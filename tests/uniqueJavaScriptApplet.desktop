@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Plugin
+Encoding=UTF-8
+Name=Unique Javascript Applet
+Comment=An applet written in JavaScript
+Icon=javascript
+
+X-KDE-Library=plasma_applet_javascript
+X-KDE-LanguageBindings=JavaScript
+X-KDE-UniqueApplet=true

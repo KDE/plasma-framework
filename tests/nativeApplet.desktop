@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Plugin
+Encoding=UTF-8
+Name=Non-Unique Native Applet
+Comment=A natively compiled applet
+Icon=native
+
+X-KDE-Library=plasma_applet_native
+X-KDE-UniqueApplet=false
