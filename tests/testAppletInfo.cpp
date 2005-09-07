@@ -20,12 +20,17 @@ Foundation, Inc., 51 Franklin Steet, Fifth Floor, Boston, MA  02110-1301, USA.
 
 #include <QDir>
 
+#include <kaboutdata.h>
+#include <kinstance.h>
+
+#include "appletinfo.h"
 #include "testAppletInfo.h"
-#include "appletInfo.h"
 
 TestAppletInfo::TestAppletInfo(QObject* parent)
     : QObject(parent)
 {
+    m_aboutData = new KAboutData("Test Applet Info", "testappletinfo", "1");
+    m_instance = new KInstance("testappletinfo");
     QString pwd = QDir::currentPath();
     notUniqueNative = new Plasma::AppletInfo(pwd + "/nativeApplet.desktop");
     uniqueJavascript = new Plasma::AppletInfo(pwd + "/uniqueJavaScriptApplet.desktop");
@@ -36,9 +41,9 @@ void TestAppletInfo::name_data(QtTestTable &t)
     t.defineElement("QString", "expected");
     t.defineElement("QString", "actual");
 
-    *t.newData("Non-Unique Native Applet") << t.name()
+    *t.newData("Non-Unique Native Applet") << notUniqueNative->name()
                                            << "Non-Unique Native Applet";
-    *t.newData("Unique Javascript Applet") << t.name()
+    *t.newData("Unique Javascript Applet") << uniqueJavascript->name()
                                            << "Unique Javascript Applet";
 }
 
@@ -55,9 +60,9 @@ void TestAppletInfo::comment_data(QtTestTable &t)
     t.defineElement("QString", "expected");
     t.defineElement("QString", "actual");
 
-    *t.newData("Non-Unique Native Applet") << t.comment()
+    *t.newData("Non-Unique Native Applet") << notUniqueNative->comment()
                                            << "A natively compiled applet";
-    *t.newData("Unique Javascript Applet") << t.comment()
+    *t.newData("Unique Javascript Applet") << uniqueJavascript->comment()
                                            << "An applet written in JavaScript";
 }
 
@@ -74,9 +79,9 @@ void TestAppletInfo::icon_data(QtTestTable &t)
     t.defineElement("QString", "expected");
     t.defineElement("QString", "actual");
 
-    *t.newData("Non-Unique Native Applet") << t.icon()
+    *t.newData("Non-Unique Native Applet") << notUniqueNative->icon()
                                            << "native";
-    *t.newData("Unique Javascript Applet") << t.icon()
+    *t.newData("Unique Javascript Applet") << uniqueJavascript->icon()
                                            << "javascript";
 }
 
@@ -93,9 +98,9 @@ void TestAppletInfo::library_data(QtTestTable &t)
     t.defineElement("QString", "expected");
     t.defineElement("QString", "actual");
 
-    *t.newData("Non-Unique Native Applet") << t.library()
+    *t.newData("Non-Unique Native Applet") << notUniqueNative->library()
                                            << "plasma_applet_native";
-    *t.newData("Unique Javascript Applet") << t.library()
+    *t.newData("Unique Javascript Applet") << uniqueJavascript->library()
                                            << "plasma_applet_javascript";
 }
 
@@ -112,9 +117,9 @@ void TestAppletInfo::languageBindings_data(QtTestTable &t)
     t.defineElement("QString", "expected");
     t.defineElement("QString", "actual");
 
-    *t.newData("Non-Unique Native Applet") << t.languageBindings()
+    *t.newData("Non-Unique Native Applet") << notUniqueNative->languageBindings()
                                            << "native";
-    *t.newData("Unique Javascript Applet") << t.languageBindings()
+    *t.newData("Unique Javascript Applet") << uniqueJavascript->languageBindings()
                                            << "javascript";
 }
 
@@ -133,9 +138,9 @@ void TestAppletInfo::desktopFilePath_data(QtTestTable &t)
 
     QString pwd = QDir::currentPath();
 
-    *t.newData("Non-Unique Native Applet") << t.desktopFilePath()
+    *t.newData("Non-Unique Native Applet") << notUniqueNative->desktopFilePath()
                                            << pwd + "/nativeApplet.desktop";
-    *t.newData("Unique Javascript Applet") << t.desktopFilePath()
+    *t.newData("Unique Javascript Applet") << uniqueJavascript->desktopFilePath()
                                            << pwd + "/uniqueJavaScriptApplet.desktop";
 }
 
@@ -152,9 +157,9 @@ void TestAppletInfo::desktopFile_data(QtTestTable &t)
     t.defineElement("QString", "expected");
     t.defineElement("QString", "actual");
 
-    *t.newData("Non-Unique Native Applet") << t.desktopFile()
+    *t.newData("Non-Unique Native Applet") << notUniqueNative->desktopFile()
                                            << "nativeApplet.desktop";
-    *t.newData("Unique Javascript Applet") << t.desktopFile()
+    *t.newData("Unique Javascript Applet") << uniqueJavascript->desktopFile()
                                            << "uniqueJavaScriptApplet.desktop";
 }
 
@@ -166,14 +171,14 @@ void TestAppletInfo::desktopFile()
     COMPARE(expected, actual);
 }
 
-void TestAppletInfo::desktopFile_data(QtTestTable &t)
+void TestAppletInfo::unique_data(QtTestTable &t)
 {
-    t.defineElement("QString", "expected");
-    t.defineElement("QString", "actual");
+    t.defineElement("bool", "expected");
+    t.defineElement("bool", "actual");
 
-    *t.newData("Non-Unique Native Applet") << t.unique()
+    *t.newData("Non-Unique Native Applet") << notUniqueNative->unique()
                                            << "nativeApplet.desktop";
-    *t.newData("Unique Javascript Applet") << t.unique()
+    *t.newData("Unique Javascript Applet") << uniqueJavascript->unique()
                                            << "uniqueJavaScriptApplet.desktop";
 }
 
@@ -190,9 +195,9 @@ void TestAppletInfo::hidden_data(QtTestTable &t)
     t.defineElement("QString", "expected");
     t.defineElement("QString", "actual");
 
-    *t.newData("Non-Unique Native Applet") << t.unique()
+    *t.newData("Non-Unique Native Applet") << notUniqueNative->unique()
                                            << "nativeApplet.desktop";
-    *t.newData("Unique Javascript Applet") << t.unique()
+    *t.newData("Unique Javascript Applet") << uniqueJavascript->unique()
                                            << "uniqueJavaScriptApplet.desktop";
 }
 
@@ -204,5 +209,5 @@ void TestAppletInfo::hidden()
     COMPARE(expected, actual);
 }
 
-QTTEST_MAIN(TestQString)
+QTTEST_MAIN(TestAppletInfo)
 #include "testAppletInfo.moc"

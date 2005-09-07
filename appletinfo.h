@@ -136,20 +136,21 @@ class KDE_EXPORT AppletInfo
         bool operator<=(const AppletInfo& rhs) const;
 
         /**
-         * Inequality operator, for sorting by name in lists
+         * Inequality operator. Compares the library used by each.
          */
         bool operator!=(const AppletInfo& rhs) const;
 
         /**
-         * Less than operator, for sorting by name in lists
+         * Less than operator. Compares the library used by each.
          */
         bool operator==(const AppletInfo& rhs) const;
 
     private:
-        void setName(const QString &name);
-        void setComment(const QString &comment);
-        void setIcon(const QString &icon);
-        void setLibrary(const QString &lib);
+        void setName(const QString& name);
+        void setComment(const QString& comment);
+        void setIcon(const QString& icon);
+        void setLibrary(const QString& lib);
+        void setLanguageBindings(const QString& language);
         void setUnique(bool u);
 
         class Private;

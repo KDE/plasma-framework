@@ -18,9 +18,17 @@ Foundation, Inc., 51 Franklin Steet, Fifth Floor, Boston, MA  02110-1301, USA.
 
 */
 
-#include <QtTest>
+#ifndef testappletinfo_h_
+#define testappletinfo_h_
 
-class Plasma::AppletInfo;
+#include <QtTest/QtTest>
+
+namespace Plasma
+{
+    class AppletInfo;
+}
+class KAboutData;
+class KInstance;
 
 class TestAppletInfo: public QObject
 {
@@ -29,26 +37,30 @@ class TestAppletInfo: public QObject
         TestAppletInfo(QObject* parent = 0);
 
     private slots:
-        void name_data(QTestTable& t);
+        void name_data(QtTestTable& t);
         void name();
-        void comment_data(QTestTable& t);
+        void comment_data(QtTestTable& t);
         void comment();
-        void icon_data(QTestTable& t);
+        void icon_data(QtTestTable& t);
         void icon();
-        void library_data(QTestTable& t);
+        void library_data(QtTestTable& t);
         void library();
-        void languageBindings_data(QTestTable& t);
+        void languageBindings_data(QtTestTable& t);
         void languageBindings();
-        void desktopFilePath_data(QTestTable& t);
+        void desktopFilePath_data(QtTestTable& t);
         void desktopFilePath();
-        void desktopFile_data(QTestTable& t);
+        void desktopFile_data(QtTestTable& t);
         void desktopFile();
-        void unique_data(QTestTable& t);
+        void unique_data(QtTestTable& t);
         void unique();
-        void hidden_data(QTestTable& t);
+        void hidden_data(QtTestTable& t);
         void hidden();
 
     private:
         Plasma::AppletInfo* notUniqueNative;
         Plasma::AppletInfo* uniqueJavascript;
+        KAboutData* m_aboutData;
+        KInstance* m_instance;
 };
+
+#endif

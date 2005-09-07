@@ -1,0 +1,11 @@
+libplasma
+
+This directory contains the classes making up libplasma, which provides the
+core framework used by Plasma and its components. This includes applet and
+extension definitions and loading, common GUI elements, etc.
+
+Domain specific sets of functionality, e.g. for network awareness or sensors,
+are not found here but in one of the Plasma Engines.
+
+Please refer to the Plasma website (http://plasma.kde.org) for API
+documentation and design documents regrading this lbirary.

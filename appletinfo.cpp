@@ -30,31 +30,30 @@ namespace Plasma
 
 class AppletInfo::Private
 {
-public:
-    Private()
-        unique(false),
-        hidden(false)
-    {}
+    public:
+        Private()
+            : unique(false),
+              hidden(false)
+        {}
 
-    QString name;
-    QString comment;
-    QString icon;
-    QString lib;
-    QString languageBindings;
-    QString desktopFile;
-    QString desktopFilePath;
-    bool unique;
-    bool hidden;
+        QString name;
+        QString comment;
+        QString icon;
+        QString lib;
+        QString languageBindings;
+        QString desktopFile;
+        QString desktopFilePath;
+        bool unique;
+        bool hidden;
 };
 
-AppletInfo::AppletInfo(const QString& deskFile)
+AppletInfo::AppletInfo(const QString& desktopFile)
 {
     d = new Private;
-    QFileInfo fi(deskFile);
+    QFileInfo fi(desktopFile);
     d->desktopFilePath = fi.absFilePath();
     d->desktopFile = fi.fileName();
-
-    KDesktopFile df(deskFile);
+    KDesktopFile df(desktopFile, true);
 
     // set the appletssimple attributes
     setName(df.readName());
@@ -65,7 +64,7 @@ AppletInfo::AppletInfo(const QString& deskFile)
     setLibrary(df.readEntry("X-KDE-Library"));
 
     // language the applet is written in
-    setLanguage(df.readEntry("X-KDE-LanguageBindings", "native").toLower());
+    setLanguageBindings(df.readEntry("X-KDE-LanguageBindings", "native").toLower());
 
     // is it a unique applet?
     setUnique(df.readBoolEntry("X-KDE-UniqueApplet", false));
@@ -112,6 +111,11 @@ QString AppletInfo::library() const
     return d->lib;
 }
 
+QString AppletInfo::languageBindings() const
+{
+    return d->languageBindings;
+}
+
 QString AppletInfo::desktopFilePath() const
 {
     return d->desktopFilePath;
@@ -129,13 +133,13 @@ QString AppletInfo::generateConfigFileName() const
 
     if (d->unique)
     {
-        d->configFile.append("rc");
+        configFile.append("rc");
     }
     else
     {
-        d->configFile.append("_")
-                    .append(kapp->randomString(20).lower())
-                    .append("_rc");
+        configFile.append("_")
+                  .append(kapp->randomString(20).lower())
+                  .append("_rc");
     }
 
     return configFile;
@@ -171,6 +175,11 @@ void AppletInfo::setLibrary(const QString &lib)
    d->lib = lib;
 }
 
+void AppletInfo::setLanguageBindings(const QString &language)
+{
+   d->languageBindings = language;
+}
+
 void AppletInfo::setUnique(bool u)
 {
     d->unique = u;
@@ -178,12 +187,12 @@ void AppletInfo::setUnique(bool u)
 
 bool AppletInfo::operator!=(const AppletInfo& rhs) const
 {
-    return configFile() != rhs.configFile();
+    return library() != rhs.library();
 }
 
 bool AppletInfo::operator==(const AppletInfo& rhs) const
 {
-    return configFile() == rhs.configFile();
+    return library() == rhs.library();
 }
 
 bool AppletInfo::operator<(const AppletInfo& rhs) const
