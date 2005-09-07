@@ -9,3 +9,7 @@ METASOURCES = AUTO
 
 LDADD = ../libplasma.la -lQtTest_debug
 testAppletInfo_SOURCES = testAppletInfo.cpp
+
+check:
+	opwd=$PWD; cd $(srcdir) && $$opwd/testAppletInfo
+

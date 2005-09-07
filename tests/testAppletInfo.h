@@ -35,6 +35,7 @@ class TestAppletInfo: public QObject
     Q_OBJECT
     public:
         TestAppletInfo(QObject* parent = 0);
+        ~TestAppletInfo();
 
     private slots:
         void name_data(QtTestTable& t);

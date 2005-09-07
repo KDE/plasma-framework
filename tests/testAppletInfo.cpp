@@ -36,6 +36,12 @@ TestAppletInfo::TestAppletInfo(QObject* parent)
     uniqueJavascript = new Plasma::AppletInfo(pwd + "/uniqueJavaScriptApplet.desktop");
 }
 
+TestAppletInfo::~TestAppletInfo()
+{
+    delete m_instance;
+    delete m_aboutData;
+}
+
 void TestAppletInfo::name_data(QtTestTable &t)
 {
     t.defineElement("QString", "expected");
@@ -177,34 +183,34 @@ void TestAppletInfo::unique_data(QtTestTable &t)
     t.defineElement("bool", "actual");
 
     *t.newData("Non-Unique Native Applet") << notUniqueNative->unique()
-                                           << "nativeApplet.desktop";
+                                           << false;
     *t.newData("Unique Javascript Applet") << uniqueJavascript->unique()
-                                           << "uniqueJavaScriptApplet.desktop";
+                                           << true;
 }
 
 void TestAppletInfo::unique()
 {
-    FETCH(QString, expected);
-    FETCH(QString, actual);
+    FETCH(bool, expected);
+    FETCH(bool, actual);
 
     COMPARE(expected, actual);
 }
 
 void TestAppletInfo::hidden_data(QtTestTable &t)
 {
-    t.defineElement("QString", "expected");
-    t.defineElement("QString", "actual");
+    t.defineElement("bool", "expected");
+    t.defineElement("bool", "actual");
 
-    *t.newData("Non-Unique Native Applet") << notUniqueNative->unique()
-                                           << "nativeApplet.desktop";
-    *t.newData("Unique Javascript Applet") << uniqueJavascript->unique()
-                                           << "uniqueJavaScriptApplet.desktop";
+    *t.newData("Non-Unique Native Applet") << notUniqueNative->hidden()
+                                           << false;
+    *t.newData("Unique Javascript Applet") << uniqueJavascript->hidden()
+                                           << true;
 }
 
 void TestAppletInfo::hidden()
 {
-    FETCH(QString, expected);
-    FETCH(QString, actual);
+    FETCH(bool, expected);
+    FETCH(bool, actual);
 
     COMPARE(expected, actual);
 }
