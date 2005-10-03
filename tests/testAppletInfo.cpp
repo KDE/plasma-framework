@@ -215,5 +215,35 @@ void TestAppletInfo::hidden()
     COMPARE(expected, actual);
 }
 
+void TestAppletInfo::assignment()
+{
+    Plasma::AppletInfo assigned = *notUniqueNative;
+    COMPARE(assigned.name(), notUniqueNative->name());
+    COMPARE(assigned.comment(), notUniqueNative->comment());
+    COMPARE(assigned.icon(), notUniqueNative->icon());
+    COMPARE(assigned.library(), notUniqueNative->library());
+    COMPARE(assigned.languageBindings(), notUniqueNative->languageBindings());
+    COMPARE(assigned.desktopFilePath(), notUniqueNative->desktopFilePath());
+    COMPARE(assigned.desktopFile(), notUniqueNative->desktopFile());
+    COMPARE(assigned.unique(), notUniqueNative->unique());
+    COMPARE(assigned.hidden(), notUniqueNative->hidden());
+}
+
+void TestAppletInfo::copyConstructor()
+{
+    Plasma::AppletInfo* tempCopy = new Plasma::AppletInfo(*notUniqueNative);
+    Plasma::AppletInfo copied(*tempCopy);
+    delete tempCopy;
+    COMPARE(copied.name(), notUniqueNative->name());
+    COMPARE(copied.comment(), notUniqueNative->comment());
+    COMPARE(copied.icon(), notUniqueNative->icon());
+    COMPARE(copied.library(), notUniqueNative->library());
+    COMPARE(copied.languageBindings(), notUniqueNative->languageBindings());
+    COMPARE(copied.desktopFilePath(), notUniqueNative->desktopFilePath());
+    COMPARE(copied.desktopFile(), notUniqueNative->desktopFile());
+    COMPARE(copied.unique(), notUniqueNative->unique());
+    COMPARE(copied.hidden(), notUniqueNative->hidden());
+}
+
 QTTEST_MAIN(TestAppletInfo)
 #include "testAppletInfo.moc"

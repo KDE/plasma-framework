@@ -4,6 +4,7 @@ Encoding=UTF-8
 Name=Unique Javascript Applet
 Comment=An applet written in JavaScript
 Icon=javascript
+Hidden=true
 
 X-KDE-Library=plasma_applet_javascript
 X-KDE-LanguageBindings=JavaScript

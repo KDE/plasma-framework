@@ -56,6 +56,8 @@ class TestAppletInfo: public QObject
         void unique();
         void hidden_data(QtTestTable& t);
         void hidden();
+        void assignment();
+        void copyConstructor();
 
     private:
         Plasma::AppletInfo* notUniqueNative;
