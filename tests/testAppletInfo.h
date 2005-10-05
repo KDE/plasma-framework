@@ -58,6 +58,7 @@ class TestAppletInfo: public QObject
         void hidden();
         void assignment();
         void copyConstructor();
+        void dragAndDrop();
 
     private:
         Plasma::AppletInfo* notUniqueNative;

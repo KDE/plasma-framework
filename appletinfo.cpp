@@ -19,7 +19,10 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 Boston, MA 02110-1301, USA.
 ******************************************************************/
 
-#include <qfileinfo.h>
+#include <QBuffer>
+#include <QFileInfo>
+#include <QMimeData>
+
 #include <kdesktopfile.h>
 #include <kapplication.h>
 
@@ -208,6 +211,38 @@ bool AppletInfo::operator>(const AppletInfo& rhs) const
 bool AppletInfo::operator<=(const AppletInfo& rhs) const
 {
     return name().lower() <= rhs.name().lower();
+}
+
+void AppletInfo::populateMimeData(QMimeData* mimeData)
+{
+    QByteArray a;
+    QDataStream s(&a, QIODevice::WriteOnly);
+    s << desktopFilePath();
+    mimeData->setData("application/plasmaAppletInfo", a);
+}
+
+bool AppletInfo::canDecode(const QMimeData* mimeData)
+{
+    return mimeData->hasFormat("application/plasmaAppletInfo");
+}
+
+AppletInfo AppletInfo::fromMimeData(const QMimeData* mimeData)
+{
+    QByteArray a = mimeData->data("application/plasmaAppletInfo");
+
+    if (a.isEmpty())
+    {
+        return AppletInfo();
+    }
+
+    QBuffer buff(&a);
+    buff.open(QIODevice::ReadOnly);
+    QDataStream s(&buff);
+
+    QString desktopFile;
+    s >> desktopFile;
+    AppletInfo info(desktopFile);
+    return info;
 }
 
 } // Plasma namespace

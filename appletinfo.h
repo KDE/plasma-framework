@@ -145,6 +145,35 @@ class KDE_EXPORT AppletInfo
          */
         bool operator==(const AppletInfo& rhs) const;
 
+        /**
+         * Part of the drag and drop support for AppletInfo.
+         * Populates a QMimeData object with the necessary data to create an
+         * equivalent AppletInfo object on the receiving end.
+         * @param mimeData a pointer to a QMimeData object. Any Applet Info
+         *                 previously added to this object will be overwritten.
+         */
+        void populateMimeData(QMimeData* mimeData);
+
+        /**
+         * Part of the drag and drop support for AppletInfo.
+         * Returns true if the QMimeData object passed in contains the proper
+         * mimetype for an AppletInfo
+         * @param mimeData a pointer to a QMimeData object which may contain
+         *                 AppletInfo data
+         */
+        static bool canDecode(const QMimeData* mimeData);
+
+        /**
+         * Part of the drag and drop support for AppletInfo.
+         * Given a QMimeData object that contains an AppletInfo, returns a
+         * corresponding AppletInfo object
+         * @param mimeData a pointer to a QMimeData object which should contain
+         *                 AppletInfo data.
+         * @see canDecode
+         */
+        static AppletInfo fromMimeData(const QMimeData* mimeData);
+
+
     private:
         void setName(const QString& name);
         void setComment(const QString& comment);

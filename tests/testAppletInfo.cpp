@@ -19,6 +19,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
 #include <QDir>
+#include <QMimeData>
 
 #include <kaboutdata.h>
 #include <kinstance.h>
@@ -243,6 +244,16 @@ void TestAppletInfo::copyConstructor()
     COMPARE(copied.desktopFile(), notUniqueNative->desktopFile());
     COMPARE(copied.unique(), notUniqueNative->unique());
     COMPARE(copied.hidden(), notUniqueNative->hidden());
+}
+
+void TestAppletInfo::dragAndDrop()
+{
+    QMimeData* data = new QMimeData;
+    notUniqueNative->populateMimeData(data);
+    VERIFY(Plasma::AppletInfo::canDecode(data));
+    Plasma::AppletInfo dropped = Plasma::AppletInfo::fromMimeData(data);
+    COMPARE(dropped.desktopFile(), notUniqueNative->desktopFile());
+    delete data;
 }
 
 QTTEST_MAIN(TestAppletInfo)
