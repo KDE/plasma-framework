@@ -25,7 +25,7 @@ Boston, MA 02110-1301, USA.
 
 #include <kdesktopfile.h>
 #include <kapplication.h>
-
+#include <krandom.h>
 #include "appletinfo.h"
 
 namespace Plasma
@@ -141,7 +141,7 @@ QString AppletInfo::generateConfigFileName() const
     else
     {
         configFile.append("_")
-                  .append(kapp->randomString(20).lower())
+                  .append(KRandom::randomString(20).lower())
                   .append("_rc");
     }
 
