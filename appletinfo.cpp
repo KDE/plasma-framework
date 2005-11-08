@@ -54,7 +54,7 @@ AppletInfo::AppletInfo(const QString& desktopFile)
 {
     d = new Private;
     QFileInfo fi(desktopFile);
-    d->desktopFilePath = fi.absFilePath();
+    d->desktopFilePath = fi.absoluteFilePath();
     d->desktopFile = fi.fileName();
     KDesktopFile df(desktopFile, true);
 
