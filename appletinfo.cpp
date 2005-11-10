@@ -132,7 +132,7 @@ QString AppletInfo::desktopFile() const
 QString AppletInfo::generateConfigFileName() const
 {
     // generate a config file base name from the library name
-    QString configFile = "plasmaApplet_" + d->lib.lower();
+    QString configFile = "plasmaApplet_" + d->lib.toLower();
 
     if (d->unique)
     {
@@ -141,7 +141,7 @@ QString AppletInfo::generateConfigFileName() const
     else
     {
         configFile.append("_")
-                  .append(KRandom::randomString(20).lower())
+                  .append(KRandom::randomString(20).toLower())
                   .append("_rc");
     }
 
@@ -200,17 +200,17 @@ bool AppletInfo::operator==(const AppletInfo& rhs) const
 
 bool AppletInfo::operator<(const AppletInfo& rhs) const
 {
-    return name().lower() < rhs.name().lower();
+    return name().toLower() < rhs.name().toLower();
 }
 
 bool AppletInfo::operator>(const AppletInfo& rhs) const
 {
-    return name().lower() > rhs.name().lower();
+    return name().toLower() > rhs.name().toLower();
 }
 
 bool AppletInfo::operator<=(const AppletInfo& rhs) const
 {
-    return name().lower() <= rhs.name().lower();
+    return name().toLower() <= rhs.name().toLower();
 }
 
 void AppletInfo::populateMimeData(QMimeData* mimeData)

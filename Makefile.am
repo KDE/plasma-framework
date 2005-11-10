@@ -1,5 +1,5 @@
 INCLUDES = $(all_includes)
-
+KDE_CXXFLAGS = -UQT3_SUPPORT
 lib_LTLIBRARIES = libplasma.la
 
 libplasma_la_SOURCES = appletinfo.cpp
