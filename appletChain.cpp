@@ -19,6 +19,11 @@
 #include "applet.h"
 #include "appletChain.h"
 
+#include <kdebug.h>
+
+#include <QApplication>
+#include <QDesktopWidget>
+
 namespace Plasma
 {
 
@@ -87,12 +92,12 @@ void AppletChain::setXineramaScreen(int screen)
     d->screen = screen;
 }
 
-void loadApplet(KService::Ptr)
+void AppletChain::loadApplet(KService::Ptr)
 {
     //TODO: load the buggers from a KService pointer!
 }
 
-void addApplet(Plasma::Applet* applet)
+void AppletChain::addApplet(Plasma::Applet* applet)
 {
     d->applets.append(applet);
 }

@@ -26,6 +26,8 @@
 namespace Plasma
 {
 
+class Applet;
+
 class KDE_EXPORT AppletChain : public QObject, public KShared
 {
     Q_OBJECT
