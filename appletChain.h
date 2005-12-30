@@ -30,6 +30,8 @@ class KDE_EXPORT AppletChain : public QObject, public KShared
 {
     Q_OBJECT
     Q_PROPERTY(AppletConstraint constraint READ constraint WRITE setConstraint)
+    Q_PROPERTY(ScreenEdge screenEdge READ screenEdge WRITE setScreenEdge)
+    Q_PROPERTY(int XineramaScreen READ screenEdge WRITE setXineramaScreen)
 
     public:
         typedef KSharedPtr<AppletChain> Ptr;
@@ -41,9 +43,19 @@ class KDE_EXPORT AppletChain : public QObject, public KShared
         void setConstraint(Plasma::AppletConstraint constraint);
         Plasma::Direction popupDirection() const;
 
-        void setScreenEdge(Plasma::ScreenEdge edge);
         Plasma::ScreenEdge screenEdge();
+        void setScreenEdge(Plasma::ScreenEdge edge);
 
+        int xineramaScreen();
+        void setXineramaScreen(int screen);
+
+    public slots:
+        void loadApplet(KService::Ptr);
+        void addApplet(Applet*);
+
+    signals:
+        void appletAdded(Applet*);
+        void appletRemoved(Applet*);
 
     private:
         class Private;

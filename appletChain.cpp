@@ -28,13 +28,15 @@ class AppletChain::Private
         Private()
             : popupDirection(Up),
               constraint(Plasma::NoConstraint),
-              screenEdge(BottomEdge)
+              screenEdge(BottomEdge),
+              screen(0)
         {
         }
 
 
         Direction popupDirection;
         AppletConstraint constraint;
+        int screen;
         ScreenEdge screenEdge;
         Applet::List applets;
 
@@ -72,6 +74,32 @@ void AppletChain::setConstraint(Plasma::AppletConstraint constraint)
     {
         applet->constraintsUpdated();
     }
+}
+
+void AppletChain::setXineramaScreen(int screen)
+{
+    if (screen < 0 || screen > qApp->desktop()->numScreens() - 1)
+    {
+        kdDebug() << "tried to set a bad screen for AppletChain" << endl;
+        return;
+    }
+
+    d->screen = screen;
+}
+
+void loadApplet(KService::Ptr)
+{
+    //TODO: load the buggers from a KService pointer!
+}
+
+void addApplet(Plasma::Applet* applet)
+{
+    d->applets.append(applet);
+}
+
+int AppletChain::xineramaScreen()
+{
+    return d->screen;
 }
 
 void AppletChain::setScreenEdge(Plasma::ScreenEdge edge)
