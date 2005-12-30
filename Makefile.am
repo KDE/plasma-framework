@@ -2,7 +2,8 @@ INCLUDES = $(all_includes)
 KDE_CXXFLAGS = -UQT3_SUPPORT
 lib_LTLIBRARIES = libplasma.la
 
-libplasma_la_SOURCES = appletinfo.cpp plasma.cpp applet.cpp appletChain.cpp
+libplasma_la_SOURCES = plasma.cpp applet.cpp \
+	appletChain.cpp appletLayout.cpp appletCompositor.cpp
 
 libplasma_la_METASOURCES = AUTO
 
@@ -13,7 +14,8 @@ libplasma_la_includedir = $(includedir)/plasma
 
 noinst_HEADERS =
 
-libplasma_la_include_HEADERS = appletinfo.h applet.h plasma.h
+libplasma_la_include_HEADERS = applet.h plasma.h \
+	appletCompositor.h appletLayout.h
 
 #kde_kcfg_DATA = plasmaSettings.kcfg extensionSettings.kcfg
 
