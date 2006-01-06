@@ -21,16 +21,16 @@
 namespace Plasma
 {
 
-int plasmaIDs = 0;
+int plasmaIds = 0;
 
-void setMinID(int minID)
+void setMinId(int minId)
 {
-    plasmaIDs = minID + 1;
+    plasmaIds = minId + 1;
 }
 
-int uniqueID()
+int uniqueId()
 {
-    return ++plasmaIDs;
+    return ++plasmaIds;
 }
 
 Direction edgeToPopupDirection(ScreenEdge edge)

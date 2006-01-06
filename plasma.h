@@ -37,8 +37,8 @@ enum Direction { Down = 0,
 enum ScreenEdge { Floating = 0, Desktop,
                   TopEdge, BottomEdge, LeftEdge, RightEdge };
 
-KDE_EXPORT void setMinID(int minID);
-KDE_EXPORT int uniqueID();
+KDE_EXPORT void setMinId(int minId);
+KDE_EXPORT int uniqueId();
 KDE_EXPORT Direction edgeToPopupDirection(ScreenEdge edge);
 
 } // Plasma namespace

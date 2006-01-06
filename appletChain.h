@@ -53,7 +53,7 @@ class KDE_EXPORT AppletChain : public QObject, public KShared
 
     public slots:
         void loadApplet(KService::Ptr);
-        void addApplet(Applet*);
+        void addApplet(Plasma::Applet*);
 
     signals:
         void appletAdded(Applet*);

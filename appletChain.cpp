@@ -16,6 +16,11 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
+#include <QApplication>
+#include <QDesktopWidget>
+
+#include <kdebug.h>
+
 #include "applet.h"
 #include "appletChain.h"
 
@@ -33,8 +38,8 @@ class AppletChain::Private
         Private()
             : popupDirection(Up),
               constraint(Plasma::NoConstraint),
-              screenEdge(BottomEdge),
-              screen(0)
+              screen(0),
+              screenEdge(BottomEdge)
         {
         }
 
@@ -100,6 +105,7 @@ void AppletChain::loadApplet(KService::Ptr)
 void AppletChain::addApplet(Plasma::Applet* applet)
 {
     d->applets.append(applet);
+    emit appletAdded(applet);
 }
 
 int AppletChain::xineramaScreen()
