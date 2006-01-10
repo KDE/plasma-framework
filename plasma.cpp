@@ -48,6 +48,7 @@ Direction edgeToPopupDirection(ScreenEdge edge)
         case RightEdge:
             return Left;
     }
+	return Down;
 }
 
 } // Plasma namespace
