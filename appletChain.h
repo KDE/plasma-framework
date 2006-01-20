@@ -51,11 +51,11 @@ class KDE_EXPORT AppletChain : public QObject, public KShared
         int xineramaScreen();
         void setXineramaScreen(int screen);
 
-    public slots:
+    public Q_SLOTS:
         void loadApplet(KService::Ptr);
         void addApplet(Plasma::Applet*);
 
-    signals:
+    Q_SIGNALS:
         void appletAdded(Applet*);
         void appletRemoved(Applet*);
 

@@ -67,7 +67,7 @@ class KDE_EXPORT Applet : public QWidget
          */
         virtual void constraintsUpdated();
 
-    signals:
+    Q_SIGNALS:
         void requestFocus(bool focus);
 
     protected:

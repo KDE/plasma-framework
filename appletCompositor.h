@@ -20,7 +20,7 @@ class KDE_EXPORT AppletCompositor : public QWidget
     public:
         AppletCompositor(QWidget *parent);
 
-    protected slots:
+    protected Q_SLOTS:
         virtual void mergeTwoApplets();
 
     private:

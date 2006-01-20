@@ -34,7 +34,7 @@ class KDE_EXPORT AppletLayout : public QLayout
         virtual void setGeometry(const QRect &rect);
         virtual QSize sizeHint() const;
         virtual QLayoutItem *takeAt(int index);
-    signals:
+    Q_SIGNALS:
         void mergeTwoApplets();
         void splitTwoApplets();
     protected:
