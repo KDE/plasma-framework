@@ -90,7 +90,7 @@ void AppletChain::setXineramaScreen(int screen)
 {
     if (screen < 0 || screen > qApp->desktop()->numScreens() - 1)
     {
-        kdDebug() << "tried to set a bad screen for AppletChain" << endl;
+        kDebug() << "tried to set a bad screen for AppletChain" << endl;
         return;
     }
 
