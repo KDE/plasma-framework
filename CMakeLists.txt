@@ -16,7 +16,7 @@ kde4_automoc(${plasma_LIB_SRCS})
 
 kde4_add_library(plasma SHARED ${plasma_LIB_SRCS})
 
-target_link_libraries(plasma  ${QT_AND_KDECORE_LIBS} kio )
+target_link_libraries(plasma  ${KDE4_KDECORE_LIBS} kio )
 
 set_target_properties(plasma PROPERTIES VERSION 1.0.0 SOVERSION 1 )
 install_targets(${LIB_INSTALL_DIR} plasma )
