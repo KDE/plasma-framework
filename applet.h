@@ -50,16 +50,29 @@ class KDE_EXPORT Applet : public QWidget
         * named \<appletname\>rc in the user's local %KDE directory.
         *
         * For normal applets this config object will write to an instance
-        * specific config file nameed \<appletname\>\<instanceid\>rc
+        * specific config file named \<appletname\>\<instanceid\>rc
         * in the user's local %KDE directory.
         **/
-        KSharedConfig::Ptr globalAppletConfig() const;
         KSharedConfig::Ptr appletConfig() const;
+
+        /**
+         * Returns a KConfig object to be shared by all applets of this type
+         * For unique applets, this will return the same config object as
+         * appletConfig()
+         */
+        KSharedConfig::Ptr globalAppletConfig() const;
+
+        /**
+         * Ensures that the DataEngine named name is loaded and ready to be used
+         *
+         * @return returns true on success, false on failure
+         */
+        bool loadDataEngine(const QString& name);
 
         const AppletChain::Ptr chain() const;
         void setChain(const AppletChain::Ptr);
 
-        /*
+        /**
          * called when any of the geometry constraints have been updated
          * this is always called prior to painting and should be used as an
          * opportunity to layout the widget, calculate sizings, etc.

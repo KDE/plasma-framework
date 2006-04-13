@@ -19,11 +19,14 @@
 #include <QEvent>
 #include <QList>
 #include <QSize>
+#include <QStringList>
 #include <QTimer>
 
 #include <kstandarddirs.h>
 
 #include "applet.h"
+
+
 
 namespace Plasma
 {
@@ -40,9 +43,13 @@ class Applet::Private
               chain(appletChain)
         { }
 
-//         ~Private()
-//         {
-//         }
+        ~Private()
+        {
+            foreach (const QString& engine, loadedEngines)
+            {
+                Interface::interface()->unloadDataEngine(engine);
+            }
+        }
 
         int id;
         KSharedConfig::Ptr globalConfig;
@@ -50,6 +57,7 @@ class Applet::Private
         KService::Ptr appletDescription;
         QList<QObject*> watchedForFocus;
         AppletChain::Ptr chain;
+        QStringList loadedEngines;
 };
 
 Applet::Applet(QWidget* parent,
@@ -67,6 +75,19 @@ Applet::~Applet()
     delete d;
 }
 
+KSharedConfig::Ptr Applet::appletConfig() const
+{
+    if (!d->appletConfig)
+    {
+        QString file = locateLocal("appdata",
+                                   "applets/" + instanceName() + "rc",
+                                   true);
+        d->appletConfig = KSharedConfig::openConfig(file, false, true);
+    }
+
+    return d->appletConfig;
+}
+
 KSharedConfig::Ptr Applet::globalAppletConfig() const
 {
     if (!d->globalConfig)
@@ -80,17 +101,20 @@ KSharedConfig::Ptr Applet::globalAppletConfig() const
     return d->globalConfig;
 }
 
-KSharedConfig::Ptr Applet::appletConfig() const
+bool Applet::loadDataEngine(const QString& name)
 {
-    if (!d->appletConfig)
+    if (d->loadedEngines.indexOf(name) != -1)
     {
-        QString file = locateLocal("appdata",
-                                   "applets/" + instanceName() + "rc",
-                                   true);
-        d->appletConfig = KSharedConfig::openConfig(file, false, true);
+        return true;
     }
 
-    return d->appletConfig;
+    if (PlasmaAppInterface::self()->loadDataEngine(name))
+    {
+        d->loadedEngines.append(name);
+        return true;
+    }
+
+    return false;
 }
 
 const AppletChain::Ptr Applet::chain() const
