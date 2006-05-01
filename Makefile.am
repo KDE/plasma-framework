@@ -19,5 +19,3 @@ libplasma_la_include_HEADERS = applet.h plasma.h \
 
 #kde_kcfg_DATA = plasmaSettings.kcfg extensionSettings.kcfg
 
-messages: rc.cpp
-	$(XGETTEXT) *.cpp *.h -o $(podir)/libplasma.pot
