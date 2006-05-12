@@ -1,4 +1,3 @@
-kde4_header()
 
 
 
@@ -25,7 +24,6 @@ install_targets(${LIB_INSTALL_DIR} plasma )
 
 install_files( /include/plasma FILES applet.h plasma.h  	appletCompositor.h appletLayout.h )
 
-kde4_footer()
 
 
 

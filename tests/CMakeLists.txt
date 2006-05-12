@@ -1,4 +1,3 @@
-kde4_header()
 include_directories( ${CMAKE_SOURCE_DIR}/workspace/plasma/lib   )
 
 
@@ -16,7 +15,6 @@ target_link_libraries(testAppletInfo  ${KDE4_KDECORE_LIBS} )
 ########### install files ###############
 
 
-kde4_footer()
 
 
 
