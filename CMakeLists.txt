@@ -22,7 +22,7 @@ install(TARGETS plasma  DESTINATION ${LIB_INSTALL_DIR} )
 
 ########### install files ###############
 
-install_files( /include/plasma FILES applet.h plasma.h  	appletCompositor.h appletLayout.h )
+install( FILES applet.h plasma.h appletCompositor.h appletLayout.h DESTINATION ${INCLUDE_INSTALL_DIR}/plasma )
 
 
 
