@@ -2,7 +2,9 @@
 Type=Plugin
 Encoding=UTF-8
 Name=Non-Unique Native Applet
+Name[x-test]=xxNon-Unique Native Appletxx
 Comment=A natively compiled applet
+Comment[x-test]=xxA natively compiled appletxx
 Icon=native
 
 X-KDE-Library=plasma_applet_native

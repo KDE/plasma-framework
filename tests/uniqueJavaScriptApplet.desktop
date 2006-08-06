@@ -2,7 +2,9 @@
 Type=Plugin
 Encoding=UTF-8
 Name=Unique Javascript Applet
+Name[x-test]=xxUnique Javascript Appletxx
 Comment=An applet written in JavaScript
+Comment[x-test]=xxAn applet written in JavaScriptxx
 Icon=javascript
 Hidden=true
 
