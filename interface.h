@@ -27,8 +27,8 @@ class Interface
     public:
         static Interface* interface() { return m_interface; }
 
-        bool loadDataEngine(const QString& name) = 0;
-        bool unloadDataEngine(const QString& name) = 0;
+        virtual bool loadDataEngine(const QString& name) = 0;
+        virtual bool unloadDataEngine(const QString& name) = 0;
 
     protected:
         Interface() : m_interface(0) {}
