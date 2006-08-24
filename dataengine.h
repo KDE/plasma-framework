@@ -67,12 +67,11 @@ class DataEngine : public QObject
 
         void ref();
         void deref();
+        bool used();
 
     protected:
         virtual void init();
         virtual void cleanup();
-        virtual DataEngine* engine() = 0;
-        virtual
 
     private:
         QAtomic ref;
@@ -89,5 +88,3 @@ class DataEngine : public QObject
 
 #endif // multiple inclusion guard
 
-
-#endif

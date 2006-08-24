@@ -47,7 +47,7 @@ class Applet::Private
         {
             foreach (const QString& engine, loadedEngines)
             {
-                Interface::interface()->unloadDataEngine(engine);
+                Interface::self()->unloadDataEngine(engine);
             }
         }
 
@@ -88,13 +88,11 @@ KSharedConfig::Ptr Applet::appletConfig() const
     return d->appletConfig;
 }
 
-KSharedConfig::Ptr Applet::globalAppletConfig() const
+KSharedConfig::Ptr Applet::AppletConfig() const
 {
     if (!d->globalConfig)
     {
-        QString file = locateLocal("config",
-                                   "plasma_" + globalName() + "rc",
-                                   true);
+        QString file = locateLocal("config", "plasma_" + globalName() + "rc");
         d->globalConfig = KSharedConfig::openConfig(file, false, true);
     }
 

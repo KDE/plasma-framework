@@ -25,10 +25,10 @@ namespace Plasma
 class Interface
 {
     public:
-        static Interface* interface() { return m_interface; }
+        static Interface* self() { return m_interface; }
 
         virtual bool loadDataEngine(const QString& name) = 0;
-        virtual bool unloadDataEngine(const QString& name) = 0;
+        virtual void unloadDataEngine(const QString& name) = 0;
 
     protected:
         Interface() : m_interface(0) {}
