@@ -8,4 +8,4 @@ Domain specific sets of functionality, e.g. for network awareness or sensors,
 are not found here but in one of the Plasma Engines.
 
 Please refer to the Plasma website (http://plasma.kde.org) for API
-documentation and design documents regrading this lbirary.
+documentation and design documents regarding this library.
