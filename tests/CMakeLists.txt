@@ -5,7 +5,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/workspace/plasma/lib   )
 
 set(testAppletInfo_SRCS testAppletInfo.cpp )
 
-kde4_automoc(${testAppletInfo_SRCS})
+kde4_automoc(testAppletInfo ${testAppletInfo_SRCS})
 
 kde4_add_executable(testAppletInfo ${testAppletInfo_SRCS})
 

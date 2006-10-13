@@ -10,7 +10,7 @@ set(plasma_LIB_SRCS
    appletLayout.cpp 
    appletCompositor.cpp )
 
-kde4_automoc(${plasma_LIB_SRCS})
+kde4_automoc(plasma ${plasma_LIB_SRCS})
 
 kde4_add_library(plasma SHARED ${plasma_LIB_SRCS})
 
