@@ -38,7 +38,7 @@ class DataSource : public QObject
         typedef QHash<QString, DataSource*> Dict;
         typedef QHash<QString, QVariant> Data;
 
-        DataSource(QObject* parent);
+        explicit DataSource(QObject* parent = 0);
         virtual ~DataSource();
 
         QString name();
@@ -67,11 +67,16 @@ class DataEngine : public QObject
 
         void ref();
         void deref();
-        bool used();
+        bool isUsed();
 
     protected:
         virtual void init();
         virtual void cleanup();
+        void setDataSource(const QString& source, const QVariant& value);
+        void createDataSource(const QString& source,
+                              const QString& domain = QString());
+        void removeDataSource(const QString& source);
+        void clearAllDataSources();
 
     private:
         QAtomic ref;

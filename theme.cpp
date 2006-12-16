@@ -16,29 +16,49 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef PLASMA_INTERFACE_H
-#define PLASMA_INTERFACE_H
+#include <KSharedConfig>
+#include <KStandardDirs>
 
-#include <QString>
+#include "theme.h"
 
 namespace Plasma
 {
 
-class Interface
+class Theme::Private
 {
     public:
-        static Interface* self() { return m_interface; }
+        Private()
+            : themeName("default")
+        {
+        }
 
-        virtual bool loadDataEngine(const QString& name) = 0;
-        virtual void unloadDataEngine(const QString& name) = 0;
-
-    protected:
-        Interface();
-        virtual ~Interface();
-        static Interface* m_interface;
+    QString themeName;
 };
 
-} // Plasma namespace
+Theme::Theme(QObject* parent)
+    : QObject(parent),
+      d(new Private)
+{
+    KConfig config("plasma");
+    KConfigGroup group(&config, "Theme");
+    d->themeName = group.readEntry("name", d->themeName);
+}
 
-#endif // multiple inclusion guard
+Theme::~Theme()
+{
+}
 
+QString Theme::themeName() const
+{
+    return d->themeName;
+}
+
+QString Theme::imagePath(const QString& name)
+{
+    return KStandardDirs::locate("data", "desktoptheme/" + d->themeName
+                                          + "/" + name + ".svg");
+}
+
+}
+
+#include <theme.moc>

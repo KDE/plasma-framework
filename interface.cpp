@@ -16,29 +16,14 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef PLASMA_INTERFACE_H
-#define PLASMA_INTERFACE_H
-
-#include <QString>
+#include "interface.h"
 
 namespace Plasma
 {
+Interface* Interface::m_interface;
 
-class Interface
-{
-    public:
-        static Interface* self() { return m_interface; }
-
-        virtual bool loadDataEngine(const QString& name) = 0;
-        virtual void unloadDataEngine(const QString& name) = 0;
-
-    protected:
-        Interface();
-        virtual ~Interface();
-        static Interface* m_interface;
-};
+Interface::Interface() {}
+Interface::~Interface() {}
 
 } // Plasma namespace
-
-#endif // multiple inclusion guard
 

@@ -22,11 +22,10 @@
 #include <QStringList>
 #include <QTimer>
 
-#include <kstandarddirs.h>
+#include <KStandardDirs>
 
 #include "applet.h"
-
-
+#include "interface.h"
 
 namespace Plasma
 {
@@ -79,20 +78,20 @@ KSharedConfig::Ptr Applet::appletConfig() const
 {
     if (!d->appletConfig)
     {
-        QString file = locateLocal("appdata",
-                                   "applets/" + instanceName() + "rc",
-                                   true);
+        QString file = KStandardDirs::locateLocal("appdata",
+                                                   "applets/" + instanceName() + "rc",
+                                                   true);
         d->appletConfig = KSharedConfig::openConfig(file, false, true);
     }
 
     return d->appletConfig;
 }
 
-KSharedConfig::Ptr Applet::AppletConfig() const
+KSharedConfig::Ptr Applet::globalAppletConfig() const
 {
     if (!d->globalConfig)
     {
-        QString file = locateLocal("config", "plasma_" + globalName() + "rc");
+        QString file = KStandardDirs::locateLocal("config", "plasma_" + globalName() + "rc");
         d->globalConfig = KSharedConfig::openConfig(file, false, true);
     }
 
@@ -106,7 +105,7 @@ bool Applet::loadDataEngine(const QString& name)
         return true;
     }
 
-    if (PlasmaAppInterface::self()->loadDataEngine(name))
+    if (Plasma::Interface::self()->loadDataEngine(name))
     {
         d->loadedEngines.append(name);
         return true;

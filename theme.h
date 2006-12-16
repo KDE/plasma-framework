@@ -16,26 +16,31 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef PLASMA_INTERFACE_H
-#define PLASMA_INTERFACE_H
+#ifndef PLASMA_THEME_H
+#define PLASMA_THEME_H
 
-#include <QString>
+#include <QtCore/QObject>
 
 namespace Plasma
 {
 
-class Interface
+class Theme : public QObject
 {
+    Q_OBJECT
+
     public:
-        static Interface* self() { return m_interface; }
+        explicit Theme(QObject* parent = 0);
+        ~Theme();
 
-        virtual bool loadDataEngine(const QString& name) = 0;
-        virtual void unloadDataEngine(const QString& name) = 0;
+        QString themeName() const;
+        QString imagePath(const QString& name);
 
-    protected:
-        Interface();
-        virtual ~Interface();
-        static Interface* m_interface;
+    signals:
+        void changed();
+
+    private:
+        class Private;
+        Private* d;
 };
 
 } // Plasma namespace

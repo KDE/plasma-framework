@@ -3,12 +3,13 @@
 
 ########### next target ###############
 
-set(plasma_LIB_SRCS 
-   plasma.cpp 
-   applet.cpp 
-   appletChain.cpp 
-   appletLayout.cpp 
-   appletCompositor.cpp )
+set(plasma_LIB_SRCS
+   plasma.cpp
+   applet.cpp
+   appletChain.cpp
+   interface.cpp
+   theme.cpp
+   )
 
 kde4_automoc(${plasma_LIB_SRCS})
 
@@ -22,5 +23,5 @@ install(TARGETS plasma  DESTINATION ${LIB_INSTALL_DIR} )
 
 ########### install files ###############
 
-install( FILES applet.h plasma.h appletCompositor.h appletLayout.h DESTINATION ${INCLUDE_INSTALL_DIR}/plasma )
+install( FILES applet.h plasma.h theme.h interface.h DESTINATION ${INCLUDE_INSTALL_DIR}/plasma )
 
