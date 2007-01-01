@@ -21,10 +21,12 @@
 
 #include <QtCore/QObject>
 
+#include <kdemacros.h>
+
 namespace Plasma
 {
 
-class Theme : public QObject
+KDE_EXPORT class Theme : public QObject
 {
     Q_OBJECT
 
