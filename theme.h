@@ -35,7 +35,7 @@ class KDE_EXPORT Theme : public QObject
         ~Theme();
 
         QString themeName() const;
-        QString imagePath(const QString& name);
+        QString imagePath(const QString& name) const;
 
     signals:
         void changed();

@@ -53,7 +53,7 @@ QString Theme::themeName() const
     return d->themeName;
 }
 
-QString Theme::imagePath(const QString& name)
+QString Theme::imagePath(const QString& name) const
 {
     return KStandardDirs::locate("data", "desktoptheme/" + d->themeName
                                           + "/" + name + ".svg");
