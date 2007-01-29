@@ -22,13 +22,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #define testappletinfo_h_
 
 #include <QtTest/QtTest>
+#include <kcomponentdata.h>
 
 namespace Plasma
 {
     class AppletInfo;
 }
 class KAboutData;
-class KInstance;
 
 class TestAppletInfo: public QObject
 {
@@ -64,7 +64,7 @@ class TestAppletInfo: public QObject
         Plasma::AppletInfo* notUniqueNative;
         Plasma::AppletInfo* uniqueJavascript;
         KAboutData* m_aboutData;
-        KInstance* m_instance;
+        KComponentData m_componentData;
 };
 
 #endif

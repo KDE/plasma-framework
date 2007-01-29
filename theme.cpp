@@ -18,6 +18,7 @@
 
 #include <KSharedConfig>
 #include <KStandardDirs>
+#include <kconfiggroup.h>
 
 #include "theme.h"
 

@@ -22,16 +22,16 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QMimeData>
 
 #include <kaboutdata.h>
-#include <kinstance.h>
+#include <kcomponentdata.h>
 
 #include "appletinfo.h"
 #include "testAppletInfo.h"
 
 TestAppletInfo::TestAppletInfo(QObject* parent)
-    : QObject(parent)
+    : QObject(parent),
+    m_componentData("testappletinfo")
 {
     m_aboutData = new KAboutData("Test Applet Info", "testappletinfo", "1");
-    m_instance = new KInstance("testappletinfo");
     QString pwd = QDir::currentPath();
     notUniqueNative = new Plasma::AppletInfo(pwd + "/nativeApplet.desktop");
     uniqueJavascript = new Plasma::AppletInfo(pwd + "/uniqueJavaScriptApplet.desktop");
@@ -39,7 +39,6 @@ TestAppletInfo::TestAppletInfo(QObject* parent)
 
 TestAppletInfo::~TestAppletInfo()
 {
-    delete m_instance;
     delete m_aboutData;
 }
 
