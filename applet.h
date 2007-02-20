@@ -21,7 +21,7 @@
 
 #include <QWidget>
 
-#include <kconfig.h>
+#include <ksharedconfig.h>
 #include <kservice.h>
 
 #include "plasma.h"

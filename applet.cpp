@@ -81,7 +81,7 @@ KSharedConfig::Ptr Applet::appletConfig() const
         QString file = KStandardDirs::locateLocal("appdata",
                                                    "applets/" + instanceName() + "rc",
                                                    true);
-        d->appletConfig = KSharedConfig::openConfig(file, false, true);
+        d->appletConfig = KSharedConfig::openConfig(file);
     }
 
     return d->appletConfig;
@@ -92,7 +92,7 @@ KSharedConfig::Ptr Applet::globalAppletConfig() const
     if (!d->globalConfig)
     {
         QString file = KStandardDirs::locateLocal("config", "plasma_" + globalName() + "rc");
-        d->globalConfig = KSharedConfig::openConfig(file, false, true);
+        d->globalConfig = KSharedConfig::openConfig(file);
     }
 
     return d->globalConfig;
