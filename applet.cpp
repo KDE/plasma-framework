@@ -38,8 +38,7 @@ class Applet::Private
             : id(uniqueID),
               globalConfig(0),
               appletConfig(0),
-              appletDescription(appletDescription),
-              chain(appletChain)
+              appletDescription(appletDescription)
         { }
 
         ~Private()
@@ -55,16 +54,14 @@ class Applet::Private
         KSharedConfig::Ptr appletConfig;
         KService::Ptr appletDescription;
         QList<QObject*> watchedForFocus;
-        AppletChain::Ptr chain;
         QStringList loadedEngines;
 };
 
 Applet::Applet(QWidget* parent,
                KService::Ptr appletDescription,
-               const AppletChain::Ptr chain,
                int id)
     : QWidget(parent),
-      d(new Private(appletDescription, id, chain))
+      d(new Private(appletDescription, id))
 {
 }
 
@@ -112,16 +109,6 @@ bool Applet::loadDataEngine(const QString& name)
     }
 
     return false;
-}
-
-const AppletChain::Ptr Applet::chain() const
-{
-    return d->chain;
-}
-
-void Applet::setChain(const AppletChain::Ptr appletChain)
-{
-    d->chain = appletChain;
 }
 
 void Applet::constraintsUpdated()

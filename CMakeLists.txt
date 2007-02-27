@@ -6,7 +6,6 @@
 set(plasma_LIB_SRCS
    plasma.cpp
    applet.cpp
-   appletChain.cpp
    interface.cpp
    theme.cpp
    )

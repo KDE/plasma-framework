@@ -39,7 +39,6 @@ class KDE_EXPORT Applet : public QWidget
 
         Applet(QWidget* parent,
                KService::Ptr appletDescription,
-               const AppletChain::Ptr chain,
                int id);
         ~Applet();
 
@@ -68,9 +67,6 @@ class KDE_EXPORT Applet : public QWidget
          * @return returns true on success, false on failure
          */
         bool loadDataEngine(const QString& name);
-
-        const AppletChain::Ptr chain() const;
-        void setChain(const AppletChain::Ptr);
 
         /**
          * called when any of the geometry constraints have been updated
