@@ -79,7 +79,7 @@ class DataEngine : public QObject
         void clearAllDataSources();
 
     private:
-        QAtomic ref;
+        QAtomic m_ref;
         class Private;
         Private* d;
 };
