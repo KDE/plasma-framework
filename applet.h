@@ -25,7 +25,6 @@
 #include <kservice.h>
 
 #include "plasma.h"
-#include "appletChain.h"
 
 namespace Plasma
 {

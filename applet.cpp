@@ -33,8 +33,7 @@ namespace Plasma
 class Applet::Private
 {
     public:
-        Private(KService::Ptr appletDescription, int uniqueID,
-                const AppletChain::Ptr appletChain)
+        Private(KService::Ptr appletDescription, int uniqueID)
             : id(uniqueID),
               globalConfig(0),
               appletConfig(0),
