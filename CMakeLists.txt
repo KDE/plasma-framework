@@ -7,6 +7,7 @@ set(plasma_LIB_SRCS
    plasma.cpp
    applet.cpp
    interface.cpp
+   runner.cpp
    theme.cpp
    )
 
@@ -22,5 +23,11 @@ install(TARGETS plasma  DESTINATION ${LIB_INSTALL_DIR} )
 
 ########### install files ###############
 
-install( FILES applet.h plasma.h theme.h interface.h DESTINATION ${INCLUDE_INSTALL_DIR}/plasma )
+install( FILES
+    applet.h
+    plasma.h
+    runner.h
+    theme.h
+    interface.h
+    DESTINATION ${INCLUDE_INSTALL_DIR}/plasma )
 
