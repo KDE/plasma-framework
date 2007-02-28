@@ -16,27 +16,124 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
+#include <kdebug.h>
+
 #include "dataengine.h"
+#include "dataengine.moc"
+
+using namespace Plasma;
 
 class DataSource::Private
 {
     public:
-        Private();
+        Private() {}
+        ~Private() {}
 };
 
-DataSource(QObject* parent)
+DataSource::DataSource(QObject* parent)
     : QObject(parent)
 {
     d = new Private();
 }
 
-virtual ~DataSource()
+DataSource::~DataSource()
 {
     delete d;
 }
 
-QString name()
+QString DataSource::name()
 {
+    kDebug() << k_funcinfo << " not implemented";
+    return QString();
+}
+
+
+
+
+
+
+DataEngine::DataEngine(QObject* parent)
+    : QObject(parent)
+{
+}
+
+DataEngine::~DataEngine()
+{
+}
+
+QStringList DataEngine::dataSources()
+{
+    kDebug() << k_funcinfo << " not implemented";
+    return QStringList();
+}
+
+void DataEngine::connect(const QString& source, DataVisualization* visualization)
+{
+    Q_UNUSED(source)
+    Q_UNUSED(visualization)
+
+    kDebug() << k_funcinfo << " not implemented";
+}
+
+DataSource::Data DataEngine::query(const QString& source)
+{
+    Q_UNUSED(source)
+
+    kDebug() << k_funcinfo << " not implemented";
+}
+
+void DataEngine::init()
+{
+    kDebug() << k_funcinfo << " not implemented";
+}
+
+void DataEngine::cleanup()
+{
+    kDebug() << k_funcinfo << " not implemented";
+}
+
+void DataEngine::setDataSource(const QString& source, const QVariant& value)
+{
+    Q_UNUSED(source)
+    Q_UNUSED(value)
+
+    kDebug() << k_funcinfo << " not implemented";
+}
+
+void DataEngine::createDataSource(const QString& source, const QString& domain)
+{
+    Q_UNUSED(source)
+    Q_UNUSED(domain)
+
+    kDebug() << k_funcinfo << " not implemented";
+}
+
+void DataEngine::removeDataSource(const QString& source)
+{
+    Q_UNUSED(source)
+
+    kDebug() << k_funcinfo << " not implemented";
+}
+
+void DataEngine::clearAllDataSources()
+{
+    kDebug() << k_funcinfo << " not implemented";
+}
+
+void DataEngine::ref()
+{
+    kDebug() << k_funcinfo << " not implemented";
+}
+
+void DataEngine::deref()
+{
+    kDebug() << k_funcinfo << " not implemented";
+}
+
+bool DataEngine::isUsed()
+{
+    kDebug() << k_funcinfo << " not implemented";
+    return false;
 }
 
 

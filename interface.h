@@ -21,20 +21,28 @@
 
 #include <QString>
 
+#include <kdelibs_export.h>
+
 namespace Plasma
 {
 
-class Interface
+class KDE_EXPORT Interface
 {
     public:
-        static Interface* self() { return m_interface; }
+        // NOTE: Fix this stuff, not sure what the design was supposed to be,
+        //       but, this thing can't be a singleton because we can't create
+        //       an Interface object due to the pure virtuals. Maybe make them
+        //       just virtual? -MB
 
-        virtual bool loadDataEngine(const QString& name) = 0;
-        virtual void unloadDataEngine(const QString& name) = 0;
+        static Interface* self();
+
+        virtual bool loadDataEngine(const QString &name);
+        virtual void unloadDataEngine(const QString &name);
 
     protected:
         Interface();
         virtual ~Interface();
+
         static Interface* m_interface;
 };
 

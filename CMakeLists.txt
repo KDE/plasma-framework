@@ -1,5 +1,4 @@
-
-
+include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
 ########### next target ###############
 
@@ -9,6 +8,7 @@ set(plasma_LIB_SRCS
    interface.cpp
    runner.cpp
    theme.cpp
+   dataengine.cpp
    )
 
 kde4_automoc(${plasma_LIB_SRCS})
@@ -29,5 +29,6 @@ install( FILES
     runner.h
     theme.h
     interface.h
+    dataengine.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/plasma )
 

@@ -16,14 +16,44 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
+#include <kdebug.h>
+
 #include "interface.h"
 
 namespace Plasma
 {
-Interface* Interface::m_interface;
 
-Interface::Interface() {}
-Interface::~Interface() {}
+Interface* Interface::m_interface = 0;
 
-} // Plasma namespace
+Interface *Interface::self()
+{
+    if (!m_interface)
+        m_interface = new Interface;
 
+    return m_interface;
+}
+
+Interface::Interface()
+{
+}
+
+Interface::~Interface()
+{
+}
+
+bool loadDataEngine(const QString& name)
+{
+    Q_UNUSED(name)
+
+    kDebug() << k_funcinfo << " not implemented";
+    return false;
+}
+
+void unloadDataEngine(const QString& name)
+{
+    Q_UNUSED(name)
+
+    kDebug() << k_funcinfo << " not implemented";
+}
+
+}

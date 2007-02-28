@@ -24,13 +24,15 @@
 #include <QObject>
 #include <QStringList>
 
+#include <kdelibs_export.h>
+
 namespace Plasma
 {
 
 class DataSource;
 class DataVisualization;
 
-class DataSource : public QObject
+class KDE_EXPORT DataSource : public QObject
 {
     Q_OBJECT
 
@@ -51,7 +53,7 @@ class DataSource : public QObject
         Private* d;
 };
 
-class DataEngine : public QObject
+class KDE_EXPORT DataEngine : public QObject
 {
     Q_OBJECT
 
