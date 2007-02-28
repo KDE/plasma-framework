@@ -29,15 +29,10 @@ namespace Plasma
 class KDE_EXPORT Interface
 {
     public:
-        // NOTE: Fix this stuff, not sure what the design was supposed to be,
-        //       but, this thing can't be a singleton because we can't create
-        //       an Interface object due to the pure virtuals. Maybe make them
-        //       just virtual? -MB
-
         static Interface* self();
 
-        virtual bool loadDataEngine(const QString &name);
-        virtual void unloadDataEngine(const QString &name);
+        virtual bool loadDataEngine(const QString &name) = 0;
+        virtual void unloadDataEngine(const QString &name) = 0;
 
     protected:
         Interface();

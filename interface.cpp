@@ -23,13 +23,10 @@
 namespace Plasma
 {
 
-Interface* Interface::m_interface = 0;
+Interface* Interface::m_interface;
 
 Interface *Interface::self()
 {
-    if (!m_interface)
-        m_interface = new Interface;
-
     return m_interface;
 }
 
@@ -39,21 +36,6 @@ Interface::Interface()
 
 Interface::~Interface()
 {
-}
-
-bool loadDataEngine(const QString& name)
-{
-    Q_UNUSED(name)
-
-    kDebug() << k_funcinfo << " not implemented";
-    return false;
-}
-
-void unloadDataEngine(const QString& name)
-{
-    Q_UNUSED(name)
-
-    kDebug() << k_funcinfo << " not implemented";
 }
 
 }
