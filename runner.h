@@ -41,8 +41,9 @@ class KDE_EXPORT Runner : public QObject
          * return 0. The first runner that returns a QAction will be the
          * default runner. Other runner's actions will be suggested in the
          * interface. Non-exact matches should be offered via findMatches.
+         * The action will be activated if the user selects it.
          */
-        virtual QAction* accepts( const QString& term ) = 0;
+        QAction* exactMatch( const QString& command );
 
         /**
          * If the runner has options that the user can interact with to modify
@@ -56,14 +57,6 @@ class KDE_EXPORT Runner : public QObject
          * the widget displaying the options the user can interact with.
          */
         virtual QWidget* options( );
-
-        /**
-         * Take action on the command. What this means is dependant on the
-         * particular runner implementation, e.g. some runners may treat
-         * command as a shell command, while others may treat it as an
-         * equation or a user name or ...
-         */
-        virtual bool exec( const QString& command ) = 0;
 
         KActionCollection* matches( const QString& term, int max, int offset );
 
@@ -86,9 +79,31 @@ class KDE_EXPORT Runner : public QObject
                                   const QString& term,
                                   int max, int offset );
 
+        /**
+         * If the runner can run precisely this term, return a QAction, else
+         * return 0. The first runner that returns a QAction will be the
+         * default runner. Other runner's actions will be suggested in the
+         * interface. Non-exact matches should be offered via findMatches.
+         * The action will be activated if the user selects it.
+         */
+        virtual QAction* accepts( const QString& term ) = 0;
+
+        /**
+         * Take action on the command. What this means is dependant on the
+         * particular runner implementation, e.g. some runners may treat
+         * command as a shell command, while others may treat it as an
+         * equation or a user name or ...
+         * This will be called automatically when the exact match
+         * QAction is triggered
+         */
+        virtual bool exec( const QString& command ) = 0;
+
     private:
         class Private;
         Private* d;
+
+    private Q_SLOTS:
+        void runExactMatch();
 };
 
 #define K_EXPORT_KRUNNER_RUNNER( libname, classname )     \

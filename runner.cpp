@@ -16,6 +16,7 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
+#include <QAction>
 #include <KActionCollection>
 
 #include "runner.h"
@@ -23,12 +24,16 @@
 class Runner::Private
 {
     public:
-        Private( Runner* runner )
+        Private( Runner* runner ) :
+            exactMatch( 0 ),
+            actions( new KActionCollection( runner ) )
         {
-            actions = new KActionCollection( runner );
         }
 
+        QAction* exactMatch;
         KActionCollection* actions;
+        // FIXME: it's a bit lame to keep a copy of the term in each runner
+        QString term;
 };
 
 Runner::Runner( QObject* parent )
@@ -52,6 +57,21 @@ QWidget* Runner::options()
     return 0;
 }
 
+QAction* Runner::exactMatch( const QString& term )
+{
+    delete d->exactMatch;
+    d->term.clear();
+
+    d->exactMatch = accepts( term );
+    if ( d->exactMatch ) {
+        d->term = term;
+        connect( d->exactMatch, SIGNAL( triggered() ),
+                 this, SLOT( runExactMatch() ) );
+    }
+
+    return d->exactMatch;
+}
+
 KActionCollection* Runner::matches( const QString& term, int max, int offset )
 {
     d->actions->clear();
@@ -63,9 +83,15 @@ void Runner::fillMatches( KActionCollection* matches,
                           const QString& term,
                           int max, int offset )
 {
+    Q_UNUSED( matches );
     Q_UNUSED( term );
     Q_UNUSED( max );
     Q_UNUSED( offset );
+}
+
+void Runner::runExactMatch()
+{
+    exec( d->term );
 }
 
 #include "runner.moc"
