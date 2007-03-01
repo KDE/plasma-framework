@@ -17,6 +17,7 @@
  */
 
 #include <kdebug.h>
+#include <QVariant>
 
 #include "dataengine.h"
 #include "dataengine.moc"
@@ -80,6 +81,7 @@ DataSource::Data DataEngine::query(const QString& source)
     Q_UNUSED(source)
 
     kDebug() << k_funcinfo << " not implemented";
+    return DataSource::Data();
 }
 
 void DataEngine::init()
