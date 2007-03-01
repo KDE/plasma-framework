@@ -1,5 +1,5 @@
 /*
- *   Copyright (C) 2006 Aaron Seigo <aseigo@kde.org>
+ *   Copyright (C) 2007 by Alexander Wiedenbruch <mail@wiedenbruch.de>
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU Library General Public License version 2 as
@@ -16,33 +16,23 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef PLASMA_DATAVISUALIZATION_H
-#define PLASMA_DATAVISUALIZATION_H
+#ifndef WIDGET_H_
+#define WIDGET_H_
 
-#include <QObject>
+#include <QGraphicsItem>
 
-#include "dataengine.h"
+#include <kdemacros.h>
 
-namespace Plasma
+class KDE_EXPORT Widget : public QGraphicsItem
 {
-
-// this will end up being multiple-inherited?
-class DataVisualization : QObject
-{
-    Q_OBJECT
-
     public:
-        DataVisualization(QObject* parent);
-        virtual ~DataVisualization();
+        Widget(QGraphicsItem *parent, QRectF size);
+        virtual ~Widget();
 
-    public slots:
-        virtual void data(const DataSource::Data&) = 0;
+        QRectF boundingRect() const;
 
-    private:
-        class Private;
-        Private* d;
+    protected:
+        QRectF m_boundingBox;
 };
 
-} // Plasma namespace
-
-#endif // multiple inclusion guard
+#endif

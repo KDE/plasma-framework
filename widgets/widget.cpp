@@ -1,5 +1,5 @@
 /*
- *   Copyright (C) 2006 Aaron Seigo <aseigo@kde.org>
+ *   Copyright (C) 2007 by Alexander Wiedenbruch <mail@wiedenbruch.de>
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU Library General Public License version 2 as
@@ -16,33 +16,19 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef PLASMA_DATAVISUALIZATION_H
-#define PLASMA_DATAVISUALIZATION_H
+#include "widget.h"
 
-#include <QObject>
-
-#include "dataengine.h"
-
-namespace Plasma
+Widget::Widget(QGraphicsItem *parent, QRectF size)
+  : QGraphicsItem(parent),
+    m_boundingBox(size)
 {
+}
 
-// this will end up being multiple-inherited?
-class DataVisualization : QObject
+Widget::~Widget()
 {
-    Q_OBJECT
+}
 
-    public:
-        DataVisualization(QObject* parent);
-        virtual ~DataVisualization();
-
-    public slots:
-        virtual void data(const DataSource::Data&) = 0;
-
-    private:
-        class Private;
-        Private* d;
-};
-
-} // Plasma namespace
-
-#endif // multiple inclusion guard
+QRectF Widget::boundingRect() const
+{
+  return m_boundingBox;
+}

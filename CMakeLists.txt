@@ -9,6 +9,9 @@ set(plasma_LIB_SRCS
    runner.cpp
    theme.cpp
    dataengine.cpp
+
+   widgets/widget.cpp
+   widgets/lineedit.cpp
    )
 
 kde4_automoc(${plasma_LIB_SRCS})
@@ -30,5 +33,8 @@ install( FILES
     theme.h
     interface.h
     dataengine.h
+
+    widgets/widget.h
+    widgets/lineedit.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/plasma )
 
