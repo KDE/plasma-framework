@@ -20,10 +20,10 @@
 
 #include "interface.h"
 
+Plasma::Interface* Plasma::Interface::m_interface;
+
 namespace Plasma
 {
-
-Interface* Interface::m_interface;
 
 Interface *Interface::self()
 {
