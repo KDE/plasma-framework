@@ -56,10 +56,11 @@ class Applet::Private
         QStringList loadedEngines;
 };
 
-Applet::Applet(QWidget* parent,
+Applet::Applet(QGraphicsItem *parent,
                KService::Ptr appletDescription,
                int id)
-    : QWidget(parent),
+    : QWidget(0),
+      QGraphicsItemGroup(parent),
       d(new Private(appletDescription, id))
 {
 }
@@ -124,12 +125,10 @@ QString Applet::instanceName() const
     return d->appletDescription->library() + QString::number(d->id);
 }
 
-void Applet::watchForFocus(QWidget* widget, bool watch)
+void Applet::watchForFocus(QObject *widget, bool watch)
 {
     if (!widget)
-    {
         return;
-    }
 
     int index = d->watchedForFocus.indexOf(widget);
     if (watch)
@@ -149,10 +148,8 @@ void Applet::watchForFocus(QWidget* widget, bool watch)
 
 void Applet::needsFocus(bool focus)
 {
-    if (focus == hasFocus())
-    {
+    if (focus == QWidget::hasFocus() || focus == QGraphicsItem::hasFocus())
         return;
-    }
 
     emit requestFocus(focus);
 }

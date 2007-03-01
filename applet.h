@@ -19,6 +19,7 @@
 #ifndef PLASMA_APPLET_H
 #define PLASMA_APPLET_H
 
+#include <QGraphicsItemGroup>
 #include <QWidget>
 
 #include <ksharedconfig.h>
@@ -29,14 +30,14 @@
 namespace Plasma
 {
 
-class KDE_EXPORT Applet : public QWidget
+class KDE_EXPORT Applet : public QWidget, public QGraphicsItemGroup
 {
     Q_OBJECT
 
     public:
         typedef QList<Applet*> List;
 
-        Applet(QWidget* parent,
+        Applet(QGraphicsItem* parent,
                KService::Ptr appletDescription,
                int id);
         ~Applet();
@@ -89,7 +90,7 @@ class KDE_EXPORT Applet : public QWidget
         * @param widget the widget to watch for keyboard focus
         * @param watch whether to start watching the widget, or to stop doing so
         */
-        void watchForFocus(QWidget* widget, bool watch = true);
+        void watchForFocus(QObject *widget, bool watch = true);
 
         /**
         * Call this whenever focus is needed or not needed. You do not have to
