@@ -45,6 +45,8 @@ class KDE_EXPORT Runner : public QObject
          * default runner. Other runner's actions will be suggested in the
          * interface. Non-exact matches should be offered via findMatches.
          * The action will be activated if the user selects it.
+         * If the action is informational only and should not be executed,
+         * disable the action with setEnabled( false ).
          */
         QAction* exactMatch( const QString& command );
 
@@ -63,10 +65,10 @@ class KDE_EXPORT Runner : public QObject
 
         KActionCollection* matches( const QString& term, int max, int offset );
 
-	/**
-	 * Static method is called to load and get a list available of Runners.
-	 */
-	static List loadRunners( QWidget* parent );
+        /**
+         * Static method is called to load and get a list available of Runners.
+         */
+        static List loadRunners( QWidget* parent );
 
     signals:
         /**
@@ -82,6 +84,8 @@ class KDE_EXPORT Runner : public QObject
          * This method is called when there is text input to match. The runner
          * should fill the matches action collection with one action per match
          * to a maximium of max matches starting at offset in the data set
+         * If the action is informational only and should not be executed,
+         * disable the action with setEnabled( false ).
          */
         virtual void fillMatches( KActionCollection* matches,
                                   const QString& term,
