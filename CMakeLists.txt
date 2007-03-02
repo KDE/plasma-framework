@@ -9,6 +9,7 @@ set(plasma_LIB_SRCS
    runner.cpp
    theme.cpp
    dataengine.cpp
+   datavisualization.cpp
 
    widgets/widget.cpp
    widgets/lineedit.cpp

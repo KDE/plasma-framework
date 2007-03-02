@@ -27,12 +27,12 @@ namespace Plasma
 {
 
 // this will end up being multiple-inherited?
-class DataVisualization : QObject
+class DataVisualization : public QObject
 {
     Q_OBJECT
 
     public:
-        DataVisualization(QObject* parent);
+        DataVisualization(QObject* parent = 0);
         virtual ~DataVisualization();
 
     public slots:

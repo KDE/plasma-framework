@@ -22,8 +22,9 @@ namespace Plasma
 {
 
 Widget::Widget(QGraphicsItem *parent, QPointF pos, QSizeF size)
-  : QGraphicsItem(parent)
-{
+  : QGraphicsItem(parent),
+    DataVisualization()
+{ 
   m_boundingBox = QRectF(0, 0, size.width(), size.height());
   setPos(pos);
 }

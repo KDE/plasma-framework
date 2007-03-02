@@ -32,7 +32,7 @@
 namespace Plasma
 {
 
-class KDE_EXPORT LineEdit : public QObject, public Widget
+class KDE_EXPORT LineEdit : public Widget
 {
   Q_OBJECT
 
@@ -48,6 +48,9 @@ class KDE_EXPORT LineEdit : public QObject, public Widget
 
     void keyPressEvent(QKeyEvent *event);
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
+
+  public Q_SLOTS:
+    void data(const DataSource::Data&);
 
   protected:
     void focusOutEvent(QFocusEvent *event);

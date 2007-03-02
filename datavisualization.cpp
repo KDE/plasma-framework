@@ -1,5 +1,5 @@
 /*
- *   Copyright (C) 2007 by Alexander Wiedenbruch <mail@wiedenbruch.de>
+ *   Copyright (C) 2007 Alexander Wiedenbruch <mail@wiedenbruch.de>
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU Library General Public License version 2 as
@@ -16,31 +16,30 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef WIDGET_H_
-#define WIDGET_H_
-
-#include <QGraphicsItem>
-
-#include <kdemacros.h>
 
 #include "datavisualization.h"
 
 namespace Plasma
 {
 
-class KDE_EXPORT Widget : public QGraphicsItem,
-                          public DataVisualization
+class DataVisualization::Private
 {
-    public:
-        Widget(QGraphicsItem *parent, QPointF pos, QSizeF size);
-        virtual ~Widget();
-
-        QRectF boundingRect() const;
-
-    protected:
-        QRectF m_boundingBox;
 };
+
+
+DataVisualization::DataVisualization(QObject *parent)
+  : QObject(parent),
+    d(new Private)
+{
+}
+
+DataVisualization::~DataVisualization()
+{
+  delete d;
+}
+
+#include "datavisualization.moc"
 
 } // Plasma namespace
 
-#endif
+

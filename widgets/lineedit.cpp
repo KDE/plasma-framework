@@ -79,6 +79,10 @@ LineEdit::~LineEdit()
   delete d;
 }
 
+void LineEdit::data(const DataSource::Data&)
+{
+}
+
 /*
   Some code in this method is copied from QLineEdit.
   Copyright (C) 1992-2006 Trolltech ASA. All rights reserved.
