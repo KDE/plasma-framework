@@ -37,7 +37,7 @@ class KDE_EXPORT LineEdit : public QObject, public Widget
   Q_OBJECT
 
   public:
-    LineEdit(Plasma::Applet *a, QRectF size);
+    LineEdit(Plasma::Applet *a, QPointF pos, QSizeF size);
     ~LineEdit();
 
     void paint(QPainter *painter,
@@ -46,8 +46,6 @@ class KDE_EXPORT LineEdit : public QObject, public Widget
     void setValue(QString text);
     QString getStringValue() const;
 
-    void setInputFocus();
-    void clearInputFocus();
     void keyPressEvent(QKeyEvent *event);
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
 

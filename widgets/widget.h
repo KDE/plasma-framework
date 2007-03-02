@@ -29,7 +29,7 @@ namespace Plasma
 class KDE_EXPORT Widget : public QGraphicsItem
 {
     public:
-        Widget(QGraphicsItem *parent, QRectF size);
+        Widget(QGraphicsItem *parent, QPointF pos, QSizeF size);
         virtual ~Widget();
 
         QRectF boundingRect() const;

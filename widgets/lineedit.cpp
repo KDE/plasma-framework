@@ -60,8 +60,8 @@ class LineEdit::Private
       QTimer m_cursorTimer;
 };
 
-LineEdit::LineEdit(Plasma::Applet* a, QRectF size)
-    : Widget(a, size),
+LineEdit::LineEdit(Plasma::Applet* a, QPointF pos, QSizeF size)
+    : Widget(a, pos, size),
     d(new Private)
 {
     d->m_bgColor = QColor(200, 200, 200);
@@ -133,7 +133,7 @@ void LineEdit::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     QTextLine line = d->m_textLayout.lineAt(0);
 
-    QPoint pos = mapFromParent(event->pos()).toPoint() - boundingRect().topLeft().toPoint();
+    QPoint pos = event->pos().toPoint();
     d->m_cursorPos = line.xToCursor(pos.x() - 5 + d->m_hscroll);
     d->m_cursorVisible = true;
 

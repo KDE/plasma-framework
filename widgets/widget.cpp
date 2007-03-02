@@ -21,10 +21,11 @@
 namespace Plasma
 {
 
-Widget::Widget(QGraphicsItem *parent, QRectF size)
-  : QGraphicsItem(parent),
-    m_boundingBox(size)
+Widget::Widget(QGraphicsItem *parent, QPointF pos, QSizeF size)
+  : QGraphicsItem(parent)
 {
+  m_boundingBox = QRectF(0, 0, size.width(), size.height());
+  setPos(pos);
 }
 
 Widget::~Widget()
