@@ -22,6 +22,9 @@
 
 #include "runner.h"
 
+namespace Plasma
+{
+
 class Runner::Private
 {
     public:
@@ -112,5 +115,7 @@ Runner::List Runner::loadRunners( QWidget* parent )
 
     return runners;
 }
+
+} // Plasma namespace
 
 #include "runner.moc"

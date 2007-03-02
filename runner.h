@@ -26,6 +26,9 @@
 
 class KActionCollection;
 
+namespace Plasma
+{
+
 class KDE_EXPORT Runner : public QObject
 {
     Q_OBJECT
@@ -110,6 +113,8 @@ class KDE_EXPORT Runner : public QObject
     private Q_SLOTS:
         void runExactMatch();
 };
+
+} // Plasma namespace
 
 #define K_EXPORT_KRUNNER_RUNNER( libname, classname )     \
     K_EXPORT_COMPONENT_FACTORY(                           \

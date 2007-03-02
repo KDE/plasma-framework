@@ -18,6 +18,9 @@
 
 #include "widget.h"
 
+namespace Plasma
+{
+
 Widget::Widget(QGraphicsItem *parent, QRectF size)
   : QGraphicsItem(parent),
     m_boundingBox(size)
@@ -32,3 +35,6 @@ QRectF Widget::boundingRect() const
 {
   return m_boundingBox;
 }
+
+} // Plasma namespace
+

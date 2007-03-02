@@ -26,7 +26,9 @@
 #include <kdebug.h>
 
 #include "lineedit.h"
-#include "lineedit.moc"
+
+namespace Plasma
+{
 
 class LineEdit::Private
 {
@@ -125,7 +127,6 @@ void LineEdit::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 
     if(hasFocus() && d->m_cursorVisible)
         d->m_textLayout.drawCursor(painter, topLeft, d->m_cursorPos);
-        
 }
 
 void LineEdit::mousePressEvent(QGraphicsSceneMouseEvent *event)
@@ -243,4 +244,8 @@ QString LineEdit::getStringValue() const
 {
     return d->m_text;
 }
+
+#include "lineedit.moc"
+
+} // Plasma namespace
 

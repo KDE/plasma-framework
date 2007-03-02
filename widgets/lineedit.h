@@ -29,6 +29,9 @@
 #include <applet.h>
 #include "widget.h"
 
+namespace Plasma
+{
+
 class KDE_EXPORT LineEdit : public QObject, public Widget
 {
   Q_OBJECT
@@ -58,5 +61,7 @@ class KDE_EXPORT LineEdit : public QObject, public Widget
     class Private;
     Private *const d;
 };
+
+} // Plasma namespace
 
 #endif

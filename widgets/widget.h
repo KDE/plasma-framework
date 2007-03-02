@@ -23,6 +23,9 @@
 
 #include <kdemacros.h>
 
+namespace Plasma
+{
+
 class KDE_EXPORT Widget : public QGraphicsItem
 {
     public:
@@ -34,5 +37,7 @@ class KDE_EXPORT Widget : public QGraphicsItem
     protected:
         QRectF m_boundingBox;
 };
+
+} // Plasma namespace
 
 #endif
