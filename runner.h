@@ -60,6 +60,11 @@ class KDE_EXPORT Runner : public QObject
 
         KActionCollection* matches( const QString& term, int max, int offset );
 
+	/**
+	 * Static method is called to load and get a list available of Runners.
+	 */
+	static List loadRunners( QWidget* parent );
+
     signals:
         /**
          * When emitted, the interface will update itself to show the new

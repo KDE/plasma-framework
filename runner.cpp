@@ -18,6 +18,7 @@
 
 #include <QAction>
 #include <KActionCollection>
+#include <KServiceTypeTrader>
 
 #include "runner.h"
 
@@ -92,6 +93,24 @@ void Runner::fillMatches( KActionCollection* matches,
 void Runner::runExactMatch()
 {
     exec( d->term );
+}
+
+Runner::List Runner::loadRunners( QWidget* parent )
+{
+    List runners;
+    KService::List offers = KServiceTypeTrader::self()->query( "KRunner/Runner" );
+    foreach ( KService::Ptr service, offers ) {
+        Runner* runner = KService::createInstance<Runner>( service, parent );
+        if ( runner ) {
+            kDebug() << "loaded runner : " << service->name() << endl ;
+            runners.append( runner );
+        }
+        else {
+            kDebug() << "failed to load runner : " << service->name() << endl ;
+        }
+    }
+
+    return runners;
 }
 
 #include "runner.moc"
