@@ -37,9 +37,9 @@ class KDE_EXPORT Applet : public QWidget, public QGraphicsItemGroup
     public:
         typedef QList<Applet*> List;
 
-        Applet(QGraphicsItem* parent,
-               KService::Ptr appletDescription,
-               int id);
+        Applet( QGraphicsItem* parent,
+                KService::Ptr appletDescription,
+                int id );
         ~Applet();
 
         /**
@@ -66,7 +66,7 @@ class KDE_EXPORT Applet : public QWidget, public QGraphicsItemGroup
          *
          * @return returns true on success, false on failure
          */
-        bool loadDataEngine(const QString& name);
+        bool loadDataEngine( const QString& name );
 
         /**
          * called when any of the geometry constraints have been updated
@@ -77,7 +77,7 @@ class KDE_EXPORT Applet : public QWidget, public QGraphicsItemGroup
         virtual void constraintsUpdated();
 
     Q_SIGNALS:
-        void requestFocus(bool focus);
+        void requestFocus( bool focus );
 
     protected:
 
@@ -90,7 +90,7 @@ class KDE_EXPORT Applet : public QWidget, public QGraphicsItemGroup
         * @param widget the widget to watch for keyboard focus
         * @param watch whether to start watching the widget, or to stop doing so
         */
-        void watchForFocus(QObject *widget, bool watch = true);
+        void watchForFocus( QObject *widget, bool watch = true );
 
         /**
         * Call this whenever focus is needed or not needed. You do not have to
@@ -99,10 +99,10 @@ class KDE_EXPORT Applet : public QWidget, public QGraphicsItemGroup
         * @see watchForFocus
         * @param focus whether to or not to request focus
         */
-        void needsFocus(bool focus);
+        void needsFocus( bool focus );
 
 
-        bool eventFilter(QObject *o, QEvent *e);
+        bool eventFilter( QObject *o, QEvent *e );
 
     private:
         class Private;

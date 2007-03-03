@@ -31,8 +31,8 @@ class KDE_EXPORT Interface
     public:
         static Interface* self();
 
-        virtual bool loadDataEngine(const QString &name) = 0;
-        virtual void unloadDataEngine(const QString &name) = 0;
+        virtual bool loadDataEngine( const QString &name ) = 0;
+        virtual void unloadDataEngine( const QString &name ) = 0;
 
     protected:
         Interface();

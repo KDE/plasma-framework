@@ -31,11 +31,11 @@ class KDE_EXPORT Theme : public QObject
     Q_OBJECT
 
     public:
-        explicit Theme(QObject* parent = 0);
+        explicit Theme( QObject* parent = 0 );
         ~Theme();
 
         QString themeName() const;
-        QString imagePath(const QString& name) const;
+        QString imagePath( const QString& name ) const;
 
     signals:
         void changed();

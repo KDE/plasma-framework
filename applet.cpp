@@ -33,18 +33,17 @@ namespace Plasma
 class Applet::Private
 {
     public:
-        Private(KService::Ptr appletDescription, int uniqueID)
-            : id(uniqueID),
-              globalConfig(0),
-              appletConfig(0),
+        Private( KService::Ptr appletDescription, int uniqueID )
+            : id( uniqueID ),
+              globalConfig( 0 ),
+              appletConfig( 0 ),
               appletDescription(appletDescription)
         { }
 
         ~Private()
         {
-            foreach (const QString& engine, loadedEngines)
-            {
-                Interface::self()->unloadDataEngine(engine);
+            foreach ( const QString& engine, loadedEngines ) {
+               Interface::self()->unloadDataEngine( engine );
             }
         }
 
@@ -56,29 +55,28 @@ class Applet::Private
         QStringList loadedEngines;
 };
 
-Applet::Applet(QGraphicsItem *parent,
-               KService::Ptr appletDescription,
-               int id)
-    : QWidget(0),
-      QGraphicsItemGroup(parent),
-      d(new Private(appletDescription, id))
+Applet::Applet( QGraphicsItem *parent,
+        KService::Ptr appletDescription,
+                    int id )
+        : QWidget( 0 ),
+          QGraphicsItemGroup( parent ),
+          d( new Private( appletDescription, id ) )
 {
 }
 
 Applet::~Applet()
 {
-    needsFocus(false);
+    needsFocus( false );
     delete d;
 }
 
 KSharedConfig::Ptr Applet::appletConfig() const
 {
-    if (!d->appletConfig)
-    {
-        QString file = KStandardDirs::locateLocal("appdata",
+    if ( !d->appletConfig ) {
+        QString file = KStandardDirs::locateLocal( "appdata",
                                                    "applets/" + instanceName() + "rc",
-                                                   true);
-        d->appletConfig = KSharedConfig::openConfig(file);
+                                                   true );
+        d->appletConfig = KSharedConfig::openConfig( file );
     }
 
     return d->appletConfig;
@@ -86,25 +84,22 @@ KSharedConfig::Ptr Applet::appletConfig() const
 
 KSharedConfig::Ptr Applet::globalAppletConfig() const
 {
-    if (!d->globalConfig)
-    {
-        QString file = KStandardDirs::locateLocal("config", "plasma_" + globalName() + "rc");
-        d->globalConfig = KSharedConfig::openConfig(file);
+    if ( !d->globalConfig ) {
+        QString file = KStandardDirs::locateLocal( "config", "plasma_" + globalName() + "rc" );
+        d->globalConfig = KSharedConfig::openConfig( file );
     }
 
     return d->globalConfig;
 }
 
-bool Applet::loadDataEngine(const QString& name)
+bool Applet::loadDataEngine( const QString& name )
 {
-    if (d->loadedEngines.indexOf(name) != -1)
-    {
+    if ( d->loadedEngines.indexOf( name ) != -1 ) {
         return true;
     }
 
-    if (Plasma::Interface::self()->loadDataEngine(name))
-    {
-        d->loadedEngines.append(name);
+    if ( Plasma::Interface::self()->loadDataEngine( name ) ) {
+        d->loadedEngines.append( name );
         return true;
     }
 
@@ -122,54 +117,50 @@ QString Applet::globalName() const
 
 QString Applet::instanceName() const
 {
-    return d->appletDescription->library() + QString::number(d->id);
+    return d->appletDescription->library() + QString::number( d->id );
 }
 
 void Applet::watchForFocus(QObject *widget, bool watch)
 {
-    if (!widget)
+    if ( !widget ) {
         return;
+    }
 
     int index = d->watchedForFocus.indexOf(widget);
-    if (watch)
-    {
-        if (index == -1)
-        {
-            d->watchedForFocus.append(widget);
-            widget->installEventFilter(this);
+    if ( watch ) {
+        if ( index == -1 ) {
+            d->watchedForFocus.append( widget );
+            widget->installEventFilter( this );
         }
-    }
-    else if (index != -1)
-    {
-        d->watchedForFocus.removeAt(index);
-        widget->removeEventFilter(this);
+    } else if ( index != -1 ) {
+        d->watchedForFocus.removeAt( index );
+        widget->removeEventFilter( this );
     }
 }
 
-void Applet::needsFocus(bool focus)
+void Applet::needsFocus( bool focus )
 {
-    if (focus == QWidget::hasFocus() || focus == QGraphicsItem::hasFocus())
+    if ( focus == QWidget::hasFocus() ||
+         focus == QGraphicsItem::hasFocus() ) {
         return;
+    }
 
     emit requestFocus(focus);
 }
 
-bool Applet::eventFilter(QObject *o, QEvent * e)
+bool Applet::eventFilter( QObject *o, QEvent * e )
 {
-    if (!d->watchedForFocus.contains(o))
+    if ( !d->watchedForFocus.contains( o ) )
     {
-        if (e->type() == QEvent::MouseButtonRelease ||
-            e->type() == QEvent::FocusIn)
-        {
-            needsFocus(true);
-        }
-        else if (e->type() == QEvent::FocusOut)
-        {
-            needsFocus(false);
+        if ( e->type() == QEvent::MouseButtonRelease ||
+             e->type() == QEvent::FocusIn ) {
+            needsFocus( true );
+        } else if ( e->type() == QEvent::FocusOut ) {
+            needsFocus( false );
         }
     }
 
-    return QWidget::eventFilter(o, e);
+    return QWidget::eventFilter( o, e );
 }
 
 } // Plasma namespace

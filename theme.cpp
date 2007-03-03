@@ -29,7 +29,7 @@ class Theme::Private
 {
     public:
         Private()
-            : themeName("default")
+            : themeName( "default" )
         {
         }
 
@@ -40,9 +40,9 @@ Theme::Theme(QObject* parent)
     : QObject(parent),
       d(new Private)
 {
-    KConfig config("plasma");
-    KConfigGroup group(&config, "Theme");
-    d->themeName = group.readEntry("name", d->themeName);
+    KConfig config( "plasmarc" );
+    KConfigGroup group( &config, "Theme" );
+    d->themeName = group.readEntry( "name", d->themeName );
 }
 
 Theme::~Theme()
@@ -54,10 +54,11 @@ QString Theme::themeName() const
     return d->themeName;
 }
 
-QString Theme::imagePath(const QString& name) const
+QString Theme::imagePath( const QString& name ) const
 {
-    return KStandardDirs::locate("data", "desktoptheme/" + d->themeName
-                                          + "/" + name + ".svg");
+    return KStandardDirs::locate( "data", "desktoptheme/" +
+                                          d->themeName +
+                                          "/" + name + ".svg" );
 }
 
 }
