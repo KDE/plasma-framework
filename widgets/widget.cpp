@@ -21,21 +21,24 @@
 namespace Plasma
 {
 
-Widget::Widget(QGraphicsItem *parent, QPointF pos, QSizeF size)
+class Widget::Private
+{
+    public:
+        Private() { };
+        ~Private() { };
+};
+
+
+Widget::Widget(QGraphicsItem *parent)
   : QGraphicsItem(parent),
-    DataVisualization()
-{ 
-  m_boundingBox = QRectF(0, 0, size.width(), size.height());
-  setPos(pos);
+    DataVisualization(),
+    d(new Private)
+{
 }
 
 Widget::~Widget()
 {
-}
-
-QRectF Widget::boundingRect() const
-{
-  return m_boundingBox;
+    delete d;
 }
 
 } // Plasma namespace

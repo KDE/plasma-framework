@@ -32,13 +32,12 @@ class KDE_EXPORT Widget : public QGraphicsItem,
                           public DataVisualization
 {
     public:
-        Widget(QGraphicsItem *parent, QPointF pos, QSizeF size);
+        Widget(QGraphicsItem *parent = 0);
         virtual ~Widget();
 
-        QRectF boundingRect() const;
-
-    protected:
-        QRectF m_boundingBox;
+    private:
+        class Private;
+        Private *const d;
 };
 
 } // Plasma namespace
