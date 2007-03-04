@@ -12,6 +12,8 @@ set(plasma_LIB_SRCS
    datavisualization.cpp
 
    widgets/widget.cpp
+   widgets/lineedit.cpp
+   widgets/button.cpp
    )
 
 kde4_automoc(${plasma_LIB_SRCS})
@@ -35,5 +37,7 @@ install( FILES
     dataengine.h
 
     widgets/widget.h
+    widgets/lineedit.h
+    widgets/button.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/plasma )
 
