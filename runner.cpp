@@ -61,6 +61,11 @@ QWidget* Runner::options()
     return 0;
 }
 
+QAction* Runner::exactMatch( )
+{
+    return d->exactMatch;
+}
+
 QAction* Runner::exactMatch( const QString& term )
 {
     delete d->exactMatch;

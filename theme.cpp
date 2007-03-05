@@ -54,7 +54,7 @@ QString Theme::themeName() const
     return d->themeName;
 }
 
-QString Theme::imagePath( const QString& name ) const
+QString Theme::image( const QString& name ) const
 {
     return KStandardDirs::locate( "data", "desktoptheme/" +
                                           d->themeName +

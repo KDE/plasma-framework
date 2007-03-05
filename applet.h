@@ -23,7 +23,6 @@
 #include <QWidget>
 
 #include <ksharedconfig.h>
-#include <kservice.h>
 
 #include "plasma.h"
 
@@ -38,8 +37,8 @@ class KDE_EXPORT Applet : public QWidget, public QGraphicsItemGroup
         typedef QList<Applet*> List;
 
         Applet( QGraphicsItem* parent,
-                KService::Ptr appletDescription,
-                int id );
+                QString serviceId,
+                int appletId );
         ~Applet();
 
         /**

@@ -39,6 +39,7 @@ class KDE_EXPORT DataSource : public QObject
     public:
         typedef QHash<QString, DataSource*> Dict;
         typedef QHash<QString, QVariant> Data;
+        typedef QHash<QString, Dict> Grouping;
 
         explicit DataSource(QObject* parent = 0);
         virtual ~DataSource();

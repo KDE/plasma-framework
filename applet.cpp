@@ -22,7 +22,9 @@
 #include <QStringList>
 #include <QTimer>
 
+#include <KPluginInfo>
 #include <KStandardDirs>
+#include <KService>
 
 #include "applet.h"
 #include "interface.h"
@@ -34,10 +36,10 @@ class Applet::Private
 {
     public:
         Private( KService::Ptr appletDescription, int uniqueID )
-            : id( uniqueID ),
+            : appletId( uniqueID ),
               globalConfig( 0 ),
               appletConfig( 0 ),
-              appletDescription(appletDescription)
+              appletDescription( new KPluginInfo( appletDescription ) )
         { }
 
         ~Private()
@@ -45,23 +47,25 @@ class Applet::Private
             foreach ( const QString& engine, loadedEngines ) {
                Interface::self()->unloadDataEngine( engine );
             }
+            delete appletDescription;
         }
 
-        int id;
+        int appletId;
         KSharedConfig::Ptr globalConfig;
         KSharedConfig::Ptr appletConfig;
-        KService::Ptr appletDescription;
+        KPluginInfo* appletDescription;
         QList<QObject*> watchedForFocus;
         QStringList loadedEngines;
 };
 
 Applet::Applet( QGraphicsItem *parent,
-        KService::Ptr appletDescription,
-                    int id )
+                QString serviceID,
+                int appletId )
         : QWidget( 0 ),
-          QGraphicsItemGroup( parent ),
-          d( new Private( appletDescription, id ) )
+          QGraphicsItemGroup( parent )
 {
+    KService::Ptr service = KService::serviceByStorageId( serviceID );
+    d = new Private( service, appletId );
 }
 
 Applet::~Applet()
@@ -112,12 +116,12 @@ void Applet::constraintsUpdated()
 
 QString Applet::globalName() const
 {
-    return d->appletDescription->library();
+    return d->appletDescription->service()->library();
 }
 
 QString Applet::instanceName() const
 {
-    return d->appletDescription->library() + QString::number( d->id );
+    return d->appletDescription->service()->library() + QString::number( d->appletId );
 }
 
 void Applet::watchForFocus(QObject *widget, bool watch)
