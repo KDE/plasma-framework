@@ -37,6 +37,9 @@ class PushButton::Private
             QString labelText;
             QString labelIcon;
             QColor  labelTextColor;
+            QIcon icon;
+            QSize iconSize;
+            bool hasIcon;
             int labelTextOpacity;
             int height;
             int width;
@@ -61,6 +64,8 @@ PushButton::PushButton(QGraphicsItem *parent)
     d->state= PushButton::NONE;
     d->labelText=tr("Plasma");
     d->labelTextColor= QColor(201,201,255);
+    d->hasIcon = false;
+    d->iconSize=QSize(32,32);
 
 }
 
@@ -81,7 +86,11 @@ void PushButton::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
     options.state = option->state;
     options.rect = boundingRect().toRect();
     options.text = text();
- 
+    if (d->hasIcon){
+       options.icon= d->icon;
+       options.iconSize = d->iconSize;
+    }
+
     widget->style()->drawPrimitive(QStyle::PE_PanelButtonCommand, &options, painter, widget);
     widget->style()->drawPrimitive(QStyle::PE_FrameFocusRect, &options, painter, widget);
     widget-> style()->drawControl(QStyle::CE_PushButton, &options, painter, widget);
@@ -136,6 +145,17 @@ void PushButton::setWidth(int w)
     }
 }
 
+void PushButton::setIcon(const QString& path)
+{
+    QPixmap _iconPixmap (path);
+    if (!path.isNull()) {
+    d->icon = QIcon(_iconPixmap);
+    d->iconSize = _iconPixmap.size();
+    d->hasIcon=true;
+    }else {
+        d->hasIcon = false;
+    }
+}
 QSize PushButton::size()
 {
     return QSize(d->width,d->height);
