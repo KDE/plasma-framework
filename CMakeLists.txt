@@ -13,7 +13,7 @@ set(plasma_LIB_SRCS
 
    widgets/widget.cpp
    widgets/lineedit.cpp
-   widgets/button.cpp
+   widgets/pushbutton.cpp
    )
 
 kde4_automoc(${plasma_LIB_SRCS})
@@ -38,6 +38,6 @@ install( FILES
 
     widgets/widget.h
     widgets/lineedit.h
-    widgets/button.h
+    widgets/pushbutton.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/plasma )
 
