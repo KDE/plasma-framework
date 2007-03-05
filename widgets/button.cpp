@@ -174,7 +174,7 @@ void Button::drawOverlay(QPainter * painter)
 
 void Button::drawSVG(QPainter * painter , const QString& imageName)
 {
-    QString file = Theme().imagePath(imageName);
+    QString file = Theme().image(imageName);
     if (!file.isEmpty()) {
              QSvgRenderer svgimg(file);
              svgimg.render(painter,this->boundingRect());
