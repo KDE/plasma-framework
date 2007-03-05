@@ -19,6 +19,7 @@
 #ifndef PUSHBUTTON_H
 #define PUSHBUTTON_H
 
+#include <QObject>
 #include <QGraphicsTextItem>
 
 #include <kdemacros.h>
@@ -31,9 +32,9 @@
 namespace Plasma
 {
 
-class KDE_EXPORT PushButton : public QGraphicsItem,
-                            public DataVisualization
+class KDE_EXPORT PushButton : public DataVisualization,public QGraphicsItem
 {
+    Q_OBJECT
     public:
         typedef enum {RECT=0,ROUND,COUSTOM} ButtonShape;
         typedef enum {NONE,HOVER,PRESSED,RELEASED} ButtonState;
@@ -53,9 +54,9 @@ class KDE_EXPORT PushButton : public QGraphicsItem,
         int width();
         int height();
 
-    public Q_SLOTS:
+    public slots:
         void data(const DataSource::Data&);
-    Q_SIGNALS:
+    signals:
         void clicked();
     protected:
         bool isDown();

@@ -24,6 +24,7 @@
 #include <QGraphicsSceneMouseEvent>
 
 #include "pushbutton.h"
+#include "pushbutton.moc"
 
 namespace Plasma
 {
@@ -80,15 +81,7 @@ void PushButton::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
     options.state = option->state;
     options.rect = boundingRect().toRect();
     options.text = text();
-
-    if (option->state & QStyle::State_Enabled) {
-            painter->setPen(option->palette.mid().color());
-            painter->setBrush(option->palette.buttonText());
-            } else {
-            painter->setPen(option->palette.buttonText().color());
-            painter->setBrush(option->palette.mid());
-                                           }
-
+ 
     widget->style()->drawPrimitive(QStyle::PE_PanelButtonCommand, &options, painter, widget);
     widget->style()->drawPrimitive(QStyle::PE_FrameFocusRect, &options, painter, widget);
     widget-> style()->drawControl(QStyle::CE_PushButton, &options, painter, widget);
@@ -176,5 +169,6 @@ void PushButton::mousePressEvent ( QGraphicsSceneMouseEvent * event )
     event->accept();
     d->state = PushButton::PRESSED;
     update();
+    emit clicked();
 }
 } // namespace Plasma
