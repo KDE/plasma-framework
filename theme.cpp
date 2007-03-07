@@ -33,8 +33,21 @@ class Theme::Private
         {
         }
 
-    QString themeName;
+        QString themeName;
 };
+
+class ThemeSingleton
+{
+    public:
+        Theme self;
+};
+
+K_GLOBAL_STATIC( ThemeSingleton, privateSelf )
+
+Theme* Theme::self()
+{
+    return &privateSelf->self;
+}
 
 Theme::Theme(QObject* parent)
     : QObject(parent),
@@ -56,9 +69,16 @@ QString Theme::themeName() const
 
 QString Theme::image( const QString& name ) const
 {
-    return KStandardDirs::locate( "data", "desktoptheme/" +
-                                          d->themeName +
-                                          "/" + name + ".svg" );
+    QString search = "desktoptheme/" + d->themeName + "/" + name + ".svg";
+    QString path =  KStandardDirs::locate( "data", search );
+
+    if ( path.isEmpty() ) {
+        kDebug() << "Theme says: bad image path " << name 
+                 << "; looked in: " << search
+                 <<  endl;
+    }
+
+    return path;
 }
 
 }

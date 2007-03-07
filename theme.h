@@ -31,6 +31,11 @@ class KDE_EXPORT Theme : public QObject
     Q_OBJECT
 
     public:
+        /**
+         * Singleton pattern accessor
+         **/
+        static Theme* self();
+
         explicit Theme( QObject* parent = 0 );
         ~Theme();
 

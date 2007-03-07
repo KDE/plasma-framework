@@ -7,6 +7,7 @@ set(plasma_LIB_SRCS
    applet.cpp
    interface.cpp
    runner.cpp
+   svg.cpp
    theme.cpp
    dataengine.cpp
    datavisualization.cpp
