@@ -19,9 +19,9 @@
 #include <QMatrix>
 #include <QPainter>
 #include <QPixmapCache>
-#include <QSvgRenderer>
 
 #include <KDebug>
+#include <KSvgRenderer>
 
 #include "svg.h"
 #include "theme.h"
@@ -87,7 +87,7 @@ class Svg::Private
             if ( ! renderer ) {
                 //TODO: connect the renderer's repaintNeeded to the Plasma::Svg signal
                 //      take into consideration for cache, e.g. don't cache if svg is animated
-                renderer = new QSvgRenderer( path );
+                renderer = new KSvgRenderer( path );
             }
 
             p.resize( size );
@@ -100,7 +100,7 @@ class Svg::Private
         }
 
         //TODO: share renderers between Svg objects with identical themePath
-        QSvgRenderer* renderer;
+        KSvgRenderer* renderer;
         QString themePath;
         QString path;
         QString id;
