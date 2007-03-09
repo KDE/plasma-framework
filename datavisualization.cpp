@@ -38,8 +38,8 @@ DataVisualization::~DataVisualization()
   delete d;
 }
 
-#include "datavisualization.moc"
-
 } // Plasma namespace
 
+
+#include "datavisualization.moc"
 
