@@ -2,8 +2,10 @@
 Type=Plugin
 Encoding=UTF-8
 Name=Non-Unique Native Applet
+Name[nds]=Nich eensoortet echt Lüttprogramm
 Name[x-test]=xxNon-Unique Native Appletxx
 Comment=A natively compiled applet
+Comment[nds]=En normaal kompileert Lüttprogramm
 Comment[x-test]=xxA natively compiled appletxx
 Icon=native
 
