@@ -21,7 +21,7 @@
 
 #include <QObject>
 #include <QGraphicsTextItem>
-
+#include <QLayoutItem>
 #include <kdemacros.h>
 
 #include "datavisualization.h"
@@ -32,7 +32,7 @@
 namespace Plasma
 {
 
-class KDE_EXPORT PushButton : public DataVisualization,public QGraphicsItem
+class KDE_EXPORT PushButton : public DataVisualization,public QGraphicsItem, public QLayoutItem
 {
     Q_OBJECT
     public:
@@ -54,6 +54,15 @@ class KDE_EXPORT PushButton : public DataVisualization,public QGraphicsItem
         void setWidth(int width);
         void setHeight(int height);
         void setMaximumWidth(int maxwidth);
+
+        //layout stufff
+        QSize sizeHint() const ; 
+        QSize minimumSize() const;
+        QSize maximumSize() const ;
+        Qt::Orientations expandingDirections() const;
+        void setGeometry(const QRect& r);
+        QRect geometry() const ;
+        bool isEmpty() const {return false;}
 
     public slots:
         void data(const DataSource::Data&);

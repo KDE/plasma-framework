@@ -44,14 +44,18 @@ class PushButton::Private
             int height;
             int width;
             int maxWidth;
+            int minWidth;
+            int minHeight;
+            int maxHeight;
             int radius;
             QTimer * updateTimer;
             PushButton::ButtonState state;
 };
 
 PushButton::PushButton(QGraphicsItem *parent)
-    :   QGraphicsItem(parent),
-        DataVisualization(),
+    :   DataVisualization(),
+        QGraphicsItem(parent),
+        QLayoutItem (Qt::AlignHCenter),
         d(new Private)
 {
     setAcceptedMouseButtons(Qt::LeftButton);
@@ -59,7 +63,10 @@ PushButton::PushButton(QGraphicsItem *parent)
     setEnabled(true);
     d->height = 40;
     d->width = 100 ;
-    d->maxWidth = 600;
+    d->minWidth = d->width;
+    d->maxWidth = d->width;
+    d->minHeight = d->height;
+    d->maxHeight = d->height;
     setPos(QPointF(0.0,0.0));
     d->state= PushButton::NONE;
     d->labelText=tr("Plasma");
@@ -190,5 +197,36 @@ void PushButton::mousePressEvent ( QGraphicsSceneMouseEvent * event )
     d->state = PushButton::PRESSED;
     update();
     emit clicked();
+}
+
+QSize PushButton::sizeHint() const
+{
+    return QSize(d->width,d->height);
+}
+
+QSize PushButton::minimumSize() const
+{
+    return QSize(d->minWidth,d->minHeight);
+}
+
+QSize PushButton::maximumSize() const
+{
+    return QSize(d->maxWidth,d->maxHeight);
+}
+
+Qt::Orientations PushButton::expandingDirections() const 
+{
+    return Qt::Horizontal;
+}
+
+void PushButton::setGeometry(const QRect & r)
+{
+    setSize(r.size());
+    setPos(r.x(),r.y());
+}
+
+QRect PushButton::geometry() const
+{
+    return boundingRect().toRect();
 }
 } // namespace Plasma
