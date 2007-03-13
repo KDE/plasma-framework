@@ -115,12 +115,17 @@ void PushButton::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
 void PushButton::setText(const QString& text)
 {
     d->labelText = text;
+/*
+    QFont * font = new QFont (text);
+    QFontMetrics  *  fm  = new QFontMetrics(*font);
+    if (fm->width(text) >= d->width)
+        setWidth(fm->width(d->labelText) + 4);
+    delete fm;
+    delete font;
+*/
 
-    QFont font(text);
-    QFontMetrics fm(font);
-    if (fm.width(text) >= d->width)
-        setWidth(fm.width(text) + 4);
 }
+
 
 QString PushButton::text() const
 {
