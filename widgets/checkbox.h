@@ -42,7 +42,7 @@ class KDE_EXPORT CheckBox : public DataVisualization,public QGraphicsItem
     public:
 
         CheckBox(QGraphicsItem *parent = 0);
-        ~CheckBox();
+        virtual ~CheckBox();
 
         void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
         QRectF boundingRect() const;
