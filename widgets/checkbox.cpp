@@ -120,6 +120,7 @@ void CheckBox::data(const DataSource::Data&)
 void CheckBox::setText(const QString& text)
 {
     d->labelText = text;
+    /*
     QFont * _font = new QFont ( text );
     QFontMetrics fm ( *_font );
     if ( fm.width(text) >= d->width ) {
@@ -127,7 +128,7 @@ void CheckBox::setText(const QString& text)
     }
 
     delete _font;
-
+    */
 }
 
 QString CheckBox::text() const
