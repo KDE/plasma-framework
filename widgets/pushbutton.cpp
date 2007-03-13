@@ -92,8 +92,11 @@ void PushButton::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
     QStyleOptionButton options;
     options.initFrom(widget);
     options.state = option->state;
+    options.state |= isDown() ? QStyle::State_Sunken : QStyle::State_Raised;
+
     options.rect = boundingRect().toRect();
     options.text = text();
+   
     if (d->hasIcon){
        options.icon= d->icon;
        options.iconSize = d->iconSize;
@@ -197,8 +200,17 @@ void PushButton::mousePressEvent ( QGraphicsSceneMouseEvent * event )
     event->accept();
     d->state = PushButton::PRESSED;
     update();
+   // emit clicked();
+}
+
+void PushButton::mouseReleaseEvent ( QGraphicsSceneMouseEvent * event )
+{
+    event->accept();
+    d->state = PushButton::RELEASED;
+    update();
     emit clicked();
 }
+
 
 QSize PushButton::sizeHint() const
 {

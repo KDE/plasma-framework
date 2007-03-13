@@ -71,6 +71,7 @@ class KDE_EXPORT PushButton : public DataVisualization,public QGraphicsItem, pub
     protected:
         bool isDown();
         void mousePressEvent ( QGraphicsSceneMouseEvent * event );
+        void mouseReleaseEvent ( QGraphicsSceneMouseEvent * event );
     private:
         class Private ;
         Private *  const d;
