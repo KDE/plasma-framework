@@ -65,7 +65,7 @@ CheckBox::CheckBox(QGraphicsItem *parent)
     d->maxWidth = 600;
     setPos(QPointF(0.0,0.0));
     d->state= Qt::Unchecked;
-    d->labelText=tr("Plasma");
+    d->labelText=QString("Plasma");
     d->labelTextColor= QColor(201,201,255);
     d->hasIcon = false;
     d->iconSize=QSize(32,32);
@@ -130,16 +130,16 @@ void CheckBox::setText(const QString& text)
 
 }
 
-QString CheckBox::text()
+QString CheckBox::text() const
 {
     return d->labelText;
 }
-int CheckBox::height()
+int CheckBox::height() const
 {
     return d->height;
 }
 
-int CheckBox::width()
+int CheckBox::width() const
 {
     return d->width;
 }
@@ -160,12 +160,12 @@ void CheckBox::setWidth(int w)
     }
 }
 
-QSize CheckBox::size()
+QSize CheckBox::size() const
 {
     return QSize(d->width,d->height);
 }
 
-void CheckBox::setSize(QSize s)
+void CheckBox::setSize(const QSize &s)
 {
     prepareGeometryChange ();
   if (!d->maxWidth  >= s.width() ) {

@@ -47,11 +47,11 @@ class KDE_EXPORT CheckBox : public DataVisualization,public QGraphicsItem
         void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
         QRectF boundingRect() const;
          void setText(const QString&) ;
-        QString text();
-        QSize size();
-        int height();
-        int width();
-        void setSize(QSize size);
+        QString text() const;
+        QSize size() const;
+        int height() const;
+        int width() const;
+        void setSize(const QSize &size);
         void setWidth(int width);
         void setHeight(int height);
         void setMaximumWidth(int maxwidth);
