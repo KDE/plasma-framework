@@ -108,6 +108,12 @@ class KDE_EXPORT Applet : public QWidget, public QGraphicsItemGroup
         Private* d;
 };
 
+#define K_EXPORT_PLASMA_APPLET(libname, classname)                       \
+        K_EXPORT_COMPONENT_FACTORY(                                      \
+                        plasmaapplet_##libname,                          \
+                        KGenericFactory<classname>("libplasmaapplet_" #libname))
+
+
 } // Plasma namespace
 
 #endif // multiple inclusion guard

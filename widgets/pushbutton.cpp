@@ -22,6 +22,7 @@
 #include <QWidget>
 #include <QPainter>
 #include <QGraphicsSceneMouseEvent>
+#include <QDebug>
 
 #include "pushbutton.h"
 #include "pushbutton.moc"
@@ -32,24 +33,25 @@ namespace Plasma
 class PushButton::Private
 {
     public:
-        Private() { };
-        ~Private() { };
-            QString labelText;
-            QString labelIcon;
-            QColor  labelTextColor;
-            QIcon icon;
-            QSize iconSize;
-            bool hasIcon;
-            int labelTextOpacity;
-            int height;
-            int width;
-            int maxWidth;
-            int minWidth;
-            int minHeight;
-            int maxHeight;
-            int radius;
-            QTimer * updateTimer;
-            PushButton::ButtonState state;
+        Private() {}
+        ~Private() {}
+
+        QString labelText;
+        QString labelIcon;
+        QColor  labelTextColor;
+        QIcon icon;
+        QSize iconSize;
+        bool hasIcon;
+        int labelTextOpacity;
+        int height;
+        int width;
+        int maxWidth;
+        int minWidth;
+        int minHeight;
+        int maxHeight;
+        int radius;
+        QTimer * updateTimer;
+        PushButton::ButtonState state;
 };
 
 PushButton::PushButton(QGraphicsItem *parent)
@@ -61,6 +63,7 @@ PushButton::PushButton(QGraphicsItem *parent)
     setAcceptedMouseButtons(Qt::LeftButton);
     setAcceptsHoverEvents(true);
     setEnabled(true);
+
     d->height = 40;
     d->width = 100 ;
     d->minWidth = d->width;
@@ -68,23 +71,21 @@ PushButton::PushButton(QGraphicsItem *parent)
     d->minHeight = d->height;
     d->maxHeight = d->height;
     setPos(QPointF(0.0,0.0));
-    d->state= PushButton::NONE;
-    d->labelText=tr("Plasma");
-    d->labelTextColor= QColor(201,201,255);
+    d->state = PushButton::None;
+    d->labelText = tr("Plasma");
+    d->labelTextColor = QColor(201,201,255);
     d->hasIcon = false;
-    d->iconSize=QSize(32,32);
-
+    d->iconSize = QSize(32,32);
 }
-
 
 PushButton::~PushButton()
 {
-delete d;
+    delete d;
 }
 
 QRectF PushButton::boundingRect() const
 {
-    return QRectF(x(),y(),d->width,d->height);
+    return QRectF(x(), y(), d->width, d->height);
 }
 
 void PushButton::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
@@ -93,11 +94,11 @@ void PushButton::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
     options.initFrom(widget);
     options.state = option->state;
     options.state |= isDown() ? QStyle::State_Sunken : QStyle::State_Raised;
-
     options.rect = boundingRect().toRect();
     options.text = text();
-   
-    if (d->hasIcon){
+
+    if (d->hasIcon)
+    {
        options.icon= d->icon;
        options.iconSize = d->iconSize;
     }
@@ -105,7 +106,6 @@ void PushButton::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
     widget->style()->drawPrimitive(QStyle::PE_PanelButtonCommand, &options, painter, widget);
     widget->style()->drawPrimitive(QStyle::PE_FrameFocusRect, &options, painter, widget);
     widget-> style()->drawControl(QStyle::CE_PushButton, &options, painter, widget);
-
 }
 
 
@@ -116,68 +116,68 @@ void PushButton::data(const DataSource::Data&)
 void PushButton::setText(const QString& text)
 {
     d->labelText = text;
-    QFont * _font = new QFont ( text );
-    QFontMetrics fm ( *_font );
-    if ( fm.width(text) >= d->width ) {
-        setWidth(fm.width(text)+4);
-    }
 
-    delete _font;
-
+    QFont font(text);
+    QFontMetrics fm(font);
+    if (fm.width(text) >= d->width)
+        setWidth(fm.width(text) + 4);
 }
 
-QString PushButton::text()
+QString PushButton::text() const
 {
     return d->labelText;
 }
-int PushButton::height()
+
+int PushButton::height() const
 {
     return d->height;
 }
 
-int PushButton::width()
+int PushButton::width() const
 {
     return d->width;
 }
 
 void PushButton::setHeight(int h)
 {
-    prepareGeometryChange ();
+    prepareGeometryChange();
     d->height = h;
     update();
 }
 
 void PushButton::setWidth(int w)
 {
-    if (!(w >= d->maxWidth)) {
-    prepareGeometryChange ();
-    d->width = w;
-    update();
+    if (!(w >= d->maxWidth))
+    {
+        prepareGeometryChange ();
+        d->width = w;
+        update();
     }
 }
 
 void PushButton::setIcon(const QString& path)
 {
-    QPixmap _iconPixmap (path);
-    if (!path.isNull()) {
-    d->icon = QIcon(_iconPixmap);
-    d->iconSize = _iconPixmap.size();
-    d->hasIcon=true;
-    }else {
-        d->hasIcon = false;
+    if (!path.isNull())
+    {
+        QPixmap iconPixmap(path);
+        d->icon = QIcon(iconPixmap);
+        d->iconSize = iconPixmap.size();
+        d->hasIcon=true;
     }
+    else
+        d->hasIcon = false;
 }
-QSize PushButton::size()
+
+QSize PushButton::size() const
 {
-    return QSize(d->width,d->height);
+    return QSize(d->width, d->height);
 }
 
 void PushButton::setSize(QSize s)
 {
-    prepareGeometryChange ();
-  if (!d->maxWidth  >= s.width() ) {
+    prepareGeometryChange();
+    if (!d->maxWidth >= s.width())
         d->width = s.width();
-  }
     d->height = s.height();
     update();
 }
@@ -189,16 +189,15 @@ void PushButton::setMaximumWidth(int w)
 
 bool PushButton::isDown()
 {
-    if (d->state == PushButton::PRESSED) {
-    return true;
-    }
+    if (d->state == PushButton::Pressed)
+        return true;
     return false;
 }
 
 void PushButton::mousePressEvent ( QGraphicsSceneMouseEvent * event )
 {
     event->accept();
-    d->state = PushButton::PRESSED;
+    d->state = PushButton::Pressed;
     update();
    // emit clicked();
 }
@@ -210,7 +209,6 @@ void PushButton::mouseReleaseEvent ( QGraphicsSceneMouseEvent * event )
     update();
     emit clicked();
 }
-
 
 QSize PushButton::sizeHint() const
 {
@@ -242,4 +240,5 @@ QRect PushButton::geometry() const
 {
     return boundingRect().toRect();
 }
+
 } // namespace Plasma

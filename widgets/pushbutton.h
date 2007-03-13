@@ -32,45 +32,68 @@
 namespace Plasma
 {
 
-class KDE_EXPORT PushButton : public DataVisualization,public QGraphicsItem, public QLayoutItem
+class KDE_EXPORT PushButton : public DataVisualization,
+                              public QGraphicsItem,
+                              public QLayoutItem
 {
-    Q_OBJECT
+        Q_OBJECT
     public:
-        typedef enum {RECT=0,ROUND,COUSTOM} ButtonShape;
-        typedef enum {NONE,HOVER,PRESSED,RELEASED} ButtonState;
+        enum ButtonShape
+        {
+            Rectangle = 0,
+            Round,
+            Custom
+        };
 
+        enum ButtonState
+        {
+            None,
+            Hover,
+            Pressed,
+            Released
+        };
+
+    public:
         PushButton(QGraphicsItem *parent = 0);
         virtual ~PushButton();
 
-        void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
-        QRectF boundingRect() const;
-         void setText(const QString&) ;
-        QString text();
-        QSize size();
-        int height();
-        int width();
-        void setIcon(const QString& path);
+        QString text() const;
+        void setText(const QString &name);
+
+        QSize size() const;
         void setSize(QSize size);
-        void setWidth(int width);
+
+        int height() const;
         void setHeight(int height);
+
+        int width() const;
+        void setWidth(int width);
+
+        void setIcon(const QString& path);
         void setMaximumWidth(int maxwidth);
 
-        //layout stufff
-        QSize sizeHint() const ; 
-        QSize minimumSize() const;
-        QSize maximumSize() const ;
-        Qt::Orientations expandingDirections() const;
-        void setGeometry(const QRect& r);
-        QRect geometry() const ;
-        bool isEmpty() const {return false;}
+        virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
+        virtual QRectF boundingRect() const;
 
-    public slots:
+        //layout stufff
+        virtual QSize sizeHint() const ; 
+        virtual QSize minimumSize() const;
+        virtual QSize maximumSize() const ;
+        virtual Qt::Orientations expandingDirections() const;
+        virtual void setGeometry(const QRect& r);
+        virtual QRect geometry() const ;
+        virtual bool isEmpty() const {return false;}
+
+    public Q_SLOTS:
         void data(const DataSource::Data&);
-    signals:
+
+    Q_SIGNALS:
         void clicked();
+
     protected:
         bool isDown();
-        void mousePressEvent ( QGraphicsSceneMouseEvent * event );
+        void mousePressEvent(QGraphicsSceneMouseEvent *event);
+
         void mouseReleaseEvent ( QGraphicsSceneMouseEvent * event );
     private:
         class Private ;

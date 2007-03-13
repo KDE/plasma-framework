@@ -29,8 +29,7 @@ namespace Plasma
 // this will end up being multiple-inherited?
 class KDE_EXPORT DataVisualization : public QObject
 {
-    Q_OBJECT
-
+        Q_OBJECT
     public:
         DataVisualization(QObject* parent = 0);
         virtual ~DataVisualization();
