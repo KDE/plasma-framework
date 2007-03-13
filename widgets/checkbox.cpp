@@ -92,7 +92,7 @@ void CheckBox::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
 
 
     QStyleOptionButton options;
-    options.rect = option->exposedRect.toRect() ;//boundingRect().toRect();
+    options.rect = boundingRect().toRect();
     options.text = text();
     options.state |= (d->state == Qt::Checked)? QStyle::State_On : QStyle::State_Off;
  
