@@ -36,7 +36,7 @@ class KDE_EXPORT PushButton : public DataVisualization,
                               public QGraphicsItem,
                               public QLayoutItem
 {
-        Q_OBJECT
+       Q_OBJECT
     public:
         enum ButtonShape
         {
@@ -84,17 +84,17 @@ class KDE_EXPORT PushButton : public DataVisualization,
         virtual QRect geometry() const ;
         virtual bool isEmpty() const {return false;}
 
-    public Q_SLOTS:
-        void data(const DataSource::Data&);
-
     Q_SIGNALS:
         void clicked();
+
+    public Q_SLOTS:
+        virtual void data(const DataSource::Data &);
 
     protected:
         bool isDown();
         void mousePressEvent(QGraphicsSceneMouseEvent *event);
+        void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
 
-        void mouseReleaseEvent ( QGraphicsSceneMouseEvent * event );
     private:
         class Private ;
         Private *  const d;

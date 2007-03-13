@@ -55,8 +55,7 @@ class PushButton::Private
 };
 
 PushButton::PushButton(QGraphicsItem *parent)
-    :   DataVisualization(),
-        QGraphicsItem(parent),
+    :   QGraphicsItem(parent),
         QLayoutItem (Qt::AlignHCenter),
         d(new Private)
 {
@@ -72,7 +71,7 @@ PushButton::PushButton(QGraphicsItem *parent)
     d->maxHeight = d->height;
     setPos(QPointF(0.0,0.0));
     d->state = PushButton::None;
-    d->labelText = tr("Plasma");
+    d->labelText = QString("Plasma");
     d->labelTextColor = QColor(201,201,255);
     d->hasIcon = false;
     d->iconSize = QSize(32,32);
@@ -81,6 +80,11 @@ PushButton::PushButton(QGraphicsItem *parent)
 PushButton::~PushButton()
 {
     delete d;
+}
+
+void PushButton::data(const DataSource::Data &data)
+{
+    Q_UNUSED(data)
 }
 
 QRectF PushButton::boundingRect() const
@@ -106,11 +110,6 @@ void PushButton::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
     widget->style()->drawPrimitive(QStyle::PE_PanelButtonCommand, &options, painter, widget);
     widget->style()->drawPrimitive(QStyle::PE_FrameFocusRect, &options, painter, widget);
     widget-> style()->drawControl(QStyle::CE_PushButton, &options, painter, widget);
-}
-
-
-void PushButton::data(const DataSource::Data&)
-{
 }
 
 void PushButton::setText(const QString& text)
@@ -199,15 +198,15 @@ void PushButton::mousePressEvent ( QGraphicsSceneMouseEvent * event )
     event->accept();
     d->state = PushButton::Pressed;
     update();
-   // emit clicked();
+//     emit clicked();
 }
 
 void PushButton::mouseReleaseEvent ( QGraphicsSceneMouseEvent * event )
 {
     event->accept();
-    d->state = PushButton::RELEASED;
+    d->state = PushButton::Released;
     update();
-    emit clicked();
+//     emit clicked();
 }
 
 QSize PushButton::sizeHint() const
