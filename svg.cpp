@@ -77,11 +77,11 @@ class Svg::Private
                                       .arg( themePath );
 
             if ( QPixmapCache::find( id, p ) ) {
-                kDebug() << "found cached version of " << id << endl;
+                //kDebug() << "found cached version of " << id << endl;
                 return;
-            } else {
+            }/* else {
                 kDebug() << "didn't find cached version of " << id << ", so re-rendering" << endl;
-            }
+            }*/
 
             // we have to re-render this puppy
             if ( ! renderer ) {
