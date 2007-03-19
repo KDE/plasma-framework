@@ -37,6 +37,7 @@ install( FILES
     theme.h
     interface.h
     dataengine.h
+    svg.h
 
     widgets/widget.h
     widgets/lineedit.h

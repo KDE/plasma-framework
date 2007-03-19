@@ -40,6 +40,7 @@ class KDE_EXPORT Svg : public QObject
          *
          * The size is initialized to be the SVG's native size.
          *
+         * @related Plasma::Theme
          * @arg imagePath the image to show, used to load the image from
          * Plasma::Theme
          * @arg parent options QObject to parent this to
