@@ -31,8 +31,8 @@ namespace Plasma
 class CheckBox::Private
 {
     public:
-        Private() { };
-        ~Private() { };
+        Private() { }
+        ~Private() { }
             QString labelText;
             QString labelIcon;
             QColor  labelTextColor;

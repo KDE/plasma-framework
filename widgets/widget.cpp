@@ -24,8 +24,8 @@ namespace Plasma
 class Widget::Private
 {
     public:
-        Private() { };
-        ~Private() { };
+        Private() { }
+        ~Private() { }
 };
 
 
