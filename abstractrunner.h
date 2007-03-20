@@ -25,19 +25,25 @@
 #include <kdemacros.h>
 
 class KActionCollection;
+class QAction;
 
 namespace Plasma
 {
 
-class KDE_EXPORT Runner : public QObject
+class KDE_EXPORT AbstractRunner : public QObject
 {
     Q_OBJECT
 
     public:
-        typedef QList<Runner*> List;
+        typedef QList<AbstractRunner*> List;
 
-        explicit Runner( QObject* parent = 0 );
-        virtual ~Runner();
+        /**
+         * Constrcuts an Runner object. Since AbstractRunner has pure virtuals,
+         * this constructor can not be called directly. Rather a subclass must
+         * be created
+         */
+        explicit AbstractRunner( QObject* parent = 0 );
+        virtual ~AbstractRunner();
 
         /**
          * If the runner can run precisely this term, return a QAction, else
@@ -56,6 +62,18 @@ class KDE_EXPORT Runner : public QObject
         QAction* exactMatch( );
 
         /**
+         * Requests the runner to find possible matches for the search term.
+         * Includes basic results paging controls via max and offset.
+         *
+         * @param term the search string to use
+         * @param max maximum number of matches to return
+         * @param offset the offset into the matched set to start at
+         *
+         * @return the collection of actions representing the potential matches
+         **/
+        KActionCollection* matches( const QString& term, int max, int offset );
+
+        /**
          * If the runner has options that the user can interact with to modify
          * what happens when exec or one of the actions created in fillMatches
          * is called, the runner should return true
@@ -67,8 +85,6 @@ class KDE_EXPORT Runner : public QObject
          * the widget displaying the options the user can interact with.
          */
         virtual QWidget* options( );
-
-        KActionCollection* matches( const QString& term, int max, int offset );
 
         /**
          * Static method is called to load and get a list available of Runners.

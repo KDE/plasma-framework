@@ -6,7 +6,7 @@ set(plasma_LIB_SRCS
    plasma.cpp
    applet.cpp
    interface.cpp
-   runner.cpp
+   abstractrunner.cpp
    svg.cpp
    theme.cpp
    dataengine.cpp
@@ -33,7 +33,7 @@ install(TARGETS plasma  DESTINATION ${LIB_INSTALL_DIR} )
 install( FILES
     applet.h
     plasma.h
-    runner.h
+    abstractrunner.h
     theme.h
     interface.h
     dataengine.h
@@ -44,4 +44,14 @@ install( FILES
     widgets/pushbutton.h
     widgets/checkbox.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/plasma )
+
+install( FILES
+    includes/Applet
+    includes/Plasma
+    includes/AbstractRunner
+    includes/Theme
+    includes/Interface
+    includes/DataEngine
+    includes/Svg
+    DESTINATION ${INCLUDE_INSTALL_DIR}/Plasma )
 

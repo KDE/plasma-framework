@@ -20,15 +20,15 @@
 #include <KActionCollection>
 #include <KServiceTypeTrader>
 
-#include "runner.h"
+#include "abstractrunner.h"
 
 namespace Plasma
 {
 
-class Runner::Private
+class AbstractRunner::Private
 {
     public:
-        Private( Runner* runner ) :
+        Private( AbstractRunner* runner ) :
             exactMatch( 0 ),
             actions( new KActionCollection( runner ) )
         {
@@ -40,33 +40,33 @@ class Runner::Private
         QString term;
 };
 
-Runner::Runner( QObject* parent )
+AbstractRunner::AbstractRunner( QObject* parent )
     : QObject( parent )
 {
     d = new Private( this );
 }
 
-Runner::~Runner()
+AbstractRunner::~AbstractRunner()
 {
     delete d;
 }
 
-bool Runner::hasOptions()
+bool AbstractRunner::hasOptions()
 {
     return false;
 }
 
-QWidget* Runner::options()
+QWidget* AbstractRunner::options()
 {
     return 0;
 }
 
-QAction* Runner::exactMatch( )
+QAction* AbstractRunner::exactMatch( )
 {
     return d->exactMatch;
 }
 
-QAction* Runner::exactMatch( const QString& term )
+QAction* AbstractRunner::exactMatch( const QString& term )
 {
     delete d->exactMatch;
     d->term.clear();
@@ -81,14 +81,14 @@ QAction* Runner::exactMatch( const QString& term )
     return d->exactMatch;
 }
 
-KActionCollection* Runner::matches( const QString& term, int max, int offset )
+KActionCollection* AbstractRunner::matches( const QString& term, int max, int offset )
 {
     d->actions->clear();
     fillMatches( d->actions, term, max, offset );
     return d->actions;
 }
 
-void Runner::fillMatches( KActionCollection* matches,
+void AbstractRunner::fillMatches( KActionCollection* matches,
                           const QString& term,
                           int max, int offset )
 {
@@ -98,17 +98,17 @@ void Runner::fillMatches( KActionCollection* matches,
     Q_UNUSED( offset );
 }
 
-void Runner::runExactMatch()
+void AbstractRunner::runExactMatch()
 {
     exec( d->term );
 }
 
-Runner::List Runner::loadRunners( QWidget* parent )
+AbstractRunner::List AbstractRunner::loadRunners( QWidget* parent )
 {
     List runners;
     KService::List offers = KServiceTypeTrader::self()->query( "KRunner/Runner" );
     foreach ( KService::Ptr service, offers ) {
-        Runner* runner = KService::createInstance<Runner>( service, parent );
+        AbstractRunner* runner = KService::createInstance<AbstractRunner>( service, parent );
         if ( runner ) {
             kDebug() << "loaded runner : " << service->name() << endl ;
             runners.append( runner );
@@ -123,4 +123,4 @@ Runner::List Runner::loadRunners( QWidget* parent )
 
 } // Plasma namespace
 
-#include "runner.moc"
+#include "abstractrunner.moc"
