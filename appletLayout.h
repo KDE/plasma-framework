@@ -1,7 +1,7 @@
 #ifndef APPLEYLAYOUT_H
 #define APPLEYLAYOUT_H
 
-#include "kdelibs_export.h"
+#include "kdemacros.h"
 
 #include <QLayout>
 #include <QSize>

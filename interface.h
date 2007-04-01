@@ -21,7 +21,7 @@
 
 #include <QString>
 
-#include <kdelibs_export.h>
+#include <kdemacros.h>
 
 namespace Plasma
 {

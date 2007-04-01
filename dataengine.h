@@ -24,7 +24,7 @@
 #include <QObject>
 #include <QStringList>
 
-#include <kdelibs_export.h>
+#include <kdemacros.h>
 
 namespace Plasma
 {
