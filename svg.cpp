@@ -90,7 +90,7 @@ class Svg::Private
                 renderer = new KSvgRenderer( path );
             }
 
-            p.resize( size );
+            p = QPixmap( size );
             p.fill(Qt::transparent);
             QPainter renderPainter( &p );
             renderPainter.setWorldMatrix( matrix );

@@ -1,7 +1,5 @@
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
-add_definitions (-DQT3_SUPPORT)
-
 ########### next target ###############
 
 set(plasma_LIB_SRCS
