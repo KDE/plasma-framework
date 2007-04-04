@@ -4,9 +4,11 @@ Encoding=UTF-8
 Name=Unique Javascript Applet
 Name[nds]=Eensoortet JavaScript-Lüttprogramm
 Name[x-test]=xxUnique Javascript Appletxx
+Name[zh_TW]=獨一的 Javascript 小程式
 Comment=An applet written in JavaScript
 Comment[nds]=En Lüttprogramm, schreven in JavaScript
 Comment[x-test]=xxAn applet written in JavaScriptxx
+Comment[zh_TW]=用 Javascript 寫的小程式
 Icon=javascript
 Hidden=true
 

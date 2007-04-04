@@ -4,9 +4,11 @@ Encoding=UTF-8
 Name=Non-Unique Native Applet
 Name[nds]=Nich eensoortet echt Lüttprogramm
 Name[x-test]=xxNon-Unique Native Appletxx
+Name[zh_TW]=非唯一原始小程式
 Comment=A natively compiled applet
 Comment[nds]=En normaal kompileert Lüttprogramm
 Comment[x-test]=xxA natively compiled appletxx
+Comment[zh_TW]=原始編譯小程式
 Icon=native
 
 X-KDE-Library=plasma_applet_native
