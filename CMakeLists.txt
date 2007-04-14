@@ -38,7 +38,7 @@ install( FILES
     interface.h
     dataengine.h
     svg.h
-
+    datavisualization.h
     widgets/widget.h
     widgets/lineedit.h
     widgets/pushbutton.h
