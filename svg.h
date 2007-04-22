@@ -23,6 +23,9 @@
 
 #include <kdemacros.h>
 
+class QPainter;
+class QPoint;
+
 namespace Plasma
 {
 

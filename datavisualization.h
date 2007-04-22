@@ -19,7 +19,7 @@
 #ifndef PLASMA_DATAVISUALIZATION_H
 #define PLASMA_DATAVISUALIZATION_H
 
-#include <QObject>
+#include <QtCore/QObject>
 
 #include "dataengine.h"
 
@@ -34,7 +34,7 @@ class KDE_EXPORT DataVisualization : public QObject
         DataVisualization(QObject* parent = 0);
         virtual ~DataVisualization();
 
-    public slots:
+    public Q_SLOTS:
         virtual void data(const DataSource::Data&) = 0;
 
     private:

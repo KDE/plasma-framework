@@ -19,7 +19,7 @@
 #ifndef WIDGET_H_
 #define WIDGET_H_
 
-#include <QGraphicsItem>
+#include <QtGui/QGraphicsItem>
 
 #include <kdemacros.h>
 

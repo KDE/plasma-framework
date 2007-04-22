@@ -20,9 +20,9 @@
 #define PLASMA_ENGINE_H
 
 #include <QAtomic>
-#include <QHash>
-#include <QObject>
-#include <QStringList>
+#include <QtCore/QHash>
+#include <QtCore/QObject>
+#include <QtCore/QStringList>
 
 #include <kdemacros.h>
 
@@ -46,7 +46,7 @@ class KDE_EXPORT DataSource : public QObject
 
         QString name();
 
-    signals:
+    Q_SIGNALS:
         void data(const DataSource::Data&);
 
     private:

@@ -19,7 +19,7 @@
 #ifndef PLASMA_INTERFACE_H
 #define PLASMA_INTERFACE_H
 
-#include <QString>
+#include <QtCore/QString>
 
 #include <kdemacros.h>
 

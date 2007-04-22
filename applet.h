@@ -19,8 +19,8 @@
 #ifndef PLASMA_APPLET_H
 #define PLASMA_APPLET_H
 
-#include <QGraphicsItemGroup>
-#include <QWidget>
+#include <QtGui/QGraphicsItemGroup>
+#include <QtGui/QWidget>
 
 #include <ksharedconfig.h>
 

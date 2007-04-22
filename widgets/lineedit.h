@@ -19,7 +19,7 @@
 #ifndef LINEEDIT_H
 #define LINEEDIT_H
 
-#include <QGraphicsTextItem>
+#include <QtGui/QGraphicsTextItem>
 
 #include <kdemacros.h>
 

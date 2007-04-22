@@ -19,9 +19,9 @@
 #ifndef PUSHBUTTON_H
 #define PUSHBUTTON_H
 
-#include <QObject>
-#include <QGraphicsTextItem>
-#include <QLayoutItem>
+#include <QtCore/QObject>
+#include <QtGui/QGraphicsTextItem>
+#include <QtGui/QLayoutItem>
 #include <kdemacros.h>
 
 #include "datavisualization.h"

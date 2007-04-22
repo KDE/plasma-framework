@@ -42,7 +42,7 @@ class KDE_EXPORT Theme : public QObject
         QString themeName() const;
         QString image( const QString& name ) const;
 
-    signals:
+    Q_SIGNALS:
         void changed();
 
     private:

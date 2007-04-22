@@ -19,8 +19,8 @@
 #ifndef CHECKBOX_H
 #define CHECKBOX_H
 
-#include <QObject>
-#include <QGraphicsItem>
+#include <QtCore/QObject>
+#include <QtGui/QGraphicsItem>
 
 #include <kdemacros.h>
 
@@ -59,9 +59,9 @@ class KDE_EXPORT CheckBox : public DataVisualization,public QGraphicsItem
         void setCheckState(Qt::CheckState state);
 
 
-    public slots:
+    public Q_SLOTS:
         void data(const DataSource::Data&);
-    signals:
+    Q_SIGNALS:
         void clicked();
     protected:
         //bool isDown();

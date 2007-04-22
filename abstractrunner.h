@@ -19,8 +19,8 @@
 #ifndef RUNNER_H
 #define RUNNER_H
 
-#include <QObject>
-#include <QList>
+#include <QtCore/QObject>
+#include <QtCore/QList>
 
 #include <kdemacros.h>
 
@@ -91,7 +91,7 @@ class KDE_EXPORT AbstractRunner : public QObject
          */
         static List loadRunners( QWidget* parent );
 
-    signals:
+    Q_SIGNALS:
         /**
          * When emitted, the interface will update itself to show the new
          * matches. This is meant to be used by asynchronous runners that will
