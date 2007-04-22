@@ -25,6 +25,8 @@
 
 class QPainter;
 class QPoint;
+class QRect;
+class QSize;
 
 namespace Plasma
 {
