@@ -1,2 +1,2 @@
-#include "../plasma/applet.h"
+#include "../../plasma/applet.h"
 

@@ -53,5 +53,5 @@ install( FILES
     includes/Interface
     includes/DataEngine
     includes/Svg
-    DESTINATION ${INCLUDE_INSTALL_DIR}/Plasma )
+    DESTINATION ${INCLUDE_INSTALL_DIR}/KDE/Plasma )
 
