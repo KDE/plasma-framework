@@ -69,7 +69,7 @@ QString Theme::themeName() const
 
 QString Theme::image( const QString& name ) const
 {
-    QString search = "desktoptheme/" + d->themeName + "/" + name + ".svg";
+    QString search = "desktoptheme/" + d->themeName + '/' + name + ".svg";
     QString path =  KStandardDirs::locate( "data", search );
 
     if ( path.isEmpty() ) {
