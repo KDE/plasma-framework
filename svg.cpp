@@ -53,7 +53,7 @@ class Svg::Private
             id.clear();
         }
 
-        void findInCache( QPainter* painter, QPixmap& p )
+        void findInCache( QPainter* painter, QPixmap& p, const QString& elementId )
         {
             if ( path.isNull() ) {
                 path = Plasma::Theme::self()->image( themePath );
@@ -76,6 +76,10 @@ class Svg::Private
                                       .arg( matrix.m22() )
                                       .arg( themePath );
 
+            if (!elementId.isEmpty()) {
+                id.append(elementId);
+            }
+
             if ( QPixmapCache::find( id, p ) ) {
                 //kDebug() << "found cached version of " << id << endl;
                 return;
@@ -90,11 +94,16 @@ class Svg::Private
                 renderer = new KSvgRenderer( path );
             }
 
-            p = QPixmap( size );
+            p = QPixmap( size.toSize() );
             p.fill(Qt::transparent);
             QPainter renderPainter( &p );
             renderPainter.setWorldMatrix( matrix );
-            renderer->render( &renderPainter, p.rect() );
+
+            if ( elementId.isEmpty() ) {
+                renderer->render( &renderPainter, p.rect() );
+            } else {
+                renderer->render( &renderPainter, elementId, p.rect() );
+            }
             renderPainter.end();
             QPixmapCache::insert( id, p );
         }
@@ -104,7 +113,7 @@ class Svg::Private
         QString themePath;
         QString path;
         QString id;
-        QSize size;
+        QSizeF size;
 };
 
 Svg::Svg( const QString& imagePath, QObject* parent )
@@ -119,30 +128,30 @@ Svg::~Svg()
 
 }
 
-void Svg::paint( QPainter* painter, const QPoint& point )
+void Svg::paint( QPainter* painter, const QPointF& point, const QString& elementID )
 {
     QPixmap pix;
-    d->findInCache( painter, pix );
+    d->findInCache( painter, pix, elementID );
 
     QMatrix matrix = painter->worldMatrix();
     painter->setWorldMatrix( QMatrix() );
-    painter->drawPixmap( point, pix );
+    painter->drawPixmap( point.toPoint(), pix );
     painter->setWorldMatrix( matrix );
 }
 
-void Svg::paint( QPainter* painter, int x, int y )
+void Svg::paint( QPainter* painter, int x, int y, const QString& elementID )
 {
-    paint( painter, QPoint( x, y ) );
+    paint( painter, QPointF( x, y ), elementID );
 }
 
-void Svg::paint( QPainter* painter, const QRect& rect )
+void Svg::paint( QPainter* painter, const QRectF& rect, const QString& elementID )
 {
     QPixmap pix;
-    d->findInCache( painter, pix );
+    d->findInCache( painter, pix, elementID );
 
     QMatrix matrix = painter->worldMatrix();
     painter->setWorldMatrix( QMatrix() );
-    painter->drawPixmap( rect, pix );
+    painter->drawPixmap( rect.toRect(), pix );
     painter->setWorldMatrix( matrix );
 }
 
@@ -151,9 +160,24 @@ void Svg::resize( int width, int height )
     resize( QSize( width, height ) );
 }
 
-void Svg::resize( const QSize& size )
+void Svg::resize( const QSizeF& size )
 {
     d->size = size;
+}
+
+QSize Svg::elementSize(const QString& elementId)
+{
+    if (!d->renderer) {
+        return QSize();
+    }
+
+    QSizeF elementSize = d->renderer->boundsOnElement(elementId).size();
+    QSizeF naturalSize = d->renderer->defaultSize();
+    qreal dx = d->size.width() / naturalSize.width();
+    qreal dy = d->size.height() / naturalSize.height();
+    elementSize.scale( elementSize.width() * dx, elementSize.height() * dy, Qt::IgnoreAspectRatio );
+
+    return elementSize.toSize();;
 }
 
 void Svg::themeChanged()
