@@ -45,13 +45,18 @@ class KDE_EXPORT DataSource : public QObject
         virtual ~DataSource();
 
         QString name();
+        void setName(const QString&);
+        const Data data() const;
+        void setData(const QString& key, const QVariant& value);
+
+        void checkForUpdate();
 
     Q_SIGNALS:
-        void data(const DataSource::Data&);
+        void updated(const Plasma::DataSource::Data&);
 
     private:
         class Private;
-        Private* d;
+        Private* const d;
 };
 
 class KDE_EXPORT DataEngine : public QObject
@@ -65,7 +70,7 @@ class KDE_EXPORT DataEngine : public QObject
         virtual ~DataEngine();
 
         virtual QStringList dataSources();
-        void connect(const QString& source, DataVisualization* visualization);
+        void connectSource(const QString& source, DataVisualization* visualization);
         DataSource::Data query(const QString& source);
 
         void ref();
@@ -74,25 +79,27 @@ class KDE_EXPORT DataEngine : public QObject
 
     protected:
         virtual void init();
-        virtual void cleanup();
-        void setDataSource(const QString& source, const QVariant& value);
-        void createDataSource(const QString& source,
-                              const QString& domain = QString());
+        void setData(const QString& source, const QVariant& value);
+        void setData(const QString& source, const QString& key, const QVariant& value);
+/*        void createDataSource(const QString& source,
+                              const QString& domain = QString());*/
         void removeDataSource(const QString& source);
         void clearAllDataSources();
 
+    protected slots:
+        void checkForUpdates();
+
     private:
-        QAtomic m_ref;
         class Private;
-        Private* d;
+        Private* const d;
 };
 
 } // Plasma namespace
 
-#define K_EXPORT_PLASMA_ENGINE(libname, classname)                       \
+#define K_EXPORT_PLASMA_DATAENGINE(libname, classname)                       \
         K_EXPORT_COMPONENT_FACTORY(                                      \
-                        plasmaengine_##libname,                          \
-                        KGenericFactory<classname>("libplasmaengine_" #libname))
+                        plasma_##libname##_engine,                          \
+                        KGenericFactory<classname>("plasma_" #libname "_engine"))
 
 #endif // multiple inclusion guard
 

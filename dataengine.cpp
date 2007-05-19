@@ -16,25 +16,33 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include <kdebug.h>
+#include <QTimer>
 #include <QVariant>
 
-#include "dataengine.h"
-#include "dataengine.moc"
+#include <KDebug>
 
-using namespace Plasma;
+#include "dataengine.h"
+#include "datavisualization.h"
+
+namespace Plasma
+{
 
 class DataSource::Private
 {
     public:
-        Private() {}
-        ~Private() {}
+        Private()
+            : dirty(false)
+        {}
+
+        QString name;
+        Data data;
+        bool dirty;
 };
 
 DataSource::DataSource(QObject* parent)
-    : QObject(parent)
+    : QObject(parent),
+      d(new Private())
 {
-    d = new Private();
 }
 
 DataSource::~DataSource()
@@ -44,98 +52,189 @@ DataSource::~DataSource()
 
 QString DataSource::name()
 {
-    kDebug() << k_funcinfo << " not implemented";
-    return QString();
+    return objectName();
 }
 
+void DataSource::setName(const QString& name)
+{
+    setObjectName(name);
+}
 
+const Plasma::DataSource::Data DataSource::data() const
+{
+    return d->data;
+}
 
+void DataSource::setData(const QString& key, const QVariant& value)
+{
+    d->data[key] = value;
+    d->dirty = true;
+}
 
+void DataSource::checkForUpdate()
+{
+    if (d->dirty) {
+        emit updated(d->data);
+        d->dirty = false;
+    }
+}
+
+class DataEngine::Private
+{
+    public:
+        Private(DataEngine* e)
+            : engine(e)
+        {
+            updateTimer = new QTimer(engine);
+            updateTimer->setSingleShot(true);
+        }
+
+        DataSource* source(const QString& sourceName)
+        {
+            DataSource::Dict::const_iterator it = sources.find(sourceName);
+            if (it != sources.constEnd()) {
+                return it.value();
+            }
+
+            kDebug() << "DataEngine " << engine->objectName()
+                     << ": could not find DataSource " << sourceName
+                     << ", creating" << endl;
+            DataSource* s = new DataSource(engine);
+            s->setName(sourceName);
+            sources.insert(sourceName, s);
+            return s;
+        }
+
+        void queueUpdate()
+        {
+            if (updateTimer->isActive()) {
+                return;
+            }
+            updateTimer->start(0);
+        }
+
+        QAtomic ref;
+        DataSource::Dict sources;
+        DataEngine* engine;
+        QTimer* updateTimer;
+};
 
 
 DataEngine::DataEngine(QObject* parent)
-    : QObject(parent)
+    : QObject(parent),
+      d(new Private(this))
 {
+    connect(d->updateTimer, SIGNAL(timeout()), this, SLOT(checkForUpdates()));
+    //FIXME: should we try and delay this call?
+    init();
 }
 
 DataEngine::~DataEngine()
 {
+    delete d;
 }
 
 QStringList DataEngine::dataSources()
 {
-    kDebug() << k_funcinfo << " not implemented";
-    return QStringList();
+    return d->sources.keys();
 }
 
-void DataEngine::connect(const QString& source, DataVisualization* visualization)
+void DataEngine::connectSource(const QString& source, DataVisualization* visualization)
 {
     Q_UNUSED(source)
     Q_UNUSED(visualization)
 
-    kDebug() << k_funcinfo << " not implemented";
+    DataSource* s = d->source(source);
+//     if (!s) {
+//         kDebug() << "DataEngine " << objectName() << ": could not find DataSource " << source << endl;
+//         return;
+//     }
+
+    connect(s, SIGNAL(updated(Plasma::DataSource::Data)),
+            visualization, SLOT(updated(Plasma::DataSource::Data)));
 }
 
 DataSource::Data DataEngine::query(const QString& source)
 {
     Q_UNUSED(source)
 
-    kDebug() << k_funcinfo << " not implemented";
-    return DataSource::Data();
+    DataSource* s = d->source(source);
+    return s->data();
 }
 
 void DataEngine::init()
 {
-    kDebug() << k_funcinfo << " not implemented";
+    // default implementation does nothing. this is for engines that have to
+    // start things in motion external to themselves before they can work
 }
 
-void DataEngine::cleanup()
+void DataEngine::setData(const QString& source, const QVariant& value)
 {
-    kDebug() << k_funcinfo << " not implemented";
+    setData(source, source, value);
 }
 
-void DataEngine::setDataSource(const QString& source, const QVariant& value)
+void DataEngine::setData(const QString& source, const QString& key, const QVariant& value)
 {
-    Q_UNUSED(source)
-    Q_UNUSED(value)
-
-    kDebug() << k_funcinfo << " not implemented";
+    DataSource* s = d->source(source);
+    s->setData(key, value);
+    d->queueUpdate();
 }
 
-void DataEngine::createDataSource(const QString& source, const QString& domain)
+/*
+Plasma::DataSource* DataEngine::createDataSource(const QString& source, const QString& domain)
 {
-    Q_UNUSED(source)
     Q_UNUSED(domain)
-
-    kDebug() << k_funcinfo << " not implemented";
-}
+    //TODO: add support for domains of sources
+    
+    if (d->source(source)) {
+        kDebug() << "DataEngine " << objectName() << ": source "  << source << " already exists " << endl;
+        return s
+    }
+}*/
 
 void DataEngine::removeDataSource(const QString& source)
 {
-    Q_UNUSED(source)
-
-    kDebug() << k_funcinfo << " not implemented";
+    DataSource::Dict::iterator it = d->sources.find(source);
+    if (it != d->sources.end()) {
+        d->sources.erase(it);
+    }
 }
 
 void DataEngine::clearAllDataSources()
 {
-    kDebug() << k_funcinfo << " not implemented";
+    QMutableHashIterator<QString, Plasma::DataSource*> it(d->sources);
+    while (it.hasNext()) {
+        it.next();
+        delete it.value();
+        it.remove();
+    }
 }
 
 void DataEngine::ref()
 {
-    kDebug() << k_funcinfo << " not implemented";
+    d->ref.ref();
 }
 
 void DataEngine::deref()
 {
-    kDebug() << k_funcinfo << " not implemented";
+    d->ref.deref();
 }
 
 bool DataEngine::isUsed()
 {
-    kDebug() << k_funcinfo << " not implemented";
-    return false;
+    return d->ref != 0;
 }
 
+void DataEngine::checkForUpdates()
+{
+    QHashIterator<QString, Plasma::DataSource*> it(d->sources);
+    while (it.hasNext()) {
+        it.next();
+        it.value()->checkForUpdate();
+    }
+}
+
+}
+
+#include "dataengine.moc"
 
