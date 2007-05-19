@@ -109,8 +109,6 @@ const QString &RadioButton::text() const
 
 void RadioButton::setChecked(bool checked)
 {
-    d->checked = checked;
-
     RadioButton *siblingRadioButton;
     // If we have a parent item (some kind of grouping widget or whatever)
     // check first there.
@@ -141,6 +139,8 @@ void RadioButton::setChecked(bool checked)
             }
         }
     }
+
+    d->checked = checked;
 
     update();
 }
