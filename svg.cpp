@@ -133,10 +133,10 @@ void Svg::paint( QPainter* painter, const QPointF& point, const QString& element
     QPixmap pix;
     d->findInCache( painter, pix, elementID );
 
-    QMatrix matrix = painter->worldMatrix();
-    painter->setWorldMatrix( QMatrix() );
+/*    QMatrix matrix = painter->worldMatrix();
+    painter->setWorldMatrix( QMatrix() );*/
     painter->drawPixmap( point.toPoint(), pix );
-    painter->setWorldMatrix( matrix );
+//     painter->setWorldMatrix( matrix );
 }
 
 void Svg::paint( QPainter* painter, int x, int y, const QString& elementID )
@@ -149,10 +149,10 @@ void Svg::paint( QPainter* painter, const QRectF& rect, const QString& elementID
     QPixmap pix;
     d->findInCache( painter, pix, elementID );
 
-    QMatrix matrix = painter->worldMatrix();
-    painter->setWorldMatrix( QMatrix() );
-    painter->drawPixmap( rect.toRect(), pix );
-    painter->setWorldMatrix( matrix );
+/*    QMatrix matrix = painter->worldMatrix();
+    painter->setWorldMatrix( QMatrix() );*/
+    painter->drawPixmap( rect, pix, rect );
+//     painter->setWorldMatrix( matrix );
 }
 
 void Svg::resize( int width, int height )
