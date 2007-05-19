@@ -59,9 +59,6 @@ public:
     RadioButton(QGraphicsItem *parent = 0);
     virtual ~RadioButton();
 
-    // DataVisualization overriden virtual methods
-    void updated(const Plasma::DataSource::Data&);
-
     // QGraphicsItem overriden virtual methods
     QRectF boundingRect() const;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
@@ -73,6 +70,10 @@ public:
     // Setters
     void setChecked(bool checked);
     void setText(const QString &text);
+
+public Q_SLOTS:
+    // DataVisualization overriden virtual slots
+    void updated(const Plasma::DataSource::Data &data);
 
 Q_SIGNALS:
     void clicked();

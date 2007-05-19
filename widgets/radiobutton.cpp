@@ -73,10 +73,6 @@ RadioButton::~RadioButton()
     delete d;
 }
 
-void RadioButton::updated(const Plasma::DataSource::Data&)
-{
-}
-
 QRectF RadioButton::boundingRect() const
 {
     return QRectF(0, 0, 150, 30);
@@ -149,6 +145,10 @@ void RadioButton::setText(const QString &text)
 {
     d->text = text;
     update();
+}
+
+void RadioButton::updated(const Plasma::DataSource::Data &data)
+{
 }
 
 void RadioButton::mousePressEvent(QGraphicsSceneMouseEvent *event)
