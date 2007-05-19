@@ -111,7 +111,7 @@ void RadioButton::setChecked(bool checked)
 {
     RadioButton *siblingRadioButton;
     // If we have a parent item (some kind of grouping widget or whatever)
-    // check first there.
+    // check first there
     if (d->mouseOver && checked && parentItem())
     {
         foreach(QGraphicsItem *sibling, parentItem()->children())
@@ -195,6 +195,7 @@ void RadioButton::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
     d->mouseOver = true;
     update();
 }
+
 
 } // Plasma namespace
 

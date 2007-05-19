@@ -44,6 +44,7 @@ install( FILES
     widgets/lineedit.h
     widgets/pushbutton.h
     widgets/checkbox.h
+    widgets/radiobutton.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/plasma )
 
 install( FILES

@@ -29,6 +29,7 @@
 // Plasma includes
 #include "datavisualization.h"
 
+
 /**
  * This class emulates a QRadioButton.
  *
@@ -44,8 +45,10 @@
  * @author Rafael Fernández López
  */
 
+
 namespace Plasma
 {
+
 
 class KDE_EXPORT RadioButton : public DataVisualization
                              , public QGraphicsItem
@@ -86,6 +89,7 @@ private:
     class Private;
     Private *const d;
 };
+
 
 } // Plasma namespace
 
