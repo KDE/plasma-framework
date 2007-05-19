@@ -16,6 +16,7 @@ set(plasma_LIB_SRCS
    widgets/lineedit.cpp
    widgets/pushbutton.cpp
    widgets/checkbox.cpp
+   widgets/radiobutton.cpp
    )
 
 kde4_automoc(${plasma_LIB_SRCS})
