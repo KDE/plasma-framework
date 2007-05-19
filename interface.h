@@ -26,13 +26,16 @@
 namespace Plasma
 {
 
+class DataEngine;
+
 class KDE_EXPORT Interface
 {
     public:
         static Interface* self();
 
-        virtual bool loadDataEngine( const QString &name ) = 0;
-        virtual void unloadDataEngine( const QString &name ) = 0;
+        virtual DataEngine* dataEngine(const QString &name) = 0;
+        virtual DataEngine* loadDataEngine(const QString &name) = 0;
+        virtual void unloadDataEngine(const QString &name) = 0;
 
     protected:
         Interface();
