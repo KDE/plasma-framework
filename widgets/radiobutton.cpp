@@ -61,7 +61,8 @@ RadioButton::Private::~Private()
 
 
 RadioButton::RadioButton(QGraphicsItem *parent)
-    : QGraphicsItem(parent)
+    : DataVisualization()
+    , QGraphicsItem(parent)
     , d(new Private)
 {
     setAcceptedMouseButtons(Qt::LeftButton);
@@ -75,7 +76,7 @@ RadioButton::~RadioButton()
 
 QRectF RadioButton::boundingRect() const
 {
-    return QRectF(0, 0, 150, 30);
+    return QRectF(0, 0, 150, 30); // FIXME: this is obviously wrong
 }
 
 void RadioButton::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
@@ -149,6 +150,7 @@ void RadioButton::setText(const QString &text)
 
 void RadioButton::updated(const Plasma::DataSource::Data &data)
 {
+    Q_UNUSED(data);
 }
 
 void RadioButton::mousePressEvent(QGraphicsSceneMouseEvent *event)
