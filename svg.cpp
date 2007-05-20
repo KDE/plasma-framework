@@ -177,7 +177,7 @@ void Svg::resize()
     d->size = d->renderer->defaultSize();
 }
 
-QSize Svg::elementSize(const QString& elementId)
+QSize Svg::elementSize(const QString& elementId) const
 {
     if (!d->renderer) {
         d->renderer = new KSvgRenderer(Plasma::Theme::self()->image(d->themePath));
@@ -192,7 +192,7 @@ QSize Svg::elementSize(const QString& elementId)
     return elementSize.toSize();
 }
 
-QSize Svg::size()
+QSize Svg::size() const
 {
     return d->size.toSize();
 }
