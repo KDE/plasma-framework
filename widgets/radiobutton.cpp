@@ -88,8 +88,8 @@ void RadioButton::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
     radioButtonOption.text = d->text;
     radioButtonOption.state = option->state;
     radioButtonOption.state |= d->checked ? QStyle::State_On : QStyle::State_Off;
-    radioButtonOption.state |= d->mouseOver && isEnabled() ? QStyle::State_MouseOver : QStyle::State_None;
-    radioButtonOption.state |= d->mouseDown && isEnabled() ? QStyle::State_Sunken : QStyle::State_Raised;
+    radioButtonOption.state |= d->mouseOver ? QStyle::State_MouseOver : QStyle::State_None;
+    radioButtonOption.state |= d->mouseDown ? QStyle::State_Sunken : QStyle::State_Raised;
 
     style->drawControl(QStyle::CE_RadioButton, &radioButtonOption, painter, widget);
 }
