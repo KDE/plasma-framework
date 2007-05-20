@@ -1,10 +1,10 @@
 #ifndef APPLEYLAYOUT_H
 #define APPLEYLAYOUT_H
 
-#include "plasma_export.h"
-
 #include <QLayout>
 #include <QSize>
+
+#include <plasma_export.h>
 
 class QLayoutItem;
 class QRect;

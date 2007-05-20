@@ -73,7 +73,7 @@ public:
 
 public Q_SLOTS:
     // DataVisualization overriden virtual slots
-    void updated(const Plasma::DataSource::Data &data);
+    void updated(const Plasma::DataEngine::Data &data);
 
 Q_SIGNALS:
     void clicked();

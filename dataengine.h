@@ -16,48 +16,20 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef PLASMA_ENGINE_H
-#define PLASMA_ENGINE_H
+#ifndef PLASMA_DATAENGINE_H
+#define PLASMA_DATAENGINE_H
 
 #include <QAtomic>
-#include <QtCore/QHash>
-#include <QtCore/QObject>
-#include <QtCore/QStringList>
+#include <QHash>
+#include <QObject>
+#include <QStringList>
 
 #include <plasma_export.h>
 
 namespace Plasma
 {
 
-class DataSource;
 class DataVisualization;
-
-class PLASMA_EXPORT DataSource : public QObject
-{
-    Q_OBJECT
-
-    public:
-        typedef QHash<QString, DataSource*> Dict;
-        typedef QHash<QString, QVariant> Data;
-        typedef QHash<QString, Dict> Grouping;
-
-        explicit DataSource(QObject* parent = 0);
-        virtual ~DataSource();
-
-        QString name();
-        void setName(const QString&);
-        const Data data() const;
-        void setData(const QString& key, const QVariant& value);
-
-        void checkForUpdate();
-
-    Q_SIGNALS:
-        void updated(const Plasma::DataSource::Data&);
-
-    private:
-        class Private;
-        Private* const d;
-};
 
 class PLASMA_EXPORT DataEngine : public QObject
 {
@@ -65,13 +37,14 @@ class PLASMA_EXPORT DataEngine : public QObject
 
     public:
         typedef QHash<QString, DataEngine*> Dict;
+        typedef QHash<QString, QVariant> Data;
 
         DataEngine(QObject* parent);
         virtual ~DataEngine();
 
         virtual QStringList dataSources();
         void connectSource(const QString& source, DataVisualization* visualization);
-        DataSource::Data query(const QString& source);
+        Data query(const QString& source);
 
         void ref();
         void deref();
@@ -96,9 +69,9 @@ class PLASMA_EXPORT DataEngine : public QObject
 
 } // Plasma namespace
 
-#define K_EXPORT_PLASMA_DATAENGINE(libname, classname)                       \
-        K_EXPORT_COMPONENT_FACTORY(                                      \
-                        plasma_##libname##_engine,                          \
+#define K_EXPORT_PLASMA_DATAENGINE(libname, classname) \
+        K_EXPORT_COMPONENT_FACTORY(                    \
+                        plasma_##libname##_engine,     \
                         KGenericFactory<classname>("plasma_" #libname "_engine"))
 
 #endif // multiple inclusion guard

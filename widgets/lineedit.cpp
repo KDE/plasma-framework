@@ -53,7 +53,7 @@ void LineEdit::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
     QGraphicsTextItem::paint(painter, style, widget);
 }
 
-void LineEdit::data(const DataSource::Data&)
+void LineEdit::data(const DataEngine::Data&)
 {
 }
 

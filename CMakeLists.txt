@@ -6,6 +6,7 @@ set(plasma_LIB_SRCS
    abstractrunner.cpp
    applet.cpp
    dataengine.cpp
+   datasource.cpp
    datavisualization.cpp
    plasma.cpp
    interface.cpp
@@ -34,6 +35,7 @@ install( FILES
     abstractrunner.h
     applet.h
     dataengine.h
+    datasource.h
     datavisualization.h
     interface.h
     plasma.h

@@ -24,7 +24,7 @@
 
 #include <ksharedconfig.h>
 
-#include "plasma.h"
+#include <plasma.h>
 
 namespace Plasma
 {

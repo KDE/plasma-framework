@@ -16,30 +16,42 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef PLASMA_DATAVISUALIZATION_H
-#define PLASMA_DATAVISUALIZATION_H
+#ifndef PLASMA_DATASOURCE_H
+#define PLASMA_DATASOURCE_H
 
+#include <QtCore/QHash>
 #include <QtCore/QObject>
 
+#include <plasma_export.h>
 #include <dataengine.h>
 
 namespace Plasma
 {
 
-// this will end up being multiple-inherited?
-class PLASMA_EXPORT DataVisualization : public QObject
+class PLASMA_EXPORT DataSource : public QObject
 {
     Q_OBJECT
-    public:
-        DataVisualization(QObject* parent = 0);
-        virtual ~DataVisualization();
 
-    public Q_SLOTS:
-        virtual void updated(const Plasma::DataEngine::Data&) = 0;
+    public:
+        typedef QHash<QString, DataSource*> Dict;
+        typedef QHash<QString, Dict> Grouping;
+
+        explicit DataSource(QObject* parent = 0);
+        virtual ~DataSource();
+
+        QString name();
+        void setName(const QString&);
+        const DataEngine::Data data() const;
+        void setData(const QString& key, const QVariant& value);
+
+        void checkForUpdate();
+
+    Q_SIGNALS:
+        void updated(const Plasma::DataEngine::Data&);
 
     private:
         class Private;
-        Private* d;
+        Private* const d;
 };
 
 } // Plasma namespace

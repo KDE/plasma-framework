@@ -22,62 +22,11 @@
 #include <KDebug>
 
 #include "dataengine.h"
+#include "datasource.h"
 #include "datavisualization.h"
 
 namespace Plasma
 {
-
-class DataSource::Private
-{
-    public:
-        Private()
-            : dirty(false)
-        {}
-
-        QString name;
-        Data data;
-        bool dirty;
-};
-
-DataSource::DataSource(QObject* parent)
-    : QObject(parent),
-      d(new Private())
-{
-}
-
-DataSource::~DataSource()
-{
-    delete d;
-}
-
-QString DataSource::name()
-{
-    return objectName();
-}
-
-void DataSource::setName(const QString& name)
-{
-    setObjectName(name);
-}
-
-const Plasma::DataSource::Data DataSource::data() const
-{
-    return d->data;
-}
-
-void DataSource::setData(const QString& key, const QVariant& value)
-{
-    d->data[key] = value;
-    d->dirty = true;
-}
-
-void DataSource::checkForUpdate()
-{
-    if (d->dirty) {
-        emit updated(d->data);
-        d->dirty = false;
-    }
-}
 
 class DataEngine::Private
 {
@@ -150,11 +99,11 @@ void DataEngine::connectSource(const QString& source, DataVisualization* visuali
 //         return;
 //     }
 
-    connect(s, SIGNAL(updated(Plasma::DataSource::Data)),
-            visualization, SLOT(updated(Plasma::DataSource::Data)));
+    connect(s, SIGNAL(updated(Plasma::DataEngine::Data)),
+            visualization, SLOT(updated(Plasma::DataEngine::Data)));
 }
 
-DataSource::Data DataEngine::query(const QString& source)
+DataEngine::Data DataEngine::query(const QString& source)
 {
     Q_UNUSED(source)
 

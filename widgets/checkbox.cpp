@@ -89,8 +89,7 @@ QRectF CheckBox::boundingRect() const
 
 void CheckBox::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-
-
+    Q_UNUSED(option)
     QStyleOptionButton options;
     options.rect = boundingRect().toRect();
     options.text = text();
@@ -113,7 +112,7 @@ void CheckBox::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
 }
 
 
-void CheckBox::data(const DataSource::Data&)
+void CheckBox::data(const DataEngine::Data&)
 {
 }
 

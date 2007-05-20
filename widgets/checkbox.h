@@ -59,7 +59,7 @@ class KDE_EXPORT CheckBox : public DataVisualization,public QGraphicsItem
 
 
     public Q_SLOTS:
-        void data(const DataSource::Data&);
+        void data(const DataEngine::Data&);
     Q_SIGNALS:
         void clicked();
     protected:

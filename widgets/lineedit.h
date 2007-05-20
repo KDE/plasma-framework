@@ -41,7 +41,7 @@ class KDE_EXPORT LineEdit : public QGraphicsTextItem,
         void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
 
     public Q_SLOTS:
-        void data(const DataSource::Data&);
+        void data(const DataEngine::Data&);
 
 };
 
