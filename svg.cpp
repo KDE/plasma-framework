@@ -53,7 +53,7 @@ class Svg::Private
             id.clear();
         }
 
-        void findInCache(const QMatrix matrix, QPixmap& p, const QString& elementId)
+        void findInCache(const QMatrix& matrix, QPixmap& p, const QString& elementId)
         {
             if ( path.isNull() ) {
                 path = Plasma::Theme::self()->image( themePath );
