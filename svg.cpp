@@ -146,8 +146,10 @@ void Svg::paint( QPainter* painter, int x, int y, const QString& elementID )
 
 void Svg::paint( QPainter* painter, const QRectF& rect, const QString& elementID )
 {
+//     QPixmap pix(rect.width(), rect.height());
     QPixmap pix;
-    d->findInCache( painter, pix, elementID );
+    QPainter *pain = new QPainter();
+    d->findInCache( pain, pix, elementID );
 
 /*    QMatrix matrix = painter->worldMatrix();
     painter->setWorldMatrix( QMatrix() );*/
