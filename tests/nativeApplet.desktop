@@ -2,11 +2,13 @@
 Type=Plugin
 Encoding=UTF-8
 Name=Non-Unique Native Applet
+Name[el]=Μη μοναδικό εγγενές εφαρμογίδιο
 Name[nds]=Nich eensoortet echt Lüttprogramm
 Name[sv]=Icke-unikt inbyggt miniprogram
 Name[x-test]=xxNon-Unique Native Appletxx
 Name[zh_TW]=非唯一原始小程式
 Comment=A natively compiled applet
+Comment[el]=Ένα εγγενές μεταγλωττισμένο εφαρμογίδιο
 Comment[nds]=En normaal kompileert Lüttprogramm
 Comment[sv]=Ett inkompilerat miniprogram
 Comment[x-test]=xxA natively compiled appletxx
