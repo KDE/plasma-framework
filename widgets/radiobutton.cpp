@@ -129,7 +129,7 @@ void RadioButton::setChecked(bool checked)
         {
             siblingRadioButton = dynamic_cast<RadioButton*>(sibling);
 
-            if (siblingRadioButton && siblingRadioButton->isChecked())
+            if (siblingRadioButton && siblingRadioButton->isChecked() && !siblingRadioButton->parentItem())
             {
                 siblingRadioButton->setChecked(false);
                 break; // Only an item is checked at same time as maximum
