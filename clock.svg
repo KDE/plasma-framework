@@ -15,7 +15,7 @@
    width="250"
    height="250"
    version="1.0"
-   sodipodi:docbase="/home/pinheiro/Desktop"
+   sodipodi:docbase="/home/kde4/kde4/kdebase/workspace/plasma/images"
    sodipodi:docname="clock.svg"
    inkscape:output_extension="org.inkscape.output.svg.inkscape"
    inkscape:export-filename="/home/pinheiro/Desktop/clock.png"
@@ -232,8 +232,8 @@
        r="74.609375" />
   </defs>
   <sodipodi:namedview
-     inkscape:window-height="584"
-     inkscape:window-width="796"
+     inkscape:window-height="957"
+     inkscape:window-width="1280"
      inkscape:pageshadow="2"
      inkscape:pageopacity="0.0"
      guidetolerance="10.0"
@@ -248,11 +248,11 @@
      showgrid="false"
      width="250px"
      height="250px"
-     inkscape:zoom="0.72028434"
-     inkscape:cx="-3.3264214"
-     inkscape:cy="218.71345"
-     inkscape:window-x="271"
-     inkscape:window-y="303"
+     inkscape:zoom="4"
+     inkscape:cx="80.45"
+     inkscape:cy="85.596251"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
      inkscape:current-layer="svg2" />
   <g
      id="ClockFace"
@@ -1090,19 +1090,20 @@
   </g>
   <path
      style="opacity:1;fill:#606060;fill-opacity:1;stroke:none;stroke-width:8;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:1.08779998;stroke-opacity:1"
-     d="M 122.99143,42.582362 L 122.99143,122.52565 C 122.41518,122.88047 122.03871,123.48944 122.03857,124.20437 C 122.03857,124.91926 122.41504,125.57364 122.99143,125.92846 L 122.99143,129.14978 L 125.12378,129.14978 L 125.12378,125.92846 C 125.71527,125.57681 126.12208,124.93041 126.12208,124.20437 C 126.12208,123.47831 125.71527,122.87731 125.12378,122.52565 L 125.12378,42.582362 L 122.99143,42.582362 z "
+     d="M 123.68922,207.89978 L 123.68922,127.95649 C 123.11297,127.60167 122.7365,126.9927 122.73636,126.27777 C 122.73636,125.56288 123.11283,124.9085 123.68922,124.55368 L 123.68922,121.33236 L 125.82157,121.33236 L 125.82157,124.55368 C 126.41306,124.90533 126.81987,125.55173 126.81987,126.27777 C 126.81987,127.00383 126.41306,127.60483 125.82157,127.95649 L 125.82157,207.89978 L 123.68922,207.89978 z "
      id="HourHand"
      inkscape:label="#rect3745" />
   <path
      id="MinuteHand"
-     d="M 216.56052,123.87281 L 125.8679,123.87282 C 125.55991,123.37262 125.03131,123.04583 124.41073,123.04571 C 123.79018,123.04571 123.22218,123.37249 122.91417,123.87282 L 120.118,123.87281 L 120.11799,125.72374 L 122.91418,125.72374 C 123.21942,126.23718 123.78052,126.59029 124.41072,126.5903 C 125.04097,126.5903 125.56265,126.23718 125.86791,125.72374 L 216.56051,125.72374 L 216.56052,123.87281 z "
+     d="M 123.85954,218.88897 L 123.72604,128.19644 C 123.22539,127.88919 122.89782,127.36107 122.89679,126.7405 C 122.89587,126.11995 123.22181,125.55146 123.72169,125.24271 L 123.71757,122.44655 L 125.5685,122.44381 L 125.57261,125.24 C 126.0865,125.54449 126.44043,126.10507 126.44138,126.73526 C 126.4423,127.36551 126.08995,127.88772 125.57696,128.19373 L 125.71047,218.88623 L 123.85954,218.88897 z "
      style="opacity:1;fill:#606060;fill-opacity:1;stroke:none;stroke-width:8;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:1.08779998;stroke-opacity:1"
      sodipodi:nodetypes="ccsccccsccc"
-     inkscape:transform-center-x="-47.163748"
-     inkscape:label="#path3750" />
+     inkscape:transform-center-x="-0.0047679295"
+     inkscape:label="#path3750"
+     inkscape:transform-center-y="47.163723" />
   <path
      style="fill:#cc5457;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-     d="M 131.65827,114.43329 L 133.0557,115.83073 L 64.764947,182.89344 L 131.65827,114.43329 z "
+     d="M 125.71146,119.57604 L 123.7352,119.58282 L 124.93134,215.28863 L 125.71146,119.57604 z "
      id="SecondHand"
      sodipodi:nodetypes="cccc"
      inkscape:label="#path3752" />
