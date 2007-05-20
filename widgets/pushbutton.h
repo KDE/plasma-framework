@@ -32,6 +32,9 @@
 namespace Plasma
 {
 
+/**
+ * Class that emulates a QPushButton inside plasma
+ */
 class KDE_EXPORT PushButton : public DataVisualization,
                               public QGraphicsItem,
                               public QLayoutItem

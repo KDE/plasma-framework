@@ -1,4 +1,4 @@
-/**
+/*
  *   Copyright (C) 2007 by Rafael Fernández López <ereslibre@gmail.com>
  *
  *   This program is free software; you can redistribute it and/or modify

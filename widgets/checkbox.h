@@ -28,14 +28,13 @@
 
 //TODO
 //Please Document this class
-/**
-  class that emulates a QCheckBox inside plasma
-**/
-
 
 namespace Plasma
 {
 
+/**
+ * Class that emulates a QCheckBox inside plasma
+ */
 class KDE_EXPORT CheckBox : public DataVisualization,public QGraphicsItem
 {
     Q_OBJECT

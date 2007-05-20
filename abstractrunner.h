@@ -30,6 +30,9 @@ class QAction;
 namespace Plasma
 {
 
+/**
+ * A abstract super-class for Plasma Runners
+ */
 class KDE_EXPORT AbstractRunner : public QObject
 {
     Q_OBJECT

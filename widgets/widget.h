@@ -28,6 +28,9 @@
 namespace Plasma
 {
 
+/**
+ * Class that emulates a QWidget inside plasma
+ */
 class KDE_EXPORT Widget : public QGraphicsItem,
                           public DataVisualization
 {

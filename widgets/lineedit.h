@@ -28,6 +28,9 @@
 namespace Plasma
 {
 
+/**
+ * Class that emulates a QLineEdit inside plasma
+ */
 class KDE_EXPORT LineEdit : public QGraphicsTextItem,
                             public DataVisualization
 {
