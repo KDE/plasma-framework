@@ -29,7 +29,7 @@
 namespace Plasma
 {
 
-class KDE_EXPORT Applet : public QWidget, public QGraphicsItemGroup
+class PLASMA_EXPORT Applet : public QWidget, public QGraphicsItemGroup
 {
     Q_OBJECT
 

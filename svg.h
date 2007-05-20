@@ -21,7 +21,7 @@
 
 #include <QtCore/QObject>
 
-#include <kdemacros.h>
+#include <plasma_export.h>
 
 class QPainter;
 class QPoint;
@@ -31,7 +31,7 @@ class QSize;
 namespace Plasma
 {
 
-class KDE_EXPORT Svg : public QObject
+class PLASMA_EXPORT Svg : public QObject
 {
     Q_OBJECT
 

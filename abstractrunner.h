@@ -22,7 +22,7 @@
 #include <QtCore/QObject>
 #include <QtCore/QList>
 
-#include <kdemacros.h>
+#include <plasma_export.h>
 
 class KActionCollection;
 class QAction;
@@ -33,7 +33,7 @@ namespace Plasma
 /**
  * A abstract super-class for Plasma Runners
  */
-class KDE_EXPORT AbstractRunner : public QObject
+class PLASMA_EXPORT AbstractRunner : public QObject
 {
     Q_OBJECT
 

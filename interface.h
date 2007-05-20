@@ -21,14 +21,14 @@
 
 #include <QtCore/QString>
 
-#include <kdemacros.h>
+#include <plasma_export.h>
 
 namespace Plasma
 {
 
 class DataEngine;
 
-class KDE_EXPORT Interface
+class PLASMA_EXPORT Interface
 {
     public:
         static Interface* self();

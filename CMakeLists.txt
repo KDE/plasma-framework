@@ -3,20 +3,19 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 ########### next target ###############
 
 set(plasma_LIB_SRCS
-   plasma.cpp
-   applet.cpp
-   interface.cpp
    abstractrunner.cpp
-   svg.cpp
-   theme.cpp
+   applet.cpp
    dataengine.cpp
    datavisualization.cpp
-
-   widgets/widget.cpp
+   plasma.cpp
+   interface.cpp
+   svg.cpp
+   theme.cpp
+   widgets/checkbox.cpp
    widgets/lineedit.cpp
    widgets/pushbutton.cpp
-   widgets/checkbox.cpp
    widgets/radiobutton.cpp
+   widgets/widget.cpp
    )
 
 kde4_automoc(${plasma_LIB_SRCS})
@@ -32,14 +31,15 @@ install(TARGETS plasma  DESTINATION ${LIB_INSTALL_DIR} )
 ########### install files ###############
 
 install( FILES
-    applet.h
-    plasma.h
     abstractrunner.h
-    theme.h
-    interface.h
+    applet.h
     dataengine.h
-    svg.h
     datavisualization.h
+    interface.h
+    plasma.h
+    plasma_export.h
+    svg.h
+    theme.h
     widgets/widget.h
     widgets/lineedit.h
     widgets/pushbutton.h

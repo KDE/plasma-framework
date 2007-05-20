@@ -19,7 +19,7 @@
 #ifndef PLASMA_DEFS_H
 #define PLASMA_DEFS_H
 
-#include <kdemacros.h>
+#include <plasma_export.h>
 
 namespace Plasma
 {
@@ -37,9 +37,9 @@ enum Direction { Down = 0,
 enum ScreenEdge { Floating = 0, Desktop,
                   TopEdge, BottomEdge, LeftEdge, RightEdge };
 
-KDE_EXPORT void setMinId(int minId);
-KDE_EXPORT int uniqueId();
-KDE_EXPORT Direction edgeToPopupDirection(ScreenEdge edge);
+PLASMA_EXPORT void setMinId(int minId);
+PLASMA_EXPORT int uniqueId();
+PLASMA_EXPORT Direction edgeToPopupDirection(ScreenEdge edge);
 
 } // Plasma namespace
 

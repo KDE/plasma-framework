@@ -1,7 +1,7 @@
 #ifndef APPLEYLAYOUT_H
 #define APPLEYLAYOUT_H
 
-#include "kdemacros.h"
+#include "plasma_export.h"
 
 #include <QLayout>
 #include <QSize>
@@ -17,7 +17,7 @@ namespace Plasma
  * of applets) by emitting corresponding signals which AppletCompositor
  * can intercept and respond with some nice animation/effect.
  */
-class KDE_EXPORT AppletLayout : public QLayout
+class PLASMA_EXPORT AppletLayout : public QLayout
 {
         Q_OBJECT
     public:
