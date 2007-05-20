@@ -115,6 +115,13 @@ class PLASMA_EXPORT Svg : public QObject
          **/
         QSize elementSize( const QString& elementId );
 
+        /**
+         * Currently set size of the SVG
+         * @arg elementId the id of the element to check
+         * @return the current size of a given element
+         **/
+        QSize size();
+
     Q_SIGNALS:
         void repaintNeeded();
 

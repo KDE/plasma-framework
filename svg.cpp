@@ -128,7 +128,7 @@ Svg::Svg( const QString& imagePath, QObject* parent )
     : QObject( parent ),
       d( new Private( imagePath ) )
 {
-    connect( Plasma::Theme::self(), SIGNAL(changed()), this, SLOT(themeChanged()) );
+    connect(Plasma::Theme::self(), SIGNAL(changed()), this, SLOT(themeChanged()));
 }
 
 Svg::~Svg()
@@ -181,7 +181,12 @@ QSize Svg::elementSize(const QString& elementId)
     qreal dy = d->size.height() / naturalSize.height();
     elementSize.scale( elementSize.width() * dx, elementSize.height() * dy, Qt::IgnoreAspectRatio );
 
-    return elementSize.toSize();;
+    return elementSize.toSize();
+}
+
+QSize Svg::size()
+{
+    return d->size.toSize();
 }
 
 void Svg::themeChanged()
