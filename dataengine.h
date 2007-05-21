@@ -38,6 +38,7 @@ class PLASMA_EXPORT DataEngine : public QObject
     public:
         typedef QHash<QString, DataEngine*> Dict;
         typedef QHash<QString, QVariant> Data;
+        typedef QHashIterator<QString, QVariant> DataIterator;
 
         DataEngine(QObject* parent);
         virtual ~DataEngine();

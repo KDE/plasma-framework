@@ -25,7 +25,7 @@ namespace Plasma
 
 LineEdit::LineEdit(QGraphicsItem *parent, QGraphicsScene *scene)
     : QGraphicsTextItem(parent, scene),
-    DataVisualization()
+      DataVisualization()
 {
     setTextInteractionFlags(Qt::TextEditorInteraction);
 }
@@ -53,8 +53,19 @@ void LineEdit::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
     QGraphicsTextItem::paint(painter, style, widget);
 }
 
-void LineEdit::data(const DataEngine::Data&)
+void LineEdit::updated(const DataEngine::Data& data)
 {
+    DataEngine::DataIterator it(data);
+
+    //TODO: this only shows the first possible data item.
+    //      should it do more?
+    while (it.hasNext()) {
+        it.next();
+        if (it.value().canConvert(QVariant::String)) {
+            setPlainText(it.value().toString());
+            return;
+        }
+    }
 }
 
 } // namespace Plasma
