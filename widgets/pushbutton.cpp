@@ -16,6 +16,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
+#include "pushbutton.h"
+
 #include <QStyleOptionFrameV2>
 #include <QStyleOption>
 #include <QStyle>
@@ -23,8 +25,6 @@
 #include <QPainter>
 #include <QGraphicsSceneMouseEvent>
 #include <QDebug>
-
-#include "pushbutton.h"
 #include "pushbutton.moc"
 
 namespace Plasma
@@ -177,7 +177,7 @@ QSize PushButton::size() const
     return QSize(d->width, d->height);
 }
 
-void PushButton::setSize(QSize s)
+void PushButton::setSize(const QSize& s)
 {
     prepareGeometryChange();
     if (!d->maxWidth >= s.width())

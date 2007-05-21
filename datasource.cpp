@@ -16,11 +16,11 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
+#include "datasource.h"
+
 #include <QVariant>
 
 #include <KDebug>
-
-#include "datasource.h"
 
 namespace Plasma
 {

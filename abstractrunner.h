@@ -136,7 +136,7 @@ class PLASMA_EXPORT AbstractRunner : public QObject
 
     private:
         class Private;
-        Private* d;
+        Private* const d;
 
     private Q_SLOTS:
         void runExactMatch();

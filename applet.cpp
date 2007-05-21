@@ -16,6 +16,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
+#include "applet.h"
+
 #include <QEvent>
 #include <QList>
 #include <QSize>
@@ -26,7 +28,6 @@
 #include <KStandardDirs>
 #include <KService>
 
-#include "applet.h"
 #include "interface.h"
 
 namespace Plasma
@@ -59,13 +60,12 @@ class Applet::Private
 };
 
 Applet::Applet( QGraphicsItem *parent,
-                QString serviceID,
+                const QString& serviceID,
                 int appletId )
         : QWidget( 0 ),
-          QGraphicsItemGroup( parent )
+          QGraphicsItemGroup( parent ),
+          d( new Private( KService::serviceByStorageId( serviceID ), appletId ) )
 {
-    KService::Ptr service = KService::serviceByStorageId( serviceID );
-    d = new Private( service, appletId );
 }
 
 Applet::~Applet()

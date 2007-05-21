@@ -25,8 +25,12 @@
 
 class QPainter;
 class QPoint;
+class QPointF;
 class QRect;
+class QRectF;
 class QSize;
+class QSizeF;
+class QMatrix;
 
 namespace Plasma
 {
@@ -45,10 +49,11 @@ class PLASMA_EXPORT Svg : public QObject
          *
          * The size is initialized to be the SVG's native size.
          *
-         * @related Plasma::Theme
          * @arg imagePath the image to show, used to load the image from
          * Plasma::Theme
          * @arg parent options QObject to parent this to
+         *
+         * @related Plasma::Theme
          */
         explicit Svg( const QString& imagePath, QObject* parent = 0 );
         ~Svg();
@@ -136,7 +141,7 @@ class PLASMA_EXPORT Svg : public QObject
 
     private:
         class Private;
-        Private* d;
+        Private* const d;
 };
 
 } // Plasma namespace

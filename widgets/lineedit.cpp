@@ -16,9 +16,9 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include <QStyleOptionFrameV2>
-
 #include "lineedit.h"
+
+#include <QStyleOptionFrameV2>
 
 namespace Plasma
 {

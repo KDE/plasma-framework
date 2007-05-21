@@ -16,11 +16,11 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
+#include "theme.h"
+
 #include <KSharedConfig>
 #include <KStandardDirs>
 #include <kconfiggroup.h>
-
-#include "theme.h"
 
 namespace Plasma
 {

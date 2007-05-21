@@ -1,4 +1,4 @@
-/**
+/*
  *   Copyright (C) 2007 by Rafael Fernández López <ereslibre@gmail.com>
  *
  *   This program is free software; you can redistribute it and/or modify
@@ -16,15 +16,15 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
+// Header Includes
+#include "radiobutton.h"
+
 // Qt includes
 #include <QtGui/QWidget>
 #include <QtGui/QApplication>
 #include <QtGui/QGraphicsScene>
 #include <QtGui/QStyleOptionButton>
 #include <QtGui/QGraphicsSceneMouseEvent>
-
-// Radio button includes
-#include "radiobutton.h"
 
 namespace Plasma
 {

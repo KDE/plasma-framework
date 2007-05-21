@@ -16,11 +16,11 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
+#include "abstractrunner.h"
+
 #include <QAction>
 #include <KActionCollection>
 #include <KServiceTypeTrader>
-
-#include "abstractrunner.h"
 
 namespace Plasma
 {
@@ -41,9 +41,9 @@ class AbstractRunner::Private
 };
 
 AbstractRunner::AbstractRunner( QObject* parent )
-    : QObject( parent )
+    : QObject( parent ),
+      d( new Private( this ) )
 {
-    d = new Private( this );
 }
 
 AbstractRunner::~AbstractRunner()

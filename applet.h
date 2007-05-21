@@ -37,7 +37,7 @@ class PLASMA_EXPORT Applet : public QWidget, public QGraphicsItemGroup
         typedef QList<Applet*> List;
 
         Applet( QGraphicsItem* parent,
-                QString serviceId,
+                const QString& serviceId,
                 int appletId );
         ~Applet();
 
@@ -105,7 +105,7 @@ class PLASMA_EXPORT Applet : public QWidget, public QGraphicsItemGroup
 
     private:
         class Private;
-        Private* d;
+        Private* const d;
 };
 
 #define K_EXPORT_PLASMA_APPLET(libname, classname)                       \

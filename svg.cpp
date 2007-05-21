@@ -16,14 +16,14 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
+#include "svg.h"
+
 #include <QMatrix>
 #include <QPainter>
 #include <QPixmapCache>
 
 #include <KDebug>
 #include <KSvgRenderer>
-
-#include "svg.h"
 #include "theme.h"
 
 namespace Plasma

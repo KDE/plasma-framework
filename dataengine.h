@@ -19,10 +19,10 @@
 #ifndef PLASMA_DATAENGINE_H
 #define PLASMA_DATAENGINE_H
 
-#include <QAtomic>
-#include <QHash>
-#include <QObject>
-#include <QStringList>
+#include <QtCore/QAtomic>
+#include <QtCore/QHash>
+#include <QtCore/QObject>
+#include <QtCore/QStringList>
 
 #include <plasma_export.h>
 

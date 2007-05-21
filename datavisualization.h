@@ -39,7 +39,7 @@ class PLASMA_EXPORT DataVisualization : public QObject
 
     private:
         class Private;
-        Private* d;
+        Private* const d;
 };
 
 } // Plasma namespace

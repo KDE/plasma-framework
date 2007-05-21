@@ -47,7 +47,7 @@ class PLASMA_EXPORT Theme : public QObject
 
     private:
         class Private;
-        Private* d;
+        Private* const d;
 };
 
 } // Plasma namespace

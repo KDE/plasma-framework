@@ -16,13 +16,14 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
+#include "checkbox.h"
+
 #include <QStyleOption>
 #include <QStyle>
 #include <QWidget>
 #include <QPainter>
 #include <QGraphicsSceneMouseEvent>
 
-#include "checkbox.h"
 #include "checkbox.moc"
 
 namespace Plasma

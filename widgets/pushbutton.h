@@ -64,7 +64,7 @@ class KDE_EXPORT PushButton : public DataVisualization,
         void setText(const QString &name);
 
         QSize size() const;
-        void setSize(QSize size);
+        void setSize(const QSize& size);
 
         int height() const;
         void setHeight(int height);

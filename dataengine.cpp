@@ -16,12 +16,13 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
+#include "dataengine.h"
+
 #include <QTimer>
 #include <QVariant>
 
 #include <KDebug>
 
-#include "dataengine.h"
 #include "datasource.h"
 #include "datavisualization.h"
 

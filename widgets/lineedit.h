@@ -35,7 +35,7 @@ class KDE_EXPORT LineEdit : public QGraphicsTextItem,
                             public DataVisualization
 {
     public:
-        LineEdit(QGraphicsItem *parent = 0, QGraphicsScene *scene = 0);
+        explicit LineEdit(QGraphicsItem *parent = 0, QGraphicsScene *scene = 0);
         ~LineEdit();
 
         void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);

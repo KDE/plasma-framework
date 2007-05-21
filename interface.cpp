@@ -16,9 +16,9 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include <kdebug.h>
-
 #include "interface.h"
+
+#include <kdebug.h>
 
 Plasma::Interface* Plasma::Interface::m_interface;
 
