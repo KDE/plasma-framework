@@ -59,7 +59,7 @@ class PLASMA_EXPORT DataEngine : public QObject
         void removeDataSource(const QString& source);
         void clearAllDataSources();
 
-    protected slots:
+    protected Q_SLOTS:
         void checkForUpdates();
 
     private:

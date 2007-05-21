@@ -111,7 +111,6 @@ class PLASMA_EXPORT Svg : public QObject
         /**
          * Resizes the rendered image to the natural size of the SVG.
          * Rendering will actually take place on the next call to paint.
-         * @arg size the new size of the image
          **/
         void resize();
 
