@@ -56,6 +56,7 @@ install( FILES
     includes/Theme
     includes/Interface
     includes/DataEngine
+    includes/DataVisualization
     includes/Svg
     DESTINATION ${INCLUDE_INSTALL_DIR}/KDE/Plasma )
 
