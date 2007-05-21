@@ -72,7 +72,7 @@ public:
     void setText(const QString &text);
 
 public Q_SLOTS:
-    // DataVisualization overriden virtual slots
+    // DataVisualization overridden virtual slots
     void updated(const Plasma::DataEngine::Data &data);
 
 Q_SIGNALS:

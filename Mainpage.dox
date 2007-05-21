@@ -3,9 +3,10 @@
 *
 * This directory contains the classes making up libplasma, which provides the
 * core framework used by Plasma and its components. This includes applet and
-* extension definitions and loading, common GUI elements, etc.
-* 
+* extension definitions and loading, <a href="../widgets/html">common GUI 
+* elements</a>, etc.
+*
 * Domain specific sets of functionality, e.g. for network awareness or sensors,
-* are not found here but in one of the Plasma Engines.
+* are not found here but in one of the Plasma <a href="../../engines/html">Engines</a>.
 *
 */
