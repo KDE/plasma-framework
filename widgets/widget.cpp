@@ -189,7 +189,7 @@ void Widget::addChild(Widget *w)
 
 	d->childList.append(w);
 
-	qDebug("Added Child Widget : %p", w);
+	qDebug("Added Child Widget : %p", (void*)w);
 
 	if(layout()) {
 

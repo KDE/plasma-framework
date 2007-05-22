@@ -61,6 +61,6 @@ class KDE_EXPORT Layout : public LayoutItem
 		Private *const d;
 };
 
-};
+}
 
 #endif /* __LAYOUT__ */
