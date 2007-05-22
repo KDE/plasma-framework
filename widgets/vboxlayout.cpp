@@ -51,10 +51,12 @@ Qt::Orientations VBoxLayout::expandingDirections() const
 
 QSizeF VBoxLayout::minimumSize() const
 {
+        return QSizeF();
 }
 
 QSizeF VBoxLayout::maximumSize() const
 {
+	return QSizeF();
 }
 
 bool VBoxLayout::hasHeightForWidth() const
@@ -64,6 +66,7 @@ bool VBoxLayout::hasHeightForWidth() const
 
 qreal VBoxLayout::heightForWidth(qreal w) const
 {
+	return qreal();
 }
 
 QRectF VBoxLayout::geometry() const
