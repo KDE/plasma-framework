@@ -63,13 +63,9 @@ class PLASMA_EXPORT Svg : public QObject
          * @arg painter the QPainter to use
          * @arg point the position to start drawing; the entire svg will be
          *      drawn starting at this point.
-         * @arg matrix the QMatrix to transform the drawing by; useful if, for instance
-         *      you are drawing into a painter with a transformation, but you want the
-         *      SVG to be painted in relation to, rather than using, that 
          */
         void paint(QPainter* painter, const QPointF& point,
-                   const QString& elementID = QString(),
-                   const QMatrix* matrix = 0);
+                   const QString& elementID = QString());
 
         /**
          * Paints the SVG represented by this object
@@ -81,8 +77,7 @@ class PLASMA_EXPORT Svg : public QObject
          *      SVG to be painted in relation to, rather than using, that 
          */
         void paint(QPainter* painter, int x, int y,
-                   const QString& elementID = QString(),
-                   const QMatrix* matrix = 0);
+                   const QString& elementID = QString());
 
         /**
          * Paints the SVG represented by this object
@@ -95,8 +90,7 @@ class PLASMA_EXPORT Svg : public QObject
          *      SVG to be painted in relation to, rather than using, that 
          */
         void paint(QPainter* painter, const QRectF& rect,
-                   const QString& elementID = QString(),
-                   const QMatrix* matrix = 0);
+                   const QString& elementID = QString());
 
         /**
          * Resizes the rendered image. Rendering will actually take place on

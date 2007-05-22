@@ -53,7 +53,7 @@ class Svg::Private
             id.clear();
         }
 
-        void findInCache(const QMatrix& matrix, QPixmap& p, const QString& elementId)
+        void findInCache(QPixmap& p, const QString& elementId)
         {
             if ( path.isNull() ) {
                 path = Plasma::Theme::self()->image( themePath );
@@ -64,18 +64,10 @@ class Svg::Private
                 }
             }
 
-            //QMatrix matrix = painter->worldMatrix();
-
-            //TODO: if the id changes, should we remove it or just let QPixmapCache do that for us?
-            id = QString::fromLatin1( "%7_%1_%2_%3_%4_%5_%6" )
-                                      .arg( size.width() )
-                                      .arg( size.height() )
-                                      .arg( matrix.m11() )
-                                      .arg( matrix.m12() )
-                                      .arg( matrix.m21() )
-                                      .arg( matrix.m22() )
-                                      .arg( themePath );
-
+            id = QString::fromLatin1("%3_%2_%1")
+                                    .arg( size.width() )
+                                    .arg( size.height() )
+                                    .arg( themePath );
             if (!elementId.isEmpty()) {
                 id.append(elementId);
             }
@@ -105,7 +97,6 @@ class Svg::Private
             p = QPixmap(s);
             p.fill(Qt::transparent);
             QPainter renderPainter( &p );
-            renderPainter.setWorldMatrix( matrix );
 
             if ( elementId.isEmpty() ) {
                 renderer->render( &renderPainter );
@@ -136,26 +127,22 @@ Svg::~Svg()
 
 }
 
-void Svg::paint(QPainter* painter, const QPointF& point, const QString& elementID, const QMatrix* matrix)
+void Svg::paint(QPainter* painter, const QPointF& point, const QString& elementID)
 {
     QPixmap pix;
-    d->findInCache(matrix ? *matrix : painter->worldMatrix(), pix, elementID);
-
-/*    QMatrix matrix = painter->worldMatrix();
-    painter->setWorldMatrix( QMatrix() );*/
+    d->findInCache(pix, elementID);
     painter->drawPixmap(point.toPoint(), pix);
-//     painter->setWorldMatrix( matrix );
 }
 
-void Svg::paint(QPainter* painter, int x, int y, const QString& elementID, const QMatrix* matrix)
+void Svg::paint(QPainter* painter, int x, int y, const QString& elementID)
 {
-    paint(painter, QPointF( x, y ), elementID, matrix);
+    paint(painter, QPointF( x, y ), elementID);
 }
 
-void Svg::paint(QPainter* painter, const QRectF& rect, const QString& elementID, const QMatrix* matrix)
+void Svg::paint(QPainter* painter, const QRectF& rect, const QString& elementID)
 {
     QPixmap pix;
-    d->findInCache(matrix ? *matrix : painter->worldMatrix(), pix, elementID);
+    d->findInCache(pix, elementID);
     painter->drawPixmap(rect, pix, rect);
 }
 
