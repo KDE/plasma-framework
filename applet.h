@@ -29,6 +29,11 @@
 namespace Plasma
 {
 
+/**
+ * @short the base Applet class
+ *
+ * 
+ */
 class PLASMA_EXPORT Applet : public QWidget, public QGraphicsItemGroup
 {
     Q_OBJECT
@@ -36,6 +41,13 @@ class PLASMA_EXPORT Applet : public QWidget, public QGraphicsItemGroup
     public:
         typedef QList<Applet*> List;
 
+        /**
+         * @arg parent the QGraphicsItem this applet is parented to
+         * @arg servideId the name of the .desktop file containing the
+         *      information about the widget
+         * @arg appletId a unique id used to differentiate between multiple
+         *      instances of the same Applet type
+         */
         Applet( QGraphicsItem* parent,
                 const QString& serviceId,
                 int appletId );
