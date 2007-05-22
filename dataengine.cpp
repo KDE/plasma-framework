@@ -24,7 +24,6 @@
 #include <KDebug>
 
 #include "datasource.h"
-#include "datavisualization.h"
 
 namespace Plasma
 {

@@ -29,8 +29,6 @@
 namespace Plasma
 {
 
-class DataVisualization;
-
 class PLASMA_EXPORT DataEngine : public QObject
 {
     Q_OBJECT
