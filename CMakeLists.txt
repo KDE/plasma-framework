@@ -17,6 +17,9 @@ set(plasma_LIB_SRCS
    widgets/pushbutton.cpp
    widgets/radiobutton.cpp
    widgets/widget.cpp
+   widgets/layout.cpp
+   widgets/layoutitem.cpp
+   widgets/vboxlayout.cpp
    )
 
 kde4_automoc(${plasma_LIB_SRCS})
