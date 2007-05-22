@@ -82,7 +82,7 @@ PushButton::~PushButton()
     delete d;
 }
 
-void PushButton::updated(const DataEngine::Data &data)
+void PushButton::updated(const QString&, const DataEngine::Data &data)
 {
     Q_UNUSED(data)
 }

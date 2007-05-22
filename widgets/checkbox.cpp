@@ -112,7 +112,7 @@ void CheckBox::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
 
 }
 
-void CheckBox::updated(const DataEngine::Data&)
+void CheckBox::updated(const QString&, const DataEngine::Data&)
 {
 }
 

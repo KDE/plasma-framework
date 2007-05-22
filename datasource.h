@@ -47,7 +47,7 @@ class PLASMA_EXPORT DataSource : public QObject
         void checkForUpdate();
 
     Q_SIGNALS:
-        void updated(const Plasma::DataEngine::Data&);
+        void updated(const QString& source, const Plasma::DataEngine::Data& data);
 
     private:
         class Private;

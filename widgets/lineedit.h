@@ -31,8 +31,7 @@ namespace Plasma
 /**
  * Class that emulates a QLineEdit inside plasma
  */
-class KDE_EXPORT LineEdit : public QGraphicsTextItem,
-                            public DataVisualization
+class KDE_EXPORT LineEdit : public QGraphicsTextItem
 {
     public:
         explicit LineEdit(QGraphicsItem *parent = 0, QGraphicsScene *scene = 0);
@@ -41,7 +40,7 @@ class KDE_EXPORT LineEdit : public QGraphicsTextItem,
         void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
 
     public Q_SLOTS:
-        void updated(const DataEngine::Data&);
+        void updated(const QString&, const DataEngine::Data&);
 };
 
 } // namespace Plasma

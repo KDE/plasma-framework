@@ -33,7 +33,6 @@ class DataSource::Private
             : dirty(false)
         {}
 
-        QString name;
         DataEngine::Data data;
         bool dirty;
 };
@@ -73,7 +72,7 @@ void DataSource::setData(const QString& key, const QVariant& value)
 void DataSource::checkForUpdate()
 {
     if (d->dirty) {
-        emit updated(d->data);
+        emit updated(objectName(), d->data);
         d->dirty = false;
     }
 }

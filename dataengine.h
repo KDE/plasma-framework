@@ -44,12 +44,17 @@ class PLASMA_EXPORT DataEngine : public QObject
         virtual ~DataEngine();
 
         virtual QStringList dataSources();
-        void connectSource(const QString& source, DataVisualization* visualization);
+        void connectSource(const QString& source, QObject* visualization);
         Data query(const QString& source);
 
         void ref();
         void deref();
         bool isUsed();
+
+
+    Q_SIGNALS:
+        void newDataSource(const QString& source);
+        void dataSourceRemoved(const QString& source);
 
     protected:
         virtual void init();

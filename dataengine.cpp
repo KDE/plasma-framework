@@ -50,6 +50,7 @@ class DataEngine::Private
                      << ": could not find DataSource " << sourceName
                      << ", creating" << endl;
             DataSource* s = new DataSource(engine);
+            emit engine->newDataSource(sourceName);
             s->setName(sourceName);
             sources.insert(sourceName, s);
             return s;
@@ -89,19 +90,14 @@ QStringList DataEngine::dataSources()
     return d->sources.keys();
 }
 
-void DataEngine::connectSource(const QString& source, DataVisualization* visualization)
+void DataEngine::connectSource(const QString& source, QObject* visualization)
 {
     Q_UNUSED(source)
     Q_UNUSED(visualization)
 
     DataSource* s = d->source(source);
-//     if (!s) {
-//         kDebug() << "DataEngine " << objectName() << ": could not find DataSource " << source << endl;
-//         return;
-//     }
-
-    connect(s, SIGNAL(updated(Plasma::DataEngine::Data)),
-            visualization, SLOT(updated(Plasma::DataEngine::Data)));
+    connect(s, SIGNAL(updated(QString,Plasma::DataEngine::Data)),
+            visualization, SLOT(updated(QString,Plasma::DataEngine::Data)));
 }
 
 DataEngine::Data DataEngine::query(const QString& source)
@@ -146,6 +142,7 @@ void DataEngine::removeDataSource(const QString& source)
 {
     DataSource::Dict::iterator it = d->sources.find(source);
     if (it != d->sources.end()) {
+        emit dataSourceRemoved(it.key());
         d->sources.erase(it);
     }
 }
@@ -155,6 +152,7 @@ void DataEngine::clearAllDataSources()
     QMutableHashIterator<QString, Plasma::DataSource*> it(d->sources);
     while (it.hasNext()) {
         it.next();
+        emit dataSourceRemoved(it.key());
         delete it.value();
         it.remove();
     }

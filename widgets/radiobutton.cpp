@@ -148,7 +148,7 @@ void RadioButton::setText(const QString &text)
     update();
 }
 
-void RadioButton::updated(const Plasma::DataEngine::Data &data)
+void RadioButton::updated(const QString&, const Plasma::DataEngine::Data &data)
 {
     Q_UNUSED(data);
 }

@@ -35,7 +35,7 @@ class PLASMA_EXPORT DataVisualization : public QObject
         virtual ~DataVisualization();
 
     public Q_SLOTS:
-        virtual void updated(const Plasma::DataEngine::Data&) = 0;
+        virtual void updated(const QString& source, const Plasma::DataEngine::Data&) = 0;
 
     private:
         class Private;

@@ -91,7 +91,7 @@ class KDE_EXPORT PushButton : public DataVisualization,
         void clicked();
 
     public Q_SLOTS:
-        virtual void updated(const DataEngine::Data &);
+        virtual void updated(const QString&, const DataEngine::Data &);
 
     protected:
         bool isDown();
