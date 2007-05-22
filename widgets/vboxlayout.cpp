@@ -191,4 +191,4 @@ QSizeF VBoxLayout::size() const
 	return geometry().size();
 }
 
-};
+}

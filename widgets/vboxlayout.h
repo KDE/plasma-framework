@@ -69,6 +69,6 @@ class KDE_EXPORT VBoxLayout : public Layout
 		Private *const d;
 };
 
-};
+}
 
 #endif /* __V_BOX_LAYOUT__ */

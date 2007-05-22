@@ -59,4 +59,4 @@ qreal LayoutItem::widthForHeight(qreal h) const
 	return 0.0;
 }
 
-};
+}

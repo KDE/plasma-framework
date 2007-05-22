@@ -72,4 +72,4 @@ LayoutItem *Layout::parent() const
 	return d->parent;
 }
 
-};
+}
