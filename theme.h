@@ -25,7 +25,15 @@
 
 namespace Plasma
 {
-
+/**
+ * @short Interface to the Plasma theme
+ *
+ * Accessed via Plasma::Theme::self() e.g:
+ * \code
+ * QString image = Plasma::Theme::self()->image("widgets/clock")
+ * \endcode
+ *
+ */
 class PLASMA_EXPORT Theme : public QObject
 {
     Q_OBJECT
@@ -39,7 +47,15 @@ class PLASMA_EXPORT Theme : public QObject
         explicit Theme( QObject* parent = 0 );
         ~Theme();
 
+        /**
+         * @return the name of the theme directory. "default" is none set.
+         */
         QString themeName() const;
+        /**
+         * @arg name the name of the file in the theme directory (without the 
+         *           ".svg" part)
+         * @return the full path to the requested file for the current theme
+         */
         QString image( const QString& name ) const;
 
     Q_SIGNALS:

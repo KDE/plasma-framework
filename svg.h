@@ -72,9 +72,6 @@ class PLASMA_EXPORT Svg : public QObject
          * @arg painter the QPainter to use
          * @arg x the horizontal coordinate to start painting from
          * @arg y the vertical coordinate to start painting from
-         * @arg matrix the QMatrix to transform the drawing by; useful if, for instance
-         *      you are drawing into a painter with a transformation, but you want the
-         *      SVG to be painted in relation to, rather than using, that 
          */
         void paint(QPainter* painter, int x, int y,
                    const QString& elementID = QString());
@@ -85,9 +82,6 @@ class PLASMA_EXPORT Svg : public QObject
          * @arg rect the rect to draw into; if small than the current size
          *           of the 
          *      drawn starting at this point.
-         * @arg matrix the QMatrix to transform the drawing by; useful if, for instance
-         *      you are drawing into a painter with a transformation, but you want the
-         *      SVG to be painted in relation to, rather than using, that 
          */
         void paint(QPainter* painter, const QRectF& rect,
                    const QString& elementID = QString());
@@ -122,7 +116,6 @@ class PLASMA_EXPORT Svg : public QObject
 
         /**
          * Currently set size of the SVG
-         * @arg elementId the id of the element to check
          * @return the current size of a given element
          **/
         QSize size() const;
