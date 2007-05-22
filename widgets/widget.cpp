@@ -157,8 +157,9 @@ void Widget::resize(qreal w, qreal h)
 	resize(QSizeF(w, h));
 }
 
-void Widget::data(const DataSource::Data& data)
+void Widget::updated(const QString& source, const Plasma::DataEngine::Data& data)
 {
+	Q_UNUSED(source);
 	Q_UNUSED(data);
 }
 

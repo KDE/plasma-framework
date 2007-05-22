@@ -84,7 +84,7 @@ class KDE_EXPORT Widget : public DataVisualization,
 		void addChild(Widget *w);
 
 	public Q_SLOTS:
-        virtual void data(const DataSource::Data&);
+	virtual void updated(const QString& source, const Plasma::DataEngine::Data&);
 
 
     private:
