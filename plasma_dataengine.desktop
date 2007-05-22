@@ -4,6 +4,7 @@ Type=ServiceType
 X-KDE-ServiceType=Plasma/DataEngine
 
 Comment=Plasma Data Engine
+Comment[zh_TW]=Plasma 資料引擎
 
 [PropertyDef::X-EngineName]
 Type=QString
