@@ -33,6 +33,8 @@ namespace Plasma
  */
 class KDE_EXPORT LineEdit : public QGraphicsTextItem
 {
+    Q_OBJECT
+
     public:
         explicit LineEdit(QGraphicsItem *parent = 0, QGraphicsScene *scene = 0);
         ~LineEdit();
@@ -40,7 +42,7 @@ class KDE_EXPORT LineEdit : public QGraphicsTextItem
         void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
 
     public Q_SLOTS:
-        void updated(const QString&, const DataEngine::Data&);
+        void updated(const QString&, const Plasma::DataEngine::Data&);
 };
 
 } // namespace Plasma

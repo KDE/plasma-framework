@@ -68,3 +68,6 @@ void LineEdit::updated(const QString&, const DataEngine::Data& data)
 }
 
 } // namespace Plasma
+
+#include "lineedit.moc"
+
