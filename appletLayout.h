@@ -1,5 +1,5 @@
-#ifndef APPLEYLAYOUT_H
-#define APPLEYLAYOUT_H
+#ifndef APPLET_LAYOUT_H
+#define APPLET_LAYOUT_H
 
 #include <QLayout>
 #include <QSize>

@@ -30,7 +30,7 @@
 namespace Plasma
 {
 /**
- * @short the base Applet class
+ * @short The base Applet (Plasmoid) class
  *
  *
  */

@@ -21,6 +21,9 @@
 
 #include <plasma_export.h>
 
+/**
+ * Namespace for everything in libplasma
+ */
 namespace Plasma
 {
 
