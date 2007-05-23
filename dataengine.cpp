@@ -67,6 +67,7 @@ class DataEngine::Private
         DataSource::Dict sources;
         DataEngine* engine;
         QTimer* updateTimer;
+        QString icon;
 };
 
 
@@ -75,7 +76,7 @@ DataEngine::DataEngine(QObject* parent)
       d(new Private(this))
 {
     connect(d->updateTimer, SIGNAL(timeout()), this, SLOT(checkForUpdates()));
-    //FIXME: should we try and delay this call?
+    //FIXME: we should delay this call; to when is the question.
     init();
 }
 
@@ -182,6 +183,16 @@ void DataEngine::deref()
 bool DataEngine::isUsed()
 {
     return d->ref != 0;
+}
+
+void DataEngine::setIcon(const QString& icon)
+{
+    d->icon = icon;
+}
+
+QString DataEngine::icon()
+{
+    return d->icon;
 }
 
 void DataEngine::checkForUpdates()

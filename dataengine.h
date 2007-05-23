@@ -41,9 +41,9 @@ class DataSource;
  * element to show all sorts of data: as long as there is a DataEngine, the
  * data is retrievable.
  *
- * DataEngines are loaded as plugins on demand and provide one more data
- * sources which are identified by name. For instance, a network DataEngine
- * might provide a data source for each network interface.
+ * DataEngines are loaded as plugins on demand and provide zero, one or more
+ * data sources which are identified by name. For instance, a network
+ * DataEngine might provide a data source for each network interface.
  **/
 class PLASMA_EXPORT DataEngine : public QObject
 {
@@ -113,6 +113,16 @@ class PLASMA_EXPORT DataEngine : public QObject
          **/
         bool isUsed();
 
+        /**
+         * Sets the icon for this data engine
+         **/
+        void setIcon(const QString& icon);
+
+        /**
+         * @return the name of the icon for this data engine; and empty string
+         *         is returned if there is no associated icon.
+         **/
+        QString icon();
     Q_SIGNALS:
         /**
          * Emitted when a new data source is created
