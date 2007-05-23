@@ -24,8 +24,8 @@
 
 #include <ksharedconfig.h>
 
-#include <Plasma/Plasma>
-#include <Plasma/DataEngine>
+#include <plasma.h>
+#include <dataengine.h>
 
 namespace Plasma
 {
