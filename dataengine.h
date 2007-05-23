@@ -66,7 +66,7 @@ class PLASMA_EXPORT DataEngine : public QObject
          * @return a list of all the data sources currently available via this
          *         DataEngine
          **/
-        virtual QStringList dataSources();
+        virtual QStringList dataSources() const;
 
         /**
          * Connects a source to an object for data updates. The object must
@@ -80,7 +80,7 @@ class PLASMA_EXPORT DataEngine : public QObject
          * @param source the name of the data source
          * @param visualization the object to connect the data source to
          **/
-        void connectSource(const QString& source, QObject* visualization);
+        void connectSource(const QString& source, QObject* visualization) const;
 
         /**
          * Gets the Data associated with a data source.
@@ -92,7 +92,7 @@ class PLASMA_EXPORT DataEngine : public QObject
          * @return the Data associated with the source; if the source doesn't
          *         exist an empty data set is returned
          **/
-        Data query(const QString& source);
+        Data query(const QString& source) const;
 
         /**
          * Reference counting method. Calling this method increases the count
@@ -111,7 +111,7 @@ class PLASMA_EXPORT DataEngine : public QObject
          * used.
          * @return true if the reference count is zero
          **/
-        bool isUsed();
+        bool isUsed() const;
 
         /**
          * Sets the icon for this data engine
@@ -122,7 +122,8 @@ class PLASMA_EXPORT DataEngine : public QObject
          * @return the name of the icon for this data engine; and empty string
          *         is returned if there is no associated icon.
          **/
-        QString icon();
+        QString icon() const;
+
     Q_SIGNALS:
         /**
          * Emitted when a new data source is created

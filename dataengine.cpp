@@ -85,12 +85,12 @@ DataEngine::~DataEngine()
     delete d;
 }
 
-QStringList DataEngine::dataSources()
+QStringList DataEngine::dataSources() const
 {
     return d->sources.keys();
 }
 
-void DataEngine::connectSource(const QString& source, QObject* visualization)
+void DataEngine::connectSource(const QString& source, QObject* visualization) const
 {
     Q_UNUSED(source)
     Q_UNUSED(visualization)
@@ -100,7 +100,7 @@ void DataEngine::connectSource(const QString& source, QObject* visualization)
             visualization, SLOT(updated(QString,Plasma::DataEngine::Data)));
 }
 
-DataEngine::Data DataEngine::query(const QString& source)
+DataEngine::Data DataEngine::query(const QString& source) const
 {
     Q_UNUSED(source)
 
@@ -180,7 +180,7 @@ void DataEngine::deref()
     d->ref.deref();
 }
 
-bool DataEngine::isUsed()
+bool DataEngine::isUsed() const
 {
     return d->ref != 0;
 }
@@ -190,7 +190,7 @@ void DataEngine::setIcon(const QString& icon)
     d->icon = icon;
 }
 
-QString DataEngine::icon()
+QString DataEngine::icon() const
 {
     return d->icon;
 }
