@@ -24,15 +24,15 @@
 
 #include <ksharedconfig.h>
 
-#include <plasma.h>
+#include <Plasma/Plasma>
+#include <Plasma/DataEngine>
 
 namespace Plasma
 {
-
 /**
  * @short the base Applet class
  *
- * 
+ *
  */
 class PLASMA_EXPORT Applet : public QWidget, public QGraphicsItemGroup
 {
@@ -86,6 +86,9 @@ class PLASMA_EXPORT Applet : public QWidget, public QGraphicsItemGroup
          * @property constraint
          */
         virtual void constraintsUpdated();
+
+    public Q_SLOTS:
+        virtual void updated(const QString& source, const Plasma::DataEngine::Data&) = 0;
 
     Q_SIGNALS:
         void requestFocus( bool focus );
