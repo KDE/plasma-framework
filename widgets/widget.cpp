@@ -17,10 +17,10 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include <QtCore/QList>
-
 #include "widget.h"
 #include "widget.moc"
+
+#include <QtCore/QList>
 
 #include "layout.h"
 
