@@ -6,6 +6,7 @@ set(plasma_LIB_SRCS
    abstractrunner.cpp
    applet.cpp
    dataengine.cpp
+   dataenginemanager.cpp
    datasource.cpp
    datavisualization.cpp
    plasma.cpp
@@ -38,6 +39,7 @@ install( FILES
     abstractrunner.h
     applet.h
     dataengine.h
+    dataenginemanager.h
     datasource.h
     datavisualization.h
     interface.h
@@ -59,6 +61,8 @@ install( FILES
     includes/Theme
     includes/Interface
     includes/DataEngine
+    includes/DataEngineManager
+    includes/DataSource
     includes/DataVisualization
     includes/Svg
     DESTINATION ${INCLUDE_INSTALL_DIR}/KDE/Plasma )
