@@ -33,6 +33,13 @@ namespace Plasma
  * QString image = Plasma::Theme::self()->image("widgets/clock")
  * \endcode
  *
+ * Plasma::Theme provides access to a common and standardized set of graphic
+ * elements stored in SVG format. This allows artists to create single packages
+ * of SVGs that will affect the look and feel of all workspace components.
+ *
+ * Plasma::Svg uses Plasma::Theme internally to locate and load the appropriate
+ * SVG data. Alternatively, Plasma::Theme can be used directly to retrieve
+ * file system paths to SVGs by name.
  */
 class PLASMA_EXPORT Theme : public QObject
 {
@@ -48,9 +55,10 @@ class PLASMA_EXPORT Theme : public QObject
         ~Theme();
 
         /**
-         * @return the name of the theme directory. "default" is none set.
+         * @return the name of the theme. "default" is none set.
          */
         QString themeName() const;
+
         /**
          * @arg name the name of the file in the theme directory (without the 
          *           ".svg" part)
