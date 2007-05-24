@@ -23,8 +23,13 @@
 namespace Plasma
 {
 
+class LineEdit::Private
+{
+};
+
 LineEdit::LineEdit(QGraphicsItem *parent, QGraphicsScene *scene)
-    : QGraphicsTextItem(parent, scene)
+    : QGraphicsTextItem(parent, scene),
+      d(new Private())
 {
     setTextInteractionFlags(Qt::TextEditorInteraction);
 }

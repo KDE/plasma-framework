@@ -25,22 +25,33 @@
 namespace Plasma
 {
 
+    class DataEngineManager::Private
+{
+    public:
+        Private()
+        {}
+
+        Plasma::DataEngine::Dict m_engines;
+
+};
+
 DataEngineManager::DataEngineManager()
+    : d(new Private())
 {
 }
 
 DataEngineManager::~DataEngineManager()
 {
-    foreach (Plasma::DataEngine* engine, m_engines) {
+    foreach (Plasma::DataEngine* engine, d->m_engines) {
         delete engine;
     }
-    m_engines.clear();
+    d->m_engines.clear();
 }
 
 Plasma::DataEngine* DataEngineManager::dataEngine(const QString& name) const
 {
-    Plasma::DataEngine::Dict::const_iterator it = m_engines.find(name);
-    if (it != m_engines.end()) {
+    Plasma::DataEngine::Dict::const_iterator it = d->m_engines.find(name);
+    if (it != d->m_engines.end()) {
         // ref and return the engine
         //Plasma::DataEngine *engine = *it;
         return *it;
@@ -78,7 +89,7 @@ Plasma::DataEngine* DataEngineManager::loadDataEngine(const QString& name)
     engine->ref();
     engine->setObjectName(offers.first()->name());
     engine->setIcon(offers.first()->icon());
-    m_engines[name] = engine;
+    d->m_engines[name] = engine;
     return engine;
 }
 
@@ -90,7 +101,7 @@ void DataEngineManager::unloadDataEngine(const QString& name)
         engine->deref();
 
         if (!engine->isUsed()) {
-            m_engines.remove(name);
+            d->m_engines.remove(name);
             delete engine;
         }
     }

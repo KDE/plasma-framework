@@ -41,7 +41,8 @@ class PLASMA_EXPORT DataEngineManager
         QStringList knownEngines() const;
 
     private:
-        Plasma::DataEngine::Dict m_engines;
+        class Private;
+        Private* const d;
 };
 
 } // namespace Plasma

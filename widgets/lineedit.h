@@ -43,6 +43,10 @@ class KDE_EXPORT LineEdit : public QGraphicsTextItem
 
     public Q_SLOTS:
         void updated(const QString&, const Plasma::DataEngine::Data&);
+
+    private:
+        class Private;
+        Private* const d;
 };
 
 } // namespace Plasma
