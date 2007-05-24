@@ -236,7 +236,7 @@ Applet* Applet::loadApplet(const KPluginInfo* info, uint appletId)
         return 0;
     }
 
-    loadApplet(info->pluginName(), appletId);
+    return loadApplet(info->pluginName(), appletId);
 }
 
 } // Plasma namespace
