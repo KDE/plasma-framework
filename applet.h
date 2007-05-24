@@ -22,7 +22,9 @@
 #include <QtGui/QGraphicsItemGroup>
 #include <QtGui/QWidget>
 
-#include <ksharedconfig.h>
+#include <KPluginInfo>
+#include <KSharedConfig>
+#include <KGenericFactory>
 
 #include <plasma.h>
 #include <dataengine.h>
@@ -34,12 +36,13 @@ namespace Plasma
  *
  *
  */
-class PLASMA_EXPORT Applet : public QWidget, public QGraphicsItemGroup
+class PLASMA_EXPORT Applet : public QObject, public QGraphicsItemGroup
 {
     Q_OBJECT
 
     public:
         typedef QList<Applet*> List;
+        typedef QHash<QString, Applet*> Dict;
 
         /**
          * @arg parent the QGraphicsItem this applet is parented to
@@ -48,9 +51,21 @@ class PLASMA_EXPORT Applet : public QWidget, public QGraphicsItemGroup
          * @arg appletId a unique id used to differentiate between multiple
          *      instances of the same Applet type
          */
-        Applet( QGraphicsItem* parent,
-                const QString& serviceId,
-                int appletId );
+        Applet(QGraphicsItem* parent,
+               const QString& serviceId,
+               int appletId);
+        /**
+         * This constructor is to be used with the plugin loading systems
+         * found in KPluginInfo and KService. The argument list is expected
+         * to have two elements: the KService service ID for the desktop entry
+         * and an applet ID which must be a base 10 number.
+         *
+         * @arg parent a QObject parent; you probably want to pass in 0
+         * @arg args a list of strings containing two entries: the service id
+         *      and the applet id
+         */
+        Applet(QObject* parent, const QStringList& args);
+
         ~Applet();
 
         /**
@@ -87,8 +102,25 @@ class PLASMA_EXPORT Applet : public QWidget, public QGraphicsItemGroup
          */
         virtual void constraintsUpdated();
 
-    public Q_SLOTS:
-        virtual void updated(const QString& source, const Plasma::DataEngine::Data&) = 0;
+        /**
+         * Returns a list of all known applets in a hash keyed by a unique
+         * identifier for each applet
+         *
+         * @return list of applets
+         **/
+        static KPluginInfo::List knownApplets();
+
+        /**
+         * Attempts to load an applet, returning a pointer to the applet if
+         * successful. The caller takes responsibility for the applet, including
+         * deleting it when no longer needed.
+         *
+         * @param name the plugin name, as returned by KPluginInfo::pluginName()
+         * @param applet unique ID to assign the applet, or zero to have one
+         *        assigned automatically.
+         * @return a pointer to the loaded applet, or 0 on load failure
+         **/
+        static Applet* loadApplet(const QString &name, uint appletId = 0);
 
     Q_SIGNALS:
         void requestFocus( bool focus );
@@ -123,12 +155,12 @@ class PLASMA_EXPORT Applet : public QWidget, public QGraphicsItemGroup
         Private* const d;
 };
 
-#define K_EXPORT_PLASMA_APPLET(libname, classname)                       \
-        K_EXPORT_COMPONENT_FACTORY(                                      \
-                        plasmaapplet_##libname,                          \
-                        KGenericFactory<classname>("libplasmaapplet_" #libname))
-
-
 } // Plasma namespace
 
+#define K_EXPORT_PLASMA_APPLET(libname, classname) \
+        K_EXPORT_COMPONENT_FACTORY(                \
+                        plasma_applet_##libname,    \
+                        KGenericFactory<classname>("plasma_applet_" #libname))
+
 #endif // multiple inclusion guard
+

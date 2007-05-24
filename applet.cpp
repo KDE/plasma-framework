@@ -27,6 +27,7 @@
 #include <KPluginInfo>
 #include <KStandardDirs>
 #include <KService>
+#include <KServiceTypeTrader>
 
 #include "interface.h"
 
@@ -40,8 +41,12 @@ class Applet::Private
             : appletId( uniqueID ),
               globalConfig( 0 ),
               appletConfig( 0 ),
-              appletDescription( new KPluginInfo( appletDescription ) )
-        { }
+              appletDescription(new KPluginInfo(appletDescription))
+        {
+            if (appletId > s_maxAppletId) {
+                s_maxAppletId = appletId;
+            }
+        }
 
         ~Private()
         {
@@ -51,21 +56,40 @@ class Applet::Private
             delete appletDescription;
         }
 
-        int appletId;
+        static uint nextId()
+        {
+            ++s_maxAppletId;
+            return s_maxAppletId;
+        }
+
+        uint appletId;
         KSharedConfig::Ptr globalConfig;
         KSharedConfig::Ptr appletConfig;
         KPluginInfo* appletDescription;
         QList<QObject*> watchedForFocus;
         QStringList loadedEngines;
+        static uint s_maxAppletId;
 };
 
-Applet::Applet( QGraphicsItem *parent,
-                const QString& serviceID,
-                int appletId )
-        : QWidget( 0 ),
-          QGraphicsItemGroup( parent ),
-          d( new Private( KService::serviceByStorageId( serviceID ), appletId ) )
+uint Applet::Private::s_maxAppletId = 0;
+
+Applet::Applet(QGraphicsItem *parent,
+               const QString& serviceID,
+               int appletId)
+        : QObject(0),
+          QGraphicsItemGroup(parent),
+          d(new Private(KService::serviceByStorageId(serviceID), appletId))
 {
+}
+
+Applet::Applet(QObject* parent, const QStringList& args)
+    : QObject(parent),
+      QGraphicsItemGroup(0),
+      d(new Private(KService::serviceByStorageId(args[0]), args[1].toInt()))
+{
+    // the brain damage seen in the initialization list is due to the 
+    // rediculous inflexibility of KService::createInstance
+    // too bad i couldn't convince others that this was a real issue.
 }
 
 Applet::~Applet()
@@ -144,8 +168,7 @@ void Applet::watchForFocus(QObject *widget, bool watch)
 
 void Applet::needsFocus( bool focus )
 {
-    if ( focus == QWidget::hasFocus() ||
-         focus == QGraphicsItem::hasFocus() ) {
+    if (focus == QGraphicsItem::hasFocus()) {
         return;
     }
 
@@ -164,7 +187,47 @@ bool Applet::eventFilter( QObject *o, QEvent * e )
         }
     }
 
-    return QWidget::eventFilter( o, e );
+    return QObject::eventFilter(o, e);
+}
+
+KPluginInfo::List Applet::knownApplets()
+{
+    QHash<QString, KPluginInfo> applets;
+    KService::List offers = KServiceTypeTrader::self()->query("Plasma/Applet");
+    return KPluginInfo::fromServices(offers);
+}
+
+Applet* Applet::loadApplet(const QString& appletName, uint appletId)
+{
+    if (appletName.isEmpty()) {
+        return 0;
+    }
+
+    QString constraint = QString("[X-KDE-PluginInfo-Name] == '%1'").arg(appletName);
+    KService::List offers = KServiceTypeTrader::self()->query("Plasma/Applet", constraint);
+
+    if (offers.isEmpty()) {
+        //TODO: what would be -really- cool is offer to try and download the applet
+        //      from the network at this point
+        kDebug() << "Applet::loadApplet: offers is empty for \"" << appletName << "\"" << endl;
+        return 0;
+    }
+
+    if (appletId == 0) {
+        appletId = Private::nextId();
+    }
+
+    QStringList sillyness;
+    QString id;
+    id.setNum(appletId);
+    sillyness << offers.first()->storageId() << id;
+    Applet* applet = KService::createInstance<Plasma::Applet>(offers.first(), 0, sillyness);
+
+    if (!applet) {
+        kDebug() << "Couldn't load applet \"" << appletName << "\"!" << endl;
+    }
+
+    return applet;
 }
 
 } // Plasma namespace

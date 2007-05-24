@@ -24,6 +24,8 @@
 #include <QtCore/QObject>
 #include <QtCore/QStringList>
 
+#include <KGenericFactory>
+
 #include <plasma_export.h>
 
 namespace Plasma
@@ -198,8 +200,8 @@ class PLASMA_EXPORT DataEngine : public QObject
 
 #define K_EXPORT_PLASMA_DATAENGINE(libname, classname) \
         K_EXPORT_COMPONENT_FACTORY(                    \
-                        plasma_##libname##_engine,     \
-                        KGenericFactory<classname>("plasma_" #libname "_engine"))
+                        plasma_engine_##libname,        \
+                        KGenericFactory<classname>("plasma_engine_" #libname))
 
 #endif // multiple inclusion guard
 

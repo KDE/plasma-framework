@@ -67,5 +67,8 @@ install( FILES
     includes/Svg
     DESTINATION ${INCLUDE_INSTALL_DIR}/KDE/Plasma )
 
-install( FILES plasma_dataengine.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR}  )
+install( FILES
+    plasma_applet.desktop
+    plasma_dataengine.desktop
+    DESTINATION ${SERVICETYPES_INSTALL_DIR}  )
 
