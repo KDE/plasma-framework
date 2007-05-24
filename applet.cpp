@@ -230,6 +230,15 @@ Applet* Applet::loadApplet(const QString& appletName, uint appletId)
     return applet;
 }
 
+Applet* Applet::loadApplet(const KPluginInfo* info, uint appletId)
+{
+    if (!info) {
+        return 0;
+    }
+
+    loadApplet(info->pluginName(), appletId);
+}
+
 } // Plasma namespace
 
 #include "applet.moc"

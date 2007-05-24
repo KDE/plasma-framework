@@ -122,6 +122,18 @@ class PLASMA_EXPORT Applet : public QObject, public QGraphicsItemGroup
          **/
         static Applet* loadApplet(const QString &name, uint appletId = 0);
 
+        /**
+         * Attempts to load an applet, returning a pointer to the applet if
+         * successful. The caller takes responsibility for the applet, including
+         * deleting it when no longer needed.
+         *
+         * @param info KPluginInfo object for the desired applet
+         * @param applet unique ID to assign the applet, or zero to have one
+         *        assigned automatically.
+         * @return a pointer to the loaded applet, or 0 on load failure
+         **/
+        static Applet* loadApplet(const KPluginInfo* info, uint appletId = 0);
+
     Q_SIGNALS:
         void requestFocus( bool focus );
 
