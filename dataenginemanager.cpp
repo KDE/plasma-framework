@@ -79,10 +79,9 @@ Plasma::DataEngine* DataEngineManager::loadDataEngine(const QString& name)
         return 0;
     }
 
-    int errorCode = 0;
     engine = KService::createInstance<Plasma::DataEngine>(offers.first(), 0);
     if (!engine) {
-        kDebug() << errorCode << " couldn't load engine! " << name << endl;
+        kDebug() << "Couldn't load engine \"" << name << "\"!" << endl;
         return 0;
     }
 

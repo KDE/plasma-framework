@@ -28,9 +28,6 @@ namespace Plasma
 class PLASMA_EXPORT DataEngineManager
 {
     public:
-        typedef QHash<QString, Plasma::DataEngine*> Dict;
-
-    public:
         DataEngineManager();
         ~DataEngineManager();
 
@@ -41,6 +38,8 @@ class PLASMA_EXPORT DataEngineManager
         QStringList knownEngines() const;
 
     private:
+        DataEngine::Dict m_engines;
+
         class Private;
         Private* const d;
 };
