@@ -54,6 +54,7 @@ class PLASMA_EXPORT Applet : public QObject, public QGraphicsItemGroup
         Applet(QGraphicsItem* parent,
                const QString& serviceId,
                int appletId);
+
         /**
          * This constructor is to be used with the plugin loading systems
          * found in KPluginInfo and KService. The argument list is expected
@@ -69,23 +70,22 @@ class PLASMA_EXPORT Applet : public QObject, public QGraphicsItemGroup
         ~Applet();
 
         /**
-        * Returns the KConfig object to access the applets configuration.
+        * Returns the KConfigGroup to access the applets configuration.
         *
-        * For unique applets this config object will write to a config file
-        * named \<appletname\>rc in the user's local %KDE directory.
-        *
-        * For normal applets this config object will write to an instance
+        * This config object will write to an instance
         * specific config file named \<appletname\>\<instanceid\>rc
-        * in the user's local %KDE directory.
+        * in the Plasma appdata directory.
         **/
-        KSharedConfig::Ptr appletConfig() const;
+        KConfigGroup appletConfig() const;
 
         /**
-         * Returns a KConfig object to be shared by all applets of this type
-         * For unique applets, this will return the same config object as
-         * appletConfig()
+         * Returns a KConfigGroup object to be shared by all applets of this
+         * type.
+         *
+         * This config object will write to an applet-specific config object
+         * named plasma_\<appletname\>rc in the local config directory.
          */
-        KSharedConfig::Ptr globalAppletConfig() const;
+        KConfigGroup globalAppletConfig() const;
 
         /**
          * Ensures that the DataEngine named name is loaded and ready to be used

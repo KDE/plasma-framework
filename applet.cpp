@@ -98,7 +98,7 @@ Applet::~Applet()
     delete d;
 }
 
-KSharedConfig::Ptr Applet::appletConfig() const
+KConfigGroup Applet::appletConfig() const
 {
     if ( !d->appletConfig ) {
         QString file = KStandardDirs::locateLocal( "appdata",
@@ -107,17 +107,17 @@ KSharedConfig::Ptr Applet::appletConfig() const
         d->appletConfig = KSharedConfig::openConfig( file );
     }
 
-    return d->appletConfig;
+    return KConfigGroup(d->appletConfig, "General");
 }
 
-KSharedConfig::Ptr Applet::globalAppletConfig() const
+KConfigGroup Applet::globalAppletConfig() const
 {
     if ( !d->globalConfig ) {
         QString file = KStandardDirs::locateLocal( "config", "plasma_" + globalName() + "rc" );
         d->globalConfig = KSharedConfig::openConfig( file );
     }
 
-    return d->globalConfig;
+    return KConfigGroup(d->globalConfig, "General");
 }
 
 bool Applet::loadDataEngine( const QString& name )
