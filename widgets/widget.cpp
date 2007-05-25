@@ -17,13 +17,11 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "widget.h"
-#include "widget.moc"
 
 #include <QtCore/QList>
 
 #include "layout.h"
-
+#include "widget.h"
 
 namespace Plasma
 {
@@ -43,8 +41,7 @@ class Widget::Private
 
 
 Widget::Widget(Widget *parent)
-  : DataVisualization(),
-	QGraphicsItem(parent),
+  : QGraphicsItem(parent),
     d(new Private)
 {
 	d->parent = parent;
@@ -52,7 +49,6 @@ Widget::Widget(Widget *parent)
 
 	if(parent) {
 		parent->addChild(this);
-
 		parent->setGeometry(QRectF(QPointF(0.0, 0.0), parent->size()));
 	}
 }
@@ -157,12 +153,6 @@ void Widget::resize(qreal w, qreal h)
 	resize(QSizeF(w, h));
 }
 
-void Widget::updated(const QString& source, const Plasma::DataEngine::Data& data)
-{
-	Q_UNUSED(source);
-	Q_UNUSED(data);
-}
-
 void Widget::setLayout(Layout *l)
 {
 	d->layout = l;
@@ -185,8 +175,6 @@ void Widget::addChild(Widget *w)
 	}
 
 	w->reparent(this);
-	w->setParentItem(this);
-
 	d->childList.append(w);
 
 	qDebug("Added Child Widget : %p", (void*)w);
@@ -202,7 +190,7 @@ void Widget::addChild(Widget *w)
 void Widget::reparent(Widget *w)
 {
 	d->parent = w;
-
+	setParentItem(w);
 	update();
 }
 

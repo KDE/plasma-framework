@@ -61,9 +61,9 @@ RadioButton::Private::~Private()
 
 
 RadioButton::RadioButton(QGraphicsItem *parent)
-    : DataVisualization()
-    , QGraphicsItem(parent)
-    , d(new Private)
+    : QObject(),
+      QGraphicsItem(parent),
+      d(new Private)
 {
     setAcceptedMouseButtons(Qt::LeftButton);
     setAcceptsHoverEvents(true);

@@ -26,13 +26,10 @@
 // KDE includes
 #include <kdemacros.h>
 
-// Plasma includes
-#include "datavisualization.h"
-
+#include <dataengine.h>
 
 namespace Plasma
 {
-
 
 /**
  * This class emulates a QRadioButton.
@@ -50,8 +47,7 @@ namespace Plasma
  */
 
 
-class KDE_EXPORT RadioButton : public DataVisualization
-                             , public QGraphicsItem
+class KDE_EXPORT RadioButton : public QObject, public QGraphicsItem
 {
     Q_OBJECT
 
@@ -72,7 +68,6 @@ public:
     void setText(const QString &text);
 
 public Q_SLOTS:
-    // DataVisualization overridden virtual slots
     void updated(const QString&, const Plasma::DataEngine::Data &data);
 
 Q_SIGNALS:

@@ -24,8 +24,6 @@
 #include <QPainter>
 #include <QGraphicsSceneMouseEvent>
 
-#include "checkbox.moc"
-
 namespace Plasma
 {
 
@@ -53,9 +51,9 @@ class CheckBox::Private
 };
 
 CheckBox::CheckBox(QGraphicsItem *parent)
-    :   DataVisualization(),
-        QGraphicsItem(parent),
-        d(new Private)
+    : QObject(),
+      QGraphicsItem(parent),
+      d(new Private)
 {
     setAcceptedMouseButtons(Qt::LeftButton);
     setAcceptsHoverEvents(true);
@@ -95,7 +93,7 @@ void CheckBox::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
     options.rect = boundingRect().toRect();
     options.text = text();
     options.state |= (d->state == Qt::Checked)? QStyle::State_On : QStyle::State_Off;
- 
+
     //if (d->down) {
       //  options.state |= QStyle::State_Sunken;
    // }
@@ -248,3 +246,7 @@ event->accept();
 
 
 } // namespace Plasma
+
+#include "checkbox.moc"
+
+

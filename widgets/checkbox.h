@@ -24,8 +24,7 @@
 
 #include <kdemacros.h>
 
-#include "datavisualization.h"
-
+#include <dataengine.h>
 //TODO
 //Please Document this class
 
@@ -35,7 +34,7 @@ namespace Plasma
 /**
  * Class that emulates a QCheckBox inside plasma
  */
-class KDE_EXPORT CheckBox : public DataVisualization,public QGraphicsItem
+class KDE_EXPORT CheckBox : public QObject, public QGraphicsItem
 {
     Q_OBJECT
     public:

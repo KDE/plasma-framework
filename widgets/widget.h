@@ -27,7 +27,6 @@
 
 #include <kdemacros.h>
 
-#include "datavisualization.h"
 #include "layoutitem.h"
 
 namespace Plasma
@@ -38,12 +37,8 @@ class Layout;
 /**
  * Class that emulates a QWidget inside plasma
  */
-class KDE_EXPORT Widget : public DataVisualization,
-			  public QGraphicsItem,
-                    	  public LayoutItem
+class KDE_EXPORT Widget : public QGraphicsItem, public LayoutItem
 {
-	Q_OBJECT
-
     public:
 		Widget(Widget *parent = 0);
         	virtual ~Widget();
@@ -82,10 +77,6 @@ class KDE_EXPORT Widget : public DataVisualization,
 		void reparent(Widget *w);
 
 		void addChild(Widget *w);
-
-	public Q_SLOTS:
-	virtual void updated(const QString& source, const Plasma::DataEngine::Data&);
-
 
     private:
         class Private;

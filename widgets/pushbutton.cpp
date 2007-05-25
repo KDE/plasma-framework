@@ -55,9 +55,10 @@ class PushButton::Private
 };
 
 PushButton::PushButton(QGraphicsItem *parent)
-    :   QGraphicsItem(parent),
-        QLayoutItem (Qt::AlignHCenter),
-        d(new Private)
+    : QObject(),
+      QGraphicsItem(parent),
+      QLayoutItem (Qt::AlignHCenter),
+      d(new Private)
 {
     setAcceptedMouseButtons(Qt::LeftButton);
     setAcceptsHoverEvents(true);

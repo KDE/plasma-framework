@@ -19,11 +19,12 @@
 #ifndef LINEEDIT_H
 #define LINEEDIT_H
 
+#include <QtCore/QObject>
 #include <QtGui/QGraphicsTextItem>
 
 #include <kdemacros.h>
 
-#include "datavisualization.h"
+#include <dataengine.h>
 
 namespace Plasma
 {

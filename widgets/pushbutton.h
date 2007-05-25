@@ -22,9 +22,10 @@
 #include <QtCore/QObject>
 #include <QtGui/QGraphicsTextItem>
 #include <QtGui/QLayoutItem>
+
 #include <kdemacros.h>
 
-#include "datavisualization.h"
+#include <dataengine.h>
 
 //TODO
 //Please Document this class
@@ -35,11 +36,11 @@ namespace Plasma
 /**
  * Class that emulates a QPushButton inside plasma
  */
-class KDE_EXPORT PushButton : public DataVisualization,
+class KDE_EXPORT PushButton : public QObject,
                               public QGraphicsItem,
                               public QLayoutItem
 {
-       Q_OBJECT
+    Q_OBJECT
     public:
         enum ButtonShape
         {
@@ -91,7 +92,7 @@ class KDE_EXPORT PushButton : public DataVisualization,
         void clicked();
 
     public Q_SLOTS:
-        virtual void updated(const QString&, const DataEngine::Data &);
+        void updated(const QString&, const DataEngine::Data &);
 
     protected:
         bool isDown();

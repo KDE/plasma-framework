@@ -8,7 +8,6 @@ set(plasma_LIB_SRCS
    dataengine.cpp
    dataenginemanager.cpp
    datasource.cpp
-   datavisualization.cpp
    plasma.cpp
    interface.cpp
    svg.cpp
@@ -41,7 +40,6 @@ install( FILES
     dataengine.h
     dataenginemanager.h
     datasource.h
-    datavisualization.h
     interface.h
     plasma.h
     plasma_export.h
@@ -63,7 +61,6 @@ install( FILES
     includes/DataEngine
     includes/DataEngineManager
     includes/DataSource
-    includes/DataVisualization
     includes/Svg
     DESTINATION ${INCLUDE_INSTALL_DIR}/KDE/Plasma )
 
