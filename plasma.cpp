@@ -33,13 +33,15 @@ int uniqueId()
     return ++plasmaIds;
 }
 
-Direction edgeToPopupDirection(ScreenEdge edge)
+Direction locationToDirection(Location location)
 {
-    switch (edge)
+    switch (location)
     {
         case Floating:
         case Desktop:
         case TopEdge:
+            //TODO: should we be smarter for floating and planer?
+            //      perhaps we should take a QRect and/or QPos as well?
             return Down;
         case BottomEdge:
             return Up;
@@ -48,7 +50,8 @@ Direction edgeToPopupDirection(ScreenEdge edge)
         case RightEdge:
             return Left;
     }
-	return Down;
+
+    return Down;
 }
 
 } // Plasma namespace
