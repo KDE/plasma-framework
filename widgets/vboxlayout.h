@@ -31,6 +31,9 @@ namespace Plasma
 
 class Widget;
 
+/**
+ * Vertical Box Layout
+ */
 class KDE_EXPORT VBoxLayout : public Layout
 {
 	public:

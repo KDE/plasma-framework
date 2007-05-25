@@ -27,6 +27,9 @@
 namespace Plasma
 {
 
+/**
+ * Base class for Plasma layout-managed items
+ */
 class KDE_EXPORT LayoutItem
 {
 	public:

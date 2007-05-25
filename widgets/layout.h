@@ -29,6 +29,9 @@
 namespace Plasma
 {
 
+/**
+ * Base class for Plasma Layout managers
+ */
 class Widget;
 
 class KDE_EXPORT Layout : public LayoutItem
