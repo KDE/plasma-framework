@@ -109,6 +109,12 @@ class PLASMA_EXPORT Applet : public QObject, public QGraphicsItemGroup
          * @return list of applets
          **/
         static KPluginInfo::List knownApplets();
+        /**
+         * Reimplement this slot to show a configuration dialog and let the user
+         * play with the plasmoid options. Called when the user selects the configure entry
+         * from the contextual menu.
+         */
+        virtual void configureDialog(){}; //default implementation is empty
 
         /**
          * Attempts to load an applet, returning a pointer to the applet if
