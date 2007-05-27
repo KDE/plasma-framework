@@ -49,7 +49,7 @@ class DataEngine::Private
                      << ": could not find DataSource " << sourceName
                      << ", creating" << endl;
             DataSource* s = new DataSource(engine);
-            s->setName(sourceName);
+            s->setObjectName(sourceName);
             sources.insert(sourceName, s);
             emit engine->newDataSource(sourceName);
             return s;
@@ -128,14 +128,14 @@ void DataEngine::setData(const QString& source, const QString& key, const QVaria
 
 void DataEngine::addSource(DataSource* source)
 {
-    DataSource::Dict::const_iterator it = d->sources.find(source->name());
+    DataSource::Dict::const_iterator it = d->sources.find(source->objectName());
     if (it != d->sources.constEnd()) {
-        kDebug() << "source named \"" << source->name() << "\" already exists." << endl;
+        kDebug() << "source named \"" << source->objectName() << "\" already exists." << endl;
         return;
     }
 
-    d->sources.insert(source->name(), source);
-    emit newDataSource(source->name());
+    d->sources.insert(source->objectName(), source);
+    emit newDataSource(source->objectName());
 }
 
 /*

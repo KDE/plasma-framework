@@ -25,17 +25,56 @@
 namespace Plasma
 {
 
+/**
+ * @brief DataEngine loader and life time manager
+ *
+ * Plasma::DataEngineManager provides facilities for listing, loading and
+ * according to reference count unloading of DataEngines.
+ **/
 class PLASMA_EXPORT DataEngineManager
 {
     public:
+        /**
+         * Singleton pattern accessor.
+         */
+        static DataEngineManager* self();
+
+        /**
+         * Default constructor. Usually the singleton method self() is the
+         * preferred access mechanism.
+         */
         DataEngineManager();
         ~DataEngineManager();
 
+        /**
+         * Returns a data engine object if one is loaded and available.
+         * Otherwise, returns 0.
+         *
+         * @param name the name of the engine
+         */
         Plasma::DataEngine* dataEngine(const QString& name) const;
+
+        /**
+         * Loads a data engine and increases the reference count on it.
+         * This should be called once per object (or set of objects) using the
+         * DataEngine. Afterwards, dataEngine should be used or the return
+         * value cached. Call unloadDataEngine when finished with the engine.
+         *
+         * @param name the name of the engine
+         * @return the data engine that was loaded, or 0 on failure.
+         */
         Plasma::DataEngine* loadDataEngine(const QString& name);
+
+        /**
+         * Decreases the reference count on the engine. If the count reaches
+         * zero, then the engine is deleted to save resources.
+         */
         void unloadDataEngine(const QString& name);
 
-        QStringList knownEngines() const;
+        /**
+         * Returns a listing of all known engines by name
+         */
+        static QStringList knownEngines();
 
     private:
         DataEngine::Dict m_engines;
