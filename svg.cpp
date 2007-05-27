@@ -18,6 +18,7 @@
 
 #include "svg.h"
 
+#include <QDir>
 #include <QMatrix>
 #include <QPainter>
 #include <QPixmapCache>
@@ -32,10 +33,16 @@ namespace Plasma
 class Svg::Private
 {
     public:
-        Private( const QString& image )
-            : renderer( 0 ),
-              themePath( image )
+        Private( const QString& imagePath )
+            : renderer( 0 )
         {
+            if (QDir::isAbsolutePath(themePath)) {
+                path = imagePath;
+                themed = false;
+            } else {
+                themePath = imagePath;
+                themed = true;
+            }
         }
 
         ~Private()
@@ -55,24 +62,16 @@ class Svg::Private
 
         void findInCache(QPixmap& p, const QString& elementId)
         {
-            if ( path.isNull() ) {
-                path = Plasma::Theme::self()->image( themePath );
-
-                if ( path.isNull() ) {
-                    // bad theme path
-                    return;
-                }
-            }
-
+            createRenderer();
             id = QString::fromLatin1("%3_%2_%1")
-                                    .arg( size.width() )
-                                    .arg( size.height() )
-                                    .arg( themePath );
+                                    .arg(size.width())
+                                    .arg(size.height())
+                                    .arg(path);
             if (!elementId.isEmpty()) {
                 id.append(elementId);
             }
 
-            if ( QPixmapCache::find( id, p ) ) {
+            if (QPixmapCache::find(id, p)) {
                 //kDebug() << "found cached version of " << id << endl;
                 return;
             } else {
@@ -80,14 +79,8 @@ class Svg::Private
             }
 
             // we have to re-render this puppy
-            if (!renderer) {
-                //TODO: connect the renderer's repaintNeeded to the Plasma::Svg signal
-                //      take into consideration for cache, e.g. don't cache if svg is animated
-                renderer = new KSvgRenderer(path);
-            }
-
             QSize s;
-            if ( elementId.isEmpty() ) {
+            if (elementId.isEmpty()) {
                 s = size.toSize();
             } else {
                 s = renderer->boundsOnElement(elementId).size().toSize();
@@ -96,15 +89,30 @@ class Svg::Private
 
             p = QPixmap(s);
             p.fill(Qt::transparent);
-            QPainter renderPainter( &p );
+            QPainter renderPainter(&p);
 
-            if ( elementId.isEmpty() ) {
-                renderer->render( &renderPainter );
+            if (elementId.isEmpty()) {
+                renderer->render(&renderPainter);
             } else {
-                renderer->render( &renderPainter, elementId );
+                renderer->render(&renderPainter, elementId);
             }
             renderPainter.end();
             QPixmapCache::insert( id, p );
+        }
+
+        void createRenderer()
+        {
+            if (renderer) {
+                return;
+            }
+
+            if (themed && path.isNull()) {
+                path = Plasma::Theme::self()->image(themePath);
+            }
+
+            //TODO: connect the renderer's repaintNeeded to the Plasma::Svg signal
+            //      take into consideration for cache, e.g. don't cache if svg is animated
+            renderer = new KSvgRenderer(path);
         }
 
         //TODO: share renderers between Svg objects with identical themePath
@@ -113,13 +121,16 @@ class Svg::Private
         QString path;
         QString id;
         QSizeF size;
+        bool themed;
 };
 
 Svg::Svg( const QString& imagePath, QObject* parent )
     : QObject( parent ),
       d( new Private( imagePath ) )
 {
-    connect(Plasma::Theme::self(), SIGNAL(changed()), this, SLOT(themeChanged()));
+    if (d->themed) {
+        connect(Plasma::Theme::self(), SIGNAL(changed()), this, SLOT(themeChanged()));
+    }
 }
 
 Svg::~Svg()
@@ -158,18 +169,13 @@ void Svg::resize( const QSizeF& size )
 
 void Svg::resize()
 {
-    if (!d->renderer) {
-        d->renderer = new KSvgRenderer(Plasma::Theme::self()->image(d->themePath));
-    }
+    d->createRenderer();
     d->size = d->renderer->defaultSize();
 }
 
 QSize Svg::elementSize(const QString& elementId) const
 {
-    if (!d->renderer) {
-        d->renderer = new KSvgRenderer(Plasma::Theme::self()->image(d->themePath));
-    }
-
+    d->createRenderer();
     QSizeF elementSize = d->renderer->boundsOnElement(elementId).size();
     QSizeF naturalSize = d->renderer->defaultSize();
     qreal dx = d->size.width() / naturalSize.width();

@@ -16,8 +16,6 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "applet.h"
-
 #include <QEvent>
 #include <QList>
 #include <QSize>
@@ -29,7 +27,8 @@
 #include <KService>
 #include <KServiceTypeTrader>
 
-#include "interface.h"
+#include "applet.h"
+#include "dataenginemanager.h"
 
 namespace Plasma
 {
@@ -51,7 +50,7 @@ class Applet::Private
         ~Private()
         {
             foreach ( const QString& engine, loadedEngines ) {
-               Interface::self()->unloadDataEngine( engine );
+               DataEngineManager::self()->unloadDataEngine( engine );
             }
             delete appletDescription;
         }
@@ -126,7 +125,7 @@ bool Applet::loadDataEngine( const QString& name )
         return true;
     }
 
-    if ( Plasma::Interface::self()->loadDataEngine( name ) ) {
+    if ( DataEngineManager::self()->loadDataEngine( name ) ) {
         d->loadedEngines.append( name );
         return true;
     }

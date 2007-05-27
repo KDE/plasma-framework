@@ -35,6 +35,14 @@ class QMatrix;
 namespace Plasma
 {
 
+/**
+ * @brief A theme aware image-centric SVG class
+ *
+ * Plasma::Svg provides a class for rendering SVG images to a QPainter in a
+ * convenient manner. Unless an absolute path to a file is provided, it loads
+ * the SVG document using Plasma::Theme. It also provides a number of internal
+ * optimizations to help lower the cost of painting SVGs, such as caching.
+ **/
 class PLASMA_EXPORT Svg : public QObject
 {
     Q_OBJECT
@@ -49,8 +57,8 @@ class PLASMA_EXPORT Svg : public QObject
          *
          * The size is initialized to be the SVG's native size.
          *
-         * @arg imagePath the image to show, used to load the image from
-         * Plasma::Theme
+         * @arg imagePath the image to show. If a relative path is passed, then
+         * Plasma::Theme is used to load the SVG.
          * @arg parent options QObject to parent this to
          *
          * @related Plasma::Theme

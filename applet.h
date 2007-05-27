@@ -141,15 +141,35 @@ class PLASMA_EXPORT Applet : public QObject, public QGraphicsItemGroup
         static Applet* loadApplet(const KPluginInfo* info, uint appletId = 0);
 
     Q_SIGNALS:
+        /**
+         * Emit this signal when your applet needs to take (or lose) keyboard
+         * focus. This ensures that autohiding elements stay unhidden and other
+         * bits of bookkeeping are performed to ensure proper function.
+         *
+         * If you call watchForFocus on your applet, then this is handled for
+         * the applet and it is not necessary to emit the signal directly.
+         *
+         * @param focus true if the applet is taking keyboard focus, false if
+         *        it is giving it up
+         **/
         void requestFocus( bool focus );
 
     protected:
-
+        /**
+         * Returns the name of the applet. This will be the same for all
+         * instances of this applet.
+         **/
         QString globalName() const;
+
+        /**
+         * Returns a name unique to the insane of this applet. Useful for
+         * being able to refer directly to a particular applet. Combines the
+         * global name with the applet id
+         **/
         QString instanceName() const;
 
         /**
-        * Register widgets that can receive keyboard focus with this this method
+        * Register widgets that can receive keyboard focus with this method
         * This call results in an eventFilter being places on the widget.
         * @param widget the widget to watch for keyboard focus
         * @param watch whether to start watching the widget, or to stop doing so
@@ -165,7 +185,9 @@ class PLASMA_EXPORT Applet : public QObject, public QGraphicsItemGroup
         */
         void needsFocus( bool focus );
 
-
+        /**
+         * @internal event filter; used for focus watching
+         **/
         bool eventFilter( QObject *o, QEvent *e );
 
     private:

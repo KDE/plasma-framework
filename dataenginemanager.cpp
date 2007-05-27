@@ -25,7 +25,7 @@
 namespace Plasma
 {
 
-    class DataEngineManager::Private
+class DataEngineManager::Private
 {
     public:
         Private()
@@ -34,6 +34,19 @@ namespace Plasma
         Plasma::DataEngine::Dict m_engines;
 
 };
+
+class DataEngineManagerSingleton
+{
+    public:
+        DataEngineManager self;
+};
+
+K_GLOBAL_STATIC(DataEngineManagerSingleton, privateSelf)
+
+DataEngineManager* DataEngineManager::self()
+{
+    return &privateSelf->self;
+}
 
 DataEngineManager::DataEngineManager()
     : d(new Private())
@@ -106,7 +119,7 @@ void DataEngineManager::unloadDataEngine(const QString& name)
     }
 }
 
-QStringList DataEngineManager::knownEngines() const
+QStringList DataEngineManager::knownEngines()
 {
     QStringList engines;
     KService::List offers = KServiceTypeTrader::self()->query("Plasma/DataEngine");
