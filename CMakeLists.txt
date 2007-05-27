@@ -9,7 +9,6 @@ set(plasma_LIB_SRCS
    dataenginemanager.cpp
    datasource.cpp
    plasma.cpp
-   interface.cpp
    svg.cpp
    theme.cpp
    widgets/checkbox.cpp
@@ -40,7 +39,6 @@ install( FILES
     dataengine.h
     dataenginemanager.h
     datasource.h
-    interface.h
     plasma.h
     plasma_export.h
     svg.h
@@ -57,7 +55,6 @@ install( FILES
     includes/Plasma
     includes/AbstractRunner
     includes/Theme
-    includes/Interface
     includes/DataEngine
     includes/DataEngineManager
     includes/DataSource
