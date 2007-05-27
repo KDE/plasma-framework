@@ -48,16 +48,6 @@ DataSource::~DataSource()
     delete d;
 }
 
-QString DataSource::name()
-{
-    return objectName();
-}
-
-void DataSource::setName(const QString& name)
-{
-    setObjectName(name);
-}
-
 const DataEngine::Data DataSource::data() const
 {
     return d->data;
