@@ -83,7 +83,7 @@ class Svg::Private
             if (elementId.isEmpty()) {
                 s = size.toSize();
             } else {
-                s = renderer->boundsOnElement(elementId).size().toSize();
+                s = elementSize(elementId);
             }
             //kDebug() << "size for " << elementId << " is " << s << endl;
 
@@ -113,6 +113,18 @@ class Svg::Private
             //TODO: connect the renderer's repaintNeeded to the Plasma::Svg signal
             //      take into consideration for cache, e.g. don't cache if svg is animated
             renderer = new KSvgRenderer(path);
+        }
+
+        QSize elementSize( const QString& elementId )
+        {
+            createRenderer();
+            QSizeF elementSize = renderer->boundsOnElement(elementId).size();
+            QSizeF naturalSize = renderer->defaultSize();
+            qreal dx = size.width() / naturalSize.width();
+            qreal dy = size.height() / naturalSize.height();
+            elementSize.scale( elementSize.width() * dx, elementSize.height() * dy, Qt::IgnoreAspectRatio );
+
+            return elementSize.toSize();
         }
 
         //TODO: share renderers between Svg objects with identical themePath
@@ -175,14 +187,7 @@ void Svg::resize()
 
 QSize Svg::elementSize(const QString& elementId) const
 {
-    d->createRenderer();
-    QSizeF elementSize = d->renderer->boundsOnElement(elementId).size();
-    QSizeF naturalSize = d->renderer->defaultSize();
-    qreal dx = d->size.width() / naturalSize.width();
-    qreal dy = d->size.height() / naturalSize.height();
-    elementSize.scale( elementSize.width() * dx, elementSize.height() * dy, Qt::IgnoreAspectRatio );
-
-    return elementSize.toSize();
+    return d->elementSize(elementId);
 }
 
 QSize Svg::size() const
