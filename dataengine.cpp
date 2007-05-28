@@ -18,6 +18,7 @@
 
 #include "dataengine.h"
 
+#include <QQueue>
 #include <QTimer>
 #include <QVariant>
 
@@ -32,7 +33,8 @@ class DataEngine::Private
 {
     public:
         Private(DataEngine* e)
-            : engine(e)
+            : engine(e),
+              limit(0)
         {
             updateTimer = new QTimer(engine);
             updateTimer->setSingleShot(true);
@@ -42,6 +44,18 @@ class DataEngine::Private
         {
             DataSource::Dict::const_iterator it = sources.find(sourceName);
             if (it != sources.constEnd()) {
+                DataSource* s = it.value();
+                if (limit > 0) {
+                    QQueue<DataSource*>::iterator it = sourceQueue.begin();
+                    while (it != sourceQueue.end()) {
+                        if (*it == s) {
+                            sourceQueue.erase(it);
+                            break;
+                        }
+                        ++it;
+                    }
+                    sourceQueue.enqueue(s);
+                }
                 return it.value();
             }
 
@@ -51,8 +65,21 @@ class DataEngine::Private
             DataSource* s = new DataSource(engine);
             s->setObjectName(sourceName);
             sources.insert(sourceName, s);
+
+            if (limit > 0) {
+                trimQueue();
+                sourceQueue.enqueue(s);
+            }
             emit engine->newDataSource(sourceName);
             return s;
+        }
+
+        void trimQueue()
+        {
+            while (sourceQueue.count() >= limit) {
+                DataSource* punted = sourceQueue.dequeue();
+                engine->removeDataSource(punted->objectName());
+            }
         }
 
         void queueUpdate()
@@ -65,9 +92,11 @@ class DataEngine::Private
 
         QAtomic ref;
         DataSource::Dict sources;
+        QQueue<DataSource*> sourceQueue;
         DataEngine* engine;
         QTimer* updateTimer;
         QString icon;
+        uint limit;
 };
 
 
@@ -92,12 +121,27 @@ QStringList DataEngine::dataSources() const
 
 void DataEngine::connectSource(const QString& source, QObject* visualization) const
 {
-    Q_UNUSED(source)
-    Q_UNUSED(visualization)
-
     DataSource* s = d->source(source);
     connect(s, SIGNAL(updated(QString,Plasma::DataEngine::Data)),
             visualization, SLOT(updated(QString,Plasma::DataEngine::Data)));
+    QMetaObject::invokeMethod(visualization, SLOT(updated(QString,Plasma::DataEngine::Data)),
+                              Q_ARG(QString, s->objectName()),
+                              Q_ARG(Plasma::DataEngine::Data, s->data()));
+}
+
+void DataEngine::connectAllSources(QObject* visualization) const
+{
+    foreach (const DataSource* s, d->sources) {
+        connect(s, SIGNAL(updated(QString,Plasma::DataEngine::Data)),
+                visualization, SLOT(updated(QString,Plasma::DataEngine::Data)));
+    }
+
+    foreach (const DataSource* s, d->sources) {
+        QMetaObject::invokeMethod(visualization,
+                                  SLOT(updated(QString,Plasma::DataEngine::Data)),
+                                  Q_ARG(QString, s->objectName()),
+                                  Q_ARG(Plasma::DataEngine::Data, s->data()));
+    }
 }
 
 DataEngine::Data DataEngine::query(const QString& source) const
@@ -136,6 +180,21 @@ void DataEngine::addSource(DataSource* source)
 
     d->sources.insert(source->objectName(), source);
     emit newDataSource(source->objectName());
+}
+
+void DataEngine::setSourceLimit(uint limit)
+{
+    if (d->limit == limit) {
+        return;
+    }
+
+    d->limit = limit;
+
+    if (d->limit > 0) {
+        d->trimQueue();
+    } else {
+        d->sourceQueue.clear();
+    }
 }
 
 /*

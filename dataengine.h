@@ -85,6 +85,19 @@ class PLASMA_EXPORT DataEngine : public QObject
         void connectSource(const QString& source, QObject* visualization) const;
 
         /**
+         * Connects all sources to an object for data updates. The object must
+         * have a slot with the following signature:
+         *
+         * SLOT(updated(QString, Plasma::DataEngine::Data))
+         *
+         * The data is a QHash of QVariants keyed by QString names, allowing
+         * one data source to provide sets of related data.
+         *
+         * @param visualization the object to connect the data source to
+         **/
+        void connectAllSources(QObject* viualization) const;
+
+        /**
          * Gets the Data associated with a data source.
          *
          * The data is a QHash of QVariants keyed by QString names, allowing
@@ -174,7 +187,17 @@ class PLASMA_EXPORT DataEngine : public QObject
          **/
         void addSource(DataSource* source);
 
-/*        void createDataSource(const QString& source,
+        /**
+         * Sets an upper limit on the number of data sources to keep in this engine.
+         * If the limit is exceeded, then the oldest data source, as defined by last
+         * update, is dropped.
+         *
+         * @param limit the maximum number of sources to keep active
+         **/
+        void setSourceLimit(uint limit);
+
+/*        DataSource* domain(const QString &domain);
+        void createDataSource(const QString& source,
                               const QString& domain = QString());*/
 
         /**
