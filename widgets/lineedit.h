@@ -25,6 +25,7 @@
 #include <kdemacros.h>
 
 #include <dataengine.h>
+#include <widgets/layoutitem.h>
 
 namespace Plasma
 {
@@ -32,7 +33,7 @@ namespace Plasma
 /**
  * Class that emulates a QLineEdit inside plasma
  */
-class KDE_EXPORT LineEdit : public QGraphicsTextItem
+class KDE_EXPORT LineEdit : public QGraphicsTextItem, public LayoutItem
 {
     Q_OBJECT
 
@@ -41,6 +42,22 @@ class KDE_EXPORT LineEdit : public QGraphicsTextItem
         ~LineEdit();
 
         void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
+
+        Qt::Orientations expandingDirections() const;
+
+        QSizeF minimumSize() const;
+        QSizeF maximumSize() const;
+
+        bool hasHeightForWidth() const;
+        qreal heightForWidth(qreal w) const;
+
+        bool hasWidthForHeight() const;
+        qreal widthForHeight(qreal h) const;
+
+        QRectF geometry() const;
+        void setGeometry(const QRectF& geometry);
+        QSizeF sizeHint() const;
+
 
     public Q_SLOTS:
         void updated(const QString&, const Plasma::DataEngine::Data&);

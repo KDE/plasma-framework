@@ -19,6 +19,7 @@
 #include "lineedit.h"
 
 #include <QStyleOptionFrameV2>
+#include <QTextDocument>
 
 namespace Plasma
 {
@@ -61,15 +62,69 @@ void LineEdit::updated(const QString&, const DataEngine::Data& data)
 {
     DataEngine::DataIterator it(data);
 
-    //TODO: this only shows the first possible data item.
-    //      should it do more?
+    QString text;
     while (it.hasNext()) {
         it.next();
         if (it.value().canConvert(QVariant::String)) {
-            setPlainText(it.value().toString());
-            return;
+            text.append(QString("<p><b>%1</b>: %2</p>").arg(it.key(), it.value().toString()));
         }
     }
+    setHtml(text);
+}
+
+Qt::Orientations LineEdit::expandingDirections() const
+{
+    return Qt::Vertical;
+}
+
+QSizeF LineEdit::minimumSize() const
+{
+    return boundingRect().size();
+}
+
+QSizeF LineEdit::maximumSize() const
+{
+    return minimumSize();
+}
+
+bool LineEdit::hasHeightForWidth() const
+{
+    return true;
+}
+
+qreal LineEdit::heightForWidth(qreal w) const
+{
+    QTextDocument* doc = document();
+    doc->setTextWidth(w);
+    qreal height = doc->size().height();
+    kDebug() << "LineEdit::heightForWidth(" << w << ") is " << height << endl;
+    return height;
+}
+
+bool LineEdit::hasWidthForHeight() const
+{
+    return false;
+}
+
+qreal LineEdit::widthForHeight(qreal h) const
+{
+    return 0;
+}
+
+QRectF LineEdit::geometry() const
+{
+    return boundingRect().toRect();
+}
+
+void LineEdit::setGeometry(const QRectF& geometry)
+{
+    setTextWidth(geometry.width());
+}
+
+QSizeF LineEdit::sizeHint() const
+{
+    kDebug() << "LineEdit::sizeeHint() " << document()->size() << endl;
+    return document()->size();
 }
 
 } // namespace Plasma
