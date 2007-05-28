@@ -44,6 +44,9 @@ VBoxLayout::VBoxLayout(LayoutItem *parent)
 
 VBoxLayout::~VBoxLayout()
 {
+    foreach (LayoutItem *l, d->childList) {
+        l->resetLayout();
+    }
 }
 
 Qt::Orientations VBoxLayout::expandingDirections() const

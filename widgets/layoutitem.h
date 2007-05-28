@@ -54,7 +54,27 @@ class KDE_EXPORT LayoutItem
 
         virtual QSizeF sizeHint() const = 0;
 
+        /**
+         * Resets the layout to 0 and doesn't notify the previous layout.
+         * Should only be used by the current layout when relinquishing the item,
+         * e.g. during layout destruction.
+         */
+        void resetLayout();
+
+        /**
+         * Sets the layout so that the LayoutItem may inform the layout of its
+         * deletion. Should only be used by the layout it is added to.
+         *
+         * If the layout item is currently associated with another layout, it will
+         * first remove itself from that layout.
+         *
+         * @param layout The Layout that this LayoutItem will be managed by.
+         */
         void setLayout(Layout* layout);
+
+        /**
+         * Returns the layout this item is currently associated with
+         */
         Layout* layout();
 
     private:

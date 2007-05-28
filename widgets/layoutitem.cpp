@@ -70,6 +70,11 @@ qreal LayoutItem::widthForHeight(qreal h) const
 	return 0.0;
 }
 
+void LayoutItem::resetLayout()
+{
+    d->layout = 0;
+}
+
 void LayoutItem::setLayout(Layout* layout)
 {
     if (d->layout) {
