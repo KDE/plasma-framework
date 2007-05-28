@@ -17,26 +17,37 @@
  */
 
 #include "layoutitem.h"
+#include "layout.h"
 
 namespace Plasma
 {
 
 class LayoutItem::Private
 {
-	public:
-		Private() {}
-		~Private() {}
+    public:
+        Private()
+            : layout(0)
+        {
+        }
+
+        ~Private() {}
+
+        Layout* layout;
 };
 
 
 LayoutItem::LayoutItem()
-	: d(new Private)
+    : d(new Private)
 {
 }
 
 LayoutItem::~LayoutItem()
 {
-	delete d;
+    if (d->layout) {
+        d->layout->removeItem(this);
+    }
+
+    delete d;
 }
 
 bool LayoutItem::hasHeightForWidth() const
@@ -57,6 +68,20 @@ bool LayoutItem::hasWidthForHeight() const
 qreal LayoutItem::widthForHeight(qreal h) const
 {
 	return 0.0;
+}
+
+void LayoutItem::setLayout(Layout* layout)
+{
+    if (d->layout) {
+        d->layout->removeItem(this);
+    }
+
+    d->layout = layout;
+}
+
+Layout* LayoutItem::layout()
+{
+    return d->layout;
 }
 
 }

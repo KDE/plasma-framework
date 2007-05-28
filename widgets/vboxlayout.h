@@ -57,6 +57,7 @@ class KDE_EXPORT VBoxLayout : public Layout
 
 		bool isEmpty() const;
 
+        void insertItem(int index, LayoutItem *l);
 		void addItem(LayoutItem *l);
 
 		void removeItem(LayoutItem *l);

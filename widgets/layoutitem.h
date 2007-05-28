@@ -27,34 +27,39 @@
 namespace Plasma
 {
 
+class Layout;
+
 /**
  * Base class for Plasma layout-managed items
  */
 class KDE_EXPORT LayoutItem
 {
-	public:
-		LayoutItem();
-		virtual ~LayoutItem();
+    public:
+        LayoutItem();
+        virtual ~LayoutItem();
 
-		virtual Qt::Orientations expandingDirections() const = 0;
+        virtual Qt::Orientations expandingDirections() const = 0;
 
-		virtual QSizeF minimumSize() const = 0;
-		virtual QSizeF maximumSize() const = 0;
+        virtual QSizeF minimumSize() const = 0;
+        virtual QSizeF maximumSize() const = 0;
 
-		virtual bool hasHeightForWidth() const;
-		virtual qreal heightForWidth(qreal w) const;
+        virtual bool hasHeightForWidth() const;
+        virtual qreal heightForWidth(qreal w) const;
 
-		virtual bool hasWidthForHeight() const;
-		virtual qreal widthForHeight(qreal h) const;
+        virtual bool hasWidthForHeight() const;
+        virtual qreal widthForHeight(qreal h) const;
 
-		virtual QRectF geometry() const = 0;
-		virtual void setGeometry(const QRectF& geometry) = 0;
+        virtual QRectF geometry() const = 0;
+        virtual void setGeometry(const QRectF& geometry) = 0;
 
-		virtual QSizeF sizeHint() const = 0;
+        virtual QSizeF sizeHint() const = 0;
 
-	private:
-		class Private;
-		Private *const d;
+        void setLayout(Layout* layout);
+        Layout* layout();
+
+    private:
+        class Private;
+        Private *const d;
 };
 
 }
