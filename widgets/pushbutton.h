@@ -23,9 +23,8 @@
 #include <QtGui/QGraphicsTextItem>
 #include <QtGui/QLayoutItem>
 
-#include <kdemacros.h>
-
 #include <dataengine.h>
+#include <plasma_export.h>
 
 //TODO
 //Please Document this class
@@ -36,9 +35,9 @@ namespace Plasma
 /**
  * Class that emulates a QPushButton inside plasma
  */
-class KDE_EXPORT PushButton : public QObject,
-                              public QGraphicsItem,
-                              public QLayoutItem
+class PLASMA_EXPORT PushButton : public QObject,
+                                 public QGraphicsItem,
+                                 public QLayoutItem
 {
     Q_OBJECT
     public:
