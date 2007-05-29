@@ -51,6 +51,9 @@ class PLASMA_EXPORT Theme : public QObject
          **/
         static Theme* self();
 
+        /**
+         * Default constructor. Usually you want to use the singleton instead.
+         */
         explicit Theme( QObject* parent = 0 );
         ~Theme();
 
@@ -60,13 +63,19 @@ class PLASMA_EXPORT Theme : public QObject
         QString themeName() const;
 
         /**
-         * @arg name the name of the file in the theme directory (without the 
-         *           ".svg" part)
+         * Retrieve the path for an SVG image in the current theme.
+         *
+         * @arg name the name of the file in the theme directory (without the
+         *           ".svg" part or a leading slash)
          * @return the full path to the requested file for the current theme
          */
         QString image( const QString& name ) const;
 
     Q_SIGNALS:
+        /**
+         * Emitted when the user changes the theme. SVGs should be reloaded at
+         * that point
+         */
         void changed();
 
     private:
