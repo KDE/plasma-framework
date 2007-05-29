@@ -118,7 +118,9 @@ QRectF LineEdit::geometry() const
 
 void LineEdit::setGeometry(const QRectF& geometry)
 {
+    prepareGeometryChange();
     setTextWidth(geometry.width());
+    update();
 }
 
 QSizeF LineEdit::sizeHint() const
