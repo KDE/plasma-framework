@@ -49,6 +49,20 @@ class PLASMA_EXPORT Svg : public QObject
 
     public:
         /**
+         * Describes the contents of the Svg, which determines how elements
+         * are drawn.
+         */
+        enum ContentType { SingleImage = 0 /**< A set of elements that together
+                                                make an image. Elements may be
+                                                drawn separately to accomplish
+                                                this. */,
+                           ImageSet /**< A set of elements, each of which
+                                         constitutes a whole image. Each
+                                         element will therefore be rendered
+                                         to the set size of the SVG */
+                         };
+
+        /**
          * Constructs an SVG object that implicitly shares and caches rendering
          * As opposed to QSvgRenderer, which this class uses internally,
          * Plasma::Svg represents an image generated from an SVG. As such, it
@@ -58,13 +72,14 @@ class PLASMA_EXPORT Svg : public QObject
          * The size is initialized to be the SVG's native size.
          *
          * @arg imagePath the image to show. If a relative path is passed, then
-         * Plasma::Theme is used to load the SVG.
+         *      Plasma::Theme is used to load the SVG.
          * @arg parent options QObject to parent this to
          *
          * @related Plasma::Theme
          */
-        explicit Svg( const QString& imagePath, QObject* parent = 0 );
+        explicit Svg(const QString& imagePath, QObject* parent = 0);
         ~Svg();
+
 
         /**
          * Paints the SVG represented by this object
@@ -123,10 +138,31 @@ class PLASMA_EXPORT Svg : public QObject
         QSize elementSize( const QString& elementId ) const;
 
         /**
+         * Check when an element exists in the loaded Svg
+         * @arg elementId the id of the element to check
+         * @return true if the element is defined in the Svg, otherwise false
+         **/
+        bool elementExists( const QString& elementId ) const;
+
+        /**
          * Currently set size of the SVG
          * @return the current size of a given element
          **/
         QSize size() const;
+
+        /**
+         * Sets what sort of content is in the Svg.
+         * @see ContentType
+         * @arg contents whether the Svg is a single image or a set of images
+         */
+        void setContentType(ContentType contentType);
+
+        /**
+         * Returns the content type of the Svg
+         * @see SetContentType
+         * @arg contents whether the Svg is a single image or a set of images
+         */
+        ContentType contentType();
 
     Q_SIGNALS:
         void repaintNeeded();

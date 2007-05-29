@@ -59,8 +59,9 @@ class SharedSvgRenderer : public KSvgRenderer, public QSharedData
 class Svg::Private
 {
     public:
-        Private( const QString& imagePath )
-            : renderer( 0 )
+        Private(const QString& imagePath)
+            : renderer(0),
+              contentType(Svg::SingleImage)
         {
             if (QDir::isAbsolutePath(themePath)) {
                 path = imagePath;
@@ -101,6 +102,7 @@ class Svg::Private
             if (!elementId.isEmpty()) {
                 id.append(elementId);
             }
+            //kDebug() << "id is " << id << endl;
 
             if (QPixmapCache::find(id, p)) {
                 //kDebug() << "found cached version of " << id << endl;
@@ -111,7 +113,7 @@ class Svg::Private
 
             // we have to re-render this puppy
             QSize s;
-            if (elementId.isEmpty()) {
+            if (elementId.isEmpty() || contentType == Svg::ImageSet) {
                 s = size.toSize();
             } else {
                 s = elementSize(elementId);
@@ -146,7 +148,7 @@ class Svg::Private
             QHash<QString, SharedSvgRenderer::Ptr>::const_iterator it = renderers.find(path);
 
             if (it != renderers.end()) {
-                kDebug() << "gots us an existing one!" << endl;
+                //kDebug() << "gots us an existing one!" << endl;
                 renderer = it.value();
             } else {
                 renderer = new SharedSvgRenderer(path);
@@ -154,14 +156,14 @@ class Svg::Private
             }
         }
 
-        QSize elementSize( const QString& elementId )
+        QSize elementSize(const QString& elementId)
         {
             createRenderer();
             QSizeF elementSize = renderer->boundsOnElement(elementId).size();
             QSizeF naturalSize = renderer->defaultSize();
             qreal dx = size.width() / naturalSize.width();
             qreal dy = size.height() / naturalSize.height();
-            elementSize.scale( elementSize.width() * dx, elementSize.height() * dy, Qt::IgnoreAspectRatio );
+            elementSize.scale(elementSize.width() * dx, elementSize.height() * dy, Qt::IgnoreAspectRatio);
 
             return elementSize.toSize();
         }
@@ -173,13 +175,14 @@ class Svg::Private
         QString id;
         QSizeF size;
         bool themed;
+        Svg::ContentType contentType;
 };
 
 QHash<QString, SharedSvgRenderer::Ptr> Svg::Private:: renderers;
 
-Svg::Svg( const QString& imagePath, QObject* parent )
-    : QObject( parent ),
-      d( new Private( imagePath ) )
+Svg::Svg(const QString& imagePath, QObject* parent)
+    : QObject(parent),
+      d(new Private(imagePath))
 {
     if (d->themed) {
         connect(Plasma::Theme::self(), SIGNAL(changed()), this, SLOT(themeChanged()));
@@ -195,18 +198,20 @@ void Svg::paint(QPainter* painter, const QPointF& point, const QString& elementI
 {
     QPixmap pix;
     d->findInCache(pix, elementID);
-    painter->drawPixmap(point.toPoint(), pix);
+    //kDebug() << "pix size is " << pix.size() << endl;
+    painter->drawPixmap(QRectF(point, pix.size()), pix, QRectF(QPointF(0,0), pix.size()));
 }
 
 void Svg::paint(QPainter* painter, int x, int y, const QString& elementID)
 {
-    paint(painter, QPointF( x, y ), elementID);
+    paint(painter, QPointF(x, y), elementID);
 }
 
 void Svg::paint(QPainter* painter, const QRectF& rect, const QString& elementID)
 {
     QPixmap pix;
     d->findInCache(pix, elementID);
+    //kDebug() << "pix size is " << pix.size() << endl;
     painter->drawPixmap(rect, pix, QRectF(QPointF(0,0), pix.size()));
 }
 
@@ -231,9 +236,25 @@ QSize Svg::elementSize(const QString& elementId) const
     return d->elementSize(elementId);
 }
 
+bool Svg::elementExists(const QString& elementId) const
+{
+    d->createRenderer();
+    return d->renderer->elementExists(elementId);
+}
+
 QSize Svg::size() const
 {
     return d->size.toSize();
+}
+
+void Svg::setContentType(ContentType contentType)
+{
+    d->contentType = contentType;
+}
+
+Svg::ContentType Svg::contentType()
+{
+    return d->contentType;
 }
 
 void Svg::themeChanged()
