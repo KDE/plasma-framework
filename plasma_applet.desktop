@@ -4,4 +4,5 @@ Type=ServiceType
 X-KDE-ServiceType=Plasma/Applet
 
 Comment=Plasma applet
+Comment[zh_TW]=Plasma 小程式
 
