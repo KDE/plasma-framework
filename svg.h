@@ -49,8 +49,11 @@ class PLASMA_EXPORT Svg : public QObject
 
     public:
         /**
-         * Describes the contents of the Svg, which determines how elements
-         * are drawn.
+         * Describes what is in the Svg document to be loaded. The important
+         * distinction is whether the Svg is a single image (or group of
+         * elements) that are meant to be viewed together, such as a clock face
+         * and hands, or a set of images that are meant to be displayed
+         * individually, such as a deck of cards.
          */
         enum ContentType { SingleImage = 0 /**< A set of elements that together
                                                 make an image. Elements may be
@@ -59,7 +62,7 @@ class PLASMA_EXPORT Svg : public QObject
                            ImageSet /**< A set of elements, each of which
                                          constitutes a whole image. Each
                                          element will therefore be rendered
-                                         to the set size of the SVG */
+                                         to the set size of the Svg object */
                          };
 
         /**
