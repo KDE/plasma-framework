@@ -1,4 +1,4 @@
-include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/widgets)
 
 ########### next target ###############
 
@@ -12,6 +12,7 @@ set(plasma_LIB_SRCS
    svg.cpp
    theme.cpp
    widgets/checkbox.cpp
+   widgets/icon.cpp
    widgets/lineedit.cpp
    widgets/pushbutton.cpp
    widgets/radiobutton.cpp
@@ -43,11 +44,15 @@ install( FILES
     plasma_export.h
     svg.h
     theme.h
-    widgets/widget.h
+    widgets/icon.h
+    widgets/layout.h
+    widgets/layoutitem.h
     widgets/lineedit.h
     widgets/pushbutton.h
     widgets/checkbox.h
     widgets/radiobutton.h
+    widgets/vboxlayout.h
+    widgets/widget.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/plasma )
 
 install( FILES
