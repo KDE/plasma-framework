@@ -32,31 +32,65 @@ class Icon::Private
 {
     public:
         Private()
-            : size(40, 40),
-              state(Icon::None),
-              background("widgets/iconbg"),
-              backgroundPressed("widgets/iconbgpressed"),
-              foreground("widgets/iconfg"),
-              foregroundHover("widgets/iconfghover"),
-              foregroundPressed("widgets/iconfgpressed")
+            : size(128*1.1, 128*1.1),
+              state(Private::NoState),
+              svg("widgets/iconbutton")
         {
+            svg.setContentType(Plasma::Svg::ImageSet);
+            svg.resize(size);
             minSize = size;
             maxSize = size;
-            state = Icon::None;
+
+            if (svg.elementExists("background")) {
+                svgElements |= SvgBackground;
+            }
+
+            if (svg.elementExists("background-hover")) {
+                svgElements |= SvgBackgroundHover;
+            }
+
+            if (svg.elementExists("background-pressed")) {
+                svgElements |= SvgBackgroundPressed;
+            }
+
+            if (svg.elementExists("foreground")) {
+                svgElements |= SvgForeground;
+            }
+
+            if (svg.elementExists("foreground-hover")) {
+                svgElements |= SvgForegroundHover;
+            }
+
+            if (svg.elementExists("foreground-pressed")) {
+                svgElements |= SvgForegroundPressed;
+            }
+
         }
         ~Private() {}
+        enum ButtonState
+        {
+            NoState,
+            HoverState,
+            PressedState
+        };
+
+
+        enum { NoSvg = 0,
+               SvgBackground = 1,
+               SvgBackgroundHover = 2,
+               SvgBackgroundPressed = 4,
+               SvgForeground = 8,
+               SvgForegroundHover = 16,
+               SvgForegroundPressed = 32 };
 
         QString text;
         QIcon icon;
         QSizeF size;
         QSizeF minSize;
         QSizeF maxSize;
-        Icon::ButtonState state;
-        Svg background;
-        Svg backgroundPressed;
-        Svg foreground;
-        Svg foregroundHover;
-        Svg foregroundPressed;
+        ButtonState state;
+        Svg svg;
+        int svgElements;
 };
 
 Icon::Icon(QGraphicsItem *parent)
@@ -77,7 +111,7 @@ Icon::~Icon()
 
 QRectF Icon::boundingRect() const
 {
-    return QRectF(pos(), d->size);
+    return QRectF(QPointF(0, 0), d->size);
 }
 
 void Icon::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
@@ -85,36 +119,65 @@ void Icon::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWid
     Q_UNUSED(option)
     Q_UNUSED(widget)
 
-    QRectF rect = boundingRect();
+//    QRectF rect = boundingRect();
+
+    QString element;
+    if (d->svgElements & Private::SvgBackground) {
+        element = "background";
+    }
 
     switch (d->state) {
-        case None:
-        case Hover:
-            d->background.paint(painter, 0, 0);
+        case Private::NoState:
             break;
-        case Pressed:
-            d->backgroundPressed.paint(painter, 0, 0);
+        case Private::HoverState:
+            if (d->svgElements & Private::SvgBackgroundHover) {
+                element = "background-hover";
+            }
+            break;
+        case Private::PressedState:
+            if (d->svgElements & Private::SvgBackgroundPressed) {
+                element = "background-pressed";
+            }
             break;
     }
 
+    if (!element.isEmpty()) {
+        //kDebug() << "painting " << element << endl;
+        d->svg.paint(painter, 0, 0, element);
+        element = QString();
+    }
+
+
     if (!d->icon.isNull()) {
-        int deltaX = d->size.width() * 0.05;
-        int deltaY = d->size.height() * 0.05;
+        int deltaX = d->size.width() * 0.1;
+        int deltaY = d->size.height() * 0.1;
         painter->drawPixmap(deltaX, deltaY, d->icon.pixmap((d->size * 0.9).toSize()));
     }
 
     //TODO: draw text
 
+    if (d->svgElements & Private::SvgForeground) {
+        element = "foreground";
+    }
+
     switch (d->state) {
-        case None:
-            d->foreground.paint(painter, 0, 0);
+        case Private::NoState:
             break;
-        case Hover:
-            d->foregroundHover.paint(painter, 0, 0);
+        case Private::HoverState:
+            if (d->svgElements & Private::SvgForegroundHover) {
+                element = "foreground-hover";
+            }
             break;
-        case Pressed:
-            d->foregroundPressed.paint(painter, 0, 0);
+        case Private::PressedState:
+            if (d->svgElements & Private::SvgForegroundPressed) {
+                element = "foreground-pressed";
+            }
             break;
+    }
+
+    if (!element.isEmpty()) {
+        //kDebug() << "painting " << element << endl;
+        d->svg.paint(painter, 0, 0, element);
     }
 }
 
@@ -154,11 +217,7 @@ void Icon::setSize(const QSizeF& s)
 {
     prepareGeometryChange();
     d->size = s.boundedTo(d->maxSize); //FIXME: maxSize always == size means it can be changed. wtf. =)
-    d->background.resize(s);
-    d->backgroundPressed.resize(s);
-    d->foreground.resize(s);
-    d->foregroundHover.resize(s);
-    d->foregroundPressed.resize(s);
+    d->svg.resize(d->size);
     update();
 }
 
@@ -169,28 +228,46 @@ void Icon::setSize(int w, int h)
 
 bool Icon::isDown()
 {
-    return d->state == Icon::Pressed;
+    return d->state == Private::PressedState;
 }
 
 void Icon::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-    event->accept();
-    d->state = Icon::Pressed;
-    update();
+    d->state = Private::PressedState;
     emit pressed(true);
+    QGraphicsItem::mousePressEvent(event);
+    update();
 }
 
 void Icon::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
-    event->accept();
-    bool wasClicked = d->state == Icon::Pressed && boundingRect().contains(event->scenePos());
-    d->state = Icon::None;
-    update();
+    bool inside = boundingRect().contains(event->pos());
+    bool wasClicked = d->state == Private::PressedState && inside;
+
+    if (inside) {
+        d->state = Private::HoverState;
+    } else {
+        d->state = Private::NoState;
+    }
 
     if (wasClicked) {
         emit pressed(false);
         emit clicked();
     }
+    QGraphicsItem::mouseReleaseEvent(event);
+    update();
+}
+
+void Icon::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
+{
+    d->state = Private::HoverState;
+    QGraphicsItem::hoverEnterEvent(event);
+}
+
+void Icon::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
+{
+    d->state = Private::NoState;
+    QGraphicsItem::hoverLeaveEvent(event);
 }
 
 QSizeF Icon::sizeHint() const

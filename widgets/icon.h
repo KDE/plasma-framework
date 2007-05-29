@@ -22,7 +22,7 @@
 #include <QtCore/QObject>
 #include <QtGui/QGraphicsTextItem>
 
-#include <layoutitem.h>
+#include <widgets/layoutitem.h>
 #include <dataengine.h>
 #include <plasma_export.h>
 
@@ -41,13 +41,6 @@ class PLASMA_EXPORT Icon : public QObject,
 {
     Q_OBJECT
     public:
-        enum ButtonState
-        {
-            None,
-            Hover,
-            Pressed
-        };
-
         Icon(QGraphicsItem *parent = 0);
         virtual ~Icon();
 
@@ -65,10 +58,10 @@ class PLASMA_EXPORT Icon : public QObject,
          QRectF boundingRect() const;
 
         //layout stufff
-        Qt::Orientations expandingDirections() const = 0;
+        Qt::Orientations expandingDirections() const;
 
-        QSizeF minimumSize() const = 0;
-        QSizeF maximumSize() const = 0;
+        QSizeF minimumSize() const;
+        QSizeF maximumSize() const;
 
         bool hasHeightForWidth() const;
         qreal heightForWidth(qreal w) const;
@@ -76,10 +69,10 @@ class PLASMA_EXPORT Icon : public QObject,
         bool hasWidthForHeight() const;
         qreal widthForHeight(qreal h) const;
 
-        QRectF geometry() const = 0;
-        void setGeometry(const QRectF& r) = 0;
+        QRectF geometry() const;
+        void setGeometry(const QRectF& r);
 
-        QSizeF sizeHint() const = 0;
+        QSizeF sizeHint() const;
 
      Q_SIGNALS:
          void pressed(bool down);
@@ -89,6 +82,8 @@ class PLASMA_EXPORT Icon : public QObject,
         bool isDown();
         void mousePressEvent(QGraphicsSceneMouseEvent *event);
         void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
+        void hoverEnterEvent (QGraphicsSceneHoverEvent * event);
+        void hoverLeaveEvent (QGraphicsSceneHoverEvent * event);
 
     private:
         class Private;
