@@ -22,13 +22,39 @@
 #include <QMatrix>
 #include <QPainter>
 #include <QPixmapCache>
+#include <QSharedData>
 
 #include <KDebug>
+#include <KSharedPtr>
 #include <KSvgRenderer>
+
 #include "theme.h"
 
 namespace Plasma
 {
+
+class SharedSvgRenderer : public KSvgRenderer, public QSharedData
+{
+    public:
+        typedef KSharedPtr<SharedSvgRenderer> Ptr;
+
+        SharedSvgRenderer(QObject *parent = 0)
+            : KSvgRenderer(parent)
+        {}
+
+        SharedSvgRenderer(const QString &filename, QObject *parent = 0)
+            : KSvgRenderer(filename, parent)
+        {}
+
+        SharedSvgRenderer(const QByteArray &contents, QObject *parent = 0)
+            : KSvgRenderer(contents, parent)
+        {}
+
+        ~SharedSvgRenderer()
+        {
+            kDebug() << "leaving this world for a better one." << endl;
+        }
+};
 
 class Svg::Private
 {
@@ -47,7 +73,12 @@ class Svg::Private
 
         ~Private()
         {
-            delete renderer;
+            if (renderer.count() == 2) {
+                // this and the cache reference it; and boy is this not thread safe ;)
+                renderers.erase(renderers.find(themePath));
+            }
+
+            renderer = 0;
         }
 
         void removeFromCache()
@@ -112,7 +143,15 @@ class Svg::Private
 
             //TODO: connect the renderer's repaintNeeded to the Plasma::Svg signal
             //      take into consideration for cache, e.g. don't cache if svg is animated
-            renderer = new KSvgRenderer(path);
+            QHash<QString, SharedSvgRenderer::Ptr>::const_iterator it = renderers.find(path);
+
+            if (it != renderers.end()) {
+                kDebug() << "gots us an existing one!" << endl;
+                renderer = it.value();
+            } else {
+                renderer = new SharedSvgRenderer(path);
+                renderers[path] = renderer;
+            }
         }
 
         QSize elementSize( const QString& elementId )
@@ -127,14 +166,16 @@ class Svg::Private
             return elementSize.toSize();
         }
 
-        //TODO: share renderers between Svg objects with identical themePath
-        KSvgRenderer* renderer;
+        static QHash<QString, SharedSvgRenderer::Ptr> renderers;
+        SharedSvgRenderer::Ptr renderer;
         QString themePath;
         QString path;
         QString id;
         QSizeF size;
         bool themed;
 };
+
+QHash<QString, SharedSvgRenderer::Ptr> Svg::Private:: renderers;
 
 Svg::Svg( const QString& imagePath, QObject* parent )
     : QObject( parent ),
@@ -199,7 +240,7 @@ void Svg::themeChanged()
 {
     d->removeFromCache();
     d->path.clear();
-    delete d->renderer;
+    //delete d->renderer; we're a KSharedPtr
     d->renderer = 0;
     emit repaintNeeded();
 }
