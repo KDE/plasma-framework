@@ -22,7 +22,7 @@
 #include <QtCore/QObject>
 #include <QtGui/QGraphicsTextItem>
 
-#include <kdemacros.h>
+#include <plasma_export.h>
 
 #include <dataengine.h>
 #include <widgets/layoutitem.h>
@@ -33,7 +33,7 @@ namespace Plasma
 /**
  * Class that emulates a QLineEdit inside plasma
  */
-class KDE_EXPORT LineEdit : public QGraphicsTextItem, public LayoutItem
+class PLASMA_EXPORT LineEdit : public QGraphicsTextItem, public LayoutItem
 {
     Q_OBJECT
 

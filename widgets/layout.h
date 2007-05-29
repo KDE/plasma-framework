@@ -22,7 +22,7 @@
 #include <QtCore/QRectF>
 #include <QtCore/QSizeF>
 
-#include <kdemacros.h>
+#include <plasma_export.h>
 
 #include "layoutitem.h"
 
@@ -34,7 +34,7 @@ namespace Plasma
  */
 class Widget;
 
-class KDE_EXPORT Layout : public LayoutItem
+class PLASMA_EXPORT Layout : public LayoutItem
 {
 	public:
 		Layout(LayoutItem *parent);

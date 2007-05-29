@@ -22,7 +22,7 @@
 #include <QtCore/QRectF>
 #include <QtCore/QSizeF>
 
-#include <kdemacros.h>
+#include <plasma_export.h>
 
 namespace Plasma
 {
@@ -32,7 +32,7 @@ class Layout;
 /**
  * Base class for Plasma layout-managed items
  */
-class KDE_EXPORT LayoutItem
+class PLASMA_EXPORT LayoutItem
 {
     public:
         LayoutItem();

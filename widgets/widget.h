@@ -25,7 +25,7 @@
 #include <QtCore/QRectF>
 #include <QtCore/QSizeF>
 
-#include <kdemacros.h>
+#include <plasma_export.h>
 
 #include "layoutitem.h"
 
@@ -37,7 +37,7 @@ class Layout;
 /**
  * Class that emulates a QWidget inside plasma
  */
-class KDE_EXPORT Widget : public QGraphicsItem, public LayoutItem
+class PLASMA_EXPORT Widget : public QGraphicsItem, public LayoutItem
 {
     public:
 		Widget(Widget *parent = 0);

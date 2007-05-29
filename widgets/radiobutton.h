@@ -24,7 +24,7 @@
 #include <QtGui/QGraphicsItem>
 
 // KDE includes
-#include <kdemacros.h>
+#include <plasma_export.h>
 
 #include <dataengine.h>
 
@@ -47,7 +47,7 @@ namespace Plasma
  */
 
 
-class KDE_EXPORT RadioButton : public QObject, public QGraphicsItem
+class PLASMA_EXPORT RadioButton : public QObject, public QGraphicsItem
 {
     Q_OBJECT
 

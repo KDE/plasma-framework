@@ -22,7 +22,7 @@
 #include <QtCore/QRectF>
 #include <QtCore/QSizeF>
 
-#include <kdemacros.h>
+#include <plasma_export.h>
 
 #include "layout.h"
 
@@ -34,7 +34,7 @@ class Widget;
 /**
  * Vertical Box Layout
  */
-class KDE_EXPORT VBoxLayout : public Layout
+class PLASMA_EXPORT VBoxLayout : public Layout
 {
 	public:
 		VBoxLayout(LayoutItem *parent = 0);

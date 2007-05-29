@@ -22,7 +22,7 @@
 #include <QtCore/QObject>
 #include <QtGui/QGraphicsItem>
 
-#include <kdemacros.h>
+#include <plasma_export.h>
 
 #include <dataengine.h>
 //TODO
@@ -34,7 +34,7 @@ namespace Plasma
 /**
  * Class that emulates a QCheckBox inside plasma
  */
-class KDE_EXPORT CheckBox : public QObject, public QGraphicsItem
+class PLASMA_EXPORT CheckBox : public QObject, public QGraphicsItem
 {
     Q_OBJECT
     public:
