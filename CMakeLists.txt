@@ -9,6 +9,7 @@ set(plasma_LIB_SRCS
    dataenginemanager.cpp
    datasource.cpp
    plasma.cpp
+   plasma_export.h
    svg.cpp
    theme.cpp
    widgets/checkbox.cpp
