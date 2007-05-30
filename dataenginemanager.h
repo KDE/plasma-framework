@@ -19,7 +19,7 @@
 #ifndef PLASMA_ENGINE_MANAGER_H
 #define PLASMA_ENGINE_MANAGER_H
 
-#include <QHash>
+#include <QtCore/QHash>
 #include "dataengine.h"
 
 namespace Plasma
@@ -77,8 +77,6 @@ class PLASMA_EXPORT DataEngineManager
         static QStringList knownEngines();
 
     private:
-        DataEngine::Dict m_engines;
-
         class Private;
         Private* const d;
 };

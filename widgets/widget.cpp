@@ -18,10 +18,11 @@
  */
 
 
+#include "widget.h"
+
 #include <QtCore/QList>
 
 #include "layout.h"
-#include "widget.h"
 
 namespace Plasma
 {

@@ -16,6 +16,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
+#include "applet.h"
+
 #include <QEvent>
 #include <QList>
 #include <QSize>
@@ -26,8 +28,6 @@
 #include <KStandardDirs>
 #include <KService>
 #include <KServiceTypeTrader>
-
-#include "applet.h"
 #include "dataenginemanager.h"
 
 namespace Plasma
