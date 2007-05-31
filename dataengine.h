@@ -61,7 +61,7 @@ class PLASMA_EXPORT DataEngine : public QObject
          *
          * @param parent The parent object.
          **/
-        explicit DataEngine(QObject* parent);
+        explicit DataEngine(QObject* parent = 0);
         virtual ~DataEngine();
 
         /**
