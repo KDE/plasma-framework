@@ -28,7 +28,7 @@
 namespace Plasma
 {
 /**
- * @brief A set of data exported via a DatEngine
+ * @brief A set of data exported via a DataEngine
  *
  * Plasma::DataSource wraps the data exported by a DataEngine
  * implementation, providing a generic wrapper for the data.
