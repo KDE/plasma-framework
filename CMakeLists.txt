@@ -5,6 +5,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 set(plasma_LIB_SRCS
    abstractrunner.cpp
    applet.cpp
+   corona.cpp
    dataengine.cpp
    dataenginemanager.cpp
    datasource.cpp
@@ -38,6 +39,7 @@ install(TARGETS plasma DESTINATION ${LIB_INSTALL_DIR} )
 install( FILES
     abstractrunner.h
     applet.h
+    corona.h
     dataengine.h
     dataenginemanager.h
     datasource.h
