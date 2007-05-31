@@ -28,6 +28,8 @@
 #include <KStandardDirs>
 #include <KService>
 #include <KServiceTypeTrader>
+
+#include "corona.h"
 #include "dataenginemanager.h"
 
 namespace Plasma
@@ -135,6 +137,17 @@ bool Applet::loadDataEngine( const QString& name )
 
 void Applet::constraintsUpdated()
 {
+    kDebug() << "constraints are FormFactor: " << formFactor() << ", Location: " << location() << endl;
+}
+
+FormFactor Applet::formFactor() const
+{
+    return static_cast<Corona*>(scene())->formFactor();
+}
+
+Location Applet::location() const
+{
+    return static_cast<Corona*>(scene())->location();
 }
 
 QString Applet::globalName() const

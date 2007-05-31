@@ -73,6 +73,12 @@ public:
     void setFormFactor(FormFactor formFactor);
 
 public Q_SLOTS:
+    /**
+     * Adds a plasmoid applet to the scene
+     *
+     * @param name the plugin name for the applet, as given by 
+     *        KPluginInfo::pluginName()
+     */
     void addPlasmoid(const QString& name);
 
 protected:

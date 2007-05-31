@@ -198,6 +198,7 @@ void Corona::addPlasmoid(const QString& name)
     Applet* applet = Applet::loadApplet(name);
     if (applet) {
         addItem(applet);
+        //applet->constraintsUpdated();
         d->applets << applet;
     } else {
         kDebug() << "Plasmoid " << name << " could not be loaded." << endl;

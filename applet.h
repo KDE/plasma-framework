@@ -98,9 +98,25 @@ class PLASMA_EXPORT Applet : public QObject, public QGraphicsItemGroup
          * called when any of the geometry constraints have been updated
          * this is always called prior to painting and should be used as an
          * opportunity to layout the widget, calculate sizings, etc.
+         *
+         * Do not call update() from this method; an update() will be triggered
+         * at the appropriate time for the applet.
+         *
          * @property constraint
          */
         virtual void constraintsUpdated();
+
+        /**
+         * Returns the current form factor the applet is being displayed in.
+         * @see Plasma::FormFactor
+         */
+        FormFactor formFactor() const;
+
+        /**
+         * Returns the location of the scene which is displaying applet.
+         * @see Plasma::Location
+         */
+        Location location() const;
 
         /**
          * Returns a list of all known applets in a hash keyed by a unique
@@ -109,6 +125,7 @@ class PLASMA_EXPORT Applet : public QObject, public QGraphicsItemGroup
          * @return list of applets
          **/
         static KPluginInfo::List knownApplets();
+
         /**
          * Reimplement this slot to show a configuration dialog and let the user
          * play with the plasmoid options. Called when the user selects the configure entry
