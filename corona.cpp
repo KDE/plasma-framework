@@ -32,6 +32,7 @@
 #include "applet.h"
 #include "dataengine.h"
 #include "widgets/vboxlayout.h"
+#include "karambamanager.h"
 
 #ifdef ICON_DEMO
 #include "widgets/icon.h"
@@ -40,9 +41,6 @@
 #include "corona.h"
 
 using namespace Plasma;
-extern "C" {
-    typedef QGraphicsItem* (*loadKaramba)(const KUrl &theme, QGraphicsView *view);
-}
 
 namespace Plasma
 {
@@ -116,23 +114,6 @@ void Corona::init()
     kDebug() << "=========================" << endl;
     */
 
-    // Loading SuperKaramba themes example
-    /*
-    QString karambaLib = QFile::encodeName(KLibLoader::self()->findLibrary(QLatin1String("libsuperkaramba")));
-    KLibLoader* loader = KLibLoader::self();
-    KLibrary* lib = loader->library(karambaLib);
-
-    if (lib) {
-        loadKaramba startKaramba = 0;
-        startKaramba = (loadKaramba)lib->resolveFunction("startKaramba");
-        if (startKaramba) {
-            startKaramba(KUrl("~/themes/aero_aio.skz"), this);
-        }
-
-        lib->unload();
-    }
-    */
-
 //    connect(this, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(displayContextMenu(QPoint)));
     d->engineExplorerAction = new QAction(i18n("Engine Explorer"), this);
     connect(d->engineExplorerAction, SIGNAL(triggered(bool)), this, SLOT(launchExplorer(bool)));
@@ -202,6 +183,16 @@ void Corona::addPlasmoid(const QString& name)
         d->applets << applet;
     } else {
         kDebug() << "Plasmoid " << name << " could not be loaded." << endl;
+    }
+}
+
+void Corona::addKaramba(const KUrl& path)
+{
+    QGraphicsItemGroup* karamba = KarambaManager::loadKaramba(path, this);
+    if (karamba) {
+        addItem(karamba);
+    } else {
+        kDebug() << "Karamba " << path << " could not be loaded." << endl;
     }
 }
 

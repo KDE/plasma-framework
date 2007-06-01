@@ -13,6 +13,7 @@ set(plasma_LIB_SRCS
    plasma_export.h
    svg.cpp
    theme.cpp
+   karambamanager.cpp
    widgets/checkbox.cpp
    widgets/icon.cpp
    widgets/lineedit.cpp

@@ -81,6 +81,13 @@ public Q_SLOTS:
      */
     void addPlasmoid(const QString& name);
 
+    /**
+     * Adds a SuperKaramba theme to the scene
+     *
+     * @param path the path to the theme file
+     */
+    void addKaramba(const KUrl& path);
+
 protected:
     void dragEnterEvent(QGraphicsSceneDragDropEvent* event);
     void dragLeaveEvent(QGraphicsSceneDragDropEvent* event);
