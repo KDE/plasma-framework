@@ -137,16 +137,24 @@ bool Applet::loadDataEngine( const QString& name )
 
 void Applet::constraintsUpdated()
 {
-    kDebug() << "constraints are FormFactor: " << formFactor() << ", Location: " << location() << endl;
+    kDebug() << "Applet::constraintsUpdate(): constraints are FormFactor: " << formFactor() << ", Location: " << location() << endl;
 }
 
 FormFactor Applet::formFactor() const
 {
+    if (!scene()) {
+        return Plasma::Planar;
+    }
+
     return static_cast<Corona*>(scene())->formFactor();
 }
 
 Location Applet::location() const
 {
+    if (!scene()) {
+        return Plasma::Desktop;
+    }
+
     return static_cast<Corona*>(scene())->location();
 }
 
