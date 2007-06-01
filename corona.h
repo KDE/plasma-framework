@@ -52,27 +52,27 @@ public:
     Plasma::Location location() const;
 
     /**
+     * The current form factor for this Corona. @see Plasma::FormFactor
+     **/
+    Plasma::FormFactor formFactor() const;
+
+public Q_SLOTS:
+    /**
      * Informs the Corona as to what position it is in. This is informational
      * only, as the Corona doesn't change it's actual location. This is,
      * however, passed on to Applets that may be managed by this Corona.
      *
      * @param location the new location of this Corona
      */
-    void setLocation(Location location);
-
-    /**
-     * The current form factor for this Corona. @see Plasma::FormFactor
-     **/
-    Plasma::FormFactor formFactor() const;
+    void setLocation(Plasma::Location location);
 
     /**
      * Sets the form factor for this Corona. This may cause changes in both
      * the arrangement of Applets as well as the display choices of individual
      * Applets.
      */
-    void setFormFactor(FormFactor formFactor);
+    void setFormFactor(Plasma::FormFactor formFactor);
 
-public Q_SLOTS:
     /**
      * Adds a plasmoid applet to the scene
      *
