@@ -118,7 +118,15 @@ Location Corona::location() const
 
 void Corona::setLocation(Location location)
 {
+    if (d->location == location) {
+        return;
+    }
+
     d->location = location;
+
+    foreach (Applet* applet, d->applets) {
+        applet->constraintsUpdated();
+    }
 }
 
 FormFactor Corona::formFactor() const
@@ -132,6 +140,7 @@ void Corona::setFormFactor(FormFactor formFactor)
         return;
     }
 
+    //kDebug() << "switching FF to " << formFactor << endl;
     d->formFactor = formFactor;
     delete d->layout;
     d->layout = 0;
