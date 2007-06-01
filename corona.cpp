@@ -34,10 +34,6 @@
 #include "widgets/vboxlayout.h"
 #include "karambamanager.h"
 
-#ifdef ICON_DEMO
-#include "widgets/icon.h"
-#endif
-
 #include "corona.h"
 
 using namespace Plasma;
@@ -93,18 +89,6 @@ void Corona::init()
     setPalette(pal);*/
     //setViewport(new QGLWidget  ( QGLFormat(QGL::StencilBuffer | QGL::AlphaChannel)   ));
 
-#ifdef ICON_DEMO
-    Icon* icon = new Icon();
-    icon->setIcon("plasmagik");
-    icon->setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable);
-    addItem(icon);
-
-    icon = new Icon();
-    icon->setIcon("user-home");
-    icon->setSize(64, 64);
-    icon->setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable);
-    addItem(icon);
-#endif
     /*
     KPluginInfo::List applets = Applet::knownApplets();
     kDebug() << "======= Applets =========" << endl;
