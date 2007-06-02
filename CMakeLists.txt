@@ -1,5 +1,12 @@
-install(DIRECTORY
-    dialogs
-    widgets
+install(FILES
+    dialogs/dialog.svg
+    dialogs/shutdowndlg.svg
+    dialogs/shutdowndlgbuttonglow.svg
+    DESTINATION ${DATA_INSTALL_DIR}/desktoptheme/default/dialogs/)
+
+install(FILES
+    widgets/clock.svg
+    widgets/default_theme.svg
+    widgets/iconbutton.svg
     DESTINATION ${DATA_INSTALL_DIR}/desktoptheme/default/widgets/)
 
