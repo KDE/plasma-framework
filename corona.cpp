@@ -100,7 +100,7 @@ void Corona::init()
 
 //    connect(this, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(displayContextMenu(QPoint)));
     d->engineExplorerAction = new QAction(i18n("Engine Explorer"), this);
-    connect(d->engineExplorerAction, SIGNAL(triggered(bool)), this, SLOT(launchExplorer(bool)));
+    connect(d->engineExplorerAction, SIGNAL(triggered(bool)), this, SLOT(launchExplorer()));
 //    setContextMenuPolicy(Qt::CustomContextMenu);
 }
 
@@ -180,7 +180,7 @@ void Corona::addPlasmoid(const QString& name)
         addItem(applet);
         //applet->constraintsUpdated();
         d->applets << applet;
-        connect(applet, SIGNAL(destroyed(QObject)),
+        connect(applet, SIGNAL(destroyed(QObject*)),
                 this, SLOT(appletDestroyed(QObject*)));
     } else {
         kDebug() << "Plasmoid " << name << " could not be loaded." << endl;
@@ -283,9 +283,23 @@ void Corona::contextMenuEvent(QGraphicsSceneContextMenuEvent *contextMenuEvent)
     contextMenuEvent->accept();
 }
 
-void Corona::launchExplorer(bool /*param*/)
+void Corona::launchExplorer()
 {
     QProcess::execute("plasmaengineexplorer");
+}
+
+void Corona::appletDestroyed(QObject* object)
+{
+    // we do a static_cast here since it really isn't an Applet by this
+    // point anymore since we are in the qobject dtor. we don't actually
+    // try and do anything with it, we just need the value of the pointer
+    // so this unsafe looking code is actually just fine.
+    Applet* applet = static_cast<Plasma::Applet*>(object);
+    int index = d->applets.indexOf(applet);
+
+    if (index > -1) {
+        d->applets.removeAt(index);
+    }
 }
 
 } // namespace Plasma

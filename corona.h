@@ -102,7 +102,8 @@ protected:
     void contextMenuEvent(QGraphicsSceneContextMenuEvent *contextMenuEvent);
 
 protected Q_SLOTS:
-    void launchExplorer(bool /*param*/);
+    void launchExplorer();
+    void appletDestroyed(QObject*);
 
 private:
     void init();
