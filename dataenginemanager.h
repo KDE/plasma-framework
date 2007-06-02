@@ -48,7 +48,8 @@ class PLASMA_EXPORT DataEngineManager
 
         /**
          * Returns a data engine object if one is loaded and available.
-         * Otherwise, returns 0.
+         * On failure, the fallback NullEngine (which does nothing and
+         * !isValid()) is returned.
          *
          * @param name the name of the engine
          */
@@ -61,7 +62,7 @@ class PLASMA_EXPORT DataEngineManager
          * value cached. Call unloadDataEngine when finished with the engine.
          *
          * @param name the name of the engine
-         * @return the data engine that was loaded, or 0 on failure.
+         * @return the data engine that was loaded, or the NullEngine on failure.
          */
         Plasma::DataEngine* loadDataEngine(const QString& name);
 

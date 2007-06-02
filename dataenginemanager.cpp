@@ -25,14 +25,37 @@
 namespace Plasma
 {
 
+class NullEngine : public DataEngine
+{
+    public:
+        NullEngine(QObject* parent = 0)
+            : DataEngine(parent)
+        {
+            setValid(false);
+        }
+};
+
 class DataEngineManager::Private
 {
     public:
         Private()
+            : null(0)
         {}
 
-        Plasma::DataEngine::Dict m_engines;
+        ~Private()
+        {
+            delete null;
+        }
 
+        DataEngine* nullEngine()
+        {
+            if (!null) {
+                null = new NullEngine;
+            }
+        }
+
+        DataEngine::Dict m_engines;
+        DataEngine* null;
 };
 
 class DataEngineManagerSingleton
@@ -70,7 +93,7 @@ Plasma::DataEngine* DataEngineManager::dataEngine(const QString& name) const
         return *it;
     }
 
-    return 0;
+    return d->nullEngine();
 }
 
 Plasma::DataEngine* DataEngineManager::loadDataEngine(const QString& name)
@@ -95,7 +118,7 @@ Plasma::DataEngine* DataEngineManager::loadDataEngine(const QString& name)
     engine = KService::createInstance<Plasma::DataEngine>(offers.first(), 0);
     if (!engine) {
         kDebug() << "Couldn't load engine \"" << name << "\"!" << endl;
-        return 0;
+        engine = d->nullEngine();
     }
 
     engine->ref();

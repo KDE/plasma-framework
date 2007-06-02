@@ -34,7 +34,8 @@ class DataEngine::Private
     public:
         Private(DataEngine* e)
             : engine(e),
-              limit(0)
+              limit(0),
+              valid(true)
         {
             updateTimer = new QTimer(engine);
             updateTimer->setSingleShot(true);
@@ -97,6 +98,7 @@ class DataEngine::Private
         QTimer* updateTimer;
         QString icon;
         uint limit;
+        bool valid;
 };
 
 
@@ -111,6 +113,7 @@ DataEngine::DataEngine(QObject* parent)
 
 DataEngine::~DataEngine()
 {
+    //kDebug() << objectName() << ": bye bye birdy! " << endl;
     delete d;
 }
 
@@ -242,6 +245,16 @@ void DataEngine::deref()
 bool DataEngine::isUsed() const
 {
     return d->ref != 0;
+}
+
+bool DataEngine::isValid() const
+{
+    return d->valid;
+}
+
+bool DataEngine::setValid(bool valid)
+{
+    d->valid = valid;
 }
 
 void DataEngine::setIcon(const QString& icon)

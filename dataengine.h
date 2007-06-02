@@ -129,6 +129,11 @@ class PLASMA_EXPORT DataEngine : public QObject
         bool isUsed() const;
 
         /**
+         * Returns true if this engine is valid, otherwise returns false
+         **/
+        bool isValid() const;
+
+        /**
          * Sets the icon for this data engine
          **/
         void setIcon(const QString& icon);
@@ -210,6 +215,15 @@ class PLASMA_EXPORT DataEngine : public QObject
          * Removes all data sources
          **/
         void clearAllDataSources();
+
+        /**
+         * Sets whether or not this engine is valid, e.g. can be used.
+         * In practice, only the internal fall-back engine, the NullEngine
+         * should have need for this.
+         *
+         * @param valid whether or not the engine is valid
+         **/
+        bool setValid(bool valid);
 
     private Q_SLOTS:
         void checkForUpdates();
