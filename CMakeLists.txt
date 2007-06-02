@@ -10,3 +10,7 @@ install(FILES
     widgets/iconbutton.svg
     DESTINATION ${DATA_INSTALL_DIR}/desktoptheme/default/widgets/)
 
+install(FILES
+    desktoptheme-default.desktop
+    DESTINATION ${DATA_INSTALL_DIR}/desktoptheme)
+
