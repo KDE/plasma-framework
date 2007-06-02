@@ -166,6 +166,12 @@ void Corona::setFormFactor(FormFactor formFactor)
     }
 }
 
+QRectF Corona::maxSizeHint() const
+{
+    //FIXME: this is a bit of a naive implementation, do you think? =)
+    //       we should factor in how much space we actually have left!
+    return sceneRect();
+}
 
 void Corona::addPlasmoid(const QString& name)
 {

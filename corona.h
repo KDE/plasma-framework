@@ -56,6 +56,12 @@ public:
      **/
     Plasma::FormFactor formFactor() const;
 
+    /**
+     * A rect containing the maximum size a plasmoid on this corona should
+     * consider being.
+     **/
+    QRectF maxSizeHint() const;
+
 public Q_SLOTS:
     /**
      * Informs the Corona as to what position it is in. This is informational

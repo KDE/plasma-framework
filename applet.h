@@ -119,6 +119,13 @@ class PLASMA_EXPORT Applet : public QObject, public QGraphicsItemGroup
         Location location() const;
 
         /**
+         * Returns a maximum size hint based on the Corona's space availability
+         * An applet may choose to violate this size hint, but should try and
+         * respect it as much as possible.
+         */
+        QRectF maxSizeHint() const;
+
+        /**
          * Returns a list of all known applets in a hash keyed by a unique
          * identifier for each applet
          *

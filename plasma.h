@@ -68,6 +68,7 @@ enum Location { Floating = 0 /**< Free floating. Neither geometry or z-ordering
                                   is described precisely by this value. */,
                 Desktop      /**< On the planar desktop layer, extending across
                                   the full screen from edge to edge */,
+                FullScreen   /**< Full screen */,
                 TopEdge      /**< Along the top of the screen*/,
                 BottomEdge   /**< Along the bottom of the screen*/,
                 LeftEdge     /**< Along the left side of the screen */,
