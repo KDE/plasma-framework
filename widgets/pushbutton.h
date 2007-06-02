@@ -23,8 +23,8 @@
 #include <QtGui/QGraphicsTextItem>
 #include <QtGui/QLayoutItem>
 
-#include <dataengine.h>
-#include <plasma_export.h>
+#include <plasma/dataengine.h>
+#include <plasma/plasma_export.h>
 
 //TODO
 //Please Document this class

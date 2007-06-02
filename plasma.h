@@ -19,7 +19,7 @@
 #ifndef PLASMA_DEFS_H
 #define PLASMA_DEFS_H
 
-#include <plasma_export.h>
+#include <plasma/plasma_export.h>
 
 /**
  * Namespace for everything in libplasma

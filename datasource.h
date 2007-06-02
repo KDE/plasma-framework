@@ -22,8 +22,8 @@
 #include <QtCore/QHash>
 #include <QtCore/QObject>
 
-#include <plasma_export.h>
-#include <dataengine.h>
+#include <plasma/plasma_export.h>
+#include <plasma/dataengine.h>
 
 namespace Plasma
 {

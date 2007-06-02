@@ -4,7 +4,7 @@
 #include <QLayout>
 #include <QSize>
 
-#include <plasma_export.h>
+#include <plasma/plasma_export.h>
 
 class QLayoutItem;
 class QRect;

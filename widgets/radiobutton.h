@@ -24,9 +24,9 @@
 #include <QtGui/QGraphicsItem>
 
 // KDE includes
-#include <plasma_export.h>
+#include <plasma/plasma_export.h>
 
-#include <dataengine.h>
+#include <plasma/dataengine.h>
 
 namespace Plasma
 {

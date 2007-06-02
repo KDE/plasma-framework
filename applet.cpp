@@ -121,18 +121,20 @@ KConfigGroup Applet::globalAppletConfig() const
     return KConfigGroup(d->globalConfig, "General");
 }
 
-bool Applet::loadDataEngine( const QString& name )
+DataEngine* Applet::dataEngine(const QString& name)
 {
-    if ( d->loadedEngines.indexOf( name ) != -1 ) {
-        return true;
+    int index = d->loadedEngines.indexOf(name);
+    if (index != -1) {
+        return DataEngineManager::self()->dataEngine(name);
     }
 
-    if ( DataEngineManager::self()->loadDataEngine( name ) ) {
-        d->loadedEngines.append( name );
-        return true;
+    DataEngine* engine = DataEngineManager::self()->loadDataEngine(name);
+    if (engine) {
+        d->loadedEngines.append(name);
+        return engine;
     }
 
-    return false;
+    return 0;
 }
 
 void Applet::constraintsUpdated()

@@ -23,7 +23,7 @@
 
 #include "applet.h"
 #include "plasma.h"
-#include "plasma_export.h"
+#include "plasma/plasma_export.h"
 
 namespace Plasma
 {

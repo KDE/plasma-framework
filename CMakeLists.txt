@@ -48,6 +48,9 @@ install( FILES
     plasma_export.h
     svg.h
     theme.h
+    DESTINATION ${INCLUDE_INSTALL_DIR}/plasma )
+
+install( FILES
     widgets/icon.h
     widgets/layout.h
     widgets/layoutitem.h
@@ -57,7 +60,7 @@ install( FILES
     widgets/radiobutton.h
     widgets/vboxlayout.h
     widgets/widget.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/plasma )
+    DESTINATION ${INCLUDE_INSTALL_DIR}/plasma/widgets )
 
 install( FILES
     includes/Applet

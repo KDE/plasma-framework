@@ -22,9 +22,9 @@
 #include <QtCore/QObject>
 #include <QtGui/QGraphicsItem>
 
-#include <plasma_export.h>
+#include <plasma/plasma_export.h>
 
-#include <dataengine.h>
+#include <plasma/dataengine.h>
 //TODO
 //Please Document this class
 

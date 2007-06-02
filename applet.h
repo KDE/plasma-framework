@@ -26,11 +26,13 @@
 #include <KSharedConfig>
 #include <KGenericFactory>
 
-#include <plasma.h>
-#include <dataengine.h>
+#include <plasma/plasma.h>
 
 namespace Plasma
 {
+
+class DataEngine;
+
 /**
  * @short The base Applet (Plasmoid) class
  *
@@ -92,7 +94,7 @@ class PLASMA_EXPORT Applet : public QObject, public QGraphicsItemGroup
          *
          * @return returns true on success, false on failure
          */
-        bool loadDataEngine( const QString& name );
+        DataEngine* dataEngine(const QString& name);
 
         /**
          * called when any of the geometry constraints have been updated

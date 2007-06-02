@@ -22,10 +22,10 @@
 #include <QtCore/QObject>
 #include <QtGui/QGraphicsTextItem>
 
-#include <plasma_export.h>
+#include <plasma/plasma_export.h>
 
-#include <dataengine.h>
-#include <widgets/layoutitem.h>
+#include <plasma/dataengine.h>
+#include <plasma/widgets/layoutitem.h>
 
 namespace Plasma
 {

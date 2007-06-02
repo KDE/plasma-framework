@@ -21,7 +21,7 @@
 
 #include <QtCore/QObject>
 
-#include <plasma_export.h>
+#include <plasma/plasma_export.h>
 
 class QPainter;
 class QPoint;
