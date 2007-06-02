@@ -180,6 +180,8 @@ void Corona::addPlasmoid(const QString& name)
         addItem(applet);
         //applet->constraintsUpdated();
         d->applets << applet;
+        connect(applet, SIGNAL(destroyed(QObject)),
+                this, SLOT(appletDestroyed(QObject*)));
     } else {
         kDebug() << "Plasmoid " << name << " could not be loaded." << endl;
     }
@@ -272,6 +274,10 @@ void Corona::contextMenuEvent(QGraphicsSceneContextMenuEvent *contextMenuEvent)
         connect(configureApplet, SIGNAL(triggered(bool)),
                 applet, SLOT(configureDialog())); //This isn't implemented in Applet yet...
         desktopMenu.addAction(configureApplet);
+        QAction* closeApplet = new QAction(i18n("Close Applet"), this);
+        connect(closeApplet, SIGNAL(triggered(bool)),
+                applet, SLOT(deleteLater()));
+        desktopMenu.addAction(closeApplet);
     }
     desktopMenu.exec(point.toPoint());
     contextMenuEvent->accept();
