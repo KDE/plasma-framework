@@ -6,7 +6,7 @@ install(FILES
 
 install(FILES
     widgets/clock.svg
-    widgets/desktop-button.svg
+    widgets/toolbox-button.svg
     widgets/plot-background.svg
     widgets/iconbutton.svg
     DESTINATION ${DATA_INSTALL_DIR}/desktoptheme/default/widgets/)
