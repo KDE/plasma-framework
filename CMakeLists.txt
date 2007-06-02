@@ -1,2 +1,5 @@
-install(FILES clock.svg iconbutton.svg DESTINATION ${DATA_INSTALL_DIR}/desktoptheme/default/widgets/)
+install(DIRECTORY
+    dialogs
+    widgets
+    DESTINATION ${DATA_INSTALL_DIR}/desktoptheme/default/widgets/)
 
