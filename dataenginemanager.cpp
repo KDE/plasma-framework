@@ -52,6 +52,8 @@ class DataEngineManager::Private
             if (!null) {
                 null = new NullEngine;
             }
+
+            return null;
         }
 
         DataEngine::Dict m_engines;
