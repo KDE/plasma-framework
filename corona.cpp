@@ -23,10 +23,10 @@
 #include <QDesktopWidget>
 #include <QGraphicsSceneDragDropEvent>
 #include <QMimeData>
-#include <QProcess>
 
 #include <KLocale>
 #include <KMenu>
+#include <KRun>
 #include <KWindowSystem>
 
 #include "applet.h"
@@ -255,6 +255,7 @@ void Corona::contextMenuEvent(QGraphicsSceneContextMenuEvent *contextMenuEvent)
     }
     */
 
+    contextMenuEvent->accept();
     Applet* applet = qgraphicsitem_cast<Applet*>(itemAt(point));
     KMenu desktopMenu;
     if(!applet) {
@@ -280,12 +281,11 @@ void Corona::contextMenuEvent(QGraphicsSceneContextMenuEvent *contextMenuEvent)
         desktopMenu.addAction(closeApplet);
     }
     desktopMenu.exec(point.toPoint());
-    contextMenuEvent->accept();
 }
 
 void Corona::launchExplorer()
 {
-    QProcess::execute("plasmaengineexplorer");
+    KRun::run("plasmaengineexplorer", KUrl::List(), 0);
 }
 
 void Corona::appletDestroyed(QObject* object)
