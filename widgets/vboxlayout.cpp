@@ -88,30 +88,30 @@ void VBoxLayout::setGeometry(const QRectF& geometry)
 
     qDebug("Geometry %p : %f, %f by %f, %f", this, geometry.x(), geometry.y(), geometry.width(), geometry.height());
 
-    QList<LayoutItem *> childs;
-    QList<LayoutItem *> expandingChilds;
+    QList<LayoutItem *> children;
+    QList<LayoutItem *> expandingChildren;
     QList<QSizeF> sizes;
     QSizeF available = geometry.size() - QSizeF(2 * margin(), 2 * margin());
 
     foreach (LayoutItem *l, d->childList) {
         kDebug() << "testing layout item " << l << endl;
         if (l->expandingDirections() & Qt::Vertical) {
-            expandingChilds += l;
+            expandingChildren += l;
         } else {
 
-            childs += l;
+            children += l;
         }
     }
 
-    foreach (LayoutItem *l, childs) {
+    foreach (LayoutItem *l, children) {
         QSizeF hint = l->sizeHint();
         sizes.insert(indexOf(l), QSizeF(available.width(), hint.height()));
         available -= QSizeF(0.0, hint.height() + spacing());
     }
 
-    qreal expandHeight = (available.height() - ((expandingChilds.count() - 1) * spacing())) / expandingChilds.count();
+    qreal expandHeight = (available.height() - ((expandingChildren.count() - 1) * spacing())) / expandingChildren.count();
 
-    foreach (LayoutItem *l, expandingChilds) {
+    foreach (LayoutItem *l, expandingChildren) {
 
         sizes.insert(indexOf(l),QSizeF(available.width(), expandHeight));
     }

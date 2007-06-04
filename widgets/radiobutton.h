@@ -55,7 +55,7 @@ public:
     RadioButton(QGraphicsItem *parent = 0);
     virtual ~RadioButton();
 
-    // QGraphicsItem overriden virtual methods
+    // QGraphicsItem overridden virtual methods
     QRectF boundingRect() const;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
 
