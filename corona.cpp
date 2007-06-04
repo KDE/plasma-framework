@@ -23,11 +23,13 @@
 #include <QDesktopWidget>
 #include <QGraphicsSceneDragDropEvent>
 #include <QMimeData>
+#include <QGraphicsView>
 
 #include <KLocale>
 #include <KMenu>
 #include <KRun>
 #include <KWindowSystem>
+#include <KDebug>
 
 #include "applet.h"
 #include "dataengine.h"
@@ -51,7 +53,7 @@ public:
           engineExplorerAction(0)
     {
     }
-
+    bool immutable;
     Applet::List applets;
     FormFactor formFactor;
     Location location;
@@ -101,6 +103,7 @@ void Corona::init()
 //    connect(this, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(displayContextMenu(QPoint)));
     d->engineExplorerAction = new QAction(i18n("Engine Explorer"), this);
     connect(d->engineExplorerAction, SIGNAL(triggered(bool)), this, SLOT(launchExplorer()));
+    d->immutable = false;
 //    setContextMenuPolicy(Qt::CustomContextMenu);
 }
 
@@ -299,6 +302,20 @@ void Corona::appletDestroyed(QObject* object)
 
     if (index > -1) {
         d->applets.removeAt(index);
+    }
+}
+
+bool Corona::isImmutable()
+{
+    return d->immutable;
+}
+
+void Corona::setImmutable(bool immutable_)
+{
+    d->immutable = immutable_;
+    foreach (QGraphicsView* view, views()) {
+        //TODO: setInteractive(false) prevents context menues from showing up
+        view->setInteractive(!(d->immutable));
     }
 }
 

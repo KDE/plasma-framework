@@ -45,6 +45,11 @@ public:
     explicit Corona(const QRectF & sceneRect, QObject * parent = 0);
     explicit Corona(qreal x, qreal y, qreal width, qreal height, QObject * parent = 0);
     ~Corona();
+    
+    /**
+     * The applets are changable or not
+     **/
+    bool isImmutable();
 
     /**
      * The location of the Corona. @see Plasma::Location
@@ -93,6 +98,11 @@ public Q_SLOTS:
      * @param path the path to the theme file
      */
     void addKaramba(const KUrl& path);
+    
+    /**
+     * Sets if the applets are Immutable
+     */
+    void setImmutable(bool immutable_);
 
 protected:
     void dragEnterEvent(QGraphicsSceneDragDropEvent* event);
@@ -107,6 +117,7 @@ protected Q_SLOTS:
 
 private:
     void init();
+    
 
     class Private;
     Private * const d;
