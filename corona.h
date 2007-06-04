@@ -28,8 +28,6 @@
 namespace Plasma
 {
 
-class Layout;
-class Svg;
 
 /**
  * @short A QGraphicsScene for Plasma::Applets

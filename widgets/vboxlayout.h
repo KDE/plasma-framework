@@ -28,7 +28,6 @@
 namespace Plasma
 {
 
-class Widget;
 
 /**
  * Vertical Box Layout

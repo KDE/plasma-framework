@@ -31,7 +31,6 @@ namespace Plasma
 /**
  * Base class for Plasma Layout managers
  */
-class Widget;
 
 class PLASMA_EXPORT Layout : public LayoutItem
 {

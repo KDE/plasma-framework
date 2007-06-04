@@ -30,7 +30,6 @@ class QRect;
 class QRectF;
 class QSize;
 class QSizeF;
-class QMatrix;
 
 namespace Plasma
 {
