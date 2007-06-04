@@ -223,7 +223,7 @@ class PLASMA_EXPORT DataEngine : public QObject
          *
          * @param valid whether or not the engine is valid
          **/
-        bool setValid(bool valid);
+        void setValid(bool valid);
 
     private Q_SLOTS:
         void checkForUpdates();

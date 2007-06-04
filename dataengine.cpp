@@ -252,7 +252,7 @@ bool DataEngine::isValid() const
     return d->valid;
 }
 
-bool DataEngine::setValid(bool valid)
+void DataEngine::setValid(bool valid)
 {
     d->valid = valid;
 }
