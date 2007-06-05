@@ -257,7 +257,6 @@ void Corona::contextMenuEvent(QGraphicsSceneContextMenuEvent *contextMenuEvent)
         }
     }
     */
-
     contextMenuEvent->accept();
     Applet* applet = qgraphicsitem_cast<Applet*>(itemAt(point));
     KMenu desktopMenu;
@@ -268,17 +267,18 @@ void Corona::contextMenuEvent(QGraphicsSceneContextMenuEvent *contextMenuEvent)
         desktopMenu.addAction("menu");
         desktopMenu.addAction(d->engineExplorerAction);
     } else {
-        //desktopMenu.setTitle( applet->name() ); //This isn't implemented in Applet yet...
+        desktopMenu.addTitle(applet->name());
+//         desktopMenu.setTitle(applet->name());
         desktopMenu.addAction("Widget");
         desktopMenu.addAction("settings");
-        desktopMenu.addAction("like");
-        desktopMenu.addAction("opacity");
+//         desktopMenu.addAction("like");
+//         desktopMenu.addAction("opacity");
         desktopMenu.addSeparator();
-        QAction* configureApplet = new QAction(i18n("Configure Applet..."), this);
+        QAction* configureApplet = new QAction(i18n("Configure Plasmoid..."), this);
         connect(configureApplet, SIGNAL(triggered(bool)),
                 applet, SLOT(configureDialog())); //This isn't implemented in Applet yet...
         desktopMenu.addAction(configureApplet);
-        QAction* closeApplet = new QAction(i18n("Close Applet"), this);
+        QAction* closeApplet = new QAction(i18n("Close Plasmoid"), this);
         connect(closeApplet, SIGNAL(triggered(bool)),
                 applet, SLOT(deleteLater()));
         desktopMenu.addAction(closeApplet);

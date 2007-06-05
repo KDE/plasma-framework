@@ -142,6 +142,11 @@ void Applet::constraintsUpdated()
     kDebug() << "Applet::constraintsUpdate(): constraints are FormFactor: " << formFactor() << ", Location: " << location() << endl;
 }
 
+QString Applet::name()
+{
+    return d->appletDescription->name();
+}
+
 FormFactor Applet::formFactor() const
 {
     if (!scene()) {

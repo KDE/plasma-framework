@@ -166,6 +166,13 @@ class PLASMA_EXPORT Applet : public QObject, public QGraphicsItemGroup
          **/
         static Applet* loadApplet(const KPluginInfo* info, uint appletId = 0);
 
+        /**
+         * Returns the user-visible name for the applet, as specified in the
+         * .desktop file.
+         * @return the user-visible name for the applet.
+         **/
+        QString name();
+
     Q_SIGNALS:
         /**
          * Emit this signal when your applet needs to take (or lose) keyboard
