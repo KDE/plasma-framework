@@ -14,7 +14,7 @@
    sodipodi:version="0.32"
    inkscape:version="0.45.1"
    version="1.0"
-   sodipodi:docbase="/home/me"
+   sodipodi:docbase="/home/siraj/kde/src/kdebase/workspace/plasma/desktoptheme/widgets"
    sodipodi:docname="iconbutton.svg"
    inkscape:output_extension="org.inkscape.output.svg.inkscape">
   <defs
@@ -36,8 +36,8 @@
      inkscape:current-layer="layer1"
      width="800px"
      height="600px"
-     inkscape:window-width="791"
-     inkscape:window-height="584"
+     inkscape:window-width="988"
+     inkscape:window-height="735"
      inkscape:window-x="247"
      inkscape:window-y="104" />
   <metadata
@@ -89,11 +89,11 @@
        height="125.71429"
        width="251.42857"
        id="foreground"
-       style="opacity:1;fill:#8000ff;fill-opacity:1;fill-rule:evenodd;stroke:#888a85;stroke-width:1;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       style="opacity:0.40677966;fill:#8000ff;fill-opacity:1;fill-rule:evenodd;stroke:#888a85;stroke-width:1;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
        inkscape:label="#rect8682" />
     <rect
        transform="translate(248.57143,191.42857)"
-       style="opacity:1;fill:#5a00b3;fill-opacity:1;fill-rule:evenodd;stroke:#888a85;stroke-width:1;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       style="opacity:0.32768362;fill:#5a00b3;fill-opacity:1;fill-rule:evenodd;stroke:#888a85;stroke-width:1;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
        id="foreground-hover"
        width="251.42857"
        height="125.71429"
@@ -106,7 +106,7 @@
        height="125.71429"
        width="251.42857"
        id="foreground-pressed"
-       style="opacity:1;fill:#400080;fill-opacity:1;fill-rule:evenodd;stroke:#888a85;stroke-width:1;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       style="opacity:0.20338983;fill:#400080;fill-opacity:1;fill-rule:evenodd;stroke:#888a85;stroke-width:1;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
        transform="translate(514.28571,191.42858)"
        inkscape:label="#rect8686" />
   </g>
