@@ -149,7 +149,15 @@ void Icon::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWid
     if (!d->icon.isNull()) {
         qreal deltaX = (d->size.width() - d->iconSize.width()) / 2;
         qreal deltaY = (d->size.height() - d->iconSize.height()) / 2 ;
-        painter->drawPixmap(deltaX, deltaY, d->icon.pixmap(d->iconSize.toSize()));
+	if(d->state == Private::PressedState)
+	{
+		painter->drawPixmap(deltaX+2, deltaY-2, d->icon.pixmap(d->iconSize.toSize()-QSize(2,2)));
+	}
+	else
+	{
+		painter->drawPixmap(deltaX, deltaY, d->icon.pixmap(d->iconSize.toSize()));
+	}
+			
     }
 
     //TODO: draw text
