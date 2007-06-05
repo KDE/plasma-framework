@@ -150,8 +150,8 @@ void Icon::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWid
 
 
     if (!d->icon.isNull()) {
-        int deltaX = d->size.width() * 0.1;
-        int deltaY = d->size.height() * 0.1;
+        qreal deltaX = d->size.width() * 0.1;
+        qreal deltaY = d->size.height() * 0.1;
         painter->drawPixmap(deltaX, deltaY, d->icon.pixmap((d->size * 0.9).toSize()));
     }
 
@@ -212,6 +212,11 @@ void Icon::setIcon(const QIcon& icon)
 QSizeF Icon::size() const
 {
     return d->size;
+}
+
+QSizeF Icon::iconSize() const
+{
+    return d->size * .9;
 }
 
 void Icon::setSize(const QSizeF& s)
@@ -320,6 +325,11 @@ void Icon::setGeometry(const QRectF &r)
 {
     setSize(r.size());
     setPos(r.x(),r.y());
+}
+
+int Icon::boundsForIconSize(int iconSize)
+{
+    return iconSize * 1.1;
 }
 
 } // namespace Plasma

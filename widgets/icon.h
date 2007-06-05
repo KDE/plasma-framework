@@ -48,6 +48,7 @@ class PLASMA_EXPORT Icon : public QObject,
         void setText(const QString &name);
 
         QSizeF size() const;
+        QSizeF iconSize() const;
         void setSize(const QSizeF& size);
         void setSize(int height, int width);
 
@@ -55,7 +56,7 @@ class PLASMA_EXPORT Icon : public QObject,
         void setIcon(const QIcon& icon);
 
         virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
-         QRectF boundingRect() const;
+        QRectF boundingRect() const;
 
         //layout stufff
         Qt::Orientations expandingDirections() const;
@@ -73,6 +74,8 @@ class PLASMA_EXPORT Icon : public QObject,
         void setGeometry(const QRectF& r);
 
         QSizeF sizeHint() const;
+
+        static int boundsForIconSize(int iconSize);
 
      Q_SIGNALS:
          void pressed(bool down);
