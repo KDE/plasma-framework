@@ -34,13 +34,12 @@ class Icon::Private
     public:
         Private()
             : size(128*1.1, 128*1.1),
+              iconSize(128, 128),
               state(Private::NoState),
               svg("widgets/iconbutton")
         {
             svg.setContentType(Plasma::Svg::ImageSet);
             svg.resize(size);
-            minSize = size;
-            maxSize = size;
 
             if (svg.elementExists("background")) {
                 svgElements |= SvgBackground;
@@ -85,10 +84,9 @@ class Icon::Private
                SvgForegroundPressed = 32 };
 
         QString text;
-        QIcon icon;
         QSizeF size;
-        QSizeF minSize;
-        QSizeF maxSize;
+        QSizeF iconSize;
+        QIcon icon;
         ButtonState state;
         Svg svg;
         int svgElements;
@@ -148,11 +146,10 @@ void Icon::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWid
         element = QString();
     }
 
-
     if (!d->icon.isNull()) {
-        qreal deltaX = d->size.width() * 0.1;
-        qreal deltaY = d->size.height() * 0.1;
-        painter->drawPixmap(deltaX, deltaY, d->icon.pixmap((d->size * 0.9).toSize()));
+        qreal deltaX = (d->size.width() - d->iconSize.width()) / 2;
+        qreal deltaY = (d->size.height() - d->iconSize.height()) / 2 ;
+        painter->drawPixmap(deltaX, deltaY, d->icon.pixmap(d->iconSize.toSize()));
     }
 
     //TODO: draw text
@@ -216,13 +213,14 @@ QSizeF Icon::size() const
 
 QSizeF Icon::iconSize() const
 {
-    return d->size * .9;
+    return d->iconSize;
 }
 
 void Icon::setSize(const QSizeF& s)
 {
     prepareGeometryChange();
-    d->size = s.boundedTo(d->maxSize); //FIXME: maxSize always == size means it can be changed. wtf. =)
+    d->iconSize = s;
+    d->size = s * 1.1;
     d->svg.resize(d->size);
     update();
 }
@@ -283,12 +281,12 @@ QSizeF Icon::sizeHint() const
 
 QSizeF Icon::minimumSize() const
 {
-    return d->minSize;
+    return d->size; // probably should be more flexible on this =)
 }
 
 QSizeF Icon::maximumSize() const
 {
-    return d->maxSize;
+    return d->size;
 }
 
 Qt::Orientations Icon::expandingDirections() const
