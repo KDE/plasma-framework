@@ -16,8 +16,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef PUSHBUTTON_H
-#define PUSHBUTTON_H
+#ifndef ICON_H
+#define ICON_H
 
 #include <QtCore/QObject>
 #include <QtGui/QGraphicsTextItem>
