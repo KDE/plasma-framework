@@ -148,17 +148,19 @@ void Icon::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWid
     }
 
     if (!d->icon.isNull()) {
-        qreal deltaX = (d->size.width() - d->iconSize.width()) / 2;
-        qreal deltaY = (d->size.height() - d->iconSize.height()) / 2 ;
-	if(d->state == Private::PressedState)
-	{
-		painter->drawPixmap(deltaX+2, deltaY-2, d->icon.pixmap(d->iconSize.toSize()-QSize(2,2)));
-	}
-	else
-	{
-		painter->drawPixmap(deltaX, deltaY, d->icon.pixmap(d->iconSize.toSize()));
-	}
-			
+        qreal iw = d->iconSize.width();
+        qreal ih = d->iconSize.height();
+        qreal deltaX = (d->size.width() - iw) / 2;
+        qreal deltaY = (d->size.height() - ih) / 2 ;
+        if(d->state == Private::PressedState)
+        {
+            painter->drawPixmap(deltaX + (iw * .025), deltaY + (ih * .025),
+                                d->icon.pixmap(d->iconSize.toSize() * 0.95));
+        }
+        else
+        {
+            painter->drawPixmap(deltaX, deltaY, d->icon.pixmap(d->iconSize.toSize()));
+        }
     }
 
     //TODO: draw text
