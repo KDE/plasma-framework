@@ -23,6 +23,7 @@
 #include <QDesktopWidget>
 #include <QGraphicsSceneDragDropEvent>
 #include <QMimeData>
+#include <QUrl>
 #include <QGraphicsView>
 
 #include <KLocale>
@@ -30,10 +31,13 @@
 #include <KRun>
 #include <KWindowSystem>
 #include <KDebug>
+#include <kmimetypetrader.h>
+#include <kdesktopfile.h>
 
 #include "applet.h"
 #include "dataengine.h"
 #include "widgets/vboxlayout.h"
+#include "widgets/icon.h"
 #include "karambamanager.h"
 
 #include "corona.h"
@@ -240,6 +244,22 @@ void Corona::dropEvent(QGraphicsSceneDragDropEvent *event)
 
         event->acceptProposedAction();
     }
+  else if (event->mimeData()->hasFormat("text/plain"))
+	{
+	QList<QUrl> list;
+	 list = event->mimeData()->urls();	
+	KDesktopFile * desktop = new KDesktopFile(list[0].path());
+		QStringList data = event->mimeData()->formats();
+		     for (int i = 0; i < data.size(); ++i)
+
+		Plasma::Icon * icon = new Plasma::Icon(0);
+		icon->setIcon(desktop->readIcon());
+		icon->setSize(128,128);
+		icon->show();
+			addItem(icon);
+		delete desktop;
+        event->acceptProposedAction();
+	}
 }
 
 void Corona::contextMenuEvent(QGraphicsSceneContextMenuEvent *contextMenuEvent)
