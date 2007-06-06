@@ -249,6 +249,7 @@ void Corona::dropEvent(QGraphicsSceneDragDropEvent *event)
             icon->setIcon(KMimeType::iconNameForUrl(url));
             icon->setSize(128,128);
             //TODO: associate the url with the icon, use the Button plasmoid here
+            icon->setPos(event->scenePos()-QPoint(icon->boundingRect().width()/2,icon->boundingRect().height()/2));
             icon->show();
             addItem(icon);
         }
