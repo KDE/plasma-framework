@@ -31,8 +31,7 @@
 #include <KRun>
 #include <KWindowSystem>
 #include <KDebug>
-#include <kmimetypetrader.h>
-#include <kdesktopfile.h>
+#include <KMimeType>
 
 #include "applet.h"
 #include "dataengine.h"
@@ -243,23 +242,18 @@ void Corona::dropEvent(QGraphicsSceneDragDropEvent *event)
         d->applets.last()->setPos(event->pos());
 
         event->acceptProposedAction();
-    }
-  else if (event->mimeData()->hasFormat("text/plain"))
-	{
-	QList<QUrl> list;
-	 list = event->mimeData()->urls();	
-	KDesktopFile * desktop = new KDesktopFile(list[0].path());
-		QStringList data = event->mimeData()->formats();
-		     for (int i = 0; i < data.size(); ++i)
-
-		Plasma::Icon * icon = new Plasma::Icon(0);
-		icon->setIcon(desktop->readIcon());
-		icon->setSize(128,128);
-		icon->show();
-			addItem(icon);
-		delete desktop;
+    } else if (KUrl::List::canDecode(event->mimeData())) {
+        KUrl::List urls = KUrl::List::fromMimeData(event->mimeData());	
+        foreach (const KUrl& url, urls) {
+            Plasma::Icon *icon = new Plasma::Icon(0);
+            icon->setIcon(KMimeType::iconNameForUrl(url));
+            icon->setSize(128,128);
+            //TODO: associate the url with the icon, use the Button plasmoid here
+            icon->show();
+            addItem(icon);
+        }
         event->acceptProposedAction();
-	}
+    }
 }
 
 void Corona::contextMenuEvent(QGraphicsSceneContextMenuEvent *contextMenuEvent)

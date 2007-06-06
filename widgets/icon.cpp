@@ -100,6 +100,7 @@ Icon::Icon(QGraphicsItem *parent)
     setAcceptedMouseButtons(Qt::LeftButton);
     setAcceptsHoverEvents(true);
     setEnabled(true);
+    setFlags(ItemIsMovable);
     setPos(QPointF(0.0,0.0));
 }
 
