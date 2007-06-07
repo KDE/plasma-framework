@@ -28,7 +28,7 @@
 #include <KDebug>
 
 #include "svg.h"
-#include "blur.cpp"
+#include "effects/blur.cpp"
 
 namespace Plasma
 {
@@ -125,7 +125,7 @@ void Icon::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWid
 
 //    QRectF rect = boundingRect();
 
-    if (d->state != Private::PressedState && scene()) {
+    if (d->state == Private::HoverState && scene()) {
         QList<QGraphicsView*> views = scene()->views();
         if (views.count() > 0) {
             QPixmap* pix = static_cast<QPixmap*>(views[0]->windowSurface()->paintDevice());
