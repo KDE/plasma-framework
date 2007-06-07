@@ -275,28 +275,28 @@ void Corona::contextMenuEvent(QGraphicsSceneContextMenuEvent *contextMenuEvent)
     contextMenuEvent->accept();
     Applet* applet = qgraphicsitem_cast<Applet*>(itemAt(point));
     KMenu desktopMenu;
-    if(!applet) {
+    kDebug() << "context menu event " << d->immutable << endl;
+    if (!applet) {
+        if (d->immutable) {
+            return;
+        }
+
         desktopMenu.setTitle("Corona");
-        desktopMenu.addAction("The");
-        desktopMenu.addAction("desktop");
-        desktopMenu.addAction("menu");
         desktopMenu.addAction(d->engineExplorerAction);
     } else {
         desktopMenu.addTitle(applet->name());
-//         desktopMenu.setTitle(applet->name());
-        desktopMenu.addAction("Widget");
-        desktopMenu.addAction("settings");
-//         desktopMenu.addAction("like");
-//         desktopMenu.addAction("opacity");
         desktopMenu.addSeparator();
-        QAction* configureApplet = new QAction(i18n("Configure Plasmoid..."), this);
-        connect(configureApplet, SIGNAL(triggered(bool)),
-                applet, SLOT(configureDialog())); //This isn't implemented in Applet yet...
-        desktopMenu.addAction(configureApplet);
-        QAction* closeApplet = new QAction(i18n("Close Plasmoid"), this);
-        connect(closeApplet, SIGNAL(triggered(bool)),
-                applet, SLOT(deleteLater()));
-        desktopMenu.addAction(closeApplet);
+
+            QAction* configureApplet = new QAction(i18n("Configure Plasmoid..."), this);
+            connect(configureApplet, SIGNAL(triggered(bool)),
+                    applet, SLOT(configureDialog())); //This isn't implemented in Applet yet...
+            desktopMenu.addAction(configureApplet);
+        if (!d->immutable) {
+            QAction* closeApplet = new QAction(i18n("Close Plasmoid"), this);
+            connect(closeApplet, SIGNAL(triggered(bool)),
+                    applet, SLOT(deleteLater()));
+            desktopMenu.addAction(closeApplet);
+        }
     }
     desktopMenu.exec(point.toPoint());
 }
@@ -325,12 +325,21 @@ bool Corona::isImmutable()
     return d->immutable;
 }
 
-void Corona::setImmutable(bool immutable_)
+void Corona::setImmutable(bool immutable)
 {
-    d->immutable = immutable_;
-    foreach (QGraphicsView* view, views()) {
-        //TODO: setInteractive(false) prevents context menues from showing up
-        view->setInteractive(!(d->immutable));
+    if (d->immutable == immutable) {
+        return;
+    }
+
+    d->immutable = immutable;
+    foreach (QGraphicsItem* item, items()) {
+        QGraphicsItem::GraphicsItemFlags flags = item->flags();
+        if (immutable) {
+            flags ^= QGraphicsItem::ItemIsMovable;
+        } else {
+            flags |= QGraphicsItem::ItemIsMovable;
+        }
+        item->setFlags(flags);
     }
 }
 
