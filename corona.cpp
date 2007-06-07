@@ -56,6 +56,15 @@ public:
           engineExplorerAction(0)
     {
     }
+
+    ~Private()
+    {
+        delete layout;
+        while (!applets.isEmpty()) {
+            delete applets.takeFirst();
+        }
+    }
+
     bool immutable;
     Applet::List applets;
     FormFactor formFactor;
@@ -112,9 +121,7 @@ void Corona::init()
 
 Corona::~Corona()
 {
-    while (!d->applets.isEmpty()) {
-        delete d->applets.takeFirst();
-    }
+    delete d;
 }
 
 Location Corona::location() const

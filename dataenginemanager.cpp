@@ -39,25 +39,29 @@ class DataEngineManager::Private
 {
     public:
         Private()
-            : null(0)
+            : nullEng(0)
         {}
 
         ~Private()
         {
-            delete null;
+            foreach (Plasma::DataEngine* engine, m_engines) {
+                delete engine;
+            }
+            m_engines.clear();
+            delete nullEng;
         }
 
         DataEngine* nullEngine()
         {
-            if (!null) {
-                null = new NullEngine;
+            if (!nullEng) {
+                nullEng = new NullEngine;
             }
 
-            return null;
+            return nullEng;
         }
 
         DataEngine::Dict m_engines;
-        DataEngine* null;
+        DataEngine* nullEng;
 };
 
 class DataEngineManagerSingleton
@@ -80,10 +84,7 @@ DataEngineManager::DataEngineManager()
 
 DataEngineManager::~DataEngineManager()
 {
-    foreach (Plasma::DataEngine* engine, d->m_engines) {
-        delete engine;
-    }
-    d->m_engines.clear();
+    delete d;
 }
 
 Plasma::DataEngine* DataEngineManager::dataEngine(const QString& name) const

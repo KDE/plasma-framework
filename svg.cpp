@@ -191,7 +191,7 @@ Svg::Svg(const QString& imagePath, QObject* parent)
 
 Svg::~Svg()
 {
-
+    delete d;
 }
 
 void Svg::paint(QPainter* painter, const QPointF& point, const QString& elementID)

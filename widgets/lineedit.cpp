@@ -37,6 +37,7 @@ LineEdit::LineEdit(QGraphicsItem *parent, QGraphicsScene *scene)
 
 LineEdit::~LineEdit()
 {
+    delete d;
 }
 
 void LineEdit::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)

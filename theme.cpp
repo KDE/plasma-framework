@@ -60,6 +60,7 @@ Theme::Theme(QObject* parent)
 
 Theme::~Theme()
 {
+    delete d;
 }
 
 QString Theme::themeName() const
