@@ -23,14 +23,15 @@
 #include <QGraphicsScene>
 #include <KUrl>
 
+#include <plasma_export.h>
+
 extern "C" {
     typedef QGraphicsItemGroup* (*startKaramba)(const KUrl &theme, QGraphicsView *view);
 }
 
-class KarambaManager
+namespace KarambaManager
 {
-    public:
-        static QGraphicsItemGroup* loadKaramba(const KUrl &themePath, QGraphicsScene *scene);
+PLASMA_EXPORT QGraphicsItemGroup* loadKaramba(const KUrl &themePath, QGraphicsScene *scene);
 };
 
 #endif
