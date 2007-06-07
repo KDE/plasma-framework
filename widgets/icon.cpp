@@ -20,11 +20,15 @@
 
 #include <QPainter>
 #include <QGraphicsSceneMouseEvent>
+#include <QGraphicsView>
+#include <private/qwindowsurface_p.h>
 
 #include <KIcon>
+#include <KImageEffect>
 #include <KDebug>
 
 #include "svg.h"
+#include "blur.cpp"
 
 namespace Plasma
 {
@@ -120,6 +124,22 @@ void Icon::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWid
     Q_UNUSED(widget)
 
 //    QRectF rect = boundingRect();
+
+    if (d->state != Private::PressedState && scene()) {
+        QList<QGraphicsView*> views = scene()->views();
+        if (views.count() > 0) {
+            QPixmap* pix = static_cast<QPixmap*>(views[0]->windowSurface()->paintDevice());
+            QImage image(boundingRect().size().toSize(), QImage::Format_ARGB32_Premultiplied);
+            {
+                QPainter p(&image);
+                p.drawPixmap(image.rect(), *pix, sceneBoundingRect());
+            }
+            expblur<16,7>(image, 10);
+            painter->save();
+            painter->drawImage(0, 0, image);
+            painter->restore();
+        }
+    }
 
     QString element;
     if (d->svgElements & Private::SvgBackground) {
