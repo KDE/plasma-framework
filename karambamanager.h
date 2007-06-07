@@ -32,6 +32,6 @@ extern "C" {
 namespace KarambaManager
 {
 PLASMA_EXPORT QGraphicsItemGroup* loadKaramba(const KUrl &themePath, QGraphicsScene *scene);
-};
+}
 
 #endif
