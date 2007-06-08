@@ -3,26 +3,28 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 ########### next target ###############
 
 set(plasma_LIB_SRCS
-   abstractrunner.cpp
-   applet.cpp
-   corona.cpp
-   dataengine.cpp
-   dataenginemanager.cpp
-   datasource.cpp
-   plasma.cpp
-   plasma_export.h
-   svg.cpp
-   theme.cpp
-   karambamanager.cpp
-   widgets/checkbox.cpp
-   widgets/icon.cpp
-   widgets/lineedit.cpp
-   widgets/pushbutton.cpp
-   widgets/radiobutton.cpp
-   widgets/widget.cpp
-   widgets/layout.cpp
-   widgets/layoutitem.cpp
-   widgets/vboxlayout.cpp
+    abstractrunner.cpp
+    animator.cpp
+    applet.cpp
+    corona.cpp
+    dataengine.cpp
+    dataenginemanager.cpp
+    datasource.cpp
+    phase.cpp
+    plasma.cpp
+    plasma_export.h
+    svg.cpp
+    theme.cpp
+    karambamanager.cpp
+    widgets/checkbox.cpp
+    widgets/icon.cpp
+    widgets/lineedit.cpp
+    widgets/pushbutton.cpp
+    widgets/radiobutton.cpp
+    widgets/widget.cpp
+    widgets/layout.cpp
+    widgets/layoutitem.cpp
+    widgets/vboxlayout.cpp
    )
 
 kde4_automoc(${plasma_LIB_SRCS})
@@ -39,11 +41,13 @@ install(TARGETS plasma DESTINATION ${LIB_INSTALL_DIR} )
 
 install( FILES
     abstractrunner.h
+    animator.h
     applet.h
     corona.h
     dataengine.h
     dataenginemanager.h
     datasource.h
+    phase.h
     plasma.h
     plasma_export.h
     svg.h
