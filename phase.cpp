@@ -121,8 +121,8 @@ void Phase::animate(QGraphicsItem* item, Animation animation)
         return;
     }
 
-    QTimeLine* timeLine = new QTimeLine(300, this);
-    timeLine->setFrameRange(0, frames);
+    QTimeLine* timeLine = new QTimeLine(333, this);
+    timeLine->setFrameRange(0, frames / 3.0);
 
     AnimationState state;
     state.item = item;
