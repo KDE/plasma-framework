@@ -78,8 +78,8 @@ install(FILES
     DESTINATION ${INCLUDE_INSTALL_DIR}/KDE/Plasma)
 
 install(FILES
-    plasma_animator.desktop
-    plasma_applet.desktop
-    plasma_dataengine.desktop
+    servicetypes/plasma_animator.desktop
+    servicetypes/plasma_applet.desktop
+    servicetypes/plasma_dataengine.desktop
     DESTINATION ${SERVICETYPES_INSTALL_DIR})
 
