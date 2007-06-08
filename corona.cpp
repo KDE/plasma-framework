@@ -60,9 +60,7 @@ public:
     ~Private()
     {
         delete layout;
-        while (!applets.isEmpty()) {
-            delete applets.takeFirst();
-        }
+        qDeleteAll(applets);
     }
 
     bool immutable;
