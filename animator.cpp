@@ -81,6 +81,6 @@ void Animator::renderBackground(QImage& background)
     Q_UNUSED(background)
 }
 
-}; // Plasma namespace
+} // Plasma namespace
 
 #include "animator.moc"

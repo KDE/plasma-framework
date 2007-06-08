@@ -53,6 +53,6 @@ public:
     virtual void renderBackground(QImage& background);
 };
 
-}; // Plasma namespace
+} // Plasma namespace
 
 #endif // multiple inclusion guard
