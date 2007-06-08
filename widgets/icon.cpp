@@ -21,7 +21,12 @@
 #include <QPainter>
 #include <QGraphicsSceneMouseEvent>
 #include <QGraphicsView>
+
+//#define PROVE_IT_CAN_BE_DONE
+
+#ifdef PROVE_IT_CAN_BE_DONE
 #include <private/qwindowsurface_p.h>
+#endif
 
 #include <KIcon>
 #include <KImageEffect>
@@ -123,8 +128,7 @@ void Icon::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWid
     Q_UNUSED(option)
     Q_UNUSED(widget)
 
-//    QRectF rect = boundingRect();
-
+#ifdef PROVE_IT_CAN_BE_DONE
     if (d->state == Private::HoverState && scene()) {
         QList<QGraphicsView*> views = scene()->views();
         if (views.count() > 0) {
@@ -140,6 +144,7 @@ void Icon::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWid
             painter->restore();
         }
     }
+#endif
 
     QString element;
     if (d->svgElements & Private::SvgBackground) {
