@@ -31,15 +31,15 @@ kde4_automoc(${plasma_LIB_SRCS})
 
 kde4_add_library(plasma SHARED ${plasma_LIB_SRCS})
 
-target_link_libraries(plasma ${KDE4_KIO_LIBS} )
+target_link_libraries(plasma ${KDE4_KIO_LIBS})
 
-set_target_properties(plasma PROPERTIES VERSION 1.0.0 SOVERSION 1 )
-install(TARGETS plasma DESTINATION ${LIB_INSTALL_DIR} )
+set_target_properties(plasma PROPERTIES VERSION 1.0.0 SOVERSION 1)
+install(TARGETS plasma DESTINATION ${LIB_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install( FILES
+install(FILES
     abstractrunner.h
     animator.h
     applet.h
@@ -52,9 +52,9 @@ install( FILES
     plasma_export.h
     svg.h
     theme.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/plasma )
+    DESTINATION ${INCLUDE_INSTALL_DIR}/plasma)
 
-install( FILES
+install(FILES
     widgets/icon.h
     widgets/layout.h
     widgets/layoutitem.h
@@ -64,9 +64,9 @@ install( FILES
     widgets/radiobutton.h
     widgets/vboxlayout.h
     widgets/widget.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/plasma/widgets )
+    DESTINATION ${INCLUDE_INSTALL_DIR}/plasma/widgets)
 
-install( FILES
+install(FILES
     includes/Applet
     includes/Plasma
     includes/AbstractRunner
@@ -75,10 +75,11 @@ install( FILES
     includes/DataEngineManager
     includes/DataSource
     includes/Svg
-    DESTINATION ${INCLUDE_INSTALL_DIR}/KDE/Plasma )
+    DESTINATION ${INCLUDE_INSTALL_DIR}/KDE/Plasma)
 
-install( FILES
+install(FILES
+    plasma_animator.desktop
     plasma_applet.desktop
     plasma_dataengine.desktop
-    DESTINATION ${SERVICETYPES_INSTALL_DIR}  )
+    DESTINATION ${SERVICETYPES_INSTALL_DIR})
 
