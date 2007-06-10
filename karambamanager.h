@@ -23,7 +23,7 @@
 #include <QGraphicsScene>
 #include <KUrl>
 
-#include <plasma_export.h>
+#include <plasma/plasma_export.h>
 
 extern "C" {
     typedef QGraphicsItemGroup* (*startKaramba)(const KUrl &theme, QGraphicsView *view);

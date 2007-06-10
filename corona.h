@@ -21,9 +21,9 @@
 
 #include <QGraphicsScene>
 #include <QMessageBox>
-#include "applet.h"
-#include "plasma.h"
-#include "plasma/plasma_export.h"
+#include <plasma/applet.h>
+#include <plasma/plasma.h>
+#include <plasma/plasma_export.h>
 
 namespace Plasma
 {

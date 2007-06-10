@@ -20,7 +20,7 @@
 #define PLASMA_ENGINE_MANAGER_H
 
 #include <QtCore/QHash>
-#include "plasma/dataengine.h"
+#include <plasma/dataengine.h>
 
 namespace Plasma
 {
