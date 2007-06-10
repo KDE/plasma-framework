@@ -41,9 +41,9 @@ class DataEngine::Private
             updateTimer->setSingleShot(true);
         }
 
-        DataSource* source(const QString& sourceName)
+        DataSource* source(const QString& sourceName, bool createWhenMissing = true)
         {
-            DataSource::Dict::const_iterator it = sources.find(sourceName);
+            DataEngine::SourceDict::const_iterator it = sources.find(sourceName);
             if (it != sources.constEnd()) {
                 DataSource* s = it.value();
                 if (limit > 0) {
@@ -58,6 +58,10 @@ class DataEngine::Private
                     sourceQueue.enqueue(s);
                 }
                 return it.value();
+            }
+
+            if (!createWhenMissing) {
+                return 0;
             }
 
             kDebug() << "DataEngine " << engine->objectName()
@@ -91,8 +95,14 @@ class DataEngine::Private
             updateTimer->start(0);
         }
 
+        bool dataSourceRequested(const QString& source)
+        {
+            //get around const! =P
+            return engine->dataSourceRequested(source);
+        }
+
         QAtomic ref;
-        DataSource::Dict sources;
+        DataEngine::SourceDict sources;
         QQueue<DataSource*> sourceQueue;
         DataEngine* engine;
         QTimer* updateTimer;
@@ -124,7 +134,15 @@ QStringList DataEngine::dataSources() const
 
 void DataEngine::connectSource(const QString& source, QObject* visualization) const
 {
-    DataSource* s = d->source(source);
+    DataSource* s = d->source(source, false);
+
+    if (!s) {
+        kDebug() << "requesting source " << source << endl;
+        d->dataSourceRequested(source);
+        s = d->source(source);
+        kDebug() << "and no we have " << s << endl;
+    }
+
     connect(s, SIGNAL(updated(QString,Plasma::DataEngine::Data)),
             visualization, SLOT(updated(QString,Plasma::DataEngine::Data)));
     QMetaObject::invokeMethod(visualization, SLOT(updated(QString,Plasma::DataEngine::Data)),
@@ -161,6 +179,12 @@ void DataEngine::init()
     // start things in motion external to themselves before they can work
 }
 
+bool DataEngine::dataSourceRequested(const QString &name)
+{
+    Q_UNUSED(name)
+    return false;
+}
+
 void DataEngine::setData(const QString& source, const QVariant& value)
 {
     setData(source, source, value);
@@ -175,7 +199,7 @@ void DataEngine::setData(const QString& source, const QString& key, const QVaria
 
 void DataEngine::addSource(DataSource* source)
 {
-    DataSource::Dict::const_iterator it = d->sources.find(source->objectName());
+    SourceDict::const_iterator it = d->sources.find(source->objectName());
     if (it != d->sources.constEnd()) {
         kDebug() << "source named \"" << source->objectName() << "\" already exists." << endl;
         return;
@@ -214,7 +238,7 @@ Plasma::DataSource* DataEngine::createDataSource(const QString& source, const QS
 
 void DataEngine::removeDataSource(const QString& source)
 {
-    DataSource::Dict::iterator it = d->sources.find(source);
+    SourceDict::iterator it = d->sources.find(source);
     if (it != d->sources.end()) {
         emit dataSourceRemoved(it.key());
         d->sources.erase(it);
@@ -257,6 +281,11 @@ void DataEngine::setValid(bool valid)
     d->valid = valid;
 }
 
+DataEngine::SourceDict DataEngine::sourceDict() const
+{
+    return d->sources;
+}
+
 void DataEngine::setIcon(const QString& icon)
 {
     d->icon = icon;
@@ -279,4 +308,3 @@ void DataEngine::checkForUpdates()
 }
 
 #include "dataengine.moc"
-

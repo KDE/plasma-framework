@@ -55,6 +55,7 @@ class PLASMA_EXPORT DataEngine : public QObject
         typedef QHash<QString, DataEngine*> Dict;
         typedef QHash<QString, QVariant> Data;
         typedef QHashIterator<QString, QVariant> DataIterator;
+        typedef QHash<QString, DataSource*> SourceDict;
 
         /**
          * Default constructor.
@@ -167,13 +168,22 @@ class PLASMA_EXPORT DataEngine : public QObject
         virtual void init();
 
         /**
+         * When a source that does not currently exist is requested by the
+         * consumer, this method is called to give the DataEngine the
+         * opportunity to create one.
+         *
+         * @return true if a DataSource was set up, false otherwise
+         */
+        virtual bool dataSourceRequested(const QString &name);
+
+        /**
          * Sets a value for a data source. If the source
          * doesn't exist then it is created.
          *
          * @param source the name of the data source
          * @param value the data to associated with the source
          **/
-        void setData(const QString& source, const QVariant& value);
+        void setData(const QString &source, const QVariant &value);
 
         /**
          * Sets a value for a data source. If the source
@@ -225,7 +235,16 @@ class PLASMA_EXPORT DataEngine : public QObject
          **/
         void setValid(bool valid);
 
-    private Q_SLOTS:
+        /**
+         * @return the list of active DataSources.
+         */
+        SourceDict sourceDict() const;
+
+    protected Q_SLOTS:
+        /**
+         * Call this method when you call setData directly on a DataSource.
+         * If this method is not called, no updated(..) signals will be emitted!
+         */
         void checkForUpdates();
 
     private:

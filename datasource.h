@@ -43,8 +43,7 @@ class PLASMA_EXPORT DataSource : public QObject
     Q_OBJECT
 
     public:
-        typedef QHash<QString, DataSource*> Dict;
-        typedef QHash<QString, Dict> Grouping;
+        //typedef QHash<QString, DataEngine::SourceDict> Grouping;
 
         /**
          * Constructs a default DataSource, which has no name or data
