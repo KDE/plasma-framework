@@ -102,6 +102,7 @@ void Phase::animate(QGraphicsItem* item, Animation animation)
     }
 
     int frames = 0;
+    QTimeLine::CurveShape curveShape = QTimeLine::EaseInOutCurve;
     switch (animation) {
         case Appear:
             frames = d->animator->appearFrames();
@@ -123,6 +124,7 @@ void Phase::animate(QGraphicsItem* item, Animation animation)
 
     QTimeLine* timeLine = new QTimeLine(333, this);
     timeLine->setFrameRange(0, frames / 3.0);
+    timeLine->setCurveShape(curveShape);
 
     AnimationState state;
     state.item = item;
@@ -131,6 +133,7 @@ void Phase::animate(QGraphicsItem* item, Animation animation)
     d->theAnimated[item] = timeLine;
     connect(timeLine, SIGNAL(frameChanged(int)), this, SLOT(advanceFrame(int)));
     connect(timeLine, SIGNAL(finished()), this, SLOT(animationComplete()));
+    timeLine->start();
 }
 
 void Phase::advanceFrame(int frame)
@@ -138,12 +141,14 @@ void Phase::advanceFrame(int frame)
     QTimeLine* timeLine = dynamic_cast<QTimeLine*>(sender());
 
     if (!timeLine) {
+        kDebug() << "Phase::advanceFrame found no timeLine!" << endl;
         return;
     }
 
     QMap<QTimeLine*, AnimationState>::iterator it = d->animations.find(timeLine);
 
     if (it == d->animations.end()) {
+        kDebug() << "Phase::advanceFrame found no entry in animations!" << endl;
         return;
     }
 
