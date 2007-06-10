@@ -64,9 +64,9 @@ class DataEngine::Private
                 return 0;
             }
 
-            kDebug() << "DataEngine " << engine->objectName()
+/*            kDebug() << "DataEngine " << engine->objectName()
                      << ": could not find DataSource " << sourceName
-                     << ", creating" << endl;
+                     << ", creating" << endl;*/
             DataSource* s = new DataSource(engine);
             s->setObjectName(sourceName);
             sources.insert(sourceName, s);
@@ -137,10 +137,19 @@ void DataEngine::connectSource(const QString& source, QObject* visualization) co
     DataSource* s = d->source(source, false);
 
     if (!s) {
-        kDebug() << "requesting source " << source << endl;
-        d->dataSourceRequested(source);
-        s = d->source(source);
-        kDebug() << "and no we have " << s << endl;
+        // we didn't find a data source, so give the engine an opportunity to make one
+        if (d->dataSourceRequested(source)) {
+            s = d->source(source);
+            if (s) {
+                // now we have a source; since it was created on demand, assume
+                // it should be removed when not used
+                connect(s, SIGNAL(unused(QString)), this, SLOT(removeDataSource(QString)));
+            }
+        }
+    }
+
+    if (!s) {
+        return;
     }
 
     connect(s, SIGNAL(updated(QString,Plasma::DataEngine::Data)),
@@ -148,6 +157,18 @@ void DataEngine::connectSource(const QString& source, QObject* visualization) co
     QMetaObject::invokeMethod(visualization, SLOT(updated(QString,Plasma::DataEngine::Data)),
                               Q_ARG(QString, s->objectName()),
                               Q_ARG(Plasma::DataEngine::Data, s->data()));
+}
+
+void DataEngine::disconnectSource(const QString& source, QObject* visualization) const
+{
+    DataSource* s = d->source(source, false);
+
+    if (!s) {
+        return;
+    }
+
+    disconnect(s, SIGNAL(updated(QString,Plasma::DataEngine::Data)),
+               visualization, SLOT(updated(QString,Plasma::DataEngine::Data)));
 }
 
 void DataEngine::connectAllSources(QObject* visualization) const
@@ -238,6 +259,7 @@ Plasma::DataSource* DataEngine::createDataSource(const QString& source, const QS
 
 void DataEngine::removeDataSource(const QString& source)
 {
+    //kDebug() << "removing source " << source << endl;
     SourceDict::iterator it = d->sources.find(source);
     if (it != d->sources.end()) {
         emit dataSourceRemoved(it.key());

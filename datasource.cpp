@@ -18,13 +18,13 @@
 
 #include "datasource.h"
 
+#include <QAtomic>
 #include <QVariant>
 
 #include <KDebug>
 
 namespace Plasma
 {
-
 
 class DataSource::Private
 {
@@ -34,7 +34,8 @@ class DataSource::Private
         {}
 
         DataEngine::Data data;
-        bool dirty;
+        QAtomic connectCount;
+        bool dirty : 1;
 };
 
 DataSource::DataSource(QObject* parent)
@@ -64,6 +65,27 @@ void DataSource::checkForUpdate()
     if (d->dirty) {
         emit updated(objectName(), d->data);
         d->dirty = false;
+    }
+}
+
+void DataSource::connectNotify(const char *signal)
+{
+    if (QLatin1String(signal) == QMetaObject::normalizedSignature(SIGNAL(updated(QString, Plasma::DataEngine::Data))).constData()) {
+        d->connectCount.ref();
+    }
+}
+
+void DataSource::disconnectNotify(const char *signal)
+{
+    if (QLatin1String(signal) == QMetaObject::normalizedSignature(SIGNAL(updated(QString, Plasma::DataEngine::Data))).constData()) {
+        if (d->connectCount > 0) {
+            d->connectCount.deref();
+        }
+
+        if (d->connectCount < 1) {
+            // DO NOT CALL ANYTHING AFTER THIS LINE AS IT MAY GET DELETED!
+            emit unused(objectName());
+        }
     }
 }
 

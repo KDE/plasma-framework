@@ -80,6 +80,15 @@ class PLASMA_EXPORT DataSource : public QObject
          **/
         void updated(const QString& source, const Plasma::DataEngine::Data& data);
 
+        /**
+         * Emitted when this source becomes unused
+         **/
+        void unused(const QString& source);
+
+    protected:
+        void connectNotify(const char *signal);
+        void disconnectNotify(const char *signal);
+
     private:
         class Private;
         Private* const d;

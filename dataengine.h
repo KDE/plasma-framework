@@ -86,6 +86,14 @@ class PLASMA_EXPORT DataEngine : public QObject
         void connectSource(const QString& source, QObject* visualization) const;
 
         /**
+         * Disconnects a source to an object that was receiving data updates.
+         *
+         * @param source the name of the data source
+         * @param visualization the object to connect the data source to
+         **/
+        void disconnectSource(const QString& source, QObject* visualization) const;
+
+        /**
          * Connects all sources to an object for data updates. The object must
          * have a slot with the following signature:
          *
@@ -216,12 +224,6 @@ class PLASMA_EXPORT DataEngine : public QObject
                               const QString& domain = QString());*/
 
         /**
-         * Removes a data source.
-         * @param source the name of the data source to remove
-         **/
-        void removeDataSource(const QString& source);
-
-        /**
          * Removes all data sources
          **/
         void clearAllDataSources();
@@ -246,6 +248,12 @@ class PLASMA_EXPORT DataEngine : public QObject
          * If this method is not called, no updated(..) signals will be emitted!
          */
         void checkForUpdates();
+
+        /**
+         * Removes a data source.
+         * @param source the name of the data source to remove
+         **/
+        void removeDataSource(const QString& source);
 
     private:
         class Private;
