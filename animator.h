@@ -23,7 +23,9 @@
 #include <QRegion>
 #include <QStringList>
 
-#include <plasma_export.h>
+#include <KGenericFactory>
+
+#include <plasma/plasma_export.h>
 
 class QGraphicsItem;
 
@@ -54,5 +56,10 @@ public:
 };
 
 } // Plasma namespace
+
+#define K_EXPORT_PLASMA_ANIMATOR(libname, classname) \
+        K_EXPORT_COMPONENT_FACTORY(                \
+                        plasma_animator_##libname,   \
+                        KGenericFactory<classname>("plasma_animator_" #libname))
 
 #endif // multiple inclusion guard

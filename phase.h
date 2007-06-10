@@ -22,7 +22,7 @@
 #include <QImage>
 #include <QObject>
 
-#include <plasma_export.h>
+#include <plasma/plasma_export.h>
 
 class QGraphicsItem;
 
@@ -82,11 +82,5 @@ private:
 
 } // namespace Plasma
 
-#define K_EXPORT_PLASMA_PHASER(libname, classname) \
-        K_EXPORT_COMPONENT_FACTORY(                \
-                        plasma_animator_##libname,   \
-                        KGenericFactory<classname>("plasma_animator_" #libname))
-
 #endif
-
 
