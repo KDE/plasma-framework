@@ -36,9 +36,14 @@ int Animator::appearFrames()
     return 0;
 }
 
-void Animator::appear(int frame, QGraphicsItem* item)
+void Animator::appear(qreal frame, QGraphicsItem* item)
 {
     Q_UNUSED(frame)
+    Q_UNUSED(item)
+}
+
+void Animator::appearCompleted(QGraphicsItem* item)
+{
     Q_UNUSED(item)
 }
 
@@ -47,9 +52,14 @@ int Animator::disappearFrames()
     return 0;
 }
 
-void Animator::disappear(int frame, QGraphicsItem* item)
+void Animator::disappear(qreal frame, QGraphicsItem* item)
 {
     Q_UNUSED(frame)
+    Q_UNUSED(item)
+}
+
+void Animator::disappearCompleted(QGraphicsItem* item)
+{
     Q_UNUSED(item)
 }
 
@@ -58,9 +68,14 @@ int Animator::activateFrames()
     return 0;
 }
 
-void Animator::activate(int frame, QGraphicsItem* item)
+void Animator::activate(qreal frame, QGraphicsItem* item)
 {
     Q_UNUSED(frame)
+    Q_UNUSED(item)
+}
+
+void Animator::activateCompleted(QGraphicsItem* item)
+{
     Q_UNUSED(item)
 }
 
@@ -69,9 +84,15 @@ int Animator::frameAppearFrames()
     return 0;
 }
 
-void Animator::frameAppear(int frame, QGraphicsItem* item, const QRegion& drawable)
+void Animator::frameAppear(qreal frame, QGraphicsItem* item, const QRegion& drawable)
 {
     Q_UNUSED(frame)
+    Q_UNUSED(item)
+    Q_UNUSED(drawable)
+}
+
+void Animator::frameAppearCompleted(QGraphicsItem* item, const QRegion& drawable)
+{
     Q_UNUSED(item)
     Q_UNUSED(drawable)
 }

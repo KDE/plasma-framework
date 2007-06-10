@@ -41,16 +41,20 @@ public:
     ~Animator();
 
     virtual int appearFrames();
-    virtual void appear(int frame, QGraphicsItem* item);
+    virtual void appear(qreal frame, QGraphicsItem* item);
+    virtual void appearCompleted(QGraphicsItem* item);
 
     virtual int disappearFrames();
-    virtual void disappear(int frame, QGraphicsItem* item);
+    virtual void disappear(qreal frame, QGraphicsItem* item);
+    virtual void disappearCompleted(QGraphicsItem* item);
 
     virtual int frameAppearFrames();
-    virtual void frameAppear(int frame, QGraphicsItem* item, const QRegion& drawable);
+    virtual void frameAppear(qreal frame, QGraphicsItem* item, const QRegion& drawable);
+    virtual void frameAppearCompleted(QGraphicsItem* item, const QRegion& drawable);
 
     virtual int activateFrames();
-    virtual void activate(int frame, QGraphicsItem* item);
+    virtual void activate(qreal frame, QGraphicsItem* item);
+    virtual void activateCompleted(QGraphicsItem* item);
 
     virtual void renderBackground(QImage& background);
 };

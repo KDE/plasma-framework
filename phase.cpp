@@ -35,6 +35,7 @@ struct AnimationState
 {
     QGraphicsItem* item;
     Phase::Animation animation;
+    qreal frames;
 };
 
 class Phase::Private
@@ -122,18 +123,21 @@ void Phase::animate(QGraphicsItem* item, Animation animation)
         return;
     }
 
-    QTimeLine* timeLine = new QTimeLine(333, this);
-    timeLine->setFrameRange(0, frames / 3.0);
-    timeLine->setCurveShape(curveShape);
-
     AnimationState state;
     state.item = item;
     state.animation = animation;
+    state.frames = frames / 3;
+
+    QTimeLine* timeLine = new QTimeLine(333, this);
+    timeLine->setFrameRange(0, state.frames);
+    timeLine->setCurveShape(curveShape);
+
     d->animations[timeLine] = state;
     d->theAnimated[item] = timeLine;
     connect(timeLine, SIGNAL(frameChanged(int)), this, SLOT(advanceFrame(int)));
     connect(timeLine, SIGNAL(finished()), this, SLOT(animationComplete()));
     timeLine->start();
+    advanceFrame(0, timeLine);
 }
 
 void Phase::advanceFrame(int frame)
@@ -145,6 +149,11 @@ void Phase::advanceFrame(int frame)
         return;
     }
 
+    advanceFrame(frame, timeLine);
+}
+
+void Phase::advanceFrame(int frame, QTimeLine* timeLine)
+{
     QMap<QTimeLine*, AnimationState>::iterator it = d->animations.find(timeLine);
 
     if (it == d->animations.end()) {
@@ -156,7 +165,7 @@ void Phase::advanceFrame(int frame)
 
     switch (state.animation) {
         case Appear:
-            d->animator->appear(frame, state.item);
+            d->animator->appear(frame / state.frames, state.item);
             break;
         case Disappear:
             d->animator->disappear(frame, state.item);
@@ -184,7 +193,24 @@ void Phase::animationComplete()
         return;
     }
 
-    QMap<QGraphicsItem*, QTimeLine*>::iterator animIt = d->theAnimated.find(it.value().item);
+    AnimationState state = it.value();
+
+    switch (state.animation) {
+        case Appear:
+            d->animator->appearCompleted(state.item);
+            break;
+        case Disappear:
+            d->animator->disappearCompleted(state.item);
+            break;
+        case Activate:
+            d->animator->activateCompleted(state.item);
+            break;
+        case FrameAppear:
+            d->animator->frameAppearCompleted(state.item, QRegion()); //FIXME: what -is- the frame region?
+            break;
+    }
+
+    QMap<QGraphicsItem*, QTimeLine*>::iterator animIt = d->theAnimated.find(state.item);
 
     if (animIt != d->theAnimated.end()) {
         d->theAnimated.erase(animIt);

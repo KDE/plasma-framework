@@ -25,6 +25,7 @@
 #include <plasma/plasma_export.h>
 
 class QGraphicsItem;
+class QTimeLine;
 
 namespace Plasma
 {
@@ -62,6 +63,8 @@ public Q_SLOTS:
 
 protected Q_SLOTS:
     void appletDestroyed(QObject*);
+
+    void advanceFrame(int frame, QTimeLine* timeLine);
 
     /**
      * NEVER call this method directly, as it relies on sender()
