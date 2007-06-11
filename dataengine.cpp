@@ -83,7 +83,7 @@ class DataEngine::Private
         {
             while (sourceQueue.count() >= limit) {
                 DataSource* punted = sourceQueue.dequeue();
-                engine->removeDataSource(punted->objectName());
+                engine->removeSource(punted->objectName());
             }
         }
 
@@ -143,7 +143,7 @@ void DataEngine::connectSource(const QString& source, QObject* visualization) co
             if (s) {
                 // now we have a source; since it was created on demand, assume
                 // it should be removed when not used
-                connect(s, SIGNAL(unused(QString)), this, SLOT(removeDataSource(QString)));
+                connect(s, SIGNAL(unused(QString)), this, SLOT(removeSource(QString)));
             }
         }
     }
@@ -257,7 +257,7 @@ Plasma::DataSource* DataEngine::createDataSource(const QString& source, const QS
     }
 }*/
 
-void DataEngine::removeDataSource(const QString& source)
+void DataEngine::removeSource(const QString& source)
 {
     //kDebug() << "removing source " << source << endl;
     SourceDict::iterator it = d->sources.find(source);

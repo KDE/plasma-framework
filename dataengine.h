@@ -253,7 +253,7 @@ class PLASMA_EXPORT DataEngine : public QObject
          * Removes a data source.
          * @param source the name of the data source to remove
          **/
-        void removeDataSource(const QString& source);
+        void removeSource(const QString& source);
 
     private:
         class Private;
