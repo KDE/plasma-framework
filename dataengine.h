@@ -133,7 +133,7 @@ class PLASMA_EXPORT DataEngine : public QObject
         /**
          * Reference counting method. Used to determine if this DataEngine is 
          * used.
-         * @return true if the reference count is zero
+         * @return true if the reference count is non-zero
          **/
         bool isUsed() const;
 
