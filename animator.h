@@ -21,7 +21,6 @@
 
 #include <QObject>
 #include <QRegion>
-#include <QStringList>
 
 #include <KGenericFactory>
 

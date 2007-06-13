@@ -21,7 +21,6 @@
 #include <QEvent>
 #include <QList>
 #include <QSize>
-#include <QStringList>
 #include <QTimer>
 
 #include <KPluginInfo>
