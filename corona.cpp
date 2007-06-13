@@ -215,7 +215,8 @@ void Corona::addKaramba(const KUrl& path)
 void Corona::dragEnterEvent( QGraphicsSceneDragDropEvent *event)
 {
     kDebug() << "Corona::dragEnterEvent(QGraphicsSceneDragDropEvent* event)" << endl;
-    if (event->mimeData()->hasFormat("text/x-plasmoidservicename")) {
+    if (event->mimeData()->hasFormat("text/x-plasmoidservicename") ||
+        KUrl::List::canDecode(event->mimeData())) {
         event->acceptProposedAction();
         //TODO Create the applet, move to mouse position then send the 
         //     following event to lock it to the mouse
