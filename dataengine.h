@@ -66,10 +66,12 @@ class PLASMA_EXPORT DataEngine : public QObject
         virtual ~DataEngine();
 
         /**
-         * @return a list of all the data sources currently available via this
-         *         DataEngine
+         * @return a list of all the data sources available via this DataEngine
+         *         Whether these sources are currently available (which is what
+         *         the default implementation provides) or not is up to the
+         *         DataEngine to decide.
          **/
-        virtual QStringList dataSources() const;
+        virtual QStringList sources() const;
 
         /**
          * Connects a source to an object for data updates. The object must
@@ -158,13 +160,13 @@ class PLASMA_EXPORT DataEngine : public QObject
          * Emitted when a new data source is created
          * @param source the name of the new data source
          **/
-        void newDataSource(const QString& source);
+        void newSource(const QString& source);
 
         /**
          * Emitted when a data source is removed.
          * @param source the name of the data source that was removed
          **/
-        void dataSourceRemoved(const QString& source);
+        void sourceRemoved(const QString& source);
 
     protected:
         /**
@@ -182,7 +184,7 @@ class PLASMA_EXPORT DataEngine : public QObject
          *
          * @return true if a DataSource was set up, false otherwise
          */
-        virtual bool dataSourceRequested(const QString &name);
+        virtual bool sourceRequested(const QString &name);
 
         /**
          * Sets a value for a data source. If the source
@@ -226,7 +228,7 @@ class PLASMA_EXPORT DataEngine : public QObject
         /**
          * Removes all data sources
          **/
-        void clearAllDataSources();
+        void clearSources();
 
         /**
          * Sets whether or not this engine is valid, e.g. can be used.

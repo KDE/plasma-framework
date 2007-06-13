@@ -75,7 +75,7 @@ class DataEngine::Private
                 trimQueue();
                 sourceQueue.enqueue(s);
             }
-            emit engine->newDataSource(sourceName);
+            emit engine->newSource(sourceName);
             return s;
         }
 
@@ -95,10 +95,10 @@ class DataEngine::Private
             updateTimer->start(0);
         }
 
-        bool dataSourceRequested(const QString& source)
+        bool sourceRequested(const QString& source)
         {
             //get around const! =P
-            return engine->dataSourceRequested(source);
+            return engine->sourceRequested(source);
         }
 
         QAtomic ref;
@@ -127,7 +127,7 @@ DataEngine::~DataEngine()
     delete d;
 }
 
-QStringList DataEngine::dataSources() const
+QStringList DataEngine::sources() const
 {
     return d->sources.keys();
 }
@@ -138,7 +138,7 @@ void DataEngine::connectSource(const QString& source, QObject* visualization) co
 
     if (!s) {
         // we didn't find a data source, so give the engine an opportunity to make one
-        if (d->dataSourceRequested(source)) {
+        if (d->sourceRequested(source)) {
             s = d->source(source);
             if (s) {
                 // now we have a source; since it was created on demand, assume
@@ -200,7 +200,7 @@ void DataEngine::init()
     // start things in motion external to themselves before they can work
 }
 
-bool DataEngine::dataSourceRequested(const QString &name)
+bool DataEngine::sourceRequested(const QString &name)
 {
     Q_UNUSED(name)
     return false;
@@ -227,7 +227,7 @@ void DataEngine::addSource(DataSource* source)
     }
 
     d->sources.insert(source->objectName(), source);
-    emit newDataSource(source->objectName());
+    emit newSource(source->objectName());
 }
 
 void DataEngine::setSourceLimit(uint limit)
@@ -245,34 +245,22 @@ void DataEngine::setSourceLimit(uint limit)
     }
 }
 
-/*
-Plasma::DataSource* DataEngine::createDataSource(const QString& source, const QString& domain)
-{
-    Q_UNUSED(domain)
-    //TODO: add support for domains of sources
-    
-    if (d->source(source)) {
-        kDebug() << "DataEngine " << objectName() << ": source "  << source << " already exists " << endl;
-        return s
-    }
-}*/
-
 void DataEngine::removeSource(const QString& source)
 {
     //kDebug() << "removing source " << source << endl;
     SourceDict::iterator it = d->sources.find(source);
     if (it != d->sources.end()) {
-        emit dataSourceRemoved(it.key());
+        emit sourceRemoved(it.key());
         d->sources.erase(it);
     }
 }
 
-void DataEngine::clearAllDataSources()
+void DataEngine::clearSources()
 {
     QMutableHashIterator<QString, Plasma::DataSource*> it(d->sources);
     while (it.hasNext()) {
         it.next();
-        emit dataSourceRemoved(it.key());
+        emit sourceRemoved(it.key());
         delete it.value();
         it.remove();
     }
