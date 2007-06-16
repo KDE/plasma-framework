@@ -257,6 +257,7 @@ void Corona::dropEvent(QGraphicsSceneDragDropEvent *event)
         foreach (const KUrl& url, urls) {
             Plasma::Icon *icon = new Plasma::Icon(0);
             icon->setIcon(KMimeType::iconNameForUrl(url));
+            icon->setUrl(url);
             icon->setSize(128,128);
             //TODO: associate the url with the icon, use the Button plasmoid here
             icon->setPos(event->scenePos()-QPoint(icon->boundingRect().width()/2,icon->boundingRect().height()/2));
@@ -291,7 +292,7 @@ void Corona::contextMenuEvent(QGraphicsSceneContextMenuEvent *contextMenuEvent)
             return;
         }
 
-        desktopMenu.setTitle("Corona");
+        desktopMenu.addTitle("Plasma");
         desktopMenu.addAction(d->engineExplorerAction);
     } else {
         desktopMenu.addTitle(applet->name());

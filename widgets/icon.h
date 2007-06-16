@@ -55,6 +55,8 @@ class PLASMA_EXPORT Icon : public QObject,
         void setIcon(const QString& icon);
         void setIcon(const QIcon& icon);
 
+        void setUrl(const KUrl& url);
+
         virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
         QRectF boundingRect() const;
 
@@ -80,6 +82,7 @@ class PLASMA_EXPORT Icon : public QObject,
      Q_SIGNALS:
          void pressed(bool down);
          void clicked();
+         void openUrl();
 
     protected:
         bool isDown();
@@ -87,6 +90,9 @@ class PLASMA_EXPORT Icon : public QObject,
         void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
         void hoverEnterEvent (QGraphicsSceneHoverEvent * event);
         void hoverLeaveEvent (QGraphicsSceneHoverEvent * event);
+
+    private Q_SLOTS:
+        void animateBubbles(int step);
 
     private:
         class Private;
