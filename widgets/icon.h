@@ -26,6 +26,8 @@
 #include <plasma/plasma_export.h>
 #include <plasma/widgets/layoutitem.h>
 
+class KUrl;
+
 //TODO
 //Please Document this class
 

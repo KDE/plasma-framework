@@ -20,7 +20,7 @@
 #define CORONA_H
 
 #include <QGraphicsScene>
-#include <QMessageBox>
+
 #include <plasma/applet.h>
 #include <plasma/plasma.h>
 #include <plasma/plasma_export.h>

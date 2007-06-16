@@ -22,9 +22,9 @@
 #include <QtGui/QGraphicsItemGroup>
 #include <QtGui/QWidget>
 
-#include <KPluginInfo>
-#include <KSharedConfig>
-#include <KGenericFactory>
+#include <kplugininfo.h>
+#include <ksharedconfig.h>
+#include <kgenericfactory.h>
 
 #include <plasma/plasma.h>
 

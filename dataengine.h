@@ -24,7 +24,7 @@
 #include <QtCore/QObject>
 #include <QtCore/QStringList>
 
-#include <KGenericFactory>
+#include <kgenericfactory.h>
 
 #include <plasma/plasma_export.h>
 
