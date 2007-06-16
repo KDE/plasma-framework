@@ -140,7 +140,7 @@ class PLASMA_EXPORT Applet : public QObject, public QGraphicsItemGroup
          * play with the plasmoid options. Called when the user selects the configure entry
          * from the contextual menu.
          */
-        virtual void configureDialog(){}; //default implementation is empty
+        virtual void configureDialog(){} //default implementation is empty
 
         /**
          * Attempts to load an applet, returning a pointer to the applet if
