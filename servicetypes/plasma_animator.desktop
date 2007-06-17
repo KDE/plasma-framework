@@ -4,7 +4,9 @@ Type=ServiceType
 X-KDE-ServiceType=Plasma/Animator
 
 Comment=Plasma Animation Engine
+Comment[csb]=Mòtór animacëji plazmë
 Comment[de]=Plasma Animations-Treiber
+Comment[es]=Motor de animaciones de Plasma
 Comment[nds]=Animeerkarn Plasma
 Comment[nl]=Plasma animatie-engine
 Comment[zh_TW]=Plasma 動畫引擎
