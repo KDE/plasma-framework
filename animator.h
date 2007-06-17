@@ -19,10 +19,10 @@
 #ifndef ANIMATOR_H
 #define ANIMATOR_H
 
-#include <QObject>
-#include <QRegion>
+#include <QtCore/QObject>
+#include <QtGui/QRegion>
 
-#include <KGenericFactory>
+#include <kgenericfactory.h>
 
 #include <plasma/plasma_export.h>
 
