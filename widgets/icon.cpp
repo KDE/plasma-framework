@@ -23,7 +23,7 @@
 #include <QGraphicsSceneMouseEvent>
 #include <QGraphicsView>
 
-// #define PROVE_IT_CAN_BE_DONE
+//#define PROVE_IT_CAN_BE_DONE
 
 #ifdef PROVE_IT_CAN_BE_DONE
 #include <private/qwindowsurface_p.h>
@@ -78,7 +78,6 @@ class Icon::Private
                 svgElements |= SvgForegroundPressed;
             }
             stepMenu = 0;
-            timeline = new QTimeLine;
             button1Pressed = false;
             button1Hovered = false;
         }
@@ -104,7 +103,7 @@ class Icon::Private
         QSizeF size;
         QSizeF iconSize;
         QIcon icon;
-        QTimeLine *timeline;
+        QTimeLine timeline;
         ButtonState state;
         Svg svg;
         int svgElements;
@@ -123,7 +122,10 @@ Icon::Icon(QGraphicsItem *parent)
     setEnabled(true);
     setFlags(ItemIsMovable);
     setPos(QPointF(0.0,0.0));
-    d->timeline->setDuration(500);
+    connect(&d->timeline, SIGNAL(frameChanged(int)), this, SLOT(animateBubbles(int)));
+    d->timeline.setCurveShape(QTimeLine::EaseInCurve);
+    d->timeline.setDuration(200);
+    d->timeline.setFrameRange(0, 5);
 }
 
 Icon::~Icon()
@@ -142,24 +144,23 @@ void Icon::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWid
     Q_UNUSED(widget)
 
 #ifdef PROVE_IT_CAN_BE_DONE
-//     if (d->state == Private::HoverState && scene()) {
-//         QList<QGraphicsView*> views = scene()->views();
-//         if (views.count() > 0) {
-//             QPixmap* pix = static_cast<QPixmap*>(views[0]->windowSurface()->paintDevice());
-//             QImage image(boundingRect().size().toSize(), QImage::Format_ARGB32_Premultiplied);
-//             {
-//                 QPainter p(&image);
-//                 p.drawPixmap(image.rect(), *pix, sceneBoundingRect());
-//             }
-//             expblur<16,7>(image, 8);
-//             painter->save();
-//             painter->drawImage(0, 0, image);
-//             painter->restore();
-//         }
-//     }
+     if (d->state == Private::HoverState && scene()) {
+         QList<QGraphicsView*> views = scene()->views();
+         if (views.count() > 0) {
+             QPixmap* pix = static_cast<QPixmap*>(views[0]->windowSurface()->paintDevice());
+             QImage image(boundingRect().size().toSize(), QImage::Format_ARGB32_Premultiplied);
+             {
+                 QPainter p(&image);
+                 p.drawPixmap(image.rect(), *pix, sceneBoundingRect());
+             }
+             expblur<16,7>(image, 8);
+             painter->save();
+             painter->drawImage(0, 0, image);
+             painter->restore();
+         }
+     }
 #endif
 
-    
     QString element;
     if (d->svgElements & Private::SvgBackground) {
         element = "background";
@@ -167,7 +168,6 @@ void Icon::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWid
 
     switch (d->state) {
         case Private::NoState:
-            element = "background";
             break;
         case Private::HoverState:
             if (d->svgElements & Private::SvgBackgroundHover) {
@@ -219,7 +219,6 @@ void Icon::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWid
 
     switch (d->state) {
         case Private::NoState:
-            element = "foreground";
             break;
         case Private::HoverState:
             if (d->svgElements & Private::SvgForegroundHover) {
@@ -244,19 +243,16 @@ void Icon::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWid
     // Draw top-left button
     QColor colorButton1;
     if (d->button1Hovered) {
-//         colorButton1 = QColor(0, 49, 110); //Oxygen color
         element = "button1-hover";
     } else if (d->button1Pressed) {
-//         colorButton1 = QColor(29, 10, 85); //Oxygen color
         element = "button1-pressed";
     } else {
-//         colorButton1 = QColor(0, 67, 138); //Oxygen color
         element = "button1";
     }
 
     KIcon exec("exec");
     painter->setRenderHint(QPainter::Antialiasing);
-    painter->setOpacity(d->stepMenu*0.04);
+    painter->setOpacity(d->stepMenu*0.2);
 //     painter->setBrush(colorButton1);
     painter->setPen(Qt::NoPen);
 
@@ -388,33 +384,20 @@ void Icon::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
         d->button1Hovered = false;
     }
 
-    if (d->timeline->state() == QTimeLine::Running) {
-        d->timeline->setPaused(true);
-    }
-    d->timeline->setFrameRange(0, 25);
-    d->timeline->setDirection(QTimeLine::Forward);
-    connect(d->timeline, SIGNAL(frameChanged(int)), this, SLOT(animateBubbles(int)));
-
+    d->timeline.setDirection(QTimeLine::Forward);
     d->state = Private::HoverState;
     QGraphicsItem::hoverEnterEvent(event);
-    d->timeline->start();
+    d->timeline.start();
 }
 
 void Icon::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 {
-    if (d->timeline->state() == QTimeLine::Running) {
-        d->timeline->setPaused(true);
-    }
-
-    d->timeline->setFrameRange(0, 25);
-    d->timeline->setDirection(QTimeLine::Backward);
-
-    connect(d->timeline, SIGNAL(frameChanged(int)), this, SLOT(animateBubbles(int)));
+    d->timeline.setDirection(QTimeLine::Backward);
 
     d->state = Private::HoverState;
     QGraphicsItem::hoverEnterEvent(event);
 
-    d->timeline->start();
+    d->timeline.start();
     d->state = Private::NoState;
     QGraphicsItem::hoverLeaveEvent(event);
 }
