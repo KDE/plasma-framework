@@ -19,7 +19,8 @@
 
 #ifndef PACKAGER_H
 #define PACKAGER_H
-#include <kdemacros.h>
+
+#include <plasma_export.h>
 
 class KTemporaryFile;
 
@@ -28,7 +29,7 @@ namespace Plasma
 class PackageMetadata;
 class PackagerPrivate;
 
-class KDE_EXPORT Packager
+class PLASMA_EXPORT Packager
 {
 public:
     Packager(PackageMetadata *metadata);

@@ -22,7 +22,7 @@
 
 #include <QStringList>
 
-#include <kdemacros.h>
+#include <plasma_export.h>
 
 namespace Plasma
 {
@@ -57,7 +57,7 @@ namespace Plasma
  * Either way, PackageStructure creates a sort of "contract" between the packager and
  * the application which is also self-documenting.
  **/
-class KDE_EXPORT PackageStructure
+class PLASMA_EXPORT PackageStructure
 {
 public:
     /**

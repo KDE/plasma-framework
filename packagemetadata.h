@@ -20,13 +20,14 @@
 #ifndef PACKAGEMETADATA_H
 #define PACKAGEMETADATA_H
 
-#include <kdemacros.h>
 #include <QString>
+
+#include <plasma_export.h>
 
 namespace Plasma
 {
 
-class KDE_EXPORT PackageMetadata
+class PLASMA_EXPORT PackageMetadata
 {
 public:
     /**
