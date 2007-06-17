@@ -9,6 +9,7 @@ install(FILES
     widgets/toolbox-button.svg
     widgets/plot-background.svg
     widgets/iconbutton.svg
+    widgets/wallpaper.svg
     DESTINATION ${DATA_INSTALL_DIR}/desktoptheme/default/widgets/)
 
 install(FILES
