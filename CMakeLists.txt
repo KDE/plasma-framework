@@ -2,7 +2,15 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_SOURCE_DIR}/workspace/li
 
 ########### next target ###############
 
+set(plasmagik_SRCS
+    packagemetadata.cpp
+    packager.cpp
+    packagestructure.cpp
+    package.cpp
+    )
+
 set(plasma_LIB_SRCS
+    ${plasmagik_SRCS}
     abstractrunner.cpp
     animator.cpp
     applet.cpp
@@ -27,6 +35,13 @@ set(plasma_LIB_SRCS
     widgets/vboxlayout.cpp
    )
 
+set(plasmagik_HEADERS
+    packagemetadata.h
+    packager.h
+    packagestructure.h
+    package.h
+    )
+
 kde4_automoc(${plasma_LIB_SRCS})
 
 kde4_add_library(plasma SHARED ${plasma_LIB_SRCS})
@@ -38,6 +53,8 @@ install(TARGETS plasma DESTINATION ${LIB_INSTALL_DIR})
 
 
 ########### install files ###############
+
+install(FILES ${plasmagik_HEADERS} DESTINATION ${INCLUDE_INSTALL_DIR}/plasma/)
 
 install(FILES
     abstractrunner.h
