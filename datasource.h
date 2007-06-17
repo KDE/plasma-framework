@@ -63,7 +63,9 @@ class PLASMA_EXPORT DataSource : public QObject
          * is done by the engine. This allows for batching updates.
          *
          * @param key a string used as the key for the data
-         * @param value a QVariant holding the actual data
+         * @param value a QVariant holding the actual data. If a null or invalid
+         *              QVariant is passed in and the key currently exists in the
+         *              data, then the data entry is removed
          **/
         void setData(const QString& key, const QVariant& value);
 

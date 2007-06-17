@@ -206,6 +206,14 @@ class PLASMA_EXPORT DataEngine : public QObject
         void setData(const QString& source, const QString& key, const QVariant& value);
 
         /**
+         * Removes a data entry from a source
+         *
+         * @param source the name of the data source
+         * @param key the data entry to remove
+         **/
+        void removeData(const QString& source, const QString& key);
+
+        /**
          * Adds an already constructed data source. The DataEngine takes
          * ownership of the DataSource object.
          * @param source the DataSource to add to the DataEngine

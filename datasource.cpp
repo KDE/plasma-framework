@@ -56,7 +56,16 @@ const DataEngine::Data DataSource::data() const
 
 void DataSource::setData(const QString& key, const QVariant& value)
 {
-    d->data[key] = value;
+    if (value.isNull() || !value.isValid()) {
+        if (!d->data.contains(key)) {
+            return;
+        }
+
+        d->data.remove(key);
+    } else {
+        d->data[key] = value;
+    }
+
     d->dirty = true;
 }
 

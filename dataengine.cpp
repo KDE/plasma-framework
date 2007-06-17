@@ -218,6 +218,15 @@ void DataEngine::setData(const QString& source, const QString& key, const QVaria
     d->queueUpdate();
 }
 
+void DataEngine::removeData(const QString& source, const QString& key)
+{
+    DataSource* s = d->source(source, false);
+    if (s) {
+        s->setData(key, QVariant());
+        d->queueUpdate();
+    }
+}
+
 void DataEngine::addSource(DataSource* source)
 {
     SourceDict::const_iterator it = d->sources.find(source->objectName());
