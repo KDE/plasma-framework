@@ -17,6 +17,13 @@
 *   Boston, MA 02110-1301, USA.                                               *
 *******************************************************************************/
 
+#ifndef PLASMA_PACKAGE_H
+#define PLASMA_PACKAGE_H
+
+#include <QtCore/QStringList>
+
+#include <plasma/plasma_export.h>
+
 namespace Plasma
 {
 
@@ -26,7 +33,7 @@ namespace Plasma
 
 class PackageStructure;
 
-class Package
+class PLASMA_EXPORT Package
 {
     public:
         /**
@@ -92,3 +99,6 @@ class Package
 };
 
 } // Namespace
+
+#endif
+
