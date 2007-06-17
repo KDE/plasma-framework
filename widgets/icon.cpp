@@ -238,27 +238,28 @@ void Icon::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWid
     if (!element.isEmpty()) {
         //kDebug() << "painting " << element << endl;
         d->svg.paint(painter, 0, 0, element);
+        element.clear();
     }
 
     // Draw top-left button
-    QColor colorButton1;
-    if (d->button1Hovered) {
-        element = "button1-hover";
-    } else if (d->button1Pressed) {
-        element = "button1-pressed";
-    } else {
-        element = "button1";
+    if (d->state != Private::NoState) {
+        if (d->button1Pressed) {
+            element = "button1-hover";
+        } else if (d->button1Hovered) {
+            element = "button1-pressed";
+        } else {
+            element = "button1";
+        }
     }
 
     KIcon exec("exec");
     painter->setRenderHint(QPainter::Antialiasing);
     painter->setOpacity(d->stepMenu*0.2);
-//     painter->setBrush(colorButton1);
     painter->setPen(Qt::NoPen);
 
     if (!element.isEmpty()) {
-        //kDebug() << "painting " << element << endl;
         d->svg.paint(painter, QRect(6, 6, 32, 32), element);
+//        painter->drawPixmap(6, 6, Phase::self()->paintElement(d->button1Id, this));
     }
     painter->drawPixmap(11, 11, exec.pixmap(22,22));
 }
@@ -335,12 +336,8 @@ bool Icon::isDown()
 void Icon::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     QRectF button1(6, 6, 32, 32); // The top-left circle
-    if (button1.contains(event->pos())) {
-        if (d->url.isValid()) {
-            KRun::runUrl(d->url, KMimeType::findByUrl(d->url)->name(), 0);
-        }
-        d->button1Pressed = true;
-    } else {
+    d->button1Pressed = button1.contains(event->pos());
+    if (!d->button1Pressed) {
         d->state = Private::PressedState;
         QGraphicsItem::mousePressEvent(event);
         update();
@@ -355,6 +352,14 @@ void Icon::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 
     if (inside) {
         d->state = Private::HoverState;
+
+        QRectF button1(6, 6, 32, 32); // The top-left circle
+        d->button1Hovered = button1.contains(event->pos());
+        if (d->button1Hovered &&
+            d->button1Pressed && d->url.isValid()) {
+            KRun::runUrl(d->url, KMimeType::findByUrl(d->url)->name(), 0);
+            wasClicked == false;
+        }
     } else {
         d->state = Private::NoState;
     }
@@ -363,13 +368,8 @@ void Icon::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
         emit pressed(false);
         emit clicked();
     }
+
     d->button1Pressed = false;
-    QRectF button1(6, 6, 32, 32); // The top-left circle
-    if (button1.contains(event->pos())) {
-       d->button1Hovered = true;
-    } else {
-       d->button1Hovered = false;
-    }
     QGraphicsItem::mouseReleaseEvent(event);
     update();
 }
@@ -378,12 +378,9 @@ void Icon::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 {
     d->button1Pressed = false;
     QRectF button1(6, 6, 32, 32); // The top-left circle
-    if (button1.contains(event->pos())) {
-        d->button1Hovered = true;
-    } else {
-        d->button1Hovered = false;
-    }
+    d->button1Hovered = button1.contains(event->pos());
 
+    //Phase::self()->elementAppears(this, button1);
     d->timeline.setDirection(QTimeLine::Forward);
     d->state = Private::HoverState;
     QGraphicsItem::hoverEnterEvent(event);
@@ -393,13 +390,26 @@ void Icon::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 void Icon::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 {
     d->timeline.setDirection(QTimeLine::Backward);
-
-    d->state = Private::HoverState;
-    QGraphicsItem::hoverEnterEvent(event);
+    //Phase::self()->elementDisappears(this, button1);
 
     d->timeline.start();
     d->state = Private::NoState;
+    d->button1Pressed = false;
+    d->button1Hovered = false;
     QGraphicsItem::hoverLeaveEvent(event);
+}
+
+void Icon::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
+{
+    if (d->button1Pressed) {
+        d->button1Pressed = false;
+    }
+
+    if (d->state == Private::PressedState) {
+        d->state == Private::HoverState;
+    }
+
+    QGraphicsItem::mouseMoveEvent(event);
 }
 
 QSizeF Icon::sizeHint() const

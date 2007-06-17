@@ -90,8 +90,9 @@ class PLASMA_EXPORT Icon : public QObject,
         bool isDown();
         void mousePressEvent(QGraphicsSceneMouseEvent *event);
         void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
-        void hoverEnterEvent (QGraphicsSceneHoverEvent * event);
-        void hoverLeaveEvent (QGraphicsSceneHoverEvent * event);
+        void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
+        void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
+        void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
 
     private Q_SLOTS:
         void animateBubbles(int step);
