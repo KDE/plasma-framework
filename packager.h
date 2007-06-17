@@ -20,7 +20,7 @@
 #ifndef PACKAGER_H
 #define PACKAGER_H
 
-#include <plasma_export.h>
+#include <plasma/plasma_export.h>
 
 class KTemporaryFile;
 
