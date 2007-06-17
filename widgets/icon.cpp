@@ -358,7 +358,7 @@ void Icon::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
         if (d->button1Hovered &&
             d->button1Pressed && d->url.isValid()) {
             KRun::runUrl(d->url, KMimeType::findByUrl(d->url)->name(), 0);
-            wasClicked == false;
+            wasClicked = false;
         }
     } else {
         d->state = Private::NoState;
@@ -406,7 +406,7 @@ void Icon::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     }
 
     if (d->state == Private::PressedState) {
-        d->state == Private::HoverState;
+        d->state = Private::HoverState;
     }
 
     QGraphicsItem::mouseMoveEvent(event);
