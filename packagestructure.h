@@ -38,7 +38,7 @@ namespace Plasma
  @code
     PackageStructure structure;
 
-    structure.addDirectoryDefinition("images", "pics/", i18n("Images");
+    structure.addDirectoryDefinition("images", "pics/", i18n("Images"));
     QStringList mimetypes;
     mimetypes << "image/svg" << "image/png" << "image/jpeg";
     structure.setMimetypes("images", mimetypes);
@@ -118,6 +118,7 @@ public:
      * or addFileDefinition.
      *
      * @param path the path of the entry within the package
+     * @param required true if this entry is required, false if not
      */
     void setRequired(const char* key, bool required);
 
@@ -127,11 +128,21 @@ public:
     bool required(const char* key);
 
     /**
+     * Defines the default mimetypes for any definitions that do not have
+     * associated mimetypes. Handy for packages with only one or predominantly
+     * one file type.
+     *
+     * @param mimetypes a list of mimetypes
+     **/
+    void setDefaultMimetypes(QStringList mimetypes);
+
+    /**
      * Define mimetypes for a given part of the structure
      * The path must already have been added using addDirectoryDefinition
      * or addFileDefinition.
      * 
      * @param path the path of the entry within the package
+     * @param mimetypes a list of mimetypes
      **/
     void setMimetypes(const char* key, QStringList mimetypes);
 

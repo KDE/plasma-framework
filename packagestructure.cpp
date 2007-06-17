@@ -45,6 +45,7 @@ class PackageStructure::Private
     public:
         QString type;
         QHash<const char*, ContentStructure> contents;
+        QStringList mimetypes;
 };
 
 PackageStructure::PackageStructure(const QString &type)
@@ -164,6 +165,11 @@ bool PackageStructure::required(const char* key)
     return it.value().required;
 }
 
+void PackageStructure::setDefaultMimetypes(QStringList mimetypes)
+{
+    d->mimetypes = mimetypes;
+}
+
 void PackageStructure::setMimetypes(const char* key, QStringList mimetypes)
 {
     QHash<const char*, ContentStructure>::iterator it = d->contents.find(key);
@@ -179,6 +185,10 @@ QStringList PackageStructure::mimetypes(const char* key)
     QHash<const char*, ContentStructure>::const_iterator it = d->contents.find(key);
     if (it == d->contents.constEnd()) {
         return QStringList();
+    }
+
+    if (it.value().mimetypes.isEmpty()) {
+        return d->mimetypes;
     }
 
     return it.value().mimetypes;
