@@ -52,14 +52,12 @@ public:
         : formFactor(Planar),
           location(Floating),
           layout(0),
-          engineExplorerAction(0),
-          phase(new Phase)
+          engineExplorerAction(0)
     {
     }
 
     ~Private()
     {
-        delete phase;
         delete layout;
         qDeleteAll(applets);
     }
@@ -70,7 +68,6 @@ public:
     Location location;
     Layout* layout;
     QAction *engineExplorerAction;
-    Phase* phase;
 };
 
 Corona::Corona(QObject * parent)
@@ -195,7 +192,7 @@ void Corona::addPlasmoid(const QString& name)
         d->applets << applet;
         connect(applet, SIGNAL(destroyed(QObject*)),
                 this, SLOT(appletDestroyed(QObject*)));
-        d->phase->animate(applet, Phase::Appear);
+        Phase::self()->animate(applet, Phase::Appear);
     } else {
         kDebug() << "Plasmoid " << name << " could not be loaded." << endl;
     }
@@ -206,7 +203,7 @@ void Corona::addKaramba(const KUrl& path)
     QGraphicsItemGroup* karamba = KarambaManager::loadKaramba(path, this);
     if (karamba) {
         addItem(karamba);
-        d->phase->animate(karamba, Phase::Appear);
+        Phase::self()->animate(karamba, Phase::Appear);
     } else {
         kDebug() << "Karamba " << path << " could not be loaded." << endl;
     }
@@ -260,7 +257,8 @@ void Corona::dropEvent(QGraphicsSceneDragDropEvent *event)
             icon->setUrl(url);
             icon->setSize(128,128);
             //TODO: associate the url with the icon, use the Button plasmoid here
-            icon->setPos(event->scenePos()-QPoint(icon->boundingRect().width()/2,icon->boundingRect().height()/2));
+            icon->setPos(event->scenePos() - QPoint(icon->boundingRect().width()/2,
+                         icon->boundingRect().height()/2));
             icon->show();
             addItem(icon);
         }

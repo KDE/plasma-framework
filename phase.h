@@ -51,6 +51,11 @@ public:
         RenderBackground = 0 /*<< Render the background of an item */
     };
 
+    /**
+     * Singleton accessor
+     **/
+    static Phase* self();
+
     explicit Phase(QObject * parent = 0);
     ~Phase();
 

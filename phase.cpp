@@ -62,6 +62,20 @@ class Phase::Private
         QMap<QTimeLine*, AnimationState> animations;
 };
 
+class PhaseSingleton
+{
+    public:
+        Phase self;
+};
+
+K_GLOBAL_STATIC( PhaseSingleton, privateSelf )
+
+Phase* Phase::self()
+{
+    return &privateSelf->self;
+}
+
+
 Phase::Phase(QObject * parent)
     : QObject(parent),
       d(new Private)
