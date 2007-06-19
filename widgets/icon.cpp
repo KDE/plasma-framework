@@ -101,6 +101,7 @@ class Icon::Private
             button1Pressed = false;
             button1Hovered = false;
         }
+
         ~Private() {}
         enum ButtonState
         {
@@ -214,8 +215,7 @@ void Icon::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWid
         qreal ih = d->iconSize.height();
         qreal deltaX = (d->size.width() - iw) / 2;
         qreal deltaY = (d->size.height() - ih) / 2 ;
-        if(d->state == Private::PressedState)
-        {
+        if (d->state == Private::PressedState) {
             painter->save();
             painter->setRenderHint(QPainter::SmoothPixmapTransform);
             painter->scale(0.95, 0.95);
@@ -224,9 +224,7 @@ void Icon::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWid
             painter->drawPixmap((int)(deltaX + (iw * .025)), (int)(deltaY + (ih * .025)),
                                 d->icon.pixmap(d->iconSize.toSize()));
             painter->restore();
-        }
-        else
-        {
+        } else {
             painter->drawPixmap((int)deltaX, (int)deltaY, d->icon.pixmap(d->iconSize.toSize()));
         }
     }
@@ -263,7 +261,6 @@ void Icon::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWid
 
     // Draw top-left button
     if (d->button1AnimId) {
-//        painter->drawPixmap(6, 6, buttonPixmap());
         painter->drawPixmap(6, 6, Phase::self()->animationResult(d->button1AnimId));
     }
 }
