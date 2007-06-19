@@ -174,6 +174,8 @@ class PLASMA_EXPORT DataEngine : public QObject
          * method is called the DataEngine is fully constructed and ready to be
          * used. This method should be reimplemented by DataEngine subclasses
          * which have the need to perform a startup routine.
+         *
+         * NOTE: Due to a bug in the DataEngine base implementation this method is never called.
          **/
         virtual void init();
 

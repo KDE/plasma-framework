@@ -118,6 +118,7 @@ DataEngine::DataEngine(QObject* parent)
 {
     connect(d->updateTimer, SIGNAL(timeout()), this, SLOT(checkForUpdates()));
     //FIXME: we should delay this call; to when is the question.
+    //Update DataEngine::init() api docu when fixed
     init();
 }
 
