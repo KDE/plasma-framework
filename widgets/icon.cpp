@@ -425,6 +425,10 @@ void Icon::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
     QRectF button1(6, 6, 32, 32); // The top-left circle
     d->button1Hovered = button1.contains(event->pos());
 
+    if (d->button1AnimId) {
+        Phase::self()->stopElementAnimation(d->button1AnimId);
+    }
+
     d->button1AnimId = Phase::self()->startElementAnimation(this, Phase::ElementAppear);
     Phase::self()->setAnimationPixmap(d->button1AnimId, buttonPixmap());
     QGraphicsItem::hoverEnterEvent(event);
@@ -434,7 +438,11 @@ void Icon::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 {
     d->button1Pressed = false;
     d->button1Hovered = false;
-    Phase::self()->stopElementAnimation(d->button1AnimId);
+
+    if (d->button1AnimId) {
+        Phase::self()->stopElementAnimation(d->button1AnimId);
+    }
+
     d->button1AnimId = Phase::self()->startElementAnimation(this, Phase::ElementDisappear);
     Phase::self()->setAnimationPixmap(d->button1AnimId, buttonPixmap());
 
