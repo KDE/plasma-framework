@@ -59,7 +59,7 @@ QPixmap Animator::elementDisappear(qreal frame, const QPixmap& pixmap)
     QPixmap alpha(pixmap.size());
     {
         QPainter painter(&alpha);
-        painter.fillRect(alpha.rect(), Qt::transparent);
+        painter.fillRect(alpha.rect(), Qt::black);
     }
     QPixmap pix(pixmap.size());
     pix.setAlphaChannel(alpha);
