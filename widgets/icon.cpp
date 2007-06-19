@@ -18,7 +18,6 @@
 
 #include "icon.h"
 
-#include <QTimeLine>
 #include <QPainter>
 #include <QGraphicsSceneMouseEvent>
 #include <QGraphicsView>
@@ -36,6 +35,7 @@
 #include <KMimeType>
 #include <KDebug>
 
+#include "phase.h"
 #include "svg.h"
 #include "effects/blur.cpp"
 
@@ -49,11 +49,19 @@ class Icon::Private
             : size(128*1.1, 128*1.1),
               iconSize(128, 128),
               state(Private::NoState),
-              svg("widgets/iconbutton")
+              svg("widgets/iconbutton"),
+              svgElements(0),
+              button1AnimId(0)
         {
             svg.setContentType(Plasma::Svg::ImageSet);
             svg.resize(size);
 
+            //TODO: recheck when svg changes
+            checkSvgElements();
+        }
+
+        void checkSvgElements()
+        {
             if (svg.elementExists("background")) {
                 svgElements |= SvgBackground;
             }
@@ -77,7 +85,19 @@ class Icon::Private
             if (svg.elementExists("foreground-pressed")) {
                 svgElements |= SvgForegroundPressed;
             }
-            stepMenu = 0;
+
+            if (svg.elementExists("minibutton")) {
+                svgElements |= SvgMinibutton;
+            }
+
+            if (svg.elementExists("minibutton-hover")) {
+                svgElements |= SvgMinibuttonHover;
+            }
+
+            if (svg.elementExists("minibutton-pressed")) {
+                svgElements |= SvgMinibuttonPressed;
+            }
+
             button1Pressed = false;
             button1Hovered = false;
         }
@@ -96,20 +116,24 @@ class Icon::Private
                SvgBackgroundPressed = 4,
                SvgForeground = 8,
                SvgForegroundHover = 16,
-               SvgForegroundPressed = 32 };
+               SvgForegroundPressed = 32,
+               SvgMinibutton = 64,
+               SvgMinibuttonHover = 256,
+               SvgMinibuttonPressed = 128};
 
         KUrl url;
         QString text;
         QSizeF size;
         QSizeF iconSize;
         QIcon icon;
-        QTimeLine timeline;
         ButtonState state;
         Svg svg;
         int svgElements;
-        int stepMenu;
+        //TODO: create a proper state int for this, as we do with ButtonState
+        //      for each possible button
         bool button1Hovered;
         bool button1Pressed;
+        Phase::AnimId button1AnimId;
 };
 
 Icon::Icon(QGraphicsItem *parent)
@@ -122,10 +146,6 @@ Icon::Icon(QGraphicsItem *parent)
     setEnabled(true);
     setFlags(ItemIsMovable);
     setPos(QPointF(0.0,0.0));
-    connect(&d->timeline, SIGNAL(frameChanged(int)), this, SLOT(animateBubbles(int)));
-    d->timeline.setCurveShape(QTimeLine::EaseInCurve);
-    d->timeline.setDuration(200);
-    d->timeline.setFrameRange(0, 5);
 }
 
 Icon::~Icon()
@@ -142,6 +162,7 @@ void Icon::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWid
 {
     Q_UNUSED(option)
     Q_UNUSED(widget)
+    painter->fillRect(boundingRect(), Qt::transparent);
 
 #ifdef PROVE_IT_CAN_BE_DONE
      if (d->state == Private::HoverState && scene()) {
@@ -234,7 +255,6 @@ void Icon::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWid
             break;
     }
 
-    //paint foreground element
     if (!element.isEmpty()) {
         //kDebug() << "painting " << element << endl;
         d->svg.paint(painter, 0, 0, element);
@@ -242,33 +262,10 @@ void Icon::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWid
     }
 
     // Draw top-left button
-    if (d->state != Private::NoState) {
-        if (d->button1Pressed) {
-            element = "button1-hover";
-        } else if (d->button1Hovered) {
-            element = "button1-pressed";
-        } else {
-            element = "button1";
-        }
+    if (d->button1AnimId) {
+//        painter->drawPixmap(6, 6, buttonPixmap());
+        painter->drawPixmap(6, 6, Phase::self()->animationResult(d->button1AnimId));
     }
-
-    KIcon exec("exec");
-    painter->setRenderHint(QPainter::Antialiasing);
-    painter->setOpacity(d->stepMenu*0.2);
-    painter->setPen(Qt::NoPen);
-
-    if (!element.isEmpty()) {
-        d->svg.paint(painter, QRect(6, 6, 32, 32), element);
-//        painter->drawPixmap(6, 6, Phase::self()->paintElement(d->button1Id, this));
-    }
-    painter->drawPixmap(11, 11, exec.pixmap(22,22));
-}
-
-void Icon::animateBubbles(int step)
-{
-    d->stepMenu = step;
-//     kDebug() << "pop in: " << d->stepMenu << endl;
-    update();
 }
 
 void Icon::setText(const QString& text)
@@ -374,28 +371,74 @@ void Icon::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     update();
 }
 
+QPixmap Icon::buttonPixmap()
+{
+    //TODO this is just full of assumptions such as sizes and icon names. ugh!
+    QPixmap alpha(26, 26);
+    {
+        QPainter painter(&alpha);
+        painter.fillRect(alpha.rect(), Qt::black);
+    }
+
+    QPixmap pix(26, 26);
+    pix.setAlphaChannel(alpha);
+    QPainter painter(&pix);
+    painter.fillRect(pix.rect(), Qt::transparent);
+    QString element;
+
+    if (d->svgElements & Private::SvgMinibutton) {
+        element = "minibutton";
+    }
+
+    if (d->button1Pressed) {
+        if (d->svgElements & Private::SvgMinibuttonPressed) {
+            element = "minibutton-pressed";
+        } else if (d->svgElements & Private::SvgMinibuttonHover) {
+            element = "minibutton-hover";
+        }
+    } else if (d->button1Hovered) {
+        if (d->svgElements & Private::SvgMinibuttonHover) {
+            element = "minibutton-hover";
+        }
+    }
+
+    //paint foreground element
+    if (!element.isEmpty()) {
+        kDebug() << "painting " << element << endl;
+        d->svg.resize(pix.size());
+        d->svg.paint(&painter, 0, 0, element);
+        d->svg.resize(boundingRect().size());
+    }
+
+    KIcon exec("exec");
+    painter.setRenderHint(QPainter::Antialiasing);
+    painter.setPen(Qt::NoPen);
+    painter.drawPixmap(2, 2, exec.pixmap(22,22));
+
+    return pix;
+}
+
 void Icon::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 {
+    d->state = Private::HoverState;
     d->button1Pressed = false;
     QRectF button1(6, 6, 32, 32); // The top-left circle
     d->button1Hovered = button1.contains(event->pos());
 
-    //Phase::self()->elementAppears(this, button1);
-    d->timeline.setDirection(QTimeLine::Forward);
-    d->state = Private::HoverState;
+    d->button1AnimId = Phase::self()->startElementAnimation(this, Phase::ElementAppear);
+    Phase::self()->setAnimationPixmap(d->button1AnimId, buttonPixmap());
     QGraphicsItem::hoverEnterEvent(event);
-    d->timeline.start();
 }
 
 void Icon::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 {
-    d->timeline.setDirection(QTimeLine::Backward);
-    //Phase::self()->elementDisappears(this, button1);
-
-    d->timeline.start();
-    d->state = Private::NoState;
     d->button1Pressed = false;
     d->button1Hovered = false;
+    Phase::self()->stopElementAnimation(d->button1AnimId);
+    d->button1AnimId = Phase::self()->startElementAnimation(this, Phase::ElementDisappear);
+    Phase::self()->setAnimationPixmap(d->button1AnimId, buttonPixmap());
+
+    d->state = Private::NoState;
     QGraphicsItem::hoverLeaveEvent(event);
 }
 

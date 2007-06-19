@@ -94,10 +94,9 @@ class PLASMA_EXPORT Icon : public QObject,
         void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
         void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
 
-    private Q_SLOTS:
-        void animateBubbles(int step);
-
     private:
+        QPixmap buttonPixmap();
+
         class Private;
         Private * const d;
 };
