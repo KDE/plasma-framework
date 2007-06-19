@@ -18,6 +18,8 @@
 
 #include "animator.h"
 
+#include <QPainter>
+
 namespace Plasma
 {
 
@@ -31,9 +33,38 @@ Animator::~Animator()
 {
 }
 
-int Animator::appearFrames()
+int Animator::frameCount(Plasma::Phase::Animation animation)
 {
+    Q_UNUSED(animation)
     return 0;
+}
+
+int Animator::elementFrameCount(Plasma::Phase::ElementAnimation animation)
+{
+    Q_UNUSED(animation)
+    return 0;
+}
+
+QPixmap Animator::elementAppear(qreal frame, const QPixmap& pixmap)
+{
+    Q_UNUSED(frame)
+    Q_UNUSED(pixmap)
+    return pixmap;
+}
+
+QPixmap Animator::elementDisappear(qreal frame, const QPixmap& pixmap)
+{
+    Q_UNUSED(frame)
+    Q_UNUSED(pixmap)
+    QPixmap alpha(pixmap.size());
+    {
+        QPainter painter(&alpha);
+        painter.fillRect(alpha.rect(), Qt::transparent);
+    }
+    QPixmap pix(pixmap.size());
+    pix.setAlphaChannel(alpha);
+
+    return pix;
 }
 
 void Animator::appear(qreal frame, QGraphicsItem* item)
@@ -47,11 +78,6 @@ void Animator::appearCompleted(QGraphicsItem* item)
     Q_UNUSED(item)
 }
 
-int Animator::disappearFrames()
-{
-    return 0;
-}
-
 void Animator::disappear(qreal frame, QGraphicsItem* item)
 {
     Q_UNUSED(frame)
@@ -63,11 +89,6 @@ void Animator::disappearCompleted(QGraphicsItem* item)
     Q_UNUSED(item)
 }
 
-int Animator::activateFrames()
-{
-    return 0;
-}
-
 void Animator::activate(qreal frame, QGraphicsItem* item)
 {
     Q_UNUSED(frame)
@@ -77,11 +98,6 @@ void Animator::activate(qreal frame, QGraphicsItem* item)
 void Animator::activateCompleted(QGraphicsItem* item)
 {
     Q_UNUSED(item)
-}
-
-int Animator::frameAppearFrames()
-{
-    return 0;
 }
 
 void Animator::frameAppear(qreal frame, QGraphicsItem* item, const QRegion& drawable)

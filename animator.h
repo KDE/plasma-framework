@@ -21,10 +21,12 @@
 
 #include <QtCore/QObject>
 #include <QtGui/QRegion>
+#include <QtGui/QPixmap>
 
 #include <kgenericfactory.h>
 
 #include <plasma/plasma_export.h>
+#include <plasma/phase.h>
 
 class QGraphicsItem;
 
@@ -39,19 +41,21 @@ public:
     explicit Animator(QObject *parent = 0, const QStringList& list = QStringList());
     ~Animator();
 
-    virtual int appearFrames();
+    virtual int frameCount(Plasma::Phase::Animation);
+    virtual int elementFrameCount(Plasma::Phase::ElementAnimation);
+
+    virtual QPixmap elementAppear(qreal frame, const QPixmap& pixmap);
+    virtual QPixmap elementDisappear(qreal frame, const QPixmap& pixmap);
+
     virtual void appear(qreal frame, QGraphicsItem* item);
     virtual void appearCompleted(QGraphicsItem* item);
 
-    virtual int disappearFrames();
     virtual void disappear(qreal frame, QGraphicsItem* item);
     virtual void disappearCompleted(QGraphicsItem* item);
 
-    virtual int frameAppearFrames();
     virtual void frameAppear(qreal frame, QGraphicsItem* item, const QRegion& drawable);
     virtual void frameAppearCompleted(QGraphicsItem* item, const QRegion& drawable);
 
-    virtual int activateFrames();
     virtual void activate(qreal frame, QGraphicsItem* item);
     virtual void activateCompleted(QGraphicsItem* item);
 
