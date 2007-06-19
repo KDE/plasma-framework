@@ -35,7 +35,18 @@ struct AnimationState
 {
     QGraphicsItem* item;
     Phase::Animation animation;
-    qreal frames;
+    int frames;
+};
+
+struct ElementAnimationState
+{
+    QGraphicsItem* item;
+    QTimeLine* timeline;
+    Phase::ElementAnimation animation;
+    int frames;
+    int currentFrame;
+    int id;
+    QPixmap pixmap;
 };
 
 class Phase::Private
@@ -43,7 +54,8 @@ class Phase::Private
     public:
 
         Private()
-            : animator(0)
+            : animator(0),
+              animId(0)
         {
         }
 
@@ -54,12 +66,15 @@ class Phase::Private
         }
 
         Animator* animator;
+        int animId;
 
         //TODO: eventually perhaps we should allow multiple animations simulataneously
         //      which would imply changing this to a QMap<QGraphicsItem*, QList<QTimeLine*> >
         //      and really making the code fun ;)
         QMap<QGraphicsItem*, QTimeLine*> theAnimated;
         QMap<QTimeLine*, AnimationState> animations;
+        QMap<Phase::AnimId, ElementAnimationState> theAnimatedElements;
+        QMap<QTimeLine*, Phase::AnimId> elementAnimations;
 };
 
 class PhaseSingleton
@@ -102,9 +117,9 @@ void Phase::appletDestroyed(QObject* o)
         return;
     }
 
-    delete it.value();
     d->animations.erase(d->animations.find(it.value()));
     d->theAnimated.erase(it);
+    delete it.value();
 }
 
 void Phase::animate(QGraphicsItem* item, Animation animation)
@@ -116,22 +131,9 @@ void Phase::animate(QGraphicsItem* item, Animation animation)
         d->animations.erase(d->animations.find(it.value()));
     }
 
-    int frames = 0;
+    //TODO: allow the animator to define this?
     QTimeLine::CurveShape curveShape = QTimeLine::EaseInOutCurve;
-    switch (animation) {
-        case Appear:
-            frames = d->animator->appearFrames();
-            break;
-        case Disappear:
-            frames = d->animator->disappearFrames();
-            break;
-        case Activate:
-            frames = d->animator->activateFrames();
-            break;
-        case FrameAppear:
-            frames = d->animator->activateFrames();
-            break;
-    }
+    int frames = d->animator->frameCount(animation);
 
     if (frames < 1) {
         return;
@@ -140,8 +142,10 @@ void Phase::animate(QGraphicsItem* item, Animation animation)
     AnimationState state;
     state.item = item;
     state.animation = animation;
+    //TODO: variance in times based on the value of animation
     state.frames = frames / 3;
 
+    //TODO: variance in times based on the value of animation
     QTimeLine* timeLine = new QTimeLine(333, this);
     timeLine->setFrameRange(0, state.frames);
     timeLine->setCurveShape(curveShape);
@@ -159,7 +163,7 @@ void Phase::advanceFrame(int frame)
     QTimeLine* timeLine = dynamic_cast<QTimeLine*>(sender());
 
     if (!timeLine) {
-        kDebug() << "Phase::advanceFrame found no timeLine!" << endl;
+        //kDebug() << "Phase::advanceFrame found no timeLine!" << endl;
         return;
     }
 
@@ -171,24 +175,26 @@ void Phase::advanceFrame(int frame, QTimeLine* timeLine)
     QMap<QTimeLine*, AnimationState>::iterator it = d->animations.find(timeLine);
 
     if (it == d->animations.end()) {
-        kDebug() << "Phase::advanceFrame found no entry in animations!" << endl;
+        //kDebug() << "Phase::advanceFrame found no entry in animations!" << endl;
         return;
     }
 
     AnimationState state = it.value();
+    qreal progress = state.frames;
+    progress = frame / progress;
 
     switch (state.animation) {
         case Appear:
-            d->animator->appear(frame / state.frames, state.item);
+            d->animator->appear(progress, state.item);
             break;
         case Disappear:
-            d->animator->disappear(frame, state.item);
+            d->animator->disappear(progress, state.item);
             break;
         case Activate:
-            d->animator->activate(frame, state.item);
+            d->animator->activate(progress, state.item);
             break;
         case FrameAppear:
-            d->animator->frameAppear(frame, state.item, QRegion()); //FIXME: what -is- the frame region?
+            d->animator->frameAppear(progress, state.item, QRegion()); //FIXME: what -is- the frame region?
             break;
     }
 }
@@ -231,7 +237,7 @@ void Phase::animationComplete()
     }
 
     d->animations.erase(it);
-    delete tl;
+    tl->deleteLater();
 }
 
 void Phase::render(QGraphicsItem* item, QImage& image, RenderOp op)
@@ -242,6 +248,161 @@ void Phase::render(QGraphicsItem* item, QImage& image, RenderOp op)
             d->animator->renderBackground(image);
             break;
     }
+}
+
+Phase::AnimId Phase::startElementAnimation(QGraphicsItem *item, ElementAnimation animation)
+{
+    //kDebug() << "startElementAnimation(AnimId " << animation << ")" << endl;
+    //TODO: allow the animator to define this?
+    QTimeLine::CurveShape curveShape = QTimeLine::EaseInOutCurve;
+
+    ElementAnimationState state;
+    state.item = item;
+    state.animation = animation;
+    //TODO: variance in times based on the value of animation
+    state.frames = d->animator->elementFrameCount(animation) / 3;
+    state.currentFrame = 0;
+    state.id = ++d->animId;
+
+    if (state.frames < 1) {
+        state.frames = 1;
+        state.currentFrame = 1;
+        state.timeline = 0;
+    } else {
+        //TODO: variance in times based on the value of animation
+        state.timeline = new QTimeLine(200, this);
+        state.timeline->setFrameRange(0, state.frames);
+        state.timeline->setCurveShape(curveShape);
+        connect(state.timeline, SIGNAL(frameChanged(int)), this, SLOT(advanceElementFrame(int)));
+        connect(state.timeline, SIGNAL(finished()), this, SLOT(elementAnimationComplete()));
+        state.timeline->start();
+    }
+
+    d->elementAnimations[state.timeline] = state.id;
+    d->theAnimatedElements[state.id] = state;
+
+    //TODO: this is a bit wasteful; perhaps we should pass in state itself?
+    advanceElementFrame(0, state.id);
+
+    //kDebug() << "startElementAnimation(AnimId " << animation << ") returning " << state.id << endl;
+    return state.id;
+}
+
+void Phase::stopElementAnimation(AnimId id)
+{
+    //kDebug() << "stopElementAnimation(AnimId " << id << ")" << endl;
+    QMap<AnimId, ElementAnimationState>::iterator it = d->theAnimatedElements.find(id);
+
+    if (it == d->theAnimatedElements.end()) {
+        return;
+    }
+
+
+    if (it.value().timeline) {
+        d->elementAnimations.erase(d->elementAnimations.find(it.value().timeline));
+        //delete it.value().timeline;
+        it.value().timeline = 0;
+    }
+
+    d->theAnimatedElements.erase(it);
+    //kDebug() << "stopElementAnimation(AnimId " << id << ") done" << endl;
+}
+
+void Phase::setAnimationPixmap(AnimId id, const QPixmap &pixmap)
+{
+    QMap<AnimId, ElementAnimationState>::iterator it = d->theAnimatedElements.find(id);
+
+    if (it == d->theAnimatedElements.end()) {
+        kDebug() << "Phase::setAnimationPixmap(" << id << ") found no entry for it!" << endl;
+        return;
+    }
+
+    it.value().pixmap = pixmap;
+}
+
+QPixmap Phase::animationResult(AnimId id)
+{
+    QMap<AnimId, ElementAnimationState>::const_iterator it = d->theAnimatedElements.find(id);
+
+    if (it == d->theAnimatedElements.constEnd()) {
+        kDebug() << "Phase::animationResult(" << id << ") found no entry for it!" << endl;
+        return QPixmap();
+    }
+
+    qreal progress = it.value().frames;
+    //kDebug() << "Phase::animationResult(" << id <<   " at " << progress  << endl;
+    progress = it.value().currentFrame / progress;
+    //kDebug() << "Phase::animationResult(" << id <<   " at " << progress  << endl;
+
+    switch (it.value().animation) {
+        case ElementAppear:
+            return d->animator->elementAppear(progress, it.value().pixmap);
+            break;
+        case ElementDisappear:
+            return d->animator->elementDisappear(progress, it.value().pixmap);
+            break;
+    }
+
+    return it.value().pixmap;
+}
+
+void Phase::advanceElementFrame(int frame)
+{
+    QTimeLine* timeline = dynamic_cast<QTimeLine*>(sender());
+
+    if (!timeline) {
+        kDebug() << "Phase::advanceElementFrame found no timeLine!" << endl;
+        return;
+    }
+
+    QMap<QTimeLine*, Phase::AnimId>::const_iterator it = d->elementAnimations.find(timeline);
+
+    if (it == d->elementAnimations.constEnd()) {
+        kDebug() << "Phase::advanceElementFrame found no entry in animations!" << endl;
+        return;
+    }
+
+    advanceElementFrame(frame, it.value());
+}
+
+void Phase::advanceElementFrame(int frame, AnimId id)
+{
+
+    QMap<Phase::AnimId, ElementAnimationState>::iterator it2 = d->theAnimatedElements.find(id);
+
+    if (it2 == d->theAnimatedElements.end()) {
+        kDebug() << "Phase::advanceElementFrame found no entry in animations!" << endl;
+        return;
+    }
+
+    it2.value().currentFrame = frame;
+    it2.value().item->update();
+}
+
+void Phase::elementAnimationComplete()
+{
+    QTimeLine* tl = dynamic_cast<QTimeLine*>(sender());
+
+    if (!tl) {
+        return;
+    }
+
+    QMap<QTimeLine*, Phase::AnimId>::iterator it = d->elementAnimations.find(tl);
+
+    if (it == d->elementAnimations.end()) {
+        return;
+    }
+    //kDebug() << "elementAnimationComplete() " << it.value() << endl;
+
+    QMap<Phase::AnimId, ElementAnimationState>::iterator it2 = d->theAnimatedElements.find(it.value());
+    if (it2 != d->theAnimatedElements.end()) {
+        it2.value().timeline = 0;
+        it2.value().currentFrame = it2.value().frames;
+        it2.value().item->update();
+    }
+
+    d->elementAnimations.erase(it);
+    tl->deleteLater();
 }
 
 void Phase::init()

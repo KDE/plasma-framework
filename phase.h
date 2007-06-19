@@ -46,10 +46,18 @@ public:
         FrameAppear /*<< Make a frame appear around an object */
     };
 
+    enum ElementAnimation
+    {
+        ElementAppear = 0,
+        ElementDisappear
+    };
+
     enum RenderOp
     {
         RenderBackground = 0 /*<< Render the background of an item */
     };
+
+    typedef int AnimId;
 
     /**
      * Singleton accessor
@@ -59,8 +67,13 @@ public:
     explicit Phase(QObject * parent = 0);
     ~Phase();
 
+    AnimId startElementAnimation(QGraphicsItem *obj, ElementAnimation);
+    void stopElementAnimation(AnimId id);
+    void setAnimationPixmap(AnimId id, const QPixmap &pixmap);
+    QPixmap animationResult(AnimId id);
+
 Q_SIGNALS:
-    void animationComplete(QGraphicsItem* item, Animation anim);
+    void animationComplete(QGraphicsItem *item, Animation anim);
 
 public Q_SLOTS:
     void animate(QGraphicsItem* item, Animation anim);
@@ -70,6 +83,8 @@ protected Q_SLOTS:
     void appletDestroyed(QObject*);
 
     void advanceFrame(int frame, QTimeLine* timeLine);
+    void advanceElementFrame(int frame);
+    void advanceElementFrame(int frame, AnimId id);
 
     /**
      * NEVER call this method directly, as it relies on sender()
@@ -80,6 +95,11 @@ protected Q_SLOTS:
      * NEVER call this method directly, as it relies on sender()
      */
     void animationComplete();
+
+    /**
+     * NEVER call this method directly, as it relies on sender()
+     */
+    void elementAnimationComplete();
 
 private:
     void init();
