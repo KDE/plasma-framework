@@ -210,9 +210,10 @@ void PushButton::mousePressEvent ( QGraphicsSceneMouseEvent * event )
 void PushButton::mouseReleaseEvent ( QGraphicsSceneMouseEvent * event )
 {
     event->accept();
+    if (d->state == PushButton::Pressed)
+        emit clicked();
     d->state = PushButton::Released;
     update();
-//     emit clicked();
 }
 
 QSize PushButton::sizeHint() const
