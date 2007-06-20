@@ -297,7 +297,7 @@ void Icon::setUrl(const KUrl& url)
     d->url = url;
 }
 
-KUrl Icon::url()
+KUrl Icon::url() const
 {
     return d->url;
 }
