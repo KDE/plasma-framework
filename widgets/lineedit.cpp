@@ -133,17 +133,15 @@ QSizeF LineEdit::sizeHint() const
 
 void LineEdit::keyPressEvent(QKeyEvent* event)
 {
-        if (event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return)
-        {
-            emit editingFinished();
-        } else {
-            QGraphicsTextItem::keyPressEvent(event); //let QT handle other keypresses
-        }
-        if (this->toHtml()!=oldText)
-        {
-            oldText=this->toHtml();
-            emit textChanged(oldText);
-        }
+    if (event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return) {
+        emit editingFinished();
+    } else {
+        QGraphicsTextItem::keyPressEvent(event); //let QT handle other keypresses
+    }
+    if (QGraphicsTextItem::toHtml() != oldText) {
+        oldText = QGraphicsTextItem::toHtml();
+        emit textChanged(oldText);
+    }
 }
 
 } // namespace Plasma
