@@ -25,6 +25,7 @@
 #include <QMimeData>
 #include <QUrl>
 #include <QGraphicsView>
+#include <QStringList>
 
 #include <KLocale>
 #include <KMenu>
@@ -183,9 +184,9 @@ QRectF Corona::maxSizeHint() const
     return sceneRect();
 }
 
-void Corona::addPlasmoid(const QString& name)
+Applet* Corona::addPlasmoid(const QString& name, const QStringList& args)
 {
-    Applet* applet = Applet::loadApplet(name);
+    Applet* applet = Applet::loadApplet(name, 0, args);
     if (applet) {
         addItem(applet);
         //applet->constraintsUpdated();
@@ -196,6 +197,8 @@ void Corona::addPlasmoid(const QString& name)
     } else {
         kDebug() << "Plasmoid " << name << " could not be loaded." << endl;
     }
+
+    return applet;
 }
 
 void Corona::addKaramba(const KUrl& path)
@@ -252,15 +255,15 @@ void Corona::dropEvent(QGraphicsSceneDragDropEvent *event)
     } else if (KUrl::List::canDecode(event->mimeData())) {
         KUrl::List urls = KUrl::List::fromMimeData(event->mimeData());	
         foreach (const KUrl& url, urls) {
-            Plasma::Icon *icon = new Plasma::Icon(0);
-            icon->setIcon(KMimeType::iconNameForUrl(url));
-            icon->setUrl(url);
-            icon->setSize(128,128);
-            //TODO: associate the url with the icon, use the Button plasmoid here
-            icon->setPos(event->scenePos() - QPoint(icon->boundingRect().width()/2,
-                         icon->boundingRect().height()/2));
-            icon->show();
-            addItem(icon);
+            QStringList args;
+            args << url.url();
+            Applet* button = addPlasmoid("url", args);
+            if (button) {
+                //button->setSize(128,128);
+                button->setPos(event->scenePos() - QPoint(button->boundingRect().width()/2,
+                               button->boundingRect().height()/2));
+            }
+            addItem(button);
         }
         event->acceptProposedAction();
     }

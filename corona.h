@@ -87,8 +87,9 @@ public Q_SLOTS:
      *
      * @param name the plugin name for the applet, as given by 
      *        KPluginInfo::pluginName()
+     * @param args argument list to pass to the plasmoid
      */
-    void addPlasmoid(const QString& name);
+    Applet* addPlasmoid(const QString& name, const QStringList& args = QStringList());
 
     /**
      * Adds a SuperKaramba theme to the scene

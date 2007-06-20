@@ -229,7 +229,7 @@ KPluginInfo::List Applet::knownApplets()
     return KPluginInfo::fromServices(offers);
 }
 
-Applet* Applet::loadApplet(const QString& appletName, uint appletId)
+Applet* Applet::loadApplet(const QString& appletName, uint appletId, const QStringList& args)
 {
     if (appletName.isEmpty()) {
         return 0;
@@ -249,11 +249,11 @@ Applet* Applet::loadApplet(const QString& appletName, uint appletId)
         appletId = Private::nextId();
     }
 
-    QStringList sillyness;
+    QStringList allArgs;
     QString id;
     id.setNum(appletId);
-    sillyness << offers.first()->storageId() << id;
-    Applet* applet = KService::createInstance<Plasma::Applet>(offers.first(), 0, sillyness);
+    allArgs << offers.first()->storageId() << id << args;
+    Applet* applet = KService::createInstance<Plasma::Applet>(offers.first(), 0, allArgs);
 
     if (!applet) {
         kDebug() << "Couldn't load applet \"" << appletName << "\"!" << endl;
@@ -262,13 +262,13 @@ Applet* Applet::loadApplet(const QString& appletName, uint appletId)
     return applet;
 }
 
-Applet* Applet::loadApplet(const KPluginInfo* info, uint appletId)
+Applet* Applet::loadApplet(const KPluginInfo* info, uint appletId, const QStringList& args)
 {
     if (!info) {
         return 0;
     }
 
-    return loadApplet(info->pluginName(), appletId);
+    return loadApplet(info->pluginName(), appletId, args);
 }
 
 } // Plasma namespace

@@ -150,9 +150,11 @@ class PLASMA_EXPORT Applet : public QObject, public QGraphicsItem
          * @param name the plugin name, as returned by KPluginInfo::pluginName()
          * @param applet unique ID to assign the applet, or zero to have one
          *        assigned automatically.
+         * @param args to send the applet extra arguments
          * @return a pointer to the loaded applet, or 0 on load failure
          **/
-        static Applet* loadApplet(const QString &name, uint appletId = 0);
+        static Applet* loadApplet(const QString &name, uint appletId = 0,
+                                  const QStringList& args = QStringList());
 
         /**
          * Attempts to load an applet, returning a pointer to the applet if
@@ -164,7 +166,8 @@ class PLASMA_EXPORT Applet : public QObject, public QGraphicsItem
          *        assigned automatically.
          * @return a pointer to the loaded applet, or 0 on load failure
          **/
-        static Applet* loadApplet(const KPluginInfo* info, uint appletId = 0);
+        static Applet* loadApplet(const KPluginInfo* info, uint appletId = 0,
+                                  const QStringList& args = QStringList());
 
         /**
          * Returns the user-visible name for the applet, as specified in the
