@@ -526,7 +526,7 @@
     </g>
     <path
        style="opacity:1;fill:url(#radialGradient3181);fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       id="button1"
+       id="minibutton"
        sodipodi:cx="61"
        sodipodi:cy="43.000011"
        sodipodi:type="arc"
@@ -537,7 +537,7 @@
        sodipodi:ry="16" />
     <path
        style="opacity:1;fill:url(#radialGradient3179);fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       id="button1-pressed"
+       id="minibutton-pressed"
        sodipodi:cx="61"
        sodipodi:cy="43.000011"
        sodipodi:type="arc"
@@ -548,7 +548,7 @@
        sodipodi:ry="16" />
     <path
        style="opacity:1;fill:url(#radialGradient3177);fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       id="button1-hover"
+       id="minibutton-hover"
        sodipodi:cx="61"
        sodipodi:cy="43.000011"
        sodipodi:type="arc"
