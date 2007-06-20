@@ -58,6 +58,7 @@ class PLASMA_EXPORT Icon : public QObject,
         void setIcon(const QIcon& icon);
 
         void setUrl(const KUrl& url);
+        KUrl url();
 
         virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
         QRectF boundingRect() const;

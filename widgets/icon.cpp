@@ -297,6 +297,11 @@ void Icon::setUrl(const KUrl& url)
     d->url = url;
 }
 
+KUrl Icon::url()
+{
+    return d->url;
+}
+
 QSizeF Icon::size() const
 {
     return d->size;
