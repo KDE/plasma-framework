@@ -409,7 +409,7 @@ void Phase::init()
 {
     KConfig c("plasmarc");
     KConfigGroup cg(&c, "Phase");
-    QString pluginName = cg.readEntry("animator", QString());
+    QString pluginName = cg.readEntry("animator", "default");
 
     if (!pluginName.isEmpty()) {
         QString constraint = QString("[X-KDE-PluginInfo-Name] == '%1'").arg(pluginName);
