@@ -58,6 +58,8 @@ class PLASMA_EXPORT LineEdit : public QGraphicsTextItem, public LayoutItem
         void setGeometry(const QRectF& geometry);
         QSizeF sizeHint() const;
 
+    Q_SIGNALS:
+        void editingFinished();
 
     public Q_SLOTS:
         void updated(const QString&, const Plasma::DataEngine::Data&);
@@ -65,6 +67,9 @@ class PLASMA_EXPORT LineEdit : public QGraphicsTextItem, public LayoutItem
     private:
         class Private;
         Private* const d;
+
+    protected:
+        void keyPressEvent(QKeyEvent* event);
 };
 
 } // namespace Plasma

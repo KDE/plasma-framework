@@ -20,6 +20,7 @@
 
 #include <QStyleOptionFrameV2>
 #include <QTextDocument>
+#include <QKeyEvent>
 
 namespace Plasma
 {
@@ -128,6 +129,17 @@ QSizeF LineEdit::sizeHint() const
 {
     kDebug() << "LineEdit::sizeeHint() " << document()->size() << endl;
     return document()->size();
+}
+
+void LineEdit::keyPressEvent(QKeyEvent* event)
+{
+        if (event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return)
+        {
+            event->accept();
+            emit editingFinished();
+        } else {
+            QGraphicsTextItem::keyPressEvent(event); //let QT handle other keypresses
+        }
 }
 
 } // namespace Plasma
