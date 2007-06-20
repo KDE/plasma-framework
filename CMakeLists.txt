@@ -85,6 +85,7 @@ install(FILES
 
 install(FILES
     includes/Applet
+    includes/Phase
     includes/Plasma
     includes/AbstractRunner
     includes/Theme
