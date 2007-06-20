@@ -400,7 +400,7 @@ QPixmap Icon::buttonPixmap()
 
     //paint foreground element
     if (!element.isEmpty()) {
-        kDebug() << "painting " << element << endl;
+        //kDebug() << "painting " << element << endl;
         d->svg.resize(pix.size());
         d->svg.paint(&painter, 0, 0, element);
         d->svg.resize(boundingRect().size());
