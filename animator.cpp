@@ -48,21 +48,14 @@ int Animator::elementFrameCount(Plasma::Phase::ElementAnimation animation)
 QPixmap Animator::elementAppear(qreal frame, const QPixmap& pixmap)
 {
     Q_UNUSED(frame)
-    Q_UNUSED(pixmap)
     return pixmap;
 }
 
 QPixmap Animator::elementDisappear(qreal frame, const QPixmap& pixmap)
 {
     Q_UNUSED(frame)
-    Q_UNUSED(pixmap)
-    QPixmap alpha(pixmap.size());
-    {
-        QPainter painter(&alpha);
-        painter.fillRect(alpha.rect(), Qt::black);
-    }
     QPixmap pix(pixmap.size());
-    pix.setAlphaChannel(alpha);
+    pix.fill(Qt::transparent);
 
     return pix;
 }
