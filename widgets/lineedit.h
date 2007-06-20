@@ -60,6 +60,7 @@ class PLASMA_EXPORT LineEdit : public QGraphicsTextItem, public LayoutItem
 
     Q_SIGNALS:
         void editingFinished();
+        void textChanged(const QString &text);
 
     public Q_SLOTS:
         void updated(const QString&, const Plasma::DataEngine::Data&);
@@ -67,6 +68,7 @@ class PLASMA_EXPORT LineEdit : public QGraphicsTextItem, public LayoutItem
     private:
         class Private;
         Private* const d;
+        QString oldText;
 
     protected:
         void keyPressEvent(QKeyEvent* event);

@@ -135,10 +135,14 @@ void LineEdit::keyPressEvent(QKeyEvent* event)
 {
         if (event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return)
         {
-            event->accept();
             emit editingFinished();
         } else {
             QGraphicsTextItem::keyPressEvent(event); //let QT handle other keypresses
+        }
+        if (this->toHtml()!=oldText)
+        {
+            oldText=this->toHtml();
+            emit textChanged(oldText);
         }
 }
 
