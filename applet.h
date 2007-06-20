@@ -19,7 +19,7 @@
 #ifndef PLASMA_APPLET_H
 #define PLASMA_APPLET_H
 
-#include <QtGui/QGraphicsItemGroup>
+#include <QtGui/QGraphicsItem>
 #include <QtGui/QWidget>
 
 #include <kplugininfo.h>
@@ -38,7 +38,7 @@ class DataEngine;
  *
  *
  */
-class PLASMA_EXPORT Applet : public QObject, public QGraphicsItemGroup
+class PLASMA_EXPORT Applet : public QObject, public QGraphicsItem
 {
     Q_OBJECT
 
@@ -172,6 +172,11 @@ class PLASMA_EXPORT Applet : public QObject, public QGraphicsItemGroup
          * @return the user-visible name for the applet.
          **/
         QString name();
+
+        /**
+         * Reimplemented from QGraphicsItem
+         **/
+        void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
 
     Q_SIGNALS:
         /**

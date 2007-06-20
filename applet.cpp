@@ -77,19 +77,18 @@ Applet::Applet(QGraphicsItem *parent,
                const QString& serviceID,
                int appletId)
         : QObject(0),
-          QGraphicsItemGroup(parent),
+          QGraphicsItem(parent),
           d(new Private(KService::serviceByStorageId(serviceID), appletId))
 {
 }
 
 Applet::Applet(QObject* parent, const QStringList& args)
     : QObject(parent),
-      QGraphicsItemGroup(0),
+      QGraphicsItem(0),
       d(new Private(KService::serviceByStorageId(args[0]), args[1].toInt()))
 {
     // the brain damage seen in the initialization list is due to the 
-    // rediculous inflexibility of KService::createInstance
-    // too bad i couldn't convince others that this was a real issue.
+    // inflexibility of KService::createInstance
 }
 
 Applet::~Applet()
@@ -144,6 +143,13 @@ void Applet::constraintsUpdated()
 QString Applet::name()
 {
     return d->appletDescription->name();
+}
+
+void Applet::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+    Q_UNUSED(painter)
+    Q_UNUSED(option)
+    Q_UNUSED(widget)
 }
 
 FormFactor Applet::formFactor() const
