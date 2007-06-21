@@ -79,9 +79,6 @@ class PLASMA_EXPORT LineEdit : public QGraphicsTextItem, public LayoutItem
     private:
         class Private;
         Private* const d;
-        QString oldText;
-        QString defaultText;
-        QString defaultTextPlain;
 
     protected:
         void keyPressEvent(QKeyEvent *event);

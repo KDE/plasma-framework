@@ -28,15 +28,15 @@ namespace Plasma
 
 class LineEdit::Private
 {
+    public:
+        QString defaultText;
+        QString oldText;
 };
 
 LineEdit::LineEdit(QGraphicsItem *parent, QGraphicsScene *scene)
     : QGraphicsTextItem(parent, scene),
       d(new Private())
 {
-    defaultText = QString("");
-    defaultTextPlain = QString("");
-    oldText = QString("");
     setTextInteractionFlags(Qt::TextEditorInteraction);
 }
 
@@ -137,53 +137,57 @@ QSizeF LineEdit::sizeHint() const
 
 void LineEdit::setDefaultText(QString text)
 {
-    defaultText = text;
-    QGraphicsTextItem::setHtml(defaultText);
-    defaultTextPlain = QGraphicsTextItem::toPlainText();
+    d->defaultText = text.simplified();
 }
 
 const QString LineEdit::toHtml()
 {
-    if (QGraphicsTextItem::toHtml().simplified() == defaultText.simplified())
-        return QString("");
-    else
+    if (QGraphicsTextItem::toHtml() == d->defaultText) {
+        return QString();
+    } else {
         return QGraphicsTextItem::toHtml();
+    }
 }
 
 const QString LineEdit::toPlainText()
 {
-    if (QGraphicsTextItem::toHtml().simplified() == defaultText.simplified())
-        return QString("");
-    else
+    if (QGraphicsTextItem::toPlainText() == d->defaultText) {
+        return QString();
+    } else {
         return QGraphicsTextItem::toPlainText();
+    }
 }
 
 void LineEdit::keyPressEvent(QKeyEvent *event)
 {
     if (event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return) {
         emit editingFinished();
+        event->accept();
     } else {
         QGraphicsTextItem::keyPressEvent(event); //let QT handle other keypresses
     }
-    if (QGraphicsTextItem::toHtml() != oldText) {
-        oldText = QGraphicsTextItem::toHtml();
-        emit textChanged(oldText);
+
+    if (QGraphicsTextItem::toHtml() != d->oldText) {
+        d->oldText = QGraphicsTextItem::toHtml();
+        emit textChanged(QGraphicsTextItem::toHtml());
     }
 //     if (QGraphicsTextItem::toPlainText().simplified() == "")
-//         QGraphicsTextItem::setHtml(defaultText);
+//         QGraphicsTextItem::setHtml(d->defaultText);
 }
 
 void LineEdit::focusInEvent(QFocusEvent *event)
 {
-    if (QGraphicsTextItem::toPlainText().simplified() == defaultTextPlain.simplified())
-        QGraphicsTextItem::setPlainText(QString(""));
+    if (QGraphicsTextItem::toPlainText() == d->defaultText) {
+        QGraphicsTextItem::setPlainText(QString());
+    }
     QGraphicsTextItem::focusInEvent(event);
 }
 
 void LineEdit::focusOutEvent(QFocusEvent *event)
 {
-    if (QGraphicsTextItem::toPlainText().simplified() == "")
-        QGraphicsTextItem::setHtml(defaultText);
+    if (QGraphicsTextItem::toPlainText().isEmpty()) {
+        QGraphicsTextItem::setHtml(d->defaultText);
+    }
     QGraphicsTextItem::focusOutEvent(event);
 }
 
