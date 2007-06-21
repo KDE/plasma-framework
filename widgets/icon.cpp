@@ -375,16 +375,10 @@ void Icon::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 QPixmap Icon::buttonPixmap()
 {
     //TODO this is just full of assumptions such as sizes and icon names. ugh!
-    QPixmap alpha(26, 26);
-    {
-        QPainter painter(&alpha);
-        painter.fillRect(alpha.rect(), Qt::black);
-    }
-
     QPixmap pix(26, 26);
-    pix.setAlphaChannel(alpha);
+    pix.fill(Qt::transparent);
+
     QPainter painter(&pix);
-    painter.fillRect(pix.rect(), Qt::transparent);
     QString element;
 
     if (d->svgElements & Private::SvgMinibutton) {
