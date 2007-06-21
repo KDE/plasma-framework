@@ -57,6 +57,10 @@ class PLASMA_EXPORT LineEdit : public QGraphicsTextItem, public LayoutItem
         QRectF geometry() const;
         void setGeometry(const QRectF& geometry);
         QSizeF sizeHint() const;
+        
+        void setDefaultText(QString text);
+        const QString toHtml();
+        const QString toPlainText();
 
     Q_SIGNALS:
         void editingFinished();
@@ -69,9 +73,13 @@ class PLASMA_EXPORT LineEdit : public QGraphicsTextItem, public LayoutItem
         class Private;
         Private* const d;
         QString oldText;
+        QString defaultText;
+        QString defaultTextPlain;
 
     protected:
-        void keyPressEvent(QKeyEvent* event);
+        void keyPressEvent(QKeyEvent *event);
+        void focusInEvent(QFocusEvent *event);
+        void focusOutEvent(QFocusEvent *event);
 };
 
 } // namespace Plasma

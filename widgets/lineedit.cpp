@@ -21,6 +21,7 @@
 #include <QStyleOptionFrameV2>
 #include <QTextDocument>
 #include <QKeyEvent>
+#include <KDebug>
 
 namespace Plasma
 {
@@ -33,6 +34,9 @@ LineEdit::LineEdit(QGraphicsItem *parent, QGraphicsScene *scene)
     : QGraphicsTextItem(parent, scene),
       d(new Private())
 {
+    defaultText = QString("");
+    defaultTextPlain = QString("");
+    oldText = QString("");
     setTextInteractionFlags(Qt::TextEditorInteraction);
 }
 
@@ -131,7 +135,30 @@ QSizeF LineEdit::sizeHint() const
     return document()->size();
 }
 
-void LineEdit::keyPressEvent(QKeyEvent* event)
+void LineEdit::setDefaultText(QString text)
+{
+    defaultText = text;
+    QGraphicsTextItem::setHtml(defaultText);
+    defaultTextPlain = QGraphicsTextItem::toPlainText();
+}
+
+const QString LineEdit::toHtml()
+{
+    if (QGraphicsTextItem::toHtml().simplified() == defaultText.simplified())
+        return QString("");
+    else
+        return QGraphicsTextItem::toHtml();
+}
+
+const QString LineEdit::toPlainText()
+{
+    if (QGraphicsTextItem::toHtml().simplified() == defaultText.simplified())
+        return QString("");
+    else
+        return QGraphicsTextItem::toPlainText();
+}
+
+void LineEdit::keyPressEvent(QKeyEvent *event)
 {
     if (event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return) {
         emit editingFinished();
@@ -142,6 +169,22 @@ void LineEdit::keyPressEvent(QKeyEvent* event)
         oldText = QGraphicsTextItem::toHtml();
         emit textChanged(oldText);
     }
+//     if (QGraphicsTextItem::toPlainText().simplified() == "")
+//         QGraphicsTextItem::setHtml(defaultText);
+}
+
+void LineEdit::focusInEvent(QFocusEvent *event)
+{
+    if (QGraphicsTextItem::toPlainText().simplified() == defaultTextPlain.simplified())
+        QGraphicsTextItem::setPlainText(QString(""));
+    QGraphicsTextItem::focusInEvent(event);
+}
+
+void LineEdit::focusOutEvent(QFocusEvent *event)
+{
+    if (QGraphicsTextItem::toPlainText().simplified() == "")
+        QGraphicsTextItem::setHtml(defaultText);
+    QGraphicsTextItem::focusOutEvent(event);
 }
 
 } // namespace Plasma
