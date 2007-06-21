@@ -42,7 +42,8 @@ class Applet::Private
             : appletId( uniqueID ),
               globalConfig( 0 ),
               appletConfig( 0 ),
-              appletDescription(new KPluginInfo(appletDescription))
+              appletDescription(new KPluginInfo(appletDescription)),
+              immutable(false)
         {
             if (appletId > s_maxAppletId) {
                 s_maxAppletId = appletId;
@@ -70,6 +71,7 @@ class Applet::Private
         QList<QObject*> watchedForFocus;
         QStringList loadedEngines;
         static uint s_maxAppletId;
+        bool immutable;
 };
 
 uint Applet::Private::s_maxAppletId = 0;
@@ -81,6 +83,7 @@ Applet::Applet(QGraphicsItem *parent,
           QGraphicsItem(parent),
           d(new Private(KService::serviceByStorageId(serviceID), appletId))
 {
+    init();
 }
 
 Applet::Applet(QObject* parent, const QStringList& args)
@@ -88,6 +91,7 @@ Applet::Applet(QObject* parent, const QStringList& args)
       QGraphicsItem(0),
       d(new Private(KService::serviceByStorageId(args[0]), args[1].toInt()))
 {
+    init();
     // the brain damage seen in the initialization list is due to the 
     // inflexibility of KService::createInstance
 }
@@ -96,6 +100,12 @@ Applet::~Applet()
 {
     needsFocus( false );
     delete d;
+}
+
+void Applet::init()
+{
+    setImmutable(globalAppletConfig().isImmutable() ||
+                 appletConfig().isImmutable());
 }
 
 KConfigGroup Applet::appletConfig() const
@@ -141,9 +151,19 @@ void Applet::constraintsUpdated()
     kDebug() << "Applet::constraintsUpdate(): constraints are FormFactor: " << formFactor() << ", Location: " << location() << endl;
 }
 
-QString Applet::name()
+QString Applet::name() const
 {
     return d->appletDescription->name();
+}
+
+bool Applet::immutable() const
+{
+    return d->immutable;
+}
+
+void Applet::setImmutable(bool immutable)
+{
+    d->immutable = immutable;
 }
 
 void Applet::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
@@ -199,7 +219,7 @@ void Applet::watchForFocus(QObject *widget, bool watch)
     }
 }
 
-void Applet::needsFocus( bool focus )
+void Applet::needsFocus(bool focus)
 {
     if (focus == QGraphicsItem::hasFocus()) {
         return;

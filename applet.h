@@ -174,7 +174,19 @@ class PLASMA_EXPORT Applet : public QObject, public QGraphicsItem
          * .desktop file.
          * @return the user-visible name for the applet.
          **/
-        QString name();
+        QString name() const;
+
+        /**
+         * @return true if this applet is immutable
+         **/
+        bool immutable() const;
+
+        /** 
+         * Sets whether or not this applet is immutable or not
+         *
+         * @arg immutable true if this applet should not be changable
+         **/
+        void setImmutable(bool immutable);
 
         /**
          * Reimplemented from QGraphicsItem
@@ -230,7 +242,7 @@ class PLASMA_EXPORT Applet : public QObject, public QGraphicsItem
         * @see watchForFocus
         * @param focus whether to or not to request focus
         */
-        void needsFocus( bool focus );
+        void needsFocus(bool focus);
 
         /**
          * @internal event filter; used for focus watching
@@ -238,6 +250,8 @@ class PLASMA_EXPORT Applet : public QObject, public QGraphicsItem
         bool eventFilter( QObject *o, QEvent *e );
 
     private:
+        void init();
+
         class Private;
         Private* const d;
 };
