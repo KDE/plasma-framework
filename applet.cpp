@@ -30,6 +30,7 @@
 
 #include "corona.h"
 #include "dataenginemanager.h"
+#include "plasma.h"
 
 namespace Plasma
 {

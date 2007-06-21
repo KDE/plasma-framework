@@ -19,6 +19,8 @@
 #ifndef PLASMA_DEFS_H
 #define PLASMA_DEFS_H
 
+#include <QGraphicsItem>
+
 #include <plasma/plasma_export.h>
 
 /**
@@ -74,6 +76,10 @@ enum Location { Floating = 0 /**< Free floating. Neither geometry or z-ordering
                 LeftEdge     /**< Along the left side of the screen */,
                 RightEdge    /**< Along the right side of the screen */
               };
+
+enum ItemTypes { AppletType = QGraphicsItem::UserType + 1,
+                 LineEditType = QGraphicsItem::UserType + 2
+               };
 
 PLASMA_EXPORT void setMinId(int minId);
 PLASMA_EXPORT int uniqueId();

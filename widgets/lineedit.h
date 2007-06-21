@@ -25,6 +25,7 @@
 #include <plasma/plasma_export.h>
 
 #include <plasma/dataengine.h>
+#include <plasma/plasma.h>
 #include <plasma/widgets/layoutitem.h>
 
 namespace Plasma
@@ -57,10 +58,16 @@ class PLASMA_EXPORT LineEdit : public QGraphicsTextItem, public LayoutItem
         QRectF geometry() const;
         void setGeometry(const QRectF& geometry);
         QSizeF sizeHint() const;
-        
+
         void setDefaultText(QString text);
         const QString toHtml();
         const QString toPlainText();
+
+        /**
+         * Reimplented from QGraphicsItem
+         **/
+        enum { Type = Plasma::LineEditType };
+        int type() const { return Type; }
 
     Q_SIGNALS:
         void editingFinished();

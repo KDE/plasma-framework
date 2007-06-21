@@ -181,6 +181,12 @@ class PLASMA_EXPORT Applet : public QObject, public QGraphicsItem
          **/
         void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
 
+        /**
+         * Reimplented from QGraphicsItem
+         **/
+        enum { Type = Plasma::AppletType };
+        int type() const { return Type; }
+
     Q_SIGNALS:
         /**
          * Emit this signal when your applet needs to take (or lose) keyboard
