@@ -31,6 +31,7 @@ class LineEdit::Private
     public:
         QString defaultText;
         QString oldText;
+        QString defaultTextPlain;
 };
 
 LineEdit::LineEdit(QGraphicsItem *parent, QGraphicsScene *scene)
@@ -138,6 +139,9 @@ QSizeF LineEdit::sizeHint() const
 void LineEdit::setDefaultText(QString text)
 {
     d->defaultText = text.simplified();
+    d->defaultText = QString("<font color=\"gray\">") + d->defaultText + QString("</font>");
+    QGraphicsTextItem::setHtml(d->defaultText);
+    d->defaultTextPlain = QGraphicsTextItem::toPlainText();
 }
 
 const QString LineEdit::toHtml()
@@ -177,7 +181,7 @@ void LineEdit::keyPressEvent(QKeyEvent *event)
 
 void LineEdit::focusInEvent(QFocusEvent *event)
 {
-    if (QGraphicsTextItem::toPlainText() == d->defaultText) {
+    if (QGraphicsTextItem::toPlainText() == d->defaultTextPlain) {
         QGraphicsTextItem::setPlainText(QString());
     }
     QGraphicsTextItem::focusInEvent(event);
