@@ -27,12 +27,13 @@
 #include <QGraphicsView>
 #include <QStringList>
 
+#include <KAuthorized>
+#include <KDebug>
 #include <KLocale>
 #include <KMenu>
+#include <KMimeType>
 #include <KRun>
 #include <KWindowSystem>
-#include <KDebug>
-#include <KMimeType>
 
 #include "applet.h"
 #include "dataengine.h"
@@ -271,6 +272,10 @@ void Corona::dropEvent(QGraphicsSceneDragDropEvent *event)
 
 void Corona::contextMenuEvent(QGraphicsSceneContextMenuEvent *contextMenuEvent)
 {
+    if (!KAuthorized::authorizeKAction("desktop_contextmenu")) {
+        return;
+    }
+
     QPointF point = contextMenuEvent->scenePos();
     /*
      * example for displaying the SuperKaramba context menu
@@ -285,9 +290,20 @@ void Corona::contextMenuEvent(QGraphicsSceneContextMenuEvent *contextMenuEvent)
     }
     */
     contextMenuEvent->accept();
-    Applet* applet = qgraphicsitem_cast<Applet*>(itemAt(point));
+    QGraphicsItem* item = itemAt(point);
+    Applet* applet = 0;
+
+    while (item) {
+        applet = qgraphicsitem_cast<Applet*>(item);
+        if (applet) {
+            break;
+        }
+
+        item = item->parentItem();
+    }
+
     KMenu desktopMenu;
-    kDebug() << "context menu event " << d->immutable << endl;
+    //kDebug() << "context menu event " << d->immutable << endl;
     if (!applet) {
         if (d->immutable) {
             return;
@@ -295,6 +311,8 @@ void Corona::contextMenuEvent(QGraphicsSceneContextMenuEvent *contextMenuEvent)
 
         desktopMenu.addTitle("Plasma");
         desktopMenu.addAction(d->engineExplorerAction);
+    } else if (applet->immutable()) {
+        return;
     } else {
         desktopMenu.addTitle(applet->name());
         desktopMenu.addSeparator();
