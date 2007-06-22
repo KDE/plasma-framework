@@ -168,6 +168,13 @@ bool Applet::immutable() const
 void Applet::setImmutable(bool immutable)
 {
     d->immutable = immutable;
+    QGraphicsItem::GraphicsItemFlags f = flags();
+    if (immutable) {
+        f ^= QGraphicsItem::ItemIsMovable;
+    } else if (!static_cast<Corona*>(scene())->immutable()) {
+        f |= QGraphicsItem::ItemIsMovable;
+    }
+    setFlags(f);
 }
 
 bool Applet::drawStandardBackground()
