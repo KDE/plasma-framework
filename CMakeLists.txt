@@ -5,6 +5,7 @@ install(FILES
     DESTINATION ${DATA_INSTALL_DIR}/desktoptheme/default/dialogs/)
 
 install(FILES
+    widgets/background.svg
     widgets/clock.svg
     widgets/toolbox-button.svg
     widgets/plot-background.svg
