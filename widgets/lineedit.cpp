@@ -182,7 +182,7 @@ void LineEdit::keyPressEvent(QKeyEvent *event)
 void LineEdit::focusInEvent(QFocusEvent *event)
 {
     if (QGraphicsTextItem::toPlainText() == d->defaultTextPlain) {
-        QGraphicsTextItem::setPlainText(QString());
+        QGraphicsTextItem::setHtml(QString());
     }
     QGraphicsTextItem::focusInEvent(event);
 }
