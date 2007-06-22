@@ -43,11 +43,11 @@ public:
     explicit Corona(const QRectF & sceneRect, QObject * parent = 0);
     explicit Corona(qreal x, qreal y, qreal width, qreal height, QObject * parent = 0);
     ~Corona();
-    
+
     /**
-     * The applets are changable or not
+     * The applets and Corona surface are changable or not
      **/
-    bool isImmutable();
+    bool immutable();
 
     /**
      * The location of the Corona. @see Plasma::Location
