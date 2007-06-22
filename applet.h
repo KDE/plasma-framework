@@ -170,6 +170,14 @@ class PLASMA_EXPORT Applet : public QObject, public QGraphicsItem
                                   const QStringList& args = QStringList());
 
         /**
+         * This method is called when the interface should be painted.
+         * @see QGraphicsItem::paint
+         **/
+        virtual void paintInterface(QPainter *painter,
+                                    const QStyleOptionGraphicsItem *option,
+                                    QWidget *widget = 0);
+
+        /**
          * Returns the user-visible name for the applet, as specified in the
          * .desktop file.
          * @return the user-visible name for the applet.
@@ -189,9 +197,16 @@ class PLASMA_EXPORT Applet : public QObject, public QGraphicsItem
         void setImmutable(bool immutable);
 
         /**
-         * Reimplemented from QGraphicsItem
+         * @return returns whether or not the applet is using the standard
+         *         background
          **/
-        void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
+        bool drawStandardBackground();
+
+        /**
+         * Sets whether or not the applet should automatically draw the standard 
+         * background or not. Defaults to false
+         **/
+        void setDrawStandardBackground(bool drawBackground);
 
         /**
          * Reimplented from QGraphicsItem
@@ -250,6 +265,11 @@ class PLASMA_EXPORT Applet : public QObject, public QGraphicsItem
         bool eventFilter( QObject *o, QEvent *e );
 
     private:
+        /**
+         * Reimplemented from QGraphicsItem
+         **/
+        void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
+
         void init();
 
         class Private;

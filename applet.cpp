@@ -28,9 +28,10 @@
 #include <KService>
 #include <KServiceTypeTrader>
 
-#include "corona.h"
-#include "dataenginemanager.h"
-#include "plasma.h"
+#include "plasma/corona.h"
+#include "plasma/dataenginemanager.h"
+#include "plasma/plasma.h"
+#include "plasma/svg.h"
 
 namespace Plasma
 {
@@ -43,7 +44,8 @@ class Applet::Private
               globalConfig( 0 ),
               appletConfig( 0 ),
               appletDescription(new KPluginInfo(appletDescription)),
-              immutable(false)
+              immutable(false),
+              background(0)
         {
             if (appletId > s_maxAppletId) {
                 s_maxAppletId = appletId;
@@ -56,6 +58,7 @@ class Applet::Private
                DataEngineManager::self()->unloadDataEngine( engine );
             }
             delete appletDescription;
+            delete background;
         }
 
         static uint nextId()
@@ -72,6 +75,7 @@ class Applet::Private
         QStringList loadedEngines;
         static uint s_maxAppletId;
         bool immutable;
+        Plasma::Svg *background;
 };
 
 uint Applet::Private::s_maxAppletId = 0;
@@ -166,7 +170,37 @@ void Applet::setImmutable(bool immutable)
     d->immutable = immutable;
 }
 
+bool Applet::drawStandardBackground()
+{
+    return d->background != 0;
+}
+
+void Applet::setDrawStandardBackground(bool drawBackground)
+{
+    if (drawBackground) {
+        if (!d->background) {
+            d->background = new Plasma::Svg("widgets/background");
+        }
+    } else {
+        delete d->background;
+        d->background = 0;
+    }
+}
+
+
 void Applet::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+    if (d->background) {
+        d->background->resize(boundingRect().size());
+        d->background->paint(painter, boundingRect());
+    }
+
+    paintInterface(painter, option, widget);
+
+    //TODO: interface overlays on hover?
+}
+
+void Applet::paintInterface(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     Q_UNUSED(painter)
     Q_UNUSED(option)
