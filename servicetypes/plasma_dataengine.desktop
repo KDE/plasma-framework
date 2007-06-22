@@ -10,6 +10,7 @@ Comment[el]=Μηχανή δεδομένων Plasma
 Comment[es]=Motor de datos de Plasma
 Comment[nds]=Datendriever Plasma
 Comment[nl]=Plasma data-engine
+Comment[sv]=Plasma datagränssnitt
 Comment[zh_TW]=Plasma 資料引擎
 
 [PropertyDef::X-EngineName]
