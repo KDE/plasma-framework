@@ -175,7 +175,7 @@ void LineEdit::keyPressEvent(QKeyEvent *event)
         d->oldText = QGraphicsTextItem::toHtml();
         emit textChanged(QGraphicsTextItem::toHtml());
     }
-//     if (QGraphicsTextItem::toPlainText().simplified() == "")
+//     if (QGraphicsTextItem::toPlainText().simplified().isEmtpy())
 //         QGraphicsTextItem::setHtml(d->defaultText);
 }
 
