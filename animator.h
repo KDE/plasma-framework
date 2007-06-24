@@ -48,16 +48,9 @@ public:
     virtual QPixmap elementDisappear(qreal frame, const QPixmap& pixmap);
 
     virtual void appear(qreal frame, QGraphicsItem* item);
-    virtual void appearCompleted(QGraphicsItem* item);
-
     virtual void disappear(qreal frame, QGraphicsItem* item);
-    virtual void disappearCompleted(QGraphicsItem* item);
-
     virtual void frameAppear(qreal frame, QGraphicsItem* item, const QRegion& drawable);
-    virtual void frameAppearCompleted(QGraphicsItem* item, const QRegion& drawable);
-
     virtual void activate(qreal frame, QGraphicsItem* item);
-    virtual void activateCompleted(QGraphicsItem* item);
 
     virtual void renderBackground(QImage& background);
 };

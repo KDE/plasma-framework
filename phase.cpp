@@ -217,16 +217,16 @@ void Phase::animationComplete()
 
     switch (state.animation) {
         case Appear:
-            d->animator->appearCompleted(state.item);
+            d->animator->appear(1, state.item);
             break;
         case Disappear:
-            d->animator->disappearCompleted(state.item);
+            d->animator->disappear(1, state.item);
             break;
         case Activate:
-            d->animator->activateCompleted(state.item);
+            d->animator->activate(1, state.item);
             break;
         case FrameAppear:
-            d->animator->frameAppearCompleted(state.item, QRegion()); //FIXME: what -is- the frame region?
+            d->animator->frameAppear(1, state.item, QRegion()); //FIXME: what -is- the frame region?
             break;
     }
 
