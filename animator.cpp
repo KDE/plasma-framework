@@ -33,13 +33,13 @@ Animator::~Animator()
 {
 }
 
-int Animator::frameCount(Plasma::Phase::Animation animation)
+int Animator::framesPerSecond(Plasma::Phase::Animation animation)
 {
     Q_UNUSED(animation)
     return 0;
 }
 
-int Animator::elementFrameCount(Plasma::Phase::ElementAnimation animation)
+int Animator::framesPerSecond(Plasma::Phase::ElementAnimation animation)
 {
     Q_UNUSED(animation)
     return 0;

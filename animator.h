@@ -41,8 +41,8 @@ public:
     explicit Animator(QObject *parent = 0, const QStringList& list = QStringList());
     ~Animator();
 
-    virtual int frameCount(Plasma::Phase::Animation);
-    virtual int elementFrameCount(Plasma::Phase::ElementAnimation);
+    virtual int framesPerSecond(Plasma::Phase::Animation);
+    virtual int framesPerSecond(Plasma::Phase::ElementAnimation);
 
     virtual QPixmap elementAppear(qreal frame, const QPixmap& pixmap);
     virtual QPixmap elementDisappear(qreal frame, const QPixmap& pixmap);

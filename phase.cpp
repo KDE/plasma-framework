@@ -133,7 +133,7 @@ void Phase::animate(QGraphicsItem* item, Animation animation)
 
     //TODO: allow the animator to define this?
     QTimeLine::CurveShape curveShape = QTimeLine::EaseInOutCurve;
-    int frames = d->animator->frameCount(animation);
+    int frames = d->animator->framesPerSecond(animation);
 
     if (frames < 1) {
         return;
@@ -260,7 +260,7 @@ Phase::AnimId Phase::startElementAnimation(QGraphicsItem *item, ElementAnimation
     state.item = item;
     state.animation = animation;
     //TODO: variance in times based on the value of animation
-    state.frames = d->animator->elementFrameCount(animation) / 3;
+    state.frames = d->animator->framesPerSecond(animation) / 3;
     state.currentFrame = 0;
     state.id = ++d->animId;
 
