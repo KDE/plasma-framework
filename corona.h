@@ -47,7 +47,7 @@ public:
     /**
      * The applets and Corona surface are changable or not
      **/
-    bool immutable();
+    bool immutable() const;
 
     /**
      * The location of the Corona. @see Plasma::Location
@@ -97,7 +97,7 @@ public Q_SLOTS:
      * @param path the path to the theme file
      */
     void addKaramba(const KUrl& path);
-    
+
     /**
      * Sets if the applets are Immutable
      */
@@ -116,7 +116,6 @@ protected Q_SLOTS:
 
 private:
     void init();
-    
 
     class Private;
     Private * const d;
