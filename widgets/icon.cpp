@@ -162,7 +162,10 @@ void Icon::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWid
 {
     Q_UNUSED(option)
     Q_UNUSED(widget)
+    painter->save();
+    painter->setCompositionMode(QPainter::CompositionMode_Source);
     painter->fillRect(boundingRect(), Qt::transparent);
+    painter->restore();
 
 #ifdef PROVE_IT_CAN_BE_DONE
      if (d->state == Private::HoverState && scene()) {
@@ -175,9 +178,7 @@ void Icon::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWid
                  p.drawPixmap(image.rect(), *pix, sceneBoundingRect());
              }
              expblur<16,7>(image, 8);
-             painter->save();
              painter->drawImage(0, 0, image);
-             painter->restore();
          }
      }
 #endif
