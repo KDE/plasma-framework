@@ -48,13 +48,21 @@ public:
 
     enum ElementAnimation
     {
-        ElementAppear = 0,
-        ElementDisappear
+        ElementAppear = 0 /*<< Animate the appearance of an element */,
+        ElementDisappear /*<< Animate the disappearance of an element */
     };
 
     enum RenderOp
     {
         RenderBackground = 0 /*<< Render the background of an item */
+    };
+
+    enum CurveShape
+    {
+        EaseInCurve = 0,
+        EaseOutCurve,
+        EaseInOutCurve,
+        LinearCurve
     };
 
     typedef int AnimId;
@@ -67,7 +75,10 @@ public:
     explicit Phase(QObject * parent = 0);
     ~Phase();
 
-    AnimId startElementAnimation(QGraphicsItem *obj, ElementAnimation);
+    void animateItem(QGraphicsItem* item, Animation anim);
+    void render(QGraphicsItem* item, QImage& image, RenderOp op);
+
+    AnimId animateElement(QGraphicsItem *obj, ElementAnimation);
     void stopElementAnimation(AnimId id);
     void setAnimationPixmap(AnimId id, const QPixmap &pixmap);
     QPixmap animationResult(AnimId id);
@@ -75,31 +86,11 @@ public:
 Q_SIGNALS:
     void animationComplete(QGraphicsItem *item, Animation anim);
 
-public Q_SLOTS:
-    void animate(QGraphicsItem* item, Animation anim);
-    void render(QGraphicsItem* item, QImage& image, RenderOp op);
+protected:
+    void timerEvent(QTimerEvent *event);
 
 protected Q_SLOTS:
     void appletDestroyed(QObject*);
-
-    void advanceFrame(int frame, QTimeLine* timeLine);
-    void advanceElementFrame(int frame);
-    void advanceElementFrame(int frame, AnimId id);
-
-    /**
-     * NEVER call this method directly, as it relies on sender()
-     */
-    void advanceFrame(int frame);
-
-    /**
-     * NEVER call this method directly, as it relies on sender()
-     */
-    void animationComplete();
-
-    /**
-     * NEVER call this method directly, as it relies on sender()
-     */
-    void elementAnimationComplete();
 
 private:
     void init();
