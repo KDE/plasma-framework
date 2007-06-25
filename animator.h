@@ -43,6 +43,8 @@ public:
 
     virtual int framesPerSecond(Plasma::Phase::Animation);
     virtual int framesPerSecond(Plasma::Phase::ElementAnimation);
+    virtual Phase::CurveShape curve(Plasma::Phase::Animation);
+    virtual Phase::CurveShape curve(Plasma::Phase::ElementAnimation);
 
     virtual QPixmap elementAppear(qreal frame, const QPixmap& pixmap);
     virtual QPixmap elementDisappear(qreal frame, const QPixmap& pixmap);

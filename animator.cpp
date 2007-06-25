@@ -45,6 +45,16 @@ int Animator::framesPerSecond(Plasma::Phase::ElementAnimation animation)
     return 0;
 }
 
+Phase::CurveShape Animator::curve(Plasma::Phase::Animation)
+{
+    return Phase::EaseInOutCurve;
+}
+
+Phase::CurveShape Animator::curve(Plasma::Phase::ElementAnimation)
+{
+    return Phase::EaseInOutCurve;
+}
+
 QPixmap Animator::elementAppear(qreal frame, const QPixmap& pixmap)
 {
     Q_UNUSED(frame)
