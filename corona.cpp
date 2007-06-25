@@ -194,7 +194,7 @@ Applet* Corona::addPlasmoid(const QString& name, const QStringList& args)
         d->applets << applet;
         connect(applet, SIGNAL(destroyed(QObject*)),
                 this, SLOT(appletDestroyed(QObject*)));
-        Phase::self()->animate(applet, Phase::Appear);
+        Phase::self()->animateItem(applet, Phase::Appear);
     } else {
         kDebug() << "Plasmoid " << name << " could not be loaded." << endl;
     }
@@ -207,7 +207,7 @@ void Corona::addKaramba(const KUrl& path)
     QGraphicsItemGroup* karamba = KarambaManager::loadKaramba(path, this);
     if (karamba) {
         addItem(karamba);
-        Phase::self()->animate(karamba, Phase::Appear);
+        Phase::self()->animateItem(karamba, Phase::Appear);
     } else {
         kDebug() << "Karamba " << path << " could not be loaded." << endl;
     }

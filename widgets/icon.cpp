@@ -345,6 +345,7 @@ void Icon::mousePressEvent(QGraphicsSceneMouseEvent *event)
 
 void Icon::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
+    kDebug() << "Icon::mouseReleaseEvent" <<endl;
     bool inside = boundingRect().contains(event->pos());
     bool wasClicked = d->state == Private::PressedState && inside;
 
@@ -424,7 +425,7 @@ void Icon::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
         Phase::self()->stopElementAnimation(d->button1AnimId);
     }
 
-    d->button1AnimId = Phase::self()->startElementAnimation(this, Phase::ElementAppear);
+    d->button1AnimId = Phase::self()->animateElement(this, Phase::ElementAppear);
     Phase::self()->setAnimationPixmap(d->button1AnimId, buttonPixmap());
     QGraphicsItem::hoverEnterEvent(event);
 }
@@ -438,7 +439,7 @@ void Icon::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
         Phase::self()->stopElementAnimation(d->button1AnimId);
     }
 
-    d->button1AnimId = Phase::self()->startElementAnimation(this, Phase::ElementDisappear);
+    d->button1AnimId = Phase::self()->animateElement(this, Phase::ElementDisappear);
     Phase::self()->setAnimationPixmap(d->button1AnimId, buttonPixmap());
 
     d->state = Private::NoState;
