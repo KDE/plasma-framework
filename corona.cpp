@@ -309,20 +309,18 @@ void Corona::contextMenuEvent(QGraphicsSceneContextMenuEvent *contextMenuEvent)
             return;
         }
 
-        desktopMenu.addTitle("Plasma");
         desktopMenu.addAction(d->engineExplorerAction);
     } else if (applet->immutable()) {
         return;
     } else {
-        desktopMenu.addTitle(applet->name());
         desktopMenu.addSeparator();
 
-            QAction* configureApplet = new QAction(i18n("Configure Plasmoid..."), this);
+            QAction* configureApplet = new QAction(i18n("Settings..."), this);
             connect(configureApplet, SIGNAL(triggered(bool)),
                     applet, SLOT(configureDialog())); //This isn't implemented in Applet yet...
             desktopMenu.addAction(configureApplet);
         if (!d->immutable) {
-            QAction* closeApplet = new QAction(i18n("Close Plasmoid"), this);
+            QAction* closeApplet = new QAction(i18n("Close"), this);
             connect(closeApplet, SIGNAL(triggered(bool)),
                     applet, SLOT(deleteLater()));
             desktopMenu.addAction(closeApplet);
