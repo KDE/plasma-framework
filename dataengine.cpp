@@ -119,7 +119,7 @@ DataEngine::DataEngine(QObject* parent)
     connect(d->updateTimer, SIGNAL(timeout()), this, SLOT(checkForUpdates()));
     //FIXME: we should delay this call; to when is the question.
     //Update DataEngine::init() api docu when fixed
-    init();
+    QTimer::singleShot(0, this, SLOT(startInit()));
 }
 
 DataEngine::~DataEngine()
@@ -195,8 +195,14 @@ DataEngine::Data DataEngine::query(const QString& source) const
     return s->data();
 }
 
+void DataEngine::startInit()
+{
+    init();
+}
+
 void DataEngine::init()
 {
+    // kDebug() << "DataEngine::init() called " << endl;
     // default implementation does nothing. this is for engines that have to
     // start things in motion external to themselves before they can work
 }

@@ -174,8 +174,6 @@ class PLASMA_EXPORT DataEngine : public QObject
          * method is called the DataEngine is fully constructed and ready to be
          * used. This method should be reimplemented by DataEngine subclasses
          * which have the need to perform a startup routine.
-         *
-         * NOTE: Due to a bug in the DataEngine base implementation this method is never called.
          **/
         virtual void init();
 
@@ -183,6 +181,11 @@ class PLASMA_EXPORT DataEngine : public QObject
          * When a source that does not currently exist is requested by the
          * consumer, this method is called to give the DataEngine the
          * opportunity to create one.
+         *
+         * The name of the data source (e.g. the source parameter passed into
+         * setData) it must be the same as the name passed to sourceRequested
+         * otherwise the requesting visualization may not receive notice of a
+         * data update.
          *
          * @return true if a DataSource was set up, false otherwise
          */
@@ -256,7 +259,8 @@ class PLASMA_EXPORT DataEngine : public QObject
 
     protected Q_SLOTS:
         /**
-         * Call this method when you call setData directly on a DataSource.
+         * Call this method when you call setData directly on a DataSource instead
+         * of using the DataEngine::setData methods.
          * If this method is not called, no updated(..) signals will be emitted!
          */
         void checkForUpdates();
@@ -266,6 +270,11 @@ class PLASMA_EXPORT DataEngine : public QObject
          * @param source the name of the data source to remove
          **/
         void removeSource(const QString& source);
+
+        /**
+         * @internal
+         **/
+        void startInit();
 
     private:
         class Private;
