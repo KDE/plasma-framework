@@ -318,7 +318,7 @@ void Corona::contextMenuEvent(QGraphicsSceneContextMenuEvent *contextMenuEvent)
         if (applet->hasConfigurationInterface()) {
             QAction* configureApplet = new QAction(i18n("%1 Settings...", applet->name()), this);
             connect(configureApplet, SIGNAL(triggered(bool)),
-                    applet, SLOT(configureDialog()));
+                    applet, SLOT(showConfigurationInterface()));
             desktopMenu.addAction(configureApplet);
             hasEntries = true;
         }

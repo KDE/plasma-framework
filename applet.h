@@ -145,7 +145,7 @@ class PLASMA_EXPORT Applet : public QObject, public QGraphicsItem
          * play with the plasmoid options. Called when the user selects the configure entry
          * from the context menu.
          */
-        virtual void configureDialog();
+        virtual void showConfigurationInterface();
 
         /**
          * Attempts to load an applet, returning a pointer to the applet if
@@ -267,7 +267,7 @@ class PLASMA_EXPORT Applet : public QObject, public QGraphicsItem
         /**
          * Sets whether or not this applet provides a user interface for configuring
          * the applet. It defaults to false, and if true is passed in you should
-         * also reimplement configureDialog()
+         * also reimplement showConfigurationInterface()
          *
          * @arg hasInterface whether or not there is a user interface available
          **/

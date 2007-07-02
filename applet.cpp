@@ -296,7 +296,7 @@ bool Applet::eventFilter( QObject *o, QEvent * e )
     return QObject::eventFilter(o, e);
 }
 
-void Applet::configureDialog()
+void Applet::showConfigurationInterface()
 {
 }
 
