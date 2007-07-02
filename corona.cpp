@@ -313,17 +313,26 @@ void Corona::contextMenuEvent(QGraphicsSceneContextMenuEvent *contextMenuEvent)
     } else if (applet->immutable()) {
         return;
     } else {
-        desktopMenu.addSeparator();
-
-            QAction* configureApplet = new QAction(i18n("Settings..."), this);
+        //desktopMenu.addSeparator();
+        bool hasEntries = false;
+        if (applet->hasConfigurationInterface()) {
+            QAction* configureApplet = new QAction(i18n("%1 Settings...", applet->name()), this);
             connect(configureApplet, SIGNAL(triggered(bool)),
-                    applet, SLOT(configureDialog())); //This isn't implemented in Applet yet...
+                    applet, SLOT(configureDialog()));
             desktopMenu.addAction(configureApplet);
+            hasEntries = true;
+        }
+
         if (!d->immutable) {
-            QAction* closeApplet = new QAction(i18n("Close"), this);
+            QAction* closeApplet = new QAction(i18n("Close this %1", applet->name()), this);
             connect(closeApplet, SIGNAL(triggered(bool)),
                     applet, SLOT(deleteLater()));
             desktopMenu.addAction(closeApplet);
+            hasEntries = true;
+        }
+
+        if (!hasEntries) {
+            return;
         }
     }
     desktopMenu.exec(point.toPoint());

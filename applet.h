@@ -136,11 +136,16 @@ class PLASMA_EXPORT Applet : public QObject, public QGraphicsItem
         static KPluginInfo::List knownApplets();
 
         /**
+         * @return true if this plasmoid provides a GUI configuration
+         **/
+        bool hasConfigurationInterface();
+
+        /**
          * Reimplement this slot to show a configuration dialog and let the user
          * play with the plasmoid options. Called when the user selects the configure entry
-         * from the contextual menu.
+         * from the context menu.
          */
-        virtual void configureDialog(){} //default implementation is empty
+        virtual void configureDialog();
 
         /**
          * Attempts to load an applet, returning a pointer to the applet if
@@ -258,6 +263,15 @@ class PLASMA_EXPORT Applet : public QObject, public QGraphicsItem
         * @param focus whether to or not to request focus
         */
         void needsFocus(bool focus);
+
+        /**
+         * Sets whether or not this applet provides a user interface for configuring
+         * the applet. It defaults to false, and if true is passed in you should
+         * also reimplement configureDialog()
+         *
+         * @arg hasInterface whether or not there is a user interface available
+         **/
+        void setHasConfigurationInterface(bool hasInterface);
 
         /**
          * @internal event filter; used for focus watching

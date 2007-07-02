@@ -45,6 +45,7 @@ class Applet::Private
               appletConfig( 0 ),
               appletDescription(new KPluginInfo(appletDescription)),
               immutable(false),
+              hasConfigurationInterface(false),
               background(0)
         {
             if (appletId > s_maxAppletId) {
@@ -75,6 +76,7 @@ class Applet::Private
         QStringList loadedEngines;
         static uint s_maxAppletId;
         bool immutable;
+        bool hasConfigurationInterface;
         Plasma::Svg *background;
 };
 
@@ -269,6 +271,16 @@ void Applet::needsFocus(bool focus)
     emit requestFocus(focus);
 }
 
+bool Applet::hasConfigurationInterface()
+{
+    return d->hasConfigurationInterface;
+}
+
+void Applet::setHasConfigurationInterface(bool hasInterface)
+{
+    d->hasConfigurationInterface = hasInterface;
+}
+
 bool Applet::eventFilter( QObject *o, QEvent * e )
 {
     if ( !d->watchedForFocus.contains( o ) )
@@ -282,6 +294,10 @@ bool Applet::eventFilter( QObject *o, QEvent * e )
     }
 
     return QObject::eventFilter(o, e);
+}
+
+void Applet::configureDialog()
+{
 }
 
 KPluginInfo::List Applet::knownApplets()
