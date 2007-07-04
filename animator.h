@@ -41,19 +41,29 @@ public:
     explicit Animator(QObject *parent = 0, const QStringList& list = QStringList());
     ~Animator();
 
+    // Parameter defintions
     virtual int framesPerSecond(Plasma::Phase::Animation);
+    virtual int framesPerSecond(Plasma::Phase::Movement);
     virtual int framesPerSecond(Plasma::Phase::ElementAnimation);
     virtual Phase::CurveShape curve(Plasma::Phase::Animation);
+    virtual Phase::CurveShape curve(Plasma::Phase::Movement);
     virtual Phase::CurveShape curve(Plasma::Phase::ElementAnimation);
 
+    // Element animations
     virtual QPixmap elementAppear(qreal frame, const QPixmap& pixmap);
     virtual QPixmap elementDisappear(qreal frame, const QPixmap& pixmap);
 
-    virtual void appear(qreal frame, QGraphicsItem* item);
-    virtual void disappear(qreal frame, QGraphicsItem* item);
-    virtual void frameAppear(qreal frame, QGraphicsItem* item, const QRegion& drawable);
-    virtual void activate(qreal frame, QGraphicsItem* item);
+    // Item animations
+    virtual void appear(qreal progress, QGraphicsItem* item);
+    virtual void disappear(qreal progress, QGraphicsItem* item);
+    virtual void frameAppear(qreal progress, QGraphicsItem* item, const QRegion& drawable);
+    virtual void activate(qreal progress, QGraphicsItem* item);
 
+    // Item movements
+    virtual void slideIn(qreal progress, QGraphicsItem* item, QPoint destination);
+    virtual void slideOut(qreal progress, QGraphicsItem* item, QPoint destination);
+
+    // Rendering
     virtual void renderBackground(QImage& background);
 };
 

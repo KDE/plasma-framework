@@ -55,6 +55,18 @@ struct ElementAnimationState
     QPixmap pixmap;
 };
 
+struct MovementState
+{
+    QGraphicsItem* item;
+    Phase::CurveShape curve;
+    Phase::Movement movement;
+    int interval;
+    int currentInterval;
+    int frames;
+    int currentFrame;
+    QPoint destination;
+};
+
 class Phase::Private
 {
     public:
@@ -101,6 +113,7 @@ class Phase::Private
         //      which would imply changing this to a QMap<QGraphicsItem*, QList<QTimeLine*> >
         //      and really making the code fun ;)
         QMap<QGraphicsItem*, AnimationState*> animatedItems;
+        QMap<QGraphicsItem*, MovementState*> movingItems;
         QMap<Phase::AnimId, ElementAnimationState*> animatedElements;
 };
 
@@ -142,6 +155,13 @@ void Phase::appletDestroyed(QObject* o)
     if (it != d->animatedItems.end()) {
         delete it.value();
         d->animatedItems.erase(it);
+        return;
+    }
+
+    QMap<QGraphicsItem*, MovementState*>::iterator it2 = d->movingItems.find(item);
+    if (it2 != d->movingItems.end()) {
+        delete it2.value();
+        d->movingItems.erase(it2);
     }
 }
 
@@ -181,6 +201,17 @@ void Phase::animateItem(QGraphicsItem* item, Animation animation)
         d->timerId = startTimer(40);
         d->time.restart();
     }
+}
+
+void Phase::moveItem(QGraphicsItem* item, Movement movement, QPoint destination)
+{
+    switch (movement) {
+        case SlideIn:
+        case SlideOut:
+        default:
+            break;
+    }
+    //FIXME: create movement item struct, add it to the map and call the animator methods
 }
 
 void Phase::render(QGraphicsItem* item, QImage& image, RenderOp op)
@@ -315,6 +346,10 @@ void Phase::timerEvent(QTimerEvent *event)
             state->currentInterval -= elapsed;
             animationsRemain = true;
         }
+    }
+
+    foreach (MovementState* state, d->movingItems) {
+        //FIXME: implement =)
     }
 
     foreach (ElementAnimationState* state, d->animatedElements) {

@@ -39,6 +39,12 @@ int Animator::framesPerSecond(Plasma::Phase::Animation animation)
     return 0;
 }
 
+int Animator::framesPerSecond(Plasma::Phase::Movement movement)
+{
+    Q_UNUSED(movement)
+    return 5;
+}
+
 int Animator::framesPerSecond(Plasma::Phase::ElementAnimation animation)
 {
     Q_UNUSED(animation)
@@ -46,6 +52,11 @@ int Animator::framesPerSecond(Plasma::Phase::ElementAnimation animation)
 }
 
 Phase::CurveShape Animator::curve(Plasma::Phase::Animation)
+{
+    return Phase::EaseInOutCurve;
+}
+
+Phase::CurveShape Animator::curve(Plasma::Phase::Movement)
 {
     return Phase::EaseInOutCurve;
 }
@@ -93,6 +104,16 @@ void Animator::frameAppear(qreal frame, QGraphicsItem* item, const QRegion& draw
     Q_UNUSED(frame)
     Q_UNUSED(item)
     Q_UNUSED(drawable)
+}
+
+void Animator::slideIn(qreal progress, QGraphicsItem* item, QPoint destination)
+{
+    //TODO: implement
+}
+
+void Animator::slideOut(qreal progress, QGraphicsItem* item, QPoint destination)
+{
+    //TODO: implement
 }
 
 void Animator::renderBackground(QImage& background)
