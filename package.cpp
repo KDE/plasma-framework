@@ -55,7 +55,7 @@ public:
 
 Package::Package(const QString& packageRoot, const QString& package,
                  const PackageStructure& structure)
-    : d(new Private(structure, packageRoot + "/" + package))
+    : d(new Private(structure, packageRoot + '/' + package))
 {
 }
 
@@ -119,7 +119,7 @@ QStringList Package::knownPackages(const QString& packageRoot) // static
     QStringList packages;
 
     foreach (const QString& dir, dir.entryList(QDir::AllDirs | QDir::Readable)) {
-        QString metadata = packageRoot + "/" + dir + "/metadata.desktop";
+        QString metadata = packageRoot + '/' + dir + "/metadata.desktop";
         if (QFile::exists(metadata)) {
             PackageMetadata m(metadata);
             packages << m.name();
@@ -158,7 +158,7 @@ bool Package::installPackage(const QString& package, const QString& packageRoot)
     }
 
     QFile f(package);
-    QString tempdir = packageRoot + "/" + f.fileName();
+    QString tempdir = packageRoot + '/' + f.fileName();
     if (QFile::exists(tempdir)) {
         return false;
     }
@@ -180,7 +180,7 @@ bool Package::installPackage(const QString& package, const QString& packageRoot)
         return false;
     }
 
-    targetName = packageRoot + "/" + targetName;
+    targetName = packageRoot + '/' + targetName;
     if (QFile::exists(targetName)) {
         KIO::SimpleJob* job = KIO::file_delete(tempdir);
         job->exec();
