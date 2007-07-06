@@ -65,6 +65,10 @@ public:
 
     // Rendering
     virtual void renderBackground(QImage& background);
+
+private:
+    class Private;
+    Private * const d;
 };
 
 } // Plasma namespace
