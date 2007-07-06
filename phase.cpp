@@ -217,7 +217,7 @@ void Phase::animateItem(QGraphicsItem* item, Animation animation)
 
 void Phase::moveItem(QGraphicsItem* item, Movement movement, QPoint destination)
 {
-     kDebug()<<k_funcinfo<<endl;
+     //kDebug()<<k_funcinfo<<endl;
      QMap<QGraphicsItem*, MovementState*>::iterator it = d->movingItems.find(item);
      if (it != d->movingItems.end()) {
           delete it.value();
@@ -358,7 +358,7 @@ void Phase::timerEvent(QTimerEvent *event)
         elapsed = d->time.elapsed();
     }
     d->time.restart();
-    kDebug() << "timeEvent, elapsed time: " << elapsed << endl;
+    //kDebug() << "timeEvent, elapsed time: " << elapsed << endl;
 
     foreach (AnimationState* state, d->animatedItems) {
         if (state->currentInterval <= elapsed) {
@@ -394,7 +394,7 @@ void Phase::timerEvent(QTimerEvent *event)
                 qreal progress = state->frames;
                 progress = state->currentFrame / progress;
                 progress = qMin(1.0, qMax(0.0, progress));
-                kDebug()<<progress<<endl;
+                //kDebug()<<progress<<endl;
                 d->performMovement(progress, state);
                 state->currentInterval = state->interval;
                 animationsRemain = true;
