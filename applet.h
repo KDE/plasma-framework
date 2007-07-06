@@ -90,15 +90,16 @@ class PLASMA_EXPORT Applet : public QObject, public QGraphicsItem
         KConfigGroup globalAppletConfig() const;
 
         /**
-         * Ensures that the DataEngine named name is loaded and ready to be used
+         * Ensures that the DataEngine named name is loaded and ready to be used.
          *
          * @return returns true on success, false on failure
          */
         DataEngine* dataEngine(const QString& name);
 
         /**
-         * called when any of the geometry constraints have been updated
-         * this is always called prior to painting and should be used as an
+         * Called when any of the geometry constraints have been updated.
+         *
+         * This is always called prior to painting and should be used as an
          * opportunity to layout the widget, calculate sizings, etc.
          *
          * Do not call update() from this method; an update() will be triggered
@@ -110,18 +111,21 @@ class PLASMA_EXPORT Applet : public QObject, public QGraphicsItem
 
         /**
          * Returns the current form factor the applet is being displayed in.
+         *
          * @see Plasma::FormFactor
          */
         FormFactor formFactor() const;
 
         /**
          * Returns the location of the scene which is displaying applet.
+         *
          * @see Plasma::Location
          */
         Location location() const;
 
         /**
-         * Returns a maximum size hint based on the Corona's space availability
+         * Returns a maximum size hint based on the Corona's space availability.
+         *
          * An applet may choose to violate this size hint, but should try and
          * respect it as much as possible.
          */
@@ -129,7 +133,7 @@ class PLASMA_EXPORT Applet : public QObject, public QGraphicsItem
 
         /**
          * Returns a list of all known applets in a hash keyed by a unique
-         * identifier for each applet
+         * identifier for each applet.
          *
          * @return list of applets
          **/
@@ -141,15 +145,19 @@ class PLASMA_EXPORT Applet : public QObject, public QGraphicsItem
         bool hasConfigurationInterface();
 
         /**
-         * Reimplement this slot to show a configuration dialog and let the user
-         * play with the plasmoid options. Called when the user selects the configure entry
+         * Reimplement this slot to show a configuration dialog.
+         *
+         * Let the user play with the plasmoid options.
+         * Called when the user selects the configure entry
          * from the context menu.
          */
         virtual void showConfigurationInterface();
 
         /**
-         * Attempts to load an applet, returning a pointer to the applet if
-         * successful. The caller takes responsibility for the applet, including
+         * Attempts to load an applet
+         *
+         * Returns a pointer to the applet if successful.
+         * The caller takes responsibility for the applet, including
          * deleting it when no longer needed.
          *
          * @param name the plugin name, as returned by KPluginInfo::pluginName()
@@ -162,8 +170,10 @@ class PLASMA_EXPORT Applet : public QObject, public QGraphicsItem
                                   const QStringList& args = QStringList());
 
         /**
-         * Attempts to load an applet, returning a pointer to the applet if
-         * successful. The caller takes responsibility for the applet, including
+         * Attempts to load an applet
+         *
+         * Returns a pointer to the applet if successful.
+         * The caller takes responsibility for the applet, including
          * deleting it when no longer needed.
          *
          * @param info KPluginInfo object for the desired applet
@@ -176,6 +186,7 @@ class PLASMA_EXPORT Applet : public QObject, public QGraphicsItem
 
         /**
          * This method is called when the interface should be painted.
+         *
          * @see QGraphicsItem::paint
          **/
         virtual void paintInterface(QPainter *painter,
@@ -185,6 +196,7 @@ class PLASMA_EXPORT Applet : public QObject, public QGraphicsItem
         /**
          * Returns the user-visible name for the applet, as specified in the
          * .desktop file.
+         *
          * @return the user-visible name for the applet.
          **/
         QString name() const;
@@ -195,7 +207,7 @@ class PLASMA_EXPORT Applet : public QObject, public QGraphicsItem
         bool immutable() const;
 
         /** 
-         * Sets whether or not this applet is immutable or not
+         * Sets whether or not this applet is immutable or not.
          *
          * @arg immutable true if this applet should not be changable
          **/
@@ -208,22 +220,24 @@ class PLASMA_EXPORT Applet : public QObject, public QGraphicsItem
         bool drawStandardBackground();
 
         /**
-         * Sets whether or not the applet should automatically draw the standard 
-         * background or not. Defaults to false
+         * Sets whether the applet should automatically draw the standard
+         * background.
+         *
+         * Defaults to false
          **/
         void setDrawStandardBackground(bool drawBackground);
 
-        /**
-         * Reimplented from QGraphicsItem
-         **/
+        // Reimplemented from QGraphicsItem
         enum { Type = Plasma::AppletType };
         int type() const { return Type; }
 
     Q_SIGNALS:
         /**
-         * Emit this signal when your applet needs to take (or lose) keyboard
-         * focus. This ensures that autohiding elements stay unhidden and other
-         * bits of bookkeeping are performed to ensure proper function.
+         * Emitted when the applet needs to take (or lose) keyboard focus.
+         *
+         * An applet should emit this signal to ensure that autohiding
+         * elements stay unhidden and other bits of bookkeeping are
+         * performed to ensure proper function.
          *
          * If you call watchForFocus on your applet, then this is handled for
          * the applet and it is not necessary to emit the signal directly.
@@ -235,38 +249,46 @@ class PLASMA_EXPORT Applet : public QObject, public QGraphicsItem
 
     protected:
         /**
-         * Returns the name of the applet. This will be the same for all
-         * instances of this applet.
+         * Returns the name of the applet.
+         *
+         * This will be the same for all instances of this applet.
          **/
         QString globalName() const;
 
         /**
-         * Returns a name unique to the insane of this applet. Useful for
-         * being able to refer directly to a particular applet. Combines the
-         * global name with the applet id
+         * Returns a name unique to the instance of this applet.
+         *
+         * Useful for being able to refer directly to a particular
+         * applet. Combines the global name with the applet id
          **/
         QString instanceName() const;
 
         /**
-        * Register widgets that can receive keyboard focus with this method
-        * This call results in an eventFilter being places on the widget.
+        * Register widgets that can receive keyboard focus.
+        *
+        * Calling this results in an eventFilter being places on the widget.
+        *
         * @param widget the widget to watch for keyboard focus
         * @param watch whether to start watching the widget, or to stop doing so
         */
         void watchForFocus( QObject *widget, bool watch = true );
 
         /**
-        * Call this whenever focus is needed or not needed. You do not have to
-        * call this method for widgets that have been registered with
-        * watchForFocus
+        * Call this whenever focus is needed or not needed.
+        *
+        * You do not have to call this method for widgets that have
+        * been registered with watchForFocus
+        *
         * @see watchForFocus
         * @param focus whether to or not to request focus
         */
         void needsFocus(bool focus);
 
         /**
-         * Sets whether or not this applet provides a user interface for configuring
-         * the applet. It defaults to false, and if true is passed in you should
+         * Sets whether or not this applet provides a user interface for
+         * configuring the applet.
+         *
+         * It defaults to false, and if true is passed in you should
          * also reimplement showConfigurationInterface()
          *
          * @arg hasInterface whether or not there is a user interface available
@@ -279,9 +301,7 @@ class PLASMA_EXPORT Applet : public QObject, public QGraphicsItem
         bool eventFilter( QObject *o, QEvent *e );
 
     private:
-        /**
-         * Reimplemented from QGraphicsItem
-         **/
+        // Reimplemented from QGraphicsItem
         void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
 
         void init();
@@ -292,6 +312,9 @@ class PLASMA_EXPORT Applet : public QObject, public QGraphicsItem
 
 } // Plasma namespace
 
+/**
+ * Register an applet when it is contained in a loadable module
+ */
 #define K_EXPORT_PLASMA_APPLET(libname, classname) \
         K_EXPORT_COMPONENT_FACTORY(                \
                         plasma_applet_##libname,    \
