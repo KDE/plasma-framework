@@ -1,5 +1,6 @@
 /*
  *   Copyright (C) 2007 Aaron Seigo <aseigo@kde.org>
+ *                 2007 Alexis Ménard <darktears31@gmail.com>
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU Library General Public License version 2 as
@@ -19,6 +20,7 @@
 #include "animator.h"
 
 #include <QPainter>
+#include <QGraphicsItem>
 
 namespace Plasma
 {
@@ -43,7 +45,7 @@ int Animator::framesPerSecond(Plasma::Phase::Animation animation)
 int Animator::framesPerSecond(Plasma::Phase::Movement movement)
 {
     Q_UNUSED(movement)
-    return 5;
+    return 10;
 }
 
 int Animator::framesPerSecond(Plasma::Phase::ElementAnimation animation)
@@ -109,12 +111,16 @@ void Animator::frameAppear(qreal frame, QGraphicsItem* item, const QRegion& draw
 
 void Animator::slideIn(qreal progress, QGraphicsItem* item, QPoint destination)
 {
-    //TODO: implement
+    kDebug()<<k_funcinfo<<endl;
+    Q_UNUSED(progress);
+    item->translate(-destination.x(),-destination.y());
 }
 
 void Animator::slideOut(qreal progress, QGraphicsItem* item, QPoint destination)
 {
-    //TODO: implement
+    Q_UNUSED(progress);
+    //kDebug()<<k_funcinfo<<endl;
+    item->translate(destination.x(),destination.y());
 }
 
 void Animator::renderBackground(QImage& background)

@@ -1,5 +1,6 @@
 /*
  *   Copyright (C) 2007 Aaron Seigo <aseigo@kde.org>
+ *                 2007 Alexis Ménard <darktears31@gmail.com>
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU Library General Public License version 2 as
@@ -103,7 +104,17 @@ class Phase::Private
                     break;
             }
         }
-
+          void performMovement(qreal amount, const MovementState* state)
+        {
+            switch (state->movement) {
+                case Phase::SlideIn:
+                    animator->slideIn(amount, state->item, state->destination);
+                    break;
+                case Phase::SlideOut:
+                    animator->slideOut(amount, state->item,state->destination);
+                    break;
+            }
+        }
         Animator* animator;
         int animId;
         int timerId;
@@ -167,6 +178,7 @@ void Phase::appletDestroyed(QObject* o)
 
 void Phase::animateItem(QGraphicsItem* item, Animation animation)
 {
+     //kDebug()<<k_funcinfo<<endl;
     // get rid of any existing animations on this item.
     //TODO: shoudl we allow multiple anims per item?
     QMap<QGraphicsItem*, AnimationState*>::iterator it = d->animatedItems.find(item);
@@ -205,13 +217,39 @@ void Phase::animateItem(QGraphicsItem* item, Animation animation)
 
 void Phase::moveItem(QGraphicsItem* item, Movement movement, QPoint destination)
 {
-    switch (movement) {
-        case SlideIn:
-        case SlideOut:
-        default:
-            break;
-    }
-    //FIXME: create movement item struct, add it to the map and call the animator methods
+     kDebug()<<k_funcinfo<<endl;
+     QMap<QGraphicsItem*, MovementState*>::iterator it = d->movingItems.find(item);
+     if (it != d->movingItems.end()) {
+          delete it.value();
+          d->movingItems.erase(it);
+     }
+
+     int frames = d->animator->framesPerSecond(movement);
+     if (frames < 1) {
+          // evidently this animator doesn't have an implementation
+          // for this Animation
+          return;
+     }
+
+     MovementState* state = new MovementState;
+     state->destination=destination;
+     state->item = item;
+     state->movement = movement;
+     state->curve = d->animator->curve(movement);
+     //TODO: variance in times based on the value of animation
+     state->frames = frames / 2;
+     state->currentFrame = 0;
+     state->interval = 500 / state->frames;
+     state->interval = (state->interval / 40) * 40;
+     state->currentInterval = state->interval;
+
+     d->movingItems[item] = state;
+     d->performMovement(0, state);
+
+     if (!d->timerId) {
+          d->timerId = startTimer(40);
+          d->time.restart();
+     }
 }
 
 void Phase::render(QGraphicsItem* item, QImage& image, RenderOp op)
@@ -258,7 +296,6 @@ Phase::AnimId Phase::animateElement(QGraphicsItem *item, ElementAnimation animat
         d->timerId = startTimer(40);
         d->time.restart();
     }
-
     return state->id;
 }
 
@@ -289,7 +326,7 @@ QPixmap Phase::animationResult(AnimId id)
     QMap<AnimId, ElementAnimationState*>::const_iterator it = d->animatedElements.find(id);
 
     if (it == d->animatedElements.constEnd()) {
-        kDebug() << "Phase::animationResult(" << id << ") found no entry for it!" << endl;
+        //kDebug() << "Phase::animationResult(" << id << ") found no entry for it!" << endl;
         return QPixmap();
     }
 
@@ -321,18 +358,18 @@ void Phase::timerEvent(QTimerEvent *event)
         elapsed = d->time.elapsed();
     }
     d->time.restart();
-//     kDebug() << "timeEvent, elapsed time: " << elapsed << endl;
+    kDebug() << "timeEvent, elapsed time: " << elapsed << endl;
 
     foreach (AnimationState* state, d->animatedItems) {
         if (state->currentInterval <= elapsed) {
             // we need to step forward!
-            qreal progress = state->frames;
-            progress = state->currentFrame / progress;
-            progress = qMin(1.0, qMax(0.0, progress));
-            d->performAnimation(progress, state);
             state->currentFrame += qMax(1, elapsed / state->interval);
 
             if (state->currentFrame < state->frames) {
+                qreal progress = state->frames;
+                progress = state->currentFrame / progress;
+                progress = qMin(1.0, qMax(0.0, progress));
+                d->performAnimation(progress, state);
                 state->currentInterval = state->interval;
                 //TODO: calculate a proper interval based on the curve
                 state->interval *= 1 - progress;
@@ -349,7 +386,27 @@ void Phase::timerEvent(QTimerEvent *event)
     }
 
     foreach (MovementState* state, d->movingItems) {
-        //FIXME: implement =)
+        if (state->currentInterval <= elapsed) {
+            // we need to step forward!
+            state->currentFrame += qMax(1, elapsed / state->interval);
+
+            if (state->currentFrame < state->frames) {
+                qreal progress = state->frames;
+                progress = state->currentFrame / progress;
+                progress = qMin(1.0, qMax(0.0, progress));
+                kDebug()<<progress<<endl;
+                d->performMovement(progress, state);
+                state->currentInterval = state->interval;
+                animationsRemain = true;
+            } else {
+                d->performMovement(1, state);
+                d->movingItems.erase(d->movingItems.find(state->item));
+                delete state;
+            }
+        } else {
+            state->currentInterval -= elapsed;
+            animationsRemain = true;
+        }
     }
 
     foreach (ElementAnimationState* state, d->animatedElements) {

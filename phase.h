@@ -1,5 +1,6 @@
 /*
  *   Copyright (C) 2007 Aaron Seigo <aseigo@kde.org>
+ *                 2007 Alexis Ménard <darktears31@gmail.com>
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU Library General Public License version 2 as
