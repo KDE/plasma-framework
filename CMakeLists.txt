@@ -8,6 +8,7 @@ install(FILES
     widgets/background.svg
     widgets/clock.svg
     widgets/toolbox-button.svg
+    widgets/connection-established.svg
     widgets/plot-background.svg
     widgets/iconbutton.svg
     widgets/wallpaper.svg
