@@ -225,6 +225,15 @@ void DataEngine::setData(const QString& source, const QString& key, const QVaria
     d->queueUpdate();
 }
 
+void DataEngine::clearData(const QString& source)
+{
+    DataSource* s = d->source(source, false);
+    if (s) {
+        s->clearData();
+        d->queueUpdate();
+    }
+}
+
 void DataEngine::removeData(const QString& source, const QString& key)
 {
     DataSource* s = d->source(source, false);

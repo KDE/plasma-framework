@@ -69,6 +69,17 @@ void DataSource::setData(const QString& key, const QVariant& value)
     d->dirty = true;
 }
 
+void DataSource::clearData()
+{
+    if (d->data.count() < 1) {
+        // avoid an update if we don't have any data anyways
+        return;
+    }
+
+    d->data.clear();
+    d->dirty = true;
+}
+
 void DataSource::checkForUpdate()
 {
     if (d->dirty) {

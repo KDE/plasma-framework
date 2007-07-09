@@ -70,6 +70,11 @@ class PLASMA_EXPORT DataSource : public QObject
         void setData(const QString& key, const QVariant& value);
 
         /**
+         * Clears all data currently associated with this source
+         **/
+        void clearData();
+
+        /**
          * Checks for whether the data has changed and therefore an update
          * signal needs to be emitted.
          **/
