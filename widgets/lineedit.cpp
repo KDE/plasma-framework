@@ -39,6 +39,7 @@ LineEdit::LineEdit(QGraphicsItem *parent, QGraphicsScene *scene)
       d(new Private())
 {
     setTextInteractionFlags(Qt::TextEditorInteraction);
+    setCursor(Qt::IBeamCursor);
 }
 
 LineEdit::~LineEdit()
