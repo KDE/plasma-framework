@@ -42,7 +42,6 @@ set(plasmagik_HEADERS
     package.h
     )
 
-kde4_automoc(${plasma_LIB_SRCS})
 
 kde4_add_library(plasma SHARED ${plasma_LIB_SRCS})
 
