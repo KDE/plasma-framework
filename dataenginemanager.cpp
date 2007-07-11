@@ -31,7 +31,11 @@ class NullEngine : public DataEngine
         NullEngine(QObject* parent = 0)
             : DataEngine(parent)
         {
+            setObjectName(i18n("Null Engine"));
             setValid(false);
+
+            // ref() ourselves to ensure we never get deleted
+            ref();
         }
 };
 
@@ -44,10 +48,10 @@ class DataEngineManager::Private
 
         ~Private()
         {
-            foreach (Plasma::DataEngine* engine, m_engines) {
+            foreach (Plasma::DataEngine* engine, engines) {
                 delete engine;
             }
-            m_engines.clear();
+            engines.clear();
             delete nullEng;
         }
 
@@ -60,7 +64,7 @@ class DataEngineManager::Private
             return nullEng;
         }
 
-        DataEngine::Dict m_engines;
+        DataEngine::Dict engines;
         DataEngine* nullEng;
 };
 
@@ -89,8 +93,8 @@ DataEngineManager::~DataEngineManager()
 
 Plasma::DataEngine* DataEngineManager::dataEngine(const QString& name) const
 {
-    Plasma::DataEngine::Dict::const_iterator it = d->m_engines.find(name);
-    if (it != d->m_engines.end()) {
+    Plasma::DataEngine::Dict::const_iterator it = d->engines.find(name);
+    if (it != d->engines.end()) {
         // ref and return the engine
         //Plasma::DataEngine *engine = *it;
         return *it;
@@ -102,9 +106,9 @@ Plasma::DataEngine* DataEngineManager::dataEngine(const QString& name) const
 Plasma::DataEngine* DataEngineManager::loadDataEngine(const QString& name)
 {
     Plasma::DataEngine* engine = 0;
-    Plasma::DataEngine::Dict::const_iterator it = d->m_engines.find(name);
+    Plasma::DataEngine::Dict::const_iterator it = d->engines.find(name);
 
-    if (it != d->m_engines.end()) {
+    if (it != d->engines.end()) {
         engine = *it;
         engine->ref();
         return engine;
@@ -117,31 +121,32 @@ Plasma::DataEngine* DataEngineManager::loadDataEngine(const QString& name)
 
     if (offers.isEmpty()) {
         kDebug() << "offers are empty for " << name << " with constraint " << constraint << endl;
-        return 0;
+    } else {
+        engine = KService::createInstance<Plasma::DataEngine>(offers.first(), 0);
     }
 
-    engine = KService::createInstance<Plasma::DataEngine>(offers.first(), 0);
     if (!engine) {
         kDebug() << "Couldn't load engine \"" << name << "\"!" << endl;
-        engine = d->nullEngine();
+        return d->nullEngine();
     }
 
     engine->ref();
     engine->setObjectName(offers.first()->name());
     engine->setIcon(offers.first()->icon());
-    d->m_engines[name] = engine;
+    d->engines[name] = engine;
     return engine;
 }
 
 void DataEngineManager::unloadDataEngine(const QString& name)
 {
-    Plasma::DataEngine* engine = dataEngine(name);
+    Plasma::DataEngine::Dict::iterator it = d->engines.find(name);
 
-    if (engine) {
+    if (it != d->engines.end()) {
+        Plasma::DataEngine* engine = *it;
         engine->deref();
 
         if (!engine->isUsed()) {
-            d->m_engines.remove(name);
+            d->engines.erase(it);
             delete engine;
         }
     }
