@@ -144,12 +144,11 @@ DataEngine* Applet::dataEngine(const QString& name)
     }
 
     DataEngine* engine = DataEngineManager::self()->loadDataEngine(name);
-    if (engine) {
+    if (engine->isValid()) {
         d->loadedEngines.append(name);
-        return engine;
     }
 
-    return 0;
+    return engine;
 }
 
 void Applet::constraintsUpdated()

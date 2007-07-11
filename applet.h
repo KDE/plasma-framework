@@ -90,9 +90,21 @@ class PLASMA_EXPORT Applet : public QObject, public QGraphicsItem
         KConfigGroup globalAppletConfig() const;
 
         /**
-         * Ensures that the DataEngine named name is loaded and ready to be used.
+         * Loads the given DataEngine
          *
-         * @return returns true on success, false on failure
+         * Tries to load the data engine given by @p name.  Each engine is
+         * only loaded once, and that instance is re-used on all subsequent
+         * requests.
+         *
+         * If the data engine was not found, an invalid data engine is returned
+         * (see DataEngine::isValid()).
+         *
+         * Note that you should <em>not</em> delete the returned engine.
+         *
+         * @param name Name of the data engine to load
+         * @return pointer to the data engine if it was loaded,
+         *         or an invalid data engine if the requested engine
+         *         could not be loaded
          */
         DataEngine* dataEngine(const QString& name);
 
