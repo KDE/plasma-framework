@@ -185,19 +185,21 @@ QRectF Corona::maxSizeHint() const
     return sceneRect();
 }
 
-Applet* Corona::addPlasmoid(const QString& name, const QStringList& args)
+Applet* Corona::addApplet(const QString& name, const QStringList& args)
 {
     Applet* applet = Applet::loadApplet(name, 0, args);
-    if (applet) {
-        addItem(applet);
-        //applet->constraintsUpdated();
-        d->applets << applet;
-        connect(applet, SIGNAL(destroyed(QObject*)),
-                this, SLOT(appletDestroyed(QObject*)));
-        Phase::self()->animateItem(applet, Phase::Appear);
-    } else {
-        kDebug() << "Plasmoid " << name << " could not be loaded." << endl;
+    if (!applet) {
+        kDebug() << "Applet " << name << " could not be loaded." << endl;
+        applet = new Applet;
+        applet->setFailedToLaunch(true);
     }
+
+    addItem(applet);
+    //applet->constraintsUpdated();
+    d->applets << applet;
+    connect(applet, SIGNAL(destroyed(QObject*)),
+            this, SLOT(appletDestroyed(QObject*)));
+    Phase::self()->animateItem(applet, Phase::Appear);
 
     return applet;
 }
@@ -249,7 +251,7 @@ void Corona::dropEvent(QGraphicsSceneDragDropEvent *event)
         //TODO This will pretty much move into dragEnterEvent()
         QString plasmoidName;
         plasmoidName = event->mimeData()->data("text/x-plasmoidservicename");
-        addPlasmoid(plasmoidName);
+        addApplet(plasmoidName);
         d->applets.last()->setPos(event->pos());
 
         event->acceptProposedAction();
@@ -258,7 +260,7 @@ void Corona::dropEvent(QGraphicsSceneDragDropEvent *event)
         foreach (const KUrl& url, urls) {
             QStringList args;
             args << url.url();
-            Applet* button = addPlasmoid("url", args);
+            Applet* button = addApplet("url", args);
             if (button) {
                 //button->setSize(128,128);
                 button->setPos(event->scenePos() - QPoint(button->boundingRect().width()/2,

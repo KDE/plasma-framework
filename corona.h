@@ -83,13 +83,13 @@ public Q_SLOTS:
     void setFormFactor(Plasma::FormFactor formFactor);
 
     /**
-     * Adds a plasmoid applet to the scene
+     * Adds an applet to the scene
      *
      * @param name the plugin name for the applet, as given by 
      *        KPluginInfo::pluginName()
      * @param args argument list to pass to the plasmoid
      */
-    Applet* addPlasmoid(const QString& name, const QStringList& args = QStringList());
+    Applet* addApplet(const QString& name, const QStringList& args = QStringList());
 
     /**
      * Adds a SuperKaramba theme to the scene
