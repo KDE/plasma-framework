@@ -327,7 +327,6 @@ void Applet::showConfigurationInterface()
 
 KPluginInfo::List Applet::knownApplets()
 {
-    QHash<QString, KPluginInfo> applets;
     KService::List offers = KServiceTypeTrader::self()->query("Plasma/Applet");
     return KPluginInfo::fromServices(offers);
 }
