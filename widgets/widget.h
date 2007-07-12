@@ -39,7 +39,7 @@ class Layout;
 class PLASMA_EXPORT Widget : public QGraphicsItem, public LayoutItem
 {
 public:
-    Widget(Widget *parent = 0);
+    explicit Widget(QGraphicsItem *parent = 0);
     virtual ~Widget();
 
     virtual Qt::Orientations expandingDirections() const;
@@ -54,7 +54,7 @@ public:
     virtual qreal widthForHeight(qreal h) const;
 
     QRectF geometry() const;
-    void setGeometry(const QRectF& geometry);
+    void setGeometry(const QRectF &geometry);
 
     void updateGeometry();
 
@@ -66,7 +66,7 @@ public:
 
     virtual QRectF boundingRect() const;
 
-    void resize(const QSizeF& size);
+    void resize(const QSizeF &size);
     void resize(qreal w, qreal h);
 
     void setLayout(Layout *l);
@@ -76,6 +76,7 @@ public:
     void reparent(Widget *w);
 
     void addChild(Widget *w);
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
 
 private:
     class Private;

@@ -30,7 +30,10 @@ namespace Plasma
 class Widget::Private
 {
     public:
-        Private() : parent(0) { }
+        Private()
+            : parent(0),
+              layout(0)
+        { }
         ~Private() { }
 
         QRectF geometry;
@@ -40,17 +43,15 @@ class Widget::Private
         QList<Widget *> childList;
 };
 
-
-Widget::Widget(Widget *parent)
+Widget::Widget(QGraphicsItem *parent)
   : QGraphicsItem(parent),
     d(new Private)
 {
-    d->parent = parent;
-    d->layout = 0;
+    d->parent = dynamic_cast<Widget*>(parent);
 
-    if (parent) {
-        parent->addChild(this);
-        parent->setGeometry(QRectF(QPointF(0.0, 0.0), parent->size()));
+    if (d->parent) {
+        d->parent->addChild(this);
+        d->parent->setGeometry(QRectF(QPointF(0.0, 0.0), d->parent->size()));
     }
 }
 
@@ -184,6 +185,15 @@ void Widget::addChild(Widget *w)
         layout()->addItem(w);
         updateGeometry();
     }
+}
+
+void Widget::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+    Q_UNUSED(painter)
+    Q_UNUSED(option)
+    Q_UNUSED(widget)
+    // do nothing, but we need to reimp so we can create Widget items as this method
+    // is pure virtual in QGraphicsItem
 }
 
 void Widget::reparent(Widget *w)
