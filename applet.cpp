@@ -18,11 +18,14 @@
 
 #include "applet.h"
 
+#include <QApplication>
 #include <QEvent>
 #include <QList>
+#include <QPainter>
 #include <QSize>
 #include <QTimer>
 
+#include <KDialog>
 #include <KPluginInfo>
 #include <KStandardDirs>
 #include <KService>
@@ -32,6 +35,10 @@
 #include "plasma/dataenginemanager.h"
 #include "plasma/plasma.h"
 #include "plasma/svg.h"
+
+#include "plasma/widgets/widget.h"
+#include "plasma/widgets/lineedit.h"
+#include "plasma/widgets/vboxlayout.h"
 
 namespace Plasma
 {
@@ -44,10 +51,16 @@ class Applet::Private
               globalConfig( 0 ),
               appletConfig( 0 ),
               appletDescription(new KPluginInfo(appletDescription)),
+              background(0),
+              failureText(0),
               immutable(false),
               hasConfigurationInterface(false),
-              background(0)
+              failed(false)
         {
+            if (appletId == 0) {
+                appletId = nextId();
+            }
+
             if (appletId > s_maxAppletId) {
                 s_maxAppletId = appletId;
             }
@@ -68,6 +81,8 @@ class Applet::Private
             return s_maxAppletId;
         }
 
+        //TODO: examine the usage of memory here; there's a pretty large
+        //      number of members at this point.
         uint appletId;
         KSharedConfig::Ptr globalConfig;
         KSharedConfig::Ptr appletConfig;
@@ -75,18 +90,20 @@ class Applet::Private
         QList<QObject*> watchedForFocus;
         QStringList loadedEngines;
         static uint s_maxAppletId;
-        bool immutable;
-        bool hasConfigurationInterface;
         Plasma::Svg *background;
+        Plasma::LineEdit *failureText;
+        bool immutable : 1;
+        bool hasConfigurationInterface : 1;
+        bool failed : 1;
 };
 
 uint Applet::Private::s_maxAppletId = 0;
 
 Applet::Applet(QGraphicsItem *parent,
                const QString& serviceID,
-               int appletId)
+               uint appletId)
         : QObject(0),
-          QGraphicsItem(parent),
+          Widget(parent),
           d(new Private(KService::serviceByStorageId(serviceID), appletId))
 {
     init();
@@ -94,8 +111,9 @@ Applet::Applet(QGraphicsItem *parent,
 
 Applet::Applet(QObject* parent, const QStringList& args)
     : QObject(parent),
-      QGraphicsItem(0),
-      d(new Private(KService::serviceByStorageId(args[0]), args[1].toInt()))
+      Widget(0),
+      d(new Private(KService::serviceByStorageId(args.count() > 0 ? args[0] : QString()),
+                    args.count() > 1 ? args[1].toInt() : 0))
 {
     init();
     // the brain damage seen in the initialization list is due to the 
@@ -221,6 +239,57 @@ void Applet::setDrawStandardBackground(bool drawBackground)
     }
 }
 
+bool Applet::failedToLaunch() const
+{
+    return d->failed;
+}
+
+QString visibleFailureText(const QString& reason)
+{
+    QString text;
+
+    if (reason.isEmpty()) {
+        text = i18n("This object could not be created.");
+    } else {
+        text = i18n("This object could not be created for the following reason:<p>%1", reason);
+    }
+
+    return text;
+}
+
+void Applet::setFailedToLaunch(bool failed, const QString& reason)
+{
+    if (d->failed == failed) {
+        if (d->failureText) {
+            d->failureText->setHtml(visibleFailureText(reason));
+        }
+        return;
+    }
+
+    d->failed = failed;
+
+    qDeleteAll(QGraphicsItem::children());
+    delete layout();
+
+    if (failed) {
+        setDrawStandardBackground(failed || d->background != 0);
+        Layout* failureLayout = new VBoxLayout(this);
+        d->failureText = new LineEdit(this, scene());
+        d->failureText->setFlags(0);
+        d->failureText->setHtml(visibleFailureText(reason));
+        failureLayout->addItem(d->failureText);
+    } else {
+        d->failureText = 0;
+    }
+
+    update();
+}
+
+QRectF Applet::boundingRect () const
+{
+    //FIXME: this should be big enough to allow for the failure text?
+    return QRectF(300, 300, 300, 300);
+}
 
 void Applet::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
@@ -229,9 +298,13 @@ void Applet::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
         d->background->paint(painter, boundingRect());
     }
 
+    if (d->failed) {
+        return;
+    }
+
     paintInterface(painter, option, widget);
 
-    //TODO: interface overlays on hover?
+    //TODO: interface overlays on hover
 }
 
 void Applet::paintInterface(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)

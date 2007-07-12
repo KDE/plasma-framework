@@ -27,6 +27,7 @@
 #include <kgenericfactory.h>
 
 #include <plasma/plasma.h>
+#include <plasma/widgets/widget.h>
 
 namespace Plasma
 {
@@ -38,7 +39,7 @@ class DataEngine;
  *
  *
  */
-class PLASMA_EXPORT Applet : public QObject, public QGraphicsItem
+class PLASMA_EXPORT Applet : public QObject, public Widget
 {
     Q_OBJECT
 
@@ -53,9 +54,9 @@ class PLASMA_EXPORT Applet : public QObject, public QGraphicsItem
          * @arg appletId a unique id used to differentiate between multiple
          *      instances of the same Applet type
          */
-        Applet(QGraphicsItem* parent,
-               const QString& serviceId,
-               int appletId);
+        explicit Applet(QGraphicsItem* parent = 0,
+                        const QString& serviceId = QString(),
+                        uint appletId = 0);
 
         /**
          * This constructor is to be used with the plugin loading systems
@@ -265,9 +266,31 @@ class PLASMA_EXPORT Applet : public QObject, public QGraphicsItem
          **/
         void setDrawStandardBackground(bool drawBackground);
 
+        /**
+         * If for some reason, the applet fails to get up on its feet (the
+         * library couldn't be loaded, necessary hardware support wasn't found,
+         * etc..) this method returns true
+         **/
+        bool failedToLaunch() const;
+
+        /**
+         * Call this method when the applet fails to launch properly. An
+         * optional reason can be provided.
+         *
+         * Not that all children items will be deleted when this method is
+         * called. If you have pointers to these items, you will need to
+         * reset them after calling this method.
+         *
+         * @param failed true when the applet failed, false when it succeeded
+         * @param reason an optional reason to show the user why the applet
+         *               failed to launch
+         **/
+        void setFailedToLaunch(bool failed, const QString& reason = QString());
+
         // Reimplemented from QGraphicsItem
         enum { Type = Plasma::AppletType };
         int type() const { return Type; }
+        QRectF boundingRect () const;
 
     Q_SIGNALS:
         /**
