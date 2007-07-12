@@ -19,3 +19,6 @@ Comment[pt_BR]='Applet' do Plasma
 Comment[sv]=Plasma-miniprogram
 Comment[zh_TW]=Plasma 小程式
 
+[PropertyDef::X-PlasmoidCategory]
+Type=QString
+

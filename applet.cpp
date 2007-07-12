@@ -161,6 +161,32 @@ QString Applet::name() const
     return d->appletDescription->name();
 }
 
+QString Applet::category() const
+{
+    return d->appletDescription->property("X-PlasmoidCategory").toString();
+}
+
+QString Applet::category(const KPluginInfo* applet)
+{
+    return applet->property("X-PlasmoidCategory").toString();
+}
+
+QString Applet::category(const QString& appletName)
+{
+    if (appletName.isEmpty()) {
+        return QString();
+    }
+
+    QString constraint = QString("[X-KDE-PluginInfo-Name] == '%1'").arg(appletName);
+    KService::List offers = KServiceTypeTrader::self()->query("Plasma/Applet", constraint);
+
+    if (offers.isEmpty()) {
+        return QString();
+    }
+
+    return offers.first()->property("X-PlasmoidCategory").toString();
+}
+
 bool Applet::immutable() const
 {
     return d->immutable;
@@ -304,6 +330,21 @@ KPluginInfo::List Applet::knownApplets()
     QHash<QString, KPluginInfo> applets;
     KService::List offers = KServiceTypeTrader::self()->query("Plasma/Applet");
     return KPluginInfo::fromServices(offers);
+}
+
+QStringList Applet::knownCategories()
+{
+    KService::List offers = KServiceTypeTrader::self()->query("Plasma/Applet", "exist [X-PlasmoidCategory]");
+    QStringList categories;
+    foreach (KService::Ptr applet, offers) {
+        QString appletCategory = applet->property("X-PlasmoidCategory").toString();
+        if (!appletCategory.isEmpty()) {
+            if (!categories.contains(appletCategory)) {
+                categories << appletCategory;
+            }
+        }
+    }
+    return categories;
 }
 
 Applet* Applet::loadApplet(const QString& appletName, uint appletId, const QStringList& args)

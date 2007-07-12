@@ -152,6 +152,12 @@ class PLASMA_EXPORT Applet : public QObject, public QGraphicsItem
         static KPluginInfo::List knownApplets();
 
         /**
+         * Returns a list of all the categories used by
+         * installed applets.
+         */
+        static QStringList knownCategories();
+
+        /**
          * @return true if this plasmoid provides a GUI configuration
          **/
         bool hasConfigurationInterface();
@@ -212,6 +218,26 @@ class PLASMA_EXPORT Applet : public QObject, public QGraphicsItem
          * @return the user-visible name for the applet.
          **/
         QString name() const;
+
+        /**
+         * Returns the category the applet is in, as specified in the
+         * .desktop file.
+         */
+        QString category() const;
+
+        /**
+         * Get the category of the given applet
+         *
+         * @param a KPluginInfo object for the applet
+         */
+        static QString category(const KPluginInfo* applet);
+
+        /**
+         * Get the category of the given applet
+         *
+         * @param the name of the applet
+         */
+        static QString category(const QString& appletName);
 
         /**
          * @return true if this applet is immutable
