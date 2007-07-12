@@ -33,11 +33,11 @@ class Widget::Private
         Private() : parent(0) { }
         ~Private() { }
 
-		QRectF geometry;
+        QRectF geometry;
 
-		Widget *parent;
-		Layout *layout;
-		QList<Widget *> childList;
+        Widget *parent;
+        Layout *layout;
+        QList<Widget *> childList;
 };
 
 
@@ -45,13 +45,13 @@ Widget::Widget(Widget *parent)
   : QGraphicsItem(parent),
     d(new Private)
 {
-	d->parent = parent;
-	d->layout = 0;
+    d->parent = parent;
+    d->layout = 0;
 
-	if(parent) {
-		parent->addChild(this);
-		parent->setGeometry(QRectF(QPointF(0.0, 0.0), parent->size()));
-	}
+    if (parent) {
+        parent->addChild(this);
+        parent->setGeometry(QRectF(QPointF(0.0, 0.0), parent->size()));
+    }
 }
 
 Widget::~Widget()
@@ -61,138 +61,136 @@ Widget::~Widget()
 
 Qt::Orientations Widget::expandingDirections() const
 {
-	return 0;
+    return 0;
 }
 
 QSizeF Widget::maximumSize() const
 {
-	return QSizeF();
+    return QSizeF();
 }
 
 QSizeF Widget::minimumSize() const
 {
-	return QSizeF(0.0, 0.0);
+    return QSizeF(0.0, 0.0);
 }
 
 bool Widget::hasHeightForWidth() const
 {
-	return false;
+    return false;
 }
 
 qreal Widget::heightForWidth(qreal w) const
 {
-	Q_UNUSED(w);
+    Q_UNUSED(w);
 
-	return -1.0;
+    return -1.0;
 }
 
 bool Widget::hasWidthForHeight() const
 {
-	return false;
+    return false;
 }
 
 qreal Widget::widthForHeight(qreal h) const
 {
-	Q_UNUSED(h);
+    Q_UNUSED(h);
 
-	return -1.0;
+    return -1.0;
 }
 
 QRectF Widget::geometry() const
 {
-	return d->geometry;
+    return d->geometry;
 }
 
 void Widget::setGeometry(const QRectF& geometry)
 {
-	prepareGeometryChange();
+    prepareGeometryChange();
 
-	d->geometry = geometry;
+    d->geometry = geometry;
 
-	updateGeometry();
-	update();
+    updateGeometry();
+    update();
 }
 
 void Widget::updateGeometry()
 {
-	if(layout()) {
-		layout()->setGeometry(QRectF(QPointF(0.0, 0.0), size()));
-	}
+    if (layout()) {
+        layout()->setGeometry(QRectF(QPointF(0.0, 0.0), size()));
+    }
 }
 
 void Widget::invalidate()
 {
-	updateGeometry();
+    updateGeometry();
 
-	if(parent()) {
-		parent()->updateGeometry();
-	}
+    if (parent()) {
+        parent()->updateGeometry();
+    }
 }
 
 QSizeF Widget::sizeHint() const
 {
-	return QSizeF(0.0, 0.0);
+    return QSizeF(0.0, 0.0);
 }
 
 QSizeF Widget::size() const
 {
-	return geometry().size();
+    return geometry().size();
 }
 
 QRectF Widget::boundingRect() const
 {
-	return geometry();
+    return geometry();
 }
 
 void Widget::resize(const QSizeF& size)
 {
-	setGeometry(QRectF(d->geometry.topLeft(), size));
+    setGeometry(QRectF(d->geometry.topLeft(), size));
 }
 
 void Widget::resize(qreal w, qreal h)
 {
-	resize(QSizeF(w, h));
+    resize(QSizeF(w, h));
 }
 
 void Widget::setLayout(Layout *l)
 {
-	d->layout = l;
+    d->layout = l;
 }
 
 Layout *Widget::layout() const
 {
-	return d->layout;
+    return d->layout;
 }
 
 Widget *Widget::parent() const
 {
-	return d->parent;
+    return d->parent;
 }
 
 void Widget::addChild(Widget *w)
 {
-	if(!w) {
-		return;
-	}
+    if (!w) {
+        return;
+    }
 
-	w->reparent(this);
-	d->childList.append(w);
+    w->reparent(this);
+    d->childList.append(w);
 
-	qDebug("Added Child Widget : %p", (void*)w);
+    qDebug("Added Child Widget : %p", (void*)w);
 
-	if(layout()) {
-
-		layout()->addItem(w);
-
-		updateGeometry();
-	}
+    if (layout()) {
+        layout()->addItem(w);
+        updateGeometry();
+    }
 }
 
 void Widget::reparent(Widget *w)
 {
-	d->parent = w;
-	setParentItem(w);
-	update();
+    d->parent = w;
+    setParentItem(w);
+    update();
 }
 
 } // Plasma namespace

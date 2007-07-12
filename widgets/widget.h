@@ -38,48 +38,48 @@ class Layout;
  */
 class PLASMA_EXPORT Widget : public QGraphicsItem, public LayoutItem
 {
-    public:
-		Widget(Widget *parent = 0);
-        	virtual ~Widget();
+public:
+    Widget(Widget *parent = 0);
+    virtual ~Widget();
 
-		virtual Qt::Orientations expandingDirections() const;
+    virtual Qt::Orientations expandingDirections() const;
 
-		virtual QSizeF minimumSize() const;
-		virtual QSizeF maximumSize() const;
+    virtual QSizeF minimumSize() const;
+    virtual QSizeF maximumSize() const;
 
-		virtual bool hasHeightForWidth() const;
-		virtual qreal heightForWidth(qreal w) const;
+    virtual bool hasHeightForWidth() const;
+    virtual qreal heightForWidth(qreal w) const;
 
-		virtual bool hasWidthForHeight() const;
-		virtual qreal widthForHeight(qreal h) const;
+    virtual bool hasWidthForHeight() const;
+    virtual qreal widthForHeight(qreal h) const;
 
-		QRectF geometry() const;
-		void setGeometry(const QRectF& geometry);
+    QRectF geometry() const;
+    void setGeometry(const QRectF& geometry);
 
-		void updateGeometry();
+    void updateGeometry();
 
-		virtual void invalidate();
+    virtual void invalidate();
 
-		virtual QSizeF sizeHint() const;
+    virtual QSizeF sizeHint() const;
 
-		QSizeF size() const;
+    QSizeF size() const;
 
-		virtual QRectF boundingRect() const;
+    virtual QRectF boundingRect() const;
 
-		void resize(const QSizeF& size);
-		void resize(qreal w, qreal h);
+    void resize(const QSizeF& size);
+    void resize(qreal w, qreal h);
 
-		void setLayout(Layout *l);
-		Layout *layout() const;
+    void setLayout(Layout *l);
+    Layout *layout() const;
 
-		Widget *parent() const;
-		void reparent(Widget *w);
+    Widget *parent() const;
+    void reparent(Widget *w);
 
-		void addChild(Widget *w);
+    void addChild(Widget *w);
 
-    private:
-        class Private;
-        Private *const d;
+private:
+    class Private;
+    Private *const d;
 };
 
 } // Plasma namespace
