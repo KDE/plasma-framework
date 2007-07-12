@@ -79,7 +79,16 @@ class PLASMA_EXPORT Applet : public QObject, public Widget
         * specific config file named \<appletname\>\<instanceid\>rc
         * in the Plasma appdata directory.
         **/
-        KConfigGroup appletConfig() const;
+        KConfigGroup config() const;
+
+        /**
+         * Returns a config group with the name provided. This ensures
+         * that the group name is properly namespaced to avoid collision
+         * with other applets that may be sharing this config file
+         *
+         * @param group the name of the group to access
+         **/
+        KConfigGroup config(const QString& group) const;
 
         /**
          * Returns a KConfigGroup object to be shared by all applets of this
@@ -88,7 +97,7 @@ class PLASMA_EXPORT Applet : public QObject, public Widget
          * This config object will write to an applet-specific config object
          * named plasma_\<appletname\>rc in the local config directory.
          */
-        KConfigGroup globalAppletConfig() const;
+        KConfigGroup globalConfig() const;
 
         /**
          * Loads the given DataEngine

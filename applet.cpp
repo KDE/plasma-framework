@@ -128,11 +128,11 @@ Applet::~Applet()
 
 void Applet::init()
 {
-    setImmutable(globalAppletConfig().isImmutable() ||
-                 appletConfig().isImmutable());
+    setImmutable(globalConfig().isImmutable() ||
+                 config().isImmutable());
 }
 
-KConfigGroup Applet::appletConfig() const
+KConfigGroup Applet::config() const
 {
     if ( !d->appletConfig ) {
         QString file = KStandardDirs::locateLocal( "appdata",
@@ -144,7 +144,14 @@ KConfigGroup Applet::appletConfig() const
     return KConfigGroup(d->appletConfig, "General");
 }
 
-KConfigGroup Applet::globalAppletConfig() const
+KConfigGroup Applet::config(const QString& group) const
+{
+    KConfigGroup cg = config();
+    cg.changeGroup(instanceName() + "-" + group);
+    return cg;
+}
+
+KConfigGroup Applet::globalConfig() const
 {
     if ( !d->globalConfig ) {
         QString file = KStandardDirs::locateLocal( "config", "plasma_" + globalName() + "rc" );
