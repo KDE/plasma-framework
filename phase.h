@@ -20,8 +20,8 @@
 #ifndef PHASE_H
 #define PHASE_H
 
-#include <QImage>
-#include <QObject>
+#include <QtGui/QImage>
+#include <QtCore/QObject>
 
 #include <plasma/plasma_export.h>
 

@@ -20,7 +20,7 @@
 #ifndef PACKAGEMETADATA_H
 #define PACKAGEMETADATA_H
 
-#include <QString>
+#include <QtCore/QString>
 
 #include <plasma/plasma_export.h>
 

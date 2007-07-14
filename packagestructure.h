@@ -20,7 +20,7 @@
 #ifndef PACKAGESTRUCTURE_H
 #define PACKAGESTRUCTURE_H
 
-#include <QStringList>
+#include <QtCore/QStringList>
 
 #include <plasma/plasma_export.h>
 

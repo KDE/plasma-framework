@@ -19,7 +19,7 @@
 #ifndef CORONA_H
 #define CORONA_H
 
-#include <QGraphicsScene>
+#include <QtGui/QGraphicsScene>
 
 #include <plasma/applet.h>
 #include <plasma/plasma.h>

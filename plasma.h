@@ -19,7 +19,7 @@
 #ifndef PLASMA_DEFS_H
 #define PLASMA_DEFS_H
 
-#include <QGraphicsItem>
+#include <QtGui/QGraphicsItem>
 
 #include <plasma/plasma_export.h>
 
