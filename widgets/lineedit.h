@@ -49,6 +49,9 @@ class PLASMA_EXPORT LineEdit : public QGraphicsTextItem, public LayoutItem
         QSizeF minimumSize() const;
         QSizeF maximumSize() const;
 
+        void setStyled(bool style);
+        bool styled() const;
+
         bool hasHeightForWidth() const;
         qreal heightForWidth(qreal w) const;
 

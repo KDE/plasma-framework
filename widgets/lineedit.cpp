@@ -29,9 +29,15 @@ namespace Plasma
 class LineEdit::Private
 {
     public:
+        Private()
+             : styled(true) {}
+
         QString defaultText;
         QString oldText;
         QString defaultTextPlain;
+
+        bool styled;
+
 };
 
 LineEdit::LineEdit(QGraphicsItem *parent, QGraphicsScene *scene)
@@ -54,8 +60,10 @@ void LineEdit::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
     panel.state = option->state;
     panel.rect = boundingRect().toRect();
 
-    widget->style()->drawPrimitive(QStyle::PE_PanelLineEdit, &panel, painter, widget);
-    widget->style()->drawPrimitive(QStyle::PE_FrameLineEdit, &panel, painter, widget);
+    if(d->styled) {
+        widget->style()->drawPrimitive(QStyle::PE_PanelLineEdit, &panel, painter, widget);
+        widget->style()->drawPrimitive(QStyle::PE_FrameLineEdit, &panel, painter, widget);
+    }
 
     // QGraphicsTextItem paints a black frame when it has focus
     // and is selected. We want to use our own frame, so we
@@ -78,6 +86,17 @@ void LineEdit::updated(const QString&, const DataEngine::Data& data)
         }
     }
     setHtml(text);
+}
+
+
+void LineEdit::setStyled(bool style)
+{
+    d->styled = style;
+}
+
+bool LineEdit::styled() const
+{
+    return d->styled;
 }
 
 Qt::Orientations LineEdit::expandingDirections() const
