@@ -63,7 +63,7 @@ class Svg::Private
             : renderer(0),
               contentType(Svg::SingleImage)
         {
-            if (QDir::isAbsolutePath(themePath)) {
+            if (QDir::isAbsolutePath(imagePath)) {
                 path = imagePath;
                 themed = false;
             } else {
