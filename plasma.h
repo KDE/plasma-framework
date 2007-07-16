@@ -81,8 +81,6 @@ enum ItemTypes { AppletType = QGraphicsItem::UserType + 1,
                  LineEditType = QGraphicsItem::UserType + 2
                };
 
-PLASMA_EXPORT void setMinId(int minId);
-PLASMA_EXPORT int uniqueId();
 PLASMA_EXPORT Direction locationToDirection(Location location);
 
 } // Plasma namespace

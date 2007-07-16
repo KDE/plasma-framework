@@ -21,18 +21,6 @@
 namespace Plasma
 {
 
-int plasmaIds = 0;
-
-void setMinId(int minId)
-{
-    plasmaIds = minId + 1;
-}
-
-int uniqueId()
-{
-    return ++plasmaIds;
-}
-
 Direction locationToDirection(Location location)
 {
     switch (location)
