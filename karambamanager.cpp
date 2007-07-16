@@ -44,5 +44,3 @@ QGraphicsItemGroup* KarambaManager::loadKaramba(const KUrl &themePath, QGraphics
     return karamba;
 }
 
-#include "karambamanager.moc"
-

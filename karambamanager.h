@@ -19,8 +19,9 @@
 #ifndef KARAMBA_MANAGER_H
 #define KARAMBA_MANAGER_H
 
-#include <QObject>
-#include <QGraphicsScene>
+#include <QtCore/QObject>
+#include <QtGui/QGraphicsScene>
+
 #include <KUrl>
 
 #include <plasma/plasma_export.h>
