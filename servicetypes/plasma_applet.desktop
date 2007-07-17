@@ -23,3 +23,6 @@ Comment[zh_TW]=Plasma 小程式
 [PropertyDef::X-PlasmoidCategory]
 Type=QString
 
+[PropertyDef::X-KDE-ParentApp]
+Type=QString
+
