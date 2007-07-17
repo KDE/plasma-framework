@@ -27,19 +27,20 @@ namespace Plasma
 
 class Theme::Private
 {
-    public:
-        Private()
-            : themeName( "default" )
-        {
-        }
+public:
+   Private()
+       : themeName( "default" )
+   {
+   }
 
-        QString themeName;
+   QString themeName;
+   QString app;
 };
 
 class ThemeSingleton
 {
-    public:
-        Theme self;
+public:
+   Theme self;
 };
 
 K_GLOBAL_STATIC( ThemeSingleton, privateSelf )
@@ -53,14 +54,36 @@ Theme::Theme(QObject* parent)
     : QObject(parent),
       d(new Private)
 {
-    KConfig config( "plasmarc" );
-    KConfigGroup group( &config, "Theme" );
-    d->themeName = group.readEntry( "name", d->themeName );
+    settingsChanged();
 }
 
 Theme::~Theme()
 {
     delete d;
+}
+
+void Theme::setApplication(const QString &appname)
+{
+    if (d->app != appname) {
+        d->app = appname;
+        settingsChanged();
+    }
+}
+
+void Theme::settingsChanged()
+{
+    QString groupName = "Theme";
+    if (!d->app.isEmpty() && d->app != "plasma") {
+        groupName.append("-").append(d->app);
+    }
+
+    KSharedConfig::Ptr config = KSharedConfig::openConfig("plasmarc");
+    KConfigGroup group(config, groupName);
+    QString themeName = group.readEntry("name", d->themeName);
+    if (themeName != d->themeName) {
+        d->themeName = themeName;
+        emit changed();
+    }
 }
 
 QString Theme::themeName() const

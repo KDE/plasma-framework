@@ -58,6 +58,15 @@ class PLASMA_EXPORT Theme : public QObject
         ~Theme();
 
         /**
+         * Sets the application the theme setting is associated with. This
+         * allows for individual applications that use libplasma to have the
+         * theme set independantly.
+         *
+         * @param appname name of the application
+         **/
+        void setApplication(const QString &appname);
+
+        /**
          * @return the name of the theme. "default" is none set.
          */
         QString themeName() const;
@@ -77,6 +86,13 @@ class PLASMA_EXPORT Theme : public QObject
          * that point
          */
         void changed();
+
+    public Q_SLOTS:
+        /**
+         * Notifies the Theme object that the theme settings have changed
+         * and should be read from the config file
+         **/
+        void settingsChanged();
 
     private:
         class Private;
