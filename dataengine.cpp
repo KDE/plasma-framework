@@ -225,6 +225,18 @@ void DataEngine::setData(const QString& source, const QString& key, const QVaria
     d->queueUpdate();
 }
 
+void DataEngine::setData(const QString &source, const Data &data)
+{
+    DataSource *s = d->source(source);
+    Data::const_iterator it = data.constBegin();
+    while (it != data.constEnd()) {
+        s->setData(it.key(), it.value());
+        ++it;
+    }
+    d->queueUpdate();
+}
+
+
 void DataEngine::clearData(const QString& source)
 {
     DataSource* s = d->source(source, false);

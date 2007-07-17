@@ -211,6 +211,15 @@ class PLASMA_EXPORT DataEngine : public QObject
         void setData(const QString& source, const QString& key, const QVariant& value);
 
         /**
+         * Adds a set of data to a data source. If the source
+         * doesn't exist then it is created.
+         *
+         * @param source the name of the data source
+         * @param data the data to add to the source
+         **/
+        void setData(const QString &source, const Data &data);
+
+        /**
          * Clears all the data associated with a data source.
          *
          * @param source the name of the data source
