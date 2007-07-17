@@ -50,7 +50,7 @@ class Applet::Private
             : appletId( uniqueID ),
               globalConfig( 0 ),
               appletConfig( 0 ),
-              appletDescription(new KPluginInfo(appletDescription)),
+              appletDescription(appletDescription ? new KPluginInfo(appletDescription) : 0),
               background(0),
               failureText(0),
               immutable(false),
@@ -128,13 +128,17 @@ Applet::~Applet()
 
 void Applet::init()
 {
+    if (!d->appletDescription) {
+        setFailedToLaunch(true);
+    }
+
     setImmutable(globalConfig().isImmutable() ||
                  config().isImmutable());
 }
 
 KConfigGroup Applet::config() const
 {
-    if ( !d->appletConfig ) {
+    if (!d->appletConfig) {
         QString file = KStandardDirs::locateLocal( "appdata",
                                                    "applets/" + instanceName() + "rc",
                                                    true );
@@ -183,11 +187,19 @@ void Applet::constraintsUpdated()
 
 QString Applet::name() const
 {
+    if (!d->appletDescription) {
+        return i18n("Unknown Applet");
+    }
+
     return d->appletDescription->name();
 }
 
 QString Applet::category() const
 {
+    if (!d->appletDescription) {
+        return i18n("Misc");
+    }
+
     return d->appletDescription->property("X-KDE-PluginInfo-Category").toString();
 }
 
@@ -341,11 +353,19 @@ Location Applet::location() const
 
 QString Applet::globalName() const
 {
+    if (!d->appletDescription) {
+        return QString();
+    }
+
     return d->appletDescription->service()->library();
 }
 
 QString Applet::instanceName() const
 {
+    if (!d->appletDescription) {
+        return QString();
+    }
+
     return d->appletDescription->service()->library() + QString::number( d->appletId );
 }
 
@@ -421,14 +441,14 @@ KPluginInfo::List Applet::knownApplets(const QString &category,
             constraint.append(" and ");
         }
 
-        if (category == "NONE") {
-            constraint.append("(not exist [X-KDE-PluginInfo-Category] or [X-KDE-PluginInfo-Category] == '')");
-        } else {
-            constraint.append("'").append(category).append("' in [X-KDE-PluginInfo-Category]");
+        constraint.append("[X-KDE-PluginInfo-Category] == '").append(category).append("'");
+        if (category == "Misc") {
+            constraint.append(" or (not exist [X-KDE-PluginInfo-Category] or [X-KDE-PluginInfo-Category] == '')");
         }
     }
 
     KService::List offers = KServiceTypeTrader::self()->query("Plasma/Applet", constraint);
+    //kDebug() << "Applet::knownApplets constraint was '" << constraint << "' which got us " << offers.count() << " matches" << endl;
     return KPluginInfo::fromServices(offers);
 }
 

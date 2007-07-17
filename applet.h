@@ -159,8 +159,8 @@ class PLASMA_EXPORT Applet : public QObject, public Widget
          *
          * @param category Only applets matchin this category will be returned.
          *                 Useful in conjunction with knownCategories.
-         *                 If NONE is passed in, then applets without a 
-         *                 Categories= entry are returned.
+         *                 If "Misc" is passed in, then applets without a 
+         *                 Categories= entry are also returned.
          *                 If an empty string is passed in, all applets are
          *                 returned.
          * @param parentApp the application to filter applets on. Uses the 
