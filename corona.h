@@ -108,16 +108,12 @@ protected:
     void dragLeaveEvent(QGraphicsSceneDragDropEvent* event);
     void dragMoveEvent(QGraphicsSceneDragDropEvent* event);
     void dropEvent(QGraphicsSceneDragDropEvent* event);
-    void contextMenuEvent(QGraphicsSceneContextMenuEvent *contextMenuEvent);
+//     void contextMenuEvent(QGraphicsSceneContextMenuEvent *contextMenuEvent);
 
 protected Q_SLOTS:
-    void launchExplorer();
-    void runCommand();
     void appletDestroyed(QObject*);
 
 private:
-    void init();
-
     class Private;
     Private * const d;
 };

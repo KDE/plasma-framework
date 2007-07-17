@@ -27,12 +27,9 @@
 #include <QGraphicsView>
 #include <QStringList>
 
-#include <KAuthorized>
 #include <KDebug>
 #include <KLocale>
-#include <KMenu>
 #include <KMimeType>
-#include <KRun>
 #include <KWindowSystem>
 
 #include "applet.h"
@@ -41,8 +38,6 @@
 #include "phase.h"
 #include "widgets/vboxlayout.h"
 #include "widgets/icon.h"
-
-#include "krunner_interface.h"
 
 using namespace Plasma;
 
@@ -53,10 +48,10 @@ class Corona::Private
 {
 public:
     Private()
-        : formFactor(Planar),
+        : immutable(false),
+          formFactor(Planar),
           location(Floating),
-          layout(0),
-          engineExplorerAction(0)
+          layout(0)
     {
     }
 
@@ -71,53 +66,27 @@ public:
     FormFactor formFactor;
     Location location;
     Layout* layout;
-    QAction *engineExplorerAction;
-    QAction *runCommandAction;
 };
 
 Corona::Corona(QObject * parent)
     : QGraphicsScene(parent),
       d(new Private)
 {
-    init();
+    //setViewport(new QGLWidget(QGLFormat(QGL::StencilBuffer | QGL::AlphaChannel)));
 }
 
 Corona::Corona(const QRectF & sceneRect, QObject * parent )
     : QGraphicsScene(sceneRect, parent),
       d(new Private)
 {
-    init();
+    //setViewport(new QGLWidget(QGLFormat(QGL::StencilBuffer | QGL::AlphaChannel)));
 }
 
 Corona::Corona(qreal x, qreal y, qreal width, qreal height, QObject * parent)
     : QGraphicsScene(x, y, width, height, parent),
       d(new Private)
 {
-    init();
-}
-
-void Corona::init()
-{
-/*    QPalette pal = palette();
-    pal.setBrush(QPalette::Base, Qt::transparent);
-    setPalette(pal);*/
-    //setViewport(new QGLWidget  ( QGLFormat(QGL::StencilBuffer | QGL::AlphaChannel)   ));
-
-    /*
-    KPluginInfo::List applets = Applet::knownApplets();
-    kDebug() << "======= Applets =========" << endl;
-    foreach (KPluginInfo* info, applets) {
-        kDebug() << info->pluginName() << ": " << info->name() << endl;
-    }
-    kDebug() << "=========================" << endl;
-    */
-
-    //TODO: should we delay the init of the actions until we actually need them?
-    d->engineExplorerAction = new QAction(i18n("Engine Explorer"), this);
-    connect(d->engineExplorerAction, SIGNAL(triggered(bool)), this, SLOT(launchExplorer()));
-    d->runCommandAction = new QAction(i18n("Run Command..."), this);
-    connect(d->runCommandAction, SIGNAL(triggered(bool)), this, SLOT(runCommand()));
-    d->immutable = false;
+    //setViewport(new QGLWidget(QGLFormat(QGL::StencilBuffer | QGL::AlphaChannel)));
 }
 
 Corona::~Corona()
@@ -274,96 +243,9 @@ void Corona::dropEvent(QGraphicsSceneDragDropEvent *event)
     }
 }
 
-void Corona::contextMenuEvent(QGraphicsSceneContextMenuEvent *contextMenuEvent)
-{
-    if (!KAuthorized::authorizeKAction("desktop_contextmenu")) {
-        return;
-    }
-
-    QPointF point = contextMenuEvent->scenePos();
-    /*
-     * example for displaying the SuperKaramba context menu
-    QGraphicsItem *item = itemAt(point);
-    if(item) {
-        QObject *object = dynamic_cast<QObject*>(item->parentItem());
-        if(object && object->objectName().startsWith("karamba")) {
-            QContextMenuEvent event(QContextMenuEvent::Mouse, point);
-            contextMenuEvent(&event);
-            return;
-        }
-    }
-    */
-    contextMenuEvent->accept();
-    QGraphicsItem* item = itemAt(point);
-    Applet* applet = 0;
-
-    while (item) {
-        applet = qgraphicsitem_cast<Applet*>(item);
-        if (applet) {
-            break;
-        }
-
-        item = item->parentItem();
-    }
-
-    KMenu desktopMenu;
-    //kDebug() << "context menu event " << d->immutable << endl;
-    if (!applet) {
-        if (d->immutable) {
-            return;
-        }
-
-        //FIXME: change this to show this only in debug mode (or not at all?)
-        //       before final release
-        desktopMenu.addAction(d->engineExplorerAction);
-
-        if (KAuthorized::authorizeKAction("run_command")) {
-            desktopMenu.addAction(d->runCommandAction);
-        }
-    } else if (applet->immutable()) {
-        return;
-    } else {
-        //desktopMenu.addSeparator();
-        bool hasEntries = false;
-        if (applet->hasConfigurationInterface()) {
-            QAction* configureApplet = new QAction(i18n("%1 Settings...", applet->name()), this);
-            connect(configureApplet, SIGNAL(triggered(bool)),
-                    applet, SLOT(showConfigurationInterface()));
-            desktopMenu.addAction(configureApplet);
-            hasEntries = true;
-        }
-
-        if (!d->immutable) {
-            QAction* closeApplet = new QAction(i18n("Close this %1", applet->name()), this);
-            connect(closeApplet, SIGNAL(triggered(bool)),
-                    applet, SLOT(deleteLater()));
-            desktopMenu.addAction(closeApplet);
-            hasEntries = true;
-        }
-
-        if (!hasEntries) {
-            return;
-        }
-    }
-    desktopMenu.exec(point.toPoint());
-}
-
-void Corona::launchExplorer()
-{
-    KRun::run("plasmaengineexplorer", KUrl::List(), 0);
-}
-
-void Corona::runCommand()
-{
-    if (!KAuthorized::authorizeKAction("run_command")) {
-        return;
-    }
-
-    QString interface("org.kde.krunner");
-    org::kde::krunner::Interface krunner(interface, "/Interface",
-                                         QDBusConnection::sessionBus());
-    krunner.display();
-}
+// void Corona::contextMenuEvent(QGraphicsSceneContextMenuEvent *contextMenuEvent)
+// {
+// }
 
 void Corona::appletDestroyed(QObject* object)
 {
