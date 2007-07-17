@@ -93,6 +93,7 @@ public:
 
 Q_SIGNALS:
     void animationComplete(QGraphicsItem *item, Animation anim);
+    void movementComplete(QGraphicsItem *item);
 
 protected:
     void timerEvent(QTimerEvent *event);
