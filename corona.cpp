@@ -42,6 +42,8 @@
 #include "widgets/vboxlayout.h"
 #include "widgets/icon.h"
 
+#include "krunner_interface.h"
+
 using namespace Plasma;
 
 namespace Plasma
@@ -70,6 +72,7 @@ public:
     Location location;
     Layout* layout;
     QAction *engineExplorerAction;
+    QAction *runCommandAction;
 };
 
 Corona::Corona(QObject * parent)
@@ -95,8 +98,6 @@ Corona::Corona(qreal x, qreal y, qreal width, qreal height, QObject * parent)
 
 void Corona::init()
 {
-/*    setBackgroundMode(Qt::NoBackground);*/
-
 /*    QPalette pal = palette();
     pal.setBrush(QPalette::Base, Qt::transparent);
     setPalette(pal);*/
@@ -111,11 +112,12 @@ void Corona::init()
     kDebug() << "=========================" << endl;
     */
 
-//    connect(this, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(displayContextMenu(QPoint)));
+    //TODO: should we delay the init of the actions until we actually need them?
     d->engineExplorerAction = new QAction(i18n("Engine Explorer"), this);
     connect(d->engineExplorerAction, SIGNAL(triggered(bool)), this, SLOT(launchExplorer()));
+    d->runCommandAction = new QAction(i18n("Run Command..."), this);
+    connect(d->runCommandAction, SIGNAL(triggered(bool)), this, SLOT(runCommand()));
     d->immutable = false;
-//    setContextMenuPolicy(Qt::CustomContextMenu);
 }
 
 Corona::~Corona()
@@ -311,7 +313,13 @@ void Corona::contextMenuEvent(QGraphicsSceneContextMenuEvent *contextMenuEvent)
             return;
         }
 
+        //FIXME: change this to show this only in debug mode (or not at all?)
+        //       before final release
         desktopMenu.addAction(d->engineExplorerAction);
+
+        if (KAuthorized::authorizeKAction("run_command")) {
+            desktopMenu.addAction(d->runCommandAction);
+        }
     } else if (applet->immutable()) {
         return;
     } else {
@@ -343,6 +351,18 @@ void Corona::contextMenuEvent(QGraphicsSceneContextMenuEvent *contextMenuEvent)
 void Corona::launchExplorer()
 {
     KRun::run("plasmaengineexplorer", KUrl::List(), 0);
+}
+
+void Corona::runCommand()
+{
+    if (!KAuthorized::authorizeKAction("run_command")) {
+        return;
+    }
+
+    QString interface("org.kde.krunner");
+    org::kde::krunner::Interface krunner(interface, "/Interface",
+                                         QDBusConnection::sessionBus());
+    krunner.display();
 }
 
 void Corona::appletDestroyed(QObject* object)

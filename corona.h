@@ -112,6 +112,7 @@ protected:
 
 protected Q_SLOTS:
     void launchExplorer();
+    void runCommand();
     void appletDestroyed(QObject*);
 
 private:

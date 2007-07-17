@@ -42,6 +42,8 @@ set(plasmagik_HEADERS
     package.h
     )
 
+set(krunner_xml ${CMAKE_SOURCE_DIR}/workspace/krunner/org.kde.krunner.Interface.xml)
+QT4_ADD_DBUS_INTERFACE(plasma_LIB_SRCS ${krunner_xml} krunner_interface)
 
 kde4_add_library(plasma SHARED ${plasma_LIB_SRCS})
 
