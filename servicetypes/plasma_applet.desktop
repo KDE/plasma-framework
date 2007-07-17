@@ -20,7 +20,7 @@ Comment[sv]=Plasma-miniprogram
 Comment[uk]=Аплет Плазми
 Comment[zh_TW]=Plasma 小程式
 
-[PropertyDef::X-PlasmoidCategory]
+[PropertyDef::X-KDE-PluginInfo-Category]
 Type=QString
 
 [PropertyDef::X-KDE-ParentApp]

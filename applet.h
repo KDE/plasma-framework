@@ -157,15 +157,34 @@ class PLASMA_EXPORT Applet : public QObject, public Widget
          * Returns a list of all known applets in a hash keyed by a unique
          * identifier for each applet.
          *
+         * @param category Only applets matchin this category will be returned.
+         *                 Useful in conjunction with knownCategories.
+         *                 If NONE is passed in, then applets without a 
+         *                 Categories= entry are returned.
+         *                 If an empty string is passed in, all applets are
+         *                 returned.
+         * @param parentApp the application to filter applets on. Uses the 
+         *                  X-KDE-ParentApp entry (if any) in the plugin info.
+         *                  The default value of QString() will result in a
+         *                  list containing only applets not specifically
+         *                  registered to an application.
          * @return list of applets
          **/
-        static KPluginInfo::List knownApplets();
+        static KPluginInfo::List knownApplets(const QString &category = QString(),
+                                              const QString &parentApp = QString());
 
         /**
          * Returns a list of all the categories used by
          * installed applets.
+         *
+         * @param parentApp the application to filter applets on. Uses the 
+         *                  X-KDE-ParentApp entry (if any) in the plugin info.
+         *                  The default value of QString() will result in a
+         *                  list containing only applets not specifically
+         *                  registered to an application.
+         * @return list of categories
          */
-        static QStringList knownCategories();
+        static QStringList knownCategories(const QString &parentApp = QString());
 
         /**
          * @return true if this plasmoid provides a GUI configuration

@@ -188,12 +188,12 @@ QString Applet::name() const
 
 QString Applet::category() const
 {
-    return d->appletDescription->property("X-PlasmoidCategory").toString();
+    return d->appletDescription->property("X-KDE-PluginInfo-Category").toString();
 }
 
 QString Applet::category(const KPluginInfo* applet)
 {
-    return applet->property("X-PlasmoidCategory").toString();
+    return applet->property("X-KDE-PluginInfo-Category").toString();
 }
 
 QString Applet::category(const QString& appletName)
@@ -209,7 +209,7 @@ QString Applet::category(const QString& appletName)
         return QString();
     }
 
-    return offers.first()->property("X-PlasmoidCategory").toString();
+    return offers.first()->property("X-KDE-PluginInfo-Category").toString();
 }
 
 bool Applet::immutable() const
@@ -405,24 +405,58 @@ void Applet::showConfigurationInterface()
 {
 }
 
-KPluginInfo::List Applet::knownApplets()
+KPluginInfo::List Applet::knownApplets(const QString &category,
+                                       const QString &parentApp)
 {
-    KService::List offers = KServiceTypeTrader::self()->query("Plasma/Applet");
+    QString constraint;
+
+    if (parentApp.isEmpty()) {
+        constraint.append("not exist [X-KDE-ParentApp]");
+    } else {
+        constraint.append("[X-KDE-ParentApp] == '").append(parentApp).append("'");
+    }
+
+    if (!category.isEmpty()) {
+        if (!constraint.isEmpty()) {
+            constraint.append(" and ");
+        }
+
+        if (category == "NONE") {
+            constraint.append("(not exist [X-KDE-PluginInfo-Category] or [X-KDE-PluginInfo-Category] == '')");
+        } else {
+            constraint.append("'").append(category).append("' in [X-KDE-PluginInfo-Category]");
+        }
+    }
+
+    KService::List offers = KServiceTypeTrader::self()->query("Plasma/Applet", constraint);
     return KPluginInfo::fromServices(offers);
 }
 
-QStringList Applet::knownCategories()
+QStringList Applet::knownCategories(const QString &parentApp)
 {
-    KService::List offers = KServiceTypeTrader::self()->query("Plasma/Applet", "exist [X-PlasmoidCategory]");
+    QString constraint = "exist [X-KDE-PluginInfo-Category]";
+
+    if (parentApp.isEmpty()) {
+        constraint.append(" and not exist [X-KDE-ParentApp]");
+    } else {
+        constraint.append(" and [X-KDE-ParentApp] == '").append(parentApp).append("'");
+    }
+
+    KService::List offers = KServiceTypeTrader::self()->query("Plasma/Applet", constraint);
     QStringList categories;
     foreach (KService::Ptr applet, offers) {
-        QString appletCategory = applet->property("X-PlasmoidCategory").toString();
-        if (!appletCategory.isEmpty()) {
-            if (!categories.contains(appletCategory)) {
-                categories << appletCategory;
+        QString appletCategory = applet->property("X-KDE-PluginInfo-Category").toString();
+        kDebug() << "   and we have " << appletCategory << endl;
+        if (appletCategory.isEmpty()) {
+            if (!categories.contains(i18n("Misc"))) {
+                categories << i18n("Misc");
             }
+        } else  if (!categories.contains(appletCategory)) {
+            categories << appletCategory;
         }
     }
+
+    categories.sort();
     return categories;
 }
 
