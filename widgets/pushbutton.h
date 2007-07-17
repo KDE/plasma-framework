@@ -35,9 +35,7 @@ namespace Plasma
 /**
  * Class that emulates a QPushButton inside plasma
  */
-class PLASMA_EXPORT PushButton : public QObject,
-                                 public QGraphicsItem,
-                                 public QLayoutItem
+class PLASMA_EXPORT PushButton : public QObject, public QGraphicsItem, public QLayoutItem
 {
     Q_OBJECT
     public:

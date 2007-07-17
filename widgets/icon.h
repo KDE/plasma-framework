@@ -37,9 +37,7 @@ namespace Plasma
 /**
  * Icon class, for URIs and menu popups in panels
  */
-class PLASMA_EXPORT Icon : public QObject,
-                           public QGraphicsItem,
-                           public LayoutItem
+class PLASMA_EXPORT Icon : public QObject, public QGraphicsItem, public LayoutItem
 {
     Q_OBJECT
     public:
