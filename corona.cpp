@@ -51,7 +51,8 @@ public:
         : immutable(false),
           formFactor(Planar),
           location(Floating),
-          layout(0)
+          layout(0),
+          mimetype("text/x-plasmoidservicename")
     {
     }
 
@@ -66,6 +67,7 @@ public:
     FormFactor formFactor;
     Location location;
     Layout* layout;
+    QString mimetype;
 };
 
 Corona::Corona(QObject * parent)
@@ -154,6 +156,16 @@ QRectF Corona::maxSizeHint() const
     //FIXME: this is a bit of a naive implementation, do you think? =)
     //       we should factor in how much space we actually have left!
     return sceneRect();
+}
+
+void Corona::setAppletMimeType(const QString& type)
+{
+    d->mimetype = type;
+}
+
+QString Corona::appletMimeType()
+{
+    return d->mimetype;
 }
 
 Applet* Corona::addApplet(const QString& name, const QStringList& args)

@@ -65,6 +65,17 @@ public:
      **/
     QRectF maxSizeHint() const;
 
+    /**
+     *  Sets the mimetype of Drag/Drop items. Default is
+     *  text/x-plasmoidservicename
+     **/
+    void setAppletMimeType(const QString& mimetype);
+    
+    /**
+     * The current mime type of Drag/Drop items.
+     **/
+    QString appletMimeType();    
+
 public Q_SLOTS:
     /**
      * Informs the Corona as to what position it is in. This is informational
