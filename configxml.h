@@ -88,6 +88,6 @@ private:
     Private * const d;
 };
 
-}; // Plasma namespace
+} // Plasma namespace
 
 #endif //multiple inclusion guard
