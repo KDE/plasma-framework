@@ -177,7 +177,13 @@ Applet* Corona::addApplet(const QString& name, const QStringList& args)
         applet->setFailedToLaunch(true);
     }
 
+    qreal appWidth = applet->boundingRect().width();
+    qreal appHeight = applet->boundingRect().height();
+    //TODO: Make sure new applets don't overlap with existing ones
+    // Center exactly:
+    applet->setPos((width() / 2) - (appWidth / 2),(height() / 2) - (appHeight / 2));
     addItem(applet);
+    
     //applet->constraintsUpdated();
     d->applets << applet;
     connect(applet, SIGNAL(destroyed(QObject*)),
