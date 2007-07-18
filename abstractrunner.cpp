@@ -32,6 +32,8 @@ class AbstractRunner::Private
             exactMatch( 0 ),
             actions( new KActionCollection( runner ) )
         {
+            delete exactMatch;
+            actions->clear();
         }
 
         QAction* exactMatch;
@@ -100,7 +102,11 @@ void AbstractRunner::fillMatches( KActionCollection* matches,
 
 void AbstractRunner::runExactMatch()
 {
-    exec( d->term );
+    if (!d->exactMatch) {
+        return;
+    }
+
+    exec(d->exactMatch, d->term);
 }
 
 AbstractRunner::List AbstractRunner::loadRunners( QWidget* parent )
