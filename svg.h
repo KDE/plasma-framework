@@ -57,7 +57,7 @@ class PLASMA_EXPORT Svg : public QObject
         enum ContentType { SingleImage = 0 /**< A set of elements that together
                                                 make an image. Elements may be
                                                 drawn separately to accomplish
-                                                this. */,
+                                                this. This is the default. */,
                            ImageSet /**< A set of elements, each of which
                                          constitutes a whole image. Each
                                          element will therefore be rendered
