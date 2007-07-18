@@ -143,8 +143,6 @@ class Svg::Private
                 path = Plasma::Theme::self()->image(themePath);
             }
 
-            //TODO: connect the renderer's repaintNeeded to the Plasma::Svg signal
-            //      take into consideration for cache, e.g. don't cache if svg is animated
             QHash<QString, SharedSvgRenderer::Ptr>::const_iterator it = renderers.find(path);
 
             if (it != renderers.end()) {
