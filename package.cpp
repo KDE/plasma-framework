@@ -24,7 +24,6 @@
 #include <KArchiveEntry>
 #include <KIO/FileCopyJob>
 #include <KIO/Job>
-#include <kio/job.h> //TODO: remove on monday
 #include <KStandardDirs>
 #include <KZip>
 
