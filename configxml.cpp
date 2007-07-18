@@ -353,4 +353,4 @@ ConfigXml::~ConfigXml()
     delete d;
 }
 
-}; // Plasma namespace
+} // Plasma namespace
