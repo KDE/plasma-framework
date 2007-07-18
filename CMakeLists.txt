@@ -14,6 +14,7 @@ set(plasma_LIB_SRCS
     abstractrunner.cpp
     animator.cpp
     applet.cpp
+    configxml.cpp
     corona.cpp
     dataengine.cpp
     dataenginemanager.cpp
@@ -35,13 +36,6 @@ set(plasma_LIB_SRCS
     widgets/vboxlayout.cpp
    )
 
-set(plasmagik_HEADERS
-    packagemetadata.h
-    packager.h
-    packagestructure.h
-    package.h
-    )
-
 kde4_add_library(plasma SHARED ${plasma_LIB_SRCS})
 
 target_link_libraries(plasma ${KDE4_KIO_LIBS})
@@ -52,12 +46,20 @@ install(TARGETS plasma DESTINATION ${LIB_INSTALL_DIR})
 
 ########### install files ###############
 
+set(plasmagik_HEADERS
+    packagemetadata.h
+    packager.h
+    packagestructure.h
+    package.h
+    )
+
 install(FILES ${plasmagik_HEADERS} DESTINATION ${INCLUDE_INSTALL_DIR}/plasma/)
 
 install(FILES
     abstractrunner.h
     animator.h
     applet.h
+    configxml.h
     corona.h
     dataengine.h
     dataenginemanager.h
