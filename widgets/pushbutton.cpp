@@ -90,7 +90,7 @@ void PushButton::updated(const QString&, const DataEngine::Data &data)
 
 QRectF PushButton::boundingRect() const
 {
-    return QRectF(x(), y(), d->width, d->height);
+    return QRectF(0, 0, d->width, d->height);
 }
 
 void PushButton::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
