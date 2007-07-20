@@ -25,6 +25,7 @@
 #include <QAction>
 
 #include <plasma/dataengine.h>
+#include <plasma/phase.h>
 #include <plasma/plasma_export.h>
 #include <plasma/widgets/layoutitem.h>
 
