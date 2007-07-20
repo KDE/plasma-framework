@@ -1,5 +1,6 @@
 /*
  *   Copyright (C) 2007 by Aaron Seigo aseigo@kde.org
+ *   Copyright (C) 2007 by Matt Broadstone <mbroadst@gmail.com>
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU Library General Public License version 2 as
@@ -16,8 +17,7 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "icon.h"
-
+#include <QApplication>
 #include <QPainter>
 #include <QGraphicsSceneMouseEvent>
 #include <QGraphicsView>
@@ -38,6 +38,7 @@
 #include "phase.h"
 #include "svg.h"
 #include "effects/blur.cpp"
+#include "icon.h"
 
 namespace Plasma
 {
@@ -122,7 +123,7 @@ class Icon::Private
                SvgMinibuttonHover = 256,
                SvgMinibuttonPressed = 128};
 
-        KUrl url;
+//        KUrl url;
         QString text;
         QSizeF size;
         QSizeF iconSize;
@@ -138,19 +139,52 @@ class Icon::Private
 };
 
 Icon::Icon(QGraphicsItem *parent)
-    : QObject(),
-      QGraphicsItem(parent),
+    : QGraphicsItem(parent),
       d(new Private)
 {
-    setAcceptedMouseButtons(Qt::LeftButton);
-    setAcceptsHoverEvents(true);
-    setEnabled(true);
-    setPos(QPointF(0.0,0.0));
+    init();
+}
+
+Icon::Icon(const QString &text, QGraphicsItem *parent)
+    : QGraphicsItem(parent),
+      d(new Private)
+{
+    setText(text);
+    init();
+}
+
+Icon::Icon(const QIcon &icon, const QString &text, QGraphicsItem *parent)
+    : QGraphicsItem(parent),
+      d(new Private)
+{
+    setText(text);
+    setIcon(icon);
+    init();
 }
 
 Icon::~Icon()
 {
     delete d;
+}
+
+void Icon::init()
+{
+    setAcceptedMouseButtons(Qt::LeftButton);
+    setAcceptsHoverEvents(true);
+}
+
+void Icon::calculateSize()
+{
+    prepareGeometryChange();
+    QFontMetrics fm(QApplication::font());      // TODO: get the font somewhere more appropriate
+    QSizeF fmSize = fm.size(Qt::AlignHCenter | Qt::AlignTop, d->text);
+
+    int margin = 6;     // hmmm
+    qreal height = d->iconSize.height() + (margin*2) + fmSize.height();
+    qreal width = margin + qMax(fmSize.width(), d->iconSize.width()) + margin;
+    d->size = QSizeF(width, height);
+    d->svg.resize(d->size);
+    update();
 }
 
 QRectF Icon::boundingRect() const
@@ -225,8 +259,6 @@ void Icon::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWid
         }
     }
 
-    //TODO: draw text
-
     // Make it default
     if (d->svgElements & Private::SvgForeground) {
         element = "foreground";
@@ -259,12 +291,26 @@ void Icon::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWid
     if (d->button1AnimId) {
         painter->drawPixmap(6, 6, Phase::self()->animationResult(d->button1AnimId));
     }
+
+    // Draw text last because its overlayed
+    if (!d->text.isEmpty()) {
+        qreal offset = (d->iconSize.height() + 12);     // TODO this shouldn't be hardcoded?
+        QRectF textRect(0, offset, d->size.width(), d->size.height() - offset);
+
+        QTextOption textOpt;
+        textOpt.setAlignment(Qt::AlignHCenter | Qt::AlignTop);
+        textOpt.setWrapMode(QTextOption::WordWrap);
+
+        painter->setPen(Qt::white);
+        painter->drawText(textRect, d->text, textOpt);
+    }
+
 }
 
 void Icon::setText(const QString& text)
 {
     d->text = text;
-//TODO: implement this puppy calculateSize();
+    calculateSize();
 }
 
 QString Icon::text() const
@@ -274,7 +320,6 @@ QString Icon::text() const
 
 void Icon::setIcon(const QString& icon)
 {
-    kDebug() << "Icon set: " << icon << endl;
     if (icon.isEmpty()) {
         setIcon(QIcon());
         return;
@@ -286,22 +331,7 @@ void Icon::setIcon(const QString& icon)
 void Icon::setIcon(const QIcon& icon)
 {
     d->icon = icon;
-    update();
-}
-
-void Icon::setUrl(const KUrl& url)
-{
-    d->url = url;
-}
-
-KUrl Icon::url() const
-{
-    return d->url;
-}
-
-QSizeF Icon::size() const
-{
-    return d->size;
+    calculateSize();
 }
 
 QSizeF Icon::iconSize() const
@@ -309,18 +339,15 @@ QSizeF Icon::iconSize() const
     return d->iconSize;
 }
 
-void Icon::setSize(const QSizeF& s)
+void Icon::setIconSize(const QSizeF& s)
 {
-    prepareGeometryChange();
     d->iconSize = s;
-    d->size = s * 1.1;
-    d->svg.resize(d->size);
-    update();
+    calculateSize();
 }
 
-void Icon::setSize(int w, int h)
+void Icon::setIconSize(int w, int h)
 {
-    setSize(QSizeF(w, h));
+    setIconSize(QSizeF(w, h));
 }
 
 bool Icon::isDown()
@@ -351,11 +378,13 @@ void Icon::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 
         QRectF button1(6, 6, 32, 32); // The top-left circle
         d->button1Hovered = button1.contains(event->pos());
+/*
         if (d->button1Hovered &&
             d->button1Pressed && d->url.isValid()) {
             KRun::runUrl(d->url, KMimeType::findByUrl(d->url)->name(), 0);
             wasClicked = false;
         }
+*/
     } else {
         d->state = Private::NoState;
     }
@@ -498,18 +527,14 @@ qreal Icon::widthForHeight(qreal h) const
 
 QRectF Icon::geometry() const
 {
-    return boundingRect().toRect();
+    return boundingRect();
 }
 
 void Icon::setGeometry(const QRectF &r)
 {
-    setSize(r.size());
+    // TODO: this is wrong, but we should probably never call setGeometry anyway!
+    setIconSize(r.size());
     setPos(r.x(),r.y());
-}
-
-int Icon::boundsForIconSize(int iconSize)
-{
-    return iconSize * 1.1;
 }
 
 } // namespace Plasma
