@@ -33,6 +33,8 @@
 
 #include "plasma/corona.h"
 #include "plasma/dataenginemanager.h"
+#include "plasma/package.h"
+#include "plasma/packages_p.h"
 #include "plasma/plasma.h"
 #include "plasma/svg.h"
 
@@ -45,56 +47,75 @@ namespace Plasma
 
 class Applet::Private
 {
-    public:
-        Private( KService::Ptr appletDescription, int uniqueID )
-            : appletId( uniqueID ),
-              globalConfig( 0 ),
-              appletConfig( 0 ),
-              appletDescription(appletDescription ? new KPluginInfo(appletDescription) : 0),
-              background(0),
-              failureText(0),
-              immutable(false),
-              hasConfigurationInterface(false),
-              failed(false)
-        {
-            if (appletId == 0) {
-                appletId = nextId();
-            }
-
-            if (appletId > s_maxAppletId) {
-                s_maxAppletId = appletId;
-            }
+public:
+    Private(KService::Ptr service, int uniqueID)
+        : appletId(uniqueID),
+          globalConfig(0),
+          appletConfig(0),
+          appletDescription(service ? new KPluginInfo(service) : 0),
+          package(0),
+          background(0),
+          failureText(0),
+          immutable(false),
+          hasConfigurationInterface(false),
+          failed(false)
+    {
+        if (appletId == 0) {
+            appletId = nextId();
         }
 
-        ~Private()
-        {
-            foreach ( const QString& engine, loadedEngines ) {
-               DataEngineManager::self()->unloadDataEngine( engine );
+        if (appletId > s_maxAppletId) {
+            s_maxAppletId = appletId;
+        }
+
+        if (appletDescription &&
+            !appletDescription->property("X-Plasma-Language").toString().isEmpty()) {
+            QString path = KStandardDirs::locate("appdata",
+                                                 "plasmoids/" +
+                                                 appletDescription->pluginName());
+            if (!path.isEmpty()) {
+                package = new Package(path,
+                        appletDescription->pluginName(),
+                        PlasmoidStructure());
+                if (!package->isValid()) {
+                    delete package;
+                    package = 0;
+                }
             }
-            delete appletDescription;
-            delete background;
         }
+    }
 
-        static uint nextId()
-        {
-            ++s_maxAppletId;
-            return s_maxAppletId;
+    ~Private()
+    {
+        foreach ( const QString& engine, loadedEngines ) {
+            DataEngineManager::self()->unloadDataEngine( engine );
         }
+        delete appletDescription;
+        delete background;
+        delete package;
+    }
 
-        //TODO: examine the usage of memory here; there's a pretty large
-        //      number of members at this point.
-        uint appletId;
-        KSharedConfig::Ptr globalConfig;
-        KSharedConfig::Ptr appletConfig;
-        KPluginInfo* appletDescription;
-        QList<QObject*> watchedForFocus;
-        QStringList loadedEngines;
-        static uint s_maxAppletId;
-        Plasma::Svg *background;
-        Plasma::LineEdit *failureText;
-        bool immutable : 1;
-        bool hasConfigurationInterface : 1;
-        bool failed : 1;
+    static uint nextId()
+    {
+        ++s_maxAppletId;
+        return s_maxAppletId;
+    }
+
+    //TODO: examine the usage of memory here; there's a pretty large
+    //      number of members at this point.
+    uint appletId;
+    KSharedConfig::Ptr globalConfig;
+    KSharedConfig::Ptr appletConfig;
+    KPluginInfo* appletDescription;
+    Package* package;
+    QList<QObject*> watchedForFocus;
+    QStringList loadedEngines;
+    static uint s_maxAppletId;
+    Plasma::Svg *background;
+    Plasma::LineEdit *failureText;
+    bool immutable : 1;
+    bool hasConfigurationInterface : 1;
+    bool failed : 1;
 };
 
 uint Applet::Private::s_maxAppletId = 0;
@@ -102,9 +123,9 @@ uint Applet::Private::s_maxAppletId = 0;
 Applet::Applet(QGraphicsItem *parent,
                const QString& serviceID,
                uint appletId)
-        : QObject(0),
-          Widget(parent),
-          d(new Private(KService::serviceByStorageId(serviceID), appletId))
+    : QObject(0),
+      Widget(parent),
+      d(new Private(KService::serviceByStorageId(serviceID), appletId))
 {
     init();
 }
