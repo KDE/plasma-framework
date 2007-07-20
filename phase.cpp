@@ -265,7 +265,6 @@ void Phase::render(QGraphicsItem* item, QImage& image, RenderOp op)
 Phase::AnimId Phase::animateElement(QGraphicsItem *item, ElementAnimation animation)
 {
     //kDebug() << "startElementAnimation(AnimId " << animation << ")" << endl;
-    //TODO: allow the animator to define this?
     ElementAnimationState *state = new ElementAnimationState;
     state->item = item;
     state->curve = d->animator->curve(animation);
