@@ -33,6 +33,7 @@ namespace Plasma
 {
 
 class DataEngine;
+class Package;
 
 /**
  * @short The base Applet (Plasmoid) class
@@ -116,7 +117,15 @@ class PLASMA_EXPORT Applet : public QObject, public Widget
          *         or an invalid data engine if the requested engine
          *         could not be loaded
          */
-        DataEngine* dataEngine(const QString& name);
+        DataEngine* dataEngine(const QString& name) const;
+
+        /**
+         * Accessor for the associated Package object if any.
+         * Generally, only Plasmoids come in a Package.
+         *
+         * @return the Package object, or 0 if none
+         **/
+        const Package* package() const;
 
         /**
          * Called when any of the geometry constraints have been updated.
@@ -390,6 +399,8 @@ class PLASMA_EXPORT Applet : public QObject, public Widget
         bool eventFilter( QObject *o, QEvent *e );
 
     private:
+        Q_DISABLE_COPY(Applet)
+
         // Reimplemented from QGraphicsItem
         void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
 

@@ -186,7 +186,7 @@ KConfigGroup Applet::globalConfig() const
     return KConfigGroup(d->globalConfig, "General");
 }
 
-DataEngine* Applet::dataEngine(const QString& name)
+DataEngine* Applet::dataEngine(const QString& name) const
 {
     int index = d->loadedEngines.indexOf(name);
     if (index != -1) {
@@ -199,6 +199,11 @@ DataEngine* Applet::dataEngine(const QString& name)
     }
 
     return engine;
+}
+
+const Package* Applet::package() const
+{
+    return d->package;
 }
 
 void Applet::constraintsUpdated()
