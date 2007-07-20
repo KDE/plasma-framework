@@ -44,6 +44,7 @@ class PackageMetadata::Private
         QString icon;
         QString preview;
         QString type;
+        QString serviceType;
 };
 
 PackageMetadata::PackageMetadata()
@@ -62,24 +63,17 @@ PackageMetadata::~PackageMetadata()
     delete d;
 }
 
-bool PackageMetadata::isComplete()
+bool PackageMetadata::isComplete() const
 {
-    if (d->name.isEmpty() ||
-//         d->description.isEmpty() ||
-        d->author.isEmpty() ||
-        d->version.isEmpty() ||
-        d->license.isEmpty() ||
-//         d->mainFile.isEmpty() ||
-        d->app.isEmpty() ||
-//         d->requiredVersion.isEmpty() ||
-        d->type.isEmpty()) {
-            return false;
-    } else {
-        return true;
-    }
+    return ! (d->name.isEmpty() ||
+              d->author.isEmpty() ||
+              d->version.isEmpty() ||
+              d->license.isEmpty() ||
+              d->app.isEmpty() ||
+              d->type.isEmpty());
 }
 
-void PackageMetadata::write(const QString& filename)
+void PackageMetadata::write(const QString& filename) const
 {
     KConfig cfg(filename);
     KConfigGroup config(&cfg, "Desktop Entry");
@@ -89,6 +83,7 @@ void PackageMetadata::write(const QString& filename)
     config.writeEntry("Name", d->name);
     config.writeEntry("Description", d->description);
     config.writeEntry("Icon", d->icon);
+    config.writeEntry("ServiceTypes", d->serviceType);
     config.writeEntry("X-KDE-PluginInfo-Name", d->name);
     config.writeEntry("X-KDE-PluginInfo-Author", d->author);
     config.writeEntry("X-KDE-PluginInfo-Email", d->email);
@@ -110,6 +105,7 @@ void PackageMetadata::read(const QString& filename)
     d->name = config.readEntry("X-KDE-PluginInfo-Name", d->name);
     d->description = config.readEntry("Description", d->description);
     d->icon = config.readEntry("Icon", d->icon);
+    d->serviceType = config.readEntry("ServiceTypes", d->serviceType);
     d->author = config.readEntry("X-KDE-PluginInfo-Author", d->author);
     d->email = config.readEntry("X-KDE-PluginInfo-Email", d->email);
     d->version = config.readEntry("X-KDE-PluginInfo-Version", d->version);
@@ -121,72 +117,77 @@ void PackageMetadata::read(const QString& filename)
     d->requiredVersion = config.readEntry("X-KDE-Plasmagik-RequiredVersion", d->requiredVersion);
 }
 
-QString PackageMetadata::name()
+QString PackageMetadata::name() const
 {
     return d->name;
 }
 
-QString PackageMetadata::description()
+QString PackageMetadata::description() const
 {
     return d->description;
 }
 
-QString PackageMetadata::author()
+QString PackageMetadata::serviceType() const
+{
+    return d->serviceType;
+}
+
+QString PackageMetadata::author() const
 {
     return d->author;
 }
 
-QString PackageMetadata::email()
+QString PackageMetadata::email() const
 {
     return d->email;
 }
 
-QString PackageMetadata::version()
+QString PackageMetadata::version() const
 {
     return d->version;
 }
 
-QString PackageMetadata::website()
+QString PackageMetadata::website() const
 {
     return d->website;
 }
 
-QString PackageMetadata::license()
+QString PackageMetadata::license() const
 {
     return d->license;
 }
 
-QString PackageMetadata::mainFile()
+QString PackageMetadata::mainFile() const
 {
     return d->mainFile;
 }
 
-QString PackageMetadata::application()
+QString PackageMetadata::application() const
 {
     return d->app;
 }
 
-QString PackageMetadata::requiredVersion()
+QString PackageMetadata::requiredVersion() const
 {
     return d->requiredVersion;
 }
 
-QString PackageMetadata::releaseNotes()
+QString PackageMetadata::releaseNotes() const
 {
     return d->releaseNotes;
 }
 
-QString PackageMetadata::icon()
+QString PackageMetadata::icon() const
 {
     return d->icon;
 }
 
-QString PackageMetadata::preview()
+QString PackageMetadata::preview() const
 {
     return d->preview;
 }
 
-QString PackageMetadata::type()
+QString PackageMetadata::type() const
 {
     return d->type;
 }
@@ -199,6 +200,11 @@ void PackageMetadata::setName(const QString &name)
 void PackageMetadata::setDescription(const QString &description)
 {
     d->description = description;
+}
+
+void PackageMetadata::setServiceType(const QString &serviceType)
+{
+    d->serviceType = serviceType;
 }
 
 void PackageMetadata::setAuthor(const QString &author)

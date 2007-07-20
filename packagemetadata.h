@@ -43,7 +43,7 @@ public:
     PackageMetadata(const QString& path);
     ~PackageMetadata();
 
-    bool isComplete();
+    bool isComplete() const;
 
     /**
      * Writes out the metadata to filename, which should be a .desktop
@@ -53,7 +53,7 @@ public:
      *
      * @arg filename path to the file to write to
      **/
-    void write(const QString& filename);
+    void write(const QString& filename) const;
 
     /**
      * Reads in metadata from a file, which should be a .desktop
@@ -65,20 +65,21 @@ public:
      **/
     void read(const QString& filename);
 
-    QString name();
-    QString description();
-    QString author();
-    QString email();
-    QString version();
-    QString website();
-    QString license();
-    QString mainFile();
-    QString application();
-    QString requiredVersion();
-    QString releaseNotes();
-    QString filenameToSave();
+    QString name() const;
+    QString description() const;
+    QString serviceType() const;
+    QString author() const;
+    QString email() const;
+    QString version() const;
+    QString website() const;
+    QString license() const;
+    QString mainFile() const;
+    QString application() const;
+    QString requiredVersion() const;
+    QString releaseNotes() const;
+    QString filenameToSave() const;
     // filename
-    QString icon();
+    QString icon() const;
 
     /**
      * Path to a PNG file containing a preview image.
@@ -87,12 +88,13 @@ public:
      * @return path to a local image file, or QString() if no
      *         preview is available
      **/
-    QString preview();
+    QString preview() const;
 
-    QString type();
+    QString type() const;
 
     void setName(const QString &);
     void setDescription(const QString &);
+    void setServiceType(const QString &);
     void setAuthor(const QString &);
     void setEmail(const QString &);
     void setVersion(const QString &);
