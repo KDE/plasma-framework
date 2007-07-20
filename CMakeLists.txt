@@ -19,6 +19,7 @@ set(plasma_LIB_SRCS
     dataengine.cpp
     dataenginemanager.cpp
     datasource.cpp
+    packages.cpp
     phase.cpp
     plasma.cpp
     plasma_export.h
