@@ -324,9 +324,16 @@ class PLASMA_EXPORT Applet : public QObject, public Widget
          **/
         void setFailedToLaunch(bool failed, const QString& reason = QString());
 
-        // Reimplemented from QGraphicsItem
         enum { Type = Plasma::AppletType };
+
+        /**
+         * Reimplemented from QGraphicsItem
+         **/
         int type() const { return Type; }
+
+        /**
+         * Reimplemented from QGraphicsItem
+         **/
         QRectF boundingRect () const;
 
     Q_SIGNALS:
@@ -401,10 +408,10 @@ class PLASMA_EXPORT Applet : public QObject, public Widget
     private:
         Q_DISABLE_COPY(Applet)
 
-        // Reimplemented from QGraphicsItem
+        /**
+         * Reimplemented from QGraphicsItem
+         **/
         void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
-
-        void init();
 
         class Private;
         Private* const d;

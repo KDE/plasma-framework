@@ -95,6 +95,17 @@ public:
         delete package;
     }
 
+    void init(Applet* applet)
+    {
+        if (!appletDescription) {
+            applet->setFailedToLaunch(true);
+        }
+
+        applet->setImmutable(applet->globalConfig().isImmutable() ||
+                             applet->config().isImmutable());
+
+    }
+
     static uint nextId()
     {
         ++s_maxAppletId;
@@ -127,7 +138,7 @@ Applet::Applet(QGraphicsItem *parent,
       Widget(parent),
       d(new Private(KService::serviceByStorageId(serviceID), appletId))
 {
-    init();
+    d->init(this);
 }
 
 Applet::Applet(QObject* parent, const QStringList& args)
@@ -136,7 +147,7 @@ Applet::Applet(QObject* parent, const QStringList& args)
       d(new Private(KService::serviceByStorageId(args.count() > 0 ? args[0] : QString()),
                     args.count() > 1 ? args[1].toInt() : 0))
 {
-    init();
+    d->init(this);
     // the brain damage seen in the initialization list is due to the 
     // inflexibility of KService::createInstance
 }
@@ -145,16 +156,6 @@ Applet::~Applet()
 {
     needsFocus( false );
     delete d;
-}
-
-void Applet::init()
-{
-    if (!d->appletDescription) {
-        setFailedToLaunch(true);
-    }
-
-    setImmutable(globalConfig().isImmutable() ||
-                 config().isImmutable());
 }
 
 KConfigGroup Applet::config() const
