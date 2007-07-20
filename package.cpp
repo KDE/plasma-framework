@@ -17,6 +17,8 @@
 *   Boston, MA 02110-1301, USA.                                               *
 *******************************************************************************/
 
+#include "package.h"
+
 #include <QDir>
 #include <QFile>
 
@@ -30,7 +32,6 @@
 #include <KTemporaryFile>
 #include <KZip>
 
-#include "package.h"
 #include "packagemetadata.h"
 #include "packagestructure.h"
 

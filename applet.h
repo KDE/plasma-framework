@@ -285,7 +285,7 @@ class PLASMA_EXPORT Applet : public QObject, public Widget
         /** 
          * Sets whether or not this applet is immutable or not.
          *
-         * @arg immutable true if this applet should not be changable
+         * @arg immutable true if this applet should not be changeable
          **/
         void setImmutable(bool immutable);
 

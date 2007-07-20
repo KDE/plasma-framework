@@ -83,7 +83,7 @@ class PLASMA_EXPORT PushButton : public QObject, public QGraphicsItem, public QL
         virtual Qt::Orientations expandingDirections() const;
         virtual void setGeometry(const QRect& r);
         virtual QRect geometry() const ;
-        virtual bool isEmpty() const {return false;}
+        virtual bool isEmpty() const;
 
     Q_SIGNALS:
         void clicked();

@@ -45,7 +45,7 @@ public:
     ~Corona();
 
     /**
-     * The applets and Corona surface are changable or not
+     * The applets and Corona surface are changeable or not
      **/
     bool immutable() const;
 

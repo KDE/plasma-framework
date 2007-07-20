@@ -215,7 +215,7 @@ void Phase::animateItem(QGraphicsItem* item, Animation animation)
     }
 }
 
-void Phase::moveItem(QGraphicsItem* item, Movement movement, QPoint destination)
+void Phase::moveItem(QGraphicsItem* item, Movement movement, const QPoint &destination)
 {
      //kDebug()<<k_funcinfo<<endl;
      QMap<QGraphicsItem*, MovementState*>::iterator it = d->movingItems.find(item);

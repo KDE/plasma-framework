@@ -16,8 +16,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef PLASMA_ENGINE_MANAGER_H
-#define PLASMA_ENGINE_MANAGER_H
+#ifndef PLASMA_DATAENGINEMANAGER_H
+#define PLASMA_DATAENGINEMANAGER_H
 
 #include <QtCore/QHash>
 #include <plasma/dataengine.h>

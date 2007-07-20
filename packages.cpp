@@ -17,9 +17,9 @@
 *   Boston, MA 02110-1301, USA.                                               *
 *******************************************************************************/
 
-#include <KLocale>
-
 #include "packages_p.h"
+
+#include <KLocale>
 
 namespace Plasma
 {

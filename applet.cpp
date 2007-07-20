@@ -172,7 +172,7 @@ KConfigGroup Applet::config() const
 KConfigGroup Applet::config(const QString& group) const
 {
     KConfigGroup cg = config();
-    cg.changeGroup(instanceName() + "-" + group);
+    cg.changeGroup(instanceName() + '-' + group);
     return cg;
 }
 
@@ -296,7 +296,7 @@ QString visibleFailureText(const QString& reason)
     if (reason.isEmpty()) {
         text = i18n("This object could not be created.");
     } else {
-        text = i18n("This object could not be created for the following reason:<p>%1", reason);
+        text = i18n("This object could not be created for the following reason:<p>%1</p>", reason);
     }
 
     return text;

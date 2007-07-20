@@ -156,7 +156,7 @@ QSizeF LineEdit::sizeHint() const
     return document()->size();
 }
 
-void LineEdit::setDefaultText(QString text)
+void LineEdit::setDefaultText(const QString &text)
 {
     d->defaultText = text.simplified();
     d->defaultText = QString("<font color=\"gray\">") + d->defaultText + QString("</font>");

@@ -83,7 +83,7 @@ public:
     ~Phase();
 
     void animateItem(QGraphicsItem* item, Animation anim);
-    void moveItem(QGraphicsItem* item, Movement movement, QPoint destination);
+    void moveItem(QGraphicsItem* item, Movement movement, const QPoint &destination);
     void render(QGraphicsItem* item, QImage& image, RenderOp op);
 
     AnimId animateElement(QGraphicsItem *obj, ElementAnimation);

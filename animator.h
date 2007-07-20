@@ -42,7 +42,7 @@ public:
     explicit Animator(QObject *parent = 0, const QStringList& list = QStringList());
     ~Animator();
 
-    // Parameter defintions
+    // Parameter definitions
     virtual int framesPerSecond(Plasma::Phase::Animation);
     virtual int framesPerSecond(Plasma::Phase::Movement);
     virtual int framesPerSecond(Plasma::Phase::ElementAnimation);
@@ -61,8 +61,8 @@ public:
     virtual void activate(qreal progress, QGraphicsItem* item);
 
     // Item movements
-    virtual void slideIn(qreal progress, QGraphicsItem* item, QPoint destination);
-    virtual void slideOut(qreal progress, QGraphicsItem* item, QPoint destination);
+    virtual void slideIn(qreal progress, QGraphicsItem* item, const QPoint &destination);
+    virtual void slideOut(qreal progress, QGraphicsItem* item, const QPoint &destination);
 
     // Rendering
     virtual void renderBackground(QImage& background);

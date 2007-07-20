@@ -62,7 +62,7 @@ class PLASMA_EXPORT LineEdit : public QGraphicsTextItem, public LayoutItem
         void setGeometry(const QRectF& geometry);
         QSizeF sizeHint() const;
 
-        void setDefaultText(QString text);
+        void setDefaultText(const QString &text);
         const QString toHtml();
         const QString toPlainText();
 

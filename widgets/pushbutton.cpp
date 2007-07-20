@@ -247,4 +247,9 @@ QRect PushButton::geometry() const
     return boundingRect().toRect();
 }
 
+bool PushButton::isEmpty() const
+{
+    return false;
+}
+
 } // namespace Plasma
