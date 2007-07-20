@@ -20,8 +20,9 @@
 #ifndef ICON_H
 #define ICON_H
 
-#include <QtCore/QObject>
-#include <QtGui/QGraphicsTextItem>
+#include <QObject>
+#include <QGraphicsTextItem>
+#include <QAction>
 
 #include <plasma/dataengine.h>
 #include <plasma/plasma_export.h>
@@ -35,9 +36,42 @@ class KUrl;
 namespace Plasma
 {
 
-/**
-* Icon class, for URIs and menu popups in panels
-*/
+class PLASMA_EXPORT IconAction : public QAction
+{
+    Q_OBJECT
+    public:
+        IconAction(QObject *parent = 0);
+        IconAction(const QIcon &icon, QObject *parent = 0);
+
+        void show();
+        void hide();
+        bool isVisible() const;
+
+        Phase::AnimId animationId() const;
+
+        void paint(QPainter *painter) const;
+        bool event(QEvent::Type type, const QPointF &pos);
+
+        void setSelected(bool selected);
+        bool isSelected() const;
+
+        bool isHovered() const;
+        bool isPressed() const;
+
+        void setRect(const QRectF &rect);
+        QRectF rect() const;
+
+    signals:
+        void clicked();
+
+    private:
+        void rebuildPixmap();
+
+        class Private;
+        Private * const d;
+
+};
+
 class PLASMA_EXPORT Icon : public QObject, public QGraphicsItem, public LayoutItem
 {
     Q_OBJECT
@@ -57,16 +91,14 @@ class PLASMA_EXPORT Icon : public QObject, public QGraphicsItem, public LayoutIt
         void setIconSize(const QSizeF& size);
         void setIconSize(int height, int width);
 
-/*
-        enum Position
+        enum ActionPosition
         {
             TopLeft = 0,
             TopRight,
             BottomLeft,
             BottomRight
         };
-        void setCornerAction(Position pos, QAction *action);
-*/
+        void setCornerAction(ActionPosition pos, IconAction *action);
 
         // Layout stuff
         Qt::Orientations expandingDirections() const;
