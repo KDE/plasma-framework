@@ -22,8 +22,10 @@
 
 #include <KArchiveDirectory>
 #include <KArchiveEntry>
+#include <KComponentData>
 #include <KIO/FileCopyJob>
 #include <KIO/Job>
+#include <KPluginInfo>
 #include <KStandardDirs>
 #include <KZip>
 
@@ -156,7 +158,8 @@ QStringList Package::knownPackages(const QString& packageRoot) // static
     return packages;
 }
 
-bool Package::installPackage(const QString& package, const QString& packageRoot) // static
+bool Package::installPackage(const QString& package,
+                             const QString& packageRoot) // static
 {
     //TODO: report *what* failed if something does fail
     QDir root(packageRoot);
@@ -216,15 +219,29 @@ bool Package::installPackage(const QString& package, const QString& packageRoot)
 
     KIO::FileCopyJob* job = KIO::file_move(tempdir, targetName);
 
-    bool success = job->exec();
-
-    if (!success) {
+    if (!job->exec()) {
         KIO::SimpleJob* job = KIO::file_delete(tempdir);
         job->exec();
         return false;
     }
 
-    return success;
+    // and now we register it as a service =)
+    targetName.append("/metadata.desktop");
+    QString service = KStandardDirs::locateLocal("services",
+                                                 KGlobal::mainComponent().componentName());
+    KPluginInfo pluginInfo(targetName);
+
+    if (pluginInfo.pluginName().isEmpty()) {
+        // should not installing it as a service disqualify it?
+        // i don't think so since KServiceTypeTrader may not be
+        // used by the installing app in any case, and the
+        // package is properly installed - aseigo
+        return true;
+    }
+
+    service.append(pluginInfo.pluginName()).append(".desktop");
+    job = KIO::file_copy(targetName, service);
+    return job->exec();
 }
 
 } // Namespace

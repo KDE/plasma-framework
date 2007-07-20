@@ -99,6 +99,9 @@ class PLASMA_EXPORT Package
          **/
         static bool installPackage(const QString& package, const QString& packageRoot);
 
+        //TODO implement uninstall
+        //static bool uninstallPackage(const QString& package, const QString& packageRoot);
+
     private:
         Q_DISABLE_COPY(Package)
         class Private;
