@@ -31,6 +31,7 @@ namespace Plasma
  * @brief object representing an installed Plasmagik package
  **/
 
+class PackageMetadata;
 class PackageStructure;
 
 class PLASMA_EXPORT Package
@@ -83,24 +84,41 @@ class PLASMA_EXPORT Package
         QStringList entryList(const char* fileType);
 
         /**
-         * 
+         * Returns a list of all installed packages
          *
          * @param packageRoot path to the directory where Plasmagik packages
          *                    have been installed to
          * @return a list of installed Plasmagik packages
          **/
-        static QStringList knownPackages(const QString& packageRoot);
+        static QStringList knownPackages(const QString &packageRoot);
 
         /**
+         * Installs a package.
+         *
          * @param package path to the Plasmagik package
          * @param packageRoot path to the directory where the package should be
          *                    installed to
          * @return true on successful installation, false otherwise
          **/
-        static bool installPackage(const QString& package, const QString& packageRoot);
+        static bool installPackage(const QString &package,
+                                   const QString &packageRoot);
 
         //TODO implement uninstall
         //static bool uninstallPackage(const QString& package, const QString& packageRoot);
+
+        /**
+         * Creates a package based on the metadata from the files contained
+         * in the source directory
+         *
+         * @arg metadata description of the package to create
+         * @arg source path to local directory containing the individual
+         *             files to be added to the package
+         * @arg destination path to local directory where the package should
+         *                  be created
+         **/
+        static bool createPackage(const PackageMetadata &metadata,
+                                  const QString &source,
+                                  const QString &destination);
 
     private:
         Q_DISABLE_COPY(Package)

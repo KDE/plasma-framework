@@ -4,7 +4,6 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${KDEBASE_WORKSPACE_SOURCE_DIR}/
 
 set(plasmagik_SRCS
     packagemetadata.cpp
-    packager.cpp
     packagestructure.cpp
     package.cpp
     )
@@ -49,7 +48,6 @@ install(TARGETS plasma DESTINATION ${LIB_INSTALL_DIR})
 
 set(plasmagik_HEADERS
     packagemetadata.h
-    packager.h
     packagestructure.h
     package.h
     )

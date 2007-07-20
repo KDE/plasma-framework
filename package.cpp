@@ -27,6 +27,7 @@
 #include <KIO/Job>
 #include <KPluginInfo>
 #include <KStandardDirs>
+#include <KTemporaryFile>
 #include <KZip>
 
 #include "package.h"
@@ -243,5 +244,58 @@ bool Package::installPackage(const QString& package,
     job = KIO::file_copy(targetName, service);
     return job->exec();
 }
+
+bool Package::createPackage(const PackageMetadata & metadata,
+                            const QString& source,
+                            const QString& destination)
+{
+    if (!metadata.isComplete()) {
+        kWarning(550) << "Metadata file is not complete" << endl;
+        return false;
+    }
+
+    KTemporaryFile metadataFile;
+    metadataFile.open();
+    metadata.write(metadataFile.fileName());
+
+    KTemporaryFile releaseNotes;
+    //We just write the content of the QString containing the metadata in an
+    //empty temporary file that we will package with the name metadata.desktop
+    if (releaseNotes.open()) {
+        QTextStream out(&releaseNotes);
+        if (metadata.releaseNotes().isEmpty()) {
+            out << metadata.releaseNotes();
+        } else {
+            out << "NO_RELEASE_NOTES";
+        }
+    }
+
+    //OK, we've got the temporary file with the metadata in it.
+    //Now we just need to put everything into a zip archive.
+    KZip creation(destination);
+    creation.setCompression(KZip::NoCompression);
+
+    if (!creation.open(QIODevice::WriteOnly)) {
+        return false;
+    }
+
+    creation.addLocalFile(metadataFile.fileName(), "metadata.desktop");
+    creation.addLocalFile(releaseNotes.fileName(), "notes.txt");
+
+    if (!metadata.icon().isEmpty()) {
+        //TODO: just one icon?
+        creation.addLocalFile(metadata.icon(), "icon.png");
+    }
+
+    if (!metadata.preview().isEmpty()) {
+        //TODO: just one icon?
+        creation.addLocalFile(metadata.preview(), "preview.png");
+    }
+
+    creation.addLocalDirectory(source, "contents/");
+    creation.close();
+    return true;
+}
+
 
 } // Namespace
