@@ -19,7 +19,7 @@
 
 #include <KLocale>
 
-#include "packages.h"
+#include "packages_p.h"
 
 namespace Plasma
 {
