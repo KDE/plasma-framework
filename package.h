@@ -48,6 +48,12 @@ class PLASMA_EXPORT Package
         ~Package();
 
         /**
+         * @return true if all the required components as defined in
+         * the PackageStructure exist
+         **/
+        bool isValid();
+
+        /**
          * Get the path to a given file.
          *
          * @arg fileType the type of file to look for, as defined in the
@@ -94,6 +100,7 @@ class PLASMA_EXPORT Package
         static bool installPackage(const QString& package, const QString& packageRoot);
 
     private:
+        Q_DISABLE_COPY(Package)
         class Private;
         Private * const d;
 };

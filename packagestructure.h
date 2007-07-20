@@ -78,9 +78,19 @@ public:
     QStringList directories();
 
     /**
+     * The required directories defined for this package
+     **/
+    QStringList requiredDirectories();
+
+    /**
      * The individual files defined for this package
      **/
     QStringList files();
+
+    /**
+     * The individual required files defined for this package
+     **/
+    QStringList requiredFiles();
 
     /**
      * Adds a directory to the structure of the package. It is added as

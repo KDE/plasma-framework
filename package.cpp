@@ -62,6 +62,29 @@ Package::~Package()
 {
 }
 
+bool Package::isValid()
+{
+    if (!d->valid) {
+        return false;
+    }
+
+    foreach (const QString& dir, d->structure.requiredDirectories()) {
+        if (QFile::exists(d->basePath + "/" + dir)) {
+            d->valid = false;
+            return false;
+        }
+    }
+
+    foreach (const QString& file, d->structure.requiredFiles()) {
+        if (QFile::exists(d->basePath + "/" + file)) {
+            d->valid = false;
+            return false;
+        }
+    }
+
+    return true;
+}
+
 QString Package::filePath(const char* fileType, const QString& filename)
 {
     if (!d->valid) {
@@ -69,7 +92,12 @@ QString Package::filePath(const char* fileType, const QString& filename)
     }
 
     QString path = d->structure.path(fileType);
-    if (!path.isEmpty() && !filename.isEmpty()) {
+
+    if (path.isEmpty()) {
+        return QString();
+    }
+
+    if (!filename.isEmpty()) {
         path.prepend(d->basePath);
         path.append("/").append(filename);
     }

@@ -33,6 +33,15 @@ class ContentStructure
         {
         }
 
+        ContentStructure(const ContentStructure& other)
+        {
+            path = other.path;
+            name = other.name;
+            mimetypes = other.mimetypes;
+            directory = other.directory;
+            required = other.required;
+        }
+
         QString path;
         QString name;
         QStringList mimetypes;
@@ -93,7 +102,35 @@ QStringList PackageStructure::directories()
     return dirs;
 }
 
+QStringList PackageStructure::requiredDirectories()
+{
+    QStringList dirs;
+    QHash<const char*, ContentStructure>::const_iterator it = d->contents.constBegin();
+    while (it != d->contents.constEnd()) {
+        if (it.value().directory &&
+            it.value().required) {
+            dirs << it.value().path;
+        }
+        ++it;
+    }
+    return dirs;
+}
+
 QStringList PackageStructure::files()
+{
+    QStringList files;
+    QHash<const char*, ContentStructure>::const_iterator it = d->contents.constBegin();
+    while (it != d->contents.constEnd()) {
+        if (!it.value().directory &&
+            it.value().required) {
+            files << it.value().path;
+        }
+        ++it;
+    }
+    return files;
+}
+
+QStringList PackageStructure::requiredFiles()
 {
     QStringList files;
     QHash<const char*, ContentStructure>::const_iterator it = d->contents.constBegin();
