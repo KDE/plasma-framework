@@ -84,10 +84,14 @@ install(FILES
     DESTINATION ${INCLUDE_INSTALL_DIR}/plasma/widgets)
 
 install(FILES
+    includes/AbstractRunner
     includes/Applet
+    includes/ConfigXml
     includes/Phase
     includes/Plasma
-    includes/AbstractRunner
+    includes/Package
+    includes/Packager
+    includes/PackageStructure
     includes/Theme
     includes/DataEngine
     includes/DataEngineManager
