@@ -84,10 +84,10 @@ class PLASMA_EXPORT Icon : public QObject, public QGraphicsItem, public LayoutIt
         void setGeometry(const QRectF& r);
 
         QSizeF sizeHint() const;
+        QRectF boundingRect() const;
 
     protected:
         void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
-        QRectF boundingRect() const;
 
     Q_SIGNALS:
         void pressed(bool down);
