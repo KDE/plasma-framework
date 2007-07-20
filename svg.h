@@ -45,6 +45,9 @@ namespace Plasma
 class PLASMA_EXPORT Svg : public QObject
 {
     Q_OBJECT
+    Q_ENUMS( ContentType )
+    Q_PROPERTY( QSize size READ size )
+    Q_PROPERTY( ContentType contentType READ contentType WRITE setContentType )
 
     public:
         /**
@@ -117,34 +120,34 @@ class PLASMA_EXPORT Svg : public QObject
          * @arg width the new width
          * @arg height the new height
          **/
-        void resize( int width, int height );
+        Q_INVOKABLE void resize( int width, int height );
 
         /**
          * Resizes the rendered image. Rendering will actually take place on
          * the next call to paint.
          * @arg size the new size of the image
          **/
-        void resize( const QSizeF& size );
+        Q_INVOKABLE void resize( const QSizeF& size );
 
         /**
          * Resizes the rendered image to the natural size of the SVG.
          * Rendering will actually take place on the next call to paint.
          **/
-        void resize();
+        Q_INVOKABLE void resize();
 
         /**
          * Size of a given element
          * @arg elementId the id of the element to check
          * @return the current size of a given element
          **/
-        QSize elementSize( const QString& elementId ) const;
+        Q_INVOKABLE QSize elementSize( const QString& elementId ) const;
 
         /**
          * Check when an element exists in the loaded Svg
          * @arg elementId the id of the element to check
          * @return true if the element is defined in the Svg, otherwise false
          **/
-        bool elementExists( const QString& elementId ) const;
+        Q_INVOKABLE bool elementExists( const QString& elementId ) const;
 
         /**
          * Currently set size of the SVG

@@ -43,6 +43,14 @@ class Package;
 class PLASMA_EXPORT Applet : public QObject, public Widget
 {
     Q_OBJECT
+//    Q_PROPERTY( QRectF maxSizeHint READ maxSizeHint ) // Not sure why this fails
+    Q_PROPERTY( bool hasConfigurationInterface READ hasConfigurationInterface WRITE setHasConfigurationInterface )
+    Q_PROPERTY( QString name READ name )
+    Q_PROPERTY( QString category READ category )
+    Q_PROPERTY( bool immutable READ immutable WRITE setImmutable )
+    Q_PROPERTY( bool drawStandardBackground READ drawStandardBackground WRITE setDrawStandardBackground )
+    Q_PROPERTY( bool failedToLaunch READ failedToLaunch WRITE setFailedToLaunch )
+    Q_PROPERTY( QRectF boundingRect READ boundingRect )
 
     public:
         typedef QList<Applet*> List;
