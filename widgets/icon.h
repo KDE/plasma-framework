@@ -37,42 +37,6 @@ class KUrl;
 namespace Plasma
 {
 
-class PLASMA_EXPORT IconAction : public QAction
-{
-    Q_OBJECT
-    public:
-        IconAction(QObject *parent = 0);
-        IconAction(const QIcon &icon, QObject *parent = 0);
-
-        void show();
-        void hide();
-        bool isVisible() const;
-
-        Phase::AnimId animationId() const;
-
-        void paint(QPainter *painter) const;
-        bool event(QEvent::Type type, const QPointF &pos);
-
-        void setSelected(bool selected);
-        bool isSelected() const;
-
-        bool isHovered() const;
-        bool isPressed() const;
-
-        void setRect(const QRectF &rect);
-        QRectF rect() const;
-
-    signals:
-        void clicked();
-
-    private:
-        void rebuildPixmap();
-
-        class Private;
-        Private * const d;
-
-};
-
 class PLASMA_EXPORT Icon : public QObject, public QGraphicsItem, public LayoutItem
 {
     Q_OBJECT
@@ -92,14 +56,7 @@ class PLASMA_EXPORT Icon : public QObject, public QGraphicsItem, public LayoutIt
         void setIconSize(const QSizeF& size);
         void setIconSize(int height, int width);
 
-        enum ActionPosition
-        {
-            TopLeft = 0,
-            TopRight,
-            BottomLeft,
-            BottomRight
-        };
-        void setCornerAction(ActionPosition pos, IconAction *action);
+        void addAction(QAction* action);
 
         // Layout stuff
         Qt::Orientations expandingDirections() const;
@@ -135,13 +92,23 @@ class PLASMA_EXPORT Icon : public QObject, public QGraphicsItem, public LayoutIt
         void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
         void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
 
+    public:
+        class Private;
+
+        /**
+         * @internal
+         **/
+        void drawActionButtonBase(QPainter* painter, const QSize &size, int element);
+
     private:
         QPixmap buttonPixmap();
         void init();
         void calculateSize();
 
-        class Private;
         Private * const d;
+
+    private Q_SLOTS:
+        void actionDestroyed(QObject* obj);
 };
 
 } // namespace Plasma
