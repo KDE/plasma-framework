@@ -180,7 +180,6 @@ class Icon::Private
         QIcon icon;
         ButtonState state;
 
-        QAction *testAction;
         QList<IconAction*> cornerActions;
 };
 
@@ -372,9 +371,6 @@ void Icon::init()
 {
     setAcceptedMouseButtons(Qt::LeftButton);
     setAcceptsHoverEvents(true);
-
-    d->testAction = new QAction(KIcon("exec"), i18n("Open"), this);
-    addAction(d->testAction);
 }
 
 void Icon::addAction(QAction *action)
@@ -388,16 +384,20 @@ void Icon::addAction(QAction *action)
     d->cornerActions.append(iconAction);
     connect(action, SIGNAL(destroyed(QObject*)), this, SLOT(actionDestroyed(QObject*)));
 
-    //FIXME: set other icon rects properly, and shift them when we change our size
+    //TODO: fewer magic numbers, please =) 38, 32, 6, etc... needs to go.
+    //      at the very least static const ints with nice names.
     switch (count) {
     case Private::TopLeft:
         iconAction->setRect(QRectF(6, 6, 32, 32));
         break;
     case Private::TopRight:
+        iconAction->setRect(QRectF(d->size.width() - 38, 6, 32, 32));
         break;
     case Private::BottomLeft:
+        iconAction->setRect(QRectF(6, d->size.height() - 38, 32, 32));
         break;
     case Private::BottomRight:
+        iconAction->setRect(QRectF(d->size.width() - 38, d->size.height() - 38, 32, 32));
         break;
     }
 }
@@ -425,6 +425,30 @@ void Icon::calculateSize()
     qreal width = margin + qMax(fmSize.width(), d->iconSize.width()) + margin;
     d->size = QSizeF(width, height);
     d->svg.resize(d->size);
+
+    int count = 0;
+    foreach (IconAction* iconAction, d->cornerActions) {
+        //TODO: fewer magic numbers, please =) 38, 32, 6, etc... needs to go.
+        //      at the very least static const ints with nice names.
+        switch (count) {
+        case Private::TopLeft:
+            // top left never changes, so don't bother setting it
+            //iconAction->setRect(QRectF(6, 6, 32, 32));
+            break;
+        case Private::TopRight:
+            iconAction->setRect(QRectF(d->size.width() - 38, 6, 32, 32));
+            break;
+        case Private::BottomLeft:
+            iconAction->setRect(QRectF(6, d->size.height() - 38, 32, 32));
+            break;
+        case Private::BottomRight:
+            iconAction->setRect(QRectF(d->size.width() - 38, d->size.height() - 38, 32, 32));
+            break;
+        }
+
+        ++count;
+    }
+
     update();
 }
 
