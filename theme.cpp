@@ -43,11 +43,11 @@ public:
    Theme self;
 };
 
-K_GLOBAL_STATIC( ThemeSingleton, privateSelf )
+K_GLOBAL_STATIC( ThemeSingleton, privateThemeSelf )
 
 Theme* Theme::self()
 {
-    return &privateSelf->self;
+    return &privateThemeSelf->self;
 }
 
 Theme::Theme(QObject* parent)
