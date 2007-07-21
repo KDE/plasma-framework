@@ -13,8 +13,11 @@
    id="svg2267"
    sodipodi:version="0.32"
    inkscape:version="0.45"
-   sodipodi:modified="true"
-   version="1.0">
+   version="1.0"
+   sodipodi:docname="background.svg"
+   sodipodi:docbase="/home/aseigo/kde4/KDE/kdebase/workspace/plasma/desktoptheme/widgets"
+   inkscape:output_extension="org.inkscape.output.svg.inkscape"
+   sodipodi:modified="true">
   <defs
      id="defs2269">
     <linearGradient
@@ -41,13 +44,13 @@
      inkscape:pageshadow="2"
      inkscape:zoom="2.1591837"
      inkscape:cx="122.5"
-     inkscape:cy="122.5"
+     inkscape:cy="128.48824"
      inkscape:document-units="px"
      inkscape:current-layer="g180"
-     inkscape:window-width="1280"
-     inkscape:window-height="720"
+     inkscape:window-width="1440"
+     inkscape:window-height="851"
      inkscape:window-x="0"
-     inkscape:window-y="24" />
+     inkscape:window-y="25" />
   <metadata
      id="metadata2272">
     <rdf:RDF>
@@ -68,11 +71,10 @@
        style="opacity:1;fill:#333333;fill-opacity:1"
        id="g180"
        transform="matrix(3.6029412,0,0,3.6029412,-113.7521,-114.40386)">
-		<path
-   style="opacity:0.61499999;fill:#000000;fill-opacity:1"
-   id="path182"
-   d="M 110,98.889 C 110,102.189 107.3,104.889 104,104.889 L 48,104.889 C 44.7,104.889 42,102.189 42,98.889 L 42,42.889 C 42,39.589 44.7,36.889 48,36.889 L 104,36.889 C 107.3,36.889 110,39.589 110,42.889 L 110,98.889 z " />
-
-	</g>
+      <path
+         style="opacity:0.61499999;fill:#ececec;fill-opacity:1"
+         id="path182"
+         d="M 110,98.889 C 110,102.189 107.3,104.889 104,104.889 L 48,104.889 C 44.7,104.889 42,102.189 42,98.889 L 42,42.889 C 42,39.589 44.7,36.889 48,36.889 L 104,36.889 C 107.3,36.889 110,39.589 110,42.889 L 110,98.889 z " />
+    </g>
   </g>
 </svg>
