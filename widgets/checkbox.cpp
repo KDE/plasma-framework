@@ -83,7 +83,7 @@ CheckBox::~CheckBox()
 
 QRectF CheckBox::boundingRect() const
 {
-    return QRectF(x(),y(),d->width,d->height);
+    return QRectF(0,0,d->width,d->height);
 }
 
 void CheckBox::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
