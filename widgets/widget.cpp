@@ -132,7 +132,7 @@ void Widget::invalidate()
 
 QSizeF Widget::sizeHint() const
 {
-    return QSizeF(0.0, 0.0);
+    return size();
 }
 
 QSizeF Widget::size() const
