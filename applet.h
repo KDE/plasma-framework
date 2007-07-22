@@ -245,7 +245,7 @@ class PLASMA_EXPORT Applet : public QObject, public Widget
          *        assigned automatically.
          * @return a pointer to the loaded applet, or 0 on load failure
          **/
-        static Applet* loadApplet(const KPluginInfo* info, uint appletId = 0,
+        static Applet* loadApplet(const KPluginInfo& info, uint appletId = 0,
                                   const QStringList& args = QStringList());
 
         /**
@@ -276,7 +276,7 @@ class PLASMA_EXPORT Applet : public QObject, public Widget
          *
          * @param a KPluginInfo object for the applet
          */
-        static QString category(const KPluginInfo* applet);
+        static QString category(const KPluginInfo& applet);
 
         /**
          * Get the category of the given applet

@@ -52,7 +52,7 @@ public:
         : appletId(uniqueID),
           globalConfig(0),
           appletConfig(0),
-          appletDescription(service ? new KPluginInfo(service) : 0),
+          appletDescription(service),
           package(0),
           background(0),
           failureText(0),
@@ -68,14 +68,14 @@ public:
             s_maxAppletId = appletId;
         }
 
-        if (appletDescription &&
-            !appletDescription->property("X-Plasma-Language").toString().isEmpty()) {
+        if (appletDescription.isValid() &&
+            !appletDescription.property("X-Plasma-Language").toString().isEmpty()) {
             QString path = KStandardDirs::locate("appdata",
                                                  "plasmoids/" +
-                                                 appletDescription->pluginName());
+                                                 appletDescription.pluginName());
             if (!path.isEmpty()) {
                 package = new Package(path,
-                        appletDescription->pluginName(),
+                        appletDescription.pluginName(),
                         PlasmoidStructure());
                 if (!package->isValid()) {
                     delete package;
@@ -90,14 +90,13 @@ public:
         foreach ( const QString& engine, loadedEngines ) {
             DataEngineManager::self()->unloadDataEngine( engine );
         }
-        delete appletDescription;
         delete background;
         delete package;
     }
 
     void init(Applet* applet)
     {
-        if (!appletDescription) {
+        if (!appletDescription.isValid()) {
             applet->setFailedToLaunch(true);
         }
 
@@ -117,7 +116,7 @@ public:
     uint appletId;
     KSharedConfig::Ptr globalConfig;
     KSharedConfig::Ptr appletConfig;
-    KPluginInfo* appletDescription;
+    KPluginInfo appletDescription;
     Package* package;
     QList<QObject*> watchedForFocus;
     QStringList loadedEngines;
@@ -214,25 +213,25 @@ void Applet::constraintsUpdated()
 
 QString Applet::name() const
 {
-    if (!d->appletDescription) {
+    if (!d->appletDescription.isValid()) {
         return i18n("Unknown Applet");
     }
 
-    return d->appletDescription->name();
+    return d->appletDescription.name();
 }
 
 QString Applet::category() const
 {
-    if (!d->appletDescription) {
+    if (!d->appletDescription.isValid()) {
         return i18n("Misc");
     }
 
-    return d->appletDescription->property("X-KDE-PluginInfo-Category").toString();
+    return d->appletDescription.property("X-KDE-PluginInfo-Category").toString();
 }
 
-QString Applet::category(const KPluginInfo* applet)
+QString Applet::category(const KPluginInfo& applet)
 {
-    return applet->property("X-KDE-PluginInfo-Category").toString();
+    return applet.property("X-KDE-PluginInfo-Category").toString();
 }
 
 QString Applet::category(const QString& appletName)
@@ -385,20 +384,20 @@ Location Applet::location() const
 
 QString Applet::globalName() const
 {
-    if (!d->appletDescription) {
+    if (!d->appletDescription.isValid()) {
         return QString();
     }
 
-    return d->appletDescription->service()->library();
+    return d->appletDescription.service()->library();
 }
 
 QString Applet::instanceName() const
 {
-    if (!d->appletDescription) {
+    if (!d->appletDescription.isValid()) {
         return QString();
     }
 
-    return d->appletDescription->service()->library() + QString::number( d->appletId );
+    return d->appletDescription.service()->library() + QString::number( d->appletId );
 }
 
 void Applet::watchForFocus(QObject *widget, bool watch)
@@ -545,13 +544,13 @@ Applet* Applet::loadApplet(const QString& appletName, uint appletId, const QStri
     return applet;
 }
 
-Applet* Applet::loadApplet(const KPluginInfo* info, uint appletId, const QStringList& args)
+Applet* Applet::loadApplet(const KPluginInfo& info, uint appletId, const QStringList& args)
 {
-    if (!info) {
+    if (!info.isValid()) {
         return 0;
     }
 
-    return loadApplet(info->pluginName(), appletId, args);
+    return loadApplet(info.pluginName(), appletId, args);
 }
 
 } // Plasma namespace
