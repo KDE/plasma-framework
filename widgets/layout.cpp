@@ -45,6 +45,7 @@ Layout::Layout(LayoutItem *parent)
 
 Layout::~Layout()
 {
+        delete d;
 }
 
 qreal Layout::margin() const
