@@ -20,15 +20,15 @@
 #ifndef ICON_H
 #define ICON_H
 
-#include <QObject>
-#include <QGraphicsTextItem>
-#include <QAction>
+#include <QtCore/QObject>
+#include <QtGui/QGraphicsTextItem>
 
 #include <plasma/dataengine.h>
 #include <plasma/phase.h>
 #include <plasma/plasma_export.h>
 #include <plasma/widgets/layoutitem.h>
 
+class QAction;
 class KUrl;
 
 //TODO
@@ -41,8 +41,8 @@ class PLASMA_EXPORT Icon : public QObject, public QGraphicsItem, public LayoutIt
 {
     Q_OBJECT
     public:
-        Icon(QGraphicsItem *parent = 0);
-        Icon(const QString &text, QGraphicsItem *parent = 0);
+        explicit Icon(QGraphicsItem *parent = 0);
+        explicit Icon(const QString &text, QGraphicsItem *parent = 0);
         Icon(const QIcon & icon, const QString &text, QGraphicsItem *parent = 0);
         virtual ~Icon();
 

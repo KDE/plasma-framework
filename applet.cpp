@@ -331,6 +331,11 @@ void Applet::setFailedToLaunch(bool failed, const QString& reason)
     update();
 }
 
+int Applet::type() const
+{
+    return Type;
+}
+
 QRectF Applet::boundingRect () const
 {
     //FIXME: this should be big enough to allow for the failure text?

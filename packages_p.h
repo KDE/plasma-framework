@@ -17,8 +17,8 @@
 *   Boston, MA 02110-1301, USA.                                               *
 *******************************************************************************/
 
-#ifndef PLASMA_PACKAGES
-#define PLASMA_PACKAGES
+#ifndef PLASMA_PACKAGES_H // krazy:exclude=includes
+#define PLASMA_PACKAGES_H
 
 #include <plasma/packagestructure.h>
 

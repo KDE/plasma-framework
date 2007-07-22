@@ -17,6 +17,9 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
+#include "icon.h"
+
+#include <QAction>
 #include <QApplication>
 #include <QPainter>
 #include <QGraphicsSceneMouseEvent>
@@ -38,7 +41,6 @@
 #include "phase.h"
 #include "svg.h"
 #include "effects/blur.cpp"
-#include "icon.h"
 
 namespace Plasma
 {

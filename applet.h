@@ -337,7 +337,7 @@ class PLASMA_EXPORT Applet : public QObject, public Widget
         /**
          * Reimplemented from QGraphicsItem
          **/
-        int type() const { return Type; }
+        int type() const;
 
         /**
          * Reimplemented from QGraphicsItem
