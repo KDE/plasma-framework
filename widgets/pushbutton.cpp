@@ -24,7 +24,9 @@
 #include <QWidget>
 #include <QPainter>
 #include <QGraphicsSceneMouseEvent>
-#include <QDebug>
+#include <QFontMetricsF>
+#include <QApplication>
+
 #include "pushbutton.moc"
 
 namespace Plasma
@@ -43,37 +45,28 @@ class PushButton::Private
         QSize iconSize;
         bool hasIcon;
         int labelTextOpacity;
-        int height;
-        int width;
-        int maxWidth;
-        int minWidth;
-        int minHeight;
-        int maxHeight;
         int radius;
-        QTimer * updateTimer;
+        QTimer *updateTimer;
         PushButton::ButtonState state;
 };
 
-PushButton::PushButton(QGraphicsItem *parent)
+PushButton::PushButton(Widget *parent)
     : QObject(),
-      QGraphicsItem(parent),
-      QLayoutItem (Qt::AlignHCenter),
+      Widget(parent),
       d(new Private)
 {
     setAcceptedMouseButtons(Qt::LeftButton);
     setAcceptsHoverEvents(true);
     setEnabled(true);
 
-    d->height = 40;
-    d->width = 100 ;
-    d->minWidth = d->width;
-    d->maxWidth = d->width;
-    d->minHeight = d->height;
-    d->maxHeight = d->height;
+    resize(40.0f, 100.0f);
     setPos(QPointF(0.0,0.0));
+
+    /*FIXME: Don't use hardcoded strings and colors. */
+
     d->state = PushButton::None;
     d->labelText = QString("Plasma");
-    d->labelTextColor = QColor(201,201,255);
+    d->labelTextColor = QColor(201, 201, 255);
     d->hasIcon = false;
     d->iconSize = QSize(32,32);
 }
@@ -86,11 +79,6 @@ PushButton::~PushButton()
 void PushButton::updated(const QString&, const DataEngine::Data &data)
 {
     Q_UNUSED(data)
-}
-
-QRectF PushButton::boundingRect() const
-{
-    return QRectF(0, 0, d->width, d->height);
 }
 
 void PushButton::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
@@ -110,7 +98,7 @@ void PushButton::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
 
     widget->style()->drawPrimitive(QStyle::PE_PanelButtonCommand, &options, painter, widget);
     widget->style()->drawPrimitive(QStyle::PE_FrameFocusRect, &options, painter, widget);
-    widget-> style()->drawControl(QStyle::CE_PushButton, &options, painter, widget);
+    widget->style()->drawControl(QStyle::CE_PushButton, &options, painter, widget);
 }
 
 void PushButton::setText(const QString& text)
@@ -127,37 +115,9 @@ void PushButton::setText(const QString& text)
 
 }
 
-
 QString PushButton::text() const
 {
     return d->labelText;
-}
-
-int PushButton::height() const
-{
-    return d->height;
-}
-
-int PushButton::width() const
-{
-    return d->width;
-}
-
-void PushButton::setHeight(int h)
-{
-    prepareGeometryChange();
-    d->height = h;
-    update();
-}
-
-void PushButton::setWidth(int w)
-{
-    if (!(w >= d->maxWidth))
-    {
-        prepareGeometryChange ();
-        d->width = w;
-        update();
-    }
 }
 
 void PushButton::setIcon(const QString& path)
@@ -173,25 +133,6 @@ void PushButton::setIcon(const QString& path)
         d->hasIcon = false;
 }
 
-QSize PushButton::size() const
-{
-    return QSize(d->width, d->height);
-}
-
-void PushButton::setSize(const QSize& s)
-{
-    prepareGeometryChange();
-    if (!d->maxWidth >= s.width())
-        d->width = s.width();
-    d->height = s.height();
-    update();
-}
-
-void PushButton::setMaximumWidth(int w)
-{
-    d->maxWidth= w;
-}
-
 bool PushButton::isDown()
 {
     if (d->state == PushButton::Pressed)
@@ -199,7 +140,7 @@ bool PushButton::isDown()
     return false;
 }
 
-void PushButton::mousePressEvent ( QGraphicsSceneMouseEvent * event )
+void PushButton::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     event->accept();
     d->state = PushButton::Pressed;
@@ -207,7 +148,7 @@ void PushButton::mousePressEvent ( QGraphicsSceneMouseEvent * event )
 //     emit clicked();
 }
 
-void PushButton::mouseReleaseEvent ( QGraphicsSceneMouseEvent * event )
+void PushButton::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
     event->accept();
     if (d->state == PushButton::Pressed)
@@ -216,35 +157,26 @@ void PushButton::mouseReleaseEvent ( QGraphicsSceneMouseEvent * event )
     update();
 }
 
-QSize PushButton::sizeHint() const
+QSizeF PushButton::sizeHint() const
 {
-    return QSize(d->width,d->height);
+    return minimumSize();
 }
 
-QSize PushButton::minimumSize() const
+QSizeF PushButton::minimumSize() const
 {
-    return QSize(d->minWidth,d->minHeight);
+    QFontMetricsF m = qApp->fontMetrics();
+
+    return m.boundingRect(text()).size();
 }
 
-QSize PushButton::maximumSize() const
+QSizeF PushButton::maximumSize() const
 {
-    return QSize(d->maxWidth,d->maxHeight);
+    return QSizeF();
 }
 
-Qt::Orientations PushButton::expandingDirections() const 
+Qt::Orientations PushButton::expandingDirections() const
 {
     return Qt::Horizontal;
-}
-
-void PushButton::setGeometry(const QRect & r)
-{
-    setSize(r.size());
-    setPos(r.x(),r.y());
-}
-
-QRect PushButton::geometry() const
-{
-    return boundingRect().toRect();
 }
 
 bool PushButton::isEmpty() const

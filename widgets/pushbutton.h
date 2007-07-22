@@ -1,5 +1,6 @@
 /*
  *   Copyright (C) 2007 by Siraj Razick siraj@kde.org
+ *                         and Matias Valdenegro <mvaldenegro@informatica.utem.cl>
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU Library General Public License version 2 as
@@ -24,20 +25,24 @@
 #include <QtGui/QLayoutItem>
 
 #include <plasma/dataengine.h>
+#include <plasma/widgets/widget.h>
 #include <plasma/plasma_export.h>
-
-//TODO
-//Please Document this class
 
 namespace Plasma
 {
 
 /**
- * Class that emulates a QPushButton inside plasma
+ * Class that emulates a QPushButton inside Plasma
+ *
+ * @author Siraj Razick and Matias Valdenegro.
+ *
+ *
  */
-class PLASMA_EXPORT PushButton : public QObject, public QGraphicsItem, public QLayoutItem
+class PLASMA_EXPORT PushButton : public QObject,
+                                 public Plasma::Widget
 {
     Q_OBJECT
+
     public:
         enum ButtonShape
         {
@@ -55,37 +60,68 @@ class PLASMA_EXPORT PushButton : public QObject, public QGraphicsItem, public QL
         };
 
     public:
-        PushButton(QGraphicsItem *parent = 0);
+
+        /**
+         * Constructor.
+         */
+        PushButton(Widget *parent = 0);
+
+        /**
+         * Virtual Destructor.
+         */
         virtual ~PushButton();
 
+        /**
+         * Returns the text of this Button.
+         */
         QString text() const;
-        void setText(const QString &name);
 
-        QSize size() const;
-        void setSize(const QSize& size);
+        /**
+         * Sets the text of this Button.
+         */
+        void setText(const QString &text);
 
-        int height() const;
-        void setHeight(int height);
-
-        int width() const;
-        void setWidth(int width);
-
+        /**
+         * Sets the icon of this Button.
+         * @param path Path to the icon file. TODO : WTF is path?
+         */
         void setIcon(const QString& path);
-        void setMaximumWidth(int maxwidth);
 
+        /**
+         * Paint function.
+         */
         virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
-        virtual QRectF boundingRect() const;
 
-        //layout stufff
-        virtual QSize sizeHint() const ; 
-        virtual QSize minimumSize() const;
-        virtual QSize maximumSize() const ;
+        /**
+         * Reimplemented from Plasma::Widget.
+         */
+        virtual QSizeF sizeHint() const ;
+
+        /**
+         * Reimplemented from Plasma::Widget.
+         */
+        virtual QSizeF minimumSize() const;
+
+        /**
+         * Reimplemented from Plasma::Widget.
+         */
+        virtual QSizeF maximumSize() const ;
+
+        /**
+         * Buttons prefer to expand in Horizontal direction.
+         */
         virtual Qt::Orientations expandingDirections() const;
-        virtual void setGeometry(const QRect& r);
-        virtual QRect geometry() const ;
+
+        /**
+         * TODO: What does this function do?
+         */
         virtual bool isEmpty() const;
 
     Q_SIGNALS:
+
+        /**
+         * Triggers whatever this button is clicked.
+         */
         void clicked();
 
     public Q_SLOTS:

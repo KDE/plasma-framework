@@ -20,6 +20,8 @@
 
 #include "widget.h"
 
+#include <KDebug>
+
 #include <QtCore/QList>
 
 #include "layout.h"
@@ -36,7 +38,7 @@ class Widget::Private
         { }
         ~Private() { }
 
-        QRectF geometry;
+        QSizeF size;
 
         Widget *parent;
         Layout *layout;
@@ -47,11 +49,11 @@ Widget::Widget(QGraphicsItem *parent)
   : QGraphicsItem(parent),
     d(new Private)
 {
-    d->parent = dynamic_cast<Widget*>(parent);
+    d->parent = dynamic_cast<Widget *>(parent);
 
     if (d->parent) {
         d->parent->addChild(this);
-        d->parent->setGeometry(QRectF(QPointF(0.0, 0.0), d->parent->size()));
+        d->parent->invalidate();
     }
 }
 
@@ -101,14 +103,20 @@ qreal Widget::widthForHeight(qreal h) const
 
 QRectF Widget::geometry() const
 {
-    return d->geometry;
+    return QRectF(pos(), size());
+}
+
+QRectF Widget::localGeometry() const
+{
+    return QRectF(QPointF(0.0f, 0.0f), size());
 }
 
 void Widget::setGeometry(const QRectF& geometry)
 {
     prepareGeometryChange();
 
-    d->geometry = geometry;
+    setPos(geometry.topLeft());
+    d->size = geometry.size();
 
     updateGeometry();
     update();
@@ -117,12 +125,17 @@ void Widget::setGeometry(const QRectF& geometry)
 void Widget::updateGeometry()
 {
     if (layout()) {
-        layout()->setGeometry(QRectF(QPointF(0.0, 0.0), size()));
+
+        kDebug() << (void *) this << " updating geometry to " << size() << endl;
+
+        layout()->setGeometry(geometry());
     }
 }
 
 void Widget::invalidate()
 {
+    setGeometry(geometry());
+
     updateGeometry();
 
     if (parent()) {
@@ -137,17 +150,17 @@ QSizeF Widget::sizeHint() const
 
 QSizeF Widget::size() const
 {
-    return geometry().size();
+    return d->size;
 }
 
 QRectF Widget::boundingRect() const
 {
-    return geometry();
+    return QRectF(QPointF(0.0f, 0.0f), size());
 }
 
 void Widget::resize(const QSizeF& size)
 {
-    setGeometry(QRectF(d->geometry.topLeft(), size));
+    setGeometry(QRectF(pos(), size));
 }
 
 void Widget::resize(qreal w, qreal h)
@@ -157,7 +170,11 @@ void Widget::resize(qreal w, qreal h)
 
 void Widget::setLayout(Layout *l)
 {
-    d->layout = l;
+    if(!d->layout) {
+        d->layout = l;
+    } else {
+        kDebug() << "Widget " << this << "already has a layout!" << endl;
+    }
 }
 
 Layout *Widget::layout() const
@@ -189,9 +206,10 @@ void Widget::addChild(Widget *w)
 
 void Widget::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-    Q_UNUSED(painter)
-    Q_UNUSED(option)
-    Q_UNUSED(widget)
+    Q_UNUSED(painter);
+    Q_UNUSED(option);
+    Q_UNUSED(widget);
+
     // do nothing, but we need to reimp so we can create Widget items as this method
     // is pure virtual in QGraphicsItem
 }

@@ -34,49 +34,152 @@ namespace Plasma
 class Layout;
 
 /**
- * Class that emulates a QWidget inside plasma
+ * Base class for all Widgets in Plasma.
+ *
+ * @author Alexander Wiedenbruch and Matias Valdenegro.
+ *
+ * Widgets are the basis for User Interfaces inside Plasma.
+ * Widgets are rectangular, but can be in any visible shape by just using transparency to mask
+ * out non-rectangular areas.
+ *
+ * To implement a Widget, just subclass Plasma::Widget and implement at minimum, sizeHint() and paint()
  */
-class PLASMA_EXPORT Widget : public QGraphicsItem, public LayoutItem
+class PLASMA_EXPORT Widget : public QGraphicsItem,
+                             public LayoutItem
 {
-public:
-    explicit Widget(QGraphicsItem *parent = 0);
-    virtual ~Widget();
+    public:
 
-    virtual Qt::Orientations expandingDirections() const;
+        /**
+         * Constructor.
+         */
+        explicit Widget(QGraphicsItem *parent = 0);
 
-    virtual QSizeF minimumSize() const;
-    virtual QSizeF maximumSize() const;
+        /**
+         * Virtual Destructor.
+         */
+        virtual ~Widget();
 
-    virtual bool hasHeightForWidth() const;
-    virtual qreal heightForWidth(qreal w) const;
+        /**
+         * Returns a bitmask with the directions that this Widget can be expanded.
+         */
+        virtual Qt::Orientations expandingDirections() const;
 
-    virtual bool hasWidthForHeight() const;
-    virtual qreal widthForHeight(qreal h) const;
+        /**
+         * Returns the minimum size of this Widget and it's contents.
+         */
+        virtual QSizeF minimumSize() const;
 
-    QRectF geometry() const;
-    void setGeometry(const QRectF &geometry);
+        /**
+         * Returns the maximum size of this Widget.
+         */
+        virtual QSizeF maximumSize() const;
 
-    void updateGeometry();
+        /**
+         * Returns true whatever this Widget can use height-for-width layout management,
+         * false otherwise.
+         */
+        virtual bool hasHeightForWidth() const;
 
-    virtual void invalidate();
+        /**
+         * Returns the corresponding height for a given width.
+         * @param w Width
+         */
+        virtual qreal heightForWidth(qreal w) const;
 
-    virtual QSizeF sizeHint() const;
+        /**
+         * Returns true whatever this Widget can use width-for-height layout management,
+         * false otherwise.
+         */
+        virtual bool hasWidthForHeight() const;
 
-    QSizeF size() const;
+        /**
+         * Returns the corresponding width for a given height.
+         * @param h Height
+         */
+        virtual qreal widthForHeight(qreal h) const;
 
-    virtual QRectF boundingRect() const;
+        /**
+         * Returns the geometry of this Widget, in parent coordinates.
+         */
+        QRectF geometry() const;
 
-    void resize(const QSizeF &size);
-    void resize(qreal w, qreal h);
+        /**
+         * Returns the geometry of this Widget, in local coordinates.
+         */
+        QRectF localGeometry() const;
 
-    void setLayout(Layout *l);
-    Layout *layout() const;
+        /**
+         * Sets the geometry of this Widget.
+         */
+        void setGeometry(const QRectF &geometry);
 
-    Widget *parent() const;
-    void reparent(Widget *w);
+        /**
+         * Propagates the geometry information to associated layouts and other Widgets.
+         */
+        void updateGeometry();
 
-    void addChild(Widget *w);
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
+        /**
+         * Invalidates the geometry information.
+         */
+        virtual void invalidate();
+
+        /**
+         * Returns the most appropiate size of this Widget to hold it's contents.
+         */
+        virtual QSizeF sizeHint() const;
+
+        /**
+         * Returns the size of this Widget.
+         */
+        QSizeF size() const;
+
+        /**
+         * Returns the bounding rectangle of this Widget.
+         */
+        virtual QRectF boundingRect() const;
+
+        /**
+         * Resizes this Widget.
+         * @param size New size
+         */
+        void resize(const QSizeF &size);
+
+        /**
+         * Resizes this Widget.
+         * @param w New width
+         * @param h New height
+         */
+        void resize(qreal w, qreal h);
+
+        /**
+         * Sets the Layout that will manage this Widget's childrens.
+         */
+        void setLayout(Layout *l);
+
+        /**
+         * Returns the Layout associated with this Widget.
+         */
+        Layout *layout() const;
+
+        /**
+         * Returns the parent of this Widget.
+         */
+        Widget *parent() const;
+
+        /**
+         * Changes the parent of this Widget.
+         */
+        void reparent(Widget *w);
+
+        /**
+         * Appends a child Widget to this Widget.
+         */
+        void addChild(Widget *w);
+
+        /**
+         * Paint function. Reimplement to draw on this Widget.
+         */
+        virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
 
 private:
     class Private;

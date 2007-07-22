@@ -84,11 +84,11 @@ QRectF VBoxLayout::geometry() const
 void VBoxLayout::setGeometry(const QRectF& geometry)
 {
     if (!geometry.isValid() || geometry.isEmpty()) {
-        kDebug() << "Invalid Geometry!" << endl;
+        kDebug() << "Invalid Geometry " << geometry << endl;
         return;
     }
 
-    qDebug("Geometry %p : %f, %f by %f, %f", this, geometry.x(), geometry.y(), geometry.width(), geometry.height());
+    kDebug() << this << " Geometry process " << geometry << " for " << d->childList.count() << " childrens"<< endl;
 
     QList<LayoutItem *> children;
     QList<LayoutItem *> expandingChildren;
@@ -118,12 +118,15 @@ void VBoxLayout::setGeometry(const QRectF& geometry)
         sizes.insert(indexOf(l),QSizeF(available.width(), expandHeight));
     }
 
-    QPointF start = geometry.topLeft();
+    //QPointF start = geometry.topLeft();
+    QPointF start = QPointF(0.0f, 0.0f);
     start += QPointF(margin(), spacing());
 
     for (int i = 0; i < sizes.size(); i++) {
 
         LayoutItem *l = itemAt(i);
+
+        kDebug() << "Setting Geometry for child " << l << " to " << QRectF(start, sizes[i]) << endl;
 
         l->setGeometry(QRectF(start, sizes[i]));
         start += QPointF(0.0, sizes[i].height() + spacing());

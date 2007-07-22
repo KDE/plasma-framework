@@ -31,11 +31,23 @@ namespace Plasma
 
 /**
  * Vertical Box Layout
+ *
+ * @author Matias Valdenegro T. <mvaldenegro@informatica.utem.cl>
+ *
+ * This class implements a Vertical Box Layout, it just lays items in vertical, from up to down.
  */
 class PLASMA_EXPORT VBoxLayout : public Layout
 {
 	public:
+
+        /**
+         * Constructor.
+         */
 		VBoxLayout(LayoutItem *parent = 0);
+
+        /**
+         * Virtual Destructor.
+         */
 		virtual ~VBoxLayout();
 
 		Qt::Orientations expandingDirections() const;

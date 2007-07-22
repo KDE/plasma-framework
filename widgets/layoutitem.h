@@ -31,27 +31,78 @@ class Layout;
 
 /**
  * Base class for Plasma layout-managed items
+ *
+ * @author Matias Valdenegro T. <mvaldenegro@informatica.utem.cl>
+ *
+ * All layout-managed items should implement this class, but regular users just need to use
+ * Plasma::Widget and Plasma::Layout.
  */
 class PLASMA_EXPORT LayoutItem
 {
     public:
+
+        /**
+         * Constructor.
+         */
         LayoutItem();
+
+        /**
+         * Virtual Destructor.
+         */
         virtual ~LayoutItem();
 
+        /**
+         * Returns a bitmask with the directions that this Item can be expanded.
+         */
         virtual Qt::Orientations expandingDirections() const = 0;
 
+        /**
+         * Returns the minimum size of this Item and it's contents.
+         */
         virtual QSizeF minimumSize() const = 0;
+
+        /**
+         * Returns the maximum size of this Item.
+         */
         virtual QSizeF maximumSize() const = 0;
 
+        /**
+         * Returns true whatever this Item can use height-for-width layout management,
+         * false otherwise.
+         */
         virtual bool hasHeightForWidth() const;
+
+        /**
+         * Returns the corresponding height for a given width.
+         * @param w Width
+         */
         virtual qreal heightForWidth(qreal w) const;
 
+        /**
+         * Returns true whatever this Item can use width-for-height layout management,
+         * false otherwise.
+         */
         virtual bool hasWidthForHeight() const;
+
+        /**
+         * Returns the corresponding width for a given height.
+         * @param h Height
+         */
         virtual qreal widthForHeight(qreal h) const;
 
+        /**
+         * Returns the geometry of this Item.
+         */
         virtual QRectF geometry() const = 0;
+
+        /**
+         * Sets the geometry of this Item.
+         */
         virtual void setGeometry(const QRectF& geometry) = 0;
 
+        /**
+         * Returns the most appropiate size of this Item to hold whatever contents it has.
+         */
         virtual QSizeF sizeHint() const = 0;
 
         /**
@@ -73,7 +124,7 @@ class PLASMA_EXPORT LayoutItem
         void setLayout(Layout* layout);
 
         /**
-         * Returns the layout this item is currently associated with
+         * Returns the layout this item is currently associated with.
          */
         Layout* layout();
 
