@@ -92,8 +92,8 @@ class PLASMA_EXPORT Svg : public QObject
          * @arg point the position to start drawing; the entire svg will be
          *      drawn starting at this point.
          */
-        void paint(QPainter* painter, const QPointF& point,
-                   const QString& elementID = QString());
+        Q_INVOKABLE void paint(QPainter* painter, const QPointF& point,
+			       const QString& elementID = QString());
 
         /**
          * Paints the SVG represented by this object
@@ -101,8 +101,8 @@ class PLASMA_EXPORT Svg : public QObject
          * @arg x the horizontal coordinate to start painting from
          * @arg y the vertical coordinate to start painting from
          */
-        void paint(QPainter* painter, int x, int y,
-                   const QString& elementID = QString());
+        Q_INVOKABLE void paint(QPainter* painter, int x, int y,
+			       const QString& elementID = QString());
 
         /**
          * Paints the SVG represented by this object
@@ -111,8 +111,8 @@ class PLASMA_EXPORT Svg : public QObject
          *           of the 
          *      drawn starting at this point.
          */
-        void paint(QPainter* painter, const QRectF& rect,
-                   const QString& elementID = QString());
+        Q_INVOKABLE void paint(QPainter* painter, const QRectF& rect,
+			      const QString& elementID = QString());
 
         /**
          * Resizes the rendered image. Rendering will actually take place on
