@@ -19,12 +19,11 @@
 #ifndef FLASH_H_
 #define FLASH_H_
 
-
 #include <QtCore/QObject>
 #include <QtGui/QGraphicsItem>
+#include <QtGui/QTextOption>
 
 #include <plasma/plasma_export.h>
-
 
 namespace Plasma
 {
@@ -52,8 +51,8 @@ class PLASMA_EXPORT Flash : public QObject, public QGraphicsItem
         void setColor( const QColor & );
         void setDuration( int duration );
 
-        void flash( const QString &text, int duration = 0 );
-        void flash( const QPixmap &pixmap, int duration = 0 );
+        void flash( const QString &text, const QTextOption &option = QTextOption(), int duration = 0 );
+        void flash( const QPixmap &pixmap, Qt::Alignment align = Qt::AlignCenter, int duration = 0 );
 
     protected Q_SLOTS:
         void fadeIn();

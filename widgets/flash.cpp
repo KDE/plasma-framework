@@ -19,7 +19,6 @@
 
 #include "flash.h"
 
-
 #include <QtCore/QString>
 #include <QtCore/QTimeLine>
 #include <QtCore/QTimer>
@@ -53,6 +52,9 @@ class Flash::Private
 
         Plasma::Phase::AnimId animId;
         QPixmap renderedPixmap;
+
+        QTextOption textOption;
+        Qt::Alignment alignment;
 };
 
 
@@ -61,7 +63,7 @@ Flash::Flash(QGraphicsItem *parent)
       QGraphicsItem(parent),
       d(new Private)
 {
-    d->duration = 2000;
+    d->defaultDuration = 3000;
     d->type = Private::Text;
     d->color = Qt::black;
     d->height = 40;
@@ -131,19 +133,21 @@ void Flash::setFont( const QFont &font )
     d->font = font;
 }
 
-void Flash::flash( const QString &text, int duration)
+void Flash::flash( const QString &text, const QTextOption &option, int duration)
 {
     d->type = Private::Text;
     d->duration = duration > 0 ? duration : d->defaultDuration;
     d->text = text;
+    d->textOption = option;
     QTimer::singleShot( 0, this, SLOT(fadeIn()) );
 }
 
-void Flash::flash( const QPixmap &pixmap, int duration )
+void Flash::flash( const QPixmap &pixmap, Qt::Alignment align, int duration )
 {
     d->type = Private::Pixmap;
     d->duration = duration > 0 ? duration : d->defaultDuration;
     d->pixmap = pixmap;
+    d->alignment = align;
     QTimer::singleShot( 0, this, SLOT(fadeIn()) );
 }
 
@@ -170,9 +174,24 @@ QPixmap Flash::renderPixmap()
     if( d->type == Private::Text ) {
         painter.setPen( d->color );
         painter.setFont( d->font );
-        painter.drawText( QRect( 0, 0, pm.width(), pm.height() ), d->text, Qt::AlignHCenter | Qt::AlignVCenter);
+        painter.drawText( QRect( 0, 0, pm.width(), pm.height() ), d->text, d->textOption);
     } else if( d->type == Private::Pixmap ) {
-        painter.drawPixmap( QPoint( (pm.width() - d->pixmap.width())/2, (pm.height() - d->pixmap.height())/2 ), d->pixmap );
+        QPoint p;
+        if( d->alignment & Qt::AlignLeft )
+            p.setX( 0 );
+        else if( d->alignment & Qt::AlignRight )
+            p.setX( pm.width() - d->pixmap.width() );
+        else
+            p.setX( (pm.width() - d->pixmap.width())/2 );
+
+        if( d->alignment & Qt::AlignTop )
+            p.setY( 0 );
+        else if( d->alignment & Qt::AlignRight )
+            p.setY( pm.height() - d->pixmap.height() );
+        else
+            p.setY( (pm.height() - d->pixmap.height())/2 );
+
+        painter.drawPixmap( p, d->pixmap );
     }
     return pm;
 }
