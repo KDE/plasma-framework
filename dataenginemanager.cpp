@@ -165,3 +165,4 @@ QStringList DataEngineManager::knownEngines()
 
 } // namespace Plasma
 
+#include "dataenginemanager.moc"

@@ -31,8 +31,9 @@ namespace Plasma
  * Plasma::DataEngineManager provides facilities for listing, loading and
  * according to reference count unloading of DataEngines.
  **/
-class PLASMA_EXPORT DataEngineManager
+class PLASMA_EXPORT DataEngineManager: public QObject
 {
+    Q_OBJECT
     public:
         /**
          * Singleton pattern accessor.
