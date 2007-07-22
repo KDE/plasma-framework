@@ -172,7 +172,7 @@ QPixmap Flash::renderPixmap()
         painter.setFont( d->font );
         painter.drawText( QRect( 0, 0, pm.width(), pm.height() ), d->text, Qt::AlignHCenter | Qt::AlignVCenter);
     } else if( d->type == Private::Pixmap ) {
-        painter.drawPixmap( QPoint( 0, 0 ), d->pixmap );
+        painter.drawPixmap( QPoint( (pm.width() - d->pixmap.width())/2, (pm.height() - d->pixmap.height())/2 ), d->pixmap );
     }
     return pm;
 }
