@@ -52,6 +52,9 @@ class PLASMA_EXPORT LineEdit : public QGraphicsTextItem, public LayoutItem
         void setStyled(bool style);
         bool styled() const;
 
+        void setMultiLine(bool multi);
+        bool multiLine() const;
+
         bool hasHeightForWidth() const;
         qreal heightForWidth(qreal w) const;
 

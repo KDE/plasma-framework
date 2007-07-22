@@ -30,13 +30,14 @@ class LineEdit::Private
 {
     public:
         Private()
-             : styled(true) {}
+             : styled(true), multiline(false) {}
 
         QString defaultText;
         QString oldText;
         QString defaultTextPlain;
 
         bool styled;
+        bool multiline;
 
 };
 
@@ -86,6 +87,16 @@ void LineEdit::updated(const QString&, const DataEngine::Data& data)
         }
     }
     setHtml(text);
+}
+
+void LineEdit::setMultiLine(bool multi)
+{
+   d->multiline = multi;
+}
+
+bool LineEdit::multiLine() const
+{
+    return d->multiline;
 }
 
 
@@ -184,7 +195,7 @@ const QString LineEdit::toPlainText()
 
 void LineEdit::keyPressEvent(QKeyEvent *event)
 {
-    if (event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return) {
+    if ( !d->multiline && (event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return)) {
         emit editingFinished();
         event->accept();
     } else {
