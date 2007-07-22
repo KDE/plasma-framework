@@ -34,6 +34,7 @@ set(plasma_LIB_SRCS
     widgets/layout.cpp
     widgets/layoutitem.cpp
     widgets/vboxlayout.cpp
+    widgets/flash.cpp
    )
 
 kde4_add_library(plasma SHARED ${plasma_LIB_SRCS})
@@ -80,6 +81,7 @@ install(FILES
     widgets/radiobutton.h
     widgets/vboxlayout.h
     widgets/widget.h
+    widgets/flash.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/plasma/widgets)
 
 install(FILES
