@@ -47,6 +47,7 @@ LineEdit::LineEdit(QGraphicsItem *parent, QGraphicsScene *scene)
 {
     setTextInteractionFlags(Qt::TextEditorInteraction);
     setCursor(Qt::IBeamCursor);
+    setFlag(QGraphicsItem::ItemIsSelectable);
 }
 
 LineEdit::~LineEdit()
