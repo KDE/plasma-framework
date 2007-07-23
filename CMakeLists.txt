@@ -22,6 +22,7 @@ set(plasma_LIB_SRCS
     phase.cpp
     plasma.cpp
     plasma_export.h
+    scriptengine.cpp
     svg.cpp
     theme.cpp
     karambamanager.cpp
@@ -67,6 +68,7 @@ install(FILES
     phase.h
     plasma.h
     plasma_export.h
+    scriptengine.cpp
     svg.h
     theme.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/plasma)
@@ -97,12 +99,14 @@ install(FILES
     includes/DataContainer
     includes/DataEngine
     includes/DataEngineManager
+    includes/ScriptEngine
     includes/Svg
     DESTINATION ${INCLUDE_INSTALL_DIR}/KDE/Plasma)
 
 install(FILES
-    servicetypes/plasma_animator.desktop
-    servicetypes/plasma_applet.desktop
-    servicetypes/plasma_dataengine.desktop
+    servicetypes/plasma-animator.desktop
+    servicetypes/plasma-applet.desktop
+    servicetypes/plasma-dataengine.desktop
+    servicetypes/plasma-scriptengine.desktop
     DESTINATION ${SERVICETYPES_INSTALL_DIR})
 
