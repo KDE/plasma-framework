@@ -84,6 +84,7 @@ public:
     {
         if (!appletDescription.isValid()) {
             applet->setFailedToLaunch(true);
+            return;
         }
 
         QString language = appletDescription.property("X-Plasma-Language").toString();
