@@ -54,6 +54,17 @@ void ScriptEngine::init(Applet* applet)
     }
 }
 
+void ScriptEngine::paintInterface(QPainter* painter, const QStyleOptionGraphicsItem* option)
+{
+    Q_UNUSED(painter)
+    Q_UNUSED(option)
+}
+
+QSizeF ScriptEngine::size()
+{
+    return QSizeF(0, 0);
+}
+
 bool ScriptEngine::init()
 {
     Q_ASSERT(d->applet);

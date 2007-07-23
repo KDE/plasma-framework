@@ -20,6 +20,10 @@
 #define PLASMA_SCRIPTENGINE_H
 
 #include <QtCore/QObject>
+#include <QtCore/QSizeF>
+
+class QPainter;
+class QStyleOptionGraphicsItem;
 
 namespace Plasma
 {
@@ -69,6 +73,19 @@ public:
      * @return pointer to the ScriptEngine or 0 on failure
      **/
     static ScriptEngine* load(const QString &language, Applet *applet);
+
+    /**
+     * Called when the script should paint the applet
+     *
+     * @param painter the QPainter to use
+     * @param option the style option containing such flags as selection, level of detail, etc
+     **/
+    virtual void paintInterface(QPainter* painter, const QStyleOptionGraphicsItem* option);
+
+    /**
+     * @return the size of the applet
+     **/
+    virtual QSizeF size();
 
 protected:
     /**

@@ -57,6 +57,7 @@ public:
           package(0),
           background(0),
           failureText(0),
+          scriptEngine(0),
           immutable(false),
           hasConfigurationInterface(false),
           failed(false)
@@ -104,9 +105,8 @@ public:
                     // it will be parented to this applet and so will get
                     // deleted when the applet does
 
-                    //TODO: do we need to hold on to the engine for later use?
-                    ScriptEngine* engine = ScriptEngine::load(language, applet);
-                    if (!engine) {
+                    scriptEngine = ScriptEngine::load(language, applet);
+                    if (!scriptEngine) {
                         delete package;
                         package = 0;
                     }
@@ -143,6 +143,7 @@ public:
     static uint s_maxAppletId;
     Plasma::Svg *background;
     Plasma::LineEdit *failureText;
+    ScriptEngine* scriptEngine;
     bool immutable : 1;
     bool hasConfigurationInterface : 1;
     bool failed : 1;
@@ -366,6 +367,10 @@ int Applet::type() const
 
 QRectF Applet::boundingRect () const
 {
+    if (d->scriptEngine) {
+        return QRectF(QPointF(0, 0), d->scriptEngine->size());
+    }
+
     //FIXME: this should be big enough to allow for the failure text?
     return QRectF(300, 300, 300, 300);
 }
@@ -388,9 +393,11 @@ void Applet::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
 
 void Applet::paintInterface(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-    Q_UNUSED(painter)
-    Q_UNUSED(option)
     Q_UNUSED(widget)
+
+    if (d->scriptEngine) {
+        d->scriptEngine->paintInterface(painter, option);
+    }
 }
 
 FormFactor Applet::formFactor() const
