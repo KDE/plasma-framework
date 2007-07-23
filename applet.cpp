@@ -36,6 +36,7 @@
 #include "plasma/package.h"
 #include "plasma/packages_p.h"
 #include "plasma/plasma.h"
+#include "plasma/scriptengine.h"
 #include "plasma/svg.h"
 
 #include "plasma/widgets/widget.h"
@@ -67,22 +68,6 @@ public:
         if (appletId > s_maxAppletId) {
             s_maxAppletId = appletId;
         }
-
-        if (appletDescription.isValid() &&
-            !appletDescription.property("X-Plasma-Language").toString().isEmpty()) {
-            QString path = KStandardDirs::locate("appdata",
-                                                 "plasmoids/" +
-                                                 appletDescription.pluginName());
-            if (!path.isEmpty()) {
-                package = new Package(path,
-                        appletDescription.pluginName(),
-                        PlasmoidStructure());
-                if (!package->isValid()) {
-                    delete package;
-                    package = 0;
-                }
-            }
-        }
     }
 
     ~Private()
@@ -100,9 +85,44 @@ public:
             applet->setFailedToLaunch(true);
         }
 
+        QString language = appletDescription.property("X-Plasma-Language").toString();
+
+        // we have a scripted plasmoid
+        if (!language.isEmpty()) {
+            // find where the Package is
+            QString path = KStandardDirs::locate("appdata",
+                                                 "plasmoids/" +
+                                                 appletDescription.pluginName());
+
+            if (!path.isEmpty()) {
+                // create the package and see if we have something real
+                package = new Package(path,
+                                      appletDescription.pluginName(),
+                                      PlasmoidStructure());
+                if (package->isValid()) {
+                    // now we try and set up the script engine.
+                    // it will be parented to this applet and so will get
+                    // deleted when the applet does
+
+                    //TODO: do we need to hold on to the engine for later use?
+                    ScriptEngine* engine = ScriptEngine::load(language, applet);
+                    if (!engine) {
+                        delete package;
+                        package = 0;
+                    }
+                } else {
+                    delete package;
+                    package = 0;
+                }
+
+                if (!package) {
+                    applet->setFailedToLaunch(true);
+                }
+            }
+        }
+
         applet->setImmutable(applet->globalConfig().isImmutable() ||
                              applet->config().isImmutable());
-
     }
 
     static uint nextId()
