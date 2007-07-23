@@ -220,6 +220,15 @@ QString Applet::name() const
     return d->appletDescription.name();
 }
 
+QString Applet::icon() const
+{
+    if (!d->appletDescription.isValid()) {
+        return QString();
+    }
+
+    return d->appletDescription.icon();
+}
+
 QString Applet::category() const
 {
     if (!d->appletDescription.isValid()) {

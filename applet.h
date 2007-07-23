@@ -266,6 +266,11 @@ class PLASMA_EXPORT Applet : public QObject, public Widget
         QString name() const;
 
         /**
+         * Returns the icon related to this applet
+         **/
+        QString icon() const;
+
+        /**
          * Returns the category the applet is in, as specified in the
          * .desktop file.
          */
