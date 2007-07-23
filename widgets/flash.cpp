@@ -137,7 +137,7 @@ void Flash::setFont( const QFont &font )
     d->font = font;
 }
 
-void Flash::flash( const QString &text, const QTextOption &option, int duration)
+void Flash::flash( const QString &text, int duration, const QTextOption &option)
 {
     d->type = Private::Text;
     d->duration = (duration == 0) ? duration : d->defaultDuration;
@@ -146,7 +146,7 @@ void Flash::flash( const QString &text, const QTextOption &option, int duration)
     QTimer::singleShot( 0, this, SLOT(fadeIn()) );
 }
 
-void Flash::flash( const QPixmap &pixmap, Qt::Alignment align, int duration )
+void Flash::flash( const QPixmap &pixmap, int duration, Qt::Alignment align )
 {
     d->type = Private::Pixmap;
     d->duration = (duration == 0) ? duration : d->defaultDuration;

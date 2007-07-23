@@ -51,8 +51,8 @@ class PLASMA_EXPORT Flash : public QObject, public QGraphicsItem
         void setColor( const QColor & );
         void setDuration( int duration );
 
-        void flash( const QString &text, const QTextOption &option = QTextOption(Qt::AlignCenter), int duration = 0 );
-        void flash( const QPixmap &pixmap, Qt::Alignment align = Qt::AlignCenter, int duration = 0 );
+        void flash( const QString &text, int duration = 0, const QTextOption &option = QTextOption(Qt::AlignCenter) );
+        void flash( const QPixmap &pixmap, int duration = 0, Qt::Alignment align = Qt::AlignCenter );
 
     public Q_SLOTS:
         void kill();
