@@ -36,6 +36,7 @@ class Flash::Private
 {
     public:
         enum FlashType { Text, Pixmap };
+        enum State { Visible, Invisible };
 
         Private() { }
         ~Private() { }
@@ -55,6 +56,8 @@ class Flash::Private
 
         QTextOption textOption;
         Qt::Alignment alignment;
+
+        State state;
 };
 
 
@@ -69,6 +72,7 @@ Flash::Flash(QGraphicsItem *parent)
     d->height = 40;
     d->width = 100 ;
     d->animId = 0;
+    d->state = Private::Invisible;
 }
 
 Flash::~Flash()
@@ -136,7 +140,7 @@ void Flash::setFont( const QFont &font )
 void Flash::flash( const QString &text, const QTextOption &option, int duration)
 {
     d->type = Private::Text;
-    d->duration = duration > 0 ? duration : d->defaultDuration;
+    d->duration = (duration == 0) ? duration : d->defaultDuration;
     d->text = text;
     d->textOption = option;
     QTimer::singleShot( 0, this, SLOT(fadeIn()) );
@@ -145,22 +149,34 @@ void Flash::flash( const QString &text, const QTextOption &option, int duration)
 void Flash::flash( const QPixmap &pixmap, Qt::Alignment align, int duration )
 {
     d->type = Private::Pixmap;
-    d->duration = duration > 0 ? duration : d->defaultDuration;
+    d->duration = (duration == 0) ? duration : d->defaultDuration;
     d->pixmap = pixmap;
     d->alignment = align;
     QTimer::singleShot( 0, this, SLOT(fadeIn()) );
 }
 
+void Flash::kill()
+{
+    if( d->state == Private::Visible )
+        fadeOut();
+}
+
 void Flash::fadeIn()
 {
+    d->state = Private::Visible;
     d->renderedPixmap = renderPixmap();
     d->animId = Plasma::Phase::self()->animateElement(this, Plasma::Phase::ElementAppear);
     Plasma::Phase::self()->setAnimationPixmap( d->animId, d->renderedPixmap );
-    QTimer::singleShot( d->duration, this, SLOT(fadeOut()) );
+    if( d->duration > 0 )
+        QTimer::singleShot( d->duration, this, SLOT(fadeOut()) );
 }
 
 void Flash::fadeOut()
 {
+    if( d->state == Private::Invisible )
+        return;    // Flash was already killed - do not animate again
+
+    d->state = Private::Invisible;
     d->animId = Plasma::Phase::self()->animateElement(this, Plasma::Phase::ElementDisappear);
     Plasma::Phase::self()->setAnimationPixmap( d->animId, d->renderedPixmap );
 }
@@ -174,7 +190,7 @@ QPixmap Flash::renderPixmap()
     if( d->type == Private::Text ) {
         painter.setPen( d->color );
         painter.setFont( d->font );
-        painter.drawText( QRect( 0, 0, pm.width(), pm.height() ), d->text, d->textOption);
+        painter.drawText( QRect( 0, 0, width(), height() ), d->text, d->textOption);
     } else if( d->type == Private::Pixmap ) {
         QPoint p;
         if( d->alignment & Qt::AlignLeft )
