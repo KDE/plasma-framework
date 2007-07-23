@@ -279,7 +279,7 @@ void Corona::appletDestroyed(QObject* object)
     }
 }
 
-bool Corona::immutable() const
+bool Corona::isImmutable() const
 {
     return d->immutable;
 }

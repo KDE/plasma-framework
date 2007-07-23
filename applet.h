@@ -47,7 +47,7 @@ class PLASMA_EXPORT Applet : public QObject, public Widget
     Q_PROPERTY( bool hasConfigurationInterface READ hasConfigurationInterface WRITE setHasConfigurationInterface )
     Q_PROPERTY( QString name READ name )
     Q_PROPERTY( QString category READ category )
-    Q_PROPERTY( bool immutable READ immutable WRITE setImmutable )
+    Q_PROPERTY( bool immutable READ isImmutable WRITE setImmutable )
     Q_PROPERTY( bool drawStandardBackground READ drawStandardBackground WRITE setDrawStandardBackground )
     Q_PROPERTY( bool failedToLaunch READ failedToLaunch WRITE setFailedToLaunch )
     Q_PROPERTY( QRectF boundingRect READ boundingRect )
@@ -288,7 +288,7 @@ class PLASMA_EXPORT Applet : public QObject, public Widget
         /**
          * @return true if this applet is immutable
          **/
-        bool immutable() const;
+        bool isImmutable() const;
 
         /** 
          * Sets whether or not this applet is immutable or not.

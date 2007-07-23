@@ -250,7 +250,7 @@ QString Applet::category(const QString& appletName)
     return offers.first()->property("X-KDE-PluginInfo-Category").toString();
 }
 
-bool Applet::immutable() const
+bool Applet::isImmutable() const
 {
     return d->immutable;
 }
@@ -261,7 +261,7 @@ void Applet::setImmutable(bool immutable)
     QGraphicsItem::GraphicsItemFlags f = flags();
     if (immutable) {
         f ^= QGraphicsItem::ItemIsMovable;
-    } else if (!scene() || !static_cast<Corona*>(scene())->immutable()) {
+    } else if (!scene() || !static_cast<Corona*>(scene())->isImmutable()) {
         f |= QGraphicsItem::ItemIsMovable;
     }
     setFlags(f);

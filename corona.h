@@ -47,7 +47,7 @@ public:
     /**
      * The applets and Corona surface are changeable or not
      **/
-    bool immutable() const;
+    bool isImmutable() const;
 
     /**
      * The location of the Corona. @see Plasma::Location
