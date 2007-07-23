@@ -119,6 +119,7 @@ ScriptEngine* ScriptEngine::load(const QString &language, Applet *applet)
 
     if (!engine) {
         kDebug() << "Couldn't load script engine for language " << language << "!" << endl;
+        return 0;
     }
 
     engine->init(applet);
