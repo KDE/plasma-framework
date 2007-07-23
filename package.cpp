@@ -66,7 +66,7 @@ Package::~Package()
 {
 }
 
-bool Package::isValid()
+bool Package::isValid() const
 {
     if (!d->valid) {
         return false;
@@ -89,7 +89,7 @@ bool Package::isValid()
     return true;
 }
 
-QString Package::filePath(const char* fileType, const QString& filename)
+QString Package::filePath(const char* fileType, const QString& filename) const
 {
     if (!d->valid) {
         return QString();
@@ -113,12 +113,12 @@ QString Package::filePath(const char* fileType, const QString& filename)
     return QString();
 }
 
-QString Package::filePath(const char* fileType)
+QString Package::filePath(const char* fileType) const
 {
     return filePath(fileType, QString());
 }
 
-QStringList Package::entryList(const char* fileType)
+QStringList Package::entryList(const char* fileType) const
 {
     if (!d->valid) {
         return QStringList();

@@ -52,7 +52,7 @@ class PLASMA_EXPORT Package
          * @return true if all the required components as defined in
          * the PackageStructure exist
          **/
-        bool isValid();
+        bool isValid() const;
 
         /**
          * Get the path to a given file.
@@ -62,7 +62,7 @@ class PLASMA_EXPORT Package
          * @arg filename the name of the file
          * @return path to the file on disk. QString() if not found.
          **/
-        QString filePath(const char* fileType, const QString& filename);
+        QString filePath(const char* fileType, const QString& filename) const;
 
         /**
          * Get the path to a given file.
@@ -72,7 +72,7 @@ class PLASMA_EXPORT Package
          *               in the package structure and not a directory.
          * @return path to the file on disk. QString() if not found
          **/
-        QString filePath(const char* fileType);
+        QString filePath(const char* fileType) const;
 
         /**
          * Get the list of files of a given type.
@@ -81,7 +81,7 @@ class PLASMA_EXPORT Package
          *               package structure.
          * @return list of files by name, suitable for passing to filePath
          **/
-        QStringList entryList(const char* fileType);
+        QStringList entryList(const char* fileType) const;
 
         /**
          * Returns a list of all installed packages
