@@ -150,6 +150,13 @@ class PLASMA_EXPORT Svg : public QObject
         Q_INVOKABLE bool elementExists( const QString& elementId ) const;
 
         /**
+         * @return true if the SVG file exists and the document is valid,
+         *         otherwise false. This method can be expensive as it
+         *         causes disk access.
+         **/
+        Q_INVOKABLE bool isValid() const;
+
+        /**
          * Currently set size of the SVG
          * @return the current size of a given element
          **/

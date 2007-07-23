@@ -66,6 +66,10 @@ class Svg::Private
             if (QDir::isAbsolutePath(imagePath)) {
                 path = imagePath;
                 themed = false;
+
+                if (!QFile::exists(path)) {
+                    kDebug() << "Plasma::Svg: file '" << path << "' does not exist!" << endl;
+                }
             } else {
                 themePath = imagePath;
                 themed = true;
@@ -238,6 +242,12 @@ bool Svg::elementExists(const QString& elementId) const
 {
     d->createRenderer();
     return d->renderer->elementExists(elementId);
+}
+
+bool Svg::isValid() const
+{
+    d->createRenderer();
+    return d->renderer->isValid();
 }
 
 QSize Svg::size() const
