@@ -166,7 +166,7 @@ QSizeF PushButton::minimumSize() const
 {
     QFontMetricsF m = qApp->fontMetrics();
 
-    return m.boundingRect(text()).size();
+    return m.boundingRect(text()).size() + QSizeF(5.0f, 5.0f);
 }
 
 QSizeF PushButton::maximumSize() const
