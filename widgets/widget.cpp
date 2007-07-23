@@ -134,8 +134,6 @@ void Widget::updateGeometry()
 
 void Widget::invalidate()
 {
-    setGeometry(geometry());
-
     updateGeometry();
 
     if (parent()) {
