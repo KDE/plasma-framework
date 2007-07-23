@@ -16,7 +16,7 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "datasource.h"
+#include "datacontainer.h"
 
 #include <QAtomic>
 #include <QVariant>
@@ -26,7 +26,7 @@
 namespace Plasma
 {
 
-class DataSource::Private
+class DataContainer::Private
 {
     public:
         Private()
@@ -38,23 +38,23 @@ class DataSource::Private
         bool dirty : 1;
 };
 
-DataSource::DataSource(QObject* parent)
+DataContainer::DataContainer(QObject* parent)
     : QObject(parent),
       d(new Private())
 {
 }
 
-DataSource::~DataSource()
+DataContainer::~DataContainer()
 {
     delete d;
 }
 
-const DataEngine::Data DataSource::data() const
+const DataEngine::Data DataContainer::data() const
 {
     return d->data;
 }
 
-void DataSource::setData(const QString& key, const QVariant& value)
+void DataContainer::setData(const QString& key, const QVariant& value)
 {
     if (value.isNull() || !value.isValid()) {
         if (!d->data.contains(key)) {
@@ -69,7 +69,7 @@ void DataSource::setData(const QString& key, const QVariant& value)
     d->dirty = true;
 }
 
-void DataSource::clearData()
+void DataContainer::clearData()
 {
     if (d->data.count() < 1) {
         // avoid an update if we don't have any data anyways
@@ -80,7 +80,7 @@ void DataSource::clearData()
     d->dirty = true;
 }
 
-void DataSource::checkForUpdate()
+void DataContainer::checkForUpdate()
 {
     if (d->dirty) {
         emit updated(objectName(), d->data);
@@ -88,14 +88,14 @@ void DataSource::checkForUpdate()
     }
 }
 
-void DataSource::connectNotify(const char *signal)
+void DataContainer::connectNotify(const char *signal)
 {
     if (QLatin1String(signal) == QMetaObject::normalizedSignature(SIGNAL(updated(QString, Plasma::DataEngine::Data))).constData()) {
         d->connectCount.ref();
     }
 }
 
-void DataSource::disconnectNotify(const char *signal)
+void DataContainer::disconnectNotify(const char *signal)
 {
     if (QLatin1String(signal) == QMetaObject::normalizedSignature(SIGNAL(updated(QString, Plasma::DataEngine::Data))).constData()) {
         if (d->connectCount > 0) {
@@ -111,5 +111,5 @@ void DataSource::disconnectNotify(const char *signal)
 
 } // Plasma namespace
 
-#include "datasource.moc"
+#include "datacontainer.moc"
 

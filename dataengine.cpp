@@ -24,7 +24,7 @@
 
 #include <KDebug>
 
-#include "datasource.h"
+#include "datacontainer.h"
 
 namespace Plasma
 {
@@ -41,13 +41,13 @@ class DataEngine::Private
             updateTimer->setSingleShot(true);
         }
 
-        DataSource* source(const QString& sourceName, bool createWhenMissing = true)
+        DataContainer* source(const QString& sourceName, bool createWhenMissing = true)
         {
             DataEngine::SourceDict::const_iterator it = sources.find(sourceName);
             if (it != sources.constEnd()) {
-                DataSource* s = it.value();
+                DataContainer* s = it.value();
                 if (limit > 0) {
-                    QQueue<DataSource*>::iterator it = sourceQueue.begin();
+                    QQueue<DataContainer*>::iterator it = sourceQueue.begin();
                     while (it != sourceQueue.end()) {
                         if (*it == s) {
                             sourceQueue.erase(it);
@@ -65,9 +65,9 @@ class DataEngine::Private
             }
 
 /*            kDebug() << "DataEngine " << engine->objectName()
-                     << ": could not find DataSource " << sourceName
+                     << ": could not find DataContainer " << sourceName
                      << ", creating" << endl;*/
-            DataSource* s = new DataSource(engine);
+            DataContainer* s = new DataContainer(engine);
             s->setObjectName(sourceName);
             sources.insert(sourceName, s);
 
@@ -82,7 +82,7 @@ class DataEngine::Private
         void trimQueue()
         {
             while (sourceQueue.count() >= limit) {
-                DataSource* punted = sourceQueue.dequeue();
+                DataContainer* punted = sourceQueue.dequeue();
                 engine->removeSource(punted->objectName());
             }
         }
@@ -103,7 +103,7 @@ class DataEngine::Private
 
         QAtomic ref;
         DataEngine::SourceDict sources;
-        QQueue<DataSource*> sourceQueue;
+        QQueue<DataContainer*> sourceQueue;
         DataEngine* engine;
         QTimer* updateTimer;
         QString icon;
@@ -135,7 +135,7 @@ QStringList DataEngine::sources() const
 
 void DataEngine::connectSource(const QString& source, QObject* visualization) const
 {
-    DataSource* s = d->source(source, false);
+    DataContainer* s = d->source(source, false);
 
     if (!s) {
         // we didn't find a data source, so give the engine an opportunity to make one
@@ -162,7 +162,7 @@ void DataEngine::connectSource(const QString& source, QObject* visualization) co
 
 void DataEngine::disconnectSource(const QString& source, QObject* visualization) const
 {
-    DataSource* s = d->source(source, false);
+    DataContainer* s = d->source(source, false);
 
     if (!s) {
         return;
@@ -174,12 +174,12 @@ void DataEngine::disconnectSource(const QString& source, QObject* visualization)
 
 void DataEngine::connectAllSources(QObject* visualization) const
 {
-    foreach (const DataSource* s, d->sources) {
+    foreach (const DataContainer* s, d->sources) {
         connect(s, SIGNAL(updated(QString,Plasma::DataEngine::Data)),
                 visualization, SLOT(updated(QString,Plasma::DataEngine::Data)));
     }
 
-    foreach (const DataSource* s, d->sources) {
+    foreach (const DataContainer* s, d->sources) {
         QMetaObject::invokeMethod(visualization,
                                   SLOT(updated(QString,Plasma::DataEngine::Data)),
                                   Q_ARG(QString, s->objectName()),
@@ -191,7 +191,7 @@ DataEngine::Data DataEngine::query(const QString& source) const
 {
     Q_UNUSED(source)
 
-    DataSource* s = d->source(source);
+    DataContainer* s = d->source(source);
     return s->data();
 }
 
@@ -220,14 +220,14 @@ void DataEngine::setData(const QString& source, const QVariant& value)
 
 void DataEngine::setData(const QString& source, const QString& key, const QVariant& value)
 {
-    DataSource* s = d->source(source);
+    DataContainer* s = d->source(source);
     s->setData(key, value);
     d->queueUpdate();
 }
 
 void DataEngine::setData(const QString &source, const Data &data)
 {
-    DataSource *s = d->source(source);
+    DataContainer *s = d->source(source);
     Data::const_iterator it = data.constBegin();
     while (it != data.constEnd()) {
         s->setData(it.key(), it.value());
@@ -239,7 +239,7 @@ void DataEngine::setData(const QString &source, const Data &data)
 
 void DataEngine::clearData(const QString& source)
 {
-    DataSource* s = d->source(source, false);
+    DataContainer* s = d->source(source, false);
     if (s) {
         s->clearData();
         d->queueUpdate();
@@ -248,14 +248,14 @@ void DataEngine::clearData(const QString& source)
 
 void DataEngine::removeData(const QString& source, const QString& key)
 {
-    DataSource* s = d->source(source, false);
+    DataContainer* s = d->source(source, false);
     if (s) {
         s->setData(key, QVariant());
         d->queueUpdate();
     }
 }
 
-void DataEngine::addSource(DataSource* source)
+void DataEngine::addSource(DataContainer* source)
 {
     SourceDict::const_iterator it = d->sources.find(source->objectName());
     if (it != d->sources.constEnd()) {
@@ -294,7 +294,7 @@ void DataEngine::removeSource(const QString& source)
 
 void DataEngine::clearSources()
 {
-    QMutableHashIterator<QString, Plasma::DataSource*> it(d->sources);
+    QMutableHashIterator<QString, Plasma::DataContainer*> it(d->sources);
     while (it.hasNext()) {
         it.next();
         emit sourceRemoved(it.key());
@@ -345,7 +345,7 @@ QString DataEngine::icon() const
 
 void DataEngine::checkForUpdates()
 {
-    QHashIterator<QString, Plasma::DataSource*> it(d->sources);
+    QHashIterator<QString, Plasma::DataContainer*> it(d->sources);
     while (it.hasNext()) {
         it.next();
         it.value()->checkForUpdate();

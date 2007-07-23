@@ -31,7 +31,7 @@
 namespace Plasma
 {
 
-class DataSource;
+class DataContainer;
 
 /**
  * @class DataEngine
@@ -55,7 +55,7 @@ class PLASMA_EXPORT DataEngine : public QObject
         typedef QHash<QString, DataEngine*> Dict;
         typedef QHash<QString, QVariant> Data;
         typedef QHashIterator<QString, QVariant> DataIterator;
-        typedef QHash<QString, DataSource*> SourceDict;
+        typedef QHash<QString, DataContainer*> SourceDict;
 
         /**
          * Default constructor.
@@ -187,7 +187,7 @@ class PLASMA_EXPORT DataEngine : public QObject
          * otherwise the requesting visualization may not receive notice of a
          * data update.
          *
-         * @return true if a DataSource was set up, false otherwise
+         * @return true if a DataContainer was set up, false otherwise
          */
         virtual bool sourceRequested(const QString &name);
 
@@ -236,10 +236,10 @@ class PLASMA_EXPORT DataEngine : public QObject
 
         /**
          * Adds an already constructed data source. The DataEngine takes
-         * ownership of the DataSource object.
-         * @param source the DataSource to add to the DataEngine
+         * ownership of the DataContainer object.
+         * @param source the DataContainer to add to the DataEngine
          **/
-        void addSource(DataSource* source);
+        void addSource(DataContainer* source);
 
         /**
          * Sets an upper limit on the number of data sources to keep in this engine.
@@ -250,8 +250,8 @@ class PLASMA_EXPORT DataEngine : public QObject
          **/
         void setSourceLimit(uint limit);
 
-/*        DataSource* domain(const QString &domain);
-        void createDataSource(const QString& source,
+/*        DataContainer* domain(const QString &domain);
+        void createDataContainer(const QString& source,
                               const QString& domain = QString());*/
 
         /**
@@ -269,13 +269,13 @@ class PLASMA_EXPORT DataEngine : public QObject
         void setValid(bool valid);
 
         /**
-         * @return the list of active DataSources.
+         * @return the list of active DataContainers.
          */
         SourceDict sourceDict() const;
 
     protected Q_SLOTS:
         /**
-         * Call this method when you call setData directly on a DataSource instead
+         * Call this method when you call setData directly on a DataContainer instead
          * of using the DataEngine::setData methods.
          * If this method is not called, no updated(..) signals will be emitted!
          */

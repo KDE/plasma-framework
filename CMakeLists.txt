@@ -15,9 +15,9 @@ set(plasma_LIB_SRCS
     applet.cpp
     configxml.cpp
     corona.cpp
+    datacontainer.cpp
     dataengine.cpp
     dataenginemanager.cpp
-    datasource.cpp
     packages.cpp
     phase.cpp
     plasma.cpp
@@ -61,9 +61,9 @@ install(FILES
     applet.h
     configxml.h
     corona.h
+    datacontainer.h
     dataengine.h
     dataenginemanager.h
-    datasource.h
     phase.h
     plasma.h
     plasma_export.h
@@ -94,9 +94,9 @@ install(FILES
     includes/Packager
     includes/PackageStructure
     includes/Theme
+    includes/DataContainer
     includes/DataEngine
     includes/DataEngineManager
-    includes/DataSource
     includes/Svg
     DESTINATION ${INCLUDE_INSTALL_DIR}/KDE/Plasma)
 

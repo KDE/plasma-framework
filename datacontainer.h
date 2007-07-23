@@ -16,8 +16,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef PLASMA_DATASOURCE_H
-#define PLASMA_DATASOURCE_H
+#ifndef PLASMA_DATACONTAINER_H
+#define PLASMA_DATACONTAINER_H
 
 #include <QtCore/QHash>
 #include <QtCore/QObject>
@@ -30,15 +30,15 @@ namespace Plasma
 /**
  * @brief A set of data exported via a DataEngine
  *
- * Plasma::DataSource wraps the data exported by a DataEngine
+ * Plasma::DataContainer wraps the data exported by a DataEngine
  * implementation, providing a generic wrapper for the data.
  *
- * A DataSource may have zero or more associated pieces of data which
+ * A DataContainer may have zero or more associated pieces of data which
  * are keyed by strings. The data itself is stored as QVariants. This allows
  * easy and flexible retrieval of the information associated with this object
- * without writing DataSource or DataEngine specific code in visualizations.
+ * without writing DataContainer or DataEngine specific code in visualizations.
  **/
-class PLASMA_EXPORT DataSource : public QObject
+class PLASMA_EXPORT DataContainer : public QObject
 {
     Q_OBJECT
 
@@ -46,14 +46,14 @@ class PLASMA_EXPORT DataSource : public QObject
         //typedef QHash<QString, DataEngine::SourceDict> Grouping;
 
         /**
-         * Constructs a default DataSource, which has no name or data
+         * Constructs a default DataContainer, which has no name or data
          * associated with it
          **/
-        explicit DataSource(QObject* parent = 0);
-        virtual ~DataSource();
+        explicit DataContainer(QObject* parent = 0);
+        virtual ~DataContainer();
 
         /**
-         * Returns the data for this DataSource
+         * Returns the data for this DataContainer
          **/
         const DataEngine::Data data() const;
 
