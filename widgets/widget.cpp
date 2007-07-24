@@ -49,6 +49,8 @@ Widget::Widget(QGraphicsItem *parent)
   : QGraphicsItem(parent),
     d(new Private)
 {
+    setFlag(QGraphicsItem::ItemClipsToShape, true);
+
     d->parent = dynamic_cast<Widget *>(parent);
 
     if (d->parent) {
