@@ -126,10 +126,35 @@ public:
                              applet->config().isImmutable());
     }
 
-    void paintBackground(QPainter* painter, Applet* q)
+    void paintBackground(QPainter* p, Applet* q)
     {
-        background->resize(q->boundingRect().size());
-        background->paint(painter, q->boundingRect());
+        QRect rect = q->boundingRect().toRect();
+        const int w = rect.width();
+        const int h = rect.height();
+
+        p->setRenderHint(QPainter::SmoothPixmapTransform);
+        background->resize();
+
+        const int topHeight = background->elementSize("top").height(); // 23
+        const int leftWidth = background->elementSize("left").width(); //20;
+        const int rightWidth = background->elementSize("right").width(); // 20
+        const int bottomHeight = background->elementSize("bottom").height(); //25;
+        const int lrWidths = leftWidth + rightWidth;
+        const int tbHeights = topHeight + bottomHeight;
+
+        background->paint(p, QRect(0, 0, leftWidth, topHeight), "topleft");
+        background->paint(p, QRect(leftWidth, 0, w - lrWidths, topHeight), "top");
+        background->paint(p, QRect(w - rightWidth, 0, rightWidth, topHeight), "topright");
+
+        background->paint(p, QRect(0, topHeight, leftWidth, h - tbHeights), "left");
+        background->paint(p, QRect(w - rightWidth, topHeight, rightWidth, h - tbHeights), "right");
+
+        background->paint(p, QRect(0, h - bottomHeight, leftWidth, bottomHeight), "bottomleft");
+        background->paint(p, QRect(leftWidth, h - bottomHeight, w - lrWidths, bottomHeight), "bottom");
+        background->paint(p, QRect(w - rightWidth, h - bottomHeight, rightWidth, bottomHeight), "bottomright");
+
+        background->resize(rect.size());
+        background->paint(p, QRect(leftWidth, topHeight, w - lrWidths, h - tbHeights), "center");
     }
 
     static uint nextId()
@@ -384,6 +409,8 @@ QRectF Applet::boundingRect () const
 
 void Applet::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
+    Q_UNUSED(widget)
+
     if (d->background) {
         d->paintBackground(painter, this);
     }
@@ -392,22 +419,20 @@ void Applet::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
         return;
     }
 
-    paintInterface(painter, option, widget);
+    paintInterface(painter, option, contentsRect());
 
     //TODO: interface overlays on hover
 }
 
-void Applet::paintInterface(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+void Applet::paintInterface(QPainter *painter, const QStyleOptionGraphicsItem *option,
+                            const QRect & contentsRect)
 {
-    Q_UNUSED(widget)
+    Q_UNUSED(contentsRect)
 
     if (d->scriptEngine) {
         d->scriptEngine->paintInterface(painter, option);
-    } else if (!d->background) {
-        // we should not be in here, the child applet probably screwed up
-        setDrawStandardBackground(true);
-        kDebug() << "Applet::paintInterface ... we should not be in here. check your painInterface method" << endl;
-        d->paintBackground(painter, this);
+    } else {
+        kDebug() << "Applet::paintInterface() default impl" << endl;
     }
 }
 
@@ -427,6 +452,22 @@ Location Applet::location() const
     }
 
     return static_cast<Corona*>(scene())->location();
+}
+
+QRect Applet::contentsRect() const
+{
+    QRect rect = boundingRect().toRect();
+    if (!d->background) {
+        return rect;
+    }
+
+    const int topHeight = d->background->elementSize("top").height();
+    const int leftWidth = d->background->elementSize("left").width();
+    const int rightWidth = d->background->elementSize("right").width();
+    const int bottomHeight = d->background->elementSize("bottom").height();
+
+    rect.adjust(leftWidth, topHeight, 0 - leftWidth - rightWidth, 0 - topHeight - bottomHeight);
+    return rect;
 }
 
 QString Applet::globalName() const

@@ -43,7 +43,7 @@ class Package;
 class PLASMA_EXPORT Applet : public QObject, public Widget
 {
     Q_OBJECT
-//    Q_PROPERTY( QRectF maxSizeHint READ maxSizeHint ) // Not sure why this fails
+//    Q_PROPERTY( QRectF maxSizeHint READ maxSizeHint )
     Q_PROPERTY( bool hasConfigurationInterface READ hasConfigurationInterface WRITE setHasConfigurationInterface )
     Q_PROPERTY( QString name READ name )
     Q_PROPERTY( QString category READ category )
@@ -168,7 +168,13 @@ class PLASMA_EXPORT Applet : public QObject, public Widget
          * An applet may choose to violate this size hint, but should try and
          * respect it as much as possible.
          */
-        QRectF maxSizeHint() const;
+//        QRectF maxSizeHint() const;
+
+        /**
+         * Returns the area within which contents can be painted. If there is no
+         * background, then this is equivalent to boundingRect().
+         **/
+        QRect contentsRect() const;
 
         /**
          * Returns a list of all known applets in a hash keyed by a unique
@@ -251,11 +257,14 @@ class PLASMA_EXPORT Applet : public QObject, public Widget
         /**
          * This method is called when the interface should be painted.
          *
-         * @see QGraphicsItem::paint
+         * @param painter the QPainter to use to do the paintiner
+         * @param option the style options object
+         * @param contentsRect the rect to paint within; automatically adjusted for
+         *                     the background, if any
          **/
         virtual void paintInterface(QPainter *painter,
                                     const QStyleOptionGraphicsItem *option,
-                                    QWidget *widget = 0);
+                                    const QRect& contentsRect);
 
         /**
          * Returns the user-visible name for the applet, as specified in the
