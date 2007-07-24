@@ -38,9 +38,15 @@ set(plasma_LIB_SRCS
     widgets/flash.cpp
    )
 
+if(QT_QTOPENGL_FOUND)
+set(plasma_LIB_SRCS
+    ${plasma_LIB_SRCS}
+    glapplet.cpp)
+endif(QT_QTOPENGL_FOUND)
+
 kde4_add_library(plasma SHARED ${plasma_LIB_SRCS})
 
-target_link_libraries(plasma ${KDE4_KIO_LIBS})
+target_link_libraries(plasma ${KDE4_KIO_LIBS} ${QT_QTOPENGL_LIBRARY} ${OPENGL_gl_LIBRARY})
 
 set_target_properties(plasma PROPERTIES VERSION 1.0.0 SOVERSION 1)
 install(TARGETS plasma DESTINATION ${LIB_INSTALL_DIR})
@@ -56,7 +62,7 @@ set(plasmagik_HEADERS
 
 install(FILES ${plasmagik_HEADERS} DESTINATION ${INCLUDE_INSTALL_DIR}/plasma/)
 
-install(FILES
+set(plasma_LIB_INCLUDES
     abstractrunner.h
     animator.h
     applet.h
@@ -70,8 +76,16 @@ install(FILES
     plasma_export.h
     scriptengine.cpp
     svg.h
-    theme.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/plasma)
+    theme.h)
+
+if(QT_QTOPENGL_FOUND)
+set(plasma_LIB_INCLUDES
+    glapplet.h)
+endif(QT_QTOPENGL_FOUND)
+
+install(FILES
+        ${plasma_LIB_INCLUDES}
+        DESTINATION ${INCLUDE_INSTALL_DIR}/plasma)
 
 install(FILES
     widgets/icon.h
