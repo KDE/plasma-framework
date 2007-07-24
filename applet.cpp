@@ -126,6 +126,12 @@ public:
                              applet->config().isImmutable());
     }
 
+    void paintBackground(QPainter* painter, Applet* q)
+    {
+        background->resize(q->boundingRect().size());
+        background->paint(painter, q->boundingRect());
+    }
+
     static uint nextId()
     {
         ++s_maxAppletId;
@@ -379,8 +385,7 @@ QRectF Applet::boundingRect () const
 void Applet::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     if (d->background) {
-        d->background->resize(boundingRect().size());
-        d->background->paint(painter, boundingRect());
+        d->paintBackground(painter, this);
     }
 
     if (d->failed) {
@@ -398,6 +403,11 @@ void Applet::paintInterface(QPainter *painter, const QStyleOptionGraphicsItem *o
 
     if (d->scriptEngine) {
         d->scriptEngine->paintInterface(painter, option);
+    } else if (!d->background) {
+        // we should not be in here, the child applet probably screwed up
+        setDrawStandardBackground(true);
+        kDebug() << "Applet::paintInterface ... we should not be in here. check your painInterface method" << endl;
+        d->paintBackground(painter, this);
     }
 }
 
