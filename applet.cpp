@@ -135,26 +135,79 @@ public:
         p->setRenderHint(QPainter::SmoothPixmapTransform);
         background->resize();
 
-        const int topHeight = background->elementSize("top").height(); // 23
-        const int leftWidth = background->elementSize("left").width(); //20;
-        const int rightWidth = background->elementSize("right").width(); // 20
-        const int bottomHeight = background->elementSize("bottom").height(); //25;
+        const int topHeight = background->elementSize("top").height();
+        const int topWidth = background->elementSize("top").width();
+        const int leftWidth = background->elementSize("left").width();
+        const int leftHeight = background->elementSize("left").height();
+        const int rightWidth = background->elementSize("right").width();
+        const int bottomHeight = background->elementSize("bottom").height();
         const int lrWidths = leftWidth + rightWidth;
         const int tbHeights = topHeight + bottomHeight;
 
         background->paint(p, QRect(0, 0, leftWidth, topHeight), "topleft");
-        background->paint(p, QRect(leftWidth, 0, w - lrWidths, topHeight), "top");
         background->paint(p, QRect(w - rightWidth, 0, rightWidth, topHeight), "topright");
-
-        background->paint(p, QRect(0, topHeight, leftWidth, h - tbHeights), "left");
-        background->paint(p, QRect(w - rightWidth, topHeight, rightWidth, h - tbHeights), "right");
-
         background->paint(p, QRect(0, h - bottomHeight, leftWidth, bottomHeight), "bottomleft");
-        background->paint(p, QRect(leftWidth, h - bottomHeight, w - lrWidths, bottomHeight), "bottom");
         background->paint(p, QRect(w - rightWidth, h - bottomHeight, rightWidth, bottomHeight), "bottomright");
 
-        background->resize(rect.size());
-        background->paint(p, QRect(leftWidth, topHeight, w - lrWidths, h - tbHeights), "center");
+        int y = topHeight;
+        QPixmap left(leftWidth, leftHeight);
+        QPixmap right(rightWidth, leftHeight);
+        {
+            QPainter sidePainter(&left);
+            sidePainter.setCompositionMode(QPainter::CompositionMode_Source);
+            background->paint(&sidePainter, QPoint(0, 0), "left");
+        }
+        {
+            QPainter sidePainter(&right);
+            sidePainter.setCompositionMode(QPainter::CompositionMode_Source);
+            background->paint(&sidePainter, QPoint(0, 0), "right");
+        }
+
+        while (y < h - bottomHeight) {
+            if (y + leftHeight > h - bottomHeight) {
+                int finalHeight = (h - bottomHeight) - y;
+                p->drawPixmap(QRect(0, y, leftWidth, finalHeight),
+                              left, QRect(0, 0, leftWidth, finalHeight));
+                p->drawPixmap(QRect(w - rightWidth, y, rightWidth, finalHeight),
+                              right, QRect(0, 0, rightWidth, finalHeight));
+            } else {
+                p->drawPixmap(QRect(0, y, leftWidth, leftHeight), left);
+                p->drawPixmap(QRect(w - rightWidth, y, rightWidth, leftHeight), right);
+            }
+
+            y += leftHeight;
+        }
+
+        int x = leftWidth;
+        QPixmap top(topWidth, topHeight);
+        QPixmap bottom(topWidth, bottomHeight);
+        {
+            QPainter sidePainter(&top);
+            sidePainter.setCompositionMode(QPainter::CompositionMode_Source);
+            background->paint(&sidePainter, QPoint(0, 0), "top");
+        }
+        {
+            QPainter sidePainter(&bottom);
+            sidePainter.setCompositionMode(QPainter::CompositionMode_Source);
+            background->paint(&sidePainter, QPoint(0, 0), "bottom");
+        }
+
+        while (x < w - rightWidth) {
+            if (x + topWidth > w - rightWidth) {
+                int finalWidth = (w - rightWidth) - x;
+                p->drawPixmap(QRect(x, 0, finalWidth, topHeight),
+                              top, QRect(0, 0, finalWidth, topHeight));
+                p->drawPixmap(QRect(x, h - bottomHeight, finalWidth, bottomHeight),
+                              bottom, QRect(0, 0, finalWidth, bottomHeight));
+            } else {
+                p->drawPixmap(QRect(x, 0, topWidth, topHeight), top);
+                p->drawPixmap(QRect(x, h - bottomHeight, topWidth, bottomHeight), bottom);
+            }
+
+            x += topWidth;
+        }
+
+        background->paint(p, QRect(leftWidth, topHeight, w - lrWidths + 1, h - tbHeights + 1), "center");
     }
 
     static uint nextId()
