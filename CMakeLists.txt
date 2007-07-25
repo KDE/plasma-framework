@@ -83,6 +83,7 @@ set(plasma_LIB_INCLUDES
 
 if(QT_QTOPENGL_FOUND AND OPENGL_FOUND)
 set(plasma_LIB_INCLUDES
+    ${plasma_LIB_INCLUDES}
     glapplet.h)
 endif(QT_QTOPENGL_FOUND AND OPENGL_FOUND)
 
