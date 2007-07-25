@@ -177,6 +177,11 @@ class PLASMA_EXPORT Applet : public QObject, public Widget
          * Applets should implement contentSize() to tell Plasma::Applet how
          * much space they need.
          *
+         * When drawing to the applet in the paintInterface() method, you can
+         * use the QRect passed to that function.  Outside paintInterface(), for
+         * example when positioning a Plasma::Widget, you can assume your drawing
+         * area has (0,0) at the top left and is the size of contentSize().
+         *
          * If drawStandardBackground() == true, enough space will reserved
          * within the borders for the content, and boundingRect() will the
          * total size of the applet, including borders.
