@@ -43,6 +43,8 @@
 #include "plasma/widgets/lineedit.h"
 #include "plasma/widgets/vboxlayout.h"
 
+//#include "stackblur_shadows.cpp"
+
 namespace Plasma
 {
 
@@ -128,10 +130,16 @@ public:
 
     void paintBackground(QPainter* p, Applet* q)
     {
+        //TODO: we should cache this background rather that repaint it over and over
         QRect rect = q->boundingRect().toRect();
         const int w = rect.width();
         const int h = rect.height();
-
+#if 0
+        // this could be used to draw a dynamic shadow
+        QImage image(w, h, QImage::Format_ARGB32_Premultiplied);
+        QPainter* p = new QPainter(&image);
+        p->setCompositionMode(QPainter::CompositionMode_Source);
+#endif
         p->setRenderHint(QPainter::SmoothPixmapTransform);
         background->resize();
 
@@ -183,6 +191,17 @@ public:
         p->drawTiledPixmap(QRect(leftWidth, h - bottomHeight, w - lrWidths, bottomHeight), bottom);
 
         background->paint(p, QRect(leftWidth, topHeight, w - lrWidths + 1, h - tbHeights + 1), "center");
+
+#if 0
+        // this could be used to draw a dynamic shadow
+        delete p;
+
+        QImage image2(image);
+        image.setAlphaChannel(image2.createHeuristicMask());
+        shadowBlur(image, 1);
+        p2->drawImage(0, 0, image);
+        p2->drawImage(0, 0, image2);
+#endif
     }
 
     static uint nextId()
