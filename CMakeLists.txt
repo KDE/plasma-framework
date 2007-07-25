@@ -1,5 +1,7 @@
 include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${KDEBASE_WORKSPACE_SOURCE_DIR}/libs)
 
+find_package(OpenGL)
+
 ########### next target ###############
 
 set(plasmagik_SRCS
@@ -38,11 +40,12 @@ set(plasma_LIB_SRCS
     widgets/flash.cpp
    )
 
-if(QT_QTOPENGL_FOUND)
+if(QT_QTOPENGL_FOUND AND OPENGL_FOUND)
+MESSAGE(STATUS "Adding support for OpenGL applets to libplasma")
 set(plasma_LIB_SRCS
     ${plasma_LIB_SRCS}
     glapplet.cpp)
-endif(QT_QTOPENGL_FOUND)
+endif(QT_QTOPENGL_FOUND AND OPENGL_FOUND)
 
 kde4_add_library(plasma SHARED ${plasma_LIB_SRCS})
 
@@ -78,10 +81,10 @@ set(plasma_LIB_INCLUDES
     svg.h
     theme.h)
 
-if(QT_QTOPENGL_FOUND)
+if(QT_QTOPENGL_FOUND AND OPENGL_FOUND)
 set(plasma_LIB_INCLUDES
     glapplet.h)
-endif(QT_QTOPENGL_FOUND)
+endif(QT_QTOPENGL_FOUND AND OPENGL_FOUND)
 
 install(FILES
         ${plasma_LIB_INCLUDES}
