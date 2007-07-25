@@ -241,7 +241,12 @@ void Corona::dropEvent(QGraphicsSceneDragDropEvent *event)
         QString plasmoidName;
         plasmoidName = event->mimeData()->data("text/x-plasmoidservicename");
         addApplet(plasmoidName);
-        d->applets.last()->setPos(event->pos());
+        Applet *applet = d->applets.last();
+        // TODO: should we place it centered on the mouse cursor?  If so, the
+        // default "zoom in" animation needs changing to zoom in from the same
+        // point, or it just looks odd
+        applet->setPos(event->scenePos()); // -
+        //        QPoint(applet->boundingRect().width()/2,applet->boundingRect().height()/2));
 
         event->acceptProposedAction();
     } else if (KUrl::List::canDecode(event->mimeData())) {
