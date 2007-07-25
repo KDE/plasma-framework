@@ -28,6 +28,7 @@ set(plasma_LIB_SRCS
     svg.cpp
     theme.cpp
     karambamanager.cpp
+    widgets/boxlayout.cpp
     widgets/checkbox.cpp
     widgets/icon.cpp
     widgets/lineedit.cpp
@@ -92,6 +93,7 @@ install(FILES
         DESTINATION ${INCLUDE_INSTALL_DIR}/plasma)
 
 install(FILES
+    widgets/boxlayout.h
     widgets/icon.h
     widgets/layout.h
     widgets/layoutitem.h

@@ -16,14 +16,11 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef __V_BOX_LAYOUT__
-#define __V_BOX_LAYOUT__
-
-#include <QtCore/QRectF>
-#include <QtCore/QSizeF>
+#ifndef PLASMA_VBOXLAYOUT
+#define PLASMA_VBOXLAYOUT
 
 #include <plasma/plasma_export.h>
-#include <plasma/widgets/layout.h>
+#include <plasma/widgets/boxlayout.h>
 
 namespace Plasma
 {
@@ -36,45 +33,28 @@ namespace Plasma
  *
  * This class implements a Vertical Box Layout, it just lays items in vertical, from up to down.
  */
-class PLASMA_EXPORT VBoxLayout : public Layout
+class PLASMA_EXPORT VBoxLayout : public BoxLayout
 {
 	public:
 
         /**
          * Constructor.
          */
-		VBoxLayout(LayoutItem *parent = 0);
+		explicit VBoxLayout(LayoutItem *parent = 0);
 
         /**
          * Virtual Destructor.
          */
-		virtual ~VBoxLayout();
+		~VBoxLayout();
 
 		Qt::Orientations expandingDirections() const;
-
-		QSizeF minimumSize() const;
-		QSizeF maximumSize() const;
 
 		bool hasHeightForWidth() const;
 		qreal heightForWidth(qreal w) const;
 
-		QRectF geometry() const;
 		void setGeometry(const QRectF& geometry);
 
 		QSizeF sizeHint() const;
-
-		int count() const;
-
-		bool isEmpty() const;
-
-        void insertItem(int index, LayoutItem *l);
-		void addItem(LayoutItem *l);
-
-		void removeItem(LayoutItem *l);
-
-		int indexOf(LayoutItem *l) const;
-		LayoutItem *itemAt(int i) const;
-		LayoutItem *takeAt(int i);
 
 		QSizeF size() const;
 
@@ -85,4 +65,4 @@ class PLASMA_EXPORT VBoxLayout : public Layout
 
 }
 
-#endif /* __V_BOX_LAYOUT__ */
+#endif /* PLASMA_VBOXLAYOUT */

@@ -44,7 +44,7 @@ class PLASMA_EXPORT Layout : public LayoutItem
         /**
          * Constructor.
          */
-		Layout(LayoutItem *parent);
+		explicit Layout(LayoutItem *parent);
 
         /**
          * Virtual Destructor.
