@@ -513,7 +513,7 @@ QRect Applet::contentsRect() const
     const int rightWidth = d->background->elementSize("right").width();
     const int bottomHeight = d->background->elementSize("bottom").height();
 
-    rect.adjust(leftWidth, topHeight, 0 - leftWidth - rightWidth, 0 - topHeight - bottomHeight);
+    rect.adjust(leftWidth, topHeight, 0 - rightWidth, 0 - bottomHeight);
     return rect;
 }
 
