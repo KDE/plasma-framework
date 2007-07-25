@@ -149,63 +149,38 @@ public:
         background->paint(p, QRect(0, h - bottomHeight, leftWidth, bottomHeight), "bottomleft");
         background->paint(p, QRect(w - rightWidth, h - bottomHeight, rightWidth, bottomHeight), "bottomright");
 
-        int y = topHeight;
         QPixmap left(leftWidth, leftHeight);
-        QPixmap right(rightWidth, leftHeight);
         {
             QPainter sidePainter(&left);
             sidePainter.setCompositionMode(QPainter::CompositionMode_Source);
             background->paint(&sidePainter, QPoint(0, 0), "left");
         }
+        p->drawTiledPixmap(QRect(0, topHeight, leftWidth, h - tbHeights), left);
+
+        QPixmap right(rightWidth, leftHeight);
         {
             QPainter sidePainter(&right);
             sidePainter.setCompositionMode(QPainter::CompositionMode_Source);
             background->paint(&sidePainter, QPoint(0, 0), "right");
         }
+        p->drawTiledPixmap(QRect(w - rightWidth, topHeight, leftWidth, h - tbHeights), right);
 
-        while (y < h - bottomHeight) {
-            if (y + leftHeight > h - bottomHeight) {
-                int finalHeight = (h - bottomHeight) - y;
-                p->drawPixmap(QRect(0, y, leftWidth, finalHeight),
-                              left, QRect(0, 0, leftWidth, finalHeight));
-                p->drawPixmap(QRect(w - rightWidth, y, rightWidth, finalHeight),
-                              right, QRect(0, 0, rightWidth, finalHeight));
-            } else {
-                p->drawPixmap(QRect(0, y, leftWidth, leftHeight), left);
-                p->drawPixmap(QRect(w - rightWidth, y, rightWidth, leftHeight), right);
-            }
 
-            y += leftHeight;
-        }
-
-        int x = leftWidth;
         QPixmap top(topWidth, topHeight);
-        QPixmap bottom(topWidth, bottomHeight);
         {
             QPainter sidePainter(&top);
             sidePainter.setCompositionMode(QPainter::CompositionMode_Source);
             background->paint(&sidePainter, QPoint(0, 0), "top");
         }
+        p->drawTiledPixmap(QRect(leftWidth, 0, w - lrWidths, topHeight), top);
+
+        QPixmap bottom(topWidth, bottomHeight);
         {
             QPainter sidePainter(&bottom);
             sidePainter.setCompositionMode(QPainter::CompositionMode_Source);
             background->paint(&sidePainter, QPoint(0, 0), "bottom");
         }
-
-        while (x < w - rightWidth) {
-            if (x + topWidth > w - rightWidth) {
-                int finalWidth = (w - rightWidth) - x;
-                p->drawPixmap(QRect(x, 0, finalWidth, topHeight),
-                              top, QRect(0, 0, finalWidth, topHeight));
-                p->drawPixmap(QRect(x, h - bottomHeight, finalWidth, bottomHeight),
-                              bottom, QRect(0, 0, finalWidth, bottomHeight));
-            } else {
-                p->drawPixmap(QRect(x, 0, topWidth, topHeight), top);
-                p->drawPixmap(QRect(x, h - bottomHeight, topWidth, bottomHeight), bottom);
-            }
-
-            x += topWidth;
-        }
+        p->drawTiledPixmap(QRect(leftWidth, h - bottomHeight, w - lrWidths, bottomHeight), bottom);
 
         background->paint(p, QRect(leftWidth, topHeight, w - lrWidths + 1, h - tbHeights + 1), "center");
     }
