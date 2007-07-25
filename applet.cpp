@@ -131,9 +131,9 @@ public:
     void paintBackground(QPainter* p, Applet* q)
     {
         //TODO: we should cache this background rather that repaint it over and over
-        QRect rect = q->boundingRect().toRect();
-        const int w = rect.width();
-        const int h = rect.height();
+        QSize contents = q->contentSize().toSize();
+        const int contentWidth = contents.width();
+        const int contentHeight = contents.height();
 #if 0
         // this could be used to draw a dynamic shadow
         QImage image(w, h, QImage::Format_ARGB32_Premultiplied);
@@ -149,13 +149,21 @@ public:
         const int leftHeight = background->elementSize("left").height();
         const int rightWidth = background->elementSize("right").width();
         const int bottomHeight = background->elementSize("bottom").height();
-        const int lrWidths = leftWidth + rightWidth;
-        const int tbHeights = topHeight + bottomHeight;
+        //const int lrWidths = leftWidth + rightWidth;
+        //const int tbHeights = topHeight + bottomHeight;
 
-        background->paint(p, QRect(0, 0, leftWidth, topHeight), "topleft");
-        background->paint(p, QRect(w - rightWidth, 0, rightWidth, topHeight), "topright");
-        background->paint(p, QRect(0, h - bottomHeight, leftWidth, bottomHeight), "bottomleft");
-        background->paint(p, QRect(w - rightWidth, h - bottomHeight, rightWidth, bottomHeight), "bottomright");
+        // contents top-left corner is (0,0).  We need to draw up and left of that
+        const int topOffset = 0 - topHeight;
+        const int leftOffset = 0 - leftWidth;
+        const int rightOffset = contentWidth;
+        const int bottomOffset = contentHeight;
+        const int contentTop = 0;
+        const int contentLeft = 0;
+
+        background->paint(p, QRect(leftOffset,  topOffset,    leftWidth,  topHeight),    "topleft");
+        background->paint(p, QRect(rightOffset, topOffset,    rightWidth, topHeight),    "topright");
+        background->paint(p, QRect(leftOffset,  bottomOffset, leftWidth,  bottomHeight), "bottomleft");
+        background->paint(p, QRect(rightOffset, bottomOffset, rightWidth, bottomHeight), "bottomright");
 
         QPixmap left(leftWidth, leftHeight);
         {
@@ -163,7 +171,7 @@ public:
             sidePainter.setCompositionMode(QPainter::CompositionMode_Source);
             background->paint(&sidePainter, QPoint(0, 0), "left");
         }
-        p->drawTiledPixmap(QRect(0, topHeight, leftWidth, h - tbHeights), left);
+        p->drawTiledPixmap(QRect(leftOffset, contentTop, leftWidth, contentHeight), left);
 
         QPixmap right(rightWidth, leftHeight);
         {
@@ -171,7 +179,7 @@ public:
             sidePainter.setCompositionMode(QPainter::CompositionMode_Source);
             background->paint(&sidePainter, QPoint(0, 0), "right");
         }
-        p->drawTiledPixmap(QRect(w - rightWidth, topHeight, leftWidth, h - tbHeights), right);
+        p->drawTiledPixmap(QRect(rightOffset, contentTop, rightWidth, contentHeight), right);
 
 
         QPixmap top(topWidth, topHeight);
@@ -180,7 +188,7 @@ public:
             sidePainter.setCompositionMode(QPainter::CompositionMode_Source);
             background->paint(&sidePainter, QPoint(0, 0), "top");
         }
-        p->drawTiledPixmap(QRect(leftWidth, 0, w - lrWidths, topHeight), top);
+        p->drawTiledPixmap(QRect(contentLeft, topOffset, contentWidth, topHeight), top);
 
         QPixmap bottom(topWidth, bottomHeight);
         {
@@ -188,9 +196,9 @@ public:
             sidePainter.setCompositionMode(QPainter::CompositionMode_Source);
             background->paint(&sidePainter, QPoint(0, 0), "bottom");
         }
-        p->drawTiledPixmap(QRect(leftWidth, h - bottomHeight, w - lrWidths, bottomHeight), bottom);
+        p->drawTiledPixmap(QRect(contentLeft, bottomOffset, contentWidth, bottomHeight), bottom);
 
-        background->paint(p, QRect(leftWidth, topHeight, w - lrWidths + 1, h - tbHeights + 1), "center");
+        background->paint(p, QRect(contentLeft, contentTop, contentWidth + 1, contentHeight + 1), "center");
 
 #if 0
         // this could be used to draw a dynamic shadow
@@ -446,12 +454,19 @@ int Applet::type() const
 
 QRectF Applet::boundingRect () const
 {
-    if (d->scriptEngine) {
-        return QRectF(QPointF(0, 0), d->scriptEngine->size());
+    QRectF rect = QRectF(QPointF(0,0), contentSize());
+    if (!d->background) {
+        return rect;
     }
 
-    //FIXME: this should be big enough to allow for the failure text?
-    return QRectF(300, 300, 300, 300);
+    const int topHeight = d->background->elementSize("top").height();
+    const int leftWidth = d->background->elementSize("left").width();
+    const int rightWidth = d->background->elementSize("right").width();
+    const int bottomHeight = d->background->elementSize("bottom").height();
+
+    rect.adjust(0 - leftWidth, 0 - topHeight, rightWidth, bottomHeight);
+    return rect;
+
 }
 
 void Applet::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
@@ -466,7 +481,7 @@ void Applet::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
         return;
     }
 
-    paintInterface(painter, option, contentsRect());
+    paintInterface(painter, option, QRect(QPoint(0,0), contentSize().toSize()));
 
     //TODO: interface overlays on hover
 }
@@ -501,20 +516,14 @@ Location Applet::location() const
     return static_cast<Corona*>(scene())->location();
 }
 
-QRect Applet::contentsRect() const
+QSizeF Applet::contentSize() const
 {
-    QRect rect = boundingRect().toRect();
-    if (!d->background) {
-        return rect;
+    if (d->scriptEngine) {
+        return d->scriptEngine->size();
     }
 
-    const int topHeight = d->background->elementSize("top").height();
-    const int leftWidth = d->background->elementSize("left").width();
-    const int rightWidth = d->background->elementSize("right").width();
-    const int bottomHeight = d->background->elementSize("bottom").height();
-
-    rect.adjust(leftWidth, topHeight, 0 - rightWidth, 0 - bottomHeight);
-    return rect;
+    //FIXME: this should be big enough to allow for the failure text?
+    return QSizeF(300, 300);
 }
 
 QString Applet::globalName() const

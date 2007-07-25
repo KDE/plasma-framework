@@ -173,8 +173,20 @@ class PLASMA_EXPORT Applet : public QObject, public Widget
         /**
          * Returns the area within which contents can be painted. If there is no
          * background, then this is equivalent to boundingRect().
+         *
+         * Applets should implement contentSize() to tell Plasma::Applet how
+         * much space they need.
+         *
+         * If drawStandardBackground() == true, enough space will reserved
+         * within the borders for the content, and boundingRect() will the
+         * total size of the applet, including borders.
+         *
+         * If the applet has not asked Plasma::Applet to draw the default
+         * background, boundingRect().size() == contentSize(), and
+         * boundingRect().topLeft() == QPointF(0,0).  Also, such applets will
+         * not break if they implement boundingRect() instead.
          **/
-        QRect contentsRect() const;
+        virtual QSizeF contentSize() const;
 
         /**
          * Returns a list of all known applets in a hash keyed by a unique
