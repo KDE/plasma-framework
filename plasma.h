@@ -77,10 +77,30 @@ enum Location { Floating = 0 /**< Free floating. Neither geometry or z-ordering
                 RightEdge    /**< Along the right side of the screen */
               };
 
+/**
+ * Zoom levels that Plasma is aware of...
+ **/
+enum ZoomLevel { DesktopZoom = 0 /**< Normal desktop usage, plasmoids are painted normally and have full interaction */,
+                 GroupZoom /**< Plasmoids are shown as icons in visual groups; drag and drop and limited context menu interaction only */ ,
+                 OverviewZoom /**< Groups become icons themselves */
+               };
+
 enum ItemTypes { AppletType = QGraphicsItem::UserType + 1,
                  LineEditType = QGraphicsItem::UserType + 2
                };
 
+/**
+ * @return the scaling factor (0..1) for a ZoomLevel
+ **/
+PLASMA_EXPORT qreal scalingFactor(ZoomLevel level);
+
+/**
+ * Converts a location to a direction. Handy for figuring out which way to send a popup based on
+ * location or to point arrows and other directional items.
+ *
+ * @param location the location of the container the element will appear in
+ * @reutrn the visual direction of the element should be oriented in
+ **/
 PLASMA_EXPORT Direction locationToDirection(Location location);
 
 } // Plasma namespace
