@@ -185,6 +185,10 @@ class PLASMA_EXPORT Applet : public QObject, public Widget
          * background, boundingRect().size() == contentSize(), and
          * boundingRect().topLeft() == QPointF(0,0).  Also, such applets will
          * not break if they implement boundingRect() instead.
+         *
+         * Note that if the value returned by contentSize() (and hence
+         * boundingRect()) changes for any reason, you should call
+         * prepareGeometryChange() to notify the Corona.
          **/
         virtual QSizeF contentSize() const;
 
