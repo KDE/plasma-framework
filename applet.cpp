@@ -24,12 +24,15 @@
 #include <QPainter>
 #include <QSize>
 #include <QTimer>
+#include <QStyleOptionGraphicsItem>
 
+#include <KIcon>
 #include <KDialog>
 #include <KPluginInfo>
 #include <KStandardDirs>
 #include <KService>
 #include <KServiceTypeTrader>
+#include <KIconLoader>
 
 #include "plasma/corona.h"
 #include "plasma/dataenginemanager.h"
@@ -210,6 +213,11 @@ public:
         p2->drawImage(0, 0, image);
         p2->drawImage(0, 0, image2);
 #endif
+    }
+
+    void paintHover(QPainter* painter, Applet* q)
+    {
+        //TODO draw hover interface for close, configure, info and move
     }
 
     static uint nextId()
@@ -472,18 +480,27 @@ QRectF Applet::boundingRect () const
 void Applet::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     Q_UNUSED(widget)
+    qreal zoomLevel = painter->transform().m11() / transform().m11();
+    if (zoomLevel == scalingFactor(Plasma::DesktopZoom)) { // Show Desktop
+        if (d->background) {
+            d->paintBackground(painter, this);
+        }
 
-    if (d->background) {
-        d->paintBackground(painter, this);
-    }
+        if (d->failed) {
+            return;
+        }
 
-    if (d->failed) {
-        return;
-    }
-
-    paintInterface(painter, option, QRect(QPoint(0,0), contentSize().toSize()));
-
-    //TODO: interface overlays on hover
+        paintInterface(painter, option, QRect(QPoint(0,0), contentSize().toSize()));
+        d->paintHover(painter, this);
+    } else if (zoomLevel == scalingFactor(Plasma::GroupZoom)) { // Show Groups + Applet outline
+        //TODO: make pretty.
+        painter->drawRoundRect(boundingRect());
+        int midX = x() + (boundingRect().width() / 2);
+        int midY = y() + (boundingRect().height() / 2);
+        //int iconSize = KIconLoader().currentSize(Desktop);
+        KIcon(icon()).paint(painter, midX, midY, 64, 64);
+    }/*  else if (zoomLevel == scalingFactor(Plasma::OverviewZoom)) { //Show Groups only
+    } */
 }
 
 void Applet::paintInterface(QPainter *painter, const QStyleOptionGraphicsItem *option,
