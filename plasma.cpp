@@ -31,9 +31,12 @@ qreal scalingFactor(ZoomLevel level)
         return 0.5;
         break;
     case OverviewZoom:
-        return 0.1;
+        return 0.2;
         break;
     }
+
+    // to make odd compilers not warn like silly beasts
+    return 1;
 }
 
 Direction locationToDirection(Location location)
@@ -43,6 +46,7 @@ Direction locationToDirection(Location location)
         case Floating:
         case Desktop:
         case TopEdge:
+        case FullScreen:
             //TODO: should we be smarter for floating and planer?
             //      perhaps we should take a QRect and/or QPos as well?
             return Down;
