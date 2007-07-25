@@ -101,7 +101,7 @@ class PLASMA_EXPORT LayoutItem
         virtual void setGeometry(const QRectF& geometry) = 0;
 
         /**
-         * Returns the most appropiate size of this Item to hold whatever contents it has.
+         * Returns the most appropriate size of this Item to hold whatever contents it has.
          */
         virtual QSizeF sizeHint() const = 0;
 

@@ -124,7 +124,7 @@ class PLASMA_EXPORT Widget : public QGraphicsItem,
         virtual void invalidate();
 
         /**
-         * Returns the most appropiate size of this Widget to hold it's contents.
+         * Returns the most appropriate size of this Widget to hold it's contents.
          */
         virtual QSizeF sizeHint() const;
 
