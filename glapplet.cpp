@@ -155,9 +155,12 @@ void GLApplet::paintInterface(QPainter *painter,
                               const QRect &contentsRect)
 {
     Q_ASSERT(d->pbuf);
-    if (!d->dummy->isValid() ||
-        !d->pbuf->isValid()) {
-        setFailedToLaunch(true, i18n("Your machine doesn't support OpenGL applets."));
+    if ((!d->dummy->isValid() ||
+         !d->pbuf->isValid())) {
+        if (!failedToLaunch()) {
+            setFailedToLaunch(true, i18n("Your machine doesn't support OpenGL applets."));
+        }
+
         return;
     }
     d->pbuf->makeCurrent();
