@@ -727,6 +727,25 @@ Applet* Applet::loadApplet(const KPluginInfo& info, uint appletId, const QString
     return loadApplet(info.pluginName(), appletId, args);
 }
 
+void Applet::slotLockApplet(bool lock)
+{
+    if(lock)
+       setFlags( flags()^QGraphicsItem::ItemIsMovable);
+    else
+       setFlags( flags() | QGraphicsItem::ItemIsMovable);
+}
+
+bool Applet::lockApplet() const
+{
+  return !(flags() & QGraphicsItem::ItemIsMovable);
+}
+
+void Applet::setLockApplet(bool lock)
+{
+  slotLockApplet(lock);
+}
+
+
 } // Plasma namespace
 
 #include "applet.moc"

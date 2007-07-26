@@ -50,6 +50,7 @@ class PLASMA_EXPORT Applet : public QObject, public Widget
     Q_PROPERTY( bool immutable READ isImmutable WRITE setImmutable )
     Q_PROPERTY( bool drawStandardBackground READ drawStandardBackground WRITE setDrawStandardBackground )
     Q_PROPERTY( bool failedToLaunch READ failedToLaunch WRITE setFailedToLaunch )
+    Q_PROPERTY( bool lockApplet READ lockApplet WRITE setLockApplet )
     Q_PROPERTY( QRectF boundingRect READ boundingRect )
 
     public:
@@ -379,6 +380,11 @@ class PLASMA_EXPORT Applet : public QObject, public Widget
          **/
         QRectF boundingRect () const;
 
+	bool lockApplet() const;
+
+	void setLockApplet(bool lock);
+
+
     Q_SIGNALS:
         /**
          * Emitted when the applet needs to take (or lose) keyboard focus.
@@ -394,6 +400,9 @@ class PLASMA_EXPORT Applet : public QObject, public Widget
          *        it is giving it up
          **/
         void requestFocus( bool focus );
+
+    protected Q_SLOTS:
+	void slotLockApplet(bool);
 
     protected:
         /**
