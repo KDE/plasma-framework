@@ -134,7 +134,7 @@ public:
     void paintBackground(QPainter* p, Applet* q)
     {
         //TODO: we should cache this background rather that repaint it over and over
-        QSize contents = q->contentSize().toSize();
+        QSize contents = contentSize(q).toSize();
         const int contentWidth = contents.width();
         const int contentHeight = contents.height();
 #if 0
@@ -218,6 +218,19 @@ public:
     void paintHover(QPainter* painter, Applet* q)
     {
         //TODO draw hover interface for close, configure, info and move
+    }
+
+    QSizeF contentSize(const Applet* q)
+    {
+        if (scriptEngine) {
+            return scriptEngine->size();
+        }
+
+        if (failureText) {
+            return failureText->geometry().size();
+        }
+
+        return q->contentSize();
     }
 
     static uint nextId()
@@ -437,7 +450,7 @@ void Applet::setFailedToLaunch(bool failed, const QString& reason)
     }
 
     d->failed = failed;
-
+    prepareGeometryChange();
     qDeleteAll(QGraphicsItem::children());
     delete layout();
 
@@ -462,7 +475,7 @@ int Applet::type() const
 
 QRectF Applet::boundingRect () const
 {
-    QRectF rect = QRectF(QPointF(0,0), contentSize());
+    QRectF rect = QRectF(QPointF(0,0), d->contentSize(this));
     if (!d->background) {
         return rect;
     }
@@ -490,7 +503,7 @@ void Applet::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
             return;
         }
 
-        paintInterface(painter, option, QRect(QPoint(0,0), contentSize().toSize()));
+        paintInterface(painter, option, QRect(QPoint(0,0), d->contentSize(this).toSize()));
         d->paintHover(painter, this);
     } else if (zoomLevel == scalingFactor(Plasma::GroupZoom)) { // Show Groups + Applet outline
         //TODO: make pretty.
@@ -535,10 +548,6 @@ Location Applet::location() const
 
 QSizeF Applet::contentSize() const
 {
-    if (d->scriptEngine) {
-        return d->scriptEngine->size();
-    }
-
     //FIXME: this should be big enough to allow for the failure text?
     return QSizeF(300, 300);
 }
