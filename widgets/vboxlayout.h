@@ -35,30 +35,30 @@ namespace Plasma
  */
 class PLASMA_EXPORT VBoxLayout : public BoxLayout
 {
-	public:
+    public:
 
         /**
          * Constructor.
          */
-		explicit VBoxLayout(LayoutItem *parent = 0);
+        explicit VBoxLayout(LayoutItem *parent = 0);
 
         /**
          * Virtual Destructor.
          */
-		~VBoxLayout();
+        ~VBoxLayout();
 
-		Qt::Orientations expandingDirections() const;
+        Qt::Orientations expandingDirections() const;
 
-		bool hasHeightForWidth() const;
-		qreal heightForWidth(qreal w) const;
+        bool hasHeightForWidth() const;
+        qreal heightForWidth(qreal w) const;
 
-		void setGeometry(const QRectF& geometry);
+        void setGeometry(const QRectF& geometry);
 
-		QSizeF sizeHint() const;
+        QSizeF sizeHint() const;
 
-	private:
-		class Private;
-		Private *const d;
+    private:
+        class Private;
+        Private *const d;
 };
 
 }

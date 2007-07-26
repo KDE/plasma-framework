@@ -104,18 +104,18 @@ void VBoxLayout::setGeometry(const QRectF& geometry)
 
 QSizeF VBoxLayout::sizeHint() const
 {
-	qreal hintHeight = 0.0;
-	qreal hintWidth = 0.0;
+    qreal hintHeight = 0.0;
+    qreal hintWidth = 0.0;
 
-	foreach(LayoutItem *l, children()) {
+    foreach(LayoutItem *l, children()) {
 
-		QSizeF hint = l->sizeHint();
+        QSizeF hint = l->sizeHint();
 
-		hintWidth = qMax(hint.width(), hintWidth);
-		hintHeight += hint.height() + spacing();
-	}
+        hintWidth = qMax(hint.width(), hintWidth);
+        hintHeight += hint.height() + spacing();
+    }
 
-	return QSizeF(hintWidth, hintHeight);
+    return QSizeF(hintWidth, hintHeight);
 }
 
 }

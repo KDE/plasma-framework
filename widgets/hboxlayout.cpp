@@ -26,8 +26,8 @@ namespace Plasma
 {
 
 HBoxLayout::HBoxLayout(LayoutItem *parent)
-	: BoxLayout(parent),
-	  d(0)
+    : BoxLayout(parent),
+      d(0)
 {
 }
 
@@ -37,18 +37,18 @@ HBoxLayout::~HBoxLayout()
 
 Qt::Orientations HBoxLayout::expandingDirections() const
 {
-	return Qt::Horizontal;
+    return Qt::Horizontal;
 }
 
 bool HBoxLayout::hasWidthForHeight() const
 {
-	return true;
+    return true;
 }
 
 qreal HBoxLayout::widthForHeight(qreal w) const
 {
     Q_UNUSED(w);
-	return qreal();
+    return qreal();
 }
 
 void HBoxLayout::setGeometry(const QRectF& geometry)
@@ -103,18 +103,18 @@ void HBoxLayout::setGeometry(const QRectF& geometry)
 
 QSizeF HBoxLayout::sizeHint() const
 {
-	qreal hintHeight = 0.0;
-	qreal hintWidth = 0.0;
+    qreal hintHeight = 0.0;
+    qreal hintWidth = 0.0;
 
-	foreach(LayoutItem *l, children()) {
+    foreach(LayoutItem *l, children()) {
 
-		QSizeF hint = l->sizeHint();
+        QSizeF hint = l->sizeHint();
 
         hintHeight = qMax(hint.height(), hintHeight);
         hintWidth += hint.width() + spacing();
-	}
+    }
 
-	return QSizeF(hintWidth, hintHeight);
+    return QSizeF(hintWidth, hintHeight);
 }
 
 }
