@@ -11,12 +11,16 @@ class Label::Private
         Private() {}
 
         QString text;
+        Qt::Alignment alignment;
+        QPen textPen;
 };
 
 Label::Label(Widget *parent)
     : Widget(parent),
       d(new Private)
 {
+    setAlignment(Qt::AlignHCenter);
+    setPen(QPen(Qt::black, 1));
 }
 
 Label::~Label()
@@ -55,14 +59,33 @@ QString Label::text() const
     return d->text;
 }
 
+void Label::setAlignment(Qt::Alignment align)
+{
+    d->alignment = align;
+}
+
+Qt::Alignment Label::alignment() const
+{
+    return d->alignment;
+}
+
+void Label::setPen(const QPen& pen)
+{
+    d->textPen = pen;
+}
+
+QPen Label::pen() const
+{
+    return d->textPen;
+}
+
 void Label::paint(QPainter *p, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     Q_UNUSED(option);
     Q_UNUSED(widget);
 
-    /* TODO:  Add config parameters, like text color, text alignment, and brush. */
-    p->setPen(QPen(Qt::black, 1));
-    p->drawText(localGeometry(), Qt::AlignCenter | Qt::TextWordWrap, d->text);
+    p->setPen(d->textPen);
+    p->drawText(localGeometry(), d->alignment | Qt::TextWordWrap, d->text);
 }
 
 }

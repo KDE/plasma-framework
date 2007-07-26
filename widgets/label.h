@@ -79,6 +79,26 @@ class PLASMA_EXPORT Label : public Plasma::Widget
         QString text() const;
 
         /**
+         * Sets the alignment of the displayed text.
+         */
+        void setAlignment(Qt::Alignment align);
+
+        /**
+         * Returns the alignment of the displayed text.
+         */
+        Qt::Alignment alignment() const;
+
+        /**
+         * Sets the pen used to paint the text.
+         */
+        void setPen(const QPen& pen);
+
+        /**
+         * Returns the pen used to paint the text.
+         */
+        QPen pen() const;
+
+        /**
          * Paint function.
          */
         void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
