@@ -157,41 +157,7 @@ void GLApplet::paintInterface(QPainter *painter,
     Q_ASSERT(d->pbuf);
     if (!d->dummy->isValid() ||
         !d->pbuf->isValid()) {
-        //FIXME: this is evil hand rendering
-        //       svg would be nicer. or even better a global
-        //       way of saying "this applet can't run on this machine"
-        QFont font("ComicSans", 10);
-        QRectF boxRect = boundingRect();
-        QPainterPath frame;
-        frame.addRoundRect(boxRect, 25);
-        QPainterPath header = headerPath(boxRect, 25);
-        painter->setRenderHint(QPainter::Antialiasing);
-        painter->setRenderHint(QPainter::SmoothPixmapTransform);
-
-        painter->setPen(Qt::black);
-        painter->setBrush(QBrush(Qt::white));
-        painter->drawPath(frame);
-
-        painter->save();
-        painter->setPen(QPen(Qt::NoPen));
-        painter->setBrush(QColor(120, 255, 185));
-        painter->drawPath(header);
-        painter->restore();
-
-        painter->setPen(QPen(Qt::black));
-        font.setBold(true);
-        painter->setFont(font);
-        painter->drawText(QPointF(boxRect.x()+10, boxRect.y()+15),
-                          i18n("Error"));
-
-        painter->setPen(QPen(Qt::black));
-        font.setPointSize(8);
-        font.setBold(false);
-        painter->setFont(font);
-
-        painter->drawText(QPointF(boxRect.x()+10,
-                                  boxRect.y()+30),
-                          i18n("Your machine doesn't support OpenGL applets."));
+        setFailedToLaunch(true, i18n("Your machine doesn't support OpenGL applets."));
         return;
     }
     d->pbuf->makeCurrent();
