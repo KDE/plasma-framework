@@ -37,6 +37,7 @@ BoxLayout::BoxLayout(LayoutItem *parent)
     : Layout(parent),
       d(new Private)
 {
+    parent->setLayout(this);
 }
 
 BoxLayout::~BoxLayout()
