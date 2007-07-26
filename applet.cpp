@@ -87,6 +87,9 @@ public:
 
     void init(Applet* applet)
     {
+        applet->setImmutable(applet->globalConfig().isImmutable() ||
+                             applet->config().isImmutable());
+
         if (!appletDescription.isValid()) {
             applet->setFailedToLaunch(true);
             return;
@@ -126,9 +129,6 @@ public:
                 }
             }
         }
-
-        applet->setImmutable(applet->globalConfig().isImmutable() ||
-                             applet->config().isImmutable());
     }
 
     void paintBackground(QPainter* p, Applet* q)
