@@ -70,7 +70,7 @@ GLApplet::GLApplet(QGraphicsItem *parent,
 {
     if (!d->dummy->isValid() ||
         !d->pbuf->isValid()) {
-        setFailedToLaunch(true, i18n("Your machine doesn't support OpenGL applets."));
+        setFailedToLaunch(true, i18n("This system does not support OpenGL applets."));
     }
 }
 
