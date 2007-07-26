@@ -66,12 +66,12 @@ QSizeF HBoxLayout::maximumSize() const
 	return QSizeF();
 }
 
-bool HBoxLayout::hasHeightForWidth() const
+bool HBoxLayout::hasWidthForHeight() const
 {
 	return true;
 }
 
-qreal HBoxLayout::heightForWidth(qreal w) const
+qreal HBoxLayout::widthForHeight(qreal w) const
 {
 	return qreal();
 }

@@ -55,8 +55,8 @@ class PLASMA_EXPORT HBoxLayout : public Layout
 		QSizeF minimumSize() const;
 		QSizeF maximumSize() const;
 
-		bool hasHeightForWidth() const;
-		qreal heightForWidth(qreal w) const;
+		bool hasWidthForHeight() const;
+		qreal widthForHeight(qreal w) const;
 
 		QRectF geometry() const;
 		void setGeometry(const QRectF& geometry);
