@@ -169,6 +169,7 @@ public:
         background->paint(p, QRect(rightOffset, bottomOffset, rightWidth, bottomHeight), "bottomright");
 
         QPixmap left(leftWidth, leftHeight);
+        left.fill(Qt::transparent);
         {
             QPainter sidePainter(&left);
             sidePainter.setCompositionMode(QPainter::CompositionMode_Source);
@@ -177,6 +178,7 @@ public:
         p->drawTiledPixmap(QRect(leftOffset, contentTop, leftWidth, contentHeight), left);
 
         QPixmap right(rightWidth, leftHeight);
+        right.fill(Qt::transparent);
         {
             QPainter sidePainter(&right);
             sidePainter.setCompositionMode(QPainter::CompositionMode_Source);
@@ -186,6 +188,7 @@ public:
 
 
         QPixmap top(topWidth, topHeight);
+        top.fill(Qt::transparent);
         {
             QPainter sidePainter(&top);
             sidePainter.setCompositionMode(QPainter::CompositionMode_Source);
@@ -194,6 +197,7 @@ public:
         p->drawTiledPixmap(QRect(contentLeft, topOffset, contentWidth, topHeight), top);
 
         QPixmap bottom(topWidth, bottomHeight);
+        bottom.fill(Qt::transparent);
         {
             QPainter sidePainter(&bottom);
             sidePainter.setCompositionMode(QPainter::CompositionMode_Source);
