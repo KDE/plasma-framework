@@ -494,11 +494,11 @@ void Applet::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
         d->paintHover(painter, this);
     } else if (zoomLevel == scalingFactor(Plasma::GroupZoom)) { // Show Groups + Applet outline
         //TODO: make pretty.
-        painter->drawRoundRect(boundingRect());
-        int midX = x() + (boundingRect().width() / 2);
-        int midY = y() + (boundingRect().height() / 2);
-        //int iconSize = KIconLoader().currentSize(Desktop);
-        KIcon(icon()).paint(painter, midX, midY, 64, 64);
+        painter->fillRect(boundingRect(), QBrush(QColor(20, 20, 20, 200)));
+        int iconDim = KIconLoader().currentSize(K3Icon::Desktop);
+        int midX = (boundingRect().width() / 2) - (iconDim / 2);
+        int midY = (boundingRect().height() / 2 )- (iconDim / 2);
+        KIcon(icon()).paint(painter, midX, midY, iconDim, iconDim);
     }/*  else if (zoomLevel == scalingFactor(Plasma::OverviewZoom)) { //Show Groups only
     } */
 }
