@@ -494,6 +494,17 @@ QRectF Applet::boundingRect () const
 
 }
 
+QColor Applet::color() const
+{
+    // TODO: add more colors for more categories and
+    // maybe read from config?
+    if (category() == "Date and Time") {
+        return QColor(30, 60, 255, 200);
+    } else {
+        return QColor(20, 20, 20, 200);
+    }
+}
+
 void Applet::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     Q_UNUSED(widget)
@@ -511,7 +522,8 @@ void Applet::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
         d->paintHover(painter, this);
     } else if (zoomLevel == scalingFactor(Plasma::GroupZoom)) { // Show Groups + Applet outline
         //TODO: make pretty.
-        painter->fillRect(boundingRect(), QBrush(QColor(20, 20, 20, 200)));
+        painter->setBrush(QBrush(color(), Qt::SolidPattern));
+        painter->drawRoundRect(boundingRect());
         int iconDim = KIconLoader().currentSize(K3Icon::Desktop);
         int midX = (boundingRect().width() / 2) - (iconDim / 2);
         int midY = (boundingRect().height() / 2 )- (iconDim / 2);

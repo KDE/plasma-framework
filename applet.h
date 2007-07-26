@@ -306,6 +306,11 @@ class PLASMA_EXPORT Applet : public QObject, public Widget
          * .desktop file.
          */
         QString category() const;
+        
+        /**
+         * Returns the color corresponding to the applet's category.
+         */
+        QColor color() const;
 
         /**
          * Get the category of the given applet
