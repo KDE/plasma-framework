@@ -170,6 +170,18 @@ class Svg::Private
             return elementSize.toSize();
         }
 
+        QRect elementRect(const QString& elementId)
+        {
+            createRenderer();
+            QRectF elementRect = renderer->boundsOnElement(elementId);
+            QSizeF naturalSize = renderer->defaultSize();
+            qreal dx = size.width() / naturalSize.width();
+            qreal dy = size.height() / naturalSize.height();
+
+            return QRect(elementRect.x() * dx, elementRect.y() * dy,
+                         elementRect.width() * dx, elementRect.height() * dy);
+        }
+
         static QHash<QString, SharedSvgRenderer::Ptr> renderers;
         SharedSvgRenderer::Ptr renderer;
         QString themePath;
@@ -236,6 +248,11 @@ void Svg::resize()
 QSize Svg::elementSize(const QString& elementId) const
 {
     return d->elementSize(elementId);
+}
+
+QRect Svg::elementRect(const QString& elementId) const
+{
+    return d->elementRect(elementId);
 }
 
 bool Svg::elementExists(const QString& elementId) const

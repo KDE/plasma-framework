@@ -138,9 +138,16 @@ class PLASMA_EXPORT Svg : public QObject
         /**
          * Size of a given element
          * @arg elementId the id of the element to check
-         * @return the current size of a given element
+         * @return the current size of a given element, given the current size of the Svg
          **/
         Q_INVOKABLE QSize elementSize( const QString& elementId ) const;
+
+        /**
+         * The bounding rect of a given element
+         * @arg elementId the id of the element to check
+         * @return the current rect of a given element, given the current size of the Svg
+         **/
+        Q_INVOKABLE QRect elementRect(const QString& elementId) const;
 
         /**
          * Check when an element exists in the loaded Svg
