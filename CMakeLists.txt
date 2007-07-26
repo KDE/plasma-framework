@@ -30,6 +30,7 @@ set(plasma_LIB_SRCS
     karambamanager.cpp
     widgets/boxlayout.cpp
     widgets/checkbox.cpp
+    widgets/hboxlayout.cpp
     widgets/icon.cpp
     widgets/lineedit.cpp
     widgets/pushbutton.cpp
@@ -94,6 +95,7 @@ install(FILES
 
 install(FILES
     widgets/boxlayout.h
+    widgets/hboxlayout.h
     widgets/icon.h
     widgets/layout.h
     widgets/layoutitem.h

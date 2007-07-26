@@ -56,8 +56,6 @@ class PLASMA_EXPORT VBoxLayout : public BoxLayout
 
 		QSizeF sizeHint() const;
 
-		QSizeF size() const;
-
 	private:
 		class Private;
 		Private *const d;

@@ -23,7 +23,7 @@
 #include <QtCore/QSizeF>
 
 #include <plasma/plasma_export.h>
-#include <plasma/widgets/layout.h>
+#include <plasma/widgets/boxlayout.h>
 
 namespace Plasma
 {
@@ -36,7 +36,7 @@ namespace Plasma
  *
  * This class implements a Horizontal Box Layout, it just lays items horizontally, from left to right.
  */
-class PLASMA_EXPORT HBoxLayout : public Layout
+class PLASMA_EXPORT HBoxLayout : public BoxLayout
 {
 	public:
 
@@ -52,31 +52,12 @@ class PLASMA_EXPORT HBoxLayout : public Layout
 
 		Qt::Orientations expandingDirections() const;
 
-		QSizeF minimumSize() const;
-		QSizeF maximumSize() const;
-
 		bool hasWidthForHeight() const;
 		qreal widthForHeight(qreal w) const;
 
-		QRectF geometry() const;
 		void setGeometry(const QRectF& geometry);
 
 		QSizeF sizeHint() const;
-
-		int count() const;
-
-		bool isEmpty() const;
-
-        void insertItem(int index, LayoutItem *l);
-		void addItem(LayoutItem *l);
-
-		void removeItem(LayoutItem *l);
-
-		int indexOf(LayoutItem *l) const;
-		LayoutItem *itemAt(int i) const;
-		LayoutItem *takeAt(int i);
-
-		QSizeF size() const;
 
 	private:
 		class Private;

@@ -25,45 +25,19 @@
 namespace Plasma
 {
 
-class HBoxLayout::Private
-{
-	public:
-		Private() {}
-		~Private() {}
-
-		QRectF geometry;
-		QList<LayoutItem *> childList;
-};
-
-
 HBoxLayout::HBoxLayout(LayoutItem *parent)
-	: Layout(parent),
-	  d(new Private)
+	: BoxLayout(parent),
+	  d(0)
 {
 }
 
 HBoxLayout::~HBoxLayout()
 {
-    foreach (LayoutItem *l, d->childList) {
-        l->resetLayout();
-    }
-
-    delete d;
 }
 
 Qt::Orientations HBoxLayout::expandingDirections() const
 {
 	return Qt::Horizontal;
-}
-
-QSizeF HBoxLayout::minimumSize() const
-{
-    return QSizeF();
-}
-
-QSizeF HBoxLayout::maximumSize() const
-{
-	return QSizeF();
 }
 
 bool HBoxLayout::hasWidthForHeight() const
@@ -73,12 +47,8 @@ bool HBoxLayout::hasWidthForHeight() const
 
 qreal HBoxLayout::widthForHeight(qreal w) const
 {
+    Q_UNUSED(w);
 	return qreal();
-}
-
-QRectF HBoxLayout::geometry() const
-{
-	return d->geometry;
 }
 
 void HBoxLayout::setGeometry(const QRectF& geometry)
@@ -88,24 +58,24 @@ void HBoxLayout::setGeometry(const QRectF& geometry)
         return;
     }
 
-    kDebug() << this << " Geometry process " << geometry << " for " << d->childList.count() << " childrens"<< endl;
+    //kDebug() << this << " Geometry process " << geometry << " for " << children().count() << " childrens"<< endl;
 
-    QList<LayoutItem *> children;
+    QList<LayoutItem *> fixedChildren;
     QList<LayoutItem *> expandingChildren;
     QList<QSizeF> sizes;
     QSizeF available = geometry.size() - QSizeF(2 * margin(), 2 * margin());
 
-    foreach (LayoutItem *l, d->childList) {
+    foreach (LayoutItem *l, children()) {
         kDebug() << "testing layout item " << l << endl;
         if (l->expandingDirections() & Qt::Horizontal) {
             expandingChildren += l;
         } else {
 
-            children += l;
+            fixedChildren += l;
         }
     }
 
-    foreach (LayoutItem *l, children) {
+    foreach (LayoutItem *l, fixedChildren) {
         QSizeF hint = l->sizeHint();
         sizes.insert(indexOf(l), QSizeF(available.width(), hint.height()));
         available -= QSizeF(hint.width() + spacing(), 0.0f);
@@ -122,16 +92,13 @@ void HBoxLayout::setGeometry(const QRectF& geometry)
     start += QPointF(margin(), spacing());
 
     for (int i = 0; i < sizes.size(); i++) {
-
         LayoutItem *l = itemAt(i);
-
         kDebug() << "Setting Geometry for child " << l << " to " << QRectF(start, sizes[i]) << endl;
-
         l->setGeometry(QRectF(start, sizes[i]));
         start += QPointF(sizes[i].width() + spacing(), 0.0);
     }
 
-    d->geometry = geometry;
+    BoxLayout::setGeometry(geometry);
 }
 
 QSizeF HBoxLayout::sizeHint() const
@@ -139,7 +106,7 @@ QSizeF HBoxLayout::sizeHint() const
 	qreal hintHeight = 0.0;
 	qreal hintWidth = 0.0;
 
-	foreach(LayoutItem *l, d->childList) {
+	foreach(LayoutItem *l, children()) {
 
 		QSizeF hint = l->sizeHint();
 
@@ -148,66 +115,6 @@ QSizeF HBoxLayout::sizeHint() const
 	}
 
 	return QSizeF(hintWidth, hintHeight);
-}
-
-int HBoxLayout::count() const
-{
-	return d->childList.count();
-}
-
-bool HBoxLayout::isEmpty() const
-{
-	return count() == 0;
-}
-
-void HBoxLayout::insertItem(int index, LayoutItem *l)
-{
-    if (!l) {
-        return;
-    }
-
-    l->setLayout(this);
-    d->childList.insert(index, l);
-    setGeometry(geometry());
-}
-
-void HBoxLayout::addItem(LayoutItem *l)
-{
-    if (!l) {
-        return;
-    }
-
-    l->setLayout(this);
-    d->childList.append(l);
-    qDebug("Added Child LayoutItem : %p", l);
-    setGeometry(geometry());
-}
-
-void HBoxLayout::removeItem(LayoutItem *l)
-{
-	d->childList.removeAll(l);
-}
-
-int HBoxLayout::indexOf(LayoutItem *l) const
-{
-	return d->childList.indexOf(l);
-}
-
-LayoutItem *HBoxLayout::itemAt(int i) const
-{
-	return d->childList[i];
-}
-
-LayoutItem *HBoxLayout::takeAt(int i)
-{
-	return d->childList.takeAt(i);
-
-	setGeometry(geometry());
-}
-
-QSizeF HBoxLayout::size() const
-{
-	return geometry().size();
 }
 
 }
