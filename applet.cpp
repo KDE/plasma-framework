@@ -65,7 +65,8 @@ public:
           scriptEngine(0),
           immutable(false),
           hasConfigurationInterface(false),
-          failed(false)
+          failed(false),
+          canMove(true)
     {
         if (appletId == 0) {
             appletId = nextId();
@@ -259,6 +260,7 @@ public:
     bool immutable : 1;
     bool hasConfigurationInterface : 1;
     bool failed : 1;
+    bool canMove : 1;
 };
 
 uint Applet::Private::s_maxAppletId = 0;
@@ -757,6 +759,15 @@ void Applet::setLockApplet(bool lock)
   slotLockApplet(lock);
 }
 
+bool Applet::canBeMoved() const
+{
+  return d->canMove;  
+}
+
+void Applet::setCanBeMoved( bool move)
+{
+  d->canMove = move;
+}
 
 } // Plasma namespace
 

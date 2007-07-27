@@ -389,6 +389,9 @@ class PLASMA_EXPORT Applet : public QObject, public Widget
 
 	void setLockApplet(bool lock);
 
+	bool canBeMoved() const;
+
+	void setCanBeMoved( bool move);
 
     Q_SIGNALS:
         /**
