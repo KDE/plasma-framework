@@ -66,12 +66,10 @@ void HBoxLayout::setGeometry(const QRectF& geometry)
     QSizeF available = geometry.size() - QSizeF(2 * margin(), 2 * margin());
 
     foreach (LayoutItem *l, children()) {
-        kDebug() << "testing layout item " << l << endl;
         if (l->expandingDirections() & Qt::Horizontal) {
-            expandingChildren += l;
+            expandingChildren.append(l);
         } else {
-
-            fixedChildren += l;
+            fixedChildren.append(l);
         }
     }
 
@@ -81,10 +79,12 @@ void HBoxLayout::setGeometry(const QRectF& geometry)
         available -= QSizeF(hint.width() + spacing(), 0.0f);
     }
 
-    qreal expandWidth = (available.width() - ((expandingChildren.count() - 1) * spacing())) / expandingChildren.count();
+    qreal expandWidth = 0;
+    if (expandingChildren.count() > 0) {
+        expandWidth = (available.height() - ((expandingChildren.count() - 1) * spacing())) / expandingChildren.count();
+    }
 
     foreach (LayoutItem *l, expandingChildren) {
-
         sizes.insert(indexOf(l), QSizeF(expandWidth, available.height()));
     }
 

@@ -17,6 +17,9 @@
  */
 
 #include "layoutitem.h"
+
+#include <KDebug>
+
 #include "layout.h"
 
 namespace Plasma
@@ -26,27 +29,30 @@ class LayoutItem::Private
 {
     public:
         Private()
-            : layout(0)
+            : layout(0),
+              managingLayout(0)
         {
         }
 
         ~Private() {}
 
         Layout* layout;
+        Layout* managingLayout;
 };
 
 
 LayoutItem::LayoutItem()
-    : d(new Private)
+    : d(new Private())
 {
 }
 
 LayoutItem::~LayoutItem()
 {
-    if (d->layout) {
-        d->layout->removeItem(this);
+    if (d->managingLayout) {
+        d->managingLayout->removeItem(this);
     }
 
+    delete d->layout;
     delete d;
 }
 
@@ -70,15 +76,11 @@ qreal LayoutItem::widthForHeight(qreal h) const
 	return 0.0;
 }
 
-void LayoutItem::resetLayout()
-{
-    d->layout = 0;
-}
-
 void LayoutItem::setLayout(Layout* layout)
 {
-    if (d->layout) {
-        d->layout->removeItem(this);
+    if (d->layout && layout) {
+        kDebug() << k_funcinfo << " already have a layout." << endl;
+        return;
     }
 
     d->layout = layout;
@@ -87,6 +89,27 @@ void LayoutItem::setLayout(Layout* layout)
 Layout* LayoutItem::layout()
 {
     return d->layout;
+}
+
+void LayoutItem::setManagingLayout(Layout* layout)
+{
+    if (d->managingLayout) {
+        d->managingLayout->removeItem(this);
+    }
+
+    d->managingLayout = layout;
+}
+
+void LayoutItem::unsetManagingLayout(Layout* layout)
+{
+    if (d->managingLayout == layout) {
+        d->managingLayout = 0;
+    }
+}
+
+Layout* LayoutItem::managingLayout()
+{
+    return d->managingLayout;
 }
 
 }

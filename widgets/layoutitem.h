@@ -44,7 +44,7 @@ class PLASMA_EXPORT LayoutItem
         /**
          * Constructor.
          */
-        LayoutItem();
+        explicit LayoutItem();
 
         /**
          * Virtual Destructor.
@@ -106,27 +106,36 @@ class PLASMA_EXPORT LayoutItem
         virtual QSizeF sizeHint() const = 0;
 
         /**
-         * Resets the layout to 0 and doesn't notify the previous layout.
-         * Should only be used by the current layout when relinquishing the item,
-         * e.g. during layout destruction.
-         */
-        void resetLayout();
-
-        /**
-         * Sets the layout so that the LayoutItem may inform the layout of its
-         * deletion. Should only be used by the layout it is added to.
-         *
-         * If the layout item is currently associated with another layout, it will
-         * first remove itself from that layout.
+         * Sets the layout that will manage children items
          *
          * @param layout The Layout that this LayoutItem will be managed by.
          */
         void setLayout(Layout* layout);
 
         /**
-         * Returns the layout this item is currently associated with.
+         * @return the layout this item is currently associated with.
          */
         Layout* layout();
+
+        /**
+         * Sets the layout that manages this item's geometry
+         *
+         * @param layout the layout that manage this item's geometry
+         **/
+        void setManagingLayout(Layout* layout);
+
+        /**
+         * Resets the layout that manges this item's geometry if it is the
+         * currently associated layout
+         *
+         * @param layout to unset
+         **/
+        void unsetManagingLayout(Layout* layout);
+
+        /**
+         * @return the layout that manages this item's geometry, or 0 if none
+         **/
+        Layout* managingLayout();
 
     private:
         class Private;

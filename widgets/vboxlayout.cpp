@@ -55,10 +55,11 @@ void VBoxLayout::setGeometry(const QRectF& geometry)
 {
     if (!geometry.isValid() || geometry.isEmpty()) {
         kDebug() << "Invalid Geometry " << geometry << endl;
+        BoxLayout::setGeometry(geometry);
         return;
     }
 
-    kDebug() << this << " Geometry process " << geometry << " for " << children().count() << " childrens"<< endl;
+    kDebug() << this << " Geometry process " << geometry << " for " << children().count() << " children"<< endl;
 
     QList<LayoutItem *> fixedChildren;
     QList<LayoutItem *> expandingChildren;
@@ -68,9 +69,9 @@ void VBoxLayout::setGeometry(const QRectF& geometry)
     foreach (LayoutItem *l, children()) {
         kDebug() << "testing layout item " << l << endl;
         if (l->expandingDirections() & Qt::Vertical) {
-            expandingChildren += l;
+            expandingChildren.append(l);
         } else {
-            fixedChildren += l;
+            fixedChildren.append(l);
         }
     }
 
@@ -80,7 +81,11 @@ void VBoxLayout::setGeometry(const QRectF& geometry)
         available -= QSizeF(0.0, hint.height() + spacing());
     }
 
-    qreal expandHeight = (available.height() - ((expandingChildren.count() - 1) * spacing())) / expandingChildren.count();
+    qreal expandHeight = 0;
+
+    if (expandingChildren.count() > 0) {
+        expandHeight = (available.height() - ((expandingChildren.count() - 1) * spacing())) / expandingChildren.count();
+    }
 
     foreach (LayoutItem *l, expandingChildren) {
         sizes.insert(indexOf(l),QSizeF(available.width(), expandHeight));

@@ -162,16 +162,6 @@ class PLASMA_EXPORT Widget : public QGraphicsItem,
         void resize(qreal w, qreal h);
 
         /**
-         * Sets the Layout that will manage this Widget's childrens.
-         */
-        void setLayout(Layout *l);
-
-        /**
-         * Returns the Layout associated with this Widget.
-         */
-        Layout *layout() const;
-
-        /**
          * Returns the parent of this Widget.
          */
         Widget *parent() const;

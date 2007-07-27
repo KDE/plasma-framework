@@ -25,27 +25,35 @@ namespace Plasma
 
 class Layout::Private
 {
-	public:
-		Private() : margin(10.0), spacing(10.0), parent(0) {}
-		~Private() {}
+    public:
+        Private(LayoutItem* parent)
+            : margin(12.0),
+              spacing(6.0),
+              parent(parent)
+        {
+        }
 
-		qreal margin;
-		qreal spacing;
+        ~Private() {}
 
-		LayoutItem *parent;
+        qreal margin;
+        qreal spacing;
+
+        LayoutItem *parent;
 };
 
 
 Layout::Layout(LayoutItem *parent)
-	: LayoutItem(),
-	  d(new Private)
+    : LayoutItem(),
+      d(new Private(parent))
 {
-	d->parent = parent;
 }
 
 Layout::~Layout()
 {
-        delete d;
+    if (parent()) {
+        parent()->setLayout(0);
+    }
+    delete d;
 }
 
 qreal Layout::margin() const

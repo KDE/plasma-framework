@@ -33,8 +33,7 @@ class Widget::Private
 {
     public:
         Private()
-            : parent(0),
-              layout(0)
+            : parent(0)
         { }
         ~Private() { }
 
@@ -43,7 +42,6 @@ class Widget::Private
         QSizeF maximumSize;
 
         Widget *parent;
-        Layout *layout;
         QList<Widget *> childList;
 };
 
@@ -139,9 +137,7 @@ void Widget::setGeometry(const QRectF& geometry)
 void Widget::updateGeometry()
 {
     if (layout()) {
-
         kDebug() << (void *) this << " updating geometry to " << size() << endl;
-
         layout()->setGeometry(geometry());
     }
 }
@@ -178,20 +174,6 @@ void Widget::resize(const QSizeF& size)
 void Widget::resize(qreal w, qreal h)
 {
     resize(QSizeF(w, h));
-}
-
-void Widget::setLayout(Layout *l)
-{
-    if(!d->layout) {
-        d->layout = l;
-    } else {
-        kDebug() << "Widget " << this << "already has a layout!" << endl;
-    }
-}
-
-Layout *Widget::layout() const
-{
-    return d->layout;
 }
 
 Widget *Widget::parent() const

@@ -37,15 +37,16 @@ BoxLayout::BoxLayout(LayoutItem *parent)
     : Layout(parent),
       d(new Private)
 {
-    parent->setLayout(this);
+    if (parent) {
+        parent->setLayout(this);
+    }
 }
 
 BoxLayout::~BoxLayout()
 {
-    foreach (LayoutItem *l, d->childList) {
-        l->resetLayout();
+    foreach (LayoutItem* item, children()) {
+        item->unsetManagingLayout(this);
     }
-
     delete d;
 }
 
@@ -90,7 +91,7 @@ void BoxLayout::insertItem(int index, LayoutItem *l)
         return;
     }
 
-    l->setLayout(this);
+    //l->setLayout(this);
     d->childList.insert(index, l);
     setGeometry(geometry());
 }
@@ -101,14 +102,18 @@ void BoxLayout::addItem(LayoutItem *l)
         return;
     }
 
-    l->setLayout(this);
+    l->setManagingLayout(this);
     d->childList.append(l);
-    qDebug("Added Child LayoutItem : %p", l);
     setGeometry(geometry());
 }
 
 void BoxLayout::removeItem(LayoutItem *l)
 {
+    if (!l) {
+        return;
+    }
+
+    l->unsetManagingLayout(this);
     d->childList.removeAll(l);
     setGeometry(geometry());
 }
