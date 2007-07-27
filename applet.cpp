@@ -542,7 +542,7 @@ void Applet::paintInterface(QPainter *painter, const QStyleOptionGraphicsItem *o
     if (d->scriptEngine) {
         d->scriptEngine->paintInterface(painter, option);
     } else {
-        kDebug() << "Applet::paintInterface() default impl" << endl;
+        //kDebug() << "Applet::paintInterface() default impl" << endl;
     }
 }
 
