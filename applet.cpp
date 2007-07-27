@@ -207,17 +207,6 @@ public:
         p->drawTiledPixmap(QRect(contentLeft, bottomOffset, contentWidth, bottomHeight), bottom);
 
         background->paint(p, QRect(contentLeft, contentTop, contentWidth + 1, contentHeight + 1), "center");
-
-#if 0
-        // this could be used to draw a dynamic shadow
-        delete p;
-
-        QImage image2(image);
-        image.setAlphaChannel(image2.createHeuristicMask());
-        shadowBlur(image, 1);
-        p2->drawImage(0, 0, image);
-        p2->drawImage(0, 0, image2);
-#endif
     }
 
     void paintHover(QPainter* painter, Applet* q)
