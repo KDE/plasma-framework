@@ -95,6 +95,9 @@ class Phase::Private
                     break;
                 case Phase::Disappear:
                     animator->disappear(amount, state->item);
+                    if (amount >= 1) {
+                        state->item->hide();
+                    }
                     break;
                 case Phase::Activate:
                     animator->activate(amount, state->item);
@@ -104,14 +107,15 @@ class Phase::Private
                     break;
             }
         }
-          void performMovement(qreal amount, const MovementState* state)
+
+        void performMovement(qreal amount, const MovementState* state)
         {
             switch (state->movement) {
                 case Phase::SlideIn:
                     animator->slideIn(amount, state->item, state->destination);
                     break;
                 case Phase::SlideOut:
-                    animator->slideOut(amount, state->item,state->destination);
+                    animator->slideOut(amount, state->item, state->destination);
                     break;
             }
         }
@@ -376,6 +380,7 @@ void Phase::timerEvent(QTimerEvent *event)
             } else {
                 d->performAnimation(1, state);
                 d->animatedItems.erase(d->animatedItems.find(state->item));
+                emit animationComplete(state->item, state->animation);
                 delete state;
             }
         } else {

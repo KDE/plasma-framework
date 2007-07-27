@@ -111,16 +111,17 @@ void Animator::frameAppear(qreal frame, QGraphicsItem* item, const QRegion& draw
 
 void Animator::slideIn(qreal progress, QGraphicsItem *item, const QPoint &destination)
 {
-    kDebug()<<k_funcinfo<<endl;
+    //FIXME: rewrite
     Q_UNUSED(progress);
-    item->translate(-destination.x(),-destination.y());
+    item->translate(-destination.x(), -destination.y());
 }
 
 void Animator::slideOut(qreal progress, QGraphicsItem *item, const QPoint &destination)
 {
+    //FIXME: rewrite
     Q_UNUSED(progress);
     //kDebug()<<k_funcinfo<<endl;
-    item->translate(destination.x(),destination.y());
+    item->translate(destination.x(), destination.y());
 }
 
 void Animator::renderBackground(QImage& background)
