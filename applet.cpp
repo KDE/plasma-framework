@@ -63,6 +63,7 @@ public:
           background(0),
           failureText(0),
           scriptEngine(0),
+          kioskImmutable(false),
           immutable(false),
           hasConfigurationInterface(false),
           failed(false),
@@ -88,8 +89,9 @@ public:
 
     void init(Applet* applet)
     {
-        applet->setImmutable(applet->globalConfig().isImmutable() ||
-                             applet->config().isImmutable());
+        kioskImmutable = applet->globalConfig().isImmutable() ||
+                         applet->config().isImmutable();
+        applet->setImmutable(kioskImmutable);
 
         if (!appletDescription.isValid()) {
             applet->setFailedToLaunch(true);
@@ -246,6 +248,7 @@ public:
     Plasma::Svg *background;
     Plasma::LineEdit *failureText;
     ScriptEngine* scriptEngine;
+    bool kioskImmutable : 1;
     bool immutable : 1;
     bool hasConfigurationInterface : 1;
     bool failed : 1;
@@ -385,7 +388,7 @@ QString Applet::category(const QString& appletName)
 
 bool Applet::isImmutable() const
 {
-    return d->immutable;
+    return d->immutable || d->kioskImmutable;
 }
 
 void Applet::setImmutable(bool immutable)
@@ -394,7 +397,7 @@ void Applet::setImmutable(bool immutable)
     QGraphicsItem::GraphicsItemFlags f = flags();
     if (immutable) {
         f ^= QGraphicsItem::ItemIsMovable;
-    } else if (!scene() || !static_cast<Corona*>(scene())->isImmutable()) {
+    } else if (!d->kioskImmutable && (!scene() || !static_cast<Corona*>(scene())->isImmutable())) {
         f |= QGraphicsItem::ItemIsMovable;
     }
     setFlags(f);
