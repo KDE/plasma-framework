@@ -65,14 +65,24 @@ class PLASMA_EXPORT Widget : public QGraphicsItem,
         virtual Qt::Orientations expandingDirections() const;
 
         /**
-         * Returns the minimum size of this Widget and it's contents.
+         * Sets the minimum size of this Widget.
          */
-        virtual QSizeF minimumSize() const;
+        void setMinimumSize(const QSizeF& size);
+
+        /**
+         * Returns the minimum size of this Widget.
+         */
+        QSizeF minimumSize() const;
+
+        /**
+         * Sets the maximum size of this Widget.
+         */
+        void setMaximumSize(const QSizeF& size);
 
         /**
          * Returns the maximum size of this Widget.
          */
-        virtual QSizeF maximumSize() const;
+        QSizeF maximumSize() const;
 
         /**
          * Returns true whatever this Widget can use height-for-width layout management,

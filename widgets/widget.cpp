@@ -39,6 +39,8 @@ class Widget::Private
         ~Private() { }
 
         QSizeF size;
+        QSizeF minimumSize;
+        QSizeF maximumSize;
 
         Widget *parent;
         Layout *layout;
@@ -69,14 +71,24 @@ Qt::Orientations Widget::expandingDirections() const
     return 0;
 }
 
-QSizeF Widget::maximumSize() const
+void Widget::setMinimumSize(const QSizeF& size)
 {
-    return QSizeF();
+    d->minimumSize = size;
 }
 
 QSizeF Widget::minimumSize() const
 {
-    return QSizeF(0.0, 0.0);
+    return d->minimumSize;
+}
+
+void Widget::setMaximumSize(const QSizeF& size)
+{
+    d->maximumSize = size;
+}
+
+QSizeF Widget::maximumSize() const
+{
+    return d->maximumSize;
 }
 
 bool Widget::hasHeightForWidth() const
