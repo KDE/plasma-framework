@@ -39,6 +39,8 @@ bool Label::hasHeightForWidth() const
 
 qreal Label::heightForWidth(qreal w) const
 {
+    Q_UNUSED(w);
+    //FIXME: this looks a bit odd?
     return 0;
 }
 

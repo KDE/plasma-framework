@@ -105,7 +105,7 @@ class PLASMA_EXPORT Label : public Plasma::Widget
 
     private:
         class Private;
-        Private *d;
+        Private * const d;
 };
 
 }
