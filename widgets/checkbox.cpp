@@ -99,7 +99,6 @@ void CheckBox::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
    // }
 
     if (d->hasMouse) {
-
         options.state |= QStyle::State_MouseOver;
         options.state |= QStyle::State_HasFocus;
         options.state |= QStyle::State_Sunken;
@@ -107,11 +106,16 @@ void CheckBox::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
         options.state |= QStyle::State_On;
     }
     widget-> style()->drawControl(QStyle::CE_CheckBox, &options, painter, widget);
-
 }
 
-void CheckBox::updated(const QString&, const DataEngine::Data&)
+void CheckBox::updated(const QString&, const DataEngine::Data& data)
 {
+    foreach (const QVariant& variant, data) {
+        if (variant.canConvert(QVariant::Bool)) {
+            setChecked(variant.toBool());
+            return;
+        }
+    }
 }
 
 void CheckBox::setText(const QString& text)
@@ -152,9 +156,9 @@ void CheckBox::setHeight(int h)
 void CheckBox::setWidth(int w)
 {
     if (!(w >= d->maxWidth)) {
-    prepareGeometryChange ();
-    d->width = w;
-    update();
+        prepareGeometryChange ();
+        d->width = w;
+        update();
     }
 }
 
@@ -166,9 +170,9 @@ QSize CheckBox::size() const
 void CheckBox::setSize(const QSize &s)
 {
     prepareGeometryChange ();
-  if (!d->maxWidth  >= s.width() ) {
+    if (!d->maxWidth  >= s.width() ) {
         d->width = s.width();
-  }
+    }
     d->height = s.height();
     update();
 }
@@ -178,18 +182,28 @@ void CheckBox::setMaximumWidth(int w)
     d->maxWidth= w;
 }
 
+Qt::CheckState CheckBox::checkState() const
+{
+    return d->state;
+}
+
+void CheckBox::setChecked(bool checked)
+{
+    d->state = checked ? Qt::Checked : Qt::Unchecked;
+}
+
 void CheckBox::setCheckState(Qt::CheckState state)
 {
     d->state = state;
 }
 
-void CheckBox::mouseMoveEvent (QGraphicsSceneMouseEvent * event)
+void CheckBox::mouseMoveEvent(QGraphicsSceneMouseEvent * event)
 {
     event->accept();
     d->hasMouse= false;
-
 }
-void CheckBox::mousePressEvent ( QGraphicsSceneMouseEvent * event )
+
+void CheckBox::mousePressEvent(QGraphicsSceneMouseEvent * event)
 {
     event->accept();
     d->down = true;
@@ -197,24 +211,23 @@ void CheckBox::mousePressEvent ( QGraphicsSceneMouseEvent * event )
 }
 
 
-void CheckBox::mouseReleaseEvent ( QGraphicsSceneMouseEvent * event )
+void CheckBox::mouseReleaseEvent(QGraphicsSceneMouseEvent * event)
 {
     event->accept();
-    
+
     if (d->hasMouse) {
-    if (d->state == Qt::Checked) {
-    d->state = Qt::Unchecked;
-    } else {
-        d->state = Qt::Checked;
+        if (d->state == Qt::Checked) {
+            d->state = Qt::Unchecked;
+        } else {
+            d->state = Qt::Checked;
         }
     }
     update();
     emit clicked();
-
 }
 
 
-void CheckBox::hoverMoveEvent ( QGraphicsSceneHoverEvent * event )
+void CheckBox::hoverMoveEvent(QGraphicsSceneHoverEvent * event)
 {
     event->accept();
     d->hasMouse= true;

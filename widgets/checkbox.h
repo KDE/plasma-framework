@@ -53,7 +53,8 @@ class PLASMA_EXPORT CheckBox : public QObject, public QGraphicsItem
         void setWidth(int width);
         void setHeight(int height);
         void setMaximumWidth(int maxwidth);
-        Qt::CheckState CheckState();
+        Qt::CheckState checkState() const;
+        void setChecked(bool checked);
         void setCheckState(Qt::CheckState state);
 
 
