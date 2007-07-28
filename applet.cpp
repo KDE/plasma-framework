@@ -579,8 +579,11 @@ Location Applet::location() const
 
 QSizeF Applet::contentSize() const
 {
-    //FIXME: this should be big enough to allow for the failure text?
-    return QSizeF(300, 300);
+    if (layout()) {
+        return layout()->sizeHint();
+    }
+
+    return QSizeF(0, 0);
 }
 
 QString Applet::globalName() const
@@ -752,34 +755,6 @@ Applet* Applet::loadApplet(const KPluginInfo& info, uint appletId, const QString
     }
 
     return loadApplet(info.pluginName(), appletId, args);
-}
-
-void Applet::slotLockApplet(bool lock)
-{
-    if(lock)
-       setFlags( flags()^QGraphicsItem::ItemIsMovable);
-    else
-       setFlags( flags() | QGraphicsItem::ItemIsMovable);
-}
-
-bool Applet::lockApplet() const
-{
-  return !(flags() & QGraphicsItem::ItemIsMovable);
-}
-
-void Applet::setLockApplet(bool lock)
-{
-  slotLockApplet(lock);
-}
-
-bool Applet::canBeMoved() const
-{
-  return d->canMove;  
-}
-
-void Applet::setCanBeMoved( bool move)
-{
-  d->canMove = move;
 }
 
 } // Plasma namespace
