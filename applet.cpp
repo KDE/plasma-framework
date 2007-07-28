@@ -492,10 +492,31 @@ QColor Applet::color() const
 {
     // TODO: add more colors for more categories and
     // maybe read from config?
-    if (category() == "Date and Time") {
-        return QColor(30, 60, 255, 200);
+    QString c = category();
+    int alpha = 200;
+    // Colors taken from Oxygen color palette
+    if (c == "Date and Time") {
+        return QColor(191, 94, 0, alpha);
+    } else if (c == "Environment & Weather") {
+        return QColor(191, 0, 0, alpha);
+    } else if (c == "Examples") {
+        return QColor(204, 0, 154, alpha);
+    } else if (c == "File System") {
+        return QColor(90, 0, 179, alpha);
+    } else if (c == "Graphics") {
+        return QColor(0, 0, 255, alpha);
+    } else if (c == "Language") {
+        return QColor(0, 191, 0, alpha);
+    } else if (c == "Mapping") {
+        return QColor(191, 245, 0, alpha);
+    } else if (c == "Online Services") {
+        return QColor(255, 213, 0, alpha);
+    } else if (c == "System Information") {
+        return QColor(0, 196, 204, alpha);
+    } else if (c == "Windows and Tasks") {
+        return QColor(255, 126, 0, alpha);
     } else {
-        return QColor(20, 20, 20, 200);
+        return QColor(136, 136, 136, alpha);
     }
 }
 
@@ -520,7 +541,7 @@ void Applet::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
         painter->drawRoundRect(boundingRect());
         int iconDim = KIconLoader().currentSize(K3Icon::Desktop);
         int midX = (boundingRect().width() / 2) - (iconDim / 2);
-        int midY = (boundingRect().height() / 2 )- (iconDim / 2);
+        int midY = (boundingRect().height() / 2) - (iconDim / 2);
         KIcon(icon()).paint(painter, midX, midY, iconDim, iconDim);
     }/*  else if (zoomLevel == scalingFactor(Plasma::OverviewZoom)) { //Show Groups only
     } */
