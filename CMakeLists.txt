@@ -42,7 +42,9 @@ set(plasma_LIB_SRCS
     widgets/layoutitem.cpp
     widgets/vboxlayout.cpp
     widgets/flash.cpp
-   )
+    widgets/label.cpp
+   
+)
 
 if(QT_QTOPENGL_FOUND AND OPENGL_FOUND)
 MESSAGE(STATUS "Adding support for OpenGL applets to libplasma")
@@ -110,6 +112,7 @@ install(FILES
     widgets/vboxlayout.h
     widgets/widget.h
     widgets/flash.h
+    widgets/label.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/plasma/widgets)
 
 install(FILES
