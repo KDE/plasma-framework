@@ -115,7 +115,7 @@ class PLASMA_EXPORT LayoutItem
         /**
          * @return the layout this item is currently associated with.
          */
-        Layout* layout();
+        Layout* layout() const;
 
         /**
          * Sets the layout that manages this item's geometry
@@ -135,7 +135,7 @@ class PLASMA_EXPORT LayoutItem
         /**
          * @return the layout that manages this item's geometry, or 0 if none
          **/
-        Layout* managingLayout();
+        Layout* managingLayout() const;
 
     private:
         class Private;

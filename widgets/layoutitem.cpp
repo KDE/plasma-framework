@@ -86,7 +86,7 @@ void LayoutItem::setLayout(Layout* layout)
     d->layout = layout;
 }
 
-Layout* LayoutItem::layout()
+Layout* LayoutItem::layout() const
 {
     return d->layout;
 }
@@ -107,7 +107,7 @@ void LayoutItem::unsetManagingLayout(Layout* layout)
     }
 }
 
-Layout* LayoutItem::managingLayout()
+Layout* LayoutItem::managingLayout() const
 {
     return d->managingLayout;
 }
