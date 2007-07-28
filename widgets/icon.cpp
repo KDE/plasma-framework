@@ -658,28 +658,34 @@ void Icon::mousePressEvent(QGraphicsSceneMouseEvent *event)
         action->event(event->type(), event->pos());
     }
 
+    d->state = Private::PressedState;
     QGraphicsItem::mousePressEvent(event);
 }
 
 void Icon::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
     bool inside = boundingRect().contains(event->pos());
-    bool wasClicked = d->state == Private::PressedState && inside;
+    Private::ButtonState was = d->state;
 
     if (inside) {
         d->state = Private::HoverState;
 
         foreach (IconAction *action, d->cornerActions) {
-            action->event(event->type(), event->pos());
+            if (action->event(event->type(), event->pos())) {
+                inside = false;
+                break;
+            }
         }
-
     } else {
         d->state = Private::NoState;
     }
 
-    if (wasClicked) {
+    if (was == Private::PressedState) {
         emit pressed(false);
-        emit clicked();
+
+        if (inside) {
+            emit clicked();
+        }
     }
 
     QGraphicsItem::mouseReleaseEvent(event);
