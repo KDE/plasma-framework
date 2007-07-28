@@ -32,9 +32,11 @@ set(plasma_LIB_SRCS
     widgets/checkbox.cpp
     widgets/hboxlayout.cpp
     widgets/icon.cpp
+    widgets/label.cpp
     widgets/lineedit.cpp
     widgets/pushbutton.cpp
     widgets/radiobutton.cpp
+#    widgets/rectangle.cpp
     widgets/widget.cpp
     widgets/layout.cpp
     widgets/layoutitem.cpp
@@ -97,12 +99,14 @@ install(FILES
     widgets/boxlayout.h
     widgets/hboxlayout.h
     widgets/icon.h
+    widgets/label.h
     widgets/layout.h
     widgets/layoutitem.h
     widgets/lineedit.h
     widgets/pushbutton.h
     widgets/checkbox.h
     widgets/radiobutton.h
+#    widgets/rectangle.h
     widgets/vboxlayout.h
     widgets/widget.h
     widgets/flash.h
