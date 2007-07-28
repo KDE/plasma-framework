@@ -50,7 +50,7 @@ Widget::Widget(QGraphicsItem *parent)
     d(new Private)
 {
     setFlag(QGraphicsItem::ItemClipsToShape, true);
-
+    setFlag(QGraphicsItem::ItemClipsChildrenToShape, true);
     d->parent = dynamic_cast<Widget *>(parent);
 
     if (d->parent) {
