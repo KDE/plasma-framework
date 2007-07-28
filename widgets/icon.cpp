@@ -175,6 +175,7 @@ class Icon::Private
         };
 
         QString text;
+        QString infoText;
         Svg svg;
         int svgElements;
         QSizeF size;
@@ -414,6 +415,8 @@ void Icon::actionDestroyed(QObject* action)
             break;
         }
     }
+
+    update();   // redraw since an action has been deleted.
 }
 
 void Icon::calculateSize()
@@ -615,6 +618,17 @@ QString Icon::text() const
     return d->text;
 }
 
+void Icon::setInfoText(const QString& text)
+{
+    d->infoText = text;
+    calculateSize();
+}
+
+QString Icon::infoText() const
+{
+    return d->infoText;
+}
+
 void Icon::setIcon(const QString& icon)
 {
     if (icon.isEmpty()) {
@@ -660,6 +674,7 @@ void Icon::mousePressEvent(QGraphicsSceneMouseEvent *event)
 
     d->state = Private::PressedState;
     QGraphicsItem::mousePressEvent(event);
+    update();
 }
 
 void Icon::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
@@ -689,6 +704,7 @@ void Icon::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     }
 
     QGraphicsItem::mouseReleaseEvent(event);
+    update();
 }
 
 void Icon::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
