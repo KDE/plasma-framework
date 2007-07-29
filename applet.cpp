@@ -46,7 +46,7 @@
 #include "plasma/widgets/lineedit.h"
 #include "plasma/widgets/vboxlayout.h"
 
-#include "shadowblur.cpp"
+//#include "stackblur_shadows.cpp"
 
 namespace Plasma
 {
@@ -134,15 +134,19 @@ public:
         }
     }
 
-    void paintBackground(QPainter* p2, Applet* q, const QColor &shadowColor = Qt::black)
+    void paintBackground(QPainter* p, Applet* q)
     {
         //TODO: we should cache this background rather that repaint it over and over
-        //TODO: get shadow removed from svg
         QSize contents = contentSize(q).toSize();
         const int contentWidth = contents.width();
         const int contentHeight = contents.height();
-
-
+#if 0
+        // this could be used to draw a dynamic shadow
+        QImage image(w, h, QImage::Format_ARGB32_Premultiplied);
+        QPainter* p = new QPainter(&image);
+        p->setCompositionMode(QPainter::CompositionMode_Source);
+#endif
+        p->setRenderHint(QPainter::SmoothPixmapTransform);
         background->resize();
 
         const int topHeight = background->elementSize("top").height();
@@ -161,14 +165,6 @@ public:
         const int bottomOffset = contentHeight;
         const int contentTop = 0;
         const int contentLeft = 0;
-
-        QPixmap backgroundPixmap(leftWidth + contentWidth + rightWidth, topHeight + contentHeight + bottomHeight);
-        backgroundPixmap.fill(Qt::transparent);
-        QPainter* p = new QPainter(&backgroundPixmap);
-        p->translate(leftWidth, topHeight);
-        p->setCompositionMode(QPainter::CompositionMode_Source);
-
-        p->setRenderHint(QPainter::SmoothPixmapTransform);
 
         background->paint(p, QRect(leftOffset,  topOffset,    leftWidth,  topHeight),    "topleft");
         background->paint(p, QRect(rightOffset, topOffset,    rightWidth, topHeight),    "topright");
@@ -213,16 +209,6 @@ public:
         p->drawTiledPixmap(QRect(contentLeft, bottomOffset, contentWidth, bottomHeight), bottom);
 
         background->paint(p, QRect(contentLeft, contentTop, contentWidth + 1, contentHeight + 1), "center");
-
-        QImage shadowImage = backgroundPixmap.toImage();
-        shadowBlur(shadowImage, 5);
-        QPainter* pShadow = new QPainter(&shadowImage);
-        pShadow->setCompositionMode(QPainter::CompositionMode_SourceAtop);
-        pShadow->fillRect(0, 0, shadowImage.size().width(), shadowImage.size().height(), QBrush(shadowColor));
-        QPixmap shadowPixmap = QPixmap::fromImage(shadowImage);
-        //p2->setRenderHint(QPainter::SmoothPixmapTransform);
-        p2->drawPixmap(leftOffset, topOffset, shadowPixmap);
-        p2->drawPixmap(leftOffset, topOffset, backgroundPixmap);
     }
 
     void paintHover(QPainter* painter, Applet* q)
@@ -507,7 +493,7 @@ QColor Applet::color() const
     // TODO: add more colors for more categories and
     // maybe read from config?
     QString c = category();
-    int alpha = 100;
+    int alpha = 200;
     // Colors taken from Oxygen color palette
     if (c == "Date and Time") {
         return QColor(191, 94, 0, alpha);
@@ -552,21 +538,11 @@ void Applet::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
     } else if (zoomLevel == scalingFactor(Plasma::GroupZoom)) { // Show Groups + Applet outline
         //TODO: make pretty.
         painter->setBrush(QBrush(color(), Qt::SolidPattern));
-        //painter->drawRoundRect(boundingRect());
-        //normal applet
-        if (d->background) {
-            d->paintBackground(painter, this, color());
-        }
-
-        if (d->failed) {
-            return;
-        }
-        paintInterface(painter, option, QRect(QPoint(0,0), d->contentSize(this).toSize()));
-
-//         int iconDim = KIconLoader().currentSize(K3Icon::Desktop);
-//         int midX = (boundingRect().width() / 2) - (iconDim / 2);
-//         int midY = (boundingRect().height() / 2) - (iconDim / 2);
-//         KIcon(icon()).paint(painter, midX, midY, iconDim, iconDim);
+        painter->drawRoundRect(boundingRect());
+        int iconDim = KIconLoader().currentSize(K3Icon::Desktop);
+        int midX = (boundingRect().width() / 2) - (iconDim / 2);
+        int midY = (boundingRect().height() / 2) - (iconDim / 2);
+        KIcon(icon()).paint(painter, midX, midY, iconDim, iconDim);
     }/*  else if (zoomLevel == scalingFactor(Plasma::OverviewZoom)) { //Show Groups only
     } */
 }
