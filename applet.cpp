@@ -66,8 +66,7 @@ public:
           kioskImmutable(false),
           immutable(false),
           hasConfigurationInterface(false),
-          failed(false),
-          canMove(true)
+          failed(false)
     {
         if (appletId == 0) {
             appletId = nextId();
@@ -252,7 +251,6 @@ public:
     bool immutable : 1;
     bool hasConfigurationInterface : 1;
     bool failed : 1;
-    bool canMove : 1;
 };
 
 uint Applet::Private::s_maxAppletId = 0;
