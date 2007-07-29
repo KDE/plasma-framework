@@ -31,18 +31,17 @@ set(plasma_LIB_SRCS
     widgets/boxlayout.cpp
     widgets/checkbox.cpp
     widgets/hboxlayout.cpp
+    widgets/flash.cpp
     widgets/icon.cpp
+    widgets/label.cpp
+    widgets/layout.cpp
+    widgets/layoutitem.cpp
     widgets/lineedit.cpp
     widgets/pushbutton.cpp
     widgets/radiobutton.cpp
 #    widgets/rectangle.cpp
     widgets/widget.cpp
-    widgets/layout.cpp
-    widgets/layoutitem.cpp
     widgets/vboxlayout.cpp
-    widgets/flash.cpp
-    widgets/label.cpp
-   
 )
 
 if(QT_QTOPENGL_FOUND AND OPENGL_FOUND)
@@ -99,6 +98,7 @@ install(FILES
 install(FILES
     widgets/boxlayout.h
     widgets/hboxlayout.h
+    widgets/flash.h
     widgets/icon.h
     widgets/label.h
     widgets/layout.h
@@ -110,8 +110,6 @@ install(FILES
 #    widgets/rectangle.h
     widgets/vboxlayout.h
     widgets/widget.h
-    widgets/flash.h
-    widgets/label.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/plasma/widgets)
 
 install(FILES
