@@ -164,16 +164,16 @@ public:
 
         QPixmap backgroundPixmap(leftWidth + contentWidth + rightWidth, topHeight + contentHeight + bottomHeight);
         backgroundPixmap.fill(Qt::transparent);
-        QPainter* p = new QPainter(&backgroundPixmap);
-        p->translate(leftWidth, topHeight);
-        p->setCompositionMode(QPainter::CompositionMode_Source);
+        QPainter p(&backgroundPixmap);
+        p.translate(leftWidth, topHeight);
+        p.setCompositionMode(QPainter::CompositionMode_Source);
 
-        p->setRenderHint(QPainter::SmoothPixmapTransform);
+        p.setRenderHint(QPainter::SmoothPixmapTransform);
 
-        background->paint(p, QRect(leftOffset,  topOffset,    leftWidth,  topHeight),    "topleft");
-        background->paint(p, QRect(rightOffset, topOffset,    rightWidth, topHeight),    "topright");
-        background->paint(p, QRect(leftOffset,  bottomOffset, leftWidth,  bottomHeight), "bottomleft");
-        background->paint(p, QRect(rightOffset, bottomOffset, rightWidth, bottomHeight), "bottomright");
+        background->paint(&p, QRect(leftOffset,  topOffset,    leftWidth,  topHeight),    "topleft");
+        background->paint(&p, QRect(rightOffset, topOffset,    rightWidth, topHeight),    "topright");
+        background->paint(&p, QRect(leftOffset,  bottomOffset, leftWidth,  bottomHeight), "bottomleft");
+        background->paint(&p, QRect(rightOffset, bottomOffset, rightWidth, bottomHeight), "bottomright");
 
         QPixmap left(leftWidth, leftHeight);
         left.fill(Qt::transparent);
@@ -182,7 +182,7 @@ public:
             sidePainter.setCompositionMode(QPainter::CompositionMode_Source);
             background->paint(&sidePainter, QPoint(0, 0), "left");
         }
-        p->drawTiledPixmap(QRect(leftOffset, contentTop, leftWidth, contentHeight), left);
+        p.drawTiledPixmap(QRect(leftOffset, contentTop, leftWidth, contentHeight), left);
 
         QPixmap right(rightWidth, leftHeight);
         right.fill(Qt::transparent);
@@ -191,7 +191,7 @@ public:
             sidePainter.setCompositionMode(QPainter::CompositionMode_Source);
             background->paint(&sidePainter, QPoint(0, 0), "right");
         }
-        p->drawTiledPixmap(QRect(rightOffset, contentTop, rightWidth, contentHeight), right);
+        p.drawTiledPixmap(QRect(rightOffset, contentTop, rightWidth, contentHeight), right);
 
 
         QPixmap top(topWidth, topHeight);
@@ -201,7 +201,7 @@ public:
             sidePainter.setCompositionMode(QPainter::CompositionMode_Source);
             background->paint(&sidePainter, QPoint(0, 0), "top");
         }
-        p->drawTiledPixmap(QRect(contentLeft, topOffset, contentWidth, topHeight), top);
+        p.drawTiledPixmap(QRect(contentLeft, topOffset, contentWidth, topHeight), top);
 
         QPixmap bottom(topWidth, bottomHeight);
         bottom.fill(Qt::transparent);
@@ -210,15 +210,15 @@ public:
             sidePainter.setCompositionMode(QPainter::CompositionMode_Source);
             background->paint(&sidePainter, QPoint(0, 0), "bottom");
         }
-        p->drawTiledPixmap(QRect(contentLeft, bottomOffset, contentWidth, bottomHeight), bottom);
+        p.drawTiledPixmap(QRect(contentLeft, bottomOffset, contentWidth, bottomHeight), bottom);
 
-        background->paint(p, QRect(contentLeft, contentTop, contentWidth + 1, contentHeight + 1), "center");
+        background->paint(&p, QRect(contentLeft, contentTop, contentWidth + 1, contentHeight + 1), "center");
 
         QImage shadowImage = backgroundPixmap.toImage();
         shadowBlur(shadowImage, 5);
-        QPainter* pShadow = new QPainter(&shadowImage);
-        pShadow->setCompositionMode(QPainter::CompositionMode_SourceAtop);
-        pShadow->fillRect(0, 0, shadowImage.size().width(), shadowImage.size().height(), QBrush(shadowColor));
+        QPainter pShadow(&shadowImage);
+        pShadow.setCompositionMode(QPainter::CompositionMode_SourceAtop);
+        pShadow.fillRect(0, 0, shadowImage.size().width(), shadowImage.size().height(), QBrush(shadowColor));
         QPixmap shadowPixmap = QPixmap::fromImage(shadowImage);
         //p2->setRenderHint(QPainter::SmoothPixmapTransform);
         p2->drawPixmap(leftOffset, topOffset, shadowPixmap);
