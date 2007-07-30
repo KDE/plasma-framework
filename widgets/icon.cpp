@@ -299,6 +299,7 @@ bool IconAction::event(QEvent::Type type, const QPointF &pos)
         break;
 
     case QEvent::MouseButtonRelease: {
+        kDebug() << "IconAction::event got a QEvent::MouseButtonRelease, " << isSelected() << endl;
         bool wasSelected = isSelected();
         setSelected(false);
         if (wasSelected) {
@@ -668,6 +669,7 @@ bool Icon::isDown()
 
 void Icon::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
+kDebug() << "Icon::mousePressEvent " << endl;
     foreach (IconAction *action, d->cornerActions) {
         action->event(event->type(), event->pos());
     }
@@ -680,8 +682,8 @@ void Icon::mousePressEvent(QGraphicsSceneMouseEvent *event)
 void Icon::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
     bool inside = boundingRect().contains(event->pos());
+kDebug() << "Icon::mouseReleaseEvent " << inside << endl;
     Private::ButtonState was = d->state;
-
     if (inside) {
         d->state = Private::HoverState;
 
