@@ -338,7 +338,18 @@ void ConfigXmlHandler::resetState()
 }
 
 ConfigXml::ConfigXml(const QString &configFile, QIODevice *xml, QObject *parent)
-    : KConfigSkeleton(configFile/*, parent*/), //FIXME: on monday, use the parent again after aseigo (that's me! =) commits fixes to kconfigskeleton
+    : KConfigSkeleton(configFile, parent),
+      d(new Private)
+{
+    QXmlInputSource source(xml);
+    QXmlSimpleReader reader;
+    ConfigXmlHandler handler(this, d);
+    reader.setContentHandler(&handler);
+    reader.parse(&source, false);
+}
+
+ConfigXml::ConfigXml(KSharedConfig::Ptr config, QIODevice *xml, QObject *parent)
+    : KConfigSkeleton(config, parent),
       d(new Private)
 {
     QXmlInputSource source(xml);

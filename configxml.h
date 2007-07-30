@@ -20,6 +20,7 @@
 #define CONFIGXML_H
 
 #include <KConfigSkeleton>
+#include <KSharedConfig>
 
 #include <plasma/plasma_export.h>
 
@@ -81,6 +82,16 @@ public:
      * @param parent optional QObject parent
      **/
     ConfigXml(const QString &configFile, QIODevice *xml, QObject *parent = 0);
+
+    /**
+     * Creates a KConfigSkeleton populated using the definition found in
+     * the XML data passed in.
+     *
+     * @param configFile path to the configuration file to use
+     * @param xml the xml data; must be valid KConfigXT data
+     * @param parent optional QObject parent
+     **/
+    ConfigXml(KSharedConfig::Ptr config, QIODevice *xml, QObject *parent = 0);
     ~ConfigXml();
 
     class Private;
