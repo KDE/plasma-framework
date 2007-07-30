@@ -26,6 +26,7 @@
 #include <ksharedconfig.h>
 #include <kgenericfactory.h>
 
+#include <plasma/configxml.h>
 #include <plasma/plasma.h>
 #include <plasma/widgets/widget.h>
 
@@ -118,6 +119,14 @@ class PLASMA_EXPORT Applet : public QObject, public Widget
          * named plasma_\<appletname\>rc in the local config directory.
          */
         KConfigGroup globalConfig() const;
+
+        /**
+         * Returns the config skeleton object from this applet's package,
+         * if any.
+         *
+         * @return config skeleton object, or 0 if none
+         **/
+        ConfigXml* configXml();
 
         /**
          * Loads the given DataEngine

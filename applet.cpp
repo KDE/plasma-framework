@@ -149,7 +149,7 @@ public:
         QString xmlPath = package->filePath("mainconfigxml");
         if (!xmlPath.isEmpty()) {
             QFile file(xmlPath);
-            configXml = new ConfigXml(xmlPath, &file);
+            configXml = new ConfigXml(config(), &file);
         }
 
         if (!package->filePath("mainconfigui").isEmpty()) {
@@ -258,6 +258,26 @@ public:
         return s_maxAppletId;
     }
 
+    KSharedConfig::Ptr config() {
+        if (!appletConfig) {
+            QString file = KStandardDirs::locateLocal("appdata",
+                                                      "applets/" + instanceName() + "rc",
+                                                      true);
+            appletConfig = KSharedConfig::openConfig(file);
+        }
+
+        return appletConfig;
+    }
+
+    QString instanceName()
+    {
+        if (!appletDescription.isValid()) {
+            return QString();
+        }
+
+        return appletDescription.service()->library() + QString::number(appletId);
+    }
+
     //TODO: examine the usage of memory here; there's a pretty large
     //      number of members at this point.
     uint appletId;
@@ -309,14 +329,7 @@ Applet::~Applet()
 
 KConfigGroup Applet::config() const
 {
-    if (!d->appletConfig) {
-        QString file = KStandardDirs::locateLocal( "appdata",
-                                                   "applets/" + instanceName() + "rc",
-                                                   true );
-        d->appletConfig = KSharedConfig::openConfig( file );
-    }
-
-    return KConfigGroup(d->appletConfig, "General");
+    return KConfigGroup(d->config(), "General");
 }
 
 KConfigGroup Applet::config(const QString& group) const
@@ -334,6 +347,11 @@ KConfigGroup Applet::globalConfig() const
     }
 
     return KConfigGroup(d->globalConfig, "General");
+}
+
+ConfigXml* Applet::configXml()
+{
+    return d->configXml;
 }
 
 DataEngine* Applet::dataEngine(const QString& name) const
@@ -622,11 +640,7 @@ QString Applet::globalName() const
 
 QString Applet::instanceName() const
 {
-    if (!d->appletDescription.isValid()) {
-        return QString();
-    }
-
-    return d->appletDescription.service()->library() + QString::number( d->appletId );
+    d->instanceName();
 }
 
 void Applet::watchForFocus(QObject *widget, bool watch)
