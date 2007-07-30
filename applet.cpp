@@ -20,13 +20,16 @@
 
 #include <QApplication>
 #include <QEvent>
+#include <QFile>
 #include <QList>
 #include <QPainter>
 #include <QSize>
-#include <QTimer>
 #include <QStyleOptionGraphicsItem>
+#include <QTimer>
+#include <QUiLoader>
 
 #include <KIcon>
+#include <KConfigDialog>
 #include <KDialog>
 #include <KPluginInfo>
 #include <KStandardDirs>
@@ -34,6 +37,7 @@
 #include <KServiceTypeTrader>
 #include <KIconLoader>
 
+#include "plasma/configxml.h"
 #include "plasma/corona.h"
 #include "plasma/dataenginemanager.h"
 #include "plasma/package.h"
@@ -63,6 +67,7 @@ public:
           background(0),
           failureText(0),
           scriptEngine(0),
+          configXml(0),
           kioskImmutable(false),
           immutable(false),
           hasConfigurationInterface(false),
@@ -84,6 +89,7 @@ public:
         }
         delete background;
         delete package;
+        delete configXml;
     }
 
     void init(Applet* applet)
@@ -128,8 +134,26 @@ public:
 
                 if (!package) {
                     applet->setFailedToLaunch(true);
+                } else {
+                    setupScriptSupport(applet);
                 }
             }
+        }
+    }
+
+    // put all setup routines for script here. at this point we can assume that
+    // package exists and that we have a script engin
+    void setupScriptSupport(Applet* applet)
+    {
+        Q_ASSERT(package);
+        QString xmlPath = package->filePath("mainconfigxml");
+        if (!xmlPath.isEmpty()) {
+            QFile file(xmlPath);
+            configXml = new ConfigXml(xmlPath, &file);
+        }
+
+        if (!package->filePath("mainconfigui").isEmpty()) {
+            applet->setHasConfigurationInterface(true);
         }
     }
 
@@ -247,6 +271,7 @@ public:
     Plasma::Svg *background;
     Plasma::LineEdit *failureText;
     ScriptEngine* scriptEngine;
+    ConfigXml* configXml;
     bool kioskImmutable : 1;
     bool immutable : 1;
     bool hasConfigurationInterface : 1;
@@ -410,9 +435,11 @@ void Applet::setDrawStandardBackground(bool drawBackground)
 {
     if (drawBackground) {
         if (!d->background) {
+            prepareGeometryChange();
             d->background = new Plasma::Svg("widgets/background");
         }
-    } else {
+    } else if (d->background) {
+        prepareGeometryChange();
         delete d->background;
         d->background = 0;
     }
@@ -656,6 +683,30 @@ bool Applet::eventFilter( QObject *o, QEvent * e )
 
 void Applet::showConfigurationInterface()
 {
+    if (d->package && d->configXml) {
+        QString uiFile = d->package->filePath("mainconfigui");
+        if (uiFile.isEmpty()) {
+            return;
+        }
+
+        KConfigDialog *dialog = new KConfigDialog(0, "", d->configXml);
+        dialog->setWindowTitle(i18n("%1 Settings", name()));
+        dialog->setAttribute(Qt::WA_DeleteOnClose, true);
+
+        QUiLoader loader;
+        QString filename = d->package->filePath("mainconfigui");
+        QFile f(filename);
+        if (!f.open(QIODevice::ReadOnly)) {
+            delete dialog;
+            return;
+        }
+
+        QWidget *w = loader.load(&f);
+        f.close();
+
+        dialog->addPage(w, i18n("Settings"), icon(), i18n("%1 Settings", name()));
+        dialog->show();
+    }
 }
 
 KPluginInfo::List Applet::knownApplets(const QString &category,
