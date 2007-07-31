@@ -71,7 +71,8 @@ public:
           kioskImmutable(false),
           immutable(false),
           hasConfigurationInterface(false),
-          failed(false)
+          failed(false),
+          cachedBackground(0)
     {
         if (appletId == 0) {
             appletId = nextId();
@@ -90,6 +91,7 @@ public:
         delete background;
         delete package;
         delete configXml;
+        delete cachedBackground;
     }
 
     void init(Applet* applet)
@@ -157,9 +159,8 @@ public:
         }
     }
 
-    void paintBackground(QPainter* p, Applet* q)
+    void paintBackground(QPainter* p2, Applet* q)
     {
-        //TODO: we should cache this background rather that repaint it over and over
         QSize contents = contentSize(q).toSize();
         const int contentWidth = contents.width();
         const int contentHeight = contents.height();
@@ -169,7 +170,7 @@ public:
         QPainter* p = new QPainter(&image);
         p->setCompositionMode(QPainter::CompositionMode_Source);
 #endif
-        p->setRenderHint(QPainter::SmoothPixmapTransform);
+
         background->resize();
 
         const int topHeight = background->elementSize("top").height();
@@ -189,49 +190,60 @@ public:
         const int contentTop = 0;
         const int contentLeft = 0;
 
-        background->paint(p, QRect(leftOffset,  topOffset,    leftWidth,  topHeight),    "topleft");
-        background->paint(p, QRect(rightOffset, topOffset,    rightWidth, topHeight),    "topright");
-        background->paint(p, QRect(leftOffset,  bottomOffset, leftWidth,  bottomHeight), "bottomleft");
-        background->paint(p, QRect(rightOffset, bottomOffset, rightWidth, bottomHeight), "bottomright");
+        if (!cachedBackground || cachedBackground->size() != QSize(leftWidth + contentWidth + rightWidth, topHeight + contentHeight + bottomHeight)) {
+            delete cachedBackground;
+            cachedBackground = new QPixmap(leftWidth + contentWidth + rightWidth, topHeight + contentHeight + bottomHeight);
+            cachedBackground->fill(Qt::transparent);
+            QPainter p(cachedBackground);
+            p.translate(leftWidth, topHeight);
+            p.setCompositionMode(QPainter::CompositionMode_Source);
+            p.setRenderHint(QPainter::SmoothPixmapTransform);
 
-        QPixmap left(leftWidth, leftHeight);
-        left.fill(Qt::transparent);
-        {
-            QPainter sidePainter(&left);
-            sidePainter.setCompositionMode(QPainter::CompositionMode_Source);
-            background->paint(&sidePainter, QPoint(0, 0), "left");
+            background->paint(&p, QRect(leftOffset,  topOffset,    leftWidth,  topHeight),    "topleft");
+            background->paint(&p, QRect(rightOffset, topOffset,    rightWidth, topHeight),    "topright");
+            background->paint(&p, QRect(leftOffset,  bottomOffset, leftWidth,  bottomHeight), "bottomleft");
+            background->paint(&p, QRect(rightOffset, bottomOffset, rightWidth, bottomHeight), "bottomright");
+
+            QPixmap left(leftWidth, leftHeight);
+            left.fill(Qt::transparent);
+            {
+                QPainter sidePainter(&left);
+                sidePainter.setCompositionMode(QPainter::CompositionMode_Source);
+                background->paint(&sidePainter, QPoint(0, 0), "left");
+            }
+            p.drawTiledPixmap(QRect(leftOffset, contentTop, leftWidth, contentHeight), left);
+
+            QPixmap right(rightWidth, leftHeight);
+            right.fill(Qt::transparent);
+            {
+                QPainter sidePainter(&right);
+                sidePainter.setCompositionMode(QPainter::CompositionMode_Source);
+                background->paint(&sidePainter, QPoint(0, 0), "right");
+            }
+            p.drawTiledPixmap(QRect(rightOffset, contentTop, rightWidth, contentHeight), right);
+
+            QPixmap top(topWidth, topHeight);
+            top.fill(Qt::transparent);
+            {
+                QPainter sidePainter(&top);
+                sidePainter.setCompositionMode(QPainter::CompositionMode_Source);
+                background->paint(&sidePainter, QPoint(0, 0), "top");
+            }
+            p.drawTiledPixmap(QRect(contentLeft, topOffset, contentWidth, topHeight), top);
+
+            QPixmap bottom(topWidth, bottomHeight);
+            bottom.fill(Qt::transparent);
+            {
+                QPainter sidePainter(&bottom);
+                sidePainter.setCompositionMode(QPainter::CompositionMode_Source);
+                background->paint(&sidePainter, QPoint(0, 0), "bottom");
+            }
+            p.drawTiledPixmap(QRect(contentLeft, bottomOffset, contentWidth, bottomHeight), bottom);
+
+            background->paint(&p, QRect(contentLeft, contentTop, contentWidth + 1, contentHeight + 1), "center");
+            p.end();
         }
-        p->drawTiledPixmap(QRect(leftOffset, contentTop, leftWidth, contentHeight), left);
-
-        QPixmap right(rightWidth, leftHeight);
-        right.fill(Qt::transparent);
-        {
-            QPainter sidePainter(&right);
-            sidePainter.setCompositionMode(QPainter::CompositionMode_Source);
-            background->paint(&sidePainter, QPoint(0, 0), "right");
-        }
-        p->drawTiledPixmap(QRect(rightOffset, contentTop, rightWidth, contentHeight), right);
-
-
-        QPixmap top(topWidth, topHeight);
-        top.fill(Qt::transparent);
-        {
-            QPainter sidePainter(&top);
-            sidePainter.setCompositionMode(QPainter::CompositionMode_Source);
-            background->paint(&sidePainter, QPoint(0, 0), "top");
-        }
-        p->drawTiledPixmap(QRect(contentLeft, topOffset, contentWidth, topHeight), top);
-
-        QPixmap bottom(topWidth, bottomHeight);
-        bottom.fill(Qt::transparent);
-        {
-            QPainter sidePainter(&bottom);
-            sidePainter.setCompositionMode(QPainter::CompositionMode_Source);
-            background->paint(&sidePainter, QPoint(0, 0), "bottom");
-        }
-        p->drawTiledPixmap(QRect(contentLeft, bottomOffset, contentWidth, bottomHeight), bottom);
-
-        background->paint(p, QRect(contentLeft, contentTop, contentWidth + 1, contentHeight + 1), "center");
+        p2->drawPixmap(leftOffset, topOffset, *cachedBackground);
     }
 
     void paintHover(QPainter* painter, Applet* q)
@@ -296,6 +308,8 @@ public:
     bool immutable : 1;
     bool hasConfigurationInterface : 1;
     bool failed : 1;
+private:
+    QPixmap* cachedBackground;
 };
 
 uint Applet::Private::s_maxAppletId = 0;

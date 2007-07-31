@@ -507,4 +507,3 @@ class PLASMA_EXPORT Applet : public QObject, public Widget
                         KGenericFactory<classname>("plasma_applet_" #libname))
 
 #endif // multiple inclusion guard
-
