@@ -1,5 +1,6 @@
 /*
  *   Copyright (C) 2006-2007 by Aaron Seigo <aseigo@kde.org>
+ *   Copyright (C) 2007 by Riccardo Iaconelli <riccardo@kde.org>
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU Library General Public License version 2 as
@@ -236,6 +237,14 @@ class PLASMA_EXPORT Applet : public QObject, public Widget
          **/
         static KPluginInfo::List knownApplets(const QString &category = QString(),
                                               const QString &parentApp = QString());
+
+        /**
+         * Returns a list of all known applets associated with a certain mimetype in a hash keyed by a unique
+         * identifier for each applet
+         *
+         * @return list of applets
+         **/
+        static KPluginInfo::List knownAppletsForMimetype(QString mimetype);
 
         /**
          * Returns a list of all the categories used by

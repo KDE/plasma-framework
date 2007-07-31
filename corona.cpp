@@ -1,6 +1,7 @@
 /*
  *   Copyright (C) 2007 Matt Broadstone <mbroadst@gmail.com>
  *   Copyright (C) 2007 Aaron Seigo <aseigo@kde.org>
+ *   Copyright (C) 2007 Riccardo Iaconelli <riccardo@kde.org>
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU Library General Public License version 2 as
@@ -252,11 +253,20 @@ void Corona::dropEvent(QGraphicsSceneDragDropEvent *event)
     } else if (KUrl::List::canDecode(event->mimeData())) {
         KUrl::List urls = KUrl::List::fromMimeData(event->mimeData());	
         foreach (const KUrl& url, urls) {
+            KMimeType::Ptr mime = KMimeType::findByUrl(url);
+            QString mimeName = mime->name();
+//             kDebug() << mimeName << endl;
+            KPluginInfo::List appletList = Applet::knownAppletsForMimetype(mimeName);
+
+
+            //FIXME: we should probably show a dialog here to choose which plasmoid load.
+            addApplet(appletList.first().pluginName());
+
             QStringList args;
             args << url.url();
             Applet* button = addApplet("url", args);
             if (button) {
-                //button->setSize(128,128);
+//                 button->setSize(128,128);
                 button->setPos(event->scenePos() - QPoint(button->boundingRect().width()/2,
                                button->boundingRect().height()/2));
             }

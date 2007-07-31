@@ -1,5 +1,6 @@
 /*
  *   Copyright (C) 2005 by Aaron Seigo <aseigo@kde.org>
+ *   Copyright (C) 2007 by Riccardo Iaconelli <riccardo@kde.org>
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU Library General Public License version 2 as
@@ -755,6 +756,14 @@ KPluginInfo::List Applet::knownApplets(const QString &category,
 
     KService::List offers = KServiceTypeTrader::self()->query("Plasma/Applet", constraint);
     //kDebug() << "Applet::knownApplets constraint was '" << constraint << "' which got us " << offers.count() << " matches" << endl;
+    return KPluginInfo::fromServices(offers);
+}
+
+KPluginInfo::List Applet::knownAppletsForMimetype(QString mimetype)
+{
+    QString constraint = QString("'%1' in [X-Plasma-Mimetypes]").arg(mimetype);
+    kDebug() << constraint << endl;
+    KService::List offers = KServiceTypeTrader::self()->query("Plasma/Applet", constraint);
     return KPluginInfo::fromServices(offers);
 }
 

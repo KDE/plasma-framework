@@ -1,5 +1,6 @@
 /*
- *   Copyright (C) 2007 by Aaron Seigo aseigo@kde.org
+ *   Copyright (C) 2007 by Aaron Seigo <aseigo@kde.org>
+ *   Copyright (C) 2007 by Riccardo Iaconelli <riccardo@kde.org>
  *   Copyright (C) 2007 by Matt Broadstone <mbroadst@gmail.com>
  *
  *   This program is free software; you can redistribute it and/or modify
