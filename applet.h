@@ -244,7 +244,7 @@ class PLASMA_EXPORT Applet : public QObject, public Widget
          *
          * @return list of applets
          **/
-        static KPluginInfo::List knownAppletsForMimetype(QString mimetype);
+        static KPluginInfo::List knownAppletsForMimetype(const QString &mimetype);
 
         /**
          * Returns a list of all the categories used by
