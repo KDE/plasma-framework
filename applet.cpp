@@ -96,6 +96,8 @@ public:
 
     void init(Applet* applet)
     {
+        applet->setFlag(QGraphicsItem::ItemClipsToShape, false);
+        applet->setFlag(QGraphicsItem::ItemClipsChildrenToShape, false);
         kioskImmutable = applet->globalConfig().isImmutable() ||
                          applet->config().isImmutable();
         applet->setImmutable(kioskImmutable);
@@ -164,12 +166,6 @@ public:
         QSize contents = contentSize(q).toSize();
         const int contentWidth = contents.width();
         const int contentHeight = contents.height();
-#if 0
-        // this could be used to draw a dynamic shadow
-        QImage image(w, h, QImage::Format_ARGB32_Premultiplied);
-        QPainter* p = new QPainter(&image);
-        p->setCompositionMode(QPainter::CompositionMode_Source);
-#endif
 
         background->resize();
 
@@ -189,7 +185,6 @@ public:
         const int bottomOffset = contentHeight;
         const int contentTop = 0;
         const int contentLeft = 0;
-
         if (!cachedBackground || cachedBackground->size() != QSize(leftWidth + contentWidth + rightWidth, topHeight + contentHeight + bottomHeight)) {
             delete cachedBackground;
             cachedBackground = new QPixmap(leftWidth + contentWidth + rightWidth, topHeight + contentHeight + bottomHeight);
@@ -449,13 +444,8 @@ bool Applet::isImmutable() const
 void Applet::setImmutable(bool immutable)
 {
     d->immutable = immutable;
-    QGraphicsItem::GraphicsItemFlags f = flags();
-    if (immutable) {
-        f ^= QGraphicsItem::ItemIsMovable;
-    } else if (!d->kioskImmutable && (!scene() || !static_cast<Corona*>(scene())->isImmutable())) {
-        f |= QGraphicsItem::ItemIsMovable;
-    }
-    setFlags(f);
+    setFlag(QGraphicsItem::ItemIsMovable, d->immutable || d->kioskImmutable ||
+                                          !scene() || !static_cast<Corona*>(scene())->isImmutable());
 }
 
 bool Applet::drawStandardBackground()
@@ -528,7 +518,7 @@ int Applet::type() const
     return Type;
 }
 
-QRectF Applet::boundingRect () const
+QRectF Applet::boundingRect() const
 {
     QRectF rect = QRectF(QPointF(0,0), d->contentSize(this));
     if (!d->background) {
@@ -542,7 +532,6 @@ QRectF Applet::boundingRect () const
 
     rect.adjust(0 - leftWidth, 0 - topHeight, rightWidth, bottomHeight);
     return rect;
-
 }
 
 QList<QAction*> Applet::contextActions()
@@ -659,7 +648,7 @@ QString Applet::globalName() const
 
 QString Applet::instanceName() const
 {
-    d->instanceName();
+    return d->instanceName();
 }
 
 void Applet::watchForFocus(QObject *widget, bool watch)
