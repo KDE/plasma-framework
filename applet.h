@@ -404,6 +404,17 @@ class PLASMA_EXPORT Applet : public QObject, public Widget
          **/
         QRectF boundingRect () const;
 
+        /**
+         * Returns a list of context-related QAction instances.
+         *
+         * This is used e.g. within the \a DesktopView to display a
+         * contextmenu.
+         *
+         * @return A list of actions. The default implementation returns an
+         *         empty list.
+         **/
+        virtual QList<QAction*> contextActions();
+
     Q_SIGNALS:
         /**
          * Emitted when the applet needs to take (or lose) keyboard focus.

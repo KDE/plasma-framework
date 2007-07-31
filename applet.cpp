@@ -531,6 +531,11 @@ QRectF Applet::boundingRect () const
 
 }
 
+QList<QAction*> Applet::contextActions()
+{
+    return QList<QAction*>();
+}
+
 QColor Applet::color() const
 {
     // TODO: add more colors for more categories and
