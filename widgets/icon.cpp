@@ -110,7 +110,8 @@ class Icon::Private
 
         void drawBackground(QPainter *painter);
         void drawForeground(QPainter *painter);
-
+        void drawIcon(QPainter *painter);
+        void drawText(QPainter *painter);
 
         void checkSvgElements()
         {
@@ -526,6 +527,43 @@ void Icon::Private::drawForeground(QPainter *painter)
     }
 }
 
+void Icon::Private::drawIcon(QPainter *painter)
+{
+    if (!icon.isNull()) {
+        qreal iw = iconSize.width();
+        qreal ih = iconSize.height();
+        qreal deltaX = (size.width() - iw) / 2;
+        qreal deltaY = (size.height() - ih) / 2 ;
+        if (state == Private::PressedState) {
+            painter->save();
+            painter->setRenderHint(QPainter::SmoothPixmapTransform);
+            painter->scale(0.95, 0.95);
+            deltaY *= 0.95;
+            deltaX *= 0.95;
+            painter->drawPixmap((int)(deltaX + (iw * .025)), (int)(deltaY + (ih * .025)),
+                                icon.pixmap(iconSize.toSize()));
+            painter->restore();
+        } else {
+            painter->drawPixmap((int)deltaX, (int)deltaY, icon.pixmap(iconSize.toSize()));
+        }
+    }
+}
+
+void Icon::Private::drawText(QPainter *painter)
+{
+    if (!text.isEmpty()) {
+        qreal offset = (iconSize.height() + 12);     // TODO this shouldn't be hardcoded?
+        QRectF textRect(0, offset, size.width(), size.height() - offset);
+
+        QTextOption textOpt;
+        textOpt.setAlignment(Qt::AlignHCenter | Qt::AlignTop);
+        textOpt.setWrapMode(QTextOption::WordWrap);
+
+        painter->setPen(Qt::white);
+        painter->drawText(textRect, text, textOpt);
+    }
+}
+
 void Icon::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     Q_UNUSED(option)
@@ -549,25 +587,7 @@ void Icon::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWid
 
     d->svg.resize(d->size);
     d->drawBackground(painter);
-
-    if (!d->icon.isNull()) {
-        qreal iw = d->iconSize.width();
-        qreal ih = d->iconSize.height();
-        qreal deltaX = (d->size.width() - iw) / 2;
-        qreal deltaY = (d->size.height() - ih) / 2 ;
-        if (d->state == Private::PressedState) {
-            painter->save();
-            painter->setRenderHint(QPainter::SmoothPixmapTransform);
-            painter->scale(0.95, 0.95);
-            deltaY *= 0.95;
-            deltaX *= 0.95;
-            painter->drawPixmap((int)(deltaX + (iw * .025)), (int)(deltaY + (ih * .025)),
-                                d->icon.pixmap(d->iconSize.toSize()));
-            painter->restore();
-        } else {
-            painter->drawPixmap((int)deltaX, (int)deltaY, d->icon.pixmap(d->iconSize.toSize()));
-        }
-    }
+    d->drawIcon(painter);
 
     d->drawForeground(painter);
 
@@ -579,18 +599,7 @@ void Icon::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWid
     }
 
     // Draw text last because its overlayed
-    if (!d->text.isEmpty()) {
-        qreal offset = (d->iconSize.height() + 12);     // TODO this shouldn't be hardcoded?
-        QRectF textRect(0, offset, d->size.width(), d->size.height() - offset);
-
-        QTextOption textOpt;
-        textOpt.setAlignment(Qt::AlignHCenter | Qt::AlignTop);
-        textOpt.setWrapMode(QTextOption::WordWrap);
-
-        painter->setPen(Qt::white);
-        painter->drawText(textRect, d->text, textOpt);
-    }
-
+    d->drawText(painter);
 }
 
 void Icon::drawActionButtonBase(QPainter* painter, const QSize &size, int element)
