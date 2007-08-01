@@ -81,7 +81,7 @@ QPen Label::pen() const
     return d->textPen;
 }
 
-void Label::paint(QPainter *p, const QStyleOptionGraphicsItem *option, QWidget *widget)
+void Label::paintWidget(QPainter *p, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     Q_UNUSED(option);
     Q_UNUSED(widget);

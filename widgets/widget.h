@@ -177,9 +177,14 @@ class PLASMA_EXPORT Widget : public QGraphicsItem,
         void addChild(Widget *w);
 
         /**
-         * Paint function. Reimplement to draw on this Widget.
+         * Paint function.
          */
-        virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
+        void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
+
+        /**
+         * Paints the widget.  Called by the paint function under correct conditions.
+         */
+        virtual void paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
 
 private:
     class Private;

@@ -90,7 +90,7 @@ class PLASMA_EXPORT PushButton : public QObject,
         /**
          * Paint function.
          */
-        virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
+        virtual void paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
 
         /**
          * Reimplemented from Plasma::Widget.

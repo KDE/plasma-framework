@@ -81,7 +81,7 @@ void PushButton::updated(const QString&, const DataEngine::Data &data)
     Q_UNUSED(data)
 }
 
-void PushButton::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+void PushButton::paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     QStyleOptionButton options;
     options.initFrom(widget);

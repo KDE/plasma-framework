@@ -31,7 +31,7 @@ class PLASMA_EXPORT Rectangle : public Plasma::Widget
 
         Qt::Orientations expandingDirections() const;
 
-        void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
+        void paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
 
     private:
         class Private;

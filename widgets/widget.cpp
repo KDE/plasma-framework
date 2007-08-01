@@ -23,8 +23,10 @@
 #include <KDebug>
 
 #include <QtCore/QList>
+#include <QPainter>
 
 #include "layout.h"
+#include "plasma/plasma.h"
 
 namespace Plasma
 {
@@ -43,7 +45,15 @@ class Widget::Private
 
         Widget *parent;
         QList<Widget *> childList;
+
+        bool shouldPaint(QPainter *painter, const QTransform &transform);
 };
+
+bool Widget::Private::shouldPaint(QPainter *painter, const QTransform &transform)
+{
+    qreal zoomLevel = painter->transform().m11() / transform.m11();
+    return zoomLevel == scalingFactor(Plasma::DesktopZoom);
+}
 
 Widget::Widget(QGraphicsItem *parent)
   : QGraphicsItem(parent),
@@ -200,12 +210,19 @@ void Widget::addChild(Widget *w)
 
 void Widget::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
+    if (d->shouldPaint(painter, transform())) {
+        paintWidget(painter, option, widget);
+    }
+    return;
+}
+
+void Widget::paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
     Q_UNUSED(painter);
     Q_UNUSED(option);
     Q_UNUSED(widget);
 
-    // do nothing, but we need to reimp so we can create Widget items as this method
-    // is pure virtual in QGraphicsItem
+    // Replaced by widget's own function
 }
 
 void Widget::reparent(Widget *w)

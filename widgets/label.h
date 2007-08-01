@@ -101,7 +101,7 @@ class PLASMA_EXPORT Label : public Plasma::Widget
         /**
          * Paint function.
          */
-        void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+        void paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
     private:
         class Private;

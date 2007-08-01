@@ -21,6 +21,8 @@
 #include <QStyleOptionFrameV2>
 #include <QTextDocument>
 #include <QKeyEvent>
+#include <QPainter>
+
 #include <KDebug>
 
 namespace Plasma
@@ -39,7 +41,14 @@ class LineEdit::Private
         bool styled;
         bool multiline;
 
+        bool shouldPaint(QPainter *painter, const QTransform &transform); 
 };
+
+bool LineEdit::Private::shouldPaint(QPainter *painter, const QTransform &transform)
+{
+    qreal zoomLevel = painter->transform().m11() / transform.m11();
+    return zoomLevel == scalingFactor(Plasma::DesktopZoom);
+}
 
 LineEdit::LineEdit(QGraphicsItem *parent, QGraphicsScene *scene)
     : QGraphicsTextItem(parent, scene),
@@ -56,6 +65,15 @@ LineEdit::~LineEdit()
 }
 
 void LineEdit::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+    //TODO: Deal with paint and shouldPaint, since they are just copies of the ones in Widget
+    if (d->shouldPaint(painter, transform())) {
+        paintWidget(painter, option, widget);
+    }
+    return;
+}
+
+void LineEdit::paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     QStyleOptionFrameV2 panel;
     panel.initFrom(widget);

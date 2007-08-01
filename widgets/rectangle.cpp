@@ -38,7 +38,7 @@ Qt::Orientations Rectangle::expandingDirections() const
     return Qt::Horizontal | Qt::Vertical;
 }
 
-void Rectangle::paint(QPainter *p, const QStyleOptionGraphicsItem *option, QWidget *widget)
+void Rectangle::paintWidget(QPainter *p, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     Q_UNUSED(option);
     Q_UNUSED(widget);
