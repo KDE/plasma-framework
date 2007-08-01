@@ -108,6 +108,10 @@ class Icon::Private
             qDeleteAll(cornerActions);
         }
 
+        void drawBackground(QPainter *painter);
+        void drawForeground(QPainter *painter);
+
+
         void checkSvgElements()
         {
             if (svg.elementExists("background")) {
@@ -464,6 +468,64 @@ QRectF Icon::boundingRect() const
     return QRectF(QPointF(0, 0), d->size);
 }
 
+void Icon::Private::drawBackground(QPainter *painter)
+{
+    QString element;
+    if (svgElements & Private::SvgBackground) {
+        element = "background";
+    }
+
+    switch (state) {
+        case Private::NoState:
+            break;
+        case Private::HoverState:
+            if (svgElements & Private::SvgBackgroundHover) {
+                element = "background-hover";
+            }
+            break;
+        case Private::PressedState:
+            if (svgElements & Private::SvgBackgroundPressed) {
+                element = "background-pressed";
+            } else if (svgElements & Private::SvgBackgroundHover) {
+                element = "background-hover";
+            }
+            break;
+    }
+
+    if (!element.isEmpty()) {
+        svg.paint(painter, 0, 0, element);
+    }
+}
+
+void Icon::Private::drawForeground(QPainter *painter)
+{
+    QString element;
+    if (svgElements & Private::SvgForeground) {
+        element = "foreground";
+    }
+
+    switch (state) {
+        case Private::NoState:
+            break;
+        case Private::HoverState:
+            if (svgElements & Private::SvgForegroundHover) {
+                element = "foreground-hover";
+            }
+            break;
+        case Private::PressedState:
+            if (svgElements & Private::SvgForegroundPressed) {
+                element = "foreground-pressed";
+            } else if (svgElements & Private::SvgForegroundHover) {
+                element = "foreground-hover";
+            }
+            break;
+    }
+
+    if (!element.isEmpty()) {
+        svg.paint(painter, 0, 0, element);
+    }
+}
+
 void Icon::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     Q_UNUSED(option)
@@ -486,33 +548,7 @@ void Icon::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWid
 #endif
 
     d->svg.resize(d->size);
-
-    QString element;
-    if (d->svgElements & Private::SvgBackground) {
-        element = "background";
-    }
-
-    switch (d->state) {
-        case Private::NoState:
-            break;
-        case Private::HoverState:
-            if (d->svgElements & Private::SvgBackgroundHover) {
-                element = "background-hover";
-            }
-            break;
-        case Private::PressedState:
-            if (d->svgElements & Private::SvgBackgroundPressed) {
-                element = "background-pressed";
-            } else if (d->svgElements & Private::SvgBackgroundHover) {
-                element = "background-hover";
-            }
-            break;
-    }
-
-    if (!element.isEmpty()) {
-        d->svg.paint(painter, 0, 0, element);
-        element = QString();
-    }
+    d->drawBackground(painter);
 
     if (!d->icon.isNull()) {
         qreal iw = d->iconSize.width();
@@ -533,35 +569,9 @@ void Icon::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWid
         }
     }
 
-    // Make it default
-    if (d->svgElements & Private::SvgForeground) {
-        element = "foreground";
-    }
+    d->drawForeground(painter);
 
-    switch (d->state) {
-        case Private::NoState:
-            break;
-        case Private::HoverState:
-            if (d->svgElements & Private::SvgForegroundHover) {
-                element = "foreground-hover";
-            }
-            break;
-        case Private::PressedState:
-            if (d->svgElements & Private::SvgForegroundPressed) {
-                element = "foreground-pressed";
-            } else if (d->svgElements & Private::SvgForegroundHover) {
-                element = "foreground-hover";
-            }
-            break;
-    }
-
-    if (!element.isEmpty()) {
-        //kDebug() << "painting " << element << endl;
-        d->svg.paint(painter, 0, 0, element);
-        element.clear();
-    }
-
-    // Draw top-left button
+    // Draw corner actions
     foreach (IconAction *action, d->cornerActions) {
         if (action->animationId()) {
             action->paint(painter);
