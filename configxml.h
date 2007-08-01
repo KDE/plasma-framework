@@ -19,8 +19,8 @@
 #ifndef CONFIGXML_H
 #define CONFIGXML_H
 
-#include <KConfigSkeleton>
-#include <KSharedConfig>
+#include <kconfigskeleton.h>
+#include <ksharedconfig.h>
 
 #include <plasma/plasma_export.h>
 
