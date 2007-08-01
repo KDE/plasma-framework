@@ -140,7 +140,7 @@ void DataEngine::connectSource(const QString& source, QObject* visualization) co
     if (!s) {
         // we didn't find a data source, so give the engine an opportunity to make one
         if (d->sourceRequested(source)) {
-            s = d->source(source);
+            s = d->source(source, false);
             if (s) {
                 // now we have a source; since it was created on demand, assume
                 // it should be removed when not used
@@ -155,7 +155,7 @@ void DataEngine::connectSource(const QString& source, QObject* visualization) co
 
     connect(s, SIGNAL(updated(QString,Plasma::DataEngine::Data)),
             visualization, SLOT(updated(QString,Plasma::DataEngine::Data)));
-    QMetaObject::invokeMethod(visualization, SLOT(updated(QString,Plasma::DataEngine::Data)),
+    QMetaObject::invokeMethod(visualization, "updated",
                               Q_ARG(QString, s->objectName()),
                               Q_ARG(Plasma::DataEngine::Data, s->data()));
 }
@@ -180,8 +180,7 @@ void DataEngine::connectAllSources(QObject* visualization) const
     }
 
     foreach (const DataContainer* s, d->sources) {
-        QMetaObject::invokeMethod(visualization,
-                                  SLOT(updated(QString,Plasma::DataEngine::Data)),
+        QMetaObject::invokeMethod(visualization, "updated",
                                   Q_ARG(QString, s->objectName()),
                                   Q_ARG(Plasma::DataEngine::Data, s->data()));
     }
