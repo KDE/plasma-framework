@@ -216,13 +216,14 @@ void Corona::dragEnterEvent( QGraphicsSceneDragDropEvent *event)
         //QMouseEvent event(QEvent::MouseButtonPress, event->pos(), Qt::LeftButton, event->mouseButtons(), 0);
         //QApplication::sendEvent(this, &event);
     }
+        
+    event->accept();
     //TODO Allow dragging an applet from another Corona into this one while
     //     keeping its settings etc.
 }
 
 void Corona::dragLeaveEvent(QGraphicsSceneDragDropEvent *event)
 {
-    Q_UNUSED(event);
     kDebug() << "Corona::dragLeaveEvent(QGraphicsSceneDragDropEvent* event)" << endl;
     //TODO If an established Applet is dragged out of the Corona, remove it and
     //     create a QDrag type thing to keep the Applet's settings
@@ -230,7 +231,9 @@ void Corona::dragLeaveEvent(QGraphicsSceneDragDropEvent *event)
 
 void Corona::dragMoveEvent(QGraphicsSceneDragDropEvent *event)
 {
-    Q_UNUSED(event);
+    QGraphicsScene::dragMoveEvent(event);
+
+    event->accept();
     kDebug() << "Corona::dragMoveEvent(QDragMoveEvent* event)" << endl;
 }
 
@@ -273,7 +276,8 @@ void Corona::dropEvent(QGraphicsSceneDragDropEvent *event)
             addItem(button);
         }
         event->acceptProposedAction();
-    }
+    } else
+        QGraphicsScene::dropEvent(event);
 }
 
 // void Corona::contextMenuEvent(QGraphicsSceneContextMenuEvent *contextMenuEvent)
