@@ -147,7 +147,7 @@ void Widget::setGeometry(const QRectF& geometry)
 void Widget::updateGeometry()
 {
     if (layout()) {
-        kDebug() << (void *) this << " updating geometry to " << size() << endl;
+        kDebug() << (void *) this << " updating geometry to " << size();
         layout()->setGeometry(geometry());
     }
 }

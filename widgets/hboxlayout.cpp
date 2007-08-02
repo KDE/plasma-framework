@@ -54,11 +54,11 @@ qreal HBoxLayout::widthForHeight(qreal w) const
 void HBoxLayout::setGeometry(const QRectF& geometry)
 {
     if (!geometry.isValid() || geometry.isEmpty()) {
-        kDebug() << "Invalid Geometry " << geometry << endl;
+        kDebug() << "Invalid Geometry " << geometry;
         return;
     }
 
-    //kDebug() << this << " Geometry process " << geometry << " for " << children().count() << " childrens"<< endl;
+    //kDebug() << this << " Geometry process " << geometry << " for " << children().count() << " childrens";
 
     QList<LayoutItem *> fixedChildren;
     QList<LayoutItem *> expandingChildren;
@@ -93,7 +93,7 @@ void HBoxLayout::setGeometry(const QRectF& geometry)
 
     for (int i = 0; i < sizes.size(); i++) {
         LayoutItem *l = itemAt(i);
-        kDebug() << "Setting Geometry for child " << l << " to " << QRectF(start, sizes[i]) << endl;
+        kDebug() << "Setting Geometry for child " << l << " to " << QRectF(start, sizes[i]);
         l->setGeometry(QRectF(start, sizes[i]));
         start += QPointF(sizes[i].width() + spacing(), 0.0);
     }

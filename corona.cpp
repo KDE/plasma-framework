@@ -126,7 +126,7 @@ void Corona::setFormFactor(FormFactor formFactor)
         return;
     }
 
-    //kDebug() << "switching FF to " << formFactor << endl;
+    //kDebug() << "switching FF to " << formFactor;
     d->formFactor = formFactor;
     delete d->layout;
     d->layout = 0;
@@ -143,7 +143,7 @@ void Corona::setFormFactor(FormFactor formFactor)
         case MediaCenter:
             break;
         default:
-            kDebug() << "This can't be happening!" << endl;
+            kDebug() << "This can't be happening!";
             break;
     }
 
@@ -173,7 +173,7 @@ Applet* Corona::addApplet(const QString& name, const QStringList& args)
 {
     Applet* applet = Applet::loadApplet(name, 0, args);
     if (!applet) {
-        kDebug() << "Applet " << name << " could not be loaded." << endl;
+        kDebug() << "Applet " << name << " could not be loaded.";
         applet = new Applet;
         applet->setFailedToLaunch(true);
     }
@@ -201,13 +201,13 @@ void Corona::addKaramba(const KUrl& path)
         addItem(karamba);
         Phase::self()->animateItem(karamba, Phase::Appear);
     } else {
-        kDebug() << "Karamba " << path << " could not be loaded." << endl;
+        kDebug() << "Karamba " << path << " could not be loaded.";
     }
 }
 
 void Corona::dragEnterEvent( QGraphicsSceneDragDropEvent *event)
 {
-    kDebug() << "Corona::dragEnterEvent(QGraphicsSceneDragDropEvent* event)" << endl;
+    kDebug() << "Corona::dragEnterEvent(QGraphicsSceneDragDropEvent* event)";
     if (event->mimeData()->hasFormat("text/x-plasmoidservicename") ||
         KUrl::List::canDecode(event->mimeData())) {
         event->acceptProposedAction();
@@ -224,7 +224,7 @@ void Corona::dragEnterEvent( QGraphicsSceneDragDropEvent *event)
 
 void Corona::dragLeaveEvent(QGraphicsSceneDragDropEvent *event)
 {
-    kDebug() << "Corona::dragLeaveEvent(QGraphicsSceneDragDropEvent* event)" << endl;
+    kDebug() << "Corona::dragLeaveEvent(QGraphicsSceneDragDropEvent* event)";
     //TODO If an established Applet is dragged out of the Corona, remove it and
     //     create a QDrag type thing to keep the Applet's settings
 }
@@ -234,12 +234,12 @@ void Corona::dragMoveEvent(QGraphicsSceneDragDropEvent *event)
     QGraphicsScene::dragMoveEvent(event);
 
     event->accept();
-    kDebug() << "Corona::dragMoveEvent(QDragMoveEvent* event)" << endl;
+    kDebug() << "Corona::dragMoveEvent(QDragMoveEvent* event)";
 }
 
 void Corona::dropEvent(QGraphicsSceneDragDropEvent *event)
 {
-    kDebug() << "Corona::dropEvent(QDropEvent* event)" << endl;
+    kDebug() << "Corona::dropEvent(QDropEvent* event)";
     if (event->mimeData()->hasFormat("text/x-plasmoidservicename")) {
         //TODO This will pretty much move into dragEnterEvent()
         QString plasmoidName;
@@ -258,7 +258,7 @@ void Corona::dropEvent(QGraphicsSceneDragDropEvent *event)
         foreach (const KUrl& url, urls) {
             KMimeType::Ptr mime = KMimeType::findByUrl(url);
             QString mimeName = mime->name();
-//             kDebug() << mimeName << endl;
+//             kDebug() << mimeName;
             KPluginInfo::List appletList = Applet::knownAppletsForMimetype(mimeName);
 
 

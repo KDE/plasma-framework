@@ -124,7 +124,7 @@ DataEngine::DataEngine(QObject* parent)
 
 DataEngine::~DataEngine()
 {
-    //kDebug() << objectName() << ": bye bye birdy! " << endl;
+    //kDebug() << objectName() << ": bye bye birdy! ";
     delete d;
 }
 
@@ -201,7 +201,7 @@ void DataEngine::startInit()
 
 void DataEngine::init()
 {
-    // kDebug() << "DataEngine::init() called " << endl;
+    // kDebug() << "DataEngine::init() called ";
     // default implementation does nothing. this is for engines that have to
     // start things in motion external to themselves before they can work
 }
@@ -258,7 +258,7 @@ void DataEngine::addSource(DataContainer* source)
 {
     SourceDict::const_iterator it = d->sources.find(source->objectName());
     if (it != d->sources.constEnd()) {
-        kDebug() << "source named \"" << source->objectName() << "\" already exists." << endl;
+        kDebug() << "source named \"" << source->objectName() << "\" already exists.";
         return;
     }
 
@@ -283,7 +283,7 @@ void DataEngine::setSourceLimit(uint limit)
 
 void DataEngine::removeSource(const QString& source)
 {
-    //kDebug() << "removing source " << source << endl;
+    //kDebug() << "removing source " << source;
     SourceDict::iterator it = d->sources.find(source);
     if (it != d->sources.end()) {
         emit sourceRemoved(it.key());

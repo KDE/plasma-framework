@@ -154,7 +154,7 @@ qreal LineEdit::heightForWidth(qreal w) const
     QTextDocument* doc = document();
     doc->setTextWidth(w);
     qreal height = doc->size().height();
-    kDebug() << "LineEdit::heightForWidth(" << w << ") is " << height << endl;
+    kDebug() << "LineEdit::heightForWidth(" << w << ") is " << height;
     return height;
 }
 
@@ -182,7 +182,7 @@ void LineEdit::setGeometry(const QRectF& geometry)
 
 QSizeF LineEdit::sizeHint() const
 {
-    kDebug() << "LineEdit::sizeeHint() " << document()->size() << endl;
+    kDebug() << "LineEdit::sizeeHint() " << document()->size();
     return document()->size();
 }
 

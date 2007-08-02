@@ -116,11 +116,11 @@ AbstractRunner::List AbstractRunner::loadRunners( QWidget* parent )
     foreach ( KService::Ptr service, offers ) {
         AbstractRunner* runner = KService::createInstance<AbstractRunner>( service, parent );
         if ( runner ) {
-            kDebug() << "loaded runner : " << service->name() << endl ;
+            kDebug() << "loaded runner : " << service->name();
             runners.append( runner );
         }
         else {
-            kDebug() << "failed to load runner : " << service->name() << endl ;
+            kDebug() << "failed to load runner : " << service->name();
         }
     }
 

@@ -386,7 +386,7 @@ const Package* Applet::package() const
 
 void Applet::constraintsUpdated()
 {
-    kDebug() << "Applet::constraintsUpdate(): constraints are FormFactor: " << formFactor() << ", Location: " << location() << endl;
+    kDebug() << "Applet::constraintsUpdate(): constraints are FormFactor: " << formFactor() << ", Location: " << location();
 }
 
 QString Applet::name() const
@@ -607,7 +607,7 @@ void Applet::paintInterface(QPainter *painter, const QStyleOptionGraphicsItem *o
     if (d->scriptEngine) {
         d->scriptEngine->paintInterface(painter, option);
     } else {
-        //kDebug() << "Applet::paintInterface() default impl" << endl;
+        //kDebug() << "Applet::paintInterface() default impl";
     }
 }
 
@@ -755,14 +755,14 @@ KPluginInfo::List Applet::knownApplets(const QString &category,
     }
 
     KService::List offers = KServiceTypeTrader::self()->query("Plasma/Applet", constraint);
-    //kDebug() << "Applet::knownApplets constraint was '" << constraint << "' which got us " << offers.count() << " matches" << endl;
+    //kDebug() << "Applet::knownApplets constraint was '" << constraint << "' which got us " << offers.count() << " matches";
     return KPluginInfo::fromServices(offers);
 }
 
 KPluginInfo::List Applet::knownAppletsForMimetype(const QString &mimetype)
 {
     QString constraint = QString("'%1' in [X-Plasma-Mimetypes]").arg(mimetype);
-    kDebug() << constraint << endl;
+    kDebug() << constraint;
     KService::List offers = KServiceTypeTrader::self()->query("Plasma/Applet", constraint);
     return KPluginInfo::fromServices(offers);
 }
@@ -781,7 +781,7 @@ QStringList Applet::knownCategories(const QString &parentApp)
     QStringList categories;
     foreach (KService::Ptr applet, offers) {
         QString appletCategory = applet->property("X-KDE-PluginInfo-Category").toString();
-        kDebug() << "   and we have " << appletCategory << endl;
+        kDebug() << "   and we have " << appletCategory;
         if (appletCategory.isEmpty()) {
             if (!categories.contains(i18n("Misc"))) {
                 categories << i18n("Misc");
@@ -807,7 +807,7 @@ Applet* Applet::loadApplet(const QString& appletName, uint appletId, const QStri
     if (offers.isEmpty()) {
         //TODO: what would be -really- cool is offer to try and download the applet
         //      from the network at this point
-        kDebug() << "Applet::loadApplet: offers is empty for \"" << appletName << "\"" << endl;
+        kDebug() << "Applet::loadApplet: offers is empty for \"" << appletName << "\"";
         return 0;
     }
 
@@ -822,7 +822,7 @@ Applet* Applet::loadApplet(const QString& appletName, uint appletId, const QStri
     Applet* applet = KService::createInstance<Plasma::Applet>(offers.first(), 0, allArgs);
 
     if (!applet) {
-        kDebug() << "Couldn't load applet \"" << appletName << "\"!" << endl;
+        kDebug() << "Couldn't load applet \"" << appletName << "\"!";
     }
 
     return applet;

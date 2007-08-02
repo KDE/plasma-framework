@@ -52,7 +52,7 @@ class SharedSvgRenderer : public KSvgRenderer, public QSharedData
 
         ~SharedSvgRenderer()
         {
-            kDebug() << "leaving this world for a better one." << endl;
+            kDebug() << "leaving this world for a better one.";
         }
 };
 
@@ -68,7 +68,7 @@ class Svg::Private
                 themed = false;
 
                 if (!QFile::exists(path)) {
-                    kDebug() << "Plasma::Svg: file '" << path << "' does not exist!" << endl;
+                    kDebug() << "Plasma::Svg: file '" << path << "' does not exist!";
                 }
             } else {
                 themePath = imagePath;
@@ -106,13 +106,13 @@ class Svg::Private
             if (!elementId.isEmpty()) {
                 id.append(elementId);
             }
-            //kDebug() << "id is " << id << endl;
+            //kDebug() << "id is " << id;
 
             if (QPixmapCache::find(id, p)) {
-                //kDebug() << "found cached version of " << id << endl;
+                //kDebug() << "found cached version of " << id;
                 return;
             } else {
-                //kDebug() << "didn't find cached version of " << id << ", so re-rendering" << endl;
+                //kDebug() << "didn't find cached version of " << id << ", so re-rendering";
             }
 
             // we have to re-render this puppy
@@ -122,7 +122,7 @@ class Svg::Private
             } else {
                 s = elementSize(elementId);
             }
-            //kDebug() << "size for " << elementId << " is " << s << endl;
+            //kDebug() << "size for " << elementId << " is " << s;
 
             p = QPixmap(s);
             p.fill(Qt::transparent);
@@ -150,7 +150,7 @@ class Svg::Private
             QHash<QString, SharedSvgRenderer::Ptr>::const_iterator it = renderers.find(path);
 
             if (it != renderers.end()) {
-                //kDebug() << "gots us an existing one!" << endl;
+                //kDebug() << "gots us an existing one!";
                 renderer = it.value();
             } else {
                 renderer = new SharedSvgRenderer(path);
@@ -212,7 +212,7 @@ void Svg::paint(QPainter* painter, const QPointF& point, const QString& elementI
 {
     QPixmap pix;
     d->findInCache(pix, elementID);
-    //kDebug() << "pix size is " << pix.size() << endl;
+    //kDebug() << "pix size is " << pix.size();
     painter->drawPixmap(QRectF(point, pix.size()), pix, QRectF(QPointF(0,0), pix.size()));
 }
 
@@ -225,7 +225,7 @@ void Svg::paint(QPainter* painter, const QRectF& rect, const QString& elementID)
 {
     QPixmap pix;
     d->findInCache(pix, elementID);
-    //kDebug() << "pix size is " << pix.size() << endl;
+    //kDebug() << "pix size is " << pix.size();
     painter->drawPixmap(rect, pix, QRectF(QPointF(0,0), pix.size()));
 }
 

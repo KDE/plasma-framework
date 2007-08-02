@@ -182,7 +182,7 @@ void Phase::appletDestroyed(QObject* o)
 
 void Phase::animateItem(QGraphicsItem* item, Animation animation)
 {
-     //kDebug()<<k_funcinfo<<endl;
+     //kDebug()<<k_funcinfo;
     // get rid of any existing animations on this item.
     //TODO: shoudl we allow multiple anims per item?
     QMap<QGraphicsItem*, AnimationState*>::iterator it = d->animatedItems.find(item);
@@ -221,7 +221,7 @@ void Phase::animateItem(QGraphicsItem* item, Animation animation)
 
 void Phase::moveItem(QGraphicsItem* item, Movement movement, const QPoint &destination)
 {
-     //kDebug()<<k_funcinfo<<endl;
+     //kDebug()<<k_funcinfo;
      QMap<QGraphicsItem*, MovementState*>::iterator it = d->movingItems.find(item);
      if (it != d->movingItems.end()) {
           delete it.value();
@@ -268,7 +268,7 @@ void Phase::render(QGraphicsItem* item, QImage& image, RenderOp op)
 
 Phase::AnimId Phase::animateElement(QGraphicsItem *item, ElementAnimation animation)
 {
-    //kDebug() << "startElementAnimation(AnimId " << animation << ")" << endl;
+    //kDebug() << "startElementAnimation(AnimId " << animation << ")";
     ElementAnimationState *state = new ElementAnimationState;
     state->item = item;
     state->curve = d->animator->curve(animation);
@@ -281,7 +281,7 @@ Phase::AnimId Phase::animateElement(QGraphicsItem *item, ElementAnimation animat
     state->currentInterval = state->interval;
     state->id = ++d->animId;
 
-    //kDebug() << "animateElement " << animation << ", interval: " << state->interval << ", frames: " << state->frames << endl;
+    //kDebug() << "animateElement " << animation << ", interval: " << state->interval << ", frames: " << state->frames;
     bool needTimer = true;
     if (state->frames < 1) {
         state->frames = 1;
@@ -292,7 +292,7 @@ Phase::AnimId Phase::animateElement(QGraphicsItem *item, ElementAnimation animat
     d->animatedElements[state->id] = state;
     state->item->update();
 
-    //kDebug() << "startElementAnimation(AnimId " << animation << ") returning " << state->id << endl;
+    //kDebug() << "startElementAnimation(AnimId " << animation << ") returning " << state->id;
     if (needTimer && !d->timerId) {
         // start a 20fps timer;
         //TODO: should be started at the maximum frame rate needed only?
@@ -309,7 +309,7 @@ void Phase::stopElementAnimation(AnimId id)
         delete it.value();
         d->animatedElements.erase(it);
     }
-    //kDebug() << "stopElementAnimation(AnimId " << id << ") done" << endl;
+    //kDebug() << "stopElementAnimation(AnimId " << id << ") done";
 }
 
 void Phase::setAnimationPixmap(AnimId id, const QPixmap &pixmap)
@@ -317,7 +317,7 @@ void Phase::setAnimationPixmap(AnimId id, const QPixmap &pixmap)
     QMap<AnimId, ElementAnimationState*>::iterator it = d->animatedElements.find(id);
 
     if (it == d->animatedElements.end()) {
-        kDebug() << "Phase::setAnimationPixmap(" << id << ") found no entry for it!" << endl;
+        kDebug() << "Phase::setAnimationPixmap(" << id << ") found no entry for it!";
         return;
     }
 
@@ -329,16 +329,16 @@ QPixmap Phase::animationResult(AnimId id)
     QMap<AnimId, ElementAnimationState*>::const_iterator it = d->animatedElements.find(id);
 
     if (it == d->animatedElements.constEnd()) {
-        //kDebug() << "Phase::animationResult(" << id << ") found no entry for it!" << endl;
+        //kDebug() << "Phase::animationResult(" << id << ") found no entry for it!";
         return QPixmap();
     }
 
     ElementAnimationState* state = it.value();
     qreal progress = state->frames;
-    //kDebug() << "Phase::animationResult(" << id <<   " at " << progress  << endl;
+    //kDebug() << "Phase::animationResult(" << id <<   " at " << progress;
     progress = state->currentFrame / progress;
     progress = qMin(1.0, qMax(0.0, progress));
-    //kDebug() << "Phase::animationResult(" << id <<   " at " << progress  << endl;
+    //kDebug() << "Phase::animationResult(" << id <<   " at " << progress;
 
     switch (state->animation) {
         case ElementAppear:
@@ -361,7 +361,7 @@ void Phase::timerEvent(QTimerEvent *event)
         elapsed = d->time.elapsed();
     }
     d->time.restart();
-    //kDebug() << "timeEvent, elapsed time: " << elapsed << endl;
+    //kDebug() << "timeEvent, elapsed time: " << elapsed;
 
     foreach (AnimationState* state, d->animatedItems) {
         if (state->currentInterval <= elapsed) {
@@ -398,7 +398,7 @@ void Phase::timerEvent(QTimerEvent *event)
                 qreal progress = state->frames;
                 progress = state->currentFrame / progress;
                 progress = qMin(1.0, qMax(0.0, progress));
-                //kDebug()<<progress<<endl;
+                //kDebug()<<progress;
                 d->performMovement(progress, state);
                 state->currentInterval = state->interval;
                 animationsRemain = true;

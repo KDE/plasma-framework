@@ -92,7 +92,7 @@ const Package* ScriptEngine::package() const
 QStringList ScriptEngine::knownLanguages()
 {
     KService::List offers = KServiceTypeTrader::self()->query("Plasma/ScriptEngine");
-    //kDebug() << "Applet::knownApplets constraint was '" << constraint << "' which got us " << offers.count() << " matches" << endl;
+    //kDebug() << "Applet::knownApplets constraint was '" << constraint << "' which got us " << offers.count() << " matches";
 
     QStringList languages;
     foreach (KService::Ptr service, offers) {
@@ -115,7 +115,7 @@ ScriptEngine* ScriptEngine::load(const QString &language, Applet *applet)
     KService::List offers = KServiceTypeTrader::self()->query("Plasma/ScriptEngine", constraint);
 
     if (offers.isEmpty()) {
-        kDebug() << "ScriptEngine::load: no offers for \"" << language << "\"" << endl;
+        kDebug() << "ScriptEngine::load: no offers for \"" << language << "\"";
         return 0;
     }
 
@@ -129,7 +129,7 @@ ScriptEngine* ScriptEngine::load(const QString &language, Applet *applet)
     }
 
     if (!engine) {
-        kDebug() << "Couldn't load script engine for language " << language << "!" << endl;
+        kDebug() << "Couldn't load script engine for language " << language << "!";
         return 0;
     }
 

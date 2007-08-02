@@ -164,14 +164,14 @@ bool ConfigXmlHandler::startElement(const QString &namespaceURI, const QString &
     Q_UNUSED(namespaceURI)
     Q_UNUSED(qName)
 
-//     kDebug() << "ConfigXmlHandler::startElement(" << localName << " " << qName << endl;
+//     kDebug() << "ConfigXmlHandler::startElement(" << localName << qName;
     int numAttrs = attrs.count();
     QString tag = localName.toLower();
     if (tag == "group") {
         for (int i = 0; i < numAttrs; ++i) {
             QString name = attrs.localName(i).toLower();
             if (name == "name") {
-                kDebug() << "set group to " << attrs.value(i) << endl;
+                kDebug() << "set group to " << attrs.value(i);
                 m_config->setCurrentGroup(attrs.value(i));
             }
         }
@@ -213,7 +213,7 @@ bool ConfigXmlHandler::endElement(const QString &namespaceURI, const QString &lo
     Q_UNUSED(namespaceURI)
     Q_UNUSED(qName)
 
-//     kDebug() << "ConfigXmlHandler::endElement(" << localName << " " << qName << endl;
+//     kDebug() << "ConfigXmlHandler::endElement(" << localName << qName;
     QString tag = localName.toLower();
     if (tag == "entry") {
         addItem();

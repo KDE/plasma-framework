@@ -305,7 +305,7 @@ bool IconAction::event(QEvent::Type type, const QPointF &pos)
         break;
 
     case QEvent::MouseButtonRelease: {
-        kDebug() << "IconAction::event got a QEvent::MouseButtonRelease, " << isSelected() << endl;
+        kDebug() << "IconAction::event got a QEvent::MouseButtonRelease, " << isSelected();
         bool wasSelected = isSelected();
         setSelected(false);
         if (wasSelected) {
@@ -387,7 +387,7 @@ void Icon::addAction(QAction *action)
 {
     int count = d->cornerActions.count();
     if (count > 3) {
-        kDebug() << "Icon::addAction(QAction*) no more room for more actions!" << endl;
+        kDebug() << "Icon::addAction(QAction*) no more room for more actions!";
     }
 
     IconAction* iconAction = new IconAction(this, action);
@@ -689,7 +689,7 @@ bool Icon::isDown()
 
 void Icon::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-kDebug() << "Icon::mousePressEvent " << endl;
+kDebug() << "Icon::mousePressEvent ";
     foreach (IconAction *action, d->cornerActions) {
         action->event(event->type(), event->pos());
     }
@@ -702,7 +702,7 @@ kDebug() << "Icon::mousePressEvent " << endl;
 void Icon::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
     bool inside = boundingRect().contains(event->pos());
-kDebug() << "Icon::mouseReleaseEvent " << inside << endl;
+kDebug() << "Icon::mouseReleaseEvent " << inside;
     Private::ButtonState was = d->state;
     if (inside) {
         d->state = Private::HoverState;

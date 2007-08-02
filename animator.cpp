@@ -120,7 +120,7 @@ void Animator::slideOut(qreal progress, QGraphicsItem *item, const QPoint &desti
 {
     //FIXME: rewrite
     Q_UNUSED(progress);
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
     item->translate(destination.x(), destination.y());
 }
 
