@@ -697,6 +697,7 @@ kDebug() << "Icon::mousePressEvent ";
     d->state = Private::PressedState;
     QGraphicsItem::mousePressEvent(event);
     update();
+    event->accept();
 }
 
 void Icon::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
