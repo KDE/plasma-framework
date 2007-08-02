@@ -177,9 +177,15 @@ class Svg::Private
             QSizeF naturalSize = renderer->defaultSize();
             qreal dx = size.width() / naturalSize.width();
             qreal dy = size.height() / naturalSize.height();
-
+            
             return QRect(elementRect.x() * dx, elementRect.y() * dy,
                          elementRect.width() * dx, elementRect.height() * dy);
+        }
+    
+        QMatrix matrixForElement(const QString& elementId)
+        {
+            createRenderer();
+            return renderer->matrixForElement(elementId);
         }
 
         static QHash<QString, SharedSvgRenderer::Ptr> renderers;
@@ -259,6 +265,12 @@ bool Svg::elementExists(const QString& elementId) const
 {
     d->createRenderer();
     return d->renderer->elementExists(elementId);
+}
+
+QMatrix Svg::matrixForElement(const QString& elementId) const
+{
+    d->createRenderer();
+    return d->renderer->matrixForElement(elementId);
 }
 
 bool Svg::isValid() const

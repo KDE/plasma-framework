@@ -30,6 +30,7 @@ class QRect;
 class QRectF;
 class QSize;
 class QSizeF;
+class QMatrix;
 
 namespace Plasma
 {
@@ -156,6 +157,14 @@ class PLASMA_EXPORT Svg : public QObject
          **/
         Q_INVOKABLE bool elementExists( const QString& elementId ) const;
 
+        /**
+         * The transformation matrix of the element. That includes the 
+         * transformation on the element itself.
+         * @arg elementId the id of the element
+         * @return the matrix for the element
+         **/
+        Q_INVOKABLE QMatrix matrixForElement(const QString& elementId) const;
+        
         /**
          * @return true if the SVG file exists and the document is valid,
          *         otherwise false. This method can be expensive as it
