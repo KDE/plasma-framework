@@ -52,144 +52,176 @@ class PLASMA_EXPORT Widget  : public QObject,
     Q_OBJECT
 public:
 
+
     /**
-        * Constructor.
-        */
+     * Creates a new Plasma::Widget.
+     * @param parent the QGraphicsItem this icon is parented to.
+     */
     explicit Widget(QGraphicsItem *parent = 0);
 
     /**
-        * Virtual Destructor.
-        */
+     * Destroys a Plasma::Widget.
+     */
     virtual ~Widget();
 
     /**
-        * Returns a bitmask with the directions that this Widget can be expanded.
-        */
+     * This method is used by Plasma::Layout to determine which directions the
+     * widget naturally expands.
+     * @return bitmask with the directions that this Widget can be expanded.
+     */
     virtual Qt::Orientations expandingDirections() const;
 
     /**
-        * Sets the minimum size of this Widget.
-        */
+     * Sets the minimum size of the Widget.
+     * @param size the size to set as the minimum size.
+     */
     void setMinimumSize(const QSizeF& size);
 
     /**
-        * Returns the minimum size of this Widget.
-        */
+     * @return minimum size of the Widget.
+     */
     QSizeF minimumSize() const;
 
     /**
-        * Sets the maximum size of this Widget.
-        */
+     * Sets the maximum size of the Widget.
+     * @param size the size to set as the maximum size.
+     */
     void setMaximumSize(const QSizeF& size);
 
     /**
-        * Returns the maximum size of this Widget.
-        */
+     * @return maximum size of the Widget.
+     */
     QSizeF maximumSize() const;
 
     /**
-        * Returns true whatever this Widget can use height-for-width layout management,
-        * false otherwise.
-        */
+     * This method is used by Plasma::Layout to determine whether this widget
+     * can provide a height value given a width value.
+     * @return whether or not this Widget has heightForWidth.
+     */
     virtual bool hasHeightForWidth() const;
 
     /**
-        * Returns the corresponding height for a given width.
-        * @param w Width
-        */
-    virtual qreal heightForWidth(qreal w) const;
+     * This method is used by Plasma::Layout to determine a height value
+     * given a width value.
+     * @param width the width to use to determine height.
+     * @return height calculated using width given.
+     */
+    virtual qreal heightForWidth(qreal width) const;
 
     /**
-        * Returns true whatever this Widget can use width-for-height layout management,
-        * false otherwise.
-        */
+     * This method is used by Plasma::Layout to determine whether this widget
+     * can provide a width value given a height value.
+     * @return whether or not this Widget has widthForHeight.
+     */
     virtual bool hasWidthForHeight() const;
 
     /**
-        * Returns the corresponding width for a given height.
-        * @param h Height
-        */
+     * This method is used by Plasma::Layout to determine a width value
+     * given a height value.
+     * @param height the width to use to determine width.
+     * @return width calculated using height given.
+     */
     virtual qreal widthForHeight(qreal h) const;
 
     /**
-        * Returns the geometry of this Widget, in parent coordinates.
-        */
+     * @return geometry of this widget.
+     */
     QRectF geometry() const;
 
     /**
-        * Returns the geometry of this Widget, in local coordinates.
-        */
+     * @return geometry of this widget in local coordinates.
+     */
     QRectF localGeometry() const;
 
     /**
-        * Sets the geometry of this Widget.
-        */
+    * Sets the geometry of this Widget.
+    */
+    /**
+     * Sets the geometry of this Plasma::Widget
+     * @param geometry the geometry to apply to this Plasma::Widget.
+     */
     void setGeometry(const QRectF &geometry);
 
     /**
-        * Propagates the geometry information to associated layouts and other Widgets.
-        */
+     * This method is used to notify any containing Plasma::Layout that it should
+     * reset its geometry.
+     */
+    // NOTE: this is a completely broken concept -MB
     void updateGeometry();
 
     /**
-        * Invalidates the geometry information.
-        */
+     * Invalidate current geometry of this Plasma::Widget as well as its
+     * parent if it exists.
+     */
     virtual void invalidate();
 
     /**
-        * Returns the most appropriate size of this Widget to hold it's contents.
-        */
+     * Returns the recommended size for this widget. Note that this size is not
+     * necessarily only the size for the widget, but might also include margins etc.
+     * @return recommended size for this Plasma::Widget.
+     */
     virtual QSizeF sizeHint() const;
 
     /**
-        * Returns the size of this Widget.
-        */
+     * Sets the size of this Plasma::Widget.
+     * @param size the size of this Plasma::Widget
+     */
+    void setSize(const QSizeF &size);
+
+    /**
+     * @return the size of this Plasma::Widget
+     */
     QSizeF size() const;
 
     /**
-        * Returns the bounding rectangle of this Widget.
-        */
+     * Reimplemented from QGraphicsItem
+     * @return the bounding rectangle for this Plasma::Widget
+     */
     virtual QRectF boundingRect() const;
 
     /**
-        * Resizes this Widget.
-        * @param size New size
-        */
+     * Resizes this Plasma::Widget.
+     * @param size the new size of this Plasma::Widget.
+     */
     void resize(const QSizeF &size);
 
     /**
-        * Resizes this Widget.
-        * @param w New width
-        * @param h New height
-        */
-    void resize(qreal w, qreal h);
+     * Convenience method for resizing this Plasma::Widget
+     * @param width the new width.
+     * @param height the new height.
+     */
+    void resize(qreal width, qreal height);
 
     /**
-        * Returns the parent of this Widget.
-        */
+     * @return this Plasma::Widget's parent, returns a null pointer if
+     *         none exist.
+     */
     Widget *parent() const;
 
     /**
-        * Changes the parent of this Widget.
-        */
-    void reparent(Widget *w);
+     * Sets the parent of this Plasma::Widget;
+     * @param widget the widget to reparent to.
+     */
+    void reparent(Widget *widget);
 
     /**
-        * Appends a child Widget to this Widget.
-        */
-    void addChild(Widget *w);
+     * Add another Plasma::Widget as a child of this one.
+     * @param widget the widget to reparent to this Plasma::Widget.
+     */
+    void addChild(Widget *widget);
 
+protected:
     /**
-        * Paint function.
-        */
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
-
-    /**
-        * Paints the widget.  Called by the paint function under correct conditions.
-        */
+     * Paints the widget
+     * @param painter the QPainter to use to paint.
+     * @param option the style option used to give specific info on the item being dawn.
+     * @param widget the parent QWidget (most likely the Corona)
+     */
     virtual void paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
 
 private:
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
+
     class Private;
     Private *const d;
 };

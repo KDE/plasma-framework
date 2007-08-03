@@ -146,6 +146,8 @@ void Widget::setGeometry(const QRectF& geometry)
 
 void Widget::updateGeometry()
 {
+    prepareGeometryChange();
+
     if (layout()) {
         kDebug() << (void *) this << " updating geometry to " << size();
         layout()->setGeometry(geometry());
@@ -164,6 +166,18 @@ void Widget::invalidate()
 QSizeF Widget::sizeHint() const
 {
     return size();
+}
+
+void Widget::setSize(const QSizeF &newSize)
+{
+    prepareGeometryChange();
+    qreal width = qBound(d->minimumSize.width(), newSize.width(), d->maximumSize.width());
+    qreal height = qBound(d->minimumSize.height(), newSize.height(), d->maximumSize.height());
+
+    d->size.setWidth(width);
+    d->size.setHeight(height);
+
+    update();
 }
 
 QSizeF Widget::size() const
