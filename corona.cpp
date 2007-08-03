@@ -224,7 +224,7 @@ void Corona::dragEnterEvent( QGraphicsSceneDragDropEvent *event)
 
 void Corona::dragLeaveEvent(QGraphicsSceneDragDropEvent *event)
 {
-   // kDebug() << "Corona::dragLeaveEvent(QGraphicsSceneDragDropEvent* event)" << endl;
+   // kDebug() << "Corona::dragLeaveEvent(QGraphicsSceneDragDropEvent* event)";
     //TODO If an established Applet is dragged out of the Corona, remove it and
     //     create a QDrag type thing to keep the Applet's settings
 }
@@ -234,12 +234,12 @@ void Corona::dragMoveEvent(QGraphicsSceneDragDropEvent *event)
     QGraphicsScene::dragMoveEvent(event);
 
     event->accept();
-    //kDebug() << "Corona::dragMoveEvent(QDragMoveEvent* event)" << endl;
+    //kDebug() << "Corona::dragMoveEvent(QDragMoveEvent* event)";
 }
 
 void Corona::dropEvent(QGraphicsSceneDragDropEvent *event)
 {
-    //kDebug() << "Corona::dropEvent(QDropEvent* event)" << endl;
+    //kDebug() << "Corona::dropEvent(QDropEvent* event)";
     if (event->mimeData()->hasFormat("text/x-plasmoidservicename")) {
         //TODO This will pretty much move into dragEnterEvent()
         QString plasmoidName;

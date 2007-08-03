@@ -38,7 +38,7 @@ QGraphicsItemGroup* KarambaManager::loadKaramba(const KUrl &themePath, QGraphics
             karamba = createKaramba(themePath, scene->views()[0]);
         }
     } else {
-        kWarning() << "Could not load " << karambaLib << endl;
+        kWarning() << "Could not load " << karambaLib ;
     }
 
     return karamba;

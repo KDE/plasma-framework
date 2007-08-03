@@ -252,7 +252,7 @@ bool Package::createPackage(const PackageMetadata & metadata,
                             const QString& destination)
 {
     if (!metadata.isComplete()) {
-        kWarning(550) << "Metadata file is not complete" << endl;
+        kWarning(550) << "Metadata file is not complete" ;
         return false;
     }
 
