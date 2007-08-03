@@ -30,6 +30,10 @@ namespace Plasma
 class PackageMetadata::Private
 {
     public:
+        Private()
+            : screenshot("screenshot.png")
+        {}
+
         QString name;
         QString description;
         QString author;
@@ -42,6 +46,7 @@ class PackageMetadata::Private
         QString requiredVersion;
         QString releaseNotes;
         QString icon;
+        QString screenshot;
         QString preview;
         QString type;
         QString serviceType;
@@ -83,6 +88,7 @@ void PackageMetadata::write(const QString& filename) const
     config.writeEntry("Name", d->name);
     config.writeEntry("Description", d->description);
     config.writeEntry("Icon", d->icon);
+    config.writeEntry("X-KDE-Screenshot", d->screenshot);
     config.writeEntry("ServiceTypes", d->serviceType);
     config.writeEntry("X-KDE-PluginInfo-Name", d->name);
     config.writeEntry("X-KDE-PluginInfo-Author", d->author);
@@ -105,6 +111,7 @@ void PackageMetadata::read(const QString& filename)
     d->name = config.readEntry("X-KDE-PluginInfo-Name", d->name);
     d->description = config.readEntry("Description", d->description);
     d->icon = config.readEntry("Icon", d->icon);
+    d->screenshot= config.readEntry("X-KDE-Screenshot", d->screenshot);
     d->serviceType = config.readEntry("ServiceTypes", d->serviceType);
     d->author = config.readEntry("X-KDE-PluginInfo-Author", d->author);
     d->email = config.readEntry("X-KDE-PluginInfo-Email", d->email);
@@ -182,6 +189,11 @@ QString PackageMetadata::icon() const
     return d->icon;
 }
 
+QString PackageMetadata::screenshot() const
+{
+    return d->screenshot;
+}
+
 QString PackageMetadata::preview() const
 {
     return d->preview;
@@ -254,6 +266,11 @@ void PackageMetadata::setReleaseNotes(const QString &releaseNotes)
 void PackageMetadata::setIcon(const QString &icon)
 {
     d->icon = icon;
+}
+
+void PackageMetadata::setScreenshot(const QString & screenshot)
+{
+    d->screenshot = screenshot;
 }
 
 void PackageMetadata::setPreview(const QString& path)

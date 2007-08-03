@@ -82,6 +82,11 @@ public:
     QString icon() const;
 
     /**
+     * @return the name of the screenshot file, screenshot.png by default
+     */
+    QString screenshot() const;
+
+    /**
      * Path to a PNG file containing a preview image.
      * This might be a screenshot, for instance.
      *
@@ -107,6 +112,13 @@ public:
     void setFilenameToSave(const QString &);
     // filename
     void setIcon(const QString &);
+
+    /**
+     * Sets the name of the screenshot file.
+     *
+     * @param file the name of the file
+     */
+    void setScreenshot(const QString &file);
 
     /**
      * Sets the path for the file containing a preview image.
