@@ -63,6 +63,7 @@ class PLASMA_EXPORT Applet : public QObject, public Widget
     Q_PROPERTY( bool immutable READ isImmutable WRITE setImmutable )
     Q_PROPERTY( bool drawStandardBackground READ drawStandardBackground WRITE setDrawStandardBackground )
     Q_PROPERTY( bool failedToLaunch READ failedToLaunch WRITE setFailedToLaunch )
+    Q_PROPERTY( bool needsConfiguring READ needsConfiguring WRITE setNeedsConfiguring )
     Q_PROPERTY( QRectF boundingRect READ boundingRect )
 
     public:
@@ -401,6 +402,25 @@ class PLASMA_EXPORT Applet : public QObject, public Widget
          **/
         void setFailedToLaunch(bool failed, const QString& reason = QString());
 
+        /**
+         * @return true if the applet currently needs to be configured, 
+         *         otherwise, false
+         */
+        bool needsConfiguring() const;
+
+        /**
+         * When the applet needs to be configured before being usable, this
+         * method can be called to show a standard interface prompting the user
+         * to configure the applet
+         *
+         * Not that all children items will be deleted when this method is
+         * called. If you have pointers to these items, you will need to
+         * reset them after calling this method.
+         *
+         * @param needsConfiguring true if the applet needs to be configured,
+         *                         or false if it doesn't
+         */
+        void setNeedsConfiguring(bool needsConfiguring);
         enum { Type = Plasma::AppletType };
 
         /**
@@ -492,6 +512,9 @@ class PLASMA_EXPORT Applet : public QObject, public Widget
          * @internal event filter; used for focus watching
          **/
         bool eventFilter( QObject *o, QEvent *e );
+
+    protected Q_SLOTS:
+        void performSetupConfig();
 
     private:
         Q_DISABLE_COPY(Applet)

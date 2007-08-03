@@ -49,6 +49,7 @@
 
 #include "plasma/widgets/widget.h"
 #include "plasma/widgets/lineedit.h"
+#include "plasma/widgets/pushbutton.h"
 #include "plasma/widgets/vboxlayout.h"
 
 //#include "stackblur_shadows.cpp"
@@ -68,12 +69,13 @@ public:
           background(0),
           failureText(0),
           scriptEngine(0),
+          cachedBackground(0),
           configXml(0),
           kioskImmutable(false),
           immutable(false),
           hasConfigurationInterface(false),
           failed(false),
-          cachedBackground(0)
+          needsConfig(false)
     {
         if (appletId == 0) {
             appletId = nextId();
@@ -300,12 +302,12 @@ public:
     Plasma::LineEdit *failureText;
     ScriptEngine* scriptEngine;
     ConfigXml* configXml;
+    QPixmap* cachedBackground;
     bool kioskImmutable : 1;
     bool immutable : 1;
     bool hasConfigurationInterface : 1;
     bool failed : 1;
-private:
-    QPixmap* cachedBackground;
+    bool needsConfig : 1;
 };
 
 uint Applet::Private::s_maxAppletId = 0;
@@ -501,7 +503,7 @@ void Applet::setFailedToLaunch(bool failed, const QString& reason)
     delete layout();
 
     if (failed) {
-        setDrawStandardBackground(failed || d->background != 0);
+        setDrawStandardBackground(true);
         Layout* failureLayout = new VBoxLayout(this);
         d->failureText = new LineEdit(this, scene());
         d->failureText->setFlags(0);
@@ -512,6 +514,39 @@ void Applet::setFailedToLaunch(bool failed, const QString& reason)
     }
 
     update();
+}
+
+bool Applet::needsConfiguring() const
+{
+    return d->needsConfig;
+}
+
+void Applet::setNeedsConfiguring(bool needsConfig)
+{
+    if (d->needsConfig == needsConfig) {
+        return;
+    }
+
+    d->needsConfig = needsConfig;
+    prepareGeometryChange();
+    qDeleteAll(QGraphicsItem::children());
+    delete layout();
+
+    if (needsConfig) {
+        setDrawStandardBackground(true);
+        Layout* layout = new VBoxLayout(this);
+        PushButton* button = new PushButton(this);
+        button->setText(i18n("Configure..."));
+        connect(button, SIGNAL(clicked()), this, SLOT(performSetupConfig()));
+        layout->addItem(button);
+    }
+}
+
+void Applet::performSetupConfig()
+{
+    qDeleteAll(QGraphicsItem::children());
+    delete layout();
+    showConfigurationInterface();
 }
 
 int Applet::type() const
@@ -581,11 +616,10 @@ void Applet::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
             d->paintBackground(painter, this);
         }
 
-        if (d->failed) {
-            return;
+        if (!d->failed && !d->needsConfig) {
+            paintInterface(painter, option, QRect(QPoint(0,0), d->contentSize(this).toSize()));
         }
 
-        paintInterface(painter, option, QRect(QPoint(0,0), d->contentSize(this).toSize()));
         d->paintHover(painter, this);
     } else if (zoomLevel == scalingFactor(Plasma::GroupZoom)) { // Show Groups + Applet outline
         //TODO: make pretty.
