@@ -51,30 +51,42 @@ class CheckBox::Private
 };
 
 CheckBox::CheckBox(QGraphicsItem *parent)
-    : QObject(),
-      QGraphicsItem(parent),
+    : Plasma::Widget(parent),
       d(new Private)
+{
+    init();
+}
+
+
+CheckBox::CheckBox(const QString &text, QGraphicsItem *parent)
+    : Plasma::Widget(parent),
+      d(new Private)
+{
+    init();
+    setText(text);
+}
+
+void CheckBox::init()
 {
     setAcceptedMouseButtons(Qt::LeftButton);
     setAcceptsHoverEvents(true);
     setAcceptDrops(true);
     setEnabled(true);
+
+    setPos(QPointF(0.0,0.0));
+
     d->height = 40;
     d->width = 100 ;
     d->maxWidth = 600;
-    setPos(QPointF(0.0,0.0));
     d->state= Qt::Unchecked;
-    d->labelText=QString("Plasma");
-    d->labelTextColor= QColor(201,201,255);
+
     d->hasIcon = false;
-    d->iconSize=QSize(32,32);
+    d->iconSize = QSize(32,32);
     d->hasMouse = false;
     d->down = false;
     d->hovering = false;
     d->down = false;
-
 }
-
 
 CheckBox::~CheckBox()
 {
@@ -83,16 +95,17 @@ CheckBox::~CheckBox()
 
 QRectF CheckBox::boundingRect() const
 {
-    return QRectF(0,0,d->width,d->height);
+    return QRectF(0, 0, d->width, d->height);
 }
 
-void CheckBox::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+void CheckBox::paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     Q_UNUSED(option)
+
     QStyleOptionButton options;
     options.rect = boundingRect().toRect();
     options.text = text();
-    options.state |= (d->state == Qt::Checked)? QStyle::State_On : QStyle::State_Off;
+    options.state |= (d->state == Qt::Checked) ? QStyle::State_On : QStyle::State_Off;
 
     //if (d->down) {
       //  options.state |= QStyle::State_Sunken;
@@ -105,6 +118,7 @@ void CheckBox::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
         options.state |= QStyle::State_Raised;
         options.state |= QStyle::State_On;
     }
+
     widget-> style()->drawControl(QStyle::CE_CheckBox, &options, painter, widget);
 }
 

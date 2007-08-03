@@ -61,8 +61,7 @@ RadioButton::Private::~Private()
 
 
 RadioButton::RadioButton(QGraphicsItem *parent)
-    : QObject(),
-      QGraphicsItem(parent),
+    : Plasma::Widget(parent),
       d(new Private)
 {
     setAcceptedMouseButtons(Qt::LeftButton);
@@ -79,7 +78,7 @@ QRectF RadioButton::boundingRect() const
     return QRectF(0, 0, 150, 30); // FIXME: this is obviously wrong
 }
 
-void RadioButton::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+void RadioButton::paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     QStyle *style = widget ? widget->style() : QApplication::style();
 

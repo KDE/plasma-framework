@@ -51,8 +51,7 @@ class PushButton::Private
 };
 
 PushButton::PushButton(Widget *parent)
-    : QObject(),
-      Widget(parent),
+    : Plasma::Widget(parent),
       d(new Private)
 {
     setAcceptedMouseButtons(Qt::LeftButton);

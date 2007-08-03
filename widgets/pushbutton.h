@@ -38,8 +38,7 @@ namespace Plasma
  *
  *
  */
-class PLASMA_EXPORT PushButton : public QObject,
-                                 public Plasma::Widget
+class PLASMA_EXPORT PushButton : public Plasma::Widget
 {
     Q_OBJECT
 

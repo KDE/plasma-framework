@@ -23,8 +23,9 @@
 #include <QtGui/QGraphicsItem>
 
 #include <plasma/plasma_export.h>
-
 #include <plasma/dataengine.h>
+#include <plasma/widgets/widget.h>
+
 //TODO
 //Please Document this class
 
@@ -34,45 +35,54 @@ namespace Plasma
 /**
  * Class that emulates a QCheckBox inside plasma
  */
-class PLASMA_EXPORT CheckBox : public QObject, public QGraphicsItem
+class PLASMA_EXPORT CheckBox : public Plasma::Widget
 {
     Q_OBJECT
-    public:
+public:
+    explicit CheckBox(QGraphicsItem *parent = 0);
+    explicit CheckBox(const QString &text, QGraphicsItem *parent = 0);
+    virtual ~CheckBox();
 
-        CheckBox(QGraphicsItem *parent = 0);
-        virtual ~CheckBox();
+    void paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
+    QRectF boundingRect() const;
 
-        void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
-        QRectF boundingRect() const;
-         void setText(const QString&) ;
-        QString text() const;
-        QSize size() const;
-        int height() const;
-        int width() const;
-        void setSize(const QSize &size);
-        void setWidth(int width);
-        void setHeight(int height);
-        void setMaximumWidth(int maxwidth);
-        Qt::CheckState checkState() const;
-        void setChecked(bool checked);
-        void setCheckState(Qt::CheckState state);
+    Qt::CheckState checkState() const;
+    void setChecked(bool checked);
+    void setCheckState(Qt::CheckState state);
 
+    void setText(const QString&) ;
+    QString text() const;
 
-    public Q_SLOTS:
-        void updated(const QString&, const DataEngine::Data&);
-    Q_SIGNALS:
-        void clicked();
-    protected:
-        //bool isDown();
-        void mousePressEvent ( QGraphicsSceneMouseEvent * event );
-        void mouseReleaseEvent ( QGraphicsSceneMouseEvent * event );
-        void mouseMoveEvent (QGraphicsSceneMouseEvent * event);
-        void hoverMoveEvent ( QGraphicsSceneHoverEvent * event );
-        void hoverLeaveEvent ( QGraphicsSceneHoverEvent * event );
-        void hoverEnterEvent ( QGraphicsSceneHoverEvent * event );
-    private:
-        class Private ;
-        Private *  const d;
+    QSize size() const;
+    void setSize(const QSize &size);
+
+    int height() const;
+    void setHeight(int height);
+
+    int width() const;
+    void setWidth(int width);
+    void setMaximumWidth(int maxwidth);
+
+public Q_SLOTS:
+    void updated(const QString&, const DataEngine::Data&);
+
+Q_SIGNALS:
+    void clicked();
+
+protected:
+    //bool isDown();
+    void mousePressEvent ( QGraphicsSceneMouseEvent * event );
+    void mouseReleaseEvent ( QGraphicsSceneMouseEvent * event );
+    void mouseMoveEvent (QGraphicsSceneMouseEvent * event);
+    void hoverMoveEvent ( QGraphicsSceneHoverEvent * event );
+    void hoverLeaveEvent ( QGraphicsSceneHoverEvent * event );
+    void hoverEnterEvent ( QGraphicsSceneHoverEvent * event );
+
+private:
+    void init();
+
+    class Private ;
+    Private *  const d;
 
 };
 

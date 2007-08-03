@@ -16,7 +16,7 @@ class Label::Private
 };
 
 Label::Label(Widget *parent)
-    : Widget(parent),
+    : Plasma::Widget(parent),
       d(new Private)
 {
     setAlignment(Qt::AlignHCenter);

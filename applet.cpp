@@ -315,18 +315,16 @@ uint Applet::Private::s_maxAppletId = 0;
 Applet::Applet(QGraphicsItem *parent,
                const QString& serviceID,
                uint appletId)
-    : QObject(0),
-      Widget(parent),
-      d(new Private(KService::serviceByStorageId(serviceID), appletId))
+    :  Widget(parent),
+       d(new Private(KService::serviceByStorageId(serviceID), appletId))
 {
     d->init(this);
 }
 
 Applet::Applet(QObject* parent, const QStringList& args)
-    : QObject(parent),
-      Widget(0),
-      d(new Private(KService::serviceByStorageId(args.count() > 0 ? args[0] : QString()),
-                    args.count() > 1 ? args[1].toInt() : 0))
+    :  Widget(0),
+       d(new Private(KService::serviceByStorageId(args.count() > 0 ? args[0] : QString()),
+                     args.count() > 1 ? args[1].toInt() : 0))
 {
     d->init(this);
     // the brain damage seen in the initialization list is due to the 

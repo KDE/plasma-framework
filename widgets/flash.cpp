@@ -62,8 +62,7 @@ class Flash::Private
 
 
 Flash::Flash(QGraphicsItem *parent)
-    : QObject(),
-      QGraphicsItem(parent),
+    : Plasma::Widget(parent),
       d(new Private)
 {
     d->defaultDuration = 3000;
@@ -212,7 +211,7 @@ QPixmap Flash::renderPixmap()
     return pm;
 }
 
-void Flash::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+void Flash::paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     Q_UNUSED(option)
     Q_UNUSED(widget)

@@ -53,7 +53,7 @@ class Package;
  *
  * See techbase.kde.org for tutorial on writing Applets using this class.
  */
-class PLASMA_EXPORT Applet : public QObject, public Widget
+class PLASMA_EXPORT Applet : public Widget 
 {
     Q_OBJECT
 //    Q_PROPERTY( QRectF maxSizeHint READ maxSizeHint )

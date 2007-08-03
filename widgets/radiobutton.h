@@ -25,7 +25,7 @@
 
 // KDE includes
 #include <plasma/plasma_export.h>
-
+#include <plasma/widgets/widget.h>
 #include <plasma/dataengine.h>
 
 namespace Plasma
@@ -47,17 +47,16 @@ namespace Plasma
  */
 
 
-class PLASMA_EXPORT RadioButton : public QObject, public QGraphicsItem
+class PLASMA_EXPORT RadioButton : public Plasma::Widget
 {
     Q_OBJECT
-
 public:
     RadioButton(QGraphicsItem *parent = 0);
     virtual ~RadioButton();
 
     // QGraphicsItem overridden virtual methods
     QRectF boundingRect() const;
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
+    void paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
 
     // Getters
     bool isChecked() const;

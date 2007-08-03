@@ -36,7 +36,8 @@ class Layout;
 /**
  * Base class for all Widgets in Plasma.
  *
- * @author Alexander Wiedenbruch and Matias Valdenegro.
+ * @author Alexander Wiedenbruch
+ * @author Matias Valdenegro
  *
  * Widgets are the basis for User Interfaces inside Plasma.
  * Widgets are rectangular, but can be in any visible shape by just using transparency to mask
@@ -44,147 +45,149 @@ class Layout;
  *
  * To implement a Widget, just subclass Plasma::Widget and implement at minimum, sizeHint() and paint()
  */
-class PLASMA_EXPORT Widget : public QGraphicsItem,
-                             public LayoutItem
+class PLASMA_EXPORT Widget  : public QObject,
+                              public QGraphicsItem,
+                              public LayoutItem
 {
-    public:
+    Q_OBJECT
+public:
 
-        /**
-         * Constructor.
-         */
-        explicit Widget(QGraphicsItem *parent = 0);
+    /**
+        * Constructor.
+        */
+    explicit Widget(QGraphicsItem *parent = 0);
 
-        /**
-         * Virtual Destructor.
-         */
-        virtual ~Widget();
+    /**
+        * Virtual Destructor.
+        */
+    virtual ~Widget();
 
-        /**
-         * Returns a bitmask with the directions that this Widget can be expanded.
-         */
-        virtual Qt::Orientations expandingDirections() const;
+    /**
+        * Returns a bitmask with the directions that this Widget can be expanded.
+        */
+    virtual Qt::Orientations expandingDirections() const;
 
-        /**
-         * Sets the minimum size of this Widget.
-         */
-        void setMinimumSize(const QSizeF& size);
+    /**
+        * Sets the minimum size of this Widget.
+        */
+    void setMinimumSize(const QSizeF& size);
 
-        /**
-         * Returns the minimum size of this Widget.
-         */
-        QSizeF minimumSize() const;
+    /**
+        * Returns the minimum size of this Widget.
+        */
+    QSizeF minimumSize() const;
 
-        /**
-         * Sets the maximum size of this Widget.
-         */
-        void setMaximumSize(const QSizeF& size);
+    /**
+        * Sets the maximum size of this Widget.
+        */
+    void setMaximumSize(const QSizeF& size);
 
-        /**
-         * Returns the maximum size of this Widget.
-         */
-        QSizeF maximumSize() const;
+    /**
+        * Returns the maximum size of this Widget.
+        */
+    QSizeF maximumSize() const;
 
-        /**
-         * Returns true whatever this Widget can use height-for-width layout management,
-         * false otherwise.
-         */
-        virtual bool hasHeightForWidth() const;
+    /**
+        * Returns true whatever this Widget can use height-for-width layout management,
+        * false otherwise.
+        */
+    virtual bool hasHeightForWidth() const;
 
-        /**
-         * Returns the corresponding height for a given width.
-         * @param w Width
-         */
-        virtual qreal heightForWidth(qreal w) const;
+    /**
+        * Returns the corresponding height for a given width.
+        * @param w Width
+        */
+    virtual qreal heightForWidth(qreal w) const;
 
-        /**
-         * Returns true whatever this Widget can use width-for-height layout management,
-         * false otherwise.
-         */
-        virtual bool hasWidthForHeight() const;
+    /**
+        * Returns true whatever this Widget can use width-for-height layout management,
+        * false otherwise.
+        */
+    virtual bool hasWidthForHeight() const;
 
-        /**
-         * Returns the corresponding width for a given height.
-         * @param h Height
-         */
-        virtual qreal widthForHeight(qreal h) const;
+    /**
+        * Returns the corresponding width for a given height.
+        * @param h Height
+        */
+    virtual qreal widthForHeight(qreal h) const;
 
-        /**
-         * Returns the geometry of this Widget, in parent coordinates.
-         */
-        QRectF geometry() const;
+    /**
+        * Returns the geometry of this Widget, in parent coordinates.
+        */
+    QRectF geometry() const;
 
-        /**
-         * Returns the geometry of this Widget, in local coordinates.
-         */
-        QRectF localGeometry() const;
+    /**
+        * Returns the geometry of this Widget, in local coordinates.
+        */
+    QRectF localGeometry() const;
 
-        /**
-         * Sets the geometry of this Widget.
-         */
-        void setGeometry(const QRectF &geometry);
+    /**
+        * Sets the geometry of this Widget.
+        */
+    void setGeometry(const QRectF &geometry);
 
-        /**
-         * Propagates the geometry information to associated layouts and other Widgets.
-         */
-        void updateGeometry();
+    /**
+        * Propagates the geometry information to associated layouts and other Widgets.
+        */
+    void updateGeometry();
 
-        /**
-         * Invalidates the geometry information.
-         */
-        virtual void invalidate();
+    /**
+        * Invalidates the geometry information.
+        */
+    virtual void invalidate();
 
-        /**
-         * Returns the most appropriate size of this Widget to hold it's contents.
-         */
-        virtual QSizeF sizeHint() const;
+    /**
+        * Returns the most appropriate size of this Widget to hold it's contents.
+        */
+    virtual QSizeF sizeHint() const;
 
-        /**
-         * Returns the size of this Widget.
-         */
-        QSizeF size() const;
+    /**
+        * Returns the size of this Widget.
+        */
+    QSizeF size() const;
 
-        /**
-         * Returns the bounding rectangle of this Widget.
-         */
-        virtual QRectF boundingRect() const;
+    /**
+        * Returns the bounding rectangle of this Widget.
+        */
+    virtual QRectF boundingRect() const;
 
-        /**
-         * Resizes this Widget.
-         * @param size New size
-         */
-        void resize(const QSizeF &size);
+    /**
+        * Resizes this Widget.
+        * @param size New size
+        */
+    void resize(const QSizeF &size);
 
-        /**
-         * Resizes this Widget.
-         * @param w New width
-         * @param h New height
-         */
-        void resize(qreal w, qreal h);
+    /**
+        * Resizes this Widget.
+        * @param w New width
+        * @param h New height
+        */
+    void resize(qreal w, qreal h);
 
-        /**
-         * Returns the parent of this Widget.
-         */
-        Widget *parent() const;
+    /**
+        * Returns the parent of this Widget.
+        */
+    Widget *parent() const;
 
-        /**
-         * Changes the parent of this Widget.
-         */
-        void reparent(Widget *w);
+    /**
+        * Changes the parent of this Widget.
+        */
+    void reparent(Widget *w);
 
-        /**
-         * Appends a child Widget to this Widget.
-         */
-        void addChild(Widget *w);
+    /**
+        * Appends a child Widget to this Widget.
+        */
+    void addChild(Widget *w);
 
-        /**
-         * Paint function.
-         */
-        void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
+    /**
+        * Paint function.
+        */
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
 
-        /**
-         * Paints the widget.  Called by the paint function under correct conditions.
-         */
-        virtual void paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
+    /**
+        * Paints the widget.  Called by the paint function under correct conditions.
+        */
+    virtual void paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
 
 private:
     class Private;

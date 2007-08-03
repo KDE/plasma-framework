@@ -24,6 +24,7 @@
 #include <QtGui/QTextOption>
 
 #include <plasma/plasma_export.h>
+#include <plasma/widgets/widget.h>
 
 namespace Plasma
 {
@@ -31,14 +32,14 @@ namespace Plasma
 /**
  * Class that allows to flash text or icons inside plasma
  */
-class PLASMA_EXPORT Flash : public QObject, public QGraphicsItem
+class PLASMA_EXPORT Flash : public Plasma::Widget
 {
     Q_OBJECT
     public:
         Flash(QGraphicsItem *parent = 0);
         virtual ~Flash();
 
-        void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
+        void paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
         QRectF boundingRect() const;
         QSize size() const;
         int height() const;
