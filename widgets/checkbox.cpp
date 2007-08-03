@@ -93,11 +93,6 @@ CheckBox::~CheckBox()
     delete d;
 }
 
-QRectF CheckBox::boundingRect() const
-{
-    return QRectF(0, 0, d->width, d->height);
-}
-
 void CheckBox::paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     Q_UNUSED(option)
@@ -150,51 +145,6 @@ QString CheckBox::text() const
 {
     return d->labelText;
 }
-int CheckBox::height() const
-{
-    return d->height;
-}
-
-int CheckBox::width() const
-{
-    return d->width;
-}
-
-void CheckBox::setHeight(int h)
-{
-    prepareGeometryChange ();
-    d->height = h;
-    update();
-}
-
-void CheckBox::setWidth(int w)
-{
-    if (!(w >= d->maxWidth)) {
-        prepareGeometryChange ();
-        d->width = w;
-        update();
-    }
-}
-
-QSize CheckBox::size() const
-{
-    return QSize(d->width,d->height);
-}
-
-void CheckBox::setSize(const QSize &s)
-{
-    prepareGeometryChange ();
-    if (!d->maxWidth  >= s.width() ) {
-        d->width = s.width();
-    }
-    d->height = s.height();
-    update();
-}
-
-void CheckBox::setMaximumWidth(int w)
-{
-    d->maxWidth= w;
-}
 
 Qt::CheckState CheckBox::checkState() const
 {
@@ -204,6 +154,11 @@ Qt::CheckState CheckBox::checkState() const
 void CheckBox::setChecked(bool checked)
 {
     d->state = checked ? Qt::Checked : Qt::Unchecked;
+}
+
+bool CheckBox::isChecked() const
+{
+    return (d->state == Qt::Checked);
 }
 
 void CheckBox::setCheckState(Qt::CheckState state)
@@ -223,7 +178,6 @@ void CheckBox::mousePressEvent(QGraphicsSceneMouseEvent * event)
     d->down = true;
     update();
 }
-
 
 void CheckBox::mouseReleaseEvent(QGraphicsSceneMouseEvent * event)
 {

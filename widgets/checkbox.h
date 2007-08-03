@@ -1,5 +1,6 @@
 /*
- *   Copyright (C) 2007 by Siraj Razick siraj@kdemail.net
+ *   Copyright (C) 2007 by Siraj Razick <siraj@kdemail.net>
+ *   Copyright (C) 2007 by Matt Broadstone <mbroadst@gmail.com>
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU Library General Public License version 2 as
@@ -26,47 +27,83 @@
 #include <plasma/dataengine.h>
 #include <plasma/widgets/widget.h>
 
-//TODO
-//Please Document this class
-
 namespace Plasma
 {
 
 /**
- * Class that emulates a QCheckBox inside plasma
+ * This class provides a QCheckBox available as a Plasma::Widget, so it can be used
+ * within Plasma::Applet's.
+ *
+ * @author Siraj Razick <siraj@kde.org>
  */
 class PLASMA_EXPORT CheckBox : public Plasma::Widget
 {
     Q_OBJECT
 public:
+    /**
+     * Creates a new Plasma::CheckBox.
+     * @param parent the QGraphicsItem this icon is parented to.
+    */
     explicit CheckBox(QGraphicsItem *parent = 0);
+
+    /**
+     * Creates a new Plasma::Icon with default text.
+     * @param text the text to display next to the checkbox.
+     * @param parent the QGraphicsItem this icon is parented to.
+    */
     explicit CheckBox(const QString &text, QGraphicsItem *parent = 0);
+
+    /**
+     * Destroys a Plasma::Icon.
+    */
     virtual ~CheckBox();
 
-    void paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
-    QRectF boundingRect() const;
+    /**
+     * @return whether this checkbox is currently checked.
+    */
+    bool isChecked() const;
 
-    Qt::CheckState checkState() const;
+    /**
+     * Sets the checked state of this Plasma::CheckBox.
+     * @param checked whether the Plasma::CheckBox is checked or not.
+    */
     void setChecked(bool checked);
+
+    /**
+     * @return the checkstate of this Plasma::CheckBox.
+    */
+    Qt::CheckState checkState() const;
+
+    /**
+     * Sets the checkstate of this Plasma::CheckBox
+     * @see <qt.h> for definition of Qt::CheckState
+     * @param state the checkstate of this Plasma::CheckBox
+    */
     void setCheckState(Qt::CheckState state);
 
-    void setText(const QString&) ;
+    /**
+     * @return the text associated with this Plasma::CheckBox
+    */
     QString text() const;
 
-    QSize size() const;
-    void setSize(const QSize &size);
+    /**
+     * Sets the text associated with this Plasma::CheckBox
+     * @param text the text to associate with this Plasma::CheckBox.
+    */
+    void setText(const QString &text);
 
-    int height() const;
-    void setHeight(int height);
-
-    int width() const;
-    void setWidth(int width);
-    void setMaximumWidth(int maxwidth);
+/*
+    bool isTristate() const;
+    void setTristate(bool triState = true);
+*/
 
 public Q_SLOTS:
     void updated(const QString&, const DataEngine::Data&);
 
 Q_SIGNALS:
+    /**
+     * Indicates that this Plasma::CheckBox has been clicked, changing its state.
+    */
     void clicked();
 
 protected:
@@ -77,6 +114,8 @@ protected:
     void hoverMoveEvent ( QGraphicsSceneHoverEvent * event );
     void hoverLeaveEvent ( QGraphicsSceneHoverEvent * event );
     void hoverEnterEvent ( QGraphicsSceneHoverEvent * event );
+
+    void paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
 
 private:
     void init();
