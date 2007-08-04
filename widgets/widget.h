@@ -50,6 +50,14 @@ class PLASMA_EXPORT Widget  : public QObject,
                               public LayoutItem
 {
     Q_OBJECT
+    Q_PROPERTY( Qt::Orientations expandingDirections READ expandingDirections )
+    Q_PROPERTY( QSizeF minimumSize READ minimumSize WRITE setMinimumSize )
+    Q_PROPERTY( QSizeF maximumSize READ maximumSize WRITE setMaximumSize )
+    Q_PROPERTY( QRectF geometry READ geometry WRITE setGeometry )
+    Q_PROPERTY( QRectF localGeometry READ localGeometry )
+    Q_PROPERTY( QSizeF sizeHint READ sizeHint )
+    Q_PROPERTY( QSizeF size READ size WRITE setSize )
+
 public:
 
 
@@ -147,13 +155,13 @@ public:
      * reset its geometry.
      */
     // NOTE: this is a completely broken concept -MB
-    void updateGeometry();
+    Q_INVOKABLE void updateGeometry();
 
     /**
      * Invalidate current geometry of this Plasma::Widget as well as its
      * parent if it exists.
      */
-    virtual void invalidate();
+    Q_INVOKABLE virtual void invalidate();
 
     /**
      * Returns the recommended size for this widget. Note that this size is not
@@ -183,32 +191,32 @@ public:
      * Resizes this Plasma::Widget.
      * @param size the new size of this Plasma::Widget.
      */
-    void resize(const QSizeF &size);
+    Q_INVOKABLE void resize(const QSizeF &size);
 
     /**
      * Convenience method for resizing this Plasma::Widget
      * @param width the new width.
      * @param height the new height.
      */
-    void resize(qreal width, qreal height);
+    Q_INVOKABLE void resize(qreal width, qreal height);
 
     /**
      * @return this Plasma::Widget's parent, returns a null pointer if
      *         none exist.
      */
-    Widget *parent() const;
+    Q_INVOKABLE Widget *parent() const;
 
     /**
      * Sets the parent of this Plasma::Widget;
      * @param widget the widget to reparent to.
      */
-    void reparent(Widget *widget);
+    Q_INVOKABLE void reparent(Widget *widget);
 
     /**
      * Add another Plasma::Widget as a child of this one.
      * @param widget the widget to reparent to this Plasma::Widget.
      */
-    void addChild(Widget *widget);
+    Q_INVOKABLE void addChild(Widget *widget);
 
 protected:
     /**
