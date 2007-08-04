@@ -177,6 +177,7 @@ void LineEdit::setGeometry(const QRectF& geometry)
 {
     prepareGeometryChange();
     setTextWidth(geometry.width());
+    setPos(geometry.topLeft());
     update();
 }
 
