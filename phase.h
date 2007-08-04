@@ -37,6 +37,10 @@ namespace Plasma
 class PLASMA_EXPORT Phase : public QObject
 {
     Q_OBJECT
+    Q_ENUMS( Animation )
+    Q_ENUMS( RenderOp )
+    Q_ENUMS( CurveShape )
+    Q_ENUMS( Movement )
 
 public:
     enum Animation
@@ -82,9 +86,9 @@ public:
     explicit Phase(QObject * parent = 0);
     ~Phase();
 
-    void animateItem(QGraphicsItem* item, Animation anim);
-    void moveItem(QGraphicsItem* item, Movement movement, const QPoint &destination);
-    void render(QGraphicsItem* item, QImage& image, RenderOp op);
+    Q_INVOKABLE void animateItem(QGraphicsItem* item, Animation anim);
+    Q_INVOKABLE void moveItem(QGraphicsItem* item, Movement movement, const QPoint &destination);
+    Q_INVOKABLE void render(QGraphicsItem* item, QImage& image, RenderOp op);
 
     AnimId animateElement(QGraphicsItem *obj, ElementAnimation);
     void stopElementAnimation(AnimId id);

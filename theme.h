@@ -44,6 +44,7 @@ namespace Plasma
 class PLASMA_EXPORT Theme : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY( QString themeName READ themeName )
 
     public:
         /**
@@ -78,7 +79,7 @@ class PLASMA_EXPORT Theme : public QObject
          *           ".svg" part or a leading slash)
          * @return the full path to the requested file for the current theme
          */
-        QString image( const QString& name ) const;
+        Q_INVOKABLE QString image( const QString& name ) const;
 
     Q_SIGNALS:
         /**

@@ -50,6 +50,9 @@ class DataContainer;
 class PLASMA_EXPORT DataEngine : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY( QStringList sources READ sources )
+    Q_PROPERTY( bool valid READ isValid )
+    Q_PROPERTY( QString icon READ icon WRITE setIcon )
 
     public:
         typedef QHash<QString, DataEngine*> Dict;
