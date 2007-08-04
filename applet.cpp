@@ -99,8 +99,10 @@ public:
 
     void init(Applet* applet)
     {
-        applet->setFlag(QGraphicsItem::ItemClipsToShape, false);
-        applet->setFlag(QGraphicsItem::ItemClipsChildrenToShape, false);
+        //these lines fix behaviour somewhat with update()s after resize in qt 4.3.0,
+        //but the issues are fixed in 4.3.1 and this breaks shadows.
+        //applet->setFlag(QGraphicsItem::ItemClipsToShape, false);
+        //applet->setFlag(QGraphicsItem::ItemClipsChildrenToShape, false);
         kioskImmutable = applet->globalConfig().isImmutable() ||
                          applet->config().isImmutable();
         applet->setImmutable(kioskImmutable);
