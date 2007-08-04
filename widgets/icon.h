@@ -47,6 +47,10 @@ namespace Plasma
 class PLASMA_EXPORT Icon : public QObject, public QGraphicsItem, public LayoutItem
 {
     Q_OBJECT
+    Q_PROPERTY( QString text READ text WRITE setText )
+    Q_PROPERTY( QString infoText READ infoText WRITE setInfoText )
+    Q_PROPERTY( QSizeF iconSize READ iconSize WRITE setIconSize )
+
     public:
         /**
          * Creates a new Plasma::Icon.
@@ -101,14 +105,14 @@ class PLASMA_EXPORT Icon : public QObject, public QGraphicsItem, public LayoutIt
          * Sets the graphical icon for this Plasma::Icon.
          * @param icon the QIcon to associate with this icon.
         */
-        void setIcon(const QIcon& icon);
+        Q_INVOKABLE void setIcon(const QIcon& icon);
 
         /**
          * Convenience method to set the icon of this Plasma::Icon
          * using a QString path to the icon.
          * @param icon the path to the icon to associate with this Plasma::Icon.
         */
-        void setIcon(const QString& icon);
+        Q_INVOKABLE void setIcon(const QString& icon);
 
         /**
          * Returns the size of this Plasma::Icon's graphical icon.
@@ -126,7 +130,7 @@ class PLASMA_EXPORT Icon : public QObject, public QGraphicsItem, public LayoutIt
          * @param height the height of the icon.
          * @param width the width of the icon.
         */
-        void setIconSize(int height, int width);
+        Q_INVOKABLE void setIconSize(int height, int width);
 
 
         /**

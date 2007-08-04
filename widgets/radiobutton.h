@@ -50,6 +50,8 @@ namespace Plasma
 class PLASMA_EXPORT RadioButton : public Plasma::Widget
 {
     Q_OBJECT
+    Q_PROPERTY( QString text READ text WRITE setText )
+    Q_PROPERTY( bool checked READ isChecked WRITE setChecked )
 public:
     RadioButton(QGraphicsItem *parent = 0);
     virtual ~RadioButton();

@@ -41,6 +41,10 @@ namespace Plasma
 class PLASMA_EXPORT PushButton : public Plasma::Widget
 {
     Q_OBJECT
+    Q_ENUMS( ButtonShape )
+    Q_ENUMS( ButtonState )
+    Q_PROPERTY( QString text READ text WRITE setText )
+    Q_PROPERTY( QString icon WRITE setIcon )
 
     public:
         enum ButtonShape
