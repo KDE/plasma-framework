@@ -854,8 +854,8 @@ KPluginInfo::List Applet::knownApplets(const QString &category,
 
 KPluginInfo::List Applet::knownAppletsForMimetype(const QString &mimetype)
 {
-    QString constraint = QString("'%1' in [X-Plasma-Mimetypes]").arg(mimetype);
-    kDebug() << constraint;
+    QString constraint = QString("'%1' in MimeTypes").arg(mimetype);
+    //kDebug() << "knownAppletsForMimetype with" << mimetype << constraint;
     KService::List offers = KServiceTypeTrader::self()->query("Plasma/Applet", constraint);
     return KPluginInfo::fromServices(offers);
 }
