@@ -24,6 +24,8 @@
 #include <QtCore/QObject>
 #include <QtGui/QGraphicsTextItem>
 
+#include <KIcon>
+
 #include <plasma/dataengine.h>
 #include <plasma/phase.h>
 #include <plasma/plasma_export.h>
@@ -48,6 +50,7 @@ class PLASMA_EXPORT Icon : public Plasma::Widget
     Q_OBJECT
     Q_PROPERTY( QString text READ text WRITE setText )
     Q_PROPERTY( QString infoText READ infoText WRITE setInfoText )
+    Q_PROPERTY( KIcon icon READ icon WRITE setIcon )
     Q_PROPERTY( QSizeF iconSize READ iconSize WRITE setIconSize )
 public:
     /**
@@ -69,7 +72,7 @@ public:
     * @param text the text that will be displayed with this icon.
     * @param parent The QGraphicsItem this icon is parented to.
     */
-    Icon(const QIcon & icon, const QString &text, QGraphicsItem *parent = 0);
+    Icon(const KIcon & icon, const QString &text, QGraphicsItem *parent = 0);
 
     /**
     * Destroys this Plasma::Icon.
@@ -100,10 +103,15 @@ public:
     void setInfoText(const QString &text);
 
     /**
-    * Sets the graphical icon for this Plasma::Icon.
-    * @param icon the QIcon to associate with this icon.
+    * @return the icon associated with this icon.
     */
-    Q_INVOKABLE void setIcon(const QIcon& icon);
+    KIcon icon() const;
+
+    /**
+    * Sets the graphical icon for this Plasma::Icon.
+    * @param icon the KIcon to associate with this icon.
+    */
+    void setIcon(const KIcon& icon);
 
     /**
     * Convenience method to set the icon of this Plasma::Icon
@@ -113,15 +121,15 @@ public:
     Q_INVOKABLE void setIcon(const QString& icon);
 
     /**
-    * Returns the size of this Plasma::Icon's graphical icon.
+    * @return the size of this Plasma::Icon's graphical icon.
     */
-    Q_INVOKABLE QSizeF iconSize() const;
+    QSizeF iconSize() const;
 
     /**
     * Sets the size of the graphical icon for this Plasma::Icon.
     * @param size the size of the icon.
     */
-    Q_INVOKABLE void setIconSize(const QSizeF& size);
+    void setIconSize(const QSizeF& size);
 
     /**
     * Convenience method to set the icon size without a QSizeF.

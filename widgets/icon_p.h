@@ -25,7 +25,8 @@
 #include <QtGui/QStyleOptionGraphicsItem>
 #include <QtGui/QTextLayout>
 #include <QtGui/QTextOption>
-#include <QtGui/QIcon>
+
+#include <KIcon>
 
 #include <plasma/plasma_export.h>
 #include <plasma/svg.h>
@@ -169,7 +170,7 @@ public:
     int svgElements;
     QSizeF size;
     QSizeF iconSize;
-    QIcon icon;
+    KIcon icon;
     ButtonState state;
     Qt::Orientation orientation;
     bool calculateSizeRequested;

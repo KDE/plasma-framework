@@ -36,7 +36,6 @@
 #include <private/qwindowsurface_p.h>
 #endif
 
-#include <KIcon>
 #include <KImageEffect>
 #include <KIconEffect>
 #include <KIconLoader>
@@ -286,7 +285,7 @@ Icon::Icon(const QString &text, QGraphicsItem *parent)
     init();
 }
 
-Icon::Icon(const QIcon &icon, const QString &text, QGraphicsItem *parent)
+Icon::Icon(const KIcon &icon, const QString &text, QGraphicsItem *parent)
     : Plasma::Widget(parent),
       d(new Private)
 {
@@ -365,7 +364,10 @@ void Icon::actionDestroyed(QObject* action)
 QSizeF Icon::Private::displaySizeHint(const QStyleOptionGraphicsItem *option) const
 {
     QString label = text;
-    const qreal maxWidth = (orientation == Qt::Vertical) ? iconSize.width() + 10 : 32757;
+    // const qreal maxWidth = (orientation == Qt::Vertical) ? iconSize.width() + 10 : 32757;
+    // NOTE: find a way to use the other layoutText, it currently returns nominal width, when
+    //       we actually need the actual width.
+
 
     // To compute the nominal size for the label + info, we'll just append
     // the information string to the label
@@ -853,17 +855,22 @@ QString Icon::infoText() const
     return d->infoText;
 }
 
+KIcon Icon::icon() const
+{
+    return d->icon;
+}
+
 void Icon::setIcon(const QString& icon)
 {
     if (icon.isEmpty()) {
-        setIcon(QIcon());
+        setIcon(KIcon());
         return;
     }
 
     setIcon(KIcon(icon));
 }
 
-void Icon::setIcon(const QIcon& icon)
+void Icon::setIcon(const KIcon& icon)
 {
     d->icon = icon;
     d->calculateSizeRequested = true;
