@@ -92,6 +92,11 @@ public:
 
 public Q_SLOTS:
     /**
+     * Load applets from the default config file
+     */
+    void loadApplets();
+
+    /**
      * Save applets to the default config file
      */
     void saveApplets() const;

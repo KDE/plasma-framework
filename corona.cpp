@@ -75,7 +75,6 @@ Corona::Corona(QObject *parent)
     : QGraphicsScene(parent),
       d(new Private)
 {
-    loadApplets("plasma-appletsrc");
     //setViewport(new QGLWidget(QGLFormat(QGL::StencilBuffer | QGL::AlphaChannel)));
 }
 
@@ -83,7 +82,6 @@ Corona::Corona(const QRectF & sceneRect, QObject * parent )
     : QGraphicsScene(sceneRect, parent),
       d(new Private)
 {
-    loadApplets("plasma-appletsrc");
     //setViewport(new QGLWidget(QGLFormat(QGL::StencilBuffer | QGL::AlphaChannel)));
 }
 
@@ -91,7 +89,6 @@ Corona::Corona(qreal x, qreal y, qreal width, qreal height, QObject * parent)
     : QGraphicsScene(x, y, width, height, parent),
       d(new Private)
 {
-    loadApplets("plasma-appletsrc");
     //setViewport(new QGLWidget(QGLFormat(QGL::StencilBuffer | QGL::AlphaChannel)));
 }
 
@@ -203,6 +200,11 @@ void Corona::loadApplets(const QString& config)
         addApplet(cg.readEntry("plugin", QString()), QStringList(),
                   group.toUInt(), cg.readEntry("geometry", QRectF()));
     }
+}
+
+void Corona::loadApplets()
+{
+    loadApplets("plasma-appletsrc");
 }
 
 Applet* Corona::addApplet(const QString& name, const QStringList& args, uint id, const QRectF& geometry)
