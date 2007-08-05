@@ -71,10 +71,11 @@ public:
     QString mimetype;
 };
 
-Corona::Corona(QObject * parent)
+Corona::Corona(QObject *parent)
     : QGraphicsScene(parent),
       d(new Private)
 {
+    loadApplets("plasma-appletsrc");
     //setViewport(new QGLWidget(QGLFormat(QGL::StencilBuffer | QGL::AlphaChannel)));
 }
 
@@ -82,6 +83,7 @@ Corona::Corona(const QRectF & sceneRect, QObject * parent )
     : QGraphicsScene(sceneRect, parent),
       d(new Private)
 {
+    loadApplets("plasma-appletsrc");
     //setViewport(new QGLWidget(QGLFormat(QGL::StencilBuffer | QGL::AlphaChannel)));
 }
 
@@ -89,6 +91,7 @@ Corona::Corona(qreal x, qreal y, qreal width, qreal height, QObject * parent)
     : QGraphicsScene(x, y, width, height, parent),
       d(new Private)
 {
+    loadApplets("plasma-appletsrc");
     //setViewport(new QGLWidget(QGLFormat(QGL::StencilBuffer | QGL::AlphaChannel)));
 }
 
@@ -169,9 +172,38 @@ QString Corona::appletMimeType()
     return d->mimetype;
 }
 
-Applet* Corona::addApplet(const QString& name, const QStringList& args)
+void Corona::saveApplets(const QString &config) const
 {
-    Applet* applet = Applet::loadApplet(name, 0, args);
+    KConfig appletConfig(config);
+    foreach (Applet *applet, d->applets) {
+        KConfigGroup cg(&appletConfig, QString::number(applet->id()));
+        kDebug() << "saving applet " << applet->name();
+        cg.writeEntry("plugin", applet->pluginName());
+        cg.writeEntry("geometry", QRect(applet->pos().toPoint(), applet->boundingRect().size().toSize()));
+    }
+}
+
+void Corona::saveApplets() const
+{
+    saveApplets("plasma-appletsrc");
+}
+
+void Corona::loadApplets(const QString& config)
+{
+    qDeleteAll(d->applets);
+    d->applets.clear();
+
+    KConfig appletConfig(config, KConfig::OnlyLocal);
+    foreach (const QString& group, appletConfig.groupList()) {
+        KConfigGroup cg(&appletConfig, group);
+        addApplet(cg.readEntry("plugin", QString()), QStringList(),
+                  group.toUInt(), cg.readEntry("geometry", QRectF()));
+    }
+}
+
+Applet* Corona::addApplet(const QString& name, const QStringList& args, uint id, const QRectF& geometry)
+{
+    Applet* applet = Applet::loadApplet(name, id, args);
     if (!applet) {
         kDebug() << "Applet " << name << " could not be loaded.";
         applet = new Applet;
@@ -180,9 +212,13 @@ Applet* Corona::addApplet(const QString& name, const QStringList& args)
 
     qreal appWidth = applet->boundingRect().width();
     qreal appHeight = applet->boundingRect().height();
-    //TODO: Make sure new applets don't overlap with existing ones
-    // Center exactly:
-    applet->setPos((width() / 2) - (appWidth / 2),(height() / 2) - (appHeight / 2));
+    if (geometry.isValid()) {
+        applet->setGeometry(geometry);
+    } else {
+        //TODO: Make sure new applets don't overlap with existing ones
+        // Center exactly:
+        applet->setPos((width() / 2) - (appWidth / 2),(height() / 2) - (appHeight / 2));
+    }
     addItem(applet);
     applet->updateConstraints();
 

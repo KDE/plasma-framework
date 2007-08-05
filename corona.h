@@ -68,15 +68,34 @@ public:
     /**
      *  Sets the mimetype of Drag/Drop items. Default is
      *  text/x-plasmoidservicename
-     **/
-    void setAppletMimeType(const QString& mimetype);
-    
+     */
+    void setAppletMimeType(const QString &mimetype);
+
     /**
      * The current mime type of Drag/Drop items.
-     **/
-    QString appletMimeType();    
+     */
+    QString appletMimeType();
+
+    /**
+     * Save applets to a config file
+     *
+     * @param config the name of the config file to save to
+     */
+    void saveApplets(const QString &config) const;
+
+    /**
+     * Load applet layout from a config file
+     *
+     * @param config the name of the config file to load from
+     */
+    void loadApplets(const QString &config);
 
 public Q_SLOTS:
+    /**
+     * Save applets to the default config file
+     */
+    void saveApplets() const;
+
     /**
      * Informs the Corona as to what position it is in. This is informational
      * only, as the Corona doesn't change it's actual location. This is,
@@ -99,8 +118,14 @@ public Q_SLOTS:
      * @param name the plugin name for the applet, as given by 
      *        KPluginInfo::pluginName()
      * @param args argument list to pass to the plasmoid
+     * @param id to assign to this applet, or 0 to auto-assign it a new id
+     * @param geometry where to place the applet, or to auto-place it if an invalid
+     *                 is provided
+     *
+     * @return a pointer to the applet on success, or 0 on failure
      */
-    Applet* addApplet(const QString& name, const QStringList& args = QStringList());
+    Applet* addApplet(const QString& name, const QStringList& args = QStringList(),
+                      uint id = 0, const QRectF &geometry = QRectF());
 
     /**
      * Adds a SuperKaramba theme to the scene
