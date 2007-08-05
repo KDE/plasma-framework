@@ -147,7 +147,7 @@ class PLASMA_EXPORT Applet : public Widget
          *         or an invalid data engine if the requested engine
          *         could not be loaded
          */
-        DataEngine* dataEngine(const QString& name) const;
+        Q_INVOKABLE DataEngine* dataEngine(const QString& name) const;
 
         /**
          * Accessor for the associated Package object if any.

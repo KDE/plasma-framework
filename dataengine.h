@@ -88,7 +88,7 @@ class PLASMA_EXPORT DataEngine : public QObject
          * @param source the name of the data source
          * @param visualization the object to connect the data source to
          **/
-        void connectSource(const QString& source, QObject* visualization) const;
+        Q_INVOKABLE void connectSource(const QString& source, QObject* visualization) const;
 
         /**
          * Disconnects a source to an object that was receiving data updates.
@@ -96,7 +96,7 @@ class PLASMA_EXPORT DataEngine : public QObject
          * @param source the name of the data source
          * @param visualization the object to connect the data source to
          **/
-        void disconnectSource(const QString& source, QObject* visualization) const;
+        Q_INVOKABLE void disconnectSource(const QString& source, QObject* visualization) const;
 
         /**
          * Connects all sources to an object for data updates. The object must
@@ -109,7 +109,7 @@ class PLASMA_EXPORT DataEngine : public QObject
          *
          * @param visualization the object to connect the data source to
          **/
-        void connectAllSources(QObject* viualization) const;
+        Q_INVOKABLE void connectAllSources(QObject* viualization) const;
 
         /**
          * Gets the Data associated with a data source.
@@ -121,7 +121,7 @@ class PLASMA_EXPORT DataEngine : public QObject
          * @return the Data associated with the source; if the source doesn't
          *         exist an empty data set is returned
          **/
-        Data query(const QString& source) const;
+        Q_INVOKABLE Data query(const QString& source) const;
 
         /**
          * Reference counting method. Calling this method increases the count
