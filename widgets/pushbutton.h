@@ -49,6 +49,7 @@ class PLASMA_EXPORT PushButton : public Plasma::Widget
     Q_PROPERTY( QString text READ text WRITE setText )
     Q_PROPERTY( QSizeF iconSize READ iconSize WRITE setIconSize )
     Q_PROPERTY( KIcon icon READ icon WRITE setIcon )
+    Q_PROPERTY( bool flat READ isFlat WRITE setFlat )
 public:
     /**
     * Creates a new Plasma::PushButton.
@@ -79,24 +80,24 @@ public:
     /**
     * @return text associated with this Plasma::PushButton
     */
-    Q_INVOKABLE QString text() const;
+    QString text() const;
 
     /**
     * Sets the text to be displayed by this button.
     * @param text the text to display
     */
-    Q_INVOKABLE void setText(const QString &text);
+    void setText(const QString &text);
 
     /**
     * @return the icon displayed by this button.
     */
-    Q_INVOKABLE KIcon icon() const;
+    KIcon icon() const;
 
     /**
     * Sets the icon to be displayed by this Plasma::Icon.
     * @param icon the KIcon to display.
     */
-    Q_INVOKABLE void setIcon(const KIcon &icon);
+    void setIcon(const KIcon &icon);
 
     /**
     * Convenience method to set the icon of this Plasma::PushButton
@@ -109,13 +110,13 @@ public:
     /**
     * @return the size of the icon displayed by this Plasma::PushButton.
     */
-    Q_INVOKABLE QSizeF iconSize() const;
+    QSizeF iconSize() const;
 
     /**
     * Sets the size of icon shown by this button.
     * @param size size of the icon.
     */
-    Q_INVOKABLE void setIconSize(const QSizeF &size);
+    void setIconSize(const QSizeF &size);
 
     /**
     * @return whether this button is currently in a down/pressed state.
