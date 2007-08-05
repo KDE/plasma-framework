@@ -25,6 +25,7 @@ set(plasma_LIB_SRCS
     plasma.cpp
     plasma_export.h
     scriptengine.cpp
+    shadowitem.cpp
     svg.cpp
     theme.cpp
     karambamanager.cpp
@@ -82,6 +83,7 @@ set(plasma_LIB_INCLUDES
     plasma.h
     plasma_export.h
     scriptengine.cpp
+    shadowitem_p.h
     svg.h
     theme.h)
 

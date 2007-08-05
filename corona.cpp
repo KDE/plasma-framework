@@ -111,7 +111,7 @@ void Corona::setLocation(Location location)
     d->location = location;
 
     foreach (Applet* applet, d->applets) {
-        applet->constraintsUpdated();
+        applet->updateConstraints();
     }
 }
 
@@ -148,7 +148,7 @@ void Corona::setFormFactor(FormFactor formFactor)
     }
 
     foreach (Applet* applet, d->applets) {
-        applet->constraintsUpdated();
+        applet->updateConstraints();
     }
 }
 
@@ -184,7 +184,8 @@ Applet* Corona::addApplet(const QString& name, const QStringList& args)
     // Center exactly:
     applet->setPos((width() / 2) - (appWidth / 2),(height() / 2) - (appHeight / 2));
     addItem(applet);
-    
+    applet->updateConstraints();
+
     //applet->constraintsUpdated();
     d->applets << applet;
     connect(applet, SIGNAL(destroyed(QObject*)),
@@ -216,7 +217,7 @@ void Corona::dragEnterEvent( QGraphicsSceneDragDropEvent *event)
         //QMouseEvent event(QEvent::MouseButtonPress, event->pos(), Qt::LeftButton, event->mouseButtons(), 0);
         //QApplication::sendEvent(this, &event);
     }
-        
+
     event->accept();
     //TODO Allow dragging an applet from another Corona into this one while
     //     keeping its settings etc.
@@ -274,10 +275,12 @@ void Corona::dropEvent(QGraphicsSceneDragDropEvent *event)
                                button->boundingRect().height()/2));
             }
             addItem(button);
+            button->updateConstraints();
         }
         event->acceptProposedAction();
-    } else
+    } else {
         QGraphicsScene::dropEvent(event);
+    }
 }
 
 // void Corona::contextMenuEvent(QGraphicsSceneContextMenuEvent *contextMenuEvent)

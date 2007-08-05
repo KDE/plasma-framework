@@ -45,6 +45,7 @@
 #include "plasma/packages_p.h"
 #include "plasma/plasma.h"
 #include "plasma/scriptengine.h"
+#include "plasma/shadowitem_p.h"
 #include "plasma/svg.h"
 
 #include "plasma/widgets/widget.h"
@@ -52,8 +53,7 @@
 #include "plasma/widgets/pushbutton.h"
 #include "plasma/widgets/vboxlayout.h"
 
-//#include "stackblur_shadows.cpp"
-
+//#define DYNAMIC_SHADOWS
 namespace Plasma
 {
 
@@ -69,8 +69,9 @@ public:
           background(0),
           failureText(0),
           scriptEngine(0),
-          cachedBackground(0),
           configXml(0),
+          shadow(0),
+          cachedBackground(0),
           kioskImmutable(false),
           immutable(false),
           hasConfigurationInterface(false),
@@ -94,11 +95,13 @@ public:
         delete background;
         delete package;
         delete configXml;
+        delete shadow;
         delete cachedBackground;
     }
 
     void init(Applet* applet)
     {
+        applet->setZValue(100);
         //these lines fix behaviour somewhat with update()s after resize in qt 4.3.0,
         //but the issues are fixed in 4.3.1 and this breaks shadows.
         //applet->setFlag(QGraphicsItem::ItemClipsToShape, false);
@@ -304,6 +307,7 @@ public:
     Plasma::LineEdit *failureText;
     ScriptEngine* scriptEngine;
     ConfigXml* configXml;
+    ShadowItem* shadow;
     QPixmap* cachedBackground;
     bool kioskImmutable : 1;
     bool immutable : 1;
@@ -384,6 +388,12 @@ DataEngine* Applet::dataEngine(const QString& name) const
 const Package* Applet::package() const
 {
     return d->package;
+}
+
+void Applet::updateConstraints()
+{
+    constraintsUpdated();
+    setShadowShown(formFactor() == Planar);
 }
 
 void Applet::constraintsUpdated()
@@ -610,6 +620,11 @@ QColor Applet::color() const
 void Applet::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     Q_UNUSED(widget)
+    if (d->shadow && d->shadow->shadowedSize() != boundingRect().size()) {
+        //kDebug() << "sizes are " << d->shadow->shadowedSize() << boundingRect().size();
+        d->shadow->generate();
+    }
+
     qreal zoomLevel = painter->transform().m11() / transform().m11();
     if (zoomLevel == scalingFactor(Plasma::DesktopZoom)) { // Show Desktop
         if (d->background) {
@@ -815,7 +830,7 @@ QStringList Applet::knownCategories(const QString &parentApp)
     QStringList categories;
     foreach (KService::Ptr applet, offers) {
         QString appletCategory = applet->property("X-KDE-PluginInfo-Category").toString();
-        kDebug() << "   and we have " << appletCategory;
+        //kDebug() << "   and we have " << appletCategory;
         if (appletCategory.isEmpty()) {
             if (!categories.contains(i18n("Misc"))) {
                 categories << i18n("Misc");
@@ -869,6 +884,69 @@ Applet* Applet::loadApplet(const KPluginInfo& info, uint appletId, const QString
     }
 
     return loadApplet(info.pluginName(), appletId, args);
+}
+
+void Applet::setShadowShown(bool shown)
+{
+    //There are various problems with shadows right now:
+    //
+    //1) shadows can be seen through translucent areas, which is probably technically correct ubt
+    //looks odd
+    //2) the shape of the item odesn't conform to the shape of the standard background, e.g. with
+    //rounded corners
+#ifdef DYNAMIC_SHADOWS
+    if (shown) {
+        if (d->shadow) {
+            d->shadow->setVisible(true);
+        } else {
+            d->shadow = new ShadowItem(this);
+            if (scene()) {
+                scene()->addItem(d->shadow);
+                d->shadow->show();
+            }
+        }
+    } else {
+        delete d->shadow;
+        d->shadow = 0;
+    }
+#endif
+}
+
+bool Applet::isShadowShown() const
+{
+    return d->shadow && d->shadow->isVisible();
+}
+
+QVariant Applet::itemChange(GraphicsItemChange change, const QVariant &value)
+{
+    if (!d->shadow) {
+        return QGraphicsItem::itemChange(change, value);
+    }
+
+    switch (change) {
+    case ItemPositionChange:
+        d->shadow->adjustPosition();
+        break;
+    case ItemSceneChange: {
+        QGraphicsScene *newScene = qvariant_cast<QGraphicsScene*>(value);
+        if (d->shadow->scene())
+            d->shadow->scene()->removeItem(d->shadow);
+        if (newScene) {
+            newScene->addItem(d->shadow);
+            d->shadow->generate();
+            d->shadow->adjustPosition();
+            d->shadow->show();
+        }
+    }
+        break;
+    case ItemVisibleChange:
+        d->shadow->setVisible(isVisible());
+        break;
+    default:
+        break;
+    };
+
+    return QGraphicsItem::itemChange(change, value);
 }
 
 } // Plasma namespace

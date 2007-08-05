@@ -1,0 +1,45 @@
+/*
+ *   Copyright (C) 2007 by Zack Rusin
+ *
+ *   This program is free software; you can redistribute it and/or modify
+ *   it under the terms of the GNU Library General Public License version 2 as
+ *   published by the Free Software Foundation
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details
+ *
+ *   You should have received a copy of the GNU Library General Public
+ *   License along with this program; if not, write to the
+ *   Free Software Foundation, Inc.,
+ *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ */
+
+#ifndef SHADOWITEM_P_H
+#define SHADOWITEM_P_H
+
+#include <QGraphicsPixmapItem>
+
+
+class ShadowItem : public QGraphicsPixmapItem
+{
+public:
+    explicit ShadowItem(QGraphicsItem* item);
+
+    void setShadowParent(QGraphicsItem *item);
+    QGraphicsItem *shadowParent() const;
+
+    void setOffset(const QPointF &offset);
+    QPointF offset() const;
+
+    QSize shadowedSize() const;
+    void generate();
+    void adjustPosition();
+
+private:
+    QGraphicsItem *m_shadowParent;
+    QPointF m_offset;
+};
+
+#endif

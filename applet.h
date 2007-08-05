@@ -159,6 +159,13 @@ class PLASMA_EXPORT Applet : public Widget
 
         /**
          * Called when any of the geometry constraints have been updated.
+         * This method calls constraintsUpdated, which may be reimplemented,
+         * once the Applet has been prepared for updating the constraints.
+         */
+        void updateConstraints();
+
+        /**
+         * Called when any of the geometry constraints have been updated.
          *
          * This is always called prior to painting and should be used as an
          * opportunity to layout the widget, calculate sizings, etc.
@@ -444,6 +451,15 @@ class PLASMA_EXPORT Applet : public Widget
          **/
         virtual QList<QAction*> contextActions();
 
+        /**
+         * Sets shadow for the given applet.
+         */
+        void setShadowShown(bool);
+        /**
+         * Returns true if the given item has a shadow shown.
+         */
+        bool isShadowShown() const;
+
     Q_SIGNALS:
         /**
          * Emitted when the applet needs to take (or lose) keyboard focus.
@@ -513,7 +529,15 @@ class PLASMA_EXPORT Applet : public Widget
          **/
         bool eventFilter( QObject *o, QEvent *e );
 
+        /**
+         * @internal for adjusting the shadow
+         */
+        QVariant itemChange(GraphicsItemChange change, const QVariant &value);
+
     protected Q_SLOTS:
+        /**
+         * @internal used to show the configuration of an applet on first show
+         */
         void performSetupConfig();
 
     private:
