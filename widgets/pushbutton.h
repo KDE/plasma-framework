@@ -1,6 +1,7 @@
 /*
- *   Copyright (C) 2007 by Siraj Razick siraj@kde.org
- *                         and Matias Valdenegro <mvaldenegro@informatica.utem.cl>
+ *   Copyright (C) 2007 by Siraj Razick <siraj@kde.org>
+ *   Copyright (C) 2007 by Matias Valdenegro <mvaldenegro@informatica.utem.cl>
+ *   Copyright (C) 2007 by Matt Broadstone <mbroadst@gmail.com>
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU Library General Public License version 2 as
@@ -16,7 +17,6 @@
  *   Free Software Foundation, Inc.,
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-
 #ifndef PUSHBUTTON_H
 #define PUSHBUTTON_H
 
@@ -24,120 +24,131 @@
 #include <QtGui/QGraphicsTextItem>
 #include <QtGui/QLayoutItem>
 
+#include <KIcon>
+
 #include <plasma/dataengine.h>
 #include <plasma/widgets/widget.h>
 #include <plasma/plasma_export.h>
 
+class QStyleOptionButton;
 namespace Plasma
 {
 
 /**
  * Class that emulates a QPushButton inside Plasma
  *
- * @author Siraj Razick and Matias Valdenegro.
+ * @author Siraj Razick 
+ * @author Matias Valdenegro
+ * @author Matt Broadstone
  *
  *
  */
 class PLASMA_EXPORT PushButton : public Plasma::Widget
 {
     Q_OBJECT
-    Q_ENUMS( ButtonShape )
-    Q_ENUMS( ButtonState )
     Q_PROPERTY( QString text READ text WRITE setText )
-    Q_PROPERTY( QString icon WRITE setIcon )
+    Q_PROPERTY( QSizeF iconSize READ iconSize WRITE setIconSize )
+    Q_PROPERTY( KIcon icon READ icon WRITE setIcon )
+public:
+    /**
+    * Creates a new Plasma::PushButton.
+    * @param parent the Widge this button is parented to.
+    */
+    explicit PushButton(Widget *parent = 0);
 
-    public:
-        enum ButtonShape
-        {
-            Rectangle = 0,
-            Round,
-            Custom
-        };
+    /**
+    * Creates a new Plasma::PushButton with a text label.
+    * @param text the text to display next to the button.
+    * @param parent the QGraphicsItem this icon is parented to.
+    */
+    explicit PushButton(const QString &text, Widget *parent = 0);
 
-        enum ButtonState
-        {
-            None,
-            Hover,
-            Pressed,
-            Released
-        };
+    /**
+    * Creates a new Plasma::PushButton with an icon and text
+    * @param icon the icon to display with this button.
+    * @param text the text to display with this button.
+    * @param parent the QGraphicsItem this icon is parented to.
+    */
+    explicit PushButton(const KIcon &icon, const QString &text, Widget *parent = 0);
 
-    public:
+    /**
+    * Destroys this Plasma::PushButton.
+    */
+    virtual ~PushButton();
 
-        /**
-         * Constructor.
-         */
-        PushButton(Widget *parent = 0);
+    /**
+    * @return text associated with this Plasma::PushButton
+    */
+    Q_INVOKABLE QString text() const;
 
-        /**
-         * Virtual Destructor.
-         */
-        virtual ~PushButton();
+    /**
+    * Sets the text to be displayed by this button.
+    * @param text the text to display
+    */
+    Q_INVOKABLE void setText(const QString &text);
 
-        /**
-         * Returns the text of this Button.
-         */
-        QString text() const;
+    /**
+    * @return the icon displayed by this button.
+    */
+    Q_INVOKABLE KIcon icon() const;
 
-        /**
-         * Sets the text of this Button.
-         */
-        void setText(const QString &text);
+    /**
+    * Sets the icon to be displayed by this Plasma::Icon.
+    * @param icon the KIcon to display.
+    */
+    Q_INVOKABLE void setIcon(const KIcon &icon);
 
-        /**
-         * Sets the icon of this Button.
-         * @param path Path to the icon file. TODO : WTF is path?
-         */
-        void setIcon(const QString& path);
+    /**
+    * Convenience method to set the icon of this Plasma::PushButton
+    * based on the icon path, or name.
+    * @see KIconLoader
+    * @param path the path to, or name of the icon to display.
+    */
+    Q_INVOKABLE void setIcon(const QString& path);
 
-        /**
-         * Paint function.
-         */
-        virtual void paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
+    /**
+    * @return the size of the icon displayed by this Plasma::PushButton.
+    */
+    Q_INVOKABLE QSizeF iconSize() const;
 
-        /**
-         * Reimplemented from Plasma::Widget.
-         */
-        virtual QSizeF sizeHint() const ;
+    /**
+    * Sets the size of icon shown by this button.
+    * @param size size of the icon.
+    */
+    Q_INVOKABLE void setIconSize(const QSizeF &size);
 
-        /**
-         * Reimplemented from Plasma::Widget.
-         */
-        virtual QSizeF minimumSize() const;
+    /**
+    * @return whether this button is currently in a down/pressed state.
+    */
+    bool isDown() const;
 
-        /**
-         * Reimplemented from Plasma::Widget.
-         */
-        virtual QSizeF maximumSize() const ;
+    /**
+    * @return whether this button is drawn flat.
+    */
+    bool isFlat() const;
 
-        /**
-         * Buttons prefer to expand in Horizontal direction.
-         */
-        virtual Qt::Orientations expandingDirections() const;
+    /**
+    * Sets whether the button is drawn flat.
+    * @param flat whether to draw it flat or not.
+    */
+    void setFlat(bool flat);
 
-        /**
-         * TODO: What does this function do?
-         */
-        virtual bool isEmpty() const;
+Q_SIGNALS:
+    /**
+    * Triggered when the button has been clicked.
+    */
+    void clicked();
 
-    Q_SIGNALS:
+protected:
+    void mousePressEvent(QGraphicsSceneMouseEvent *event);
+    void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
 
-        /**
-         * Triggers whatever this button is clicked.
-         */
-        void clicked();
+    void paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
+    QRectF boundingRect() const;
 
-    public Q_SLOTS:
-        void updated(const QString&, const DataEngine::Data &);
-
-    protected:
-        bool isDown();
-        void mousePressEvent(QGraphicsSceneMouseEvent *event);
-        void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
-
-    private:
-        class Private ;
-        Private *  const d;
+private:
+    class Private ;
+    Private *  const d;
 
 };
 

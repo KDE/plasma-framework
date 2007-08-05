@@ -1,5 +1,6 @@
 /*
- *   Copyright (C) 2007 by Siraj Razick siraj@kde.org
+ *   Copyright (C) 2007 by Siraj Razick <siraj@kde.org>
+ *   Copyright (C) 2007 by Matt Broadstone <mbroadst@gmail.com>
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU Library General Public License version 2 as
@@ -18,8 +19,8 @@
 
 #include "pushbutton.h"
 
-#include <QStyleOptionFrameV2>
-#include <QStyleOption>
+#include <QStylePainter>
+#include <QStyleOptionButton>
 #include <QStyle>
 #include <QWidget>
 #include <QPainter>
@@ -27,47 +28,139 @@
 #include <QFontMetricsF>
 #include <QApplication>
 
-#include "pushbutton.moc"
-
 namespace Plasma
 {
 
 class PushButton::Private
 {
-    public:
-        Private() {}
-        ~Private() {}
+public:
+    enum ButtonShape
+    {
+        Rectangle = 0,
+        Round,
+        Custom
+    };
 
-        QString labelText;
-        QString labelIcon;
-        QColor  labelTextColor;
-        QIcon icon;
-        QSize iconSize;
-        bool hasIcon;
-        int labelTextOpacity;
-        int radius;
-        QTimer *updateTimer;
-        PushButton::ButtonState state;
+    enum ButtonState
+    {
+        None,
+        Hover,
+        Pressed,
+        Released
+    };
+
+public:
+    Private()
+        : flat(false),
+          state(None)
+    {}
+
+    void init(PushButton *button);
+    void initStyleOption(QStyleOptionButton *option, const PushButton *button,
+            const QStyleOptionGraphicsItem *graphicsOption = 0 ) const;
+
+    QString text;
+    KIcon icon;
+    QSizeF iconSize;
+    QSizeF size;
+    bool flat;
+    ButtonState state;
 };
+
+void PushButton::Private::init(PushButton *button)
+{
+    button->setAcceptedMouseButtons(Qt::LeftButton);
+    button->setAcceptsHoverEvents(true);
+    button->setEnabled(true);
+}
+
+void PushButton::Private::initStyleOption(QStyleOptionButton *option, const PushButton *button,
+    const QStyleOptionGraphicsItem *graphicsOption) const
+{
+    option->state = QStyle::State_None;
+    if (button->isEnabled()) {
+        option->state |= QStyle::State_Enabled;
+    }
+    if (button->hasFocus()) {
+        option->state |= QStyle::State_HasFocus;
+    }
+    if (state == Private::Hover) {
+        option->state |= QStyle::State_MouseOver;
+    }
+
+    if (graphicsOption) {
+        option->palette = graphicsOption->palette;
+        option->fontMetrics = graphicsOption->fontMetrics;
+        option->rect = graphicsOption->rect;
+    } else {
+        option->palette = QApplication::palette();  // pretty good guess
+        option->fontMetrics = QApplication::fontMetrics();  // hrm
+    }
+
+    option->features = QStyleOptionButton::None;
+    if (flat) {
+        option->features |= QStyleOptionButton::Flat;
+    }
+    if (!flat && !(state == Private::Pressed)) {
+        option->state |= QStyle::State_Raised;
+    } else {
+        option->state |= QStyle::State_Sunken;
+    }
+    option->text = text;
+    option->icon = icon;
+    option->iconSize = button->iconSize().toSize();
+}
 
 PushButton::PushButton(Widget *parent)
     : Plasma::Widget(parent),
       d(new Private)
 {
-    setAcceptedMouseButtons(Qt::LeftButton);
-    setAcceptsHoverEvents(true);
-    setEnabled(true);
+    d->init(this);
+}
 
-    resize(40.0f, 100.0f);
-    setPos(QPointF(0.0,0.0));
+PushButton::PushButton(const QString &text, Widget *parent)
+    : Plasma::Widget(parent),
+      d(new Private)
+{
+    d->init(this);
+    setText(text);
+}
 
-    /*FIXME: Don't use hardcoded strings and colors. */
+PushButton::PushButton(const KIcon &icon, const QString &text, Widget *parent)
+    : Plasma::Widget(parent),
+      d(new Private)
+{
+    d->init(this);
+    setText(text);
+    setIcon(icon);
+}
 
-    d->state = PushButton::None;
-    d->labelText = QString("Plasma");
-    d->labelTextColor = QColor(201, 201, 255);
-    d->hasIcon = false;
-    d->iconSize = QSize(32,32);
+QRectF PushButton::boundingRect() const
+{
+    if (!d->size.isValid()) {
+        int width = 0;
+        int height = 0;
+
+        QStyleOptionButton option;
+        d->initStyleOption(&option, this);
+
+        if (!icon().isNull()) {
+            height += qMax(option.iconSize.height(), height);
+            width += 2 + option.iconSize.width() + 2;  // add margin
+        }
+
+        QString display(option.text);
+        if (display.isEmpty())
+            display = "Plasma";
+
+        QSize textSize = option.fontMetrics.size(Qt::TextShowMnemonic, display);
+        width += textSize.width();
+        height = qMax(height, textSize.height());
+        d->size = QSizeF((QApplication::style()->sizeFromContents(QStyle::CT_PushButton, &option, QSize(width, height), 0).
+                    expandedTo(QApplication::globalStrut())));
+    }
+
+    return QRectF(QPointF(0.0, 0.0), d->size);
 }
 
 PushButton::~PushButton()
@@ -75,112 +168,99 @@ PushButton::~PushButton()
     delete d;
 }
 
-void PushButton::updated(const QString&, const DataEngine::Data &data)
+void PushButton::paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *opt, QWidget *widget)
 {
-    Q_UNUSED(data)
-}
+    QStyleOptionButton option;
+    option.initFrom(widget);
+    d->initStyleOption(&option, this, opt);
 
-void PushButton::paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
-{
-    QStyleOptionButton options;
-    options.initFrom(widget);
-    options.state = option->state;
-    options.state |= isDown() ? QStyle::State_Sunken : QStyle::State_Raised;
-    options.rect = boundingRect().toRect();
-    options.text = text();
-
-    if (d->hasIcon)
-    {
-       options.icon= d->icon;
-       options.iconSize = d->iconSize;
-    }
-
-    widget->style()->drawPrimitive(QStyle::PE_PanelButtonCommand, &options, painter, widget);
-    widget->style()->drawPrimitive(QStyle::PE_FrameFocusRect, &options, painter, widget);
-    widget->style()->drawControl(QStyle::CE_PushButton, &options, painter, widget);
+    widget->style()->drawPrimitive(QStyle::PE_PanelButtonCommand, &option, painter, widget);
+    widget->style()->drawPrimitive(QStyle::PE_FrameFocusRect, &option, painter, widget);
+    widget->style()->drawControl(QStyle::CE_PushButton, &option, painter, widget);
 }
 
 void PushButton::setText(const QString& text)
 {
-    d->labelText = text;
-/*
-    QFont * font = new QFont (text);
-    QFontMetrics  *  fm  = new QFontMetrics(*font);
-    if (fm->width(text) >= d->width)
-        setWidth(fm->width(d->labelText) + 4);
-    delete fm;
-    delete font;
-*/
-
+    d->text = text;
+    d->size = QSizeF();
+    update();
 }
 
 QString PushButton::text() const
 {
-    return d->labelText;
+    return d->text;
 }
 
-void PushButton::setIcon(const QString& path)
+void PushButton::setIcon(const KIcon &icon)
 {
-    if (!path.isNull())
-    {
-        QPixmap iconPixmap(path);
-        d->icon = QIcon(iconPixmap);
-        d->iconSize = iconPixmap.size();
-        d->hasIcon=true;
-    }
-    else
-        d->hasIcon = false;
+    d->icon = icon;
+    d->size = QSizeF();
+    update();
 }
 
-bool PushButton::isDown()
+void PushButton::setIcon(const QString &path)
 {
-    if (d->state == PushButton::Pressed)
-        return true;
-    return false;
+    KIcon icon(path);
+    setIcon(icon);
+}
+
+KIcon PushButton::icon() const
+{
+    return d->icon;
+}
+
+QSizeF PushButton::iconSize() const
+{
+    if (d->iconSize.isValid())
+        return d->iconSize;
+
+    qreal metric = qreal(QApplication::style()->pixelMetric(QStyle::PM_ButtonIconSize));
+    return QSizeF(metric, metric);
+}
+
+void PushButton::setIconSize(const QSizeF &size)
+{
+    if (d->iconSize == size)
+        return;
+
+    d->iconSize = size;
+    d->size = QSizeF();
+    update();
+}
+
+bool PushButton::isDown() const
+{
+    return (d->state == Private::Pressed);
+}
+
+bool PushButton::isFlat() const
+{
+    return d->flat;
+}
+
+void PushButton::setFlat(bool flat)
+{
+    d->flat = flat;
+    update();
 }
 
 void PushButton::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     event->accept();
-    d->state = PushButton::Pressed;
+    d->state = Private::Pressed;
     update();
-//     emit clicked();
 }
 
 void PushButton::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
     event->accept();
-    if (d->state == PushButton::Pressed)
+    if (d->state == Private::Pressed)
         emit clicked();
-    d->state = PushButton::Released;
+    d->state = Private::Released;
     update();
 }
 
-QSizeF PushButton::sizeHint() const
-{
-    return minimumSize();
-}
-
-QSizeF PushButton::minimumSize() const
-{
-    QFontMetricsF m = qApp->fontMetrics();
-
-    return m.boundingRect(text()).size() + QSizeF(5.0f, 5.0f);
-}
-
-QSizeF PushButton::maximumSize() const
-{
-    return QSizeF();
-}
-
-Qt::Orientations PushButton::expandingDirections() const
-{
-    return Qt::Horizontal;
-}
-
-bool PushButton::isEmpty() const
-{
-    return false;
-}
-
 } // namespace Plasma
+
+#include "pushbutton.moc"
+
