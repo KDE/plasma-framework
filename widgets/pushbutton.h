@@ -134,6 +134,11 @@ public:
     */
     void setFlat(bool flat);
 
+    // NOTE: bogus
+    QSizeF minimumSize() const;
+    Qt::Orientations expandingDirections() const;
+    QSizeF sizeHint() const;
+
 Q_SIGNALS:
     /**
     * Triggered when the button has been clicked.

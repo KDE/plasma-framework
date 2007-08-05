@@ -260,6 +260,23 @@ void PushButton::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     update();
 }
 
+QSizeF PushButton::minimumSize() const
+{
+    QFontMetricsF m = qApp->fontMetrics();
+    return m.boundingRect(text()).size() + QSizeF(5.0f, 5.0f);
+}
+
+Qt::Orientations PushButton::expandingDirections() const
+{
+    return Qt::Horizontal;
+}
+
+QSizeF PushButton::sizeHint() const
+{
+    return minimumSize();
+}
+
+
 } // namespace Plasma
 
 #include "pushbutton.moc"
