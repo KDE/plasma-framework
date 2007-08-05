@@ -2,6 +2,7 @@
  *   Copyright (C) 2007 by Aaron Seigo <aseigo@kde.org>
  *   Copyright (C) 2007 by Riccardo Iaconelli <riccardo@kde.org>
  *   Copyright (C) 2007 by Matt Broadstone <mbroadst@gmail.com>
+ *   Copyright (C) 2006-2007 Fredrik Höglund <fredrik@kde.org>
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU Library General Public License version 2 as
@@ -19,12 +20,15 @@
  */
 
 #include "icon.h"
+#include "icon_p.h"
 
 #include <QAction>
 #include <QApplication>
 #include <QPainter>
 #include <QGraphicsSceneMouseEvent>
 #include <QGraphicsView>
+#include <QStyleOptionGraphicsItem>
+#include <QTextLayout>
 
 //#define BACKINGSTORE_BLUR_HACK
 
@@ -34,6 +38,9 @@
 
 #include <KIcon>
 #include <KImageEffect>
+#include <KIconEffect>
+#include <KIconLoader>
+#include <K3Icon>
 #include <KUrl>
 #include <KRun>
 #include <KMimeType>
@@ -46,151 +53,67 @@
 namespace Plasma
 {
 
-class PLASMA_EXPORT IconAction
+Icon::Private::Private()
+    : svg("widgets/iconbutton"),
+      svgElements(0),
+      size(128*1.1, 128*1.1),
+      iconSize(128, 128),
+      state(Private::NoState),
+      orientation(Qt::Vertical),
+      calculateSizeRequested(true)          // First time always true
 {
-    public:
-        IconAction(Icon* icon, QAction* action);
+    svg.setContentType(Plasma::Svg::ImageSet);
+    svg.resize(size);
 
-        void show();
-        void hide();
-        bool isVisible() const;
+    //TODO: recheck when svg changes
+    checkSvgElements();
+}
 
-        Phase::AnimId animationId() const;
-        QAction* action() const;
-
-        void paint(QPainter *painter) const;
-        bool event(QEvent::Type type, const QPointF &pos);
-
-        void setSelected(bool selected);
-        bool isSelected() const;
-
-        bool isHovered() const;
-        bool isPressed() const;
-
-        void setRect(const QRectF &rect);
-        QRectF rect() const;
-
-    private:
-        void rebuildPixmap();
-
-        Icon* m_icon;
-        QAction* m_action;
-        QPixmap m_pixmap;
-        QRectF m_rect;
-
-        bool m_hovered;
-        bool m_pressed;
-        bool m_selected;
-        bool m_visible;
-
-        Phase::AnimId m_animationId;
-};
-
-class Icon::Private
+Icon::Private::~Private()
 {
-    public:
-        Private()
-            : svg("widgets/iconbutton"),
-              svgElements(0),
-              size(128*1.1, 128*1.1),
-              iconSize(128, 128),
-              state(Private::NoState)
-        {
-            svg.setContentType(Plasma::Svg::ImageSet);
-            svg.resize(size);
+    qDeleteAll(cornerActions);
+}
 
-            //TODO: recheck when svg changes
-            checkSvgElements();
-        }
+void Icon::Private::checkSvgElements()
+{
+    if (svg.elementExists("background")) {
+        svgElements |= SvgBackground;
+    }
 
-        ~Private()
-        {
-            qDeleteAll(cornerActions);
-        }
+    if (svg.elementExists("background-hover")) {
+        svgElements |= SvgBackgroundHover;
+    }
 
-        void drawBackground(QPainter *painter);
-        void drawForeground(QPainter *painter);
-        void drawIcon(QPainter *painter);
-        void drawText(QPainter *painter);
+    if (svg.elementExists("background-pressed")) {
+        svgElements |= SvgBackgroundPressed;
+    }
 
-        void checkSvgElements()
-        {
-            if (svg.elementExists("background")) {
-                svgElements |= SvgBackground;
-            }
+    if (svg.elementExists("foreground")) {
+        svgElements |= SvgForeground;
+    }
 
-            if (svg.elementExists("background-hover")) {
-                svgElements |= SvgBackgroundHover;
-            }
+    if (svg.elementExists("foreground-hover")) {
+        svgElements |= SvgForegroundHover;
+    }
 
-            if (svg.elementExists("background-pressed")) {
-                svgElements |= SvgBackgroundPressed;
-            }
+    if (svg.elementExists("foreground-pressed")) {
+        svgElements |= SvgForegroundPressed;
+    }
 
-            if (svg.elementExists("foreground")) {
-                svgElements |= SvgForeground;
-            }
+    if (svg.elementExists("minibutton")) {
+        svgElements |= SvgMinibutton;
+    }
 
-            if (svg.elementExists("foreground-hover")) {
-                svgElements |= SvgForegroundHover;
-            }
+    if (svg.elementExists("minibutton-hover")) {
+        svgElements |= SvgMinibuttonHover;
+    }
 
-            if (svg.elementExists("foreground-pressed")) {
-                svgElements |= SvgForegroundPressed;
-            }
+    if (svg.elementExists("minibutton-pressed")) {
+        svgElements |= SvgMinibuttonPressed;
+    }
+}
 
-            if (svg.elementExists("minibutton")) {
-                svgElements |= SvgMinibutton;
-            }
 
-            if (svg.elementExists("minibutton-hover")) {
-                svgElements |= SvgMinibuttonHover;
-            }
-
-            if (svg.elementExists("minibutton-pressed")) {
-                svgElements |= SvgMinibuttonPressed;
-            }
-        }
-
-        enum {
-            NoSvg = 0,
-            SvgBackground = 1,
-            SvgBackgroundHover = 2,
-            SvgBackgroundPressed = 4,
-            SvgForeground = 8,
-            SvgForegroundHover = 16,
-            SvgForegroundPressed = 32,
-            SvgMinibutton = 64,
-            SvgMinibuttonHover = 128,
-            SvgMinibuttonPressed = 256
-        };
-
-        enum ActionPosition {
-            TopLeft = 0,
-            TopRight,
-            BottomLeft,
-            BottomRight,
-            LastIconPosition
-        };
-
-        enum ButtonState
-        {
-            NoState,
-            HoverState,
-            PressedState
-        };
-
-        QString text;
-        QString infoText;
-        Svg svg;
-        int svgElements;
-        QSizeF size;
-        QSizeF iconSize;
-        QIcon icon;
-        ButtonState state;
-
-        QList<IconAction*> cornerActions;
-};
 
 IconAction::IconAction(Icon* icon, QAction *action)
     : m_icon(icon),
@@ -349,14 +272,14 @@ void IconAction::paint(QPainter *painter) const
 }
 
 Icon::Icon(QGraphicsItem *parent)
-    : QGraphicsItem(parent),
+    : Plasma::Widget(parent),
       d(new Private)
 {
     init();
 }
 
 Icon::Icon(const QString &text, QGraphicsItem *parent)
-    : QGraphicsItem(parent),
+    : Plasma::Widget(parent),
       d(new Private)
 {
     setText(text);
@@ -364,7 +287,7 @@ Icon::Icon(const QString &text, QGraphicsItem *parent)
 }
 
 Icon::Icon(const QIcon &icon, const QString &text, QGraphicsItem *parent)
-    : QGraphicsItem(parent),
+    : Plasma::Widget(parent),
       d(new Private)
 {
     setText(text);
@@ -379,8 +302,21 @@ Icon::~Icon()
 
 void Icon::init()
 {
-    setAcceptedMouseButtons(Qt::LeftButton);
+    // setAcceptedMouseButtons(Qt::LeftButton);
     setAcceptsHoverEvents(true);
+
+    int focusHMargin = QApplication::style()->pixelMetric(QStyle::PM_FocusFrameHMargin);
+    int focusVMargin = QApplication::style()->pixelMetric(QStyle::PM_FocusFrameVMargin);
+
+    // Margins for horizontal mode (list views, tree views, table views)
+    d->setHorizontalMargin(Private::TextMargin, focusHMargin, focusVMargin);
+    d->setHorizontalMargin(Private::IconMargin, focusHMargin, focusVMargin);
+    d->setHorizontalMargin(Private::ItemMargin, 0, 0);
+
+    // Margins for vertical mode (icon views)
+    d->setVerticalMargin(Private::TextMargin, 6, 2);
+    d->setVerticalMargin(Private::IconMargin, focusHMargin, focusVMargin);
+    d->setVerticalMargin(Private::ItemMargin, 0, 0);
 }
 
 void Icon::addAction(QAction *action)
@@ -426,17 +362,55 @@ void Icon::actionDestroyed(QObject* action)
     update();   // redraw since an action has been deleted.
 }
 
-void Icon::calculateSize()
+QSizeF Icon::Private::displaySizeHint(const QStyleOptionGraphicsItem *option) const
 {
-    prepareGeometryChange();
-    QFontMetrics fm(QApplication::font());      // TODO: get the font somewhere more appropriate
-    QSizeF fmSize = fm.size(Qt::AlignHCenter | Qt::AlignTop, d->text);
+    QString label = text;
+    const qreal maxWidth = (orientation == Qt::Vertical) ? iconSize.width() + 10 : 32757;
+    kDebug() << "Icon::Private::displaySizeHint maxWidth: " << maxWidth;
 
-    int margin = 6;     // hmmm
-    qreal height = d->iconSize.height() + (margin*2) + fmSize.height();
-    qreal width = margin + qMax(fmSize.width(), d->iconSize.width()) + margin;
-    d->size = QSizeF(width, height);
+    // To compute the nominal size for the label + info, we'll just append
+    // the information string to the label
+    const QString info = infoText;
+    if (!info.isEmpty())
+        label += QString(QChar::LineSeparator) + info;
+
+    QTextLayout layout;
+    setLayoutOptions(layout, option);
+
+    kDebug() << "Icon::Private::displaySizeHint maxWidth: " << maxWidth;
+    QSizeF size = layoutText(layout, option, label, QSizeF(iconSize.width() + 10, 32757));
+    kDebug() << "Icon::Private::displaySizeHint size.width: " << size.width();
+
+    return addMargin(size, TextMargin);
+}
+
+void Icon::calculateSize(const QStyleOptionGraphicsItem *option)
+{
+    if (!d->calculateSizeRequested)
+        return;
+
+    prepareGeometryChange();
+    d->setActiveMargins();
+
+    const QSizeF displaySize    = d->displaySizeHint(option);
+    const QSizeF decorationSize = d->addMargin(d->iconSize, Private::IconMargin);
+
+    QSizeF newSize;
+    if (d->orientation == Qt::Vertical)
+    {
+        newSize.rwidth()  = qMax(decorationSize.width(), displaySize.width());
+        newSize.rheight() = decorationSize.height() + displaySize.height() + 1;
+    }
+    else
+    {
+        newSize.rwidth()  = decorationSize.width() + displaySize.width() + 1;
+        newSize.rheight() = qMax(decorationSize.height(), displaySize.height());
+    }
+
+    kDebug() << "Icon::calculateSize newSize: " << newSize;
+    d->size = d->addMargin(newSize, Private::ItemMargin);
     d->svg.resize(d->size);
+    d->calculateSizeRequested = false;
 
     int count = 0;
     foreach (IconAction* iconAction, d->cornerActions) {
@@ -527,44 +501,266 @@ void Icon::Private::drawForeground(QPainter *painter)
     }
 }
 
-void Icon::Private::drawIcon(QPainter *painter)
+QPixmap Icon::Private::decoration(const QStyleOptionGraphicsItem *option) const
 {
-    if (!icon.isNull()) {
-        qreal iw = iconSize.width();
-        qreal ih = iconSize.height();
-        qreal deltaX = (size.width() - iw) / 2;
-        qreal deltaY = (size.height() - ih) / 2 ;
-        if (state == Private::PressedState) {
-            painter->save();
-            painter->setRenderHint(QPainter::SmoothPixmapTransform);
-            painter->scale(0.95, 0.95);
-            deltaY *= 0.95;
-            deltaX *= 0.95;
-            painter->drawPixmap((int)(deltaX + (iw * .025)), (int)(deltaY + (ih * .025)),
-                                icon.pixmap(iconSize.toSize()));
-            painter->restore();
-        } else {
-            painter->drawPixmap((int)deltaX, (int)deltaY, icon.pixmap(iconSize.toSize()));
+    QPixmap result;
+
+    QIcon::Mode mode   = option->state & QStyle::State_Enabled ? QIcon::Normal : QIcon::Disabled;
+    QIcon::State state = option->state & QStyle::State_Open ? QIcon::On : QIcon::Off;
+    const QSize size = icon.actualSize(iconSize.toSize(), mode, state);
+    result = icon.pixmap(size, mode, state);
+
+    if (!result.isNull())
+    {
+        // Apply the configured hover effect    NOTE: This has no visible effect because we 
+        //                                            do drawForeground() -MB
+        if (option->state & QStyle::State_MouseOver) {
+            KIconEffect *effect = KIconLoader::global()->iconEffect();
+
+            // Note that in KIconLoader terminology, active = hover.
+            // ### We're assuming that the icon group is desktop/filemanager, since this
+            //     is KFileItemDelegate.
+            if (effect->hasEffect(K3Icon::Desktop, K3Icon::ActiveState)) {
+                result = effect->apply(result, K3Icon::Desktop, K3Icon::ActiveState);
+            }
         }
     }
+
+    return result;
 }
 
-void Icon::Private::drawText(QPainter *painter)
+QPointF Icon::Private::iconPosition(const QStyleOptionGraphicsItem *option, const QPixmap &pixmap) const
 {
-    if (!text.isEmpty()) {
-        qreal offset = (iconSize.height() + 12);     // TODO this shouldn't be hardcoded?
-        QRectF textRect(0, offset, size.width(), size.height() - offset);
+    const QRectF itemRect = subtractMargin(option->rect, Private::ItemMargin);
+    Qt::Alignment alignment = Qt::AlignHCenter | Qt::AlignTop;  // NOTE: This assumes always top-center -MB
 
-        QTextOption textOpt;
-        textOpt.setAlignment(Qt::AlignHCenter | Qt::AlignTop);
-        textOpt.setWrapMode(QTextOption::WordWrap);
+    // Compute the nominal decoration rectangle
+    const QSizeF size = addMargin(iconSize, Private::IconMargin);
+    const QRect iconRect = QStyle::alignedRect(option->direction, alignment, size.toSize(), itemRect.toRect());
 
-        painter->setPen(Qt::white);
-        painter->drawText(textRect, text, textOpt);
+    // Position the pixmap in the center of the rectangle
+    QRect pixmapRect = pixmap.rect();
+    pixmapRect.moveCenter(iconRect.center());
+
+    // add a gimmicky margin of 5px to y, TEMP TEMP TEMP
+    // pixmapRect = pixmapRect.adjusted(0, 5, 0, 0);
+
+    return QPointF(pixmapRect.topLeft());
+}
+
+QRectF Icon::Private::labelRectangle(const QStyleOptionGraphicsItem *option, const QPixmap &icon,
+                                    const QString &string) const
+{
+    Q_UNUSED(string)
+
+    if (icon.isNull())
+        return option->rect;
+
+    const QSizeF decoSize = addMargin(iconSize, Private::IconMargin); 
+
+    kDebug() << "Icon::Private::labelRectangle option->rect: " << option->rect;
+    const QRectF itemRect = subtractMargin(option->rect, Private::ItemMargin);
+    QRectF textArea(QPointF(0, 0), itemRect.size());
+
+    textArea.setTop(decoSize.height() + 1);
+    textArea.translate(itemRect.topLeft());
+    return QRectF(QStyle::visualRect(option->direction, option->rect, textArea.toRect()));
+}
+
+// Lays the text out in a rectangle no larger than constraints, eliding it as necessary
+QSizeF Icon::Private::layoutText(QTextLayout &layout, const QStyleOptionGraphicsItem *option,
+                                const QString &text, const QSizeF &constraints) const
+{
+    const QSizeF size = layoutText(layout, text, constraints.width());
+
+    if (size.width() > constraints.width() || size.height() > constraints.height())
+    {
+        const QString elided = elidedText(layout, option, constraints);
+        return layoutText(layout, elided, constraints.width());
+    }
+
+    return size;
+}
+
+// Lays the text out in a rectangle no wider than maxWidth
+QSizeF Icon::Private::layoutText(QTextLayout &layout, const QString &text, qreal maxWidth) const
+{
+    QFontMetricsF metrics(layout.font());
+    qreal leading     = metrics.leading();
+    qreal height      = 0.0;
+    qreal widthUsed   = 0.0;
+    QTextLine line;
+
+    layout.setText(text);
+
+    layout.beginLayout();
+
+//    kDebug() << "layoutText called with maxWidth: " << maxWidth;
+    while ((line = layout.createLine()).isValid())
+    {
+        line.setLineWidth(maxWidth);
+        height += leading;
+        line.setPosition(QPointF(0.0, height));
+        height += line.height();
+        widthUsed = qMax(widthUsed, line.naturalTextWidth());
+    }
+    layout.endLayout();
+
+//    return layout.boundingRect().size();          // ARGH!
+    return QSizeF(widthUsed, height);
+}
+
+// Elides the text in the layout, by iterating over each line in the layout, eliding
+// or word breaking the line if it's wider than the max width, and finally adding an
+// ellipses at the end of the last line, if there are more lines than will fit within
+// the vertical size constraints.
+QString Icon::Private::elidedText(QTextLayout &layout, const QStyleOptionGraphicsItem *option,
+                                  const QSizeF &size) const
+{
+    Q_UNUSED(option)
+
+    QFontMetricsF metrics(layout.font());
+    const QString text = layout.text();
+    qreal maxWidth       = size.width();
+    qreal maxHeight      = size.height();
+    qreal height         = 0;
+
+    // If the string contains a single line of text it shouldn't be word wrapped
+    if (text.indexOf(QChar::LineSeparator) == -1)
+        return metrics.elidedText(text, Qt::ElideRight, maxWidth);
+
+    // Elide each line that has already been laid out in the layout.
+    QString elided;
+    elided.reserve(text.length());
+
+    for (int i = 0; i < layout.lineCount(); i++)
+    {
+        QTextLine line = layout.lineAt(i);
+        int start  = line.textStart();
+        int length = line.textLength();
+
+        height += metrics.leading();
+        if (height + line.height() + metrics.lineSpacing() > maxHeight)
+        {
+            // Unfortunately, if the line ends because of a line separator, elidedText() will be too
+            // clever and keep adding lines until it finds one that's too wide.
+            if (line.naturalTextWidth() < maxWidth && text[start + length - 1] == QChar::LineSeparator)
+                elided += text.mid(start, length - 1);
+            else
+                elided += metrics.elidedText(text.mid(start), Qt::ElideRight, maxWidth);
+            break;
+        }
+        else if (line.naturalTextWidth() > maxWidth)
+            elided += metrics.elidedText(text.mid(start, length), Qt::ElideRight, maxWidth);
+        else
+            elided += text.mid(start, length);
+
+        height += line.height();
+    }
+
+    return elided;
+}
+
+void Icon::Private::layoutTextItems(const QStyleOptionGraphicsItem *option,
+                                    const QPixmap &icon, QTextLayout *labelLayout,
+                                    QTextLayout *infoLayout, QRectF *textBoundingRect) const
+{
+    bool showInformation = false;
+
+    setLayoutOptions(*labelLayout, option);
+
+    QFontMetricsF fm(labelLayout->font());
+    const QRectF textArea = labelRectangle(option, icon, text);
+    QRectF textRect       = subtractMargin(textArea, Private::TextMargin);
+
+    // Sizes and constraints for the different text parts
+    QSizeF maxLabelSize = textRect.size();
+    QSizeF maxInfoSize  = textRect.size();
+    QSizeF labelSize;
+    QSizeF infoSize;
+
+    // If we have additional info text, and there's space for at least two lines of text,
+    // adjust the max label size to make room for at least one line of the info text
+    if (!infoText.isEmpty() && textRect.height() >= fm.lineSpacing() * 2)
+    {
+        infoLayout->setFont(labelLayout->font());
+        infoLayout->setTextOption(labelLayout->textOption());
+
+        maxLabelSize.rheight() -= fm.lineSpacing();
+        showInformation = true;
+    }
+
+    // Lay out the label text, and adjust the max info size based on the label size
+    kDebug() << "Icon::Private::layoutTextItems maxLabelSize: " << maxLabelSize;
+    labelSize = layoutText(*labelLayout, option, text, maxLabelSize);
+    maxInfoSize.rheight() -= labelSize.height();
+
+    // Lay out the info text
+    if (showInformation)
+        infoSize = layoutText(*infoLayout, option, infoText, maxInfoSize);
+    else
+        infoSize = QSizeF(0, 0);
+
+    // Compute the bounding rect of the text
+    const Qt::Alignment alignment = labelLayout->textOption().alignment();
+    const QSizeF size(qMax(labelSize.width(), infoSize.width()), labelSize.height() + infoSize.height());
+    *textBoundingRect = QStyle::alignedRect(option->direction, alignment, size.toSize(), textRect.toRect());
+
+    // Compute the positions where we should draw the layouts
+    labelLayout->setPosition(QPointF(textRect.x(), textBoundingRect->y()));
+    infoLayout->setPosition(QPointF(textRect.x(), textBoundingRect->y() + labelSize.height()));
+}
+
+QBrush Icon::Private::foregroundBrush(const QStyleOptionGraphicsItem *option) const
+{
+    const QPalette::ColorGroup group = option->state & QStyle::State_Enabled ?
+            QPalette::Normal : QPalette::Disabled;
+
+    // Always use the highlight color for selected items
+    if (option->state & QStyle::State_Selected)
+        return option->palette.brush(group, QPalette::HighlightedText);
+
+    return option->palette.brush(group, QPalette::Text);
+}
+
+QBrush Icon::Private::backgroundBrush(const QStyleOptionGraphicsItem *option) const
+{
+    const QPalette::ColorGroup group = option->state & QStyle::State_Enabled ?
+            QPalette::Normal : QPalette::Disabled;
+
+    QBrush background(Qt::NoBrush);
+
+    // Always use the highlight color for selected items
+    if (option->state & QStyle::State_Selected)
+        background = option->palette.brush(group, QPalette::Highlight);
+
+    return background;
+}
+
+void Icon::Private::drawTextItems(QPainter *painter, const QStyleOptionGraphicsItem *option,
+                                  const QTextLayout &labelLayout, const QTextLayout &infoLayout) const
+{
+    QPen pen(foregroundBrush(option), 0);
+    painter->setPen(pen);
+    labelLayout.draw(painter, QPointF());
+
+    if (!infoLayout.text().isEmpty())
+    {
+        QColor color;
+        if (option->state & QStyle::State_Selected)
+        {
+            color = option->palette.color(QPalette::HighlightedText);
+            color.setAlphaF(.5);
+        } else
+            color = option->palette.color(QPalette::Highlight);
+
+        painter->setPen(color);
+        infoLayout.draw(painter, QPointF());
     }
 }
 
-void Icon::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+
+void Icon::paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     Q_UNUSED(option)
     Q_UNUSED(widget)
@@ -585,9 +781,23 @@ void Icon::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWid
      }
 #endif
 
+    calculateSize(option);
+    d->setActiveMargins();
+
+    // Compute the metrics, and lay out the text items
+    // ========================================================================
+    QPixmap icon         = d->decoration(option);
+    const QPointF iconPos = d->iconPosition(option, icon);
+
+    QTextLayout labelLayout, infoLayout;
+    QRectF textBoundingRect;
+    d->layoutTextItems(option, icon, &labelLayout, &infoLayout, &textBoundingRect);
+
     d->svg.resize(d->size);
     d->drawBackground(painter);
-    d->drawIcon(painter);
+
+    // draw icon
+    painter->drawPixmap(iconPos, icon);
 
     d->drawForeground(painter);
 
@@ -599,7 +809,8 @@ void Icon::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWid
     }
 
     // Draw text last because its overlayed
-    d->drawText(painter);
+    d->drawTextItems(painter, option, labelLayout, infoLayout);
+
 }
 
 void Icon::drawActionButtonBase(QPainter* painter, const QSize &size, int element)
@@ -631,7 +842,7 @@ void Icon::drawActionButtonBase(QPainter* painter, const QSize &size, int elemen
 void Icon::setText(const QString& text)
 {
     d->text = text;
-    calculateSize();
+    d->calculateSizeRequested = true;
 }
 
 QString Icon::text() const
@@ -642,7 +853,7 @@ QString Icon::text() const
 void Icon::setInfoText(const QString& text)
 {
     d->infoText = text;
-    calculateSize();
+    d->calculateSizeRequested = true;
 }
 
 QString Icon::infoText() const
@@ -663,7 +874,7 @@ void Icon::setIcon(const QString& icon)
 void Icon::setIcon(const QIcon& icon)
 {
     d->icon = icon;
-    calculateSize();
+    d->calculateSizeRequested = true;
 }
 
 QSizeF Icon::iconSize() const
@@ -674,7 +885,7 @@ QSizeF Icon::iconSize() const
 void Icon::setIconSize(const QSizeF& s)
 {
     d->iconSize = s;
-    calculateSize();
+    d->calculateSizeRequested = true;
 }
 
 void Icon::setIconSize(int w, int h)
@@ -689,22 +900,21 @@ bool Icon::isDown()
 
 void Icon::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-kDebug() << "Icon::mousePressEvent ";
     foreach (IconAction *action, d->cornerActions) {
         action->event(event->type(), event->pos());
     }
 
     d->state = Private::PressedState;
+
     QGraphicsItem::mousePressEvent(event);
     update();
-    event->accept();
 }
 
 void Icon::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
     bool inside = boundingRect().contains(event->pos());
-kDebug() << "Icon::mouseReleaseEvent " << inside;
     Private::ButtonState was = d->state;
+
     if (inside) {
         d->state = Private::HoverState;
 
@@ -714,16 +924,17 @@ kDebug() << "Icon::mouseReleaseEvent " << inside;
                 break;
             }
         }
-    } else {
-        d->state = Private::NoState;
     }
-
-    if (was == Private::PressedState) {
+    else if (was == Private::PressedState) {
         emit pressed(false);
 
         if (inside) {
             emit clicked();
         }
+        d->state = Private::NoState;
+    }
+    else {
+        d->state = Private::NoState;
     }
 
     QGraphicsItem::mouseReleaseEvent(event);
@@ -760,7 +971,6 @@ void Icon::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
     QGraphicsItem::mouseMoveEvent(event);
 }
-
 
 QSizeF Icon::sizeHint() const
 {

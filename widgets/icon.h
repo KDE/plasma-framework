@@ -27,10 +27,9 @@
 #include <plasma/dataengine.h>
 #include <plasma/phase.h>
 #include <plasma/plasma_export.h>
-#include <plasma/widgets/layoutitem.h>
+#include <plasma/widgets/widget.h>
 
 class QAction;
-class KUrl;
 
 /**
  * This class provides a generic Icon for the Plasma desktop. An icon, in this
@@ -44,162 +43,160 @@ class KUrl;
 namespace Plasma
 {
 
-class PLASMA_EXPORT Icon : public QObject, public QGraphicsItem, public LayoutItem
+class PLASMA_EXPORT Icon : public Plasma::Widget
 {
     Q_OBJECT
     Q_PROPERTY( QString text READ text WRITE setText )
     Q_PROPERTY( QString infoText READ infoText WRITE setInfoText )
     Q_PROPERTY( QSizeF iconSize READ iconSize WRITE setIconSize )
+public:
+    /**
+    * Creates a new Plasma::Icon.
+    * @param parent the QGraphicsItem this icon is parented to.
+    */
+    explicit Icon(QGraphicsItem *parent = 0);
 
-    public:
-        /**
-         * Creates a new Plasma::Icon.
-         * @param parent the QGraphicsItem this icon is parented to.
-        */
-        explicit Icon(QGraphicsItem *parent = 0);
+    /**
+    * Convenience constructor to create a Plasma::Icon with text.
+    * @param text the text that will be displayed with this icon.
+    * @param parent the QGraphicsItem this icon is parented to.
+    */
+    explicit Icon(const QString &text, QGraphicsItem *parent = 0);
 
-        /**
-         * Convenience constructor to create a Plasma::Icon with text.
-         * @param text the text that will be displayed with this icon.
-         * @param parent the QGraphicsItem this icon is parented to.
-        */
-        explicit Icon(const QString &text, QGraphicsItem *parent = 0);
+    /**
+    * Creates a new Plasma::Icon with text and an icon.
+    * @param icon the icon that will be displayed with this icon.
+    * @param text the text that will be displayed with this icon.
+    * @param parent The QGraphicsItem this icon is parented to.
+    */
+    Icon(const QIcon & icon, const QString &text, QGraphicsItem *parent = 0);
 
-        /**
-         * Creates a new Plasma::Icon with text and an icon.
-         * @param icon the icon that will be displayed with this icon.
-         * @param text the text that will be displayed with this icon.
-         * @param parent The QGraphicsItem this icon is parented to.
-        */
-        Icon(const QIcon & icon, const QString &text, QGraphicsItem *parent = 0);
+    /**
+    * Destroys this Plasma::Icon.
+    */
+    virtual ~Icon();
 
-        /**
-         * Destroys this Plasma::Icon.
-        */
-        virtual ~Icon();
+    /**
+    * Returns the text associated with this icon.
+    */
+    QString text() const;
 
-        /**
-         * Returns the text associated with this icon.
-        */
-        QString text() const;
+    /**
+    * Sets the text associated with this icon.
+    * @param text the text to associate with this icon.
+    */
+    void setText(const QString &text);
 
-        /**
-         * Sets the text associated with this icon.
-         * @param text the text to associate with this icon.
-        */
-        void setText(const QString &text);
+    /**
+    * Returns the meta text associated with this icon.
+    */
+    QString infoText() const;
 
-        /**
-         * Returns the meta text associated with this icon.
-        */
-        QString infoText() const;
+    /**
+    * Sets the additional information to be displayed by
+    * this icon.
+    * @param text additional meta text associated with this icon.
+    */
+    void setInfoText(const QString &text);
 
-        /**
-         * Sets the additional information to be displayed by
-         * this icon.
-         * @param text additional meta text associated with this icon.
-        */
-        void setInfoText(const QString &text);
+    /**
+    * Sets the graphical icon for this Plasma::Icon.
+    * @param icon the QIcon to associate with this icon.
+    */
+    Q_INVOKABLE void setIcon(const QIcon& icon);
 
-        /**
-         * Sets the graphical icon for this Plasma::Icon.
-         * @param icon the QIcon to associate with this icon.
-        */
-        Q_INVOKABLE void setIcon(const QIcon& icon);
+    /**
+    * Convenience method to set the icon of this Plasma::Icon
+    * using a QString path to the icon.
+    * @param icon the path to the icon to associate with this Plasma::Icon.
+    */
+    Q_INVOKABLE void setIcon(const QString& icon);
 
-        /**
-         * Convenience method to set the icon of this Plasma::Icon
-         * using a QString path to the icon.
-         * @param icon the path to the icon to associate with this Plasma::Icon.
-        */
-        Q_INVOKABLE void setIcon(const QString& icon);
+    /**
+    * Returns the size of this Plasma::Icon's graphical icon.
+    */
+    Q_INVOKABLE QSizeF iconSize() const;
 
-        /**
-         * Returns the size of this Plasma::Icon's graphical icon.
-        */
-        QSizeF iconSize() const;
+    /**
+    * Sets the size of the graphical icon for this Plasma::Icon.
+    * @param size the size of the icon.
+    */
+    Q_INVOKABLE void setIconSize(const QSizeF& size);
 
-        /**
-         * Sets the size of the graphical icon for this Plasma::Icon.
-         * @param size the size of the icon.
-        */
-        void setIconSize(const QSizeF& size);
+    /**
+    * Convenience method to set the icon size without a QSizeF.
+    * @param height the height of the icon.
+    * @param width the width of the icon.
+    */
+    Q_INVOKABLE void setIconSize(int height, int width);
 
-        /**
-         * Convenience method to set the icon size without a QSizeF.
-         * @param height the height of the icon.
-         * @param width the width of the icon.
-        */
-        Q_INVOKABLE void setIconSize(int height, int width);
+    /**
+    * Plasma::Icon allows the user to specify a number of actions
+    * (current four) to be displayed around the widget. This method
+    * allows for a created QAction (not a KAction!) to be added to 
+    * the Plasma::Icon.
+    * @param action the QAction to associate with this icon.
+    */
+    void addAction(QAction* action);
 
+    // Layout stuff - no need to document
+    Qt::Orientations expandingDirections() const;
 
-        /**
-         * Plasma::Icon allows the user to specify a number of actions
-         * (current four) to be displayed around the widget. This method
-         * allows for a created QAction (not a KAction!) to be added to 
-         * the Plasma::Icon.
-         * @param action the QAction to associate with this icon.
-        */
-        void addAction(QAction* action);
+    QSizeF minimumSize() const;
+    QSizeF maximumSize() const;
 
-        // Layout stuff - no need to document
-        Qt::Orientations expandingDirections() const;
+    bool hasHeightForWidth() const;
+    qreal heightForWidth(qreal w) const;
 
-        QSizeF minimumSize() const;
-        QSizeF maximumSize() const;
+    bool hasWidthForHeight() const;
+    qreal widthForHeight(qreal h) const;
 
-        bool hasHeightForWidth() const;
-        qreal heightForWidth(qreal w) const;
+    QRectF geometry() const;
+    void setGeometry(const QRectF& r);
 
-        bool hasWidthForHeight() const;
-        qreal widthForHeight(qreal h) const;
+    QSizeF sizeHint() const;
+    QRectF boundingRect() const;
 
-        QRectF geometry() const;
-        void setGeometry(const QRectF& r);
+protected:
+    void paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
 
-        QSizeF sizeHint() const;
-        QRectF boundingRect() const;
+Q_SIGNALS:
+    /**
+    * Indicates when the icon has been pressed.
+    */
+    void pressed(bool down);
 
-    protected:
-        void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
+    /**
+    * Indicates when the icon has been clicked.
+    */
+    void clicked();
 
-    Q_SIGNALS:
-        /**
-         * Indicates when the icon has been pressed.
-        */
-        void pressed(bool down);
+protected:
+    bool isDown();
+    void mousePressEvent(QGraphicsSceneMouseEvent *event);
+    void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
+    void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
 
-        /**
-         * Indicates when the icon has been clicked.
-        */
-        void clicked();
+    void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
+    void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
 
-    protected:
-        bool isDown();
-        void mousePressEvent(QGraphicsSceneMouseEvent *event);
-        void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
-        void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
+public:
+    class Private;
 
-        void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
-        void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
+    /**
+    * @internal
+    **/
+    void drawActionButtonBase(QPainter* painter, const QSize &size, int element);
 
-    public:
-        class Private;
+private:
+    void init();
+    void calculateSize(const QStyleOptionGraphicsItem *option);
 
-        /**
-         * @internal
-         **/
-        void drawActionButtonBase(QPainter* painter, const QSize &size, int element);
+    Private * const d;
 
-    private:
-        QPixmap buttonPixmap();
-        void init();
-        void calculateSize();
+private Q_SLOTS:
+    void actionDestroyed(QObject* obj);
 
-        Private * const d;
-
-    private Q_SLOTS:
-        void actionDestroyed(QObject* obj);
 };
 
 } // namespace Plasma
