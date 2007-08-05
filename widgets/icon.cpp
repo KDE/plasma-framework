@@ -228,7 +228,7 @@ bool IconAction::event(QEvent::Type type, const QPointF &pos)
         break;
 
     case QEvent::MouseButtonRelease: {
-        kDebug() << "IconAction::event got a QEvent::MouseButtonRelease, " << isSelected();
+        // kDebug() << "IconAction::event got a QEvent::MouseButtonRelease, " << isSelected();
         bool wasSelected = isSelected();
         setSelected(false);
         if (wasSelected) {
@@ -366,7 +366,6 @@ QSizeF Icon::Private::displaySizeHint(const QStyleOptionGraphicsItem *option) co
 {
     QString label = text;
     const qreal maxWidth = (orientation == Qt::Vertical) ? iconSize.width() + 10 : 32757;
-    kDebug() << "Icon::Private::displaySizeHint maxWidth: " << maxWidth;
 
     // To compute the nominal size for the label + info, we'll just append
     // the information string to the label
@@ -376,10 +375,7 @@ QSizeF Icon::Private::displaySizeHint(const QStyleOptionGraphicsItem *option) co
 
     QTextLayout layout;
     setLayoutOptions(layout, option);
-
-    kDebug() << "Icon::Private::displaySizeHint maxWidth: " << maxWidth;
     QSizeF size = layoutText(layout, option, label, QSizeF(iconSize.width() + 10, 32757));
-    kDebug() << "Icon::Private::displaySizeHint size.width: " << size.width();
 
     return addMargin(size, TextMargin);
 }
@@ -407,7 +403,6 @@ void Icon::calculateSize(const QStyleOptionGraphicsItem *option)
         newSize.rheight() = qMax(decorationSize.height(), displaySize.height());
     }
 
-    kDebug() << "Icon::calculateSize newSize: " << newSize;
     d->size = d->addMargin(newSize, Private::ItemMargin);
     d->svg.resize(d->size);
     d->calculateSizeRequested = false;
@@ -558,7 +553,6 @@ QRectF Icon::Private::labelRectangle(const QStyleOptionGraphicsItem *option, con
 
     const QSizeF decoSize = addMargin(iconSize, Private::IconMargin); 
 
-    kDebug() << "Icon::Private::labelRectangle option->rect: " << option->rect;
     const QRectF itemRect = subtractMargin(option->rect, Private::ItemMargin);
     QRectF textArea(QPointF(0, 0), itemRect.size());
 
@@ -595,7 +589,6 @@ QSizeF Icon::Private::layoutText(QTextLayout &layout, const QString &text, qreal
 
     layout.beginLayout();
 
-//    kDebug() << "layoutText called with maxWidth: " << maxWidth;
     while ((line = layout.createLine()).isValid())
     {
         line.setLineWidth(maxWidth);
@@ -691,7 +684,6 @@ void Icon::Private::layoutTextItems(const QStyleOptionGraphicsItem *option,
     }
 
     // Lay out the label text, and adjust the max info size based on the label size
-    kDebug() << "Icon::Private::layoutTextItems maxLabelSize: " << maxLabelSize;
     labelSize = layoutText(*labelLayout, option, text, maxLabelSize);
     maxInfoSize.rheight() -= labelSize.height();
 
