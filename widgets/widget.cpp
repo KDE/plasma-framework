@@ -20,6 +20,7 @@
 
 #include "widget.h"
 
+#include <cmath>
 #include <limits>
 
 #include <QtCore/QList>
@@ -54,7 +55,7 @@ class Widget::Private
 bool Widget::Private::shouldPaint(QPainter *painter, const QTransform &transform)
 {
     qreal zoomLevel = painter->transform().m11() / transform.m11();
-    return (zoomLevel - scalingFactor(Plasma::DesktopZoom)) < std::numeric_limits<double>::epsilon();
+    return (fabs(zoomLevel - scalingFactor(Plasma::DesktopZoom))) < std::numeric_limits<double>::epsilon();
 }
 
 Widget::Widget(QGraphicsItem *parent)

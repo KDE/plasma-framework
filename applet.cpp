@@ -19,6 +19,9 @@
 
 #include "applet.h"
 
+#include <cmath>
+#include <limits>
+
 #include <QApplication>
 #include <QEvent>
 #include <QFile>
@@ -665,7 +668,8 @@ void Applet::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
     }
 
     qreal zoomLevel = painter->transform().m11() / transform().m11();
-    if (zoomLevel == scalingFactor(Plasma::DesktopZoom)) { // Show Desktop
+    //kDebug() << "qreal " << zoomLevel << " = " << painter->transform().m11() << " / " << transform().m11();
+    if (fabs(zoomLevel - scalingFactor(Plasma::DesktopZoom)) < std::numeric_limits<double>::epsilon()) { // Show Desktop
         if (d->background) {
             d->paintBackground(painter, this);
         }
@@ -675,7 +679,8 @@ void Applet::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
         }
 
         d->paintHover(painter, this);
-    } else if (zoomLevel == scalingFactor(Plasma::GroupZoom)) { // Show Groups + Applet outline
+    } else if (fabs(zoomLevel - scalingFactor(Plasma::GroupZoom)) < std::numeric_limits<double>::epsilon()) {
+        // Show Groups + Applet outline
         //TODO: make pretty.
         painter->setBrush(QBrush(color(), Qt::SolidPattern));
         painter->drawRoundRect(boundingRect());
