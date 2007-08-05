@@ -175,9 +175,13 @@ QString Corona::appletMimeType()
 void Corona::saveApplets(const QString &config) const
 {
     KConfig appletConfig(config);
+    foreach (const QString& group, appletConfig.groupList()) {
+        appletConfig.deleteGroup(group);
+    }
+
     foreach (Applet *applet, d->applets) {
         KConfigGroup cg(&appletConfig, QString::number(applet->id()));
-        kDebug() << "saving applet " << applet->name();
+        //kDebug() << "saving applet " << applet->name();
         cg.writeEntry("plugin", applet->pluginName());
         cg.writeEntry("geometry", QRect(applet->pos().toPoint(), applet->boundingRect().size().toSize()));
     }
@@ -214,10 +218,14 @@ Applet* Corona::addApplet(const QString& name, const QStringList& args, uint id,
     qreal appHeight = applet->boundingRect().height();
     if (geometry.isValid()) {
         applet->setGeometry(geometry);
+    } else if (geometry.x() != -1 && geometry.y() != -1) {
+        // yes, this means we can't have items start -1, -1
+        applet->setPos(geometry.topLeft() - QPoint(applet->boundingRect().width()/2,
+                                                   applet->boundingRect().height()/2));
     } else {
         //TODO: Make sure new applets don't overlap with existing ones
         // Center exactly:
-        applet->setPos((width() / 2) - (appWidth / 2),(height() / 2) - (appHeight / 2));
+        applet->setPos((width() / 2) - (appWidth / 2), (height() / 2) - (appHeight / 2));
     }
     addItem(applet);
     applet->updateConstraints();
@@ -245,7 +253,7 @@ void Corona::addKaramba(const KUrl& path)
 void Corona::dragEnterEvent( QGraphicsSceneDragDropEvent *event)
 {
     kDebug() << "Corona::dragEnterEvent(QGraphicsSceneDragDropEvent* event)";
-    if (event->mimeData()->hasFormat("text/x-plasmoidservicename") ||
+    if (event->mimeData()->hasFormat(d->mimetype) ||
         KUrl::List::canDecode(event->mimeData())) {
         event->acceptProposedAction();
         //TODO Create the applet, move to mouse position then send the 
@@ -277,41 +285,31 @@ void Corona::dragMoveEvent(QGraphicsSceneDragDropEvent *event)
 void Corona::dropEvent(QGraphicsSceneDragDropEvent *event)
 {
     //kDebug() << "Corona::dropEvent(QDropEvent* event)";
-    if (event->mimeData()->hasFormat("text/x-plasmoidservicename")) {
-        //TODO This will pretty much move into dragEnterEvent()
+    if (event->mimeData()->hasFormat(d->mimetype)) {
         QString plasmoidName;
-        plasmoidName = event->mimeData()->data("text/x-plasmoidservicename");
-        addApplet(plasmoidName);
-        Applet *applet = d->applets.last();
-        // TODO: should we place it centered on the mouse cursor?  If so, the
-        // default "zoom in" animation needs changing to zoom in from the same
-        // point, or it just looks odd
-        applet->setPos(event->scenePos()); // -
-        //        QPoint(applet->boundingRect().width()/2,applet->boundingRect().height()/2));
-
+        plasmoidName = event->mimeData()->data(d->mimetype);
+        QRectF geom(event->scenePos(), QSize(0, 0));
+        addApplet(plasmoidName, QStringList(), 0, geom);
         event->acceptProposedAction();
     } else if (KUrl::List::canDecode(event->mimeData())) {
         KUrl::List urls = KUrl::List::fromMimeData(event->mimeData());	
         foreach (const KUrl& url, urls) {
             KMimeType::Ptr mime = KMimeType::findByUrl(url);
             QString mimeName = mime->name();
+            QRectF geom(event->scenePos(), QSize(0, 0));
+            QStringList args;
+            args << url.url();
 //             kDebug() << mimeName;
             KPluginInfo::List appletList = Applet::knownAppletsForMimetype(mimeName);
 
-
-            //FIXME: we should probably show a dialog here to choose which plasmoid load.
-            addApplet(appletList.first().pluginName());
-
-            QStringList args;
-            args << url.url();
-            Applet* button = addApplet("url", args);
-            if (button) {
-//                 button->setSize(128,128);
-                button->setPos(event->scenePos() - QPoint(button->boundingRect().width()/2,
-                               button->boundingRect().height()/2));
+            if (appletList.isEmpty()) {
+                // no special applet associated with this mimetype, let's 
+                addApplet("url", args, 0, geom);
+            } else {
+                //TODO: should we show a dialog here to choose which plasmoid load if
+                //appletList.count() > 0?
+                addApplet(appletList.first().pluginName(), args, 0, geom);
             }
-            addItem(button);
-            button->updateConstraints();
         }
         event->acceptProposedAction();
     } else {
