@@ -340,6 +340,15 @@ Applet::Applet(QObject* parent, const QStringList& args)
 Applet::~Applet()
 {
     needsFocus( false );
+
+    if (d->appletConfig) {
+        d->appletConfig->sync();
+    }
+
+    if (d->globalConfig) {
+        d->globalConfig->sync();
+    }
+
     delete d;
 }
 
@@ -365,7 +374,23 @@ KConfigGroup Applet::globalConfig() const
     return KConfigGroup(d->globalConfig, "General");
 }
 
-ConfigXml* Applet::configXml()
+void Applet::destroy()
+{
+    if (d->configXml) {
+        d->configXml->setDefaults();
+    }
+
+    if (d->appletConfig) {
+        foreach (const QString& group, d->appletConfig->groupList()) {
+            d->appletConfig->deleteGroup(group);
+        }
+        d->appletConfig = 0;
+    }
+
+    deleteLater();
+}
+
+ConfigXml* Applet::configXml() const
 {
     return d->configXml;
 }

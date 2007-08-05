@@ -94,7 +94,7 @@ public Q_SLOTS:
     void setFormFactor(Plasma::FormFactor formFactor);
 
     /**
-     * Adds an applet to the scene
+     * Adds an applet to the Corona
      *
      * @param name the plugin name for the applet, as given by 
      *        KPluginInfo::pluginName()

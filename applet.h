@@ -128,7 +128,7 @@ class PLASMA_EXPORT Applet : public Widget
          *
          * @return config skeleton object, or 0 if none
          **/
-        ConfigXml* configXml();
+        ConfigXml* configXml() const;
 
         /**
          * Loads the given DataEngine
@@ -475,6 +475,12 @@ class PLASMA_EXPORT Applet : public Widget
          *        it is giving it up
          **/
         void requestFocus( bool focus );
+
+    public Q_SLOTS:
+        /**
+         * Destroys the applet; it will be deleted and configurations reset.
+         */
+        void destroy();
 
     protected:
         /**
