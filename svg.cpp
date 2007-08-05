@@ -52,7 +52,7 @@ class SharedSvgRenderer : public KSvgRenderer, public QSharedData
 
         ~SharedSvgRenderer()
         {
-            kDebug() << "leaving this world for a better one.";
+            //kDebug() << "leaving this world for a better one.";
         }
 };
 
