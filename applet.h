@@ -96,6 +96,11 @@ class PLASMA_EXPORT Applet : public Widget
         ~Applet();
 
         /**
+         * @return the id of this applet
+         */
+        uint id() const;
+
+        /**
         * Returns the KConfigGroup to access the applets configuration.
         *
         * This config object will write to an instance
@@ -331,6 +336,11 @@ class PLASMA_EXPORT Applet : public Widget
          * @return the user-visible name for the applet.
          **/
         QString name() const;
+
+        /**
+         * Returns the plugin name for the applet
+         */
+        QString pluginName() const;
 
         /**
          * Returns the icon related to this applet

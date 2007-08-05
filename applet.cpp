@@ -352,6 +352,11 @@ Applet::~Applet()
     delete d;
 }
 
+uint Applet::id() const
+{
+    return d->appletId;
+}
+
 KConfigGroup Applet::config() const
 {
     return KConfigGroup(d->config(), "General");
@@ -444,13 +449,22 @@ QString Applet::icon() const
     return d->appletDescription.icon();
 }
 
+QString Applet::pluginName() const
+{
+    if (!d->appletDescription.isValid()) {
+        return QString();
+    }
+
+    return d->appletDescription.pluginName();
+}
+
 QString Applet::category() const
 {
     if (!d->appletDescription.isValid()) {
-        return i18n("Misc");
+        return i18n("Miscellaneous");
     }
 
-    return d->appletDescription.property("X-KDE-PluginInfo-Category").toString();
+    return d->appletDescription.category();
 }
 
 QString Applet::category(const KPluginInfo& applet)
@@ -823,7 +837,7 @@ KPluginInfo::List Applet::knownApplets(const QString &category,
         }
 
         constraint.append("[X-KDE-PluginInfo-Category] == '").append(category).append("'");
-        if (category == "Misc") {
+        if (category == "Miscellaneous") {
             constraint.append(" or (not exist [X-KDE-PluginInfo-Category] or [X-KDE-PluginInfo-Category] == '')");
         }
     }
@@ -857,8 +871,8 @@ QStringList Applet::knownCategories(const QString &parentApp)
         QString appletCategory = applet->property("X-KDE-PluginInfo-Category").toString();
         //kDebug() << "   and we have " << appletCategory;
         if (appletCategory.isEmpty()) {
-            if (!categories.contains(i18n("Misc"))) {
-                categories << i18n("Misc");
+            if (!categories.contains(i18n("Miscellaneous"))) {
+                categories << i18n("Miscellaneous");
             }
         } else  if (!categories.contains(appletCategory)) {
             categories << appletCategory;
