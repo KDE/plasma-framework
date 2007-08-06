@@ -1,7 +1,7 @@
 /*
- *   Copyright (C) 2007 Matt Broadstone <mbroadst@gmail.com>
- *   Copyright (C) 2007 Aaron Seigo <aseigo@kde.org>
- *   Copyright (C) 2007 Riccardo Iaconelli <riccardo@kde.org>
+ *   Copyright 2007 Matt Broadstone <mbroadst@gmail.com>
+ *   Copyright 2007 Aaron Seigo <aseigo@kde.org>
+ *   Copyright 2007 Riccardo Iaconelli <riccardo@kde.org>
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU Library General Public License version 2 as

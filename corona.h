@@ -1,5 +1,5 @@
 /*
- *   Copyright (C) 2007 Matt Broadstone <mbroadst@gmail.com>
+ *   Copyright 2007 Matt Broadstone <mbroadst@gmail.com>
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU Library General Public License version 2 as
@@ -130,7 +130,7 @@ public Q_SLOTS:
      * @return a pointer to the applet on success, or 0 on failure
      */
     Applet* addApplet(const QString& name, const QStringList& args = QStringList(),
-                      uint id = 0, const QRectF &geometry = QRectF());
+                      uint id = 0, const QRectF &geometry = QRectF(-1, -1, -1, -1));
 
     /**
      * Adds a SuperKaramba theme to the scene

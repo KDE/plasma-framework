@@ -1,5 +1,5 @@
 /*
- *   Copyright (C) 2007 by Alexander Wiedenbruch <mail@wiedenbruch.de>
+ *   Copyright 2007 by Alexander Wiedenbruch <mail@wiedenbruch.de>
  *                      and Matias Valdenegro <mvaldenegro@informatica.utem.cl>
  *
  *   This program is free software; you can redistribute it and/or modify

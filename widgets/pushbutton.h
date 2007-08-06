@@ -1,7 +1,7 @@
 /*
- *   Copyright (C) 2007 by Siraj Razick <siraj@kde.org>
- *   Copyright (C) 2007 by Matias Valdenegro <mvaldenegro@informatica.utem.cl>
- *   Copyright (C) 2007 by Matt Broadstone <mbroadst@gmail.com>
+ *   Copyright 2007 by Siraj Razick <siraj@kde.org>
+ *   Copyright 2007 by Matias Valdenegro <mvaldenegro@informatica.utem.cl>
+ *   Copyright 2007 by Matt Broadstone <mbroadst@gmail.com>
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU Library General Public License version 2 as

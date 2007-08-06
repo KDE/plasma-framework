@@ -1,5 +1,5 @@
 /*
- *   Copyright (C) 2007 by André Duffeck <andre@duffeck.de>
+ *   Copyright 2007 by André Duffeck <andre@duffeck.de>
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU Library General Public License version 2 as
