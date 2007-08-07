@@ -84,7 +84,7 @@ set(plasma_LIB_INCLUDES
     phase.h
     plasma.h
     plasma_export.h
-    scriptengine.cpp
+    scriptengine.h
     shadowitem_p.h
     svg.h
     theme.h)
