@@ -24,7 +24,7 @@
 #include <QtGui/QGraphicsTextItem>
 #include <QtGui/QLayoutItem>
 
-#include <KIcon>
+#include <KDE/KIcon>
 
 #include <plasma/dataengine.h>
 #include <plasma/widgets/widget.h>

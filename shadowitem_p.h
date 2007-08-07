@@ -19,7 +19,7 @@
 #ifndef SHADOWITEM_P_H
 #define SHADOWITEM_P_H
 
-#include <QGraphicsPixmapItem>
+#include <QtGui/QGraphicsPixmapItem>
 
 
 class ShadowItem : public QGraphicsPixmapItem

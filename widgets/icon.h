@@ -24,7 +24,7 @@
 #include <QtCore/QObject>
 #include <QtGui/QGraphicsTextItem>
 
-#include <KIcon>
+#include <KDE/KIcon>
 
 #include <plasma/dataengine.h>
 #include <plasma/phase.h>
