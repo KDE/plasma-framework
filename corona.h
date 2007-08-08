@@ -90,6 +90,11 @@ public:
      */
     void loadApplets(const QString &config);
 
+    /**
+     * Clear the Corona from all applets.
+     */
+    void clearApplets();
+    
 public Q_SLOTS:
     /**
      * Load applets from the default config file

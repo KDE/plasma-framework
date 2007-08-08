@@ -191,9 +191,8 @@ void Corona::saveApplets() const
 
 void Corona::loadApplets(const QString& config)
 {
-    qDeleteAll(d->applets);
-    d->applets.clear();
-
+    clearApplets();
+    
     KConfig appletConfig(config, KConfig::OnlyLocal);
     foreach (const QString& group, appletConfig.groupList()) {
         KConfigGroup cg(&appletConfig, group);
@@ -205,6 +204,12 @@ void Corona::loadApplets(const QString& config)
 void Corona::loadApplets()
 {
     loadApplets("plasma-appletsrc");
+}
+
+void Corona::clearApplets()
+{
+    qDeleteAll(d->applets);
+    d->applets.clear();
 }
 
 Applet* Corona::addApplet(const QString& name, const QStringList& args, uint id, const QRectF& geometry)
