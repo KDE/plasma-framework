@@ -91,8 +91,7 @@ void VBoxLayout::setGeometry(const QRectF& geometry)
         sizes.insert(indexOf(l),QSizeF(available.width(), expandHeight));
     }
 
-    //QPointF start = geometry.topLeft();
-    QPointF start = QPointF(0.0f, 0.0f);
+    QPointF start = geometry.topLeft();
     start += QPointF(margin(), spacing());
 
     for (int i = 0; i < sizes.size(); i++) {
