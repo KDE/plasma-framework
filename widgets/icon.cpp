@@ -1,8 +1,8 @@
 /*
- *   Copyright 2007 by Aaron Seigo <aseigo@kde.org>
- *   Copyright 2007 by Riccardo Iaconelli <riccardo@kde.org>
- *   Copyright 2007 by Matt Broadstone <mbroadst@gmail.com>
- *   Copyright 2006-2007 Fredrik Höglund <fredrik@kde.org>
+ *   Copyright (C) 2007 by Aaron Seigo <aseigo@kde.org>
+ *   Copyright (C) 2007 by Riccardo Iaconelli <riccardo@kde.org>
+ *   Copyright (C) 2007 by Matt Broadstone <mbroadst@gmail.com>
+ *   Copyright (C) 2006-2007 Fredrik Höglund <fredrik@kde.org>
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU Library General Public License version 2 as
@@ -55,8 +55,8 @@ namespace Plasma
 Icon::Private::Private()
     : svg("widgets/iconbutton"),
       svgElements(0),
-      size(128*1.1, 128*1.1),
-      iconSize(128, 128),
+      size(48*1.1, 48*1.1),
+      iconSize(48, 48),
       state(Private::NoState),
       orientation(Qt::Vertical),
       calculateSizeRequested(true)          // First time always true
@@ -316,6 +316,8 @@ void Icon::init()
     d->setVerticalMargin(Private::TextMargin, 6, 2);
     d->setVerticalMargin(Private::IconMargin, focusHMargin, focusVMargin);
     d->setVerticalMargin(Private::ItemMargin, 0, 0);
+
+    calculateSize();
 }
 
 void Icon::addAction(QAction *action)
@@ -380,6 +382,21 @@ QSizeF Icon::Private::displaySizeHint(const QStyleOptionGraphicsItem *option) co
     QSizeF size = layoutText(layout, option, label, QSizeF(iconSize.width() + 10, 32757));
 
     return addMargin(size, TextMargin);
+}
+
+void Icon::calculateSize()
+{
+    if (d->calculateSizeRequested = true) {
+        // We do this to get size hint information before the icon has been drawn, as
+        // we have no access to the style option before that time. So we create a dummy.
+        QStyleOptionGraphicsItem option;
+        option.state = QStyle::State_None;
+        option.rect = boundingRect().toRect();
+        calculateSize(&option);
+    }
+    else {
+        d->calculateSizeRequested = true;
+    }
 }
 
 void Icon::calculateSize(const QStyleOptionGraphicsItem *option)
@@ -601,7 +618,6 @@ QSizeF Icon::Private::layoutText(QTextLayout &layout, const QString &text, qreal
     }
     layout.endLayout();
 
-//    return layout.boundingRect().size();          // ARGH!
     return QSizeF(widthUsed, height);
 }
 
@@ -836,7 +852,7 @@ void Icon::drawActionButtonBase(QPainter* painter, const QSize &size, int elemen
 void Icon::setText(const QString& text)
 {
     d->text = text;
-    d->calculateSizeRequested = true;
+    calculateSize();
 }
 
 QString Icon::text() const
@@ -847,7 +863,7 @@ QString Icon::text() const
 void Icon::setInfoText(const QString& text)
 {
     d->infoText = text;
-    d->calculateSizeRequested = true;
+    calculateSize();
 }
 
 QString Icon::infoText() const
@@ -873,7 +889,7 @@ void Icon::setIcon(const QString& icon)
 void Icon::setIcon(const KIcon& icon)
 {
     d->icon = icon;
-    d->calculateSizeRequested = true;
+    calculateSize();
 }
 
 QSizeF Icon::iconSize() const
@@ -884,7 +900,7 @@ QSizeF Icon::iconSize() const
 void Icon::setIconSize(const QSizeF& s)
 {
     d->iconSize = s;
-    d->calculateSizeRequested = true;
+    calculateSize();
 }
 
 void Icon::setIconSize(int w, int h)
@@ -971,6 +987,7 @@ void Icon::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     QGraphicsItem::mouseMoveEvent(event);
 }
 
+/*
 QSizeF Icon::sizeHint() const
 {
     return d->size;
@@ -1022,6 +1039,7 @@ void Icon::setGeometry(const QRectF &r)
     setIconSize(r.size());
     setPos(r.x(),r.y());
 }
+*/
 
 } // namespace Plasma
 

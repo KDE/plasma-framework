@@ -1,7 +1,7 @@
 /*
-*   Copyright 2007 by Siraj Razick <siraj@kde.org>
-*   Copyright 2007 by Riccardo Iaconelli <riccardo@kde.org>
-*   Copyright 2007 by Matt Broadstone <mbroadst@gmail.com>
+*   Copyright (C) 2007 by Siraj Razick <siraj@kde.org>
+*   Copyright (C) 2007 by Riccardo Iaconelli <riccardo@kde.org>
+*   Copyright (C) 2007 by Matt Broadstone <mbroadst@gmail.com>
 *
 *   This program is free software; you can redistribute it and/or modify
 *   it under the terms of the GNU Library General Public License version 2 as
@@ -148,6 +148,7 @@ public:
     void addAction(QAction* action);
 
     // Layout stuff - no need to document
+/*
     Qt::Orientations expandingDirections() const;
 
     QSizeF minimumSize() const;
@@ -163,6 +164,7 @@ public:
     void setGeometry(const QRectF& r);
 
     QSizeF sizeHint() const;
+*/
     QRectF boundingRect() const;
 
 protected:
@@ -198,6 +200,7 @@ public:
 
 private:
     void init();
+    void calculateSize();
     void calculateSize(const QStyleOptionGraphicsItem *option);
 
     Private * const d;
