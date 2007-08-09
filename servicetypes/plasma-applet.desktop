@@ -4,6 +4,7 @@ Type=ServiceType
 X-KDE-ServiceType=Plasma/Applet
 
 Comment=Plasma applet
+Comment[ar]=بنما
 Comment[be]=Аплет Plasma
 Comment[bg]=Панама
 Comment[csb]=Aplet plazmë
