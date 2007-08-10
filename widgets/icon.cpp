@@ -285,7 +285,7 @@ Icon::Icon(const QString &text, QGraphicsItem *parent)
     init();
 }
 
-Icon::Icon(const KIcon &icon, const QString &text, QGraphicsItem *parent)
+Icon::Icon(const QIcon &icon, const QString &text, QGraphicsItem *parent)
     : Plasma::Widget(parent),
       d(new Private)
 {
@@ -871,7 +871,7 @@ QString Icon::infoText() const
     return d->infoText;
 }
 
-KIcon Icon::icon() const
+QIcon Icon::icon() const
 {
     return d->icon;
 }
@@ -879,14 +879,14 @@ KIcon Icon::icon() const
 void Icon::setIcon(const QString& icon)
 {
     if (icon.isEmpty()) {
-        setIcon(KIcon());
+        setIcon(QIcon());
         return;
     }
 
-    setIcon(KIcon(icon));
+    setIcon(QIcon(icon));
 }
 
-void Icon::setIcon(const KIcon& icon)
+void Icon::setIcon(const QIcon& icon)
 {
     d->icon = icon;
     calculateSize();

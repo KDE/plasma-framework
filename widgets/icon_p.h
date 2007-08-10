@@ -22,11 +22,10 @@
 
 #include <QtCore/QEvent>
 #include <QtGui/QApplication>
+#include <QtGui/QIcon>
 #include <QtGui/QStyleOptionGraphicsItem>
 #include <QtGui/QTextLayout>
 #include <QtGui/QTextOption>
-
-#include <KIcon>
 
 #include <plasma/plasma_export.h>
 #include <plasma/svg.h>
@@ -170,7 +169,7 @@ public:
     int svgElements;
     QSizeF size;
     QSizeF iconSize;
-    KIcon icon;
+    QIcon icon;
     ButtonState state;
     Qt::Orientation orientation;
     bool calculateSizeRequested;

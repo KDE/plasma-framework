@@ -23,8 +23,7 @@
 
 #include <QtCore/QObject>
 #include <QtGui/QGraphicsTextItem>
-
-#include <KDE/KIcon>
+#include <QtGui/QIcon>
 
 #include <plasma/dataengine.h>
 #include <plasma/phase.h>
@@ -50,7 +49,7 @@ class PLASMA_EXPORT Icon : public Plasma::Widget
     Q_OBJECT
     Q_PROPERTY( QString text READ text WRITE setText )
     Q_PROPERTY( QString infoText READ infoText WRITE setInfoText )
-    Q_PROPERTY( KIcon icon READ icon WRITE setIcon )
+    Q_PROPERTY( QIcon icon READ icon WRITE setIcon )
     Q_PROPERTY( QSizeF iconSize READ iconSize WRITE setIconSize )
 public:
     /**
@@ -72,7 +71,7 @@ public:
     * @param text the text that will be displayed with this icon.
     * @param parent The QGraphicsItem this icon is parented to.
     */
-    Icon(const KIcon & icon, const QString &text, QGraphicsItem *parent = 0);
+    Icon(const QIcon &icon, const QString &text, QGraphicsItem *parent = 0);
 
     /**
     * Destroys this Plasma::Icon.
@@ -105,13 +104,13 @@ public:
     /**
     * @return the icon associated with this icon.
     */
-    KIcon icon() const;
+    QIcon icon() const;
 
     /**
     * Sets the graphical icon for this Plasma::Icon.
     * @param icon the KIcon to associate with this icon.
     */
-    void setIcon(const KIcon& icon);
+    void setIcon(const QIcon& icon);
 
     /**
     * Convenience method to set the icon of this Plasma::Icon
