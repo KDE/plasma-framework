@@ -88,7 +88,7 @@ void HBoxLayout::setGeometry(const QRectF& geometry)
         sizes.insert(indexOf(l), QSizeF(expandWidth, available.height()));
     }
 
-    QPointF start = QPointF(0.0f, 0.0f);
+    QPointF start = geometry.topLeft();
     start += QPointF(margin(), spacing());
 
     for (int i = 0; i < sizes.size(); i++) {
