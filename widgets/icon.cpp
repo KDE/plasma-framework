@@ -39,6 +39,7 @@
 #include <KImageEffect>
 #include <KIconEffect>
 #include <KIconLoader>
+#include <KIcon>
 #include <K3Icon>
 #include <KUrl>
 #include <KRun>
@@ -883,7 +884,7 @@ void Icon::setIcon(const QString& icon)
         return;
     }
 
-    setIcon(QIcon(icon));
+    setIcon(KIcon(icon));
 }
 
 void Icon::setIcon(const QIcon& icon)
