@@ -80,6 +80,24 @@ class DataEngine::Private
             return s;
         }
 
+        DataContainer* requestSource(const QString& sourceName)
+        {
+            DataContainer* s = source(sourceName, false);
+
+            if (!s) {
+                // we didn't find a data source, so give the engine an opportunity to make one
+                if (engine->sourceRequested(sourceName)) {
+                    s = source(sourceName, false);
+                    if (s) {
+                        // now we have a source; since it was created on demand, assume
+                        // it should be removed when not used
+                        connect(s, SIGNAL(unused(QString)), engine, SLOT(removeSource(QString)));
+                    }
+                }
+            }
+            return s;
+        }
+
         void trimQueue()
         {
             while (sourceQueue.count() >= limit) {
@@ -94,12 +112,6 @@ class DataEngine::Private
                 return;
             }
             updateTimer->start(0);
-        }
-
-        bool sourceRequested(const QString& source)
-        {
-            //get around const! =P
-            return engine->sourceRequested(source);
         }
 
         QAtomic ref;
@@ -136,19 +148,7 @@ QStringList DataEngine::sources() const
 
 void DataEngine::connectSource(const QString& source, QObject* visualization) const
 {
-    DataContainer* s = d->source(source, false);
-
-    if (!s) {
-        // we didn't find a data source, so give the engine an opportunity to make one
-        if (d->sourceRequested(source)) {
-            s = d->source(source, false);
-            if (s) {
-                // now we have a source; since it was created on demand, assume
-                // it should be removed when not used
-                connect(s, SIGNAL(unused(QString)), this, SLOT(removeSource(QString)));
-            }
-        }
-    }
+    DataContainer* s = d->requestSource(source);
 
     if (!s) {
         return;
@@ -189,9 +189,12 @@ void DataEngine::connectAllSources(QObject* visualization) const
 
 DataEngine::Data DataEngine::query(const QString& source) const
 {
-    Q_UNUSED(source)
+    DataContainer* s = d->requestSource(source);
 
-    DataContainer* s = d->source(source);
+    if (!s) {
+        return DataEngine::Data();
+    }
+
     return s->data();
 }
 
