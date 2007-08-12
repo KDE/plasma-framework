@@ -170,7 +170,7 @@ qreal LineEdit::widthForHeight(qreal h) const
 
 QRectF LineEdit::geometry() const
 {
-    return boundingRect().toRect();
+    return QRectF(pos(),boundingRect().size());
 }
 
 void LineEdit::setGeometry(const QRectF& geometry)
