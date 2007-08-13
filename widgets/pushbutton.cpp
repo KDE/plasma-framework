@@ -62,7 +62,6 @@ public:
     QString text;
     KIcon icon;
     QSizeF iconSize;
-    QSizeF size;
     bool flat;
     ButtonState state;
 };
@@ -135,34 +134,6 @@ PushButton::PushButton(const KIcon &icon, const QString &text, Widget *parent)
     setIcon(icon);
 }
 
-QRectF PushButton::boundingRect() const
-{
-    if (!d->size.isValid()) {
-        int width = 0;
-        int height = 0;
-
-        QStyleOptionButton option;
-        d->initStyleOption(&option, this);
-
-        if (!icon().isNull()) {
-            height += qMax(option.iconSize.height(), height);
-            width += 2 + option.iconSize.width() + 2;  // add margin
-        }
-
-        QString display(option.text);
-        if (display.isEmpty())
-            display = "Plasma";
-
-        QSize textSize = option.fontMetrics.size(Qt::TextShowMnemonic, display);
-        width += textSize.width();
-        height = qMax(height, textSize.height());
-        d->size = QSizeF((QApplication::style()->sizeFromContents(QStyle::CT_PushButton, &option, QSize(width, height), 0).
-                    expandedTo(QApplication::globalStrut())));
-    }
-
-    return QRectF(QPointF(0.0, 0.0), d->size);
-}
-
 PushButton::~PushButton()
 {
     delete d;
@@ -182,7 +153,6 @@ void PushButton::paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *
 void PushButton::setText(const QString& text)
 {
     d->text = text;
-    d->size = QSizeF();
     update();
 }
 
@@ -194,7 +164,6 @@ QString PushButton::text() const
 void PushButton::setIcon(const KIcon &icon)
 {
     d->icon = icon;
-    d->size = QSizeF();
     update();
 }
 
@@ -224,7 +193,6 @@ void PushButton::setIconSize(const QSizeF &size)
         return;
 
     d->iconSize = size;
-    d->size = QSizeF();
     update();
 }
 
@@ -273,7 +241,25 @@ Qt::Orientations PushButton::expandingDirections() const
 
 QSizeF PushButton::sizeHint() const
 {
-    return minimumSize();
+    int width = 0;
+    int height = 0;
+
+    QStyleOptionButton option;
+    d->initStyleOption(&option, this);
+
+    if (!icon().isNull()) {
+        height += qMax(option.iconSize.height(), height);
+        width += 2 + option.iconSize.width() + 2;  // add margin
+    }
+
+    QString display(option.text);
+
+    QSize textSize = option.fontMetrics.size(Qt::TextShowMnemonic, display);
+    width += textSize.width();
+    height = qMax(height, textSize.height());
+    
+    return QSizeF((QApplication::style()->sizeFromContents(QStyle::CT_PushButton, &option, QSize(width, height), 0).
+                expandedTo(QApplication::globalStrut())));
 }
 
 

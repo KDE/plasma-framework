@@ -150,7 +150,6 @@ protected:
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
 
     void paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
-    QRectF boundingRect() const;
 
 private:
     class Private ;
