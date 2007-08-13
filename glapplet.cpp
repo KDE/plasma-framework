@@ -158,7 +158,7 @@ void GLApplet::paintInterface(QPainter *painter,
     if ((!d->dummy->isValid() ||
          !d->pbuf->isValid())) {
         if (!failedToLaunch()) {
-            setFailedToLaunch(true, i18n("Your machine doesn't support OpenGL applets."));
+            setFailedToLaunch(true, i18n("Your machine does not support OpenGL applets."));
         }
 
         return;
