@@ -24,6 +24,8 @@
 
 #include <plasma/plasma_export.h>
 
+class QGraphicsItem;
+
 namespace Plasma
 {
 
@@ -136,6 +138,14 @@ class PLASMA_EXPORT LayoutItem
          * @return the layout that manages this item's geometry, or 0 if none
          **/
         Layout* managingLayout() const;
+
+        /**
+         * Returns the graphics item associated with this layout item or 0
+         * if there is no associated graphics item.
+         *
+         * The default implementation returns 0.
+         */
+        virtual QGraphicsItem* graphicsItem();
 
     private:
         class Private;

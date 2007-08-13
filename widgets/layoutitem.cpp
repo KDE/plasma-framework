@@ -56,6 +56,11 @@ LayoutItem::~LayoutItem()
     delete d;
 }
 
+QGraphicsItem* LayoutItem::graphicsItem() 
+{
+    return 0;
+}
+
 bool LayoutItem::hasHeightForWidth() const
 {
 	return false;

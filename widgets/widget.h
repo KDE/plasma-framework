@@ -218,6 +218,10 @@ public:
      */
     Q_INVOKABLE void addChild(Widget *widget);
 
+    void setOpacity(qreal opacity);
+
+    virtual QGraphicsItem* graphicsItem();
+
 protected:
     /**
      * Paints the widget

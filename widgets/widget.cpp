@@ -39,6 +39,7 @@ class Widget::Private
     public:
         Private()
             : parent(0)
+            , opacity(1.0)
         { }
         ~Private() { }
 
@@ -49,8 +50,15 @@ class Widget::Private
         Widget *parent;
         QList<Widget *> childList;
 
+        qreal opacity;
+
         bool shouldPaint(QPainter *painter, const QTransform &transform);
 };
+
+QGraphicsItem* Widget::graphicsItem()
+{
+    return this;
+}
 
 bool Widget::Private::shouldPaint(QPainter *painter, const QTransform &transform)
 {
@@ -75,6 +83,11 @@ Widget::Widget(QGraphicsItem *parent)
 Widget::~Widget()
 {
     delete d;
+}
+
+void Widget::setOpacity(qreal opacity)
+{
+    d->opacity = opacity;
 }
 
 Qt::Orientations Widget::expandingDirections() const
@@ -138,12 +151,14 @@ QRectF Widget::localGeometry() const
 
 void Widget::setGeometry(const QRectF& geometry)
 {
-    prepareGeometryChange();
+    bool sizeChange = d->size != geometry.size();
 
+    if ( sizeChange ) {
+        prepareGeometryChange();
+        d->size = geometry.size();
+    }
     setPos(geometry.topLeft());
-    d->size = geometry.size();
 
-    updateGeometry();
     update();
 }
 
@@ -152,7 +167,7 @@ void Widget::updateGeometry()
     prepareGeometryChange();
 
     if (layout()) {
-        kDebug() << (void *) this << " updating geometry to " << size();
+     //   kDebug() << (void *) this << " updating geometry to " << size();
         layout()->setGeometry(geometry());
     }
 }
@@ -227,6 +242,8 @@ void Widget::addChild(Widget *w)
 
 void Widget::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
+    painter->setOpacity(d->opacity);
+
     if (d->shouldPaint(painter, transform())) {
         paintWidget(painter, option, widget);
     }
