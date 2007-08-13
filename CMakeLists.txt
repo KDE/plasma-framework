@@ -45,6 +45,7 @@ set(plasma_LIB_SRCS
 #    widgets/rectangle.cpp
     widgets/widget.cpp
     widgets/vboxlayout.cpp
+    widgets/signalplotter.cpp
 )
 
 if(QT_QTOPENGL_FOUND AND OPENGL_FOUND)
@@ -114,6 +115,7 @@ install(FILES
 #    widgets/rectangle.h
     widgets/vboxlayout.h
     widgets/widget.h
+    widgets/signalplotter.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/plasma/widgets)
 
 install(FILES
