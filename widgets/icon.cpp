@@ -988,6 +988,11 @@ void Icon::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     QGraphicsItem::mouseMoveEvent(event);
 }
 
+QSizeF Icon::sizeHint() const
+{
+    return d->size;
+}
+
 /*
 QSizeF Icon::sizeHint() const
 {

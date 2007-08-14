@@ -164,6 +164,7 @@ public:
 
     QSizeF sizeHint() const;
 */
+    QSizeF sizeHint() const;
     QRectF boundingRect() const;
 
 protected:
