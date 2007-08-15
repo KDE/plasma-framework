@@ -35,7 +35,7 @@ class PLASMA_EXPORT Rectangle : public Plasma::Widget
 
     private:
         class Private;
-        Private * const d;
+        Private const *d;
 };
 
 }
