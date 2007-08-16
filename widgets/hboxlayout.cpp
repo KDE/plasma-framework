@@ -58,7 +58,7 @@ void HBoxLayout::setGeometry(const QRectF& geometry)
         return;
     }
 
-    //kDebug() << this << " Geometry process " << geometry << " for " << children().count() << " childrens";
+    kDebug() << this << " Geometry process " << geometry << " for " << children().count() << " childrens";
 
     QList<LayoutItem *> fixedChildren;
     QList<LayoutItem *> expandingChildren;
@@ -81,7 +81,7 @@ void HBoxLayout::setGeometry(const QRectF& geometry)
 
     qreal expandWidth = 0;
     if (expandingChildren.count() > 0) {
-        expandWidth = (available.height() - ((expandingChildren.count() - 1) * spacing())) / expandingChildren.count();
+        expandWidth = (available.width() - ((expandingChildren.count() - 1) * spacing())) / expandingChildren.count();
     }
 
     foreach (LayoutItem *l, expandingChildren) {
