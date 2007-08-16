@@ -34,10 +34,12 @@ set(plasma_LIB_SRCS
     widgets/boxlayout.cpp
     widgets/checkbox.cpp
     widgets/hboxlayout.cpp
+#    widgets/flowlayout.cpp
     widgets/flash.cpp
     widgets/icon.cpp
     widgets/label.cpp
     widgets/layout.cpp
+    widgets/layoutanimator.cpp
     widgets/layoutitem.cpp
     widgets/lineedit.cpp
     widgets/pushbutton.cpp

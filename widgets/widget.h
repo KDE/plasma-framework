@@ -219,6 +219,7 @@ public:
     Q_INVOKABLE void addChild(Widget *widget);
 
     void setOpacity(qreal opacity);
+    qreal opacity() const;
 
     virtual QGraphicsItem* graphicsItem();
 

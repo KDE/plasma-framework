@@ -89,6 +89,10 @@ void Widget::setOpacity(qreal opacity)
 {
     d->opacity = opacity;
 }
+qreal Widget::opacity() const
+{
+    return d->opacity;
+}
 
 Qt::Orientations Widget::expandingDirections() const
 {
@@ -188,6 +192,9 @@ QSizeF Widget::sizeHint() const
 
 void Widget::setSize(const QSizeF &newSize)
 {
+    if ( newSize != d->size )
+        return;
+
     prepareGeometryChange();
     qreal width = qBound(d->minimumSize.width(), newSize.width(), d->maximumSize.width());
     qreal height = qBound(d->minimumSize.height(), newSize.height(), d->maximumSize.height());
