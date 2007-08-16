@@ -279,6 +279,8 @@ void Corona::dragLeaveEvent(QGraphicsSceneDragDropEvent *event)
    // kDebug() << "Corona::dragLeaveEvent(QGraphicsSceneDragDropEvent* event)";
     //TODO If an established Applet is dragged out of the Corona, remove it and
     //     create a QDrag type thing to keep the Applet's settings
+
+    QGraphicsScene::dragLeaveEvent(event);
 }
 
 void Corona::dragMoveEvent(QGraphicsSceneDragDropEvent *event)
@@ -291,6 +293,11 @@ void Corona::dragMoveEvent(QGraphicsSceneDragDropEvent *event)
 
 void Corona::dropEvent(QGraphicsSceneDragDropEvent *event)
 {
+    if (itemAt(event->scenePos())) {
+        QGraphicsScene::dropEvent(event);
+        return;
+    }
+
     //kDebug() << "Corona::dropEvent(QDropEvent* event)";
     if (event->mimeData()->hasFormat(d->mimetype)) {
         QString plasmoidName;
