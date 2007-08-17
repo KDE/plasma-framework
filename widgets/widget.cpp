@@ -158,11 +158,13 @@ QRectF Widget::localGeometry() const
 
 void Widget::setGeometry(const QRectF& geometry)
 {
-    bool sizeChange = d->size != geometry.size();
-
-    if ( sizeChange ) {
+    if ( d->size != geometry.size() ) {
         prepareGeometryChange();
-        d->size = geometry.size();
+        qreal width = qBound(d->minimumSize.width(), geometry.size().width(), d->maximumSize.width());
+        qreal height = qBound(d->minimumSize.height(), geometry.size().height(), d->maximumSize.height());
+
+        d->size = QSizeF(width, height);
+
     }
     setPos(geometry.topLeft());
 
