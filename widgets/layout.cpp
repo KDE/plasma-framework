@@ -29,7 +29,8 @@ class Layout::Private
         Private(LayoutItem* parent)
             : margin(12.0),
               spacing(6.0),
-              parent(parent)
+              parent(parent),
+              animator(0)
         {
         }
 
@@ -39,6 +40,7 @@ class Layout::Private
         qreal spacing;
 
         LayoutItem *parent;
+        LayoutAnimator *animator;
 };
 
 
@@ -54,6 +56,22 @@ Layout::~Layout()
         parent()->setLayout(0);
     }
     delete d;
+}
+
+void Layout::update()
+{
+    // this will force an update
+    setGeometry( parent()->geometry() );
+}
+
+LayoutAnimator* Layout::animator() const
+{
+    return d->animator;
+}
+
+void Layout::setAnimator(LayoutAnimator* animator)
+{
+    d->animator = animator;
 }
 
 qreal Layout::margin() const

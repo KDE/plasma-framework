@@ -28,6 +28,8 @@
 namespace Plasma
 {
 
+class LayoutAnimator;
+
 /**
  * Base class for Plasma Layout managers
  *
@@ -116,6 +118,21 @@ class PLASMA_EXPORT Layout : public LayoutItem
          */
 		virtual LayoutItem *takeAt(int i) = 0;
 
+        /**
+         * Returns the object controlling animation of changes
+         * in this layout or 0 if no animator has been set.
+         */
+        virtual LayoutAnimator* animator() const;
+
+        /** 
+         * Sets the object controlling animation of changes in this
+         * layout.
+         */
+        virtual void setAnimator( LayoutAnimator* animator );
+
+        /** Triggers an update of the layout. */ 
+        void update();
+       
 	private:
 		class Private;
 		Private *const d;
