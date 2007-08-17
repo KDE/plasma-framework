@@ -87,7 +87,7 @@ void Label::paintWidget(QPainter *p, const QStyleOptionGraphicsItem *option, QWi
     Q_UNUSED(widget);
 
     p->setPen(d->textPen);
-    p->drawText(localGeometry(), d->alignment | Qt::TextWordWrap, d->text);
+    p->drawText(option->rect, d->alignment | Qt::TextWordWrap, d->text);
 }
 
 }
