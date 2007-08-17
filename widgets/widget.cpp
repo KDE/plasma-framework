@@ -165,6 +165,7 @@ void Widget::setGeometry(const QRectF& geometry)
 
         d->size = QSizeF(width, height);
 
+        updateGeometry();
     }
     setPos(geometry.topLeft());
 
@@ -177,7 +178,7 @@ void Widget::updateGeometry()
 
     if (layout()) {
      //   kDebug() << (void *) this << " updating geometry to " << size();
-        layout()->setGeometry(geometry());
+        layout()->setGeometry(boundingRect());
     }
 }
 
