@@ -54,9 +54,8 @@ class PLASMA_EXPORT Widget  : public QObject,
     Q_PROPERTY( QSizeF minimumSize READ minimumSize WRITE setMinimumSize )
     Q_PROPERTY( QSizeF maximumSize READ maximumSize WRITE setMaximumSize )
     Q_PROPERTY( QRectF geometry READ geometry WRITE setGeometry )
-    Q_PROPERTY( QRectF localGeometry READ localGeometry )
     Q_PROPERTY( QSizeF sizeHint READ sizeHint )
-    Q_PROPERTY( QSizeF size READ size WRITE setSize )
+    Q_PROPERTY( QSizeF size READ size WRITE resize ) 
 
 public:
 
@@ -65,7 +64,7 @@ public:
      * Creates a new Plasma::Widget.
      * @param parent the QGraphicsItem this icon is parented to.
      */
-    explicit Widget(QGraphicsItem *parent = 0);
+    explicit Widget(QGraphicsItem *parent = 0 , QObject *parentObject = 0);
 
     /**
      * Destroys a Plasma::Widget.
@@ -137,11 +136,6 @@ public:
     QRectF geometry() const;
 
     /**
-     * @return geometry of this widget in local coordinates.
-     */
-    QRectF localGeometry() const;
-
-    /**
     * Sets the geometry of this Widget.
     */
     /**
@@ -169,12 +163,6 @@ public:
      * @return recommended size for this Plasma::Widget.
      */
     virtual QSizeF sizeHint() const;
-
-    /**
-     * Sets the size of this Plasma::Widget.
-     * @param size the size of this Plasma::Widget
-     */
-    void setSize(const QSizeF &size);
 
     /**
      * @return the size of this Plasma::Widget

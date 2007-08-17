@@ -252,7 +252,7 @@ public:
         p2->drawPixmap(leftOffset, topOffset, *cachedBackground);
     }
 
-    void paintHover(QPainter* painter, Applet* q)
+    void paintHover(QPainter* , Applet* )
     {
         //TODO draw hover interface for close, configure, info and move
     }
@@ -296,6 +296,18 @@ public:
         return appletDescription.service()->library() + QString::number(appletId);
     }
 
+    void getBorderSize(int& left , int& top, int &right, int& bottom)
+    {
+        if (!background) {
+            top = left = right = bottom = 0;
+        } else { 
+            top = background->elementSize("top").height();
+            left = background->elementSize("left").width();
+            right = background->elementSize("right").width();
+            bottom = background->elementSize("bottom").height();
+        }
+    }
+
     //TODO: examine the usage of memory here; there's a pretty large
     //      number of members at this point.
     uint appletId;
@@ -330,8 +342,8 @@ Applet::Applet(QGraphicsItem *parent,
     d->init(this);
 }
 
-Applet::Applet(QObject* parent, const QStringList& args)
-    :  Widget(0),
+Applet::Applet(QObject* parentObject, const QStringList& args)
+    :  Widget(0,parentObject),
        d(new Private(KService::serviceByStorageId(args.count() > 0 ? args[0] : QString()),
                      args.count() > 1 ? args[1].toInt() : 0))
 {
@@ -609,17 +621,27 @@ int Applet::type() const
 QRectF Applet::boundingRect() const
 {
     QRectF rect = QRectF(QPointF(0,0), d->contentSize(this));
-    if (!d->background) {
-        return rect;
-    }
 
-    const int topHeight = d->background->elementSize("top").height();
-    const int leftWidth = d->background->elementSize("left").width();
-    const int rightWidth = d->background->elementSize("right").width();
-    const int bottomHeight = d->background->elementSize("bottom").height();
+    int left;
+    int right;
+    int top;
+    int bottom;
 
-    rect.adjust(0 - leftWidth, 0 - topHeight, rightWidth, bottomHeight);
-    return rect;
+    d->getBorderSize(left,top,right,bottom);
+    
+    return rect.adjusted(-left,-top,right,bottom);
+}
+
+QSizeF Applet::sizeHint() const
+{
+    int left;
+    int right;
+    int top;
+    int bottom;
+
+    d->getBorderSize(left,top,right,bottom);
+
+    return contentSize() + QSizeF(left+right,top+bottom);
 }
 
 QList<QAction*> Applet::contextActions()
@@ -685,9 +707,9 @@ void Applet::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
         painter->setBrush(QBrush(color(), Qt::SolidPattern));
         painter->drawRoundRect(boundingRect());
         int iconDim = KIconLoader().currentSize(K3Icon::Desktop);
-        int midX = (boundingRect().width() / 2) - (iconDim / 2);
-        int midY = (boundingRect().height() / 2) - (iconDim / 2);
-        KIcon(icon()).paint(painter, midX, midY, iconDim, iconDim);
+        qreal midX = (boundingRect().width() / 2) - (iconDim / 2);
+        qreal midY = (boundingRect().height() / 2) - (iconDim / 2);
+        KIcon(icon()).paint(painter, (int)midX, (int)midY, iconDim, iconDim);
     }/*  else if (zoomLevel == scalingFactor(Plasma::OverviewZoom)) { //Show Groups only
     } */
 }
@@ -953,6 +975,8 @@ void Applet::setShadowShown(bool shown)
         delete d->shadow;
         d->shadow = 0;
     }
+#else
+    Q_UNUSED(shown);
 #endif
 }
 

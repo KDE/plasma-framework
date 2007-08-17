@@ -550,6 +550,11 @@ class PLASMA_EXPORT Applet : public Widget
          */
         QVariant itemChange(GraphicsItemChange change, const QVariant &value);
 
+        // reimplemented from LayoutItem
+        // value is the same as contentSize() if drawStandardBackground() is false
+        // or contentSize() plus the size of the border otherwise. 
+        virtual QSizeF sizeHint() const;
+
     protected Q_SLOTS:
         /**
          * @internal used to show the configuration of an applet on first show

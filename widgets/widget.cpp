@@ -66,8 +66,9 @@ bool Widget::Private::shouldPaint(QPainter *painter, const QTransform &transform
     return (fabs(zoomLevel - scalingFactor(Plasma::DesktopZoom))) < std::numeric_limits<double>::epsilon();
 }
 
-Widget::Widget(QGraphicsItem *parent)
-  : QGraphicsItem(parent),
+Widget::Widget(QGraphicsItem *parent,QObject* parentObject)
+  : QObject(parentObject),
+    QGraphicsItem(parent),
     d(new Private)
 {
     setFlag(QGraphicsItem::ItemClipsToShape, true);
@@ -145,13 +146,15 @@ qreal Widget::widthForHeight(qreal h) const
 
 QRectF Widget::geometry() const
 {
-    return QRectF(pos(), size());
+    return QRectF(pos(),d->size);
 }
 
+#if 0
 QRectF Widget::localGeometry() const
 {
-    return QRectF(QPointF(0.0f, 0.0f), size());
+    return QRectF(QPointF(0.0f, 0.0f), boundingRect().size);
 }
+#endif
 
 void Widget::setGeometry(const QRectF& geometry)
 {
@@ -187,32 +190,20 @@ void Widget::invalidate()
 
 QSizeF Widget::sizeHint() const
 {
-    return size();
-}
-
-void Widget::setSize(const QSizeF &newSize)
-{
-    if ( newSize != d->size )
-        return;
-
-    prepareGeometryChange();
-    qreal width = qBound(d->minimumSize.width(), newSize.width(), d->maximumSize.width());
-    qreal height = qBound(d->minimumSize.height(), newSize.height(), d->maximumSize.height());
-
-    d->size.setWidth(width);
-    d->size.setHeight(height);
-
-    update();
+    if (layout()) {
+        return layout()->sizeHint();
+    } else {
+        return QSizeF();
+    }
 }
 
 QSizeF Widget::size() const
 {
-    return d->size;
+    return geometry().size();
 }
-
 QRectF Widget::boundingRect() const
 {
-    return QRectF(QPointF(0.0f, 0.0f), size());
+    return QRectF(QPointF(0,0),geometry().size()); 
 }
 
 void Widget::resize(const QSizeF& size)
