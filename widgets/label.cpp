@@ -2,6 +2,7 @@
 
 #include <QPainter>
 #include <QFontMetricsF>
+#include <QStyleOptionGraphicsItem>
 
 namespace Plasma {
 
