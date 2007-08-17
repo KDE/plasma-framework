@@ -135,7 +135,9 @@ class Svg::Private
                 renderer->render(&renderPainter, elementId);
             }
             renderPainter.end();
-            QPixmapCache::insert( id, p );
+            bool inserted = QPixmapCache::insert( id, p );
+            if (!inserted)
+                kDebug() << "pixmap cache is too small for inserting" << id << "of size" << s;
         }
 
         void createRenderer()
