@@ -23,6 +23,8 @@ Comment[pt]='Applet' do Plasma
 Comment[pt_BR]='Applet' do Plasma
 Comment[sv]=Plasma-miniprogram
 Comment[uk]=Аплет Плазми
+Comment[vi]=Tiểu dụng Plasma
+Comment[zh_CN]=Plasma 小程序
 Comment[zh_TW]=Plasma 小程式
 
 [PropertyDef::X-Plasma-Language]
