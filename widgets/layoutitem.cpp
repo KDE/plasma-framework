@@ -84,7 +84,7 @@ qreal LayoutItem::widthForHeight(qreal h) const
 void LayoutItem::setLayout(Layout* layout)
 {
     if (d->layout && layout) {
-        kDebug() << k_funcinfo << " already have a layout.";
+        kDebug() << " already have a layout.";
         return;
     }
 

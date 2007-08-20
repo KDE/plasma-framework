@@ -182,7 +182,7 @@ void Phase::appletDestroyed(QObject* o)
 
 void Phase::animateItem(QGraphicsItem* item, Animation animation)
 {
-     //kDebug()<<k_funcinfo;
+     //kDebug();
     // get rid of any existing animations on this item.
     //TODO: shoudl we allow multiple anims per item?
     QMap<QGraphicsItem*, AnimationState*>::iterator it = d->animatedItems.find(item);
@@ -221,7 +221,7 @@ void Phase::animateItem(QGraphicsItem* item, Animation animation)
 
 void Phase::moveItem(QGraphicsItem* item, Movement movement, const QPoint &destination)
 {
-     //kDebug()<<k_funcinfo;
+     //kDebug();
      QMap<QGraphicsItem*, MovementState*>::iterator it = d->movingItems.find(item);
      if (it != d->movingItems.end()) {
           delete it.value();
