@@ -38,7 +38,9 @@ class Widget::Private
 {
     public:
         Private()
-            : parent(0)
+            : minimumSize(0,0)
+            , maximumSize(INFINITY,INFINITY)
+            , parent(0)
             , opacity(1.0)
         { }
         ~Private() { }

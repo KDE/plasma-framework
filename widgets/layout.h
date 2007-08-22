@@ -132,7 +132,17 @@ class PLASMA_EXPORT Layout : public LayoutItem
 
         /** Triggers an update of the layout. */ 
         void update();
-       
+
+        /** 
+         * Returns the minimum size of this layout.
+         * The default implementation allows unlimited resizing.
+         */
+        virtual QSizeF minimumSize() const;
+        /**
+         * Returns the maximum size of this layout.  The default
+         * implementation allows unlimited resizing.
+         */
+        virtual QSizeF maximumSize() const;       
 	private:
 		class Private;
 		Private *const d;

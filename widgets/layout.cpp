@@ -18,6 +18,8 @@
 
 #include "layout.h"
 
+#include <math.h>
+
 #include <QtCore/QList>
 
 namespace Plasma
@@ -97,6 +99,15 @@ void Layout::setSpacing(qreal s)
 LayoutItem *Layout::parent() const
 {
 	return d->parent;
+}
+
+QSizeF Layout::minimumSize() const
+{
+    return QSizeF(0,0);
+}
+QSizeF Layout::maximumSize() const
+{
+    return QSizeF(INFINITY,INFINITY);
 }
 
 }
