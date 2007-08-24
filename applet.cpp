@@ -706,10 +706,11 @@ void Applet::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
         //TODO: make pretty.
         painter->setBrush(QBrush(color(), Qt::SolidPattern));
         painter->drawRoundRect(boundingRect());
-        int iconDim = KIconLoader().currentSize(K3Icon::Desktop);
+        int iconDim = KIconLoader::global()->currentSize(K3Icon::Desktop);
         qreal midX = (boundingRect().width() / 2) - (iconDim / 2);
         qreal midY = (boundingRect().height() / 2) - (iconDim / 2);
-        KIcon(icon()).paint(painter, (int)midX, (int)midY, iconDim, iconDim);
+        KIcon ico(icon());
+        ico.paint(painter, (int)midX, (int)midY, iconDim, iconDim);
     }/*  else if (zoomLevel == scalingFactor(Plasma::OverviewZoom)) { //Show Groups only
     } */
 }
