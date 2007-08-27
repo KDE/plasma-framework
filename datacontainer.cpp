@@ -18,7 +18,6 @@
 
 #include "datacontainer.h"
 
-#include <QAtomic>
 #include <QVariant>
 
 #include <KDebug>
@@ -34,7 +33,7 @@ class DataContainer::Private
         {}
 
         DataEngine::Data data;
-        QAtomic connectCount;
+        int connectCount;
         bool dirty : 1;
 };
 
@@ -91,7 +90,7 @@ void DataContainer::checkForUpdate()
 void DataContainer::connectNotify(const char *signal)
 {
     if (QLatin1String(signal) == QMetaObject::normalizedSignature(SIGNAL(updated(QString, Plasma::DataEngine::Data))).constData()) {
-        d->connectCount.ref();
+        ++d->connectCount;
     }
 }
 
@@ -99,7 +98,7 @@ void DataContainer::disconnectNotify(const char *signal)
 {
     if (QLatin1String(signal) == QMetaObject::normalizedSignature(SIGNAL(updated(QString, Plasma::DataEngine::Data))).constData()) {
         if (d->connectCount > 0) {
-            d->connectCount.deref();
+            --d->connectCount;
         }
 
         if (d->connectCount < 1) {

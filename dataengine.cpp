@@ -114,7 +114,7 @@ class DataEngine::Private
             updateTimer->start(0);
         }
 
-        QAtomic ref;
+        int ref;
         DataEngine::SourceDict sources;
         QQueue<DataContainer*> sourceQueue;
         DataEngine* engine;
@@ -308,12 +308,12 @@ void DataEngine::clearSources()
 
 void DataEngine::ref()
 {
-    d->ref.ref();
+    --d->ref;
 }
 
 void DataEngine::deref()
 {
-    d->ref.deref();
+    ++d->ref;
 }
 
 bool DataEngine::isUsed() const
