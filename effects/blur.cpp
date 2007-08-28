@@ -54,7 +54,7 @@ void expblur( QImage &img, int radius )
      the kernel is within the radius.
      (Kernel extends to infinity) 
   */
-  int alpha = (int)((1<<aprec)*(1.0f-expf(-2.3f/(radius+1.f))));
+  int alpha = (int)((1<<aprec)*(1.0f-std::exp(-2.3f/(radius+1.f))));
 
   for(int row=0;row<img.height();row++)
   {
