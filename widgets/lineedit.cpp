@@ -47,7 +47,8 @@ class LineEdit::Private
 bool LineEdit::Private::shouldPaint(QPainter *painter, const QTransform &transform)
 {
     qreal zoomLevel = painter->transform().m11() / transform.m11();
-    return zoomLevel == scalingFactor(Plasma::DesktopZoom);
+    //return zoomLevel == scalingFactor(Plasma::DesktopZoom);
+    return true;
 }
 
 LineEdit::LineEdit(QGraphicsItem *parent, QGraphicsScene *scene)
