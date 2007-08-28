@@ -691,7 +691,7 @@ void Applet::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
 
     qreal zoomLevel = painter->transform().m11() / transform().m11();
     //kDebug() << "qreal " << zoomLevel << " = " << painter->transform().m11() << " / " << transform().m11();
-    if (fabs(zoomLevel - scalingFactor(Plasma::DesktopZoom)) < std::numeric_limits<double>::epsilon()) { // Show Desktop
+    //if (fabs(zoomLevel - scalingFactor(Plasma::DesktopZoom)) < std::numeric_limits<double>::epsilon()) { // Show Desktop
         if (d->background) {
             d->paintBackground(painter, this);
         }
@@ -701,7 +701,7 @@ void Applet::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
         }
 
         d->paintHover(painter, this);
-    } else if (fabs(zoomLevel - scalingFactor(Plasma::GroupZoom)) < std::numeric_limits<double>::epsilon()) {
+    /*} else if (fabs(zoomLevel - scalingFactor(Plasma::GroupZoom)) < std::numeric_limits<double>::epsilon()) {
         // Show Groups + Applet outline
         //TODO: make pretty.
         painter->setBrush(QBrush(color(), Qt::SolidPattern));
@@ -711,7 +711,7 @@ void Applet::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
         qreal midY = (boundingRect().height() / 2) - (iconDim / 2);
         KIcon ico(icon());
         ico.paint(painter, (int)midX, (int)midY, iconDim, iconDim);
-    }/*  else if (zoomLevel == scalingFactor(Plasma::OverviewZoom)) { //Show Groups only
+    }  else if (zoomLevel == scalingFactor(Plasma::OverviewZoom)) { //Show Groups only
     } */
 }
 
