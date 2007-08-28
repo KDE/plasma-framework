@@ -65,7 +65,8 @@ QGraphicsItem* Widget::graphicsItem()
 bool Widget::Private::shouldPaint(QPainter *painter, const QTransform &transform)
 {
     qreal zoomLevel = painter->transform().m11() / transform.m11();
-    return (fabs(zoomLevel - scalingFactor(Plasma::DesktopZoom))) < std::numeric_limits<double>::epsilon();
+    //return (fabs(zoomLevel - scalingFactor(Plasma::DesktopZoom))) < std::numeric_limits<double>::epsilon();
+    return true;
 }
 
 Widget::Widget(QGraphicsItem *parent,QObject* parentObject)
