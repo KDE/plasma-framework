@@ -20,7 +20,6 @@
 #ifndef PLASMA_DATAENGINE_H
 #define PLASMA_DATAENGINE_H
 
-#include <QtCore/QAtomic>
 #include <QtCore/QHash>
 #include <QtCore/QObject>
 #include <QtCore/QStringList>
