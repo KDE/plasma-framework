@@ -122,7 +122,7 @@ class PLASMA_EXPORT DataEngine : public QObject
          * @return the Data associated with the source; if the source doesn't
          *         exist an empty data set is returned
          **/
-        Q_INVOKABLE Data query(const QString& source) const;
+        Q_INVOKABLE DataEngine::Data query(const QString& source) const;
 
         /**
          * Reference counting method. Calling this method increases the count
