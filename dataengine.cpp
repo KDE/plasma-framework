@@ -187,6 +187,11 @@ void DataEngine::connectAllSources(QObject* visualization) const
     }
 }
 
+DataContainer* DataEngine::containerForSource(const QString &source)
+{
+    return d->requestSource(source);
+}
+
 DataEngine::Data DataEngine::query(const QString& source) const
 {
     DataContainer* s = d->requestSource(source);

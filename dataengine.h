@@ -80,7 +80,7 @@ class PLASMA_EXPORT DataEngine : public QObject
          * Connects a source to an object for data updates. The object must
          * have a slot with the following signature:
          *
-         * SLOT(updated(QString, Plasma::DataEngine::Data))
+         * updated(QString sourceName, Plasma::DataEngine::Data data)
          *
          * The data is a QHash of QVariants keyed by QString names, allowing
          * one data source to provide sets of related data.
@@ -110,6 +110,18 @@ class PLASMA_EXPORT DataEngine : public QObject
          * @param visualization the object to connect the data source to
          **/
         Q_INVOKABLE void connectAllSources(QObject* viualization) const;
+
+        /**
+         * Retrevies a pointer to the DataContainer for a given source. This method
+         * should not be used if possible. An exception is for script engines that 
+         * can not provide a QMetaObject as required by connectSource for the initial
+         * call to updated(). Using this method, such engines can provide their own
+         * connectSource API.
+         *
+         * @arg source the name of the source.
+         * @return pointer to a DataContainer, or zero on failure
+         **/
+        Q_INVOKABLE DataContainer* containerForSource(const QString &source);
 
         /**
          * Gets the Data associated with a data source.
