@@ -35,11 +35,10 @@ public:
     Applet* applet;
 };
 
-ScriptEngine::ScriptEngine(QObject *parent, const QStringList &args)
+ScriptEngine::ScriptEngine(QObject *parent)
     : QObject(parent),
       d(new Private)
 {
-    Q_UNUSED(args)
     d->applet = 0;
 }
 
@@ -120,7 +119,7 @@ ScriptEngine* ScriptEngine::load(const QString &language, Applet *applet)
         return 0;
     }
 
-    QStringList args;
+    QVariantList args;
     ScriptEngine* engine = 0;
     foreach (KService::Ptr service, offers) {
         engine = KService::createInstance<Plasma::ScriptEngine>(service, applet, args);

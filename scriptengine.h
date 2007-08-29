@@ -56,7 +56,7 @@ public:
      *
      * @param applet the Applet object that will house the plasmoid
      **/
-    explicit ScriptEngine(QObject *parent, const QStringList &args);
+    explicit ScriptEngine(QObject *parent);
     virtual ~ScriptEngine();
 
     void init(Applet* applet);
@@ -117,10 +117,9 @@ private:
     Private * const d;
 };
 
-#define K_EXPORT_PLASMA_SCRIPENGINE(libname, classname) \
-        K_EXPORT_COMPONENT_FACTORY(                \
-                        plasma_scriptengine_##libname,    \
-                        KGenericFactory<classname>("plasma_scriptengine_" #libname))
+#define K_EXPORT_PLASMA_SCRIPTENGINE(libname, classname) \
+K_PLUGIN_FACTORY(factory, registerPlugin<classname>();) \
+K_EXPORT_PLUGIN(factory("plasma_scriptengine_" #libname))
 
 
 } // namespace Plasma
