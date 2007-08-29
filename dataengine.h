@@ -303,9 +303,7 @@ class PLASMA_EXPORT DataEngine : public QObject
 } // Plasma namespace
 
 #define K_EXPORT_PLASMA_DATAENGINE(libname, classname) \
-        K_EXPORT_COMPONENT_FACTORY(                    \
-                        plasma_engine_##libname,        \
-                        KGenericFactory<classname>("plasma_engine_" #libname))
-
+K_PLUGIN_FACTORY(factory, registerPlugin<classname>();) \
+K_EXPORT_PLUGIN(factory("plasma_engine_" #libname))
 #endif // multiple inclusion guard
 
