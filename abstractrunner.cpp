@@ -113,15 +113,16 @@ void AbstractRunner::runExactMatch()
 AbstractRunner::List AbstractRunner::loadRunners( QWidget* parent )
 {
     List runners;
-    KService::List offers = KServiceTypeTrader::self()->query( "KRunner/Runner" );
-    foreach ( KService::Ptr service, offers ) {
-        AbstractRunner* runner = KService::createInstance<AbstractRunner>( service, parent );
+    KService::List offers = KServiceTypeTrader::self()->query("KRunner/Runner");
+    QString error;
+    foreach (KService::Ptr service, offers) {
+        AbstractRunner* runner = KService::createInstance<AbstractRunner>(service, parent, QVariantList(), &error);
         if ( runner ) {
             kDebug() << "loaded runner : " << service->name();
             runners.append( runner );
         }
         else {
-            kDebug() << "failed to load runner : " << service->name();
+            kDebug() << "failed to load runner : " << service->name() << ". error reported: " << error;
         }
     }
 

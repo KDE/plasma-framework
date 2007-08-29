@@ -120,16 +120,19 @@ ScriptEngine* ScriptEngine::load(const QString &language, Applet *applet)
     }
 
     QVariantList args;
+    QString error;
     ScriptEngine* engine = 0;
     foreach (KService::Ptr service, offers) {
-        engine = KService::createInstance<Plasma::ScriptEngine>(service, applet, args);
+        engine = KService::createInstance<Plasma::ScriptEngine>(service, applet, args, &error);
+
         if (engine) {
             break;
         }
+
+        kDebug() << "Couldn't load script engine for language " << language << "! error reported: " << error;
     }
 
     if (!engine) {
-        kDebug() << "Couldn't load script engine for language " << language << "!";
         return 0;
     }
 

@@ -463,7 +463,11 @@ void Phase::init()
         KService::List offers = KServiceTypeTrader::self()->query("Plasma/Animator", constraint);
 
         if (!offers.isEmpty()) {
-             d->animator = KService::createInstance<Plasma::Animator>(offers.first(), 0, QStringList());
+            QString error;
+            d->animator = KService::createInstance<Plasma::Animator>(offers.first(), 0, QVariantList(), &error);
+            if (!d->animator) {
+                kDebug() << "Could not load requested animator " << offers.first() << ". Error given: " << error;
+            }
         }
     }
 

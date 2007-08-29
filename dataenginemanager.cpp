@@ -118,15 +118,16 @@ Plasma::DataEngine* DataEngineManager::loadDataEngine(const QString& name)
     QString constraint = QString("[X-EngineName] == '%1'").arg(name);
     KService::List offers = KServiceTypeTrader::self()->query("Plasma/DataEngine",
                                                               constraint);
+    QString error;
 
     if (offers.isEmpty()) {
         kDebug() << "offers are empty for " << name << " with constraint " << constraint;
     } else {
-        engine = KService::createInstance<Plasma::DataEngine>(offers.first(), 0);
+        engine = KService::createInstance<Plasma::DataEngine>(offers.first(), 0, QVariantList(), &error);
     }
 
     if (!engine) {
-        kDebug() << "Couldn't load engine \"" << name << "\"!";
+        kDebug() << "Couldn't load engine \"" << name << "\". Error given: " << error;
         return d->nullEngine();
     }
 
