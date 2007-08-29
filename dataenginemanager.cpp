@@ -21,7 +21,6 @@
 
 #include <KDebug>
 #include <KServiceTypeTrader>
-#include <KParts/ComponentFactory>
 
 namespace Plasma
 {
