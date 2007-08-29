@@ -91,7 +91,7 @@ class PLASMA_EXPORT Applet : public Widget
          * @arg args a list of strings containing two entries: the service id
          *      and the applet id
          */
-        Applet(QObject* parent, const QStringList& args);
+        Applet(QObject* parent, const QVariantList& args);
 
         ~Applet();
 
@@ -300,7 +300,7 @@ class PLASMA_EXPORT Applet : public Widget
          * @return a pointer to the loaded applet, or 0 on load failure
          **/
         static Applet* loadApplet(const QString &name, uint appletId = 0,
-                                  const QStringList& args = QStringList());
+                                  const QVariantList& args = QVariantList());
 
         /**
          * Attempts to load an applet
@@ -315,7 +315,7 @@ class PLASMA_EXPORT Applet : public Widget
          * @return a pointer to the loaded applet, or 0 on load failure
          **/
         static Applet* loadApplet(const KPluginInfo& info, uint appletId = 0,
-                                  const QStringList& args = QStringList());
+                                  const QVariantList& args = QVariantList());
 
         /**
          * This method is called when the interface should be painted.
@@ -579,8 +579,7 @@ class PLASMA_EXPORT Applet : public Widget
  * Register an applet when it is contained in a loadable module
  */
 #define K_EXPORT_PLASMA_APPLET(libname, classname) \
-        K_EXPORT_COMPONENT_FACTORY(                \
-                        plasma_applet_##libname,    \
-                        KGenericFactory<classname>("plasma_applet_" #libname))
+K_PLUGIN_FACTORY(factory, registerPlugin<classname>();) \
+K_EXPORT_PLUGIN(factory("plasma_applet_" #libname))
 
 #endif // multiple inclusion guard

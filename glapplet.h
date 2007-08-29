@@ -56,7 +56,7 @@ class PLASMA_EXPORT GLApplet : public Applet
          * @arg args a list of strings containing two entries: the service id
          *      and the applet id
          */
-        GLApplet(QObject *parent, const QStringList &args);
+        GLApplet(QObject *parent, const QVariantList &args);
 
         ~GLApplet();
 

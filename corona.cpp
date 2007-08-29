@@ -192,11 +192,11 @@ void Corona::saveApplets() const
 void Corona::loadApplets(const QString& config)
 {
     clearApplets();
-    
+
     KConfig appletConfig(config, KConfig::OnlyLocal);
     foreach (const QString& group, appletConfig.groupList()) {
         KConfigGroup cg(&appletConfig, group);
-        addApplet(cg.readEntry("plugin", QString()), QStringList(),
+        addApplet(cg.readEntry("plugin", QString()), QVariantList(),
                   group.toUInt(), cg.readEntry("geometry", QRectF()));
     }
 }
@@ -212,7 +212,7 @@ void Corona::clearApplets()
     d->applets.clear();
 }
 
-Applet* Corona::addApplet(const QString& name, const QStringList& args, uint id, const QRectF& geometry)
+Applet* Corona::addApplet(const QString& name, const QVariantList& args, uint id, const QRectF& geometry)
 {
     Applet* applet = Applet::loadApplet(name, id, args);
     if (!applet) {
@@ -303,7 +303,7 @@ void Corona::dropEvent(QGraphicsSceneDragDropEvent *event)
         QString plasmoidName;
         plasmoidName = event->mimeData()->data(d->mimetype);
         QRectF geom(event->scenePos(), QSize(0, 0));
-        addApplet(plasmoidName, QStringList(), 0, geom);
+        addApplet(plasmoidName, QVariantList(), 0, geom);
         event->acceptProposedAction();
     } else if (KUrl::List::canDecode(event->mimeData())) {
         KUrl::List urls = KUrl::List::fromMimeData(event->mimeData());	
@@ -311,7 +311,7 @@ void Corona::dropEvent(QGraphicsSceneDragDropEvent *event)
             KMimeType::Ptr mime = KMimeType::findByUrl(url);
             QString mimeName = mime->name();
             QRectF geom(event->scenePos(), QSize(0, 0));
-            QStringList args;
+            QVariantList args;
             args << url.url();
 //             kDebug() << mimeName;
             KPluginInfo::List appletList = Applet::knownAppletsForMimetype(mimeName);

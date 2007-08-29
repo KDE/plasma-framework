@@ -74,7 +74,7 @@ GLApplet::GLApplet(QGraphicsItem *parent,
     }
 }
 
-GLApplet::GLApplet(QObject *parent, const QStringList &args)
+GLApplet::GLApplet(QObject *parent, const QVariantList &args)
     : Applet(parent, args),
       d(new Private)
 {

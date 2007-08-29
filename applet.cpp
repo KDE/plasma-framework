@@ -342,9 +342,9 @@ Applet::Applet(QGraphicsItem *parent,
     d->init(this);
 }
 
-Applet::Applet(QObject* parentObject, const QStringList& args)
+Applet::Applet(QObject* parentObject, const QVariantList& args)
     :  Widget(0,parentObject),
-       d(new Private(KService::serviceByStorageId(args.count() > 0 ? args[0] : QString()),
+       d(new Private(KService::serviceByStorageId(args.count() > 0 ? args[0].toString() : QString()),
                      args.count() > 1 ? args[1].toInt() : 0))
 {
     d->init(this);
@@ -689,7 +689,7 @@ void Applet::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
         d->shadow->generate();
     }
 
-    qreal zoomLevel = painter->transform().m11() / transform().m11();
+    //qreal zoomLevel = painter->transform().m11() / transform().m11();
     //kDebug() << "qreal " << zoomLevel << " = " << painter->transform().m11() << " / " << transform().m11();
     //if (fabs(zoomLevel - scalingFactor(Plasma::DesktopZoom)) < std::numeric_limits<double>::epsilon()) { // Show Desktop
         if (d->background) {
@@ -911,7 +911,7 @@ QStringList Applet::knownCategories(const QString &parentApp)
     return categories;
 }
 
-Applet* Applet::loadApplet(const QString& appletName, uint appletId, const QStringList& args)
+Applet* Applet::loadApplet(const QString& appletName, uint appletId, const QVariantList& args)
 {
     if (appletName.isEmpty()) {
         return 0;
@@ -931,20 +931,19 @@ Applet* Applet::loadApplet(const QString& appletName, uint appletId, const QStri
         appletId = Private::nextId();
     }
 
-    QStringList allArgs;
-    QString id;
-    id.setNum(appletId);
-    allArgs << offers.first()->storageId() << id << args;
-    Applet* applet = KService::createInstance<Plasma::Applet>(offers.first(), 0, allArgs);
+    QVariantList allArgs;
+    allArgs << offers.first()->storageId() << appletId << args;
+    QString error;
+    Applet* applet = KService::createInstance<Plasma::Applet>(offers.first(), 0, allArgs, &error);
 
     if (!applet) {
-        kDebug() << "Couldn't load applet \"" << appletName << "\"!";
+        kDebug() << "Couldn't load applet \"" << appletName << "\"! reason given: " << error;
     }
 
     return applet;
 }
 
-Applet* Applet::loadApplet(const KPluginInfo& info, uint appletId, const QStringList& args)
+Applet* Applet::loadApplet(const KPluginInfo& info, uint appletId, const QVariantList& args)
 {
     if (!info.isValid()) {
         return 0;

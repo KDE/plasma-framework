@@ -134,7 +134,7 @@ public Q_SLOTS:
      *
      * @return a pointer to the applet on success, or 0 on failure
      */
-    Applet* addApplet(const QString& name, const QStringList& args = QStringList(),
+    Applet* addApplet(const QString& name, const QVariantList& args = QVariantList(),
                       uint id = 0, const QRectF &geometry = QRectF(-1, -1, -1, -1));
 
     /**
