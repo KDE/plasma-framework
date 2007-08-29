@@ -25,11 +25,10 @@
 namespace Plasma
 {
 
-Animator::Animator(QObject *parent, const QStringList& list)
+Animator::Animator(QObject *parent)
     : QObject(parent),
       d(0)
 {
-    Q_UNUSED(list)
 }
 
 Animator::~Animator()

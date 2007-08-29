@@ -39,7 +39,7 @@ class PLASMA_EXPORT Animator : public QObject
     Q_OBJECT
 
 public:
-    explicit Animator(QObject *parent = 0, const QStringList& list = QStringList());
+    explicit Animator(QObject *parent = 0);
     ~Animator();
 
     // Parameter definitions
@@ -75,8 +75,7 @@ private:
 } // Plasma namespace
 
 #define K_EXPORT_PLASMA_ANIMATOR(libname, classname) \
-        K_EXPORT_COMPONENT_FACTORY(                \
-                        plasma_animator_##libname,   \
-                        KGenericFactory<classname>("plasma_animator_" #libname))
+K_PLUGIN_FACTORY(factory, registerPlugin<classname>();) \
+K_EXPORT_PLUGIN(factory("plasma_animator_" #libname))
 
 #endif // multiple inclusion guard
