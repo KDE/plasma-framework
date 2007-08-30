@@ -18,26 +18,17 @@
 
 #include "vboxlayout.h"
 
-#include <QtCore/QList>
-
-#include <KDebug>
-
 namespace Plasma
 {
 
 VBoxLayout::VBoxLayout(LayoutItem *parent)
-    : BoxLayout(parent),
+    : BoxLayout(Qt::Vertical, parent),
       d(0)
 {
 }
 
 VBoxLayout::~VBoxLayout()
 {
-}
-
-Qt::Orientations VBoxLayout::expandingDirections() const
-{
-    return Qt::Vertical;
 }
 
 bool VBoxLayout::hasHeightForWidth() const
@@ -49,77 +40,6 @@ qreal VBoxLayout::heightForWidth(qreal w) const
 {
     Q_UNUSED(w);
     return qreal();
-}
-
-void VBoxLayout::setGeometry(const QRectF& geometry)
-{
-    if (!geometry.isValid() || geometry.isEmpty()) {
-        kDebug() << "Invalid Geometry " << geometry;
-        BoxLayout::setGeometry(geometry);
-        return;
-    }
-
-    kDebug() << this << " Geometry process " << geometry << " for " << children().count() << " children";
-
-    QList<LayoutItem *> fixedChildren;
-    QList<LayoutItem *> expandingChildren;
-    QList<QSizeF> sizes;
-    QSizeF available = geometry.size() - QSizeF(2 * margin(), 2 * margin());
-
-    foreach (LayoutItem *l, children()) {
-        kDebug() << "testing layout item " << l;
-        if (l->expandingDirections() & Qt::Vertical) {
-            expandingChildren.append(l);
-        } else {
-            fixedChildren.append(l);
-        }
-    }
-
-    foreach (LayoutItem *l, fixedChildren) {
-        QSizeF hint = l->sizeHint();
-        sizes.insert(indexOf(l), QSizeF(available.width(), hint.height()));
-        available -= QSizeF(0.0, hint.height() + spacing());
-    }
-
-    qreal expandHeight = 0;
-
-    if (expandingChildren.count() > 0) {
-        expandHeight = (available.height() - ((expandingChildren.count() - 1) * spacing())) / expandingChildren.count();
-    }
-
-    foreach (LayoutItem *l, expandingChildren) {
-        sizes.insert(indexOf(l),QSizeF(available.width(), expandHeight));
-    }
-
-    QPointF start = geometry.topLeft();
-    start += QPointF(margin(), spacing());
-
-    for (int i = 0; i < sizes.size(); i++) {
-        LayoutItem *l = itemAt(i);
-
-        kDebug() << "Setting Geometry for child " << l << " to " << QRectF(start, sizes[i]);
-
-        l->setGeometry(QRectF(start, sizes[i]));
-        start += QPointF(0.0, sizes[i].height() + spacing());
-    }
-
-    BoxLayout::setGeometry(geometry);
-}
-
-QSizeF VBoxLayout::sizeHint() const
-{
-    qreal hintHeight = 0.0;
-    qreal hintWidth = 0.0;
-
-    foreach(LayoutItem *l, children()) {
-
-        QSizeF hint = l->sizeHint();
-
-        hintWidth = qMax(hint.width(), hintWidth);
-        hintHeight += hint.height() + spacing();
-    }
-
-    return QSizeF(hintWidth, hintHeight);
 }
 
 }

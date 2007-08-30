@@ -47,14 +47,8 @@ class PLASMA_EXPORT VBoxLayout : public BoxLayout
          */
         ~VBoxLayout();
 
-        Qt::Orientations expandingDirections() const;
-
         bool hasHeightForWidth() const;
         qreal heightForWidth(qreal w) const;
-
-        void setGeometry(const QRectF& geometry);
-
-        QSizeF sizeHint() const;
 
     private:
         class Private;

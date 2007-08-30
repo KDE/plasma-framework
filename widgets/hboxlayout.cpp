@@ -18,26 +18,17 @@
 
 #include "hboxlayout.h"
 
-#include <QtCore/QList>
-
-#include <KDebug>
-
 namespace Plasma
 {
 
 HBoxLayout::HBoxLayout(LayoutItem *parent)
-    : BoxLayout(parent),
+    : BoxLayout(Qt::Horizontal, parent),
       d(0)
 {
 }
 
 HBoxLayout::~HBoxLayout()
 {
-}
-
-Qt::Orientations HBoxLayout::expandingDirections() const
-{
-    return Qt::Horizontal;
 }
 
 bool HBoxLayout::hasWidthForHeight() const
@@ -49,72 +40,6 @@ qreal HBoxLayout::widthForHeight(qreal w) const
 {
     Q_UNUSED(w);
     return qreal();
-}
-
-void HBoxLayout::setGeometry(const QRectF& geometry)
-{
-    if (!geometry.isValid() || geometry.isEmpty()) {
-        kDebug() << "Invalid Geometry " << geometry;
-        return;
-    }
-
-    kDebug() << this << " Geometry process " << geometry << " for " << children().count() << " childrens";
-
-    QList<LayoutItem *> fixedChildren;
-    QList<LayoutItem *> expandingChildren;
-    QList<QSizeF> sizes;
-    QSizeF available = geometry.size() - QSizeF(2 * margin(), 2 * margin());
-
-    foreach (LayoutItem *l, children()) {
-        if (l->expandingDirections() & Qt::Horizontal) {
-            expandingChildren.append(l);
-        } else {
-            fixedChildren.append(l);
-        }
-    }
-
-    foreach (LayoutItem *l, fixedChildren) {
-        QSizeF hint = l->sizeHint();
-        sizes.insert(indexOf(l), QSizeF(available.width(), hint.height()));
-        available -= QSizeF(hint.width() + spacing(), 0.0f);
-    }
-
-    qreal expandWidth = 0;
-    if (expandingChildren.count() > 0) {
-        expandWidth = (available.width() - ((expandingChildren.count() - 1) * spacing())) / expandingChildren.count();
-    }
-
-    foreach (LayoutItem *l, expandingChildren) {
-        sizes.insert(indexOf(l), QSizeF(expandWidth, available.height()));
-    }
-
-    QPointF start = geometry.topLeft();
-    start += QPointF(margin(), spacing());
-
-    for (int i = 0; i < sizes.size(); i++) {
-        LayoutItem *l = itemAt(i);
-        kDebug() << "Setting Geometry for child " << l << " to " << QRectF(start, sizes[i]);
-        l->setGeometry(QRectF(start, sizes[i]));
-        start += QPointF(sizes[i].width() + spacing(), 0.0);
-    }
-
-    BoxLayout::setGeometry(geometry);
-}
-
-QSizeF HBoxLayout::sizeHint() const
-{
-    qreal hintHeight = 0.0;
-    qreal hintWidth = 0.0;
-
-    foreach(LayoutItem *l, children()) {
-
-        QSizeF hint = l->sizeHint();
-
-        hintHeight = qMax(hint.height(), hintHeight);
-        hintWidth += hint.width() + spacing();
-    }
-
-    return QSizeF(hintWidth, hintHeight);
 }
 
 }

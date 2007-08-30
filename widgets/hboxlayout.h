@@ -30,7 +30,7 @@ namespace Plasma
 
 
 /**
- * Vertical Box Layout
+ * Horizontal Box Layout
  *
  * @author Matias Valdenegro T. <mvaldenegro@informatica.utem.cl>
  *
@@ -50,14 +50,8 @@ class PLASMA_EXPORT HBoxLayout : public BoxLayout
          */
         virtual ~HBoxLayout();
 
-        Qt::Orientations expandingDirections() const;
-
         bool hasWidthForHeight() const;
         qreal widthForHeight(qreal w) const;
-
-        void setGeometry(const QRectF& geometry);
-
-        QSizeF sizeHint() const;
 
     private:
         class Private;

@@ -42,14 +42,14 @@ class PLASMA_EXPORT BoxLayout : public Layout
         /**
          * Constructor.
         */
-        explicit BoxLayout(LayoutItem *parent = 0);
+        explicit BoxLayout(Qt::Orientations orientation, LayoutItem *parent = 0);
 
         /**
          * Destructor.
         */
         ~BoxLayout();
 
-        virtual Qt::Orientations expandingDirections() const;
+        Qt::Orientations expandingDirections() const;
 
         QSizeF minimumSize() const;
         QSizeF maximumSize() const;
@@ -57,8 +57,7 @@ class PLASMA_EXPORT BoxLayout : public Layout
         QRectF geometry() const;
         void setGeometry(const QRectF& geometry);
 
-        //TODO: if we turn this into an actually usable layout we need to implement this
-        //QSizeF sizeHint() const;
+        QSizeF sizeHint() const;
 
         int count() const;
 
