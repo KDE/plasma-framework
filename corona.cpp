@@ -37,6 +37,7 @@
 #include "dataengine.h"
 #include "karambamanager.h"
 #include "phase.h"
+#include "widgets/hboxlayout.h"
 #include "widgets/vboxlayout.h"
 #include "widgets/icon.h"
 
@@ -135,7 +136,7 @@ void Corona::setFormFactor(FormFactor formFactor)
         case Planar:
             break;
         case Horizontal:
-            //d->layout = new HBoxLayout;
+            d->layout = new HBoxLayout;
             break;
         case Vertical:
             d->layout = new VBoxLayout;
