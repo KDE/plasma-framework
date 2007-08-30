@@ -69,7 +69,7 @@ class PLASMA_EXPORT GLApplet : public Applet
          * using OpenGL api directly is supported.
          */
         virtual void paintGLInterface(QPainter *painter,
-                                      const QStyleOptionGraphicsItem *option) = 0;
+                                      const QStyleOptionGraphicsItem *option);
         void makeCurrent();
     private:
         virtual void paintInterface(QPainter *painter,

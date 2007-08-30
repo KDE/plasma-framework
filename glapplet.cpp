@@ -99,6 +99,13 @@ void GLApplet::deleteTexture(GLuint textureId)
     d->dummy->deleteTexture(textureId);
 }
 
+void GLApplet::paintGLInterface(QPainter *painter,
+                                const QStyleOptionGraphicsItem *option)
+{
+    Q_UNUSED(painter)
+    Q_UNUSED(option)
+}
+
 static inline QPainterPath headerPath(const QRectF &r, int roundness,
                                       int headerHeight=10)
 {
