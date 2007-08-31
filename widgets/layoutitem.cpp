@@ -89,7 +89,9 @@ void LayoutItem::setLayout(Layout* layout)
     }
 
     d->layout = layout;
-    layout->setParent(this);
+
+    if ( layout )
+        layout->setParent(this);
 }
 
 Layout* LayoutItem::layout() const
