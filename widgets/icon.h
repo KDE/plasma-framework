@@ -164,6 +164,7 @@ public:
 
     QSizeF sizeHint() const;
 */
+    Qt::Orientations expandingDirections() const;
     QSizeF sizeHint() const;
     QRectF boundingRect() const;
 

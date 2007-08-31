@@ -993,6 +993,11 @@ QSizeF Icon::sizeHint() const
     return d->size;
 }
 
+Qt::Orientations Icon::expandingDirections() const
+{
+    return 0;
+}
+
 /*
 QSizeF Icon::sizeHint() const
 {
