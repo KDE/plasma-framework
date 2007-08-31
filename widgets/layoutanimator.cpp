@@ -46,10 +46,15 @@ public:
     
     QHash<LayoutItem*,ItemGeometry> geometries;
     QHash<LayoutItem*,LayoutAnimator::State> states;
-
     QPointer<QTimeLine> timeLine;
-
     qreal lastValue;
+    bool autoDeleteOnRemoval;
+
+    Private() 
+        : lastValue(0)
+        , autoDeleteOnRemoval(false)
+    {
+    }
 
     qreal delta(qreal currentValue) const
     {
@@ -73,6 +78,18 @@ public:
 
         return newGeometry;
     }
+
+    void prepareItemForState( LayoutItem *item , LayoutAnimator::State state ) {
+        
+        // opacity setting for widgets
+        if ( state == InsertedState && effects[state] == LayoutAnimator::FadeInMoveEffect ) {
+            Widget *widget = dynamic_cast<Widget*>(item->graphicsItem());
+
+            if ( widget ) {
+                widget->setOpacity(0); // item is invisible immediately after insertion     
+            }
+        }
+    }
 };
 
 LayoutAnimator::LayoutAnimator(QObject* parent)
@@ -87,6 +104,39 @@ LayoutAnimator::~LayoutAnimator()
     delete d;
 }
 
+void LayoutAnimator::setAutoDeleteOnRemoval(bool autoDelete) 
+{
+    if ( d->autoDeleteOnRemoval == autoDelete )
+        return;
+
+    d->autoDeleteOnRemoval = autoDelete;
+
+    if ( autoDelete ) { 
+        connect( this , SIGNAL(stateChanged(LayoutItem*,State,State)) , this , 
+                 SLOT(itemAutoDeleter(LayoutItem*,State,State)) );
+    } else { 
+        disconnect( this , SIGNAL(stateChanged(LayoutItem*,State,State)) , this , 
+                SLOT(itemAutoDeleter(LayoutItem*,State,State)) );
+    } 
+}
+bool LayoutAnimator::autoDeleteOnRemoval() const
+{
+    return d->autoDeleteOnRemoval;
+}
+void LayoutAnimator::itemAutoDeleter(LayoutItem *item , State oldState , State newState)
+{
+    if ( oldState == RemovedState && newState == DeadState ) {
+        
+        if ( item->graphicsItem() ) {
+            item->graphicsItem()->scene()->removeItem( item->graphicsItem() );
+
+            if ( dynamic_cast<QGraphicsItem*>(item) != dynamic_cast<QGraphicsItem*>(item->graphicsItem()) )
+                delete item->graphicsItem();
+        }
+
+        delete item;
+    }
+}
 void LayoutAnimator::setEffect( State action , int effect )
 {
     d->effects[action] = effect;
@@ -96,13 +146,22 @@ int LayoutAnimator::effect(State action) const
     return d->effects[action];
 }
 
-void LayoutAnimator::setCurrentState( LayoutItem* item , State action )
+void LayoutAnimator::setCurrentState( LayoutItem* item , State state )
 {
-    d->states[item] = action;
+    State oldState = d->states[item];
+
+    d->states[item] = state;
+    d->prepareItemForState(item,state);
+
+    emit stateChanged(item,oldState,state);
 }
 LayoutAnimator::State LayoutAnimator::state( LayoutItem* item ) const
 {
-    return d->states[item];
+    if ( !d->states.contains(item) ) {
+        return DeadState;
+    } else {
+        return d->states[item];
+    }
 }
 
 void LayoutAnimator::setTimeLine(QTimeLine* timeLine)
@@ -120,6 +179,12 @@ void LayoutAnimator::setTimeLine(QTimeLine* timeLine)
              SLOT(valueChanged(qreal)) );
     connect( d->timeLine , SIGNAL(finished()) , this , 
              SLOT(animationCompleted()) );
+}
+void LayoutAnimator::animationCompleted()
+{
+    foreach( LayoutItem* item , d->states.keys() ) {
+        animationFinished(item);
+    }
 }
 QTimeLine* LayoutAnimator::timeLine() const
 {
@@ -153,12 +218,23 @@ void LayoutAnimator::moveEffectUpdateItem( qreal value , LayoutItem* item , Effe
     else if ( widget && effect == FadeOutMoveEffect )
         widget->setOpacity( qMax(0.0,widget->opacity()-d->delta(value)) );
 
-    item->setGeometry( d->interpolateGeometry(item,value) );
+    
+    if ( effect == FadeInMoveEffect ) {
+        const QRectF finalGeometry = d->geometries[item].endGeometry;
+
+        if ( item->geometry() != finalGeometry )
+            item->setGeometry( finalGeometry ); 
+    }
+    else 
+        item->setGeometry( d->interpolateGeometry(item,value) );
 }
 
 void LayoutAnimator::noEffectUpdateItem( qreal , LayoutItem* item )
 {
-    item->setGeometry( d->geometries[item].endGeometry );
+    const QRectF finalGeometry = d->geometries[item].endGeometry;
+
+    if ( item->geometry() != finalGeometry )
+        item->setGeometry( finalGeometry );
 }
 
 void LayoutAnimator::fadeEffectUpdateItem( qreal value , LayoutItem* item )
@@ -184,17 +260,19 @@ void LayoutAnimator::fadeEffectUpdateItem( qreal value , LayoutItem* item )
 
 void LayoutAnimator::animationFinished(LayoutItem* item)
 {
-    switch (d->states[item]) 
+    switch ( state(item) ) 
     {
         case InsertedState:
-            d->states[item] = NormalState;
+                setCurrentState(item,StandardState);
             break;
         case RemovedState:
                 d->states.remove(item);
                 d->geometries.remove(item);
+
+                emit stateChanged( item , RemovedState , DeadState );
             break;
-        case NormalState:
-                // do nothing
+        case StandardState:
+                    d->geometries[item].startGeometry = d->geometries[item].endGeometry;
             break;
         default:
             Q_ASSERT(false);

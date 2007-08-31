@@ -44,7 +44,7 @@ class LayoutItem;
  *
  * animator->setTimeLine(timeLine);
  * animator->setEffect( LayoutAnimator::InsertedState , LayoutAnimator::FadeInMoveEffect );
- * animator->setEffect( LayoutAnimator::NormalState , LayoutAnimator::MoveEffect );
+ * animator->setEffect( LayoutAnimator::StandardState , LayoutAnimator::MoveEffect );
  * animator->setEffect( LayoutAnimator::RemovedState , LayoutAnimator::FadeOutMoveEffect );
  * myLayout->setAnimator(animator);
  *
@@ -69,7 +69,7 @@ public:
         /** 
          * State for an item which has recently been added to a layout. 
          * When the animation completes, the item's state will change to
-         * NormalState 
+         * StandardState 
          */
         InsertedState,
         /** 
@@ -77,13 +77,24 @@ public:
          * Items will remain in this state until it is explicitly changed
          * via setCurrentState()
          */
-        NormalState,
+        StandardState,
         /** 
-         * State for an item which is being removed from a layout. 
+         * State for an item which is currently being removed from a layout. 
          * When the animation completes, the item will be removed from the 
          * animator and its state will be undefined. 
          */
-        RemovedState
+        RemovedState,
+        /**
+         * State for an item whoose geometry is not managed by the animator.
+         *
+         * All LayoutItems are initially in this state and are moved into a 
+         * different state ( usually InsertedState ) by calling
+         * setCurrentState( item , state )
+         *
+         * An item transitions into this state when the animation completes
+         * whilst the item is in RemovedState
+         */
+        DeadState
     };
 
     /** 
@@ -146,7 +157,8 @@ public:
     /** 
      * Sets the new geometry for a layout item.  
      * The item will animate from its current geometry to @p geometry, using
-     * the effect specified in setEffect() 
+     * the effect specified in setEffect() for the state currently associated
+     * with @p item 
      */
     virtual void setGeometry( LayoutItem* item , const QRectF& geometry );
 
@@ -159,12 +171,29 @@ public:
     /** Returns the QTimeLine used by this animator. */
     QTimeLine* timeLine() const;
 
+    /** 
+     * Convenience feature which causes LayoutItems and their associated
+     * QGraphicsItems to be automatically deleted when their removal 
+     * animation finishes.
+     *
+     * The default is false.
+     */
+    void setAutoDeleteOnRemoval(bool autoDelete);
+    /** See setAutoDeleteOnRemoval() */
+    bool autoDeleteOnRemoval() const;
+
+Q_SIGNALS:
+    /** This signal is emitted when the state of an item in the animator changes. */
+    void stateChanged( LayoutItem *item , State oldState , State newState );
+
 protected:
     virtual void updateItem( qreal value , LayoutItem* item );
 
 private slots:
     void valueChanged(qreal value);
-    
+    void animationCompleted();
+    void itemAutoDeleter( LayoutItem *item , State oldState , State newState );
+
 private:
     void moveEffectUpdateItem(qreal value,LayoutItem* item,Effect effect);
     void noEffectUpdateItem(qreal value,LayoutItem* item);
