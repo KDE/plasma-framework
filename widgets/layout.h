@@ -79,6 +79,11 @@ class PLASMA_EXPORT Layout : public LayoutItem
 		LayoutItem *parent() const;
 
         /**
+         * Sets the parent of this layout.
+         */
+        void setParent(LayoutItem *parent);
+
+        /**
          * Returns the number of elements of this Layout.
          */
 		virtual int count() const = 0;
@@ -86,7 +91,7 @@ class PLASMA_EXPORT Layout : public LayoutItem
         /**
          * Returns true if this Layout contains no elements, false otherwise.
          */
-		virtual bool isEmpty() const = 0;
+		bool isEmpty() const;
 
         /**
          * Adds a Item to this Layout.
@@ -142,7 +147,11 @@ class PLASMA_EXPORT Layout : public LayoutItem
          * Returns the maximum size of this layout.  The default
          * implementation allows unlimited resizing.
          */
-        virtual QSizeF maximumSize() const;       
+        virtual QSizeF maximumSize() const;      
+
+        /** TODO Document me */
+        void invalidate(); 
+
 	private:
 		class Private;
 		Private *const d;

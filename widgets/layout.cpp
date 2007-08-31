@@ -21,6 +21,9 @@
 #include <math.h>
 
 #include <QtCore/QList>
+#include <QtDebug>
+
+#include "widget.h"
 
 namespace Plasma
 {
@@ -52,6 +55,10 @@ Layout::Layout(LayoutItem *parent)
 {
 }
 
+void Layout::setParent(LayoutItem *parent) {
+    d->parent = parent;
+}
+
 Layout::~Layout()
 {
     if (parent()) {
@@ -60,11 +67,41 @@ Layout::~Layout()
     delete d;
 }
 
+bool Layout::isEmpty() const 
+{
+    return count() == 0;
+}
+
 void Layout::update()
 {
-    // this will force an update
-    setGeometry( parent()->geometry() );
+
+    setGeometry(geometry());
+
 }
+void Layout::invalidate()
+{
+    //qDebug() << "Layout update"; 
+    LayoutItem *item = parent(); 
+    while ( item ) { 
+        //qDebug() << "Looking at item " << item;
+        Widget *widget = dynamic_cast<Widget*>(item);
+        if ( widget ) {
+            //qDebug() << "Parent widget found and invalidated";
+            widget->updateGeometry();
+            break;
+        }
+        else {
+            Layout *layout = dynamic_cast<Layout*>(item);
+            if ( layout ) {
+                item = layout->parent();
+      //          qDebug() << "Item is a layout";
+            }
+            else
+                item = 0;
+        }
+    }
+}
+
 
 LayoutAnimator* Layout::animator() const
 {
