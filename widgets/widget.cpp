@@ -80,7 +80,7 @@ Widget::Widget(QGraphicsItem *parent,QObject* parentObject)
 
     if (d->parent) {
         d->parent->addChild(this);
-        d->parent->invalidate();
+        d->parent->updateGeometry();
     }
 }
 
@@ -100,7 +100,7 @@ qreal Widget::opacity() const
 
 Qt::Orientations Widget::expandingDirections() const
 {
-    return 0;
+    return Qt::Horizontal | Qt::Vertical;
 }
 
 void Widget::setMinimumSize(const QSizeF& size)
@@ -168,9 +168,11 @@ void Widget::setGeometry(const QRectF& geometry)
 
         d->size = QSizeF(width, height);
 
-        updateGeometry();
+        if ( layout() ) 
+            layout()->setGeometry(boundingRect());
     }
-    setPos(geometry.topLeft());
+
+    setPos(geometry.topLeft() - boundingRect().topLeft());
 
     update();
 }
@@ -178,20 +180,29 @@ void Widget::setGeometry(const QRectF& geometry)
 void Widget::updateGeometry()
 {
     prepareGeometryChange();
+    
+    Widget *widget = this;
+    while ( widget ) {
+        if ( widget->parent() == 0 || widget->parent()->layout() != 0 ) {
+            if ( widget->layout() ) {
+                widget->layout()->update();
+                widget->update();
+            }
+            break;
+        } 
+        widget = widget->parent();
+    }
+
+#if 0
+    prepareGeometryChange();
 
     if (layout()) {
      //   kDebug() << (void *) this << " updating geometry to " << size();
+     //
+        //qDebug() << "Widget" << metaObject()->className() << "updating geometry to " << boundingRect();
         layout()->setGeometry(boundingRect());
     }
-}
-
-void Widget::invalidate()
-{
-    updateGeometry();
-
-    if (parent()) {
-        parent()->updateGeometry();
-    }
+#endif
 }
 
 QSizeF Widget::sizeHint() const

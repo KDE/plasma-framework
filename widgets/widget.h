@@ -152,12 +152,6 @@ public:
     Q_INVOKABLE void updateGeometry();
 
     /**
-     * Invalidate current geometry of this Plasma::Widget as well as its
-     * parent if it exists.
-     */
-    Q_INVOKABLE virtual void invalidate();
-
-    /**
      * Returns the recommended size for this widget. Note that this size is not
      * necessarily only the size for the widget, but might also include margins etc.
      * @return recommended size for this Plasma::Widget.
