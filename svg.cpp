@@ -159,6 +159,8 @@ class Svg::Private
                 renderer = new SharedSvgRenderer(path);
                 renderers[path] = renderer;
             }
+
+            size = renderer->defaultSize();
         }
 
         QSize elementSize(const QString& elementId)
@@ -245,13 +247,13 @@ void Svg::resize( int width, int height )
 
 void Svg::resize( const QSizeF& size )
 {
+    d->createRenderer();
     d->size = size;
 }
 
 void Svg::resize()
 {
     d->createRenderer();
-    d->size = d->renderer->defaultSize();
 }
 
 QSize Svg::elementSize(const QString& elementId) const
