@@ -39,7 +39,8 @@ class Widget::Private
     public:
         Private()
             : minimumSize(0,0)
-            , maximumSize(INFINITY,INFINITY)
+            , maximumSize(std::numeric_limits<qreal>::infinity(),
+                          std::numeric_limits<qreal>::infinity())
             , parent(0)
             , opacity(1.0)
         { }
