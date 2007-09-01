@@ -12,6 +12,7 @@ install(FILES
     widgets/plot-background.svg
     widgets/iconbutton.svg
     widgets/wallpaper.svg
+    widgets/panel-background.svg
     DESTINATION ${DATA_INSTALL_DIR}/desktoptheme/default/widgets/)
 
 install(FILES
