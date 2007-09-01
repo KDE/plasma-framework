@@ -1,5 +1,5 @@
 /*
- *   Copyright 2007 by Matias Valdenegro T. <mvaldenegro@informatica.utem.cl>
+ *   Copyright 2007 by Robert Knight <robertknight@gmail.com> 
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU Library General Public License version 2 as
@@ -19,42 +19,6 @@
 #ifndef PLASMA_VBOXLAYOUT
 #define PLASMA_VBOXLAYOUT
 
-#include <plasma/plasma_export.h>
 #include <plasma/widgets/boxlayout.h>
-
-namespace Plasma
-{
-
-
-/**
- * Vertical Box Layout
- *
- * @author Matias Valdenegro T. <mvaldenegro@informatica.utem.cl>
- *
- * This class implements a Vertical Box Layout, it just lays items in vertical, from up to down.
- */
-class PLASMA_EXPORT VBoxLayout : public BoxLayout
-{
-    public:
-
-        /**
-         * Constructor.
-         */
-        explicit VBoxLayout(LayoutItem *parent = 0);
-
-        /**
-         * Virtual Destructor.
-         */
-        ~VBoxLayout();
-
-        bool hasHeightForWidth() const;
-        qreal heightForWidth(qreal w) const;
-
-    private:
-        class Private;
-        Private *const d;
-};
-
-}
 
 #endif /* PLASMA_VBOXLAYOUT */

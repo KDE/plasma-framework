@@ -33,8 +33,7 @@ set(plasma_LIB_SRCS
     karambamanager.cpp
     widgets/boxlayout.cpp
     widgets/checkbox.cpp
-    widgets/hboxlayout.cpp
-#    widgets/flowlayout.cpp
+    widgets/flowlayout.cpp
     widgets/flash.cpp
     widgets/icon.cpp
     widgets/label.cpp
@@ -46,7 +45,6 @@ set(plasma_LIB_SRCS
     widgets/radiobutton.cpp
 #    widgets/rectangle.cpp
     widgets/widget.cpp
-    widgets/vboxlayout.cpp
     widgets/signalplotter.cpp
 )
 
@@ -105,17 +103,18 @@ install(FILES
 install(FILES
     widgets/boxlayout.h
     widgets/hboxlayout.h
+    widgets/vboxlayout.h
     widgets/flash.h
     widgets/icon.h
     widgets/label.h
     widgets/layout.h
+    widgets/layoutanimator.h
     widgets/layoutitem.h
     widgets/lineedit.h
     widgets/pushbutton.h
     widgets/checkbox.h
     widgets/radiobutton.h
 #    widgets/rectangle.h
-    widgets/vboxlayout.h
     widgets/widget.h
     widgets/signalplotter.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/plasma/widgets)

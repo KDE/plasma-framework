@@ -1,5 +1,6 @@
 /*
  *   Copyright 2007 by Matias Valdenegro T. <mvaldenegro@informatica.utem.cl>
+ *   Copyright 2007 by Robert Knight <robertknight@gmail.com>
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU Library General Public License version 2 as
@@ -27,61 +28,89 @@
 namespace Plasma
 {
 
-
 /**
- * Vertical Box Layout
- *
- * @author Matias Valdenegro T. <mvaldenegro@informatica.utem.cl>
- *
- * This class implements a generic box Layout used as a common API for VBox and HBox implementations.
+ * The BoxLayout class lays out items in a horizontal or vertical line.
  */
 class PLASMA_EXPORT BoxLayout : public Layout
 {
     public:
+        /** 
+         * This enum describes the directions in which items can be laid 
+         * out.
+         */
+        enum Direction
+        {
+            /** Lay items out horizontally, from left to right. */
+            LeftToRight,
+            /** Lay items out horizontally, from right to left. */
+            RightToLeft,
+            /** Lay items out vertically, from top to bottom. */
+            TopToBottom,
+            /** Lay items out vertically, from bottom to top. */
+            BottomToTop
+        };
 
         /**
-         * Constructor.
-        */
-        explicit BoxLayout(Qt::Orientations orientation, LayoutItem *parent = 0);
-
-        /**
-         * Destructor.
-        */
+         * Creates a new box layout which lays items out in the specified
+         * @p direction
+         */
+        explicit BoxLayout(Direction direction , LayoutItem *parent = 0);
         ~BoxLayout();
 
-        Qt::Orientations expandingDirections() const;
+        /** Sets the direction in which items are laid out. */
+        void setDirection(Direction direction);
+        /** Returns the direction in which items are laid out. */
+        Direction direction() const;
 
-        QSizeF minimumSize() const;
-        QSizeF maximumSize() const;
-
-        QRectF geometry() const;
-        void setGeometry(const QRectF& geometry);
-
-        QSizeF sizeHint() const;
-
-        int count() const;
-
-        bool isEmpty() const;
-
+        /** Inserts a new item into the layout at the specified index. */
         void insertItem(int index, LayoutItem *l);
-        void addItem(LayoutItem *l);
+        
+        // reimplemented from Layout
+        virtual void addItem(LayoutItem *l);
+        virtual void removeItem(LayoutItem *l);
+        virtual int indexOf(LayoutItem *l) const;
+        virtual LayoutItem *itemAt(int i) const;
+        virtual LayoutItem *takeAt(int i);
+        virtual Qt::Orientations expandingDirections() const;
+        virtual QRectF geometry() const;
+        virtual void setGeometry(const QRectF& geometry);
+        virtual int count() const;
 
-        void removeItem(LayoutItem *l);
-
-        int indexOf(LayoutItem *l) const;
-        LayoutItem *itemAt(int i) const;
-        LayoutItem *takeAt(int i);
-
-        QSizeF size() const;
-
-    protected:
-        QList<LayoutItem *> children() const;
+        virtual QSizeF minimumSize() const;
+        virtual QSizeF maximumSize() const;
+        virtual QSizeF sizeHint() const;
 
     private:
         class Private;
         Private *const d;
 };
 
+/** 
+ * A BoxLayout which defaults to laying items out 
+ * horizontally in a left-to-right order.
+ *
+ * Equivalent to creating a BoxLayout and passing LeftToRight
+ * in the constructor.
+ */
+class PLASMA_EXPORT HBoxLayout : public BoxLayout 
+{
+public:
+    explicit HBoxLayout(LayoutItem *parent = 0);
+};
+
+/**
+ * A BoxLayout which defaults to laying items out
+ * vertically in a top-to-bottom order.
+ *
+ * Equivalent to creating a BoxLayout and passing TopToBottom
+ * in the constructor.
+ */
+class PLASMA_EXPORT VBoxLayout : public BoxLayout 
+{
+public:
+    explicit VBoxLayout(LayoutItem *parent = 0);
+};
+
 }
 
-#endif /* _H_BOX_LAYOUT__ */
+#endif /* PLASMA_BOX_LAYOUT */

@@ -37,8 +37,7 @@
 #include "dataengine.h"
 #include "karambamanager.h"
 #include "phase.h"
-#include "widgets/hboxlayout.h"
-#include "widgets/vboxlayout.h"
+#include "widgets/boxlayout.h"
 #include "widgets/icon.h"
 
 using namespace Plasma;
@@ -136,10 +135,10 @@ void Corona::setFormFactor(FormFactor formFactor)
         case Planar:
             break;
         case Horizontal:
-            d->layout = new HBoxLayout;
+            d->layout = new BoxLayout(BoxLayout::LeftToRight);
             break;
         case Vertical:
-            d->layout = new VBoxLayout;
+            d->layout = new BoxLayout(BoxLayout::TopToBottom);
             break;
         case MediaCenter:
             break;
@@ -224,17 +223,31 @@ Applet* Corona::addApplet(const QString& name, const QVariantList& args, uint id
 
     qreal appWidth = applet->boundingRect().width();
     qreal appHeight = applet->boundingRect().height();
+
+    if (geometry.isValid()) {
+        applet->setGeometry(geometry);
+    } else { 
+        applet->setGeometry( QRectF(geometry.topLeft(),applet->sizeHint()) );
+    }
+
+#if 0
+    if (!geometry.size().isValid()) {
+        
+    }
+
     if (geometry.isValid()) {
         applet->setGeometry(geometry);
     } else if (geometry.x() != -1 && geometry.y() != -1) {
         // yes, this means we can't have items start -1, -1
-        applet->setPos(geometry.topLeft() - QPoint(applet->boundingRect().width()/2,
+        applet->setPos(geometry.topLeft() - QPointF(applet->boundingRect().width()/2,
                                                    applet->boundingRect().height()/2));
     } else {
         //TODO: Make sure new applets don't overlap with existing ones
         // Center exactly:
         applet->setPos((width() / 2) - (appWidth / 2), (height() / 2) - (appHeight / 2));
     }
+#endif
+
     addItem(applet);
     applet->updateConstraints();
 

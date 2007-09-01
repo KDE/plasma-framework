@@ -197,39 +197,23 @@ class PLASMA_EXPORT Applet : public Widget
         Location location() const;
 
         /**
-         * Returns a maximum size hint based on the Corona's space availability.
-         *
-         * An applet may choose to violate this size hint, but should try and
-         * respect it as much as possible.
-         */
-//        QRectF maxSizeHint() const;
+         * Returns the area within which contents can be painted. If there is no
+         * background, then this is equivalent to boundingRect().size()
+         **/
+        QSizeF contentSize() const;
 
         /**
-         * Returns the area within which contents can be painted. If there is no
-         * background, then this is equivalent to boundingRect().
+         * Returns an ideal size for the applet's content.  
+         * Applets can re-implement this to provide a suitable size based
+         * on their contents.
          *
-         * Applets should implement contentSize() to tell Plasma::Applet how
-         * much space they need.
+         * Unlike sizeHint() , contentSizeHint() does not include the 
+         * size of any borders surrounding the content area. 
          *
-         * When drawing to the applet in the paintInterface() method, you can
-         * use the QRect passed to that function.  Outside paintInterface(), for
-         * example when positioning a Plasma::Widget, you can assume your drawing
-         * area has (0,0) at the top left and is the size of contentSize().
-         *
-         * If drawStandardBackground() == true, enough space will reserved
-         * within the borders for the content, and boundingRect() will the
-         * total size of the applet, including borders.
-         *
-         * If the applet has not asked Plasma::Applet to draw the default
-         * background, boundingRect().size() == contentSize(), and
-         * boundingRect().topLeft() == QPointF(0,0).  Also, such applets will
-         * not break if they implement boundingRect() instead.
-         *
-         * Note that if the value returned by contentSize() (and hence
-         * boundingRect()) changes for any reason, you should call
-         * prepareGeometryChange() to notify the Corona.
-         **/
-        virtual QSizeF contentSize() const;
+         * The default implementation returns the sizeHint() of the applet's
+         * layout if it has one, or a null size otherwise. 
+         */
+        virtual QSizeF contentSizeHint() const;
 
         /**
          * Returns a list of all known applets in a hash keyed by a unique
@@ -470,6 +454,11 @@ class PLASMA_EXPORT Applet : public Widget
          */
         bool isShadowShown() const;
 
+        // reimplemented from LayoutItem
+        // value is the same as contentSizeHint() if drawStandardBackground() is false
+        // or contentSizeHint() plus the size of the border otherwise. 
+        virtual QSizeF sizeHint() const;
+
     Q_SIGNALS:
         /**
          * Emitted when the applet needs to take (or lose) keyboard focus.
@@ -550,11 +539,7 @@ class PLASMA_EXPORT Applet : public Widget
          */
         QVariant itemChange(GraphicsItemChange change, const QVariant &value);
 
-        // reimplemented from LayoutItem
-        // value is the same as contentSize() if drawStandardBackground() is false
-        // or contentSize() plus the size of the border otherwise. 
-        virtual QSizeF sizeHint() const;
-
+        
     protected Q_SLOTS:
         /**
          * @internal used to show the configuration of an applet on first show

@@ -54,7 +54,7 @@
 #include "plasma/widgets/widget.h"
 #include "plasma/widgets/lineedit.h"
 #include "plasma/widgets/pushbutton.h"
-#include "plasma/widgets/vboxlayout.h"
+#include "plasma/widgets/boxlayout.h"
 
 //#define DYNAMIC_SHADOWS
 namespace Plasma
@@ -300,7 +300,7 @@ public:
     {
         if (!background) {
             top = left = right = bottom = 0;
-        } else { 
+        } else {
             top = background->elementSize("top").height();
             left = background->elementSize("left").width();
             right = background->elementSize("right").width();
@@ -568,7 +568,7 @@ void Applet::setFailedToLaunch(bool failed, const QString& reason)
 
     if (failed) {
         setDrawStandardBackground(true);
-        Layout* failureLayout = new VBoxLayout(this);
+        Layout* failureLayout = new BoxLayout(BoxLayout::TopToBottom,this);
         d->failureText = new LineEdit(this, scene());
         d->failureText->setFlags(0);
         d->failureText->setHtml(visibleFailureText(reason));
@@ -598,7 +598,7 @@ void Applet::setNeedsConfiguring(bool needsConfig)
 
     if (needsConfig) {
         setDrawStandardBackground(true);
-        Layout* layout = new VBoxLayout(this);
+        Layout* layout = new BoxLayout(BoxLayout::TopToBottom,this);
         PushButton* button = new PushButton(this);
         button->setText(i18n("Configure..."));
         connect(button, SIGNAL(clicked()), this, SLOT(performSetupConfig()));
@@ -628,6 +628,9 @@ QRectF Applet::boundingRect() const
     int bottom;
 
     d->getBorderSize(left,top,right,bottom);
+  
+     
+    //qDebug() << "Background , Border size" << d->background << left << top << right << bottom;
     
     return rect.adjusted(-left,-top,right,bottom);
 }
@@ -641,7 +644,9 @@ QSizeF Applet::sizeHint() const
 
     d->getBorderSize(left,top,right,bottom);
 
-    return contentSize() + QSizeF(left+right,top+bottom);
+    //qDebug() << "Applet content size hint: " << contentSizeHint();
+
+    return contentSizeHint() + QSizeF(left+right,top+bottom);
 }
 
 QList<QAction*> Applet::contextActions()
@@ -746,6 +751,17 @@ Location Applet::location() const
 }
 
 QSizeF Applet::contentSize() const
+{
+    int top , left , right , bottom;
+    d->getBorderSize(left,top,right,bottom);
+  
+   // qDebug() << "Geometry size: " << geometry().size();
+   // qDebug() << "Borders: " << left << top << right << bottom;
+
+    return geometry().size() - QSizeF(left+right,top+bottom);
+}
+
+QSizeF Applet::contentSizeHint() const
 {
     if (layout()) {
         return layout()->sizeHint();

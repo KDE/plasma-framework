@@ -10,8 +10,7 @@
 
 #include "../pushbutton.h"
 #include "../lineedit.h"
-#include "../vboxlayout.h"
-#include "../hboxlayout.h"
+#include "../boxlayout.h"
 #include "../widget.h"
 #include "../label.h"
 
@@ -54,14 +53,16 @@ int main(int argc, char **argv)
     h2->addItem(pushTwo);
     scene.addItem(pushTwo);
 
-    Plasma::LineEdit *editTwo = new Plasma::LineEdit;
-    h2->addItem(editTwo);
-    scene.addItem(editTwo);
+   Plasma::LineEdit *editTwo = new Plasma::LineEdit;
+   h2->addItem(editTwo);
+   scene.addItem(editTwo);
 
-    Plasma::Label *labelTwo = new Plasma::Label( 0 );
-    labelTwo->setText( "hello world 2" );
-    h2->addItem(labelTwo);
-    scene.addItem(labelTwo);
+   Plasma::Label *labelTwo = new Plasma::Label( 0 );
+   labelTwo->setText( "hello world 2" );
+   h2->addItem(labelTwo);
+   scene.addItem(labelTwo);
+
+    widgetLayout->update();
 
     view.show();
     return app.exec();
