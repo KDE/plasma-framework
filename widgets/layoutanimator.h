@@ -189,7 +189,7 @@ Q_SIGNALS:
 protected:
     virtual void updateItem( qreal value , LayoutItem* item );
 
-private slots:
+private Q_SLOTS:
     void valueChanged(qreal value);
     void animationCompleted();
     void itemAutoDeleter( LayoutItem *item , State oldState , State newState );
