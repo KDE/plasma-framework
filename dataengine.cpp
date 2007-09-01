@@ -154,6 +154,7 @@ void DataEngine::connectSource(const QString& source, QObject* visualization) co
         return;
     }
 
+    connect(visualization, SIGNAL(destroyed(QObject*)), s, SLOT(checkUsage()), Qt::QueuedConnection);
     connect(s, SIGNAL(updated(QString,Plasma::DataEngine::Data)),
             visualization, SLOT(updated(QString,Plasma::DataEngine::Data)));
     QMetaObject::invokeMethod(visualization, "updated",
@@ -200,7 +201,9 @@ DataEngine::Data DataEngine::query(const QString& source) const
         return DataEngine::Data();
     }
 
-    return s->data();
+    DataEngine::Data data = s->data();
+    s->checkUsage();
+    return data;
 }
 
 void DataEngine::startInit()
@@ -296,6 +299,7 @@ void DataEngine::removeSource(const QString& source)
     SourceDict::iterator it = d->sources.find(source);
     if (it != d->sources.end()) {
         emit sourceRemoved(it.key());
+        it.value()->deleteLater();
         d->sources.erase(it);
     }
 }

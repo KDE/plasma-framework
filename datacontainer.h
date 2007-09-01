@@ -80,6 +80,14 @@ class PLASMA_EXPORT DataContainer : public QObject
          **/
         void checkForUpdate();
 
+    public Q_SLOTS:
+        /**
+         * Check if the DataContainer is still in use.
+         * If not the signal "unused" will be emitted.
+         * Warning: The DataContainer may be invalid after calling this function.
+         */
+        void checkUsage();
+
     Q_SIGNALS:
         /**
          * Emitted when the data has been updated, allowing visualization to
@@ -93,7 +101,6 @@ class PLASMA_EXPORT DataContainer : public QObject
         void unused(const QString& source);
 
     protected:
-        void connectNotify(const char *signal);
         void disconnectNotify(const char *signal);
 
     private:

@@ -33,7 +33,6 @@ class DataContainer::Private
         {}
 
         DataEngine::Data data;
-        int connectCount;
         bool dirty : 1;
 };
 
@@ -87,25 +86,17 @@ void DataContainer::checkForUpdate()
     }
 }
 
-void DataContainer::connectNotify(const char *signal)
+void DataContainer::checkUsage()
 {
-    if (QLatin1String(signal) == QMetaObject::normalizedSignature(SIGNAL(updated(QString, Plasma::DataEngine::Data))).constData()) {
-        ++d->connectCount;
+    if (receivers(SIGNAL(updated(QString, Plasma::DataEngine::Data))) < 1) {
+        // DO NOT CALL ANYTHING AFTER THIS LINE AS IT MAY GET DELETED!
+        emit unused(objectName());
     }
 }
 
 void DataContainer::disconnectNotify(const char *signal)
 {
-    if (QLatin1String(signal) == QMetaObject::normalizedSignature(SIGNAL(updated(QString, Plasma::DataEngine::Data))).constData()) {
-        if (d->connectCount > 0) {
-            --d->connectCount;
-        }
-
-        if (d->connectCount < 1) {
-            // DO NOT CALL ANYTHING AFTER THIS LINE AS IT MAY GET DELETED!
-            emit unused(objectName());
-        }
-    }
+    checkUsage();
 }
 
 } // Plasma namespace
