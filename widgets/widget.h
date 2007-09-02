@@ -56,6 +56,7 @@ class PLASMA_EXPORT Widget  : public QObject,
     Q_PROPERTY( QRectF geometry READ geometry WRITE setGeometry )
     Q_PROPERTY( QSizeF sizeHint READ sizeHint )
     Q_PROPERTY( QSizeF size READ size WRITE resize ) 
+    Q_PROPERTY( qreal opacity READ opacity WRITE setOpacity ) 
 
 public:
 
