@@ -37,6 +37,11 @@ namespace Plasma
 class PLASMA_EXPORT LineEdit : public QGraphicsTextItem, public LayoutItem
 {
     Q_OBJECT
+    Q_PROPERTY( bool styled READ styled WRITE setStyled )
+    Q_PROPERTY( bool multiLine READ multiLine WRITE setMultiLine )
+    Q_PROPERTY( QString defaultText WRITE setDefaultText )
+    Q_PROPERTY( QString html READ toHtml )
+    Q_PROPERTY( QString plainText READ toPlainText )
 
     public:
         explicit LineEdit(QGraphicsItem *parent = 0, QGraphicsScene *scene = 0);

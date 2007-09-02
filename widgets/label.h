@@ -21,6 +21,7 @@
 #define __PLASMA_LABEL__
 
 #include <plasma/widgets/widget.h>
+#include <QPen>
 
 class QGraphicsTextItem;
 
@@ -39,6 +40,7 @@ class PLASMA_EXPORT Label : public Plasma::Widget
     Q_OBJECT
     Q_PROPERTY( QString text READ text WRITE setText )
     Q_PROPERTY( Qt::Alignment alignment READ alignment WRITE setAlignment )
+    Q_PROPERTY( QPen pen READ pen WRITE setPen )
 
     public:
 
