@@ -21,7 +21,7 @@
 #define __PLASMA_LABEL__
 
 #include <plasma/widgets/widget.h>
-#include <QPen>
+#include <QtGui/QPen>
 
 class QGraphicsTextItem;
 

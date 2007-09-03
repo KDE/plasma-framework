@@ -21,7 +21,7 @@
 #define SIGNALPLOTTER_H
 
 #include <plasma/widgets/widget.h>
-#include <QFont>
+#include <QtGui/QFont>
 
 namespace Plasma
 {
