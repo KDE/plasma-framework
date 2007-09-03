@@ -21,9 +21,11 @@
 #include <math.h>
 
 #include <QtCore/QList>
+#include <QtCore/QTimeLine>
 #include <QtDebug>
 
 #include "widget.h"
+#include "layoutanimator.h"
 
 namespace Plasma
 {
@@ -145,6 +147,15 @@ QSizeF Layout::minimumSize() const
 QSizeF Layout::maximumSize() const
 {
     return QSizeF(INFINITY,INFINITY);
+}
+void Layout::startAnimation() 
+{
+    if ( animator() && animator()->timeLine() ) {
+        animator()->timeLine()->setCurrentTime(0); 
+        if ( animator()->timeLine()->state() == QTimeLine::NotRunning ) {
+            animator()->timeLine()->start();
+        }
+    }
 }
 
 }

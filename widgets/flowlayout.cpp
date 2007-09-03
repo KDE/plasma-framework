@@ -193,8 +193,7 @@ void FlowLayout::setGeometry(const QRectF& geo)
 
     d->geometry = geo;
 
-    if ( animator() && animator()->timeLine() )
-        animator()->timeLine()->start();
+    startAnimation();
 }
 
 Qt::Orientations FlowLayout::expandingDirections() const

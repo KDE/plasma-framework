@@ -438,12 +438,7 @@ void BoxLayout::setGeometry(const QRectF& geo)
 
     d->geometry = geometry;
 
-    if ( animator() && animator()->timeLine() ) {
-        animator()->timeLine()->setCurrentTime(0); 
-        if ( animator()->timeLine()->state() == QTimeLine::NotRunning ) {
-            animator()->timeLine()->start();
-        }
-    }
+    startAnimation();
 }
 
 

@@ -152,6 +152,16 @@ class PLASMA_EXPORT Layout : public LayoutItem
         /** TODO Document me */
         void invalidate(); 
 
+    protected:
+        /**
+         * Starts a layout animation.  Subclasses may call this 
+         * at the end of their setGeometry() implementation to
+         * start the timeline associated with the layout's animator()
+         * if there is one.  If an animation is already in progress then
+         * the timeline is reset to 0ms and the animation continues.
+         */
+        void startAnimation();
+
 	private:
 		class Private;
 		Private *const d;
