@@ -46,7 +46,7 @@ public:
     virtual ~UiLoader();
 
     QStringList availableWidgets() const;
-    Widget *createWidget( const QString &className, QGraphicsItem *parent=0, QObject *parentObject = 0 );
+    Widget *createWidget( const QString &className, Widget *parent=0 );
 
     QStringList availableLayouts() const;
     Layout *createLayout( const QString &className, LayoutItem *parent );

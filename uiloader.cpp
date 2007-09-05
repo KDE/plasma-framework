@@ -73,7 +73,7 @@ QStringList UiLoader::availableWidgets() const
     return d->widgets;
 }
 
-Widget *UiLoader::createWidget( const QString &className, QGraphicsItem *parent, QObject *parentObject )
+Widget *UiLoader::createWidget( const QString &className, Widget *parent )
 {
     if ( className == QString("CheckBox") ) {
 	return new CheckBox( parent );
@@ -85,10 +85,10 @@ Widget *UiLoader::createWidget( const QString &className, QGraphicsItem *parent,
 	return new Icon( parent );
     }
     else if ( className == QString("Label") ) {
-	// return new Label( parent ); // Constructor here requires a Widget
+	return new Label( parent ); // Constructor here requires a Widget
     }
     else if ( className == QString("PushButton") ) {
-	// return new PushButton( parent ); // Constructor here requires a Widget
+	return new PushButton( parent ); // Constructor here requires a Widget
     }
     else if ( className == QString("RadioButton") ) {
 	return new RadioButton( parent );
