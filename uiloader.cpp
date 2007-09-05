@@ -29,7 +29,7 @@
 #include "widgets/label.h"
 #include "widgets/pushbutton.h"
 #include "widgets/radiobutton.h"
-#include "widgets/rectangle.h"
+//#include "widgets/rectangle.h"
 
 #include "widgets/hboxlayout.h"
 #include "widgets/vboxlayout.h"
@@ -93,9 +93,9 @@ Widget *UiLoader::createWidget( const QString &className, Widget *parent )
     else if ( className == QString("RadioButton") ) {
 	return new RadioButton( parent );
     }
-    else if ( className == QString("Rectangle") ) {
+    //else if ( className == QString("Rectangle") ) {
 	// return new Rectangle( parent ); // Constructor here requires a Widget
-    }
+    //}
 
     return 0;
 }
