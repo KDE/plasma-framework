@@ -180,30 +180,9 @@ void Widget::setGeometry(const QRectF& geometry)
 
 void Widget::updateGeometry()
 {
-    prepareGeometryChange();
-    
-    Widget *widget = this;
-    while ( widget ) {
-        if ( widget->parent() == 0 || widget->parent()->layout() != 0 ) {
-            if ( widget->layout() ) {
-                widget->layout()->update();
-                widget->update();
-            }
-            break;
-        } 
-        widget = widget->parent();
-    }
-
-#if 0
-    prepareGeometryChange();
-
-    if (layout()) {
-     //   kDebug() << (void *) this << " updating geometry to " << size();
-     //
-        //qDebug() << "Widget" << metaObject()->className() << "updating geometry to " << boundingRect();
-        layout()->setGeometry(boundingRect());
-    }
-#endif
+    if ( parent() && parent()->layout() ) {
+        parent()->layout()->invalidate();
+    } 
 }
 
 QSizeF Widget::sizeHint() const

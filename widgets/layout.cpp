@@ -82,26 +82,17 @@ void Layout::update()
 }
 void Layout::invalidate()
 {
-    //qDebug() << "Layout update"; 
-    LayoutItem *item = parent(); 
-    while ( item ) { 
-        //qDebug() << "Looking at item " << item;
-        Widget *widget = dynamic_cast<Widget*>(item);
-        if ( widget ) {
-            //qDebug() << "Parent widget found and invalidated";
-            widget->updateGeometry();
-            break;
-        }
-        else {
-            Layout *layout = dynamic_cast<Layout*>(item);
-            if ( layout ) {
-                item = layout->parent();
-      //          qDebug() << "Item is a layout";
-            }
-            else
-                item = 0;
-        }
-    }
+    // find and update the top level layout
+    Layout *layout = this;
+    Layout *parentLayout = 0;
+
+    do {
+        parentLayout = dynamic_cast<Layout*>(layout->parent());
+        if ( parentLayout )
+            layout = parentLayout;
+    } while ( parentLayout );
+
+    layout->update();
 }
 
 
