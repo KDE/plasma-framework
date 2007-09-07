@@ -210,41 +210,49 @@ public:
             background->paint(&p, QRect(leftOffset,  bottomOffset, leftWidth,  bottomHeight), "bottomleft");
             background->paint(&p, QRect(rightOffset, bottomOffset, rightWidth, bottomHeight), "bottomright");
 
-            QPixmap left(leftWidth, leftHeight);
-            left.fill(Qt::transparent);
-            {
-                QPainter sidePainter(&left);
-                sidePainter.setCompositionMode(QPainter::CompositionMode_Source);
-                background->paint(&sidePainter, QPoint(0, 0), "left");
-            }
-            p.drawTiledPixmap(QRect(leftOffset, contentTop, leftWidth, contentHeight), left);
+            if (stretchBackgroundBorders) {
+		background->paint(&p, QRect(leftOffset, contentTop, leftWidth, contentHeight), "left");
+		background->paint(&p, QRect(rightOffset, contentTop, rightWidth, contentHeight), "right");
+		background->paint(&p, QRect(contentLeft, topOffset, contentWidth, topHeight), "top");
+		background->paint(&p, QRect(contentLeft, bottomOffset, contentWidth, bottomHeight), "bottom");
+            } else {
 
-            QPixmap right(rightWidth, leftHeight);
-            right.fill(Qt::transparent);
-            {
-                QPainter sidePainter(&right);
-                sidePainter.setCompositionMode(QPainter::CompositionMode_Source);
-                background->paint(&sidePainter, QPoint(0, 0), "right");
-            }
-            p.drawTiledPixmap(QRect(rightOffset, contentTop, rightWidth, contentHeight), right);
+                QPixmap left(leftWidth, leftHeight);
+                left.fill(Qt::transparent);
+                {
+                    QPainter sidePainter(&left);
+                    sidePainter.setCompositionMode(QPainter::CompositionMode_Source);
+                    background->paint(&sidePainter, QPoint(0, 0), "left");
+                }
+                p.drawTiledPixmap(QRect(leftOffset, contentTop, leftWidth, contentHeight), left);
 
-            QPixmap top(topWidth, topHeight);
-            top.fill(Qt::transparent);
-            {
-                QPainter sidePainter(&top);
-                sidePainter.setCompositionMode(QPainter::CompositionMode_Source);
-                background->paint(&sidePainter, QPoint(0, 0), "top");
-            }
-            p.drawTiledPixmap(QRect(contentLeft, topOffset, contentWidth, topHeight), top);
+                QPixmap right(rightWidth, leftHeight);
+                right.fill(Qt::transparent);
+                {
+                    QPainter sidePainter(&right);
+                    sidePainter.setCompositionMode(QPainter::CompositionMode_Source);
+                    background->paint(&sidePainter, QPoint(0, 0), "right");
+                }
+                p.drawTiledPixmap(QRect(rightOffset, contentTop, rightWidth, contentHeight), right);
 
-            QPixmap bottom(topWidth, bottomHeight);
-            bottom.fill(Qt::transparent);
-            {
-                QPainter sidePainter(&bottom);
-                sidePainter.setCompositionMode(QPainter::CompositionMode_Source);
-                background->paint(&sidePainter, QPoint(0, 0), "bottom");
+                QPixmap top(topWidth, topHeight);
+                top.fill(Qt::transparent);
+                {
+                    QPainter sidePainter(&top);
+                    sidePainter.setCompositionMode(QPainter::CompositionMode_Source);
+                    background->paint(&sidePainter, QPoint(0, 0), "top");
+                }
+                p.drawTiledPixmap(QRect(contentLeft, topOffset, contentWidth, topHeight), top);
+
+                QPixmap bottom(topWidth, bottomHeight);
+                bottom.fill(Qt::transparent);
+                {
+                    QPainter sidePainter(&bottom);
+                    sidePainter.setCompositionMode(QPainter::CompositionMode_Source);
+                    background->paint(&sidePainter, QPoint(0, 0), "bottom");
+                }
+                p.drawTiledPixmap(QRect(contentLeft, bottomOffset, contentWidth, bottomHeight), bottom);
             }
-            p.drawTiledPixmap(QRect(contentLeft, bottomOffset, contentWidth, bottomHeight), bottom);
 
             background->paint(&p, QRect(contentLeft, contentTop, contentWidth + 1, contentHeight + 1), "center");
             p.end();
@@ -319,6 +327,7 @@ public:
     QStringList loadedEngines;
     static uint s_maxAppletId;
     Plasma::Svg *background;
+    bool stretchBackgroundBorders;
     Plasma::LineEdit *failureText;
     ScriptEngine* scriptEngine;
     ConfigXml* configXml;
@@ -526,6 +535,7 @@ void Applet::setDrawStandardBackground(bool drawBackground)
         if (!d->background) {
             prepareGeometryChange();
             d->background = new Plasma::Svg("widgets/background");
+            d->stretchBackgroundBorders = d->background->elementExists("hint-stretch-borders");
         }
     } else if (d->background) {
         prepareGeometryChange();
