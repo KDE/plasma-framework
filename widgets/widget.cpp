@@ -180,9 +180,9 @@ void Widget::setGeometry(const QRectF& geometry)
 
 void Widget::updateGeometry()
 {
-    if ( parent() && parent()->layout() ) {
-        parent()->layout()->invalidate();
-    } 
+    if ( managingLayout() ) {
+        managingLayout()->invalidate();
+    }
 }
 
 QSizeF Widget::sizeHint() const
