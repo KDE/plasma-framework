@@ -120,4 +120,4 @@ Layout *UiLoader::createLayout( const QString &className, LayoutItem *parent )
     return 0;
 }
 
-};
+}

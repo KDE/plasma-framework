@@ -56,6 +56,6 @@ private:
     Private *const d;
 };
 
-};
+}
 
 #endif // PLASMA_UILOADER_H
