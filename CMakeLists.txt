@@ -31,6 +31,7 @@ set(plasma_LIB_SRCS
     svg.cpp
     theme.cpp
     karambamanager.cpp
+    uiloader.cpp
     widgets/boxlayout.cpp
     widgets/checkbox.cpp
     widgets/flowlayout.cpp
@@ -88,7 +89,8 @@ set(plasma_LIB_INCLUDES
     scriptengine.h
     shadowitem_p.h
     svg.h
-    theme.h)
+    theme.h
+    uiloader.h)
 
 if(QT_QTOPENGL_FOUND AND OPENGL_FOUND)
 set(plasma_LIB_INCLUDES
