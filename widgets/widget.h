@@ -59,6 +59,11 @@ class PLASMA_EXPORT Widget  : public QObject,
     Q_PROPERTY( qreal opacity READ opacity WRITE setOpacity ) 
 
 public:
+    enum CachePaintMode {
+        NoCacheMode,
+	ItemCoordinateCacheMode,
+	DeviceCoordinateCacheMode
+    };
 
 
     /**
@@ -203,6 +208,26 @@ public:
 
     void setOpacity(qreal opacity);
     qreal opacity() const;
+
+    /**
+     * Sets the widget's cache paint mode and cache size.
+     * @param mode the new cache paint mode
+     * @param mode the new cache size, only applies to ItemCoordinateCacheMode
+     */
+    void setCachePaintMode(CachePaintMode mode, const QSize &size = QSize());
+
+    /**
+     * The current cache paint mode.
+     */
+    CachePaintMode cachePaintMode() const;
+
+    /**
+     * Invalidates the widget's cache paint mode for a given item rectangle.
+     * @param rect the optional invalidated rectangle; if null, defaults to boundingRect().
+     */
+    void invalidate(const QRectF &rect = QRectF());
+    inline void invalidate(qreal _x, qreal _y, qreal w, qreal h)
+    { invalidate(QRectF(_x, _y, w, h)); }
 
     virtual QGraphicsItem* graphicsItem();
 

@@ -25,6 +25,8 @@
 
 #include <QtCore/QList>
 #include <QPainter>
+#include <QPixmapCache>
+#include <QStyleOptionGraphicsItem>
 
 #include <KDebug>
 
@@ -43,6 +45,7 @@ class Widget::Private
                           std::numeric_limits<qreal>::infinity())
             , parent(0)
             , opacity(1.0)
+            , cachePaintMode(Widget::NoCacheMode)
         { }
         ~Private() { }
 
@@ -54,6 +57,15 @@ class Widget::Private
         QList<Widget *> childList;
 
         qreal opacity;
+ 
+        // Replace with CacheMode in 4.4
+#if QT_VERSION >= 0x040400
+#warning Replace Plasma::Widget::CachePaintMode with QGraphicsItem::CacheMode
+#endif
+        Widget::CachePaintMode cachePaintMode; 
+        QSize cacheSize;
+        QString cacheKey;
+        QRectF cacheInvalidated;
 
         bool shouldPaint(QPainter *painter, const QTransform &transform);
 };
@@ -97,6 +109,35 @@ void Widget::setOpacity(qreal opacity)
 qreal Widget::opacity() const
 {
     return d->opacity;
+}
+
+void Widget::setCachePaintMode(CachePaintMode mode, const QSize &size)
+{
+    d->cachePaintMode = mode;
+    d->cacheSize = size;
+    if (mode == NoCacheMode) {
+	QPixmapCache::remove(d->cacheKey);
+	d->cacheKey.clear();
+	update();
+    } else {
+	if (mode == ItemCoordinateCacheMode) {
+	    d->cacheKey = QString("%1").arg(long(this));
+	    d->cacheSize = size;
+	}
+	invalidate();
+    }
+}
+
+Widget::CachePaintMode Widget::cachePaintMode() const
+{
+    return d->cachePaintMode;
+}
+
+void Widget::invalidate(const QRectF &rect)
+{
+    if (d->cachePaintMode != NoCacheMode)
+	d->cacheInvalidated |= rect.isNull() ? boundingRect() : rect;
+    update(rect);
 }
 
 Qt::Orientations Widget::expandingDirections() const
@@ -240,7 +281,98 @@ void Widget::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
     painter->setOpacity(d->opacity);
 
     if (d->shouldPaint(painter, transform())) {
-        paintWidget(painter, option, widget);
+	if (d->cachePaintMode == NoCacheMode) {
+	    paintWidget(painter, option, widget);
+	} else {
+	    QRectF brect = boundingRect();
+	    QRect boundingRectInt = brect.toRect();
+
+	    // Fetch the off-screen transparent buffer and exposed area info.
+	    QPixmap pix;
+	    QPixmapCache::find(d->cacheKey, pix);
+	    QRectF exposed = d->cacheInvalidated;
+
+	    // Render using item coodinate cache mode.
+	    if (d->cachePaintMode == ItemCoordinateCacheMode) {
+		// Recreate the pixmap if it's gone.
+		if (pix.isNull()) {
+		    pix = QPixmap(d->cacheSize);
+		    pix.fill(Qt::transparent);
+		    exposed = brect;
+		}
+        
+		// Check for newly invalidated areas.
+		if (!exposed.isNull()) {
+		    d->cacheInvalidated = QRectF();
+
+		    QStyleOptionGraphicsItem cacheOption = *option;
+		    cacheOption.exposedRect = exposed.toRect(); // <- truncation
+
+		    QPainter pixmapPainter(&pix);
+		    // Fit the item's bounding rect into the pixmap's coordinates.
+		    pixmapPainter.scale(pix.width() / brect.width(),
+					pix.height() / brect.height());
+		    pixmapPainter.translate(-brect.topLeft());
+
+		    // Re-render the invalidated areas of the pixmap. Important: don't
+		    // fool the item into using the widget - pass 0 instead of \a
+		    // widget.
+		    paintWidget(&pixmapPainter, &cacheOption, 0);
+		    pixmapPainter.end();
+
+		    // Reinsert this pixmap into the cache
+		    QPixmapCache::insert(d->cacheKey, pix);
+		}
+
+		// Redraw the exposed area using the transformed painter. Depending on
+		// the hardware, this may be a server-side operation, or an expensive
+		// qpixmap-image-transform-pixmap roundtrip.
+		painter->drawPixmap(brect, pix, QRectF(QPointF(), pix.size()));
+		return;
+	    }
+
+	    // Render using device coordinate cache mode.
+	    if (d->cachePaintMode == DeviceCoordinateCacheMode) {
+		QTransform transform = painter->worldTransform();
+		QRect deviceRect = transform.mapRect(brect).toRect();
+
+		// Auto-adjust the pixmap size.
+		if (deviceRect.size() != pix.size()) {
+		    pix = QPixmap(deviceRect.size());
+		    pix.fill(Qt::transparent);
+		    exposed = brect;
+		}
+
+		// Check for newly invalidated areas.
+		if (!exposed.isNull()) {
+		    d->cacheInvalidated = QRectF();
+
+		    // Construct the new styleoption, reset the exposed rect.
+		    QStyleOptionGraphicsItem cacheOption = *option;
+		    cacheOption.exposedRect = exposed.toRect(); // <- truncation
+
+		    QPointF viewOrigo = transform.map(QPointF(0,  0));
+		    QPointF offset = viewOrigo - deviceRect.topLeft();
+
+		    // Transform the painter, and render the item in device coordinates.
+		    QPainter pixmapPainter(&pix);
+		    pixmapPainter.translate(offset);
+		    pixmapPainter.setWorldTransform(transform, true);
+		    pixmapPainter.translate(transform.inverted().map(QPointF(0, 0)));
+		    paintWidget(&pixmapPainter, &cacheOption, 0);
+		    pixmapPainter.end();
+
+		    // Reinsert this pixmap into the cache
+		    QPixmapCache::insert(d->cacheKey, pix);
+		}
+
+		// Redraw the exposed area using an untransformed painter. This
+		// effectively becomes a bitblit that does not transform the cache.
+		painter->setWorldTransform(QTransform());
+		painter->drawPixmap(deviceRect.topLeft(), pix);
+		return;
+	    }
+	}
     }
     return;
 }
