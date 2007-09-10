@@ -44,6 +44,14 @@ class ConfigXml::Private
             qDeleteAll(uints);
             qDeleteAll(urls);
             qDeleteAll(dateTimes);
+            qDeleteAll(doubles);
+            qDeleteAll(intlists);
+            qDeleteAll(longlongs);
+            qDeleteAll(points);
+            qDeleteAll(rects);
+            qDeleteAll(sizes);
+            qDeleteAll(ulonglongs);
+            qDeleteAll(urllists);
         }
 
         bool* newBool()
@@ -109,6 +117,62 @@ class ConfigXml::Private
             return v;
         }
 
+        double* newDouble()
+        {
+            double* v = new double;
+            doubles.append(v);
+            return v;
+        }
+
+        QList<qint32>* newIntList()
+        {
+            QList<qint32>* v = new QList<qint32>;
+            intlists.append(v);
+            return v;
+        }
+
+        qint64* newLongLong()
+        {
+            qint64* v = new qint64;
+            longlongs.append(v);
+            return v;
+        }
+
+        QPoint* newPoint()
+        {
+            QPoint* v = new QPoint;
+            points.append(v);
+            return v;
+        }
+
+        QRect* newRect()
+        {
+            QRect* v = new QRect;
+            rects.append(v);
+            return v;
+        }
+
+        QSize* newSize()
+        {
+            QSize* v = new QSize;
+            sizes.append(v);
+            return v;
+        }
+
+        quint64* newULongLong()
+        {
+            quint64* v = new quint64;
+            ulonglongs.append(v);
+            return v;
+        }
+
+        KUrl::List* newUrlList()
+        {
+            KUrl::List* v = new KUrl::List;
+            urllists.append(v);
+            return v;
+        }
+
         QList<bool*> bools;
         QList<QString*> strings;
         QList<QStringList*> stringlists;
@@ -118,6 +182,14 @@ class ConfigXml::Private
         QList<quint32*> uints;
         QList<KUrl*> urls;
         QList<QDateTime*> dateTimes;
+        QList<double*> doubles;
+        QList<QList<qint32>*> intlists;
+        QList<qint64*> longlongs;
+        QList<QPoint*> points;
+        QList<QRect*> rects;
+        QList<QSize*> sizes;
+        QList<quint64*> ulonglongs;
+        QList<KUrl::List*> urllists;
 };
 
 class ConfigXmlHandler : public QXmlDefaultHandler
@@ -313,6 +385,80 @@ void ConfigXmlHandler::addItem()
         urlItem->setName(m_name);
         m_config->addItem(urlItem, m_name);
         item = urlItem;
+    } else if (m_type == "double") {
+        KConfigSkeleton::ItemDouble* doubleItem = m_config->addItemDouble(m_name,
+                *d->newDouble(), m_default.toDouble(), m_key);
+        if (m_haveMin) {
+            doubleItem->setMinValue(m_min);
+        }
+        if (m_haveMax) {
+            doubleItem->setMaxValue(m_max);
+        }
+        item = doubleItem;
+    } else if (m_type == "intlist") {
+        QStringList tmpList = m_default.split(",");
+        QList<qint32> defaultList;
+        foreach (QString tmp, tmpList) {
+            defaultList.append(tmp.toInt());
+        }
+        item = m_config->addItemIntList(m_name, *d->newIntList(), defaultList, m_key);
+    } else if (m_type == "longlong") {
+        KConfigSkeleton::ItemLongLong* longlongItem = m_config->addItemLongLong(m_name,
+                *d->newLongLong(), m_default.toLongLong(), m_key);
+        if (m_haveMin) {
+            longlongItem->setMinValue(m_min);
+        }
+        if (m_haveMax) {
+            longlongItem->setMaxValue(m_max);
+        }
+        item = longlongItem;
+    /* No addItemPathList in KConfigSkeleton ?
+    } else if (m_type == "PathList") {
+        //FIXME: the split() is naive and will break on lists with ,'s in them
+        item = m_config->addItemPathList(m_name, *d->newStringList(), m_default.split(","), m_key); */
+    } else if (m_type == "point") {
+        QPoint defaultPoint;
+        QStringList tmpList = m_default.split(",");
+        while (tmpList.size() >= 2) {
+            defaultPoint.setX(tmpList[0].toInt());
+            defaultPoint.setY(tmpList[1].toInt());
+        }
+        item = m_config->addItemPoint(m_name, *d->newPoint(), defaultPoint, m_key);
+    } else if (m_type == "rect") {
+        QRect defaultRect;
+        QStringList tmpList = m_default.split(",");
+        while (tmpList.size() >= 4) {
+            defaultRect.setCoords(tmpList[0].toInt(), tmpList[1].toInt(),
+                                  tmpList[2].toInt(), tmpList[3].toInt());
+        }
+        item = m_config->addItemRect(m_name, *d->newRect(), defaultRect, m_key);
+    } else if (m_type == "size") {
+        QSize defaultSize;
+        QStringList tmpList = m_default.split(",");
+        while (tmpList.size() >= 2) {
+            defaultSize.setWidth(tmpList[0].toInt());
+            defaultSize.setHeight(tmpList[1].toInt());
+        }
+        item = m_config->addItemSize(m_name, *d->newSize(), defaultSize, m_key);
+    } else if (m_type == "ulonglong") {
+        KConfigSkeleton::ItemULongLong* ulonglongItem = m_config->addItemULongLong(m_name,
+                *d->newULongLong(), m_default.toULongLong(), m_key);
+        if (m_haveMin) {
+            ulonglongItem->setMinValue(m_min);
+        }
+        if (m_haveMax) {
+            ulonglongItem->setMaxValue(m_max);
+        }
+        item = ulonglongItem;
+    /* No addItemUrlList in KConfigSkeleton ?
+    } else if (m_type == "urllist") {
+        //FIXME: the split() is naive and will break on lists with ,'s in them
+        QStringList tmpList = m_default.split(",");
+        KUrl::List defaultList;
+        foreach (QString tmp, tmpList) {
+            defaultList.append(KUrl(tmp));
+        }
+        item = m_config->addItemUrlList(m_name, *d->newUrlList(), defaultList, m_key);*/
     }
 
     if (item) {

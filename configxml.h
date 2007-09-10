@@ -29,7 +29,7 @@
  *
  * This class allows one to ship an XML file and reconstitute it into a
  * KConfigSkeleton object at runtime. Common usage might look like this:
- * 
+ *
  * \code
  * QFile file(xmlFilePath);
  * Plasma::ConfigXml appletConfig(configFilePath, &file);
@@ -52,10 +52,6 @@
  * @li stringlists
  * @li uints
  * @li urls
- *
- * The following data types which are supported by KConfigSkeleton
- * are not yet supported by ConfigXml's XML parsing:
- *
  * @li doubles
  * @li int lists
  * @li longlongs
