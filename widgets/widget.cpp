@@ -89,6 +89,7 @@ Widget::Widget(QGraphicsItem *parent,QObject* parentObject)
 {
     setFlag(QGraphicsItem::ItemClipsToShape, true);
     setFlag(QGraphicsItem::ItemClipsChildrenToShape, true);
+    setCachePaintMode(DeviceCoordinateCacheMode);
     d->parent = dynamic_cast<Widget *>(parent);
 
     if (d->parent) {
@@ -114,17 +115,13 @@ qreal Widget::opacity() const
 void Widget::setCachePaintMode(CachePaintMode mode, const QSize &size)
 {
     d->cachePaintMode = mode;
-    d->cacheSize = size;
     if (mode == NoCacheMode) {
 	QPixmapCache::remove(d->cacheKey);
 	d->cacheKey.clear();
-	update();
     } else {
-	if (mode == ItemCoordinateCacheMode) {
-	    d->cacheKey = QString("%1").arg(long(this));
-	    d->cacheSize = size;
-	}
-	invalidate();
+	d->cacheKey = QString("%1").arg(long(this));
+	if (mode == ItemCoordinateCacheMode)
+	    d->cacheSize = size.isNull() ? boundingRect().size().toSize() : size;
     }
 }
 
@@ -133,11 +130,11 @@ Widget::CachePaintMode Widget::cachePaintMode() const
     return d->cachePaintMode;
 }
 
-void Widget::invalidate(const QRectF &rect)
+void Widget::update(const QRectF &rect)
 {
     if (d->cachePaintMode != NoCacheMode)
 	d->cacheInvalidated |= rect.isNull() ? boundingRect() : rect;
-    update(rect);
+    QGraphicsItem::update(rect);
 }
 
 Qt::Orientations Widget::expandingDirections() const

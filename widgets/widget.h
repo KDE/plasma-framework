@@ -225,9 +225,9 @@ public:
      * Invalidates the widget's cache paint mode for a given item rectangle.
      * @param rect the optional invalidated rectangle; if null, defaults to boundingRect().
      */
-    void invalidate(const QRectF &rect = QRectF());
-    inline void invalidate(qreal _x, qreal _y, qreal w, qreal h)
-    { invalidate(QRectF(_x, _y, w, h)); }
+    void update(const QRectF &rect = QRectF());
+    inline void update(qreal _x, qreal _y, qreal w, qreal h)
+    { update(QRectF(_x, _y, w, h)); }
 
     virtual QGraphicsItem* graphicsItem();
 
