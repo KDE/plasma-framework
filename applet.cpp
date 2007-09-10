@@ -696,7 +696,7 @@ QColor Applet::color() const
     }
 }
 
-void Applet::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+void Applet::paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     Q_UNUSED(widget)
     if (d->shadow && d->shadow->shadowedSize() != boundingRect().size()) {

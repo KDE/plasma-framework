@@ -552,7 +552,7 @@ class PLASMA_EXPORT Applet : public Widget
         /**
          * Reimplemented from QGraphicsItem
          **/
-        void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
+        void paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
 
         class Private;
         Private* const d;
