@@ -87,16 +87,15 @@ class PLASMA_EXPORT DataEngine : public QObject
          *
          * @param source the name of the data source
          * @param visualization the object to connect the data source to
+         * @param updateInterval the frequency, in milliseconds, with which to signal updates;
+         *                        a value of 0 (the default) means to update only
+         *                        when there is new data spontaneously generated
+         *                        (e.g. by the engine); any other value results in
+         *                        periodic updates from this source. This value is
+         *                        per-visualization and can be handy for items that require
+         *                        constant updates such as scrolling graphs or clocks.
          **/
-        Q_INVOKABLE void connectSource(const QString& source, QObject* visualization) const;
-
-        /**
-         * Disconnects a source to an object that was receiving data updates.
-         *
-         * @param source the name of the data source
-         * @param visualization the object to connect the data source to
-         **/
-        Q_INVOKABLE void disconnectSource(const QString& source, QObject* visualization) const;
+        Q_INVOKABLE void connectSource(const QString& source, QObject* visualization, uint updateInterval = 0) const;
 
         /**
          * Connects all sources to an object for data updates. The object must
@@ -108,8 +107,23 @@ class PLASMA_EXPORT DataEngine : public QObject
          * one data source to provide sets of related data.
          *
          * @param visualization the object to connect the data source to
+         * @param updateInterval the frequency, in milliseconds, with which to signal updates;
+         *                        a value of 0 (the default) means to update only
+         *                        when there is new data spontaneously generated
+         *                        (e.g. by the engine); any other value results in
+         *                        periodic updates from this source. This value is
+         *                        per-visualization and can be handy for items that require
+         *                        constant updates such as scrolling graphs or clocks.
          **/
-        Q_INVOKABLE void connectAllSources(QObject* viualization) const;
+        Q_INVOKABLE void connectAllSources(QObject* viualization, uint updateInterval = 0) const;
+
+        /**
+         * Disconnects a source to an object that was receiving data updates.
+         *
+         * @param source the name of the data source
+         * @param visualization the object to connect the data source to
+         **/
+        Q_INVOKABLE void disconnectSource(const QString& source, QObject* visualization) const;
 
         /**
          * Retrevies a pointer to the DataContainer for a given source. This method
@@ -207,6 +221,18 @@ class PLASMA_EXPORT DataEngine : public QObject
         virtual bool sourceRequested(const QString &name);
 
         /**
+         * Called by internal updating mechanisms to trigger the engine
+         * to refresh the data contained in a given source. Reimplement this
+         * method when using facilities such as setupdateInterval.
+         * @see setupdateInterval
+         *
+         * @param source the name of the source that should be updated
+         * @return true if the data was changed, or false if there was no
+         *         change or if the change will occur later
+         **/
+        virtual bool updateSource(const QString& source);
+
+        /**
          * Sets a value for a data source. If the source
          * doesn't exist then it is created.
          *
@@ -265,9 +291,42 @@ class PLASMA_EXPORT DataEngine : public QObject
          **/
         void setSourceLimit(uint limit);
 
-/*        DataContainer* domain(const QString &domain);
-        void createDataContainer(const QString& source,
-                              const QString& domain = QString());*/
+        /**
+         * Sets the minimum amount of time, in milliseconds, that must pass between
+         * successive updates of data. This can help prevent too many updates happening
+         * due to multiple update requests coming in, which can be useful for
+         * expensive (time- or resource-wise) update mechanisms.
+         *
+         * @arg minimumMs the minimum time lapse, in milliseconds, between updates.
+         *                A value less than 0 means to never perform automatic updates,
+         *                a value of 0 means update immediately on every update request,
+         *                a value >0 will result in a minimum time lapse being enforced.
+         **/
+        void setMinimumUpdateInterval(int minimumMs);
+
+        /**
+         * @return the minimum time between updates. @see setMinimumupdateInterval
+         **/
+        int minimumUpdateInterval() const;
+
+        /**
+         * Sets up an internal update tick for all data sources. On every update,
+         * updateSource will be called for each applicable source.
+         * @see updateSource
+         *
+         * @param frequency the time, in milliseconds, between updates. A value of 0
+         *                  will stop internally triggered updates.
+         **/
+        void setupdateInterval(uint frequency);
+
+        /**
+         * Returns the current update frequency.
+         * @see setupdateInterval
+         NOTE: This is not implemented to prevent having to store the value internally.
+               When there is a good use case for needing access to this value, we can
+               add another member to the Private class and add this method.
+        uint updateInterval();
+         **/
 
         /**
          * Removes all data sources
@@ -287,6 +346,11 @@ class PLASMA_EXPORT DataEngine : public QObject
          * @return the list of active DataContainers.
          */
         SourceDict sourceDict() const;
+
+        /**
+         * Reimplemented from QObject
+         **/
+        void timerEvent(QTimerEvent *event);
 
     protected Q_SLOTS:
         /**

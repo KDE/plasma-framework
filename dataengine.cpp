@@ -21,6 +21,7 @@
 
 #include <QQueue>
 #include <QTimer>
+#include <QTimerEvent>
 #include <QVariant>
 
 #include <KDebug>
@@ -35,11 +36,15 @@ class DataEngine::Private
     public:
         Private(DataEngine* e)
             : engine(e),
+              ref(0),
+              updateTimerId(0),
+              minUpdateFreq(-1),
               limit(0),
               valid(true)
         {
             updateTimer = new QTimer(engine);
             updateTimer->setSingleShot(true);
+            updateTimestamp.start();
         }
 
         DataContainer* source(const QString& sourceName, bool createWhenMissing = true)
@@ -71,6 +76,7 @@ class DataEngine::Private
             DataContainer* s = new DataContainer(engine);
             s->setObjectName(sourceName);
             sources.insert(sourceName, s);
+            connect(s, SIGNAL(requestUpdate(QString)), engine, SLOT(updateSource(QString)));
 
             if (limit > 0) {
                 trimQueue();
@@ -78,6 +84,32 @@ class DataEngine::Private
             }
             emit engine->newSource(sourceName);
             return s;
+        }
+
+        void connectSource(const DataContainer* s, QObject* visualization, uint updateInterval)
+        {
+            connect(visualization, SIGNAL(destroyed(QObject*)),
+                    s, SLOT(disconnectVisualization(QObject*)), Qt::QueuedConnection);
+
+            if (updateInterval < 1) {
+                connect(s, SIGNAL(updated(QString,Plasma::DataEngine::Data)),
+                        visualization, SLOT(updated(QString,Plasma::DataEngine::Data)));
+            } else {
+                // never more frequently than allowed
+                uint min = minUpdateFreq; // for qMin below
+                updateInterval = qMin(min, updateInterval);
+
+                // never more than 20 times per second, and align on the 50ms
+                updateInterval = updateInterval - (updateInterval % 50);
+
+                connect(s->signalRelay(visualization, updateInterval),
+                        SIGNAL(updated(QString,Plasma::DataEngine::Data)),
+                        visualization, SLOT(updated(QString,Plasma::DataEngine::Data)));
+            }
+
+            QMetaObject::invokeMethod(visualization, "updated",
+                                      Q_ARG(QString, s->objectName()),
+                                      Q_ARG(Plasma::DataEngine::Data, s->data()));
         }
 
         DataContainer* requestSource(const QString& sourceName)
@@ -92,6 +124,7 @@ class DataEngine::Private
                         // now we have a source; since it was created on demand, assume
                         // it should be removed when not used
                         connect(s, SIGNAL(unused(QString)), engine, SLOT(removeSource(QString)));
+                        connect(s, SIGNAL(requestUpdate(QString)), engine, SLOT(updateSource(QString)));
                     }
                 }
             }
@@ -114,10 +147,13 @@ class DataEngine::Private
             updateTimer->start(0);
         }
 
+        DataEngine* engine;
         int ref;
+        int updateTimerId;
+        int minUpdateFreq;
+        QTime updateTimestamp;
         DataEngine::SourceDict sources;
         QQueue<DataContainer*> sourceQueue;
-        DataEngine* engine;
         QTimer* updateTimer;
         QString icon;
         uint limit;
@@ -146,7 +182,7 @@ QStringList DataEngine::sources() const
     return d->sources.keys();
 }
 
-void DataEngine::connectSource(const QString& source, QObject* visualization) const
+void DataEngine::connectSource(const QString& source, QObject* visualization, uint updateInterval) const
 {
     DataContainer* s = d->requestSource(source);
 
@@ -154,12 +190,14 @@ void DataEngine::connectSource(const QString& source, QObject* visualization) co
         return;
     }
 
-    connect(visualization, SIGNAL(destroyed(QObject*)), s, SLOT(checkUsage()), Qt::QueuedConnection);
-    connect(s, SIGNAL(updated(QString,Plasma::DataEngine::Data)),
-            visualization, SLOT(updated(QString,Plasma::DataEngine::Data)));
-    QMetaObject::invokeMethod(visualization, "updated",
-                              Q_ARG(QString, s->objectName()),
-                              Q_ARG(Plasma::DataEngine::Data, s->data()));
+    d->connectSource(s, visualization, updateInterval);
+}
+
+void DataEngine::connectAllSources(QObject* visualization, uint updateInterval) const
+{
+    foreach (const DataContainer* s, d->sources) {
+        d->connectSource(s, visualization, updateInterval);
+    }
 }
 
 void DataEngine::disconnectSource(const QString& source, QObject* visualization) const
@@ -170,22 +208,7 @@ void DataEngine::disconnectSource(const QString& source, QObject* visualization)
         return;
     }
 
-    disconnect(s, SIGNAL(updated(QString,Plasma::DataEngine::Data)),
-               visualization, SLOT(updated(QString,Plasma::DataEngine::Data)));
-}
-
-void DataEngine::connectAllSources(QObject* visualization) const
-{
-    foreach (const DataContainer* s, d->sources) {
-        connect(s, SIGNAL(updated(QString,Plasma::DataEngine::Data)),
-                visualization, SLOT(updated(QString,Plasma::DataEngine::Data)));
-    }
-
-    foreach (const DataContainer* s, d->sources) {
-        QMetaObject::invokeMethod(visualization, "updated",
-                                  Q_ARG(QString, s->objectName()),
-                                  Q_ARG(Plasma::DataEngine::Data, s->data()));
-    }
+    s->disconnectVisualization(visualization);
 }
 
 DataContainer* DataEngine::containerForSource(const QString &source)
@@ -222,6 +245,13 @@ bool DataEngine::sourceRequested(const QString &name)
 {
     Q_UNUSED(name)
     return false;
+}
+
+bool DataEngine::updateSource(const QString& source)
+{
+    Q_UNUSED(source);
+    kDebug() << "updateSource source" << endl;
+    return false; //TODO: should this be true to trigger, even needless, updates on every tick?
 }
 
 void DataEngine::setData(const QString& source, const QVariant& value)
@@ -293,6 +323,37 @@ void DataEngine::setSourceLimit(uint limit)
     }
 }
 
+void DataEngine::setMinimumUpdateInterval(int minimumMs)
+{
+    d->minUpdateFreq = minimumMs;
+}
+
+int DataEngine::minimumUpdateInterval() const
+{
+    return d->minUpdateFreq;
+}
+
+void DataEngine::setupdateInterval(uint frequency)
+{
+    killTimer(d->updateTimerId);
+    d->updateTimerId = 0;
+
+    if (frequency > 0) {
+        d->updateTimerId = startTimer(frequency);
+    }
+}
+
+/*
+NOTE: This is not implemented to prevent having to store the value internally.
+      When there is a good use case for needing access to this value, we can
+      add another member to the Private class and add this method.
+
+void DataEngine::updateInterval()
+{
+    return d->updateInterval;
+}
+*/
+
 void DataEngine::removeSource(const QString& source)
 {
     //kDebug() << "removing source " << source;
@@ -343,6 +404,33 @@ void DataEngine::setValid(bool valid)
 DataEngine::SourceDict DataEngine::sourceDict() const
 {
     return d->sources;
+}
+
+void DataEngine::timerEvent(QTimerEvent *event)
+{
+    if (event->timerId() != d->updateTimerId) {
+        return;
+    }
+
+    event->accept();
+
+    // if the freq update is less than 0, don't bother
+    if (d->minUpdateFreq < 0) {
+        return;
+    }
+
+    // minUpdateFreq
+    if (d->updateTimestamp.elapsed() < d->minUpdateFreq) {
+        return;
+    }
+
+    d->updateTimestamp.restart();
+    QHashIterator<QString, Plasma::DataContainer*> it(d->sources);
+    while (it.hasNext()) {
+        it.next();
+        updateSource(it.key());
+    }
+    checkForUpdates();
 }
 
 void DataEngine::setIcon(const QString& icon)

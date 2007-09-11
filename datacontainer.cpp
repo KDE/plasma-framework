@@ -17,6 +17,7 @@
  */
 
 #include "datacontainer.h"
+#include "datacontainer_p.h"
 
 #include <QVariant>
 
@@ -24,17 +25,6 @@
 
 namespace Plasma
 {
-
-class DataContainer::Private
-{
-    public:
-        Private()
-            : dirty(false)
-        {}
-
-        DataEngine::Data data;
-        bool dirty : 1;
-};
 
 DataContainer::DataContainer(QObject* parent)
     : QObject(parent),
@@ -86,20 +76,56 @@ void DataContainer::checkForUpdate()
     }
 }
 
+QObject* DataContainer::signalRelay(QObject *visualization, uint updateInterval) const
+{
+    return d->signalRelay(this, visualization, updateInterval);
+}
+
 void DataContainer::checkUsage()
 {
-    if (receivers(SIGNAL(updated(QString, Plasma::DataEngine::Data))) < 1) {
+    if (d->relays.count() < 1 &&
+        receivers(SIGNAL(updated(QString, Plasma::DataEngine::Data))) < 1) {
         // DO NOT CALL ANYTHING AFTER THIS LINE AS IT MAY GET DELETED!
         emit unused(objectName());
     }
 }
 
+void DataContainer::disconnectVisualization(QObject* visualization)
+{
+    QMap<QObject *, SignalRelay *>::iterator objIt = d->relayObjects.find(visualization);
+
+    if (objIt == d->relayObjects.end()) {
+        // we will assume that it is connected directly to the DataContainer itself
+        disconnect(this, SIGNAL(updated(QString,Plasma::DataEngine::Data)),
+                   visualization, SLOT(updated(QString,Plasma::DataEngine::Data)));
+
+        // NOTE: we don't need to call checkUsage here as it will happen in disconnectNotify
+        // checkUsage()
+    } else {
+        SignalRelay *relay = objIt.value();
+        d->relayObjects.erase(objIt);
+        objIt = d->relayObjects.end(); //for safety's sake?
+
+        disconnect(relay, SIGNAL(updated(QString,Plasma::DataEngine::Data)),
+                   visualization, SLOT(updated(QString,Plasma::DataEngine::Data)));
+
+        if (relay->isUnused()) {
+            d->relays.erase(d->relays.find(relay->interval));
+            delete relay;
+        }
+
+        checkUsage();
+    }
+}
+
 void DataContainer::disconnectNotify(const char *signal)
 {
+    Q_UNUSED(signal)
     checkUsage();
 }
 
 } // Plasma namespace
 
 #include "datacontainer.moc"
+#include "datacontainer_p.moc"
 

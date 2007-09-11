@@ -80,6 +80,12 @@ class PLASMA_EXPORT DataContainer : public QObject
          **/
         void checkForUpdate();
 
+        /**
+         * Returns a QObject that can be used to relay the updated() signal
+         * at a given timing frequency independantly.
+         **/
+        QObject* signalRelay(QObject *visualization, uint updateInterval) const;
+
     public Q_SLOTS:
         /**
          * Check if the DataContainer is still in use.
@@ -87,6 +93,11 @@ class PLASMA_EXPORT DataContainer : public QObject
          * Warning: The DataContainer may be invalid after calling this function.
          */
         void checkUsage();
+
+        /**
+         * Disconnects an object from this DataContainer.
+         **/
+        void disconnectVisualization(QObject* visualization);
 
     Q_SIGNALS:
         /**
@@ -100,10 +111,17 @@ class PLASMA_EXPORT DataContainer : public QObject
          **/
         void unused(const QString& source);
 
+        /**
+         * Emitted when the source, usually due to an internal timer firing,
+         * requests to be updated.
+         **/
+        void requestUpdate(const QString& source);
+
     protected:
         void disconnectNotify(const char *signal);
 
     private:
+        friend class SignalRelay;
         class Private;
         Private* const d;
 };
