@@ -106,6 +106,9 @@ class PLASMA_EXPORT DataEngine : public QObject
          * The data is a QHash of QVariants keyed by QString names, allowing
          * one data source to provide sets of related data.
          *
+         * This method may be called multiple times for the same visualization
+         * without side-effects. This can be useful to change the updateInterval.
+         *
          * @param visualization the object to connect the data source to
          * @param updateInterval the frequency, in milliseconds, with which to signal updates;
          *                        a value of 0 (the default) means to update only
@@ -370,6 +373,11 @@ class PLASMA_EXPORT DataEngine : public QObject
          * @internal
          **/
         void startInit();
+
+        /**
+         * @internal
+         **/
+        void internalUpdateSource(const QString& source);
 
     private:
         class Private;

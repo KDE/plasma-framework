@@ -76,7 +76,7 @@ class DataEngine::Private
             DataContainer* s = new DataContainer(engine);
             s->setObjectName(sourceName);
             sources.insert(sourceName, s);
-            connect(s, SIGNAL(requestUpdate(QString)), engine, SLOT(updateSource(QString)));
+            connect(s, SIGNAL(requestUpdate(QString)), engine, SLOT(internalUpdateSource(QString)));
 
             if (limit > 0) {
                 trimQueue();
@@ -86,26 +86,18 @@ class DataEngine::Private
             return s;
         }
 
-        void connectSource(const DataContainer* s, QObject* visualization, uint updateInterval)
+        void connectSource(DataContainer* s, QObject* visualization, uint updateInterval)
         {
-            connect(visualization, SIGNAL(destroyed(QObject*)),
-                    s, SLOT(disconnectVisualization(QObject*)), Qt::QueuedConnection);
+            if (updateInterval > 0) {
+                // never more frequently than allowed, never more than 20 times per second
+                uint min = qMax(50, minUpdateFreq); // for qMin below
+                updateInterval = qMax(min, updateInterval);
 
-            if (updateInterval < 1) {
-                connect(s, SIGNAL(updated(QString,Plasma::DataEngine::Data)),
-                        visualization, SLOT(updated(QString,Plasma::DataEngine::Data)));
-            } else {
-                // never more frequently than allowed
-                uint min = minUpdateFreq; // for qMin below
-                updateInterval = qMin(min, updateInterval);
-
-                // never more than 20 times per second, and align on the 50ms
+                // align on the 50ms
                 updateInterval = updateInterval - (updateInterval % 50);
-
-                connect(s->signalRelay(visualization, updateInterval),
-                        SIGNAL(updated(QString,Plasma::DataEngine::Data)),
-                        visualization, SLOT(updated(QString,Plasma::DataEngine::Data)));
             }
+
+            s->connectVisualization(visualization, updateInterval);
 
             QMetaObject::invokeMethod(visualization, "updated",
                                       Q_ARG(QString, s->objectName()),
@@ -124,7 +116,7 @@ class DataEngine::Private
                         // now we have a source; since it was created on demand, assume
                         // it should be removed when not used
                         connect(s, SIGNAL(unused(QString)), engine, SLOT(removeSource(QString)));
-                        connect(s, SIGNAL(requestUpdate(QString)), engine, SLOT(updateSource(QString)));
+                        connect(s, SIGNAL(requestUpdate(QString)), engine, SLOT(internalUpdateSource(QString)));
                     }
                 }
             }
@@ -195,7 +187,7 @@ void DataEngine::connectSource(const QString& source, QObject* visualization, ui
 
 void DataEngine::connectAllSources(QObject* visualization, uint updateInterval) const
 {
-    foreach (const DataContainer* s, d->sources) {
+    foreach (DataContainer* s, d->sources) {
         d->connectSource(s, visualization, updateInterval);
     }
 }
@@ -232,6 +224,13 @@ DataEngine::Data DataEngine::query(const QString& source) const
 void DataEngine::startInit()
 {
     init();
+}
+
+void DataEngine::internalUpdateSource(const QString& source)
+{
+    if (updateSource(source)) {
+        d->queueUpdate();
+    }
 }
 
 void DataEngine::init()
