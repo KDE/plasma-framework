@@ -90,22 +90,66 @@ void DataContainer::checkUsage()
     }
 }
 
+void DataContainer::connectVisualization(QObject* visualization, uint updateInterval)
+{
+//    kDebug() << "connecting visualization" << (void*)visualization << "at interval of" << updateInterval;
+    QMap<QObject *, SignalRelay *>::iterator objIt = d->relayObjects.find(visualization);
+    bool connected = objIt != d->relayObjects.end();
+    if (connected) {
+        // this visualization is already connected. just adjust the update
+        // frequency if necessary
+        SignalRelay *relay = objIt.value();
+        if (relay) {
+            // connected to a relay
+            disconnect(relay, SIGNAL(updated(QString,Plasma::DataEngine::Data)),
+                    visualization, SLOT(updated(QString,Plasma::DataEngine::Data)));
+
+            if (relay->isUnused()) {
+                d->relays.erase(d->relays.find(relay->interval));
+                delete relay;
+            }
+//            kDebug() << "     already connected, but to a relay";
+        } else if (updateInterval < 1) {
+            // the visualization was connected already, but not to a relay
+            // and it still doesn't want to connect to a relay, so we have
+            // nothing to do!
+            kDebug() << "     already connected, nothing to do";
+            return;
+        } else {
+            disconnect(this, SIGNAL(updated(QString,Plasma::DataEngine::Data)),
+                       visualization, SLOT(updated(QString,Plasma::DataEngine::Data)));
+        }
+    }
+
+    if (!connected) {
+        connect(visualization, SIGNAL(destroyed(QObject*)),
+                this, SLOT(disconnectVisualization(QObject*)), Qt::QueuedConnection);
+    }
+
+    d->relayObjects[visualization] = 0;
+
+    if (updateInterval < 1) {
+//        kDebug() << "    connecting directly";
+        connect(this, SIGNAL(updated(QString,Plasma::DataEngine::Data)),
+                visualization, SLOT(updated(QString,Plasma::DataEngine::Data)));
+    } else {
+//        kDebug() << "    connecting to a relay";
+        connect(signalRelay(visualization, updateInterval),
+                SIGNAL(updated(QString,Plasma::DataEngine::Data)),
+                visualization, SLOT(updated(QString,Plasma::DataEngine::Data)));
+    }
+}
+
 void DataContainer::disconnectVisualization(QObject* visualization)
 {
     QMap<QObject *, SignalRelay *>::iterator objIt = d->relayObjects.find(visualization);
 
-    if (objIt == d->relayObjects.end()) {
-        // we will assume that it is connected directly to the DataContainer itself
+    if (objIt == d->relayObjects.end() || !objIt.value()) {
+        // it is connected directly to the DataContainer itself
         disconnect(this, SIGNAL(updated(QString,Plasma::DataEngine::Data)),
                    visualization, SLOT(updated(QString,Plasma::DataEngine::Data)));
-
-        // NOTE: we don't need to call checkUsage here as it will happen in disconnectNotify
-        // checkUsage()
     } else {
         SignalRelay *relay = objIt.value();
-        d->relayObjects.erase(objIt);
-        objIt = d->relayObjects.end(); //for safety's sake?
-
         disconnect(relay, SIGNAL(updated(QString,Plasma::DataEngine::Data)),
                    visualization, SLOT(updated(QString,Plasma::DataEngine::Data)));
 
@@ -114,13 +158,9 @@ void DataContainer::disconnectVisualization(QObject* visualization)
             delete relay;
         }
 
-        checkUsage();
     }
-}
 
-void DataContainer::disconnectNotify(const char *signal)
-{
-    Q_UNUSED(signal)
+    d->relayObjects.erase(objIt);
     checkUsage();
 }
 

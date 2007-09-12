@@ -95,6 +95,15 @@ class PLASMA_EXPORT DataContainer : public QObject
         void checkUsage();
 
         /**
+         * Connects an object to this DataContainer. May be called repeatedly
+         * for the same visualization without side effects
+         *
+         * @param visualization the object to connect to this DataContainer
+         * @param updateInterval the time in milliseconds between updates
+         **/
+        void connectVisualization(QObject* visualization, uint updateInterval);
+
+        /**
          * Disconnects an object from this DataContainer.
          **/
         void disconnectVisualization(QObject* visualization);
@@ -116,9 +125,6 @@ class PLASMA_EXPORT DataContainer : public QObject
          * requests to be updated.
          **/
         void requestUpdate(const QString& source);
-
-    protected:
-        void disconnectNotify(const char *signal);
 
     private:
         friend class SignalRelay;
