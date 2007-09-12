@@ -56,6 +56,9 @@ public:
           m_resetTimer(false)
     {
         m_timerId = startTimer(m_interval);
+        if (m_align != Plasma::NoAlignment) {
+            checkAlignment();
+        }
     }
 
     bool isUnused()
