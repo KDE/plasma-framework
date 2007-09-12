@@ -16,6 +16,7 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
+#include "plasma.h"
 #include "datacontainer.h"
 #include "datacontainer_p.h"
 
@@ -76,11 +77,6 @@ void DataContainer::checkForUpdate()
     }
 }
 
-QObject* DataContainer::signalRelay(QObject *visualization, uint updateInterval) const
-{
-    return d->signalRelay(this, visualization, updateInterval);
-}
-
 void DataContainer::checkUsage()
 {
     if (d->relays.count() < 1 &&
@@ -90,7 +86,7 @@ void DataContainer::checkUsage()
     }
 }
 
-void DataContainer::connectVisualization(QObject* visualization, uint updateInterval)
+void DataContainer::connectVisualization(QObject* visualization, uint updateInterval, Plasma::IntervalAlignment alignment)
 {
 //    kDebug() << "connecting visualization" << (void*)visualization << "at interval of" << updateInterval;
     QMap<QObject *, SignalRelay *>::iterator objIt = d->relayObjects.find(visualization);
@@ -105,7 +101,7 @@ void DataContainer::connectVisualization(QObject* visualization, uint updateInte
                     visualization, SLOT(updated(QString,Plasma::DataEngine::Data)));
 
             if (relay->isUnused()) {
-                d->relays.erase(d->relays.find(relay->interval));
+                d->relays.erase(d->relays.find(relay->m_interval));
                 delete relay;
             }
 //            kDebug() << "     already connected, but to a relay";
@@ -134,7 +130,7 @@ void DataContainer::connectVisualization(QObject* visualization, uint updateInte
                 visualization, SLOT(updated(QString,Plasma::DataEngine::Data)));
     } else {
 //        kDebug() << "    connecting to a relay";
-        connect(signalRelay(visualization, updateInterval),
+        connect(d->signalRelay(this, visualization, updateInterval, alignment),
                 SIGNAL(updated(QString,Plasma::DataEngine::Data)),
                 visualization, SLOT(updated(QString,Plasma::DataEngine::Data)));
     }
@@ -154,7 +150,7 @@ void DataContainer::disconnectVisualization(QObject* visualization)
                    visualization, SLOT(updated(QString,Plasma::DataEngine::Data)));
 
         if (relay->isUnused()) {
-            d->relays.erase(d->relays.find(relay->interval));
+            d->relays.erase(d->relays.find(relay->m_interval));
             delete relay;
         }
 

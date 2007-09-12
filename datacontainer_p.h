@@ -33,7 +33,8 @@ public:
     : dirty(false)
     {}
 
-    QObject* signalRelay(const DataContainer* dc, QObject *visualization, uint updateInterval);
+    QObject* signalRelay(const DataContainer* dc, QObject *visualization,
+                         uint updateInterval, Plasma::IntervalAlignment align);
 
     DataEngine::Data data;
     QMap<QObject *, SignalRelay *> relayObjects;
@@ -46,13 +47,15 @@ class SignalRelay : public QObject
     Q_OBJECT
 
 public:
-    SignalRelay(DataContainer* parent, DataContainer::Private *data, uint ival)
+    SignalRelay(DataContainer* parent, DataContainer::Private *data, uint ival, Plasma::IntervalAlignment align)
         : QObject(parent),
           dc(parent),
           d(data),
-          interval(ival)
+          m_interval(ival),
+          m_align(align),
+          m_resetTimer(false)
     {
-        startTimer(interval);
+        m_timerId = startTimer(m_interval);
     }
 
     bool isUnused()
@@ -60,9 +63,38 @@ public:
         return receivers(SIGNAL(updated(QString,Plasma::DataEngine::Data))) < 1;
     }
 
+    void checkAlignment()
+    {
+        int newTime = 0;
+
+        QTime t = QTime::currentTime();
+        if (m_align == Plasma::AlignToMinute) {
+            int seconds = t.second();
+            if (seconds > 2) {
+                newTime = ((60 - seconds) * 1000) + 500;
+            }
+        } else if (m_align == Plasma::AlignToHour) {
+            int minutes = t.minute();
+            int seconds = t.second();
+            if (minutes > 1 || seconds > 10) {
+                newTime = ((60 - minutes) * 1000 * 60) +
+                          ((60 - seconds) * 1000) + 500;
+            }
+        }
+
+        if (newTime) {
+            killTimer(m_timerId);
+            m_timerId = startTimer(newTime);
+            m_resetTimer = true;
+        }
+    }
+
     DataContainer *dc;
     DataContainer::Private *d;
-    uint interval;
+    uint m_interval;
+    Plasma::IntervalAlignment m_align;
+    int m_timerId;
+    bool m_resetTimer;
 
 signals:
     void updated(const QString&, const Plasma::DataEngine::Data&);
@@ -70,19 +102,29 @@ signals:
 protected:
     void timerEvent(QTimerEvent *event)
     {
+        if (m_resetTimer) {
+            killTimer(m_timerId);
+            m_timerId = startTimer(m_interval);
+            m_resetTimer = false;
+        }
+
+        if (m_align != Plasma::NoAlignment) {
+            checkAlignment();
+        }
+
         emit dc->requestUpdate(dc->objectName());
         emit updated(dc->objectName(), d->data);
         event->accept();
     }
 };
 
-QObject* DataContainer::Private::signalRelay(const DataContainer* dc, QObject *visualization, uint updateInterval)
+QObject* DataContainer::Private::signalRelay(const DataContainer* dc, QObject *visualization, uint updateInterval, Plasma::IntervalAlignment align)
 {
     QMap<uint, SignalRelay *>::const_iterator relayIt = relays.find(updateInterval);
     SignalRelay *relay = 0;
 
     if (relayIt == relays.end()) {
-        relay = new SignalRelay(const_cast<DataContainer*>(dc), this, updateInterval);
+        relay = new SignalRelay(const_cast<DataContainer*>(dc), this, updateInterval, align);
         relays[updateInterval] = relay;
     } else {
         relay = relayIt.value();

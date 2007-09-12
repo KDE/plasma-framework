@@ -27,6 +27,7 @@
 #include <kgenericfactory.h>
 
 #include <plasma/plasma_export.h>
+#include <plasma/plasma.h>
 
 namespace Plasma
 {
@@ -94,8 +95,11 @@ class PLASMA_EXPORT DataEngine : public QObject
          *                        periodic updates from this source. This value is
          *                        per-visualization and can be handy for items that require
          *                        constant updates such as scrolling graphs or clocks.
+         * @param intervalAlignedTo the number of ms to aling the interval to
          **/
-        Q_INVOKABLE void connectSource(const QString& source, QObject* visualization, uint updateInterval = 0) const;
+        Q_INVOKABLE void connectSource(const QString& source, QObject* visualization,
+                                       uint updateInterval = 0,
+                                       Plasma::IntervalAlignment intervalAlignment = NoAlignment) const;
 
         /**
          * Connects all sources to an object for data updates. The object must
@@ -118,7 +122,8 @@ class PLASMA_EXPORT DataEngine : public QObject
          *                        per-visualization and can be handy for items that require
          *                        constant updates such as scrolling graphs or clocks.
          **/
-        Q_INVOKABLE void connectAllSources(QObject* viualization, uint updateInterval = 0) const;
+        Q_INVOKABLE void connectAllSources(QObject* viualization, uint updateInterval = 0,
+                                           Plasma::IntervalAlignment intervalAlignment = NoAlignment) const;
 
         /**
          * Disconnects a source to an object that was receiving data updates.

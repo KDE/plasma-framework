@@ -80,12 +80,6 @@ class PLASMA_EXPORT DataContainer : public QObject
          **/
         void checkForUpdate();
 
-        /**
-         * Returns a QObject that can be used to relay the updated() signal
-         * at a given timing frequency independantly.
-         **/
-        QObject* signalRelay(QObject *visualization, uint updateInterval) const;
-
     public Q_SLOTS:
         /**
          * Check if the DataContainer is still in use.
@@ -101,7 +95,7 @@ class PLASMA_EXPORT DataContainer : public QObject
          * @param visualization the object to connect to this DataContainer
          * @param updateInterval the time in milliseconds between updates
          **/
-        void connectVisualization(QObject* visualization, uint updateInterval);
+        void connectVisualization(QObject* visualization, uint updateInterval, Plasma::IntervalAlignment alignment);
 
         /**
          * Disconnects an object from this DataContainer.

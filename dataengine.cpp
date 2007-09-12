@@ -86,7 +86,7 @@ class DataEngine::Private
             return s;
         }
 
-        void connectSource(DataContainer* s, QObject* visualization, uint updateInterval)
+        void connectSource(DataContainer* s, QObject* visualization, uint updateInterval, Plasma::IntervalAlignment align)
         {
             if (updateInterval > 0) {
                 // never more frequently than allowed, never more than 20 times per second
@@ -97,7 +97,7 @@ class DataEngine::Private
                 updateInterval = updateInterval - (updateInterval % 50);
             }
 
-            s->connectVisualization(visualization, updateInterval);
+            s->connectVisualization(visualization, updateInterval, align);
 
             QMetaObject::invokeMethod(visualization, "updated",
                                       Q_ARG(QString, s->objectName()),
@@ -174,7 +174,8 @@ QStringList DataEngine::sources() const
     return d->sources.keys();
 }
 
-void DataEngine::connectSource(const QString& source, QObject* visualization, uint updateInterval) const
+void DataEngine::connectSource(const QString& source, QObject* visualization,
+                               uint updateInterval, Plasma::IntervalAlignment intervalAlignment) const
 {
     DataContainer* s = d->requestSource(source);
 
@@ -182,13 +183,14 @@ void DataEngine::connectSource(const QString& source, QObject* visualization, ui
         return;
     }
 
-    d->connectSource(s, visualization, updateInterval);
+    d->connectSource(s, visualization, updateInterval, intervalAlignment);
 }
 
-void DataEngine::connectAllSources(QObject* visualization, uint updateInterval) const
+void DataEngine::connectAllSources(QObject* visualization, uint updateInterval,
+                                   Plasma::IntervalAlignment intervalAlignment) const
 {
     foreach (DataContainer* s, d->sources) {
-        d->connectSource(s, visualization, updateInterval);
+        d->connectSource(s, visualization, updateInterval, intervalAlignment);
     }
 }
 

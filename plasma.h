@@ -86,6 +86,14 @@ enum ZoomLevel { DesktopZoom = 0 /**< Normal desktop usage, plasmoids are painte
                  OverviewZoom /**< Groups become icons themselves */
                };
 
+/**
+ * Possible timing alignments
+ **/
+enum IntervalAlignment { NoAlignment = 0,
+                         AlignToMinute,
+                         AlignToHour };
+
+
 enum ItemTypes { AppletType = QGraphicsItem::UserType + 1,
                  LineEditType = QGraphicsItem::UserType + 2
                };
