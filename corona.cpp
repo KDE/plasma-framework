@@ -37,6 +37,7 @@
 #include "dataengine.h"
 #include "karambamanager.h"
 #include "phase.h"
+#include "widgets/freelayout.h"
 #include "widgets/boxlayout.h"
 #include "widgets/icon.h"
 
@@ -52,7 +53,7 @@ public:
         : immutable(false),
           formFactor(Planar),
           location(Floating),
-          layout(0),
+          layout(new FreeLayout),
           mimetype("text/x-plasmoidservicename")
     {
     }
@@ -133,6 +134,7 @@ void Corona::setFormFactor(FormFactor formFactor)
 
     switch (d->formFactor) {
         case Planar:
+            d->layout = new FreeLayout;
             break;
         case Horizontal:
             d->layout = new BoxLayout(BoxLayout::LeftToRight);
@@ -248,6 +250,8 @@ Applet* Corona::addApplet(const QString& name, const QVariantList& args, uint id
     }
 #endif
 
+    if ( d->layout )
+        d->layout->addItem(applet);
     addItem(applet);
     applet->updateConstraints();
 
