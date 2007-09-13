@@ -96,6 +96,14 @@ class PLASMA_EXPORT Applet : public Widget
         ~Applet();
 
         /**
+         * This method is called once the applet is loaded and added to a Corona.
+         * If the applet requires a QGraphicsScene or has an particularly intensive
+         * set of initialization routines to go through, consider implementing it
+         * in this method instead of the contsructor.
+         **/
+        virtual void init();
+
+        /**
          * @return the id of this applet
          */
         uint id() const;

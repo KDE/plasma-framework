@@ -376,6 +376,10 @@ Applet::~Applet()
     delete d;
 }
 
+void Applet::init()
+{
+}
+
 uint Applet::id() const
 {
     return d->appletId;
