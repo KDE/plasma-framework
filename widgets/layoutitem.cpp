@@ -63,22 +63,22 @@ QGraphicsItem* LayoutItem::graphicsItem()
 
 bool LayoutItem::hasHeightForWidth() const
 {
-	return false;
+    return false;
 }
 
 qreal LayoutItem::heightForWidth(qreal w) const
 {
-	return 0.0;
+    return 0.0;
 }
 
 bool LayoutItem::hasWidthForHeight() const
 {
-	return false;
+    return false;
 }
 
 qreal LayoutItem::widthForHeight(qreal h) const
 {
-	return 0.0;
+    return 0.0;
 }
 
 void LayoutItem::setLayout(Layout* layout)
@@ -90,8 +90,15 @@ void LayoutItem::setLayout(Layout* layout)
 
     d->layout = layout;
 
-    if ( layout )
+    if (layout) {
         layout->setParent(this);
+    } else {
+        // FIXME: we had a layout, but now it has been removed
+        // and we are without layout; we should tell our
+        // children about this, but LayoutItem doesn't know
+        // about children =/
+        kDebug() << "layout removed from under us. expect crashes";
+    }
 }
 
 Layout* LayoutItem::layout() const

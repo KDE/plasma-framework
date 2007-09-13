@@ -60,8 +60,8 @@ public:
 
     ~Private()
     {
-        delete layout;
         qDeleteAll(applets);
+        delete layout;
     }
 
     bool immutable;
