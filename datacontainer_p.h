@@ -100,6 +100,18 @@ public:
         if (m_queued) {
             emit updated(dc->objectName(), d->data);
             m_queued = false;
+            //TODO: should we re-align our timer at this point, to avoid
+            //      constant queueing due to more-or-less constant time
+            //      async update time? this might make sense for
+            //      staggered accesses to the same source by multiple
+            //      visualizations causing a minimumUpdateInterval violation.
+            //      it may not make sense for purely async-and-takes-a-while
+            //      type operations (e.g. network fetching).
+            //      we need more real world data before making such a change
+            //      change
+            //
+            // killTimer(m_timerId);
+            // m_timerId = startTime(m_interval);
         }
     }
 
