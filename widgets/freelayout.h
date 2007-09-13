@@ -38,11 +38,11 @@ namespace Plasma
 class PLASMA_EXPORT FreeLayout : public Layout
 {
     public:
-        
         /**
          * Creates a new free layout
          */
         explicit FreeLayout(LayoutItem *parent = 0);
+        ~FreeLayout();
 
         // reimplemented from Layout
         virtual void addItem(LayoutItem *l);
