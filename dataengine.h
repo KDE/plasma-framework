@@ -382,7 +382,7 @@ class PLASMA_EXPORT DataEngine : public QObject
         /**
          * @internal
          **/
-        void internalUpdateSource(const QString& source);
+        void internalUpdateSource(DataContainer* source);
 
     private:
         class Private;

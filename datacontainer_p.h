@@ -30,7 +30,8 @@ class DataContainer::Private
 {
 public:
     Private()
-    : dirty(false)
+        : updateTs(0),
+          dirty(false)
     {}
 
     QObject* signalRelay(const DataContainer* dc, QObject *visualization,
@@ -39,6 +40,7 @@ public:
     DataEngine::Data data;
     QMap<QObject *, SignalRelay *> relayObjects;
     QMap<uint, SignalRelay *> relays;
+    int updateTs;
     bool dirty : 1;
 };
 
@@ -53,8 +55,10 @@ public:
           d(data),
           m_interval(ival),
           m_align(align),
-          m_resetTimer(false)
+          m_resetTimer(false),
+          m_queued(false)
     {
+        //kDebug() << "signal relay with time of" << m_timerId << "being set up";
         m_timerId = startTimer(m_interval);
         if (m_align != Plasma::NoAlignment) {
             checkAlignment();
@@ -92,12 +96,20 @@ public:
         }
     }
 
+    void checkQueueing() {
+        if (m_queued) {
+            emit updated(dc->objectName(), d->data);
+            m_queued = false;
+        }
+    }
+
     DataContainer *dc;
     DataContainer::Private *d;
     uint m_interval;
     Plasma::IntervalAlignment m_align;
     int m_timerId;
     bool m_resetTimer;
+    bool m_queued;
 
 signals:
     void updated(const QString&, const Plasma::DataEngine::Data&);
@@ -115,7 +127,12 @@ protected:
             checkAlignment();
         }
 
-        emit dc->requestUpdate(dc->objectName());
+        emit dc->requestUpdate(dc);
+        if (!dc->hasUpdates()) {
+            // the source wasn't actually updated; so let's put ourselves in the queue
+            // so we get an updated() when the data does arrive
+            m_queued = true;
+        }
         emit updated(dc->objectName(), d->data);
         event->accept();
     }

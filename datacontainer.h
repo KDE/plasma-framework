@@ -80,6 +80,16 @@ class PLASMA_EXPORT DataContainer : public QObject
          **/
         void checkForUpdate();
 
+        /**
+         * Returns how long ago, in msecs, that the data in this container was last updated
+         **/
+        uint timeSinceLastUpdate() const;
+
+        /**
+         * @internal
+         **/
+        bool hasUpdates() const;
+
     public Q_SLOTS:
         /**
          * Check if the DataContainer is still in use.
@@ -118,7 +128,7 @@ class PLASMA_EXPORT DataContainer : public QObject
          * Emitted when the source, usually due to an internal timer firing,
          * requests to be updated.
          **/
-        void requestUpdate(const QString& source);
+        void requestUpdate(DataContainer *source);
 
     private:
         friend class SignalRelay;

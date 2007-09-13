@@ -46,16 +46,13 @@ const DataEngine::Data DataContainer::data() const
 void DataContainer::setData(const QString& key, const QVariant& value)
 {
     if (value.isNull() || !value.isValid()) {
-        if (!d->data.contains(key)) {
-            return;
-        }
-
         d->data.remove(key);
     } else {
         d->data[key] = value;
     }
 
     d->dirty = true;
+    d->updateTs = QTime::currentTime().msec();
 }
 
 void DataContainer::clearData()
@@ -73,8 +70,33 @@ void DataContainer::checkForUpdate()
 {
     if (d->dirty) {
         emit updated(objectName(), d->data);
+
+        foreach (SignalRelay* relay, d->relays) {
+            relay->checkQueueing();
+        }
+
         d->dirty = false;
     }
+}
+
+uint DataContainer::timeSinceLastUpdate() const
+{
+    int msec = QTime::currentTime().msec();
+    if (msec < d->updateTs) {
+        // we wrapped over midnight here, so return the current
+        // msec's plus the number of msec left in the previous day.
+        // 86400000 is the # of msec in a day
+        //
+        // yes, we assume we don't wrap more than one day here.
+        return msec + (86400000 - d->updateTs);
+    }
+
+    return msec - d->updateTs;
+}
+
+bool DataContainer::hasUpdates() const
+{
+    return d->dirty;
 }
 
 void DataContainer::checkUsage()
@@ -109,7 +131,7 @@ void DataContainer::connectVisualization(QObject* visualization, uint updateInte
             // the visualization was connected already, but not to a relay
             // and it still doesn't want to connect to a relay, so we have
             // nothing to do!
-            kDebug() << "     already connected, nothing to do";
+            //kDebug() << "     already connected, nothing to do";
             return;
         } else {
             disconnect(this, SIGNAL(updated(QString,Plasma::DataEngine::Data)),
@@ -119,7 +141,7 @@ void DataContainer::connectVisualization(QObject* visualization, uint updateInte
 
     if (!connected) {
         connect(visualization, SIGNAL(destroyed(QObject*)),
-                this, SLOT(disconnectVisualization(QObject*)), Qt::QueuedConnection);
+                this, SLOT(disconnectVisualization(QObject*)));//, Qt::QueuedConnection);
     }
 
     d->relayObjects[visualization] = 0;
