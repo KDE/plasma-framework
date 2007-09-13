@@ -64,7 +64,7 @@ class PLASMA_EXPORT BoxLayout : public Layout
 
         /** Inserts a new item into the layout at the specified index. */
         void insertItem(int index, LayoutItem *l);
-        
+
         // reimplemented from Layout
         virtual void addItem(LayoutItem *l);
         virtual void removeItem(LayoutItem *l);

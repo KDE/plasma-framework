@@ -88,9 +88,10 @@ void Layout::invalidate()
 
     do {
         parentLayout = dynamic_cast<Layout*>(layout->parent());
-        if ( parentLayout )
+        if (parentLayout) {
             layout = parentLayout;
-    } while ( parentLayout );
+        }
+    } while (parentLayout);
 
     layout->update();
 }
@@ -101,34 +102,34 @@ LayoutAnimator* Layout::animator() const
     return d->animator;
 }
 
-void Layout::setAnimator(LayoutAnimator* animator)
+void Layout::setAnimator(LayoutAnimator *animator)
 {
     d->animator = animator;
 }
 
 qreal Layout::margin() const
 {
-	return d->margin;
+    return d->margin;
 }
 
 void Layout::setMargin(qreal m)
 {
-	d->margin = m;
+    d->margin = m;
 }
 
 qreal Layout::spacing() const
 {
-	return d->spacing;
+    return d->spacing;
 }
 
 void Layout::setSpacing(qreal s)
 {
-	d->spacing = s;
+    d->spacing = s;
 }
 
 LayoutItem *Layout::parent() const
 {
-	return d->parent;
+    return d->parent;
 }
 
 QSizeF Layout::minimumSize() const
@@ -139,11 +140,12 @@ QSizeF Layout::maximumSize() const
 {
     return QSizeF(INFINITY,INFINITY);
 }
+
 void Layout::startAnimation() 
 {
-    if ( animator() && animator()->timeLine() ) {
-        animator()->timeLine()->setCurrentTime(0); 
-        if ( animator()->timeLine()->state() == QTimeLine::NotRunning ) {
+    if (animator() && animator()->timeLine()) {
+        animator()->timeLine()->setCurrentTime(0);
+        if (animator()->timeLine()->state() == QTimeLine::NotRunning) {
             animator()->timeLine()->start();
         }
     }

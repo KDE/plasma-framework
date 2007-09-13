@@ -41,42 +41,42 @@ class LayoutAnimator;
 
 class PLASMA_EXPORT Layout : public LayoutItem
 {
-	public:
+    public:
 
         /**
          * Constructor.
          */
-		explicit Layout(LayoutItem *parent);
+        explicit Layout(LayoutItem *parent);
 
         /**
          * Virtual Destructor.
          */
-		virtual ~Layout();
+        virtual ~Layout();
 
         /**
          * Returns the margin of this Layout.
          */
-		qreal margin() const;
+        qreal margin() const;
 
         /**
          * Sets the margin of this Layout.
          */
-		void setMargin(qreal m);
+        void setMargin(qreal m);
 
         /**
          * Returns the spacing between Layout elements of this Layout.
          */
-		qreal spacing() const;
+        qreal spacing() const;
 
         /**
          * Sets the spacing of this Layout.
          */
-		void setSpacing(qreal s);
+        void setSpacing(qreal s);
 
         /**
          * Returns the parent of this Layout.
          */
-		LayoutItem *parent() const;
+        LayoutItem *parent() const;
 
         /**
          * Sets the parent of this layout.
@@ -86,42 +86,42 @@ class PLASMA_EXPORT Layout : public LayoutItem
         /**
          * Returns the number of elements of this Layout.
          */
-		virtual int count() const = 0;
+        virtual int count() const = 0;
 
         /**
          * Returns true if this Layout contains no elements, false otherwise.
          */
-		bool isEmpty() const;
+        bool isEmpty() const;
 
         /**
          * Adds a Item to this Layout.
          * @param l Pointer to the Item to be added.
          */
-        	virtual void addItem(LayoutItem *l) = 0;
+            virtual void addItem(LayoutItem *l) = 0;
 
          /**
           * Removes a Item from this Layout.
           * @param l Pointer to the Item to be removed.
           */
-		virtual void removeItem(LayoutItem *l) = 0;
+        virtual void removeItem(LayoutItem *l) = 0;
 
         /**
          * Returns the index of a Item in this Layout.
          * @param l Pointer to an Item to be queryed.
          */
-		virtual int indexOf(LayoutItem *l) const = 0;
+        virtual int indexOf(LayoutItem *l) const = 0;
 
         /**
          * Returns a Pointer to an Item in this Layout.
          * @param i Index of the desired Item.
          */
-		virtual LayoutItem *itemAt(int i) const = 0;
+        virtual LayoutItem *itemAt(int i) const = 0;
 
         /**
          * Takes the Pointer of an Item in this Layout.
          * @param i Index of the desired Item.
          */
-		virtual LayoutItem *takeAt(int i) = 0;
+        virtual LayoutItem *takeAt(int i) = 0;
 
         /**
          * Returns the object controlling animation of changes
@@ -162,9 +162,9 @@ class PLASMA_EXPORT Layout : public LayoutItem
          */
         void startAnimation();
 
-	private:
-		class Private;
-		Private *const d;
+    private:
+        class Private;
+        Private *const d;
 };
 
 }
