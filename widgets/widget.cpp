@@ -23,7 +23,8 @@
 #include <cmath>
 #include <limits>
 
-#include <QtCore/QList>
+#include <QApplication>
+#include <QList>
 #include <QPainter>
 #include <QPixmapCache>
 #include <QStyleOptionGraphicsItem>
@@ -238,6 +239,18 @@ QSizeF Widget::size() const
 {
     return geometry().size();
 }
+
+QFont Widget::font() const
+{
+    return QApplication::font();
+}
+
+/*
+void Widget::setFont(const QFront& font)
+{
+}
+*/
+
 QRectF Widget::boundingRect() const
 {
     return QRectF(QPointF(0,0),geometry().size()); 
