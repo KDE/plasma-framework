@@ -57,7 +57,7 @@ class Widget::Private
         QList<Widget *> childList;
 
         qreal opacity;
- 
+
         // Replace with CacheMode in 4.4
 #if QT_VERSION >= 0x040400
 #warning Replace Plasma::Widget::CachePaintMode with QGraphicsItem::CacheMode
@@ -116,12 +116,13 @@ void Widget::setCachePaintMode(CachePaintMode mode, const QSize &size)
 {
     d->cachePaintMode = mode;
     if (mode == NoCacheMode) {
-	QPixmapCache::remove(d->cacheKey);
-	d->cacheKey.clear();
+        QPixmapCache::remove(d->cacheKey);
+        d->cacheKey.clear();
     } else {
-	d->cacheKey = QString("%1").arg(long(this));
-	if (mode == ItemCoordinateCacheMode)
-	    d->cacheSize = size.isNull() ? boundingRect().size().toSize() : size;
+        d->cacheKey = QString("%1").arg(long(this));
+        if (mode == ItemCoordinateCacheMode) {
+            d->cacheSize = size.isNull() ? boundingRect().size().toSize() : size;
+        }
     }
 }
 
@@ -132,8 +133,9 @@ Widget::CachePaintMode Widget::cachePaintMode() const
 
 void Widget::update(const QRectF &rect)
 {
-    if (d->cachePaintMode != NoCacheMode)
-	d->cacheInvalidated |= rect.isNull() ? boundingRect() : rect;
+    if (d->cachePaintMode != NoCacheMode) {
+        d->cacheInvalidated |= rect.isNull() ? boundingRect() : rect;
+    }
     QGraphicsItem::update(rect);
 }
 
@@ -207,12 +209,12 @@ void Widget::setGeometry(const QRectF& geometry)
 
         d->size = QSizeF(width, height);
 
-        if ( layout() ) 
+        if (layout()) {
             layout()->setGeometry(boundingRect());
+        }
     }
 
     setPos(geometry.topLeft() - boundingRect().topLeft());
-
     update();
 }
 

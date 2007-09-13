@@ -61,8 +61,8 @@ class PLASMA_EXPORT Widget  : public QObject,
 public:
     enum CachePaintMode {
         NoCacheMode,
-	ItemCoordinateCacheMode,
-	DeviceCoordinateCacheMode
+        ItemCoordinateCacheMode,
+        DeviceCoordinateCacheMode
     };
 
 
