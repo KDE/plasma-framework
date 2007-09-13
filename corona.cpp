@@ -199,7 +199,11 @@ void Corona::loadApplets(const QString& config)
     foreach (const QString& group, appletConfig.groupList()) {
         KConfigGroup cg(&appletConfig, group);
         addApplet(cg.readEntry("plugin", QString()), QVariantList(),
-                  group.toUInt(), cg.readEntry("geometry", QRectF()));
+                  group.toUInt(), cg.readEntry("geometry", QRectF()), true);
+    }
+
+    foreach (Applet* applet, d->applets) {
+        applet->init();
     }
 }
 
@@ -214,7 +218,7 @@ void Corona::clearApplets()
     d->applets.clear();
 }
 
-Applet* Corona::addApplet(const QString& name, const QVariantList& args, uint id, const QRectF& geometry)
+Applet* Corona::addApplet(const QString& name, const QVariantList& args, uint id, const QRectF& geometry, bool delayInit)
 {
     Applet* applet = Applet::loadApplet(name, id, args);
     if (!applet) {
@@ -254,6 +258,10 @@ Applet* Corona::addApplet(const QString& name, const QVariantList& args, uint id
         d->layout->addItem(applet);
     addItem(applet);
     applet->updateConstraints();
+
+    if (!delayInit) {
+        applet->init();
+    }
 
     //applet->constraintsUpdated();
     d->applets << applet;
