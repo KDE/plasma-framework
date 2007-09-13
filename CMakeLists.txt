@@ -34,6 +34,7 @@ set(plasma_LIB_SRCS
     uiloader.cpp
     widgets/boxlayout.cpp
     widgets/checkbox.cpp
+    widgets/freelayout.cpp
     widgets/flowlayout.cpp
     widgets/flash.cpp
     widgets/icon.cpp
@@ -106,6 +107,7 @@ install(FILES
     widgets/boxlayout.h
     widgets/hboxlayout.h
     widgets/vboxlayout.h
+    widgets/freelayout.h
     widgets/flash.h
     widgets/icon.h
     widgets/label.h
