@@ -227,8 +227,8 @@ Applet* Corona::addApplet(const QString& name, const QVariantList& args, uint id
         applet->setFailedToLaunch(true);
     }
 
-    qreal appWidth = applet->boundingRect().width();
-    qreal appHeight = applet->boundingRect().height();
+    //qreal appWidth = applet->boundingRect().width();
+    //qreal appHeight = applet->boundingRect().height();
 
     if (geometry.isValid()) {
         applet->setGeometry(geometry);
