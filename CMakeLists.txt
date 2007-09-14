@@ -43,6 +43,7 @@ set(plasma_LIB_SRCS
     widgets/layoutanimator.cpp
     widgets/layoutitem.cpp
     widgets/lineedit.cpp
+    widgets/progressbar.cpp
     widgets/pushbutton.cpp
     widgets/radiobutton.cpp
 #    widgets/rectangle.cpp
@@ -115,6 +116,7 @@ install(FILES
     widgets/layoutanimator.h
     widgets/layoutitem.h
     widgets/lineedit.h
+    widgets/progressbar.cpp
     widgets/pushbutton.h
     widgets/checkbox.h
     widgets/radiobutton.h
