@@ -116,7 +116,7 @@ install(FILES
     widgets/layoutanimator.h
     widgets/layoutitem.h
     widgets/lineedit.h
-    widgets/progressbar.cpp
+    widgets/progressbar.h
     widgets/pushbutton.h
     widgets/checkbox.h
     widgets/radiobutton.h
