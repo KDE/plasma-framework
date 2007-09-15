@@ -83,7 +83,9 @@ LayoutItem * FreeLayout::takeAt(int i)
 void FreeLayout::setGeometry(const QRectF &geometry)
 {
     foreach (LayoutItem *child , d->children) {
-        child->setGeometry(QRectF(child->geometry().topLeft(),child->sizeHint()));
+        if (child->geometry().size() != child->sizeHint()) {
+            child->setGeometry(QRectF(child->geometry().topLeft(),child->sizeHint()));
+        }
     }
     d->geometry = geometry;
 }

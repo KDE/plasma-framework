@@ -217,7 +217,7 @@ void Widget::setGeometry(const QRectF& geometry)
         }
     }
 
-    setPos(geometry.topLeft() - boundingRect().topLeft());
+    setPos(geometry.topLeft());
     update();
 }
 
