@@ -38,7 +38,7 @@ class DataEngine::Private
             : engine(e),
               ref(0),
               updateTimerId(0),
-              minUpdateFreq(-1),
+              minUpdateInterval(-1),
               limit(0),
               valid(true)
         {
@@ -91,7 +91,7 @@ class DataEngine::Private
             //kDebug() << "connect source called with interval" << updateInterval;
             if (updateInterval > 0) {
                 // never more frequently than allowed, never more than 20 times per second
-                uint min = qMax(50, minUpdateFreq); // for qMin below
+                uint min = qMax(50, minUpdateInterval); // for qMin below
                 updateInterval = qMax(min, updateInterval);
 
                 // align on the 50ms
@@ -148,7 +148,7 @@ class DataEngine::Private
         DataEngine* engine;
         int ref;
         int updateTimerId;
-        int minUpdateFreq;
+        int minUpdateInterval;
         QTime updateTimestamp;
         DataEngine::SourceDict sources;
         QQueue<DataContainer*> sourceQueue;
@@ -234,12 +234,12 @@ void DataEngine::startInit()
 
 void DataEngine::internalUpdateSource(DataContainer* source)
 {
-    if (d->minUpdateFreq > 0 &&
-        source->timeSinceLastUpdate() < d->minUpdateFreq) {
+    if (d->minUpdateInterval > 0 &&
+        source->timeSinceLastUpdate() < d->minUpdateInterval) {
         // skip updating this source; it's been too soon
         //TODO: should we queue an update in this case? return to this
         //      once we see the results in real world usage
-        //kDebug() << "internal update source is delaying" << source->timeSinceLastUpdate() << d->minUpdateFreq;
+        //kDebug() << "internal update source is delaying" << source->timeSinceLastUpdate() << d->minUpdateInterval;
         return;
     }
 
@@ -339,12 +339,12 @@ void DataEngine::setSourceLimit(uint limit)
 
 void DataEngine::setMinimumUpdateInterval(int minimumMs)
 {
-    d->minUpdateFreq = minimumMs;
+    d->minUpdateInterval = minimumMs;
 }
 
 int DataEngine::minimumUpdateInterval() const
 {
-    return d->minUpdateFreq;
+    return d->minUpdateInterval;
 }
 
 void DataEngine::setUpdateInterval(uint frequency)
@@ -429,12 +429,12 @@ void DataEngine::timerEvent(QTimerEvent *event)
     event->accept();
 
     // if the freq update is less than 0, don't bother
-    if (d->minUpdateFreq < 0) {
+    if (d->minUpdateInterval < 0) {
         return;
     }
 
-    // minUpdateFreq
-    if (d->updateTimestamp.elapsed() < d->minUpdateFreq) {
+    // minUpdateInterval
+    if (d->updateTimestamp.elapsed() < d->minUpdateInterval) {
         return;
     }
 
