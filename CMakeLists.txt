@@ -142,6 +142,8 @@ install(FILES
     includes/DataEngineManager
     includes/ScriptEngine
     includes/Svg
+    includes/UiLoader
+    includes/PackageMetadata
     DESTINATION ${INCLUDE_INSTALL_DIR}/KDE/Plasma)
 
 if(QT_QTOPENGL_FOUND AND OPENGL_FOUND)
