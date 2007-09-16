@@ -79,6 +79,17 @@ enum Location { Floating = 0 /**< Free floating. Neither geometry or z-ordering
               };
 
 /**
+ * The position enumeration
+ *
+ **/
+enum Position { LeftPositioned    /**< Positioned left */,
+                RightPositioned   /**< Positioned right */,
+                TopPositioned     /**< Positioned top */, 
+                BottomPositioned  /**< Positioned bottom */,
+                CenterPositioned  /**< Positioned in the center */
+              };
+
+/**
  * Zoom levels that Plasma is aware of...
  **/
 enum ZoomLevel { DesktopZoom = 0 /**< Normal desktop usage, plasmoids are painted normally and have full interaction */,
