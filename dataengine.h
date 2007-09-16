@@ -231,8 +231,8 @@ class PLASMA_EXPORT DataEngine : public QObject
         /**
          * Called by internal updating mechanisms to trigger the engine
          * to refresh the data contained in a given source. Reimplement this
-         * method when using facilities such as setupdateInterval.
-         * @see setupdateInterval
+         * method when using facilities such as setUpdateInterval.
+         * @see setUpdateInterval
          *
          * @param source the name of the source that should be updated
          * @return true if the data was changed, or false if there was no
@@ -325,11 +325,11 @@ class PLASMA_EXPORT DataEngine : public QObject
          * @param frequency the time, in milliseconds, between updates. A value of 0
          *                  will stop internally triggered updates.
          **/
-        void setupdateInterval(uint frequency);
+        void setUpdateInterval(uint frequency);
 
         /**
          * Returns the current update frequency.
-         * @see setupdateInterval
+         * @see setUpdateInterval
          NOTE: This is not implemented to prevent having to store the value internally.
                When there is a good use case for needing access to this value, we can
                add another member to the Private class and add this method.

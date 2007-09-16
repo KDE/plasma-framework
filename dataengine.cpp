@@ -347,7 +347,7 @@ int DataEngine::minimumUpdateInterval() const
     return d->minUpdateFreq;
 }
 
-void DataEngine::setupdateInterval(uint frequency)
+void DataEngine::setUpdateInterval(uint frequency)
 {
     killTimer(d->updateTimerId);
     d->updateTimerId = 0;

@@ -80,7 +80,7 @@ void DataContainer::checkForUpdate()
     }
 }
 
-uint DataContainer::timeSinceLastUpdate() const
+int DataContainer::timeSinceLastUpdate() const
 {
     int msec = QTime::currentTime().msec();
     if (msec < d->updateTs) {
@@ -124,7 +124,7 @@ void DataContainer::connectVisualization(QObject* visualization, uint updateInte
                     visualization, SLOT(updated(QString,Plasma::DataEngine::Data)));
 
             if (relay->isUnused()) {
-                d->relays.erase(d->relays.find(relay->m_interval));
+                d->relays.remove(relay->m_interval);
                 delete relay;
             }
 //            kDebug() << "     already connected, but to a relay";
@@ -173,7 +173,7 @@ void DataContainer::disconnectVisualization(QObject* visualization)
                    visualization, SLOT(updated(QString,Plasma::DataEngine::Data)));
 
         if (relay->isUnused()) {
-            d->relays.erase(d->relays.find(relay->m_interval));
+            d->relays.remove(relay->m_interval);
             delete relay;
         }
 

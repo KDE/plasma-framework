@@ -84,7 +84,7 @@ class PLASMA_EXPORT DataContainer : public QObject
         /**
          * Returns how long ago, in msecs, that the data in this container was last updated
          **/
-        uint timeSinceLastUpdate() const;
+        int timeSinceLastUpdate() const;
 
         /**
          * @internal
