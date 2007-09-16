@@ -55,7 +55,10 @@ ProgressBar::ProgressBar(Widget *parent)
     init();
 }
 
-ProgressBar::~ProgressBar() {}
+ProgressBar::~ProgressBar() 
+{
+    delete d;
+}
 
 void ProgressBar::init()
 {
