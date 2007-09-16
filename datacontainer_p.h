@@ -56,11 +56,11 @@ public:
           d(data),
           m_interval(ival),
           m_align(align),
-          m_resetTimer(false),
+          m_resetTimer(true),
           m_queued(false)
     {
         //kDebug() << "signal relay with time of" << m_timerId << "being set up";
-        m_timerId = startTimer(m_interval);
+        m_timerId = startTimer(0);
         if (m_align != Plasma::NoAlignment) {
             checkAlignment();
         }
@@ -145,8 +145,9 @@ protected:
             // the source wasn't actually updated; so let's put ourselves in the queue
             // so we get an updated() when the data does arrive
             m_queued = true;
+        } else {
+            emit updated(dc->objectName(), d->data);
         }
-        emit updated(dc->objectName(), d->data);
         event->accept();
     }
 };
