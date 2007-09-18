@@ -43,6 +43,7 @@
 #include <KIconLoader>
 
 #include "plasma/configxml.h"
+#include "plasma/containment.h"
 #include "plasma/corona.h"
 #include "plasma/dataenginemanager.h"
 #include "plasma/package.h"
@@ -106,10 +107,6 @@ public:
     void init(Applet* applet)
     {
         applet->setZValue(100);
-        //these lines fix behaviour somewhat with update()s after resize in qt 4.3.0,
-        //but the issues are fixed in 4.3.1 and this breaks shadows.
-        //applet->setFlag(QGraphicsItem::ItemClipsToShape, false);
-        //applet->setFlag(QGraphicsItem::ItemClipsChildrenToShape, false);
         kioskImmutable = applet->globalConfig().isImmutable() ||
                          applet->config().isImmutable();
         applet->setImmutable(kioskImmutable);
@@ -197,7 +194,9 @@ public:
         const int bottomOffset = contentHeight;
         const int contentTop = 0;
         const int contentLeft = 0;
-        if (!cachedBackground || cachedBackground->size() != QSize(leftWidth + contentWidth + rightWidth, topHeight + contentHeight + bottomHeight)) {
+        QSize s = QSize(leftWidth + contentWidth + rightWidth,
+                        topHeight + contentHeight + bottomHeight);
+        if (!cachedBackground || cachedBackground->size() != s) {
             delete cachedBackground;
             cachedBackground = new QPixmap(leftWidth + contentWidth + rightWidth, topHeight + contentHeight + bottomHeight);
             cachedBackground->fill(Qt::transparent);
@@ -212,12 +211,11 @@ public:
             background->paint(&p, QRect(rightOffset, bottomOffset, rightWidth, bottomHeight), "bottomright");
 
             if (stretchBackgroundBorders) {
-		background->paint(&p, QRect(leftOffset, contentTop, leftWidth, contentHeight), "left");
-		background->paint(&p, QRect(rightOffset, contentTop, rightWidth, contentHeight), "right");
-		background->paint(&p, QRect(contentLeft, topOffset, contentWidth, topHeight), "top");
-		background->paint(&p, QRect(contentLeft, bottomOffset, contentWidth, bottomHeight), "bottom");
+                background->paint(&p, QRect(leftOffset, contentTop, leftWidth, contentHeight), "left");
+                background->paint(&p, QRect(rightOffset, contentTop, rightWidth, contentHeight), "right");
+                background->paint(&p, QRect(contentLeft, topOffset, contentWidth, topHeight), "top");
+                background->paint(&p, QRect(contentLeft, bottomOffset, contentWidth, bottomHeight), "bottom");
             } else {
-
                 QPixmap left(leftWidth, leftHeight);
                 left.fill(Qt::transparent);
                 {
@@ -389,6 +387,24 @@ uint Applet::id() const
 KConfigGroup Applet::config() const
 {
     return KConfigGroup(d->config(), "General");
+}
+
+void Applet::save(KConfigGroup* group) const
+{
+    group->writeEntry("plugin", pluginName());
+    group->writeEntry("geometry", QRect(pos().toPoint(), boundingRect().size().toSize()));
+
+    Containment* c = containment();
+    if (c) {
+        group->writeEntry("containment", c->id());
+    }
+
+    saveState(group);
+}
+
+void Applet::saveState(KConfigGroup* group) const
+{
+    Q_UNUSED(group)
 }
 
 KConfigGroup Applet::config(const QString& group) const
@@ -749,29 +765,38 @@ void Applet::paintInterface(QPainter *painter, const QStyleOptionGraphicsItem *o
 
 FormFactor Applet::formFactor() const
 {
-    if (!scene()) {
+    Containment* c = containment();
+
+    if (!c) {
         return Plasma::Planar;
     }
 
-    return static_cast<Corona*>(scene())->formFactor();
+    return c->formFactor();
+}
+
+Containment* Applet::containment() const
+{
+    return dynamic_cast<Containment*>(parentItem());
 }
 
 Location Applet::location() const
 {
-    if (!scene()) {
+    Containment* c = containment();
+
+    if (!c) {
         return Plasma::Desktop;
     }
 
-    return static_cast<Corona*>(scene())->location();
+    return c->location();
 }
 
 QSizeF Applet::contentSize() const
 {
     int top , left , right , bottom;
     d->getBorderSize(left,top,right,bottom);
-  
-   // qDebug() << "Geometry size: " << geometry().size();
-   // qDebug() << "Borders: " << left << top << right << bottom;
+
+    // qDebug() << "Geometry size: " << geometry().size();
+    // qDebug() << "Borders: " << left << top << right << bottom;
 
     return geometry().size() - QSizeF(left+right,top+bottom);
 }

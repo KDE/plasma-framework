@@ -35,6 +35,7 @@
 namespace Plasma
 {
 
+class Containment;
 class DataEngine;
 class Package;
 
@@ -128,6 +129,11 @@ class PLASMA_EXPORT Applet : public Widget
         KConfigGroup config(const QString& group) const;
 
         /**
+         * Saves state information about this applet.
+         **/
+        void save(KConfigGroup* group) const;
+
+        /**
          * Returns a KConfigGroup object to be shared by all applets of this
          * type.
          *
@@ -196,14 +202,14 @@ class PLASMA_EXPORT Applet : public Widget
          *
          * @see Plasma::FormFactor
          */
-        FormFactor formFactor() const;
+        virtual FormFactor formFactor() const;
 
         /**
          * Returns the location of the scene which is displaying applet.
          *
          * @see Plasma::Location
          */
-        Location location() const;
+        virtual Location location() const;
 
         /**
          * Returns the area within which contents can be painted. If there is no
@@ -225,8 +231,7 @@ class PLASMA_EXPORT Applet : public Widget
         virtual QSizeF contentSizeHint() const;
 
         /**
-         * Returns a list of all known applets in a hash keyed by a unique
-         * identifier for each applet.
+         * Returns a list of all known applets.
          *
          * @param category Only applets matchin this category will be returned.
          *                 Useful in conjunction with knownCategories.
@@ -245,8 +250,7 @@ class PLASMA_EXPORT Applet : public Widget
                                               const QString &parentApp = QString());
 
         /**
-         * Returns a list of all known applets associated with a certain mimetype in a hash keyed by a unique
-         * identifier for each applet
+         * Returns a list of all known applets associated with a certain mimetype.
          *
          * @return list of applets
          **/
@@ -492,6 +496,12 @@ class PLASMA_EXPORT Applet : public Widget
 
     protected:
         /**
+         * Called when a request to save the state of the applet is made
+         * during runtime
+         **/
+        virtual void saveState(KConfigGroup* config) const;
+
+        /**
          * Returns the name of the applet.
          *
          * This will be the same for all instances of this applet.
@@ -548,7 +558,11 @@ class PLASMA_EXPORT Applet : public Widget
          */
         QVariant itemChange(GraphicsItemChange change, const QVariant &value);
 
-        
+        /**
+         * @return the Containment, if any, this applet belongs to
+         **/
+        Containment* containment() const;
+
     protected Q_SLOTS:
         /**
          * @internal used to show the configuration of an applet on first show
