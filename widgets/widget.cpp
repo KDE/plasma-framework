@@ -30,6 +30,7 @@
 #include <QPainter>
 #include <QPixmapCache>
 #include <QStyleOptionGraphicsItem>
+#include <QGraphicsSceneContextMenuEvent>
 
 #include <KDebug>
 
@@ -405,6 +406,34 @@ void Widget::reparent(Widget *w)
     d->parent = w;
     setParentItem(w);
     update();
+}
+
+void Widget::contextMenuEvent(QGraphicsSceneContextMenuEvent *contextMenuEvent)
+{
+    //kDebug() << "context menu event!";
+    if (!scene()) {
+        return;
+    }
+    Widget* item = dynamic_cast<Widget*>(parentItem());
+
+    if (!item) {
+        QGraphicsItem::contextMenuEvent(contextMenuEvent);
+        return;
+    }
+
+    while (item && item->parentItem()) {
+        item = dynamic_cast<Widget*>(parentItem()); //item->parentItem();
+    }
+
+    if (!item) {
+        QGraphicsItem::contextMenuEvent(contextMenuEvent);
+        return;
+    }
+
+    item->contextMenuEvent(contextMenuEvent);
+    contextMenuEvent->accept();
+    return;
+    //QGraphicsScene::contextMenuEvent(contextMenuEvent);
 }
 
 } // Plasma namespace
