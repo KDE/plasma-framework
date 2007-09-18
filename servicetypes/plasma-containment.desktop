@@ -1,0 +1,7 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=ServiceType
+X-KDE-ServiceType=Plasma/Containment
+
+Comment=Plasma applet container and background painter
+
