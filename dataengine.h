@@ -224,6 +224,13 @@ class PLASMA_EXPORT DataEngine : public QObject
          * otherwise the requesting visualization may not receive notice of a
          * data update.
          *
+         * If the source can not be populated with data immediately (e.g. due to
+         * an asynchronous data acquisition method such as an HTTP request)
+         * the source must still be created, even if it is empty. This can
+         * be accomplished in these cases with the follow line:
+         *
+         *      setData(name, DataEngine::Data());
+         *
          * @return true if a DataContainer was set up, false otherwise
          */
         virtual bool sourceRequested(const QString &name);
