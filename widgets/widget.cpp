@@ -433,7 +433,6 @@ void Widget::contextMenuEvent(QGraphicsSceneContextMenuEvent *contextMenuEvent)
     item->contextMenuEvent(contextMenuEvent);
     contextMenuEvent->accept();
     return;
-    //QGraphicsScene::contextMenuEvent(contextMenuEvent);
 }
 
 } // Plasma namespace
