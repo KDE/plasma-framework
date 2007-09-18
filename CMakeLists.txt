@@ -18,6 +18,7 @@ set(plasma_LIB_SRCS
     animator.cpp
     applet.cpp
     configxml.cpp
+    containment.cpp
     corona.cpp
     datacontainer.cpp
     dataengine.cpp
@@ -52,6 +53,10 @@ set(plasma_LIB_SRCS
     widgets/signalplotter.cpp
 )
 
+set(krunner_xml ${KDEBASE_WORKSPACE_SOURCE_DIR}/krunner/org.kde.krunner.Interface.xml)
+QT4_ADD_DBUS_INTERFACE(plasma_LIB_SRCS ${krunner_xml} krunner_interface)
+
+
 if(QT_QTOPENGL_FOUND AND OPENGL_FOUND)
 MESSAGE(STATUS "Adding support for OpenGL applets to libplasma")
 set(plasma_LIB_SRCS
@@ -82,6 +87,7 @@ set(plasma_LIB_INCLUDES
     animator.h
     applet.h
     configxml.h
+    containment.h
     corona.h
     datacontainer.h
     dataengine.h

@@ -34,7 +34,7 @@
 #include <KMimeType>
 #include <KWindowSystem>
 
-#include "applet.h"
+#include "containment.h"
 #include "dataengine.h"
 #include "karambamanager.h"
 #include "phase.h"
@@ -52,31 +52,24 @@ class Corona::Private
 public:
     Private()
         : immutable(false),
-          formFactor(Planar),
-          location(Floating),
-          layout(new FreeLayout),
           mimetype("text/x-plasmoidservicename")
     {
     }
 
     ~Private()
     {
-        qDeleteAll(applets);
-        delete layout;
     }
 
     bool immutable;
-    Applet::List applets;
-    FormFactor formFactor;
-    Location location;
-    Layout* layout;
     QString mimetype;
+    QList<Containment*> containments;
 };
 
 Corona::Corona(QObject *parent)
     : QGraphicsScene(parent),
       d(new Private)
 {
+    //d->init(this);
     //setViewport(new QGLWidget(QGLFormat(QGL::StencilBuffer | QGL::AlphaChannel)));
 }
 
@@ -84,6 +77,7 @@ Corona::Corona(const QRectF & sceneRect, QObject * parent )
     : QGraphicsScene(sceneRect, parent),
       d(new Private)
 {
+    //d->init(this);
     //setViewport(new QGLWidget(QGLFormat(QGL::StencilBuffer | QGL::AlphaChannel)));
 }
 
@@ -91,68 +85,13 @@ Corona::Corona(qreal x, qreal y, qreal width, qreal height, QObject * parent)
     : QGraphicsScene(x, y, width, height, parent),
       d(new Private)
 {
+    //d->init(this);
     //setViewport(new QGLWidget(QGLFormat(QGL::StencilBuffer | QGL::AlphaChannel)));
 }
 
 Corona::~Corona()
 {
     delete d;
-}
-
-Location Corona::location() const
-{
-    return d->location;
-}
-
-void Corona::setLocation(Location location)
-{
-    if (d->location == location) {
-        return;
-    }
-
-    d->location = location;
-
-    foreach (Applet* applet, d->applets) {
-        applet->updateConstraints();
-    }
-}
-
-FormFactor Corona::formFactor() const
-{
-    return d->formFactor;
-}
-
-void Corona::setFormFactor(FormFactor formFactor)
-{
-    if (d->formFactor == formFactor) {
-        return;
-    }
-
-    //kDebug() << "switching FF to " << formFactor;
-    d->formFactor = formFactor;
-    delete d->layout;
-    d->layout = 0;
-
-    switch (d->formFactor) {
-        case Planar:
-            d->layout = new FreeLayout;
-            break;
-        case Horizontal:
-            d->layout = new BoxLayout(BoxLayout::LeftToRight);
-            break;
-        case Vertical:
-            d->layout = new BoxLayout(BoxLayout::TopToBottom);
-            break;
-        case MediaCenter:
-            break;
-        default:
-            kDebug() << "This can't be happening!";
-            break;
-    }
-
-    foreach (Applet* applet, d->applets) {
-        applet->updateConstraints();
-    }
 }
 
 QRectF Corona::maxSizeHint() const
@@ -174,16 +113,21 @@ QString Corona::appletMimeType()
 
 void Corona::saveApplets(const QString &config) const
 {
-    KConfig appletConfig(config);
-    foreach (const QString& group, appletConfig.groupList()) {
-        appletConfig.deleteGroup(group);
+    KConfig cg(config);
+    foreach (const QString& group, cg.groupList()) {
+        cg.deleteGroup(group);
     }
 
-    foreach (Applet *applet, d->applets) {
-        KConfigGroup cg(&appletConfig, QString::number(applet->id()));
-        //kDebug() << "saving applet " << applet->name();
-        cg.writeEntry("plugin", applet->pluginName());
-        cg.writeEntry("geometry", QRect(applet->pos().toPoint(), applet->boundingRect().size().toSize()));
+    QStringList containmentIds;
+    foreach (const Containment *containment, d->containments) {
+        QString cid = QString::number(containment->id());
+        KConfigGroup containmentConfig(&cg, cid.append("-containment"));
+        containment->saveConstraints(&containmentConfig);
+        containment->save(&containmentConfig);
+        foreach (const Applet* applet, containment->applets()) {
+            KConfigGroup appletConfig(&cg, QString::number(applet->id()).append("-applet"));
+            applet->save(&appletConfig);
+        }
     }
 }
 
@@ -196,16 +140,66 @@ void Corona::loadApplets(const QString& config)
 {
     clearApplets();
 
-    KConfig appletConfig(config, KConfig::OnlyLocal);
-    foreach (const QString& group, appletConfig.groupList()) {
-        KConfigGroup cg(&appletConfig, group);
-        addApplet(cg.readEntry("plugin", QString()), QVariantList(),
-                  group.toUInt(), cg.readEntry("geometry", QRectF()), true);
+    KConfig cg(config, KConfig::OnlyLocal);
+
+    QList<KConfigGroup> applets;
+    QHash<int, Containment*> containments;
+    foreach (const QString& group, cg.groupList()) {
+        KConfigGroup appletConfig(&cg, group);
+        if (group.contains("containment")) {
+            int cid = group.left(group.indexOf('-')).toUInt();
+            Containment *c = addContainment(appletConfig.readEntry("plugin", QString()), QVariantList(),
+                                            cid, true);
+            if (c) {
+                containments.insert(c->id(), c);
+                c->initConstraints(&appletConfig);
+            }
+        } else {
+            // it's an applet, let's grab the containment association
+            kDebug() << "insert multi " << group;
+            applets.append(appletConfig);
+        }
     }
 
-    foreach (Applet* applet, d->applets) {
-        applet->init();
+    //int maxContainment = containments.size();
+    //kDebug() << "number of applets?" << applets.count();
+    foreach (KConfigGroup cg, applets) {
+        int cid = cg.readEntry("containment", 0);
+        kDebug() << "trying to load applet" << cg.group() << cid;
+
+        Containment* c = containments.value(cid, 0);
+
+        if (!c) {
+            continue;
+        }
+
+        kDebug() << "loading containment " << cid;
+
+        kDebug() << "creating applet " << cg.group();
+        int appId = cg.group().left(cg.group().indexOf('-')).toUInt();
+        c->addApplet(cg.readEntry("plugin", QString()), QVariantList(),
+                        appId, cg.readEntry("geometry", QRectF()), true);
     }
+
+    foreach (Containment* c, containments) {
+        QString cid = QString::number(c->id());
+        KConfigGroup containmentConfig(&cg, cid.append("-containment"));
+        c->setImmutable(containmentConfig.isImmutable());
+    }
+
+    if (d->containments.count() < 1) {
+        loadDefaultSetup();
+    }
+
+    foreach (Containment* containment, d->containments) {
+        containment->init();
+
+        foreach(Applet* applet, containment->applets()) {
+            applet->init();
+        }
+    }
+
+    setImmutable(cg.isImmutable());
 }
 
 void Corona::loadApplets()
@@ -213,68 +207,84 @@ void Corona::loadApplets()
     loadApplets("plasma-appletsrc");
 }
 
-void Corona::clearApplets()
+void Corona::loadDefaultSetup()
 {
-    qDeleteAll(d->applets);
-    d->applets.clear();
+    //FIXME: implement support for system-wide defaults
+    QDesktopWidget desktop;
+    int numScreens = desktop.numScreens();
+    // create a containment for each screen
+    for (int i = 0; i < numScreens; ++i) {
+        Containment* c = addContainment("default");
+        c->setScreen(i);
+        c->setFormFactor(Plasma::Planar);
+    }
 }
 
-Applet* Corona::addApplet(const QString& name, const QVariantList& args, uint id, const QRectF& geometry, bool delayInit)
+Containment* Corona::containmentForScreen(int screen) const
 {
-    Applet* applet = Applet::loadApplet(name, id, args);
-    if (!applet) {
-        kDebug() << "Applet " << name << " could not be loaded.";
-        applet = new Applet;
-        applet->setFailedToLaunch(true);
+    foreach (Containment* containment, d->containments) {
+        if (containment->screen() == screen) {
+            return containment;
+        }
     }
 
-    //qreal appWidth = applet->boundingRect().width();
-    //qreal appHeight = applet->boundingRect().height();
+    return 0;
+}
 
-    if (geometry.isValid()) {
-        applet->setGeometry(geometry);
-    } else { 
-        applet->setGeometry( QRectF(geometry.topLeft(),applet->sizeHint()) );
+void Corona::clearApplets()
+{
+    foreach (Containment* containment, d->containments) {
+        containment->clearApplets();
+    }
+}
+
+Containment* Corona::addContainment(const QString& name, const QVariantList& args, uint id, bool delayedInit)
+{
+    Containment* containment = 0;
+    Applet* applet = 0;
+
+    if (!name.isEmpty()) {
+        applet = Applet::loadApplet(name, id, args);
+        containment = dynamic_cast<Containment*>(applet);
     }
 
-#if 0
-    if (!geometry.size().isValid()) {
-        
+    if (!containment) {
+        delete applet; // in case we got a non-Containment from Applet::loadApplet
+        containment = new Containment;
+        containment->setFailedToLaunch(false); // we want to provide something and don't care about the failure to launch
     }
 
-    if (geometry.isValid()) {
-        applet->setGeometry(geometry);
-    } else if (geometry.x() != -1 && geometry.y() != -1) {
-        // yes, this means we can't have items start -1, -1
-        applet->setPos(geometry.topLeft() - QPointF(applet->boundingRect().width()/2,
-                                                   applet->boundingRect().height()/2));
-    } else {
-        //TODO: Make sure new applets don't overlap with existing ones
-        // Center exactly:
-        applet->setPos((width() / 2) - (appWidth / 2), (height() / 2) - (appHeight / 2));
-    }
-#endif
+    addItem(containment);
 
-    if ( d->layout )
-        d->layout->addItem(applet);
-    addItem(applet);
-    applet->updateConstraints();
-
-    if (!delayInit) {
-        applet->init();
+    if (!delayedInit) {
+        containment->init();
     }
 
-    //applet->constraintsUpdated();
-    d->applets << applet;
-    connect(applet, SIGNAL(destroyed(QObject*)),
-            this, SLOT(appletDestroyed(QObject*)));
-    Phase::self()->animateItem(applet, Phase::Appear);
+    // in case it was set in the Containment (or Applet), we don't want this
+    containment->setDrawStandardBackground(false);
 
-    return applet;
+    d->containments.append(containment);
+    connect(containment, SIGNAL(destroyed(QObject*)),
+            this, SLOT(containmentDestroyed(QObject*)));
+
+    return containment;
+}
+
+Applet* Corona::addApplet(const QString& name, const QVariantList& args, uint id, const QRectF& geometry)
+{
+    if (d->containments.size() < 1) {
+        kDebug() << "No containments to add an applet to!" << endl;
+        //FIXME create a containment if one doesn't exist ... ?
+        return 0;
+    }
+
+    return d->containments[0]->addApplet(name, args, id, geometry);
 }
 
 void Corona::addKaramba(const KUrl& path)
 {
+    //FIXME: i think this is slightly broken now that we have containments?
+    //       it should go into a containment...
     QGraphicsItemGroup* karamba = KarambaManager::loadKaramba(path, this);
     if (karamba) {
         addItem(karamba);
@@ -286,7 +296,7 @@ void Corona::addKaramba(const KUrl& path)
 
 void Corona::dragEnterEvent( QGraphicsSceneDragDropEvent *event)
 {
-    kDebug() << "Corona::dragEnterEvent(QGraphicsSceneDragDropEvent* event)";
+//    kDebug() << "Corona::dragEnterEvent(QGraphicsSceneDragDropEvent* event)";
     if (event->mimeData()->hasFormat(d->mimetype) ||
         KUrl::List::canDecode(event->mimeData())) {
         event->acceptProposedAction();
@@ -358,21 +368,17 @@ void Corona::dropEvent(QGraphicsSceneDragDropEvent *event)
     }
 }
 
-// void Corona::contextMenuEvent(QGraphicsSceneContextMenuEvent *contextMenuEvent)
-// {
-// }
-
-void Corona::appletDestroyed(QObject* object)
+void Corona::containmentDestroyed(QObject* obj)
 {
-    // we do a static_cast here since it really isn't an Applet by this
+    // we do a static_cast here since it really isn't an Containment by this
     // point anymore since we are in the qobject dtor. we don't actually
     // try and do anything with it, we just need the value of the pointer
     // so this unsafe looking code is actually just fine.
-    Applet* applet = static_cast<Plasma::Applet*>(object);
-    int index = d->applets.indexOf(applet);
+    Containment* containment = static_cast<Plasma::Containment*>(obj);
+    int index = d->containments.indexOf(containment);
 
     if (index > -1) {
-        d->applets.removeAt(index);
+        d->containments.removeAt(index);
     }
 }
 
@@ -389,13 +395,7 @@ void Corona::setImmutable(bool immutable)
 
     d->immutable = immutable;
     foreach (QGraphicsItem* item, items()) {
-        QGraphicsItem::GraphicsItemFlags flags = item->flags();
-        if (immutable) {
-            flags ^= QGraphicsItem::ItemIsMovable;
-        } else {
-            flags |= QGraphicsItem::ItemIsMovable;
-        }
-        item->setFlags(flags);
+        item->setFlag(QGraphicsItem::ItemIsMovable, immutable);
     }
 }
 

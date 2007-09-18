@@ -29,6 +29,7 @@
 namespace Plasma
 {
 
+class Containment;
 
 /**
  * @short A QGraphicsScene for Plasma::Applets
@@ -49,16 +50,6 @@ public:
      * The applets and Corona surface are changeable or not
      **/
     bool isImmutable() const;
-
-    /**
-     * The location of the Corona. @see Plasma::Location
-     */
-    Plasma::Location location() const;
-
-    /**
-     * The current form factor for this Corona. @see Plasma::FormFactor
-     **/
-    Plasma::FormFactor formFactor() const;
 
     /**
      * A rect containing the maximum size a plasmoid on this corona should
@@ -92,10 +83,15 @@ public:
     void loadApplets(const QString &config);
 
     /**
+     * Loads the default (system wide) layout for this user
+     **/
+    virtual void loadDefaultSetup();
+
+    /**
      * Clear the Corona from all applets.
      */
     void clearApplets();
-    
+
 public Q_SLOTS:
     /**
      * Load applets from the default config file
@@ -108,23 +104,7 @@ public Q_SLOTS:
     void saveApplets() const;
 
     /**
-     * Informs the Corona as to what position it is in. This is informational
-     * only, as the Corona doesn't change it's actual location. This is,
-     * however, passed on to Applets that may be managed by this Corona.
-     *
-     * @param location the new location of this Corona
-     */
-    void setLocation(Plasma::Location location);
-
-    /**
-     * Sets the form factor for this Corona. This may cause changes in both
-     * the arrangement of Applets as well as the display choices of individual
-     * Applets.
-     */
-    void setFormFactor(Plasma::FormFactor formFactor);
-
-    /**
-     * Adds an applet to the Corona
+     * Adds an applet to the default Containment
      *
      * @param name the plugin name for the applet, as given by 
      *        KPluginInfo::pluginName()
@@ -136,8 +116,29 @@ public Q_SLOTS:
      * @return a pointer to the applet on success, or 0 on failure
      */
     Applet* addApplet(const QString& name, const QVariantList& args = QVariantList(),
-                      uint id = 0, const QRectF &geometry = QRectF(-1, -1, -1, -1),
-                      bool delayInit = false);
+                      uint id = 0, const QRectF &geometry = QRectF(-1, -1, -1, -1));
+
+    /**
+     * Adds a Containment to the Corona
+     *
+     * @param name the plugin name for the containment, as given by
+     *        KPluginInfo::pluginName()
+     * @param args argument list to pass to the containment
+     * @param id to assign to this containment, or 0 to auto-assign it a new id
+     * @param geometry where to place the containment, or to auto-place it if an invalid
+     *                 is provided
+     *
+     * @return a pointer to the containment on success, or 0 on failure
+     */
+    Containment* addContainment(const QString& name, const QVariantList& args = QVariantList(),
+                                uint id = 0, bool delayInit = false);
+
+    /**
+     * Returns the Containment, if any, for a given physical screen
+     *
+     * @param screen number of the physical screen to locate
+     */
+    Containment* containmentForScreen(int screen) const;
 
     /**
      * Adds a SuperKaramba theme to the scene
@@ -156,10 +157,10 @@ protected:
     void dragLeaveEvent(QGraphicsSceneDragDropEvent* event);
     void dragMoveEvent(QGraphicsSceneDragDropEvent* event);
     void dropEvent(QGraphicsSceneDragDropEvent* event);
-//     void contextMenuEvent(QGraphicsSceneContextMenuEvent *contextMenuEvent);
+    //void contextMenuEvent(QGraphicsSceneContextMenuEvent *contextMenuEvent);
 
 protected Q_SLOTS:
-    void appletDestroyed(QObject*);
+    void containmentDestroyed(QObject*);
 
 private:
     class Private;
