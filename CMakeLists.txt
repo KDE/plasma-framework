@@ -140,7 +140,6 @@ install(FILES
     includes/Phase
     includes/Plasma
     includes/Package
-    includes/Packager
     includes/PackageStructure
     includes/Theme
     includes/DataContainer
@@ -150,6 +149,7 @@ install(FILES
     includes/Svg
     includes/UiLoader
     includes/PackageMetadata
+    includes/Containment
     DESTINATION ${INCLUDE_INSTALL_DIR}/KDE/Plasma)
 
 if(QT_QTOPENGL_FOUND AND OPENGL_FOUND)
