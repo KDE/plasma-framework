@@ -139,7 +139,6 @@ void Containment::paintInterface(QPainter *painter,
                                  const QStyleOptionGraphicsItem *option,
                                  const QRect& contentsRect)
 {
-    return;
     //TODO: we should have a way to do this outside of the paint event!
     if (d->background) {
         d->background->resize(contentsRect.size());
