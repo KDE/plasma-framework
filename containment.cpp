@@ -31,6 +31,7 @@
 #include <KIcon>
 #include <KMenu>
 #include <KRun>
+#include <KServiceTypeTrader>
 
 #include "workspace/kworkspace.h"
 
@@ -526,6 +527,41 @@ void Containment::setScreen(int screen)
 int Containment::screen() const
 {
     return d->screen;
+}
+
+KPluginInfo::List Containment::knownContainments(const QString &category,
+                                                 const QString &parentApp)
+{
+    QString constraint;
+
+    if (parentApp.isEmpty()) {
+        constraint.append("not exist [X-KDE-ParentApp]");
+    } else {
+        constraint.append("[X-KDE-ParentApp] == '").append(parentApp).append("'");
+    }
+
+    if (!category.isEmpty()) {
+        if (!constraint.isEmpty()) {
+            constraint.append(" and ");
+        }
+
+        constraint.append("[X-KDE-PluginInfo-Category] == '").append(category).append("'");
+        if (category == "Miscellaneous") {
+            constraint.append(" or (not exist [X-KDE-PluginInfo-Category] or [X-KDE-PluginInfo-Category] == '')");
+        }
+    }
+
+    KService::List offers = KServiceTypeTrader::self()->query("Plasma/Containment", constraint);
+    //kDebug() << "constraint was" << constraint << "which got us" << offers.count() << "matches";
+    return KPluginInfo::fromServices(offers);
+}
+
+KPluginInfo::List Containment::knownContainmentsForMimetype(const QString &mimetype)
+{
+    QString constraint = QString("'%1' in MimeTypes").arg(mimetype);
+    //kDebug() << "knownContainmentsForMimetype with" << mimetype << constraint;
+    KService::List offers = KServiceTypeTrader::self()->query("Plasma/Containment", constraint);
+    return KPluginInfo::fromServices(offers);
 }
 
 }
