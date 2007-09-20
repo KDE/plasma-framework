@@ -26,9 +26,13 @@
 #include <QPainter>
 #include <QStyleOptionGraphicsItem>
 
+#include <KApplication>
 #include <KAuthorized>
+#include <KIcon>
 #include <KMenu>
 #include <KRun>
+
+#include "workspace/kworkspace.h"
 
 #include "corona.h"
 #include "karambamanager.h"
@@ -39,6 +43,8 @@
 #include "widgets/boxlayout.h"
 
 #include "krunner_interface.h"
+#include "ksmserver_interface.h"
+#include "screensaver_interface.h"
 
 namespace Plasma
 {
@@ -76,6 +82,8 @@ public:
     QString wallpaperPath;
     QAction *engineExplorerAction;
     QAction *runCommandAction;
+    QAction *lockAction;
+    QAction *logoutAction;
     QSize size;
     int screen;
     bool immutable;
@@ -113,11 +121,6 @@ void Containment::init()
         //kDebug() << "SVG wallpaper!";
         d->background = new Plasma::Svg("widgets/wallpaper", this);
     }
-
-    d->engineExplorerAction = new QAction(i18n("Engine Explorer"), this);
-    connect(d->engineExplorerAction, SIGNAL(triggered(bool)), this, SLOT(launchExplorer()));
-    d->runCommandAction = new QAction(i18n("Run Command..."), this);
-    connect(d->runCommandAction, SIGNAL(triggered(bool)), this, SLOT(runCommand()));
 }
 
 void Containment::initConstraints(KConfigGroup* group)
@@ -194,6 +197,36 @@ void Containment::runCommand()
     }
 }
 
+void Containment::lockScreen()
+{
+    if (!KAuthorized::authorizeKAction("lock_screen")) {
+        return;
+    }
+
+    QString interface("org.freedesktop.ScreenSaver");
+    org::freedesktop::ScreenSaver screensaver(interface, "/ScreenSaver",
+                                              QDBusConnection::sessionBus());
+    if (screensaver.isValid()) {
+        screensaver.Lock();
+    }
+}
+
+void Containment::logout()
+{
+    if (!KAuthorized::authorizeKAction("logout")) {
+        return;
+    }
+
+    QString interface("org.kde.ksmserver");
+    org::kde::KSMServerInterface smserver(interface, "/KSMServer",
+                                          QDBusConnection::sessionBus());
+    if (smserver.isValid()) {
+        smserver.logout(KWorkSpace::ShutdownConfirmDefault,
+                        KWorkSpace::ShutdownTypeDefault,
+                        KWorkSpace::ShutdownModeDefault);
+    }
+}
+
 QSizeF Containment::contentSizeHint() const
 {
     return d->size;
@@ -201,12 +234,42 @@ QSizeF Containment::contentSizeHint() const
 
 QList<QAction*> Containment::contextActions()
 {
+    //FIXME: several items here ... probably all junior jobs =)
+    //  - engineExplorerAction is going to go away, so the !d->engineExplorerAction below needs to
+    //    go
+    //  - pretty up the menu with separators
+    //  - should we offer "Switch User" here?
+
+    if (!d->engineExplorerAction) {
+        d->engineExplorerAction = new QAction(i18n("Engine Explorer"), this);
+        connect(d->engineExplorerAction, SIGNAL(triggered(bool)), this, SLOT(launchExplorer()));
+
+        d->runCommandAction = new QAction(i18n("Run Command..."), this);
+        connect(d->runCommandAction, SIGNAL(triggered(bool)), this, SLOT(runCommand()));
+
+        d->lockAction = new QAction(i18n("Lock Screen"), this);
+        d->lockAction->setIcon(KIcon("system-lock-screen"));
+        connect(d->lockAction, SIGNAL(triggered(bool)), this, SLOT(lockScreen()));
+
+        d->logoutAction = new QAction(i18n("Logout"), this);
+        d->logoutAction->setIcon(KIcon("system-log-out"));
+        connect(d->logoutAction, SIGNAL(triggered(bool)), this, SLOT(logout()));
+    }
+
     QList<QAction*> actions;
 
     actions.append(d->engineExplorerAction);
 
     if (KAuthorized::authorizeKAction("run_command")) {
         actions.append(d->runCommandAction);
+    }
+
+    if (KAuthorized::authorizeKAction("lock_screen")) {
+        actions.append(d->lockAction);
+    }
+
+    if (KAuthorized::authorizeKAction("logout")) {
+        actions.append(d->logoutAction);
     }
 
     return actions;

@@ -230,6 +230,8 @@ class PLASMA_EXPORT Containment : public Applet
         void appletDestroyed(QObject*);
         void launchExplorer();
         void runCommand();
+        void lockScreen();
+        void logout();
 
     private:
         Q_DISABLE_COPY(Containment)
