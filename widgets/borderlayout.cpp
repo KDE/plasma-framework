@@ -214,6 +214,8 @@ LayoutItem * BorderLayout::itemAt(int index) const
 
         }
     }
+
+    return 0;
 }
 
 Plasma::LayoutItem * BorderLayout::takeAt(int i)
