@@ -6,12 +6,12 @@ set(testlayouts_SRCS
 )
 
 kde4_add_executable(testLayouts ${testlayouts_SRCS} )
-target_link_libraries( testLayouts ${KDE4_KDECORE_LIBS} ${KDE4_KDEUI_LIBS} plasma)
+target_link_libraries( testLayouts ${KDE4_KDEUI_LIBS} plasma)
 
 set(testProgressBar_SRCS
     testProgressBar.cpp
 )
 
 kde4_add_executable( testProgressBar ${testProgressBar_SRCS} )
-target_link_libraries( testProgressBar ${KDE4_KDECORE_LIBS} ${KDE4_KDEUI_LIBS} plasma)
+target_link_libraries( testProgressBar ${KDE4_KDEUI_LIBS} plasma)
 
