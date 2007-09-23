@@ -328,46 +328,6 @@ void Corona::dragMoveEvent(QGraphicsSceneDragDropEvent *event)
     //kDebug() << "Corona::dragMoveEvent(QDragMoveEvent* event)";
 }
 
-void Corona::dropEvent(QGraphicsSceneDragDropEvent *event)
-{
-    if (itemAt(event->scenePos())) {
-        QGraphicsScene::dropEvent(event);
-        return;
-    }
-
-    //kDebug() << "Corona::dropEvent(QDropEvent* event)";
-    if (event->mimeData()->hasFormat(d->mimetype)) {
-        QString plasmoidName;
-        plasmoidName = event->mimeData()->data(d->mimetype);
-        QRectF geom(event->scenePos(), QSize(0, 0));
-        addApplet(plasmoidName, QVariantList(), 0, geom);
-        event->acceptProposedAction();
-    } else if (KUrl::List::canDecode(event->mimeData())) {
-        KUrl::List urls = KUrl::List::fromMimeData(event->mimeData());	
-        foreach (const KUrl& url, urls) {
-            KMimeType::Ptr mime = KMimeType::findByUrl(url);
-            QString mimeName = mime->name();
-            QRectF geom(event->scenePos(), QSize(0, 0));
-            QVariantList args;
-            args << url.url();
-//             kDebug() << mimeName;
-            KPluginInfo::List appletList = Applet::knownAppletsForMimetype(mimeName);
-
-            if (appletList.isEmpty()) {
-                // no special applet associated with this mimetype, let's 
-                addApplet("url", args, 0, geom);
-            } else {
-                //TODO: should we show a dialog here to choose which plasmoid load if
-                //appletList.count() > 0?
-                addApplet(appletList.first().pluginName(), args, 0, geom);
-            }
-        }
-        event->acceptProposedAction();
-    } else {
-        QGraphicsScene::dropEvent(event);
-    }
-}
-
 void Corona::containmentDestroyed(QObject* obj)
 {
     // we do a static_cast here since it really isn't an Containment by this

@@ -23,6 +23,7 @@
 #include <QDesktopWidget>
 #include <QFile>
 #include <QGraphicsSceneContextMenuEvent>
+#include <QMimeData>
 #include <QPainter>
 #include <QStyleOptionGraphicsItem>
 
@@ -30,6 +31,7 @@
 #include <KAuthorized>
 #include <KIcon>
 #include <KMenu>
+#include <KMimeType>
 #include <KRun>
 #include <KServiceTypeTrader>
 
@@ -122,6 +124,7 @@ void Containment::init()
         //kDebug() << "SVG wallpaper!";
         d->background = new Plasma::Svg("widgets/wallpaper", this);
     }
+    setAcceptDrops(true);
 }
 
 void Containment::initConstraints(KConfigGroup* group)
@@ -562,6 +565,42 @@ KPluginInfo::List Containment::knownContainmentsForMimetype(const QString &mimet
     //kDebug() << "knownContainmentsForMimetype with" << mimetype << constraint;
     KService::List offers = KServiceTypeTrader::self()->query("Plasma/Containment", constraint);
     return KPluginInfo::fromServices(offers);
+}
+
+void Containment::dropEvent(QGraphicsSceneDragDropEvent *event)
+{
+    //kDebug() << "drop event:" << event->mimeData()->text();
+
+    QString mimetype(static_cast<Corona*>(scene())->appletMimeType());
+
+    if (event->mimeData()->hasFormat(mimetype) && scene()) {
+        QString plasmoidName;
+        plasmoidName = event->mimeData()->data(mimetype);
+        QRectF geom(event->scenePos(), QSize(0, 0));
+        addApplet(plasmoidName, QVariantList(), 0, geom);
+        event->acceptProposedAction();
+    } else if (KUrl::List::canDecode(event->mimeData())) {
+        KUrl::List urls = KUrl::List::fromMimeData(event->mimeData());	
+        foreach (const KUrl& url, urls) {
+            KMimeType::Ptr mime = KMimeType::findByUrl(url);
+            QString mimeName = mime->name();
+            QRectF geom(event->scenePos(), QSize(0, 0));
+            QVariantList args;
+            args << url.url();
+//             kDebug() << mimeName;
+            KPluginInfo::List appletList = Applet::knownAppletsForMimetype(mimeName);
+
+            if (appletList.isEmpty()) {
+                // no special applet associated with this mimetype, let's 
+                addApplet("url", args, 0, geom);
+            } else {
+                //TODO: should we show a dialog here to choose which plasmoid load if
+                //appletList.count() > 0?
+                addApplet(appletList.first().pluginName(), args, 0, geom);
+            }
+        }
+        event->acceptProposedAction();
+    }
 }
 
 }

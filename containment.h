@@ -232,6 +232,7 @@ class PLASMA_EXPORT Containment : public Applet
         void runCommand();
         void lockScreen();
         void logout();
+        void dropEvent(QGraphicsSceneDragDropEvent* event);
 
     private:
         Q_DISABLE_COPY(Containment)
