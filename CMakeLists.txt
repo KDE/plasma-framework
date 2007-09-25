@@ -51,6 +51,7 @@ set(plasma_LIB_SRCS
 #    widgets/rectangle.cpp
     widgets/widget.cpp
     widgets/signalplotter.cpp
+    widgets/meter.cpp
 )
 
 set(krunner_xml ${KDEBASE_WORKSPACE_SOURCE_DIR}/krunner/org.kde.krunner.Interface.xml)
@@ -136,6 +137,7 @@ install(FILES
 #    widgets/rectangle.h
     widgets/widget.h
     widgets/signalplotter.h
+    widgets/meter.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/plasma/widgets)
 
 install(FILES
