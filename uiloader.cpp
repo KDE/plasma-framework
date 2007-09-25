@@ -30,6 +30,7 @@
 #include "widgets/label.h"
 #include "widgets/pushbutton.h"
 #include "widgets/radiobutton.h"
+#include "widgets/meter.h"
 //#include "widgets/rectangle.h"
 
 #include "widgets/hboxlayout.h"
@@ -56,7 +57,8 @@ UiLoader::UiLoader( QObject *parent )
 	<< "Label"
 	<< "PushButton"
 	<< "RadioButton"
-	<< "Rectangle";
+	<< "Rectangle"
+        << "Meter";
 
     d->layouts
 	<< "VBoxLayout"
@@ -93,6 +95,9 @@ Widget *UiLoader::createWidget( const QString &className, Widget *parent )
     }
     else if ( className == QString("RadioButton") ) {
 	return new RadioButton( parent );
+    }
+    else if ( className == QString("Meter") ) {
+        return new Meter( parent );
     }
     //else if ( className == QString("Rectangle") ) {
 	// return new Rectangle( parent ); // Constructor here requires a Widget
