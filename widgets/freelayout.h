@@ -18,8 +18,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef PLASMA_FREE_LAYOUT
-#define PLASMA_FREE_LAYOUT
+#ifndef PLASMA_FREE_LAYOUT_H
+#define PLASMA_FREE_LAYOUT_H
 
 #include <QtCore/QList>
 
@@ -31,7 +31,7 @@ namespace Plasma
 
 /**
  * The FreeLayout class is a layout for use in desktop-like workspaces where
- * I items can be moved around freely and applets and widgets are allowed
+ * items can be moved around freely and applets and widgets are allowed
  * to determine their own size.
  *
  * Whenever this layout is updated, all child items are resized to
@@ -66,4 +66,4 @@ class PLASMA_EXPORT FreeLayout : public Layout
 
 }
 
-#endif /* PLASMA_FREE_LAYOUT */
+#endif /* PLASMA_FREE_LAYOUT_H */
