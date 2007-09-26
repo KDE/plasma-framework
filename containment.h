@@ -229,6 +229,7 @@ class PLASMA_EXPORT Containment : public Applet
          */
         void appletDestroyed(QObject*);
         void launchExplorer();
+        void launchAppletBrowser();
         void runCommand();
         void lockScreen();
         void logout();
