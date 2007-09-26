@@ -465,7 +465,7 @@ void Phase::init()
 
         if (!offers.isEmpty()) {
             QString error;
-            d->animator = KService::createInstance<Plasma::Animator>(offers.first(), 0, QVariantList(), &error);
+            d->animator = offers.first()->createInstance<Plasma::Animator>(0, QVariantList(), &error);
             if (!d->animator) {
                 kDebug() << "Could not load requested animator " << offers.first() << ". Error given: " << error;
             }

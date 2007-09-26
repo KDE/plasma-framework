@@ -123,7 +123,7 @@ ScriptEngine* ScriptEngine::load(const QString &language, Applet *applet)
     QString error;
     ScriptEngine* engine = 0;
     foreach (KService::Ptr service, offers) {
-        engine = KService::createInstance<Plasma::ScriptEngine>(service, applet, args, &error);
+        engine = service->createInstance<Plasma::ScriptEngine>(applet, args, &error);
 
         if (engine) {
             break;
