@@ -990,7 +990,7 @@ Applet* Applet::loadApplet(const QString& appletName, uint appletId, const QVari
     QVariantList allArgs;
     allArgs << offers.first()->storageId() << appletId << args;
     QString error;
-    Applet* applet = KService::createInstance<Plasma::Applet>(offers.first(), 0, allArgs, &error);
+    Applet* applet = offers.first()->createInstance<Plasma::Applet>(0, allArgs, &error);
 
     if (!applet) {
         kDebug() << "Couldn't load applet \"" << appletName << "\"! reason given: " << error;
@@ -1072,6 +1072,27 @@ QVariant Applet::itemChange(GraphicsItemChange change, const QVariant &value)
 
     return QGraphicsItem::itemChange(change, value);
 }
+
+void Applet::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
+{
+    //kDebug() << "context menu event!";
+    if (!scene()) {
+        return;
+    }
+
+    Applet* containment = dynamic_cast<Plasma::Applet*>(topLevelItem());
+
+    if (!containment) {
+        Widget::contextMenuEvent(event);
+        return;
+    }
+
+    // we want to pass up the context menu event to the Containment at
+    // this point
+    containment->contextMenuEvent(event);
+    return;
+}
+
 
 } // Plasma namespace
 

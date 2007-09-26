@@ -554,6 +554,11 @@ class PLASMA_EXPORT Applet : public Widget
         bool eventFilter( QObject *o, QEvent *e );
 
         /**
+         * Reimplemented from QGraphicsItem
+         */
+        void contextMenuEvent(QGraphicsSceneContextMenuEvent *contextMenuEvent);
+
+        /**
          * @internal for adjusting the shadow
          */
         QVariant itemChange(GraphicsItemChange change, const QVariant &value);
