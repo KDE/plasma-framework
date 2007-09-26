@@ -425,7 +425,7 @@ void Widget::contextMenuEvent(QGraphicsSceneContextMenuEvent *contextMenuEvent)
     }
 
     while (item && item->parentItem()) {
-        item = dynamic_cast<Widget*>(parentItem()); //item->parentItem();
+        item = dynamic_cast<Widget*>(item->parentItem());
     }
 
     if (!item) {
