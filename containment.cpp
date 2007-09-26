@@ -49,8 +49,6 @@
 #include "ksmserver_interface.h"
 #include "screensaver_interface.h"
 
-#include "appletbrowser.h"
-
 namespace Plasma
 {
 
@@ -86,11 +84,9 @@ public:
     QPixmap* bitmapBackground;
     QString wallpaperPath;
     QAction *engineExplorerAction;
-    QAction *appletBrowserAction;
     QAction *runCommandAction;
     QAction *lockAction;
     QAction *logoutAction;
-    AppletBrowser *appletBrowser;
     QSize size;
     int screen;
     bool immutable;
@@ -102,19 +98,16 @@ Containment::Containment(QGraphicsItem* parent,
     : Applet(parent, serviceId, containmentId),
       d(new Private)
 {
-    d->appletBrowser = new AppletBrowser(this);
 }
 
 Containment::Containment(QObject* parent, const QVariantList& args)
     : Applet(parent, args),
       d(new Private)
 {
-    d->appletBrowser = new AppletBrowser(this);
 }
 
 Containment::~Containment()
 {
-    delete d->appletBrowser;
     delete d;
 }
 
@@ -194,11 +187,6 @@ void Containment::launchExplorer()
     KRun::run("plasmaengineexplorer", KUrl::List(), 0);
 }
 
-void Containment::launchAppletBrowser()
-{
-    d->appletBrowser->show();
-}
-
 void Containment::runCommand()
 {
     if (!KAuthorized::authorizeKAction("run_command")) {
@@ -251,15 +239,14 @@ QSizeF Containment::contentSizeHint() const
 QList<QAction*> Containment::contextActions()
 {
     //FIXME: several items here ... probably all junior jobs =)
+    //  - engineExplorerAction is going to go away, so the !d->engineExplorerAction below needs to
+    //    go
     //  - pretty up the menu with separators
     //  - should we offer "Switch User" here?
 
-    if (!d->appletBrowserAction) {
+    if (!d->engineExplorerAction) {
         d->engineExplorerAction = new QAction(i18n("Engine Explorer"), this);
         connect(d->engineExplorerAction, SIGNAL(triggered(bool)), this, SLOT(launchExplorer()));
-
-        d->appletBrowserAction = new QAction(i18n("Add widget to desktop"), this);
-        connect(d->appletBrowserAction, SIGNAL(triggered(bool)), this, SLOT(launchAppletBrowser()));
 
         d->runCommandAction = new QAction(i18n("Run Command..."), this);
         connect(d->runCommandAction, SIGNAL(triggered(bool)), this, SLOT(runCommand()));
@@ -276,7 +263,6 @@ QList<QAction*> Containment::contextActions()
     QList<QAction*> actions;
 
     actions.append(d->engineExplorerAction);
-    actions.append(d->appletBrowserAction);
 
     if (KAuthorized::authorizeKAction("run_command")) {
         actions.append(d->runCommandAction);

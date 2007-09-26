@@ -3,7 +3,6 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${KDEBASE_WORKSPACE_SOURCE_DIR}/
 find_package(OpenGL)
 
 add_subdirectory( widgets )
-#add_subdirectory( appletbrowser )
 
 ########### next target ###############
 
@@ -53,19 +52,6 @@ set(plasma_LIB_SRCS
     widgets/widget.cpp
     widgets/signalplotter.cpp
     widgets/meter.cpp
-
-    appletbrowser.cpp
-    appletbrowser/appletbrowserwindow.cpp
-    appletbrowser/kcategorizeditemsview.cpp
-    appletbrowser/kcategorizeditemsviewdelegate.cpp
-    appletbrowser/kcategorizeditemsviewmodels.cpp
-    appletbrowser/plasmaappletitemmodel.cpp
-)
-
-kde4_add_ui_files(
-    plasma_LIB_SRCS
-    appletbrowser/kcategorizeditemsviewbase.ui
-    appletbrowser/appletbrowserwindowbase.ui
 )
 
 set(krunner_xml ${KDEBASE_WORKSPACE_SOURCE_DIR}/krunner/org.kde.krunner.Interface.xml)
@@ -106,7 +92,6 @@ set(plasma_LIB_INCLUDES
     abstractrunner.h
     animator.h
     applet.h
-    appletbrowser.h
     configxml.h
     containment.h
     corona.h
