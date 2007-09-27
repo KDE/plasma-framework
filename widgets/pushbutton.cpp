@@ -144,12 +144,14 @@ PushButton::~PushButton()
 void PushButton::paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *opt, QWidget *widget)
 {
     QStyleOptionButton option;
-    option.initFrom(widget);
+    if (widget) {
+        option.initFrom(widget);
+    }
     d->initStyleOption(&option, this, opt);
 
-    widget->style()->drawPrimitive(QStyle::PE_PanelButtonCommand, &option, painter, widget);
-    widget->style()->drawPrimitive(QStyle::PE_FrameFocusRect, &option, painter, widget);
-    widget->style()->drawControl(QStyle::CE_PushButton, &option, painter, widget);
+    QApplication::style()->drawPrimitive(QStyle::PE_PanelButtonCommand, &option, painter, widget);
+    QApplication::style()->drawPrimitive(QStyle::PE_FrameFocusRect, &option, painter, widget);
+    QApplication::style()->drawControl(QStyle::CE_PushButton, &option, painter, widget);
 }
 
 void PushButton::setText(const QString& text)
