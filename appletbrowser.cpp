@@ -18,7 +18,7 @@
  */
 
 #include <appletbrowser.h>
-#include <appletbrowser/appletbrowserwindow.h>
+#include <appletbrowser/appletbrowserwindow_p.h>
 
 #include <corona.h>
 #include <containment.h>
@@ -44,8 +44,8 @@ public:
     void show() { if (window) window->show(); };
     void hide() { if (window) window->hide(); };
 
-    AppletBrowserWindow * window;
     AppletBrowser * q;
+    AppletBrowserWindow * window;
 };
 
 AppletBrowser::AppletBrowser(Corona * corona)

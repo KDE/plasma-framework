@@ -17,6 +17,12 @@ set(plasma_LIB_SRCS
     abstractrunner.cpp
     animator.cpp
     applet.cpp
+    appletbrowser.cpp
+    appletbrowser/appletbrowserwindow.cpp
+    appletbrowser/kcategorizeditemsview.cpp
+    appletbrowser/kcategorizeditemsviewdelegate.cpp
+    appletbrowser/kcategorizeditemsviewmodels.cpp
+    appletbrowser/plasmaappletitemmodel.cpp
     configxml.cpp
     containment.cpp
     corona.cpp
@@ -52,14 +58,6 @@ set(plasma_LIB_SRCS
     widgets/widget.cpp
     widgets/signalplotter.cpp
     widgets/meter.cpp
-
-    #    appletbrowser.cpp
-    appletbrowser/appletbrowserwindow.cpp
-    appletbrowser/kcategorizeditemsview.cpp
-    appletbrowser/kcategorizeditemsviewdelegate.cpp
-    appletbrowser/kcategorizeditemsviewmodels.cpp
-    appletbrowser/plasmaappletitemmodel.cpp
-
 )
 
 kde4_add_ui_files (
@@ -106,7 +104,7 @@ set(plasma_LIB_INCLUDES
     abstractrunner.h
     animator.h
     applet.h
-    #    appletbrowser.h
+    appletbrowser.h
     configxml.h
     containment.h
     corona.h

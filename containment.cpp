@@ -49,8 +49,7 @@
 #include "ksmserver_interface.h"
 #include "screensaver_interface.h"
 
-//#include "appletbrowser.h"
-class AppletBrowser;
+#include "appletbrowser.h"
 
 namespace Plasma
 {
@@ -78,7 +77,7 @@ public:
         applets.clear();
         delete layout;
         delete bitmapBackground;
-        //delete appletBrowser;
+        delete appletBrowser;
     }
 
     FormFactor formFactor;
@@ -197,10 +196,12 @@ void Containment::launchExplorer()
 void Containment::launchAppletBrowser()
 {
     if (!d->appletBrowser) {
-//        d->appletBrowser = new AppletBrowser(this);
+        //TODO: should we delete this after some point, so as to conserve memory
+        //      and any possible processing tha tmight end up in AppletBrowser?
+        d->appletBrowser = new AppletBrowser(this);
     }
 
-//    d->appletBrowser->show();
+    d->appletBrowser->show();
 }
 
 void Containment::runCommand()
