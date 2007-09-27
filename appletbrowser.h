@@ -37,7 +37,14 @@ public:
     virtual ~AppletBrowser();
 
 protected Q_SLOTS:
+    /**
+     * Adds currently selected applets
+     */
     void addApplet();
+
+    /**
+     * Launches a download dialog to retrieve new applets from the Internet
+     */
     void downloadApplets();
 
 private:

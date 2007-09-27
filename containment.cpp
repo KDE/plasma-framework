@@ -49,7 +49,7 @@
 #include "ksmserver_interface.h"
 #include "screensaver_interface.h"
 
-#include "appletbrowser/appletbrowser.h"
+#include "appletbrowser.h"
 
 namespace Plasma
 {

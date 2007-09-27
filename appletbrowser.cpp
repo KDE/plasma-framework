@@ -17,7 +17,7 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "appletbrowser.h"
+#include "plasma/appletbrowser.h"
 
 #include <KAction>
 #include <KStandardAction>
@@ -25,8 +25,8 @@
 
 #include "plasma/corona.h"
 #include "plasma/containment.h"
-#include "plasmaappletitemmodel_p.h"
-#include "kcategorizeditemsview_p.h"
+#include "plasma/appletbrowser/plasmaappletitemmodel_p.h"
+#include "plasma/appletbrowser/kcategorizeditemsview_p.h"
 
 namespace Plasma
 {
