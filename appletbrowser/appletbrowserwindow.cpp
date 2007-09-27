@@ -36,6 +36,8 @@ AppletBrowserWindow::AppletBrowserWindow(Plasma::Containment * containment, QWid
 void AppletBrowserWindow::init() {
     setupUi(this);
 
+    connect(buttonAdd, SIGNAL(clicked()), this, SLOT(buttonAddClicked()));
+
     QAction* quit = KStandardAction::quit(qApp, SLOT(quit()), this);
     this->addAction(quit);
 
@@ -44,7 +46,7 @@ void AppletBrowserWindow::init() {
             KCategorizedItemsViewModels::Filter("recommended", true));
     appletList->addEmblem(i18n("Used in past"), new KIcon("history"), 
             KCategorizedItemsViewModels::Filter("used", true));
-    
+
     // Filters: Special
     m_filterModel.addFilter(i18n("All applets"),
         KCategorizedItemsViewModels::Filter(), new KIcon("application-x-plasma"));
@@ -54,21 +56,21 @@ void AppletBrowserWindow::init() {
         KCategorizedItemsViewModels::Filter("favorite", true), new KIcon("bookmark"));
     m_filterModel.addFilter(i18n("Used in past"),
         KCategorizedItemsViewModels::Filter("used", true), new KIcon("history"));
-    
+
     m_filterModel.addSeparator(i18n("Categories:"));
-    
+
     // Filters: Categories
     foreach (const QString& category, Plasma::Applet::knownCategories()) {
         m_filterModel.addFilter(category, 
             KCategorizedItemsViewModels::Filter("category", category));
     }
-    
+
     appletList->setFilterModel(& m_filterModel);
 
     // Other models
 
     appletList->setItemModel(& m_itemModel);
-    
+
 }
 
 AppletBrowserWindow::~AppletBrowserWindow()
@@ -78,4 +80,20 @@ AppletBrowserWindow::~AppletBrowserWindow()
     delete m_proxyModel;*/
 }
 
+void AppletBrowserWindow::buttonAddClicked() {
+    kDebug() << "Button ADD clicked\n";
+
+    foreach (AbstractItem * item, appletList->selectedItems()) {
+        PlasmaAppletItem * selectedItem = (PlasmaAppletItem *) item;
+        kDebug() << "Adding applet " << selectedItem->name();
+        if (m_corona) {
+            kDebug() << " to corona\n";
+            m_corona->addApplet(selectedItem->pluginName());
+        } else if (m_containment) {
+            kDebug() << " to conatainment\n";
+            m_containment->addApplet(selectedItem->pluginName());
+        }
+
+    }
+}
 #include "appletbrowserwindow.moc"

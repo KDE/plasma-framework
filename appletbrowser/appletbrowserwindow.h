@@ -33,11 +33,14 @@
 
 class AppletBrowserWindow: public QDialog, public Ui::AppletBrowserWindowBase
 {
-    //Q_OBJECT
+    Q_OBJECT
 public:
     explicit AppletBrowserWindow(Plasma::Corona * corona, QWidget * parent = 0, Qt::WindowFlags f = 0);
     explicit AppletBrowserWindow(Plasma::Containment * containment, QWidget * parent = 0, Qt::WindowFlags f = 0);
     virtual ~AppletBrowserWindow();
+
+private slots:
+    void buttonAddClicked();
 
 private:
     void init();

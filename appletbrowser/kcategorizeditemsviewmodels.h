@@ -121,18 +121,18 @@ private:
         InnerProxyModel(QObject * parent = 0);
 
         Qt::ItemFlags flags(const QModelIndex & index) const;
-        
+
         QVariant data(const QModelIndex & index, bool favoriteColumn,
                 int role = Qt::DisplayRole) const;
         QVariant data(const QModelIndex & index, int role = Qt::DisplayRole) const;
         bool setData(const QModelIndex & index, const QVariant & value,
                 int role = Qt::EditRole);
-        
+
         QVariant headerData(int section, Qt::Orientation orientation,
                 int role = Qt::DisplayRole) const;
         bool setHeaderData(int section, Qt::Orientation orientation,
                 const QVariant & value, int role = Qt::EditRole);
-        
+
         int rowCount(const QModelIndex & parent = QModelIndex()) const;
         int columnCount(const QModelIndex& index) const;
 
@@ -140,7 +140,7 @@ private:
         QModelIndex index(int row, int column,
                 const QModelIndex & parent = QModelIndex()) const;
         QModelIndex parent(const QModelIndex & index) const;
-        
+
         QMimeData * mimeData(const QModelIndexList & indexes) const;
 
         void setSourceModel(QStandardItemModel * sourceModel);

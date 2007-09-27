@@ -48,22 +48,24 @@ class KCategorizedItemsView: public QWidget, public Ui::KCategorizedItemsViewBas
 {
     Q_OBJECT
 public:
- 
+
     KCategorizedItemsView(QWidget * parent = 0, Qt::WindowFlags f = 0);
     virtual ~KCategorizedItemsView();
 
     void setFilterModel(QStandardItemModel * model);             ///< Sets the filters model
     void setItemModel(QStandardItemModel * model);               ///< Sets the item model, as mentioned items must implement AbstractItem class
-    
+
     void addEmblem(const QString & title, QIcon * icon, const Filter & filter);
     void clearEmblems();
-    
+
+    QList < AbstractItem * > selectedItems() const;
+
 protected slots:
     void searchTermChanged(const QString &text);
     void filterChanged(int index);
-    void resizeEvent ( QResizeEvent * event ); 
+    void resizeEvent ( QResizeEvent * event );
     void paintEvent ( QPaintEvent * event );
-    
+
 Q_SIGNALS:
     void activated ( const QModelIndex & index );
     void clicked ( const QModelIndex & index );
@@ -75,13 +77,14 @@ private:
     QStandardItemModel * m_modelCategories;
     QStandardItemModel * m_modelFilters;
     QStandardItemModel * m_modelItems;
-    
+
     DefaultItemFilterProxyModel * m_modelFilterItems;
     KCategorizedItemsViewDelegate * m_delegate;
-    
+
     int m_viewWidth;
-    
+
     QMap < QString, QPair < Filter, QIcon * > > m_emblems;
+    AbstractItem * getItemByProxyIndex(const QModelIndex & index) const;
 
     friend class KCategorizedItemsViewDelegate;
 };

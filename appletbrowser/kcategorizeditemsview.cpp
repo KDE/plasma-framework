@@ -36,10 +36,10 @@ KCategorizedItemsView::KCategorizedItemsView(QWidget * parent, Qt::WindowFlags f
             this, SLOT(searchTermChanged(QString)));
     connect(comboFilters, SIGNAL(currentIndexChanged(int)),
             this, SLOT(filterChanged(int)));
-    
+
     connect (itemsView, SIGNAL(activated(const QModelIndex &)),
                   this, SIGNAL(activated(const QModelIndex &)));
-    
+
     connect (itemsView, SIGNAL(clicked(const QModelIndex &)),
                   this, SIGNAL(clicked(const QModelIndex &)));
     connect (itemsView, SIGNAL(entered(const QModelIndex &)),
@@ -48,11 +48,11 @@ KCategorizedItemsView::KCategorizedItemsView(QWidget * parent, Qt::WindowFlags f
                   this, SIGNAL(pressed(const QModelIndex &)));
 
     itemsView->header()->setVisible(false);
-    
+
     itemsView->setItemDelegate(m_delegate = new KCategorizedItemsViewDelegate(this));
-    
+
     comboFilters->setItemDelegate(new KCategorizedItemsViewFilterDelegate(this));
-    
+
     itemsView->viewport()->setAttribute(Qt::WA_Hover);
 
     QAction * find = KStandardAction::find(textSearch, SLOT(setFocus()), this);
@@ -118,5 +118,21 @@ void KCategorizedItemsView::clearEmblems() {
     m_emblems.clear();
 }
 
+AbstractItem * KCategorizedItemsView::getItemByProxyIndex(const QModelIndex & index) const {
+    return (AbstractItem *) m_modelItems->itemFromIndex(
+        m_modelFilterItems->mapToSource(index)
+    );
+}
+
+
+QList < AbstractItem * > KCategorizedItemsView::selectedItems() const {
+    QList < AbstractItem * > items;
+    foreach (QModelIndex index, itemsView->selectionModel()->selectedIndexes()) {
+        if (index.column() == 0) {
+            items << getItemByProxyIndex(index);
+        }
+    }
+    return items;
+}
 #include "kcategorizeditemsview.moc"
 
