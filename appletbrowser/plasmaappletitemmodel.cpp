@@ -52,7 +52,6 @@ PlasmaAppletItem::PlasmaAppletItem(QObject *parent, const KPluginInfo& info,
     setText(info.name() + " - "+ info.category());
     setData(attrs);
     setIcon(KIcon(info.icon().isEmpty()?"application-x-plasma":info.icon()));
-        
 }
 
 QString PlasmaAppletItem::name() const
@@ -86,7 +85,7 @@ bool PlasmaAppletItem::passesFiltering(
 PlasmaAppletItemModel::PlasmaAppletItemModel(QObject * parent) :
     KCategorizedItemsViewModels::DefaultItemModel(parent)
 {
-    // some test items that do have FilterFlags as well as overly long text
+    /* some test items that do have FilterFlags as well as overly long text
     appendRow(new PlasmaAppletItem(this, 
         i18n("This is a very long name for an applet, isn't it?"), "null", 
         i18n("This is a Graphics applet whose description is even longer than it's title. And it was hard to achieve!"), 
@@ -102,13 +101,12 @@ PlasmaAppletItemModel::PlasmaAppletItemModel(QObject * parent) :
         i18n("This is a Graphics applet whose description is even longer than it's title. And it was hard to achieve!"), 
         QString("graph"),
         QIcon("/usr/share/icons/oxygen/64x64/apps/okular.png"), PlasmaAppletItem::Favorite | PlasmaAppletItem::Recommended));
+    */
 
     //TODO: get recommended, favorit, used, etc out of knownApplets()
     foreach (const KPluginInfo& info, Plasma::Applet::knownApplets()) {
         appendRow(new PlasmaAppletItem(this, info));
     }
-
-    
 }
 
 QStringList PlasmaAppletItemModel::mimeTypes() const
