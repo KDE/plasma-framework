@@ -64,7 +64,10 @@ public:
           background(0),
           bitmapBackground(0),
           engineExplorerAction(0),
+          appletBrowserAction(0),
           runCommandAction(0),
+          lockAction(0),
+          logoutAction(0),
           screen(-1),
           immutable(false),
           appletBrowser(0)
