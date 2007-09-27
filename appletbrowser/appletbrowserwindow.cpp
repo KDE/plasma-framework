@@ -22,80 +22,123 @@
 #include <KAction>
 #include <KStandardAction>
 
-AppletBrowserWindow::AppletBrowserWindow(Plasma::Corona * corona, QWidget * parent, Qt::WindowFlags f) :
-    QDialog(parent, f), m_corona(corona), m_containment(NULL), m_itemModel(this), m_filterModel(this)
+
+#include "plasma/corona.h"
+#include "plasma/containment.h"
+#include "plasmaappletitemmodel_p.h"
+#include "kcategorizeditemsview_p.h"
+
+namespace Plasma
+{
+
+class AppletBrowserWindow::Private
+{
+public:
+    Private(Corona* co, Containment* cont, AppletBrowserWindow* q)
+        : corona(co),
+          containment(cont),
+          appletList(0),
+          itemModel(q),
+          filterModel(q)
+    {
+
+    }
+
+    Plasma::Corona *corona;
+    Plasma::Containment *containment;
+    KCategorizedItemsView *appletList;
+    PlasmaAppletItemModel itemModel;
+    KCategorizedItemsViewModels::DefaultFilterModel filterModel;
+};
+
+AppletBrowserWindow::AppletBrowserWindow(Plasma::Corona * corona, QWidget * parent, Qt::WindowFlags f)
+    : KDialog(parent, f),
+      d(new Private(corona, 0, this))
 {
     init();
 }
 
-AppletBrowserWindow::AppletBrowserWindow(Plasma::Containment * containment, QWidget * parent, Qt::WindowFlags f) :
-    QDialog(parent, f), m_corona(NULL), m_containment(containment), m_itemModel(this), m_filterModel(this)
+AppletBrowserWindow::AppletBrowserWindow(Plasma::Containment * containment, QWidget * parent, Qt::WindowFlags f)
+    : KDialog(parent, f),
+      d(new Private(0, containment, this))
 {
     init();
 }
 
-void AppletBrowserWindow::init() {
-    setupUi(this);
+void AppletBrowserWindow::init()
+{
+    d->appletList = new KCategorizedItemsView(this);
+    setMainWidget(d->appletList);
 
-    connect(buttonAdd, SIGNAL(clicked()), this, SLOT(buttonAddClicked()));
+    setButtons(KDialog::Apply | KDialog::Close | KDialog::User1);
+    setButtonText(KDialog::Apply, i18n("Add Applet"));
+    setButtonText(KDialog::User1, i18n("Get New Applets")); //TODO: not overly happy with this text
+    enableButton(KDialog::User1, false); //TODO: enable when GHNS integration is implemented
+
+    connect(this, SIGNAL(applyClicked()), this, SLOT(addApplet()));
+    connect(this, SIGNAL(user1Clicked()), this, SLOT(downloadApplets()));
 
     QAction* quit = KStandardAction::quit(qApp, SLOT(quit()), this);
-    this->addAction(quit);
+    addAction(quit);
 
     // Emblems
-    appletList->addEmblem(i18n("Recommended by KDE"), new KIcon("about-kde"), 
-            KCategorizedItemsViewModels::Filter("recommended", true));
-    appletList->addEmblem(i18n("Used in past"), new KIcon("history"), 
-            KCategorizedItemsViewModels::Filter("used", true));
+    d->appletList->addEmblem(i18n("Recommended by KDE"), new KIcon("about-kde"), 
+                                KCategorizedItemsViewModels::Filter("recommended", true));
+    d->appletList->addEmblem(i18n("Used in past"), new KIcon("history"), 
+                                KCategorizedItemsViewModels::Filter("used", true));
 
     // Filters: Special
-    m_filterModel.addFilter(i18n("All applets"),
+    d->filterModel.addFilter(i18n("All applets"),
         KCategorizedItemsViewModels::Filter(), new KIcon("application-x-plasma"));
-    m_filterModel.addFilter(i18n("Recommended by KDE"),
+    d->filterModel.addFilter(i18n("Recommended by KDE"),
         KCategorizedItemsViewModels::Filter("recommended", true), new KIcon("about-kde"));
-    m_filterModel.addFilter(i18n("Favorites"),
+    d->filterModel.addFilter(i18n("Favorites"),
         KCategorizedItemsViewModels::Filter("favorite", true), new KIcon("bookmark"));
-    m_filterModel.addFilter(i18n("Used in past"),
+    d->filterModel.addFilter(i18n("Used in past"),
         KCategorizedItemsViewModels::Filter("used", true), new KIcon("history"));
 
-    m_filterModel.addSeparator(i18n("Categories:"));
+    d->filterModel.addSeparator(i18n("Categories:"));
 
     // Filters: Categories
     foreach (const QString& category, Plasma::Applet::knownCategories()) {
-        m_filterModel.addFilter(category, 
+        d->filterModel.addFilter(category, 
             KCategorizedItemsViewModels::Filter("category", category));
     }
 
-    appletList->setFilterModel(& m_filterModel);
+    d->appletList->setFilterModel(&d->filterModel);
 
     // Other models
-
-    appletList->setItemModel(& m_itemModel);
-
+    d->appletList->setItemModel(&d->itemModel);
 }
 
 AppletBrowserWindow::~AppletBrowserWindow()
 {
-    /*delete m_itemModel;
-    delete m_filterModel;
-    delete m_proxyModel;*/
 }
 
-void AppletBrowserWindow::buttonAddClicked() {
-    kDebug() << "Button ADD clicked\n";
+void AppletBrowserWindow::addApplet()
+{
+    kDebug() << "Button ADD clicked";
 
-    foreach (AbstractItem * item, appletList->selectedItems()) {
-        PlasmaAppletItem * selectedItem = (PlasmaAppletItem *) item;
+    foreach (AbstractItem *item, d->appletList->selectedItems()) {
+        PlasmaAppletItem *selectedItem = (PlasmaAppletItem *) item;
         kDebug() << "Adding applet " << selectedItem->name();
-        if (m_corona) {
+        if (d->corona) {
             kDebug() << " to corona\n";
-            m_corona->addApplet(selectedItem->pluginName());
-        } else if (m_containment) {
+            d->corona->addApplet(selectedItem->pluginName());
+        } else if (d->containment) {
             kDebug() << " to conatainment\n";
-            m_containment->addApplet(selectedItem->pluginName());
+            d->containment->addApplet(selectedItem->pluginName());
         }
 
     }
 }
+
+void AppletBrowserWindow::downloadApplets()
+{
+    //TODO: implement
+    kDebug() << "GHNS button clicked";
+}
+
+} // namespace Plasma
 
 #include "appletbrowserwindow_p.moc"

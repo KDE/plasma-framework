@@ -20,34 +20,32 @@
 #ifndef APPLETBROWSERWINDOW_H_
 #define APPLETBROWSERWINDOW_H_
 
-#include <QtGui>
-#include <QtCore>
+#include <KDialog>
 
-#include "ui_appletbrowserwindowbase.h"
+namespace Plasma
+{
 
-#include "plasmaappletitemmodel_p.h"
-#include "kcategorizeditemsview_p.h"
+class Corona;
+class Containment;
 
-#include "plasma/corona.h"
-#include "plasma/containment.h"
-
-class AppletBrowserWindow: public QDialog, public Ui::AppletBrowserWindowBase
+class AppletBrowserWindow: public KDialog
 {
     Q_OBJECT
 public:
-    explicit AppletBrowserWindow(Plasma::Corona * corona, QWidget * parent = 0, Qt::WindowFlags f = 0);
-    explicit AppletBrowserWindow(Plasma::Containment * containment, QWidget * parent = 0, Qt::WindowFlags f = 0);
+    explicit AppletBrowserWindow(Plasma::Corona *corona, QWidget *parent = 0, Qt::WindowFlags f = 0);
+    explicit AppletBrowserWindow(Plasma::Containment *containment, QWidget *parent = 0, Qt::WindowFlags f = 0);
     virtual ~AppletBrowserWindow();
 
-private slots:
-    void buttonAddClicked();
+protected Q_SLOTS:
+    void addApplet();
+    void downloadApplets();
 
 private:
     void init();
-    Plasma::Corona * m_corona;
-    Plasma::Containment * m_containment;
-    PlasmaAppletItemModel m_itemModel;
-    KCategorizedItemsViewModels::DefaultFilterModel m_filterModel;
+    class Private;
+    Private * const d;
 };
+
+} // namespace Plasma
 
 #endif /*APPLETBROWSERWINDOW_H_*/

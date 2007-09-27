@@ -63,7 +63,6 @@ set(plasma_LIB_SRCS
 kde4_add_ui_files (
     plasma_LIB_SRCS
     appletbrowser/kcategorizeditemsviewbase.ui
-    appletbrowser/appletbrowserwindowbase.ui
 )
 
 set(krunner_xml ${KDEBASE_WORKSPACE_SOURCE_DIR}/krunner/org.kde.krunner.Interface.xml)
