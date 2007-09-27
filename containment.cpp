@@ -424,6 +424,7 @@ void Containment::setFormFactor(FormFactor formFactor)
     }
 
     foreach (Applet* applet, d->applets) {
+        d->layout->addItem(applet);
         applet->updateConstraints();
     }
 }
