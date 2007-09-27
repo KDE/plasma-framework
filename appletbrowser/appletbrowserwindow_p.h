@@ -22,14 +22,14 @@
 
 #include <QtGui>
 #include <QtCore>
-#include <iostream>
+
 #include "ui_appletbrowserwindowbase.h"
 
-#include "plasmaappletitemmodel.h"
-#include "kcategorizeditemsview.h"
+#include "plasmaappletitemmodel_p.h"
+#include "kcategorizeditemsview_p.h"
 
-#include "../corona.h"
-#include "../containment.h"
+#include "plasma/corona.h"
+#include "plasma/containment.h"
 
 class AppletBrowserWindow: public QDialog, public Ui::AppletBrowserWindowBase
 {

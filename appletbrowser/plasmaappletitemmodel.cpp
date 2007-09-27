@@ -17,7 +17,7 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "plasmaappletitemmodel.h"
+#include "plasmaappletitemmodel_p.h"
 
 PlasmaAppletItem::PlasmaAppletItem(QObject * parent, QString name,
         QString pluginName, QString description, QString category, QIcon icon,

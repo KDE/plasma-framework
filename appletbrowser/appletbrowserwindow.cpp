@@ -17,7 +17,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "appletbrowserwindow.h"
+#include "appletbrowserwindow_p.h"
+
 #include <KAction>
 #include <KStandardAction>
 
@@ -96,4 +97,5 @@ void AppletBrowserWindow::buttonAddClicked() {
 
     }
 }
-#include "appletbrowserwindow.moc"
+
+#include "appletbrowserwindow_p.moc"

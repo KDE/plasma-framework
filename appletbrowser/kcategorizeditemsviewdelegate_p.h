@@ -22,8 +22,10 @@
 
 #include <QtCore>
 #include <QtGui>
+
 #include <KIcon>
-#include "kcategorizeditemsviewmodels.h"
+
+#include "kcategorizeditemsviewmodels_p.h"
 
 class KCategorizedItemsView;
 

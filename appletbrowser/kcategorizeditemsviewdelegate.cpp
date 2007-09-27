@@ -17,11 +17,15 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "kcategorizeditemsviewdelegate.h"
-#include "kcategorizeditemsview.h"
-#include <KIconLoader>
-#include <QtCore>
+#include "kcategorizeditemsviewdelegate_p.h"
+
 #include <cmath>
+
+#include <QtCore>
+
+#include <KIconLoader>
+
+#include "kcategorizeditemsview_p.h"
 
 #define FAV_ICON_SIZE 24
 #define EMBLEM_ICON_SIZE 16
@@ -277,5 +281,5 @@ QSize KCategorizedItemsViewFilterDelegate::sizeHint(const QStyleOptionViewItem &
     return size;
 }
 
-#include "kcategorizeditemsviewdelegate.moc"
+#include "kcategorizeditemsviewdelegate_p.moc"
 

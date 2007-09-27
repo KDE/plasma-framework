@@ -20,9 +20,11 @@
 #ifndef PLASMAAPPLETSMODEL_H_
 #define PLASMAAPPLETSMODEL_H_
 
-#include <plasma/applet.h>
 #include <KPluginInfo>
-#include "kcategorizeditemsview.h"
+
+#include <plasma/applet.h>
+
+#include "kcategorizeditemsview_p.h"
 
 /**
  * Implementation of the KCategorizedItemsViewModels::AbstractItem

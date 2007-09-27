@@ -17,8 +17,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "kcategorizeditemsview.h"
-#include "kcategorizeditemsviewdelegate.h"
+#include "kcategorizeditemsview_p.h"
+#include "kcategorizeditemsviewdelegate_p.h"
 
 #include <KIcon>
 #include <KDebug>
@@ -134,5 +134,6 @@ QList < AbstractItem * > KCategorizedItemsView::selectedItems() const {
     }
     return items;
 }
-#include "kcategorizeditemsview.moc"
+
+#include "kcategorizeditemsview_p.moc"
 

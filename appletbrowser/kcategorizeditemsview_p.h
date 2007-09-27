@@ -22,8 +22,8 @@
 
 #include <QtGui>
 #include <QtCore>
-#include <iostream>
-#include "kcategorizeditemsviewmodels.h"
+
+#include "kcategorizeditemsviewmodels_p.h"
 
 #include "ui_kcategorizeditemsviewbase.h"
 

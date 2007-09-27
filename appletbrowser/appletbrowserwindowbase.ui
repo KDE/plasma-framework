@@ -56,7 +56,7 @@
   <customwidget>
    <class>KCategorizedItemsView</class>
    <extends>QWidget</extends>
-   <header>appletbrowser/kcategorizeditemsview.h</header>
+   <header>appletbrowser/kcategorizeditemsview_p.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
