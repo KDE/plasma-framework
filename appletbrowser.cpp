@@ -29,43 +29,50 @@ namespace Plasma
 class AppletBrowser::Private
 {
 public:
-    Private(AppletBrowser * parent, Corona * corona)
+    Private(AppletBrowser *parent, Corona *corona)
         : q(parent), window(new AppletBrowserWindow(corona))
-    {};
+    {}
 
-    Private(AppletBrowser * parent, Containment * containment)
+    Private(AppletBrowser *parent, Containment *containment)
         : q(parent), window(new AppletBrowserWindow(containment))
-    {};
+    {}
 
-    ~Private() {
+    ~Private()
+    {
         delete window;
     }
 
-    void show() { if (window) window->show(); };
-    void hide() { if (window) window->hide(); };
-
-    AppletBrowser * q;
-    AppletBrowserWindow * window;
+    AppletBrowser *q;
+    AppletBrowserWindow *window;
 };
 
 AppletBrowser::AppletBrowser(Corona * corona)
     : d(new Private(this, corona))
-{}
+{
+}
 
 AppletBrowser::AppletBrowser(Containment * containment)
     : d(new Private(this, containment))
-{}
+{
+}
 
-AppletBrowser::~AppletBrowser() {
+AppletBrowser::~AppletBrowser()
+{
     delete d;
 }
 
-void AppletBrowser::show() {
-    d->window->show();
+void AppletBrowser::show()
+{
+    if (d->window) {
+        d->window->show();
+    }
 }
 
-void AppletBrowser::hide() {
-    d->window->hide();
+void AppletBrowser::hide()
+{
+    if (d->window) {
+        d->window->hide();
+    }
 }
 
 

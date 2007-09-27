@@ -23,34 +23,34 @@
 namespace Plasma
 {
 
-    class Corona;
-    class Containment;
+class Corona;
+class Containment;
 
 /**
  * Interface for applet browser
  *
  */
-    class AppletBrowser
-    {
-    public:
-        explicit AppletBrowser(Corona * corona);
-        explicit AppletBrowser(Containment * corona);
-        virtual ~AppletBrowser();
+class AppletBrowser
+{
+public:
+    explicit AppletBrowser(Corona * corona);
+    explicit AppletBrowser(Containment * corona);
+    virtual ~AppletBrowser();
 
-        /**
-         * Displays the applet browser window
-         */
-        void show();
+    /**
+     * Displays the applet browser window
+     */
+    void show();
 
-        /**
-         * Hides the applet browser window
-         */
-        void hide();
+    /**
+     * Hides the applet browser window
+     */
+    void hide();
 
-    private:
-        class Private;
-        Private * const d;
-    };
+private:
+    class Private;
+    Private * const d;
+};
 
 } // namespace Plasma
 
