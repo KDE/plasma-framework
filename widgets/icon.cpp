@@ -37,7 +37,6 @@
 #include <private/qwindowsurface_p.h>
 #endif
 
-#include <KImageEffect>
 #include <KIconEffect>
 #include <KIconLoader>
 #include <KIcon>
