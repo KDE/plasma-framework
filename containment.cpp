@@ -407,13 +407,17 @@ void Containment::setFormFactor(FormFactor formFactor)
 
     switch (d->formFactor) {
         case Planar:
-            d->layout = new FreeLayout;
+            d->layout = new FreeLayout(this);
             break;
         case Horizontal:
-            d->layout = new BoxLayout(BoxLayout::LeftToRight);
+            d->layout = new BoxLayout(BoxLayout::LeftToRight, this);
+            d->layout->setMargin(0);
+            d->layout->setSpacing(0);
             break;
         case Vertical:
-            d->layout = new BoxLayout(BoxLayout::TopToBottom);
+            d->layout = new BoxLayout(BoxLayout::TopToBottom, this);
+            d->layout->setMargin(0);
+            d->layout->setSpacing(0);
             break;
         case MediaCenter:
             //FIXME: need a layout type here!
