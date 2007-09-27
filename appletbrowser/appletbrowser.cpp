@@ -17,7 +17,7 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "appletbrowserwindow_p.h"
+#include "appletbrowser.h"
 
 #include <KAction>
 #include <KStandardAction>
@@ -31,10 +31,10 @@
 namespace Plasma
 {
 
-class AppletBrowserWindow::Private
+class AppletBrowser::Private
 {
 public:
-    Private(Corona* co, Containment* cont, AppletBrowserWindow* q)
+    Private(Corona* co, Containment* cont, AppletBrowser* q)
         : corona(co),
           containment(cont),
           appletList(0),
@@ -51,21 +51,21 @@ public:
     KCategorizedItemsViewModels::DefaultFilterModel filterModel;
 };
 
-AppletBrowserWindow::AppletBrowserWindow(Plasma::Corona * corona, QWidget * parent, Qt::WindowFlags f)
+AppletBrowser::AppletBrowser(Plasma::Corona * corona, QWidget * parent, Qt::WindowFlags f)
     : KDialog(parent, f),
       d(new Private(corona, 0, this))
 {
     init();
 }
 
-AppletBrowserWindow::AppletBrowserWindow(Plasma::Containment * containment, QWidget * parent, Qt::WindowFlags f)
+AppletBrowser::AppletBrowser(Plasma::Containment * containment, QWidget * parent, Qt::WindowFlags f)
     : KDialog(parent, f),
       d(new Private(0, containment, this))
 {
     init();
 }
 
-void AppletBrowserWindow::init()
+void AppletBrowser::init()
 {
     d->appletList = new KCategorizedItemsView(this);
     setMainWidget(d->appletList);
@@ -111,11 +111,11 @@ void AppletBrowserWindow::init()
     d->appletList->setItemModel(&d->itemModel);
 }
 
-AppletBrowserWindow::~AppletBrowserWindow()
+AppletBrowser::~AppletBrowser()
 {
 }
 
-void AppletBrowserWindow::addApplet()
+void AppletBrowser::addApplet()
 {
     kDebug() << "Button ADD clicked";
 
@@ -133,7 +133,7 @@ void AppletBrowserWindow::addApplet()
     }
 }
 
-void AppletBrowserWindow::downloadApplets()
+void AppletBrowser::downloadApplets()
 {
     //TODO: implement
     kDebug() << "GHNS button clicked";
@@ -141,4 +141,4 @@ void AppletBrowserWindow::downloadApplets()
 
 } // namespace Plasma
 
-#include "appletbrowserwindow_p.moc"
+#include "appletbrowser.moc"

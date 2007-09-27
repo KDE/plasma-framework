@@ -28,13 +28,13 @@ namespace Plasma
 class Corona;
 class Containment;
 
-class AppletBrowserWindow: public KDialog
+class AppletBrowser: public KDialog
 {
     Q_OBJECT
 public:
-    explicit AppletBrowserWindow(Plasma::Corona *corona, QWidget *parent = 0, Qt::WindowFlags f = 0);
-    explicit AppletBrowserWindow(Plasma::Containment *containment, QWidget *parent = 0, Qt::WindowFlags f = 0);
-    virtual ~AppletBrowserWindow();
+    explicit AppletBrowser(Plasma::Corona *corona, QWidget *parent = 0, Qt::WindowFlags f = 0);
+    explicit AppletBrowser(Plasma::Containment *containment, QWidget *parent = 0, Qt::WindowFlags f = 0);
+    virtual ~AppletBrowser();
 
 protected Q_SLOTS:
     void addApplet();

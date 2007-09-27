@@ -17,8 +17,7 @@ set(plasma_LIB_SRCS
     abstractrunner.cpp
     animator.cpp
     applet.cpp
-    appletbrowser.cpp
-    appletbrowser/appletbrowserwindow.cpp
+    appletbrowser/appletbrowser.cpp
     appletbrowser/kcategorizeditemsview.cpp
     appletbrowser/kcategorizeditemsviewdelegate.cpp
     appletbrowser/kcategorizeditemsviewmodels.cpp
@@ -103,7 +102,7 @@ set(plasma_LIB_INCLUDES
     abstractrunner.h
     animator.h
     applet.h
-    appletbrowser.h
+    appletbrowser/appletbrowser.h
     configxml.h
     containment.h
     corona.h
