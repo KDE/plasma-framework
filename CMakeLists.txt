@@ -53,7 +53,7 @@ set(plasma_LIB_SRCS
     widgets/signalplotter.cpp
     widgets/meter.cpp
 
-    appletbrowser.cpp
+    #    appletbrowser.cpp
     appletbrowser/appletbrowserwindow.cpp
     appletbrowser/kcategorizeditemsview.cpp
     appletbrowser/kcategorizeditemsviewdelegate.cpp
@@ -106,7 +106,7 @@ set(plasma_LIB_INCLUDES
     abstractrunner.h
     animator.h
     applet.h
-    appletbrowser.h
+    #    appletbrowser.h
     configxml.h
     containment.h
     corona.h

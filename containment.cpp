@@ -49,7 +49,8 @@
 #include "ksmserver_interface.h"
 #include "screensaver_interface.h"
 
-#include "appletbrowser.h"
+//#include "appletbrowser.h"
+class AppletBrowser;
 
 namespace Plasma
 {
@@ -66,7 +67,8 @@ public:
           engineExplorerAction(0),
           runCommandAction(0),
           screen(-1),
-          immutable(false)
+          immutable(false),
+          appletBrowser(0)
     {
     }
 
@@ -76,6 +78,7 @@ public:
         applets.clear();
         delete layout;
         delete bitmapBackground;
+        //delete appletBrowser;
     }
 
     FormFactor formFactor;
@@ -102,19 +105,16 @@ Containment::Containment(QGraphicsItem* parent,
     : Applet(parent, serviceId, containmentId),
       d(new Private)
 {
-    d->appletBrowser = new AppletBrowser(this);
 }
 
 Containment::Containment(QObject* parent, const QVariantList& args)
     : Applet(parent, args),
       d(new Private)
 {
-    d->appletBrowser = new AppletBrowser(this);
 }
 
 Containment::~Containment()
 {
-    delete d->appletBrowser;
     delete d;
 }
 
@@ -196,10 +196,12 @@ void Containment::launchExplorer()
 
 void Containment::launchAppletBrowser()
 {
-    d->appletBrowser->show();
+    if (!d->appletBrowser) {
+//        d->appletBrowser = new AppletBrowser(this);
+    }
+
+//    d->appletBrowser->show();
 }
-
-
 
 void Containment::runCommand()
 {
