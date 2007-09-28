@@ -45,7 +45,7 @@ public:
     {
     }
 
-    // returns the component of 'size' in the expanding direction 
+    // returns the component of 'size' in the expanding direction
     // of this layout
     qreal size(const QSizeF& size) const
     {
@@ -77,27 +77,27 @@ public:
                 Q_ASSERT(false);
                 return Qt::Horizontal;
         }
-    } 
+    }
 
     // returns the position from which layouting should
     // begin depending on the direction of this layout
-    qreal startPos(const QRectF& geometry) const 
+    qreal startPos(const QRectF& geometry) const
     {
         switch ( direction ) {
             case LeftToRight:
             case TopToBottom:
-                return 0;
+                return q->margin();
             case RightToLeft:
-                return geometry.width();
+                return geometry.width() - q->margin();
             case BottomToTop:
-                return geometry.height();
+                return geometry.height() - q->margin();
             default:
                 Q_ASSERT(false);
                 return 0;
         }
     }
 
-    // lays out an item 
+    // lays out an item
     //
     // 'geometry' the geometry of the layout
     // 'item' the item whoose geometry should be altered
@@ -159,7 +159,7 @@ public:
         else
             item->setGeometry(newGeometry);
 
-        return newPos; 
+        return newPos;
     }
 
     enum SizeType
@@ -168,20 +168,20 @@ public:
         MaxSize,
         HintSize
     };
-       
+
     // this provides a + function which can be passed as the 'op'
-    // argument to calculateSize  
-    static qreal sum(const qreal a , const qreal b) 
+    // argument to calculateSize
+    static qreal sum(const qreal a , const qreal b)
     {
         return a+b;
     }
 
     // calcualtes a size hint or value for this layout
-    // 'sizeType' - The item size ( minimum , maximum , hint ) to use 
+    // 'sizeType' - The item size ( minimum , maximum , hint ) to use
     // 'dir' - The direction component of the item size to use
     // 'op' - A function to apply to the size of each item in the layout
     //        , usually qMax,qMin or sum
-    template <class T> 
+    template <class T>
     qreal calculateSize(SizeType sizeType , Qt::Orientation dir , T (*op)(T,T)) const
     {
         qreal value = 0;
@@ -228,7 +228,7 @@ public:
                 result.rwidth() += totalMargin + totalSpacing;
                 result.rheight() += totalMargin;
 
-                break; 
+                break;
             case TopToBottom:
             case BottomToTop:
                 result = QSizeF(calculateSize(calculateSizeType,Qt::Horizontal,qMax<qreal>),
@@ -240,7 +240,7 @@ public:
                 break;
         }
 
-        return result;    
+        return result;
     }
 };
 
@@ -307,7 +307,7 @@ void BoxLayout::insertItem(int index, LayoutItem *item)
 
     item->setManagingLayout(this);
 
-    if ( index == -1 ) 
+    if ( index == -1 )
         index = d->children.size();
 
     d->children.insert(index, item);
@@ -374,10 +374,10 @@ void BoxLayout::setGeometry(const QRectF& geo)
         const LayoutItem *item = d->children[i];
 
         const bool isExpanding = item->expandingDirections() & d->expandingDirection();
-        
-        if ( isExpanding )    
-            sizes[i] = perItemSize;      
-        else    
+
+        if ( isExpanding )
+            sizes[i] = perItemSize;
+        else
             sizes[i] = d->size(item->sizeHint());
 
         const qreal minItemSize = d->size(item->minimumSize());
@@ -385,23 +385,23 @@ void BoxLayout::setGeometry(const QRectF& geo)
 
        // qDebug() << "Layout max item " << i << "size: " << maxItemSize;
 
-        sizes[i] = qMin( sizes[i] , maxItemSize ); 
-        sizes[i] = qMax( sizes[i] , minItemSize ); 
+        sizes[i] = qMin( sizes[i] , maxItemSize );
+        sizes[i] = qMax( sizes[i] , minItemSize );
 
-       // qDebug() << "Available: " << available << "per item:" << perItemSize << 
+       // qDebug() << "Available: " << available << "per item:" << perItemSize <<
        //     "Initial size: " << sizes[i];
 
-        if ( isExpanding ) 
+        if ( isExpanding )
             expansionSpace[i] = maxItemSize-sizes[i];
         else
             expansionSpace[i] = 0;
 
         // adjust the per-item size if the space was over or under used
         if ( sizes[i] != perItemSize && i != sizes.count()-1 ) {
-            perItemSize = available / (sizes.count()-i-1); 
+            perItemSize = available / (sizes.count()-i-1);
         }
 
-        available -= sizes[i]; 
+        available -= sizes[i];
     }
 
     // distribute out any remaining space to items which can still expand
@@ -411,7 +411,7 @@ void BoxLayout::setGeometry(const QRectF& geo)
     int expandable = sizes.count();
     const qreal threshold = 1.0;
     while ( available > threshold && expandable > 0 ) {
-    
+
         qreal extraSpace = available / expandable;
         for ( int i = 0 ; i < sizes.count() ; i++ ) {
             if ( expansionSpace[i] > threshold ) {
@@ -430,12 +430,12 @@ void BoxLayout::setGeometry(const QRectF& geo)
     // set items' geometry according to new sizes
     qreal pos = d->startPos(geometry);
     for ( int i = 0 ; i < sizes.count() ; i++ ) {
-       
+
         //QObject *obj = dynamic_cast<QObject*>(d->children[i]);
         //if ( obj )
         //qDebug() << "Item " << i << obj->metaObject()->className() << "size:" << sizes[i];
 
-       pos = d->layoutItem( geometry , d->children[i] , pos , sizes[i] ); 
+       pos = d->layoutItem( geometry , d->children[i] , pos , sizes[i] );
     }
 
     d->geometry = geometry;
@@ -454,7 +454,7 @@ QSizeF BoxLayout::minimumSize() const
 }
 QSizeF BoxLayout::sizeHint() const
 {
-    return d->calculateSize(Private::HintSize);   
+    return d->calculateSize(Private::HintSize);
 }
 
 HBoxLayout::HBoxLayout(LayoutItem *parent)
