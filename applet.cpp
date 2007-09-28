@@ -356,7 +356,7 @@ Applet::Applet(QObject* parentObject, const QVariantList& args)
                      args.count() > 1 ? args[1].toInt() : 0))
 {
     d->init(this);
-    // the brain damage seen in the initialization list is due to the 
+    // the brain damage seen in the initialization list is due to the
     // inflexibility of KService::createInstance
 }
 
@@ -659,10 +659,10 @@ QRectF Applet::boundingRect() const
     int bottom;
 
     d->getBorderSize(left,top,right,bottom);
-  
-     
+
+
     //qDebug() << "Background , Border size" << d->background << left << top << right << bottom;
-    
+
     return rect.adjusted(-left,-top,right,bottom);
 }
 
@@ -1073,6 +1073,24 @@ QVariant Applet::itemChange(GraphicsItemChange change, const QVariant &value)
     return QGraphicsItem::itemChange(change, value);
 }
 
+void Applet::setGeometry(const QRectF& geometry)
+{
+    if (size() != geometry.size()) {
+        prepareGeometryChange();
+        qreal width = qBound(minimumSize().width(), geometry.size().width(), maximumSize().width());
+        qreal height = qBound(minimumSize().height(), geometry.size().height(), maximumSize().height());
+
+        setSize(QSizeF(width, height));
+
+        if (layout()) {
+            layout()->setGeometry(QRectF(QPoint(0, 0), contentSize()));
+        }
+    }
+
+    setPos(geometry.topLeft());
+    update();
+}
+
 void Applet::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
 {
     //kDebug() << "context menu event!";
@@ -1092,7 +1110,6 @@ void Applet::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
     containment->contextMenuEvent(event);
     return;
 }
-
 
 } // Plasma namespace
 

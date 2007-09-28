@@ -55,7 +55,7 @@ class Package;
  *
  * See techbase.kde.org for tutorial on writing Applets using this class.
  */
-class PLASMA_EXPORT Applet : public Widget 
+class PLASMA_EXPORT Applet : public Widget
 {
     Q_OBJECT
 //    Q_PROPERTY( QRectF maxSizeHint READ maxSizeHint )
@@ -67,6 +67,7 @@ class PLASMA_EXPORT Applet : public Widget
     Q_PROPERTY( bool failedToLaunch READ failedToLaunch WRITE setFailedToLaunch )
     Q_PROPERTY( bool needsConfiguring READ needsConfiguring WRITE setNeedsConfiguring )
     Q_PROPERTY( QRectF boundingRect READ boundingRect )
+    Q_PROPERTY( QRectF geometry READ geometry WRITE setGeometry )
 
     public:
         typedef QList<Applet*> List;
@@ -218,15 +219,15 @@ class PLASMA_EXPORT Applet : public Widget
         QSizeF contentSize() const;
 
         /**
-         * Returns an ideal size for the applet's content.  
+         * Returns an ideal size for the applet's content.
          * Applets can re-implement this to provide a suitable size based
          * on their contents.
          *
-         * Unlike sizeHint() , contentSizeHint() does not include the 
-         * size of any borders surrounding the content area. 
+         * Unlike sizeHint() , contentSizeHint() does not include the
+         * size of any borders surrounding the content area.
          *
          * The default implementation returns the sizeHint() of the applet's
-         * layout if it has one, or a null size otherwise. 
+         * layout if it has one, or a null size otherwise.
          */
         virtual QSizeF contentSizeHint() const;
 
@@ -235,11 +236,11 @@ class PLASMA_EXPORT Applet : public Widget
          *
          * @param category Only applets matchin this category will be returned.
          *                 Useful in conjunction with knownCategories.
-         *                 If "Misc" is passed in, then applets without a 
+         *                 If "Misc" is passed in, then applets without a
          *                 Categories= entry are also returned.
          *                 If an empty string is passed in, all applets are
          *                 returned.
-         * @param parentApp the application to filter applets on. Uses the 
+         * @param parentApp the application to filter applets on. Uses the
          *                  X-KDE-ParentApp entry (if any) in the plugin info.
          *                  The default value of QString() will result in a
          *                  list containing only applets not specifically
@@ -260,7 +261,7 @@ class PLASMA_EXPORT Applet : public Widget
          * Returns a list of all the categories used by
          * installed applets.
          *
-         * @param parentApp the application to filter applets on. Uses the 
+         * @param parentApp the application to filter applets on. Uses the
          *                  X-KDE-ParentApp entry (if any) in the plugin info.
          *                  The default value of QString() will result in a
          *                  list containing only applets not specifically
@@ -374,7 +375,7 @@ class PLASMA_EXPORT Applet : public Widget
          **/
         bool isImmutable() const;
 
-        /** 
+        /**
          * Sets whether or not this applet is immutable or not.
          *
          * @arg immutable true if this applet should not be changeable
@@ -417,7 +418,7 @@ class PLASMA_EXPORT Applet : public Widget
         void setFailedToLaunch(bool failed, const QString& reason = QString());
 
         /**
-         * @return true if the applet currently needs to be configured, 
+         * @return true if the applet currently needs to be configured,
          *         otherwise, false
          */
         bool needsConfiguring() const;
@@ -469,8 +470,17 @@ class PLASMA_EXPORT Applet : public Widget
 
         // reimplemented from LayoutItem
         // value is the same as contentSizeHint() if drawStandardBackground() is false
-        // or contentSizeHint() plus the size of the border otherwise. 
+        // or contentSizeHint() plus the size of the border otherwise.
         virtual QSizeF sizeHint() const;
+
+        /**
+        * Sets the geometry of this Applet.
+        */
+        /**
+        * Sets the geometry of this Plasma::Applet
+        * @param geometry the geometry to apply to this Plasma::Applet.
+        */
+        void setGeometry(const QRectF &geometry);
 
     Q_SIGNALS:
         /**
