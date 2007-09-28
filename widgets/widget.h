@@ -57,8 +57,8 @@ class PLASMA_EXPORT Widget  : public QObject,
     Q_PROPERTY( QSizeF maximumSize READ maximumSize WRITE setMaximumSize )
     Q_PROPERTY( QRectF geometry READ geometry WRITE setGeometry )
     Q_PROPERTY( QSizeF sizeHint READ sizeHint )
-    Q_PROPERTY( QSizeF size READ size WRITE resize ) 
-    Q_PROPERTY( qreal opacity READ opacity WRITE setOpacity ) 
+    Q_PROPERTY( QSizeF size READ size WRITE resize )
+    Q_PROPERTY( qreal opacity READ opacity WRITE setOpacity )
 
 public:
     enum CachePaintMode {
@@ -255,6 +255,7 @@ protected:
      * @param widget the parent QWidget (most likely the Corona)
      */
     virtual void paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
+    void setSize(const QSizeF& size);
 
 private:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);

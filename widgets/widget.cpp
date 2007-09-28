@@ -66,7 +66,7 @@ class Widget::Private
 #if QT_VERSION >= 0x040400
 #warning Replace Plasma::Widget::CachePaintMode with QGraphicsItem::CacheMode
 #endif
-        Widget::CachePaintMode cachePaintMode; 
+        Widget::CachePaintMode cachePaintMode;
         QSize cacheSize;
         QString cacheKey;
         QRectF cacheInvalidated;
@@ -222,6 +222,11 @@ void Widget::setGeometry(const QRectF& geometry)
     update();
 }
 
+void Widget::setSize(const QSizeF& size)
+{
+    d->size = size;
+}
+
 void Widget::updateGeometry()
 {
     if ( managingLayout() ) {
@@ -256,7 +261,7 @@ void Widget::setFont(const QFront& font)
 
 QRectF Widget::boundingRect() const
 {
-    return QRectF(QPointF(0,0),geometry().size()); 
+    return QRectF(QPointF(0,0),geometry().size());
 }
 
 void Widget::resize(const QSizeF& size)
