@@ -3,10 +3,9 @@
 #define PIX_SIZE 64
 #define MAX_OFFSET 16
 #define MAX_COUNT 5
-#define min(A, B) (((A) < (B)) ? (A) : (B))
 
 CustomDragTreeView::CustomDragTreeView(QWidget * parent)
-    : QTreeView(parent) {};
+    : QTreeView(parent) {}
 
 void CustomDragTreeView::startDrag ( Qt::DropActions supportedActions )
 {
@@ -24,7 +23,7 @@ void CustomDragTreeView::startDrag ( Qt::DropActions supportedActions )
             return;
         }
 
-        int size = PIX_SIZE + (min(MAX_COUNT, indexes.count()) * MAX_OFFSET);
+        int size = PIX_SIZE + (qMin(MAX_COUNT, indexes.count()) * MAX_OFFSET);
         int off  = MAX_OFFSET;
         if (indexes.count() > MAX_COUNT) {
             off = (MAX_OFFSET * MAX_COUNT) / indexes.count();
