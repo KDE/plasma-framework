@@ -20,7 +20,7 @@
 #ifndef APPLETBROWSERWINDOW_H_
 #define APPLETBROWSERWINDOW_H_
 
-#include <KDialog>
+#include <KDE/KDialog>
 
 namespace Plasma
 {
