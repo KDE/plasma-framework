@@ -87,6 +87,7 @@ private:
     AbstractItem * getItemByProxyIndex(const QModelIndex & index) const;
 
     friend class KCategorizedItemsViewDelegate;
+    friend class CustomDragTreeView;
 };
 
 //Q_DECLARE_METATYPE(KCategorizedItemsView::Filter)

@@ -30,6 +30,8 @@ KCategorizedItemsView::KCategorizedItemsView(QWidget * parent, Qt::WindowFlags f
         m_modelItems(NULL), m_modelFilterItems(NULL), m_delegate(NULL)
 {
     setupUi(this);
+    itemsView->m_view = this;
+
     textSearch->setClickMessage(i18n("Enter search phrase here"));
 
     connect(textSearch, SIGNAL(textChanged(QString)),

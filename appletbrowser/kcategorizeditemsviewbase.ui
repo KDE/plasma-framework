@@ -83,7 +83,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QTreeView" name="itemsView" >
+       <widget class="CustomDragTreeView" name="itemsView" >
         <property name="frameShape" >
          <enum>QFrame::NoFrame</enum>
         </property>
@@ -124,6 +124,11 @@
    <class>KLineEdit</class>
    <extends>QLineEdit</extends>
    <header>klineedit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>CustomDragTreeView</class>
+   <extends>QTreeView</extends>
+   <header>appletbrowser/customdragtreeview_p.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>
