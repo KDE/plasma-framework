@@ -259,8 +259,6 @@ QSizeF Containment::contentSizeHint() const
 QList<QAction*> Containment::contextActions()
 {
     //FIXME: several items here ... probably all junior jobs =)
-    //  - engineExplorerAction is going to go away, so the !d->engineExplorerAction below needs to
-    //    go
     //  - pretty up the menu with separators
     //  - should we offer "Switch User" here?
 
