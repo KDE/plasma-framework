@@ -172,6 +172,13 @@ public:
 
     void paintBackground(QPainter* p2, Applet* q)
     {
+        if (q->formFactor() != Plasma::Planar) {
+            // we don't paint special backgrounds for other form factors
+            // if that changes in the future, this method is where such
+            // background painting code should be added
+            return;
+        }
+
         QSize contents = contentSize(q).toSize();
         const int contentWidth = contents.width();
         const int contentHeight = contents.height();
