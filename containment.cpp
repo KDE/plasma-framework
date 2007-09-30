@@ -495,6 +495,9 @@ Applet* Containment::addApplet(const QString& name, const QVariantList& args, ui
 
     applet->updateConstraints();
 
+    kDebug() << applet->name() << "sizehint:" << applet->sizeHint()
+                               << "geometry:" << applet->geometry();
+
     if (!delayInit) {
         applet->init();
     }

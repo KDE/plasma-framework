@@ -153,10 +153,12 @@ void Corona::loadApplets(const QString& config)
             if (c) {
                 containments.insert(c->id(), c);
                 c->initConstraints(&appletConfig);
+                c->setGeometry(appletConfig.readEntry("geometry", QRectF()));
+                kDebug() << "Containment" << c->id() << "geometry is" << c->geometry();
             }
         } else {
             // it's an applet, let's grab the containment association
-            kDebug() << "insert multi " << group;
+            kDebug() << "insert multi" << group;
             applets.append(appletConfig);
         }
     }
@@ -218,6 +220,22 @@ void Corona::loadDefaultSetup()
         c->setScreen(i);
         c->setFormFactor(Plasma::Planar);
     }
+
+    // make a panel at the bottom
+    Containment* panel = addContainment("panel", (QVariantList() << (int)Plasma::BottomEdge));
+
+    // some default applets to get a usable UI
+    QList<Plasma::Applet*> applets;
+    Plasma::Applet *tasksApplet = panel->addApplet("tasks");
+    Plasma::Applet *systemTrayApplet = panel->addApplet("systemtray");
+    Plasma::Applet *clockApplet = panel->addApplet("digital-clock");
+
+    applets << tasksApplet << systemTrayApplet << clockApplet;
+
+    foreach (Plasma::Applet* applet , applets) {
+        // If we have a Panel class (is a Container), this should move there
+        applet->setDrawStandardBackground(false);
+    }
 }
 
 Containment* Corona::containmentForScreen(int screen) const
@@ -231,6 +249,11 @@ Containment* Corona::containmentForScreen(int screen) const
     return 0;
 }
 
+QList<Containment*> Corona::containments() const
+{
+    return d->containments;
+}
+
 void Corona::clearApplets()
 {
     foreach (Containment* containment, d->containments) {
@@ -242,6 +265,8 @@ Containment* Corona::addContainment(const QString& name, const QVariantList& arg
 {
     Containment* containment = 0;
     Applet* applet = 0;
+
+    kDebug() << "Loading" << name << args << id;
 
     if (!name.isEmpty()) {
         applet = Applet::loadApplet(name, id, args);

@@ -141,6 +141,11 @@ public Q_SLOTS:
     Containment* containmentForScreen(int screen) const;
 
     /**
+     * Returns all containments on this Corona
+     */
+    QList<Containment*> containments() const;
+
+    /**
      * Adds a SuperKaramba theme to the scene
      *
      * @param path the path to the theme file
