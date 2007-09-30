@@ -380,8 +380,8 @@ void Containment::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
             desktopMenu.addSeparator();
             foreach(QAction* action, actions) {
                 desktopMenu.addAction(action);
-                hasEntries = true;
             }
+            hasEntries = true;
         }
 
         if (!hasEntries) {
