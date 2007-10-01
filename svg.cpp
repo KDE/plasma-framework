@@ -254,6 +254,7 @@ void Svg::resize( const QSizeF& size )
 void Svg::resize()
 {
     d->createRenderer();
+    d->size = d->renderer->defaultSize();
 }
 
 QSize Svg::elementSize(const QString& elementId) const
