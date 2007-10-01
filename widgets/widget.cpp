@@ -81,7 +81,9 @@ QGraphicsItem* Widget::graphicsItem()
 
 bool Widget::Private::shouldPaint(QPainter *painter, const QTransform &transform)
 {
-    qreal zoomLevel = painter->transform().m11() / transform.m11();
+    Q_UNUSED(painter)
+    Q_UNUSED(transform)
+    //qreal zoomLevel = painter->transform().m11() / transform.m11();
     //return (fabs(zoomLevel - scalingFactor(Plasma::DesktopZoom))) < std::numeric_limits<double>::epsilon();
     return true;
 }
@@ -194,7 +196,7 @@ qreal Widget::widthForHeight(qreal h) const
 
 QRectF Widget::geometry() const
 {
-    return QRectF(pos(),d->size);
+    return QRectF(pos(), d->size);
 }
 
 #if 0
@@ -206,7 +208,7 @@ QRectF Widget::localGeometry() const
 
 void Widget::setGeometry(const QRectF& geometry)
 {
-    if ( d->size != geometry.size() ) {
+    if (d->size != geometry.size()) {
         prepareGeometryChange();
         qreal width = qBound(d->minimumSize.width(), geometry.size().width(), d->maximumSize.width());
         qreal height = qBound(d->minimumSize.height(), geometry.size().height(), d->maximumSize.height());
@@ -229,7 +231,7 @@ void Widget::setSize(const QSizeF& size)
 
 void Widget::updateGeometry()
 {
-    if ( managingLayout() ) {
+    if (managingLayout()) {
         managingLayout()->invalidate();
     }
 }
@@ -261,7 +263,7 @@ void Widget::setFont(const QFront& font)
 
 QRectF Widget::boundingRect() const
 {
-    return QRectF(QPointF(0,0),geometry().size());
+    return QRectF(QPointF(0,0), d->size);
 }
 
 void Widget::resize(const QSizeF& size)
@@ -323,7 +325,6 @@ void Widget::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
         // Recreate the pixmap if it's gone.
         if (pix.isNull()) {
             pix = QPixmap(d->cacheSize);
-            pix.fill(Qt::transparent);
             exposed = brect;
         }
 
@@ -335,10 +336,16 @@ void Widget::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
             cacheOption.exposedRect = exposed.toRect(); // <- truncation
 
             QPainter pixmapPainter(&pix);
+
             // Fit the item's bounding rect into the pixmap's coordinates.
             pixmapPainter.scale(pix.width() / brect.width(),
-                    pix.height() / brect.height());
+                                pix.height() / brect.height());
             pixmapPainter.translate(-brect.topLeft());
+
+            // erase the exposed area so we don't paint over and over
+            pixmapPainter.setCompositionMode(QPainter::CompositionMode_Source);
+            pixmapPainter.fillRect(exposed, Qt::transparent);
+            pixmapPainter.setCompositionMode(QPainter::CompositionMode_SourceOver);
 
             // Re-render the invalidated areas of the pixmap. Important: don't
             // fool the item into using the widget - pass 0 instead of \a
@@ -365,7 +372,6 @@ void Widget::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
         // Auto-adjust the pixmap size.
         if (deviceRect.size() != pix.size()) {
             pix = QPixmap(deviceRect.size());
-            pix.fill(Qt::transparent);
             exposed = brect;
         }
 
@@ -382,9 +388,16 @@ void Widget::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
 
             // Transform the painter, and render the item in device coordinates.
             QPainter pixmapPainter(&pix);
+
             pixmapPainter.translate(offset);
             pixmapPainter.setWorldTransform(transform, true);
             pixmapPainter.translate(transform.inverted().map(QPointF(0, 0)));
+
+            // erase the exposed area so we don't paint over and over
+            pixmapPainter.setCompositionMode(QPainter::CompositionMode_Source);
+            pixmapPainter.fillRect(exposed, Qt::transparent);
+            pixmapPainter.setCompositionMode(QPainter::CompositionMode_SourceOver);
+
             paintWidget(&pixmapPainter, &cacheOption, 0);
             pixmapPainter.end();
 

@@ -150,7 +150,7 @@ public:
      * Sets the geometry of this Plasma::Widget
      * @param geometry the geometry to apply to this Plasma::Widget.
      */
-    void setGeometry(const QRectF &geometry);
+    virtual void setGeometry(const QRectF &geometry);
 
     /**
      * This method is used to notify any containing Plasma::Layout that it should
