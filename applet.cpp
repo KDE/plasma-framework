@@ -212,9 +212,9 @@ public:
             p.setCompositionMode(QPainter::CompositionMode_Source);
             p.setRenderHint(QPainter::SmoothPixmapTransform);
 
-            background->paint(&p, QRect(leftOffset,  topOffset,    leftWidth,  topHeight),    "topleft");
-            background->paint(&p, QRect(rightOffset, topOffset,    rightWidth, topHeight),    "topright");
-            background->paint(&p, QRect(leftOffset,  bottomOffset, leftWidth,  bottomHeight), "bottomleft");
+            background->paint(&p, QRect(leftOffset, topOffset, leftWidth, topHeight), "topleft");
+            background->paint(&p, QRect(rightOffset, topOffset,rightWidth, topHeight), "topright");
+            background->paint(&p, QRect(leftOffset, bottomOffset, leftWidth, bottomHeight), "bottomleft");
             background->paint(&p, QRect(rightOffset, bottomOffset, rightWidth, bottomHeight), "bottomright");
 
             if (stretchBackgroundBorders) {
@@ -260,9 +260,11 @@ public:
                 p.drawTiledPixmap(QRect(contentLeft, bottomOffset, contentWidth, bottomHeight), bottom);
             }
 
-            background->paint(&p, QRect(contentLeft, contentTop, contentWidth + 1, contentHeight + 1), "center");
-            p.end();
+            background->resize(contentWidth, contentHeight);
+            background->paint(&p, QRect(contentLeft, contentTop, contentWidth, contentHeight), "center");
+            background->resize();
         }
+
         p2->drawPixmap(leftOffset, topOffset, *cachedBackground);
     }
 
