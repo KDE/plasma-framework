@@ -40,7 +40,6 @@
 #include <KIconEffect>
 #include <KIconLoader>
 #include <KIcon>
-#include <K3Icon>
 #include <KUrl>
 #include <KRun>
 #include <KMimeType>
@@ -535,8 +534,8 @@ QPixmap Icon::Private::decoration(const QStyleOptionGraphicsItem *option) const
             // Note that in KIconLoader terminology, active = hover.
             // ### We're assuming that the icon group is desktop/filemanager, since this
             //     is KFileItemDelegate.
-            if (effect->hasEffect(K3Icon::Desktop, K3Icon::ActiveState)) {
-                result = effect->apply(result, K3Icon::Desktop, K3Icon::ActiveState);
+            if (effect->hasEffect(KIconLoader::Desktop, KIconLoader::ActiveState)) {
+                result = effect->apply(result, KIconLoader::Desktop, KIconLoader::ActiveState);
             }
         }
     }

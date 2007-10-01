@@ -751,7 +751,7 @@ void Applet::paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *opti
         //TODO: make pretty.
         painter->setBrush(QBrush(color(), Qt::SolidPattern));
         painter->drawRoundRect(boundingRect());
-        int iconDim = KIconLoader::global()->currentSize(K3Icon::Desktop);
+        int iconDim = KIconLoader::global()->currentSize(KIconLoader::Desktop);
         qreal midX = (boundingRect().width() / 2) - (iconDim / 2);
         qreal midY = (boundingRect().height() / 2) - (iconDim / 2);
         KIcon ico(icon());
