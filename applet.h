@@ -185,7 +185,7 @@ class PLASMA_EXPORT Applet : public Widget
          *
          * @param constraints the type of constraints that were updated
          */
-        void updateConstraints(Plasma::Constraints constraints);
+        void updateConstraints(Plasma::Constraints constraints = Plasma::AllConstraints);
 
         /**
          * Called when any of the geometry constraints have been updated.
