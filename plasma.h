@@ -31,6 +31,18 @@ namespace Plasma
 {
 
 /**
+ * The Constriants enumeration lists the various constraints that Plasma
+ * objects have managed for them and which they may wish to react to,
+ * for instance in Applet::constraintsUpdated
+ */
+enum Constraint { FormFactorConstraint = 1 /** The FormFactor for an object */,
+                  LocationConstraint = 2 /** The Location of an object */,
+                  ScreenConstraint = 4 /** Which screen an object is on */,
+                  AllConstraints = FormFactorConstraint | LocationConstraint | ScreenConstraint
+};
+Q_DECLARE_FLAGS(Constraints, Constraint)
+
+/**
  * The FormFactor enumeration describes how a Plasma::Applet should arrange
  * itself. The value is derived from the container managing the Applet
  * (e.g. in Plasma, a Corona on the desktop or on a panel).
@@ -124,5 +136,7 @@ PLASMA_EXPORT qreal scalingFactor(ZoomLevel level);
 PLASMA_EXPORT Direction locationToDirection(Location location);
 
 } // Plasma namespace
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(Plasma::Constraints)
 
 #endif // multiple inclusion guard

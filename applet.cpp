@@ -474,15 +474,15 @@ const Package* Applet::package() const
     return d->package;
 }
 
-void Applet::updateConstraints()
+void Applet::updateConstraints(Plasma::Constraints constraints)
 {
-    constraintsUpdated();
+    constraintsUpdated(constraints);
     setShadowShown(formFactor() == Planar);
 }
 
-void Applet::constraintsUpdated()
+void Applet::constraintsUpdated(Plasma::Constraints constraints)
 {
-    kDebug() << "Applet::constraintsUpdate(): constraints are FormFactor: " << formFactor() << ", Location: " << location();
+    kDebug() << constraints << "constraints are FormFactor: " << formFactor() << ", Location: " << location();
 }
 
 QString Applet::name() const

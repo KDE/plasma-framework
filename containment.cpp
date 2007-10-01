@@ -427,8 +427,10 @@ void Containment::setFormFactor(FormFactor formFactor)
 
     foreach (Applet* applet, d->applets) {
         d->layout->addItem(applet);
-        applet->updateConstraints();
+        applet->updateConstraints(Plasma::FormFactorConstraint);
     }
+
+    updateConstraints(Plasma::FormFactorConstraint);
 }
 
 FormFactor Containment::formFactor() const
@@ -445,8 +447,10 @@ void Containment::setLocation(Location location)
     d->location = location;
 
     foreach (Applet* applet, d->applets) {
-        applet->updateConstraints();
+        applet->updateConstraints(Plasma::LocationConstraint);
     }
+
+    updateConstraints(Plasma::LocationConstraint);
 }
 
 Location Containment::location() const
@@ -493,7 +497,7 @@ Applet* Containment::addApplet(const QString& name, const QVariantList& args, ui
         d->layout->addItem(applet);
     }
 
-    applet->updateConstraints();
+    applet->updateConstraints(Plasma::AllConstraints);
 
     kDebug() << applet->name() << "sizehint:" << applet->sizeHint()
                                << "geometry:" << applet->geometry();
@@ -555,6 +559,7 @@ void Containment::setScreen(int screen)
     }
 
     d->screen = screen;
+    updateConstraints(Plasma::ScreenConstraint);
 }
 
 int Containment::screen() const

@@ -182,8 +182,10 @@ class PLASMA_EXPORT Applet : public Widget
          * Called when any of the geometry constraints have been updated.
          * This method calls constraintsUpdated, which may be reimplemented,
          * once the Applet has been prepared for updating the constraints.
+         *
+         * @param constraints the type of constraints that were updated
          */
-        void updateConstraints();
+        void updateConstraints(Plasma::Constraints constraints);
 
         /**
          * Called when any of the geometry constraints have been updated.
@@ -194,9 +196,10 @@ class PLASMA_EXPORT Applet : public Widget
          * Do not call update() from this method; an update() will be triggered
          * at the appropriate time for the applet.
          *
+         * @param constraints the type of constraints that were updated
          * @property constraint
          */
-        virtual void constraintsUpdated();
+        virtual void constraintsUpdated(Plasma::Constraints constraints);
 
         /**
          * Returns the current form factor the applet is being displayed in.
