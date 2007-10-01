@@ -14,11 +14,10 @@
    height="50"
    id="svg2"
    sodipodi:version="0.32"
-   inkscape:version="0.45"
+   inkscape:version="0.45.1"
    sodipodi:docname="background.svg"
    sodipodi:docbase="/home/aseigo/kde4/KDE/kdebase/workspace/plasma/desktoptheme/widgets"
-   inkscape:output_extension="org.inkscape.output.svg.inkscape"
-   sodipodi:modified="true">
+   inkscape:output_extension="org.inkscape.output.svg.inkscape">
   <metadata
      id="metadata2480">
     <rdf:RDF>
@@ -42,7 +41,7 @@
      bordercolor="#666666"
      pagecolor="#ffffff"
      id="base"
-     inkscape:zoom="5.6568542"
+     inkscape:zoom="3.9166667"
      inkscape:cx="21"
      inkscape:cy="25"
      inkscape:window-x="461"
@@ -50,6 +49,13 @@
      inkscape:current-layer="svg2" />
   <defs
      id="defs5" />
+  <rect
+     style="opacity:0.875;fill:#FF0000;stroke:none"
+     id="center"
+     width="42"
+     height="50"
+     x="0"
+     y="0" />
   <image
      xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAZCAYAAAAxFw7TAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz AAAN1wAADdcBQiibeAAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAJ3SURB VDiNrZS7ThwxFIb/Yx/PhdVILJEiVgRBwUpQUESR8gIU2TegpEtPmZ5HoKGkSZsUiZR3QLRRlDQp aDYbCFp2ZmfnYqdYG5xhACFi6dfcfD7/5xx7CICBN8IwrPb3978kSXIRRdGUmSsiMkRkhBCamasw DIu9vb13RPQKwBhACmAKIBdojKWlpbT57jHjFnB7e3v434Cbm5uX/X7/8ilAVkqZbrdbbm1tXW1s bJwD0ESkicg8GN0G3N3d/W0BJRFpIUT9FKCwwbUQopRSFsxc2M5qItKPdkhEpRCiZOYpM2dKqSkz F1LKmoge7ZCVUhMpZaGUyuI4HkdRlCmlZhbYmnYQBGyMqVuBCwsLF1LKIgiCaRRFaRRFqVKqFEJo AKYNurKy8nwymfxsBSZJMpJSlkqpwuk+d0Rker3ei+Fw+BU3p8y4e5EkyZ9OpzOO4zgNwzBn5koI oY25zSMi0+12O2tra6+Pj48/NGEAwEEQzGxHYV0ZG3wLtri4GO/s7Lw5PT39eHBw8AOAbrgEM3PV DHT3xhhiZrG6uvpsfX291+/3X56cnHweDAbvLcwXABiq67psq5W/xng8/nV2dvb96Ojo0+Hh4TfM /yxXACZWGYAcQMHLy8tv74GZLMvqNE1LABWA0qqwzxWA2koDAI9Go/wumJVLqbKgwgM7qKulYTuh Deau2jpwznKrmefUOTRs6/GQw9pzltuY3AO6LAxj/vu+C+gmOoeldeYc+mlfp3x1T8o+0AU261h7 2bQC/SPi7zMf2tbheZcx30d3pdyso7s6uW83Rw8PN8U59Wuq8e9i8wBjDGNe3DaYP7T3vqlrGAD8 BSHzOdR7PMREAAAAAElFTkSuQmCC "
      x="22"
@@ -114,11 +120,4 @@
      y="23"
      id="rect2309"
      style="opacity:1;fill:#000000;fill-opacity:1;stroke:none;stroke-width:5.19999981;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:1.08779998;stroke-opacity:1" />
-  <rect
-     style="opacity:0.875;fill:#000000"
-     id="center"
-     width="6.7175145"
-     height="6.3639612"
-     x="17.67767"
-     y="19.417631" />
 </svg>
