@@ -1,3 +1,6 @@
+#ifndef BLUR_CPP
+#define BLUR_CPP
+
 /*
  *   Copyright 2007 Jani Huhtanen <jani.huhtanen@tut.fi>
  *
@@ -145,3 +148,4 @@ inline const T& qClamp(const T &x, const T &low, const T &high)
     else               return x;
 }
 
+#endif
