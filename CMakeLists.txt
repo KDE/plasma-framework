@@ -65,15 +65,6 @@ kde4_add_ui_files (
     appletbrowser/kcategorizeditemsviewbase.ui
 )
 
-set(krunner_xml ${KDEBASE_WORKSPACE_SOURCE_DIR}/krunner/org.kde.krunner.Interface.xml)
-QT4_ADD_DBUS_INTERFACE(plasma_LIB_SRCS ${krunner_xml} krunner_interface)
-
-set(screensaver_xml ${KDEBASE_WORKSPACE_SOURCE_DIR}/krunner/org.freedesktop.ScreenSaver.xml)
-QT4_ADD_DBUS_INTERFACE(plasma_LIB_SRCS ${screensaver_xml} screensaver_interface)
-
-set(ksmserver_xml ${KDEBASE_WORKSPACE_SOURCE_DIR}/ksmserver/org.kde.KSMServerInterface.xml)
-QT4_ADD_DBUS_INTERFACE(plasma_LIB_SRCS ${ksmserver_xml} ksmserver_interface)
-
 if(QT_QTOPENGL_FOUND AND OPENGL_FOUND)
 MESSAGE(STATUS "Adding support for OpenGL applets to libplasma")
 set(plasma_LIB_SRCS

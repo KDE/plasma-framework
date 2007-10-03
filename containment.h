@@ -119,11 +119,11 @@ class PLASMA_EXPORT Containment : public Applet
          *
          * @param category Only applets matchin this category will be returned.
          *                 Useful in conjunction with knownCategories.
-         *                 If "Misc" is passed in, then applets without a 
+         *                 If "Misc" is passed in, then applets without a
          *                 Categories= entry are also returned.
          *                 If an empty string is passed in, all applets are
          *                 returned.
-         * @param parentApp the application to filter applets on. Uses the 
+         * @param parentApp the application to filter applets on. Uses the
          *                  X-KDE-ParentApp entry (if any) in the plugin info.
          *                  The default value of QString() will result in a
          *                  list containing only applets not specifically
@@ -196,8 +196,6 @@ class PLASMA_EXPORT Containment : public Applet
          */
         void initConstraints(KConfigGroup* group);
 
-        QList<QAction*> contextActions();
-
         /**
          * Reimplemented from Applet
          */
@@ -228,11 +226,6 @@ class PLASMA_EXPORT Containment : public Applet
          * @internal
          */
         void appletDestroyed(QObject*);
-        void launchExplorer();
-        void launchAppletBrowser();
-        void runCommand();
-        void lockScreen();
-        void logout();
         void dropEvent(QGraphicsSceneDragDropEvent* event);
 
     private:

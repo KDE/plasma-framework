@@ -35,8 +35,6 @@
 #include <KRun>
 #include <KServiceTypeTrader>
 
-#include "workspace/kworkspace.h"
-
 #include "corona.h"
 #include "karambamanager.h"
 #include "phase.h"
@@ -44,12 +42,6 @@
 
 #include "widgets/freelayout.h"
 #include "widgets/boxlayout.h"
-
-#include "krunner_interface.h"
-#include "ksmserver_interface.h"
-#include "screensaver_interface.h"
-
-#include "appletbrowser.h"
 
 namespace Plasma
 {
@@ -63,14 +55,8 @@ public:
           layout(0),
           background(0),
           bitmapBackground(0),
-          engineExplorerAction(0),
-          appletBrowserAction(0),
-          runCommandAction(0),
-          lockAction(0),
-          logoutAction(0),
           screen(-1),
-          immutable(false),
-          appletBrowser(0)
+          immutable(false)
     {
     }
 
@@ -80,7 +66,6 @@ public:
         applets.clear();
         delete layout;
         delete bitmapBackground;
-        delete appletBrowser;
     }
 
     FormFactor formFactor;
@@ -90,15 +75,9 @@ public:
     Plasma::Svg *background;
     QPixmap* bitmapBackground;
     QString wallpaperPath;
-    QAction *engineExplorerAction;
-    QAction *appletBrowserAction;
-    QAction *runCommandAction;
-    QAction *lockAction;
-    QAction *logoutAction;
     QSize size;
     int screen;
     bool immutable;
-    AppletBrowser *appletBrowser;
 };
 
 Containment::Containment(QGraphicsItem* parent,
@@ -191,114 +170,9 @@ void Containment::paintInterface(QPainter *painter,
     painter->restore();
 }
 
-void Containment::launchExplorer()
-{
-    KRun::run("plasmaengineexplorer", KUrl::List(), 0);
-}
-
-void Containment::launchAppletBrowser()
-{
-    if (!d->appletBrowser) {
-        //TODO: should we delete this after some point, so as to conserve memory
-        //      and any possible processing tha tmight end up in AppletBrowser?
-        d->appletBrowser = new AppletBrowser(this);
-    }
-
-    d->appletBrowser->show();
-}
-
-void Containment::runCommand()
-{
-    if (!KAuthorized::authorizeKAction("run_command")) {
-        return;
-    }
-
-    QString interface("org.kde.krunner");
-    org::kde::krunner::Interface krunner(interface, "/Interface",
-                                         QDBusConnection::sessionBus());
-    if (krunner.isValid()) {
-        krunner.display();
-    }
-}
-
-void Containment::lockScreen()
-{
-    if (!KAuthorized::authorizeKAction("lock_screen")) {
-        return;
-    }
-
-    QString interface("org.freedesktop.ScreenSaver");
-    org::freedesktop::ScreenSaver screensaver(interface, "/ScreenSaver",
-                                              QDBusConnection::sessionBus());
-    if (screensaver.isValid()) {
-        screensaver.Lock();
-    }
-}
-
-void Containment::logout()
-{
-    if (!KAuthorized::authorizeKAction("logout")) {
-        return;
-    }
-
-    QString interface("org.kde.ksmserver");
-    org::kde::KSMServerInterface smserver(interface, "/KSMServer",
-                                          QDBusConnection::sessionBus());
-    if (smserver.isValid()) {
-        smserver.logout(KWorkSpace::ShutdownConfirmDefault,
-                        KWorkSpace::ShutdownTypeDefault,
-                        KWorkSpace::ShutdownModeDefault);
-    }
-}
-
 QSizeF Containment::contentSizeHint() const
 {
     return d->size;
-}
-
-QList<QAction*> Containment::contextActions()
-{
-    //FIXME: several items here ... probably all junior jobs =)
-    //  - pretty up the menu with separators
-    //  - should we offer "Switch User" here?
-
-    if (!d->appletBrowserAction) {
-        d->engineExplorerAction = new QAction(i18n("Engine Explorer"), this);
-        connect(d->engineExplorerAction, SIGNAL(triggered(bool)), this, SLOT(launchExplorer()));
-
-        d->appletBrowserAction = new QAction(i18n("Add applet"), this);
-        connect(d->appletBrowserAction, SIGNAL(triggered(bool)), this, SLOT(launchAppletBrowser()));
-
-        d->runCommandAction = new QAction(i18n("Run Command..."), this);
-        connect(d->runCommandAction, SIGNAL(triggered(bool)), this, SLOT(runCommand()));
-
-        d->lockAction = new QAction(i18n("Lock Screen"), this);
-        d->lockAction->setIcon(KIcon("system-lock-screen"));
-        connect(d->lockAction, SIGNAL(triggered(bool)), this, SLOT(lockScreen()));
-
-        d->logoutAction = new QAction(i18n("Logout"), this);
-        d->logoutAction->setIcon(KIcon("system-log-out"));
-        connect(d->logoutAction, SIGNAL(triggered(bool)), this, SLOT(logout()));
-    }
-
-    QList<QAction*> actions;
-
-    actions.append(d->engineExplorerAction);
-    actions.append(d->appletBrowserAction);
-
-    if (KAuthorized::authorizeKAction("run_command")) {
-        actions.append(d->runCommandAction);
-    }
-
-    if (KAuthorized::authorizeKAction("lock_screen")) {
-        actions.append(d->lockAction);
-    }
-
-    if (KAuthorized::authorizeKAction("logout")) {
-        actions.append(d->logoutAction);
-    }
-
-    return actions;
 }
 
 void Containment::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
@@ -615,7 +489,7 @@ void Containment::dropEvent(QGraphicsSceneDragDropEvent *event)
         addApplet(plasmoidName, QVariantList(), 0, geom);
         event->acceptProposedAction();
     } else if (KUrl::List::canDecode(event->mimeData())) {
-        KUrl::List urls = KUrl::List::fromMimeData(event->mimeData());	
+        KUrl::List urls = KUrl::List::fromMimeData(event->mimeData());
         foreach (const KUrl& url, urls) {
             KMimeType::Ptr mime = KMimeType::findByUrl(url);
             QString mimeName = mime->name();
@@ -626,7 +500,7 @@ void Containment::dropEvent(QGraphicsSceneDragDropEvent *event)
             KPluginInfo::List appletList = Applet::knownAppletsForMimetype(mimeName);
 
             if (appletList.isEmpty()) {
-                // no special applet associated with this mimetype, let's 
+                // no special applet associated with this mimetype, let's
                 addApplet("url", args, 0, geom);
             } else {
                 //TODO: should we show a dialog here to choose which plasmoid load if
