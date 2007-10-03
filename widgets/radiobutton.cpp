@@ -1,5 +1,5 @@
 /*
- *   Copyright 2007 by Rafael Fernández López <ereslibre@gmail.com>
+ *   Copyright 2007 by Rafael Fernández López <ereslibre@kde.org>
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU Library General Public License as
