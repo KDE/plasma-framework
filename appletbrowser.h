@@ -22,13 +22,15 @@
 
 #include <KDE/KDialog>
 
+#include <plasma/plasma_export.h>
+
 namespace Plasma
 {
 
 class Corona;
 class Containment;
 
-class AppletBrowser: public KDialog
+class PLASMA_EXPORT AppletBrowser: public KDialog
 {
     Q_OBJECT
 public:
