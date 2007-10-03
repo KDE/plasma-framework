@@ -216,7 +216,7 @@ void Corona::loadDefaultSetup()
     int numScreens = desktop.numScreens();
     // create a containment for each screen
     for (int i = 0; i < numScreens; ++i) {
-        Containment* c = addContainment("default");
+        Containment* c = addContainment("desktop");
         c->setScreen(i);
         c->setFormFactor(Plasma::Planar);
     }
@@ -325,7 +325,7 @@ void Corona::dragEnterEvent( QGraphicsSceneDragDropEvent *event)
     if (event->mimeData()->hasFormat(d->mimetype) ||
         KUrl::List::canDecode(event->mimeData())) {
         event->acceptProposedAction();
-        //TODO Create the applet, move to mouse position then send the 
+        //TODO Create the applet, move to mouse position then send the
         //     following event to lock it to the mouse
         //QMouseEvent event(QEvent::MouseButtonPress, event->pos(), Qt::LeftButton, event->mouseButtons(), 0);
         //QApplication::sendEvent(this, &event);
