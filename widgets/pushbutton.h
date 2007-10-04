@@ -39,7 +39,7 @@ namespace Plasma
 /**
  * Class that emulates a QPushButton inside Plasma
  *
- * @author Siraj Razick 
+ * @author Siraj Razick
  * @author Matias Valdenegro
  * @author Matt Broadstone
  *
@@ -52,6 +52,8 @@ class PLASMA_EXPORT PushButton : public Plasma::Widget
     Q_PROPERTY( QSizeF iconSize READ iconSize WRITE setIconSize )
     Q_PROPERTY( KIcon icon READ icon WRITE setIcon )
     Q_PROPERTY( bool flat READ isFlat WRITE setFlat )
+    Q_PROPERTY( bool checkable READ isCheckable WRITE setCheckable )
+    Q_PROPERTY( bool checked READ isChecked WRITE setChecked)
 public:
     /**
     * Creates a new Plasma::PushButton.
@@ -136,6 +138,28 @@ public:
     */
     void setFlat(bool flat);
 
+    /**
+    * @return whether this button is checkable.
+    */
+    bool isCheckable() const;
+
+    /**
+    * Sets whether the button is checkable.
+    * @param checkable whether button is checkable or not.
+    */
+    void setCheckable(bool checkable);
+
+    /**
+    * @return whether this button is checked.
+    */
+    bool isChecked() const;
+
+    /**
+    * Sets whether the button is checked.
+    * @param checked whether button is checked or not.
+    */
+    void setChecked(bool checked);
+
     // NOTE: bogus
     QSizeF minimumSize() const;
     Qt::Orientations expandingDirections() const;
@@ -146,6 +170,11 @@ Q_SIGNALS:
     * Triggered when the button has been clicked.
     */
     void clicked();
+
+    /**
+    * Triggered when the checkable button has been toggled.
+    */
+    void toggled(bool checked);
 
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *event);

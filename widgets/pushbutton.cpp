@@ -54,6 +54,8 @@ public:
 public:
     Private()
         : flat(false),
+          checkable(false),
+          checked(false),
           state(None)
     {}
 
@@ -65,6 +67,8 @@ public:
     KIcon icon;
     QSizeF iconSize;
     bool flat;
+    bool checkable;
+    bool checked;
     ButtonState state;
 };
 
@@ -102,7 +106,7 @@ void PushButton::Private::initStyleOption(QStyleOptionButton *option, const Push
     if (flat) {
         option->features |= QStyleOptionButton::Flat;
     }
-    if (!flat && !(state == Private::Pressed)) {
+    if (!flat && !(checked || state == Private::Pressed)) {
         option->state |= QStyle::State_Raised;
     } else {
         option->state |= QStyle::State_Sunken;
@@ -216,6 +220,29 @@ void PushButton::setFlat(bool flat)
     update();
 }
 
+bool PushButton::isChecked() const
+{
+    return d->checked;
+}
+
+void PushButton::setChecked(bool checked)
+{
+    if (isCheckable()) {
+        d->checked = checked;
+        update();
+    }
+}
+
+bool PushButton::isCheckable() const
+{
+    return d->checkable;
+}
+
+void PushButton::setCheckable(bool checkable)
+{
+    d->checkable = checkable;
+}
+
 void PushButton::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     event->accept();
@@ -226,9 +253,15 @@ void PushButton::mousePressEvent(QGraphicsSceneMouseEvent *event)
 void PushButton::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
     event->accept();
-    if (d->state == Private::Pressed)
+    if (d->state == Private::Pressed) {
+        d->state = Private::Released;
         emit clicked();
-    d->state = Private::Released;
+
+        if (d->checkable) {
+            d->checked = ! d->checked;
+            emit toggled(d->checked);
+        }
+    }
     update();
 }
 
@@ -261,7 +294,7 @@ QSizeF PushButton::sizeHint() const
     QSize textSize = option.fontMetrics.size(Qt::TextShowMnemonic, display);
     width += textSize.width();
     height = qMax(height, textSize.height());
-    
+
     return QSizeF((QApplication::style()->sizeFromContents(QStyle::CT_PushButton, &option, QSize(width, height), 0).
                 expandedTo(QApplication::globalStrut())));
 }
