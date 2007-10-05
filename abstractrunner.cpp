@@ -22,6 +22,7 @@
 #include <QAction>
 #include <KActionCollection>
 #include <KServiceTypeTrader>
+#include <KDebug>
 
 namespace Plasma
 {

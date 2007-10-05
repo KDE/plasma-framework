@@ -32,6 +32,7 @@
 #include <KStandardDirs>
 #include <KTemporaryFile>
 #include <KZip>
+#include <KDebug>
 
 #include "packagemetadata.h"
 #include "packagestructure.h"

@@ -140,7 +140,7 @@ void Corona::loadApplets(const QString& config)
 {
     clearApplets();
 
-    KConfig cg(config, KConfig::OnlyLocal);
+    KConfig cg(config, KConfig::SimpleConfig);
 
     QList<KConfigGroup> applets;
     QHash<int, Containment*> containments;
@@ -167,7 +167,7 @@ void Corona::loadApplets(const QString& config)
     //kDebug() << "number of applets?" << applets.count();
     foreach (KConfigGroup cg, applets) {
         int cid = cg.readEntry("containment", 0);
-        kDebug() << "trying to load applet" << cg.group() << cid;
+        kDebug() << "trying to load applet" << cg.name() << cid;
 
         Containment* c = containments.value(cid, 0);
 
@@ -177,8 +177,8 @@ void Corona::loadApplets(const QString& config)
 
         kDebug() << "loading containment " << cid;
 
-        kDebug() << "creating applet " << cg.group();
-        int appId = cg.group().left(cg.group().indexOf('-')).toUInt();
+        kDebug() << "creating applet " << cg.name();
+        int appId = cg.name().left(cg.name().indexOf('-')).toUInt();
         c->addApplet(cg.readEntry("plugin", QString()), QVariantList(),
                         appId, cg.readEntry("geometry", QRectF()), true);
     }

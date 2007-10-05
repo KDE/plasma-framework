@@ -21,6 +21,7 @@
 
 #include <QQueue>
 #include <QTimer>
+#include <QTime>
 #include <QTimerEvent>
 #include <QVariant>
 

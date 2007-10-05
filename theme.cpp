@@ -21,6 +21,7 @@
 
 #include <KSharedConfig>
 #include <KStandardDirs>
+#include <kdebug.h>
 #include <kconfiggroup.h>
 
 namespace Plasma

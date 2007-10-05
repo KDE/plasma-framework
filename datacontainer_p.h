@@ -21,6 +21,7 @@
 #define PLASMA_DATACONTAINER_P_H
 
 #include <QtCore/QTimerEvent>
+#include <QtCore/QTime>
 
 namespace Plasma
 {
