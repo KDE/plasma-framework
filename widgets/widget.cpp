@@ -325,6 +325,7 @@ void Widget::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
         // Recreate the pixmap if it's gone.
         if (pix.isNull()) {
             pix = QPixmap(d->cacheSize);
+ 	    pix.fill(Qt::transparent);
             exposed = brect;
         }
 
@@ -372,6 +373,7 @@ void Widget::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
         // Auto-adjust the pixmap size.
         if (deviceRect.size() != pix.size()) {
             pix = QPixmap(deviceRect.size());
+	    pix.fill(Qt::transparent);
             exposed = brect;
         }
 
