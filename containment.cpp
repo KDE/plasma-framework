@@ -223,6 +223,12 @@ void Containment::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
         //FIXME: change this to show this only in debug mode (or not at all?)
         //       before final release
         QList<QAction*> actions = contextActions();
+
+        if (actions.count() < 1) {
+            QGraphicsItem::contextMenuEvent(event);
+            return;
+        }
+
         foreach(QAction* action, actions) {
             desktopMenu.addAction(action);
         }
