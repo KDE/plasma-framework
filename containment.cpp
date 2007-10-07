@@ -347,6 +347,9 @@ Applet* Containment::addApplet(const QString& name, const QVariantList& args, ui
     }
 
     applet->setParentItem(this);
+    //the applet needs to be given constraints before it can set its geometry
+    applet->updateConstraints(Plasma::AllConstraints);
+
     //kDebug() << "adding applet" << applet->name() << "with a default geometry of" << geometry << geometry.isValid();
     if (geometry.isValid()) {
         applet->setGeometry(geometry);
@@ -370,8 +373,6 @@ Applet* Containment::addApplet(const QString& name, const QVariantList& args, ui
     if (d->layout) {
         d->layout->addItem(applet);
     }
-
-    applet->updateConstraints(Plasma::AllConstraints);
 
     kDebug() << applet->name() << "sizehint:" << applet->sizeHint()
                                << "geometry:" << applet->geometry();
