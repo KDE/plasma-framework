@@ -263,15 +263,19 @@ void Corona::clearApplets()
 
 Containment* Corona::addContainment(const QString& name, const QVariantList& args, uint id, bool delayedInit)
 {
+    QString pluginName = name;
     Containment* containment = 0;
     Applet* applet = 0;
 
     kDebug() << "Loading" << name << args << id;
 
-    if (!name.isEmpty()) {
-        applet = Applet::loadApplet(name, id, args);
-        containment = dynamic_cast<Containment*>(applet);
+    if (pluginName.isEmpty()) {
+        // default to the desktop containment
+        pluginName = "desktop";
     }
+
+    applet = Applet::loadApplet(pluginName, id, args);
+    containment = dynamic_cast<Containment*>(applet);
 
     if (!containment) {
         delete applet; // in case we got a non-Containment from Applet::loadApplet
