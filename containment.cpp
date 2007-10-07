@@ -268,7 +268,7 @@ void Containment::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
 
 void Containment::setFormFactor(FormFactor formFactor)
 {
-    if (d->formFactor == formFactor) {
+    if (d->formFactor == formFactor && d->layout) {
         return;
     }
 
