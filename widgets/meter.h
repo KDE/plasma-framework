@@ -141,13 +141,52 @@ public:
      * @param index label index.
      * @param text text for the label.
      */
-    void setLabel(int index, const QString & text);
+    void setLabel(int index, const QString &text);
 
     /**
      * @param index label index
      * @return text label for the meter
      */
     QString label(int index) const;
+
+    /**
+     * Set text label color for the meter
+     * @param index label index.
+     * @param text color for the label.
+     */
+    void setLabelColor(int index, const QColor &color);
+
+    /**
+     * @param index label index
+     * @return text label color for the meter
+     */
+    QColor labelColor(int index) const;
+
+    /**
+     * Set text label font for the meter
+     * @param index label index.
+     * @param text font for the label.
+     */
+    void setLabelFont(int index, const QFont &font);
+
+    /**
+     * @param index label index
+     * @return text label font for the meter
+     */
+    QFont labelFont(int index) const;
+
+    /**
+     * Set text label alignment for the meter
+     * @param index label index.
+     * @param text alignment for the label.
+     */
+    void setLabelAlignment(int index, const Qt::Alignment alignment);
+
+    /**
+     * @param index label index
+     * @return text label alignment for the meter
+     */
+    Qt::Alignment labelAlignment(int index) const;
 
 public Q_SLOTS:
     /**

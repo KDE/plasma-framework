@@ -45,14 +45,26 @@ public:
         }
     }
 
-    void text(QPainter *p, const QString& elementID, const QString &text)
+    void text(QPainter *p, int index)
     {
+        QString elementID = QString("label%1").arg(index);
+        QString text = labels[index];
+
         if (image->elementExists(elementID)) {
             QRectF elementRect = image->elementRect(elementID);
+            Qt::Alignment align = Qt::AlignCenter;
 
-            p->setPen(QPen(Qt::lightGray));
+            if (colors.count() > index) {
+                p->setPen(QPen(colors[index]));
+            }
+            if (fonts.count() > index) {
+                p->setFont(fonts[index]);
+            }
+            if (alignments.count() > index) {
+                align = alignments[index];
+            }
             if (elementRect.width() > elementRect.height()) {
-                p->drawText(elementRect, Qt::AlignCenter, text);
+                p->drawText(elementRect, align, text);
             } else {
                 p->save();
                 QPointF rotateCenter(
@@ -63,7 +75,7 @@ public:
                 p->translate(elementRect.height() / -2,
                              elementRect.width() / -2);
                 QRectF r(0, 0, elementRect.height(), elementRect.width());
-                p->drawText(r, Qt::AlignCenter, text);
+                p->drawText(r, align, text);
                 p->restore();
             }
         }
@@ -79,7 +91,7 @@ public:
     {
         p->restore();
         for (int i = 0; i < labels.count(); ++i) {
-            text(p, QString("label%1").arg(i), labels[i]);
+            text(p, i);
         }
         paint(p, "foreground");
     }
@@ -88,6 +100,9 @@ public:
     int maximum;
     int value;
     QStringList labels;
+    QList<Qt::Alignment> alignments;
+    QList<QColor> colors;
+    QList<QFont> fonts;
     QString svg;
     MeterType meterType;
     Plasma::Svg *image;
@@ -139,7 +154,7 @@ int Meter::value() const
     return d->value;
 }
 
-void Meter::setLabel(int index, const QString& text)
+void Meter::setLabel(int index, const QString &text)
 {
     while (d->labels.count() <= index) {
         d->labels << QString();
@@ -150,6 +165,45 @@ void Meter::setLabel(int index, const QString& text)
 QString Meter::label(int index) const
 {
     return d->labels[index];
+}
+
+void Meter::setLabelColor(int index, const QColor &color)
+{
+    while (d->colors.count() <= index) {
+        d->colors << color;
+    }
+    d->colors[index] = color;
+}
+
+QColor Meter::labelColor(int index) const
+{
+    return d->colors[index];
+}
+
+void Meter::setLabelFont(int index, const QFont &font)
+{
+    while (d->fonts.count() <= index) {
+        d->fonts << font;
+    }
+    d->fonts[index] = font;
+}
+
+QFont Meter::labelFont(int index) const
+{
+    return d->fonts[index];
+}
+
+void Meter::setLabelAlignment(int index, Qt::Alignment alignment)
+{
+    while (d->alignments.count() <= index) {
+        d->alignments << alignment;
+    }
+    d->alignments[index] = alignment;
+}
+
+Qt::Alignment Meter::labelAlignment(int index) const
+{
+    return d->alignments[index];
 }
 
 void Meter::updated(QString sourceName, Plasma::DataEngine::Data data)
