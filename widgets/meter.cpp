@@ -115,7 +115,6 @@ Meter::Meter(QGraphicsItem *parent, QObject *parentObject) :
         Plasma::Widget(parent, parentObject),
         d(new Private)
 {
-     kDebug();
 }
 
 Meter::~Meter()
@@ -220,7 +219,6 @@ void Meter::updated(QString sourceName, Plasma::DataEngine::Data data)
 
 void Meter::setSvg(QString svg)
 {
-    kDebug() << svg;
     d->svg = svg;
     delete d->image;
     d->image = new Plasma::Svg(svg, this);
@@ -231,7 +229,6 @@ void Meter::setSvg(QString svg)
         QRectF r = d->image->elementRect("rotateminmax");
         d->minrotate = (int)r.height();
         d->maxrotate = (int)r.width();
-        kDebug() << "Rotate:" << d->minrotate << d->maxrotate;
     }
 }
 
@@ -261,7 +258,6 @@ Meter::MeterType Meter::meterType() const
 
 QSizeF Meter::sizeHint() const
 {
-    kDebug() << d->sizeHint;
     return d->sizeHint;
 }
 
@@ -279,7 +275,6 @@ void Meter::paintWidget(QPainter *p,
     QSize intSize = QSize((int)size().width(), (int)size().height());
 
     if (intSize != d->image->size()) {
-        kDebug() << "Resize:" << intSize << "!=" << d->image->size();
         d->image->resize(intSize);
     }
 
