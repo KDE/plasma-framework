@@ -212,6 +212,14 @@ public:
             p.setCompositionMode(QPainter::CompositionMode_Source);
             p.setRenderHint(QPainter::SmoothPixmapTransform);
 
+            //FIXME: This is a hack to fix a drawing problems with svg files where a thin transparent border is drawn around the svg image.
+            //       the transparent border around the svg seems to vary in size depending on the size of the svg and as a result increasing the 
+	    //	     svn image by 2 all around didn't resolve the issue. For now it resizes based on the border size.
+
+            background->resize(contentWidth, contentHeight);
+            background->paint(&p, QRect(contentLeft-leftWidth, contentTop-topHeight, contentWidth+leftWidth*2, contentHeight+topHeight*2), "center");
+            background->resize();
+
             background->paint(&p, QRect(leftOffset, topOffset, leftWidth, topHeight), "topleft");
             background->paint(&p, QRect(rightOffset, topOffset,rightWidth, topHeight), "topright");
             background->paint(&p, QRect(leftOffset, bottomOffset, leftWidth, bottomHeight), "bottomleft");
@@ -260,9 +268,6 @@ public:
                 p.drawTiledPixmap(QRect(contentLeft, bottomOffset, contentWidth, bottomHeight), bottom);
             }
 
-            background->resize(contentWidth, contentHeight);
-            background->paint(&p, QRect(contentLeft, contentTop, contentWidth, contentHeight), "center");
-            background->resize();
         }
 
         p2->drawPixmap(leftOffset, topOffset, *cachedBackground);
