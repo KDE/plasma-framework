@@ -136,16 +136,16 @@ void Corona::saveApplets() const
     saveApplets("plasma-appletsrc");
 }
 
-void Corona::loadApplets(const QString& config)
+void Corona::loadApplets(const QString& configname)
 {
     clearApplets();
 
-    KConfig cg(config, KConfig::SimpleConfig);
+    KConfig config(configname, KConfig::SimpleConfig);
 
     QList<KConfigGroup> applets;
     QHash<int, Containment*> containments;
-    foreach (const QString& group, cg.groupList()) {
-        KConfigGroup appletConfig(&cg, group);
+    foreach (const QString& group, config.groupList()) {
+        KConfigGroup appletConfig(&config, group);
         if (group.contains("containment")) {
             int cid = group.left(group.indexOf('-')).toUInt();
             Containment *c = addContainment(appletConfig.readEntry("plugin", QString()), QVariantList(),
@@ -167,11 +167,12 @@ void Corona::loadApplets(const QString& config)
     //kDebug() << "number of applets?" << applets.count();
     foreach (KConfigGroup cg, applets) {
         int cid = cg.readEntry("containment", 0);
-        kDebug() << "trying to load applet" << cg.name() << cid;
+        kDebug() << "trying to load applet " << cg.name() << " in containment " << cid;
 
         Containment* c = containments.value(cid, 0);
 
         if (!c) {
+            kDebug() << "couldn't find containment " << cid << ", skipping this applet";
             continue;
         }
 
@@ -185,7 +186,7 @@ void Corona::loadApplets(const QString& config)
 
     foreach (Containment* c, containments) {
         QString cid = QString::number(c->id());
-        KConfigGroup containmentConfig(&cg, cid.append("-containment"));
+        KConfigGroup containmentConfig(&config, cid.append("-containment"));
         c->setImmutable(containmentConfig.isImmutable());
     }
 
@@ -194,14 +195,14 @@ void Corona::loadApplets(const QString& config)
     }
 
     foreach (Containment* containment, d->containments) {
-        containment->init();
+        containment->init(); //FIXME: is this being called twice?
 
         foreach(Applet* applet, containment->applets()) {
             applet->init();
         }
     }
 
-    setImmutable(cg.isImmutable());
+    setImmutable(config.isImmutable());
 }
 
 void Corona::loadApplets()
@@ -278,6 +279,7 @@ Containment* Corona::addContainment(const QString& name, const QVariantList& arg
     containment = dynamic_cast<Containment*>(applet);
 
     if (!containment) {
+        kDebug() << "loading failed.";
         delete applet; // in case we got a non-Containment from Applet::loadApplet
         containment = new Containment;
         containment->setFailedToLaunch(false); // we want to provide something and don't care about the failure to launch
