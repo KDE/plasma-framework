@@ -35,17 +35,12 @@ class PlasmaAppletItem : public KCategorizedItemsViewModels::AbstractItem,
 public:
     enum FilterFlag {NoFilter = 0,
         Favorite = 1,
-        Used = 2,
-        Recommended = 4};
+        Used = 2};
 
     Q_DECLARE_FLAGS(FilterFlags, FilterFlag)
 
-    PlasmaAppletItem(QObject * parent, QString name, QString pluginName,
-            QString description, QString category, QIcon icon,
-            FilterFlags flags = NoFilter);
-
     PlasmaAppletItem(QObject *parent, const KPluginInfo& info,
-            FilterFlags flags = NoFilter);
+            FilterFlags flags = NoFilter, QMap<QString, QVariant> * extraAttrs = NULL);
 
     virtual QString name() const;
     QString pluginName() const;
@@ -59,7 +54,7 @@ class PlasmaAppletItemModel :
     public KCategorizedItemsViewModels::DefaultItemModel
 {
 public:
-    PlasmaAppletItemModel(QObject * parent = 0);
+    PlasmaAppletItemModel(QObject * parent = 0, KConfigGroup * configGroup = NULL);
 
     QStringList mimeTypes() const;
 

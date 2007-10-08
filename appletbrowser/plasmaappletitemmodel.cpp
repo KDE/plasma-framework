@@ -19,26 +19,8 @@
 
 #include "plasmaappletitemmodel_p.h"
 
-PlasmaAppletItem::PlasmaAppletItem(QObject * parent, QString name,
-        QString pluginName, QString description, QString category, QIcon icon,
-        FilterFlags flags) :
-    QObject(parent)
-{
-    QMap<QString, QVariant> attrs;
-    attrs.insert("name", QVariant(name));
-    attrs.insert("pluginName", QVariant(pluginName));
-    attrs.insert("description", QVariant(description));
-    attrs.insert("category", QVariant(category));
-    attrs.insert("favorite", flags & Favorite ? true : false);
-    attrs.insert("used", flags & Used ? true : false);
-    attrs.insert("recommended", flags & Recommended ? true : false);
-    setText(name + " - "+ description);
-    setData(QVariant(attrs));
-    setIcon(icon);
-}
-
 PlasmaAppletItem::PlasmaAppletItem(QObject *parent, const KPluginInfo& info,
-        FilterFlags flags) :
+        FilterFlags flags, QMap<QString, QVariant> * extraAttrs) :
     QObject(parent)
 {
     QMap<QString, QVariant> attrs;
@@ -48,7 +30,8 @@ PlasmaAppletItem::PlasmaAppletItem(QObject *parent, const KPluginInfo& info,
     attrs.insert("category", info.category());
     attrs.insert("favorite", flags & Favorite ? true : false);
     attrs.insert("used", flags & Used ? true : false);
-    attrs.insert("recommended", flags & Recommended ? true : false);
+    //attrs.insert("recommended", flags & Recommended ? true : false);
+    if (extraAttrs) attrs.unite(* extraAttrs);
     setText(info.name() + " - "+ info.category());
     setData(attrs);
     setIcon(KIcon(info.icon().isEmpty()?"application-x-plasma":info.icon()));
@@ -82,30 +65,28 @@ bool PlasmaAppletItem::passesFiltering(
     return data().toMap()[filter.first] == filter.second;
 }
 
-PlasmaAppletItemModel::PlasmaAppletItemModel(QObject * parent) :
+PlasmaAppletItemModel::PlasmaAppletItemModel(QObject * parent, KConfigGroup * configGroup) :
     KCategorizedItemsViewModels::DefaultItemModel(parent)
 {
-    /* some test items that do have FilterFlags as well as overly long text
-    appendRow(new PlasmaAppletItem(this, 
-        i18n("This is a very long name for an applet, isn't it?"), "null", 
-        i18n("This is a Graphics applet whose description is even longer than it's title. And it was hard to achieve!"), 
-        QString("graph"),
-        QIcon("/usr/share/icons/oxygen/64x64/apps/k3b.png"), PlasmaAppletItem::Used));
-    appendRow(new PlasmaAppletItem(this, 
-        i18n("This is a very long name for another applet, isn't it?"), "null", 
-        i18n("This is a Graphics applet whose description is even longer than it's title. And it was hard to achieve!"), 
-        QString("graph"),
-        QIcon("/usr/share/icons/oxygen/64x64/apps/kfind.png"), PlasmaAppletItem::Used | PlasmaAppletItem::Recommended));
-    appendRow(new PlasmaAppletItem(this, 
-        i18n("This is my favorite item!"), "null",
-        i18n("This is a Graphics applet whose description is even longer than it's title. And it was hard to achieve!"), 
-        QString("graph"),
-        QIcon("/usr/share/icons/oxygen/64x64/apps/okular.png"), PlasmaAppletItem::Favorite | PlasmaAppletItem::Recommended));
-    */
+
+    // Recommended emblems and filters
+    QRegExp rx("recommended[.]([0-9A-Za-z]+)[.]plugins");
+    QMapIterator<QString, QString> i(configGroup->entryMap());
+    QMap < QString, QMap < QString, QVariant > > extraPluginAttrs;
+    while (i.hasNext()) {
+        i.next();
+        if (!rx.exactMatch(i.key())) continue;
+        QString id = rx.cap(1);
+        
+        foreach (QString plugin, i.value().split(",")) {
+            extraPluginAttrs[plugin]["recommended." + id] = true;
+        }
+    }
 
     //TODO: get recommended, favorit, used, etc out of knownApplets()
     foreach (const KPluginInfo& info, Plasma::Applet::knownApplets()) {
-        appendRow(new PlasmaAppletItem(this, info));
+        kDebug() << info.pluginName() << " is the name of the plugin\n";
+        appendRow(new PlasmaAppletItem(this, info, PlasmaAppletItem::NoFilter, &(extraPluginAttrs[info.pluginName()])));
     }
 }
 
