@@ -86,13 +86,15 @@ PlasmaAppletItemModel::PlasmaAppletItemModel(KConfigGroup configGroup, QObject *
     }
 
     m_favorites = m_configGroup.readEntry("favorites").split(",");
+    QStringList m_used = m_configGroup.readEntry("used").split(",");
     
     //TODO: get recommended, favorit, used, etc out of knownApplets()
     foreach (const KPluginInfo& info, Plasma::Applet::knownApplets()) {
         kDebug() << info.pluginName() << " is the name of the plugin\n";
         
         appendRow(new PlasmaAppletItem(this, info,
-                ((m_favorites.contains(info.pluginName()))?PlasmaAppletItem::Favorite:PlasmaAppletItem::NoFilter)
+                ((m_favorites.contains(info.pluginName())) ? PlasmaAppletItem::Favorite : PlasmaAppletItem::NoFilter) |
+                ((m_used.contains(info.pluginName())) ? PlasmaAppletItem::Used : PlasmaAppletItem::NoFilter)
                 , &(extraPluginAttrs[info.pluginName()])));
     }
 }
