@@ -148,6 +148,7 @@ void PackageStructure::addDirectoryDefinition(const char* key, const QString& pa
     ContentStructure s;
     s.name = name;
     s.path = path;
+    s.directory = true;
 
     d->contents[key] = s;
 }
