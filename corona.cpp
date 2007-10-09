@@ -176,9 +176,7 @@ void Corona::loadApplets(const QString& configname)
             continue;
         }
 
-        kDebug() << "loading containment " << cid;
-
-        kDebug() << "creating applet " << cg.name();
+        kDebug() << "creating applet " << cg.name() << "in containment" << cid;
         int appId = cg.name().left(cg.name().indexOf('-')).toUInt();
         c->addApplet(cg.readEntry("plugin", QString()), QVariantList(),
                         appId, cg.readEntry("geometry", QRectF()), true);
@@ -192,13 +190,13 @@ void Corona::loadApplets(const QString& configname)
 
     if (d->containments.count() < 1) {
         loadDefaultSetup();
-    }
+    } else {
+        foreach (Containment* containment, d->containments) {
+            containment->init();
 
-    foreach (Containment* containment, d->containments) {
-        containment->init(); //FIXME: is this being called twice?
-
-        foreach(Applet* applet, containment->applets()) {
-            applet->init();
+            foreach(Applet* applet, containment->applets()) {
+                applet->init();
+            }
         }
     }
 
@@ -235,6 +233,7 @@ void Corona::loadDefaultSetup()
 
     foreach (Plasma::Applet* applet , applets) {
         // If we have a Panel class (is a Container), this should move there
+        applet->init();
         applet->setDrawStandardBackground(false);
     }
 }
