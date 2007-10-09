@@ -61,6 +61,10 @@ class PLASMA_EXPORT Containment : public Applet
         typedef QList<Applet*> List;
         typedef QHash<QString, Applet*> Dict;
 
+        enum Type { DesktopContainment = 0 /**< A desktop containment */,
+                    PanelContainment /**< A desktop panel */
+                  };
+
         /**
          * @arg parent the QGraphicsItem this applet is parented to
          * @arg servideId the name of the .desktop file containing the
@@ -90,6 +94,11 @@ class PLASMA_EXPORT Containment : public Applet
          * Reimplemented from Applet
          */
         void init();
+
+        /**
+         * Returns the type of containment
+         */
+        virtual Type type();
 
         /**
          * Paints a default background image. Nothing fancy, but that's what plugins

@@ -55,7 +55,7 @@ public:
           layout(0),
           background(0),
           bitmapBackground(0),
-          screen(-1),
+          screen(0),
           immutable(false)
     {
     }
@@ -112,13 +112,21 @@ void Containment::init()
         //kDebug() << "SVG wallpaper!";
         d->background = new Plasma::Svg("widgets/wallpaper", this);
     }
+
     setAcceptDrops(true);
+
+    if (type() == PanelContainment) {
+        kDebug() << "we are a panel, let's move ourselves to a negative coordinate system";
+        QDesktopWidget desktop;
+        QRect r = desktop.screenGeometry(screen());
+        translate(0, -r.height());
+    }
 }
 
 void Containment::initConstraints(KConfigGroup* group)
 {
-    //kDebug() << "initConstraints" << group->group();
-    setScreen(group->readEntry("screen", -1));
+    kDebug() << "initConstraints" << group->name() << type();
+    setScreen(group->readEntry("screen", 0));
     setFormFactor((Plasma::FormFactor)group->readEntry("formfactor", (int)Plasma::Planar));
     setLocation((Plasma::Location)group->readEntry("location", (int)Plasma::Desktop));
 }
@@ -128,6 +136,11 @@ void Containment::saveConstraints(KConfigGroup* group) const
     group->writeEntry("screen", d->screen);
     group->writeEntry("formfactor", (int)d->formFactor);
     group->writeEntry("location", (int)d->location);
+}
+
+Containment::Type Containment::type()
+{
+    return DesktopContainment;
 }
 
 void Containment::paintInterface(QPainter *painter,
