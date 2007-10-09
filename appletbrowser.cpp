@@ -42,7 +42,7 @@ public:
           appletList(0),
           config("plasmarc"),
           configGroup(&config, "Applet Browser"),
-          itemModel(q, &configGroup),
+          itemModel(configGroup, q),
           filterModel(q)
     {
     }

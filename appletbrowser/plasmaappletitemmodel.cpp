@@ -19,9 +19,9 @@
 
 #include "plasmaappletitemmodel_p.h"
 
-PlasmaAppletItem::PlasmaAppletItem(QObject *parent, const KPluginInfo& info,
+PlasmaAppletItem::PlasmaAppletItem(PlasmaAppletItemModel * model, const KPluginInfo& info,
         FilterFlags flags, QMap<QString, QVariant> * extraAttrs) :
-    QObject(parent)
+    QObject(model), m_model(model)
 {
     QMap<QString, QVariant> attrs;
     attrs.insert("name", info.name());
@@ -57,6 +57,7 @@ void PlasmaAppletItem::setFavorite(bool favorite)
     QMap<QString, QVariant> attrs = data().toMap();
     attrs.insert("favorite", favorite ? true : false);
     setData(QVariant(attrs));
+    m_model->setFavorite(attrs["pluginName"].toString(), favorite);
 }
 
 bool PlasmaAppletItem::passesFiltering(
@@ -65,13 +66,14 @@ bool PlasmaAppletItem::passesFiltering(
     return data().toMap()[filter.first] == filter.second;
 }
 
-PlasmaAppletItemModel::PlasmaAppletItemModel(QObject * parent, KConfigGroup * configGroup) :
-    KCategorizedItemsViewModels::DefaultItemModel(parent)
+PlasmaAppletItemModel::PlasmaAppletItemModel(KConfigGroup configGroup, QObject * parent) :
+    KCategorizedItemsViewModels::DefaultItemModel(parent),
+    m_configGroup(configGroup)
 {
 
     // Recommended emblems and filters
     QRegExp rx("recommended[.]([0-9A-Za-z]+)[.]plugins");
-    QMapIterator<QString, QString> i(configGroup->entryMap());
+    QMapIterator<QString, QString> i(m_configGroup.entryMap());
     QMap < QString, QMap < QString, QVariant > > extraPluginAttrs;
     while (i.hasNext()) {
         i.next();
@@ -83,10 +85,15 @@ PlasmaAppletItemModel::PlasmaAppletItemModel(QObject * parent, KConfigGroup * co
         }
     }
 
+    m_favorites = m_configGroup.readEntry("favorites").split(",");
+    
     //TODO: get recommended, favorit, used, etc out of knownApplets()
     foreach (const KPluginInfo& info, Plasma::Applet::knownApplets()) {
         kDebug() << info.pluginName() << " is the name of the plugin\n";
-        appendRow(new PlasmaAppletItem(this, info, PlasmaAppletItem::NoFilter, &(extraPluginAttrs[info.pluginName()])));
+        
+        appendRow(new PlasmaAppletItem(this, info,
+                ((m_favorites.contains(info.pluginName()))?PlasmaAppletItem::Favorite:PlasmaAppletItem::NoFilter)
+                , &(extraPluginAttrs[info.pluginName()])));
     }
 }
 
@@ -121,4 +128,19 @@ QMimeData* PlasmaAppletItemModel::mimeData(const QModelIndexList & indexes) cons
     data->setData(format, appletName);
 
     return data;
+}
+
+void PlasmaAppletItemModel::setFavorite(QString plugin, bool favorite) {
+    if (favorite) {
+        if (!m_favorites.contains(plugin)) {
+            m_favorites.append(plugin);
+        }
+    } else {
+        if (m_favorites.contains(plugin)) {
+            m_favorites.removeAll(plugin);
+        }
+    }
+    m_configGroup.writeEntry("favorites", m_favorites.join(","));
+    m_configGroup.sync();
+
 }

@@ -26,6 +26,8 @@
 
 #include "kcategorizeditemsview_p.h"
 
+class PlasmaAppletItemModel;
+
 /**
  * Implementation of the KCategorizedItemsViewModels::AbstractItem
  */
@@ -39,7 +41,7 @@ public:
 
     Q_DECLARE_FLAGS(FilterFlags, FilterFlag)
 
-    PlasmaAppletItem(QObject *parent, const KPluginInfo& info,
+    PlasmaAppletItem(PlasmaAppletItemModel * model, const KPluginInfo& info,
             FilterFlags flags = NoFilter, QMap<QString, QVariant> * extraAttrs = NULL);
 
     virtual QString name() const;
@@ -48,17 +50,26 @@ public:
     virtual void setFavorite(bool favorite);
     virtual bool passesFiltering(
             const KCategorizedItemsViewModels::Filter & filter) const;
+private:
+    PlasmaAppletItemModel * m_model;
 };
 
 class PlasmaAppletItemModel :
     public KCategorizedItemsViewModels::DefaultItemModel
 {
 public:
-    PlasmaAppletItemModel(QObject * parent = 0, KConfigGroup * configGroup = NULL);
+    PlasmaAppletItemModel(KConfigGroup configGroup, QObject * parent = 0);
 
     QStringList mimeTypes() const;
 
     QMimeData* mimeData(const QModelIndexList & indexes) const;
+    
+    void setFavorite(QString plugin, bool favorite);
+
+private:
+    QStringList m_favorites;
+    KConfigGroup m_configGroup;
+    
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(PlasmaAppletItem::FilterFlags)
