@@ -396,12 +396,11 @@ void BoxLayout::setGeometry(const QRectF& geo)
         else
             expansionSpace[i] = 0;
 
+        available -= sizes[i];
         // adjust the per-item size if the space was over or under used
         if ( sizes[i] != perItemSize && i != sizes.count()-1 ) {
             perItemSize = available / (sizes.count()-i-1);
         }
-
-        available -= sizes[i];
     }
 
     // distribute out any remaining space to items which can still expand
