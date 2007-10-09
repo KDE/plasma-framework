@@ -1,0 +1,39 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=ServiceType
+X-KDE-ServiceType=Plasma/Runner
+
+Comment=KRunner plugin
+Comment[ar]=KRunner ملحق
+Comment[be]=Утулка Krunner
+Comment[bg]=Приставка за KRunner
+Comment[csb]=Wtëkôcze zrëszôcza KRunner
+Comment[de]=Programmstarter-Modul
+Comment[el]=Πρόσθετο του KRunner
+Comment[es]=Complementos de Konqueror
+Comment[fa]=وصلۀ KRunner
+Comment[ga]=Breiseáin KRunner
+Comment[he]=תוסף של KRunner
+Comment[it]=Plugin di KRunner
+Comment[ja]=KRunner プラグイン
+Comment[kk]=KRunner плагин модулі
+Comment[km]=កម្មវិធី​ជំនួយ KRunner
+Comment[nb]=KRunner-programtillegg
+Comment[nds]=KRunner-Moduul
+Comment[ne]=केडीई रनर प्लगइन
+Comment[nl]=KRunner-plugin
+Comment[nn]=KRunner-tillegg
+Comment[pa]=ਕੇ-ਰਨਰ ਪਲੱਗਇਨ
+Comment[pt]='Plugin' do KRunner
+Comment[pt_BR]=Plugin do KRunner
+Comment[sl]=Vstavek za KRunner
+Comment[sv]=Krunner-insticksprogram
+Comment[th]=ปลั๊กอินของ KRunner
+Comment[vi]=Bổ sung KRunner
+Comment[x-test]=xxKRunner pluginxx
+Comment[zh_CN]=KRunner 插件
+Comment[zh_TW]=KRunner 外掛程式
+
+[PropertyDef::X-Plasma-RunnerPhase]
+Type=QString
+

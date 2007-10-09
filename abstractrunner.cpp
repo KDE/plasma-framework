@@ -113,21 +113,32 @@ void AbstractRunner::runExactMatch()
 
 AbstractRunner::List AbstractRunner::loadRunners( QWidget* parent )
 {
+    List firstRunners;
     List runners;
-    KService::List offers = KServiceTypeTrader::self()->query("KRunner/Runner");
+    List lastRunners;
+
+    KService::List offers = KServiceTypeTrader::self()->query("Plasma/Runner");
     QString error;
     foreach (KService::Ptr service, offers) {
         AbstractRunner* runner = service->createInstance<AbstractRunner>(parent, QVariantList(), &error);
-        if ( runner ) {
+        if (runner) {
             kDebug() << "loaded runner : " << service->name();
-            runners.append( runner );
+            QString phase = service->property("X-Plasma-RunnerPhase").toString();
+            if (phase == "last") {
+                lastRunners.append(runner);
+            } else if (phase == "first") {
+                firstRunners.append(runner);
+            } else {
+                runners.append(runner);
+            }
         }
         else {
             kDebug() << "failed to load runner : " << service->name() << ". error reported: " << error;
         }
     }
 
-    return runners;
+    firstRunners << runners << lastRunners;
+    return firstRunners;
 }
 
 } // Plasma namespace
