@@ -163,8 +163,8 @@ class PLASMA_EXPORT AbstractRunner : public QObject
 
 } // Plasma namespace
 
-#define K_EXPORT_KRUNNER_RUNNER( libname, classname )     \
+#define K_EXPORT_PLASMA_RUNNER( libname, classname )     \
 K_PLUGIN_FACTORY(factory, registerPlugin<classname>();) \
-K_EXPORT_PLUGIN(factory("krunner_" #libname))
+K_EXPORT_PLUGIN(factory("plasma_runner_" #libname))
 
 #endif
