@@ -83,14 +83,17 @@ void BorderLayout::setGeometry(const QRectF& geometry)
 
 void BorderLayout::invalidate()
 {
+    QRectF geometry = d->geometry;
+    geometry.setTopLeft(geometry.topLeft() + QPointF(margin(), margin()));
+    geometry.setBottomRight(geometry.bottomRight() - QPointF(margin(), margin()));
 
-    QPointF origin = d->geometry.topLeft();
+    QPointF origin = geometry.topLeft();
     qreal top = 0, bottom = 0, left = 0, right = 0;
 
     if (d->itemPositions[TopPositioned] /*&& d->itemPositions[TopPositioned]->isVisible()*/) {
         top = (d->sizes[TopPositioned] >= 0) ? d->sizes[TopPositioned] : d->itemPositions[TopPositioned]->sizeHint().height();
         d->itemPositions[TopPositioned]->setGeometry(QRectF(origin, QSizeF(
-                d->geometry.width(), top)));
+                geometry.width(), top)));
 	top += spacing();
 
     }
@@ -99,9 +102,9 @@ void BorderLayout::invalidate()
         bottom = (d->sizes[BottomPositioned] >= 0) ? d->sizes[BottomPositioned]
                 : d->itemPositions[BottomPositioned]->sizeHint().height();
         d->itemPositions[BottomPositioned]->setGeometry(QRectF(origin + QPointF(0,
-                d->geometry.height() - bottom), QSizeF(d->geometry.width(),
+                geometry.height() - bottom), QSizeF(geometry.width(),
                 bottom)));
-        bottom = d->geometry.height() - bottom - spacing();
+        bottom = geometry.height() - bottom - spacing();
     }
 
     if (d->itemPositions[LeftPositioned] /*&& d->itemPositions[LeftPositioned]->isVisible()*/) {
@@ -114,8 +117,8 @@ void BorderLayout::invalidate()
     if (d->itemPositions[RightPositioned] /*&& d->itemPositions[RightPositioned]->isVisible()*/) {
         right = (d->sizes[RightPositioned] >= 0) ? d->sizes[RightPositioned] : d->itemPositions[RightPositioned]->sizeHint().width();
         d->itemPositions[RightPositioned]->setGeometry(QRectF(origin + QPointF(
-                d->geometry.width() - right, top), QSizeF(right, bottom - top)));
-        right = d->geometry.width() - right - spacing();
+                geometry.width() - right, top), QSizeF(right, bottom - top)));
+        right = geometry.width() - right - spacing();
     }
 
     if (d->itemPositions[CenterPositioned] /*&& d->itemPositions[CenterPositioned]->isVisible()*/) {
@@ -151,7 +154,7 @@ QSizeF BorderLayout::sizeHint() const
         hintWidth += d->itemPositions[CenterPositioned]->sizeHint().width();
     }
 
-    return QSizeF(hintWidth, hintHeight);
+    return QSizeF(hintWidth + 2 * margin(), hintHeight + 2 * margin());
 }
 
 void BorderLayout::addItem(Plasma::LayoutItem * item)
