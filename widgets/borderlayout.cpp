@@ -88,14 +88,17 @@ void BorderLayout::invalidate()
     geometry.setBottomRight(geometry.bottomRight() - QPointF(margin(), margin()));
 
     QPointF origin = geometry.topLeft();
-    qreal top = 0, bottom = 0, left = 0, right = 0;
+    qreal top, bottom, left, right;
+    top    = (d->sizes[TopPositioned] >= 0)    ? d->sizes[TopPositioned]    : 0;
+    left   = (d->sizes[LeftPositioned] >= 0)   ? d->sizes[LeftPositioned]   : 0;
+    bottom = geometry.height() - ((d->sizes[BottomPositioned] >= 0) ? d->sizes[BottomPositioned] : 0);
+    right  = geometry.width()  - ((d->sizes[RightPositioned] >= 0)  ? d->sizes[RightPositioned]  : 0);
 
     if (d->itemPositions[TopPositioned] /*&& d->itemPositions[TopPositioned]->isVisible()*/) {
         top = (d->sizes[TopPositioned] >= 0) ? d->sizes[TopPositioned] : d->itemPositions[TopPositioned]->sizeHint().height();
         d->itemPositions[TopPositioned]->setGeometry(QRectF(origin, QSizeF(
                 geometry.width(), top)));
-	top += spacing();
-
+	    top += spacing();
     }
 
     if (d->itemPositions[BottomPositioned] /*&& d->itemPositions[BottomPositioned]->isVisible()*/) {
@@ -111,7 +114,7 @@ void BorderLayout::invalidate()
         left = (d->sizes[LeftPositioned] >= 0) ? d->sizes[LeftPositioned] : d->itemPositions[LeftPositioned]->sizeHint().width();
         d->itemPositions[LeftPositioned]->setGeometry(QRectF(origin + QPointF(0, top),
                 QSizeF(left, bottom - top)));
-	left += spacing();
+	    left += spacing();
     }
 
     if (d->itemPositions[RightPositioned] /*&& d->itemPositions[RightPositioned]->isVisible()*/) {
