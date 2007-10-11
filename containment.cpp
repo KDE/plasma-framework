@@ -366,6 +366,10 @@ Applet* Containment::addApplet(const QString& name, const QVariantList& args, ui
     }
 
     applet->setParentItem(this);
+    //panels don't want backgrounds, which is important when setting geometry
+    if (type() == PanelContainment) {
+        applet->setDrawStandardBackground(false);
+    }
     //the applet needs to be given constraints before it can set its geometry
     applet->updateConstraints(Plasma::AllConstraints);
 

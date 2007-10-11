@@ -231,11 +231,6 @@ void Corona::loadDefaultSetup()
 
     applets << tasksApplet << systemTrayApplet << clockApplet;
 
-    foreach (Plasma::Applet* applet , applets) {
-        // If we have a Panel class (is a Container), this should move there
-        applet->init();
-        applet->setDrawStandardBackground(false);
-    }
 }
 
 Containment* Corona::containmentForScreen(int screen) const
