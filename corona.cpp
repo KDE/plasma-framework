@@ -285,9 +285,6 @@ Containment* Corona::addContainment(const QString& name, const QVariantList& arg
         containment->init();
     }
 
-    // in case it was set in the Containment (or Applet), we don't want this
-    containment->setDrawStandardBackground(false);
-
     d->containments.append(containment);
     connect(containment, SIGNAL(destroyed(QObject*)),
             this, SLOT(containmentDestroyed(QObject*)));
