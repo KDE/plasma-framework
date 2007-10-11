@@ -45,7 +45,8 @@ class Layout;
  * Widgets are rectangular, but can be in any visible shape by just using transparency to mask
  * out non-rectangular areas.
  *
- * To implement a Widget, just subclass Plasma::Widget and implement at minimum, sizeHint() and paint()
+ * To implement a Widget, just subclass Plasma::Widget and implement at minimum,
+ * sizeHint() and paintWidget()
  */
 class PLASMA_EXPORT Widget  : public QObject,
                               public QGraphicsItem,

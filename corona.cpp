@@ -153,7 +153,6 @@ void Corona::loadApplets(const QString& configname)
             if (c) {
                 containments.insert(c->id(), c);
                 c->initConstraints(&appletConfig);
-                c->setGeometry(appletConfig.readEntry("geometry", QRectF()));
                 kDebug() << "Containment" << c->id() << "geometry is" << c->geometry();
             }
         } else {
@@ -179,7 +178,7 @@ void Corona::loadApplets(const QString& configname)
         kDebug() << "creating applet " << cg.name() << "in containment" << cid;
         int appId = cg.name().left(cg.name().indexOf('-')).toUInt();
         c->addApplet(cg.readEntry("plugin", QString()), QVariantList(),
-                        appId, cg.readEntry("geometry", QRectF()), true);
+                     appId, cg.readEntry("geometry", QRectF()), true);
     }
 
     foreach (Containment* c, containments) {
@@ -223,6 +222,7 @@ void Corona::loadDefaultSetup()
     // make a panel at the bottom
     Containment* panel = addContainment("panel", (QVariantList() << (int)Plasma::BottomEdge));
 
+    return;
     // some default applets to get a usable UI
     QList<Plasma::Applet*> applets;
     Plasma::Applet *tasksApplet = panel->addApplet("tasks");

@@ -126,9 +126,10 @@ void Containment::init()
 void Containment::initConstraints(KConfigGroup* group)
 {
     kDebug() << "initConstraints" << group->name() << type();
-    setScreen(group->readEntry("screen", 0));
-    setFormFactor((Plasma::FormFactor)group->readEntry("formfactor", (int)Plasma::Planar));
     setLocation((Plasma::Location)group->readEntry("location", (int)Plasma::Desktop));
+    setGeometry(group->readEntry("geometry", QRectF()));
+    setFormFactor((Plasma::FormFactor)group->readEntry("formfactor", (int)Plasma::Planar));
+    setScreen(group->readEntry("screen", 0));
 }
 
 void Containment::saveConstraints(KConfigGroup* group) const
@@ -190,7 +191,7 @@ QSizeF Containment::contentSizeHint() const
 
 void Containment::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
 {
-    kDebug() << "let's see if we manage to get a context menu here, huh";
+    //kDebug() << "let's see if we manage to get a context menu here, huh";
     if (!scene() || !KAuthorized::authorizeKAction("desktop_contextmenu")) {
         QGraphicsItem::contextMenuEvent(event);
         return;
@@ -451,9 +452,10 @@ void Containment::setScreen(int screen)
         screen = -1;
     }
 
-    if (screen > -1) {
+    //kDebug() << "setting scrreen to " << screen << "and type is" << type();
+    if (screen > -1 && type() == DesktopContainment) {
         setGeometry(desktop.screenGeometry(screen));
-        //kDebug() << "setting geometry to" << desktop.screenGeometry(screen);
+        //kDebug() << "setting geometry to" << desktop.screenGeometry(screen) << geometry();
     }
 
     d->screen = screen;

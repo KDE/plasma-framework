@@ -1092,7 +1092,7 @@ QVariant Applet::itemChange(GraphicsItemChange change, const QVariant &value)
 
 void Applet::setGeometry(const QRectF& geometry)
 {
-    if (size() != geometry.size()) {
+    if (geometry.size().width() > 0 && geometry.size().height() > 0 && size() != geometry.size()) {
         prepareGeometryChange();
         qreal width = qBound(minimumSize().width(), geometry.size().width(), maximumSize().width());
         qreal height = qBound(minimumSize().height(), geometry.size().height(), maximumSize().height());

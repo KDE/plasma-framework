@@ -208,7 +208,7 @@ QRectF Widget::localGeometry() const
 
 void Widget::setGeometry(const QRectF& geometry)
 {
-    if (d->size != geometry.size()) {
+    if (geometry.size().width() > 0 && geometry.size().height() > 0 && d->size != geometry.size()) {
         prepareGeometryChange();
         qreal width = qBound(d->minimumSize.width(), geometry.size().width(), d->maximumSize.width());
         qreal height = qBound(d->minimumSize.height(), geometry.size().height(), d->maximumSize.height());
@@ -243,7 +243,7 @@ QSizeF Widget::sizeHint() const
     if (layout()) {
         return layout()->sizeHint();
     } else {
-        return QSizeF();
+        return boundingRect().size();
     }
 }
 
@@ -327,7 +327,7 @@ void Widget::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
         // Recreate the pixmap if it's gone.
         if (pix.isNull()) {
             pix = QPixmap(d->cacheSize);
- 	    pix.fill(Qt::transparent);
+            pix.fill(Qt::transparent);
             exposed = brect;
         }
 
