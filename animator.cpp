@@ -109,19 +109,19 @@ void Animator::frameAppear(qreal frame, QGraphicsItem* item, const QRegion& draw
     Q_UNUSED(drawable)
 }
 
-void Animator::slideIn(qreal progress, QGraphicsItem *item, const QPoint &destination)
+void Animator::slideIn(qreal progress, QGraphicsItem *item, const QPoint &start, const QPoint &destination)
 {
-    //FIXME: rewrite
-    Q_UNUSED(progress);
-    item->translate(-destination.x(), -destination.y());
+    int x = start.x() + (destination.x() - start.x()) * progress;
+    int y = start.y() + (destination.y() - start.y()) * progress;
+    item->setPos(x, y);
 }
 
-void Animator::slideOut(qreal progress, QGraphicsItem *item, const QPoint &destination)
+void Animator::slideOut(qreal progress, QGraphicsItem *item, const QPoint &start, const QPoint &destination)
 {
-    //FIXME: rewrite
-    Q_UNUSED(progress);
     //kDebug();
-    item->translate(destination.x(), destination.y());
+    int x = start.x() + (destination.x() - start.x()) * progress;
+    int y = start.y() + (destination.y() - start.y()) * progress;
+    item->setPos(x, y);
 }
 
 } // Plasma namespace

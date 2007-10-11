@@ -66,6 +66,7 @@ struct MovementState
     int currentInterval;
     int frames;
     int currentFrame;
+    QPoint start;
     QPoint destination;
 };
 
@@ -113,10 +114,12 @@ class Phase::Private
         {
             switch (state->movement) {
                 case Phase::SlideIn:
-                    animator->slideIn(amount, state->item, state->destination);
+                    kDebug() << "performMovement, SlideIn";
+                    animator->slideIn(amount, state->item, state->start, state->destination);
                     break;
                 case Phase::SlideOut:
-                    animator->slideOut(amount, state->item, state->destination);
+                    kDebug() << "performMovement, SlideOut";
+                    animator->slideOut(amount, state->item, state->start, state->destination);
                     break;
             }
         }
@@ -222,7 +225,7 @@ void Phase::animateItem(QGraphicsItem* item, Animation animation)
 
 void Phase::moveItem(QGraphicsItem* item, Movement movement, const QPoint &destination)
 {
-     //kDebug();
+     kDebug();
      QMap<QGraphicsItem*, MovementState*>::iterator it = d->movingItems.find(item);
      if (it != d->movingItems.end()) {
           delete it.value();
@@ -237,7 +240,8 @@ void Phase::moveItem(QGraphicsItem* item, Movement movement, const QPoint &desti
      }
 
      MovementState* state = new MovementState;
-     state->destination=destination;
+     state->destination = destination;
+     state->start = item->pos().toPoint();
      state->item = item;
      state->movement = movement;
      state->curve = d->animator->curve(movement);
@@ -389,7 +393,6 @@ void Phase::timerEvent(QTimerEvent *event)
                 qreal progress = state->frames;
                 progress = state->currentFrame / progress;
                 progress = qMin(1.0, qMax(0.0, progress));
-                //kDebug()<<progress;
                 d->performMovement(progress, state);
                 state->currentInterval = state->interval;
                 animationsRemain = true;
