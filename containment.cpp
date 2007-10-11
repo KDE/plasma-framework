@@ -103,20 +103,22 @@ void Containment::init()
 {
 //    setCachePaintMode(NoCacheMode);
     setFlag(QGraphicsItem::ItemIsMovable, false);
-    KConfigGroup config(KGlobal::config(), "General");
-    d->wallpaperPath = config.readEntry("wallpaper", QString());
-
-    //kDebug() << "wallpaperPath is" << d->wallpaperPath << QFile::exists(d->wallpaperPath);
-    if (d->wallpaperPath.isEmpty() ||
-        !QFile::exists(d->wallpaperPath)) {
-        //kDebug() << "SVG wallpaper!";
-        d->background = new Plasma::Svg("widgets/wallpaper", this);
-    }
-
     setAcceptDrops(true);
 
+    if (type() == DesktopContainment) {
+        KConfigGroup config(KGlobal::config(), "General");
+        d->wallpaperPath = config.readEntry("wallpaper", QString());
+
+        //kDebug() << "wallpaperPath is" << d->wallpaperPath << QFile::exists(d->wallpaperPath);
+        if (d->wallpaperPath.isEmpty() ||
+                !QFile::exists(d->wallpaperPath)) {
+            kDebug() << "SVG wallpaper!";
+            d->background = new Plasma::Svg("widgets/wallpaper", this);
+        }
+    }
+
     if (type() == PanelContainment) {
-        kDebug() << "we are a panel, let's move ourselves to a negative coordinate system";
+        //kDebug() << "we are a panel, let's move ourselves to a negative coordinate system";
         QDesktopWidget desktop;
         QRect r = desktop.screenGeometry(screen());
         translate(0, -r.height());
@@ -125,7 +127,7 @@ void Containment::init()
 
 void Containment::initConstraints(KConfigGroup* group)
 {
-    kDebug() << "initConstraints" << group->name() << type();
+    //kDebug() << "initConstraints" << group->name() << type();
     setLocation((Plasma::Location)group->readEntry("location", (int)Plasma::Desktop));
     setGeometry(group->readEntry("geometry", QRectF()));
     setFormFactor((Plasma::FormFactor)group->readEntry("formfactor", (int)Plasma::Planar));
@@ -148,6 +150,13 @@ void Containment::paintInterface(QPainter *painter,
                                  const QStyleOptionGraphicsItem *option,
                                  const QRect& contentsRect)
 {
+    //FIXME: this should probably ALL move to the Desktop containment, save for drawing a rect
+    //       in case there is no other drawing going on
+    if (type() != DesktopContainment) {
+        return;
+    }
+
+    //kDebug() << "paintInterface of background";
     //TODO: we should have a way to do this outside of the paint event!
     if (d->background) {
         d->background->resize(contentsRect.size());
@@ -159,7 +168,8 @@ void Containment::paintInterface(QPainter *painter,
         }
     } else {
         // got nothing to paint!
-        painter->drawRect(contentsRect);
+        //kDebug() << "got nothing?";
+        painter->drawRect(contentsRect.adjusted(1, 1, -1, -1));
         return;
     }
 
@@ -173,11 +183,13 @@ void Containment::paintInterface(QPainter *painter,
     if (d->background) {
         // Plasma::Svg doesn't support drawing only part of the image (it only
         // supports drawing the whole image to a rect), so we blit to 0,0-w,h
-        d->background->paint(painter, 0, 0);
+        d->background->paint(painter, contentsRect);
+    //kDebug() << "draw svg of background";
     } else if (d->bitmapBackground) {
         // for pixmaps we draw only the exposed part (untransformed since the
         // bitmapBackground already has the size of the viewport)
         painter->drawPixmap(option->exposedRect, *d->bitmapBackground, option->exposedRect);
+    //kDebug() << "draw pixmap of background";
     }
 
     // restore transformation and composition mode
