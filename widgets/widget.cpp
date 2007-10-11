@@ -233,6 +233,8 @@ void Widget::updateGeometry()
 {
     if (managingLayout()) {
         managingLayout()->invalidate();
+    } else {
+        setGeometry(QRectF(pos(), sizeHint()));
     }
 }
 
