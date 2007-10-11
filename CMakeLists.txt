@@ -160,6 +160,7 @@ install(FILES
     includes/UiLoader
     includes/PackageMetadata
     includes/Containment
+    includes/AppletBrowser
     DESTINATION ${INCLUDE_INSTALL_DIR}/KDE/Plasma)
 
 if(QT_QTOPENGL_FOUND AND OPENGL_FOUND)
