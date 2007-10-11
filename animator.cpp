@@ -124,11 +124,6 @@ void Animator::slideOut(qreal progress, QGraphicsItem *item, const QPoint &desti
     item->translate(destination.x(), destination.y());
 }
 
-void Animator::renderBackground(QImage& background)
-{
-    Q_UNUSED(background)
-}
-
 } // Plasma namespace
 
 #include "animator.moc"

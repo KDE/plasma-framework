@@ -65,9 +65,6 @@ public:
     virtual void slideIn(qreal progress, QGraphicsItem* item, const QPoint &destination);
     virtual void slideOut(qreal progress, QGraphicsItem* item, const QPoint &destination);
 
-    // Rendering
-    virtual void renderBackground(QImage& background);
-
 private:
     class Private;
     Private * const d;

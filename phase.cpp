@@ -257,16 +257,6 @@ void Phase::moveItem(QGraphicsItem* item, Movement movement, const QPoint &desti
      }
 }
 
-void Phase::render(QGraphicsItem* item, QImage& image, RenderOp op)
-{
-    Q_UNUSED(item);
-    switch (op) {
-        case RenderBackground:
-            d->animator->renderBackground(image);
-            break;
-    }
-}
-
 Phase::AnimId Phase::animateElement(QGraphicsItem *item, ElementAnimation animation)
 {
     //kDebug() << "startElementAnimation(AnimId " << animation << ")";

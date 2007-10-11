@@ -39,7 +39,6 @@ class PLASMA_EXPORT Phase : public QObject
 {
     Q_OBJECT
     Q_ENUMS( Animation )
-    Q_ENUMS( RenderOp )
     Q_ENUMS( CurveShape )
     Q_ENUMS( Movement )
 
@@ -56,11 +55,6 @@ public:
     {
         ElementAppear = 0 /*<< Animate the appearance of an element */,
         ElementDisappear /*<< Animate the disappearance of an element */
-    };
-
-    enum RenderOp
-    {
-        RenderBackground = 0 /*<< Render the background of an item */
     };
 
     enum CurveShape
@@ -89,7 +83,6 @@ public:
 
     Q_INVOKABLE void animateItem(QGraphicsItem* item, Animation anim);
     Q_INVOKABLE void moveItem(QGraphicsItem* item, Movement movement, const QPoint &destination);
-    Q_INVOKABLE void render(QGraphicsItem* item, QImage& image, RenderOp op);
 
     AnimId animateElement(QGraphicsItem *obj, ElementAnimation);
     void stopElementAnimation(AnimId id);
