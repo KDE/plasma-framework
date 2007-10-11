@@ -696,6 +696,7 @@ QSizeF Applet::sizeHint() const
 
 QList<QAction*> Applet::contextActions()
 {
+    kDebug() << "empty actions";
     return QList<QAction*>();
 }
 
@@ -995,6 +996,8 @@ Applet* Applet::loadApplet(const QString& appletName, uint appletId, const QVari
         //      from the network at this point
         kDebug() << "Applet::loadApplet: offers is empty for \"" << appletName << "\"";
         return 0;
+    } else if (offers.count() > 1) {
+        kDebug() << "hey! we got more than one! let's blindly take the first one";
     }
 
     if (appletId == 0) {
