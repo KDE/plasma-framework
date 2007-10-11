@@ -192,6 +192,7 @@ void Corona::loadApplets(const QString& configname)
     } else {
         foreach (Containment* containment, d->containments) {
             containment->init();
+            addItem(containment);
 
             foreach(Applet* applet, containment->applets()) {
                 applet->init();
@@ -222,7 +223,6 @@ void Corona::loadDefaultSetup()
     // make a panel at the bottom
     Containment* panel = addContainment("panel", (QVariantList() << (int)Plasma::BottomEdge));
 
-    return;
     // some default applets to get a usable UI
     QList<Plasma::Applet*> applets;
     Plasma::Applet *tasksApplet = panel->addApplet("tasks");
@@ -230,7 +230,6 @@ void Corona::loadDefaultSetup()
     Plasma::Applet *clockApplet = panel->addApplet("digital-clock");
 
     applets << tasksApplet << systemTrayApplet << clockApplet;
-
 }
 
 Containment* Corona::containmentForScreen(int screen) const
@@ -279,10 +278,9 @@ Containment* Corona::addContainment(const QString& name, const QVariantList& arg
         containment->setFailedToLaunch(false); // we want to provide something and don't care about the failure to launch
     }
 
-    addItem(containment);
-
     if (!delayedInit) {
         containment->init();
+        addItem(containment);
     }
 
     d->containments.append(containment);
