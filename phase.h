@@ -84,10 +84,34 @@ public:
     Q_INVOKABLE void animateItem(QGraphicsItem* item, Animation anim);
     Q_INVOKABLE void moveItem(QGraphicsItem* item, Movement movement, const QPoint &destination);
 
-    AnimId animateElement(QGraphicsItem *obj, ElementAnimation);
-    void stopElementAnimation(AnimId id);
-    void setAnimationPixmap(AnimId id, const QPixmap &pixmap);
-    QPixmap animationResult(AnimId id);
+    /**
+     * Starts a custom animation, preventing the need to create a timeline
+     * with its own timer tick.
+     *
+     * @arg frames the number of frames this animation should persist for
+     * @arg duration the length, in milliseconds, the animation will take
+     * @arg curve the curve applied to the frame rate
+     * @arg receive the object that will handle the actual animation
+     * @arg slot the slot to be invoked on each update
+     *
+     * @return an id that can be used to identify this animation.
+     */
+    Q_INVOKABLE AnimId customAnimation(int frames, int duration, Phase::CurveShape curve,
+                                       QObject* receiver, const char* slot);
+
+    /**
+     * Stops a custom animation. Note that it is not necessary to call
+     * this on object destruction, as custom animations associated with
+     * a given QObject are cleaned up automatically on QObject destruction.
+     *
+     * @arg id the id of the animation as returned by customAnimation
+     */
+    Q_INVOKABLE void stopCustomAnimation(AnimId id);
+
+    Q_INVOKABLE AnimId animateElement(QGraphicsItem *obj, ElementAnimation);
+    Q_INVOKABLE void stopElementAnimation(AnimId id);
+    Q_INVOKABLE void setAnimationPixmap(AnimId id, const QPixmap &pixmap);
+    Q_INVOKABLE QPixmap animationResult(AnimId id);
 
 Q_SIGNALS:
     void animationComplete(QGraphicsItem *item, Animation anim);
@@ -98,6 +122,7 @@ protected:
 
 protected Q_SLOTS:
     void appletDestroyed(QObject*);
+    void customAnimReceiverDestroyed(QObject*);
 
 private:
     void init();

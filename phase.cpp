@@ -70,6 +70,18 @@ struct MovementState
     QPoint destination;
 };
 
+struct CustomAnimationState
+{
+    Phase::CurveShape curve;
+    int frames;
+    int currentFrame;
+    int interval;
+    int currentInterval;
+    Phase::AnimId id;
+    QObject* receiver;
+    char* slot;
+};
+
 class Phase::Private
 {
     public:
@@ -85,8 +97,25 @@ class Phase::Private
         {
             qDeleteAll(animatedItems);
             qDeleteAll(animatedElements);
+            qDeleteAll(movingItems);
+
+            QMutableMapIterator<AnimId, CustomAnimationState*> it(customAnims);
+            while (it.hasNext()) {
+                delete it.value()->slot;
+                delete it.value();
+                it.remove();
+            }
+
             // Animator is a QObject
             // and we don't own the items
+        }
+
+        qreal calculateProgress(int frames, int currentFrame)
+        {
+            qreal progress = frames;
+            progress = currentFrame / progress;
+            progress = qMin(1.0, qMax(0.0, progress));
+            return progress;
         }
 
         void performAnimation(qreal amount, const AnimationState* state)
@@ -114,11 +143,11 @@ class Phase::Private
         {
             switch (state->movement) {
                 case Phase::SlideIn:
-                    kDebug() << "performMovement, SlideIn";
+                    //kDebug() << "performMovement, SlideIn";
                     animator->slideIn(amount, state->item, state->start, state->destination);
                     break;
                 case Phase::SlideOut:
-                    kDebug() << "performMovement, SlideOut";
+                    //kDebug() << "performMovement, SlideOut";
                     animator->slideOut(amount, state->item, state->start, state->destination);
                     break;
             }
@@ -134,6 +163,7 @@ class Phase::Private
         QMap<QGraphicsItem*, AnimationState*> animatedItems;
         QMap<QGraphicsItem*, MovementState*> movingItems;
         QMap<Phase::AnimId, ElementAnimationState*> animatedElements;
+        QMap<AnimId, CustomAnimationState*> customAnims;
 };
 
 class PhaseSingleton
@@ -181,6 +211,18 @@ void Phase::appletDestroyed(QObject* o)
     if (it2 != d->movingItems.end()) {
         delete it2.value();
         d->movingItems.erase(it2);
+    }
+}
+
+void Phase::customAnimReceiverDestroyed(QObject* o)
+{
+    QMutableMapIterator<AnimId, CustomAnimationState*> it(d->customAnims);
+    while (it.hasNext()) {
+        if (it.next().value()->receiver == o) {
+            delete it.value()->slot;
+            delete it.value();
+            it.remove();
+        }
     }
 }
 
@@ -259,6 +301,50 @@ void Phase::moveItem(QGraphicsItem* item, Movement movement, const QPoint &desti
           d->timerId = startTimer(40);
           d->time.restart();
      }
+}
+
+Phase::AnimId Phase::customAnimation(int frames, int duration, Phase::CurveShape curve,
+                                     QObject* receiver, const char* slot)
+{
+    if (frames < 1 || duration < 1 || !receiver || !slot) {
+        return -1;
+    }
+
+    CustomAnimationState *state = new CustomAnimationState;
+    state->id = ++d->animId;
+    state->frames = frames;
+    state->currentFrame = 0;
+    state->curve = curve;
+    state->interval = duration / qreal(state->frames);
+    state->interval = (state->interval / 40) * 40;
+    state->currentInterval = state->interval;
+    state->receiver = receiver;
+    state->slot = qstrdup(slot);
+
+    d->customAnims[state->id] = state;
+
+    connect(receiver, SLOT(objectDestroyed(QObject*)),
+            this, SLOT(customAnimReceiverDestroyed(QObject*)));
+
+    QMetaObject::invokeMethod(receiver, slot, Q_ARG(qreal, 0));
+
+    if (!d->timerId) {
+        d->timerId = startTimer(40);
+        d->time.restart();
+    }
+
+    return state->id;
+}
+
+void Phase::stopCustomAnimation(AnimId id)
+{
+    QMap<AnimId, CustomAnimationState*>::iterator it = d->customAnims.find(id);
+    if (it != d->customAnims.end()) {
+        delete it.value()->slot;
+        delete it.value();
+        d->customAnims.erase(it);
+    }
+    //kDebug() << "stopCustomAnimation(AnimId " << id << ") done";
 }
 
 Phase::AnimId Phase::animateElement(QGraphicsItem *item, ElementAnimation animation)
@@ -364,9 +450,7 @@ void Phase::timerEvent(QTimerEvent *event)
             state->currentFrame += qMax(1, elapsed / state->interval);
 
             if (state->currentFrame < state->frames) {
-                qreal progress = state->frames;
-                progress = state->currentFrame / progress;
-                progress = qMin(1.0, qMax(0.0, progress));
+                qreal progress = d->calculateProgress(state->frames, state->currentFrame);
                 d->performAnimation(progress, state);
                 state->currentInterval = state->interval;
                 //TODO: calculate a proper interval based on the curve
@@ -390,10 +474,8 @@ void Phase::timerEvent(QTimerEvent *event)
             state->currentFrame += qMax(1, elapsed / state->interval);
 
             if (state->currentFrame < state->frames) {
-                qreal progress = state->frames;
-                progress = state->currentFrame / progress;
-                progress = qMin(1.0, qMax(0.0, progress));
-                d->performMovement(progress, state);
+                d->performMovement(d->calculateProgress(state->frames, state->currentFrame), state);
+                //TODO: calculate a proper interval based on the curve
                 state->currentInterval = state->interval;
                 animationsRemain = true;
             } else {
@@ -428,11 +510,34 @@ void Phase::timerEvent(QTimerEvent *event)
             if (state->currentFrame < state->frames) {
                 state->currentInterval = state->interval;
                 //TODO: calculate a proper interval based on the curve
-                qreal progress = state->frames;
-                progress = state->currentFrame / progress;
-                progress = qMin(1.0, qMax(0.0, progress));
-                state->interval *= 1 - progress;
+                state->interval *= 1 - d->calculateProgress(state->frames, state->currentFrame);
                 animationsRemain = true;
+            }
+        } else {
+            state->currentInterval -= elapsed;
+            animationsRemain = true;
+        }
+    }
+
+    foreach (CustomAnimationState *state, d->customAnims) {
+        if (state->currentInterval <= elapsed) {
+            // advance the frame
+            state->currentFrame += qMax(1, elapsed / state->interval);
+
+
+            if (state->currentFrame < state->frames) {
+                //TODO: calculate a proper interval based on the curve
+                state->currentInterval = state->interval;
+                animationsRemain = true;
+                // signal the object
+                QMetaObject::invokeMethod(state->receiver, state->slot,
+                                          Q_ARG(qreal,
+                                                d->calculateProgress(state->frames, state->currentFrame)));
+            } else {
+                QMetaObject::invokeMethod(state->receiver, state->slot, Q_ARG(qreal, 1));
+                d->customAnims.erase(d->customAnims.find(state->id));
+                delete state->slot;
+                delete state;
             }
         } else {
             state->currentInterval -= elapsed;
