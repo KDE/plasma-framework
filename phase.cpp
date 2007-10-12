@@ -268,7 +268,7 @@ void Phase::animateItem(QGraphicsItem* item, Animation animation)
 
 void Phase::moveItem(QGraphicsItem* item, Movement movement, const QPoint &destination)
 {
-     kDebug();
+     //kDebug();
      QMap<QGraphicsItem*, MovementState*>::iterator it = d->movingItems.find(item);
      if (it != d->movingItems.end()) {
           delete it.value();
@@ -524,11 +524,11 @@ void Phase::timerEvent(QTimerEvent *event)
         if (state->currentInterval <= elapsed) {
             // advance the frame
             state->currentFrame += qMax(1, elapsed / state->interval);
-            kDebug() << "custom anim for" << state->receiver << "to slot" << state->slot
-                     << "with interval of" << state->interval << "at frame" << state->currentFrame;
+            /*kDebug() << "custom anim for" << state->receiver << "to slot" << state->slot
+                     << "with interval of" << state->interval << "at frame" << state->currentFrame;*/
 
             if (state->currentFrame < state->frames) {
-                kDebug () << "not the final frame";
+                //kDebug () << "not the final frame";
                 //TODO: calculate a proper interval based on the curve
                 state->currentInterval = state->interval;
                 animationsRemain = true;
