@@ -32,6 +32,7 @@
 namespace Plasma
 {
 
+static const qreal MIN_TICK_RATE = 40;
 
 struct AnimationState
 {
@@ -253,14 +254,14 @@ void Phase::animateItem(QGraphicsItem* item, Animation animation)
     state->frames = frames / 3;
     state->currentFrame = 0;
     state->interval = 333 / state->frames;
-    state->interval = (state->interval / 40) * 40;
+    state->interval = (state->interval / MIN_TICK_RATE) * MIN_TICK_RATE;
     state->currentInterval = state->interval;
 
     d->animatedItems[item] = state;
     d->performAnimation(0, state);
 
     if (!d->timerId) {
-        d->timerId = startTimer(40);
+        d->timerId = startTimer(MIN_TICK_RATE);
         d->time.restart();
     }
 }
@@ -291,14 +292,14 @@ void Phase::moveItem(QGraphicsItem* item, Movement movement, const QPoint &desti
      state->frames = frames / 2;
      state->currentFrame = 0;
      state->interval = 250 / state->frames;
-     state->interval = (state->interval / 40) * 40;
+     state->interval = (state->interval / MIN_TICK_RATE) * MIN_TICK_RATE;
      state->currentInterval = state->interval;
 
      d->movingItems[item] = state;
      d->performMovement(0, state);
 
      if (!d->timerId) {
-          d->timerId = startTimer(40);
+          d->timerId = startTimer(MIN_TICK_RATE);
           d->time.restart();
      }
 }
@@ -316,20 +317,20 @@ Phase::AnimId Phase::customAnimation(int frames, int duration, Phase::CurveShape
     state->currentFrame = 0;
     state->curve = curve;
     state->interval = duration / qreal(state->frames);
-    state->interval = (state->interval / 40) * 40;
+    state->interval = (state->interval / MIN_TICK_RATE) * MIN_TICK_RATE;
     state->currentInterval = state->interval;
     state->receiver = receiver;
     state->slot = qstrdup(slot);
 
     d->customAnims[state->id] = state;
 
-    connect(receiver, SLOT(objectDestroyed(QObject*)),
+    connect(receiver, SIGNAL(destroyed(QObject*)),
             this, SLOT(customAnimReceiverDestroyed(QObject*)));
 
     QMetaObject::invokeMethod(receiver, slot, Q_ARG(qreal, 0));
 
     if (!d->timerId) {
-        d->timerId = startTimer(40);
+        d->timerId = startTimer(MIN_TICK_RATE);
         d->time.restart();
     }
 
@@ -358,7 +359,7 @@ Phase::AnimId Phase::animateElement(QGraphicsItem *item, ElementAnimation animat
     state->frames = d->animator->framesPerSecond(animation) / 5;
     state->currentFrame = 0;
     state->interval = 200 / state->frames;
-    state->interval = (state->interval / 40) * 40;
+    state->interval = (state->interval / MIN_TICK_RATE) * MIN_TICK_RATE;
     state->currentInterval = state->interval;
     state->id = ++d->animId;
 
@@ -377,7 +378,7 @@ Phase::AnimId Phase::animateElement(QGraphicsItem *item, ElementAnimation animat
     if (needTimer && !d->timerId) {
         // start a 20fps timer;
         //TODO: should be started at the maximum frame rate needed only?
-        d->timerId = startTimer(40);
+        d->timerId = startTimer(MIN_TICK_RATE);
         d->time.restart();
     }
     return state->id;
@@ -437,7 +438,7 @@ void Phase::timerEvent(QTimerEvent *event)
 {
     Q_UNUSED(event)
     bool animationsRemain = false;
-    int elapsed = 40;
+    int elapsed = MIN_TICK_RATE;
     if (d->time.elapsed() > elapsed) {
         elapsed = d->time.elapsed();
     }
@@ -523,9 +524,11 @@ void Phase::timerEvent(QTimerEvent *event)
         if (state->currentInterval <= elapsed) {
             // advance the frame
             state->currentFrame += qMax(1, elapsed / state->interval);
-
+            kDebug() << "custom anim for" << state->receiver << "to slot" << state->slot
+                     << "with interval of" << state->interval << "at frame" << state->currentFrame;
 
             if (state->currentFrame < state->frames) {
+                kDebug () << "not the final frame";
                 //TODO: calculate a proper interval based on the curve
                 state->currentInterval = state->interval;
                 animationsRemain = true;
