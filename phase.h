@@ -92,12 +92,14 @@ public:
      * @arg duration the length, in milliseconds, the animation will take
      * @arg curve the curve applied to the frame rate
      * @arg receive the object that will handle the actual animation
-     * @arg slot the slot to be invoked on each update
+     * @arg method the method name of slot to be invoked on each update.
+     *             It must take a qreal. So if the slot is animate(qreal),
+     *             pass in "animate" as the method parameter.
      *
      * @return an id that can be used to identify this animation.
      */
     Q_INVOKABLE AnimId customAnimation(int frames, int duration, Phase::CurveShape curve,
-                                       QObject* receiver, const char* slot);
+                                       QObject* receiver, const char* method);
 
     /**
      * Stops a custom animation. Note that it is not necessary to call
