@@ -79,6 +79,8 @@ void AppletBrowser::init()
     d->appletList = new KCategorizedItemsView(this);
     setMainWidget(d->appletList);
 
+    setWindowTitle("Add Applets");
+
     setButtons(KDialog::Apply | KDialog::Close | KDialog::User1);
     setButtonText(KDialog::Apply, i18n("Add Applet"));
     setButtonText(KDialog::User1, i18n("Get New Applets")); //TODO: not overly happy with this text
@@ -151,10 +153,12 @@ void AppletBrowser::addApplet()
         kDebug() << "Adding applet " << selectedItem->name();
         if (d->corona) {
             kDebug() << " to corona\n";
-            d->corona->addApplet(selectedItem->pluginName());
+            d->corona->addApplet(selectedItem->pluginName(),
+                    selectedItem->arguments());
         } else if (d->containment) {
-            kDebug() << " to conatainment\n";
-            d->containment->addApplet(selectedItem->pluginName());
+            kDebug() << " to containment\n";
+            d->containment->addApplet(selectedItem->pluginName(),
+                    selectedItem->arguments());
         }
 
     }

@@ -37,7 +37,6 @@ set(plasma_LIB_SRCS
     shadowitem.cpp
     svg.cpp
     theme.cpp
-    karambamanager.cpp
     uiloader.cpp
     widgets/boxlayout.cpp
     widgets/borderlayout.cpp

@@ -36,7 +36,6 @@
 
 #include "containment.h"
 #include "dataengine.h"
-#include "karambamanager.h"
 #include "phase.h"
 #include "widgets/freelayout.h"
 #include "widgets/boxlayout.h"
@@ -299,19 +298,6 @@ Applet* Corona::addApplet(const QString& name, const QVariantList& args, uint id
     }
 
     return d->containments[0]->addApplet(name, args, id, geometry);
-}
-
-void Corona::addKaramba(const KUrl& path)
-{
-    //FIXME: i think this is slightly broken now that we have containments?
-    //       it should go into a containment...
-    QGraphicsItemGroup* karamba = KarambaManager::loadKaramba(path, this);
-    if (karamba) {
-        addItem(karamba);
-        Phase::self()->animateItem(karamba, Phase::Appear);
-    } else {
-        kDebug() << "Karamba " << path << " could not be loaded.";
-    }
 }
 
 void Corona::dragEnterEvent( QGraphicsSceneDragDropEvent *event)

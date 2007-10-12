@@ -146,13 +146,6 @@ public Q_SLOTS:
     QList<Containment*> containments() const;
 
     /**
-     * Adds a SuperKaramba theme to the scene
-     *
-     * @param path the path to the theme file
-     */
-    void addKaramba(const KUrl& path);
-
-    /**
      * Sets if the applets are Immutable
      */
     void setImmutable(bool immutable_);

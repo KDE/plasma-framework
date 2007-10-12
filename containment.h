@@ -196,11 +196,6 @@ class PLASMA_EXPORT Containment : public Applet
         void saveConstraints(KConfigGroup* group) const;
 
         /**
-         * Adds a Superkaramba theme to this Containment
-         */
-        void addKaramba(const KUrl& path);
-
-        /**
          * @internal
          */
         void initConstraints(KConfigGroup* group);

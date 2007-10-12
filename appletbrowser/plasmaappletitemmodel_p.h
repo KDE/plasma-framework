@@ -41,7 +41,7 @@ public:
 
     Q_DECLARE_FLAGS(FilterFlags, FilterFlag)
 
-    PlasmaAppletItem(PlasmaAppletItemModel * model, const KPluginInfo& info,
+    PlasmaAppletItem(PlasmaAppletItemModel * model, const QMap<QString, QVariant>& info,
             FilterFlags flags = NoFilter, QMap<QString, QVariant> * extraAttrs = NULL);
 
     virtual QString name() const;
@@ -50,6 +50,8 @@ public:
     virtual void setFavorite(bool favorite);
     virtual bool passesFiltering(
             const KCategorizedItemsViewModels::Filter & filter) const;
+    virtual QVariantList arguments() const;
+
 private:
     PlasmaAppletItemModel * m_model;
 };
@@ -68,8 +70,10 @@ public:
 
 private:
     QStringList m_favorites;
+    QStringList m_used;
     KConfigGroup m_configGroup;
-    
+
+    void loadSuperKarambaThemes(const KPluginInfo &info);
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(PlasmaAppletItem::FilterFlags)

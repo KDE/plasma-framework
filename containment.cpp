@@ -36,7 +36,6 @@
 #include <KServiceTypeTrader>
 
 #include "corona.h"
-#include "karambamanager.h"
 #include "phase.h"
 #include "svg.h"
 
@@ -210,18 +209,6 @@ void Containment::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
     }
 
     QPointF point = event->scenePos();
-    /*
-    * example for displaying the SuperKaramba context menu
-    QGraphicsItem *item = itemAt(point);
-    if(item) {
-    QObject *object = dynamic_cast<QObject*>(item->parentItem());
-    if(object && object->objectName().startsWith("karamba")) {
-    QContextMenuEvent event(QContextMenuEvent::Mouse, point);
-    contextMenuEvent(&event);
-    return;
-}
-}
-    */
     QGraphicsItem* item = scene()->itemAt(point);
     if (item == this) {
         item = 0;
@@ -423,17 +410,6 @@ Applet* Containment::addApplet(const QString& name, const QVariantList& args, ui
     Phase::self()->animateItem(applet, Phase::Appear);
 
     return applet;
-}
-
-void Containment::addKaramba(const KUrl& path)
-{
-    QGraphicsItemGroup* karamba = KarambaManager::loadKaramba(path, scene());
-    if (karamba) {
-        karamba->setParentItem(this);
-        Phase::self()->animateItem(karamba, Phase::Appear);
-    } else {
-        kDebug() << "Karamba " << path << " could not be loaded.";
-    }
 }
 
 void Containment::appletDestroyed(QObject* object)
