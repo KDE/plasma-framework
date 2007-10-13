@@ -25,7 +25,7 @@
 namespace Plasma
 {
 NodeLayout::NodeCoordinate::NodeCoordinate(qreal xRelative, qreal yRelative, qreal xAbsolute, qreal yAbsolute)
-    : xr(xRelative), xa(xAbsolute), yr(yRelative), ya(yAbsolute) {};
+    : xr(xRelative), xa(xAbsolute), yr(yRelative), ya(yAbsolute) {}
 
 NodeLayout::NodeCoordinate NodeLayout::NodeCoordinate::simple(qreal x, qreal y,
         CoordinateType xType, CoordinateType yType)
