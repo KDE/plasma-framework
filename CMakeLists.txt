@@ -42,6 +42,7 @@ set(plasma_LIB_SRCS
     widgets/borderlayout.cpp
     widgets/checkbox.cpp
     widgets/freelayout.cpp
+    widgets/nodelayout.cpp
     widgets/flowlayout.cpp
     widgets/flash.cpp
     widgets/icon.cpp
@@ -122,6 +123,7 @@ install(FILES
 install(FILES
     widgets/boxlayout.h
     widgets/borderlayout.h
+    widgets/nodelayout.h
     widgets/hboxlayout.h
     widgets/vboxlayout.h
     widgets/freelayout.h
