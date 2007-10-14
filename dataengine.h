@@ -81,7 +81,7 @@ class PLASMA_EXPORT DataEngine : public QObject
          * Connects a source to an object for data updates. The object must
          * have a slot with the following signature:
          *
-         * updated(QString sourceName, Plasma::DataEngine::Data data)
+         * updated(const QString &sourceName, const Plasma::DataEngine::Data &data)
          *
          * The data is a QHash of QVariants keyed by QString names, allowing
          * one data source to provide sets of related data.
