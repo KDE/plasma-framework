@@ -194,12 +194,14 @@ void NodeLayout::addItem (LayoutItem * item)
 
 void NodeLayout::addItem (LayoutItem * item, NodeCoordinate topLeft, NodeCoordinate bottomRight)
 {
+    if (!item) return;
     d->items[item] = QPair<NodeCoordinate, NodeCoordinate>(topLeft, bottomRight);
     d->calculateSizeHint(item);
 }
 
 void NodeLayout::addItem (LayoutItem * item, NodeCoordinate node, qreal xr, qreal yr)
 {
+    if (!item) return;
     d->items[item] = QPair<NodeCoordinate, NodeCoordinate>(node,
         NodeCoordinate::simple(xr, yr, NodeCoordinate::InnerRelative, NodeCoordinate::InnerRelative));
     d->calculateSizeHint(item);
@@ -207,6 +209,7 @@ void NodeLayout::addItem (LayoutItem * item, NodeCoordinate node, qreal xr, qrea
 
 void NodeLayout::removeItem (LayoutItem * item)
 {
+    if (!item) return;
     d->items.remove(item);
     d->calculateSizeHint();
 }
@@ -218,6 +221,7 @@ int NodeLayout::count() const
 
 int NodeLayout::indexOf(LayoutItem * item) const
 {
+    if (!item) return -1;
     return d->items.keys().indexOf(item);
 }
 
