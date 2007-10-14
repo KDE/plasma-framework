@@ -1,2 +1,2 @@
 #! /usr/bin/env bash
-$XGETTEXT *.cpp *.h -o $podir/libplasma.pot
+$XGETTEXT *.cpp *.h */*.h */*.cpp -o $podir/libplasma.pot
