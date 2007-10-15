@@ -123,7 +123,7 @@ void AppletBrowser::init()
     // Filters: Special
     d->filterModel.addFilter(i18n("Favorites"),
         KCategorizedItemsViewModels::Filter("favorite", true), new KIcon("bookmark"));
-    d->filterModel.addFilter(i18n("Used in past"),
+    d->filterModel.addFilter(i18n("Used in Past"),
         KCategorizedItemsViewModels::Filter("used", true), new KIcon("history"));
 
     d->filterModel.addSeparator(i18n("Categories:"));
