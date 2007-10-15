@@ -107,13 +107,11 @@ void Flash::setDuration( int duration )
 
 QSizeF Flash::minimumSize() const
 {
-    kDebug() << QSize(d->width,d->height) << endl;
     return QSize(d->width,d->height);
 }
 
 QSizeF Flash::maximumSize() const
 {
-    kDebug() << QSize(d->width,d->height) << endl;
     return QSize(d->width,d->height);
 }
 
