@@ -1,5 +1,5 @@
 /*
- *   Copyright 2007 by André Duffeck <andre@duffeck.de>
+ *   Copyright 2007 by André Duffeck <duffeck@kde.org>
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU Library General Public License as
@@ -86,16 +86,6 @@ QRectF Flash::boundingRect() const
     return QRectF(0,0,d->width,d->height);
 }
 
-int Flash::height() const
-{
-    return d->height;
-}
-
-int Flash::width() const
-{
-    return d->width;
-}
-
 void Flash::setHeight(int h)
 {
     prepareGeometryChange ();
@@ -115,8 +105,15 @@ void Flash::setDuration( int duration )
     d->defaultDuration = duration;
 }
 
-QSize Flash::size() const
+QSizeF Flash::minimumSize() const
 {
+    kDebug() << QSize(d->width,d->height) << endl;
+    return QSize(d->width,d->height);
+}
+
+QSizeF Flash::maximumSize() const
+{
+    kDebug() << QSize(d->width,d->height) << endl;
     return QSize(d->width,d->height);
 }
 
@@ -126,6 +123,11 @@ void Flash::setSize(const QSize &s)
     d->width = s.width();
     d->height = s.height();
     update();
+}
+
+QSizeF Flash::sizeHint() const
+{
+    return minimumSize();
 }
 
 void Flash::setColor( const QColor &color )
@@ -184,14 +186,14 @@ void Flash::fadeOut()
 
 QPixmap Flash::renderPixmap()
 {
-    QPixmap pm( width(), height() );
+    QPixmap pm( size().toSize() );
     pm.fill(Qt::transparent);
 
     QPainter painter( &pm );
     if( d->type == Private::Text ) {
         painter.setPen( d->color );
         painter.setFont( d->font );
-        painter.drawText( QRect( 0, 0, width(), height() ), d->text, d->textOption);
+        painter.drawText( QRect( QPoint(0, 0), size().toSize() ), d->text, d->textOption);
     } else if( d->type == Private::Pixmap ) {
         QPoint p;
         if( d->alignment & Qt::AlignLeft )

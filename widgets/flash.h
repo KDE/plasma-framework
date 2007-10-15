@@ -1,5 +1,5 @@
 /*
- *   Copyright 2007 by André Duffeck <andre@duffeck.de>
+ *   Copyright 2007 by André Duffeck <duffeck@kde.org>
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU Library General Public License as
@@ -43,9 +43,9 @@ class PLASMA_EXPORT Flash : public Plasma::Widget
 
         void paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
         QRectF boundingRect() const;
-        QSize size() const;
-        int height() const;
-        int width() const;
+        QSizeF minimumSize() const;
+        QSizeF maximumSize() const;
+        virtual QSizeF sizeHint() const;
         void setSize(const QSize &size);
         void setWidth(int width);
         void setHeight(int height);
