@@ -74,6 +74,8 @@ Flash::Flash(QGraphicsItem *parent)
     d->width = 100 ;
     d->animId = 0;
     d->state = Private::Invisible;
+
+    setCachePaintMode( NoCacheMode );
 }
 
 Flash::~Flash()
@@ -140,8 +142,9 @@ void Flash::setFont( const QFont &font )
 
 void Flash::flash( const QString &text, int duration, const QTextOption &option)
 {
+    kDebug() << duration << endl;
     d->type = Private::Text;
-    d->duration = (duration == 0) ? duration : d->defaultDuration;
+    d->duration = (duration == 0) ? d->defaultDuration : duration;
     d->text = text;
     d->textOption = option;
     QTimer::singleShot( 0, this, SLOT(fadeIn()) );
@@ -150,7 +153,7 @@ void Flash::flash( const QString &text, int duration, const QTextOption &option)
 void Flash::flash( const QPixmap &pixmap, int duration, Qt::Alignment align )
 {
     d->type = Private::Pixmap;
-    d->duration = (duration == 0) ? duration : d->defaultDuration;
+    d->duration = (duration == 0) ? d->defaultDuration : duration;
     d->pixmap = pixmap;
     d->alignment = align;
     QTimer::singleShot( 0, this, SLOT(fadeIn()) );
@@ -212,7 +215,6 @@ QPixmap Flash::renderPixmap()
     }
     return pm;
 }
-
 void Flash::paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     Q_UNUSED(option)
