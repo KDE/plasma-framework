@@ -92,7 +92,7 @@ void AppletBrowser::init()
     QAction* quit = KStandardAction::quit(qApp, SLOT(quit()), this);
     addAction(quit);
 
-    d->filterModel.addFilter(i18n("All applets"),
+    d->filterModel.addFilter(i18n("All Applets"),
         KCategorizedItemsViewModels::Filter(), new KIcon("application-x-plasma"));
     
     // Recommended emblems and filters
@@ -117,7 +117,7 @@ void AppletBrowser::init()
     }
 
     // Other Emblems
-    d->appletList->addEmblem(i18n("Used in past"), new KIcon("history"), 
+    d->appletList->addEmblem(i18n("Used in Past"), new KIcon("history"), 
                                 KCategorizedItemsViewModels::Filter("used", true));
 
     // Filters: Special
