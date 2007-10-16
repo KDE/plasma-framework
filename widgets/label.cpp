@@ -49,7 +49,7 @@ QSizeF Label::sizeHint() const
 {
     QFontMetricsF m(QFont("Arial", 12));
 
-    return m.boundingRect(d->text).size();
+    return m.boundingRect(QRectF(0,0,9999,9999), d->alignment | Qt::TextWordWrap, d->text).size();
 }
 
 void Label::setText(const QString& text)
