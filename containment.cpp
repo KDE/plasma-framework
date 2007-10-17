@@ -102,6 +102,7 @@ void Containment::init()
 {
 //    setCachePaintMode(NoCacheMode);
     setFlag(QGraphicsItem::ItemIsMovable, false);
+    setFlag(QGraphicsItem::ItemClipsChildrenToShape, false);
     setAcceptDrops(true);
 
     if (type() == DesktopContainment) {
