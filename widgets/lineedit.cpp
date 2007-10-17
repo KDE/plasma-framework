@@ -186,7 +186,6 @@ void LineEdit::setGeometry(const QRectF& geometry)
 
 QSizeF LineEdit::sizeHint() const
 {
-    kDebug() << "LineEdit::sizeeHint() " << document()->size();
     return document()->size();
 }
 
