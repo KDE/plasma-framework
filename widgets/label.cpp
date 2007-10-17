@@ -14,6 +14,7 @@ class Label::Private
         QString text;
         Qt::Alignment alignment;
         QPen textPen;
+        QFont textFont;
 };
 
 Label::Label(Widget *parent)
@@ -47,7 +48,7 @@ qreal Label::heightForWidth(qreal w) const
 
 QSizeF Label::sizeHint() const
 {
-    QFontMetricsF m(QFont("Arial", 12));
+    QFontMetricsF m(d->textFont);
 
     return m.boundingRect(QRectF(0,0,9999,9999), d->alignment | Qt::TextWordWrap, d->text).size();
 }
@@ -82,12 +83,23 @@ QPen Label::pen() const
     return d->textPen;
 }
 
+void Label::setFont(const QFont& font)
+{
+    d->textFont = font;
+}
+
+QFont Label::font() const
+{
+    return d->textFont;
+}
+
 void Label::paintWidget(QPainter *p, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     Q_UNUSED(option);
     Q_UNUSED(widget);
 
     p->setPen(d->textPen);
+    p->setFont(d->textFont);
     p->drawText(option->rect, d->alignment | Qt::TextWordWrap, d->text);
 }
 

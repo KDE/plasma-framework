@@ -24,6 +24,7 @@
 
 #include <plasma/widgets/widget.h>
 #include <QtGui/QPen>
+#include <QtGui/QFont>
 
 class QGraphicsTextItem;
 
@@ -105,6 +106,16 @@ class PLASMA_EXPORT Label : public Plasma::Widget
          * Returns the pen used to paint the text.
          */
         QPen pen() const;
+
+        /**
+         * Sets the font used for the text.
+         */
+        void setFont(const QFont& font);
+
+        /**
+         * Returns the font used for the text.
+         */
+        QFont font() const;
 
         /**
          * Paint function.
