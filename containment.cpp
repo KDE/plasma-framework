@@ -283,7 +283,7 @@ void Containment::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
     }
 
     event->accept();
-    desktopMenu.exec(point.toPoint());
+    desktopMenu.exec(event->screenPos());
 }
 
 void Containment::setFormFactor(FormFactor formFactor)
