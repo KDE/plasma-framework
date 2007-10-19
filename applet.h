@@ -102,7 +102,7 @@ class PLASMA_EXPORT Applet : public Widget
          * This method is called once the applet is loaded and added to a Corona.
          * If the applet requires a QGraphicsScene or has an particularly intensive
          * set of initialization routines to go through, consider implementing it
-         * in this method instead of the contsructor.
+         * in this method instead of the constructor.
          **/
         virtual void init();
 
@@ -277,15 +277,6 @@ class PLASMA_EXPORT Applet : public Widget
          * @return true if this plasmoid provides a GUI configuration
          **/
         bool hasConfigurationInterface();
-
-        /**
-         * Reimplement this slot to show a configuration dialog.
-         *
-         * Let the user play with the plasmoid options.
-         * Called when the user selects the configure entry
-         * from the context menu.
-         */
-        virtual void showConfigurationInterface();
 
         /**
          * Attempts to load an applet
@@ -506,6 +497,15 @@ class PLASMA_EXPORT Applet : public Widget
          * Destroys the applet; it will be deleted and configurations reset.
          */
         void destroy();
+
+        /**
+         * Reimplement this slot to show a configuration dialog.
+         *
+         * Let the user play with the plasmoid options.
+         * Called when the user selects the configure entry
+         * from the context menu.
+         */
+        virtual void showConfigurationInterface();
 
     protected:
         /**
