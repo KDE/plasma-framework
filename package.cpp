@@ -295,7 +295,7 @@ bool Package::createPackage(const PackageMetadata & metadata,
         creation.addLocalFile(metadata.preview(), "preview.png");
     }
 
-    creation.addLocalDirectory(source, "contents/");
+    creation.addLocalDirectory(source, "contents");
     creation.close();
     return true;
 }
