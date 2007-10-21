@@ -223,12 +223,10 @@ void Corona::loadDefaultSetup()
     Containment* panel = addContainment("panel", (QVariantList() << (int)Plasma::BottomEdge));
 
     // some default applets to get a usable UI
-    QList<Plasma::Applet*> applets;
+    Plasma::Applet *launcher = panel->addApplet("launcher");
     Plasma::Applet *tasksApplet = panel->addApplet("tasks");
     Plasma::Applet *systemTrayApplet = panel->addApplet("systemtray");
     Plasma::Applet *clockApplet = panel->addApplet("digital-clock");
-
-    applets << tasksApplet << systemTrayApplet << clockApplet;
 }
 
 Containment* Corona::containmentForScreen(int screen) const
