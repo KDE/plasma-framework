@@ -27,7 +27,8 @@
 
 KCategorizedItemsView::KCategorizedItemsView(QWidget * parent, Qt::WindowFlags f)
         : QWidget(parent, f), m_modelCategories(NULL), m_modelFilters(NULL),
-        m_modelItems(NULL), m_modelFilterItems(NULL), m_delegate(NULL)
+        m_modelItems(NULL), m_modelFilterItems(NULL), m_delegate(NULL),
+        m_viewWidth(0)
 {
     setupUi(this);
     itemsView->m_view = this;
