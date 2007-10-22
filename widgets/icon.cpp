@@ -939,16 +939,16 @@ void Icon::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
                 break;
             }
         }
+    } else {
+        d->state = Private::NoState;
     }
-    else if (was == Private::PressedState) {
+
+    if (was == Private::PressedState) {
         emit pressed(false);
 
         if (inside) {
             emit clicked();
         }
-        d->state = Private::NoState;
-    }
-    else {
         d->state = Private::NoState;
     }
 
