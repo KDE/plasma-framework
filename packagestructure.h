@@ -75,22 +75,22 @@ public:
     /**
      * The directories defined for this package
      **/
-    QStringList directories();
+    QList<const char*> directories();
 
     /**
      * The required directories defined for this package
      **/
-    QStringList requiredDirectories();
+    QList<const char*> requiredDirectories();
 
     /**
-     * The individual files defined for this package
+     * The individual files, by key, that are defined for this package
      **/
-    QStringList files();
+    QList<const char*> files();
 
     /**
-     * The individual required files defined for this package
+     * The individual required files, by key, that are defined for this package
      **/
-    QStringList requiredFiles();
+    QList<const char*> requiredFiles();
 
     /**
      * Adds a directory to the structure of the package. It is added as
