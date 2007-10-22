@@ -44,7 +44,7 @@ PlasmoidStructure::PlasmoidStructure()
     mimetypes << "text/*";
     setMimetypes("scripts", mimetypes);
 
-    addFileDefinition("mainconfigui", "config/ui/main.ui", i18n("Main Config UI File"));
+    addFileDefinition("mainconfiggui", "config/ui/main.ui", i18n("Main Config UI File"));
     addFileDefinition("mainconfigxml", "config/xml/main.xml", i18n("Configuration XML file"));
     addFileDefinition("mainscript", "code/main", i18n("Main Script File"));
     setRequired("mainscript", true);

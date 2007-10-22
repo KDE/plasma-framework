@@ -28,13 +28,13 @@ namespace Plasma
 class PlasmoidStructure : public PackageStructure
 {
 public:
-    PlasmoidStructure();
+    explicit PlasmoidStructure();
 };
 
 class ThemePackageStructure : public PackageStructure
 {
 public:
-    ThemePackageStructure();
+    explicit ThemePackageStructure();
 };
 
 } // namespace Plasma
