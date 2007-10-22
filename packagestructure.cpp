@@ -89,54 +89,53 @@ QString PackageStructure::type()
     return d->type;
 }
 
-QStringList PackageStructure::directories()
+QList<const char*> PackageStructure::directories()
 {
-    QStringList dirs;
+    QList<const char*> dirs;
     QHash<const char*, ContentStructure>::const_iterator it = d->contents.constBegin();
     while (it != d->contents.constEnd()) {
         if (it.value().directory) {
-            dirs << it.value().path;
+            dirs << it.key();
         }
         ++it;
     }
     return dirs;
 }
 
-QStringList PackageStructure::requiredDirectories()
+QList<const char*> PackageStructure::requiredDirectories()
 {
-    QStringList dirs;
+    QList<const char*> dirs;
     QHash<const char*, ContentStructure>::const_iterator it = d->contents.constBegin();
     while (it != d->contents.constEnd()) {
         if (it.value().directory &&
             it.value().required) {
-            dirs << it.value().path;
+            dirs << it.key();
         }
         ++it;
     }
     return dirs;
 }
 
-QStringList PackageStructure::files()
+QList<const char*> PackageStructure::files()
 {
-    QStringList files;
+    QList<const char*> files;
     QHash<const char*, ContentStructure>::const_iterator it = d->contents.constBegin();
     while (it != d->contents.constEnd()) {
-        if (!it.value().directory &&
-            it.value().required) {
-            files << it.value().path;
+        if (!it.value().directory) {
+            files << it.key();
         }
         ++it;
     }
     return files;
 }
 
-QStringList PackageStructure::requiredFiles()
+QList<const char*> PackageStructure::requiredFiles()
 {
-    QStringList files;
+    QList<const char*> files;
     QHash<const char*, ContentStructure>::const_iterator it = d->contents.constBegin();
     while (it != d->contents.constEnd()) {
-        if (!it.value().directory) {
-            files << it.value().path;
+        if (!it.value().directory && it.value().required) {
+            files << it.key();
         }
         ++it;
     }
