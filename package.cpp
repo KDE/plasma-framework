@@ -74,15 +74,15 @@ bool Package::isValid() const
         return false;
     }
 
-    foreach (const QString& dir, d->structure.requiredDirectories()) {
-        if (QFile::exists(d->basePath + '/' + dir)) {
+    foreach (const char *dir, d->structure.requiredDirectories()) {
+        if (QFile::exists(d->basePath + '/' + d->structure.path(dir))) {
             d->valid = false;
             return false;
         }
     }
 
-    foreach (const QString& file, d->structure.requiredFiles()) {
-        if (QFile::exists(d->basePath + '/' + file)) {
+    foreach (const char *file, d->structure.requiredFiles()) {
+        if (QFile::exists(d->basePath + '/' + d->structure.path(file))) {
             d->valid = false;
             return false;
         }
