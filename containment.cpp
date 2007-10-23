@@ -45,6 +45,8 @@
 namespace Plasma
 {
 
+static const int INTER_CONTAINMENT_MARGIN = 6;
+
 class Containment::Private
 {
 public:
@@ -121,7 +123,10 @@ void Containment::init()
         //kDebug() << "we are a panel, let's move ourselves to a negative coordinate system";
         QDesktopWidget desktop;
         QRect r = desktop.screenGeometry(screen());
-        translate(0, -r.height());
+        //FIXME PANELS: multiple panel support means having to move the panels up
+        //              this requires a proper panel manager, discuss in the panel
+        //              irc meeting
+        translate(0, -r.height() - INTER_CONTAINMENT_MARGIN);
     }
 }
 
