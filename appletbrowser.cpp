@@ -50,14 +50,12 @@ public:
     Plasma::Corona *corona;
     Plasma::Containment *containment;
     KCategorizedItemsView *appletList;
-    
+
     KConfig config;
     KConfigGroup configGroup;
 
     PlasmaAppletItemModel itemModel;
     KCategorizedItemsViewModels::DefaultFilterModel filterModel;
-    
-
 };
 
 AppletBrowser::AppletBrowser(Plasma::Corona * corona, QWidget * parent, Qt::WindowFlags f)
@@ -77,6 +75,7 @@ AppletBrowser::AppletBrowser(Plasma::Containment * containment, QWidget * parent
 void AppletBrowser::init()
 {
     d->appletList = new KCategorizedItemsView(this);
+    connect(d->appletList, SIGNAL(activated(const QModelIndex &)), this, SLOT(addApplet()));
     setMainWidget(d->appletList);
 
     setWindowTitle("Add Applets");
@@ -94,25 +93,25 @@ void AppletBrowser::init()
 
     d->filterModel.addFilter(i18n("All Applets"),
         KCategorizedItemsViewModels::Filter(), new KIcon("application-x-plasma"));
-    
+
     // Recommended emblems and filters
     QRegExp rx("recommended[.]([0-9A-Za-z]+)[.]caption");
     QMapIterator<QString, QString> i(d->configGroup.entryMap());
     while (i.hasNext()) {
         i.next();
         if (!rx.exactMatch(i.key())) continue;
-        kDebug() << "These are the key/vals in rc file " << rx.cap(1) << "\n";
-        
+        //kDebug() << "These are the key/vals in rc file " << rx.cap(1) << "\n";
+
         QString id = rx.cap(1);
         QString caption = d->configGroup.readEntry("recommended." + id + ".caption");
         QString icon    = d->configGroup.readEntry("recommended." + id + ".icon");
         QString plugins = d->configGroup.readEntry("recommended." + id + ".plugins");
-        
+
         d->appletList->addEmblem(i18n("Recommended by %1", caption), new KIcon(icon), 
             KCategorizedItemsViewModels::Filter("recommended." + id, true));
         d->filterModel.addFilter(i18n("Recommended by %1", caption),
             KCategorizedItemsViewModels::Filter("recommended." + id, true), new KIcon(icon));
-        
+
         //foreach (QString plugin, plugins.split(",")) {}
     }
 

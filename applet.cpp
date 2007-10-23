@@ -268,6 +268,9 @@ public:
                 p.drawTiledPixmap(QRect(contentLeft, bottomOffset, contentWidth, bottomHeight), bottom);
             }
 
+            // re-enable this once Qt's svg rendering is un-buggered
+            //background->resize(contentWidth, contentHeight);
+            //background->paint(&p, QRect(contentLeft, contentTop, contentWidth, contentHeight), "center");
         }
 
         p2->drawPixmap(leftOffset, topOffset, *cachedBackground);
