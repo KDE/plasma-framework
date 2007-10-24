@@ -915,18 +915,21 @@ bool Icon::isDown()
 
 void Icon::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
+    kDebug();
     foreach (IconAction *action, d->cornerActions) {
         action->event(event->type(), event->pos());
     }
 
     d->state = Private::PressedState;
+    emit pressed(true);
 
-    QGraphicsItem::mousePressEvent(event);
+    event->ignore();
     update();
 }
 
 void Icon::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
+    kDebug();
     bool inside = boundingRect().contains(event->pos());
     Private::ButtonState was = d->state;
 
@@ -952,7 +955,7 @@ void Icon::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
         d->state = Private::NoState;
     }
 
-    QGraphicsItem::mouseReleaseEvent(event);
+    event->ignore();
     update();
 }
 
@@ -964,7 +967,7 @@ void Icon::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
     }
 
     d->state = Private::HoverState;
-    QGraphicsItem::hoverEnterEvent(event);
+    Widget::hoverEnterEvent(event);
 }
 
 void Icon::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
@@ -975,7 +978,7 @@ void Icon::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
     }
 
     d->state = Private::NoState;
-    QGraphicsItem::hoverLeaveEvent(event);
+    Widget::hoverLeaveEvent(event);
 }
 
 void Icon::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
@@ -984,7 +987,7 @@ void Icon::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
         d->state = Private::HoverState;
     }
 
-    QGraphicsItem::mouseMoveEvent(event);
+    Widget::mouseMoveEvent(event);
 }
 
 QSizeF Icon::sizeHint() const
