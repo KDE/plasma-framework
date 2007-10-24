@@ -427,8 +427,7 @@ void Applet::saveState(KConfigGroup* group) const
 KConfigGroup Applet::config(const QString& group) const
 {
     KConfigGroup cg = config();
-    cg.changeGroup(instanceName() + '-' + group);
-    return cg;
+    return KConfigGroup(cg.config(), instanceName() + '-' + group);
 }
 
 KConfigGroup Applet::globalConfig() const
