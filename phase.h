@@ -116,7 +116,7 @@ public:
     Q_INVOKABLE QPixmap animationResult(AnimId id);
 
 Q_SIGNALS:
-    void animationComplete(QGraphicsItem *item, Animation anim);
+    void animationComplete(QGraphicsItem *item, Plasma::Phase::Animation anim);
     void movementComplete(QGraphicsItem *item);
 
 protected:
