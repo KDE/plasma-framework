@@ -115,6 +115,7 @@ void LayoutItem::setManagingLayout(Layout* layout)
     }
 
     d->managingLayout = layout;
+    managingLayoutChanged();
 }
 
 void LayoutItem::unsetManagingLayout(Layout* layout)
@@ -122,6 +123,11 @@ void LayoutItem::unsetManagingLayout(Layout* layout)
     if (d->managingLayout == layout) {
         d->managingLayout = 0;
     }
+    managingLayoutChanged();
+}
+
+void LayoutItem::managingLayoutChanged()
+{
 }
 
 Layout* LayoutItem::managingLayout() const

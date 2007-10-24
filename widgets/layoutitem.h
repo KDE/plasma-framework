@@ -149,6 +149,12 @@ class PLASMA_EXPORT LayoutItem
          */
         virtual QGraphicsItem* graphicsItem();
 
+    protected:
+        /**
+         * Reimplement to respond to a change in managing layout
+         */
+        virtual void managingLayoutChanged();
+
     private:
         class Private;
         Private *const d;

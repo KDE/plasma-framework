@@ -34,7 +34,7 @@
 
 #include <KDebug>
 
-#include "layout.h"
+#include "freelayout.h"
 #include "plasma/plasma.h"
 
 namespace Plasma
@@ -44,12 +44,13 @@ class Widget::Private
 {
     public:
         Private()
-            : minimumSize(0,0)
-            , maximumSize(std::numeric_limits<qreal>::infinity(),
-                          std::numeric_limits<qreal>::infinity())
-            , parent(0)
-            , opacity(1.0)
-            , cachePaintMode(Widget::NoCacheMode)
+            : minimumSize(0,0),
+              maximumSize(std::numeric_limits<qreal>::infinity(),
+                          std::numeric_limits<qreal>::infinity()),
+              parent(0),
+              opacity(1.0),
+              cachePaintMode(Widget::NoCacheMode),
+              wasMovable(false)
         { }
         ~Private() { }
 
@@ -70,6 +71,8 @@ class Widget::Private
         QSize cacheSize;
         QString cacheKey;
         QRectF cacheInvalidated;
+
+        bool wasMovable;
 
         bool shouldPaint(QPainter *painter, const QTransform &transform);
 };
@@ -292,7 +295,7 @@ void Widget::addChild(Widget *w)
     w->reparent(this);
     d->childList.append(w);
 
-    qDebug("Added Child Widget : %p", (void*)w);
+    //kDebug() << "Added Child Widget" <<  w;
 
     if (layout()) {
         layout()->addItem(w);
@@ -431,6 +434,18 @@ void Widget::reparent(Widget *w)
     d->parent = w;
     setParentItem(w);
     update();
+}
+
+void Widget::managingLayoutChanged()
+{
+    if (managingLayout()) {
+        d->wasMovable = flags() & ItemIsMovable;
+        if (!dynamic_cast<FreeLayout*>(managingLayout())) {
+            setFlag(ItemIsMovable, false);
+        }
+    } else {
+        setFlag(ItemIsMovable, d->wasMovable);
+    }
 }
 
 } // Plasma namespace
