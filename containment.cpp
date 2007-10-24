@@ -128,6 +128,10 @@ void Containment::init()
         //              irc meeting
         translate(0, -r.height() - INTER_CONTAINMENT_MARGIN);
     }
+
+    //TODO: would be nice to not do this on init, as it causes Phase to init
+    connect(Phase::self(), SIGNAL(animationComplete(QGraphicsItem*,Plasma::Phase::Animation)),
+            this, SLOT(appletDisappearComplete(QGraphicsItem*,Plasma::Phase::Animation)));
 }
 
 void Containment::initConstraints(KConfigGroup* group)
@@ -266,8 +270,11 @@ void Containment::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
 
         if (scene() && !static_cast<Corona*>(scene())->isImmutable()) {
             QAction* closeApplet = new QAction(i18n("Remove this %1", applet->name()), &desktopMenu);
+            QVariant appletV;
+            appletV.setValue((QObject*)applet);
+            closeApplet->setData(appletV);
             connect(closeApplet, SIGNAL(triggered(bool)),
-                    applet, SLOT(destroy()));
+                    this, SLOT(destroyApplet()));
             desktopMenu.addAction(closeApplet);
             hasEntries = true;
         }
@@ -429,6 +436,31 @@ void Containment::appletDestroyed(QObject* object)
 
     if (index > -1) {
         d->applets.removeAt(index);
+    }
+}
+
+void Containment::destroyApplet()
+{
+    QAction *action = qobject_cast<QAction*>(sender());
+
+    if (!action) {
+        return;
+    }
+
+    Applet *applet = qobject_cast<Applet*>(action->data().value<QObject*>());
+    Phase::self()->animateItem(applet, Phase::Disappear);
+}
+
+void Containment::appletDisappearComplete(QGraphicsItem *item, Plasma::Phase::Animation anim)
+{
+    if (anim == Phase::Disappear) {
+        if (item->parentItem() == this) {
+            Applet *applet = qgraphicsitem_cast<Applet*>(item);
+
+            if (applet) {
+                applet->destroy();
+            }
+        }
     }
 }
 

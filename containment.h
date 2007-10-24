@@ -28,6 +28,7 @@
 #include <kgenericfactory.h>
 
 #include <plasma/applet.h>
+#include <plasma/phase.h>
 
 namespace Plasma
 {
@@ -230,6 +231,8 @@ class PLASMA_EXPORT Containment : public Applet
          * @internal
          */
         void appletDestroyed(QObject*);
+        void destroyApplet();
+        void appletDisappearComplete(QGraphicsItem *item, Plasma::Phase::Animation anim);
         void dropEvent(QGraphicsSceneDragDropEvent* event);
 
     private:
