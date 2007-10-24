@@ -104,25 +104,29 @@ PlasmaAppletItemModel::PlasmaAppletItemModel(KConfigGroup configGroup, QObject *
 
     //TODO: get recommended, favorit, used, etc out of knownApplets()
     foreach (const KPluginInfo& info, Plasma::Applet::knownApplets()) {
+        if (info.category() == i18n("Hidden")) {
+            // we don't want to show the hidden category
+            continue;
+        }
         kDebug() << info.pluginName() << " is the name of the plugin\n";
 
-        QMap<QString, QVariant> attrs;
-        attrs.insert("name", info.name());
-        attrs.insert("pluginName", info.pluginName());
-        attrs.insert("description", info.comment());
-        attrs.insert("category", info.category());
-        attrs.insert("icon", static_cast<QIcon>(KIcon(info.icon().isEmpty()?"application-x-plasma":info.icon())));
-
-        appendRow(new PlasmaAppletItem(this, attrs,
-                ((m_favorites.contains(info.pluginName())) ? PlasmaAppletItem::Favorite : PlasmaAppletItem::NoFilter) |
-                ((m_used.contains(info.pluginName())) ? PlasmaAppletItem::Used : PlasmaAppletItem::NoFilter)
-                , &(extraPluginAttrs[info.pluginName()])));
-
-        // If there is the SuperKaramba applet,
-        // add SuperKaramba themes to the
-        // model too
         if (info.pluginName() == "skapplet") {
+            // If there is the SuperKaramba applet,
+            // add SuperKaramba themes to the
+            // model too
             loadSuperKarambaThemes(info);
+        } else {
+            QMap<QString, QVariant> attrs;
+            attrs.insert("name", info.name());
+            attrs.insert("pluginName", info.pluginName());
+            attrs.insert("description", info.comment());
+            attrs.insert("category", info.category());
+            attrs.insert("icon", static_cast<QIcon>(KIcon(info.icon().isEmpty()?"application-x-plasma":info.icon())));
+
+            appendRow(new PlasmaAppletItem(this, attrs,
+                        ((m_favorites.contains(info.pluginName())) ? PlasmaAppletItem::Favorite : PlasmaAppletItem::NoFilter) |
+                        ((m_used.contains(info.pluginName())) ? PlasmaAppletItem::Used : PlasmaAppletItem::NoFilter)
+                        , &(extraPluginAttrs[info.pluginName()])));
         }
     }
 }
