@@ -11,7 +11,6 @@ install(FILES
     widgets/connection-established.svg
     widgets/plot-background.svg
     widgets/iconbutton.svg
-    widgets/wallpaper.svg
     widgets/panel-background.svg
     widgets/analog_meter.svg
     widgets/bar_meter_horizontal.svg
