@@ -476,7 +476,7 @@ void Containment::setScreen(int screen)
         QRect r = desktop.screenGeometry(screen);
 
         if (type() == DesktopContainment) {
-            r.moveLeft(INTER_CONTAINMENT_MARGIN * screen);
+            r.moveRight(INTER_CONTAINMENT_MARGIN * screen);
             setGeometry(r);
             //kDebug() << "setting geometry to" << desktop.screenGeometry(screen) << geometry();
         } else if (type() == PanelContainment) {
