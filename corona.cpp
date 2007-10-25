@@ -152,11 +152,11 @@ void Corona::loadApplets(const QString& configname)
             if (c) {
                 containments.insert(c->id(), c);
                 c->initConstraints(&appletConfig);
-                kDebug() << "Containment" << c->id() << "geometry is" << c->geometry();
+                //kDebug() << "Containment" << c->id() << "geometry is" << c->geometry();
             }
         } else {
             // it's an applet, let's grab the containment association
-            kDebug() << "insert multi" << group;
+            //kDebug() << "insert multi" << group;
             applets.append(appletConfig);
         }
     }
@@ -165,7 +165,7 @@ void Corona::loadApplets(const QString& configname)
     //kDebug() << "number of applets?" << applets.count();
     foreach (KConfigGroup cg, applets) {
         int cid = cg.readEntry("containment", 0);
-        kDebug() << "trying to load applet " << cg.name() << " in containment " << cid;
+        //kDebug() << "trying to load applet " << cg.name() << " in containment " << cid;
 
         Containment* c = containments.value(cid, 0);
 
@@ -174,7 +174,7 @@ void Corona::loadApplets(const QString& configname)
             continue;
         }
 
-        kDebug() << "creating applet " << cg.name() << "in containment" << cid;
+        //kDebug() << "creating applet " << cg.name() << "in containment" << cid;
         int appId = cg.name().left(cg.name().indexOf('-')).toUInt();
         c->addApplet(cg.readEntry("plugin", QString()), QVariantList(),
                      appId, cg.readEntry("geometry", QRectF()), true);
@@ -258,7 +258,7 @@ Containment* Corona::addContainment(const QString& name, const QVariantList& arg
     Containment* containment = 0;
     Applet* applet = 0;
 
-    kDebug() << "Loading" << name << args << id;
+    //kDebug() << "Loading" << name << args << id;
 
     if (pluginName.isEmpty()) {
         // default to the desktop containment
@@ -269,7 +269,7 @@ Containment* Corona::addContainment(const QString& name, const QVariantList& arg
     containment = dynamic_cast<Containment*>(applet);
 
     if (!containment) {
-        kDebug() << "loading failed.";
+        kDebug() << "loading of containment" << name << "failed.";
         delete applet; // in case we got a non-Containment from Applet::loadApplet
         containment = new Containment;
         containment->setFailedToLaunch(false); // we want to provide something and don't care about the failure to launch
