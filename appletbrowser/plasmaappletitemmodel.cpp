@@ -104,11 +104,12 @@ PlasmaAppletItemModel::PlasmaAppletItemModel(KConfigGroup configGroup, QObject *
 
     //TODO: get recommended, favorit, used, etc out of knownApplets()
     foreach (const KPluginInfo& info, Plasma::Applet::knownApplets()) {
-        if (info.category() == i18n("Hidden")) {
+        //kDebug() << info.pluginName() << "NoDisplay" << info.property("NoDisplay").toBool();
+        if (info.property("NoDisplay").toBool()) {
             // we don't want to show the hidden category
             continue;
         }
-        kDebug() << info.pluginName() << " is the name of the plugin\n";
+        //kDebug() << info.pluginName() << " is the name of the plugin\n";
 
         if (info.pluginName() == "skapplet") {
             // If there is the SuperKaramba applet,
