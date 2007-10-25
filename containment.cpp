@@ -34,6 +34,7 @@
 #include <KMimeType>
 #include <KRun>
 #include <KServiceTypeTrader>
+#include <KStandardDirs>
 
 #include "corona.h"
 #include "phase.h"
@@ -102,18 +103,18 @@ Containment::~Containment()
 
 void Containment::init()
 {
-//    setCachePaintMode(NoCacheMode);
+    setCachePaintMode(NoCacheMode);
     setFlag(QGraphicsItem::ItemIsMovable, false);
     setFlag(QGraphicsItem::ItemClipsChildrenToShape, false);
     setAcceptDrops(true);
 
     if (type() == DesktopContainment) {
         KConfigGroup config(KGlobal::config(), "General");
-        d->wallpaperPath = config.readEntry("wallpaper", QString());
+        d->wallpaperPath = config.readEntry("wallpaper", KStandardDirs::locate("wallpaper", "plasma-default.png"));
 
-        //kDebug() << "wallpaperPath is" << d->wallpaperPath << QFile::exists(d->wallpaperPath);
+        kDebug() << "wallpaperPath is" << d->wallpaperPath << QFile::exists(d->wallpaperPath);
         if (d->wallpaperPath.isEmpty() ||
-                !QFile::exists(d->wallpaperPath)) {
+            !QFile::exists(d->wallpaperPath)) {
             kDebug() << "SVG wallpaper!";
             d->background = new Plasma::Svg("widgets/wallpaper", this);
         }
