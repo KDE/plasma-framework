@@ -471,15 +471,15 @@ void Containment::setScreen(int screen)
         screen = -1;
     }
 
-    //kDebug() << "setting scrreen to " << screen << "and type is" << type();
+    kDebug() << "APAKU: setting screen to " << screen << "and type is" << type();
     if (screen > -1) {
         if (type() == DesktopContainment) {
             setGeometry(desktop.screenGeometry(screen));
             //kDebug() << "setting geometry to" << desktop.screenGeometry(screen) << geometry();
         } else if (type() == PanelContainment) {
-            //kDebug() << "we are a panel, let's move ourselves to a negative coordinate system";
             QDesktopWidget desktop;
             QRect r = desktop.screenGeometry(screen);
+            kDebug() << "APAKU: we are a panel, let's move ourselves to a negative coordinate system" << r;
             //FIXME PANELS: multiple panel support means having to move the panels up
             //              this requires a proper panel manager, discuss in the panel
             //              irc meeting
