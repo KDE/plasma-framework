@@ -473,8 +473,11 @@ void Containment::setScreen(int screen)
 
     kDebug() << "APAKU: setting screen to " << screen << "and type is" << type();
     if (screen > -1) {
+        QRect r = desktop.screenGeometry(screen);
+
         if (type() == DesktopContainment) {
-            setGeometry(desktop.screenGeometry(screen));
+            r.moveLeft(INTER_CONTAINMENT_MARGIN * screen);
+            setGeometry(r);
             //kDebug() << "setting geometry to" << desktop.screenGeometry(screen) << geometry();
         } else if (type() == PanelContainment) {
             QDesktopWidget desktop;
