@@ -378,7 +378,7 @@ void Widget::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
         // Auto-adjust the pixmap size.
         if (deviceRect.size() != pix.size()) {
             pix = QPixmap(deviceRect.size());
-	    pix.fill(Qt::transparent);
+            pix.fill(Qt::transparent);
             exposed = brect;
         }
 
@@ -441,10 +441,10 @@ void Widget::managingLayoutChanged()
     if (managingLayout()) {
         d->wasMovable = flags() & ItemIsMovable;
         if (!dynamic_cast<FreeLayout*>(managingLayout())) {
-//            setFlag(ItemIsMovable, false);
+            setFlag(ItemIsMovable, false);
         }
     } else {
-//        setFlag(ItemIsMovable, d->wasMovable);
+        setFlag(ItemIsMovable, d->wasMovable);
     }
 }
 

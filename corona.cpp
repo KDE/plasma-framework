@@ -221,6 +221,7 @@ void Corona::loadDefaultSetup()
 
     // make a panel at the bottom
     Containment* panel = addContainment("panel", (QVariantList() << (int)Plasma::BottomEdge));
+    panel->setScreen(0);
 
     // some default applets to get a usable UI
     panel->addApplet("launcher");

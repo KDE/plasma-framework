@@ -120,16 +120,6 @@ void Containment::init()
         }
     }
 
-    if (type() == PanelContainment) {
-        //kDebug() << "we are a panel, let's move ourselves to a negative coordinate system";
-        QDesktopWidget desktop;
-        QRect r = desktop.screenGeometry(screen());
-        //FIXME PANELS: multiple panel support means having to move the panels up
-        //              this requires a proper panel manager, discuss in the panel
-        //              irc meeting
-        translate(0, -r.height() - INTER_CONTAINMENT_MARGIN);
-    }
-
     //TODO: would be nice to not do this on init, as it causes Phase to init
     connect(Phase::self(), SIGNAL(animationComplete(QGraphicsItem*,Plasma::Phase::Animation)),
             this, SLOT(appletDisappearComplete(QGraphicsItem*,Plasma::Phase::Animation)));
@@ -472,6 +462,8 @@ Applet::List Containment::applets() const
 
 void Containment::setScreen(int screen)
 {
+    // screen of -1 means no associated screen.
+
     //kDebug() << "setting screen to" << screen;
     QDesktopWidget desktop;
     int numScreens = desktop.numScreens();
@@ -480,9 +472,19 @@ void Containment::setScreen(int screen)
     }
 
     //kDebug() << "setting scrreen to " << screen << "and type is" << type();
-    if (screen > -1 && type() == DesktopContainment) {
-        setGeometry(desktop.screenGeometry(screen));
-        //kDebug() << "setting geometry to" << desktop.screenGeometry(screen) << geometry();
+    if (screen > -1) {
+        if (type() == DesktopContainment) {
+            setGeometry(desktop.screenGeometry(screen));
+            //kDebug() << "setting geometry to" << desktop.screenGeometry(screen) << geometry();
+        } else if (type() == PanelContainment) {
+            //kDebug() << "we are a panel, let's move ourselves to a negative coordinate system";
+            QDesktopWidget desktop;
+            QRect r = desktop.screenGeometry(screen);
+            //FIXME PANELS: multiple panel support means having to move the panels up
+            //              this requires a proper panel manager, discuss in the panel
+            //              irc meeting
+            translate(0, -r.height() - INTER_CONTAINMENT_MARGIN);
+        }
     }
 
     d->screen = screen;
