@@ -441,10 +441,10 @@ void Widget::managingLayoutChanged()
     if (managingLayout()) {
         d->wasMovable = flags() & ItemIsMovable;
         if (!dynamic_cast<FreeLayout*>(managingLayout())) {
-            setFlag(ItemIsMovable, false);
+//            setFlag(ItemIsMovable, false);
         }
     } else {
-        setFlag(ItemIsMovable, d->wasMovable);
+//        setFlag(ItemIsMovable, d->wasMovable);
     }
 }
 
