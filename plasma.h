@@ -35,7 +35,8 @@ namespace Plasma
  * objects have managed for them and which they may wish to react to,
  * for instance in Applet::constraintsUpdated
  */
-enum Constraint { FormFactorConstraint = 1 /** The FormFactor for an object */,
+enum Constraint { NoConstraint = 0,
+                  FormFactorConstraint = 1 /** The FormFactor for an object */,
                   LocationConstraint = 2 /** The Location of an object */,
                   ScreenConstraint = 4 /** Which screen an object is on */,
                   AllConstraints = FormFactorConstraint | LocationConstraint | ScreenConstraint
