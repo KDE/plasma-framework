@@ -307,9 +307,12 @@ void Widget::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
 {
     painter->setOpacity(d->opacity);
 
+    /*
+NOTE: put this back if we end up needing to control when things paint due to, e.g. zooming.
     if (!d->shouldPaint(painter, transform())) {
         return;
     }
+    */
 
     if (d->cachePaintMode == NoCacheMode) {
         paintWidget(painter, option, widget);
@@ -318,7 +321,6 @@ void Widget::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
 
     // Cached painting
     QRectF brect = boundingRect();
-    QRect boundingRectInt = brect.toRect();
 
     // Fetch the off-screen transparent buffer and exposed area info.
     QPixmap pix;
@@ -374,6 +376,12 @@ void Widget::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
     if (d->cachePaintMode == DeviceCoordinateCacheMode) {
         QTransform transform = painter->worldTransform();
         QRect deviceRect = transform.mapRect(brect).toRect();
+
+        if (deviceRect.width() < 1 ||
+            deviceRect.height() < 1) {
+            // we have nothing to paint!
+            return;
+        }
 
         // Auto-adjust the pixmap size.
         if (deviceRect.size() != pix.size()) {
