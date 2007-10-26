@@ -500,7 +500,7 @@ void Applet::updateConstraints(Plasma::Constraints constraints)
 
 void Applet::constraintsUpdated(Plasma::Constraints constraints)
 {
-    kDebug() << constraints << "constraints are FormFactor: " << formFactor() << ", Location: " << location();
+    //kDebug() << constraints << "constraints are FormFactor: " << formFactor() << ", Location: " << location();
 }
 
 QString Applet::name() const
@@ -677,7 +677,7 @@ void Applet::flushUpdatedConstraints()
         return;
     }
 
-    kDebug() << "fushing constraints: " << d->pendingConstraints << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";
+    //kDebug() << "fushing constraints: " << d->pendingConstraints << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";
     Plasma::Constraints c = d->pendingConstraints;
     d->pendingConstraints = NoConstraint;
 
@@ -1028,9 +1028,9 @@ Applet* Applet::loadApplet(const QString& appletName, uint appletId, const QVari
         //      from the network at this point
         kDebug() << "Applet::loadApplet: offers is empty for \"" << appletName << "\"";
         return 0;
-    } else if (offers.count() > 1) {
+    } /* else if (offers.count() > 1) {
         kDebug() << "hey! we got more than one! let's blindly take the first one";
-    }
+    } */
 
     if (appletId == 0) {
         appletId = Private::nextId();
