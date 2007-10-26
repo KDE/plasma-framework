@@ -199,6 +199,13 @@ void Corona::loadApplets(const QString& configname)
         }
     }
 
+    foreach (Containment* containment, d->containments) {
+        // we need to manually flush the constraints changes
+        // because we may not get back to the event loop before
+        // view set up
+        containment->flushUpdatedConstraints();
+    }
+
     setImmutable(config.isImmutable());
 }
 
@@ -220,8 +227,9 @@ void Corona::loadDefaultSetup()
     }
 
     // make a panel at the bottom
-    Containment* panel = addContainment("panel", (QVariantList() << (int)Plasma::BottomEdge));
+    Containment* panel = addContainment("panel");
     panel->setScreen(0);
+    panel->setLocation(Plasma::BottomEdge);
 
     // some default applets to get a usable UI
     panel->addApplet("launcher");
@@ -233,7 +241,8 @@ void Corona::loadDefaultSetup()
 Containment* Corona::containmentForScreen(int screen) const
 {
     foreach (Containment* containment, d->containments) {
-        if (containment->screen() == screen) {
+        if (containment->screen() == screen &&
+            containment->type() == Containment::DesktopContainment) {
             return containment;
         }
     }
