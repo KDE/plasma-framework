@@ -177,11 +177,13 @@ Q_SIGNALS:
     * Indicates when the icon has been pressed.
     */
     void pressed(bool down);
+    void pressed(bool down, QGraphicsSceneMouseEvent *event);
 
     /**
     * Indicates when the icon has been clicked.
     */
     void clicked();
+    void clicked(QGraphicsSceneMouseEvent *event);
 
 protected:
     bool isDown();

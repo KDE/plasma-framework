@@ -922,8 +922,9 @@ void Icon::mousePressEvent(QGraphicsSceneMouseEvent *event)
 
     d->state = Private::PressedState;
     emit pressed(true);
+    emit pressed(true, event);
 
-    event->ignore();
+    event->accept();
     update();
 }
 
@@ -948,9 +949,11 @@ void Icon::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 
     if (was == Private::PressedState) {
         emit pressed(false);
+        emit pressed(false, event);
 
         if (inside) {
             emit clicked();
+            emit clicked(event);
         }
         d->state = Private::NoState;
     }
