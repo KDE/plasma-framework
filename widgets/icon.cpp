@@ -915,7 +915,7 @@ bool Icon::isDown()
 
 void Icon::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-    kDebug();
+    //kDebug();
     foreach (IconAction *action, d->cornerActions) {
         action->event(event->type(), event->pos());
     }
@@ -930,7 +930,7 @@ void Icon::mousePressEvent(QGraphicsSceneMouseEvent *event)
 
 void Icon::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
-    kDebug();
+    //kDebug();
     bool inside = boundingRect().contains(event->pos());
     Private::ButtonState was = d->state;
 
