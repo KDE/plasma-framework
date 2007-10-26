@@ -128,10 +128,10 @@ void Containment::init()
 void Containment::initConstraints(KConfigGroup* group)
 {
     //kDebug() << "initConstraints" << group->name() << type();
-    setLocation((Plasma::Location)group->readEntry("location", (int)Plasma::Desktop));
-    setGeometry(group->readEntry("geometry", QRectF()));
-    setFormFactor((Plasma::FormFactor)group->readEntry("formfactor", (int)Plasma::Planar));
-    setScreen(group->readEntry("screen", 0));
+    setLocation((Plasma::Location)group->readEntry("location", (int)d->location));
+    setGeometry(group->readEntry("geometry", geometry()));
+    setFormFactor((Plasma::FormFactor)group->readEntry("formfactor", (int)d->formFactor));
+    setScreen(group->readEntry("screen", d->screen));
 }
 
 void Containment::saveConstraints(KConfigGroup* group) const
@@ -476,13 +476,13 @@ void Containment::setScreen(int screen)
         QRect r = desktop.screenGeometry(screen);
 
         if (type() == DesktopContainment) {
-            r.moveRight(INTER_CONTAINMENT_MARGIN * screen);
+            r.moveLeft(INTER_CONTAINMENT_MARGIN * screen);
             setGeometry(r);
             //kDebug() << "setting geometry to" << desktop.screenGeometry(screen) << geometry();
         } else if (type() == PanelContainment) {
             QDesktopWidget desktop;
             QRect r = desktop.screenGeometry(screen);
-            kDebug() << "APAKU: we are a panel, let's move ourselves to a negative coordinate system" << r;
+            kDebug() << "APAKU: we are a panel on" << r << ", let's move ourselves to a negative coordinate system" << -r.height() - INTER_CONTAINMENT_MARGIN;
             //FIXME PANELS: multiple panel support means having to move the panels up
             //              this requires a proper panel manager, discuss in the panel
             //              irc meeting
