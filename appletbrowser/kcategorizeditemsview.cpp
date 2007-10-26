@@ -53,6 +53,7 @@ KCategorizedItemsView::KCategorizedItemsView(QWidget * parent, Qt::WindowFlags f
     itemsView->header()->setVisible(false);
 
     itemsView->setItemDelegate(m_delegate = new KCategorizedItemsViewDelegate(this));
+    itemsView->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
 
     comboFilters->setItemDelegate(new KCategorizedItemsViewFilterDelegate(this));
 
@@ -95,6 +96,10 @@ void KCategorizedItemsView::setItemModel(QStandardItemModel * model)
     m_modelFilterItems->setSourceModel(m_modelItems);
 
     itemsView->setModel(m_modelFilterItems);
+
+    if (m_modelFilterItems->rowCount()) {
+        itemsView->verticalScrollBar()->setSingleStep(itemsView->sizeHintForRow(0));
+    }
 }
 
 void KCategorizedItemsView::searchTermChanged(const QString & text)
