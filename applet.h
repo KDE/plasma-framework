@@ -507,6 +507,12 @@ class PLASMA_EXPORT Applet : public Widget
          */
         virtual void showConfigurationInterface();
 
+        /**
+         * Sends all pending contraints updates to the applet. Will usually
+         * be called automatically, but can also be called manually if needed.
+         */
+        void flushUpdatedConstraints();
+
     protected:
         /**
          * Called when a request to save the state of the applet is made

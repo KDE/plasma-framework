@@ -77,6 +77,7 @@ public:
           configXml(0),
           shadow(0),
           cachedBackground(0),
+          pendingConstraints(NoConstraint),
           kioskImmutable(false),
           immutable(false),
           hasConfigurationInterface(false),
@@ -332,6 +333,14 @@ public:
         }
     }
 
+    void scheduleConstraintsUpdate(Plasma::Constraints c, Applet* applet)
+    {
+        if (pendingConstraints == NoConstraint) {
+            QTimer::singleShot(0, applet, SLOT(flushUpdatedConstraints()));
+        }
+        pendingConstraints |= c;
+    }
+
     //TODO: examine the usage of memory here; there's a pretty large
     //      number of members at this point.
     uint appletId;
@@ -349,6 +358,7 @@ public:
     ConfigXml* configXml;
     ShadowItem* shadow;
     QPixmap* cachedBackground;
+    Plasma::Constraints pendingConstraints;
     bool kioskImmutable : 1;
     bool immutable : 1;
     bool hasConfigurationInterface : 1;
@@ -409,7 +419,9 @@ KConfigGroup Applet::config() const
 void Applet::save(KConfigGroup* group) const
 {
     group->writeEntry("plugin", pluginName());
-    group->writeEntry("geometry", QRect(pos().toPoint(), boundingRect().size().toSize()));
+    //FIXME: for containments, we need to have some special values here w/regards to
+    //       screen affinity (e.g. "bottom of screen 0")
+    group->writeEntry("geometry", geometry());
 
     Containment* c = containment();
     if (c) {
@@ -483,8 +495,7 @@ const Package* Applet::package() const
 
 void Applet::updateConstraints(Plasma::Constraints constraints)
 {
-    constraintsUpdated(constraints);
-    setShadowShown(formFactor() == Planar);
+    d->scheduleConstraintsUpdate(constraints, this);
 }
 
 void Applet::constraintsUpdated(Plasma::Constraints constraints)
@@ -658,6 +669,25 @@ void Applet::performSetupConfig()
     qDeleteAll(QGraphicsItem::children());
     delete layout();
     showConfigurationInterface();
+}
+
+void Applet::flushUpdatedConstraints()
+{
+    if (d->pendingConstraints == NoConstraint) {
+        return;
+    }
+
+    kDebug() << "fushing constraints: " << d->pendingConstraints << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";
+    Plasma::Constraints c = d->pendingConstraints;
+    d->pendingConstraints = NoConstraint;
+
+    constraintsUpdated(c);
+
+    if (layout()) {
+        layout()->update();
+    }
+
+    setShadowShown(formFactor() == Planar);
 }
 
 int Applet::type() const
