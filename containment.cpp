@@ -55,8 +55,6 @@ public:
         : formFactor(Planar),
           location(Floating),
           layout(0),
-          background(0),
-          bitmapBackground(0),
           screen(0),
           immutable(false)
     {
@@ -67,16 +65,12 @@ public:
         qDeleteAll(applets);
         applets.clear();
         delete layout;
-        delete bitmapBackground;
     }
 
     FormFactor formFactor;
     Location location;
     Layout* layout;
     Applet::List applets;
-    Plasma::Svg *background;
-    QPixmap* bitmapBackground;
-    QString wallpaperPath;
     QSize size;
     int screen;
     bool immutable;
@@ -108,18 +102,6 @@ void Containment::init()
     setFlag(QGraphicsItem::ItemClipsChildrenToShape, false);
     setAcceptDrops(true);
 
-    if (type() == DesktopContainment) {
-        KConfigGroup config(KGlobal::config(), "General");
-        d->wallpaperPath = config.readEntry("wallpaper", KStandardDirs::locate("wallpaper", "plasma-default.png"));
-
-        kDebug() << "wallpaperPath is" << d->wallpaperPath << QFile::exists(d->wallpaperPath);
-        if (d->wallpaperPath.isEmpty() ||
-            !QFile::exists(d->wallpaperPath)) {
-            kDebug() << "SVG wallpaper!";
-            d->background = new Plasma::Svg("widgets/wallpaper", this);
-        }
-    }
-
     //TODO: would be nice to not do this on init, as it causes Phase to init
     connect(Phase::self(), SIGNAL(animationComplete(QGraphicsItem*,Plasma::Phase::Animation)),
             this, SLOT(appletDisappearComplete(QGraphicsItem*,Plasma::Phase::Animation)));
@@ -150,50 +132,8 @@ void Containment::paintInterface(QPainter *painter,
                                  const QStyleOptionGraphicsItem *option,
                                  const QRect& contentsRect)
 {
-    //FIXME: this should probably ALL move to the Desktop containment, save for drawing a rect
-    //       in case there is no other drawing going on
-    if (type() != DesktopContainment) {
-        return;
-    }
-
-    //kDebug() << "paintInterface of background";
-    //TODO: we should have a way to do this outside of the paint event!
-    if (d->background) {
-        d->background->resize(contentsRect.size());
-    } else if (!d->wallpaperPath.isEmpty()) {
-        if (!d->bitmapBackground || !(d->bitmapBackground->size() == contentsRect.size())) {
-            delete d->bitmapBackground;
-            d->bitmapBackground = new QPixmap(d->wallpaperPath);
-            (*d->bitmapBackground) = d->bitmapBackground->scaled(contentsRect.size());
-        }
-    } else {
-        // got nothing to paint!
-        //kDebug() << "got nothing?";
-        painter->drawRect(contentsRect.adjusted(1, 1, -1, -1));
-        return;
-    }
-
-    // draw the background untransformed (saves lots of per-pixel-math)
-    painter->save();
-    painter->resetTransform();
-
-    // blit the background (saves all the per-pixel-products that blending does)
-    painter->setCompositionMode(QPainter::CompositionMode_Source);
-
-    if (d->background) {
-        // Plasma::Svg doesn't support drawing only part of the image (it only
-        // supports drawing the whole image to a rect), so we blit to 0,0-w,h
-        d->background->paint(painter, contentsRect);
-    //kDebug() << "draw svg of background";
-    } else if (d->bitmapBackground) {
-        // for pixmaps we draw only the exposed part (untransformed since the
-        // bitmapBackground already has the size of the viewport)
-        painter->drawPixmap(option->exposedRect, *d->bitmapBackground, option->exposedRect);
-    //kDebug() << "draw pixmap of background";
-    }
-
-    // restore transformation and composition mode
-    painter->restore();
+    // If the derived class can't be bothered - just draw a plane old rectangle
+    painter->drawRect(contentsRect.adjusted(1, 1, -1, -1));
 }
 
 QSizeF Containment::contentSizeHint() const
