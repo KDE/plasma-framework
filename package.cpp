@@ -66,6 +66,7 @@ Package::Package(const QString& packageRoot, const QString& package,
 
 Package::~Package()
 {
+    delete d;
 }
 
 bool Package::isValid() const

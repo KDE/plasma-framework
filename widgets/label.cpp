@@ -27,6 +27,7 @@ Label::Label(Widget *parent)
 
 Label::~Label()
 {
+    delete d;
 }
 
 Qt::Orientations Label::expandingDirections() const

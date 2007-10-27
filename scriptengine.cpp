@@ -44,6 +44,7 @@ ScriptEngine::ScriptEngine(QObject *parent)
 
 ScriptEngine::~ScriptEngine()
 {
+    delete d;
 }
 
 void ScriptEngine::init(Applet* applet)

@@ -141,6 +141,7 @@ void AppletBrowser::init()
 
 AppletBrowser::~AppletBrowser()
 {
+  delete d;
 }
 
 void AppletBrowser::addApplet()
