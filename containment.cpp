@@ -483,7 +483,7 @@ void Containment::dropEvent(QGraphicsSceneDragDropEvent *event)
     if (event->mimeData()->hasFormat(mimetype) && scene()) {
         QString plasmoidName;
         plasmoidName = event->mimeData()->data(mimetype);
-        QRectF geom(event->scenePos(), QSize(0, 0));
+        QRectF geom(mapFromScene(event->scenePos()), QSize(0, 0));
         addApplet(plasmoidName, QVariantList(), 0, geom);
         event->acceptProposedAction();
     } else if (KUrl::List::canDecode(event->mimeData())) {
