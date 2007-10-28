@@ -267,7 +267,7 @@ bool Package::createPackage(const PackageMetadata & metadata,
     //empty temporary file that we will package with the name metadata.desktop
     if (releaseNotes.open()) {
         QTextStream out(&releaseNotes);
-        if (metadata.releaseNotes().isEmpty()) {
+        if (!metadata.releaseNotes().isEmpty()) {
             out << metadata.releaseNotes();
         } else {
             out << "NO_RELEASE_NOTES";
