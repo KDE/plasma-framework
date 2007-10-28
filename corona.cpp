@@ -273,16 +273,20 @@ Containment* Corona::addContainment(const QString& name, const QVariantList& arg
     if (pluginName.isEmpty()) {
         // default to the desktop containment
         pluginName = "desktop";
+    } else if (pluginName != "null") {
+        applet = Applet::loadApplet(pluginName, id, args);
+        containment = dynamic_cast<Containment*>(applet);
     }
-
-    applet = Applet::loadApplet(pluginName, id, args);
-    containment = dynamic_cast<Containment*>(applet);
 
     if (!containment) {
         kDebug() << "loading of containment" << name << "failed.";
-        delete applet; // in case we got a non-Containment from Applet::loadApplet
+
+        // in case we got a non-Containment from Applet::loadApplet or a null containment was requested
+        delete applet;
         containment = new Containment;
-        containment->setFailedToLaunch(false); // we want to provide something and don't care about the failure to launch
+
+        // we want to provide something and don't care about the failure to launch
+        containment->setFailedToLaunch(false);
     }
 
     if (!delayedInit) {

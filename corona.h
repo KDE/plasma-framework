@@ -122,7 +122,10 @@ public Q_SLOTS:
      * Adds a Containment to the Corona
      *
      * @param name the plugin name for the containment, as given by
-     *        KPluginInfo::pluginName()
+     *        KPluginInfo::pluginName(). If an empty string is passed in, the defalt
+     *        containment plugin will be used (usually DesktopContainment). If the
+     *        string literal "null" is passed in, then no plugin will be loaded and
+     *        a simple Containment object will be created instead.
      * @param args argument list to pass to the containment
      * @param id to assign to this containment, or 0 to auto-assign it a new id
      * @param geometry where to place the containment, or to auto-place it if an invalid
