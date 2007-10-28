@@ -406,8 +406,7 @@ void Containment::setScreen(int screen)
 
     //kDebug() << "setting screen to" << screen;
     QDesktopWidget desktop;
-    int numScreens = desktop.numScreens();
-    if (screen < -1 || screen > numScreens - 1) {
+    if (screen < -1 || screen > desktop.numScreens() - 1) {
         screen = -1;
     }
 
