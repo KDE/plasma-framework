@@ -174,7 +174,7 @@ void Corona::loadApplets(const QString& configname)
             continue;
         }
 
-        //kDebug() << "creating applet " << cg.name() << "in containment" << cid;
+        //kDebug() << "creating applet " << cg.name() << "in containment" << cid << "at geometry" << cg.readEntry("geometry", QRectF());
         int appId = cg.name().left(cg.name().indexOf('-')).toUInt();
         c->addApplet(cg.readEntry("plugin", QString()), QVariantList(),
                      appId, cg.readEntry("geometry", QRectF()), true);
