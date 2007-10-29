@@ -421,7 +421,7 @@ void Applet::save(KConfigGroup* group) const
     group->writeEntry("plugin", pluginName());
     //FIXME: for containments, we need to have some special values here w/regards to
     //       screen affinity (e.g. "bottom of screen 0")
-    group->writeEntry("geometry", geometry());
+    group->writeEntry("geometry", geometry().toRect());
 
     Containment* c = containment();
     if (c) {
