@@ -309,7 +309,7 @@ Applet* Containment::addApplet(const QString& name, const QVariantList& args, ui
         applet = new Applet;
     }
 
-    applet->setParentItem(this);
+    addChild(applet);
     //panels don't want backgrounds, which is important when setting geometry
     if (type() == PanelContainment) {
         applet->setDrawStandardBackground(false);
@@ -415,7 +415,7 @@ void Containment::setScreen(int screen)
         QRect r = desktop.screenGeometry(screen);
 
         if (type() == DesktopContainment) {
-            r.moveLeft(INTER_CONTAINMENT_MARGIN * screen);
+            r.moveLeft(r.x() + INTER_CONTAINMENT_MARGIN * screen);
             setGeometry(r);
             //kDebug() << "setting geometry to" << desktop.screenGeometry(screen) << geometry();
         } else if (type() == PanelContainment) {
