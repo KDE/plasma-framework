@@ -132,6 +132,7 @@ void Containment::paintInterface(QPainter *painter,
                                  const QStyleOptionGraphicsItem *option,
                                  const QRect& contentsRect)
 {
+    Q_UNUSED(option)
     // If the derived class can't be bothered - just draw a plane old rectangle
     painter->drawRect(contentsRect.adjusted(1, 1, -1, -1));
 }
@@ -406,7 +407,8 @@ void Containment::setScreen(int screen)
 
     //kDebug() << "setting screen to" << screen;
     QDesktopWidget desktop;
-    if (screen < -1 || screen > desktop.numScreens() - 1) {
+    int numScreens = desktop.numScreens();
+    if (screen < -1 || screen > numScreens - 1) {
         screen = -1;
     }
 
@@ -415,9 +417,27 @@ void Containment::setScreen(int screen)
         QRect r = desktop.screenGeometry(screen);
 
         if (type() == DesktopContainment) {
-            r.moveLeft(r.x() + INTER_CONTAINMENT_MARGIN * screen);
+            // we need to find how many screens are to our top and left
+            // to calculate the proper offsets for the margins.
+            int x = r.x();
+            int y = r.y();
+            int screensLeft = 0;
+            int screensAbove = 0;
+            for (int i = 0; i < numScreens; ++i) {
+                QRect otherScreen = desktop.screenGeometry(screen);
+                if (x > otherScreen.x()) {
+                    ++screensLeft;
+                }
+
+                if (y > otherScreen.y()) {
+                    ++screensAbove;
+                }
+            }
+
+            r.moveLeft(r.x() + INTER_CONTAINMENT_MARGIN * screensLeft);
+            r.moveTop(r.y() + INTER_CONTAINMENT_MARGIN * screensAbove);
             setGeometry(r);
-            //kDebug() << "setting geometry to" << desktop.screenGeometry(screen) << geometry();
+            //kDebug() << "setting geometry to" << desktop.screenGeometry(screen) << r << geometry();
         } else if (type() == PanelContainment) {
             QDesktopWidget desktop;
             QRect r = desktop.screenGeometry(screen);
@@ -493,7 +513,7 @@ void Containment::dropEvent(QGraphicsSceneDragDropEvent *event)
             QRectF geom(event->scenePos(), QSize(0, 0));
             QVariantList args;
             args << url.url();
-//             kDebug() << mimeName;
+            //             kDebug() << mimeName;
             KPluginInfo::List appletList = Applet::knownAppletsForMimetype(mimeName);
 
             if (appletList.isEmpty()) {
