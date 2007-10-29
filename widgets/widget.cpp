@@ -288,12 +288,13 @@ Widget *Widget::parent() const
 
 void Widget::addChild(Widget *w)
 {
-    if (!w) {
+    if (!w || w->parent() == this) {
         return;
     }
 
-    w->reparent(this);
     d->childList.append(w);
+    w->d->parent = this;
+    w->setParentItem(this);
 
     //kDebug() << "Added Child Widget" <<  w;
 
@@ -301,6 +302,7 @@ void Widget::addChild(Widget *w)
         layout()->addItem(w);
         updateGeometry();
     }
+    w->update();
 }
 
 void Widget::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
@@ -437,11 +439,17 @@ void Widget::paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *opti
     // Replaced by widget's own function
 }
 
-void Widget::reparent(Widget *w)
+QVariant Widget::itemChange(GraphicsItemChange change, const QVariant &value)
 {
-    d->parent = w;
-    setParentItem(w);
-    update();
+    if (change == QGraphicsItem::ItemChildRemovedChange) {
+        Widget *child = dynamic_cast<Plasma::Widget*>(value.value<QGraphicsItem*>());
+        if (child) {
+            d->childList.removeAll(child);
+            updateGeometry();
+        }
+    }
+
+    return QGraphicsItem::itemChange(change, value);
 }
 
 void Widget::managingLayoutChanged()

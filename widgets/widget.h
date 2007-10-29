@@ -212,12 +212,6 @@ TODO: implement once we decide how to handle the font system
     Q_INVOKABLE Widget *parent() const;
 
     /**
-     * Sets the parent of this Plasma::Widget;
-     * @param widget the widget to reparent to.
-     */
-    Q_INVOKABLE void reparent(Widget *widget);
-
-    /**
      * Add another Plasma::Widget as a child of this one.
      * @param widget the widget to reparent to this Plasma::Widget.
      */
@@ -256,6 +250,7 @@ protected:
      * @param widget the parent QWidget (most likely the Corona)
      */
     virtual void paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
+    QVariant itemChange(GraphicsItemChange change, const QVariant &value);
     void setSize(const QSizeF& size);
     void managingLayoutChanged();
 
