@@ -288,7 +288,7 @@ Widget *Widget::parent() const
 
 void Widget::addChild(Widget *w)
 {
-    if (!w || w->parent() == this) {
+    if (!w || d->childList.contains(w)) {
         return;
     }
 
