@@ -915,6 +915,11 @@ bool Icon::isDown()
 
 void Icon::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
+    if (event->button() != Qt::LeftButton) {
+        Widget::mousePressEvent(event);
+        return;
+    }
+
     //kDebug();
     foreach (IconAction *action, d->cornerActions) {
         action->event(event->type(), event->pos());
