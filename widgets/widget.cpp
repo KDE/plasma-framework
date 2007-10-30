@@ -47,7 +47,6 @@ class Widget::Private
             : minimumSize(0,0),
               maximumSize(std::numeric_limits<qreal>::infinity(),
                           std::numeric_limits<qreal>::infinity()),
-              parent(0),
               opacity(1.0),
               cachePaintMode(Widget::NoCacheMode),
               wasMovable(false)
@@ -58,7 +57,6 @@ class Widget::Private
         QSizeF minimumSize;
         QSizeF maximumSize;
 
-        Widget *parent;
         QList<Widget *> childList;
 
         qreal opacity;
@@ -91,7 +89,7 @@ bool Widget::Private::shouldPaint(QPainter *painter, const QTransform &transform
     return true;
 }
 
-Widget::Widget(QGraphicsItem *parent,QObject* parentObject)
+Widget::Widget(QGraphicsItem *parent, QObject* parentObject)
   : QObject(parentObject),
     QGraphicsItem(parent),
     d(new Private)
@@ -99,11 +97,10 @@ Widget::Widget(QGraphicsItem *parent,QObject* parentObject)
     setFlag(QGraphicsItem::ItemClipsToShape, true);
     setFlag(QGraphicsItem::ItemClipsChildrenToShape, true);
     setCachePaintMode(DeviceCoordinateCacheMode);
-    d->parent = dynamic_cast<Widget *>(parent);
 
-    if (d->parent) {
-        d->parent->addChild(this);
-        d->parent->updateGeometry();
+    Widget *w = dynamic_cast<Widget *>(parent);
+    if (w) {
+        w->addChild(this);
     }
 }
 
@@ -283,7 +280,7 @@ void Widget::resize(qreal w, qreal h)
 
 Widget *Widget::parent() const
 {
-    return d->parent;
+    return dynamic_cast<Widget *>(parentItem());
 }
 
 void Widget::addChild(Widget *w)
@@ -293,15 +290,17 @@ void Widget::addChild(Widget *w)
     }
 
     d->childList.append(w);
-    w->d->parent = this;
     w->setParentItem(this);
 
     //kDebug() << "Added Child Widget" <<  w;
 
     if (layout()) {
         layout()->addItem(w);
-        updateGeometry();
     }
+
+    updateGeometry();
+
+    //TODO: is this necessary?
     w->update();
 }
 
