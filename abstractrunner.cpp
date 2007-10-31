@@ -280,7 +280,7 @@ void AbstractRunner::setHasMatchOptions(bool hasMatchOptions)
     d->hasMatchOptions = hasMatchOptions;
 }
 
-void AbstractRunner::createMatchOptions(QWidget* parent)
+void AbstractRunner::createMatchOptions(QWidget *parent)
 {
     Q_UNUSED(parent)
 }
@@ -293,6 +293,11 @@ bool AbstractRunner::canBeConfigured()
 void AbstractRunner::setCanBeConfigured(bool hasConfig)
 {
     d->hasConfig = hasConfig;
+}
+
+void AbstractRunner::createConfigurationInterface(QWidget *widget)
+{
+    Q_UNUSED(widget)
 }
 
 void AbstractRunner::exec(Plasma::SearchAction *action)
