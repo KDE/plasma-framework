@@ -216,7 +216,6 @@ class PLASMA_EXPORT AbstractRunner : public QObject
          */
         virtual void exec(Plasma::SearchAction *action);
 
-
     protected:
         /**
          * Sets whether or not the the runner has options for matches

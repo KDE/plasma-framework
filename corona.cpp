@@ -219,8 +219,10 @@ void Corona::loadDefaultSetup()
     //FIXME: implement support for system-wide defaults
     QDesktopWidget desktop;
     int numScreens = desktop.numScreens();
+    kDebug() << "number of screens is" << numScreens;
     // create a containment for each screen
     for (int i = 0; i < numScreens; ++i) {
+        kDebug() << "     screen " << i << "geometry is" << desktop.screenGeometry(i);
         Containment* c = addContainment("desktop");
         c->setScreen(i);
         c->setFormFactor(Plasma::Planar);
