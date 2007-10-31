@@ -78,11 +78,11 @@ void AppletBrowser::init()
     connect(d->appletList, SIGNAL(activated(const QModelIndex &)), this, SLOT(addApplet()));
     setMainWidget(d->appletList);
 
-    setWindowTitle("Add Applets");
+    setWindowTitle(i18n("Widgets"));
 
     setButtons(KDialog::Apply | KDialog::Close | KDialog::User1);
-    setButtonText(KDialog::Apply, i18n("Add Applet"));
-    setButtonText(KDialog::User1, i18n("Get New Applets")); //TODO: not overly happy with this text
+    setButtonText(KDialog::Apply, i18n("Add Widget"));
+    setButtonText(KDialog::User1, i18n("Get New Widgets")); //TODO: not overly happy with this text
     enableButton(KDialog::User1, false); //TODO: enable when GHNS integration is implemented
 
     connect(this, SIGNAL(applyClicked()), this, SLOT(addApplet()));
@@ -91,7 +91,7 @@ void AppletBrowser::init()
     QAction* quit = KStandardAction::quit(qApp, SLOT(quit()), this);
     addAction(quit);
 
-    d->filterModel.addFilter(i18n("All Applets"),
+    d->filterModel.addFilter(i18n("All Widgets"),
         KCategorizedItemsViewModels::Filter(), new KIcon("application-x-plasma"));
 
     // Recommended emblems and filters
@@ -116,13 +116,13 @@ void AppletBrowser::init()
     }
 
     // Other Emblems
-    d->appletList->addEmblem(i18n("Used in Past"), new KIcon("history"), 
+    d->appletList->addEmblem(i18n("Widgets I Have Used Before"), new KIcon("history"), 
                                 KCategorizedItemsViewModels::Filter("used", true));
 
     // Filters: Special
-    d->filterModel.addFilter(i18n("Favorites"),
+    d->filterModel.addFilter(i18n("My Favorite Widgets"),
         KCategorizedItemsViewModels::Filter("favorite", true), new KIcon("bookmark"));
-    d->filterModel.addFilter(i18n("Used in Past"),
+    d->filterModel.addFilter(i18n("Widgets I Have Used Before"),
         KCategorizedItemsViewModels::Filter("used", true), new KIcon("history"));
 
     d->filterModel.addSeparator(i18n("Categories:"));
