@@ -20,7 +20,7 @@
 #ifndef RUNNER_H
 #define RUNNER_H
 
-#include <QtCore/QAction>
+#include <QtGui/QAction>
 #include <QtCore/QList>
 #include <QtCore/QObject>
 
