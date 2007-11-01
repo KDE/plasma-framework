@@ -20,9 +20,9 @@
 #ifndef RUNNER_H
 #define RUNNER_H
 
-#include <QAction>
-#include <QList>
-#include <QObject>
+#include <QtCore/QAction>
+#include <QtCore/QList>
+#include <QtCore/QObject>
 
 #include <plasma/plasma_export.h>
 
