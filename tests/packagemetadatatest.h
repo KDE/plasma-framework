@@ -32,8 +32,11 @@ public Q_SLOTS:
     void cleanup();
 
 private Q_SLOTS:
+    void screenshot();
     void read();
     void write();
+    void preview();
+    void releaseNotes();
 
 private:
     void removeDir(const QString &subdir);

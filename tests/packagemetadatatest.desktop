@@ -8,6 +8,7 @@ ServiceTypes=Plasma/Applet
 
 Description=Some fancy test description
 
+X-KDE-Screenshot=a_not_default_file.svg
 X-KDE-Library=some_test_library
 X-KDE-PluginInfo-Author=Bertjan Broeksema
 X-KDE-PluginInfo-Email=b.broeksema@kdemail.net
