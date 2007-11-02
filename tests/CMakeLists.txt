@@ -9,5 +9,6 @@ ENDMACRO(PLASMA_UNIT_TESTS)
 
 PLASMA_UNIT_TESTS(
     packagestructuretest
+    packagemetadatatest
 )
 

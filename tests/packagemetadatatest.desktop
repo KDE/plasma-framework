@@ -1,0 +1,26 @@
+[Desktop Entry]
+Name=Package metadata test file
+Comment=A test desktop file to test the PackageMetaData class.
+
+Icon=test
+Type=Service
+ServiceTypes=Plasma/Applet
+
+Description=Some fancy test description
+
+X-KDE-Library=some_test_library
+X-KDE-PluginInfo-Author=Bertjan Broeksema
+X-KDE-PluginInfo-Email=b.broeksema@kdemail.net
+X-KDE-PluginInfo-Name=test
+X-KDE-PluginInfo-Version=pre0.1
+X-KDE-PluginInfo-Website=http://plasma.kde.org/
+X-KDE-PluginInfo-Category=System test
+X-KDE-PluginInfo-Depends=some_test_dep
+X-KDE-PluginInfo-License=GPL
+X-KDE-PluginInfo-EnabledByDefault=true
+
+X-KDE-Plasmagik-RequiredVersion=1.2.3
+X-KDE-Plasmagik-ApplicationName=A Test name
+X-KDE-Plasmagik-MainFile=Main file
+
+X-PlasmoidCategory=System Information
