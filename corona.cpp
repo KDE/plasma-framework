@@ -220,17 +220,26 @@ void Corona::loadDefaultSetup()
     QDesktopWidget desktop;
     int numScreens = desktop.numScreens();
     kDebug() << "number of screens is" << numScreens;
+    int topLeftScreen = 0;
+    QPoint topLeftCorner = desktop.screenGeometry(0).topLeft();
+
     // create a containment for each screen
     for (int i = 0; i < numScreens; ++i) {
-        kDebug() << "     screen " << i << "geometry is" << desktop.screenGeometry(i);
+        QRect g = desktop.screenGeometry(i);
+        kDebug() << "     screen " << i << "geometry is" << g;
         Containment* c = addContainment("desktop");
         c->setScreen(i);
         c->setFormFactor(Plasma::Planar);
+
+        if (g.x() <= topLeftCorner.x() && g.y() <= topLeftCorner.y()) {
+            topLeftCorner = g.topLeft();
+            topLeftScreen = i;
+        }
     }
 
     // make a panel at the bottom
     Containment* panel = addContainment("panel");
-    panel->setScreen(0);
+    panel->setScreen(topLeftScreen);
     panel->setLocation(Plasma::BottomEdge);
 
     // some default applets to get a usable UI
