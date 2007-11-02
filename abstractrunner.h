@@ -20,128 +20,19 @@
 #ifndef RUNNER_H
 #define RUNNER_H
 
-#include <QtGui/QAction>
-#include <QtCore/QList>
 #include <QtCore/QObject>
 
 #include <plasma/plasma_export.h>
+#include <plasma/searchaction.h>
+#include <plasma/searchcontext.h>
 
-class KActionCollection;
-class QAction;
+class KCompletion;
 
 namespace Plasma
 {
 
-class AbstractRunner;
-class SearchAction;
-
-class PLASMA_EXPORT SearchContext : public QObject
-{
-    Q_OBJECT
-
-    public:
-        enum Type { UnknownType = 0,
-                    Directory,
-                    File,
-                    NetworkLocation,
-                    Executable,
-                    ShellCommand,
-                    Help
-                  };
-
-        explicit SearchContext(QObject *parent = 0);
-        ~SearchContext();
-
-        void setTerm(const QString&);
-        QString term() const;
-        Type type() const;
-        QString mimetype() const;
-
-        SearchAction* addInformationalMatch(AbstractRunner *runner);
-        SearchAction* addExactMatch(AbstractRunner *runner);
-        SearchAction* addPossibleMatch(AbstractRunner *runner);
-
-        QList<SearchAction *> informationalMatches() const;
-        QList<SearchAction *> exactMatches() const;
-        QList<SearchAction *> possibleMatches() const;
-
-    private:
-        class Private;
-        Private * const d;
-};
-
-class PLASMA_EXPORT SearchAction : public QAction
-{
-    Q_OBJECT
-
-    public:
-        enum Type { InformationalMatch,
-                    ExactMatch,
-                    PossibleMatch };
-
-        SearchAction(SearchContext *search, AbstractRunner *runner);
-        ~SearchAction();
-
-        /**
-         * Sets the type of match this action represents.
-         */
-        void setType(Type type);
-
-        /**
-         * The type of action this is. Defaults to ExactMatch.
-         */
-        Type type() const;
-
-        /**
-         * Sets the mimetype, if any, associated with this match
-         *
-         * @arg mimetype the mimetype
-         */
-        void setMimetype(const QString &mimetype);
-
-        /**
-         * The mimetype associated with this action, if any
-         */
-        QString mimetype() const;
-
-        /**
-         * The search term that triggered this action
-         */
-        QString term() const;
-
-        /**
-         * Sets the relevance of this action for the search
-         * it was created for.
-         *
-         * @param relevance a number between 0 and 1.
-         */
-        void setRelevance(qreal relevance);
-
-        /**
-         * The relevance of this action to the search. By default,
-         * the relevance is 1.
-         *
-         * @return a number between 0 and 1
-         */
-        qreal relevance() const;
-
-        /**
-         * The runner associated with this action
-         */
-        AbstractRunner* runner() const;
-
-        bool operator<(const SearchAction& other) const;
-
-    protected Q_SLOTS:
-        void exec();
-
-    private:
-        class Private;
-        Private * const d;
-};
-
 /**
- * A abstract super-class for Plasma Runners
+ * An abstract base class for Plasma Runner plugins
  */
 class PLASMA_EXPORT AbstractRunner : public QObject
 {

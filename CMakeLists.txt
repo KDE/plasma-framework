@@ -35,6 +35,8 @@ set(plasma_LIB_SRCS
     plasma.cpp
     plasma_export.h
     scriptengine.cpp
+    searchaction.cpp
+    searchcontext.cpp
     shadowitem.cpp
     svg.cpp
     theme.cpp
@@ -106,6 +108,8 @@ set(plasma_LIB_INCLUDES
     plasma.h
     plasma_export.h
     scriptengine.h
+    searchaction.h
+    searchcontext.h
     shadowitem_p.h
     svg.h
     theme.h
