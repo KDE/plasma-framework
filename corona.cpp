@@ -231,7 +231,7 @@ void Corona::loadDefaultSetup()
         c->setScreen(i);
         c->setFormFactor(Plasma::Planar);
 
-        if (g.x() <= topLeftCorner.x() && g.y() <= topLeftCorner.y()) {
+        if (g.x() <= topLeftCorner.x() && g.y() >= topLeftCorner.y()) {
             topLeftCorner = g.topLeft();
             topLeftScreen = i;
         }
