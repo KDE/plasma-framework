@@ -74,7 +74,7 @@ AppletBrowser::AppletBrowser(Plasma::Containment * containment, QWidget * parent
 
 void AppletBrowser::init()
 {
-    d->appletList = new KCategorizedItemsView(this);
+    d->appletList = new KCategorizedItemsView(this); //TODO: focus the lineedit on startup
     connect(d->appletList, SIGNAL(activated(const QModelIndex &)), this, SLOT(addApplet()));
     setMainWidget(d->appletList);
 
