@@ -72,7 +72,6 @@ void PlasmoidPackageTest::isValid()
     // Should still be invalid.
     delete p;
     p = new Plasma::Package(mPackageRoot, mPackage, *ps);
-    qDebug() << p->isValid();
     QVERIFY(!p->isValid());
     
     // Create the code dir.
@@ -96,6 +95,43 @@ void PlasmoidPackageTest::isValid()
     delete p;
     p = new Plasma::Package(mPackageRoot, mPackage, *ps);
     QVERIFY(p->isValid());
+}
+
+void PlasmoidPackageTest::filePath()
+{
+    // Package::filePath() returns
+    // - {package_root}/{package_name}/path/to/file if the file exists
+    // - QString() otherwise.
+
+    delete p;
+    p = new Plasma::Package(mPackageRoot, mPackage, *ps);
+
+    QCOMPARE(p->filePath("scripts", "main"), QString());
+
+    QVERIFY(QDir().mkpath(mPackageRoot + "/" + mPackage + "/code"));
+    QFile file(mPackageRoot + "/" + mPackage + "/code/main");
+    QVERIFY(file.open(QIODevice::WriteOnly | QIODevice::Text));
+
+    QTextStream out(&file);
+    out << "THIS IS A PLASMOID SCRIPT.....";
+    file.flush();
+    file.close();
+
+    // The package is valid by now so a path for code/main should get returned.
+    delete p;
+    p = new Plasma::Package(mPackageRoot, mPackage, *ps);
+
+    QString path = mPackageRoot + "/" + mPackage + "/code/main";
+
+    // Two ways to get the same info.
+    // 1. Give the file type which refers to a class of files (a directory) in
+    //    the package strucutre and the file name.
+    // 2. Give the file type which refers to a file in the package structure.
+    //
+    // NOTE: scripts, main and mainscript are defined in packages.cpp and are
+    //       specific for a PlasmoidPackag.
+    QCOMPARE(p->filePath("scripts", "main"), path);
+    QCOMPARE(p->filePath("mainscript"), path);
 }
 
 QTEST_KDEMAIN(PlasmoidPackageTest, NoGUI)

@@ -104,8 +104,9 @@ QString Package::filePath(const char* fileType, const QString& filename) const
         return QString();
     }
 
+    path.prepend(d->basePath);
+
     if (!filename.isEmpty()) {
-        path.prepend(d->basePath);
         path.append("/").append(filename);
     }
 

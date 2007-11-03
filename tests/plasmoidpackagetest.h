@@ -33,6 +33,7 @@ public Q_SLOTS:
 
 private Q_SLOTS:
     void isValid();
+    void filePath();
 
 private:
     void removeDir(const QString &subdir);
