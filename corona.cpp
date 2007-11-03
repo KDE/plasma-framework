@@ -298,6 +298,7 @@ Containment* Corona::addContainment(const QString& name, const QVariantList& arg
 
         // we want to provide something and don't care about the failure to launch
         containment->setFailedToLaunch(false);
+        containment->setFormFactor(Plasma::Planar);
     }
 
     if (!delayedInit) {
