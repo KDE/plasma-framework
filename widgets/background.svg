@@ -2,7 +2,7 @@
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
 <svg
    xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://web.resource.org/cc/"
+   xmlns:cc="http://creativecommons.org/ns#"
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
@@ -14,7 +14,7 @@
    height="50"
    id="svg2"
    sodipodi:version="0.32"
-   inkscape:version="0.45.1"
+   inkscape:version="0.45+devel"
    sodipodi:docname="background.svg"
    sodipodi:docbase="/home/aseigo/kde4/KDE/kdebase/workspace/plasma/desktoptheme/widgets"
    inkscape:output_extension="org.inkscape.output.svg.inkscape">
@@ -30,7 +30,7 @@
     </rdf:RDF>
   </metadata>
   <sodipodi:namedview
-     inkscape:window-height="582"
+     inkscape:window-height="654"
      inkscape:window-width="806"
      inkscape:pageshadow="2"
      inkscape:pageopacity="0.0"
@@ -41,16 +41,20 @@
      bordercolor="#666666"
      pagecolor="#ffffff"
      id="base"
-     inkscape:zoom="3.9166667"
-     inkscape:cx="21"
-     inkscape:cy="25"
-     inkscape:window-x="461"
-     inkscape:window-y="189"
-     inkscape:current-layer="svg2" />
+     inkscape:zoom="5.5390032"
+     inkscape:cx="44.591218"
+     inkscape:cy="24.245951"
+     inkscape:window-x="368"
+     inkscape:window-y="365"
+     inkscape:current-layer="svg2">
+    <inkscape:grid
+       type="xygrid"
+       id="grid2893" />
+  </sodipodi:namedview>
   <defs
      id="defs5" />
   <rect
-     style="opacity:0.875;fill:#000000;stroke:#000000;stroke-opacity:1;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none"
+     style="opacity:1;fill:#000000;stroke:#000000;stroke-opacity:1;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none"
      id="center"
      width="42"
      height="50"
@@ -113,11 +117,8 @@
      width="2"
      height="23"
      id="top" />
-  <rect
-     width="2"
-     height="2"
-     x="20"
-     y="23"
-     id="rect2309"
-     style="opacity:1;fill:#000000;fill-opacity:1;stroke:none;stroke-width:5.19999981;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:1.08779998;stroke-opacity:1" />
+  <path
+     style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dashoffset:4.15;stroke-opacity:1"
+     d="M 20,23 L 22,23 L 22,25 L 20,25 L 20,23 z"
+     id="rect2895" />
 </svg>
