@@ -501,6 +501,7 @@ void Applet::updateConstraints(Plasma::Constraints constraints)
 
 void Applet::constraintsUpdated(Plasma::Constraints constraints)
 {
+    Q_UNUSED(constraints)
     //kDebug() << constraints << "constraints are FormFactor: " << formFactor() << ", Location: " << location();
 }
 
@@ -616,6 +617,7 @@ void Applet::setFailedToLaunch(bool failed, const QString& reason)
     if (d->failed == failed) {
         if (d->failureText) {
             d->failureText->setHtml(visibleFailureText(reason));
+            setGeometry(QRectF(geometry().topLeft(), d->failureText->sizeHint()));
         }
         return;
     }
@@ -627,11 +629,13 @@ void Applet::setFailedToLaunch(bool failed, const QString& reason)
 
     if (failed) {
         setDrawStandardBackground(true);
-        Layout* failureLayout = new BoxLayout(BoxLayout::TopToBottom,this);
+        Layout* failureLayout = new BoxLayout(BoxLayout::TopToBottom, this);
+        failureLayout->setMargin(0);
         d->failureText = new LineEdit(this, scene());
         d->failureText->setFlags(0);
         d->failureText->setHtml(visibleFailureText(reason));
         failureLayout->addItem(d->failureText);
+        setGeometry(QRectF(geometry().topLeft(), d->failureText->sizeHint()));
     } else {
         d->failureText = 0;
     }
