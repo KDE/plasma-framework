@@ -218,6 +218,10 @@ void Widget::setGeometry(const QRectF& geometry)
         if (layout()) {
             layout()->setGeometry(boundingRect());
         }
+
+        if (managingLayout()) {
+            managingLayout()->invalidate();
+        }
     }
 
     setPos(geometry.topLeft());
