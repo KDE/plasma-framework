@@ -69,7 +69,12 @@ class PLASMA_EXPORT Theme : public QObject
         void setApplication(const QString &appname);
 
         /**
-         * @return the name of the theme. "default" is none set.
+         * Sets the current theme being used.
+         */
+        void setThemeName(const QString &themeName);
+
+        /**
+         * @return the name of the theme.
          */
         QString themeName() const;
 

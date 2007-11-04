@@ -31,8 +31,19 @@ class Theme::Private
 {
 public:
    Private()
-       : themeName( "default" )
+       : themeName("default")
    {
+   }
+
+   KConfigGroup config()
+   {
+       QString groupName = "Theme";
+       if (!app.isEmpty() && app != "plasma") {
+           groupName.append("-").append(app);
+       }
+
+       KSharedConfig::Ptr config = KSharedConfig::openConfig("plasmarc");
+       return KConfigGroup(config, groupName);
    }
 
    QString themeName;
@@ -61,6 +72,7 @@ Theme::Theme(QObject* parent)
 
 Theme::~Theme()
 {
+    d->config().writeEntry("name", d->themeName);
     delete d;
 }
 
@@ -74,15 +86,13 @@ void Theme::setApplication(const QString &appname)
 
 void Theme::settingsChanged()
 {
-    QString groupName = "Theme";
-    if (!d->app.isEmpty() && d->app != "plasma") {
-        groupName.append("-").append(d->app);
-    }
+    setThemeName(d->config().readEntry("name", d->themeName));
+}
 
-    KSharedConfig::Ptr config = KSharedConfig::openConfig("plasmarc");
-    KConfigGroup group(config, groupName);
-    QString themeName = group.readEntry("name", d->themeName);
-    if (themeName != d->themeName) {
+void Theme::setThemeName(const QString &themeName)
+{
+    if (themeName != d->themeName &&
+        !KStandardDirs::locate("data", "desktoptheme/" + d->themeName).isEmpty()) {
         d->themeName = themeName;
         emit changed();
     }
@@ -98,10 +108,16 @@ QString Theme::image( const QString& name ) const
     QString search = "desktoptheme/" + d->themeName + '/' + name + ".svg";
     QString path =  KStandardDirs::locate( "data", search );
 
-    if ( path.isEmpty() ) {
-        kDebug() << "Theme says: bad image path " << name 
-                 << "; looked in: " << search
-                 <<  endl;
+    if (path.isEmpty()) {
+        if (d->themeName != "default") {
+            search = "desktoptheme/default/" + name + ".svg";
+            path = KStandardDirs::locate("data", search);
+        }
+
+        if (path.isEmpty()) {
+            kDebug() << "Theme says: bad image path " << name 
+                     << "; looked in: " << search <<  endl;
+        }
     }
 
     return path;
