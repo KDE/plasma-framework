@@ -403,7 +403,7 @@ void Containment::setScreen(int screen)
         screen = -1;
     }
 
-    kDebug() << "APAKU: setting screen to " << screen << "and type is" << type();
+    //kDebug() << "setting screen to " << screen << "and type is" << type();
     if (screen > -1) {
         QRect r = desktop.screenGeometry(screen);
 
@@ -432,7 +432,7 @@ void Containment::setScreen(int screen)
         } else if (type() == PanelContainment) {
             QDesktopWidget desktop;
             QRect r = desktop.screenGeometry(screen);
-            kDebug() << "APAKU: we are a panel on" << r << ", let's move ourselves to a negative coordinate system" << -r.height() - INTER_CONTAINMENT_MARGIN;
+            //kDebug() << "we are a panel on" << r << ", let's move ourselves to a negative coordinate system" << -r.height() - INTER_CONTAINMENT_MARGIN;
             //FIXME PANELS: multiple panel support means having to move the panels up
             //              this requires a proper panel manager, discuss in the panel
             //              irc meeting
