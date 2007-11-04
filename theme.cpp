@@ -19,6 +19,8 @@
 
 #include "theme.h"
 
+#include <QFile>
+
 #include <KSharedConfig>
 #include <KStandardDirs>
 #include <kdebug.h>
@@ -31,7 +33,6 @@ class Theme::Private
 {
 public:
    Private()
-       : themeName("default")
    {
    }
 
@@ -42,12 +43,13 @@ public:
            groupName.append("-").append(app);
        }
 
-       KSharedConfig::Ptr config = KSharedConfig::openConfig("plasmarc");
+       KSharedConfigPtr config = KSharedConfig::openConfig("plasmarc");
        return KConfigGroup(config, groupName);
    }
 
    QString themeName;
    QString app;
+   KSharedConfigPtr colors;
 };
 
 class ThemeSingleton
@@ -86,16 +88,40 @@ void Theme::setApplication(const QString &appname)
 
 void Theme::settingsChanged()
 {
-    setThemeName(d->config().readEntry("name", d->themeName));
+    setThemeName(d->config().readEntry("name", "default"));
 }
 
 void Theme::setThemeName(const QString &themeName)
 {
-    if (themeName != d->themeName &&
-        !KStandardDirs::locate("data", "desktoptheme/" + d->themeName).isEmpty()) {
-        d->themeName = themeName;
-        emit changed();
+    if (themeName.isEmpty() || themeName == d->themeName) {
+        // let's try and get the default theme at least
+        if (d->themeName.isEmpty()) {
+            setThemeName("default");
+        }
+        return;
     }
+
+    //TODO: should we care about names with relative paths in them?
+    QString themePath = KStandardDirs::locate("data", "desktoptheme/" + themeName + "/");
+    if (themePath.isEmpty()) {
+        // let's try and get the default theme at least
+        if (d->themeName.isEmpty() && themeName != "default") {
+            setThemeName("default");
+        }
+        return;
+    }
+
+    d->themeName = themeName;
+
+    // load the color scheme config
+    themePath = themePath.append("colors");
+    if (QFile::exists(themePath)) {
+        d->colors = KSharedConfig::openConfig(themePath);
+    } else {
+        d->colors = 0;
+    }
+
+    emit changed();
 }
 
 QString Theme::themeName() const
@@ -105,6 +131,9 @@ QString Theme::themeName() const
 
 QString Theme::image( const QString& name ) const
 {
+    //TODO: performance ... should we try and cache the results of KStandardDirs::locate?
+    //      should we just use whatever theme path was returned and not care about cascades?
+    //      (probably "no" on the last question)
     QString search = "desktoptheme/" + d->themeName + '/' + name + ".svg";
     QString path =  KStandardDirs::locate( "data", search );
 
@@ -121,6 +150,11 @@ QString Theme::image( const QString& name ) const
     }
 
     return path;
+}
+
+KSharedConfigPtr Theme::colors() const
+{
+    return d->colors;
 }
 
 }

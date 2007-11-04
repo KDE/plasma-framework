@@ -22,6 +22,8 @@
 
 #include <QtCore/QObject>
 
+#include <KSharedConfig>
+
 #include <plasma/plasma_export.h>
 
 namespace Plasma
@@ -86,6 +88,13 @@ class PLASMA_EXPORT Theme : public QObject
          * @return the full path to the requested file for the current theme
          */
         Q_INVOKABLE QString image( const QString& name ) const;
+
+        /**
+         * Returns the color scheme configurationthat goes along this theme.
+         * This can be used with KStatefulBrush and KColorScheme to determine
+         * the proper colours to use along with the visual elements in this theme.
+         */
+        Q_INVOKABLE KSharedConfigPtr colors() const;
 
     Q_SIGNALS:
         /**
