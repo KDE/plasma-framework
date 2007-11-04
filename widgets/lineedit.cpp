@@ -53,8 +53,8 @@ bool LineEdit::Private::shouldPaint(QPainter *painter, const QTransform &transfo
     return true;
 }
 
-LineEdit::LineEdit(QGraphicsItem *parent, QGraphicsScene *scene)
-    : QGraphicsTextItem(parent, scene),
+LineEdit::LineEdit(QGraphicsItem *parent)
+    : QGraphicsTextItem(parent),
       d(new Private())
 {
     setTextInteractionFlags(Qt::TextEditorInteraction);

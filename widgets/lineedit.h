@@ -46,12 +46,12 @@ class PLASMA_EXPORT LineEdit : public QGraphicsTextItem, public LayoutItem
     Q_PROPERTY( QString plainText READ toPlainText )
 
     public:
-        explicit LineEdit(QGraphicsItem *parent = 0, QGraphicsScene *scene = 0);
+        explicit LineEdit(QGraphicsItem *parent = 0);
         ~LineEdit();
 
         void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
         void paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
-       
+
         Qt::Orientations expandingDirections() const;
 
         QSizeF minimumSize() const;
