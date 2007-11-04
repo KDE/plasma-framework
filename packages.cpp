@@ -53,6 +53,7 @@ PlasmoidStructure::PlasmoidStructure()
 ThemePackageStructure::ThemePackageStructure()
     : Plasma::PackageStructure(QString("Plasma Theme"))
 {
+    addDirectoryDefinition("dialogs", "dialogs/", i18n("Images for dialogs"));
     addFileDefinition("dialogs/background", "dialogs/background.svg",
                       i18n("Generic dialog background"));
     addFileDefinition("dialogs/shutdowndlg", "dialogs/shutdowndlg.svg",
@@ -60,6 +61,7 @@ ThemePackageStructure::ThemePackageStructure()
     addFileDefinition("dialogs/shutdowndlgbuttonglow", "dialogs/shutdowndlgbuttonglow.svg",
                       i18n("Overlay for buttons on the log out dialog"));
 
+    addDirectoryDefinition("widgets", "widgets/", i18n("Images for widgets"));
     addFileDefinition("widgets/background", "widgets/background.svg",
                       i18n("Background image for plasmoids"));
     addFileDefinition("widgets/clock", "widgets/clock.svg",
@@ -68,8 +70,8 @@ ThemePackageStructure::ThemePackageStructure()
                       i18n("Back- and foregrounds for clickable icons"));
     addFileDefinition("widgets/plot-background", "widgets/plot-background.svg",
                       i18n("Background for graphing widgets"));
-    addFileDefinition("widgets/toolbox-button", "widgets/toolbox-button.svg",
-                      i18n("The desktop toolbox hotspot background"));
+
+    addFileDefinition("colors", "colors", i18n("KColorScheme configuration file"));
 
     QStringList mimetypes;
     mimetypes << "image/svg+xml";
