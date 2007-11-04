@@ -101,6 +101,7 @@ void Containment::init()
     setFlag(QGraphicsItem::ItemIsMovable, false);
     setFlag(QGraphicsItem::ItemClipsChildrenToShape, false);
     setAcceptDrops(true);
+    setDrawStandardBackground(false);
 
     //TODO: would be nice to not do this on init, as it causes Phase to init
     connect(Phase::self(), SIGNAL(animationComplete(QGraphicsItem*,Plasma::Phase::Animation)),
@@ -126,15 +127,6 @@ void Containment::saveConstraints(KConfigGroup* group) const
 Containment::Type Containment::type()
 {
     return DesktopContainment;
-}
-
-void Containment::paintInterface(QPainter *painter,
-                                 const QStyleOptionGraphicsItem *option,
-                                 const QRect& contentsRect)
-{
-    Q_UNUSED(option)
-    // If the derived class can't be bothered - just draw a plane old rectangle
-    painter->drawRect(contentsRect.adjusted(1, 1, -1, -1));
 }
 
 QSizeF Containment::contentSizeHint() const

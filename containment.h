@@ -102,14 +102,6 @@ class PLASMA_EXPORT Containment : public Applet
         virtual Type type();
 
         /**
-         * Paints a default background image. Nothing fancy, but that's what plugins
-         * are for. Reimplemented from Applet;
-         */
-        void paintInterface(QPainter *painter,
-                            const QStyleOptionGraphicsItem *option,
-                            const QRect& contentsRect);
-
-        /**
          * Returns the current form factor the applets in this Containment
          * are being displayed in.
          *
