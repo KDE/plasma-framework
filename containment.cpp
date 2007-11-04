@@ -315,10 +315,9 @@ Applet* Containment::addApplet(const QString& name, const QVariantList& args, ui
         applet->setGeometry(geometry);
     } else if (geometry.x() != -1 && geometry.y() != -1) {
         // yes, this means we can't have items start -1, -1
-        applet->setGeometry(QRectF(geometry.topLeft() - QPointF(applet->sizeHint().width()/2,
-                                                                applet->sizeHint().height()/2),
+        applet->setGeometry(QRectF(geometry.topLeft(),
                                    applet->sizeHint()));
-    } else {
+    } else if (this->geometry().isValid()) {
         //TODO: Make sure new applets don't overlap with existing ones
         // Center exactly:
         QSizeF size = applet->sizeHint();
