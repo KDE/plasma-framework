@@ -22,6 +22,6 @@ install(FILES
     DESTINATION ${DATA_INSTALL_DIR}/desktoptheme/default/)
 
 install(FILES
-    desktoptheme-default.desktop
+    metadata.desktop
     DESTINATION ${DATA_INSTALL_DIR}/desktoptheme)
 
