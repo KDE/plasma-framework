@@ -30,6 +30,7 @@
 #include <QPainter>
 #include <QSize>
 #include <QStyleOptionGraphicsItem>
+#include <QTextDocument>
 #include <QTimer>
 #include <QUiLoader>
 
@@ -606,7 +607,7 @@ QString visibleFailureText(const QString& reason)
     if (reason.isEmpty()) {
         text = i18n("This object could not be created.");
     } else {
-        text = i18n("This object could not be created for the following reason:<p>%1</p>", reason);
+        text = i18n("This object could not be created for the following reason:<p><b>%1</b></p>", reason);
     }
 
     return text;
@@ -631,9 +632,12 @@ void Applet::setFailedToLaunch(bool failed, const QString& reason)
         setDrawStandardBackground(true);
         Layout* failureLayout = new BoxLayout(BoxLayout::TopToBottom, this);
         failureLayout->setMargin(0);
-        d->failureText = new LineEdit(this, scene());
-        d->failureText->setFlags(0);
+        d->failureText = new LineEdit(this);
+        d->failureText->setStyled(false);
+        d->failureText->document()->setTextWidth(200);
         d->failureText->setHtml(visibleFailureText(reason));
+        //FIXME: this needs to get the colour from the theme's colour scheme
+        d->failureText->setDefaultTextColor(Qt::white);
         failureLayout->addItem(d->failureText);
         setGeometry(QRectF(geometry().topLeft(), d->failureText->sizeHint()));
     } else {
@@ -1138,6 +1142,10 @@ void Applet::setGeometry(const QRectF& geometry)
 
         if (layout()) {
             layout()->setGeometry(QRectF(QPoint(0, 0), contentSize()));
+        }
+
+        if (managingLayout()) {
+            managingLayout()->invalidate();
         }
     }
 
