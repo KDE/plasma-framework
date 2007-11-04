@@ -35,6 +35,7 @@
 #include <QUiLoader>
 
 #include <KIcon>
+#include <KColorScheme>
 #include <KConfigDialog>
 #include <KDialog>
 #include <KPluginInfo>
@@ -53,6 +54,7 @@
 #include "plasma/scriptengine.h"
 #include "plasma/shadowitem_p.h"
 #include "plasma/svg.h"
+#include "plasma/theme.h"
 
 #include "plasma/widgets/widget.h"
 #include "plasma/widgets/lineedit.h"
@@ -637,7 +639,10 @@ void Applet::setFailedToLaunch(bool failed, const QString& reason)
         d->failureText->document()->setTextWidth(200);
         d->failureText->setHtml(visibleFailureText(reason));
         //FIXME: this needs to get the colour from the theme's colour scheme
-        d->failureText->setDefaultTextColor(Qt::white);
+        d->failureText->setDefaultTextColor(KStatefulBrush(KColorScheme::Window,
+                                                           KColorScheme::NormalText,
+                                                           Theme::self()->colors())
+                                                        .brush(QPalette::Normal).color());
         failureLayout->addItem(d->failureText);
         setGeometry(QRectF(geometry().topLeft(), d->failureText->sizeHint()));
     } else {
