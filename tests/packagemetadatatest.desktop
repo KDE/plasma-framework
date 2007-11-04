@@ -1,12 +1,21 @@
 [Desktop Entry]
 Name=Package metadata test file
+Name[nds]=Paketmetadaten-Testdatei
+Name[pt]=Ficheiro de testes de meta-dados dos pacotes
+Name[pt_BR]=Ficheiro de testes de meta-dados dos pacotes
 Comment=A test desktop file to test the PackageMetaData class.
+Comment[nds]=Schriefdisch-Datei för't Utproberen vun de PackageMetaData-Klass
+Comment[pt]=Um ficheiro 'desktop' de testes da classe PackageMetaData.
+Comment[pt_BR]=Um ficheiro 'desktop' de testes da classe PackageMetaData.
 
 Icon=test
 Type=Service
 ServiceTypes=Plasma/Applet
 
 Description=Some fancy test description
+Description[nds]=Jichtenseen smuck Testbeschrieven
+Description[pt]=Uma descrição de teste bonita
+Description[pt_BR]=Uma descrição de teste bonita
 
 X-KDE-Screenshot=a_not_default_file.svg
 X-KDE-Library=some_test_library
