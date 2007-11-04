@@ -203,7 +203,7 @@ void ProgressBar::paintWidget(QPainter *painter, const QStyleOptionGraphicsItem 
     options.text = text();
 
     options.invertedAppearance = d->invertedAppearance;
-    options.rect = geometry().toRect();
+    options.rect = option->rect;
 
     style->drawControl(QStyle::CE_ProgressBar, &options, painter, widget);
 }
