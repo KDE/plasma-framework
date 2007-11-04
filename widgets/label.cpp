@@ -9,12 +9,15 @@ namespace Plasma {
 class Label::Private
 {
     public:
-        Private() {}
+        Private()
+            : maximumWidth(9999)
+        {}
 
         QString text;
         Qt::Alignment alignment;
         QPen textPen;
         QFont textFont;
+        int maximumWidth;
 };
 
 Label::Label(Widget *parent)
@@ -42,16 +45,15 @@ bool Label::hasHeightForWidth() const
 
 qreal Label::heightForWidth(qreal w) const
 {
-    Q_UNUSED(w);
     //FIXME: this looks a bit odd?
-    return 0;
+    QFontMetricsF m(d->textFont);
+    return m.boundingRect(QRectF(0, 0, w, 9999), d->alignment | Qt::TextWordWrap, d->text).height();
 }
 
 QSizeF Label::sizeHint() const
 {
     QFontMetricsF m(d->textFont);
-
-    return m.boundingRect(QRectF(0,0,9999,9999), d->alignment | Qt::TextWordWrap, d->text).size();
+    return m.boundingRect(QRectF(0, 0, d->maximumWidth, 9999), d->alignment | Qt::TextWordWrap, d->text).size();
 }
 
 void Label::setText(const QString& text)
@@ -82,6 +84,16 @@ void Label::setPen(const QPen& pen)
 QPen Label::pen() const
 {
     return d->textPen;
+}
+
+void Label::setMaximumWidth(int width)
+{
+    d->maximumWidth = width;
+}
+
+int Label::maximumWidth() const
+{
+    return d->maximumWidth;
 }
 
 void Label::setFont(const QFont& font)

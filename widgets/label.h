@@ -44,6 +44,7 @@ class PLASMA_EXPORT Label : public Plasma::Widget
     Q_PROPERTY( QString text READ text WRITE setText )
     Q_PROPERTY( Qt::Alignment alignment READ alignment WRITE setAlignment )
     Q_PROPERTY( QPen pen READ pen WRITE setPen )
+    Q_PROPERTY( int maximumWidth READ maximumWidth WRITE setMaximumWidth )
 
     public:
 
@@ -106,6 +107,18 @@ class PLASMA_EXPORT Label : public Plasma::Widget
          * Returns the pen used to paint the text.
          */
         QPen pen() const;
+
+        /**
+         * Sets the maximum width that this label should extend to
+         *
+         * @arg width the new maximum width in pixels
+         */
+        void setMaximumWidth(int width);
+
+        /**
+         * The width in pixels that this label is constrained to
+         */
+        int maximumWidth() const;
 
         /**
          * Sets the font used for the text.
