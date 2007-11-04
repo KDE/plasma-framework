@@ -18,6 +18,10 @@ install(FILES
     DESTINATION ${DATA_INSTALL_DIR}/desktoptheme/default/widgets/)
 
 install(FILES
+    colors
+    DESTINATION ${DATA_INSTALL_DIR}/desktoptheme/default/)
+
+install(FILES
     desktoptheme-default.desktop
     DESTINATION ${DATA_INSTALL_DIR}/desktoptheme)
 
