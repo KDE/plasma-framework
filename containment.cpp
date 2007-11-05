@@ -88,6 +88,7 @@ Containment::Containment(QObject* parent, const QVariantList& args)
     : Applet(parent, args),
       d(new Private)
 {
+    setAcceptsHoverEvents(true);
 }
 
 Containment::~Containment()
