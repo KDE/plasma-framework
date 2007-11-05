@@ -521,6 +521,26 @@ void Containment::dropEvent(QGraphicsSceneDragDropEvent *event)
     }
 }
 
+void Containment::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
+{
+    //FIXME Qt4.4 check to see if this is still necessary to avoid unecessary repaints
+    //            check with QT_FLUSH_PAINT=1 and mouse through applets that accept hover,
+    //            applets that don't and system windows
+    if (event->spontaneous()) {
+        Applet::hoverEnterEvent(event);
+    }
+    Q_UNUSED(event)
+}
+
+void Containment::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
+{
+    //FIXME Qt4.4 check to see if this is still necessary to avoid unecessary repaints
+    //            check with QT_FLUSH_PAINT=1 and mouse through applets that accept hover,
+    //            applets that don't and system windows
+//    Applet::hoverLeaveEvent(event);
+    Q_UNUSED(event)
+}
+
 }
 
 #include "containment.moc"
