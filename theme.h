@@ -22,7 +22,7 @@
 
 #include <QtCore/QObject>
 
-#include <KSharedConfig>
+#include <KDE/KSharedConfig>
 
 #include <plasma/plasma_export.h>
 
