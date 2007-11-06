@@ -34,11 +34,11 @@ class PLASMA_EXPORT AppletBrowser: public KDialog
 {
     Q_OBJECT
 public:
-    explicit AppletBrowser(Plasma::Corona *corona, const QString& app = QString(), QWidget *parent = 0, Qt::WindowFlags f = 0);
-    explicit AppletBrowser(Plasma::Containment *containment, const QString&  = QString(), QWidget *parent = 0, Qt::WindowFlags f = 0);
+    explicit AppletBrowser(Plasma::Corona *corona, QWidget *parent = 0, Qt::WindowFlags f = 0);
+    explicit AppletBrowser(Plasma::Containment *containment, QWidget *parent = 0, Qt::WindowFlags f = 0);
     virtual ~AppletBrowser();
 
-    void setApplication( const QString& application );
+    void setApplication(const QString& application = QString());
     QString Application();
 
 protected Q_SLOTS:

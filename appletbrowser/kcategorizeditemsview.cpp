@@ -90,7 +90,9 @@ void KCategorizedItemsView::setFilterModel(QStandardItemModel * model)
 
 void KCategorizedItemsView::setItemModel(QStandardItemModel * model)
 {
-    if (!m_modelFilterItems) m_modelFilterItems = new DefaultItemFilterProxyModel(this);
+    if (!m_modelFilterItems) {
+        m_modelFilterItems = new DefaultItemFilterProxyModel(this);
+    }
 
     m_modelItems = model;
     m_modelFilterItems->setSourceModel(m_modelItems);

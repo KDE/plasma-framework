@@ -80,11 +80,18 @@ QVariantList PlasmaAppletItem::arguments() const
     return qvariant_cast<QVariantList>(data().toMap()["arguments"]);
 }
 
-PlasmaAppletItemModel::PlasmaAppletItemModel(KConfigGroup configGroup, QString app, QObject * parent) :
+PlasmaAppletItemModel::PlasmaAppletItemModel(KConfigGroup configGroup, QObject * parent) :
     KCategorizedItemsViewModels::DefaultItemModel(parent),
-    m_application( app ),
     m_configGroup(configGroup)
 {
+    m_used = m_configGroup.readEntry("used").split(",");
+    m_favorites = m_configGroup.readEntry("favorites").split(",");
+}
+
+void PlasmaAppletItemModel::populateModel()
+{
+    clear();
+    //kDebug() << "populating model, our application is" << m_application;
 
     // Recommended emblems and filters
     QRegExp rx("recommended[.]([0-9A-Za-z]+)[.]plugins");
@@ -100,11 +107,9 @@ PlasmaAppletItemModel::PlasmaAppletItemModel(KConfigGroup configGroup, QString a
         }
     }
 
-    m_favorites = m_configGroup.readEntry("favorites").split(",");
-    m_used = m_configGroup.readEntry("used").split(",");
-
-    //TODO: get recommended, favorit, used, etc out of knownApplets()
-    foreach (const KPluginInfo& info, Plasma::Applet::knownApplets( QString(), m_application)) {
+    //TODO: get recommended, favorite, used, etc out of knownApplets()
+    //kDebug() << "number of applets is" <<  Plasma::Applet::knownApplets(QString(), m_application).count();
+    foreach (const KPluginInfo& info, Plasma::Applet::knownApplets(QString(), m_application)) {
         //kDebug() << info.pluginName() << "NoDisplay" << info.property("NoDisplay").toBool();
         if (info.property("NoDisplay").toBool()) {
             // we don't want to show the hidden category
@@ -185,6 +190,7 @@ void PlasmaAppletItemModel::setFavorite(QString plugin, bool favorite)
 void PlasmaAppletItemModel::setApplication(const QString& app)
 {
     m_application = app;
+    populateModel();
 }
 
 QString& PlasmaAppletItemModel::Application()

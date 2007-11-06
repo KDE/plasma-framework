@@ -60,7 +60,7 @@ class PlasmaAppletItemModel :
     public KCategorizedItemsViewModels::DefaultItemModel
 {
 public:
-    PlasmaAppletItemModel(KConfigGroup configGroup, QString parentApp = QString(), QObject * parent = 0);
+    PlasmaAppletItemModel(KConfigGroup configGroup, QObject * parent = 0);
 
     QStringList mimeTypes() const;
 
@@ -77,6 +77,7 @@ private:
     KConfigGroup m_configGroup;
 
     void loadSuperKarambaThemes(const KPluginInfo &info);
+    void populateModel();
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(PlasmaAppletItem::FilterFlags)

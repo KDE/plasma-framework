@@ -36,17 +36,18 @@ namespace Plasma
 class AppletBrowser::Private
 {
 public:
-    Private(Corona* co, Containment* cont, AppletBrowser* q, const QString& app)
-        : application( app ),
-          corona(co),
+    Private(Corona* co, Containment* cont, AppletBrowser* q)
+        : corona(co),
           containment(cont),
           appletList(0),
           config("plasmarc"),
           configGroup(&config, "Applet Browser"),
-          itemModel(configGroup, app, q),
+          itemModel(configGroup, q),
           filterModel(q)
     {
     }
+
+    void initFilters();
 
     QString application;
     Plasma::Corona *corona;
@@ -60,16 +61,61 @@ public:
     KCategorizedItemsViewModels::DefaultFilterModel filterModel;
 };
 
-AppletBrowser::AppletBrowser(Plasma::Corona * corona, const QString& application, QWidget * parent, Qt::WindowFlags f)
+void AppletBrowser::Private::initFilters()
+{
+    filterModel.clear();
+
+    filterModel.addFilter(i18n("All Widgets"),
+                          KCategorizedItemsViewModels::Filter(), new KIcon("plasmagik"));
+
+    // Recommended emblems and filters
+    QRegExp rx("recommended[.]([0-9A-Za-z]+)[.]caption");
+    QMapIterator<QString, QString> i(configGroup.entryMap());
+    while (i.hasNext()) {
+        i.next();
+        if (!rx.exactMatch(i.key())) {
+            continue;
+        }
+        //kDebug() << "These are the key/vals in rc file " << rx.cap(1) << "\n";
+
+        QString id = rx.cap(1);
+        QString caption = configGroup.readEntry("recommended." + id + ".caption");
+        QString icon    = configGroup.readEntry("recommended." + id + ".icon");
+        QString plugins = configGroup.readEntry("recommended." + id + ".plugins");
+
+        appletList->addEmblem(i18n("Recommended by %1", caption), new KIcon(icon), 
+                              KCategorizedItemsViewModels::Filter("recommended." + id, true));
+        filterModel.addFilter(i18n("Recommended by %1", caption),
+                              KCategorizedItemsViewModels::Filter("recommended." + id, true), new KIcon(icon));
+    }
+
+    // Filters: Special
+    filterModel.addFilter(i18n("My Favorite Widgets"),
+                          KCategorizedItemsViewModels::Filter("favorite", true),
+                          new KIcon("bookmark"));
+    filterModel.addFilter(i18n("Widgets I Have Used Before"),
+                          KCategorizedItemsViewModels::Filter("used", true),
+                          new KIcon("history"));
+
+    filterModel.addSeparator(i18n("Categories:"));
+
+    foreach (const QString& category, Plasma::Applet::knownCategories(application)) {
+        filterModel.addFilter(category,
+                              KCategorizedItemsViewModels::Filter("category", category));
+    }
+}
+
+
+AppletBrowser::AppletBrowser(Plasma::Corona * corona, QWidget * parent, Qt::WindowFlags f)
     : KDialog(parent, f),
-    d(new Private(corona, 0, this, application))
+    d(new Private(corona, 0, this))
 {
     init();
 }
 
-AppletBrowser::AppletBrowser(Plasma::Containment * containment, const QString& application, QWidget * parent, Qt::WindowFlags f)
+AppletBrowser::AppletBrowser(Plasma::Containment * containment, QWidget * parent, Qt::WindowFlags f)
     : KDialog(parent, f),
-    d(new Private(0, containment, this, application))
+    d(new Private(0, containment, this))
 {
     init();
 }
@@ -93,48 +139,11 @@ void AppletBrowser::init()
     QAction* quit = KStandardAction::quit(qApp, SLOT(quit()), this);
     addAction(quit);
 
-    d->filterModel.addFilter(i18n("All Widgets"),
-        KCategorizedItemsViewModels::Filter(), new KIcon("plasma"));
-
-    // Recommended emblems and filters
-    QRegExp rx("recommended[.]([0-9A-Za-z]+)[.]caption");
-    QMapIterator<QString, QString> i(d->configGroup.entryMap());
-    while (i.hasNext()) {
-        i.next();
-        if (!rx.exactMatch(i.key())) continue;
-        //kDebug() << "These are the key/vals in rc file " << rx.cap(1) << "\n";
-
-        QString id = rx.cap(1);
-        QString caption = d->configGroup.readEntry("recommended." + id + ".caption");
-        QString icon    = d->configGroup.readEntry("recommended." + id + ".icon");
-        QString plugins = d->configGroup.readEntry("recommended." + id + ".plugins");
-
-        d->appletList->addEmblem(i18n("Recommended by %1", caption), new KIcon(icon), 
-            KCategorizedItemsViewModels::Filter("recommended." + id, true));
-        d->filterModel.addFilter(i18n("Recommended by %1", caption),
-            KCategorizedItemsViewModels::Filter("recommended." + id, true), new KIcon(icon));
-
-        //foreach (QString plugin, plugins.split(",")) {}
-    }
-
     // Other Emblems
     d->appletList->addEmblem(i18n("Widgets I Have Used Before"), new KIcon("history"), 
                                 KCategorizedItemsViewModels::Filter("used", true));
 
-    // Filters: Special
-    d->filterModel.addFilter(i18n("My Favorite Widgets"),
-        KCategorizedItemsViewModels::Filter("favorite", true), new KIcon("bookmark"));
-    d->filterModel.addFilter(i18n("Widgets I Have Used Before"),
-        KCategorizedItemsViewModels::Filter("used", true), new KIcon("history"));
-
-    d->filterModel.addSeparator(i18n("Categories:"));
-    
-
-    foreach (const QString& category, Plasma::Applet::knownCategories(d->application)) {
-        d->filterModel.addFilter(category, 
-                                     KCategorizedItemsViewModels::Filter("category", category));
-    }
-        
+    d->initFilters();
     d->appletList->setFilterModel(&d->filterModel);
 
     // Other models
@@ -146,10 +155,15 @@ AppletBrowser::~AppletBrowser()
   delete d;
 }
 
-void AppletBrowser::setApplication( const QString& app )
+void AppletBrowser::setApplication(const QString& app)
 {
     d->application = app;
-    d->itemModel.setApplication( app );
+    d->initFilters();
+    d->itemModel.setApplication(app);
+
+    //FIXME: AFAIK this shouldn't be necessary ... but here it is. need to find out what in that
+    //       maze of models and views is screwing up
+    d->appletList->setItemModel(&d->itemModel);
 }
 
 QString AppletBrowser::Application()
