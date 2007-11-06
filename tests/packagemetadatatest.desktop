@@ -1,11 +1,13 @@
 [Desktop Entry]
 Name=Package metadata test file
 Name[nds]=Paketmetadaten-Testdatei
+Name[nl]=Testbestand voor pakketmetadata
 Name[pt]=Ficheiro de testes de meta-dados dos pacotes
 Name[pt_BR]=Ficheiro de testes de meta-dados dos pacotes
 Name[zh_CN]=打包元数据测试文件
 Comment=A test desktop file to test the PackageMetaData class.
 Comment[nds]=Schriefdisch-Datei för't Utproberen vun de PackageMetaData-Klass
+Comment[nl]=Een desktop-bestand voor het testen van de klasse PackageMetaData.
 Comment[pt]=Um ficheiro 'desktop' de testes da classe PackageMetaData.
 Comment[pt_BR]=Um ficheiro 'desktop' de testes da classe PackageMetaData.
 Comment[zh_CN]=一个用来测试 PackageMetaData 类的测试桌面文件。
@@ -16,6 +18,7 @@ ServiceTypes=Plasma/Applet
 
 Description=Some fancy test description
 Description[nds]=Jichtenseen smuck Testbeschrieven
+Description[nl]=Een elegante testbeschrijving
 Description[pt]=Uma descrição de teste bonita
 Description[pt_BR]=Uma descrição de teste bonita
 Description[zh_CN]=一些精美的测试描述
