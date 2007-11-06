@@ -205,7 +205,7 @@ Qt::Alignment Meter::labelAlignment(int index) const
     return d->alignments[index];
 }
 
-void Meter::updated(QString sourceName, Plasma::DataEngine::Data data)
+void Meter::dataUpdated(QString sourceName, Plasma::DataEngine::Data data)
 {
     Q_UNUSED(sourceName)
 

@@ -119,7 +119,7 @@ void CheckBox::paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *op
     widget-> style()->drawControl(QStyle::CE_CheckBox, &options, painter, widget);
 }
 
-void CheckBox::updated(const QString&, const DataEngine::Data& data)
+void CheckBox::dataUpdated(const QString&, const DataEngine::Data& data)
 {
     foreach (const QVariant& variant, data) {
         if (variant.canConvert(QVariant::Bool)) {

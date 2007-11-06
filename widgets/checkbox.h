@@ -100,7 +100,7 @@ public:
 */
 
 public Q_SLOTS:
-    void updated(const QString&, const DataEngine::Data&);
+    void dataUpdated(const QString&, const DataEngine::Data&);
 
 Q_SIGNALS:
     /**

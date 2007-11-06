@@ -88,7 +88,7 @@ class PLASMA_EXPORT LineEdit : public QGraphicsTextItem, public LayoutItem
         void textChanged(const QString &text);
 
     public Q_SLOTS:
-        void updated(const QString&, const Plasma::DataEngine::Data&);
+        void dataUpdated(const QString&, const Plasma::DataEngine::Data&);
 
     private:
         class Private;

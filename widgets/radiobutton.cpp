@@ -149,9 +149,17 @@ void RadioButton::setText(const QString &text)
     update();
 }
 
-void RadioButton::updated(const QString&, const Plasma::DataEngine::Data &data)
+void RadioButton::dataUpdated(const QString&, const Plasma::DataEngine::Data &data)
 {
-    Q_UNUSED(data);
+    DataEngine::DataIterator it(data);
+
+    while (it.hasNext()) {
+        it.next();
+        if (it.value().canConvert(QVariant::Bool)) {
+            setChecked(it.value().toBool());
+            return;
+        }
+    }
 }
 
 void RadioButton::mousePressEvent(QGraphicsSceneMouseEvent *event)

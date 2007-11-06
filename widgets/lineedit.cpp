@@ -97,7 +97,7 @@ void LineEdit::paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *op
     QGraphicsTextItem::paint(painter, style, widget);
 }
 
-void LineEdit::updated(const QString&, const DataEngine::Data& data)
+void LineEdit::dataUpdated(const QString&, const DataEngine::Data& data)
 {
     DataEngine::DataIterator it(data);
 

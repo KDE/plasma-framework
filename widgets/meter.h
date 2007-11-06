@@ -192,7 +192,7 @@ public Q_SLOTS:
     /**
      * Used when connecting to a DataEngine
      */
-    void updated(QString sourceName, Plasma::DataEngine::Data data);
+    void dataUpdated(QString sourceName, Plasma::DataEngine::Data data);
 
 protected:
     /**

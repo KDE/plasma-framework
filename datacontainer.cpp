@@ -70,7 +70,7 @@ void DataContainer::clearData()
 void DataContainer::checkForUpdate()
 {
     if (d->dirty) {
-        emit updated(objectName(), d->data);
+        emit dataUpdated(objectName(), d->data);
 
         foreach (SignalRelay* relay, d->relays) {
             relay->checkQueueing();
@@ -103,7 +103,7 @@ bool DataContainer::hasUpdates() const
 void DataContainer::checkUsage()
 {
     if (d->relays.count() < 1 &&
-        receivers(SIGNAL(updated(QString, Plasma::DataEngine::Data))) < 1) {
+        receivers(SIGNAL(dataUpdated(QString, Plasma::DataEngine::Data))) < 1) {
         // DO NOT CALL ANYTHING AFTER THIS LINE AS IT MAY GET DELETED!
         emit unused(objectName());
     }
@@ -120,8 +120,8 @@ void DataContainer::connectVisualization(QObject* visualization, uint updateInte
         SignalRelay *relay = objIt.value();
         if (relay) {
             // connected to a relay
-            disconnect(relay, SIGNAL(updated(QString,Plasma::DataEngine::Data)),
-                    visualization, SLOT(updated(QString,Plasma::DataEngine::Data)));
+            disconnect(relay, SIGNAL(dataUpdated(QString,Plasma::DataEngine::Data)),
+                    visualization, SLOT(dataUpdated(QString,Plasma::DataEngine::Data)));
 
             if (relay->isUnused()) {
                 d->relays.remove(relay->m_interval);
@@ -135,8 +135,8 @@ void DataContainer::connectVisualization(QObject* visualization, uint updateInte
             //kDebug() << "     already connected, nothing to do";
             return;
         } else {
-            disconnect(this, SIGNAL(updated(QString,Plasma::DataEngine::Data)),
-                       visualization, SLOT(updated(QString,Plasma::DataEngine::Data)));
+            disconnect(this, SIGNAL(dataUpdated(QString,Plasma::DataEngine::Data)),
+                       visualization, SLOT(dataUpdated(QString,Plasma::DataEngine::Data)));
         }
     }
 
@@ -149,13 +149,13 @@ void DataContainer::connectVisualization(QObject* visualization, uint updateInte
 
     if (updateInterval < 1) {
 //        kDebug() << "    connecting directly";
-        connect(this, SIGNAL(updated(QString,Plasma::DataEngine::Data)),
-                visualization, SLOT(updated(QString,Plasma::DataEngine::Data)));
+        connect(this, SIGNAL(dataUpdated(QString,Plasma::DataEngine::Data)),
+                visualization, SLOT(dataUpdated(QString,Plasma::DataEngine::Data)));
     } else {
 //        kDebug() << "    connecting to a relay";
         connect(d->signalRelay(this, visualization, updateInterval, alignment),
-                SIGNAL(updated(QString,Plasma::DataEngine::Data)),
-                visualization, SLOT(updated(QString,Plasma::DataEngine::Data)));
+                SIGNAL(dataUpdated(QString,Plasma::DataEngine::Data)),
+                visualization, SLOT(dataUpdated(QString,Plasma::DataEngine::Data)));
     }
 }
 
@@ -165,12 +165,12 @@ void DataContainer::disconnectVisualization(QObject* visualization)
 
     if (objIt == d->relayObjects.end() || !objIt.value()) {
         // it is connected directly to the DataContainer itself
-        disconnect(this, SIGNAL(updated(QString,Plasma::DataEngine::Data)),
-                   visualization, SLOT(updated(QString,Plasma::DataEngine::Data)));
+        disconnect(this, SIGNAL(dataUpdated(QString,Plasma::DataEngine::Data)),
+                   visualization, SLOT(dataUpdated(QString,Plasma::DataEngine::Data)));
     } else {
         SignalRelay *relay = objIt.value();
-        disconnect(relay, SIGNAL(updated(QString,Plasma::DataEngine::Data)),
-                   visualization, SLOT(updated(QString,Plasma::DataEngine::Data)));
+        disconnect(relay, SIGNAL(dataUpdated(QString,Plasma::DataEngine::Data)),
+                   visualization, SLOT(dataUpdated(QString,Plasma::DataEngine::Data)));
 
         if (relay->isUnused()) {
             d->relays.remove(relay->m_interval);

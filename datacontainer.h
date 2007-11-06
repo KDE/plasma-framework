@@ -118,7 +118,7 @@ class PLASMA_EXPORT DataContainer : public QObject
          * Emitted when the data has been updated, allowing visualization to
          * reflect the new data.
          **/
-        void updated(const QString& source, const Plasma::DataEngine::Data& data);
+        void dataUpdated(const QString& source, const Plasma::DataEngine::Data& data);
 
         /**
          * Emitted when this source becomes unused

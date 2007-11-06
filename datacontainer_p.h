@@ -69,7 +69,7 @@ public:
 
     bool isUnused()
     {
-        return receivers(SIGNAL(updated(QString,Plasma::DataEngine::Data))) < 1;
+        return receivers(SIGNAL(dataUpdated(QString,Plasma::DataEngine::Data))) < 1;
     }
 
     void checkAlignment()
@@ -100,7 +100,7 @@ public:
 
     void checkQueueing() {
         if (m_queued) {
-            emit updated(dc->objectName(), d->data);
+            emit dataUpdated(dc->objectName(), d->data);
             m_queued = false;
             //TODO: should we re-align our timer at this point, to avoid
             //      constant queueing due to more-or-less constant time
@@ -126,7 +126,7 @@ public:
     bool m_queued;
 
 signals:
-    void updated(const QString&, const Plasma::DataEngine::Data&);
+    void dataUpdated(const QString&, const Plasma::DataEngine::Data&);
 
 protected:
     void timerEvent(QTimerEvent *event)
@@ -144,10 +144,10 @@ protected:
         emit dc->requestUpdate(dc);
         if (!dc->hasUpdates()) {
             // the source wasn't actually updated; so let's put ourselves in the queue
-            // so we get an updated() when the data does arrive
+            // so we get an dataUpdated() when the data does arrive
             m_queued = true;
         } else {
-            emit updated(dc->objectName(), d->data);
+            emit dataUpdated(dc->objectName(), d->data);
         }
         event->accept();
     }

@@ -71,7 +71,7 @@ public:
     void setText(const QString &text);
 
 public Q_SLOTS:
-    void updated(const QString&, const Plasma::DataEngine::Data &data);
+    void dataUpdated(const QString&, const Plasma::DataEngine::Data &data);
 
 Q_SIGNALS:
     void clicked();

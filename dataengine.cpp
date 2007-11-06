@@ -101,7 +101,7 @@ class DataEngine::Private
 
             s->connectVisualization(visualization, updateInterval, align);
 
-            QMetaObject::invokeMethod(visualization, "updated",
+            QMetaObject::invokeMethod(visualization, "dataUpdated",
                                       Q_ARG(QString, s->objectName()),
                                       Q_ARG(Plasma::DataEngine::Data, s->data()));
         }

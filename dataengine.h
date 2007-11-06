@@ -81,7 +81,7 @@ class PLASMA_EXPORT DataEngine : public QObject
          * Connects a source to an object for data updates. The object must
          * have a slot with the following signature:
          *
-         * updated(const QString &sourceName, const Plasma::DataEngine::Data &data)
+         * dataUpdated(const QString &sourceName, const Plasma::DataEngine::Data &data)
          *
          * The data is a QHash of QVariants keyed by QString names, allowing
          * one data source to provide sets of related data.
@@ -105,7 +105,7 @@ class PLASMA_EXPORT DataEngine : public QObject
          * Connects all sources to an object for data updates. The object must
          * have a slot with the following signature:
          *
-         * SLOT(updated(QString, Plasma::DataEngine::Data))
+         * SLOT(dataUpdated(QString, Plasma::DataEngine::Data))
          *
          * The data is a QHash of QVariants keyed by QString names, allowing
          * one data source to provide sets of related data.
@@ -137,7 +137,7 @@ class PLASMA_EXPORT DataEngine : public QObject
          * Retrevies a pointer to the DataContainer for a given source. This method
          * should not be used if possible. An exception is for script engines that 
          * can not provide a QMetaObject as required by connectSource for the initial
-         * call to updated(). Using this method, such engines can provide their own
+         * call to dataUpdated. Using this method, such engines can provide their own
          * connectSource API.
          *
          * @arg source the name of the source.
@@ -371,7 +371,7 @@ class PLASMA_EXPORT DataEngine : public QObject
         /**
          * Call this method when you call setData directly on a DataContainer instead
          * of using the DataEngine::setData methods.
-         * If this method is not called, no updated(..) signals will be emitted!
+         * If this method is not called, no dataUpdated(..) signals will be emitted!
          */
         void checkForUpdates();
 
