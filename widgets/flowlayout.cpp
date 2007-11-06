@@ -34,8 +34,10 @@ using namespace Plasma;
 class FlowLayout::Private
 {
 public:
+    Private() : columnWidth( -1 ) {}
     QList<LayoutItem*> items; 
     QRectF geometry; 
+    qreal columnWidth;
 };
 
 FlowLayout::FlowLayout(LayoutItem* parent)
@@ -128,8 +130,12 @@ void FlowLayout::setGeometry(const QRectF& geo)
     // Also include the spacing either side of each item as part of the 
     // average width, this provides the spacing between the items and
     // also allows some tolerance for small differences in item widths 
-    const qreal averageWidth = totalWidth / d->items.count() + 2*spacing();
-
+    qreal averageWidth;
+    if( d->columnWidth == -1 )
+    	averageWidth = totalWidth / d->items.count() + 2*spacing();
+    else
+        averageWidth = d->columnWidth;
+	
     const int columnCount = (int)(geometry.width() / averageWidth);
 
     int insertColumn = 0;
@@ -201,3 +207,12 @@ Qt::Orientations FlowLayout::expandingDirections() const
     return Qt::Vertical | Qt::Horizontal;
 }
 
+qreal FlowLayout::columnWidth() const
+{
+    return d->columnWidth;
+}
+
+void FlowLayout::setColumnWidth( const qreal width )
+{
+    d->columnWidth = width;
+}

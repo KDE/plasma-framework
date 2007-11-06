@@ -52,6 +52,8 @@ public:
     virtual QRectF geometry() const;
     virtual void setGeometry(const QRectF& geometry);
     virtual Qt::Orientations expandingDirections() const;
+    virtual void setColumnWidth( const qreal width );
+    virtual qreal columnWidth() const;
 
 private:
     class Private;
