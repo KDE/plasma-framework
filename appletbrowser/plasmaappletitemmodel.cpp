@@ -80,8 +80,9 @@ QVariantList PlasmaAppletItem::arguments() const
     return qvariant_cast<QVariantList>(data().toMap()["arguments"]);
 }
 
-PlasmaAppletItemModel::PlasmaAppletItemModel(KConfigGroup configGroup, QObject * parent) :
+PlasmaAppletItemModel::PlasmaAppletItemModel(KConfigGroup configGroup, QString app, QObject * parent) :
     KCategorizedItemsViewModels::DefaultItemModel(parent),
+    m_application( app ),
     m_configGroup(configGroup)
 {
 
@@ -103,7 +104,7 @@ PlasmaAppletItemModel::PlasmaAppletItemModel(KConfigGroup configGroup, QObject *
     m_used = m_configGroup.readEntry("used").split(",");
 
     //TODO: get recommended, favorit, used, etc out of knownApplets()
-    foreach (const KPluginInfo& info, Plasma::Applet::knownApplets()) {
+    foreach (const KPluginInfo& info, Plasma::Applet::knownApplets( QString(), m_application)) {
         //kDebug() << info.pluginName() << "NoDisplay" << info.property("NoDisplay").toBool();
         if (info.property("NoDisplay").toBool()) {
             // we don't want to show the hidden category
@@ -181,6 +182,16 @@ void PlasmaAppletItemModel::setFavorite(QString plugin, bool favorite)
 
 }
 
+void PlasmaAppletItemModel::setApplication(const QString& app)
+{
+    m_application = app;
+}
+
+QString& PlasmaAppletItemModel::Application()
+{
+    return m_application;
+}
+
 /*
  * Define function type to get the SuperKaramba themes
  * from skapplet (see skapplet.cpp in kdeutils/superkaramba)
@@ -223,4 +234,3 @@ void PlasmaAppletItemModel::loadSuperKarambaThemes(const KPluginInfo &info)
         kWarning() << "Could not load" << libName;
     }
 }
-

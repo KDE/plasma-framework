@@ -36,17 +36,19 @@ namespace Plasma
 class AppletBrowser::Private
 {
 public:
-    Private(Corona* co, Containment* cont, AppletBrowser* q)
-        : corona(co),
+    Private(Corona* co, Containment* cont, AppletBrowser* q, const QString& app)
+        : application( app ),
+          corona(co),
           containment(cont),
           appletList(0),
           config("plasmarc"),
           configGroup(&config, "Applet Browser"),
-          itemModel(configGroup, q),
+          itemModel(configGroup, app, q),
           filterModel(q)
     {
     }
 
+    QString application;
     Plasma::Corona *corona;
     Plasma::Containment *containment;
     KCategorizedItemsView *appletList;
@@ -58,16 +60,16 @@ public:
     KCategorizedItemsViewModels::DefaultFilterModel filterModel;
 };
 
-AppletBrowser::AppletBrowser(Plasma::Corona * corona, QWidget * parent, Qt::WindowFlags f)
+AppletBrowser::AppletBrowser(Plasma::Corona * corona, const QString& application, QWidget * parent, Qt::WindowFlags f)
     : KDialog(parent, f),
-      d(new Private(corona, 0, this))
+    d(new Private(corona, 0, this, application))
 {
     init();
 }
 
-AppletBrowser::AppletBrowser(Plasma::Containment * containment, QWidget * parent, Qt::WindowFlags f)
+AppletBrowser::AppletBrowser(Plasma::Containment * containment, const QString& application, QWidget * parent, Qt::WindowFlags f)
     : KDialog(parent, f),
-      d(new Private(0, containment, this))
+    d(new Private(0, containment, this, application))
 {
     init();
 }
@@ -126,13 +128,13 @@ void AppletBrowser::init()
         KCategorizedItemsViewModels::Filter("used", true), new KIcon("history"));
 
     d->filterModel.addSeparator(i18n("Categories:"));
+    
 
-    // Filters: Categories
-    foreach (const QString& category, Plasma::Applet::knownCategories()) {
+    foreach (const QString& category, Plasma::Applet::knownCategories(d->application)) {
         d->filterModel.addFilter(category, 
-            KCategorizedItemsViewModels::Filter("category", category));
+                                     KCategorizedItemsViewModels::Filter("category", category));
     }
-
+        
     d->appletList->setFilterModel(&d->filterModel);
 
     // Other models
@@ -142,6 +144,17 @@ void AppletBrowser::init()
 AppletBrowser::~AppletBrowser()
 {
   delete d;
+}
+
+void AppletBrowser::setApplication( const QString& app )
+{
+    d->application = app;
+    d->itemModel.setApplication( app );
+}
+
+QString AppletBrowser::Application()
+{
+    return d->application;
 }
 
 void AppletBrowser::addApplet()

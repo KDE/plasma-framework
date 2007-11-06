@@ -60,15 +60,18 @@ class PlasmaAppletItemModel :
     public KCategorizedItemsViewModels::DefaultItemModel
 {
 public:
-    PlasmaAppletItemModel(KConfigGroup configGroup, QObject * parent = 0);
+    PlasmaAppletItemModel(KConfigGroup configGroup, QString parentApp = QString(), QObject * parent = 0);
 
     QStringList mimeTypes() const;
 
     QMimeData* mimeData(const QModelIndexList & indexes) const;
     
     void setFavorite(QString plugin, bool favorite);
-
+    void setApplication(const QString& app);
+    
+    QString& Application();
 private:
+    QString m_application;
     QStringList m_favorites;
     QStringList m_used;
     KConfigGroup m_configGroup;
