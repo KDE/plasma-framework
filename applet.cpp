@@ -695,13 +695,18 @@ void Applet::flushUpdatedConstraints()
     Plasma::Constraints c = d->pendingConstraints;
     d->pendingConstraints = NoConstraint;
 
+    if (c & Plasma::FormFactorConstraint) {
+        FormFactor f = formFactor();
+        setShadowShown(f == Planar);
+        setDrawStandardBackground(qobject_cast<Containment*>(this) == 0 && f != Vertical && f != Horizontal);
+    }
+
     constraintsUpdated(c);
 
     if (layout()) {
         layout()->update();
     }
 
-    setShadowShown(formFactor() == Planar);
 }
 
 int Applet::type() const
