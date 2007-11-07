@@ -87,7 +87,8 @@ class DataEngine::Private
             return s;
         }
 
-        void connectSource(DataContainer* s, QObject* visualization, uint updateInterval, Plasma::IntervalAlignment align)
+        void connectSource(DataContainer* s, QObject* visualization, uint updateInterval,
+                           Plasma::IntervalAlignment align, bool immediateCall = true)
         {
             //kDebug() << "connect source called with interval" << updateInterval;
             if (updateInterval > 0) {
@@ -101,13 +102,19 @@ class DataEngine::Private
 
             s->connectVisualization(visualization, updateInterval, align);
 
-            QMetaObject::invokeMethod(visualization, "dataUpdated",
-                                      Q_ARG(QString, s->objectName()),
-                                      Q_ARG(Plasma::DataEngine::Data, s->data()));
+            if (immediateCall) {
+                QMetaObject::invokeMethod(visualization, "dataUpdated",
+                                          Q_ARG(QString, s->objectName()),
+                                          Q_ARG(Plasma::DataEngine::Data, s->data()));
+            }
         }
 
-        DataContainer* requestSource(const QString& sourceName)
+        DataContainer* requestSource(const QString& sourceName, bool* newSource = 0)
         {
+            if (newSource) {
+                *newSource = false;
+            }
+
             //kDebug() << "requesting source " << sourceName;
             DataContainer* s = source(sourceName, false);
 
@@ -121,6 +128,9 @@ class DataEngine::Private
                     if (s) {
                         // now we have a source; since it was created on demand, assume
                         // it should be removed when not used
+                        if (newSource) {
+                            *newSource = true;
+                        }
                         connect(s, SIGNAL(unused(QString)), engine, SLOT(removeSource(QString)));
                     }
                 }
@@ -185,10 +195,11 @@ void DataEngine::connectSource(const QString& source, QObject* visualization,
                                uint updateInterval, Plasma::IntervalAlignment intervalAlignment) const
 {
     //kDebug() << "connectSource" << source;
-    DataContainer* s = d->requestSource(source);
+    bool newSource;
+    DataContainer* s = d->requestSource(source, &newSource);
 
     if (s) {
-        d->connectSource(s, visualization, updateInterval, intervalAlignment);
+        d->connectSource(s, visualization, updateInterval, intervalAlignment, !newSource);
         //kDebug() << " ==> source connected";
     }
 }
