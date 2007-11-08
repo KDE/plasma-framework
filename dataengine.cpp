@@ -199,7 +199,10 @@ void DataEngine::connectSource(const QString& source, QObject* visualization,
     DataContainer* s = d->requestSource(source, &newSource);
 
     if (s) {
-        d->connectSource(s, visualization, updateInterval, intervalAlignment, !newSource);
+        // we suppress the immediate invocation of dataUpdated here if the source was prexisting and they
+        // don't request delayed updates (we want to do an immediate update in that case so they
+        // don't have to wait for the first time out)
+        d->connectSource(s, visualization, updateInterval, intervalAlignment, !newSource || updateInterval > 0);
         //kDebug() << " ==> source connected";
     }
 }
