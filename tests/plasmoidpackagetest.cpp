@@ -28,19 +28,24 @@ void PlasmoidPackageTest::init()
 {
     mPackage = QString("Package");
     mPackageRoot = QDir::homePath() + "/.kde-unit-test/packageRoot";
-    
+
     ps = new Plasma::PlasmoidStructure;
-    p = new Plasma::Package(mPackageRoot, mPackage, *ps);
 }
 
 void PlasmoidPackageTest::cleanup()
 {
     delete ps;
     delete p;
-    
+
     // Clean things up.
-    removeDir(QLatin1String("packageRoot/" + mPackage.toLatin1() + "/code"));
-    removeDir(QLatin1String("packageRoot/" + mPackage.toLatin1()));
+    QDir local = QDir::homePath() + QLatin1String("/.kde-unit-test/packageRoot/");
+    foreach(const QString &dir, local.entryList(QDir::Dirs))
+    {
+        removeDir(QLatin1String("packageRoot/" + dir.toLatin1() + "/code"));
+        removeDir(QLatin1String("packageRoot/" + dir.toLatin1() + "/images"));
+        removeDir(QLatin1String("packageRoot/" + dir.toLatin1()));
+    }
+
     QDir().rmpath(QDir::homePath() + "/.kde-unit-test/packageRoot");
 }
 
@@ -58,8 +63,52 @@ void PlasmoidPackageTest::removeDir(const QString &subdir)
     local.rmpath(subd);
 }
 
+void PlasmoidPackageTest::createTestPackage(const QString &packageName)
+{
+    // Create the root and package dir.
+    QVERIFY(QDir().mkpath(mPackageRoot));
+    QVERIFY(QDir().mkpath(mPackageRoot + "/" + packageName));
+
+    // Create the code dir.
+    QVERIFY(QDir().mkpath(mPackageRoot + "/" + packageName + "/code"));
+
+    // Create the main file.
+    QFile file(mPackageRoot + "/" + packageName + "/code/main");
+    QVERIFY(file.open(QIODevice::WriteOnly | QIODevice::Text));
+
+    QTextStream out(&file);
+    out << "THIS IS A PLASMOID SCRIPT.....";
+    file.flush();
+    file.close();
+
+    // Now we have a minimal plasmoid package which is valid. Let's add some 
+    // files to it for test purposes.
+
+    // Create the images dir.
+    QVERIFY(QDir().mkpath(mPackageRoot + "/" + packageName + "/images"));
+    file.setFileName(mPackageRoot + "/" + packageName + "/images/image-1.svg");
+
+    QVERIFY(file.open(QIODevice::WriteOnly | QIODevice::Text));
+
+    out.setDevice(&file);
+    out << "<svg>This is a test image</svg>";
+    file.flush();
+    file.close();
+
+    file.setFileName(mPackageRoot + "/" + packageName + "/images/image-2.svg");
+
+    QVERIFY(file.open(QIODevice::WriteOnly | QIODevice::Text));
+
+    out.setDevice(&file);
+    out << "<svg>This is another test image</svg>";
+    file.flush();
+    file.close();
+}
+
 void PlasmoidPackageTest::isValid()
 {
+    p = new Plasma::Package(mPackageRoot, mPackage, *ps);
+
     // A PlasmoidPackage is valid when:
     // - The package root exists.
     // - The package root consists an file named "code/main"
@@ -102,8 +151,6 @@ void PlasmoidPackageTest::filePath()
     // Package::filePath() returns
     // - {package_root}/{package_name}/path/to/file if the file exists
     // - QString() otherwise.
-
-    delete p;
     p = new Plasma::Package(mPackageRoot, mPackage, *ps);
 
     QCOMPARE(p->filePath("scripts", "main"), QString());
@@ -132,6 +179,32 @@ void PlasmoidPackageTest::filePath()
     //       specific for a PlasmoidPackag.
     QCOMPARE(p->filePath("scripts", "main"), path);
     QCOMPARE(p->filePath("mainscript"), path);
+}
+
+void PlasmoidPackageTest::entryList()
+{
+    QString packageName("SomePlasmoid");
+
+    // Create a package named @p packageName which is valid and has some images.
+    createTestPackage(packageName);
+
+    // Create a package object and verify that it is valid.
+    p = new Plasma::Package(mPackageRoot, packageName, *ps);
+    QVERIFY(p->isValid());
+
+    // Now we have a valid package that should contain the following files in
+    // given filetypes:
+    // fileTye - Files
+    // scripts - {"main"}
+    // images - {"image-1.svg", "image-2.svg"}
+    QStringList files = p->entryList("scripts");
+    QCOMPARE(files.size(), 1);
+    QVERIFY(files.contains("main"));
+
+    files = p->entryList("images");
+    QCOMPARE(files.size(), 2);
+    QVERIFY(files.contains("image-1.svg"));
+    QVERIFY(files.contains("image-2.svg"));
 }
 
 QTEST_KDEMAIN(PlasmoidPackageTest, NoGUI)
