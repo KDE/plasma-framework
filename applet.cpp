@@ -156,6 +156,7 @@ public:
                 }
             }
         }
+        applet->setDrawStandardBackground(true);
     }
 
     // put all setup routines for script here. at this point we can assume that
@@ -706,7 +707,6 @@ void Applet::flushUpdatedConstraints()
     if (layout()) {
         layout()->update();
     }
-
 }
 
 int Applet::type() const

@@ -386,7 +386,7 @@ class PLASMA_EXPORT Applet : public Widget
          * Sets whether the applet should automatically draw the standard
          * background.
          *
-         * Defaults to false
+         * Defaults to true
          **/
         void setDrawStandardBackground(bool drawBackground);
 
