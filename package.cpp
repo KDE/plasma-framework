@@ -51,6 +51,10 @@ public:
         if (valid && basePath[basePath.length() - 1] != '/') {
             basePath.append('/');
         }
+
+        structure.addFileDefinition("metadata", "metadata.desktop",
+                             i18n("Package Meta Data File"));
+        structure.setRequired("metadata", true);
     }
 
     PackageStructure structure;

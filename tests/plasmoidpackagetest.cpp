@@ -69,14 +69,24 @@ void PlasmoidPackageTest::createTestPackage(const QString &packageName)
     QVERIFY(QDir().mkpath(mPackageRoot));
     QVERIFY(QDir().mkpath(mPackageRoot + "/" + packageName));
 
+    // Create the metadata.desktop file
+    QFile file(mPackageRoot + "/" + packageName + "/metadata.desktop");
+
+    QVERIFY(file.open(QIODevice::WriteOnly | QIODevice::Text));
+
+    QTextStream out(&file);
+    out << "[Desktop Entry]\n";
+    out << "Name=" << packageName << "\n";
+    file.flush();
+    file.close();
+
     // Create the code dir.
     QVERIFY(QDir().mkpath(mPackageRoot + "/" + packageName + "/code"));
 
     // Create the main file.
-    QFile file(mPackageRoot + "/" + packageName + "/code/main");
+    file.setFileName(mPackageRoot + "/" + packageName + "/code/main");
     QVERIFY(file.open(QIODevice::WriteOnly | QIODevice::Text));
 
-    QTextStream out(&file);
     out << "THIS IS A PLASMOID SCRIPT.....";
     file.flush();
     file.close();
@@ -90,7 +100,6 @@ void PlasmoidPackageTest::createTestPackage(const QString &packageName)
 
     QVERIFY(file.open(QIODevice::WriteOnly | QIODevice::Text));
 
-    out.setDevice(&file);
     out << "<svg>This is a test image</svg>";
     file.flush();
     file.close();
@@ -113,33 +122,42 @@ void PlasmoidPackageTest::isValid()
     // - The package root exists.
     // - The package root consists an file named "code/main"
     QVERIFY(!p->isValid());
-    
+
     // Create the root and package dir.
     QVERIFY(QDir().mkpath(mPackageRoot));
     QVERIFY(QDir().mkpath(mPackageRoot + "/" + mPackage));
-    
+
     // Should still be invalid.
     delete p;
     p = new Plasma::Package(mPackageRoot, mPackage, *ps);
     QVERIFY(!p->isValid());
-    
+
+    // Create the metadata.desktop file.
+    QFile file(mPackageRoot + "/" + mPackage + "/metadata.desktop");
+    QVERIFY(file.open(QIODevice::WriteOnly | QIODevice::Text));
+
+    QTextStream out(&file);
+    out << "This is a metadatafile";
+    file.flush();
+    file.close();
+
     // Create the code dir.
     QVERIFY(QDir().mkpath(mPackageRoot + "/" + mPackage + "/code"));
-    
+
     // No main file yet so should still be invalid.
     delete p;
     p = new Plasma::Package(mPackageRoot, mPackage, *ps);
     QVERIFY(!p->isValid());
-    
+
     // Create the main file.
-    QFile file(mPackageRoot + "/" + mPackage + "/code/main");
+    file.setFileName(mPackageRoot + "/" + mPackage + "/code/main");
     QVERIFY(file.open(QIODevice::WriteOnly | QIODevice::Text));
-    
-    QTextStream out(&file);
+
+    out.setDevice(&file);
     out << "THIS IS A PLASMOID SCRIPT.....";
     file.flush();
     file.close();
-    
+
     // Main file exists so should be valid now.
     delete p;
     p = new Plasma::Package(mPackageRoot, mPackage, *ps);
