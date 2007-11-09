@@ -1,4 +1,5 @@
 /*
+ *   Copyright 2007 Aaron Seigo <aseigo@kde.org>
  *   Copyright 2007 Matt Broadstone <mbroadst@gmail.com>
  *
  *   This program is free software; you can redistribute it and/or modify
@@ -43,7 +44,7 @@ class PLASMA_EXPORT Corona : public QGraphicsScene
 public:
     explicit Corona(QObject * parent = 0);
     explicit Corona(const QRectF & sceneRect, QObject * parent = 0);
-    explicit Corona(qreal x, qreal y, qreal width, qreal height, QObject * parent = 0);
+    Corona(qreal x, qreal y, qreal width, qreal height, QObject * parent = 0);
     ~Corona();
 
     /**
@@ -161,6 +162,7 @@ protected:
 
 protected Q_SLOTS:
     void containmentDestroyed(QObject*);
+    void screenResized(int);
 
 private:
     class Private;

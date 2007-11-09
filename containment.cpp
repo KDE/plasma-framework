@@ -88,7 +88,6 @@ Containment::Containment(QObject* parent, const QVariantList& args)
     : Applet(parent, args),
       d(new Private)
 {
-    setAcceptsHoverEvents(true);
 }
 
 Containment::~Containment()
@@ -102,6 +101,7 @@ void Containment::init()
     setFlag(QGraphicsItem::ItemIsMovable, false);
     setFlag(QGraphicsItem::ItemClipsChildrenToShape, false);
     setAcceptDrops(true);
+    setAcceptsHoverEvents(true);
     setDrawStandardBackground(false);
 
     //TODO: would be nice to not do this on init, as it causes Phase to init
@@ -135,6 +135,11 @@ QSizeF Containment::contentSizeHint() const
     return d->size;
 }
 
+Corona* Containment::corona() const
+{
+    return dynamic_cast<Corona*>(scene());
+}
+
 void Containment::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
 {
     //kDebug() << "let's see if we manage to get a context menu here, huh";
@@ -164,6 +169,7 @@ void Containment::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
     //kDebug() << "context menu event " << immutable;
     if (!applet) {
         if (!scene() || static_cast<Corona*>(scene())->isImmutable()) {
+            kDebug() << "immutability";
             QGraphicsItem::contextMenuEvent(event);
             return;
         }
@@ -173,6 +179,7 @@ void Containment::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
         QList<QAction*> actions = contextActions();
 
         if (actions.count() < 1) {
+            kDebug() << "no applet, but no actions";
             QGraphicsItem::contextMenuEvent(event);
             return;
         }
@@ -181,6 +188,7 @@ void Containment::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
             desktopMenu.addAction(action);
         }
     } else if (applet->isImmutable()) {
+        kDebug() << "immutable applet";
         QGraphicsItem::contextMenuEvent(event);
         return;
     } else {
@@ -215,11 +223,13 @@ void Containment::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
 
         if (!hasEntries) {
             QGraphicsItem::contextMenuEvent(event);
+            kDebug() << "no entries";
             return;
         }
     }
 
     event->accept();
+    kDebug() << "executing at" << event->screenPos();
     desktopMenu.exec(event->screenPos());
 }
 
@@ -281,6 +291,7 @@ void Containment::setLocation(Location location)
         applet->updateConstraints(Plasma::LocationConstraint);
     }
 
+    setScreen(screen());
     updateConstraints(Plasma::LocationConstraint);
 }
 
@@ -398,15 +409,15 @@ void Containment::setScreen(int screen)
     // screen of -1 means no associated screen.
 
     //kDebug() << "setting screen to" << screen;
-    QDesktopWidget desktop;
-    int numScreens = desktop.numScreens();
+    QDesktopWidget *desktop = QApplication::desktop();
+    int numScreens = desktop->numScreens();
     if (screen < -1 || screen > numScreens - 1) {
         screen = -1;
     }
 
     //kDebug() << "setting screen to " << screen << "and type is" << type();
     if (screen > -1) {
-        QRect r = desktop.screenGeometry(screen);
+        QRect r = desktop->screenGeometry(screen);
 
         if (type() == DesktopContainment) {
             // we need to find how many screens are to our top and left
@@ -416,7 +427,7 @@ void Containment::setScreen(int screen)
             int screensLeft = 0;
             int screensAbove = 0;
             for (int i = 0; i < numScreens; ++i) {
-                QRect otherScreen = desktop.screenGeometry(screen);
+                QRect otherScreen = desktop->screenGeometry(screen);
                 if (x > otherScreen.x()) {
                     ++screensLeft;
                 }
@@ -429,15 +440,12 @@ void Containment::setScreen(int screen)
             r.moveLeft(r.x() + INTER_CONTAINMENT_MARGIN * screensLeft);
             r.moveTop(r.y() + INTER_CONTAINMENT_MARGIN * screensAbove);
             setGeometry(r);
-            //kDebug() << "setting geometry to" << desktop.screenGeometry(screen) << r << geometry();
+            //kDebug() << "setting geometry to" << desktop->screenGeometry(screen) << r << geometry();
         } else if (type() == PanelContainment) {
-            QDesktopWidget desktop;
-            QRect r = desktop.screenGeometry(screen);
+            QRect r = desktop->screenGeometry(screen);
             //kDebug() << "we are a panel on" << r << ", let's move ourselves to a negative coordinate system" << -r.height() - INTER_CONTAINMENT_MARGIN;
-            //FIXME PANELS: multiple panel support means having to move the panels up
-            //              this requires a proper panel manager, discuss in the panel
-            //              irc meeting
-            translate(0, -r.height() - INTER_CONTAINMENT_MARGIN);
+            int vertOffset = r.height() + INTER_CONTAINMENT_MARGIN;
+            translate(0, -vertOffset);
         }
     }
 

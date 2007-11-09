@@ -59,6 +59,11 @@ public:
     {
     }
 
+    void init(Corona* q)
+    {
+        QObject::connect(QApplication::desktop(), SIGNAL(resized(int)), q, SLOT(screenResized(int)));
+    }
+
     bool immutable;
     QString mimetype;
     QList<Containment*> containments;
@@ -68,7 +73,7 @@ Corona::Corona(QObject *parent)
     : QGraphicsScene(parent),
       d(new Private)
 {
-    //d->init(this);
+    d->init(this);
     //setViewport(new QGLWidget(QGLFormat(QGL::StencilBuffer | QGL::AlphaChannel)));
 }
 
@@ -76,7 +81,7 @@ Corona::Corona(const QRectF & sceneRect, QObject * parent )
     : QGraphicsScene(sceneRect, parent),
       d(new Private)
 {
-    //d->init(this);
+    d->init(this);
     //setViewport(new QGLWidget(QGLFormat(QGL::StencilBuffer | QGL::AlphaChannel)));
 }
 
@@ -84,7 +89,7 @@ Corona::Corona(qreal x, qreal y, qreal width, qreal height, QObject * parent)
     : QGraphicsScene(x, y, width, height, parent),
       d(new Private)
 {
-    //d->init(this);
+    d->init(this);
     //setViewport(new QGLWidget(QGLFormat(QGL::StencilBuffer | QGL::AlphaChannel)));
 }
 
@@ -150,6 +155,7 @@ void Corona::loadApplets(const QString& configname)
             Containment *c = addContainment(appletConfig.readEntry("plugin", QString()), QVariantList(),
                                             cid, true);
             if (c) {
+                addItem(c);
                 containments.insert(c->id(), c);
                 c->initConstraints(&appletConfig);
                 //kDebug() << "Containment" << c->id() << "geometry is" << c->geometry();
@@ -217,15 +223,15 @@ void Corona::loadApplets()
 void Corona::loadDefaultSetup()
 {
     //FIXME: implement support for system-wide defaults
-    QDesktopWidget desktop;
-    int numScreens = desktop.numScreens();
+    QDesktopWidget *desktop = QApplication::desktop();
+    int numScreens = desktop->numScreens();
     kDebug() << "number of screens is" << numScreens;
     int topLeftScreen = 0;
-    QPoint topLeftCorner = desktop.screenGeometry(0).topLeft();
+    QPoint topLeftCorner = desktop->screenGeometry(0).topLeft();
 
     // create a containment for each screen
     for (int i = 0; i < numScreens; ++i) {
-        QRect g = desktop.screenGeometry(i);
+        QRect g = desktop->screenGeometry(i);
         kDebug() << "     screen " << i << "geometry is" << g;
         Containment* c = addContainment("desktop");
         c->setScreen(i);
@@ -247,6 +253,22 @@ void Corona::loadDefaultSetup()
     panel->addApplet("tasks");
     panel->addApplet("systemtray");
     panel->addApplet("digital-clock");
+
+    // trigger an instant layout so we immediately have a proper geometry rather than waiting around
+    // for the event loop
+    panel->flushUpdatedConstraints();
+    if (panel->layout()) {
+        panel->layout()->invalidate();
+    }
+
+    /*
+     * a little snip that adds another panel, this time to the left
+     *
+    panel = addContainment("panel");
+    panel->setScreen(topLeftScreen);
+    //TODO: but .. *where* on the left edge?
+    panel->setLocation(Plasma::LeftEdge);
+    */
 }
 
 Containment* Corona::containmentForScreen(int screen) const
@@ -302,8 +324,8 @@ Containment* Corona::addContainment(const QString& name, const QVariantList& arg
     }
 
     if (!delayedInit) {
-        containment->init();
         addItem(containment);
+        containment->init();
     }
 
     d->containments.append(containment);
@@ -369,6 +391,16 @@ void Corona::containmentDestroyed(QObject* obj)
 
     if (index > -1) {
         d->containments.removeAt(index);
+    }
+}
+
+void Corona::screenResized(int screen)
+{
+    foreach (Containment *c, d->containments) {
+        if (c->screen() == screen) {
+            // trigger a relayout
+            c->setScreen(screen);
+        }
     }
 }
 
