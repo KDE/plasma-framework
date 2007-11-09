@@ -19,10 +19,14 @@
 
 #include "searchcontext.h"
 
+#include <QFile>
+#include <QFileInfo>
+
 #include <KCompletion>
 #include <KDebug>
 #include <KMimeType>
-#include <KUriFilterData>
+#include <KStandardDirs>
+#include <KUrl>
 
 #include "searchaction.h"
 
@@ -99,44 +103,36 @@ void SearchContext::setSearchTerm(const QString &term)
     }
 
     d->term = term;
-    //FIXME: this is insanely slow =/
-    
-    // the below lines commented out until we can find a much faster way to do the same
 
-    //KUriFilterData filter(term);
-    //bool filtered = KUriFilter::self()->filterUri(filter);
+    int space = term.indexOf(' ');
+    if (space > 0) {
+        if (!KStandardDirs::findExe(term.left(space)).isEmpty()) {
+            d->type = ShellCommand;
+        }
+    } else if (!KStandardDirs::findExe(term.left(space)).isEmpty()) {
+        d->type = Executable;
+    } else {
+        KUrl url(term);
 
-    //if (filtered) {
-    //    switch (filter.uriType()) {
-    //        case KUriFilterData::LocalDir:
-    //            d->type = Directory;
-    //            d->mimetype = "inode/folder";
-    //            break;
-    //        case KUriFilterData::LocalFile: {
-    //            d->type = File;
-    //            KMimeType::Ptr mimetype = KMimeType::findByPath(filter.uri().path());
-    //            if (mimetype) {
-    //                d->mimetype = mimetype->name();
-    //            }
-    //            break;
-    //        }
-    //        case KUriFilterData::NetProtocol:
-    //            //kDebug() << "term is a network protocol?" << term << filter.uriType();
-    //            d->type = NetworkLocation;
-    //            break;
-    //        case KUriFilterData::Executable:
-    //            d->type = Executable;
-    //            break;
-    //        case KUriFilterData::Shell:
-    //            d->type = ShellCommand;
-    //            break;
-    //        case KUriFilterData::Help:
-    //            d->type = Help;
-    //            break;
-    //        default:
-    //            break;
-    //    }
-    //}
+        if (!url.protocol().isEmpty() && !url.host().isEmpty()) {
+            d->type = NetworkLocation;
+        } else  if (QFile::exists(term)) {
+            QFileInfo info(term);
+            if (info.isDir()) {
+                d->type = Directory;
+                d->mimetype = "inode/folder";
+            } else {
+                d->type = File;
+                KMimeType::Ptr mimetype = KMimeType::findByPath(term);
+                if (mimetype) {
+                    d->mimetype = mimetype->name();
+                }
+            }
+        } else if (term.contains('.')) {
+            // default to a network location so we can can do things like www.kde.org
+            d->type = NetworkLocation;
+        }
+    }
 }
 
 QString SearchContext::searchTerm() const
