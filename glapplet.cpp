@@ -162,6 +162,7 @@ void GLApplet::paintInterface(QPainter *painter,
                               const QStyleOptionGraphicsItem *option,
                               const QRect &contentsRect)
 {
+    Q_UNUSED(contentsRect)
     Q_ASSERT(d->pbuf);
     if ((!d->dummy->isValid() ||
          !d->pbuf->isValid())) {
