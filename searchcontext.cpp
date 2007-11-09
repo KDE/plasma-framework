@@ -100,40 +100,43 @@ void SearchContext::setSearchTerm(const QString &term)
 
     d->term = term;
     //FIXME: this is insanely slow =/
-    KUriFilterData filter(term);
-    bool filtered = KUriFilter::self()->filterUri(filter);
+    
+    // the below lines commented out until we can find a much faster way to do the same
 
-    if (filtered) {
-        switch (filter.uriType()) {
-            case KUriFilterData::LocalDir:
-                d->type = Directory;
-                d->mimetype = "inode/folder";
-                break;
-            case KUriFilterData::LocalFile: {
-                d->type = File;
-                KMimeType::Ptr mimetype = KMimeType::findByPath(filter.uri().path());
-                if (mimetype) {
-                    d->mimetype = mimetype->name();
-                }
-                break;
-            }
-            case KUriFilterData::NetProtocol:
-                //kDebug() << "term is a network protocol?" << term << filter.uriType();
-                d->type = NetworkLocation;
-                break;
-            case KUriFilterData::Executable:
-                d->type = Executable;
-                break;
-            case KUriFilterData::Shell:
-                d->type = ShellCommand;
-                break;
-            case KUriFilterData::Help:
-                d->type = Help;
-                break;
-            default:
-                break;
-        }
-    }
+    //KUriFilterData filter(term);
+    //bool filtered = KUriFilter::self()->filterUri(filter);
+
+    //if (filtered) {
+    //    switch (filter.uriType()) {
+    //        case KUriFilterData::LocalDir:
+    //            d->type = Directory;
+    //            d->mimetype = "inode/folder";
+    //            break;
+    //        case KUriFilterData::LocalFile: {
+    //            d->type = File;
+    //            KMimeType::Ptr mimetype = KMimeType::findByPath(filter.uri().path());
+    //            if (mimetype) {
+    //                d->mimetype = mimetype->name();
+    //            }
+    //            break;
+    //        }
+    //        case KUriFilterData::NetProtocol:
+    //            //kDebug() << "term is a network protocol?" << term << filter.uriType();
+    //            d->type = NetworkLocation;
+    //            break;
+    //        case KUriFilterData::Executable:
+    //            d->type = Executable;
+    //            break;
+    //        case KUriFilterData::Shell:
+    //            d->type = ShellCommand;
+    //            break;
+    //        case KUriFilterData::Help:
+    //            d->type = Help;
+    //            break;
+    //        default:
+    //            break;
+    //    }
+    //}
 }
 
 QString SearchContext::searchTerm() const
