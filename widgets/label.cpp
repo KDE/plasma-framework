@@ -47,18 +47,21 @@ qreal Label::heightForWidth(qreal w) const
 {
     //FIXME: this looks a bit odd?
     QFontMetricsF m(d->textFont);
-    return m.boundingRect(QRectF(0, 0, w, 9999), d->alignment | Qt::TextWordWrap, d->text).height();
+    //return m.boundingRect(QRectF(0, 0, w, 9999), d->alignment | Qt::TextWordWrap, d->text).height();
+	return 0;
 }
 
 QSizeF Label::sizeHint() const
 {
     QFontMetricsF m(d->textFont);
-    return m.boundingRect(QRectF(0, 0, d->maximumWidth, 9999), d->alignment | Qt::TextWordWrap, d->text).size();
+    return m.boundingRect(QRectF(0,0,9999,9999), d->alignment | Qt::TextWordWrap, d->text).size();
+	//return m.boundingRect(QRectF(0, 0, d->maximumWidth, 9999), d->alignment | Qt::TextWordWrap, d->text).size();
 }
 
 void Label::setText(const QString& text)
 {
     d->text = text;
+    updateGeometry();
 }
 
 QString Label::text() const
@@ -79,6 +82,7 @@ Qt::Alignment Label::alignment() const
 void Label::setPen(const QPen& pen)
 {
     d->textPen = pen;
+    updateGeometry();
 }
 
 QPen Label::pen() const
@@ -99,6 +103,7 @@ int Label::maximumWidth() const
 void Label::setFont(const QFont& font)
 {
     d->textFont = font;
+    updateGeometry();
 }
 
 QFont Label::font() const
