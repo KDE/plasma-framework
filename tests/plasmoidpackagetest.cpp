@@ -35,7 +35,11 @@ void PlasmoidPackageTest::init()
 void PlasmoidPackageTest::cleanup()
 {
     delete ps;
-    delete p;
+    if( p )
+    {
+        delete p;
+        p = 0;
+    }
 
     // Clean things up.
     QDir local = QDir::homePath() + QLatin1String("/.kde-unit-test/packageRoot/");
@@ -65,8 +69,14 @@ void PlasmoidPackageTest::removeDir(const QString &subdir)
 
 void PlasmoidPackageTest::createTestPackage(const QString &packageName)
 {
+    QDir pRoot(mPackageRoot);
     // Create the root and package dir.
-    QVERIFY(QDir().mkpath(mPackageRoot));
+    if(!pRoot.exists())
+    {
+        QVERIFY(QDir().mkpath(mPackageRoot));
+    }
+
+    // Create the package dir
     QVERIFY(QDir().mkpath(mPackageRoot + "/" + packageName));
 
     // Create the metadata.desktop file
@@ -77,6 +87,7 @@ void PlasmoidPackageTest::createTestPackage(const QString &packageName)
     QTextStream out(&file);
     out << "[Desktop Entry]\n";
     out << "Name=" << packageName << "\n";
+    out << "X-KDE-PluginInfo-Name=" << packageName << "\n";
     file.flush();
     file.close();
 
@@ -223,6 +234,48 @@ void PlasmoidPackageTest::entryList()
     QCOMPARE(files.size(), 2);
     QVERIFY(files.contains("image-1.svg"));
     QVERIFY(files.contains("image-2.svg"));
+}
+
+void PlasmoidPackageTest::knownPackages()
+{
+    // Don't do strange things when package root doesn't exists.
+    QDir pRoot = QDir(mPackageRoot);
+    QVERIFY(!pRoot.exists());
+    p = new Plasma::Package(mPackageRoot, mPackage, *ps);
+    QCOMPARE(p->knownPackages(mPackageRoot), QStringList());
+    delete p;
+
+    // Don't do strange things when an empty package root exists
+    QVERIFY(QDir().mkpath(mPackageRoot));
+    //QVERIFY(pRoot.exists());
+    p = new Plasma::Package(mPackageRoot, mPackage, *ps);
+    QCOMPARE(p->knownPackages(mPackageRoot), QStringList());
+    delete p;
+
+    // Do not return a directory as package if it has no metadata.desktop file
+    QVERIFY(QDir().mkpath(mPackageRoot + "/invalid_plasmoid"));
+    p = new Plasma::Package(mPackageRoot, mPackage, *ps);
+    QCOMPARE(p->knownPackages(mPackageRoot), QStringList());
+    delete p;
+
+    // Let's add a valid package and see what happens.
+    QString plamoid1("a_valid_plasmoid");
+    createTestPackage(plamoid1);
+    p = new Plasma::Package(mPackageRoot, mPackage, *ps);
+
+    QStringList packages = p->knownPackages(mPackageRoot);
+    QCOMPARE(packages.size(), 1);
+    QVERIFY(packages.contains(plamoid1));
+
+    // Ok.... one more valid package.
+    QString plamoid2("anoter_valid_plasmoid");
+    createTestPackage(plamoid2);
+    p = new Plasma::Package(mPackageRoot, mPackage, *ps);
+
+    packages = p->knownPackages(mPackageRoot);
+    QCOMPARE(packages.size(), 2);
+    QVERIFY(packages.contains(plamoid1));
+    QVERIFY(packages.contains(plamoid2));
 }
 
 QTEST_KDEMAIN(PlasmoidPackageTest, NoGUI)

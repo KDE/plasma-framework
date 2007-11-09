@@ -35,6 +35,7 @@ private Q_SLOTS:
     void isValid();
     void filePath();
     void entryList();
+    void knownPackages();
 
 private:
     void removeDir(const QString &subdir);
