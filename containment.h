@@ -199,6 +199,12 @@ class PLASMA_EXPORT Containment : public Applet
          */
         QSizeF contentSizeHint() const;
 
+    Q_SIGNALS:
+        /**
+         * This signal is emitted when a new applet is created by the containment
+         */
+        void appletAdded(Plasma::Applet* applet);
+
     public Q_SLOTS:
         /**
          * Informs the Corona as to what position it is in. This is informational

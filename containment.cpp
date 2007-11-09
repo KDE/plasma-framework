@@ -357,6 +357,7 @@ Applet* Containment::addApplet(const QString& name, const QVariantList& args, ui
             this, SLOT(appletDestroyed(QObject*)));
     Phase::self()->animateItem(applet, Phase::Appear);
 
+    emit appletAdded(applet);
     return applet;
 }
 
