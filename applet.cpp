@@ -1160,6 +1160,7 @@ void Applet::setGeometry(const QRectF& geometry)
     }
 
     setPos(geometry.topLeft());
+    emit geometryChanged();
     update();
 }
 

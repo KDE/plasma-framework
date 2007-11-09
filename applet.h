@@ -468,9 +468,6 @@ class PLASMA_EXPORT Applet : public Widget
         virtual QSizeF sizeHint() const;
 
         /**
-        * Sets the geometry of this Applet.
-        */
-        /**
         * Sets the geometry of this Plasma::Applet
         * @param geometry the geometry to apply to this Plasma::Applet.
         */
@@ -491,6 +488,12 @@ class PLASMA_EXPORT Applet : public Widget
          *        it is giving it up
          **/
         void requestFocus( bool focus );
+
+        /**
+         * Emitted whenever the applet makes a geometry change, so that views
+         * can coordinate themselves with these changes if they desire.
+         */
+        void geometryChanged();
 
     public Q_SLOTS:
         /**
