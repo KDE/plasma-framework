@@ -54,7 +54,6 @@ public:
     Private()
         : formFactor(Planar),
           location(Floating),
-          layout(0),
           screen(0),
           immutable(false)
     {
@@ -64,14 +63,11 @@ public:
     {
         qDeleteAll(applets);
         applets.clear();
-        delete layout;
     }
 
     FormFactor formFactor;
     Location location;
-    Layout* layout;
     Applet::List applets;
-    QSize size;
     int screen;
     bool immutable;
 };
@@ -111,9 +107,13 @@ void Containment::init()
 
 void Containment::initConstraints(KConfigGroup* group)
 {
-    //kDebug() << "initConstraints" << group->name() << type();
-    setLocation((Plasma::Location)group->readEntry("location", (int)d->location));
+/*    kDebug() << "!!!!!!!!!!!!initConstraints" << group->name() << type();
+    kDebug() << "    location:" << group->readEntry("location", (int)d->location);
+    kDebug() << "    geom:" << group->readEntry("geometry", geometry());
+    kDebug() << "    formfactor:" << group->readEntry("formfactor", (int)d->formFactor);
+    kDebug() << "    screen:" << group->readEntry("screen", d->screen);*/
     setGeometry(group->readEntry("geometry", geometry()));
+    setLocation((Plasma::Location)group->readEntry("location", (int)d->location));
     setFormFactor((Plasma::FormFactor)group->readEntry("formfactor", (int)d->formFactor));
     setScreen(group->readEntry("screen", d->screen));
 }
@@ -128,11 +128,6 @@ void Containment::saveConstraints(KConfigGroup* group) const
 Containment::Type Containment::type()
 {
     return DesktopContainment;
-}
-
-QSizeF Containment::contentSizeHint() const
-{
-    return d->size;
 }
 
 Corona* Containment::corona() const
@@ -235,28 +230,30 @@ void Containment::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
 
 void Containment::setFormFactor(FormFactor formFactor)
 {
-    if (d->formFactor == formFactor && d->layout) {
+    if (d->formFactor == formFactor && layout()) {
         return;
     }
 
 //kDebug() << "switching FF to " << formFactor;
     d->formFactor = formFactor;
-    delete d->layout;
-    d->layout = 0;
+    Layout *lay = layout();
+    setLayout(0);
+    delete lay;
+    lay = 0;
 
     switch (d->formFactor) {
         case Planar:
-            d->layout = new FreeLayout(this);
+            lay = new FreeLayout(this);
             break;
         case Horizontal:
-            d->layout = new BoxLayout(BoxLayout::LeftToRight, this);
-            d->layout->setMargin(0);
-            d->layout->setSpacing(0);
+            lay = new BoxLayout(BoxLayout::LeftToRight, this);
+            lay->setMargin(0);
+            lay->setSpacing(0);
             break;
         case Vertical:
-            d->layout = new BoxLayout(BoxLayout::TopToBottom, this);
-            d->layout->setMargin(0);
-            d->layout->setSpacing(0);
+            lay = new BoxLayout(BoxLayout::TopToBottom, this);
+            lay->setMargin(0);
+            lay->setSpacing(0);
             break;
         case MediaCenter:
             //FIXME: need a layout type here!
@@ -266,9 +263,11 @@ void Containment::setFormFactor(FormFactor formFactor)
             break;
     }
 
-    foreach (Applet* applet, d->applets) {
-        d->layout->addItem(applet);
-        applet->updateConstraints(Plasma::FormFactorConstraint);
+    if (lay) {
+        foreach (Applet* applet, d->applets) {
+            lay->addItem(applet);
+            applet->updateConstraints(Plasma::FormFactorConstraint);
+        }
     }
 
     updateConstraints(Plasma::FormFactorConstraint);
@@ -306,7 +305,7 @@ void Containment::clearApplets()
     d->applets.clear();
 }
 
-Applet* Containment::addApplet(const QString& name, const QVariantList& args, uint id, const QRectF& geometry, bool delayInit)
+Applet* Containment::addApplet(const QString& name, const QVariantList& args, uint id, const QRectF& appletGeometry, bool delayInit)
 {
     Applet* applet = Applet::loadApplet(name, id, args);
     if (!applet) {
@@ -319,30 +318,31 @@ Applet* Containment::addApplet(const QString& name, const QVariantList& args, ui
     if (type() == PanelContainment) {
         applet->setDrawStandardBackground(false);
     }
+
     //the applet needs to be given constraints before it can set its geometry
     applet->updateConstraints(Plasma::AllConstraints);
 
-    //kDebug() << "adding applet" << applet->name() << "with a default geometry of" << geometry << geometry.isValid();
-    if (geometry.isValid()) {
-        applet->setGeometry(geometry);
-    } else if (geometry.x() != -1 && geometry.y() != -1) {
+    //kDebug() << "adding applet" << applet->name() << "with a default geometry of" << appletGeometry << appletGeometry.isValid();
+    if (appletGeometry.isValid()) {
+        applet->setGeometry(appletGeometry);
+    } else if (appletGeometry.x() != -1 && appletGeometry.y() != -1) {
         // yes, this means we can't have items start -1, -1
-        applet->setGeometry(QRectF(geometry.topLeft(),
+        applet->setGeometry(QRectF(appletGeometry.topLeft(),
                                    applet->sizeHint()));
-    } else if (this->geometry().isValid()) {
+    } else if (geometry().isValid()) {
         //TODO: Make sure new applets don't overlap with existing ones
         // Center exactly:
         QSizeF size = applet->sizeHint();
         qreal appletWidth = size.width();
         qreal appletHeight = size.height();
-        qreal width = this->geometry().width();
-        qreal height = this->geometry().height();
+        qreal width = geometry().width();
+        qreal height = geometry().height();
         //kDebug() << "measuring geometry with" << appletWidth << appletHeight << width << height;
         applet->setGeometry(QRectF(QPointF((width / 2) - (appletWidth / 2), (height / 2) - (appletHeight / 2)), size));
     }
 
-    if (d->layout) {
-        d->layout->addItem(applet);
+    if (layout()) {
+        layout()->addItem(applet);
     }
 
     kDebug() << applet->name() << "sizehint:" << applet->sizeHint()
