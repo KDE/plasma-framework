@@ -194,11 +194,6 @@ class PLASMA_EXPORT Containment : public Applet
          */
         void initConstraints(KConfigGroup* group);
 
-        /**
-         * Reimplemented from Applet
-         */
-        QSizeF contentSizeHint() const;
-
     Q_SIGNALS:
         /**
          * This signal is emitted when a new applet is created by the containment
