@@ -150,7 +150,7 @@ void Corona::loadApplets(const QString& configname)
     QHash<int, Containment*> containments;
     foreach (const QString& group, config.groupList()) {
         KConfigGroup appletConfig(&config, group);
-        if (group.contains("containment")) {
+        if (group.endsWith("containment")) {
             int cid = group.left(group.indexOf('-')).toUInt();
             Containment *c = addContainment(appletConfig.readEntry("plugin", QString()), QVariantList(),
                                             cid, true);
@@ -158,7 +158,7 @@ void Corona::loadApplets(const QString& configname)
                 addItem(c);
                 containments.insert(c->id(), c);
                 c->initConstraints(&appletConfig);
-                //kDebug() << "Containment" << c->id() << "geometry is" << c->geometry();
+                //kDebug() << "Containment" << c->id() << "geometry is" << c->geometry().toRect() << "config'd with" << appletConfig.name();
             }
         } else {
             // it's an applet, let's grab the containment association
@@ -197,7 +197,6 @@ void Corona::loadApplets(const QString& configname)
     } else {
         foreach (Containment* containment, d->containments) {
             containment->init();
-            addItem(containment);
 
             foreach(Applet* applet, containment->applets()) {
                 applet->init();
