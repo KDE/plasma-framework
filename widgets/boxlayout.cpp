@@ -249,10 +249,6 @@ BoxLayout::BoxLayout(Direction direction , LayoutItem *parent)
     : Layout(parent),
       d(new Private(this))
 {
-    if (parent) {
-        parent->setLayout(this);
-    }
-
     d->direction = direction;
 }
 

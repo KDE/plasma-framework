@@ -35,10 +35,10 @@ namespace Plasma
 class Layout::Private
 {
     public:
-        Private(LayoutItem* parent)
+        Private(LayoutItem* p)
             : margin(12.0),
               spacing(6.0),
-              parent(parent),
+              parent(p),
               animator(0)
         {
         }
@@ -57,6 +57,9 @@ Layout::Layout(LayoutItem *parent)
     : LayoutItem(),
       d(new Private(parent))
 {
+    if (parent) {
+        parent->setLayout(this);
+    }
 }
 
 void Layout::setParent(LayoutItem *parent) {
