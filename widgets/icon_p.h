@@ -174,6 +174,7 @@ public:
     QIcon icon;
     ButtonState state;
     Qt::Orientation orientation;
+    Qt::Alignment alignment;
     bool calculateSizeRequested;
 
     QList<IconAction*> cornerActions;

@@ -59,6 +59,7 @@ Icon::Private::Private()
       iconSize(48, 48),
       state(Private::NoState),
       orientation(Qt::Vertical),
+      alignment(Qt::AlignHCenter | Qt::AlignTop),
       calculateSizeRequested(true)          // First time always true
 {
     svg.setContentType(Plasma::Svg::ImageSet);
@@ -546,7 +547,6 @@ QPixmap Icon::Private::decoration(const QStyleOptionGraphicsItem *option) const
 QPointF Icon::Private::iconPosition(const QStyleOptionGraphicsItem *option, const QPixmap &pixmap) const
 {
     const QRectF itemRect = subtractMargin(option->rect, Private::ItemMargin);
-    Qt::Alignment alignment = Qt::AlignHCenter | Qt::AlignTop;  // NOTE: This assumes always top-center -MB
 
     // Compute the nominal decoration rectangle
     const QSizeF size = addMargin(iconSize, Private::IconMargin);
@@ -1006,6 +1006,11 @@ QSizeF Icon::sizeHint() const
 Qt::Orientations Icon::expandingDirections() const
 {
     return 0;
+}
+
+void Icon::setAlignment(Qt::Alignment alignment)
+{
+    d->alignment=alignment;
 }
 
 /*

@@ -147,6 +147,12 @@ public:
     */
     void addAction(QAction* action);
 
+    /**
+    * let set the position in layout area
+    * @param action the QAction to associate with this icon.
+    */
+    void setAlignment(Qt::Alignment alignment);
+
     // Layout stuff - no need to document
 /*
     Qt::Orientations expandingDirections() const;
