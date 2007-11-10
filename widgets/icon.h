@@ -149,7 +149,7 @@ public:
 
     /**
     * let set the position in layout area
-    * @param action the QAction to associate with this icon.
+    * @param alignment the alignment we want
     */
     void setAlignment(Qt::Alignment alignment);
 
