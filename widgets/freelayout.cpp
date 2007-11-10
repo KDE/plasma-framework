@@ -18,10 +18,11 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include <plasma/plasma_export.h>
-#include <plasma/widgets/layout.h>
-
 #include "freelayout.h"
+
+#include <KDebug>
+
+#include <plasma/widgets/layout.h>
 
 namespace Plasma
 {
@@ -97,6 +98,10 @@ QRectF FreeLayout::geometry() const
 
 QSizeF FreeLayout::sizeHint() const
 {
+    if (parent()) {
+        return parent()->geometry().size();
+    }
+
     return maximumSize();
 }
 
