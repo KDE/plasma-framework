@@ -77,11 +77,11 @@ endif(QT_QTOPENGL_FOUND AND OPENGL_FOUND)
 
 kde4_add_library(plasma SHARED ${plasma_LIB_SRCS})
 
-target_link_libraries(plasma ${KDE4_KIO_LIBS} ${QT_QTOPENGL_LIBRARY} ${QT_QTUITOOLS_LIBRARY})
+target_link_libraries(plasma ${KDE4_KIO_LIBS} ${QT_QTUITOOLS_LIBRARY})
 
-if(OPENGL_FOUND)
-target_link_libraries(plasma ${OPENGL_gl_LIBRARY})
-endif(OPENGL_FOUND)
+if(QT_QTOPENGL_FOUND AND OPENGL_FOUND)
+target_link_libraries(plasma ${QT_QTOPENGL_LIBRARY} ${OPENGL_gl_LIBRARY})
+endif(QT_QTOPENGL_FOUND AND OPENGL_FOUND)
 
 set_target_properties(plasma PROPERTIES VERSION 1.0.0 SOVERSION 1)
 install(TARGETS plasma DESTINATION ${LIB_INSTALL_DIR})
