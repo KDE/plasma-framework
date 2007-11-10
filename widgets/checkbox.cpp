@@ -192,8 +192,12 @@ void CheckBox::mouseReleaseEvent(QGraphicsSceneMouseEvent * event)
             d->state = Qt::Checked;
         }
     }
+
     update();
-    emit clicked();
+
+    if (sceneBoundingRect().contains(event->scenePos())) {
+        emit clicked();
+    }
 }
 
 

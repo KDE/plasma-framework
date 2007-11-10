@@ -123,9 +123,9 @@ void RadioButton::setChecked(bool checked)
             }
         }
     }
-    // If not, we should be on a scene, not flying anywhere
     else if (checked && !parentItem() && scene())
     {
+        // we should be on a scene, not flying anywhere
         foreach(QGraphicsItem *sibling, scene()->items())
         {
             siblingRadioButton = dynamic_cast<RadioButton*>(sibling);
@@ -173,10 +173,13 @@ void RadioButton::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
     event->accept();
     d->mouseDown = false;
-    setChecked(true);
-    update();
 
-    emit clicked();
+    if (sceneBoundingRect().contains(event->scenePos())) {
+        setChecked(true);
+        emit clicked();
+    }
+
+    update();
 }
 
 void RadioButton::mouseMoveEvent(QGraphicsSceneMouseEvent *event)

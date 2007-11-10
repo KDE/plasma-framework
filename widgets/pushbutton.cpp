@@ -255,11 +255,14 @@ void PushButton::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     event->accept();
     if (d->state == Private::Pressed) {
         d->state = Private::Released;
-        emit clicked();
 
-        if (d->checkable) {
-            d->checked = ! d->checked;
-            emit toggled(d->checked);
+        if (sceneBoundingRect().contains(event->scenePos())) {
+            emit clicked();
+
+            if (d->checkable) {
+                d->checked = ! d->checked;
+                emit toggled(d->checked);
+            }
         }
     }
     update();
