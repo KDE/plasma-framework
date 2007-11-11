@@ -110,6 +110,10 @@ Layout* LayoutItem::layout() const
 
 void LayoutItem::setManagingLayout(Layout* layout)
 {
+    if (layout == d->managingLayout) {
+        return;
+    }
+
     if (d->managingLayout) {
         d->managingLayout->removeItem(this);
     }
