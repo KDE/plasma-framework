@@ -110,6 +110,7 @@ public:
 
     void init(Applet* applet)
     {
+        applet->setAcceptsHoverEvents(true);
         applet->setZValue(100);
         kioskImmutable = applet->globalConfig().isImmutable() ||
                          applet->config().isImmutable();
@@ -218,7 +219,7 @@ public:
             p.setRenderHint(QPainter::SmoothPixmapTransform);
 
             //FIXME: This is a hack to fix a drawing problems with svg files where a thin transparent border is drawn around the svg image.
-            //       the transparent border around the svg seems to vary in size depending on the size of the svg and as a result increasing the 
+            //       the transparent border around the svg seems to vary in size depending on the size of the svg and as a result increasing the
 	    //	     svn image by 2 all around didn't resolve the issue. For now it resizes based on the border size.
 
             background->resize(contentWidth, contentHeight);
@@ -574,8 +575,6 @@ bool Applet::isImmutable() const
 void Applet::setImmutable(bool immutable)
 {
     d->immutable = immutable;
-    setFlag(QGraphicsItem::ItemIsMovable, d->immutable || d->kioskImmutable ||
-                                          !scene() || !static_cast<Corona*>(scene())->isImmutable());
 }
 
 bool Applet::drawStandardBackground()

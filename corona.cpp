@@ -415,9 +415,6 @@ void Corona::setImmutable(bool immutable)
     }
 
     d->immutable = immutable;
-    foreach (QGraphicsItem* item, items()) {
-        item->setFlag(QGraphicsItem::ItemIsMovable, immutable);
-    }
 }
 
 } // namespace Plasma

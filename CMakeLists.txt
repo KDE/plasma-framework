@@ -24,6 +24,7 @@ set(plasma_LIB_SRCS
     appletbrowser/kcategorizeditemsviewmodels.cpp
     appletbrowser/plasmaappletitemmodel.cpp
     appletbrowser/customdragtreeview.cpp
+    applethandle.cpp
     configxml.cpp
     containment.cpp
     corona.cpp

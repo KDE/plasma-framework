@@ -33,6 +33,7 @@
 namespace Plasma
 {
 
+class AppletHandle;
 class DataEngine;
 class Package;
 class Corona;
@@ -226,15 +227,18 @@ class PLASMA_EXPORT Containment : public Applet
         void contextMenuEvent(QGraphicsSceneContextMenuEvent * event);
         void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
         void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
+        bool sceneEventFilter(QGraphicsItem *watched, QEvent *event);
 
     protected Q_SLOTS:
         /**
          * @internal
          */
         void appletDestroyed(QObject*);
-        void destroyApplet();
-        void appletDisappearComplete(QGraphicsItem *item, Plasma::Phase::Animation anim);
+        void appletAnimationComplete(QGraphicsItem *item, Plasma::Phase::Animation anim);
         void dropEvent(QGraphicsSceneDragDropEvent* event);
+
+    private Q_SLOTS:
+        void handleDisappeared(AppletHandle *handle);
 
     private:
         Q_DISABLE_COPY(Containment)
