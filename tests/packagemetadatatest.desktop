@@ -9,6 +9,7 @@ Name[pt]=Ficheiro de testes de meta-dados dos pacotes
 Name[pt_BR]=Arquivo de teste de meta-dados de pacotes
 Name[sr]=Пробни фајл метаподатака пакета
 Name[sr@latin]=Probni fajl metapodataka paketa
+Name[sv]=Testfil för paketmetadata
 Name[zh_CN]=打包元数据测试文件
 Name[zh_TW]=套件中繼資料測試檔
 Comment=A test desktop file to test the PackageMetaData class.
@@ -21,6 +22,7 @@ Comment[pt]=Um ficheiro 'desktop' de testes da classe PackageMetaData.
 Comment[pt_BR]=Um arquivo desktop de testes para a classe PackageMetaData.
 Comment[sr]=Пробни фајл радне површи за класу PackageMetaData.
 Comment[sr@latin]=Probni fajl radne površi za klasu PackageMetaData.
+Comment[sv]=En skrivbordsfil för att testa klassen PackageMetaData.
 Comment[zh_CN]=一个用来测试 PackageMetaData 类的测试桌面文件。
 Comment[zh_TW]=測試 PackageMetaData 類別的桌面檔
 
@@ -38,6 +40,7 @@ Description[pt]=Uma descrição de teste bonita
 Description[pt_BR]=Alguma descrição de teste interessante
 Description[sr]=Некакав звучан опис пробе
 Description[sr@latin]=Nekakav zvučan opis probe
+Description[sv]=Någon utstuderad testbeskrivning
 Description[zh_CN]=一些精美的测试描述
 Description[zh_TW]=一些花俏的測試描述
 
