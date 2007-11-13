@@ -516,7 +516,7 @@ bool Containment::sceneEventFilter(QGraphicsItem *watched, QEvent *event)
 
     // Otherwise we're watching something we shouldn't be...
     Q_ASSERT(applet!=0);
-    Q_ASSERT(d->applets.contains(applet));
+    if (!d->applets.contains(applet)) return false;
 
     switch (event->type())
     {
