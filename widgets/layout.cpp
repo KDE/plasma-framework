@@ -81,9 +81,11 @@ bool Layout::isEmpty() const
 
 void Layout::update()
 {
-
     setGeometry(geometry());
 
+    if( managingLayout() ) {
+        managingLayout()->update();
+    }
 }
 void Layout::invalidate()
 {
