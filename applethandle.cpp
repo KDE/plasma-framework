@@ -167,10 +167,11 @@ AppletHandle::ButtonType AppletHandle::mapToButton(const QPointF &point) const
         return MoveButton;
     }
 
-    activeArea.translate(QPointF(0.0, 42.0));
-    if (activeArea.containsPoint(point, Qt::OddEvenFill)
-     && m_applet->hasConfigurationInterface()) {
-        return ConfigureButton;
+    if( m_applet->hasConfigurationInterface() ) {
+        activeArea.translate(QPointF(0.0, 42.0));
+        if (activeArea.containsPoint(point, Qt::OddEvenFill)) {
+            return ConfigureButton;
+        }
     }
 
     activeArea.translate(QPointF(0.0, 42.0));
