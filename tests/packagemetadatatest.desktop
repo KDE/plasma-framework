@@ -1,6 +1,8 @@
 [Desktop Entry]
 Name=Package metadata test file
+Name[de]=Paket-Metadaten Testdatei
 Name[el]=Δοκιμαστικό αρχείο μεταδεδομένων του πακέτου
+Name[et]=Paketi metaandmete testfail
 Name[ko]=패키지 메타데이터 테스트 파일
 Name[nds]=Paketmetadaten-Testdatei
 Name[nl]=Testbestand voor pakketmetadata
@@ -13,7 +15,9 @@ Name[sv]=Testfil för paketmetadata
 Name[zh_CN]=打包元数据测试文件
 Name[zh_TW]=套件中繼資料測試檔
 Comment=A test desktop file to test the PackageMetaData class.
+Comment[de]=Eine Test-Desktop-Datei zum Testen der Klasse PackageMetaData.
 Comment[el]=Ένα δοκιμαστικό αρχείο desktop για τον έλεγχο τς κλάσης PackageMetaData.
+Comment[et]=Test-töölauafail klassi PackageMetaData testimiseks.
 Comment[ko]=PackageMetaData 클래스를 테스트하는 데스크톱 파일.
 Comment[nds]=Schriefdisch-Datei för't Utproberen vun de PackageMetaData-Klass
 Comment[nl]=Een desktop-bestand voor het testen van de klasse PackageMetaData.
@@ -31,7 +35,9 @@ Type=Service
 ServiceTypes=Plasma/Applet
 
 Description=Some fancy test description
+Description[de]=Eine lustige Test-Beschreibung
 Description[el]=Μια δοκιμαστική περιγραφή
+Description[et]=Vahva testikirjeldus
 Description[ko]=좀 흥미있는 테스트 설명
 Description[nds]=Jichtenseen smuck Testbeschrieven
 Description[nl]=Een elegante testbeschrijving
