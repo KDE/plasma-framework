@@ -516,10 +516,11 @@ bool Containment::sceneEventFilter(QGraphicsItem *watched, QEvent *event)
 
     // Otherwise we're watching something we shouldn't be...
     Q_ASSERT(applet!=0);
-    if (!d->applets.contains(applet)) return false;
+    if (!d->applets.contains(applet)) {
+        return false;
+    }
 
-    switch (event->type())
-    {
+    switch (event->type()) {
     case QEvent::GraphicsSceneHoverEnter:
         if (!d->immutable && !applet->isImmutable()
          && !d->handles.contains(applet)) {
