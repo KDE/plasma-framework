@@ -138,8 +138,8 @@ void AppletHandle::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
     }
 
     painter->drawPixmap(point+shiftM, KIcon("exec").pixmap(32,32)); // FIXME: I'd like a "transform-move" here
-    point+=QPointF(0.0, 42.0);
     if (m_applet->hasConfigurationInterface()) {
+        point+=QPointF(0.0, 42.0);
         painter->drawPixmap(point+shiftC, KIcon("configure").pixmap(32,32));
     }
     point+=QPointF(0.0, 42.0);
