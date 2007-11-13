@@ -317,6 +317,7 @@ Phase::AnimId Phase::customAnimation(int frames, int duration, Phase::CurveShape
     state->currentFrame = 0;
     state->curve = curve;
     state->interval = duration / qreal(state->frames);
+    state->interval = qMax( 1, state->interval );
     state->interval = (state->interval / MIN_TICK_RATE) * MIN_TICK_RATE;
     state->currentInterval = state->interval;
     state->receiver = receiver;
