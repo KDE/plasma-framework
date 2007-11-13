@@ -43,8 +43,9 @@ AppletHandle::AppletHandle(Containment *parent, Applet *applet)
     m_rect = m_applet->boundingRect();
     m_rect = m_applet->mapToParent(m_rect).boundingRect();
 
-    if (m_rect.height()<158.0) {
-        float delta = 158.0-m_rect.height();
+    const int requiredHeight = m_applet->hasConfigurationInterface() ? 158 : 116;
+    if (m_rect.height()<requiredHeight) {
+        float delta = requiredHeight-m_rect.height();
         delta = delta/2.0;
         if (delta>0.0) {
             m_rect.adjust(0.0, -delta, 0.0, delta);
