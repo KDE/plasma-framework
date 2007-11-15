@@ -66,8 +66,8 @@ View::View(Containment *containment, QWidget *parent)
     : QGraphicsView(parent),
       d(new Private)
 {
-    d->containment = containment;
     setScene(containment->scene());
+    setContainment(containment);
 }
 
 View::~View()
@@ -101,7 +101,7 @@ void View::setContainment(Containment *containment)
     disconnect(d->containment, SIGNAL(geometryChanged()), this, SLOT(updateSceneRect()));
     d->containment = containment;
     d->screen = containment->screen();
-    setSceneRect(containment->geometry());
+    updateSceneRect();
     connect(containment, SIGNAL(geometryChanged()), this, SLOT(updateSceneRect()));
 }
 
@@ -118,6 +118,11 @@ void View::setDrawWallpaper(bool draw)
 bool View::drawWallpaper() const
 {
     return d->drawWallpaper;
+}
+
+void View::updateSceneRect()
+{
+    setSceneRect(d->containment->sceneBoundingRect());
 }
 
 } // namespace Plasma

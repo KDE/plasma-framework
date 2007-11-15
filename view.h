@@ -81,6 +81,9 @@ public:
      */
     Containment* containment() const;
 
+protected slots:
+    void updateSceneRect();
+
 private:
     class Private;
     Private * const d;
