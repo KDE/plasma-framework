@@ -201,6 +201,8 @@ void AppletHandle::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 
     if (event->button()==Qt::LeftButton && m_pressedButton==releasedAtButton) {
         if (m_pressedButton==ConfigureButton) {
+            //FIXME: Remove this call once the configuration management change was done
+            m_containment->emitLaunchActivated();
             m_applet->showConfigurationInterface();
         } else if (m_pressedButton==RemoveButton) {
             Phase::self()->animateItem(m_applet, Phase::Disappear);

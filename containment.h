@@ -195,11 +195,21 @@ class PLASMA_EXPORT Containment : public Applet
          */
         void initConstraints(KConfigGroup* group);
 
+        /**
+         * Emits the launchActivated() signal
+         */ 
+        void emitLaunchActivated();
+
     Q_SIGNALS:
         /**
          * This signal is emitted when a new applet is created by the containment
          */
         void appletAdded(Plasma::Applet* applet);
+
+        /**
+         * This signal indicates, that a application launch was triggered
+         */
+        void launchActivated();
 
     public Q_SLOTS:
         /**

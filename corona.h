@@ -154,6 +154,12 @@ public Q_SLOTS:
      */
     void setImmutable(bool immutable_);
 
+Q_SIGNALS:
+    /**
+     * This signal indicates, that a application launch was triggered
+     */
+    void launchActivated();
+
 protected:
     void dragEnterEvent(QGraphicsSceneDragDropEvent* event);
     void dragLeaveEvent(QGraphicsSceneDragDropEvent* event);

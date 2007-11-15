@@ -289,7 +289,7 @@ Applet* Containment::addApplet(const QString& name, const QVariantList& args, ui
     //the applet needs to be given constraints before it can set its geometry
     applet->updateConstraints(Plasma::AllConstraints);
 
-    //kDebug() << "adding applet" << applet->name() << "with a default geometry of" << appletGeometry << appletGeometry.isValid();
+     //kDebug() << "adding applet" << applet->name() << "with a default geometry of" << appletGeometry << appletGeometry.isValid();
     if (appletGeometry.isValid()) {
         applet->setGeometry(appletGeometry);
     } else if (appletGeometry.x() != -1 && appletGeometry.y() != -1) {
@@ -541,6 +541,12 @@ void Containment::handleDisappeared(AppletHandle *handle)
 {
     d->handles.remove(handle->applet());
     handle->deleteLater();
+}
+
+void Containment::emitLaunchActivated()
+{
+    kDebug();
+    emit launchActivated();
 }
 
 }

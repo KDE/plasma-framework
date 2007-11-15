@@ -305,9 +305,7 @@ Containment* Corona::addContainment(const QString& name, const QVariantList& arg
     if (pluginName.isEmpty()) {
         // default to the desktop containment
         pluginName = "desktop";
-    }
-
-    if (pluginName != "null") {
+    } else if (pluginName != "null") {
         applet = Applet::loadApplet(pluginName, id, args);
         containment = dynamic_cast<Containment*>(applet);
     }
@@ -334,6 +332,8 @@ Containment* Corona::addContainment(const QString& name, const QVariantList& arg
     d->containments.append(containment);
     connect(containment, SIGNAL(destroyed(QObject*)),
             this, SLOT(containmentDestroyed(QObject*)));
+    connect(containment, SIGNAL(launchActivated()),
+            SIGNAL(launchActivated()));
 
     return containment;
 }
