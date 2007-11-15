@@ -846,7 +846,14 @@ FormFactor Applet::formFactor() const
 
 Containment* Applet::containment() const
 {
-    return dynamic_cast<Containment*>(parentItem());
+    QGraphicsItem *parent = parentItem();
+    while (parent) {
+        if (dynamic_cast<Containment*>(parent)) {
+            break;
+        }
+        parent = parent->parentItem();
+    }
+    return dynamic_cast<Containment*>(parent);
 }
 
 Location Applet::location() const
