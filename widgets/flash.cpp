@@ -142,7 +142,7 @@ void Flash::setFont( const QFont &font )
 
 void Flash::flash( const QString &text, int duration, const QTextOption &option)
 {
-    kDebug() << duration << endl;
+    kDebug() << duration;
     d->type = Private::Text;
     d->duration = (duration == 0) ? d->defaultDuration : duration;
     d->text = text;
