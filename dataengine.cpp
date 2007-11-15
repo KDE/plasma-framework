@@ -226,7 +226,7 @@ void DataEngine::disconnectSource(const QString& source, QObject* visualization)
 
 DataContainer* DataEngine::containerForSource(const QString &source)
 {
-    return d->requestSource(source);
+    return d->source(source, false);
 }
 
 DataEngine::Data DataEngine::query(const QString& source) const
