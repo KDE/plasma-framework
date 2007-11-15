@@ -468,10 +468,20 @@ class PLASMA_EXPORT Applet : public Widget
         virtual QSizeF sizeHint() const;
 
         /**
-        * Sets the geometry of this Plasma::Applet
-        * @param geometry the geometry to apply to this Plasma::Applet.
-        */
+         * Sets the geometry of this Plasma::Applet
+         * @param geometry the geometry to apply to this Plasma::Applet.
+         */
         void setGeometry(const QRectF &geometry);
+
+        /**
+         * Sets whether or not this Applet is acting as a Containment
+         */
+        void setIsContainment(bool isContainment);
+
+        /**
+         * @return true if this Applet is currently being used as a Containment, false otherwise
+         */
+        bool isContainment() const;
 
     Q_SIGNALS:
         /**

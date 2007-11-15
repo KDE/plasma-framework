@@ -55,6 +55,7 @@
 #include "plasma/shadowitem_p.h"
 #include "plasma/svg.h"
 #include "plasma/theme.h"
+#include "plasma/view.h"
 
 #include "plasma/widgets/widget.h"
 #include "plasma/widgets/lineedit.h"
@@ -85,7 +86,8 @@ public:
           immutable(false),
           hasConfigurationInterface(false),
           failed(false),
-          needsConfig(false)
+          needsConfig(false),
+          isContainment(false)
     {
         if (appletId == 0) {
             appletId = nextId();
@@ -282,11 +284,6 @@ public:
         p2->drawPixmap(leftOffset, topOffset, *cachedBackground);
     }
 
-    void paintHover(QPainter* , Applet* )
-    {
-        //TODO draw hover interface for close, configure, info and move
-    }
-
     QSizeF contentSize(const Applet* q)
     {
         if (scriptEngine) {
@@ -369,6 +366,7 @@ public:
     bool hasConfigurationInterface : 1;
     bool failed : 1;
     bool needsConfig : 1;
+    bool isContainment : 1;
 };
 
 uint Applet::Private::s_maxAppletId = 0;
@@ -798,10 +796,17 @@ void Applet::paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *opti
         }
 
         if (!d->failed && !d->needsConfig) {
+            if (widget && isContainment()) {
+                // note that the widget we get is actually the viewport of the view, not the view itself
+                View* v = qobject_cast<Plasma::View*>(widget->parent());
+                if (v && !v->drawWallpaper()) {
+                    return;
+                }
+            }
+
             paintInterface(painter, option, QRect(QPoint(0,0), d->contentSize(this).toSize()));
         }
 
-        d->paintHover(painter, this);
     /*} else if (fabs(zoomLevel - scalingFactor(Plasma::GroupZoom)) < std::numeric_limits<double>::epsilon()) {
         // Show Groups + Applet outline
         //TODO: make pretty.
@@ -1161,6 +1166,16 @@ void Applet::setGeometry(const QRectF& geometry)
     setPos(geometry.topLeft());
     emit geometryChanged();
     update();
+}
+
+void Applet::setIsContainment(bool isContainment)
+{
+    d->isContainment = isContainment;
+}
+
+bool Applet::isContainment() const
+{
+    return d->isContainment;
 }
 
 void Applet::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
