@@ -366,6 +366,9 @@ void Icon::actionDestroyed(QObject* action)
 
 QSizeF Icon::Private::displaySizeHint(const QStyleOptionGraphicsItem *option) const
 {
+    if (text.isEmpty() && infoText.isEmpty()) {
+      return QSizeF( .0, .0 );
+    }
     QString label = text;
     // const qreal maxWidth = (orientation == Qt::Vertical) ? iconSize.width() + 10 : 32757;
     // NOTE: find a way to use the other layoutText, it currently returns nominal width, when
