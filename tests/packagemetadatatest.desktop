@@ -32,7 +32,7 @@ Comment[zh_TW]=測試 PackageMetaData 類別的桌面檔
 
 Icon=test
 Type=Service
-ServiceTypes=Plasma/Applet
+X-KDE-ServiceTypes=Plasma/Applet
 
 Description=Some fancy test description
 Description[de]=Eine lustige Test-Beschreibung
