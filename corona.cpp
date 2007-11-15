@@ -305,7 +305,9 @@ Containment* Corona::addContainment(const QString& name, const QVariantList& arg
     if (pluginName.isEmpty()) {
         // default to the desktop containment
         pluginName = "desktop";
-    } else if (pluginName != "null") {
+    }
+
+    if (pluginName != "null") {
         applet = Applet::loadApplet(pluginName, id, args);
         containment = dynamic_cast<Containment*>(applet);
     }
@@ -321,6 +323,8 @@ Containment* Corona::addContainment(const QString& name, const QVariantList& arg
         containment->setFailedToLaunch(false);
         containment->setFormFactor(Plasma::Planar);
     }
+
+    containment->setIsContainment(true);
 
     if (!delayedInit) {
         addItem(containment);
