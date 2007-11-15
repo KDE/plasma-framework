@@ -42,6 +42,7 @@ set(plasma_LIB_SRCS
     svg.cpp
     theme.cpp
     uiloader.cpp
+    view.cpp
     widgets/boxlayout.cpp
     widgets/borderlayout.cpp
     widgets/checkbox.cpp
@@ -118,7 +119,8 @@ set(plasma_LIB_INCLUDES
     shadowitem_p.h
     svg.h
     theme.h
-    uiloader.h)
+    uiloader.h
+    view.h)
 
 if(QT_QTOPENGL_FOUND AND OPENGL_FOUND)
 set(plasma_LIB_INCLUDES
@@ -157,7 +159,9 @@ install(FILES
 install(FILES
     includes/AbstractRunner
     includes/Applet
+    includes/AppletBrowser
     includes/ConfigXml
+    includes/Containment
     includes/Phase
     includes/Plasma
     includes/Package
@@ -170,8 +174,7 @@ install(FILES
     includes/Svg
     includes/UiLoader
     includes/PackageMetadata
-    includes/Containment
-    includes/AppletBrowser
+    includes/View
     DESTINATION ${INCLUDE_INSTALL_DIR}/KDE/Plasma)
 
 if(QT_QTOPENGL_FOUND AND OPENGL_FOUND)
