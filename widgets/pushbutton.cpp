@@ -26,6 +26,7 @@
 #include <QStyle>
 #include <QWidget>
 #include <QPainter>
+#include <QGraphicsScene>
 #include <QGraphicsSceneMouseEvent>
 #include <QFontMetricsF>
 #include <QApplication>
@@ -250,22 +251,35 @@ void PushButton::mousePressEvent(QGraphicsSceneMouseEvent *event)
     update();
 }
 
+void PushButton::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
+{
+    event->accept();
+    if (sceneBoundingRect().contains(event->scenePos())) {
+        if (d->state == Private::Released && scene()->mouseGrabberItem() == this) {
+            d->state = Private::Pressed;
+            update();
+        }
+    } else {
+        if (d->state == Private::Pressed) {
+            d->state = Private::Released;
+            update();
+        }
+    }
+}
+
 void PushButton::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
     event->accept();
     if (d->state == Private::Pressed) {
         d->state = Private::Released;
+        emit clicked();
 
-        if (sceneBoundingRect().contains(event->scenePos())) {
-            emit clicked();
-
-            if (d->checkable) {
-                d->checked = ! d->checked;
-                emit toggled(d->checked);
-            }
+        if (d->checkable) {
+            d->checked = ! d->checked;
+            emit toggled(d->checked);
         }
+        update();
     }
-    update();
 }
 
 QSizeF PushButton::minimumSize() const
