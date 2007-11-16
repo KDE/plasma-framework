@@ -30,16 +30,16 @@ namespace Plasma
 class Corona;
 class Containment;
 
-class PLASMA_EXPORT AppletBrowser: public KDialog
+class PLASMA_EXPORT AppletBrowserWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit AppletBrowser(Plasma::Corona *corona, QWidget *parent = 0, Qt::WindowFlags f = 0);
-    explicit AppletBrowser(Plasma::Containment *containment, QWidget *parent = 0, Qt::WindowFlags f = 0);
-    virtual ~AppletBrowser();
+    explicit AppletBrowserWidget( Plasma::Corona *corona, bool showButtons, QWidget *parent = 0, Qt::WindowFlags f = 0);
+    explicit AppletBrowserWidget(Plasma::Containment *containment, bool showButtons, QWidget *parent = 0, Qt::WindowFlags f = 0);
+    virtual ~AppletBrowserWidget();
 
     void setApplication(const QString& application = QString());
-    QString Application();
+    QString application();
 
 protected Q_SLOTS:
     /**
@@ -56,6 +56,23 @@ private:
     void init();
     class Private;
     Private * const d;
+    bool m_showButtons;
+};
+
+class PLASMA_EXPORT AppletBrowser: public KDialog
+{
+    Q_OBJECT
+public:
+    explicit AppletBrowser(Plasma::Corona *corona, QWidget *parent = 0, Qt::WindowFlags f = 0);
+    explicit AppletBrowser(Plasma::Containment *containment, QWidget *parent = 0, Qt::WindowFlags f = 0);
+    virtual ~AppletBrowser();
+
+    void setApplication(const QString& application = QString());
+    QString application();
+
+private:
+    void init();
+    AppletBrowserWidget *m_widget;
 };
 
 } // namespace Plasma

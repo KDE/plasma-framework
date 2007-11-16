@@ -33,17 +33,17 @@
 namespace Plasma
 {
 
-class AppletBrowser::Private
+class AppletBrowserWidget::Private
 {
 public:
-    Private(Corona* co, Containment* cont, AppletBrowser* q)
+    Private(Corona* co, Containment* cont, AppletBrowserWidget* w)
         : corona(co),
           containment(cont),
           appletList(0),
           config("plasmarc"),
           configGroup(&config, "Applet Browser"),
-          itemModel(configGroup, q),
-          filterModel(q)
+          itemModel(configGroup, w),
+          filterModel(w)
     {
     }
 
@@ -61,7 +61,7 @@ public:
     KCategorizedItemsViewModels::DefaultFilterModel filterModel;
 };
 
-void AppletBrowser::Private::initFilters()
+void AppletBrowserWidget::Private::initFilters()
 {
     filterModel.clear();
 
@@ -106,38 +106,51 @@ void AppletBrowser::Private::initFilters()
 }
 
 
-AppletBrowser::AppletBrowser(Plasma::Corona * corona, QWidget * parent, Qt::WindowFlags f)
-    : KDialog(parent, f),
-    d(new Private(corona, 0, this))
+AppletBrowserWidget::AppletBrowserWidget(Plasma::Corona * corona, bool showButtons, QWidget * parent, Qt::WindowFlags f)
+    : QWidget(parent, f),
+    d(new Private(corona, 0, this)),
+    m_showButtons( showButtons )
 {
     init();
 }
 
-AppletBrowser::AppletBrowser(Plasma::Containment * containment, QWidget * parent, Qt::WindowFlags f)
-    : KDialog(parent, f),
-    d(new Private(0, containment, this))
+AppletBrowserWidget::AppletBrowserWidget(Plasma::Containment * containment, bool showButtons, QWidget * parent, Qt::WindowFlags f)
+    : QWidget(parent, f),
+    d(new Private(0, containment, this)),
+    m_showButtons( showButtons )
 {
     init();
 }
 
-void AppletBrowser::init()
+AppletBrowserWidget::~AppletBrowserWidget()
 {
-    d->appletList = new KCategorizedItemsView(this); //TODO: focus the lineedit on startup
+    delete d;
+}
+
+void AppletBrowserWidget::init()
+{
+    QVBoxLayout *layout = new QVBoxLayout(this);
+
+    d->appletList = new KCategorizedItemsView(this);
     connect(d->appletList, SIGNAL(activated(const QModelIndex &)), this, SLOT(addApplet()));
-    setMainWidget(d->appletList);
+    layout->addWidget( d->appletList );
 
-    setWindowTitle(i18n("Widgets"));
+    if( m_showButtons ) {
+        QHBoxLayout *buttonLayout = new QHBoxLayout();
+        buttonLayout->setSpacing( KDialog::spacingHint() );
+        buttonLayout->setMargin( KDialog::marginHint() );
 
-    setButtons(KDialog::Apply | KDialog::Close | KDialog::User1);
-    setButtonText(KDialog::Apply, i18n("Add Widget"));
-    setButtonText(KDialog::User1, i18n("Get New Widgets")); //TODO: not overly happy with this text
-    enableButton(KDialog::User1, false); //TODO: enable when GHNS integration is implemented
+        QPushButton *addButton = new QPushButton(i18n("Add Widget"), this );
+        connect(addButton, SIGNAL(clicked()), this, SLOT(addApplet()));
+        buttonLayout->addWidget( addButton );
 
-    connect(this, SIGNAL(applyClicked()), this, SLOT(addApplet()));
-    connect(this, SIGNAL(user1Clicked()), this, SLOT(downloadApplets()));
+        QPushButton *newButton = new QPushButton(i18n("Get New Widgets"), this ); //TODO: not overly happy with this text
+        newButton->setEnabled( false ); //TODO: enable when GHNS integration is implemented
+        connect(newButton, SIGNAL(clicked()), this, SLOT(downloadApplets()));
+        buttonLayout->addWidget( newButton );
 
-    QAction* quit = KStandardAction::quit(qApp, SLOT(quit()), this);
-    addAction(quit);
+        layout->addItem( buttonLayout );
+    }
 
     // Other Emblems
     d->appletList->addEmblem(i18n("Widgets I Have Used Before"), new KIcon("history"), 
@@ -150,13 +163,9 @@ void AppletBrowser::init()
     d->appletList->setItemModel(&d->itemModel);
 }
 
-AppletBrowser::~AppletBrowser()
+void AppletBrowserWidget::setApplication(const QString& app)
 {
-  delete d;
-}
 
-void AppletBrowser::setApplication(const QString& app)
-{
     d->application = app;
     d->initFilters();
     d->itemModel.setApplication(app);
@@ -166,12 +175,11 @@ void AppletBrowser::setApplication(const QString& app)
     d->appletList->setItemModel(&d->itemModel);
 }
 
-QString AppletBrowser::Application()
+QString AppletBrowserWidget::application()
 {
     return d->application;
 }
-
-void AppletBrowser::addApplet()
+void AppletBrowserWidget::addApplet()
 {
     kDebug() << "Button ADD clicked";
 
@@ -191,10 +199,66 @@ void AppletBrowser::addApplet()
     }
 }
 
-void AppletBrowser::downloadApplets()
+void AppletBrowserWidget::downloadApplets()
 {
     //TODO: implement
     kDebug() << "GHNS button clicked";
+}
+
+
+
+
+
+
+
+
+
+
+
+AppletBrowser::AppletBrowser(Plasma::Corona * corona, QWidget * parent, Qt::WindowFlags f)
+    : KDialog(parent, f),
+    m_widget(new AppletBrowserWidget(corona, false, this))
+{
+    init();
+}
+
+AppletBrowser::AppletBrowser(Plasma::Containment * containment, QWidget * parent, Qt::WindowFlags f)
+    : KDialog(parent, f),
+    m_widget(new AppletBrowserWidget(containment, false, this))
+{
+    init();
+}
+
+void AppletBrowser::init()
+{
+    setMainWidget(m_widget);
+
+    setWindowTitle(i18n("Widgets"));
+
+    setButtons(KDialog::Apply | KDialog::Close | KDialog::User1);
+    setButtonText(KDialog::Apply, i18n("Add Widget"));
+    setButtonText(KDialog::User1, i18n("Get New Widgets")); //TODO: not overly happy with this text
+    enableButton(KDialog::User1, false); //TODO: enable when GHNS integration is implemented
+
+    connect(this, SIGNAL(applyClicked()), m_widget, SLOT(addApplet()));
+    connect(this, SIGNAL(user1Clicked()), m_widget, SLOT(downloadApplets()));
+
+    QAction* quit = KStandardAction::quit(qApp, SLOT(quit()), this);
+    addAction(quit);
+}
+
+AppletBrowser::~AppletBrowser()
+{
+}
+
+void AppletBrowser::setApplication(const QString& app)
+{
+    m_widget->setApplication( app );
+}
+
+QString AppletBrowser::application()
+{
+    return m_widget->application();
 }
 
 } // namespace Plasma
