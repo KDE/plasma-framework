@@ -98,7 +98,9 @@ int View::screen() const
 
 void View::setContainment(Containment *containment)
 {
-    disconnect(d->containment, SIGNAL(geometryChanged()), this, SLOT(updateSceneRect()));
+    if( d->containment ) {
+        disconnect(d->containment, SIGNAL(geometryChanged()), this, SLOT(updateSceneRect()));
+    }
     d->containment = containment;
     d->screen = containment->screen();
     updateSceneRect();
