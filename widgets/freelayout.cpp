@@ -31,7 +31,6 @@ class FreeLayout::Private
 {
 public:
     QList<LayoutItem*> children;
-    QRectF geometry;
 };
 
 FreeLayout::FreeLayout(LayoutItem *parent)
@@ -81,27 +80,32 @@ LayoutItem * FreeLayout::takeAt(int i)
     return d->children.takeAt(i);
 }
 
-void FreeLayout::setGeometry(const QRectF &geometry)
+void FreeLayout::setGeometry(const QRectF &)
 {
     foreach (LayoutItem *child , d->children) {
         if (child->geometry().size() != child->sizeHint()) {
-            child->setGeometry(QRectF(child->geometry().topLeft(),child->sizeHint()));
+            child->setGeometry(QRectF(child->geometry().topLeft(), child->sizeHint()));
         }
     }
-    d->geometry = geometry;
 }
 
 QRectF FreeLayout::geometry() const
 {
-    return d->geometry;
+    if (parent()) {
+        return parent()->geometry();
+    }
+
+    return QRectF(QPointF(0, 0), maximumSize());
 }
 
 QSizeF FreeLayout::sizeHint() const
 {
     if (parent()) {
+        //kDebug() << "returning size hint from freelayout of" <<  parent()->geometry().size();
         return parent()->geometry().size();
     }
 
+    //kDebug() << "returning size hint from freelayout of" << maximumSize();
     return maximumSize();
 }
 
