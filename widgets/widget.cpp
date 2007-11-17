@@ -216,7 +216,7 @@ void Widget::setGeometry(const QRectF& geometry)
         d->size = QSizeF(width, height);
 
         if (layout()) {
-            layout()->setGeometry(boundingRect());
+            layout()->setGeometry(QRectF(QPointF(0, 0), d->size));
         }
 
         if (managingLayout()) {
@@ -296,16 +296,14 @@ void Widget::addChild(Widget *w)
     d->childList.append(w);
     w->setParentItem(this);
 
-    //kDebug() << "Added Child Widget" <<  w;
+    //kDebug() << "Added Child Widget" <<  (QObject*)w << "our geom is" << geometry();
 
     if (layout()) {
         layout()->addItem(w);
     }
 
     updateGeometry();
-
-    //TODO: is this necessary?
-    w->update();
+    //kDebug() << "after the item is added our geom is now" << geometry();
 }
 
 void Widget::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)

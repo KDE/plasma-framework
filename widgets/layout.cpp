@@ -83,6 +83,7 @@ void Layout::update()
 {
     setGeometry(geometry());
 }
+
 void Layout::invalidate()
 {
     // find and update the top level layout
