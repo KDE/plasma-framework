@@ -325,13 +325,13 @@ public:
 
     void getBorderSize(int& left , int& top, int &right, int& bottom)
     {
-        if (!background) {
-            top = left = right = bottom = 0;
-        } else {
+        if (background) {
             top = background->elementSize("top").height();
             left = background->elementSize("left").width();
             right = background->elementSize("right").width();
             bottom = background->elementSize("bottom").height();
+        } else {
+            top = left = right = bottom = 0;
         }
     }
 
@@ -584,14 +584,14 @@ void Applet::setDrawStandardBackground(bool drawBackground)
 {
     if (drawBackground) {
         if (!d->background) {
-            prepareGeometryChange();
             d->background = new Plasma::Svg("widgets/background");
             d->stretchBackgroundBorders = d->background->elementExists("hint-stretch-borders");
+            updateGeometry();
         }
     } else if (d->background) {
-        prepareGeometryChange();
         delete d->background;
         d->background = 0;
+        updateGeometry();
     }
 }
 
@@ -723,23 +723,23 @@ QRectF Applet::boundingRect() const
     d->getBorderSize(left,top,right,bottom);
 
 
-    //qDebug() << "Background , Border size" << d->background << left << top << right << bottom;
+    //kDebug() << "Background , Border size" << d->background << left << top << right << bottom;
 
     return rect.adjusted(-left,-top,right,bottom);
 }
 
 QSizeF Applet::sizeHint() const
 {
-    int left;
-    int right;
-    int top;
-    int bottom;
+    int left = 0;
+    int right = 0;
+    int top = 0;
+    int bottom = 0;
 
-    d->getBorderSize(left,top,right,bottom);
+    d->getBorderSize(left, top, right, bottom);
 
-    //qDebug() << "Applet content size hint: " << contentSizeHint();
+    //kDebug() << "Applet content size hint: " << contentSizeHint() << "plus our borders" << left << right << top << bottom;
 
-    return contentSizeHint() + QSizeF(left+right,top+bottom);
+    return contentSizeHint() + QSizeF(left + right, top + bottom);
 }
 
 QList<QAction*> Applet::contextActions()
@@ -872,8 +872,8 @@ QSizeF Applet::contentSize() const
     int top , left , right , bottom;
     d->getBorderSize(left,top,right,bottom);
 
-    // qDebug() << "Geometry size: " << geometry().size();
-    // qDebug() << "Borders: " << left << top << right << bottom;
+    // kDebug() << "Geometry size: " << geometry().size();
+    // kDebug() << "Borders: " << left << top << right << bottom;
 
     return geometry().size() - QSizeF(left+right,top+bottom);
 }
