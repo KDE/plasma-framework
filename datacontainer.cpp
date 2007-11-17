@@ -121,7 +121,7 @@ void DataContainer::connectVisualization(QObject* visualization, uint updateInte
         if (relay) {
             // connected to a relay
             disconnect(relay, SIGNAL(dataUpdated(QString,Plasma::DataEngine::Data)),
-                    visualization, SLOT(dataUpdated(QString,Plasma::DataEngine::Data)));
+                       visualization, SLOT(dataUpdated(QString,Plasma::DataEngine::Data)));
 
             if (relay->isUnused()) {
                 d->relays.remove(relay->m_interval);

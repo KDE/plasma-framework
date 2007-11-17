@@ -99,7 +99,7 @@ class PLASMA_EXPORT Layout : public LayoutItem
          * Adds a Item to this Layout.
          * @param l Pointer to the Item to be added.
          */
-            virtual void addItem(LayoutItem *l) = 0;
+        virtual void addItem(LayoutItem *l) = 0;
 
          /**
           * Removes a Item from this Layout.
