@@ -86,6 +86,7 @@ Containment::Containment(QObject* parent, const QVariantList& args)
     : Applet(parent, args),
       d(new Private)
 {
+    setDrawStandardBackground(false);
 }
 
 Containment::~Containment()
@@ -100,14 +101,13 @@ void Containment::init()
     setFlag(QGraphicsItem::ItemClipsChildrenToShape, false);
     setAcceptDrops(true);
     setAcceptsHoverEvents(true);
-    setDrawStandardBackground(false);
 
     //TODO: would be nice to not do this on init, as it causes Phase to init
     connect(Phase::self(), SIGNAL(animationComplete(QGraphicsItem*,Plasma::Phase::Animation)),
             this, SLOT(appletAnimationComplete(QGraphicsItem*,Plasma::Phase::Animation)));
 }
 
-void Containment::initConstraints(KConfigGroup* group)
+void Containment::loadConstraints(KConfigGroup* group)
 {
 /*    kDebug() << "!!!!!!!!!!!!initConstraints" << group->name() << type();
     kDebug() << "    location:" << group->readEntry("location", (int)d->location);
@@ -308,10 +308,6 @@ Applet* Containment::addApplet(const QString& name, const QVariantList& args, ui
         applet->setGeometry(QRectF(QPointF((width / 2) - (appletWidth / 2), (height / 2) - (appletHeight / 2)), size));
     }
 
-    if (layout()) {
-        layout()->addItem(applet);
-    }
-
     kDebug() << applet->name() << "sizehint:" << applet->sizeHint()
                                << "geometry:" << applet->geometry();
 
@@ -353,7 +349,7 @@ void Containment::appletAnimationComplete(QGraphicsItem *item, Plasma::Phase::An
             }
         }
     } else if (anim == Phase::Appear) {
-        if (type()==DesktopContainment) {
+        if (type() == DesktopContainment) {
             item->installSceneEventFilter(this);
         }
     }

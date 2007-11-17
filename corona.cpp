@@ -157,7 +157,7 @@ void Corona::loadApplets(const QString& configname)
             if (c) {
                 addItem(c);
                 containments.insert(c->id(), c);
-                c->initConstraints(&appletConfig);
+                c->loadConstraints(&appletConfig);
                 //kDebug() << "Containment" << c->id() << "geometry is" << c->geometry().toRect() << "config'd with" << appletConfig.name();
             }
         } else {

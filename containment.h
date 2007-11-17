@@ -193,7 +193,7 @@ class PLASMA_EXPORT Containment : public Applet
         /**
          * @internal
          */
-        void initConstraints(KConfigGroup* group);
+        void loadConstraints(KConfigGroup* group);
 
         /**
          * Emits the launchActivated() signal
