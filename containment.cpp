@@ -166,7 +166,7 @@ void Containment::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
     //kDebug() << "context menu event " << immutable;
     if (!applet) {
         if (!scene() || static_cast<Corona*>(scene())->isImmutable()) {
-            kDebug() << "immutability";
+            //kDebug() << "immutability";
             QGraphicsItem::contextMenuEvent(event);
             return;
         }
@@ -176,7 +176,7 @@ void Containment::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
         QList<QAction*> actions = contextActions();
 
         if (actions.count() < 1) {
-            kDebug() << "no applet, but no actions";
+            //kDebug() << "no applet, but no actions";
             QGraphicsItem::contextMenuEvent(event);
             return;
         }
@@ -185,13 +185,13 @@ void Containment::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
             desktopMenu.addAction(action);
         }
     } else {
-        kDebug() << "immutable applet";
+        //kDebug() << "immutable applet";
         QGraphicsItem::contextMenuEvent(event);
         return;
     }
 
     event->accept();
-    kDebug() << "executing at" << event->screenPos();
+    //kDebug() << "executing at" << event->screenPos();
     desktopMenu.exec(event->screenPos());
 }
 
@@ -201,7 +201,7 @@ void Containment::setFormFactor(FormFactor formFactor)
         return;
     }
 
-//kDebug() << "switching FF to " << formFactor;
+    //kDebug() << "switching FF to " << formFactor;
     d->formFactor = formFactor;
     Layout *lay = layout();
     setLayout(0);
@@ -363,6 +363,14 @@ Applet::List Containment::applets() const
 void Containment::setScreen(int screen)
 {
     // screen of -1 means no associated screen.
+    // sanity check to make sure someone else doesn't have this screen already!
+    if (type() == DesktopContainment && corona()) {
+        Containment* currently = corona()->containmentForScreen(screen);
+        if (currently && currently != this) {
+            //kDebug() << "currently is on screen" << currently->screen() << "and is" << currently->name() << (QObject*)currently << (QObject*)this;
+            currently->setScreen(-1);
+        }
+    }
 
     //kDebug() << "setting screen to" << screen;
     QDesktopWidget *desktop = QApplication::desktop();
@@ -395,6 +403,9 @@ void Containment::setScreen(int screen)
 
             r.moveLeft(r.x() + INTER_CONTAINMENT_MARGIN * screensLeft);
             r.moveTop(r.y() + INTER_CONTAINMENT_MARGIN * screensAbove);
+
+            // FIXME: positioning at this x,y will break if we switch between containments for a
+            //        given screen! we should change the pos() on new containment setup.
             setGeometry(r);
             //kDebug() << "setting geometry to" << desktop->screenGeometry(screen) << r << geometry();
         } else if (type() == PanelContainment) {
