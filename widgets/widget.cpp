@@ -30,7 +30,6 @@
 #include <QPainter>
 #include <QPixmapCache>
 #include <QStyleOptionGraphicsItem>
-#include <QGraphicsSceneContextMenuEvent>
 
 #include <KDebug>
 
@@ -445,7 +444,11 @@ QVariant Widget::itemChange(GraphicsItemChange change, const QVariant &value)
     if (change == QGraphicsItem::ItemChildRemovedChange) {
         Widget *child = dynamic_cast<Plasma::Widget*>(value.value<QGraphicsItem*>());
         if (child) {
+            kDebug() << "removing" << (QObject*)child;
             d->childList.removeAll(child);
+            if (layout()) {
+                layout()->removeItem(child);
+            }
             updateGeometry();
         }
     }
