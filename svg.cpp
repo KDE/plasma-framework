@@ -273,6 +273,17 @@ bool Svg::elementExists(const QString& elementId) const
     return d->renderer->elementExists(elementId);
 }
 
+QString Svg::elementAtPoint(const QPoint &point) const
+{
+    d->createRenderer();
+    QSizeF naturalSize = d->renderer->defaultSize();
+    qreal dx = d->size.width() / naturalSize.width();
+    qreal dy = d->size.height() / naturalSize.height();
+    //kDebug() << point << "is really" << QPoint(point.x() *dx, naturalSize.height() - point.y() * dy);
+
+    return QString(); // d->renderer->elementAtPoint(QPoint(point.x() *dx, naturalSize.height() - point.y() * dy));
+}
+
 QMatrix Svg::matrixForElement(const QString& elementId) const
 {
     d->createRenderer();

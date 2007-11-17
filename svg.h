@@ -159,6 +159,12 @@ class PLASMA_EXPORT Svg : public QObject
         Q_INVOKABLE bool elementExists( const QString& elementId ) const;
 
         /**
+         * Returns the element (by id) at the given point. An empty string is
+         * returned if no element is at that point.
+         */
+        Q_INVOKABLE QString elementAtPoint(const QPoint &point) const;
+
+        /**
          * The transformation matrix of the element. That includes the 
          * transformation on the element itself.
          * @arg elementId the id of the element
