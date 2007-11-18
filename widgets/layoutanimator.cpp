@@ -148,6 +148,10 @@ int LayoutAnimator::effect(State action) const
 
 void LayoutAnimator::setCurrentState( LayoutItem* item , State state )
 {
+    if (state == RemovedState && !d->states.contains(item)) {
+        return;
+    }
+
     State oldState = d->states[item];
 
     d->states[item] = state;
