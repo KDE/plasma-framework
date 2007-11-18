@@ -230,6 +230,8 @@ qreal _k_angleForPoints(const QPointF &center, const QPointF &pt1, const QPointF
 
 void AppletHandle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
+    static const qreal snapAngle = 3.14159 / 2.0;
+
     if (m_pressedButton == MoveButton) {
         QPointF delta = event->pos()-event->lastPos();
         setPos(pos()+delta);
@@ -244,6 +246,11 @@ void AppletHandle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
         QPointF center = rect.center();
 
         m_angle = _k_angleForPoints(center, pressPos, event->pos());
+
+        if (fabs(remainder(m_angle, snapAngle)) < 0.15) {
+            m_angle = m_angle - remainder(m_angle, snapAngle);
+        }
+
         m_scale = _k_distanceForPoint(event->pos()-center) / _k_distanceForPoint(pressPos-center);
 
         QTransform matrix;
