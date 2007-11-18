@@ -182,6 +182,12 @@ class PLASMA_EXPORT DataEngine : public QObject
         bool isValid() const;
 
         /**
+         * Returns true if the data engine is empty, which is to say that it has no
+         * data sources currently.
+         */
+        bool isEmpty() const;
+
+        /**
          * Sets the icon for this data engine
          **/
         void setIcon(const QString& icon);

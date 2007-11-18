@@ -425,6 +425,11 @@ bool DataEngine::isValid() const
     return d->valid;
 }
 
+bool DataEngine::isEmpty() const
+{
+    return d->sources.count() > 0;
+}
+
 void DataEngine::setValid(bool valid)
 {
     d->valid = valid;
