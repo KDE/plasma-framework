@@ -43,22 +43,22 @@ AppletHandle::AppletHandle(Containment *parent, Applet *applet)
     m_rect = m_applet->boundingRect();
     m_rect = m_applet->mapToParent(m_rect).boundingRect();
 
-    const int requiredHeight = m_applet->hasConfigurationInterface() ? 158 : 116;
-    if (m_rect.height()<requiredHeight) {
-        float delta = requiredHeight-m_rect.height();
+    const int requiredHeight = (HANDLE_WIDTH * 2) + m_applet->hasConfigurationInterface() ? + (ICON_SIZE * 4) : (ICON_SIZE * 3);
+    if (m_rect.height() < requiredHeight) {
+        float delta = requiredHeight - m_rect.height();
         delta = delta/2.0;
-        if (delta>0.0) {
+        if (delta > 0.0) {
             m_rect.adjust(0.0, -delta, 0.0, delta);
         }
     }
 
-    m_rect.adjust(-20.0, -20.0, 20.0, 20.0);
+    m_rect.adjust(-HANDLE_WIDTH, -HANDLE_WIDTH, HANDLE_WIDTH, HANDLE_WIDTH);
 
-    if (m_applet->pos().x()<=60.0) {
-        m_rect.adjust(0.0, 0.0, 40.0, 0.0);
+    if (m_applet->pos().x() <= ((HANDLE_WIDTH * 2) + ICON_SIZE + ICON_MARGIN)) {
+        m_rect.adjust(0.0, 0.0, ICON_MARGIN + ICON_SIZE, 0.0);
         m_buttonsOnRight = true;
     } else {
-        m_rect.adjust(-40.0, 0.0, 0.0, 0.0);
+        m_rect.adjust(- ICON_MARGIN - ICON_SIZE, 0.0, 0.0, 0.0);
     }
 
     m_applet->setParentItem(this);
@@ -110,9 +110,9 @@ void AppletHandle::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
     QPointF point = m_rect.topLeft();
 
     if (m_buttonsOnRight) {
-        point+= QPointF(m_rect.width()-52.0, 20.0);
+        point += QPointF(m_rect.width() - ICON_SIZE - ICON_MARGIN, HANDLE_WIDTH);
     } else {
-        point+= QPointF(20.0, 20.0);
+        point+= QPointF(HANDLE_WIDTH, HANDLE_WIDTH);
     }
 
     QPointF shiftM;
@@ -138,15 +138,15 @@ void AppletHandle::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
         break;
     }
 
-    painter->drawPixmap(point+shiftM, KIcon("exec").pixmap(32,32)); // FIXME: I'd like a "transform-move" here
+    painter->drawPixmap(point+shiftM, KIcon("exec").pixmap(ICON_SIZE, ICON_SIZE)); // FIXME: I'd like a "transform-move" here
     if (m_applet->hasConfigurationInterface()) {
-        point+=QPointF(0.0, 42.0);
-        painter->drawPixmap(point+shiftC, KIcon("configure").pixmap(32,32));
+        point+=QPointF(0.0, ICON_SIZE + ICON_MARGIN);
+        painter->drawPixmap(point+shiftC, KIcon("configure").pixmap(ICON_SIZE, ICON_SIZE));
     }
-    point+=QPointF(0.0, 42.0);
-    painter->drawPixmap(point+shiftD, KIcon("edit-delete").pixmap(32,32));
-    point+=QPointF(0.0, 42.0);
-    painter->drawPixmap(point+shiftR, KIcon("transform-rotate").pixmap(32,32));
+    point+=QPointF(0.0, ICON_SIZE + ICON_MARGIN);
+    painter->drawPixmap(point+shiftD, KIcon("edit-delete").pixmap(ICON_SIZE, ICON_SIZE));
+    point+=QPointF(0.0, ICON_SIZE + ICON_MARGIN);
+    painter->drawPixmap(point+shiftR, KIcon("transform-rotate").pixmap(ICON_SIZE, ICON_SIZE));
 
     painter->restore();
 }
@@ -156,35 +156,36 @@ AppletHandle::ButtonType AppletHandle::mapToButton(const QPointF &point) const
     QPointF basePoint = m_rect.topLeft();
 
     if (m_buttonsOnRight) {
-        basePoint+= QPointF(m_rect.width()-52.0, 20.0);
+        basePoint+= QPointF(m_rect.width() - ICON_SIZE - ICON_MARGIN, HANDLE_WIDTH);
     } else {
-        basePoint+= QPointF(20.0, 20.0);
+        basePoint+= QPointF(HANDLE_WIDTH, HANDLE_WIDTH);
     }
 
-    QPolygonF activeArea = QPolygonF(QRectF(basePoint, QSizeF(32.0, 32.0)));
+    QPolygonF activeArea = QPolygonF(QRectF(basePoint, QSizeF(ICON_SIZE, ICON_SIZE)));
 
     if (activeArea.containsPoint(point, Qt::OddEvenFill)) {
         return MoveButton;
     }
 
-    if( m_applet->hasConfigurationInterface() ) {
-        activeArea.translate(QPointF(0.0, 42.0));
+    if (m_applet->hasConfigurationInterface()) {
+        activeArea.translate(QPointF(0.0, ICON_SIZE + ICON_MARGIN));
         if (activeArea.containsPoint(point, Qt::OddEvenFill)) {
             return ConfigureButton;
         }
     }
 
-    activeArea.translate(QPointF(0.0, 42.0));
+    activeArea.translate(QPointF(0.0, ICON_SIZE + ICON_MARGIN));
     if (activeArea.containsPoint(point, Qt::OddEvenFill)) {
         return RemoveButton;
     }
 
-    activeArea.translate(QPointF(0.0, 42.0));
+    activeArea.translate(QPointF(0.0, ICON_SIZE + ICON_MARGIN));
     if (activeArea.containsPoint(point, Qt::OddEvenFill)) {
         return RotateButton;
     }
 
-    return NoButton;
+    kDebug() << "base point is" << basePoint << "and applet is" <<  m_applet->mapToParent(m_applet->boundingRect());
+    return m_applet->mapToParent(m_applet->shape()).contains(point) ? NoButton : MoveButton;
 }
 
 void AppletHandle::mousePressEvent(QGraphicsSceneMouseEvent *event)
@@ -293,7 +294,7 @@ void AppletHandle::startFading(FadeType anim)
         Phase::self()->stopCustomAnimation(m_animId);
     }
 
-    qreal time = 500;
+    qreal time = 250;
 
     if (anim==FadeIn) {
         time *= 1.0-m_opacity;

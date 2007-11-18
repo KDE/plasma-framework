@@ -60,6 +60,10 @@ class AppletHandle : public QObject, public QGraphicsItem
         void fadeAnimation(qreal progress);
 
     private:
+        static const int HANDLE_WIDTH = 10;
+        static const int ICON_SIZE = 12;
+        static const int ICON_MARGIN = 6;
+
         void startFading(FadeType anim);
         void forceDisappear();
         ButtonType mapToButton(const QPointF &point) const;
