@@ -178,7 +178,7 @@ public:
         }
     }
 
-    void paintBackground(QPainter* p2, Applet* q)
+    void paintBackground(QPainter* p2, Applet* q, QRectF paintRect)
     {
         if (q->formFactor() != Plasma::Planar) {
             // we don't paint special backgrounds for other form factors
@@ -187,31 +187,31 @@ public:
             return;
         }
 
-        QSize contents = contentSize(q).toSize();
-        const int contentWidth = contents.width();
-        const int contentHeight = contents.height();
-
-        background->resize();
-
+        // TODO: caching these values might be an idea
         const int topHeight = background->elementSize("top").height();
-        const int topWidth = background->elementSize("top").width();
         const int leftWidth = background->elementSize("left").width();
-        const int leftHeight = background->elementSize("left").height();
-        const int rightWidth = background->elementSize("right").width();
-        const int bottomHeight = background->elementSize("bottom").height();
-        //const int lrWidths = leftWidth + rightWidth;
-        //const int tbHeights = topHeight + bottomHeight;
-
-        // contents top-left corner is (0,0).  We need to draw up and left of that
         const int topOffset = 0 - topHeight;
         const int leftOffset = 0 - leftWidth;
-        const int rightOffset = contentWidth;
-        const int bottomOffset = contentHeight;
-        const int contentTop = 0;
-        const int contentLeft = 0;
-        QSize s = QSize(leftWidth + contentWidth + rightWidth,
-                        topHeight + contentHeight + bottomHeight);
-        if (!cachedBackground || cachedBackground->size() != s) {
+
+        if (!cachedBackground || cachedBackground->size() != q->boundingRect().toRect().size()) {
+            QSize contents = contentSize(q).toSize();
+
+            const int contentWidth = contents.width();
+            const int contentHeight = contents.height();
+
+            background->resize();
+
+            const int topWidth = background->elementSize("top").width();
+            const int leftHeight = background->elementSize("left").height();
+            const int rightWidth = background->elementSize("right").width();
+            const int bottomHeight = background->elementSize("bottom").height();
+
+            // contents top-left corner is (0,0).  We need to draw up and left of that
+            const int rightOffset = contentWidth;
+            const int bottomOffset = contentHeight;
+            const int contentTop = 0;
+            const int contentLeft = 0;
+
             delete cachedBackground;
             cachedBackground = new QPixmap(leftWidth + contentWidth + rightWidth, topHeight + contentHeight + bottomHeight);
             cachedBackground->fill(Qt::transparent);
@@ -222,7 +222,7 @@ public:
 
             //FIXME: This is a hack to fix a drawing problems with svg files where a thin transparent border is drawn around the svg image.
             //       the transparent border around the svg seems to vary in size depending on the size of the svg and as a result increasing the
-	    //	     svn image by 2 all around didn't resolve the issue. For now it resizes based on the border size.
+            //       svn image by 2 all around didn't resolve the issue. For now it resizes based on the border size.
 
             background->resize(contentWidth, contentHeight);
             background->paint(&p, QRect(contentLeft-leftWidth, contentTop-topHeight, contentWidth+leftWidth*2, contentHeight+topHeight*2), "center");
@@ -281,7 +281,7 @@ public:
             //background->paint(&p, QRect(contentLeft, contentTop, contentWidth, contentHeight), "center");
         }
 
-        p2->drawPixmap(leftOffset, topOffset, *cachedBackground);
+        p2->drawPixmap(paintRect, *cachedBackground, paintRect.translated(-leftOffset,-topOffset));
     }
 
     QSizeF contentSize(const Applet* q)
@@ -792,7 +792,8 @@ void Applet::paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *opti
     //kDebug() << "qreal " << zoomLevel << " = " << painter->transform().m11() << " / " << transform().m11();
     //if (fabs(zoomLevel - scalingFactor(Plasma::DesktopZoom)) < std::numeric_limits<double>::epsilon()) { // Show Desktop
         if (d->background) {
-            d->paintBackground(painter, this);
+            //kDebug() << "option rect is" << option->rect;
+            d->paintBackground(painter, this, option->rect);
         }
 
         if (!d->failed && !d->needsConfig) {
