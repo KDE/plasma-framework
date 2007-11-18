@@ -73,13 +73,13 @@ class AppletHandle : public QObject, public QGraphicsItem
         ButtonType m_pressedButton;
         Containment *m_containment;
         Applet *m_applet;
-        Svg m_svg;
         qreal m_opacity;
         FadeType m_anim;
         Phase::AnimId m_animId;
         qreal m_angle;
         qreal m_scale;
         QTransform m_originalMatrix;
+        QColor m_gradientColor;
 };
 
 }

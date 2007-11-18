@@ -20,14 +20,17 @@
 #include "applethandle_p.h"
 
 #include <QtGui/QGraphicsSceneMouseEvent>
+#include <QtGui/QLinearGradient>
 #include <QtGui/QPainter>
 
+#include <KColorScheme>
 #include <KIcon>
 
 #include <cmath>
 
-#include "containment.h"
 #include "applet.h"
+#include "containment.h"
+#include "theme.h"
 
 namespace Plasma
 {
@@ -39,13 +42,15 @@ AppletHandle::AppletHandle(Containment *parent, Applet *applet)
       m_pressedButton(NoButton),
       m_containment(parent),
       m_applet(applet),
-      m_svg("widgets/iconbutton"),
       m_opacity(0.0),
       m_anim(FadeIn),
       m_animId(0),
       m_angle(0.0),
       m_scale(1.0)
 {
+    KColorScheme colors(QPalette::Active, KColorScheme::View, Theme::self()->colors());
+    m_gradientColor = colors.background(KColorScheme::NormalBackground).color();
+
     m_originalMatrix = m_applet->transform();
     m_rect = m_applet->boundingRect();
     m_rect = m_applet->mapToParent(m_rect).boundingRect();
@@ -111,8 +116,17 @@ void AppletHandle::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
     painter->save();
     painter->setOpacity(m_opacity);
 
-    m_svg.paint(painter, boundingRect(), "background");
-    m_svg.paint(painter, boundingRect(), "foreground-hover");
+    painter->save();
+    painter->setOpacity(m_opacity * 0.4);
+    painter->setPen(Qt::NoPen);
+    painter->setRenderHints(QPainter::Antialiasing);
+    QLinearGradient gr(boundingRect().topLeft(), boundingRect().bottomRight());
+    gr.setColorAt(0, m_gradientColor);
+    gr.setColorAt(0.1, KColorScheme::shade(m_gradientColor, KColorScheme::LightShade));
+    gr.setColorAt(1, KColorScheme::shade(m_gradientColor, KColorScheme::DarkShade));
+    painter->setBrush(gr);
+    painter->drawPath(Plasma::roundedRectangle(boundingRect(), 10));
+    painter->restore();
 
     QPointF point = m_rect.topLeft();
 
@@ -187,10 +201,19 @@ AppletHandle::ButtonType AppletHandle::mapToButton(const QPointF &point) const
 
 void AppletHandle::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-    if (event->button()==Qt::LeftButton) {
+    if (event->button() == Qt::LeftButton) {
         m_pressedButton = mapToButton(event->pos());
+
+        if (m_pressedButton == NoButton) {
+            // since drag is everywhere there isn't a button, NoButton clicks mean the applet
+            
+        }
+        event->accept();
         update();
+        return;
     }
+
+    QGraphicsItem::mousePressEvent(event);
 }
 
 void AppletHandle::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
