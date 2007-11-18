@@ -196,18 +196,14 @@ AppletHandle::ButtonType AppletHandle::mapToButton(const QPointF &point) const
         return RemoveButton;
     }
 
-    return m_applet->mapToParent(m_applet->shape()).contains(point) ? NoButton : MoveButton;
+    return MoveButton;
+    //return m_applet->mapToParent(m_applet->shape()).contains(point) ? NoButton : MoveButton;
 }
 
 void AppletHandle::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton) {
         m_pressedButton = mapToButton(event->pos());
-
-        if (m_pressedButton == NoButton) {
-            // since drag is everywhere there isn't a button, NoButton clicks mean the applet
-            
-        }
         event->accept();
         update();
         return;

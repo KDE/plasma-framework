@@ -182,7 +182,7 @@ class Svg::Private
             QSizeF naturalSize = renderer->defaultSize();
             qreal dx = size.width() / naturalSize.width();
             qreal dy = size.height() / naturalSize.height();
-            
+
             return QRect(elementRect.x() * dx, elementRect.y() * dy,
                          elementRect.width() * dx, elementRect.height() * dy);
         }
