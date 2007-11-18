@@ -163,7 +163,7 @@ void Containment::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
     }
 
     KMenu desktopMenu;
-    //kDebug() << "context menu event " << immutable;
+    //kDebug() << "context menu event " << (QObject*)applet;
     if (!applet) {
         if (!scene() || static_cast<Corona*>(scene())->isImmutable()) {
             //kDebug() << "immutability";
@@ -185,9 +185,40 @@ void Containment::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
             desktopMenu.addAction(action);
         }
     } else {
-        //kDebug() << "immutable applet";
-        QGraphicsItem::contextMenuEvent(event);
-        return;
+        bool hasEntries = false;   
+        if (applet->hasConfigurationInterface()) {   
+            QAction* configureApplet = new QAction(i18n("%1 Settings...", applet->name()), &desktopMenu);   
+            connect(configureApplet, SIGNAL(triggered(bool)),   
+                    applet, SLOT(showConfigurationInterface()));   
+            desktopMenu.addAction(configureApplet);   
+            hasEntries = true;   
+        }   
+    
+        if (scene() && !static_cast<Corona*>(scene())->isImmutable()) {   
+            QAction* closeApplet = new QAction(i18n("Remove this %1", applet->name()), &desktopMenu);   
+            QVariant appletV;   
+            appletV.setValue((QObject*)applet);   
+            closeApplet->setData(appletV);   
+            connect(closeApplet, SIGNAL(triggered(bool)),   
+                    this, SLOT(destroyApplet()));   
+            desktopMenu.addAction(closeApplet);   
+            hasEntries = true;   
+        }   
+    
+        QList<QAction*> actions = applet->contextActions();   
+        if (!actions.isEmpty()) {   
+            desktopMenu.addSeparator();   
+            foreach(QAction* action, actions) {   
+                desktopMenu.addAction(action);   
+            }   
+            hasEntries = true;   
+        }   
+    
+        if (!hasEntries) {   
+            QGraphicsItem::contextMenuEvent(event);   
+            kDebug() << "no entries";   
+            return;   
+        }
     }
 
     event->accept();
@@ -529,8 +560,7 @@ bool Containment::sceneEventFilter(QGraphicsItem *watched, QEvent *event)
 
     switch (event->type()) {
     case QEvent::GraphicsSceneHoverEnter:
-        if (!d->immutable && !applet->isImmutable()
-         && !d->handles.contains(applet)) {
+        if (!d->immutable && !applet->isImmutable() && !d->handles.contains(applet)) {
             AppletHandle *handle = new AppletHandle(this, applet);
             d->handles[applet] = handle;
             connect(handle, SIGNAL(disappearDone(AppletHandle*)),

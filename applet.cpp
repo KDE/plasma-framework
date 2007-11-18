@@ -1189,12 +1189,14 @@ void Applet::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
 {
     //kDebug() << "context menu event!";
     if (!scene()) {
+        //kDebug() << "no scene?!";
         return;
     }
 
     Applet* containment = dynamic_cast<Plasma::Applet*>(topLevelItem());
 
     if (!containment) {
+        //kDebug() << "no containment. hm.";
         Widget::contextMenuEvent(event);
         return;
     }
@@ -1202,7 +1204,6 @@ void Applet::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
     // we want to pass up the context menu event to the Containment at
     // this point
     containment->contextMenuEvent(event);
-    return;
 }
 
 } // Plasma namespace
