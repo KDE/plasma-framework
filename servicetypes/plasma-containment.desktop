@@ -3,6 +3,7 @@ Type=ServiceType
 X-KDE-ServiceType=Plasma/Containment
 
 Comment=Plasma applet container and background painter
+Comment[ca]=Contenidor de miniaplicació del Plasma i pintor de fons
 Comment[de]=Plasma-Programmcontainer und Hintergrund-Zeichnung
 Comment[el]=Περιέχει μικροεφαρμογές Plasma και σχεδιάζει το φόντο
 Comment[et]=Plasma apleti konteiner ja tausta joonistaja
@@ -14,6 +15,7 @@ Comment[nds]=Plasma-Gelaats för Lüttprogrammen un Achtergrundmaker
 Comment[ne]=प्लाज्मा एप्लेट कन्टेनर र पृष्ठभूमि पेन्टर
 Comment[nl]=Container en achtergrond voor Plasma-applet
 Comment[nn]=Plasma-behaldar og bakgrunnsmålar
+Comment[pa]=ਪਲਾਜ਼ਮਾ ਐਪਲਿਟ ਕੰਨਟੇਨਰ ਅਤੇ ਬੈਕਗਰਾਊਂਡ ਪੇਂਟਰ
 Comment[pt]=Contentor de 'applets' do Plasma e pintor do fundo
 Comment[pt_BR]=Recipiente de mini-aplicativos do Plasma e pintor de plano de fundo
 Comment[sr]=Садржалац плазма аплета
