@@ -33,11 +33,18 @@ namespace Plasma
 {
 
 AppletHandle::AppletHandle(Containment *parent, Applet *applet)
-    : QObject(), QGraphicsItem(parent),
-      m_buttonsOnRight(false), m_pressedButton(NoButton),
-      m_containment(parent), m_applet(applet),
-      m_svg("widgets/iconbutton"), m_opacity(0.0),
-      m_anim(FadeIn), m_animId(0), m_angle(0.0), m_scale(1.0)
+    : QObject(),
+      QGraphicsItem(parent),
+      m_buttonsOnRight(false),
+      m_pressedButton(NoButton),
+      m_containment(parent),
+      m_applet(applet),
+      m_svg("widgets/iconbutton"),
+      m_opacity(0.0),
+      m_anim(FadeIn),
+      m_animId(0),
+      m_angle(0.0),
+      m_scale(1.0)
 {
     m_originalMatrix = m_applet->transform();
     m_rect = m_applet->boundingRect();
@@ -115,16 +122,12 @@ void AppletHandle::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
         point+= QPointF(HANDLE_WIDTH, HANDLE_WIDTH);
     }
 
-    QPointF shiftM;
     QPointF shiftC;
     QPointF shiftD;
     QPointF shiftR;
 
     switch(m_pressedButton)
     {
-    case MoveButton:
-        shiftM = QPointF(2, 2);
-        break;
     case ConfigureButton:
         shiftC = QPointF(2, 2);
         break;
@@ -138,15 +141,15 @@ void AppletHandle::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
         break;
     }
 
-    painter->drawPixmap(point+shiftM, KIcon("exec").pixmap(ICON_SIZE, ICON_SIZE)); // FIXME: I'd like a "transform-move" here
     if (m_applet->hasConfigurationInterface()) {
-        point+=QPointF(0.0, ICON_SIZE + ICON_MARGIN);
-        painter->drawPixmap(point+shiftC, KIcon("configure").pixmap(ICON_SIZE, ICON_SIZE));
+        painter->drawPixmap(point + shiftC, KIcon("configure").pixmap(ICON_SIZE, ICON_SIZE));
     }
-    point+=QPointF(0.0, ICON_SIZE + ICON_MARGIN);
-    painter->drawPixmap(point+shiftD, KIcon("edit-delete").pixmap(ICON_SIZE, ICON_SIZE));
-    point+=QPointF(0.0, ICON_SIZE + ICON_MARGIN);
-    painter->drawPixmap(point+shiftR, KIcon("transform-rotate").pixmap(ICON_SIZE, ICON_SIZE));
+
+    point += QPointF(0.0, ICON_SIZE + ICON_MARGIN);
+    painter->drawPixmap(point + shiftR, KIcon("transform-rotate").pixmap(ICON_SIZE, ICON_SIZE));
+
+    point += QPointF(0.0, ICON_SIZE * 2 + ICON_MARGIN);
+    painter->drawPixmap(point + shiftD, KIcon("edit-delete").pixmap(ICON_SIZE, ICON_SIZE));
 
     painter->restore();
 }
@@ -163,28 +166,22 @@ AppletHandle::ButtonType AppletHandle::mapToButton(const QPointF &point) const
 
     QPolygonF activeArea = QPolygonF(QRectF(basePoint, QSizeF(ICON_SIZE, ICON_SIZE)));
 
-    if (activeArea.containsPoint(point, Qt::OddEvenFill)) {
-        return MoveButton;
-    }
-
     if (m_applet->hasConfigurationInterface()) {
-        activeArea.translate(QPointF(0.0, ICON_SIZE + ICON_MARGIN));
         if (activeArea.containsPoint(point, Qt::OddEvenFill)) {
             return ConfigureButton;
         }
+        activeArea.translate(QPointF(0.0, ICON_SIZE + ICON_MARGIN));
     }
 
-    activeArea.translate(QPointF(0.0, ICON_SIZE + ICON_MARGIN));
-    if (activeArea.containsPoint(point, Qt::OddEvenFill)) {
-        return RemoveButton;
-    }
-
-    activeArea.translate(QPointF(0.0, ICON_SIZE + ICON_MARGIN));
     if (activeArea.containsPoint(point, Qt::OddEvenFill)) {
         return RotateButton;
     }
 
-    kDebug() << "base point is" << basePoint << "and applet is" <<  m_applet->mapToParent(m_applet->boundingRect());
+    activeArea.translate(QPointF(0.0, ICON_SIZE * 2 + ICON_MARGIN));
+    if (activeArea.containsPoint(point, Qt::OddEvenFill)) {
+        return RemoveButton;
+    }
+
     return m_applet->mapToParent(m_applet->shape()).contains(point) ? NoButton : MoveButton;
 }
 
@@ -233,10 +230,10 @@ qreal _k_angleForPoints(const QPointF &center, const QPointF &pt1, const QPointF
 
 void AppletHandle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
-    if (m_pressedButton==MoveButton) {
+    if (m_pressedButton == MoveButton) {
         QPointF delta = event->pos()-event->lastPos();
         setPos(pos()+delta);
-    } else if (m_pressedButton==RotateButton) {
+    } else if (m_pressedButton == RotateButton) {
         if (_k_distanceForPoint(event->pos()-event->lastPos()) <= 1.0) {
             return;
         }

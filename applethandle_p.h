@@ -61,8 +61,8 @@ class AppletHandle : public QObject, public QGraphicsItem
 
     private:
         static const int HANDLE_WIDTH = 10;
-        static const int ICON_SIZE = 12;
-        static const int ICON_MARGIN = 6;
+        static const int ICON_SIZE = 16;
+        static const int ICON_MARGIN = 8;
 
         void startFading(FadeType anim);
         void forceDisappear();
