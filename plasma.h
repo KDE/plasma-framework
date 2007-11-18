@@ -21,6 +21,7 @@
 #define PLASMA_DEFS_H
 
 #include <QtGui/QGraphicsItem>
+#include <QtGui/QPainterPath>
 
 #include <plasma/plasma_export.h>
 
@@ -135,6 +136,11 @@ PLASMA_EXPORT qreal scalingFactor(ZoomLevel level);
  * @reutrn the visual direction of the element should be oriented in
  **/
 PLASMA_EXPORT Direction locationToDirection(Location location);
+
+/**
+ * Returns a nicely rounded rectanglular path for painting.
+ */
+PLASMA_EXPORT QPainterPath roundedRectangle(const QRectF& rect, qreal radius);
 
 } // Plasma namespace
 
