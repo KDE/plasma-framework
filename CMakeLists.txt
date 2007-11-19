@@ -41,6 +41,7 @@ set(plasma_LIB_SRCS
     shadowitem.cpp
     svg.cpp
     theme.cpp
+    toolbox.cpp
     uiloader.cpp
     view.cpp
     widgets/boxlayout.cpp
