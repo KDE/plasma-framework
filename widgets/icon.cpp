@@ -35,6 +35,7 @@
 
 #ifdef BACKINGSTORE_BLUR_HACK
 #include <private/qwindowsurface_p.h>
+#include "effects/blur.cpp"
 #endif
 
 #include <KIconEffect>
@@ -47,7 +48,6 @@
 
 #include "phase.h"
 #include "svg.h"
-#include "effects/blur.cpp"
 
 namespace Plasma
 {
