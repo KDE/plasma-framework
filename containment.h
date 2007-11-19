@@ -103,7 +103,7 @@ class PLASMA_EXPORT Containment : public Applet
         /**
          * Returns the type of containment
          */
-        virtual Type type();
+        virtual Type type() const;
 
         /**
          * Returns the current form factor the applets in this Containment
