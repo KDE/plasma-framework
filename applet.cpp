@@ -1022,7 +1022,7 @@ KPluginInfo::List Applet::knownAppletsForMimetype(const QString &mimetype)
     return KPluginInfo::fromServices(offers);
 }
 
-QStringList Applet::knownCategories(const QString &parentApp)
+QStringList Applet::knownCategories(const QString &parentApp, bool visibleOnly)
 {
     QString constraint = "exist [X-KDE-PluginInfo-Category]";
 
@@ -1034,8 +1034,13 @@ QStringList Applet::knownCategories(const QString &parentApp)
 
     KService::List offers = KServiceTypeTrader::self()->query("Plasma/Applet", constraint);
     QStringList categories;
-    foreach (KService::Ptr applet, offers) {
+    foreach (const KService::Ptr applet, offers) {
         QString appletCategory = applet->property("X-KDE-PluginInfo-Category").toString();
+        if (visibleOnly && applet->property("NoDisplay").toBool()) {
+            // we don't want to show the hidden category
+            continue;
+        }
+
         //kDebug() << "   and we have " << appletCategory;
         if (appletCategory.isEmpty()) {
             if (!categories.contains(i18n("Miscellaneous"))) {

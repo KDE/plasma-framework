@@ -270,8 +270,9 @@ class PLASMA_EXPORT Applet : public Widget
          *                  list containing only applets not specifically
          *                  registered to an application.
          * @return list of categories
+         * @param visibleOnly true if it should only return applets that are marked as visible
          */
-        static QStringList knownCategories(const QString &parentApp = QString());
+        static QStringList knownCategories(const QString &parentApp = QString(), bool visibleOnly = true);
 
         /**
          * @return true if this plasmoid provides a GUI configuration
