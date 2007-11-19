@@ -199,5 +199,9 @@ void Flash::paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *optio
         painter->drawPixmap(0, 0, Plasma::Phase::self()->animationResult(d->animId));
     }
 }
+void Flash::setSize( const QSizeF & size )
+{
+    Widget::setSize(size);
+}
 
 #include "flash.moc"
