@@ -66,11 +66,11 @@ AppletHandle::AppletHandle(Containment *parent, Applet *applet)
 
     m_rect.adjust(-HANDLE_WIDTH, -HANDLE_WIDTH, HANDLE_WIDTH, HANDLE_WIDTH);
 
-    if (m_applet->pos().x() <= ((HANDLE_WIDTH * 2) + ICON_SIZE + ICON_MARGIN)) {
-        m_rect.adjust(0.0, 0.0, ICON_MARGIN + ICON_SIZE, 0.0);
+    if (m_applet->pos().x() <= ((HANDLE_WIDTH * 2) + ICON_SIZE)) {
+        m_rect.adjust(0.0, 0.0, ICON_SIZE, 0.0);
         m_buttonsOnRight = true;
     } else {
-        m_rect.adjust(- ICON_MARGIN - ICON_SIZE, 0.0, 0.0, 0.0);
+        m_rect.adjust(- ICON_SIZE, 0.0, 0.0, 0.0);
     }
 
     m_applet->setParentItem(this);
@@ -131,9 +131,9 @@ void AppletHandle::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
     QPointF point = m_rect.topLeft();
 
     if (m_buttonsOnRight) {
-        point += QPointF(m_rect.width() - ICON_SIZE - ICON_MARGIN, HANDLE_WIDTH);
+        point += QPointF(m_rect.width() - ICON_SIZE - HANDLE_WIDTH, HANDLE_WIDTH);
     } else {
-        point+= QPointF(HANDLE_WIDTH, HANDLE_WIDTH);
+        point+= QPointF(HANDLE_WIDTH / 2, HANDLE_WIDTH);
     }
 
     QPointF shiftC;
@@ -173,7 +173,7 @@ AppletHandle::ButtonType AppletHandle::mapToButton(const QPointF &point) const
     QPointF basePoint = m_rect.topLeft();
 
     if (m_buttonsOnRight) {
-        basePoint+= QPointF(m_rect.width() - ICON_SIZE - ICON_MARGIN, HANDLE_WIDTH);
+        basePoint+= QPointF(m_rect.width() - ICON_SIZE, HANDLE_WIDTH);
     } else {
         basePoint+= QPointF(HANDLE_WIDTH, HANDLE_WIDTH);
     }

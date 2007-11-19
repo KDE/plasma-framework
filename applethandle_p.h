@@ -60,7 +60,7 @@ class AppletHandle : public QObject, public QGraphicsItem
         void fadeAnimation(qreal progress);
 
     private:
-        static const int HANDLE_WIDTH = 10;
+        static const int HANDLE_WIDTH = 5;
         static const int ICON_SIZE = 16;
         static const int ICON_MARGIN = 8;
 
