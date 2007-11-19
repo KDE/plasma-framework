@@ -232,19 +232,19 @@ class PLASMA_EXPORT Containment : public Applet
          * Usually only used for desktop containments.
          */
         void zoomIn();
-        
+
         /**
          * Emitted when the containment requests zooming out one step.
          * Usually only used for desktop containments.
          */
         void zoomOut();
-        
+
         /**
          * Emitted when the containment requests an add widgets dialog is shown.
          * Usually only used for desktop containments.
          */
         void showAddWidgets();
-        
+
     public Q_SLOTS:
         /**
          * Informs the Corona as to what position it is in. This is informational

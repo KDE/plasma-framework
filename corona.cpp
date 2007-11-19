@@ -274,7 +274,7 @@ Containment* Corona::containmentForScreen(int screen) const
 {
     foreach (Containment* containment, d->containments) {
         if (containment->screen() == screen &&
-            containment->type() == Containment::DesktopContainment) {
+            containment->containmentType() == Containment::DesktopContainment) {
             return containment;
         }
     }

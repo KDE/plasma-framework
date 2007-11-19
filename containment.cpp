@@ -109,18 +109,18 @@ void Containment::init()
     //TODO: would be nice to not do this on init, as it causes Phase to init
     connect(Phase::self(), SIGNAL(animationComplete(QGraphicsItem*,Plasma::Phase::Animation)),
             this, SLOT(appletAnimationComplete(QGraphicsItem*,Plasma::Phase::Animation)));
-    
-    if (type() == DesktopContainment) {
+
+    if (containmentType() == DesktopContainment) {
         Plasma::PushButton *tool = new Plasma::PushButton(i18n("Add Widgets"));
         tool->resize(tool->sizeHint());
         addToolBoxTool(tool);
         connect(tool, SIGNAL(clicked()), this, SIGNAL(showAddWidgets()));
-        
+
         tool = new Plasma::PushButton(i18n("Zoom In"));
         connect(tool, SIGNAL(clicked()), this, SIGNAL(zoomIn()));
         tool->resize(tool->sizeHint());
         addToolBoxTool(tool);
-        
+
         tool = new Plasma::PushButton(i18n("Zoom Out"));
         connect(tool, SIGNAL(clicked()), this, SIGNAL(zoomOut()));
         tool->resize(tool->sizeHint());
@@ -130,7 +130,7 @@ void Containment::init()
 
 void Containment::loadConstraints(KConfigGroup* group)
 {
-/*    kDebug() << "!!!!!!!!!!!!initConstraints" << group->name() << type();
+    /*kDebug() << "!!!!!!!!!!!!initConstraints" << group->name() << containmentType();
     kDebug() << "    location:" << group->readEntry("location", (int)d->location);
     kDebug() << "    geom:" << group->readEntry("geometry", geometry());
     kDebug() << "    formfactor:" << group->readEntry("formfactor", (int)d->formFactor);
@@ -341,7 +341,7 @@ Applet* Containment::addApplet(const QString& name, const QVariantList& args, ui
 
     addChild(applet);
     //panels don't want backgrounds, which is important when setting geometry
-    if (type() == PanelContainment) {
+    if (containmentType() == PanelContainment) {
         applet->setDrawStandardBackground(false);
     }
 
@@ -408,7 +408,7 @@ void Containment::appletAnimationComplete(QGraphicsItem *item, Plasma::Phase::An
             }
         }
     } else if (anim == Phase::Appear) {
-        if (type() == DesktopContainment) {
+        if (containmentType() == DesktopContainment) {
             item->installSceneEventFilter(this);
         }
     }
@@ -423,7 +423,7 @@ void Containment::setScreen(int screen)
 {
     // screen of -1 means no associated screen.
     // sanity check to make sure someone else doesn't have this screen already!
-    if (type() == DesktopContainment && corona()) {
+    if (containmentType() == DesktopContainment && corona()) {
         Containment* currently = corona()->containmentForScreen(screen);
         if (currently && currently != this) {
             //kDebug() << "currently is on screen" << currently->screen() << "and is" << currently->name() << (QObject*)currently << (QObject*)this;
@@ -431,18 +431,18 @@ void Containment::setScreen(int screen)
         }
     }
 
-    //kDebug() << "setting screen to" << screen;
+    kDebug() << "setting screen to" << screen << "and we are a" << containmentType();
     QDesktopWidget *desktop = QApplication::desktop();
     int numScreens = desktop->numScreens();
     if (screen < -1 || screen > numScreens - 1) {
         screen = -1;
     }
 
-    //kDebug() << "setting screen to " << screen << "and type is" << type();
+    //kDebug() << "setting screen to " << screen << "and type is" << containmentType();
     if (screen > -1) {
         QRect r = desktop->screenGeometry(screen);
 
-        if (type() == DesktopContainment) {
+        if (containmentType() == DesktopContainment) {
             // we need to find how many screens are to our top and left
             // to calculate the proper offsets for the margins.
             int x = r.x();
@@ -467,7 +467,7 @@ void Containment::setScreen(int screen)
             //        given screen! we should change the pos() on new containment setup.
             setGeometry(r);
             //kDebug() << "setting geometry to" << desktop->screenGeometry(screen) << r << geometry();
-        } else if (type() == PanelContainment) {
+        } else if (containmentType() == PanelContainment) {
             QRect r = desktop->screenGeometry(screen);
             //kDebug() << "we are a panel on" << r << ", let's move ourselves to a negative coordinate system" << -r.height() - INTER_CONTAINMENT_MARGIN;
             int vertOffset = r.height() + INTER_CONTAINMENT_MARGIN;
