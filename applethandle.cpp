@@ -164,9 +164,9 @@ void AppletHandle::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
 
     if (m_applet->hasConfigurationInterface()) {
         painter->drawPixmap(point + shiftC, KIcon("configure").pixmap(ICON_SIZE, ICON_SIZE));
+        point += QPointF(0.0, ICON_SIZE + ICON_MARGIN);
     }
 
-    point += QPointF(0.0, ICON_SIZE + ICON_MARGIN);
     painter->drawPixmap(point + shiftR, KIcon("transform-rotate").pixmap(ICON_SIZE, ICON_SIZE));
 
     point += QPointF(0.0, ICON_SIZE + ICON_MARGIN * 2);
