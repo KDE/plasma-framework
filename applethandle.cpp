@@ -55,7 +55,10 @@ AppletHandle::AppletHandle(Containment *parent, Applet *applet)
     m_rect = m_applet->boundingRect();
     m_rect = m_applet->mapToParent(m_rect).boundingRect();
 
-    const int requiredHeight = (HANDLE_WIDTH * 2) + m_applet->hasConfigurationInterface() ? + (ICON_SIZE * 4) : (ICON_SIZE * 3);
+    const int requiredHeight = (HANDLE_WIDTH * 2) + m_applet->hasConfigurationInterface() 
+                                                    ? ((ICON_SIZE + ICON_MARGIN) * 4)
+                                                    : ((ICON_SIZE + ICON_MARGIN) * 3)
+                                                  + ICON_MARGIN; // that last margin is blank space before the close button
     if (m_rect.height() < requiredHeight) {
         float delta = requiredHeight - m_rect.height();
         delta = delta/2.0;
@@ -80,15 +83,19 @@ AppletHandle::AppletHandle(Containment *parent, Applet *applet)
 
 AppletHandle::~AppletHandle()
 {
-    QPointF center = m_applet->boundingRect().center();
+    QRectF rect(m_applet->boundingRect());
+    QPointF center = rect.center();
 
-    // TODO: Keep the rotation only, to apply the scaling force
-    // a new pixel size to applets (avoid upscaling aliasing, and
-    // insane downscaling), probably requires support in the Applet class.
+    if (m_scale > 0) {
+        const qreal newWidth = rect.width() * m_scale;
+        const qreal newHeight = rect.height() * m_scale;
+        m_applet->moveBy((rect.width() - newWidth) / 2, (rect.height() - newHeight) / 2);
+        m_applet->resize(newWidth, newHeight);
+    }
+
     QTransform matrix = m_originalMatrix;
     matrix.translate(center.x(), center.y());
     matrix.rotateRadians(m_angle);
-    matrix.scale(m_scale, m_scale);
     matrix.translate(-center.x(), -center.y());
 
     QPointF newPos = transform().inverted().map(m_applet->pos());
@@ -162,7 +169,7 @@ void AppletHandle::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
     point += QPointF(0.0, ICON_SIZE + ICON_MARGIN);
     painter->drawPixmap(point + shiftR, KIcon("transform-rotate").pixmap(ICON_SIZE, ICON_SIZE));
 
-    point += QPointF(0.0, ICON_SIZE * 2 + ICON_MARGIN);
+    point += QPointF(0.0, ICON_SIZE + ICON_MARGIN * 2);
     painter->drawPixmap(point + shiftD, KIcon("edit-delete").pixmap(ICON_SIZE, ICON_SIZE));
 
     painter->restore();
@@ -191,7 +198,7 @@ AppletHandle::ButtonType AppletHandle::mapToButton(const QPointF &point) const
         return RotateButton;
     }
 
-    activeArea.translate(QPointF(0.0, ICON_SIZE * 2 + ICON_MARGIN));
+    activeArea.translate(QPointF(0.0, ICON_SIZE + ICON_MARGIN * 2));
     if (activeArea.containsPoint(point, Qt::OddEvenFill)) {
         return RemoveButton;
     }
