@@ -42,7 +42,8 @@ class Layout::Private
               bottomMargin(12.0),
               spacing(6.0),
               parent(p),
-              animator(0)
+              animator(0),
+              relayouting(false)
         {
         }
 
@@ -56,6 +57,8 @@ class Layout::Private
 
         LayoutItem *parent;
         LayoutAnimator *animator;
+
+        bool relayouting;
 };
 
 
@@ -92,6 +95,11 @@ void Layout::update()
 
 void Layout::invalidate()
 {
+    if (d->relayouting()) {
+        return;
+    }
+
+    d->relayouting = true;
     // find and update the top level layout
     Layout *layout = this;
     Layout *parentLayout = 0;
@@ -104,6 +112,7 @@ void Layout::invalidate()
     } while (parentLayout);
 
     layout->update();
+    d->relayouting = false;
 }
 
 

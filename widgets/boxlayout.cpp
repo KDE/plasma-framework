@@ -437,7 +437,6 @@ void BoxLayout::setGeometry(const QRectF& geo)
     }
 
     d->geometry = geo;
-
     startAnimation();
 }
 

@@ -128,7 +128,6 @@ void BorderLayout::invalidate()
         d->itemPositions[CenterPositioned]->setGeometry(QRectF(
                 origin + QPointF(left, top), QSizeF(right - left, bottom - top)));
     }
-
 }
 
 QSizeF BorderLayout::sizeHint() const
