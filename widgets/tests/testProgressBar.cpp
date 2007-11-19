@@ -10,9 +10,8 @@
 #include <KIcon>
 
 
-#include "../../layouts/boxlayout.h"
-#include "../widget.h"
-#include "../progressbar.h"
+#include "plasma/layouts/boxlayout.h"
+#include "plasma/widgets/progressbar.h"
 
 class Counter : QObject
 {
@@ -89,7 +88,7 @@ int main(int argc, char **argv)
     h1->addItem(progressBar);
     scene.addItem(progressBar);
 
-    widgetLayout->update();
+    widgetLayout->updateGeometry();
 
     view.show();
 

@@ -8,11 +8,11 @@
 #include <KAboutData>
 #include <KIcon>
 
-#include "../pushbutton.h"
-#include "../lineedit.h"
-#include "../../layouts/boxlayout.h"
-#include "../widget.h"
-#include "../label.h"
+#include "plasma/layouts/boxlayout.h"
+#include "plasma/widgets/pushbutton.h"
+#include "plasma/widgets/lineedit.h"
+#include "plasma/widgets/widget.h"
+#include "plasma/widgets/label.h"
 
 int main(int argc, char **argv)
 {
@@ -62,7 +62,7 @@ int main(int argc, char **argv)
    h2->addItem(labelTwo);
    scene.addItem(labelTwo);
 
-    widgetLayout->update();
+    widgetLayout->updateGeometry();
 
     view.show();
     return app.exec();

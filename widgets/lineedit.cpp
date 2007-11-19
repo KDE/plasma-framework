@@ -27,6 +27,8 @@
 
 #include <KDebug>
 
+#include "plasma/layouts/layout.h"
+
 namespace Plasma
 {
 
@@ -182,6 +184,15 @@ void LineEdit::setGeometry(const QRectF& geometry)
     setTextWidth(geometry.width());
     setPos(geometry.topLeft());
     update();
+}
+
+void LineEdit::updateGeometry()
+{
+    if (managingLayout()) {
+        managingLayout()->invalidate();
+    } else {
+        setGeometry(QRectF(pos(), sizeHint()));
+    }
 }
 
 QSizeF LineEdit::sizeHint() const

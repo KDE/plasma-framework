@@ -59,6 +59,7 @@ class Layout::Private
         LayoutAnimator *animator;
 
         bool relayouting;
+        QRectF geometry;
 };
 
 
@@ -88,9 +89,24 @@ bool Layout::isEmpty() const
     return count() == 0;
 }
 
-void Layout::update()
+void Layout::updateGeometry()
 {
-    setGeometry(geometry());
+    relayout();
+}
+
+QRectF Layout::geometry() const
+{
+    return d->geometry;
+}
+
+void Layout::setGeometry(const QRectF &geometry)
+{
+    if (!geometry.isValid() || geometry == d->geometry) {
+        return;
+    }
+
+    d->geometry = geometry;
+    invalidate();
 }
 
 void Layout::invalidate()
@@ -111,7 +127,7 @@ void Layout::invalidate()
         }
     } while (parentLayout);
 
-    layout->update();
+    layout->relayout();
     d->relayouting = false;
 }
 

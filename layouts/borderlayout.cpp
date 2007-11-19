@@ -41,7 +41,6 @@ public:
     }
 
     QMap< Position, LayoutItem * > itemPositions;
-    QRectF geometry;
     QMap< Position, qreal > sizes;
 };
 
@@ -65,39 +64,23 @@ Qt::Orientations BorderLayout::expandingDirections() const
     return Qt::Horizontal | Qt::Vertical;
 }
 
-QRectF BorderLayout::geometry() const
+void BorderLayout::relayout()
 {
-    return d->geometry;
-}
+    QRectF rect = geometry();
+    rect.setTopLeft(rect.topLeft() + QPointF(margin(LeftMargin), margin(TopMargin)));
+    rect.setBottomRight(rect.bottomRight() - QPointF(margin(RightMargin), margin(BottomMargin)));
 
-void BorderLayout::setGeometry(const QRectF& geometry)
-{
-    if (!geometry.isValid() || geometry.isEmpty()) {
-        return;
-    }
-
-    d->geometry = geometry;
-
-    invalidate();
-}
-
-void BorderLayout::invalidate()
-{
-    QRectF geometry = d->geometry;
-    geometry.setTopLeft(geometry.topLeft() + QPointF(margin(LeftMargin), margin(TopMargin)));
-    geometry.setBottomRight(geometry.bottomRight() - QPointF(margin(RightMargin), margin(BottomMargin)));
-
-    QPointF origin = geometry.topLeft();
+    QPointF origin = rect.topLeft();
     qreal top, bottom, left, right;
     top    = (d->sizes[TopPositioned] >= 0)    ? d->sizes[TopPositioned]    : 0;
     left   = (d->sizes[LeftPositioned] >= 0)   ? d->sizes[LeftPositioned]   : 0;
-    bottom = geometry.height() - ((d->sizes[BottomPositioned] >= 0) ? d->sizes[BottomPositioned] : 0);
-    right  = geometry.width()  - ((d->sizes[RightPositioned] >= 0)  ? d->sizes[RightPositioned]  : 0);
+    bottom = rect.height() - ((d->sizes[BottomPositioned] >= 0) ? d->sizes[BottomPositioned] : 0);
+    right  = rect.width()  - ((d->sizes[RightPositioned] >= 0)  ? d->sizes[RightPositioned]  : 0);
 
     if (d->itemPositions[TopPositioned] /*&& d->itemPositions[TopPositioned]->isVisible()*/) {
         top = (d->sizes[TopPositioned] >= 0) ? d->sizes[TopPositioned] : d->itemPositions[TopPositioned]->sizeHint().height();
         d->itemPositions[TopPositioned]->setGeometry(QRectF(origin, QSizeF(
-                geometry.width(), top)));
+                rect.width(), top)));
         top += spacing();
     }
 
@@ -105,9 +88,9 @@ void BorderLayout::invalidate()
         bottom = (d->sizes[BottomPositioned] >= 0) ? d->sizes[BottomPositioned]
                 : d->itemPositions[BottomPositioned]->sizeHint().height();
         d->itemPositions[BottomPositioned]->setGeometry(QRectF(origin + QPointF(0,
-                geometry.height() - bottom), QSizeF(geometry.width(),
+                rect.height() - bottom), QSizeF(rect.width(),
                 bottom)));
-        bottom = geometry.height() - bottom - spacing();
+        bottom = rect.height() - bottom - spacing();
     }
 
     if (d->itemPositions[LeftPositioned] /*&& d->itemPositions[LeftPositioned]->isVisible()*/) {
@@ -120,8 +103,8 @@ void BorderLayout::invalidate()
     if (d->itemPositions[RightPositioned] /*&& d->itemPositions[RightPositioned]->isVisible()*/) {
         right = (d->sizes[RightPositioned] >= 0) ? d->sizes[RightPositioned] : d->itemPositions[RightPositioned]->sizeHint().width();
         d->itemPositions[RightPositioned]->setGeometry(QRectF(origin + QPointF(
-                geometry.width() - right, top), QSizeF(right, bottom - top)));
-        right = geometry.width() - right - spacing();
+                rect.width() - right, top), QSizeF(right, bottom - top)));
+        right = rect.width() - right - spacing();
     }
 
     if (d->itemPositions[CenterPositioned] /*&& d->itemPositions[CenterPositioned]->isVisible()*/) {
@@ -169,7 +152,7 @@ void BorderLayout::addItem(Plasma::LayoutItem * item, Position position)
     removeItem(item);
     d->itemPositions[position] = item;
     item->setManagingLayout(this);
-    update();
+    updateGeometry();
 }
 
 void BorderLayout::removeItem(LayoutItem * item)
@@ -182,7 +165,7 @@ void BorderLayout::removeItem(LayoutItem * item)
             item->unsetManagingLayout(this);
         }
     }
-    update();
+    updateGeometry();
 }
 
 int BorderLayout::count() const
@@ -236,13 +219,13 @@ Plasma::LayoutItem * BorderLayout::takeAt(int i)
 void BorderLayout::setSize(qreal size, Position border)
 {
     d->sizes[border] = size;
-    update();
+    updateGeometry();
 }
 
 void BorderLayout::setAutoSize(Position border)
 {
     d->sizes[border] = -1;
-    update();
+    updateGeometry();
 }
 
 qreal BorderLayout::size(Position border)

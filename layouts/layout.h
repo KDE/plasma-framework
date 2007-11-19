@@ -143,8 +143,18 @@ class PLASMA_EXPORT Layout : public LayoutItem
          */
         virtual void setAnimator( LayoutAnimator* animator );
 
+        /**
+         * Returns the current geometry for this layout
+         */
+        virtual QRectF geometry() const;
+
+        /**
+         * Changes the geometry of this layout
+         */
+        void setGeometry(const QRectF &geometry);
+
         /** Triggers an update of the layout. */ 
-        void update();
+        void updateGeometry();
 
         /** 
          * Returns the minimum size of this layout.
@@ -162,8 +172,13 @@ class PLASMA_EXPORT Layout : public LayoutItem
 
     protected:
         /**
+         * Triggers a layout, usually after a change in geometry
+         */
+        virtual void relayout() = 0;
+
+        /**
          * Starts a layout animation.  Subclasses may call this 
-         * at the end of their setGeometry() implementation to
+         * at the end of their relayout() implementation to
          * start the timeline associated with the layout's animator()
          * if there is one.  If an animation is already in progress then
          * the timeline is reset to 0ms and the animation continues.

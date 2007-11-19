@@ -57,10 +57,10 @@
 #include "plasma/theme.h"
 #include "plasma/view.h"
 
+#include "plasma/layouts/boxlayout.h"
 #include "plasma/widgets/widget.h"
 #include "plasma/widgets/lineedit.h"
 #include "plasma/widgets/pushbutton.h"
-#include "plasma/layouts/boxlayout.h"
 
 //#define DYNAMIC_SHADOWS
 namespace Plasma
@@ -715,7 +715,7 @@ void Applet::flushUpdatedConstraints()
     constraintsUpdated(c);
 
     if (layout()) {
-        layout()->update();
+        layout()->updateGeometry();
     }
 }
 

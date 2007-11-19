@@ -76,9 +76,6 @@ public:
     explicit NodeLayout(LayoutItem * parent = 0);
     virtual ~NodeLayout();
 
-    virtual QRectF geometry() const;
-    void setGeometry(const QRectF& geometry);
-
     QSizeF sizeHint() const;
 
     /**
@@ -108,6 +105,9 @@ public:
     virtual int indexOf(LayoutItem * item) const;
     virtual LayoutItem * itemAt(int i) const;
     virtual LayoutItem * takeAt(int i);
+
+protected:
+    void relayout();
 
 private:
     class Private;

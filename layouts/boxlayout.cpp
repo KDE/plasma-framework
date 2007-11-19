@@ -36,7 +36,6 @@ class BoxLayout::Private
 public:
     BoxLayout *const q;
     Direction direction;
-    QRectF geometry;
     QList<LayoutItem*> children;
 
     Private(BoxLayout *parent)
@@ -255,7 +254,7 @@ BoxLayout::BoxLayout(Direction direction , LayoutItem *parent)
 void BoxLayout::setDirection(Direction direction)
 {
     d->direction = direction;
-    update();
+    updateGeometry();
 }
 BoxLayout::Direction BoxLayout::direction() const
 {
@@ -285,11 +284,6 @@ Qt::Orientations BoxLayout::expandingDirections() const
     }
 }
 
-QRectF BoxLayout::geometry() const
-{
-    return d->geometry;
-}
-
 int BoxLayout::count() const
 {
     return d->children.count();
@@ -313,7 +307,7 @@ void BoxLayout::insertItem(int index, LayoutItem *item)
         animator()->setCurrentState(item,LayoutAnimator::InsertedState);
     }
 
-    update();
+    updateGeometry();
 }
 
 void BoxLayout::addItem(LayoutItem *item)
@@ -333,7 +327,7 @@ void BoxLayout::removeItem(LayoutItem *item)
     if ( animator() )
         animator()->setCurrentState(item,LayoutAnimator::RemovedState);
 
-    update();
+    updateGeometry();
 }
 
 int BoxLayout::indexOf(LayoutItem *l) const
@@ -350,12 +344,12 @@ LayoutItem *BoxLayout::takeAt(int i)
 {
     return d->children.takeAt(i);
 
-    update();
+    updateGeometry();
 }
 
-void BoxLayout::setGeometry(const QRectF& geo)
+void BoxLayout::relayout()
 {
-    QRectF margined = geo.adjusted(margin(LeftMargin), margin(TopMargin), -margin(RightMargin), -margin(BottomMargin));
+    QRectF margined = geometry().adjusted(margin(LeftMargin), margin(TopMargin), -margin(RightMargin), -margin(BottomMargin));
 
     //qDebug() << "geo before " << geo << "and with margins" << margined << "margins" << margin(LeftMargin)
     //         << margin(TopMargin) <<  -margin(RightMargin) << -margin(BottomMargin);
@@ -426,7 +420,7 @@ void BoxLayout::setGeometry(const QRectF& geo)
     }
 
     // set items' geometry according to new sizes
-    qreal pos = d->startPos(geo);
+    qreal pos = d->startPos(geometry());
     for ( int i = 0 ; i < sizes.count() ; i++ ) {
 
         //QObject *obj = dynamic_cast<QObject*>(d->children[i]);
@@ -436,7 +430,6 @@ void BoxLayout::setGeometry(const QRectF& geo)
        pos = d->layoutItem(margined, d->children[i], pos , sizes[i]);
     }
 
-    d->geometry = geo;
     startAnimation();
 }
 

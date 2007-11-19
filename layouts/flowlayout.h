@@ -20,13 +20,10 @@
 #define __FLOWLAYOUT__
 
 #include <plasma/plasma_export.h>
-
-#include "layout.h"
+#include <plasma/layouts/layout.h>
 
 namespace Plasma
 {
-
-class LayoutItem;
 
 /**
  * A layout which lays items out left-to-right , top-to-bottom.
@@ -49,11 +46,12 @@ public:
     virtual LayoutItem* takeAt(int i);
 
     virtual QSizeF sizeHint() const;
-    virtual QRectF geometry() const;
-    virtual void setGeometry(const QRectF& geometry);
     virtual Qt::Orientations expandingDirections() const;
     virtual void setColumnWidth( const qreal width );
     virtual qreal columnWidth() const;
+
+protected:
+    void relayout();
 
 private:
     class Private;

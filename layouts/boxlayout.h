@@ -74,13 +74,14 @@ class PLASMA_EXPORT BoxLayout : public Layout
         virtual LayoutItem *itemAt(int i) const;
         virtual LayoutItem *takeAt(int i);
         virtual Qt::Orientations expandingDirections() const;
-        virtual QRectF geometry() const;
-        virtual void setGeometry(const QRectF& geometry);
         virtual int count() const;
 
         virtual QSizeF minimumSize() const;
         virtual QSizeF maximumSize() const;
         virtual QSizeF sizeHint() const;
+
+    protected:
+        void relayout();
 
     private:
         class Private;

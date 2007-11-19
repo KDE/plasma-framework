@@ -21,18 +21,17 @@
 
 #include <QStringList>
 
-#include "widgets/checkbox.h"
-#include "widgets/flash.h"
-#include "widgets/icon.h"
-#include "widgets/label.h"
-#include "widgets/pushbutton.h"
-#include "widgets/radiobutton.h"
-#include "widgets/meter.h"
-//#include "widgets/rectangle.h"
+#include "plasma/widgets/checkbox.h"
+#include "plasma/widgets/flash.h"
+#include "plasma/widgets/icon.h"
+#include "plasma/widgets/label.h"
+#include "plasma/widgets/pushbutton.h"
+#include "plasma/widgets/radiobutton.h"
+#include "plasma/widgets/meter.h"
 
-#include "layouts/hboxlayout.h"
-#include "layouts/vboxlayout.h"
-#include "layouts/flowlayout.h"
+#include "plasma/layouts/hboxlayout.h"
+#include "plasma/layouts/vboxlayout.h"
+#include "plasma/layouts/flowlayout.h"
 
 namespace Plasma
 {

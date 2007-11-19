@@ -36,7 +36,6 @@ class FlowLayout::Private
 public:
     Private() : columnWidth( -1 ) {}
     QList<LayoutItem*> items; 
-    QRectF geometry; 
     qreal columnWidth;
 };
 
@@ -103,11 +102,6 @@ LayoutItem* FlowLayout::takeAt(int i)
     return d->items.takeAt(i);
 }
 
-QRectF FlowLayout::geometry() const
-{
-    return d->geometry;
-}
-
 template <class T>
 T qSum(const QList<T>& container) 
 {
@@ -118,11 +112,11 @@ T qSum(const QList<T>& container)
     return total;
 }
 
-void FlowLayout::setGeometry(const QRectF& geo)
+void FlowLayout::relayout()
 {
-    QRectF geometry = geo.adjusted(margin(LeftMargin), margin(TopMargin), -margin(RightMargin), -margin(BottomMargin));
+    QRectF rect = geometry().adjusted(margin(LeftMargin), margin(TopMargin), -margin(RightMargin), -margin(BottomMargin));
 
-    qDebug() << "Flow layout geometry set to " << geo;
+    qDebug() << "Flow layout geometry set to " << geometry();
 
     // calculate average size of items
     qreal totalWidth = 0;
@@ -138,12 +132,13 @@ void FlowLayout::setGeometry(const QRectF& geo)
     // average width, this provides the spacing between the items and
     // also allows some tolerance for small differences in item widths 
     qreal averageWidth;
-    if( d->columnWidth == -1 )
-    	averageWidth = totalWidth / d->items.count() + 2*spacing();
-    else
+    if (d->columnWidth == -1) {
+        averageWidth = totalWidth / d->items.count() + 2*spacing();
+    } else {
         averageWidth = d->columnWidth;
-	
-    const int columnCount = (int)(geometry.width() / averageWidth);
+    }
+
+    const int columnCount = (int)(rect.width() / averageWidth);
 
     int insertColumn = 0;
     qreal rowPos = 0;
@@ -183,17 +178,16 @@ void FlowLayout::setGeometry(const QRectF& geo)
 
         // try to restrict the item width to the available geometry's
         // width
-        if ( itemWidth > geometry.width() ) {
-            itemWidth = qMax(geometry.width(),item->minimumSize().width());
+        if ( itemWidth > rect.width() ) {
+            itemWidth = qMax(rect.width(),item->minimumSize().width());
             offset = 0;
         }        
 
         // position the item
-        const QRectF newGeometry( geometry.left() + 
-                                    insertColumn * averageWidth + offset, 
-                                  geometry.top() + rowPos , 
-                                  itemWidth , 
-                                  itemSize.height() );
+        const QRectF newGeometry(rect.left() + insertColumn * averageWidth + offset,
+                                 rect.top() + rowPos,
+                                 itemWidth,
+                                 itemSize.height());
 
         rowHeight = qMax(rowHeight,itemSize.height());
         insertColumn += columnSpan;
@@ -203,8 +197,6 @@ void FlowLayout::setGeometry(const QRectF& geo)
         else
             item->setGeometry( newGeometry );
     }
-
-    d->geometry = geo;
 
     startAnimation();
 }

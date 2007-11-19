@@ -105,6 +105,13 @@ class PLASMA_EXPORT LayoutItem
         virtual void setGeometry(const QRectF& geometry) = 0;
 
         /**
+         * Updates the layouting of the item without first changing its geometry.
+         * Calling this may result in a geometry change, but may not, depending
+         * on the managing layout if any.
+         */
+        virtual void updateGeometry() = 0;
+
+        /**
          * Returns the most appropriate size of this Item to hold whatever contents it has.
          */
         virtual QSizeF sizeHint() const = 0;

@@ -114,15 +114,6 @@ public:
         return result;
     }
 
-    void invalidate()
-    {
-        foreach (LayoutItem * item, items.keys()) {
-            if (item) {
-                item->setGeometry(calculateRectangle(item));
-            }
-        }
-    }
-
     void calculateSizeHint(LayoutItem * item = NULL) {
         if (item == NULL) {
             // Recalculate the sizeHint using all items
@@ -167,19 +158,13 @@ Qt::Orientations NodeLayout::expandingDirections() const
     return Qt::Horizontal | Qt::Vertical;
 }
 
-QRectF NodeLayout::geometry() const
+void NodeLayout::relayout()
 {
-    return d->geometry;
-}
-
-void NodeLayout::setGeometry(const QRectF& geometry)
-{
-    if (!geometry.isValid() || geometry.isEmpty()) {
-        return;
+    foreach (LayoutItem * item, d->items.keys()) {
+        if (item) {
+            item->setGeometry(d->calculateRectangle(item));
+        }
     }
-
-    d->geometry = geometry;
-    d->invalidate();
 }
 
 QSizeF NodeLayout::sizeHint() const

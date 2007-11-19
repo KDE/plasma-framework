@@ -41,10 +41,6 @@ public:
     virtual ~BorderLayout();
 
     virtual Qt::Orientations expandingDirections() const;
-    virtual QRectF geometry() const;
-    void setGeometry(const QRectF& geometry);
-
-    void invalidate();
 
     QSizeF sizeHint() const;
 
@@ -87,6 +83,9 @@ public:
      * it will return a value less than zero.
      */
     qreal size(Position border);
+
+protected:
+    void relayout();
 
 private:
     class Private;

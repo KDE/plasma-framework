@@ -85,7 +85,7 @@ LayoutItem * FreeLayout::takeAt(int i)
     return d->children.takeAt(i);
 }
 
-void FreeLayout::setGeometry(const QRectF &)
+void FreeLayout::relayout()
 {
     foreach (LayoutItem *child , d->children) {
         if (child->geometry().size() != child->sizeHint()) {

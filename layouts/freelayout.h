@@ -54,10 +54,12 @@ class PLASMA_EXPORT FreeLayout : public Layout
         virtual LayoutItem *takeAt(int i);
         virtual Qt::Orientations expandingDirections() const;
         virtual QRectF geometry() const;
-        virtual void setGeometry(const QRectF& geometry);
         virtual int count() const;
 
         virtual QSizeF sizeHint() const;
+
+    protected:
+        void relayout();
 
     private:
         class Private;
