@@ -28,7 +28,7 @@
 
 #include <plasma/dataengine.h>
 #include <plasma/plasma.h>
-#include <plasma/widgets/layoutitem.h>
+#include <plasma/layouts/layoutitem.h>
 
 namespace Plasma
 {

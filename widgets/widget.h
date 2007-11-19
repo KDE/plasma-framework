@@ -27,7 +27,7 @@
 #include <QtCore/QRectF>
 #include <QtCore/QSizeF>
 
-#include <plasma/widgets/layoutitem.h>
+#include <plasma/layouts/layoutitem.h>
 #include <plasma/plasma_export.h>
 
 namespace Plasma

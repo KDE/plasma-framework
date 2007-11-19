@@ -60,7 +60,7 @@
 #include "plasma/widgets/widget.h"
 #include "plasma/widgets/lineedit.h"
 #include "plasma/widgets/pushbutton.h"
-#include "plasma/widgets/boxlayout.h"
+#include "plasma/layouts/boxlayout.h"
 
 //#define DYNAMIC_SHADOWS
 namespace Plasma

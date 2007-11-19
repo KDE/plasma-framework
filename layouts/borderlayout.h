@@ -24,7 +24,7 @@
 
 #include <plasma/plasma_export.h>
 #include <plasma/plasma.h>
-#include <plasma/widgets/layout.h>
+#include <plasma/layouts/layout.h>
 
 namespace Plasma {
 
