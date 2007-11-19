@@ -42,8 +42,6 @@ class Flash::Private
 
         Private() { }
         ~Private() { }
-        int height;
-        int width;
 
         QString text;
         QColor color;
@@ -70,10 +68,9 @@ Flash::Flash(QGraphicsItem *parent)
     d->defaultDuration = 3000;
     d->type = Private::Text;
     d->color = Qt::black;
-    d->height = 40;
-    d->width = 100 ;
     d->animId = 0;
     d->state = Private::Invisible;
+    setSize(QSizeF(40, 100));
 
     setCachePaintMode( NoCacheMode );
 }
@@ -85,21 +82,7 @@ Flash::~Flash()
 
 QRectF Flash::boundingRect() const
 {
-    return QRectF(0,0,d->width,d->height);
-}
-
-void Flash::setHeight(int h)
-{
-    prepareGeometryChange ();
-    d->height = h;
-    update();
-}
-
-void Flash::setWidth(int w)
-{
-    prepareGeometryChange ();
-    d->width = w;
-    update();
+    return QRectF(0, 0, size().width(), size().height());
 }
 
 void Flash::setDuration( int duration )
@@ -109,20 +92,12 @@ void Flash::setDuration( int duration )
 
 QSizeF Flash::minimumSize() const
 {
-    return QSize(d->width,d->height);
+    return size();
 }
 
 QSizeF Flash::maximumSize() const
 {
-    return QSize(d->width,d->height);
-}
-
-void Flash::setSize(const QSize &s)
-{
-    prepareGeometryChange ();
-    d->width = s.width();
-    d->height = s.height();
-    update();
+    return size();
 }
 
 QSizeF Flash::sizeHint() const
