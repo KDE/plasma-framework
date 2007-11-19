@@ -152,13 +152,13 @@ install(FILES
     layouts/boxlayout.h
     layouts/vboxlayout.h
     layouts/hboxlayout.h
-    layouts/borderlayout.cpp
-    layouts/freelayout.cpp
-    layouts/nodelayout.cpp
-    layouts/flowlayout.cpp
-    layouts/layout.cpp
-    layouts/layoutanimator.cpp
-    layouts/layoutitem.cpp
+    layouts/borderlayout.h
+    layouts/freelayout.h
+    layouts/nodelayout.h
+    layouts/flowlayout.h
+    layouts/layout.h
+    layouts/layoutanimator.h
+    layouts/layoutitem.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/plasma/layouts)
 
 install(FILES
