@@ -297,26 +297,28 @@ int BoxLayout::count() const
 
 void BoxLayout::insertItem(int index, LayoutItem *item)
 {
-    if (!item) {
+    if (!item || d->children.contains(item)) {
         return;
     }
 
     item->setManagingLayout(this);
 
-    if ( index == -1 )
+    if (index == -1) {
         index = d->children.size();
+    }
 
     d->children.insert(index, item);
 
-    if ( animator() )
+    if (animator())  {
         animator()->setCurrentState(item,LayoutAnimator::InsertedState);
+    }
 
     update();
 }
 
 void BoxLayout::addItem(LayoutItem *item)
 {
-    insertItem(-1,item);
+    insertItem(-1, item);
 }
 
 void BoxLayout::removeItem(LayoutItem *item)

@@ -167,7 +167,9 @@ void BorderLayout::addItem(Plasma::LayoutItem * item)
 
 void BorderLayout::addItem(Plasma::LayoutItem * item, Position position)
 {
+    removeItem(item);
     d->itemPositions[position] = item;
+    item->setManagingLayout(this);
     update();
 }
 
@@ -178,6 +180,7 @@ void BorderLayout::removeItem(LayoutItem * item)
         i.next();
         if (i.value() == item) {
             i.remove();
+            item->unsetManagingLayout(this);
         }
     }
     update();

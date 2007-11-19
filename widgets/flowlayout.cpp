@@ -54,21 +54,29 @@ int FlowLayout::count() const
 {
     return d->items.count();
 }
+
 void FlowLayout::addItem(LayoutItem* item)
 {
+    if (d->items.contains(item)) {
+        return;
+    }
+
     d->items << item;
 
-    if ( animator() )
+    if (animator()) {
         animator()->setCurrentState(item,LayoutAnimator::InsertedState);
+    }
 
     item->setManagingLayout(this);
 }
 void FlowLayout::removeItem(LayoutItem* item)
 {
+    item->unsetManagingLayout(this);
     d->items.removeAll(item);
 
-    if ( animator() )
+    if (animator()) {
         animator()->setCurrentState(item,LayoutAnimator::RemovedState);
+    }
 }
 int FlowLayout::indexOf(LayoutItem* item) const
 {

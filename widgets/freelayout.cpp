@@ -51,6 +51,10 @@ Qt::Orientations FreeLayout::expandingDirections() const
 
 void FreeLayout::addItem(LayoutItem *item)
 {
+    if (d->children.contains(item)) {
+        return;
+    }
+
     d->children << item;
     item->setManagingLayout(this);
 }
@@ -58,6 +62,7 @@ void FreeLayout::addItem(LayoutItem *item)
 void FreeLayout::removeItem(LayoutItem *item)
 {
     d->children.removeAll(item);
+    item->unsetManagingLayout(this);
 }
 
 int FreeLayout::indexOf(LayoutItem *item) const

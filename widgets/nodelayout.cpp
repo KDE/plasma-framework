@@ -194,22 +194,34 @@ void NodeLayout::addItem (LayoutItem * item)
 
 void NodeLayout::addItem (LayoutItem * item, NodeCoordinate topLeft, NodeCoordinate bottomRight)
 {
-    if (!item) return;
+    if (!item) {
+        return;
+    }
+
     d->items[item] = QPair<NodeCoordinate, NodeCoordinate>(topLeft, bottomRight);
+    item->setManagingLayout(this);
     d->calculateSizeHint(item);
 }
 
 void NodeLayout::addItem (LayoutItem * item, NodeCoordinate node, qreal xr, qreal yr)
 {
-    if (!item) return;
+    if (!item) {
+        return;
+    }
+
     d->items[item] = QPair<NodeCoordinate, NodeCoordinate>(node,
         NodeCoordinate::simple(xr, yr, NodeCoordinate::InnerRelative, NodeCoordinate::InnerRelative));
+    item->setManagingLayout(this);
     d->calculateSizeHint(item);
 }
 
 void NodeLayout::removeItem (LayoutItem * item)
 {
-    if (!item) return;
+    if (!item) {
+        return;
+    }
+
+    item->unsetManagingLayout(this);
     d->items.remove(item);
     d->calculateSizeHint();
 }
