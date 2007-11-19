@@ -427,7 +427,7 @@ bool DataEngine::isValid() const
 
 bool DataEngine::isEmpty() const
 {
-    return d->sources.count() < 1;
+    return d->sources.isEmpty();
 }
 
 void DataEngine::setValid(bool valid)

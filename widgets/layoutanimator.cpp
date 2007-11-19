@@ -119,14 +119,15 @@ void LayoutAnimator::setAutoDeleteOnRemoval(bool autoDelete)
                 SLOT(itemAutoDeleter(LayoutItem*,State,State)) );
     } 
 }
+
 bool LayoutAnimator::autoDeleteOnRemoval() const
 {
     return d->autoDeleteOnRemoval;
 }
+
 void LayoutAnimator::itemAutoDeleter(LayoutItem *item , State oldState , State newState)
 {
     if ( oldState == RemovedState && newState == DeadState ) {
-        
         if ( item->graphicsItem() ) {
             item->graphicsItem()->scene()->removeItem( item->graphicsItem() );
 
@@ -137,6 +138,7 @@ void LayoutAnimator::itemAutoDeleter(LayoutItem *item , State oldState , State n
         delete item;
     }
 }
+
 void LayoutAnimator::setEffect( State action , int effect )
 {
     d->effects[action] = effect;
