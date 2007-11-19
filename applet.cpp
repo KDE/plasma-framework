@@ -233,7 +233,7 @@ public:
             background->paint(&p, QRect(leftOffset, bottomOffset, leftWidth, bottomHeight), "bottomleft");
             background->paint(&p, QRect(rightOffset, bottomOffset, rightWidth, bottomHeight), "bottomright");
 
-            if (stretchBackgroundBorders) {
+            if (background->elementExists("hint-stretch-borders")) {
                 background->paint(&p, QRect(leftOffset, contentTop, leftWidth, contentHeight), "left");
                 background->paint(&p, QRect(rightOffset, contentTop, rightWidth, contentHeight), "right");
                 background->paint(&p, QRect(contentLeft, topOffset, contentWidth, topHeight), "top");
@@ -354,7 +354,6 @@ public:
     QStringList loadedEngines;
     static uint s_maxAppletId;
     Plasma::Svg *background;
-    bool stretchBackgroundBorders;
     Plasma::LineEdit *failureText;
     ScriptEngine* scriptEngine;
     ConfigXml* configXml;
@@ -585,7 +584,6 @@ void Applet::setDrawStandardBackground(bool drawBackground)
     if (drawBackground) {
         if (!d->background) {
             d->background = new Plasma::Svg("widgets/background");
-            d->stretchBackgroundBorders = d->background->elementExists("hint-stretch-borders");
             updateGeometry();
         }
     } else if (d->background) {
@@ -693,10 +691,15 @@ void Applet::flushUpdatedConstraints()
     Plasma::Constraints c = d->pendingConstraints;
     d->pendingConstraints = NoConstraint;
 
+    Containment* containment = qobject_cast<Plasma::Containment*>(this);
     if (c & Plasma::FormFactorConstraint) {
         FormFactor f = formFactor();
         setShadowShown(f == Planar);
-        setDrawStandardBackground(qobject_cast<Containment*>(this) == 0 && f != Vertical && f != Horizontal);
+        setDrawStandardBackground(!containment && f != Vertical && f != Horizontal);
+    }
+
+    if (isContainment() && containment) {
+        containment->containmentConstraintsUpdated(c);
     }
 
     constraintsUpdated(c);
