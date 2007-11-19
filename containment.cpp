@@ -155,7 +155,7 @@ void Containment::containmentConstraintsUpdated(Plasma::Constraints constraints)
     }
 }
 
-Containment::Type Containment::type() const
+Containment::Type Containment::containmentType() const
 {
     return DesktopContainment;
 }
