@@ -251,6 +251,7 @@ protected:
      */
     virtual void paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
     QVariant itemChange(GraphicsItemChange change, const QVariant &value);
+    void setSize(qreal width, qreal height);
     void setSize(const QSizeF& size);
     void managingLayoutChanged();
 

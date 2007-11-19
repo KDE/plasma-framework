@@ -227,6 +227,11 @@ void Widget::setGeometry(const QRectF& geometry)
     update();
 }
 
+void Widget::setSize(qreal width, qreal height)
+{
+    setSize(QSizeF(width, height));
+}
+
 void Widget::setSize(const QSizeF& size)
 {
     d->size = size;
@@ -246,13 +251,13 @@ QSizeF Widget::sizeHint() const
     if (layout()) {
         return layout()->sizeHint();
     } else {
-        return boundingRect().size();
+        return d->size;
     }
 }
 
 QSizeF Widget::size() const
 {
-    return geometry().size();
+    return d->size;
 }
 
 QFont Widget::font() const
