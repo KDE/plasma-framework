@@ -112,9 +112,8 @@ T qSum(const QList<T>& container)
 
 void FlowLayout::setGeometry(const QRectF& geo)
 {
-    QRectF geometry(geo);
-    geometry.adjust(margin(),margin(),-margin(),-margin());
- 
+    QRectF geometry = geo.adjusted(margin(LeftMargin), margin(TopMargin), -margin(RightMargin), -margin(BottomMargin));
+
     qDebug() << "Flow layout geometry set to " << geo;
 
     // calculate average size of items

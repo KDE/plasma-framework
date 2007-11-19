@@ -84,8 +84,8 @@ void BorderLayout::setGeometry(const QRectF& geometry)
 void BorderLayout::invalidate()
 {
     QRectF geometry = d->geometry;
-    geometry.setTopLeft(geometry.topLeft() + QPointF(margin(), margin()));
-    geometry.setBottomRight(geometry.bottomRight() - QPointF(margin(), margin()));
+    geometry.setTopLeft(geometry.topLeft() + QPointF(margin(LeftMargin), margin(TopMargin)));
+    geometry.setBottomRight(geometry.bottomRight() - QPointF(margin(RightMargin), margin(BottomMargin)));
 
     QPointF origin = geometry.topLeft();
     qreal top, bottom, left, right;
@@ -157,7 +157,7 @@ QSizeF BorderLayout::sizeHint() const
         hintWidth += d->itemPositions[CenterPositioned]->sizeHint().width();
     }
 
-    return QSizeF(hintWidth + 2 * margin(), hintHeight + 2 * margin());
+    return QSizeF(hintWidth + 2 + margin(LeftMargin) + margin(RightMargin), hintHeight + 2 + margin(TopMargin) + margin(BottomMargin));
 }
 
 void BorderLayout::addItem(Plasma::LayoutItem * item)

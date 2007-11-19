@@ -85,12 +85,13 @@ public:
     {
         switch ( direction ) {
             case LeftToRight:
+                return q->margin(LeftMargin);
             case TopToBottom:
-                return q->margin();
+                return q->margin(TopMargin);
             case RightToLeft:
-                return geometry.width() - q->margin();
+                return geometry.width() - q->margin(RightMargin);
             case BottomToTop:
-                return geometry.height() - q->margin();
+                return geometry.height() - q->margin(BottomMargin);
             default:
                 Q_ASSERT(false);
                 return 0;
@@ -155,7 +156,7 @@ public:
        // qDebug() << "Item geometry: " << newGeometry;
 
         if ( q->animator() )
-            q->animator()->setGeometry(item,newGeometry);
+            q->animator()->setGeometry(item, newGeometry);
         else
             item->setGeometry(newGeometry);
 
@@ -216,7 +217,6 @@ public:
     {
         QSizeF result;
 
-        const qreal totalMargin = q->margin() * 2;
         const qreal totalSpacing = q->spacing() * (children.count()-1);
 
         switch ( direction ) {
@@ -225,8 +225,8 @@ public:
                 result = QSizeF(calculateSize(calculateSizeType,Qt::Horizontal,sum),
                                 calculateSize(calculateSizeType,Qt::Vertical,qMax<qreal>));
 
-                result.rwidth() += totalMargin + totalSpacing;
-                result.rheight() += totalMargin;
+                result.rwidth() += q->margin(LeftMargin) + q->margin(RightMargin) + totalSpacing;
+                result.rheight() += q->margin(TopMargin) + q->margin(BottomMargin);
 
                 break;
             case TopToBottom:
@@ -234,8 +234,8 @@ public:
                 result = QSizeF(calculateSize(calculateSizeType,Qt::Horizontal,qMax<qreal>),
                                 calculateSize(calculateSizeType,Qt::Vertical,sum));
 
-                result.rheight() += totalMargin + totalSpacing;
-                result.rwidth() += totalMargin;
+                result.rheight() += q->margin(TopMargin) + q->margin(BottomMargin) + totalSpacing;
+                result.rwidth() += q->margin(LeftMargin) + q->margin(RightMargin);
 
                 break;
         }
@@ -353,16 +353,17 @@ LayoutItem *BoxLayout::takeAt(int i)
 
 void BoxLayout::setGeometry(const QRectF& geo)
 {
-    QRectF geometry = geo.adjusted(margin(),margin(),-margin(),-margin());
+    QRectF margined = geo.adjusted(margin(LeftMargin), margin(TopMargin), -margin(RightMargin), -margin(BottomMargin));
 
-    //qDebug() << "geo before " << geo << "after" << geometry << "margin" << margin();
+    //qDebug() << "geo before " << geo << "and with margins" << margined << "margins" << margin(LeftMargin)
+    //         << margin(TopMargin) <<  -margin(RightMargin) << -margin(BottomMargin);
     //qDebug() << "Box layout beginning with geo" << geometry;
     //qDebug() << "This box max size" << maximumSize();
 
     QVector<qreal> sizes(count());
     QVector<qreal> expansionSpace(count());
 
-    qreal available = d->size(geometry.size()) - spacing()*(d->children.count()-1);
+    qreal available = d->size(margined.size()) - spacing() * (d->children.count()-1);
     qreal perItemSize = available / count();
 
     // initial distribution of space to items
@@ -423,17 +424,17 @@ void BoxLayout::setGeometry(const QRectF& geo)
     }
 
     // set items' geometry according to new sizes
-    qreal pos = d->startPos(geometry);
+    qreal pos = d->startPos(geo);
     for ( int i = 0 ; i < sizes.count() ; i++ ) {
 
         //QObject *obj = dynamic_cast<QObject*>(d->children[i]);
         //if ( obj )
         //qDebug() << "Item " << i << obj->metaObject()->className() << "size:" << sizes[i];
 
-       pos = d->layoutItem( geometry , d->children[i] , pos , sizes[i] );
+       pos = d->layoutItem(margined, d->children[i], pos , sizes[i]);
     }
 
-    d->geometry = geometry;
+    d->geometry = geo;
 
     startAnimation();
 }

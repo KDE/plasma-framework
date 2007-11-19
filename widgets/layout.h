@@ -44,6 +44,7 @@ class LayoutAnimator;
 class PLASMA_EXPORT Layout : public LayoutItem
 {
     public:
+        enum MarginEdge { TopMargin, BottomMargin, LeftMargin, RightMargin };
 
         /**
          * Constructor.
@@ -58,10 +59,15 @@ class PLASMA_EXPORT Layout : public LayoutItem
         /**
          * Returns the margin of this Layout.
          */
-        qreal margin() const;
+        qreal margin(MarginEdge edge) const;
 
         /**
          * Sets the margin of this Layout.
+         */
+        void setMargin(MarginEdge edge, qreal m);
+
+        /**
+         * Sets all the margins of this Layout.
          */
         void setMargin(qreal m);
 

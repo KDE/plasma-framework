@@ -36,7 +36,10 @@ class Layout::Private
 {
     public:
         Private(LayoutItem* p)
-            : margin(12.0),
+            : leftMargin(12.0),
+              rightMargin(12.0),
+              topMargin(12.0),
+              bottomMargin(12.0),
               spacing(6.0),
               parent(p),
               animator(0)
@@ -45,7 +48,10 @@ class Layout::Private
 
         ~Private() {}
 
-        qreal margin;
+        qreal leftMargin;
+        qreal rightMargin;
+        qreal topMargin;
+        qreal bottomMargin;
         qreal spacing;
 
         LayoutItem *parent;
@@ -111,14 +117,48 @@ void Layout::setAnimator(LayoutAnimator *animator)
     d->animator = animator;
 }
 
-qreal Layout::margin() const
+qreal Layout::margin(MarginEdge edge) const
 {
-    return d->margin;
+    switch (edge) {
+        case LeftMargin:
+            return d->leftMargin;
+            break;
+        case RightMargin:
+            return d->rightMargin;
+            break;
+        case TopMargin:
+            return d->topMargin;
+            break;
+        case BottomMargin:
+            return d->bottomMargin;
+            break;
+    }
+}
+
+void Layout::setMargin(MarginEdge edge, qreal m)
+{
+    switch (edge) {
+        case LeftMargin:
+            d->leftMargin = m;
+            break;
+        case RightMargin:
+            d->rightMargin = m;
+            break;
+        case TopMargin:
+            d->topMargin = m;
+            break;
+        case BottomMargin:
+            d->bottomMargin = m;
+            break;
+    }
 }
 
 void Layout::setMargin(qreal m)
 {
-    d->margin = m;
+    d->leftMargin = m;
+    d->rightMargin = m;
+    d->topMargin = m;
+    d->bottomMargin = m;
 }
 
 qreal Layout::spacing() const
