@@ -182,8 +182,15 @@ void Corona::loadApplets(const QString& configname)
 
         //kDebug() << "creating applet " << cg.name() << "in containment" << cid << "at geometry" << cg.readEntry("geometry", QRectF());
         int appId = cg.name().left(cg.name().indexOf('-')).toUInt();
-        c->addApplet(cg.readEntry("plugin", QString()), QVariantList(),
-                     appId, cg.readEntry("geometry", QRectF()), true);
+        Applet *applet = c->addApplet(cg.readEntry("plugin", QString()), QVariantList(),
+                                      appId, cg.readEntry("geometry", QRectF()), true);
+        QList<qreal> m = cg.readEntry("transform", QList<qreal>());
+        if (m.count() == 9) {
+            QTransform t(m[0], m[1], m[2], m[3], m[4], m[5], m[6], m[7], m[8]);
+            // FIXME: the transform does not stick; it gets set then almost immediately reset.
+            //        find out why and then reenable this
+            //applet->setTransform(t);
+        }
     }
 
     foreach (Containment* c, containments) {
