@@ -46,8 +46,6 @@ class PLASMA_EXPORT Flash : public Plasma::Widget
         QSizeF minimumSize() const;
         QSizeF maximumSize() const;
         virtual QSizeF sizeHint() const;
-        void setWidth(int width);
-        void setHeight(int height);
 
         void setFont( const QFont & );
         void setColor( const QColor & );
