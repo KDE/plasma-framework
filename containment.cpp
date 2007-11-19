@@ -110,7 +110,7 @@ void Containment::init()
     connect(Phase::self(), SIGNAL(animationComplete(QGraphicsItem*,Plasma::Phase::Animation)),
             this, SLOT(appletAnimationComplete(QGraphicsItem*,Plasma::Phase::Animation)));
 
-    if (containmentType() == DesktopContainment) {
+    if (isContainment() && containmentType() == DesktopContainment) {
         Plasma::PushButton *tool = new Plasma::PushButton(i18n("Add Widgets"));
         tool->resize(tool->sizeHint());
         addToolBoxTool(tool);
