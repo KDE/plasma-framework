@@ -149,7 +149,9 @@ install(FILES
     DESTINATION ${INCLUDE_INSTALL_DIR}/plasma/widgets)
 
 install(FILES
-    layouts/boxlayout.cpp
+    layouts/boxlayout.h
+    layouts/vboxlayout.h
+    layouts/hboxlayout.h
     layouts/borderlayout.cpp
     layouts/freelayout.cpp
     layouts/nodelayout.cpp

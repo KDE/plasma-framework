@@ -21,6 +21,6 @@
 #ifndef PLASMA_VBOXLAYOUT
 #define PLASMA_VBOXLAYOUT
 
-#include <plasma/widgets/boxlayout.h>
+#include <plasma/layouts/boxlayout.h>
 
 #endif /* PLASMA_VBOXLAYOUT */
