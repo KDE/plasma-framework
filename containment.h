@@ -65,7 +65,9 @@ class PLASMA_EXPORT Containment : public Applet
         typedef QHash<QString, Applet*> Dict;
 
         enum Type { DesktopContainment = 0 /**< A desktop containment */,
-                    PanelContainment /**< A desktop panel */
+                    PanelContainment /**< A desktop panel */,
+                    CustomContainment /**< A containment that is neither a desktop nor a panel,
+                                           but something application specific */
                   };
 
         /**
@@ -200,6 +202,20 @@ class PLASMA_EXPORT Containment : public Applet
          */ 
         void emitLaunchActivated();
 
+        /**
+         * Adds an item to the toolbox. The toolbox takes over ownership of the item.
+         * TODO: add remove and accessor methods
+         */
+        void addToolBoxTool(QGraphicsItem *tool);
+
+        /**
+         * @internal
+         * Called when constraints have been updated on this containment to provide
+         * constraint services common to all containments. Containments should still
+         * implement their own constraintsUpdated method
+         */
+        void containmentConstraintsUpdated(Plasma::Constraints constraints);
+
     Q_SIGNALS:
         /**
          * This signal is emitted when a new applet is created by the containment
@@ -211,6 +227,24 @@ class PLASMA_EXPORT Containment : public Applet
          */
         void launchActivated();
 
+        /**
+         * Emitted when the containment requests zooming out one step.
+         * Usually only used for desktop containments.
+         */
+        void zoomIn();
+        
+        /**
+         * Emitted when the containment requests zooming out one step.
+         * Usually only used for desktop containments.
+         */
+        void zoomOut();
+        
+        /**
+         * Emitted when the containment requests an add widgets dialog is shown.
+         * Usually only used for desktop containments.
+         */
+        void showAddWidgets();
+        
     public Q_SLOTS:
         /**
          * Informs the Corona as to what position it is in. This is informational

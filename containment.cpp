@@ -39,10 +39,12 @@
 #include "applethandle_p.h"
 #include "corona.h"
 #include "phase.h"
+#include "toolbox_p.h"
 #include "svg.h"
 
 #include "widgets/freelayout.h"
 #include "widgets/boxlayout.h"
+#include "widgets/pushbutton.h"
 
 namespace Plasma
 {
@@ -56,7 +58,8 @@ public:
         : formFactor(Planar),
           location(Floating),
           screen(0),
-          immutable(false)
+          immutable(false),
+          toolbox(0)
     {
     }
 
@@ -72,6 +75,7 @@ public:
     QMap<Applet*, AppletHandle*> handles;
     int screen;
     bool immutable;
+    DesktopToolbox *toolbox;
 };
 
 Containment::Containment(QGraphicsItem* parent,
@@ -105,6 +109,23 @@ void Containment::init()
     //TODO: would be nice to not do this on init, as it causes Phase to init
     connect(Phase::self(), SIGNAL(animationComplete(QGraphicsItem*,Plasma::Phase::Animation)),
             this, SLOT(appletAnimationComplete(QGraphicsItem*,Plasma::Phase::Animation)));
+    
+    if (type() == DesktopContainment) {
+        Plasma::PushButton *tool = new Plasma::PushButton(i18n("Add Widgets"));
+        tool->resize(tool->sizeHint());
+        addToolBoxTool(tool);
+        connect(tool, SIGNAL(clicked()), this, SIGNAL(showAddWidgets()));
+        
+        tool = new Plasma::PushButton(i18n("Zoom In"));
+        connect(tool, SIGNAL(clicked()), this, SIGNAL(zoomIn()));
+        tool->resize(tool->sizeHint());
+        addToolBoxTool(tool);
+        
+        tool = new Plasma::PushButton(i18n("Zoom Out"));
+        connect(tool, SIGNAL(clicked()), this, SIGNAL(zoomOut()));
+        tool->resize(tool->sizeHint());
+        addToolBoxTool(tool);
+    }
 }
 
 void Containment::loadConstraints(KConfigGroup* group)
@@ -125,6 +146,13 @@ void Containment::saveConstraints(KConfigGroup* group) const
     group->writeEntry("screen", d->screen);
     group->writeEntry("formfactor", (int)d->formFactor);
     group->writeEntry("location", (int)d->location);
+}
+
+void Containment::containmentConstraintsUpdated(Plasma::Constraints constraints)
+{
+    if (d->toolbox && constraints & Plasma::ScreenConstraint) {
+        d->toolbox->setPos(geometry().width() - d->toolbox->boundingRect().width(), 0);
+    }
 }
 
 Containment::Type Containment::type()
@@ -586,6 +614,17 @@ void Containment::emitLaunchActivated()
     emit launchActivated();
 }
 
+void Containment::addToolBoxTool(QGraphicsItem *tool)
+{
+    if (!d->toolbox) {
+        d->toolbox = new DesktopToolbox(this);
+        d->toolbox->setPos(geometry().width() - d->toolbox->boundingRect().width(), 0);
+    }
+
+    d->toolbox->addTool(tool);
 }
 
+} // Plasma namespace
+
 #include "containment.moc"
+
