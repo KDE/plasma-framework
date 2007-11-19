@@ -10,7 +10,7 @@
 
 #include "../pushbutton.h"
 #include "../lineedit.h"
-#include "../boxlayout.h"
+#include "../../layouts/boxlayout.h"
 #include "../widget.h"
 #include "../label.h"
 

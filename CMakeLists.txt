@@ -31,6 +31,14 @@ set(plasma_LIB_SRCS
     datacontainer.cpp
     dataengine.cpp
     dataenginemanager.cpp
+    layouts/boxlayout.cpp
+    layouts/borderlayout.cpp
+    layouts/freelayout.cpp
+    layouts/nodelayout.cpp
+    layouts/flowlayout.cpp
+    layouts/layout.cpp
+    layouts/layoutanimator.cpp
+    layouts/layoutitem.cpp
     packages.cpp
     phase.cpp
     plasma.cpp
@@ -44,18 +52,10 @@ set(plasma_LIB_SRCS
     toolbox.cpp
     uiloader.cpp
     view.cpp
-    widgets/boxlayout.cpp
-    widgets/borderlayout.cpp
     widgets/checkbox.cpp
-    widgets/freelayout.cpp
-    widgets/nodelayout.cpp
-    widgets/flowlayout.cpp
     widgets/flash.cpp
     widgets/icon.cpp
     widgets/label.cpp
-    widgets/layout.cpp
-    widgets/layoutanimator.cpp
-    widgets/layoutitem.cpp
     widgets/lineedit.cpp
     widgets/progressbar.cpp
     widgets/pushbutton.cpp
@@ -134,18 +134,9 @@ install(FILES
         DESTINATION ${INCLUDE_INSTALL_DIR}/plasma)
 
 install(FILES
-    widgets/boxlayout.h
-    widgets/borderlayout.h
-    widgets/nodelayout.h
-    widgets/hboxlayout.h
-    widgets/vboxlayout.h
-    widgets/freelayout.h
     widgets/flash.h
     widgets/icon.h
     widgets/label.h
-    widgets/layout.h
-    widgets/layoutanimator.h
-    widgets/layoutitem.h
     widgets/lineedit.h
     widgets/progressbar.h
     widgets/pushbutton.h
@@ -156,6 +147,17 @@ install(FILES
     widgets/signalplotter.h
     widgets/meter.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/plasma/widgets)
+
+install(FILES
+    layouts/boxlayout.cpp
+    layouts/borderlayout.cpp
+    layouts/freelayout.cpp
+    layouts/nodelayout.cpp
+    layouts/flowlayout.cpp
+    layouts/layout.cpp
+    layouts/layoutanimator.cpp
+    layouts/layoutitem.cpp
+    DESTINATION ${INCLUDE_INSTALL_DIR}/plasma/layouts)
 
 install(FILES
     includes/AbstractRunner

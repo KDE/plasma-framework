@@ -37,8 +37,7 @@
 #include "containment.h"
 #include "dataengine.h"
 #include "phase.h"
-#include "widgets/freelayout.h"
-#include "widgets/boxlayout.h"
+#include "layouts/layout.h"
 #include "widgets/icon.h"
 
 using namespace Plasma;

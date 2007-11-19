@@ -27,8 +27,8 @@
 #include <QtGui/QGraphicsScene>
 #include <QtDebug>
 
-#include "layout.h"
-#include "widget.h"
+#include "layouts/layout.h"
+#include "widgets/widget.h"
 
 using namespace Plasma;
 

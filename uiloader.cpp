@@ -21,9 +21,6 @@
 
 #include <QStringList>
 
-#include "widgets/widget.h"
-#include "widgets/layout.h"
-
 #include "widgets/checkbox.h"
 #include "widgets/flash.h"
 #include "widgets/icon.h"
@@ -33,9 +30,9 @@
 #include "widgets/meter.h"
 //#include "widgets/rectangle.h"
 
-#include "widgets/hboxlayout.h"
-#include "widgets/vboxlayout.h"
-#include "widgets/flowlayout.h"
+#include "layouts/hboxlayout.h"
+#include "layouts/vboxlayout.h"
+#include "layouts/flowlayout.h"
 
 namespace Plasma
 {

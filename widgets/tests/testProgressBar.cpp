@@ -10,7 +10,7 @@
 #include <KIcon>
 
 
-#include "../boxlayout.h"
+#include "../../layouts/boxlayout.h"
 #include "../widget.h"
 #include "../progressbar.h"
 

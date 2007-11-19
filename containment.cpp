@@ -42,8 +42,8 @@
 #include "toolbox_p.h"
 #include "svg.h"
 
-#include "widgets/freelayout.h"
-#include "widgets/boxlayout.h"
+#include "layouts/freelayout.h"
+#include "layouts/boxlayout.h"
 #include "widgets/pushbutton.h"
 
 namespace Plasma

@@ -33,7 +33,7 @@
 
 #include <KDebug>
 
-#include "freelayout.h"
+#include "layouts/freelayout.h"
 #include "plasma/plasma.h"
 
 namespace Plasma

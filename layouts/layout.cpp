@@ -26,8 +26,8 @@
 #include <QtCore/QTimeLine>
 #include <QtDebug>
 
-#include "widget.h"
-#include "layoutanimator.h"
+#include "widgets/widget.h"
+#include "layouts/layoutanimator.h"
 
 namespace Plasma
 {
@@ -95,7 +95,7 @@ void Layout::update()
 
 void Layout::invalidate()
 {
-    if (d->relayouting()) {
+    if (d->relayouting) {
         return;
     }
 
