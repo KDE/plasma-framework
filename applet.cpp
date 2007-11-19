@@ -426,6 +426,16 @@ void Applet::save(KConfigGroup* group) const
     //kDebug() << pluginName() << "geometry is" << geometry() << "pos is" << pos() << "bounding rect is" << boundingRect();
     group->writeEntry("geometry", geometry());
 
+    if (transform() == QTransform()) {
+        group->deleteEntry("transform");
+    } else {
+        QList<qreal> m;
+        QTransform t = transform();
+        m << t.m11() << t.m12() << t.m13() << t.m21() << t.m22() << t.m23() << t.m31() << t.m32() << t.m33();
+        group->writeEntry("transform", m);
+        //group->writeEntry("transform", transformToString(transform()));
+    }
+
     Containment* c = containment();
     if (c) {
         group->writeEntry("containment", c->id());
@@ -791,38 +801,30 @@ void Applet::paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *opti
         d->shadow->generate();
     }
 
-    //qreal zoomLevel = painter->transform().m11() / transform().m11();
-    //kDebug() << "qreal " << zoomLevel << " = " << painter->transform().m11() << " / " << transform().m11();
-    //if (fabs(zoomLevel - scalingFactor(Plasma::DesktopZoom)) < std::numeric_limits<double>::epsilon()) { // Show Desktop
-        if (d->background) {
-            //kDebug() << "option rect is" << option->rect;
-            d->paintBackground(painter, this, option->rect);
-        }
+    painter->save();
+    if (transform().isRotating()) {
+        painter->setRenderHint(QPainter::SmoothPixmapTransform);
+        painter->setRenderHint(QPainter::Antialiasing);
+    }
 
-        if (!d->failed && !d->needsConfig) {
-            if (widget && isContainment()) {
-                // note that the widget we get is actually the viewport of the view, not the view itself
-                View* v = qobject_cast<Plasma::View*>(widget->parent());
-                if (v && !v->drawWallpaper()) {
-                    return;
-                }
+    if (d->background) {
+        //kDebug() << "option rect is" << option->rect;
+        d->paintBackground(painter, this, option->rect);
+    }
+
+    if (!d->failed && !d->needsConfig) {
+        if (widget && isContainment()) {
+            // note that the widget we get is actually the viewport of the view, not the view itself
+            View* v = qobject_cast<Plasma::View*>(widget->parent());
+            if (v && !v->drawWallpaper()) {
+                return;
             }
-
-            paintInterface(painter, option, QRect(QPoint(0,0), d->contentSize(this).toSize()));
         }
 
-    /*} else if (fabs(zoomLevel - scalingFactor(Plasma::GroupZoom)) < std::numeric_limits<double>::epsilon()) {
-        // Show Groups + Applet outline
-        //TODO: make pretty.
-        painter->setBrush(QBrush(color(), Qt::SolidPattern));
-        painter->drawRoundRect(boundingRect());
-        int iconDim = KIconLoader::global()->currentSize(KIconLoader::Desktop);
-        qreal midX = (boundingRect().width() / 2) - (iconDim / 2);
-        qreal midY = (boundingRect().height() / 2) - (iconDim / 2);
-        KIcon ico(icon());
-        ico.paint(painter, (int)midX, (int)midY, iconDim, iconDim);
-    }  else if (zoomLevel == scalingFactor(Plasma::OverviewZoom)) { //Show Groups only
-    } */
+        paintInterface(painter, option, QRect(QPoint(0,0), d->contentSize(this).toSize()));
+    }
+
+    painter->restore();
 }
 
 void Applet::paintInterface(QPainter *painter, const QStyleOptionGraphicsItem *option,
