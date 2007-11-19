@@ -133,6 +133,8 @@ qreal Layout::margin(MarginEdge edge) const
             return d->bottomMargin;
             break;
     }
+
+    return 0;
 }
 
 void Layout::setMargin(MarginEdge edge, qreal m)
