@@ -91,7 +91,13 @@ bool Layout::isEmpty() const
 
 void Layout::updateGeometry()
 {
+    if (d->relayouting) {
+        return;
+    }
+
+    d->relayouting = true;
     relayout();
+    d->relayouting = false;
 }
 
 QRectF Layout::geometry() const
