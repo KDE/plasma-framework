@@ -90,11 +90,6 @@ void Flash::setDuration( int duration )
     d->defaultDuration = duration;
 }
 
-QSizeF Flash::sizeHint() const
-{
-    return minimumSize();
-}
-
 void Flash::setColor( const QColor &color )
 {
     d->color = color;
@@ -188,10 +183,6 @@ void Flash::paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *optio
     if( d->animId ) {
         painter->drawPixmap(0, 0, Plasma::Phase::self()->animationResult(d->animId));
     }
-}
-void Flash::setSize( const QSizeF & size )
-{
-    Widget::setSize(size);
 }
 
 #include "flash.moc"

@@ -278,6 +278,7 @@ QRectF Widget::boundingRect() const
 
 void Widget::resize(const QSizeF& size)
 {
+    //FIXME: we need to respect minimum size here i think
     setGeometry(QRectF(pos(), size));
 }
 

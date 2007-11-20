@@ -129,6 +129,9 @@ void Layout::invalidate()
     do {
         parentLayout = dynamic_cast<Layout*>(layout->parent());
         if (parentLayout) {
+            if (parentLayout->d->relayouting) {
+                break;
+            }
             layout = parentLayout;
         }
     } while (parentLayout);

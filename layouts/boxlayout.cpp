@@ -305,7 +305,7 @@ void BoxLayout::insertItem(int index, LayoutItem *item)
     d->children.insert(index, item);
 
     if (animator())  {
-        animator()->setCurrentState(item,LayoutAnimator::InsertedState);
+        animator()->setCurrentState(item, LayoutAnimator::InsertedState);
     }
 
     updateGeometry();
