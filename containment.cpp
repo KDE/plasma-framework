@@ -274,12 +274,12 @@ void Containment::setFormFactor(FormFactor formFactor)
         case Horizontal:
             lay = new BoxLayout(BoxLayout::LeftToRight, this);
             lay->setMargin(0);
-            lay->setSpacing(0);
+            lay->setSpacing(4);
             break;
         case Vertical:
             lay = new BoxLayout(BoxLayout::TopToBottom, this);
             lay->setMargin(0);
-            lay->setSpacing(0);
+            lay->setSpacing(4);
             break;
         case MediaCenter:
             //FIXME: need a layout type here!
