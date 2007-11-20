@@ -47,19 +47,18 @@ UiLoader::UiLoader( QObject *parent )
     : d( new Private() )
 {
     d->widgets
-	<< "CheckBox"
-	<< "Flash"
-	<< "Icon"
-	<< "Label"
-	<< "PushButton"
-	<< "RadioButton"
-	<< "Rectangle"
+        << "CheckBox"
+        << "Flash"
+        << "Icon"
+        << "Label"
+        << "PushButton"
+        << "RadioButton"
         << "Meter";
 
     d->layouts
-	<< "VBoxLayout"
-	<< "HBoxLayout"
-	<< "FlowLayout";
+        << "VBoxLayout"
+        << "HBoxLayout"
+        << "FlowLayout";
 }
 
 UiLoader::~UiLoader()
@@ -74,30 +73,27 @@ QStringList UiLoader::availableWidgets() const
 
 Widget *UiLoader::createWidget( const QString &className, Widget *parent )
 {
-    if ( className == QString("CheckBox") ) {
-	return new CheckBox( parent );
+    if (className == QString("CheckBox")) {
+        return new CheckBox( parent );
     }
-    else if ( className == QString("Flash") ) {
-	return new Flash( parent );
+    else if (className == QString("Flash")) {
+        return new Flash( parent );
     }
-    else if ( className == QString("Icon") ) {
-	return new Icon( parent );
+    else if (className == QString("Icon")) {
+        return new Icon( parent );
     }
-    else if ( className == QString("Label") ) {
-	return new Label( parent ); // Constructor here requires a Widget
+    else if (className == QString("Label")) {
+        return new Label( parent ); // Constructor here requires a Widget
     }
-    else if ( className == QString("PushButton") ) {
-	return new PushButton( parent ); // Constructor here requires a Widget
+    else if (className == QString("PushButton")) {
+        return new PushButton( parent ); // Constructor here requires a Widget
     }
-    else if ( className == QString("RadioButton") ) {
-	return new RadioButton( parent );
+    else if (className == QString("RadioButton")) {
+        return new RadioButton( parent );
     }
-    else if ( className == QString("Meter") ) {
+    else if (className == QString("Meter")) {
         return new Meter( parent );
     }
-    //else if ( className == QString("Rectangle") ) {
-	// return new Rectangle( parent ); // Constructor here requires a Widget
-    //}
 
     return 0;
 }
@@ -109,14 +105,14 @@ QStringList UiLoader::availableLayouts() const
 
 Layout *UiLoader::createLayout( const QString &className, LayoutItem *parent )
 {
-    if ( className == QString("HBoxLayout") ) {
-	return new HBoxLayout( parent );
+    if (className == QString("HBoxLayout")) {
+        return new HBoxLayout( parent );
     }
-    else if ( className == QString("VBoxLayout") ) {
-	return new VBoxLayout( parent );
+    else if (className == QString("VBoxLayout")) {
+        return new VBoxLayout( parent );
     }
-    else if ( className == QString("FlowLayout") ) {
-	return new FlowLayout( parent );
+    else if (className == QString("FlowLayout")) {
+        return new FlowLayout( parent );
     }
 
     return 0;

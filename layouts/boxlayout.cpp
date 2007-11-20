@@ -154,10 +154,11 @@ public:
 
        // qDebug() << "Item geometry: " << newGeometry;
 
-        if ( q->animator() )
+        if (q->animator()) {
             q->animator()->setGeometry(item, newGeometry);
-        else
+        } else {
             item->setGeometry(newGeometry);
+        }
 
         return newPos;
     }

@@ -43,14 +43,14 @@ class PLASMA_EXPORT UiLoader : public QObject
     Q_OBJECT
 
 public:
-    UiLoader( QObject *parent = 0 );
+    UiLoader(QObject *parent = 0);
     virtual ~UiLoader();
 
     QStringList availableWidgets() const;
-    Widget *createWidget( const QString &className, Widget *parent=0 );
+    Widget *createWidget(const QString &className, Widget *parent = 0);
 
     QStringList availableLayouts() const;
-    Layout *createLayout( const QString &className, LayoutItem *parent );
+    Layout *createLayout(const QString &className, LayoutItem *parent);
 
 private:
     class Private;
