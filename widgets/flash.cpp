@@ -90,16 +90,6 @@ void Flash::setDuration( int duration )
     d->defaultDuration = duration;
 }
 
-QSizeF Flash::minimumSize() const
-{
-    return size();
-}
-
-QSizeF Flash::maximumSize() const
-{
-    return size();
-}
-
 QSizeF Flash::sizeHint() const
 {
     return minimumSize();

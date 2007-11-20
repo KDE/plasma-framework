@@ -43,11 +43,9 @@ class PLASMA_EXPORT Flash : public Plasma::Widget
 
         void paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
         QRectF boundingRect() const;
-        QSizeF minimumSize() const;
-        QSizeF maximumSize() const;
         virtual QSizeF sizeHint() const;
 
-	void setSize( const QSizeF & );
+        void setSize( const QSizeF & );
 
         void setFont( const QFont & );
         void setColor( const QColor & );
