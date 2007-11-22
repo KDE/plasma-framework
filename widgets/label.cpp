@@ -45,6 +45,7 @@ bool Label::hasHeightForWidth() const
 
 qreal Label::heightForWidth(qreal w) const
 {
+    Q_UNUSED( w );
     //FIXME: this looks a bit odd?
     QFontMetricsF m(d->textFont);
     //return m.boundingRect(QRectF(0, 0, w, 9999), d->alignment | Qt::TextWordWrap, d->text).height();

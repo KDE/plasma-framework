@@ -170,6 +170,7 @@ bool LineEdit::hasWidthForHeight() const
 
 qreal LineEdit::widthForHeight(qreal h) const
 {
+    Q_UNUSED(h);
     return 0;
 }
 

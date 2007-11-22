@@ -70,6 +70,7 @@ bool LayoutItem::hasHeightForWidth() const
 
 qreal LayoutItem::heightForWidth(qreal w) const
 {
+    Q_UNUSED (w);
     return 0.0;
 }
 
@@ -80,6 +81,7 @@ bool LayoutItem::hasWidthForHeight() const
 
 qreal LayoutItem::widthForHeight(qreal h) const
 {
+    Q_UNUSED (h);
     return 0.0;
 }
 

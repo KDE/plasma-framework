@@ -81,6 +81,8 @@ public:
 
     QPointF calculatePosition(const NodeCoordinate & coo, const QRectF & parentGeometry) const
     {
+        Q_UNUSED( parentGeometry );
+
         return QPointF(
             calculateXPosition(coo, geometry),
             calculateYPosition(coo, geometry)
