@@ -1,6 +1,6 @@
 /*
  *   Copyright 2007 Aaron Seigo <aseigo@kde.org>
- *                 2007 Alexis Ménard <darktears31@gmail.com>
+ *             2007 Alexis Ménard <darktears31@gmail.com>
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU Library General Public License as
@@ -111,16 +111,16 @@ void Animator::frameAppear(qreal frame, QGraphicsItem* item, const QRegion& draw
 
 void Animator::slideIn(qreal progress, QGraphicsItem *item, const QPoint &start, const QPoint &destination)
 {
-    int x = start.x() + (destination.x() - start.x()) * progress;
-    int y = start.y() + (destination.y() - start.y()) * progress;
+    double x = start.x() + (destination.x() - start.x()) * progress;
+    double y = start.y() + (destination.y() - start.y()) * progress;
     item->setPos(x, y);
 }
 
 void Animator::slideOut(qreal progress, QGraphicsItem *item, const QPoint &start, const QPoint &destination)
 {
     //kDebug();
-    int x = start.x() + (destination.x() - start.x()) * progress;
-    int y = start.y() + (destination.y() - start.y()) * progress;
+    double x = start.x() + (destination.x() - start.x()) * progress;
+    double y = start.y() + (destination.y() - start.y()) * progress;
     item->setPos(x, y);
 }
 
