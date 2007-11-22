@@ -96,6 +96,8 @@ void KCategorizedItemsView::setItemModel(QStandardItemModel * model)
 
     m_modelItems = model;
     m_modelFilterItems->setSourceModel(m_modelItems);
+    m_modelFilterItems->setSortCaseSensitivity(Qt::CaseInsensitive);
+    m_modelFilterItems->sort(0);
 
     itemsView->setModel(m_modelFilterItems);
 

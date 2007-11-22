@@ -120,7 +120,7 @@ bool DefaultItemFilterProxyModel::filterAcceptsRow(int sourceRow,
 bool DefaultItemFilterProxyModel::lessThan(const QModelIndex &left,
         const QModelIndex &right) const
 {
-    return (sourceModel()->data(left).toString() < sourceModel()->data(right).toString());
+    return sourceModel()->data(left).toString().compare(sourceModel()->data(right).toString(), sortCaseSensitivity()) < 0;
 }
 
 void DefaultItemFilterProxyModel::setSearch(const QString & pattern)
