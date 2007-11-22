@@ -44,10 +44,10 @@ class PLASMA_EXPORT AbstractRunner : public QObject
         /**
          * Static method is called to load and get a list available of Runners.
          */
-        static List loadRunners(QObject* parent);
+        static List loadRunners(QObject* parent, const QStringList& whitelist = QStringList() );
 
         /**
-         * Constrcuts an Runner object. Since AbstractRunner has pure virtuals,
+         * Constructs a Runner object. Since AbstractRunner has pure virtuals,
          * this constructor can not be called directly. Rather a subclass must
          * be created
          */
@@ -90,10 +90,10 @@ class PLASMA_EXPORT AbstractRunner : public QObject
         /**
          * If the runner itself has configuration options, this method returns true
          */
-        bool canBeConfigured();
+        bool isConfigurable();
 
         /**
-         * If canBeConfigured() returns true, this method may to get
+         * If isConfigurable() returns true, this method may to get
          * a widget displaying the options the user can interact with to modify
          * the behaviour of what happens when a given match is selected.
          *
@@ -116,7 +116,7 @@ class PLASMA_EXPORT AbstractRunner : public QObject
         /**
          * Sets whether or not the runner has configuration options itself
          */
-        void setCanBeConfigured(bool canBeConfigured);
+        void setIsConfigurable(bool canBeConfigured);
 
     private:
         class Private;

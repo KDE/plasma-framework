@@ -58,12 +58,12 @@ void AbstractRunner::createMatchOptions(QWidget *parent)
     Q_UNUSED(parent)
 }
 
-bool AbstractRunner::canBeConfigured()
+bool AbstractRunner::isConfigurable()
 {
     return d->hasConfig;
 }
 
-void AbstractRunner::setCanBeConfigured(bool hasConfig)
+void AbstractRunner::setIsConfigurable(bool hasConfig)
 {
     d->hasConfig = hasConfig;
 }
@@ -78,7 +78,7 @@ void AbstractRunner::exec(Plasma::SearchAction *action)
     Q_UNUSED(action)
 }
 
-AbstractRunner::List AbstractRunner::loadRunners(QObject* parent)
+AbstractRunner::List AbstractRunner::loadRunners(QObject* parent, const QStringList& whitelist)
 {
     List firstRunners;
     List runners;
@@ -87,20 +87,22 @@ AbstractRunner::List AbstractRunner::loadRunners(QObject* parent)
     KService::List offers = KServiceTypeTrader::self()->query("Plasma/Runner");
     QString error;
     foreach (KService::Ptr service, offers) {
-        AbstractRunner* runner = service->createInstance<AbstractRunner>(parent, QVariantList(), &error);
-        if (runner) {
-            //kDebug() << "loaded runner : " << service->name();
-            QString phase = service->property("X-Plasma-RunnerPhase").toString();
-            if (phase == "last") {
-                lastRunners.append(runner);
-            } else if (phase == "first") {
-                firstRunners.append(runner);
-            } else {
-                runners.append(runner);
+        if( whitelist.empty() || whitelist.contains( service->name() ) ) {
+            AbstractRunner* runner = service->createInstance<AbstractRunner>(parent, QVariantList(), &error);
+            if (runner) {
+                //kDebug() << "loaded runner : " << service->name();
+                QString phase = service->property("X-Plasma-RunnerPhase").toString();
+                if (phase == "last") {
+                    lastRunners.append(runner);
+                } else if (phase == "first") {
+                    firstRunners.append(runner);
+                } else {
+                    runners.append(runner);
+                }
             }
-        }
-        else {
-            kDebug() << "failed to load runner : " << service->name() << ". error reported: " << error;
+            else {
+                kDebug() << "failed to load runner : " << service->name() << ". error reported: " << error;
+            }
         }
     }
 
