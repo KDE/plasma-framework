@@ -342,7 +342,7 @@ void Phase::stopCustomAnimation(AnimId id)
 {
     QMap<AnimId, CustomAnimationState*>::iterator it = d->customAnims.find(id);
     if (it != d->customAnims.end()) {
-        delete it.value()->slot;
+        delete [] it.value()->slot;
         delete it.value();
         d->customAnims.erase(it);
     }
@@ -540,7 +540,7 @@ void Phase::timerEvent(QTimerEvent *event)
             } else {
                 QMetaObject::invokeMethod(state->receiver, state->slot, Q_ARG(qreal, 1));
                 d->customAnims.erase(d->customAnims.find(state->id));
-                delete state->slot;
+                delete [] state->slot;
                 delete state;
             }
         } else {
