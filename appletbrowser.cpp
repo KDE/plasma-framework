@@ -219,6 +219,8 @@ AppletBrowser::AppletBrowser(Plasma::Corona * corona, QWidget * parent, Qt::Wind
     : KDialog(parent, f),
     m_widget(new AppletBrowserWidget(corona, false, this))
 {
+    winId(); // this is to get us a win id so that the next line doesn't abort on us
+    setWindowRole("appletbrowser");
     init();
 }
 
