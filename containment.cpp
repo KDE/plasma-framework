@@ -428,9 +428,8 @@ void Containment::appletAnimationComplete(QGraphicsItem *item, Plasma::Phase::An
     } else if (anim == Phase::Appear) {
         if (containmentType() == DesktopContainment &&
             item->parentItem() == this &&
-            qgraphicsitem_cast<Applet*>(applet)) {
+            qgraphicsitem_cast<Applet*>(item)) {
                 item->installSceneEventFilter(this);
-            }
         }
     }
 }
