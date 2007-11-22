@@ -84,13 +84,13 @@ public:
     {
         switch ( direction ) {
             case LeftToRight:
-                return q->margin(LeftMargin);
+                return geometry.left() + q->margin(LeftMargin);
             case TopToBottom:
-                return q->margin(TopMargin);
+                return geometry.top() + q->margin(TopMargin);
             case RightToLeft:
-                return geometry.width() - q->margin(RightMargin);
+                return geometry.right() - q->margin(RightMargin);
             case BottomToTop:
-                return geometry.height() - q->margin(BottomMargin);
+                return geometry.bottom() - q->margin(BottomMargin);
             default:
                 Q_ASSERT(false);
                 return 0;
