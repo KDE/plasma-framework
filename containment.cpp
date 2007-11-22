@@ -213,45 +213,57 @@ void Containment::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
             desktopMenu.addAction(action);
         }
     } else {
-        bool hasEntries = false;   
-        if (applet->hasConfigurationInterface()) {   
-            QAction* configureApplet = new QAction(i18n("%1 Settings...", applet->name()), &desktopMenu);   
-            connect(configureApplet, SIGNAL(triggered(bool)),   
-                    applet, SLOT(showConfigurationInterface()));   
-            desktopMenu.addAction(configureApplet);   
-            hasEntries = true;   
-        }   
-    
-        if (scene() && !static_cast<Corona*>(scene())->isImmutable()) {   
-            QAction* closeApplet = new QAction(i18n("Remove this %1", applet->name()), &desktopMenu);   
-            QVariant appletV;   
-            appletV.setValue((QObject*)applet);   
-            closeApplet->setData(appletV);   
-            connect(closeApplet, SIGNAL(triggered(bool)),   
-                    this, SLOT(destroyApplet()));   
-            desktopMenu.addAction(closeApplet);   
-            hasEntries = true;   
-        }   
-    
-        QList<QAction*> actions = applet->contextActions();   
-        if (!actions.isEmpty()) {   
-            desktopMenu.addSeparator();   
-            foreach(QAction* action, actions) {   
-                desktopMenu.addAction(action);   
-            }   
-            hasEntries = true;   
-        }   
-    
-        if (!hasEntries) {   
-            QGraphicsItem::contextMenuEvent(event);   
-            kDebug() << "no entries";   
-            return;   
+        bool hasEntries = false;
+        if (applet->hasConfigurationInterface()) {
+            QAction* configureApplet = new QAction(i18n("%1 Settings...", applet->name()), &desktopMenu);
+            connect(configureApplet, SIGNAL(triggered(bool)),
+                    applet, SLOT(showConfigurationInterface()));
+            desktopMenu.addAction(configureApplet);
+            hasEntries = true;
+        }
+
+        if (scene() && !static_cast<Corona*>(scene())->isImmutable()) {
+            QAction* closeApplet = new QAction(i18n("Remove this %1", applet->name()), &desktopMenu);
+            QVariant appletV;
+            appletV.setValue((QObject*)applet);
+            closeApplet->setData(appletV);
+            connect(closeApplet, SIGNAL(triggered(bool)),
+                    this, SLOT(destroyApplet()));
+            desktopMenu.addAction(closeApplet);
+            hasEntries = true;
+        }
+
+        QList<QAction*> actions = applet->contextActions();
+        if (!actions.isEmpty()) {
+            desktopMenu.addSeparator();
+            foreach(QAction* action, actions) {
+                desktopMenu.addAction(action);
+            }
+            hasEntries = true;
+        }
+
+        if (!hasEntries) {
+            QGraphicsItem::contextMenuEvent(event);
+            kDebug() << "no entries";
+            return;
         }
     }
 
     event->accept();
     //kDebug() << "executing at" << event->screenPos();
     desktopMenu.exec(event->screenPos());
+}
+
+void Containment::destroyApplet()
+{
+    QAction *action = qobject_cast<QAction*>(sender());
+
+    if (!action) {
+        return;
+    }
+
+    Applet *applet = qobject_cast<Applet*>(action->data().value<QObject*>());
+    Phase::self()->animateItem(applet, Phase::Disappear);
 }
 
 void Containment::setFormFactor(FormFactor formFactor)
@@ -400,12 +412,18 @@ void Containment::appletDestroyed(QObject* object)
 void Containment::appletAnimationComplete(QGraphicsItem *item, Plasma::Phase::Animation anim)
 {
     if (anim == Phase::Disappear) {
-        if (item->parentItem() == this) {
-            Applet *applet = qgraphicsitem_cast<Applet*>(item);
+        QGraphicsItem *parent = item->parentItem();
 
-            if (applet) {
-                applet->destroy();
+        while (parent) {
+            if (parent == this) {
+                Applet *applet = qgraphicsitem_cast<Applet*>(item);
+
+                if (applet) {
+                    applet->destroy();
+                }
             }
+
+            parent = parent->parentItem();
         }
     } else if (anim == Phase::Appear) {
         if (containmentType() == DesktopContainment) {

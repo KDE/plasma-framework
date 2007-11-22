@@ -77,12 +77,17 @@ AppletHandle::AppletHandle(Containment *parent, Applet *applet)
     }
 
     m_applet->setParentItem(this);
+    connect(m_applet, SIGNAL(destroyed(QObject*)), this, SLOT(appletDestroyed()));
     setAcceptsHoverEvents(true);
     startFading(FadeIn);
 }
 
 AppletHandle::~AppletHandle()
 {
+    if (!m_applet) {
+        return;
+    }
+
     QRectF rect(m_applet->boundingRect());
     QPointF center = rect.center();
 
@@ -162,7 +167,7 @@ void AppletHandle::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
         break;
     }
 
-    if (m_applet->hasConfigurationInterface()) {
+    if (m_applet && m_applet->hasConfigurationInterface()) {
         painter->drawPixmap(point + shiftC, KIcon("configure").pixmap(ICON_SIZE, ICON_SIZE));
         point += QPointF(0.0, ICON_SIZE + ICON_MARGIN);
     }
@@ -187,7 +192,7 @@ AppletHandle::ButtonType AppletHandle::mapToButton(const QPointF &point) const
 
     QPolygonF activeArea = QPolygonF(QRectF(basePoint, QSizeF(ICON_SIZE, ICON_SIZE)));
 
-    if (m_applet->hasConfigurationInterface()) {
+    if (m_applet && m_applet->hasConfigurationInterface()) {
         if (activeArea.containsPoint(point, Qt::OddEvenFill)) {
             return ConfigureButton;
         }
@@ -223,12 +228,12 @@ void AppletHandle::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
     ButtonType releasedAtButton = mapToButton(event->pos());
 
-    if (event->button()==Qt::LeftButton && m_pressedButton==releasedAtButton) {
-        if (m_pressedButton==ConfigureButton) {
+    if (m_applet && event->button() == Qt::LeftButton && m_pressedButton==releasedAtButton) {
+        if (m_pressedButton == ConfigureButton) {
             //FIXME: Remove this call once the configuration management change was done
             m_containment->emitLaunchActivated();
             m_applet->showConfigurationInterface();
-        } else if (m_pressedButton==RemoveButton) {
+        } else if (m_pressedButton == RemoveButton) {
             Phase::self()->animateItem(m_applet, Phase::Disappear);
             forceDisappear();
         }
@@ -258,7 +263,10 @@ void AppletHandle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
     static const qreal snapAngle = 3.14159 / 2.0;
 
-    if (m_pressedButton == MoveButton) {
+    if (!m_applet) {
+        QGraphicsItem::mouseMoveEvent(event);
+    }
+    else if (m_pressedButton == MoveButton) {
         QPointF delta = event->pos()-event->lastPos();
         setPos(pos()+delta);
     } else if (m_pressedButton == RotateButton) {
@@ -316,6 +324,12 @@ void AppletHandle::fadeAnimation(qreal progress)
     }
 
     update();
+}
+
+void AppletHandle::appletDestroyed()
+{
+    m_applet = 0;
+    deleteLater();
 }
 
 void AppletHandle::startFading(FadeType anim)

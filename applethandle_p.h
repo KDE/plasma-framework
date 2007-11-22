@@ -58,6 +58,7 @@ class AppletHandle : public QObject, public QGraphicsItem
 
     private Q_SLOTS:
         void fadeAnimation(qreal progress);
+        void appletDestroyed();
 
     private:
         static const int HANDLE_WIDTH = 5;

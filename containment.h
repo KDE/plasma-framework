@@ -283,6 +283,7 @@ class PLASMA_EXPORT Containment : public Applet
 
     private Q_SLOTS:
         void handleDisappeared(AppletHandle *handle);
+        void destroyApplet();
 
     private:
         Q_DISABLE_COPY(Containment)
