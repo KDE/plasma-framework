@@ -613,6 +613,8 @@ bool Containment::sceneEventFilter(QGraphicsItem *watched, QEvent *event)
             d->handles[applet] = handle;
             connect(handle, SIGNAL(disappearDone(AppletHandle*)),
                     this, SLOT(handleDisappeared(AppletHandle*)));
+            connect(applet, SIGNAL(geometryChanged()),
+                    handle, SLOT(appletResized()));
         }
         break;
     default:

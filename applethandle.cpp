@@ -50,32 +50,9 @@ AppletHandle::AppletHandle(Containment *parent, Applet *applet)
 {
     KColorScheme colors(QPalette::Active, KColorScheme::View, Theme::self()->colors());
     m_gradientColor = colors.background(KColorScheme::NormalBackground).color();
-
     m_originalMatrix = m_applet->transform();
-    m_rect = m_applet->boundingRect();
-    m_rect = m_applet->mapToParent(m_rect).boundingRect();
 
-    const int requiredHeight = (HANDLE_WIDTH * 2) + m_applet->hasConfigurationInterface() 
-                                                    ? ((ICON_SIZE + ICON_MARGIN) * 4)
-                                                    : ((ICON_SIZE + ICON_MARGIN) * 3)
-                                                  + ICON_MARGIN; // that last margin is blank space before the close button
-    if (m_rect.height() < requiredHeight) {
-        float delta = requiredHeight - m_rect.height();
-        delta = delta/2.0;
-        if (delta > 0.0) {
-            m_rect.adjust(0.0, -delta, 0.0, delta);
-        }
-    }
-
-    m_rect.adjust(-HANDLE_WIDTH, -HANDLE_WIDTH, HANDLE_WIDTH, HANDLE_WIDTH);
-
-    if (m_applet->pos().x() <= ((HANDLE_WIDTH * 2) + ICON_SIZE)) {
-        m_rect.adjust(0.0, 0.0, ICON_SIZE, 0.0);
-        m_buttonsOnRight = true;
-    } else {
-        m_rect.adjust(- ICON_SIZE, 0.0, 0.0, 0.0);
-    }
-
+    calculateSize();
     m_applet->setParentItem(this);
     connect(m_applet, SIGNAL(destroyed(QObject*)), this, SLOT(appletDestroyed()));
     setAcceptsHoverEvents(true);
@@ -332,6 +309,13 @@ void AppletHandle::appletDestroyed()
     deleteLater();
 }
 
+void AppletHandle::appletResized()
+{
+    prepareGeometryChange();
+    calculateSize();
+    update();
+}
+
 void AppletHandle::startFading(FadeType anim)
 {
     if (m_animId!=0) {
@@ -356,6 +340,33 @@ void AppletHandle::forceDisappear()
 {
     setAcceptsHoverEvents(false);
     startFading(FadeOut);
+}
+
+void AppletHandle::calculateSize()
+{
+    m_rect = m_applet->boundingRect();
+    m_rect = m_applet->mapToParent(m_rect).boundingRect();
+
+    const int requiredHeight = (HANDLE_WIDTH * 2) + m_applet->hasConfigurationInterface()
+                                                    ? ((ICON_SIZE + ICON_MARGIN) * 4)
+                                                    : ((ICON_SIZE + ICON_MARGIN) * 3)
+                                                  + ICON_MARGIN; // that last margin is blank space before the close button
+    if (m_rect.height() < requiredHeight) {
+        float delta = requiredHeight - m_rect.height();
+        delta = delta/2.0;
+        if (delta > 0.0) {
+            m_rect.adjust(0.0, -delta, 0.0, delta);
+        }
+    }
+
+    m_rect.adjust(-HANDLE_WIDTH, -HANDLE_WIDTH, HANDLE_WIDTH, HANDLE_WIDTH);
+
+    if (m_applet->pos().x() <= ((HANDLE_WIDTH * 2) + ICON_SIZE)) {
+        m_rect.adjust(0.0, 0.0, ICON_SIZE, 0.0);
+        m_buttonsOnRight = true;
+    } else {
+        m_rect.adjust(- ICON_SIZE, 0.0, 0.0, 0.0);
+    }
 }
 
 }
