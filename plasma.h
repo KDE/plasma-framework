@@ -40,7 +40,8 @@ enum Constraint { NoConstraint = 0,
                   FormFactorConstraint = 1 /** The FormFactor for an object */,
                   LocationConstraint = 2 /** The Location of an object */,
                   ScreenConstraint = 4 /** Which screen an object is on */,
-                  AllConstraints = FormFactorConstraint | LocationConstraint | ScreenConstraint
+                  SizeConstraint = 8 /** the size of the applet was changed */,
+                  AllConstraints = FormFactorConstraint | LocationConstraint | ScreenConstraint | SizeConstraint
 };
 Q_DECLARE_FLAGS(Constraints, Constraint)
 
