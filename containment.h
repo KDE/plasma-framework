@@ -262,12 +262,12 @@ class PLASMA_EXPORT Containment : public Applet
          */
         void setFormFactor(Plasma::FormFactor formFactor);
 
-    protected:
         /**
          * Returns the Corona (if any) that this Containment is hosted by
          */
         Corona* corona() const;
 
+    protected:
         void contextMenuEvent(QGraphicsSceneContextMenuEvent * event);
         void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
         void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);

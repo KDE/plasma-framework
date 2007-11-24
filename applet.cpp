@@ -71,8 +71,6 @@ class Applet::Private
 public:
     Private(KService::Ptr service, int uniqueID)
         : appletId(uniqueID),
-          globalConfig(0),
-          appletConfig(0),
           appletDescription(service),
           package(0),
           background(0),
@@ -170,7 +168,8 @@ public:
         QString xmlPath = package->filePath("mainconfigxml");
         if (!xmlPath.isEmpty()) {
             QFile file(xmlPath);
-            configXml = new ConfigXml(config(), &file);
+            // FIXME: KConfigSkeleton doesn't play well with KConfigGroup =/
+            //configXml = new ConfigXml(applet->config(), &file);
         }
 
         if (!package->filePath("mainconfigui").isEmpty()) {
@@ -303,17 +302,6 @@ public:
         return s_maxAppletId;
     }
 
-    KSharedConfig::Ptr config() {
-        if (!appletConfig) {
-            QString file = KStandardDirs::locateLocal("appdata",
-                                                      "applets/" + instanceName() + "rc",
-                                                      true);
-            appletConfig = KSharedConfig::openConfig(file);
-        }
-
-        return appletConfig;
-    }
-
     QString instanceName()
     {
         if (!appletDescription.isValid()) {
@@ -346,8 +334,6 @@ public:
     //TODO: examine the usage of memory here; there's a pretty large
     //      number of members at this point.
     uint appletId;
-    KSharedConfig::Ptr globalConfig;
-    KSharedConfig::Ptr appletConfig;
     KPluginInfo appletDescription;
     Package* package;
     QList<QObject*> watchedForFocus;
@@ -391,16 +377,7 @@ Applet::Applet(QObject* parentObject, const QVariantList& args)
 
 Applet::~Applet()
 {
-    needsFocus( false );
-
-    if (d->appletConfig) {
-        d->appletConfig->sync();
-    }
-
-    if (d->globalConfig) {
-        d->globalConfig->sync();
-    }
-
+    needsFocus(false);
     delete d;
 }
 
@@ -411,11 +388,6 @@ void Applet::init()
 uint Applet::id() const
 {
     return d->appletId;
-}
-
-KConfigGroup Applet::config() const
-{
-    return KConfigGroup(d->config(), "General");
 }
 
 void Applet::save(KConfigGroup* group) const
@@ -436,12 +408,8 @@ void Applet::save(KConfigGroup* group) const
         //group->writeEntry("transform", transformToString(transform()));
     }
 
-    Containment* c = containment();
-    if (c) {
-        group->writeEntry("containment", c->id());
-    }
-
-    saveState(group);
+    KConfigGroup appletConfigGroup(group, "Configuration");
+    saveState(&appletConfigGroup);
 }
 
 void Applet::saveState(KConfigGroup* group) const
@@ -449,20 +417,53 @@ void Applet::saveState(KConfigGroup* group) const
     Q_UNUSED(group)
 }
 
-KConfigGroup Applet::config(const QString& group) const
+KConfigGroup Applet::config(const QString &group) const
 {
     KConfigGroup cg = config();
-    return KConfigGroup(cg.config(), instanceName() + '-' + group);
+    return KConfigGroup(&cg, group);
+}
+
+KConfigGroup Applet::config() const
+{
+    if (d->isContainment) {
+        const Containment *asContainment = qobject_cast<Containment*>(const_cast<Applet*>(this));
+        Q_ASSERT(asContainment);
+
+        KConfigGroup containmentConfig;
+        if (asContainment->corona()) {
+            containmentConfig = KConfigGroup(asContainment->corona()->config(), "Containments");
+        } else {
+            containmentConfig =  KConfigGroup(KGlobal::config(), "Containments");
+        }
+
+        containmentConfig = KConfigGroup(&containmentConfig, QString::number(d->appletId));
+        return containmentConfig;
+    }
+
+    KConfigGroup appletConfig;
+    if (containment()) {
+        appletConfig = containment()->config();
+        appletConfig = KConfigGroup(&appletConfig, "Applets");
+    } else {
+        kWarning() << "requesting config for" << name() << "without a containment!";
+        appletConfig = KConfigGroup(KGlobal::config(), "Applets");
+    }
+
+    appletConfig = KConfigGroup(&appletConfig, QString::number(d->appletId));
+    return KConfigGroup(&appletConfig, "Configuration");
 }
 
 KConfigGroup Applet::globalConfig() const
 {
-    if ( !d->globalConfig ) {
-        QString file = KStandardDirs::locateLocal( "config", "plasma_" + globalName() + "rc" );
-        d->globalConfig = KSharedConfig::openConfig( file );
+    KConfigGroup globalAppletConfig;
+    if (containment() && containment()->corona()) {
+        KSharedConfig::Ptr coronaConfig = containment()->corona()->config();
+        globalAppletConfig = KConfigGroup(coronaConfig, "AppletGlobals");
+    } else {
+        globalAppletConfig = KConfigGroup(KGlobal::config(), "AppletGlobals");
     }
 
-    return KConfigGroup(d->globalConfig, "General");
+    return KConfigGroup(&globalAppletConfig, globalName());
 }
 
 void Applet::destroy()
@@ -471,13 +472,7 @@ void Applet::destroy()
         d->configXml->setDefaults();
     }
 
-    if (d->appletConfig) {
-        foreach (const QString& group, d->appletConfig->groupList()) {
-            d->appletConfig->deleteGroup(group);
-        }
-        d->appletConfig = 0;
-    }
-
+    config().deleteGroup();
     deleteLater();
 }
 
@@ -749,6 +744,7 @@ QSizeF Applet::sizeHint() const
     int bottom = 0;
 
     d->getBorderSize(left, top, right, bottom);
+    QSizeF borderSize = QSizeF(left + right, top + bottom);
 
     //kDebug() << "Applet content size hint: " << contentSizeHint() << "plus our borders" << left << right << top << bottom;
 
@@ -890,7 +886,7 @@ QSizeF Applet::contentSizeHint() const
         return layout()->sizeHint();
     }
 
-    return QSizeF(0, 0);
+    return contentSize();
 }
 
 QString Applet::globalName() const
@@ -1179,6 +1175,8 @@ void Applet::setGeometry(const QRectF& geometry)
         if (managingLayout()) {
             managingLayout()->invalidate();
         }
+
+        updateConstraints(Plasma::SizeConstraint);
     }
 
     setPos(geometry.topLeft());

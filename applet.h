@@ -127,7 +127,7 @@ class PLASMA_EXPORT Applet : public Widget
          *
          * @param group the name of the group to access
          **/
-        KConfigGroup config(const QString& group) const;
+        KConfigGroup config(const QString &group) const;
 
         /**
          * Saves state information about this applet.

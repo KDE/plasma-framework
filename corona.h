@@ -93,6 +93,11 @@ public:
      */
     void clearApplets();
 
+    /**
+     * Returns the the config file used to store the configuration for this Corona
+     */
+    KSharedConfig::Ptr config();
+
 public Q_SLOTS:
     /**
      * Load applets from the default config file
@@ -136,6 +141,11 @@ public Q_SLOTS:
      */
     Containment* addContainment(const QString& name, const QVariantList& args = QVariantList(),
                                 uint id = 0, bool delayInit = false);
+
+    /**
+     * Removes a given containment from the corona
+     */
+    void destroyContainment(Containment *containment);
 
     /**
      * Returns the Containment, if any, for a given physical screen

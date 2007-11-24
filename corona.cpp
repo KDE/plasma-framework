@@ -50,7 +50,9 @@ class Corona::Private
 public:
     Private()
         : immutable(false),
-          mimetype("text/x-plasmoidservicename")
+          mimetype("text/x-plasmoidservicename"),
+          configName("plasma-appletsrc"),
+          config(0)
     {
     }
 
@@ -65,6 +67,8 @@ public:
 
     bool immutable;
     QString mimetype;
+    QString configName;
+    KSharedConfigPtr config;
     QList<Containment*> containments;
 };
 
@@ -117,18 +121,18 @@ QString Corona::appletMimeType()
 void Corona::saveApplets(const QString &config) const
 {
     KConfig cg(config);
-    foreach (const QString& group, cg.groupList()) {
-        cg.deleteGroup(group);
-    }
+    d->configName = config;
 
     QStringList containmentIds;
+    KConfigGroup containments(&cg, "Containments");
     foreach (const Containment *containment, d->containments) {
         QString cid = QString::number(containment->id());
-        KConfigGroup containmentConfig(&cg, cid.append("-containment"));
+        KConfigGroup containmentConfig(&containments, cid);
         containment->saveConstraints(&containmentConfig);
         containment->save(&containmentConfig);
+        KConfigGroup applets(&containmentConfig, "Applets");
         foreach (const Applet* applet, containment->applets()) {
-            KConfigGroup appletConfig(&cg, QString::number(applet->id()).append("-applet"));
+            KConfigGroup appletConfig(&applets, QString::number(applet->id()));
             applet->save(&appletConfig);
         }
     }
@@ -136,85 +140,67 @@ void Corona::saveApplets(const QString &config) const
 
 void Corona::saveApplets() const
 {
-    saveApplets("plasma-appletsrc");
+    saveApplets(d->configName);
 }
 
-void Corona::loadApplets(const QString& configname)
+void Corona::loadApplets(const QString& configName)
 {
     clearApplets();
+    d->configName = configName;
 
-    KConfig config(configname, KConfig::SimpleConfig);
+    KConfig config(configName, KConfig::SimpleConfig);
+    KConfigGroup containments(&config, "Containments");
 
-    QList<KConfigGroup> applets;
-    QHash<int, Containment*> containments;
-    foreach (const QString& group, config.groupList()) {
-        KConfigGroup appletConfig(&config, group);
-        if (group.endsWith("containment")) {
-            int cid = group.left(group.indexOf('-')).toUInt();
-            Containment *c = addContainment(appletConfig.readEntry("plugin", QString()), QVariantList(),
-                                            cid, true);
-            if (c) {
-                addItem(c);
-                containments.insert(c->id(), c);
-                c->loadConstraints(&appletConfig);
-                //kDebug() << "Containment" << c->id() << "geometry is" << c->geometry().toRect() << "config'd with" << appletConfig.name();
-            }
-        } else {
-            // it's an applet, let's grab the containment association
-            //kDebug() << "insert multi" << group;
-            applets.append(appletConfig);
-        }
-    }
-
-    //int maxContainment = containments.size();
-    //kDebug() << "number of applets?" << applets.count();
-    foreach (KConfigGroup cg, applets) {
-        int cid = cg.readEntry("containment", 0);
-        //kDebug() << "trying to load applet " << cg.name() << " in containment " << cid;
-
-        Containment* c = containments.value(cid, 0);
-
+    foreach (const QString& group, containments.groupList()) {
+        KConfigGroup containmentConfig(&containments, group);
+        int cid = group.toUInt();
+        kDebug() << "got a containment in the config, trying to make a" << containmentConfig.readEntry("plugin", QString()) << "from" << group;
+        Containment *c = addContainment(containmentConfig.readEntry("plugin", QString()), QVariantList(),
+                                        cid, true);
         if (!c) {
-            kDebug() << "couldn't find containment " << cid << ", skipping this applet";
             continue;
         }
 
-        //kDebug() << "creating applet " << cg.name() << "in containment" << cid << "at geometry" << cg.readEntry("geometry", QRectF());
-        int appId = cg.name().left(cg.name().indexOf('-')).toUInt();
-        Applet *applet = c->addApplet(cg.readEntry("plugin", QString()), QVariantList(),
-                                      appId, cg.readEntry("geometry", QRectF()), true);
-        QList<qreal> m = cg.readEntry("transform", QList<qreal>());
-        if (m.count() == 9) {
-            QTransform t(m[0], m[1], m[2], m[3], m[4], m[5], m[6], m[7], m[8]);
+        addItem(c);
+        c->loadConstraints(&containmentConfig);
+        //kDebug() << "Containment" << c->id() << "geometry is" << c->geometry().toRect() << "config'd with" << appletConfig.name();
+        KConfigGroup applets(&containmentConfig, "Applets");
+
+        foreach (const QString &appletGroup, applets.groupList()) {
+            kDebug() << "reading from applet group" << appletGroup;
+            int appId = appletGroup.toUInt();
+            KConfigGroup appletConfig(&applets, appletGroup);
+            kDebug() << "the name is" << appletConfig.name();
+            Applet *applet = c->addApplet(appletConfig.readEntry("plugin", QString()), QVariantList(),
+                                          appId, appletConfig.readEntry("geometry", QRectF()), true);
+            Q_UNUSED(applet)
             // FIXME: the transform does not stick; it gets set then almost immediately reset.
             //        find out why and then reenable this
-            //applet->setTransform(t);
+            /*
+            QList<qreal> m = cg.readEntry("transform", QList<qreal>());
+            if (m.count() == 9) {
+                QTransform t(m[0], m[1], m[2], m[3], m[4], m[5], m[6], m[7], m[8]);
+                applet->setTransform(t);
+            }
+           */
         }
-    }
-
-    foreach (Containment* c, containments) {
-        QString cid = QString::number(c->id());
-        KConfigGroup containmentConfig(&config, cid.append("-containment"));
-        c->setImmutable(containmentConfig.isImmutable());
     }
 
     if (d->containments.count() < 1) {
         loadDefaultSetup();
     } else {
         foreach (Containment* containment, d->containments) {
+            QString cid = QString::number(containment->id());
             containment->init();
+            KConfigGroup containmentConfig(&containments, cid);
+            containment->setImmutable(containmentConfig.isImmutable());
 
             foreach(Applet* applet, containment->applets()) {
                 applet->init();
             }
-        }
-    }
 
-    foreach (Containment* containment, d->containments) {
-        // we need to manually flush the constraints changes
-        // because we may not get back to the event loop before
-        // view set up
-        containment->flushUpdatedConstraints();
+            containment->flushUpdatedConstraints();
+        }
     }
 
     setImmutable(config.isImmutable());
@@ -222,7 +208,7 @@ void Corona::loadApplets(const QString& configname)
 
 void Corona::loadApplets()
 {
-    loadApplets("plasma-appletsrc");
+    loadApplets(d->configName);
 }
 
 void Corona::loadDefaultSetup()
@@ -300,6 +286,15 @@ void Corona::clearApplets()
     }
 }
 
+KSharedConfigPtr Corona::config()
+{
+    if (!d->config) {
+        d->config = KSharedConfig::openConfig(d->configName);
+    }
+
+    return d->config;
+}
+
 Containment* Corona::addContainment(const QString& name, const QVariantList& args, uint id, bool delayedInit)
 {
     QString pluginName = name;
@@ -342,6 +337,17 @@ Containment* Corona::addContainment(const QString& name, const QVariantList& arg
             SIGNAL(launchActivated()));
 
     return containment;
+}
+
+void Corona::destroyContainment(Containment *c)
+{
+    if (!d->containments.contains(c)) {
+        return;
+    }
+
+    d->containments.removeAll(c);
+    c->config().deleteGroup();
+    c->deleteLater();
 }
 
 Applet* Corona::addApplet(const QString& name, const QVariantList& args, uint id, const QRectF& geometry)
