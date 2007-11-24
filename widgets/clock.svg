@@ -15,7 +15,7 @@
    width="250"
    height="250"
    version="1.0"
-   sodipodi:docbase="/home/matt"
+   sodipodi:docbase="/home/kde-devel/kdesvn/kdebase/workspace/plasma/desktoptheme/widgets"
    sodipodi:docname="clock.svg"
    inkscape:output_extension="org.inkscape.output.svg.inkscape"
    inkscape:export-filename="/home/pinheiro/Desktop/clock.png"
@@ -248,11 +248,11 @@
      showgrid="false"
      width="250px"
      height="250px"
-     inkscape:zoom="16"
-     inkscape:cx="116.31598"
-     inkscape:cy="124.35818"
-     inkscape:window-x="0"
-     inkscape:window-y="0"
+     inkscape:zoom="2.988"
+     inkscape:cx="125"
+     inkscape:cy="125"
+     inkscape:window-x="1558"
+     inkscape:window-y="28"
      inkscape:current-layer="svg2" />
   <g
      id="ClockFace"
@@ -1090,7 +1090,7 @@
   </g>
   <path
      style="opacity:1;fill:#606060;fill-opacity:1;stroke:none;stroke-width:8;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:1.08779998;stroke-opacity:1"
-     d="M 123.98886,207.89978 L 123.98886,127.95649 C 123.41261,127.60167 123.03614,126.9927 123.036,126.27777 C 123.036,125.56288 123.41247,124.9085 123.98886,124.55368 L 123.98886,121.33236 L 126.12121,121.33236 L 126.12121,124.55368 C 126.7127,124.90533 127.11951,125.55173 127.11951,126.27777 C 127.11951,127.00383 126.7127,127.60483 126.12121,127.95649 L 126.12121,207.89978 L 123.98886,207.89978 z "
+     d="M 122.67866,182.14891 L 122.67866,123.46025 C 121.3205,123.19977 120.43316,122.75271 120.43284,122.22785 C 120.43284,121.70303 121.32016,121.22263 122.67866,120.96215 L 122.67866,118.59728 L 127.70444,118.59728 L 127.70444,120.96215 C 129.09853,121.22031 130.05736,121.69484 130.05736,122.22785 C 130.05736,122.76087 129.09853,123.20209 127.70444,123.46025 L 127.70444,182.14891 L 122.67866,182.14891 z "
      id="HourHand"
      inkscape:label="#rect3745" />
   <path
