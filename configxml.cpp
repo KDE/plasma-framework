@@ -174,6 +174,8 @@ class ConfigXml::Private
             return v;
         }
 
+        void parse(ConfigXml *configXml, QIODevice *xml);
+
         QList<bool*> bools;
         QList<QString*> strings;
         QList<QStringList*> stringlists;
@@ -223,6 +225,16 @@ private:
     bool m_inChoice;
 };
 
+void ConfigXml::Private::parse(ConfigXml *configXml, QIODevice *xml)
+{
+    QXmlInputSource source(xml);
+    QXmlSimpleReader reader;
+    ConfigXmlHandler handler(configXml, this);
+    reader.setContentHandler(&handler);
+    reader.parse(&source, false);
+}
+
+QList<bool*> bools;
 ConfigXmlHandler::ConfigXmlHandler(ConfigXml* config, ConfigXml::Private* d)
     : QXmlDefaultHandler(),
       m_config(config),
@@ -495,15 +507,21 @@ ConfigXml::ConfigXml(const QString &configFile, QIODevice *xml, QObject *parent)
     reader.parse(&source, false);
 }
 
-ConfigXml::ConfigXml(KSharedConfig::Ptr config, QIODevice *xml, QObject *parent)
+ConfigXml::ConfigXml(KSharedConfigPtr config, QIODevice *xml, QObject *parent)
     : KConfigSkeleton(config, parent),
       d(new Private)
 {
-    QXmlInputSource source(xml);
-    QXmlSimpleReader reader;
-    ConfigXmlHandler handler(this, d);
-    reader.setContentHandler(&handler);
-    reader.parse(&source, false);
+    d->parse(this, xml);
+}
+
+//FIXME: obviously this is broken and should be using the group as the root, 
+//       but KConfigSkeleton does not currently support this. it will eventually though,
+//       at which point this can be addressed properly
+ConfigXml::ConfigXml(const KConfigGroup *config, QIODevice *xml, QObject *parent)
+    : KConfigSkeleton(KSharedConfig::openConfig(config->config()->name()), parent),
+      d(new Private)
+{
+    d->parse(this, xml);
 }
 
 ConfigXml::~ConfigXml()

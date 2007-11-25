@@ -169,7 +169,8 @@ public:
         if (!xmlPath.isEmpty()) {
             QFile file(xmlPath);
             // FIXME: KConfigSkeleton doesn't play well with KConfigGroup =/
-            //configXml = new ConfigXml(applet->config(), &file);
+            KConfigGroup config = applet->config();
+            configXml = new ConfigXml(&config, &file);
         }
 
         if (!package->filePath("mainconfigui").isEmpty()) {
