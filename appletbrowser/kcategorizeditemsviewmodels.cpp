@@ -80,10 +80,16 @@ DefaultItemFilterProxyModel::DefaultItemFilterProxyModel(QObject * parent) :
 {
 }
 
-void DefaultItemFilterProxyModel::setSourceModel(
-        QStandardItemModel * sourceModel)
+void DefaultItemFilterProxyModel::setSourceModel(QAbstractItemModel * sourceModel)
 {
-    m_innerModel.setSourceModel(sourceModel);
+    QStandardItemModel *model = qobject_cast<QStandardItemModel*>(sourceModel);
+
+    if (!model) {
+        kWarning() << "DefaultItemFilterProxyModel::setSourceModel expects a QStandardItemModel!";
+        return;
+    }
+
+    m_innerModel.setSourceModel(model);
     QSortFilterProxyModel::setSourceModel(&m_innerModel);
 }
 

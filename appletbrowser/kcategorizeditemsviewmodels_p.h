@@ -105,7 +105,7 @@ public:
     void setSearch(const QString & pattern);
     void setFilter(const Filter & filter);
 
-    void setSourceModel(QStandardItemModel * sourceModel);
+    void setSourceModel(QAbstractItemModel * sourceModel);
 
     QStandardItemModel * sourceModel() const;
 
