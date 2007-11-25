@@ -20,9 +20,9 @@
 #ifndef CONFIGXML_H
 #define CONFIGXML_H
 
-#include <KConfigGroup>
-#include <KConfigSkeleton>
-#include <KSharedConfig>
+#include <KDE/KConfigGroup>
+#include <KDE/KConfigSkeleton>
+#include <KDE/KSharedConfig>
 
 #include <plasma/plasma_export.h>
 
