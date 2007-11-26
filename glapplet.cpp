@@ -45,8 +45,9 @@ public:
         format.setAlphaBufferSize(8);
         //dummy size construction
         pbuf = new QGLPixelBuffer(300, 300, format, dummy);
-        if (pbuf->isValid())
+        if (pbuf->isValid()) {
             pbuf->makeCurrent();
+        }
     }
     void updateGlSize(const QSize &size)
     {
@@ -179,7 +180,7 @@ void GLApplet::paintInterface(QPainter *painter,
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     QMatrix m = painter->worldMatrix();
-    QRect deviceRect = m.mapRect(boundingRect()).toRect();
+    QRect deviceRect = m.mapRect(QRect(QPoint(23, 25), contentSize().toSize()));
     d->updateGlSize(deviceRect.size());
 
     // redirect this widget's painting into the pbuffer
