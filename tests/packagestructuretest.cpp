@@ -18,6 +18,9 @@
 *******************************************************************************/
 
 #include "packagestructuretest.h"
+
+#include <KDebug>
+
 #include "plasma/packages.cpp"
 
 void PackageStructureTest::init()
@@ -35,17 +38,17 @@ void PackageStructureTest::type()
     QCOMPARE(ps->type(), QString("Plasmoid"));
 }
 
-#include <KDebug>
 void PackageStructureTest::directories()
 {
     QList<const char*> dirs;
-    dirs << "images" << "config" << "configui" << "scripts";
-    qSort(dirs);
+    dirs << "config" << "configui" << "images" << "scripts";
 
     QList<const char*> psDirs = ps->directories();
-    qSort(psDirs);
 
-    QCOMPARE(psDirs, dirs);
+    QCOMPARE(dirs.count(), psDirs.count());
+    for (int i = 0; i < dirs.count(); ++i) {
+        QCOMPARE(dirs[i], psDirs[i]);
+    }
 }
 
 void PackageStructureTest::requiredDirectories()
@@ -58,19 +61,26 @@ void PackageStructureTest::files()
 {
     QList<const char*> files;
     files << "mainconfiggui" << "mainconfigxml" << "mainscript";
-    qSort(files);
 
     QList<const char*> psFiles = ps->files();
-    qSort(psFiles);
 
-    QCOMPARE(psFiles, files);
+    QCOMPARE(files.count(), psFiles.count());
+    for (int i = 0; i < files.count(); ++i) {
+        QCOMPARE(files[i], psFiles[i]);
+    }
 }
 
 void PackageStructureTest::requiredFiles()
 {
     QList<const char*> files;
     files << "mainscript";
-    QCOMPARE(ps->requiredFiles(), files);
+
+    QList<const char*> psFiles = ps->requiredFiles();
+
+    QCOMPARE(files.count(), psFiles.count());
+    for (int i = 0; i < files.count(); ++i) {
+        QCOMPARE(files[i], psFiles[i]);
+    }
 }
 
 void PackageStructureTest::path()
