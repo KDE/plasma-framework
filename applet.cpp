@@ -1205,7 +1205,7 @@ void Applet::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
 
     Applet* containment = dynamic_cast<Plasma::Applet*>(topLevelItem());
 
-    if (!containment) {
+    if (!containment || containment == this) {
         //kDebug() << "no containment. hm.";
         Widget::contextMenuEvent(event);
         return;
