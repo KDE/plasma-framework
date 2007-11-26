@@ -277,6 +277,10 @@ void AppletHandle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
         m_scale = _k_distanceForPoint(event->pos()-center) / _k_distanceForPoint(pressPos-center);
 
+        if (qAbs(m_scale-1.0)<=0.1) {
+            m_scale = 1.0;
+        }
+
         QTransform matrix;
         matrix.translate(center.x(), center.y());
         matrix.rotateRadians(m_angle);
