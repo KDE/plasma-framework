@@ -239,9 +239,9 @@ void PlasmoidPackageTest::entryList()
 void PlasmoidPackageTest::knownPackages()
 {
     // Don't do strange things when package root doesn't exists.
-    QDir pRoot = QDir(mPackageRoot);
+    QDir pRoot = QDir(mPackageRoot + "blah");
     QVERIFY(!pRoot.exists());
-    p = new Plasma::Package(mPackageRoot, mPackage, *ps);
+    p = new Plasma::Package(mPackageRoot + "blah", mPackage, *ps);
     QCOMPARE(p->knownPackages(mPackageRoot), QStringList());
     delete p;
 
@@ -276,6 +276,16 @@ void PlasmoidPackageTest::knownPackages()
     QCOMPARE(packages.size(), 2);
     QVERIFY(packages.contains(plamoid1));
     QVERIFY(packages.contains(plamoid2));
+}
+
+void PlasmoidPackageTest::metadata()
+{
+    QString plasmoid("plasmoid_with_metadata");
+    createTestPackage(plasmoid);
+
+    QString path = mPackageRoot + '/' + plasmoid + "/metadata.desktop";
+    p = new Plasma::Package(mPackageRoot, plasmoid, *ps);
+    QCOMPARE(p->filePath("metadata"), path);
 }
 
 QTEST_KDEMAIN(PlasmoidPackageTest, NoGUI)

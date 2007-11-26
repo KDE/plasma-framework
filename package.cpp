@@ -68,6 +68,12 @@ Package::Package(const QString& packageRoot, const QString& package,
 {
 }
 
+Package::Package(const QString &packagePath, const PackageStructure &structure)
+    : d(new Private(structure, packagePath))
+{
+}
+
+
 Package::~Package()
 {
     delete d;

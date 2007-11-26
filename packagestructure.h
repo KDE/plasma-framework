@@ -70,27 +70,27 @@ public:
     /**
      * Type of package this structure describes
      **/
-    QString type();
+    QString type() const;
 
     /**
      * The directories defined for this package
      **/
-    QList<const char*> directories();
+    QList<const char*> directories() const;
 
     /**
      * The required directories defined for this package
      **/
-    QList<const char*> requiredDirectories();
+    QList<const char*> requiredDirectories() const;
 
     /**
      * The individual files, by key, that are defined for this package
      **/
-    QList<const char*> files();
+    QList<const char*> files() const;
 
     /**
      * The individual required files, by key, that are defined for this package
      **/
-    QList<const char*> requiredFiles();
+    QList<const char*> requiredFiles() const;
 
     /**
      * Adds a directory to the structure of the package. It is added as
@@ -115,12 +115,12 @@ public:
     /**
      * @return path relative to the package root for the given entry
      **/
-    QString path(const char* key);
+    QString path(const char* key) const;
 
     /**
      * @return user visible name for the given entry
      **/
-    QString name(const char* key);
+    QString name(const char* key) const;
 
     /**
      * Sets whether or not a given part of the structure is required or not.
@@ -135,7 +135,7 @@ public:
     /**
      * @return true if the item at path exists and is required
      **/
-    bool required(const char* key);
+    bool required(const char* key) const;
 
     /**
      * Defines the default mimetypes for any definitions that do not have
@@ -159,7 +159,7 @@ public:
     /**
      * @return the mimetypes associated with the path, if any
      **/
-    QStringList mimetypes(const char* key);
+    QStringList mimetypes(const char* key) const;
 
     /**
      * Copy constructor

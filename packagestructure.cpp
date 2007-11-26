@@ -19,7 +19,7 @@
 
 #include "packagestructure.h"
 
-#include <QHash>
+#include <QMap>
 
 namespace Plasma
 {
@@ -53,7 +53,7 @@ class PackageStructure::Private
 {
     public:
         QString type;
-        QHash<const char*, ContentStructure> contents;
+        QMap<QByteArray, ContentStructure> contents;
         QStringList mimetypes;
 };
 
@@ -84,28 +84,28 @@ PackageStructure& PackageStructure::operator=(const PackageStructure& rhs)
     return *this;
 }
 
-QString PackageStructure::type()
+QString PackageStructure::type() const
 {
     return d->type;
 }
 
-QList<const char*> PackageStructure::directories()
+QList<const char*> PackageStructure::directories() const
 {
     QList<const char*> dirs;
-    QHash<const char*, ContentStructure>::const_iterator it = d->contents.constBegin();
+    QMap<QByteArray, ContentStructure>::const_iterator it = d->contents.constBegin();
     while (it != d->contents.constEnd()) {
         if (it.value().directory) {
-            dirs << it.key();
+            dirs << it.key().constData();
         }
         ++it;
     }
     return dirs;
 }
 
-QList<const char*> PackageStructure::requiredDirectories()
+QList<const char*> PackageStructure::requiredDirectories() const
 {
     QList<const char*> dirs;
-    QHash<const char*, ContentStructure>::const_iterator it = d->contents.constBegin();
+    QMap<QByteArray, ContentStructure>::const_iterator it = d->contents.constBegin();
     while (it != d->contents.constEnd()) {
         if (it.value().directory &&
             it.value().required) {
@@ -116,10 +116,10 @@ QList<const char*> PackageStructure::requiredDirectories()
     return dirs;
 }
 
-QList<const char*> PackageStructure::files()
+QList<const char*> PackageStructure::files() const
 {
     QList<const char*> files;
-    QHash<const char*, ContentStructure>::const_iterator it = d->contents.constBegin();
+    QMap<QByteArray, ContentStructure>::const_iterator it = d->contents.constBegin();
     while (it != d->contents.constEnd()) {
         if (!it.value().directory) {
             files << it.key();
@@ -129,10 +129,10 @@ QList<const char*> PackageStructure::files()
     return files;
 }
 
-QList<const char*> PackageStructure::requiredFiles()
+QList<const char*> PackageStructure::requiredFiles() const
 {
     QList<const char*> files;
-    QHash<const char*, ContentStructure>::const_iterator it = d->contents.constBegin();
+    QMap<QByteArray, ContentStructure>::const_iterator it = d->contents.constBegin();
     while (it != d->contents.constEnd()) {
         if (!it.value().directory && it.value().required) {
             files << it.key();
@@ -162,9 +162,9 @@ void PackageStructure::addFileDefinition(const char* key, const QString& path, c
     d->contents[key] = s;
 }
 
-QString PackageStructure::path(const char* key)
+QString PackageStructure::path(const char* key) const
 {
-    QHash<const char*, ContentStructure>::const_iterator it = d->contents.find(key);
+    QMap<QByteArray, ContentStructure>::const_iterator it = d->contents.find(key);
     if (it == d->contents.constEnd()) {
         return QString();
     }
@@ -172,9 +172,9 @@ QString PackageStructure::path(const char* key)
     return it.value().path;
 }
 
-QString PackageStructure::name(const char* key)
+QString PackageStructure::name(const char* key) const
 {
-    QHash<const char*, ContentStructure>::const_iterator it = d->contents.find(key);
+    QMap<QByteArray, ContentStructure>::const_iterator it = d->contents.find(key);
     if (it == d->contents.constEnd()) {
         return QString();
     }
@@ -184,7 +184,7 @@ QString PackageStructure::name(const char* key)
 
 void PackageStructure::setRequired(const char* key, bool required)
 {
-    QHash<const char*, ContentStructure>::iterator it = d->contents.find(key);
+    QMap<QByteArray, ContentStructure>::iterator it = d->contents.find(key);
     if (it == d->contents.end()) {
         return;
     }
@@ -192,9 +192,9 @@ void PackageStructure::setRequired(const char* key, bool required)
     it.value().required = required;
 }
 
-bool PackageStructure::required(const char* key)
+bool PackageStructure::required(const char* key) const
 {
-    QHash<const char*, ContentStructure>::const_iterator it = d->contents.find(key);
+    QMap<QByteArray, ContentStructure>::const_iterator it = d->contents.find(key);
     if (it == d->contents.constEnd()) {
         return false;
     }
@@ -209,7 +209,7 @@ void PackageStructure::setDefaultMimetypes(QStringList mimetypes)
 
 void PackageStructure::setMimetypes(const char* key, QStringList mimetypes)
 {
-    QHash<const char*, ContentStructure>::iterator it = d->contents.find(key);
+    QMap<QByteArray, ContentStructure>::iterator it = d->contents.find(key);
     if (it == d->contents.end()) {
         return;
     }
@@ -217,9 +217,9 @@ void PackageStructure::setMimetypes(const char* key, QStringList mimetypes)
     it.value().mimetypes = mimetypes;
 }
 
-QStringList PackageStructure::mimetypes(const char* key)
+QStringList PackageStructure::mimetypes(const char* key) const
 {
-    QHash<const char*, ContentStructure>::const_iterator it = d->contents.find(key);
+    QMap<QByteArray, ContentStructure>::const_iterator it = d->contents.find(key);
     if (it == d->contents.constEnd()) {
         return QStringList();
     }

@@ -89,7 +89,7 @@ void PackageMetadata::write(const QString& filename) const
     config.writeEntry("Description", d->description);
     config.writeEntry("Icon", d->icon);
     config.writeEntry("X-KDE-Screenshot", d->screenshot);
-    config.writeEntry("ServiceTypes", d->serviceType);
+    config.writeEntry("X-KDE-ServiceTypes", d->serviceType);
     config.writeEntry("X-KDE-PluginInfo-Name", d->name);
     config.writeEntry("X-KDE-PluginInfo-Author", d->author);
     config.writeEntry("X-KDE-PluginInfo-Email", d->email);
@@ -112,7 +112,7 @@ void PackageMetadata::read(const QString& filename)
     d->description = config.readEntry("Description", d->description);
     d->icon = config.readEntry("Icon", d->icon);
     d->screenshot= config.readEntry("X-KDE-Screenshot", d->screenshot);
-    d->serviceType = config.readEntry("ServiceTypes", d->serviceType);
+    d->serviceType = config.readEntry("X-KDE-ServiceTypes", d->serviceType);
     d->author = config.readEntry("X-KDE-PluginInfo-Author", d->author);
     d->email = config.readEntry("X-KDE-PluginInfo-Email", d->email);
     d->version = config.readEntry("X-KDE-PluginInfo-Version", d->version);
