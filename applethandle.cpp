@@ -278,9 +278,10 @@ void AppletHandle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
                         m_containment = containments[i];
                         //m_containment->addChild(m_applet);
                         //setParentItem(containments[i]);
+                        m_containment->addApplet(m_applet);
                         setPos(m_containment->mapFromScene(scenePosition));
                         m_applet->installSceneEventFilter(m_containment);
-                        m_containment->addApplet(m_applet);
+                        setParentItem(m_containment);
                         update();
                         break;
                     }
