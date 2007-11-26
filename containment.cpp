@@ -84,6 +84,7 @@ Containment::Containment(QGraphicsItem* parent,
     : Applet(parent, serviceId, containmentId),
       d(new Private)
 {
+    setDrawStandardBackground(false);
 }
 
 Containment::Containment(QObject* parent, const QVariantList& args)
