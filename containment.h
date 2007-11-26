@@ -174,6 +174,11 @@ class PLASMA_EXPORT Containment : public Applet
         void clearApplets();
 
         /**
+         * add existing applet to this containment
+         */
+        void addApplet(Applet * applet);
+
+        /**
          * Sets the physical screen this Containment is associated with.
          *
          * @param screen the screen number this containment is the desktop for, or -1

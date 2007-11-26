@@ -30,6 +30,8 @@
 
 #include "applet.h"
 #include "containment.h"
+#include "corona.h"
+#include "applet.h"
 #include "theme.h"
 
 namespace Plasma
@@ -259,6 +261,32 @@ void AppletHandle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     else if (m_pressedButton == MoveButton) {
         QPointF delta = event->pos()-event->lastPos();
         setPos(pos()+delta);
+        // test for containment change
+        if (!m_containment->sceneBoundingRect().contains(event->scenePos())) {
+            // see which containment it belongs to
+            Corona * corona = qobject_cast<Corona*>(scene());
+            if (corona) {
+                QList<Containment*> containments = corona->containments();
+                for (int i = 0; i < containments.size(); ++i) {
+                    if (containments[i]->sceneBoundingRect().contains(event->scenePos())) {
+                        // add the applet to the new containment
+                        // and take it from the old one
+                        QPointF scenePosition = scenePos();
+                        kDebug() << "moving to other containment with position" << event->pos() << event->scenePos();
+                        kDebug() << "position before reparenting" << pos() << scenePos();
+                        m_applet->removeSceneEventFilter(m_containment);
+                        m_containment = containments[i];
+                        //m_containment->addChild(m_applet);
+                        //setParentItem(containments[i]);
+                        setPos(m_containment->mapFromScene(scenePosition));
+                        m_applet->installSceneEventFilter(m_containment);
+                        m_containment->addApplet(m_applet);
+                        update();
+                        break;
+                    }
+                }
+            }
+        }
     } else if (m_pressedButton == RotateButton) {
         if (_k_distanceForPoint(event->pos()-event->lastPos()) <= 1.0) {
             return;

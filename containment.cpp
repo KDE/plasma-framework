@@ -352,11 +352,12 @@ Applet* Containment::addApplet(const QString& name, const QVariantList& args, ui
         applet = new Applet;
     }
 
-    addChild(applet);
     //panels don't want backgrounds, which is important when setting geometry
     if (containmentType() == PanelContainment) {
         applet->setDrawStandardBackground(false);
     }
+
+    addApplet(applet);
 
     //the applet needs to be given constraints before it can set its geometry
     applet->updateConstraints(Plasma::AllConstraints);
@@ -387,13 +388,18 @@ Applet* Containment::addApplet(const QString& name, const QVariantList& args, ui
         applet->init();
     }
 
-    d->applets << applet;
-    connect(applet, SIGNAL(destroyed(QObject*)),
-            this, SLOT(appletDestroyed(QObject*)));
     Phase::self()->animateItem(applet, Phase::Appear);
 
     emit appletAdded(applet);
     return applet;
+}
+
+void Containment::addApplet(Applet * applet)
+{
+    d->applets << applet;
+    addChild(applet);
+    connect(applet, SIGNAL(destroyed(QObject*)),
+            this, SLOT(appletDestroyed(QObject*)));
 }
 
 void Containment::appletDestroyed(QObject* object)
@@ -602,6 +608,7 @@ bool Containment::sceneEventFilter(QGraphicsItem *watched, QEvent *event)
     //QEvent::GraphicsSceneHoverEnter
 
     // Otherwise we're watching something we shouldn't be...
+    kDebug() << "got sceneEvent";
     Q_ASSERT(applet!=0);
     if (!d->applets.contains(applet)) {
         return false;
@@ -609,7 +616,9 @@ bool Containment::sceneEventFilter(QGraphicsItem *watched, QEvent *event)
 
     switch (event->type()) {
     case QEvent::GraphicsSceneHoverEnter:
+        kDebug() << "got hoverenterEvent" << d->immutable << " " << applet->isImmutable();
         if (!d->immutable && !applet->isImmutable() && !d->handles.contains(applet)) {
+            kDebug() << "generated applet handle";
             AppletHandle *handle = new AppletHandle(this, applet);
             d->handles[applet] = handle;
             connect(handle, SIGNAL(disappearDone(AppletHandle*)),
