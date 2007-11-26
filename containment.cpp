@@ -57,7 +57,7 @@ public:
     Private()
         : formFactor(Planar),
           location(Floating),
-          screen(0),
+          screen(-1),
           immutable(false),
           toolbox(0)
     {
@@ -450,7 +450,7 @@ void Containment::setScreen(int screen)
 {
     // screen of -1 means no associated screen.
     // sanity check to make sure someone else doesn't have this screen already!
-    if (containmentType() == DesktopContainment && corona()) {
+    if (screen > -1 && containmentType() == DesktopContainment && corona()) {
         Containment* currently = corona()->containmentForScreen(screen);
         if (currently && currently != this) {
             //kDebug() << "currently is on screen" << currently->screen() << "and is" << currently->name() << (QObject*)currently << (QObject*)this;
