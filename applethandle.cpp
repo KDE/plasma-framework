@@ -35,6 +35,8 @@
 namespace Plasma
 {
 
+qreal _k_angleForPoints(const QPointF &center, const QPointF &pt1, const QPointF &pt2);
+
 AppletHandle::AppletHandle(Containment *parent, Applet *applet)
     : QObject(),
       QGraphicsItem(parent),
@@ -50,7 +52,18 @@ AppletHandle::AppletHandle(Containment *parent, Applet *applet)
 {
     KColorScheme colors(QPalette::Active, KColorScheme::View, Theme::self()->colors());
     m_gradientColor = colors.background(KColorScheme::NormalBackground).color();
-    m_originalMatrix = m_applet->transform();
+
+    QTransform originalMatrix = m_applet->transform();
+    QRectF rect(m_applet->boundingRect());
+    QPointF center = rect.center();
+    originalMatrix.translate(center.x(), center.y());
+
+    qreal cosine = originalMatrix.m11();
+    qreal sine = originalMatrix.m12();
+
+    m_originalAngle = _k_angleForPoints(QPointF(0, 0),
+                                        QPointF(1, 0),
+                                        QPointF(cosine, sine));
 
     calculateSize();
     m_applet->setParentItem(this);
@@ -75,9 +88,9 @@ AppletHandle::~AppletHandle()
         m_applet->resize(newWidth, newHeight);
     }
 
-    QTransform matrix = m_originalMatrix;
+    QTransform matrix;
     matrix.translate(center.x(), center.y());
-    matrix.rotateRadians(m_angle);
+    matrix.rotateRadians(m_originalAngle+m_angle);
     matrix.translate(-center.x(), -center.y());
 
     QPointF newPos = transform().inverted().map(m_applet->pos());
@@ -258,8 +271,8 @@ void AppletHandle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
         m_angle = _k_angleForPoints(center, pressPos, event->pos());
 
-        if (fabs(remainder(m_angle, snapAngle)) < 0.15) {
-            m_angle = m_angle - remainder(m_angle, snapAngle);
+        if (fabs(remainder(m_originalAngle+m_angle, snapAngle)) < 0.15) {
+            m_angle = m_angle - remainder(m_originalAngle+m_angle, snapAngle);
         }
 
         m_scale = _k_distanceForPoint(event->pos()-center) / _k_distanceForPoint(pressPos-center);

@@ -81,7 +81,7 @@ class AppletHandle : public QObject, public QGraphicsItem
         Phase::AnimId m_animId;
         qreal m_angle;
         qreal m_scale;
-        QTransform m_originalMatrix;
+        qreal m_originalAngle;
         QColor m_gradientColor;
 };
 
