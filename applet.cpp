@@ -332,6 +332,21 @@ public:
         pendingConstraints |= c;
     }
 
+    KConfigGroup mainConfigGroup(const Applet* q)
+    {
+        KConfigGroup appletConfig;
+
+        if (q->containment()) {
+            appletConfig = q->containment()->config();
+            appletConfig = KConfigGroup(&appletConfig, "Applets");
+        } else {
+            kWarning() << "requesting config for" << q->name() << "without a containment!";
+            appletConfig = KConfigGroup(KGlobal::config(), "Applets");
+        }
+
+        return KConfigGroup(&appletConfig, QString::number(appletId));
+    }
+
     //TODO: examine the usage of memory here; there's a pretty large
     //      number of members at this point.
     uint appletId;
@@ -441,16 +456,7 @@ KConfigGroup Applet::config() const
         return containmentConfig;
     }
 
-    KConfigGroup appletConfig;
-    if (containment()) {
-        appletConfig = containment()->config();
-        appletConfig = KConfigGroup(&appletConfig, "Applets");
-    } else {
-        kWarning() << "requesting config for" << name() << "without a containment!";
-        appletConfig = KConfigGroup(KGlobal::config(), "Applets");
-    }
-
-    appletConfig = KConfigGroup(&appletConfig, QString::number(d->appletId));
+    KConfigGroup appletConfig = d->mainConfigGroup(this);
     return KConfigGroup(&appletConfig, "Configuration");
 }
 
@@ -469,11 +475,12 @@ KConfigGroup Applet::globalConfig() const
 
 void Applet::destroy()
 {
+    //kDebug() << "???????????????? DESTROYING APPLET" << name() << " ???????????????????????????";
     if (d->configXml) {
         d->configXml->setDefaults();
     }
 
-    config().deleteGroup();
+    d->mainConfigGroup(this).deleteGroup();
     deleteLater();
 }
 
