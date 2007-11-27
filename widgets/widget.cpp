@@ -55,8 +55,6 @@ class Widget::Private
         QSizeF minimumSize;
         QSizeF maximumSize;
 
-        QList<Widget *> childList;
-
         qreal opacity;
 
         // Replace with CacheMode in 4.4
@@ -111,6 +109,7 @@ void Widget::setOpacity(qreal opacity)
 {
     d->opacity = opacity;
 }
+
 qreal Widget::opacity() const
 {
     return d->opacity;
@@ -288,16 +287,26 @@ void Widget::resize(qreal w, qreal h)
 
 Widget *Widget::parent() const
 {
-    return dynamic_cast<Widget *>(parentItem());
+    QGraphicsItem *parent = parentItem();
+
+    while (parent) {
+        Widget *parentWidget = dynamic_cast<Widget *>(parentItem());
+
+        if (parentWidget) {
+            return parentWidget;
+        }
+
+        parent = parent->parentItem();
+    }
+    return 0;
 }
 
 void Widget::addChild(Widget *w)
 {
-    if (!w || d->childList.contains(w)) {
+    if (!w || QGraphicsItem::children().contains(w)) {
         return;
     }
 
-    d->childList.append(w);
     w->setParentItem(this);
 
     //kDebug() << "Added Child Widget" <<  (QObject*)w << "our geom is" << geometry();
@@ -312,7 +321,9 @@ void Widget::addChild(Widget *w)
 
 void Widget::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-    painter->setOpacity(d->opacity);
+    if (d->opacity < 1.0) {
+        painter->setOpacity(painter->opacity() * d->opacity);
+    }
 
     /*
 NOTE: put this back if we end up needing to control when things paint due to, e.g. zooming.
@@ -447,13 +458,8 @@ void Widget::paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *opti
 QVariant Widget::itemChange(GraphicsItemChange change, const QVariant &value)
 {
     if (change == QGraphicsItem::ItemChildRemovedChange) {
-        Widget *child = dynamic_cast<Plasma::Widget*>(value.value<QGraphicsItem*>());
-        if (child) {
-            kDebug() << "removing" << (QObject*)child;
-            d->childList.removeAll(child);
-            if (layout()) {
-                layout()->removeItem(child);
-            }
+        if (layout()) {
+            layout()->removeItem(dynamic_cast<Plasma::LayoutItem*>(value.value<QGraphicsItem*>()));
             updateGeometry();
         }
     }
