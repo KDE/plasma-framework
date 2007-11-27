@@ -21,10 +21,11 @@
 
 #include <QFile>
 
+#include <KColorScheme>
+#include <KConfigGroup>
+#include <KDebug>
 #include <KSharedConfig>
 #include <KStandardDirs>
-#include <kdebug.h>
-#include <kconfiggroup.h>
 
 namespace Plasma
 {
@@ -155,6 +156,12 @@ QString Theme::image( const QString& name ) const
 KSharedConfigPtr Theme::colors() const
 {
     return d->colors;
+}
+
+QColor Theme::textColor() const
+{
+    KColorScheme colors(QPalette::Active, KColorScheme::View, Theme::self()->colors());
+    return colors.foreground(KColorScheme::NormalText).color();
 }
 
 }

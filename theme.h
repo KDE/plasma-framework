@@ -96,6 +96,11 @@ class PLASMA_EXPORT Theme : public QObject
          */
         Q_INVOKABLE KSharedConfigPtr colors() const;
 
+        /**
+         * Returns the text color to be used by items resting on the background
+         */
+        Q_INVOKABLE QColor textColor() const;
+
     Q_SIGNALS:
         /**
          * Emitted when the user changes the theme. SVGs should be reloaded at
