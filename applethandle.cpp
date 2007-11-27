@@ -226,8 +226,8 @@ void AppletHandle::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
             m_containment->emitLaunchActivated();
             m_applet->showConfigurationInterface();
         } else if (m_pressedButton == RemoveButton) {
-            Phase::self()->animateItem(m_applet, Phase::Disappear);
             forceDisappear();
+            Phase::self()->animateItem(m_applet, Phase::Disappear);
         }
     }
 
@@ -274,14 +274,13 @@ void AppletHandle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
                         QPointF scenePosition = scenePos();
                         kDebug() << "moving to other containment with position" << event->pos() << event->scenePos();
                         kDebug() << "position before reparenting" << pos() << scenePos();
-                        m_applet->removeSceneEventFilter(m_containment);
                         m_containment = containments[i];
                         //m_containment->addChild(m_applet);
                         //setParentItem(containments[i]);
                         m_containment->addApplet(m_applet);
-                        setPos(m_containment->mapFromScene(scenePosition));
-                        m_applet->installSceneEventFilter(m_containment);
                         setParentItem(m_containment);
+                        m_applet->setParentItem(this);
+                        setPos(m_containment->mapFromScene(scenePosition));
                         update();
                         break;
                     }
