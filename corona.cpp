@@ -153,6 +153,11 @@ void Corona::loadApplets(const QString& configName)
 
     foreach (const QString& group, containments.groupList()) {
         KConfigGroup containmentConfig(&containments, group);
+
+        if (containmentConfig.entryMap().isEmpty()) {
+            continue;
+        }
+
         int cid = group.toUInt();
         kDebug() << "got a containment in the config, trying to make a" << containmentConfig.readEntry("plugin", QString()) << "from" << group;
         Containment *c = addContainment(containmentConfig.readEntry("plugin", QString()), QVariantList(),
@@ -265,6 +270,9 @@ void Corona::loadDefaultSetup()
     //TODO: but .. *where* on the left edge?
     panel->setLocation(Plasma::LeftEdge);
     */
+
+    // in case something goes bad during runtime, let's at least save this to disk right away
+    config()->sync();
 }
 
 Containment* Corona::containmentForScreen(int screen) const
