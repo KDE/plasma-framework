@@ -439,8 +439,18 @@ void Corona::screenResized(int screen)
         if (c->screen() == screen) {
             // trigger a relayout
             c->setScreen(screen);
+            return;
         }
     }
+
+    // a new screen appeared. neat.
+    // FIXME: apparently QDesktopWidget doesn't do the Right Thing when a new screen is plugged in
+    //        at runtime. seems it gets confused and thinks it's all one big screen? need to 
+    //        fix this upstream
+    Containment* c = addContainment("desktop");
+    c->setScreen(screen);
+    c->setFormFactor(Plasma::Planar);
+    emit newScreen(screen);
 }
 
 bool Corona::isImmutable() const

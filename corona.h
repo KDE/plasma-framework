@@ -166,9 +166,17 @@ public Q_SLOTS:
 
 Q_SIGNALS:
     /**
-     * This signal indicates, that a application launch was triggered
+     * This signal indicates that a application launch was triggered
      */
     void launchActivated();
+
+    /**
+     * This signal indicates that a new screen is being handled
+     * at runtime (e.g. after first creation)
+     *
+     * @param screen the xinerama number of the new screen
+     */
+    void newScreen(int screen);
 
 protected:
     void dragEnterEvent(QGraphicsSceneDragDropEvent* event);
