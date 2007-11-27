@@ -388,11 +388,12 @@ Applet* Containment::addApplet(const QString& name, const QVariantList& args, ui
     kDebug() << applet->name() << "sizehint:" << applet->sizeHint()
                                << "geometry:" << applet->geometry();
 
-    if (!delayInit) {
+    if (delayInit) {
+        applet->installSceneEventFilter(this);
+    } else {
         applet->init();
+        Phase::self()->animateItem(applet, Phase::Appear);
     }
-
-    Phase::self()->animateItem(applet, Phase::Appear);
 
     emit appletAdded(applet);
     return applet;
