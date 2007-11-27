@@ -475,12 +475,12 @@ void Containment::setScreen(int screen)
     kDebug() << "setting screen to" << screen << "and we are a" << containmentType();
     QDesktopWidget *desktop = QApplication::desktop();
     int numScreens = desktop->numScreens();
-    if (screen < -1 || screen > numScreens - 1) {
+    if (screen < -1) {
         screen = -1;
     }
 
     //kDebug() << "setting screen to " << screen << "and type is" << containmentType();
-    if (screen > -1) {
+    if (screen < numScreens && screen > -1) {
         QRect r = desktop->screenGeometry(screen);
 
         if (containmentType() == DesktopContainment) {
