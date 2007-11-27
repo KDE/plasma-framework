@@ -484,6 +484,11 @@ class PLASMA_EXPORT Applet : public Widget
          */
         bool isContainment() const;
 
+        /**
+         * @internal
+         */
+        void resetConfigurationObject();
+
     Q_SIGNALS:
         /**
          * Emitted when the applet needs to take (or lose) keyboard focus.
@@ -526,6 +531,11 @@ class PLASMA_EXPORT Applet : public Widget
          * be called automatically, but can also be called manually if needed.
          */
         void flushUpdatedConstraints();
+
+        /**
+         * @return the Containment, if any, this applet belongs to
+         **/
+        Containment* containment() const;
 
     protected:
         /**
@@ -592,20 +602,20 @@ class PLASMA_EXPORT Applet : public Widget
         void contextMenuEvent(QGraphicsSceneContextMenuEvent *contextMenuEvent);
 
         /**
-         * @internal for adjusting the shadow
+         * Reimplemented from QGraphicsItem
          */
         QVariant itemChange(GraphicsItemChange change, const QVariant &value);
-
-        /**
-         * @return the Containment, if any, this applet belongs to
-         **/
-        Containment* containment() const;
 
     protected Q_SLOTS:
         /**
          * @internal used to show the configuration of an applet on first show
          */
         void performSetupConfig();
+
+        /**
+         * @internal used to check the immutability of the item in the config file
+         */
+        void checkImmutability();
 
     private:
         Q_DISABLE_COPY(Applet)

@@ -79,6 +79,7 @@ public:
           configXml(0),
           shadow(0),
           cachedBackground(0),
+          mainConfig(0),
           pendingConstraints(NoConstraint),
           kioskImmutable(false),
           immutable(false),
@@ -106,15 +107,15 @@ public:
         delete configXml;
         delete shadow;
         delete cachedBackground;
+        delete mainConfig;
     }
 
     void init(Applet* applet)
     {
+        // WARNING: do not access config() OR globalConfig() in this method!
+        //          that requires a scene, which is not available at this point
         applet->setAcceptsHoverEvents(true);
         applet->setZValue(100);
-        kioskImmutable = applet->globalConfig().isImmutable() ||
-                         applet->config().isImmutable();
-        applet->setImmutable(kioskImmutable);
 
         if (!appletDescription.isValid()) {
             applet->setFailedToLaunch(true);
@@ -332,19 +333,40 @@ public:
         pendingConstraints |= c;
     }
 
-    KConfigGroup mainConfigGroup(const Applet* q)
+    KConfigGroup* mainConfigGroup(const Applet* q)
     {
-        KConfigGroup appletConfig;
-
-        if (q->containment()) {
-            appletConfig = q->containment()->config();
-            appletConfig = KConfigGroup(&appletConfig, "Applets");
-        } else {
-            kWarning() << "requesting config for" << q->name() << "without a containment!";
-            appletConfig = KConfigGroup(KGlobal::config(), "Applets");
+        if (mainConfig) {
+            return mainConfig;
         }
 
-        return KConfigGroup(&appletConfig, QString::number(appletId));
+        if (isContainment) {
+            const Containment *asContainment = qobject_cast<Containment*>(const_cast<Applet*>(q));
+            Q_ASSERT(asContainment);
+
+            KConfigGroup containmentConfig;
+            kDebug() << "got a corona, baby?" << (QObject*)asContainment->corona();
+            if (asContainment->corona()) {
+                containmentConfig = KConfigGroup(asContainment->corona()->config(), "Containments");
+            } else {
+                kDebug() << kBacktrace();
+                containmentConfig =  KConfigGroup(KGlobal::config(), "Containments");
+            }
+
+            mainConfig = new KConfigGroup(&containmentConfig, QString::number(appletId));
+        } else {
+            KConfigGroup appletConfig;
+            if (q->containment()) {
+                appletConfig = q->containment()->config();
+                appletConfig = KConfigGroup(&appletConfig, "Applets");
+            } else {
+                kWarning() << "requesting config for" << q->name() << "without a containment!";
+                appletConfig = KConfigGroup(KGlobal::config(), "Applets");
+            }
+
+            mainConfig = new KConfigGroup(&appletConfig, QString::number(appletId));
+        }
+
+        return mainConfig;
     }
 
     //TODO: examine the usage of memory here; there's a pretty large
@@ -361,6 +383,7 @@ public:
     ConfigXml* configXml;
     ShadowItem* shadow;
     QPixmap* cachedBackground;
+    KConfigGroup *mainConfig;
     Plasma::Constraints pendingConstraints;
     bool kioskImmutable : 1;
     bool immutable : 1;
@@ -378,6 +401,8 @@ Applet::Applet(QGraphicsItem *parent,
     :  Widget(parent),
        d(new Private(KService::serviceByStorageId(serviceID), appletId))
 {
+    // WARNING: do not access config() OR globalConfig() in this method!
+    //          that requires a scene, which is not available at this point
     d->init(this);
 }
 
@@ -386,6 +411,8 @@ Applet::Applet(QObject* parentObject, const QVariantList& args)
        d(new Private(KService::serviceByStorageId(args.count() > 0 ? args[0].toString() : QString()),
                      args.count() > 1 ? args[1].toInt() : 0))
 {
+    // WARNING: do not access config() OR globalConfig() in this method!
+    //          that requires a scene, which is not available at this point
     d->init(this);
     // the brain damage seen in the initialization list is due to the
     // inflexibility of KService::createInstance
@@ -442,22 +469,10 @@ KConfigGroup Applet::config(const QString &group) const
 KConfigGroup Applet::config() const
 {
     if (d->isContainment) {
-        const Containment *asContainment = qobject_cast<Containment*>(const_cast<Applet*>(this));
-        Q_ASSERT(asContainment);
-
-        KConfigGroup containmentConfig;
-        if (asContainment->corona()) {
-            containmentConfig = KConfigGroup(asContainment->corona()->config(), "Containments");
-        } else {
-            containmentConfig =  KConfigGroup(KGlobal::config(), "Containments");
-        }
-
-        containmentConfig = KConfigGroup(&containmentConfig, QString::number(d->appletId));
-        return containmentConfig;
+        return *(d->mainConfigGroup(this));
     }
 
-    KConfigGroup appletConfig = d->mainConfigGroup(this);
-    return KConfigGroup(&appletConfig, "Configuration");
+    return KConfigGroup(d->mainConfigGroup(this), "Configuration");
 }
 
 KConfigGroup Applet::globalConfig() const
@@ -480,8 +495,15 @@ void Applet::destroy()
         d->configXml->setDefaults();
     }
 
-    d->mainConfigGroup(this).deleteGroup();
+    resetConfigurationObject();
     deleteLater();
+}
+
+void Applet::resetConfigurationObject()
+{
+    d->mainConfigGroup(this)->deleteGroup();
+    delete d->mainConfig;
+    d->mainConfig = 0;
 }
 
 ConfigXml* Applet::configXml() const
@@ -692,6 +714,12 @@ void Applet::performSetupConfig()
     qDeleteAll(QGraphicsItem::children());
     delete layout();
     showConfigurationInterface();
+}
+
+void Applet::checkImmutability()
+{
+    d->kioskImmutable = globalConfig().isImmutable() || config().isImmutable();
+    setImmutable(d->kioskImmutable);
 }
 
 void Applet::flushUpdatedConstraints()
@@ -1135,30 +1163,44 @@ bool Applet::isShadowShown() const
     return d->shadow && d->shadow->isVisible();
 }
 
+
+
 QVariant Applet::itemChange(GraphicsItemChange change, const QVariant &value)
 {
-    if (!d->shadow) {
-        return QGraphicsItem::itemChange(change, value);
-    }
-
     switch (change) {
     case ItemPositionChange:
-        d->shadow->adjustPosition();
+        if (d->shadow) {
+            d->shadow->adjustPosition();
+        }
         break;
     case ItemSceneChange: {
         QGraphicsScene *newScene = qvariant_cast<QGraphicsScene*>(value);
-        if (d->shadow->scene())
-            d->shadow->scene()->removeItem(d->shadow);
         if (newScene) {
-            newScene->addItem(d->shadow);
-            d->shadow->generate();
-            d->shadow->adjustPosition();
-            d->shadow->show();
+            // checking immutability requires having a working config object
+            // Applet relies on having a Corona scene to be able to get the
+            // correct config. so we have to wait until we have the scene,
+            // otherwise we trigger premature creation of the config objects
+            QTimer::singleShot(0, this, SLOT(checkImmutability()));
+        }
+
+        if (d->shadow) {
+            if (d->shadow->scene()) {
+                d->shadow->scene()->removeItem(d->shadow);
+            }
+
+            if (newScene) {
+                newScene->addItem(d->shadow);
+                d->shadow->generate();
+                d->shadow->adjustPosition();
+                d->shadow->show();
+            }
         }
     }
         break;
     case ItemVisibleChange:
-        d->shadow->setVisible(isVisible());
+        if (d->shadow) {
+            d->shadow->setVisible(isVisible());
+        }
         break;
     default:
         break;
