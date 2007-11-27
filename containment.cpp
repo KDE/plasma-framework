@@ -84,6 +84,8 @@ Containment::Containment(QGraphicsItem* parent,
     : Applet(parent, serviceId, containmentId),
       d(new Private)
 {
+    // WARNING: do not access config() OR globalConfig() in this method!
+    //          that requires a scene, which is not available at this point
     setDrawStandardBackground(false);
 }
 
@@ -91,6 +93,8 @@ Containment::Containment(QObject* parent, const QVariantList& args)
     : Applet(parent, args),
       d(new Private)
 {
+    // WARNING: do not access config() OR globalConfig() in this method!
+    //          that requires a scene, which is not available at this point
     setDrawStandardBackground(false);
 }
 
@@ -394,10 +398,22 @@ Applet* Containment::addApplet(const QString& name, const QVariantList& args, ui
     return applet;
 }
 
-void Containment::addApplet(Applet * applet)
+void Containment::addApplet(Applet *applet)
 {
+    Containment *currentContainment = applet->containment();
+    if (currentContainment && currentContainment != this) {
+        applet->removeSceneEventFilter(currentContainment);
+        applet->resetConfigurationObject();
+        currentContainment->d->applets.removeAll(applet);
+    }
+
     d->applets << applet;
     addChild(applet);
+
+    if (currentContainment) {
+        applet->installSceneEventFilter(this);
+    }
+
     connect(applet, SIGNAL(destroyed(QObject*)),
             this, SLOT(appletDestroyed(QObject*)));
 }
@@ -409,11 +425,7 @@ void Containment::appletDestroyed(QObject* object)
     // try and do anything with it, we just need the value of the pointer
     // so this unsafe looking code is actually just fine.
     Applet* applet = static_cast<Plasma::Applet*>(object);
-    int index = d->applets.indexOf(applet);
-
-    if (index > -1) {
-        d->applets.removeAt(index);
-    }
+    d->applets.removeAll(applet);
 }
 
 void Containment::appletAnimationComplete(QGraphicsItem *item, Plasma::Phase::Animation anim)
@@ -428,6 +440,8 @@ void Containment::appletAnimationComplete(QGraphicsItem *item, Plasma::Phase::An
                 if (applet) {
                     applet->destroy();
                 }
+
+                break;
             }
 
             parent = parent->parentItem();
@@ -608,7 +622,7 @@ bool Containment::sceneEventFilter(QGraphicsItem *watched, QEvent *event)
     //QEvent::GraphicsSceneHoverEnter
 
     // Otherwise we're watching something we shouldn't be...
-    kDebug() << "got sceneEvent";
+    //kDebug() << "got sceneEvent";
     Q_ASSERT(applet!=0);
     if (!d->applets.contains(applet)) {
         return false;
@@ -616,9 +630,9 @@ bool Containment::sceneEventFilter(QGraphicsItem *watched, QEvent *event)
 
     switch (event->type()) {
     case QEvent::GraphicsSceneHoverEnter:
-        kDebug() << "got hoverenterEvent" << d->immutable << " " << applet->isImmutable();
+        //kDebug() << "got hoverenterEvent" << d->immutable << " " << applet->isImmutable();
         if (!d->immutable && !applet->isImmutable() && !d->handles.contains(applet)) {
-            kDebug() << "generated applet handle";
+            //kDebug() << "generated applet handle";
             AppletHandle *handle = new AppletHandle(this, applet);
             d->handles[applet] = handle;
             connect(handle, SIGNAL(disappearDone(AppletHandle*)),
