@@ -89,7 +89,8 @@ void FreeLayout::relayout()
 {
     foreach (LayoutItem *child , d->children) {
         if (child->geometry().size() != child->sizeHint()) {
-            child->setGeometry(QRectF(child->geometry().topLeft(), child->sizeHint()));
+            QSizeF newSize = child->sizeHint().expandedTo(minimumSize()).boundedTo(maximumSize());
+            child->setGeometry(QRectF(child->geometry().topLeft(), newSize));
         }
     }
 }
