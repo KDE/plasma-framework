@@ -264,6 +264,7 @@ void Corona::loadDefaultSetup()
     panel->addApplet("launcher");
     panel->addApplet("tasks");
     panel->addApplet("systemtray");
+    panel->addApplet("notifier");
     panel->addApplet("digital-clock");
 
     // trigger an instant layout so we immediately have a proper geometry rather than waiting around
