@@ -389,7 +389,9 @@ Applet* Containment::addApplet(const QString& name, const QVariantList& args, ui
                                << "geometry:" << applet->geometry();
 
     if (delayInit) {
-        applet->installSceneEventFilter(this);
+        if (type() == DesktopContainment) {
+            applet->installSceneEventFilter(this);
+        }
     } else {
         applet->init();
         Phase::self()->animateItem(applet, Phase::Appear);
