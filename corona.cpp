@@ -171,8 +171,13 @@ void Corona::loadApplets(const QString& configName)
             int appId = appletGroup.toUInt();
             KConfigGroup appletConfig(&applets, appletGroup);
             kDebug() << "the name is" << appletConfig.name();
-            Applet *applet = c->addApplet(appletConfig.readEntry("plugin", QString()), QVariantList(),
-                                          appId, appletConfig.readEntry("geometry", QRectF()), true);
+            QString plugin = appletConfig.readEntry("plugin", QString());
+
+            if (plugin.isEmpty()) {
+                continue;
+            }
+
+            Applet *applet = c->addApplet(plugin, QVariantList(), appId, appletConfig.readEntry("geometry", QRectF()), true);
             Q_UNUSED(applet)
             // FIXME: the transform does not stick; it gets set then almost immediately reset.
             //        find out why and then reenable this
