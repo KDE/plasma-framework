@@ -303,10 +303,26 @@ void AppletHandle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
             m_angle = m_angle - remainder(m_originalAngle+m_angle, snapAngle);
         }
 
-        m_scale = _k_distanceForPoint(event->pos()-center) / _k_distanceForPoint(pressPos-center);
+        qreal newScale = _k_distanceForPoint(event->pos()-center) / _k_distanceForPoint(pressPos-center);
 
-        if (qAbs(m_scale-1.0)<=0.1) {
-            m_scale = 1.0;
+        if (qAbs(newScale-1.0)<=0.1) {
+            newScale = 1.0;
+        }
+
+        qreal w = m_applet->size().width();
+        qreal h = m_applet->size().height();
+        QSizeF min = m_applet->minimumSize();
+        QSizeF max = m_applet->maximumSize();
+
+        //FIXME: this code will only work if we are keeping the aspect ratio, as we currently do
+        //       as it resets only on the width, which will break if we allow resizing of width
+        //       and height independantly
+        if (newScale * w < min.width() || newScale * h < min.height()) {
+            m_scale = min.width() / w;
+        } else if (newScale * w > max.width() && newScale * h > max.height()) {
+            m_scale = max.width() / w;
+        } else {
+            m_scale = newScale;
         }
 
         QTransform matrix;
