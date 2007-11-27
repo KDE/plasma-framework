@@ -199,6 +199,17 @@ void Corona::loadApplets(const QString& configName)
     if (d->containments.count() < 1) {
         loadDefaultSetup();
     } else {
+        // quick sanity check to ensure we have containments for each screen!
+        int numScreens = QApplication::desktop()->numScreens();
+        for (int i = 0; i < numScreens; ++i) {
+            if (!containmentForScreen(i)) {
+                //TODO: should we look for containments that aren't asigned but already exist?
+                Containment* c = addContainment("desktop");
+                c->setScreen(i);
+                c->setFormFactor(Plasma::Planar);
+            }
+        }
+
         foreach (Containment* containment, d->containments) {
             QString cid = QString::number(containment->id());
             containment->init();
