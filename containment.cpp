@@ -389,7 +389,7 @@ Applet* Containment::addApplet(const QString& name, const QVariantList& args, ui
                                << "geometry:" << applet->geometry();
 
     if (delayInit) {
-        if (type() == DesktopContainment) {
+        if (containmentType() == DesktopContainment) {
             applet->installSceneEventFilter(this);
         }
     } else {
