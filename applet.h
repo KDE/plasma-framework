@@ -235,6 +235,26 @@ class PLASMA_EXPORT Applet : public Widget
         virtual QSizeF contentSizeHint() const;
 
         /**
+         * Sets the minimum size for the content of this applet
+         */
+        void setMinimumContentSize(const QSizeF &minSize);
+
+        /**
+         * Get the minimum size for the content of this applet
+         */
+        QSizeF minimumContentSize() const;
+
+        /**
+         * Sets the maximum size for the content of this applet.
+         */
+        void setMaximumContentSize(const QSizeF &maxSize);
+
+        /**
+         * Get the minimum size for the content of this applet
+         */
+        QSizeF maximumContentSize() const;
+
+        /**
          * Returns a list of all known applets.
          *
          * @param category Only applets matchin this category will be returned.

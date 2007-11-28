@@ -907,13 +907,13 @@ Location Applet::location() const
 
 QSizeF Applet::contentSize() const
 {
-    int top , left , right , bottom;
-    d->getBorderSize(left,top,right,bottom);
+    int top, left, right, bottom;
+    d->getBorderSize(left, top, right, bottom);
 
     // kDebug() << "Geometry size: " << geometry().size();
     // kDebug() << "Borders: " << left << top << right << bottom;
 
-    return geometry().size() - QSizeF(left+right,top+bottom);
+    return geometry().size() - QSizeF(left + right, top + bottom);
 }
 
 QSizeF Applet::contentSizeHint() const
@@ -923,6 +923,38 @@ QSizeF Applet::contentSizeHint() const
     }
 
     return contentSize();
+}
+
+void Applet::setMinimumContentSize(const QSizeF &minSize)
+{
+    int top, left, right, bottom;
+    d->getBorderSize(left, top, right, bottom);
+
+    setMinimumSize(minSize + QSizeF(left + right, top + bottom));
+}
+
+QSizeF Applet::minimumContentSize() const
+{
+    int top, left, right, bottom;
+    d->getBorderSize(left, top, right, bottom);
+
+    return minimumSize() - QSizeF(left + right, top + bottom);
+}
+
+void Applet::setMaximumContentSize(const QSizeF &maxSize)
+{
+    int top, left, right, bottom;
+    d->getBorderSize(left, top, right, bottom);
+
+    setMaximumSize(maxSize + QSizeF(left + right, top + bottom));
+}
+
+QSizeF Applet::maximumContentSize() const
+{
+    int top, left, right, bottom;
+    d->getBorderSize(left, top, right, bottom);
+
+    return maximumSize() - QSizeF(left + right, top + bottom);
 }
 
 QString Applet::globalName() const
