@@ -150,6 +150,10 @@ Qt::Orientations Widget::expandingDirections() const
 void Widget::setMinimumSize(const QSizeF& size)
 {
     d->minimumSize = size;
+    if (d->size != d->size.expandedTo(size)) {
+        d->size = d->size.expandedTo(size);
+        updateGeometry();
+    }
 }
 
 QSizeF Widget::minimumSize() const
@@ -160,6 +164,10 @@ QSizeF Widget::minimumSize() const
 void Widget::setMaximumSize(const QSizeF& size)
 {
     d->maximumSize = size;
+    if (d->size != d->size.boundedTo(size)) {
+        d->size = d->size.boundedTo(size);
+        updateGeometry();
+    }
 }
 
 QSizeF Widget::maximumSize() const
