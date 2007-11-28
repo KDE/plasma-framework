@@ -59,7 +59,8 @@ public:
           location(Floating),
           screen(-1),
           immutable(false),
-          toolbox(0)
+          toolbox(0),
+          type(Containment::DesktopContainment)
     {
     }
 
@@ -76,6 +77,7 @@ public:
     int screen;
     bool immutable;
     DesktopToolbox *toolbox;
+    Containment::Type type;
 };
 
 Containment::Containment(QGraphicsItem* parent,
@@ -162,7 +164,12 @@ void Containment::containmentConstraintsUpdated(Plasma::Constraints constraints)
 
 Containment::Type Containment::containmentType() const
 {
-    return DesktopContainment;
+    return d->type;
+}
+
+void Containment::setContainmentType(Containment::Type type)
+{
+    d->type = type;
 }
 
 Corona* Containment::corona() const
