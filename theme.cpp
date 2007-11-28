@@ -160,7 +160,7 @@ KSharedConfigPtr Theme::colors() const
 
 QColor Theme::textColor() const
 {
-    KColorScheme colors(QPalette::Active, KColorScheme::View, Theme::self()->colors());
+    KColorScheme colors(QPalette::Active, KColorScheme::Window, Theme::self()->colors());
     return colors.foreground(KColorScheme::NormalText).color();
 }
 
