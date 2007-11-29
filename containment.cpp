@@ -60,7 +60,7 @@ public:
           screen(-1),
           immutable(false),
           toolbox(0),
-          type(Containment::DesktopContainment)
+          type(Containment::NoContainmentType)
     {
     }
 
@@ -89,6 +89,7 @@ Containment::Containment(QGraphicsItem* parent,
     // WARNING: do not access config() OR globalConfig() in this method!
     //          that requires a scene, which is not available at this point
     setDrawStandardBackground(false);
+    setContainmentType(CustomContainment);
 }
 
 Containment::Containment(QObject* parent, const QVariantList& args)
@@ -117,21 +118,8 @@ void Containment::init()
     connect(Phase::self(), SIGNAL(animationComplete(QGraphicsItem*,Plasma::Phase::Animation)),
             this, SLOT(appletAnimationComplete(QGraphicsItem*,Plasma::Phase::Animation)));
 
-    if (isContainment() && containmentType() == DesktopContainment) {
-        Plasma::PushButton *tool = new Plasma::PushButton(i18n("Add Widgets"));
-        tool->resize(tool->sizeHint());
-        addToolBoxTool(tool);
-        connect(tool, SIGNAL(clicked()), this, SIGNAL(showAddWidgets()));
-
-        tool = new Plasma::PushButton(i18n("Zoom In"));
-        connect(tool, SIGNAL(clicked()), this, SIGNAL(zoomIn()));
-        tool->resize(tool->sizeHint());
-        addToolBoxTool(tool);
-
-        tool = new Plasma::PushButton(i18n("Zoom Out"));
-        connect(tool, SIGNAL(clicked()), this, SIGNAL(zoomOut()));
-        tool->resize(tool->sizeHint());
-        addToolBoxTool(tool);
+    if (d->type == NoContainmentType) {
+        setContainmentType(DesktopContainment);
     }
 }
 
@@ -170,6 +158,28 @@ Containment::Type Containment::containmentType() const
 void Containment::setContainmentType(Containment::Type type)
 {
     d->type = type;
+
+    if (isContainment() && type == DesktopContainment) {
+        if (!d->toolbox) {
+            Plasma::PushButton *tool = new Plasma::PushButton(i18n("Add Widgets"));
+            tool->resize(tool->sizeHint());
+            addToolBoxTool(tool);
+            connect(tool, SIGNAL(clicked()), this, SIGNAL(showAddWidgets()));
+
+            tool = new Plasma::PushButton(i18n("Zoom In"));
+            connect(tool, SIGNAL(clicked()), this, SIGNAL(zoomIn()));
+            tool->resize(tool->sizeHint());
+            addToolBoxTool(tool);
+
+            tool = new Plasma::PushButton(i18n("Zoom Out"));
+            connect(tool, SIGNAL(clicked()), this, SIGNAL(zoomOut()));
+            tool->resize(tool->sizeHint());
+            addToolBoxTool(tool);
+        }
+    } else {
+        delete d->toolbox;
+        d->toolbox = 0;
+    }
 }
 
 Corona* Containment::corona() const
@@ -309,7 +319,7 @@ void Containment::setFormFactor(FormFactor formFactor)
             //FIXME: need a layout type here!
             break;
         default:
-            kDebug() << "This can't be happening! Or... can it? ;)";
+            kDebug() << "This can't be happening! Or... can it? ;)" << d->formFactor;
             break;
     }
 
