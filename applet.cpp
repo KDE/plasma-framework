@@ -128,14 +128,15 @@ public:
         if (!language.isEmpty()) {
             // find where the Package is
             QString path = KStandardDirs::locate("appdata",
-                                                 "plasmoids/" +
-                                                 appletDescription.pluginName());
+                                                 "plasmoids/" + appletDescription.pluginName() + '/');
 
-            if (!path.isEmpty()) {
+            if (path.isEmpty()) {
+                applet->setFailedToLaunch(true, i18n("Could not locate the %1 package required for the %2 widget.",
+                                                     appletDescription.pluginName(), appletDescription.name()));
+            } else {
                 // create the package and see if we have something real
-                package = new Package(path,
-                                      appletDescription.pluginName(),
-                                      PlasmoidStructure());
+                //kDebug() << "trying for" << path;
+                package = new Package(path, PlasmoidStructure());
                 if (package->isValid()) {
                     // now we try and set up the script engine.
                     // it will be parented to this applet and so will get
@@ -145,15 +146,17 @@ public:
                     if (!scriptEngine) {
                         delete package;
                         package = 0;
+                        applet->setFailedToLaunch(true, i18n("Could not create a %1 ScriptEngine for the %2 widget.",
+                                                             language, appletDescription.name()));
                     }
                 } else {
+                    applet->setFailedToLaunch(true, i18n("Could not open the %1 package required for the %2 widget.",
+                                                         appletDescription.pluginName(), appletDescription.name()));
                     delete package;
                     package = 0;
                 }
 
-                if (!package) {
-                    applet->setFailedToLaunch(true);
-                } else {
+                if (package) {
                     setupScriptSupport(applet);
                 }
             }
@@ -287,10 +290,6 @@ public:
 
     QSizeF contentSize(const Applet* q)
     {
-        if (scriptEngine) {
-            return scriptEngine->size();
-        }
-
         if (failureText) {
             return failureText->geometry().size();
         }
@@ -344,11 +343,10 @@ public:
             Q_ASSERT(asContainment);
 
             KConfigGroup containmentConfig;
-            kDebug() << "got a corona, baby?" << (QObject*)asContainment->corona();
+            //kDebug() << "got a corona, baby?" << (QObject*)asContainment->corona();
             if (asContainment->corona()) {
                 containmentConfig = KConfigGroup(asContainment->corona()->config(), "Containments");
             } else {
-                kDebug() << kBacktrace();
                 containmentConfig =  KConfigGroup(KGlobal::config(), "Containments");
             }
 
@@ -789,7 +787,7 @@ QSizeF Applet::sizeHint() const
 
 QList<QAction*> Applet::contextActions()
 {
-    kDebug() << "empty actions";
+    kDebug() << "empty context actions";
     return QList<QAction*>();
 }
 
@@ -914,6 +912,14 @@ QSizeF Applet::contentSize() const
     // kDebug() << "Borders: " << left << top << right << bottom;
 
     return geometry().size() - QSizeF(left + right, top + bottom);
+}
+
+void Applet::setContentSize(const QSizeF &size)
+{
+    int top, left, right, bottom;
+    d->getBorderSize(left, top, right, bottom);
+
+    resize(size + QSizeF(left + right, top + bottom));
 }
 
 QSizeF Applet::contentSizeHint() const
@@ -1137,14 +1143,22 @@ Applet* Applet::loadApplet(const QString& appletName, uint appletId, const QVari
         kDebug() << "hey! we got more than one! let's blindly take the first one";
     } */
 
+    KService::Ptr offer = offers.first();
+
     if (appletId == 0) {
         appletId = Private::nextId();
     }
 
+    if (!offer->property("X-Plasma-Language").toString().isEmpty()) {
+        kDebug() << "we have a script in the language of" << offer->property("X-Plasma-Language").toString();
+        Applet *applet = new Applet(0, offer->storageId(), appletId);
+        return applet;
+    }
+
     QVariantList allArgs;
-    allArgs << offers.first()->storageId() << appletId << args;
+    allArgs << offer->storageId() << appletId << args;
     QString error;
-    Applet* applet = offers.first()->createInstance<Plasma::Applet>(0, allArgs, &error);
+    Applet* applet = offer->createInstance<Plasma::Applet>(0, allArgs, &error);
 
     if (!applet) {
         kDebug() << "Couldn't load applet \"" << appletName << "\"! reason given: " << error;

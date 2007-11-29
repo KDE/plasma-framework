@@ -222,6 +222,17 @@ class PLASMA_EXPORT Applet : public Widget
         QSizeF contentSize() const;
 
         /**
+         * Sets the content size.
+         *
+         * @note Normally an applet should never
+         * call this directly except in the constructor to provide a default
+         * size
+         *
+         * @arg size the new size of the contents area
+         */
+        void setContentSize(const QSizeF &size);
+
+        /**
          * Returns an ideal size for the applet's content.
          * Applets can re-implement this to provide a suitable size based
          * on their contents.
