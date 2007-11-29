@@ -159,7 +159,7 @@ void Corona::loadApplets(const QString& configName)
         }
 
         int cid = group.toUInt();
-        kDebug() << "got a containment in the config, trying to make a" << containmentConfig.readEntry("plugin", QString()) << "from" << group;
+        //kDebug() << "got a containment in the config, trying to make a" << containmentConfig.readEntry("plugin", QString()) << "from" << group;
         Containment *c = addContainment(containmentConfig.readEntry("plugin", QString()), QVariantList(),
                                         cid, true);
         if (!c) {
@@ -167,15 +167,16 @@ void Corona::loadApplets(const QString& configName)
         }
 
         addItem(c);
+        c->init();
         c->loadConstraints(&containmentConfig);
         //kDebug() << "Containment" << c->id() << "geometry is" << c->geometry().toRect() << "config'd with" << appletConfig.name();
         KConfigGroup applets(&containmentConfig, "Applets");
 
         foreach (const QString &appletGroup, applets.groupList()) {
-            kDebug() << "reading from applet group" << appletGroup;
+            //kDebug() << "reading from applet group" << appletGroup;
             int appId = appletGroup.toUInt();
             KConfigGroup appletConfig(&applets, appletGroup);
-            kDebug() << "the name is" << appletConfig.name();
+            //kDebug() << "the name is" << appletConfig.name();
             QString plugin = appletConfig.readEntry("plugin", QString());
 
             if (plugin.isEmpty()) {
@@ -201,7 +202,6 @@ void Corona::loadApplets(const QString& configName)
     } else {
         foreach (Containment* containment, d->containments) {
             QString cid = QString::number(containment->id());
-            containment->init();
             KConfigGroup containmentConfig(&containments, cid);
             containment->setImmutable(containmentConfig.isImmutable());
 
