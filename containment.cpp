@@ -402,8 +402,7 @@ Applet* Containment::addApplet(const QString& name, const QVariantList& args, ui
         applet->setGeometry(QRectF(QPointF((width / 2) - (appletWidth / 2), (height / 2) - (appletHeight / 2)), size));
     }
 
-    kDebug() << applet->name() << "sizehint:" << applet->sizeHint()
-                               << "geometry:" << applet->geometry();
+    //kDebug() << applet->name() << "sizehint:" << applet->sizeHint() << "geometry:" << applet->geometry();
 
     if (delayInit) {
         if (containmentType() == DesktopContainment) {
@@ -492,7 +491,7 @@ void Containment::setScreen(int screen)
         }
     }
 
-    kDebug() << "setting screen to" << screen << "and we are a" << containmentType();
+    //kDebug() << "setting screen to" << screen << "and we are a" << containmentType();
     QDesktopWidget *desktop = QApplication::desktop();
     int numScreens = desktop->numScreens();
     if (screen < -1) {
