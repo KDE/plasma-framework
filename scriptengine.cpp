@@ -64,7 +64,11 @@ void ScriptEngine::paintInterface(QPainter* painter, const QStyleOptionGraphicsI
 
 QSizeF ScriptEngine::size() const
 {
-    return QSizeF(0, 0);
+    if (applet()) {
+        return applet()->contentSize();
+    }
+
+    return QSizeF();
 }
 
 bool ScriptEngine::init()

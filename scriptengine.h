@@ -87,10 +87,7 @@ public:
      **/
     virtual void paintInterface(QPainter* painter, const QStyleOptionGraphicsItem* option, const QRect &contentsRect);
 
-    /**
-     * @return the size of the applet
-     **/
-    virtual QSizeF size() const;
+    Q_INVOKABLE QSizeF size() const;
 
 protected:
     /**
