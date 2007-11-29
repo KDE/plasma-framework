@@ -115,7 +115,7 @@ Plasma::DataEngine* DataEngineManager::loadDataEngine(const QString& name)
     }
 
     // load the engine, add it to the engines
-    QString constraint = QString("[X-EngineName] == '%1'").arg(name);
+    QString constraint = QString("[X-Plasma-EngineName] == '%1'").arg(name);
     KService::List offers = KServiceTypeTrader::self()->query("Plasma/DataEngine",
                                                               constraint);
     QString error;
@@ -158,7 +158,7 @@ QStringList DataEngineManager::knownEngines()
     QStringList engines;
     KService::List offers = KServiceTypeTrader::self()->query("Plasma/DataEngine");
     foreach (KService::Ptr service, offers) {
-        engines.append(service->property("X-EngineName").toString());
+        engines.append(service->property("X-Plasma-EngineName").toString());
     }
 
     return engines;
