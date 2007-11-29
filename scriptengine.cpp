@@ -55,13 +55,14 @@ void ScriptEngine::init(Applet* applet)
     }
 }
 
-void ScriptEngine::paintInterface(QPainter* painter, const QStyleOptionGraphicsItem* option)
+void ScriptEngine::paintInterface(QPainter* painter, const QStyleOptionGraphicsItem* option, const QRect &contentsRect)
 {
     Q_UNUSED(painter)
     Q_UNUSED(option)
+    Q_UNUSED(contentsRect)
 }
 
-QSizeF ScriptEngine::size()
+QSizeF ScriptEngine::size() const
 {
     return QSizeF(0, 0);
 }
@@ -82,6 +83,12 @@ Applet* ScriptEngine::applet()  const
 {
     Q_ASSERT(d->applet);
     return d->applet;
+}
+
+DataEngine* ScriptEngine::dataEngine(const QString &engine) const
+{
+    Q_ASSERT(d->applet);
+    return d->applet->dataEngine(engine);
 }
 
 const Package* ScriptEngine::package() const

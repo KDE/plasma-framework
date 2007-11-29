@@ -20,7 +20,10 @@
 #ifndef PLASMA_SCRIPTENGINE_H
 #define PLASMA_SCRIPTENGINE_H
 
+#include <plasma/plasma_export.h>
+
 #include <QtCore/QObject>
+#include <QtCore/QRect>
 #include <QtCore/QSizeF>
 
 class QPainter;
@@ -31,6 +34,7 @@ namespace Plasma
 
 class Applet;
 class Package;
+class DataEngine;
 
 /**
  * @brief The base class for scripting interfaces to be used in loading
@@ -46,7 +50,7 @@ class Package;
  * LoadImage - loads an image resource out of the plasmoid's package
  * PlasmaSvg - creates and returns an Svg file
  **/
-class ScriptEngine : public QObject
+class PLASMA_EXPORT ScriptEngine : public QObject
 {
     Q_OBJECT
 
@@ -81,12 +85,12 @@ public:
      * @param painter the QPainter to use
      * @param option the style option containing such flags as selection, level of detail, etc
      **/
-    virtual void paintInterface(QPainter* painter, const QStyleOptionGraphicsItem* option);
+    virtual void paintInterface(QPainter* painter, const QStyleOptionGraphicsItem* option, const QRect &contentsRect);
 
     /**
      * @return the size of the applet
      **/
-    virtual QSizeF size();
+    virtual QSizeF size() const;
 
 protected:
     /**
@@ -111,6 +115,13 @@ protected:
      * @return the Applet that contains this plasmoid
      **/
     Applet* applet() const;
+
+    /**
+     * @return a data engine associated with this plasmoid
+     *
+     * @arg engine name of the engine
+     */
+    Q_INVOKABLE DataEngine* dataEngine(const QString &engine) const;
 
 private:
     class Private;

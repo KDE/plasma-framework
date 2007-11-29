@@ -865,7 +865,7 @@ void Applet::paintInterface(QPainter *painter, const QStyleOptionGraphicsItem *o
     Q_UNUSED(contentsRect)
 
     if (d->scriptEngine) {
-        d->scriptEngine->paintInterface(painter, option);
+        d->scriptEngine->paintInterface(painter, option, contentsRect);
     } else {
         //kDebug() << "Applet::paintInterface() default impl";
     }
