@@ -55,7 +55,6 @@ namespace Plasma
 Icon::Private::Private()
     : svg("widgets/iconbutton"),
       svgElements(0),
-      size(48*1.1, 48*1.1),
       iconSize(48, 48),
       state(Private::NoState),
       orientation(Qt::Vertical),
@@ -63,7 +62,6 @@ Icon::Private::Private()
       calculateSizeRequested(true)          // First time always true
 {
     svg.setContentType(Plasma::Svg::ImageSet);
-    svg.resize(size);
 
     //TODO: recheck when svg changes
     checkSvgElements();
@@ -339,13 +337,13 @@ void Icon::addAction(QAction *action)
         iconAction->setRect(QRectF(6, 6, 32, 32));
         break;
     case Private::TopRight:
-        iconAction->setRect(QRectF(d->size.width() - 38, 6, 32, 32));
+        iconAction->setRect(QRectF(size().width() - 38, 6, 32, 32));
         break;
     case Private::BottomLeft:
-        iconAction->setRect(QRectF(6, d->size.height() - 38, 32, 32));
+        iconAction->setRect(QRectF(6, size().height() - 38, 32, 32));
         break;
     case Private::BottomRight:
-        iconAction->setRect(QRectF(d->size.width() - 38, d->size.height() - 38, 32, 32));
+        iconAction->setRect(QRectF(size().width() - 38, size().height() - 38, 32, 32));
         break;
     }
 }
@@ -390,7 +388,7 @@ QSizeF Icon::Private::displaySizeHint(const QStyleOptionGraphicsItem *option) co
 
 void Icon::calculateSize()
 {
-    if (d->calculateSizeRequested = true) {
+    if (d->calculateSizeRequested) {
         // We do this to get size hint information before the icon has been drawn, as
         // we have no access to the style option before that time. So we create a dummy.
         QStyleOptionGraphicsItem option;
@@ -415,19 +413,16 @@ void Icon::calculateSize(const QStyleOptionGraphicsItem *option)
     const QSizeF decorationSize = d->addMargin(d->iconSize, Private::IconMargin);
 
     QSizeF newSize;
-    if (d->orientation == Qt::Vertical)
-    {
+    if (d->orientation == Qt::Vertical) {
         newSize.rwidth()  = qMax(decorationSize.width(), displaySize.width());
         newSize.rheight() = decorationSize.height() + displaySize.height() + 1;
-    }
-    else
-    {
+    } else {
         newSize.rwidth()  = decorationSize.width() + displaySize.width() + 1;
         newSize.rheight() = qMax(decorationSize.height(), displaySize.height());
     }
 
-    d->size = d->addMargin(newSize, Private::ItemMargin);
-    d->svg.resize(d->size);
+    newSize = d->addMargin(newSize, Private::ItemMargin);
+    d->svg.resize(newSize);
     d->calculateSizeRequested = false;
 
     int count = 0;
@@ -440,25 +435,21 @@ void Icon::calculateSize(const QStyleOptionGraphicsItem *option)
             //iconAction->setRect(QRectF(6, 6, 32, 32));
             break;
         case Private::TopRight:
-            iconAction->setRect(QRectF(d->size.width() - 38, 6, 32, 32));
+            iconAction->setRect(QRectF(newSize.width() - 38, 6, 32, 32));
             break;
         case Private::BottomLeft:
-            iconAction->setRect(QRectF(6, d->size.height() - 38, 32, 32));
+            iconAction->setRect(QRectF(6, newSize.height() - 38, 32, 32));
             break;
         case Private::BottomRight:
-            iconAction->setRect(QRectF(d->size.width() - 38, d->size.height() - 38, 32, 32));
+            iconAction->setRect(QRectF(newSize.width() - 38, newSize.height() - 38, 32, 32));
             break;
         }
 
         ++count;
     }
 
+    resize(newSize);
     update();
-}
-
-QRectF Icon::boundingRect() const
-{
-    return QRectF(QPointF(0, 0), d->size);
 }
 
 void Icon::Private::drawBackground(QPainter *painter)
@@ -570,8 +561,9 @@ QRectF Icon::Private::labelRectangle(const QStyleOptionGraphicsItem *option, con
 {
     Q_UNUSED(string)
 
-    if (icon.isNull())
+    if (icon.isNull()) {
         return option->rect;
+    }
 
     const QSizeF decoSize = addMargin(iconSize, Private::IconMargin); 
 
@@ -806,7 +798,7 @@ void Icon::paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *option
     QRectF textBoundingRect;
     d->layoutTextItems(option, icon, &labelLayout, &infoLayout, &textBoundingRect);
 
-    d->svg.resize(d->size);
+    d->svg.resize(size());
     d->drawBackground(painter);
 
     // draw icon
@@ -1001,74 +993,15 @@ void Icon::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     Widget::mouseMoveEvent(event);
 }
 
-QSizeF Icon::sizeHint() const
-{
-    return d->size;
-}
-
-Qt::Orientations Icon::expandingDirections() const
-{
-    return 0;
-}
-
 void Icon::setAlignment(Qt::Alignment alignment)
 {
     d->alignment=alignment;
-}
-
-/*
-QSizeF Icon::sizeHint() const
-{
-    return d->size;
-}
-
-QSizeF Icon::minimumSize() const
-{
-    return d->size; // probably should be more flexible on this =)
-}
-
-QSizeF Icon::maximumSize() const
-{
-    return d->size;
 }
 
 Qt::Orientations Icon::expandingDirections() const
 {
     return Qt::Horizontal;
 }
-
-bool Icon::hasHeightForWidth() const
-{
-    return true;
-}
-
-qreal Icon::heightForWidth(qreal w) const
-{
-    return w; //FIXME: we shouldn't assume squareness but actually calculate based on text and what not
-}
-
-bool Icon::hasWidthForHeight() const
-{
-    return true;
-}
-
-qreal Icon::widthForHeight(qreal h) const
-{
-    return h; //FIXME: we shouldn't assume squareness but actually calculate based on text and what not
-}
-
-QRectF Icon::geometry() const
-{
-    return boundingRect();
-}
-
-void Icon::setGeometry(const QRectF &r)
-{
-    // TODO: this is wrong, but we should probably never call setGeometry anyway!
-    setIconSize(r.size());
-    setPos(r.x(),r.y());
-}
-*/
 
 } // namespace Plasma
 

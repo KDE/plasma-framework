@@ -153,27 +153,7 @@ public:
     */
     void setAlignment(Qt::Alignment alignment);
 
-    // Layout stuff - no need to document
-/*
     Qt::Orientations expandingDirections() const;
-
-    QSizeF minimumSize() const;
-    QSizeF maximumSize() const;
-
-    bool hasHeightForWidth() const;
-    qreal heightForWidth(qreal w) const;
-
-    bool hasWidthForHeight() const;
-    qreal widthForHeight(qreal h) const;
-
-    QRectF geometry() const;
-    void setGeometry(const QRectF& r);
-
-    QSizeF sizeHint() const;
-*/
-    Qt::Orientations expandingDirections() const;
-    QSizeF sizeHint() const;
-    QRectF boundingRect() const;
 
 protected:
     void paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
