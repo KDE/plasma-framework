@@ -18,6 +18,7 @@
  */
 
 #include "abstractrunner.h"
+#include "searchcontext.h"
 
 #include <KDebug>
 #include <KServiceTypeTrader>
@@ -41,6 +42,28 @@ AbstractRunner::AbstractRunner(QObject* parent)
 AbstractRunner::~AbstractRunner()
 {
     delete d;
+}
+
+void AbstractRunner::performMatch( Plasma::SearchContext &globalContext )
+{
+    Plasma::SearchContext localContext( 0, globalContext );
+    //Keep track of global context list sizes so we know which pointers are our responsibility to delete
+    int exactEnd = localContext.exactMatches().count();
+    int possibleEnd = localContext.possibleMatches().count();
+    int infoEnd = localContext.informationalMatches().count();
+
+    match( &localContext );
+
+    QList<SearchAction *> exact = localContext.exactMatches().mid(exactEnd);
+    QList<SearchAction *> possible = localContext.possibleMatches().mid(possibleEnd);
+    QList<SearchAction *> info = localContext.informationalMatches().mid(infoEnd);
+
+    //If matches were not added, delete items on the heap
+    if (!globalContext.addMatches(localContext.searchTerm(), exact, possible, info)) {
+        qDeleteAll(exact);
+        qDeleteAll(possible);
+        qDeleteAll(info);
+    }
 }
 
 bool AbstractRunner::hasMatchOptions()

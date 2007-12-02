@@ -71,6 +71,8 @@ class PLASMA_EXPORT AbstractRunner : public QObject
          */
         virtual void match(Plasma::SearchContext *search) = 0;
 
+        void performMatch(Plasma::SearchContext &globalContext);
+
         /**
          * If the runner has options that the user can interact with to modify
          * what happens when exec or one of the actions created in fillMatches

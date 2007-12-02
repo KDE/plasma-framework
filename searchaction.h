@@ -30,9 +30,9 @@ namespace Plasma
 class SearchContext;
 class AbstractRunner;
 
-class PLASMA_EXPORT SearchAction : public QAction
+class PLASMA_EXPORT SearchAction /*: public QAction*/
 {
-    Q_OBJECT
+//     Q_OBJECT
 
     public:
         enum Type { InformationalMatch,
@@ -90,9 +90,20 @@ class PLASMA_EXPORT SearchAction : public QAction
          */
         AbstractRunner* runner() const;
 
+        void setText(const QString& text);
+        void setData(const QVariant& data);
+        void setIcon(const QIcon& icon);
+        void setEnabled(bool enable);
+
+        QString text() const;
+        QVariant data() const;
+        QIcon icon() const;
+        bool isEnabled() const;
+
         bool operator<(const SearchAction& other) const;
 
-    protected Q_SLOTS:
+    //Pending a better solution, changing this to public
+//     public Q_SLOTS:
         void exec();
 
     private:

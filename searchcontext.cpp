@@ -19,6 +19,8 @@
 
 #include "searchcontext.h"
 
+#include <QReadWriteLock>
+
 #include <QFile>
 #include <QFileInfo>
 
@@ -49,6 +51,7 @@ class SearchContext::Private
 
         void resetState()
         {
+            lock.lockForWrite();
             qDeleteAll(info);
             info.clear();
             qDeleteAll(exact);
@@ -62,6 +65,19 @@ class SearchContext::Private
             if (completer) {
                 completer->clear();
             }
+            lock.unlock();
+        }
+
+        void clearMatches()
+        {
+            lock.lockForWrite();
+            qDeleteAll(info);
+            info.clear();
+            qDeleteAll(exact);
+            exact.clear();
+            qDeleteAll(possible);
+            possible.clear();
+            lock.unlock();
         }
 
         KCompletion* completionObject()
@@ -73,6 +89,22 @@ class SearchContext::Private
             return completer;
         }
 
+        void lockForRead()
+        {
+            lock.lockForRead();
+        }
+
+        void lockForWrite()
+        {
+            lock.lockForWrite();
+        }
+
+        void unlock()
+        {
+            lock.unlock();
+        }
+
+        QReadWriteLock lock;
         QList<SearchAction *> info;
         QList<SearchAction *> exact;
         QList<SearchAction *> possible;
@@ -89,6 +121,20 @@ SearchContext::SearchContext(QObject *parent)
 {
 }
 
+SearchContext::SearchContext(QObject *parent, const SearchContext &other)
+    : QObject( parent ),
+      d( new Private )
+{
+    other.d->lockForRead();
+    d->info = other.d->info;
+    d->possible = other.d->possible;
+    d->exact = other.d->exact;
+    d->term = other.d->term;
+    d->mimetype = other.d->mimetype;
+    d->type = other.d->type;
+    other.d->unlock();
+}
+
 SearchContext::~SearchContext()
 {
     delete d;
@@ -102,7 +148,16 @@ void SearchContext::setSearchTerm(const QString &term)
         return;
     }
 
+    d->lockForWrite();
     d->term = term;
+    d->unlock();
+    determineType();
+}
+
+void SearchContext::determineType()
+{
+    d->lockForWrite();
+    QString term = d->term;
 
     int space = term.indexOf(' ');
     if (space > 0) {
@@ -133,11 +188,15 @@ void SearchContext::setSearchTerm(const QString &term)
             d->type = NetworkLocation;
         }
     }
+    d->unlock();
 }
 
 QString SearchContext::searchTerm() const
 {
-    return d->term;
+    d->lockForRead();
+    QString term = d->term;
+    d->unlock();
+    return term;
 }
 
 SearchContext::Type SearchContext::type() const
@@ -152,27 +211,36 @@ QString SearchContext::mimetype() const
 
 KCompletion* SearchContext::completionObject() const
 {
-    return d->completionObject();
+    d->lockForRead();
+    KCompletion* comp = d->completionObject();
+    d->unlock();
+    return comp;
 }
 
 void SearchContext::addStringCompletion(const QString &completion)
 {
+    d->lockForWrite();
     if (!d->completer) {
+        d->unlock();
         // if the completion object isn't actually used, don't bother
         return;
     }
 
     d->completer->addItem(completion);
+    d->unlock();
 }
 
 void SearchContext::addStringCompletions(const QStringList &completion)
 {
+    d->lockForWrite();
     if (!d->completer) {
+        d->unlock();
         // if the completion object isn't actually used, don't bother
         return;
     }
 
     d->completer->insertItems(completion);
+    d->unlock();
 }
 
 SearchAction* SearchContext::addInformationalMatch(AbstractRunner *runner)
@@ -199,19 +267,49 @@ SearchAction* SearchContext::addPossibleMatch(AbstractRunner *runner)
     return action;
 }
 
+bool SearchContext::addMatches( const QString& term, const QList<SearchAction *> &exactMatches,
+                                                      const QList<SearchAction *> &possibleMatches,
+                                                      const QList<SearchAction *> &informationalMatches )
+{
+    if (searchTerm() != term) {
+        return false;
+    }
+    d->lockForWrite();
+    d->exact << exactMatches;
+    d->possible << possibleMatches;
+    d->info << informationalMatches;
+    d->unlock();
+    emit matchesChanged();
+    return true;
+}
+
 QList<SearchAction *> SearchContext::informationalMatches() const
 {
-    return d->info;
+    d->lockForRead();
+    QList<SearchAction *> matches = d->info;
+    d->unlock();
+    return matches;
 }
 
 QList<SearchAction *> SearchContext::exactMatches() const
 {
-    return d->exact;
+    d->lockForRead();
+    QList<SearchAction *> matches = d->exact;
+    d->unlock();
+    return matches;
 }
 
 QList<SearchAction *> SearchContext::possibleMatches() const
 {
-    return d->possible;
+    d->lockForRead();
+    QList<SearchAction *> matches = d->possible;
+    d->unlock();
+    return matches;
+}
+
+void SearchContext::clearMatches()
+{
+    d->clearMatches();
 }
 
 }

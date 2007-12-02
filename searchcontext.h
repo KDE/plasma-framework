@@ -55,6 +55,8 @@ class PLASMA_EXPORT SearchContext : public QObject
         explicit SearchContext(QObject *parent = 0);
         ~SearchContext();
 
+        SearchContext(QObject *parent, const SearchContext& other);
+
         /**
          * Sets the search term for this object. This clears all current
          * matches in the process.
@@ -117,6 +119,14 @@ class PLASMA_EXPORT SearchContext : public QObject
         SearchAction* addPossibleMatch(AbstractRunner *runner);
 
         /**
+         * Appends lists of matches to the lists for exact, possible, and informational matches
+         * @return true if matches were added, false if matches were outdated
+         */
+        bool addMatches( const QString& term, const QList<SearchAction *> &exactMatches,
+                                     const QList<SearchAction *> &possibleMatches,
+                                     const QList<SearchAction *> &informationalMatches );
+
+        /**
          * Retrieves all available informational matches for the current
          * search term.
          */
@@ -133,6 +143,19 @@ class PLASMA_EXPORT SearchContext : public QObject
          * search term.
          */
         QList<SearchAction *> possibleMatches() const;
+
+        /**
+         * Determines type of query
+         */
+        void determineType();
+
+        /**
+         * Clears matches
+         */
+        void clearMatches();
+
+    signals:
+        void matchesChanged();
 
     private:
         class Private;

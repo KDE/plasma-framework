@@ -28,26 +28,31 @@ class SearchAction::Private
 {
     public:
         Private(SearchContext* s, AbstractRunner *r)
-            : search(s),
+            : /*search(s),*/
               runner(r),
               type(SearchAction::ExactMatch),
+              enabled(true),
               relevance(1)
         {
+            searchTerm = s->searchTerm();
+            mimetype = s->mimetype();
         }
-
+        QString searchTerm;
         SearchContext *search;
         AbstractRunner *runner;
         SearchAction::Type type;
         QString mimetype;
+        QString text;
+        QIcon icon;
+        QVariant data;
+        bool enabled;
         qreal relevance;
 };
 
 
 SearchAction::SearchAction(SearchContext *search, AbstractRunner *runner)
-    : QAction(search),
-      d(new Private(search, runner))
+    : d(new Private(search, runner))
 {
-    connect(this, SIGNAL(triggered(bool)), this, SLOT(exec()));
 }
 
 SearchAction::~SearchAction()
@@ -72,12 +77,12 @@ void SearchAction::setMimetype(const QString &mimetype)
 
 QString SearchAction::mimetype() const
 {
-    return d->mimetype.isEmpty() ? d->search->mimetype() : d->mimetype;
+    return d->mimetype;//.isEmpty() ? d->search->mimetype() : d->mimetype;
 }
 
 QString SearchAction::searchTerm() const
 {
-    return d->search->searchTerm();
+    return d->searchTerm;//->searchTerm();
 }
 
 void SearchAction::setRelevance(qreal relevance)
@@ -95,6 +100,46 @@ AbstractRunner* SearchAction::runner() const
     return d->runner;
 }
 
+void SearchAction::setText(const QString& text)
+{
+    d->text = text;
+}
+
+void SearchAction::setData(const QVariant& data)
+{
+    d->data = data;
+}
+
+void SearchAction::setIcon(const QIcon& icon)
+{
+    d->icon = icon;
+}
+
+QVariant SearchAction::data() const
+{
+    return d->data;
+}
+
+QString SearchAction::text() const
+{
+    return d->text;
+}
+
+QIcon SearchAction::icon() const
+{
+    return d->icon;
+}
+
+void SearchAction::setEnabled( bool enabled )
+{
+    d->enabled = enabled;
+}
+
+bool SearchAction::isEnabled() const
+{
+  return d->enabled;
+}
+
 bool SearchAction::operator<(const SearchAction& other) const
 {
     return d->relevance < other.d->relevance;
@@ -102,8 +147,10 @@ bool SearchAction::operator<(const SearchAction& other) const
 
 void SearchAction::exec()
 {
+    if(d->runner) {
     //TODO: this could be dangerous if the runner is deleted behind our backs.
-    d->runner->exec(this);
+        d->runner->exec(this);
+    }
 }
 
 }
