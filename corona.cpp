@@ -58,6 +58,7 @@ public:
 
     ~Private()
     {
+        qDeleteAll(containments);
     }
 
     void init(Corona* q)
