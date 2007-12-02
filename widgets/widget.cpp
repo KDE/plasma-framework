@@ -298,7 +298,7 @@ Widget *Widget::parent() const
     QGraphicsItem *parent = parentItem();
 
     while (parent) {
-        Widget *parentWidget = dynamic_cast<Widget *>(parentItem());
+        Widget *parentWidget = dynamic_cast<Widget *>(parent);
 
         if (parentWidget) {
             return parentWidget;
