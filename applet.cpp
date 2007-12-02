@@ -1252,7 +1252,7 @@ QVariant Applet::itemChange(GraphicsItemChange change, const QVariant &value)
         break;
     };
 
-    return QGraphicsItem::itemChange(change, value);
+    return Widget::itemChange(change, value);
 }
 
 void Applet::setGeometry(const QRectF& geometry)
