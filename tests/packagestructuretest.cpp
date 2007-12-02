@@ -19,8 +19,11 @@
 
 #include "packagestructuretest.h"
 
+#include <KConfig>
+#include <KConfigGroup>
 #include <KDebug>
 
+#include "plasma/packagestructure.h"
 #include "plasma/packages.cpp"
 
 void PackageStructureTest::init()
@@ -105,6 +108,75 @@ void PackageStructureTest::mimetypes()
     QStringList mimetypes;
     mimetypes << "image/svg+xml" << "image/png" << "image/jpeg";
     QCOMPARE(ps->mimetypes("images"), mimetypes);
+}
+
+void PackageStructureTest::read()
+{
+    QString structurePath = QString(KDESRCDIR) + "/plasmoidpackagerc";
+    KConfig config(structurePath);
+    Plasma::PackageStructure structure = 
+        Plasma::PackageStructure::read(&config);
+
+    // check some names
+    QCOMPARE(structure.name("config"), i18n("Configuration Definitions"));
+    QCOMPARE(structure.name("mainscript"), i18n("Main Script File"));
+    
+    // check some paths
+    QCOMPARE(structure.path("images"), QString("images"));
+    QCOMPARE(structure.path("mainscript"), QString("code/main"));
+    
+    // compare files
+    QList<const char *> files;
+    files << "mainconfiggui" << "mainconfigxml" << "mainscript";
+
+    QList<const char *> psFiles = structure.files();
+
+    QCOMPARE(psFiles.count(), files.count());
+    for (int i = 0; i < files.count(); ++i) {
+        QCOMPARE(psFiles[i], files[i]);
+    }
+    
+    // compare required files
+    QList<const char *> reqFiles = structure.requiredFiles();
+    QCOMPARE(reqFiles.count(), 1);
+    QCOMPARE(reqFiles[0], "mainscript");
+    
+    // compare directories
+    QList <const char *> dirs;
+    dirs << "config" << "configui" << "images" << "scripts";
+    QList <const char *> psDirs = structure.directories();
+    QCOMPARE(psDirs.count(), dirs.count());
+    for (int i = 0; i < dirs.count(); i++) {
+        QCOMPARE(psDirs[i], dirs[i]);
+    }
+    QCOMPARE(structure.requiredDirectories().size(), 0);
+}
+
+void PackageStructureTest::write()
+{
+    QString file1 = QDir::homePath() + "/.kde-unit-test/packagerc";
+    QString file2 = QString(KDESRCDIR) + "/plasmoidpackagerc";
+    
+    KConfig config(file1);
+    ps->write(&config);
+    
+    // check type
+    QCOMPARE(config.group("").readEntry("Type", QString()), QString("Plasmoid"));
+    
+    // check groups
+    QStringList groups;
+    groups << "images" << "config" << "configui" << "scripts"
+           << "mainconfiggui" << "mainconfigxml" << "mainscript";
+    groups.sort();
+    QCOMPARE(config.groupList(), groups);
+    
+    // check scripts
+    KConfigGroup scripts = config.group("scripts");
+    QCOMPARE(scripts.readEntry("Path", QString()), QString("code"));
+    QCOMPARE(scripts.readEntry("Name", QString()), QString("Executable Scripts"));
+    QCOMPARE(scripts.readEntry("Mimetypes", QStringList()), QStringList() << "text/*");
+    QCOMPARE(scripts.readEntry("Directory", false), true);
+    QCOMPARE(scripts.readEntry("Required", false), false);
 }
 
 QTEST_KDEMAIN(PackageStructureTest, NoGUI)

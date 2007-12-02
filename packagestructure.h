@@ -24,6 +24,8 @@
 
 #include <plasma/plasma_export.h>
 
+class KConfigBase;
+
 namespace Plasma
 {
 
@@ -175,6 +177,16 @@ public:
      * Assignment operator
      **/
     PackageStructure& operator=(const PackageStructure& rhs);
+    
+    /**
+      * Read a package structure from a config file.
+      */
+    static PackageStructure read(const KConfigBase *config);
+    
+    /**
+      * Write this package structure to a config file.
+      */
+    void write(KConfigBase *config) const;
 
 private:
      class Private;

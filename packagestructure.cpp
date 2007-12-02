@@ -20,6 +20,7 @@
 #include "packagestructure.h"
 
 #include <QMap>
+#include <KConfigGroup>
 
 namespace Plasma
 {
@@ -229,6 +230,59 @@ QStringList PackageStructure::mimetypes(const char* key) const
     }
 
     return it.value().mimetypes;
+}
+
+PackageStructure PackageStructure::read(const KConfigBase *config)
+{
+    QString type = config->group("").readEntry("Type", "");
+    PackageStructure structure(type);
+    
+    QStringList groups = config->groupList();
+    foreach (QString groupName, groups) {
+        QByteArray key = groupName.toAscii();
+        KConfigGroup entry = config->group(key);
+        
+        QString path = entry.readEntry("Path", QString());
+        QString name = entry.readEntry("Name", QString());
+        QStringList mimetypes = entry.readEntry("Mimetypes", QStringList());
+        bool directory = entry.readEntry("Directory", false);
+        bool required = entry.readEntry("Required", false);
+        
+        if (directory) {
+            structure.addDirectoryDefinition(key, path, name);
+        }
+        else {
+            structure.addFileDefinition(key, path, name);
+        }
+        
+        structure.setMimetypes(key, mimetypes);
+        structure.setRequired(key, required);
+    }
+    
+    return structure;
+}
+
+void PackageStructure::write(KConfigBase *config) const
+{
+    config->group("").writeEntry("Type", type());
+    
+    QMap<QByteArray, ContentStructure>::const_iterator it = d->contents.constBegin();
+    while (it != d->contents.constEnd()) {
+        KConfigGroup group = config->group(it.key());
+        group.writeEntry("Path", it.value().path);
+        group.writeEntry("Name", it.value().name);
+        if (!it.value().mimetypes.isEmpty()) {
+            group.writeEntry("Mimetypes", it.value().mimetypes);
+        }
+        if (it.value().directory) {
+            group.writeEntry("Directory", true);
+        }
+        if (it.value().required) {
+            group.writeEntry("Required", true);
+        }
+        
+        ++it;
+    }
 }
 
 } // Plasma namespace
