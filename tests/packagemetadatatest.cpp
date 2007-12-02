@@ -59,12 +59,6 @@ void PackageMetadataTest::removeDir(const QString &subdir)
     local.rmpath(subd);
 }
 
-void PackageMetadataTest::screenshot()
-{
-    // Defealt value
-    QCOMPARE(pm->screenshot(), QString("screenshot.png"));
-}
-
 void PackageMetadataTest::read()
 {
     pm->read("packagemetadatatest.desktop");
@@ -82,8 +76,6 @@ void PackageMetadataTest::read()
     QCOMPARE(pm->mainFile(), QString("Main file"));
     QCOMPARE(pm->application(), QString("A Test name"));
     QCOMPARE(pm->requiredVersion(), QString("1.2.3"));
-    QCOMPARE(pm->icon(), QString("test"));
-    QCOMPARE(pm->screenshot(), QString("a_not_default_file.svg"));
     QCOMPARE(pm->type(), QString("System test"));
 }
 
@@ -100,7 +92,6 @@ void PackageMetadataTest::write()
     pm->setMainFile(QString("Main file"));
     pm->setApplication(QString("A Test name"));
     pm->setRequiredVersion(QString("1.2.3"));
-    pm->setIcon(QString("test"));
     
     pm->write("somefile.desktop");
     delete pm;
@@ -118,21 +109,6 @@ void PackageMetadataTest::write()
     QCOMPARE(pm->mainFile(), QString("Main file"));
     QCOMPARE(pm->application(), QString("A Test name"));
     QCOMPARE(pm->requiredVersion(), QString("1.2.3"));
-    QCOMPARE(pm->icon(), QString("test"));
-}
-
-void PackageMetadataTest::preview()
-{
-    QCOMPARE(pm->preview(), QString());
-    pm->setPreview("Test");
-    QCOMPARE(pm->preview(), QString("Test"));
-}
-
-void PackageMetadataTest::releaseNotes()
-{
-    QCOMPARE(pm->releaseNotes(), QString());
-    pm->setReleaseNotes("Test");
-    QCOMPARE(pm->releaseNotes(), QString("Test"));
 }
 
 QTEST_KDEMAIN(PackageMetadataTest, NoGUI)

@@ -2,13 +2,9 @@ This file enumerates which classes and methods needs test. Please feel free to
 add a specific test you'd like to see for a class/method.
 
 // Finished (as in has test for each method)
+package
+packagemetadata
 packagestructure
-
-// Work in progress. Enumerated methods don't have tests yet.
-Package:
- - knownPackages
- - installPackage
- - createPackage
 
 // No tests written atm.
 abstractrunner
@@ -23,8 +19,6 @@ datacontainer_p
 dataengine
 dataenginemanager
 glapplet
-package
-packagemetadata
 packages_p
 phase
 plasma_export

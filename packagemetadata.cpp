@@ -30,10 +30,6 @@ namespace Plasma
 class PackageMetadata::Private
 {
     public:
-        Private()
-            : screenshot("screenshot.png")
-        {}
-
         QString name;
         QString description;
         QString author;
@@ -44,10 +40,6 @@ class PackageMetadata::Private
         QString mainFile;
         QString app;
         QString requiredVersion;
-        QString releaseNotes;
-        QString icon;
-        QString screenshot;
-        QString preview;
         QString type;
         QString serviceType;
 };
@@ -78,7 +70,7 @@ bool PackageMetadata::isComplete() const
               d->type.isEmpty());
 }
 
-void PackageMetadata::write(const QString& filename) const
+void PackageMetadata::write(const QString &filename, const QString &icon) const
 {
     KConfig cfg(filename);
     KConfigGroup config(&cfg, "Desktop Entry");
@@ -87,8 +79,9 @@ void PackageMetadata::write(const QString& filename) const
     //TODO: this will be a problem for localized names?
     config.writeEntry("Name", d->name);
     config.writeEntry("Description", d->description);
-    config.writeEntry("Icon", d->icon);
-    config.writeEntry("X-KDE-Screenshot", d->screenshot);
+    if (!icon.isNull()) {
+        config.writeEntry("Icon", icon);
+    }
     config.writeEntry("X-KDE-ServiceTypes", d->serviceType);
     config.writeEntry("X-KDE-PluginInfo-Name", d->name);
     config.writeEntry("X-KDE-PluginInfo-Author", d->author);
@@ -110,8 +103,6 @@ void PackageMetadata::read(const QString& filename)
     //TODO: this will be a problem for localized names?
     d->name = config.readEntry("X-KDE-PluginInfo-Name", d->name);
     d->description = config.readEntry("Description", d->description);
-    d->icon = config.readEntry("Icon", d->icon);
-    d->screenshot= config.readEntry("X-KDE-Screenshot", d->screenshot);
     d->serviceType = config.readEntry("X-KDE-ServiceTypes", d->serviceType);
     d->author = config.readEntry("X-KDE-PluginInfo-Author", d->author);
     d->email = config.readEntry("X-KDE-PluginInfo-Email", d->email);
@@ -179,26 +170,6 @@ QString PackageMetadata::requiredVersion() const
     return d->requiredVersion;
 }
 
-QString PackageMetadata::releaseNotes() const
-{
-    return d->releaseNotes;
-}
-
-QString PackageMetadata::icon() const
-{
-    return d->icon;
-}
-
-QString PackageMetadata::screenshot() const
-{
-    return d->screenshot;
-}
-
-QString PackageMetadata::preview() const
-{
-    return d->preview;
-}
-
 QString PackageMetadata::type() const
 {
     return d->type;
@@ -248,6 +219,7 @@ void PackageMetadata::setMainFile(const QString &mainFile)
 {
     d->mainFile = mainFile;
 }
+
 void PackageMetadata::setApplication(const QString &application)
 {
     d->app = application;
@@ -256,26 +228,6 @@ void PackageMetadata::setApplication(const QString &application)
 void PackageMetadata::setRequiredVersion(const QString &requiredVersion)
 {
     d->requiredVersion = requiredVersion;
-}
-
-void PackageMetadata::setReleaseNotes(const QString &releaseNotes)
-{
-    d->releaseNotes = releaseNotes;
-}
-
-void PackageMetadata::setIcon(const QString &icon)
-{
-    d->icon = icon;
-}
-
-void PackageMetadata::setScreenshot(const QString & screenshot)
-{
-    d->screenshot = screenshot;
-}
-
-void PackageMetadata::setPreview(const QString& path)
-{
-    d->preview = path;
 }
 
 void PackageMetadata::setType(const QString& type)

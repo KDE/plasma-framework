@@ -94,6 +94,11 @@ class PLASMA_EXPORT Package
         QStringList entryList(const char* fileType) const;
 
         /**
+          * @return the package metadata object.
+          */
+        const PackageMetadata *metadata() const;
+
+        /**
          * Returns a list of all installed packages
          *
          * @param packageRoot path to the directory where Plasmagik packages
@@ -123,12 +128,13 @@ class PLASMA_EXPORT Package
          * @arg metadata description of the package to create
          * @arg source path to local directory containing the individual
          *             files to be added to the package
-         * @arg destination path to local directory where the package should
-         *                  be created
+         * @arg destination path to the package that should be created
+         * @arg icon path to the package icon
          **/
         static bool createPackage(const PackageMetadata &metadata,
                                   const QString &source,
-                                  const QString &destination);
+                                  const QString &destination,
+                                  const QString &icon = QString());
 
     private:
         Q_DISABLE_COPY(Package)

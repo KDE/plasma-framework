@@ -52,8 +52,9 @@ public:
      * @see KPluginInfo
      *
      * @arg filename path to the file to write to
+     * @arg icon path to the package icon
      **/
-    void write(const QString& filename) const;
+    void write(const QString& filename, const QString &icon = QString()) const;
 
     /**
      * Reads in metadata from a file, which should be a .desktop
@@ -63,7 +64,7 @@ public:
      *
      * @arg filename path to the file to write to
      **/
-    void read(const QString& filename);
+    void read(const QString &filename);
 
     QString name() const;
     QString description() const;
@@ -76,24 +77,6 @@ public:
     QString mainFile() const;
     QString application() const;
     QString requiredVersion() const;
-    QString releaseNotes() const;
-    QString filenameToSave() const;
-    // filename
-    QString icon() const;
-
-    /**
-     * @return the name of the screenshot file, screenshot.png by default
-     */
-    QString screenshot() const;
-
-    /**
-     * Path to a PNG file containing a preview image.
-     * This might be a screenshot, for instance.
-     *
-     * @return path to a local image file, or QString() if no
-     *         preview is available
-     **/
-    QString preview() const;
 
     QString type() const;
 
@@ -108,27 +91,6 @@ public:
     void setMainFile(const QString &);
     void setApplication(const QString &);
     void setRequiredVersion(const QString &);
-    void setReleaseNotes(const QString &);
-    void setFilenameToSave(const QString &);
-    // filename
-    void setIcon(const QString &);
-
-    /**
-     * Sets the name of the screenshot file.
-     *
-     * @param file the name of the file
-     */
-    void setScreenshot(const QString &file);
-
-    /**
-     * Sets the path for the file containing a preview image.
-     * This might be a screenshot, for instance.
-     * A PNG is expected.
-     *
-     * @args path path to the preview image file
-     **/
-    void setPreview(const QString & path);
-
     void setType(const QString& type);
 
 private:
