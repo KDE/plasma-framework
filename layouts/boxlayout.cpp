@@ -313,6 +313,10 @@ void BoxLayout::insertItem(int index, LayoutItem *item)
 
 void BoxLayout::addItem(LayoutItem *item)
 {
+    if (!item) {
+        return;
+    }
+
     insertItem(-1, item);
 }
 
@@ -325,8 +329,9 @@ void BoxLayout::removeItem(LayoutItem *item)
     item->unsetManagingLayout(this);
     d->children.removeAll(item);
 
-    if ( animator() )
-        animator()->setCurrentState(item,LayoutAnimator::RemovedState);
+    if (animator()) {
+        animator()->setCurrentState(item, LayoutAnimator::RemovedState);
+    }
 
     updateGeometry();
 }
@@ -338,13 +343,20 @@ int BoxLayout::indexOf(LayoutItem *l) const
 
 LayoutItem *BoxLayout::itemAt(int i) const
 {
+    if (i >= d->children.count()) {
+        return 0;
+    }
+
     return d->children[i];
 }
 
 LayoutItem *BoxLayout::takeAt(int i)
 {
-    return d->children.takeAt(i);
+    if (i >= d->children.count()) {
+        return 0;
+    }
 
+    return d->children.takeAt(i);
     updateGeometry();
 }
 

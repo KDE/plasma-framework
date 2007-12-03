@@ -174,12 +174,12 @@ QSizeF NodeLayout::sizeHint() const
     return d->sizeHint;
 }
 
-void NodeLayout::addItem (LayoutItem * item)
+void NodeLayout::addItem(LayoutItem * item)
 {
-    NodeLayout::addItem (item, NodeCoordinate());
+    NodeLayout::addItem(item, NodeCoordinate());
 }
 
-void NodeLayout::addItem (LayoutItem * item, NodeCoordinate topLeft, NodeCoordinate bottomRight)
+void NodeLayout::addItem(LayoutItem * item, NodeCoordinate topLeft, NodeCoordinate bottomRight)
 {
     if (!item) {
         return;
@@ -190,7 +190,7 @@ void NodeLayout::addItem (LayoutItem * item, NodeCoordinate topLeft, NodeCoordin
     d->calculateSizeHint(item);
 }
 
-void NodeLayout::addItem (LayoutItem * item, NodeCoordinate node, qreal xr, qreal yr)
+void NodeLayout::addItem(LayoutItem * item, NodeCoordinate node, qreal xr, qreal yr)
 {
     if (!item) {
         return;
@@ -202,7 +202,7 @@ void NodeLayout::addItem (LayoutItem * item, NodeCoordinate node, qreal xr, qrea
     d->calculateSizeHint(item);
 }
 
-void NodeLayout::removeItem (LayoutItem * item)
+void NodeLayout::removeItem(LayoutItem * item)
 {
     if (!item) {
         return;
@@ -220,17 +220,28 @@ int NodeLayout::count() const
 
 int NodeLayout::indexOf(LayoutItem * item) const
 {
-    if (!item) return -1;
+    if (!item) {
+        return -1;
+    }
+
     return d->items.keys().indexOf(item);
 }
 
 LayoutItem * NodeLayout::itemAt(int i) const
 {
+    if (i >= d->items.count()) {
+        return 0;
+    }
+
     return d->items.keys()[i];
 }
 
 LayoutItem * NodeLayout::takeAt(int i)
 {
+    if (i >= d->items.count()) {
+        return 0;
+    }
+
     LayoutItem * item = itemAt(i);
     removeItem(item);
     return item;

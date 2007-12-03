@@ -57,7 +57,7 @@ int FlowLayout::count() const
 
 void FlowLayout::addItem(LayoutItem* item)
 {
-    if (d->items.contains(item)) {
+    if (!item || d->items.contains(item)) {
         return;
     }
 
@@ -71,6 +71,10 @@ void FlowLayout::addItem(LayoutItem* item)
 }
 void FlowLayout::removeItem(LayoutItem* item)
 {
+    if (!item) {
+        return;
+    }
+
     item->unsetManagingLayout(this);
     d->items.removeAll(item);
 
@@ -80,12 +84,21 @@ void FlowLayout::removeItem(LayoutItem* item)
 }
 int FlowLayout::indexOf(LayoutItem* item) const
 {
+    if (!item) {
+        return -1;
+    }
+
     return d->items.indexOf(item);
 }
 LayoutItem* FlowLayout::itemAt(int i) const
 {
+    if (i >= d->items.count()) {
+        return 0;
+    }
+
     return d->items[i];
 }
+
 QSizeF FlowLayout::sizeHint() const
 {
     // TODO A proper algorithm here
@@ -98,8 +111,13 @@ QSizeF FlowLayout::sizeHint() const
     // testing
     return QSizeF(500,500);
 }
+
 LayoutItem* FlowLayout::takeAt(int i)
 {
+    if (i >= d->items.count()) {
+        return 0;
+    }
+
     return d->items.takeAt(i);
 }
 
@@ -123,7 +141,7 @@ void FlowLayout::relayout()
     qreal totalWidth = 0;
     qreal totalHeight = 0;
 
-    foreach( LayoutItem *item , d->items ) {
+    foreach(LayoutItem *item , d->items) {
         totalWidth += item->sizeHint().width();
         totalHeight += item->sizeHint().height();
     }
@@ -146,8 +164,7 @@ void FlowLayout::relayout()
     qreal rowHeight = 0;
 
     // lay the items out in left-to-right , top-to-bottom order
-    foreach( LayoutItem *item , d->items ) {
-    
+    foreach(LayoutItem *item , d->items) {
         const QSizeF& itemSize = item->sizeHint();
 
         int columnSpan = (int)ceil(itemSize.width() / averageWidth);
