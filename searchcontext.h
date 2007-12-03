@@ -154,7 +154,7 @@ class PLASMA_EXPORT SearchContext : public QObject
          */
         void clearMatches();
 
-    signals:
+    Q_SIGNALS:
         void matchesChanged();
 
     private:
