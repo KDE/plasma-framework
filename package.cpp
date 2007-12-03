@@ -178,8 +178,8 @@ QStringList Package::knownPackages(const QString& packageRoot) // static
 
     QStringList packages;
 
-    foreach (const QString& dir, dir.entryList(QDir::AllDirs | QDir::Readable)) {
-        QString metadata = packageRoot + '/' + dir + "/metadata.desktop";
+    foreach (const QString& sdir, dir.entryList(QDir::AllDirs | QDir::Readable)) {
+        QString metadata = packageRoot + '/' + sdir + "/metadata.desktop";
         if (QFile::exists(metadata)) {
             PackageMetadata m(metadata);
             packages << m.name();
