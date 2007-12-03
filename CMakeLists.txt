@@ -44,7 +44,7 @@ set(plasma_LIB_SRCS
     plasma.cpp
     plasma_export.h
     scriptengine.cpp
-    searchaction.cpp
+    searchmatch.cpp
     searchcontext.cpp
     shadowitem.cpp
     svg.cpp
@@ -115,7 +115,7 @@ set(plasma_LIB_INCLUDES
     plasma.h
     plasma_export.h
     scriptengine.h
-    searchaction.h
+    searchmatch.h
     searchcontext.h
     shadowitem_p.h
     svg.h
@@ -176,6 +176,8 @@ install(FILES
     includes/DataEngine
     includes/DataEngineManager
     includes/ScriptEngine
+    includes/SearchContext
+    includes/SearchMatch
     includes/Svg
     includes/UiLoader
     includes/PackageMetadata

@@ -23,7 +23,7 @@
 #include <QtCore/QObject>
 
 #include <plasma/plasma_export.h>
-#include <plasma/searchaction.h>
+#include <plasma/searchmatch.h>
 #include <plasma/searchcontext.h>
 
 class KCompletion;
@@ -107,7 +107,7 @@ class PLASMA_EXPORT AbstractRunner : public QObject
          * Called whenever an exact or possible match associated with this
          * runner is triggered.
          */
-        virtual void exec(Plasma::SearchAction *action);
+        virtual void exec(Plasma::SearchMatch *action);
 
     protected:
         /**

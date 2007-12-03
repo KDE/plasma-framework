@@ -17,20 +17,20 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "searchaction.h"
+#include "searchmatch.h"
 
 #include "abstractrunner.h"
 
 namespace Plasma
 {
 
-class SearchAction::Private
+class SearchMatch::Private
 {
     public:
         Private(SearchContext* s, AbstractRunner *r)
             : /*search(s),*/
               runner(r),
-              type(SearchAction::ExactMatch),
+              type(SearchMatch::ExactMatch),
               enabled(true),
               relevance(1)
         {
@@ -40,7 +40,7 @@ class SearchAction::Private
         QString searchTerm;
         SearchContext *search;
         AbstractRunner *runner;
-        SearchAction::Type type;
+        SearchMatch::Type type;
         QString mimetype;
         QString text;
         QIcon icon;
@@ -50,104 +50,104 @@ class SearchAction::Private
 };
 
 
-SearchAction::SearchAction(SearchContext *search, AbstractRunner *runner)
+SearchMatch::SearchMatch(SearchContext *search, AbstractRunner *runner)
     : d(new Private(search, runner))
 {
 }
 
-SearchAction::~SearchAction()
+SearchMatch::~SearchMatch()
 {
     delete d;
 }
 
-void SearchAction::setType(Type type)
+void SearchMatch::setType(Type type)
 {
     d->type = type;
 }
 
-SearchAction::Type SearchAction::type() const
+SearchMatch::Type SearchMatch::type() const
 {
     return d->type;
 }
 
-void SearchAction::setMimetype(const QString &mimetype)
+void SearchMatch::setMimetype(const QString &mimetype)
 {
     d->mimetype = mimetype;
 }
 
-QString SearchAction::mimetype() const
+QString SearchMatch::mimetype() const
 {
     return d->mimetype;//.isEmpty() ? d->search->mimetype() : d->mimetype;
 }
 
-QString SearchAction::searchTerm() const
+QString SearchMatch::searchTerm() const
 {
     return d->searchTerm;//->searchTerm();
 }
 
-void SearchAction::setRelevance(qreal relevance)
+void SearchMatch::setRelevance(qreal relevance)
 {
     d->relevance = qMax(0.0, qMin(1.0, relevance));
 }
 
-qreal SearchAction::relevance() const
+qreal SearchMatch::relevance() const
 {
     return d->relevance;
 }
 
-AbstractRunner* SearchAction::runner() const
+AbstractRunner* SearchMatch::runner() const
 {
     return d->runner;
 }
 
-void SearchAction::setText(const QString& text)
+void SearchMatch::setText(const QString& text)
 {
     d->text = text;
 }
 
-void SearchAction::setData(const QVariant& data)
+void SearchMatch::setData(const QVariant& data)
 {
     d->data = data;
 }
 
-void SearchAction::setIcon(const QIcon& icon)
+void SearchMatch::setIcon(const QIcon& icon)
 {
     d->icon = icon;
 }
 
-QVariant SearchAction::data() const
+QVariant SearchMatch::data() const
 {
     return d->data;
 }
 
-QString SearchAction::text() const
+QString SearchMatch::text() const
 {
     return d->text;
 }
 
-QIcon SearchAction::icon() const
+QIcon SearchMatch::icon() const
 {
     return d->icon;
 }
 
-void SearchAction::setEnabled( bool enabled )
+void SearchMatch::setEnabled( bool enabled )
 {
     d->enabled = enabled;
 }
 
-bool SearchAction::isEnabled() const
+bool SearchMatch::isEnabled() const
 {
   return d->enabled;
 }
 
-bool SearchAction::operator<(const SearchAction& other) const
+bool SearchMatch::operator<(const SearchMatch& other) const
 {
     return d->relevance < other.d->relevance;
 }
 
-void SearchAction::exec()
+void SearchMatch::exec()
 {
-    if(d->runner) {
+    if (d->runner) {
     //TODO: this could be dangerous if the runner is deleted behind our backs.
         d->runner->exec(this);
     }
@@ -155,4 +155,4 @@ void SearchAction::exec()
 
 }
 
-#include "searchaction.moc"
+#include "searchmatch.moc"

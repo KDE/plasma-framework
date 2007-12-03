@@ -54,9 +54,9 @@ void AbstractRunner::performMatch( Plasma::SearchContext &globalContext )
 
     match( &localContext );
 
-    QList<SearchAction *> exact = localContext.exactMatches().mid(exactEnd);
-    QList<SearchAction *> possible = localContext.possibleMatches().mid(possibleEnd);
-    QList<SearchAction *> info = localContext.informationalMatches().mid(infoEnd);
+    QList<SearchMatch *> exact = localContext.exactMatches().mid(exactEnd);
+    QList<SearchMatch *> possible = localContext.possibleMatches().mid(possibleEnd);
+    QList<SearchMatch *> info = localContext.informationalMatches().mid(infoEnd);
 
     //If matches were not added, delete items on the heap
     if (!globalContext.addMatches(localContext.searchTerm(), exact, possible, info)) {
@@ -96,7 +96,7 @@ void AbstractRunner::createConfigurationInterface(QWidget *widget)
     Q_UNUSED(widget)
 }
 
-void AbstractRunner::exec(Plasma::SearchAction *action)
+void AbstractRunner::exec(Plasma::SearchMatch *action)
 {
     Q_UNUSED(action)
 }

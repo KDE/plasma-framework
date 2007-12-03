@@ -30,7 +30,7 @@
 #include <KStandardDirs>
 #include <KUrl>
 
-#include "searchaction.h"
+#include "searchmatch.h"
 
 namespace Plasma
 {
@@ -105,9 +105,9 @@ class SearchContext::Private
         }
 
         QReadWriteLock lock;
-        QList<SearchAction *> info;
-        QList<SearchAction *> exact;
-        QList<SearchAction *> possible;
+        QList<SearchMatch *> info;
+        QList<SearchMatch *> exact;
+        QList<SearchMatch *> possible;
         QString term;
         QString mimetype;
         SearchContext::Type type;
@@ -243,33 +243,33 @@ void SearchContext::addStringCompletions(const QStringList &completion)
     d->unlock();
 }
 
-SearchAction* SearchContext::addInformationalMatch(AbstractRunner *runner)
+SearchMatch* SearchContext::addInformationalMatch(AbstractRunner *runner)
 {
-    SearchAction *action = new SearchAction(this, runner);
-    action->setType(SearchAction::InformationalMatch);
+    SearchMatch *action = new SearchMatch(this, runner);
+    action->setType(SearchMatch::InformationalMatch);
     d->info.append(action);
     return action;
 }
 
-SearchAction* SearchContext::addExactMatch(AbstractRunner *runner)
+SearchMatch* SearchContext::addExactMatch(AbstractRunner *runner)
 {
-    SearchAction *action = new SearchAction(this, runner);
-    action->setType(SearchAction::ExactMatch);
+    SearchMatch *action = new SearchMatch(this, runner);
+    action->setType(SearchMatch::ExactMatch);
     d->exact.append(action);
     return action;
 }
 
-SearchAction* SearchContext::addPossibleMatch(AbstractRunner *runner)
+SearchMatch* SearchContext::addPossibleMatch(AbstractRunner *runner)
 {
-    SearchAction *action = new SearchAction(this, runner);
-    action->setType(SearchAction::PossibleMatch);
+    SearchMatch *action = new SearchMatch(this, runner);
+    action->setType(SearchMatch::PossibleMatch);
     d->possible.append(action);
     return action;
 }
 
-bool SearchContext::addMatches( const QString& term, const QList<SearchAction *> &exactMatches,
-                                                      const QList<SearchAction *> &possibleMatches,
-                                                      const QList<SearchAction *> &informationalMatches )
+bool SearchContext::addMatches( const QString& term, const QList<SearchMatch *> &exactMatches,
+                                                      const QList<SearchMatch *> &possibleMatches,
+                                                      const QList<SearchMatch *> &informationalMatches )
 {
     if (searchTerm() != term) {
         return false;
@@ -283,26 +283,26 @@ bool SearchContext::addMatches( const QString& term, const QList<SearchAction *>
     return true;
 }
 
-QList<SearchAction *> SearchContext::informationalMatches() const
+QList<SearchMatch *> SearchContext::informationalMatches() const
 {
     d->lockForRead();
-    QList<SearchAction *> matches = d->info;
+    QList<SearchMatch *> matches = d->info;
     d->unlock();
     return matches;
 }
 
-QList<SearchAction *> SearchContext::exactMatches() const
+QList<SearchMatch *> SearchContext::exactMatches() const
 {
     d->lockForRead();
-    QList<SearchAction *> matches = d->exact;
+    QList<SearchMatch *> matches = d->exact;
     d->unlock();
     return matches;
 }
 
-QList<SearchAction *> SearchContext::possibleMatches() const
+QList<SearchMatch *> SearchContext::possibleMatches() const
 {
     d->lockForRead();
-    QList<SearchAction *> matches = d->possible;
+    QList<SearchMatch *> matches = d->possible;
     d->unlock();
     return matches;
 }

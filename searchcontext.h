@@ -30,7 +30,7 @@ class KCompletion;
 namespace Plasma
 {
 
-class SearchAction;
+class SearchMatch;
 class AbstractRunner;
 
 /**
@@ -106,43 +106,43 @@ class PLASMA_EXPORT SearchContext : public QObject
          * If string data is added to the action using QAction::setData(), that
          * string may be used in user interfaces when the item is selected.
          */
-        SearchAction* addInformationalMatch(AbstractRunner *runner);
+        SearchMatch* addInformationalMatch(AbstractRunner *runner);
 
         /**
          * Add an action that represents an exact match to the current search term.
          */
-        SearchAction* addExactMatch(AbstractRunner *runner);
+        SearchMatch* addExactMatch(AbstractRunner *runner);
 
         /**
          * Add an action that represents a possible match to the current search term.
          */
-        SearchAction* addPossibleMatch(AbstractRunner *runner);
+        SearchMatch* addPossibleMatch(AbstractRunner *runner);
 
         /**
          * Appends lists of matches to the lists for exact, possible, and informational matches
          * @return true if matches were added, false if matches were outdated
          */
-        bool addMatches( const QString& term, const QList<SearchAction *> &exactMatches,
-                                     const QList<SearchAction *> &possibleMatches,
-                                     const QList<SearchAction *> &informationalMatches );
+        bool addMatches( const QString& term, const QList<SearchMatch *> &exactMatches,
+                                     const QList<SearchMatch *> &possibleMatches,
+                                     const QList<SearchMatch *> &informationalMatches );
 
         /**
          * Retrieves all available informational matches for the current
          * search term.
          */
-        QList<SearchAction *> informationalMatches() const;
+        QList<SearchMatch *> informationalMatches() const;
 
         /**
          * Retrieves all available exact matches for the current
          * search term.
          */
-        QList<SearchAction *> exactMatches() const;
+        QList<SearchMatch *> exactMatches() const;
 
         /**
          * Retrieves all available possible matches for the current
          * search term.
          */
-        QList<SearchAction *> possibleMatches() const;
+        QList<SearchMatch *> possibleMatches() const;
 
         /**
          * Determines type of query

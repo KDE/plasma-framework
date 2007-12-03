@@ -30,7 +30,7 @@ namespace Plasma
 class SearchContext;
 class AbstractRunner;
 
-class PLASMA_EXPORT SearchAction /*: public QAction*/
+class PLASMA_EXPORT SearchMatch /*: public QAction*/
 {
 //     Q_OBJECT
 
@@ -39,8 +39,8 @@ class PLASMA_EXPORT SearchAction /*: public QAction*/
                     ExactMatch,
                     PossibleMatch };
 
-        SearchAction(SearchContext *search, AbstractRunner *runner);
-        ~SearchAction();
+        SearchMatch(SearchContext *search, AbstractRunner *runner);
+        ~SearchMatch();
 
         /**
          * Sets the type of match this action represents.
@@ -100,7 +100,7 @@ class PLASMA_EXPORT SearchAction /*: public QAction*/
         QIcon icon() const;
         bool isEnabled() const;
 
-        bool operator<(const SearchAction& other) const;
+        bool operator<(const SearchMatch& other) const;
 
     //Pending a better solution, changing this to public
 //     public Q_SLOTS:
