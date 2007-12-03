@@ -61,6 +61,10 @@ void FreeLayout::addItem(LayoutItem *item)
 
 void FreeLayout::removeItem(LayoutItem *item)
 {
+    if (!item) {
+        return;
+    }
+
     d->children.removeAll(item);
     item->unsetManagingLayout(this);
 }
