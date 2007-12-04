@@ -402,13 +402,6 @@ class PLASMA_EXPORT Applet : public Widget
         bool isImmutable() const;
 
         /**
-         * Sets whether or not this applet is immutable or not.
-         *
-         * @arg immutable true if this applet should not be changeable
-         **/
-        void setImmutable(bool immutable);
-
-        /**
          * @return returns whether or not the applet is using the standard
          *         background
          **/
@@ -543,6 +536,13 @@ class PLASMA_EXPORT Applet : public Widget
         void geometryChanged();
 
     public Q_SLOTS:
+        /**
+         * Sets whether or not this applet is immutable or not.
+         *
+         * @arg immutable true if this applet should not be changeable
+         **/
+        void setImmutable(bool immutable);
+
         /**
          * Destroys the applet; it will be deleted and configurations reset.
          */

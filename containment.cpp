@@ -215,7 +215,7 @@ void Containment::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
     KMenu desktopMenu;
     //kDebug() << "context menu event " << (QObject*)applet;
     if (!applet) {
-        if (!scene() || static_cast<Corona*>(scene())->isImmutable()) {
+        if (!scene() || (static_cast<Corona*>(scene())->isImmutable() && !KAuthorized::authorizeKAction("unlock_desktop"))) {
             //kDebug() << "immutability";
             QGraphicsItem::contextMenuEvent(event);
             return;
@@ -238,6 +238,7 @@ void Containment::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
         bool hasEntries = false;
         if (applet->hasConfigurationInterface()) {
             QAction* configureApplet = new QAction(i18n("%1 Settings...", applet->name()), &desktopMenu);
+            configureApplet->setIcon(KIcon("configure"));
             connect(configureApplet, SIGNAL(triggered(bool)),
                     applet, SLOT(showConfigurationInterface()));
             desktopMenu.addAction(configureApplet);
@@ -249,6 +250,7 @@ void Containment::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
             QVariant appletV;
             appletV.setValue((QObject*)applet);
             closeApplet->setData(appletV);
+            closeApplet->setIcon(KIcon("edit-delete"));
             connect(closeApplet, SIGNAL(triggered(bool)),
                     this, SLOT(destroyApplet()));
             desktopMenu.addAction(closeApplet);
@@ -650,7 +652,7 @@ bool Containment::sceneEventFilter(QGraphicsItem *watched, QEvent *event)
     switch (event->type()) {
     case QEvent::GraphicsSceneHoverEnter:
         //kDebug() << "got hoverenterEvent" << d->immutable << " " << applet->isImmutable();
-        if (!d->immutable && !applet->isImmutable() && !d->handles.contains(applet)) {
+        if (!d->immutable && !applet->isImmutable() && !corona()->isImmutable() && !d->handles.contains(applet)) {
             //kDebug() << "generated applet handle";
             AppletHandle *handle = new AppletHandle(this, applet);
             d->handles[applet] = handle;

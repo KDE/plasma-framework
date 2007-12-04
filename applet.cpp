@@ -599,7 +599,7 @@ QString Applet::category(const QString& appletName)
 
 bool Applet::isImmutable() const
 {
-    return d->immutable || d->kioskImmutable;
+    return (containment() && containment()->isImmutable()) || d->immutable || d->kioskImmutable;
 }
 
 void Applet::setImmutable(bool immutable)
