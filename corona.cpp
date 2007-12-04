@@ -125,7 +125,6 @@ void Corona::saveApplets(const QString &config) const
     KConfig cg(config);
     d->configName = config;
 
-    QStringList containmentIds;
     KConfigGroup containments(&cg, "Containments");
     foreach (const Containment *containment, d->containments) {
         QString cid = QString::number(containment->id());
