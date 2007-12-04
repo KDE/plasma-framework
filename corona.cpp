@@ -67,6 +67,7 @@ public:
     }
 
     bool immutable;
+    bool kioskImmutable;
     QString mimetype;
     QString configName;
     KSharedConfigPtr config;
@@ -225,7 +226,7 @@ void Corona::loadApplets(const QString& configName)
         }
     }
 
-    setImmutable(config.isImmutable());
+    d->kioskImmutable = config.isImmutable();
 }
 
 void Corona::loadApplets()
@@ -457,7 +458,12 @@ void Corona::screenResized(int screen)
 
 bool Corona::isImmutable() const
 {
-    return d->immutable;
+    return d->kioskImmutable || d->immutable;
+}
+
+bool Corona::isKioskImmutable() const
+{
+    return d->kioskImmutable;
 }
 
 void Corona::setImmutable(bool immutable)

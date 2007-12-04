@@ -402,6 +402,11 @@ class PLASMA_EXPORT Applet : public Widget
         bool isImmutable() const;
 
         /**
+         * @return true if this applet is immutable due to Kiosk settings
+         */
+        bool isKioskImmutable() const;
+
+        /**
          * @return returns whether or not the applet is using the standard
          *         background
          **/

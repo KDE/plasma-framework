@@ -53,6 +53,11 @@ public:
     bool isImmutable() const;
 
     /**
+     * @return true if this Corona is immutable due to Kiosk settings
+     */
+    bool isKioskImmutable() const;
+
+    /**
      * A rect containing the maximum size a plasmoid on this corona should
      * consider being.
      **/

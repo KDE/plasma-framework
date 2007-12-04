@@ -599,7 +599,14 @@ QString Applet::category(const QString& appletName)
 
 bool Applet::isImmutable() const
 {
-    return (containment() && containment()->isImmutable()) || d->immutable || d->kioskImmutable;
+    return  d->immutable || d->kioskImmutable ||
+            (containment() && containment()->isImmutable()) ||
+            (scene() && static_cast<Corona*>(scene())->isImmutable());
+}
+
+bool Applet::isKioskImmutable() const
+{
+    return d->kioskImmutable;
 }
 
 void Applet::setImmutable(bool immutable)
@@ -716,7 +723,9 @@ void Applet::performSetupConfig()
 
 void Applet::checkImmutability()
 {
-    d->kioskImmutable = globalConfig().isImmutable() || config().isImmutable();
+    d->kioskImmutable = globalConfig().isImmutable() || config().isImmutable() ||
+                        (containment() && containment()->isKioskImmutable()) ||
+                        (scene() && static_cast<Corona*>(scene())->isKioskImmutable());
     setImmutable(d->kioskImmutable);
 }
 
@@ -883,13 +892,14 @@ FormFactor Applet::formFactor() const
 Containment* Applet::containment() const
 {
     QGraphicsItem *parent = parentItem();
+    Containment *c = 0;
     while (parent) {
-        if (dynamic_cast<Containment*>(parent)) {
+        if ((c = dynamic_cast<Containment*>(parent))) {
             break;
         }
         parent = parent->parentItem();
     }
-    return dynamic_cast<Containment*>(parent);
+    return c;
 }
 
 Location Applet::location() const
