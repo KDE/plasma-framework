@@ -41,7 +41,8 @@ public:
     QRectF boundingRect() const;
     QPainterPath shape() const;
 
-    void addTool(QGraphicsItem *tool);
+    void addTool(QGraphicsItem *tool, const QString &name);
+    void enableTool(const QString &tool, bool enabled);
 
 protected:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);

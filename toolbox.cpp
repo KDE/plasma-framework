@@ -23,10 +23,15 @@
 #include <QPainter>
 #include <QRadialGradient>
 
+#include <KDebug>
+
 #include "widgets/widget.h"
 
 namespace Plasma
 {
+
+// used with QGrahphicsItem::setData
+static const int ToolName = 7001;
 
 DesktopToolbox::DesktopToolbox(QGraphicsItem *parent)
     : QGraphicsItem(parent),
@@ -89,7 +94,11 @@ void DesktopToolbox::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
     int y = 0; // pos().y();
     Plasma::Phase* phase = Plasma::Phase::self();
     foreach (QGraphicsItem* tool, QGraphicsItem::children()) {
-//        kDebug() << "let's show and move" << (QObject*)tool << tool->geometry().toRect();
+        if (!tool->isEnabled()) {
+            continue;
+        }
+
+        //kDebug() << "let's show and move" << tool << tool->boundingRect();
         tool->show();
         phase->moveItem(tool, Plasma::Phase::SlideIn, QPoint(x, y));
         //x += 0;
@@ -112,6 +121,11 @@ void DesktopToolbox::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
     int y = 0;
     Plasma::Phase* phase = Plasma::Phase::self();
     foreach (QGraphicsItem* tool, QGraphicsItem::children()) {
+        if (!tool->isEnabled()) {
+            tool->hide();
+            continue;
+        }
+
         phase->moveItem(tool, Plasma::Phase::SlideOut, QPoint(x, y));
     }
 
@@ -150,7 +164,7 @@ void DesktopToolbox::toolMoved(QGraphicsItem *item)
     }
 }
 
-void DesktopToolbox::addTool(QGraphicsItem *tool)
+void DesktopToolbox::addTool(QGraphicsItem *tool, const QString &name)
 {
     if (!tool) {
         return;
@@ -160,6 +174,25 @@ void DesktopToolbox::addTool(QGraphicsItem *tool)
     tool->setPos(QPoint(0,0));
     tool->setZValue(zValue() + 1);
     tool->setParentItem(this);
+    tool->setData(ToolName, name);
+}
+
+void DesktopToolbox::enableTool(const QString &toolName, bool visible)
+{
+    //kDebug() << (visible? "enabling" : "disabling") << "tool" << toolName;
+    QGraphicsItem *tool = 0;
+    foreach (QGraphicsItem *child, QGraphicsItem::children()) {
+        //kDebug() << "checking tool" << child << child->data(ToolName);
+        if (child->data(ToolName).toString() == toolName) {
+            //kDebug() << "tool found!";
+            tool = child;
+            break;
+        }
+    }
+
+    if (tool) {
+        tool->setEnabled(visible);
+    }
 }
 
 } // plasma namespace
