@@ -22,7 +22,7 @@
 #ifndef PLASMA_DIALOG_H
 #define PLASMA_DIALOG_H
 
-#include <QWidget>
+#include <QtGui/QWidget>
 #include <QtGui/QGraphicsSceneEvent>
 
 #include <plasma/plasma_export.h>
