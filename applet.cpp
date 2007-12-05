@@ -611,7 +611,13 @@ bool Applet::isKioskImmutable() const
 
 void Applet::setImmutable(bool immutable)
 {
+    if (d->immutable == immutable) {
+        return;
+    }
+
     d->immutable = immutable;
+    // TODO: should we tell the applets too?
+    updateConstraints(ImmutableConstraint);
 }
 
 bool Applet::drawStandardBackground()
@@ -911,6 +917,11 @@ Location Applet::location() const
     }
 
     return c->location();
+}
+
+QRectF Applet::contentRect() const
+{
+    return QRectF(QPointF(0, 0), contentSize());
 }
 
 QSizeF Applet::contentSize() const

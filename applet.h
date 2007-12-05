@@ -216,8 +216,12 @@ class PLASMA_EXPORT Applet : public Widget
         virtual Location location() const;
 
         /**
-         * Returns the area within which contents can be painted. If there is no
-         * background, then this is equivalent to boundingRect().size()
+         * Returns the rect that the contents are positioned within in local coordinates
+         */
+        QRectF contentRect() const;
+
+        /**
+         * Returns the area within which contents can be painted.
          **/
         QSizeF contentSize() const;
 
