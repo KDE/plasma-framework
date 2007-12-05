@@ -31,6 +31,7 @@ set(plasma_LIB_SRCS
     datacontainer.cpp
     dataengine.cpp
     dataenginemanager.cpp
+    dialog.cpp
     layouts/boxlayout.cpp
     layouts/borderlayout.cpp
     layouts/freelayout.cpp
@@ -111,6 +112,7 @@ set(plasma_LIB_INCLUDES
     datacontainer.h
     dataengine.h
     dataenginemanager.h
+    dialog.h
     phase.h
     plasma.h
     plasma_export.h
