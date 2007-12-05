@@ -472,6 +472,11 @@ void Corona::setImmutable(bool immutable)
     }
 
     d->immutable = immutable;
+    foreach (Containment *c, d->containments) {
+        // we need to tell each containment that immutability has been altered
+        // TODO: should we tell the applets too?
+        c->updateConstraints(ImmutableConstraint);
+    }
 }
 
 } // namespace Plasma
