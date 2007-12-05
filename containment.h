@@ -217,7 +217,7 @@ class PLASMA_EXPORT Containment : public Applet
          * Adds an item to the toolbox. The toolbox takes over ownership of the item.
          * TODO: add remove and accessor methods
          */
-        void addToolBoxTool(QGraphicsItem *tool);
+        void addToolBoxTool(QGraphicsItem *tool, const QString &toolname = QString());
 
         /**
          * @internal

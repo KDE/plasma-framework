@@ -145,8 +145,15 @@ void Containment::saveConstraints(KConfigGroup* group) const
 
 void Containment::containmentConstraintsUpdated(Plasma::Constraints constraints)
 {
-    if (d->toolbox && constraints & Plasma::ScreenConstraint) {
-        d->toolbox->setPos(geometry().width() - d->toolbox->boundingRect().width(), 0);
+    //kDebug() << "got containmentConstraintsUpdated" << constraints << (QObject*)d->toolbox;
+    if (d->toolbox) {
+        if (constraints & Plasma::ScreenConstraint) {
+            d->toolbox->setPos(geometry().width() - d->toolbox->boundingRect().width(), 0);
+        }
+
+        if (constraints & Plasma::ImmutableConstraint) {
+            d->toolbox->enableTool("addwidgets", !isImmutable());
+        }
     }
 }
 
@@ -163,7 +170,7 @@ void Containment::setContainmentType(Containment::Type type)
         if (!d->toolbox) {
             Plasma::PushButton *tool = new Plasma::PushButton(i18n("Add Widgets"));
             tool->resize(tool->sizeHint());
-            addToolBoxTool(tool);
+            addToolBoxTool(tool, "addwidgets");
             connect(tool, SIGNAL(clicked()), this, SIGNAL(showAddWidgets()));
 
             tool = new Plasma::PushButton(i18n("Zoom In"));
@@ -681,14 +688,14 @@ void Containment::emitLaunchActivated()
     emit launchActivated();
 }
 
-void Containment::addToolBoxTool(QGraphicsItem *tool)
+void Containment::addToolBoxTool(QGraphicsItem *tool, const QString& toolName)
 {
     if (!d->toolbox) {
         d->toolbox = new DesktopToolbox(this);
         d->toolbox->setPos(geometry().width() - d->toolbox->boundingRect().width(), 0);
     }
 
-    d->toolbox->addTool(tool);
+    d->toolbox->addTool(tool, toolName);
 }
 
 } // Plasma namespace
