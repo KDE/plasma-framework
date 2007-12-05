@@ -23,7 +23,7 @@
 #define PLASMA_DIALOG_H
 
 #include <QWidget>
-#include <QtGui/QGraphicsSceneMouseEvent>
+#include <QtGui/QGraphicsSceneEvent>
 
 #include <plasma/plasma_export.h>
 
@@ -61,7 +61,7 @@ class PLASMA_EXPORT Dialog : public QWidget
          * @arg boundingRect the boundingRect() from the applet.
          * @arg scenePos the absolute position on the scene.
          */
-        void position(QGraphicsSceneMouseEvent *event, const QRectF boundingRect, QPointF scenePos);
+        void position(QGraphicsSceneEvent *event, const QRectF boundingRect, QPointF scenePos);
 
     protected:
         /**

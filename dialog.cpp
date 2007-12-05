@@ -27,7 +27,7 @@
 #include <QMouseEvent>
 #include <QX11Info>
 #include <QGraphicsView>
-#include <QtGui/QGraphicsSceneMouseEvent>
+#include <QtGui/QGraphicsSceneEvent>
 
 #include <KDebug>
 #include <NETRootInfo>
@@ -166,7 +166,7 @@ void Dialog::paintBackground(QPainter* painter, const QRect &exposedRect)
     painter->drawPixmap(exposedRect, *m_cachedBackground, exposedRect);
 }
 
-void Dialog::position(QGraphicsSceneMouseEvent *event, const QRectF boundingRect, QPointF scenePos)
+void Dialog::position(QGraphicsSceneEvent *event, const QRectF boundingRect, QPointF scenePos)
 {
     QWidget *viewWidget = event->widget() ? event->widget()->parentWidget() : 0;
     //QPointF scenePos = mapToScene(boundingRect.topLeft());
