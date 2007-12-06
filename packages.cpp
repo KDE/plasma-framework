@@ -32,20 +32,22 @@ PlasmoidStructure::PlasmoidStructure()
     mimetypes << "image/svg+xml" << "image/png" << "image/jpeg";
     setMimetypes("images", mimetypes);
 
-    addDirectoryDefinition("config", "config/xml", i18n("Configuration Definitions"));
-    addDirectoryDefinition("configui", "config/ui", i18n("Configuration UI"));
+    addDirectoryDefinition("config", "config/", i18n("Configuration Definitions"));
     mimetypes.clear();
     mimetypes << "text/xml";
     setMimetypes("config", mimetypes);
     setMimetypes("configui", mimetypes);
+
+    addDirectoryDefinition("ui", "ui", i18n("Executable Scripts"));
+    setMimetypes("ui", mimetypes);
 
     addDirectoryDefinition("scripts", "code", i18n("Executable Scripts"));
     mimetypes.clear();
     mimetypes << "text/*";
     setMimetypes("scripts", mimetypes);
 
-    addFileDefinition("mainconfiggui", "config/ui/main.ui", i18n("Main Config UI File"));
-    addFileDefinition("mainconfigxml", "config/xml/main.xml", i18n("Configuration XML file"));
+    addFileDefinition("mainconfiggui", "ui/config.ui", i18n("Main Config UI File"));
+    addFileDefinition("mainconfigxml", "config/main.xml", i18n("Configuration XML file"));
     addFileDefinition("mainscript", "code/main", i18n("Main Script File"));
     setRequired("mainscript", true);
 }
@@ -68,6 +70,8 @@ ThemePackageStructure::ThemePackageStructure()
                       i18n("Analog clock face"));
     addFileDefinition("widgets/iconbutton", "widgets/iconbutton.svg",
                       i18n("Back- and foregrounds for clickable icons"));
+    addFileDefinition("widgets/panel-background", "widgets/panel-background.svg",
+                      i18n("Default background image for panels"));
     addFileDefinition("widgets/plot-background", "widgets/plot-background.svg",
                       i18n("Background for graphing widgets"));
 
