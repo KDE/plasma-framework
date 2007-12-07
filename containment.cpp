@@ -138,6 +138,7 @@ void Containment::loadConstraints(KConfigGroup* group)
 
 void Containment::saveConstraints(KConfigGroup* group) const
 {
+    // locking is saved in Applet::save
     group->writeEntry("screen", d->screen);
     group->writeEntry("formfactor", (int)d->formFactor);
     group->writeEntry("location", (int)d->location);

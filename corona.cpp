@@ -100,6 +100,11 @@ Corona::Corona(qreal x, qreal y, qreal width, qreal height, QObject * parent)
 
 Corona::~Corona()
 {
+    KConfigGroup cg(config(), "General");
+
+    // we call the dptr member directly for locked since isImmutable()
+    // also checks kiosk and parent containers
+    cg.writeEntry("locked", d->immutable);
     delete d;
 }
 
@@ -149,8 +154,7 @@ void Corona::loadApplets(const QString& configName)
     clearApplets();
     d->configName = configName;
 
-    KConfig config(configName, KConfig::SimpleConfig);
-    KConfigGroup containments(&config, "Containments");
+    KConfigGroup containments(config(), "Containments");
 
     foreach (const QString& group, containments.groupList()) {
         KConfigGroup containmentConfig(&containments, group);
@@ -225,7 +229,9 @@ void Corona::loadApplets(const QString& configName)
         }
     }
 
-    d->kioskImmutable = config.isImmutable();
+    d->kioskImmutable = config()->isImmutable();
+    KConfigGroup coronaConfig(config(), "General");
+    setImmutable(coronaConfig.readEntry("locked", false));
 }
 
 void Corona::loadApplets()
@@ -467,6 +473,7 @@ bool Corona::isKioskImmutable() const
 
 void Corona::setImmutable(bool immutable)
 {
+    kDebug() << "setting immutability to" << immutable;
     if (d->immutable == immutable) {
         return;
     }

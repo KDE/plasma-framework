@@ -433,6 +433,9 @@ uint Applet::id() const
 
 void Applet::save(KConfigGroup* group) const
 {
+    // we call the dptr member directly for locked since isImmutable()
+    // also checks kiosk and parent containers
+    group->writeEntry("locked", d->immutable);
     group->writeEntry("plugin", pluginName());
     //FIXME: for containments, we need to have some special values here w/regards to
     //       screen affinity (e.g. "bottom of screen 0")
