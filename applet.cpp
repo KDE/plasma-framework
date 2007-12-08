@@ -935,7 +935,7 @@ QSizeF Applet::contentSize() const
     // kDebug() << "Geometry size: " << geometry().size();
     // kDebug() << "Borders: " << left << top << right << bottom;
 
-    return geometry().size() - QSizeF(left + right, top + bottom);
+    return (geometry().size() - QSizeF(left + right, top + bottom)).expandedTo(QSizeF(0, 0));
 }
 
 void Applet::setContentSize(const QSizeF &size)
