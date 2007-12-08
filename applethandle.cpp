@@ -335,6 +335,14 @@ void AppletHandle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     }
 }
 
+QVariant AppletHandle::itemChange(GraphicsItemChange change, const QVariant &value)
+{
+    if (change == ItemPositionHasChanged && m_applet) {
+        m_applet->constraintsUpdated(Plasma::LocationConstraint);
+    }
+    return QGraphicsItem::itemChange(change, value);
+}
+
 void AppletHandle::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 {
     Q_UNUSED(event);

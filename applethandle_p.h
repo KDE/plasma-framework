@@ -52,6 +52,7 @@ class AppletHandle : public QObject, public QGraphicsItem
         void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
         void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
         void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
+        QVariant itemChange(GraphicsItemChange change, const QVariant &value);
 
     Q_SIGNALS:
        void disappearDone(AppletHandle *self);
