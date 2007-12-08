@@ -25,6 +25,8 @@
 #include <limits>
 
 #include <QApplication>
+#include <QGraphicsScene>
+#include <QGraphicsView>
 #include <QList>
 #include <QPainter>
 #include <QPixmapCache>
@@ -74,6 +76,36 @@ class Widget::Private
 QGraphicsItem* Widget::graphicsItem()
 {
     return this;
+}
+
+QGraphicsView *Widget::view() const
+{
+    // It's assumed that we won't be visible on more than one view here.
+    // Anything that actually needs view() should only really care about
+    // one of them anyway though.
+    if (!scene()) {
+        return 0;
+    }
+    foreach (QGraphicsView *view, scene()->views()) {
+        if (view->sceneRect().intersects(sceneBoundingRect())) {
+            return view;
+        }
+    }
+    return 0;
+}
+
+QRectF Widget::mapFromView(const QGraphicsView *view, const QRect &rect) const
+{
+    // TODO: Confirm that adjusted() is needed and is not covering for some
+    // issue elsewhere
+    return mapFromScene(view->mapToScene(rect)).boundingRect().adjusted(0, 0, 1, 1);
+}
+
+QRect Widget::mapToView(const QGraphicsView *view, const QRectF &rect) const
+{
+    // TODO: Confirm that adjusted() is needed and is not covering for some
+    // issue elsewhere
+    return view->mapFromScene(mapToScene(rect)).boundingRect().adjusted(0, 0, -1, -1);
 }
 
 bool Widget::Private::shouldPaint(QPainter *painter, const QTransform &transform)

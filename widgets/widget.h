@@ -30,6 +30,8 @@
 #include <plasma/layouts/layoutitem.h>
 #include <plasma/plasma_export.h>
 
+class QGraphicsView;
+
 namespace Plasma
 {
 
@@ -241,6 +243,25 @@ TODO: implement once we decide how to handle the font system
     { update(QRectF(_x, _y, w, h)); }
 
     virtual QGraphicsItem* graphicsItem();
+
+    /**
+     * Returns the view this widget is visible on
+     */
+    QGraphicsView *view() const;
+
+    /**
+     * Maps a QRect from a view's coordinates to local coordinates.
+     * @param view the view from which rect should be mapped
+     * @param rect the rect to be mapped
+     */
+    QRectF mapFromView(const QGraphicsView *view, const QRect &rect) const;
+
+    /**
+     * Maps a QRectF from local coordinates to a view's coordinates.
+     * @param view the view to which rect should be mapped
+     * @param rect the rect to be mapped
+     */
+    QRect mapToView(const QGraphicsView *view, const QRectF &rect) const;
 
 protected:
     /**
