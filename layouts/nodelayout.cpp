@@ -21,6 +21,7 @@
 
 #include <QPair>
 #include <QMap>
+#include <KDebug>
 
 namespace Plasma
 {
@@ -66,8 +67,13 @@ NodeLayout::NodeCoordinate NodeLayout::NodeCoordinate::simple(qreal x, qreal y,
 class NodeLayout::Private {
 public:
     QMap <LayoutItem * , QPair < NodeCoordinate, NodeCoordinate > > items;
-    QRectF geometry;
+    //QRectF geometry;
+    NodeLayout * parent;
     QSizeF sizeHint;
+
+    Private(NodeLayout * parentLayout) {
+        parent = parentLayout;
+    }
 
     qreal calculateXPosition(const NodeCoordinate & coo, const QRectF & parentGeometry) const
     {
@@ -84,15 +90,17 @@ public:
         Q_UNUSED( parentGeometry );
 
         return QPointF(
-            calculateXPosition(coo, geometry),
-            calculateYPosition(coo, geometry)
+            calculateXPosition(coo, parent->geometry()),
+            calculateYPosition(coo, parent->geometry())
         );
     }
 
 
     QRectF calculateRectangle(LayoutItem * item, QRectF geometry = QRectF()) const
     {
-        if (geometry == QRectF()) geometry = this->geometry;
+        kDebug() << " enter geom is " << geometry << " \n";
+
+        if (geometry == QRectF()) geometry = parent->geometry();
 
         QRectF result;
         if (!item || !items.contains(item)) return QRectF();
@@ -112,6 +120,8 @@ public:
             result.setHeight(item->sizeHint().height());
             result.moveTop(result.top() - items[item].second.yr * result.height());
         }
+
+        kDebug() << " leave \n";
 
         return result;
     }
@@ -146,7 +156,7 @@ public:
 
 
 NodeLayout::NodeLayout(LayoutItem * parent) 
-  : Layout(parent), d(new Private())
+  : Layout(parent), d(new Private(this))
 {
 }
 
@@ -162,8 +172,11 @@ Qt::Orientations NodeLayout::expandingDirections() const
 
 void NodeLayout::relayout()
 {
+    kDebug() << " RELAYUOT ... \n";
+
     foreach (LayoutItem * item, d->items.keys()) {
         if (item) {
+            kDebug() << " aaRELAYUOT ..." << d->calculateRectangle(item) << "\n";
             item->setGeometry(d->calculateRectangle(item));
         }
     }
