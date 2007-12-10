@@ -27,6 +27,7 @@
 #include <KIcon>
 
 #include <cmath>
+#include <math.h>
 
 #include "applet.h"
 #include "containment.h"
@@ -236,7 +237,7 @@ void AppletHandle::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 
 qreal _k_distanceForPoint(QPointF point)
 {
-    return ::sqrt(point.x()*point.x()+point.y()*point.y());
+    return std::sqrt(point.x()*point.x()+point.y()*point.y());
 }
 
 qreal _k_angleForPoints(const QPointF &center, const QPointF &pt1, const QPointF &pt2)
@@ -244,15 +245,15 @@ qreal _k_angleForPoints(const QPointF &center, const QPointF &pt1, const QPointF
     QPointF vec1 = pt1 - center;
     QPointF vec2 = pt2 - center;
 
-    qreal alpha = ::atan2(vec1.y(), vec1.x());
-    qreal beta = ::atan2(vec2.y(), vec2.x());
+    qreal alpha = std::atan2(vec1.y(), vec1.x());
+    qreal beta = std::atan2(vec2.y(), vec2.x());
 
     return beta - alpha;
 }
 
 void AppletHandle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
-    static const qreal snapAngle = 3.14159 / 2.0;
+    static const qreal snapAngle = M_PI_2 /* $i 3.14159 / 2.0 */;
 
     if (!m_applet) {
         QGraphicsItem::mouseMoveEvent(event);
