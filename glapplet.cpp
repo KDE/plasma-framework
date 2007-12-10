@@ -71,6 +71,7 @@ GLApplet::GLApplet(QGraphicsItem *parent,
       d(new Private)
 {
     if (!d->dummy->isValid() ||
+        !QGLPixelBuffer::hasOpenGLPbuffers() ||
         !d->pbuf->isValid()) {
         setFailedToLaunch(true, i18n("This system does not support OpenGL applets."));
     }
@@ -80,6 +81,11 @@ GLApplet::GLApplet(QObject *parent, const QVariantList &args)
     : Applet(parent, args),
       d(new Private)
 {
+    if (!d->dummy->isValid() ||
+        !QGLPixelBuffer::hasOpenGLPbuffers() ||
+        !d->pbuf->isValid()) {
+        setFailedToLaunch(true, i18n("This system does not support OpenGL applets."));
+    }
 }
 
 GLApplet::~GLApplet()
