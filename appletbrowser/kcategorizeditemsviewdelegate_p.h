@@ -52,17 +52,25 @@ public:
                      const QStyleOptionViewItem &option,
                      const QModelIndex &index);
 
+Q_SIGNALS:
+    void destroyApplets(const QString name);
 private:
     
     KCategorizedItemsView * m_parent;
     KIcon m_favoriteIcon;
     KIcon m_favoriteAddIcon;
-    KIcon m_favoriteRemoveIcon;
+    KIcon m_removeIcon;
     
     mutable KCategorizedItemsViewModels::AbstractItem * m_onFavoriteIconItem;
     
     
     KCategorizedItemsViewModels::AbstractItem * getItemByProxyIndex(const QModelIndex & index) const;
+    void paintColMain(QPainter *painter,
+            const QStyleOptionViewItem &option, const KCategorizedItemsViewModels::AbstractItem * item) const;
+    void paintColFav(QPainter *painter,
+            const QStyleOptionViewItem &option, const KCategorizedItemsViewModels::AbstractItem * item) const;
+    void paintColRemove(QPainter *painter,
+            const QStyleOptionViewItem &option, const KCategorizedItemsViewModels::AbstractItem * item) const;
 };
 
 /**

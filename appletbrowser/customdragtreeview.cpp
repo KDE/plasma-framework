@@ -56,7 +56,7 @@ void CustomDragTreeView::startDrag ( Qt::DropActions supportedActions )
         QRect rect(0, 0, PIX_SIZE, PIX_SIZE);
 
         foreach (QModelIndex index, indexes) {
-            if (index.column() == 1) continue;
+            if (index.column() != 0) continue;
 
             KCategorizedItemsViewModels::AbstractItem * item =
                 m_view->getItemByProxyIndex(index);

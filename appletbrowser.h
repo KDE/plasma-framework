@@ -29,6 +29,7 @@ namespace Plasma
 
 class Corona;
 class Containment;
+class Applet;
 
 class PLASMA_EXPORT AppletBrowserWidget : public QWidget
 {
@@ -48,12 +49,28 @@ protected Q_SLOTS:
     void addApplet();
 
     /**
+     * Tracks a new running applet
+     */
+    void appletAdded(Plasma::Applet* applet);
+
+    /**
+     * A running applet is no more
+     */
+    void appletDestroyed(QObject* applet);
+
+    /**
+     * Destroy all applets with this name
+     */
+    void destroyApplets(const QString name);
+
+    /**
      * Launches a download dialog to retrieve new applets from the Internet
      */
     void downloadApplets();
 
 private:
     void init();
+    void initRunningApplets();
     class Private;
     Private * const d;
     bool m_showButtons;

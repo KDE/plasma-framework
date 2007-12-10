@@ -49,6 +49,11 @@ QString PlasmaAppletItem::description() const
     return data().toMap()["description"].toString();
 }
 
+int PlasmaAppletItem::running() const
+{
+    return data().toMap()["runningCount"].toInt();
+}
+
 void PlasmaAppletItem::setFavorite(bool favorite)
 {
     QMap<QString, QVariant> attrs = data().toMap();
@@ -67,6 +72,14 @@ void PlasmaAppletItem::setFavorite(bool favorite)
     } else {
         m_model->setFavorite(pluginName, favorite);
     }
+}
+
+void PlasmaAppletItem::setRunning(int count)
+{
+    QMap<QString, QVariant> attrs = data().toMap();
+    attrs.insert("running", count > 0); //bool for the filter
+    attrs.insert("runningCount", count);
+    setData(QVariant(attrs));
 }
 
 bool PlasmaAppletItem::passesFiltering(
@@ -134,6 +147,29 @@ void PlasmaAppletItemModel::populateModel()
                         ((m_favorites.contains(info.pluginName())) ? PlasmaAppletItem::Favorite : PlasmaAppletItem::NoFilter) |
                         ((m_used.contains(info.pluginName())) ? PlasmaAppletItem::Used : PlasmaAppletItem::NoFilter)
                         , &(extraPluginAttrs[info.pluginName()])));
+        }
+    }
+}
+
+void PlasmaAppletItemModel::setRunningApplets(const QHash<QString, int> apps)
+{
+    //foreach item, find that string and set the count
+    for (int r=0; r<rowCount(); ++r) {
+        QStandardItem *i = item(r);
+        PlasmaAppletItem *p = (PlasmaAppletItem *)i;
+        if (p) {
+            p->setRunning(apps.value(p->name()));
+        }
+    }
+}
+
+void PlasmaAppletItemModel::setRunningApplets(const QString name, int count)
+{
+    for (int r=0; r<rowCount(); ++r) {
+        QStandardItem *i = item(r);
+        PlasmaAppletItem *p = (PlasmaAppletItem *)i;
+        if (p && p->name() == name) {
+            p->setRunning(count);
         }
     }
 }

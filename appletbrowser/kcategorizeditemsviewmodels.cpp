@@ -38,6 +38,11 @@ bool AbstractItem::isFavorite() const
     return passesFiltering(Filter("favorite", true));
 }
 
+int AbstractItem::running() const
+{
+    return 0;
+}
+
 bool AbstractItem::matches(const QString & pattern) const
 {
     return name().contains(pattern, Qt::CaseInsensitive) || description().contains(pattern, Qt::CaseInsensitive);
@@ -101,7 +106,7 @@ QStandardItemModel * DefaultItemFilterProxyModel::sourceModel() const
 int DefaultItemFilterProxyModel::columnCount(const QModelIndex& index) const
 {
     Q_UNUSED(index);
-    return 2;
+    return 3;
 }
 
 QVariant DefaultItemFilterProxyModel::data(const QModelIndex & index, int role) const
@@ -234,7 +239,7 @@ int DefaultItemFilterProxyModel::InnerProxyModel::columnCount(
         const QModelIndex& index) const
 {
     Q_UNUSED(index);
-    return 2;
+    return 3; //FIXME: a hardcoded magic number that appears in two places CANNOT be good
 }
 
 void DefaultItemFilterProxyModel::InnerProxyModel::setSourceModel(

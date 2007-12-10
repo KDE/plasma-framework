@@ -51,6 +51,12 @@ public:
     virtual bool isFavorite() const;
 
     /**
+     * Returns the item's number of running applets
+     * Default implementation just returns 0
+     */
+    virtual int running() const;
+
+    /**
      * Returns if the item contains string specified by pattern.
      * Default implementation checks whether name or description contain the
      * string (not needed to be exactly that string) 
@@ -61,6 +67,10 @@ public:
      * sets the favorite flag for the item 
      */
     virtual void setFavorite(bool favorite) = 0;
+    /**
+     * sets the number of running applets for the item
+     */
+    virtual void setRunning(int count) = 0;
 
     /**
      * Returns if the item passes the filter specified 

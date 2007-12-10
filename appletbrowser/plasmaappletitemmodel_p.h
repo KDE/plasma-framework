@@ -47,7 +47,10 @@ public:
     virtual QString name() const;
     QString pluginName() const;
     virtual QString description() const;
+    virtual int running() const;
     virtual void setFavorite(bool favorite);
+    //set how many instances of this applet are running
+    virtual void setRunning(int count);
     virtual bool passesFiltering(
             const KCategorizedItemsViewModels::Filter & filter) const;
     virtual QVariantList arguments() const;
@@ -68,6 +71,8 @@ public:
     
     void setFavorite(QString plugin, bool favorite);
     void setApplication(const QString& app);
+    void setRunningApplets(const QHash<QString, int> apps);
+    void setRunningApplets(const QString name, int count);
     
     QString& Application();
 private:

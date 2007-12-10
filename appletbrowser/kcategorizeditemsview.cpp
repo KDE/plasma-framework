@@ -55,6 +55,9 @@ KCategorizedItemsView::KCategorizedItemsView(QWidget * parent, Qt::WindowFlags f
     itemsView->setItemDelegate(m_delegate = new KCategorizedItemsViewDelegate(this));
     itemsView->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
 
+    connect (m_delegate, SIGNAL(destroyApplets(const QString)),
+                  parent, SLOT(destroyApplets(const QString)));
+
     comboFilters->setItemDelegate(new KCategorizedItemsViewFilterDelegate(this));
 
     itemsView->viewport()->setAttribute(Qt::WA_Hover);
@@ -80,6 +83,7 @@ void KCategorizedItemsView::resizeEvent ( QResizeEvent * event ) {
     m_viewWidth = itemsView->viewport()->width();
     itemsView->setColumnWidth(0, m_delegate->columnWidth(0, m_viewWidth));
     itemsView->setColumnWidth(1, m_delegate->columnWidth(1, m_viewWidth));
+    itemsView->setColumnWidth(2, m_delegate->columnWidth(2, m_viewWidth));
 }
 
 void KCategorizedItemsView::setFilterModel(QStandardItemModel * model)
