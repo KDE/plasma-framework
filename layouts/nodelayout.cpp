@@ -22,6 +22,8 @@
 #include <QPair>
 #include <QMap>
 
+#include <limits>
+
 namespace Plasma
 {
 NodeLayout::NodeCoordinate::NodeCoordinate(qreal xRelative, qreal yRelative, qreal xAbsolute, qreal yAbsolute)
@@ -42,7 +44,7 @@ NodeLayout::NodeCoordinate NodeLayout::NodeCoordinate::simple(qreal x, qreal y,
         break;
     case InnerRelative:
         coo.xr = x;
-        coo.xa = INFINITY;
+        coo.xa = std::numeric_limits<float>::infinity();
         break;
     }
 
@@ -57,7 +59,7 @@ NodeLayout::NodeCoordinate NodeLayout::NodeCoordinate::simple(qreal x, qreal y,
         break;
     case InnerRelative:
         coo.yr = y;
-        coo.ya = INFINITY;
+        coo.ya = std::numeric_limits<float>::infinity();
         break;
     }
     return coo;
@@ -104,14 +106,14 @@ public:
 
         result.setTopLeft(calculatePosition(items[item].first, geometry));
 
-        if (items[item].second.xa != INFINITY) {
+        if (items[item].second.xa != std::numeric_limits<float>::infinity()) {
             result.setRight(calculateXPosition(items[item].second, geometry));
         } else {
             result.setWidth(item->sizeHint().width());
             result.moveLeft(result.left() - items[item].second.xr * result.width());
         }
 
-        if (items[item].second.ya != INFINITY) {
+        if (items[item].second.ya != std::numeric_limits<float>::infinity()) {
             result.setBottom(calculateYPosition(items[item].second, geometry));
         } else {
             result.setHeight(item->sizeHint().height());

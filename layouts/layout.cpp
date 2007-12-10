@@ -21,6 +21,7 @@
 #include "layout.h"
 
 #include <math.h>
+#include <limits>
 
 #include <QtCore/QList>
 #include <QtCore/QTimeLine>
@@ -218,7 +219,7 @@ QSizeF Layout::minimumSize() const
 }
 QSizeF Layout::maximumSize() const
 {
-    return QSizeF(INFINITY,INFINITY);
+    return QSizeF(std::numeric_limits<float>::infinity(),std::numeric_limits<float>::infinity());
 }
 
 void Layout::startAnimation() 
