@@ -17,6 +17,11 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
+
+#include <QVariant>
+#include <QStringList>
+#include <QIcon>
+
 #include "searchmatch.h"
 
 #include "abstractrunner.h"
@@ -154,5 +159,3 @@ void SearchMatch::exec()
 }
 
 }
-
-#include "searchmatch.moc"

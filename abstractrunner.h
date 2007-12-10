@@ -21,6 +21,7 @@
 #define RUNNER_H
 
 #include <QtCore/QObject>
+#include <QtCore/QStringList>
 
 #include <plasma/plasma_export.h>
 #include <plasma/searchmatch.h>

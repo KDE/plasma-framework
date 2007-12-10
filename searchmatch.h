@@ -20,9 +20,11 @@
 #ifndef SEARCHACTION_H
 #define SEARCHACTION_H
 
-#include <QtGui/QAction>
-
 #include <plasma/plasma_export.h>
+
+class QIcon;
+class QVariant;
+class QString;
 
 namespace Plasma
 {
@@ -30,10 +32,8 @@ namespace Plasma
 class SearchContext;
 class AbstractRunner;
 
-class PLASMA_EXPORT SearchMatch /*: public QAction*/
+class PLASMA_EXPORT SearchMatch
 {
-//     Q_OBJECT
-
     public:
         enum Type { InformationalMatch,
                     ExactMatch,
