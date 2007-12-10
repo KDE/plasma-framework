@@ -20,8 +20,8 @@
 #ifndef KCategorizedItemsView_H
 #define KCategorizedItemsView_H
 
-#include <QtGui>
-#include <QtCore>
+#include <QtGui/QtGui>
+#include <QtCore/QtCore>
 
 #include "kcategorizeditemsviewmodels_p.h"
 

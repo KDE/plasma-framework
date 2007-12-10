@@ -20,8 +20,8 @@
 #ifndef KCATEGORIZEDITEMSVIEWMODELS_H_
 #define KCATEGORIZEDITEMSVIEWMODELS_H_
 
-#include <QtGui>
-#include <QtCore>
+#include <QtGui/QtGui>
+#include <QtCore/QtCore>
 #include <KIcon>
 #include <KDebug>
 namespace KCategorizedItemsViewModels {
