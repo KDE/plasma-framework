@@ -21,7 +21,7 @@
 
 #include <cmath>
 
-#include <QtCore>
+#include <QtCore/QtCore>
 
 #include <KIconLoader>
 

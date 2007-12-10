@@ -20,8 +20,8 @@
 #ifndef KCATEGORIZEDITEMSVIEWDELEGATE_H_
 #define KCATEGORIZEDITEMSVIEWDELEGATE_H_
 
-#include <QtCore>
-#include <QtGui>
+#include <QtCore/QtCore>
+#include <QtGui/QtGui>
 
 #include <KIcon>
 
