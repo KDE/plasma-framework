@@ -11,7 +11,7 @@ are not found here but in one of the %Plasma
 Please refer to the <a href="http://plasma.kde.org">Plasma website</a> for API
 documentation and design documents regarding this library.
 
-If you want to write plasmoids (%Plasma plugins), have a look a the
+If you want to write plasmoids (%Plasma plugins), have a look at the
 <a href="http://techbase.kde.org/Development/Tutorials/Plasma">Plasma tutorials</a>
 on TechBase.
 
