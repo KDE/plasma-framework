@@ -653,7 +653,7 @@ void SignalPlotter::calculateNiceRange()
     // Massage the range so that the grid shows some nice values.
     double step = d->niceVertRange / (d->scaledBy*(d->horizontalLinesCount+1));
     int logdim = (int)floor(log10(step));
-    double dim = pow(10, logdim) / 2;
+    double dim = pow((double)10.0, logdim) / 2;
     int a = (int)ceil(step / dim);
     if (logdim >= 0)
         d->precision = 0;
