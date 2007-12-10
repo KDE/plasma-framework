@@ -31,6 +31,10 @@ class AbstractRunner::Private
     public:
         bool hasMatchOptions;
         bool hasConfig;
+        Speed speed;
+    Private()
+      : speed(NormalSpeed)
+    {}
 };
 
 AbstractRunner::AbstractRunner(QObject* parent)
@@ -94,6 +98,16 @@ void AbstractRunner::setIsConfigurable(bool hasConfig)
 void AbstractRunner::createConfigurationInterface(QWidget *widget)
 {
     Q_UNUSED(widget)
+}
+
+AbstractRunner::Speed AbstractRunner::speed() const
+{
+    return d->speed;
+}
+
+void AbstractRunner::setSpeed(Speed speed)
+{
+    d->speed = speed;
 }
 
 void AbstractRunner::exec(Plasma::SearchMatch *action)

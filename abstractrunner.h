@@ -39,10 +39,15 @@ class PLASMA_EXPORT AbstractRunner : public QObject
     Q_OBJECT
 
     public:
+        enum Speed { NormalSpeed,
+              SlowSpeed };
+
         typedef QList<AbstractRunner*> List;
 
         /**
          * Static method is called to load and get a list available of Runners.
+         *
+         * @param whitelist An optional whitelist of runners to load
          */
         static List loadRunners(QObject* parent, const QStringList& whitelist = QStringList() );
 
@@ -109,6 +114,11 @@ class PLASMA_EXPORT AbstractRunner : public QObject
          */
         virtual void exec(Plasma::SearchMatch *action);
 
+        /**
+         * The nominal speed of the runner.
+         */
+	Speed speed() const;
+
     protected:
         /**
          * Sets whether or not the the runner has options for matches
@@ -119,6 +129,14 @@ class PLASMA_EXPORT AbstractRunner : public QObject
          * Sets whether or not the runner has configuration options itself
          */
         void setIsConfigurable(bool canBeConfigured);
+
+        /**
+         * Sets the nominal speed of the runner. Only slow runners need 
+         * to call this within their constructor because the default 
+         * speed is NormalSpeed. Runners that use DBUS should call 
+         * this within their constructors.
+         */
+        void setSpeed(Speed newSpeed);
 
     private:
         class Private;
