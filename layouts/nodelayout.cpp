@@ -21,7 +21,6 @@
 
 #include <QPair>
 #include <QMap>
-#include <KDebug>
 
 namespace Plasma
 {
@@ -98,8 +97,6 @@ public:
 
     QRectF calculateRectangle(LayoutItem * item, QRectF geometry = QRectF()) const
     {
-        kDebug() << " enter geom is " << geometry << " \n";
-
         if (geometry == QRectF()) geometry = parent->geometry();
 
         QRectF result;
@@ -120,8 +117,6 @@ public:
             result.setHeight(item->sizeHint().height());
             result.moveTop(result.top() - items[item].second.yr * result.height());
         }
-
-        kDebug() << " leave \n";
 
         return result;
     }
@@ -172,11 +167,8 @@ Qt::Orientations NodeLayout::expandingDirections() const
 
 void NodeLayout::relayout()
 {
-    kDebug() << " RELAYUOT ... \n";
-
     foreach (LayoutItem * item, d->items.keys()) {
         if (item) {
-            kDebug() << " aaRELAYUOT ..." << d->calculateRectangle(item) << "\n";
             item->setGeometry(d->calculateRectangle(item));
         }
     }
