@@ -183,7 +183,7 @@ public:
     // 'op' - A function to apply to the size of each item in the layout
     //        , usually qMax,qMin or sum
     template <class T>
-    qreal calculateSize(SizeType sizeType , Qt::Orientation dir , T (*op)(T,T)) const
+    qreal calculateSize(SizeType sizeType , Qt::Orientation dir , T (*op)(const T,const T)) const
     {
         qreal value = 0;
         for ( int i = 0 ; i < children.count() ; i++ ) {
