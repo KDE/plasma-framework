@@ -23,7 +23,7 @@
 #include <QtCore/QObject>
 #include <QtCore/QStringList>
 
-#include <KConfigGroup>
+#include <KDE/KConfigGroup>
 
 #include <plasma/plasma_export.h>
 #include <plasma/searchmatch.h>
