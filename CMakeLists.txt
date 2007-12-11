@@ -37,6 +37,7 @@ set(plasma_LIB_SRCS
     layouts/freelayout.cpp
     layouts/nodelayout.cpp
     layouts/flowlayout.cpp
+    layouts/fliplayout.cpp
     layouts/layout.cpp
     layouts/layoutanimator.cpp
     layouts/layoutitem.cpp
@@ -158,6 +159,7 @@ install(FILES
     layouts/freelayout.h
     layouts/nodelayout.h
     layouts/flowlayout.h
+    layouts/fliplayout.h
     layouts/layout.h
     layouts/layoutanimator.h
     layouts/layoutitem.h

@@ -106,6 +106,15 @@ enum Position { LeftPositioned    /**< Positioned left */,
               };
 
 /**
+ * Flip enumeration
+ */
+enum FlipDirection { NoFlip = 0          /**< Do not flip */,
+                     HorizontalFlip = 1   /**< Flip horizontally */,
+                     VerticalFlip = 2    /**< Flip vertically */
+                   };
+Q_DECLARE_FLAGS(Flip, FlipDirection)
+
+/**
  * Zoom levels that Plasma is aware of...
  **/
 enum ZoomLevel { DesktopZoom = 0 /**< Normal desktop usage, plasmoids are painted normally and have full interaction */,
@@ -147,5 +156,6 @@ PLASMA_EXPORT QPainterPath roundedRectangle(const QRectF& rect, qreal radius);
 } // Plasma namespace
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Plasma::Constraints)
+Q_DECLARE_OPERATORS_FOR_FLAGS(Plasma::Flip)
 
 #endif // multiple inclusion guard
