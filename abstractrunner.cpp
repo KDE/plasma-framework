@@ -48,6 +48,16 @@ AbstractRunner::~AbstractRunner()
     delete d;
 }
 
+KConfigGroup AbstractRunner::config() const
+{
+    QString group = objectName();
+    if (group.isEmpty()) {
+        group = "UnnamedRunner";
+    }
+
+    return KConfigGroup(&KConfigGroup(KGlobal::config(), "Runners"), group);
+}
+
 void AbstractRunner::performMatch( Plasma::SearchContext &globalContext )
 {
     Plasma::SearchContext localContext( 0, globalContext );

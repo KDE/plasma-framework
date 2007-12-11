@@ -23,6 +23,8 @@
 #include <QtCore/QObject>
 #include <QtCore/QStringList>
 
+#include <KConfigGroup>
+
 #include <plasma/plasma_export.h>
 #include <plasma/searchmatch.h>
 #include <plasma/searchcontext.h>
@@ -59,6 +61,11 @@ class PLASMA_EXPORT AbstractRunner : public QObject
          */
         explicit AbstractRunner(QObject* parent = 0);
         virtual ~AbstractRunner();
+
+        /**
+         * Provides access to the runner's configuration object.
+         */
+        KConfigGroup config() const;
 
         /**
          * If the runner can run precisely this term, return a QAction, else
