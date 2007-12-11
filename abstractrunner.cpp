@@ -55,7 +55,8 @@ KConfigGroup AbstractRunner::config() const
         group = "UnnamedRunner";
     }
 
-    return KConfigGroup(&KConfigGroup(KGlobal::config(), "Runners"), group);
+    KConfigGroup runners(KGlobal::config(), "Runners");
+    return KConfigGroup(&runners, group);
 }
 
 void AbstractRunner::performMatch( Plasma::SearchContext &globalContext )
