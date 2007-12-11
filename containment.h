@@ -234,6 +234,11 @@ class PLASMA_EXPORT Containment : public Applet
         void appletAdded(Plasma::Applet* applet);
 
         /**
+         * This signal is emitted when an applet is destroyed
+         */
+        void appletRemoved(Plasma::Applet* applet);
+
+        /**
          * This signal indicates, that a application launch was triggered
          */
         void launchActivated();
