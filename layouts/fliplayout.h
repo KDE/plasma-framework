@@ -23,8 +23,6 @@
 #include <plasma/plasma.h>
 #include <plasma/layouts/layout.h>
 #include <plasma/widgets/widget.h>
-#include <cmath>
-#include <QMap>
 
 namespace Plasma
 {
