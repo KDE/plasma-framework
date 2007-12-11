@@ -219,7 +219,7 @@ QSizeF Layout::minimumSize() const
 }
 QSizeF Layout::maximumSize() const
 {
-    return QSizeF(std::numeric_limits<float>::infinity(),std::numeric_limits<float>::infinity());
+    return QSizeF(std::numeric_limits<qreal>::infinity(),std::numeric_limits<qreal>::infinity());
 }
 
 void Layout::startAnimation() 
