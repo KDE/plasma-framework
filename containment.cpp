@@ -345,7 +345,11 @@ void Containment::setFormFactor(FormFactor formFactor)
 
 FormFactor Containment::formFactor() const
 {
-    return d->formFactor;
+    if (isContainment()) {
+        return d->formFactor;
+    }
+
+    return Applet::formFactor();
 }
 
 void Containment::setLocation(Location location)
@@ -663,6 +667,8 @@ bool Containment::sceneEventFilter(QGraphicsItem *watched, QEvent *event)
         //kDebug() << "got hoverenterEvent" << d->immutable << " " << applet->isImmutable();
         if (!d->immutable && !applet->isImmutable() && !corona()->isImmutable() && !d->handles.contains(applet)) {
             //kDebug() << "generated applet handle";
+            //TODO: there should be a small delay on showing these. they pop up too quickly/easily
+            //      right now
             AppletHandle *handle = new AppletHandle(this, applet);
             d->handles[applet] = handle;
             connect(handle, SIGNAL(disappearDone(AppletHandle*)),
