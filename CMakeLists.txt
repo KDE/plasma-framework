@@ -1,4 +1,3 @@
-find_package(OpenGL)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${KDEBASE_WORKSPACE_SOURCE_DIR}/libs ${OPENGL_INCLUDE_DIR})
 
