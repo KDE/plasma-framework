@@ -70,6 +70,16 @@ public:
         applets.clear();
     }
 
+    DesktopToolbox* createToolbox(Containment* c)
+    {
+        if (!toolbox) {
+            toolbox = new DesktopToolbox(c);
+            toolbox->setPos(c->geometry().width() - toolbox->boundingRect().width(), 0);
+        }
+
+        return toolbox;
+    }
+
     FormFactor formFactor;
     Location location;
     Applet::List applets;
@@ -177,12 +187,12 @@ void Containment::setContainmentType(Containment::Type type)
             tool = new Plasma::PushButton(i18n("Zoom In"));
             connect(tool, SIGNAL(clicked()), this, SIGNAL(zoomIn()));
             tool->resize(tool->sizeHint());
-            addToolBoxTool(tool);
+            addToolBoxTool(tool, "zoomIn");
 
             tool = new Plasma::PushButton(i18n("Zoom Out"));
             connect(tool, SIGNAL(clicked()), this, SIGNAL(zoomOut()));
             tool->resize(tool->sizeHint());
-            addToolBoxTool(tool);
+            addToolBoxTool(tool, "zoomOut");
         }
     } else {
         delete d->toolbox;
@@ -698,12 +708,12 @@ void Containment::emitLaunchActivated()
 
 void Containment::addToolBoxTool(QGraphicsItem *tool, const QString& toolName)
 {
-    if (!d->toolbox) {
-        d->toolbox = new DesktopToolbox(this);
-        d->toolbox->setPos(geometry().width() - d->toolbox->boundingRect().width(), 0);
-    }
+    d->createToolbox(this)->addTool(tool, toolName);
+}
 
-    d->toolbox->addTool(tool, toolName);
+void Containment::enableToolBoxTool(const QString &toolname, bool enable)
+{
+    d->createToolbox(this)->enableTool(toolname, enable);
 }
 
 } // Plasma namespace

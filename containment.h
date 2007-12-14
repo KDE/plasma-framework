@@ -220,6 +220,14 @@ class PLASMA_EXPORT Containment : public Applet
         void addToolBoxTool(QGraphicsItem *tool, const QString &toolname = QString());
 
         /**
+         * Enables or disables a toolbox tool by name
+         *
+         * @arg name the name of the tool
+         * @arg enable true to enable, false to disable
+         */
+        void enableToolBoxTool(const QString &toolname, bool enable);
+
+        /**
          * @internal
          * Called when constraints have been updated on this containment to provide
          * constraint services common to all containments. Containments should still
