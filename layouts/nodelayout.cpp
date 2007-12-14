@@ -141,8 +141,8 @@ public:
             // not do anything smarter concerning the sizeHint when there are
             // autosized elements.
 
-            qreal width  = item->sizeHint().width()  / qMin(scaled.width(), 1.0);
-            qreal height = item->sizeHint().height() / qMin(scaled.height(), 1.0);
+            qreal width  = item->sizeHint().width()  / qMin(scaled.width(), qreal(1.0));
+            qreal height = item->sizeHint().height() / qMin(scaled.height(), qreal(1.0));
 
             if (width > sizeHint.width())   sizeHint.setWidth(width);
             if (height > sizeHint.height()) sizeHint.setHeight(height);

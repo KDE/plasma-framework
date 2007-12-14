@@ -115,7 +115,7 @@ class Phase::Private
         {
             qreal progress = frames;
             progress = currentFrame / progress;
-            progress = qMin(1.0, qMax(0.0, progress));
+            progress = qMin(qreal(1.0), qMax(qreal(0.0), progress));
             return progress;
         }
 
@@ -420,7 +420,7 @@ QPixmap Phase::animationResult(AnimId id)
     qreal progress = state->frames;
     //kDebug() << "Phase::animationResult(" << id <<   " at " << progress;
     progress = state->currentFrame / progress;
-    progress = qMin(1.0, qMax(0.0, progress));
+    progress = qMin(qreal(1.0), qMax(qreal(0.0), progress));
     //kDebug() << "Phase::animationResult(" << id <<   " at " << progress;
 
     switch (state->animation) {

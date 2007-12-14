@@ -220,9 +220,9 @@ void LayoutAnimator::moveEffectUpdateItem( qreal value , LayoutItem* item , Effe
     Widget* widget = dynamic_cast<Widget*>(item->graphicsItem());
 
     if ( widget && effect == FadeInMoveEffect )
-        widget->setOpacity( qMin(1.0,widget->opacity()+d->delta(value)) );
+        widget->setOpacity( qMin(qreal(1.0),widget->opacity()+d->delta(value)) );
     else if ( widget && effect == FadeOutMoveEffect )
-        widget->setOpacity( qMax(0.0,widget->opacity()-d->delta(value)) );
+        widget->setOpacity( qMax(qreal(0.0),widget->opacity()-d->delta(value)) );
 
     
     if ( effect == FadeInMoveEffect ) {

@@ -255,7 +255,7 @@ void SignalPlotter::scale(qreal delta)
     calculateNiceRange();
 }
 
-double SignalPlotter::scaledBy() const
+qreal SignalPlotter::scaledBy() const
 {
     return d->scaledBy;
 }

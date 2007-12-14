@@ -92,7 +92,7 @@ QString SearchMatch::searchTerm() const
 
 void SearchMatch::setRelevance(qreal relevance)
 {
-    d->relevance = qMax(0.0, qMin(1.0, relevance));
+    d->relevance = qMax(qreal(0.0), qMin(qreal(1.0), relevance));
 }
 
 qreal SearchMatch::relevance() const
