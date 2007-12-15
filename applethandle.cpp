@@ -257,9 +257,14 @@ void AppletHandle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
     if (!m_applet) {
         QGraphicsItem::mouseMoveEvent(event);
+        return;
     }
-    else if (m_pressedButton == MoveButton) {
-        QPointF delta = event->pos()-event->lastPos();
+
+    QPointF curPos = transform().map(event->pos());
+    QPointF lastPos = transform().map(event->lastPos());
+    QPointF delta = curPos-lastPos;
+
+    if (m_pressedButton == MoveButton) {
         setPos(pos()+delta);
         // test for containment change
         if (!m_containment->sceneBoundingRect().contains(event->scenePos())) {
@@ -272,7 +277,7 @@ void AppletHandle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
                         // add the applet to the new containment
                         // and take it from the old one
                         QPointF scenePosition = scenePos();
-                        kDebug() << "moving to other containment with position" << event->pos() << event->scenePos();
+                        kDebug() << "moving to other containment with position" << pos() << event->scenePos();
                         kDebug() << "position before reparenting" << pos() << scenePos();
                         m_containment = containments[i];
                         //m_containment->addChild(m_applet);
@@ -288,7 +293,7 @@ void AppletHandle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
             }
         }
     } else if (m_pressedButton == RotateButton) {
-        if (_k_distanceForPoint(event->pos()-event->lastPos()) <= 1.0) {
+        if (_k_distanceForPoint(delta) <= 1.0) {
             return;
         }
 
