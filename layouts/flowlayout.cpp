@@ -61,13 +61,15 @@ void FlowLayout::addItem(LayoutItem* item)
         return;
     }
 
+    item->setManagingLayout(this);
     d->items << item;
 
     if (animator()) {
         animator()->setCurrentState(item,LayoutAnimator::InsertedState);
     }
 
-    item->setManagingLayout(this);
+    updateGeometry();
+    startAnimation();
 }
 void FlowLayout::removeItem(LayoutItem* item)
 {
@@ -81,6 +83,9 @@ void FlowLayout::removeItem(LayoutItem* item)
     if (animator()) {
         animator()->setCurrentState(item,LayoutAnimator::RemovedState);
     }
+
+    updateGeometry();
+    startAnimation();
 }
 int FlowLayout::indexOf(LayoutItem* item) const
 {
@@ -119,6 +124,7 @@ LayoutItem* FlowLayout::takeAt(int i)
     }
 
     return d->items.takeAt(i);
+    // FIXME: Should updateGeometry() and startAnimation() be called?
 }
 
 template <class T>
@@ -215,8 +221,6 @@ void FlowLayout::relayout()
         else
             item->setGeometry( newGeometry );
     }
-
-    startAnimation();
 }
 
 Qt::Orientations FlowLayout::expandingDirections() const
