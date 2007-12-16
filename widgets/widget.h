@@ -271,6 +271,12 @@ protected:
      * @param widget the parent QWidget (most likely the Corona)
      */
     virtual void paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
+
+    /**
+     * Reimplemented from QGraphicsItem
+     */
+    virtual void contextMenuEvent(QGraphicsSceneContextMenuEvent *event);
+
     QVariant itemChange(GraphicsItemChange change, const QVariant &value);
     void setSize(qreal width, qreal height);
     void setSize(const QSizeF& size);

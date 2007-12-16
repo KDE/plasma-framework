@@ -1314,27 +1314,6 @@ bool Applet::isContainment() const
     return d->isContainment;
 }
 
-void Applet::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
-{
-    //kDebug() << "context menu event!";
-    if (!scene()) {
-        //kDebug() << "no scene?!";
-        return;
-    }
-
-    Applet* containment = dynamic_cast<Plasma::Applet*>(topLevelItem());
-
-    if (!containment || containment == this) {
-        //kDebug() << "no containment. hm.";
-        Widget::contextMenuEvent(event);
-        return;
-    }
-
-    // we want to pass up the context menu event to the Containment at
-    // this point
-    containment->contextMenuEvent(event);
-}
-
 } // Plasma namespace
 
 #include "applet.moc"

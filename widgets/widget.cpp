@@ -519,5 +519,15 @@ void Widget::managingLayoutChanged()
     }
 }
 
+void Widget::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
+{
+    // HACK: QGraphicsItem's documentation says that the event will be
+    // passed to the parent if it's not handled, but it isn't passed.
+    Widget *parentWidget = parent();
+    if (parentWidget) {
+        parentWidget->contextMenuEvent(event);
+    }
+}
+
 } // Plasma namespace
 

@@ -639,11 +639,6 @@ class PLASMA_EXPORT Applet : public Widget
         /**
          * Reimplemented from QGraphicsItem
          */
-        void contextMenuEvent(QGraphicsSceneContextMenuEvent *contextMenuEvent);
-
-        /**
-         * Reimplemented from QGraphicsItem
-         */
         QVariant itemChange(GraphicsItemChange change, const QVariant &value);
 
     protected Q_SLOTS:
