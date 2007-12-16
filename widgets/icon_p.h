@@ -99,7 +99,7 @@ public:
         PressedState = 2,
         ManualPressedState = 4
     };
-    Q_DECLARE_FLAGS(IconStates, IconState);
+    Q_DECLARE_FLAGS(IconStates, IconState)
 
 public:
     Private();
@@ -186,7 +186,7 @@ public:
     Margin *activeMargins;
 };
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(Icon::Private::IconStates);
+Q_DECLARE_OPERATORS_FOR_FLAGS(Icon::Private::IconStates)
 
 // Inline methods
 void Icon::Private::setLayoutOptions(QTextLayout &layout, const QStyleOptionGraphicsItem *option) const
