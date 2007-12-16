@@ -56,7 +56,7 @@ Icon::Private::Private()
     : svg("widgets/iconbutton"),
       svgElements(0),
       iconSize(48, 48),
-      state(Private::NoState),
+      states(Private::NoState),
       orientation(Qt::Vertical),
       alignment(Qt::AlignHCenter | Qt::AlignTop),
       calculateSizeRequested(true)          // First time always true
@@ -452,7 +452,7 @@ void Icon::calculateSize(const QStyleOptionGraphicsItem *option)
     update();
 }
 
-void Icon::Private::drawBackground(QPainter *painter)
+void Icon::Private::drawBackground(QPainter *painter, IconState state)
 {
     QString element;
     if (svgElements & Private::SvgBackground) {
@@ -460,8 +460,6 @@ void Icon::Private::drawBackground(QPainter *painter)
     }
 
     switch (state) {
-        case Private::NoState:
-            break;
         case Private::HoverState:
             if (svgElements & Private::SvgBackgroundHover) {
                 element = "background-hover";
@@ -474,6 +472,8 @@ void Icon::Private::drawBackground(QPainter *painter)
                 element = "background-hover";
             }
             break;
+        default:
+            break;
     }
 
     if (!element.isEmpty()) {
@@ -481,7 +481,7 @@ void Icon::Private::drawBackground(QPainter *painter)
     }
 }
 
-void Icon::Private::drawForeground(QPainter *painter)
+void Icon::Private::drawForeground(QPainter *painter, IconState state)
 {
     QString element;
     if (svgElements & Private::SvgForeground) {
@@ -489,8 +489,6 @@ void Icon::Private::drawForeground(QPainter *painter)
     }
 
     switch (state) {
-        case Private::NoState:
-            break;
         case Private::HoverState:
             if (svgElements & Private::SvgForegroundHover) {
                 element = "foreground-hover";
@@ -503,6 +501,8 @@ void Icon::Private::drawForeground(QPainter *painter)
                 element = "foreground-hover";
             }
             break;
+        default:
+            break;
     }
 
     if (!element.isEmpty()) {
@@ -510,7 +510,7 @@ void Icon::Private::drawForeground(QPainter *painter)
     }
 }
 
-QPixmap Icon::Private::decoration(const QStyleOptionGraphicsItem *option) const
+QPixmap Icon::Private::decoration(const QStyleOptionGraphicsItem *option, bool useHoverEffect) const
 {
     QPixmap result;
 
@@ -519,19 +519,15 @@ QPixmap Icon::Private::decoration(const QStyleOptionGraphicsItem *option) const
     const QSize size = icon.actualSize(iconSize.toSize(), mode, state);
     result = icon.pixmap(size, mode, state);
 
-    if (!result.isNull())
+    if (!result.isNull() && useHoverEffect)
     {
-        // Apply the configured hover effect    NOTE: This has no visible effect because we 
-        //                                            do drawForeground() -MB
-        if (option->state & QStyle::State_MouseOver) {
-            KIconEffect *effect = KIconLoader::global()->iconEffect();
+        KIconEffect *effect = KIconLoader::global()->iconEffect();
 
-            // Note that in KIconLoader terminology, active = hover.
-            // ### We're assuming that the icon group is desktop/filemanager, since this
-            //     is KFileItemDelegate.
-            if (effect->hasEffect(KIconLoader::Desktop, KIconLoader::ActiveState)) {
-                result = effect->apply(result, KIconLoader::Desktop, KIconLoader::ActiveState);
-            }
+        // Note that in KIconLoader terminology, active = hover.
+        // ### We're assuming that the icon group is desktop/filemanager, since this
+        //     is KFileItemDelegate.
+        if (effect->hasEffect(KIconLoader::Desktop, KIconLoader::ActiveState)) {
+            result = effect->apply(result, KIconLoader::Desktop, KIconLoader::ActiveState);
         }
     }
 
@@ -791,7 +787,18 @@ void Icon::paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *option
 
     // Compute the metrics, and lay out the text items
     // ========================================================================
-    QPixmap icon         = d->decoration(option);
+    Private::IconState state = Private::NoState;
+    if (d->states & Private::ManualPressedState) {
+        state = Private::PressedState;
+    } else if (d->states & Private::PressedState) {
+        if (d->states & Private::HoverState) {
+            state = Private::PressedState;
+        }
+    } else if (d->states & Private::HoverState) {
+        state = Private::HoverState;
+    }
+
+    QPixmap icon         = d->decoration(option, state != Private::NoState);
     const QPointF iconPos = d->iconPosition(option, icon);
 
     QTextLayout labelLayout, infoLayout;
@@ -799,12 +806,12 @@ void Icon::paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *option
     d->layoutTextItems(option, icon, &labelLayout, &infoLayout, &textBoundingRect);
 
     d->svg.resize(size());
-    d->drawBackground(painter);
+    d->drawBackground(painter, state);
 
     // draw icon
     painter->drawPixmap(iconPos, icon);
 
-    d->drawForeground(painter);
+    d->drawForeground(painter, state);
 
     // Draw corner actions
     foreach (IconAction *action, d->cornerActions) {
@@ -905,7 +912,7 @@ void Icon::setIconSize(int w, int h)
 
 bool Icon::isDown()
 {
-    return d->state == Private::PressedState;
+    return d->states & Private::PressedState;
 }
 
 void Icon::mousePressEvent(QGraphicsSceneMouseEvent *event)
@@ -915,47 +922,67 @@ void Icon::mousePressEvent(QGraphicsSceneMouseEvent *event)
         return;
     }
 
-    //kDebug();
+    d->states |= Private::PressedState;
+
+    bool handled = false;
     foreach (IconAction *action, d->cornerActions) {
-        action->event(event->type(), event->pos());
+        handled = action->event(event->type(), event->pos());
+        if (handled) {
+            break;
+        }
     }
 
-    d->state = Private::PressedState;
-    emit pressed(true);
+    if (!handled) {
+        emit pressed(true);
+    }
 
-    event->accept();
     update();
+}
+
+void Icon::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
+{
+    if (~d->states & Private::PressedState) {
+        Widget::mouseMoveEvent(event);
+        return;
+    }
+
+    if (boundingRect().contains(event->pos())) {
+        if (~d->states & Private::HoverState) {
+            d->states |= Private::HoverState;
+            update();
+        }
+    } else {
+        if (d->states & Private::HoverState) {
+            d->states &= ~Private::HoverState;
+            update();
+        }
+    }
 }
 
 void Icon::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
-    //kDebug();
-    bool inside = boundingRect().contains(event->pos());
-    Private::ButtonState was = d->state;
-
-    if (inside) {
-        d->state = Private::HoverState;
-
-        foreach (IconAction *action, d->cornerActions) {
-            if (action->event(event->type(), event->pos())) {
-                inside = false;
-                break;
-            }
-        }
-    } else {
-        d->state = Private::NoState;
+    if (~d->states & Private::PressedState) {
+        Widget::mouseMoveEvent(event);
+        return;
     }
 
-    if (was == Private::PressedState) {
-        emit pressed(false);
+    d->states &= ~Private::PressedState;
 
-        if (inside) {
+    bool handled = false;
+    foreach (IconAction *action, d->cornerActions) {
+        if (action->event(event->type(), event->pos())) {
+            handled = true;
+            break;
+        }
+    }
+
+    if (!handled) {
+        if (boundingRect().contains(event->pos())) {
             emit clicked();
         }
-        d->state = Private::NoState;
+        emit pressed(false);
     }
 
-    event->ignore();
     update();
 }
 
@@ -966,7 +993,9 @@ void Icon::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
         action->event(event->type(), event->pos());
     }
 
-    d->state = Private::HoverState;
+    d->states |= Private::HoverState;
+    update();
+
     Widget::hoverEnterEvent(event);
 }
 
@@ -977,17 +1006,25 @@ void Icon::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
         action->event(event->type(), event->pos());
     }
 
-    d->state = Private::NoState;
+    d->states &= ~Private::HoverState;
+    update();
+
     Widget::hoverLeaveEvent(event);
 }
 
-void Icon::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
+void Icon::setPressed(bool pressed)
 {
-    if (d->state == Private::PressedState) {
-        d->state = Private::HoverState;
+    if (pressed) {
+        d->states |= Private::ManualPressedState;
+    } else {
+        d->states &= ~Private::ManualPressedState;
     }
+    update();
+}
 
-    Widget::mouseMoveEvent(event);
+void Icon::setUnpressed()
+{
+    setPressed(false);
 }
 
 void Icon::setAlignment(Qt::Alignment alignment)

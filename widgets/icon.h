@@ -155,6 +155,19 @@ public:
 
     Qt::Orientations expandingDirections() const;
 
+public slots:
+	/**
+	* Sets the appearance of the icon to pressed or restores the appearance
+	* to normal. This does not simulate a mouse button press.
+	* @param pressed whether to appear as pressed (true) or as normal (false)
+	*/
+	void setPressed(bool pressed=true);
+
+	/**
+	* Shortcut for setPressed(false)
+	*/
+	void setUnpressed();
+
 protected:
     void paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
 

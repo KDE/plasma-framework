@@ -92,17 +92,26 @@ class Icon::Private
 public:
     enum MarginType { ItemMargin = 0, TextMargin, IconMargin, NMargins };
 
+    enum IconState
+    {
+        NoState = 0,
+        HoverState = 1,
+        PressedState = 2,
+        ManualPressedState = 4
+    };
+    Q_DECLARE_FLAGS(IconStates, IconState);
+
 public:
     Private();
     ~Private();
 
-    void drawBackground(QPainter *painter);
-    void drawForeground(QPainter *painter);
+    void drawBackground(QPainter *painter, IconState state);
+    void drawForeground(QPainter *painter, IconState state);
     void drawText(QPainter *painter);
     void drawTextItems(QPainter *painter, const QStyleOptionGraphicsItem *option,
                         const QTextLayout &labelLayout, const QTextLayout &infoLayout) const;
 
-    QPixmap decoration(const QStyleOptionGraphicsItem *option) const;
+    QPixmap decoration(const QStyleOptionGraphicsItem *option, bool useHoverEffect) const;
     QPointF iconPosition(const QStyleOptionGraphicsItem *option, const QPixmap &pixmap) const;
 
     QSizeF displaySizeHint(const QStyleOptionGraphicsItem *option) const;
@@ -158,13 +167,6 @@ public:
         LastIconPosition
     };
 
-    enum ButtonState
-    {
-        NoState,
-        HoverState,
-        PressedState
-    };
-
     QString text;
     QString infoText;
     Svg svg;
@@ -172,7 +174,7 @@ public:
     QSizeF size;
     QSizeF iconSize;
     QIcon icon;
-    ButtonState state;
+    IconStates states;
     Qt::Orientation orientation;
     Qt::Alignment alignment;
     bool calculateSizeRequested;
@@ -183,6 +185,8 @@ public:
     Margin horizontalMargin[NMargins];
     Margin *activeMargins;
 };
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(Icon::Private::IconStates);
 
 // Inline methods
 void Icon::Private::setLayoutOptions(QTextLayout &layout, const QStyleOptionGraphicsItem *option) const
