@@ -672,6 +672,8 @@ void Applet::setFailedToLaunch(bool failed, const QString& reason)
 
     d->failed = failed;
     prepareGeometryChange();
+
+    d->failureText = 0;
     qDeleteAll(QGraphicsItem::children());
     delete layout();
 
@@ -690,8 +692,6 @@ void Applet::setFailedToLaunch(bool failed, const QString& reason)
                                                         .brush(QPalette::Normal).color());
         failureLayout->addItem(d->failureText);
         setGeometry(QRectF(geometry().topLeft(), d->failureText->sizeHint()));
-    } else {
-        d->failureText = 0;
     }
 
     update();
