@@ -443,12 +443,17 @@ void Corona::containmentDestroyed(QObject* obj)
 
 void Corona::screenResized(int screen)
 {
+    bool desktopFound = false;
     foreach (Containment *c, d->containments) {
         if (c->screen() == screen) {
             // trigger a relayout
             c->setScreen(screen);
-            return;
+            desktopFound = desktopFound || c->containmentType() == Containment::DesktopContainment;
         }
+    }
+
+    if (desktopFound) {
+        return;
     }
 
     // a new screen appeared. neat.
