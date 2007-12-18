@@ -153,8 +153,6 @@ public:
     */
     void setAlignment(Qt::Alignment alignment);
 
-    Qt::Orientations expandingDirections() const;
-
 public Q_SLOTS:
     /**
     * Sets the appearance of the icon to pressed or restores the appearance

@@ -782,6 +782,17 @@ void Icon::paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *option
      }
 #endif
 
+    int iconWidth;
+    if (size().width() < size().height()) {
+        iconWidth = size().width() -
+                    d->horizontalMargin[Private::IconMargin].left -
+                    d->horizontalMargin[Private::IconMargin].right;
+    }else{
+        iconWidth = size().height() -
+                    d->verticalMargin[Private::IconMargin].top -
+                    d->verticalMargin[Private::IconMargin].bottom;
+    }
+    d->iconSize = QSizeF(iconWidth, iconWidth);
     calculateSize(option);
     d->setActiveMargins();
 
@@ -798,12 +809,22 @@ void Icon::paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *option
         state = Private::HoverState;
     }
 
-    QPixmap icon         = d->decoration(option, state != Private::NoState);
+    QPixmap icon          = d->decoration(option, state != Private::NoState);
     const QPointF iconPos = d->iconPosition(option, icon);
 
     QTextLayout labelLayout, infoLayout;
     QRectF textBoundingRect;
     d->layoutTextItems(option, icon, &labelLayout, &infoLayout, &textBoundingRect);
+
+    //did the calculated icon size left room for the text?
+    if (!d->text.isEmpty() && iconPos.y()+
+        d->iconSize.height()+
+        textBoundingRect.height() > size().height()) {
+        int iconWidth = d->iconSize.width() -
+                        textBoundingRect.height() +
+                        iconPos.y();
+        d->iconSize = QSizeF(iconWidth, iconWidth);
+    }
 
     d->svg.resize(size());
     d->drawBackground(painter, state);
@@ -1030,11 +1051,6 @@ void Icon::setUnpressed()
 void Icon::setAlignment(Qt::Alignment alignment)
 {
     d->alignment=alignment;
-}
-
-Qt::Orientations Icon::expandingDirections() const
-{
-    return Qt::Horizontal;
 }
 
 } // namespace Plasma
