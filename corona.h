@@ -115,21 +115,6 @@ public Q_SLOTS:
     void saveApplets() const;
 
     /**
-     * Adds an applet to the default Containment
-     *
-     * @param name the plugin name for the applet, as given by 
-     *        KPluginInfo::pluginName()
-     * @param args argument list to pass to the plasmoid
-     * @param id to assign to this applet, or 0 to auto-assign it a new id
-     * @param geometry where to place the applet, or to auto-place it if an invalid
-     *                 is provided
-     *
-     * @return a pointer to the applet on success, or 0 on failure
-     */
-    Applet* addApplet(const QString& name, const QVariantList& args = QVariantList(),
-                      uint id = 0, const QRectF &geometry = QRectF(-1, -1, -1, -1));
-
-    /**
      * Adds a Containment to the Corona
      *
      * @param name the plugin name for the containment, as given by

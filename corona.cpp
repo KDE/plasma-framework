@@ -50,6 +50,7 @@ class Corona::Private
 public:
     Private()
         : immutable(false),
+          kioskImmutable(false),
           mimetype("text/x-plasmoidservicename"),
           configName("plasma-appletsrc"),
           config(0)
@@ -382,17 +383,6 @@ void Corona::destroyContainment(Containment *c)
     c->deleteLater();
 }
 
-Applet* Corona::addApplet(const QString& name, const QVariantList& args, uint id, const QRectF& geometry)
-{
-    if (d->containments.size() < 1) {
-        kDebug() << "No containments to add an applet to!" << endl;
-        //FIXME create a containment if one doesn't exist ... ?
-        return 0;
-    }
-
-    return d->containments[0]->addApplet(name, args, id, geometry);
-}
-
 void Corona::dragEnterEvent( QGraphicsSceneDragDropEvent *event)
 {
 //    kDebug() << "Corona::dragEnterEvent(QGraphicsSceneDragDropEvent* event)";
@@ -478,11 +468,11 @@ bool Corona::isKioskImmutable() const
 
 void Corona::setImmutable(bool immutable)
 {
-    kDebug() << "setting immutability to" << immutable;
     if (d->immutable == immutable) {
         return;
     }
 
+    kDebug() << "setting immutability to" << immutable;
     d->immutable = immutable;
     foreach (Containment *c, d->containments) {
         // we need to tell each containment that immutability has been altered
