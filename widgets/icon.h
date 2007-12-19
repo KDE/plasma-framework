@@ -52,6 +52,7 @@ class PLASMA_EXPORT Icon : public Plasma::Widget
     Q_PROPERTY( QString infoText READ infoText WRITE setInfoText )
     Q_PROPERTY( QIcon icon READ icon WRITE setIcon )
     Q_PROPERTY( QSizeF iconSize READ iconSize WRITE setIconSize )
+    Q_PROPERTY( QString svg WRITE setSvg )
 public:
     /**
     * Creates a new Plasma::Icon.
@@ -89,6 +90,12 @@ public:
     * @param text the text to associate with this icon.
     */
     void setText(const QString &text);
+
+    /**
+    * Convenience method to set the svg image to use when given the filepath and name of svg.
+    * @param svgFilePath the svg filepath including name of the svg.
+    */
+    void setSvg(const QString &svgFilePath);
 
     /**
     * Returns the meta text associated with this icon.
