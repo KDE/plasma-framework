@@ -454,7 +454,7 @@ void Icon::calculateSize(const QStyleOptionGraphicsItem *option)
 
 void Icon::setSvg(const QString &svgFilePath)
 {
-    d->svg.setSvg(svgFilePath);
+    d->svg.setFile(svgFilePath);
 }
 
 void Icon::Private::drawBackground(QPainter *painter, IconState state)
