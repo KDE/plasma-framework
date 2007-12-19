@@ -50,6 +50,7 @@ class PLASMA_EXPORT Svg : public QObject
     Q_ENUMS( ContentType )
     Q_PROPERTY( QSize size READ size )
     Q_PROPERTY( ContentType contentType READ contentType WRITE setContentType )
+    Q_PROPERTY( QString file READ file WRITE setFile )
 
     public:
         /**
@@ -198,6 +199,18 @@ class PLASMA_EXPORT Svg : public QObject
          * @arg contents whether the Svg is a single image or a set of images
          */
         ContentType contentType();
+
+        /**
+         * Convenience method for setting the svg file to use for the Svg.
+         * @arg svgFilePath the filepath including name of the svg.
+         */
+        void setFile(const QString &svgFilePath);
+
+        /**
+         * Convenience method to get the svg filepath and name of svg.
+         * @return the svg's filepath including name of the svg.
+         */
+        QString file() const;
 
     Q_SIGNALS:
         void repaintNeeded();

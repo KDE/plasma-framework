@@ -79,12 +79,7 @@ class Svg::Private
 
         ~Private()
         {
-            if (renderer.count() == 2) {
-                // this and the cache reference it; and boy is this not thread safe ;)
-                renderers.erase(renderers.find(themePath));
-            }
-
-            renderer = 0;
+            eraseRenderer();
         }
 
         void removeFromCache()
@@ -161,6 +156,16 @@ class Svg::Private
             }
 
             size = renderer->defaultSize();
+        }
+
+        void eraseRenderer()
+        {
+            if (renderer.count() == 2) {
+                // this and the cache reference it; and boy is this not thread safe ;)
+                renderers.erase(renderers.find(themePath));
+            }
+
+            renderer = 0;
         }
 
         QSize elementSize(const QString& elementId)
@@ -309,6 +314,17 @@ void Svg::setContentType(ContentType contentType)
 Svg::ContentType Svg::contentType()
 {
     return d->contentType;
+}
+
+void Svg::setFile(const QString &svgFilePath)
+{
+   d->themePath = svgFilePath;
+   d->eraseRenderer();
+}
+
+QString Svg::file() const
+{
+   return d->themePath;
 }
 
 void Svg::themeChanged()
