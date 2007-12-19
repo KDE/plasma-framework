@@ -35,8 +35,7 @@ class PLASMA_EXPORT AppletBrowserWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit AppletBrowserWidget( Plasma::Corona *corona, bool showButtons, QWidget *parent = 0, Qt::WindowFlags f = 0);
-    explicit AppletBrowserWidget(Plasma::Containment *containment, bool showButtons, QWidget *parent = 0, Qt::WindowFlags f = 0);
+    AppletBrowserWidget(Plasma::Containment *containment, bool showButtons, QWidget *parent = 0, Qt::WindowFlags f = 0);
     virtual ~AppletBrowserWidget();
 
     void setApplication(const QString& application = QString());
@@ -80,7 +79,6 @@ class PLASMA_EXPORT AppletBrowser: public KDialog
 {
     Q_OBJECT
 public:
-    explicit AppletBrowser(Plasma::Corona *corona, QWidget *parent = 0, Qt::WindowFlags f = 0);
     explicit AppletBrowser(Plasma::Containment *containment, QWidget *parent = 0, Qt::WindowFlags f = 0);
     virtual ~AppletBrowser();
 

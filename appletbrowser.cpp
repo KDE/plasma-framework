@@ -38,8 +38,7 @@ class AppletBrowserWidget::Private
 {
 public:
     Private(Corona* co, Containment* cont, AppletBrowserWidget* w)
-        : corona(co),
-          containment(cont),
+        : containment(cont),
           appletList(0),
           config("plasmarc"),
           configGroup(&config, "Applet Browser"),
@@ -53,7 +52,6 @@ public:
     void updateRunningApplets();
 
     QString application;
-    Plasma::Corona *corona;
     Plasma::Containment *containment;
     KCategorizedItemsView *appletList;
     QMultiHash<QString,Plasma::Applet*> runningApplets;
@@ -124,7 +122,7 @@ void AppletBrowserWidget::Private::updateRunningApplets()
     itemModel.setRunningApplets(appCount);
 }
 
-
+/*
 AppletBrowserWidget::AppletBrowserWidget(Plasma::Corona * corona, bool showButtons, QWidget * parent, Qt::WindowFlags f)
     : QWidget(parent, f),
     d(new Private(corona, 0, this)),
@@ -132,7 +130,7 @@ AppletBrowserWidget::AppletBrowserWidget(Plasma::Corona * corona, bool showButto
 {
     init();
 }
-
+*/
 AppletBrowserWidget::AppletBrowserWidget(Plasma::Containment * containment, bool showButtons, QWidget * parent, Qt::WindowFlags f)
     : QWidget(parent, f),
     d(new Private(0, containment, this)),
@@ -188,17 +186,16 @@ void AppletBrowserWidget::initRunningApplets()
 //get applets from corona, count them, send results to model
     kDebug() << d->runningApplets.count();
     QHash<QString,int> appCount;
-    Plasma::Corona *c=d->corona;
-    if (!c && d->containment) {
-        c=d->containment->corona();
-    }
+    Plasma::Corona *c = d->containment->corona();
+
     //we've tried our best to get a corona
     //we don't want just one containment, we want them all
     if (!c) {
         kDebug() << "can't happen";
         return;
     }
-    QList<Containment*>containments=c->containments();
+
+    QList<Containment*> containments = c->containments();
     foreach (Containment * containment,containments) {
         connect(containment, SIGNAL(appletAdded(Plasma::Applet*)), this, SLOT(appletAdded(Plasma::Applet*)));
         //TODO track containments too?
@@ -232,23 +229,18 @@ QString AppletBrowserWidget::application()
 {
     return d->application;
 }
+
 void AppletBrowserWidget::addApplet()
 {
     kDebug() << "Button ADD clicked";
+    if (!d->containment) {
+        return;
+    }
 
     foreach (AbstractItem *item, d->appletList->selectedItems()) {
         PlasmaAppletItem *selectedItem = (PlasmaAppletItem *) item;
-        kDebug() << "Adding applet " << selectedItem->name();
-        if (d->corona) {
-            kDebug() << " to corona\n";
-            d->corona->addApplet(selectedItem->pluginName(),
-                    selectedItem->arguments());
-        } else if (d->containment) {
-            kDebug() << " to containment\n";
-            d->containment->addApplet(selectedItem->pluginName(),
-                    selectedItem->arguments());
-        }
-
+        kDebug() << "Adding applet " << selectedItem->name() << "to containment";
+        d->containment->addApplet(selectedItem->pluginName(), selectedItem->arguments());
     }
 }
 
@@ -299,14 +291,14 @@ void AppletBrowserWidget::downloadApplets()
 
 
 
-AppletBrowser::AppletBrowser(Plasma::Corona * corona, QWidget * parent, Qt::WindowFlags f)
+/*AppletBrowser::AppletBrowser(Plasma::Corona * corona, QWidget * parent, Qt::WindowFlags f)
     : KDialog(parent, f),
     m_widget(new AppletBrowserWidget(corona, false, this))
 {
     winId(); // this is to get us a win id so that the next line doesn't abort on us
     setWindowRole("appletbrowser");
     init();
-}
+}*/
 
 AppletBrowser::AppletBrowser(Plasma::Containment * containment, QWidget * parent, Qt::WindowFlags f)
     : KDialog(parent, f),
