@@ -865,6 +865,7 @@ void Applet::paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *opti
             // note that the widget we get is actually the viewport of the view, not the view itself
             View* v = qobject_cast<Plasma::View*>(widget->parent());
             if (v && !v->drawWallpaper()) {
+                painter->restore();
                 return;
             }
         }
