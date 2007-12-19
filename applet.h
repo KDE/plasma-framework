@@ -237,6 +237,18 @@ class PLASMA_EXPORT Applet : public Widget
         void setContentSize(const QSizeF &size);
 
         /**
+         * Sets the content size.
+         *
+         * @note Normally an applet should never
+         * call this directly except in the constructor to provide a default
+         * size
+         *
+         * @arg width the new width of the contents area
+         * @arg height the new height of the contents area
+         */
+        void setContentSize(int width, int height);
+
+        /**
          * Returns an ideal size for the applet's content.
          * Applets can re-implement this to provide a suitable size based
          * on their contents.
@@ -255,6 +267,14 @@ class PLASMA_EXPORT Applet : public Widget
         void setMinimumContentSize(const QSizeF &minSize);
 
         /**
+         * Sets the minimum size for the content of this applet
+         *
+         * @arg minWidth the new minimum width of the contents area
+         * @arg minHeight the new minimum height of the contents area
+         */
+        void setMinimumContentSize(int minWidth, int minHeight);
+
+        /**
          * Get the minimum size for the content of this applet
          */
         QSizeF minimumContentSize() const;
@@ -263,6 +283,14 @@ class PLASMA_EXPORT Applet : public Widget
          * Sets the maximum size for the content of this applet.
          */
         void setMaximumContentSize(const QSizeF &maxSize);
+
+        /**
+         * Sets the maximum size for the content of this applet
+         *
+         * @arg maxWidth the new maximum width of the contents area
+         * @arg maxHeight the new maximum height of the contents area
+         */
+        void setMaximumContentSize(int maxWidth, int maxHeight);
 
         /**
          * Get the minimum size for the content of this applet

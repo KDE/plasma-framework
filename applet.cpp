@@ -869,6 +869,7 @@ void Applet::paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *opti
             }
         }
 
+        //kDebug() << "paint interface of" << (QObject*) this;
         paintInterface(painter, option, QRect(QPoint(0,0), d->contentSize(this).toSize()));
     }
 
@@ -890,12 +891,7 @@ void Applet::paintInterface(QPainter *painter, const QStyleOptionGraphicsItem *o
 FormFactor Applet::formFactor() const
 {
     Containment* c = containment();
-
-    if (!c) {
-        return Plasma::Planar;
-    }
-
-    return c->formFactor();
+    return c ? c->formFactor() : Plasma::Planar;
 }
 
 Containment* Applet::containment() const
@@ -946,6 +942,11 @@ void Applet::setContentSize(const QSizeF &size)
     resize(size + QSizeF(left + right, top + bottom));
 }
 
+void Applet::setContentSize(int width, int height)
+{
+    setContentSize(QSizeF(width, height));
+}
+
 QSizeF Applet::contentSizeHint() const
 {
     if (layout()) {
@@ -963,6 +964,11 @@ void Applet::setMinimumContentSize(const QSizeF &minSize)
     setMinimumSize(minSize + QSizeF(left + right, top + bottom));
 }
 
+void Applet::setMinimumContentSize(int minWidth, int minHeight)
+{
+    setMinimumContentSize(QSizeF(minWidth, minHeight));
+}
+
 QSizeF Applet::minimumContentSize() const
 {
     int top, left, right, bottom;
@@ -977,6 +983,11 @@ void Applet::setMaximumContentSize(const QSizeF &maxSize)
     d->getBorderSize(left, top, right, bottom);
 
     setMaximumSize(maxSize + QSizeF(left + right, top + bottom));
+}
+
+void Applet::setMaximumContentSize(int maxWidth, int maxHeight)
+{
+    setMaximumContentSize(QSizeF(maxWidth, maxHeight));
 }
 
 QSizeF Applet::maximumContentSize() const
