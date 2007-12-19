@@ -19,6 +19,7 @@
 
 #include "theme.h"
 
+#include <QApplication>
 #include <QFile>
 
 #include <KColorScheme>
@@ -162,6 +163,18 @@ QColor Theme::textColor() const
 {
     KColorScheme colors(QPalette::Active, KColorScheme::Window, Theme::self()->colors());
     return colors.foreground(KColorScheme::NormalText).color();
+}
+
+QFont Theme::font() const
+{
+    //TODO: allow this to be overridden with a plasma specific font?
+    return QApplication::font();
+}
+
+QFontMetrics Theme::fontMetrics() const
+{
+    //TODO: allow this to be overridden with a plasma specific font?
+    return QApplication::fontMetrics();
 }
 
 }

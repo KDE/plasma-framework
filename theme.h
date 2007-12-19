@@ -21,6 +21,8 @@
 #define PLASMA_THEME_H
 
 #include <QtCore/QObject>
+#include <QtGui/QFont>
+#include <QtGui/QFontMetrics>
 
 #include <KDE/KSharedConfig>
 
@@ -100,6 +102,16 @@ class PLASMA_EXPORT Theme : public QObject
          * Returns the text color to be used by items resting on the background
          */
         Q_INVOKABLE QColor textColor() const;
+
+        /**
+         * Returns the font to be used by themed items
+         */
+        Q_INVOKABLE QFont font() const;
+
+        /**
+         * Returns the font metrics for the font to be used by themed items
+         */
+        Q_INVOKABLE QFontMetrics fontMetrics() const;
 
     Q_SIGNALS:
         /**
