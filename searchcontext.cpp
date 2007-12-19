@@ -27,6 +27,7 @@
 #include <KCompletion>
 #include <KDebug>
 #include <KMimeType>
+#include <KShell>
 #include <KStandardDirs>
 #include <KUrl>
 
@@ -158,27 +159,28 @@ void SearchContext::determineType()
 {
     d->lockForWrite();
     QString term = d->term;
+    QString path = KShell::tildeExpand(term);
 
     int space = term.indexOf(' ');
     if (space > 0) {
-        if (!KStandardDirs::findExe(term.left(space)).isEmpty()) {
+        if (!KStandardDirs::findExe(path.left(space)).isEmpty()) {
             d->type = ShellCommand;
         }
-    } else if (!KStandardDirs::findExe(term.left(space)).isEmpty()) {
+    } else if (!KStandardDirs::findExe(path.left(space)).isEmpty()) {
         d->type = Executable;
     } else {
         KUrl url(term);
 
         if (!url.protocol().isEmpty() && !url.host().isEmpty()) {
             d->type = NetworkLocation;
-        } else  if (QFile::exists(term)) {
-            QFileInfo info(term);
+        } else  if (QFile::exists(path)) {
+            QFileInfo info(path);
             if (info.isDir()) {
                 d->type = Directory;
                 d->mimetype = "inode/folder";
             } else {
                 d->type = File;
-                KMimeType::Ptr mimetype = KMimeType::findByPath(term);
+                KMimeType::Ptr mimetype = KMimeType::findByPath(path);
                 if (mimetype) {
                     d->mimetype = mimetype->name();
                 }
