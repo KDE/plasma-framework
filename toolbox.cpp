@@ -180,19 +180,35 @@ void DesktopToolbox::addTool(QGraphicsItem *tool, const QString &name)
 void DesktopToolbox::enableTool(const QString &toolName, bool visible)
 {
     //kDebug() << (visible? "enabling" : "disabling") << "tool" << toolName;
-    QGraphicsItem *tool = 0;
+    QGraphicsItem *t = tool(toolName);
+
+    if (t) {
+        t->setEnabled(visible);
+    }
+}
+
+bool DesktopToolbox::isToolEnabled(const QString &toolName) const
+{
+    QGraphicsItem *t = tool(toolName);
+
+    if (t) {
+        return t->isEnabled();
+    }
+
+    return false;
+}
+
+QGraphicsItem* DesktopToolbox::tool(const QString &toolName) const
+{
     foreach (QGraphicsItem *child, QGraphicsItem::children()) {
         //kDebug() << "checking tool" << child << child->data(ToolName);
         if (child->data(ToolName).toString() == toolName) {
             //kDebug() << "tool found!";
-            tool = child;
-            break;
+            return child;
         }
     }
 
-    if (tool) {
-        tool->setEnabled(visible);
-    }
+    return 0;
 }
 
 } // plasma namespace

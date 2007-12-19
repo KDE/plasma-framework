@@ -54,8 +54,9 @@ static const int INTER_CONTAINMENT_MARGIN = 6;
 class Containment::Private
 {
 public:
-    Private()
-        : formFactor(Planar),
+    Private(Containment* c)
+        : q(c),
+          formFactor(Planar),
           location(Floating),
           screen(-1),
           immutable(false),
@@ -70,16 +71,17 @@ public:
         applets.clear();
     }
 
-    DesktopToolbox* createToolbox(Containment* c)
+    DesktopToolbox* createToolbox()
     {
         if (!toolbox) {
-            toolbox = new DesktopToolbox(c);
-            toolbox->setPos(c->geometry().width() - toolbox->boundingRect().width(), 0);
+            toolbox = new DesktopToolbox(q);
+            toolbox->setPos(q->geometry().width() - toolbox->boundingRect().width(), 0);
         }
 
         return toolbox;
     }
 
+    Containment *q;
     FormFactor formFactor;
     Location location;
     Applet::List applets;
@@ -94,7 +96,7 @@ Containment::Containment(QGraphicsItem* parent,
                          const QString& serviceId,
                          uint containmentId)
     : Applet(parent, serviceId, containmentId),
-      d(new Private)
+      d(new Private(this))
 {
     // WARNING: do not access config() OR globalConfig() in this method!
     //          that requires a scene, which is not available at this point
@@ -104,7 +106,7 @@ Containment::Containment(QGraphicsItem* parent,
 
 Containment::Containment(QObject* parent, const QVariantList& args)
     : Applet(parent, args),
-      d(new Private)
+      d(new Private(this))
 {
     // WARNING: do not access config() OR globalConfig() in this method!
     //          that requires a scene, which is not available at this point
@@ -708,12 +710,17 @@ void Containment::emitLaunchActivated()
 
 void Containment::addToolBoxTool(QGraphicsItem *tool, const QString& toolName)
 {
-    d->createToolbox(this)->addTool(tool, toolName);
+    d->createToolbox()->addTool(tool, toolName);
 }
 
 void Containment::enableToolBoxTool(const QString &toolname, bool enable)
 {
-    d->createToolbox(this)->enableTool(toolname, enable);
+    d->createToolbox()->enableTool(toolname, enable);
+}
+
+bool Containment::isToolboxToolEnabled(const QString &toolname) const
+{
+    return d->createToolbox()->isToolEnabled(toolname);
 }
 
 } // Plasma namespace

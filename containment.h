@@ -215,7 +215,6 @@ class PLASMA_EXPORT Containment : public Applet
 
         /**
          * Adds an item to the toolbox. The toolbox takes over ownership of the item.
-         * TODO: add remove and accessor methods
          */
         void addToolBoxTool(QGraphicsItem *tool, const QString &toolname = QString());
 
@@ -226,6 +225,11 @@ class PLASMA_EXPORT Containment : public Applet
          * @arg enable true to enable, false to disable
          */
         void enableToolBoxTool(const QString &toolname, bool enable);
+
+        /**
+         * Returns whether or not a given toolbox tool is enabled
+         */
+        bool isToolboxToolEnabled(const QString &toolname) const;
 
         /**
          * @internal

@@ -43,6 +43,8 @@ public:
 
     void addTool(QGraphicsItem *tool, const QString &name);
     void enableTool(const QString &tool, bool enabled);
+    bool isToolEnabled(const QString &tool) const;
+    QGraphicsItem* tool(const QString &tool) const;
 
 protected:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
