@@ -54,6 +54,7 @@ namespace Plasma
 
 Icon::Private::Private()
     : svg("widgets/iconbutton"),
+      iconSvg(0),
       svgElements(0),
       iconSize(48, 48),
       states(Private::NoState),
@@ -70,6 +71,7 @@ Icon::Private::Private()
 Icon::Private::~Private()
 {
     qDeleteAll(cornerActions);
+    delete iconSvg;
 }
 
 void Icon::Private::checkSvgElements()
@@ -454,7 +456,11 @@ void Icon::calculateSize(const QStyleOptionGraphicsItem *option)
 
 void Icon::setSvg(const QString &svgFilePath)
 {
-    d->svg.setFile(svgFilePath);
+    if (!d->iconSvg) {
+        d->iconSvg = new Plasma::Svg(svgFilePath);
+    } else {
+        d->iconSvg->setFile(svgFilePath);
+    }
 }
 
 void Icon::Private::drawBackground(QPainter *painter, IconState state)
@@ -515,17 +521,29 @@ void Icon::Private::drawForeground(QPainter *painter, IconState state)
     }
 }
 
-QPixmap Icon::Private::decoration(const QStyleOptionGraphicsItem *option, bool useHoverEffect) const
+QPixmap Icon::Private::decoration(const QStyleOptionGraphicsItem *option, bool useHoverEffect)
 {
     QPixmap result;
 
     QIcon::Mode mode   = option->state & QStyle::State_Enabled ? QIcon::Normal : QIcon::Disabled;
     QIcon::State state = option->state & QStyle::State_Open ? QIcon::On : QIcon::Off;
-    const QSize size = icon.actualSize(iconSize.toSize(), mode, state);
-    result = icon.pixmap(size, mode, state);
 
-    if (!result.isNull() && useHoverEffect)
-    {
+    if (iconSvg) {
+        if (iconSvgPixmap.size() != iconSize.toSize()) {
+            QImage img(iconSize.toSize(), QImage::Format_ARGB32_Premultiplied);
+            {
+                QPainter p(&img);
+                iconSvg->paint(&p, img.rect());
+            }
+            iconSvgPixmap = QPixmap::fromImage(img);
+        }
+        result = iconSvgPixmap;
+    } else {
+        const QSize size = icon.actualSize(iconSize.toSize(), mode, state);
+        result = icon.pixmap(size, mode, state);
+    }
+
+    if (!result.isNull() && useHoverEffect) {
         KIconEffect *effect = KIconLoader::global()->iconEffect();
 
         // Note that in KIconLoader terminology, active = hover.

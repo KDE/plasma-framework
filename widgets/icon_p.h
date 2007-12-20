@@ -111,7 +111,7 @@ public:
     void drawTextItems(QPainter *painter, const QStyleOptionGraphicsItem *option,
                         const QTextLayout &labelLayout, const QTextLayout &infoLayout) const;
 
-    QPixmap decoration(const QStyleOptionGraphicsItem *option, bool useHoverEffect) const;
+    QPixmap decoration(const QStyleOptionGraphicsItem *option, bool useHoverEffect);
     QPointF iconPosition(const QStyleOptionGraphicsItem *option, const QPixmap &pixmap) const;
 
     QSizeF displaySizeHint(const QStyleOptionGraphicsItem *option) const;
@@ -170,6 +170,8 @@ public:
     QString text;
     QString infoText;
     Svg svg;
+    Svg *iconSvg;
+    QPixmap iconSvgPixmap;
     int svgElements;
     QSizeF size;
     QSizeF iconSize;
