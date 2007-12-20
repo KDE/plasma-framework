@@ -36,6 +36,7 @@ class Theme::Private
 public:
    Private()
    {
+       generalFont = QApplication::font();
    }
 
    KConfigGroup config()
@@ -52,6 +53,7 @@ public:
    QString themeName;
    QString app;
    KSharedConfigPtr colors;
+   QFont generalFont;
 };
 
 class ThemeSingleton
@@ -165,16 +167,21 @@ QColor Theme::textColor() const
     return colors.foreground(KColorScheme::NormalText).color();
 }
 
+void Theme::setFont(const QFont &font)
+{
+    d->generalFont = font;
+}
+
 QFont Theme::font() const
 {
     //TODO: allow this to be overridden with a plasma specific font?
-    return QApplication::font();
+    return d->generalFont;
 }
 
 QFontMetrics Theme::fontMetrics() const
 {
     //TODO: allow this to be overridden with a plasma specific font?
-    return QApplication::fontMetrics();
+    return QFontMetrics(d->generalFont);
 }
 
 }
