@@ -84,6 +84,7 @@ void Label::setText(const QString& text)
 {
     d->text = text;
     updateGeometry();
+    update();
 }
 
 QString Label::text() const
@@ -105,6 +106,7 @@ void Label::setPen(const QPen& pen)
 {
     d->textPen = pen;
     updateGeometry();
+    update();
 }
 
 QPen Label::pen() const
@@ -126,6 +128,7 @@ void Label::setFont(const QFont& font)
 {
     d->textFont = font;
     updateGeometry();
+    update();
 }
 
 QFont Label::font() const
