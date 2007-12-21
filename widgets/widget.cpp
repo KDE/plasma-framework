@@ -557,6 +557,9 @@ void Widget::hoverEnterEvent(QGraphicsSceneHoverEvent *e)
 
         return; //Nothing to show
     }
+    if (view()->mouseGrabber()) {
+	return; // Someone has the mouse (eg. a context menu)
+    }
     QPoint viewPos = view()->mapFromScene(scenePos());
     QPoint globalPos = view()->mapToGlobal(viewPos);
     ToolTip::instance()->show(globalPos, d->toolTip);
