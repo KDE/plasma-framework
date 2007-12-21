@@ -77,30 +77,19 @@ AppletHandle::AppletHandle(Containment *parent, Applet *applet)
 
 AppletHandle::~AppletHandle()
 {
-    if (!m_applet) {
-        return;
+    if (m_applet) {
+        QRectF rect(m_applet->boundingRect());
+        QPointF center = rect.center();
+
+        QPointF newPos = transform().inverted().map(m_applet->pos());
+        m_applet->setPos(mapToParent(newPos));
+        QTransform matrix;
+        matrix.translate(center.x(), center.y());
+        matrix.rotateRadians(m_originalAngle+m_angle);
+        matrix.translate(-center.x(), -center.y());
+        m_applet->setTransform(matrix);
+        m_applet->setParentItem(m_containment);
     }
-
-    QRectF rect(m_applet->boundingRect());
-    QPointF center = rect.center();
-
-    if (m_scale > 0) {
-        const qreal newWidth = rect.width() * m_scale;
-        const qreal newHeight = rect.height() * m_scale;
-        m_applet->moveBy((rect.width() - newWidth) / 2, (rect.height() - newHeight) / 2);
-        m_applet->resize(newWidth, newHeight);
-    }
-
-    QTransform matrix;
-    matrix.translate(center.x(), center.y());
-    matrix.rotateRadians(m_originalAngle+m_angle);
-    matrix.translate(-center.x(), -center.y());
-
-    QPointF newPos = transform().inverted().map(m_applet->pos());
-
-    m_applet->setParentItem(m_containment);
-    m_applet->setPos(mapToParent(newPos));
-    m_applet->setTransform(matrix);
 }
 
 Applet *AppletHandle::applet() const
@@ -220,14 +209,47 @@ void AppletHandle::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
     ButtonType releasedAtButton = mapToButton(event->pos());
 
-    if (m_applet && event->button() == Qt::LeftButton && m_pressedButton==releasedAtButton) {
-        if (m_pressedButton == ConfigureButton) {
-            //FIXME: Remove this call once the configuration management change was done
-            m_containment->emitLaunchActivated();
-            m_applet->showConfigurationInterface();
-        } else if (m_pressedButton == RemoveButton) {
-            forceDisappear();
-            Phase::self()->animateItem(m_applet, Phase::Disappear);
+    if (m_applet && event->button() == Qt::LeftButton) {
+        switch (m_pressedButton) {
+            case RotateButton: {
+                if (m_scale > 0) {
+                    QRectF rect(m_applet->boundingRect());
+                    const qreal newWidth = rect.width() * m_scale;
+                    const qreal newHeight = rect.height() * m_scale;
+                    m_applet->resetTransform();
+                    m_applet->resize(newWidth, newHeight);
+                    scale(1.0/m_scale, 1.0/m_scale);
+                    moveBy((rect.width() - newWidth) / 2, (rect.height() - newHeight) / 2);
+                    m_scale = 0;
+                }
+
+                QRectF rect(boundingRect());
+                QPointF center = rect.center();
+
+                QTransform matrix;
+                matrix.translate(center.x(), center.y());
+                matrix.rotateRadians(m_originalAngle+m_angle);
+                matrix.translate(-center.x(), -center.y());
+
+                setTransform(matrix);
+                m_applet->update();
+                break;
+            }
+            case ConfigureButton:
+                //FIXME: Remove this call once the configuration management change was done
+                if (m_pressedButton == releasedAtButton) {
+                    m_containment->emitLaunchActivated();
+                    m_applet->showConfigurationInterface();
+                }
+                break;
+            case RemoveButton:
+                if (m_pressedButton == releasedAtButton) {
+                    forceDisappear();
+                    Phase::self()->animateItem(m_applet, Phase::Disappear);
+                }
+                break;
+            default:
+                break;
         }
     }
 
@@ -309,7 +331,6 @@ void AppletHandle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
         }
 
         qreal newScale = _k_distanceForPoint(event->pos()-center) / _k_distanceForPoint(pressPos-center);
-
         if (qAbs(newScale-1.0)<=0.1) {
             newScale = 1.0;
         }
@@ -352,12 +373,14 @@ QVariant AppletHandle::itemChange(GraphicsItemChange change, const QVariant &val
 void AppletHandle::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 {
     Q_UNUSED(event);
+    kDebug() << "hover enter";
     startFading(FadeIn);
 }
 
 void AppletHandle::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 {
     Q_UNUSED(event);
+    kDebug() << "hover leave";
     startFading(FadeOut);
 }
 
@@ -405,9 +428,7 @@ void AppletHandle::startFading(FadeType anim)
     }
 
     m_anim = anim;
-    m_animId = Phase::self()->customAnimation(40, (int)time,
-                                              Phase::EaseInOutCurve,
-                                              this, "fadeAnimation");
+    m_animId = Phase::self()->customAnimation(40, (int)time, Phase::EaseInOutCurve, this, "fadeAnimation");
 }
 
 void AppletHandle::forceDisappear()
@@ -421,10 +442,10 @@ void AppletHandle::calculateSize()
     m_rect = m_applet->boundingRect();
     m_rect = m_applet->mapToParent(m_rect).boundingRect();
 
-    const int requiredHeight = (HANDLE_WIDTH * 2) + m_applet->hasConfigurationInterface()
-                                                    ? ((ICON_SIZE + ICON_MARGIN) * 4)
-                                                    : ((ICON_SIZE + ICON_MARGIN) * 3)
-                                                  + ICON_MARGIN; // that last margin is blank space before the close button
+    const int requiredHeight = (HANDLE_WIDTH * 2) + m_applet->hasConfigurationInterface() ?
+                                                        ((ICON_SIZE + ICON_MARGIN) * 4) :
+                                                        ((ICON_SIZE + ICON_MARGIN) * 3) +
+                               ICON_MARGIN; // that last margin is blank space before the close button
     if (m_rect.height() < requiredHeight) {
         float delta = requiredHeight - m_rect.height();
         delta = delta/2.0;
