@@ -213,13 +213,13 @@ void IconAction::rebuildPixmap()
 bool IconAction::event(QEvent::Type type, const QPointF &pos)
 {
     switch (type) {
-    case QEvent::MouseButtonPress: {
+    case QEvent::GraphicsSceneMousePress: {
         setSelected(m_rect.contains(pos));
         return isSelected();
         }
         break;
 
-    case QEvent::MouseMove: {
+    case QEvent::GraphicsSceneMouseMove: {
         bool wasSelected = isSelected();
         bool active = m_rect.contains(pos);
         setSelected(wasSelected && active);
@@ -227,7 +227,7 @@ bool IconAction::event(QEvent::Type type, const QPointF &pos)
         }
         break;
 
-    case QEvent::MouseButtonRelease: {
+    case QEvent::GraphicsSceneMouseRelease: {
         // kDebug() << "IconAction::event got a QEvent::MouseButtonRelease, " << isSelected();
         bool wasSelected = isSelected();
         setSelected(false);
