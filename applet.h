@@ -68,6 +68,7 @@ class PLASMA_EXPORT Applet : public Widget
     Q_PROPERTY( bool needsConfiguring READ needsConfiguring WRITE setNeedsConfiguring )
     Q_PROPERTY( QRectF boundingRect READ boundingRect )
     Q_PROPERTY( QRectF geometry READ geometry WRITE setGeometry )
+    Q_PROPERTY( bool shouldConserveResources READ shouldConserveResources )
 
     public:
         typedef QList<Applet*> List;
@@ -404,7 +405,7 @@ class PLASMA_EXPORT Applet : public Widget
          *
          * @return true if it should conserve resources, false if it does not.
          */
-        Q_PROPERTY bool shouldConserveResources() const;
+        bool shouldConserveResources() const;
 
         /**
          * Returns the icon related to this applet
