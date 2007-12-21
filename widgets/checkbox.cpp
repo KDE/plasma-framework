@@ -214,6 +214,7 @@ void CheckBox::hoverLeaveEvent ( QGraphicsSceneHoverEvent * event )
     event->accept();
     d->hasMouse= false;
     update();
+    Widget::hoverEnterEvent(event);
 }
 
 void  CheckBox::hoverEnterEvent ( QGraphicsSceneHoverEvent * event)
@@ -221,6 +222,7 @@ void  CheckBox::hoverEnterEvent ( QGraphicsSceneHoverEvent * event)
     event->accept();
     d->hasMouse = true;
     update();
+    Widget::hoverLeaveEvent(event);
 }
 
 /*

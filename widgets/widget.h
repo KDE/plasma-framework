@@ -23,19 +23,30 @@
 #define WIDGET_H_
 
 #include <QtGui/QGraphicsItem>
+#include <QPixmap>
 
 #include <QtCore/QRectF>
 #include <QtCore/QSizeF>
+#include <QtCore/QString>
 
 #include <plasma/layouts/layoutitem.h>
 #include <plasma/plasma_export.h>
 
 class QGraphicsView;
+class QGraphicsSceneHoverEvent;
 
 namespace Plasma
 {
 
+struct PLASMA_EXPORT ToolTipData
+{
+    QString mainText; //Important information
+    QString subText; //Elaborates on the Main Text
+    QPixmap image; // Icon to show;
+};
+
 class Layout;
+
 
 /**
  * Base class for all Widgets in Plasma.
@@ -273,6 +284,17 @@ protected:
     virtual void paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
 
     /**
+    * The Data from the tooltip
+    * @returns A ToolTip::Data object with current information
+    */
+    ToolTipData toolTip() const;
+
+    /**
+    * Setter for data shown in tooltip
+    * @param data a ToolTip::Data object containing icon and text
+    */
+    void setToolTip( const ToolTipData &dt );
+    /**
      * Reimplemented from QGraphicsItem
      */
     virtual void contextMenuEvent(QGraphicsSceneContextMenuEvent *event);
@@ -281,6 +303,8 @@ protected:
     void setSize(qreal width, qreal height);
     void setSize(const QSizeF& size);
     void managingLayoutChanged();
+    virtual void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
+    virtual void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
 
 private:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);

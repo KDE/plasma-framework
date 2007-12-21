@@ -65,6 +65,7 @@ set(plasma_LIB_SRCS
     widgets/widget.cpp
     widgets/signalplotter.cpp
     widgets/meter.cpp
+    widgets/tooltip.cpp
 )
 
 kde4_add_ui_files (

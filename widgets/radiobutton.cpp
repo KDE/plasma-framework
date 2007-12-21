@@ -201,6 +201,7 @@ void RadioButton::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
     event->accept();
     d->mouseOver = false;
     update();
+    Widget::hoverLeaveEvent(event);
 }
 
 void RadioButton::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
@@ -208,6 +209,7 @@ void RadioButton::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
     event->accept();
     d->mouseOver = true;
     update();
+    Widget::hoverEnterEvent(event);
 }
 
 

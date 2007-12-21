@@ -26,7 +26,9 @@
 
 #include <QApplication>
 #include <QGraphicsScene>
+#include <QGraphicsSceneHoverEvent>
 #include <QGraphicsView>
+#include <QHelpEvent>
 #include <QList>
 #include <QPainter>
 #include <QPixmapCache>
@@ -36,6 +38,7 @@
 
 #include "layouts/freelayout.h"
 #include "plasma/plasma.h"
+#include "tooltip_p.h"
 
 namespace Plasma
 {
@@ -71,6 +74,7 @@ class Widget::Private
         bool wasMovable;
 
         bool shouldPaint(QPainter *painter, const QTransform &transform);
+        ToolTipData toolTip;
 };
 
 QGraphicsItem* Widget::graphicsItem()
@@ -495,6 +499,21 @@ void Widget::paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *opti
     // Replaced by widget's own function
 }
 
+ToolTipData Widget::toolTip() const
+{
+    return d->toolTip;
+}
+
+void Widget::setToolTip(const ToolTipData &tip)
+{
+    d->toolTip = tip;
+    if (ToolTip::instance()->isVisible()) {
+        QPoint viewPos = view()->mapFromScene(scenePos());
+        QPoint globalPos = view()->mapToGlobal(viewPos);
+        ToolTip::instance()->show(globalPos, d->toolTip);
+    }
+}
+
 QVariant Widget::itemChange(GraphicsItemChange change, const QVariant &value)
 {
     if (change == QGraphicsItem::ItemChildRemovedChange) {
@@ -528,6 +547,24 @@ void Widget::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
     if (parentWidget) {
         parentWidget->contextMenuEvent(event);
     }
+}
+
+void Widget::hoverEnterEvent(QGraphicsSceneHoverEvent *e)
+{
+    if (d->toolTip.image.isNull() &&
+       d->toolTip.subText.isEmpty() &&
+       d->toolTip.mainText.isEmpty()) {
+
+        return; //Nothing to show
+    }
+    QPoint viewPos = view()->mapFromScene(scenePos());
+    QPoint globalPos = view()->mapToGlobal(viewPos);
+    ToolTip::instance()->show(globalPos, d->toolTip);
+}
+
+void Widget::hoverLeaveEvent(QGraphicsSceneHoverEvent *e)
+{
+    ToolTip::instance()->hide();
 }
 
 } // Plasma namespace
