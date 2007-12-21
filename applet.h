@@ -399,6 +399,14 @@ class PLASMA_EXPORT Applet : public Widget
         QString pluginName() const;
 
         /**
+         * Whether the applet should conserve resources. If true, try to avoid doing stuff which
+         * is computationally heavy. Try to conserve power and resources.
+         *
+         * @return true if it should conserve resources, false if it does not.
+         */
+        Q_PROPERTY bool shouldConserveResources() const;
+
+        /**
          * Returns the icon related to this applet
          **/
         QString icon() const;

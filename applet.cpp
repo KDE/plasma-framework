@@ -44,6 +44,8 @@
 #include <KServiceTypeTrader>
 #include <KIconLoader>
 
+#include <Solid/PowerManagement>
+
 #include "plasma/configxml.h"
 #include "plasma/containment.h"
 #include "plasma/corona.h"
@@ -568,6 +570,11 @@ QString Applet::pluginName() const
     }
 
     return d->appletDescription.pluginName();
+}
+
+bool Applet::shouldConserveResources() const
+{
+    return Solid::PowerManagement::appShouldConserveResources();
 }
 
 QString Applet::category() const
