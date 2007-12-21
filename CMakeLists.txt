@@ -50,7 +50,7 @@ set(plasma_LIB_SRCS
     shadowitem.cpp
     svg.cpp
     theme.cpp
-    toolbox.cpp
+    desktoptoolbox.cpp
     uiloader.cpp
     view.cpp
     widgets/checkbox.cpp

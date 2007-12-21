@@ -39,7 +39,7 @@
 #include "applethandle_p.h"
 #include "corona.h"
 #include "phase.h"
-#include "toolbox_p.h"
+#include "desktoptoolbox_p.h"
 #include "svg.h"
 
 #include "layouts/freelayout.h"

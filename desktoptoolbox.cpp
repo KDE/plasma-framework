@@ -17,7 +17,7 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "toolbox_p.h"
+#include "desktoptoolbox_p.h"
 
 #include <QGraphicsSceneHoverEvent>
 #include <QPainter>
@@ -213,5 +213,5 @@ QGraphicsItem* DesktopToolbox::tool(const QString &toolName) const
 
 } // plasma namespace
 
-#include "toolbox_p.moc"
+#include "desktoptoolbox_p.moc"
 
