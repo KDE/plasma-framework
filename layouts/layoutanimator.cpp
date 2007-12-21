@@ -225,7 +225,7 @@ void LayoutAnimator::moveEffectUpdateItem( qreal value , LayoutItem* item , Effe
         widget->setOpacity( qMax(qreal(0.0),widget->opacity()-d->delta(value)) );
 
     
-    if ( effect == FadeInMoveEffect ) {
+    if ( effect == FadeInMoveEffect || effect == FadeOutMoveEffect ) {
         const QRectF finalGeometry = d->geometries[item].endGeometry;
 
         if ( item->geometry() != finalGeometry )
