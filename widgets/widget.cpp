@@ -560,8 +560,18 @@ void Widget::hoverEnterEvent(QGraphicsSceneHoverEvent *e)
     if (view()->mouseGrabber()) {
 	return; // Someone has the mouse (eg. a context menu)
     }
-    QPoint viewPos = view()->mapFromScene(scenePos());
-    QPoint globalPos = view()->mapToGlobal(viewPos);
+    
+    // If the mouse is in the widget's area at the time that it is being created
+    // the widget can receive a hover event before it is fully initialized, in
+    // which case view() will return 0.
+    QGraphicsView *parentView = view();
+    if (!parentView) {
+        kDebug() << "no parent view";
+        return;
+    }
+
+    QPoint viewPos = parentView->mapFromScene(scenePos());
+    QPoint globalPos = parentView->mapToGlobal(viewPos);
     ToolTip::instance()->show(globalPos, d->toolTip);
 }
 
