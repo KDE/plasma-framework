@@ -469,8 +469,8 @@ QRectF Containment::geometryForApplet(Applet *applet) const
     }
 
     // Otherwise place it in the centre of the screen
-    placement.moveLeft(geometry().width() / 2 + placement.width() / 2);
-    placement.moveTop(geometry().height() / 2 + placement.height() / 2);
+    placement.moveLeft(geometry().width() / 2 - placement.width() / 2);
+    placement.moveTop(geometry().height() / 2 - placement.height() / 2);
     return placement;
 }
 
