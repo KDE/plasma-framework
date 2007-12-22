@@ -63,7 +63,11 @@ void ToolTip::show(const QPoint &location, const Plasma::ToolTipData &data)
     setData(data);
     move(location.x(), location.y() - sizeHint().height());
     if (d->isShown) {
-        setVisible(true); // Don't delay if the tooltip is already shown(i.e. moving from one task to another)
+        // Don't delay if the tooltip is already shown(i.e. moving from one task to another)
+        // Qt doesn't seem to like visible tooltips moving though, so hide it and then
+        // immediately show it again
+        setVisible(false);
+        d->showTimer->start(0);
     }
     else {
         d->showTimer->start(1000);  //Shown after a one second delay.
