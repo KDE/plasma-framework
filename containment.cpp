@@ -437,34 +437,33 @@ Applet* Containment::addApplet(const QString& name, const QVariantList& args, ui
 
 QRectF Containment::geometryForApplet(Applet *applet) const
 {
-    // first try the top left of the containment
-    QRectF placement = QRectF(geometry().topLeft(), applet->sizeHint());
-    if (regionIsEmpty(placement, applet)) {
-        return placement;
+    // The value part of these maps isn't used. Only sorted keys are needed.
+    QMap<qreal, bool> xPositions;
+    QMap<qreal, bool> yPositions;
+
+    // Add the top-left corner offset by the applet's border
+    QPointF offset = applet->boundingRect().topLeft();
+    xPositions[-offset.x()] = true;
+    yPositions[-offset.y()] = true;
+
+    QRectF placement(QPointF(0, 0), applet->sizeHint());
+    foreach (Applet *existingApplet, d->applets) {
+        QPointF bottomRight = existingApplet->geometry().bottomRight();
+        if (bottomRight.x() + placement.width() < geometry().width()) {
+            xPositions[bottomRight.x() + 1] = true;
+        }
+        if (bottomRight.y() + placement.height() < geometry().height()) {
+            yPositions[bottomRight.y() + 1] = true;
+        }
     }
 
-    QList<Applet *> otherApplets = d->applets;
-    otherApplets.removeAll(applet);
-
-    // Then below existing applets
-    foreach (Applet *otherApplet, otherApplets) {
-        placement.moveTo(otherApplet->pos() + QPointF(0, otherApplet->size().height()));
-        if (!geometry().contains(placement)) {
-            continue;
-        }
-        if (regionIsEmpty(placement, applet)) {
-            return placement;
-        }
-    }
-
-    // Then to the right
-    foreach (Applet *otherApplet, otherApplets) {
-        placement.moveTo(otherApplet->pos() + QPointF(otherApplet->size().width(), 0));
-        if (!geometry().contains(placement)) {
-            continue;
-        }
-        if (regionIsEmpty(placement, applet)) {
-            return placement;
+    // Try to fit it in an empty space
+    foreach (qreal x, xPositions.keys()) {
+        foreach (qreal y, yPositions.keys()) {
+            placement.moveTo(x, y);
+            if (regionIsEmpty(placement, applet)) {
+                return placement;
+            }
         }
     }
 
