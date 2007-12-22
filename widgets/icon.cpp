@@ -454,13 +454,15 @@ void Icon::calculateSize(const QStyleOptionGraphicsItem *option)
     update();
 }
 
-void Icon::setSvg(const QString &svgFilePath)
+void Icon::setSvg(const QString &svgFilePath, const QString &elementId)
 {
     if (!d->iconSvg) {
         d->iconSvg = new Plasma::Svg(svgFilePath);
     } else {
         d->iconSvg->setFile(svgFilePath);
     }
+
+    d->iconSvgElement = elementId;
 }
 
 void Icon::Private::drawBackground(QPainter *painter, IconState state)
@@ -533,7 +535,7 @@ QPixmap Icon::Private::decoration(const QStyleOptionGraphicsItem *option, bool u
             QImage img(iconSize.toSize(), QImage::Format_ARGB32_Premultiplied);
             {
                 QPainter p(&img);
-                iconSvg->paint(&p, img.rect());
+                iconSvg->paint(&p, img.rect(), iconSvgElement);
             }
             iconSvgPixmap = QPixmap::fromImage(img);
         }

@@ -94,8 +94,9 @@ public:
     /**
     * Convenience method to set the svg image to use when given the filepath and name of svg.
     * @param svgFilePath the svg filepath including name of the svg.
+    * @param svgIconElement the svg element to use when displaying the svg. Defaults to all of them.
     */
-    void setSvg(const QString &svgFilePath);
+    void setSvg(const QString &svgFilePath, const QString &svgIconElement = QString());
 
     /**
     * Returns the meta text associated with this icon.

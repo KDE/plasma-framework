@@ -171,6 +171,7 @@ public:
     QString infoText;
     Svg svg;
     Svg *iconSvg;
+    QString iconSvgElement;
     QPixmap iconSvgPixmap;
     int svgElements;
     QSizeF size;
