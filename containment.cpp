@@ -417,15 +417,7 @@ Applet* Containment::addApplet(const QString& name, const QVariantList& args, ui
         applet->setGeometry(QRectF(appletGeometry.topLeft(),
                                    applet->sizeHint()));
     } else if (geometry().isValid()) {
-        //TODO: Make sure new applets don't overlap with existing ones
-        // Center exactly:
-        QSizeF size = applet->sizeHint();
-        qreal appletWidth = size.width();
-        qreal appletHeight = size.height();
-        qreal width = geometry().width();
-        qreal height = geometry().height();
-        //kDebug() << "measuring geometry with" << appletWidth << appletHeight << width << height;
-        applet->setGeometry(QRectF(QPointF((width / 2) - (appletWidth / 2), (height / 2) - (appletHeight / 2)), size));
+        applet->setGeometry(geometryForApplet(applet));
     }
 
     //kDebug() << applet->name() << "sizehint:" << applet->sizeHint() << "geometry:" << applet->geometry();
@@ -441,6 +433,55 @@ Applet* Containment::addApplet(const QString& name, const QVariantList& args, ui
 
     emit appletAdded(applet);
     return applet;
+}
+
+QRectF Containment::geometryForApplet(Applet *applet) const
+{
+    // first try the top left of the containment
+    QRectF placement = QRectF(geometry().topLeft(), applet->sizeHint());
+    if (regionIsEmpty(placement, applet)) {
+        return placement;
+    }
+
+    QList<Applet *> otherApplets = d->applets;
+    otherApplets.removeAll(applet);
+
+    // Then below existing applets
+    foreach (Applet *otherApplet, otherApplets) {
+        placement.moveTo(otherApplet->pos() + QPointF(0, otherApplet->size().height()));
+        if (!geometry().contains(placement)) {
+            continue;
+        }
+        if (regionIsEmpty(placement, applet)) {
+            return placement;
+        }
+    }
+
+    // Then to the right
+    foreach (Applet *otherApplet, otherApplets) {
+        placement.moveTo(otherApplet->pos() + QPointF(otherApplet->size().width(), 0));
+        if (!geometry().contains(placement)) {
+            continue;
+        }
+        if (regionIsEmpty(placement, applet)) {
+            return placement;
+        }
+    }
+
+    // Otherwise place it in the centre of the screen
+    placement.moveLeft(geometry().width() / 2 + placement.width() / 2);
+    placement.moveTop(geometry().height() / 2 + placement.height() / 2);
+    return placement;
+}
+
+bool Containment::regionIsEmpty(const QRectF &region, Applet *ignoredApplet) const
+{
+    foreach (Applet *applet, d->applets) {
+        if (applet != ignoredApplet && applet->geometry().intersects(region)) {
+            return false;
+        }
+    }
+    return true;
 }
 
 void Containment::addApplet(Applet *applet)
