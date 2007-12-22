@@ -1300,6 +1300,8 @@ QVariant Applet::itemChange(GraphicsItemChange change, const QVariant &value)
 
 void Applet::setGeometry(const QRectF& geometry)
 {
+    Plasma::Constraints updatedConstraints(0);
+
     if (geometry.size().width() > 0 && geometry.size().height() > 0 && size() != geometry.size()) {
         prepareGeometryChange();
         qreal width = qBound(minimumSize().width(), geometry.size().width(), maximumSize().width());
@@ -1315,12 +1317,19 @@ void Applet::setGeometry(const QRectF& geometry)
             managingLayout()->invalidate();
         }
 
-        updateConstraints(Plasma::SizeConstraint);
+        updatedConstraints |= Plasma::SizeConstraint;
     }
 
-    setPos(geometry.topLeft());
-    emit geometryChanged();
-    update();
+    if (geometry.topLeft() != pos()) {
+        setPos(geometry.topLeft());
+        updatedConstraints |= Plasma::LocationConstraint;
+    }
+
+    if (updatedConstraints) {
+        updateConstraints(updatedConstraints);
+        emit geometryChanged();
+        update();
+    }
 }
 
 void Applet::setIsContainment(bool isContainment)
