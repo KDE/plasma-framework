@@ -161,6 +161,13 @@ public:
     */
     void setAlignment(Qt::Alignment alignment);
 
+    /**
+    * @return optimal size given a size for the icon
+    * @param  iconWidth desidered width of the icon
+    */
+    QSizeF sizeFromIconSize(const qreal iconWidth) const;
+
+
 public Q_SLOTS:
     /**
     * Sets the appearance of the icon to pressed or restores the appearance

@@ -115,6 +115,7 @@ public:
     QPointF iconPosition(const QStyleOptionGraphicsItem *option, const QPixmap &pixmap) const;
 
     QSizeF displaySizeHint(const QStyleOptionGraphicsItem *option) const;
+    QSizeF displaySizeHint(const QStyleOptionGraphicsItem *option, const qreal width) const;
 
     QBrush foregroundBrush(const QStyleOptionGraphicsItem *option) const;
     QBrush backgroundBrush(const QStyleOptionGraphicsItem *option) const;
@@ -174,7 +175,8 @@ public:
     QString iconSvgElement;
     QPixmap iconSvgPixmap;
     int svgElements;
-    QSizeF size;
+    QColor textColor;
+    QColor shadowColor;
     QSizeF iconSize;
     QIcon icon;
     IconStates states;

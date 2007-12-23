@@ -45,6 +45,9 @@
 #include <KRun>
 #include <KMimeType>
 #include <KDebug>
+#include <KColorScheme>
+
+#include <plasma/theme.h>
 
 #include "phase.h"
 #include "svg.h"
@@ -66,6 +69,12 @@ Icon::Private::Private()
 
     //TODO: recheck when svg changes
     checkSvgElements();
+
+    textColor = KColorScheme(QPalette::Active, KColorScheme::View,
+                             Plasma::Theme::self()->colors()).foreground().color();
+    shadowColor = KColorScheme(QPalette::Active, KColorScheme::View,
+                               Plasma::Theme::self()->colors()).background().color();
+    shadowColor.setAlphaF(.6);
 }
 
 Icon::Private::~Private()
@@ -384,6 +393,37 @@ QSizeF Icon::Private::displaySizeHint(const QStyleOptionGraphicsItem *option) co
     QTextLayout layout;
     setLayoutOptions(layout, option);
     QSizeF size = layoutText(layout, option, label, QSizeF(iconSize.width() + 10, 32757));
+
+    return addMargin(size, TextMargin);
+}
+
+QSizeF Icon::Private::displaySizeHint(const QStyleOptionGraphicsItem *option, const qreal width) const
+{
+    if (text.isEmpty() && infoText.isEmpty()) {
+      return QSizeF( .0, .0 );
+    }
+    QString label = text;
+    // const qreal maxWidth = (orientation == Qt::Vertical) ? iconSize.width() + 10 : 32757;
+    // NOTE: find a way to use the other layoutText, it currently returns nominal width, when
+    //       we actually need the actual width.
+
+
+    qreal textWidth = width -
+                      horizontalMargin[Private::TextMargin].left -
+                      horizontalMargin[Private::TextMargin].right;
+
+    //allow only five lines of text
+    const int maxHeight = 5*Plasma::Theme::self()->fontMetrics().height();
+
+    // To compute the nominal size for the label + info, we'll just append
+    // the information string to the label
+    const QString info = infoText;
+    if (!info.isEmpty())
+        label += QString(QChar::LineSeparator) + info;
+
+    QTextLayout layout;
+    setLayoutOptions(layout, option);
+    QSizeF size = layoutText(layout, option, label, QSizeF(textWidth, maxHeight));
 
     return addMargin(size, TextMargin);
 }
@@ -766,21 +806,21 @@ QBrush Icon::Private::backgroundBrush(const QStyleOptionGraphicsItem *option) co
 void Icon::Private::drawTextItems(QPainter *painter, const QStyleOptionGraphicsItem *option,
                                   const QTextLayout &labelLayout, const QTextLayout &infoLayout) const
 {
-    QPen pen(foregroundBrush(option), 0);
-    painter->setPen(pen);
+    if (!labelLayout.text().isEmpty() || !infoLayout.text().isEmpty()) {
+        QRectF bRect(labelLayout.boundingRect());
+        QSizeF textSize = displaySizeHint(option, bRect.width());
+        QRectF backRect(QPointF(bRect.width()/2-textSize.width()/2+labelLayout.position().x(),labelLayout.position().y()-5),textSize);
+        painter->setBrush(shadowColor);
+        painter->setPen(Qt::NoPen);
+        painter->setRenderHint(QPainter::Antialiasing);
+        painter->drawRoundRect(backRect, 15,15*(backRect.width()/backRect.height()));
+    }
+
+    painter->setPen(textColor);
     labelLayout.draw(painter, QPointF());
 
-    if (!infoLayout.text().isEmpty())
-    {
-        QColor color;
-        if (option->state & QStyle::State_Selected)
-        {
-            color = option->palette.color(QPalette::HighlightedText);
-            color.setAlphaF(.5);
-        } else
-            color = option->palette.color(QPalette::Highlight);
-
-        painter->setPen(color);
+    if (!infoLayout.text().isEmpty()) {
+        painter->setPen(textColor);
         infoLayout.draw(painter, QPointF());
     }
 }
@@ -807,13 +847,26 @@ void Icon::paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *option
      }
 #endif
 
-    int iconWidth;
-    if (size().width() < size().height()) {
+    qreal iconWidth;
+    qreal heightAvail;
+    //if there is text resize the icon in order to make room for the text
+    if (!d->text.isEmpty() || !d->infoText.isEmpty()) {
+        heightAvail = size().height() -
+                      d->displaySizeHint(option, size().width()).height() -
+                      d->verticalMargin[Private::TextMargin].top -
+                      d->verticalMargin[Private::TextMargin].bottom;
+        //never make a label higher than half the total height
+        heightAvail = qMax(heightAvail, size().height()/2);
+    }else{
+        heightAvail = size().height();
+    }
+
+    if (size().width() < heightAvail) {
         iconWidth = size().width() -
                     d->horizontalMargin[Private::IconMargin].left -
                     d->horizontalMargin[Private::IconMargin].right;
     }else{
-        iconWidth = size().height() -
+        iconWidth = heightAvail -
                     d->verticalMargin[Private::IconMargin].top -
                     d->verticalMargin[Private::IconMargin].bottom;
     }
@@ -841,17 +894,8 @@ void Icon::paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *option
     QRectF textBoundingRect;
     d->layoutTextItems(option, icon, &labelLayout, &infoLayout, &textBoundingRect);
 
-    //did the calculated icon size left room for the text?
-    if (!d->text.isEmpty() && iconPos.y()+
-        d->iconSize.height()+
-        textBoundingRect.height() > size().height()) {
-        int iconWidth = d->iconSize.width() -
-                        textBoundingRect.height() +
-                        iconPos.y();
-        d->iconSize = QSizeF(iconWidth, iconWidth);
-    }
-
-    d->svg.resize(size());
+    //round to the bottom integer; otherwise a pixel could be chopped
+    d->svg.resize(QSize((int)size().width(), (int)size().height()));
     d->drawBackground(painter, state);
 
     // draw icon
@@ -1076,6 +1120,42 @@ void Icon::setUnpressed()
 void Icon::setAlignment(Qt::Alignment alignment)
 {
     d->alignment=alignment;
+}
+
+QSizeF Icon::sizeFromIconSize(const qreal iconWidth) const
+{
+    //no text, less calculations
+    if (d->text.isEmpty() && d->infoText.isEmpty()) {
+        return d->addMargin(d->addMargin(QSizeF(iconWidth, iconWidth),
+                                         Private::IconMargin),
+                            Private::ItemMargin);
+    }
+
+    QFontMetricsF fm(font());
+    //make room for at most 14 characters
+    qreal width = qMax(fm.width(d->text.left(12)),
+                       fm.width(d->infoText.left(12))) +
+                  fm.width("xx") +
+                  d->horizontalMargin[Private::TextMargin].left +
+                  d->horizontalMargin[Private::TextMargin].right;
+
+    width = qMax(width, iconWidth);
+
+    qreal height;
+    qreal textHeight;
+
+    QStyleOptionGraphicsItem option;
+    option.state = QStyle::State_None;
+    option.rect = boundingRect().toRect();
+    textHeight = d->displaySizeHint(&option, width).height();
+
+    height = iconWidth + textHeight +
+             d->verticalMargin[Private::TextMargin].top +
+             d->verticalMargin[Private::TextMargin].bottom +
+             d->verticalMargin[Private::IconMargin].top +
+             d->verticalMargin[Private::IconMargin].bottom;
+
+    return d->addMargin(QSizeF(width, height), Private::ItemMargin);
 }
 
 } // namespace Plasma
