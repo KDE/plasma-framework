@@ -806,16 +806,6 @@ QBrush Icon::Private::backgroundBrush(const QStyleOptionGraphicsItem *option) co
 void Icon::Private::drawTextItems(QPainter *painter, const QStyleOptionGraphicsItem *option,
                                   const QTextLayout &labelLayout, const QTextLayout &infoLayout) const
 {
-    if (!labelLayout.text().isEmpty() || !infoLayout.text().isEmpty()) {
-        QRectF bRect(labelLayout.boundingRect());
-        QSizeF textSize = displaySizeHint(option, bRect.width());
-        QRectF backRect(QPointF(bRect.width()/2-textSize.width()/2+labelLayout.position().x(),labelLayout.position().y()-5),textSize);
-        painter->setBrush(shadowColor);
-        painter->setPen(Qt::NoPen);
-        painter->setRenderHint(QPainter::Antialiasing);
-        painter->drawRoundRect(backRect, 15,15*(backRect.width()/backRect.height()));
-    }
-
     painter->setPen(textColor);
     labelLayout.draw(painter, QPointF());
 
