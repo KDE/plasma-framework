@@ -70,9 +70,9 @@ Icon::Private::Private()
     //TODO: recheck when svg changes
     checkSvgElements();
 
-    textColor = KColorScheme(QPalette::Active, KColorScheme::View,
+    textColor = KColorScheme(QPalette::Active, KColorScheme::Window,
                              Plasma::Theme::self()->colors()).foreground().color();
-    shadowColor = KColorScheme(QPalette::Active, KColorScheme::View,
+    shadowColor = KColorScheme(QPalette::Active, KColorScheme::Window,
                                Plasma::Theme::self()->colors()).background().color();
     shadowColor.setAlphaF(.6);
 }
