@@ -23,7 +23,7 @@
 #define WIDGET_H_
 
 #include <QtGui/QGraphicsItem>
-#include <QPixmap>
+#include <QtGui/QPixmap>
 
 #include <QtCore/QRectF>
 #include <QtCore/QSizeF>
