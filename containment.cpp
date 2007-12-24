@@ -399,25 +399,30 @@ Applet* Containment::addApplet(const QString& name, const QVariantList& args, ui
         applet = new Applet;
     }
 
-    //panels don't want backgrounds, which is important when setting geometry
-    if (containmentType() == PanelContainment) {
+    switch (containmentType()) {
+    case PanelContainment:
+        //panels don't want backgrounds, which is important when setting geometry
         applet->setDrawStandardBackground(false);
-    }
 
-    addApplet(applet);
+        addApplet(applet);
+        break;
 
-    //the applet needs to be given constraints before it can set its geometry
-    applet->updateConstraints(Plasma::AllConstraints);
+    default:
+        addApplet(applet);
 
-     //kDebug() << "adding applet" << applet->name() << "with a default geometry of" << appletGeometry << appletGeometry.isValid();
-    if (appletGeometry.isValid()) {
-        applet->setGeometry(appletGeometry);
-    } else if (appletGeometry.x() != -1 && appletGeometry.y() != -1) {
-        // yes, this means we can't have items start -1, -1
-        applet->setGeometry(QRectF(appletGeometry.topLeft(),
-                                   applet->sizeHint()));
-    } else if (geometry().isValid()) {
-        applet->setGeometry(geometryForApplet(applet));
+        //the applet needs to be given constraints before it can set its geometry
+        applet->updateConstraints(Plasma::AllConstraints);
+
+        //kDebug() << "adding applet" << applet->name() << "with a default geometry of" << appletGeometry << appletGeometry.isValid();
+        if (appletGeometry.isValid()) {
+            applet->setGeometry(appletGeometry);
+        } else if (appletGeometry.x() != -1 && appletGeometry.y() != -1) {
+            // yes, this means we can't have items start -1, -1
+            applet->setGeometry(QRectF(appletGeometry.topLeft(),
+                                    applet->sizeHint()));
+        } else if (geometry().isValid()) {
+            applet->setGeometry(geometryForApplet(applet));
+        }
     }
 
     //kDebug() << applet->name() << "sizehint:" << applet->sizeHint() << "geometry:" << applet->geometry();
