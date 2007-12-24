@@ -401,11 +401,55 @@ Applet* Containment::addApplet(const QString& name, const QVariantList& args, ui
 
     switch (containmentType()) {
     case PanelContainment:
+    {
         //panels don't want backgrounds, which is important when setting geometry
         applet->setDrawStandardBackground(false);
 
+        // Calculate where the user wants the applet to go before adding it
+        int index = -1;
+        QPointF position = appletGeometry.topLeft();
+        BoxLayout *l = dynamic_cast<BoxLayout *>(layout());
+        if (l && position != QPointF(-1, -1)) {
+            foreach (Applet *existingApplet, d->applets) {
+                if (formFactor() == Horizontal) {
+                    qreal middle = (existingApplet->geometry().left() +
+                            existingApplet->geometry().right()) / 2.0;
+                    if (position.x() >= existingApplet->geometry().left() &&
+                            position.x() <= middle) {
+                        index = l->indexOf(existingApplet);
+                        break;
+                    } else if (position.x() <= existingApplet->geometry().right() &&
+                            position.x() >= middle) {
+                        index = l->indexOf(existingApplet) + 1;
+                        break;
+                    }
+                } else {
+                    qreal middle = (existingApplet->geometry().top() +
+                            existingApplet->geometry().bottom()) / 2.0;
+                    if (position.y() >= existingApplet->geometry().top() &&
+                            position.y() <= middle) {
+                        index = l->indexOf(existingApplet);
+                        break;
+                    } else if (position.y() <= existingApplet->geometry().bottom() &&
+                            position.y() >= middle) {
+                        index = l->indexOf(existingApplet) + 1;
+                        break;
+                    }
+                }
+            }
+        }
+
         addApplet(applet);
+
+        // Reposition the applet after adding has been done
+        if (index != -1) {
+            l->insertItem(index, l->takeAt(l->indexOf(applet)));
+            d->applets.removeAll(applet);
+            d->applets.insert(index, applet);
+        }
+
         break;
+    }
 
     default:
         addApplet(applet);
