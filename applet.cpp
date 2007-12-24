@@ -164,9 +164,6 @@ public:
             }
         }
         applet->setDrawStandardBackground(true);
-
-        // give the applet a default minimum size
-        applet->setMinimumContentSize(16, 16);
     }
 
     // put all setup routines for script here. at this point we can assume that
