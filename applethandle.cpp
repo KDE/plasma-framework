@@ -340,6 +340,13 @@ void AppletHandle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
         QSizeF min = m_applet->minimumSize();
         QSizeF max = m_applet->maximumSize();
 
+        // If the applet doesn't have a minimum size, calculate based on a
+        // minimum content area size of 16x16
+        if (min.isEmpty()) {
+            min = m_applet->boundingRect().size() - m_applet->contentRect().size();
+            min += QSizeF(16, 16);
+        }
+
         //FIXME: this code will only work if we are keeping the aspect ratio, as we currently do
         //       as it resets only on the width, which will break if we allow resizing of width
         //       and height independantly
