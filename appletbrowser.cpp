@@ -99,10 +99,10 @@ void AppletBrowserWidget::Private::initFilters()
                           new KIcon("bookmark"));
     filterModel.addFilter(i18n("Widgets I Have Used Before"),
                           KCategorizedItemsViewModels::Filter("used", true),
-                          new KIcon("history"));
+                          new KIcon("view-history"));
     filterModel.addFilter(i18n("Currently Running Widgets"),
                           KCategorizedItemsViewModels::Filter("running", true),
-                          new KIcon("history"));
+                          new KIcon("view-history"));
 
     filterModel.addSeparator(i18n("Categories:"));
 
@@ -170,7 +170,7 @@ void AppletBrowserWidget::init()
     }
 
     // Other Emblems
-    d->appletList->addEmblem(i18n("Widgets I Have Used Before"), new KIcon("history"), 
+    d->appletList->addEmblem(i18n("Widgets I Have Used Before"), new KIcon("view-history"), 
                                 KCategorizedItemsViewModels::Filter("used", true));
 
     d->initFilters();
