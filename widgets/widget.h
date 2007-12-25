@@ -274,15 +274,6 @@ TODO: implement once we decide how to handle the font system
      */
     QRect mapToView(const QGraphicsView *view, const QRectF &rect) const;
 
-protected:
-    /**
-     * Paints the widget
-     * @param painter the QPainter to use to paint.
-     * @param option the style option used to give specific info on the item being dawn.
-     * @param widget the parent QWidget (most likely the Corona)
-     */
-    virtual void paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
-
     /**
     * The Data from the tooltip
     * @returns A ToolTip::Data object with current information
@@ -294,6 +285,16 @@ protected:
     * @param data a ToolTip::Data object containing icon and text
     */
     void setToolTip( const ToolTipData &dt );
+
+protected:
+    /**
+     * Paints the widget
+     * @param painter the QPainter to use to paint.
+     * @param option the style option used to give specific info on the item being dawn.
+     * @param widget the parent QWidget (most likely the Corona)
+     */
+    virtual void paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
+
     /**
      * Reimplemented from QGraphicsItem
      */
