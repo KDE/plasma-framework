@@ -490,15 +490,6 @@ NOTE: put this back if we end up needing to control when things paint due to, e.
     }
 }
 
-void Widget::paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
-{
-    Q_UNUSED(painter);
-    Q_UNUSED(option);
-    Q_UNUSED(widget);
-
-    // Replaced by widget's own function
-}
-
 ToolTipData Widget::toolTip() const
 {
     return d->toolTip;
@@ -512,6 +503,15 @@ void Widget::setToolTip(const ToolTipData &tip)
         QPoint globalPos = view()->mapToGlobal(viewPos);
         ToolTip::instance()->show(globalPos, d->toolTip);
     }
+}
+
+void Widget::paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+    Q_UNUSED(painter);
+    Q_UNUSED(option);
+    Q_UNUSED(widget);
+
+    // Replaced by widget's own function
 }
 
 QVariant Widget::itemChange(GraphicsItemChange change, const QVariant &value)
