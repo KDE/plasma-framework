@@ -51,7 +51,7 @@ class PLASMA_EXPORT Icon : public Plasma::Widget
     Q_PROPERTY( QString text READ text WRITE setText )
     Q_PROPERTY( QString infoText READ infoText WRITE setInfoText )
     Q_PROPERTY( QIcon icon READ icon WRITE setIcon )
-    Q_PROPERTY( QSizeF iconSize READ iconSize WRITE setIconSize )
+    Q_PROPERTY( QSizeF iconSize READ iconSize )
     Q_PROPERTY( QString svg WRITE setSvg )
 public:
     /**
@@ -134,19 +134,6 @@ public:
     QSizeF iconSize() const;
 
     /**
-    * Sets the size of the graphical icon for this Plasma::Icon.
-    * @param size the size of the icon.
-    */
-    void setIconSize(const QSizeF& size);
-
-    /**
-    * Convenience method to set the icon size without a QSizeF.
-    * @param height the height of the icon.
-    * @param width the width of the icon.
-    */
-    Q_INVOKABLE void setIconSize(int height, int width);
-
-    /**
     * Plasma::Icon allows the user to specify a number of actions
     * (current four) to be displayed around the widget. This method
     * allows for a created QAction (not a KAction!) to be added to 
@@ -214,10 +201,10 @@ public:
 
 private:
     void init();
-    void calculateSize();
-    void calculateSize(const QStyleOptionGraphicsItem *option);
+    void layoutIcons(const QStyleOptionGraphicsItem *option);
 
     Private * const d;
+    QSizeF currentSize;
 
 private Q_SLOTS:
     void actionDestroyed(QObject* obj);

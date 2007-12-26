@@ -3,6 +3,7 @@
  *   Copyright 2007 by Riccardo Iaconelli <riccardo@kde.org>
  *   Copyright 2007 by Matt Broadstone <mbroadst@gmail.com>
  *   Copyright 2006-2007 Fredrik Höglund <fredrik@kde.org>
+ *   Copyright 2007 by Marco Martin <notmart@gmail.com>
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU Library General Public License as
@@ -62,8 +63,7 @@ Icon::Private::Private()
       iconSize(48, 48),
       states(Private::NoState),
       orientation(Qt::Vertical),
-      alignment(Qt::AlignHCenter | Qt::AlignTop),
-      calculateSizeRequested(true)          // First time always true
+      alignment(Qt::AlignHCenter | Qt::AlignTop)
 {
     svg.setContentType(Plasma::Svg::ImageSet);
 
@@ -327,7 +327,8 @@ void Icon::init()
     d->setVerticalMargin(Private::IconMargin, focusHMargin, focusVMargin);
     d->setVerticalMargin(Private::ItemMargin, 0, 0);
 
-    calculateSize();
+    d->setActiveMargins();
+    currentSize = QSizeF(-1,-1);
 }
 
 void Icon::addAction(QAction *action)
@@ -373,30 +374,6 @@ void Icon::actionDestroyed(QObject* action)
     update();   // redraw since an action has been deleted.
 }
 
-QSizeF Icon::Private::displaySizeHint(const QStyleOptionGraphicsItem *option) const
-{
-    if (text.isEmpty() && infoText.isEmpty()) {
-      return QSizeF( .0, .0 );
-    }
-    QString label = text;
-    // const qreal maxWidth = (orientation == Qt::Vertical) ? iconSize.width() + 10 : 32757;
-    // NOTE: find a way to use the other layoutText, it currently returns nominal width, when
-    //       we actually need the actual width.
-
-
-    // To compute the nominal size for the label + info, we'll just append
-    // the information string to the label
-    const QString info = infoText;
-    if (!info.isEmpty())
-        label += QString(QChar::LineSeparator) + info;
-
-    QTextLayout layout;
-    setLayoutOptions(layout, option);
-    QSizeF size = layoutText(layout, option, label, QSizeF(iconSize.width() + 10, 32757));
-
-    return addMargin(size, TextMargin);
-}
-
 QSizeF Icon::Private::displaySizeHint(const QStyleOptionGraphicsItem *option, const qreal width) const
 {
     if (text.isEmpty() && infoText.isEmpty()) {
@@ -428,44 +405,42 @@ QSizeF Icon::Private::displaySizeHint(const QStyleOptionGraphicsItem *option, co
     return addMargin(size, TextMargin);
 }
 
-void Icon::calculateSize()
+void Icon::layoutIcons(const QStyleOptionGraphicsItem *option)
 {
-    if (d->calculateSizeRequested) {
-        // We do this to get size hint information before the icon has been drawn, as
-        // we have no access to the style option before that time. So we create a dummy.
-        QStyleOptionGraphicsItem option;
-        option.state = QStyle::State_None;
-        option.rect = boundingRect().toRect();
-        calculateSize(&option);
-    }
-    else {
-        d->calculateSizeRequested = true;
-    }
-}
-
-void Icon::calculateSize(const QStyleOptionGraphicsItem *option)
-{
-    if (!d->calculateSizeRequested)
+    if (size() == currentSize) {
         return;
+    }
 
-    prepareGeometryChange();
+    currentSize = size();
     d->setActiveMargins();
 
-    const QSizeF displaySize    = d->displaySizeHint(option);
-    const QSizeF decorationSize = d->addMargin(d->iconSize, Private::IconMargin);
-
-    QSizeF newSize;
-    if (d->orientation == Qt::Vertical) {
-        newSize.rwidth()  = qMax(decorationSize.width(), displaySize.width());
-        newSize.rheight() = decorationSize.height() + displaySize.height() + 1;
-    } else {
-        newSize.rwidth()  = decorationSize.width() + displaySize.width() + 1;
-        newSize.rheight() = qMax(decorationSize.height(), displaySize.height());
+    //calculate icon size based on the available space
+    //TODO: similar calculations for horizontal icons
+    qreal iconWidth;
+    qreal heightAvail;
+    //if there is text resize the icon in order to make room for the text
+    if (!d->text.isEmpty() || !d->infoText.isEmpty()) {
+        heightAvail = currentSize.height() -
+                      d->displaySizeHint(option, currentSize.width()).height() -
+                      d->verticalMargin[Private::TextMargin].top -
+                      d->verticalMargin[Private::TextMargin].bottom;
+        //never make a label higher than half the total height
+        heightAvail = qMax(heightAvail, currentSize.height()/2);
+    }else{
+        heightAvail = size().height();
     }
 
-    newSize = d->addMargin(newSize, Private::ItemMargin);
-    d->svg.resize(newSize);
-    d->calculateSizeRequested = false;
+    //aspect ratio very "tall"
+    if (size().width() < heightAvail) {
+        iconWidth = currentSize.width() -
+                    d->horizontalMargin[Private::IconMargin].left -
+                    d->horizontalMargin[Private::IconMargin].right;
+    }else{
+        iconWidth = heightAvail -
+                    d->verticalMargin[Private::IconMargin].top -
+                    d->verticalMargin[Private::IconMargin].bottom;
+    }
+    d->iconSize = QSizeF(iconWidth, iconWidth);
 
     int count = 0;
     foreach (IconAction* iconAction, d->cornerActions) {
@@ -477,21 +452,19 @@ void Icon::calculateSize(const QStyleOptionGraphicsItem *option)
             //iconAction->setRect(QRectF(6, 6, 32, 32));
             break;
         case Private::TopRight:
-            iconAction->setRect(QRectF(newSize.width() - 38, 6, 32, 32));
+            iconAction->setRect(QRectF(currentSize.width() - 38, 6, 32, 32));
             break;
         case Private::BottomLeft:
-            iconAction->setRect(QRectF(6, newSize.height() - 38, 32, 32));
+            iconAction->setRect(QRectF(6, currentSize.height() - 38, 32, 32));
             break;
         case Private::BottomRight:
-            iconAction->setRect(QRectF(newSize.width() - 38, newSize.height() - 38, 32, 32));
+            iconAction->setRect(QRectF(currentSize.width() - 38, currentSize.height() - 38, 32, 32));
             break;
         }
 
         ++count;
     }
 
-    resize(newSize);
-    update();
 }
 
 void Icon::setSvg(const QString &svgFilePath, const QString &elementId)
@@ -837,32 +810,8 @@ void Icon::paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *option
      }
 #endif
 
-    qreal iconWidth;
-    qreal heightAvail;
-    //if there is text resize the icon in order to make room for the text
-    if (!d->text.isEmpty() || !d->infoText.isEmpty()) {
-        heightAvail = size().height() -
-                      d->displaySizeHint(option, size().width()).height() -
-                      d->verticalMargin[Private::TextMargin].top -
-                      d->verticalMargin[Private::TextMargin].bottom;
-        //never make a label higher than half the total height
-        heightAvail = qMax(heightAvail, size().height()/2);
-    }else{
-        heightAvail = size().height();
-    }
-
-    if (size().width() < heightAvail) {
-        iconWidth = size().width() -
-                    d->horizontalMargin[Private::IconMargin].left -
-                    d->horizontalMargin[Private::IconMargin].right;
-    }else{
-        iconWidth = heightAvail -
-                    d->verticalMargin[Private::IconMargin].top -
-                    d->verticalMargin[Private::IconMargin].bottom;
-    }
-    d->iconSize = QSizeF(iconWidth, iconWidth);
-    calculateSize(option);
-    d->setActiveMargins();
+    //Lay out the main icon and action icons
+    layoutIcons(option);
 
     // Compute the metrics, and lay out the text items
     // ========================================================================
@@ -934,7 +883,6 @@ void Icon::drawActionButtonBase(QPainter* painter, const QSize &size, int elemen
 void Icon::setText(const QString& text)
 {
     d->text = text;
-    calculateSize();
 }
 
 QString Icon::text() const
@@ -945,7 +893,6 @@ QString Icon::text() const
 void Icon::setInfoText(const QString& text)
 {
     d->infoText = text;
-    calculateSize();
 }
 
 QString Icon::infoText() const
@@ -971,23 +918,11 @@ void Icon::setIcon(const QString& icon)
 void Icon::setIcon(const QIcon& icon)
 {
     d->icon = icon;
-    calculateSize();
 }
 
 QSizeF Icon::iconSize() const
 {
     return d->iconSize;
-}
-
-void Icon::setIconSize(const QSizeF& s)
-{
-    d->iconSize = s;
-    calculateSize();
-}
-
-void Icon::setIconSize(int w, int h)
-{
-    setIconSize(QSizeF(w, h));
 }
 
 bool Icon::isDown()

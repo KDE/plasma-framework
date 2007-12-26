@@ -114,7 +114,6 @@ public:
     QPixmap decoration(const QStyleOptionGraphicsItem *option, bool useHoverEffect);
     QPointF iconPosition(const QStyleOptionGraphicsItem *option, const QPixmap &pixmap) const;
 
-    QSizeF displaySizeHint(const QStyleOptionGraphicsItem *option) const;
     QSizeF displaySizeHint(const QStyleOptionGraphicsItem *option, const qreal width) const;
 
     QBrush foregroundBrush(const QStyleOptionGraphicsItem *option) const;
@@ -182,7 +181,6 @@ public:
     IconStates states;
     Qt::Orientation orientation;
     Qt::Alignment alignment;
-    bool calculateSizeRequested;
 
     QList<IconAction*> cornerActions;
 
