@@ -374,6 +374,26 @@ void Icon::actionDestroyed(QObject* action)
     update();   // redraw since an action has been deleted.
 }
 
+int Icon::numDisplayLines()
+{
+    return d->numDisplayLines;
+}
+
+void Icon::setNumDisplayLines(int numLines)
+{
+    if(numLines > d->maxDisplayLines) {
+        d->numDisplayLines = d->maxDisplayLines;
+    }
+    else {
+        d->numDisplayLines = numLines;
+    }
+}
+
+QSizeF Icon::sizeHint() const
+{
+    return currentSize;
+}
+
 QSizeF Icon::Private::displaySizeHint(const QStyleOptionGraphicsItem *option, const qreal width) const
 {
     if (text.isEmpty() && infoText.isEmpty()) {
@@ -390,7 +410,7 @@ QSizeF Icon::Private::displaySizeHint(const QStyleOptionGraphicsItem *option, co
                       horizontalMargin[Private::TextMargin].right;
 
     //allow only five lines of text
-    const int maxHeight = 5*Plasma::Theme::self()->fontMetrics().height();
+    const qreal maxHeight = numDisplayLines*Plasma::Theme::self()->fontMetrics().lineSpacing();
 
     // To compute the nominal size for the label + info, we'll just append
     // the information string to the label
@@ -665,10 +685,6 @@ QString Icon::Private::elidedText(QTextLayout &layout, const QStyleOptionGraphic
     qreal maxHeight      = size.height();
     qreal height         = 0;
 
-    // If the string contains a single line of text it shouldn't be word wrapped
-    if (text.indexOf(QChar::LineSeparator) == -1)
-        return metrics.elidedText(text, Qt::ElideRight, maxWidth);
-
     // Elide each line that has already been laid out in the layout.
     QString elided;
     elided.reserve(text.length());
@@ -684,7 +700,7 @@ QString Icon::Private::elidedText(QTextLayout &layout, const QStyleOptionGraphic
         {
             // Unfortunately, if the line ends because of a line separator, elidedText() will be too
             // clever and keep adding lines until it finds one that's too wide.
-            if (line.naturalTextWidth() < maxWidth && text[start + length - 1] == QChar::LineSeparator)
+            if (line.naturalTextWidth() < maxWidth && start+length > 0 && text[start + length - 1] == QChar::LineSeparator)
                 elided += text.mid(start, length - 1);
             else
                 elided += metrics.elidedText(text.mid(start), Qt::ElideRight, maxWidth);

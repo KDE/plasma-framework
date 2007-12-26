@@ -380,14 +380,14 @@ QVariant AppletHandle::itemChange(GraphicsItemChange change, const QVariant &val
 void AppletHandle::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 {
     Q_UNUSED(event);
-    kDebug() << "hover enter";
+    //kDebug() << "hover enter";
     startFading(FadeIn);
 }
 
 void AppletHandle::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 {
     Q_UNUSED(event);
-    kDebug() << "hover leave";
+    //kDebug() << "hover leave";
     startFading(FadeOut);
 }
 

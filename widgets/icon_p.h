@@ -181,12 +181,15 @@ public:
     IconStates states;
     Qt::Orientation orientation;
     Qt::Alignment alignment;
+    int numDisplayLines;
 
     QList<IconAction*> cornerActions;
 
     Margin verticalMargin[NMargins];
     Margin horizontalMargin[NMargins];
     Margin *activeMargins;
+
+    static const int maxDisplayLines = 5;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Icon::Private::IconStates)

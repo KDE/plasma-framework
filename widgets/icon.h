@@ -154,6 +154,21 @@ public:
     */
     QSizeF sizeFromIconSize(const qreal iconWidth) const;
 
+    /**
+    * @return the number of lines allowed to display
+    */
+    int numDisplayLines();
+
+    /**
+    * @param numLines the number of lines to show in the display.
+    */
+    void setNumDisplayLines(int numLines);
+
+    /**
+    * @return the recommended size of the widget
+    */
+    QSizeF sizeHint() const;
+
 
 public Q_SLOTS:
     /**
