@@ -23,6 +23,7 @@
 #include <QDesktopWidget>
 #include <QFile>
 #include <QGraphicsSceneContextMenuEvent>
+#include <QGraphicsView>
 #include <QMimeData>
 #include <QPainter>
 #include <QStyleOptionGraphicsItem>
@@ -393,7 +394,16 @@ void Containment::clearApplets()
 
 Applet* Containment::addApplet(const QString& name, const QVariantList& args, uint id, const QRectF& appletGeometry, bool delayInit)
 {
+    QGraphicsView *v = view();
+    if (v) {
+        v->setCursor(Qt::BusyCursor);
+    }
+
     Applet* applet = Applet::loadApplet(name, id, args);
+    if (v) {
+        v->unsetCursor();
+    }
+
     if (!applet) {
         kDebug() << "Applet" << name << "could not be loaded.";
         applet = new Applet;
