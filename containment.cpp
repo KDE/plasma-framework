@@ -238,7 +238,7 @@ void Containment::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
     if (!applet) {
         if (!scene() || (static_cast<Corona*>(scene())->isImmutable() && !KAuthorized::authorizeKAction("unlock_desktop"))) {
             //kDebug() << "immutability";
-            QGraphicsItem::contextMenuEvent(event);
+            Applet::contextMenuEvent(event);
             return;
         }
 
@@ -248,7 +248,7 @@ void Containment::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
 
         if (actions.count() < 1) {
             //kDebug() << "no applet, but no actions";
-            QGraphicsItem::contextMenuEvent(event);
+            Applet::contextMenuEvent(event);
             return;
         }
 
@@ -288,7 +288,7 @@ void Containment::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
         }
 
         if (!hasEntries) {
-            QGraphicsItem::contextMenuEvent(event);
+            Applet::contextMenuEvent(event);
             kDebug() << "no entries";
             return;
         }
