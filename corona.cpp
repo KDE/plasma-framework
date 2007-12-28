@@ -193,14 +193,13 @@ void Corona::loadApplets(const QString& configName)
             Q_UNUSED(applet)
             // FIXME: the transform does not stick; it gets set then almost immediately reset.
             //        find out why and then reenable this
-            /*
-            QList<qreal> m = cg.readEntry("transform", QList<qreal>());
+            
+            QList<qreal> m = appletConfig.readEntry("transform", QList<qreal>());
             if (m.count() == 9) {
                 QTransform t(m[0], m[1], m[2], m[3], m[4], m[5], m[6], m[7], m[8]);
                 applet->setTransform(t);
             }
-           */
-        }
+         }
     }
 
     if (d->containments.count() < 1) {
