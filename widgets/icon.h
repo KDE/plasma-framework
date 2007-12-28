@@ -152,6 +152,13 @@ public:
     void setOrientation(Qt::Orientation orientation);
 
     /**
+    * @deprecated
+    * let set the position in layout area
+    * @param alignment the alignment we want
+    */
+    void setAlignment(Qt::Alignment orientation){};
+
+    /**
     * @return optimal size given a size for the icon
     * @param  iconWidth desidered width of the icon
     */
