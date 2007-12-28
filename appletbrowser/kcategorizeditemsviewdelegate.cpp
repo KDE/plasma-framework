@@ -37,7 +37,7 @@
 
 KCategorizedItemsViewDelegate::KCategorizedItemsViewDelegate(QObject * parent)
         : QItemDelegate(parent), m_favoriteIcon("bookmark"), 
-        m_favoriteAddIcon("edit-add"), m_removeIcon("edit-delete"),
+        m_favoriteAddIcon("list-add"), m_removeIcon("list-remove"),
         m_onFavoriteIconItem(NULL)
 {
     m_parent = (KCategorizedItemsView *) parent;
