@@ -53,7 +53,7 @@ void DataContainer::setData(const QString& key, const QVariant& value)
     }
 
     d->dirty = true;
-    d->updateTs = QTime::currentTime().msec();
+    d->updateTs.start();
 }
 
 void DataContainer::clearData()
@@ -82,17 +82,9 @@ void DataContainer::checkForUpdate()
 
 int DataContainer::timeSinceLastUpdate() const
 {
-    int msec = QTime::currentTime().msec();
-    if (msec < d->updateTs) {
-        // we wrapped over midnight here, so return the current
-        // msec's plus the number of msec left in the previous day.
-        // 86400000 is the # of msec in a day
-        //
-        // yes, we assume we don't wrap more than one day here.
-        return msec + (86400000 - d->updateTs);
-    }
-
-    return msec - d->updateTs;
+    //FIXME: we still assume it's been <24h
+    //and ignore possible daylight savings changes
+    return d->updateTs.elapsed();
 }
 
 bool DataContainer::hasUpdates() const

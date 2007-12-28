@@ -32,8 +32,7 @@ class DataContainer::Private
 {
 public:
     Private()
-        : updateTs(0),
-          dirty(false)
+        : dirty(false)
     {}
 
     QObject* signalRelay(const DataContainer* dc, QObject *visualization,
@@ -42,7 +41,7 @@ public:
     DataEngine::Data data;
     QMap<QObject *, SignalRelay *> relayObjects;
     QMap<uint, SignalRelay *> relays;
-    int updateTs;
+    QTime updateTs;
     bool dirty : 1;
 };
 
