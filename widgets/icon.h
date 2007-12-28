@@ -143,10 +143,13 @@ public:
     void addAction(QAction* action);
 
     /**
-    * let set the position in layout area
-    * @param alignment the alignment we want
+    * let set the orientation of the icon
+    * Qt::Vertical: text under the icon
+    * Qt::Horizontal text at a side of the icon depending
+    * by the direction of the language
+    * @param orientation the orientation we want
     */
-    void setAlignment(Qt::Alignment alignment);
+    void setOrientation(Qt::Orientation orientation);
 
     /**
     * @return optimal size given a size for the icon

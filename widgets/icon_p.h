@@ -180,7 +180,6 @@ public:
     QIcon icon;
     IconStates states;
     Qt::Orientation orientation;
-    Qt::Alignment alignment;
     int numDisplayLines;
 
     QList<IconAction*> cornerActions;

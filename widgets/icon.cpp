@@ -62,8 +62,7 @@ Icon::Private::Private()
       svgElements(0),
       iconSize(48, 48),
       states(Private::NoState),
-      orientation(Qt::Vertical),
-      alignment(Qt::AlignHCenter | Qt::AlignTop)
+      orientation(Qt::Vertical)
 {
     svg.setContentType(Plasma::Svg::ImageSet);
 
@@ -435,31 +434,67 @@ void Icon::layoutIcons(const QStyleOptionGraphicsItem *option)
     d->setActiveMargins();
 
     //calculate icon size based on the available space
-    //TODO: similar calculations for horizontal icons
     qreal iconWidth;
-    qreal heightAvail;
-    //if there is text resize the icon in order to make room for the text
-    if (!d->text.isEmpty() || !d->infoText.isEmpty()) {
-        heightAvail = currentSize.height() -
-                      d->displaySizeHint(option, currentSize.width()).height() -
-                      d->verticalMargin[Private::TextMargin].top -
-                      d->verticalMargin[Private::TextMargin].bottom;
-        //never make a label higher than half the total height
-        heightAvail = qMax(heightAvail, currentSize.height()/2);
+
+    if (d->orientation == Qt::Vertical) {
+        qreal heightAvail;
+        //if there is text resize the icon in order to make room for the text
+        if (!d->text.isEmpty() || !d->infoText.isEmpty()) {
+            heightAvail = currentSize.height() -
+                          d->displaySizeHint(option, currentSize.width()).height() -
+                          d->verticalMargin[Private::TextMargin].top -
+                          d->verticalMargin[Private::TextMargin].bottom;
+            //never make a label higher than half the total height
+            heightAvail = qMax(heightAvail, currentSize.height()/2);
+        }else{
+            heightAvail = currentSize.height();
+        }
+
+        //aspect ratio very "tall"
+        if (currentSize.width() < heightAvail) {
+            iconWidth = currentSize.width() -
+                        d->horizontalMargin[Private::IconMargin].left -
+                        d->horizontalMargin[Private::IconMargin].right;
+        }else{
+            iconWidth = heightAvail -
+                        d->verticalMargin[Private::IconMargin].top -
+                        d->verticalMargin[Private::IconMargin].bottom;
+        }
+    //Horizontal layout
     }else{
-        heightAvail = size().height();
+        qreal widthAvail;
+        QFontMetricsF fm(font());
+
+        //make room for at most 14 characters
+        qreal textWidth = qMax(fm.width(d->text.left(12)),
+                          fm.width(d->infoText.left(12))) +
+                          fm.width("xx") +
+                          d->horizontalMargin[Private::TextMargin].left +
+                          d->horizontalMargin[Private::TextMargin].right;
+
+        //if there is text resize the icon in order to make room for the text
+        if (!d->text.isEmpty() || !d->infoText.isEmpty()) {
+            widthAvail = currentSize.width() -
+                         //FIXME: fontmetrics
+                         textWidth -
+                         d->horizontalMargin[Private::TextMargin].left -
+                         d->horizontalMargin[Private::TextMargin].right;
+        }else{
+            widthAvail = currentSize.width();
+        }
+
+        //aspect ratio very "wide"
+        if (currentSize.height() < widthAvail) {
+            iconWidth = currentSize.height() -
+                        d->verticalMargin[Private::IconMargin].top -
+                        d->verticalMargin[Private::IconMargin].bottom;
+        }else{
+            iconWidth = widthAvail -
+                        d->horizontalMargin[Private::IconMargin].left -
+                        d->horizontalMargin[Private::IconMargin].right;
+        }
     }
 
-    //aspect ratio very "tall"
-    if (size().width() < heightAvail) {
-        iconWidth = currentSize.width() -
-                    d->horizontalMargin[Private::IconMargin].left -
-                    d->horizontalMargin[Private::IconMargin].right;
-    }else{
-        iconWidth = heightAvail -
-                    d->verticalMargin[Private::IconMargin].top -
-                    d->verticalMargin[Private::IconMargin].bottom;
-    }
     d->iconSize = QSizeF(iconWidth, iconWidth);
 
     int count = 0;
@@ -598,6 +633,18 @@ QPointF Icon::Private::iconPosition(const QStyleOptionGraphicsItem *option, cons
 
     // Compute the nominal decoration rectangle
     const QSizeF size = addMargin(iconSize, Private::IconMargin);
+
+    //alignment depends from orientation and option->direction
+    Qt::Alignment alignment;
+    if (text.isEmpty() && infoText.isEmpty()) {
+        alignment = Qt::AlignCenter;
+    }else if (orientation == Qt::Vertical) {
+        alignment = Qt::Alignment(Qt::AlignHCenter | Qt::AlignTop);
+    //Horizontal
+    }else{
+        alignment = QStyle::visualAlignment(option->direction, Qt::Alignment(Qt::AlignLeft | Qt::AlignVCenter));
+    }
+
     const QRect iconRect = QStyle::alignedRect(option->direction, alignment, size.toSize(), itemRect.toRect());
 
     // Position the pixmap in the center of the rectangle
@@ -624,8 +671,16 @@ QRectF Icon::Private::labelRectangle(const QStyleOptionGraphicsItem *option, con
     const QRectF itemRect = subtractMargin(option->rect, Private::ItemMargin);
     QRectF textArea(QPointF(0, 0), itemRect.size());
 
-    textArea.setTop(decoSize.height() + 1);
+
+    if (orientation == Qt::Vertical) {
+        textArea.setTop(decoSize.height() + 1);
+    //Horizontal
+    }else{
+       textArea.setLeft(decoSize.width() + 1);
+    }
+
     textArea.translate(itemRect.topLeft());
+
     return QRectF(QStyle::visualRect(option->direction, option->rect, textArea.toRect()));
 }
 
@@ -1058,9 +1113,9 @@ void Icon::setUnpressed()
     setPressed(false);
 }
 
-void Icon::setAlignment(Qt::Alignment alignment)
+void Icon::setOrientation(Qt::Orientation orientation)
 {
-    d->alignment=alignment;
+    d->orientation = orientation;
 }
 
 QSizeF Icon::sizeFromIconSize(const qreal iconWidth) const
@@ -1080,7 +1135,12 @@ QSizeF Icon::sizeFromIconSize(const qreal iconWidth) const
                   d->horizontalMargin[Private::TextMargin].left +
                   d->horizontalMargin[Private::TextMargin].right;
 
-    width = qMax(width, iconWidth);
+    if (d->orientation == Qt::Vertical) {
+        width = qMax(width,
+                     iconWidth +
+                     d->horizontalMargin[Private::IconMargin].left +
+                     d->horizontalMargin[Private::IconMargin].right);
+    }
 
     qreal height;
     qreal textHeight;
@@ -1090,11 +1150,24 @@ QSizeF Icon::sizeFromIconSize(const qreal iconWidth) const
     option.rect = boundingRect().toRect();
     textHeight = d->displaySizeHint(&option, width).height();
 
-    height = iconWidth + textHeight +
-             d->verticalMargin[Private::TextMargin].top +
-             d->verticalMargin[Private::TextMargin].bottom +
-             d->verticalMargin[Private::IconMargin].top +
-             d->verticalMargin[Private::IconMargin].bottom;
+    if (d->orientation == Qt::Vertical) {
+        height = iconWidth + textHeight +
+                 d->verticalMargin[Private::TextMargin].top +
+                 d->verticalMargin[Private::TextMargin].bottom +
+                 d->verticalMargin[Private::IconMargin].top +
+                 d->verticalMargin[Private::IconMargin].bottom;
+    //Horizontal
+    }else{
+        height = qMax(iconWidth +
+                      d->verticalMargin[Private::IconMargin].top +
+                      d->verticalMargin[Private::IconMargin].bottom,
+                      textHeight +
+                      d->verticalMargin[Private::TextMargin].top +
+                      d->verticalMargin[Private::IconMargin].bottom);
+        width = width + iconWidth +
+                d->horizontalMargin[Private::IconMargin].left +
+                d->horizontalMargin[Private::IconMargin].right;
+    }
 
     return d->addMargin(QSizeF(width, height), Private::ItemMargin);
 }
