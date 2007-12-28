@@ -156,7 +156,7 @@ public:
     * let set the position in layout area
     * @param alignment the alignment we want
     */
-    void setAlignment(Qt::Alignment orientation){};
+    void setAlignment(Qt::Alignment alignment){};
 
     /**
     * @return optimal size given a size for the icon
