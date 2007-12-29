@@ -458,6 +458,10 @@ Applet* Containment::addApplet(const QString& name, const QVariantList& args, ui
             d->applets.insert(index, applet);
         }
 
+        //the applet needs to be given constraints before it can set its geometry
+        applet->updateConstraints(Plasma::AllConstraints);
+        applet->flushUpdatedConstraints();
+
         break;
     }
 
