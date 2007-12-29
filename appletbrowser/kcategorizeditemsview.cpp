@@ -34,7 +34,9 @@ KCategorizedItemsView::KCategorizedItemsView(QWidget * parent, Qt::WindowFlags f
     itemsView->m_view = this;
 
     textSearch->setClickMessage(i18n("Enter search phrase here"));
-
+    
+    textSearch->setFocus();
+    
     connect(textSearch, SIGNAL(textChanged(QString)),
             this, SLOT(searchTermChanged(QString)));
     connect(comboFilters, SIGNAL(currentIndexChanged(int)),
