@@ -24,6 +24,7 @@
 
 #include <QtGui/QWidget>
 #include <QtGui/QGraphicsSceneEvent>
+#include <QtGui/QGraphicsView>
 
 #include <plasma/plasma_export.h>
 
@@ -62,6 +63,13 @@ class PLASMA_EXPORT Dialog : public QWidget
          * @arg scenePos the absolute position on the scene.
          */
         void position(QGraphicsSceneEvent *event, const QRectF boundingRect, QPointF scenePos);
+	
+	/**
+         * @arg view The QGV where is displayed the applet
+         * @arg scenePos the absolute position on the scene.
+	 * @arg boundingRect the boundingRect() from the applet.
+         */
+        void position(QGraphicsView * view,const QRectF boundingRect,QPointF scenePos);
 
     protected:
         /**
