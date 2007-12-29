@@ -309,7 +309,6 @@ void BoxLayout::insertItem(int index, LayoutItem *item)
     }
 
     updateGeometry();
-    startAnimation();
 }
 
 void BoxLayout::addItem(LayoutItem *item)
@@ -335,7 +334,6 @@ void BoxLayout::removeItem(LayoutItem *item)
     }
 
     updateGeometry();
-    startAnimation();
 }
 
 int BoxLayout::indexOf(LayoutItem *l) const
@@ -359,8 +357,7 @@ LayoutItem *BoxLayout::takeAt(int i)
     }
 
     return d->children.takeAt(i);
-    // FIXME: This is never reached. Should it be called? Should
-    // startAnimation() also be called?
+    // FIXME: This is never reached. Should it be called?
     updateGeometry();
 }
 
@@ -446,6 +443,8 @@ void BoxLayout::relayout()
 
        pos = d->layoutItem(margined, d->children[i], pos , sizes[i]);
     }
+
+    startAnimation();
 }
 
 

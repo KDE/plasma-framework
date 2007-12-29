@@ -225,8 +225,8 @@ QSizeF Layout::maximumSize() const
 void Layout::startAnimation() 
 {
     if (animator() && animator()->timeLine()) {
-        animator()->timeLine()->setCurrentTime(0);
         if (animator()->timeLine()->state() == QTimeLine::NotRunning) {
+            animator()->timeLine()->setCurrentTime(0);
             animator()->timeLine()->start();
         }
     }
