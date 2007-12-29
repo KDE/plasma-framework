@@ -138,6 +138,7 @@ void Corona::saveApplets(const QString &config) const
         containment->saveConstraints(&containmentConfig);
         containment->save(&containmentConfig);
         KConfigGroup applets(&containmentConfig, "Applets");
+        applets.deleteGroup();
         foreach (const Applet* applet, containment->applets()) {
             KConfigGroup appletConfig(&applets, QString::number(applet->id()));
             applet->save(&appletConfig);
