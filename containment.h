@@ -316,6 +316,7 @@ class PLASMA_EXPORT Containment : public Applet
     private:
         QRectF geometryForApplet(Applet *applet) const;
         bool regionIsEmpty(const QRectF &region, Applet *ignoredApplet=0) const;
+        void prepareApplet(Applet *applet, bool delayInit);
 
         Q_DISABLE_COPY(Containment)
 

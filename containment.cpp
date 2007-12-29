@@ -450,6 +450,7 @@ Applet* Containment::addApplet(const QString& name, const QVariantList& args, ui
         }
 
         addApplet(applet);
+        prepareApplet(applet, delayInit);
 
         // Reposition the applet after adding has been done
         if (index != -1) {
@@ -458,19 +459,12 @@ Applet* Containment::addApplet(const QString& name, const QVariantList& args, ui
             d->applets.insert(index, applet);
         }
 
-        //the applet needs to be given constraints before it can set its geometry
-        applet->updateConstraints(Plasma::AllConstraints);
-        applet->flushUpdatedConstraints();
-
         break;
     }
 
     default:
         addApplet(applet);
-
-        //the applet needs to be given constraints before it can set its geometry
-        applet->updateConstraints(Plasma::AllConstraints);
-        applet->flushUpdatedConstraints();
+        prepareApplet(applet, delayInit);
 
         //kDebug() << "adding applet" << applet->name() << "with a default geometry of" << appletGeometry << appletGeometry.isValid();
         if (appletGeometry.isValid()) {
@@ -486,6 +480,12 @@ Applet* Containment::addApplet(const QString& name, const QVariantList& args, ui
 
     //kDebug() << applet->name() << "sizehint:" << applet->sizeHint() << "geometry:" << applet->geometry();
 
+    emit appletAdded(applet);
+    return applet;
+}
+
+void Containment::prepareApplet(Applet *applet, bool delayInit)
+{
     if (delayInit) {
         if (containmentType() == DesktopContainment) {
             applet->installSceneEventFilter(this);
@@ -495,8 +495,10 @@ Applet* Containment::addApplet(const QString& name, const QVariantList& args, ui
         Phase::self()->animateItem(applet, Phase::Appear);
     }
 
-    emit appletAdded(applet);
-    return applet;
+    applet->updateConstraints(Plasma::AllConstraints);
+    if (!delayInit) {
+        applet->flushUpdatedConstraints();
+    }
 }
 
 QRectF Containment::geometryForApplet(Applet *applet) const
