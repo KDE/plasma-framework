@@ -90,8 +90,10 @@ QGraphicsView *Widget::view() const
     if (!scene()) {
         return 0;
     }
+
     foreach (QGraphicsView *view, scene()->views()) {
-        if (view->sceneRect().intersects(sceneBoundingRect())) {
+        if (view->sceneRect().intersects(sceneBoundingRect()) ||
+                view->sceneRect().contains(scenePos())) {
             return view;
         }
     }
