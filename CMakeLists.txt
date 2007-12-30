@@ -1,7 +1,6 @@
 install(FILES
     dialogs/background.svg
-    dialogs/shutdowndlg.svg
-    dialogs/shutdowndlgbuttonglow.svg
+    dialogs/shutdowndialog.svg
     DESTINATION ${DATA_INSTALL_DIR}/desktoptheme/default/dialogs/)
 
 install(FILES
