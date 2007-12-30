@@ -23,6 +23,7 @@
 #include <QLabel>
 #include <QPixmap>
 #include <QTimer>
+#include <QGraphicsView>
 
 #include <kglobal.h>
 
@@ -95,6 +96,9 @@ Plasma::Widget *ToolTip::currentWidget() const
 //PRIVATE FUNCTIONS
 void ToolTip::slotShowToolTip()
 {
+    if ( d->currentWidget->view()->mouseGrabber() )
+	return;
+
     d->isShown = true;  //ToolTip is visible
     setVisible(true);
 }
