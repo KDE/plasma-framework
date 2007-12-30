@@ -549,36 +549,48 @@ void Widget::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
     }
 }
 
-void Widget::hoverEnterEvent(QGraphicsSceneHoverEvent *e)
+bool Widget::sceneEvent(QEvent *event)
 {
-    if (d->toolTip.image.isNull() &&
-       d->toolTip.subText.isEmpty() &&
-       d->toolTip.mainText.isEmpty()) {
+    switch (event->type()) {
+    case QEvent::GraphicsSceneHoverMove:
+        // If the tooltip isn't visible, run through showing the tooltip again
+        // so that it only becomes visible after a stationary hover
+        if (ToolTip::instance()->isVisible()) {
+            break;
+        }
 
-        return; //Nothing to show
+    case QEvent::GraphicsSceneHoverEnter:
+    {
+        // Check that there is a tooltip to show
+        if (d->toolTip.image.isNull() &&
+                d->toolTip.subText.isEmpty() &&
+                d->toolTip.mainText.isEmpty()) {
+            break;
+        }
+
+        // If the mouse is in the widget's area at the time that it is being
+        // created the widget can receive a hover event before it is fully
+        // initialized, in which case view() will return 0.
+        QGraphicsView *parentView = view();
+        if (parentView) {
+            QPoint viewPos = parentView->mapFromScene(scenePos());
+            QPoint globalPos = parentView->mapToGlobal(viewPos);
+            ToolTip::instance()->show(globalPos, this);
+        }
+
+        break;
     }
 
-    // If the mouse is in the widget's area at the time that it is being created
-    // the widget can receive a hover event before it is fully initialized, in
-    // which case view() will return 0.
-    QGraphicsView *parentView = view();
-    if (!parentView) {
-        kDebug() << "no parent view";
-        return;
+    case QEvent::GraphicsSceneHoverLeave:
+    case QEvent::GraphicsSceneMousePress:
+    case QEvent::GraphicsSceneWheel:
+        ToolTip::instance()->hide();
+
+    default:
+        break;
     }
 
-    if (parentView->mouseGrabber()) {
-        return; // Someone has the mouse (eg. a context menu)
-    }
-
-    QPoint viewPos = parentView->mapFromScene(scenePos());
-    QPoint globalPos = parentView->mapToGlobal(viewPos);
-    ToolTip::instance()->show(globalPos, this);
-}
-
-void Widget::hoverLeaveEvent(QGraphicsSceneHoverEvent *e)
-{
-    ToolTip::instance()->hide();
+    return QGraphicsItem::sceneEvent(event);
 }
 
 } // Plasma namespace

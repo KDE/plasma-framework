@@ -304,8 +304,8 @@ protected:
     void setSize(qreal width, qreal height);
     void setSize(const QSizeF& size);
     void managingLayoutChanged();
-    virtual void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
-    virtual void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
+
+    virtual bool sceneEvent(QEvent *event);
 
 private:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
