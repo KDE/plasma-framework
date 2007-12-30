@@ -34,6 +34,7 @@ class ToolTip::Private
         Private()
         : label(0)
         , imageLabel(0)
+        , currentWidget(0)
         , isShown(false)
         , showTimer(0)
         , hideTimer(0)
@@ -41,6 +42,7 @@ class ToolTip::Private
 
     QLabel *label;
     QLabel *imageLabel;
+    Plasma::Widget *currentWidget;
     bool isShown;
     QTimer *showTimer;
     QTimer *hideTimer;
@@ -58,9 +60,10 @@ ToolTip *ToolTip::instance()
     return &privateInstance->self;
 }
 
-void ToolTip::show(const QPoint &location, const Plasma::ToolTipData &data)
+void ToolTip::show(const QPoint &location, Plasma::Widget *widget)
 {
-    setData(data);
+    d->currentWidget = widget;
+    setData(widget->toolTip());
     move(location.x(), location.y() - sizeHint().height());
     if (d->isShown) {
         // Don't delay if the tooltip is already shown(i.e. moving from one task to another)
@@ -68,20 +71,25 @@ void ToolTip::show(const QPoint &location, const Plasma::ToolTipData &data)
         // immediately show it again
         setVisible(false);
         d->showTimer->start(0);
-    }
-    else {
+    } else {
         d->showTimer->start(1000);  //Shown after a one second delay.
     }
 }
 
 void ToolTip::hide()
 {
+    d->currentWidget = 0;
     d->showTimer->stop();  //Mouse out, stop the timer to show the tooltip
     if (!isVisible()) {
         d->isShown = false;
     }
     setVisible(false);
     d->hideTimer->start(500);  //500 ms delay before we are officially "gone" to allow for the time to move between widgets
+}
+
+Plasma::Widget *ToolTip::currentWidget() const
+{
+    return d->currentWidget;
 }
 
 //PRIVATE FUNCTIONS

@@ -498,10 +498,10 @@ ToolTipData Widget::toolTip() const
 void Widget::setToolTip(const ToolTipData &tip)
 {
     d->toolTip = tip;
-    if (ToolTip::instance()->isVisible()) {
+    if (ToolTip::instance()->currentWidget() == this) {
         QPoint viewPos = view()->mapFromScene(scenePos());
         QPoint globalPos = view()->mapToGlobal(viewPos);
-        ToolTip::instance()->show(globalPos, d->toolTip);
+        ToolTip::instance()->show(globalPos, this);
     }
 }
 
@@ -557,10 +557,7 @@ void Widget::hoverEnterEvent(QGraphicsSceneHoverEvent *e)
 
         return; //Nothing to show
     }
-    if (view()->mouseGrabber()) {
-	return; // Someone has the mouse (eg. a context menu)
-    }
-    
+
     // If the mouse is in the widget's area at the time that it is being created
     // the widget can receive a hover event before it is fully initialized, in
     // which case view() will return 0.
@@ -570,9 +567,13 @@ void Widget::hoverEnterEvent(QGraphicsSceneHoverEvent *e)
         return;
     }
 
+    if (parentView->mouseGrabber()) {
+        return; // Someone has the mouse (eg. a context menu)
+    }
+
     QPoint viewPos = parentView->mapFromScene(scenePos());
     QPoint globalPos = parentView->mapToGlobal(viewPos);
-    ToolTip::instance()->show(globalPos, d->toolTip);
+    ToolTip::instance()->show(globalPos, this);
 }
 
 void Widget::hoverLeaveEvent(QGraphicsSceneHoverEvent *e)

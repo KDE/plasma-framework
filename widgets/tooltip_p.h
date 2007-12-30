@@ -44,8 +44,10 @@ public:
     ~ToolTip();
 
     static ToolTip *instance();
-    void show(const QPoint &location, const Plasma::ToolTipData &data);
+    void show(const QPoint &location, Plasma::Widget *widget);
     void hide();
+
+    Plasma::Widget *currentWidget() const;
 
 private Q_SLOTS:
     void slotResetTimer();
