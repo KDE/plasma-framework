@@ -58,10 +58,8 @@ ThemePackageStructure::ThemePackageStructure()
     addDirectoryDefinition("dialogs", "dialogs/", i18n("Images for dialogs"));
     addFileDefinition("dialogs/background", "dialogs/background.svg",
                       i18n("Generic dialog background"));
-    addFileDefinition("dialogs/shutdowndlg", "dialogs/shutdowndlg.svg",
-                      i18n("Background for the log out dialog"));
-    addFileDefinition("dialogs/shutdowndlgbuttonglow", "dialogs/shutdowndlgbuttonglow.svg",
-                      i18n("Overlay for buttons on the log out dialog"));
+    addFileDefinition("dialogs/shutdowndialog", "dialogs/shutdowndialog.svg",
+                      i18n("Theme for the log out dialog"));
 
     addDirectoryDefinition("widgets", "widgets/", i18n("Images for widgets"));
     addFileDefinition("widgets/background", "widgets/background.svg",
