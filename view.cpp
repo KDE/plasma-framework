@@ -49,6 +49,22 @@ View::View(int screen, Corona *corona, QWidget *parent)
     : QGraphicsView(parent),
       d(new Private)
 {
+    initGraphicsView();
+    setScene(corona);
+    setScreen(screen);
+}
+
+View::View(Containment *containment, QWidget *parent)
+    : QGraphicsView(parent),
+      d(new Private)
+{
+    initGraphicsView();
+    setScene(containment->scene());
+    setContainment(containment);
+}
+
+void View::initGraphicsView()
+{
     setFrameShape(QFrame::NoFrame);
     setAutoFillBackground(true);
     setDragMode(QGraphicsView::RubberBandDrag);
@@ -58,17 +74,6 @@ View::View(int screen, Corona *corona, QWidget *parent)
     setAlignment(Qt::AlignLeft | Qt::AlignTop);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-
-    setScene(corona);
-    setScreen(screen);
-}
-
-View::View(Containment *containment, QWidget *parent)
-    : QGraphicsView(parent),
-      d(new Private)
-{
-    setScene(containment->scene());
-    setContainment(containment);
 }
 
 View::~View()

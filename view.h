@@ -85,6 +85,8 @@ protected Q_SLOTS:
     void updateSceneRect();
 
 private:
+    void initGraphicsView();
+
     class Private;
     Private * const d;
 };
