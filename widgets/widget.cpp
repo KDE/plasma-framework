@@ -140,6 +140,9 @@ Widget::Widget(QGraphicsItem *parent, QObject* parentObject)
 
 Widget::~Widget()
 {
+    if (ToolTip::instance()->currentWidget() == this) {
+        ToolTip::instance()->hide();
+    }
     delete d;
 }
 

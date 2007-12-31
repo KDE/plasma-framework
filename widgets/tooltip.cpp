@@ -96,8 +96,10 @@ Plasma::Widget *ToolTip::currentWidget() const
 //PRIVATE FUNCTIONS
 void ToolTip::slotShowToolTip()
 {
-    if ( d->currentWidget->view() && d->currentWidget->view()->mouseGrabber() )
+    QGraphicsView *v = d->currentWidget->view();
+    if (v && v->mouseGrabber()) {
 	return;
+    }
 
     d->isShown = true;  //ToolTip is visible
     setVisible(true);
