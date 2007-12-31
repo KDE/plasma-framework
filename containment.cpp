@@ -737,7 +737,7 @@ void Containment::dropEvent(QGraphicsSceneDragDropEvent *event)
 
             if (appletList.isEmpty()) {
                 // no special applet associated with this mimetype, let's
-                addApplet("url", args, 0, geom);
+                addApplet("icon", args, 0, geom);
             } else {
                 //TODO: should we show a dialog here to choose which plasmoid load if
                 //appletList.count() > 0?
