@@ -28,6 +28,7 @@
 #include <KServiceTypeTrader>
 
 #include "animator.h"
+#include "widgets/widget.h"
 
 namespace Plasma
 {
@@ -373,7 +374,14 @@ Phase::AnimId Phase::animateElement(QGraphicsItem *item, ElementAnimation animat
     }
 
     d->animatedElements[state->id] = state;
-    state->item->update();
+    // nasty hack because QGraphicsItem::update isn't virtual!
+    // FIXME: remove in 4.1 as we will no longer need the caching in Plasma::Widget with Qt 4.4
+    Plasma::Widget *widget = dynamic_cast<Plasma::Widget*>(state->item);
+    if (widget) {
+        widget->update();
+    } else {
+        state->item->update();
+    }
 
     //kDebug() << "startElementAnimation(AnimId " << animation << ") returning " << state->id;
     if (needTimer && !d->timerId) {
@@ -494,6 +502,7 @@ void Phase::timerEvent(QTimerEvent *event)
 
     foreach (ElementAnimationState* state, d->animatedElements) {
         if (state->currentFrame == state->frames) {
+            //kDebug() << "skipping" << state->id << "as its already at frame" << state->currentFrame << "of" << state->frames;
             // since we keep element animations around until they are
             // removed, we will end up with finished animations in the queue;
             // just skip them
@@ -503,12 +512,19 @@ void Phase::timerEvent(QTimerEvent *event)
 
         if (state->currentInterval <= elapsed) {
             // we need to step forward!
-/*            kDebug() << "stepping forwards element anim " << state->id << " from " << state->currentFrame
+            /*kDebug() << "stepping forwards element anim " << state->id << " from " << state->currentFrame
                     << " by " << qMax(1, elapsed / state->interval) << " to "
                     << state->currentFrame + qMax(1, elapsed / state->interval) << endl;*/
             state->currentFrame += qMax(1, elapsed / state->interval);
-            state->item->update();
-
+            // nasty hack because QGraphicsItem::update isn't virtual!
+            // FIXME: remove in 4.1 as we will no longer need the caching in Plasma::Widget with Qt 4.4
+            Plasma::Widget *widget = dynamic_cast<Plasma::Widget*>(state->item);
+            if (widget) {
+                widget->update();
+            } else {
+                state->item->update();
+            }
+            
             if (state->currentFrame < state->frames) {
                 state->currentInterval = state->interval;
                 //TODO: calculate a proper interval based on the curve
