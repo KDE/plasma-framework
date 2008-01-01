@@ -115,6 +115,12 @@ public Q_SLOTS:
     void saveApplets() const;
 
     /**
+     * Called when there have been changes made to configuration that should be saved
+     * to disk at the next convenient moment
+     */
+    void scheduleConfigSync();
+
+    /**
      * Adds a Containment to the Corona
      *
      * @param name the plugin name for the containment, as given by
@@ -177,6 +183,7 @@ protected:
 protected Q_SLOTS:
     void containmentDestroyed(QObject*);
     void screenResized(int);
+    void syncConfig();
 
 private:
     class Private;

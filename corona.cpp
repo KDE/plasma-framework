@@ -28,6 +28,7 @@
 #include <QUrl>
 #include <QGraphicsView>
 #include <QStringList>
+#include <QTimer>
 
 #include <KDebug>
 #include <KLocale>
@@ -44,6 +45,10 @@ using namespace Plasma;
 
 namespace Plasma
 {
+
+// constant controling how long between requesting a configuration sync
+// and one happening should occur. currently 2 minutes.
+const int CONFIG_SYNC_TIMEOUT = 120000;
 
 class Corona::Private
 {
@@ -64,6 +69,8 @@ public:
 
     void init(Corona* q)
     {
+        configSyncTimer.setSingleShot(true);
+        connect(&configSyncTimer, SIGNAL(timeout()), q, SLOT(syncConfig()));
         QObject::connect(QApplication::desktop(), SIGNAL(resized(int)), q, SLOT(screenResized(int)));
     }
 
@@ -72,6 +79,7 @@ public:
     QString mimetype;
     QString configName;
     KSharedConfigPtr config;
+    QTimer configSyncTimer;
     QList<Containment*> containments;
 };
 
@@ -149,6 +157,18 @@ void Corona::saveApplets(const QString &config) const
 void Corona::saveApplets() const
 {
     saveApplets(d->configName);
+}
+
+void Corona::scheduleConfigSync()
+{
+    //NOTE: this is a pretty simplistic model: we simply save no more than CONFIG_SYNC_TIMEOUT
+    //      after the first time this is called. not much of a heuristic for save points, but
+    //      it should at least compress these activities a bit and provide a way for applet
+    //      authors to ween themselves from the sync() disease. A more interesting/dynamic
+    //      algorithm for determining when to actually sync() to disk might be better, though.
+    if (!d->configSyncTimer.isActive()) {
+        d->configSyncTimer.start(CONFIG_SYNC_TIMEOUT);
+    }
 }
 
 void Corona::loadApplets(const QString& configName)
@@ -292,8 +312,8 @@ void Corona::loadDefaultSetup()
     panel->setLocation(Plasma::LeftEdge);
     */
 
-    // in case something goes bad during runtime, let's at least save this to disk right away
-    config()->sync();
+    // in case something goes bad during runtime, let's at least save this to disk soonish
+    scheduleConfigSync();
 }
 
 Containment* Corona::containmentForScreen(int screen) const
@@ -455,6 +475,11 @@ void Corona::screenResized(int screen)
     c->setScreen(screen);
     c->setFormFactor(Plasma::Planar);
     emit newScreen(screen);
+}
+
+void Corona::syncConfig()
+{
+    config()->sync();
 }
 
 bool Corona::isImmutable() const

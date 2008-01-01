@@ -473,6 +473,11 @@ Applet* Containment::addApplet(const QString& name, const QVariantList& args, ui
 
     //kDebug() << applet->name() << "sizehint:" << applet->sizeHint() << "geometry:" << applet->geometry();
 
+    Corona *c = corona();
+    if (c) {
+        connect(applet, SIGNAL(configurationChanged()), corona(), SLOT(scheduleConfigSync()));
+    }
+
     emit appletAdded(applet);
     return applet;
 }

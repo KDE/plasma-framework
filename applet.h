@@ -581,6 +581,16 @@ class PLASMA_EXPORT Applet : public Widget
          */
         void geometryChanged();
 
+        /**
+         * Emitted when an applet has changed values in its configuration
+         * and wishes for them to be saved at the next save point. As this implies
+         * disk activity, this signal should be used with care.
+         *
+         * @note This does not need to be emitted from saveState by individual
+         * applets.
+         */
+        void configurationChanged();
+
     public Q_SLOTS:
         /**
          * Sets whether or not this applet is immutable or not.
