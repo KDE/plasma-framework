@@ -101,7 +101,7 @@ public:
     /**
      * Returns the the config file used to store the configuration for this Corona
      */
-    KSharedConfig::Ptr config();
+    KSharedConfig::Ptr config() const;
 
 public Q_SLOTS:
     /**
@@ -118,7 +118,7 @@ public Q_SLOTS:
      * Called when there have been changes made to configuration that should be saved
      * to disk at the next convenient moment
      */
-    void scheduleConfigSync();
+    void scheduleConfigSync() const;
 
     /**
      * Adds a Containment to the Corona

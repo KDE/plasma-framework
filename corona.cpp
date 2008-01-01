@@ -74,6 +74,22 @@ public:
         QObject::connect(QApplication::desktop(), SIGNAL(resized(int)), q, SLOT(screenResized(int)));
     }
 
+    void saveApplets(KSharedConfigPtr cg) const
+    {
+        KConfigGroup containmentsGroup(cg, "Containments");
+        foreach (const Containment *containment, containments) {
+            QString cid = QString::number(containment->id());
+            KConfigGroup containmentConfig(&containmentsGroup, cid);
+            containment->saveConstraints(&containmentConfig);
+            containment->save(&containmentConfig);
+            KConfigGroup applets(&containmentConfig, "Applets");
+            foreach (const Applet* applet, containment->applets()) {
+                KConfigGroup appletConfig(&applets, QString::number(applet->id()));
+                applet->save(&appletConfig);
+            }
+        }
+    }
+
     bool immutable;
     bool kioskImmutable;
     QString mimetype;
@@ -136,30 +152,17 @@ QString Corona::appletMimeType()
 
 void Corona::saveApplets(const QString &config) const
 {
-    KConfig cg(config);
-    d->configName = config;
-
-    KConfigGroup containments(&cg, "Containments");
-    foreach (const Containment *containment, d->containments) {
-        QString cid = QString::number(containment->id());
-        KConfigGroup containmentConfig(&containments, cid);
-        containment->saveConstraints(&containmentConfig);
-        containment->save(&containmentConfig);
-        KConfigGroup applets(&containmentConfig, "Applets");
-        applets.deleteGroup();
-        foreach (const Applet* applet, containment->applets()) {
-            KConfigGroup appletConfig(&applets, QString::number(applet->id()));
-            applet->save(&appletConfig);
-        }
-    }
+    KSharedConfigPtr cg = KSharedConfig::openConfig(config);
+    d->saveApplets(cg);
 }
 
 void Corona::saveApplets() const
 {
-    saveApplets(d->configName);
+    d->saveApplets(config());
+    scheduleConfigSync();
 }
 
-void Corona::scheduleConfigSync()
+void Corona::scheduleConfigSync() const
 {
     //NOTE: this is a pretty simplistic model: we simply save no more than CONFIG_SYNC_TIMEOUT
     //      after the first time this is called. not much of a heuristic for save points, but
@@ -174,7 +177,10 @@ void Corona::scheduleConfigSync()
 void Corona::loadApplets(const QString& configName)
 {
     clearApplets();
-    d->configName = configName;
+    if (configName != d->configName) {
+        d->configName = configName;
+        d->config = 0;
+    }
 
     KConfigGroup containments(config(), "Containments");
 
@@ -340,7 +346,7 @@ void Corona::clearApplets()
     }
 }
 
-KSharedConfigPtr Corona::config()
+KSharedConfigPtr Corona::config() const
 {
     if (!d->config) {
         d->config = KSharedConfig::openConfig(d->configName);
