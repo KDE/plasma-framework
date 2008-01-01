@@ -475,7 +475,7 @@ Applet* Containment::addApplet(const QString& name, const QVariantList& args, ui
 
     Corona *c = corona();
     if (c) {
-        connect(applet, SIGNAL(configurationChanged()), corona(), SLOT(scheduleConfigSync()));
+        connect(applet, SIGNAL(configNeedsSaving()), corona(), SLOT(scheduleConfigSync()));
     }
 
     emit appletAdded(applet);

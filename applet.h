@@ -589,7 +589,7 @@ class PLASMA_EXPORT Applet : public Widget
          * @note This does not need to be emitted from saveState by individual
          * applets.
          */
-        void configurationChanged();
+        void configNeedsSaving();
 
     public Q_SLOTS:
         /**
