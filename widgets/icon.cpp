@@ -413,9 +413,9 @@ QSizeF Icon::Private::displaySizeHint(const QStyleOptionGraphicsItem *option, co
 
     // To compute the nominal size for the label + info, we'll just append
     // the information string to the label
-    const QString info = infoText;
-    if (!info.isEmpty())
-        label += QString(QChar::LineSeparator) + info;
+    if (!infoText.isEmpty()) {
+        label += QString(QChar::LineSeparator) + infoText;
+    }
 
     QTextLayout layout;
     setLayoutOptions(layout, option);
