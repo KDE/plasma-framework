@@ -65,6 +65,7 @@ void DataContainer::clearData()
 
     d->data.clear();
     d->dirty = true;
+    d->updateTs.start();
 }
 
 void DataContainer::checkForUpdate()
