@@ -35,7 +35,7 @@ static const int ToolName = 7001;
 
 DesktopToolbox::DesktopToolbox(QGraphicsItem *parent)
     : QGraphicsItem(parent),
-      m_icon("configure"),
+      m_icon("plasma"),
       m_size(50),
       m_showing(false),
       m_animId(0),
@@ -67,8 +67,9 @@ void DesktopToolbox::paint(QPainter *painter, const QStyleOptionGraphicsItem *op
     QPainterPath p = shape();
     QRadialGradient gradient(QPoint(m_size*2, 0), m_size*3);
     gradient.setFocalPoint(QPointF(m_size*2, 0));
-    gradient.setColorAt(0, QColor(255, 255, 255, 128));
-    gradient.setColorAt(.9, QColor(128, 128, 128, 128));
+    gradient.setColorAt(0, QColor(255, 255, 255, 96));
+    gradient.setColorAt(.33, QColor(128, 128, 128, 96));
+    gradient.setColorAt(.66, QColor(128, 128, 128, 0));
     painter->save();
     painter->setPen(Qt::NoPen);
     painter->setRenderHint(QPainter::Antialiasing, true);
@@ -90,7 +91,7 @@ QPainterPath DesktopToolbox::shape() const
 void DesktopToolbox::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 {
 //    Plasma::Phase::self()->moveItem(this, Phase::SlideIn, QPoint(-25, -25));
-    int x = -25; // pos().x();
+    int x = -35; // pos().x();
     int y = 0; // pos().y();
     Plasma::Phase* phase = Plasma::Phase::self();
     foreach (QGraphicsItem* tool, QGraphicsItem::children()) {

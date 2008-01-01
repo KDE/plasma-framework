@@ -45,7 +45,6 @@
 
 #include "layouts/freelayout.h"
 #include "layouts/boxlayout.h"
-#include "widgets/pushbutton.h"
 
 namespace Plasma
 {
@@ -182,20 +181,14 @@ void Containment::setContainmentType(Containment::Type type)
 
     if (isContainment() && type == DesktopContainment) {
         if (!d->toolbox) {
-            Plasma::PushButton *tool = new Plasma::PushButton(i18n("Add Widgets"));
-            tool->resize(tool->sizeHint());
-            addToolBoxTool(tool, "addwidgets");
-            connect(tool, SIGNAL(clicked()), this, SIGNAL(showAddWidgets()));
+            Plasma::Widget *addWidgetTool = addToolBoxTool("addwidgets", "edit-add", i18n("Add Widgets"));
+            connect(addWidgetTool, SIGNAL(clicked()), this, SIGNAL(showAddWidgets()));
 
-            tool = new Plasma::PushButton(i18n("Zoom In"));
-            connect(tool, SIGNAL(clicked()), this, SIGNAL(zoomIn()));
-            tool->resize(tool->sizeHint());
-            addToolBoxTool(tool, "zoomIn");
+            Plasma::Widget *zoomInTool = addToolBoxTool("zoomIn", "zoom-in", i18n("Zoom In"));
+            connect(zoomInTool, SIGNAL(clicked()), this, SIGNAL(zoomIn()));
 
-            tool = new Plasma::PushButton(i18n("Zoom Out"));
-            connect(tool, SIGNAL(clicked()), this, SIGNAL(zoomOut()));
-            tool->resize(tool->sizeHint());
-            addToolBoxTool(tool, "zoomOut");
+            Plasma::Widget *zoomOutTool = addToolBoxTool("zoomOut", "zoom-out", i18n("Zoom Out"));
+            connect(zoomOutTool, SIGNAL(clicked()), this, SIGNAL(zoomOut()));
         }
     } else {
         delete d->toolbox;
@@ -814,9 +807,21 @@ void Containment::emitLaunchActivated()
     emit launchActivated();
 }
 
-void Containment::addToolBoxTool(QGraphicsItem *tool, const QString& toolName)
+Plasma::Widget * Containment::addToolBoxTool(const QString& toolName, const QString& iconName, const QString& iconText)
 {
+    Plasma::Icon *tool = new Plasma::Icon(this);
+
+    tool->setIcon(KIcon(iconName));
+    tool->setText(iconText);
+    tool->setOrientation(Qt::Horizontal);
+    QSizeF iconSize = tool->sizeFromIconSize(22);
+    tool->setMinimumSize(iconSize);
+    tool->setMaximumSize(iconSize);
+    tool->resize(tool->sizeHint());
+
     d->createToolbox()->addTool(tool, toolName);
+
+    return tool;
 }
 
 void Containment::enableToolBoxTool(const QString &toolname, bool enable)

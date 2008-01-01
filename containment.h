@@ -30,6 +30,8 @@
 #include <plasma/applet.h>
 #include <plasma/phase.h>
 
+#include "widgets/icon.h"
+
 namespace Plasma
 {
 
@@ -214,9 +216,15 @@ class PLASMA_EXPORT Containment : public Applet
         void emitLaunchActivated();
 
         /**
-         * Adds an item to the toolbox. The toolbox takes over ownership of the item.
+         * Constructs a toolbox item and adds it to the toolbox. The toolbox takes over ownership of the item. Returns the constructed tool.
+         * 
+         * @arg name of the tool
+         * @arg name of the icon
+         * @arg text to be displayed on the icon
+         *
+         * @return the constructed tool
          */
-        void addToolBoxTool(QGraphicsItem *tool, const QString &toolname = QString());
+        Plasma::Widget * addToolBoxTool(const QString &toolName = QString(), const QString &iconName = QString(), const QString &iconText = QString());
 
         /**
          * Enables or disables a toolbox tool by name
