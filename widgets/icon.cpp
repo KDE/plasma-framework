@@ -327,7 +327,7 @@ void Icon::init()
     d->setVerticalMargin(Private::ItemMargin, 0, 0);
 
     d->setActiveMargins();
-    currentSize = QSizeF(-1,-1);
+    d->currentSize = QSizeF(-1,-1);
 }
 
 void Icon::addAction(QAction *action)
@@ -390,7 +390,7 @@ void Icon::setNumDisplayLines(int numLines)
 
 QSizeF Icon::sizeHint() const
 {
-    return currentSize;
+    return d->currentSize;
 }
 
 QSizeF Icon::Private::displaySizeHint(const QStyleOptionGraphicsItem *option, const qreal width) const
@@ -426,11 +426,11 @@ QSizeF Icon::Private::displaySizeHint(const QStyleOptionGraphicsItem *option, co
 
 void Icon::layoutIcons(const QStyleOptionGraphicsItem *option)
 {
-    if (size() == currentSize) {
+    if (size() == d->currentSize) {
         return;
     }
 
-    currentSize = size();
+    d->currentSize = size();
     d->setActiveMargins();
 
     //calculate icon size based on the available space
@@ -440,19 +440,19 @@ void Icon::layoutIcons(const QStyleOptionGraphicsItem *option)
         qreal heightAvail;
         //if there is text resize the icon in order to make room for the text
         if (!d->text.isEmpty() || !d->infoText.isEmpty()) {
-            heightAvail = currentSize.height() -
-                          d->displaySizeHint(option, currentSize.width()).height() -
+            heightAvail = d->currentSize.height() -
+                          d->displaySizeHint(option, d->currentSize.width()).height() -
                           d->verticalMargin[Private::TextMargin].top -
                           d->verticalMargin[Private::TextMargin].bottom;
             //never make a label higher than half the total height
-            heightAvail = qMax(heightAvail, currentSize.height()/2);
+            heightAvail = qMax(heightAvail, d->currentSize.height()/2);
         }else{
-            heightAvail = currentSize.height();
+            heightAvail = d->currentSize.height();
         }
 
         //aspect ratio very "tall"
-        if (currentSize.width() < heightAvail) {
-            iconWidth = currentSize.width() -
+        if (d->currentSize.width() < heightAvail) {
+            iconWidth = d->currentSize.width() -
                         d->horizontalMargin[Private::IconMargin].left -
                         d->horizontalMargin[Private::IconMargin].right;
         }else{
@@ -474,18 +474,18 @@ void Icon::layoutIcons(const QStyleOptionGraphicsItem *option)
 
         //if there is text resize the icon in order to make room for the text
         if (!d->text.isEmpty() || !d->infoText.isEmpty()) {
-            widthAvail = currentSize.width() -
+            widthAvail = d->currentSize.width() -
                          //FIXME: fontmetrics
                          textWidth -
                          d->horizontalMargin[Private::TextMargin].left -
                          d->horizontalMargin[Private::TextMargin].right;
         }else{
-            widthAvail = currentSize.width();
+            widthAvail = d->currentSize.width();
         }
 
         //aspect ratio very "wide"
-        if (currentSize.height() < widthAvail) {
-            iconWidth = currentSize.height() -
+        if (d->currentSize.height() < widthAvail) {
+            iconWidth = d->currentSize.height() -
                         d->verticalMargin[Private::IconMargin].top -
                         d->verticalMargin[Private::IconMargin].bottom;
         }else{
@@ -507,13 +507,13 @@ void Icon::layoutIcons(const QStyleOptionGraphicsItem *option)
             //iconAction->setRect(QRectF(6, 6, 32, 32));
             break;
         case Private::TopRight:
-            iconAction->setRect(QRectF(currentSize.width() - 38, 6, 32, 32));
+            iconAction->setRect(QRectF(d->currentSize.width() - 38, 6, 32, 32));
             break;
         case Private::BottomLeft:
-            iconAction->setRect(QRectF(6, currentSize.height() - 38, 32, 32));
+            iconAction->setRect(QRectF(6, d->currentSize.height() - 38, 32, 32));
             break;
         case Private::BottomRight:
-            iconAction->setRect(QRectF(currentSize.width() - 38, currentSize.height() - 38, 32, 32));
+            iconAction->setRect(QRectF(d->currentSize.width() - 38, d->currentSize.height() - 38, 32, 32));
             break;
         }
 

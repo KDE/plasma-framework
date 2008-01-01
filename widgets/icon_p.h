@@ -181,6 +181,7 @@ public:
     IconStates states;
     Qt::Orientation orientation;
     int numDisplayLines;
+    QSizeF currentSize;
 
     QList<IconAction*> cornerActions;
 

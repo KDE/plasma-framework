@@ -222,11 +222,9 @@ private:
     void layoutIcons(const QStyleOptionGraphicsItem *option);
 
     Private * const d;
-    QSizeF currentSize;
 
 private Q_SLOTS:
     void actionDestroyed(QObject* obj);
-
 };
 
 } // namespace Plasma
