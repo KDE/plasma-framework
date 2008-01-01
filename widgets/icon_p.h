@@ -131,6 +131,8 @@ public:
 
     inline void setLayoutOptions(QTextLayout &layout, const QStyleOptionGraphicsItem *options) const;
 
+    inline Qt::LayoutDirection iconDirection(const QStyleOptionGraphicsItem *option) const;
+
 
     // Margin functions
     inline void setActiveMargins();
@@ -181,6 +183,7 @@ public:
     IconStates states;
     Qt::Orientation orientation;
     int numDisplayLines;
+    bool invertLayout;
     QSizeF currentSize;
 
     QList<IconAction*> cornerActions;
@@ -204,6 +207,23 @@ void Icon::Private::setLayoutOptions(QTextLayout &layout, const QStyleOptionGrap
 
     layout.setFont(QApplication::font());    // NOTE: find better ways to get the font
     layout.setTextOption(textoption);
+}
+
+Qt::LayoutDirection Icon::Private::iconDirection(const QStyleOptionGraphicsItem *option) const
+{
+    Qt::LayoutDirection direction;
+
+    if (invertLayout && orientation == Qt::Horizontal) {
+        if (option->direction == Qt::LeftToRight) {
+            direction = Qt::RightToLeft;
+        }else{
+            direction = Qt::LeftToRight;
+        }
+    }else{
+        direction = option->direction;
+    }
+
+    return direction;
 }
 
 void Icon::Private::setActiveMargins()
