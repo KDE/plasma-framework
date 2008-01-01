@@ -62,7 +62,8 @@ Icon::Private::Private()
       svgElements(0),
       iconSize(48, 48),
       states(Private::NoState),
-      orientation(Qt::Vertical)
+      orientation(Qt::Vertical),
+      invertLayout(false)
 {
     svg.setContentType(Plasma::Svg::ImageSet);
 
@@ -636,6 +637,8 @@ QPointF Icon::Private::iconPosition(const QStyleOptionGraphicsItem *option, cons
     // Compute the nominal decoration rectangle
     const QSizeF size = addMargin(iconSize, Private::IconMargin);
 
+    Qt::LayoutDirection direction = iconDirection(option);
+
     //alignment depends from orientation and option->direction
     Qt::Alignment alignment;
     if (text.isEmpty() && infoText.isEmpty()) {
@@ -644,10 +647,10 @@ QPointF Icon::Private::iconPosition(const QStyleOptionGraphicsItem *option, cons
         alignment = Qt::Alignment(Qt::AlignHCenter | Qt::AlignTop);
     //Horizontal
     }else{
-        alignment = QStyle::visualAlignment(option->direction, Qt::Alignment(Qt::AlignLeft | Qt::AlignVCenter));
+        alignment = QStyle::visualAlignment(direction, Qt::Alignment(Qt::AlignLeft | Qt::AlignVCenter));
     }
 
-    const QRect iconRect = QStyle::alignedRect(option->direction, alignment, size.toSize(), itemRect.toRect());
+    const QRect iconRect = QStyle::alignedRect(direction, alignment, size.toSize(), itemRect.toRect());
 
     // Position the pixmap in the center of the rectangle
     QRect pixmapRect = pixmap.rect();
@@ -683,7 +686,7 @@ QRectF Icon::Private::labelRectangle(const QStyleOptionGraphicsItem *option, con
 
     textArea.translate(itemRect.topLeft());
 
-    return QRectF(QStyle::visualRect(option->direction, option->rect, textArea.toRect()));
+    return QRectF(QStyle::visualRect(iconDirection(option), option->rect, textArea.toRect()));
 }
 
 // Lays the text out in a rectangle no larger than constraints, eliding it as necessary
@@ -816,7 +819,7 @@ void Icon::Private::layoutTextItems(const QStyleOptionGraphicsItem *option,
     // Compute the bounding rect of the text
     const Qt::Alignment alignment = labelLayout->textOption().alignment();
     const QSizeF size(qMax(labelSize.width(), infoSize.width()), labelSize.height() + infoSize.height());
-    *textBoundingRect = QStyle::alignedRect(option->direction, alignment, size.toSize(), textRect.toRect());
+    *textBoundingRect = QStyle::alignedRect(iconDirection(option), alignment, size.toSize(), textRect.toRect());
 
     // Compute the positions where we should draw the layouts
     labelLayout->setPosition(QPointF(textRect.x(), textBoundingRect->y()));
@@ -1118,6 +1121,11 @@ void Icon::setUnpressed()
 void Icon::setOrientation(Qt::Orientation orientation)
 {
     d->orientation = orientation;
+}
+
+void Icon::invertLayout(bool invert)
+{
+    d->invertLayout = invert;
 }
 
 QSizeF Icon::sizeFromIconSize(const qreal iconWidth) const

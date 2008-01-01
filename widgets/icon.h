@@ -152,6 +152,13 @@ public:
     void setOrientation(Qt::Orientation orientation);
 
     /**
+    * inverts the layout of the icons if the orientation is horizontal,
+    * normally we get icon on the left with left-to-right languages
+    * @param invert if we want to invert the layout of icons
+    */
+    void invertLayout(bool invert);
+
+    /**
     * @return optimal size given a size for the icon
     * @param  iconWidth desidered width of the icon
     */
