@@ -167,10 +167,13 @@ install(FILES
 
 install(FILES
     includes/AbstractRunner
+    includes/Animator
     includes/Applet
     includes/AppletBrowser
     includes/ConfigXml
+    includes/Corona
     includes/Containment
+    includes/Dialog
     includes/Phase
     includes/Plasma
     includes/Package
