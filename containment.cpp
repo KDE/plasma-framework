@@ -181,7 +181,7 @@ void Containment::setContainmentType(Containment::Type type)
 
     if (isContainment() && type == DesktopContainment) {
         if (!d->toolbox) {
-            Plasma::Widget *addWidgetTool = addToolBoxTool("addwidgets", "edit-add", i18n("Add Widgets"));
+            Plasma::Widget *addWidgetTool = addToolBoxTool("addwidgets", "list-add", i18n("Add Widgets"));
             connect(addWidgetTool, SIGNAL(clicked()), this, SIGNAL(showAddWidgets()));
 
             Plasma::Widget *zoomInTool = addToolBoxTool("zoomIn", "zoom-in", i18n("Zoom In"));
