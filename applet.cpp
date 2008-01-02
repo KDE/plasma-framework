@@ -369,6 +369,22 @@ public:
         return mainConfig;
     }
 
+    void copyEntries(KConfigGroup *source, KConfigGroup *destination)
+    {
+        foreach (const QString &group, source->groupList()) {
+            KConfigGroup subSource(source, group);
+            KConfigGroup subDest(destination, group);
+            copyEntries(&subSource, &subDest);
+        }
+
+        QMap<QString, QString> entries = source->entryMap();
+        QMapIterator<QString, QString> it(entries);
+        while (it.hasNext()) {
+            it.next();
+            destination->writeEntry(it.key(), it.value());
+        }
+    }
+
     //TODO: examine the usage of memory here; there's a pretty large
     //      number of members at this point.
     uint appletId;
@@ -455,11 +471,19 @@ void Applet::save(KConfigGroup* group) const
     }
 
     KConfigGroup appletConfigGroup(group, "Configuration");
+    //FIXME: we need a global save state too
     saveState(&appletConfigGroup);
 }
 
 void Applet::saveState(KConfigGroup* group) const
 {
+    if (group->config()->name() != config().config()->name()) {
+        // we're being saved to a different file!
+        // let's just copy the current values in our configuration over
+        KConfigGroup c = config();
+        d->copyEntries(&c, group);
+    }
+
     Q_UNUSED(group)
 }
 
