@@ -159,6 +159,11 @@ public:
     void invertLayout(bool invert);
 
     /**
+    * @return if the layout of the icons should appear inverted or not
+    */
+    bool invertedLayout() const;
+
+    /**
     * @return optimal size given a size for the icon
     * @param  iconWidth desidered width of the icon
     */

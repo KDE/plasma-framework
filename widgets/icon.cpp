@@ -1128,6 +1128,11 @@ void Icon::invertLayout(bool invert)
     d->invertLayout = invert;
 }
 
+bool Icon::invertedLayout() const
+{
+    return d->invertLayout;
+}
+
 QSizeF Icon::sizeFromIconSize(const qreal iconWidth) const
 {
     //no text, less calculations
