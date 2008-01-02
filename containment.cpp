@@ -552,12 +552,23 @@ void Containment::addApplet(Applet *applet)
     Containment *currentContainment = applet->containment();
     if (currentContainment && currentContainment != this) {
         applet->removeSceneEventFilter(currentContainment);
+        KConfigGroup oldConfig = applet->config();
         applet->resetConfigurationObject();
         currentContainment->d->applets.removeAll(applet);
+        addChild(applet);
+
+        // now move the old config to the new location
+        KConfigGroup c = config();
+        c = KConfigGroup(&c, "Applets");
+        c = KConfigGroup(&c, QString::number(applet->id()));
+        //FIXME: without the next line, we don't save the applet configuration in the new location!
+        //       this is pending a patch to KConfigGroup, however, so can't go in right now
+        //oldConfig.reparent(&c);
+    } else {
+        addChild(applet);
     }
 
     d->applets << applet;
-    addChild(applet);
 
     if (currentContainment) {
         applet->installSceneEventFilter(this);
