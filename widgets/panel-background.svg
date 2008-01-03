@@ -34,9 +34,9 @@
      bordercolor="#666666"
      pagecolor="#ffffff"
      id="base"
-     inkscape:zoom="16"
-     inkscape:cx="17.359227"
-     inkscape:cy="4.1241134"
+     inkscape:zoom="15"
+     inkscape:cx="9.4666667"
+     inkscape:cy="12.253331"
      inkscape:window-x="344"
      inkscape:window-y="0"
      inkscape:current-layer="svg2"
@@ -275,8 +275,8 @@
        y2="-876.36218" />
   </defs>
   <path
-     style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:0;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dashoffset:4.15;stroke-opacity:1"
-     d="M 0,1.0822112e-13 L 20,1.0822112e-13 L 20,20 L 0,20 L 0,1.0822112e-13 z "
+     style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:0;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:4.15;stroke-opacity:1"
+     d="M 0,2.2190796e-13 L 400,2.2190796e-13 L 400,20 L 0,20 L 0,2.2190796e-13 z "
      id="center" />
   <g
      id="topleft"
@@ -316,18 +316,6 @@
      style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:0;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dashoffset:4.15;stroke-opacity:1"
      d="M 7,13 L 13,13 L 13,20 L 7,20 L 7,13 z "
      id="bottom" />
-  <g
-     style="display:none"
-     inkscape:label="layer1"
-     id="layer1"
-     inkscape:groupmode="layer"
-     transform="translate(-2763.2,-868.36218)" />
-  <g
-     style="display:inline"
-     inkscape:label="glow"
-     id="layer2"
-     inkscape:groupmode="layer"
-     transform="translate(-2763.2,-868.36218)" />
   <g
      id="left"
      transform="translate(-2250,-868.36218)">
@@ -414,10 +402,22 @@
      d="M 20,13 C 20,16.878 16.878,20 13,20 L 13,13 L 20,13 z "
      style="opacity:1;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:4.15;stroke-opacity:1" />
   <rect
-     style="opacity:0.875;fill-opacity:1;stroke:none;stroke-width:0;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     style="opacity:0.875;fill-opacity:1;stroke:none;stroke-width:0;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;fill:#008000"
      id="hint-stretch-borders"
      width="5"
      height="4.375"
-     x="22.875"
-     y="19.9375" />
+     x="7.5"
+     y="8" />
+  <g
+     style="display:none"
+     inkscape:label="layer1"
+     id="layer1"
+     inkscape:groupmode="layer"
+     transform="translate(-2763.2,-868.36218)" />
+  <g
+     style="display:inline"
+     inkscape:label="glow"
+     id="layer2"
+     inkscape:groupmode="layer"
+     transform="translate(-2763.2,-868.36218)" />
 </svg>
