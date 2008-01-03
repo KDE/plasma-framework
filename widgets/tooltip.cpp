@@ -110,6 +110,12 @@ void ToolTip::slotShowToolTip()
 	return;
     }
 
+    if( d->windowToPreview != 0 ) // show/hide the preview area
+        d->preview->show();
+    else
+        d->preview->hide();
+    layout()->activate();
+
     d->isShown = true;  //ToolTip is visible
     setVisible(true);
 }
@@ -124,11 +130,7 @@ void ToolTip::slotResetTimer()
 void ToolTip::showEvent( QShowEvent* e )
 {
     QWidget::showEvent( e );
-    if( d->windowToPreview != 0 ) { //show or hide the window preview area
-        d->preview->show();
-        d->preview->setInfo();
-    } else
-        d->preview->hide();
+    d->preview->setInfo();
 }
 
 ToolTip::ToolTip()
@@ -161,7 +163,8 @@ void ToolTip::setData(const Plasma::ToolTipData &data)
     d->label->setText("<qt><h3>" + data.mainText + "</h3><p>" +
                         data.subText + "</p></qt>");
     d->imageLabel->setPixmap(data.image);
-    d->preview->setWindowId( data.windowToPreview );
+    d->windowToPreview = data.windowToPreview;
+    d->preview->setWindowId( d->windowToPreview );
 }
 
 ToolTip::~ToolTip()
