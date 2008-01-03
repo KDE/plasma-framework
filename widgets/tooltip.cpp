@@ -24,8 +24,13 @@
 #include <QPixmap>
 #include <QTimer>
 #include <QGraphicsView>
+#include <QX11Info>
 
 #include <kglobal.h>
+#include <kwindowsystem.h>
+
+#include <X11/Xlib.h>
+#include <fixx11h.h>
 
 namespace Plasma {
 
@@ -35,6 +40,8 @@ class ToolTip::Private
         Private()
         : label(0)
         , imageLabel(0)
+        , preview(0)
+        , windowToPreview(0)
         , currentWidget(0)
         , isShown(false)
         , showTimer(0)
@@ -43,6 +50,8 @@ class ToolTip::Private
 
     QLabel *label;
     QLabel *imageLabel;
+    WindowPreview *preview;
+    WId windowToPreview;
     Plasma::Widget *currentWidget;
     bool isShown;
     QTimer *showTimer;
@@ -112,18 +121,30 @@ void ToolTip::slotResetTimer()
     }
 }
 
+void ToolTip::showEvent( QShowEvent* e )
+{
+    QWidget::showEvent( e );
+    if( d->windowToPreview != 0 ) { //show or hide the window preview area
+        d->preview->show();
+        d->preview->setInfo();
+    } else
+        d->preview->hide();
+}
+
 ToolTip::ToolTip()
     : QWidget(0)
     , d( new Private )
 {
     setWindowFlags(Qt::ToolTip);
-    QHBoxLayout *l = new QHBoxLayout;
+    QGridLayout *l = new QGridLayout;
+    d->preview = new WindowPreview;
     d->label = new QLabel;
     d->label->setWordWrap(true);
     d->imageLabel = new QLabel;
     d->imageLabel->setAlignment(Qt::AlignTop | Qt::AlignLeft);
-    l->addWidget(d->imageLabel);
-    l->addWidget(d->label);
+    l->addWidget(d->preview, 0, 0, 1, 2);
+    l->addWidget(d->imageLabel, 1, 0);
+    l->addWidget(d->label, 1, 1);
     setLayout(l);
 
     d->showTimer = new QTimer(this);
@@ -140,11 +161,87 @@ void ToolTip::setData(const Plasma::ToolTipData &data)
     d->label->setText("<qt><h3>" + data.mainText + "</h3><p>" +
                         data.subText + "</p></qt>");
     d->imageLabel->setPixmap(data.image);
+    d->preview->setWindowId( data.windowToPreview );
 }
 
 ToolTip::~ToolTip()
 {
     delete d;
+}
+
+
+// A widget which reserves area for window preview and sets hints on the toplevel
+// tooltip widget that tells KWin to render the preview in this area. This depends
+// on KWin's TaskbarThumbnail compositing effect (which is here detected).
+
+void WindowPreview::setWindowId( WId w )
+{
+    if( !previewsAvailable()) {
+        id = 0;
+        return;
+    }
+    id = w;
+    windowSize = QSize();
+}
+
+bool WindowPreview::previewsAvailable() const
+{
+    if( !KWindowSystem::compositingActive())
+        return false;
+    // hackish way to find out if KWin has the effect enabled,
+    // TODO provide proper support
+    Display* dpy = QX11Info::display();
+    Atom atom = XInternAtom( dpy, "_KDE_WINDOW_PREVIEW", False );
+    int cnt;
+    Atom* list = XListProperties( dpy, DefaultRootWindow( dpy ), &cnt );
+    if( list != NULL ) {
+        bool ret = ( qFind( list, list + cnt, atom ) != list + cnt );
+        XFree( list );
+        return ret;
+    }
+    return false;
+}
+
+QSize WindowPreview::sizeHint() const
+{
+    if( id == 0 )
+        return QSize();
+    if( !windowSize.isValid())
+        readWindowSize();
+    QSize s = windowSize;
+    s.scale( 200, 150, Qt::KeepAspectRatio );
+    return s;
+}
+
+void WindowPreview::readWindowSize() const
+{
+    Window r;
+    int x, y;
+    unsigned int w, h, b, d;
+    if( XGetGeometry( QX11Info::display(), id, &r, &x, &y, &w, &h, &b, &d ))
+        windowSize = QSize( w, h );
+    else
+        windowSize = QSize();
+}
+
+void WindowPreview::setInfo()
+{
+    Display* dpy = QX11Info::display();
+    Atom atom = XInternAtom( dpy, "_KDE_WINDOW_PREVIEW", False );
+    if( id == 0 ) {
+        XDeleteProperty( dpy, winId(), atom );
+        return;
+    }
+    if( !windowSize.isValid())
+        readWindowSize();
+    if( !windowSize.isValid()) {
+        XDeleteProperty( dpy, winId(), atom );
+        return;
+    }
+    Q_ASSERT( parentWidget()->isWindow()); // parent must be toplevel
+    long data[] = { 1, 5, id, x(), y(), width(), height() };
+    XChangeProperty( dpy, parentWidget()->winId(), atom, atom, 32, PropModeReplace,
+        reinterpret_cast< unsigned char* >( data ), sizeof( data ) / sizeof( data[ 0 ] ));
 }
 
 }

@@ -49,6 +49,9 @@ public:
 
     Plasma::Widget *currentWidget() const;
 
+protected:
+    virtual void showEvent( QShowEvent* );
+
 private Q_SLOTS:
     void slotResetTimer();
     void slotShowToolTip();
@@ -58,6 +61,20 @@ private:
 
     class Private;
     Private *const d;
+};
+
+class WindowPreview : public QWidget
+{
+    Q_OBJECT
+public:
+    void setWindowId( WId w );
+    void setInfo();
+    virtual QSize sizeHint() const;
+    bool previewsAvailable() const;
+private:
+    void readWindowSize() const;
+    WId id;
+    mutable QSize windowSize;
 };
 
 }

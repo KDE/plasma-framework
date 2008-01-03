@@ -40,9 +40,11 @@ namespace Plasma
 
 struct PLASMA_EXPORT ToolTipData
 {
+    ToolTipData() : windowToPreview( 0 ) {}
     QString mainText; //Important information
     QString subText; //Elaborates on the Main Text
     QPixmap image; // Icon to show;
+    WId windowToPreview; // Id of window to show preview
 };
 
 class Layout;
