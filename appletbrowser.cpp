@@ -70,7 +70,7 @@ void AppletBrowserWidget::Private::initFilters()
     filterModel.clear();
 
     filterModel.addFilter(i18n("All Widgets"),
-                          KCategorizedItemsViewModels::Filter(), new KIcon("plasmagik"));
+                          KCategorizedItemsViewModels::Filter(), new KIcon("plasma"));
 
     // Recommended emblems and filters
     QRegExp rx("recommended[.]([0-9A-Za-z]+)[.]caption");
