@@ -96,7 +96,7 @@ void AppletBrowserWidget::Private::initFilters()
     // Filters: Special
     filterModel.addFilter(i18n("My Favorite Widgets"),
                           KCategorizedItemsViewModels::Filter("favorite", true),
-                          new KIcon("bookmark"));
+                          new KIcon("bookmarks"));
     filterModel.addFilter(i18n("Widgets I Have Used Before"),
                           KCategorizedItemsViewModels::Filter("used", true),
                           new KIcon("view-history"));

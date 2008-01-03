@@ -36,7 +36,7 @@
 #define DROPDOWN_SEPARATOR_HEIGHT 32
 
 KCategorizedItemsViewDelegate::KCategorizedItemsViewDelegate(QObject * parent)
-        : QItemDelegate(parent), m_favoriteIcon("bookmark"), 
+        : QItemDelegate(parent), m_favoriteIcon("bookmarks"),
         m_favoriteAddIcon("list-add"), m_removeIcon("list-remove"),
         m_onFavoriteIconItem(NULL)
 {
