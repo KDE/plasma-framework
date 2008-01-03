@@ -827,6 +827,7 @@ Plasma::Widget * Containment::addToolBoxTool(const QString& toolName, const QStr
 {
     Plasma::Icon *tool = new Plasma::Icon(this);
 
+    tool->setDrawBackground(true);
     tool->setIcon(KIcon(iconName));
     tool->setText(iconText);
     tool->setOrientation(Qt::Horizontal);
