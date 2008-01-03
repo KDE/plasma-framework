@@ -23,7 +23,7 @@
    inkscape:export-ydpi="90"
    version="1.0">
   <sodipodi:namedview
-     inkscape:window-height="801"
+     inkscape:window-height="814"
      inkscape:window-width="1086"
      inkscape:pageshadow="2"
      inkscape:pageopacity="0.0"
@@ -34,7 +34,7 @@
      bordercolor="#666666"
      pagecolor="#ffffff"
      id="base"
-     inkscape:zoom="15.999999"
+     inkscape:zoom="16"
      inkscape:cx="17.359227"
      inkscape:cy="4.1241134"
      inkscape:window-x="0"
@@ -413,4 +413,11 @@
      id="bottomright"
      d="M 20,13 C 20,16.878 16.878,20 13,20 L 13,13 L 20,13 z "
      style="opacity:1;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:4.15;stroke-opacity:1" />
+  <rect
+     style="opacity:0.875;fill-opacity:1;stroke:none;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     id="hint-stretch-borders"
+     width="5"
+     height="4.375"
+     x="-13.3125"
+     y="0" />
 </svg>
