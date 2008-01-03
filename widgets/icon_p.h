@@ -106,7 +106,6 @@ public:
     ~Private();
 
     void drawBackground(QPainter *painter, IconState state);
-    void drawForeground(QPainter *painter, IconState state);
     void drawText(QPainter *painter);
     void drawTextItems(QPainter *painter, const QStyleOptionGraphicsItem *option,
                         const QTextLayout &labelLayout, const QTextLayout &infoLayout) const;
@@ -146,19 +145,10 @@ public:
     inline QSizeF subtractMargin(const QSizeF &size, MarginType type) const;
 
 
-    void checkSvgElements();
-
     enum {
-        NoSvg = 0,
-        SvgBackground = 1,
-        SvgBackgroundHover = 2,
-        SvgBackgroundPressed = 4,
-        SvgForeground = 8,
-        SvgForegroundHover = 16,
-        SvgForegroundPressed = 32,
-        SvgMinibutton = 64,
-        SvgMinibuttonHover = 128,
-        SvgMinibuttonPressed = 256
+        Minibutton = 64,
+        MinibuttonHover = 128,
+        MinibuttonPressed = 256
     };
 
     enum ActionPosition {
@@ -171,11 +161,9 @@ public:
 
     QString text;
     QString infoText;
-    Svg svg;
     Svg *iconSvg;
     QString iconSvgElement;
     QPixmap iconSvgPixmap;
-    int svgElements;
     QColor textColor;
     QColor shadowColor;
     QSizeF iconSize;

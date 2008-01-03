@@ -57,24 +57,16 @@ namespace Plasma
 {
 
 Icon::Private::Private()
-    : svg("widgets/iconbutton"),
-      iconSvg(0),
-      svgElements(0),
+    : iconSvg(0),
       iconSize(48, 48),
       states(Private::NoState),
       orientation(Qt::Vertical),
       invertLayout(false)
 {
-    svg.setContentType(Plasma::Svg::ImageSet);
-
-    //TODO: recheck when svg changes
-    checkSvgElements();
-
     textColor = KColorScheme(QPalette::Active, KColorScheme::Window,
                              Plasma::Theme::self()->colors()).foreground().color();
     shadowColor = KColorScheme(QPalette::Active, KColorScheme::Window,
                                Plasma::Theme::self()->colors()).background().color();
-    shadowColor.setAlphaF(.6);
 }
 
 Icon::Private::~Private()
@@ -82,47 +74,6 @@ Icon::Private::~Private()
     qDeleteAll(cornerActions);
     delete iconSvg;
 }
-
-void Icon::Private::checkSvgElements()
-{
-    if (svg.elementExists("background")) {
-        svgElements |= SvgBackground;
-    }
-
-    if (svg.elementExists("background-hover")) {
-        svgElements |= SvgBackgroundHover;
-    }
-
-    if (svg.elementExists("background-pressed")) {
-        svgElements |= SvgBackgroundPressed;
-    }
-
-    if (svg.elementExists("foreground")) {
-        svgElements |= SvgForeground;
-    }
-
-    if (svg.elementExists("foreground-hover")) {
-        svgElements |= SvgForegroundHover;
-    }
-
-    if (svg.elementExists("foreground-pressed")) {
-        svgElements |= SvgForegroundPressed;
-    }
-
-    if (svg.elementExists("minibutton")) {
-        svgElements |= SvgMinibutton;
-    }
-
-    if (svg.elementExists("minibutton-hover")) {
-        svgElements |= SvgMinibuttonHover;
-    }
-
-    if (svg.elementExists("minibutton-pressed")) {
-        svgElements |= SvgMinibuttonPressed;
-    }
-}
-
-
 
 IconAction::IconAction(Icon* icon, QAction *action)
     : m_icon(icon),
@@ -207,11 +158,11 @@ void IconAction::rebuildPixmap()
     m_pixmap = QPixmap(26, 26);
     m_pixmap.fill(Qt::transparent);
 
-    int element = Icon::Private::SvgMinibutton;
+    int element = Icon::Private::Minibutton;
     if (m_pressed) {
-        element = Icon::Private::SvgMinibuttonPressed;
+        element = Icon::Private::MinibuttonPressed;
     } else if (m_hovered) {
-        element = Icon::Private::SvgMinibuttonHover;
+        element = Icon::Private::MinibuttonHover;
     }
 
     QPainter painter(&m_pixmap);
@@ -536,60 +487,34 @@ void Icon::setSvg(const QString &svgFilePath, const QString &elementId)
 
 void Icon::Private::drawBackground(QPainter *painter, IconState state)
 {
-    QString element;
-    if (svgElements & Private::SvgBackground) {
-        element = "background";
-    }
+  bool darkShadow = shadowColor.value() < 128;
+  QColor shadow = shadowColor;
 
-    switch (state) {
+  shadow.setAlphaF(.35);
+
+  switch (state) {
         case Private::HoverState:
-            if (svgElements & Private::SvgBackgroundHover) {
-                element = "background-hover";
-            }
+            shadow.setHsv(shadow.hue(),
+                          shadow.saturation(),
+                          shadow.value()+(darkShadow?50:-50),
+                          100);
             break;
         case Private::PressedState:
-            if (svgElements & Private::SvgBackgroundPressed) {
-                element = "background-pressed";
-            } else if (svgElements & Private::SvgBackgroundHover) {
-                element = "background-hover";
-            }
+            shadow.setHsv(shadow.hue(),
+                          shadow.saturation(),
+                          shadow.value()+(darkShadow?100:-100),
+                          128);
             break;
         default:
             break;
     }
 
-    if (!element.isEmpty()) {
-        svg.paint(painter, 0, 0, element);
-    }
-}
-
-void Icon::Private::drawForeground(QPainter *painter, IconState state)
-{
-    QString element;
-    if (svgElements & Private::SvgForeground) {
-        element = "foreground";
-    }
-
-    switch (state) {
-        case Private::HoverState:
-            if (svgElements & Private::SvgForegroundHover) {
-                element = "foreground-hover";
-            }
-            break;
-        case Private::PressedState:
-            if (svgElements & Private::SvgForegroundPressed) {
-                element = "foreground-pressed";
-            } else if (svgElements & Private::SvgForegroundHover) {
-                element = "foreground-hover";
-            }
-            break;
-        default:
-            break;
-    }
-
-    if (!element.isEmpty()) {
-        svg.paint(painter, 0, 0, element);
-    }
+    painter->save();
+    painter->setRenderHint(QPainter::Antialiasing);
+    painter->setBrush(shadow);
+    painter->setPen(QPen(shadow, 1.0));
+    painter->drawPath(roundedRectangle(QRectF(QPointF(0.0, 0.0), currentSize), 10.0));
+    painter->restore();
 }
 
 QPixmap Icon::Private::decoration(const QStyleOptionGraphicsItem *option, bool useHoverEffect)
@@ -909,14 +834,10 @@ void Icon::paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *option
     QRectF textBoundingRect;
     d->layoutTextItems(option, icon, &labelLayout, &infoLayout, &textBoundingRect);
 
-    //round to the bottom integer; otherwise a pixel could be chopped
-    d->svg.resize(QSize((int)size().width(), (int)size().height()));
     d->drawBackground(painter, state);
 
     // draw icon
     painter->drawPixmap(iconPos, icon);
-
-    d->drawForeground(painter, state);
 
     // Draw corner actions
     foreach (IconAction *action, d->cornerActions) {
@@ -927,32 +848,31 @@ void Icon::paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *option
 
     // Draw text last because its overlayed
     d->drawTextItems(painter, option, labelLayout, infoLayout);
-
 }
 
 void Icon::drawActionButtonBase(QPainter* painter, const QSize &size, int element)
 {
-    // Determine proper svg element
-    QString id;
-    if (d->svgElements & Private::SvgMinibutton) {
-        id = "minibutton";
-    }
+    qreal radius = size.width()/2;
+    QRadialGradient gradient(radius, radius, radius, radius, radius);
+    int alpha;
 
-    if (element == Private::SvgMinibuttonPressed) {
-        if (d->svgElements & Private::SvgMinibuttonPressed) {
-            id = "minibutton-pressed";
-        } else if (d->svgElements & Private::SvgMinibuttonHover) {
-            id = "minibutton-hover";
-        }
-    } else if (element == Icon::Private::SvgMinibuttonHover &&
-               d->svgElements & Private::SvgMinibuttonHover) {
-        id = "minibutton-hover";
+    if (element == Private::MinibuttonPressed) {
+        alpha = 255;
+    } else if (element == Private::MinibuttonHover) {
+        alpha = 200;
+    } else {
+        alpha = 160;
     }
+    gradient.setColorAt(0, QColor::fromRgb(d->textColor.red(),
+                                           d->textColor.green(),
+                                           d->textColor.blue(), alpha));
+    gradient.setColorAt(1, QColor::fromRgb(d->textColor.red(),
+                                           d->textColor.green(),
+                                           d->textColor.blue(), 0));
 
-    if (!id.isEmpty()) {
-        d->svg.resize(size);
-        d->svg.paint(painter, 0, 0, id);
-    }
+    painter->setBrush(gradient);
+    painter->setPen(Qt::NoPen);
+    painter->drawEllipse(QRectF(QPointF(.0, .0), size));
 }
 
 
