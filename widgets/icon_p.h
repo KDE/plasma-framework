@@ -173,6 +173,7 @@ public:
     Qt::Orientation orientation;
     int numDisplayLines;
     bool invertLayout;
+    bool drawBg;
     QSizeF currentSize;
 
     QList<IconAction*> cornerActions;

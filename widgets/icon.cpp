@@ -61,7 +61,8 @@ Icon::Private::Private()
       iconSize(48, 48),
       states(Private::NoState),
       orientation(Qt::Vertical),
-      invertLayout(false)
+      invertLayout(false),
+      drawBg(false)
 {
     textColor = KColorScheme(QPalette::Active, KColorScheme::Window,
                              Plasma::Theme::self()->colors()).foreground().color();
@@ -345,6 +346,19 @@ QSizeF Icon::sizeHint() const
     return d->currentSize;
 }
 
+void Icon::setDrawBackground(bool draw)
+{
+    if (d->drawBg != draw) {
+        d->drawBg = draw;
+        update();
+    }
+}
+
+bool Icon::drawBackground() const
+{
+    return d->drawBg;
+}
+
 QSizeF Icon::Private::displaySizeHint(const QStyleOptionGraphicsItem *option, const qreal width) const
 {
     if (text.isEmpty() && infoText.isEmpty()) {
@@ -487,12 +501,16 @@ void Icon::setSvg(const QString &svgFilePath, const QString &elementId)
 
 void Icon::Private::drawBackground(QPainter *painter, IconState state)
 {
-  bool darkShadow = shadowColor.value() < 128;
-  QColor shadow = shadowColor;
+    if (!drawBg) {
+        return;
+    }
 
-  shadow.setAlphaF(.35);
+    bool darkShadow = shadowColor.value() < 128;
+    QColor shadow = shadowColor;
 
-  switch (state) {
+    shadow.setAlphaF(.35);
+
+    switch (state) {
         case Private::HoverState:
             shadow.setHsv(shadow.hue(),
                           shadow.saturation(),
@@ -780,6 +798,8 @@ QBrush Icon::Private::backgroundBrush(const QStyleOptionGraphicsItem *option) co
 void Icon::Private::drawTextItems(QPainter *painter, const QStyleOptionGraphicsItem *option,
                                   const QTextLayout &labelLayout, const QTextLayout &infoLayout) const
 {
+    Q_UNUSED(option)
+
     painter->setPen(textColor);
     labelLayout.draw(painter, QPointF());
 

@@ -184,6 +184,17 @@ public:
     */
     QSizeF sizeHint() const;
 
+    /**
+     * Sets whether or not to draw a background area for the icon
+     *
+     * @arg draw true if a background should be drawn or not
+     */
+    void setDrawBackground(bool draw);
+
+    /**
+     * @return true if a background area is to be drawn for the icon
+     */
+    bool drawBackground() const;
 
 public Q_SLOTS:
     /**
