@@ -174,6 +174,16 @@ void Corona::scheduleConfigSync() const
     }
 }
 
+bool appletConfigLessThan(const KConfigGroup &c1, const KConfigGroup &c2)
+{
+    QPointF p1 = c1.readEntry("geometry", QRectF()).topLeft();
+    QPointF p2 = c2.readEntry("geometry", QRectF()).topLeft();
+    if (p1.x() != p2.x()) {
+        return p1.x() < p2.x();
+    }
+    return p1.y() < p2.y();
+}
+
 void Corona::loadApplets(const QString& configName)
 {
     clearApplets();
@@ -205,10 +215,18 @@ void Corona::loadApplets(const QString& configName)
         //kDebug() << "Containment" << c->id() << "geometry is" << c->geometry().toRect() << "config'd with" << appletConfig.name();
         KConfigGroup applets(&containmentConfig, "Applets");
 
+        // Sort the applet configs in order of geometry to ensure that applets
+        // are added from left to right or top to bottom for a panel containment
+        QList<KConfigGroup> appletConfigs;
         foreach (const QString &appletGroup, applets.groupList()) {
             //kDebug() << "reading from applet group" << appletGroup;
-            int appId = appletGroup.toUInt();
             KConfigGroup appletConfig(&applets, appletGroup);
+            appletConfigs.append(appletConfig);
+        }
+        qSort(appletConfigs.begin(), appletConfigs.end(), appletConfigLessThan);
+
+        foreach (KConfigGroup appletConfig, appletConfigs) {
+            int appId = appletConfig.name().toUInt();
             //kDebug() << "the name is" << appletConfig.name();
             QString plugin = appletConfig.readEntry("plugin", QString());
 

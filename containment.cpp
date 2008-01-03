@@ -412,7 +412,7 @@ Applet* Containment::addApplet(const QString& name, const QVariantList& args, ui
         int index = -1;
         QPointF position = appletGeometry.topLeft();
         BoxLayout *l = dynamic_cast<BoxLayout *>(layout());
-        if (l && position != QPointF(-1, -1)) {
+        if (!delayInit && l && position != QPointF(-1, -1)) {
             foreach (Applet *existingApplet, d->applets) {
                 if (formFactor() == Horizontal) {
                     qreal middle = (existingApplet->geometry().left() +
