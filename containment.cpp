@@ -417,24 +417,24 @@ Applet* Containment::addApplet(const QString& name, const QVariantList& args, ui
                 if (formFactor() == Horizontal) {
                     qreal middle = (existingApplet->geometry().left() +
                             existingApplet->geometry().right()) / 2.0;
-                    if (position.x() >= existingApplet->geometry().left() &&
-                            position.x() <= middle) {
+                    // Applets are checked in order so there is no need to check
+                    // if the position is equal to or greater than the applet's
+                    // leftmost point. This also allows for dropping in the gap
+                    // between applets.
+                    if (position.x() < middle) {
                         index = l->indexOf(existingApplet);
                         break;
-                    } else if (position.x() <= existingApplet->geometry().right() &&
-                            position.x() >= middle) {
+                    } else if (position.x() <= existingApplet->geometry().right()) {
                         index = l->indexOf(existingApplet) + 1;
                         break;
                     }
                 } else {
                     qreal middle = (existingApplet->geometry().top() +
                             existingApplet->geometry().bottom()) / 2.0;
-                    if (position.y() >= existingApplet->geometry().top() &&
-                            position.y() <= middle) {
+                    if (position.y() < middle) {
                         index = l->indexOf(existingApplet);
                         break;
-                    } else if (position.y() <= existingApplet->geometry().bottom() &&
-                            position.y() >= middle) {
+                    } else if (position.y() <= existingApplet->geometry().bottom()) {
                         index = l->indexOf(existingApplet) + 1;
                         break;
                     }
