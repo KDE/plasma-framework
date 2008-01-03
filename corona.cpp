@@ -235,9 +235,6 @@ void Corona::loadApplets(const QString& configName)
             }
 
             Applet *applet = c->addApplet(plugin, QVariantList(), appId, appletConfig.readEntry("geometry", QRectF()), true);
-            Q_UNUSED(applet)
-            // FIXME: the transform does not stick; it gets set then almost immediately reset.
-            //        find out why and then reenable this
             
             QList<qreal> m = appletConfig.readEntry("transform", QList<qreal>());
             if (m.count() == 9) {
