@@ -13,7 +13,7 @@
    id="svg2"
    sodipodi:version="0.32"
    inkscape:version="0.45.1"
-   width="20.000031"
+   width="20"
    height="20"
    sodipodi:docbase="/home/aseigo/kde4/KDE/kdebase/workspace/plasma/desktoptheme/widgets"
    sodipodi:docname="panel-background.svg"
@@ -37,7 +37,7 @@
      inkscape:zoom="16"
      inkscape:cx="17.359227"
      inkscape:cy="4.1241134"
-     inkscape:window-x="0"
+     inkscape:window-x="344"
      inkscape:window-y="0"
      inkscape:current-layer="svg2"
      showgrid="false"
@@ -274,22 +274,26 @@
        x2="2263"
        y2="-876.36218" />
   </defs>
+  <path
+     style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:0;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dashoffset:4.15;stroke-opacity:1"
+     d="M -0.0625,1.0822112e-13 L 20.3125,1.0822112e-13 L 20.3125,20 L -0.0625,20 L -0.0625,1.0822112e-13 z "
+     id="center" />
   <g
      id="topleft"
      transform="translate(-2250,-868.36218)">
     <path
        style="opacity:1;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:4.15;stroke-opacity:1"
-       d="M 2250,875.36218 C 2250,871.48418 2253.122,868.36218 2257,868.36218 L 2257,875.36218 L 2250,875.36218 z"
+       d="M 2250,875.36218 C 2250,871.48418 2253.122,868.36218 2257,868.36218 L 2257,875.36218 L 2250,875.36218 z "
        id="path3088"
        sodipodi:nodetypes="cccc" />
     <path
        id="path3044"
-       d="M 2257,868.36218 C 2253.1281,868.36218 2250,871.47187 2250,875.34375 L 2250,875.36218 L 2257,875.36218 L 2257,868.36218 z"
+       d="M 2257,868.36218 C 2253.1281,868.36218 2250,871.47187 2250,875.34375 L 2250,875.36218 L 2257,875.36218 L 2257,868.36218 z "
        style="opacity:1;fill:url(#linearGradient3152);fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:4.15;stroke-opacity:1"
        sodipodi:nodetypes="ccccc" />
     <path
        transform="matrix(0.7403416,-0.1013013,-0.1107672,0.8221857,680.74547,382.70231)"
-       d="M 2256.8638,872.35931 A 2.3864853,2.2980971 0 1 1 2252.0908,872.35931 A 2.3864853,2.2980971 0 1 1 2256.8638,872.35931 z"
+       d="M 2256.8638 872.35931 A 2.3864853 2.2980971 0 1 1  2252.0908,872.35931 A 2.3864853 2.2980971 0 1 1  2256.8638 872.35931 z"
        sodipodi:ry="2.2980971"
        sodipodi:rx="2.3864853"
        sodipodi:cy="872.35931"
@@ -300,17 +304,17 @@
     <path
        sodipodi:nodetypes="ccccccc"
        id="rect2985"
-       d="M 2257,868.36218 C 2253.1208,868.36218 2250,871.48299 2250,875.36218 L 2251,875.36218 L 2251,875.33093 C 2251,872.02208 2253.6599,869.36218 2256.9688,869.36218 L 2257,869.36218 L 2257,868.36218 z"
+       d="M 2257,868.36218 C 2253.1208,868.36218 2250,871.48299 2250,875.36218 L 2251,875.36218 L 2251,875.33093 C 2251,872.02208 2253.6599,869.36218 2256.9688,869.36218 L 2257,869.36218 L 2257,868.36218 z "
        style="opacity:1;fill:url(#linearGradient3156);fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:4.15;stroke-opacity:1" />
   </g>
   <path
      style="opacity:1;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:4.15;stroke-opacity:1"
-     d="M 0,13 C 0,16.878 3.122,20 7,20 L 7,13 L 0,13 z"
+     d="M 0,13 C 0,16.878 3.122,20 7,20 L 7,13 L 0,13 z "
      id="bottomleft"
      sodipodi:nodetypes="cccc" />
   <path
      style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dashoffset:4.15;stroke-opacity:1"
-     d="M 7,13 L 13,13 L 13,20 L 7,20 L 7,13 z"
+     d="M 7,13 L 13,13 L 13,20 L 7,20 L 7,13 z "
      id="bottom" />
   <g
      style="display:none"
@@ -330,11 +334,11 @@
     <path
        transform="scale(-1,1)"
        style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dashoffset:4.15;stroke-opacity:1"
-       d="M -2257,875.36218 L -2250,875.36218 L -2250,881.36218 L -2257,881.36218 L -2257,875.36218 z"
+       d="M -2257,875.36218 L -2250,875.36218 L -2250,881.36218 L -2257,881.36218 L -2257,875.36218 z "
        id="rect3074" />
     <path
        style="fill:url(#linearGradient3150);fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dashoffset:4.15;stroke-opacity:1"
-       d="M 2250,875.36218 L 2251,875.36218 L 2251,881.36218 L 2250,881.36218 L 2250,875.36218 z"
+       d="M 2250,875.36218 L 2251,875.36218 L 2251,881.36218 L 2250,881.36218 L 2250,875.36218 z "
        id="rect3137" />
   </g>
   <g
@@ -382,10 +386,6 @@
        d="M 2263,868.36218 C 2266.8792,868.36218 2270,871.48299 2270,875.36218 L 2269,875.36218 L 2269,875.33093 C 2269,872.02208 2266.3401,869.36218 2263.0312,869.36218 L 2263,869.36218 L 2263,868.36218 z "
        id="path3014" />
   </g>
-  <path
-     style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dashoffset:4.15;stroke-opacity:1"
-     d="M 7,7 L 13,7 L 13,13 L 7,13 L 7,7 z"
-     id="center" />
   <g
      id="top">
     <rect
@@ -418,6 +418,6 @@
      id="hint-stretch-borders"
      width="5"
      height="4.375"
-     x="-13.3125"
-     y="0" />
+     x="22.875"
+     y="19.9375" />
 </svg>
