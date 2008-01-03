@@ -54,8 +54,10 @@ class PLASMA_EXPORT Package
           * @arg packagePath full path to the package directory
           * @arg structure the package structure describing this package
           */
-        Package(const QString &packagePath, const PackageStructure &structure);  
-          
+        Package(const QString &packagePath, const PackageStructure &structure);
+
+        //TODO for 4.1: be able to load an uninstalled/uncompressed file.
+
         ~Package();
 
         /**
