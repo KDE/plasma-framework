@@ -107,13 +107,15 @@ void ToolTip::slotShowToolTip()
 {
     QGraphicsView *v = d->currentWidget->view();
     if (v && v->mouseGrabber()) {
-	return;
+        return;
     }
 
-    if( d->windowToPreview != 0 ) // show/hide the preview area
+    if( d->windowToPreview != 0 ) {
+        // show/hide the preview area
         d->preview->show();
-    else
+    } else {
         d->preview->hide();
+    }
     layout()->activate();
 
     d->isShown = true;  //ToolTip is visible
