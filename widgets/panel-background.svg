@@ -15,7 +15,7 @@
    inkscape:version="0.45.1"
    width="20"
    height="20"
-   sodipodi:docbase="/home/aseigo/kde4/KDE/kdebase/workspace/plasma/desktoptheme/widgets"
+   sodipodi:docbase="/home/thomas/kde/src/kdebase/workspace/plasma/desktoptheme/widgets"
    sodipodi:docname="panel-background.svg"
    inkscape:output_extension="org.inkscape.output.svg.inkscape"
    inkscape:export-filename="/home/pinheiro/Documents/pics/estilo/plasma/raptor/main menusnoframe.png"
@@ -37,8 +37,8 @@
      inkscape:zoom="15"
      inkscape:cx="9.4666667"
      inkscape:cy="12.253331"
-     inkscape:window-x="344"
-     inkscape:window-y="0"
+     inkscape:window-x="584"
+     inkscape:window-y="150"
      inkscape:current-layer="svg2"
      showgrid="false"
      showguides="true"
@@ -276,7 +276,7 @@
   </defs>
   <path
      style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:0;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:4.15;stroke-opacity:1"
-     d="M 0,2.2190796e-13 L 400,2.2190796e-13 L 400,20 L 0,20 L 0,2.2190796e-13 z "
+     d="M 0,2.2190796e-13 L 50,2.2190796e-13 L 50,20 L 0,20 L 0,2.2190796e-13 z "
      id="center" />
   <g
      id="topleft"
