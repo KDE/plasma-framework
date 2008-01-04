@@ -254,7 +254,7 @@ void Containment::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
     } else {
         bool hasEntries = false;
         if (applet->hasConfigurationInterface()) {
-            QAction* configureApplet = new QAction(i18n("%1 Settings...", applet->name()), &desktopMenu);
+            QAction* configureApplet = new QAction(i18n("%1 Settings", applet->name()), &desktopMenu);
             configureApplet->setIcon(KIcon("configure"));
             connect(configureApplet, SIGNAL(triggered(bool)),
                     applet, SLOT(showConfigurationInterface()));
