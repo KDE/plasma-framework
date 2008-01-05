@@ -267,6 +267,7 @@ void Corona::loadApplets(const QString& configName)
                 Containment* c = addContainment("desktop");
                 c->setScreen(i);
                 c->setFormFactor(Plasma::Planar);
+                c->flushUpdatedConstraints();
             }
         }
     }
@@ -297,6 +298,7 @@ void Corona::loadDefaultSetup()
         Containment* c = addContainment("desktop");
         c->setScreen(i);
         c->setFormFactor(Plasma::Planar);
+        c->flushUpdatedConstraints();
 
         if (g.x() <= topLeftCorner.x() && g.y() >= topLeftCorner.y()) {
             topLeftCorner = g.topLeft();
