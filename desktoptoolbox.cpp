@@ -91,8 +91,17 @@ QPainterPath DesktopToolbox::shape() const
 void DesktopToolbox::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 {
 //    Plasma::Phase::self()->moveItem(this, Phase::SlideIn, QPoint(-25, -25));
-    int x = -35; // pos().x();
-    int y = 0; // pos().y();
+    int maxwidth = 0;
+    foreach (QGraphicsItem* tool, QGraphicsItem::children()) {
+        if (!tool->isEnabled()) {
+            continue;
+        }
+        maxwidth = qMax(static_cast<int>(tool->boundingRect().width()),
+                        maxwidth);
+    }
+    // put tools 5px from screen edge
+    int x = m_size*2 - maxwidth - 5; // pos().x();
+    int y = 5; // pos().y();
     Plasma::Phase* phase = Plasma::Phase::self();
     foreach (QGraphicsItem* tool, QGraphicsItem::children()) {
         if (!tool->isEnabled()) {
@@ -120,16 +129,12 @@ void DesktopToolbox::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 void DesktopToolbox::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 {
 //    Plasma::Phase::self->moveItem(this, Phase::SlideOut, boundingRect()QPoint(-50, -50));
-    int x = 0; // pos().x() + geometry().width();
+    int x = m_size*2; // TODO: this is an arbitrary value, try to calculate basing on the tool width
     int y = 0;
     Plasma::Phase* phase = Plasma::Phase::self();
     foreach (QGraphicsItem* tool, QGraphicsItem::children()) {
-        if (!tool->isEnabled()) {
-            tool->hide();
-            continue;
-        }
-
-        phase->moveItem(tool, Plasma::Phase::SlideOut, QPoint(x, y));
+         const int height = static_cast<int>(tool->boundingRect().height());
+         phase->moveItem(tool, Plasma::Phase::SlideOut, QPoint(x, y-height)); // FIXME: make me faster (~150-200 ms)
     }
 
     if (m_animId) {
@@ -137,7 +142,7 @@ void DesktopToolbox::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
     }
 
     m_showing = false;
-    m_animId = phase->customAnimation(10, 250, Plasma::Phase::EaseOutCurve, this, "animate");
+    m_animId = phase->customAnimation(10, 150, Plasma::Phase::EaseOutCurve, this, "animate");
     QGraphicsItem::hoverLeaveEvent(event);
 }
 
@@ -174,7 +179,8 @@ void DesktopToolbox::addTool(QGraphicsItem *tool, const QString &name)
     }
 
     tool->hide();
-    tool->setPos(QPoint(0,0));
+    const int height = static_cast<int>(tool->boundingRect().height());
+    tool->setPos(QPoint(m_size*2,-height));
     tool->setZValue(zValue() + 1);
     tool->setParentItem(this);
     tool->setData(ToolName, name);
