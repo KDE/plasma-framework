@@ -22,6 +22,7 @@
 #include <QtGui/QGraphicsSceneMouseEvent>
 #include <QtGui/QLinearGradient>
 #include <QtGui/QPainter>
+#include <QtGui/QApplication>
 
 #include <KColorScheme>
 #include <KIcon>
@@ -51,7 +52,8 @@ AppletHandle::AppletHandle(Containment *parent, Applet *applet)
       m_anim(FadeIn),
       m_animId(0),
       m_angle(0.0),
-      m_scale(1.0)
+      m_scaleWidth(1.0),
+      m_scaleHeight(1.0)
 {
     KColorScheme colors(QPalette::Active, KColorScheme::View, Theme::self()->colors());
     m_gradientColor = colors.background(KColorScheme::NormalBackground).color();
@@ -212,15 +214,15 @@ void AppletHandle::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     if (m_applet && event->button() == Qt::LeftButton) {
         switch (m_pressedButton) {
             case RotateButton: {
-                if (m_scale > 0) {
+                if (m_scaleWidth > 0 && m_scaleHeight > 0) {
                     QRectF rect(m_applet->boundingRect());
-                    const qreal newWidth = rect.width() * m_scale;
-                    const qreal newHeight = rect.height() * m_scale;
+                    const qreal newWidth = rect.width() * m_scaleWidth;
+                    const qreal newHeight = rect.height() * m_scaleHeight;
                     m_applet->resetTransform();
                     m_applet->resize(newWidth, newHeight);
-                    scale(1.0/m_scale, 1.0/m_scale);
+                    scale(1.0/m_scaleWidth, 1.0/m_scaleHeight);
                     moveBy((rect.width() - newWidth) / 2, (rect.height() - newHeight) / 2);
-                    m_scale = 0;
+                    m_scaleWidth = m_scaleHeight = 0;
                 }
 
                 QRectF rect(boundingRect());
@@ -324,17 +326,6 @@ void AppletHandle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
         QRectF rect = QRectF(m_applet->pos(), m_applet->size());
         QPointF center = rect.center();
 
-        m_angle = _k_angleForPoints(center, pressPos, event->pos());
-
-        if (fabs(remainder(m_originalAngle+m_angle, snapAngle)) < 0.15) {
-            m_angle = m_angle - remainder(m_originalAngle+m_angle, snapAngle);
-        }
-
-        qreal newScale = _k_distanceForPoint(event->pos()-center) / _k_distanceForPoint(pressPos-center);
-        if (qAbs(newScale-1.0)<=0.1) {
-            newScale = 1.0;
-        }
-
         qreal w = m_applet->size().width();
         qreal h = m_applet->size().height();
         QSizeF min = m_applet->minimumSize();
@@ -347,21 +338,65 @@ void AppletHandle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
             min += QSizeF(16, 16);
         }
 
-        //FIXME: this code will only work if we are keeping the aspect ratio, as we currently do
-        //       as it resets only on the width, which will break if we allow resizing of width
-        //       and height independantly
-        if (newScale * w < min.width() || newScale * h < min.height()) {
-            m_scale = min.width() / w;
-        } else if (newScale * w > max.width() && newScale * h > max.height()) {
-            m_scale = max.width() / w;
+        if (QApplication::keyboardModifiers() & Qt::ControlModifier) {
+            m_angle = 0;
+
+            qreal newScaleWidth = 0;
+            qreal newScaleHeight = 0;
+
+            QPointF startDistance(pressPos - center);
+            QPointF currentDistance(event->pos() - center);
+            newScaleWidth = currentDistance.x() / startDistance.x();
+            newScaleHeight = currentDistance.y() / startDistance.y();
+
+            if (qAbs(newScaleWidth-1.0)<=0.1) {
+                newScaleWidth = 1.0;
+            }
+            if (qAbs(newScaleHeight-1.0)<=0.1) {
+                newScaleHeight = 1.0;
+            }
+
+            if (newScaleHeight * h < min.height()) {
+                m_scaleHeight = min.height() / h;
+            } else if (newScaleHeight * h > max.height()) {
+                m_scaleHeight = max.height() / h;
+            } else {
+                m_scaleHeight = newScaleHeight;
+            }
+            if (newScaleWidth * w < min.width()) {
+                m_scaleWidth = min.width() / w;
+            } else if (newScaleWidth * w > max.width()) {
+                m_scaleWidth = max.width() / w;
+            } else {
+                m_scaleWidth = newScaleWidth;
+            }
         } else {
-            m_scale = newScale;
+            m_angle = _k_angleForPoints(center, pressPos, event->pos());
+
+            if (fabs(remainder(m_originalAngle+m_angle, snapAngle)) < 0.15) {
+                m_angle = m_angle - remainder(m_originalAngle+m_angle, snapAngle);
+            }
+
+            qreal newScale = 0;
+
+            newScale = _k_distanceForPoint(event->pos()-center) / _k_distanceForPoint(pressPos-center);
+            if (qAbs(newScale-1.0)<=0.1) {
+                newScale = 1.0;
+            }
+
+            if (newScale * w < min.width() || newScale * h < min.height()) {
+                m_scaleWidth = m_scaleHeight = qMax(min.width() / w, min.height() / h);
+            } else if (newScale * w > max.width() && newScale * h > max.height()) {
+                m_scaleWidth = m_scaleHeight = qMin(max.width() / w, max.height() / h);
+            } else {
+                m_scaleHeight = m_scaleWidth = newScale;
+            }
         }
 
         QTransform matrix;
         matrix.translate(center.x(), center.y());
         matrix.rotateRadians(m_angle);
-        matrix.scale(m_scale, m_scale);
+        matrix.scale(m_scaleWidth, m_scaleHeight);
         matrix.translate(-center.x(), -center.y());
         setTransform(matrix);
     } else {

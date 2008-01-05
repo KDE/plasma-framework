@@ -81,7 +81,8 @@ class AppletHandle : public QObject, public QGraphicsItem
         FadeType m_anim;
         Phase::AnimId m_animId;
         qreal m_angle;
-        qreal m_scale;
+        qreal m_scaleWidth;
+        qreal m_scaleHeight;
         qreal m_originalAngle;
         QColor m_gradientColor;
 };
