@@ -713,6 +713,7 @@ void Applet::setFailedToLaunch(bool failed, const QString& reason)
         Layout* failureLayout = new BoxLayout(BoxLayout::TopToBottom, this);
         failureLayout->setMargin(0);
         d->failureText = new LineEdit(this);
+        d->failureText->setTextInteractionFlags( Qt::TextSelectableByMouse );
         d->failureText->setStyled(false);
         d->failureText->document()->setTextWidth(200);
         d->failureText->setHtml(visibleFailureText(reason));
