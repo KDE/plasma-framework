@@ -82,11 +82,12 @@ public:
     void prepareItemForState( LayoutItem *item , LayoutAnimator::State state ) {
         
         // opacity setting for widgets
-        if ( state == InsertedState && effects[state] == LayoutAnimator::FadeInMoveEffect ) {
-            Widget *widget = dynamic_cast<Widget*>(item->graphicsItem());
-
-            if ( widget ) {
-                widget->setOpacity(0); // item is invisible immediately after insertion     
+        Widget *widget = dynamic_cast<Widget*>(item->graphicsItem());
+        if (widget) {
+            if (state == InsertedState && effects[state] == LayoutAnimator::FadeInMoveEffect) {
+                widget->setOpacity(0); // item is invisible immediately after insertion
+            } else {
+                widget->setOpacity(1.0);
             }
         }
     }
