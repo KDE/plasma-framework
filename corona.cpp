@@ -413,7 +413,7 @@ Containment* Corona::addContainment(const QString& name, const QVariantList& arg
     connect(containment, SIGNAL(launchActivated()),
             SIGNAL(launchActivated()));
     connect(containment, SIGNAL(configNeedsSaving()),
-            SIGNAL(scheduleConfigSync()));
+            SLOT(scheduleConfigSync()));
 
     return containment;
 }
