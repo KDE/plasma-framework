@@ -85,7 +85,7 @@ void ToolTip::show(const QPoint &location, Plasma::Widget *widget)
         setVisible(false);
         d->showTimer->start(0);
     } else {
-        d->showTimer->start(1000);  //Shown after a one second delay.
+        d->showTimer->start(300);  //Shown after 300ms delay.
     }
 }
 
