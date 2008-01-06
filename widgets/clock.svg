@@ -15,7 +15,7 @@
    width="250"
    height="250"
    version="1.0"
-   sodipodi:docbase="/home/kde-devel/kdesvn/kdebase/workspace/plasma/desktoptheme/widgets"
+   sodipodi:docbase="/home/me/kde4/src/kdebase/workspace/plasma/desktoptheme/widgets"
    sodipodi:docname="clock.svg"
    inkscape:output_extension="org.inkscape.output.svg.inkscape"
    inkscape:export-filename="/home/pinheiro/Desktop/clock.png"
@@ -232,7 +232,7 @@
        r="74.609375" />
   </defs>
   <sodipodi:namedview
-     inkscape:window-height="967"
+     inkscape:window-height="724"
      inkscape:window-width="1280"
      inkscape:pageshadow="2"
      inkscape:pageopacity="0.0"
@@ -248,11 +248,11 @@
      showgrid="false"
      width="250px"
      height="250px"
-     inkscape:zoom="2.988"
-     inkscape:cx="125"
-     inkscape:cy="125"
-     inkscape:window-x="1558"
-     inkscape:window-y="28"
+     inkscape:zoom="4"
+     inkscape:cx="132.2803"
+     inkscape:cy="125.60732"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
      inkscape:current-layer="svg2" />
   <g
      id="ClockFace"
@@ -1090,9 +1090,10 @@
   </g>
   <path
      style="opacity:1;fill:#606060;fill-opacity:1;stroke:none;stroke-width:8;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:1.08779998;stroke-opacity:1"
-     d="M 122.67866,182.14891 L 122.67866,123.46025 C 121.3205,123.19977 120.43316,122.75271 120.43284,122.22785 C 120.43284,121.70303 121.32016,121.22263 122.67866,120.96215 L 122.67866,118.59728 L 127.70444,118.59728 L 127.70444,120.96215 C 129.09853,121.22031 130.05736,121.69484 130.05736,122.22785 C 130.05736,122.76087 129.09853,123.20209 127.70444,123.46025 L 127.70444,182.14891 L 122.67866,182.14891 z "
+     d="M 122.67866,200.38854 L 122.67866,127.54345 C 121.3205,127.20821 120.43316,125.16409 120.43284,124.48859 C 120.43284,123.81315 121.32016,121.97612 122.67866,121.64088 L 122.67866,118.59728 L 127.70444,118.59728 L 127.70444,121.64088 C 129.09853,121.97313 130.05736,123.8026 130.05736,124.48859 C 130.05736,125.17459 129.09853,127.21119 127.70444,127.54345 L 127.70444,200.38854 L 122.67866,200.38854 z "
      id="HourHand"
-     inkscape:label="#rect3745" />
+     inkscape:label="#rect3745"
+     sodipodi:nodetypes="ccsccccsccc" />
   <path
      id="MinuteHand"
      d="M 124.45975,218.88897 L 124.32625,128.19644 C 123.8256,127.88919 123.49803,127.36107 123.497,126.7405 C 123.49608,126.11995 123.82202,125.55146 124.3219,125.24271 L 124.31778,122.44655 L 126.16871,122.44381 L 126.17282,125.24 C 126.68671,125.54449 127.04064,126.10507 127.04159,126.73526 C 127.04251,127.36551 126.69016,127.88772 126.17717,128.19373 L 126.31068,218.88623 L 124.45975,218.88897 z "
