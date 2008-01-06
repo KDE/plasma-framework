@@ -516,6 +516,13 @@ QPixmap SignalPlotter::getSnapshotImage(uint w, uint height)
     return image;
 }
 
+void SignalPlotter::setGeometry(const QRectF &geometry)
+{
+    // First update our size, then update the data buffers accordingly.
+    Widget::setGeometry(geometry);
+    updateDataBuffers();
+}
+
 void SignalPlotter::paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     Q_UNUSED(option);

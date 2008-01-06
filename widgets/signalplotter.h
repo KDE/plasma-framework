@@ -410,6 +410,12 @@ public:
      */
     QPixmap getSnapshotImage(uint width, uint height);
 
+    /**
+     * Overwritten to be notified of size changes. Needed to update the
+     * data buffers that are used to store the samples.
+     */
+    virtual void setGeometry(const QRectF &geometry);
+
 protected:
     void updateDataBuffers();
     void calculateNiceRange();
