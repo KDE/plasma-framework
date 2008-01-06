@@ -96,11 +96,8 @@ void ToolTip::hide()
 {
     d->currentWidget = 0;
     d->showTimer->stop();  //Mouse out, stop the timer to show the tooltip
-    if (!isVisible()) {
-        d->isShown = false;
-    }
     setVisible(false);
-    d->hideTimer->start(500);  //500 ms delay before we are officially "gone" to allow for the time to move between widgets
+    d->hideTimer->start(250);  //500 ms delay before we are officially "gone" to allow for the time to move between widgets
 }
 
 Plasma::Widget *ToolTip::currentWidget() const
