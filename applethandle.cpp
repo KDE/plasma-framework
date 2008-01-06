@@ -135,6 +135,7 @@ void AppletHandle::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
     QPointF shiftC;
     QPointF shiftD;
     QPointF shiftR;
+    QPointF shiftM;
 
     switch(m_pressedButton)
     {
@@ -147,6 +148,9 @@ void AppletHandle::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
     case RotateButton:
         shiftR = QPointF(2, 2);
         break;
+    case ResizeButton:
+        shiftM = QPointF(2, 2);
+        break;
     default:
         break;
     }
@@ -156,6 +160,9 @@ void AppletHandle::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
         point += QPointF(0.0, ICON_SIZE + ICON_MARGIN);
     }
     painter->drawPixmap(point + shiftR, KIcon("transform-rotate").pixmap(ICON_SIZE, ICON_SIZE));
+
+    point += QPointF(0.0, ICON_SIZE + ICON_MARGIN);
+    painter->drawPixmap(point + shiftM, KIcon("transform-move").pixmap(ICON_SIZE, ICON_SIZE)); // no transform-resize icon
 
     point += QPointF(0.0, ICON_SIZE + ICON_MARGIN * 2);
     painter->drawPixmap(point + shiftD, KIcon("edit-delete").pixmap(ICON_SIZE, ICON_SIZE));
@@ -186,6 +193,11 @@ AppletHandle::ButtonType AppletHandle::mapToButton(const QPointF &point) const
         return RotateButton;
     }
 
+    activeArea.translate(QPointF(0.0, ICON_SIZE + ICON_MARGIN));
+    if (activeArea.containsPoint(point, Qt::OddEvenFill)) {
+        return ResizeButton;
+    }
+
     activeArea.translate(QPointF(0.0, ICON_SIZE + ICON_MARGIN * 2));
     if (activeArea.containsPoint(point, Qt::OddEvenFill)) {
         return RemoveButton;
@@ -213,6 +225,7 @@ void AppletHandle::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 
     if (m_applet && event->button() == Qt::LeftButton) {
         switch (m_pressedButton) {
+            case ResizeButton:
             case RotateButton: {
                 if (m_scaleWidth > 0 && m_scaleHeight > 0) {
                     QRectF rect(m_applet->boundingRect());
@@ -224,7 +237,6 @@ void AppletHandle::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
                     moveBy((rect.width() - newWidth) / 2, (rect.height() - newHeight) / 2);
                     m_scaleWidth = m_scaleHeight = 0;
                 }
-
                 QRectF rect(boundingRect());
                 QPointF center = rect.center();
 
@@ -316,7 +328,8 @@ void AppletHandle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
                 }
             }
         }
-    } else if (m_pressedButton == RotateButton) {
+    } else if (m_pressedButton == RotateButton ||
+               m_pressedButton == ResizeButton) {
         if (_k_distanceForPoint(delta) <= 1.0) {
             return;
         }
@@ -326,70 +339,74 @@ void AppletHandle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
         QRectF rect = QRectF(m_applet->pos(), m_applet->size());
         QPointF center = rect.center();
 
-        qreal w = m_applet->size().width();
-        qreal h = m_applet->size().height();
-        QSizeF min = m_applet->minimumSize();
-        QSizeF max = m_applet->maximumSize();
-
-        // If the applet doesn't have a minimum size, calculate based on a
-        // minimum content area size of 16x16
-        if (min.isEmpty()) {
-            min = m_applet->boundingRect().size() - m_applet->contentRect().size();
-            min += QSizeF(16, 16);
-        }
-
-        if (QApplication::keyboardModifiers() & Qt::ControlModifier) {
-            m_angle = 0;
-
-            qreal newScaleWidth = 0;
-            qreal newScaleHeight = 0;
-
-            QPointF startDistance(pressPos - center);
-            QPointF currentDistance(event->pos() - center);
-            newScaleWidth = currentDistance.x() / startDistance.x();
-            newScaleHeight = currentDistance.y() / startDistance.y();
-
-            if (qAbs(newScaleWidth-1.0)<=0.1) {
-                newScaleWidth = 1.0;
-            }
-            if (qAbs(newScaleHeight-1.0)<=0.1) {
-                newScaleHeight = 1.0;
-            }
-
-            if (newScaleHeight * h < min.height()) {
-                m_scaleHeight = min.height() / h;
-            } else if (newScaleHeight * h > max.height()) {
-                m_scaleHeight = max.height() / h;
-            } else {
-                m_scaleHeight = newScaleHeight;
-            }
-            if (newScaleWidth * w < min.width()) {
-                m_scaleWidth = min.width() / w;
-            } else if (newScaleWidth * w > max.width()) {
-                m_scaleWidth = max.width() / w;
-            } else {
-                m_scaleWidth = newScaleWidth;
-            }
-        } else {
+        if (m_pressedButton == RotateButton) {
             m_angle = _k_angleForPoints(center, pressPos, event->pos());
 
             if (fabs(remainder(m_originalAngle+m_angle, snapAngle)) < 0.15) {
                 m_angle = m_angle - remainder(m_originalAngle+m_angle, snapAngle);
             }
 
-            qreal newScale = 0;
+            m_scaleWidth = m_scaleHeight = 1.0;
+        } else {
+            qreal w = m_applet->size().width();
+            qreal h = m_applet->size().height();
+            QSizeF min = m_applet->minimumSize();
+            QSizeF max = m_applet->maximumSize();
 
-            newScale = _k_distanceForPoint(event->pos()-center) / _k_distanceForPoint(pressPos-center);
-            if (qAbs(newScale-1.0)<=0.1) {
-                newScale = 1.0;
+            // If the applet doesn't have a minimum size, calculate based on a
+            // minimum content area size of 16x16
+            if (min.isEmpty()) {
+                min = m_applet->boundingRect().size() - m_applet->contentRect().size();
+                min += QSizeF(16, 16);
             }
 
-            if (newScale * w < min.width() || newScale * h < min.height()) {
-                m_scaleWidth = m_scaleHeight = qMax(min.width() / w, min.height() / h);
-            } else if (newScale * w > max.width() && newScale * h > max.height()) {
-                m_scaleWidth = m_scaleHeight = qMin(max.width() / w, max.height() / h);
+            if (QApplication::keyboardModifiers() & Qt::ControlModifier) {
+                // free resizing
+                qreal newScaleWidth = 0;
+                qreal newScaleHeight = 0;
+
+                QPointF startDistance(pressPos - center);
+                QPointF currentDistance(event->pos() - center);
+                newScaleWidth = currentDistance.x() / startDistance.x();
+                newScaleHeight = currentDistance.y() / startDistance.y();
+
+                if (qAbs(newScaleWidth-1.0)<=0.1) {
+                    newScaleWidth = 1.0;
+                }
+                if (qAbs(newScaleHeight-1.0)<=0.1) {
+                    newScaleHeight = 1.0;
+                }
+
+                if (newScaleHeight * h < min.height()) {
+                    m_scaleHeight = min.height() / h;
+                } else if (newScaleHeight * h > max.height()) {
+                    m_scaleHeight = max.height() / h;
+                } else {
+                    m_scaleHeight = newScaleHeight;
+                }
+                if (newScaleWidth * w < min.width()) {
+                    m_scaleWidth = min.width() / w;
+                } else if (newScaleWidth * w > max.width()) {
+                    m_scaleWidth = max.width() / w;
+                } else {
+                    m_scaleWidth = newScaleWidth;
+                }
             } else {
-                m_scaleHeight = m_scaleWidth = newScale;
+                // maintain aspect ratio
+                qreal newScale = 0;
+
+                newScale = _k_distanceForPoint(event->pos()-center) / _k_distanceForPoint(pressPos-center);
+                if (qAbs(newScale-1.0)<=0.1) {
+                    newScale = 1.0;
+                }
+
+                if (newScale * w < min.width() || newScale * h < min.height()) {
+                    m_scaleWidth = m_scaleHeight = qMax(min.width() / w, min.height() / h);
+                } else if (newScale * w > max.width() && newScale * h > max.height()) {
+                    m_scaleWidth = m_scaleHeight = qMin(max.width() / w, max.height() / h);
+                } else {
+                    m_scaleHeight = m_scaleWidth = newScale;
+                }
             }
         }
 
