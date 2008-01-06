@@ -155,14 +155,15 @@ void AppletHandle::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
         break;
     }
 
-    if (m_applet && m_applet->hasConfigurationInterface()) {
-        painter->drawPixmap(point + shiftC, KIcon("configure").pixmap(ICON_SIZE, ICON_SIZE));
-        point += QPointF(0.0, ICON_SIZE + ICON_MARGIN);
-    }
-    painter->drawPixmap(point + shiftR, KIcon("transform-rotate").pixmap(ICON_SIZE, ICON_SIZE));
+    painter->drawPixmap(point + shiftM, KIcon("transform-move").pixmap(ICON_SIZE, ICON_SIZE)); // no transform-resize icon
 
     point += QPointF(0.0, ICON_SIZE + ICON_MARGIN);
-    painter->drawPixmap(point + shiftM, KIcon("transform-move").pixmap(ICON_SIZE, ICON_SIZE)); // no transform-resize icon
+    painter->drawPixmap(point + shiftR, KIcon("transform-rotate").pixmap(ICON_SIZE, ICON_SIZE));
+
+    if (m_applet && m_applet->hasConfigurationInterface()) {
+        point += QPointF(0.0, ICON_SIZE + ICON_MARGIN);
+        painter->drawPixmap(point + shiftC, KIcon("configure").pixmap(ICON_SIZE, ICON_SIZE));
+    }
 
     point += QPointF(0.0, ICON_SIZE + ICON_MARGIN * 2);
     painter->drawPixmap(point + shiftD, KIcon("edit-delete").pixmap(ICON_SIZE, ICON_SIZE));
@@ -182,20 +183,20 @@ AppletHandle::ButtonType AppletHandle::mapToButton(const QPointF &point) const
 
     QPolygonF activeArea = QPolygonF(QRectF(basePoint, QSizeF(ICON_SIZE, ICON_SIZE)));
 
-    if (m_applet && m_applet->hasConfigurationInterface()) {
-        if (activeArea.containsPoint(point, Qt::OddEvenFill)) {
-            return ConfigureButton;
-        }
-        activeArea.translate(QPointF(0.0, ICON_SIZE + ICON_MARGIN));
-    }
-
     if (activeArea.containsPoint(point, Qt::OddEvenFill)) {
-        return RotateButton;
+        return ResizeButton;
     }
 
     activeArea.translate(QPointF(0.0, ICON_SIZE + ICON_MARGIN));
     if (activeArea.containsPoint(point, Qt::OddEvenFill)) {
-        return ResizeButton;
+        return RotateButton;
+    }
+
+    if (m_applet && m_applet->hasConfigurationInterface()) {
+        activeArea.translate(QPointF(0.0, ICON_SIZE + ICON_MARGIN));
+        if (activeArea.containsPoint(point, Qt::OddEvenFill)) {
+            return ConfigureButton;
+        }
     }
 
     activeArea.translate(QPointF(0.0, ICON_SIZE + ICON_MARGIN * 2));
