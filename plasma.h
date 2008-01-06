@@ -42,6 +42,7 @@ enum Constraint { NoConstraint = 0,
                   ScreenConstraint = 4 /** Which screen an object is on */,
                   SizeConstraint = 8 /** the size of the applet was changed */,
                   ImmutableConstraint = 16 /** the immutability (locked) nature of the applet changed  */,
+                  StartupCompletedConstraint = 32 /** application startup has completed */,
                   AllConstraints = FormFactorConstraint | LocationConstraint | ScreenConstraint | SizeConstraint | ImmutableConstraint
 };
 Q_DECLARE_FLAGS(Constraints, Constraint)

@@ -236,7 +236,7 @@ void Corona::loadApplets(const QString& configName)
             }
 
             Applet *applet = c->addApplet(plugin, QVariantList(), appId, appletConfig.readEntry("geometry", QRectF()), true);
-            
+
             QList<qreal> m = appletConfig.readEntry("transform", QList<qreal>());
             if (m.count() == 9) {
                 QTransform t(m[0], m[1], m[2], m[3], m[4], m[5], m[6], m[7], m[8]);
@@ -257,6 +257,7 @@ void Corona::loadApplets(const QString& configName)
                 applet->init();
             }
 
+            containment->updateConstraints(Plasma::StartupCompletedConstraint);
             containment->flushUpdatedConstraints();
         }
 
@@ -406,6 +407,7 @@ Containment* Corona::addContainment(const QString& name, const QVariantList& arg
     if (!delayedInit) {
         addItem(containment);
         containment->init();
+        containment->updateConstraints(Plasma::StartupCompletedConstraint);
     }
 
     d->containments.append(containment);
