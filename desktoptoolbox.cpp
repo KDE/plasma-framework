@@ -65,11 +65,11 @@ void DesktopToolbox::paint(QPainter *painter, const QStyleOptionGraphicsItem *op
     Q_UNUSED(widget)
 
     QPainterPath p = shape();
-    QRadialGradient gradient(QPoint(m_size*2, 0), m_size*3);
+    QRadialGradient gradient(QPoint(m_size*2, 0), m_size + m_animFrame);
     gradient.setFocalPoint(QPointF(m_size*2, 0));
     gradient.setColorAt(0, QColor(255, 255, 255, 96));
-    gradient.setColorAt(.33, QColor(128, 128, 128, 96));
-    gradient.setColorAt(.66, QColor(128, 128, 128, 0));
+    gradient.setColorAt(.66, QColor(128, 128, 128, 96));
+    gradient.setColorAt(1, QColor(128, 128, 128, 0));
     painter->save();
     painter->setPen(Qt::NoPen);
     painter->setRenderHint(QPainter::Antialiasing, true);
