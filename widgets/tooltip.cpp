@@ -83,9 +83,12 @@ void ToolTip::show(const QPoint &location, Plasma::Widget *widget)
         // Qt doesn't seem to like visible tooltips moving though, so hide it and then
         // immediately show it again
         setVisible(false);
-        d->showTimer->start(0);
+
+        // small delay to prevent unecessary showing when the mouse is moving quickly across items
+        // which can be too much for less powerful CPUs to keep up with
+        d->showTimer->start(150);
     } else {
-        d->showTimer->start(300);  //Shown after 300ms delay.
+        d->showTimer->start(500);
     }
 }
 
