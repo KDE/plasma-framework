@@ -341,11 +341,6 @@ void Icon::setNumDisplayLines(int numLines)
     }
 }
 
-QSizeF Icon::sizeHint() const
-{
-    return size();
-}
-
 void Icon::setDrawBackground(bool draw)
 {
     if (d->drawBg != draw) {

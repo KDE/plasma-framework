@@ -180,11 +180,6 @@ public:
     void setNumDisplayLines(int numLines);
 
     /**
-    * @return the recommended size of the widget
-    */
-    QSizeF sizeHint() const;
-
-    /**
      * Sets whether or not to draw a background area for the icon
      *
      * @arg draw true if a background should be drawn or not
