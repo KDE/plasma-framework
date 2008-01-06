@@ -146,7 +146,6 @@ void Containment::loadConstraints(KConfigGroup* group)
     setLocation((Plasma::Location)group->readEntry("location", (int)d->location));
     setFormFactor((Plasma::FormFactor)group->readEntry("formfactor", (int)d->formFactor));
     setScreen(group->readEntry("screen", d->screen));
-    flushUpdatedConstraints();
 }
 
 void Containment::saveConstraints(KConfigGroup* group) const

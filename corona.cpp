@@ -212,6 +212,7 @@ void Corona::loadApplets(const QString& configName)
         addItem(c);
         c->init();
         c->loadConstraints(&containmentConfig);
+        c->flushUpdatedConstraints();
         //kDebug() << "Containment" << c->id() << "geometry is" << c->geometry().toRect() << "config'd with" << appletConfig.name();
         KConfigGroup applets(&containmentConfig, "Applets");
 
