@@ -211,7 +211,7 @@ void Corona::loadApplets(const QString& configName)
         }
 
         int cid = group.toUInt();
-        //kDebug() << "got a containment in the config, trying to make a" << containmentConfig.readEntry("plugin", QString()) << "from" << group;
+        //kDebug(1209) << "got a containment in the config, trying to make a" << containmentConfig.readEntry("plugin", QString()) << "from" << group;
         Containment *c = addContainment(containmentConfig.readEntry("plugin", QString()), QVariantList(),
                                         cid, true);
         if (!c) {
@@ -222,14 +222,14 @@ void Corona::loadApplets(const QString& configName)
         c->init();
         c->loadConstraints(&containmentConfig);
         c->flushUpdatedConstraints();
-        //kDebug() << "Containment" << c->id() << "geometry is" << c->geometry().toRect() << "config'd with" << appletConfig.name();
+        //kDebug(1209) << "Containment" << c->id() << "geometry is" << c->geometry().toRect() << "config'd with" << appletConfig.name();
         KConfigGroup applets(&containmentConfig, "Applets");
 
         // Sort the applet configs in order of geometry to ensure that applets
         // are added from left to right or top to bottom for a panel containment
         QList<KConfigGroup> appletConfigs;
         foreach (const QString &appletGroup, applets.groupList()) {
-            //kDebug() << "reading from applet group" << appletGroup;
+            //kDebug(1209) << "reading from applet group" << appletGroup;
             KConfigGroup appletConfig(&applets, appletGroup);
             appletConfigs.append(appletConfig);
         }
@@ -237,7 +237,7 @@ void Corona::loadApplets(const QString& configName)
 
         foreach (KConfigGroup appletConfig, appletConfigs) {
             int appId = appletConfig.name().toUInt();
-            //kDebug() << "the name is" << appletConfig.name();
+            //kDebug(1209) << "the name is" << appletConfig.name();
             QString plugin = appletConfig.readEntry("plugin", QString());
 
             if (plugin.isEmpty()) {
@@ -301,14 +301,14 @@ void Corona::loadDefaultSetup()
     //FIXME: implement support for system-wide defaults
     QDesktopWidget *desktop = QApplication::desktop();
     int numScreens = desktop->numScreens();
-    kDebug() << "number of screens is" << numScreens;
+    kDebug(1209) << "number of screens is" << numScreens;
     int topLeftScreen = 0;
     QPoint topLeftCorner = desktop->screenGeometry(0).topLeft();
 
     // create a containment for each screen
     for (int i = 0; i < numScreens; ++i) {
         QRect g = desktop->screenGeometry(i);
-        kDebug() << "     screen " << i << "geometry is" << g;
+        kDebug(1209) << "     screen " << i << "geometry is" << g;
         Containment* c = addContainment("desktop");
         c->setScreen(i);
         c->setFormFactor(Plasma::Planar);
@@ -392,7 +392,7 @@ Containment* Corona::addContainment(const QString& name, const QVariantList& arg
     Containment* containment = 0;
     Applet* applet = 0;
 
-    //kDebug() << "Loading" << name << args << id;
+    //kDebug(1209) << "Loading" << name << args << id;
 
     if (pluginName.isEmpty()) {
         // default to the desktop containment
@@ -403,7 +403,7 @@ Containment* Corona::addContainment(const QString& name, const QVariantList& arg
     }
 
     if (!containment) {
-        kDebug() << "loading of containment" << name << "failed.";
+        kDebug(1209) << "loading of containment" << name << "failed.";
 
         // in case we got a non-Containment from Applet::loadApplet or a null containment was requested
         delete applet;
@@ -446,7 +446,7 @@ void Corona::destroyContainment(Containment *c)
 
 void Corona::dragEnterEvent( QGraphicsSceneDragDropEvent *event)
 {
-//    kDebug() << "Corona::dragEnterEvent(QGraphicsSceneDragDropEvent* event)";
+//    kDebug(1209) << "Corona::dragEnterEvent(QGraphicsSceneDragDropEvent* event)";
     if (event->mimeData()->hasFormat(d->mimetype) ||
         KUrl::List::canDecode(event->mimeData())) {
         event->acceptProposedAction();
@@ -463,7 +463,7 @@ void Corona::dragEnterEvent( QGraphicsSceneDragDropEvent *event)
 
 void Corona::dragLeaveEvent(QGraphicsSceneDragDropEvent *event)
 {
-   // kDebug() << "Corona::dragLeaveEvent(QGraphicsSceneDragDropEvent* event)";
+   // kDebug(1209) << "Corona::dragLeaveEvent(QGraphicsSceneDragDropEvent* event)";
     //TODO If an established Applet is dragged out of the Corona, remove it and
     //     create a QDrag type thing to keep the Applet's settings
 
@@ -475,7 +475,7 @@ void Corona::dragMoveEvent(QGraphicsSceneDragDropEvent *event)
     QGraphicsScene::dragMoveEvent(event);
 
     event->accept();
-    //kDebug() << "Corona::dragMoveEvent(QDragMoveEvent* event)";
+    //kDebug(1209) << "Corona::dragMoveEvent(QDragMoveEvent* event)";
 }
 
 void Corona::containmentDestroyed(QObject* obj)
@@ -539,7 +539,7 @@ void Corona::setImmutable(bool immutable)
         return;
     }
 
-    kDebug() << "setting immutability to" << immutable;
+    kDebug(1209) << "setting immutability to" << immutable;
     d->immutable = immutable;
     d->updateContainmentImmutability();
 }

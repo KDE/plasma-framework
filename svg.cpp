@@ -53,7 +53,7 @@ class SharedSvgRenderer : public KSvgRenderer, public QSharedData
 
         ~SharedSvgRenderer()
         {
-            //kDebug() << "leaving this world for a better one.";
+            //kDebug(1209) << "leaving this world for a better one.";
         }
 };
 
@@ -83,7 +83,7 @@ class Svg::Private
                 path = imagePath;
 
                 if (!QFile::exists(path)) {
-                    kDebug() << "Plasma::Svg: file '" << path << "' does not exist!";
+                    kDebug(1209) << "Plasma::Svg: file '" << path << "' does not exist!";
                 }
             }
         }
@@ -108,13 +108,13 @@ class Svg::Private
             if (!elementId.isEmpty()) {
                 id.append(elementId);
             }
-            //kDebug() << "id is " << id;
+            //kDebug(1209) << "id is " << id;
 
             if (QPixmapCache::find(id, p)) {
-                //kDebug() << "found cached version of " << id;
+                //kDebug(1209) << "found cached version of " << id;
                 return;
             } else {
-                //kDebug() << "didn't find cached version of " << id << ", so re-rendering";
+                //kDebug(1209) << "didn't find cached version of " << id << ", so re-rendering";
             }
 
             // we have to re-render this puppy
@@ -124,7 +124,7 @@ class Svg::Private
             } else {
                 s = elementSize(elementId);
             }
-            //kDebug() << "size for " << elementId << " is " << s;
+            //kDebug(1209) << "size for " << elementId << " is " << s;
 
             p = QPixmap(s);
             p.fill(Qt::transparent);
@@ -139,7 +139,7 @@ class Svg::Private
             renderPainter.end();
 
             if (!QPixmapCache::insert( id, p )) {
-                kDebug() << "pixmap cache is too small for inserting" << id << "of size" << s;
+                kDebug(1209) << "pixmap cache is too small for inserting" << id << "of size" << s;
             }
         }
 
@@ -156,7 +156,7 @@ class Svg::Private
             QHash<QString, SharedSvgRenderer::Ptr>::const_iterator it = renderers.find(path);
 
             if (it != renderers.end()) {
-                //kDebug() << "gots us an existing one!";
+                //kDebug(1209) << "gots us an existing one!";
                 renderer = it.value();
             } else {
                 renderer = new SharedSvgRenderer(path);
@@ -236,7 +236,7 @@ void Svg::paint(QPainter* painter, const QPointF& point, const QString& elementI
 {
     QPixmap pix;
     d->findInCache(pix, elementID);
-    //kDebug() << "pix size is " << pix.size();
+    //kDebug(1209) << "pix size is " << pix.size();
     painter->drawPixmap(QRectF(point, pix.size()), pix, QRectF(QPointF(0,0), pix.size()));
 }
 
@@ -249,7 +249,7 @@ void Svg::paint(QPainter* painter, const QRectF& rect, const QString& elementID)
 {
     QPixmap pix;
     d->findInCache(pix, elementID);
-    //kDebug() << "pix size is " << pix.size();
+    //kDebug(1209) << "pix size is " << pix.size();
     painter->drawPixmap(rect, pix, QRectF(QPointF(0,0), pix.size()));
 }
 
@@ -292,7 +292,7 @@ QString Svg::elementAtPoint(const QPoint &point) const
     QSizeF naturalSize = d->renderer->defaultSize();
     qreal dx = d->size.width() / naturalSize.width();
     qreal dy = d->size.height() / naturalSize.height();
-    //kDebug() << point << "is really" << QPoint(point.x() *dx, naturalSize.height() - point.y() * dy);
+    //kDebug(1209) << point << "is really" << QPoint(point.x() *dx, naturalSize.height() - point.y() * dy);
 
     return QString(); // d->renderer->elementAtPoint(QPoint(point.x() *dx, naturalSize.height() - point.y() * dy));
 }

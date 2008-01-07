@@ -118,7 +118,7 @@ void Animator::slideIn(qreal progress, QGraphicsItem *item, const QPoint &start,
 
 void Animator::slideOut(qreal progress, QGraphicsItem *item, const QPoint &start, const QPoint &destination)
 {
-    //kDebug();
+    //kDebug(1209);
     double x = start.x() + (destination.x() - start.x()) * progress;
     double y = start.y() + (destination.y() - start.y()) * progress;
     item->setPos(x, y);

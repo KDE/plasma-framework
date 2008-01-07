@@ -74,7 +74,7 @@ void KCategorizedItemsViewDelegate::paint(QPainter *painter,
         paintColRemove(painter, option, item);
         break;
     default:
-        kDebug() << "unexpected column";
+        kDebug(1209) << "unexpected column";
     }
 
     // Dividing line 
@@ -311,7 +311,7 @@ KCategorizedItemsViewModels::AbstractItem * KCategorizedItemsViewDelegate::getIt
 
 KCategorizedItemsViewFilterDelegate::KCategorizedItemsViewFilterDelegate(QObject *parent)
     : QItemDelegate(parent) {
-    kDebug() << "KCategorizedItemsViewFilterDelegate(QObject *parent)\n";
+    kDebug(1209) << "KCategorizedItemsViewFilterDelegate(QObject *parent)\n";
 
 }
 

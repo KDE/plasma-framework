@@ -189,7 +189,7 @@ bool IconAction::event(QEvent::Type type, const QPointF &pos)
         break;
 
     case QEvent::GraphicsSceneMouseRelease: {
-        // kDebug() << "IconAction::event got a QEvent::MouseButtonRelease, " << isSelected();
+        // kDebug(1209) << "IconAction::event got a QEvent::MouseButtonRelease, " << isSelected();
         bool wasSelected = isSelected();
         setSelected(false);
         if (wasSelected) {
@@ -287,7 +287,7 @@ void Icon::addAction(QAction *action)
 {
     int count = d->cornerActions.count();
     if (count > 3) {
-        kDebug() << "Icon::addAction(QAction*) no more room for more actions!";
+        kDebug(1209) << "Icon::addAction(QAction*) no more room for more actions!";
     }
 
     IconAction* iconAction = new IconAction(this, action);

@@ -120,7 +120,7 @@ void DesktopToolbox::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
             continue;
         }
 
-        //kDebug() << "let's show and move" << tool << tool->boundingRect();
+        //kDebug(1209) << "let's show and move" << tool << tool->boundingRect();
         tool->show();
         phase->moveItem(tool, Plasma::Phase::SlideIn, QPoint(x, y));
         //x += 0;
@@ -166,7 +166,7 @@ void DesktopToolbox::animate(qreal progress)
         m_animFrame = static_cast<int>(m_size * (1.0 - progress));
     }
 
-    //kDebug() << "animating at" << progress << "for" << m_animFrame;
+    //kDebug(1209) << "animating at" << progress << "for" << m_animFrame;
 
     if (progress >= 1) {
         m_animId = 0;
@@ -177,7 +177,7 @@ void DesktopToolbox::animate(qreal progress)
 
 void DesktopToolbox::toolMoved(QGraphicsItem *item)
 {
-    //kDebug() << "geometry is now " << static_cast<Plasma::Widget*>(item)->geometry();
+    //kDebug(1209) << "geometry is now " << static_cast<Plasma::Widget*>(item)->geometry();
     if (!m_showing &&
         QGraphicsItem::children().indexOf(static_cast<Plasma::Widget*>(item)) != -1) {
         item->hide();
@@ -200,7 +200,7 @@ void DesktopToolbox::addTool(QGraphicsItem *tool, const QString &name)
 
 void DesktopToolbox::enableTool(const QString &toolName, bool visible)
 {
-    //kDebug() << (visible? "enabling" : "disabling") << "tool" << toolName;
+    //kDebug(1209) << (visible? "enabling" : "disabling") << "tool" << toolName;
     QGraphicsItem *t = tool(toolName);
 
     if (t) {
@@ -222,9 +222,9 @@ bool DesktopToolbox::isToolEnabled(const QString &toolName) const
 QGraphicsItem* DesktopToolbox::tool(const QString &toolName) const
 {
     foreach (QGraphicsItem *child, QGraphicsItem::children()) {
-        //kDebug() << "checking tool" << child << child->data(ToolName);
+        //kDebug(1209) << "checking tool" << child << child->data(ToolName);
         if (child->data(ToolName).toString() == toolName) {
-            //kDebug() << "tool found!";
+            //kDebug(1209) << "tool found!";
             return child;
         }
     }

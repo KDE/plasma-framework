@@ -104,7 +104,7 @@ PlasmaAppletItemModel::PlasmaAppletItemModel(KConfigGroup configGroup, QObject *
 void PlasmaAppletItemModel::populateModel()
 {
     clear();
-    //kDebug() << "populating model, our application is" << m_application;
+    //kDebug(1209) << "populating model, our application is" << m_application;
 
     // Recommended emblems and filters
     QRegExp rx("recommended[.]([0-9A-Za-z]+)[.]plugins");
@@ -121,14 +121,14 @@ void PlasmaAppletItemModel::populateModel()
     }
 
     //TODO: get recommended, favorite, used, etc out of knownApplets()
-    //kDebug() << "number of applets is" <<  Plasma::Applet::knownApplets(QString(), m_application).count();
+    //kDebug(1209) << "number of applets is" <<  Plasma::Applet::knownApplets(QString(), m_application).count();
     foreach (const KPluginInfo& info, Plasma::Applet::knownApplets(QString(), m_application)) {
-        //kDebug() << info.pluginName() << "NoDisplay" << info.property("NoDisplay").toBool();
+        //kDebug(1209) << info.pluginName() << "NoDisplay" << info.property("NoDisplay").toBool();
         if (info.property("NoDisplay").toBool()) {
             // we don't want to show the hidden category
             continue;
         }
-        //kDebug() << info.pluginName() << " is the name of the plugin\n";
+        //kDebug(1209) << info.pluginName() << " is the name of the plugin\n";
 
         if (info.pluginName() == "skapplet") {
             // If there is the SuperKaramba applet,
@@ -183,7 +183,7 @@ QStringList PlasmaAppletItemModel::mimeTypes() const
 
 QMimeData* PlasmaAppletItemModel::mimeData(const QModelIndexList & indexes) const
 {
-    kDebug() << "GETTING MIME DATA\n";
+    kDebug(1209) << "GETTING MIME DATA\n";
     if (indexes.count() <= 0) {
         return 0;
     }

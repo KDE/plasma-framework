@@ -145,11 +145,11 @@ class Phase::Private
         {
             switch (state->movement) {
                 case Phase::SlideIn:
-                    //kDebug() << "performMovement, SlideIn";
+                    //kDebug(1209) << "performMovement, SlideIn";
                     animator->slideIn(amount, state->item, state->start, state->destination);
                     break;
                 case Phase::SlideOut:
-                    //kDebug() << "performMovement, SlideOut";
+                    //kDebug(1209) << "performMovement, SlideOut";
                     animator->slideOut(amount, state->item, state->start, state->destination);
                     break;
             }
@@ -230,7 +230,7 @@ void Phase::customAnimReceiverDestroyed(QObject* o)
 
 void Phase::animateItem(QGraphicsItem* item, Animation animation)
 {
-     //kDebug();
+     //kDebug(1209);
     // get rid of any existing animations on this item.
     //TODO: shoudl we allow multiple anims per item?
     QMap<QGraphicsItem*, AnimationState*>::iterator it = d->animatedItems.find(item);
@@ -269,7 +269,7 @@ void Phase::animateItem(QGraphicsItem* item, Animation animation)
 
 void Phase::moveItem(QGraphicsItem* item, Movement movement, const QPoint &destination)
 {
-     //kDebug();
+     //kDebug(1209);
      QMap<QGraphicsItem*, MovementState*>::iterator it = d->movingItems.find(item);
      if (it != d->movingItems.end()) {
           delete it.value();
@@ -347,12 +347,12 @@ void Phase::stopCustomAnimation(AnimId id)
         delete it.value();
         d->customAnims.erase(it);
     }
-    //kDebug() << "stopCustomAnimation(AnimId " << id << ") done";
+    //kDebug(1209) << "stopCustomAnimation(AnimId " << id << ") done";
 }
 
 Phase::AnimId Phase::animateElement(QGraphicsItem *item, ElementAnimation animation)
 {
-    //kDebug() << "startElementAnimation(AnimId " << animation << ")";
+    //kDebug(1209) << "startElementAnimation(AnimId " << animation << ")";
     ElementAnimationState *state = new ElementAnimationState;
     state->item = item;
     state->curve = d->animator->curve(animation);
@@ -365,7 +365,7 @@ Phase::AnimId Phase::animateElement(QGraphicsItem *item, ElementAnimation animat
     state->currentInterval = state->interval;
     state->id = ++d->animId;
 
-    //kDebug() << "animateElement " << animation << ", interval: " << state->interval << ", frames: " << state->frames;
+    //kDebug(1209) << "animateElement " << animation << ", interval: " << state->interval << ", frames: " << state->frames;
     bool needTimer = true;
     if (state->frames < 1) {
         state->frames = 1;
@@ -383,7 +383,7 @@ Phase::AnimId Phase::animateElement(QGraphicsItem *item, ElementAnimation animat
         state->item->update();
     }
 
-    //kDebug() << "startElementAnimation(AnimId " << animation << ") returning " << state->id;
+    //kDebug(1209) << "startElementAnimation(AnimId " << animation << ") returning " << state->id;
     if (needTimer && !d->timerId) {
         // start a 20fps timer;
         //TODO: should be started at the maximum frame rate needed only?
@@ -400,7 +400,7 @@ void Phase::stopElementAnimation(AnimId id)
         delete it.value();
         d->animatedElements.erase(it);
     }
-    //kDebug() << "stopElementAnimation(AnimId " << id << ") done";
+    //kDebug(1209) << "stopElementAnimation(AnimId " << id << ") done";
 }
 
 void Phase::setAnimationPixmap(AnimId id, const QPixmap &pixmap)
@@ -408,7 +408,7 @@ void Phase::setAnimationPixmap(AnimId id, const QPixmap &pixmap)
     QMap<AnimId, ElementAnimationState*>::iterator it = d->animatedElements.find(id);
 
     if (it == d->animatedElements.end()) {
-        kDebug() << "Phase::setAnimationPixmap(" << id << ") found no entry for it!";
+        kDebug(1209) << "Phase::setAnimationPixmap(" << id << ") found no entry for it!";
         return;
     }
 
@@ -420,16 +420,16 @@ QPixmap Phase::animationResult(AnimId id)
     QMap<AnimId, ElementAnimationState*>::const_iterator it = d->animatedElements.find(id);
 
     if (it == d->animatedElements.constEnd()) {
-        //kDebug() << "Phase::animationResult(" << id << ") found no entry for it!";
+        //kDebug(1209) << "Phase::animationResult(" << id << ") found no entry for it!";
         return QPixmap();
     }
 
     ElementAnimationState* state = it.value();
     qreal progress = state->frames;
-    //kDebug() << "Phase::animationResult(" << id <<   " at " << progress;
+    //kDebug(1209) << "Phase::animationResult(" << id <<   " at " << progress;
     progress = state->currentFrame / progress;
     progress = qMin(qreal(1.0), qMax(qreal(0.0), progress));
-    //kDebug() << "Phase::animationResult(" << id <<   " at " << progress;
+    //kDebug(1209) << "Phase::animationResult(" << id <<   " at " << progress;
 
     switch (state->animation) {
         case ElementAppear:
@@ -452,7 +452,7 @@ void Phase::timerEvent(QTimerEvent *event)
         elapsed = d->time.elapsed();
     }
     d->time.restart();
-    //kDebug() << "timeEvent, elapsed time: " << elapsed;
+    //kDebug(1209) << "timeEvent, elapsed time: " << elapsed;
 
     foreach (AnimationState* state, d->animatedItems) {
         if (state->currentInterval <= elapsed) {
@@ -502,7 +502,7 @@ void Phase::timerEvent(QTimerEvent *event)
 
     foreach (ElementAnimationState* state, d->animatedElements) {
         if (state->currentFrame == state->frames) {
-            //kDebug() << "skipping" << state->id << "as its already at frame" << state->currentFrame << "of" << state->frames;
+            //kDebug(1209) << "skipping" << state->id << "as its already at frame" << state->currentFrame << "of" << state->frames;
             // since we keep element animations around until they are
             // removed, we will end up with finished animations in the queue;
             // just skip them
@@ -512,7 +512,7 @@ void Phase::timerEvent(QTimerEvent *event)
 
         if (state->currentInterval <= elapsed) {
             // we need to step forward!
-            /*kDebug() << "stepping forwards element anim " << state->id << " from " << state->currentFrame
+            /*kDebug(1209) << "stepping forwards element anim " << state->id << " from " << state->currentFrame
                     << " by " << qMax(1, elapsed / state->interval) << " to "
                     << state->currentFrame + qMax(1, elapsed / state->interval) << endl;*/
             state->currentFrame += qMax(1, elapsed / state->interval);
@@ -541,7 +541,7 @@ void Phase::timerEvent(QTimerEvent *event)
         if (state->currentInterval <= elapsed) {
             // advance the frame
             state->currentFrame += qMax(1, elapsed / state->interval);
-            /*kDebug() << "custom anim for" << state->receiver << "to slot" << state->slot
+            /*kDebug(1209) << "custom anim for" << state->receiver << "to slot" << state->slot
                      << "with interval of" << state->interval << "at frame" << state->currentFrame;*/
 
             if (state->currentFrame < state->frames) {
@@ -585,7 +585,7 @@ void Phase::init()
             QString error;
             d->animator = offers.first()->createInstance<Plasma::Animator>(0, QVariantList(), &error);
             if (!d->animator) {
-                kDebug() << "Could not load requested animator " << offers.first() << ". Error given: " << error;
+                kDebug(1209) << "Could not load requested animator " << offers.first() << ". Error given: " << error;
             }
         }
     }

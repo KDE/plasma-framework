@@ -137,7 +137,7 @@ public:
                                                      appletDescription.pluginName(), appletDescription.name()));
             } else {
                 // create the package and see if we have something real
-                //kDebug() << "trying for" << path;
+                //kDebug(1209) << "trying for" << path;
                 package = new Package(path, PlasmoidStructure());
                 if (package->isValid()) {
                     // now we try and set up the script engine.
@@ -345,7 +345,7 @@ public:
             Q_ASSERT(asContainment);
 
             KConfigGroup containmentConfig;
-            //kDebug() << "got a corona, baby?" << (QObject*)asContainment->corona();
+            //kDebug(1209) << "got a corona, baby?" << (QObject*)asContainment->corona();
             if (asContainment->corona()) {
                 containmentConfig = KConfigGroup(asContainment->corona()->config(), "Containments");
             } else {
@@ -457,7 +457,7 @@ void Applet::save(KConfigGroup* group) const
     group->writeEntry("plugin", pluginName());
     //FIXME: for containments, we need to have some special values here w/regards to
     //       screen affinity (e.g. "bottom of screen 0")
-    //kDebug() << pluginName() << "geometry is" << geometry() << "pos is" << pos() << "bounding rect is" << boundingRect();
+    //kDebug(1209) << pluginName() << "geometry is" << geometry() << "pos is" << pos() << "bounding rect is" << boundingRect();
     group->writeEntry("geometry", geometry());
 
     if (transform() == QTransform()) {
@@ -517,7 +517,7 @@ KConfigGroup Applet::globalConfig() const
 
 void Applet::destroy()
 {
-    //kDebug() << "???????????????? DESTROYING APPLET" << name() << " ???????????????????????????";
+    //kDebug(1209) << "???????????????? DESTROYING APPLET" << name() << " ???????????????????????????";
     if (d->configXml) {
         d->configXml->setDefaults();
     }
@@ -566,7 +566,7 @@ void Applet::updateConstraints(Plasma::Constraints constraints)
 void Applet::constraintsUpdated(Plasma::Constraints constraints)
 {
     Q_UNUSED(constraints)
-    //kDebug() << constraints << "constraints are FormFactor: " << formFactor() << ", Location: " << location();
+    //kDebug(1209) << constraints << "constraints are FormFactor: " << formFactor() << ", Location: " << location();
 }
 
 QString Applet::name() const
@@ -780,7 +780,7 @@ void Applet::flushUpdatedConstraints()
         return;
     }
 
-    //kDebug() << "fushing constraints: " << d->pendingConstraints << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";
+    //kDebug(1209) << "fushing constraints: " << d->pendingConstraints << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";
     Plasma::Constraints c = d->pendingConstraints;
     d->pendingConstraints = NoConstraint;
 
@@ -819,7 +819,7 @@ QRectF Applet::boundingRect() const
     d->getBorderSize(left,top,right,bottom);
 
 
-    //kDebug() << "Background , Border size" << d->background << left << top << right << bottom;
+    //kDebug(1209) << "Background , Border size" << d->background << left << top << right << bottom;
 
     return rect.adjusted(-left,-top,right,bottom);
 }
@@ -834,14 +834,14 @@ QSizeF Applet::sizeHint() const
     d->getBorderSize(left, top, right, bottom);
     QSizeF borderSize = QSizeF(left + right, top + bottom);
 
-    //kDebug() << "Applet content size hint: " << contentSizeHint() << "plus our borders" << left << right << top << bottom;
+    //kDebug(1209) << "Applet content size hint: " << contentSizeHint() << "plus our borders" << left << right << top << bottom;
 
     return contentSizeHint() + QSizeF(left + right, top + bottom);
 }
 
 QList<QAction*> Applet::contextActions()
 {
-    kDebug() << "empty context actions";
+    kDebug(1209) << "empty context actions";
     return QList<QAction*>();
 }
 
@@ -881,7 +881,7 @@ void Applet::paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *opti
 {
     Q_UNUSED(widget)
     if (d->shadow && d->shadow->shadowedSize() != boundingRect().size()) {
-        //kDebug() << "sizes are " << d->shadow->shadowedSize() << boundingRect().size();
+        //kDebug(1209) << "sizes are " << d->shadow->shadowedSize() << boundingRect().size();
         d->shadow->generate();
     }
 
@@ -892,7 +892,7 @@ void Applet::paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *opti
     }
 
     if (d->background) {
-        //kDebug() << "option rect is" << option->rect;
+        //kDebug(1209) << "option rect is" << option->rect;
         d->paintBackground(painter, this, option->rect);
     }
 
@@ -906,7 +906,7 @@ void Applet::paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *opti
             }
         }
 
-        //kDebug() << "paint interface of" << (QObject*) this;
+        //kDebug(1209) << "paint interface of" << (QObject*) this;
         paintInterface(painter, option, QRect(QPoint(0,0), d->contentSize(this).toSize()));
     }
 
@@ -921,7 +921,7 @@ void Applet::paintInterface(QPainter *painter, const QStyleOptionGraphicsItem *o
     if (d->scriptEngine) {
         d->scriptEngine->paintInterface(painter, option, contentsRect);
     } else {
-        //kDebug() << "Applet::paintInterface() default impl";
+        //kDebug(1209) << "Applet::paintInterface() default impl";
     }
 }
 
@@ -965,8 +965,8 @@ QSizeF Applet::contentSize() const
     int top, left, right, bottom;
     d->getBorderSize(left, top, right, bottom);
 
-    // kDebug() << "Geometry size: " << geometry().size();
-    // kDebug() << "Borders: " << left << top << right << bottom;
+    // kDebug(1209) << "Geometry size: " << geometry().size();
+    // kDebug(1209) << "Borders: " << left << top << right << bottom;
 
     return (geometry().size() - QSizeF(left + right, top + bottom)).expandedTo(QSizeF(0, 0));
 }
@@ -1152,14 +1152,14 @@ KPluginInfo::List Applet::knownApplets(const QString &category,
     }
 
     KService::List offers = KServiceTypeTrader::self()->query("Plasma/Applet", constraint);
-    //kDebug() << "Applet::knownApplets constraint was '" << constraint << "' which got us " << offers.count() << " matches";
+    //kDebug(1209) << "Applet::knownApplets constraint was '" << constraint << "' which got us " << offers.count() << " matches";
     return KPluginInfo::fromServices(offers);
 }
 
 KPluginInfo::List Applet::knownAppletsForMimetype(const QString &mimetype)
 {
     QString constraint = QString("'%1' in MimeTypes").arg(mimetype);
-    //kDebug() << "knownAppletsForMimetype with" << mimetype << constraint;
+    //kDebug(1209) << "knownAppletsForMimetype with" << mimetype << constraint;
     KService::List offers = KServiceTypeTrader::self()->query("Plasma/Applet", constraint);
     return KPluginInfo::fromServices(offers);
 }
@@ -1183,7 +1183,7 @@ QStringList Applet::knownCategories(const QString &parentApp, bool visibleOnly)
             continue;
         }
 
-        //kDebug() << "   and we have " << appletCategory;
+        //kDebug(1209) << "   and we have " << appletCategory;
         if (appletCategory.isEmpty()) {
             if (!categories.contains(i18n("Miscellaneous"))) {
                 categories << i18n("Miscellaneous");
@@ -1209,10 +1209,10 @@ Applet* Applet::loadApplet(const QString& appletName, uint appletId, const QVari
     if (offers.isEmpty()) {
         //TODO: what would be -really- cool is offer to try and download the applet
         //      from the network at this point
-        kDebug() << "Applet::loadApplet: offers is empty for \"" << appletName << "\"";
+        kDebug(1209) << "Applet::loadApplet: offers is empty for \"" << appletName << "\"";
         return 0;
     } /* else if (offers.count() > 1) {
-        kDebug() << "hey! we got more than one! let's blindly take the first one";
+        kDebug(1209) << "hey! we got more than one! let's blindly take the first one";
     } */
 
     KService::Ptr offer = offers.first();
@@ -1222,7 +1222,7 @@ Applet* Applet::loadApplet(const QString& appletName, uint appletId, const QVari
     }
 
     if (!offer->property("X-Plasma-Language").toString().isEmpty()) {
-        kDebug() << "we have a script in the language of" << offer->property("X-Plasma-Language").toString();
+        kDebug(1209) << "we have a script in the language of" << offer->property("X-Plasma-Language").toString();
         Applet *applet = new Applet(0, offer->storageId(), appletId);
         return applet;
     }
@@ -1233,7 +1233,7 @@ Applet* Applet::loadApplet(const QString& appletName, uint appletId, const QVari
     Applet* applet = offer->createInstance<Plasma::Applet>(0, allArgs, &error);
 
     if (!applet) {
-        kDebug() << "Couldn't load applet \"" << appletName << "\"! reason given: " << error;
+        kDebug(1209) << "Couldn't load applet \"" << appletName << "\"! reason given: " << error;
     }
 
     return applet;

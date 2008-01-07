@@ -48,7 +48,7 @@ void CustomDragTreeView::startDrag ( Qt::DropActions supportedActions )
             off = (MAX_OFFSET * MAX_COUNT) / indexes.count();
         }
 
-        kDebug() << "Size: " << size << " Off: " << off << "\n";
+        kDebug(1209) << "Size: " << size << " Off: " << off << "\n";
 
         QPixmap pixmap(size, size);
         pixmap.fill(QColor(255, 255, 255, 0)); // TODO: Transparent. Now it flickers when it's transparent

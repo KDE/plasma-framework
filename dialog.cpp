@@ -191,7 +191,7 @@ void Dialog::position(QGraphicsView * view,const QRectF boundingRect,QPointF sce
 	    globalPos.rx()-=((globalPos.rx() + width())-view->width());
 	}
 	move(globalPos);
-	kDebug() << globalPos;
+	kDebug(1209) << globalPos;
     }
 }
 

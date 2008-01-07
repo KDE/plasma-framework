@@ -315,8 +315,8 @@ void AppletHandle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
                         // add the applet to the new containment
                         // and take it from the old one
                         QPointF scenePosition = scenePos();
-                        kDebug() << "moving to other containment with position" << pos() << event->scenePos();
-                        kDebug() << "position before reparenting" << pos() << scenePos();
+                        kDebug(1209) << "moving to other containment with position" << pos() << event->scenePos();
+                        kDebug(1209) << "position before reparenting" << pos() << scenePos();
                         m_containment = containments[i];
                         //m_containment->addChild(m_applet);
                         //setParentItem(containments[i]);
@@ -434,14 +434,14 @@ QVariant AppletHandle::itemChange(GraphicsItemChange change, const QVariant &val
 void AppletHandle::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 {
     Q_UNUSED(event);
-    //kDebug() << "hover enter";
+    //kDebug(1209) << "hover enter";
     startFading(FadeIn);
 }
 
 void AppletHandle::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 {
     Q_UNUSED(event);
-    //kDebug() << "hover leave";
+    //kDebug(1209) << "hover leave";
     startFading(FadeOut);
 }
 

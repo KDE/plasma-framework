@@ -148,7 +148,7 @@ QString Theme::image( const QString& name ) const
         }
 
         if (path.isEmpty()) {
-            kDebug() << "Theme says: bad image path " << name 
+            kDebug(1209) << "Theme says: bad image path " << name 
                      << "; looked in: " << search <<  endl;
         }
     }

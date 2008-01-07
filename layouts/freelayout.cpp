@@ -111,11 +111,11 @@ QRectF FreeLayout::geometry() const
 QSizeF FreeLayout::sizeHint() const
 {
     if (parent()) {
-        //kDebug() << "returning size hint from freelayout of" <<  parent()->geometry().size();
+        //kDebug(1209) << "returning size hint from freelayout of" <<  parent()->geometry().size();
         return parent()->geometry().size();
     }
 
-    //kDebug() << "returning size hint from freelayout of" << maximumSize();
+    //kDebug(1209) << "returning size hint from freelayout of" << maximumSize();
     return maximumSize();
 }
 

@@ -358,14 +358,14 @@ void Widget::addChild(Widget *w)
 
     w->setParentItem(this);
 
-    //kDebug() << "Added Child Widget" <<  (QObject*)w << "our geom is" << geometry();
+    //kDebug(1209) << "Added Child Widget" <<  (QObject*)w << "our geom is" << geometry();
 
     if (layout()) {
         layout()->addItem(w);
     }
 
     updateGeometry();
-    //kDebug() << "after the item is added our geom is now" << geometry();
+    //kDebug(1209) << "after the item is added our geom is now" << geometry();
 }
 
 void Widget::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)

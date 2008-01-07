@@ -135,11 +135,11 @@ void Containment::init()
 
 void Containment::loadConstraints(KConfigGroup* group)
 {
-    /*kDebug() << "!!!!!!!!!!!!initConstraints" << group->name() << containmentType();
-    kDebug() << "    location:" << group->readEntry("location", (int)d->location);
-    kDebug() << "    geom:" << group->readEntry("geometry", geometry());
-    kDebug() << "    formfactor:" << group->readEntry("formfactor", (int)d->formFactor);
-    kDebug() << "    screen:" << group->readEntry("screen", d->screen);*/
+    /*kDebug(1209) << "!!!!!!!!!!!!initConstraints" << group->name() << containmentType();
+    kDebug(1209) << "    location:" << group->readEntry("location", (int)d->location);
+    kDebug(1209) << "    geom:" << group->readEntry("geometry", geometry());
+    kDebug(1209) << "    formfactor:" << group->readEntry("formfactor", (int)d->formFactor);
+    kDebug(1209) << "    screen:" << group->readEntry("screen", d->screen);*/
     setGeometry(group->readEntry("geometry", geometry()));
     setLocation((Plasma::Location)group->readEntry("location", (int)d->location));
     setFormFactor((Plasma::FormFactor)group->readEntry("formfactor", (int)d->formFactor));
@@ -156,7 +156,7 @@ void Containment::saveConstraints(KConfigGroup* group) const
 
 void Containment::containmentConstraintsUpdated(Plasma::Constraints constraints)
 {
-    //kDebug() << "got containmentConstraintsUpdated" << constraints << (QObject*)d->toolbox;
+    //kDebug(1209) << "got containmentConstraintsUpdated" << constraints << (QObject*)d->toolbox;
     if (d->toolbox) {
         if (constraints & Plasma::ScreenConstraint) {
             d->toolbox->setPos(geometry().width() - d->toolbox->boundingRect().width(), 0);
@@ -201,7 +201,7 @@ Corona* Containment::corona() const
 
 void Containment::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
 {
-    //kDebug() << "let's see if we manage to get a context menu here, huh";
+    //kDebug(1209) << "let's see if we manage to get a context menu here, huh";
     if (!scene() || !KAuthorized::authorizeKAction("desktop_contextmenu")) {
         Applet::contextMenuEvent(event);
         return;
@@ -225,10 +225,10 @@ void Containment::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
     }
 
     KMenu desktopMenu;
-    //kDebug() << "context menu event " << (QObject*)applet;
+    //kDebug(1209) << "context menu event " << (QObject*)applet;
     if (!applet) {
         if (!scene() || (static_cast<Corona*>(scene())->isImmutable() && !KAuthorized::authorizeKAction("unlock_desktop"))) {
-            //kDebug() << "immutability";
+            //kDebug(1209) << "immutability";
             Applet::contextMenuEvent(event);
             return;
         }
@@ -238,7 +238,7 @@ void Containment::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
         QList<QAction*> actions = contextActions();
 
         if (actions.count() < 1) {
-            //kDebug() << "no applet, but no actions";
+            //kDebug(1209) << "no applet, but no actions";
             Applet::contextMenuEvent(event);
             return;
         }
@@ -280,13 +280,13 @@ void Containment::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
 
         if (!hasEntries) {
             Applet::contextMenuEvent(event);
-            kDebug() << "no entries";
+            kDebug(1209) << "no entries";
             return;
         }
     }
 
     event->accept();
-    //kDebug() << "executing at" << event->screenPos();
+    //kDebug(1209) << "executing at" << event->screenPos();
     desktopMenu.exec(event->screenPos());
 }
 
@@ -308,7 +308,7 @@ void Containment::setFormFactor(FormFactor formFactor)
         return;
     }
 
-    //kDebug() << "switching FF to " << formFactor;
+    //kDebug(1209) << "switching FF to " << formFactor;
     d->formFactor = formFactor;
     Layout *lay = layout();
     setLayout(0);
@@ -333,7 +333,7 @@ void Containment::setFormFactor(FormFactor formFactor)
             //FIXME: need a layout type here!
             break;
         default:
-            kDebug() << "This can't be happening! Or... can it? ;)" << d->formFactor;
+            kDebug(1209) << "This can't be happening! Or... can it? ;)" << d->formFactor;
             break;
     }
 
@@ -396,7 +396,7 @@ Applet* Containment::addApplet(const QString& name, const QVariantList& args, ui
     }
 
     if (!applet) {
-        kDebug() << "Applet" << name << "could not be loaded.";
+        kDebug(1209) << "Applet" << name << "could not be loaded.";
         applet = new Applet;
     }
 
@@ -457,7 +457,7 @@ Applet* Containment::addApplet(const QString& name, const QVariantList& args, ui
         addApplet(applet);
         prepareApplet(applet, delayInit);
 
-        //kDebug() << "adding applet" << applet->name() << "with a default geometry of" << appletGeometry << appletGeometry.isValid();
+        //kDebug(1209) << "adding applet" << applet->name() << "with a default geometry of" << appletGeometry << appletGeometry.isValid();
         if (appletGeometry.isValid()) {
             applet->setGeometry(appletGeometry);
         } else if (appletGeometry.x() != -1 && appletGeometry.y() != -1) {
@@ -469,7 +469,7 @@ Applet* Containment::addApplet(const QString& name, const QVariantList& args, ui
         }
     }
 
-    //kDebug() << applet->name() << "sizehint:" << applet->sizeHint() << "geometry:" << applet->geometry();
+    //kDebug(1209) << applet->name() << "sizehint:" << applet->sizeHint() << "geometry:" << applet->geometry();
 
     Corona *c = corona();
     if (c) {
@@ -626,19 +626,19 @@ void Containment::setScreen(int screen)
     if (screen > -1 && containmentType() == DesktopContainment && corona()) {
         Containment* currently = corona()->containmentForScreen(screen);
         if (currently && currently != this) {
-            //kDebug() << "currently is on screen" << currently->screen() << "and is" << currently->name() << (QObject*)currently << (QObject*)this;
+            //kDebug(1209) << "currently is on screen" << currently->screen() << "and is" << currently->name() << (QObject*)currently << (QObject*)this;
             currently->setScreen(-1);
         }
     }
 
-    //kDebug() << "setting screen to" << screen << "and we are a" << containmentType();
+    //kDebug(1209) << "setting screen to" << screen << "and we are a" << containmentType();
     QDesktopWidget *desktop = QApplication::desktop();
     int numScreens = desktop->numScreens();
     if (screen < -1) {
         screen = -1;
     }
 
-    //kDebug() << "setting screen to " << screen << "and type is" << containmentType();
+    //kDebug(1209) << "setting screen to " << screen << "and type is" << containmentType();
     if (screen < numScreens && screen > -1) {
         QRect r = desktop->screenGeometry(screen);
 
@@ -666,10 +666,10 @@ void Containment::setScreen(int screen)
             // FIXME: positioning at this x,y will break if we switch between containments for a
             //        given screen! we should change the pos() on new containment setup.
             setGeometry(r);
-            //kDebug() << "setting geometry to" << desktop->screenGeometry(screen) << r << geometry();
+            //kDebug(1209) << "setting geometry to" << desktop->screenGeometry(screen) << r << geometry();
         } else if (containmentType() == PanelContainment) {
             QRect r = desktop->screenGeometry(screen);
-            //kDebug() << "we are a panel on" << r << ", let's move ourselves to a negative coordinate system" << -(r.y() * 2) - r.height() - INTER_CONTAINMENT_MARGIN;
+            //kDebug(1209) << "we are a panel on" << r << ", let's move ourselves to a negative coordinate system" << -(r.y() * 2) - r.height() - INTER_CONTAINMENT_MARGIN;
             // panels are moved into negative coords; we double the x() so that each screen get's
             // it's own area for panels
             int vertOffset = (r.y() * 2) + r.height() + INTER_CONTAINMENT_MARGIN;
@@ -709,21 +709,21 @@ KPluginInfo::List Containment::knownContainments(const QString &category,
     }
 
     KService::List offers = KServiceTypeTrader::self()->query("Plasma/Containment", constraint);
-    //kDebug() << "constraint was" << constraint << "which got us" << offers.count() << "matches";
+    //kDebug(1209) << "constraint was" << constraint << "which got us" << offers.count() << "matches";
     return KPluginInfo::fromServices(offers);
 }
 
 KPluginInfo::List Containment::knownContainmentsForMimetype(const QString &mimetype)
 {
     QString constraint = QString("'%1' in MimeTypes").arg(mimetype);
-    //kDebug() << "knownContainmentsForMimetype with" << mimetype << constraint;
+    //kDebug(1209) << "knownContainmentsForMimetype with" << mimetype << constraint;
     KService::List offers = KServiceTypeTrader::self()->query("Plasma/Containment", constraint);
     return KPluginInfo::fromServices(offers);
 }
 
 void Containment::dropEvent(QGraphicsSceneDragDropEvent *event)
 {
-    //kDebug() << "drop event:" << event->mimeData()->text();
+    //kDebug(1209) << "drop event:" << event->mimeData()->text();
 
     QString mimetype(static_cast<Corona*>(scene())->appletMimeType());
 
@@ -741,7 +741,7 @@ void Containment::dropEvent(QGraphicsSceneDragDropEvent *event)
             QRectF geom(event->scenePos(), QSize(0, 0));
             QVariantList args;
             args << url.url();
-            //             kDebug() << mimeName;
+            //             kDebug(1209) << mimeName;
             KPluginInfo::List appletList = Applet::knownAppletsForMimetype(mimeName);
 
             if (appletList.isEmpty()) {
@@ -783,7 +783,7 @@ bool Containment::sceneEventFilter(QGraphicsItem *watched, QEvent *event)
     //QEvent::GraphicsSceneHoverEnter
 
     // Otherwise we're watching something we shouldn't be...
-    //kDebug() << "got sceneEvent";
+    //kDebug(1209) << "got sceneEvent";
     Q_ASSERT(applet!=0);
     if (!d->applets.contains(applet)) {
         return false;
@@ -791,9 +791,9 @@ bool Containment::sceneEventFilter(QGraphicsItem *watched, QEvent *event)
 
     switch (event->type()) {
     case QEvent::GraphicsSceneHoverEnter:
-        //kDebug() << "got hoverenterEvent" << isImmutable << " " << applet->isImmutable();
+        //kDebug(1209) << "got hoverenterEvent" << isImmutable << " " << applet->isImmutable();
         if (!isImmutable() && !applet->isImmutable() && !d->handles.contains(applet)) {
-            //kDebug() << "generated applet handle";
+            //kDebug(1209) << "generated applet handle";
             //TODO: there should be a small delay on showing these. they pop up too quickly/easily
             //      right now
             AppletHandle *handle = new AppletHandle(this, applet);
@@ -819,7 +819,7 @@ void Containment::handleDisappeared(AppletHandle *handle)
 
 void Containment::emitLaunchActivated()
 {
-    kDebug();
+    kDebug(1209);
     emit launchActivated();
 }
 
