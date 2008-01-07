@@ -132,9 +132,9 @@ void ToolTip::slotResetTimer()
     }
 }
 
-void ToolTip::showEvent( QShowEvent* e )
+void ToolTip::showEvent(QShowEvent *e)
 {
-    QWidget::showEvent( e );
+    QWidget::showEvent(e);
     d->preview->setInfo();
 }
 
@@ -182,9 +182,9 @@ ToolTip::~ToolTip()
 // tooltip widget that tells KWin to render the preview in this area. This depends
 // on KWin's TaskbarThumbnail compositing effect (which is here detected).
 
-void WindowPreview::setWindowId( WId w )
+void WindowPreview::setWindowId(WId w)
 {
-    if( !previewsAvailable()) {
+    if (!previewsAvailable()) {
         id = 0;
         return;
     }
@@ -194,17 +194,18 @@ void WindowPreview::setWindowId( WId w )
 
 bool WindowPreview::previewsAvailable() const
 {
-    if( !KWindowSystem::compositingActive())
+    if (!KWindowSystem::compositingActive()) {
         return false;
+    }
     // hackish way to find out if KWin has the effect enabled,
     // TODO provide proper support
     Display* dpy = QX11Info::display();
-    Atom atom = XInternAtom( dpy, "_KDE_WINDOW_PREVIEW", False );
+    Atom atom = XInternAtom(dpy, "_KDE_WINDOW_PREVIEW", False);
     int cnt;
-    Atom* list = XListProperties( dpy, DefaultRootWindow( dpy ), &cnt );
-    if( list != NULL ) {
-        bool ret = ( qFind( list, list + cnt, atom ) != list + cnt );
-        XFree( list );
+    Atom* list = XListProperties(dpy, DefaultRootWindow( dpy ), &cnt);
+    if (list != NULL) {
+        bool ret = ( qFind(list, list + cnt, atom) != list + cnt );
+        XFree(list);
         return ret;
     }
     return false;
@@ -212,12 +213,14 @@ bool WindowPreview::previewsAvailable() const
 
 QSize WindowPreview::sizeHint() const
 {
-    if( id == 0 )
+    if (id == 0) {
         return QSize();
-    if( !windowSize.isValid())
+    }
+    if (!windowSize.isValid()) {
         readWindowSize();
+    }
     QSize s = windowSize;
-    s.scale( 200, 150, Qt::KeepAspectRatio );
+    s.scale(200, 150, Qt::KeepAspectRatio);
     return s;
 }
 
@@ -226,29 +229,31 @@ void WindowPreview::readWindowSize() const
     Window r;
     int x, y;
     unsigned int w, h, b, d;
-    if( XGetGeometry( QX11Info::display(), id, &r, &x, &y, &w, &h, &b, &d ))
+    if (XGetGeometry(QX11Info::display(), id, &r, &x, &y, &w, &h, &b, &d)) {
         windowSize = QSize( w, h );
-    else
+    } else {
         windowSize = QSize();
+    }
 }
 
 void WindowPreview::setInfo()
 {
-    Display* dpy = QX11Info::display();
-    Atom atom = XInternAtom( dpy, "_KDE_WINDOW_PREVIEW", False );
-    if( id == 0 ) {
-        XDeleteProperty( dpy, winId(), atom );
+    Display *dpy = QX11Info::display();
+    Atom atom = XInternAtom(dpy, "_KDE_WINDOW_PREVIEW", False);
+    if (id == 0) {
+        XDeleteProperty(dpy, winId(), atom);
         return;
     }
-    if( !windowSize.isValid())
+    if (!windowSize.isValid()) {
         readWindowSize();
-    if( !windowSize.isValid()) {
-        XDeleteProperty( dpy, winId(), atom );
+    }
+    if (!windowSize.isValid()) {
+        XDeleteProperty(dpy, winId(), atom);
         return;
     }
     Q_ASSERT( parentWidget()->isWindow()); // parent must be toplevel
     long data[] = { 1, 5, id, x(), y(), width(), height() };
-    XChangeProperty( dpy, parentWidget()->winId(), atom, atom, 32, PropModeReplace,
+    XChangeProperty(dpy, parentWidget()->winId(), atom, atom, 32, PropModeReplace,
         reinterpret_cast< unsigned char* >( data ), sizeof( data ) / sizeof( data[ 0 ] ));
 }
 

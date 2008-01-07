@@ -50,7 +50,7 @@ public:
     Plasma::Widget *currentWidget() const;
 
 protected:
-    virtual void showEvent( QShowEvent* );
+    virtual void showEvent(QShowEvent *);
 
     void paintEvent(QPaintEvent */*event*/);
 
@@ -69,7 +69,7 @@ class WindowPreview : public QWidget
 {
     Q_OBJECT
 public:
-    void setWindowId( WId w );
+    void setWindowId(WId w);
     void setInfo();
     virtual QSize sizeHint() const;
     bool previewsAvailable() const;
