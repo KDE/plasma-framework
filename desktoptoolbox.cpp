@@ -23,6 +23,9 @@
 #include <QPainter>
 #include <QRadialGradient>
 
+#include <plasma/theme.h>
+#include <KColorScheme>
+
 #include <KDebug>
 
 #include "widgets/widget.h"
@@ -64,12 +67,20 @@ void DesktopToolbox::paint(QPainter *painter, const QStyleOptionGraphicsItem *op
     Q_UNUSED(option)
     Q_UNUSED(widget)
 
+    QColor color1 = KColorScheme(QPalette::Active, KColorScheme::Window,
+                               Plasma::Theme::self()->colors()).background().color();
+    color1.setAlpha(64);
+
+    QColor color2 = KColorScheme(QPalette::Active, KColorScheme::Window,
+                               Plasma::Theme::self()->colors()).foreground().color();
+    color2.setAlpha(64);
+
     QPainterPath p = shape();
     QRadialGradient gradient(QPoint(m_size*2, 0), m_size + m_animFrame);
     gradient.setFocalPoint(QPointF(m_size*2, 0));
-    gradient.setColorAt(0, QColor(255, 255, 255, 96));
-    gradient.setColorAt(.66, QColor(128, 128, 128, 96));
-    gradient.setColorAt(1, QColor(128, 128, 128, 0));
+    gradient.setColorAt(0, color1);
+    gradient.setColorAt(.85, color1);
+    gradient.setColorAt(1, color2);
     painter->save();
     painter->setPen(Qt::NoPen);
     painter->setRenderHint(QPainter::Antialiasing, true);
