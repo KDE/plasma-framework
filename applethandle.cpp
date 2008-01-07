@@ -25,6 +25,7 @@
 #include <QtGui/QApplication>
 
 #include <KColorScheme>
+#include <KGlobalSettings>
 #include <KIcon>
 
 #include <cmath>
@@ -371,10 +372,10 @@ void AppletHandle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
                 newScaleWidth = currentDistance.x() / startDistance.x();
                 newScaleHeight = currentDistance.y() / startDistance.y();
 
-                if (qAbs(newScaleWidth-1.0)<=0.1) {
+                if (qAbs(w - (newScaleWidth * w)) <= KGlobalSettings::dndEventDelay()) {
                     newScaleWidth = 1.0;
                 }
-                if (qAbs(newScaleHeight-1.0)<=0.1) {
+                if (qAbs(h - (newScaleHeight * h)) <= KGlobalSettings::dndEventDelay()) {
                     newScaleHeight = 1.0;
                 }
 
@@ -397,7 +398,7 @@ void AppletHandle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
                 qreal newScale = 0;
 
                 newScale = _k_distanceForPoint(event->pos()-center) / _k_distanceForPoint(pressPos-center);
-                if (qAbs(newScale-1.0)<=0.1) {
+                if (qAbs(h - (newScale * h)) <= KGlobalSettings::dndEventDelay()) {
                     newScale = 1.0;
                 }
 
