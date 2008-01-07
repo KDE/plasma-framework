@@ -645,7 +645,8 @@ bool Applet::isKioskImmutable() const
 
 void Applet::setImmutable(bool immutable)
 {
-    if (d->immutable == immutable) {
+    if (d->immutable == immutable ||
+        (immutable && d->kioskImmutable)) {
         return;
     }
 
@@ -766,8 +767,11 @@ void Applet::checkImmutability()
 {
     d->kioskImmutable = globalConfig().isImmutable() || config().isImmutable() ||
                         (containment() && containment()->isKioskImmutable()) ||
-                        (dynamic_cast<Corona*>( scene() ) && static_cast<Corona*>(scene())->isKioskImmutable());
-    setImmutable(d->kioskImmutable);
+                        (dynamic_cast<Corona*>(scene()) && static_cast<Corona*>(scene())->isKioskImmutable());
+
+    if (d->kioskImmutable) {
+        updateConstraints(ImmutableConstraint);
+    }
 }
 
 void Applet::flushUpdatedConstraints()

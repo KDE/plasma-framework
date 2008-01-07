@@ -90,6 +90,15 @@ public:
         }
     }
 
+    void updateContainmentImmutability()
+    {
+        foreach (Containment *c, containments) {
+            // we need to tell each containment that immutability has been altered
+            // TODO: should we tell the applets too?
+            c->updateConstraints(ImmutableConstraint);
+        }
+    }
+
     bool immutable;
     bool kioskImmutable;
     QString mimetype;
@@ -274,6 +283,10 @@ void Corona::loadApplets(const QString& configName)
     }
 
     d->kioskImmutable = config()->isImmutable();
+    if (d->kioskImmutable) {
+        d->updateContainmentImmutability();
+    }
+
     KConfigGroup coronaConfig(config(), "General");
     setImmutable(coronaConfig.readEntry("locked", false));
 }
@@ -521,17 +534,14 @@ bool Corona::isKioskImmutable() const
 
 void Corona::setImmutable(bool immutable)
 {
-    if (d->immutable == immutable) {
+    if (d->immutable == immutable ||
+        (!immutable && d->kioskImmutable)) {
         return;
     }
 
     kDebug() << "setting immutability to" << immutable;
     d->immutable = immutable;
-    foreach (Containment *c, d->containments) {
-        // we need to tell each containment that immutability has been altered
-        // TODO: should we tell the applets too?
-        c->updateConstraints(ImmutableConstraint);
-    }
+    d->updateContainmentImmutability();
 }
 
 } // namespace Plasma
