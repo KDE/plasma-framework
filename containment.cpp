@@ -669,7 +669,7 @@ void Containment::setScreen(int screen)
             //kDebug() << "setting geometry to" << desktop->screenGeometry(screen) << r << geometry();
         } else if (containmentType() == PanelContainment) {
             QRect r = desktop->screenGeometry(screen);
-            //kDebug() << "we are a panel on" << r << ", let's move ourselves to a negative coordinate system" << -(r.x() * 2) - r.height() - INTER_CONTAINMENT_MARGIN;
+            //kDebug() << "we are a panel on" << r << ", let's move ourselves to a negative coordinate system" << -(r.y() * 2) - r.height() - INTER_CONTAINMENT_MARGIN;
             // panels are moved into negative coords; we double the x() so that each screen get's
             // it's own area for panels
             int vertOffset = (r.y() * 2) + r.height() + INTER_CONTAINMENT_MARGIN;
