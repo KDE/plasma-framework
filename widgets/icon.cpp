@@ -280,7 +280,7 @@ void Icon::init()
     d->setVerticalMargin(Private::ItemMargin, 0, 0);
 
     d->setActiveMargins();
-    d->currentSize = QSizeF(-1,-1);
+    d->currentSize = QSizeF(-1, -1);
 }
 
 void Icon::addAction(QAction *action)
@@ -407,7 +407,7 @@ void Icon::layoutIcons(const QStyleOptionGraphicsItem *option)
                           d->verticalMargin[Private::TextMargin].bottom;
             //never make a label higher than half the total height
             heightAvail = qMax(heightAvail, d->currentSize.height()/2);
-        }else{
+        } else {
             heightAvail = d->currentSize.height();
         }
 
@@ -416,13 +416,13 @@ void Icon::layoutIcons(const QStyleOptionGraphicsItem *option)
             iconWidth = d->currentSize.width() -
                         d->horizontalMargin[Private::IconMargin].left -
                         d->horizontalMargin[Private::IconMargin].right;
-        }else{
+        } else {
             iconWidth = heightAvail -
                         d->verticalMargin[Private::IconMargin].top -
                         d->verticalMargin[Private::IconMargin].bottom;
         }
     //Horizontal layout
-    }else{
+    } else {
         qreal widthAvail;
         QFontMetricsF fm(font());
 
@@ -440,7 +440,7 @@ void Icon::layoutIcons(const QStyleOptionGraphicsItem *option)
                          textWidth -
                          d->horizontalMargin[Private::TextMargin].left -
                          d->horizontalMargin[Private::TextMargin].right;
-        }else{
+        } else {
             widthAvail = d->currentSize.width();
         }
 
@@ -449,7 +449,7 @@ void Icon::layoutIcons(const QStyleOptionGraphicsItem *option)
             iconWidth = d->currentSize.height() -
                         d->verticalMargin[Private::IconMargin].top -
                         d->verticalMargin[Private::IconMargin].bottom;
-        }else{
+        } else {
             iconWidth = widthAvail -
                         d->horizontalMargin[Private::IconMargin].left -
                         d->horizontalMargin[Private::IconMargin].right;
@@ -894,6 +894,8 @@ void Icon::drawActionButtonBase(QPainter* painter, const QSize &size, int elemen
 void Icon::setText(const QString& text)
 {
     d->text = text;
+    // cause a relayout
+    d->currentSize = QSizeF(-1, -1);
 }
 
 QString Icon::text() const
@@ -904,6 +906,8 @@ QString Icon::text() const
 void Icon::setInfoText(const QString& text)
 {
     d->infoText = text;
+    // cause a relayout
+    d->currentSize = QSizeF(-1, -1);
 }
 
 QString Icon::infoText() const
