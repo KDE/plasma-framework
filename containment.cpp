@@ -59,7 +59,6 @@ public:
           formFactor(Planar),
           location(Floating),
           screen(-1),
-          immutable(false),
           toolbox(0),
           type(Containment::NoContainmentType)
     {
@@ -87,7 +86,6 @@ public:
     Applet::List applets;
     QMap<Applet*, AppletHandle*> handles;
     int screen;
-    bool immutable;
     DesktopToolbox *toolbox;
     Containment::Type type;
 };
@@ -677,7 +675,7 @@ void Containment::setScreen(int screen)
             //kDebug() << "we are a panel on" << r << ", let's move ourselves to a negative coordinate system" << -(r.x() * 2) - r.height() - INTER_CONTAINMENT_MARGIN;
             // panels are moved into negative coords; we double the x() so that each screen get's
             // it's own area for panels
-            int vertOffset = (r.x() * 2) + r.height() + INTER_CONTAINMENT_MARGIN;
+            int vertOffset = (r.y() * 2) + r.height() + INTER_CONTAINMENT_MARGIN;
             translate(0, -vertOffset);
         }
     }
@@ -796,8 +794,8 @@ bool Containment::sceneEventFilter(QGraphicsItem *watched, QEvent *event)
 
     switch (event->type()) {
     case QEvent::GraphicsSceneHoverEnter:
-        //kDebug() << "got hoverenterEvent" << d->immutable << " " << applet->isImmutable();
-        if (!d->immutable && !applet->isImmutable() && !corona()->isImmutable() && !d->handles.contains(applet)) {
+        //kDebug() << "got hoverenterEvent" << isImmutable << " " << applet->isImmutable();
+        if (!isImmutable() && !applet->isImmutable() && !d->handles.contains(applet)) {
             //kDebug() << "generated applet handle";
             //TODO: there should be a small delay on showing these. they pop up too quickly/easily
             //      right now
