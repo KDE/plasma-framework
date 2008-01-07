@@ -82,7 +82,8 @@ void DesktopToolbox::paint(QPainter *painter, const QStyleOptionGraphicsItem *op
     gradient.setColorAt(0, color1);
     gradient.setColorAt(.87, color1);
     gradient.setColorAt(.97, color2);
-    gradient.setColorAt(1, QColor(255, 255, 255, 0));
+    color2.setAlpha(0);
+    gradient.setColorAt(1, color2);
     painter->save();
     painter->setPen(Qt::NoPen);
     painter->setRenderHint(QPainter::Antialiasing, true);
