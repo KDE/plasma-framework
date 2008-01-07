@@ -251,7 +251,6 @@ void Corona::loadApplets(const QString& configName)
         foreach (Containment* containment, d->containments) {
             QString cid = QString::number(containment->id());
             KConfigGroup containmentConfig(&containments, cid);
-            containment->setImmutable(containmentConfig.isImmutable());
 
             foreach(Applet* applet, containment->applets()) {
                 applet->init();
