@@ -125,7 +125,8 @@ void DesktopToolbox::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
                         maxwidth);
     }
     // put tools 5px from screen edge
-    int x = m_size*2 - maxwidth - 5; // pos().x();
+    const int iconWidth = 32;
+    int x = m_size*2 - maxwidth - iconWidth - 5;
     int y = 5; // pos().y();
     Plasma::Phase* phase = Plasma::Phase::self();
     foreach (QGraphicsItem* tool, QGraphicsItem::children()) {
