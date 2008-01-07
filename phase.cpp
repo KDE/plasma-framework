@@ -292,7 +292,7 @@ void Phase::moveItem(QGraphicsItem* item, Movement movement, const QPoint &desti
      //TODO: variance in times based on the value of animation
      state->frames = frames / 2;
      state->currentFrame = 0;
-     state->interval = 250 / state->frames;
+     state->interval = 240 / state->frames;
      state->interval = (state->interval / MIN_TICK_RATE) * MIN_TICK_RATE;
      state->currentInterval = state->interval;
 
