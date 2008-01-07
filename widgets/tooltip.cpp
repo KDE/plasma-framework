@@ -252,20 +252,26 @@ void WindowPreview::setInfo()
         reinterpret_cast< unsigned char* >( data ), sizeof( data ) / sizeof( data[ 0 ] ));
 }
 
-//Patterned after KickerTip
-//TODO: Do something to antialias edges
-//Reimplement paintEvent perhaps?
-void ToolTip::resizeEvent(QResizeEvent *)
+
+void ToolTip::paintEvent(QPaintEvent *)
 {
+    QPainter painter(this);
+    painter.setRenderHint(QPainter::Antialiasing);
+
+    // draw items
     QBitmap mask(width(), height());
-    QPainter painter(&mask);
+    QPainter maskPainter(&mask);
 
     mask.fill(Qt::white);
 
-    painter.setBrush(Qt::black);
-    painter.setPen(Qt::black);
-    painter.drawPath(Plasma::roundedRectangle(mask.rect(), 10));
+    maskPainter.setBrush(Qt::black);
+    maskPainter.setPen(Qt::black);
+
+    maskPainter.drawPath(roundedRectangle(mask.rect(), 10));
     setMask(mask);
+
+    painter.setPen(Qt::black);
+    painter.drawPath(roundedRectangle(mask.rect(), 10));
 }
 
 }
