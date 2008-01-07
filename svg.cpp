@@ -64,22 +64,28 @@ class Svg::Private
             : renderer(0),
               contentType(Svg::SingleImage)
         {
-            if (QDir::isAbsolutePath(imagePath)) {
-                path = imagePath;
-                themed = false;
-
-                if (!QFile::exists(path)) {
-                    kDebug() << "Plasma::Svg: file '" << path << "' does not exist!";
-                }
-            } else {
-                themePath = imagePath;
-                themed = true;
-            }
+            setImagePath(imagePath);
         }
 
         ~Private()
         {
             eraseRenderer();
+        }
+
+        void setImagePath(const QString &imagePath)
+        {
+            themed = !QDir::isAbsolutePath(imagePath);
+            path = themePath = QString();
+
+            if (themed) {
+                themePath = imagePath;
+            } else {
+                path = imagePath;
+
+                if (!QFile::exists(path)) {
+                    kDebug() << "Plasma::Svg: file '" << path << "' does not exist!";
+                }
+            }
         }
 
         void removeFromCache()
@@ -129,10 +135,12 @@ class Svg::Private
             } else {
                 renderer->render(&renderPainter, elementId);
             }
+
             renderPainter.end();
-            bool inserted = QPixmapCache::insert( id, p );
-            if (!inserted)
+
+            if (!QPixmapCache::insert( id, p )) {
                 kDebug() << "pixmap cache is too small for inserting" << id << "of size" << s;
+            }
         }
 
         void createRenderer()
@@ -141,7 +149,7 @@ class Svg::Private
                 return;
             }
 
-            if (themed && path.isNull()) {
+            if (themed && path.isEmpty()) {
                 path = Plasma::Theme::self()->image(themePath);
             }
 
@@ -318,7 +326,7 @@ Svg::ContentType Svg::contentType()
 
 void Svg::setFile(const QString &svgFilePath)
 {
-   d->themePath = svgFilePath;
+   d->setImagePath(svgFilePath);
    d->eraseRenderer();
 }
 
