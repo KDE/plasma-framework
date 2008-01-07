@@ -57,11 +57,12 @@ protected slots:
 
 private:
     KIcon m_icon;
+    KIcon m_iconSelected;
     int m_size;
     bool m_hidden;
     bool m_showing;
     Plasma::Phase::AnimId m_animId;
-    int m_animFrame;
+    qreal m_animFrame;
 };
 
 } // Plasma namespace
