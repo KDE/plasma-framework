@@ -140,8 +140,8 @@ Widget::Widget(QGraphicsItem *parent, QObject* parentObject)
 
 Widget::~Widget()
 {
-    if (ToolTip::instance()->currentWidget() == this) {
-        ToolTip::instance()->hide();
+    if (ToolTip::self()->currentWidget() == this) {
+        ToolTip::self()->hide();
     }
     delete d;
 }
@@ -503,10 +503,10 @@ ToolTipData Widget::toolTip() const
 void Widget::setToolTip(const ToolTipData &tip)
 {
     d->toolTip = tip;
-    if (ToolTip::instance()->currentWidget() == this) {
+    if (ToolTip::self()->currentWidget() == this) {
         QPoint viewPos = view()->mapFromScene(scenePos());
         QPoint globalPos = view()->mapToGlobal(viewPos);
-        ToolTip::instance()->show(globalPos, this);
+        ToolTip::self()->show(globalPos, this);
     }
 }
 
@@ -560,7 +560,7 @@ bool Widget::sceneEvent(QEvent *event)
     case QEvent::GraphicsSceneHoverMove:
         // If the tooltip isn't visible, run through showing the tooltip again
         // so that it only becomes visible after a stationary hover
-        if (ToolTip::instance()->isVisible()) {
+        if (ToolTip::self()->isVisible()) {
             break;
         }
 
@@ -580,7 +580,7 @@ bool Widget::sceneEvent(QEvent *event)
         if (parentView) {
             QPoint viewPos = parentView->mapFromScene(scenePos());
             QPoint globalPos = parentView->mapToGlobal(viewPos);
-            ToolTip::instance()->show(globalPos, this);
+            ToolTip::self()->show(globalPos, this);
         }
 
         break;
@@ -589,7 +589,7 @@ bool Widget::sceneEvent(QEvent *event)
     case QEvent::GraphicsSceneHoverLeave:
     case QEvent::GraphicsSceneMousePress:
     case QEvent::GraphicsSceneWheel:
-        ToolTip::instance()->hide();
+        ToolTip::self()->hide();
 
     default:
         break;

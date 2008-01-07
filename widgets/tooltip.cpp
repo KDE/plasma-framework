@@ -68,7 +68,7 @@ class ToolTipSingleton
 };
 K_GLOBAL_STATIC( ToolTipSingleton, privateInstance )
 
-ToolTip *ToolTip::instance()
+ToolTip *ToolTip::self()
 {
     return &privateInstance->self;
 }

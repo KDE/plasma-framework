@@ -43,7 +43,7 @@ public:
     ToolTip();
     ~ToolTip();
 
-    static ToolTip *instance();
+    static ToolTip *self();
     void show(const QPoint &location, Plasma::Widget *widget);
     void hide();
 
