@@ -257,26 +257,28 @@ void WindowPreview::setInfo()
         reinterpret_cast< unsigned char* >( data ), sizeof( data ) / sizeof( data[ 0 ] ));
 }
 
+void ToolTip::resizeEvent(QResizeEvent *)
+{
+    QBitmap mask(width(), height());
+    QPainter painter(&mask);
+
+    mask.fill(Qt::white);
+
+    painter.setBrush(Qt::black);
+    painter.setPen(Qt::black);
+
+    painter.drawPath(roundedRectangle(mask.rect(), 10));
+    setMask(mask);
+}
 
 void ToolTip::paintEvent(QPaintEvent *)
 {
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
 
-    // draw items
-    QBitmap mask(width(), height());
-    QPainter maskPainter(&mask);
-
-    mask.fill(Qt::white);
-
-    maskPainter.setBrush(Qt::black);
-    maskPainter.setPen(Qt::black);
-
-    maskPainter.drawPath(roundedRectangle(mask.rect(), 10));
-    setMask(mask);
-
-    painter.setPen(Qt::black);
-    painter.drawPath(roundedRectangle(mask.rect(), 10));
+    //Stroke border
+    painter.setPen(palette().dark().color());
+    painter.drawPath(roundedRectangle(rect(), 10));
 }
 
 }

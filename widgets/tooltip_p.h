@@ -52,7 +52,8 @@ public:
 protected:
     virtual void showEvent(QShowEvent *);
 
-    void paintEvent(QPaintEvent */*event*/);
+    void resizeEvent(QResizeEvent *);
+    void paintEvent(QPaintEvent *);
 
 private Q_SLOTS:
     void slotResetTimer();
