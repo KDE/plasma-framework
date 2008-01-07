@@ -182,14 +182,11 @@ void Containment::setContainmentType(Containment::Type type)
             Plasma::Widget *addWidgetTool = addToolBoxTool("addwidgets", "list-add", i18n("Add Widgets"));
             connect(addWidgetTool, SIGNAL(clicked()), this, SIGNAL(showAddWidgets()));
 
-//zooming provides no functionality for 4.0 (not implemented yet) and will confuse user
-#if 0
             Plasma::Widget *zoomInTool = addToolBoxTool("zoomIn", "zoom-in", i18n("Zoom In"));
             connect(zoomInTool, SIGNAL(clicked()), this, SIGNAL(zoomIn()));
 
             Plasma::Widget *zoomOutTool = addToolBoxTool("zoomOut", "zoom-out", i18n("Zoom Out"));
             connect(zoomOutTool, SIGNAL(clicked()), this, SIGNAL(zoomOut()));
-#endif
         }
     } else {
         delete d->toolbox;
