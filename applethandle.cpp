@@ -53,6 +53,7 @@ AppletHandle::AppletHandle(Containment *parent, Applet *applet)
       m_anim(FadeIn),
       m_animId(0),
       m_angle(0.0),
+      m_tempAngle(0.0),
       m_scaleWidth(1.0),
       m_scaleHeight(1.0)
 {
@@ -67,12 +68,23 @@ AppletHandle::AppletHandle(Containment *parent, Applet *applet)
     qreal cosine = originalMatrix.m11();
     qreal sine = originalMatrix.m12();
 
-    m_originalAngle = _k_angleForPoints(QPointF(0, 0),
-                                        QPointF(1, 0),
-                                        QPointF(cosine, sine));
+    m_angle = _k_angleForPoints(QPointF(0, 0),
+                                QPointF(1, 0),
+                                QPointF(cosine, sine));
+
+    m_applet->resetTransform();
 
     calculateSize();
     m_applet->setParentItem(this);
+
+    rect = QRectF(m_applet->pos(), m_applet->size());
+    center = rect.center();
+    QTransform matrix;
+    matrix.translate(center.x(), center.y());
+    matrix.rotateRadians(m_angle);
+    matrix.translate(-center.x(), -center.y());
+    setTransform(matrix);
+
     connect(m_applet, SIGNAL(destroyed(QObject*)), this, SLOT(appletDestroyed()));
     setAcceptsHoverEvents(true);
     startFading(FadeIn);
@@ -89,7 +101,7 @@ AppletHandle::~AppletHandle()
 
         QTransform matrix;
         matrix.translate(center.x(), center.y());
-        matrix.rotateRadians(m_originalAngle+m_angle);
+        matrix.rotateRadians(m_angle);
         matrix.translate(-center.x(), -center.y());
         m_applet->setTransform(matrix);
 
@@ -244,9 +256,12 @@ void AppletHandle::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
                 QRectF rect = QRectF(m_applet->pos(), m_applet->size());
                 QPointF center = rect.center();
 
+                m_angle += m_tempAngle;
+                m_tempAngle = 0;
+
                 QTransform matrix;
                 matrix.translate(center.x(), center.y());
-                matrix.rotateRadians(m_originalAngle+m_angle);
+                matrix.rotateRadians(m_angle);
                 matrix.translate(-center.x(), -center.y());
 
                 setTransform(matrix);
@@ -344,10 +359,10 @@ void AppletHandle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
         QPointF center = rect.center();
 
         if (m_pressedButton == RotateButton) {
-            m_angle = _k_angleForPoints(center, pressPos, event->pos());
+            m_tempAngle = _k_angleForPoints(center, pressPos, event->pos());
 
-            if (fabs(remainder(m_originalAngle+m_angle, snapAngle)) < 0.15) {
-                m_angle = m_angle - remainder(m_originalAngle+m_angle, snapAngle);
+            if (fabs(remainder(m_angle+m_tempAngle, snapAngle)) < 0.15) {
+                m_tempAngle = m_tempAngle - remainder(m_angle+m_tempAngle, snapAngle);
             }
 
             m_scaleWidth = m_scaleHeight = 1.0;
@@ -416,7 +431,7 @@ void AppletHandle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
         QTransform matrix;
         matrix.translate(center.x(), center.y());
-        matrix.rotateRadians(m_angle);
+        matrix.rotateRadians(m_angle+m_tempAngle);
         matrix.scale(m_scaleWidth, m_scaleHeight);
         matrix.translate(-center.x(), -center.y());
         setTransform(matrix);
