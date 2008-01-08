@@ -104,6 +104,11 @@ class PLASMA_EXPORT Theme : public QObject
         Q_INVOKABLE QColor textColor() const;
 
         /**
+         * Returns the background color to be used by items resting on the background
+         */
+        Q_INVOKABLE QColor backgroundColor() const;
+
+        /**
          * Sets the default font to be used with themed items. Defaults to
          * the application wide default font.
          */

@@ -167,6 +167,12 @@ QColor Theme::textColor() const
     return colors.foreground(KColorScheme::NormalText).color();
 }
 
+QColor Theme::backgroundColor() const
+{
+    KColorScheme colors(QPalette::Active, KColorScheme::Window, Theme::self()->colors());
+    return colors.background().color();
+}
+
 void Theme::setFont(const QFont &font)
 {
     d->generalFont = font;
