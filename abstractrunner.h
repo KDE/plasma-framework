@@ -36,6 +36,11 @@ namespace Plasma
 
 /**
  * An abstract base class for Plasma Runner plugins
+ *
+ * Be aware that runners have to be thread-safe. This is due to
+ * the fact that each runner is executed in its own thread for
+ * each new term. Thus, a runner may be executed more than once
+ * at the same time.
  */
 class PLASMA_EXPORT AbstractRunner : public QObject
 {
@@ -76,19 +81,25 @@ class PLASMA_EXPORT AbstractRunner : public QObject
         KConfigGroup config() const;
 
         /**
-         * If the runner can run precisely this term, return a QAction, else
-         * return 0. The first runner that returns a QAction will be the
-         * default runner. Other runner's actions will be suggested in the
-         * interface. Non-exact matches should be offered via findMatches.
-         * The action will be activated if the user selects it.
-         * If the action is informational only and should not be executed,
-         * disable the action with setEnabled( false ).
+         * This is the main query method. It should trigger creation of
+         * SearchMatch instances through SearchContext::addInformationalMatch,
+         * SearchContext::addExactMatch, and SearchContext::addPossibleMatch.
          *
-         * If this runner's exact match is selected, the action will not
-         * be triggered, but it will be passed into the exec method.
+         * If the runner can run precisely the requested term (SearchContext::searchTerm),
+         * it should create an exact match (SearchContext::addExactMatch).
+         * The first runner that creates a SearchMatch will be the
+         * default runner. Other runner's matches will be suggested in the
+         * interface. Non-exact matches should be offered via SearchContext::addPossibleMatch.
+         *
+         * The match will be activated if the user selects it.
+         *
+         * If this runner's exact match is selected, it will be passed into 
+         * the exec method.
          * @see exec
          *
-         * Ownership of the action passes to the AbstractRunner class.
+         * Since each runner is executed in its own thread there is no need
+         * to return from this method right away, nor to create all matches
+         * here.
          */
         virtual void match(Plasma::SearchContext *search) = 0;
 
