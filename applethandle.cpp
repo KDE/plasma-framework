@@ -81,16 +81,18 @@ AppletHandle::AppletHandle(Containment *parent, Applet *applet)
 AppletHandle::~AppletHandle()
 {
     if (m_applet) {
-        QRectF rect(m_applet->boundingRect());
-        QPointF center = rect.center();
+        QRectF rect = QRectF(m_applet->pos(), m_applet->size());
+        QPointF center = m_applet->mapFromParent(rect.center());
 
         QPointF newPos = transform().inverted().map(m_applet->pos());
         m_applet->setPos(mapToParent(newPos));
+
         QTransform matrix;
         matrix.translate(center.x(), center.y());
         matrix.rotateRadians(m_originalAngle+m_angle);
         matrix.translate(-center.x(), -center.y());
         m_applet->setTransform(matrix);
+
         m_applet->setParentItem(m_containment);
     }
 }
