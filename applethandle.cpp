@@ -239,7 +239,7 @@ void AppletHandle::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
                     moveBy((rect.width() - newWidth) / 2, (rect.height() - newHeight) / 2);
                     m_scaleWidth = m_scaleHeight = 0;
                 }
-                QRectF rect(boundingRect());
+                QRectF rect = QRectF(m_applet->pos(), m_applet->size());
                 QPointF center = rect.center();
 
                 QTransform matrix;
