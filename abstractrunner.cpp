@@ -31,9 +31,14 @@ class AbstractRunner::Private
     public:
         bool hasMatchOptions;
         bool hasConfig;
+        Priority priority;
         Speed speed;
+        int tier;
+
     Private()
-      : speed(NormalSpeed)
+      : priority(NormalPriority),
+        speed(NormalSpeed),
+        tier(0)
     {}
 };
 
@@ -119,6 +124,27 @@ AbstractRunner::Speed AbstractRunner::speed() const
 void AbstractRunner::setSpeed(Speed speed)
 {
     d->speed = speed;
+}
+
+// For 4.1:
+// int AbstractRunner::tier() const
+// {
+//     return d->tier;
+// }
+// 
+// void AbstractRunner::setTier(int tier)
+// {
+//     d->tier = tier;
+// }
+
+AbstractRunner::Priority AbstractRunner::priority() const
+{
+    return d->priority;
+}
+
+void AbstractRunner::setPriority(Priority priority)
+{
+    d->priority = priority;
 }
 
 void AbstractRunner::exec(Plasma::SearchMatch *action)

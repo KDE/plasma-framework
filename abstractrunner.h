@@ -43,7 +43,15 @@ class PLASMA_EXPORT AbstractRunner : public QObject
 
     public:
         enum Speed { NormalSpeed,
-              SlowSpeed };
+                     SlowSpeed
+                   };
+
+        enum Priority { LowestPriority = 0,
+                        LowPriority,
+                        NormalPriority,
+                        HighPriority,
+                        HighestPriority
+                      };
 
         typedef QList<AbstractRunner*> List;
 
@@ -124,8 +132,22 @@ class PLASMA_EXPORT AbstractRunner : public QObject
 
         /**
          * The nominal speed of the runner.
+         * @see setSpeed
          */
-	Speed speed() const;
+        Speed speed() const;
+
+// For 4.1
+//         /**
+//          * The tier of the runner.
+//          * @see setTier
+//          */
+//         int tier() const;
+
+        /**
+         * The priority of the runner.
+         * @see setPriority
+         */
+        Priority priority() const;
 
     protected:
         /**
@@ -145,6 +167,20 @@ class PLASMA_EXPORT AbstractRunner : public QObject
          * this within their constructors.
          */
         void setSpeed(Speed newSpeed);
+
+//For 4.1
+//         /**
+//          * Sets the run tier of the runner. Higher tier runners execute only
+//          * after all lower-level runners execute. Call this method if your runner
+//          * depends on the output of previous runners.
+//          */
+//         void setTier(int tier);
+
+        /**
+         * Sets the priority of the runner. Lower priority runners are executed
+         * only after higher priority runners.
+         */
+        void setPriority(Priority newPriority);
 
     private:
         class Private;
