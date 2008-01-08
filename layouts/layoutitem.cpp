@@ -88,7 +88,7 @@ qreal LayoutItem::widthForHeight(qreal h) const
 void LayoutItem::setLayout(Layout* layout)
 {
     if (d->layout && layout) {
-        kDebug(1209) << "already have a layout.";
+        kDebug() << "already have a layout.";
         return;
     }
 
@@ -99,7 +99,7 @@ void LayoutItem::setLayout(Layout* layout)
         // and we are without layout; we should tell our
         // children about this, but LayoutItem doesn't know
         // about children =/
-        kDebug(1209) << "layout removed from under us. expect crashes";
+        kDebug() << "layout removed from under us. expect crashes";
     }
 
     d->layout = layout;

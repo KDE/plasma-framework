@@ -71,7 +71,7 @@ class DataEngine::Private
                 return 0;
             }
 
-            /*kDebug(1209) << "DataEngine " << engine->objectName()
+            /*kDebug() << "DataEngine " << engine->objectName()
                      << ": could not find DataContainer " << sourceName
                      << ", creating" << endl;*/
             DataContainer* s = new DataContainer(engine);
@@ -90,7 +90,7 @@ class DataEngine::Private
         void connectSource(DataContainer* s, QObject* visualization, uint updateInterval,
                            Plasma::IntervalAlignment align, bool immediateCall = true)
         {
-            //kDebug(1209) << "connect source called with interval" << updateInterval;
+            //kDebug() << "connect source called with interval" << updateInterval;
             if (updateInterval > 0) {
                 // never more frequently than allowed, never more than 20 times per second
                 uint min = qMax(50, minUpdateInterval); // for qMin below
@@ -115,12 +115,12 @@ class DataEngine::Private
                 *newSource = false;
             }
 
-            //kDebug(1209) << "requesting source " << sourceName;
+            //kDebug() << "requesting source " << sourceName;
             DataContainer* s = source(sourceName, false);
 
             if (!s) {
                 // we didn't find a data source, so give the engine an opportunity to make one
-                /*kDebug(1209) << "DataEngine " << engine->objectName()
+                /*kDebug() << "DataEngine " << engine->objectName()
                     << ": could not find DataContainer " << sourceName
                     << " will create on request" << endl;*/
                 if (engine->sourceRequested(sourceName)) {
@@ -182,7 +182,7 @@ DataEngine::DataEngine(QObject* parent)
 
 DataEngine::~DataEngine()
 {
-    //kDebug(1209) << objectName() << ": bye bye birdy! ";
+    //kDebug() << objectName() << ": bye bye birdy! ";
     delete d;
 }
 
@@ -194,7 +194,7 @@ QStringList DataEngine::sources() const
 void DataEngine::connectSource(const QString& source, QObject* visualization,
                                uint updateInterval, Plasma::IntervalAlignment intervalAlignment) const
 {
-    //kDebug(1209) << "connectSource" << source;
+    //kDebug() << "connectSource" << source;
     bool newSource;
     DataContainer* s = d->requestSource(source, &newSource);
 
@@ -203,7 +203,7 @@ void DataEngine::connectSource(const QString& source, QObject* visualization,
         // don't request delayed updates (we want to do an immediate update in that case so they
         // don't have to wait for the first time out)
         d->connectSource(s, visualization, updateInterval, intervalAlignment, !newSource || updateInterval > 0);
-        //kDebug(1209) << " ==> source connected";
+        //kDebug() << " ==> source connected";
     }
 }
 
@@ -254,7 +254,7 @@ void DataEngine::internalUpdateSource(DataContainer* source)
         // skip updating this source; it's been too soon
         //TODO: should we queue an update in this case? return to this
         //      once we see the results in real world usage
-        //kDebug(1209) << "internal update source is delaying" << source->timeSinceLastUpdate() << d->minUpdateInterval;
+        //kDebug() << "internal update source is delaying" << source->timeSinceLastUpdate() << d->minUpdateInterval;
         return;
     }
 
@@ -265,7 +265,7 @@ void DataEngine::internalUpdateSource(DataContainer* source)
 
 void DataEngine::init()
 {
-    // kDebug(1209) << "DataEngine::init() called ";
+    // kDebug() << "DataEngine::init() called ";
     // default implementation does nothing. this is for engines that have to
     // start things in motion external to themselves before they can work
 }
@@ -279,7 +279,7 @@ bool DataEngine::sourceRequested(const QString &name)
 bool DataEngine::updateSource(const QString& source)
 {
     Q_UNUSED(source);
-    //kDebug(1209) << "updateSource source" << endl;
+    //kDebug() << "updateSource source" << endl;
     return false; //TODO: should this be true to trigger, even needless, updates on every tick?
 }
 
@@ -329,7 +329,7 @@ void DataEngine::addSource(DataContainer* source)
 {
     SourceDict::const_iterator it = d->sources.find(source->objectName());
     if (it != d->sources.constEnd()) {
-        kDebug(1209) << "source named \"" << source->objectName() << "\" already exists.";
+        kDebug() << "source named \"" << source->objectName() << "\" already exists.";
         return;
     }
 
@@ -385,7 +385,7 @@ void DataEngine::updateInterval()
 
 void DataEngine::removeSource(const QString& source)
 {
-    //kDebug(1209) << "removing source " << source;
+    //kDebug() << "removing source " << source;
     SourceDict::iterator it = d->sources.find(source);
     if (it != d->sources.end()) {
         emit sourceRemoved(it.key());

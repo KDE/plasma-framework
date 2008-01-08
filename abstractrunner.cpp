@@ -164,7 +164,7 @@ AbstractRunner::List AbstractRunner::loadRunners(QObject* parent, const QStringL
         if( whitelist.empty() || whitelist.contains( service->name() ) ) {
             AbstractRunner* runner = service->createInstance<AbstractRunner>(parent, QVariantList(), &error);
             if (runner) {
-                //kDebug(1209) << "loaded runner : " << service->name();
+                //kDebug() << "loaded runner : " << service->name();
                 QString phase = service->property("X-Plasma-RunnerPhase").toString();
                 if (phase == "last") {
                     lastRunners.append(runner);
@@ -175,7 +175,7 @@ AbstractRunner::List AbstractRunner::loadRunners(QObject* parent, const QStringL
                 }
             }
             else {
-                kDebug(1209) << "failed to load runner : " << service->name() << ". error reported: " << error;
+                kDebug() << "failed to load runner : " << service->name() << ". error reported: " << error;
             }
         }
     }

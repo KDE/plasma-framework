@@ -80,7 +80,7 @@ void AppletBrowserWidget::Private::initFilters()
         if (!rx.exactMatch(i.key())) {
             continue;
         }
-        //kDebug(1209) << "These are the key/vals in rc file " << rx.cap(1) << "\n";
+        //kDebug() << "These are the key/vals in rc file " << rx.cap(1) << "\n";
 
         QString id = rx.cap(1);
         QString caption = configGroup.readEntry("recommended." + id + ".caption");
@@ -118,7 +118,7 @@ void AppletBrowserWidget::Private::updateRunningApplets()
     foreach (QString key, runningApplets.uniqueKeys()) {
         appCount[key]=runningApplets.count(key);
     }
-    kDebug(1209) << appCount;
+    kDebug() << appCount;
     itemModel.setRunningApplets(appCount);
 }
 
@@ -184,14 +184,14 @@ void AppletBrowserWidget::init()
 void AppletBrowserWidget::initRunningApplets()
 {
 //get applets from corona, count them, send results to model
-    kDebug(1209) << d->runningApplets.count();
+    kDebug() << d->runningApplets.count();
     QHash<QString,int> appCount;
     Plasma::Corona *c = d->containment->corona();
 
     //we've tried our best to get a corona
     //we don't want just one containment, we want them all
     if (!c) {
-        kDebug(1209) << "can't happen";
+        kDebug() << "can't happen";
         return;
     }
 
@@ -207,7 +207,7 @@ void AppletBrowserWidget::initRunningApplets()
             appCount[applet->name()]++;
         }
     }
-    kDebug(1209) << appCount;
+    kDebug() << appCount;
     d->itemModel.setRunningApplets(appCount);
 }
 
@@ -232,14 +232,14 @@ QString AppletBrowserWidget::application()
 
 void AppletBrowserWidget::addApplet()
 {
-    kDebug(1209) << "Button ADD clicked";
+    kDebug() << "Button ADD clicked";
     if (!d->containment) {
         return;
     }
 
     foreach (AbstractItem *item, d->appletList->selectedItems()) {
         PlasmaAppletItem *selectedItem = (PlasmaAppletItem *) item;
-        kDebug(1209) << "Adding applet " << selectedItem->name() << "to containment";
+        kDebug() << "Adding applet " << selectedItem->name() << "to containment";
         d->containment->addApplet(selectedItem->pluginName(), selectedItem->arguments());
     }
 }
@@ -247,7 +247,7 @@ void AppletBrowserWidget::addApplet()
 void AppletBrowserWidget::appletAdded(Plasma::Applet* applet)
 {
     QString name = applet->name();
-    kDebug(1209) << name;
+    kDebug() << name;
     d->runningApplets.insert(name, applet);
     d->appletNames.insert(applet, name);
     connect(applet, SIGNAL(destroyed(QObject*)), this, SLOT(appletDestroyed(QObject*)));
@@ -256,7 +256,7 @@ void AppletBrowserWidget::appletAdded(Plasma::Applet* applet)
 
 void AppletBrowserWidget::appletDestroyed(QObject* applet)
 {
-    kDebug(1209) << applet;
+    kDebug() << applet;
     Plasma::Applet* a = (Plasma::Applet*)applet; //don't care if it's valid, just need the address
     QString name = d->appletNames.take(a);
     //if !name, was the applet not found or was the name actually ""?
@@ -278,7 +278,7 @@ void AppletBrowserWidget::destroyApplets(QString name)
 void AppletBrowserWidget::downloadApplets()
 {
     //TODO: implement
-    kDebug(1209) << "GHNS button clicked";
+    kDebug() << "GHNS button clicked";
 }
 
 

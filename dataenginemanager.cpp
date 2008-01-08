@@ -121,13 +121,13 @@ Plasma::DataEngine* DataEngineManager::loadDataEngine(const QString& name)
     QString error;
 
     if (offers.isEmpty()) {
-        kDebug(1209) << "offers are empty for " << name << " with constraint " << constraint;
+        kDebug() << "offers are empty for " << name << " with constraint " << constraint;
     } else {
         engine = offers.first()->createInstance<Plasma::DataEngine>(0, QVariantList(), &error);
     }
 
     if (!engine) {
-        kDebug(1209) << "Couldn't load engine \"" << name << "\". Error given: " << error;
+        kDebug() << "Couldn't load engine \"" << name << "\". Error given: " << error;
         return d->nullEngine();
     }
 

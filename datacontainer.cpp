@@ -104,7 +104,7 @@ void DataContainer::checkUsage()
 
 void DataContainer::connectVisualization(QObject* visualization, uint updateInterval, Plasma::IntervalAlignment alignment)
 {
-//    kDebug(1209) << "connecting visualization" << (void*)visualization << "at interval of" << updateInterval;
+//    kDebug() << "connecting visualization" << (void*)visualization << "at interval of" << updateInterval;
     QMap<QObject *, SignalRelay *>::iterator objIt = d->relayObjects.find(visualization);
     bool connected = objIt != d->relayObjects.end();
     if (connected) {
@@ -120,12 +120,12 @@ void DataContainer::connectVisualization(QObject* visualization, uint updateInte
                 d->relays.remove(relay->m_interval);
                 delete relay;
             }
-//            kDebug(1209) << "     already connected, but to a relay";
+//            kDebug() << "     already connected, but to a relay";
         } else if (updateInterval < 1) {
             // the visualization was connected already, but not to a relay
             // and it still doesn't want to connect to a relay, so we have
             // nothing to do!
-            //kDebug(1209) << "     already connected, nothing to do";
+            //kDebug() << "     already connected, nothing to do";
             return;
         } else {
             disconnect(this, SIGNAL(dataUpdated(QString,Plasma::DataEngine::Data)),
@@ -141,11 +141,11 @@ void DataContainer::connectVisualization(QObject* visualization, uint updateInte
     d->relayObjects[visualization] = 0;
 
     if (updateInterval < 1) {
-//        kDebug(1209) << "    connecting directly";
+//        kDebug() << "    connecting directly";
         connect(this, SIGNAL(dataUpdated(QString,Plasma::DataEngine::Data)),
                 visualization, SLOT(dataUpdated(QString,Plasma::DataEngine::Data)));
     } else {
-//        kDebug(1209) << "    connecting to a relay";
+//        kDebug() << "    connecting to a relay";
         connect(d->signalRelay(this, visualization, updateInterval, alignment),
                 SIGNAL(dataUpdated(QString,Plasma::DataEngine::Data)),
                 visualization, SLOT(dataUpdated(QString,Plasma::DataEngine::Data)));

@@ -133,7 +133,7 @@ void DesktopToolbox::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
             continue;
         }
 
-        //kDebug(1209) << "let's show and move" << tool << tool->boundingRect();
+        //kDebug() << "let's show and move" << tool << tool->boundingRect();
         tool->show();
         phase->moveItem(tool, Plasma::Phase::SlideIn, QPoint(x, y));
         //x += 0;
@@ -178,7 +178,7 @@ void DesktopToolbox::animate(qreal progress)
         m_animFrame = m_size * (1.0 - progress);
     }
 
-    //kDebug(1209) << "animating at" << progress << "for" << m_animFrame;
+    //kDebug() << "animating at" << progress << "for" << m_animFrame;
 
     if (progress >= 1) {
         m_animId = 0;
@@ -189,7 +189,7 @@ void DesktopToolbox::animate(qreal progress)
 
 void DesktopToolbox::toolMoved(QGraphicsItem *item)
 {
-    //kDebug(1209) << "geometry is now " << static_cast<Plasma::Widget*>(item)->geometry();
+    //kDebug() << "geometry is now " << static_cast<Plasma::Widget*>(item)->geometry();
     if (!m_showing &&
         QGraphicsItem::children().indexOf(static_cast<Plasma::Widget*>(item)) != -1) {
         item->hide();
@@ -212,7 +212,7 @@ void DesktopToolbox::addTool(QGraphicsItem *tool, const QString &name)
 
 void DesktopToolbox::enableTool(const QString &toolName, bool visible)
 {
-    //kDebug(1209) << (visible? "enabling" : "disabling") << "tool" << toolName;
+    //kDebug() << (visible? "enabling" : "disabling") << "tool" << toolName;
     QGraphicsItem *t = tool(toolName);
 
     if (t) {
@@ -234,9 +234,9 @@ bool DesktopToolbox::isToolEnabled(const QString &toolName) const
 QGraphicsItem* DesktopToolbox::tool(const QString &toolName) const
 {
     foreach (QGraphicsItem *child, QGraphicsItem::children()) {
-        //kDebug(1209) << "checking tool" << child << child->data(ToolName);
+        //kDebug() << "checking tool" << child << child->data(ToolName);
         if (child->data(ToolName).toString() == toolName) {
-            //kDebug(1209) << "tool found!";
+            //kDebug() << "tool found!";
             return child;
         }
     }
