@@ -202,7 +202,7 @@ Corona* Containment::corona() const
 void Containment::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
 {
     //kDebug() << "let's see if we manage to get a context menu here, huh";
-    if (!scene() || !KAuthorized::authorizeKAction("desktop_contextmenu")) {
+    if (!isContainment() || !scene() || !KAuthorized::authorizeKAction("desktop_contextmenu")) {
         Applet::contextMenuEvent(event);
         return;
     }
@@ -217,7 +217,7 @@ void Containment::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
 
     while (item) {
         applet = qgraphicsitem_cast<Applet*>(item);
-        if (applet) {
+        if (applet && !applet->isContainment()) {
             break;
         }
 
