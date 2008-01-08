@@ -155,7 +155,7 @@ void DesktopToolbox::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
     m_showing = true;
     // TODO: 10 and 200 shouldn't be hardcoded here. There needs to be a way to
     // match whatever the time is that moveItem() takes. Same in hoverLeaveEvent().
-    m_animId = phase->customAnimation(10, 250, Plasma::Phase::EaseInCurve, this, "animate");
+    m_animId = phase->customAnimation(10, 240, Plasma::Phase::EaseInCurve, this, "animate");
     QGraphicsItem::hoverEnterEvent(event);
 }
 
@@ -180,7 +180,7 @@ void DesktopToolbox::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
     }
 
     m_showing = false;
-    m_animId = phase->customAnimation(10, 150, Plasma::Phase::EaseOutCurve, this, "animate");
+    m_animId = phase->customAnimation(10, 240, Plasma::Phase::EaseOutCurve, this, "animate");
     m_toolsRect = QRect();
     QGraphicsItem::hoverLeaveEvent(event);
 }
