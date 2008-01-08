@@ -556,12 +556,8 @@ void Containment::addApplet(Applet *applet)
         addChild(applet);
 
         // now move the old config to the new location
-        KConfigGroup c = config();
-        c = KConfigGroup(&c, "Applets");
-        c = KConfigGroup(&c, QString::number(applet->id()));
-        //FIXME: without the next line, we don't save the applet configuration in the new location!
-        //       this is pending a patch to KConfigGroup, however, so can't go in right now
-        //oldConfig.reparent(&c);
+        KConfigGroup c = config().group("Applets").group(QString::number(applet->id()));
+        oldConfig.reparent(&c);
     } else {
         addChild(applet);
     }
