@@ -39,7 +39,6 @@ static const int ToolName = 7001;
 DesktopToolbox::DesktopToolbox(QGraphicsItem *parent)
     : QGraphicsItem(parent),
       m_icon("plasma"),
-      m_iconSelected("plasma"),
       m_size(50),
       m_showing(false),
       m_animId(0),
@@ -94,13 +93,13 @@ void DesktopToolbox::paint(QPainter *painter, const QStyleOptionGraphicsItem *op
     const qreal progress = m_animFrame / m_size;
 
     if (progress > 0.1) {
-        m_iconSelected.paint(painter, QRect(m_size*2 - 34, 2, 32, 32), Qt::AlignCenter, QIcon::Disabled, QIcon::Off);
-    }
-  
-    if (progress < 0.95) {
-        painter->save();
-        painter->setOpacity(1.0 - m_animFrame / m_size);
         m_icon.paint(painter, QRect(m_size*2 - 34, 2, 32, 32));
+    }
+
+    if (progress <= 0.9) {
+        painter->save();
+        painter->setOpacity(1 - progress);
+        m_icon.paint(painter, QRect(m_size*2 - 34, 2, 32, 32), Qt::AlignCenter, QIcon::Disabled, QIcon::Off);
         painter->restore();
     }
 }
@@ -116,7 +115,6 @@ QPainterPath DesktopToolbox::shape() const
 
 void DesktopToolbox::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 {
-//    Plasma::Phase::self()->moveItem(this, Phase::SlideIn, QPoint(-25, -25));
     int maxwidth = 0;
     foreach (QGraphicsItem* tool, QGraphicsItem::children()) {
         if (!tool->isEnabled()) {
@@ -155,7 +153,6 @@ void DesktopToolbox::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 
 void DesktopToolbox::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 {
-//    Plasma::Phase::self->moveItem(this, Phase::SlideOut, boundingRect()QPoint(-50, -50));
     int x = m_size*2;
     int y = 0;
     Plasma::Phase* phase = Plasma::Phase::self();

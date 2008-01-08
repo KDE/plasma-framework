@@ -57,7 +57,6 @@ protected slots:
 
 private:
     KIcon m_icon;
-    KIcon m_iconSelected;
     int m_size;
     bool m_hidden;
     bool m_showing;
