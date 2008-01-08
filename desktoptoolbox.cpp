@@ -115,15 +115,20 @@ QPainterPath DesktopToolbox::shape() const
 
 void DesktopToolbox::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 {
+    if (m_showing) {
+        QGraphicsItem::hoverEnterEvent(event);
+        return;
+    }
+
     int maxwidth = 0;
     foreach (QGraphicsItem* tool, QGraphicsItem::children()) {
         if (!tool->isEnabled()) {
             continue;
         }
-        maxwidth = qMax(static_cast<int>(tool->boundingRect().width()),
-                        maxwidth);
+        maxwidth = qMax(static_cast<int>(tool->boundingRect().width()), maxwidth);
     }
-    // put tools 5px from screen edge
+
+    // put tools 5px from icon edge
     const int iconWidth = 32;
     int x = m_size*2 - maxwidth - iconWidth - 5;
     int y = 5; // pos().y();
@@ -140,6 +145,9 @@ void DesktopToolbox::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
         y += static_cast<int>(tool->boundingRect().height()) + 5;
     }
 
+    //NOTE: this will not work if the item is rotated, but this way we don't need use a QRegion
+    m_toolsRect = QRect(mapToScene(QPoint(x, 5)).toPoint(), QSize(maxwidth, y - 10)).adjusted(1, 1, -1, -1);
+
     if (m_animId) {
         phase->stopCustomAnimation(m_animId);
     }
@@ -153,6 +161,12 @@ void DesktopToolbox::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 
 void DesktopToolbox::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 {
+    //kDebug() << m_toolsRect << event->pos() << event->scenePos() << m_toolsRect.contains(event->scenePos().toPoint());
+    if (!m_toolsRect.isNull() && m_toolsRect.contains(event->scenePos().toPoint())) {
+        QGraphicsItem::hoverLeaveEvent(event);
+        return;
+    }
+
     int x = m_size*2;
     int y = 0;
     Plasma::Phase* phase = Plasma::Phase::self();
@@ -167,6 +181,7 @@ void DesktopToolbox::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 
     m_showing = false;
     m_animId = phase->customAnimation(10, 150, Plasma::Phase::EaseOutCurve, this, "animate");
+    m_toolsRect = QRect();
     QGraphicsItem::hoverLeaveEvent(event);
 }
 

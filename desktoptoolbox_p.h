@@ -57,7 +57,8 @@ protected slots:
 
 private:
     KIcon m_icon;
-    int m_size;
+    const int m_size;
+    QRect m_toolsRect;
     bool m_hidden;
     bool m_showing;
     Plasma::Phase::AnimId m_animId;
