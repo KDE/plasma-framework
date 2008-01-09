@@ -84,10 +84,15 @@ AppletHandle::AppletHandle(Containment *parent, Applet *applet)
     matrix.rotateRadians(m_angle);
     matrix.translate(-center.x(), -center.y());
     setTransform(matrix);
+    m_hoverTimer = new QTimer(this);
+    m_hoverTimer->setSingleShot(true);
+    m_hoverTimer->setInterval(300);
 
+    connect(m_hoverTimer, SIGNAL(timeout()), this, SLOT(fadeIn()));
     connect(m_applet, SIGNAL(destroyed(QObject*)), this, SLOT(appletDestroyed()));
+
     setAcceptsHoverEvents(true);
-    startFading(FadeIn);
+    m_hoverTimer->start();
 }
 
 AppletHandle::~AppletHandle()
@@ -452,13 +457,14 @@ void AppletHandle::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 {
     Q_UNUSED(event);
     //kDebug() << "hover enter";
-    startFading(FadeIn);
+    m_hoverTimer->start();
 }
 
 void AppletHandle::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 {
     Q_UNUSED(event);
     //kDebug() << "hover leave";
+    m_hoverTimer->stop();
     startFading(FadeOut);
 }
 
@@ -478,6 +484,11 @@ void AppletHandle::fadeAnimation(qreal progress)
     update();
 }
 
+void AppletHandle::fadeIn()
+{
+    startFading(FadeIn);
+}
+
 void AppletHandle::appletDestroyed()
 {
     m_applet = 0;
@@ -493,15 +504,16 @@ void AppletHandle::appletResized()
 
 void AppletHandle::startFading(FadeType anim)
 {
-    if (m_animId!=0) {
+    if (m_animId != 0) {
         Phase::self()->stopCustomAnimation(m_animId);
     }
 
     qreal time = 250;
 
-    if (anim==FadeIn) {
+    if (anim == FadeIn) {
         time *= 1.0-m_opacity;
     } else {
+        m_hoverTimer->stop();
         time *= m_opacity;
     }
 
