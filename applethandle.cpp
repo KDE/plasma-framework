@@ -411,7 +411,13 @@ void AppletHandle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
                 min += QSizeF(16, 16);
             }
 
+            bool ignoreAspectRatio = m_applet->aspectRatioMode() == Qt::IgnoreAspectRatio;
+
             if (QApplication::keyboardModifiers() & Qt::ControlModifier) {
+                ignoreAspectRatio = !ignoreAspectRatio;
+            }
+
+            if (ignoreAspectRatio) {
                 // free resizing
                 qreal newScaleWidth = 0;
                 qreal newScaleHeight = 0;
