@@ -45,7 +45,6 @@ qreal _k_angleForPoints(const QPointF &center, const QPointF &pt1, const QPointF
 AppletHandle::AppletHandle(Containment *parent, Applet *applet)
     : QObject(),
       QGraphicsItem(parent),
-      m_buttonsOnRight(false),
       m_pressedButton(NoButton),
       m_containment(parent),
       m_applet(applet),
@@ -55,7 +54,9 @@ AppletHandle::AppletHandle(Containment *parent, Applet *applet)
       m_angle(0.0),
       m_tempAngle(0.0),
       m_scaleWidth(1.0),
-      m_scaleHeight(1.0)
+      m_scaleHeight(1.0),
+      m_buttonsOnRight(false),
+      m_pendingFade(false)
 {
     KColorScheme colors(QPalette::Active, KColorScheme::View, Theme::self()->colors());
     m_gradientColor = colors.background(KColorScheme::NormalBackground).color();
@@ -230,8 +231,21 @@ AppletHandle::ButtonType AppletHandle::mapToButton(const QPointF &point) const
 
 void AppletHandle::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
+    if (m_pendingFade) {
+        //m_pendingFade = false;
+        return;
+    }
+
     if (event->button() == Qt::LeftButton) {
         m_pressedButton = mapToButton(event->pos());
+        //kDebug() << "button pressed:" << m_pressedButton;
+        if (m_pressedButton != NoButton) {
+            // when the mouse goes over a window, the applet is likely to
+            // get a hover out event that we really don't want to respond to
+            // so while we have a button pressed we intercept these events
+            // and handle them ourselves here in AppletHandle
+            m_applet->installSceneEventFilter(this);
+        }
         event->accept();
         update();
         return;
@@ -242,6 +256,17 @@ void AppletHandle::mousePressEvent(QGraphicsSceneMouseEvent *event)
 
 void AppletHandle::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
+    kDebug() << "button pressed:" << m_pressedButton << ", fade pending?" << m_pendingFade;
+    if (m_applet) {
+        m_applet->removeSceneEventFilter(this);
+    }
+
+    if (m_pendingFade) {
+        startFading(FadeOut);
+        m_pendingFade = false;
+        return;
+    }
+
     ButtonType releasedAtButton = mapToButton(event->pos());
 
     if (m_applet && event->button() == Qt::LeftButton) {
@@ -337,8 +362,8 @@ void AppletHandle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
                         // add the applet to the new containment
                         // and take it from the old one
                         QPointF scenePosition = scenePos();
-                        kDebug() << "moving to other containment with position" << pos() << event->scenePos();
-                        kDebug() << "position before reparenting" << pos() << scenePos();
+                        //kDebug() << "moving to other containment with position" << pos() << event->scenePos();
+                        //kDebug() << "position before reparenting" << pos() << scenePos();
                         m_containment = containments[i];
                         //m_containment->addChild(m_applet);
                         //setParentItem(containments[i]);
@@ -463,9 +488,24 @@ void AppletHandle::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 void AppletHandle::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 {
     Q_UNUSED(event);
-    //kDebug() << "hover leave";
+    //kDebug() << "hover leave" << m_pressedButton;
     m_hoverTimer->stop();
-    startFading(FadeOut);
+
+    if (m_pressedButton != NoButton) {
+        m_pendingFade = true;
+    } else {
+        startFading(FadeOut);
+    }
+}
+
+bool AppletHandle::sceneEventFilter(QGraphicsItem *watched, QEvent *event)
+{
+    if (watched == m_applet && event->type() == QEvent::GraphicsSceneHoverLeave) {
+        hoverLeaveEvent(static_cast<QGraphicsSceneHoverEvent*>(event));
+        return true;
+    }
+
+    return false;
 }
 
 void AppletHandle::fadeAnimation(qreal progress)
@@ -513,6 +553,9 @@ void AppletHandle::startFading(FadeType anim)
     if (anim == FadeIn) {
         time *= 1.0-m_opacity;
     } else {
+        if (m_applet) {
+            m_applet->removeSceneEventFilter(this);
+        }
         m_hoverTimer->stop();
         time *= m_opacity;
     }
