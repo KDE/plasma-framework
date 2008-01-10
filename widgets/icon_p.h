@@ -23,6 +23,7 @@
 #define ICON_P_H
 
 #include <QtCore/QEvent>
+#include <QtCore/QTime>
 #include <QtGui/QApplication>
 #include <QtGui/QIcon>
 #include <QtGui/QStyleOptionGraphicsItem>
@@ -169,6 +170,7 @@ public:
     QColor shadowColor;
     QSizeF iconSize;
     QIcon icon;
+    QTime lastClicked;
     IconStates states;
     Qt::Orientation orientation;
     int numDisplayLines;

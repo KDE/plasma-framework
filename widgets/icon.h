@@ -209,14 +209,19 @@ protected:
 
 Q_SIGNALS:
     /**
-    * Indicates when the icon has been pressed.
-    */
+     * Indicates when the icon has been pressed.
+     */
     void pressed(bool down);
 
     /**
-    * Indicates when the icon has been clicked.
-    */
+     * Indicates when the icon has been clicked.
+     */
     void clicked();
+
+    /**
+     * Indicates when the icon has been double clicked.
+     */
+    void doubleClicked();
 
 protected:
     bool isDown();
