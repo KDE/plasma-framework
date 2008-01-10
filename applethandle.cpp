@@ -99,6 +99,8 @@ AppletHandle::AppletHandle(Containment *parent, Applet *applet)
 AppletHandle::~AppletHandle()
 {
     if (m_applet) {
+        m_applet->removeSceneEventFilter(this);
+
         QRectF rect = QRectF(m_applet->pos(), m_applet->size());
         QPointF center = m_applet->mapFromParent(rect.center());
 
@@ -550,12 +552,13 @@ void AppletHandle::startFading(FadeType anim)
 
     qreal time = 250;
 
+    if (m_applet) {
+        m_applet->removeSceneEventFilter(this);
+    }
+
     if (anim == FadeIn) {
         time *= 1.0-m_opacity;
     } else {
-        if (m_applet) {
-            m_applet->removeSceneEventFilter(this);
-        }
         m_hoverTimer->stop();
         time *= m_opacity;
     }
