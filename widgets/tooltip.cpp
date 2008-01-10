@@ -146,6 +146,7 @@ ToolTip::ToolTip()
     QGridLayout *l = new QGridLayout;
     d->preview = new WindowPreview;
     d->label = new QLabel;
+    d->label->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
     d->label->setWordWrap(true);
     d->imageLabel = new QLabel;
     d->imageLabel->setAlignment(Qt::AlignTop | Qt::AlignLeft);
@@ -165,8 +166,8 @@ ToolTip::ToolTip()
 
 void ToolTip::setData(const Plasma::ToolTipData &data)
 {
-    d->label->setText("<qt><h3>" + data.mainText + "</h3><p>" +
-                        data.subText + "</p></qt>");
+    d->label->setText("<qt><b>" + data.mainText + "</b><br>" +
+                        data.subText + "</qt>");
     d->imageLabel->setPixmap(data.image);
     d->windowToPreview = data.windowToPreview;
     d->preview->setWindowId( d->windowToPreview );
