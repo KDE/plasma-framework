@@ -33,12 +33,51 @@
 namespace Plasma
 {
 
+class EmptyGraphicsItem : public QGraphicsItem
+{
+    public:
+        EmptyGraphicsItem(QGraphicsItem *parent)
+            : QGraphicsItem(parent)
+        {
+            setAcceptsHoverEvents(true);
+        }
+
+        QRectF boundingRect() const
+        {
+            return QRectF(QPointF(0, 0), m_rect.size());
+        }
+
+        QRectF rect() const
+        {
+            return m_rect;
+        }
+
+        void setRect(const QRectF &rect)
+        {
+            //kDebug() << "setting rect to" << rect;
+            prepareGeometryChange();
+            m_rect = rect;
+            setPos(rect.topLeft());
+        }
+
+        void paint(QPainter * p, const QStyleOptionGraphicsItem*, QWidget*)
+        {
+            Q_UNUSED(p)
+            //p->setPen(Qt::red);
+            //p->drawRect(boundingRect());
+        }
+
+    private:
+        QRectF m_rect;
+};
+
 // used with QGrahphicsItem::setData
 static const int ToolName = 7001;
 
 DesktopToolbox::DesktopToolbox(QGraphicsItem *parent)
     : QGraphicsItem(parent),
       m_icon("plasma"),
+      m_toolBacker(0),
       m_size(50),
       m_showing(false),
       m_animId(0),
@@ -134,7 +173,7 @@ void DesktopToolbox::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
     int y = 5; // pos().y();
     Plasma::Phase* phase = Plasma::Phase::self();
     foreach (QGraphicsItem* tool, QGraphicsItem::children()) {
-        if (!tool->isEnabled()) {
+        if (!tool->isEnabled() || tool == m_toolBacker) {
             continue;
         }
 
@@ -145,8 +184,11 @@ void DesktopToolbox::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
         y += static_cast<int>(tool->boundingRect().height()) + 5;
     }
 
-    //NOTE: this will not work if the item is rotated, but this way we don't need use a QRegion
-    m_toolsRect = QRect(mapToScene(QPoint(x, 5)).toPoint(), QSize(maxwidth, y - 10)).adjusted(1, 1, -1, -1);
+    if (!m_toolBacker) {
+        m_toolBacker = new EmptyGraphicsItem(this);
+    }
+    m_toolBacker->setRect(QRectF(QPointF(x, 0), QSizeF(maxwidth, y - 10)));
+    m_toolBacker->show();
 
     if (m_animId) {
         phase->stopCustomAnimation(m_animId);
@@ -161,8 +203,8 @@ void DesktopToolbox::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 
 void DesktopToolbox::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 {
-    //kDebug() << m_toolsRect << event->pos() << event->scenePos() << m_toolsRect.contains(event->scenePos().toPoint());
-    if (!m_toolsRect.isNull() && m_toolsRect.contains(event->scenePos().toPoint())) {
+    //kDebug() << event->pos() << event->scenePos() << m_toolBacker->rect().contains(event->scenePos().toPoint());
+    if (!m_toolBacker && m_toolBacker->rect().contains(event->scenePos().toPoint())) {
         QGraphicsItem::hoverLeaveEvent(event);
         return;
     }
@@ -171,8 +213,12 @@ void DesktopToolbox::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
     int y = 0;
     Plasma::Phase* phase = Plasma::Phase::self();
     foreach (QGraphicsItem* tool, QGraphicsItem::children()) {
-         const int height = static_cast<int>(tool->boundingRect().height());
-         phase->moveItem(tool, Plasma::Phase::SlideOut, QPoint(x, y-height)); // FIXME: make me faster (~150-200 ms)
+        if (tool == m_toolBacker) {
+            continue;
+        }
+
+        const int height = static_cast<int>(tool->boundingRect().height());
+        phase->moveItem(tool, Plasma::Phase::SlideOut, QPoint(x, y-height)); // FIXME: make me faster (~150-200 ms)
     }
 
     if (m_animId) {
@@ -181,7 +227,10 @@ void DesktopToolbox::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 
     m_showing = false;
     m_animId = phase->customAnimation(10, 240, Plasma::Phase::EaseOutCurve, this, "animate");
-    m_toolsRect = QRect();
+
+    if (m_toolBacker) {
+        m_toolBacker->hide();
+    }
     QGraphicsItem::hoverLeaveEvent(event);
 }
 

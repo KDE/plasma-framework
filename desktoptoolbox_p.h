@@ -31,6 +31,7 @@ namespace Plasma
 {
 
 class Widget;
+class EmptyGraphicsItem;
 
 class DesktopToolbox : public QObject, public QGraphicsItem
 {
@@ -57,8 +58,8 @@ protected slots:
 
 private:
     KIcon m_icon;
+    EmptyGraphicsItem *m_toolBacker;
     const int m_size;
-    QRect m_toolsRect;
     bool m_hidden;
     bool m_showing;
     Plasma::Phase::AnimId m_animId;
