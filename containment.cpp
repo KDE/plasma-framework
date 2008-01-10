@@ -807,7 +807,7 @@ bool Containment::sceneEventFilter(QGraphicsItem *watched, QEvent *event)
         //kDebug() << "got hoverLeaveEvent";
         if (d->handles.contains(applet)) {
             QGraphicsSceneHoverEvent *he = static_cast<QGraphicsSceneHoverEvent *>(event);
-            if (!d->handles[applet]->boundingRect().contains(he->scenePos())) {
+            if (!d->handles[applet]->boundingRect().contains(d->handles[applet]->mapFromScene(he->scenePos()))) {
                 d->handles[applet]->startFading(AppletHandle::FadeOut);
             }
         }
