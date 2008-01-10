@@ -209,18 +209,18 @@ protected:
 
 Q_SIGNALS:
     /**
-     * Indicates when the icon has been pressed.
-     */
+    * Indicates when the icon has been pressed.
+    */
     void pressed(bool down);
 
     /**
-     * Indicates when the icon has been clicked.
-     */
+    * Indicates when the icon has been clicked.
+    */
     void clicked();
 
     /**
-     * Indicates when the icon has been double clicked.
-     */
+    * Indicates when the icon has been double-clicked
+    */
     void doubleClicked();
 
 protected:
@@ -228,6 +228,7 @@ protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
+    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event);
 
     void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
     void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);

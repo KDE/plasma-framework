@@ -1016,18 +1016,16 @@ void Icon::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     if (!handled) {
         if (boundingRect().contains(event->pos())) {
             emit clicked();
-
-            if (qApp && d->lastClicked.isValid() && d->lastClicked.elapsed() < qApp->doubleClickInterval()) {
-                emit doubleClicked();
-                d->lastClicked = QTime();
-            } else {
-                d->lastClicked.restart();
-            }
         }
         emit pressed(false);
     }
 
     update();
+}
+
+void Icon::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
+{
+    emit doubleClicked();
 }
 
 void Icon::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
