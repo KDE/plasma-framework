@@ -22,6 +22,7 @@
 #include <QApplication>
 #include <QFile>
 
+#include <KWindowSystem>
 #include <KColorScheme>
 #include <KConfigGroup>
 #include <KDebug>
@@ -138,13 +139,29 @@ QString Theme::image( const QString& name ) const
     //TODO: performance ... should we try and cache the results of KStandardDirs::locate?
     //      should we just use whatever theme path was returned and not care about cascades?
     //      (probably "no" on the last question)
-    QString search = "desktoptheme/" + d->themeName + '/' + name + ".svg";
-    QString path =  KStandardDirs::locate( "data", search );
+    QString search;
+    QString path;
+    bool compositingActive = KWindowSystem::compositingActive();
+    if (!compositingActive) {
+        search = "desktoptheme/" + d->themeName + "/opaque/" + name + ".svg";
+        path =  KStandardDirs::locate( "data", search );
+    }
+    //not found or compositing enabled
+    if (path.isEmpty()) {
+        search = "desktoptheme/" + d->themeName + '/' + name + ".svg";
+        path =  KStandardDirs::locate( "data", search );
+    }
 
     if (path.isEmpty()) {
         if (d->themeName != "default") {
-            search = "desktoptheme/default/" + name + ".svg";
-            path = KStandardDirs::locate("data", search);
+            if (!compositingActive) {
+                search = "desktoptheme/default/opaque/" + name + ".svg";
+                path = KStandardDirs::locate("data", search);
+            }
+            if (path.isEmpty()) {
+                search = "desktoptheme/default/" + name + ".svg";
+                path = KStandardDirs::locate("data", search);
+            }
         }
 
         if (path.isEmpty()) {
