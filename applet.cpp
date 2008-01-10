@@ -83,6 +83,7 @@ public:
           cachedBackground(0),
           mainConfig(0),
           pendingConstraints(NoConstraint),
+          aspectRatioMode(Qt::KeepAspectRatio),
           kioskImmutable(false),
           immutable(false),
           hasConfigurationInterface(false),
@@ -401,6 +402,7 @@ public:
     QPixmap* cachedBackground;
     KConfigGroup *mainConfig;
     Plasma::Constraints pendingConstraints;
+    Qt::AspectRatioMode aspectRatioMode;
     bool kioskImmutable : 1;
     bool immutable : 1;
     bool hasConfigurationInterface : 1;
@@ -1033,6 +1035,16 @@ QSizeF Applet::maximumContentSize() const
     d->getBorderSize(left, top, right, bottom);
 
     return maximumSize() - QSizeF(left + right, top + bottom);
+}
+
+Qt::AspectRatioMode Applet::aspectRatioMode() const
+{
+    return d->aspectRatioMode;
+}
+
+void Applet::setAspectRatioMode(Qt::AspectRatioMode mode)
+{
+    d->aspectRatioMode = mode;
 }
 
 QString Applet::globalName() const

@@ -59,16 +59,17 @@ class PLASMA_EXPORT Applet : public Widget
 {
     Q_OBJECT
 //    Q_PROPERTY( QRectF maxSizeHint READ maxSizeHint )
-    Q_PROPERTY( bool hasConfigurationInterface READ hasConfigurationInterface WRITE setHasConfigurationInterface )
-    Q_PROPERTY( QString name READ name )
-    Q_PROPERTY( QString category READ category )
-    Q_PROPERTY( bool immutable READ isImmutable WRITE setImmutable )
-    Q_PROPERTY( bool drawStandardBackground READ drawStandardBackground WRITE setDrawStandardBackground )
-    Q_PROPERTY( bool failedToLaunch READ failedToLaunch WRITE setFailedToLaunch )
-    Q_PROPERTY( bool needsConfiguring READ needsConfiguring WRITE setNeedsConfiguring )
-    Q_PROPERTY( QRectF boundingRect READ boundingRect )
-    Q_PROPERTY( QRectF geometry READ geometry WRITE setGeometry )
-    Q_PROPERTY( bool shouldConserveResources READ shouldConserveResources )
+    Q_PROPERTY(bool hasConfigurationInterface READ hasConfigurationInterface WRITE setHasConfigurationInterface)
+    Q_PROPERTY(QString name READ name)
+    Q_PROPERTY(QString category READ category)
+    Q_PROPERTY(bool immutable READ isImmutable WRITE setImmutable)
+    Q_PROPERTY(bool drawStandardBackground READ drawStandardBackground WRITE setDrawStandardBackground)
+    Q_PROPERTY(bool failedToLaunch READ failedToLaunch WRITE setFailedToLaunch)
+    Q_PROPERTY(bool needsConfiguring READ needsConfiguring WRITE setNeedsConfiguring)
+    Q_PROPERTY(QRectF boundingRect READ boundingRect)
+    Q_PROPERTY(QRectF geometry READ geometry WRITE setGeometry)
+    Q_PROPERTY(bool shouldConserveResources READ shouldConserveResources)
+    Q_PROPERTY(Qt::AspectRatioMode aspectRatioMode READ aspectRatioMode WRITE setAspectRatioMode)
 
     public:
         typedef QList<Applet*> List;
@@ -297,6 +298,16 @@ class PLASMA_EXPORT Applet : public Widget
          * Get the minimum size for the content of this applet
          */
         QSizeF maximumContentSize() const;
+
+        /**
+         * @return the prefered aspect ratio mode for placement and resizing
+         */
+        Qt::AspectRatioMode aspectRatioMode() const;
+
+        /**
+         * @return the prefered aspect ratio mode for placement and resizing
+         */
+        void setAspectRatioMode(Qt::AspectRatioMode);
 
         /**
          * Returns a list of all known applets.
