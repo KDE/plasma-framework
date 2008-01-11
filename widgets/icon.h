@@ -228,6 +228,12 @@ Q_SIGNALS:
     */
     void doubleClicked();
 
+    /**
+    * Indicates when the icon has been activated following the single
+    * or doubleclick settings
+    */
+    void activated();
+
 protected:
     bool isDown();
     void mousePressEvent(QGraphicsSceneMouseEvent *event);

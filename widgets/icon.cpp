@@ -39,6 +39,7 @@
 #include "effects/blur.cpp"
 #endif
 
+#include <KGlobalSettings>
 #include <KIconEffect>
 #include <KIconLoader>
 #include <KIcon>
@@ -1025,6 +1026,9 @@ void Icon::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     if (!handled) {
         if (boundingRect().contains(event->pos())) {
             emit clicked();
+            if (KGlobalSettings::singleClick()) {
+               emit activated();
+            }
         }
         emit pressed(false);
     }
@@ -1035,6 +1039,9 @@ void Icon::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 void Icon::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
 {
     emit doubleClicked();
+    if (!KGlobalSettings::singleClick()) {
+        emit activated();
+    }
 }
 
 void Icon::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
