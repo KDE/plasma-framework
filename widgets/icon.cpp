@@ -354,6 +354,15 @@ bool Icon::drawBackground() const
     return d->drawBg;
 }
 
+QPainterPath Icon::shape() const
+{
+    if (d->currentSize.width() < 1) {
+        return QGraphicsItem::shape();
+    }
+
+    return roundedRectangle(QRectF(QPointF(0.0, 0.0), d->currentSize).adjusted(-2, -2, 2, 2), 10.0);
+}
+
 QSizeF Icon::Private::displaySizeHint(const QStyleOptionGraphicsItem *option, const qreal width) const
 {
     if (text.isEmpty() && infoText.isEmpty()) {

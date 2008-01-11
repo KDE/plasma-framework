@@ -191,6 +191,11 @@ public:
      */
     bool drawBackground() const;
 
+    /**
+     * reimplemented from QGraphicsItem
+     */
+    QPainterPath shape() const;
+
 public Q_SLOTS:
     /**
     * Sets the appearance of the icon to pressed or restores the appearance
