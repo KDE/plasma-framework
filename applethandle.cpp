@@ -114,6 +114,8 @@ AppletHandle::~AppletHandle()
         m_applet->setTransform(matrix);
 
         m_applet->setParentItem(m_containment);
+
+        m_applet->update(); // re-render the background, now we've transformed the applet
     }
 }
 
