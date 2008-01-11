@@ -507,11 +507,14 @@ KConfigGroup Applet::config() const
 KConfigGroup Applet::globalConfig() const
 {
     KConfigGroup globalAppletConfig;
-    if (containment() && containment()->corona()) {
-        KSharedConfig::Ptr coronaConfig = containment()->corona()->config();
-        globalAppletConfig = KConfigGroup(coronaConfig, "AppletGlobals");
+    const Containment *c = isContainment() ? dynamic_cast<const Containment*>(this) : containment();
+    QString group = isContainment() ? "ContainmentGlobals" : "AppletGlobals";
+
+    if (c && c->corona()) {
+        KSharedConfig::Ptr coronaConfig = c->corona()->config();
+        globalAppletConfig = KConfigGroup(coronaConfig, group);
     } else {
-        globalAppletConfig = KConfigGroup(KGlobal::config(), "AppletGlobals");
+        globalAppletConfig = KConfigGroup(KGlobal::config(), group);
     }
 
     return KConfigGroup(&globalAppletConfig, globalName());
@@ -935,14 +938,26 @@ FormFactor Applet::formFactor() const
 
 Containment* Applet::containment() const
 {
+/*
+ * while this is probably "more correct", much of the code in applet assumes containment
+ * returns zero in the case that this is a containment itself.
+ * if (isContainment()) {
+        return dynamic_cast<Containment*>(const_cast<Applet*>(this));
+    }
+*/
+
     QGraphicsItem *parent = parentItem();
     Containment *c = 0;
+
     while (parent) {
-        if ((c = dynamic_cast<Containment*>(parent))) {
+        Containment *possibleC =  dynamic_cast<Containment*>(parent);
+        if (possibleC && possibleC->isContainment()) {
+            c = possibleC;
             break;
         }
         parent = parent->parentItem();
     }
+
     return c;
 }
 
