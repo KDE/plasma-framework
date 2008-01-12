@@ -997,8 +997,6 @@ void Icon::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
             update();
         }
     }
-    
-    d->states |= Private::MovedState;
 }
 
 void Icon::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
@@ -1016,11 +1014,6 @@ void Icon::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
             handled = true;
             break;
         }
-    }
-
-    if (d->states & Private::MovedState) {
-        d->states &= ~Private::MovedState;
-        handled = true;
     }
 
     if (!handled) {
@@ -1074,8 +1067,10 @@ void Icon::setPressed(bool pressed)
 {
     if (pressed) {
         d->states |= Private::ManualPressedState;
+        d->states |= Private::PressedState;
     } else {
         d->states &= ~Private::ManualPressedState;
+        d->states &= ~Private::PressedState;
     }
     update();
 }
