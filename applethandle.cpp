@@ -146,7 +146,17 @@ void AppletHandle::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
     gr.setColorAt(0.1, KColorScheme::shade(m_gradientColor, KColorScheme::LightShade));
     gr.setColorAt(1, KColorScheme::shade(m_gradientColor, KColorScheme::DarkShade));
     painter->setBrush(gr);
-    painter->drawPath(Plasma::roundedRectangle(boundingRect(), 10));
+    QPainterPath path = Plasma::roundedRectangle(boundingRect(), 10);
+
+    if (m_applet) {
+        QPainterPath shape = m_applet->shape();
+
+        if (!shape.isEmpty()) {
+            path = path.subtracted(m_applet->mapToParent(m_applet->shape()));
+        }
+    }
+
+    painter->drawPath(path);
     painter->restore();
 
     QPointF point = m_rect.topLeft();
@@ -260,7 +270,7 @@ void AppletHandle::mousePressEvent(QGraphicsSceneMouseEvent *event)
 
 void AppletHandle::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
-    kDebug() << "button pressed:" << m_pressedButton << ", fade pending?" << m_pendingFade;
+    //kDebug() << "button pressed:" << m_pressedButton << ", fade pending?" << m_pendingFade;
     if (m_applet) {
         m_applet->removeSceneEventFilter(this);
     }
@@ -528,6 +538,10 @@ void AppletHandle::fadeAnimation(qreal progress)
     m_opacity += (endOpacity-m_opacity)*progress;
 
     if (progress>=1.0 && m_anim==FadeOut) {
+        if (m_applet) {
+            m_applet->removeSceneEventFilter(this);
+        }
+
         emit disappearDone(this);
     }
 
