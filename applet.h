@@ -350,11 +350,6 @@ class PLASMA_EXPORT Applet : public Widget
         static QStringList knownCategories(const QString &parentApp = QString(), bool visibleOnly = true);
 
         /**
-         * @return true if this plasmoid provides a GUI configuration
-         **/
-        bool hasConfigurationInterface();
-
-        /**
          * Attempts to load an applet
          *
          * Returns a pointer to the applet if successful.
@@ -384,6 +379,20 @@ class PLASMA_EXPORT Applet : public Widget
          **/
         static Applet* loadApplet(const KPluginInfo& info, uint appletId = 0,
                                   const QVariantList& args = QVariantList());
+
+        /**
+         * Get the category of the given applet
+         *
+         * @param a KPluginInfo object for the applet
+         */
+        static QString category(const KPluginInfo& applet);
+
+        /**
+         * Get the category of the given applet
+         *
+         * @param the name of the applet
+         */
+        static QString category(const QString& appletName);
 
         /**
          * This method is called when the interface should be painted.
@@ -433,20 +442,6 @@ class PLASMA_EXPORT Applet : public Widget
          * Returns the color corresponding to the applet's category.
          */
         QColor color() const;
-
-        /**
-         * Get the category of the given applet
-         *
-         * @param a KPluginInfo object for the applet
-         */
-        static QString category(const KPluginInfo& applet);
-
-        /**
-         * Get the category of the given applet
-         *
-         * @param the name of the applet
-         */
-        static QString category(const QString& appletName);
 
         /**
          * @return true if this applet is immutable
@@ -512,17 +507,22 @@ class PLASMA_EXPORT Applet : public Widget
          *                         or false if it doesn't
          */
         void setNeedsConfiguring(bool needsConfiguring);
-        enum { Type = Plasma::AppletType };
 
         /**
-         * Reimplemented from QGraphicsItem
+         * @return true if this plasmoid provides a GUI configuration
          **/
-        int type() const;
+        bool hasConfigurationInterface();
 
         /**
-         * Reimplemented from QGraphicsItem
+         * Sets whether or not this applet provides a user interface for
+         * configuring the applet.
+         *
+         * It defaults to false, and if true is passed in you should
+         * also reimplement showConfigurationInterface()
+         *
+         * @arg hasInterface whether or not there is a user interface available
          **/
-        QRectF boundingRect () const;
+        void setHasConfigurationInterface(bool hasInterface);
 
         /**
          * Returns a list of context-related QAction instances.
@@ -539,21 +539,11 @@ class PLASMA_EXPORT Applet : public Widget
          * Sets shadow for the given applet.
          */
         void setShadowShown(bool);
+
         /**
          * Returns true if the given item has a shadow shown.
          */
         bool isShadowShown() const;
-
-        // reimplemented from LayoutItem
-        // value is the same as contentSizeHint() if drawStandardBackground() is false
-        // or contentSizeHint() plus the size of the border otherwise.
-        virtual QSizeF sizeHint() const;
-
-        /**
-         * Sets the geometry of this Plasma::Applet
-         * @param geometry the geometry to apply to this Plasma::Applet.
-         */
-        void setGeometry(const QRectF &geometry);
 
         /**
          * Sets whether or not this Applet is acting as a Containment
@@ -564,6 +554,34 @@ class PLASMA_EXPORT Applet : public Widget
          * @return true if this Applet is currently being used as a Containment, false otherwise
          */
         bool isContainment() const;
+
+        /**
+         * Sets the geometry of this Plasma::Applet. Should not be used directly by
+         * applet subclasses.
+         * @param geometry the geometry to apply to this Plasma::Applet.
+         */
+        void setGeometry(const QRectF &geometry);
+
+        /**
+         * Reimplemented from LayoutItem
+         */
+        virtual QSizeF sizeHint() const;
+
+        /**
+         * Reimplemented from QGraphicsItem
+         **/
+        int type() const;
+        enum { Type = Plasma::AppletType };
+
+        /**
+         * Reimplemented from QGraphicsItem
+         **/
+        QRectF boundingRect() const;
+
+        /**
+         * Reimplemented from QGraphicsItem
+         */
+        QPainterPath shape() const;
 
         /**
          * @internal
@@ -677,17 +695,6 @@ class PLASMA_EXPORT Applet : public Widget
         * @param focus whether to or not to request focus
         */
         void needsFocus(bool focus);
-
-        /**
-         * Sets whether or not this applet provides a user interface for
-         * configuring the applet.
-         *
-         * It defaults to false, and if true is passed in you should
-         * also reimplement showConfigurationInterface()
-         *
-         * @arg hasInterface whether or not there is a user interface available
-         **/
-        void setHasConfigurationInterface(bool hasInterface);
 
         /**
          * @internal event filter; used for focus watching

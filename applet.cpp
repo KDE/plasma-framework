@@ -829,6 +829,15 @@ QRectF Applet::boundingRect() const
     return rect.adjusted(-left,-top,right,bottom);
 }
 
+QPainterPath Applet::shape() const
+{
+    if (isContainment()) {
+        return Plasma::Widget::shape();
+    }
+
+    return Plasma::roundedRectangle(boundingRect().adjusted(-2, -2, 2, 2), 10);
+}
+
 QSizeF Applet::sizeHint() const
 {
     int left = 0;
