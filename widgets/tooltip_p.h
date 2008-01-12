@@ -50,7 +50,8 @@ public:
     Plasma::Widget *currentWidget() const;
 
 protected:
-    virtual void showEvent(QShowEvent *);
+    void showEvent(QShowEvent *);
+    void mouseReleaseEvent(QMouseEvent *);
 
     void resizeEvent(QResizeEvent *);
     void paintEvent(QPaintEvent *);

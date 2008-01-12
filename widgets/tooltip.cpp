@@ -22,6 +22,7 @@
 #include <QBitmap>
 #include <QHBoxLayout>
 #include <QLabel>
+#include <QMouseEvent>
 #include <QPixmap>
 #include <QTimer>
 #include <QGraphicsView>
@@ -136,6 +137,13 @@ void ToolTip::showEvent(QShowEvent *e)
 {
     QWidget::showEvent(e);
     d->preview->setInfo();
+}
+
+void ToolTip::mouseReleaseEvent(QMouseEvent* event)
+{
+    if (rect().contains(event->pos())) {
+        hide();
+    }
 }
 
 ToolTip::ToolTip()
