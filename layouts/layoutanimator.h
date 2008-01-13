@@ -184,7 +184,7 @@ public:
 
 Q_SIGNALS:
     /** This signal is emitted when the state of an item in the animator changes. */
-    void stateChanged( LayoutItem *item , State oldState , State newState );
+    void stateChanged(Plasma::LayoutItem *item, Plasma::LayoutAnimator::State oldState, Plasma::LayoutAnimator::State newState);
 
 protected:
     virtual void updateItem( qreal value , LayoutItem* item );
@@ -192,7 +192,7 @@ protected:
 private Q_SLOTS:
     void valueChanged(qreal value);
     void animationCompleted();
-    void itemAutoDeleter( LayoutItem *item , State oldState , State newState );
+    void itemAutoDeleter(Plasma::LayoutItem *item, Plasma::LayoutAnimator::State oldState, Plasma::LayoutAnimator::State newState);
 
 private:
     void moveEffectUpdateItem(qreal value,LayoutItem* item,Effect effect);

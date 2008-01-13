@@ -113,11 +113,11 @@ void LayoutAnimator::setAutoDeleteOnRemoval(bool autoDelete)
     d->autoDeleteOnRemoval = autoDelete;
 
     if ( autoDelete ) { 
-        connect( this , SIGNAL(stateChanged(LayoutItem*,State,State)) , this , 
-                 SLOT(itemAutoDeleter(LayoutItem*,State,State)) );
+        connect( this , SIGNAL(stateChanged(Plasma::LayoutItem*,Plasma::LayoutAnimator::State,Plasma::LayoutAnimator::State)) , this , 
+                 SLOT(itemAutoDeleter(Plasma::LayoutItem*,Plasma::LayoutAnimator::State,Plasma::LayoutAnimator::State)) );
     } else { 
-        disconnect( this , SIGNAL(stateChanged(LayoutItem*,State,State)) , this , 
-                SLOT(itemAutoDeleter(LayoutItem*,State,State)) );
+        disconnect( this , SIGNAL(stateChanged(Plasma::LayoutItem*,Plasma::LayoutAnimator::State,Plasma::LayoutAnimator::State)) , this , 
+                SLOT(itemAutoDeleter(Plasma::LayoutItem*,Plasma::LayoutAnimator::State,Plasma::LayoutAnimator::State)) );
     } 
 }
 
@@ -126,7 +126,7 @@ bool LayoutAnimator::autoDeleteOnRemoval() const
     return d->autoDeleteOnRemoval;
 }
 
-void LayoutAnimator::itemAutoDeleter(LayoutItem *item , State oldState , State newState)
+void LayoutAnimator::itemAutoDeleter(Plasma::LayoutItem *item, Plasma::LayoutAnimator::State oldState, Plasma::LayoutAnimator::State newState)
 {
     if ( oldState == RemovedState && newState == DeadState ) {
         if ( item->graphicsItem() ) {
@@ -275,11 +275,10 @@ void LayoutAnimator::animationFinished(LayoutItem* item)
         case RemovedState:
                 d->states.remove(item);
                 d->geometries.remove(item);
-
-                emit stateChanged( item , RemovedState , DeadState );
+                emit stateChanged(item, RemovedState, DeadState);
             break;
         case StandardState:
-                    d->geometries[item].startGeometry = d->geometries[item].endGeometry;
+                d->geometries[item].startGeometry = d->geometries[item].endGeometry;
             break;
         default:
             Q_ASSERT(false);
