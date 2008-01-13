@@ -234,7 +234,6 @@ void ConfigXml::Private::parse(ConfigXml *configXml, QIODevice *xml)
     reader.parse(&source, false);
 }
 
-QList<bool*> bools;
 ConfigXmlHandler::ConfigXmlHandler(ConfigXml* config, ConfigXml::Private* d)
     : QXmlDefaultHandler(),
       m_config(config),
