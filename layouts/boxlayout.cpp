@@ -290,6 +290,18 @@ int BoxLayout::count() const
     return d->children.count();
 }
 
+void BoxLayout::setAnimator(LayoutAnimator *animator)
+{
+    Layout::setAnimator(animator);
+
+    if (animator) {
+        foreach (LayoutItem *item, d->children) {
+            animator->setGeometry(item, item->geometry());
+            animator->setCurrentState(item, LayoutAnimator::StandardState);
+        }
+    }
+}
+
 void BoxLayout::insertItem(int index, LayoutItem *item)
 {
     if (!item || d->children.contains(item)) {

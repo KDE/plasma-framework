@@ -75,6 +75,7 @@ class PLASMA_EXPORT BoxLayout : public Layout
         virtual LayoutItem *takeAt(int i);
         virtual Qt::Orientations expandingDirections() const;
         virtual int count() const;
+        virtual void setAnimator(LayoutAnimator* animator);
 
         virtual QSizeF minimumSize() const;
         virtual QSizeF maximumSize() const;
