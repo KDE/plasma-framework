@@ -963,6 +963,7 @@ void Icon::mousePressEvent(QGraphicsSceneMouseEvent *event)
     }
 
     d->states |= Private::PressedState;
+    d->clickStartPos = scenePos();
 
     bool handled = false;
     foreach (IconAction *action, d->cornerActions) {
@@ -1015,6 +1016,8 @@ void Icon::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
             break;
         }
     }
+
+    handled = d->clickStartPos != scenePos();
 
     if (!handled) {
         if (boundingRect().contains(event->pos())) {

@@ -174,6 +174,7 @@ public:
     bool invertLayout;
     bool drawBg;
     QSizeF currentSize;
+    QPointF clickStartPos;
 
     QList<IconAction*> cornerActions;
 
