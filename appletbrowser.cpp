@@ -318,6 +318,13 @@ void AppletBrowser::init()
     setButtonText(KDialog::User1, i18n("Get New Widgets")); //TODO: not overly happy with this text
     enableButton(KDialog::User1, false); //TODO: enable when GHNS integration is implemented
 
+    setButtonToolTip(KDialog::Close, i18n("Close the dialog"));
+    setButtonWhatsThis(KDialog::Close, i18n("<qt>When clicking <b>Close</b>, this dialog will be closed with no further action taken.</qt>"));
+    setButtonToolTip(KDialog::Apply, i18n("Add selected widgets"));
+    setButtonWhatsThis(KDialog::Apply, i18n("<qt>When clicking <b>Add Widget</b>, the selected widgets will be added to your desktop.</qt>"));
+    setButtonToolTip(KDialog::User1, i18n("Download new widgets"));
+    setButtonWhatsThis(KDialog::User1, i18n("<qt>When clicking <b>Get New Widgets</b>, a dialog will open to allow you to download new widgets. You need to be connected to the Internet.</qt>"));
+
     connect(this, SIGNAL(applyClicked()), m_widget, SLOT(addApplet()));
     connect(this, SIGNAL(user1Clicked()), m_widget, SLOT(downloadApplets()));
 
