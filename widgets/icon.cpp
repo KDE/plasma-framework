@@ -1017,7 +1017,9 @@ void Icon::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
         }
     }
 
-    handled = d->clickStartPos != scenePos();
+    if (!handled) {
+        handled = d->clickStartPos != scenePos();
+    }
 
     if (!handled) {
         if (boundingRect().contains(event->pos())) {
