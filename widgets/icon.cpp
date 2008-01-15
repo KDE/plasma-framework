@@ -1009,16 +1009,15 @@ void Icon::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 
     d->states &= ~Private::PressedState;
 
-    bool handled = false;
-    foreach (IconAction *action, d->cornerActions) {
-        if (action->event(event->type(), event->pos())) {
-            handled = true;
-            break;
-        }
-    }
-
+    //don't pass click when the mouse was moved
+    bool handled = d->clickStartPos != scenePos();
     if (!handled) {
-        handled = d->clickStartPos != scenePos();
+        foreach (IconAction *action, d->cornerActions) {
+            if (action->event(event->type(), event->pos())) {
+                handled = true;
+                break;
+            }
+        }
     }
 
     if (!handled) {
