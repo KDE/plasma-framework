@@ -97,7 +97,7 @@ public:
         NoState = 0,
         HoverState = 1,
         PressedState = 2,
-        ManualPressedState = 4,
+        ManualPressedState = 4
     };
     Q_DECLARE_FLAGS(IconStates, IconState)
 
