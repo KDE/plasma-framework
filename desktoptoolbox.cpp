@@ -218,7 +218,7 @@ void DesktopToolbox::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
         }
 
         const int height = static_cast<int>(tool->boundingRect().height());
-        phase->moveItem(tool, Plasma::Phase::SlideOut, QPoint(x, y-height)); // FIXME: make me faster (~150-200 ms)
+        phase->moveItem(tool, Plasma::Phase::SlideOut, QPoint(x, y-height));
     }
 
     if (m_animId) {
