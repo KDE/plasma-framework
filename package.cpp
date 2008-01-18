@@ -99,7 +99,8 @@ bool Package::isValid() const
 
     foreach (const char *file, d->structure.requiredFiles()) {
         if (!QFile::exists(d->basePath + "contents/" + d->structure.path(file))) {
-            kWarning(505) << "Could not find required file" << file;
+            kWarning(505) << "Could not find required file" << file << ", look in"
+                          << d->basePath + "contents/" + d->structure.path(file) << endl;
             d->valid = false;
             return false;
         }
