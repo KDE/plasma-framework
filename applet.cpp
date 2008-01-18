@@ -660,7 +660,7 @@ void Applet::setImmutable(bool immutable)
     updateConstraints(ImmutableConstraint);
 }
 
-bool Applet::drawStandardBackground()
+bool Applet::drawStandardBackground() const
 {
     return d->background != 0;
 }
@@ -804,6 +804,13 @@ void Applet::flushUpdatedConstraints()
 
     if (layout()) {
         layout()->updateGeometry();
+    }
+}
+
+void Applet::launchActivated()
+{
+    if (containment()) {
+        containment()->emitLaunchActivated();
     }
 }
 

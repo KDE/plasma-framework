@@ -457,7 +457,7 @@ class PLASMA_EXPORT Applet : public Widget
          * @return returns whether or not the applet is using the standard
          *         background
          **/
-        bool drawStandardBackground();
+        bool drawStandardBackground() const;
 
         /**
          * Sets whether the applet should automatically draw the standard
@@ -588,6 +588,11 @@ class PLASMA_EXPORT Applet : public Widget
          */
         void resetConfigurationObject();
 
+        /**
+         * @return the Containment, if any, this applet belongs to
+         **/
+        Containment* containment() const;
+
     Q_SIGNALS:
         /**
          * Emitted when the applet needs to take (or lose) keyboard focus.
@@ -649,9 +654,10 @@ class PLASMA_EXPORT Applet : public Widget
         void flushUpdatedConstraints();
 
         /**
-         * @return the Containment, if any, this applet belongs to
-         **/
-        Containment* containment() const;
+         * This method should be invoked whenever an application launch or other window
+         * creation of focussing event was triggered
+         */
+        void launchActivated();
 
     protected:
         /**
