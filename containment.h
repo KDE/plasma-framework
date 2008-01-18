@@ -46,6 +46,7 @@ class Corona;
  * Containment objects provide the means to group applets into functional sets.
  * They also provide the following:
  *
+ * creation of focussing event 
  * - drawing of the background image (which can be interactive)
  * - form factors (e.g. panel, desktop, full screen, etc)
  * - applet layout management
@@ -259,7 +260,8 @@ class PLASMA_EXPORT Containment : public Applet
         void appletRemoved(Plasma::Applet* applet);
 
         /**
-         * This signal indicates, that a application launch was triggered
+         * This signal indicates, that an application launch or other window
+         * creation of focussing event was triggered
          */
         void launchActivated();
 
