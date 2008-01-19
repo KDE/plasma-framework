@@ -76,7 +76,7 @@ class PLASMA_EXPORT Containment : public Applet
 
         /**
          * @arg parent the QGraphicsItem this applet is parented to
-         * @arg servideId the name of the .desktop file containing the
+         * @arg serviceId the name of the .desktop file containing the
          *      information about the widget
          * @arg appletId a unique id used to differentiate between multiple
          *      instances of the same Applet type
