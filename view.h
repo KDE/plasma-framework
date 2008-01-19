@@ -31,7 +31,7 @@ class Containment;
 class Corona;
 
 /**
- * @short A QGraphicsScene for Plasma::Applets
+ * @short A QGraphicsView for Plasma::Applets
  */
 class PLASMA_EXPORT View : public QGraphicsView
 {
