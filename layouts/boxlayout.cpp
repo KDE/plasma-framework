@@ -69,6 +69,23 @@ public:
                 return 0;
         }
     }
+    
+    // returns the component of 'size' in the other direction
+    qreal size_o(const QSizeF& size) const
+    {
+        switch (direction) {
+            case LeftToRight:
+            case RightToLeft:
+                return size.height();
+            case TopToBottom:
+            case BottomToTop:
+                return size.width();
+            default:
+                Q_ASSERT(false);
+                return 0;
+        }
+    }
+
 
     // returns the direction in which this layout expands
     // or shrinks
@@ -393,13 +410,30 @@ void BoxLayout::relayout()
     //         << margin(TopMargin) <<  -margin(RightMargin) << -margin(BottomMargin);
     //qDebug() << "Box layout beginning with geo" << geometry;
     //qDebug() << "This box max size" << maximumSize();
-    
     d->rowCount = 1;
     if(d->multiRow) {
+        qreal minRowSize=1;
+        qreal minWidth=0;
+        for(int i = 0; i < d->children.count(); i++) {
+            minRowSize = qMax(minRowSize, d->size_o(d->children[i]->minimumSize()));
+            minWidth += d->size(d->children[i]->minimumSize());
+        }
+ 
         const qreal ratio = 2.25; //maybe this should not be hardcoded
+        //we want the height of items be larger than the minimum size
+        int maxRow = (d->size_o(margined.size()) + spacing()) / 
+                (minRowSize + spacing());
+        //we want enough rows to be able to fit each items width.
+        int minRow = (minWidth + d->children.count() * spacing()) / 
+                (d->size(margined.size()) + spacing() + 0.1);
         //FIXME:  this formula doesn't take the cellspacing in account
         //        it should also try to "fill" before adding a row
-        d->rowCount = 1 + sqrt(ratio * count() * margined.height() / (margined.width()+1));
+        d->rowCount = 1 + sqrt(ratio * count() * d->size_o(margined.size()) /
+                (d->size(margined.size())+1));
+        
+        d->rowCount = qMax(minRow,d->rowCount);
+        d->rowCount = qMin(maxRow,d->rowCount);
+        d->rowCount = qMax(1,d->rowCount);
     }
 
     int colCount = d->colCount();
