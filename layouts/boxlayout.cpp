@@ -1,6 +1,7 @@
 /*
  *   Copyright 2007 by Matias Valdenegro T. <mvaldenegro@informatica.utem.cl>
  *   Copyright 2007 by Robert Knight <robertknight@gmail.com>
+ *   Copyright 2008 by Olivier Goffart <ogoffart@kde.org>
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU Library General Public License as
@@ -21,10 +22,13 @@
 
 #include "boxlayout.h"
 
+#include <math.h>
+
 #include <QtCore/QList>
 #include <QtCore/QTimeLine>
 
 #include <KDebug>
+
 
 #include "layoutanimator.h"
 
@@ -37,10 +41,15 @@ public:
     BoxLayout *const q;
     Direction direction;
     QList<LayoutItem*> children;
+    bool multiRow;
+    int rowCount;
+    int colCount() const { 
+        return ((children.count()-1)/rowCount)+1;
+    }
 
     Private(BoxLayout *parent)
         : q(parent)
-        , direction(LeftToRight)
+        , direction(LeftToRight), multiRow(false) , rowCount(1)
     {
     }
 
@@ -106,7 +115,7 @@ public:
     //
     // returns the position for the next item in the layout
     //
-    qreal layoutItem(const QRectF& geometry , LayoutItem *item , const qreal pos , qreal size)
+    qreal layoutItem(const QRectF& geometry , LayoutItem *item , const qreal pos ,  qreal size, int row)
     {
         //qDebug() << "layoutItem: " << direction << "item size" << size;
 
@@ -121,13 +130,15 @@ public:
         switch ( direction ) {
             case LeftToRight:
             case RightToLeft:
-               height = qBound(minSize.height(),geometry.height(),maxSize.height());
-               top = geometry.top();
+               height = (geometry.height()-q->spacing()*(rowCount-1))/rowCount;
+               top = geometry.top()+row*(height+q->spacing());
+               height = qBound(minSize.height(), height, maxSize.height());
                break;
             case TopToBottom:
             case BottomToTop:
-               height = qBound(minSize.width(),geometry.width(),maxSize.width());
-               top = geometry.left();
+               height = (geometry.width()-q->spacing()*(rowCount-1))/rowCount;
+               top = geometry.left()+row*(height+q->spacing());
+               height = qBound(minSize.width(), height, maxSize.width());
                break;
         }
 
@@ -217,25 +228,26 @@ public:
     {
         QSizeF result;
 
-        const qreal totalSpacing = q->spacing() * (children.count()-1);
+        const qreal totalSpacingC = q->spacing() * colCount()-1;
+        const qreal totalSpacingR = q->spacing() * rowCount-1;
 
         switch ( direction ) {
             case LeftToRight:
             case RightToLeft:
-                result = QSizeF(calculateSize(calculateSizeType,Qt::Horizontal,sum),
-                                calculateSize(calculateSizeType,Qt::Vertical,qMax<qreal>));
+                result = QSizeF(calculateSize(calculateSizeType,Qt::Horizontal,sum)/rowCount,
+                                calculateSize(calculateSizeType,Qt::Vertical,qMax<qreal>)*rowCount);
 
-                result.rwidth() += q->margin(LeftMargin) + q->margin(RightMargin) + totalSpacing;
-                result.rheight() += q->margin(TopMargin) + q->margin(BottomMargin);
+                result.rwidth() += q->margin(LeftMargin) + q->margin(RightMargin) + totalSpacingC;
+                result.rheight() += q->margin(TopMargin) + q->margin(BottomMargin) + totalSpacingR;
 
                 break;
             case TopToBottom:
             case BottomToTop:
-                result = QSizeF(calculateSize(calculateSizeType,Qt::Horizontal,qMax<qreal>),
-                                calculateSize(calculateSizeType,Qt::Vertical,sum));
+                result = QSizeF(calculateSize(calculateSizeType,Qt::Horizontal,qMax<qreal>)/rowCount,
+                                calculateSize(calculateSizeType,Qt::Vertical,sum)*rowCount);
 
-                result.rheight() += q->margin(TopMargin) + q->margin(BottomMargin) + totalSpacing;
-                result.rwidth() += q->margin(LeftMargin) + q->margin(RightMargin);
+                result.rheight() += q->margin(TopMargin) + q->margin(BottomMargin) + totalSpacingC;
+                result.rwidth() += q->margin(LeftMargin) + q->margin(RightMargin) + totalSpacingR;
 
                 break;
         }
@@ -381,26 +393,48 @@ void BoxLayout::relayout()
     //         << margin(TopMargin) <<  -margin(RightMargin) << -margin(BottomMargin);
     //qDebug() << "Box layout beginning with geo" << geometry;
     //qDebug() << "This box max size" << maximumSize();
+    
+    d->rowCount = 1;
+    if(d->multiRow) {
+        const qreal ratio = 2.25; //maybe this should not be hardcoded
+        //FIXME:  this formula doesn't take the cellspacing in account
+        //        it should also try to "fill" before adding a row
+        d->rowCount = 1 + sqrt(ratio * count() * margined.height() / (margined.width()+1));
+    }
 
-    QVector<qreal> sizes(count());
-    QVector<qreal> expansionSpace(count());
+    int colCount = d->colCount();
+    
+    QVector<qreal> sizes(colCount,0);
+    QVector<qreal> expansionSpace(colCount,0);
 
-    qreal available = d->size(margined.size()) - spacing() * (d->children.count()-1);
-    qreal perItemSize = available / count();
-
+    qreal available = d->size(margined.size()) - spacing() * colCount;
+    qreal perItemSize = available / colCount;
+    
     // initial distribution of space to items
-    for ( int i = 0 ; i < sizes.count() ; i++ ) {
-        const LayoutItem *item = d->children[i];
+    for ( int i = 0 ; i < colCount ; i++ ) {
+        qreal minItemSize=0;
+        qreal maxItemSize=65536;
+        bool isExpanding=true;
+        qreal hint = 0;
+        
+        for(int f = i*d->rowCount; f < (i+1)*d->rowCount; f++) {
+            if(f>=count()) {
+                break;
+            }
+            const LayoutItem *item = d->children[f];
+            const bool itemExp = (item->expandingDirections() & d->expandingDirection());
+            isExpanding = isExpanding && itemExp;
+            minItemSize = qMax(minItemSize,d->size(item->minimumSize()));
+            maxItemSize = qMin(maxItemSize,d->size(item->maximumSize()));
+            if(!itemExp)
+                hint = qMax(hint,d->size(item->sizeHint()));
+        }
 
-        const bool isExpanding = item->expandingDirections() & d->expandingDirection();
-
-        if ( isExpanding )
+        if ( isExpanding ) {
             sizes[i] = perItemSize;
-        else
-            sizes[i] = d->size(item->sizeHint());
-
-        const qreal minItemSize = d->size(item->minimumSize());
-        const qreal maxItemSize = d->size(item->maximumSize());
+        } else {
+            sizes[i] = hint;
+        }
 
        // qDebug() << "Layout max item " << i << "size: " << maxItemSize;
 
@@ -410,10 +444,11 @@ void BoxLayout::relayout()
        // qDebug() << "Available: " << available << "per item:" << perItemSize <<
        //     "Initial size: " << sizes[i];
 
-        if ( isExpanding )
+        if ( isExpanding ) {
             expansionSpace[i] = maxItemSize-sizes[i];
-        else
+        } else {
             expansionSpace[i] = 0;
+        }
 
         available -= sizes[i];
         // adjust the per-item size if the space was over or under used
@@ -431,7 +466,7 @@ void BoxLayout::relayout()
     while ( available > threshold && expandable > 0 ) {
 
         qreal extraSpace = available / expandable;
-        for ( int i = 0 ; i < sizes.count() ; i++ ) {
+        for ( int i = 0 ; i < colCount ; i++ ) {
             if ( expansionSpace[i] > threshold ) {
                 qreal oldSize = sizes[i];
 
@@ -447,13 +482,21 @@ void BoxLayout::relayout()
 
     // set items' geometry according to new sizes
     qreal pos = d->startPos(geometry());
-    for ( int i = 0 ; i < sizes.count() ; i++ ) {
+    for ( int col = 0 ; col < colCount ; col++ ) {
+        int newPos = pos;
+        for ( int row = 0 ; row < d->rowCount ; row++ ) {
+            int i = col*d->rowCount+row;
+            if(i>=count())
+                break;
+            
+            //QObject *obj = dynamic_cast<QObject*>(d->children[i]);
+            //if ( obj )
+            //qDebug() << "Item " << i << obj->metaObject()->className() << "size:" << sizes[i];
 
-        //QObject *obj = dynamic_cast<QObject*>(d->children[i]);
-        //if ( obj )
-        //qDebug() << "Item " << i << obj->metaObject()->className() << "size:" << sizes[i];
-
-       pos = d->layoutItem(margined, d->children[i], pos , sizes[i]);
+           int p = d->layoutItem(margined, d->children[i], pos , sizes[col], row);
+           newPos = (row != 0 && p < pos) ? qMin(p,newPos) : qMax(p,newPos);
+        }
+        pos=newPos;
     }
 
     startAnimation();
@@ -473,6 +516,11 @@ QSizeF BoxLayout::sizeHint() const
     return d->calculateSize(Private::HintSize);
 }
 
+void BoxLayout::setMultiRow(bool b)
+{
+    d->multiRow = b;
+}
+
 HBoxLayout::HBoxLayout(LayoutItem *parent)
     : BoxLayout(LeftToRight,parent)
 {
@@ -483,6 +531,6 @@ VBoxLayout::VBoxLayout(LayoutItem *parent)
 {
 }
 
-
 } // Plasma namespace
+
 
