@@ -133,18 +133,6 @@ public:
     inline Qt::LayoutDirection iconDirection(const QStyleOptionGraphicsItem *option) const;
 
 
-    // Margin functions
-    inline void setActiveMargins();
-    void setVerticalMargin(MarginType type, qreal left, qreal right, qreal top, qreal bottom);
-    void setHorizontalMargin(MarginType type, qreal left, qreal right, qreal top, qreal bottom);
-    inline void setVerticalMargin(MarginType type, qreal hor, qreal ver);
-    inline void setHorizontalMargin(MarginType type, qreal hor, qreal ver);
-    inline QRectF addMargin(const QRectF &rect, MarginType type) const;
-    inline QRectF subtractMargin(const QRectF &rect, MarginType type) const;
-    inline QSizeF addMargin(const QSizeF &size, MarginType type) const;
-    inline QSizeF subtractMargin(const QSizeF &size, MarginType type) const;
-
-
     enum {
         Minibutton = 64,
         MinibuttonHover = 128,
@@ -158,6 +146,20 @@ public:
         BottomRight,
         LastIconPosition
     };
+
+
+    // Margin functions
+    inline void setActiveMargins();
+    void setVerticalMargin(MarginType type, qreal left, qreal right, qreal top, qreal bottom);
+    void setHorizontalMargin(MarginType type, qreal left, qreal right, qreal top, qreal bottom);
+    inline void setVerticalMargin(MarginType type, qreal hor, qreal ver);
+    inline void setHorizontalMargin(MarginType type, qreal hor, qreal ver);
+    inline QRectF addMargin(const QRectF &rect, MarginType type) const;
+    inline QRectF subtractMargin(const QRectF &rect, MarginType type) const;
+    inline QSizeF addMargin(const QSizeF &size, MarginType type) const;
+    inline QSizeF subtractMargin(const QSizeF &size, MarginType type) const;
+    inline QRectF actionRect(ActionPosition position) const;
+
 
     QString text;
     QString infoText;
@@ -183,6 +185,8 @@ public:
     Margin *activeMargins;
 
     static const int maxDisplayLines = 5;
+    static const int iconActionSize = 26;
+    static const int iconActionMargin = 4;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Icon::Private::IconStates)
@@ -270,6 +274,33 @@ QSizeF Icon::Private::subtractMargin(const QSizeF &size, MarginType type) const
 {
     const Margin &m = activeMargins[type];
     return QSizeF(size.width() - m.left - m.right, size.height() - m.top - m.bottom);
+}
+
+QRectF Icon::Private::actionRect(ActionPosition position) const
+{
+    switch (position) {
+    case TopLeft:
+        return QRectF(iconActionMargin,
+                      iconActionMargin,
+                      iconActionSize,
+                      iconActionSize);
+    case TopRight:
+        return QRectF(currentSize.width() - iconActionSize - iconActionMargin,
+                      iconActionMargin,
+                      iconActionSize,
+                      iconActionSize);
+    case BottomLeft:
+        return QRectF(iconActionMargin,
+                      currentSize.height() - iconActionSize - iconActionMargin,
+                      iconActionSize,
+                      iconActionSize);
+    //BottomRight
+    default:
+        return QRectF(currentSize.width() - iconActionSize - iconActionMargin,
+                      currentSize.height() - iconActionSize - iconActionMargin,
+                      iconActionSize,
+                      iconActionSize);
+    }
 }
 
 } // Namespace

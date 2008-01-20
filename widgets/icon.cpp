@@ -174,6 +174,11 @@ void IconAction::rebuildPixmap()
 
 bool IconAction::event(QEvent::Type type, const QPointF &pos)
 {
+    if (m_icon->size().width() < m_rect.width()*2.0 ||
+        m_icon->size().height() < m_rect.height()*2.0) {
+        return false;
+    }
+
     switch (type) {
     case QEvent::GraphicsSceneMousePress: {
         setSelected(m_rect.contains(pos));
@@ -230,6 +235,10 @@ QAction* IconAction::action() const
 
 void IconAction::paint(QPainter *painter) const
 {
+    if (m_icon->size().width() < m_rect.width()*2.0 ||
+        m_icon->size().height() < m_rect.height()*2.0) {
+        return;
+    }
     painter->drawPixmap(m_rect.toRect(), Phase::self()->animationResult(m_animationId));
 }
 
@@ -295,22 +304,7 @@ void Icon::addAction(QAction *action)
     d->cornerActions.append(iconAction);
     connect(action, SIGNAL(destroyed(QObject*)), this, SLOT(actionDestroyed(QObject*)));
 
-    //TODO: fewer magic numbers, please =) 38, 32, 6, etc... needs to go.
-    //      at the very least static const ints with nice names.
-    switch (count) {
-    case Private::TopLeft:
-        iconAction->setRect(QRectF(6, 6, 32, 32));
-        break;
-    case Private::TopRight:
-        iconAction->setRect(QRectF(size().width() - 38, 6, 32, 32));
-        break;
-    case Private::BottomLeft:
-        iconAction->setRect(QRectF(6, size().height() - 38, 32, 32));
-        break;
-    case Private::BottomRight:
-        iconAction->setRect(QRectF(size().width() - 38, size().height() - 38, 32, 32));
-        break;
-    }
+    iconAction->setRect(d->actionRect((Private::ActionPosition)count));
 }
 
 void Icon::actionDestroyed(QObject* action)
@@ -470,24 +464,7 @@ void Icon::layoutIcons(const QStyleOptionGraphicsItem *option)
 
     int count = 0;
     foreach (IconAction* iconAction, d->cornerActions) {
-        //TODO: fewer magic numbers, please =) 38, 32, 6, etc... needs to go.
-        //      at the very least static const ints with nice names.
-        switch (count) {
-        case Private::TopLeft:
-            // top left never changes, so don't bother setting it
-            //iconAction->setRect(QRectF(6, 6, 32, 32));
-            break;
-        case Private::TopRight:
-            iconAction->setRect(QRectF(d->currentSize.width() - 38, 6, 32, 32));
-            break;
-        case Private::BottomLeft:
-            iconAction->setRect(QRectF(6, d->currentSize.height() - 38, 32, 32));
-            break;
-        case Private::BottomRight:
-            iconAction->setRect(QRectF(d->currentSize.width() - 38, d->currentSize.height() - 38, 32, 32));
-            break;
-        }
-
+        iconAction->setRect(d->actionRect((Private::ActionPosition)count));
         ++count;
     }
 
