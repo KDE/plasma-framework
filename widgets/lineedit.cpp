@@ -26,7 +26,10 @@
 #include <QPainter>
 
 #include <KDebug>
+#include <KColorScheme>
+#include <KApplication>
 
+#include <plasma/theme.h>
 #include "plasma/layouts/layout.h"
 
 namespace Plasma
@@ -110,6 +113,15 @@ bool LineEdit::multiLine() const
 void LineEdit::setStyled(bool style)
 {
     d->styled = style;
+
+    if (style) {
+        QColor textColor = KColorScheme(QPalette::Active, KColorScheme::Window,
+                                        Plasma::Theme::self()->colors()).foreground().color();
+        
+        setDefaultTextColor(textColor);
+    } else {
+        setDefaultTextColor(kapp->palette().color(QPalette::Text));
+    }
 }
 
 bool LineEdit::styled() const
