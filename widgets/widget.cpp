@@ -38,6 +38,8 @@
 
 #include "layouts/freelayout.h"
 #include "plasma/plasma.h"
+#include "plasma/view.h"
+#include "plasma/containment.h"
 #include "tooltip_p.h"
 
 namespace Plasma
@@ -504,9 +506,7 @@ void Widget::setToolTip(const ToolTipData &tip)
 {
     d->toolTip = tip;
     if (ToolTip::self()->currentWidget() == this) {
-        QPoint viewPos = view()->mapFromScene(scenePos());
-        QPoint globalPos = view()->mapToGlobal(viewPos);
-        ToolTip::self()->show(globalPos, this);
+        ToolTip::self()->show(popupPosition(ToolTip::self()->sizeHint()), this);
     }
 }
 
@@ -540,6 +540,35 @@ void Widget::managingLayoutChanged()
         }
     } else {
         setFlag(ItemIsMovable, d->wasMovable);
+    }
+}
+
+QPoint Widget::popupPosition(const QSize s) const
+{
+    QPoint pos = view()->mapFromScene(scenePos());
+    pos = view()->mapToGlobal(pos);
+    Plasma::View *pv = dynamic_cast<Plasma::View *>(view());
+
+    Plasma::Location loc = Floating;
+    if (pv) {
+        loc = pv->containment()->location();
+    }
+
+    switch (loc) {
+    case BottomEdge:
+        return QPoint(pos.x(), pos.y() - s.height());
+    case TopEdge:
+        return QPoint(pos.x(), pos.y() + (int)size().height());
+    case LeftEdge:
+        return QPoint(pos.x() + (int)size().width(), pos.y());
+    case RightEdge:
+        return QPoint(pos.x() - s.width(), pos.y());
+    default:
+        if (pos.y() > 0) {
+             return QPoint(pos.x(), pos.y()-s.height());
+        } else {
+             return QPoint(pos.x(), pos.y()+(int)size().height());
+        }
     }
 }
 
@@ -578,9 +607,9 @@ bool Widget::sceneEvent(QEvent *event)
         // initialized, in which case view() will return 0.
         QGraphicsView *parentView = view();
         if (parentView) {
-            QPoint viewPos = parentView->mapFromScene(scenePos());
-            QPoint globalPos = parentView->mapToGlobal(viewPos);
-            ToolTip::self()->show(globalPos, this);
+            ToolTip *tip = ToolTip::self();
+            tip->adjustSize();
+            tip->show(popupPosition(tip->size()), this);
         }
 
         break;

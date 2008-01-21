@@ -82,7 +82,9 @@ void ToolTip::show(const QPoint &location, Plasma::Widget *widget)
 {
     d->currentWidget = widget;
     setData(widget->toolTip());
-    move(location.x(), location.y() - sizeHint().height());
+
+    move(location.x(), location.y());
+
     if (d->isShown) {
         // Don't delay if the tooltip is already shown(i.e. moving from one task to another)
         // Qt doesn't seem to like visible tooltips moving though, so hide it and then

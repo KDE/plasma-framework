@@ -288,6 +288,14 @@ TODO: implement once we decide how to handle the font system
     */
     void setToolTip( const ToolTipData &dt );
 
+    /**
+    * Recomended position for a popup window like a menu or a tooltip
+    * given its size
+    * @param s size of the popup
+    * @returns recomended position
+    */
+    QPoint popupPosition(const QSize s) const;
+
 protected:
     /**
      * Paints the widget
