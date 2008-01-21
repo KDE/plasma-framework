@@ -260,8 +260,10 @@ class PLASMA_EXPORT Containment : public Applet
         void appletRemoved(Plasma::Applet* applet);
 
         /**
-         * This signal indicates, that an application launch or other window
-         * creation of focussing event was triggered
+         * This signal indicates that an application launch, window
+         * creation or window focus event was triggered. This is used, for instance,
+         * to ensure that the Dashboard view in Plasma hides when such an event is
+         * triggered by an item it is displaying.
          */
         void launchActivated();
 
