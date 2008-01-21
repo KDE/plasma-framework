@@ -193,15 +193,6 @@ public:
     QFont font() const;
 
     /**
-     * Set the font for this widget
-     *
-     * @param font the new font
-     **
-TODO: implement once we decide how to handle the font system
-     void setFont(const QFont& font);
-    */
-
-    /**
      * Reimplemented from QGraphicsItem
      * @return the bounding rectangle for this Plasma::Widget
      */
