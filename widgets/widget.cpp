@@ -565,9 +565,9 @@ QPoint Widget::popupPosition(const QSize s) const
         return QPoint(pos.x() - s.width(), pos.y());
     default:
         if (pos.y() > 0) {
-             return QPoint(pos.x(), pos.y()-s.height());
+             return QPoint(pos.x(), pos.y() - s.height());
         } else {
-             return QPoint(pos.x(), pos.y()+(int)size().height());
+             return QPoint(pos.x(), pos.y() + (int)size().height());
         }
     }
 }
