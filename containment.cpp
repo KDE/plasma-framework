@@ -858,6 +858,16 @@ bool Containment::isToolboxToolEnabled(const QString &toolname) const
     return d->createToolbox()->isToolEnabled(toolname);
 }
 
+void Containment::showToolbox()
+{
+    d->createToolbox()->showToolbox();
+}
+
+void Containment::hideToolbox()
+{
+    d->createToolbox()->hideToolbox();
+}
+
 } // Plasma namespace
 
 #include "containment.moc"

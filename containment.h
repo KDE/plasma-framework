@@ -248,6 +248,16 @@ class PLASMA_EXPORT Containment : public Applet
          */
         void containmentConstraintsUpdated(Plasma::Constraints constraints);
 
+        /**
+         * Open the Plasma toolbox
+         */
+        void showToolbox();
+
+        /**
+         * Close the Plasma toolbox
+         */
+        void hideToolbox();
+
     Q_SIGNALS:
         /**
          * This signal is emitted when a new applet is created by the containment

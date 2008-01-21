@@ -158,6 +158,15 @@ void DesktopToolbox::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
         QGraphicsItem::hoverEnterEvent(event);
         return;
     }
+    showToolbox();
+    QGraphicsItem::hoverEnterEvent(event);
+}
+
+void DesktopToolbox::showToolbox()
+{
+    if (m_showing) {
+        return;
+    }
 
     int maxwidth = 0;
     foreach (QGraphicsItem* tool, QGraphicsItem::children()) {
@@ -198,7 +207,6 @@ void DesktopToolbox::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
     // TODO: 10 and 200 shouldn't be hardcoded here. There needs to be a way to
     // match whatever the time is that moveItem() takes. Same in hoverLeaveEvent().
     m_animId = phase->customAnimation(10, 240, Plasma::Phase::EaseInCurve, this, "animate");
-    QGraphicsItem::hoverEnterEvent(event);
 }
 
 void DesktopToolbox::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
@@ -206,6 +214,15 @@ void DesktopToolbox::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
     //kDebug() << event->pos() << event->scenePos() << m_toolBacker->rect().contains(event->scenePos().toPoint());
     if (!m_toolBacker && m_toolBacker->rect().contains(event->scenePos().toPoint())) {
         QGraphicsItem::hoverLeaveEvent(event);
+        return;
+    }
+    hideToolbox();
+    QGraphicsItem::hoverLeaveEvent(event);
+}
+
+void DesktopToolbox::hideToolbox()
+{
+    if (!m_showing) {
         return;
     }
 
@@ -231,7 +248,6 @@ void DesktopToolbox::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
     if (m_toolBacker) {
         m_toolBacker->hide();
     }
-    QGraphicsItem::hoverLeaveEvent(event);
 }
 
 void DesktopToolbox::animate(qreal progress)
