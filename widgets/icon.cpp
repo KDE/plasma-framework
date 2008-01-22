@@ -1012,6 +1012,8 @@ void Icon::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 
 void Icon::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
 {
+    Q_UNUSED(event)
+
     emit doubleClicked();
     if (!KGlobalSettings::singleClick()) {
         emit activated();

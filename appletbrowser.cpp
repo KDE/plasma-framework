@@ -37,7 +37,7 @@ namespace Plasma
 class AppletBrowserWidget::Private
 {
 public:
-    Private(Corona* co, Containment* cont, AppletBrowserWidget* w)
+    Private(Containment* cont, AppletBrowserWidget* w)
         : containment(cont),
           appletList(0),
           config("plasmarc"),
@@ -125,7 +125,7 @@ void AppletBrowserWidget::Private::updateRunningApplets()
 /*
 AppletBrowserWidget::AppletBrowserWidget(Plasma::Corona * corona, bool showButtons, QWidget * parent, Qt::WindowFlags f)
     : QWidget(parent, f),
-    d(new Private(corona, 0, this)),
+    d(new Private(0, this)),
     m_showButtons( showButtons )
 {
     init();
@@ -133,7 +133,7 @@ AppletBrowserWidget::AppletBrowserWidget(Plasma::Corona * corona, bool showButto
 */
 AppletBrowserWidget::AppletBrowserWidget(Plasma::Containment * containment, bool showButtons, QWidget * parent, Qt::WindowFlags f)
     : QWidget(parent, f),
-    d(new Private(0, containment, this)),
+    d(new Private(containment, this)),
     m_showButtons( showButtons )
 {
     init();
