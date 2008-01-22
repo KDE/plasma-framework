@@ -39,7 +39,7 @@ class PLASMA_EXPORT SearchMatch
                     ExactMatch,
                     PossibleMatch };
 
-        SearchMatch(SearchContext *search, AbstractRunner *runner);
+        SearchMatch(const SearchContext *search, AbstractRunner *runner);
         ~SearchMatch();
 
         /**
@@ -104,7 +104,7 @@ class PLASMA_EXPORT SearchMatch
 
     //Pending a better solution, changing this to public
 //     public Q_SLOTS:
-        void exec();
+        void exec(const SearchContext *context);
 
     private:
         class Private;

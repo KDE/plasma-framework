@@ -141,10 +141,14 @@ SearchContext::~SearchContext()
     delete d;
 }
 
-void SearchContext::setSearchTerm(const QString &term)
+void SearchContext::resetSearchTerm(const QString &term)
 {
     d->resetState();
+    setSearchTerm(term);
+}
 
+void SearchContext::setSearchTerm(const QString &term)
+{
     if (term.isEmpty()) {
         return;
     }

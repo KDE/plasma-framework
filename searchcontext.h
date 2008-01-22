@@ -58,8 +58,15 @@ class PLASMA_EXPORT SearchContext : public QObject
         SearchContext(QObject *parent, const SearchContext& other);
 
         /**
-         * Sets the search term for this object. This clears all current
-         * matches in the process.
+         * Sets the search term for this object and attempts to determine
+         * the type of the search.
+         * This clears all current matches in the process.
+         */
+        void resetSearchTerm(const QString&);
+
+        /**
+         * Sets the search term for this object and attempts to determine
+         * the type of the search.
          */
         void setSearchTerm(const QString&);
 

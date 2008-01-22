@@ -22,6 +22,8 @@
 #include <QStringList>
 #include <QIcon>
 
+#include <KDebug>
+
 #include "searchmatch.h"
 
 #include "abstractrunner.h"
@@ -32,9 +34,8 @@ namespace Plasma
 class SearchMatch::Private
 {
     public:
-        Private(SearchContext* s, AbstractRunner *r)
-            : /*search(s),*/
-              runner(r),
+        Private(const SearchContext *s, AbstractRunner *r)
+            : runner(r),
               type(SearchMatch::ExactMatch),
               enabled(true),
               relevance(1)
@@ -42,8 +43,8 @@ class SearchMatch::Private
             searchTerm = s->searchTerm();
             mimetype = s->mimetype();
         }
+
         QString searchTerm;
-        SearchContext *search;
         AbstractRunner *runner;
         SearchMatch::Type type;
         QString mimetype;
@@ -55,7 +56,7 @@ class SearchMatch::Private
 };
 
 
-SearchMatch::SearchMatch(SearchContext *search, AbstractRunner *runner)
+SearchMatch::SearchMatch(const SearchContext *search, AbstractRunner *runner)
     : d(new Private(search, runner))
 {
 }
@@ -82,12 +83,12 @@ void SearchMatch::setMimetype(const QString &mimetype)
 
 QString SearchMatch::mimetype() const
 {
-    return d->mimetype;//.isEmpty() ? d->search->mimetype() : d->mimetype;
+    return d->mimetype;
 }
 
 QString SearchMatch::searchTerm() const
 {
-    return d->searchTerm;//->searchTerm();
+    return d->searchTerm;
 }
 
 void SearchMatch::setRelevance(qreal relevance)
@@ -150,12 +151,20 @@ bool SearchMatch::operator<(const SearchMatch& other) const
     return d->relevance < other.d->relevance;
 }
 
-void SearchMatch::exec()
+void SearchMatch::exec(const SearchContext *context)
 {
+    Q_ASSERT(context);
+
+    //kDebug() << "reseting the terms to the most recent status" << context;
+    d->searchTerm = context->searchTerm();
+    d->mimetype = context->mimetype();
+
+    //kDebug() << "we have" << d->searchTerm << d->mimetype;
     if (d->runner) {
-    //TODO: this could be dangerous if the runner is deleted behind our backs.
+        //TODO: this could be dangerous if the runner is deleted behind our backs.
         d->runner->exec(this);
     }
 }
 
-}
+} // Plasma namespace
+
