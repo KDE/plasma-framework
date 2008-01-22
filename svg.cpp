@@ -216,7 +216,7 @@ class Svg::Private
         Svg::ContentType contentType;
 };
 
-QHash<QString, SharedSvgRenderer::Ptr> Svg::Private:: renderers;
+QHash<QString, SharedSvgRenderer::Ptr> Svg::Private::renderers;
 
 Svg::Svg(const QString& imagePath, QObject* parent)
     : QObject(parent),
