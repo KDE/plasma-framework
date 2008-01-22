@@ -47,8 +47,7 @@ public:
     {
         Appear = 0 /*<< When some appears in the Corona */,
         Disappear /*<< When something is about to disappear */,
-        Activate /*<< When something is activated or launched, such as an app icon being clicked */,
-        FrameAppear /*<< Make a frame appear around an object */
+        Activate /*<< When something is activated or launched, such as an app icon being clicked */
     };
 
     enum ElementAnimation
@@ -68,7 +67,9 @@ public:
     enum Movement
     {
         SlideIn = 0,
-        SlideOut
+        SlideOut,
+        FastSlideIn,
+        FastSlideOut
     };
 
     typedef int AnimId;

@@ -135,9 +135,6 @@ class Phase::Private
                 case Phase::Activate:
                     animator->activate(amount, state->item);
                     break;
-                case Phase::FrameAppear:
-                    animator->frameAppear(amount, state->item, QRegion()); //FIXME: what -is- the frame region?
-                    break;
             }
         }
 
@@ -145,10 +142,12 @@ class Phase::Private
         {
             switch (state->movement) {
                 case Phase::SlideIn:
+                case Phase::FastSlideIn:
                     //kDebug() << "performMovement, SlideIn";
                     animator->slideIn(amount, state->item, state->start, state->destination);
                     break;
                 case Phase::SlideOut:
+                case Phase::FastSlideOut:
                     //kDebug() << "performMovement, SlideOut";
                     animator->slideOut(amount, state->item, state->start, state->destination);
                     break;
@@ -254,7 +253,7 @@ void Phase::animateItem(QGraphicsItem* item, Animation animation)
     //TODO: variance in times based on the value of animation
     state->frames = frames / 3;
     state->currentFrame = 0;
-    state->interval = 333 / state->frames;
+    state->interval = d->animator->duration(animation) / state->frames;
     state->interval = (state->interval / MIN_TICK_RATE) * MIN_TICK_RATE;
     state->currentInterval = state->interval;
 
@@ -292,7 +291,7 @@ void Phase::moveItem(QGraphicsItem* item, Movement movement, const QPoint &desti
      //TODO: variance in times based on the value of animation
      state->frames = frames / 2;
      state->currentFrame = 0;
-     state->interval = 240 / state->frames;
+     state->interval = d->animator->duration(movement) / state->frames;
      state->interval = (state->interval / MIN_TICK_RATE) * MIN_TICK_RATE;
      state->currentInterval = state->interval;
 
@@ -360,7 +359,7 @@ Phase::AnimId Phase::animateElement(QGraphicsItem *item, ElementAnimation animat
     //TODO: variance in times based on the value of animation
     state->frames = d->animator->framesPerSecond(animation) / 5;
     state->currentFrame = 0;
-    state->interval = 200 / state->frames;
+    state->interval = d->animator->duration(animation) / state->frames;
     state->interval = (state->interval / MIN_TICK_RATE) * MIN_TICK_RATE;
     state->currentInterval = state->interval;
     state->id = ++d->animId;

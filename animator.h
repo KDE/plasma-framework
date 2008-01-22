@@ -44,12 +44,15 @@ public:
     ~Animator();
 
     // Parameter definitions
-    virtual int framesPerSecond(Plasma::Phase::Animation);
-    virtual int framesPerSecond(Plasma::Phase::Movement);
-    virtual int framesPerSecond(Plasma::Phase::ElementAnimation);
-    virtual Phase::CurveShape curve(Plasma::Phase::Animation);
-    virtual Phase::CurveShape curve(Plasma::Phase::Movement);
-    virtual Phase::CurveShape curve(Plasma::Phase::ElementAnimation);
+    virtual int framesPerSecond(Plasma::Phase::Animation) const;
+    virtual int framesPerSecond(Plasma::Phase::Movement) const;
+    virtual int framesPerSecond(Plasma::Phase::ElementAnimation) const;
+    virtual int duration(Plasma::Phase::Animation) const;
+    virtual int duration(Plasma::Phase::Movement) const;
+    virtual int duration(Plasma::Phase::ElementAnimation) const;
+    virtual Phase::CurveShape curve(Plasma::Phase::Animation) const;
+    virtual Phase::CurveShape curve(Plasma::Phase::Movement) const;
+    virtual Phase::CurveShape curve(Plasma::Phase::ElementAnimation) const;
 
     // Element animations
     virtual QPixmap elementAppear(qreal frame, const QPixmap& pixmap);
@@ -58,7 +61,6 @@ public:
     // Item animations
     virtual void appear(qreal progress, QGraphicsItem* item);
     virtual void disappear(qreal progress, QGraphicsItem* item);
-    virtual void frameAppear(qreal progress, QGraphicsItem* item, const QRegion& drawable);
     virtual void activate(qreal progress, QGraphicsItem* item);
 
     // Item movements

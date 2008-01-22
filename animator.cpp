@@ -36,35 +36,59 @@ Animator::~Animator()
 {
 }
 
-int Animator::framesPerSecond(Plasma::Phase::Animation animation)
+int Animator::framesPerSecond(Plasma::Phase::Animation animation) const
 {
     Q_UNUSED(animation)
     return 0;
 }
 
-int Animator::framesPerSecond(Plasma::Phase::Movement movement)
+int Animator::framesPerSecond(Plasma::Phase::Movement movement) const
 {
     Q_UNUSED(movement)
     return 20;
 }
 
-int Animator::framesPerSecond(Plasma::Phase::ElementAnimation animation)
+int Animator::framesPerSecond(Plasma::Phase::ElementAnimation animation) const
 {
     Q_UNUSED(animation)
     return 0;
 }
 
-Phase::CurveShape Animator::curve(Plasma::Phase::Animation)
+int Animator::duration(Plasma::Phase::Animation) const
+{
+    return 200;
+}
+
+int Animator::duration(Plasma::Phase::Movement movement) const
+{
+    switch (movement) {
+        case Phase::FastSlideIn:
+        case Phase::FastSlideOut:
+            return 100;
+            break;
+        default:
+            break;
+    }
+
+    return 270;
+}
+
+int Animator::duration(Plasma::Phase::ElementAnimation) const
+{
+    return 333;
+}
+
+Phase::CurveShape Animator::curve(Plasma::Phase::Animation) const
 {
     return Phase::EaseInOutCurve;
 }
 
-Phase::CurveShape Animator::curve(Plasma::Phase::Movement)
+Phase::CurveShape Animator::curve(Plasma::Phase::Movement) const
 {
     return Phase::EaseInOutCurve;
 }
 
-Phase::CurveShape Animator::curve(Plasma::Phase::ElementAnimation)
+Phase::CurveShape Animator::curve(Plasma::Phase::ElementAnimation) const
 {
     return Phase::EaseInOutCurve;
 }
@@ -100,13 +124,6 @@ void Animator::activate(qreal frame, QGraphicsItem* item)
 {
     Q_UNUSED(frame)
     Q_UNUSED(item)
-}
-
-void Animator::frameAppear(qreal frame, QGraphicsItem* item, const QRegion& drawable)
-{
-    Q_UNUSED(frame)
-    Q_UNUSED(item)
-    Q_UNUSED(drawable)
 }
 
 void Animator::slideIn(qreal progress, QGraphicsItem *item, const QPoint &start, const QPoint &destination)
