@@ -338,7 +338,13 @@ void Widget::resize(qreal w, qreal h)
 
 Widget *Widget::parent() const
 {
-    QGraphicsItem *parent = parentItem();
+    return parent(this);
+}
+
+Widget *Widget::parent(const QGraphicsItem *item)
+{
+    Q_ASSERT(item);
+    QGraphicsItem *parent = item->parentItem();
 
     while (parent) {
         Widget *parentWidget = dynamic_cast<Widget *>(parent);

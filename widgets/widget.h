@@ -218,6 +218,11 @@ public:
     Q_INVOKABLE Widget *parent() const;
 
     /**
+     * @return the Plasma::Widget parent for a given QGraphicsItem
+     */
+    static Widget *parent(const QGraphicsItem *item);
+
+    /**
      * Add another Plasma::Widget as a child of this one.
      * @param widget the widget to reparent to this Plasma::Widget.
      */
@@ -287,6 +292,11 @@ public:
     */
     QPoint popupPosition(const QSize s) const;
 
+    /**
+     * Reimplemented from QGraphicsItem
+     */
+    virtual void contextMenuEvent(QGraphicsSceneContextMenuEvent *event);
+
 protected:
     /**
      * Paints the widget
@@ -295,11 +305,6 @@ protected:
      * @param widget the parent QWidget (most likely the Corona)
      */
     virtual void paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
-
-    /**
-     * Reimplemented from QGraphicsItem
-     */
-    virtual void contextMenuEvent(QGraphicsSceneContextMenuEvent *event);
 
     QVariant itemChange(GraphicsItemChange change, const QVariant &value);
     void setSize(qreal width, qreal height);
