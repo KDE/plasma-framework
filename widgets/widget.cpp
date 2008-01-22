@@ -556,20 +556,30 @@ QPoint Widget::popupPosition(const QSize s) const
 
     switch (loc) {
     case BottomEdge:
-        return QPoint(pos.x(), pos.y() - s.height());
+        pos = QPoint(pos.x(), pos.y() - s.height());
+        break;
     case TopEdge:
-        return QPoint(pos.x(), pos.y() + (int)size().height());
+        pos = QPoint(pos.x(), pos.y() + (int)size().height());
+        break;
     case LeftEdge:
-        return QPoint(pos.x() + (int)size().width(), pos.y());
+        pos = QPoint(pos.x() + (int)size().width(), pos.y());
+        break;
     case RightEdge:
-        return QPoint(pos.x() - s.width(), pos.y());
+        pos = QPoint(pos.x() - s.width(), pos.y());
+        break;
     default:
         if (pos.y() > 0) {
-             return QPoint(pos.x(), pos.y() - s.height());
+             pos = QPoint(pos.x(), pos.y() - s.height());
         } else {
-             return QPoint(pos.x(), pos.y() + (int)size().height());
+             pos = QPoint(pos.x(), pos.y() + (int)size().height());
         }
     }
+
+    if (pos.rx() + s.width() > view()->width()) {
+        pos.rx() -= ((pos.rx() + s.width()) - view()->width());
+    }
+
+    return pos;
 }
 
 void Widget::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
