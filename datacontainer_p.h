@@ -32,7 +32,7 @@ class DataContainer::Private
 {
 public:
     Private()
-        : dirty(false)
+        : dirty(false), cached(false)
     {}
 
     QObject* signalRelay(const DataContainer* dc, QObject *visualization,
@@ -43,6 +43,7 @@ public:
     QMap<uint, SignalRelay *> relays;
     QTime updateTs;
     bool dirty : 1;
+    bool cached : 1;
 };
 
 class SignalRelay : public QObject
@@ -157,6 +158,7 @@ QObject* DataContainer::Private::signalRelay(const DataContainer* dc, QObject *v
     QMap<uint, SignalRelay *>::const_iterator relayIt = relays.find(updateInterval);
     SignalRelay *relay = 0;
 
+    //FIXME what if we have two applets with the same interval and different alignment?
     if (relayIt == relays.end()) {
         relay = new SignalRelay(const_cast<DataContainer*>(dc), this, updateInterval, align);
         relays[updateInterval] = relay;

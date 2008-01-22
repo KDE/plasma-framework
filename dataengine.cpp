@@ -252,9 +252,11 @@ void DataEngine::internalUpdateSource(DataContainer* source)
     if (d->minUpdateInterval > 0 &&
         source->timeSinceLastUpdate() < d->minUpdateInterval) {
         // skip updating this source; it's been too soon
-        //TODO: should we queue an update in this case? return to this
-        //      once we see the results in real world usage
         //kDebug() << "internal update source is delaying" << source->timeSinceLastUpdate() << d->minUpdateInterval;
+        //but fake an update so that the signalrelay that triggered this gets the data from the
+        //recent update. this way we don't have to worry about queuing - the relay will send a
+        //signal immediately and everyone else is undisturbed.
+        source->setNeedsUpdate();
         return;
     }
 

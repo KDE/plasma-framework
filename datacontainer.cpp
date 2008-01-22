@@ -90,7 +90,17 @@ int DataContainer::timeSinceLastUpdate() const
 
 bool DataContainer::hasUpdates() const
 {
+    if (d->cached) {
+        //some signalrelay needs us to pretend we did an update
+        d->cached = false;
+        return true;
+    }
     return d->dirty;
+}
+
+void DataContainer::setNeedsUpdate(bool update)
+{
+    d->cached = update;
 }
 
 void DataContainer::checkUsage()

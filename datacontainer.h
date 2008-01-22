@@ -91,6 +91,16 @@ class PLASMA_EXPORT DataContainer : public QObject
          **/
         bool hasUpdates() const;
 
+        /**
+         * Indicates that the data should be treated as dirty the next time hasUpdates() is called.
+         *
+         * why? because if one SignalRelay times out just after another, the minimum update
+         * interval stops a real update from being done - but that relay still needs to be given
+         * data, because it won't have been in the queue and won't have gotten that last update.
+         * when it checks hasUpdates() we'll lie, and then everything will return to normal.
+         **/
+        void setNeedsUpdate(bool update = true);
+
     public Q_SLOTS:
         /**
          * Check if the DataContainer is still in use.
