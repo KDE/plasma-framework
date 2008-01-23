@@ -282,7 +282,6 @@ void AppletHandle::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     if (m_pendingFade) {
         startFading(FadeOut);
         m_pendingFade = false;
-        return;
     }
 
     ButtonType releasedAtButton = mapToButton(event->pos());
