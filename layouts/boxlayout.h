@@ -56,7 +56,7 @@ class PLASMA_EXPORT BoxLayout : public Layout
          * Creates a new box layout which lays items out in the specified
          * @p direction
          */
-        explicit BoxLayout(Direction direction , LayoutItem *parent = 0);
+        explicit BoxLayout(Direction direction, LayoutItem *parent = 0);
         ~BoxLayout();
 
         /** Sets the direction in which items are laid out. */
@@ -66,7 +66,7 @@ class PLASMA_EXPORT BoxLayout : public Layout
 
         /** Inserts a new item into the layout at the specified index. */
         void insertItem(int index, LayoutItem *l);
-        
+
         /** Set weither this layout will take severals row */
         void setMultiRow(bool b);
 
