@@ -159,13 +159,15 @@ void AppletHandle::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
     painter->drawPath(path);
     painter->restore();
 
-    QPointF point = m_rect.topLeft();
+    //XXX this code is duplicated in the next function
+    QPointF basePoint = m_rect.topLeft() + QPointF(HANDLE_WIDTH / 2, HANDLE_WIDTH);
+    QPointF step = QPointF(0, ICON_SIZE + ICON_MARGIN);
+    QPointF separator = step + QPointF(0, ICON_MARGIN);
 
     if (m_buttonsOnRight) {
-        point += QPointF(m_rect.width() - ICON_SIZE - HANDLE_WIDTH, HANDLE_WIDTH);
-    } else {
-        point+= QPointF(HANDLE_WIDTH / 2, HANDLE_WIDTH);
+        basePoint += QPointF(m_rect.width() - ICON_SIZE - HANDLE_WIDTH, 0);
     }
+    //end duplicate code
 
     QPointF shiftC;
     QPointF shiftD;
@@ -190,31 +192,33 @@ void AppletHandle::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
         break;
     }
 
-    painter->drawPixmap(point + shiftM, KIcon("transform-move").pixmap(ICON_SIZE, ICON_SIZE)); // no transform-resize icon
+    painter->drawPixmap(basePoint + shiftM, KIcon("transform-move").pixmap(ICON_SIZE, ICON_SIZE)); //FIXME no transform-resize icon
 
-    point += QPointF(0.0, ICON_SIZE + ICON_MARGIN);
-    painter->drawPixmap(point + shiftR, KIcon("transform-rotate").pixmap(ICON_SIZE, ICON_SIZE));
+    basePoint += step;
+    painter->drawPixmap(basePoint + shiftR, KIcon("transform-rotate").pixmap(ICON_SIZE, ICON_SIZE));
 
     if (m_applet && m_applet->hasConfigurationInterface()) {
-        point += QPointF(0.0, ICON_SIZE + ICON_MARGIN);
-        painter->drawPixmap(point + shiftC, KIcon("configure").pixmap(ICON_SIZE, ICON_SIZE));
+        basePoint += step;
+        painter->drawPixmap(basePoint + shiftC, KIcon("configure").pixmap(ICON_SIZE, ICON_SIZE));
     }
 
-    point += QPointF(0.0, ICON_SIZE + ICON_MARGIN * 2);
-    painter->drawPixmap(point + shiftD, KIcon("edit-delete").pixmap(ICON_SIZE, ICON_SIZE));
+    basePoint += separator;
+    painter->drawPixmap(basePoint + shiftD, KIcon("edit-delete").pixmap(ICON_SIZE, ICON_SIZE));
 
     painter->restore();
 }
 
 AppletHandle::ButtonType AppletHandle::mapToButton(const QPointF &point) const
 {
-    QPointF basePoint = m_rect.topLeft();
+    //XXX this code is duplicated in the prev. function
+    QPointF basePoint = m_rect.topLeft() + QPointF(HANDLE_WIDTH / 2, HANDLE_WIDTH);
+    QPointF step = QPointF(0, ICON_SIZE + ICON_MARGIN);
+    QPointF separator = step + QPointF(0, ICON_MARGIN);
 
     if (m_buttonsOnRight) {
-        basePoint+= QPointF(m_rect.width() - ICON_SIZE, HANDLE_WIDTH);
-    } else {
-        basePoint+= QPointF(HANDLE_WIDTH, HANDLE_WIDTH);
+        basePoint += QPointF(m_rect.width() - ICON_SIZE - HANDLE_WIDTH, 0);
     }
+    //end duplicate code
 
     QPolygonF activeArea = QPolygonF(QRectF(basePoint, QSizeF(ICON_SIZE, ICON_SIZE)));
 
@@ -222,19 +226,19 @@ AppletHandle::ButtonType AppletHandle::mapToButton(const QPointF &point) const
         return ResizeButton;
     }
 
-    activeArea.translate(QPointF(0.0, ICON_SIZE + ICON_MARGIN));
+    activeArea.translate(step);
     if (activeArea.containsPoint(point, Qt::OddEvenFill)) {
         return RotateButton;
     }
 
     if (m_applet && m_applet->hasConfigurationInterface()) {
-        activeArea.translate(QPointF(0.0, ICON_SIZE + ICON_MARGIN));
+        activeArea.translate(step);
         if (activeArea.containsPoint(point, Qt::OddEvenFill)) {
             return ConfigureButton;
         }
     }
 
-    activeArea.translate(QPointF(0.0, ICON_SIZE + ICON_MARGIN * 2));
+    activeArea.translate(separator);
     if (activeArea.containsPoint(point, Qt::OddEvenFill)) {
         return RemoveButton;
     }
@@ -601,6 +605,7 @@ void AppletHandle::calculateSize()
     m_rect = m_applet->boundingRect();
     m_rect = m_applet->mapToParent(m_rect).boundingRect();
 
+    //XXX remember to update this if the number of buttons changes
     const int requiredHeight = (HANDLE_WIDTH * 2) + m_applet->hasConfigurationInterface() ?
                                                         ((ICON_SIZE + ICON_MARGIN) * 4) :
                                                         ((ICON_SIZE + ICON_MARGIN) * 3) +
