@@ -489,21 +489,23 @@ void Icon::Private::drawBackground(QPainter *painter, IconState state)
 
     bool darkShadow = shadowColor.value() < 128;
     QColor shadow = shadowColor;
+    QColor border = textColor;
 
-    shadow.setAlphaF(.35);
+    shadow.setAlphaF(.60);
+    border.setAlphaF(.20);
 
     switch (state) {
         case Private::HoverState:
             shadow.setHsv(shadow.hue(),
                           shadow.saturation(),
-                          shadow.value()+(darkShadow?50:-50),
-                          100);
+                          shadow.value() + (darkShadow?50:-50),
+                          180); //70% opacity
             break;
         case Private::PressedState:
             shadow.setHsv(shadow.hue(),
                           shadow.saturation(),
-                          shadow.value()+(darkShadow?100:-100),
-                          128);
+                          shadow.value() + (darkShadow?100:-100),
+                          204); //80% opacity
             break;
         default:
             break;
@@ -512,8 +514,8 @@ void Icon::Private::drawBackground(QPainter *painter, IconState state)
     painter->save();
     painter->setRenderHint(QPainter::Antialiasing);
     painter->setBrush(shadow);
-    painter->setPen(QPen(shadow, 1.0));
-    painter->drawPath(roundedRectangle(QRectF(QPointF(0.0, 0.0), currentSize), 10.0));
+    painter->setPen(QPen(border, 2.0));
+    painter->drawPath(roundedRectangle(QRectF(QPointF(1, 1), QSize(currentSize.width()-2, currentSize.height()-2)), 5.0));
     painter->restore();
 }
 
