@@ -33,6 +33,7 @@
 #include <QPainter>
 #include <QPixmapCache>
 #include <QStyleOptionGraphicsItem>
+#include <QDesktopWidget>
 
 #include <KDebug>
 
@@ -581,8 +582,14 @@ QPoint Widget::popupPosition(const QSize s) const
         }
     }
 
-    if (pos.rx() + s.width() > view()->width()) {
-        pos.rx() -= ((pos.rx() + s.width()) - view()->width());
+    //are we out of screen?
+    QRect screenRect = QApplication::desktop()->screenGeometry(pv->containment()->screen());
+
+    if (pos.rx() + s.width() > screenRect.width()) {
+        pos.rx() -= ((pos.rx() + s.width()) - screenRect.width());
+    }
+    if (pos.ry() + s.height() > screenRect.height()) {
+        pos.ry() -= ((pos.ry() + s.height()) - screenRect.height());
     }
 
     return pos;
