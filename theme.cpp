@@ -98,32 +98,38 @@ void Theme::settingsChanged()
 
 void Theme::setThemeName(const QString &themeName)
 {
-    if (themeName.isEmpty() || themeName == d->themeName) {
+    QString theme = themeName;
+    if (theme.isEmpty() || theme == d->themeName) {
         // let's try and get the default theme at least
         if (d->themeName.isEmpty()) {
-            setThemeName("default");
+            theme = "default";
+        } else {
+            return;
         }
-        return;
     }
 
     //TODO: should we care about names with relative paths in them?
-    QString themePath = KStandardDirs::locate("data", "desktoptheme/" + themeName + "/");
-    if (themePath.isEmpty()) {
-        // let's try and get the default theme at least
-        if (d->themeName.isEmpty() && themeName != "default") {
-            setThemeName("default");
+    QString themePath = KStandardDirs::locate("data", "desktoptheme/" + theme + "/");
+    if (themePath.isEmpty() && d->themeName.isEmpty()) {
+        themePath = KStandardDirs::locate("data", "desktoptheme/default/");
+
+        if (themePath.isEmpty()) {
+            return;
         }
-        return;
+
+        theme = "default";
     }
 
-    d->themeName = themeName;
+    d->themeName = theme;
 
     // load the color scheme config
-    themePath = themePath.append("colors");
-    if (QFile::exists(themePath)) {
-        d->colors = KSharedConfig::openConfig(themePath);
-    } else {
+    QString colorsFile = KStandardDirs::locate("data", "desktoptheme/" + theme + "/colors");
+    //kDebug() << "we're going for..." << colorsFile << "*******************";
+
+    if (colorsFile.isEmpty()) {
         d->colors = 0;
+    } else {
+        d->colors = KSharedConfig::openConfig(colorsFile);
     }
 
     emit changed();
