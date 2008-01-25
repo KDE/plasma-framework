@@ -1205,8 +1205,7 @@ void Applet::showConfigurationInterface()
         dialog->setAttribute(Qt::WA_DeleteOnClose, true);
 
         QUiLoader loader;
-        QString filename = d->package->filePath("mainconfigui");
-        QFile f(filename);
+        QFile f(uiFile);
         if (!f.open(QIODevice::ReadOnly)) {
             delete dialog;
             return;
