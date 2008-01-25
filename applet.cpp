@@ -232,9 +232,13 @@ public:
             //       the transparent border around the svg seems to vary in size depending on the size of the svg and as a result increasing the
             //       svn image by 2 all around didn't resolve the issue. For now it resizes based on the border size.
 
-            background->resize(contentWidth, contentHeight);
-            background->paint(&p, QRect(contentLeft-leftWidth, contentTop-topHeight, contentWidth+leftWidth*2, contentHeight+topHeight*2), "center");
-            background->resize();
+            if (contentWidth > 0 && contentHeight > 0) {
+                background->resize(contentWidth, contentHeight);
+                background->paint(&p, QRect(contentLeft-leftWidth, contentTop-topHeight,
+                                            contentWidth+leftWidth*2, contentHeight+topHeight*2),
+                                  "center");
+                background->resize();
+            }
 
             background->paint(&p, QRect(leftOffset, topOffset, leftWidth, topHeight), "topleft");
             background->paint(&p, QRect(rightOffset, topOffset,rightWidth, topHeight), "topright");
