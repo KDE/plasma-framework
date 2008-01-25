@@ -47,3 +47,6 @@ Comment[x-test]=xxScripting language extension for Plasmaxx
 Comment[zh_CN]=Plasma 的脚本语言扩展
 Comment[zh_TW]=Plasma 文稿語言延伸
 
+[PropertyDef::X-Plasma-ComponentTypes]
+Type=QStringList
+
