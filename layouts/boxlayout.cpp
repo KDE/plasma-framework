@@ -243,8 +243,8 @@ public:
     {
         QSizeF result;
 
-        const qreal totalSpacingC = q->spacing() * colCount() - 1;
-        const qreal totalSpacingR = q->spacing() * rowCount - 1;
+        const qreal totalSpacingC = q->spacing() * (colCount() - 1);
+        const qreal totalSpacingR = q->spacing() * (rowCount - 1);
 
         switch (direction) {
             case LeftToRight:
