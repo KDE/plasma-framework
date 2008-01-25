@@ -65,10 +65,9 @@ Icon::Private::Private()
       invertLayout(false),
       drawBg(false)
 {
-    textColor = KColorScheme(QPalette::Active, KColorScheme::Window,
-                             Plasma::Theme::self()->colors()).foreground().color();
-    shadowColor = KColorScheme(QPalette::Active, KColorScheme::Window,
-                               Plasma::Theme::self()->colors()).background().color();
+    //FIXME: update with Theme::change()!
+    textColor = Plasma::Theme::self()->textColor();
+    shadowColor = Plasma::Theme::self()->backgroundColor();
 }
 
 Icon::Private::~Private()
@@ -841,7 +840,9 @@ void Icon::paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *option
     d->drawBackground(painter, state);
 
     // draw icon
-    painter->drawPixmap(iconPos, icon);
+    if (!icon.isNull()) {
+        painter->drawPixmap(iconPos, icon);
+    }
 
     // Draw corner actions
     foreach (IconAction *action, d->cornerActions) {
