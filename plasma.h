@@ -136,6 +136,18 @@ enum ItemTypes { AppletType = QGraphicsItem::UserType + 1,
                };
 
 /**
+ * The ComonentType enumeration refers to the various types of components,
+ * or plugins, supported by plasma.
+ */
+enum ComponentType { AppletComponent = 1 /**< Plasma::Applet based plugins **/,
+                     DataEngineComponent = 2 /**< Plasma::DataEngine based plugins **/,
+                     RunnerComponent = 4 /**< Plasma::AbstractRunner based plugsin **/,
+                     AnimatorComponent = 8 /**< Plasma::Animator based plugins **/,
+                     ContainmentComponent = 16 /**< Plasma::Containment based plugins **/
+                   };
+Q_DECLARE_FLAGS(ComponentTypes, ComponentType)
+
+/**
  * @return the scaling factor (0..1) for a ZoomLevel
  **/
 PLASMA_EXPORT qreal scalingFactor(ZoomLevel level);
@@ -158,5 +170,6 @@ PLASMA_EXPORT QPainterPath roundedRectangle(const QRectF& rect, qreal radius);
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Plasma::Constraints)
 Q_DECLARE_OPERATORS_FOR_FLAGS(Plasma::Flip)
+Q_DECLARE_OPERATORS_FOR_FLAGS(Plasma::ComponentTypes)
 
 #endif // multiple inclusion guard
