@@ -45,7 +45,6 @@ set(plasma_LIB_SRCS
     phase.cpp
     plasma.cpp
     plasma_export.h
-    scriptengine.cpp
     searchmatch.cpp
     searchcontext.cpp
     shadowitem.cpp
@@ -54,6 +53,10 @@ set(plasma_LIB_SRCS
     desktoptoolbox.cpp
     uiloader.cpp
     view.cpp
+    scripting/appletscript.cpp
+    scripting/dataenginescript.cpp
+    scripting/runnerscript.cpp
+    scripting/scriptengine.cpp
     widgets/checkbox.cpp
     widgets/flash.cpp
     widgets/icon.cpp
@@ -118,7 +121,10 @@ set(plasma_LIB_INCLUDES
     phase.h
     plasma.h
     plasma_export.h
-    scriptengine.h
+    scripting/appletscript.h
+    scripting/dataenginescript.h
+    scripting/runnerscript.h
+    scripting/scriptengine.h
     searchmatch.h
     searchcontext.h
     shadowitem_p.h
@@ -165,6 +171,14 @@ install(FILES
     layouts/layoutanimator.h
     layouts/layoutitem.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/plasma/layouts)
+
+install(FILES
+    scripting/appletscript.h
+    scripting/dataenginescript.h
+    scripting/runnerscript.h
+    scripting/scriptengine.h
+    DESTINATION ${INCLUDE_INSTALL_DIR}/plasma/scripting)
+
 
 install(FILES
     includes/AbstractRunner
