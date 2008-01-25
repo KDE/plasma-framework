@@ -226,7 +226,48 @@ void Containment::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
 
     KMenu desktopMenu;
     //kDebug() << "context menu event " << (QObject*)applet;
-    if (!applet) {
+    if (applet) {
+        bool hasEntries = false;
+
+        QList<QAction*> actions = applet->contextActions();
+        if (!actions.isEmpty()) {
+            foreach(QAction* action, actions) {
+                desktopMenu.addAction(action);
+            }
+            hasEntries = true;
+        }
+
+        if (applet->hasConfigurationInterface()) {
+            QAction* configureApplet = new QAction(i18n("%1 Settings", applet->name()), &desktopMenu);
+            configureApplet->setIcon(KIcon("configure"));
+            connect(configureApplet, SIGNAL(triggered(bool)),
+                    applet, SLOT(showConfigurationInterface()));
+            desktopMenu.addAction(configureApplet);
+            hasEntries = true;
+        }
+
+        if (scene() && !static_cast<Corona*>(scene())->isImmutable()) {
+            if (hasEntries) {
+                desktopMenu.addSeparator();
+            }
+
+            QAction* closeApplet = new QAction(i18n("Remove this %1", applet->name()), &desktopMenu);
+            QVariant appletV;
+            appletV.setValue((QObject*)applet);
+            closeApplet->setData(appletV);
+            closeApplet->setIcon(KIcon("edit-delete"));
+            connect(closeApplet, SIGNAL(triggered(bool)),
+                    this, SLOT(destroyApplet()));
+            desktopMenu.addAction(closeApplet);
+            hasEntries = true;
+        }
+
+        if (!hasEntries) {
+            Applet::contextMenuEvent(event);
+            kDebug() << "no entries";
+            return;
+        }
+    } else {
         if (!scene() || (static_cast<Corona*>(scene())->isImmutable() && !KAuthorized::authorizeKAction("unlock_desktop"))) {
             //kDebug() << "immutability";
             Applet::contextMenuEvent(event);
@@ -245,43 +286,6 @@ void Containment::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
 
         foreach(QAction* action, actions) {
             desktopMenu.addAction(action);
-        }
-    } else {
-        bool hasEntries = false;
-        if (applet->hasConfigurationInterface()) {
-            QAction* configureApplet = new QAction(i18n("%1 Settings", applet->name()), &desktopMenu);
-            configureApplet->setIcon(KIcon("configure"));
-            connect(configureApplet, SIGNAL(triggered(bool)),
-                    applet, SLOT(showConfigurationInterface()));
-            desktopMenu.addAction(configureApplet);
-            hasEntries = true;
-        }
-
-        if (scene() && !static_cast<Corona*>(scene())->isImmutable()) {
-            QAction* closeApplet = new QAction(i18n("Remove this %1", applet->name()), &desktopMenu);
-            QVariant appletV;
-            appletV.setValue((QObject*)applet);
-            closeApplet->setData(appletV);
-            closeApplet->setIcon(KIcon("edit-delete"));
-            connect(closeApplet, SIGNAL(triggered(bool)),
-                    this, SLOT(destroyApplet()));
-            desktopMenu.addAction(closeApplet);
-            hasEntries = true;
-        }
-
-        QList<QAction*> actions = applet->contextActions();
-        if (!actions.isEmpty()) {
-            desktopMenu.addSeparator();
-            foreach(QAction* action, actions) {
-                desktopMenu.addAction(action);
-            }
-            hasEntries = true;
-        }
-
-        if (!hasEntries) {
-            Applet::contextMenuEvent(event);
-            kDebug() << "no entries";
-            return;
         }
     }
 
