@@ -305,9 +305,21 @@ class PLASMA_EXPORT Applet : public Widget
         Qt::AspectRatioMode aspectRatioMode() const;
 
         /**
-         * @return the prefered aspect ratio mode for placement and resizing
+         * Sets the prefered aspect ratio mode for placement and resizing
          */
         void setAspectRatioMode(Qt::AspectRatioMode);
+
+        /**
+         * @return whether or not to keep this applet square.
+         */
+        bool remainSquare() const;
+
+        /**
+         * Sets whether or not this applet should be kept square.
+         *
+         * @param square true if the applet should always be square in shape.
+         */
+        void setRemainSquare(bool square);
 
         /**
          * Returns a list of all known applets.
@@ -565,7 +577,12 @@ class PLASMA_EXPORT Applet : public Widget
         /**
          * Reimplemented from LayoutItem
          */
-        virtual QSizeF sizeHint() const;
+        QSizeF sizeHint() const;
+
+        /**
+         * Reimplemented from Plasma::Widget
+         */
+        Qt::Orientations expandingDirections() const;
 
         /**
          * Reimplemented from QGraphicsItem

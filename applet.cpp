@@ -53,7 +53,7 @@
 #include "plasma/package.h"
 #include "plasma/packages_p.h"
 #include "plasma/plasma.h"
-#include "plasma/scriptengine.h"
+#include "plasma/scripting/appletscript.h"
 #include "plasma/shadowitem_p.h"
 #include "plasma/svg.h"
 #include "plasma/theme.h"
@@ -77,7 +77,7 @@ public:
           package(0),
           background(0),
           failureText(0),
-          scriptEngine(0),
+          script(0),
           configXml(0),
           shadow(0),
           cachedBackground(0),
@@ -89,7 +89,8 @@ public:
           hasConfigurationInterface(false),
           failed(false),
           needsConfig(false),
-          isContainment(false)
+          isContainment(false),
+          square(false)
     {
         if (appletId == 0) {
             appletId = nextId();
@@ -145,8 +146,8 @@ public:
                     // it will be parented to this applet and so will get
                     // deleted when the applet does
 
-                    scriptEngine = ScriptEngine::load(language, applet);
-                    if (!scriptEngine) {
+                    script = Plasma::loadScriptEngine(language, applet);
+                    if (!script) {
                         delete package;
                         package = 0;
                         applet->setFailedToLaunch(true, i18n("Could not create a %1 ScriptEngine for the %2 widget.",
@@ -396,7 +397,7 @@ public:
     static uint s_maxAppletId;
     Plasma::Svg *background;
     Plasma::LineEdit *failureText;
-    ScriptEngine* scriptEngine;
+    AppletScript *script;
     ConfigXml* configXml;
     ShadowItem* shadow;
     QPixmap* cachedBackground;
@@ -409,6 +410,7 @@ public:
     bool failed : 1;
     bool needsConfig : 1;
     bool isContainment : 1;
+    bool square : 1;
 };
 
 uint Applet::Private::s_maxAppletId = 0;
@@ -444,6 +446,9 @@ Applet::~Applet()
 
 void Applet::init()
 {
+    if (d->script && !d->script->init()) {
+        setFailedToLaunch(true);
+    }
 }
 
 uint Applet::id() const
@@ -860,6 +865,15 @@ QSizeF Applet::sizeHint() const
     return contentSizeHint() + QSizeF(left + right, top + bottom);
 }
 
+Qt::Orientations Applet::expandingDirections() const
+{
+    if (d->square) {
+        return 0;
+    }
+
+    return Widget::expandingDirections();
+}
+
 QList<QAction*> Applet::contextActions()
 {
     kDebug() << "empty context actions";
@@ -939,8 +953,8 @@ void Applet::paintInterface(QPainter *painter, const QStyleOptionGraphicsItem *o
 {
     Q_UNUSED(contentsRect)
 
-    if (d->scriptEngine) {
-        d->scriptEngine->paintInterface(painter, option, contentsRect);
+    if (d->script) {
+        d->script->paintInterface(painter, option, contentsRect);
     } else {
         //kDebug() << "Applet::paintInterface() default impl";
     }
@@ -1019,11 +1033,31 @@ void Applet::setContentSize(int width, int height)
 
 QSizeF Applet::contentSizeHint() const
 {
+    QSizeF size;
     if (layout()) {
-        return layout()->sizeHint();
+        size = layout()->sizeHint();
+    } else {
+        size = contentSize();
     }
 
-    return contentSize();
+    if (d->square) {
+        //kDebug() << "SizeHintIn: " << size;
+        switch (formFactor()) {
+            case Plasma::Vertical:
+                size.setHeight(size.width());
+            case Plasma::Horizontal:
+            case Plasma::Planar:
+            case Plasma::MediaCenter:
+                size.setWidth(size.height());
+            default:
+                break;
+        }
+
+        //kDebug() << "SizeHintOut: " << size;
+        return size;
+    }
+
+    return size;
 }
 
 void Applet::setMinimumContentSize(const QSizeF &minSize)
@@ -1076,6 +1110,16 @@ Qt::AspectRatioMode Applet::aspectRatioMode() const
 void Applet::setAspectRatioMode(Qt::AspectRatioMode mode)
 {
     d->aspectRatioMode = mode;
+}
+
+bool Applet::remainSquare() const
+{
+    return d->square;
+}
+
+void Applet::setRemainSquare(bool square)
+{
+    d->square = square;
 }
 
 QString Applet::globalName() const
