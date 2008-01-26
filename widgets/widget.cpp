@@ -575,7 +575,7 @@ QPoint Widget::popupPosition(const QSize s) const
         pos = QPoint(pos.x() - s.width(), pos.y());
         break;
     default:
-        if (pos.y() > 0) {
+        if (pos.y() - s.height() > 0) {
              pos = QPoint(pos.x(), pos.y() - s.height());
         } else {
              pos = QPoint(pos.x(), pos.y() + (int)size().height());
@@ -591,6 +591,7 @@ QPoint Widget::popupPosition(const QSize s) const
     if (pos.ry() + s.height() > screenRect.height()) {
         pos.ry() -= ((pos.ry() + s.height()) - screenRect.height());
     }
+    pos.rx() = qMax(0, pos.rx());
 
     return pos;
 }
