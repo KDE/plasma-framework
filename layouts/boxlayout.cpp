@@ -41,6 +41,7 @@ public:
     BoxLayout *const q;
     Direction direction;
     QList<LayoutItem*> children;
+    bool expandingBoth;
     bool multiRow;
     int rowCount;
     int colCount() const {
@@ -49,7 +50,7 @@ public:
 
     Private(BoxLayout *parent)
         : q(parent)
-        , direction(LeftToRight), multiRow(false) , rowCount(1)
+        , direction(LeftToRight), expandingBoth(false), multiRow(false) , rowCount(1)
     {
     }
 
@@ -87,10 +88,14 @@ public:
     }
 
 
-    // returns the direction in which this layout expands
+    // returns the directions in which this layout expands
     // or shrinks
-    Qt::Orientation expandingDirection() const
+    Qt::Orientations expandingDirections() const
     {
+        if (expandingBoth) {
+            return Qt::Horizontal|Qt::Vertical;
+        }
+
         switch (direction) {
             case LeftToRight:
             case RightToLeft:
@@ -300,17 +305,7 @@ BoxLayout::~BoxLayout()
 
 Qt::Orientations BoxLayout::expandingDirections() const
 {
-    switch (d->direction) {
-        case LeftToRight:
-        case RightToLeft:
-            return Qt::Horizontal;
-        case TopToBottom:
-        case BottomToTop:
-            return Qt::Vertical;
-        default:
-            Q_ASSERT(false);
-            return 0;
-    }
+    return d->expandingDirections();
 }
 
 int BoxLayout::count() const
@@ -455,7 +450,7 @@ void BoxLayout::relayout()
                 break;
             }
             const LayoutItem *item = d->children[f];
-            const bool itemExp = (item->expandingDirections() & d->expandingDirection());
+            const bool itemExp = (item->expandingDirections() & d->expandingDirections());
             isExpanding = isExpanding && itemExp;
             minItemSize = qMax(minItemSize, d->size(item->minimumSize()));
             maxItemSize = qMin(maxItemSize, d->size(item->maximumSize()));
@@ -554,6 +549,11 @@ QSizeF BoxLayout::sizeHint() const
 void BoxLayout::setMultiRow(bool b)
 {
     d->multiRow = b;
+}
+
+void BoxLayout::setExpandingBoth(bool both)
+{
+    d->expandingBoth = both;
 }
 
 HBoxLayout::HBoxLayout(LayoutItem *parent)
