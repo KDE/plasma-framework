@@ -44,7 +44,11 @@ class AbstractRunner::Private
         speed(NormalSpeed),
         tier(0)
     {}
+
+    static QMutex serviceTypeTraderLock;
 };
+
+QMutex AbstractRunner::Private::serviceTypeTraderLock;
 
 AbstractRunner::AbstractRunner(QObject* parent)
     : QObject(parent),
@@ -151,11 +155,9 @@ void AbstractRunner::setPriority(Priority priority)
     d->priority = priority;
 }
 
-QMutex serviceTypeTraderLock;
-
 KService::List AbstractRunner::serviceQuery(const QString &serviceType, const QString &constraint) const
 {
-    QMutexLocker lock(&serviceTypeTraderLock);
+    QMutexLocker lock(&Private::serviceTypeTraderLock);
     return KServiceTypeTrader::self()->query(serviceType, constraint);
 }
 

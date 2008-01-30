@@ -195,10 +195,12 @@ class PLASMA_EXPORT AbstractRunner : public QObject
         void setPriority(Priority newPriority);
 
         /**
-         * A thread safe (blocking) method to do queries of installed Services
+         * A blocking method to do queries of installed Services which can provide
+         * a measure of safety for runners running their own threads. This should
+         * be used instead of calling KServiceTypeTrader::query(..) directly.
          *
          * @arg serviceType a service type like "Plasma/Applet" or "KFilePlugin"
-         * @arg constraint a constraint to limie the the choices returned.
+         * @arg constraint a constraint to limit the the choices returned.
          * @see KServiceTypeTrader::query(const QString&, const QString&)
          *
          * @return a list of services that satisfy the query.
