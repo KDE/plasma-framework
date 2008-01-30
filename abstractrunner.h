@@ -24,6 +24,7 @@
 #include <QtCore/QStringList>
 
 #include <KDE/KConfigGroup>
+#include <KDE/KService>
 
 #include <plasma/plasma_export.h>
 #include <plasma/searchmatch.h>
@@ -192,6 +193,18 @@ class PLASMA_EXPORT AbstractRunner : public QObject
          * only after higher priority runners.
          */
         void setPriority(Priority newPriority);
+
+        /**
+         * A thread safe (blocking) method to do queries of installed Services
+         *
+         * @arg serviceType a service type like "Plasma/Applet" or "KFilePlugin"
+         * @arg constraint a constraint to limie the the choices returned.
+         * @see KServiceTypeTrader::query(const QString&, const QString&)
+         *
+         * @return a list of services that satisfy the query.
+         */
+        KService::List serviceQuery(const QString &serviceType,
+                                    const QString &constraint = QString()) const;
 
     private:
         class Private;

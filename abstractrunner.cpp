@@ -18,10 +18,14 @@
  */
 
 #include "abstractrunner.h"
-#include "searchcontext.h"
+
+#include <QMutex>
+#include <QMutexLocker>
 
 #include <KDebug>
 #include <KServiceTypeTrader>
+
+#include "searchcontext.h"
 
 namespace Plasma
 {
@@ -145,6 +149,14 @@ AbstractRunner::Priority AbstractRunner::priority() const
 void AbstractRunner::setPriority(Priority priority)
 {
     d->priority = priority;
+}
+
+QMutex serviceTypeTraderLock;
+
+KService::List AbstractRunner::serviceQuery(const QString &serviceType, const QString &constraint) const
+{
+    QMutexLocker lock(&serviceTypeTraderLock);
+    return KServiceTypeTrader::self()->query(serviceType, constraint);
 }
 
 void AbstractRunner::exec(Plasma::SearchMatch *action)
