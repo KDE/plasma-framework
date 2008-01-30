@@ -154,7 +154,7 @@ QPainterPath DesktopToolbox::shape() const
 
 void DesktopToolbox::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 {
-    if (m_showing) {
+    if (m_showing || m_stopwatch.elapsed() < 100) {
         QGraphicsItem::hoverEnterEvent(event);
         return;
     }
@@ -182,7 +182,15 @@ void DesktopToolbox::showToolbox()
     int y = 5; // pos().y();
     Plasma::Phase* phase = Plasma::Phase::self();
     foreach (QGraphicsItem* tool, QGraphicsItem::children()) {
-        if (!tool->isEnabled() || tool == m_toolBacker) {
+        if (tool == m_toolBacker) {
+            continue;
+        }
+
+        if (!tool->isEnabled()) {
+            if (tool->isVisible()) {
+                const int height = static_cast<int>(tool->boundingRect().height());
+                phase->moveItem(tool, Plasma::Phase::SlideOut, QPoint(m_size * 2, -height));
+            }
             continue;
         }
 
@@ -207,12 +215,14 @@ void DesktopToolbox::showToolbox()
     // TODO: 10 and 200 shouldn't be hardcoded here. There needs to be a way to
     // match whatever the time is that moveItem() takes. Same in hoverLeaveEvent().
     m_animId = phase->customAnimation(10, 240, Plasma::Phase::EaseInCurve, this, "animate");
+    m_stopwatch.restart();
 }
 
 void DesktopToolbox::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 {
     //kDebug() << event->pos() << event->scenePos() << m_toolBacker->rect().contains(event->scenePos().toPoint());
-    if (m_toolBacker && m_toolBacker->rect().contains(event->scenePos().toPoint())) {
+    if ((m_toolBacker && m_toolBacker->rect().contains(event->scenePos().toPoint())) ||
+        m_stopwatch.elapsed() < 100) {
         QGraphicsItem::hoverLeaveEvent(event);
         return;
     }
@@ -226,7 +236,7 @@ void DesktopToolbox::hideToolbox()
         return;
     }
 
-    int x = m_size*2;
+    int x = m_size * 2;
     int y = 0;
     Plasma::Phase* phase = Plasma::Phase::self();
     foreach (QGraphicsItem* tool, QGraphicsItem::children()) {
@@ -248,6 +258,8 @@ void DesktopToolbox::hideToolbox()
     if (m_toolBacker) {
         m_toolBacker->hide();
     }
+
+    m_stopwatch.restart();
 }
 
 void DesktopToolbox::animate(qreal progress)
@@ -295,8 +307,13 @@ void DesktopToolbox::enableTool(const QString &toolName, bool visible)
     //kDebug() << (visible? "enabling" : "disabling") << "tool" << toolName;
     QGraphicsItem *t = tool(toolName);
 
-    if (t) {
+    if (t && t->isEnabled() != visible) {
         t->setEnabled(visible);
+        // adjust the visible items
+        if (m_showing) {
+            m_showing = false;
+            showToolbox();
+        }
     }
 }
 
