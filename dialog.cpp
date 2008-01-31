@@ -79,9 +79,9 @@ void Dialog::paintBackground(QPainter* painter, const QRect &exposedRect)
     if (!m_cachedBackground || m_cachedBackground->size() != rect().size()) {
         const int contentWidth = rect().width();
         const int contentHeight = rect().height();
-        
+
         m_background->resize();
-        
+
         const int topHeight = m_background->elementSize("top").height();
         const int topWidth = m_background->elementSize("top").width();
         const int leftWidth = m_background->elementSize("left").width();
@@ -97,20 +97,20 @@ void Dialog::paintBackground(QPainter* painter, const QRect &exposedRect)
         const int bottomOffset = contentHeight - bottomHeight;
         const int contentTop = topHeight;
         const int contentLeft = leftWidth;
-        
+
         delete m_cachedBackground;
         m_cachedBackground = new QPixmap(contentWidth, contentHeight);
         m_cachedBackground->fill(Qt::transparent);
         QPainter p(m_cachedBackground);
         p.setCompositionMode(QPainter::CompositionMode_Source);
         p.setRenderHint(QPainter::SmoothPixmapTransform);
-        
+
         //FIXME: This is a hack to fix a drawing problems with svg files where a thin transparent border is drawn around the svg image.
         //       the transparent border around the svg seems to vary in size depending on the size of the svg and as a result increasing the
         //       svn image by 2 all around didn't resolve the issue. For now it resizes based on the border size.
-        
+
         m_background->resize(contentWidth, contentHeight);
-        m_background->paint(&p, QRect(contentLeft, contentTop, contentWidth, contentHeight), "center");
+        m_background->paint(&p, QRect(leftOffset, topOffset, contentWidth, contentHeight), "center");
         m_background->resize();
 
         m_background->paint(&p, QRect(leftOffset, topOffset, leftWidth, topHeight), "topleft");
