@@ -104,6 +104,11 @@ class PLASMA_EXPORT AbstractRunner : public QObject
          */
         virtual void match(Plasma::SearchContext *search) = 0;
 
+        /**
+         * Triggers a call to match.
+         *
+         * @arg globalContext the search context used in executing this match.
+         */
         void performMatch(Plasma::SearchContext &globalContext);
 
         /**
