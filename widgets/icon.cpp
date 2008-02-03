@@ -511,9 +511,10 @@ void Icon::Private::drawBackground(QPainter *painter, IconState state)
     }
 
     painter->save();
+    painter->translate(0.5, 0.5);
     painter->setRenderHint(QPainter::Antialiasing);
     painter->setBrush(shadow);
-    painter->setPen(QPen(border, 2.0));
+    painter->setPen(QPen(border, 1));
     painter->drawPath(roundedRectangle(QRectF(QPointF(1, 1), QSize(currentSize.width()-2, currentSize.height()-2)), 5.0));
     painter->restore();
 }
