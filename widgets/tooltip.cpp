@@ -104,7 +104,7 @@ void ToolTip::hide()
     d->currentWidget = 0;
     d->showTimer->stop();  //Mouse out, stop the timer to show the tooltip
     setVisible(false);
-    d->hideTimer->start(250);  //500 ms delay before we are officially "gone" to allow for the time to move between widgets
+    d->hideTimer->start(250);  //250 ms delay before we are officially "gone" to allow for the time to move between widgets
 }
 
 Plasma::Widget *ToolTip::currentWidget() const
@@ -180,6 +180,12 @@ ToolTip::ToolTip()
 
 void ToolTip::setData(const Plasma::ToolTipData &data)
 {
+    //reset our size
+    setVisible(false);
+    resize(0, 0);
+    resize(sizeHint());
+    setVisible(true);
+
     d->label->setText("<qt><b>" + data.mainText + "</b><br>" +
                         data.subText + "</qt>");
     d->imageLabel->setPixmap(data.image);
