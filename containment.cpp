@@ -221,6 +221,8 @@ void Containment::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
             break;
         }
 
+        // applet may have a value due to finding a containment!
+        applet = 0;
         item = item->parentItem();
     }
 
@@ -274,8 +276,6 @@ void Containment::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
             return;
         }
 
-        //FIXME: change this to show this only in debug mode (or not at all?)
-        //       before final release
         QList<QAction*> actions = contextActions();
 
         if (actions.count() < 1) {
