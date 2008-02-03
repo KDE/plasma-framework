@@ -404,63 +404,9 @@ Applet* Containment::addApplet(const QString& name, const QVariantList& args, ui
         applet = new Applet;
     }
 
-    switch (containmentType()) {
-    case PanelContainment:
-    {
-        //panels don't want backgrounds, which is important when setting geometry
-        applet->setDrawStandardBackground(false);
+    addApplet(applet, appletGeometry.topLeft(), delayInit);
 
-        // Calculate where the user wants the applet to go before adding it
-        int index = -1;
-        QPointF position = appletGeometry.topLeft();
-        BoxLayout *l = dynamic_cast<BoxLayout *>(layout());
-        if (!delayInit && l && position != QPointF(-1, -1)) {
-            foreach (Applet *existingApplet, d->applets) {
-                if (formFactor() == Horizontal) {
-                    qreal middle = (existingApplet->geometry().left() +
-                            existingApplet->geometry().right()) / 2.0;
-                    // Applets are checked in order so there is no need to check
-                    // if the position is equal to or greater than the applet's
-                    // leftmost point. This also allows for dropping in the gap
-                    // between applets.
-                    if (position.x() < middle) {
-                        index = l->indexOf(existingApplet);
-                        break;
-                    } else if (position.x() <= existingApplet->geometry().right()) {
-                        index = l->indexOf(existingApplet) + 1;
-                        break;
-                    }
-                } else {
-                    qreal middle = (existingApplet->geometry().top() +
-                            existingApplet->geometry().bottom()) / 2.0;
-                    if (position.y() < middle) {
-                        index = l->indexOf(existingApplet);
-                        break;
-                    } else if (position.y() <= existingApplet->geometry().bottom()) {
-                        index = l->indexOf(existingApplet) + 1;
-                        break;
-                    }
-                }
-            }
-        }
-
-        addApplet(applet);
-        prepareApplet(applet, delayInit);
-
-        // Reposition the applet after adding has been done
-        if (index != -1) {
-            l->insertItem(index, l->takeAt(l->indexOf(applet)));
-            d->applets.removeAll(applet);
-            d->applets.insert(index, applet);
-        }
-
-        break;
-    }
-
-    default:
-        addApplet(applet);
-        prepareApplet(applet, delayInit);
-
+    if (containmentType() != PanelContainment) {
         //kDebug() << "adding applet" << applet->name() << "with a default geometry of" << appletGeometry << appletGeometry.isValid();
         if (appletGeometry.isValid()) {
             applet->setGeometry(appletGeometry);
@@ -482,6 +428,106 @@ Applet* Containment::addApplet(const QString& name, const QVariantList& args, ui
 
     emit appletAdded(applet);
     return applet;
+}
+
+//pos must be relative to the containment already. use mapfromscene.
+//what we're trying to do here for panels is make the applet go to the requested position,
+//or somewhere close to it, and get integrated properly into the containment as if it were created
+//there.
+void Containment::addApplet(Applet *applet, const QPointF &pos, bool dontInit)
+{
+    if (!applet) {
+        kDebug() << "adding null applet!?!";
+        return;
+    }
+
+    Containment *currentContainment = applet->containment();
+    int index = -1;
+
+    if (containmentType() == PanelContainment) {
+        //panels don't want backgrounds, which is important when setting geometry
+        applet->setDrawStandardBackground(false);
+
+        // Calculate where the user wants the applet to go before adding it
+        //so long as this isn't a new applet with a delayed init
+        if (! dontInit || (currentContainment && currentContainment != this)) {
+            index = indexAt(pos);
+        }
+    }
+
+    if (currentContainment && currentContainment != this) {
+        applet->removeSceneEventFilter(currentContainment);
+        KConfigGroup oldConfig = applet->config();
+        applet->resetConfigurationObject();
+        currentContainment->d->applets.removeAll(applet);
+        addChild(applet);
+
+        // now move the old config to the new location
+        KConfigGroup c = config().group("Applets").group(QString::number(applet->id()));
+        oldConfig.reparent(&c);
+    } else {
+        addChild(applet);
+    }
+
+    d->applets << applet;
+
+    connect(applet, SIGNAL(destroyed(QObject*)),
+            this, SLOT(appletDestroyed(QObject*)));
+
+    if (containmentType() == PanelContainment) {
+        // Reposition the applet after adding has been done
+        if (index != -1) {
+            BoxLayout *l = dynamic_cast<BoxLayout *>(layout());
+            l->insertItem(index, l->takeAt(l->indexOf(applet)));
+            d->applets.removeAll(applet);
+            d->applets.insert(index, applet);
+        }
+    } else {
+        //FIXME if it came from a panel its bg was disabled
+        //maybe we should expect the applet to handle that on a constraint update?
+
+        //should we really do this? hell, do we have any business playing with the geometry of
+        //non-panel applets at all?
+        if (pos != QPointF(-1, -1)) {
+            applet->setPos(pos);
+        }
+    }
+    prepareApplet(applet, dontInit); //must at least flush constraints
+}
+
+//containment-relative pos... right?
+int Containment::indexAt(const QPointF &pos) const
+{
+    if (pos == QPointF(-1, -1)) {
+        return -1;
+    }
+    BoxLayout *l = dynamic_cast<BoxLayout *>(layout());
+    if (l) {
+        foreach (Applet *existingApplet, d->applets) {
+            if (formFactor() == Horizontal) {
+                qreal middle = (existingApplet->geometry().left() +
+                        existingApplet->geometry().right()) / 2.0;
+                // Applets are checked in order so there is no need to check
+                // if the position is equal to or greater than the applet's
+                // leftmost point. This also allows for dropping in the gap
+                // between applets.
+                if (pos.x() < middle) {
+                    return l->indexOf(existingApplet);
+                } else if (pos.x() <= existingApplet->geometry().right()) {
+                    return l->indexOf(existingApplet) + 1;
+                }
+            } else {
+                qreal middle = (existingApplet->geometry().top() +
+                        existingApplet->geometry().bottom()) / 2.0;
+                if (pos.y() < middle) {
+                    return l->indexOf(existingApplet);
+                } else if (pos.y() <= existingApplet->geometry().bottom()) {
+                    return l->indexOf(existingApplet) + 1;
+                }
+            }
+        }
+    }
+    return -1;
 }
 
 void Containment::prepareApplet(Applet *applet, bool delayInit)
@@ -547,33 +593,6 @@ bool Containment::regionIsEmpty(const QRectF &region, Applet *ignoredApplet) con
         }
     }
     return true;
-}
-
-void Containment::addApplet(Applet *applet)
-{
-    Containment *currentContainment = applet->containment();
-    if (currentContainment && currentContainment != this) {
-        applet->removeSceneEventFilter(currentContainment);
-        KConfigGroup oldConfig = applet->config();
-        applet->resetConfigurationObject();
-        currentContainment->d->applets.removeAll(applet);
-        addChild(applet);
-
-        // now move the old config to the new location
-        KConfigGroup c = config().group("Applets").group(QString::number(applet->id()));
-        oldConfig.reparent(&c);
-    } else {
-        addChild(applet);
-    }
-
-    d->applets << applet;
-
-    if (currentContainment) {
-        applet->installSceneEventFilter(this);
-    }
-
-    connect(applet, SIGNAL(destroyed(QObject*)),
-            this, SLOT(appletDestroyed(QObject*)));
 }
 
 void Containment::appletDestroyed(QObject* object)

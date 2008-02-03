@@ -183,9 +183,17 @@ class PLASMA_EXPORT Containment : public Applet
         void clearApplets();
 
         /**
-         * add existing applet to this containment
+         * add existing applet to this containment at pos
+         * @param pos the containment-relative position
+         * @param dontInit if true, init() will not be called on the applet
          */
-        void addApplet(Applet * applet);
+        void addApplet(Applet *applet, const QPointF &pos = QPointF(-1, -1), bool dontInit = true);
+
+        /**
+         * @return the index to insert an applet at if you want it near the point pos.
+         * @param pos the containment-relative position
+         */
+        virtual int indexAt(const QPointF &pos) const;
 
         /**
          * Sets the physical screen this Containment is associated with.

@@ -19,6 +19,7 @@
 
 #include "applethandle_p.h"
 
+#include <QApplication>
 #include <QtGui/QGraphicsSceneMouseEvent>
 #include <QtGui/QLinearGradient>
 #include <QtGui/QPainter>
@@ -31,6 +32,7 @@
 #include <cmath>
 #include <math.h>
 
+#include "plasma/view.h"
 #include "applet.h"
 #include "containment.h"
 #include "corona.h"
@@ -328,6 +330,27 @@ void AppletHandle::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
                     Phase::self()->animateItem(m_applet, Phase::Disappear);
                 }
                 break;
+            case MoveButton: {
+                //find out if we were dropped on a panel or something
+                QWidget *w = QApplication::topLevelAt(event->screenPos());
+                kDebug() << "move to widget" << w;
+                if (w) {
+                    Plasma::View *v = qobject_cast<Plasma::View *>(w);
+                    if (v) {
+                        Containment *c = v->containment();
+                        //XXX the dashboard view won't give us a containment. if it did, this could
+                        //break shit.
+                        if (c && c != m_containment) {
+                            //we actually have been dropped on another containment, so move there
+                            //we have a screenpos, we need a scenepos
+                            //FIXME how reliable is this transform?
+                            QPoint pos = v->mapFromGlobal(event->screenPos());
+                            switchContainment(c, v->mapToScene(pos));
+                        }
+                    }
+                }
+                break;
+            }
             default:
                 break;
         }
@@ -378,17 +401,9 @@ void AppletHandle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
                     if (containments[i]->sceneBoundingRect().contains(event->scenePos())) {
                         // add the applet to the new containment
                         // and take it from the old one
-                        QPointF scenePosition = scenePos();
                         //kDebug() << "moving to other containment with position" << pos() << event->scenePos();
                         //kDebug() << "position before reparenting" << pos() << scenePos();
-                        m_containment = containments[i];
-                        //m_containment->addChild(m_applet);
-                        //setParentItem(containments[i]);
-                        m_containment->addApplet(m_applet);
-                        setParentItem(m_containment);
-                        m_applet->setParentItem(this);
-                        setPos(m_containment->mapFromScene(scenePosition));
-                        update();
+                        switchContainment(containments[i], scenePos());
                         break;
                     }
                 }
@@ -491,6 +506,31 @@ void AppletHandle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     } else {
         QGraphicsItem::mouseMoveEvent(event);
     }
+}
+
+//pos relative to scene
+void AppletHandle::switchContainment(Containment *containment, const QPointF &pos)
+{
+    Applet *applet=m_applet;
+    switch (containment->containmentType()) {
+        case Containment::PanelContainment:
+            kDebug() << "panel";
+            //we need to fully disassociate the applet and handle, then kill the handle
+            forceDisappear(); //takes care of event filter and killing handle
+            m_applet=0; //make sure we don't try to act on the applet again
+            applet->disconnect(this); //make sure the applet doesn't tell us to do anything
+            containment->addApplet(applet, containment->mapFromScene(pos));
+            break;
+        default: //FIXME assuming everything else behaves like desktop
+            kDebug() << "desktop";
+            m_containment = containment;
+            containment->addApplet(m_applet);
+            setParentItem(containment);
+            m_applet->setParentItem(this);
+            setPos(containment->mapFromScene(pos));
+            //setPos(pos);
+    }
+    update();
 }
 
 QVariant AppletHandle::itemChange(GraphicsItemChange change, const QVariant &value)

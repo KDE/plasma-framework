@@ -74,6 +74,12 @@ class AppletHandle : public QObject, public QGraphicsItem
         void calculateSize();
         ButtonType mapToButton(const QPointF &point) const;
         void forceDisappear();
+        /**
+         * move our applet to another containment
+         * @param containment the containment to move to
+         * @param pos the (scene-relative) position to place it at
+         */
+        void switchContainment(Containment *containment, const QPointF &pos);
 
         QRectF m_rect;
         ButtonType m_pressedButton;
