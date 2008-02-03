@@ -204,7 +204,7 @@ void WindowPreview::setWindowId(WId w)
         return;
     }
     id = w;
-    windowSize = QSize();
+    readWindowSize();
 }
 
 bool WindowPreview::previewsAvailable() const
