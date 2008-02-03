@@ -581,6 +581,16 @@ void Applet::constraintsUpdated(Plasma::Constraints constraints)
 {
     Q_UNUSED(constraints)
     //kDebug() << constraints << "constraints are FormFactor: " << formFactor() << ", Location: " << location();
+    if ((constraints & Plasma::FormFactorConstraint) && !d->square) {
+        if (formFactor() == Plasma::Vertical && !(expandingDirections()&Qt::Vertical) ) {
+             setMaximumContentSize(QSizeF(maximumContentSize().width(), IconSize(KIconLoader::Panel)));
+        }else if (formFactor() == Plasma::Horizontal && !(expandingDirections()&Qt::Horizontal)) {
+             setMaximumContentSize(QSizeF(IconSize(KIconLoader::Panel), maximumContentSize().height()));
+        } else {
+             setMaximumContentSize(QSizeF(std::numeric_limits<qreal>::infinity(),
+                                          std::numeric_limits<qreal>::infinity()));
+        }
+    }
 }
 
 QString Applet::name() const
