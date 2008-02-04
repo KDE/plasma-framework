@@ -579,18 +579,12 @@ void Applet::updateConstraints(Plasma::Constraints constraints)
 
 void Applet::constraintsUpdated(Plasma::Constraints constraints)
 {
+    //NOTE: do NOT put any code in here that reacts to constraints updates
+    //      as it will not get called for any applet that reimplements constraintsUpdated
+    //      without calling the Applet:: version as well, which it shouldn't need to.
+    //      INSTEAD put such code into flushUpdatedConstraints
     Q_UNUSED(constraints)
     //kDebug() << constraints << "constraints are FormFactor: " << formFactor() << ", Location: " << location();
-    if ((constraints & Plasma::FormFactorConstraint) && !d->square) {
-        if (formFactor() == Plasma::Vertical && !(expandingDirections()&Qt::Vertical) ) {
-             setMaximumContentSize(QSizeF(maximumContentSize().width(), IconSize(KIconLoader::Panel)));
-        }else if (formFactor() == Plasma::Horizontal && !(expandingDirections()&Qt::Horizontal)) {
-             setMaximumContentSize(QSizeF(IconSize(KIconLoader::Panel), maximumContentSize().height()));
-        } else {
-             setMaximumContentSize(QSizeF(std::numeric_limits<qreal>::infinity(),
-                                          std::numeric_limits<qreal>::infinity()));
-        }
-    }
 }
 
 QString Applet::name() const
@@ -813,6 +807,34 @@ void Applet::flushUpdatedConstraints()
         FormFactor f = formFactor();
         setShadowShown(f == Planar);
         setDrawStandardBackground(!containment && f != Vertical && f != Horizontal);
+
+        /**
+         FIXME: what follows was an attempt to constrain the size of applets. it is, however,
+                broken for the following reasons:
+
+                * it constrains to the size of an icon, when clearly this is not valid for
+                  any non-single-icon applet
+                * it is far too pessimistic for horizontal constraints
+
+        QSizeF newMax;
+        const QSizeF infSize(std::numeric_limits<qreal>::infinity(),
+                std::numeric_limits<qreal>::infinity());
+        if (f == Plasma::Vertical && !(expandingDirections() & Qt::Vertical)) {
+            newMax = QSizeF(maximumContentSize().width(), IconSize(KIconLoader::Panel));
+        } else if (f == Plasma::Horizontal && !(expandingDirections() & Qt::Horizontal)) {
+            newMax = QSizeF(IconSize(KIconLoader::Panel), maximumContentSize().height());
+        } else if (maximumContentSize() != infSize) {
+            newMax = infSize;
+        }
+
+        if (newMax.isValid()) {
+            setMaximumContentSize(newMax);
+            if (newMax.width() < contentSize().width() ||
+                newMax.height() < contentSize().height()) {
+                updateGeometry();
+            }
+        }
+        */
     }
 
     if (isContainment() && containment) {
@@ -1054,14 +1076,24 @@ QSizeF Applet::contentSizeHint() const
         size = contentSize();
     }
 
+    QSizeF max = maximumContentSize();
+    size = size.boundedTo(max);
     if (d->square) {
-        //kDebug() << "SizeHintIn: " << size;
+        //kDebug() << "SizeHintIn: " << (QObject*)this << size;
         switch (formFactor()) {
             case Plasma::Vertical:
+                if (size.width() > max.height()) {
+                    size.setWidth(max.height());
+                }
+
                 size.setHeight(size.width());
             case Plasma::Horizontal:
             case Plasma::Planar:
             case Plasma::MediaCenter:
+                if (size.height() > max.width()) {
+                    size.setHeight(max.width());
+                }
+
                 size.setWidth(size.height());
             default:
                 break;
