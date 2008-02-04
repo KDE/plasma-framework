@@ -181,16 +181,13 @@ ToolTip::ToolTip()
 void ToolTip::setData(const Plasma::ToolTipData &data)
 {
     //reset our size
-    setVisible(false);
-    resize(0, 0);
-    resize(sizeHint());
-    setVisible(true);
-
     d->label->setText("<qt><b>" + data.mainText + "</b><br>" +
                         data.subText + "</qt>");
     d->imageLabel->setPixmap(data.image);
     d->windowToPreview = data.windowToPreview;
     d->preview->setWindowId( d->windowToPreview );
+
+    resize(sizeHint());
 }
 
 ToolTip::~ToolTip()
