@@ -68,10 +68,10 @@ class AbstractRunner::Private
         }
     }
 
-    static QMutex serviceTypeTraderLock;
+    static QMutex bigLock;
 };
 
-QMutex AbstractRunner::Private::serviceTypeTraderLock;
+QMutex AbstractRunner::Private::bigLock;
 
 AbstractRunner::AbstractRunner(QObject* parent, const QString& serviceId)
     : QObject(parent),
@@ -186,8 +186,13 @@ void AbstractRunner::setPriority(Priority priority)
 
 KService::List AbstractRunner::serviceQuery(const QString &serviceType, const QString &constraint) const
 {
-    QMutexLocker lock(&Private::serviceTypeTraderLock);
+    QMutexLocker lock(&Private::bigLock);
     return KServiceTypeTrader::self()->query(serviceType, constraint);
+}
+
+const QMutex& AbstractRunner::bigLock() const
+{
+    return Private::bigLock;
 }
 
 void AbstractRunner::exec(Plasma::SearchMatch *action)
