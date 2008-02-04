@@ -32,7 +32,7 @@ public:
 
 RunnerScript::RunnerScript(QObject *parent)
     : ScriptEngine(parent),
-      d(0)
+      d(new Private)
 {
 }
 
@@ -49,6 +49,16 @@ void RunnerScript::setRunner(AbstractRunner *runner)
 AbstractRunner* RunnerScript::runner() const
 {
     return d->runner;
+}
+
+void RunnerScript::match(Plasma::SearchContext *search)
+{
+    Q_UNUSED(search)
+}
+
+void RunnerScript::exec(Plasma::SearchMatch *action)
+{
+    Q_UNUSED(action)
 }
 
 } // Plasma namespace

@@ -53,6 +53,37 @@ public:
      */
     DataEngine* dataEngine() const;
 
+    /**
+     * Called when the script should create a source that does not currently
+     * exist.
+     *
+     * @param name the name of the source that should be created
+     * @return true if a DataContainer was set up, false otherwise
+     */
+    virtual bool sourceRequested(const QString &name);
+
+    /**
+     * Called when the script should refresh the data contained in a given
+     * source.
+     *
+     * @param source the name of the source that should be updated
+     * @return true if the data was changed, or false if there was no
+     *         change or if the change will occur later
+     **/
+    virtual bool updateSource(const QString& source);
+
+protected:
+    void setData(const QString& source, const QString& key,
+                 const QVariant& value);
+    void setData(const QString &source, const QVariant &value);
+    void clearData(const QString& source);
+    void removeData(const QString& source, const QString& key);
+    void setSourceLimit(uint limit);
+    void setMinimumUpdateInterval(int minimumMs);
+    int  minimumUpdateInterval() const;
+    void setUpdateInterval(uint frequency);
+    void clearSources();
+
 private:
     class Private;
     Private * const d;

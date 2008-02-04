@@ -177,12 +177,24 @@ AppletScript* loadScriptEngine(const QString &language, Applet *applet)
 
 DataEngineScript* loadScriptEngine(const QString &language, DataEngine *dataEngine)
 {
-    return static_cast<DataEngineScript*>(loadEngine(language, DataEngineComponent, dataEngine));
+    DataEngineScript *engine = static_cast<DataEngineScript*>(loadEngine(language, DataEngineComponent, dataEngine));
+
+    if (engine) {
+        engine->setDataEngine(dataEngine);
+    }
+
+    return engine;
 }
 
 RunnerScript* loadScriptEngine(const QString &language, AbstractRunner *runner)
 {
-    return static_cast<RunnerScript*>(loadEngine(language, RunnerComponent, runner));
+    RunnerScript* engine = static_cast<RunnerScript*>(loadEngine(language, RunnerComponent, runner));
+
+    if (engine) {
+        engine->setRunner(runner);
+    }
+
+    return engine;
 }
 
 } // namespace Plasma

@@ -26,8 +26,11 @@
 #include <QVariant>
 
 #include <KDebug>
+#include <KPluginInfo>
+#include <KService>
 
 #include "datacontainer.h"
+#include "scripting/dataenginescript.h"
 
 namespace Plasma
 {
@@ -35,17 +38,31 @@ namespace Plasma
 class DataEngine::Private
 {
     public:
-        Private(DataEngine* e)
+        Private(DataEngine* e, KService::Ptr service)
             : engine(e),
               ref(0),
               updateTimerId(0),
               minUpdateInterval(-1),
               limit(0),
-              valid(true)
+              valid(true),
+              script(0),
+              dataEngineDescription(service)
         {
             updateTimer = new QTimer(engine);
             updateTimer->setSingleShot(true);
             updateTimestamp.start();
+
+            if (dataEngineDescription.isValid()) {
+                QString language = dataEngineDescription.property("X-Plasma-Language").toString();
+
+                if (!language.isEmpty()) {
+                    script = Plasma::loadScriptEngine(language, engine);
+                    if (!script) {
+                        kDebug() << "Could not create a" << language << "ScriptEngine for the"
+                                << dataEngineDescription.name() << "DataEngine.";
+                    }
+                }
+            }
         }
 
         DataContainer* source(const QString& sourceName, bool createWhenMissing = true)
@@ -167,12 +184,24 @@ class DataEngine::Private
         QString icon;
         uint limit;
         bool valid;
+        DataEngineScript* script;
+        KPluginInfo dataEngineDescription;
 };
 
 
-DataEngine::DataEngine(QObject* parent)
+DataEngine::DataEngine(QObject* parent, const QString& serviceId)
     : QObject(parent),
-      d(new Private(this))
+      d(new Private(this, KService::serviceByStorageId(serviceId)))
+{
+    connect(d->updateTimer, SIGNAL(timeout()), this, SLOT(checkForUpdates()));
+    //FIXME: we should delay this call; to when is the question.
+    //Update DataEngine::init() api docu when fixed
+    QTimer::singleShot(0, this, SLOT(startInit()));
+}
+
+DataEngine::DataEngine(QObject* parent, const QVariantList& args)
+    : QObject(parent),
+      d(new Private(this, KService::serviceByStorageId(args.count() > 0 ? args[0].toString() : QString())))
 {
     connect(d->updateTimer, SIGNAL(timeout()), this, SLOT(checkForUpdates()));
     //FIXME: we should delay this call; to when is the question.
@@ -267,22 +296,32 @@ void DataEngine::internalUpdateSource(DataContainer* source)
 
 void DataEngine::init()
 {
-    // kDebug() << "DataEngine::init() called ";
-    // default implementation does nothing. this is for engines that have to
-    // start things in motion external to themselves before they can work
+    if (d->script) {
+        d->script->init();
+    } else {
+        // kDebug() << "DataEngine::init() called ";
+        // default implementation does nothing. this is for engines that have to
+        // start things in motion external to themselves before they can work
+    }
 }
 
 bool DataEngine::sourceRequested(const QString &name)
 {
-    Q_UNUSED(name)
-    return false;
+    if (d->script) {
+        return d->script->sourceRequested(name);
+    } else {
+        return false;
+    }
 }
 
 bool DataEngine::updateSource(const QString& source)
 {
-    Q_UNUSED(source);
-    //kDebug() << "updateSource source" << endl;
-    return false; //TODO: should this be true to trigger, even needless, updates on every tick?
+    if (d->script) {
+        return d->script->updateSource(source);
+    } else {
+        //kDebug() << "updateSource source" << endl;
+        return false; //TODO: should this be true to trigger, even needless, updates on every tick?
+    }
 }
 
 void DataEngine::setData(const QString& source, const QVariant& value)
@@ -486,6 +525,15 @@ void DataEngine::checkForUpdates()
         it.next();
         it.value()->checkForUpdate();
     }
+}
+
+QString DataEngine::engineName() const
+{
+    if (!d->dataEngineDescription.isValid()) {
+        return QString();
+    }
+
+    return d->dataEngineDescription.property("X-Plasma-EngineName").toString();
 }
 
 }

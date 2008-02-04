@@ -33,6 +33,7 @@ namespace Plasma
 {
 
 class DataContainer;
+class DataEngineScript;
 
 /**
  * @class DataEngine
@@ -50,6 +51,7 @@ class DataContainer;
  **/
 class PLASMA_EXPORT DataEngine : public QObject
 {
+    friend class DataEngineScript;
     Q_OBJECT
     Q_PROPERTY( QStringList sources READ sources )
     Q_PROPERTY( bool valid READ isValid )
@@ -66,7 +68,8 @@ class PLASMA_EXPORT DataEngine : public QObject
          *
          * @param parent The parent object.
          **/
-        explicit DataEngine(QObject* parent = 0);
+        explicit DataEngine(QObject* parent = 0, const QString& serviceId = QString());
+        DataEngine(QObject* parent, const QVariantList& args);
         virtual ~DataEngine();
 
         /**
@@ -76,6 +79,11 @@ class PLASMA_EXPORT DataEngine : public QObject
          *         DataEngine to decide.
          **/
         virtual QStringList sources() const;
+
+        /**
+         * Returns the engine name for the DataEngine
+         */
+        QString engineName() const;
 
         /**
          * Connects a source to an object for data updates. The object must
@@ -135,7 +143,7 @@ class PLASMA_EXPORT DataEngine : public QObject
 
         /**
          * Retrevies a pointer to the DataContainer for a given source. This method
-         * should not be used if possible. An exception is for script engines that 
+         * should not be used if possible. An exception is for script engines that
          * can not provide a QMetaObject as required by connectSource for the initial
          * call to dataUpdated. Using this method, such engines can provide their own
          * connectSource API.
@@ -170,7 +178,7 @@ class PLASMA_EXPORT DataEngine : public QObject
         void deref();
 
         /**
-         * Reference counting method. Used to determine if this DataEngine is 
+         * Reference counting method. Used to determine if this DataEngine is
          * used.
          * @return true if the reference count is non-zero
          **/

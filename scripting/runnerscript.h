@@ -27,6 +27,8 @@ namespace Plasma
 {
 
 class AbstractRunner;
+class SearchContext;
+class SearchMatch;
 
 class PLASMA_EXPORT RunnerScript : public ScriptEngine
 {
@@ -52,6 +54,19 @@ public:
      * Returns the Plasma::AbstractRunner associated with this script component
      */
     AbstractRunner* runner() const;
+
+    /**
+     * Called when the script should create SearchMatch instances through
+     * SearchContext::addInformationalMatch, SearchContext::addExactMatch, and
+     * SearchContext::addPossibleMatch.
+     */
+    virtual void match(Plasma::SearchContext *search);
+
+    /**
+     * Called whenever an exact or possible match associated with this
+     * runner is triggered.
+     */
+    virtual void exec(Plasma::SearchMatch *action);
 
 private:
     class Private;

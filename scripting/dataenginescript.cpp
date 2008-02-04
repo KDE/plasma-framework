@@ -32,7 +32,7 @@ public:
 
 DataEngineScript::DataEngineScript(QObject *parent)
     : ScriptEngine(parent),
-      d(0)
+      d(new Private)
 {
 }
 
@@ -49,6 +49,83 @@ void DataEngineScript::setDataEngine(DataEngine *dataEngine)
 DataEngine* DataEngineScript::dataEngine() const
 {
     return d->dataEngine;
+}
+
+bool DataEngineScript::sourceRequested(const QString &name)
+{
+    Q_UNUSED(name)
+    return false;
+}
+
+bool DataEngineScript::updateSource(const QString& source)
+{
+    Q_UNUSED(source)
+    return false;
+}
+
+void DataEngineScript::setData(const QString& source, const QString& key,
+                                    const QVariant& value)
+{
+    if (d->dataEngine) {
+        d->dataEngine->setData(source, key, value);
+    }
+}
+
+void DataEngineScript::setData(const QString &source, const QVariant &value)
+{
+    if (d->dataEngine) {
+        d->dataEngine->setData(source, value);
+    }
+}
+
+void DataEngineScript::clearData(const QString& source)
+{
+    if (d->dataEngine) {
+        d->dataEngine->clearData(source);
+    }
+}
+
+void DataEngineScript::removeData(const QString& source, const QString& key)
+{
+    if (d->dataEngine) {
+        d->dataEngine->removeData(source, key);
+    }
+}
+
+void DataEngineScript::setSourceLimit(uint limit)
+{
+    if (d->dataEngine) {
+        d->dataEngine->setSourceLimit(limit);
+    }
+}
+
+void DataEngineScript::setMinimumUpdateInterval(int minimumMs)
+{
+    if (d->dataEngine) {
+        d->dataEngine->setMinimumUpdateInterval(minimumMs);
+    }
+}
+
+int DataEngineScript::minimumUpdateInterval() const
+{
+    if (d->dataEngine) {
+        return d->dataEngine->minimumUpdateInterval();
+    }
+    return 0;
+}
+
+void DataEngineScript::setUpdateInterval(uint frequency)
+{
+    if (d->dataEngine) {
+        d->dataEngine->setUpdateInterval(frequency);
+    }
+}
+
+void DataEngineScript::clearSources()
+{
+    if (d->dataEngine) {
+        d->dataEngine->clearSources();
+    }
 }
 
 } // Plasma namespace

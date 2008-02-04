@@ -23,8 +23,11 @@
 #include <QMutexLocker>
 
 #include <KDebug>
+#include <KPluginInfo>
 #include <KServiceTypeTrader>
+#include <QTimer>
 
+#include "scripting/runnerscript.h"
 #include "searchcontext.h"
 
 namespace Plasma
@@ -38,21 +41,47 @@ class AbstractRunner::Private
         Priority priority;
         Speed speed;
         int tier;
+        RunnerScript* script;
+        KPluginInfo runnerDescription;
+        AbstractRunner* runner;
 
-    Private()
+    Private(AbstractRunner* r, KService::Ptr service)
       : priority(NormalPriority),
         speed(NormalSpeed),
-        tier(0)
-    {}
+        tier(0),
+        script(0),
+        runnerDescription(service),
+        runner(r)
+    {
+        if (runnerDescription.isValid()) {
+            QString language = runnerDescription.property("X-Plasma-Language").toString();
+
+            if (!language.isEmpty()) {
+                script = Plasma::loadScriptEngine(language, runner);
+                if (!script) {
+                    kDebug() << "Could not create a" << language << "ScriptEngine for the"
+                    << runnerDescription.name() << "Runner.";
+                } else {
+                    QTimer::singleShot(0, runner, SLOT(init()));
+                }
+            }
+        }
+    }
 
     static QMutex serviceTypeTraderLock;
 };
 
 QMutex AbstractRunner::Private::serviceTypeTraderLock;
 
-AbstractRunner::AbstractRunner(QObject* parent)
+AbstractRunner::AbstractRunner(QObject* parent, const QString& serviceId)
     : QObject(parent),
-      d(new Private())
+      d(new Private(this, KService::serviceByStorageId(serviceId)))
+{
+}
+
+AbstractRunner::AbstractRunner(QObject* parent, const QVariantList& args)
+    : QObject(parent),
+      d(new Private(this, KService::serviceByStorageId(args.count() > 0 ? args[0].toString() : QString())))
 {
 }
 
@@ -139,7 +168,7 @@ void AbstractRunner::setSpeed(Speed speed)
 // {
 //     return d->tier;
 // }
-// 
+//
 // void AbstractRunner::setTier(int tier)
 // {
 //     d->tier = tier;
@@ -163,7 +192,31 @@ KService::List AbstractRunner::serviceQuery(const QString &serviceType, const QS
 
 void AbstractRunner::exec(Plasma::SearchMatch *action)
 {
-    Q_UNUSED(action)
+    if (d->script) {
+        return d->script->exec(action);
+    }
+}
+
+void AbstractRunner::match(Plasma::SearchContext *search)
+{
+    if (d->script) {
+        return d->script->match(search);
+    }
+}
+
+QString AbstractRunner::runnerName() const
+{
+    if (!d->runnerDescription.isValid()) {
+        return QString();
+    }
+    return d->runnerDescription.property("X-Plasma-RunnerName").toString();
+}
+
+void AbstractRunner::init()
+{
+    if (d->script) {
+        d->script->init();
+    }
 }
 
 AbstractRunner::List AbstractRunner::loadRunners(QObject* parent, const QStringList& whitelist)
@@ -174,9 +227,17 @@ AbstractRunner::List AbstractRunner::loadRunners(QObject* parent, const QStringL
 
     KService::List offers = KServiceTypeTrader::self()->query("Plasma/Runner");
     QString error;
+    QVariantList allArgs;
     foreach (KService::Ptr service, offers) {
         if( whitelist.empty() || whitelist.contains( service->name() ) ) {
-            AbstractRunner* runner = service->createInstance<AbstractRunner>(parent, QVariantList(), &error);
+            allArgs << service->storageId();
+            QString language = service->property("X-Plasma-Language").toString();
+            AbstractRunner* runner;
+            if (language.isEmpty()) {
+                runner = service->createInstance<AbstractRunner>(parent, allArgs, &error);
+            } else {
+                runner = new AbstractRunner(parent, service->storageId());
+            }
             if (runner) {
                 //kDebug() << "loaded runner : " << service->name();
                 QString phase = service->property("X-Plasma-RunnerPhase").toString();

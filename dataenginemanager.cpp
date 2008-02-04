@@ -18,6 +18,7 @@
  */
 
 #include "dataenginemanager.h"
+#include "scripting/scriptengine.h"
 
 #include <KDebug>
 #include <KServiceTypeTrader>
@@ -119,11 +120,18 @@ Plasma::DataEngine* DataEngineManager::loadDataEngine(const QString& name)
     KService::List offers = KServiceTypeTrader::self()->query("Plasma/DataEngine",
                                                               constraint);
     QString error;
+    QVariantList allArgs;
+    allArgs << offers.first()->storageId();
 
     if (offers.isEmpty()) {
         kDebug() << "offers are empty for " << name << " with constraint " << constraint;
     } else {
-        engine = offers.first()->createInstance<Plasma::DataEngine>(0, QVariantList(), &error);
+        QString language = offers.first()->property("X-Plasma-Language").toString();
+        if (language.isEmpty()) {
+            engine = offers.first()->createInstance<Plasma::DataEngine>(0, allArgs, &error);
+        } else {
+            engine = new DataEngine(0, offers.first()->storageId());
+        }
     }
 
     if (!engine) {

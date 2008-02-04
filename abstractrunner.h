@@ -35,6 +35,8 @@ class KCompletion;
 namespace Plasma
 {
 
+class RunnerScript;
+
 /**
  * An abstract base class for Plasma Runner plugins
  *
@@ -73,7 +75,8 @@ class PLASMA_EXPORT AbstractRunner : public QObject
          * this constructor can not be called directly. Rather a subclass must
          * be created
          */
-        explicit AbstractRunner(QObject* parent = 0);
+        explicit AbstractRunner(QObject* parent = 0, const QString& serviceId = QString());
+        AbstractRunner(QObject* parent, const QVariantList& args);
         virtual ~AbstractRunner();
 
         /**
@@ -94,7 +97,7 @@ class PLASMA_EXPORT AbstractRunner : public QObject
          *
          * The match will be activated if the user selects it.
          *
-         * If this runner's exact match is selected, it will be passed into 
+         * If this runner's exact match is selected, it will be passed into
          * the exec method.
          * @see exec
          *
@@ -102,7 +105,7 @@ class PLASMA_EXPORT AbstractRunner : public QObject
          * to return from this method right away, nor to create all matches
          * here.
          */
-        virtual void match(Plasma::SearchContext *search) = 0;
+        virtual void match(Plasma::SearchContext *search);
 
         /**
          * Triggers a call to match.
@@ -166,6 +169,11 @@ class PLASMA_EXPORT AbstractRunner : public QObject
          */
         Priority priority() const;
 
+        /**
+          * Returns the engine name for the Runner
+          */
+        QString runnerName() const;
+
     protected:
         /**
          * Sets whether or not the the runner has options for matches
@@ -178,9 +186,9 @@ class PLASMA_EXPORT AbstractRunner : public QObject
         void setIsConfigurable(bool canBeConfigured);
 
         /**
-         * Sets the nominal speed of the runner. Only slow runners need 
-         * to call this within their constructor because the default 
-         * speed is NormalSpeed. Runners that use DBUS should call 
+         * Sets the nominal speed of the runner. Only slow runners need
+         * to call this within their constructor because the default
+         * speed is NormalSpeed. Runners that use DBUS should call
          * this within their constructors.
          */
         void setSpeed(Speed newSpeed);
@@ -212,6 +220,9 @@ class PLASMA_EXPORT AbstractRunner : public QObject
          */
         KService::List serviceQuery(const QString &serviceType,
                                     const QString &constraint = QString()) const;
+
+    protected slots:
+        void init();
 
     private:
         class Private;
