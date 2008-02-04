@@ -28,7 +28,7 @@ namespace Plasma
 {
 
 /**
- * @short Plasma Applet that is fully rendererd using OpengGL
+ * @short Plasma Applet that is fully rendered using OpengGL
  *
  */
 class PLASMA_EXPORT GLApplet : public Applet

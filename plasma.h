@@ -32,7 +32,7 @@ namespace Plasma
 {
 
 /**
- * The Constriants enumeration lists the various constraints that Plasma
+ * The Constraint enumeration lists the various constraints that Plasma
  * objects have managed for them and which they may wish to react to,
  * for instance in Applet::constraintsUpdated
  */
@@ -64,7 +64,7 @@ enum FormFactor { Planar = 0  /**< The applet lives in a plane and has two
                                    referred to as a "ten foot interface".*/,
                   Horizontal  /**< The applet is constrained vertically, but
                                    can expand horizontally. */,
-                  Vertical    /**< The applet is contrained horizontally, but
+                  Vertical    /**< The applet is constrained horizontally, but
                                    can expand vertically. */
                 };
 

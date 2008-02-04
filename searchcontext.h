@@ -85,7 +85,7 @@ class PLASMA_EXPORT SearchContext : public QObject
          * The mimetype that the search term refers to, if discoverable.
          *
          * @return QString() if the mimetype can not be determined, otherwise
-         *         the mimetype of the object being refered to by the search
+         *         the mimetype of the object being referred to by the search
          *         string.
          */
         QString mimetype() const;
@@ -106,8 +106,8 @@ class PLASMA_EXPORT SearchContext : public QObject
         void addStringCompletions(const QStringList& completions);
 
         /**
-         * Add an action that represents a match to the current search term.
-         * This action is informational in nature and does not represent and actionable
+         * Adds an action that represents a match to the current search term.
+         * This action is informational in nature and does not represent an actionable
          * match.
          *
          * If string data is added to the action using QAction::setData(), that
@@ -116,12 +116,12 @@ class PLASMA_EXPORT SearchContext : public QObject
         SearchMatch* addInformationalMatch(AbstractRunner *runner);
 
         /**
-         * Add an action that represents an exact match to the current search term.
+         * Adds an action that represents an exact match to the current search term.
          */
         SearchMatch* addExactMatch(AbstractRunner *runner);
 
         /**
-         * Add an action that represents a possible match to the current search term.
+         * Adds an action that represents a possible match to the current search term.
          */
         SearchMatch* addPossibleMatch(AbstractRunner *runner);
 
