@@ -36,6 +36,7 @@
 #include <QDesktopWidget>
 
 #include <KDebug>
+#include <KGlobalSettings>
 
 #include "layouts/freelayout.h"
 #include "plasma/plasma.h"
@@ -312,7 +313,13 @@ QSizeF Widget::size() const
 
 QFont Widget::font() const
 {
-    return QApplication::font();
+    if (managingLayout()) {
+        kDebug() << "layout, return taskbarFont()";
+        return KGlobalSettings::taskbarFont();
+    } else {
+        kDebug() << "nolayout, return desktopFont()";
+        return KGlobalSettings::desktopFont();
+    }
 }
 
 /*

@@ -32,6 +32,7 @@
 
 #include <kglobal.h>
 #include <kwindowsystem.h>
+#include <plasma/theme.h>
 
 #ifdef Q_WS_X11
 #include <X11/Xlib.h>
@@ -82,7 +83,14 @@ void ToolTip::show(const QPoint &location, Plasma::Widget *widget)
 {
     d->currentWidget = widget;
     setData(widget->toolTip());
-
+    
+    // Make the tooltip use Plasma's colorscheme
+    QPalette plasmaPalette = QPalette();
+    plasmaPalette.setColor(QPalette::Window, Plasma::Theme::self()->backgroundColor());
+    plasmaPalette.setColor(QPalette::WindowText, Plasma::Theme::self()->textColor());    
+    setAutoFillBackground(true);
+    setPalette(plasmaPalette);
+    
     move(location.x(), location.y());
 
     if (d->isShown) {
@@ -303,7 +311,7 @@ void ToolTip::paintEvent(QPaintEvent *)
     painter.setRenderHint(QPainter::Antialiasing);
 
     //Stroke border
-    painter.setPen(palette().dark().color());
+    painter.setPen(Plasma::Theme::self()->textColor());
     painter.drawPath(roundedRectangle(rect(), 10));
 }
 
