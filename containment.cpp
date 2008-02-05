@@ -248,6 +248,21 @@ void Containment::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
             hasEntries = true;
         }
 
+        actions = contextActions();
+        if (actions.count() > 0) {
+            hasEntries = true;
+            QMenu *containmentActionMenu = &desktopMenu;
+
+            if (actions.count() > 1) {
+                containmentActionMenu = new KMenu(i18n("%1 Options", name()), &desktopMenu);
+                desktopMenu.addMenu(containmentActionMenu);
+            }
+
+            foreach(QAction* action, actions) {
+                containmentActionMenu->addAction(action);
+            }
+        }
+
         if (scene() && !static_cast<Corona*>(scene())->isImmutable()) {
             if (hasEntries) {
                 desktopMenu.addSeparator();
