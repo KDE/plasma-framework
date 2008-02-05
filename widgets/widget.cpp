@@ -521,6 +521,7 @@ void Widget::setToolTip(const ToolTipData &tip)
         tip.mainText.isEmpty()) {
         delete d->toolTip;
         d->toolTip = 0;
+        return;
     }
 
     if (!d->toolTip) {
