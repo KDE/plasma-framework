@@ -60,10 +60,10 @@ protected:
 private Q_SLOTS:
     void resetShownState();
     void showToolTip();
+    void resetPalette();
 
 private:
     void setData(const Plasma::ToolTipData &data);
-    void resetPalette();
 
     class Private;
     Private *const d;
