@@ -25,9 +25,6 @@
 #include <QDesktopWidget>
 #include <QGraphicsSceneDragDropEvent>
 #include <QMimeData>
-#include <QUrl>
-#include <QGraphicsView>
-#include <QStringList>
 #include <QTimer>
 
 #include <KDebug>
