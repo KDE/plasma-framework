@@ -55,9 +55,14 @@ class Widget::Private
                           std::numeric_limits<qreal>::infinity()),
               opacity(1.0),
               cachePaintMode(Widget::NoCacheMode),
-              wasMovable(false)
+              wasMovable(false),
+              toolTip(0)
         { }
-        ~Private() { }
+
+        ~Private()
+        {
+            delete toolTip;
+        }
 
         QSizeF size;
         QSizeF minimumSize;
@@ -77,7 +82,7 @@ class Widget::Private
         bool wasMovable;
 
         bool shouldPaint(QPainter *painter, const QTransform &transform);
-        ToolTipData toolTip;
+        ToolTipData *toolTip;
 };
 
 QGraphicsItem* Widget::graphicsItem()
@@ -504,16 +509,28 @@ NOTE: put this back if we end up needing to control when things paint due to, e.
     }
 }
 
-ToolTipData Widget::toolTip() const
+const ToolTipData* Widget::toolTip() const
 {
     return d->toolTip;
 }
 
 void Widget::setToolTip(const ToolTipData &tip)
 {
-    d->toolTip = tip;
+    if (tip.image.isNull() &&
+        tip.subText.isEmpty() &&
+        tip.mainText.isEmpty()) {
+        delete d->toolTip;
+        d->toolTip = 0;
+    }
+
+    if (!d->toolTip) {
+        d->toolTip = new ToolTipData;
+    }
+
+    *d->toolTip = tip;
+
     if (ToolTip::self()->currentWidget() == this) {
-        ToolTip::self()->show(popupPosition(ToolTip::self()->sizeHint()), this);
+        ToolTip::self()->show(this);
     }
 }
 
@@ -620,9 +637,7 @@ bool Widget::sceneEvent(QEvent *event)
     case QEvent::GraphicsSceneHoverEnter:
     {
         // Check that there is a tooltip to show
-        if (d->toolTip.image.isNull() &&
-                d->toolTip.subText.isEmpty() &&
-                d->toolTip.mainText.isEmpty()) {
+        if (!d->toolTip) {
             break;
         }
 
@@ -631,15 +646,16 @@ bool Widget::sceneEvent(QEvent *event)
         // initialized, in which case view() will return 0.
         QGraphicsView *parentView = view();
         if (parentView) {
-            ToolTip *tip = ToolTip::self();
-            tip->adjustSize();
-            tip->show(popupPosition(tip->size()), this);
+            ToolTip::self()->show(this);
         }
 
         break;
     }
 
     case QEvent::GraphicsSceneHoverLeave:
+        ToolTip::self()->delayedHide();
+        break;
+
     case QEvent::GraphicsSceneMousePress:
     case QEvent::GraphicsSceneWheel:
         ToolTip::self()->hide();

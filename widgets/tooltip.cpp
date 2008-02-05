@@ -30,8 +30,9 @@
 #include <QX11Info>
 #endif
 
-#include <kglobal.h>
-#include <kwindowsystem.h>
+#include <KDebug>
+#include <KGlobal>
+#include <KWindowSystem>
 #include <plasma/theme.h>
 
 #ifdef Q_WS_X11
@@ -53,6 +54,7 @@ class ToolTip::Private
         , windowToPreview(0)
         , currentWidget(0)
         , isShown(false)
+        , delayedHide(false)
         , showTimer(0)
         , hideTimer(0)
     { }
@@ -63,6 +65,7 @@ class ToolTip::Private
     WId windowToPreview;
     Plasma::Widget *currentWidget;
     bool isShown;
+    bool delayedHide;
     QTimer *showTimer;
     QTimer *hideTimer;
 };
@@ -79,38 +82,34 @@ ToolTip *ToolTip::self()
     return &privateInstance->self;
 }
 
-void ToolTip::show(const QPoint &location, Plasma::Widget *widget)
+void ToolTip::show(Plasma::Widget *widget)
 {
+    d->hideTimer->stop();
+    d->delayedHide = false;
     d->currentWidget = widget;
-    setData(widget->toolTip());
-    
-    // Make the tooltip use Plasma's colorscheme
-    QPalette plasmaPalette = QPalette();
-    plasmaPalette.setColor(QPalette::Window, Plasma::Theme::self()->backgroundColor());
-    plasmaPalette.setColor(QPalette::WindowText, Plasma::Theme::self()->textColor());    
-    setAutoFillBackground(true);
-    setPalette(plasmaPalette);
-    
-    move(location.x(), location.y());
+    d->showTimer->stop();
 
     if (d->isShown) {
-        // Don't delay if the tooltip is already shown(i.e. moving from one task to another)
-        // Qt doesn't seem to like visible tooltips moving though, so hide it and then
-        // immediately show it again
-        setVisible(false);
-
         // small delay to prevent unecessary showing when the mouse is moving quickly across items
         // which can be too much for less powerful CPUs to keep up with
-        d->showTimer->start(150);
+        d->showTimer->start(200);
     } else {
         d->showTimer->start(500);
     }
+}
+
+void ToolTip::delayedHide()
+{
+    d->showTimer->stop();  // stop the timer to show the tooltip
+    d->delayedHide = true;
+    d->hideTimer->start(250);
 }
 
 void ToolTip::hide()
 {
     d->currentWidget = 0;
     d->showTimer->stop();  //Mouse out, stop the timer to show the tooltip
+    d->delayedHide = false;
     setVisible(false);
     d->hideTimer->start(250);  //250 ms delay before we are officially "gone" to allow for the time to move between widgets
 }
@@ -121,12 +120,18 @@ Plasma::Widget *ToolTip::currentWidget() const
 }
 
 //PRIVATE FUNCTIONS
-void ToolTip::slotShowToolTip()
+void ToolTip::showToolTip()
 {
+    if (!d->currentWidget || !d->currentWidget->toolTip()) {
+        return;
+    }
+
     QGraphicsView *v = d->currentWidget->view();
     if (v && v->mouseGrabber()) {
         return;
     }
+
+    setData(*d->currentWidget->toolTip());
 
     if( d->windowToPreview != 0 ) {
         // show/hide the preview area
@@ -138,12 +143,18 @@ void ToolTip::slotShowToolTip()
 
     d->isShown = true;  //ToolTip is visible
     setVisible(true);
+    resize(sizeHint());
+    move(d->currentWidget->popupPosition(size()));
 }
 
-void ToolTip::slotResetTimer()
+void ToolTip::resetShownState()
 {
-    if (!isVisible()) { //One might have moused out and back in again
+    if (!isVisible() || //One might have moused out and back in again
+        d->delayedHide) {
+        d->delayedHide = false;
         d->isShown = false;
+        d->currentWidget = 0;
+        setVisible(false);
     }
 }
 
@@ -182,20 +193,11 @@ ToolTip::ToolTip()
     d->hideTimer = new QTimer(this);
     d->hideTimer->setSingleShot(true);
 
-    connect(d->showTimer, SIGNAL(timeout()), SLOT(slotShowToolTip()));
-    connect(d->hideTimer, SIGNAL(timeout()), SLOT(slotResetTimer()));
-}
+    connect(d->showTimer, SIGNAL(timeout()), SLOT(showToolTip()));
+    connect(d->hideTimer, SIGNAL(timeout()), SLOT(resetShownState()));
 
-void ToolTip::setData(const Plasma::ToolTipData &data)
-{
-    //reset our size
-    d->label->setText("<qt><b>" + data.mainText + "</b><br>" +
-                        data.subText + "</qt>");
-    d->imageLabel->setPixmap(data.image);
-    d->windowToPreview = data.windowToPreview;
-    d->preview->setWindowId( d->windowToPreview );
-
-    resize(sizeHint());
+    connect(Plasma::Theme::self(), SIGNAL(changed()), this, SLOT(resetPalette()));
+    resetPalette();
 }
 
 ToolTip::~ToolTip()
@@ -203,6 +205,32 @@ ToolTip::~ToolTip()
     delete d;
 }
 
+void ToolTip::setData(const Plasma::ToolTipData &data)
+{
+    //reset our size
+    d->label->setText("<qt><b>" + data.mainText + "</b><br>" + data.subText + "</qt>");
+    d->imageLabel->setPixmap(data.image);
+    d->windowToPreview = data.windowToPreview;
+    d->preview->setWindowId( d->windowToPreview );
+
+    if (isVisible()) {
+        resize(sizeHint());
+
+        if (d->currentWidget) {
+            move(d->currentWidget->popupPosition(size()));
+        }
+    }
+}
+
+void ToolTip::resetPalette()
+{
+    // Make the tooltip use Plasma's colorscheme
+    QPalette plasmaPalette = QPalette();
+    plasmaPalette.setColor(QPalette::Window, Plasma::Theme::self()->backgroundColor());
+    plasmaPalette.setColor(QPalette::WindowText, Plasma::Theme::self()->textColor());
+    setAutoFillBackground(true);
+    setPalette(plasmaPalette);
+}
 
 // A widget which reserves area for window preview and sets hints on the toplevel
 // tooltip widget that tells KWin to render the preview in this area. This depends

@@ -276,7 +276,7 @@ public:
     * The Data from the tooltip
     * @returns A ToolTip::Data object with current information
     */
-    ToolTipData toolTip() const;
+    const ToolTipData* toolTip() const;
 
     /**
     * Setter for data shown in tooltip
