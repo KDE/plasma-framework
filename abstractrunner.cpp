@@ -40,7 +40,6 @@ class AbstractRunner::Private
         bool hasConfig;
         Priority priority;
         Speed speed;
-        int tier;
         RunnerScript* script;
         KPluginInfo runnerDescription;
         AbstractRunner* runner;
@@ -48,7 +47,6 @@ class AbstractRunner::Private
     Private(AbstractRunner* r, KService::Ptr service)
       : priority(NormalPriority),
         speed(NormalSpeed),
-        tier(0),
         script(0),
         runnerDescription(service),
         runner(r)
@@ -162,17 +160,6 @@ void AbstractRunner::setSpeed(Speed speed)
 {
     d->speed = speed;
 }
-
-// For 4.1:
-// int AbstractRunner::tier() const
-// {
-//     return d->tier;
-// }
-//
-// void AbstractRunner::setTier(int tier)
-// {
-//     d->tier = tier;
-// }
 
 AbstractRunner::Priority AbstractRunner::priority() const
 {

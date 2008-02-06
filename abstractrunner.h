@@ -157,13 +157,6 @@ class PLASMA_EXPORT AbstractRunner : public QObject
          */
         Speed speed() const;
 
-// For 4.1
-//         /**
-//          * The tier of the runner.
-//          * @see setTier
-//          */
-//         int tier() const;
-
         /**
          * The priority of the runner.
          * @see setPriority
