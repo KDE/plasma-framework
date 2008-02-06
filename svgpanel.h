@@ -120,24 +120,8 @@ class PLASMA_EXPORT SvgPanel : public QObject
         void updateSizes();
 
     private:
-        BorderFlags bFlags;
-        QPixmap *cachedBackground;
-        Svg *m_background;
-        QSizeF panelSize;
-
-        //measures
-        int topHeight;
-        int topWidth;
-        int leftWidth;
-        int leftHeight;
-        int rightWidth;
-        int bottomHeight;
-
-        //size of the svg where the size of the "center"
-        //element is contentWidth x contentHeight
-        QSizeF scaledSize;
-        bool noBorderPadding : 1;
-        bool stretchBorders : 1;
+        class Private;
+        Private * const d;
 };
 
 } // Plasma namespace
