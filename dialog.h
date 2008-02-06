@@ -28,11 +28,8 @@
 
 #include <plasma/plasma_export.h>
 
-
-
 namespace Plasma
 {
-    class Svg;
 
 /**
  * @short A dialog that uses the Plasma style
@@ -75,23 +72,12 @@ class PLASMA_EXPORT Dialog : public QWidget
         /**
          * Reimplemented from QWidget
          */
-        void paintEvent( QPaintEvent *e );
+        void paintEvent(QPaintEvent *e);
+        void resizeEvent(QResizeEvent *e);
 
     private:
-        /**
-         * Paints the plasma-themed background
-         */
-        void paintBackground(QPainter* painter, const QRect &exposedRect);
-        /**
-         * Holds the background SVG, to be re-rendered when the cache is invalidated,
-         * for example by resizing the dialogue.
-         */
-        Plasma::Svg *m_background;
-        /**
-         * Holds a pixmap of the rendered SVG background so we don't need to re-render
-         * it when not necessary.
-         */
-        QPixmap *m_cachedBackground;
+        class Private;
+        Private * const d;
 };
 
 } // Plasma namespace
