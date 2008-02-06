@@ -149,31 +149,31 @@ qreal SvgPanel::marginSize(const Plasma::MarginEdge edge) const
 
 void SvgPanel::paint(QPainter* painter, const QRectF& rect)
 {
+    bool origined = d->bFlags & ContentAtOrigin;
     const int topWidth = d->background->elementSize("top").width();
     const int leftHeight = d->background->elementSize("left").height();
-    const int topOffset = d->bFlags & ContentAtOrigin ? 0 - d->topHeight : 0;
-    const int leftOffset = d->bFlags & ContentAtOrigin ? 0 - d->leftWidth : 0;
+    const int topOffset = origined ? 0 - d->topHeight : 0;
+    const int leftOffset = origined ? 0 - d->leftWidth : 0;
 
     if (!d->cachedBackground) {
-        const int contentTop = 0;
-        const int contentLeft = 0;
         const int contentWidth = d->panelSize.width() - d->leftWidth  - d->rightWidth;
         const int contentHeight = d->panelSize.height() - d->topHeight  - d->bottomHeight;
-        const int rightOffset = contentWidth;
-        const int bottomOffset = contentHeight;
+        int contentTop = 0;
+        int contentLeft = 0;
+        int rightOffset = contentWidth;
+        int bottomOffset = contentHeight;
 
         delete d->cachedBackground;
         d->cachedBackground = new QPixmap(d->leftWidth + contentWidth + d->rightWidth,
                                           d->topHeight + contentHeight + d->bottomHeight);
         d->cachedBackground->fill(Qt::transparent);
         QPainter p(d->cachedBackground);
-
-        if (d->bFlags & ContentAtOrigin) {
-            p.translate(d->leftWidth, d->topHeight);
-        }
-
         p.setCompositionMode(QPainter::CompositionMode_Source);
         p.setRenderHint(QPainter::SmoothPixmapTransform);
+
+        if (origined) {
+            p.translate(d->leftWidth, d->topHeight);
+        }
 
         //FIXME: This is a hack to fix a drawing problems with svg files where a thin transparent border is drawn around the svg image.
         //       the transparent border around the svg seems to vary in size depending on the size of the svg and as a result increasing the
@@ -196,10 +196,20 @@ void SvgPanel::paint(QPainter* painter, const QRectF& rect)
            d->background->resize();
        }
 
-        //EDGES
+        // Corners
         if (d->bFlags & DrawTopBorder) {
+            if (!origined) {
+                contentTop = d->topHeight;
+                bottomOffset += d->topHeight;
+            }
+
             if (d->bFlags & DrawLeftBorder) {
                 d->background->paint(&p, QRect(leftOffset, topOffset, d->leftWidth, d->topHeight), "topleft");
+
+                if (!origined) {
+                    contentLeft = d->leftWidth;
+                    rightOffset = contentWidth + d->leftWidth;
+                }
             }
 
             if (d->bFlags & DrawRightBorder) {
@@ -210,6 +220,11 @@ void SvgPanel::paint(QPainter* painter, const QRectF& rect)
         if (d->bFlags & DrawBottomBorder) {
             if (d->bFlags & DrawLeftBorder) {
                 d->background->paint(&p, QRect(leftOffset, bottomOffset, d->leftWidth, d->bottomHeight), "bottomleft");
+
+                if (!origined) {
+                    contentLeft = d->leftWidth;
+                    rightOffset = contentWidth + d->leftWidth;
+                }
             }
 
             if (d->bFlags & DrawRightBorder) {
@@ -217,7 +232,7 @@ void SvgPanel::paint(QPainter* painter, const QRectF& rect)
             }
         }
 
-        //SIDES
+        // Sides
         if (d->stretchBorders) {
             if (d->bFlags & DrawLeftBorder) {
                 d->background->paint(&p, QRect(leftOffset, contentTop, d->leftWidth, contentHeight), "left");
@@ -327,8 +342,8 @@ void SvgPanel::updateSizes()
    //since it's rectangular, topWidth and bottomWidth must be the same
    d->noBorderPadding = d->background->elementExists("hint-no-border-padding");
    d->stretchBorders = d->background->elementExists("hint-stretch-borders");
+   emit repaintNeeded();
 }
-
 
 } // Plasma namespace
 

@@ -117,6 +117,9 @@ class PLASMA_EXPORT SvgPanel : public QObject
          */
         Q_INVOKABLE void paint(QPainter* painter, const QRectF& rect);
 
+    Q_SIGNALS:
+        void repaintNeeded();
+
     private slots:
         //update sizes of the svg elements
         void updateSizes();
