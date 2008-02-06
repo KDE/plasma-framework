@@ -332,7 +332,7 @@ void Svg::setFile(const QString &svgFilePath)
 
 QString Svg::file() const
 {
-   return d->themePath;
+   return d->themed ? d->themePath : d->path;
 }
 
 void Svg::themeChanged()
