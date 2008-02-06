@@ -162,19 +162,16 @@ void SvgPanel::paint(QPainter* painter, const QRectF& rect)
         const int rightOffset = contentWidth;
         const int bottomOffset = contentHeight;
 
-        QSizeF scaledSize = QSizeF(d->panelSize.width() -
-                            (d->leftWidth + d->rightWidth) +
-                            d->panelSize.width()*(((qreal)(d->leftWidth + d->rightWidth)) / d->panelSize.width()),
-                            d->panelSize.height() -
-                            (d->topHeight + d->bottomHeight) +
-                            d->panelSize.height()*(((qreal)(d->topHeight + d->bottomHeight)) / d->panelSize.height()));
-
         delete d->cachedBackground;
         d->cachedBackground = new QPixmap(d->leftWidth + contentWidth + d->rightWidth,
                                           d->topHeight + contentHeight + d->bottomHeight);
         d->cachedBackground->fill(Qt::transparent);
         QPainter p(d->cachedBackground);
-        p.translate(d->leftWidth, d->topHeight);
+
+        if (d->bFlags & ContentAtOrigin) {
+            p.translate(d->leftWidth, d->topHeight);
+        }
+
         p.setCompositionMode(QPainter::CompositionMode_Source);
         p.setRenderHint(QPainter::SmoothPixmapTransform);
 
@@ -185,6 +182,13 @@ void SvgPanel::paint(QPainter* painter, const QRectF& rect)
 
        //CENTER
        if (contentHeight > 0 && contentWidth > 0) {
+           QSizeF scaledSize = QSizeF(d->panelSize.width() -
+                            (d->leftWidth + d->rightWidth) +
+                            d->panelSize.width()*(((qreal)(d->leftWidth + d->rightWidth)) / d->panelSize.width()),
+                            d->panelSize.height() -
+                            (d->topHeight + d->bottomHeight) +
+                            d->panelSize.height()*(((qreal)(d->topHeight + d->bottomHeight)) / d->panelSize.height()));
+
            d->background->resize(scaledSize.width(), scaledSize.height());
            d->background->paint(&p, QRect(contentLeft - d->leftWidth, contentTop - d->topHeight,
                                           contentWidth + d->leftWidth*2, contentHeight + d->topHeight*2),
@@ -216,27 +220,19 @@ void SvgPanel::paint(QPainter* painter, const QRectF& rect)
         //SIDES
         if (d->stretchBorders) {
             if (d->bFlags & DrawLeftBorder) {
-                d->background->resize(d->background->size().width(), scaledSize.height());
                 d->background->paint(&p, QRect(leftOffset, contentTop, d->leftWidth, contentHeight), "left");
-                d->background->resize();
             }
 
             if (d->bFlags & DrawRightBorder) {
-                d->background->resize(d->background->size().width(), scaledSize.height());
                 d->background->paint(&p, QRect(rightOffset, contentTop, d->rightWidth, contentHeight), "right");
-                d->background->resize();
             }
 
             if (d->bFlags & DrawTopBorder) {
-                d->background->resize(scaledSize.width(), d->background->size().height());
                 d->background->paint(&p, QRect(contentLeft, topOffset, contentWidth, d->topHeight), "top");
-                d->background->resize();
             }
 
             if (d->bFlags & DrawBottomBorder) {
-                d->background->resize(scaledSize.width(), d->background->size().height());
                 d->background->paint(&p, QRect(contentLeft, bottomOffset, contentWidth, d->bottomHeight), "bottom");
-                d->background->resize();
             }
         } else {
             if (d->bFlags & DrawLeftBorder) {
