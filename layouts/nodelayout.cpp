@@ -159,6 +159,10 @@ NodeLayout::NodeLayout(LayoutItem * parent)
 
 NodeLayout::~NodeLayout()
 {
+    foreach (LayoutItem * item, d->items.keys()) {
+        item->unsetManagingLayout(this);
+    }
+
     delete d;
 }
 

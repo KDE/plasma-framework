@@ -56,6 +56,10 @@ BorderLayout::BorderLayout(LayoutItem * parent) :
 
 BorderLayout::~BorderLayout()
 {
+    foreach (Plasma::LayoutItem *item, d->itemPositions) {
+        item->unsetManagingLayout(this);
+    }
+
     delete d;
 }
 

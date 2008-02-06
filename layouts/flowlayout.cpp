@@ -47,6 +47,10 @@ FlowLayout::FlowLayout(LayoutItem* parent)
 }
 FlowLayout::~FlowLayout()
 {
+    foreach (LayoutItem *item, d->items) {
+        item->unsetManagingLayout(this);
+    }
+
     delete d;
 }
 

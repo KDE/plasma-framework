@@ -168,7 +168,7 @@ class PLASMA_EXPORT Layout : public LayoutItem
         virtual QSizeF maximumSize() const;      
 
         /** TODO Document me */
-        void invalidate(); 
+        void invalidate();
 
     protected:
         /**

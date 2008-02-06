@@ -41,6 +41,10 @@ FreeLayout::FreeLayout(LayoutItem *parent)
 
 FreeLayout::~FreeLayout()
 {
+    foreach (LayoutItem *item, d->children) {
+        item->unsetManagingLayout(this);
+    }
+
     delete d;
 }
 
