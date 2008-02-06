@@ -48,11 +48,13 @@ class PLASMA_EXPORT SvgPanel : public QObject
         /**
          * These flags represents what borders should be drawn
          */
-        enum BorderFlag { DrawTop = 1,
-                          DrawBottom = 2,
-                          DrawLeft = 4,
-                          DrawRight = 8,
-                          ContentAtOrigin = 16
+        enum BorderFlag { DrawTopBorder = 1,
+                          DrawBottomBorder = 2,
+                          DrawLeftBorder = 4,
+                          DrawRightBorder = 8,
+                          ContentAtOrigin = 16,
+                          DrawAllBorders = DrawTopBorder | DrawBottomBorder |
+                                           DrawLeftBorder | DrawRightBorder
                         };
         Q_DECLARE_FLAGS(BorderFlags, BorderFlag)
 
@@ -125,4 +127,7 @@ class PLASMA_EXPORT SvgPanel : public QObject
 };
 
 } // Plasma namespace
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(Plasma::SvgPanel::BorderFlags)
+
 #endif // multiple inclusion guard
