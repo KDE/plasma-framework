@@ -214,10 +214,10 @@ public:
     void getBorderSize(int& left , int& top, int &right, int& bottom)
     {
         if (background) {
-            top = background->marginSize(Plasma::Layout::TopMargin);
-            left = background->marginSize(Plasma::Layout::LeftMargin);
-            right = background->marginSize(Plasma::Layout::RightMargin);
-            bottom = background->marginSize(Plasma::Layout::BottomMargin);
+            top = background->marginSize(Plasma::TopMargin);
+            left = background->marginSize(Plasma::LeftMargin);
+            right = background->marginSize(Plasma::RightMargin);
+            bottom = background->marginSize(Plasma::BottomMargin);
         } else {
             top = left = right = bottom = 0;
         }

@@ -147,6 +147,12 @@ enum ComponentType { AppletComponent = 1 /**< Plasma::Applet based plugins **/,
                    };
 Q_DECLARE_FLAGS(ComponentTypes, ComponentType)
 
+enum MarginEdge { TopMargin = 0,
+                  BottomMargin,
+                  LeftMargin,
+                  RightMargin
+                };
+
 /**
  * @return the scaling factor (0..1) for a ZoomLevel
  **/

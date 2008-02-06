@@ -26,6 +26,7 @@
 
 #include <plasma/layouts/layoutitem.h>
 #include <plasma/plasma_export.h>
+#include <plasma/plasma.h>
 
 namespace Plasma
 {
@@ -44,8 +45,6 @@ class LayoutAnimator;
 class PLASMA_EXPORT Layout : public LayoutItem
 {
     public:
-        enum MarginEdge { TopMargin, BottomMargin, LeftMargin, RightMargin };
-
         /**
          * Constructor.
          */
@@ -59,12 +58,12 @@ class PLASMA_EXPORT Layout : public LayoutItem
         /**
          * Returns the margin of this Layout.
          */
-        qreal margin(MarginEdge edge) const;
+        qreal margin(Plasma::MarginEdge edge) const;
 
         /**
          * Sets the margin of this Layout.
          */
-        void setMargin(MarginEdge edge, qreal m);
+        void setMargin(Plasma::MarginEdge edge, qreal m);
 
         /**
          * Sets all the margins of this Layout.

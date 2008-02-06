@@ -121,26 +121,26 @@ void SvgPanel::resize(const QSizeF& size)
     updateSizes();
 }
 
-qreal SvgPanel::marginSize(const Plasma::Layout::MarginEdge edge) const
+qreal SvgPanel::marginSize(const Plasma::MarginEdge edge) const
 {
     if (d->noBorderPadding) {
         return .0;
     }
 
     switch (edge) {
-    case Plasma::Layout::TopMargin:
+    case Plasma::TopMargin:
         return d->topHeight;
     break;
 
-    case Plasma::Layout::LeftMargin:
+    case Plasma::LeftMargin:
         return d->leftWidth;
     break;
 
-    case Plasma::Layout::RightMargin:
+    case Plasma::RightMargin:
         return d->rightWidth;
     break;
 
-    //Plasma::Layout::BottomMargin
+    //Plasma::BottomMargin
     default:
         return d->bottomHeight;
     break;

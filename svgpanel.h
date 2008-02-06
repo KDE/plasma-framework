@@ -26,8 +26,8 @@
 
 #include <plasma/plasma_export.h>
 
+#include <plasma/plasma.h>
 #include <plasma/svg.h>
-#include <plasma/layouts/layout.h>
 
 class QPainter;
 class QPoint;
@@ -106,7 +106,7 @@ class PLASMA_EXPORT SvgPanel : public QObject
          * @arg edge the margin edge we want, top, bottom, left or right
          * @return the margin size
          */
-        qreal marginSize(const Plasma::Layout::MarginEdge edge) const;
+        qreal marginSize(const Plasma::MarginEdge edge) const;
 
         /**
          * Paints the loaded SVG with the elements that represents the border
