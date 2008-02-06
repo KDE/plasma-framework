@@ -56,6 +56,7 @@
 #include "plasma/scripting/appletscript.h"
 #include "plasma/shadowitem_p.h"
 #include "plasma/svg.h"
+#include "plasma/svgpanel.h"
 #include "plasma/theme.h"
 #include "plasma/view.h"
 
@@ -186,116 +187,6 @@ public:
         }
     }
 
-    void paintBackground(QPainter* p2, Applet* q, QRectF paintRect)
-    {
-        if (q->formFactor() != Plasma::Planar) {
-            // we don't paint special backgrounds for other form factors
-            // if that changes in the future, this method is where such
-            // background painting code should be added
-            return;
-        }
-
-        // TODO: caching these values might be an idea
-        const int topHeight = background->elementSize("top").height();
-        const int leftWidth = background->elementSize("left").width();
-        const int topOffset = 0 - topHeight;
-        const int leftOffset = 0 - leftWidth;
-
-        if (!cachedBackground || cachedBackground->size() != q->boundingRect().toRect().size()) {
-            QSize contents = contentSize(q).toSize();
-
-            const int contentWidth = contents.width();
-            const int contentHeight = contents.height();
-
-            background->resize();
-
-            const int topWidth = background->elementSize("top").width();
-            const int leftHeight = background->elementSize("left").height();
-            const int rightWidth = background->elementSize("right").width();
-            const int bottomHeight = background->elementSize("bottom").height();
-
-            // contents top-left corner is (0,0).  We need to draw up and left of that
-            const int rightOffset = contentWidth;
-            const int bottomOffset = contentHeight;
-            const int contentTop = 0;
-            const int contentLeft = 0;
-
-            delete cachedBackground;
-            cachedBackground = new QPixmap(leftWidth + contentWidth + rightWidth, topHeight + contentHeight + bottomHeight);
-            cachedBackground->fill(Qt::transparent);
-            QPainter p(cachedBackground);
-            p.translate(leftWidth, topHeight);
-            p.setCompositionMode(QPainter::CompositionMode_Source);
-            p.setRenderHint(QPainter::SmoothPixmapTransform);
-
-            //FIXME: This is a hack to fix a drawing problems with svg files where a thin transparent border is drawn around the svg image.
-            //       the transparent border around the svg seems to vary in size depending on the size of the svg and as a result increasing the
-            //       svn image by 2 all around didn't resolve the issue. For now it resizes based on the border size.
-
-            if (contentWidth > 0 && contentHeight > 0) {
-                background->resize(contentWidth, contentHeight);
-                background->paint(&p, QRect(contentLeft-leftWidth, contentTop-topHeight,
-                                            contentWidth+leftWidth*2, contentHeight+topHeight*2),
-                                  "center");
-                background->resize();
-            }
-
-            background->paint(&p, QRect(leftOffset, topOffset, leftWidth, topHeight), "topleft");
-            background->paint(&p, QRect(rightOffset, topOffset,rightWidth, topHeight), "topright");
-            background->paint(&p, QRect(leftOffset, bottomOffset, leftWidth, bottomHeight), "bottomleft");
-            background->paint(&p, QRect(rightOffset, bottomOffset, rightWidth, bottomHeight), "bottomright");
-
-            if (background->elementExists("hint-stretch-borders")) {
-                background->paint(&p, QRect(leftOffset, contentTop, leftWidth, contentHeight), "left");
-                background->paint(&p, QRect(rightOffset, contentTop, rightWidth, contentHeight), "right");
-                background->paint(&p, QRect(contentLeft, topOffset, contentWidth, topHeight), "top");
-                background->paint(&p, QRect(contentLeft, bottomOffset, contentWidth, bottomHeight), "bottom");
-            } else {
-                QPixmap left(leftWidth, leftHeight);
-                left.fill(Qt::transparent);
-                {
-                    QPainter sidePainter(&left);
-                    sidePainter.setCompositionMode(QPainter::CompositionMode_Source);
-                    background->paint(&sidePainter, QPoint(0, 0), "left");
-                }
-                p.drawTiledPixmap(QRect(leftOffset, contentTop, leftWidth, contentHeight), left);
-
-                QPixmap right(rightWidth, leftHeight);
-                right.fill(Qt::transparent);
-                {
-                    QPainter sidePainter(&right);
-                    sidePainter.setCompositionMode(QPainter::CompositionMode_Source);
-                    background->paint(&sidePainter, QPoint(0, 0), "right");
-                }
-                p.drawTiledPixmap(QRect(rightOffset, contentTop, rightWidth, contentHeight), right);
-
-                QPixmap top(topWidth, topHeight);
-                top.fill(Qt::transparent);
-                {
-                    QPainter sidePainter(&top);
-                    sidePainter.setCompositionMode(QPainter::CompositionMode_Source);
-                    background->paint(&sidePainter, QPoint(0, 0), "top");
-                }
-                p.drawTiledPixmap(QRect(contentLeft, topOffset, contentWidth, topHeight), top);
-
-                QPixmap bottom(topWidth, bottomHeight);
-                bottom.fill(Qt::transparent);
-                {
-                    QPainter sidePainter(&bottom);
-                    sidePainter.setCompositionMode(QPainter::CompositionMode_Source);
-                    background->paint(&sidePainter, QPoint(0, 0), "bottom");
-                }
-                p.drawTiledPixmap(QRect(contentLeft, bottomOffset, contentWidth, bottomHeight), bottom);
-            }
-
-            // re-enable this once Qt's svg rendering is un-buggered
-            //background->resize(contentWidth, contentHeight);
-            //background->paint(&p, QRect(contentLeft, contentTop, contentWidth, contentHeight), "center");
-        }
-
-        p2->drawPixmap(paintRect, *cachedBackground, paintRect.translated(-leftOffset,-topOffset));
-    }
-
     QSizeF contentSize(const Applet* q)
     {
         if (failureText) {
@@ -323,10 +214,10 @@ public:
     void getBorderSize(int& left , int& top, int &right, int& bottom)
     {
         if (background) {
-            top = background->elementSize("top").height();
-            left = background->elementSize("left").width();
-            right = background->elementSize("right").width();
-            bottom = background->elementSize("bottom").height();
+            top = background->marginSize(Plasma::Layout::TopMargin);
+            left = background->marginSize(Plasma::Layout::LeftMargin);
+            right = background->marginSize(Plasma::Layout::RightMargin);
+            bottom = background->marginSize(Plasma::Layout::BottomMargin);
         } else {
             top = left = right = bottom = 0;
         }
@@ -399,7 +290,7 @@ public:
     QList<QObject*> watchedForFocus;
     QStringList loadedEngines;
     static uint s_maxAppletId;
-    Plasma::Svg *background;
+    Plasma::SvgPanel *background;
     Plasma::LineEdit *failureText;
     AppletScript *script;
     ConfigXml* configXml;
@@ -682,7 +573,7 @@ void Applet::setDrawStandardBackground(bool drawBackground)
 {
     if (drawBackground) {
         if (!d->background) {
-            d->background = new Plasma::Svg("widgets/background");
+            d->background = new Plasma::SvgPanel("widgets/background");
             updateGeometry();
         }
     } else if (d->background) {
@@ -962,9 +853,11 @@ void Applet::paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *opti
         painter->setRenderHint(QPainter::Antialiasing);
     }
 
-    if (d->background) {
+    if (d->background &&
+        formFactor() != Plasma::Vertical &&
+        formFactor() != Plasma::Horizontal) {
         //kDebug() << "option rect is" << option->rect;
-        d->paintBackground(painter, this, option->rect);
+        d->background->paint(painter, option->rect);
     }
 
     if (!d->failed && !d->needsConfig) {
@@ -1478,6 +1371,9 @@ void Applet::setGeometry(const QRectF& geometry)
             managingLayout()->invalidate();
         }
 
+        if (d->background) {
+            d->background->resize(size());
+        }
         updatedConstraints |= Plasma::SizeConstraint;
     }
 
