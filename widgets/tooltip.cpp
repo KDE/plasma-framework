@@ -141,8 +141,13 @@ void ToolTip::showToolTip()
     }
     layout()->activate();
 
+    if (isVisible()) {
+        d->preview->setInfo();
+    } else {
+        setVisible(true);
+    }
+
     d->isShown = true;  //ToolTip is visible
-    setVisible(true);
     resize(sizeHint());
     move(d->currentWidget->popupPosition(size()));
 }
