@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://web.resource.org/cc/"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.0"
+   width="42"
+   height="50"
+   id="svg2"
+   sodipodi:version="0.32"
+   inkscape:version="0.45.1"
+   sodipodi:docname="background.svg"
+   sodipodi:docbase="/home/diau/failed Graphics attempts/plasma background"
+   inkscape:output_extension="org.inkscape.output.svg.inkscape">
+  <sodipodi:namedview
+     inkscape:window-height="674"
+     inkscape:window-width="792"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     guidetolerance="10.0"
+     gridtolerance="10.0"
+     objecttolerance="10.0"
+     borderopacity="1.0"
+     bordercolor="#666666"
+     pagecolor="#ffffff"
+     id="base"
+     inkscape:zoom="9.26"
+     inkscape:cx="21"
+     inkscape:cy="25"
+     inkscape:window-x="0"
+     inkscape:window-y="301"
+     inkscape:current-layer="svg2" />
+  <metadata
+     id="metadata15">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs5" />
+  <rect
+     style="opacity:1;fill:#000000;stroke:#000000;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     id="center"
+     width="42"
+     y="-0.5"
+     x="0.5"
+     height="50" />
+  <path
+     style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dashoffset:4.15;stroke-opacity:1"
+     d="M 20,22 L 22,22 L 22,24 L 20,24 L 20,22 z "
+     id="rect2895" />
+  <image
+     id="bottom"
+     width="2"
+     y="24"
+     xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAARCAYAAAD39H0RAAAABmJLR0QA/wD/AP+gvaeTAAAACXBI
+WXMAAA3XAAAN1wFCKJt4AAAAB3RJTUUH2AELCwUwjyOxWwAAADZJREFUCNeVirENACAMw5yKC/v/
+I53CAGXoRibLsQADBHdfsDLzQESMxvYwkk7c12rzGlWVATYtlwwOURnbYAAAAABJRU5ErkJggg==
+"
+     x="20"
+     height="17" />
+  <image
+     id="topleft"
+     width="15"
+     y="6"
+     xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAQCAYAAADJViUEAAAABmJLR0QA/wD/AP+gvaeTAAAACXBI
+WXMAAA3XAAAN1wFCKJt4AAAAB3RJTUUH2AELCxUs0eD/RQAAAJpJREFUKM+tkLEOAyEMQ50K+EN+
+nQH+AAZYGGBJh4rqrpDjWvVNiCiObWJmxoJaK7TWuEIBgLUWv6DG42iAiKa/FY/Pj7H41WUimi6t
+HBzFlXSVmd+CkhvVe4eUe5vZGINdbklEXQ135f2v7TuklBBCQCnltbxrdeCcg3PubHvXKgDEGE+L
+y8wS3vt1YXfy5pzltiWBEam1Ns2e00NM0VCpUf4AAAAASUVORK5CYII=
+"
+     x="5"
+     height="16" />
+  <image
+     id="bottomright"
+     width="15"
+     y="24"
+     xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAARCAYAAAACCvahAAAABmJLR0QA/wD/AP+gvaeTAAAACXBI
+WXMAAA3XAAAN1wFCKJt4AAAAB3RJTUUH2AELCxUFk1JnKQAAAJdJREFUOMulkrEKxCAQRGeX1T5W
+Yq3/k8K/9AsFwatOJJdcNmYaQfc54yAB6Dgo54zeO4gIVyqlgPFCP7C1dh12zq3DMcY1OMYI770a
+FhHBtm1IKSGEAAC3TQ943/cBzOvj2LOj5hL5Ds0QEalgvhq6e3NrDczMp7EVTUOeuB274LPNfyKi
+YSJaR9X3fCKqtfa7mMaY07MPWKA1d+IvswwAAAAASUVORK5CYII=
+"
+     x="22"
+     height="17" />
+  <image
+     id="top"
+     width="2"
+     y="6"
+     xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAAQCAYAAAA8qK60AAAABmJLR0QA/wD/AP+gvaeTAAAACXBI
+WXMAAA3XAAAN1wFCKJt4AAAAB3RJTUUH2AELCxYCJhuhSQAAADRJREFUCNeNjLENACAMw2zUJ/v/
+Fe1SBljYyGRZcqyqATAzByC6G4DFXaiv+QHV8wzMb7UBCY4LB49FuQcAAAAASUVORK5CYII=
+"
+     x="20"
+     height="16" />
+  <image
+     id="left"
+     width="15"
+     y="22"
+     xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAACCAYAAACHSIaUAAAABmJLR0QA/wD/AP+gvaeTAAAACXBI
+WXMAAA3XAAAN1wFCKJt4AAAAB3RJTUUH2AELCwUgkpShPwAAACdJREFUCNeFycERACAMwzCHHTNm
+ZzQDcD30VVTbslEBmJnnDh9J1rv6wgoGUqvw2AAAAABJRU5ErkJggg==
+"
+     x="5"
+     height="2" />
+  <image
+     id="topright"
+     width="15"
+     y="6"
+     xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAQCAYAAADJViUEAAAABmJLR0QA/wD/AP+gvaeTAAAACXBI
+WXMAAA3XAAAN1wFCKJt4AAAAB3RJTUUH2AELCxYaNXc5HwAAAKZJREFUKM+lUiEOBCEQKxscBsMT
+MLyHX+J5CmIfgMDgSAiCUyTcLjdh95pgZminU2C11g4CrTUIIZY9Zq0lyb/gnAPvneYyxgAA871R
+O3YnDcIMPhdX6pTIcW2MM4QoQU5Z7b1/CZGTV/apFfhuOFc3/6ftvYeUElprKKUeCfBSCkopiDHC
+GANjDHZCvNkOISCltP1Fbzuf5/menHN+T661Lt96FdoH2XZGMzy7inUAAAAASUVORK5CYII=
+"
+     x="22"
+     height="16" />
+  <image
+     id="right"
+     width="15"
+     y="22"
+     xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAACCAYAAACHSIaUAAAABmJLR0QA/wD/AP+gvaeTAAAACXBI
+WXMAAA3XAAAN1wFCKJt4AAAAB3RJTUUH2AELCxQc7iL+qAAAAChJREFUCNdjZGBg+M+ABoKDgxkY
+GBgYGBkZGXCB1atXMzDhksSnEQYAWggEAy+Qf1YAAAAASUVORK5CYII=
+"
+     x="22"
+     height="2" />
+  <image
+     id="bottomleft"
+     width="15"
+     y="24"
+     xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAARCAYAAAACCvahAAAABmJLR0QA/wD/AP+gvaeTAAAACXBI
+WXMAAA3XAAAN1wFCKJt4AAAAB3RJTUUH2AELCxcBpgnBsgAAAJNJREFUOMulk7ENxCAMRW3rxAAU
+SLhEDMAybMlGDEFP43SXhBPBR1yCHn7+FigiknOGWYkIICKUUn7uCF6UGjbG7MPW2n04hLAPMzPE
+GG9nnxWEiN/EU0rgnINaK7TW1vC4Mu89MLNOW0RuBn9pj+rXB0kDzozUaY/aRHTC4zwaC1rpzQJU
+Bzbr/upXoTwM23t/hA+4VjdMTKYq7QAAAABJRU5ErkJggg==
+"
+     x="5"
+     height="17" />
+</svg>

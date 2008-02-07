@@ -8,7 +8,12 @@ install(FILES
     DESTINATION ${DATA_INSTALL_DIR}/desktoptheme/default/opaque/dialogs/)
 
 install(FILES
+    opaque/widgets/tooltip.svg
+    DESTINATION ${DATA_INSTALL_DIR}/desktoptheme/default/opaque/widgets/)
+
+install(FILES
     widgets/background.svg
+    widgets/tooltip.svg
     widgets/clock.svg
     widgets/toolbox-button.svg
     widgets/connection-established.svg
