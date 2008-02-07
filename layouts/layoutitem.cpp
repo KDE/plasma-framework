@@ -90,13 +90,18 @@ void LayoutItem::setLayout(Layout* layout)
     if (d->layout == layout) {
         return;
     }
+
     delete d->layout;
+    d->layout = layout;
 
     if (layout) {
         layout->setParent(this);
     }
+}
 
-    d->layout = layout;
+void LayoutItem::unsetLayout()
+{
+    d->layout = 0;
 }
 
 Layout* LayoutItem::layout() const

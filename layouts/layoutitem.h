@@ -117,11 +117,21 @@ class PLASMA_EXPORT LayoutItem
         virtual QSizeF sizeHint() const = 0;
 
         /**
-         * Sets the layout that will manage children items
+         * Sets the layout that will manage children items. The LayoutItem
+         * takes ownership of the layout from that point forward, unless
+         * unsetLayout() is called.
          *
          * @param layout The Layout that this LayoutItem will be managed by.
          */
         void setLayout(Layout* layout);
+
+        /**
+         * Resets the layout that will manage children items to no layout.
+         * Note that the caller of this method must alert any items managed
+         * by the layout of this change if necessary. Primarily, this should
+         * only be used from the dtors of LayoutItem subclasses.
+         */
+        void unsetLayout();
 
         /**
          * @return the layout this item is currently associated with.

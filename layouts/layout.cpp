@@ -68,17 +68,24 @@ Layout::Layout(LayoutItem *parent)
     : LayoutItem(),
       d(new Private(parent))
 {
-    if (parent) {
+    setParent(parent);
+}
+
+void Layout::setParent(LayoutItem *parent)
+{
+    d->parent = parent;
+
+    if (parent && parent->layout() != this) {
         parent->setLayout(this);
     }
 }
 
-void Layout::setParent(LayoutItem *parent) {
-    d->parent = parent;
-}
-
 Layout::~Layout()
 {
+    if (d->parent) {
+        d->parent->unsetLayout();
+    }
+
     delete d;
 }
 
