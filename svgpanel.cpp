@@ -81,8 +81,6 @@ void SvgPanel::setFile(const QString& imagePath)
         return;
     }
 
-    delete d->cachedBackground;
-    d->cachedBackground = 0;
     d->background->setFile(imagePath);
     updateSizes();
 }
@@ -98,8 +96,6 @@ void SvgPanel::setBorderFlags(const BorderFlags flags)
         return;
     }
 
-    delete d->cachedBackground;
-    d->cachedBackground = 0;
     d->bFlags = flags;
     updateSizes();
 }
@@ -115,8 +111,6 @@ void SvgPanel::resize(const QSizeF& size)
         return;
     }
 
-    delete d->cachedBackground;
-    d->cachedBackground = 0;
     d->panelSize = size;
     updateSizes();
 }
@@ -314,6 +308,8 @@ void SvgPanel::paint(QPainter* painter, const QRectF& rect)
 
 void SvgPanel::updateSizes()
 {
+    delete d->cachedBackground;
+    d->cachedBackground = 0;
     d->background->resize();
     if (d->bFlags & DrawTopBorder) {
         d->topHeight = d->background->elementSize("top").height();
