@@ -60,11 +60,12 @@ class SharedSvgRenderer : public KSvgRenderer, public QSharedData
 class Svg::Private
 {
     public:
-        Private(const QString& imagePath)
+        Private(const QString& imagePath, Svg *q)
             : renderer(0),
-              contentType(Svg::SingleImage)
+              contentType(Svg::SingleImage),
+              themed(false)
         {
-            setImagePath(imagePath);
+            setImagePath(imagePath, q);
         }
 
         ~Private()
@@ -72,13 +73,18 @@ class Svg::Private
             eraseRenderer();
         }
 
-        void setImagePath(const QString &imagePath)
+        void setImagePath(const QString &imagePath, Svg *q)
         {
+            if (themed) {
+                disconnect(Plasma::Theme::self(), SIGNAL(changed()), q, SLOT(themeChanged()));
+            }
+
             themed = !QDir::isAbsolutePath(imagePath);
             path = themePath = QString();
 
             if (themed) {
                 themePath = imagePath;
+                connect(Plasma::Theme::self(), SIGNAL(changed()), q, SLOT(themeChanged()));
             } else {
                 path = imagePath;
 
@@ -220,11 +226,8 @@ QHash<QString, SharedSvgRenderer::Ptr> Svg::Private::renderers;
 
 Svg::Svg(const QString& imagePath, QObject* parent)
     : QObject(parent),
-      d(new Private(imagePath))
+      d(new Private(imagePath, this))
 {
-    if (d->themed) {
-        connect(Plasma::Theme::self(), SIGNAL(changed()), this, SLOT(themeChanged()));
-    }
 }
 
 Svg::~Svg()
@@ -326,7 +329,7 @@ Svg::ContentType Svg::contentType()
 
 void Svg::setFile(const QString &svgFilePath)
 {
-   d->setImagePath(svgFilePath);
+   d->setImagePath(svgFilePath, this);
    d->eraseRenderer();
 }
 
@@ -337,10 +340,20 @@ QString Svg::file() const
 
 void Svg::themeChanged()
 {
+    if (!d->themed) {
+        return;
+    }
+
+    QString newPath = Theme::self()->image(d->themePath);
+
+    if (d->path == newPath) {
+        return;
+    }
+
     d->removeFromCache();
-    d->path.clear();
+    d->path = newPath;
     //delete d->renderer; we're a KSharedPtr
-    d->renderer = 0;
+    d->eraseRenderer();
     emit repaintNeeded();
 }
 
