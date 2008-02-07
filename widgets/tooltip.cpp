@@ -34,6 +34,7 @@
 #include <KGlobal>
 #include <KWindowSystem>
 #include <plasma/theme.h>
+#include <plasma/svgpanel.h>
 
 #ifdef Q_WS_X11
 #include <X11/Xlib.h>
@@ -68,6 +69,9 @@ class ToolTip::Private
     bool delayedHide;
     QTimer *showTimer;
     QTimer *hideTimer;
+
+    SvgPanel *background;
+
 };
 
 class ToolTipSingleton
@@ -188,6 +192,17 @@ ToolTip::ToolTip()
     d->label->setWordWrap(true);
     d->imageLabel = new QLabel;
     d->imageLabel->setAlignment(Qt::AlignTop | Qt::AlignLeft);
+
+    d->background = new SvgPanel("widgets/tooltip", this);
+    d->background->setBorderFlags(SvgPanel::DrawAllBorders);
+    const int topHeight = d->background->marginSize(Plasma::TopMargin);
+    const int leftWidth = d->background->marginSize(Plasma::LeftMargin);
+    const int rightWidth = d->background->marginSize(Plasma::RightMargin);
+    const int bottomHeight = d->background->marginSize(Plasma::BottomMargin);
+    setContentsMargins(leftWidth, topHeight, rightWidth, bottomHeight);
+
+    connect(d->background, SIGNAL(repaintNeeded()), this, SLOT(update()));
+
     l->addWidget(d->preview, 0, 0, 1, 2);
     l->addWidget(d->imageLabel, 1, 0);
     l->addWidget(d->label, 1, 1);
@@ -326,6 +341,12 @@ void WindowPreview::setInfo()
 
 void ToolTip::resizeEvent(QResizeEvent *)
 {
+    d->background->resize(size());
+
+    if (KWindowSystem::compositingActive()) {
+        return;
+    }
+
     QBitmap mask(width(), height());
     QPainter painter(&mask);
 
@@ -338,14 +359,22 @@ void ToolTip::resizeEvent(QResizeEvent *)
     setMask(mask);
 }
 
-void ToolTip::paintEvent(QPaintEvent *)
+void ToolTip::paintEvent(QPaintEvent *e)
 {
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
+    painter.setClipRect(e->rect());
+    painter.setCompositionMode(QPainter::CompositionMode_Source );
+    painter.fillRect(rect(), Qt::transparent);
 
-    //Stroke border
-    painter.setPen(Plasma::Theme::self()->textColor());
-    painter.drawPath(roundedRectangle(rect(), 10));
+    d->background->paint(&painter, rect());
+
+    //Stroke border if there is no compositing
+    if (!KWindowSystem::compositingActive()) {
+        painter.setCompositionMode(QPainter::CompositionMode_SourceOver );
+        painter.setPen(Plasma::Theme::self()->textColor());
+        painter.drawPath(roundedRectangle(rect().adjusted(.5,.5,-.5,-.5), 10));
+    }
 }
 
 }
