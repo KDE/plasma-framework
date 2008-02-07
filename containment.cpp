@@ -329,10 +329,9 @@ void Containment::setFormFactor(FormFactor formFactor)
 
     //kDebug() << "switching FF to " << formFactor;
     d->formFactor = formFactor;
-    Layout *lay = layout();
-    setLayout(0);
-    delete lay;
-    lay = 0;
+    Layout *lay = 0;
+    //note: setting a new layout autodeletes the old one
+    //and creating a layout calls setLayout on the parent
 
     switch (d->formFactor) {
         case Planar:
@@ -350,9 +349,11 @@ void Containment::setFormFactor(FormFactor formFactor)
             break;
         case MediaCenter:
             //FIXME: need a layout type here!
+            setLayout(0); //auto-delete
             break;
         default:
             kDebug() << "This can't be happening! Or... can it? ;)" << d->formFactor;
+            setLayout(0); //auto-delete
             break;
     }
 

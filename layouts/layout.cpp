@@ -79,9 +79,6 @@ void Layout::setParent(LayoutItem *parent) {
 
 Layout::~Layout()
 {
-    if (parent()) {
-        parent()->setLayout(0);
-    }
     delete d;
 }
 

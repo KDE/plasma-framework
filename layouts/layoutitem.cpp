@@ -87,6 +87,9 @@ qreal LayoutItem::widthForHeight(qreal h) const
 
 void LayoutItem::setLayout(Layout* layout)
 {
+    if (d->layout == layout) {
+        return;
+    }
     delete d->layout;
 
     if (layout) {
