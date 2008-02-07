@@ -138,6 +138,9 @@ class PLASMA_EXPORT Theme : public QObject
          **/
         void settingsChanged();
 
+    private Q_SLOTS:
+        void compositingChanged();
+
     private:
         class Private;
         Private* const d;

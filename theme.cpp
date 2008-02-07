@@ -21,11 +21,13 @@
 
 #include <QApplication>
 #include <QFile>
+#include <QX11Info>
 
 #include <KWindowSystem>
 #include <KColorScheme>
 #include <KConfigGroup>
 #include <KDebug>
+#include <KSelectionWatcher>
 #include <KSharedConfig>
 #include <KStandardDirs>
 
@@ -55,6 +57,10 @@ public:
    QString app;
    KSharedConfigPtr colors;
    QFont generalFont;
+   bool compositingActive;
+#ifdef Q_WS_X11
+   KSelectionWatcher *compositeWatch;
+#endif
 };
 
 class ThemeSingleton
@@ -75,6 +81,15 @@ Theme::Theme(QObject* parent)
       d(new Private)
 {
     settingsChanged();
+    d->compositingActive = KWindowSystem::compositingActive();
+
+#ifdef Q_WS_X11
+    char net_wm_cm_name[100];
+    sprintf(net_wm_cm_name, "_NET_WM_CM_S%d", DefaultScreen(QX11Info::display()));
+    d->compositeWatch = new KSelectionWatcher(net_wm_cm_name, -1, this);
+    connect(d->compositeWatch, SIGNAL(newOwner(Window)), this, SLOT(compositingChanged()));
+    connect(d->compositeWatch, SIGNAL(lostOwner()), this, SLOT(compositingChanged()));
+#endif
 }
 
 Theme::~Theme()
@@ -94,6 +109,18 @@ void Theme::setApplication(const QString &appname)
 void Theme::settingsChanged()
 {
     setThemeName(d->config().readEntry("name", "default"));
+}
+
+void Theme::compositingChanged()
+{
+#ifdef Q_WS_X11
+    bool compositingActive = d->compositeWatch->owner() != None;
+
+    if (d->compositingActive != compositingActive) {
+        d->compositingActive = compositingActive;
+        emit changed();
+    }
+#endif
 }
 
 void Theme::setThemeName(const QString &themeName)
@@ -142,13 +169,9 @@ QString Theme::themeName() const
 
 QString Theme::image( const QString& name ) const
 {
-    //TODO: performance ... should we try and cache the results of KStandardDirs::locate?
-    //      should we just use whatever theme path was returned and not care about cascades?
-    //      (probably "no" on the last question)
     QString search;
     QString path;
-    bool compositingActive = KWindowSystem::compositingActive();
-    if (!compositingActive) {
+    if (!d->compositingActive) {
         search = "desktoptheme/" + d->themeName + "/opaque/" + name + ".svg";
         path =  KStandardDirs::locate( "data", search );
     }
@@ -160,7 +183,7 @@ QString Theme::image( const QString& name ) const
 
     if (path.isEmpty()) {
         if (d->themeName != "default") {
-            if (!compositingActive) {
+            if (!d->compositingActive) {
                 search = "desktoptheme/default/opaque/" + name + ".svg";
                 path = KStandardDirs::locate("data", search);
             }
