@@ -616,7 +616,7 @@ void Applet::setFailedToLaunch(bool failed, const QString& reason)
 
     d->failureText = 0;
     qDeleteAll(QGraphicsItem::children());
-    delete layout();
+    setLayout(0);
 
     if (failed) {
         setDrawStandardBackground(true);
@@ -653,7 +653,7 @@ void Applet::setNeedsConfiguring(bool needsConfig)
     d->needsConfig = needsConfig;
     prepareGeometryChange();
     qDeleteAll(QGraphicsItem::children());
-    delete layout();
+    setLayout(0);
 
     if (needsConfig) {
         setDrawStandardBackground(true);
@@ -668,7 +668,7 @@ void Applet::setNeedsConfiguring(bool needsConfig)
 void Applet::performSetupConfig()
 {
     qDeleteAll(QGraphicsItem::children());
-    delete layout();
+    setLayout(0);
     showConfigurationInterface();
 }
 
