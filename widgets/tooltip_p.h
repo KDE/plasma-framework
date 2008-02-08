@@ -60,7 +60,7 @@ protected:
 private Q_SLOTS:
     void resetShownState();
     void showToolTip();
-    void resetPalette();
+    void themeUpdated();
 
 private:
     void setData(const Plasma::ToolTipData &data);

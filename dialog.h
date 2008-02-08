@@ -75,6 +75,12 @@ class PLASMA_EXPORT Dialog : public QWidget
         void paintEvent(QPaintEvent *e);
         void resizeEvent(QResizeEvent *e);
 
+    private Q_SLOTS:
+        /**
+         * React to theme changes 
+         */
+        void themeUpdated();
+
     private:
         class Private;
         Private * const d;

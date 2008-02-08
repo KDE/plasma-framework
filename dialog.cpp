@@ -35,6 +35,7 @@
 #include <NETRootInfo>
 
 #include <plasma/svgpanel.h>
+#include <plasma/theme.h>
 
 #ifdef Q_WS_X11
 #include <X11/Xlib.h>
@@ -62,17 +63,23 @@ Dialog::Dialog( QWidget * parent, Qt::WindowFlags f )
     d->background->setBorderFlags(SvgPanel::DrawAllBorders);
     d->background->resize(size());
 
+    connect(d->background, SIGNAL(repaintNeeded()), this, SLOT(update()));
+
+    connect(Plasma::Theme::self(), SIGNAL(changed()), this, SLOT(themeUpdated()));
+    themeUpdated();
+}
+
+Dialog::~Dialog()
+{
+}
+
+void Dialog::themeUpdated()
+{
     const int topHeight = d->background->marginSize(Plasma::TopMargin);
     const int leftWidth = d->background->marginSize(Plasma::LeftMargin);
     const int rightWidth = d->background->marginSize(Plasma::RightMargin);
     const int bottomHeight = d->background->marginSize(Plasma::BottomMargin);
     setContentsMargins(leftWidth, topHeight, rightWidth, bottomHeight);
-
-    connect(d->background, SIGNAL(repaintNeeded()), this, SLOT(update()));
-}
-
-Dialog::~Dialog()
-{
 }
 
 void Dialog::paintEvent(QPaintEvent *e)

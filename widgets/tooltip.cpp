@@ -195,11 +195,6 @@ ToolTip::ToolTip()
 
     d->background = new SvgPanel("widgets/tooltip", this);
     d->background->setBorderFlags(SvgPanel::DrawAllBorders);
-    const int topHeight = d->background->marginSize(Plasma::TopMargin);
-    const int leftWidth = d->background->marginSize(Plasma::LeftMargin);
-    const int rightWidth = d->background->marginSize(Plasma::RightMargin);
-    const int bottomHeight = d->background->marginSize(Plasma::BottomMargin);
-    setContentsMargins(leftWidth, topHeight, rightWidth, bottomHeight);
 
     connect(d->background, SIGNAL(repaintNeeded()), this, SLOT(update()));
 
@@ -216,8 +211,8 @@ ToolTip::ToolTip()
     connect(d->showTimer, SIGNAL(timeout()), SLOT(showToolTip()));
     connect(d->hideTimer, SIGNAL(timeout()), SLOT(resetShownState()));
 
-    connect(Plasma::Theme::self(), SIGNAL(changed()), this, SLOT(resetPalette()));
-    resetPalette();
+    connect(Plasma::Theme::self(), SIGNAL(changed()), this, SLOT(themeUpdated()));
+    themeUpdated();
 }
 
 ToolTip::~ToolTip()
@@ -242,8 +237,14 @@ void ToolTip::setData(const Plasma::ToolTipData &data)
     }
 }
 
-void ToolTip::resetPalette()
+void ToolTip::themeUpdated()
 {
+    const int topHeight = d->background->marginSize(Plasma::TopMargin);
+    const int leftWidth = d->background->marginSize(Plasma::LeftMargin);
+    const int rightWidth = d->background->marginSize(Plasma::RightMargin);
+    const int bottomHeight = d->background->marginSize(Plasma::BottomMargin);
+    setContentsMargins(leftWidth, topHeight, rightWidth, bottomHeight);
+
     // Make the tooltip use Plasma's colorscheme
     QPalette plasmaPalette = QPalette();
     plasmaPalette.setColor(QPalette::Window, Plasma::Theme::self()->backgroundColor());
