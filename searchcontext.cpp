@@ -280,6 +280,13 @@ bool SearchContext::addMatches( const QString& term, const QList<SearchMatch *> 
     if (searchTerm() != term) {
         return false;
     }
+
+    if (exactMatches.isEmpty() &&
+        possibleMatches.isEmpty() &&
+        informationalMatches.isEmpty()) {
+        return false;
+    }
+
     d->lockForWrite();
     d->exact << exactMatches;
     d->possible << possibleMatches;
