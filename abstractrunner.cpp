@@ -199,7 +199,7 @@ void AbstractRunner::match(Plasma::SearchContext *search)
 QString AbstractRunner::runnerName() const
 {
     if (!d->runnerDescription.isValid()) {
-        return QString();
+        return objectName();
     }
     return d->runnerDescription.property("X-Plasma-RunnerName").toString();
 }
@@ -219,17 +219,19 @@ AbstractRunner::List AbstractRunner::loadRunners(QObject* parent, const QStringL
 
     KService::List offers = KServiceTypeTrader::self()->query("Plasma/Runner");
     QString error;
-    QVariantList allArgs;
     foreach (KService::Ptr service, offers) {
-        if( whitelist.empty() || whitelist.contains( service->name() ) ) {
-            allArgs << service->storageId();
+        if (whitelist.empty() || whitelist.contains(service->name())) {
             QString language = service->property("X-Plasma-Language").toString();
-            AbstractRunner* runner;
+            AbstractRunner* runner = 0;
+
             if (language.isEmpty()) {
-                runner = service->createInstance<AbstractRunner>(parent, allArgs, &error);
+                QVariantList args;
+                args << service->storageId();
+                runner = service->createInstance<AbstractRunner>(parent, args, &error);
             } else {
                 runner = new AbstractRunner(parent, service->storageId());
             }
+
             if (runner) {
                 //kDebug() << "loaded runner : " << service->name();
                 QString phase = service->property("X-Plasma-RunnerPhase").toString();
@@ -240,8 +242,7 @@ AbstractRunner::List AbstractRunner::loadRunners(QObject* parent, const QStringL
                 } else {
                     runners.append(runner);
                 }
-            }
-            else {
+            } else {
                 kDebug() << "failed to load runner : " << service->name() << ". error reported: " << error;
             }
         }
