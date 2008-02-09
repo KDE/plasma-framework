@@ -803,7 +803,7 @@ Qt::Orientations Applet::expandingDirections() const
 
 QList<QAction*> Applet::contextActions()
 {
-    kDebug() << "empty context actions";
+    //kDebug() << "empty context actions";
     return QList<QAction*>();
 }
 
