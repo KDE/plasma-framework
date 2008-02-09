@@ -26,7 +26,7 @@
 #include <QtCore/QRectF>
 #include <QtCore/QTimeLine>
 
-#include <QtDebug>
+#include <KDebug>
 
 #include "layoutanimator.h"
 
@@ -141,87 +141,97 @@ T qSum(const QList<T>& container)
 
 void FlowLayout::relayout()
 {
-    QRectF rect = geometry().adjusted(margin(LeftMargin), margin(TopMargin), -margin(RightMargin), -margin(BottomMargin));
+    const QRectF rect = geometry().adjusted(margin(LeftMargin), margin(TopMargin),
+                                            -margin(RightMargin), -margin(BottomMargin));
 
-    qDebug() << "Flow layout geometry set to " << geometry();
+    const qreal space = spacing();
+    const qreal rectWidth = rect.width();
+    const qreal rectHeight = rect.height();
+    const int count = d->items.count();
+    //kDebug() << "Flow layout geometry set to " << geometry();
 
     // calculate average size of items
-    qreal totalWidth = 0;
-    qreal totalHeight = 0;
+    qreal colWidth = 0;
+    qreal rowHeight = 0;
+    qreal maxItemWidth = 0;
+    //qreal minItemWidth = 0;
+    //qreal maxItemHeight = 0;
+    qreal minItemHeight = 0;
+    int colCnt = 0;
+    int rowMax = 0;
+    int rowCnt = 0;
 
     foreach(LayoutItem *item , d->items) {
-        totalWidth += item->sizeHint().width();
-        totalHeight += item->sizeHint().height();
+        maxItemWidth = (maxItemWidth < item->maximumSize().width()) ? 
+                        item->maximumSize().width() : maxItemWidth;
+        //minItemWidth = (minItemWidth < item->minimumSize().width()) ? 
+        //              item->minimumSize().width() : minItemWidth;
+        //maxItemHeight = (maxItemHeight < item->maximumSize().height()) ? 
+        //              item->maximumSize().height() : maxItemHeight;
+        minItemHeight = (minItemHeight < item->minimumSize().height()) ? 
+                        item->minimumSize().height() : minItemHeight;
     }
 
-    // use the average item width as the column width.
-    // Also include the spacing either side of each item as part of the 
-    // average width, this provides the spacing between the items and
-    // also allows some tolerance for small differences in item widths 
-    qreal averageWidth;
-    if (d->columnWidth == -1) {
-        averageWidth = totalWidth / d->items.count() + 2*spacing();
+    if( minItemHeight != 0) {
+        rowMax = (int)(rectHeight / (minItemHeight + space) );
     } else {
-        averageWidth = d->columnWidth;
+        kDebug() << "*************POSSIBLE DIVIDE BY ZERO **************";
     }
 
-    const int columnCount = (int)(rect.width() / averageWidth);
+    if( maxItemWidth == 0) {
+        kDebug() << "*************POSSIBLE DIVIDE BY ZERO **************";
+        maxItemWidth = 20;
+    }
 
-    int insertColumn = 0;
-    qreal rowPos = 0;
-    qreal rowHeight = 0;
+    // try to use the maxwidth if there is room
+    maxItemWidth += space;
+    qreal usedSpace = floor( (rectWidth / maxItemWidth ) ) * maxItemWidth;
+    for(int i = 1; (i <= rowMax) && (colWidth == 0); i++) {
+        if( i * (usedSpace / maxItemWidth ) >= count) {
+            colWidth = maxItemWidth;
+            rowHeight = floor( ((rectHeight - space) / i - space) );
+            rowCnt = i;
+            colCnt = (int)(usedSpace / colWidth);
+        }
+    }
+
+    //make items fit in available space
+    if( colWidth == 0) {
+        colCnt = (int)ceil((qreal)(count + (count % 2)) / rowMax);
+        // use floor incase we get into repeating decimal situation (that breaks things..I think)
+        colWidth = floor(rectWidth / colCnt);
+        rowCnt = (count + (count % 2)) / colCnt;
+        rowHeight = floor( ( ( rectHeight - space ) / rowCnt ) - space );
+    }
+
+    //kDebug() << "colWidth: " << colWidth << "rowHeight: " << rowHeight
+    //            << "rowCnt: " << rowCnt << "rowMax: " << rowMax << "colCnt: " << colCnt;
+
 
     // lay the items out in left-to-right , top-to-bottom order
+    int insertColumn = 0;
+    qreal rowPos = space;
     foreach(LayoutItem *item , d->items) {
-        const QSizeF& itemSize = item->sizeHint();
 
-        int columnSpan = (int)ceil(itemSize.width() / averageWidth);
-
-        if ( insertColumn + columnSpan > columnCount ) {
-            // start a new row
+        if(insertColumn >= colCnt) {
             insertColumn = 0;
-            rowPos += rowHeight + spacing();
+            rowPos += (rowHeight + space);
         }
-
-       // qDebug() << "Inserting item at column" << insertColumn 
-       //          << "spanning" << columnSpan << "columns"
-       //          << "with offset" << offset;
-
-
-        // try to expand the item to fill its allocated number of columns
-        qreal itemWidth = itemSize.width(); 
-        const qreal idealWidth = columnSpan * averageWidth - spacing();
-        if ( itemWidth < idealWidth && 
-             idealWidth < item->maximumSize().width() ) {
-             itemWidth = idealWidth; 
-        }
-       
-        // calculate offset to horizontally center item 
-        qreal offset = (columnSpan * averageWidth) - itemWidth;
-        if ( insertColumn == 0 )
-            offset -= spacing();  
-        offset /= 2;
-
-        // try to restrict the item width to the available geometry's
-        // width
-        if ( itemWidth > rect.width() ) {
-            itemWidth = qMax(rect.width(),item->minimumSize().width());
-            offset = 0;
-        }        
 
         // position the item
-        const QRectF newGeometry(rect.left() + insertColumn * averageWidth + offset,
+        const QRectF newGeometry(rect.left() + (insertColumn * colWidth),
                                  rect.top() + rowPos,
-                                 itemWidth,
-                                 itemSize.height());
+                                 colWidth - space,
+                                 rowHeight);
 
-        rowHeight = qMax(rowHeight,itemSize.height());
-        insertColumn += columnSpan;
+        //kDebug() << "newGeometry: " << newGeometry;
+        insertColumn++;
 
-        if ( animator() )
+        if ( animator() ){
             animator()->setGeometry( item , newGeometry );
-        else
+        } else {
             item->setGeometry( newGeometry );
+        }
     }
 
     startAnimation();
