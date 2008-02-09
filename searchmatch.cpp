@@ -38,7 +38,7 @@ class SearchMatch::Private
             : runner(r),
               type(SearchMatch::ExactMatch),
               enabled(true),
-              relevance(1)
+              relevance(.7)
         {
             searchTerm = s->searchTerm();
             mimetype = s->mimetype();
