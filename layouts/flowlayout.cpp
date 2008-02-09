@@ -189,7 +189,7 @@ void FlowLayout::relayout()
     for(int i = 1; (i <= rowMax) && (colWidth == 0); i++) {
         if( i * (usedSpace / maxItemWidth ) >= count) {
             colWidth = maxItemWidth;
-            rowHeight = floor( ((rectHeight - space) / i - space) );
+            rowHeight = rectHeight / i;
             rowCnt = i;
             colCnt = (int)(usedSpace / colWidth);
         }
@@ -198,10 +198,9 @@ void FlowLayout::relayout()
     //make items fit in available space
     if( colWidth == 0) {
         colCnt = (int)ceil((qreal)(count + (count % 2)) / rowMax);
-        // use floor incase we get into repeating decimal situation (that breaks things..I think)
-        colWidth = floor(rectWidth / colCnt);
+        colWidth = rectWidth / colCnt;
         rowCnt = (count + (count % 2)) / colCnt;
-        rowHeight = floor( ( ( rectHeight - space ) / rowCnt ) - space );
+        rowHeight = rectHeight / rowCnt;
     }
 
     //kDebug() << "colWidth: " << colWidth << "rowHeight: " << rowHeight
@@ -210,19 +209,19 @@ void FlowLayout::relayout()
 
     // lay the items out in left-to-right , top-to-bottom order
     int insertColumn = 0;
-    qreal rowPos = space;
+    qreal rowPos = 0;
     foreach(LayoutItem *item , d->items) {
 
         if(insertColumn >= colCnt) {
             insertColumn = 0;
-            rowPos += (rowHeight + space);
+            rowPos += rowHeight;
         }
 
         // position the item
         const QRectF newGeometry(rect.left() + (insertColumn * colWidth),
                                  rect.top() + rowPos,
                                  colWidth - space,
-                                 rowHeight);
+                                 rowHeight - space);
 
         //kDebug() << "newGeometry: " << newGeometry;
         insertColumn++;
