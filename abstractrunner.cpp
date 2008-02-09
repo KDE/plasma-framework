@@ -43,13 +43,16 @@ class AbstractRunner::Private
         RunnerScript* script;
         KPluginInfo runnerDescription;
         AbstractRunner* runner;
+        QTime runtime;
+        int fastRuns;
 
     Private(AbstractRunner* r, KService::Ptr service)
       : priority(NormalPriority),
         speed(NormalSpeed),
         script(0),
         runnerDescription(service),
-        runner(r)
+        runner(r),
+        fastRuns(0)
     {
         if (runnerDescription.isValid()) {
             QString language = runnerDescription.property("X-Plasma-Language").toString();
@@ -101,13 +104,29 @@ KConfigGroup AbstractRunner::config() const
 
 void AbstractRunner::performMatch( Plasma::SearchContext &globalContext )
 {
+    static const int reasonableRunTime = 1500;
+    static const int fastEnoughTime = 250;
+
+    d->runtime.restart();
     Plasma::SearchContext localContext( 0, globalContext );
     //Keep track of global context list sizes so we know which pointers are our responsibility to delete
-    int exactEnd = localContext.exactMatches().count();
-    int possibleEnd = localContext.possibleMatches().count();
-    int infoEnd = localContext.informationalMatches().count();
+    const int exactEnd = localContext.exactMatches().count();
+    const int possibleEnd = localContext.possibleMatches().count();
+    const int infoEnd = localContext.informationalMatches().count();
 
-    match( &localContext );
+    match(&localContext);
+
+    // automatically rate limit runners that become slooow
+    const int runtime = d->runtime.elapsed();
+    bool slowed = speed() == SlowSpeed;
+
+    if (!slowed && runtime > reasonableRunTime) {
+        // we punish runners that return too slowly, even if they don't bring
+        // back matches
+        kDebug() << runnerName() << "runner is too slow, putting it on the back burner.";
+        d->fastRuns = 0;
+        setSpeed(SlowSpeed);
+    }
 
     QList<SearchMatch *> exact = localContext.exactMatches().mid(exactEnd);
     QList<SearchMatch *> possible = localContext.possibleMatches().mid(possibleEnd);
@@ -118,6 +137,15 @@ void AbstractRunner::performMatch( Plasma::SearchContext &globalContext )
         qDeleteAll(exact);
         qDeleteAll(possible);
         qDeleteAll(info);
+    } else if (slowed && runtime < fastEnoughTime) {
+        ++d->fastRuns;
+
+        if (d->fastRuns > 2) {
+            // we reward slowed runners who bring back matches fast enough
+            // 3 times in a row
+            kDebug() << runnerName() << "runner is faster than we thought, kicking it up a notch";
+            setSpeed(NormalSpeed);
+        }
     }
 }
 
