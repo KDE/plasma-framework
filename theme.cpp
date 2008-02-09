@@ -38,6 +38,8 @@ class Theme::Private
 {
 public:
    Private()
+       : locolor(false),
+         compositingActive(KWindowSystem::compositingActive())
    {
        generalFont = QApplication::font();
    }
@@ -53,15 +55,21 @@ public:
        return KConfigGroup(config, groupName);
    }
 
+    QString findInTheme(const QString &image, const QString &theme) const;
+    static const char *defaultTheme;
+
    QString themeName;
    QString app;
    KSharedConfigPtr colors;
    QFont generalFont;
+   bool locolor;
    bool compositingActive;
 #ifdef Q_WS_X11
    KSelectionWatcher *compositeWatch;
 #endif
 };
+
+const char *Theme::Private::defaultTheme = "default";
 
 class ThemeSingleton
 {
@@ -81,14 +89,19 @@ Theme::Theme(QObject* parent)
       d(new Private)
 {
     settingsChanged();
-    d->compositingActive = KWindowSystem::compositingActive();
 
 #ifdef Q_WS_X11
-    char net_wm_cm_name[100];
-    sprintf(net_wm_cm_name, "_NET_WM_CM_S%d", DefaultScreen(QX11Info::display()));
-    d->compositeWatch = new KSelectionWatcher(net_wm_cm_name, -1, this);
-    connect(d->compositeWatch, SIGNAL(newOwner(Window)), this, SLOT(compositingChanged()));
-    connect(d->compositeWatch, SIGNAL(lostOwner()), this, SLOT(compositingChanged()));
+    Display *dpy = QX11Info::display();
+    int screen = DefaultScreen(dpy);
+    d->locolor = DefaultDepth(dpy, screen) < 16;
+
+    if (!d->locolor) {
+        char net_wm_cm_name[100];
+        sprintf(net_wm_cm_name, "_NET_WM_CM_S%d", screen);
+        d->compositeWatch = new KSelectionWatcher(net_wm_cm_name, -1, this);
+        connect(d->compositeWatch, SIGNAL(newOwner(Window)), this, SLOT(compositingChanged()));
+        connect(d->compositeWatch, SIGNAL(lostOwner()), this, SLOT(compositingChanged()));
+    }
 #endif
 }
 
@@ -108,7 +121,7 @@ void Theme::setApplication(const QString &appname)
 
 void Theme::settingsChanged()
 {
-    setThemeName(d->config().readEntry("name", "default"));
+    setThemeName(d->config().readEntry("name", Private::defaultTheme));
 }
 
 void Theme::compositingChanged()
@@ -129,7 +142,7 @@ void Theme::setThemeName(const QString &themeName)
     if (theme.isEmpty() || theme == d->themeName) {
         // let's try and get the default theme at least
         if (d->themeName.isEmpty()) {
-            theme = "default";
+            theme = Private::defaultTheme;
         } else {
             return;
         }
@@ -144,7 +157,7 @@ void Theme::setThemeName(const QString &themeName)
             return;
         }
 
-        theme = "default";
+        theme = Private::defaultTheme;
     }
 
     d->themeName = theme;
@@ -167,36 +180,38 @@ QString Theme::themeName() const
     return d->themeName;
 }
 
-QString Theme::image( const QString& name ) const
+QString Theme::Private::findInTheme(const QString &image, const QString &theme) const
 {
+    //TODO: this should be using Package
     QString search;
-    QString path;
-    if (!d->compositingActive) {
-        search = "desktoptheme/" + d->themeName + "/opaque/" + name + ".svg";
-        path =  KStandardDirs::locate( "data", search );
+
+    if (locolor) {
+        search = "desktoptheme/" + theme + "/locolor/" + image + ".svg";
+        search =  KStandardDirs::locate("data", search);
+    } else if (!compositingActive) {
+        search = "desktoptheme/" + theme + "/opaque/" + image + ".svg";
+        search =  KStandardDirs::locate("data", search);
     }
+
     //not found or compositing enabled
-    if (path.isEmpty()) {
-        search = "desktoptheme/" + d->themeName + '/' + name + ".svg";
-        path =  KStandardDirs::locate( "data", search );
+    if (search.isEmpty()) {
+        search = "desktoptheme/" + theme + '/' + image + ".svg";
+        search =  KStandardDirs::locate("data", search);
+    }
+
+    return search;
+}
+
+QString Theme::image(const QString& name)  const
+{
+    QString path = d->findInTheme(name, d->themeName);
+
+    if (path.isEmpty() && d->themeName != Private::defaultTheme) {
+        path = d->findInTheme(name, Private::defaultTheme);
     }
 
     if (path.isEmpty()) {
-        if (d->themeName != "default") {
-            if (!d->compositingActive) {
-                search = "desktoptheme/default/opaque/" + name + ".svg";
-                path = KStandardDirs::locate("data", search);
-            }
-            if (path.isEmpty()) {
-                search = "desktoptheme/default/" + name + ".svg";
-                path = KStandardDirs::locate("data", search);
-            }
-        }
-
-        if (path.isEmpty()) {
-            kDebug() << "Theme says: bad image path " << name 
-                     << "; looked in: " << search <<  endl;
-        }
+        kDebug() << "Theme says: bad image path " << name;
     }
 
     return path;
