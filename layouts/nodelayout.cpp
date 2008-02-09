@@ -99,10 +99,14 @@ public:
 
     QRectF calculateRectangle(LayoutItem * item, QRectF geometry = QRectF()) const
     {
-        if (geometry == QRectF()) geometry = parent->geometry();
+        if (geometry == QRectF()) {
+            geometry = parent->geometry();
+        }
 
         QRectF result;
-        if (!item || !items.contains(item)) return QRectF();
+        if (!item || !items.contains(item)) { 
+            return QRectF();
+        }
 
         result.setTopLeft(calculatePosition(items[item].first, geometry));
 
@@ -134,7 +138,7 @@ public:
             }
         } else {
             // Calculate size hint for current item
-            QRectF scaled = calculateRectangle(item, QRectF(0, 0, 1, 1));
+            const QRectF scaled = calculateRectangle(item, QRectF(0, 0, 1, 1));
 
             // qMin(..., 1.0) so that for autosized elements we don't get smaller
             // size than the item's size itself. The sizeHint for NodeLayout can

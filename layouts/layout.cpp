@@ -159,18 +159,18 @@ void Layout::setAnimator(LayoutAnimator *animator)
 qreal Layout::margin(Plasma::MarginEdge edge) const
 {
     switch (edge) {
-        case LeftMargin:
-            return d->leftMargin;
-            break;
-        case RightMargin:
-            return d->rightMargin;
-            break;
-        case TopMargin:
-            return d->topMargin;
-            break;
-        case BottomMargin:
-            return d->bottomMargin;
-            break;
+    case LeftMargin:
+        return d->leftMargin;
+        break;
+    case RightMargin:
+        return d->rightMargin;
+        break;
+    case TopMargin:
+        return d->topMargin;
+        break;
+    case BottomMargin:
+        return d->bottomMargin;
+        break;
     }
 
     return 0;
@@ -179,18 +179,18 @@ qreal Layout::margin(Plasma::MarginEdge edge) const
 void Layout::setMargin(Plasma::MarginEdge edge, qreal m)
 {
     switch (edge) {
-        case LeftMargin:
-            d->leftMargin = m;
-            break;
-        case RightMargin:
-            d->rightMargin = m;
-            break;
-        case TopMargin:
-            d->topMargin = m;
-            break;
-        case BottomMargin:
-            d->bottomMargin = m;
-            break;
+    case LeftMargin:
+        d->leftMargin = m;
+        break;
+    case RightMargin:
+        d->rightMargin = m;
+        break;
+    case TopMargin:
+        d->topMargin = m;
+        break;
+    case BottomMargin:
+        d->bottomMargin = m;
+        break;
     }
 }
 

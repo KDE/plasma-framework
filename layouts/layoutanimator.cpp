@@ -58,10 +58,11 @@ public:
 
     qreal delta(qreal currentValue) const
     {
-        if ( currentValue > lastValue ) 
+        if ( currentValue > lastValue ) {
             return currentValue - lastValue;
-        else
+        } else {
             return (1.0-lastValue) + currentValue;
+        }
     }
 
     QRectF interpolateGeometry(LayoutItem* item,qreal value) const
@@ -80,7 +81,7 @@ public:
     }
 
     void prepareItemForState( LayoutItem *item , LayoutAnimator::State state ) {
-        
+
         // opacity setting for widgets
         Widget *widget = dynamic_cast<Widget*>(item->graphicsItem());
         if (widget) {
@@ -115,7 +116,7 @@ void LayoutAnimator::setAutoDeleteOnRemoval(bool autoDelete)
     if ( autoDelete ) { 
         connect( this , SIGNAL(stateChanged(Plasma::LayoutItem*,Plasma::LayoutAnimator::State,Plasma::LayoutAnimator::State)) , this , 
                  SLOT(itemAutoDeleter(Plasma::LayoutItem*,Plasma::LayoutAnimator::State,Plasma::LayoutAnimator::State)) );
-    } else { 
+    } else {
         disconnect( this , SIGNAL(stateChanged(Plasma::LayoutItem*,Plasma::LayoutAnimator::State,Plasma::LayoutAnimator::State)) , this , 
                 SLOT(itemAutoDeleter(Plasma::LayoutItem*,Plasma::LayoutAnimator::State,Plasma::LayoutAnimator::State)) );
     } 
@@ -164,11 +165,7 @@ void LayoutAnimator::setCurrentState( LayoutItem* item , State state )
 }
 LayoutAnimator::State LayoutAnimator::state( LayoutItem* item ) const
 {
-    if ( !d->states.contains(item) ) {
-        return DeadState;
-    } else {
-        return d->states[item];
-    }
+    return !d->states.contains(item) ? DeadState : d->states[item];
 }
 
 void LayoutAnimator::setTimeLine(QTimeLine* timeLine)
@@ -220,28 +217,31 @@ void LayoutAnimator::moveEffectUpdateItem( qreal value , LayoutItem* item , Effe
 {
     Widget* widget = dynamic_cast<Widget*>(item->graphicsItem());
 
-    if ( widget && effect == FadeInMoveEffect )
+    if ( widget && effect == FadeInMoveEffect ) {
         widget->setOpacity( qMin(qreal(1.0),widget->opacity()+d->delta(value)) );
-    else if ( widget && effect == FadeOutMoveEffect )
+    } else if ( widget && effect == FadeOutMoveEffect ) {
         widget->setOpacity( qMax(qreal(0.0),widget->opacity()-d->delta(value)) );
+    }
 
-    
+
     if ( effect == FadeInMoveEffect || effect == FadeOutMoveEffect ) {
         const QRectF finalGeometry = d->geometries[item].endGeometry;
 
-        if ( item->geometry() != finalGeometry )
-            item->setGeometry( finalGeometry ); 
-    }
-    else 
+        if ( item->geometry() != finalGeometry ) {
+            item->setGeometry( finalGeometry );
+        }
+    } else {
         item->setGeometry( d->interpolateGeometry(item,value) );
+    }
 }
 
 void LayoutAnimator::noEffectUpdateItem( qreal , LayoutItem* item )
 {
     const QRectF finalGeometry = d->geometries[item].endGeometry;
 
-    if ( item->geometry() != finalGeometry )
+    if ( item->geometry() != finalGeometry ) {
         item->setGeometry( finalGeometry );
+    }
 }
 
 void LayoutAnimator::fadeEffectUpdateItem( qreal value , LayoutItem* item )
@@ -249,18 +249,13 @@ void LayoutAnimator::fadeEffectUpdateItem( qreal value , LayoutItem* item )
     Widget* widget = dynamic_cast<Widget*>(item->graphicsItem());
 
     qreal threshold = 0;
-    
-    if ( widget != 0 && d->geometries[item].startGeometry != d->geometries[item].endGeometry ) { 
+
+    if ( widget != 0 && d->geometries[item].startGeometry != d->geometries[item].endGeometry ) {
         widget->setOpacity( qAbs( (value*2)-1.0 ) );
         threshold = 0.5; 
     }
 
-    QRectF newGeometry;
-    
-    if ( value < threshold )
-        newGeometry = d->geometries[item].startGeometry;
-    else
-        newGeometry = d->geometries[item].endGeometry;
+    const QRectF newGeometry = ( value < threshold ) ? d->geometries[item].startGeometry : d->geometries[item].endGeometry;
 
     item->setGeometry(newGeometry);
 }
@@ -269,19 +264,19 @@ void LayoutAnimator::animationFinished(LayoutItem* item)
 {
     switch ( state(item) ) 
     {
-        case InsertedState:
-                setCurrentState(item,StandardState);
-            break;
-        case RemovedState:
-                d->states.remove(item);
-                d->geometries.remove(item);
-                emit stateChanged(item, RemovedState, DeadState);
-            break;
-        case StandardState:
-                d->geometries[item].startGeometry = d->geometries[item].endGeometry;
-            break;
-        default:
-            Q_ASSERT(false);
+    case InsertedState:
+            setCurrentState(item,StandardState);
+        break;
+    case RemovedState:
+            d->states.remove(item);
+            d->geometries.remove(item);
+            emit stateChanged(item, RemovedState, DeadState);
+        break;
+    case StandardState:
+            d->geometries[item].startGeometry = d->geometries[item].endGeometry;
+        break;
+    default:
+        Q_ASSERT(false);
     }
 }
 
@@ -293,23 +288,23 @@ void LayoutAnimator::updateItem( qreal value , LayoutItem* item )
 
     switch ( effect(d->states[item]) )
     {
-        case NoEffect:
-                noEffectUpdateItem(value,item);
-            break;
-        case MoveEffect:
-                moveEffectUpdateItem(value,item,MoveEffect);
-            break;
-        case FadeInMoveEffect:
-                moveEffectUpdateItem(value,item,FadeInMoveEffect);
-            break;
-        case FadeOutMoveEffect:
-                moveEffectUpdateItem(value,item,FadeOutMoveEffect);
-            break;
-        case FadeEffect:
-                fadeEffectUpdateItem(value,item);
-            break;
-        default:
-            Q_ASSERT(false);
+    case NoEffect:
+            noEffectUpdateItem(value,item);
+        break;
+    case MoveEffect:
+            moveEffectUpdateItem(value,item,MoveEffect);
+        break;
+    case FadeInMoveEffect:
+            moveEffectUpdateItem(value,item,FadeInMoveEffect);
+        break;
+    case FadeOutMoveEffect:
+            moveEffectUpdateItem(value,item,FadeOutMoveEffect);
+        break;
+    case FadeEffect:
+            fadeEffectUpdateItem(value,item);
+        break;
+    default:
+        Q_ASSERT(false);
     }
 }
 

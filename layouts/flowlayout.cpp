@@ -175,11 +175,12 @@ void FlowLayout::relayout()
     if( minItemHeight != 0) {
         rowMax = (int)(rectHeight / (minItemHeight + space) );
     } else {
-        kDebug() << "*************POSSIBLE DIVIDE BY ZERO **************";
+        kDebug() << "******POSSIBLE DIVIDE BY ZERO: minItemHeight *******";
+        rowMax = 1;
     }
 
     if( maxItemWidth == 0) {
-        kDebug() << "*************POSSIBLE DIVIDE BY ZERO **************";
+        kDebug() << "******POSSIBLE DIVIDE BY ZERO: maxItemWidth ********";
         maxItemWidth = 20;
     }
 
