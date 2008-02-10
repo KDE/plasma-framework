@@ -1,5 +1,6 @@
 /*
 *   Copyright 2007 by Robert Knight <robertknight@gmail.com>
+*   Copyright 2008 by William Egert <begert@gmail.com>
 *
 *   This program is free software; you can redistribute it and/or modify
 *   it under the terms of the GNU Library General Public License
@@ -158,7 +159,6 @@ void FlowLayout::relayout()
     //qreal maxItemHeight = 0;
     qreal minItemHeight = 0;
     int colCnt = 0;
-    int rowMax = 0;
     int rowCnt = 0;
 
     foreach(LayoutItem *item , d->items) {
@@ -172,12 +172,7 @@ void FlowLayout::relayout()
                         item->minimumSize().height() : minItemHeight;
     }
 
-    if( minItemHeight != 0) {
-        rowMax = (int)(rectHeight / (minItemHeight + space) );
-    } else {
-        kDebug() << "******POSSIBLE DIVIDE BY ZERO: minItemHeight *******";
-        rowMax = 1;
-    }
+    const int rowMax = ( minItemHeight != 0) ? (int)(rectHeight / (minItemHeight + space)) : 1;
 
     if( maxItemWidth == 0) {
         kDebug() << "******POSSIBLE DIVIDE BY ZERO: maxItemWidth ********";
@@ -185,6 +180,8 @@ void FlowLayout::relayout()
     }
 
     // try to use the maxwidth if there is room
+    // need usedSpace so we don't try to use the leftover
+    // area of our rect to make a item location.
     maxItemWidth += space;
     qreal usedSpace = floor( (rectWidth / maxItemWidth ) ) * maxItemWidth;
     for(int i = 1; (i <= rowMax) && (colWidth == 0); i++) {
@@ -196,11 +193,21 @@ void FlowLayout::relayout()
         }
     }
 
-    //make items fit in available space
+    //crazy algorithm to make items fit in available space
     if( colWidth == 0) {
-        colCnt = (int)ceil((qreal)(count + (count % 2)) / rowMax);
+        // These gave me the most trouble and should
+        // be taken into account if you try and change this:
+        // - maxRow = 3 with 9 items and 3 columns.
+        // - maxRow = 5 with 8 items and 3 colums.
+
+        const qreal tmp = (qreal)(count + (count % 2)) / rowMax;
+        if( (tmp - floor(tmp)) > 0.5) {
+            colCnt = (int)ceil(tmp) + 1;
+        } else {
+            colCnt = (int)ceil(tmp);
+        }
+        rowCnt = (int)ceil((qreal)count / colCnt);
         colWidth = rectWidth / colCnt;
-        rowCnt = (count + (count % 2)) / colCnt;
         rowHeight = rectHeight / rowCnt;
     }
 
