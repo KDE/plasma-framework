@@ -1352,52 +1352,28 @@ QVariant Applet::itemChange(GraphicsItemChange change, const QVariant &value)
     return Widget::itemChange(change, value);
 }
 
-void Applet::setSize(int width, int height)
-{
-    setSize(QSizeF(width, height));
-}
-
-void Applet::setSize(const QSizeF &size)
-{
-    setGeometry(QRectF(pos(), size));
-}
-
 void Applet::setGeometry(const QRectF& geometry)
 {
     Plasma::Constraints updatedConstraints(0);
+    QSizeF s = size();
+    QPointF p = pos();
 
-    if (geometry.size().width() > 0 && geometry.size().height() > 0 && size() != geometry.size()) {
-        prepareGeometryChange();
-        qreal width = qBound(minimumSize().width(), geometry.size().width(), maximumSize().width());
-        qreal height = qBound(minimumSize().height(), geometry.size().height(), maximumSize().height());
-
-        // it is important we call Widget::setSize(QSizeF) here to avoid recursing back to this
-        // method, creating an infinite loop
-        Widget::setSize(QSizeF(width, height));
-
-        if (layout()) {
-            layout()->setGeometry(QRectF(QPoint(0, 0), contentSize()));
-        }
-
-        if (managingLayout()) {
-            managingLayout()->invalidate();
-        }
-
+    Widget::setGeometry(geometry);
+    if (s != size()) {
         if (d->background) {
             d->background->resize(size());
         }
+
         updatedConstraints |= Plasma::SizeConstraint;
     }
 
-    if (geometry.topLeft() != pos()) {
-        setPos(geometry.topLeft());
+    if (p != pos()) {
         updatedConstraints |= Plasma::LocationConstraint;
     }
 
     if (updatedConstraints) {
         updateConstraints(updatedConstraints);
         emit geometryChanged();
-        update();
     }
 }
 

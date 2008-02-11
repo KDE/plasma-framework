@@ -273,16 +273,6 @@ void Widget::setGeometry(const QRectF& geometry)
     update();
 }
 
-void Widget::setSize(qreal width, qreal height)
-{
-    setSize(QSizeF(width, height));
-}
-
-void Widget::setSize(const QSizeF& size)
-{
-    d->size = size;
-}
-
 void Widget::updateGeometry()
 {
     if (managingLayout()) {

@@ -70,7 +70,7 @@ Flash::Flash(QGraphicsItem *parent)
     d->color = Qt::black;
     d->animId = 0;
     d->state = Private::Invisible;
-    setSize(QSizeF(40, 100));
+    resize(QSizeF(40, 100));
 
     setCachePaintMode( NoCacheMode );
 }
