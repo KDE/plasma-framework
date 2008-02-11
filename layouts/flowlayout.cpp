@@ -187,7 +187,7 @@ void FlowLayout::relayout()
     for(int i = 1; (i <= rowMax) && (colWidth == 0); i++) {
         if( i * (usedSpace / maxItemWidth ) >= count) {
             colWidth = maxItemWidth;
-            rowHeight = rectHeight / i;
+            rowHeight = (rectHeight + space) / i;
             rowCnt = i;
             colCnt = (int)(usedSpace / colWidth);
         }
@@ -208,7 +208,12 @@ void FlowLayout::relayout()
         }
         rowCnt = (int)ceil((qreal)count / colCnt);
         colWidth = rectWidth / colCnt;
-        rowHeight = rectHeight / rowCnt;
+        rowHeight = (rectHeight + space) / rowCnt;
+    }
+
+
+    if( minItemHeight > (rowHeight - space) ) {
+        rowHeight = minItemHeight + space;
     }
 
     //kDebug() << "colWidth: " << colWidth << "rowHeight: " << rowHeight
