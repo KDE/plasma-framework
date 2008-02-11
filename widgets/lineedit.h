@@ -49,7 +49,7 @@ class PLASMA_EXPORT LineEdit : public QGraphicsTextItem, public LayoutItem
         explicit LineEdit(QGraphicsItem *parent = 0);
         ~LineEdit();
 
-        void paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
+        void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
 
         Qt::Orientations expandingDirections() const;
 

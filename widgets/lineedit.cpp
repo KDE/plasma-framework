@@ -64,14 +64,14 @@ LineEdit::~LineEdit()
     delete d;
 }
 
-void LineEdit::paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+void LineEdit::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-    QStyleOptionFrameV2 panel;
-    panel.initFrom(widget);
-    panel.state = option->state;
-    panel.rect = boundingRect().toRect();
+    if (d->styled && widget) {
+        QStyleOptionFrameV2 panel;
+        panel.initFrom(widget);
+        panel.state = option->state;
+        panel.rect = boundingRect().toRect();
 
-    if(d->styled) {
         widget->style()->drawPrimitive(QStyle::PE_PanelLineEdit, &panel, painter, widget);
         widget->style()->drawPrimitive(QStyle::PE_FrameLineEdit, &panel, painter, widget);
     }
@@ -115,12 +115,9 @@ void LineEdit::setStyled(bool style)
     d->styled = style;
 
     if (style) {
-        QColor textColor = KColorScheme(QPalette::Active, KColorScheme::Window,
-                                        Plasma::Theme::self()->colors()).foreground().color();
-        
-        setDefaultTextColor(textColor);
-    } else {
         setDefaultTextColor(kapp->palette().color(QPalette::Text));
+    } else {
+        setDefaultTextColor(Plasma::Theme::self()->textColor());
     }
 }
 
