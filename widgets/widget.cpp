@@ -200,8 +200,7 @@ void Widget::setMinimumSize(const QSizeF& size)
 {
     d->minimumSize = size;
     if (d->size != d->size.expandedTo(size)) {
-        d->size = d->size.expandedTo(size);
-        updateGeometry();
+        setGeometry(QRectF(pos(), d->size.expandedTo(size)));
     }
 }
 
@@ -214,8 +213,7 @@ void Widget::setMaximumSize(const QSizeF& size)
 {
     d->maximumSize = size;
     if (d->size != d->size.boundedTo(size)) {
-        d->size = d->size.boundedTo(size);
-        updateGeometry();
+        setGeometry(QRectF(pos(), d->size.boundedTo(size)));
     }
 }
 
