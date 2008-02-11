@@ -172,7 +172,8 @@ void FlowLayout::relayout()
                         item->minimumSize().height() : minItemHeight;
     }
 
-    const int rowMax = ( minItemHeight != 0) ? (int)(rectHeight / (minItemHeight + space)) : 1;
+    const int rowMax = ((minItemHeight != 0) && (minItemHeight != rectHeight)) ?
+                        (int)(rectHeight / (minItemHeight + space)) : 1;
 
     if( maxItemWidth == 0) {
         kDebug() << "******POSSIBLE DIVIDE BY ZERO: maxItemWidth ********";
@@ -199,6 +200,7 @@ void FlowLayout::relayout()
         // be taken into account if you try and change this:
         // - maxRow = 3 with 9 items and 3 columns.
         // - maxRow = 5 with 8 items and 3 colums.
+        // - maxRow = 1 with odd number columns.
 
         const qreal tmp = (qreal)(count + (count % 2)) / rowMax;
         if( (tmp - floor(tmp)) > 0.5) {
@@ -207,6 +209,9 @@ void FlowLayout::relayout()
             colCnt = (int)ceil(tmp);
         }
         rowCnt = (int)ceil((qreal)count / colCnt);
+        if( (rowCnt == 1) && (colCnt&2) ) {
+            colCnt--;
+        }
         colWidth = rectWidth / colCnt;
         rowHeight = (rectHeight + space) / rowCnt;
     }
@@ -216,8 +221,8 @@ void FlowLayout::relayout()
         rowHeight = minItemHeight + space;
     }
 
-    //kDebug() << "colWidth: " << colWidth << "rowHeight: " << rowHeight
-    //            << "rowCnt: " << rowCnt << "rowMax: " << rowMax << "colCnt: " << colCnt;
+//     kDebug() << "colWidth: " << colWidth << "rowHeight: " << rowHeight
+//                 << "rowCnt: " << rowCnt << "rowMax: " << rowMax << "colCnt: " << colCnt;
 
 
     // lay the items out in left-to-right , top-to-bottom order
