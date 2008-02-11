@@ -52,10 +52,21 @@ class PLASMA_EXPORT SearchContext : public QObject
                     Help
                   };
 
-        explicit SearchContext(QObject *parent = 0);
+        enum DataPolicy { Shared = 0,
+                          SingleConsumer
+                        };
+
+        explicit SearchContext(QObject *parent = 0, DataPolicy policy = Shared);
+
+        /**
+         * Constructs a SearchContext with a DataPolicy of SingleConsumer that
+         * contains the search metadata (though none of the currently registered
+         * matches) from the passed in SearchContext. Primarily useful for creating
+         * a thread-local copy of a Shared SearchContext.
+         */
+        SearchContext(QObject *parent, const SearchContext& other);
         ~SearchContext();
 
-        SearchContext(QObject *parent, const SearchContext& other);
 
         /**
          * Sets the search term for this object and attempts to determine
@@ -112,26 +123,54 @@ class PLASMA_EXPORT SearchContext : public QObject
          *
          * If string data is added to the action using QAction::setData(), that
          * string may be used in user interfaces when the item is selected.
+         *
+         * This may only be used from SingleConsumer SearchContexts, and
+         * does not result in the matchesChanged() signal being emitted.
+         * @see addMatches
          */
         SearchMatch* addInformationalMatch(AbstractRunner *runner);
 
         /**
          * Adds an action that represents an exact match to the current search term.
+         *
+         * This may only be used from SingleConsumer SearchContexts, and
+         * does not result in the matchesChanged() signal being emitted.
+         * @see addMatches
          */
         SearchMatch* addExactMatch(AbstractRunner *runner);
 
         /**
          * Adds an action that represents a possible match to the current search term.
+         *
+         * This may only be used from SingleConsumer SearchContexts, and
+         * does not result in the matchesChanged() signal being emitted.
+         * @see addMatches
          */
         SearchMatch* addPossibleMatch(AbstractRunner *runner);
 
         /**
-         * Appends lists of matches to the lists for exact, possible, and informational matches
-         * @return true if matches were added, false if matches were outdated
+         * Appends lists of matches to the lists for exact, possible, and
+         * informational matches. The SearchContext takes over ownership of the
+         * items on successful addition.
+         *
+         * This method is thread safe and causes the matchesChanged() signal to be emitted.
+         *
+         * @return true if matches were added, false if matches were e.g. outdated
          */
-        bool addMatches( const QString& term, const QList<SearchMatch *> &exactMatches,
-                                     const QList<SearchMatch *> &possibleMatches,
-                                     const QList<SearchMatch *> &informationalMatches );
+        bool addMatches(const QString& term,
+                        const QList<SearchMatch *> &exactMatches,
+                        const QList<SearchMatch *> &possibleMatches,
+                        const QList<SearchMatch *> &informationalMatches);
+
+        /**
+         * Takes the matches from this SearchContext and adds to them another.
+         * If successful, the matches are removed from this SearchContext and
+         * ownership passed to the other SearchContext
+         *
+         * @arg other the SearchContext to add this object's Matches to
+         * @return true if matches were added, false if matches were e.g. outdated
+         */
+        bool addMatchesTo(SearchContext &other);
 
         /**
          * Retrieves all available informational matches for the current

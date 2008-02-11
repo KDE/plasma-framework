@@ -39,20 +39,22 @@ namespace Plasma
 class SearchContext::Private
 {
     public:
-        Private()
+        Private(SearchContext::DataPolicy p)
             : type(SearchContext::UnknownType),
-              completer(0)
+              completer(0),
+              policy(p)
         {
         }
 
         ~Private()
         {
+            clearMatches();
             delete completer;
         }
 
         void resetState()
         {
-            lock.lockForWrite();
+            lockForWrite();
             qDeleteAll(info);
             info.clear();
             qDeleteAll(exact);
@@ -66,19 +68,19 @@ class SearchContext::Private
             if (completer) {
                 completer->clear();
             }
-            lock.unlock();
+            unlock();
         }
 
         void clearMatches()
         {
-            lock.lockForWrite();
+            lockForWrite();
             qDeleteAll(info);
             info.clear();
             qDeleteAll(exact);
             exact.clear();
             qDeleteAll(possible);
             possible.clear();
-            lock.unlock();
+            unlock();
         }
 
         KCompletion* completionObject()
@@ -92,17 +94,23 @@ class SearchContext::Private
 
         void lockForRead()
         {
-            lock.lockForRead();
+            if (policy == Shared) {
+                lock.lockForRead();
+            }
         }
 
         void lockForWrite()
         {
-            lock.lockForWrite();
+            if (policy == Shared) {
+                lock.lockForWrite();
+            }
         }
 
         void unlock()
         {
-            lock.unlock();
+            if (policy == Shared) {
+                lock.unlock();
+            }
         }
 
         QReadWriteLock lock;
@@ -113,23 +121,21 @@ class SearchContext::Private
         QString mimetype;
         SearchContext::Type type;
         KCompletion *completer;
+        const SearchContext::DataPolicy policy;
 };
 
 
-SearchContext::SearchContext(QObject *parent)
+SearchContext::SearchContext(QObject *parent, DataPolicy policy)
     : QObject(parent),
-      d(new Private)
+      d(new Private(policy))
 {
 }
 
 SearchContext::SearchContext(QObject *parent, const SearchContext &other)
-    : QObject( parent ),
-      d( new Private )
+    : QObject(parent),
+      d(new Private(SingleConsumer))
 {
     other.d->lockForRead();
-    d->info = other.d->info;
-    d->possible = other.d->possible;
-    d->exact = other.d->exact;
     d->term = other.d->term;
     d->mimetype = other.d->mimetype;
     d->type = other.d->type;
@@ -251,6 +257,7 @@ void SearchContext::addStringCompletions(const QStringList &completion)
 
 SearchMatch* SearchContext::addInformationalMatch(AbstractRunner *runner)
 {
+    Q_ASSERT(d->policy == SingleConsumer);
     SearchMatch *action = new SearchMatch(this, runner);
     action->setType(SearchMatch::InformationalMatch);
     d->info.append(action);
@@ -259,6 +266,7 @@ SearchMatch* SearchContext::addInformationalMatch(AbstractRunner *runner)
 
 SearchMatch* SearchContext::addExactMatch(AbstractRunner *runner)
 {
+    Q_ASSERT(d->policy == SingleConsumer);
     SearchMatch *action = new SearchMatch(this, runner);
     action->setType(SearchMatch::ExactMatch);
     d->exact.append(action);
@@ -267,6 +275,7 @@ SearchMatch* SearchContext::addExactMatch(AbstractRunner *runner)
 
 SearchMatch* SearchContext::addPossibleMatch(AbstractRunner *runner)
 {
+    Q_ASSERT(d->policy == SingleConsumer);
     SearchMatch *action = new SearchMatch(this, runner);
     action->setType(SearchMatch::PossibleMatch);
     d->possible.append(action);
@@ -294,6 +303,23 @@ bool SearchContext::addMatches( const QString& term, const QList<SearchMatch *> 
     d->unlock();
     emit matchesChanged();
     return true;
+}
+
+bool SearchContext::addMatchesTo(SearchContext &other)
+{
+    d->lockForRead();
+    if (other.addMatches(d->term, d->exact, d->possible, d->info)) {
+        // the matches no longer belong to this SearchContext,
+        // so remove them from the data
+        d->exact.clear();
+        d->possible.clear();
+        d->info.clear();
+        d->unlock();
+        return true;
+    }
+
+    d->unlock();
+    return false;
 }
 
 QList<SearchMatch *> SearchContext::informationalMatches() const

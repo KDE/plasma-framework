@@ -108,11 +108,7 @@ void AbstractRunner::performMatch( Plasma::SearchContext &globalContext )
     static const int fastEnoughTime = 250;
 
     d->runtime.restart();
-    Plasma::SearchContext localContext( 0, globalContext );
-    //Keep track of global context list sizes so we know which pointers are our responsibility to delete
-    const int exactEnd = localContext.exactMatches().count();
-    const int possibleEnd = localContext.possibleMatches().count();
-    const int infoEnd = localContext.informationalMatches().count();
+    SearchContext localContext(0, globalContext);
 
     match(&localContext);
 
@@ -128,16 +124,9 @@ void AbstractRunner::performMatch( Plasma::SearchContext &globalContext )
         setSpeed(SlowSpeed);
     }
 
-    QList<SearchMatch *> exact = localContext.exactMatches().mid(exactEnd);
-    QList<SearchMatch *> possible = localContext.possibleMatches().mid(possibleEnd);
-    QList<SearchMatch *> info = localContext.informationalMatches().mid(infoEnd);
-
     //If matches were not added, delete items on the heap
-    if (!globalContext.addMatches(localContext.searchTerm(), exact, possible, info)) {
-        qDeleteAll(exact);
-        qDeleteAll(possible);
-        qDeleteAll(info);
-    } else if (slowed && runtime < fastEnoughTime) {
+    if (localContext.addMatchesTo(globalContext) &&
+        slowed && runtime < fastEnoughTime) {
         ++d->fastRuns;
 
         if (d->fastRuns > 2) {
