@@ -270,8 +270,8 @@ bool KCategorizedItemsViewDelegate::editorEvent(QEvent *event,
     if (event->type() == QEvent::MouseButtonPress) {
         KCategorizedItemsViewModels::AbstractItem * item = getItemByProxyIndex(index);
         if (index.column() == 1) {
-            (m_onFavoriteIconItem = item)
-                ->setFavorite(!item->isFavorite());
+            m_onFavoriteIconItem = item;
+            item->setFavorite(!item->isFavorite());
             return true;
         } else if (index.column() == 2 && item->running()) {
             item->setRunning(0);
