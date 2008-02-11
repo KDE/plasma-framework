@@ -1352,6 +1352,11 @@ QVariant Applet::itemChange(GraphicsItemChange change, const QVariant &value)
     return Widget::itemChange(change, value);
 }
 
+void Applet::setSize(int width, int height)
+{
+    setSize(QSizeF(width, height));
+}
+
 void Applet::setSize(const QSizeF &size)
 {
     setGeometry(QRectF(pos(), size));

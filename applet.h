@@ -732,6 +732,11 @@ class PLASMA_EXPORT Applet : public Widget
         /**
          * Reimplemented from QGraphicsItem
          */
+        void setSize(int width, int height);
+
+        /**
+         * Reimplemented from QGraphicsItem
+         */
         void setSize(const QSizeF& size);
 
     protected Q_SLOTS:
