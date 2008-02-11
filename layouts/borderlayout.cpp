@@ -56,10 +56,7 @@ BorderLayout::BorderLayout(LayoutItem * parent) :
 
 BorderLayout::~BorderLayout()
 {
-    foreach (Plasma::LayoutItem *item, d->itemPositions) {
-        item->unsetManagingLayout(this);
-    }
-
+    releaseManagedItems();
     delete d;
 }
 
@@ -114,6 +111,13 @@ void BorderLayout::relayout()
     if (d->itemPositions[CenterPositioned] /*&& d->itemPositions[CenterPositioned]->isVisible()*/) {
         d->itemPositions[CenterPositioned]->setGeometry(QRectF(
                 origin + QPointF(left, top), QSizeF(right - left, bottom - top)));
+    }
+}
+
+void BorderLayout::releaseManagedItems()
+{
+    foreach (Plasma::LayoutItem *item, d->itemPositions) {
+        item->unsetManagingLayout(this);
     }
 }
 

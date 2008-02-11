@@ -176,6 +176,12 @@ class PLASMA_EXPORT Layout : public LayoutItem
         virtual void relayout() = 0;
 
         /**
+         * When called, the layout must cease management of any
+         * current LayoutItems it is managing.
+         */
+        virtual void releaseManagedItems() = 0;
+
+        /**
          * Starts a layout animation.  Subclasses may call this 
          * at the end of their relayout() implementation to
          * start the timeline associated with the layout's animator()

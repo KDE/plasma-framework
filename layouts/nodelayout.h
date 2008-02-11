@@ -108,6 +108,7 @@ public:
 
 protected:
     void relayout();
+    void releaseManagedItems();
 
 private:
     class Private;

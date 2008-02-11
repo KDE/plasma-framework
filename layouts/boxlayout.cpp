@@ -297,9 +297,7 @@ BoxLayout::Direction BoxLayout::direction() const
 
 BoxLayout::~BoxLayout()
 {
-    foreach (LayoutItem* item, d->children) {
-        item->unsetManagingLayout(this);
-    }
+    releaseManagedItems();
     delete d;
 }
 
@@ -532,6 +530,12 @@ void BoxLayout::relayout()
     startAnimation();
 }
 
+void BoxLayout::releaseManagedItems()
+{
+    foreach (LayoutItem* item, d->children) {
+        item->unsetManagingLayout(this);
+    }
+}
 
 QSizeF BoxLayout::maximumSize() const
 {

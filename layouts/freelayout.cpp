@@ -41,10 +41,7 @@ FreeLayout::FreeLayout(LayoutItem *parent)
 
 FreeLayout::~FreeLayout()
 {
-    foreach (LayoutItem *item, d->children) {
-        item->unsetManagingLayout(this);
-    }
-
+    releaseManagedItems();
     delete d;
 }
 
@@ -100,6 +97,13 @@ void FreeLayout::relayout()
             const QSizeF newSize = child->sizeHint().expandedTo(minimumSize()).boundedTo(maximumSize());
             child->setGeometry(QRectF(child->geometry().topLeft(), newSize));
         }
+    }
+}
+
+void FreeLayout::releaseManagedItems()
+{
+    foreach (LayoutItem *item, d->children) {
+        item->unsetManagingLayout(this);
     }
 }
 

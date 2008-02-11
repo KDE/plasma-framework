@@ -89,6 +89,7 @@ class PLASMA_EXPORT BoxLayout : public Layout
 
     protected:
         void relayout();
+        void releaseManagedItems();
 
     private:
         class Private;

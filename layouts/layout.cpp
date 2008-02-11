@@ -36,13 +36,13 @@ namespace Plasma
 class Layout::Private
 {
     public:
-        Private(LayoutItem* p)
+        Private()
             : leftMargin(12.0),
               rightMargin(12.0),
               topMargin(12.0),
               bottomMargin(12.0),
               spacing(6.0),
-              parent(p),
+              parent(0),
               animator(0),
               relayouting(false)
         {
@@ -66,13 +66,22 @@ class Layout::Private
 
 Layout::Layout(LayoutItem *parent)
     : LayoutItem(),
-      d(new Private(parent))
+      d(new Private)
 {
     setParent(parent);
 }
 
 void Layout::setParent(LayoutItem *parent)
 {
+    if (d->parent == parent) {
+        return;
+    }
+
+    if (d->parent && d->parent->layout() == this) {
+        d->parent->unsetLayout();
+        releaseManagedItems();
+    }
+
     d->parent = parent;
 
     if (parent && parent->layout() != this) {
@@ -84,6 +93,7 @@ Layout::~Layout()
 {
     if (d->parent) {
         d->parent->unsetLayout();
+        d->parent = 0;
     }
 
     delete d;

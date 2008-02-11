@@ -163,10 +163,7 @@ NodeLayout::NodeLayout(LayoutItem * parent)
 
 NodeLayout::~NodeLayout()
 {
-    foreach (LayoutItem * item, d->items.keys()) {
-        item->unsetManagingLayout(this);
-    }
-
+    releaseManagedItems();
     delete d;
 }
 
@@ -181,6 +178,13 @@ void NodeLayout::relayout()
         if (item) {
             item->setGeometry(d->calculateRectangle(item));
         }
+    }
+}
+
+void NodeLayout::releaseManagedItems()
+{
+    foreach (LayoutItem * item, d->items.keys()) {
+        item->unsetManagingLayout(this);
     }
 }
 

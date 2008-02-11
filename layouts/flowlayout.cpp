@@ -46,12 +46,10 @@ FlowLayout::FlowLayout(LayoutItem* parent)
     , d(new Private)
 {
 }
+
 FlowLayout::~FlowLayout()
 {
-    foreach (LayoutItem *item, d->items) {
-        item->unsetManagingLayout(this);
-    }
-
+    releaseManagedItems();
     delete d;
 }
 
@@ -252,6 +250,13 @@ void FlowLayout::relayout()
     }
 
     startAnimation();
+}
+
+void FlowLayout::releaseManagedItems()
+{
+    foreach (LayoutItem *item, d->items) {
+        item->unsetManagingLayout(this);
+    }
 }
 
 Qt::Orientations FlowLayout::expandingDirections() const
