@@ -28,6 +28,7 @@
 #include <QTimer>
 
 #include <KDebug>
+#include <KGlobal>
 #include <KLocale>
 #include <KMimeType>
 #include <KWindowSystem>
@@ -54,9 +55,13 @@ public:
         : immutable(false),
           kioskImmutable(false),
           mimetype("text/x-plasmoidservicename"),
-          configName("plasma-appletsrc"),
           config(0)
     {
+        if (KGlobal::hasMainComponent()) {
+            configName = KGlobal::mainComponent().componentName() + "-appletsrc";
+        } else {
+            configName = "plasma-appletsrc";
+        }
     }
 
     ~Private()
@@ -156,16 +161,17 @@ QString Corona::appletMimeType()
     return d->mimetype;
 }
 
-void Corona::saveApplets(const QString &config) const
+void Corona::saveApplets(const QString &configName) const
 {
-    KSharedConfigPtr cg = KSharedConfig::openConfig(config);
-    d->saveApplets(cg);
-}
+    KSharedConfigPtr c;
 
-void Corona::saveApplets() const
-{
-    d->saveApplets(config());
-    scheduleConfigSync();
+    if (configName.isEmpty() || configName == d->configName) {
+        c = config();
+    } else {
+        c = KSharedConfig::openConfig(configName);
+    }
+
+    d->saveApplets(c);
 }
 
 void Corona::scheduleConfigSync() const
@@ -193,9 +199,12 @@ bool appletConfigLessThan(const KConfigGroup &c1, const KConfigGroup &c2)
 void Corona::loadApplets(const QString& configName)
 {
     clearApplets();
-    if (configName != d->configName) {
-        d->configName = configName;
-        d->config = 0;
+    KSharedConfigPtr c;
+
+    if (configName.isEmpty() || configName == d->configName) {
+        c = config();
+    } else {
+        c = KSharedConfig::openConfig(configName);
     }
 
     KConfigGroup containments(config(), "Containments");
@@ -286,11 +295,6 @@ void Corona::loadApplets(const QString& configName)
 
     KConfigGroup coronaConfig(config(), "General");
     setImmutable(coronaConfig.readEntry("locked", false));
-}
-
-void Corona::loadApplets()
-{
-    loadApplets(d->configName);
 }
 
 void Corona::loadDefaultSetup()

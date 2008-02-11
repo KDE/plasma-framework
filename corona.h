@@ -75,20 +75,6 @@ public:
     QString appletMimeType();
 
     /**
-     * Save applets to a config file
-     *
-     * @param config the name of the config file to save to
-     */
-    void saveApplets(const QString &config) const;
-
-    /**
-     * Load applet layout from a config file
-     *
-     * @param config the name of the config file to load from
-     */
-    void loadApplets(const QString &config);
-
-    /**
      * Loads the default (system wide) layout for this user
      **/
     virtual void loadDefaultSetup();
@@ -105,14 +91,18 @@ public:
 
 public Q_SLOTS:
     /**
-     * Load applets from the default config file
+     * Load applet layout from a config file
+     *
+     * @param config the name of the config file to load from,
+     *               or the default config file if QString()
      */
-    void loadApplets();
+    void loadApplets(const QString &config = QString());
 
     /**
-     * Save applets to the default config file
+     * Save applets to file
+     * @arg config the file to save to, or the default config file if QString()
      */
-    void saveApplets() const;
+    void saveApplets(const QString &config = QString()) const;
 
     /**
      * Called when there have been changes made to configuration that should be saved
