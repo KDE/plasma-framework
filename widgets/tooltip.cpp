@@ -145,6 +145,9 @@ void ToolTip::showToolTip()
     }
     layout()->activate();
 
+    resize(sizeHint());
+    move(d->currentWidget->popupPosition(size()));
+
     if (isVisible()) {
         d->preview->setInfo();
     } else {
@@ -152,8 +155,6 @@ void ToolTip::showToolTip()
     }
 
     d->isShown = true;  //ToolTip is visible
-    resize(sizeHint());
-    move(d->currentWidget->popupPosition(size()));
 }
 
 void ToolTip::resetShownState()
