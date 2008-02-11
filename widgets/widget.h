@@ -308,7 +308,7 @@ protected:
 
     QVariant itemChange(GraphicsItemChange change, const QVariant &value);
     void setSize(qreal width, qreal height);
-    void setSize(const QSizeF& size);
+    virtual void setSize(const QSizeF& size);
     void managingLayoutChanged();
 
     virtual bool sceneEvent(QEvent *event);

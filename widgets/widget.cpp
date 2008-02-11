@@ -251,13 +251,6 @@ QRectF Widget::geometry() const
     return QRectF(pos(), d->size);
 }
 
-#if 0
-QRectF Widget::localGeometry() const
-{
-    return QRectF(QPointF(0.0f, 0.0f), boundingRect().size);
-}
-#endif
-
 void Widget::setGeometry(const QRectF& geometry)
 {
     if (geometry.size().width() > 0 && geometry.size().height() > 0 && d->size != geometry.size()) {
@@ -318,12 +311,6 @@ QFont Widget::font() const
     return QApplication::font();
 }
 
-/*
-void Widget::setFont(const QFront& font)
-{
-}
-*/
-
 QRectF Widget::boundingRect() const
 {
     return QRectF(QPointF(0,0), d->size);
@@ -331,7 +318,6 @@ QRectF Widget::boundingRect() const
 
 void Widget::resize(const QSizeF& size)
 {
-    //FIXME: we need to respect minimum size here i think
     setGeometry(QRectF(pos(), size));
 }
 

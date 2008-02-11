@@ -1352,6 +1352,11 @@ QVariant Applet::itemChange(GraphicsItemChange change, const QVariant &value)
     return Widget::itemChange(change, value);
 }
 
+void Applet::setSize(const QSizeF &size)
+{
+    setGeometry(QRectF(pos(), size));
+}
+
 void Applet::setGeometry(const QRectF& geometry)
 {
     Plasma::Constraints updatedConstraints(0);
@@ -1361,7 +1366,9 @@ void Applet::setGeometry(const QRectF& geometry)
         qreal width = qBound(minimumSize().width(), geometry.size().width(), maximumSize().width());
         qreal height = qBound(minimumSize().height(), geometry.size().height(), maximumSize().height());
 
-        setSize(QSizeF(width, height));
+        // it is important we call Widget::setSize(QSizeF) here to avoid recursing back to this
+        // method, creating an infinite loop
+        Widget::setSize(QSizeF(width, height));
 
         if (layout()) {
             layout()->setGeometry(QRectF(QPoint(0, 0), contentSize()));

@@ -729,6 +729,11 @@ class PLASMA_EXPORT Applet : public Widget
          */
         QVariant itemChange(GraphicsItemChange change, const QVariant &value);
 
+        /**
+         * Reimplemented from QGraphicsItem
+         */
+        void setSize(const QSizeF& size);
+
     protected Q_SLOTS:
         /**
          * @internal used to show the configuration of an applet on first show
