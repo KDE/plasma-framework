@@ -167,6 +167,8 @@ public:
             }
         }
         applet->setDrawStandardBackground(true);
+
+        connect(Plasma::Theme::self(), SIGNAL(changed()), applet, SLOT(themeChanged()));
     }
 
     // put all setup routines for script here. at this point we can assume that
@@ -1385,6 +1387,11 @@ void Applet::setIsContainment(bool isContainment)
 bool Applet::isContainment() const
 {
     return d->isContainment;
+}
+
+void Applet::themeChanged()
+{
+    update();
 }
 
 } // Plasma namespace

@@ -676,6 +676,11 @@ class PLASMA_EXPORT Applet : public Widget
          */
         void launchActivated();
 
+        /**
+         * called when the Plasma::Theme has changed
+         */
+        void themeChanged();
+
     protected:
         /**
          * Called when a request to save the state of the applet is made
