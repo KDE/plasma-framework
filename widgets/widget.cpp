@@ -553,6 +553,9 @@ QPoint Widget::popupPosition(const QSize s) const
         loc = pv->containment()->location();
     }
 
+    QRect screenRect = QApplication::desktop()->screenGeometry(pv ? pv->containment()->screen() : -1);
+    pos += screenRect.topLeft();
+
     switch (loc) {
     case BottomEdge:
         pos = QPoint(pos.x(), pos.y() - s.height());
@@ -575,13 +578,12 @@ QPoint Widget::popupPosition(const QSize s) const
     }
 
     //are we out of screen?
-    QRect screenRect = QApplication::desktop()->screenGeometry(pv->containment()->screen());
 
-    if (pos.rx() + s.width() > screenRect.width()) {
-        pos.rx() -= ((pos.rx() + s.width()) - screenRect.width());
+    if (pos.rx() + s.width() > screenRect.right()) {
+        pos.rx() -= ((pos.rx() + s.width()) - screenRect.right());
     }
-    if (pos.ry() + s.height() > screenRect.height()) {
-        pos.ry() -= ((pos.ry() + s.height()) - screenRect.height());
+    if (pos.ry() + s.height() > screenRect.bottom()) {
+        pos.ry() -= ((pos.ry() + s.height()) - screenRect.bottom());
     }
     pos.rx() = qMax(0, pos.rx());
 
