@@ -529,6 +529,9 @@ void Phase::timerEvent(QTimerEvent *event)
                 //TODO: calculate a proper interval based on the curve
                 state->interval *= 1 - d->calculateProgress(state->frames, state->currentFrame);
                 animationsRemain = true;
+            } else {
+                d->animatedElements.remove( state->id );
+                delete state;
             }
         } else {
             state->currentInterval -= elapsed;
