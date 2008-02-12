@@ -180,8 +180,10 @@ void Flash::paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *optio
     Q_UNUSED(option)
     Q_UNUSED(widget)
 
-    if( d->animId ) {
-        painter->drawPixmap(0, 0, Plasma::Phase::self()->animationResult(d->animId));
+    if( d->animId && !Plasma::Phase::self()->animationResult(d->animId).isNull() ) {
+        painter->drawPixmap( 0, 0, Plasma::Phase::self()->animationResult(d->animId) );
+    } else if( d->state == Private::Visible ) {
+        painter->drawPixmap( 0, 0, d->renderedPixmap );
     }
 }
 
