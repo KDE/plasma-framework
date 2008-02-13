@@ -249,12 +249,7 @@ void AppletBrowserWidget::appletAdded(Plasma::Applet* applet)
     QString name = applet->name();
     kDebug() << name;
 
-    if (d->runningApplets.contains(applet->name())) {
-        d->runningApplets[name] = d->runningApplets[applet->name()] + 1;
-    } else {
-        d->runningApplets.insert(name, 1);
-    }
-
+    d->runningApplets[name]++;
     d->appletNames.insert(applet, name);
     connect(applet, SIGNAL(destroyed(QObject*)), this, SLOT(appletDestroyed(QObject*)));
     d->itemModel.setRunningApplets(name, d->runningApplets[name]);
@@ -265,7 +260,7 @@ void AppletBrowserWidget::appletDestroyed(QObject* applet)
     kDebug() << applet;
     Plasma::Applet* a = (Plasma::Applet*)applet; //don't care if it's valid, just need the address
 
-    QString name = a->name();
+    QString name = d->appletNames.take(a);
 
     int count = 0;
     if (d->runningApplets.contains(name)) {
@@ -278,8 +273,6 @@ void AppletBrowserWidget::appletDestroyed(QObject* applet)
         }
     }
 
-    //if !name, was the applet not found or was the name actually ""?
-    d->appletNames.remove(a);
     d->itemModel.setRunningApplets(name, count);
 }
 
