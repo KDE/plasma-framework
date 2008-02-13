@@ -253,7 +253,7 @@ void Containment::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
             hasEntries = true;
             QMenu *containmentActionMenu = &desktopMenu;
 
-            if (actions.count() > 1) {
+            if (actions.count() > 2) {
                 containmentActionMenu = new KMenu(i18n("%1 Options", name()), &desktopMenu);
                 desktopMenu.addMenu(containmentActionMenu);
             }
@@ -557,7 +557,7 @@ void Containment::prepareApplet(Applet *applet, bool delayInit)
         Phase::self()->animateItem(applet, Phase::Appear);
     }
 
-    applet->updateConstraints(Plasma::AllConstraints);
+    applet->updateConstraints(Plasma::AllConstraints | Plasma::StartupCompletedConstraint);
     if (!delayInit) {
         applet->flushUpdatedConstraints();
     }
