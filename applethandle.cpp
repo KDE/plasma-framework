@@ -89,13 +89,15 @@ AppletHandle::AppletHandle(Containment *parent, Applet *applet)
     setTransform(matrix);
     m_hoverTimer = new QTimer(this);
     m_hoverTimer->setSingleShot(true);
-    m_hoverTimer->setInterval(300);
+    m_hoverTimer->setInterval(333);
 
     connect(m_hoverTimer, SIGNAL(timeout()), this, SLOT(fadeIn()));
     connect(m_applet, SIGNAL(destroyed(QObject*)), this, SLOT(appletDestroyed()));
 
     setAcceptsHoverEvents(true);
     m_hoverTimer->start();
+
+    setZValue(m_applet->zValue());
 }
 
 AppletHandle::~AppletHandle()
@@ -574,13 +576,13 @@ bool AppletHandle::sceneEventFilter(QGraphicsItem *watched, QEvent *event)
 void AppletHandle::fadeAnimation(qreal progress)
 {
     qreal endOpacity = 1.0;
-    if (m_anim==FadeOut) {
+    if (m_anim == FadeOut) {
         endOpacity = 0.0;
     }
 
-    m_opacity += (endOpacity-m_opacity)*progress;
+    m_opacity += (endOpacity - m_opacity) * progress;
 
-    if (progress>=1.0 && m_anim==FadeOut) {
+    if (progress >= 1.0 && m_anim == FadeOut) {
         if (m_applet) {
             m_applet->removeSceneEventFilter(this);
         }
@@ -615,21 +617,26 @@ void AppletHandle::startFading(FadeType anim)
         Phase::self()->stopCustomAnimation(m_animId);
     }
 
+    m_anim = anim;
     qreal time = 250;
-    m_hoverTimer->stop();
+
+    if (anim == FadeOut && m_hoverTimer->isActive()) {
+        // fading out before we've started fading in
+        m_hoverTimer->stop();
+        fadeAnimation(1.0);
+        return;
+    }
 
     if (m_applet) {
         m_applet->removeSceneEventFilter(this);
     }
 
     if (anim == FadeIn) {
-        time *= 1.0-m_opacity;
+        time *= 1.0 - m_opacity;
     } else {
-        m_hoverTimer->stop();
         time *= m_opacity;
     }
 
-    m_anim = anim;
     m_animId = Phase::self()->customAnimation(40, (int)time, Phase::EaseInOutCurve, this, "fadeAnimation");
 }
 
