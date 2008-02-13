@@ -251,12 +251,7 @@ void Corona::loadApplets(const QString& configName)
             }
 
             Applet *applet = c->addApplet(plugin, QVariantList(), appId, appletConfig.readEntry("geometry", QRectF()), true);
-
-            QList<qreal> m = appletConfig.readEntry("transform", QList<qreal>());
-            if (m.count() == 9) {
-                QTransform t(m[0], m[1], m[2], m[3], m[4], m[5], m[6], m[7], m[8]);
-                applet->setTransform(t);
-            }
+            applet->restore(&appletConfig);
          }
     }
 
