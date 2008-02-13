@@ -41,6 +41,18 @@ public:
     void setApplication(const QString& application = QString());
     QString application();
 
+    /**
+     * Changes the current default containment to add applets to
+     *
+     * @arg containment the new default
+     */
+    void setContainment(Plasma::Containment *containment);
+
+    /**
+     * @return the current default containment to add applets to
+     */
+    Containment* containment() const;
+
 protected Q_SLOTS:
     /**
      * Adds currently selected applets
@@ -84,6 +96,18 @@ public:
 
     void setApplication(const QString& application = QString());
     QString application();
+
+    /**
+     * Changes the current default containment to add applets to
+     *
+     * @arg containment the new default
+     */
+    void setContainment(Plasma::Containment *containment);
+
+    /**
+     * @return the current default containment to add applets to
+     */
+    Containment* containment() const;
 
 private:
     void init();

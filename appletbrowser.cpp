@@ -230,6 +230,16 @@ QString AppletBrowserWidget::application()
     return d->application;
 }
 
+void AppletBrowserWidget::setContainment(Plasma::Containment *containment)
+{
+    d->containment = containment;
+}
+
+Containment *AppletBrowserWidget::containment() const
+{
+    return d->containment;
+}
+
 void AppletBrowserWidget::addApplet()
 {
     kDebug() << "Button ADD clicked";
@@ -344,6 +354,16 @@ void AppletBrowser::setApplication(const QString& app)
 QString AppletBrowser::application()
 {
     return m_widget->application();
+}
+
+void AppletBrowser::setContainment(Plasma::Containment *containment)
+{
+    m_widget->setContainment(containment);
+}
+
+Containment* AppletBrowser::containment() const
+{
+    return m_widget->containment();
 }
 
 } // namespace Plasma
