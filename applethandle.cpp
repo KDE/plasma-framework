@@ -267,6 +267,8 @@ void AppletHandle::mousePressEvent(QGraphicsSceneMouseEvent *event)
             // so while we have a button pressed we intercept these events
             // and handle them ourselves here in AppletHandle
             m_applet->installSceneEventFilter(this);
+            m_applet->raise();
+            setZValue(m_applet->zValue());
         }
         event->accept();
         update();
