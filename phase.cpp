@@ -37,7 +37,8 @@ static const qreal MIN_TICK_RATE = 40;
 
 struct AnimationState
 {
-    QGraphicsItem* item;
+    QGraphicsItem *item;
+    QObject *qobj;
     Phase::Animation animation;
     Phase::CurveShape curve;
     int interval;
@@ -48,7 +49,7 @@ struct AnimationState
 
 struct ElementAnimationState
 {
-    QGraphicsItem* item;
+    QGraphicsItem *item;
     Phase::CurveShape curve;
     Phase::ElementAnimation animation;
     int interval;
@@ -61,7 +62,8 @@ struct ElementAnimationState
 
 struct MovementState
 {
-    QGraphicsItem* item;
+    QGraphicsItem *item;
+    QObject *qobj;
     Phase::CurveShape curve;
     Phase::Movement movement;
     int interval;
@@ -193,25 +195,27 @@ Phase::~Phase()
     delete d;
 }
 
-void Phase::appletDestroyed(QObject* o)
+void Phase::objectDestroyed(QObject* o)
 {
-    QGraphicsItem* item = dynamic_cast<QGraphicsItem*>(o);
-
-    if (!item) {
-        return;
+    //kDebug() << "testing for" << (void*)o;
+    QMutableMapIterator<QGraphicsItem*, AnimationState*> it(d->animatedItems);
+    while (it.hasNext()) {
+        it.next();
+        //kDebug() << "comparing against" << it.value()->qobj;
+        if (it.value()->qobj == o) {
+            kDebug() << "found deleted animated item";
+            delete it.value();
+            it.remove();
+        }
     }
 
-    QMap<QGraphicsItem*, AnimationState*>::iterator it = d->animatedItems.find(item);
-    if (it != d->animatedItems.end()) {
-        delete it.value();
-        d->animatedItems.erase(it);
-        return;
-    }
-
-    QMap<QGraphicsItem*, MovementState*>::iterator it2 = d->movingItems.find(item);
-    if (it2 != d->movingItems.end()) {
-        delete it2.value();
-        d->movingItems.erase(it2);
+    QMutableMapIterator<QGraphicsItem*, MovementState*> it2(d->movingItems);
+    while (it2.hasNext()) {
+        it.next();
+        if (it.value()->qobj == o) {
+            delete it2.value();
+            it2.remove();
+        }
     }
 }
 
@@ -256,6 +260,14 @@ void Phase::animateItem(QGraphicsItem* item, Animation animation)
     state->interval = d->animator->duration(animation) / state->frames;
     state->interval = (state->interval / MIN_TICK_RATE) * MIN_TICK_RATE;
     state->currentInterval = state->interval;
+    state->qobj = dynamic_cast<QObject*>(item);
+
+     if (state->qobj) {
+         kDebug() << "!!!!!!!!!!!!!!!!!!!!!!!!! got us an object!";
+         connect(state->qobj, SIGNAL(destroyed(QObject*)), this, SLOT(objectDestroyed(QObject*)));
+     } else {
+         kDebug() << "???????????????????????? no oject *wheep*";
+     }
 
     d->animatedItems[item] = state;
     d->performAnimation(0, state);
@@ -294,6 +306,11 @@ void Phase::moveItem(QGraphicsItem* item, Movement movement, const QPoint &desti
      state->interval = d->animator->duration(movement) / state->frames;
      state->interval = (state->interval / MIN_TICK_RATE) * MIN_TICK_RATE;
      state->currentInterval = state->interval;
+     state->qobj = dynamic_cast<QObject*>(item);
+
+     if (state->qobj) {
+        connect(state->qobj, SIGNAL(destroyed(QObject*)), this, SLOT(objectDestroyed(QObject*)));
+     }
 
      d->movingItems[item] = state;
      d->performMovement(0, state);

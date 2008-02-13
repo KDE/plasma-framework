@@ -124,7 +124,7 @@ protected:
     void timerEvent(QTimerEvent *event);
 
 protected Q_SLOTS:
-    void appletDestroyed(QObject*);
+    void objectDestroyed(QObject*);
     void customAnimReceiverDestroyed(QObject*);
 
 private:
