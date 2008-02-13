@@ -94,10 +94,8 @@ public:
           square(false)
     {
         if (appletId == 0) {
-            appletId = nextId();
-        }
-
-        if (appletId > s_maxAppletId) {
+            appletId = ++s_maxAppletId;
+        } else if (appletId > s_maxAppletId) {
             s_maxAppletId = appletId;
         }
     }
@@ -120,7 +118,6 @@ public:
         // WARNING: do not access config() OR globalConfig() in this method!
         //          that requires a scene, which is not available at this point
         applet->setAcceptsHoverEvents(true);
-        applet->setZValue(100);
 
         if (!appletDescription.isValid()) {
             applet->setFailedToLaunch(true);
@@ -196,12 +193,6 @@ public:
         }
 
         return q->contentSize();
-    }
-
-    static uint nextId()
-    {
-        ++s_maxAppletId;
-        return s_maxAppletId;
     }
 
     QString instanceName()
@@ -286,12 +277,13 @@ public:
 
     //TODO: examine the usage of memory here; there's a pretty large
     //      number of members at this point.
+    static uint s_maxAppletId;
+    static uint s_maxZValue;
     uint appletId;
     KPluginInfo appletDescription;
     Package* package;
     QList<QObject*> watchedForFocus;
     QStringList loadedEngines;
-    static uint s_maxAppletId;
     Plasma::SvgPanel *background;
     Plasma::LineEdit *failureText;
     AppletScript *script;
@@ -311,6 +303,7 @@ public:
 };
 
 uint Applet::Private::s_maxAppletId = 0;
+uint Applet::Private::s_maxZValue = 0;
 
 Applet::Applet(QGraphicsItem *parent,
                const QString& serviceID,
@@ -363,6 +356,7 @@ void Applet::save(KConfigGroup* group) const
     //       screen affinity (e.g. "bottom of screen 0")
     //kDebug() << pluginName() << "geometry is" << geometry() << "pos is" << pos() << "bounding rect is" << boundingRect();
     group->writeEntry("geometry", geometry());
+    group->writeEntry("zvalue", zValue());
 
     if (transform() == QTransform()) {
         group->deleteEntry("transform");
@@ -377,6 +371,29 @@ void Applet::save(KConfigGroup* group) const
     KConfigGroup appletConfigGroup(group, "Configuration");
     //FIXME: we need a global save state too
     saveState(&appletConfigGroup);
+}
+
+void Applet::restore(KConfigGroup *c)
+{
+    QList<qreal> m = c->readEntry("transform", QList<qreal>());
+    if (m.count() == 9) {
+        QTransform t(m[0], m[1], m[2], m[3], m[4], m[5], m[6], m[7], m[8]);
+        setTransform(t);
+    }
+
+    qreal z = c->readEntry("zvalue", -1);
+
+    if (z < 0) {
+        z = ++Private::s_maxZValue;
+    } else if (z >= Private::s_maxZValue) {
+        Private::s_maxZValue = z;
+    }
+
+    setZValue(z);
+
+    if (c->readEntry("locked", false)) {
+        setImmutable(true);
+    }
 }
 
 void Applet::saveState(KConfigGroup* group) const
@@ -576,6 +593,9 @@ void Applet::setDrawStandardBackground(bool drawBackground)
     if (drawBackground) {
         if (!d->background) {
             d->background = new Plasma::SvgPanel("widgets/background");
+
+            int left, top, right, bottom;
+            d->getBorderSize(left, top, right, bottom);
             updateGeometry();
         }
     } else if (d->background) {
@@ -695,11 +715,10 @@ void Applet::flushUpdatedConstraints()
     Plasma::Constraints c = d->pendingConstraints;
     d->pendingConstraints = NoConstraint;
 
-    Containment* containment = qobject_cast<Plasma::Containment*>(this);
     if (c & Plasma::FormFactorConstraint) {
         FormFactor f = formFactor();
         setShadowShown(f == Planar);
-        setDrawStandardBackground(!containment && f != Vertical && f != Horizontal);
+        setDrawStandardBackground(!isContainment() && f != Vertical && f != Horizontal);
 
         /**
          FIXME: what follows was an attempt to constrain the size of applets. it is, however,
@@ -730,6 +749,7 @@ void Applet::flushUpdatedConstraints()
         */
     }
 
+    Containment* containment = qobject_cast<Plasma::Containment*>(this);
     if (isContainment() && containment) {
         containment->containmentConstraintsUpdated(c);
     }
@@ -763,11 +783,8 @@ QRectF Applet::boundingRect() const
     int bottom;
 
     d->getBorderSize(left,top,right,bottom);
-
-
     //kDebug() << "Background , Border size" << d->background << left << top << right << bottom;
-
-    return rect.adjusted(-left,-top,right,bottom);
+    return rect.adjusted(-left, -top, right, bottom);
 }
 
 QPainterPath Applet::shape() const
@@ -1245,7 +1262,7 @@ Applet* Applet::loadApplet(const QString& appletName, uint appletId, const QVari
     KService::Ptr offer = offers.first();
 
     if (appletId == 0) {
-        appletId = Private::nextId();
+        appletId = ++Private::s_maxAppletId;
     }
 
     if (!offer->property("X-Plasma-Language").toString().isEmpty()) {
@@ -1308,7 +1325,10 @@ bool Applet::isShadowShown() const
     return d->shadow && d->shadow->isVisible();
 }
 
-
+QPointF Applet::topLeft() const
+{
+    return boundingRect().topLeft();
+}
 
 QVariant Applet::itemChange(GraphicsItemChange change, const QVariant &value)
 {
@@ -1361,8 +1381,10 @@ void Applet::setGeometry(const QRectF& geometry)
     QPointF p = pos();
 
     Widget::setGeometry(geometry);
+    //kDebug() << s << size();
     if (s != size()) {
         if (d->background) {
+            //kDebug() << "setting background to" << size();
             d->background->resize(size());
         }
 
@@ -1377,6 +1399,11 @@ void Applet::setGeometry(const QRectF& geometry)
         updateConstraints(updatedConstraints);
         emit geometryChanged();
     }
+}
+
+void Applet::raise()
+{
+    setZValue(++Private::s_maxZValue);
 }
 
 void Applet::setIsContainment(bool isContainment)

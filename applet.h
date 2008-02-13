@@ -137,6 +137,11 @@ class PLASMA_EXPORT Applet : public Widget
         void save(KConfigGroup* group) const;
 
         /**
+         * Restores state information about this applet.
+         **/
+        void restore(KConfigGroup* group);
+
+        /**
          * Returns a KConfigGroup object to be shared by all applets of this
          * type.
          *
@@ -575,6 +580,11 @@ class PLASMA_EXPORT Applet : public Widget
         void setGeometry(const QRectF &geometry);
 
         /**
+         * Causes this applet to raise above all other applets.
+         */
+        void raise();
+
+        /**
          * Reimplemented from LayoutItem
          */
         QSizeF sizeHint() const;
@@ -728,6 +738,11 @@ class PLASMA_EXPORT Applet : public Widget
          * @internal event filter; used for focus watching
          **/
         bool eventFilter( QObject *o, QEvent *e );
+
+        /**
+         * Reimpmlemented from LayoutItem
+         */
+        QPointF topLeft() const;
 
         /**
          * Reimplemented from QGraphicsItem
