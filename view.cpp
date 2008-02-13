@@ -67,7 +67,7 @@ void View::initGraphicsView()
 {
     setFrameShape(QFrame::NoFrame);
     setAutoFillBackground(true);
-    setDragMode(QGraphicsView::RubberBandDrag);
+    setDragMode(QGraphicsView::NoDrag);
     //setCacheMode(QGraphicsView::CacheBackground);
     setInteractive(true);
     setAcceptDrops(true);
