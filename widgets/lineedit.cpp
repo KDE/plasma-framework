@@ -133,7 +133,9 @@ Qt::Orientations LineEdit::expandingDirections() const
 
 QSizeF LineEdit::minimumSize() const
 {
-    return boundingRect().size();
+    QSizeF sh = document()->size();
+    sh.setWidth(textWidth());
+    return sh;
 }
 
 QSizeF LineEdit::maximumSize() const
@@ -168,14 +170,16 @@ qreal LineEdit::widthForHeight(qreal h) const
 
 QRectF LineEdit::geometry() const
 {
-    return QRectF(pos(),boundingRect().size());
+    return QRectF(pos(), boundingRect().size());
 }
 
 void LineEdit::setGeometry(const QRectF& geometry)
 {
     prepareGeometryChange();
-    setTextWidth(geometry.width());
-    setPos(geometry.topLeft());
+    QRectF geom(geometry.topLeft(),
+                geometry.size().boundedTo(maximumSize()).expandedTo(minimumSize()));
+    setTextWidth(geom.width());
+    setPos(geom.topLeft());
     update();
 }
 
@@ -190,7 +194,13 @@ void LineEdit::updateGeometry()
 
 QSizeF LineEdit::sizeHint() const
 {
-    return document()->size();
+    QSizeF sh = document()->size();
+
+    if (sh.width() < textWidth()) {
+        sh.setWidth(textWidth());
+    }
+
+    return sh;
 }
 
 void LineEdit::setDefaultText(const QString &text)
@@ -250,6 +260,11 @@ void LineEdit::focusOutEvent(QFocusEvent *event)
         QGraphicsTextItem::setHtml(d->defaultText);
     }
     QGraphicsTextItem::focusOutEvent(event);
+}
+
+QPointF LineEdit::position() const
+{
+    return pos();
 }
 
 } // namespace Plasma

@@ -98,6 +98,7 @@ class PLASMA_EXPORT LineEdit : public QGraphicsTextItem, public LayoutItem
         void keyPressEvent(QKeyEvent *event);
         void focusInEvent(QFocusEvent *event);
         void focusOutEvent(QFocusEvent *event);
+        QPointF position() const;
 };
 
 } // namespace Plasma
