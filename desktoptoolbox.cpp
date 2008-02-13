@@ -84,7 +84,7 @@ DesktopToolbox::DesktopToolbox(QGraphicsItem *parent)
       m_animFrame(0)
 {
     setAcceptsHoverEvents(true);
-    setZValue(10000);
+    setZValue(10000000);
     setFlag(ItemClipsToShape, true);
     setFlag(ItemClipsChildrenToShape, false);
 
