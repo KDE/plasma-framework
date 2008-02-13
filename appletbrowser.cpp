@@ -48,15 +48,13 @@ public:
     }
 
     void initFilters();
-    //update the itemModel on our running applets
-    void updateRunningApplets();
 
     QString application;
     Plasma::Containment *containment;
     KCategorizedItemsView *appletList;
-    QMultiHash<QString,Plasma::Applet*> runningApplets;
+    QHash<QString, int> runningApplets; // applet name => count
     //extra hash so we can look up the names of deleted applets
-    QHash<Plasma::Applet*,QString> appletNames;
+    QHash<Plasma::Applet*, QString> appletNames;
 
     KConfig config;
     KConfigGroup configGroup;
@@ -110,16 +108,6 @@ void AppletBrowserWidget::Private::initFilters()
         filterModel.addFilter(category,
                               KCategorizedItemsViewModels::Filter("category", category));
     }
-}
-
-void AppletBrowserWidget::Private::updateRunningApplets()
-{
-    QHash<QString,int> appCount;
-    foreach (QString key, runningApplets.uniqueKeys()) {
-        appCount[key]=runningApplets.count(key);
-    }
-    kDebug() << appCount;
-    itemModel.setRunningApplets(appCount);
 }
 
 /*
@@ -185,7 +173,6 @@ void AppletBrowserWidget::initRunningApplets()
 {
 //get applets from corona, count them, send results to model
     kDebug() << d->runningApplets.count();
-    QHash<QString,int> appCount;
     Plasma::Corona *c = d->containment->corona();
 
     //we've tried our best to get a corona
@@ -195,20 +182,22 @@ void AppletBrowserWidget::initRunningApplets()
         return;
     }
 
+    d->appletNames.clear();
+    d->runningApplets.clear();
     QList<Containment*> containments = c->containments();
     foreach (Containment * containment,containments) {
         connect(containment, SIGNAL(appletAdded(Plasma::Applet*)), this, SLOT(appletAdded(Plasma::Applet*)));
         //TODO track containments too?
         QList<Applet*>applets=containment->applets();
         foreach (Applet *applet,applets) {
-            d->runningApplets.insert(applet->name(), applet);
+            d->runningApplets[applet->name()]++;
             d->appletNames.insert(applet, applet->name());
             connect(applet, SIGNAL(destroyed(QObject*)), this, SLOT(appletDestroyed(QObject*)));
-            appCount[applet->name()]++;
         }
     }
-    kDebug() << appCount;
-    d->itemModel.setRunningApplets(appCount);
+
+    kDebug() << d->runningApplets;
+    d->itemModel.setRunningApplets(d->runningApplets);
 }
 
 void AppletBrowserWidget::setApplication(const QString& app)
@@ -222,7 +211,8 @@ void AppletBrowserWidget::setApplication(const QString& app)
     //       maze of models and views is screwing up
     d->appletList->setItemModel(&d->itemModel);
 
-    d->updateRunningApplets();
+    kDebug() << d->runningApplets;
+    d->itemModel.setRunningApplets(d->runningApplets);
 }
 
 QString AppletBrowserWidget::application()
@@ -258,31 +248,65 @@ void AppletBrowserWidget::appletAdded(Plasma::Applet* applet)
 {
     QString name = applet->name();
     kDebug() << name;
-    d->runningApplets.insert(name, applet);
+
+    if (d->runningApplets.contains(applet->name())) {
+        d->runningApplets[name] = d->runningApplets[applet->name()] + 1;
+    } else {
+        d->runningApplets.insert(name, 1);
+    }
+
     d->appletNames.insert(applet, name);
     connect(applet, SIGNAL(destroyed(QObject*)), this, SLOT(appletDestroyed(QObject*)));
-    d->itemModel.setRunningApplets(name, d->runningApplets.count(name));
+    d->itemModel.setRunningApplets(name, d->runningApplets[name]);
 }
 
 void AppletBrowserWidget::appletDestroyed(QObject* applet)
 {
     kDebug() << applet;
     Plasma::Applet* a = (Plasma::Applet*)applet; //don't care if it's valid, just need the address
-    QString name = d->appletNames.take(a);
+
+    QString name = a->name();
+
+    int count = 0;
+    if (d->runningApplets.contains(name)) {
+        count = d->runningApplets[name] - 1;
+
+        if (count < 1) {
+            d->runningApplets.remove(name);
+        } else {
+            d->runningApplets[name] = count;
+        }
+    }
+
     //if !name, was the applet not found or was the name actually ""?
-    d->runningApplets.remove(name, a);
-    d->itemModel.setRunningApplets(name, d->runningApplets.count(name));
+    d->appletNames.remove(a);
+    d->itemModel.setRunningApplets(name, count);
 }
 
 void AppletBrowserWidget::destroyApplets(QString name)
 {
-    foreach (Plasma::Applet* app, d->runningApplets.values(name)) {
-        //FIXME I have a hard time believing this is safe without QPointer
-        app->disconnect(this); //don't need to be told it's being destroyed
-        app->destroy();
-        d->appletNames.remove(app);
+    Plasma::Corona *c = d->containment->corona();
+
+    //we've tried our best to get a corona
+    //we don't want just one containment, we want them all
+    if (!c) {
+        kDebug() << "can't happen";
+        return;
     }
+
+    foreach (Containment *containment, c->containments()) {
+        QList<Applet*> applets = containment->applets();
+        foreach (Applet *applet,applets) {
+            d->appletNames.remove(applet);
+            if (applet->name() == name) {
+                applet->disconnect(this);
+                applet->destroy();
+            }
+        }
+    }
+
     d->runningApplets.remove(name);
+    d->itemModel.setRunningApplets(name, 0);
 }
 
 void AppletBrowserWidget::downloadApplets()
