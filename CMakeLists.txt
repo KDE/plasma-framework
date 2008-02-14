@@ -205,6 +205,7 @@ install(FILES
     includes/SearchContext
     includes/SearchMatch
     includes/Svg
+    includes/SvgPanel
     includes/UiLoader
     includes/PackageMetadata
     includes/View
