@@ -132,6 +132,7 @@ set(plasma_LIB_INCLUDES
     searchcontext.h
     shadowitem_p.h
     svg.h
+    svgpanel.h
     theme.h
     uiloader.h
     view.h)
