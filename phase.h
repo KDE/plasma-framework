@@ -119,12 +119,16 @@ public:
 Q_SIGNALS:
     void animationComplete(QGraphicsItem *item, Plasma::Phase::Animation anim);
     void movementComplete(QGraphicsItem *item);
+    void elementAnimationComplete(AnimId id);
+    void customAnimationComplete(AnimId id);
 
 protected:
     void timerEvent(QTimerEvent *event);
 
 protected Q_SLOTS:
-    void objectDestroyed(QObject*);
+    void animatedItemDestroyed(QObject*);
+    void movingItemDestroyed(QObject*);
+    void animatedElementDestroyed(QObject*);
     void customAnimReceiverDestroyed(QObject*);
 
 private:
