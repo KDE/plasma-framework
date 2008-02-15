@@ -150,6 +150,7 @@ SearchContext::~SearchContext()
 void SearchContext::resetSearchTerm(const QString &term)
 {
     d->resetState();
+    emit matchesChanged();
     setSearchTerm(term);
 }
 
@@ -349,6 +350,7 @@ QList<SearchMatch *> SearchContext::possibleMatches() const
 void SearchContext::clearMatches()
 {
     d->clearMatches();
+    emit matchesChanged();
 }
 
 }
