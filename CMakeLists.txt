@@ -27,9 +27,5 @@ install(FILES
 
 install(FILES
     colors
-    DESTINATION ${DATA_INSTALL_DIR}/desktoptheme/default/)
-
-install(FILES
     metadata.desktop
-    DESTINATION ${DATA_INSTALL_DIR}/desktoptheme)
-
+    DESTINATION ${DATA_INSTALL_DIR}/desktoptheme/default/)
