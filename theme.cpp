@@ -179,6 +179,12 @@ void Theme::setThemeName(const QString &themeName)
         d->colors = KSharedConfig::openConfig(colorsFile);
     }
 
+    KConfigGroup cg = d->config();
+    if (cg.readEntry("name", Private::defaultTheme) != d->themeName) {
+        cg.writeEntry("name", d->themeName);
+        cg.config()->sync();
+    }
+
     emit changed();
 }
 
