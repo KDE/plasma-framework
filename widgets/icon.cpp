@@ -238,7 +238,14 @@ void IconAction::paint(QPainter *painter) const
         m_icon->size().height() < m_rect.height()*2.0) {
         return;
     }
-    painter->drawPixmap(m_rect.toRect(), Phase::self()->animationResult(m_animationId));
+
+    QPixmap animPixmap = Phase::self()->animationResult(m_animationId);
+
+    if (m_visible && animPixmap.isNull()) {
+        painter->drawPixmap(m_rect.toRect(), m_pixmap);
+    } else {
+        painter->drawPixmap(m_rect.toRect(), animPixmap);
+    }
 }
 
 Icon::Icon(QGraphicsItem *parent)
