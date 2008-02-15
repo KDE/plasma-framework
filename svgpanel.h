@@ -111,6 +111,18 @@ class PLASMA_EXPORT SvgPanel : public QObject
         qreal marginSize(const Plasma::MarginEdge edge) const;
 
         /**
+         * Sets the position of the SvgPanel
+         * @arg pos where it should be positioned at
+         */
+        void setPos( const QPointF& pos );
+
+        /**
+         * Returns the position of the SvgPanel
+         * @return the position
+         */
+        QPointF pos() const;
+
+        /**
          * Paints the loaded SVG with the elements that represents the border
          * @arg painter the QPainter to use
          * @arg rect the exposed rect to draw into

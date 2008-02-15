@@ -33,7 +33,7 @@ class SvgPanel::Private
 public:
     Private()
       : bFlags(DrawAllBorders|ContentAtOrigin),
-        cachedBackground(0)
+        cachedBackground(0), pos(0,0)
     {
     }
 
@@ -46,6 +46,7 @@ public:
     QPixmap *cachedBackground;
     Svg *background;
     QSizeF panelSize;
+    QPointF pos;
 
     //measures
     int topHeight;
@@ -104,6 +105,17 @@ SvgPanel::BorderFlags SvgPanel::borderFlags() const
 {
     return d->bFlags;
 }
+
+void SvgPanel::setPos(const QPointF& pos)
+{
+    d->pos = pos;
+}
+
+QPointF SvgPanel::pos() const
+{
+    return d->pos;
+}
+
 
 void SvgPanel::resize(const QSizeF& size)
 {
@@ -303,7 +315,7 @@ void SvgPanel::paint(QPainter* painter, const QRectF& rect)
    }
 
    //p2->drawPixmap(paintRect, *cachedBackground, paintRect.translated(-leftOffset,-topOffset));
-   painter->drawPixmap(rect, *d->cachedBackground, rect.translated(-leftOffset, -topOffset));
+   painter->drawPixmap(rect, *d->cachedBackground, rect.translated(-d->pos.x()-leftOffset,-d->pos.y()-topOffset));
 }
 
 void SvgPanel::updateSizes()
