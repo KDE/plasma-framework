@@ -31,7 +31,6 @@
 #include <QHelpEvent>
 #include <QList>
 #include <QPainter>
-#include <QPixmapCache>
 #include <QStyleOptionGraphicsItem>
 #include <QDesktopWidget>
 
@@ -54,7 +53,6 @@ class Widget::Private
               maximumSize(std::numeric_limits<qreal>::infinity(),
                           std::numeric_limits<qreal>::infinity()),
               opacity(1.0),
-              cachePaintMode(Widget::NoCacheMode),
               wasMovable(false),
               toolTip(0)
         { }
@@ -69,15 +67,6 @@ class Widget::Private
         QSizeF maximumSize;
 
         qreal opacity;
-
-        // Replace with CacheMode in 4.4
-#if QT_VERSION >= 0x040400
-#warning Replace Plasma::Widget::CachePaintMode with QGraphicsItem::CacheMode
-#endif
-        Widget::CachePaintMode cachePaintMode;
-        QSize cacheSize;
-        QString cacheKey;
-        QRectF cacheInvalidated;
 
         bool wasMovable;
 
@@ -138,7 +127,7 @@ Widget::Widget(QGraphicsItem *parent, QObject* parentObject)
 {
     setFlag(QGraphicsItem::ItemClipsToShape, true);
     setFlag(QGraphicsItem::ItemClipsChildrenToShape, true);
-    setCachePaintMode(DeviceCoordinateCacheMode);
+    setCacheMode(DeviceCoordinateCache);
 
     Widget *w = dynamic_cast<Widget *>(parent);
     if (w) {
@@ -166,28 +155,16 @@ qreal Widget::opacity() const
 
 void Widget::setCachePaintMode(CachePaintMode mode, const QSize &size)
 {
-    d->cachePaintMode = mode;
-    if (mode == NoCacheMode) {
-        QPixmapCache::remove(d->cacheKey);
-        d->cacheKey.clear();
-    } else {
-        d->cacheKey = QString("%1").arg(long(this));
-        if (mode == ItemCoordinateCacheMode) {
-            d->cacheSize = size.isNull() ? boundingRect().size().toSize() : size;
-        }
-    }
+    setCacheMode(CacheMode(mode), size);
 }
 
 Widget::CachePaintMode Widget::cachePaintMode() const
 {
-    return d->cachePaintMode;
+    return CachePaintMode(cacheMode());
 }
 
 void Widget::update(const QRectF &rect)
 {
-    if (d->cachePaintMode != NoCacheMode) {
-        d->cacheInvalidated |= rect.isNull() ? boundingRect() : rect;
-    }
     QGraphicsItem::update(rect);
 }
 
@@ -369,118 +346,7 @@ NOTE: put this back if we end up needing to control when things paint due to, e.
     }
     */
 
-    if (d->cachePaintMode == NoCacheMode) {
-        paintWidget(painter, option, widget);
-        return;
-    }
-
-    // Cached painting
-    QRectF brect = boundingRect();
-
-    // Fetch the off-screen transparent buffer and exposed area info.
-    QPixmap pix;
-    QPixmapCache::find(d->cacheKey, pix);
-    QRectF exposed = d->cacheInvalidated;
-
-    // Render using item coodinate cache mode.
-    if (d->cachePaintMode == ItemCoordinateCacheMode) {
-        // Recreate the pixmap if it's gone.
-        if (pix.isNull()) {
-            pix = QPixmap(d->cacheSize);
-            pix.fill(Qt::transparent);
-            exposed = brect;
-        }
-
-        // Check for newly invalidated areas.
-        if (!exposed.isNull()) {
-            d->cacheInvalidated = QRectF();
-
-            QStyleOptionGraphicsItem cacheOption = *option;
-            cacheOption.exposedRect = exposed.toRect(); // <- truncation
-
-            QPainter pixmapPainter(&pix);
-
-            // Fit the item's bounding rect into the pixmap's coordinates.
-            pixmapPainter.scale(pix.width() / brect.width(),
-                                pix.height() / brect.height());
-            pixmapPainter.translate(-brect.topLeft());
-
-            // erase the exposed area so we don't paint over and over
-            pixmapPainter.setCompositionMode(QPainter::CompositionMode_Source);
-            pixmapPainter.fillRect(exposed, Qt::transparent);
-            pixmapPainter.setCompositionMode(QPainter::CompositionMode_SourceOver);
-
-            // Re-render the invalidated areas of the pixmap. Important: don't
-            // fool the item into using the widget - pass 0 instead of \a
-            // widget.
-            paintWidget(&pixmapPainter, &cacheOption, 0);
-            pixmapPainter.end();
-
-            // Reinsert this pixmap into the cache
-            QPixmapCache::insert(d->cacheKey, pix);
-        }
-
-        // Redraw the exposed area using the transformed painter. Depending on
-        // the hardware, this may be a server-side operation, or an expensive
-        // qpixmap-image-transform-pixmap roundtrip.
-        painter->drawPixmap(brect, pix, QRectF(QPointF(), pix.size()));
-        return;
-    }
-
-    // Render using device coordinate cache mode.
-    if (d->cachePaintMode == DeviceCoordinateCacheMode) {
-        QTransform transform = painter->worldTransform();
-        QRect deviceRect = transform.mapRect(brect).toRect();
-
-        if (deviceRect.width() < 1 ||
-            deviceRect.height() < 1) {
-            // we have nothing to paint!
-            return;
-        }
-
-        // Auto-adjust the pixmap size.
-        if (deviceRect.size() != pix.size()) {
-            pix = QPixmap(deviceRect.size());
-            pix.fill(Qt::transparent);
-            exposed = brect;
-        }
-
-        // Check for newly invalidated areas.
-        if (!exposed.isNull()) {
-            d->cacheInvalidated = QRectF();
-
-            // Construct the new styleoption, reset the exposed rect.
-            QStyleOptionGraphicsItem cacheOption = *option;
-            cacheOption.exposedRect = exposed.toRect(); // <- truncation
-
-            QPointF viewOrigo = transform.map(QPointF(0,  0));
-            QPointF offset = viewOrigo - deviceRect.topLeft();
-
-            // Transform the painter, and render the item in device coordinates.
-            QPainter pixmapPainter(&pix);
-
-            pixmapPainter.translate(offset);
-            pixmapPainter.setWorldTransform(transform, true);
-            pixmapPainter.translate(transform.inverted().map(QPointF(0, 0)));
-
-            // erase the exposed area so we don't paint over and over
-            pixmapPainter.setCompositionMode(QPainter::CompositionMode_Source);
-            pixmapPainter.fillRect(exposed, Qt::transparent);
-            pixmapPainter.setCompositionMode(QPainter::CompositionMode_SourceOver);
-
-            paintWidget(&pixmapPainter, &cacheOption, 0);
-            pixmapPainter.end();
-
-            // Reinsert this pixmap into the cache
-            QPixmapCache::insert(d->cacheKey, pix);
-        }
-
-        // Redraw the exposed area using an untransformed painter. This
-        // effectively becomes a bitblit that does not transform the cache.
-        painter->setWorldTransform(QTransform());
-        painter->drawPixmap(deviceRect.topLeft(), pix);
-        return;
-    }
+    paintWidget(painter, option, widget);
 }
 
 const ToolTipData* Widget::toolTip() const

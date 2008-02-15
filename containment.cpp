@@ -118,7 +118,7 @@ Containment::~Containment()
 
 void Containment::init()
 {
-    setCachePaintMode(NoCacheMode);
+    setCacheMode(NoCache);
     setFlag(QGraphicsItem::ItemIsMovable, false);
     setFlag(QGraphicsItem::ItemClipsChildrenToShape, false);
     setAcceptDrops(true);

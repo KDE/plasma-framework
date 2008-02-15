@@ -72,7 +72,7 @@ Flash::Flash(QGraphicsItem *parent)
     d->state = Private::Invisible;
     resize(QSizeF(40, 100));
 
-    setCachePaintMode( NoCacheMode );
+    setCacheMode(NoCache);
 }
 
 Flash::~Flash()
