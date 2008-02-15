@@ -29,6 +29,7 @@
 #include <kgenericfactory.h>
 
 #include <plasma/configxml.h>
+#include <plasma/packagestructure.h>
 #include <plasma/plasma.h>
 #include <plasma/widgets/widget.h>
 
@@ -99,6 +100,11 @@ class PLASMA_EXPORT Applet : public Widget
         Applet(QObject* parent, const QVariantList& args);
 
         ~Applet();
+
+        /**
+         * @return a package structure representing a Theme
+         */
+        static PackageStructure packageStructure();
 
         /**
          * This method is called once the applet is loaded and added to a Corona.

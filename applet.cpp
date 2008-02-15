@@ -334,6 +334,11 @@ Applet::~Applet()
     delete d;
 }
 
+PackageStructure Applet::packageStructure()
+{
+    return PlasmoidStructure();
+}
+
 void Applet::init()
 {
     if (d->script && !d->script->init()) {

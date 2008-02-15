@@ -31,6 +31,8 @@
 #include <KSharedConfig>
 #include <KStandardDirs>
 
+#include "plasma/packages_p.h"
+
 namespace Plasma
 {
 
@@ -109,6 +111,11 @@ Theme::~Theme()
 {
     d->config().writeEntry("name", d->themeName);
     delete d;
+}
+
+PackageStructure Theme::packageStructure()
+{
+    return ThemePackageStructure();
 }
 
 void Theme::setApplication(const QString &appname)

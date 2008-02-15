@@ -27,6 +27,7 @@
 #include <KDE/KSharedConfig>
 
 #include <plasma/plasma_export.h>
+#include <plasma/packagestructure.h>
 
 namespace Plasma
 {
@@ -62,6 +63,11 @@ class PLASMA_EXPORT Theme : public QObject
          */
         explicit Theme( QObject* parent = 0 );
         ~Theme();
+
+        /**
+         * @return a package structure representing a Theme
+         */
+        static PackageStructure packageStructure();
 
         /**
          * Sets the application the theme setting is associated with. This
