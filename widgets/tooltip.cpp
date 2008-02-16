@@ -357,7 +357,7 @@ void ToolTip::resizeEvent(QResizeEvent *)
     painter.setBrush(Qt::black);
     painter.setPen(Qt::black);
 
-    painter.drawPath(roundedRectangle(mask.rect(), 10));
+    painter.drawPath(roundedRectangle(mask.rect().adjusted(-1,-1,-1,-1), 10));
     setMask(mask);
 }
 
