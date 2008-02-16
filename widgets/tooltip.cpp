@@ -350,14 +350,14 @@ void ToolTip::resizeEvent(QResizeEvent *)
     }
 
     QBitmap mask(width(), height());
-    QPainter painterMask(&mask);
+    QPainter maskPainter(&mask);
 
     mask.fill(Qt::white);
 
-    painterMask.setBrush(Qt::black);
-    painterMask.setPen(Qt::black);
+    maskPainter.setBrush(Qt::black);
+    maskPainter.setPen(Qt::black);
 
-    painterMask.drawPath(roundedRectangle(mask.rect().adjusted(-1,-1,-1,-1), 10));
+    maskPainter.drawPath(roundedRectangle(mask.rect().adjusted(-1,-1,-1,-1), 10));
     setMask(mask);
 }
 
