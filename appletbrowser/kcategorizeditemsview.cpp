@@ -55,7 +55,7 @@ KCategorizedItemsView::KCategorizedItemsView(QWidget * parent, Qt::WindowFlags f
     itemsView->header()->setVisible(false);
 
     itemsView->setItemDelegate(m_delegate = new KCategorizedItemsViewDelegate(this));
-    itemsView->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
+    //itemsView->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
 
     connect (m_delegate, SIGNAL(destroyApplets(const QString)),
                   parent, SLOT(destroyApplets(const QString)));
