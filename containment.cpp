@@ -339,12 +339,12 @@ void Containment::setFormFactor(FormFactor formFactor)
             break;
         case Horizontal:
             lay = new BoxLayout(BoxLayout::LeftToRight, this);
-            lay->setMargin(0);
+            lay->setMargins(0, 0, 0, 0);
             lay->setSpacing(4);
             break;
         case Vertical:
             lay = new BoxLayout(BoxLayout::TopToBottom, this);
-            lay->setMargin(0);
+            lay->setMargins(0, 0, 0, 0);
             lay->setSpacing(4);
             break;
         case MediaCenter:
@@ -405,6 +405,11 @@ void Containment::clearApplets()
 
 Applet* Containment::addApplet(const QString& name, const QVariantList& args, uint id, const QRectF& appletGeometry, bool delayInit)
 {
+    if (!delayInit && isImmutable()) {
+        kDebug() << "addApplet for" << name << "requested, but we're currently immutable!";
+        return 0;
+    }
+
     QGraphicsView *v = view();
     if (v) {
         v->setCursor(Qt::BusyCursor);
@@ -450,8 +455,12 @@ Applet* Containment::addApplet(const QString& name, const QVariantList& args, ui
 //what we're trying to do here for panels is make the applet go to the requested position,
 //or somewhere close to it, and get integrated properly into the containment as if it were created
 //there.
-void Containment::addApplet(Applet *applet, const QPointF &pos, bool dontInit)
+void Containment::addApplet(Applet *applet, const QPointF &pos, bool delayInit)
 {
+    if (!delayInit && isImmutable()) {
+        return;
+    }
+
     if (!applet) {
         kDebug() << "adding null applet!?!";
         return;
@@ -466,7 +475,7 @@ void Containment::addApplet(Applet *applet, const QPointF &pos, bool dontInit)
 
         // Calculate where the user wants the applet to go before adding it
         //so long as this isn't a new applet with a delayed init
-        if (! dontInit || (currentContainment && currentContainment != this)) {
+        if (! delayInit || (currentContainment && currentContainment != this)) {
             index = indexAt(pos);
         }
     }
@@ -508,7 +517,8 @@ void Containment::addApplet(Applet *applet, const QPointF &pos, bool dontInit)
             applet->setPos(pos);
         }
     }
-    prepareApplet(applet, dontInit); //must at least flush constraints
+
+    prepareApplet(applet, delayInit); //must at least flush constraints
 }
 
 //containment-relative pos... right?
