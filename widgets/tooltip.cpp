@@ -341,8 +341,9 @@ void WindowPreview::setInfo()
 #endif
 }
 
-void ToolTip::resizeEvent(QResizeEvent *)
+void ToolTip::resizeEvent(QResizeEvent *e)
 {
+    QWidget::resizeEvent(e);
     d->background->resize(size());
 
     if (KWindowSystem::compositingActive()) {
