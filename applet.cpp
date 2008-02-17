@@ -601,11 +601,13 @@ void Applet::setDrawStandardBackground(bool drawBackground)
 
             int left, top, right, bottom;
             d->getBorderSize(left, top, right, bottom);
+            setMargins(0, 0, right, bottom);
             updateGeometry();
         }
     } else if (d->background) {
         delete d->background;
         d->background = 0;
+        setMargins(0, 0, 0, 0);
         updateGeometry();
     }
 }
@@ -648,7 +650,7 @@ void Applet::setFailedToLaunch(bool failed, const QString& reason)
     if (failed) {
         setDrawStandardBackground(true);
         Layout* failureLayout = new BoxLayout(BoxLayout::TopToBottom, this);
-        failureLayout->setMargin(0);
+        failureLayout->setMargins(0, 0, 0, 0);
         d->failureText = new LineEdit(this);
         d->failureText->setTextInteractionFlags( Qt::TextSelectableByMouse );
         d->failureText->setStyled(false);
@@ -787,7 +789,7 @@ QRectF Applet::boundingRect() const
     int top;
     int bottom;
 
-    d->getBorderSize(left,top,right,bottom);
+    d->getBorderSize(left, top, right, bottom);
     //kDebug() << "Background , Border size" << d->background << left << top << right << bottom;
     return rect.adjusted(-left, -top, right, bottom);
 }

@@ -140,8 +140,7 @@ T qSum(const QList<T>& container)
 
 void FlowLayout::relayout()
 {
-    const QRectF rect = geometry().adjusted(margin(LeftMargin), margin(TopMargin),
-                                            -margin(RightMargin), -margin(BottomMargin));
+    const QRectF rect = adjustToMargins(geometry());
 
     const qreal space = spacing();
     const qreal rectWidth = rect.width();

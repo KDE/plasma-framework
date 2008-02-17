@@ -25,6 +25,7 @@
 #include <QtCore/QSizeF>
 
 #include <plasma/plasma_export.h>
+#include <plasma/plasma.h>
 
 class QGraphicsItem;
 
@@ -159,12 +160,52 @@ class PLASMA_EXPORT LayoutItem
         Layout* managingLayout() const;
 
         /**
+         * Returns the margin of this Layout.
+         */
+        qreal margin(Plasma::MarginEdge edge) const;
+
+        /**
+         * @return the rect adjust to the margins of this item
+         */
+        QRectF adjustToMargins(const QRectF &rect) const;
+
+        /**
+         * Sets the margin of this Layout.
+         */
+        void setMargin(Plasma::MarginEdge edge, qreal m);
+
+        /**
+         * Sets all the margins of this Layout.
+         */
+        void setMargin(qreal m);
+
+        /**
+         * Sets all the margins of this Layout.
+         */
+        void setMargins(qreal left, qreal top, qreal right, qreal bottom);
+
+        /**
+         * Sets the size of the layout item
+         */
+        void setSize(const QSizeF &size);
+
+        /**
+         * @return the size of this item
+         */
+        QSizeF size() const;
+
+        /**
          * Returns the graphics item associated with this layout item or 0
          * if there is no associated graphics item.
          *
          * The default implementation returns 0.
          */
         virtual QGraphicsItem* graphicsItem();
+
+        /**
+         * Get the topLeft of the item in its coordinate space
+         */
+        virtual QPointF topLeft() const;
 
     protected:
         /**

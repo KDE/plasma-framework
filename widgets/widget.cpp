@@ -36,11 +36,13 @@
 
 #include <KDebug>
 
+#include "plasma/applet.h"
+
 #include "layouts/freelayout.h"
 #include "plasma/plasma.h"
 #include "plasma/view.h"
 #include "plasma/containment.h"
-#include "tooltip_p.h"
+#include "plasma/widgets/tooltip_p.h"
 
 namespace Plasma
 {
@@ -62,7 +64,6 @@ class Widget::Private
             delete toolTip;
         }
 
-        QSizeF size;
         QSizeF minimumSize;
         QSizeF maximumSize;
 
@@ -173,11 +174,12 @@ Qt::Orientations Widget::expandingDirections() const
     return Qt::Horizontal | Qt::Vertical;
 }
 
-void Widget::setMinimumSize(const QSizeF& size)
+void Widget::setMinimumSize(const QSizeF& newMin)
 {
-    d->minimumSize = size;
-    if (d->size != d->size.expandedTo(size)) {
-        setGeometry(QRectF(pos(), d->size.expandedTo(size)));
+    d->minimumSize = newMin;
+    QSizeF s = size();
+    if (s != s.expandedTo(newMin)) {
+        setGeometry(QRectF(pos(), s.expandedTo(newMin)));
     }
 }
 
@@ -186,11 +188,12 @@ QSizeF Widget::minimumSize() const
     return d->minimumSize;
 }
 
-void Widget::setMaximumSize(const QSizeF& size)
+void Widget::setMaximumSize(const QSizeF& newMax)
 {
-    d->maximumSize = size;
-    if (d->size != d->size.boundedTo(size)) {
-        setGeometry(QRectF(pos(), d->size.boundedTo(size)));
+    d->maximumSize = newMax;
+    QSizeF s = size();
+    if (s != s.boundedTo(newMax)) {
+        setGeometry(QRectF(pos(), s.boundedTo(newMax)));
     }
 }
 
@@ -225,20 +228,45 @@ qreal Widget::widthForHeight(qreal h) const
 
 QRectF Widget::geometry() const
 {
-    return QRectF(pos(), d->size);
+    return QRectF(pos(), size());
+}
+
+void Widget::setSize(const QSizeF &s)
+{
+    LayoutItem::setSize(s);
 }
 
 void Widget::setGeometry(const QRectF& geometry)
 {
-    if (geometry.size().width() > 0 && geometry.size().height() > 0 && d->size != geometry.size()) {
+    setPos(geometry.topLeft());
+    if (geometry.size().width() > 0 && geometry.size().height() > 0 && size() != geometry.size()) {
         prepareGeometryChange();
         qreal width = qBound(d->minimumSize.width(), geometry.size().width(), d->maximumSize.width());
         qreal height = qBound(d->minimumSize.height(), geometry.size().height(), d->maximumSize.height());
 
-        d->size = QSizeF(width, height);
+        setSize(QSizeF(width, height));
+
+        qreal xd = topLeft().x();
+        qreal yd = topLeft().y();
+
+        if (xd < 0) {
+            width -= xd;
+            xd = 0;
+        }
+
+        if (yd < 0) {
+            height -= yd;
+            yd = 0;
+        }
 
         if (layout()) {
-            layout()->setGeometry(QRectF(QPointF(0, 0), d->size));
+            QRectF r(QPointF(xd, yd), QSizeF(width, height));
+            r = adjustToMargins(r);
+            layout()->setGeometry(r);
+            /*if (qobject_cast<Plasma::Applet*>(this)) {
+                kDebug() << (QObject*)this << this->geometry() << this->topLeft()
+                         << "layout geometry is now" << r << margin(RightMargin);
+            }*/
         }
 
         if (managingLayout()) {
@@ -246,7 +274,6 @@ void Widget::setGeometry(const QRectF& geometry)
         }
     }
 
-    setPos(geometry.topLeft());
     update();
 }
 
@@ -264,13 +291,8 @@ QSizeF Widget::sizeHint() const
     if (layout()) {
         return layout()->sizeHint();
     } else {
-        return d->size;
+        return size();
     }
-}
-
-QSizeF Widget::size() const
-{
-    return d->size;
 }
 
 QFont Widget::font() const
@@ -280,7 +302,7 @@ QFont Widget::font() const
 
 QRectF Widget::boundingRect() const
 {
-    return QRectF(QPointF(0,0), d->size);
+    return QRectF(QPointF(0,0), size());
 }
 
 void Widget::resize(const QSizeF& size)

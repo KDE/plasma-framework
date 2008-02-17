@@ -27,6 +27,8 @@
 #include <QtCore/QTimeLine>
 #include <QtDebug>
 
+#include <KDebug>
+
 #include "widgets/widget.h"
 #include "layouts/layoutanimator.h"
 
@@ -37,11 +39,7 @@ class Layout::Private
 {
     public:
         Private()
-            : leftMargin(12.0),
-              rightMargin(12.0),
-              topMargin(12.0),
-              bottomMargin(12.0),
-              spacing(6.0),
+            : spacing(6.0),
               parent(0),
               animator(0),
               relayouting(false)
@@ -50,17 +48,13 @@ class Layout::Private
 
         ~Private() {}
 
-        qreal leftMargin;
-        qreal rightMargin;
-        qreal topMargin;
-        qreal bottomMargin;
         qreal spacing;
 
         LayoutItem *parent;
         LayoutAnimator *animator;
 
         bool relayouting;
-        QRectF geometry;
+        QPointF pos;
 };
 
 
@@ -68,6 +62,7 @@ Layout::Layout(LayoutItem *parent)
     : LayoutItem(),
       d(new Private)
 {
+    setMargins(12, 12, 12, 12);
     setParent(parent);
 }
 
@@ -117,16 +112,30 @@ void Layout::updateGeometry()
 
 QRectF Layout::geometry() const
 {
-    return d->geometry;
+    return QRectF(d->pos, size());
 }
 
-void Layout::setGeometry(const QRectF &geometry)
+void Layout::setGeometry(const QRectF &geom)
 {
-    if (!geometry.isValid() || geometry == d->geometry) {
+    if (!geom.isValid() || geom == geometry()) {
         return;
     }
 
-    d->geometry = geometry;
+    QRectF newGeom = geom;
+
+    if (d->parent && !dynamic_cast<Layout*>(d->parent)) {
+        newGeom = d->parent->adjustToMargins(newGeom);
+        //kDebug() << "parent rect is" << d->parent->topLeft() << d->parent->size()
+        //         << "and we are" << geometry() << "but aiming for"
+        //         << newGeom << "from" << geom;
+    }
+
+    d->pos = newGeom.topLeft();
+    setSize(newGeom.size());
+    // TODO: respect minimum and maximum sizes: is it possible?
+    //setSize(newGeom.size().expandedTo(minimumSize()).boundedTo(maximumSize()));
+
+    //kDebug() << "geometry is now" << geometry();
     invalidate();
 }
 
@@ -164,52 +173,6 @@ LayoutAnimator* Layout::animator() const
 void Layout::setAnimator(LayoutAnimator *animator)
 {
     d->animator = animator;
-}
-
-qreal Layout::margin(Plasma::MarginEdge edge) const
-{
-    switch (edge) {
-    case LeftMargin:
-        return d->leftMargin;
-        break;
-    case RightMargin:
-        return d->rightMargin;
-        break;
-    case TopMargin:
-        return d->topMargin;
-        break;
-    case BottomMargin:
-        return d->bottomMargin;
-        break;
-    }
-
-    return 0;
-}
-
-void Layout::setMargin(Plasma::MarginEdge edge, qreal m)
-{
-    switch (edge) {
-    case LeftMargin:
-        d->leftMargin = m;
-        break;
-    case RightMargin:
-        d->rightMargin = m;
-        break;
-    case TopMargin:
-        d->topMargin = m;
-        break;
-    case BottomMargin:
-        d->bottomMargin = m;
-        break;
-    }
-}
-
-void Layout::setMargin(qreal m)
-{
-    d->leftMargin = m;
-    d->rightMargin = m;
-    d->topMargin = m;
-    d->bottomMargin = m;
 }
 
 qreal Layout::spacing() const

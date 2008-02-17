@@ -35,9 +35,13 @@ class AbstractRunner;
 class PLASMA_EXPORT SearchMatch
 {
     public:
-        enum Type { InformationalMatch,
-                    ExactMatch,
-                    PossibleMatch };
+        /**
+         * The type of match. Value is important here as it is used for sorting
+         */
+        enum Type { PossibleMatch = 0 /**< Something that may match the query */,
+                    InformationalMatch = 50 /**< A purely informational, non-actionable match,
+                                                 such as the answer to a question or calculation*/,
+                    ExactMatch = 100 /**< An exact matcht to the query */};
 
         SearchMatch(const SearchContext *search, AbstractRunner *runner);
         ~SearchMatch();

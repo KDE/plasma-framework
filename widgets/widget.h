@@ -183,11 +183,6 @@ public:
     virtual QSizeF sizeHint() const;
 
     /**
-     * @return the size of this Plasma::Widget
-     */
-    QSizeF size() const;
-
-    /**
      * @return the font currently set for this widget
      **/
     QFont font() const;
@@ -308,11 +303,12 @@ protected:
 
     QVariant itemChange(GraphicsItemChange change, const QVariant &value);
     void managingLayoutChanged();
-
     virtual bool sceneEvent(QEvent *event);
 
 private:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
+    void setSize(const QSizeF &);
+
 
     class Private;
     Private *const d;

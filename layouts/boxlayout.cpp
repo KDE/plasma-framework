@@ -155,12 +155,18 @@ public:
                height = (geometry.height() - q->spacing() * (rowCount - 1)) / rowCount;
                top = geometry.top() + row * (height + q->spacing());
                height = qBound(minSize.height(), height, maxSize.height());
+               if (size > geometry.width()) {
+                   size = geometry.width();
+               }
                break;
             case TopToBottom:
             case BottomToTop:
                height = (geometry.width() - q->spacing() * (rowCount - 1)) / rowCount;
                top = geometry.left() + row * (height + q->spacing());
                height = qBound(minSize.width(), height, maxSize.width());
+               if (size > geometry.height()) {
+                   size = geometry.height();
+               }
                break;
         }
 

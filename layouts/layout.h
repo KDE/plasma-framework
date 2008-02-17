@@ -56,21 +56,6 @@ class PLASMA_EXPORT Layout : public LayoutItem
         virtual ~Layout();
 
         /**
-         * Returns the margin of this Layout.
-         */
-        qreal margin(Plasma::MarginEdge edge) const;
-
-        /**
-         * Sets the margin of this Layout.
-         */
-        void setMargin(Plasma::MarginEdge edge, qreal m);
-
-        /**
-         * Sets all the margins of this Layout.
-         */
-        void setMargin(qreal m);
-
-        /**
          * Returns the spacing between Layout elements of this Layout.
          */
         qreal spacing() const;
