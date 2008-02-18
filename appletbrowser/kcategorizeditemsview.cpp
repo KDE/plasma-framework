@@ -25,6 +25,8 @@
 #include <KAction>
 #include <KStandardAction>
 
+#define UNIVERSAL_PADDING 6
+
 KCategorizedItemsView::KCategorizedItemsView(QWidget * parent, Qt::WindowFlags f)
         : QWidget(parent, f), m_modelCategories(NULL), m_modelFilters(NULL),
         m_modelItems(NULL), m_modelFilterItems(NULL), m_delegate(NULL),
@@ -66,26 +68,33 @@ KCategorizedItemsView::KCategorizedItemsView(QWidget * parent, Qt::WindowFlags f
 
     QAction * find = KStandardAction::find(textSearch, SLOT(setFocus()), this);
     addAction(find);
-    resizeEvent(NULL);
 }
 
-KCategorizedItemsView::~KCategorizedItemsView() {
+KCategorizedItemsView::~KCategorizedItemsView()
+{
     delete m_modelFilterItems;
     delete m_delegate;
 }
 
-void KCategorizedItemsView::paintEvent ( QPaintEvent * event ) {
-    Q_UNUSED(event);
-    resizeEvent(NULL);
+void KCategorizedItemsView::resizeEvent ( QResizeEvent * event )
+{
+    updateColumnsWidth();
+
+    QWidget::resizeEvent(event);
 }
 
-void KCategorizedItemsView::resizeEvent ( QResizeEvent * event ) {
-    Q_UNUSED(event);
-    if (m_viewWidth == itemsView->viewport()->width()) return;
-    m_viewWidth = itemsView->viewport()->width();
-    itemsView->setColumnWidth(0, m_delegate->columnWidth(0, m_viewWidth));
-    itemsView->setColumnWidth(1, m_delegate->columnWidth(1, m_viewWidth));
-    itemsView->setColumnWidth(2, m_delegate->columnWidth(2, m_viewWidth));
+bool KCategorizedItemsView::event ( QEvent * event )
+{
+    switch (event->type()) {
+        case QEvent::PolishRequest:
+        case QEvent::Polish:
+            updateColumnsWidth(true);
+            break;
+        default:
+            break;
+    }
+
+    return QWidget::event(event);
 }
 
 void KCategorizedItemsView::setFilterModel(QStandardItemModel * model)
@@ -126,6 +135,19 @@ void KCategorizedItemsView::filterChanged(int index)
         QVariant data = m_modelFilters->item(index)->data();
         m_modelFilterItems->setFilter(qVariantValue<KCategorizedItemsViewModels::Filter>(data));
     }
+}
+
+void KCategorizedItemsView::updateColumnsWidth(bool force)
+{
+    m_viewWidth = itemsView->viewport()->width();
+
+    if (force) {
+        m_viewWidth -= style()->pixelMetric(QStyle::PM_ScrollBarExtent) + UNIVERSAL_PADDING;
+    }
+
+    itemsView->setColumnWidth(0, m_delegate->columnWidth(0, m_viewWidth));
+    itemsView->setColumnWidth(1, m_delegate->columnWidth(1, m_viewWidth));
+    itemsView->setColumnWidth(2, m_delegate->columnWidth(2, m_viewWidth));
 }
 
 void KCategorizedItemsView::addEmblem(const QString & title, QIcon * icon, const Filter & filter) {

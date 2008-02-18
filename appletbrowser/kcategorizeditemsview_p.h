@@ -60,11 +60,13 @@ public:
 
     QList < AbstractItem * > selectedItems() const;
 
+protected:
+    virtual void resizeEvent ( QResizeEvent * event );
+    virtual bool event ( QEvent * event );
+
 protected slots:
     void searchTermChanged(const QString &text);
     void filterChanged(int index);
-    void resizeEvent ( QResizeEvent * event );
-    void paintEvent ( QPaintEvent * event );
 
 Q_SIGNALS:
     void activated ( const QModelIndex & index );
@@ -74,6 +76,8 @@ Q_SIGNALS:
     void pressed ( const QModelIndex & index );
 
 private:
+    void updateColumnsWidth(bool force = false);
+
     QStandardItemModel * m_modelCategories;
     QStandardItemModel * m_modelFilters;
     QStandardItemModel * m_modelItems;

@@ -154,7 +154,7 @@ void AppletBrowserWidget::init()
         connect(newButton, SIGNAL(clicked()), this, SLOT(downloadApplets()));
         buttonLayout->addWidget( newButton );
 
-        layout->addItem( buttonLayout );
+        layout->addLayout( buttonLayout );
     }
 
     // Other Emblems
@@ -167,6 +167,8 @@ void AppletBrowserWidget::init()
     // Other models
     d->appletList->setItemModel(&d->itemModel);
     initRunningApplets();
+
+    setLayout(layout);
 }
 
 void AppletBrowserWidget::initRunningApplets()

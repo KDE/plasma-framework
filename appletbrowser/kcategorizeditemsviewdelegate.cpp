@@ -46,7 +46,6 @@ KCategorizedItemsViewDelegate::KCategorizedItemsViewDelegate(QObject * parent)
 void KCategorizedItemsViewDelegate::paint(QPainter *painter,
         const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
-
     KCategorizedItemsViewModels::AbstractItem * item =
         getItemByProxyIndex(index);
     if (!item) return;
@@ -300,7 +299,7 @@ int KCategorizedItemsViewDelegate::columnWidth (int column, int viewWidth) const
 }
 
 
-KCategorizedItemsViewModels::AbstractItem * KCategorizedItemsViewDelegate::getItemByProxyIndex(const QModelIndex & index) const { 
+KCategorizedItemsViewModels::AbstractItem * KCategorizedItemsViewDelegate::getItemByProxyIndex(const QModelIndex & index) const {
     return (AbstractItem *) m_parent->m_modelItems->itemFromIndex(
         m_parent->m_modelFilterItems->mapToSource(index)
     );
