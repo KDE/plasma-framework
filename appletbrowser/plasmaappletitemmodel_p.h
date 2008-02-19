@@ -69,10 +69,10 @@ public:
 
     QMimeData* mimeData(const QModelIndexList & indexes) const;
     
-    void setFavorite(QString plugin, bool favorite);
+    void setFavorite(const QString &plugin, bool favorite);
     void setApplication(const QString& app);
-    void setRunningApplets(const QHash<QString, int> apps);
-    void setRunningApplets(const QString name, int count);
+    void setRunningApplets(const QHash<QString, int> &apps);
+    void setRunningApplets(const QString &name, int count);
     
     QString& Application();
 private:

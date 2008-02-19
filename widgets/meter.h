@@ -113,7 +113,7 @@ public:
     /**
      * Set svg file name
      */
-    void setSvg(QString svg);
+    void setSvg(const QString &svg);
 
     /**
      * @return svg file name
@@ -192,7 +192,7 @@ public Q_SLOTS:
     /**
      * Used when connecting to a DataEngine
      */
-    void dataUpdated(QString sourceName, Plasma::DataEngine::Data data);
+    void dataUpdated(const QString &sourceName, const Plasma::DataEngine::Data &data);
 
 protected:
     /**

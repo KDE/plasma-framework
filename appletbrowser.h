@@ -72,7 +72,7 @@ protected Q_SLOTS:
     /**
      * Destroy all applets with this name
      */
-    void destroyApplets(const QString name);
+    void destroyApplets(const QString &name);
 
     /**
      * Launches a download dialog to retrieve new applets from the Internet

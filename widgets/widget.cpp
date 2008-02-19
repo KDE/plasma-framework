@@ -430,7 +430,7 @@ void Widget::managingLayoutChanged()
     }
 }
 
-QPoint Widget::popupPosition(const QSize s) const
+QPoint Widget::popupPosition(const QSize &s) const
 {
     QPoint pos = view()->mapFromScene(scenePos());
     pos = view()->mapToGlobal(pos);

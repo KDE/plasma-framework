@@ -151,7 +151,7 @@ void PlasmaAppletItemModel::populateModel()
     }
 }
 
-void PlasmaAppletItemModel::setRunningApplets(const QHash<QString, int> apps)
+void PlasmaAppletItemModel::setRunningApplets(const QHash<QString, int> &apps)
 {
     //foreach item, find that string and set the count
     for (int r=0; r<rowCount(); ++r) {
@@ -163,7 +163,7 @@ void PlasmaAppletItemModel::setRunningApplets(const QHash<QString, int> apps)
     }
 }
 
-void PlasmaAppletItemModel::setRunningApplets(const QString name, int count)
+void PlasmaAppletItemModel::setRunningApplets(const QString &name, int count)
 {
     for (int r=0; r<rowCount(); ++r) {
         QStandardItem *i = item(r);
@@ -207,7 +207,7 @@ QMimeData* PlasmaAppletItemModel::mimeData(const QModelIndexList & indexes) cons
     return data;
 }
 
-void PlasmaAppletItemModel::setFavorite(QString plugin, bool favorite)
+void PlasmaAppletItemModel::setFavorite(const QString &plugin, bool favorite)
 {
     if (favorite) {
         if (!m_favorites.contains(plugin)) {

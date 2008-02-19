@@ -205,7 +205,7 @@ Qt::Alignment Meter::labelAlignment(int index) const
     return d->alignments[index];
 }
 
-void Meter::dataUpdated(QString sourceName, Plasma::DataEngine::Data data)
+void Meter::dataUpdated(const QString &sourceName, const Plasma::DataEngine::Data &data)
 {
     Q_UNUSED(sourceName)
 
@@ -217,7 +217,7 @@ void Meter::dataUpdated(QString sourceName, Plasma::DataEngine::Data data)
     }
 }
 
-void Meter::setSvg(QString svg)
+void Meter::setSvg(const QString &svg)
 {
     d->svg = svg;
     delete d->image;

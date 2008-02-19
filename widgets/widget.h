@@ -285,7 +285,7 @@ public:
     * @param s size of the popup
     * @returns recomended position
     */
-    QPoint popupPosition(const QSize s) const;
+    QPoint popupPosition(const QSize &s) const;
 
     /**
      * Reimplemented from QGraphicsItem

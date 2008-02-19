@@ -278,7 +278,7 @@ void AppletBrowserWidget::appletDestroyed(QObject* applet)
     d->itemModel.setRunningApplets(name, count);
 }
 
-void AppletBrowserWidget::destroyApplets(QString name)
+void AppletBrowserWidget::destroyApplets(const QString &name)
 {
     Plasma::Corona *c = d->containment->corona();
 
