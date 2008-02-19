@@ -129,8 +129,9 @@ public:
         // we have a scripted plasmoid
         if (!language.isEmpty()) {
             // find where the Package is
-            QString path = KStandardDirs::locate("appdata",
-                                                 "plasmoids/" + appletDescription.pluginName() + '/');
+            QString path = KStandardDirs::locate("data",
+                                                 "plasma/plasmoids/" + appletDescription.pluginName() +
+                                                 "/");
 
             if (path.isEmpty()) {
                 applet->setFailedToLaunch(true, i18n("Could not locate the %1 package required for the %2 widget.",
