@@ -48,39 +48,13 @@ class SearchContext::Private
 
         ~Private()
         {
-            clearMatches();
+            qDeleteAll(matches);
+            matches.clear();
             delete completer;
         }
 
         void resetState()
         {
-            lockForWrite();
-            qDeleteAll(info);
-            info.clear();
-            qDeleteAll(exact);
-            exact.clear();
-            qDeleteAll(possible);
-            possible.clear();
-            type = SearchContext::UnknownType;
-            term.clear();
-            mimetype.clear();
-
-            if (completer) {
-                completer->clear();
-            }
-            unlock();
-        }
-
-        void clearMatches()
-        {
-            lockForWrite();
-            qDeleteAll(info);
-            info.clear();
-            qDeleteAll(exact);
-            exact.clear();
-            qDeleteAll(possible);
-            possible.clear();
-            unlock();
         }
 
         KCompletion* completionObject()
@@ -114,9 +88,7 @@ class SearchContext::Private
         }
 
         QReadWriteLock lock;
-        QList<SearchMatch *> info;
-        QList<SearchMatch *> exact;
-        QList<SearchMatch *> possible;
+        QList<SearchMatch *> matches;
         QString term;
         QString mimetype;
         SearchContext::Type type;
@@ -149,8 +121,28 @@ SearchContext::~SearchContext()
 
 void SearchContext::resetSearchTerm(const QString &term)
 {
-    d->resetState();
+    d->lockForWrite();
+    QList<SearchMatch*> matches = d->matches;
+
+    d->matches.clear();
+    d->type = SearchContext::UnknownType;
+    d->term.clear();
+    d->mimetype.clear();
+
+    if (d->completer) {
+        d->completer->clear();
+    }
+
+    d->unlock();
+
     emit matchesChanged();
+
+    // in case someone is still holding on to the Matches
+    // when we emit the matchesChanged() signal, we don't
+    // delete the matches until after the signal is handled.
+    // a bit safer.
+    qDeleteAll(matches);
+
     setSearchTerm(term);
 }
 
@@ -256,101 +248,81 @@ void SearchContext::addStringCompletions(const QStringList &completion)
     d->unlock();
 }
 
-SearchMatch* SearchContext::addInformationalMatch(AbstractRunner *runner)
+bool SearchContext::addMatches(const QString& term, const QList<SearchMatch*> &matches)
 {
-    Q_ASSERT(d->policy == SingleConsumer);
-    SearchMatch *action = new SearchMatch(this, runner);
-    action->setType(SearchMatch::InformationalMatch);
-    d->info.append(action);
-    return action;
+    if (searchTerm() != term || matches.isEmpty()) {
+        return false;
+    }
+
+    d->lockForWrite();
+    d->matches << matches;
+    d->unlock();
+
+    // TODO: perhaps queue this signal so that it is only emitted after a small delay?
+    //       currently we do this in krunner's Interface class, but it would probably
+    //       be better to move that detail to SearchContext so that other apps that
+    //       use SearchContext can also benefit from it
+    emit matchesChanged();
+    return true;
 }
 
-SearchMatch* SearchContext::addExactMatch(AbstractRunner *runner)
-{
-    Q_ASSERT(d->policy == SingleConsumer);
-    SearchMatch *action = new SearchMatch(this, runner);
-    action->setType(SearchMatch::ExactMatch);
-    d->exact.append(action);
-    return action;
-}
-
-SearchMatch* SearchContext::addPossibleMatch(AbstractRunner *runner)
-{
-    Q_ASSERT(d->policy == SingleConsumer);
-    SearchMatch *action = new SearchMatch(this, runner);
-    action->setType(SearchMatch::PossibleMatch);
-    d->possible.append(action);
-    return action;
-}
-
-bool SearchContext::addMatches( const QString& term, const QList<SearchMatch *> &exactMatches,
-                                                      const QList<SearchMatch *> &possibleMatches,
-                                                      const QList<SearchMatch *> &informationalMatches )
+bool SearchContext::addMatch(const QString &term, SearchMatch *match)
 {
     if (searchTerm() != term) {
         return false;
     }
 
-    if (exactMatches.isEmpty() &&
-        possibleMatches.isEmpty() &&
-        informationalMatches.isEmpty()) {
-        return false;
-    }
-
     d->lockForWrite();
-    d->exact << exactMatches;
-    d->possible << possibleMatches;
-    d->info << informationalMatches;
+    d->matches << match;
     d->unlock();
     emit matchesChanged();
+
     return true;
 }
 
 bool SearchContext::addMatchesTo(SearchContext &other)
 {
-    d->lockForRead();
-    if (other.addMatches(d->term, d->exact, d->possible, d->info)) {
+    //NOTE: we have addMatchesTo instead of the more 'natural' addMatches
+    // because we can get away with one write lock on the local object
+    // this way, otherwise we'd need to lock once for searchTerm, once
+    // for matches() and again for clearMatches() (2 read, one write)
+    d->lockForWrite();
+
+    const bool success = other.addMatches(d->term, d->matches);
+
+    if (success) {
         // the matches no longer belong to this SearchContext,
         // so remove them from the data
-        d->exact.clear();
-        d->possible.clear();
-        d->info.clear();
-        d->unlock();
-        return true;
+        d->matches.clear();
     }
 
     d->unlock();
-    return false;
+    return success;
 }
 
-QList<SearchMatch *> SearchContext::informationalMatches() const
+QList<SearchMatch *> SearchContext::matches() const
 {
     d->lockForRead();
-    QList<SearchMatch *> matches = d->info;
-    d->unlock();
-    return matches;
-}
-
-QList<SearchMatch *> SearchContext::exactMatches() const
-{
-    d->lockForRead();
-    QList<SearchMatch *> matches = d->exact;
-    d->unlock();
-    return matches;
-}
-
-QList<SearchMatch *> SearchContext::possibleMatches() const
-{
-    d->lockForRead();
-    QList<SearchMatch *> matches = d->possible;
+    QList<SearchMatch *> matches = d->matches;
     d->unlock();
     return matches;
 }
 
 void SearchContext::clearMatches()
 {
-    d->clearMatches();
+    d->lockForWrite();
+
+    QList<SearchMatch*> matches = d->matches;
+    d->matches.clear();
+    d->unlock();
+
     emit matchesChanged();
+
+    // in case someone is still holding on to the Matches
+    // when we emit the matchesChanged() signal, we don't
+    // delete the matches until after the signal is handled.
+    // a bit safer.
+    qDeleteAll(matches);
 }
 
 }

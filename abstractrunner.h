@@ -149,7 +149,7 @@ class PLASMA_EXPORT AbstractRunner : public QObject
          * Called whenever an exact or possible match associated with this
          * runner is triggered.
          */
-        virtual void exec(Plasma::SearchMatch *action);
+        virtual void exec(const Plasma::SearchContext *context, const Plasma::SearchMatch *action);
 
         /**
          * The nominal speed of the runner.

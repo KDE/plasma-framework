@@ -117,50 +117,28 @@ class PLASMA_EXPORT SearchContext : public QObject
         void addStringCompletions(const QStringList& completions);
 
         /**
-         * Adds an action that represents a match to the current search term.
-         * This action is informational in nature and does not represent an actionable
-         * match.
-         *
-         * If string data is added to the action using QAction::setData(), that
-         * string may be used in user interfaces when the item is selected.
-         *
-         * This may only be used from SingleConsumer SearchContexts, and
-         * does not result in the matchesChanged() signal being emitted.
-         * @see addMatches
-         */
-        SearchMatch* addInformationalMatch(AbstractRunner *runner);
-
-        /**
-         * Adds an action that represents an exact match to the current search term.
-         *
-         * This may only be used from SingleConsumer SearchContexts, and
-         * does not result in the matchesChanged() signal being emitted.
-         * @see addMatches
-         */
-        SearchMatch* addExactMatch(AbstractRunner *runner);
-
-        /**
-         * Adds an action that represents a possible match to the current search term.
-         *
-         * This may only be used from SingleConsumer SearchContexts, and
-         * does not result in the matchesChanged() signal being emitted.
-         * @see addMatches
-         */
-        SearchMatch* addPossibleMatch(AbstractRunner *runner);
-
-        /**
-         * Appends lists of matches to the lists for exact, possible, and
-         * informational matches. The SearchContext takes over ownership of the
-         * items on successful addition.
+         * Appends lists of matches to the list of matches.
+         * The SearchContext takes over ownership of the matches on successful addition.
          *
          * This method is thread safe and causes the matchesChanged() signal to be emitted.
          *
          * @return true if matches were added, false if matches were e.g. outdated
          */
-        bool addMatches(const QString& term,
-                        const QList<SearchMatch *> &exactMatches,
-                        const QList<SearchMatch *> &possibleMatches,
-                        const QList<SearchMatch *> &informationalMatches);
+        bool addMatches(const QString& term, const QList<SearchMatch *> &matches);
+
+        /**
+         * Appends a match to the existing list of matches.
+         * The SearchContext takes over ownership of the match on successful addition.
+         *
+         * If you are going to be adding multiple matches, it is better to use
+         * addMatches instead.
+         *
+         * @arg term the search term that this match was generated for
+         * @arg match the match to add
+         *
+         * @return true if the match was added, false otherwise.
+         */
+        bool addMatch(const QString &term, SearchMatch *match);
 
         /**
          * Takes the matches from this SearchContext and adds to them another.
@@ -173,22 +151,9 @@ class PLASMA_EXPORT SearchContext : public QObject
         bool addMatchesTo(SearchContext &other);
 
         /**
-         * Retrieves all available informational matches for the current
-         * search term.
+         * Retrieves all available matches for the current search term.
          */
-        QList<SearchMatch *> informationalMatches() const;
-
-        /**
-         * Retrieves all available exact matches for the current
-         * search term.
-         */
-        QList<SearchMatch *> exactMatches() const;
-
-        /**
-         * Retrieves all available possible matches for the current
-         * search term.
-         */
-        QList<SearchMatch *> possibleMatches() const;
+        QList<SearchMatch *> matches() const;
 
         /**
          * Determines type of query

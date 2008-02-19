@@ -60,13 +60,13 @@ public:
      * SearchContext::addInformationalMatch, SearchContext::addExactMatch, and
      * SearchContext::addPossibleMatch.
      */
-    virtual void match(Plasma::SearchContext *search);
+    void match(const Plasma::SearchContext *search);
 
     /**
      * Called whenever an exact or possible match associated with this
      * runner is triggered.
      */
-    virtual void exec(Plasma::SearchMatch *action);
+    void exec(const Plasma::SearchContext *search, const Plasma::SearchMatch *action);
 
 private:
     class Private;

@@ -43,7 +43,14 @@ class PLASMA_EXPORT SearchMatch
                                                  such as the answer to a question or calculation*/,
                     ExactMatch = 100 /**< An exact matcht to the query */};
 
-        SearchMatch(const SearchContext *search, AbstractRunner *runner);
+        /**
+         * Constructs a PossibleMatch associated with a given SearchContext
+         * and runner.
+         *
+         * @arg search the SearchContext this match belongs to
+         * @arg runner the runner this match belongs to
+         */
+        explicit SearchMatch(AbstractRunner *runner);
         ~SearchMatch();
 
         /**
@@ -52,7 +59,7 @@ class PLASMA_EXPORT SearchMatch
         void setType(Type type);
 
         /**
-         * The type of action this is. Defaults to ExactMatch.
+         * The type of action this is. Defaults to PossibleMatch.
          */
         Type type() const;
 
@@ -71,7 +78,7 @@ class PLASMA_EXPORT SearchMatch
         /**
          * The search term that triggered this action
          */
-        QString searchTerm() const;
+        //QString searchTerm() const;
 
         /**
          * Sets the relevance of this action for the search
@@ -106,9 +113,7 @@ class PLASMA_EXPORT SearchMatch
 
         bool operator<(const SearchMatch& other) const;
 
-    //Pending a better solution, changing this to public
-//     public Q_SLOTS:
-        void exec(const SearchContext *context);
+        void exec(const SearchContext *context) const;
 
     private:
         class Private;

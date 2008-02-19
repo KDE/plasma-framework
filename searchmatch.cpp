@@ -34,14 +34,12 @@ namespace Plasma
 class SearchMatch::Private
 {
     public:
-        Private(const SearchContext *s, AbstractRunner *r)
+        Private(AbstractRunner *r)
             : runner(r),
               type(SearchMatch::ExactMatch),
               enabled(true),
               relevance(.7)
         {
-            searchTerm = s->searchTerm();
-            mimetype = s->mimetype();
         }
 
         QString searchTerm;
@@ -56,8 +54,8 @@ class SearchMatch::Private
 };
 
 
-SearchMatch::SearchMatch(const SearchContext *search, AbstractRunner *runner)
-    : d(new Private(search, runner))
+SearchMatch::SearchMatch(AbstractRunner *runner)
+    : d(new Private(runner))
 {
 }
 
@@ -85,12 +83,12 @@ QString SearchMatch::mimetype() const
 {
     return d->mimetype;
 }
-
+/*
 QString SearchMatch::searchTerm() const
 {
     return d->searchTerm;
 }
-
+*/
 void SearchMatch::setRelevance(qreal relevance)
 {
     d->relevance = qMax(qreal(0.0), qMin(qreal(1.0), relevance));
@@ -151,18 +149,14 @@ bool SearchMatch::operator<(const SearchMatch& other) const
     return d->relevance < other.d->relevance;
 }
 
-void SearchMatch::exec(const SearchContext *context)
+void SearchMatch::exec(const SearchContext *context) const
 {
     Q_ASSERT(context);
-
-    //kDebug() << "reseting the terms to the most recent status" << context;
-    d->searchTerm = context->searchTerm();
-    d->mimetype = context->mimetype();
 
     //kDebug() << "we have" << d->searchTerm << d->mimetype;
     if (d->runner) {
         //TODO: this could be dangerous if the runner is deleted behind our backs.
-        d->runner->exec(this);
+        d->runner->exec(context, this);
     }
 }
 
