@@ -94,23 +94,25 @@ class Svg::Private
             }
         }
 
-        void removeFromCache()
-        {
-            if ( id.isEmpty() ) {
+        void removeFromCache() {
+            if (ids.isEmpty()) {
                 return;
             }
 
-            QPixmapCache::remove( id );
-            id.clear();
+            foreach (const QString & id, ids) {
+                QPixmapCache::remove(id);
+            }
+
+            ids.clear();
         }
 
         void findInCache(QPixmap& p, const QString& elementId)
         {
             createRenderer();
-            id = QString::fromLatin1("%3_%2_%1")
-                                    .arg(size.width())
-                                    .arg(size.height())
-                                    .arg(path);
+            QString id = QString::fromLatin1("%3_%2_%1_").arg(size.width())
+                                                         .arg(size.height())
+                                                         .arg(path);
+
             if (!elementId.isEmpty()) {
                 id.append(elementId);
             }
@@ -123,6 +125,7 @@ class Svg::Private
                 //kDebug() << "didn't find cached version of " << id << ", so re-rendering";
             }
 
+            ids.append(id);
             // we have to re-render this puppy
             QSize s;
             if (elementId.isEmpty() || contentType == Svg::ImageSet) {
@@ -205,7 +208,7 @@ class Svg::Private
             return QRect(elementRect.x() * dx, elementRect.y() * dy,
                          elementRect.width() * dx, elementRect.height() * dy);
         }
-    
+
         QMatrix matrixForElement(const QString& elementId)
         {
             createRenderer();
@@ -216,7 +219,7 @@ class Svg::Private
         SharedSvgRenderer::Ptr renderer;
         QString themePath;
         QString path;
-        QString id;
+        QList<QString> ids;
         QSizeF size;
         bool themed;
         Svg::ContentType contentType;
