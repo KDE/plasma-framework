@@ -64,23 +64,6 @@ class PLASMA_EXPORT SearchMatch
         Type type() const;
 
         /**
-         * Sets the mimetype, if any, associated with this match
-         *
-         * @arg mimetype the mimetype
-         */
-        void setMimetype(const QString &mimetype);
-
-        /**
-         * The mimetype associated with this action, if any
-         */
-        QString mimetype() const;
-
-        /**
-         * The search term that triggered this action
-         */
-        //QString searchTerm() const;
-
-        /**
          * Sets the relevance of this action for the search
          * it was created for.
          *
@@ -102,11 +85,13 @@ class PLASMA_EXPORT SearchMatch
         AbstractRunner* runner() const;
 
         void setText(const QString& text);
+        void setSubtext(const QString& text);
         void setData(const QVariant& data);
         void setIcon(const QIcon& icon);
         void setEnabled(bool enable);
 
         QString text() const;
+        QString subtext() const;
         QVariant data() const;
         QIcon icon() const;
         bool isEnabled() const;

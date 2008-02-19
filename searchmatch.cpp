@@ -41,11 +41,10 @@ class SearchMatch::Private
         {
         }
 
-        QString searchTerm;
         AbstractRunner *runner;
         SearchMatch::Type type;
-        QString mimetype;
         QString text;
+        QString subtext;
         QIcon icon;
         QVariant data;
         bool enabled;
@@ -73,21 +72,6 @@ SearchMatch::Type SearchMatch::type() const
     return d->type;
 }
 
-void SearchMatch::setMimetype(const QString &mimetype)
-{
-    d->mimetype = mimetype;
-}
-
-QString SearchMatch::mimetype() const
-{
-    return d->mimetype;
-}
-/*
-QString SearchMatch::searchTerm() const
-{
-    return d->searchTerm;
-}
-*/
 void SearchMatch::setRelevance(qreal relevance)
 {
     d->relevance = qMax(qreal(0.0), qMin(qreal(1.0), relevance));
@@ -108,6 +92,11 @@ void SearchMatch::setText(const QString& text)
     d->text = text;
 }
 
+void SearchMatch::setSubtext(const QString& subtext)
+{
+    d->subtext = subtext;
+}
+
 void SearchMatch::setData(const QVariant& data)
 {
     d->data = data;
@@ -126,6 +115,11 @@ QVariant SearchMatch::data() const
 QString SearchMatch::text() const
 {
     return d->text;
+}
+
+QString SearchMatch::subtext() const
+{
+    return d->subtext;
 }
 
 QIcon SearchMatch::icon() const
@@ -152,7 +146,7 @@ void SearchMatch::exec(const SearchContext *context) const
 {
     Q_ASSERT(context);
 
-    //kDebug() << "we have" << d->searchTerm << d->mimetype;
+    //kDebug() << "we have" << context->searchTerm() << context->mimetype();
     if (d->runner) {
         //TODO: this could be dangerous if the runner is deleted behind our backs.
         d->runner->exec(context, this);
