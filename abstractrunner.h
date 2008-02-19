@@ -215,7 +215,7 @@ class PLASMA_EXPORT AbstractRunner : public QObject
         KService::List serviceQuery(const QString &serviceType,
                                     const QString &constraint = QString()) const;
 
-        const QMutex& bigLock() const;
+        QMutex* bigLock() const;
 
     protected slots:
         void init();
