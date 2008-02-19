@@ -32,12 +32,11 @@
 #include <cmath>
 #include <math.h>
 
-#include "plasma/view.h"
 #include "applet.h"
 #include "containment.h"
 #include "corona.h"
-#include "applet.h"
 #include "theme.h"
+#include "view.h"
 
 namespace Plasma
 {

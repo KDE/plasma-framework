@@ -17,8 +17,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef PLASMA_DESKTOPTOOLBOX_H
-#define PLASMA_DESKTOPTOOLBOX_H
+#ifndef PLASMA_DESKTOPTOOLBOX_P_H
+#define PLASMA_DESKTOPTOOLBOX_P_H
 
 #include <QGraphicsItem>
 #include <QObject>

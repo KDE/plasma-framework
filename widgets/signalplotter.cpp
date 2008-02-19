@@ -20,6 +20,8 @@
  *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
+#include "signalplotter.h"
+
 #include <math.h>
 #include <string.h>
 
@@ -37,8 +39,6 @@
 #include <KStandardDirs>
 
 #include <plasma/svg.h>
-
-#include "signalplotter.h"
 
 namespace Plasma
 {

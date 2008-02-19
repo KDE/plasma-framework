@@ -17,14 +17,13 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
+#include "searchmatch.h"
 
 #include <QVariant>
 #include <QStringList>
 #include <QIcon>
 
 #include <KDebug>
-
-#include "searchmatch.h"
 
 #include "abstractrunner.h"
 

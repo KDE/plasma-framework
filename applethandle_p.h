@@ -17,8 +17,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef PLASMA_APPLETHANDLE
-#define PLASMA_APPLETHANDLE
+#ifndef PLASMA_APPLETHANDLE_P_H
+#define PLASMA_APPLETHANDLE_P_H
 
 #include <QtCore/QObject>
 #include <QtGui/QGraphicsItem>

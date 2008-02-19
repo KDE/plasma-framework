@@ -17,8 +17,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef SEARCHACTION_H
-#define SEARCHACTION_H
+#ifndef SEARCHMATCH_H
+#define SEARCHMATCH_H
 
 #include <plasma/plasma_export.h>
 

@@ -17,8 +17,9 @@
  *   Free Software Foundation, Inc.,
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#ifndef PLASMATOOLTIP_H
-#define PLASMATOOLTIP_H
+
+#ifndef PLASMA_TOOLTIP_P_H
+#define PLASMA_TOOLTIP_P_H
 
 #include <plasma/widgets/widget.h> //ToolTipData struct
 

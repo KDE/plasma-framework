@@ -17,13 +17,14 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "plasma.h"
 #include "datacontainer.h"
-#include "datacontainer_p.h"
 
 #include <QVariant>
 
 #include <KDebug>
+
+#include "plasma.h"
+#include "datacontainer_p.h"
 
 namespace Plasma
 {
