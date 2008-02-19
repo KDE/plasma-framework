@@ -49,7 +49,7 @@ class KCategorizedItemsView: public QWidget, public Ui::KCategorizedItemsViewBas
     Q_OBJECT
 public:
 
-    KCategorizedItemsView(QWidget * parent = 0, Qt::WindowFlags f = 0);
+    explicit KCategorizedItemsView(QWidget * parent = 0, Qt::WindowFlags f = 0);
     virtual ~KCategorizedItemsView();
 
     void setFilterModel(QStandardItemModel * model);             ///< Sets the filters model

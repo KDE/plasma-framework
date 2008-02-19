@@ -63,7 +63,7 @@ class PlasmaAppletItemModel :
     public KCategorizedItemsViewModels::DefaultItemModel
 {
 public:
-    PlasmaAppletItemModel(KConfigGroup configGroup, QObject * parent = 0);
+    explicit PlasmaAppletItemModel(KConfigGroup configGroup, QObject * parent = 0);
 
     QStringList mimeTypes() const;
 

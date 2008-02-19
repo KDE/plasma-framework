@@ -57,7 +57,7 @@ public:
          * x = parentLeft + (xRelative * parentWidth)  + xAbsolute
          * y = parentTop  + (yRelative * parentHeight) + yAbsolute
          */
-        NodeCoordinate(qreal xRelative = 0, qreal yRelative = 0, qreal xAbsolute = 0, qreal yAbsolute = 0);
+        explicit NodeCoordinate(qreal xRelative = 0, qreal yRelative = 0, qreal xAbsolute = 0, qreal yAbsolute = 0);
 
         enum CoordinateType {
             Relative = 0,
