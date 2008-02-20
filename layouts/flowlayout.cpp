@@ -152,7 +152,7 @@ void FlowLayout::relayout()
     qreal colWidth = 0;
     qreal rowHeight = 0;
     qreal maxItemWidth = 0;
-    //qreal minItemWidth = 0;
+    qreal minItemWidth = 0;
     //qreal maxItemHeight = 0;
     qreal minItemHeight = 0;
     int colCnt = 0;
@@ -161,8 +161,8 @@ void FlowLayout::relayout()
     foreach(LayoutItem *item , d->items) {
         maxItemWidth = (maxItemWidth < item->maximumSize().width()) ? 
                         item->maximumSize().width() : maxItemWidth;
-        //minItemWidth = (minItemWidth < item->minimumSize().width()) ? 
-        //              item->minimumSize().width() : minItemWidth;
+        minItemWidth = (minItemWidth < item->minimumSize().width()) ? 
+                      item->minimumSize().width() : minItemWidth;
         //maxItemHeight = (maxItemHeight < item->maximumSize().height()) ? 
         //              item->maximumSize().height() : maxItemHeight;
         minItemHeight = (minItemHeight < item->minimumSize().height()) ? 
@@ -172,9 +172,12 @@ void FlowLayout::relayout()
     const int rowMax = ((minItemHeight != 0) && (minItemHeight != rectHeight)) ?
                         (int)(rectHeight / (minItemHeight + space)) : 1;
 
-    if( maxItemWidth == 0) {
-        kDebug() << "******POSSIBLE DIVIDE BY ZERO: maxItemWidth ********";
-        maxItemWidth = 20;
+    if( maxItemWidth == 0 && minItemWidth != 0 ) {
+        kDebug() << "******POSSIBLE DIVIDE BY ZERO: maxItemWidth = minItemWidth ********";
+        maxItemWidth = minItemWidth + space;
+    } else if( maxItemWidth == 0 && minItemWidth == 0 ) {
+        kDebug() << "******POSSIBLE DIVIDE BY ZERO: maxItemWidth = rectWidth ********";
+        maxItemWidth = rectWidth + space;
     }
 
     // try to use the maxwidth if there is room
