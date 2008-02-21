@@ -33,6 +33,7 @@
 #include <QTextDocument>
 #include <QTimer>
 #include <QUiLoader>
+#include <QGraphicsSceneMouseEvent>
 
 #include <KIcon>
 #include <KColorScheme>
@@ -284,6 +285,7 @@ public:
     KPluginInfo appletDescription;
     Package* package;
     QList<QObject*> watchedForFocus;
+    QList<QGraphicsItem*> watchedForMouseMove;
     QStringList loadedEngines;
     Plasma::SvgPanel *background;
     Plasma::LineEdit *failureText;
@@ -1104,19 +1106,37 @@ QString Applet::instanceName() const
 
 void Applet::watchForFocus(QObject *widget, bool watch)
 {
-    if ( !widget ) {
+    if (!widget) {
         return;
     }
 
     int index = d->watchedForFocus.indexOf(widget);
-    if ( watch ) {
-        if ( index == -1 ) {
-            d->watchedForFocus.append( widget );
-            widget->installEventFilter( this );
+    if (watch) {
+        if (index == -1) {
+            d->watchedForFocus.append(widget);
+            widget->installEventFilter(this);
         }
-    } else if ( index != -1 ) {
-        d->watchedForFocus.removeAt( index );
-        widget->removeEventFilter( this );
+    } else if (index != -1) {
+        d->watchedForFocus.removeAt(index);
+        widget->removeEventFilter(this);
+    }
+}
+
+void Applet::watchForMouseMove( QGraphicsItem * watched, bool watch )
+{
+    if (!watched) {
+        return;
+    }
+
+    int index = d->watchedForMouseMove.indexOf(watched);
+    if (watch) {
+        if (index == -1) {
+            d->watchedForMouseMove.append(watched);
+            watched->installSceneEventFilter(this);
+        }
+    } else if (index != -1) {
+        d->watchedForMouseMove.removeAt(index);
+        watched->removeSceneEventFilter(this);
     }
 }
 
@@ -1153,6 +1173,51 @@ bool Applet::eventFilter( QObject *o, QEvent * e )
 
     return QObject::eventFilter(o, e);
 }
+
+bool Applet::sceneEventFilter( QGraphicsItem * watched, QEvent * event )
+{
+    switch (event->type()) {
+        case QEvent::GraphicsSceneMouseMove: {
+            if (d->watchedForMouseMove.contains( watched )) {
+                mouseMoveEvent(static_cast<QGraphicsSceneMouseEvent*>(event));
+                return true;
+            }
+            break;
+        }
+
+        default:
+            break;
+    }
+
+    return QGraphicsItem::sceneEventFilter(watched, event);
+}
+
+void Applet::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
+{
+    if (!isImmutable() && formFactor() == Plasma::Planar) {
+        QGraphicsItem *parent = parentItem();
+        Plasma::Applet *applet = qgraphicsitem_cast<Plasma::Applet*>(parent);
+
+        if (applet && applet->isContainment()) {
+            // our direct parent is a containment. just move ourselves.
+            QPointF curPos = event->pos();
+            QPointF lastPos = event->lastPos();
+            QPointF delta = curPos-lastPos;
+
+            moveBy(delta.x(),delta.y());
+        } else if (parent) {
+            //don't move the icon as well because our parent (usually an appletHandle) will do it for us
+            //parent->moveBy(delta.x(),delta.y());
+            QPointF curPos = parent->transform().map(event->pos());
+            QPointF lastPos = parent->transform().map(event->lastPos());
+            QPointF delta = curPos-lastPos;
+
+            parent->setPos(parent->pos() + delta);
+        }
+
+    }
+}
+
 
 void Applet::showConfigurationInterface()
 {

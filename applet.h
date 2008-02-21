@@ -722,12 +722,24 @@ class PLASMA_EXPORT Applet : public Widget
         /**
         * Register widgets that can receive keyboard focus.
         *
-        * Calling this results in an eventFilter being places on the widget.
+        * Calling this results in an eventFilter being placed on the widget.
         *
         * @param widget the widget to watch for keyboard focus
         * @param watch whether to start watching the widget, or to stop doing so
         */
-        void watchForFocus( QObject *widget, bool watch = true );
+        void watchForFocus(QObject *widget, bool watch = true);
+
+        /**
+         * Register the widgets that manages mouse clicks but you still want
+         * to be able to drag the applet around when holding the mouse pointer
+         * on that widgets.
+         *
+         * Calling this results in an eventFilter being places on the widget.
+         *
+         * @param widget the widget to watch for mouse move
+         * @param watch whether to start watching the widget, or to stop doing so
+         */
+        void watchForMouseMove(QGraphicsItem * watched, bool watch);
 
         /**
         * Call this whenever focus is needed or not needed.
@@ -744,6 +756,16 @@ class PLASMA_EXPORT Applet : public Widget
          * @internal event filter; used for focus watching
          **/
         bool eventFilter( QObject *o, QEvent *e );
+
+        /**
+         * @internal scene event filter; used to manage applet dragging
+         */
+        bool sceneEventFilter ( QGraphicsItem * watched, QEvent * event );
+
+        /**
+         * @internal manage the mouse movement to drag the applet around
+         */
+        void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
 
         /**
          * Reimpmlemented from LayoutItem
