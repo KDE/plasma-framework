@@ -20,6 +20,8 @@
 
 #include "lineedit.h"
 
+#include <limits>
+
 #include <QStyleOptionFrameV2>
 #include <QTextDocument>
 #include <QKeyEvent>
@@ -140,7 +142,9 @@ QSizeF LineEdit::minimumSize() const
 
 QSizeF LineEdit::maximumSize() const
 {
-    return minimumSize();
+    //TODO: well, this is useless, isn't it? ;) when ported to WoC, remove it
+    return QSizeF(std::numeric_limits<qreal>::infinity(),
+                  std::numeric_limits<qreal>::infinity());
 }
 
 bool LineEdit::hasHeightForWidth() const
@@ -153,7 +157,7 @@ qreal LineEdit::heightForWidth(qreal w) const
     QTextDocument* doc = document();
     doc->setTextWidth(w);
     qreal height = doc->size().height();
-    kDebug() << "LineEdit::heightForWidth(" << w << ") is " << height;
+    //kDebug() << "LineEdit::heightForWidth(" << w << ") is " << height;
     return height;
 }
 
