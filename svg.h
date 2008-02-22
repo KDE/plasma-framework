@@ -217,6 +217,7 @@ class PLASMA_EXPORT Svg : public QObject
 
     private Q_SLOTS:
         void themeChanged();
+        void colorsChanged();
 
     private:
         class Private;

@@ -28,6 +28,9 @@
 #include <KDebug>
 #include <KSharedPtr>
 #include <KSvgRenderer>
+#include <KColorScheme>
+#include <KIconEffect>
+#include <KGlobalSettings>
 
 #include "theme.h"
 
@@ -77,6 +80,7 @@ class Svg::Private
         {
             if (themed) {
                 disconnect(Plasma::Theme::self(), SIGNAL(changed()), q, SLOT(themeChanged()));
+                disconnect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()), q, SLOT(colorsChanged()));
             }
 
             themed = !QDir::isAbsolutePath(imagePath);
@@ -85,6 +89,14 @@ class Svg::Private
             if (themed) {
                 themePath = imagePath;
                 connect(Plasma::Theme::self(), SIGNAL(changed()), q, SLOT(themeChanged()));
+
+                // check if svg wants colorscheme applied
+                createRenderer();
+                applyColors = renderer->elementExists("hint-apply-color-scheme");
+                if (applyColors && !Theme::self()->colors()) {
+                    connect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()), q, SLOT(colorsChanged()));
+                }
+
             } else {
                 path = imagePath;
 
@@ -99,7 +111,7 @@ class Svg::Private
                 return;
             }
 
-            foreach (const QString & id, ids) {
+            foreach (const QString &id, ids) {
                 QPixmapCache::remove(id);
             }
 
@@ -118,6 +130,10 @@ class Svg::Private
             }
             //kDebug() << "id is " << id;
 
+            if (!ids.contains(id)) {
+                ids.append(id);
+            }
+
             if (QPixmapCache::find(id, p)) {
                 //kDebug() << "found cached version of " << id;
                 return;
@@ -125,7 +141,6 @@ class Svg::Private
                 //kDebug() << "didn't find cached version of " << id << ", so re-rendering";
             }
 
-            ids.append(id);
             // we have to re-render this puppy
             QSize s;
             if (elementId.isEmpty() || contentType == Svg::ImageSet) {
@@ -146,6 +161,13 @@ class Svg::Private
             }
 
             renderPainter.end();
+
+            // Apply current color scheme if the svg asks for it
+            if (applyColors) {
+                QImage itmp = p.toImage();
+                KIconEffect::colorize(itmp, Theme::self()->backgroundColor(), 0.9);
+                p = p.fromImage(itmp);
+            }
 
             if (!QPixmapCache::insert( id, p )) {
                 kDebug() << "pixmap cache is too small for inserting" << id << "of size" << s;
@@ -222,6 +244,7 @@ class Svg::Private
         QList<QString> ids;
         QSizeF size;
         bool themed;
+        bool applyColors;
         Svg::ContentType contentType;
 };
 
@@ -356,6 +379,17 @@ void Svg::themeChanged()
     d->removeFromCache();
     d->path = newPath;
     //delete d->renderer; we're a KSharedPtr
+    d->eraseRenderer();
+    emit repaintNeeded();
+}
+
+void Svg::colorsChanged()
+{
+    if (!d->applyColors) {
+        return;
+    }
+
+    d->removeFromCache();
     d->eraseRenderer();
     emit repaintNeeded();
 }
