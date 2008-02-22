@@ -18,6 +18,9 @@
  */
 
 #include "view.h"
+
+#include <KWindowSystem>
+
 #include "corona.h"
 #include "containment.h"
 
@@ -31,7 +34,7 @@ class View::Private
 public:
     Private()
         : drawWallpaper(true),
-          screen(-1),
+          desktop(-1),
           containment(0)
     {
     }
@@ -41,7 +44,7 @@ public:
     }
 
     bool drawWallpaper;
-    int screen;
+    int desktop;
     Plasma::Containment *containment;
 };
 
@@ -58,6 +61,7 @@ View::View(Containment *containment, QWidget *parent)
     : QGraphicsView(parent),
       d(new Private)
 {
+    Q_ASSERT(containment);
     initGraphicsView();
     setScene(containment->scene());
     setContainment(containment);
@@ -91,15 +95,37 @@ void View::setScreen(int screen)
         }
 
         setContainment(corona->containmentForScreen(screen));
-    } else {
-        // reseting the screen who knows what.
-        d->screen = screen;
+        if (d->desktop < -1) {
+            // we want to set it to "all desktops" if we get ownership of
+            // a screen but don't have a desktop set
+            d->desktop = -1;
+        }
     }
 }
 
 int View::screen() const
 {
-    return d->screen;
+    return d->containment->screen();
+}
+
+void View::setDesktop(int desktop)
+{
+    // -1 == All desktops
+    if (desktop < -1 || desktop > KWindowSystem::numberOfDesktops() - 1) {
+        desktop = -1;
+    }
+
+    d->desktop = desktop;
+}
+
+int View::desktop() const
+{
+    return d->desktop;
+}
+
+int View::effectiveDesktop() const
+{
+    return d->desktop > -1 ? d->desktop : KWindowSystem::currentDesktop();
 }
 
 void View::setContainment(Containment *containment)
@@ -113,7 +139,6 @@ void View::setContainment(Containment *containment)
     }
 
     d->containment = containment;
-    d->screen = containment->screen();
     updateSceneRect();
     connect(containment, SIGNAL(geometryChanged()), this, SLOT(updateSceneRect()));
 }

@@ -58,7 +58,7 @@ public:
         : q(c),
           formFactor(Planar),
           location(Floating),
-          screen(-1),
+          screen(-1), // no screen
           toolbox(0),
           type(Containment::NoContainmentType)
     {
@@ -89,6 +89,25 @@ public:
     DesktopToolbox *toolbox;
     Containment::Type type;
 };
+
+Containment::StyleOption::StyleOption()
+    : QStyleOptionGraphicsItem(),
+      desktop(-1)
+{
+
+}
+
+Containment::StyleOption::StyleOption(const Containment::StyleOption & other)
+    : QStyleOptionGraphicsItem(other),
+      desktop(other.desktop)
+{
+}
+
+Containment::StyleOption::StyleOption(const QStyleOptionGraphicsItem &other)
+    : QStyleOptionGraphicsItem(other),
+      desktop(-1)
+{
+}
 
 Containment::Containment(QGraphicsItem* parent,
                          const QString& serviceId,

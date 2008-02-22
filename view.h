@@ -69,6 +69,27 @@ public:
     int screen() const;
 
     /**
+     * Sets which virtual desktop this view is asociated with, if any.
+     *
+     * @arg desktop a valid desktop number, -1 for all desktops, less than -1 for none
+     */
+    void setDesktop(int desktop);
+
+    /**
+     * The virtual desktop this view is associated with
+     *
+     * @return the desktop number, -1 for all desktops and less than -1 for none
+     */
+    int desktop() const;
+
+    /**
+     * The virtual desktop this view is actually being viewed on
+     *
+     * @return the desktop number (always valid, never < 0)
+     */
+    int effectiveDesktop() const;
+
+    /**
      * Sets the containment for this view, which will also cause the view
      * to track the geometry of the containment.
      *

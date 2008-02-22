@@ -22,6 +22,7 @@
 
 #include <QtGui/QGraphicsItem>
 #include <QtGui/QWidget>
+#include <QtGui/QStyleOptionGraphicsItem>
 
 #include <kplugininfo.h>
 #include <ksharedconfig.h>
@@ -64,6 +65,16 @@ class PLASMA_EXPORT Containment : public Applet
     Q_OBJECT
 
     public:
+        class StyleOption : public QStyleOptionGraphicsItem
+        {
+            public:
+                explicit StyleOption();
+                explicit StyleOption(const StyleOption &other);
+                explicit StyleOption(const QStyleOptionGraphicsItem &other);
+
+                int desktop;
+        };
+
         typedef QList<Applet*> List;
         typedef QHash<QString, Applet*> Dict;
 

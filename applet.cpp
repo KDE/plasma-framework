@@ -870,7 +870,6 @@ QColor Applet::color() const
 
 void Applet::paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-    Q_UNUSED(widget)
     if (d->shadow && d->shadow->shadowedSize() != boundingRect().size()) {
         //kDebug() << "sizes are " << d->shadow->shadowedSize() << boundingRect().size();
         d->shadow->generate();
@@ -893,10 +892,14 @@ void Applet::paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *opti
         if (widget && isContainment()) {
             // note that the widget we get is actually the viewport of the view, not the view itself
             View* v = qobject_cast<Plasma::View*>(widget->parent());
-            if (v && !v->drawWallpaper()) {
-                painter->restore();
-                return;
+            if (v && v->drawWallpaper()) { 
+                Containment::StyleOption coption(*option);
+                coption.desktop = v->effectiveDesktop();
+                paintInterface(painter, &coption, QRect(QPoint(0,0), d->contentSize(this).toSize()));
             }
+
+            painter->restore();
+            return;
         }
 
         //kDebug() << "paint interface of" << (QObject*) this;
