@@ -87,6 +87,7 @@ DesktopToolbox::DesktopToolbox(QGraphicsItem *parent)
     setZValue(10000000);
     setFlag(ItemClipsToShape, true);
     setFlag(ItemClipsChildrenToShape, false);
+    setFlag(ItemIgnoresTransformations, true);
 
     connect(Plasma::Phase::self(), SIGNAL(movementComplete(QGraphicsItem*)), this, SLOT(toolMoved(QGraphicsItem*)));
 }
