@@ -60,7 +60,7 @@ public:
      * SearchContext::addInformationalMatch, SearchContext::addExactMatch, and
      * SearchContext::addPossibleMatch.
      */
-    virtual void match(const Plasma::SearchContext *search);
+    virtual void match(Plasma::SearchContext *search);
 
     /**
      * Called whenever an exact or possible match associated with this
