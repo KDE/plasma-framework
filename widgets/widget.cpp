@@ -91,7 +91,7 @@ QGraphicsView *Widget::view() const
 
     foreach (QGraphicsView *view, scene()->views()) {
         if (view->sceneRect().intersects(sceneBoundingRect()) ||
-                view->sceneRect().contains(scenePos())) {
+            view->sceneRect().contains(scenePos())) {
             return view;
         }
     }
@@ -432,9 +432,12 @@ void Widget::managingLayoutChanged()
 
 QPoint Widget::popupPosition(const QSize &s) const
 {
-    QPoint pos = view()->mapFromScene(scenePos());
-    pos = view()->mapToGlobal(pos);
-    Plasma::View *pv = dynamic_cast<Plasma::View *>(view());
+    QGraphicsView *v = view();
+    Q_ASSERT(v);
+
+    QPoint pos = v->mapFromScene(scenePos());
+    pos = v->mapToGlobal(pos);
+    Plasma::View *pv = dynamic_cast<Plasma::View *>(v);
 
     Plasma::Location loc = Floating;
     if (pv) {
