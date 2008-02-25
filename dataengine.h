@@ -24,7 +24,8 @@
 #include <QtCore/QObject>
 #include <QtCore/QStringList>
 
-#include <kgenericfactory.h>
+#include <KGenericFactory>
+#include <KService>
 
 #include <plasma/plasma_export.h>
 #include <plasma/plasma.h>
@@ -64,11 +65,12 @@ class PLASMA_EXPORT DataEngine : public QObject
         typedef QHash<QString, DataContainer*> SourceDict;
 
         /**
-         * Default constructor.
+         * Constructor.
          *
          * @param parent The parent object.
+         * @param service pointer to the service that describes the engine
          **/
-        explicit DataEngine(QObject* parent = 0, const QString& serviceId = QString());
+        explicit DataEngine(QObject* parent = 0, KService::Ptr service = KService::Ptr(0));
         DataEngine(QObject* parent, const QVariantList& args);
         virtual ~DataEngine();
 
@@ -394,11 +396,6 @@ class PLASMA_EXPORT DataEngine : public QObject
          * @param source the name of the data source to remove
          **/
         void removeSource(const QString& source);
-
-        /**
-         * @internal
-         **/
-        void startInit();
 
         /**
          * @internal

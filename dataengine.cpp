@@ -40,18 +40,26 @@ class DataEngine::Private
     public:
         Private(DataEngine* e, KService::Ptr service)
             : engine(e),
-              ref(0),
+              ref(-1), // first ref
               updateTimerId(0),
               minUpdateInterval(-1),
               limit(0),
               valid(true),
-              script(0),
-              dataEngineDescription(service)
+              script(0)
         {
             updateTimer = new QTimer(engine);
             updateTimer->setSingleShot(true);
             updateTimestamp.start();
 
+            if (!service) {
+                return;
+            }
+
+            engineName = service->property("X-Plasma-EngineName").toString();
+            e->setObjectName(engineName);
+            icon = service->icon();
+
+            KPluginInfo dataEngineDescription(service);
             if (dataEngineDescription.isValid()) {
                 QString language = dataEngineDescription.property("X-Plasma-Language").toString();
 
@@ -185,18 +193,16 @@ class DataEngine::Private
         uint limit;
         bool valid;
         DataEngineScript* script;
-        KPluginInfo dataEngineDescription;
+        QString engineName;
 };
 
 
-DataEngine::DataEngine(QObject* parent, const QString& serviceId)
+DataEngine::DataEngine(QObject* parent, KService::Ptr service)
     : QObject(parent),
-      d(new Private(this, KService::serviceByStorageId(serviceId)))
+      d(new Private(this, service))
 {
     connect(d->updateTimer, SIGNAL(timeout()), this, SLOT(checkForUpdates()));
-    //FIXME: we should delay this call; to when is the question.
-    //Update DataEngine::init() api docu when fixed
-    QTimer::singleShot(0, this, SLOT(startInit()));
+    init();
 }
 
 DataEngine::DataEngine(QObject* parent, const QVariantList& args)
@@ -204,9 +210,7 @@ DataEngine::DataEngine(QObject* parent, const QVariantList& args)
       d(new Private(this, KService::serviceByStorageId(args.count() > 0 ? args[0].toString() : QString())))
 {
     connect(d->updateTimer, SIGNAL(timeout()), this, SLOT(checkForUpdates()));
-    //FIXME: we should delay this call; to when is the question.
-    //Update DataEngine::init() api docu when fixed
-    QTimer::singleShot(0, this, SLOT(startInit()));
+    init();
 }
 
 DataEngine::~DataEngine()
@@ -269,11 +273,6 @@ DataEngine::Data DataEngine::query(const QString& source) const
     DataEngine::Data data = s->data();
     s->checkUsage();
     return data;
-}
-
-void DataEngine::startInit()
-{
-    init();
 }
 
 void DataEngine::internalUpdateSource(DataContainer* source)
@@ -529,11 +528,7 @@ void DataEngine::checkForUpdates()
 
 QString DataEngine::engineName() const
 {
-    if (!d->dataEngineDescription.isValid()) {
-        return QString();
-    }
-
-    return d->dataEngineDescription.property("X-Plasma-EngineName").toString();
+    return d->engineName;
 }
 
 }

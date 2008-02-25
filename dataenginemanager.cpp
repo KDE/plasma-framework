@@ -130,7 +130,7 @@ Plasma::DataEngine* DataEngineManager::loadDataEngine(const QString& name)
         if (language.isEmpty()) {
             engine = offers.first()->createInstance<Plasma::DataEngine>(0, allArgs, &error);
         } else {
-            engine = new DataEngine(0, offers.first()->storageId());
+            engine = new DataEngine(0, offers.first());
         }
     }
 
@@ -139,9 +139,6 @@ Plasma::DataEngine* DataEngineManager::loadDataEngine(const QString& name)
         return d->nullEngine();
     }
 
-    engine->ref();
-    engine->setObjectName(offers.first()->name());
-    engine->setIcon(offers.first()->icon());
     d->engines[name] = engine;
     return engine;
 }
