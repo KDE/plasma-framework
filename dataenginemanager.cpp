@@ -92,7 +92,7 @@ DataEngineManager::~DataEngineManager()
     delete d;
 }
 
-Plasma::DataEngine* DataEngineManager::dataEngine(const QString& name) const
+Plasma::DataEngine* DataEngineManager::get(const QString& name) const
 {
     Plasma::DataEngine::Dict::const_iterator it = d->engines.find(name);
     if (it != d->engines.end()) {
@@ -104,7 +104,7 @@ Plasma::DataEngine* DataEngineManager::dataEngine(const QString& name) const
     return d->nullEngine();
 }
 
-Plasma::DataEngine* DataEngineManager::loadDataEngine(const QString& name)
+Plasma::DataEngine* DataEngineManager::load(const QString& name)
 {
     Plasma::DataEngine* engine = 0;
     Plasma::DataEngine::Dict::const_iterator it = d->engines.find(name);
@@ -143,7 +143,7 @@ Plasma::DataEngine* DataEngineManager::loadDataEngine(const QString& name)
     return engine;
 }
 
-void DataEngineManager::unloadDataEngine(const QString& name)
+void DataEngineManager::unload(const QString& name)
 {
     Plasma::DataEngine::Dict::iterator it = d->engines.find(name);
 

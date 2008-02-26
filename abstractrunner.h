@@ -69,7 +69,7 @@ class PLASMA_EXPORT AbstractRunner : public QObject
          *
          * @param whitelist An optional whitelist of runners to load
          */
-        static List loadRunners(QObject* parent, const QStringList& whitelist = QStringList() );
+        static List load(QObject* parent, const QStringList& whitelist = QStringList());
 
         /**
          * Constructs a Runner object. Since AbstractRunner has pure virtuals,

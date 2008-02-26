@@ -434,7 +434,7 @@ Applet* Containment::addApplet(const QString& name, const QVariantList& args, ui
         v->setCursor(Qt::BusyCursor);
     }
 
-    Applet* applet = Applet::loadApplet(name, id, args);
+    Applet* applet = Applet::load(name, id, args);
     if (v) {
         v->unsetCursor();
     }
