@@ -60,6 +60,7 @@ public:
     QString findInTheme(const QString &image, const QString &theme) const;
     static const char *defaultTheme;
 
+    static PackageStructure::Ptr packageStructure;
    QString themeName;
    QString app;
    KSharedConfigPtr colors;
@@ -71,6 +72,7 @@ public:
 #endif
 };
 
+PackageStructure::Ptr Theme::Private::packageStructure(0);
 const char *Theme::Private::defaultTheme = "default";
 
 class ThemeSingleton
@@ -113,9 +115,13 @@ Theme::~Theme()
     delete d;
 }
 
-PackageStructure Theme::packageStructure()
+PackageStructure::Ptr Theme::packageStructure()
 {
-    return ThemePackage();
+    if (!Private::packageStructure) {
+        Private::packageStructure = new ThemePackage();
+    }
+
+    return Private::packageStructure;
 }
 
 void Theme::setApplication(const QString &appname)

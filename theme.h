@@ -67,7 +67,7 @@ class PLASMA_EXPORT Theme : public QObject
         /**
          * @return a package structure representing a Theme
          */
-        static PackageStructure packageStructure();
+        static PackageStructure::Ptr packageStructure();
 
         /**
          * Sets the application the theme setting is associated with. This

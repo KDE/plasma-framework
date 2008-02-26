@@ -24,9 +24,9 @@
 #include <QtGui/QGraphicsItem>
 #include <QtGui/QWidget>
 
-#include <kplugininfo.h>
-#include <ksharedconfig.h>
-#include <kgenericfactory.h>
+#include <KPluginInfo>
+#include <KSharedConfig>
+#include <KGenericFactory>
 
 #include <plasma/configxml.h>
 #include <plasma/packagestructure.h>
@@ -104,7 +104,7 @@ class PLASMA_EXPORT Applet : public Widget
         /**
          * @return a package structure representing a Theme
          */
-        static PackageStructure packageStructure();
+        static PackageStructure::Ptr packageStructure();
 
         /**
          * This method is called once the applet is loaded and added to a Corona.

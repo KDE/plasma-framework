@@ -143,7 +143,7 @@ public:
                 QString packageFormat = appletDescription.property("X-Plasma-PackageFormat").toString();
 
                 if (packageFormat.isEmpty()) {
-                    package = new Package(path, PlasmoidPackage());
+                    package = new Package(path, PackageStructure::Ptr(new PlasmoidPackage()));
                 } else {
                     package = new Package(path, PackageStructure::load(packageFormat));
                 }
@@ -288,6 +288,7 @@ public:
     //      number of members at this point.
     static uint s_maxAppletId;
     static uint s_maxZValue;
+    static PackageStructure::Ptr packageStructure;
     uint appletId;
     KPluginInfo appletDescription;
     Package* package;
@@ -314,6 +315,7 @@ public:
 
 uint Applet::Private::s_maxAppletId = 0;
 uint Applet::Private::s_maxZValue = 0;
+PackageStructure::Ptr Applet::Private::packageStructure(0);
 
 Applet::Applet(QGraphicsItem *parent,
                const QString& serviceID,
@@ -344,9 +346,13 @@ Applet::~Applet()
     delete d;
 }
 
-PackageStructure Applet::packageStructure()
+PackageStructure::Ptr Applet::packageStructure()
 {
-    return PlasmoidPackage();
+    if (!Private::packageStructure) {
+        Private::packageStructure = new PlasmoidPackage();
+    }
+
+    return Private::packageStructure;
 }
 
 void Applet::init()
@@ -1001,6 +1007,14 @@ void Applet::setContentSize(int width, int height)
 
 QSizeF Applet::contentSizeHint() const
 {
+    static bool checkingScript = false;
+
+    if (!checkingScript && d->script) {
+        checkingScript = true;
+        return d->script->contentSizeHint();
+    }
+
+    checkingScript = false;
     QSizeF size;
     if (layout()) {
         size = layout()->sizeHint();
