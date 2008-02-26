@@ -20,12 +20,15 @@
 #ifndef PLASMA_APPLETSCRIPT_H
 #define PLASMA_APPLETSCRIPT_H
 
-#include <plasma/plasma_export.h>
-#include <plasma/scripting/scriptengine.h>
 
 #include <QtCore/QObject>
 #include <QtCore/QRect>
 #include <QtCore/QSizeF>
+
+#include <KGenericFactory>
+
+#include <plasma/plasma_export.h>
+#include <plasma/scripting/scriptengine.h>
 
 class QPainter;
 class QStyleOptionGraphicsItem;
