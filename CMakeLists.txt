@@ -222,6 +222,7 @@ install(FILES
     servicetypes/plasma-animator.desktop
     servicetypes/plasma-applet.desktop
     servicetypes/plasma-dataengine.desktop
+    servicetypes/plasma-packagestructure.desktop
     servicetypes/plasma-runner.desktop
     servicetypes/plasma-scriptengine.desktop
     DESTINATION ${SERVICETYPES_INSTALL_DIR})

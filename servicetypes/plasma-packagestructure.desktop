@@ -1,0 +1,5 @@
+[Desktop Entry]
+Type=ServiceType
+X-KDE-ServiceType=Plasma/PackageStructure
+Comment=Plasma package structure definition
+
