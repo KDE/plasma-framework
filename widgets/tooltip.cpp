@@ -324,14 +324,14 @@ void WindowPreview::setInfo()
     Display *dpy = QX11Info::display();
     Atom atom = XInternAtom(dpy, "_KDE_WINDOW_PREVIEW", False);
     if (id == 0) {
-        XDeleteProperty(dpy, winId(), atom);
+        XDeleteProperty(dpy, parentWidget()->winId(), atom);
         return;
     }
     if (!windowSize.isValid()) {
         readWindowSize();
     }
     if (!windowSize.isValid()) {
-        XDeleteProperty(dpy, winId(), atom);
+        XDeleteProperty(dpy, parentWidget()->winId(), atom);
         return;
     }
     Q_ASSERT( parentWidget()->isWindow()); // parent must be toplevel
