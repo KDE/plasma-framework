@@ -24,16 +24,15 @@
 #include <KDebug>
 
 #include "plasma/packagestructure.h"
-#include "plasma/packages.cpp"
+#include "plasma/applet.h"
 
 void PackageStructureTest::init()
 {
-    ps = new Plasma::PlasmoidStructure;
+    ps = Plasma::Applet::packageStructure();
 }
 
 void PackageStructureTest::cleanup()
 {
-    delete ps;
 }
 
 void PackageStructureTest::type()
@@ -44,13 +43,13 @@ void PackageStructureTest::type()
 void PackageStructureTest::directories()
 {
     QList<const char*> dirs;
-    dirs << "config" << "configui" << "images" << "scripts";
+    dirs << "config" << "images" << "scripts" << "ui";
 
     QList<const char*> psDirs = ps->directories();
 
     QCOMPARE(dirs.count(), psDirs.count());
-    for (int i = 0; i < dirs.count(); ++i) {
-        QCOMPARE(dirs[i], psDirs[i]);
+    for (int i = 0; i < psDirs.count(); ++i) {
+        QVERIFY(qstrcmp(dirs[i], psDirs[i]) == 0);
     }
 }
 
@@ -114,8 +113,8 @@ void PackageStructureTest::read()
 {
     QString structurePath = QString(KDESRCDIR) + "/plasmoidpackagerc";
     KConfig config(structurePath);
-    Plasma::PackageStructure structure = 
-        Plasma::PackageStructure::read(&config);
+    Plasma::PackageStructure structure;
+    structure.read(&config);
 
     // check some names
     QCOMPARE(structure.name("config"), i18n("Configuration Definitions"));
@@ -165,11 +164,14 @@ void PackageStructureTest::write()
     
     // check groups
     QStringList groups;
-    groups << "images" << "config" << "configui" << "scripts"
-           << "mainconfiggui" << "mainconfigxml" << "mainscript";
+    groups << "images" << "config" << "scripts"
+           << "mainconfiggui" << "mainconfigxml" << "mainscript" << "ui";
     groups.sort();
-    QCOMPARE(config.groupList(), groups);
-    
+
+    QStringList actualGroups = config.groupList();
+    actualGroups.sort();
+    QCOMPARE(actualGroups, groups);
+
     // check scripts
     KConfigGroup scripts = config.group("scripts");
     QCOMPARE(scripts.readEntry("Path", QString()), QString("code"));

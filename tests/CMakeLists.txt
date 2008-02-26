@@ -7,8 +7,10 @@ MACRO(PLASMA_UNIT_TESTS)
        ENDFOREACH(_testname)
 ENDMACRO(PLASMA_UNIT_TESTS)
 
+kde4_add_unit_test(packagestructuretest packagestructuretest.cpp) # ../packages.cpp)
+target_link_libraries(packagestructuretest plasma ${QT_QTTEST_LIBRARY})
+
 PLASMA_UNIT_TESTS(
-    packagestructuretest
     packagemetadatatest
     plasmoidpackagetest
 )

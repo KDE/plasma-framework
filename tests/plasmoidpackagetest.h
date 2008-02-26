@@ -45,7 +45,7 @@ private:
 
     QString mPackageRoot;
     QString mPackage;
-    Plasma::PackageStructure *ps;
+    Plasma::PackageStructure::Ptr ps;
     Plasma::Package *p;
 };
 

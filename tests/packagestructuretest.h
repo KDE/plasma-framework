@@ -21,7 +21,7 @@
 
 #include <qtest_kde.h>
 
-#include "plasma/packages_p.h"
+#include "plasma/packagestructure.h"
 
 class PackageStructureTest : public QObject
 {
@@ -47,7 +47,7 @@ private Q_SLOTS:
     //TODO: add tests for copy construction
 
 private:
-    Plasma::PackageStructure *ps;
+    Plasma::PackageStructure::Ptr ps;
 };
 
 #endif
