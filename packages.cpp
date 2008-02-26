@@ -24,7 +24,7 @@
 namespace Plasma
 {
 
-PlasmoidStructure::PlasmoidStructure()
+PlasmoidPackage::PlasmoidPackage()
     : Plasma::PackageStructure(QString("Plasmoid"))
 {
     addDirectoryDefinition("images", "images", i18n("Images"));
@@ -52,7 +52,7 @@ PlasmoidStructure::PlasmoidStructure()
     setRequired("mainscript", true);
 }
 
-ThemePackageStructure::ThemePackageStructure()
+ThemePackage::ThemePackage()
     : Plasma::PackageStructure(QString("Plasma Theme"))
 {
     addDirectoryDefinition("dialogs", "dialogs/", i18n("Images for dialogs"));

@@ -115,7 +115,7 @@ Theme::~Theme()
 
 PackageStructure Theme::packageStructure()
 {
-    return ThemePackageStructure();
+    return ThemePackage();
 }
 
 void Theme::setApplication(const QString &appname)

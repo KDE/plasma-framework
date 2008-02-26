@@ -25,16 +25,16 @@
 namespace Plasma
 {
 
-class PlasmoidStructure : public PackageStructure
+class PlasmoidPackage : public PackageStructure
 {
 public:
-    explicit PlasmoidStructure();
+    explicit PlasmoidPackage();
 };
 
-class ThemePackageStructure : public PackageStructure
+class ThemePackage : public PackageStructure
 {
 public:
-    explicit ThemePackageStructure();
+    explicit ThemePackage();
 };
 
 } // namespace Plasma
