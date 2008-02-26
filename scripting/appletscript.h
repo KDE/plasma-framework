@@ -68,6 +68,12 @@ public:
                                 const QStyleOptionGraphicsItem* option,
                                 const QRect &contentsRect);
 
+    /**
+     * Called to discover the content size hint for the item.
+     * The default implementation simply returns the Applet's contentSizeHint
+     */
+    virtual QSizeF contentSizeHint() const;
+
     Q_INVOKABLE QSizeF size() const;
 
 protected:

@@ -61,6 +61,11 @@ void AppletScript::paintInterface(QPainter* painter, const QStyleOptionGraphicsI
     Q_UNUSED(contentsRect)
 }
 
+QSizeF AppletScript::contentSizeHint() const
+{
+    return applet()->contentSizeHint();
+}
+
 QSizeF AppletScript::size() const
 {
     if (applet()) {
