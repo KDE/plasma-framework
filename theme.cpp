@@ -30,6 +30,7 @@
 #include <KSelectionWatcher>
 #include <KSharedConfig>
 #include <KStandardDirs>
+#include <KGlobalSettings>
 
 #include "plasma/packages_p.h"
 
@@ -149,6 +150,11 @@ void Theme::compositingChanged()
 #endif
 }
 
+void Theme::colorsChanged()
+{
+    emit changed();
+}
+
 void Theme::setThemeName(const QString &themeName)
 {
     QString theme = themeName;
@@ -179,8 +185,10 @@ void Theme::setThemeName(const QString &themeName)
     QString colorsFile = KStandardDirs::locate("data", "desktoptheme/" + theme + "/colors");
     //kDebug() << "we're going for..." << colorsFile << "*******************";
 
+    disconnect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()), this, SLOT(colorsChanged()));
     if (colorsFile.isEmpty()) {
         d->colors = 0;
+        connect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()), this, SLOT(colorsChanged()));
     } else {
         d->colors = KSharedConfig::openConfig(colorsFile);
     }
