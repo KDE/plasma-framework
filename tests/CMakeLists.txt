@@ -7,11 +7,13 @@ MACRO(PLASMA_UNIT_TESTS)
        ENDFOREACH(_testname)
 ENDMACRO(PLASMA_UNIT_TESTS)
 
-kde4_add_unit_test(packagestructuretest packagestructuretest.cpp) # ../packages.cpp)
-target_link_libraries(packagestructuretest plasma ${QT_QTTEST_LIBRARY})
-
 PLASMA_UNIT_TESTS(
+    packagestructuretest
     packagemetadatatest
     plasmoidpackagetest
 )
+
+set(appletbrowser_SRCS appletbrowser.cpp)
+kde4_add_executable(plasmaappletbrowser ${appletbrowser_SRCS})
+target_link_libraries(plasmaappletbrowser ${KDE4_KDEUI_LIBS} plasma)
 
