@@ -35,7 +35,7 @@ class PLASMA_EXPORT AppletBrowserWidget : public QWidget
 {
     Q_OBJECT
 public:
-    AppletBrowserWidget(Plasma::Containment *containment, bool showButtons, QWidget *parent = 0, Qt::WindowFlags f = 0);
+    AppletBrowserWidget(Plasma::Containment *containment, QWidget *parent = 0, Qt::WindowFlags f = 0);
     virtual ~AppletBrowserWidget();
 
     void setApplication(const QString& application = QString());
@@ -77,14 +77,18 @@ protected Q_SLOTS:
     /**
      * Launches a download dialog to retrieve new applets from the Internet
      */
-    void downloadApplets();
+    void downloadWidgets();
+
+    /**
+     * Opens a file dialog to open a widget from a local file
+     */
+    void openWidgetFile();
 
 private:
     void init();
     void initRunningApplets();
     class Private;
     Private * const d;
-    bool m_showButtons;
 };
 
 class PLASMA_EXPORT AppletBrowser: public KDialog
@@ -110,8 +114,8 @@ public:
     Containment* containment() const;
 
 private:
-    void init();
-    AppletBrowserWidget *m_widget;
+    class Private;
+    Private * const d;
 };
 
 } // namespace Plasma
