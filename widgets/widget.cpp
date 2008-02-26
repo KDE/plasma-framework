@@ -437,6 +437,7 @@ QPoint Widget::popupPosition(const QSize &s) const
 
     QPoint pos = v->mapFromScene(scenePos());
     pos = v->mapToGlobal(pos);
+    kDebug() << "==> position is" << scenePos() << v->mapFromScene(scenePos()) << pos;
     Plasma::View *pv = dynamic_cast<Plasma::View *>(v);
 
     Plasma::Location loc = Floating;
@@ -468,6 +469,7 @@ QPoint Widget::popupPosition(const QSize &s) const
     //are we out of screen?
 
     QRect screenRect = QApplication::desktop()->screenGeometry(pv ? pv->containment()->screen() : -1);
+    kDebug() << "==> rect for" << (pv ? pv->containment()->screen() : -1) << "is" << screenRect;
 
     if (pos.rx() + s.width() > screenRect.right()) {
         pos.rx() -= ((pos.rx() + s.width()) - screenRect.right());
