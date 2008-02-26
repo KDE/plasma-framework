@@ -79,11 +79,6 @@ public:
     explicit PackageStructure(QObject *parent = 0, const QString &type = i18n("Invalid"));
 
     /**
-     * Copy constructor
-     **/
-    PackageStructure(const PackageStructure& rhs);
-
-    /**
      * Destructor
      **/
     virtual ~PackageStructure();
