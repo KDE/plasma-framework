@@ -24,6 +24,7 @@
 #include <QtCore/QStringList>
 
 #include <plasma/plasma_export.h>
+#include <plasma/packagestructure.h>
 
 namespace Plasma
 {
@@ -33,7 +34,6 @@ namespace Plasma
  **/
 
 class PackageMetadata;
-class PackageStructure;
 
 class PLASMA_EXPORT Package
 {
@@ -46,15 +46,15 @@ class PLASMA_EXPORT Package
          * @arg structure the package structure describing this package
          **/
         Package(const QString& packageRoot, const QString& package,
-                const PackageStructure& structure);
-                
+                const PackageStructure::Ptr structure);
+
         /**
           * Construct a Package object.
           * 
           * @arg packagePath full path to the package directory
           * @arg structure the package structure describing this package
           */
-        Package(const QString &packagePath, const PackageStructure &structure);
+        Package(const QString &packagePath, const PackageStructure::Ptr structure);
 
         //TODO for 4.1: be able to load an uninstalled/uncompressed file.
 

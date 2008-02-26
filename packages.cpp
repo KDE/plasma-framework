@@ -24,8 +24,8 @@
 namespace Plasma
 {
 
-PlasmoidPackage::PlasmoidPackage()
-    : Plasma::PackageStructure(QString("Plasmoid"))
+PlasmoidPackage::PlasmoidPackage(QObject *parent)
+    : Plasma::PackageStructure(parent, QString("Plasmoid"))
 {
     addDirectoryDefinition("images", "images", i18n("Images"));
     QStringList mimetypes;
@@ -52,8 +52,8 @@ PlasmoidPackage::PlasmoidPackage()
     setRequired("mainscript", true);
 }
 
-ThemePackage::ThemePackage()
-    : Plasma::PackageStructure(QString("Plasma Theme"))
+ThemePackage::ThemePackage(QObject *parent)
+    : Plasma::PackageStructure(parent, QString("Plasma Theme"))
 {
     addDirectoryDefinition("dialogs", "dialogs/", i18n("Images for dialogs"));
     addFileDefinition("dialogs/background", "dialogs/background.svg",
@@ -112,4 +112,5 @@ ThemePackage::ThemePackage()
 
 } // namespace Plasma
 
+#include "packages_p.moc"
 

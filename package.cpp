@@ -36,7 +36,6 @@
 #include <KDebug>
 
 #include "packagemetadata.h"
-#include "packagestructure.h"
 
 namespace Plasma
 {
@@ -44,7 +43,7 @@ namespace Plasma
 class Package::Private
 {
 public:
-    Private(const PackageStructure& st, const QString& p)
+    Private(const PackageStructure::Ptr st, const QString& p)
         : structure(st),
           basePath(p),
           valid(QFile::exists(basePath)),
@@ -54,26 +53,25 @@ public:
             basePath.append('/');
         }
     }
-    
+
     ~Private()
     {
         delete metadata;
     }
 
-    PackageStructure structure;
+    const PackageStructure::Ptr structure;
     QString basePath;
     bool valid;
     PackageMetadata *metadata;
-    
 };
 
 Package::Package(const QString& packageRoot, const QString& package,
-                 const PackageStructure& structure)
+                 const PackageStructure::Ptr structure)
     : d(new Private(structure, packageRoot + '/' + package))
 {
 }
 
-Package::Package(const QString &packagePath, const PackageStructure &structure)
+Package::Package(const QString &packagePath, const PackageStructure::Ptr structure)
     : d(new Private(structure, packagePath))
 {
 }
@@ -89,18 +87,18 @@ bool Package::isValid() const
         return false;
     }
 
-    foreach (const char *dir, d->structure.requiredDirectories()) {
-        if (!QFile::exists(d->basePath + "contents/" + d->structure.path(dir))) {
+    foreach (const char *dir, d->structure->requiredDirectories()) {
+        if (!QFile::exists(d->basePath + "contents/" + d->structure->path(dir))) {
             kWarning(505) << "Could not find required directory" << dir;
             d->valid = false;
             return false;
         }
     }
 
-    foreach (const char *file, d->structure.requiredFiles()) {
-        if (!QFile::exists(d->basePath + "contents/" + d->structure.path(file))) {
+    foreach (const char *file, d->structure->requiredFiles()) {
+        if (!QFile::exists(d->basePath + "contents/" + d->structure->path(file))) {
             kWarning(505) << "Could not find required file" << file << ", look in"
-                          << d->basePath + "contents/" + d->structure.path(file) << endl;
+                          << d->basePath + "contents/" + d->structure->path(file) << endl;
             d->valid = false;
             return false;
         }
@@ -115,7 +113,7 @@ QString Package::filePath(const char* fileType, const QString& filename) const
         return QString();
     }
 
-    QString path = d->structure.path(fileType);
+    QString path = d->structure->path(fileType);
 
     if (path.isEmpty()) {
         return QString();
@@ -145,7 +143,7 @@ QStringList Package::entryList(const char* fileType) const
         return QStringList();
     }
 
-    QString path = d->structure.path(fileType);
+    QString path = d->structure->path(fileType);
     if (path.isEmpty()) {
         return QStringList();
     }
@@ -159,7 +157,7 @@ QStringList Package::entryList(const char* fileType) const
     return dir.entryList(QDir::Files | QDir::Readable);
 }
 
-const PackageMetadata *Package::metadata() const
+const PackageMetadata* Package::metadata() const
 {
     if (!d->metadata) {
         d->metadata = new PackageMetadata(d->basePath + "metadata.desktop");

@@ -27,14 +27,16 @@ namespace Plasma
 
 class PlasmoidPackage : public PackageStructure
 {
+    Q_OBJECT
 public:
-    explicit PlasmoidPackage();
+    explicit PlasmoidPackage(QObject *parent = 0);
 };
 
 class ThemePackage : public PackageStructure
 {
+    Q_OBJECT
 public:
-    explicit ThemePackage();
+    explicit ThemePackage(QObject *parent = 0);
 };
 
 } // namespace Plasma

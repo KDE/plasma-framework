@@ -21,8 +21,11 @@
 #define PACKAGESTRUCTURE_H
 
 #include <QtCore/QStringList>
+#include <QtCore/QSharedData>
 
+#include <KGenericFactory>
 #include <KLocale>
+#include <KSharedPtr>
 
 #include <plasma/plasma_export.h>
 
@@ -61,15 +64,19 @@ namespace Plasma
  * Either way, PackageStructure creates a sort of "contract" between the packager and
  * the application which is also self-documenting.
  **/
-class PLASMA_EXPORT PackageStructure
+class PLASMA_EXPORT PackageStructure : public QObject, public QSharedData
 {
+    Q_OBJECT
+
 public:
+    typedef KSharedPtr<PackageStructure> Ptr;
+
     /**
      * Default constructor for a package structure definition
      *
      * @arg type the type of package. This is often application specific.
      **/
-    explicit PackageStructure(const QString &type = i18n("Invalid"));
+    explicit PackageStructure(QObject *parent = 0, const QString &type = i18n("Invalid"));
 
     /**
      * Copy constructor
@@ -94,7 +101,7 @@ public:
      * @return a package that matches the format, if available. The caller
      *         is responsible for deleting the object.
      */
-    static PackageStructure load(const QString &package);
+    static PackageStructure::Ptr load(const QString &package);
 
     /**
      * Type of package this structure describes
@@ -204,6 +211,13 @@ private:
      class Private;
      Private * const d;
 };
+
+/**
+ * Register an applet when it is contained in a loadable module
+ */
+#define K_EXPORT_PLASMA_PACKAGESTRUCTURE(libname, classname) \
+K_PLUGIN_FACTORY(factory, registerPlugin<classname>();) \
+K_EXPORT_PLUGIN(factory("plasma_packagestructure_" #libname))
 
 } // Plasma namespace
 #endif

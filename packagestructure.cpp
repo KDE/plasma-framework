@@ -23,6 +23,7 @@
 
 #include <KConfigGroup>
 #include <KStandardDirs>
+#include <KServiceTypeTrader>
 
 #include "packages_p.h"
 
@@ -54,24 +55,23 @@ class ContentStructure
         bool required;
 };
 
+
 class PackageStructure::Private
 {
-    public:
-        QString type;
-        QMap<QByteArray, ContentStructure> contents;
-        QStringList mimetypes;
+public:
+    QString type;
+    QMap<QByteArray, ContentStructure> contents;
+    QStringList mimetypes;
+    static QHash<QString, PackageStructure::Ptr> structures;
 };
 
-PackageStructure::PackageStructure(const QString &type)
-    : d(new Private)
+QHash<QString, PackageStructure::Ptr> PackageStructure::Private::structures;
+
+PackageStructure::PackageStructure(QObject *parent, const QString &type)
+    : QObject(parent),
+      d(new Private)
 {
     d->type = type;
-}
-
-PackageStructure::PackageStructure(const PackageStructure& rhs)
-    : d(new Private)
-{
-    *d = *rhs.d;
 }
 
 PackageStructure::~PackageStructure()
@@ -79,23 +79,47 @@ PackageStructure::~PackageStructure()
     delete d;
 }
 
-PackageStructure PackageStructure::load(const QString &packageFormat)
+PackageStructure::Ptr PackageStructure::load(const QString &packageFormat)
 {
-    PackageStructure ps;
-
     if (packageFormat.isEmpty()) {
-        return ps;
+        return Ptr(new PackageStructure());
     }
 
+    PackageStructure::Ptr structure = Private::structures[packageFormat];
+
+    if (structure) {
+        return structure;
+    }
+
+    // first we check for plugins in sycoca
+    QString constraint = QString("[X-KDE-PluginInfo-Name] == '%1'").arg(packageFormat);
+    KService::List offers = KServiceTypeTrader::self()->query("Plasma/PackageStructure", constraint);
+
+    QVariantList args;
+    QString error;
+    foreach (const KService::Ptr &offer, offers) {
+        PackageStructure::Ptr structure(offer->createInstance<Plasma::PackageStructure>(0, args, &error));
+
+        if (structure) {
+            Private::structures[packageFormat] = structure;
+            return structure;
+        }
+
+        kDebug() << "Couldn't load PackageStructure for" << packageFormat << "! reason given: " << error;
+    }
+
+    // if that didn't give us any love, then we try to load from a config file
+    structure = new PackageStructure();
     QString configPath("plasma/packageformats/%1rc");
     configPath = KStandardDirs::locate("data", configPath.arg(packageFormat));
 
     if (!configPath.isEmpty()) {
         KConfig config(configPath);
-        ps.read(&config);
+        structure->read(&config);
     }
 
-    return ps;
+    Private::structures[packageFormat] = structure;
+    return structure;
 }
 
 PackageStructure& PackageStructure::operator=(const PackageStructure& rhs)
@@ -307,4 +331,6 @@ void PackageStructure::write(KConfigBase *config) const
 }
 
 } // Plasma namespace
+
+#include "packagestructure.moc"
 
