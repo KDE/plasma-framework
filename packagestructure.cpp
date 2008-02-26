@@ -20,7 +20,11 @@
 #include "packagestructure.h"
 
 #include <QMap>
+
 #include <KConfigGroup>
+#include <KStandardDirs>
+
+#include "packages_p.h"
 
 namespace Plasma
 {
@@ -73,6 +77,25 @@ PackageStructure::PackageStructure(const PackageStructure& rhs)
 PackageStructure::~PackageStructure()
 {
     delete d;
+}
+
+PackageStructure PackageStructure::load(const QString &packageFormat)
+{
+    PackageStructure ps;
+
+    if (packageFormat.isEmpty()) {
+        return ps;
+    }
+
+    QString configPath("plasma/packageformats/%1rc");
+    configPath = KStandardDirs::locate("data", configPath.arg(packageFormat));
+
+    if (!configPath.isEmpty()) {
+        KConfig config(configPath);
+        ps.read(&config);
+    }
+
+    return ps;
 }
 
 PackageStructure& PackageStructure::operator=(const PackageStructure& rhs)
@@ -232,40 +255,38 @@ QStringList PackageStructure::mimetypes(const char* key) const
     return it.value().mimetypes;
 }
 
-PackageStructure PackageStructure::read(const KConfigBase *config)
+void PackageStructure::read(const KConfigBase *config)
 {
-    QString type = config->group("").readEntry("Type", "");
-    PackageStructure structure(type);
-    
+    d->contents.clear();
+    d->mimetypes.clear();
+    d->type = config->group("").readEntry("Type", QString()); 
+
     QStringList groups = config->groupList();
-    foreach (QString groupName, groups) {
-        QByteArray key = groupName.toAscii();
-        KConfigGroup entry = config->group(key);
-        
+    foreach (QString group, groups) {
+        QByteArray key = group.toAscii();
+        KConfigGroup entry = config->group(group);
+
         QString path = entry.readEntry("Path", QString());
         QString name = entry.readEntry("Name", QString());
         QStringList mimetypes = entry.readEntry("Mimetypes", QStringList());
         bool directory = entry.readEntry("Directory", false);
         bool required = entry.readEntry("Required", false);
-        
+
         if (directory) {
-            structure.addDirectoryDefinition(key, path, name);
+            addDirectoryDefinition(key, path, name);
+        } else {
+            addFileDefinition(key, path, name);
         }
-        else {
-            structure.addFileDefinition(key, path, name);
-        }
-        
-        structure.setMimetypes(key, mimetypes);
-        structure.setRequired(key, required);
+
+        setMimetypes(key, mimetypes);
+        setRequired(key, required);
     }
-    
-    return structure;
 }
 
 void PackageStructure::write(KConfigBase *config) const
 {
     config->group("").writeEntry("Type", type());
-    
+
     QMap<QByteArray, ContentStructure>::const_iterator it = d->contents.constBegin();
     while (it != d->contents.constEnd()) {
         KConfigGroup group = config->group(it.key());
@@ -280,7 +301,7 @@ void PackageStructure::write(KConfigBase *config) const
         if (it.value().required) {
             group.writeEntry("Required", true);
         }
-        
+
         ++it;
     }
 }

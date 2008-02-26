@@ -22,6 +22,8 @@
 
 #include <QtCore/QStringList>
 
+#include <KLocale>
+
 #include <plasma/plasma_export.h>
 
 class KConfigBase;
@@ -67,7 +69,32 @@ public:
      *
      * @arg type the type of package. This is often application specific.
      **/
-    PackageStructure(const QString &type);
+    explicit PackageStructure(const QString &type = i18n("Invalid"));
+
+    /**
+     * Copy constructor
+     **/
+    PackageStructure(const PackageStructure& rhs);
+
+    /**
+     * Destructor
+     **/
+    virtual ~PackageStructure();
+
+    /**
+     * Assignment operator
+     **/
+    PackageStructure& operator=(const PackageStructure& rhs);
+
+    /**
+     * Loads a package format by name.
+     *
+     * @arg format If not empty, attempts to locate the given format, either
+     *             from built-ins or via plugins.
+     * @return a package that matches the format, if available. The caller
+     *         is responsible for deleting the object.
+     */
+    static PackageStructure load(const QString &package);
 
     /**
      * Type of package this structure describes
@@ -164,25 +191,10 @@ public:
     QStringList mimetypes(const char* key) const;
 
     /**
-     * Copy constructor
-     **/
-    PackageStructure(const PackageStructure& rhs);
-
-    /**
-     * Destructor
-     **/
-    virtual ~PackageStructure();
-
-    /**
-     * Assignment operator
-     **/
-    PackageStructure& operator=(const PackageStructure& rhs);
-    
-    /**
       * Read a package structure from a config file.
       */
-    static PackageStructure read(const KConfigBase *config);
-    
+    void read(const KConfigBase *config);
+
     /**
       * Write this package structure to a config file.
       */
