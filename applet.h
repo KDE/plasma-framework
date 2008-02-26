@@ -385,8 +385,8 @@ class PLASMA_EXPORT Applet : public Widget
          * @param args to send the applet extra arguments
          * @return a pointer to the loaded applet, or 0 on load failure
          **/
-        static Applet* loadApplet(const QString &name, uint appletId = 0,
-                                  const QVariantList& args = QVariantList());
+        static Applet* load(const QString &name, uint appletId = 0,
+                            const QVariantList& args = QVariantList());
 
         /**
          * Attempts to load an applet
@@ -400,7 +400,7 @@ class PLASMA_EXPORT Applet : public Widget
          *        assigned automatically.
          * @return a pointer to the loaded applet, or 0 on load failure
          **/
-        static Applet* loadApplet(const KPluginInfo& info, uint appletId = 0,
+        static Applet* load(const KPluginInfo& info, uint appletId = 0,
                                   const QVariantList& args = QVariantList());
 
         /**

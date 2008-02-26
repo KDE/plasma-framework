@@ -104,7 +104,7 @@ public:
     ~Private()
     {
         foreach ( const QString& engine, loadedEngines ) {
-            DataEngineManager::self()->unloadDataEngine( engine );
+            DataEngineManager::self()->unload( engine );
         }
         delete background;
         delete package;
@@ -140,7 +140,14 @@ public:
             } else {
                 // create the package and see if we have something real
                 //kDebug() << "trying for" << path;
-                package = new Package(path, PlasmoidStructure());
+                QString packageFormat = appletDescription.property("X-Plasma-PackageFormat").toString();
+
+                if (packageFormat.isEmpty()) {
+                    package = new Package(path, PlasmoidPackage());
+                } else {
+                    package = new Package(path, PackageStructure::load(packageFormat));
+                }
+
                 if (package->isValid()) {
                     // now we try and set up the script engine.
                     // it will be parented to this applet and so will get
@@ -339,7 +346,7 @@ Applet::~Applet()
 
 PackageStructure Applet::packageStructure()
 {
-    return PlasmoidStructure();
+    return PlasmoidPackage();
 }
 
 void Applet::init()
@@ -474,10 +481,10 @@ DataEngine* Applet::dataEngine(const QString& name) const
 {
     int index = d->loadedEngines.indexOf(name);
     if (index != -1) {
-        return DataEngineManager::self()->dataEngine(name);
+        return DataEngineManager::self()->get(name);
     }
 
-    DataEngine* engine = DataEngineManager::self()->loadDataEngine(name);
+    DataEngine* engine = DataEngineManager::self()->load(name);
     if (engine->isValid()) {
         d->loadedEngines.append(name);
     }
@@ -1317,7 +1324,7 @@ QStringList Applet::knownCategories(const QString &parentApp, bool visibleOnly)
     return categories;
 }
 
-Applet* Applet::loadApplet(const QString& appletName, uint appletId, const QVariantList& args)
+Applet* Applet::load(const QString& appletName, uint appletId, const QVariantList& args)
 {
     if (appletName.isEmpty()) {
         return 0;
@@ -1329,7 +1336,7 @@ Applet* Applet::loadApplet(const QString& appletName, uint appletId, const QVari
     if (offers.isEmpty()) {
         //TODO: what would be -really- cool is offer to try and download the applet
         //      from the network at this point
-        kDebug() << "Applet::loadApplet: offers is empty for \"" << appletName << "\"";
+        kDebug() << "offers is empty for " << appletName;
         return 0;
     } /* else if (offers.count() > 1) {
         kDebug() << "hey! we got more than one! let's blindly take the first one";
@@ -1359,13 +1366,13 @@ Applet* Applet::loadApplet(const QString& appletName, uint appletId, const QVari
     return applet;
 }
 
-Applet* Applet::loadApplet(const KPluginInfo& info, uint appletId, const QVariantList& args)
+Applet* Applet::load(const KPluginInfo& info, uint appletId, const QVariantList& args)
 {
     if (!info.isValid()) {
         return 0;
     }
 
-    return loadApplet(info.pluginName(), appletId, args);
+    return load(info.pluginName(), appletId, args);
 }
 
 void Applet::setShadowShown(bool shown)
