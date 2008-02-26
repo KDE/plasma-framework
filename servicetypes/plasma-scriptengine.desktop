@@ -52,3 +52,6 @@ Comment[zh_TW]=Plasma 文稿語言延伸
 [PropertyDef::X-Plasma-ComponentTypes]
 Type=QStringList
 
+[PropertyDef::X-Plasma-PackageFormat]
+Type=QString
+
