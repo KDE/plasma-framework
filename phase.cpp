@@ -26,6 +26,7 @@
 #include <KConfigGroup>
 #include <KService>
 #include <KServiceTypeTrader>
+#include <KGlobalSettings>
 
 #include "animator.h"
 #include "widgets/widget.h"
@@ -117,6 +118,10 @@ class Phase::Private
 
         qreal calculateProgress(int frames, int currentFrame)
         {
+            if (!(KGlobalSettings::graphicEffectsLevel() & KGlobalSettings::SimpleAnimationEffects)) {
+                return qreal(1.0);
+            }
+
             qreal progress = frames;
             progress = currentFrame / progress;
             progress = qMin(qreal(1.0), qMax(qreal(0.0), progress));
@@ -156,6 +161,7 @@ class Phase::Private
                     break;
             }
         }
+
         Animator* animator;
         int animId;
         int timerId;
@@ -497,7 +503,8 @@ void Phase::timerEvent(QTimerEvent *event)
     foreach (AnimationState* state, d->animatedItems) {
         if (state->currentInterval <= elapsed) {
             // we need to step forward!
-            state->currentFrame += qMax(1, elapsed / state->interval);
+            state->currentFrame += (KGlobalSettings::graphicEffectsLevel() & KGlobalSettings::SimpleAnimationEffects) ?
+                                   qMax(1, elapsed / state->interval) : state->frames - state->currentFrame;
 
             if (state->currentFrame < state->frames) {
                 qreal progress = d->calculateProgress(state->frames, state->currentFrame);
@@ -521,7 +528,8 @@ void Phase::timerEvent(QTimerEvent *event)
     foreach (MovementState* state, d->movingItems) {
         if (state->currentInterval <= elapsed) {
             // we need to step forward!
-            state->currentFrame += qMax(1, elapsed / state->interval);
+            state->currentFrame += (KGlobalSettings::graphicEffectsLevel() & KGlobalSettings::SimpleAnimationEffects) ?
+                                   qMax(1, elapsed / state->interval) : state->frames - state->currentFrame;
 
             if (state->currentFrame < state->frames) {
                 d->performMovement(d->calculateProgress(state->frames, state->currentFrame), state);
@@ -555,7 +563,8 @@ void Phase::timerEvent(QTimerEvent *event)
             /*kDebug() << "stepping forwards element anim " << state->id << " from " << state->currentFrame
                     << " by " << qMax(1, elapsed / state->interval) << " to "
                     << state->currentFrame + qMax(1, elapsed / state->interval) << endl;*/
-            state->currentFrame += qMax(1, elapsed / state->interval);
+            state->currentFrame += (KGlobalSettings::graphicEffectsLevel() & KGlobalSettings::SimpleAnimationEffects) ?
+                                   qMax(1, elapsed / state->interval) : state->frames - state->currentFrame;
             // nasty hack because QGraphicsItem::update isn't virtual!
             // FIXME: remove in 4.1 as we will no longer need the caching in Plasma::Widget with Qt 4.4
             Plasma::Widget *widget = dynamic_cast<Plasma::Widget*>(state->item);
@@ -584,7 +593,8 @@ void Phase::timerEvent(QTimerEvent *event)
     foreach (CustomAnimationState *state, d->customAnims) {
         if (state->currentInterval <= elapsed) {
             // advance the frame
-            state->currentFrame += qMax(1, elapsed / state->interval);
+            state->currentFrame += (KGlobalSettings::graphicEffectsLevel() & KGlobalSettings::SimpleAnimationEffects) ?
+                                   qMax(1, elapsed / state->interval) : state->frames - state->currentFrame;
             /*kDebug() << "custom anim for" << state->receiver << "to slot" << state->slot
                      << "with interval of" << state->interval << "at frame" << state->currentFrame;*/
 
