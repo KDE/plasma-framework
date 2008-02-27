@@ -255,11 +255,15 @@ public:
 private:
     void init();
     void layoutIcons(const QStyleOptionGraphicsItem *option);
+    void hoverEffect(bool);
 
     Private * const d;
 
 private Q_SLOTS:
     void actionDestroyed(QObject* obj);
+    void readColors();
+    void hoverAnimationUpdate(qreal progress);
+
 };
 
 } // namespace Plasma

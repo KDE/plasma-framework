@@ -33,6 +33,7 @@
 #include <plasma/svg.h>
 
 #include "icon.h"
+#include "phase.h"
 
 class QAction;
 class QPainter;
@@ -128,6 +129,7 @@ public:
     void layoutTextItems(const QStyleOptionGraphicsItem *option, const QPixmap &icon,
                             QTextLayout *labelLayout, QTextLayout *infoLayout, QRectF *textBoundingRect) const;
 
+
     inline void setLayoutOptions(QTextLayout &layout, const QStyleOptionGraphicsItem *options) const;
 
     inline Qt::LayoutDirection iconDirection(const QStyleOptionGraphicsItem *option) const;
@@ -168,6 +170,9 @@ public:
     QPixmap iconSvgPixmap;
     QColor textColor;
     QColor shadowColor;
+    bool m_fadeIn;
+    Phase::AnimId m_hoverAnimId;
+    qreal m_hoverAlpha;
     QSizeF iconSize;
     QIcon icon;
     IconStates states;
@@ -213,7 +218,7 @@ Qt::LayoutDirection Icon::Private::iconDirection(const QStyleOptionGraphicsItem 
         }else{
             direction = Qt::LeftToRight;
         }
-    }else{
+    } else {
         direction = option->direction;
     }
 

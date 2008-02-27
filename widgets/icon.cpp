@@ -65,15 +65,21 @@ Icon::Private::Private()
       invertLayout(false),
       drawBg(false)
 {
-    //FIXME: update with Theme::change()!
-    textColor = Plasma::Theme::self()->textColor();
-    shadowColor = Plasma::Theme::self()->backgroundColor();
+    m_hoverAnimId = -1;
+    m_hoverAlpha = 20/255;
 }
 
 Icon::Private::~Private()
 {
     qDeleteAll(cornerActions);
     delete iconSvg;
+}
+
+void Icon::readColors() 
+{
+    d->textColor = Plasma::Theme::self()->textColor();
+    d->shadowColor = Plasma::Theme::self()->backgroundColor();
+
 }
 
 IconAction::IconAction(Icon* icon, QAction *action)
@@ -279,6 +285,9 @@ Icon::~Icon()
 
 void Icon::init()
 {
+    readColors();
+    connect(Plasma::Theme::self(), SIGNAL(changed()), SLOT(readColors()));
+
     // setAcceptedMouseButtons(Qt::LeftButton);
     setAcceptsHoverEvents(true);
 
@@ -297,6 +306,7 @@ void Icon::init()
 
     d->setActiveMargins();
     d->currentSize = QSizeF(-1, -1);
+    //setDrawStandardBackground(false);
 }
 
 void Icon::addAction(QAction *action)
@@ -336,8 +346,7 @@ void Icon::setNumDisplayLines(int numLines)
 {
     if(numLines > d->maxDisplayLines) {
         d->numDisplayLines = d->maxDisplayLines;
-    }
-    else {
+    } else {
         d->numDisplayLines = numLines;
     }
 }
@@ -487,6 +496,38 @@ void Icon::setSvg(const QString &svgFilePath, const QString &elementId)
     d->iconSvgElement = elementId;
 }
 
+void Icon::hoverEffect(bool show)
+{
+    d->m_fadeIn = show;
+    const int FadeInDuration = 150;
+
+    if (d->m_hoverAnimId != -1) {
+        Phase::self()->stopCustomAnimation(d->m_hoverAnimId);
+    }
+    d->m_hoverAnimId = Phase::self()->customAnimation(40 / (1000 / FadeInDuration), FadeInDuration,
+                                                      Phase::EaseOutCurve, this,
+                                                      "hoverAnimationUpdate");
+}
+
+void Icon::hoverAnimationUpdate(qreal progress) 
+{
+    if (d->m_fadeIn) {
+        d->m_hoverAlpha = progress;
+    } else {
+        // If we mouse leaves before the fade in is done, fade out from where we were,
+        // not from fully faded in
+        qreal new_alpha = d->m_fadeIn ? progress : 1 - progress;
+        d->m_hoverAlpha = qMin(new_alpha, d->m_hoverAlpha);
+    }
+    if (progress == 1) {
+        d->m_hoverAnimId = -1;
+    }
+    if (!d->m_fadeIn && progress == 1 ) {
+        d->states &= ~Private::HoverState;
+    }
+    update();
+}
+
 void Icon::Private::drawBackground(QPainter *painter, IconState state)
 {
     if (!drawBg) {
@@ -497,32 +538,32 @@ void Icon::Private::drawBackground(QPainter *painter, IconState state)
     QColor shadow = shadowColor;
     QColor border = textColor;
 
-    shadow.setAlphaF(.60);
     border.setAlphaF(.20);
 
     switch (state) {
         case Private::HoverState:
             shadow.setHsv(shadow.hue(),
                           shadow.saturation(),
-                          shadow.value() + (darkShadow?50:-50),
-                          180); //70% opacity
+                          shadow.value() + (int)(darkShadow?50*m_hoverAlpha:-50*m_hoverAlpha),
+                          200+(int)m_hoverAlpha*55); // opacity
             break;
         case Private::PressedState:
             shadow.setHsv(shadow.hue(),
                           shadow.saturation(),
-                          shadow.value() + (darkShadow?100:-100),
+                          shadow.value() + (darkShadow?(int)(50*m_hoverAlpha):(int)(-50*m_hoverAlpha)),
                           204); //80% opacity
             break;
         default:
             break;
     }
-
+    
     painter->save();
     painter->translate(0.5, 0.5);
     painter->setRenderHint(QPainter::Antialiasing);
+    shadow.setAlphaF(.6);
     painter->setBrush(shadow);
     painter->setPen(QPen(border, 1));
-    painter->drawPath(roundedRectangle(QRectF(QPointF(1, 1), QSize(currentSize.width()-2, currentSize.height()-2)), 5.0));
+    painter->drawPath(roundedRectangle(QRectF(QPointF(1, 1), QSize((int)currentSize.width()-2, (int)currentSize.height()-2)), 5.0));
     painter->restore();
 }
 
@@ -550,12 +591,13 @@ QPixmap Icon::Private::decoration(const QStyleOptionGraphicsItem *option, bool u
         result = icon.pixmap(size, mode, state);
     }
 
-    if (!result.isNull() && useHoverEffect) {
+    // We disable the iconeffect here since we cannot get it into sync with
+    // the fade animation. TODO: Enable it when animations are switched off
+    if (!result.isNull() && useHoverEffect && !drawBg) {
         KIconEffect *effect = KIconLoader::global()->iconEffect();
-
         // Note that in KIconLoader terminology, active = hover.
-        // ### We're assuming that the icon group is desktop/filemanager, since this
-        //     is KFileItemDelegate.
+        // We're assuming that the icon group is desktop/filemanager, since this
+        // is KFileItemDelegate.
         if (effect->hasEffect(KIconLoader::Desktop, KIconLoader::ActiveState)) {
             result = effect->apply(result, KIconLoader::Desktop, KIconLoader::ActiveState);
         }
@@ -745,11 +787,11 @@ void Icon::Private::layoutTextItems(const QStyleOptionGraphicsItem *option,
     maxInfoSize.rheight() -= labelSize.height();
 
     // Lay out the info text
-    if (showInformation)
+    if (showInformation) {
         infoSize = layoutText(*infoLayout, option, infoText, maxInfoSize);
-    else
+    } else {
         infoSize = QSizeF(0, 0);
-
+    }
     // Compute the bounding rect of the text
     const Qt::Alignment alignment = labelLayout->textOption().alignment();
     const QSizeF size(qMax(labelSize.width(), infoSize.width()), labelSize.height() + infoSize.height());
@@ -766,9 +808,9 @@ QBrush Icon::Private::foregroundBrush(const QStyleOptionGraphicsItem *option) co
             QPalette::Normal : QPalette::Disabled;
 
     // Always use the highlight color for selected items
-    if (option->state & QStyle::State_Selected)
+    if (option->state & QStyle::State_Selected) {
         return option->palette.brush(group, QPalette::HighlightedText);
-
+    }
     return option->palette.brush(group, QPalette::Text);
 }
 
@@ -780,9 +822,9 @@ QBrush Icon::Private::backgroundBrush(const QStyleOptionGraphicsItem *option) co
     QBrush background(Qt::NoBrush);
 
     // Always use the highlight color for selected items
-    if (option->state & QStyle::State_Selected)
+    if (option->state & QStyle::State_Selected) {
         background = option->palette.brush(group, QPalette::Highlight);
-
+    }
     return background;
 }
 
@@ -1037,8 +1079,8 @@ void Icon::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
         action->show();
         action->event(event->type(), event->pos());
     }
-
     d->states |= Private::HoverState;
+    hoverEffect(true);
     update();
 
     Widget::hoverEnterEvent(event);
@@ -1050,8 +1092,8 @@ void Icon::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
         action->hide();
         action->event(event->type(), event->pos());
     }
-
-    d->states &= ~Private::HoverState;
+    // d->states &= ~Private::HoverState; // Will be set once progress is zero again ... 
+    hoverEffect(false);
     update();
 
     Widget::hoverLeaveEvent(event);
