@@ -244,33 +244,38 @@ bool Package::installPackage(const QString& package,
         return false;
     }
 
-    KIO::FileCopyJob* job = KIO::file_move(tempdir.name(), targetName, -1,
-        KIO::HideProgressInfo);
+    KIO::FileCopyJob* job = KIO::file_move(tempdir.name(), targetName, -1, KIO::HideProgressInfo);
 
     if (!job->exec()) {
         kWarning(505) << "Could not move package to destination:" << targetName;
         return false;
     }
-    
+
     // no need to remove the temp dir (which has been moved)
     tempdir.setAutoRemove(false);
 
     // and now we register it as a service =)
     targetName.append("/metadata.desktop");
-    QString service = KStandardDirs::locateLocal("services",
-                                                 KGlobal::mainComponent().componentName());
-    KPluginInfo pluginInfo(targetName);
+
+    // should not installing it as a service disqualify it?
+    // i don't think so since KServiceTypeTrader may not be
+    // used by the installing app in any case, and the
+    // package is properly installed - aseigo
+    registerPackage(targetName);
+    return true;
+}
+
+bool Package::registerPackage(const QString &desktopFilePath)
+{
+    QString service = KStandardDirs::locateLocal("services", KGlobal::mainComponent().componentName());
+    KPluginInfo pluginInfo(desktopFilePath);
 
     if (pluginInfo.pluginName().isEmpty()) {
-        // should not installing it as a service disqualify it?
-        // i don't think so since KServiceTypeTrader may not be
-        // used by the installing app in any case, and the
-        // package is properly installed - aseigo
-        return true;
+        return false;
     }
 
     service.append(pluginInfo.pluginName()).append(".desktop");
-    job = KIO::file_copy(targetName, service, -1, KIO::HideProgressInfo);
+    KIO::FileCopyJob *job = KIO::file_copy(desktopFilePath, service, -1, KIO::HideProgressInfo);
     return job->exec();
 }
 

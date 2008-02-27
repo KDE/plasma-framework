@@ -25,7 +25,7 @@
 #include <KStandardDirs>
 #include <KServiceTypeTrader>
 
-#include "packages_p.h"
+#include "package.h"
 
 namespace Plasma
 {
@@ -328,6 +328,11 @@ void PackageStructure::write(KConfigBase *config) const
 
         ++it;
     }
+}
+
+bool PackageStructure::installPackage(const QString &package, const QString &packageRoot)
+{
+    return Package::installPackage(package, packageRoot);
 }
 
 } // Plasma namespace

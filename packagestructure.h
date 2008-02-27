@@ -202,8 +202,19 @@ public:
       */
     void write(KConfigBase *config) const;
 
+    /**
+     * Installs a package matching this package structure. By default simply calls
+     * Plasma::Package::install.
+     *
+     * @param package path to the Plasmagik package
+     * @param packageRoot path to the directory where the package should be
+     *                    installed to
+     * @return true on successful installation, false otherwise
+     **/
+    virtual bool installPackage(const QString &package, const QString &packageRoot);
+
 private:
-     class Private;
+    class Private;
      Private * const d;
 };
 
