@@ -101,6 +101,16 @@ class PLASMA_EXPORT Package
         const PackageMetadata *metadata() const;
 
         /**
+         * @return the path to the root of this particular package
+         */
+        const QString path() const;
+
+        /**
+         * @return the PackageStructure use in this Package
+         */
+        const PackageStructure::Ptr structure() const;
+
+        /**
          * Returns a list of all installed packages
          *
          * @param packageRoot path to the directory where Plasmagik packages

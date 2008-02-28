@@ -96,7 +96,7 @@ public:
      * @return a package that matches the format, if available. The caller
      *         is responsible for deleting the object.
      */
-    static PackageStructure::Ptr load(const QString &package);
+    static PackageStructure::Ptr load(const QString &packageFormat);
 
     /**
      * Type of package this structure describes
@@ -193,6 +193,17 @@ public:
     QStringList mimetypes(const char* key) const;
 
     /**
+     * Sets the path to the package. Useful for package formats
+     * which do not have well defined contents prior to installation.
+     */
+    void setPath(const QString &path);
+
+    /**
+     * @return the path to the package, or QString() if none
+     */
+    QString path() const;
+
+    /**
       * Read a package structure from a config file.
       */
     void read(const KConfigBase *config);
@@ -206,12 +217,15 @@ public:
      * Installs a package matching this package structure. By default simply calls
      * Plasma::Package::install.
      *
-     * @param package path to the Plasmagik package
+     * @param archivePath path to the package archive file
      * @param packageRoot path to the directory where the package should be
      *                    installed to
      * @return true on successful installation, false otherwise
      **/
-    virtual bool installPackage(const QString &package, const QString &packageRoot);
+    virtual bool installPackage(const QString &archivePath, const QString &packageRoot);
+
+protected:
+    virtual void pathChanged();
 
 private:
     class Private;

@@ -5,3 +5,6 @@ Comment=Plasma package structure definition
 Comment[km]=កា​រកំណត់​រចនាសម្ព័ន្ធ​កញ្ចប់​ប្លាស្មា
 Comment[zh_TW]=Plasma 套件結構定義
 
+[PropertyDef::X-Plasma-PackageFileFilter]
+Type=QString
+

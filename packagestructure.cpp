@@ -60,10 +60,11 @@ class PackageStructure::Private
 {
 public:
     QString type;
+    QString path;
     QMap<QByteArray, ContentStructure> contents;
     QStringList mimetypes;
     static QHash<QString, PackageStructure::Ptr> structures;
-};
+ };
 
 QHash<QString, PackageStructure::Ptr> PackageStructure::Private::structures;
 
@@ -101,7 +102,6 @@ PackageStructure::Ptr PackageStructure::load(const QString &packageFormat)
         PackageStructure::Ptr structure(offer->createInstance<Plasma::PackageStructure>(0, args, &error));
 
         if (structure) {
-            Private::structures[packageFormat] = structure;
             return structure;
         }
 
@@ -116,9 +116,9 @@ PackageStructure::Ptr PackageStructure::load(const QString &packageFormat)
     if (!configPath.isEmpty()) {
         KConfig config(configPath);
         structure->read(&config);
+        Private::structures[packageFormat] = structure;
     }
 
-    Private::structures[packageFormat] = structure;
     return structure;
 }
 
@@ -277,6 +277,22 @@ QStringList PackageStructure::mimetypes(const char* key) const
     }
 
     return it.value().mimetypes;
+}
+
+void PackageStructure::setPath(const QString &path)
+{
+    d->path = path;
+    pathChanged();
+}
+
+QString PackageStructure::path() const
+{
+    return d->path;
+}
+
+void PackageStructure::pathChanged()
+{
+    // Do nothing ... subclasses might, however.
 }
 
 void PackageStructure::read(const KConfigBase *config)

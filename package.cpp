@@ -59,21 +59,22 @@ public:
         delete metadata;
     }
 
-    const PackageStructure::Ptr structure;
+    PackageStructure::Ptr structure;
     QString basePath;
     bool valid;
     PackageMetadata *metadata;
 };
 
-Package::Package(const QString& packageRoot, const QString& package,
-                 const PackageStructure::Ptr structure)
+Package::Package(const QString& packageRoot, const QString& package, PackageStructure::Ptr structure)
     : d(new Private(structure, packageRoot + '/' + package))
 {
+    structure->setPath(d->basePath);
 }
 
-Package::Package(const QString &packagePath, const PackageStructure::Ptr structure)
+Package::Package(const QString &packagePath, PackageStructure::Ptr structure)
     : d(new Private(structure, packagePath))
 {
+    structure->setPath(d->basePath);
 }
 
 Package::~Package()
@@ -159,10 +160,21 @@ QStringList Package::entryList(const char* fileType) const
 
 const PackageMetadata* Package::metadata() const
 {
+    //FIXME: this only works for native plasma packges; should fall back to... PackageStructure?
     if (!d->metadata) {
         d->metadata = new PackageMetadata(d->basePath + "metadata.desktop");
     }
     return d->metadata;
+}
+
+const QString Package::path() const
+{
+    return d->basePath;
+}
+
+const PackageStructure::Ptr Package::structure() const
+{
+    return d->structure;
 }
 
 //TODO: provide a version of this that allows one to ask for certain types of packages, etc?

@@ -297,19 +297,26 @@ void AppletBrowserWidget::openWidgetFile()
 {
     KService::List offers = KServiceTypeTrader::self()->query("Plasma/PackageStructure");
     QStringList filters;
-    filters << ("*.plasmoid|Plasma Widget");
-/*
+    filters << i18nc("File dialog filter", "%1|PlasmaWidget", "*.plasma");
+    QStringList mimetypes;
+
     foreach (const KService::Ptr &offer, offers) {
-        QString glob = offer
-        QString filter(
+        //filters << offer->property("X-Plasma-PackageMimeFilter").toStringList();
+        QString glob = offer->property("X-Plasma-PackageFileFilter").toString();
+
+        if (!glob.isEmpty()) {
+            glob = QString("%1|%2").arg(glob).arg(offer->name());
+            filters << glob;
+        }
     }
-*/
+
+    kDebug() << "filters are" << filters;
     KFileDialog fd(KUrl(), QString(), this);
     fd.setOperationMode(KFileDialog::Opening);
     fd.setMode(KFile::Files | KFile::ExistingOnly);
-    fd.setFilter(filters.join("\n"));
+    fd.setFilter(filters.join("\n"));// + mimetypes.join("\n"));
     fd.exec();
-    kDebug() << "selected file" << fd.selectedUrl();
+    kDebug() << "selected file" << fd.selectedUrl() << "of type" << fd.currentFilter();
 }
 
 class AppletBrowser::Private
@@ -335,7 +342,7 @@ void AppletBrowser::Private::init(AppletBrowser *q, Plasma::Containment *contain
 
     q->setButtons(KDialog::Apply | KDialog::Close | KDialog::User1);
     q->setButtonText(KDialog::Apply, i18n("Add Widget"));
-    q->setButtonText(KDialog::User1, i18n("Get New Widgets"));
+    q->setButtonText(KDialog::User1, i18n("Install New Widgets"));
 
     KMenu *widgetsMenu = new KMenu(i18n("Get New Widgets"), q);
     QAction *action = new QAction(KIcon("applications-internet"),
@@ -344,7 +351,7 @@ void AppletBrowser::Private::init(AppletBrowser *q, Plasma::Containment *contain
     widgetsMenu->addAction(action);
 
     action = new QAction(KIcon("applications-internet"),
-                         i18n("Load from file"), q);
+                         i18n("Install from file"), q);
     connect(action, SIGNAL(triggered(bool)), widget, SLOT(openWidgetFile()));
     widgetsMenu->addAction(action);
     q->button(KDialog::User1)->setMenu(widgetsMenu);
@@ -357,10 +364,16 @@ void AppletBrowser::Private::init(AppletBrowser *q, Plasma::Containment *contain
     q->setButtonWhatsThis(KDialog::User1, i18n("<qt>When clicking <b>Get New Widgets</b>, a dialog will open to allow you to download new widgets. You need to be connected to the Internet.</qt>"));
 
     connect(q, SIGNAL(applyClicked()), widget, SLOT(addApplet()));
+
+    q->setInitialSize(QSize(400, 600));
+    KConfigGroup cg(KGlobal::config(), "PlasmaAppletBrowserDialog");
+    q->restoreDialogSize(cg);
 }
 
 AppletBrowser::~AppletBrowser()
 {
+    KConfigGroup cg(KGlobal::config(), "PlasmaAppletBrowserDialog");
+    saveDialogSize(cg);
 }
 
 void AppletBrowser::setApplication(const QString& app)
