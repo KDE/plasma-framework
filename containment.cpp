@@ -555,24 +555,10 @@ void Containment::addApplet(Applet *applet, const QPointF &pos, bool delayInit)
 
     if (containmentType() == PanelContainment) {
         // Reposition the applet after adding has been done
-        if (index != -1) {
-            QGraphicsLinearLayout *l = dynamic_cast<QGraphicsLinearLayout *>(layout());
-            int i = 1;
-            for (; i< l->count(); i++) {
-                if (l->itemAt(i) == applet) {
-                    break;
-                }
-            }
-            l->insertItem(index, l->itemAt(i));
-            l->removeAt(i); //FIXME: takeAt no longer works.. which means that this may not be totally correct..
-            applet->setParentLayoutItem(this);
-            d->applets.removeAll(applet);
-            d->applets.insert(index, applet);
-        } else {
-            QGraphicsLinearLayout *l = dynamic_cast<QGraphicsLinearLayout*>(layout());
-            Q_ASSERT(l);
-            l->addItem(applet);
-        }
+        
+        QGraphicsLinearLayout *l = dynamic_cast<QGraphicsLinearLayout*>(layout());
+        Q_ASSERT(l);
+        l->addItem(applet);
     } else {
         //FIXME if it came from a panel its bg was disabled
         //maybe we should expect the applet to handle that on a constraint update?
@@ -604,14 +590,14 @@ int Containment::indexAt(const QPointF &pos) const
                 // leftmost point. This also allows for dropping in the gap
                 // between applets.
                 if (pos.x() < middle) {
-                    for (int i = 1; i<l->count(); i++) {
+                    for (int i = 1; i < l->count(); i++) {
                         if (l->itemAt(i) == existingApplet) {
                             kDebug() << i;
                             return i;
                         }
                     }
                 } else if (pos.x() <= existingApplet->geometry().right()) {
-                    for (int i = 1; i<l->count(); i++) {
+                    for (int i = 1; i < l->count(); i++) {
                         if (l->itemAt(i) == existingApplet) {
                             kDebug() << i;
                             return i + 1;
@@ -622,14 +608,14 @@ int Containment::indexAt(const QPointF &pos) const
                 qreal middle = (existingApplet->geometry().top() +
                         existingApplet->geometry().bottom()) / 2.0;
                 if (pos.y() < middle) {
-                    for (int i = 1; i<l->count(); i++) {
+                    for (int i = 1; i < l->count(); i++) {
                         if (l->itemAt(i) == existingApplet) {
                             kDebug() << i;
                             return i;
                         }
                     }
                 } else if (pos.y() <= existingApplet->geometry().bottom()) {
-                    for (int i = 1; i<l->count(); i++) {
+                    for (int i = 1; i < l->count(); i++) {
                         if (l->itemAt(i) == existingApplet) {
                             kDebug() << i;
                             return i + 1;

@@ -251,7 +251,6 @@ void Corona::loadApplets(const QString& configName)
             }
 
             Applet *applet = c->addApplet(plugin, QVariantList(), appId, appletConfig.readEntry("geometry", QRectF()), true);
-            addItem(applet);
             applet->restore(&appletConfig);
          }
     }

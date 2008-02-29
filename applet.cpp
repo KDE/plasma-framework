@@ -1014,7 +1014,8 @@ QSizeF Applet::contentSizeHint() const
     } else {
         size = contentSize();
     }
-
+//FIXME: This causes infinite recursion in qt code.. maximumContentSize calls
+//sizeHint.. which eventually calls contentSizeHint again.
 //     QSizeF max = maximumContentSize();
 //     size = size.boundedTo(max);
 //     if (d->square) {
