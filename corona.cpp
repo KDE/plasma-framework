@@ -96,8 +96,11 @@ public:
     {
         foreach (Containment *c, containments) {
             // we need to tell each containment that immutability has been altered
-            // TODO: should we tell the applets too?
             c->updateConstraints(ImmutableConstraint);
+            // tell the applets too
+            foreach (Applet *a, c->applets()) {
+                a->constraintsUpdated(ImmutableConstraint);
+            }
         }
     }
 
