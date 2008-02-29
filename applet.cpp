@@ -121,7 +121,7 @@ public:
         applet->setAcceptsHoverEvents(true);
 
         if (!appletDescription.isValid()) {
-            applet->setFailedToLaunch(true);
+            applet->setFailedToLaunch(true, i18n("Invalid applet description"));
             return;
         }
 
@@ -140,12 +140,14 @@ public:
             } else {
                 // create the package and see if we have something real
                 //kDebug() << "trying for" << path;
-                QString packageFormat = appletDescription.property("X-Plasma-PackageFormat").toString();
+                QString packageFormat = appletDescription.property("X-Plasma-Language").toString();
 
                 if (packageFormat.isEmpty()) {
                     package = new Package(path, PackageStructure::Ptr(new PlasmoidPackage()));
                 } else {
-                    package = new Package(path, PackageStructure::load(packageFormat));
+                    PackageStructure::Ptr structure = PackageStructure::load(packageFormat);
+                    structure->setPath(path);
+                    package = new Package(path, structure);
                 }
 
                 if (package->isValid()) {
@@ -358,7 +360,7 @@ PackageStructure::Ptr Applet::packageStructure()
 void Applet::init()
 {
     if (d->script && !d->script->init()) {
-        setFailedToLaunch(true);
+        setFailedToLaunch(true, i18n("Script initialization failed"));
     }
 }
 
