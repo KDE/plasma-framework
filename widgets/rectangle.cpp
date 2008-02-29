@@ -29,11 +29,15 @@ Rectangle::Rectangle(Widget *parent)
 {
     resize(400.0f, 400.0f);
     setFlag(QGraphicsItem::ItemIsMovable);
-    setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding,QSizePolicy::DefaultType);
 }
 
 Rectangle::~Rectangle()
 {
+}
+
+Qt::Orientations Rectangle::expandingDirections() const
+{
+    return Qt::Horizontal | Qt::Vertical;
 }
 
 void Rectangle::paintWidget(QPainter *p, const QStyleOptionGraphicsItem *option, QWidget *widget)

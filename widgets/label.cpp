@@ -47,12 +47,16 @@ Label::Label(Widget *parent)
 {
     setAlignment(Qt::AlignHCenter);
     setPen(QPen(Qt::black, 1));
-    setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding,QSizePolicy::Label);
 }
 
 Label::~Label()
 {
     delete d;
+}
+
+Qt::Orientations Label::expandingDirections() const
+{
+    return Qt::Horizontal | Qt::Vertical;
 }
 
 bool Label::hasHeightForWidth() const
@@ -69,7 +73,7 @@ qreal Label::heightForWidth(qreal w) const
 	return 0;
 }
 
-QSizeF Label::sizeHint(Qt::SizeHint which, const QSizeF &constraint) const
+QSizeF Label::sizeHint() const
 {
     QFontMetricsF m(d->textFont);
     return m.boundingRect(QRectF(0,0,9999,9999), d->alignment | Qt::TextWordWrap, d->text).size();

@@ -67,7 +67,7 @@ NodeLayout::NodeCoordinate NodeLayout::NodeCoordinate::simple(qreal x, qreal y,
 
 class NodeLayout::Private {
 public:
-    QMap <QGraphicsLayoutItem * , QPair < NodeCoordinate, NodeCoordinate > > items;
+    QMap <LayoutItem * , QPair < NodeCoordinate, NodeCoordinate > > items;
     //QRectF geometry;
     NodeLayout * parent;
     QSizeF sizeHint;
@@ -97,7 +97,7 @@ public:
     }
 
 
-    QRectF calculateRectangle(QGraphicsLayoutItem * item, QRectF geometry = QRectF()) const
+    QRectF calculateRectangle(LayoutItem * item, QRectF geometry = QRectF()) const
     {
         if (geometry == QRectF()) {
             geometry = parent->geometry();
@@ -113,25 +113,25 @@ public:
         if (items[item].second.xa != std::numeric_limits<float>::infinity()) {
             result.setRight(calculateXPosition(items[item].second, geometry));
         } else {
-            result.setWidth(item->effectiveSizeHint(Qt::PreferredSize).width());
+            result.setWidth(item->sizeHint().width());
             result.moveLeft(result.left() - items[item].second.xr * result.width());
         }
 
         if (items[item].second.ya != std::numeric_limits<float>::infinity()) {
             result.setBottom(calculateYPosition(items[item].second, geometry));
         } else {
-            result.setHeight(item->effectiveSizeHint(Qt::PreferredSize).height());
+            result.setHeight(item->sizeHint().height());
             result.moveTop(result.top() - items[item].second.yr * result.height());
         }
 
         return result;
     }
 
-    void calculateSizeHint(QGraphicsLayoutItem * item = NULL) {
+    void calculateSizeHint(LayoutItem * item = NULL) {
         if (item == NULL) {
             // Recalculate the sizeHint using all items
             sizeHint = QSizeF();
-            foreach (QGraphicsLayoutItem * item, items.keys()) {
+            foreach (LayoutItem * item, items.keys()) {
                 if (item) {
                     calculateSizeHint(item);
                 }
@@ -145,8 +145,8 @@ public:
             // not do anything smarter concerning the sizeHint when there are
             // autosized elements.
 
-            qreal width  = item->effectiveSizeHint(Qt::PreferredSize).width()  / qMin(scaled.width(), qreal(1.0));
-            qreal height = item->effectiveSizeHint(Qt::PreferredSize).height() / qMin(scaled.height(), qreal(1.0));
+            qreal width  = item->sizeHint().width()  / qMin(scaled.width(), qreal(1.0));
+            qreal height = item->sizeHint().height() / qMin(scaled.height(), qreal(1.0));
 
             if (width > sizeHint.width())   sizeHint.setWidth(width);
             if (height > sizeHint.height()) sizeHint.setHeight(height);
@@ -156,47 +156,60 @@ public:
 };
 
 
-NodeLayout::NodeLayout(QGraphicsLayoutItem * parent) 
-  : QGraphicsLayout(parent), d(new Private(this))
+NodeLayout::NodeLayout(LayoutItem * parent) 
+  : Layout(parent), d(new Private(this))
 {
-    setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding,QSizePolicy::DefaultType);
 }
 
 NodeLayout::~NodeLayout()
 {
+    releaseManagedItems();
     delete d;
+}
+
+Qt::Orientations NodeLayout::expandingDirections() const
+{
+    return Qt::Horizontal | Qt::Vertical;
 }
 
 void NodeLayout::relayout()
 {
-    foreach (QGraphicsLayoutItem * item, d->items.keys()) {
+    foreach (LayoutItem * item, d->items.keys()) {
         if (item) {
             item->setGeometry(d->calculateRectangle(item));
         }
     }
 }
 
-QSizeF NodeLayout::sizeHint(Qt::SizeHint which, const QSizeF &constraint) const
+void NodeLayout::releaseManagedItems()
+{
+    foreach (LayoutItem * item, d->items.keys()) {
+        item->unsetManagingLayout(this);
+    }
+}
+
+QSizeF NodeLayout::sizeHint() const
 {
     return d->sizeHint;
 }
 
-void NodeLayout::addItem(QGraphicsLayoutItem * item)
+void NodeLayout::addItem(LayoutItem * item)
 {
     NodeLayout::addItem(item, NodeCoordinate());
 }
 
-void NodeLayout::addItem(QGraphicsLayoutItem * item, NodeCoordinate topLeft, NodeCoordinate bottomRight)
+void NodeLayout::addItem(LayoutItem * item, NodeCoordinate topLeft, NodeCoordinate bottomRight)
 {
     if (!item) {
         return;
     }
 
     d->items[item] = QPair<NodeCoordinate, NodeCoordinate>(topLeft, bottomRight);
+    item->setManagingLayout(this);
     d->calculateSizeHint(item);
 }
 
-void NodeLayout::addItem(QGraphicsLayoutItem * item, NodeCoordinate node, qreal xr, qreal yr)
+void NodeLayout::addItem(LayoutItem * item, NodeCoordinate node, qreal xr, qreal yr)
 {
     if (!item) {
         return;
@@ -204,15 +217,17 @@ void NodeLayout::addItem(QGraphicsLayoutItem * item, NodeCoordinate node, qreal 
 
     d->items[item] = QPair<NodeCoordinate, NodeCoordinate>(node,
         NodeCoordinate::simple(xr, yr, NodeCoordinate::InnerRelative, NodeCoordinate::InnerRelative));
+    item->setManagingLayout(this);
     d->calculateSizeHint(item);
 }
 
-void NodeLayout::removeItem(QGraphicsLayoutItem * item)
+void NodeLayout::removeItem(LayoutItem * item)
 {
     if (!item) {
         return;
     }
 
+    item->unsetManagingLayout(this);
     d->items.remove(item);
     d->calculateSizeHint();
 }
@@ -222,7 +237,7 @@ int NodeLayout::count() const
     return d->items.count();
 }
 
-int NodeLayout::indexOf(QGraphicsLayoutItem * item) const
+int NodeLayout::indexOf(LayoutItem * item) const
 {
     if (!item) {
         return -1;
@@ -231,7 +246,7 @@ int NodeLayout::indexOf(QGraphicsLayoutItem * item) const
     return d->items.keys().indexOf(item);
 }
 
-QGraphicsLayoutItem * NodeLayout::itemAt(int i) const
+LayoutItem * NodeLayout::itemAt(int i) const
 {
     if (i >= d->items.count()) {
         return 0;
@@ -240,13 +255,13 @@ QGraphicsLayoutItem * NodeLayout::itemAt(int i) const
     return d->items.keys()[i];
 }
 
-QGraphicsLayoutItem * NodeLayout::takeAt(int i)
+LayoutItem * NodeLayout::takeAt(int i)
 {
     if (i >= d->items.count()) {
         return 0;
     }
 
-    QGraphicsLayoutItem * item = itemAt(i);
+    LayoutItem * item = itemAt(i);
     removeItem(item);
     return item;
 }

@@ -23,9 +23,8 @@
 
 #include <QtCore/QList>
 
-#include <QtGui/QGraphicsLayout>
-
 #include <plasma/plasma_export.h>
+#include <plasma/layouts/layout.h>
 
 namespace Plasma
 {
@@ -38,30 +37,30 @@ namespace Plasma
  * Whenever this layout is updated, all child items are resized to
  * their sizeHint() and left in their existing positions.
  */
-class PLASMA_EXPORT FreeLayout : public QGraphicsLayout
+class PLASMA_EXPORT FreeLayout : public Layout
 {
     public:
         /**
          * Creates a new free layout
          */
-        explicit FreeLayout(QGraphicsLayoutItem *parent = 0);
+        explicit FreeLayout(LayoutItem *parent = 0);
         ~FreeLayout();
 
         // reimplemented from Layout
-        virtual void addItem(QGraphicsLayoutItem *l);
-        virtual void removeItem(QGraphicsLayoutItem *l);
-        virtual int indexOf(QGraphicsLayoutItem *l) const;
-        virtual QGraphicsLayoutItem *itemAt(int i) const;
-        virtual QGraphicsLayoutItem *takeAt(int i);
-        virtual void removeAt(int i);
+        virtual void addItem(LayoutItem *l);
+        virtual void removeItem(LayoutItem *l);
+        virtual int indexOf(LayoutItem *l) const;
+        virtual LayoutItem *itemAt(int i) const;
+        virtual LayoutItem *takeAt(int i);
+        virtual Qt::Orientations expandingDirections() const;
         virtual QRectF geometry() const;
-        virtual void setGeometry(const QRectF &geom);
         virtual int count() const;
 
-        virtual QSizeF sizeHint(Qt::SizeHint which, const QSizeF &constraint = QSizeF()) const;
+        virtual QSizeF sizeHint() const;
 
     protected:
         void relayout();
+        void releaseManagedItems();
 
     private:
         class Private;

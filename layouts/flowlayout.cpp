@@ -29,28 +29,27 @@
 
 #include <KDebug>
 
-// #include "layoutanimator.h"
+#include "layoutanimator.h"
 
 using namespace Plasma;
 
 class FlowLayout::Private
 {
 public:
-    Private() : columnWidth( -1 ), spacing(6.0) {}
-    QList<QGraphicsLayoutItem*> items; 
+    Private() : columnWidth( -1 ) {}
+    QList<LayoutItem*> items; 
     qreal columnWidth;
-    qreal spacing;
 };
 
-FlowLayout::FlowLayout(QGraphicsLayoutItem* parent)
-    : QGraphicsLayout(parent)
+FlowLayout::FlowLayout(LayoutItem* parent)
+    : Layout(parent)
     , d(new Private)
 {
-    setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding,QSizePolicy::DefaultType);
 }
 
 FlowLayout::~FlowLayout()
 {
+    releaseManagedItems();
     delete d;
 }
 
@@ -59,35 +58,37 @@ int FlowLayout::count() const
     return d->items.count();
 }
 
-void FlowLayout::addItem(QGraphicsLayoutItem* item)
+void FlowLayout::addItem(LayoutItem* item)
 {
     if (!item || d->items.contains(item)) {
         return;
     }
 
+    item->setManagingLayout(this);
     d->items << item;
-//FIXME: Port
-//     if (animator()) {
-//         animator()->setCurrentState(item,LayoutAnimator::InsertedState);
-//     }
+
+    if (animator()) {
+        animator()->setCurrentState(item,LayoutAnimator::InsertedState);
+    }
 
     updateGeometry();
 }
-void FlowLayout::removeItem(QGraphicsLayoutItem* item)
+void FlowLayout::removeItem(LayoutItem* item)
 {
     if (!item) {
         return;
     }
 
+    item->unsetManagingLayout(this);
     d->items.removeAll(item);
-//FIXME: Port
-//     if (animator()) {
-//         animator()->setCurrentState(item,LayoutAnimator::RemovedState);
-//     }
+
+    if (animator()) {
+        animator()->setCurrentState(item,LayoutAnimator::RemovedState);
+    }
 
     updateGeometry();
 }
-int FlowLayout::indexOf(QGraphicsLayoutItem* item) const
+int FlowLayout::indexOf(LayoutItem* item) const
 {
     if (!item) {
         return -1;
@@ -95,7 +96,7 @@ int FlowLayout::indexOf(QGraphicsLayoutItem* item) const
 
     return d->items.indexOf(item);
 }
-QGraphicsLayoutItem* FlowLayout::itemAt(int i) const
+LayoutItem* FlowLayout::itemAt(int i) const
 {
     if (i >= d->items.count()) {
         return 0;
@@ -104,7 +105,7 @@ QGraphicsLayoutItem* FlowLayout::itemAt(int i) const
     return d->items[i];
 }
 
-QSizeF FlowLayout::sizeHint(Qt::SizeHint which, const QSizeF &constraint) const
+QSizeF FlowLayout::sizeHint() const
 {
     // TODO A proper algorithm here
     // 
@@ -117,7 +118,7 @@ QSizeF FlowLayout::sizeHint(Qt::SizeHint which, const QSizeF &constraint) const
     return QSizeF(500,500);
 }
 
-QGraphicsLayoutItem* FlowLayout::takeAt(int i)
+LayoutItem* FlowLayout::takeAt(int i)
 {
     if (i >= d->items.count()) {
         return 0;
@@ -125,58 +126,6 @@ QGraphicsLayoutItem* FlowLayout::takeAt(int i)
 
     return d->items.takeAt(i);
     // FIXME: Should updateGeometry() be called?
-}
-
-void FlowLayout::removeAt(int i)
-{
-    if (i >= d->items.count()) {
-        return;
-    }
-
-    d->items.removeAt(i);
-}
-
-QRectF FlowLayout::geometry() const
-{
-    if (parentLayoutItem()) {
-        return parentLayoutItem()->geometry();
-    }
-
-    return QRectF(QPointF(0, 0), maximumSize());
-}
-
-void FlowLayout::setGeometry(const QRectF &geom)
-{
-    if (!geom.isValid() || geom == geometry()) {
-        return;
-    }
-
-//     QRectF newGeom = geom;
-    // 
-//     if (d->parent && !dynamic_cast<QGraphicsLayout*>(d->parent)) {
-//         newGeom = d->parent->adjustToMargins(newGeom);
-//         //kDebug() << "parent rect is" << d->parent->topLeft() << d->parent->size()
-//         //         << "and we are" << geometry() << "but aiming for"
-//         //         << newGeom << "from" << geom;
-//     }
-    // 
-//     d->pos = newGeom.topLeft();
-    setPreferredSize(geom.size());
-    // TODO: respect minimum and maximum sizes: is it possible?
-    //setSize(newGeom.size().expandedTo(minimumSize()).boundedTo(maximumSize()));
-
-    //kDebug() << "geometry is now" << geometry();
-    invalidate();
-}
-
-qreal FlowLayout::spacing() const
-{
-    return d->spacing;
-}
-
-void FlowLayout::setSpacing(qreal s)
-{
-    d->spacing = s;
 }
 
 template <class T>
@@ -191,8 +140,7 @@ T qSum(const QList<T>& container)
 
 void FlowLayout::relayout()
 {
-//     const QRectF rect = adjustToMargins(geometry());
-    const QRectF rect = geometry();
+    const QRectF rect = adjustToMargins(geometry());
 
     const qreal space = spacing();
     const qreal rectWidth = rect.width();
@@ -210,7 +158,7 @@ void FlowLayout::relayout()
     int colCnt = 0;
     int rowCnt = 0;
 
-    foreach(QGraphicsLayoutItem *item , d->items) {
+    foreach(LayoutItem *item , d->items) {
         maxItemWidth = (maxItemWidth < item->maximumSize().width()) ? 
                         item->maximumSize().width() : maxItemWidth;
         minItemWidth = (minItemWidth < item->minimumSize().width()) ? 
@@ -280,7 +228,7 @@ void FlowLayout::relayout()
     // lay the items out in left-to-right , top-to-bottom order
     int insertColumn = 0;
     qreal rowPos = 0;
-    foreach(QGraphicsLayoutItem *item , d->items) {
+    foreach(LayoutItem *item , d->items) {
 
         if(insertColumn >= colCnt) {
             insertColumn = 0;
@@ -296,15 +244,26 @@ void FlowLayout::relayout()
         //kDebug() << "newGeometry: " << newGeometry;
         insertColumn++;
 
-        //FIXME: Port
-/*        if ( animator() ){
+        if ( animator() ){
             animator()->setGeometry( item , newGeometry );
-        } else {*/
+        } else {
             item->setGeometry( newGeometry );
-//         }
+        }
     }
-//FIXME: Port
-//     startAnimation();
+
+    startAnimation();
+}
+
+void FlowLayout::releaseManagedItems()
+{
+    foreach (LayoutItem *item, d->items) {
+        item->unsetManagingLayout(this);
+    }
+}
+
+Qt::Orientations FlowLayout::expandingDirections() const
+{
+    return Qt::Vertical | Qt::Horizontal;
 }
 
 qreal FlowLayout::columnWidth() const

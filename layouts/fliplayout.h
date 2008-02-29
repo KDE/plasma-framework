@@ -20,9 +20,8 @@
 #ifndef PLASMA_FLIPLAYOUT_H_
 #define PLASMA_FLIPLAYOUT_H_
 
-#include <QtGui/QGraphicsLayout>
-
 #include <plasma/plasma.h>
+#include <plasma/layouts/layout.h>
 #include <plasma/widgets/widget.h>
 
 namespace Plasma
@@ -58,7 +57,7 @@ protected:
 
         QRectF childGeometry;
         for (int i = 0; i < count; i++) {
-            QGraphicsLayoutItem * item = SuperLayout::itemAt(i);
+            Plasma::LayoutItem * item = SuperLayout::itemAt(i);
 
             if (!item) continue;
 

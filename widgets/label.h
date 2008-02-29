@@ -58,6 +58,11 @@ class PLASMA_EXPORT Label : public Plasma::Widget
         virtual ~Label();
 
         /**
+         * Labels can expand in Horizontal and Vertical directions.
+         */
+        Qt::Orientations expandingDirections() const;
+
+        /**
          * Labels can use height-for-width geometry management.
          */
         bool hasHeightForWidth() const;
@@ -70,7 +75,7 @@ class PLASMA_EXPORT Label : public Plasma::Widget
         /**
          * Reimplemented from Plasma::Widget.
          */
-        QSizeF sizeHint(Qt::SizeHint which, const QSizeF &constrant = QSizeF()) const;
+        QSizeF sizeHint() const;
 
         /**
          * Sets the text to be displayed.

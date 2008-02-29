@@ -23,10 +23,9 @@
 #include <QtCore/QMap>
 #include <cmath>
 
-#include <QtGui/QGraphicsLayout>
-
 #include <plasma/plasma_export.h>
 #include <plasma/plasma.h>
+#include <plasma/layouts/layout.h>
 
 namespace Plasma {
 
@@ -49,7 +48,7 @@ namespace Plasma {
  * the item will be bound to the defined node.
  */
 
-class PLASMA_EXPORT NodeLayout : public QGraphicsLayout {
+class PLASMA_EXPORT NodeLayout : public Layout {
 public:
     class PLASMA_EXPORT NodeCoordinate {
     public:
@@ -71,21 +70,24 @@ public:
         float yr, ya;
     };
 
-    explicit NodeLayout(QGraphicsLayoutItem * parent = 0);
+    // reimplemented
+    virtual Qt::Orientations expandingDirections() const;
+
+    explicit NodeLayout(LayoutItem * parent = 0);
     virtual ~NodeLayout();
 
-
+    QSizeF sizeHint() const;
 
     /**
      * Adds item at top-left corner, with automatic sizing
      * (using sizeHint of the item)
      */
-    void addItem (QGraphicsLayoutItem * item);
+    void addItem (LayoutItem * item);
 
     /**
      * Adds item with specified top-left and bottom right corners.
      */
-    void addItem (QGraphicsLayoutItem * item,
+    void addItem (LayoutItem * item,
             NodeCoordinate topLeft, NodeCoordinate bottomRight);
 
     /**
@@ -94,19 +96,19 @@ public:
      * are relative coordinates so (0, 0) represent top left corner,
      * (0.5, 0.5) represent the center of the item etc.
      */
-    void addItem (QGraphicsLayoutItem * item,
+    void addItem (LayoutItem * item,
             NodeCoordinate node, qreal xr = 0, qreal yr = 0);
 
-    void removeItem (QGraphicsLayoutItem * item);
+    void removeItem (LayoutItem * item);
 
     virtual int count() const;
-    virtual int indexOf(QGraphicsLayoutItem * item) const;
-    virtual QGraphicsLayoutItem * itemAt(int i) const;
-    virtual QGraphicsLayoutItem * takeAt(int i);
+    virtual int indexOf(LayoutItem * item) const;
+    virtual LayoutItem * itemAt(int i) const;
+    virtual LayoutItem * takeAt(int i);
 
 protected:
     void relayout();
-    QSizeF sizeHint(Qt::SizeHint which, const QSizeF &constraint = QSizeF()) const;
+    void releaseManagedItems();
 
 private:
     class Private;

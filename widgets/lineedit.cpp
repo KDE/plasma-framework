@@ -59,7 +59,6 @@ LineEdit::LineEdit(QGraphicsItem *parent)
     setTextInteractionFlags(Qt::TextEditorInteraction);
     setCursor(Qt::IBeamCursor);
     setFlag(QGraphicsItem::ItemIsSelectable);
-    setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Expanding,QSizePolicy::LineEdit);
 }
 
 LineEdit::~LineEdit()
@@ -129,6 +128,11 @@ bool LineEdit::styled() const
     return d->styled;
 }
 
+Qt::Orientations LineEdit::expandingDirections() const
+{
+    return Qt::Vertical;
+}
+
 QSizeF LineEdit::minimumSize() const
 {
     QSizeF sh = document()->size();
@@ -185,10 +189,14 @@ void LineEdit::setGeometry(const QRectF& geometry)
 
 void LineEdit::updateGeometry()
 {
-    setGeometry(QRectF(pos(), sizeHint(Qt::PreferredSize)));
+    if (managingLayout()) {
+        managingLayout()->invalidate();
+    } else {
+        setGeometry(QRectF(pos(), sizeHint()));
+    }
 }
 
-QSizeF LineEdit::sizeHint(Qt::SizeHint which, const QSizeF &constraint) const
+QSizeF LineEdit::sizeHint() const
 {
     QSizeF sh = document()->size();
 

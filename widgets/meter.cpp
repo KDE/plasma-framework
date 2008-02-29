@@ -111,8 +111,8 @@ public:
     int maxrotate;
 };
 
-Meter::Meter(QGraphicsItem *parent) :
-        Plasma::Widget(parent),
+Meter::Meter(QGraphicsItem *parent, QObject *parentObject) :
+        Plasma::Widget(parent, parentObject),
         d(new Private)
 {
 }
@@ -256,7 +256,7 @@ Meter::MeterType Meter::meterType() const
     return d->meterType;
 }
 
-QSizeF Meter::sizeHint(Qt::SizeHint which, const QSizeF &constraint) const
+QSizeF Meter::sizeHint() const
 {
     return d->sizeHint;
 }

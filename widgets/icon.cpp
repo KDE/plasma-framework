@@ -930,16 +930,6 @@ void Icon::drawActionButtonBase(QPainter* painter, const QSize &size, int elemen
     painter->drawEllipse(QRectF(QPointF(.0, .0), size));
 }
 
-QSizeF Icon::sizeHint(Qt::SizeHint which, const QSizeF &constraint) const
-{
-    if (which == Qt::MinimumSize) {
-        return QSizeF(25,25);
-    } else if (which == Qt::PreferredSize) {
-        return iconSize();
-    } else /*maximumSize*/ {
-        return constraint.isValid() ? constraint : QSizeF(1000,1000);
-    }
-}
 
 void Icon::setText(const QString& text)
 {

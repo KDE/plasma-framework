@@ -21,8 +21,6 @@
 
 #include <QStringList>
 
-#include <QGraphicsLinearLayout>
-
 #include "plasma/widgets/checkbox.h"
 #include "plasma/widgets/flash.h"
 #include "plasma/widgets/icon.h"
@@ -31,6 +29,8 @@
 #include "plasma/widgets/radiobutton.h"
 #include "plasma/widgets/meter.h"
 
+#include "plasma/layouts/hboxlayout.h"
+#include "plasma/layouts/vboxlayout.h"
 #include "plasma/layouts/flowlayout.h"
 
 namespace Plasma
@@ -103,13 +103,13 @@ QStringList UiLoader::availableLayouts() const
     return d->layouts;
 }
 
-QGraphicsLayout *UiLoader::createLayout( const QString &className, QGraphicsLayoutItem *parent )
+Layout *UiLoader::createLayout( const QString &className, LayoutItem *parent )
 {
     if (className == QString("HBoxLayout")) {
-        return new QGraphicsLinearLayout( Qt::Horizontal, parent );
+        return new HBoxLayout( parent );
     }
     else if (className == QString("VBoxLayout")) {
-        return new QGraphicsLinearLayout( Qt::Vertical, parent );
+        return new VBoxLayout( parent );
     }
     else if (className == QString("FlowLayout")) {
         return new FlowLayout( parent );

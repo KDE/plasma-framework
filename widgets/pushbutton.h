@@ -162,7 +162,8 @@ public:
 
     // NOTE: bogus
     QSizeF minimumSize() const;
-    QSizeF sizeHint(Qt::SizeHint which, const QSizeF &constraint = QSizeF()) const;
+    Qt::Orientations expandingDirections() const;
+    QSizeF sizeHint() const;
 
 Q_SIGNALS:
     /**

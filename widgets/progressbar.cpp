@@ -209,7 +209,7 @@ void ProgressBar::paintWidget(QPainter *painter, const QStyleOptionGraphicsItem 
     style->drawControl(QStyle::CE_ProgressBar, &options, painter, widget);
 }
 
-QSizeF ProgressBar::sizeHint(Qt::SizeHint which, const QSizeF &constraint) const
+QSizeF ProgressBar::sizeHint() const
 {
     QFontMetrics fm(font());
     QStyleOptionProgressBarV2 options;

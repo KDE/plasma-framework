@@ -122,7 +122,6 @@ PushButton::PushButton(Widget *parent)
       d(new Private)
 {
     d->init(this);
-    setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed,QSizePolicy::PushButton);
 }
 
 PushButton::PushButton(const QString &text, Widget *parent)
@@ -131,7 +130,6 @@ PushButton::PushButton(const QString &text, Widget *parent)
 {
     d->init(this);
     setText(text);
-    setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed,QSizePolicy::PushButton);
 }
 
 PushButton::PushButton(const KIcon &icon, const QString &text, Widget *parent)
@@ -290,7 +288,12 @@ QSizeF PushButton::minimumSize() const
     return m.boundingRect(text()).size() + QSizeF(5.0f, 5.0f);
 }
 
-QSizeF PushButton::sizeHint(Qt::SizeHint which, const QSizeF &constraint) const
+Qt::Orientations PushButton::expandingDirections() const
+{
+    return Qt::Horizontal;
+}
+
+QSizeF PushButton::sizeHint() const
 {
     int width = 0;
     int height = 0;

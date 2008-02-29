@@ -20,9 +20,8 @@
 #ifndef __FLOWLAYOUT__
 #define __FLOWLAYOUT__
 
-#include <QtGui/QGraphicsLayout>
-
 #include <plasma/plasma_export.h>
+#include <plasma/layouts/layout.h>
 
 namespace Plasma
 {
@@ -32,31 +31,29 @@ namespace Plasma
  *
  * This is similar to the layout of items in a QListView. 
  */
-class PLASMA_EXPORT FlowLayout : public QGraphicsLayout
+class PLASMA_EXPORT FlowLayout : public Layout
 {
 public:
     /** Construct a new flow layout with the specified parent. */
-    explicit FlowLayout(QGraphicsLayoutItem* parent);
+    explicit FlowLayout(LayoutItem* parent);
     virtual ~FlowLayout();
 
     // reimplemented
     virtual int count() const;
-    virtual void addItem(QGraphicsLayoutItem* item);
-    virtual void removeItem(QGraphicsLayoutItem* item);
-    virtual int indexOf(QGraphicsLayoutItem* item) const;
-    virtual QGraphicsLayoutItem* itemAt(int i) const;
-    virtual QGraphicsLayoutItem* takeAt(int i);
-    virtual void removeAt(int i);
+    virtual void addItem(LayoutItem* item);
+    virtual void removeItem(LayoutItem* item);
+    virtual int indexOf(LayoutItem* item) const;
+    virtual LayoutItem* itemAt(int i) const;
+    virtual LayoutItem* takeAt(int i);
+
+    virtual QSizeF sizeHint() const;
+    virtual Qt::Orientations expandingDirections() const;
     virtual void setColumnWidth( const qreal width );
     virtual qreal columnWidth() const;
-    virtual QRectF geometry() const;
-    virtual void setGeometry(const QRectF &geom);
-    qreal spacing() const;
-    void setSpacing(qreal s);
 
 protected:
     void relayout();
-    virtual QSizeF sizeHint(Qt::SizeHint which, const QSizeF &constraint = QSizeF()) const;
+    void releaseManagedItems();
 
 private:
     class Private;

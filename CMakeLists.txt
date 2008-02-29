@@ -35,12 +35,15 @@ set(plasma_LIB_SRCS
     dataengine.cpp
     dataenginemanager.cpp
     dialog.cpp
+    layouts/boxlayout.cpp
     layouts/borderlayout.cpp
     layouts/freelayout.cpp
     layouts/nodelayout.cpp
     layouts/flowlayout.cpp
     layouts/fliplayout.cpp
-#    layouts/layoutanimator.cpp
+    layouts/layout.cpp
+    layouts/layoutanimator.cpp
+    layouts/layoutitem.cpp
     packages.cpp
     phase.cpp
     plasma.cpp
@@ -161,13 +164,17 @@ install(FILES
     DESTINATION ${INCLUDE_INSTALL_DIR}/plasma/widgets)
 
 install(FILES
+    layouts/boxlayout.h
+    layouts/vboxlayout.h
+    layouts/hboxlayout.h
     layouts/borderlayout.h
     layouts/freelayout.h
     layouts/nodelayout.h
     layouts/flowlayout.h
     layouts/fliplayout.h
-#    layouts/layoutanimator.h
-#    layouts/layoutitem.h
+    layouts/layout.h
+    layouts/layoutanimator.h
+    layouts/layoutitem.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/plasma/layouts)
 
 install(FILES

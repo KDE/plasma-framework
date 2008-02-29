@@ -22,7 +22,6 @@
 #include <QAction>
 #include <QDesktopWidget>
 #include <QFile>
-#include <QGraphicsLinearLayout>
 #include <QGraphicsSceneContextMenuEvent>
 #include <QGraphicsView>
 #include <QMimeData>
@@ -45,6 +44,7 @@
 #include "svg.h"
 
 #include "layouts/freelayout.h"
+#include "layouts/boxlayout.h"
 
 namespace Plasma
 {
@@ -74,28 +74,10 @@ public:
     {
         if (!toolbox) {
             toolbox = new DesktopToolbox(q);
-            toolbox->setPos(toolboxPosition());
+            toolbox->setPos(q->geometry().width() - toolbox->boundingRect().width(), 0);
         }
 
         return toolbox;
-    }
-
-    QPointF toolboxPosition()
-    {
-        qreal yOffset = 0.0;
-        qreal xOffset = 0.0;
-        foreach (Containment *c, q->corona()->containments()) {
-            kDebug() << c->name() << " is at the: " << (Plasma::Location)c->location();
-            if (c->location() == TopEdge) {
-                kDebug() << "Have a containemnt on the top Edge.. moving the item down";
-                yOffset += c->geometry().height();
-            } else if (c->location() == RightEdge) {
-                xOffset += c->geometry().width();
-            }
-        }
-        QPointF ret(q->geometry().width() - toolbox->boundingRect().width() - xOffset, q->geometry().topRight().y() + yOffset);
-        kDebug() << "Moving to: " << ret;
-        return ret;
     }
 
     Containment *q;
@@ -366,47 +348,24 @@ void Containment::setFormFactor(FormFactor formFactor)
 
     //kDebug() << "switching FF to " << formFactor;
     d->formFactor = formFactor;
+    Layout *lay = 0;
     //note: setting a new layout autodeletes the old one
     //and creating a layout calls setLayout on the parent
 
     switch (d->formFactor) {
         case Planar:
-        {
-            FreeLayout *fLay = new FreeLayout;
-            fLay->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding,QSizePolicy::DefaultType);
-
-            foreach (Applet* applet, d->applets) {
-                fLay->addItem(applet);
-                applet->updateConstraints(Plasma::FormFactorConstraint);
-            }
+            lay = new FreeLayout(this);
             break;
-        }
         case Horizontal:
-        {
-            QGraphicsLinearLayout *hLay = new QGraphicsLinearLayout(Qt::Horizontal, this);
-            hLay->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding,QSizePolicy::DefaultType);
-            hLay->setContentsMargins(0, 0, 0, 0);
-            hLay->setSpacing(4);
-
-            foreach (Applet* applet, d->applets) {
-                hLay->addItem(applet);
-                applet->updateConstraints(Plasma::FormFactorConstraint);
-            }
+            lay = new BoxLayout(BoxLayout::LeftToRight, this);
+            lay->setMargins(0, 0, 0, 0);
+            lay->setSpacing(4);
             break;
-        }
         case Vertical:
-        {
-            QGraphicsLinearLayout *vLay = new QGraphicsLinearLayout(Qt::Vertical, this);
-            vLay->setContentsMargins(0, 0, 0, 0);
-            vLay->setSpacing(4);
-            vLay->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding,QSizePolicy::DefaultType);
-
-            foreach (Applet* applet, d->applets) {
-                vLay->addItem(applet);
-                applet->updateConstraints(Plasma::FormFactorConstraint);
-            }
+            lay = new BoxLayout(BoxLayout::TopToBottom, this);
+            lay->setMargins(0, 0, 0, 0);
+            lay->setSpacing(4);
             break;
-        }
         case MediaCenter:
             //FIXME: need a layout type here!
             setLayout(0); //auto-delete
@@ -415,6 +374,13 @@ void Containment::setFormFactor(FormFactor formFactor)
             kDebug() << "This can't be happening! Or... can it? ;)" << d->formFactor;
             setLayout(0); //auto-delete
             break;
+    }
+
+    if (lay) {
+        foreach (Applet* applet, d->applets) {
+            lay->addItem(applet);
+            applet->updateConstraints(Plasma::FormFactorConstraint);
+        }
     }
 
     updateConstraints(Plasma::FormFactorConstraint);
@@ -481,13 +447,13 @@ Applet* Containment::addApplet(const QString& name, const QVariantList& args, ui
     addApplet(applet, appletGeometry.topLeft(), delayInit);
 
     if (containmentType() != PanelContainment) {
-//         kDebug() << "adding applet" << applet->name() << "with a default geometry of" << appletGeometry << appletGeometry.isValid();
+        //kDebug() << "adding applet" << applet->name() << "with a default geometry of" << appletGeometry << appletGeometry.isValid();
         if (appletGeometry.isValid()) {
             applet->setGeometry(appletGeometry);
         } else if (appletGeometry.x() != -1 && appletGeometry.y() != -1) {
             // yes, this means we can't have items start -1, -1
             applet->setGeometry(QRectF(appletGeometry.topLeft(),
-                                    applet->effectiveSizeHint(Qt::PreferredSize)));
+                                    applet->sizeHint()));
         } else if (geometry().isValid()) {
             applet->setGeometry(geometryForApplet(applet));
         }
@@ -538,15 +504,14 @@ void Containment::addApplet(Applet *applet, const QPointF &pos, bool delayInit)
         KConfigGroup oldConfig = applet->config();
         applet->resetConfigurationObject();
         currentContainment->d->applets.removeAll(applet);
+        addChild(applet);
+
         // now move the old config to the new location
         KConfigGroup c = config().group("Applets").group(QString::number(applet->id()));
         oldConfig.reparent(&c);
     } else {
-        applet->setParentLayoutItem(this);
-        applet->updateConstraints(Plasma::SizeConstraint);
+        addChild(applet);
     }
-    scene()->addItem(applet);
-    applet->setParentLayoutItem(this);
 
     d->applets << applet;
 
@@ -555,10 +520,12 @@ void Containment::addApplet(Applet *applet, const QPointF &pos, bool delayInit)
 
     if (containmentType() == PanelContainment) {
         // Reposition the applet after adding has been done
-        
-        QGraphicsLinearLayout *l = dynamic_cast<QGraphicsLinearLayout*>(layout());
-        Q_ASSERT(l);
-        l->addItem(applet);
+        if (index != -1) {
+            BoxLayout *l = dynamic_cast<BoxLayout *>(layout());
+            l->insertItem(index, l->takeAt(l->indexOf(applet)));
+            d->applets.removeAll(applet);
+            d->applets.insert(index, applet);
+        }
     } else {
         //FIXME if it came from a panel its bg was disabled
         //maybe we should expect the applet to handle that on a constraint update?
@@ -579,7 +546,7 @@ int Containment::indexAt(const QPointF &pos) const
     if (pos == QPointF(-1, -1)) {
         return -1;
     }
-    QGraphicsLinearLayout *l = dynamic_cast<QGraphicsLinearLayout *>(layout());
+    BoxLayout *l = dynamic_cast<BoxLayout *>(layout());
     if (l) {
         foreach (Applet *existingApplet, d->applets) {
             if (formFactor() == Horizontal) {
@@ -590,37 +557,17 @@ int Containment::indexAt(const QPointF &pos) const
                 // leftmost point. This also allows for dropping in the gap
                 // between applets.
                 if (pos.x() < middle) {
-                    for (int i = 1; i < l->count(); i++) {
-                        if (l->itemAt(i) == existingApplet) {
-                            kDebug() << i;
-                            return i;
-                        }
-                    }
+                    return l->indexOf(existingApplet);
                 } else if (pos.x() <= existingApplet->geometry().right()) {
-                    for (int i = 1; i < l->count(); i++) {
-                        if (l->itemAt(i) == existingApplet) {
-                            kDebug() << i;
-                            return i + 1;
-                        }
-                    }
+                    return l->indexOf(existingApplet) + 1;
                 }
             } else {
                 qreal middle = (existingApplet->geometry().top() +
                         existingApplet->geometry().bottom()) / 2.0;
                 if (pos.y() < middle) {
-                    for (int i = 1; i < l->count(); i++) {
-                        if (l->itemAt(i) == existingApplet) {
-                            kDebug() << i;
-                            return i;
-                        }
-                    }
+                    return l->indexOf(existingApplet);
                 } else if (pos.y() <= existingApplet->geometry().bottom()) {
-                    for (int i = 1; i < l->count(); i++) {
-                        if (l->itemAt(i) == existingApplet) {
-                            kDebug() << i;
-                            return i + 1;
-                        }
-                    }
+                    return l->indexOf(existingApplet) + 1;
                 }
             }
         }
@@ -656,7 +603,7 @@ QRectF Containment::geometryForApplet(Applet *applet) const
     xPositions[-offset.x()] = true;
     yPositions[-offset.y()] = true;
 
-    QRectF placement(QPointF(0, 0), applet->effectiveSizeHint(Qt::PreferredSize));
+    QRectF placement(QPointF(0, 0), applet->sizeHint());
     foreach (Applet *existingApplet, d->applets) {
         QPointF bottomRight = existingApplet->geometry().bottomRight();
         if (bottomRight.x() + placement.width() < geometry().width()) {
@@ -962,7 +909,7 @@ Plasma::Widget * Containment::addToolBoxTool(const QString& toolName, const QStr
     QSizeF iconSize = tool->sizeFromIconSize(22);
     tool->setMinimumSize(iconSize);
     tool->setMaximumSize(iconSize);
-    tool->resize(tool->effectiveSizeHint(Qt::PreferredSize));
+    tool->resize(tool->sizeHint());
 
     d->createToolbox()->addTool(tool, toolName);
 
@@ -987,11 +934,6 @@ void Containment::showToolbox()
 void Containment::hideToolbox()
 {
     d->createToolbox()->hideToolbox();
-}
-
-void Containment::repositionToolbox()
-{
-    d->createToolbox()->setPos(d->toolboxPosition());
 }
 
 } // Plasma namespace
