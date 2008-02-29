@@ -205,7 +205,7 @@ class PLASMA_EXPORT Containment : public Applet
          * @param pos the containment-relative position
          */
         virtual int indexAt(const QPointF &pos) const;
-
+    
         /**
          * Sets the physical screen this Containment is associated with.
          *
@@ -276,6 +276,11 @@ class PLASMA_EXPORT Containment : public Applet
          * Close the Plasma toolbox
          */
         void hideToolbox();
+
+        /**
+         * Repositions the Plasma toolbox.  Useful to ensure its always in the correct place within the view.
+         */
+        void repositionToolbox();
 
     Q_SIGNALS:
         /**

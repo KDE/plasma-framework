@@ -23,12 +23,12 @@
 
 #include <QtCore/QObject>
 #include <QtGui/QGraphicsTextItem>
+#include <QtGui/QGraphicsLayoutItem>
 
 #include <plasma/plasma_export.h>
 
 #include <plasma/dataengine.h>
 #include <plasma/plasma.h>
-#include <plasma/layouts/layoutitem.h>
 
 namespace Plasma
 {
@@ -36,7 +36,7 @@ namespace Plasma
 /**
  * Class that emulates a QLineEdit inside plasma
  */
-class PLASMA_EXPORT LineEdit : public QGraphicsTextItem, public LayoutItem
+class PLASMA_EXPORT LineEdit : public QGraphicsTextItem, public QGraphicsLayoutItem
 {
     Q_OBJECT
     Q_PROPERTY( bool styled READ styled WRITE setStyled )
@@ -50,8 +50,6 @@ class PLASMA_EXPORT LineEdit : public QGraphicsTextItem, public LayoutItem
         ~LineEdit();
 
         void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
-
-        Qt::Orientations expandingDirections() const;
 
         QSizeF minimumSize() const;
         QSizeF maximumSize() const;
@@ -71,7 +69,7 @@ class PLASMA_EXPORT LineEdit : public QGraphicsTextItem, public LayoutItem
         QRectF geometry() const;
         void setGeometry(const QRectF& geometry);
         void updateGeometry();
-        QSizeF sizeHint() const;
+        QSizeF sizeHint(Qt::SizeHint which, const QSizeF &constraint = QSizeF()) const;
 
         void setDefaultText(const QString &text);
         const QString toHtml();

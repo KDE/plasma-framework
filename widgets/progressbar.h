@@ -119,7 +119,7 @@ public:
 
     void paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
 
-    QSizeF sizeHint() const;
+    QSizeF sizeHint(Qt::SizeHint which, const QSizeF &constraint = QSizeF()) const;
 
 public Q_SLOTS:
     void reset();

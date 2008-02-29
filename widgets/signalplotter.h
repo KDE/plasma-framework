@@ -62,8 +62,6 @@ public:
     SignalPlotter(Widget *parent = 0);
     ~SignalPlotter();
 
-    Qt::Orientations expandingDirections() const;
-
     /**
      * Add a new line to the graph plotter, with the specified color.
      * Note that the order you add the plots must be the same order that

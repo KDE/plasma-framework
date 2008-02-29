@@ -8,7 +8,7 @@
 #include <KAboutData>
 #include <KIcon>
 
-#include "plasma/layouts/boxlayout.h"
+#include "plasma/layouts/flowlayout.h"
 #include "plasma/widgets/pushbutton.h"
 #include "plasma/widgets/lineedit.h"
 #include "plasma/widgets/widget.h"
@@ -26,11 +26,11 @@ int main(int argc, char **argv)
     QGraphicsScene scene;
     view.setScene(&scene);
 
-    Plasma::VBoxLayout *widgetLayout = new Plasma::VBoxLayout(0);
+    Plasma::FlowLayout *widgetLayout = new Plasma::FlowLayout(0);
     widgetLayout->setGeometry( QRectF(0.0, 0.0, 400.0, 700.0) );
 
-    Plasma::HBoxLayout *h1 = new Plasma::HBoxLayout( 0 );
-    Plasma::HBoxLayout *h2 = new Plasma::HBoxLayout( 0 );
+    Plasma::FlowLayout *h1 = new Plasma::FlowLayout( 0 );
+    Plasma::FlowLayout *h2 = new Plasma::FlowLayout( 0 );
     widgetLayout->addItem( h1 );
     widgetLayout->addItem( h2 );
 

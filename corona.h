@@ -89,6 +89,11 @@ public:
      */
     KSharedConfig::Ptr config() const;
 
+    /** 
+     * Updates all of the corona's containments with reguards to their tool box position.. 
+     */
+    void updateToolboxPositions();
+
 public Q_SLOTS:
     /**
      * Load applet layout from a config file

@@ -23,6 +23,7 @@
 
 #include <QApplication>
 #include <QDesktopWidget>
+#include <QGraphicsLayout>
 #include <QGraphicsSceneDragDropEvent>
 #include <QMimeData>
 #include <QTimer>
@@ -36,7 +37,6 @@
 #include "containment.h"
 #include "dataengine.h"
 #include "phase.h"
-#include "layouts/layout.h"
 #include "widgets/icon.h"
 
 using namespace Plasma;
@@ -217,7 +217,7 @@ void Corona::loadApplets(const QString& configName)
         }
 
         int cid = group.toUInt();
-        //kDebug() << "got a containment in the config, trying to make a" << containmentConfig.readEntry("plugin", QString()) << "from" << group;
+//         kDebug() << "got a containment in the config, trying to make a" << containmentConfig.readEntry("plugin", QString()) << "from" << group;
         Containment *c = addContainment(containmentConfig.readEntry("plugin", QString()), QVariantList(),
                                         cid, true);
         if (!c) {
@@ -228,14 +228,14 @@ void Corona::loadApplets(const QString& configName)
         c->init();
         c->loadConstraints(&containmentConfig);
         c->flushUpdatedConstraints();
-        //kDebug() << "Containment" << c->id() << "geometry is" << c->geometry().toRect() << "config'd with" << appletConfig.name();
+//         kDebug() << "Containment" << c->id() << "geometry is" << c->geometry().toRect() << "config'd with" << containmentConfig.name();
         KConfigGroup applets(&containmentConfig, "Applets");
 
         // Sort the applet configs in order of geometry to ensure that applets
         // are added from left to right or top to bottom for a panel containment
         QList<KConfigGroup> appletConfigs;
         foreach (const QString &appletGroup, applets.groupList()) {
-            //kDebug() << "reading from applet group" << appletGroup;
+//             kDebug() << "reading from applet group" << appletGroup;
             KConfigGroup appletConfig(&applets, appletGroup);
             appletConfigs.append(appletConfig);
         }
@@ -243,7 +243,7 @@ void Corona::loadApplets(const QString& configName)
 
         foreach (KConfigGroup appletConfig, appletConfigs) {
             int appId = appletConfig.name().toUInt();
-            //kDebug() << "the name is" << appletConfig.name();
+//             kDebug() << "the name is" << appletConfig.name();
             QString plugin = appletConfig.readEntry("plugin", QString());
 
             if (plugin.isEmpty()) {
@@ -251,10 +251,11 @@ void Corona::loadApplets(const QString& configName)
             }
 
             Applet *applet = c->addApplet(plugin, QVariantList(), appId, appletConfig.readEntry("geometry", QRectF()), true);
+            addItem(applet);
             applet->restore(&appletConfig);
          }
     }
-
+    updateToolboxPositions();
     if (d->containments.count() < 1) {
         loadDefaultSetup();
     } else {
@@ -380,6 +381,15 @@ KSharedConfigPtr Corona::config() const
     }
 
     return d->config;
+}
+
+void Corona::updateToolboxPositions()
+{
+    foreach (Containment *c, d->containments) {
+        if (c->containmentType() == Containment::DesktopContainment) {
+            c->repositionToolbox();
+        }
+    }
 }
 
 Containment* Corona::addContainment(const QString& name, const QVariantList& args, uint id, bool delayedInit)

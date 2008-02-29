@@ -130,16 +130,13 @@ SignalPlotter::SignalPlotter(Widget *parent)
 
     d->svgBackground = 0;
     d->backgroundColor = QColor(0,0,0);
+
+    setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding,QSizePolicy::DefaultType);
 }
 
 SignalPlotter::~SignalPlotter()
 {
     delete d;
-}
-
-Qt::Orientations SignalPlotter::expandingDirections() const
-{
-    return Qt::Horizontal | Qt::Vertical;
 }
 
 QString SignalPlotter::unit() const

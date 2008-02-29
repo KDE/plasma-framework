@@ -211,6 +211,7 @@ public Q_SLOTS:
 
 protected:
     void paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
+    QSizeF sizeHint(Qt::SizeHint which, const QSizeF &constraint = QSizeF()) const;
 
 Q_SIGNALS:
     /**

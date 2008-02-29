@@ -25,13 +25,13 @@
 #include <plasma/plasma_export.h>
 
 class QGraphicsItem;
+class QGraphicsLayout;
+class QGraphicsLayoutItem;
 
 namespace Plasma
 {
 
 class Widget;
-class Layout;
-class LayoutItem;
 
 /**
  * Dynamically create plasma Widgets and Layouts.
@@ -50,7 +50,7 @@ public:
     Widget *createWidget(const QString &className, Widget *parent = 0);
 
     QStringList availableLayouts() const;
-    Layout *createLayout(const QString &className, LayoutItem *parent);
+    QGraphicsLayout *createLayout(const QString &className, QGraphicsLayoutItem *parent);
 
 private:
     class Private;

@@ -73,7 +73,7 @@ public:
      * @param parent the QGraphicsItem this meter is parented to.
      * @param parent the QObject this meter is parented to.
      */
-    explicit Meter(QGraphicsItem *parent = 0, QObject *parentObject = 0);
+    explicit Meter(QGraphicsItem *parent = 0);
 
     /**
      * Destructor
@@ -134,7 +134,7 @@ public:
     /**
      * Reimplemented from Plasma::Widget
      */
-    virtual QSizeF sizeHint() const;
+    virtual QSizeF sizeHint(Qt::SizeHint which, const QSizeF &constraint = QSizeF()) const;
 
     /**
      * Set text label for the meter

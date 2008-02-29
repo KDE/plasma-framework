@@ -22,60 +22,51 @@
 
 #include <KDebug>
 
-#include <plasma/layouts/layout.h>
-
 namespace Plasma
 {
 
 class FreeLayout::Private
 {
 public:
-    QList<LayoutItem*> children;
+    QList<QGraphicsLayoutItem*> children;
 };
 
-FreeLayout::FreeLayout(LayoutItem *parent)
-    : Layout(parent),
+FreeLayout::FreeLayout(QGraphicsLayoutItem *parent)
+    : QGraphicsLayout(parent),
       d(new Private)
 {
+    setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding,QSizePolicy::DefaultType);
 }
 
 FreeLayout::~FreeLayout()
 {
-    releaseManagedItems();
     delete d;
 }
 
-Qt::Orientations FreeLayout::expandingDirections() const
-{
-    return Qt::Horizontal | Qt::Vertical;
-}
-
-void FreeLayout::addItem(LayoutItem *item)
+void FreeLayout::addItem(QGraphicsLayoutItem *item)
 {
     if (d->children.contains(item)) {
         return;
     }
 
     d->children << item;
-    item->setManagingLayout(this);
 }
 
-void FreeLayout::removeItem(LayoutItem *item)
+void FreeLayout::removeItem(QGraphicsLayoutItem *item)
 {
     if (!item) {
         return;
     }
 
     d->children.removeAll(item);
-    item->unsetManagingLayout(this);
 }
 
-int FreeLayout::indexOf(LayoutItem *item) const
+int FreeLayout::indexOf(QGraphicsLayoutItem *item) const
 {
     return d->children.indexOf(item);
 }
 
-LayoutItem * FreeLayout::itemAt(int i) const
+QGraphicsLayoutItem * FreeLayout::itemAt(int i) const
 {
     return d->children[i];
 }
@@ -85,42 +76,64 @@ int FreeLayout::count() const
     return d->children.count();
 }
 
-LayoutItem * FreeLayout::takeAt(int i)
+QGraphicsLayoutItem * FreeLayout::takeAt(int i)
 {
     return d->children.takeAt(i);
 }
 
+void FreeLayout::removeAt(int i)
+{
+    d->children.removeAt(i);
+}
+
 void FreeLayout::relayout()
 {
-    foreach (LayoutItem *child , d->children) {
-        if (child->geometry().size() != child->sizeHint()) {
-            const QSizeF newSize = child->sizeHint().expandedTo(minimumSize()).boundedTo(maximumSize());
+    foreach (QGraphicsLayoutItem *child , d->children) {
+        if (child->geometry().size() != child->effectiveSizeHint(Qt::PreferredSize)) {
+            const QSizeF newSize = child->effectiveSizeHint(Qt::PreferredSize).expandedTo(minimumSize()).boundedTo(maximumSize());
             child->setGeometry(QRectF(child->geometry().topLeft(), newSize));
         }
     }
 }
 
-void FreeLayout::releaseManagedItems()
-{
-    foreach (LayoutItem *item, d->children) {
-        item->unsetManagingLayout(this);
-    }
-}
-
 QRectF FreeLayout::geometry() const
 {
-    if (parent()) {
-        return parent()->geometry();
+    if (parentLayoutItem()) {
+        return parentLayoutItem()->geometry();
     }
 
     return QRectF(QPointF(0, 0), maximumSize());
 }
 
-QSizeF FreeLayout::sizeHint() const
+void FreeLayout::setGeometry(const QRectF &geom)
 {
-    if (parent()) {
+    if (!geom.isValid() || geom == geometry()) {
+        return;
+    }
+
+//     QRectF newGeom = geom;
+// 
+//     if (d->parent && !dynamic_cast<QGraphicsLayout*>(d->parent)) {
+//         newGeom = d->parent->adjustToMargins(newGeom);
+//         //kDebug() << "parent rect is" << d->parent->topLeft() << d->parent->size()
+//         //         << "and we are" << geometry() << "but aiming for"
+//         //         << newGeom << "from" << geom;
+//     }
+// 
+//     d->pos = newGeom.topLeft();
+    setPreferredSize(geom.size());
+    // TODO: respect minimum and maximum sizes: is it possible?
+    //setSize(newGeom.size().expandedTo(minimumSize()).boundedTo(maximumSize()));
+
+    //kDebug() << "geometry is now" << geometry();
+    invalidate();
+}
+
+QSizeF FreeLayout::sizeHint(Qt::SizeHint which, const QSizeF &constraint) const
+{
+    if (parentLayoutItem()) {
         //kDebug() << "returning size hint from freelayout of" <<  parent()->geometry().size();
-        return parent()->geometry().size();
+        return parentLayoutItem()->geometry().size();
     }
 
     //kDebug() << "returning size hint from freelayout of" << maximumSize();

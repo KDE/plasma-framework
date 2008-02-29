@@ -26,6 +26,7 @@
 #include <QApplication>
 #include <QEvent>
 #include <QFile>
+#include <QGraphicsLinearLayout>
 #include <QList>
 #include <QPainter>
 #include <QSize>
@@ -61,7 +62,6 @@
 #include "plasma/theme.h"
 #include "plasma/view.h"
 
-#include "plasma/layouts/boxlayout.h"
 #include "plasma/widgets/widget.h"
 #include "plasma/widgets/lineedit.h"
 #include "plasma/widgets/pushbutton.h"
@@ -331,7 +331,7 @@ Applet::Applet(QGraphicsItem *parent,
 }
 
 Applet::Applet(QObject* parentObject, const QVariantList& args)
-    :  Widget(0,parentObject),
+    :  Widget(dynamic_cast<QGraphicsItem*>(parentObject)),
        d(new Private(KService::serviceByStorageId(args.count() > 0 ? args[0].toString() : QString()),
                      args.count() > 1 ? args[1].toInt() : 0))
 {
@@ -619,13 +619,13 @@ void Applet::setDrawStandardBackground(bool drawBackground)
 
             int left, top, right, bottom;
             d->getBorderSize(left, top, right, bottom);
-            setMargins(0, 0, right, bottom);
+            setContentsMargins(0, 0, right, bottom);
             updateGeometry();
         }
     } else if (d->background) {
         delete d->background;
         d->background = 0;
-        setMargins(0, 0, 0, 0);
+        setContentsMargins(0, 0, 0, 0);
         updateGeometry();
     }
 }
@@ -653,7 +653,7 @@ void Applet::setFailedToLaunch(bool failed, const QString& reason)
     if (d->failed == failed) {
         if (d->failureText) {
             d->failureText->setHtml(visibleFailureText(reason));
-            setGeometry(QRectF(geometry().topLeft(), d->failureText->sizeHint()));
+            setGeometry(QRectF(geometry().topLeft(), d->failureText->sizeHint(Qt::PreferredSize)));
         }
         return;
     }
@@ -667,8 +667,8 @@ void Applet::setFailedToLaunch(bool failed, const QString& reason)
 
     if (failed) {
         setDrawStandardBackground(true);
-        Layout* failureLayout = new BoxLayout(BoxLayout::TopToBottom, this);
-        failureLayout->setMargins(0, 0, 0, 0);
+        QGraphicsLinearLayout* failureLayout = new QGraphicsLinearLayout(Qt::Vertical, this);
+        failureLayout->setContentsMargins(0, 0, 0, 0);
         d->failureText = new LineEdit(this);
         d->failureText->setTextInteractionFlags( Qt::TextSelectableByMouse );
         d->failureText->setStyled(false);
@@ -680,7 +680,7 @@ void Applet::setFailedToLaunch(bool failed, const QString& reason)
                                                            Theme::self()->colors())
                                                         .brush(QPalette::Normal).color());
         failureLayout->addItem(d->failureText);
-        setGeometry(QRectF(geometry().topLeft(), d->failureText->sizeHint()));
+        setGeometry(QRectF(geometry().topLeft(), d->failureText->sizeHint(Qt::PreferredSize)));
     }
 
     update();
@@ -704,7 +704,7 @@ void Applet::setNeedsConfiguring(bool needsConfig)
 
     if (needsConfig) {
         setDrawStandardBackground(true);
-        Layout* layout = new BoxLayout(BoxLayout::TopToBottom,this);
+        QGraphicsLinearLayout* layout = new QGraphicsLinearLayout(Qt::Vertical,this);
         PushButton* button = new PushButton(this);
         button->setText(i18n("Configure..."));
         connect(button, SIGNAL(clicked()), this, SLOT(performSetupConfig()));
@@ -821,7 +821,7 @@ QPainterPath Applet::shape() const
     return Plasma::roundedRectangle(boundingRect().adjusted(-2, -2, 2, 2), 10);
 }
 
-QSizeF Applet::sizeHint() const
+QSizeF Applet::sizeHint(Qt::SizeHint which, const QSizeF &constraint) const
 {
     int left = 0;
     int right = 0;
@@ -834,15 +834,6 @@ QSizeF Applet::sizeHint() const
     //kDebug() << "Applet content size hint: " << contentSizeHint() << "plus our borders" << left << right << top << bottom;
 
     return contentSizeHint() + QSizeF(left + right, top + bottom);
-}
-
-Qt::Orientations Applet::expandingDirections() const
-{
-    if (d->square) {
-        return 0;
-    }
-
-    return Widget::expandingDirections();
 }
 
 QList<QAction*> Applet::contextActions()
@@ -952,7 +943,7 @@ Containment* Applet::containment() const
     }
 */
 
-    QGraphicsItem *parent = parentItem();
+    QGraphicsLayoutItem *parent = parentLayoutItem();
     Containment *c = 0;
 
     while (parent) {
@@ -961,7 +952,7 @@ Containment* Applet::containment() const
             c = possibleC;
             break;
         }
-        parent = parent->parentItem();
+        parent = parent->parentLayoutItem();
     }
 
     return c;
@@ -1019,37 +1010,37 @@ QSizeF Applet::contentSizeHint() const
     checkingScript = false;
     QSizeF size;
     if (layout()) {
-        size = layout()->sizeHint();
+        size = layout()->effectiveSizeHint(Qt::PreferredSize);
     } else {
         size = contentSize();
     }
 
-    QSizeF max = maximumContentSize();
-    size = size.boundedTo(max);
-    if (d->square) {
-        //kDebug() << "SizeHintIn: " << (QObject*)this << size;
-        switch (formFactor()) {
-            case Plasma::Vertical:
-                if (size.width() > max.height()) {
-                    size.setWidth(max.height());
-                }
-
-                size.setHeight(size.width());
-            case Plasma::Horizontal:
-            case Plasma::Planar:
-            case Plasma::MediaCenter:
-                if (size.height() > max.width()) {
-                    size.setHeight(max.width());
-                }
-
-                size.setWidth(size.height());
-            default:
-                break;
-        }
+//     QSizeF max = maximumContentSize();
+//     size = size.boundedTo(max);
+//     if (d->square) {
+//         //kDebug() << "SizeHintIn: " << (QObject*)this << size;
+//         switch (formFactor()) {
+//             case Plasma::Vertical:
+//                 if (size.width() > max.height()) {
+//                     size.setWidth(max.height());
+//                 }
+// 
+//                 size.setHeight(size.width());
+//             case Plasma::Horizontal:
+//             case Plasma::Planar:
+//             case Plasma::MediaCenter:
+//                 if (size.height() > max.width()) {
+//                     size.setHeight(max.width());
+//                 }
+// 
+//                 size.setWidth(size.height());
+//             default:
+//                 break;
+//         }
 
         //kDebug() << "SizeHintOut: " << size;
-        return size;
-    }
+//         return size;
+//     }
 
     return size;
 }

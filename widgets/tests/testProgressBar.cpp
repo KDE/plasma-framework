@@ -1,4 +1,5 @@
 #include <QApplication>
+#include <QGraphicsLinearLayout>
 #include <QGraphicsScene>
 #include <QGraphicsView>
 #include <QTimer>
@@ -9,8 +10,6 @@
 #include <KAboutData>
 #include <KIcon>
 
-
-#include "plasma/layouts/boxlayout.h"
 #include "plasma/widgets/progressbar.h"
 
 class Counter : QObject
@@ -78,10 +77,10 @@ int main(int argc, char **argv)
     QGraphicsScene scene;
     view.setScene(&scene);
 
-    Plasma::VBoxLayout *widgetLayout = new Plasma::VBoxLayout(0);
+    QGraphicsLinearLayout *widgetLayout = new QGraphicsLinearLayout(Qt::Vertical,0);
     widgetLayout->setGeometry(QRectF(0.0, 0.0, 350.0, 30.0));
 
-    Plasma::HBoxLayout *h1 = new Plasma::HBoxLayout(0);
+    QGraphicsLinearLayout *h1 = new QGraphicsLinearLayout(Qt::Horizontal,0);
     widgetLayout->addItem(h1);
 
     Plasma::ProgressBar *progressBar = new Plasma::ProgressBar(0);

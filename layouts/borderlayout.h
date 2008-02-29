@@ -22,9 +22,10 @@
 
 #include <QtCore/QMap>
 
+#include <QtGui/QGraphicsLayout>
+
 #include <plasma/plasma_export.h>
 #include <plasma/plasma.h>
-#include <plasma/layouts/layout.h>
 
 namespace Plasma {
 
@@ -34,33 +35,29 @@ namespace Plasma {
  *
  * Similar to java.awt.BorderLayout from the Java's standard library
  */
-class PLASMA_EXPORT BorderLayout : public Layout {
+class PLASMA_EXPORT BorderLayout : public QGraphicsLayout {
 public:
 
-    explicit BorderLayout(LayoutItem * parent = 0);
+    explicit BorderLayout(QGraphicsLayoutItem * parent = 0);
     virtual ~BorderLayout();
-
-    virtual Qt::Orientations expandingDirections() const;
-
-    QSizeF sizeHint() const;
 
     /**
      * Adds item in the center. Equal to:
      * addItem(item, Plasma::CenterPositioned);
      */
-    void addItem(Plasma::LayoutItem * item);
+    void addItem(QGraphicsLayoutItem * item);
 
     /**
      * Adds item at the specified position
      */
-    void addItem(Plasma::LayoutItem * item, Position position);
+    void addItem(QGraphicsLayoutItem * item, Position position);
 
-    void removeItem(Plasma::LayoutItem * item);
+    void removeItem(QGraphicsLayoutItem * item);
 
     virtual int count() const;
-    virtual int indexOf(LayoutItem * item) const;
-    virtual LayoutItem * itemAt(int i) const;
-    virtual LayoutItem * takeAt(int i);
+    virtual int indexOf(QGraphicsLayoutItem * item) const;
+    virtual QGraphicsLayoutItem * itemAt(int i) const;
+    virtual QGraphicsLayoutItem * takeAt(int i);
 
     /**
      * Deactivates the automatic sizing of a border widget,
@@ -84,9 +81,12 @@ public:
      */
     qreal size(Position border);
 
+    qreal spacing() const;
+    void setSpacing(qreal s);
+
 protected:
     void relayout();
-    void releaseManagedItems();
+    QSizeF sizeHint(Qt::SizeHint which, const QSizeF &constraint = QSizeF()) const;
 
 private:
     class Private;

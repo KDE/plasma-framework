@@ -593,12 +593,7 @@ class PLASMA_EXPORT Applet : public Widget
         /**
          * Reimplemented from LayoutItem
          */
-        QSizeF sizeHint() const;
-
-        /**
-         * Reimplemented from Plasma::Widget
-         */
-        Qt::Orientations expandingDirections() const;
+        QSizeF sizeHint(Qt::SizeHint which, const QSizeF &constraint = QSizeF()) const;
 
         /**
          * Reimplemented from QGraphicsItem
