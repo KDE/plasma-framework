@@ -176,14 +176,16 @@ void Containment::saveConstraints(KConfigGroup* group) const
 void Containment::containmentConstraintsUpdated(Plasma::Constraints constraints)
 {
     //kDebug() << "got containmentConstraintsUpdated" << constraints << (QObject*)d->toolbox;
-    if (d->toolbox) {
-        if (constraints & Plasma::ScreenConstraint) {
-            d->toolbox->setPos(geometry().width() - d->toolbox->boundingRect().width(), 0);
+    if (constraints & Plasma::ImmutableConstraint) {
+        // tell the applets too
+        foreach (Applet *a, d->applets) {
+            a->constraintsUpdated(ImmutableConstraint);
         }
+    }
 
-        if (constraints & Plasma::ImmutableConstraint) {
-            d->toolbox->enableTool("addwidgets", !isImmutable());
-        }
+    if (constraints & Plasma::ScreenConstraint && d->toolbox) {
+        d->toolbox->setPos(geometry().width() - d->toolbox->boundingRect().width(), 0);
+        d->toolbox->enableTool("addwidgets", !isImmutable());
     }
 }
 
