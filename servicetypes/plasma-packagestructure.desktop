@@ -8,3 +8,6 @@ Comment[zh_TW]=Plasma 套件結構定義
 [PropertyDef::X-Plasma-PackageFileFilter]
 Type=QString
 
+[PropertyDef::X-Plasma-PackageFileMimetypes]
+Type=QStringList
+
