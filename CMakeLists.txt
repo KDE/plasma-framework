@@ -21,11 +21,12 @@ set(plasma_LIB_SRCS
     animator.cpp
     applet.cpp
     appletbrowser.cpp
+    appletbrowser/customdragtreeview.cpp
     appletbrowser/kcategorizeditemsview.cpp
     appletbrowser/kcategorizeditemsviewdelegate.cpp
     appletbrowser/kcategorizeditemsviewmodels.cpp
+    appletbrowser/openwidgetassistant.cpp
     appletbrowser/plasmaappletitemmodel.cpp
-    appletbrowser/customdragtreeview.cpp
     applethandle.cpp
     configxml.cpp
     containment.cpp
@@ -89,7 +90,7 @@ endif(QT_QTOPENGL_FOUND AND OPENGL_FOUND)
 
 kde4_add_library(plasma SHARED ${plasma_LIB_SRCS})
 
-target_link_libraries(plasma ${KDE4_KIO_LIBS} ${QT_QTUITOOLS_LIBRARY})
+target_link_libraries(plasma ${KDE4_KIO_LIBS} ${KDE4_KFILE_LIBS} ${QT_QTUITOOLS_LIBRARY})
 
 if(QT_QTOPENGL_FOUND AND OPENGL_FOUND)
 target_link_libraries(plasma ${QT_QTOPENGL_LIBRARY} ${OPENGL_gl_LIBRARY})

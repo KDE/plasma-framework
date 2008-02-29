@@ -19,20 +19,24 @@
 
 #include "plasma/appletbrowser.h"
 
+#include <QVBoxLayout>
+#include <QLabel>
+
 #include <KAction>
 #include <KConfig>
 #include <KConfigGroup>
-#include <KFileDialog>
 #include <KMenu>
+#include <KPageWidgetItem>
 #include <KPushButton>
 #include <KServiceTypeTrader>
 #include <KStandardAction>
 
+#include "plasma/applet.h"
 #include "plasma/corona.h"
 #include "plasma/containment.h"
-#include "plasma/applet.h"
-#include "plasma/appletbrowser/plasmaappletitemmodel_p.h"
 #include "plasma/appletbrowser/kcategorizeditemsview_p.h"
+#include "plasma/appletbrowser/plasmaappletitemmodel_p.h"
+#include "plasma/appletbrowser/openwidgetassistant_p.h"
 
 namespace Plasma
 {
@@ -295,28 +299,10 @@ void AppletBrowserWidget::downloadWidgets()
 
 void AppletBrowserWidget::openWidgetFile()
 {
-    KService::List offers = KServiceTypeTrader::self()->query("Plasma/PackageStructure");
-    QStringList filters;
-    filters << i18nc("File dialog filter", "%1|PlasmaWidget", "*.plasma");
-    QStringList mimetypes;
-
-    foreach (const KService::Ptr &offer, offers) {
-        //filters << offer->property("X-Plasma-PackageMimeFilter").toStringList();
-        QString glob = offer->property("X-Plasma-PackageFileFilter").toString();
-
-        if (!glob.isEmpty()) {
-            glob = QString("%1|%2").arg(glob).arg(offer->name());
-            filters << glob;
-        }
-    }
-
-    kDebug() << "filters are" << filters;
-    KFileDialog fd(KUrl(), QString(), this);
-    fd.setOperationMode(KFileDialog::Opening);
-    fd.setMode(KFile::Files | KFile::ExistingOnly);
-    fd.setFilter(filters.join("\n"));// + mimetypes.join("\n"));
-    fd.exec();
-    kDebug() << "selected file" << fd.selectedUrl() << "of type" << fd.currentFilter();
+    // TODO: if we already have one of these showing and the user clicks to add it again, show the same window?
+    OpenWidgetAssistant *assistant = new OpenWidgetAssistant(topLevelWidget());
+    assistant->setAttribute(Qt::WA_DeleteOnClose, true);
+    assistant->show(); 
 }
 
 class AppletBrowser::Private
