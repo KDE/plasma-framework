@@ -73,7 +73,6 @@ void PackageMetadataTest::read()
     QCOMPARE(pm->version(), QString("pre0.1"));
     QCOMPARE(pm->website(), QString("http://plasma.kde.org/"));
     QCOMPARE(pm->license(), QString("GPL"));
-    QCOMPARE(pm->mainFile(), QString("Main file"));
     QCOMPARE(pm->application(), QString("A Test name"));
     QCOMPARE(pm->requiredVersion(), QString("1.2.3"));
     QCOMPARE(pm->type(), QString("System test"));
@@ -89,7 +88,6 @@ void PackageMetadataTest::write()
     pm->setVersion(QString("pre0.1"));
     pm->setWebsite(QString("http://plasma.kde.org/"));
     pm->setLicense(QString("GPL"));
-    pm->setMainFile(QString("Main file"));
     pm->setApplication(QString("A Test name"));
     pm->setRequiredVersion(QString("1.2.3"));
     
@@ -106,7 +104,6 @@ void PackageMetadataTest::write()
     QCOMPARE(pm->version(), QString("pre0.1"));
     QCOMPARE(pm->website(), QString("http://plasma.kde.org/"));
     QCOMPARE(pm->license(), QString("GPL"));
-    QCOMPARE(pm->mainFile(), QString("Main file"));
     QCOMPARE(pm->application(), QString("A Test name"));
     QCOMPARE(pm->requiredVersion(), QString("1.2.3"));
 }

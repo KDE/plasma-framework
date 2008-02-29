@@ -34,7 +34,7 @@ static const char version[] = "1.0";
 
 int main(int argc, char *argv[])
 {
-    KAboutData aboutData("plasamappletbrowser", 0, ki18n("Plasma Applet Browser"),
+    KAboutData aboutData("plasmappletbrowser", 0, ki18n("Plasma Applet Browser"),
                          version, ki18n( description ), KAboutData::License_GPL,
                          ki18n("(C) 2008, Aaron Seigo"));
     aboutData.addAuthor(ki18n("Aaron Seigo"), ki18n("Original author"), "aseigo@kde.org");

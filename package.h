@@ -136,7 +136,7 @@ class PLASMA_EXPORT Package
          * @arg the full path to the desktop file (must be KPluginInfo compatible)
          * @return true on success, false on failure
          */
-        static bool registerPackage(const QString &desktopFilePath);
+        static bool registerPackage(const PackageMetadata &data, const QString &iconPath);
 
         //TODO implement uninstall
         //static bool uninstallPackage(const QString& package, const QString& packageRoot);

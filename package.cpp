@@ -26,6 +26,7 @@
 #include <KArchiveDirectory>
 #include <KArchiveEntry>
 #include <KComponentData>
+#include <KDesktopFile>
 #include <KIO/FileCopyJob>
 #include <KIO/Job>
 #include <KPluginInfo>
@@ -89,7 +90,7 @@ bool Package::isValid() const
     }
 
     foreach (const char *dir, d->structure->requiredDirectories()) {
-        if (!QFile::exists(d->basePath + "contents/" + d->structure->path(dir))) {
+        if (!QFile::exists(d->basePath + d->structure->contentsPrefix() + d->structure->path(dir))) {
             kWarning(505) << "Could not find required directory" << dir;
             d->valid = false;
             return false;
@@ -97,9 +98,9 @@ bool Package::isValid() const
     }
 
     foreach (const char *file, d->structure->requiredFiles()) {
-        if (!QFile::exists(d->basePath + "contents/" + d->structure->path(file))) {
+        if (!QFile::exists(d->basePath + d->structure->contentsPrefix() + d->structure->path(file))) {
             kWarning(505) << "Could not find required file" << file << ", look in"
-                          << d->basePath + "contents/" + d->structure->path(file) << endl;
+                          << d->basePath + d->structure->contentsPrefix() + d->structure->path(file) << endl;
             d->valid = false;
             return false;
         }
@@ -111,16 +112,18 @@ bool Package::isValid() const
 QString Package::filePath(const char* fileType, const QString& filename) const
 {
     if (!d->valid) {
+        kDebug() << "package is not valid";
         return QString();
     }
 
     QString path = d->structure->path(fileType);
 
     if (path.isEmpty()) {
+        kDebug() << "no matching path came of it";
         return QString();
     }
 
-    path.prepend(d->basePath + "contents/");
+    path.prepend(d->basePath + d->structure->contentsPrefix());
 
     if (!filename.isEmpty()) {
         path.append("/").append(filename);
@@ -130,6 +133,7 @@ QString Package::filePath(const char* fileType, const QString& filename) const
         return path;
     }
 
+    kDebug() << path << "does not exist";
     return QString();
 }
 
@@ -149,7 +153,7 @@ QStringList Package::entryList(const char* fileType) const
         return QStringList();
     }
 
-    QDir dir(d->basePath + "contents/" + path);
+    QDir dir(d->basePath + d->structure->contentsPrefix() + path);
 
     if (!dir.exists()) {
         return QStringList();
@@ -268,27 +272,61 @@ bool Package::installPackage(const QString& package,
 
     // and now we register it as a service =)
     targetName.append("/metadata.desktop");
+    KConfigGroup cg = KDesktopFile(targetName).desktopGroup();
 
     // should not installing it as a service disqualify it?
     // i don't think so since KServiceTypeTrader may not be
     // used by the installing app in any case, and the
     // package is properly installed - aseigo
-    registerPackage(targetName);
+
+    //TODO: reduce code duplication with registerPackage below
+
+    QFile icon(packageRoot + cg.readEntry("Icon"));
+    if (icon.exists()) {
+        QString installedIcon("plasma_applet_" + meta.pluginName() + cg.readEntry("Icon"));
+        meta.write(targetName, installedIcon);
+        installedIcon = KStandardDirs::locateLocal("icon", installedIcon);
+        job = KIO::file_copy(icon.fileName(), installedIcon, -1, KIO::HideProgressInfo);
+        job->exec();
+    }
+
+    QString serviceName(KGlobal::mainComponent().componentName() + "_plasma_applet_" + meta.pluginName());
+    QString service = KStandardDirs::locateLocal("services", serviceName + ".desktop");
+    job = KIO::file_copy(targetName, service, -1, KIO::HideProgressInfo);
+    job->exec();
+
     return true;
 }
 
-bool Package::registerPackage(const QString &desktopFilePath)
+bool Package::registerPackage(const PackageMetadata &data, const QString &iconPath)
 {
-    QString service = KStandardDirs::locateLocal("services", KGlobal::mainComponent().componentName());
-    KPluginInfo pluginInfo(desktopFilePath);
+    QString serviceName("plasma-applet-" + data.pluginName());
+    QString service = KStandardDirs::locateLocal("services", serviceName + ".desktop");
 
-    if (pluginInfo.pluginName().isEmpty()) {
+    if (data.pluginName().isEmpty()) {
         return false;
     }
 
-    service.append(pluginInfo.pluginName()).append(".desktop");
-    KIO::FileCopyJob *job = KIO::file_copy(desktopFilePath, service, -1, KIO::HideProgressInfo);
-    return job->exec();
+    data.write(service);
+
+    KDesktopFile config(service);
+    KConfigGroup cg = config.desktopGroup();
+    cg.writeEntry("Type", "Service");
+    cg.writeEntry("X-KDE-ServiceTypes", "Plasma/Applet");
+    cg.writeEntry("X-KDE-PluginInfo-EnabledByDefault", true);
+
+    QFile icon(iconPath);
+    if (icon.exists()) {
+        //FIXME: the '/' search will break on non-UNIX. do we care?
+        QString installedIcon("plasma_applet_" + data.pluginName() +
+                              iconPath.right(iconPath.length() - iconPath.lastIndexOf("/")));
+        cg.writeEntry("Icon", installedIcon);
+        installedIcon = KStandardDirs::locateLocal("icon", installedIcon);
+        KIO::FileCopyJob *job = KIO::file_copy(iconPath, installedIcon, -1, KIO::HideProgressInfo);
+        job->exec();
+    }
+
+    return true;
 }
 
 bool Package::createPackage(const PackageMetadata &metadata,
@@ -314,7 +352,7 @@ bool Package::createPackage(const PackageMetadata &metadata,
     if (!creation.open(QIODevice::WriteOnly)) {
         return false;
     }
-    
+
     creation.addLocalFile(metadataFile.fileName(), "metadata.desktop");
     creation.addLocalDirectory(source, "contents");
     creation.close();

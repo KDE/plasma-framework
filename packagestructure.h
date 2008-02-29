@@ -224,7 +224,22 @@ public:
      **/
     virtual bool installPackage(const QString &archivePath, const QString &packageRoot);
 
+    /**
+     * @return the prefix inserted between the base path and content entries
+     */
+    QString contentsPrefix() const;
+
 protected:
+    /**
+     * Sets the prefix that all the contents in this package should
+     * appear under. This defaults to "contents/" and is added automatically
+     * between the base path and the entries as defined by the package
+     * structure
+     *
+     * @arg prefix the directory prefix to use
+     */
+    void setContentsPrefix(const QString &prefix);
+
     virtual void pathChanged();
 
 private:

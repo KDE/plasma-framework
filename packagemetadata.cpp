@@ -21,8 +21,8 @@
 
 #include <QDir>
 
-#include <KConfig>
 #include <KConfigGroup>
+#include <KDesktopFile>
 
 namespace Plasma
 {
@@ -37,11 +37,12 @@ class PackageMetadata::Private
         QString version;
         QString website;
         QString license;
-        QString mainFile;
         QString app;
         QString requiredVersion;
+        QString pluginName;
         QString type;
         QString serviceType;
+        QString language;
 };
 
 PackageMetadata::PackageMetadata()
@@ -72,25 +73,25 @@ bool PackageMetadata::isComplete() const
 
 void PackageMetadata::write(const QString &filename, const QString &icon) const
 {
-    KConfig cfg(filename);
-    KConfigGroup config(&cfg, "Desktop Entry");
+    KDesktopFile cfg(filename);
+    KConfigGroup config = cfg.desktopGroup();
     config.writeEntry("Encoding", "UTF-8");
 
     //TODO: this will be a problem for localized names?
     config.writeEntry("Name", d->name);
-    config.writeEntry("Description", d->description);
+    config.writeEntry("Comment", d->description);
     if (!icon.isNull()) {
         config.writeEntry("Icon", icon);
     }
     config.writeEntry("X-KDE-ServiceTypes", d->serviceType);
-    config.writeEntry("X-KDE-PluginInfo-Name", d->name);
+    config.writeEntry("X-KDE-PluginInfo-Name", d->pluginName);
     config.writeEntry("X-KDE-PluginInfo-Author", d->author);
     config.writeEntry("X-KDE-PluginInfo-Email", d->email);
     config.writeEntry("X-KDE-PluginInfo-Version", d->version);
     config.writeEntry("X-KDE-PluginInfo-Website", d->website);
     config.writeEntry("X-KDE-PluginInfo-License", d->license);
     config.writeEntry("X-KDE-PluginInfo-Category", d->type);
-    config.writeEntry("X-KDE-Plasmagik-MainFile", d->mainFile);
+    config.writeEntry("X-Plasma-Language", d->language);
     config.writeEntry("X-KDE-Plasmagik-ApplicationName", d->app);
     config.writeEntry("X-KDE-Plasmagik-RequiredVersion", d->requiredVersion);
 }
@@ -110,7 +111,6 @@ void PackageMetadata::read(const QString& filename)
     d->website = config.readEntry("X-KDE-PluginInfo-Website", d->website);
     d->license = config.readEntry("X-KDE-PluginInfo-License", d->license);
     d->type = config.readEntry("X-KDE-PluginInfo-Category", d->type);
-    d->mainFile = config.readEntry("X-KDE-Plasmagik-MainFile", d->mainFile);
     d->app = config.readEntry("X-KDE-Plasmagik-ApplicationName", d->app);
     d->requiredVersion = config.readEntry("X-KDE-Plasmagik-RequiredVersion", d->requiredVersion);
 }
@@ -155,11 +155,6 @@ QString PackageMetadata::license() const
     return d->license;
 }
 
-QString PackageMetadata::mainFile() const
-{
-    return d->mainFile;
-}
-
 QString PackageMetadata::application() const
 {
     return d->app;
@@ -173,6 +168,26 @@ QString PackageMetadata::requiredVersion() const
 QString PackageMetadata::type() const
 {
     return d->type;
+}
+
+QString PackageMetadata::implementationLanguage() const
+{
+    return d->language;
+}
+
+void PackageMetadata::setImplementationLanguage(const QString& language)
+{
+    d->language = language;
+}
+
+QString PackageMetadata::pluginName() const
+{
+    return d->pluginName;
+}
+
+void PackageMetadata::setPluginName(const QString &pluginName)
+{
+    d->pluginName = pluginName;
 }
 
 void PackageMetadata::setName(const QString &name)
@@ -213,11 +228,6 @@ void PackageMetadata::setWebsite(const QString &website)
 void PackageMetadata::setLicense(const QString &license)
 {
     d->license = license;
-}
-
-void PackageMetadata::setMainFile(const QString &mainFile)
-{
-    d->mainFile = mainFile;
 }
 
 void PackageMetadata::setApplication(const QString &application)

@@ -61,6 +61,7 @@ class PackageStructure::Private
 public:
     QString type;
     QString path;
+    QString contentsPrefix;
     QMap<QByteArray, ContentStructure> contents;
     QStringList mimetypes;
     static QHash<QString, PackageStructure::Ptr> structures;
@@ -73,6 +74,7 @@ PackageStructure::PackageStructure(QObject *parent, const QString &type)
       d(new Private)
 {
     d->type = type;
+    d->contentsPrefix = "contents/";
 }
 
 PackageStructure::~PackageStructure()
@@ -143,7 +145,7 @@ QList<const char*> PackageStructure::directories() const
     QMap<QByteArray, ContentStructure>::const_iterator it = d->contents.constBegin();
     while (it != d->contents.constEnd()) {
         if (it.value().directory) {
-            dirs << it.key().constData();
+            dirs << it.key();
         }
         ++it;
     }
@@ -212,11 +214,13 @@ void PackageStructure::addFileDefinition(const char* key, const QString& path, c
 
 QString PackageStructure::path(const char* key) const
 {
+    kDebug() << "looking for" << key;
     QMap<QByteArray, ContentStructure>::const_iterator it = d->contents.find(key);
     if (it == d->contents.constEnd()) {
         return QString();
     }
 
+    kDebug() << "found" << key << "and the value is" << it.value().path;
     return it.value().path;
 }
 
@@ -344,6 +348,16 @@ void PackageStructure::write(KConfigBase *config) const
 
         ++it;
     }
+}
+
+QString PackageStructure::contentsPrefix() const
+{
+    return d->contentsPrefix;
+}
+
+void PackageStructure::setContentsPrefix(const QString &prefix)
+{
+    d->contentsPrefix = prefix;
 }
 
 bool PackageStructure::installPackage(const QString &package, const QString &packageRoot)
