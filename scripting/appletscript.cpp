@@ -75,6 +75,20 @@ QSizeF AppletScript::size() const
     return QSizeF();
 }
 
+void AppletScript::constraintsUpdated(Plasma::Constraints constraints)
+{
+    Q_UNUSED(constraints);
+}
+
+QList<QAction*> AppletScript::contextActions()
+{
+    return QList<QAction*>();
+}
+
+void AppletScript::showConfigurationInterface()
+{
+}
+
 DataEngine* AppletScript::dataEngine(const QString &engine) const
 {
     Q_ASSERT(d->applet);

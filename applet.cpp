@@ -518,6 +518,9 @@ void Applet::constraintsUpdated(Plasma::Constraints constraints)
     //      INSTEAD put such code into flushUpdatedConstraints
     Q_UNUSED(constraints)
     //kDebug() << constraints << "constraints are FormFactor: " << formFactor() << ", Location: " << location();
+    if (d->script) {
+        d->script->constraintsUpdated(constraints);
+    }
 }
 
 QString Applet::name() const
@@ -848,7 +851,7 @@ Qt::Orientations Applet::expandingDirections() const
 QList<QAction*> Applet::contextActions()
 {
     //kDebug() << "empty context actions";
-    return QList<QAction*>();
+    return d->script ? d->script->contextActions() : QList<QAction*>();
 }
 
 QColor Applet::color() const
@@ -1273,6 +1276,9 @@ void Applet::showConfigurationInterface()
 
         dialog->addPage(w, i18n("Settings"), icon(), i18n("%1 Settings", name()));
         dialog->show();
+    }
+    else if(d->script) {
+        d->script->showConfigurationInterface();
     }
 }
 

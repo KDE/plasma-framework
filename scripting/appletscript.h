@@ -30,6 +30,7 @@
 #include <plasma/plasma_export.h>
 #include <plasma/scripting/scriptengine.h>
 
+class QAction;
 class QPainter;
 class QStyleOptionGraphicsItem;
 
@@ -66,7 +67,7 @@ public:
      *
      * @param painter the QPainter to use
      * @param option the style option containing such flags as selection, level of detail, etc
-     **/
+     */
     virtual void paintInterface(QPainter* painter,
                                 const QStyleOptionGraphicsItem* option,
                                 const QRect &contentsRect);
@@ -77,7 +78,38 @@ public:
      */
     virtual QSizeF contentSizeHint() const;
 
+    /**
+     * Returns the area within which contents can be painted.
+     **/
     Q_INVOKABLE QSizeF size() const;
+
+    /**
+     * Called when any of the geometry constraints have been updated.
+     *
+     * This is always called prior to painting and should be used as an
+     * opportunity to layout the widget, calculate sizings, etc.
+     *
+     * Do not call update() from this method; an update() will be triggered
+     * at the appropriate time for the applet.
+     *
+     * @param constraints the type of constraints that were updated
+     */
+    virtual void constraintsUpdated(Plasma::Constraints constraints);
+
+    /**
+     * Returns a list of context-related QAction instances.
+     *
+     * @return A list of actions. The default implementation returns an
+     *         empty list.
+     */
+    virtual QList<QAction*> contextActions();
+
+public Q_SLOTS:
+
+    /**
+     * Show a configuration dialog.
+     */
+    virtual void showConfigurationInterface();
 
 protected:
     /**
@@ -88,7 +120,7 @@ protected:
 
     /**
      * @return absolute path to the main script file for this plasmoid
-     **/
+     */
     QString mainScript() const;
 
     /**
