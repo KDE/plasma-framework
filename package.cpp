@@ -197,7 +197,7 @@ QStringList Package::knownPackages(const QString& packageRoot) // static
         QString metadata = packageRoot + '/' + sdir + "/metadata.desktop";
         if (QFile::exists(metadata)) {
             PackageMetadata m(metadata);
-            packages << m.name();
+            packages << m.pluginName();
         }
     }
 
@@ -247,10 +247,10 @@ bool Package::installPackage(const QString& package,
         return false;
     }
     PackageMetadata meta(metadataPath);
-    QString targetName = meta.name();
+    QString targetName = meta.pluginName();
 
     if (targetName.isEmpty()) {
-        kWarning(505) << "Package name not specified";
+        kWarning(505) << "Package plugin name not specified";
         return false;
     }
 

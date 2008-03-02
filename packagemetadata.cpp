@@ -77,7 +77,6 @@ void PackageMetadata::write(const QString &filename, const QString &icon) const
     KConfigGroup config = cfg.desktopGroup();
     config.writeEntry("Encoding", "UTF-8");
 
-    //TODO: this will be a problem for localized names?
     config.writeEntry("Name", d->name);
     config.writeEntry("Comment", d->description);
     if (!icon.isNull()) {
@@ -101,10 +100,10 @@ void PackageMetadata::read(const QString& filename)
     KConfig cfg(filename);
     KConfigGroup config(&cfg, "Desktop Entry");
 
-    //TODO: this will be a problem for localized names?
-    d->name = config.readEntry("X-KDE-PluginInfo-Name", d->name);
-    d->description = config.readEntry("Description", d->description);
+    d->name = config.readEntry("Name", d->name);
+    d->description = config.readEntry("Comment", d->description);
     d->serviceType = config.readEntry("X-KDE-ServiceTypes", d->serviceType);
+    d->pluginName = config.readEntry("X-KDE-PluginInfo-Name", d->pluginName);
     d->author = config.readEntry("X-KDE-PluginInfo-Author", d->author);
     d->email = config.readEntry("X-KDE-PluginInfo-Email", d->email);
     d->version = config.readEntry("X-KDE-PluginInfo-Version", d->version);
