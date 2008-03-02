@@ -651,6 +651,7 @@ void Containment::appletDestroyed(QObject* object)
     Applet* applet = static_cast<Plasma::Applet*>(object);
     d->applets.removeAll(applet);
     emit appletRemoved(applet);
+    emit configNeedsSaving();
 }
 
 void Containment::appletAnimationComplete(QGraphicsItem *item, Plasma::Phase::Animation anim)
