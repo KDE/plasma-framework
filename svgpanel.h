@@ -132,7 +132,7 @@ class PLASMA_EXPORT SvgPanel : public QObject
     Q_SIGNALS:
         void repaintNeeded();
 
-    private slots:
+    private Q_SLOTS:
         //update sizes of the svg elements
         void updateSizes();
 

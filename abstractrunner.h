@@ -217,7 +217,7 @@ class PLASMA_EXPORT AbstractRunner : public QObject
 
         QMutex* bigLock() const;
 
-    protected slots:
+    protected Q_SLOTS:
         void init();
 
     private:
