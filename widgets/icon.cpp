@@ -62,6 +62,7 @@ Icon::Private::Private()
       iconSize(48, 48),
       states(Private::NoState),
       orientation(Qt::Vertical),
+      numDisplayLines(2),
       invertLayout(false),
       drawBg(false)
 {
@@ -1140,7 +1141,7 @@ QSizeF Icon::sizeFromIconSize(const qreal iconWidth) const
                             Private::ItemMargin);
     }
 
-    QFontMetricsF fm(font());
+    QFontMetricsF fm = Plasma::Theme::self()->fontMetrics();
     //make room for at most 14 characters
     qreal width = qMax(fm.width(d->text.left(12)),
                        fm.width(d->infoText.left(12))) +
