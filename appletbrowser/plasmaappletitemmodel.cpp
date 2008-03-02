@@ -61,17 +61,7 @@ void PlasmaAppletItem::setFavorite(bool favorite)
     setData(QVariant(attrs));
 
     QString pluginName = attrs["pluginName"].toString();
-
-    if (pluginName == "skapplet" && attrs.contains("arguments")) {
-        // skapplet can be used with all SuperKaramba themes,
-        // so when setting skapplet as favorite it is also
-        // necessary to know which theme is meant
-        QString themePath = qvariant_cast<QVariantList>(attrs["arguments"])[0].toString();
-
-        m_model->setFavorite(pluginName + " - " + themePath, favorite);
-    } else {
-        m_model->setFavorite(pluginName, favorite);
-    }
+    m_model->setFavorite(pluginName, favorite);
 }
 
 void PlasmaAppletItem::setRunning(int count)
@@ -130,24 +120,17 @@ void PlasmaAppletItemModel::populateModel()
         }
         //kDebug() << info.pluginName() << " is the name of the plugin\n";
 
-        if (info.pluginName() == "skapplet") {
-            // If there is the SuperKaramba applet,
-            // add SuperKaramba themes to the
-            // model too
-            loadSuperKarambaThemes(info);
-        } else {
-            QMap<QString, QVariant> attrs;
-            attrs.insert("name", info.name());
-            attrs.insert("pluginName", info.pluginName());
-            attrs.insert("description", info.comment());
-            attrs.insert("category", info.category());
-            attrs.insert("icon", static_cast<QIcon>(KIcon(info.icon().isEmpty()?"application-x-plasma":info.icon())));
+        QMap<QString, QVariant> attrs;
+        attrs.insert("name", info.name());
+        attrs.insert("pluginName", info.pluginName());
+        attrs.insert("description", info.comment());
+        attrs.insert("category", info.category());
+        attrs.insert("icon", static_cast<QIcon>(KIcon(info.icon().isEmpty()?"application-x-plasma":info.icon())));
 
-            appendRow(new PlasmaAppletItem(this, attrs,
-                        ((m_favorites.contains(info.pluginName())) ? PlasmaAppletItem::Favorite : PlasmaAppletItem::NoFilter) |
-                        ((m_used.contains(info.pluginName())) ? PlasmaAppletItem::Used : PlasmaAppletItem::NoFilter)
-                        , &(extraPluginAttrs[info.pluginName()])));
-        }
+        appendRow(new PlasmaAppletItem(this, attrs,
+                    ((m_favorites.contains(info.pluginName())) ? PlasmaAppletItem::Favorite : PlasmaAppletItem::NoFilter) |
+                    ((m_used.contains(info.pluginName())) ? PlasmaAppletItem::Used : PlasmaAppletItem::NoFilter)
+                    , &(extraPluginAttrs[info.pluginName()])));
     }
 }
 
@@ -232,45 +215,4 @@ void PlasmaAppletItemModel::setApplication(const QString& app)
 QString& PlasmaAppletItemModel::Application()
 {
     return m_application;
-}
-
-/*
- * Define function type to get the SuperKaramba themes
- * from skapplet (see skapplet.cpp in kdeutils/superkaramba)
- */
-extern "C" {
-    typedef QList<QMap<QString, QVariant> > (*installedThemes)();
-}
-
-void PlasmaAppletItemModel::loadSuperKarambaThemes(const KPluginInfo &info)
-{
-    KService::Ptr service = info.service();
-    QString libName = service->library();
-
-    // Load the Plugin as library to get access
-    // to installedThemes() in skapplet
-    KLibrary lib(libName);
-    installedThemes loadThemes = 0;
-
-    loadThemes = (installedThemes)lib.resolveFunction("installedThemes");
-
-    if (loadThemes) {
-        // loadThemes() returns the name, description, the icon
-        // and one argument (file path) from the theme
-        QList<QMap<QString, QVariant> > themeMetadata = loadThemes();
-
-        QMap <QString, QVariant> metadata;
-        foreach (metadata, themeMetadata) {
-            metadata.insert("pluginName", "skapplet");
-            metadata.insert("category", "SuperKaramba");
-
-            QString favorite = info.pluginName() + " - " + qvariant_cast<QVariantList>(metadata["arguments"])[0].toString();
-
-            appendRow(new PlasmaAppletItem(this, metadata,
-                      ((m_favorites.contains(favorite)) ? PlasmaAppletItem::Favorite : PlasmaAppletItem::NoFilter) |
-                      ((m_used.contains(info.pluginName())) ? PlasmaAppletItem::Used : PlasmaAppletItem::NoFilter)));
-        }
-    } else {
-        kWarning() << "Could not load" << libName << "; KLibrary said:" << lib.errorString();
-    }
 }

@@ -81,7 +81,6 @@ private:
     QStringList m_used;
     KConfigGroup m_configGroup;
 
-    void loadSuperKarambaThemes(const KPluginInfo &info);
     void populateModel();
 };
 
