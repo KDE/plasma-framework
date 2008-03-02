@@ -591,6 +591,7 @@ void Containment::prepareApplet(Applet *applet, bool delayInit)
     applet->updateConstraints(Plasma::AllConstraints | Plasma::StartupCompletedConstraint);
     if (!delayInit) {
         applet->flushUpdatedConstraints();
+        emit configNeedsSaving();
     }
 }
 
