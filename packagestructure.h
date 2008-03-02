@@ -23,9 +23,9 @@
 #include <QtCore/QStringList>
 #include <QtCore/QSharedData>
 
-#include <KGenericFactory>
-#include <KLocale>
-#include <KSharedPtr>
+#include <KDE/KGenericFactory>
+#include <KDE/KLocale>
+#include <KDE/KSharedPtr>
 
 #include <plasma/plasma_export.h>
 

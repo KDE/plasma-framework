@@ -22,7 +22,7 @@
 #define PLASMA_SVGPANEL_H
 
 #include <QtCore/QObject>
-#include <QPixmap>
+#include <QtGui/QPixmap>
 
 #include <plasma/plasma_export.h>
 

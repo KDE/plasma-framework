@@ -24,9 +24,9 @@
 #include <QtGui/QGraphicsItem>
 #include <QtGui/QWidget>
 
-#include <KPluginInfo>
-#include <KSharedConfig>
-#include <KGenericFactory>
+#include <KDE/KPluginInfo>
+#include <KDE/KSharedConfig>
+#include <KDE/KGenericFactory>
 
 #include <plasma/configxml.h>
 #include <plasma/packagestructure.h>
