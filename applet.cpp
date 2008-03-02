@@ -909,7 +909,11 @@ void Applet::paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *opti
             View* v = qobject_cast<Plasma::View*>(widget->parent());
             if (!v || v->drawWallpaper()) {
                 Containment::StyleOption coption(*option);
-                coption.desktop = v->effectiveDesktop();
+
+                if (v) {
+                    coption.desktop = v->effectiveDesktop();
+                }
+
                 paintInterface(painter, &coption, QRect(QPoint(0,0), d->contentSize(this).toSize()));
             }
 
