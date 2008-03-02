@@ -907,7 +907,7 @@ void Applet::paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *opti
         if (widget && isContainment()) {
             // note that the widget we get is actually the viewport of the view, not the view itself
             View* v = qobject_cast<Plasma::View*>(widget->parent());
-            if (v && v->drawWallpaper()) { 
+            if (!v || v->drawWallpaper()) {
                 Containment::StyleOption coption(*option);
                 coption.desktop = v->effectiveDesktop();
                 paintInterface(painter, &coption, QRect(QPoint(0,0), d->contentSize(this).toSize()));
