@@ -80,6 +80,8 @@ public:
         return toolbox;
     }
 
+    void setLockToolText();
+
     Containment *q;
     FormFactor formFactor;
     Location location;
@@ -89,6 +91,22 @@ public:
     DesktopToolbox *toolbox;
     Containment::Type type;
 };
+
+void Containment::Private::setLockToolText()
+{
+    if (toolbox) {
+        Icon *icon = dynamic_cast<Plasma::Icon*>(toolbox->tool("lockWidgets"));
+        if (icon) {
+            // we know it's an icon becase we made it
+            icon->setText(q->isImmutable() ? i18n("Unlock Widgets") :
+                                             i18n("Lock Widgets"));
+            QSizeF iconSize = icon->sizeFromIconSize(22);
+            icon->setMinimumSize(iconSize);
+            icon->setMaximumSize(iconSize);
+            icon->resize(icon->sizeHint());
+        }
+    }
+}
 
 Containment::StyleOption::StyleOption()
     : QStyleOptionGraphicsItem(),
@@ -177,6 +195,8 @@ void Containment::containmentConstraintsUpdated(Plasma::Constraints constraints)
 {
     //kDebug() << "got containmentConstraintsUpdated" << constraints << (QObject*)d->toolbox;
     if (constraints & Plasma::ImmutableConstraint) {
+        d->setLockToolText();
+
         // tell the applets too
         foreach (Applet *a, d->applets) {
             a->constraintsUpdated(ImmutableConstraint);
@@ -209,10 +229,12 @@ void Containment::setContainmentType(Containment::Type type)
             Plasma::Widget *zoomOutTool = addToolBoxTool("zoomOut", "zoom-out", i18n("Zoom Out"));
             connect(zoomOutTool, SIGNAL(clicked()), this, SIGNAL(zoomOut()));
 
-            //FIXME how do we access the widget later to change it between lock and unlock?
-            //FIXME only show if user's allowed to toggle
-            //Plasma::Widget *lockTool = addToolBoxTool("lockWidgets", "object-locked", i18n("Lock Widgets"));
-            //connect(lockTool, SIGNAL(clicked()), this, SLOT(toggleDesktopImmutability()));
+            if (!isKioskImmutable()) {
+                Plasma::Widget *lockTool = addToolBoxTool("lockWidgets", "object-locked",
+                                                          isImmutable() ? i18n("Unlock Widgets") :
+                                                                          i18n("Lock Widgets"));
+                connect(lockTool, SIGNAL(clicked()), this, SLOT(toggleDesktopImmutability()));
+            }
         }
     } else {
         delete d->toolbox;
@@ -430,6 +452,8 @@ void Containment::toggleDesktopImmutability()
     } else {
         setImmutable(!isImmutable());
     }
+
+    d->setLockToolText();
 }
 
 void Containment::clearApplets()
