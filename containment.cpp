@@ -208,6 +208,11 @@ void Containment::setContainmentType(Containment::Type type)
 
             Plasma::Widget *zoomOutTool = addToolBoxTool("zoomOut", "zoom-out", i18n("Zoom Out"));
             connect(zoomOutTool, SIGNAL(clicked()), this, SIGNAL(zoomOut()));
+
+            //FIXME how do we access the widget later to change it between lock and unlock?
+            //FIXME only show if user's allowed to toggle
+            //Plasma::Widget *lockTool = addToolBoxTool("lockWidgets", "object-locked", i18n("Lock Widgets"));
+            //connect(lockTool, SIGNAL(clicked()), this, SLOT(toggleDesktopImmutability()));
         }
     } else {
         delete d->toolbox;
@@ -416,6 +421,15 @@ void Containment::setLocation(Location location)
 Location Containment::location() const
 {
     return d->location;
+}
+
+void Containment::toggleDesktopImmutability()
+{
+    if (corona()) {
+        corona()->setImmutable(!corona()->isImmutable());
+    } else {
+        setImmutable(!isImmutable());
+    }
 }
 
 void Containment::clearApplets()
@@ -705,7 +719,7 @@ void Containment::setScreen(int screen)
     if (screen < -1) {
         screen = -1;
     }
-
+//FIXME several blatant bugs here
     //kDebug() << "setting screen to " << screen << "and type is" << containmentType();
     if (screen < numScreens && screen > -1) {
         QRect r = desktop->screenGeometry(screen);

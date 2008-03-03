@@ -332,6 +332,13 @@ class PLASMA_EXPORT Containment : public Applet
         void setFormFactor(Plasma::FormFactor formFactor);
 
         /**
+         * Locks or unlocks plasma's applets.
+         * When plasma is locked, applets cannot be transformed, added or deleted
+         * but they can still be configured.
+         */
+        void toggleDesktopImmutability();
+
+        /**
          * Returns the Corona (if any) that this Containment is hosted by
          */
         Corona* corona() const;
