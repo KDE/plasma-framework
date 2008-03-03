@@ -589,12 +589,13 @@ bool Applet::isImmutable() const
 {
     return  d->immutable || d->kioskImmutable ||
             (containment() && containment()->isImmutable()) ||
-            (dynamic_cast<Corona*>( scene() ) && static_cast<Corona*>(scene())->isImmutable());
+            (dynamic_cast<Corona*>(scene()) && static_cast<Corona*>(scene())->isImmutable());
 }
 
 bool Applet::isKioskImmutable() const
 {
-    return d->kioskImmutable;
+    Corona *c = dynamic_cast<Corona*>(scene());
+    return d->kioskImmutable || (c && c->isKioskImmutable());
 }
 
 void Applet::setImmutable(bool immutable)
