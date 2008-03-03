@@ -606,7 +606,6 @@ void Applet::setImmutable(bool immutable)
     }
 
     d->immutable = immutable;
-    // TODO: should we tell the applets too?
     updateConstraints(ImmutableConstraint);
 }
 
@@ -1448,14 +1447,10 @@ QVariant Applet::itemChange(GraphicsItemChange change, const QVariant &value)
             d->shadow->adjustPosition();
         }
         break;
-    case ItemSceneChange: {
+    case ItemSceneHasChanged: {
         QGraphicsScene *newScene = qvariant_cast<QGraphicsScene*>(value);
         if (newScene) {
-            // checking immutability requires having a working config object
-            // Applet relies on having a Corona scene to be able to get the
-            // correct config. so we have to wait until we have the scene,
-            // otherwise we trigger premature creation of the config objects
-            QTimer::singleShot(0, this, SLOT(checkImmutability()));
+            checkImmutability();
         }
 
         if (d->shadow) {
