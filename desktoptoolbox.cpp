@@ -159,6 +159,18 @@ void DesktopToolbox::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
         QGraphicsItem::hoverEnterEvent(event);
         return;
     }
+
+    QPainterPath path;
+    int size = m_size + (int)m_animFrame - 5;
+    path.moveTo(m_size*2, 0);
+    path.arcTo(QRectF(m_size * 2 - size, -size, size*2, size*2), 180, 90);
+    path.lineTo(m_size*2, 0);
+
+    if (path.contains(event->pos())) {
+        QGraphicsItem::hoverEnterEvent(event);
+        return;
+    }
+
     showToolbox();
     QGraphicsItem::hoverEnterEvent(event);
 }
