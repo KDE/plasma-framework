@@ -441,38 +441,20 @@ void Icon::layoutIcons(const QStyleOptionGraphicsItem *option)
                         d->verticalMargin[Private::IconMargin].top -
                         d->verticalMargin[Private::IconMargin].bottom;
         }
-    //Horizontal layout
     } else {
-        qreal widthAvail;
+        //Horizontal layout
         QFontMetricsF fm(font());
 
-        //make room for at most 14 characters
-        qreal textWidth = qMax(fm.width(d->text.left(12)),
-                          fm.width(d->infoText.left(12))) +
-                          fm.width("xx") +
-                          d->horizontalMargin[Private::TextMargin].left +
-                          d->horizontalMargin[Private::TextMargin].right;
-
         //if there is text resize the icon in order to make room for the text
-        if (!d->text.isEmpty() || !d->infoText.isEmpty()) {
-            widthAvail = d->currentSize.width() -
-                         //FIXME: fontmetrics
-                         textWidth -
-                         d->horizontalMargin[Private::TextMargin].left -
-                         d->horizontalMargin[Private::TextMargin].right;
+        if (d->text.isEmpty() && d->infoText.isEmpty()) {
+            // with no text, we just take up the whole geometry
+            iconWidth = d->currentSize.width() -
+                        d->horizontalMargin[Private::IconMargin].left -
+                        d->horizontalMargin[Private::IconMargin].right;
         } else {
-            widthAvail = d->currentSize.width();
-        }
-
-        //aspect ratio very "wide"
-        if (d->currentSize.height() < widthAvail) {
             iconWidth = d->currentSize.height() -
                         d->verticalMargin[Private::IconMargin].top -
                         d->verticalMargin[Private::IconMargin].bottom;
-        } else {
-            iconWidth = widthAvail -
-                        d->horizontalMargin[Private::IconMargin].left -
-                        d->horizontalMargin[Private::IconMargin].right;
         }
     }
 
@@ -483,7 +465,6 @@ void Icon::layoutIcons(const QStyleOptionGraphicsItem *option)
         iconAction->setRect(d->actionRect((Private::ActionPosition)count));
         ++count;
     }
-
 }
 
 void Icon::setSvg(const QString &svgFilePath, const QString &elementId)
@@ -539,14 +520,12 @@ void Icon::Private::drawBackground(QPainter *painter, IconState state)
     QColor shadow = shadowColor;
     QColor border = textColor;
 
-    border.setAlphaF(.20);
-
     switch (state) {
         case Private::HoverState:
             shadow.setHsv(shadow.hue(),
                           shadow.saturation(),
-                          shadow.value() + (int)(darkShadow?50*m_hoverAlpha:-50*m_hoverAlpha),
-                          200+(int)m_hoverAlpha*55); // opacity
+                          shadow.value() + (int)(darkShadow ? 50 * m_hoverAlpha: -50 * m_hoverAlpha),
+                          200 + (int)m_hoverAlpha * 55); // opacity
             break;
         case Private::PressedState:
             shadow.setHsv(shadow.hue(),
@@ -557,11 +536,13 @@ void Icon::Private::drawBackground(QPainter *painter, IconState state)
         default:
             break;
     }
-    
+
+    border.setAlphaF(.2);
+    shadow.setAlphaF(.6);
+
     painter->save();
     painter->translate(0.5, 0.5);
     painter->setRenderHint(QPainter::Antialiasing);
-    shadow.setAlphaF(.6);
     painter->setBrush(shadow);
     painter->setPen(QPen(border, 1));
     painter->drawPath(roundedRectangle(QRectF(QPointF(1, 1), QSize((int)currentSize.width()-2, (int)currentSize.height()-2)), 5.0));
@@ -648,21 +629,18 @@ QRectF Icon::Private::labelRectangle(const QStyleOptionGraphicsItem *option, con
         return option->rect;
     }
 
-    const QSizeF decoSize = addMargin(iconSize, Private::IconMargin); 
-
+    const QSizeF decoSize = addMargin(iconSize, Private::IconMargin);
     const QRectF itemRect = subtractMargin(option->rect, Private::ItemMargin);
     QRectF textArea(QPointF(0, 0), itemRect.size());
 
-
     if (orientation == Qt::Vertical) {
         textArea.setTop(decoSize.height() + 1);
-    //Horizontal
-    }else{
+    } else {
+        //Horizontal
        textArea.setLeft(decoSize.width() + 1);
     }
 
     textArea.translate(itemRect.topLeft());
-
     return QRectF(QStyle::visualRect(iconDirection(option), option->rect, textArea.toRect()));
 }
 
@@ -764,8 +742,9 @@ void Icon::Private::layoutTextItems(const QStyleOptionGraphicsItem *option,
 
     QFontMetricsF fm(labelLayout->font());
     const QRectF textArea = labelRectangle(option, icon, text);
-    QRectF textRect       = subtractMargin(textArea, Private::TextMargin);
+    QRectF textRect = subtractMargin(textArea, Private::TextMargin);
 
+    //kDebug() << this << "text area" << textArea << "text rect" << textRect;
     // Sizes and constraints for the different text parts
     QSizeF maxLabelSize = textRect.size();
     QSizeF maxInfoSize  = textRect.size();
@@ -801,6 +780,7 @@ void Icon::Private::layoutTextItems(const QStyleOptionGraphicsItem *option,
     // Compute the positions where we should draw the layouts
     labelLayout->setPosition(QPointF(textRect.x(), textBoundingRect->y()));
     infoLayout->setPosition(QPointF(textRect.x(), textBoundingRect->y() + labelSize.height()));
+    //kDebug() << "final position is" << labelLayout->position();
 }
 
 QBrush Icon::Private::foregroundBrush(const QStyleOptionGraphicsItem *option) const
@@ -834,19 +814,25 @@ void Icon::Private::drawTextItems(QPainter *painter, const QStyleOptionGraphicsI
 {
     Q_UNUSED(option)
 
+    painter->save();
     painter->setPen(textColor);
+
+    // the translation prevents odd rounding errors in labelLayout.position()
+    // when applied to the canvas
+    painter->translate(0.5, 0.5);
+
     labelLayout.draw(painter, QPointF());
 
     if (!infoLayout.text().isEmpty()) {
         painter->setPen(textColor);
         infoLayout.draw(painter, QPointF());
     }
+    painter->restore();
 }
 
 
 void Icon::paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-    Q_UNUSED(option)
     Q_UNUSED(widget)
 
 #ifdef BACKINGSTORE_BLUR_HACK
@@ -881,12 +867,8 @@ void Icon::paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *option
         state = Private::HoverState;
     }
 
-    QPixmap icon          = d->decoration(option, state != Private::NoState);
+    QPixmap icon = d->decoration(option, state != Private::NoState);
     const QPointF iconPos = d->iconPosition(option, icon);
-
-    QTextLayout labelLayout, infoLayout;
-    QRectF textBoundingRect;
-    d->layoutTextItems(option, icon, &labelLayout, &infoLayout, &textBoundingRect);
 
     d->drawBackground(painter, state);
 
@@ -896,13 +878,16 @@ void Icon::paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *option
     }
 
     // Draw corner actions
-    foreach (IconAction *action, d->cornerActions) {
+    foreach (const IconAction *action, d->cornerActions) {
         if (action->animationId()) {
             action->paint(painter);
         }
     }
 
     // Draw text last because its overlayed
+    QTextLayout labelLayout, infoLayout;
+    QRectF textBoundingRect;
+    d->layoutTextItems(option, icon, &labelLayout, &infoLayout, &textBoundingRect);
     d->drawTextItems(painter, option, labelLayout, infoLayout);
 }
 
@@ -1120,6 +1105,7 @@ void Icon::setUnpressed()
 void Icon::setOrientation(Qt::Orientation orientation)
 {
     d->orientation = orientation;
+    resize(sizeFromIconSize(d->iconSize.width()));
 }
 
 void Icon::invertLayout(bool invert)
@@ -1134,26 +1120,34 @@ bool Icon::invertedLayout() const
 
 QSizeF Icon::sizeFromIconSize(const qreal iconWidth) const
 {
-    //no text, less calculations
     if (d->text.isEmpty() && d->infoText.isEmpty()) {
-        return d->addMargin(d->addMargin(QSizeF(iconWidth, iconWidth),
-                                         Private::IconMargin),
+        //no text, less calculations
+        return d->addMargin(d->addMargin(QSizeF(iconWidth, iconWidth), Private::IconMargin),
                             Private::ItemMargin);
     }
 
     QFontMetricsF fm = Plasma::Theme::self()->fontMetrics();
-    //make room for at most 14 characters
-    qreal width = qMax(fm.width(d->text.left(12)),
-                       fm.width(d->infoText.left(12))) +
-                  fm.width("xx") +
-                  d->horizontalMargin[Private::TextMargin].left +
-                  d->horizontalMargin[Private::TextMargin].right;
+    qreal width = 0;
 
     if (d->orientation == Qt::Vertical) {
+        // make room for at most 14 characters
+        width = qMax(fm.width(d->text.left(12)),
+                     fm.width(d->infoText.left(12))) +
+                     fm.width("xx") +
+                     d->horizontalMargin[Private::TextMargin].left +
+                     d->horizontalMargin[Private::TextMargin].right;
+
         width = qMax(width,
                      iconWidth +
                      d->horizontalMargin[Private::IconMargin].left +
                      d->horizontalMargin[Private::IconMargin].right);
+    } else {
+        width = iconWidth +
+                d->horizontalMargin[Private::IconMargin].left +
+                d->horizontalMargin[Private::IconMargin].right +
+                qMax(fm.width(d->text), fm.width(d->infoText)) + fm.width("xx") +
+                d->horizontalMargin[Private::TextMargin].left +
+                d->horizontalMargin[Private::TextMargin].right;
     }
 
     qreal height;
@@ -1170,17 +1164,14 @@ QSizeF Icon::sizeFromIconSize(const qreal iconWidth) const
                  d->verticalMargin[Private::TextMargin].bottom +
                  d->verticalMargin[Private::IconMargin].top +
                  d->verticalMargin[Private::IconMargin].bottom;
-    //Horizontal
-    }else{
+    } else {
+        //Horizontal
         height = qMax(iconWidth +
                       d->verticalMargin[Private::IconMargin].top +
                       d->verticalMargin[Private::IconMargin].bottom,
                       textHeight +
                       d->verticalMargin[Private::TextMargin].top +
-                      d->verticalMargin[Private::IconMargin].bottom);
-        width = width + iconWidth +
-                d->horizontalMargin[Private::IconMargin].left +
-                d->horizontalMargin[Private::IconMargin].right;
+                      d->verticalMargin[Private::TextMargin].bottom);
     }
 
     return d->addMargin(QSizeF(width, height), Private::ItemMargin);
