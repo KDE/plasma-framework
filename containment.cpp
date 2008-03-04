@@ -784,6 +784,11 @@ void Containment::setScreen(int screen)
 
     d->screen = screen;
     updateConstraints(Plasma::ScreenConstraint);
+
+    if (containmentType() == PanelContainment) {
+        // our geometry on the scene may not actually change, but for the purposes of views it has
+        emit geometryChanged();
+    }
 }
 
 int Containment::screen() const
