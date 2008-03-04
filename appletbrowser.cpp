@@ -92,7 +92,7 @@ void AppletBrowserWidget::Private::initFilters()
         QString icon    = configGroup.readEntry("recommended." + id + ".icon");
         QString plugins = configGroup.readEntry("recommended." + id + ".plugins");
 
-        appletList->addEmblem(i18n("Recommended by %1", caption), new KIcon(icon), 
+        appletList->addEmblem(i18n("Recommended by %1", caption), new KIcon(icon),
                               KCategorizedItemsViewModels::Filter("recommended." + id, true));
         filterModel.addFilter(i18n("Recommended by %1", caption),
                               KCategorizedItemsViewModels::Filter("recommended." + id, true), new KIcon(icon));
@@ -138,7 +138,7 @@ void AppletBrowserWidget::init()
     layout->addWidget( d->appletList );
 
     // Other Emblems
-    d->appletList->addEmblem(i18n("Widgets I Have Used Before"), new KIcon("view-history"), 
+    d->appletList->addEmblem(i18n("Widgets I Have Used Before"), new KIcon("view-history"),
                                 KCategorizedItemsViewModels::Filter("used", true));
 
     d->initFilters();
@@ -302,7 +302,7 @@ void AppletBrowserWidget::openWidgetFile()
     // TODO: if we already have one of these showing and the user clicks to add it again, show the same window?
     OpenWidgetAssistant *assistant = new OpenWidgetAssistant(topLevelWidget());
     assistant->setAttribute(Qt::WA_DeleteOnClose, true);
-    assistant->show(); 
+    assistant->show();
 }
 
 class AppletBrowser::Private
@@ -332,12 +332,12 @@ void AppletBrowser::Private::init(AppletBrowser *q, Plasma::Containment *contain
 
     KMenu *widgetsMenu = new KMenu(i18n("Get New Widgets"), q);
     QAction *action = new QAction(KIcon("applications-internet"),
-                                  i18n("Download from the Internet"), q);
+                                  i18n("Download From Internet"), q);
     connect(action, SIGNAL(triggered(bool)), widget, SLOT(downloadWidgets()));
     widgetsMenu->addAction(action);
 
     action = new QAction(KIcon("applications-internet"),
-                         i18n("Install from file"), q);
+                         i18n("Install From File..."), q);
     connect(action, SIGNAL(triggered(bool)), widget, SLOT(openWidgetFile()));
     widgetsMenu->addAction(action);
     q->button(KDialog::User1)->setMenu(widgetsMenu);
