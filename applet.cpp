@@ -1481,7 +1481,6 @@ QVariant Applet::itemChange(GraphicsItemChange change, const QVariant &value)
 
 void Applet::setGeometry(const QRectF& geometry)
 {
-    Plasma::Constraints updatedConstraints(0);
     QSizeF s = size();
     QPointF p = pos();
 
@@ -1493,15 +1492,9 @@ void Applet::setGeometry(const QRectF& geometry)
             d->background->resize(size());
         }
 
-        updatedConstraints |= Plasma::SizeConstraint;
-    }
-
-    if (p != pos()) {
-        updatedConstraints |= Plasma::LocationConstraint;
-    }
-
-    if (updatedConstraints) {
-        updateConstraints(updatedConstraints);
+        updateConstraints(Plasma::SizeConstraint);
+        emit geometryChanged();
+    } else if (p != pos()) {
         emit geometryChanged();
     }
 }
