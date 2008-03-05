@@ -361,6 +361,11 @@ class PLASMA_EXPORT Containment : public Applet
         void handleDisappeared(AppletHandle *handle);
         void destroyApplet();
 
+        /**
+         * Repositions the Plasma toolbox.  Useful to ensure its always in the correct place within the view.
+         */
+        void repositionToolbox();
+
     private:
         QRectF geometryForApplet(Applet *applet) const;
         bool regionIsEmpty(const QRectF &region, Applet *ignoredApplet=0) const;

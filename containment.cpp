@@ -36,6 +36,7 @@
 #include <KRun>
 #include <KServiceTypeTrader>
 #include <KStandardDirs>
+#include <KWindowSystem>
 
 #include "applethandle_p.h"
 #include "corona.h"
@@ -74,10 +75,23 @@ public:
     {
         if (!toolbox) {
             toolbox = new DesktopToolbox(q);
-            toolbox->setPos(q->geometry().width() - toolbox->boundingRect().width(), 0);
+            positionToolbox();
         }
 
         return toolbox;
+    }
+
+    void positionToolbox()
+    {
+        QRectF r;
+        if (screen < 0) {
+            r = q->geometry();
+        } else {
+            QDesktopWidget *desktop = QApplication::desktop();
+            r = desktop->availableGeometry(screen);
+        }
+
+        toolbox->setPos(QPointF(r.right() - toolbox->boundingRect().width(), r.y()));
     }
 
     void setLockToolText();
@@ -743,11 +757,20 @@ void Containment::setScreen(int screen)
 {
     // screen of -1 means no associated screen.
     // sanity check to make sure someone else doesn't have this screen already!
-    if (screen > -1 && containmentType() == DesktopContainment && corona()) {
-        Containment* currently = corona()->containmentForScreen(screen);
-        if (currently && currently != this) {
-            //kDebug() << "currently is on screen" << currently->screen() << "and is" << currently->name() << (QObject*)currently << (QObject*)this;
-            currently->setScreen(-1);
+    if (containmentType() == DesktopContainment) {
+        // we want to listen to changes in work area if our screen changes
+        if (d->screen < 0 && screen > -1) {
+            connect(KWindowSystem::self(), SIGNAL(workAreaChanged()), this, SLOT(repositionToolbox()));
+        } else if (screen < 0) {
+            disconnect(KWindowSystem::self(), SIGNAL(workAreaChanged()), this, SLOT(repositionToolbox()));
+        }
+
+        if (screen > -1 && corona()) {
+            Containment* currently = corona()->containmentForScreen(screen);
+            if (currently && currently != this) {
+                //kDebug() << "currently is on screen" << currently->screen() << "and is" << currently->name() << (QObject*)currently << (QObject*)this;
+                currently->setScreen(-1);
+            }
         }
     }
 
@@ -989,6 +1012,14 @@ void Containment::showToolbox()
 void Containment::hideToolbox()
 {
     d->createToolbox()->hideToolbox();
+}
+
+void Containment::repositionToolbox()
+{
+    //kDebug() << "reposition" << d->screen << (QObject*)d->toolbox;
+    if (d->toolbox) {
+        d->positionToolbox();
+    }
 }
 
 } // Plasma namespace
