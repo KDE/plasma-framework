@@ -160,7 +160,10 @@ bool View::drawWallpaper() const
 
 void View::updateSceneRect()
 {
+    //kDebug( )<< "!!!!!!!!!!!!!!!!! setting the scene rect to" << d->containment->sceneBoundingRect();
+    emit sceneRectAboutToChange();
     setSceneRect(d->containment->sceneBoundingRect());
+    emit sceneRectChanged();
 }
 
 } // namespace Plasma

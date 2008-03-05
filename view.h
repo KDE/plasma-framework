@@ -102,6 +102,27 @@ public:
      */
     Containment* containment() const;
 
+Q_SIGNALS:
+    /**
+     * This signal is emitted whenever the containment being viewed has
+     * changed its geometry, but before the View has shifted the viewd scene rect
+     * to the new geometry. This is useful for Views which want to keep
+     * their rect() in sync with the containment'sa
+     *
+     * @arg rect the new scene rect.
+     */
+    void sceneRectAboutToChange();
+
+    /**
+     * This signal is emitted whenever the containment being viewed has
+     * changed its geometry, and after the View has shifted the viewd scene rect
+     * to the new geometry. This is useful for Views which want to keep
+     * their rect() in sync with the containment's.
+     *
+     * @arg rect the new scene rect.
+     */
+    void sceneRectChanged();
+
 protected Q_SLOTS:
     void updateSceneRect();
 
