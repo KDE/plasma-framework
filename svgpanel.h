@@ -123,6 +123,12 @@ class PLASMA_EXPORT SvgPanel : public QObject
         QPointF pos() const;
 
         /**
+         * Returns a monochrome mask that tightly contains the fully opaque areas of the svg
+         * @return a monochrome bitmap of opaque areas
+         */
+        QBitmap mask() const;
+
+        /**
          * Paints the loaded SVG with the elements that represents the border
          * @arg painter the QPainter to use
          * @arg rect the exposed rect to draw into

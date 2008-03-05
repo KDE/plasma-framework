@@ -22,6 +22,7 @@
 
 #include <QPainter>
 #include <QSize>
+#include <QBitmap>
 
 #include <KDebug>
 
@@ -41,6 +42,8 @@ public:
     {
         delete cachedBackground;
     }
+
+    void generateBackground();
 
     BorderFlags bFlags;
     QPixmap *cachedBackground;
@@ -153,32 +156,41 @@ qreal SvgPanel::marginSize(const Plasma::MarginEdge edge) const
     }
 }
 
-void SvgPanel::paint(QPainter* painter, const QRectF& rect)
+QBitmap SvgPanel::mask() const
 {
-    bool origined = d->bFlags & ContentAtOrigin;
-    const int topWidth = d->background->elementSize("top").width();
-    const int leftHeight = d->background->elementSize("left").height();
-    const int topOffset = origined ? 0 - d->topHeight : 0;
-    const int leftOffset = origined ? 0 - d->leftWidth : 0;
-
     if (!d->cachedBackground) {
-        const int contentWidth = d->panelSize.width() - d->leftWidth  - d->rightWidth;
-        const int contentHeight = d->panelSize.height() - d->topHeight  - d->bottomHeight;
+        d->generateBackground();
+    }
+
+    return d->cachedBackground->alphaChannel().createMaskFromColor(Qt::black);
+}
+
+void SvgPanel::Private::generateBackground()
+{
+    bool origined = bFlags & ContentAtOrigin;
+    const int topWidth = background->elementSize("top").width();
+    const int leftHeight = background->elementSize("left").height();
+    const int topOffset = origined ? 0 - topHeight : 0;
+    const int leftOffset = origined ? 0 - leftWidth : 0;
+
+    if (!cachedBackground) {
+        const int contentWidth = panelSize.width() - leftWidth  - rightWidth;
+        const int contentHeight = panelSize.height() - topHeight  - bottomHeight;
         int contentTop = 0;
         int contentLeft = 0;
         int rightOffset = contentWidth;
         int bottomOffset = contentHeight;
 
-        delete d->cachedBackground;
-        d->cachedBackground = new QPixmap(d->leftWidth + contentWidth + d->rightWidth,
-                                          d->topHeight + contentHeight + d->bottomHeight);
-        d->cachedBackground->fill(Qt::transparent);
-        QPainter p(d->cachedBackground);
+        delete cachedBackground;
+        cachedBackground = new QPixmap(leftWidth + contentWidth + rightWidth,
+                                          topHeight + contentHeight + bottomHeight);
+        cachedBackground->fill(Qt::transparent);
+        QPainter p(cachedBackground);
         p.setCompositionMode(QPainter::CompositionMode_Source);
         p.setRenderHint(QPainter::SmoothPixmapTransform);
 
         if (origined) {
-            p.translate(d->leftWidth, d->topHeight);
+            p.translate(leftWidth, topHeight);
         }
 
         //FIXME: This is a hack to fix a drawing problems with svg files where a thin transparent border is drawn around the svg image.
@@ -188,124 +200,124 @@ void SvgPanel::paint(QPainter* painter, const QRectF& rect)
 
        //CENTER
        if (contentHeight > 0 && contentWidth > 0) {
-           QSizeF scaledSize = QSizeF(d->panelSize.width() -
-                            (d->leftWidth + d->rightWidth) +
-                            d->panelSize.width()*(((qreal)(d->leftWidth + d->rightWidth)) / d->panelSize.width()),
-                            d->panelSize.height() -
-                            (d->topHeight + d->bottomHeight) +
-                            d->panelSize.height()*(((qreal)(d->topHeight + d->bottomHeight)) / d->panelSize.height()));
+           QSizeF scaledSize = QSizeF(panelSize.width() -
+                            (leftWidth + rightWidth) +
+                            panelSize.width()*(((qreal)(leftWidth + rightWidth)) / panelSize.width()),
+                            panelSize.height() -
+                            (topHeight + bottomHeight) +
+                            panelSize.height()*(((qreal)(topHeight + bottomHeight)) / panelSize.height()));
 
-           d->background->resize(scaledSize.width(), scaledSize.height());
-           d->background->paint(&p, QRect(contentLeft - d->leftWidth, contentTop - d->topHeight,
-                                          contentWidth + d->leftWidth*2, contentHeight + d->topHeight*2),
+           background->resize(scaledSize.width(), scaledSize.height());
+           background->paint(&p, QRect(contentLeft - leftWidth, contentTop - topHeight,
+                                          contentWidth + leftWidth*2, contentHeight + topHeight*2),
                                "center");
-           d->background->resize();
+           background->resize();
        }
 
         // Corners
-        if (d->bFlags & DrawTopBorder) {
+        if (bFlags & DrawTopBorder) {
             if (!origined) {
-                contentTop = d->topHeight;
-                bottomOffset += d->topHeight;
+                contentTop = topHeight;
+                bottomOffset += topHeight;
             }
 
-            if (d->bFlags & DrawLeftBorder) {
-                d->background->paint(&p, QRect(leftOffset, topOffset, d->leftWidth, d->topHeight), "topleft");
+            if (bFlags & DrawLeftBorder) {
+                background->paint(&p, QRect(leftOffset, topOffset, leftWidth, topHeight), "topleft");
 
                 if (!origined) {
-                    contentLeft = d->leftWidth;
-                    rightOffset = contentWidth + d->leftWidth;
+                    contentLeft = leftWidth;
+                    rightOffset = contentWidth + leftWidth;
                 }
             }
 
-            if (d->bFlags & DrawRightBorder) {
-                d->background->paint(&p, QRect(rightOffset, topOffset, d->rightWidth, d->topHeight), "topright");
+            if (bFlags & DrawRightBorder) {
+                background->paint(&p, QRect(rightOffset, topOffset, rightWidth, topHeight), "topright");
             }
         }
 
-        if (d->bFlags & DrawBottomBorder) {
-            if (d->bFlags & DrawLeftBorder) {
-                d->background->paint(&p, QRect(leftOffset, bottomOffset, d->leftWidth, d->bottomHeight), "bottomleft");
+        if (bFlags & DrawBottomBorder) {
+            if (bFlags & DrawLeftBorder) {
+                background->paint(&p, QRect(leftOffset, bottomOffset, leftWidth, bottomHeight), "bottomleft");
 
                 if (!origined) {
-                    contentLeft = d->leftWidth;
-                    rightOffset = contentWidth + d->leftWidth;
+                    contentLeft = leftWidth;
+                    rightOffset = contentWidth + leftWidth;
                 }
             }
 
-            if (d->bFlags & DrawRightBorder) {
-                d->background->paint(&p, QRect(rightOffset, bottomOffset, d->rightWidth, d->bottomHeight), "bottomright");
+            if (bFlags & DrawRightBorder) {
+                background->paint(&p, QRect(rightOffset, bottomOffset, rightWidth, bottomHeight), "bottomright");
             }
         }
 
         // Sides
-        if (d->stretchBorders) {
-            if (d->bFlags & DrawLeftBorder) {
-                d->background->paint(&p, QRect(leftOffset, contentTop, d->leftWidth, contentHeight), "left");
+        if (stretchBorders) {
+            if (bFlags & DrawLeftBorder) {
+                background->paint(&p, QRect(leftOffset, contentTop, leftWidth, contentHeight), "left");
             }
 
-            if (d->bFlags & DrawRightBorder) {
-                d->background->paint(&p, QRect(rightOffset, contentTop, d->rightWidth, contentHeight), "right");
+            if (bFlags & DrawRightBorder) {
+                background->paint(&p, QRect(rightOffset, contentTop, rightWidth, contentHeight), "right");
             }
 
-            if (d->bFlags & DrawTopBorder) {
-                d->background->paint(&p, QRect(contentLeft, topOffset, contentWidth, d->topHeight), "top");
+            if (bFlags & DrawTopBorder) {
+                background->paint(&p, QRect(contentLeft, topOffset, contentWidth, topHeight), "top");
             }
 
-            if (d->bFlags & DrawBottomBorder) {
-                d->background->paint(&p, QRect(contentLeft, bottomOffset, contentWidth, d->bottomHeight), "bottom");
+            if (bFlags & DrawBottomBorder) {
+                background->paint(&p, QRect(contentLeft, bottomOffset, contentWidth, bottomHeight), "bottom");
             }
         } else {
-            if (d->bFlags & DrawLeftBorder) {
-                QPixmap left(d->leftWidth, leftHeight);
+            if (bFlags & DrawLeftBorder) {
+                QPixmap left(leftWidth, leftHeight);
                 left.fill(Qt::transparent);
 
                 {
                     QPainter sidePainter(&left);
                     sidePainter.setCompositionMode(QPainter::CompositionMode_Source);
-                    d->background->paint(&sidePainter, QPoint(0, 0), "left");
+                    background->paint(&sidePainter, QPoint(0, 0), "left");
                 }
 
-                p.drawTiledPixmap(QRect(leftOffset, contentTop, d->leftWidth, contentHeight), left);
+                p.drawTiledPixmap(QRect(leftOffset, contentTop, leftWidth, contentHeight), left);
             }
 
-            if (d->bFlags & DrawRightBorder) {
-                QPixmap right(d->rightWidth, leftHeight);
+            if (bFlags & DrawRightBorder) {
+                QPixmap right(rightWidth, leftHeight);
                 right.fill(Qt::transparent);
 
                 {
                     QPainter sidePainter(&right);
                     sidePainter.setCompositionMode(QPainter::CompositionMode_Source);
-                    d->background->paint(&sidePainter, QPoint(0, 0), "right");
+                    background->paint(&sidePainter, QPoint(0, 0), "right");
                 }
 
-                p.drawTiledPixmap(QRect(rightOffset, contentTop, d->rightWidth, contentHeight), right);
+                p.drawTiledPixmap(QRect(rightOffset, contentTop, rightWidth, contentHeight), right);
             }
 
-            if (d->bFlags & DrawTopBorder) {
-                QPixmap top(topWidth, d->topHeight);
+            if (bFlags & DrawTopBorder) {
+                QPixmap top(topWidth, topHeight);
                 top.fill(Qt::transparent);
 
                 {
                     QPainter sidePainter(&top);
                     sidePainter.setCompositionMode(QPainter::CompositionMode_Source);
-                    d->background->paint(&sidePainter, QPoint(0, 0), "top");
+                    background->paint(&sidePainter, QPoint(0, 0), "top");
                 }
 
-                p.drawTiledPixmap(QRect(contentLeft, topOffset, contentWidth, d->topHeight), top);
+                p.drawTiledPixmap(QRect(contentLeft, topOffset, contentWidth, topHeight), top);
             }
 
-            if (d->bFlags & DrawBottomBorder) {
-                QPixmap bottom(topWidth, d->bottomHeight);
+            if (bFlags & DrawBottomBorder) {
+                QPixmap bottom(topWidth, bottomHeight);
                 bottom.fill(Qt::transparent);
 
                 {
                     QPainter sidePainter(&bottom);
                     sidePainter.setCompositionMode(QPainter::CompositionMode_Source);
-                    d->background->paint(&sidePainter, QPoint(0, 0), "bottom");
+                    background->paint(&sidePainter, QPoint(0, 0), "bottom");
                 }
 
-                p.drawTiledPixmap(QRect(contentLeft, bottomOffset, contentWidth, d->bottomHeight), bottom);
+                p.drawTiledPixmap(QRect(contentLeft, bottomOffset, contentWidth, bottomHeight), bottom);
             }
         }
 
@@ -313,9 +325,22 @@ void SvgPanel::paint(QPainter* painter, const QRectF& rect)
         //resize(contentWidth, contentHeight);
         //paint(&p, QRect(contentLeft, contentTop, contentWidth, contentHeight), "center");
    }
+}
 
-   //p2->drawPixmap(paintRect, *cachedBackground, paintRect.translated(-leftOffset,-topOffset));
-   painter->drawPixmap(rect, *d->cachedBackground, rect.translated(-d->pos.x()-leftOffset,-d->pos.y()-topOffset));
+void SvgPanel::paint(QPainter* painter, const QRectF& rect)
+{
+    if (!d->cachedBackground) {
+        d->generateBackground();
+    }
+
+    //FIXME: this is redundant with generatebackground for now
+    bool origined = d->bFlags & ContentAtOrigin;
+    const int topWidth = d->background->elementSize("top").width();
+    const int leftHeight = d->background->elementSize("left").height();
+    const int topOffset = origined ? 0 - d->topHeight : 0;
+    const int leftOffset = origined ? 0 - d->leftWidth : 0;
+
+    painter->drawPixmap(rect, *d->cachedBackground, rect.translated(-d->pos.x()-leftOffset,-d->pos.y()-topOffset));
 }
 
 void SvgPanel::updateSizes()

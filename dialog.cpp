@@ -28,6 +28,7 @@
 #ifdef Q_WS_X11
 #include <QX11Info>
 #endif
+#include <QBitmap>
 #include <QGraphicsView>
 #include <QtGui/QGraphicsSceneEvent>
 
@@ -95,6 +96,8 @@ void Dialog::paintEvent(QPaintEvent *e)
 void Dialog::resizeEvent(QResizeEvent *e)
 {
     d->background->resize(e->size());
+
+    setMask(d->background->mask());
 }
 
 void Dialog::position(QGraphicsSceneEvent *event, const QRectF boundingRect, QPointF scenePos)

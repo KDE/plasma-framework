@@ -130,6 +130,11 @@ class PLASMA_EXPORT Theme : public QObject
          */
         Q_INVOKABLE QFontMetrics fontMetrics() const;
 
+        /**
+         * Returns if the window compositing is active or not
+         */
+        Q_INVOKABLE bool compositingActive() const;
+
     Q_SIGNALS:
         /**
          * Emitted when the user changes the theme. SVGs should be reloaded at

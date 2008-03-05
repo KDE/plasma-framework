@@ -346,20 +346,7 @@ void ToolTip::resizeEvent(QResizeEvent *e)
     QWidget::resizeEvent(e);
     d->background->resize(size());
 
-    if (KWindowSystem::compositingActive()) {
-        return;
-    }
-
-    QBitmap mask(width(), height());
-    QPainter maskPainter(&mask);
-
-    mask.fill(Qt::white);
-
-    maskPainter.setBrush(Qt::black);
-    maskPainter.setPen(Qt::black);
-
-    maskPainter.drawPath(roundedRectangle(mask.rect().adjusted(-1,-1,-1,-1), 10));
-    setMask(mask);
+    setMask(d->background->mask());
 }
 
 void ToolTip::paintEvent(QPaintEvent *e)
@@ -371,13 +358,6 @@ void ToolTip::paintEvent(QPaintEvent *e)
     painter.fillRect(rect(), Qt::transparent);
 
     d->background->paint(&painter, rect());
-
-    //Stroke border if there is no compositing
-    if (!KWindowSystem::compositingActive()) {
-        painter.setCompositionMode(QPainter::CompositionMode_SourceOver );
-        painter.setPen(Plasma::Theme::self()->textColor());
-        painter.drawPath(roundedRectangle(rect().adjusted(.5,.5,-.5,-.5), 10));
-    }
 }
 
 }

@@ -280,6 +280,11 @@ QFontMetrics Theme::fontMetrics() const
     return QFontMetrics(d->generalFont);
 }
 
+bool Theme::compositingActive() const
+{
+    return d->compositingActive;
+}
+
 }
 
 #include <theme.moc>
