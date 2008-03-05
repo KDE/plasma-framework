@@ -4,9 +4,14 @@ X-KDE-ServiceType=Plasma/PackageStructure
 Comment=Plasma package structure definition
 Comment[ca]=Definició de l'estructura d'un paquet Plasma
 Comment[el]=Ορισμός δομής πακέτου του Plasma
+Comment[eo]=Plasma-pakaĵa struktura difino
+Comment[ga]=Sainmhíniú ar struchtúr pacáiste Plasma
 Comment[km]=កា​រកំណត់​រចនាសម្ព័ន្ធ​កញ្ចប់​ប្លាស្មា
 Comment[pt]=Definição da estrutura de pacotes do Plasma
 Comment[pt_BR]=Definição da estrutura do pacote Plasma
+Comment[sr]=Дефиниција структуре плазма пакета
+Comment[sr@latin]=Definicija strukture plasma paketa
+Comment[tr]=Plasma paketi yapı tanımlaması
 Comment[zh_TW]=Plasma 套件結構定義
 
 [PropertyDef::X-Plasma-PackageFileFilter]
