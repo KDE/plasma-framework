@@ -21,7 +21,9 @@
 
 #include <QApplication>
 #include <QFile>
+#ifdef Q_WS_X11
 #include <QX11Info>
+#endif
 
 #include <KWindowSystem>
 #include <KColorScheme>
