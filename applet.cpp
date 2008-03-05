@@ -1365,7 +1365,7 @@ Applet* Applet::load(const QString& appletName, uint appletId, const QVariantLis
         //      from the network at this point
         offers = KServiceTypeTrader::self()->query("Plasma/Containment", constraint);
         isContainment = true;
-        if (!offers.isEmpty()) {
+        if (offers.isEmpty()) {
             kDebug() << "offers is empty for " << appletName;
             return 0;
         }
