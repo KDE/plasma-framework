@@ -383,6 +383,7 @@ void Containment::setFormFactor(FormFactor formFactor)
 
     switch (d->formFactor) {
         case Planar:
+        case MediaCenter:
             lay = new FreeLayout(this);
             break;
         case Horizontal:
@@ -394,10 +395,6 @@ void Containment::setFormFactor(FormFactor formFactor)
             lay = new BoxLayout(BoxLayout::TopToBottom, this);
             lay->setMargins(0, 0, 0, 0);
             lay->setSpacing(4);
-            break;
-        case MediaCenter:
-            //FIXME: need a layout type here!
-            setLayout(0); //auto-delete
             break;
         default:
             kDebug() << "This can't be happening! Or... can it? ;)" << d->formFactor;
@@ -430,13 +427,30 @@ void Containment::setLocation(Location location)
         return;
     }
 
+    bool emitGeomChange = false;
+
+    if ((location == TopEdge || location == BottomEdge) &&
+        (d->location == TopEdge || d->location == BottomEdge)) {
+        emitGeomChange = true;
+    }
+
+    if ((location == RightEdge || location == LeftEdge) &&
+        (d->location == RightEdge || d->location == LeftEdge)) {
+        emitGeomChange = true;
+    }
+
     d->location = location;
 
     foreach (Applet* applet, d->applets) {
         applet->updateConstraints(Plasma::LocationConstraint);
     }
 
-    setScreen(screen());
+    if (emitGeomChange) {
+        // our geometry on the scene will not actually change,
+        // but for the purposes of views it has
+        emit geometryChanged();
+    }
+
     updateConstraints(Plasma::LocationConstraint);
 }
 
@@ -784,11 +798,6 @@ void Containment::setScreen(int screen)
 
     d->screen = screen;
     updateConstraints(Plasma::ScreenConstraint);
-
-    if (containmentType() == PanelContainment) {
-        // our geometry on the scene may not actually change, but for the purposes of views it has
-        emit geometryChanged();
-    }
 }
 
 int Containment::screen() const
