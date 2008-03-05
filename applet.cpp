@@ -1359,11 +1359,16 @@ Applet* Applet::load(const QString& appletName, uint appletId, const QVariantLis
     QString constraint = QString("[X-KDE-PluginInfo-Name] == '%1'").arg(appletName);
     KService::List offers = KServiceTypeTrader::self()->query("Plasma/Applet", constraint);
 
+    bool isContainment = false;
     if (offers.isEmpty()) {
         //TODO: what would be -really- cool is offer to try and download the applet
         //      from the network at this point
-        kDebug() << "offers is empty for " << appletName;
-        return 0;
+        offers = KServiceTypeTrader::self()->query("Plasma/Containment", constraint);
+        isContainment = true;
+        if (!offers.isEmpty()) {
+            kDebug() << "offers is empty for " << appletName;
+            return 0;
+        }
     } /* else if (offers.count() > 1) {
         kDebug() << "hey! we got more than one! let's blindly take the first one";
     } */
@@ -1376,8 +1381,10 @@ Applet* Applet::load(const QString& appletName, uint appletId, const QVariantLis
 
     if (!offer->property("X-Plasma-Language").toString().isEmpty()) {
         kDebug() << "we have a script in the language of" << offer->property("X-Plasma-Language").toString();
-        Applet *applet = new Applet(0, offer->storageId(), appletId);
-        return applet;
+        if (isContainment) {
+            return new Containment(0, offer->storageId(), appletId);
+        }
+        return new Applet(0, offer->storageId(), appletId);
     }
 
     QVariantList allArgs;

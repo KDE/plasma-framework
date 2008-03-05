@@ -312,7 +312,9 @@ bool Package::registerPackage(const PackageMetadata &data, const QString &iconPa
     KDesktopFile config(service);
     KConfigGroup cg = config.desktopGroup();
     cg.writeEntry("Type", "Service");
-    cg.writeEntry("X-KDE-ServiceTypes", "Plasma/Applet");
+    //TODO do we really like to just install all packages as applet/containment? Probably
+    //it would make sense to let the packages themself decide what they are.
+    cg.writeEntry("X-KDE-ServiceTypes", "Plasma/Applet,Plasma/Containment");
     cg.writeEntry("X-KDE-PluginInfo-EnabledByDefault", true);
 
     QFile icon(iconPath);

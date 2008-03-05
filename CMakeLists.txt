@@ -222,6 +222,7 @@ endif(QT_QTOPENGL_FOUND AND OPENGL_FOUND)
 install(FILES
     servicetypes/plasma-animator.desktop
     servicetypes/plasma-applet.desktop
+    servicetypes/plasma-containment.desktop
     servicetypes/plasma-dataengine.desktop
     servicetypes/plasma-packagestructure.desktop
     servicetypes/plasma-runner.desktop
