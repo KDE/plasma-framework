@@ -182,6 +182,8 @@ void Containment::init()
     if (d->type == NoContainmentType) {
         setContainmentType(DesktopContainment);
     }
+
+    Applet::init();
 }
 
 void Containment::loadConstraints(KConfigGroup* group)
