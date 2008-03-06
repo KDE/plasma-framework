@@ -75,6 +75,14 @@ class PLASMA_EXPORT DataEngine : public QObject
         virtual ~DataEngine();
 
         /**
+         * This method is called when the DataEngine is started. When this
+         * method is called the DataEngine is fully constructed and ready to be
+         * used. This method should be reimplemented by DataEngine subclasses
+         * which have the need to perform a startup routine.
+         **/
+        virtual void init();
+
+        /**
          * @return a list of all the data sources available via this DataEngine
          *         Whether these sources are currently available (which is what
          *         the default implementation provides) or not is up to the
@@ -222,14 +230,6 @@ class PLASMA_EXPORT DataEngine : public QObject
         void sourceRemoved(const QString& source);
 
     protected:
-        /**
-         * This method is called when the DataEngine is started. When this
-         * method is called the DataEngine is fully constructed and ready to be
-         * used. This method should be reimplemented by DataEngine subclasses
-         * which have the need to perform a startup routine.
-         **/
-        virtual void init();
-
         /**
          * When a source that does not currently exist is requested by the
          * consumer, this method is called to give the DataEngine the

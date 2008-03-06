@@ -202,7 +202,6 @@ DataEngine::DataEngine(QObject* parent, KService::Ptr service)
       d(new Private(this, service))
 {
     connect(d->updateTimer, SIGNAL(timeout()), this, SLOT(checkForUpdates()));
-    init();
 }
 
 DataEngine::DataEngine(QObject* parent, const QVariantList& args)
@@ -210,7 +209,6 @@ DataEngine::DataEngine(QObject* parent, const QVariantList& args)
       d(new Private(this, KService::serviceByStorageId(args.count() > 0 ? args[0].toString() : QString())))
 {
     connect(d->updateTimer, SIGNAL(timeout()), this, SLOT(checkForUpdates()));
-    init();
 }
 
 DataEngine::~DataEngine()
@@ -298,7 +296,7 @@ void DataEngine::init()
     if (d->script) {
         d->script->init();
     } else {
-        // kDebug() << "DataEngine::init() called ";
+        // kDebug() << "called";
         // default implementation does nothing. this is for engines that have to
         // start things in motion external to themselves before they can work
     }
