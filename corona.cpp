@@ -25,6 +25,7 @@
 #include <QDesktopWidget>
 #include <QGraphicsSceneDragDropEvent>
 #include <QMimeData>
+#include <QPainter>
 #include <QTimer>
 
 #include <KDebug>
@@ -74,6 +75,18 @@ public:
         configSyncTimer.setSingleShot(true);
         connect(&configSyncTimer, SIGNAL(timeout()), q, SLOT(syncConfig()));
         QObject::connect(QApplication::desktop(), SIGNAL(resized(int)), q, SLOT(screenResized(int)));
+
+        const int w = 25;
+        QPixmap tile(w * 2, w * 2);
+        tile.fill(q->palette().base().color());
+        QPainter pt(&tile);
+        QColor color = q->palette().mid().color();
+        color.setAlphaF(.8);
+        pt.fillRect(0, 0, w, w, color);
+        pt.fillRect(w, w, w, w, color);
+        pt.end();
+        QBrush b(tile);
+        q->setBackgroundBrush(tile);
     }
 
     void saveApplets(KSharedConfigPtr cg) const
