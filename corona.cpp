@@ -81,7 +81,7 @@ public:
         tile.fill(q->palette().base().color());
         QPainter pt(&tile);
         QColor color = q->palette().mid().color();
-        color.setAlphaF(.8);
+        color.setAlphaF(.6);
         pt.fillRect(0, 0, w, w, color);
         pt.fillRect(w, w, w, w, color);
         pt.end();
