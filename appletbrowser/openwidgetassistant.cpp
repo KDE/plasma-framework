@@ -129,7 +129,9 @@ void OpenWidgetAssistant::prepPage(KPageWidgetItem *current, KPageWidgetItem *be
             }
         }
     } else {
-        m_fileDialog->setFilter("*.plasmoid|Plasma Widget");
+        QStringList mimes;
+        mimes << "application/x-plasma";
+        m_fileDialog->setMimeFilter(mimes);
     }
 }
 
