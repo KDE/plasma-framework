@@ -314,6 +314,9 @@ void Containment::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
 
         QList<QAction*> containmentActions = contextActions();
         if (containmentActions.count() > 0) {
+            if (hasEntries) {
+                desktopMenu.addSeparator();
+            }
             hasEntries = true;
             QMenu *containmentActionMenu = &desktopMenu;
 
