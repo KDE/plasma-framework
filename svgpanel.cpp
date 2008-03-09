@@ -61,6 +61,7 @@ public:
     //element is contentWidth x contentHeight
     bool noBorderPadding : 1;
     bool stretchBorders : 1;
+    bool tileCenter : 1;
 };
 
 SvgPanel::SvgPanel(const QString& imagePath, QObject* parent)
@@ -199,20 +200,41 @@ void SvgPanel::Private::generateBackground()
 
 
        //CENTER
-       if (contentHeight > 0 && contentWidth > 0) {
-           QSizeF scaledSize = QSizeF(panelSize.width() -
-                            (leftWidth + rightWidth) +
-                            panelSize.width()*(((qreal)(leftWidth + rightWidth)) / panelSize.width()),
-                            panelSize.height() -
-                            (topHeight + bottomHeight) +
-                            panelSize.height()*(((qreal)(topHeight + bottomHeight)) / panelSize.height()));
+       if (tileCenter) { 
+           if (contentHeight > 0 && contentWidth > 0) {
+               int centerTileHeight;
+               int centerTileWidth;
+               centerTileHeight = background->elementSize("center").height();
+               centerTileWidth = background->elementSize("center").width();
+               QPixmap center(centerTileWidth, centerTileHeight);
+               center.fill(Qt::transparent);
 
-           background->resize(scaledSize.width(), scaledSize.height());
-           background->paint(&p, QRect(contentLeft - leftWidth, contentTop - topHeight,
-                                          contentWidth + leftWidth*2, contentHeight + topHeight*2),
-                               "center");
-           background->resize();
+               {
+                   QPainter centerPainter(&center);
+                   centerPainter.setCompositionMode(QPainter::CompositionMode_Source);
+                   background->paint(&centerPainter, QPoint(0, 0), "center");
+               }
+
+               p.drawTiledPixmap(QRect(contentLeft - leftWidth, contentTop - topHeight,
+                                          contentWidth + leftWidth*2, contentHeight + topHeight*2), center);
+           }
+       } else {
+           if (contentHeight > 0 && contentWidth > 0) {
+               QSizeF scaledSize = QSizeF(panelSize.width() -
+                                (leftWidth + rightWidth) +
+                                panelSize.width()*(((qreal)(leftWidth + rightWidth)) / panelSize.width()),
+                                panelSize.height() -
+                                (topHeight + bottomHeight) +
+                                panelSize.height()*(((qreal)(topHeight + bottomHeight)) / panelSize.height()));
+    
+               background->resize(scaledSize.width(), scaledSize.height());
+               background->paint(&p, QRect(contentLeft - leftWidth, contentTop - topHeight,
+                                              contentWidth + leftWidth*2, contentHeight + topHeight*2),
+                                   "center");
+               background->resize();
+           }
        }
+
 
         // Corners
         if (bFlags & DrawTopBorder) {
@@ -373,6 +395,7 @@ void SvgPanel::updateSizes()
    }
 
    //since it's rectangular, topWidth and bottomWidth must be the same
+   d->tileCenter = d->background->elementExists("hint-tile-center");
    d->noBorderPadding = d->background->elementExists("hint-no-border-padding");
    d->stretchBorders = d->background->elementExists("hint-stretch-borders");
    emit repaintNeeded();
