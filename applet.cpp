@@ -934,8 +934,6 @@ void Applet::paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *opti
 void Applet::paintInterface(QPainter *painter, const QStyleOptionGraphicsItem *option,
                             const QRect & contentsRect)
 {
-    Q_UNUSED(contentsRect)
-
     if (d->script) {
         d->script->paintInterface(painter, option, contentsRect);
     } else {
