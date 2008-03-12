@@ -51,6 +51,7 @@ namespace Plasma
 {
 
 static const int INTER_CONTAINMENT_MARGIN = 6;
+static const int VERTICAL_STACKING_OFFSET = 10000;
 
 class Containment::Private
 {
@@ -222,6 +223,11 @@ void Containment::containmentConstraintsUpdated(Plasma::Constraints constraints)
     if (constraints & Plasma::ScreenConstraint && d->toolbox) {
         d->toolbox->setPos(geometry().width() - d->toolbox->boundingRect().width(), 0);
         d->toolbox->enableTool("addwidgets", !isImmutable());
+    }
+
+    if (constraints & Plasma::SizeConstraint &&
+        containmentType() == PanelContainment) {
+        positionPanel();
     }
 }
 
@@ -395,12 +401,13 @@ void Containment::setFormFactor(FormFactor formFactor)
     }
 
     //kDebug() << "switching FF to " << formFactor;
+    FormFactor was = d->formFactor;
     d->formFactor = formFactor;
     Layout *lay = 0;
     //note: setting a new layout autodeletes the old one
     //and creating a layout calls setLayout on the parent
 
-    switch (d->formFactor) {
+    switch (formFactor) {
         case Planar:
         case MediaCenter:
             lay = new FreeLayout(this);
@@ -420,6 +427,12 @@ void Containment::setFormFactor(FormFactor formFactor)
             setLayout(0); //auto-delete
             break;
     }
+
+    if (containmentType() == PanelContainment && was != formFactor) {
+        // we are a panel and we have chaged our orientation
+        positionPanel(true);
+    }
+
 
     if (lay) {
         foreach (Applet* applet, d->applets) {
@@ -651,7 +664,8 @@ int Containment::indexAt(const QPointF &pos) const
 void Containment::prepareApplet(Applet *applet, bool delayInit)
 {
     if (delayInit) {
-        if (containmentType() == DesktopContainment) {
+        if (containmentType() == DesktopContainment ||
+            containmentType() == CustomContainment) {
             applet->installSceneEventFilter(this);
         }
     } else {
@@ -745,7 +759,8 @@ void Containment::appletAnimationComplete(QGraphicsItem *item, Plasma::Phase::An
             parent = parent->parentItem();
         }
     } else if (anim == Phase::Appear) {
-        if (containmentType() == DesktopContainment &&
+        if ((containmentType() == DesktopContainment ||
+             containmentType() == CustomContainment) &&
             item->parentItem() == this &&
             qgraphicsitem_cast<Applet*>(item)) {
                 item->installSceneEventFilter(this);
@@ -761,8 +776,7 @@ Applet::List Containment::applets() const
 void Containment::setScreen(int screen)
 {
     // screen of -1 means no associated screen.
-    // sanity check to make sure someone else doesn't have this screen already!
-    if (containmentType() == DesktopContainment) {
+    if (containmentType() == DesktopContainment || containmentType() == CustomContainment) {
         // we want to listen to changes in work area if our screen changes
         if (d->screen < 0 && screen > -1) {
             connect(KWindowSystem::self(), SIGNAL(workAreaChanged()), this, SLOT(repositionToolbox()));
@@ -771,6 +785,7 @@ void Containment::setScreen(int screen)
         }
 
         if (screen > -1 && corona()) {
+            // sanity check to make sure someone else doesn't have this screen already!
             Containment* currently = corona()->containmentForScreen(screen);
             if (currently && currently != this) {
                 //kDebug() << "currently is on screen" << currently->screen() << "and is" << currently->name() << (QObject*)currently << (QObject*)this;
@@ -790,7 +805,8 @@ void Containment::setScreen(int screen)
     if (screen < numScreens && screen > -1) {
         QRect r = desktop->screenGeometry(screen);
 
-        if (containmentType() == DesktopContainment) {
+        if (containmentType() == DesktopContainment ||
+            containmentType() == CustomContainment) {
             // we need to find how many screens are to our top and left
             // to calculate the proper offsets for the margins.
             int x = r.x();
@@ -815,17 +831,84 @@ void Containment::setScreen(int screen)
             //        given screen! we should change the pos() on new containment setup.
             setGeometry(r);
             //kDebug() << "setting geometry to" << desktop->screenGeometry(screen) << r << geometry();
-        } else if (containmentType() == PanelContainment) {
-            //kDebug() << "we are a panel on" << r << ", let's move ourselves to a negative coordinate system" << -(r.y() * 2) - r.height() - INTER_CONTAINMENT_MARGIN;
-            // panels are moved into negative coords; we double the x() so that each screen get's
-            // it's own area for panels
-            int vertOffset = (r.y() * 2) + r.height() + INTER_CONTAINMENT_MARGIN;
-            translate(0, -vertOffset);
         }
     }
 
     d->screen = screen;
     updateConstraints(Plasma::ScreenConstraint);
+}
+
+void Containment::positionPanel(bool force)
+{
+    if (!scene()) {
+        kDebug() << "no scene yet";
+        return;
+    }
+
+    // we position panels in negative coordinates, and stack all horizontal
+    // and all vertical panels with each other.
+
+    const QPointF p = pos();
+
+    if (!force &&
+        p.y() + size().height() < -INTER_CONTAINMENT_MARGIN &&
+        scene()->collidingItems(this).isEmpty()) {
+        // already positioned and not running into any other panels
+        return;
+    }
+
+    //TODO: research how non-Horizontal, non-Vertical (e.g. Planar) panels behave here
+    bool horiz = formFactor() == Plasma::Horizontal;
+    qreal bottom = horiz ? 0 : VERTICAL_STACKING_OFFSET;
+    qreal lastHeight = 0;
+
+    // this should be ok for small numbers of panels, but we ever end
+    // up managing hundreds of them, this simplistic alogrithm will
+    // likely be too slow.
+    foreach (const Containment* other, corona()->containments()) {
+        if (other == this ||
+            other->containmentType() != PanelContainment ||
+            horiz != (other->formFactor() == Plasma::Horizontal)) {
+            // only line up with panels of the same orientation
+            continue;
+        }
+
+        if (horiz) {
+            qreal y = other->pos().y();
+            if (y < bottom) {
+                lastHeight = other->size().height();
+                bottom = y;
+            }
+        } else {
+            qreal width = other->size().width();
+            qreal x = other->pos().x() + width;
+            if (x > bottom) {
+                lastHeight = width;
+                bottom = x + lastHeight;
+            }
+        }
+    }
+
+    kDebug() << "positioning" << (horiz ? "" : "non-") << "horizontal panel; forced?" << force;
+    // give a space equal to the height again of the last item so there is
+    // room to grow.
+    QPointF newPos;
+    if (horiz) {
+        bottom -= lastHeight + INTER_CONTAINMENT_MARGIN;
+        //TODO: fix x position for non-flush-left panels
+        kDebug() << "moved to" << QPointF(0, bottom - size().height());
+        newPos = QPointF(0, bottom - size().height());
+    } else {
+        bottom += lastHeight + INTER_CONTAINMENT_MARGIN;
+        //TODO: fix y position for non-flush-top panels
+        kDebug() << "moved to" << QPointF(bottom + size().width(), -INTER_CONTAINMENT_MARGIN - size().height());
+        newPos = QPointF(bottom + size().width(), -INTER_CONTAINMENT_MARGIN - size().height());
+    }
+
+    if (p != newPos) {
+        setPos(newPos);
+        emit geometryChanged();
+    }
 }
 
 int Containment::screen() const
@@ -881,6 +964,8 @@ void Containment::dropEvent(QGraphicsSceneDragDropEvent *event)
         addApplet(plasmoidName, QVariantList(), 0, geom);
         event->acceptProposedAction();
     } else if (KUrl::List::canDecode(event->mimeData())) {
+        //TODO: collect the mimetypes of available script engines and offer
+        //      to create widgets out of the matching URLs, if any
         KUrl::List urls = KUrl::List::fromMimeData(event->mimeData());
         foreach (const KUrl& url, urls) {
             KMimeType::Ptr mime = KMimeType::findByUrl(url);
@@ -975,6 +1060,18 @@ void Containment::handleDisappeared(AppletHandle *handle)
     handle->deleteLater();
 }
 
+QVariant Containment::itemChange(GraphicsItemChange change, const QVariant &value)
+{
+    Q_UNUSED(value)
+
+    if (change == QGraphicsItem::ItemPositionHasChanged &&
+        containmentType() == PanelContainment) {
+        positionPanel();
+    }
+
+    return Applet::itemChange(change, value);
+}
+
 void Containment::emitLaunchActivated()
 {
     kDebug();
@@ -1011,12 +1108,16 @@ bool Containment::isToolboxToolEnabled(const QString &toolname) const
 
 void Containment::showToolbox()
 {
-    d->createToolbox()->showToolbox();
+    if (d->toolbox) {
+        d->toolbox->showToolbox();
+    }
 }
 
 void Containment::hideToolbox()
 {
-    d->createToolbox()->hideToolbox();
+    if (d->toolbox) {
+        d->toolbox->hideToolbox();
+    }
 }
 
 void Containment::repositionToolbox()

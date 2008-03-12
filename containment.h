@@ -348,6 +348,7 @@ class PLASMA_EXPORT Containment : public Applet
         void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
         void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
         bool sceneEventFilter(QGraphicsItem *watched, QEvent *event);
+        QVariant itemChange(GraphicsItemChange change, const QVariant &value);
 
     protected Q_SLOTS:
         /**
@@ -370,8 +371,7 @@ class PLASMA_EXPORT Containment : public Applet
         QRectF geometryForApplet(Applet *applet) const;
         bool regionIsEmpty(const QRectF &region, Applet *ignoredApplet=0) const;
         void prepareApplet(Applet *applet, bool delayInit);
-
-        Q_DISABLE_COPY(Containment)
+        void positionPanel(bool force = false);
 
         class Private;
         Private* const d;
