@@ -105,7 +105,11 @@ void View::setScreen(int screen)
 
 int View::screen() const
 {
-    return d->containment->screen();
+    if (d->containment) {
+        return d->containment->screen();
+    }
+
+    return -1;
 }
 
 void View::setDesktop(int desktop)
@@ -140,7 +144,10 @@ void View::setContainment(Containment *containment)
 
     d->containment = containment;
     updateSceneRect();
-    connect(containment, SIGNAL(geometryChanged()), this, SLOT(updateSceneRect()));
+
+    if (containment) {
+        connect(containment, SIGNAL(geometryChanged()), this, SLOT(updateSceneRect()));
+    }
 }
 
 Containment* View::containment() const
@@ -161,6 +168,10 @@ bool View::drawWallpaper() const
 void View::updateSceneRect()
 {
     //kDebug( )<< "!!!!!!!!!!!!!!!!! setting the scene rect to" << d->containment->sceneBoundingRect();
+    if (!d->containment) {
+        return;
+    }
+
     emit sceneRectAboutToChange();
     setSceneRect(d->containment->sceneBoundingRect());
     emit sceneRectChanged();
