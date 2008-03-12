@@ -65,6 +65,7 @@ KCategorizedItemsView::KCategorizedItemsView(QWidget * parent, Qt::WindowFlags f
     comboFilters->setItemDelegate(new KCategorizedItemsViewFilterDelegate(this));
 
     itemsView->viewport()->setAttribute(Qt::WA_Hover);
+    itemsView->setAlternatingRowColors(true);
 
     QAction * find = KStandardAction::find(textSearch, SLOT(setFocus()), this);
     addAction(find);

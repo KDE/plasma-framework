@@ -50,17 +50,9 @@ void KCategorizedItemsViewDelegate::paint(QPainter *painter,
         getItemByProxyIndex(index);
     if (!item) return;
 
-    // Preparing needed data for painting
-    int left = option.rect.left();
-    int top = option.rect.top();
-    int width = option.rect.width();
-    int height = option.rect.height();
-
-    QColor backgroundColor = (option.state.testFlag(QStyle::State_Selected))?
-            option.palette.color(QPalette::Highlight):option.palette.color(QPalette::Base);
-
-    // Base Background
-    painter->fillRect(option.rect, QBrush(backgroundColor));
+    QStyleOptionViewItemV4 opt(option);
+    QStyle *style = opt.widget ? opt.widget->style() : QApplication::style();
+    style->drawPrimitive(QStyle::PE_PanelItemViewItem, &opt, painter, opt.widget);
 
     switch (index.column()) {
     case 0:
@@ -75,13 +67,6 @@ void KCategorizedItemsViewDelegate::paint(QPainter *painter,
     default:
         kDebug() << "unexpected column";
     }
-
-    // Dividing line 
-    backgroundColor = option.palette.color(QPalette::Highlight);
-    backgroundColor.setAlpha(100);
-    painter->setPen(backgroundColor);
-    painter->drawLine(left, top + height - 1, left + width, top + height - 1);
-
 }
 
 void KCategorizedItemsViewDelegate::paintColMain(QPainter *painter,
@@ -94,8 +79,6 @@ void KCategorizedItemsViewDelegate::paintColMain(QPainter *painter,
     bool leftToRight = (painter->layoutDirection() == Qt::LeftToRight);
     QIcon::Mode iconMode = QIcon::Normal;
 
-    QColor backgroundColor = (option.state.testFlag(QStyle::State_Selected))?
-            option.palette.color(QPalette::Highlight):option.palette.color(QPalette::Base);
     QColor foregroundColor = (option.state.testFlag(QStyle::State_Selected))?
         option.palette.color(QPalette::HighlightedText):option.palette.color(QPalette::Text);
 
@@ -105,6 +88,11 @@ void KCategorizedItemsViewDelegate::paintColMain(QPainter *painter,
 
     local_option_title.font.setBold(true);
     local_option_title.font.setPointSize(local_option_title.font.pointSize() + 2);
+
+    QPixmap pixmap(option.rect.size());
+    pixmap.fill(Qt::transparent);
+    QPainter p(&pixmap);
+    p.translate(-option.rect.topLeft());
 
     QLinearGradient gradient;
 
@@ -116,22 +104,22 @@ void KCategorizedItemsViewDelegate::paintColMain(QPainter *painter,
     // Text
     int textInner = 2 * UNIVERSAL_PADDING + MAIN_ICON_SIZE;
 
-    painter->setPen(foregroundColor);
-    painter->setFont(local_option_title.font);
-    painter->drawText(
+    p.setPen(foregroundColor);
+    p.setFont(local_option_title.font);
+    p.drawText(
             left + (leftToRight ? textInner : 0),
             top + UNIVERSAL_PADDING,
             width - textInner, MAIN_ICON_SIZE / 2,
             Qt::AlignBottom | Qt::AlignLeft, title);
-    painter->setFont(local_option_normal.font);
-    painter->drawText(
+    p.setFont(local_option_normal.font);
+    p.drawText(
             left + (leftToRight ? textInner : 0),
             top + UNIVERSAL_PADDING + MAIN_ICON_SIZE / 2,
             width - textInner, MAIN_ICON_SIZE / 2,
             Qt::AlignTop | Qt::AlignLeft, description);
 
     // Main icon
-    item->icon().paint(painter, 
+    item->icon().paint(&p, 
             leftToRight ? left + UNIVERSAL_PADDING : left + width - UNIVERSAL_PADDING - MAIN_ICON_SIZE,
             top + UNIVERSAL_PADDING, 
             MAIN_ICON_SIZE, MAIN_ICON_SIZE, Qt::AlignCenter, iconMode);
@@ -147,21 +135,18 @@ void KCategorizedItemsViewDelegate::paintColMain(QPainter *painter,
     if (leftToRight) {
         gradient = QLinearGradient(left + width - UNIVERSAL_PADDING - FADE_LENGTH, 0, 
                 left + width - UNIVERSAL_PADDING, 0);
-        gradient.setColorAt(1, backgroundColor);
-        backgroundColor.setAlpha(0);
-        gradient.setColorAt(0, backgroundColor);
+        gradient.setColorAt(0, Qt::white);
+        gradient.setColorAt(1, Qt::transparent);
     } else {
         gradient = QLinearGradient(left + UNIVERSAL_PADDING, 0, 
                 left + UNIVERSAL_PADDING + FADE_LENGTH, 0);
-        gradient.setColorAt(0, backgroundColor);
-        backgroundColor.setAlpha(0);
-        gradient.setColorAt(1, backgroundColor);
-
+        gradient.setColorAt(0, Qt::transparent);
+        gradient.setColorAt(1, Qt::white);
     }
 
     QRect paintRect = option.rect;
-    painter->setCompositionMode(QPainter::CompositionMode_SourceOver);
-    painter->fillRect(paintRect, gradient);
+    p.setCompositionMode(QPainter::CompositionMode_DestinationIn);
+    p.fillRect(paintRect, gradient);
 
     if (leftToRight) {
         gradient.setStart(left + width
@@ -175,13 +160,14 @@ void KCategorizedItemsViewDelegate::paintColMain(QPainter *painter,
                 + emblemCount * (UNIVERSAL_PADDING + EMBLEM_ICON_SIZE) + FADE_LENGTH, 0);
     }
     paintRect.setHeight(UNIVERSAL_PADDING + MAIN_ICON_SIZE / 2);
-    painter->fillRect(paintRect, gradient);
+    p.fillRect(paintRect, gradient);
 
     // Emblems icons
+    p.setCompositionMode(QPainter::CompositionMode_SourceOver);
     int emblemLeft = leftToRight ? (left + width - EMBLEM_ICON_SIZE) : left; // - FAV_ICON_SIZE - 2 * UNIVERSAL_PADDING
     foreach (emblem, m_parent->m_emblems) {
         if (item->passesFiltering(emblem.first)) {
-            emblem.second->paint(painter, 
+            emblem.second->paint(&p, 
                     emblemLeft, top + UNIVERSAL_PADDING, 
                     EMBLEM_ICON_SIZE, EMBLEM_ICON_SIZE, Qt::AlignCenter, iconMode);
             if (leftToRight) {
@@ -191,6 +177,9 @@ void KCategorizedItemsViewDelegate::paintColMain(QPainter *painter,
             }
         }
     }
+    p.end();
+
+    painter->drawPixmap(option.rect.topLeft(), pixmap);
 }
 
 void KCategorizedItemsViewDelegate::paintColFav(QPainter *painter,
