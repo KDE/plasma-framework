@@ -314,6 +314,16 @@ class PLASMA_EXPORT Containment : public Applet
          */
         void showAddWidgets();
 
+        /**
+         * This signal indicates that a containment has been newly
+         * associated (or dissociated) with a physical screen.
+         *
+         * @param wasScreen the screen it was associated with
+         * @param isScreen the screen it is now associated with
+         * @param containment the containment switching screens
+         */
+        void screenChanged(int wasScreen, int isScreen, Plasma::Containment *containment);
+
     public Q_SLOTS:
         /**
          * Informs the Corona as to what position it is in. This is informational

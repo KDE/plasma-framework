@@ -280,6 +280,7 @@ void Corona::loadApplets(const QString& configName)
 
             containment->updateConstraints(Plasma::StartupCompletedConstraint);
             containment->flushUpdatedConstraints();
+            emit containmentAdded(containment);
         }
 
         // quick sanity check to ensure we have containments for each screen!
@@ -438,6 +439,12 @@ Containment* Corona::addContainment(const QString& name, const QVariantList& arg
             SIGNAL(launchActivated()));
     connect(containment, SIGNAL(configNeedsSaving()),
             SLOT(scheduleConfigSync()));
+    connect(containment, SIGNAL(screenChanged(int,int,Plasma::Containment*)),
+            this, SIGNAL(screenOwnerChanged(int,int,Plasma::Containment*)));
+
+    if (!delayedInit) {
+        emit containmentAdded(containment);
+    }
 
     return containment;
 }
@@ -525,7 +532,6 @@ void Corona::screenResized(int screen)
     Containment* c = addContainment("desktop");
     c->setScreen(screen);
     c->setFormFactor(Plasma::Planar);
-    emit newScreen(screen);
 }
 
 void Corona::syncConfig()

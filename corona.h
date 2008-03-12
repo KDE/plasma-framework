@@ -157,12 +157,20 @@ Q_SIGNALS:
     void launchActivated();
 
     /**
-     * This signal indicates that a new screen is being handled
-     * at runtime (e.g. after first creation)
-     *
-     * @param screen the xinerama number of the new screen
+     * This signal indicates a new containment has been added to
+     * the Corona
      */
-    void newScreen(int screen);
+    void containmentAdded(Plasma::Containment *containment);
+
+    /**
+     * This signal indicates that a containment has been newly
+     * associated (or dissociated) with a physical screen.
+     *
+     * @param wasScreen the screen it was associated with
+     * @param isScreen the screen it is now associated with
+     * @param containment the containment switching screens
+     */
+    void screenOwnerChanged(int wasScreen, int isScreen, Plasma::Containment *containment);
 
 protected:
     void dragEnterEvent(QGraphicsSceneDragDropEvent* event);

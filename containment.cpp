@@ -834,8 +834,10 @@ void Containment::setScreen(int screen)
         }
     }
 
+    int oldScreen = d->screen;
     d->screen = screen;
     updateConstraints(Plasma::ScreenConstraint);
+    emit screenChanged(oldScreen, screen, this);
 }
 
 void Containment::positionPanel(bool force)
