@@ -20,7 +20,7 @@
 #ifndef PLASMA_DATAENGINESCRIPT_H
 #define PLASMA_DATAENGINESCRIPT_H
 
-#include <KGenericFactory>
+#include <KDE/KGenericFactory>
 
 #include <plasma/plasma_export.h>
 #include <plasma/scripting/scriptengine.h>
