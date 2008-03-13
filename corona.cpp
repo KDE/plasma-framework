@@ -349,15 +349,6 @@ void Corona::loadDefaultSetup()
         panel->layout()->invalidate();
     }
 
-    /*
-     * a little snip that adds another panel, this time to the left
-     *
-    panel = addContainment("panel");
-    panel->setScreen(topLeftScreen);
-    //TODO: but .. *where* on the left edge?
-    panel->setLocation(Plasma::LeftEdge);
-    */
-
     // in case something goes bad during runtime, let's at least save this to disk soonish
     scheduleConfigSync();
 }
