@@ -68,6 +68,9 @@ protected slots:
     void searchTermChanged(const QString &text);
     void filterChanged(int index);
 
+private slots:
+    void itemActivated( const QModelIndex& index );
+
 Q_SIGNALS:
     void activated ( const QModelIndex & index );
     void clicked ( const QModelIndex & index );
