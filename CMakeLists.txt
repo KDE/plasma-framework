@@ -125,10 +125,6 @@ set(plasma_LIB_INCLUDES
     phase.h
     plasma.h
     plasma_export.h
-    scripting/appletscript.h
-    scripting/dataenginescript.h
-    scripting/runnerscript.h
-    scripting/scriptengine.h
     searchmatch.h
     searchcontext.h
     shadowitem_p.h
