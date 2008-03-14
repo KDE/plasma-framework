@@ -270,6 +270,7 @@ void Widget::setGeometry(const QRectF& geometry)
         }
 
         if (managingLayout()) {
+            //kDebug() << "invalidating managing layout";
             managingLayout()->invalidate();
         }
     }
@@ -409,7 +410,7 @@ void Widget::paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *opti
 QVariant Widget::itemChange(GraphicsItemChange change, const QVariant &value)
 {
     if (change == QGraphicsItem::ItemChildRemovedChange) {
-        if (layout()) {
+        if (layout() && !isAncestorOf(value.value<QGraphicsItem*>())) {
             layout()->removeItem(dynamic_cast<Plasma::LayoutItem*>(value.value<QGraphicsItem*>()));
             updateGeometry();
         }
