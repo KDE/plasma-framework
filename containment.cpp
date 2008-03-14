@@ -62,7 +62,8 @@ public:
           location(Floating),
           screen(-1), // no screen
           toolbox(0),
-          type(Containment::NoContainmentType)
+          type(Containment::NoContainmentType),
+          positioning(false)
     {
     }
 
@@ -105,6 +106,7 @@ public:
     int screen;
     DesktopToolbox *toolbox;
     Containment::Type type;
+    bool positioning;
 };
 
 void Containment::Private::setLockToolText()
@@ -150,6 +152,7 @@ Containment::Containment(QGraphicsItem* parent,
 {
     // WARNING: do not access config() OR globalConfig() in this method!
     //          that requires a scene, which is not available at this point
+    setPos(0, 0);
     setDrawStandardBackground(false);
     setContainmentType(CustomContainment);
 }
@@ -160,6 +163,7 @@ Containment::Containment(QObject* parent, const QVariantList& args)
 {
     // WARNING: do not access config() OR globalConfig() in this method!
     //          that requires a scene, which is not available at this point
+    setPos(0, 0);
     setDrawStandardBackground(false);
 }
 
@@ -225,9 +229,15 @@ void Containment::containmentConstraintsUpdated(Plasma::Constraints constraints)
         d->toolbox->enableTool("addwidgets", !isImmutable());
     }
 
-    if (constraints & Plasma::SizeConstraint &&
-        containmentType() == PanelContainment) {
-        positionPanel();
+    if (constraints & Plasma::SizeConstraint) {
+        switch (containmentType()) {
+            case PanelContainment:
+                positionPanel();
+                break;
+            default:
+                positionContainment();
+                break;
+        }
     }
 }
 
@@ -402,38 +412,17 @@ void Containment::setFormFactor(FormFactor formFactor)
 
     //kDebug() << "switching FF to " << formFactor;
     FormFactor was = d->formFactor;
-    d->formFactor = formFactor;
-    Layout *lay = 0;
-    //note: setting a new layout autodeletes the old one
-    //and creating a layout calls setLayout on the parent
 
-    switch (formFactor) {
-        case Planar:
-        case MediaCenter:
-            lay = new FreeLayout(this);
-            break;
-        case Horizontal:
-            lay = new BoxLayout(BoxLayout::LeftToRight, this);
-            lay->setMargins(0, 0, 0, 0);
-            lay->setSpacing(4);
-            break;
-        case Vertical:
-            lay = new BoxLayout(BoxLayout::TopToBottom, this);
-            lay->setMargins(0, 0, 0, 0);
-            lay->setSpacing(4);
-            break;
-        default:
-            kDebug() << "This can't be happening! Or... can it? ;)" << d->formFactor;
-            setLayout(0); //auto-delete
-            break;
-    }
+    createLayout(formFactor);
+
+    d->formFactor = formFactor;
 
     if (containmentType() == PanelContainment && was != formFactor) {
         // we are a panel and we have chaged our orientation
         positionPanel(true);
     }
 
-
+    Layout *lay = layout();
     if (lay) {
         foreach (Applet* applet, d->applets) {
             lay->addItem(applet);
@@ -442,6 +431,34 @@ void Containment::setFormFactor(FormFactor formFactor)
     }
 
     updateConstraints(Plasma::FormFactorConstraint);
+}
+
+void Containment::createLayout(FormFactor formFactor)
+{
+    //note: setting a new layout autodeletes the old one
+    //and creating a layout calls setLayout on the parent
+    switch (formFactor) {
+        case Planar:
+        case MediaCenter:
+            new FreeLayout(this);
+            break;
+        case Horizontal: {
+            BoxLayout *lay = new BoxLayout(BoxLayout::LeftToRight, this);
+            lay->setMargins(0, 0, 0, 0);
+            lay->setSpacing(4);
+            break;
+            }
+        case Vertical: {
+            BoxLayout *lay = new BoxLayout(BoxLayout::TopToBottom, this);
+            lay->setMargins(0, 0, 0, 0);
+            lay->setSpacing(4);
+            break;
+            }
+        default:
+            kDebug() << "This can't be happening! Or... can it? ;)" << d->formFactor;
+            setLayout(0); //auto-delete
+            break;
+    }
 }
 
 FormFactor Containment::formFactor() const
@@ -604,22 +621,27 @@ void Containment::addApplet(Applet *applet, const QPointF &pos, bool delayInit)
     connect(applet, SIGNAL(destroyed(QObject*)),
             this, SLOT(appletDestroyed(QObject*)));
 
-    if (containmentType() == PanelContainment) {
-        // Reposition the applet after adding has been done
-        if (index != -1) {
-            BoxLayout *l = dynamic_cast<BoxLayout *>(layout());
+    Layout *lay = layout();
+
+    // Reposition the applet after adding has been done
+    if (index != -1) {
+        BoxLayout *l = dynamic_cast<BoxLayout *>(lay);
+        if (l) {
             l->insertItem(index, l->takeAt(l->indexOf(applet)));
             d->applets.removeAll(applet);
             d->applets.insert(index, applet);
+        } else {
+            index = -1;
         }
-    } else {
-        //FIXME if it came from a panel its bg was disabled
-        //maybe we should expect the applet to handle that on a constraint update?
+    }
 
-        //should we really do this? hell, do we have any business playing with the geometry of
-        //non-panel applets at all?
+    if (index == -1) {
         if (pos != QPointF(-1, -1)) {
             applet->setPos(pos);
+        }
+
+        if (lay) {
+            lay->addItem(applet);
         }
     }
 
@@ -665,7 +687,7 @@ void Containment::prepareApplet(Applet *applet, bool delayInit)
 {
     if (delayInit) {
         if (containmentType() == DesktopContainment ||
-            containmentType() == CustomContainment) {
+                containmentType() == CustomContainment) {
             applet->installSceneEventFilter(this);
         }
     } else {
@@ -803,34 +825,9 @@ void Containment::setScreen(int screen)
 
     //kDebug() << "setting screen to " << screen << "and type is" << containmentType();
     if (screen < numScreens && screen > -1) {
-        QRect r = desktop->screenGeometry(screen);
-
         if (containmentType() == DesktopContainment ||
             containmentType() == CustomContainment) {
-            // we need to find how many screens are to our top and left
-            // to calculate the proper offsets for the margins.
-            int x = r.x();
-            int y = r.y();
-            int screensLeft = 0;
-            int screensAbove = 0;
-            for (int i = 0; i < numScreens; ++i) {
-                QRect otherScreen = desktop->screenGeometry(screen);
-                if (x > otherScreen.x()) {
-                    ++screensLeft;
-                }
-
-                if (y > otherScreen.y()) {
-                    ++screensAbove;
-                }
-            }
-
-            r.moveLeft(r.x() + INTER_CONTAINMENT_MARGIN * screensLeft);
-            r.moveTop(r.y() + INTER_CONTAINMENT_MARGIN * screensAbove);
-
-            // FIXME: positioning at this x,y will break if we switch between containments for a
-            //        given screen! we should change the pos() on new containment setup.
-            setGeometry(r);
-            //kDebug() << "setting geometry to" << desktop->screenGeometry(screen) << r << geometry();
+            resize(desktop->screenGeometry(screen).size());
         }
     }
 
@@ -838,6 +835,103 @@ void Containment::setScreen(int screen)
     d->screen = screen;
     updateConstraints(Plasma::ScreenConstraint);
     emit screenChanged(oldScreen, screen, this);
+}
+
+void Containment::positionContainment()
+{
+    Corona *c = corona();
+    if (!c) {
+        return;
+    }
+
+    QList<Containment*> containments = c->containments();
+    QMutableListIterator<Containment*> it(containments);
+
+    while (it.hasNext()) {
+        Containment *containment = it.next();
+        if (containment->containmentType() == PanelContainment) {
+            // weed out all containments we don't care about at all
+            // e.g. Panels
+            it.remove();
+            continue;
+        }
+
+        if (collidesWithItem(containment)) {
+            break;
+        }
+    }
+
+    if (!it.hasNext()) {
+        // we made it all the way through the list, we have no
+        // collisions
+        return;
+    }
+
+    // we need to find how many screens are to our top and left
+    // to calculate the proper offsets for the margins.
+    int width = 0;
+    int height = 0;
+
+    QDesktopWidget *desktop = QApplication::desktop();
+    int numScreens = desktop->numScreens();
+
+    for (int i = 0; i < numScreens; ++i) {
+        QRect otherScreen = desktop->screenGeometry(i);
+
+        if (width < otherScreen.width()) {
+            width = otherScreen.width();
+        }
+
+        if (height < otherScreen.height()) {
+            height = otherScreen.height();
+        }
+    }
+
+    width = (width + INTER_CONTAINMENT_MARGIN) * 4;
+    height += INTER_CONTAINMENT_MARGIN;
+
+    // a mildly naive "find the first slot" approach
+    QRectF r = boundingRect();
+    QPointF topLeft(0, 0);
+    setPos(topLeft);
+
+    d->positioning = true;
+    while (true) {
+        it.toFront();
+
+        while (it.hasNext()) {
+            Containment *containment = it.next();
+            if (collidesWithItem(containment)) {
+                break;
+            }
+
+            QPointF pos = containment->pos();
+            if (pos.x() <= topLeft.x() && pos.y() <= topLeft.y()) {
+                // we don't colid with this containment, and it's above
+                // and to the left of us, so let's not bother checking
+                // it again if we go through this loop again
+                it.remove();
+            }
+        }
+
+        if (!it.hasNext()) {
+            // success! no collisions!
+            break;
+        }
+
+        if (topLeft.x() + (r.width() * 2) + INTER_CONTAINMENT_MARGIN > width) {
+            // we ran out of width room, try another row
+            topLeft = QPoint(0, topLeft.y() + height);
+        } else {
+            topLeft.setX(topLeft.x() + r.width() + INTER_CONTAINMENT_MARGIN);
+        }
+
+        kDebug() << "trying at" << topLeft;
+        setPos(topLeft);
+        //kDebug() << collidingItems().count() << collidingItems()[0] << (QGraphicsItem*)this;
+    }
+
+    d->positioning = false;
 }
 
 void Containment::positionPanel(bool force)
@@ -907,15 +1001,52 @@ void Containment::positionPanel(bool force)
         newPos = QPointF(bottom + size().width(), -INTER_CONTAINMENT_MARGIN - size().height());
     }
 
+    d->positioning = true;
     if (p != newPos) {
         setPos(newPos);
         emit geometryChanged();
     }
+    d->positioning = false;
 }
 
 int Containment::screen() const
 {
     return d->screen;
+}
+
+QPoint Containment::effectiveScreenPos() const
+{
+    if (d->screen < 0) {
+        return QPoint();
+    }
+
+    QRect r = QApplication::desktop()->screenGeometry(d->screen);
+    if (containmentType() == PanelContainment) {
+        QRectF p = geometry();
+
+        switch (d->location) {
+            case TopEdge:
+                return QPoint(r.left() + p.x(), r.top());
+                break;
+            case BottomEdge:
+                return QPoint(r.left() + p.x(), r.bottom() - p.height());
+                break;
+            case LeftEdge:
+                return QPoint(r.left(), r.top() + (p.bottom() + INTER_CONTAINMENT_MARGIN));
+                break;
+            case RightEdge:
+                return QPoint(r.right() - p.width(), r.top() + (p.bottom() + INTER_CONTAINMENT_MARGIN));
+                break;
+            default:
+                //FIXME: implement properly for Floating!
+                return p.topLeft().toPoint();
+                break;
+        }
+    } else {
+        //NOTE: if we ever support non-origin'd desktop containments
+        //      this assumption here will have to change
+        return r.topLeft();
+    }
 }
 
 KPluginInfo::List Containment::knownContainments(const QString &category,
@@ -1066,9 +1197,16 @@ QVariant Containment::itemChange(GraphicsItemChange change, const QVariant &valu
 {
     Q_UNUSED(value)
 
-    if (change == QGraphicsItem::ItemPositionHasChanged &&
-        containmentType() == PanelContainment) {
-        positionPanel();
+    if ((change == QGraphicsItem::ItemSceneHasChanged || change == QGraphicsItem::ItemPositionHasChanged) &&
+        !d->positioning) {
+        switch (containmentType()) {
+            case PanelContainment:
+                positionPanel();
+                break;
+            default:
+                positionContainment();
+                break;
+        }
     }
 
     return Applet::itemChange(change, value);

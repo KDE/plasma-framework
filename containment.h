@@ -221,6 +221,12 @@ class PLASMA_EXPORT Containment : public Applet
         int screen() const;
 
         /**
+         * @return where top left corner of the containment maps to for the currently
+         *         set screen. If no screen is associated, it will return QPoint()
+         */
+        QPoint effectiveScreenPos() const;
+
+        /**
          * @internal
          */
         void saveConstraints(KConfigGroup* group) const;
@@ -354,6 +360,16 @@ class PLASMA_EXPORT Containment : public Applet
         Corona* corona() const;
 
     protected:
+        /**
+         * Optionally creates a layout for the Containment for the new
+         * form factor. This is called before the current form factor is
+         * reset, and adding applets to the new layout, if any, is handled
+         * automatically.
+         *
+         * @param formFactor the new FormFacto
+         */
+        virtual void createLayout(FormFactor formFactor);
+
         void contextMenuEvent(QGraphicsSceneContextMenuEvent * event);
         void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
         void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
@@ -382,6 +398,7 @@ class PLASMA_EXPORT Containment : public Applet
         bool regionIsEmpty(const QRectF &region, Applet *ignoredApplet=0) const;
         void prepareApplet(Applet *applet, bool delayInit);
         void positionPanel(bool force = false);
+        void positionContainment();
 
         class Private;
         Private* const d;
