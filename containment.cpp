@@ -214,6 +214,10 @@ void Containment::saveConstraints(KConfigGroup* group) const
 
 void Containment::containmentConstraintsUpdated(Plasma::Constraints constraints)
 {
+    if (!isContainment()) {
+        return;
+    }
+
     //kDebug() << "got containmentConstraintsUpdated" << constraints << (QObject*)d->toolbox;
     if (constraints & Plasma::ImmutableConstraint) {
         d->setLockToolText();
@@ -417,7 +421,7 @@ void Containment::setFormFactor(FormFactor formFactor)
 
     d->formFactor = formFactor;
 
-    if (containmentType() == PanelContainment && was != formFactor) {
+    if (isContainment() && containmentType() == PanelContainment && was != formFactor) {
         // we are a panel and we have chaged our orientation
         positionPanel(true);
     }
@@ -834,7 +838,9 @@ void Containment::setScreen(int screen)
     int oldScreen = d->screen;
     d->screen = screen;
     updateConstraints(Plasma::ScreenConstraint);
-    emit screenChanged(oldScreen, screen, this);
+    if (oldScreen != screen) {
+        emit screenChanged(oldScreen, screen, this);
+    }
 }
 
 void Containment::positionContainment()
@@ -849,9 +855,10 @@ void Containment::positionContainment()
 
     while (it.hasNext()) {
         Containment *containment = it.next();
-        if (containment->containmentType() == PanelContainment) {
+        if (containment == this ||
+            containment->containmentType() == PanelContainment) {
             // weed out all containments we don't care about at all
-            // e.g. Panels
+            // e.g. Panels and ourself
             it.remove();
             continue;
         }
@@ -1197,7 +1204,8 @@ QVariant Containment::itemChange(GraphicsItemChange change, const QVariant &valu
 {
     Q_UNUSED(value)
 
-    if ((change == QGraphicsItem::ItemSceneHasChanged || change == QGraphicsItem::ItemPositionHasChanged) &&
+    if (isContainment() &&
+        (change == QGraphicsItem::ItemSceneHasChanged || change == QGraphicsItem::ItemPositionHasChanged) &&
         !d->positioning) {
         switch (containmentType()) {
             case PanelContainment:
