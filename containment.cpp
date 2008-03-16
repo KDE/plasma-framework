@@ -1246,12 +1246,17 @@ Plasma::Widget * Containment::addToolBoxTool(const QString& toolName, const QStr
 
 void Containment::enableToolBoxTool(const QString &toolname, bool enable)
 {
-    d->createToolbox()->enableTool(toolname, enable);
+    if (d->toolbox) {
+        d->toolbox->enableTool(toolname, enable);
+    }
 }
 
 bool Containment::isToolboxToolEnabled(const QString &toolname) const
 {
-    return d->createToolbox()->isToolEnabled(toolname);
+    if (d->toolbox) {
+        return d->toolbox->isToolEnabled(toolname);
+    }
+    return false;
 }
 
 void Containment::showToolbox()
