@@ -48,15 +48,6 @@ public:
     Plasma::Containment *containment;
 };
 
-View::View(int screen, Corona *corona, QWidget *parent)
-    : QGraphicsView(parent),
-      d(new Private)
-{
-    initGraphicsView();
-    setScene(corona);
-    setScreen(screen);
-}
-
 View::View(Containment *containment, QWidget *parent)
     : QGraphicsView(parent),
       d(new Private)
@@ -95,11 +86,6 @@ void View::setScreen(int screen)
         }
 
         setContainment(corona->containmentForScreen(screen));
-        if (d->desktop < -1) {
-            // we want to set it to "all desktops" if we get ownership of
-            // a screen but don't have a desktop set
-            d->desktop = -1;
-        }
     }
 }
 
@@ -143,11 +129,15 @@ void View::setContainment(Containment *containment)
     }
 
     d->containment = containment;
-    updateSceneRect();
 
-    if (containment) {
-        connect(containment, SIGNAL(geometryChanged()), this, SLOT(updateSceneRect()));
+    if (containment->screen() > -1 && d->desktop < -1) {
+        // we want to set it to "all desktops" if we get ownership of
+        // a screen but don't have a desktop explicitly set
+        d->desktop = -1;
     }
+
+    updateSceneRect();
+    connect(containment, SIGNAL(geometryChanged()), this, SLOT(updateSceneRect()));
 }
 
 Containment* View::containment() const
@@ -167,10 +157,13 @@ bool View::drawWallpaper() const
 
 void View::updateSceneRect()
 {
-    //kDebug( )<< "!!!!!!!!!!!!!!!!! setting the scene rect to" << d->containment->sceneBoundingRect();
     if (!d->containment) {
         return;
     }
+
+    kDebug() << "!!!!!!!!!!!!!!!!! setting the scene rect to"
+             << d->containment->sceneBoundingRect()
+             << "associated screen is" << d->containment->screen();
 
     emit sceneRectAboutToChange();
     setSceneRect(d->containment->sceneBoundingRect());

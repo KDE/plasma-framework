@@ -38,7 +38,6 @@ class PLASMA_EXPORT View : public QGraphicsView
     Q_OBJECT
 
 public:
-    View(int screen, Corona *corona, QWidget *parent = 0);
     explicit View(Containment *containment, QWidget *parent = 0);
     ~View();
 
