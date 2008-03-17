@@ -260,7 +260,7 @@ void Containment::setContainmentType(Containment::Type type)
             connect(addWidgetTool, SIGNAL(clicked()), this, SIGNAL(showAddWidgets()));
 
             Plasma::Widget *zoomInTool = addToolBoxTool("zoomIn", "zoom-in", i18n("Zoom In"));
-            connect(zoomInTool, SIGNAL(clicked()), this, SIGNAL(zoomIn()));
+            connect(zoomInTool, SIGNAL(clicked()), this, SLOT(zoomIn()));
 
             Plasma::Widget *zoomOutTool = addToolBoxTool("zoomOut", "zoom-out", i18n("Zoom Out"));
             connect(zoomOutTool, SIGNAL(clicked()), this, SIGNAL(zoomOut()));
@@ -521,6 +521,11 @@ void Containment::toggleDesktopImmutability()
     }
 
     d->setLockToolText();
+}
+
+void Containment::zoomIn()
+{
+    emit zoomIn(this);
 }
 
 void Containment::clearApplets()

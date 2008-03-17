@@ -126,6 +126,11 @@ class PLASMA_EXPORT Containment : public Applet
         void setContainmentType(Containment::Type type);
 
         /**
+         * Returns the Corona (if any) that this Containment is hosted by
+         */
+        Corona* corona() const;
+
+        /**
          * Returns the current form factor the applets in this Containment
          * are being displayed in.
          *
@@ -303,10 +308,10 @@ class PLASMA_EXPORT Containment : public Applet
         void launchActivated();
 
         /**
-         * Emitted when the containment requests zooming out one step.
+         * Emitted when the containment requests zooming in one step.
          * Usually only used for desktop containments.
          */
-        void zoomIn();
+        void zoomIn(Plasma::Containment *);
 
         /**
          * Emitted when the containment requests zooming out one step.
@@ -355,9 +360,10 @@ class PLASMA_EXPORT Containment : public Applet
         void toggleDesktopImmutability();
 
         /**
-         * Returns the Corona (if any) that this Containment is hosted by
+         * Make the containment request zooming in one step.
+         * Usually only used for desktop containments.
          */
-        Corona* corona() const;
+        void zoomIn();
 
     protected:
         /**

@@ -85,7 +85,11 @@ void View::setScreen(int screen)
             return;
         }
 
-        setContainment(corona->containmentForScreen(screen));
+        Containment *containment = corona->containmentForScreen(screen);
+        if (containment) {
+            d->containment = 0; //so that we don't end up on the old containment's screen
+            setContainment(containment);
+        }
     }
 }
 
@@ -120,15 +124,21 @@ int View::effectiveDesktop() const
 
 void View::setContainment(Containment *containment)
 {
-    if (!containment) {
+    if (!containment || containment == d->containment) {
         return;
     }
 
+    int screen = -1;
+
     if (d->containment) {
         disconnect(d->containment, SIGNAL(geometryChanged()), this, SLOT(updateSceneRect()));
+        screen = d->containment->screen();
     }
 
     d->containment = containment;
+    if (screen > -1) {
+        containment->setScreen(screen);
+    }
 
     if (containment->screen() > -1 && d->desktop < -1) {
         // we want to set it to "all desktops" if we get ownership of
