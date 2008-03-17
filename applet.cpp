@@ -624,12 +624,14 @@ void Applet::setDrawStandardBackground(bool drawBackground)
             d->getBorderSize(left, top, right, bottom);
             setMargins(0, 0, right, bottom);
             updateGeometry();
+            update();
         }
     } else if (d->background) {
         delete d->background;
         d->background = 0;
         setMargins(0, 0, 0, 0);
         updateGeometry();
+        update();
     }
 }
 
