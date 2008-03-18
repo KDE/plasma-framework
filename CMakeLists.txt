@@ -57,6 +57,7 @@ set(plasma_LIB_SRCS
     desktoptoolbox.cpp
     uiloader.cpp
     view.cpp
+    delegate.cpp
     scripting/appletscript.cpp
     scripting/dataenginescript.cpp
     scripting/runnerscript.cpp
@@ -132,7 +133,8 @@ set(plasma_LIB_INCLUDES
     svgpanel.h
     theme.h
     uiloader.h
-    view.h)
+    view.h
+    delegate.h)
 
 if(QT_QTOPENGL_FOUND AND OPENGL_FOUND)
 set(plasma_LIB_INCLUDES
@@ -206,6 +208,7 @@ install(FILES
     includes/UiLoader
     includes/PackageMetadata
     includes/View
+    includes/Delegate
     DESTINATION ${INCLUDE_INSTALL_DIR}/KDE/Plasma)
 
 if(QT_QTOPENGL_FOUND AND OPENGL_FOUND)
