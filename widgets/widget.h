@@ -277,7 +277,14 @@ public:
     * Setter for data shown in tooltip
     * @param data a ToolTip::Data object containing icon and text
     */
-    void setToolTip( const ToolTipData &dt );
+    void setToolTip(const ToolTipData &dt);
+
+    /**
+     * Called when the tooltip data should be updated, e.g. right before
+     * a tooltip is shown. This allows tips that are more expensive to
+     * create ahead of time to be set at the last possible moment.
+     */
+    virtual void updateToolTip();
 
     /**
     * Recomended position for a popup window like a menu or a tooltip

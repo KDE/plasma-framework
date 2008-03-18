@@ -398,6 +398,10 @@ void Widget::setToolTip(const ToolTipData &tip)
     }
 }
 
+void Widget::updateToolTip()
+{
+}
+
 void Widget::paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     Q_UNUSED(painter);

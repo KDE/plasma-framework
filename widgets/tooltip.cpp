@@ -135,6 +135,7 @@ void ToolTip::showToolTip()
         return;
     }
 
+    d->currentWidget->updateToolTip();
     setData(*d->currentWidget->toolTip());
 
     if( d->windowToPreview != 0 ) {
