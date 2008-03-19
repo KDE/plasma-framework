@@ -695,8 +695,7 @@ int Containment::indexAt(const QPointF &pos) const
 void Containment::prepareApplet(Applet *applet, bool delayInit)
 {
     if (delayInit) {
-        if (containmentType() == DesktopContainment ||
-                containmentType() == CustomContainment) {
+        if (containmentType() == DesktopContainment) {
             applet->installSceneEventFilter(this);
         }
     } else {
@@ -790,8 +789,7 @@ void Containment::appletAnimationComplete(QGraphicsItem *item, Plasma::Phase::An
             parent = parent->parentItem();
         }
     } else if (anim == Phase::Appear) {
-        if ((containmentType() == DesktopContainment ||
-             containmentType() == CustomContainment) &&
+        if (containmentType() == DesktopContainment &&
             item->parentItem() == this &&
             qgraphicsitem_cast<Applet*>(item)) {
                 item->installSceneEventFilter(this);
