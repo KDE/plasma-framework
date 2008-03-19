@@ -95,6 +95,7 @@ QRect Delegate::Private::titleRect(const QStyleOptionViewItem& option, const QMo
                                          fm.boundingRect(index.data(Qt::DisplayRole).toString()).size(),
                                          emptyRect);
 
+    textRect.setWidth(textRect.width() + TEXT_RIGHT_MARGIN);
     textRect.setHeight(emptyRect.height()/2);
     return textRect;
 }
@@ -110,7 +111,7 @@ QRect Delegate::Private::subTitleRect(const QStyleOptionViewItem& option, const 
 
     //if title=subtitle subtitle won't be displayed
     if (subTitle != index.data(Qt::DisplayRole).toString()) {
-        textRect.setWidth(fm.width("  " + subTitle));
+        textRect.setWidth(fm.width("  " + subTitle) + TEXT_RIGHT_MARGIN);
     } else {
         textRect.setWidth(0);
     }
@@ -142,7 +143,7 @@ QRect Delegate::rectAfterTitle(const QStyleOptionViewItem& option, const QModelI
 {
     QRect textRect = d->titleRect(option, index);
 
-    QRect emptyRect(0, textRect.top(), option.rect.width() - textRect.width() - ITEM_LEFT_MARGIN - ITEM_RIGHT_MARGIN - ICON_SIZE, textRect.height());
+    QRect emptyRect(0, textRect.top(), option.rect.width() - textRect.width() - ITEM_LEFT_MARGIN - ITEM_RIGHT_MARGIN - ICON_SIZE - ICON_TEXT_MARGIN, textRect.height());
 
     if (option.direction == Qt::LeftToRight) {
         emptyRect.moveLeft(textRect.right());
@@ -161,7 +162,7 @@ QRect Delegate::rectAfterSubTitle(const QStyleOptionViewItem& option, const QMod
 {
     QRect textRect = d->subTitleRect(option, index);
 
-    QRect emptyRect(0, textRect.top(), option.rect.width() - textRect.width() - ITEM_LEFT_MARGIN - ITEM_RIGHT_MARGIN - ICON_SIZE, textRect.height());
+    QRect emptyRect(0, textRect.top(), option.rect.width() - textRect.width() - ITEM_LEFT_MARGIN - ITEM_RIGHT_MARGIN - ICON_SIZE - ICON_TEXT_MARGIN, textRect.height());
 
     if (option.direction == Qt::LeftToRight) {
         emptyRect.moveLeft(textRect.right());

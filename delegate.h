@@ -66,6 +66,7 @@ public:
     void setRole(SpecificRoles role, int actual);
 
     static const int ICON_TEXT_MARGIN = 10;
+    static const int TEXT_RIGHT_MARGIN = 5;
     static const int ICON_SIZE = 32;
     static const int ACTION_ICON_SIZE = 22;
 
