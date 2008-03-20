@@ -13,6 +13,7 @@ install(FILES
 
 install(FILES
     widgets/background.svg
+    widgets/branding.svg
     widgets/tooltip.svg
     widgets/clock.svg
     widgets/toolbox-button.svg
