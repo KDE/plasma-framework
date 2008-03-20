@@ -271,6 +271,9 @@ class PLASMA_EXPORT DataEngine : public QObject
          * Sets a value for a data source. If the source
          * doesn't exist then it is created.
          *
+         * Note: Passing an empty or invalid QVariant as the value is
+         * functionally equivalent to calling removeSource(source);
+         *
          * @param source the name of the data source
          * @param value the data to associated with the source
          **/
@@ -279,6 +282,9 @@ class PLASMA_EXPORT DataEngine : public QObject
         /**
          * Sets a value for a data source. If the source
          * doesn't exist then it is created.
+         *
+         * Note: Passing an empty or invalid QVariant as the value is
+         * functionally equivalent to calling removeSource(source);
          *
          * @param source the name of the data source
          * @param key the key to use for the data
@@ -289,6 +295,9 @@ class PLASMA_EXPORT DataEngine : public QObject
         /**
          * Adds a set of data to a data source. If the source
          * doesn't exist then it is created.
+         *
+         * Note: Passing an empty or invalid QVariant as the value is
+         * functionally equivalent to calling removeSource(source);
          *
          * @param source the name of the data source
          * @param data the data to add to the source
