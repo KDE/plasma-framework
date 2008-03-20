@@ -72,6 +72,7 @@ Dialog::Dialog( QWidget * parent, Qt::WindowFlags f )
 
 Dialog::~Dialog()
 {
+    delete d;
 }
 
 void Dialog::themeUpdated()
