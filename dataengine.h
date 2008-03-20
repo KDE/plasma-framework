@@ -120,16 +120,20 @@ class PLASMA_EXPORT DataEngine : public QObject
                                        Plasma::IntervalAlignment intervalAlignment = NoAlignment) const;
 
         /**
-         * Connects all sources to an object for data updates. The object must
-         * have a slot with the following signature:
+         * Connects all currently existing sources to an object for data updates.
+         * The object must have a slot with the following signature:
          *
-         * SLOT(dataUpdated(QString, Plasma::DataEngine::Data))
+         * SLOT(dataUpdated(QString,Plasma::DataEngine::Data))
          *
          * The data is a QHash of QVariants keyed by QString names, allowing
          * one data source to provide sets of related data.
          *
          * This method may be called multiple times for the same visualization
          * without side-effects. This can be useful to change the updateInterval.
+         *
+         * Note that this method does not automatically connect sources that
+         * may appear later on. Connecting and responding to the sourceAdded sigal
+         * is still required to achieve that.
          *
          * @param visualization the object to connect the data source to
          * @param updateInterval the frequency, in milliseconds, with which to signal updates;
@@ -140,7 +144,7 @@ class PLASMA_EXPORT DataEngine : public QObject
          *                        per-visualization and can be handy for items that require
          *                        constant updates such as scrolling graphs or clocks.
          **/
-        Q_INVOKABLE void connectAllSources(QObject* viualization, uint updateInterval = 0,
+        Q_INVOKABLE void connectAllSources(QObject* visualization, uint updateInterval = 0,
                                            Plasma::IntervalAlignment intervalAlignment = NoAlignment) const;
 
         /**
