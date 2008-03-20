@@ -306,7 +306,7 @@ class PLASMA_EXPORT Applet : public Widget
         void setMaximumContentSize(int maxWidth, int maxHeight);
 
         /**
-         * Get the minimum size for the content of this applet
+         * Get the maximum size for the content of this applet
          */
         QSizeF maximumContentSize() const;
 
