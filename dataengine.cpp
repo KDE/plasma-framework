@@ -426,9 +426,10 @@ void DataEngine::removeSource(const QString& source)
     //kDebug() << "removing source " << source;
     SourceDict::iterator it = d->sources.find(source);
     if (it != d->sources.end()) {
-        emit sourceRemoved(it.key());
+        QString key = it.key();
         it.value()->deleteLater();
         d->sources.erase(it);
+        emit sourceRemoved(key);
     }
 }
 
