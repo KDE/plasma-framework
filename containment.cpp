@@ -198,7 +198,17 @@ void Containment::loadConstraints(KConfigGroup* group)
     kDebug() << "    geom:" << group->readEntry("geometry", geometry());
     kDebug() << "    formfactor:" << group->readEntry("formfactor", (int)d->formFactor);
     kDebug() << "    screen:" << group->readEntry("screen", d->screen);*/
-    setGeometry(group->readEntry("geometry", geometry()));
+
+    QRectF geo = group->readEntry("geometry", geometry());
+    //override max/min
+    if (geo.size() != geo.size().boundedTo(maximumSize())) {
+        setMaximumSize(maximumSize().expandedTo(geo.size()));
+    }
+    if (geo.size() != geo.size().expandedTo(minimumSize())) {
+        setMinimumSize(minimumSize().boundedTo(geo.size()));
+    }
+    setGeometry(geo);
+
     setLocation((Plasma::Location)group->readEntry("location", (int)d->location));
     setFormFactor((Plasma::FormFactor)group->readEntry("formfactor", (int)d->formFactor));
     setScreen(group->readEntry("screen", d->screen));
