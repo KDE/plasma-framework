@@ -47,10 +47,7 @@ namespace Plasma
 class Delegate::Private
 {
     public:
-        Private()
-        {
-            roles[ColumnTypeRole] = MainColumn;
-        }
+        Private() { }
 
         ~Private() { }
 
@@ -210,7 +207,7 @@ void Delegate::paint(QPainter *painter, const QStyleOptionViewItem& option, cons
     QRect subTitleRect = d->subTitleRect(option, index);
 
 
-    bool uniqueTitle = !index.data(SubTitleMandatoryRole).value<bool>();// true;
+    bool uniqueTitle = !index.data(d->roles[SubTitleMandatoryRole]).value<bool>();// true;
     if (uniqueTitle) {
         QModelIndex sib = index.sibling(index.row() + 1, index.column());
         if (sib.isValid()) {
@@ -306,21 +303,24 @@ void Delegate::paint(QPainter *painter, const QStyleOptionViewItem& option, cons
     // draw icon
     QIcon decorationIcon = index.data(Qt::DecorationRole).value<QIcon>();
 
-    if (index.data(d->roles[ColumnTypeRole]).toInt() == MainColumn) {
+    if (index.data(d->roles[ColumnTypeRole]).toInt() == SecondaryActionColumn) {
 
+        if (hover) {
+            const int delta = floor((qreal)(ICON_SIZE - ACTION_ICON_SIZE)/2.0);
+
+            decorationRect.adjust(delta, delta-1, -delta-1, -delta);
+
+            decorationIcon.paint(painter, decorationRect, option.decorationAlignment);
+        }
+        //If not hover don't draw anything
+
+    // as default always draw as main column
+    } else {
         if (!hover) {
           decorationRect.adjust(2, 2, -2, -2);
         }
 
         decorationIcon.paint(painter, decorationRect, option.decorationAlignment);
-
-    //if d->roles[ColumnTypeRole] == SecondaryActionColumn only display the icon on mouse hover
-    } else if (hover) {
-         const int delta = floor((qreal)(ICON_SIZE - ACTION_ICON_SIZE)/2.0);
-
-         decorationRect.adjust(delta, delta-1, -delta-1, -delta);
-
-         decorationIcon.paint(painter, decorationRect, option.decorationAlignment);
     }
 
     painter->save();
