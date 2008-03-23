@@ -123,6 +123,42 @@ class PLASMA_EXPORT SvgPanel : public QObject
         QPointF pos() const;
 
         /**
+         * Sets the prefix (@see setPrefix) to 'north', 'south', 'west' and 'east'
+         * when the location is TopEdge, BottomEdge, LeftEdge and RightEdge,
+         * respectively. Clears the prefix in other cases.
+         * @arg location location
+         */
+        void setLocation(Plasma::Location location);
+
+        /**
+         * Returns the set location for the SvgPanel. Returns 0 if no location is set
+         * or a custom prefix is set (@see setPrefix)
+         * @return the location
+         */
+        Plasma::Location location() const;
+
+        /**
+         * Sets the prefix for the SVG elements to be used for painting. For example,
+         * if prefix is 'active', then instead of using the 'top' element of the SVG
+         * file to paint the top border, 'active-top' element will be used. The same
+         * goes for other SVG elements.
+         *
+         * If the elements with prefixes are not present, the default ones are used.
+         * (for the sake of speed, the test is present only for the 'center' element)
+         *
+         * Setting the prefix manually resets the location to Floating.
+         * If the
+         * @arg prefix prefix for the SVG element names
+         */
+        void setPrefix(const QString & prefix);
+
+        /**
+         * Returns the prefix for SVG elements of the SvgPanel
+         * @return the prefix
+         */
+        QString prefix();
+
+        /**
          * Returns a monochrome mask that tightly contains the fully opaque areas of the svg
          * @return a monochrome bitmap of opaque areas
          */
