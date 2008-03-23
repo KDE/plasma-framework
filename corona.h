@@ -176,11 +176,9 @@ protected:
     void dragEnterEvent(QGraphicsSceneDragDropEvent* event);
     void dragLeaveEvent(QGraphicsSceneDragDropEvent* event);
     void dragMoveEvent(QGraphicsSceneDragDropEvent* event);
-    //void contextMenuEvent(QGraphicsSceneContextMenuEvent *contextMenuEvent);
 
 protected Q_SLOTS:
     void containmentDestroyed(QObject*);
-    void screenResized(int);
     void syncConfig();
 
 private:

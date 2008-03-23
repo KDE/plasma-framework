@@ -32,13 +32,8 @@
 #include <KGlobal>
 #include <KLocale>
 #include <KMimeType>
-#include <KWindowSystem>
 
 #include "containment.h"
-#include "dataengine.h"
-#include "phase.h"
-#include "layouts/layout.h"
-#include "widgets/icon.h"
 
 using namespace Plasma;
 
@@ -74,7 +69,6 @@ public:
     {
         configSyncTimer.setSingleShot(true);
         connect(&configSyncTimer, SIGNAL(timeout()), q, SLOT(syncConfig()));
-        QObject::connect(QApplication::desktop(), SIGNAL(resized(int)), q, SLOT(screenResized(int)));
 
         const int w = 25;
         QPixmap tile(w * 2, w * 2);
@@ -282,18 +276,6 @@ void Corona::loadApplets(const QString& configName)
             containment->flushUpdatedConstraints();
             emit containmentAdded(containment);
         }
-
-        // quick sanity check to ensure we have containments for each screen!
-        int numScreens = QApplication::desktop()->numScreens();
-        for (int i = 0; i < numScreens; ++i) {
-            if (!containmentForScreen(i)) {
-                //TODO: should we look for containments that aren't asigned but already exist?
-                Containment* c = addContainment("desktop");
-                c->setScreen(i);
-                c->setFormFactor(Plasma::Planar);
-                c->flushUpdatedConstraints();
-            }
-        }
     }
 
     d->kioskImmutable = config()->isImmutable();
@@ -307,50 +289,6 @@ void Corona::loadApplets(const QString& configName)
 
 void Corona::loadDefaultSetup()
 {
-    //FIXME: implement support for system-wide defaults
-    QDesktopWidget *desktop = QApplication::desktop();
-    int numScreens = desktop->numScreens();
-    kDebug() << "number of screens is" << numScreens;
-    int topLeftScreen = 0;
-    QPoint topLeftCorner = desktop->screenGeometry(0).topLeft();
-
-    // create a containment for each screen
-    for (int i = 0; i < numScreens; ++i) {
-        QRect g = desktop->screenGeometry(i);
-        kDebug() << "     screen " << i << "geometry is" << g;
-        Containment* c = addContainment("desktop");
-        c->setScreen(i);
-        c->setFormFactor(Plasma::Planar);
-        c->flushUpdatedConstraints();
-
-        if (g.x() <= topLeftCorner.x() && g.y() >= topLeftCorner.y()) {
-            topLeftCorner = g.topLeft();
-            topLeftScreen = i;
-        }
-    }
-
-    // make a panel at the bottom
-    Containment* panel = addContainment("panel");
-    panel->setScreen(topLeftScreen);
-    panel->setLocation(Plasma::BottomEdge);
-    panel->flushUpdatedConstraints();
-
-    // some default applets to get a usable UI
-    panel->addApplet("launcher");
-    panel->addApplet("tasks");
-    panel->addApplet("pager");
-    panel->addApplet("systemtray");
-    panel->addApplet("notifier");
-    panel->addApplet("digital-clock");
-
-    // trigger an instant layout so we immediately have a proper geometry rather than waiting around
-    // for the event loop
-    if (panel->layout()) {
-        panel->layout()->invalidate();
-    }
-
-    // in case something goes bad during runtime, let's at least save this to disk soonish
-    scheduleConfigSync();
 }
 
 Containment* Corona::containmentForScreen(int screen) const
@@ -497,32 +435,6 @@ void Corona::containmentDestroyed(QObject* obj)
     if (index > -1) {
         d->containments.removeAt(index);
     }
-}
-
-void Corona::screenResized(int screen)
-{
-    bool desktopFound = false;
-    foreach (Containment *c, d->containments) {
-        if (c->screen() == screen) {
-            // trigger a relayout
-            c->setScreen(screen);
-            desktopFound = desktopFound ||
-                           c->containmentType() == Containment::DesktopContainment ||
-                           c->containmentType() == Containment::CustomContainment;
-        }
-    }
-
-    if (desktopFound) {
-        return;
-    }
-
-    // a new screen appeared. neat.
-    // FIXME: apparently QDesktopWidget doesn't do the Right Thing when a new screen is plugged in
-    //        at runtime. seems it gets confused and thinks it's all one big screen? need to 
-    //        fix this upstream
-    Containment* c = addContainment("desktop");
-    c->setScreen(screen);
-    c->setFormFactor(Plasma::Planar);
 }
 
 void Corona::syncConfig()
