@@ -108,7 +108,6 @@ class DataEngine::Private
                 trimQueue();
                 sourceQueue.enqueue(s);
             }
-            emit engine->newSource(sourceName);
             return s;
         }
 
@@ -328,19 +327,41 @@ void DataEngine::setData(const QString& source, const QVariant& value)
 
 void DataEngine::setData(const QString& source, const QString& key, const QVariant& value)
 {
-    DataContainer* s = d->source(source);
+    DataContainer* s = d->source(source, false);
+    bool isNew = !s;
+
+    if (isNew) {
+        s = d->source(source);
+    }
+
     s->setData(key, value);
+
+    if (isNew) {
+        emit newSource(source);
+    }
+
     d->queueUpdate();
 }
 
 void DataEngine::setData(const QString &source, const Data &data)
 {
-    DataContainer *s = d->source(source);
+    DataContainer *s = d->source(source, false);
+    bool isNew = !s;
+
+    if (isNew) {
+        s = d->source(source);
+    }
+
     Data::const_iterator it = data.constBegin();
     while (it != data.constEnd()) {
         s->setData(it.key(), it.value());
         ++it;
     }
+
+    if (isNew) {
+        emit newSource(source);
+    }
+
     d->queueUpdate();
 }
 
@@ -426,10 +447,23 @@ void DataEngine::removeSource(const QString& source)
     //kDebug() << "removing source " << source;
     SourceDict::iterator it = d->sources.find(source);
     if (it != d->sources.end()) {
-        QString key = it.key();
-        it.value()->deleteLater();
+        DataContainer *s = it.value();
+
+        // remove it from the limit queue if we're keeping one
+        if (d->limit > 0) {
+            QQueue<DataContainer*>::iterator it = d->sourceQueue.begin();
+            while (it != d->sourceQueue.end()) {
+                if (*it == s) {
+                    d->sourceQueue.erase(it);
+                    break;
+                }
+                ++it;
+            }
+        }
+
+        s->deleteLater();
         d->sources.erase(it);
-        emit sourceRemoved(key);
+        emit sourceRemoved(source);
     }
 }
 
