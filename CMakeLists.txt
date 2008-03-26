@@ -200,7 +200,6 @@ install(FILES
     includes/DataContainer
     includes/DataEngine
     includes/DataEngineManager
-    includes/ScriptEngine
     includes/SearchContext
     includes/SearchMatch
     includes/Svg
@@ -216,6 +215,10 @@ install(FILES
     includes/GLApplet
     DESTINATION ${INCLUDE_INSTALL_DIR}/KDE/Plasma)
 endif(QT_QTOPENGL_FOUND AND OPENGL_FOUND)
+
+install(FILES
+    includes/ScriptEngine
+    DESTINATION ${INCLUDE_INSTALL_DIR}/KDE/Plasma/Scripting)
 
 
 install(FILES
