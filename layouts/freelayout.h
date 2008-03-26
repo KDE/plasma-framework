@@ -35,7 +35,8 @@ namespace Plasma
  * to determine their own size.
  *
  * Whenever this layout is updated, all child items are resized to
- * their sizeHint() and left in their existing positions.
+ * their sizeHint() and left in their existing positions relative
+ * to the layout borders.
  */
 class PLASMA_EXPORT FreeLayout : public Layout
 {

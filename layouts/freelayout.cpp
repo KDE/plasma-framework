@@ -94,11 +94,56 @@ void FreeLayout::relayout()
 {
     foreach (LayoutItem *child , d->children) {
         if (child->geometry().size() != child->sizeHint()) {
+            /*
+             * We are setting the new geometry to have the desired size (sizeHint()),
+             * and we are changing the position of the topLeft corner so that the
+             * ratio
+             *    d(widgetLeft, layoutLeft) / d(widgetRight, layoutRight)
+             * is kept constant (where d(X,Y) is the distance between X and Y)
+             *
+             * The same goes for the vertical distances.
+             */
+
             const QSizeF newSize = child->sizeHint().expandedTo(minimumSize()).boundedTo(maximumSize());
-            child->setGeometry(QRectF(child->geometry().topLeft(), newSize));
+
+            /*
+             * Since the layout doesn't have to be originated at (0, 0), we are switching
+             * to local coordinates.
+             */
+            QRectF newGeometry = QRectF(child->geometry().topLeft() - geometry().topLeft(), newSize);
+
+            /*
+             * newWidgetLeft   layoutWidth - newWidgetWidth
+             * ------------- = ----------------------------
+             * oldWidgetLeft   layoutWidth - oldWidgetWidth
+             */
+            newGeometry.moveLeft(
+                    newGeometry.left() *
+                    (geometry().width() - newSize.width()) /
+                    (geometry().width() - child->size().width())
+            );
+
+            /*
+             * newWidgetTop   layoutHeight - newWidgetHeight
+             * ------------ = ------------------------------
+             * oldWidgetTop   layoutHeight - oldWidgetHeight
+             */
+            newGeometry.moveTop(
+                    newGeometry.top() *
+                    (geometry().height() - newSize.height()) /
+                    (geometry().height() - child->size().height())
+            );
+
+            /*
+             * Moving back from local coordinates to global
+             */
+            newGeometry.moveTopLeft(newGeometry.topLeft() + geometry().topLeft());
+
+            child->setGeometry(newGeometry);
         }
     }
 }
+
 
 void FreeLayout::releaseManagedItems()
 {
