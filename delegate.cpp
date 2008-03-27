@@ -23,6 +23,7 @@
 #include "delegate.h"
 
 #include <cmath>
+#include <math.h>
 
 // Qt
 #include <QApplication>
