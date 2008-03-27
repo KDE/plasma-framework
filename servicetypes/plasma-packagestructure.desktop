@@ -16,6 +16,7 @@ Comment[sr@latin]=Definicija strukture plasma paketa
 Comment[th]=ข้อกำหนดโครงสร้างแพ็กเกจของพลาสมา
 Comment[tr]=Plasma paketi yapı tanımlaması
 Comment[x-test]=xxPlasma package structure definitionxx
+Comment[zh_CN]=Plasma 包结构定义
 Comment[zh_TW]=Plasma 套件結構定義
 
 [PropertyDef::X-Plasma-PackageFileFilter]
