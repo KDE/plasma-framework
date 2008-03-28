@@ -77,10 +77,10 @@ class PLASMA_EXPORT Applet : public Widget
         typedef QHash<QString, Applet*> Dict;
 
         /**
-         * @arg parent the QGraphicsItem this applet is parented to
-         * @arg serviceId the name of the .desktop file containing the
+         * @param parent the QGraphicsItem this applet is parented to
+         * @param serviceId the name of the .desktop file containing the
          *      information about the widget
-         * @arg appletId a unique id used to differentiate between multiple
+         * @param appletId a unique id used to differentiate between multiple
          *      instances of the same Applet type
          */
         explicit Applet(QGraphicsItem* parent = 0,
@@ -93,8 +93,8 @@ class PLASMA_EXPORT Applet : public Widget
          * to have two elements: the KService service ID for the desktop entry
          * and an applet ID which must be a base 10 number.
          *
-         * @arg parent a QObject parent; you probably want to pass in 0
-         * @arg args a list of strings containing two entries: the service id
+         * @param parent a QObject parent; you probably want to pass in 0
+         * @param args a list of strings containing two entries: the service id
          *      and the applet id
          */
         Applet(QObject* parent, const QVariantList& args);
@@ -245,7 +245,7 @@ class PLASMA_EXPORT Applet : public Widget
          * call this directly except in the constructor to provide a default
          * size
          *
-         * @arg size the new size of the contents area
+         * @param size the new size of the contents area
          */
         void setContentSize(const QSizeF &size);
 
@@ -256,8 +256,8 @@ class PLASMA_EXPORT Applet : public Widget
          * call this directly except in the constructor to provide a default
          * size
          *
-         * @arg width the new width of the contents area
-         * @arg height the new height of the contents area
+         * @param width the new width of the contents area
+         * @param height the new height of the contents area
          */
         void setContentSize(int width, int height);
 
@@ -282,8 +282,8 @@ class PLASMA_EXPORT Applet : public Widget
         /**
          * Sets the minimum size for the content of this applet
          *
-         * @arg minWidth the new minimum width of the contents area
-         * @arg minHeight the new minimum height of the contents area
+         * @param minWidth the new minimum width of the contents area
+         * @param minHeight the new minimum height of the contents area
          */
         void setMinimumContentSize(int minWidth, int minHeight);
 
@@ -300,8 +300,8 @@ class PLASMA_EXPORT Applet : public Widget
         /**
          * Sets the maximum size for the content of this applet
          *
-         * @arg maxWidth the new maximum width of the contents area
-         * @arg maxHeight the new maximum height of the contents area
+         * @param maxWidth the new maximum width of the contents area
+         * @param maxHeight the new maximum height of the contents area
          */
         void setMaximumContentSize(int maxWidth, int maxHeight);
 
@@ -380,7 +380,7 @@ class PLASMA_EXPORT Applet : public Widget
          * deleting it when no longer needed.
          *
          * @param name the plugin name, as returned by KPluginInfo::pluginName()
-         * @param applet unique ID to assign the applet, or zero to have one
+         * @param appletId unique ID to assign the applet, or zero to have one
          *        assigned automatically.
          * @param args to send the applet extra arguments
          * @return a pointer to the loaded applet, or 0 on load failure
@@ -396,8 +396,9 @@ class PLASMA_EXPORT Applet : public Widget
          * deleting it when no longer needed.
          *
          * @param info KPluginInfo object for the desired applet
-         * @param applet unique ID to assign the applet, or zero to have one
+         * @param appletId unique ID to assign the applet, or zero to have one
          *        assigned automatically.
+         * @param args to send the applet extra arguments
          * @return a pointer to the loaded applet, or 0 on load failure
          **/
         static Applet* load(const KPluginInfo& info, uint appletId = 0,
@@ -406,14 +407,14 @@ class PLASMA_EXPORT Applet : public Widget
         /**
          * Get the category of the given applet
          *
-         * @param a KPluginInfo object for the applet
+         * @param applet a KPluginInfo object for the applet
          */
         static QString category(const KPluginInfo& applet);
 
         /**
          * Get the category of the given applet
          *
-         * @param the name of the applet
+         * @param appletName the name of the applet
          */
         static QString category(const QString& appletName);
 
@@ -543,7 +544,7 @@ class PLASMA_EXPORT Applet : public Widget
          * It defaults to false, and if true is passed in you should
          * also reimplement showConfigurationInterface()
          *
-         * @arg hasInterface whether or not there is a user interface available
+         * @param hasInterface whether or not there is a user interface available
          **/
         void setHasConfigurationInterface(bool hasInterface);
 
@@ -662,7 +663,7 @@ class PLASMA_EXPORT Applet : public Widget
         /**
          * Sets whether or not this applet is immutable or not.
          *
-         * @arg immutable true if this applet should not be changeable
+         * @param immutable true if this applet should not be changeable
          **/
         void setImmutable(bool immutable);
 
@@ -739,7 +740,7 @@ class PLASMA_EXPORT Applet : public Widget
          * @param widget the widget to watch for mouse move
          * @param watch whether to start watching the widget, or to stop doing so
          */
-        void watchForMouseMove(QGraphicsItem * watched, bool watch);
+        void watchForMouseMove(QGraphicsItem *widget, bool watch);
 
         /**
         * Call this whenever focus is needed or not needed.
