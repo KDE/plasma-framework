@@ -73,6 +73,10 @@ class PLASMA_EXPORT LineEdit : public QGraphicsTextItem, public LayoutItem
         void updateGeometry();
         QSizeF sizeHint() const;
 
+        /**
+         * Set text to be displayed when the LineEdit is empty and doesn't have focus.
+         * Warning: this will overwrite any text currently in the item
+         */
         void setDefaultText(const QString &text);
         const QString toHtml();
         const QString toPlainText();
