@@ -42,6 +42,8 @@ namespace Plasma
 class PLASMA_EXPORT Delegate : public QAbstractItemDelegate
 {
 public:
+    Q_OBJECT
+
     enum SpecificRoles {
          SubTitleRole = Qt::UserRole + 1,
          SubTitleMandatoryRole = Qt::UserRole + 2,
