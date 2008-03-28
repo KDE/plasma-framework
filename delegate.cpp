@@ -38,6 +38,7 @@
 #include <KDebug>
 #include <KGlobal>
 #include <KGlobalSettings>
+#include <KColorScheme>
 
 // plasma
 #include <plasma/plasma.h>
@@ -335,7 +336,7 @@ void Delegate::paint(QPainter *painter, const QStyleOptionViewItem& option, cons
 
     if (hover || !uniqueTitle) {
         // draw sub-title
-        painter->setPen(QPen(option.palette.dark(), 1));
+        painter->setPen(QPen(KColorScheme(QPalette::Active).foreground(KColorScheme::InactiveText), 1));
         painter->setFont(subTitleFont);
         painter->drawText(subTitleRect, Qt::AlignLeft|Qt::AlignVCenter, "  " + subTitleText);
     }
