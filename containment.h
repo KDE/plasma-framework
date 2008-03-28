@@ -86,10 +86,10 @@ class PLASMA_EXPORT Containment : public Applet
                   };
 
         /**
-         * @arg parent the QGraphicsItem this applet is parented to
-         * @arg serviceId the name of the .desktop file containing the
+         * @param parent the QGraphicsItem this applet is parented to
+         * @param serviceId the name of the .desktop file containing the
          *      information about the widget
-         * @arg appletId a unique id used to differentiate between multiple
+         * @param containmentId a unique id used to differentiate between multiple
          *      instances of the same Applet type
          */
         explicit Containment(QGraphicsItem* parent = 0,
@@ -102,8 +102,8 @@ class PLASMA_EXPORT Containment : public Applet
          * to have two elements: the KService service ID for the desktop entry
          * and an applet ID which must be a base 10 number.
          *
-         * @arg parent a QObject parent; you probably want to pass in 0
-         * @arg args a list of strings containing two entries: the service id
+         * @param parent a QObject parent; you probably want to pass in 0
+         * @param args a list of strings containing two entries: the service id
          *      and the applet id
          */
         Containment(QObject* parent, const QVariantList& args);
@@ -200,6 +200,7 @@ class PLASMA_EXPORT Containment : public Applet
 
         /**
          * add existing applet to this containment at pos
+         * @param applet the applet that should be added
          * @param pos the containment-relative position
          * @param dontInit if true, init() will not be called on the applet
          */
@@ -249,9 +250,9 @@ class PLASMA_EXPORT Containment : public Applet
         /**
          * Constructs a toolbox item and adds it to the toolbox. The toolbox takes over ownership of the item. Returns the constructed tool.
          * 
-         * @arg name of the tool
-         * @arg name of the icon
-         * @arg text to be displayed on the icon
+         * @param toolName the name of the tool
+         * @param iconName the name of the icon
+         * @param iconText the text to be displayed on the icon
          *
          * @return the constructed tool
          */
@@ -260,15 +261,15 @@ class PLASMA_EXPORT Containment : public Applet
         /**
          * Enables or disables a toolbox tool by name
          *
-         * @arg name the name of the tool
-         * @arg enable true to enable, false to disable
+         * @param toolName the name of the tool
+         * @param enable true to enable, false to disable
          */
-        void enableToolBoxTool(const QString &toolname, bool enable);
+        void enableToolBoxTool(const QString &toolName, bool enable);
 
         /**
          * Returns whether or not a given toolbox tool is enabled
          */
-        bool isToolboxToolEnabled(const QString &toolname) const;
+        bool isToolboxToolEnabled(const QString &toolName) const;
 
         /**
          * @internal
