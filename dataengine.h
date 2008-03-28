@@ -113,7 +113,7 @@ class PLASMA_EXPORT DataEngine : public QObject
          *                        periodic updates from this source. This value is
          *                        per-visualization and can be handy for items that require
          *                        constant updates such as scrolling graphs or clocks.
-         * @param intervalAlignedTo the number of ms to aling the interval to
+         * @param intervalAlignment the number of ms to aling the interval to
          **/
         Q_INVOKABLE void connectSource(const QString& source, QObject* visualization,
                                        uint updateInterval = 0,
@@ -143,6 +143,7 @@ class PLASMA_EXPORT DataEngine : public QObject
          *                        periodic updates from this source. This value is
          *                        per-visualization and can be handy for items that require
          *                        constant updates such as scrolling graphs or clocks.
+         * @param intervalAlignment the number of ms to aling the interval to
          **/
         Q_INVOKABLE void connectAllSources(QObject* visualization, uint updateInterval = 0,
                                            Plasma::IntervalAlignment intervalAlignment = NoAlignment) const;
@@ -162,7 +163,7 @@ class PLASMA_EXPORT DataEngine : public QObject
          * call to dataUpdated. Using this method, such engines can provide their own
          * connectSource API.
          *
-         * @arg source the name of the source.
+         * @param source the name of the source.
          * @return pointer to a DataContainer, or zero on failure
          **/
         Q_INVOKABLE DataContainer* containerForSource(const QString &source);
@@ -240,7 +241,7 @@ class PLASMA_EXPORT DataEngine : public QObject
          * opportunity to create one.
          *
          * The name of the data source (e.g. the source parameter passed into
-         * setData) it must be the same as the name passed to sourceRequested
+         * setData) must be the same as the name passed to sourceRequested
          * otherwise the requesting visualization may not receive notice of a
          * data update.
          *
@@ -251,9 +252,10 @@ class PLASMA_EXPORT DataEngine : public QObject
          *
          *      setData(name, DataEngine::Data());
          *
+         * @param source the name of the source that has been requested
          * @return true if a DataContainer was set up, false otherwise
          */
-        virtual bool sourceRequested(const QString &name);
+        virtual bool sourceRequested(const QString &source);
 
         /**
          * Called by internal updating mechanisms to trigger the engine
@@ -341,7 +343,7 @@ class PLASMA_EXPORT DataEngine : public QObject
          * due to multiple update requests coming in, which can be useful for
          * expensive (time- or resource-wise) update mechanisms.
          *
-         * @arg minimumMs the minimum time lapse, in milliseconds, between updates.
+         * @param minimumMs the minimum time lapse, in milliseconds, between updates.
          *                A value less than 0 means to never perform automatic updates,
          *                a value of 0 means update immediately on every update request,
          *                a value >0 will result in a minimum time lapse being enforced.
