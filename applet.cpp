@@ -140,7 +140,7 @@ public:
             } else {
                 // create the package and see if we have something real
                 //kDebug() << "trying for" << path;
-                QString packageFormat = appletDescription.property("X-Plasma-Language").toString();
+                QString packageFormat = appletDescription.property("X-Plasma-PackageFormat").toString();
 
                 if (packageFormat.isEmpty()) {
                     package = new Package(path, PackageStructure::Ptr(new PlasmoidPackage()));
