@@ -210,6 +210,7 @@ QSizeF LineEdit::sizeHint() const
 void LineEdit::setDefaultText(const QString &text)
 {
     d->defaultText = text.simplified();
+    //FIXME hardcoded colours aren't nice
     d->defaultText = QString("<font color=\"gray\">") + d->defaultText + QString("</font>");
     QGraphicsTextItem::setHtml(d->defaultText);
     d->defaultTextPlain = QGraphicsTextItem::toPlainText();
@@ -217,7 +218,9 @@ void LineEdit::setDefaultText(const QString &text)
 
 const QString LineEdit::toHtml()
 {
-    if (QGraphicsTextItem::toHtml() == d->defaultText) {
+    //note: comparing html doesn't work because QGraphicsTextItem::toHtml() returns
+    //unpredictable text with lots of added html
+    if (QGraphicsTextItem::toPlainText() == d->defaultTextPlain) {
         return QString();
     } else {
         return QGraphicsTextItem::toHtml();
@@ -226,7 +229,7 @@ const QString LineEdit::toHtml()
 
 const QString LineEdit::toPlainText()
 {
-    if (QGraphicsTextItem::toPlainText() == d->defaultText) {
+    if (QGraphicsTextItem::toPlainText() == d->defaultTextPlain) {
         return QString();
     } else {
         return QGraphicsTextItem::toPlainText();
