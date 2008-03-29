@@ -41,12 +41,12 @@ class LineEdit::Private
 {
     public:
         Private()
-             : styled(true), multiline(false) {}
+             : showingDefaultText(true), styled(true), multiline(false) {}
 
         QString defaultText;
         QString oldText;
-        QString defaultTextPlain;
 
+        bool showingDefaultText;
         bool styled;
         bool multiline;
 
@@ -212,15 +212,14 @@ void LineEdit::setDefaultText(const QString &text)
     d->defaultText = text.simplified();
     //FIXME hardcoded colours aren't nice
     d->defaultText = QString("<font color=\"gray\">") + d->defaultText + QString("</font>");
-    QGraphicsTextItem::setHtml(d->defaultText);
-    d->defaultTextPlain = QGraphicsTextItem::toPlainText();
+    if (d->showingDefaultText) {
+        QGraphicsTextItem::setHtml(d->defaultText);
+    }
 }
 
 const QString LineEdit::toHtml()
 {
-    //note: comparing html doesn't work because QGraphicsTextItem::toHtml() returns
-    //unpredictable text with lots of added html
-    if (QGraphicsTextItem::toPlainText() == d->defaultTextPlain) {
+    if (d->showingDefaultText) {
         return QString();
     } else {
         return QGraphicsTextItem::toHtml();
@@ -229,10 +228,32 @@ const QString LineEdit::toHtml()
 
 const QString LineEdit::toPlainText()
 {
-    if (QGraphicsTextItem::toPlainText() == d->defaultTextPlain) {
+    if (d->showingDefaultText) {
         return QString();
     } else {
         return QGraphicsTextItem::toPlainText();
+    }
+}
+
+void LineEdit::setHtml(const QString &text)
+{
+    if (text.isEmpty()) {
+        d->showingDefaultText = true;
+        QGraphicsTextItem::setHtml(d->defaultText);
+    } else {
+        d->showingDefaultText = false;
+        QGraphicsTextItem::setHtml(text);
+    }
+}
+
+void LineEdit::setPlainText(const QString &text)
+{
+    if (text.isEmpty()) {
+        d->showingDefaultText = true;
+        QGraphicsTextItem::setHtml(d->defaultText);
+    } else {
+        d->showingDefaultText = false;
+        QGraphicsTextItem::setPlainText(text);
     }
 }
 
@@ -255,8 +276,9 @@ void LineEdit::keyPressEvent(QKeyEvent *event)
 
 void LineEdit::focusInEvent(QFocusEvent *event)
 {
-    if (QGraphicsTextItem::toPlainText() == d->defaultTextPlain) {
+    if (d->showingDefaultText) {
         QGraphicsTextItem::setHtml(QString());
+        d->showingDefaultText = false;
     }
     QGraphicsTextItem::focusInEvent(event);
 }
@@ -265,6 +287,7 @@ void LineEdit::focusOutEvent(QFocusEvent *event)
 {
     if (QGraphicsTextItem::toPlainText().isEmpty()) {
         QGraphicsTextItem::setHtml(d->defaultText);
+        d->showingDefaultText = true;
     }
     QGraphicsTextItem::focusOutEvent(event);
 }
