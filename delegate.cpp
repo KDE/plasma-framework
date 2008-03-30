@@ -335,7 +335,18 @@ void Delegate::paint(QPainter *painter, const QStyleOptionViewItem& option, cons
     painter->drawText(titleRect, Qt::AlignLeft|Qt::AlignVCenter, titleText);
 
     if (hover || !uniqueTitle) {
-        // draw sub-title
+        // draw sub-title, BUT only if:
+        //   * it isn't a unique title, this allows two items to have the same title and be
+        //          disambiguated by their subtitle
+        //   * we are directed by the model that this item should never be treated as unique
+        //          e.g. the documents list in the recently used tab
+        //   * the mouse is hovered over the item, causing the additional information to be
+        //          displayed
+        //
+        // the rational for this is that subtitle text should in most cases not be
+        // required to understand the item itself and that showing all the subtexts in a
+        // listing makes the information density very high, impacting both the speed at
+        // which one can scan the list visually and the aesthetic qualities of the listing.
         painter->setPen(QPen(KColorScheme(QPalette::Active).foreground(KColorScheme::InactiveText), 1));
         painter->setFont(subTitleFont);
         painter->drawText(subTitleRect, Qt::AlignLeft|Qt::AlignVCenter, "  " + subTitleText);
