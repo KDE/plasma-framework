@@ -343,14 +343,14 @@ void Containment::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
         }
 
         QList<QAction*> containmentActions = contextActions();
-        if (containmentActions.count() > 0) {
+        if (!containmentActions.isEmpty()) {
             if (hasEntries) {
                 desktopMenu.addSeparator();
             }
             hasEntries = true;
             QMenu *containmentActionMenu = &desktopMenu;
 
-            if (actions.count() > 0 && containmentActions.count() > 2) {
+            if (!actions.isEmpty() && containmentActions.count() > 2) {
                 containmentActionMenu = new KMenu(i18n("%1 Options", name()), &desktopMenu);
                 desktopMenu.addMenu(containmentActionMenu);
             }
@@ -1135,7 +1135,7 @@ void Containment::dropEvent(QGraphicsSceneDragDropEvent *event)
                 addApplet("icon", args, 0, geom);
             } else {
                 //TODO: should we show a dialog here to choose which plasmoid load if
-                //appletList.count() > 0?
+                //!appletList.isEmpty()
                 addApplet(appletList.first().pluginName(), args, 0, geom);
             }
         }
