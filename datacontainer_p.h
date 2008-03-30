@@ -35,8 +35,8 @@ public:
         : dirty(false), cached(false)
     {}
 
-    QObject* signalRelay(const DataContainer* dc, QObject *visualization,
-                         uint updateInterval, Plasma::IntervalAlignment align);
+    SignalRelay* signalRelay(const DataContainer* dc, QObject *visualization,
+                             uint updateInterval, Plasma::IntervalAlignment align);
 
     DataEngine::Data data;
     QMap<QObject *, SignalRelay *> relayObjects;
@@ -65,6 +65,11 @@ public:
         if (m_align != Plasma::NoAlignment) {
             checkAlignment();
         }
+    }
+
+    int receiverCount() const
+    {
+        return receivers(SIGNAL(dataUpdated(QString,Plasma::DataEngine::Data)));
     }
 
     bool isUnused()
@@ -153,7 +158,7 @@ protected:
     }
 };
 
-QObject* DataContainer::Private::signalRelay(const DataContainer* dc, QObject *visualization, uint updateInterval, Plasma::IntervalAlignment align)
+SignalRelay* DataContainer::Private::signalRelay(const DataContainer* dc, QObject *visualization, uint updateInterval, Plasma::IntervalAlignment align)
 {
     QMap<uint, SignalRelay *>::const_iterator relayIt = relays.find(updateInterval);
     SignalRelay *relay = 0;
