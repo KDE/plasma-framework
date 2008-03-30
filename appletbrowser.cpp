@@ -346,8 +346,8 @@ void AppletBrowser::Private::init(AppletBrowser *q, Plasma::Containment *contain
     q->setButtonWhatsThis(KDialog::Close, i18n("<qt>When clicking <b>Close</b>, this dialog will be closed with no further action taken.</qt>"));
     q->setButtonToolTip(KDialog::Apply, i18n("Add selected widgets"));
     q->setButtonWhatsThis(KDialog::Apply, i18n("<qt>When clicking <b>Add Widget</b>, the selected widgets will be added to your desktop.</qt>"));
-    q->setButtonToolTip(KDialog::User1, i18n("Download new widgets"));
-    q->setButtonWhatsThis(KDialog::User1, i18n("<qt>When clicking <b>Get New Widgets</b>, a dialog will open to allow you to download new widgets. You need to be connected to the Internet.</qt>"));
+    q->setButtonToolTip(KDialog::User1, i18n("Install new widgets"));
+    q->setButtonWhatsThis(KDialog::User1, i18n("<qt>Selecting <b>Get New Widgets</b> will show a window that allows you to download new widgets directly from the Internet, while Install From File allows you to add new widgets from files you have on disk.</qt>"));
 
     connect(q, SIGNAL(applyClicked()), widget, SLOT(addApplet()));
 
