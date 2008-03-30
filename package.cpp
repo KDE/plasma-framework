@@ -218,34 +218,50 @@ bool Package::installPackage(const QString& package,
         }
     }
 
-    if (!QFile::exists(package)) {
+    QFileInfo fileInfo(package);
+    if (!fileInfo.exists()) {
         kWarning(505) << "No such file:" << package;
         return false;
     }
 
-    KZip archive(package);
-    if (!archive.open(QIODevice::ReadOnly)) {
-        kWarning(505) << "Could not open package file:" << package;
-        return false;
-    }
-
-    const KArchiveDirectory* source = archive.directory();
-    const KArchiveEntry* metadata = source->entry("metadata.desktop");
-
-    if (!metadata) {
-        kWarning(505) << "No metadata file in package" << package;
-        return false;
-    }
-
-    QFile f(package);
+    QString path;
     KTempDir tempdir;
-    source->copyTo(tempdir.name());
+    bool archivedPackage = false;
 
-    QString metadataPath = tempdir.name() + "metadata.desktop";
+    if (fileInfo.isDir()) {
+        // we have a directory, so let's just install what is in there
+        path = package;
+
+        // make sure we end in a slash!
+        if (path[path.size() - 1] != '/') {
+            path.append('/');
+        }
+    } else {
+        KZip archive(package);
+        if (!archive.open(QIODevice::ReadOnly)) {
+            kWarning(505) << "Could not open package file:" << package;
+            return false;
+        }
+
+        archivedPackage = true;
+        const KArchiveDirectory* source = archive.directory();
+        const KArchiveEntry* metadata = source->entry("metadata.desktop");
+
+        if (!metadata) {
+            kWarning(505) << "No metadata file in package" << package;
+            return false;
+        }
+
+        path = tempdir.name();
+        source->copyTo(path);
+    }
+
+    QString metadataPath = path + "metadata.desktop";
     if (!QFile::exists(metadataPath)) {
         kWarning(505) << "No metadata file in package" << package;
         return false;
     }
+
     PackageMetadata meta(metadataPath);
     QString targetName = meta.pluginName();
 
@@ -260,15 +276,26 @@ bool Package::installPackage(const QString& package,
         return false;
     }
 
-    KIO::FileCopyJob* job = KIO::file_move(tempdir.name(), targetName, -1, KIO::HideProgressInfo);
+    KIO::FileCopyJob* job(0);
+
+    if (archivedPackage) {
+        // it's in a temp dir, so just move it over.
+        job = KIO::file_move(path, targetName, -1, KIO::HideProgressInfo);
+    } else {
+        // it's a directory containing the stuff, so copy the contents rather
+        // than move them
+        job = KIO::file_copy(path, targetName, -1, KIO::HideProgressInfo);
+    }
 
     if (!job->exec()) {
         kWarning(505) << "Could not move package to destination:" << targetName;
         return false;
     }
 
-    // no need to remove the temp dir (which has been moved)
-    tempdir.setAutoRemove(false);
+    if (archivedPackage) {
+        // no need to remove the temp dir (which has been successfully moved if it's an archive)
+        tempdir.setAutoRemove(false);
+    }
 
     // and now we register it as a service =)
     targetName.append("/metadata.desktop");
