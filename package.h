@@ -138,9 +138,6 @@ class PLASMA_EXPORT Package
          */
         static bool registerPackage(const PackageMetadata &data, const QString &iconPath);
 
-        //TODO implement uninstall
-        //static bool uninstallPackage(const QString& package, const QString& packageRoot);
-
         /**
          * Creates a package based on the metadata from the files contained
          * in the source directory

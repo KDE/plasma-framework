@@ -214,8 +214,8 @@ public:
     void write(KConfigBase *config) const;
 
     /**
-     * Installs a package matching this package structure. By default simply calls
-     * Plasma::Package::install.
+     * Installs a package matching this package structure. By default installs a
+     * native Plasma::Package.
      *
      * @param archivePath path to the package archive file
      * @param packageRoot path to the directory where the package should be
@@ -223,6 +223,15 @@ public:
      * @return true on successful installation, false otherwise
      **/
     virtual bool installPackage(const QString &archivePath, const QString &packageRoot);
+
+    /**
+     * Uninstalls a package matching this package structure.
+     *
+     * @arg package the name of the package to remove
+     * @arg packageRoot path to the directory where the package should be installed to
+     * @return true on successful removal of the package, false otherwise
+     */
+    virtual bool uninstallPackage(const QString& package, const QString& packageRoot);
 
     /**
      * @return the prefix inserted between the base path and content entries
