@@ -146,18 +146,24 @@ void OpenWidgetAssistant::finished()
     }
 
     //kDebug() << "selected uri is" << m_fileDialog->selectedFile() << "of type" << m_fileDialog->currentFilter();
-    QString error;
-    PackageStructure *installer = m_packageStructureService->createInstance<Plasma::PackageStructure>(0, QVariantList(), &error);
-    if (!installer) {
-        kDebug() << "Could not load requested PackageStructure installer "
-                 << m_packageStructureService << ". Error given: " << error;
-        return;
+    PackageStructure *installer = 0;
+    if (m_packageStructureService) {
+        QString error;
+        installer = m_packageStructureService->createInstance<Plasma::PackageStructure>(0, QVariantList(), &error);
+        if (!installer) {
+            kDebug() << "Could not load requested PackageStructure installer "
+                     << m_packageStructureService << ". Error given: " << error;
+            return;
+        }
+    } else {
+        installer = new PackageStructure;
     }
 
     QString root = KStandardDirs::locateLocal("data", "plasma/plasmoids/");
     //kDebug() << "installing to root dir of" << root;
     bool success = installer->installPackage(m_fileDialog->selectedFile(), root);
 
+    delete installer;
     kDebug() << "install returned. were we successful?" << success;
     //TODO: user visible feedback
 }
