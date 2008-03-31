@@ -124,7 +124,7 @@ int View::effectiveDesktop() const
 
 void View::setContainment(Containment *containment)
 {
-    if (!containment || containment == d->containment) {
+    if (containment == d->containment) {
         return;
     }
 
@@ -136,6 +136,10 @@ void View::setContainment(Containment *containment)
     }
 
     d->containment = containment;
+    if (! containment) {
+        return;
+    }
+    
     if (screen > -1) {
         containment->setScreen(screen);
     }
