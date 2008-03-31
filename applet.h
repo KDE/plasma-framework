@@ -780,11 +780,6 @@ class PLASMA_EXPORT Applet : public Widget
 
     protected Q_SLOTS:
         /**
-         * @internal used to show the configuration of an applet on first show
-         */
-        void performSetupConfig();
-
-        /**
          * @internal used to check the immutability of the item in the config file
          */
         void checkImmutability();

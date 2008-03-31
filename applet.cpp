@@ -70,6 +70,29 @@
 namespace Plasma
 {
 
+class OverlayWidget : public Widget
+{
+public:
+    OverlayWidget(Widget *parent)
+        : Widget(parent, parent)
+    {
+        resize(parent->size());
+    }
+
+protected:
+    void paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0)
+    {
+        Q_UNUSED(option)
+        Q_UNUSED(widget)
+        painter->save();
+        painter->setRenderHint(QPainter::Antialiasing);
+        QColor wash = Plasma::Theme::self()->backgroundColor();
+        wash.setAlphaF(.6);
+        painter->fillPath(parent()->shape(), wash);
+        painter->restore();
+    }
+};
+
 class Applet::Private
 {
 public:
@@ -77,6 +100,7 @@ public:
         : appletId(uniqueID),
           appletDescription(service),
           package(0),
+          needsConfigOverlay(0),
           background(0),
           failureText(0),
           script(0),
@@ -90,7 +114,6 @@ public:
           immutable(false),
           hasConfigurationInterface(false),
           failed(false),
-          needsConfig(false),
           isContainment(false),
           square(false)
     {
@@ -294,6 +317,7 @@ public:
     uint appletId;
     KPluginInfo appletDescription;
     Package* package;
+    OverlayWidget *needsConfigOverlay;
     QList<QObject*> watchedForFocus;
     QList<QGraphicsItem*> watchedForMouseMove;
     QStringList loadedEngines;
@@ -310,7 +334,6 @@ public:
     bool immutable : 1;
     bool hasConfigurationInterface : 1;
     bool failed : 1;
-    bool needsConfig : 1;
     bool isContainment : 1;
     bool square : 1;
 };
@@ -693,35 +716,35 @@ void Applet::setFailedToLaunch(bool failed, const QString& reason)
 
 bool Applet::needsConfiguring() const
 {
-    return d->needsConfig;
+    return d->needsConfigOverlay != 0;
 }
 
 void Applet::setNeedsConfiguring(bool needsConfig)
 {
-    if (d->needsConfig == needsConfig) {
+    if ((d->needsConfigOverlay != 0) == needsConfig) {
         return;
     }
 
-    d->needsConfig = needsConfig;
-    prepareGeometryChange();
-    qDeleteAll(QGraphicsItem::children());
-    setLayout(0);
-
-    if (needsConfig) {
-        setDrawStandardBackground(true);
-        Layout* layout = new BoxLayout(BoxLayout::TopToBottom,this);
-        PushButton* button = new PushButton(this);
-        button->setText(i18n("Configure..."));
-        connect(button, SIGNAL(clicked()), this, SLOT(performSetupConfig()));
-        layout->addItem(button);
+    if (d->needsConfigOverlay) {
+        delete d->needsConfigOverlay;
+        d->needsConfigOverlay = 0;
+        return;
     }
-}
 
-void Applet::performSetupConfig()
-{
-    qDeleteAll(QGraphicsItem::children());
-    setLayout(0);
-    showConfigurationInterface();
+    d->needsConfigOverlay = new OverlayWidget(this);
+    d->needsConfigOverlay->resize(contentSize());
+
+    setDrawStandardBackground(true);
+    qDeleteAll(d->needsConfigOverlay->QGraphicsItem::children());
+    PushButton* button = new PushButton(d->needsConfigOverlay);
+    button->setText(i18n("Configure..."));
+    connect(button, SIGNAL(clicked()), this, SLOT(showConfigurationInterface()));
+    QSizeF s = button->sizeHint();
+    button->resize(s);
+    button->setPos(d->needsConfigOverlay->boundingRect().width() / 2 - s.width() / 2,
+                   d->needsConfigOverlay->boundingRect().height() / 2 - s.height() / 2);
+    button->show();
+    d->needsConfigOverlay->show();
 }
 
 void Applet::checkImmutability()
@@ -744,6 +767,18 @@ void Applet::flushUpdatedConstraints()
     //kDebug() << "fushing constraints: " << d->pendingConstraints << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";
     Plasma::Constraints c = d->pendingConstraints;
     d->pendingConstraints = NoConstraint;
+
+    if (c & Plasma::SizeConstraint && d->needsConfigOverlay) {
+        d->needsConfigOverlay->setGeometry(QRectF(QPointF(0, 0), contentSize()));
+        // FIXME:: rather horrible hack to work around the fact we don't have spacers
+        //         for layouts, and with WoC coming i'd rather not expend effort there
+        QGraphicsItem * button = d->needsConfigOverlay->QGraphicsItem::children().first();
+        if (button) {
+            QSizeF s = button->boundingRect().size();
+            button->setPos(d->needsConfigOverlay->boundingRect().width() / 2 - s.width() / 2,
+                           d->needsConfigOverlay->boundingRect().height() / 2 - s.height() / 2);
+        }
+    }
 
     if (c & Plasma::FormFactorConstraint) {
         FormFactor f = formFactor();
@@ -908,7 +943,7 @@ void Applet::paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *opti
         d->background->paint(painter, option->rect);
     }
 
-    if (!d->failed && !d->needsConfig) {
+    if (!d->failed) {
         if (widget && isContainment()) {
             // note that the widget we get is actually the viewport of the view, not the view itself
             View* v = qobject_cast<Plasma::View*>(widget->parent());
