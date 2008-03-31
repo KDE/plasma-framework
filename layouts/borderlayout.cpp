@@ -117,7 +117,9 @@ void BorderLayout::relayout()
 void BorderLayout::releaseManagedItems()
 {
     foreach (Plasma::LayoutItem *item, d->itemPositions) {
-        item->unsetManagingLayout(this);
+        if (item) {
+            item->unsetManagingLayout(this);
+        }
     }
 }
 
