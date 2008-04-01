@@ -190,7 +190,7 @@ QRect Delegate::emptyRect(const QStyleOptionViewItem& option, const QModelIndex&
 
 void Delegate::paint(QPainter *painter, const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
-    const bool hover = option.state & (QStyle::State_Selected|QStyle::State_MouseOver|QStyle::State_HasFocus);
+    const bool hover = option.state & (QStyle::State_MouseOver | QStyle::State_Selected);
 
     QRect contentRect = option.rect;
     contentRect.setBottom(contentRect.bottom() - 1);
