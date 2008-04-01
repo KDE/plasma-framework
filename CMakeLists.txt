@@ -99,7 +99,7 @@ target_link_libraries(plasma ${QT_QTOPENGL_LIBRARY} ${OPENGL_gl_LIBRARY})
 endif(QT_QTOPENGL_FOUND AND OPENGL_FOUND)
 
 set_target_properties(plasma PROPERTIES VERSION 1.0.0 SOVERSION 1)
-install(TARGETS plasma DESTINATION ${LIB_INSTALL_DIR})
+install(TARGETS plasma ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 
 ########### install files ###############
