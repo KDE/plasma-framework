@@ -816,13 +816,14 @@ void Containment::setScreen(int screen)
 {
     // screen of -1 means no associated screen.
     if (containmentType() == DesktopContainment || containmentType() == CustomContainment) {
+#ifndef Q_OS_WIN
         // we want to listen to changes in work area if our screen changes
         if (d->screen < 0 && screen > -1) {
             connect(KWindowSystem::self(), SIGNAL(workAreaChanged()), this, SLOT(repositionToolbox()));
         } else if (screen < 0) {
             disconnect(KWindowSystem::self(), SIGNAL(workAreaChanged()), this, SLOT(repositionToolbox()));
         }
-
+#endif
         if (screen > -1 && corona()) {
             // sanity check to make sure someone else doesn't have this screen already!
             Containment* currently = corona()->containmentForScreen(screen);
