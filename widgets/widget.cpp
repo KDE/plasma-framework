@@ -398,7 +398,7 @@ void Widget::setToolTip(const ToolTipData &tip)
     }
 }
 
-void Widget::updateToolTip()
+void Widget::updateToolTip(bool update)
 {
 }
 

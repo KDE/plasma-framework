@@ -90,6 +90,11 @@ void ToolTip::show(Plasma::Widget *widget)
 {
     d->hideTimer->stop();
     d->delayedHide = false;
+    if (d->isShown && d->currentWidget) {
+        // we let know widget which had tooltip up to now that it's tooltip
+        // is not longer displayed
+        d->currentWidget->updateToolTip(false);
+    }
     d->currentWidget = widget;
     d->showTimer->stop();
 
@@ -135,7 +140,7 @@ void ToolTip::showToolTip()
         return;
     }
 
-    d->currentWidget->updateToolTip();
+    d->currentWidget->updateToolTip(true);
     setData(*d->currentWidget->toolTip());
 
     if( d->windowToPreview != 0 ) {
@@ -164,8 +169,11 @@ void ToolTip::resetShownState()
         d->delayedHide) {
         d->delayedHide = false;
         d->isShown = false;
-        d->currentWidget = 0;
         setVisible(false);
+        if (d->currentWidget) {
+            d->currentWidget->updateToolTip(false);
+        }
+        d->currentWidget = 0;
     }
 }
 

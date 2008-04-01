@@ -280,11 +280,14 @@ public:
     void setToolTip(const ToolTipData &dt);
 
     /**
-     * Called when the tooltip data should be updated, e.g. right before
-     * a tooltip is shown. This allows tips that are more expensive to
-     * create ahead of time to be set at the last possible moment.
+     * Called when the tooltip is going to be shown or just after hiding
+     * it. This lets updating data right before a tooltip is shown or
+     * tracking current visibility. That allows e.g. tips that are more
+     * expensive to create ahead of time to be set at the last possible
+     * moment.
+     * @param update visibility of tooltip
      */
-    virtual void updateToolTip();
+    virtual void updateToolTip(bool update);
 
     /**
     * Recomended position for a popup window like a menu or a tooltip
