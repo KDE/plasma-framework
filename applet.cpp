@@ -734,7 +734,14 @@ void Applet::setNeedsConfiguring(bool needsConfig)
     d->needsConfigOverlay = new OverlayWidget(this);
     d->needsConfigOverlay->resize(contentSize());
 
-    setDrawStandardBackground(true);
+    int zValue = 100;
+    foreach (QGraphicsItem *child, QGraphicsItem::children()) {
+        if (child->zValue() > zValue) {
+            zValue = child->zValue() + 1;
+        }
+    }
+    d->needsConfigOverlay->setZValue(zValue);
+
     qDeleteAll(d->needsConfigOverlay->QGraphicsItem::children());
     PushButton* button = new PushButton(d->needsConfigOverlay);
     button->setText(i18n("Configure..."));
