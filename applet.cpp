@@ -39,11 +39,12 @@
 #include <KColorScheme>
 #include <KConfigDialog>
 #include <KDialog>
+#include <KIconLoader>
 #include <KPluginInfo>
 #include <KStandardDirs>
 #include <KService>
 #include <KServiceTypeTrader>
-#include <KIconLoader>
+#include <KWindowSystem>
 
 #include <Solid/PowerManagement>
 
@@ -1296,14 +1297,29 @@ void Applet::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
 void Applet::showConfigurationInterface()
 {
+    if (!hasConfigurationInterface()) {
+        return;
+    }
+
+    const QString dialogId = QString("%1settings%2").arg(id()).arg(name());
+    KConfigDialog * dlg = KConfigDialog::exists(dialogId);
+
+    if (dlg) {
+        KWindowSystem::setOnDesktop(dlg->winId(), KWindowSystem::currentDesktop());
+        dlg->show();
+        KWindowSystem::activateWindow(dlg->winId());
+        return;
+    }
+
+    const QString windowTitle = i18nc("@title:window", "%1 Settings", name());
     if (d->package && d->configXml) {
         QString uiFile = d->package->filePath("mainconfigui");
         if (uiFile.isEmpty()) {
             return;
         }
 
-        KConfigDialog *dialog = new KConfigDialog(0, "", d->configXml);
-        dialog->setWindowTitle(i18n("%1 Settings", name()));
+        KConfigDialog *dialog = new KConfigDialog(0, dialogId, d->configXml);
+        dialog->setWindowTitle(windowTitle);
         dialog->setAttribute(Qt::WA_DeleteOnClose, true);
 
         QUiLoader loader;
@@ -1318,10 +1334,27 @@ void Applet::showConfigurationInterface()
 
         dialog->addPage(w, i18n("Settings"), icon(), i18n("%1 Settings", name()));
         dialog->show();
-    }
-    else if(d->script) {
+    } else if (d->script) {
         d->script->showConfigurationInterface();
+    } else {
+        KConfigSkeleton *nullManager = new KConfigSkeleton(0);
+        KConfigDialog *dialog = new KConfigDialog(0, dialogId, nullManager);
+        dialog->setFaceType(KPageDialog::Auto);
+        dialog->setWindowTitle(windowTitle);
+        dialog->setAttribute(Qt::WA_DeleteOnClose, true);
+        createConfigurationInterface(dialog);
+        //TODO: would be nice to not show dialog if there are no pages added?
+        connect(dialog, SIGNAL(finished()), nullManager, SLOT(deleteLater()));
+        dialog->show();
+        dialog->enableButtonApply(true);
     }
+}
+
+void Applet::createConfigurationInterface(KConfigDialog *parent)
+{
+    Q_UNUSED(parent)
+    // virtual method reimplemented by subclasses.
+    // do not put anything here ...
 }
 
 KPluginInfo::List Applet::knownApplets(const QString &category,

@@ -25,13 +25,14 @@
 #include <QtGui/QWidget>
 
 #include <KDE/KPluginInfo>
-#include <KDE/KSharedConfig>
 #include <KDE/KGenericFactory>
 
 #include <plasma/configxml.h>
 #include <plasma/packagestructure.h>
 #include <plasma/plasma.h>
 #include <plasma/widgets/widget.h>
+
+class KConfigDialog;
 
 namespace Plasma
 {
@@ -673,13 +674,24 @@ class PLASMA_EXPORT Applet : public Widget
         void destroy();
 
         /**
-         * Reimplement this slot to show a configuration dialog.
-         *
-         * Let the user play with the plasmoid options.
+         * Lets the user interact with the plasmoid options.
          * Called when the user selects the configure entry
          * from the context menu.
+         *
+         * Applets should NOT reimplement this method unless there is good
+         * reason to do so, but instead reimplment createConfigurationInterface
          */
         virtual void showConfigurationInterface();
+
+        /**
+         * Reimplement this method so provide a configuration interface,
+         * parented to the supplied widget. Ownership of the widgets is passed
+         * to the parent widget.
+         *
+         * @param parent the dialog which is the parent of the configuration
+         *               widgets
+         */
+        virtual void createConfigurationInterface(KConfigDialog *parent);
 
         /**
          * Sends all pending contraints updates to the applet. Will usually
