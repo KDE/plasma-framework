@@ -229,7 +229,7 @@ public:
     /**
      * Sets the widget's cache paint mode and cache size.
      * @param mode the new cache paint mode
-     * @param mode the new cache size, only applies to ItemCoordinateCacheMode
+     * @param size the new cache size, only applies to ItemCoordinateCacheMode
      */
     void setCachePaintMode(CachePaintMode mode, const QSize &size = QSize());
 
