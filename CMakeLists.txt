@@ -71,7 +71,7 @@ set(plasma_LIB_SRCS
     widgets/progressbar.cpp
     widgets/pushbutton.cpp
     widgets/radiobutton.cpp
-#    widgets/rectangle.cpp
+    widgets/webcontent.cpp
     widgets/widget.cpp
     widgets/signalplotter.cpp
     widgets/meter.cpp
@@ -92,7 +92,7 @@ endif(QT_QTOPENGL_FOUND AND OPENGL_FOUND)
 
 kde4_add_library(plasma SHARED ${plasma_LIB_SRCS})
 
-target_link_libraries(plasma ${KDE4_KIO_LIBS} ${KDE4_KFILE_LIBS} ${QT_QTUITOOLS_LIBRARY})
+target_link_libraries(plasma ${KDE4_KIO_LIBS} ${KDE4_KFILE_LIBS} ${QT_QTUITOOLS_LIBRARY} ${QT_QTWEBKIT_LIBRARY})
 
 if(QT_QTOPENGL_FOUND AND OPENGL_FOUND)
 target_link_libraries(plasma ${QT_QTOPENGL_LIBRARY} ${OPENGL_gl_LIBRARY})
@@ -161,6 +161,7 @@ install(FILES
     widgets/widget.h
     widgets/signalplotter.h
     widgets/meter.h
+    widgets/webcontent.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/plasma/widgets)
 
 install(FILES
