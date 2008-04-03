@@ -20,6 +20,7 @@
 #ifndef PLASMA_WEBCONTENT_H
 #define PLASMA_WEBCONTENT_H
 
+#include <plasma/plasma_export.h>
 #include <plasma/widgets/widget.h>
 
 class QWebPage;
@@ -32,7 +33,7 @@ class QGraphicsSceneWheelEvent;
 namespace Plasma
 {
 
-class WebContent : public Widget
+class PLASMA_EXPORT WebContent : public Widget
 {
     Q_OBJECT
 
