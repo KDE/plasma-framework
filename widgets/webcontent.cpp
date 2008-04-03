@@ -25,11 +25,11 @@
 #include <QtGui/QKeyEvent>
 #include <QtGui/QStyleOptionGraphicsItem>
 #include <QtWebKit/QWebFrame>
+#include <QtWebKit/QWebPage>
 
 #include <KDE/KDebug>
 
-#include "webcontent.h"
-#include "webpage.h"
+#include "plasma/widgets/webcontent.h"
 
 namespace Plasma
 {
@@ -37,7 +37,7 @@ namespace Plasma
 class WebContent::Private
 {
 public:
-    WebPage *page;
+    QWebPage *page;
     bool loaded;
 };
 
@@ -46,9 +46,7 @@ WebContent::WebContent(QGraphicsItem *parent , QObject *parentObject)
       d(new Private)
 {
     d->loaded = false;
-    d->page = new WebPage(this);
-    connect(d->page, SIGNAL(loadProgress(int)), this, SIGNAL(loadProgress(int)));
-    connect(d->page->mainFrame(), SIGNAL(loadDone(bool)), this, SLOT(loadingComplete(bool)));
+    setPage(new QWebPage(this));
 }
 
 WebContent::~WebContent()
@@ -58,22 +56,44 @@ WebContent::~WebContent()
 void WebContent::setUrl(const QUrl &url)
 {
     d->loaded = false;
-    d->page->mainFrame()->load(url);
+    if (d->page) {
+        d->page->mainFrame()->load(url);
+    }
 }
 
 void WebContent::setHtml(const QByteArray &html, const QUrl &baseUrl)
 {
     d->loaded = false;
-    d->page->mainFrame()->setHtml(html, baseUrl);
+    if (d->page) {
+        d->page->mainFrame()->setHtml(html, baseUrl);
+    }
 }
 
 QSizeF WebContent::sizeHint() const
 {
-    if (d->loaded) {
+    if (d->loaded && d->page) {
         return d->page->mainFrame()->contentsSize();
     }
 
     return Widget::sizeHint();
+}
+
+void WebContent::setPage(QWebPage *page)
+{
+    if (page == d->page) {
+        return;
+    }
+
+    if (d->page && d->page->parent() == this) {
+        delete d->page;
+    }
+
+    d->page = page;
+
+    if (d->page) {
+        connect(d->page, SIGNAL(loadProgress(int)), this, SIGNAL(loadProgress(int)));
+        connect(d->page->mainFrame(), SIGNAL(loadDone(bool)), this, SLOT(loadingComplete(bool)));
+    }
 }
 
 QWebPage* WebContent::page() const
@@ -83,14 +103,14 @@ QWebPage* WebContent::page() const
 
 QWebFrame* WebContent::mainFrame() const
 {
-    return d->page->mainFrame();
+    return d->page ? d->page->mainFrame() : 0;
 }
 
 void WebContent::paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     Q_UNUSED(widget)
 
-    if (d->loaded) {
+    if (d->loaded && d->page) {
         //kDebug() << "painting page";
         d->page->mainFrame()->render(painter, option->rect);
     }
@@ -98,6 +118,11 @@ void WebContent::paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *
 
 void WebContent::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
+    if (!d->page) {
+        Widget::mouseMoveEvent(event);
+        return;
+    }
+
     QMouseEvent me(QEvent::MouseMove, event->pos().toPoint(), event->button(),
                    event->buttons(), event->modifiers());
     d->page->event(&me);
@@ -108,6 +133,11 @@ void WebContent::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
 void WebContent::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
+    if (!d->page) {
+        Widget::mousePressEvent(event);
+        return;
+    }
+
     QMouseEvent me(QEvent::MouseButtonPress, event->pos().toPoint(), event->button(),
                    event->buttons(), event->modifiers());
     d->page->event(&me);
@@ -118,6 +148,11 @@ void WebContent::mousePressEvent(QGraphicsSceneMouseEvent *event)
 
 void WebContent::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
 {
+    if (!d->page) {
+        Widget::mouseDoubleClickEvent(event);
+        return;
+    }
+
     QMouseEvent me(QEvent::MouseButtonDblClick, event->pos().toPoint(), event->button(),
                    event->buttons(), event->modifiers());
     d->page->event(&me);
@@ -128,6 +163,11 @@ void WebContent::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
 
 void WebContent::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
+    if (!d->page) {
+        Widget::mouseReleaseEvent(event);
+        return;
+    }
+
     QMouseEvent me(QEvent::MouseButtonRelease, event->pos().toPoint(), event->button(),
                    event->buttons(), event->modifiers());
     d->page->event(&me);
@@ -138,6 +178,11 @@ void WebContent::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 
 void WebContent::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
 {
+    if (!d->page) {
+        Widget::contextMenuEvent(event);
+        return;
+    }
+
     QContextMenuEvent ce(static_cast<QContextMenuEvent::Reason>(event->reason()),
                          event->pos().toPoint(), event->screenPos());
     d->page->event(&ce);
@@ -148,6 +193,11 @@ void WebContent::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
 
 void WebContent::wheelEvent(QGraphicsSceneWheelEvent *event)
 {
+    if (!d->page) {
+        Widget::wheelEvent(event);
+        return;
+    }
+
     QWheelEvent we(event->pos().toPoint(), event->delta(), event->buttons(),
                    event->modifiers(), event->orientation());
 
@@ -162,6 +212,11 @@ void WebContent::wheelEvent(QGraphicsSceneWheelEvent *event)
 
 void WebContent::keyPressEvent(QKeyEvent * event)
 {
+    if (!d->page) {
+        Widget::keyPressEvent(event);
+        return;
+    }
+
     d->page->event(event);
 
     if (!event->isAccepted()) {
@@ -171,6 +226,11 @@ void WebContent::keyPressEvent(QKeyEvent * event)
 
 void WebContent::keyReleaseEvent(QKeyEvent * event)
 {
+    if (!d->page) {
+        Widget::keyReleaseEvent(event);
+        return;
+    }
+
     d->page->event(event);
 
     if (!event->isAccepted()) {
@@ -180,18 +240,29 @@ void WebContent::keyReleaseEvent(QKeyEvent * event)
 
 void WebContent::focusInEvent(QFocusEvent * event)
 {
-    d->page->event(event);
+    if (d->page) {
+        d->page->event(event);
+    }
+
     Widget::focusInEvent(event);
 }
 
 void WebContent::focusOutEvent(QFocusEvent * event)
 {
-    d->page->event(event);
+    if (d->page) {
+        d->page->event(event);
+    }
+
     Widget::focusOutEvent(event);
 }
 
 void WebContent::dragEnterEvent(QGraphicsSceneDragDropEvent * event)
 {
+    if (!d->page) {
+        Widget::dragEnterEvent(event);
+        return;
+    }
+
     QDragEnterEvent de(event->pos().toPoint(), event->possibleActions(), event->mimeData(),
                        event->buttons(), event->modifiers());
     d->page->event(&de);
@@ -203,6 +274,11 @@ void WebContent::dragEnterEvent(QGraphicsSceneDragDropEvent * event)
 
 void WebContent::dragLeaveEvent(QGraphicsSceneDragDropEvent * event)
 {
+    if (!d->page) {
+        Widget::dragLeaveEvent(event);
+        return;
+    }
+
     QDragLeaveEvent de;
     d->page->event(&de);
 
@@ -213,6 +289,11 @@ void WebContent::dragLeaveEvent(QGraphicsSceneDragDropEvent * event)
 
 void WebContent::dragMoveEvent(QGraphicsSceneDragDropEvent * event)
 {
+    if (!d->page) {
+        Widget::dragMoveEvent(event);
+        return;
+    }
+
     // Ok, so the docs say "don't make a QDragMoveEvent yourself" but we're just
     // replicating it here, not really creating a new one. hopefully we get away with it ;)
     QDragMoveEvent de(event->pos().toPoint(), event->possibleActions(), event->mimeData(),
@@ -226,6 +307,11 @@ void WebContent::dragMoveEvent(QGraphicsSceneDragDropEvent * event)
 
 void WebContent::dropEvent(QGraphicsSceneDragDropEvent * event)
 {
+    if (!d->page) {
+        Widget::dropEvent(event);
+        return;
+    }
+
     QDragMoveEvent de(event->pos().toPoint(), event->possibleActions(), event->mimeData(),
                       event->buttons(), event->modifiers());
     d->page->event(&de);

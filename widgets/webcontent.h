@@ -62,6 +62,15 @@ class WebContent : public Widget
         QSizeF sizeHint() const;
 
         /**
+         * Sets the page to use in this item. The owner of the webpage remains,
+         * however if this WebContent object is the owner of the current page,
+         * then the current page is deleted
+         *
+         * @param page the page to set in this view
+         */
+        void setPage(QWebPage *page);
+
+        /**
          * The QWebPage associated with this item. Useful when more
          * of the features of the full QWebPage object need to be accessed.
          */
