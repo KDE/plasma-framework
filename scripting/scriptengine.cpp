@@ -27,6 +27,7 @@
 #include "applet.h"
 #include "dataengine.h"
 #include "package.h"
+#include "packages_p.h"
 #include "scripting/appletscript.h"
 #include "scripting/dataenginescript.h"
 #include "scripting/runnerscript.h"
@@ -96,16 +97,16 @@ QStringList knownLanguages(ComponentTypes types)
     return languages;
 }
 
-ScriptEngine* loadEngine(const QString &language, ComponentType type, QObject *parent)
+KService::List engineOffers(const QString &language, ComponentType type)
 {
     if (language.isEmpty()) {
-        return 0;
+        return KService::List();
     }
 
     QRegExp re("[^a-zA-Z0-9\\-_]");
     if (re.indexIn(language) != -1) {
         kDebug() << "invalid language attempted:" << language;
-        return 0;
+        return KService::List();
     }
 
     QString component;
@@ -120,7 +121,7 @@ ScriptEngine* loadEngine(const QString &language, ComponentType type, QObject *p
             component = "Runner";
             break;
         default:
-            return 0;
+            return KService::List();
             break;
     }
 
@@ -131,8 +132,14 @@ ScriptEngine* loadEngine(const QString &language, ComponentType type, QObject *p
              << "resulting in" << offers.count() << "results";*/
     if (offers.isEmpty()) {
         kDebug() << "ScriptEngine::load: no offers for \"" << language << "\"";
-        return 0;
     }
+
+    return offers;
+}
+
+ScriptEngine* loadEngine(const QString &language, ComponentType type, QObject *parent)
+{
+    KService::List offers = engineOffers(language, type);
 
     QVariantList args;
     QString error;
@@ -195,6 +202,39 @@ RunnerScript* loadScriptEngine(const QString &language, AbstractRunner *runner)
     }
 
     return engine;
+}
+
+PackageStructure::Ptr defaultPackageStructure(ComponentType type)
+{
+    switch (type) {
+        case AppletComponent:
+            return PackageStructure::Ptr(new PlasmoidPackage());
+            break;
+        default:
+            // TODO: we don't have any special structures for other components yet
+            break;
+    }
+
+    return PackageStructure::Ptr(new PackageStructure());
+}
+
+PackageStructure::Ptr packageStructure(const QString &language, ComponentType type)
+{
+    KService::List offers = engineOffers(language, type);
+
+    if (offers.isEmpty()) {
+        return defaultPackageStructure(type);
+    }
+
+    KService::Ptr offer = offers.first();
+    QString packageFormat = offer->property("X-Plasma-PackageFormat").toString();
+
+    if (packageFormat.isEmpty()) {
+        return defaultPackageStructure(type);
+    } else {
+        PackageStructure::Ptr structure = PackageStructure::load(packageFormat);
+        return structure;
+    }
 }
 
 } // namespace Plasma

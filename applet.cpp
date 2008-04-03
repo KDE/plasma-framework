@@ -164,15 +164,9 @@ public:
             } else {
                 // create the package and see if we have something real
                 //kDebug() << "trying for" << path;
-                QString packageFormat = appletDescription.property("X-Plasma-PackageFormat").toString();
-
-                if (packageFormat.isEmpty()) {
-                    package = new Package(path, PackageStructure::Ptr(new PlasmoidPackage()));
-                } else {
-                    PackageStructure::Ptr structure = PackageStructure::load(packageFormat);
-                    structure->setPath(path);
-                    package = new Package(path, structure);
-                }
+                PackageStructure::Ptr structure = Plasma::packageStructure(language, Plasma::AppletComponent);
+                structure->setPath(path);
+                package = new Package(path, structure);
 
                 if (package->isValid()) {
                     // now we try and set up the script engine.

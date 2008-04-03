@@ -21,6 +21,7 @@
 #define PLASMA_SCRIPTENGINE_H
 
 #include <plasma/plasma_export.h>
+#include <plasma/packagestructure.h>
 #include <plasma/plasma.h>
 
 #include <QtCore/QObject>
@@ -110,6 +111,15 @@ DataEngineScript* loadScriptEngine(const QString &language, DataEngine *dataEngi
  *         for the return object which will be parented to the AbstractRunner
  **/
 RunnerScript* loadScriptEngine(const QString &language, AbstractRunner *runner);
+
+/**
+ * Loads an appropriate PackageStructure for the given language and type
+ *
+ * @param langauge the language to load the PackageStructure for
+ * @param type the component type
+ * @return a guarded PackageStructure pointer
+ */
+PackageStructure::Ptr packageStructure(const QString &language, ComponentType type);
 
 } // namespace Plasma
 
