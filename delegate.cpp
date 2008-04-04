@@ -306,31 +306,20 @@ void Delegate::paint(QPainter *painter, const QStyleOptionViewItem& option, cons
     QIcon decorationIcon = index.data(Qt::DecorationRole).value<QIcon>();
 
     if (index.data(d->roles[ColumnTypeRole]).toInt() == SecondaryActionColumn) {
-
         if (hover) {
+            // Only draw on hover
             const int delta = floor((qreal)(ICON_SIZE - ACTION_ICON_SIZE)/2.0);
-
             decorationRect.adjust(delta, delta-1, -delta-1, -delta);
-
             decorationIcon.paint(painter, decorationRect, option.decorationAlignment);
         }
-        //If not hover don't draw anything
-
-    // as default always draw as main column
     } else {
-        if (!hover) {
-          decorationRect.adjust(2, 2, -2, -2);
-        }
-
+        // as default always draw as main column
         decorationIcon.paint(painter, decorationRect, option.decorationAlignment);
     }
 
     painter->save();
 
     // draw title
-    if (hover) {
-      titleFont.setBold(true);
-    }
     painter->setFont(titleFont);
     painter->drawText(titleRect, Qt::AlignLeft|Qt::AlignVCenter, titleText);
 
