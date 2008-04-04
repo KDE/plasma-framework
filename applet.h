@@ -628,6 +628,17 @@ class PLASMA_EXPORT Applet : public Widget
          **/
         Containment* containment() const;
 
+        /**
+         * Sets the opacity of this Plasma::Applet
+         * @param opacity the new opacity
+         */
+        void setOpacity( qreal opacity );
+
+        /**
+         * @return opacity of this Applet
+         **/
+        qreal opacity() const;
+
     Q_SIGNALS:
         /**
          * Emitted when the applet needs to take (or lose) keyboard focus.
