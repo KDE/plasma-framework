@@ -45,6 +45,7 @@ WebContent::WebContent(QGraphicsItem *parent , QObject *parentObject)
     : Widget(parent, parentObject),
       d(new Private)
 {
+    d->page = 0;
     d->loaded = false;
     setPage(new QWebPage(this));
 }
