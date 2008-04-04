@@ -425,7 +425,7 @@ protected:
     void drawWidget(QPainter *p, uint w, uint height, int horizontalScale);
     void drawBackground(QPainter *p, int w, int h);
     void drawThinFrame(QPainter *p, int w, int h);
-    void drawTopBarFrame(QPainter *p, int seperatorX, int height);
+    void drawTopBarFrame(QPainter *p, int separatorX, int height);
     void drawTopBarContents(QPainter *p, int x, int width, int height);
     void drawVerticalLines(QPainter *p, int top, int w, int h);
     void drawPlots(QPainter *p, int top, int w, int h, int horizontalScale);

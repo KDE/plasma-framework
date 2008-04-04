@@ -579,8 +579,8 @@ void SignalPlotter::drawWidget(QPainter *p, uint w, uint height, int horizontalS
         }
 
         if (showTopBar) {
-            int seperatorX = w / 2;
-            drawTopBarFrame(&pCache, seperatorX, top);
+            int separatorX = w / 2;
+            drawTopBarFrame(&pCache, separatorX, top);
         }
 
         // Draw scope-like grid vertical lines if it doesn't move.
@@ -602,9 +602,9 @@ void SignalPlotter::drawWidget(QPainter *p, uint w, uint height, int horizontalS
     p->setRenderHint(QPainter::Antialiasing, true);
 
     if (showTopBar) {
-        int seperatorX = w / 2;
-        int topBarWidth = w - seperatorX -2;
-        drawTopBarContents(p, seperatorX, topBarWidth, top -1);
+        int separatorX = w / 2;
+        int topBarWidth = w - separatorX -2;
+        drawTopBarContents(p, separatorX, topBarWidth, top -1);
     }
 
     p->setClipRect(0, top, w, h);
@@ -674,16 +674,16 @@ void SignalPlotter::calculateNiceRange()
 }
 
 
-void SignalPlotter::drawTopBarFrame(QPainter *p, int seperatorX, int height)
+void SignalPlotter::drawTopBarFrame(QPainter *p, int separatorX, int height)
 {
     // Draw horizontal bar with current sensor values at top of display.
     // Remember that it has a height of 'height'. Thus the lowest pixel
     // it can draw on is height-1 since we count from 0.
     p->setPen(Qt::NoPen);
     p->setPen(d->fontColor);
-    p->drawText(0, 1, seperatorX, height, Qt::AlignCenter, d->title);
+    p->drawText(0, 1, separatorX, height, Qt::AlignCenter, d->title);
     p->setPen(d->horizontalLinesColor);
-    p->drawLine(seperatorX - 1, 1, seperatorX - 1, height-1);
+    p->drawLine(separatorX - 1, 1, separatorX - 1, height-1);
 }
 
 void SignalPlotter::drawTopBarContents(QPainter *p, int x, int width, int height)
