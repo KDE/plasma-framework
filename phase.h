@@ -119,8 +119,8 @@ public:
 Q_SIGNALS:
     void animationComplete(QGraphicsItem *item, Plasma::Phase::Animation anim);
     void movementComplete(QGraphicsItem *item);
-    void elementAnimationComplete(AnimId id);
-    void customAnimationComplete(AnimId id);
+    void elementAnimationComplete(Plasma::Phase::AnimId id);
+    void customAnimationComplete(Plasma::Phase::AnimId id);
 
 protected:
     void timerEvent(QTimerEvent *event);
