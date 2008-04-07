@@ -965,6 +965,7 @@ void Applet::paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *opti
 
                 if (v) {
                     coption.desktop = v->effectiveDesktop();
+                    coption.view = v;
                 }
 
                 paintInterface(painter, &coption, QRect(QPoint(0,0), d->contentSize(this).toSize()));
