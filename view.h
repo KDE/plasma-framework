@@ -22,6 +22,8 @@
 
 #include <QtGui/QGraphicsView>
 
+#include <KDE/KConfigGroup>
+
 #include <plasma/plasma_export.h>
 
 namespace Plasma
@@ -31,14 +33,35 @@ class Containment;
 class Corona;
 
 /**
- * @short A QGraphicsView for Plasma::Applets
+ * @short A QGraphicsView for Plasma::Applets. Each View is associated with
+ * a Plasma::Containment and tracks geometry changes, maps to the current desktop
+ * (if any) among other helpful utilities. It isn't stricly required to use
+ * a Plasma::View with Plasma enabled applications, but it can make some
+ * things easier.
  */
 class PLASMA_EXPORT View : public QGraphicsView
 {
     Q_OBJECT
 
 public:
+    /**
+     * Constructs a view for a given contanment. An Id is automatically
+     * assigned to the View.
+     *
+     * @arg containment the containment to center the view on
+     * @arg parent the parent object for this view
+     */
     explicit View(Containment *containment, QWidget *parent = 0);
+
+    /**
+     * Constructs a view for a given contanment.
+     *
+     * @arg containment the containment to center the view on
+     * @arg viewId the id to assign to this view
+     * @arg parent the parent object for this view
+     */
+    View(Containment *containment, int viewId, QWidget *parent = 0);
+
     ~View();
 
     /**
@@ -100,6 +123,16 @@ public:
      * @return the containment associated with this view, or 0 if none is
      */
     Containment* containment() const;
+
+    /**
+     * @return a KConfigGroup for this application unique to the view
+     */
+    KConfigGroup config() const;
+
+    /**
+     * @return the id of the View set in the constructor
+     */
+    int id() const;
 
 Q_SIGNALS:
     /**

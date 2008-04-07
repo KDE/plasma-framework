@@ -19,6 +19,7 @@
 
 #include "view.h"
 
+#include <KGlobal>
 #include <KWindowSystem>
 
 #include "corona.h"
@@ -32,11 +33,16 @@ namespace Plasma
 class View::Private
 {
 public:
-    Private()
+    Private(int uniqueId)
         : drawWallpaper(true),
           desktop(-1),
           containment(0)
     {
+        if (uniqueId == 0) {
+            viewId = ++s_maxViewId;
+        } else if (uniqueId > s_maxViewId) {
+            s_maxViewId = uniqueId;
+        }
     }
 
     ~Private()
@@ -45,12 +51,26 @@ public:
 
     bool drawWallpaper;
     int desktop;
+    int viewId;
     Plasma::Containment *containment;
+    static int s_maxViewId;
 };
+
+int View::Private::s_maxViewId(0);
 
 View::View(Containment *containment, QWidget *parent)
     : QGraphicsView(parent),
-      d(new Private)
+      d(new Private(0))
+{
+    Q_ASSERT(containment);
+    initGraphicsView();
+    setScene(containment->scene());
+    setContainment(containment);
+}
+
+View::View(Containment *containment, int viewId, QWidget *parent)
+    : QGraphicsView(parent),
+      d(new Private(viewId))
 {
     Q_ASSERT(containment);
     initGraphicsView();
@@ -157,6 +177,17 @@ void View::setContainment(Containment *containment)
 Containment* View::containment() const
 {
     return d->containment;
+}
+
+KConfigGroup View::config() const
+{
+    KConfigGroup views(KGlobal::config(), "PlasmaViews");
+    return KConfigGroup(&views, QString::number(d->viewId));
+}
+
+int View::id() const
+{
+    return d->viewId;
 }
 
 void View::setDrawWallpaper(bool draw)
