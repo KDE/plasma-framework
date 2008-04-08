@@ -450,8 +450,6 @@ void Applet::saveState(KConfigGroup* group) const
         KConfigGroup c = config();
         d->copyEntries(&c, group);
     }
-
-    Q_UNUSED(group)
 }
 
 KConfigGroup Applet::config(const QString &group) const
