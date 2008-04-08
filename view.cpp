@@ -42,6 +42,7 @@ public:
             viewId = ++s_maxViewId;
         } else if (uniqueId > s_maxViewId) {
             s_maxViewId = uniqueId;
+            viewId = uniqueId;
         }
     }
 
