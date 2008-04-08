@@ -230,6 +230,13 @@ ToolTip::~ToolTip()
     delete d;
 }
 
+void ToolTip::setData(Plasma::Widget *widget, const Plasma::ToolTipData &data)
+{
+    if (d->currentWidget && d->currentWidget == widget) {
+        setData(data);
+    }
+}
+
 void ToolTip::setData(const Plasma::ToolTipData &data)
 {
     //reset our size

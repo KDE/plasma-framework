@@ -393,13 +393,13 @@ void Widget::setToolTip(const ToolTipData &tip)
 
     *d->toolTip = tip;
 
-    if (ToolTip::self()->currentWidget() == this) {
-        ToolTip::self()->show(this);
-    }
+    // this does a check to ensure the current widget is us
+    ToolTip::self()->setData(this, *d->toolTip);
 }
 
 void Widget::updateToolTip(bool update)
 {
+    Q_UNUSED(update)
 }
 
 void Widget::paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)

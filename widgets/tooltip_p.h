@@ -50,6 +50,7 @@ public:
     void hide();
 
     Plasma::Widget *currentWidget() const;
+    void setData(Plasma::Widget *widget, const Plasma::ToolTipData &data);
 
 protected:
     void showEvent(QShowEvent *);
