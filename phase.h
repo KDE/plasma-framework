@@ -116,6 +116,8 @@ public:
     Q_INVOKABLE void setAnimationPixmap(AnimId id, const QPixmap &pixmap);
     Q_INVOKABLE QPixmap animationResult(AnimId id);
 
+    Q_INVOKABLE bool isAnimating();
+
 Q_SIGNALS:
     void animationComplete(QGraphicsItem *item, Plasma::Phase::Animation anim);
     void movementComplete(QGraphicsItem *item);
