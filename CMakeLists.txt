@@ -95,7 +95,7 @@ kde4_add_library(plasma SHARED ${plasma_LIB_SRCS})
 target_link_libraries(plasma ${KDE4_KIO_LIBS} ${KDE4_KFILE_LIBS} ${QT_QTUITOOLS_LIBRARY} ${QT_QTWEBKIT_LIBRARY})
 
 if(QT_QTOPENGL_FOUND AND OPENGL_FOUND)
-target_link_libraries(plasma ${QT_QTOPENGL_LIBRARY} ${OPENGL_gl_LIBRARY})
+    target_link_libraries(plasma ${QT_QTOPENGL_LIBRARY} ${OPENGL_gl_LIBRARY})
 endif(QT_QTOPENGL_FOUND AND OPENGL_FOUND)
 
 set_target_properties(plasma PROPERTIES VERSION 1.0.0 SOVERSION 1)
