@@ -346,7 +346,7 @@ Containment* Corona::addContainment(const QString& name, const QVariantList& arg
 
         // in case we got a non-Containment from Applet::loadApplet or a null containment was requested
         delete applet;
-        containment = new Containment;
+        containment = new Containment(0, 0, id);
 
         // we want to provide something and don't care about the failure to launch
         containment->setFailedToLaunch(false);
