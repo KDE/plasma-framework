@@ -46,9 +46,9 @@ class LineEdit::Private
         QString defaultText;
         QString oldText;
 
-        bool showingDefaultText;
-        bool styled;
-        bool multiline;
+        bool showingDefaultText : 1;
+        bool styled : 1;
+        bool multiline : 1;
 
 };
 
