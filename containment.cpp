@@ -122,6 +122,8 @@ void Containment::Private::setLockToolText()
             icon->setMaximumSize(iconSize);
             icon->resize(icon->sizeHint());
         }
+
+        toolbox->enableTool("addwidgets", !q->isImmutable());
     }
 }
 
@@ -240,7 +242,6 @@ void Containment::containmentConstraintsUpdated(Plasma::Constraints constraints)
 
     if (constraints & Plasma::ScreenConstraint && d->toolbox) {
         d->toolbox->setPos(geometry().width() - d->toolbox->boundingRect().width(), 0);
-        d->toolbox->enableTool("addwidgets", !isImmutable());
     }
 
     if (constraints & Plasma::SizeConstraint) {
