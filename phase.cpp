@@ -489,8 +489,7 @@ QPixmap Phase::animationResult(AnimId id)
     return state->pixmap;
 }
 
-//returns true if there are animations happening.
-bool Phase::isAnimating()
+bool Phase::isAnimating() const
 {
     return (d->animatedItems.size() > 0 ||
             d->movingItems.size() > 0 ||
