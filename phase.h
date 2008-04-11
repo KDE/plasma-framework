@@ -118,6 +118,7 @@ public:
 
     /**
      * @return true if there are animations happening
+     * @since 4.1
      */
     Q_INVOKABLE bool isAnimating() const;
 

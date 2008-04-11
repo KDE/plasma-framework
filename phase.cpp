@@ -491,10 +491,10 @@ QPixmap Phase::animationResult(AnimId id)
 
 bool Phase::isAnimating() const
 {
-    return (d->animatedItems.size() > 0 ||
-            d->movingItems.size() > 0 ||
-            d->animatedItems.size() > 0 ||
-            d->customAnims.size() > 0);
+    return (!d->animatedItems.isEmpty() ||
+            !d->movingItems.isEmpty() ||
+            !d->animatedElements.isEmpty() ||
+            !d->customAnims.isEmpty());
 }
 
 void Phase::timerEvent(QTimerEvent *event)
