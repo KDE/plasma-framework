@@ -25,8 +25,10 @@
 #include <KDebug>
 #include <KPluginInfo>
 #include <KServiceTypeTrader>
+#include <KStandardDirs>
 #include <QTimer>
 
+#include "package.h"
 #include "scripting/runnerscript.h"
 #include "searchcontext.h"
 
@@ -35,33 +37,31 @@ namespace Plasma
 
 class AbstractRunner::Private
 {
-    public:
-        bool hasMatchOptions;
-        bool hasConfig;
-        Priority priority;
-        Speed speed;
-        RunnerScript* script;
-        KPluginInfo runnerDescription;
-        AbstractRunner* runner;
-        QTime runtime;
-        int fastRuns;
-
+public:
     Private(AbstractRunner* r, KService::Ptr service)
       : priority(NormalPriority),
         speed(NormalSpeed),
         script(0),
         runnerDescription(service),
         runner(r),
-        fastRuns(0)
+        fastRuns(0),
+        package(0)
     {
         if (runnerDescription.isValid()) {
-            QString language = runnerDescription.property("X-Plasma-Language").toString();
-
+            const QString language = runnerDescription.property("X-Plasma-Language").toString();
             if (!language.isEmpty()) {
+                const QString path = KStandardDirs::locate("data",
+                                    "plasma/runners/" + runnerDescription.pluginName() + "/");
+                PackageStructure::Ptr structure = Plasma::packageStructure(language, Plasma::RunnerComponent);
+                structure->setPath(path);
+                package = new Package(path, structure);
+
                 script = Plasma::loadScriptEngine(language, runner);
                 if (!script) {
                     kDebug() << "Could not create a" << language << "ScriptEngine for the"
                     << runnerDescription.name() << "Runner.";
+                    delete package;
+                    package = 0;
                 } else {
                     QTimer::singleShot(0, runner, SLOT(init()));
                 }
@@ -69,14 +69,25 @@ class AbstractRunner::Private
         }
     }
 
+    bool hasMatchOptions;
+    bool hasConfig;
+    Priority priority;
+    Speed speed;
+    RunnerScript* script;
+    KPluginInfo runnerDescription;
+    AbstractRunner* runner;
+    QTime runtime;
+    int fastRuns;
+    Package *package;
+
     static QMutex bigLock;
 };
 
 QMutex AbstractRunner::Private::bigLock;
 
-AbstractRunner::AbstractRunner(QObject* parent, const QString& serviceId)
-    : QObject(parent),
-      d(new Private(this, KService::serviceByStorageId(serviceId)))
+    AbstractRunner::AbstractRunner(QObject* parent, const QString& serviceId)
+: QObject(parent),
+    d(new Private(this, KService::serviceByStorageId(serviceId)))
 {
 }
 
@@ -219,6 +230,11 @@ QString AbstractRunner::runnerName() const
         return objectName();
     }
     return d->runnerDescription.property("X-Plasma-RunnerName").toString();
+}
+
+const Package* AbstractRunner::package() const
+{
+    return d->package;
 }
 
 void AbstractRunner::init()
