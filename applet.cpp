@@ -103,6 +103,7 @@ public:
           package(0),
           needsConfigOverlay(0),
           background(0),
+          overlay(0),
           failureText(0),
           script(0),
           configXml(0),
@@ -132,6 +133,7 @@ public:
             DataEngineManager::self()->unload( engine );
         }
         delete background;
+        delete overlay;
         delete package;
         delete configXml;
         delete shadow;
@@ -318,6 +320,7 @@ public:
     QList<QGraphicsItem*> watchedForMouseMove;
     QStringList loadedEngines;
     Plasma::SvgPanel *background;
+    Plasma::SvgPanel *overlay;
     Plasma::LineEdit *failureText;
     AppletScript *script;
     ConfigXml* configXml;
@@ -641,6 +644,10 @@ void Applet::setDrawStandardBackground(bool drawBackground)
         if (!d->background) {
             d->background = new Plasma::SvgPanel("widgets/background");
 
+            if (!Plasma::Theme::self()->image("widgets/overlay").isEmpty()) {
+                d->overlay = new Plasma::SvgPanel("widgets/overlay");
+            }
+
             int left, top, right, bottom;
             d->getBorderSize(left, top, right, bottom);
             setMargins(0, 0, right, bottom);
@@ -649,7 +656,9 @@ void Applet::setDrawStandardBackground(bool drawBackground)
         }
     } else if (d->background) {
         delete d->background;
+        delete d->overlay;
         d->background = 0;
+        d->overlay = 0;
         setMargins(0, 0, 0, 0);
         updateGeometry();
         update();
@@ -975,6 +984,13 @@ void Applet::paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *opti
 
         //kDebug() << "paint interface of" << (QObject*) this;
         paintInterface(painter, option, QRect(QPoint(0,0), d->contentSize(this).toSize()));
+    }
+
+    if (d->overlay &&
+        formFactor() != Plasma::Vertical &&
+        formFactor() != Plasma::Horizontal) {
+        //kDebug() << "option rect is" << option->rect;
+        d->overlay->paint(painter, option->rect);
     }
 
     painter->restore();
@@ -1576,6 +1592,11 @@ void Applet::setGeometry(const QRectF& geometry)
         if (d->background) {
             //kDebug() << "setting background to" << size();
             d->background->resize(size());
+        }
+
+        if (d->overlay) {
+            //kDebug() << "setting overlay to" << size();
+            d->overlay->resize(size());
         }
 
         updateConstraints(Plasma::SizeConstraint);
