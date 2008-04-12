@@ -51,6 +51,16 @@ bool ScriptEngine::init()
     return true;
 }
 
+const Package* ScriptEngine::package() const
+{
+    return 0;
+}
+
+QString ScriptEngine::mainScript() const
+{
+    return QString();
+}
+
 QStringList knownLanguages(ComponentTypes types)
 {
     QString constraintTemplate = "'%1' in [X-Plasma-ComponentTypes]";

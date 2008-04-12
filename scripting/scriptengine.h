@@ -70,8 +70,21 @@ public:
      */
     virtual bool init();
 
+protected Q_SLOTS:
+    /**
+     * @return absolute path to the main script file for this plasmoid
+     */
+    virtual QString mainScript() const;
+
+    /**
+     * @return the Package associated with this plasmoid which can
+     *         be used to request resources, such as images and
+     *         interface files.
+     */
+    virtual const Package* package() const;
+
 private:
-    class Private;
+        class Private;
     Private * const d;
 };
 
