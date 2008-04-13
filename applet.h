@@ -573,7 +573,7 @@ class PLASMA_EXPORT Applet : public Widget
         /**
          * Sets whether or not this Applet is acting as a Containment
          */
-        void setIsContainment(bool isContainment);
+        virtual void setIsContainment(bool isContainment);
 
         /**
          * @return true if this Applet is currently being used as a Containment, false otherwise
