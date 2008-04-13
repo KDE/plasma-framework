@@ -21,18 +21,6 @@
 
 #include <QStringList>
 
-#include "plasma/widgets/checkbox.h"
-#include "plasma/widgets/flash.h"
-#include "plasma/widgets/icon.h"
-#include "plasma/widgets/label.h"
-#include "plasma/widgets/pushbutton.h"
-#include "plasma/widgets/radiobutton.h"
-#include "plasma/widgets/meter.h"
-
-#include "plasma/layouts/hboxlayout.h"
-#include "plasma/layouts/vboxlayout.h"
-#include "plasma/layouts/flowlayout.h"
-
 namespace Plasma
 {
 
@@ -71,8 +59,9 @@ QStringList UiLoader::availableWidgets() const
     return d->widgets;
 }
 
-Widget *UiLoader::createWidget( const QString &className, Widget *parent )
+Applet *UiLoader::createWidget( const QString &className, Applet *parent )
 {
+    #ifdef RICHARD_WORK
     if (className == QString("CheckBox")) {
         return new CheckBox( parent );
     }
@@ -94,7 +83,7 @@ Widget *UiLoader::createWidget( const QString &className, Widget *parent )
     else if (className == QString("Meter")) {
         return new Meter( parent );
     }
-
+    #endif
     return 0;
 }
 
@@ -105,6 +94,7 @@ QStringList UiLoader::availableLayouts() const
 
 Layout *UiLoader::createLayout( const QString &className, LayoutItem *parent )
 {
+    #ifdef RICHARD_WORK
     if (className == QString("HBoxLayout")) {
         return new HBoxLayout( parent );
     }
@@ -114,7 +104,7 @@ Layout *UiLoader::createLayout( const QString &className, LayoutItem *parent )
     else if (className == QString("FlowLayout")) {
         return new FlowLayout( parent );
     }
-
+    #endif
     return 0;
 }
 
