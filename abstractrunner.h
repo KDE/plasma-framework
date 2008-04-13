@@ -28,6 +28,7 @@
 #include <KDE/KService>
 
 #include <plasma/plasma_export.h>
+#include <plasma/package.h>
 #include <plasma/searchmatch.h>
 #include <plasma/searchcontext.h>
 
@@ -171,7 +172,6 @@ class PLASMA_EXPORT AbstractRunner : public QObject
 
         /**
          * Accessor for the associated Package object if any.
-         * Generally, only Plasmoids come in a Package.
          *
          * @return the Package object, or 0 if none
          **/
