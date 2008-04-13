@@ -83,6 +83,33 @@ public:
         return toolbox;
     }
 
+    void initToolBox()
+    {
+        if (toolbox) {
+            return;
+        }
+
+        if (type == DesktopContainment) {
+            Plasma::Widget *addWidgetTool = q->addToolBoxTool("addwidgets", "list-add", i18n("Add Widgets"));
+            connect(addWidgetTool, SIGNAL(clicked()), q, SIGNAL(showAddWidgets()));
+
+            Plasma::Widget *zoomInTool = q->addToolBoxTool("zoomIn", "zoom-in", i18n("Zoom In"));
+            connect(zoomInTool, SIGNAL(clicked()), q, SLOT(zoomIn()));
+
+            Plasma::Widget *zoomOutTool = q->addToolBoxTool("zoomOut", "zoom-out", i18n("Zoom Out"));
+            connect(zoomOutTool, SIGNAL(clicked()), q, SIGNAL(zoomOut()));
+
+            if (!q->isKioskImmutable()) {
+                Plasma::Widget *lockTool = q->addToolBoxTool("lockWidgets", "object-locked",
+                                                             q->isImmutable() ? i18n("Unlock Widgets") :
+                                                                                i18n("Lock Widgets"));
+                connect(lockTool, SIGNAL(clicked()), q, SLOT(toggleDesktopImmutability()));
+            }
+        } else if (type == PanelContainment) {
+            createToolbox();
+        }
+    }
+
     void positionToolbox()
     {
         QRectF r;
@@ -265,28 +292,24 @@ void Containment::setContainmentType(Containment::Type type)
 {
     d->type = type;
 
-    if (isContainment() && type == DesktopContainment) {
-        if (!d->toolbox) {
-            Plasma::Widget *addWidgetTool = addToolBoxTool("addwidgets", "list-add", i18n("Add Widgets"));
-            connect(addWidgetTool, SIGNAL(clicked()), this, SIGNAL(showAddWidgets()));
+    // reset the toolbox!
+    delete d->toolbox;
+    d->toolbox = 0;
 
-            Plasma::Widget *zoomInTool = addToolBoxTool("zoomIn", "zoom-in", i18n("Zoom In"));
-            connect(zoomInTool, SIGNAL(clicked()), this, SLOT(zoomIn()));
-
-            Plasma::Widget *zoomOutTool = addToolBoxTool("zoomOut", "zoom-out", i18n("Zoom Out"));
-            connect(zoomOutTool, SIGNAL(clicked()), this, SIGNAL(zoomOut()));
-
-            if (!isKioskImmutable()) {
-                Plasma::Widget *lockTool = addToolBoxTool("lockWidgets", "object-locked",
-                                                          isImmutable() ? i18n("Unlock Widgets") :
-                                                                          i18n("Lock Widgets"));
-                connect(lockTool, SIGNAL(clicked()), this, SLOT(toggleDesktopImmutability()));
-            }
-        }
-    } else {
-        delete d->toolbox;
-        d->toolbox = 0;
+    if (isContainment()) {
+        d->initToolBox();
     }
+}
+
+void Containment::setIsContainment(bool isContainment)
+{
+    Applet::setIsContainment(isContainment);
+
+    // reset the toolbox!
+    delete d->toolbox;
+    d->toolbox = 0;
+
+    d->initToolBox();
 }
 
 Corona* Containment::corona() const
@@ -584,11 +607,7 @@ Applet* Containment::addApplet(const QString& name, const QVariantList& args, ui
 
     //kDebug() << applet->name() << "sizehint:" << applet->sizeHint() << "geometry:" << applet->geometry();
 
-    Corona *c = corona();
-    if (c) {
-        connect(applet, SIGNAL(configNeedsSaving()), corona(), SLOT(scheduleConfigSync()));
-    }
-
+    connect(applet, SIGNAL(configNeedsSaving()), this, SIGNAL(configNeedsSaving()));
     emit appletAdded(applet);
     return applet;
 }
