@@ -35,6 +35,7 @@ namespace Plasma
 
 class DataContainer;
 class DataEngineScript;
+class Package;
 
 /**
  * @class DataEngine
@@ -220,6 +221,13 @@ class PLASMA_EXPORT DataEngine : public QObject
          *         is returned if there is no associated icon.
          **/
         QString icon() const;
+
+        /**
+         * Accessor for the associated Package object if any.
+         *
+         * @return the Package object, or 0 if none
+         **/
+        const Package* package() const;
 
     Q_SIGNALS:
         /**

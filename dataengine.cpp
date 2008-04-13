@@ -28,8 +28,10 @@
 #include <KDebug>
 #include <KPluginInfo>
 #include <KService>
+#include <KStandardDirs>
 
 #include "datacontainer.h"
+#include "package.h"
 #include "scripting/dataenginescript.h"
 
 namespace Plasma
@@ -45,7 +47,8 @@ class DataEngine::Private
               minUpdateInterval(-1),
               limit(0),
               valid(true),
-              script(0)
+              script(0),
+              package(0)
         {
             updateTimer = new QTimer(engine);
             updateTimer->setSingleShot(true);
@@ -64,10 +67,18 @@ class DataEngine::Private
                 QString language = dataEngineDescription.property("X-Plasma-Language").toString();
 
                 if (!language.isEmpty()) {
+                    const QString path = KStandardDirs::locate("data",
+                                                               "plasma/engines/" + dataEngineDescription.pluginName() + "/");
+                    PackageStructure::Ptr structure = Plasma::packageStructure(language, Plasma::RunnerComponent);
+                    structure->setPath(path);
+                    package = new Package(path, structure);
+
                     script = Plasma::loadScriptEngine(language, engine);
                     if (!script) {
                         kDebug() << "Could not create a" << language << "ScriptEngine for the"
                                 << dataEngineDescription.name() << "DataEngine.";
+                        delete package;
+                        package = 0;
                     }
                 }
             }
@@ -193,6 +204,7 @@ class DataEngine::Private
         bool valid;
         DataEngineScript* script;
         QString engineName;
+        Package *package;
 };
 
 
@@ -548,6 +560,11 @@ void DataEngine::setIcon(const QString& icon)
 QString DataEngine::icon() const
 {
     return d->icon;
+}
+
+const Package *DataEngine::package() const
+{
+    return d->package;
 }
 
 void DataEngine::checkForUpdates()
