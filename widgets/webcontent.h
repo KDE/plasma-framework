@@ -21,8 +21,7 @@
 #define PLASMA_WEBCONTENT_H
 
 #include <plasma/plasma_export.h>
-#include <plasma/widgets/widget.h>
-
+#include <QGraphicsWidget>
 class QWebPage;
 class QWebFrame;
 class QKeyEvent;
@@ -33,12 +32,12 @@ class QGraphicsSceneWheelEvent;
 namespace Plasma
 {
 
-class PLASMA_EXPORT WebContent : public Widget
+class PLASMA_EXPORT WebContent : public QGraphicsWidget
 {
     Q_OBJECT
 
     public:
-        explicit WebContent(QGraphicsItem *parent = 0 , QObject *parentObject = 0);
+        explicit WebContent(QGraphicsItem *parent = 0);
         ~WebContent();
 
         /**
@@ -60,7 +59,7 @@ class PLASMA_EXPORT WebContent : public Widget
         /**
          * Reimplementation
          */
-        QSizeF sizeHint() const;
+        QSizeF geometry() const;
 
         /**
          * Sets the page to use in this item. The owner of the webpage remains,
@@ -108,7 +107,7 @@ class PLASMA_EXPORT WebContent : public Widget
         /**
          * Reimplementation
          */
-        void paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
+        void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
         void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
         void mousePressEvent(QGraphicsSceneMouseEvent *event);
         void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event);

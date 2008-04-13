@@ -41,8 +41,8 @@ public:
     bool loaded;
 };
 
-WebContent::WebContent(QGraphicsItem *parent , QObject *parentObject)
-    : Widget(parent, parentObject),
+WebContent::WebContent(QGraphicsItem *parent)
+    : QGraphicsWidget(parent),
       d(new Private)
 {
     d->page = 0;
@@ -70,13 +70,13 @@ void WebContent::setHtml(const QByteArray &html, const QUrl &baseUrl)
     }
 }
 
-QSizeF WebContent::sizeHint() const
+QSizeF WebContent::geometry() const
 {
     if (d->loaded && d->page) {
         return d->page->mainFrame()->contentsSize();
     }
 
-    return Widget::size();
+    return QGraphicsWidget::geometry().size();
 }
 
 void WebContent::setPage(QWebPage *page)
@@ -107,7 +107,7 @@ QWebFrame* WebContent::mainFrame() const
     return d->page ? d->page->mainFrame() : 0;
 }
 
-void WebContent::paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+void WebContent::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     Q_UNUSED(widget)
 
@@ -120,7 +120,7 @@ void WebContent::paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *
 void WebContent::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
     if (!d->page) {
-        Widget::mouseMoveEvent(event);
+        QGraphicsWidget::mouseMoveEvent(event);
         return;
     }
 
@@ -135,7 +135,7 @@ void WebContent::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 void WebContent::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     if (!d->page) {
-        Widget::mousePressEvent(event);
+        QGraphicsWidget::mousePressEvent(event);
         return;
     }
 
@@ -150,7 +150,7 @@ void WebContent::mousePressEvent(QGraphicsSceneMouseEvent *event)
 void WebContent::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
 {
     if (!d->page) {
-        Widget::mouseDoubleClickEvent(event);
+        QGraphicsWidget::mouseDoubleClickEvent(event);
         return;
     }
 
@@ -165,7 +165,7 @@ void WebContent::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
 void WebContent::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
     if (!d->page) {
-        Widget::mouseReleaseEvent(event);
+        QGraphicsWidget::mouseReleaseEvent(event);
         return;
     }
 
@@ -180,7 +180,7 @@ void WebContent::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 void WebContent::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
 {
     if (!d->page) {
-        Widget::contextMenuEvent(event);
+        QGraphicsWidget::contextMenuEvent(event);
         return;
     }
 
@@ -195,7 +195,7 @@ void WebContent::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
 void WebContent::wheelEvent(QGraphicsSceneWheelEvent *event)
 {
     if (!d->page) {
-        Widget::wheelEvent(event);
+        QGraphicsWidget::wheelEvent(event);
         return;
     }
 
@@ -207,35 +207,35 @@ void WebContent::wheelEvent(QGraphicsSceneWheelEvent *event)
     if (we.isAccepted()) {
         event->accept();
     } else {
-        Widget::wheelEvent(event);
+        QGraphicsWidget::wheelEvent(event);
     }
 }
 
 void WebContent::keyPressEvent(QKeyEvent * event)
 {
     if (!d->page) {
-        Widget::keyPressEvent(event);
+        QGraphicsWidget::keyPressEvent(event);
         return;
     }
 
     d->page->event(event);
 
     if (!event->isAccepted()) {
-        Widget::keyPressEvent(event);
+        QGraphicsWidget::keyPressEvent(event);
     }
 }
 
 void WebContent::keyReleaseEvent(QKeyEvent * event)
 {
     if (!d->page) {
-        Widget::keyReleaseEvent(event);
+        QGraphicsWidget::keyReleaseEvent(event);
         return;
     }
 
     d->page->event(event);
 
     if (!event->isAccepted()) {
-        Widget::keyPressEvent(event);
+        QGraphicsWidget::keyPressEvent(event);
     }
 }
 
@@ -245,7 +245,7 @@ void WebContent::focusInEvent(QFocusEvent * event)
         d->page->event(event);
     }
 
-    Widget::focusInEvent(event);
+    QGraphicsWidget::focusInEvent(event);
 }
 
 void WebContent::focusOutEvent(QFocusEvent * event)
@@ -254,13 +254,13 @@ void WebContent::focusOutEvent(QFocusEvent * event)
         d->page->event(event);
     }
 
-    Widget::focusOutEvent(event);
+    QGraphicsWidget::focusOutEvent(event);
 }
 
 void WebContent::dragEnterEvent(QGraphicsSceneDragDropEvent * event)
 {
     if (!d->page) {
-        Widget::dragEnterEvent(event);
+        QGraphicsWidget::dragEnterEvent(event);
         return;
     }
 
@@ -276,7 +276,7 @@ void WebContent::dragEnterEvent(QGraphicsSceneDragDropEvent * event)
 void WebContent::dragLeaveEvent(QGraphicsSceneDragDropEvent * event)
 {
     if (!d->page) {
-        Widget::dragLeaveEvent(event);
+        QGraphicsWidget::dragLeaveEvent(event);
         return;
     }
 
@@ -291,7 +291,7 @@ void WebContent::dragLeaveEvent(QGraphicsSceneDragDropEvent * event)
 void WebContent::dragMoveEvent(QGraphicsSceneDragDropEvent * event)
 {
     if (!d->page) {
-        Widget::dragMoveEvent(event);
+        QGraphicsWidget::dragMoveEvent(event);
         return;
     }
 
@@ -309,7 +309,7 @@ void WebContent::dragMoveEvent(QGraphicsSceneDragDropEvent * event)
 void WebContent::dropEvent(QGraphicsSceneDragDropEvent * event)
 {
     if (!d->page) {
-        Widget::dropEvent(event);
+        QGraphicsWidget::dropEvent(event);
         return;
     }
 
@@ -324,7 +324,7 @@ void WebContent::dropEvent(QGraphicsSceneDragDropEvent * event)
 
 void WebContent::setGeometry(const QRectF &geometry)
 {
-    Widget::setGeometry(geometry);
+    QGraphicsWidget::setGeometry(geometry);
     d->page->setViewportSize(geometry.size().toSize());
 }
 
