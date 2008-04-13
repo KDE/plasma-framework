@@ -36,6 +36,7 @@ class KCompletion;
 namespace Plasma
 {
 
+class Package;
 class RunnerScript;
 
 /**
@@ -167,6 +168,14 @@ class PLASMA_EXPORT AbstractRunner : public QObject
           * Returns the engine name for the Runner
           */
         QString runnerName() const;
+
+        /**
+         * Accessor for the associated Package object if any.
+         * Generally, only Plasmoids come in a Package.
+         *
+         * @return the Package object, or 0 if none
+         **/
+        const Package* package() const;
 
     protected:
         /**
