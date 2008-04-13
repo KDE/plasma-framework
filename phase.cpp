@@ -29,7 +29,6 @@
 #include <KGlobalSettings>
 
 #include "animator.h"
-#include "widgets/widget.h"
 
 namespace Plasma
 {
@@ -420,15 +419,7 @@ Phase::AnimId Phase::animateElement(QGraphicsItem *item, ElementAnimation animat
     }
 
     d->animatedElements[state->id] = state;
-    // nasty hack because QGraphicsItem::update isn't virtual!
-    // FIXME: remove in 4.1 as we will no longer need the caching in Plasma::Widget with Qt 4.4
-    Plasma::Widget *widget = dynamic_cast<Plasma::Widget*>(state->item);
-    if (widget) {
-        widget->update();
-    } else {
-        state->item->update();
-    }
-
+    
     //kDebug() << "startElementAnimation(AnimId " << animation << ") returning " << state->id;
     if (needTimer && !d->timerId) {
         // start a 20fps timer;
@@ -565,15 +556,6 @@ void Phase::timerEvent(QTimerEvent *event)
                     << state->currentFrame + qMax(1, elapsed / state->interval) << endl;*/
             state->currentFrame += (KGlobalSettings::graphicEffectsLevel() & KGlobalSettings::SimpleAnimationEffects) ?
                                    qMax(1, elapsed / state->interval) : state->frames - state->currentFrame;
-            // nasty hack because QGraphicsItem::update isn't virtual!
-            // FIXME: remove in 4.1 as we will no longer need the caching in Plasma::Widget with Qt 4.4
-            Plasma::Widget *widget = dynamic_cast<Plasma::Widget*>(state->item);
-            if (widget) {
-                widget->update();
-            } else {
-                state->item->update();
-            }
-
             if (state->currentFrame < state->frames) {
                 state->currentInterval = state->interval;
                 //TODO: calculate a proper interval based on the curve
