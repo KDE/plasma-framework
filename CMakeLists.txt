@@ -38,7 +38,6 @@ set(plasma_LIB_SRCS
     layouts/boxlayout.cpp
     layouts/borderlayout.cpp
     layouts/freelayout.cpp
-    layouts/nodelayout.cpp
     layouts/flowlayout.cpp
     layouts/fliplayout.cpp
     layouts/layout.cpp
@@ -170,7 +169,6 @@ install(FILES
     layouts/hboxlayout.h
     layouts/borderlayout.h
     layouts/freelayout.h
-    layouts/nodelayout.h
     layouts/flowlayout.h
     layouts/fliplayout.h
     layouts/layout.h
