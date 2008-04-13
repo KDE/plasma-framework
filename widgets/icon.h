@@ -45,7 +45,7 @@ class QAction;
 namespace Plasma
 {
 
-class PLASMA_EXPORT Icon : public Plasma::Widget
+class PLASMA_EXPORT Icon : public QGraphicsWidget
 {
     Q_OBJECT
     Q_PROPERTY( QString text READ text WRITE setText )
@@ -210,7 +210,7 @@ public Q_SLOTS:
     void setUnpressed();
 
 protected:
-    void paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
 
 Q_SIGNALS:
     /**

@@ -256,14 +256,14 @@ void IconAction::paint(QPainter *painter) const
 }
 
 Icon::Icon(QGraphicsItem *parent)
-    : Plasma::Widget(parent),
+    : QGraphicsWidget(parent),
       d(new Private)
 {
     init();
 }
 
 Icon::Icon(const QString &text, QGraphicsItem *parent)
-    : Plasma::Widget(parent),
+    : QGraphicsWidget(parent),
       d(new Private)
 {
     setText(text);
@@ -271,7 +271,7 @@ Icon::Icon(const QString &text, QGraphicsItem *parent)
 }
 
 Icon::Icon(const QIcon &icon, const QString &text, QGraphicsItem *parent)
-    : Plasma::Widget(parent),
+    : QGraphicsWidget(parent),
       d(new Private)
 {
     setText(text);
@@ -831,7 +831,7 @@ void Icon::Private::drawTextItems(QPainter *painter, const QStyleOptionGraphicsI
 }
 
 
-void Icon::paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+void Icon::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     Q_UNUSED(widget)
 
@@ -974,7 +974,7 @@ bool Icon::isDown()
 void Icon::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     if (event->button() != Qt::LeftButton) {
-        Widget::mousePressEvent(event);
+        QGraphicsWidget::mousePressEvent(event);
         return;
     }
 
@@ -999,7 +999,7 @@ void Icon::mousePressEvent(QGraphicsSceneMouseEvent *event)
 void Icon::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
     if (~d->states & Private::PressedState) {
-        Widget::mouseMoveEvent(event);
+        QGraphicsWidget::mouseMoveEvent(event);
         return;
     }
 
@@ -1019,7 +1019,7 @@ void Icon::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 void Icon::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
     if (~d->states & Private::PressedState) {
-        Widget::mouseMoveEvent(event);
+        QGraphicsWidget::mouseMoveEvent(event);
         return;
     }
 
@@ -1069,7 +1069,7 @@ void Icon::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
     hoverEffect(true);
     update();
 
-    Widget::hoverEnterEvent(event);
+    QGraphicsWidget::hoverEnterEvent(event);
 }
 
 void Icon::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
@@ -1082,7 +1082,7 @@ void Icon::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
     hoverEffect(false);
     update();
 
-    Widget::hoverLeaveEvent(event);
+    QGraphicsWidget::hoverLeaveEvent(event);
 }
 
 void Icon::setPressed(bool pressed)
