@@ -17,9 +17,10 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "runnerscript.h"
+#include "plasma/scripting/runnerscript.h"
 
-#include "abstractrunner.h"
+#include "plasma/abstractrunner.h"
+#include "plasma/package.h"
 
 namespace Plasma
 {
@@ -60,6 +61,20 @@ void RunnerScript::exec(const Plasma::SearchContext *search, const Plasma::Searc
 {
     Q_UNUSED(search)
     Q_UNUSED(action)
+}
+
+const Package* RunnerScript::package() const
+{
+    return d->runner ? d->runner->package() : 0;
+}
+
+QString RunnerScript::mainScript() const
+{
+    if (!package()) {
+        return QString();
+    } else {
+        return package()->filePath("mainscript");
+    }
 }
 
 } // Plasma namespace

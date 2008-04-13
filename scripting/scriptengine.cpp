@@ -51,6 +51,16 @@ bool ScriptEngine::init()
     return true;
 }
 
+const Package* ScriptEngine::package() const
+{
+    return 0;
+}
+
+QString ScriptEngine::mainScript() const
+{
+    return QString();
+}
+
 QStringList knownLanguages(ComponentTypes types)
 {
     QString constraintTemplate = "'%1' in [X-Plasma-ComponentTypes]";
@@ -210,6 +220,15 @@ PackageStructure::Ptr defaultPackageStructure(ComponentType type)
         case AppletComponent:
             return PackageStructure::Ptr(new PlasmoidPackage());
             break;
+        case RunnerComponent:
+        case DataEngineComponent:
+        {
+            PackageStructure::Ptr structure(new PackageStructure());
+            structure->addFileDefinition("mainscript", "code/main", i18n("Main Script File"));
+            structure->setRequired("mainscript", true);
+            return structure;
+            break;
+        }
         default:
             // TODO: we don't have any special structures for other components yet
             break;
