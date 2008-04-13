@@ -40,7 +40,6 @@
 
 #include "plasma/applet.h"
 
-#include "layouts/freelayout.h"
 #include "plasma/plasma.h"
 #include "plasma/view.h"
 #include "plasma/containment.h"

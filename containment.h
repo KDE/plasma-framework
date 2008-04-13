@@ -273,7 +273,7 @@ class PLASMA_EXPORT Containment : public Applet
          *
          * @return the constructed tool
          */
-        Plasma::Widget * addToolBoxTool(const QString &toolName = QString(), const QString &iconName = QString(), const QString &iconText = QString());
+        QGraphicsWidget * addToolBoxTool(const QString &toolName = QString(), const QString &iconName = QString(), const QString &iconText = QString());
 
         /**
          * Enables or disables a toolbox tool by name

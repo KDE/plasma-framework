@@ -34,6 +34,7 @@
 #include <QTimer>
 #include <QUiLoader>
 #include <QLabel>
+#include <QPushButton>
 #include <QGraphicsSceneMouseEvent>
 #include <QGraphicsLinearLayout>
 #include <QGraphicsProxyWidget>
@@ -67,8 +68,6 @@
 
 #include "plasma/layouts/boxlayout.h"
 #include "plasma/widgets/widget.h"
-#include "plasma/widgets/lineedit.h"
-#include "plasma/widgets/pushbutton.h"
 
 //#define DYNAMIC_SHADOWS
 namespace Plasma
@@ -106,7 +105,6 @@ public:
           package(0),
           needsConfigOverlay(0),
           background(0),
-          failureText(0),
           script(0),
           configXml(0),
           shadow(0),
@@ -311,7 +309,7 @@ public:
     QList<QGraphicsItem*> watchedForMouseMove;
     QStringList loadedEngines;
     Plasma::SvgPanel *background;
-    Plasma::LineEdit *failureText;
+    //Plasma::LineEdit *failureText;
     AppletScript *script;
     ConfigXml* configXml;
     ShadowItem* shadow;
@@ -688,17 +686,14 @@ void Applet::paintWindowFrame ( QPainter * painter, const QStyleOptionGraphicsIt
 void Applet::setFailedToLaunch(bool failed, const QString& reason)
 {
     if (d->failed == failed) {
-        if (d->failureText) {
-            d->failureText->setHtml(visibleFailureText(reason));
-            setGeometry(QRectF(geometry().topLeft(), d->failureText->sizeHint()));
-        }
+       
         return;
     }
 
     d->failed = failed;
     prepareGeometryChange();
 
-    d->failureText = 0;
+    
     qDeleteAll(QGraphicsItem::children());
     setLayout(0);
 
@@ -763,14 +758,15 @@ void Applet::setNeedsConfiguring(bool needsConfig)
     d->needsConfigOverlay->setZValue(zValue);
 
     qDeleteAll(d->needsConfigOverlay->QGraphicsItem::children());
-    PushButton* button = new PushButton(d->needsConfigOverlay);
+    QPushButton* button = new QPushButton();
     button->setText(i18n("Configure..."));
     connect(button, SIGNAL(clicked()), this, SLOT(showConfigurationInterface()));
-    QSizeF s = button->geometry().size();
-    button->resize(s);
-    button->setPos(d->needsConfigOverlay->boundingRect().width() / 2 - s.width() / 2,
-                   d->needsConfigOverlay->boundingRect().height() / 2 - s.height() / 2);
-    button->show();
+    QGraphicsLinearLayout *configLayout = new QGraphicsLinearLayout(this);
+    configLayout->setContentsMargins(0, 0, 0, 0);
+    QGraphicsProxyWidget * configWidget = new QGraphicsProxyWidget(this);
+    configWidget->setWidget(button);
+    configLayout->addItem(configWidget);
+    setLayout(configLayout);
     d->needsConfigOverlay->show();
 }
 

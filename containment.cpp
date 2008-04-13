@@ -46,9 +46,6 @@
 #include "desktoptoolbox_p.h"
 #include "svg.h"
 
-#include "layouts/freelayout.h"
-#include "layouts/boxlayout.h"
-
 namespace Plasma
 {
 
@@ -268,17 +265,17 @@ void Containment::setContainmentType(Containment::Type type)
 
     if (isContainment() && type == DesktopContainment) {
         if (!d->toolbox) {
-            Plasma::Widget *addWidgetTool = addToolBoxTool("addwidgets", "list-add", i18n("Add Widgets"));
+            QGraphicsWidget *addWidgetTool = addToolBoxTool("addwidgets", "list-add", i18n("Add Widgets"));
             connect(addWidgetTool, SIGNAL(clicked()), this, SIGNAL(showAddWidgets()));
 
-            Plasma::Widget *zoomInTool = addToolBoxTool("zoomIn", "zoom-in", i18n("Zoom In"));
+            QGraphicsWidget *zoomInTool = addToolBoxTool("zoomIn", "zoom-in", i18n("Zoom In"));
             connect(zoomInTool, SIGNAL(clicked()), this, SLOT(zoomIn()));
 
-            Plasma::Widget *zoomOutTool = addToolBoxTool("zoomOut", "zoom-out", i18n("Zoom Out"));
+            QGraphicsWidget *zoomOutTool = addToolBoxTool("zoomOut", "zoom-out", i18n("Zoom Out"));
             connect(zoomOutTool, SIGNAL(clicked()), this, SIGNAL(zoomOut()));
 
             if (!isKioskImmutable()) {
-                Plasma::Widget *lockTool = addToolBoxTool("lockWidgets", "object-locked",
+                QGraphicsWidget *lockTool = addToolBoxTool("lockWidgets", "object-locked",
                                                           isImmutable() ? i18n("Unlock Widgets") :
                                                                           i18n("Lock Widgets"));
                 connect(lockTool, SIGNAL(clicked()), this, SLOT(toggleDesktopImmutability()));
@@ -1214,7 +1211,7 @@ void Containment::emitLaunchActivated()
     emit launchActivated();
 }
 
-Plasma::Widget * Containment::addToolBoxTool(const QString& toolName, const QString& iconName, const QString& iconText)
+QGraphicsWidget * Containment::addToolBoxTool(const QString& toolName, const QString& iconName, const QString& iconText)
 {
     Plasma::Icon *tool = new Plasma::Icon(this);
 
