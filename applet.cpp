@@ -1442,8 +1442,12 @@ QVariant Applet::itemChange(GraphicsItemChange change, const QVariant &value)
 
 void Applet::setGeometry(const QRectF& geometry)
 {
+    QSizeF beforeSize = Widget::geometry().size();
     Widget::setGeometry(geometry);
-    updateConstraints(Plasma::SizeConstraint);
+    if (geometry.size() != beforeSize)
+    {
+	updateConstraints(Plasma::SizeConstraint);
+    }
     //FIXME see for who is connect to this???
     //emit geometryChanged();
 }
