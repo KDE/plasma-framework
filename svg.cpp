@@ -118,11 +118,32 @@ class Svg::Private
             ids.clear();
         }
 
-        void findInCache(QPixmap& p, const QString& elementId)
+        void findInCache(QPixmap& p, const QString& elementId, const QPainter *itemPainter, const QSizeF &size = QSizeF())
         {
+            QSizeF localSize;
+            if (elementId.isEmpty() || contentType == Svg::ImageSet) {
+                localSize = size;
+            } else {
+                localSize = elementSize(elementId);
+            }
+            if (localSize.isEmpty())
+                return;
+
+            QTransform transform = itemPainter->worldTransform();
+            if (size.isValid()) {
+                transform.scale(size.width() / localSize.width(),
+                                size.height() / localSize.height());
+            }
+
             createRenderer();
-            QString id = QString::fromLatin1("%3_%2_%1_").arg(size.width())
+            QLineF v1 = transform.map(QLineF(0, 0, 1, 0));
+            QLineF v2 = transform.map(QLineF(0, 0, 0, 1));
+            QString id = QString::fromLatin1("%7_%6_%5_%4_%3_%2_%1").arg(size.width())
                                                          .arg(size.height())
+                                                         .arg((int) v1.dx())
+                                                         .arg((int) v1.dy())
+                                                         .arg((int) v2.dx())
+                                                         .arg((int) v2.dy())
                                                          .arg(path);
 
             if (!elementId.isEmpty()) {
@@ -141,18 +162,21 @@ class Svg::Private
                 //kDebug() << "didn't find cached version of " << id << ", so re-rendering";
             }
 
-            // we have to re-render this puppy
-            QSize s;
-            if (elementId.isEmpty() || contentType == Svg::ImageSet) {
-                s = size.toSize();
-            } else {
-                s = elementSize(elementId);
-            }
-            //kDebug() << "size for " << elementId << " is " << s;
+            QRect deviceRect = transform.mapRect(QRectF(QPointF(), localSize)).toRect();
+            if (deviceRect.isEmpty())
+                return;
 
-            p = QPixmap(s);
+            p = QPixmap(deviceRect.size());
             p.fill(Qt::transparent);
             QPainter renderPainter(&p);
+
+            QPointF tl = deviceRect.topLeft();
+            QTransform xform = QTransform().translate(-tl.x(), -tl.y());
+            xform = itemPainter->worldTransform() * xform;
+
+            renderPainter.setRenderHints(renderPainter.renderHints(), false);
+            renderPainter.setRenderHints(itemPainter->renderHints(), true);
+            renderPainter.setWorldTransform(xform, true);
 
             if (elementId.isEmpty()) {
                 renderer->render(&renderPainter);
@@ -170,7 +194,7 @@ class Svg::Private
             }
 
             if (!QPixmapCache::insert( id, p )) {
-                kDebug() << "pixmap cache is too small for inserting" << id << "of size" << s;
+                //kDebug() << "pixmap cache is too small for inserting" << id << "of size" << s;
             }
         }
 
@@ -264,9 +288,15 @@ Svg::~Svg()
 void Svg::paint(QPainter* painter, const QPointF& point, const QString& elementID)
 {
     QPixmap pix;
-    d->findInCache(pix, elementID);
+    d->findInCache(pix, elementID, painter);
+    if (pix.isNull())
+        return;
+    painter->save();
+    QTransform x = painter->worldTransform();
+    painter->setWorldTransform(QTransform(), false);
     //kDebug() << "pix size is " << pix.size();
-    painter->drawPixmap(QRectF(point, pix.size()), pix, QRectF(QPointF(0,0), pix.size()));
+    painter->drawPixmap(x.map(point), pix);
+    painter->restore();
 }
 
 void Svg::paint(QPainter* painter, int x, int y, const QString& elementID)
@@ -277,9 +307,14 @@ void Svg::paint(QPainter* painter, int x, int y, const QString& elementID)
 void Svg::paint(QPainter* painter, const QRectF& rect, const QString& elementID)
 {
     QPixmap pix;
-    d->findInCache(pix, elementID);
-    //kDebug() << "pix size is " << pix.size();
-    painter->drawPixmap(rect, pix, QRectF(QPointF(0,0), pix.size()));
+    d->findInCache(pix, elementID, painter, rect.size());
+    if (pix.isNull())
+        return;
+    painter->save();
+    QTransform x = painter->worldTransform();
+    painter->setWorldTransform(QTransform());
+    painter->drawPixmap(x.map(rect.topLeft()) , pix);
+    painter->restore();
 }
 
 void Svg::resize( int width, int height )
