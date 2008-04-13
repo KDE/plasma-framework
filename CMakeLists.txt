@@ -35,14 +35,8 @@ set(plasma_LIB_SRCS
     dataengine.cpp
     dataenginemanager.cpp
     dialog.cpp
-    layouts/boxlayout.cpp
-    layouts/borderlayout.cpp
-    layouts/freelayout.cpp
-    layouts/flowlayout.cpp
-    layouts/fliplayout.cpp
-    layouts/layout.cpp
-    layouts/layoutanimator.cpp
-    layouts/layoutitem.cpp
+    #FOR FUTURE
+    #layouts/borderlayout.cpp
     packages.cpp
     phase.cpp
     plasma.cpp
@@ -62,19 +56,10 @@ set(plasma_LIB_SRCS
     scripting/dataenginescript.cpp
     scripting/runnerscript.cpp
     scripting/scriptengine.cpp
-    widgets/checkbox.cpp
-    widgets/flash.cpp
     widgets/icon.cpp
-    widgets/label.cpp
-    widgets/lineedit.cpp
-    widgets/progressbar.cpp
-    widgets/pushbutton.cpp
-    widgets/radiobutton.cpp
-    widgets/webcontent.cpp
-    widgets/widget.cpp
-    widgets/signalplotter.cpp
-    widgets/meter.cpp
     widgets/tooltip.cpp
+    widgets/widget.cpp
+    widgets/webcontent.cpp
 )
 
 kde4_add_ui_files (
@@ -148,32 +133,12 @@ install(FILES
         DESTINATION ${INCLUDE_INSTALL_DIR}/plasma)
 
 install(FILES
-    widgets/flash.h
     widgets/icon.h
-    widgets/label.h
-    widgets/lineedit.h
-    widgets/progressbar.h
-    widgets/pushbutton.h
-    widgets/checkbox.h
-    widgets/radiobutton.h
-#    widgets/rectangle.h
-    widgets/widget.h
-    widgets/signalplotter.h
-    widgets/meter.h
     widgets/webcontent.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/plasma/widgets)
 
 install(FILES
-    layouts/boxlayout.h
-    layouts/vboxlayout.h
-    layouts/hboxlayout.h
     layouts/borderlayout.h
-    layouts/freelayout.h
-    layouts/flowlayout.h
-    layouts/fliplayout.h
-    layouts/layout.h
-    layouts/layoutanimator.h
-    layouts/layoutitem.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/plasma/layouts)
 
 install(FILES
