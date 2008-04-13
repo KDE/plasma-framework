@@ -72,13 +72,14 @@ qreal Label::heightForWidth(qreal w) const
     //return m.boundingRect(QRectF(0, 0, w, 9999), d->alignment | Qt::TextWordWrap, d->text).height();
 	return 0;
 }
-
+#ifdef REMOVE
 QSizeF Label::sizeHint() const
 {
     QFontMetricsF m(d->textFont);
     return m.boundingRect(QRectF(0,0,9999,9999), d->alignment | Qt::TextWordWrap, d->text).size();
 	//return m.boundingRect(QRectF(0, 0, d->maximumWidth, 9999), d->alignment | Qt::TextWordWrap, d->text).size();
 }
+#endif
 
 void Label::setText(const QString& text)
 {

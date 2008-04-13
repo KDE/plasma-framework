@@ -63,7 +63,7 @@ AppletHandle::AppletHandle(Containment *parent, Applet *applet)
     m_gradientColor = colors.background(KColorScheme::NormalBackground).color();
 
     QTransform originalMatrix = m_applet->transform();
-    QRectF rect(m_applet->boundingRect());
+    QRectF rect(m_applet->contentsRect());
     QPointF center = rect.center();
     originalMatrix.translate(center.x(), center.y());
 
@@ -440,7 +440,7 @@ void AppletHandle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
             // If the applet doesn't have a minimum size, calculate based on a
             // minimum content area size of 16x16
             if (min.isEmpty()) {
-                min = m_applet->boundingRect().size() - m_applet->contentRect().size();
+                min = m_applet->boundingRect().size() - m_applet->boundingRect().size();
                 min += QSizeF(16, 16);
             }
 

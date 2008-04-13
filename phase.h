@@ -116,12 +116,6 @@ public:
     Q_INVOKABLE void setAnimationPixmap(AnimId id, const QPixmap &pixmap);
     Q_INVOKABLE QPixmap animationResult(AnimId id);
 
-    /**
-     * @return true if there are animations happening
-     * @since 4.1
-     */
-    Q_INVOKABLE bool isAnimating() const;
-
 Q_SIGNALS:
     void animationComplete(QGraphicsItem *item, Plasma::Phase::Animation anim);
     void movementComplete(QGraphicsItem *item);

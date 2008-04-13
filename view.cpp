@@ -157,10 +157,10 @@ void View::setContainment(Containment *containment)
     }
 
     d->containment = containment;
-    if (!containment) {
+    if (! containment) {
         return;
     }
-
+    
     if (screen > -1) {
         containment->setScreen(screen);
     }
@@ -172,7 +172,7 @@ void View::setContainment(Containment *containment)
     }
 
     updateSceneRect();
-    connect(containment, SIGNAL(geometryChanged()), this, SLOT(updateSceneRect()));
+    //connect(containment, SIGNAL(geometryChanged()), this, SLOT(updateSceneRect()));
 }
 
 Containment* View::containment() const

@@ -44,8 +44,7 @@ public:
 };
 
 UiLoader::UiLoader( QObject *parent )
-    : QObject(parent),
-      d(new Private())
+    : d( new Private() )
 {
     d->widgets
         << "CheckBox"

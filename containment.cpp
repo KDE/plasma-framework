@@ -27,6 +27,8 @@
 #include <QMimeData>
 #include <QPainter>
 #include <QStyleOptionGraphicsItem>
+#include <QGraphicsLayout>
+#include <QGraphicsLinearLayout>
 
 #include <KApplication>
 #include <KAuthorized>
@@ -83,33 +85,6 @@ public:
         return toolbox;
     }
 
-    void initToolBox()
-    {
-        if (toolbox) {
-            return;
-        }
-
-        if (type == DesktopContainment) {
-            Plasma::Widget *addWidgetTool = q->addToolBoxTool("addwidgets", "list-add", i18n("Add Widgets"));
-            connect(addWidgetTool, SIGNAL(clicked()), q, SIGNAL(showAddWidgets()));
-
-            Plasma::Widget *zoomInTool = q->addToolBoxTool("zoomIn", "zoom-in", i18n("Zoom In"));
-            connect(zoomInTool, SIGNAL(clicked()), q, SLOT(zoomIn()));
-
-            Plasma::Widget *zoomOutTool = q->addToolBoxTool("zoomOut", "zoom-out", i18n("Zoom Out"));
-            connect(zoomOutTool, SIGNAL(clicked()), q, SIGNAL(zoomOut()));
-
-            if (!q->isKioskImmutable()) {
-                Plasma::Widget *lockTool = q->addToolBoxTool("lockWidgets", "object-locked",
-                                                             q->isImmutable() ? i18n("Unlock Widgets") :
-                                                                                i18n("Lock Widgets"));
-                connect(lockTool, SIGNAL(clicked()), q, SLOT(toggleDesktopImmutability()));
-            }
-        } else if (type == PanelContainment) {
-            createToolbox();
-        }
-    }
-
     void positionToolbox()
     {
         QRectF r;
@@ -147,10 +122,8 @@ void Containment::Private::setLockToolText()
             QSizeF iconSize = icon->sizeFromIconSize(22);
             icon->setMinimumSize(iconSize);
             icon->setMaximumSize(iconSize);
-            icon->resize(icon->sizeHint());
+            icon->resize(icon->size());
         }
-
-        toolbox->enableTool("addwidgets", !q->isImmutable());
     }
 }
 
@@ -269,6 +242,7 @@ void Containment::containmentConstraintsUpdated(Plasma::Constraints constraints)
 
     if (constraints & Plasma::ScreenConstraint && d->toolbox) {
         d->toolbox->setPos(geometry().width() - d->toolbox->boundingRect().width(), 0);
+        d->toolbox->enableTool("addwidgets", !isImmutable());
     }
 
     if (constraints & Plasma::SizeConstraint) {
@@ -292,24 +266,28 @@ void Containment::setContainmentType(Containment::Type type)
 {
     d->type = type;
 
-    // reset the toolbox!
-    delete d->toolbox;
-    d->toolbox = 0;
+    if (isContainment() && type == DesktopContainment) {
+        if (!d->toolbox) {
+            Plasma::Widget *addWidgetTool = addToolBoxTool("addwidgets", "list-add", i18n("Add Widgets"));
+            connect(addWidgetTool, SIGNAL(clicked()), this, SIGNAL(showAddWidgets()));
 
-    if (isContainment()) {
-        d->initToolBox();
+            Plasma::Widget *zoomInTool = addToolBoxTool("zoomIn", "zoom-in", i18n("Zoom In"));
+            connect(zoomInTool, SIGNAL(clicked()), this, SLOT(zoomIn()));
+
+            Plasma::Widget *zoomOutTool = addToolBoxTool("zoomOut", "zoom-out", i18n("Zoom Out"));
+            connect(zoomOutTool, SIGNAL(clicked()), this, SIGNAL(zoomOut()));
+
+            if (!isKioskImmutable()) {
+                Plasma::Widget *lockTool = addToolBoxTool("lockWidgets", "object-locked",
+                                                          isImmutable() ? i18n("Unlock Widgets") :
+                                                                          i18n("Lock Widgets"));
+                connect(lockTool, SIGNAL(clicked()), this, SLOT(toggleDesktopImmutability()));
+            }
+        }
+    } else {
+        delete d->toolbox;
+        d->toolbox = 0;
     }
-}
-
-void Containment::setIsContainment(bool isContainment)
-{
-    Applet::setIsContainment(isContainment);
-
-    // reset the toolbox!
-    delete d->toolbox;
-    d->toolbox = 0;
-
-    d->initToolBox();
 }
 
 Corona* Containment::corona() const
@@ -460,14 +438,15 @@ void Containment::setFormFactor(FormFactor formFactor)
         positionPanel(true);
     }
 
-    Layout *lay = layout();
-    if (lay) {
+    QGraphicsLayout *lay = layout();
+    QGraphicsLinearLayout * linearLay = dynamic_cast<QGraphicsLinearLayout *>(lay);
+    if (linearLay) {
         foreach (Applet* applet, d->applets) {
-            lay->addItem(applet);
+            linearLay->addItem(applet);
             applet->updateConstraints(Plasma::FormFactorConstraint);
         }
+	//linearLay->addStretch();
     }
-
     updateConstraints(Plasma::FormFactorConstraint);
 }
 
@@ -478,23 +457,27 @@ void Containment::createLayout(FormFactor formFactor)
     switch (formFactor) {
         case Planar:
         case MediaCenter:
-            new FreeLayout(this);
+            //setLayout(new QGraphicsLinearLayout());
             break;
         case Horizontal: {
-            BoxLayout *lay = new BoxLayout(BoxLayout::LeftToRight, this);
-            lay->setMargins(0, 0, 0, 0);
+            QGraphicsLinearLayout *lay = new QGraphicsLinearLayout();
+            lay->setOrientation(Qt::Horizontal);
+	    lay->setContentsMargins(0, 0, 0, 0);
             lay->setSpacing(4);
+	    setLayout(lay);
             break;
             }
         case Vertical: {
-            BoxLayout *lay = new BoxLayout(BoxLayout::TopToBottom, this);
-            lay->setMargins(0, 0, 0, 0);
+            QGraphicsLinearLayout *lay = new QGraphicsLinearLayout();
+            lay->setOrientation(Qt::Vertical);
+            lay->setContentsMargins(0, 0, 0, 0);
             lay->setSpacing(4);
+	    setLayout(lay);
             break;
             }
         default:
             kDebug() << "This can't be happening! Or... can it? ;)" << d->formFactor;
-            setLayout(0); //auto-delete
+            //setLayout(0); //auto-delete
             break;
     }
 }
@@ -595,19 +578,23 @@ Applet* Containment::addApplet(const QString& name, const QVariantList& args, ui
     if (containmentType() != PanelContainment) {
         //kDebug() << "adding applet" << applet->name() << "with a default geometry of" << appletGeometry << appletGeometry.isValid();
         if (appletGeometry.isValid()) {
-            applet->setGeometry(appletGeometry);
+            //applet->setGeometry(appletGeometry);
         } else if (appletGeometry.x() != -1 && appletGeometry.y() != -1) {
             // yes, this means we can't have items start -1, -1
-            applet->setGeometry(QRectF(appletGeometry.topLeft(),
-                                    applet->sizeHint()));
+            //applet->setGeometry(QRectF(appletGeometry.topLeft(),
+//                                    applet->sizeHint()));
         } else if (geometry().isValid()) {
-            applet->setGeometry(geometryForApplet(applet));
+            //applet->setGeometry(geometryForApplet(applet));
         }
     }
 
     //kDebug() << applet->name() << "sizehint:" << applet->sizeHint() << "geometry:" << applet->geometry();
 
-    connect(applet, SIGNAL(configNeedsSaving()), this, SIGNAL(configNeedsSaving()));
+    Corona *c = corona();
+    if (c) {
+        connect(applet, SIGNAL(configNeedsSaving()), corona(), SLOT(scheduleConfigSync()));
+    }
+
     emit appletAdded(applet);
     return applet;
 }
@@ -637,7 +624,7 @@ void Containment::addApplet(Applet *applet, const QPointF &pos, bool delayInit)
         // Calculate where the user wants the applet to go before adding it
         //so long as this isn't a new applet with a delayed init
         if (! delayInit || (currentContainment && currentContainment != this)) {
-            index = indexAt(pos);
+	    index = indexAt(pos);
         }
     }
 
@@ -660,13 +647,14 @@ void Containment::addApplet(Applet *applet, const QPointF &pos, bool delayInit)
     connect(applet, SIGNAL(destroyed(QObject*)),
             this, SLOT(appletDestroyed(QObject*)));
 
-    Layout *lay = layout();
+    QGraphicsLayout *lay = layout();
 
     // Reposition the applet after adding has been done
+    //FIXME adding position incorrect
     if (index != -1) {
-        BoxLayout *l = dynamic_cast<BoxLayout *>(lay);
+        QGraphicsLinearLayout *l = dynamic_cast<QGraphicsLinearLayout *>(lay);
         if (l) {
-            l->insertItem(index, l->takeAt(l->indexOf(applet)));
+            l->insertItem(index, applet);
             d->applets.removeAll(applet);
             d->applets.insert(index, applet);
         } else {
@@ -679,21 +667,24 @@ void Containment::addApplet(Applet *applet, const QPointF &pos, bool delayInit)
             applet->setPos(pos);
         }
 
-        if (lay) {
-            lay->addItem(applet);
+	QGraphicsLinearLayout *l = dynamic_cast<QGraphicsLinearLayout *>(lay);
+        if (l) {
+	    l->addItem(applet);
         }
+	//l->addStretch();
     }
 
     prepareApplet(applet, delayInit); //must at least flush constraints
+    
 }
 
 //containment-relative pos... right?
 int Containment::indexAt(const QPointF &pos) const
 {
-    if (pos == QPointF(-1, -1)) {
+/*    if (pos == QPointF(-1, -1)) {
         return -1;
     }
-    BoxLayout *l = dynamic_cast<BoxLayout *>(layout());
+    QGraphicsLinearLayout *l = dynamic_cast<QGraphicsLinearLayout *>(layout());
     if (l) {
         foreach (Applet *existingApplet, d->applets) {
             if (formFactor() == Horizontal) {
@@ -718,7 +709,7 @@ int Containment::indexAt(const QPointF &pos) const
                 }
             }
         }
-    }
+    }*/
     return -1;
 }
 
@@ -738,44 +729,6 @@ void Containment::prepareApplet(Applet *applet, bool delayInit)
         applet->flushUpdatedConstraints();
         emit configNeedsSaving();
     }
-}
-
-QRectF Containment::geometryForApplet(Applet *applet) const
-{
-    // The value part of these maps isn't used. Only sorted keys are needed.
-    QMap<qreal, bool> xPositions;
-    QMap<qreal, bool> yPositions;
-
-    // Add the top-left corner offset by the applet's border
-    QPointF offset = applet->boundingRect().topLeft();
-    xPositions[-offset.x()] = true;
-    yPositions[-offset.y()] = true;
-
-    QRectF placement(QPointF(0, 0), applet->sizeHint());
-    foreach (Applet *existingApplet, d->applets) {
-        QPointF bottomRight = existingApplet->geometry().bottomRight();
-        if (bottomRight.x() + placement.width() < geometry().width()) {
-            xPositions[bottomRight.x() + 1] = true;
-        }
-        if (bottomRight.y() + placement.height() < geometry().height()) {
-            yPositions[bottomRight.y() + 1] = true;
-        }
-    }
-
-    // Try to fit it in an empty space
-    foreach (qreal x, xPositions.keys()) {
-        foreach (qreal y, yPositions.keys()) {
-            placement.moveTo(x, y);
-            if (regionIsEmpty(placement, applet)) {
-                return placement;
-            }
-        }
-    }
-
-    // Otherwise place it in the centre of the screen
-    placement.moveLeft(geometry().width() / 2 - placement.width() / 2);
-    placement.moveTop(geometry().height() / 2 - placement.height() / 2);
-    return placement;
 }
 
 bool Containment::regionIsEmpty(const QRectF &region, Applet *ignoredApplet) const
@@ -1272,7 +1225,7 @@ Plasma::Widget * Containment::addToolBoxTool(const QString& toolName, const QStr
     QSizeF iconSize = tool->sizeFromIconSize(22);
     tool->setMinimumSize(iconSize);
     tool->setMaximumSize(iconSize);
-    tool->resize(tool->sizeHint());
+    tool->resize(tool->size());
 
     d->createToolbox()->addTool(tool, toolName);
 

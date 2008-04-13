@@ -93,8 +93,7 @@ class PLASMA_EXPORT Theme : public QObject
          *
          * @arg name the name of the file in the theme directory (without the
          *           ".svg" part or a leading slash)
-         * @return the full path to the requested file for the current theme,
-         *         or an empty string if the image is not available
+         * @return the full path to the requested file for the current theme
          */
         Q_INVOKABLE QString image( const QString& name ) const;
 

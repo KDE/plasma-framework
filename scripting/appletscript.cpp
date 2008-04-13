@@ -63,13 +63,13 @@ void AppletScript::paintInterface(QPainter* painter, const QStyleOptionGraphicsI
 
 QSizeF AppletScript::contentSizeHint() const
 {
-    return applet()->contentSizeHint();
+    return applet()->boundingRect().size();
 }
 
 QSizeF AppletScript::size() const
 {
     if (applet()) {
-        return applet()->contentSize();
+        return applet()->boundingRect().size();
     }
 
     return QSizeF();

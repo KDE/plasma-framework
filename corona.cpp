@@ -362,11 +362,14 @@ Containment* Corona::addContainment(const QString& name, const QVariantList& arg
     }
 
     d->containments.append(containment);
-    connect(containment, SIGNAL(destroyed(QObject*)), SLOT(containmentDestroyed(QObject*)));
-    connect(containment, SIGNAL(launchActivated()), SIGNAL(launchActivated()));
-    connect(containment, SIGNAL(configNeedsSaving()), SLOT(scheduleConfigSync()));
+    connect(containment, SIGNAL(destroyed(QObject*)),
+            this, SLOT(containmentDestroyed(QObject*)));
+    connect(containment, SIGNAL(launchActivated()),
+            SIGNAL(launchActivated()));
+    connect(containment, SIGNAL(configNeedsSaving()),
+            SLOT(scheduleConfigSync()));
     connect(containment, SIGNAL(screenChanged(int,int,Plasma::Containment*)),
-            SIGNAL(screenOwnerChanged(int,int,Plasma::Containment*)));
+            this, SIGNAL(screenOwnerChanged(int,int,Plasma::Containment*)));
 
     if (!delayedInit) {
         emit containmentAdded(containment);

@@ -70,19 +70,6 @@ public:
      */
     virtual void exec(const Plasma::SearchContext *search, const Plasma::SearchMatch *action);
 
-protected Q_SLOTS:
-    /**
-     * @return absolute path to the main script file for this plasmoid
-     */
-    QString mainScript() const;
-
-    /**
-     * @return the Package associated with this plasmoid which can
-     *         be used to request resources, such as images and
-     *         interface files.
-     */
-    const Package* package() const;
-
 private:
     class Private;
     Private * const d;

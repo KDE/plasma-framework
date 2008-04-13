@@ -76,7 +76,7 @@ QSizeF WebContent::sizeHint() const
         return d->page->mainFrame()->contentsSize();
     }
 
-    return Widget::sizeHint();
+    return Widget::size();
 }
 
 void WebContent::setPage(QWebPage *page)

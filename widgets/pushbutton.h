@@ -163,7 +163,9 @@ public:
     // NOTE: bogus
     QSizeF minimumSize() const;
     Qt::Orientations expandingDirections() const;
+    #ifdef REMOVE
     QSizeF sizeHint() const;
+    #endif
 
 Q_SIGNALS:
     /**

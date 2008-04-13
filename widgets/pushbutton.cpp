@@ -292,7 +292,7 @@ Qt::Orientations PushButton::expandingDirections() const
 {
     return Qt::Horizontal;
 }
-
+#ifdef REMOVE
 QSizeF PushButton::sizeHint() const
 {
     int width = 0;
@@ -315,6 +315,7 @@ QSizeF PushButton::sizeHint() const
     return QSizeF((QApplication::style()->sizeFromContents(QStyle::CT_PushButton, &option, QSize(width, height), 0).
                 expandedTo(QApplication::globalStrut())));
 }
+#endif
 
 
 } // namespace Plasma

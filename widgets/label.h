@@ -72,11 +72,12 @@ class PLASMA_EXPORT Label : public Plasma::Widget
          */
         qreal heightForWidth(qreal w) const;
 
-        /**
+        #ifdef REMOVE
+	/**
          * Reimplemented from Plasma::Widget.
          */
         QSizeF sizeHint() const;
-
+	#endif
         /**
          * Sets the text to be displayed.
          */

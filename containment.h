@@ -143,11 +143,6 @@ class PLASMA_EXPORT Containment : public Applet
         void setContainmentType(Containment::Type type);
 
         /**
-         * Reimplemented from Applet
-         */
-        void setIsContainment(bool isContainment);
-
-        /**
          * Returns the Corona (if any) that this Containment is hosted by
          */
         Corona* corona() const;
@@ -228,12 +223,12 @@ class PLASMA_EXPORT Containment : public Applet
          */
         void addApplet(Applet *applet, const QPointF &pos = QPointF(-1, -1), bool dontInit = true);
 
-        /**
+       	/**
          * @return the index to insert an applet at if you want it near the point pos.
          * @param pos the containment-relative position
          */
         virtual int indexAt(const QPointF &pos) const;
-
+	
         /**
          * Sets the physical screen this Containment is associated with.
          *
@@ -423,7 +418,6 @@ class PLASMA_EXPORT Containment : public Applet
         void repositionToolbox();
 
     private:
-        QRectF geometryForApplet(Applet *applet) const;
         bool regionIsEmpty(const QRectF &region, Applet *ignoredApplet=0) const;
         void prepareApplet(Applet *applet, bool delayInit);
         void positionPanel(bool force = false);

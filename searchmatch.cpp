@@ -134,7 +134,7 @@ void SearchMatch::setEnabled( bool enabled )
 
 bool SearchMatch::isEnabled() const
 {
-    return d->enabled;
+  return d->enabled;
 }
 
 bool SearchMatch::operator<(const SearchMatch& other) const

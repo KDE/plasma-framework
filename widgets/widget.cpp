@@ -33,6 +33,8 @@
 #include <QPainter>
 #include <QStyleOptionGraphicsItem>
 #include <QDesktopWidget>
+#include <QGraphicsLayout>
+#include <QGraphicsLinearLayout>
 
 #include <KDebug>
 
@@ -122,8 +124,7 @@ bool Widget::Private::shouldPaint(QPainter *painter, const QTransform &transform
 }
 
 Widget::Widget(QGraphicsItem *parent, QObject* parentObject)
-  : QObject(parentObject),
-    QGraphicsItem(parent),
+  : QGraphicsWidget(parent),
     d(new Private)
 {
     setFlag(QGraphicsItem::ItemClipsToShape, true);
@@ -166,7 +167,7 @@ Widget::CachePaintMode Widget::cachePaintMode() const
 
 void Widget::update(const QRectF &rect)
 {
-    QGraphicsItem::update(rect);
+    QGraphicsWidget::update(rect);
 }
 
 Qt::Orientations Widget::expandingDirections() const
@@ -174,32 +175,9 @@ Qt::Orientations Widget::expandingDirections() const
     return Qt::Horizontal | Qt::Vertical;
 }
 
-void Widget::setMinimumSize(const QSizeF& newMin)
+QFont Widget::font() const
 {
-    d->minimumSize = newMin;
-    QSizeF s = size();
-    if (s != s.expandedTo(newMin)) {
-        setGeometry(QRectF(pos(), s.expandedTo(newMin)));
-    }
-}
-
-QSizeF Widget::minimumSize() const
-{
-    return d->minimumSize;
-}
-
-void Widget::setMaximumSize(const QSizeF& newMax)
-{
-    d->maximumSize = newMax;
-    QSizeF s = size();
-    if (s != s.boundedTo(newMax)) {
-        setGeometry(QRectF(pos(), s.boundedTo(newMax)));
-    }
-}
-
-QSizeF Widget::maximumSize() const
-{
-    return d->maximumSize;
+    return QApplication::font();
 }
 
 bool Widget::hasHeightForWidth() const
@@ -233,87 +211,7 @@ QRectF Widget::geometry() const
 
 void Widget::setSize(const QSizeF &s)
 {
-    LayoutItem::setSize(s);
-}
-
-void Widget::setGeometry(const QRectF& geometry)
-{
-    setPos(geometry.topLeft());
-    if (geometry.size().width() > 0 && geometry.size().height() > 0 && size() != geometry.size()) {
-        prepareGeometryChange();
-        qreal width = qBound(d->minimumSize.width(), geometry.size().width(), d->maximumSize.width());
-        qreal height = qBound(d->minimumSize.height(), geometry.size().height(), d->maximumSize.height());
-
-        setSize(QSizeF(width, height));
-
-        qreal xd = topLeft().x();
-        qreal yd = topLeft().y();
-
-        if (xd < 0) {
-            width -= xd;
-            xd = 0;
-        }
-
-        if (yd < 0) {
-            height -= yd;
-            yd = 0;
-        }
-
-        if (layout()) {
-            QRectF r(QPointF(xd, yd), QSizeF(width, height));
-            r = adjustToMargins(r);
-            layout()->setGeometry(r);
-            /*if (qobject_cast<Plasma::Applet*>(this)) {
-                kDebug() << (QObject*)this << this->geometry() << this->topLeft()
-                         << "layout geometry is now" << r << margin(RightMargin);
-            }*/
-        }
-
-        if (managingLayout()) {
-            //kDebug() << "invalidating managing layout";
-            managingLayout()->invalidate();
-        }
-    }
-
-    update();
-}
-
-void Widget::updateGeometry()
-{
-    if (managingLayout()) {
-        managingLayout()->invalidate();
-    } else {
-        setGeometry(QRectF(pos(), sizeHint()));
-    }
-}
-
-QSizeF Widget::sizeHint() const
-{
-    if (layout()) {
-        return layout()->sizeHint();
-    } else {
-        return size();
-    }
-}
-
-QFont Widget::font() const
-{
-    return QApplication::font();
-}
-
-QRectF Widget::boundingRect() const
-{
-    return QRectF(QPointF(0,0), size());
-}
-
-void Widget::resize(const QSizeF& size)
-{
-    setGeometry(QRectF(pos(), size));
-}
-
-void Widget::resize(qreal w, qreal h)
-{
-    resize(QSizeF(w, h));
+    resize(s);
 }
 
 Widget *Widget::parent() const
@@ -347,9 +245,9 @@ void Widget::addChild(Widget *w)
     w->setParentItem(this);
 
     //kDebug() << "Added Child Widget" <<  (QObject*)w << "our geom is" << geometry();
-
-    if (layout()) {
-        layout()->addItem(w);
+    QGraphicsLinearLayout * lay = dynamic_cast<QGraphicsLinearLayout *>(layout());
+    if (lay) {
+        lay->addItem(w);
     }
 
     updateGeometry();
@@ -409,30 +307,6 @@ void Widget::paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *opti
     Q_UNUSED(widget);
 
     // Replaced by widget's own function
-}
-
-QVariant Widget::itemChange(GraphicsItemChange change, const QVariant &value)
-{
-    if (change == QGraphicsItem::ItemChildRemovedChange) {
-        if (layout() && !isAncestorOf(value.value<QGraphicsItem*>())) {
-            layout()->removeItem(dynamic_cast<Plasma::LayoutItem*>(value.value<QGraphicsItem*>()));
-            updateGeometry();
-        }
-    }
-
-    return QGraphicsItem::itemChange(change, value);
-}
-
-void Widget::managingLayoutChanged()
-{
-    if (managingLayout()) {
-        d->wasMovable = flags() & ItemIsMovable;
-        if (!dynamic_cast<FreeLayout*>(managingLayout())) {
-            setFlag(ItemIsMovable, false);
-        }
-    } else {
-        setFlag(ItemIsMovable, d->wasMovable);
-    }
 }
 
 QPoint Widget::popupPosition(const QSize &s) const

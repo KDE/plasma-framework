@@ -228,90 +228,8 @@ class PLASMA_EXPORT Applet : public Widget
          * @see Plasma::Location
          */
         virtual Location location() const;
-
-        /**
-         * Returns the rect that the contents are positioned within in local coordinates
-         */
-        QRectF contentRect() const;
-
-        /**
-         * Returns the area within which contents can be painted.
-         **/
-        QSizeF contentSize() const;
-
-        /**
-         * Sets the content size.
-         *
-         * @note Normally an applet should never
-         * call this directly except in the constructor to provide a default
-         * size
-         *
-         * @param size the new size of the contents area
-         */
-        void setContentSize(const QSizeF &size);
-
-        /**
-         * Sets the content size.
-         *
-         * @note Normally an applet should never
-         * call this directly except in the constructor to provide a default
-         * size
-         *
-         * @param width the new width of the contents area
-         * @param height the new height of the contents area
-         */
-        void setContentSize(int width, int height);
-
-        /**
-         * Returns an ideal size for the applet's content.
-         * Applets can re-implement this to provide a suitable size based
-         * on their contents.
-         *
-         * Unlike sizeHint() , contentSizeHint() does not include the
-         * size of any borders surrounding the content area.
-         *
-         * The default implementation returns the sizeHint() of the applet's
-         * layout if it has one, or a null size otherwise.
-         */
-        virtual QSizeF contentSizeHint() const;
-
-        /**
-         * Sets the minimum size for the content of this applet
-         */
-        void setMinimumContentSize(const QSizeF &minSize);
-
-        /**
-         * Sets the minimum size for the content of this applet
-         *
-         * @param minWidth the new minimum width of the contents area
-         * @param minHeight the new minimum height of the contents area
-         */
-        void setMinimumContentSize(int minWidth, int minHeight);
-
-        /**
-         * Get the minimum size for the content of this applet
-         */
-        QSizeF minimumContentSize() const;
-
-        /**
-         * Sets the maximum size for the content of this applet.
-         */
-        void setMaximumContentSize(const QSizeF &maxSize);
-
-        /**
-         * Sets the maximum size for the content of this applet
-         *
-         * @param maxWidth the new maximum width of the contents area
-         * @param maxHeight the new maximum height of the contents area
-         */
-        void setMaximumContentSize(int maxWidth, int maxHeight);
-
-        /**
-         * Get the maximum size for the content of this applet
-         */
-        QSizeF maximumContentSize() const;
-
-        /**
+     
+	/**
          * @return the prefered aspect ratio mode for placement and resizing
          */
         Qt::AspectRatioMode aspectRatioMode() const;
@@ -492,6 +410,8 @@ class PLASMA_EXPORT Applet : public Widget
          **/
         void setDrawStandardBackground(bool drawBackground);
 
+	void paintWindowFrame ( QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget);
+
         /**
          * If for some reason, the applet fails to get up on its feet (the
          * library couldn't be loaded, necessary hardware support wasn't found,
@@ -573,29 +493,24 @@ class PLASMA_EXPORT Applet : public Widget
         /**
          * Sets whether or not this Applet is acting as a Containment
          */
-        virtual void setIsContainment(bool isContainment);
+        void setIsContainment(bool isContainment);
 
         /**
          * @return true if this Applet is currently being used as a Containment, false otherwise
          */
         bool isContainment() const;
 
-        /**
+	/**
          * Sets the geometry of this Plasma::Applet. Should not be used directly by
          * applet subclasses.
          * @param geometry the geometry to apply to this Plasma::Applet.
          */
         void setGeometry(const QRectF &geometry);
-
+  
         /**
          * Causes this applet to raise above all other applets.
          */
         void raise();
-
-        /**
-         * Reimplemented from LayoutItem
-         */
-        QSizeF sizeHint() const;
 
         /**
          * Reimplemented from Plasma::Widget
@@ -608,12 +523,7 @@ class PLASMA_EXPORT Applet : public Widget
         int type() const;
         enum { Type = Plasma::AppletType };
 
-        /**
-         * Reimplemented from QGraphicsItem
-         **/
-        QRectF boundingRect() const;
-
-        /**
+	/**
          * Reimplemented from QGraphicsItem
          */
         QPainterPath shape() const;

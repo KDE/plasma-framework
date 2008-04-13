@@ -4,7 +4,7 @@ include (KDE4Defaults)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${KDEBASE_WORKSPACE_SOURCE_DIR}/libs ${CMAKE_CURRENT_SOURCE_DIR}/.. ${KDE4_INCLUDES} ${OPENGL_INCLUDE_DIR})
 
 add_subdirectory(widgets)
-add_subdirectory(tests)
+#add_subdirectory(tests)
 add_definitions(-DKDE_DEFAULT_DEBUG_AREA=1209)
 
 ########### next target ###############

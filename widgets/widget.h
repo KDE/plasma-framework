@@ -22,7 +22,7 @@
 #ifndef WIDGET_H_
 #define WIDGET_H_
 
-#include <QtGui/QGraphicsItem>
+#include <QtGui/QGraphicsWidget>
 #include <QtGui/QPixmap>
 
 #include <QtCore/QRectF>
@@ -63,16 +63,11 @@ class Layout;
  * To implement a Widget, just subclass Plasma::Widget and implement at minimum,
  * sizeHint() and paintWidget()
  */
-class PLASMA_EXPORT Widget  : public QObject,
-                              public QGraphicsItem,
-                              public LayoutItem
+class PLASMA_EXPORT Widget  : public QGraphicsWidget
 {
     Q_OBJECT
     Q_PROPERTY( Qt::Orientations expandingDirections READ expandingDirections )
-    Q_PROPERTY( QSizeF minimumSize READ minimumSize WRITE setMinimumSize )
-    Q_PROPERTY( QSizeF maximumSize READ maximumSize WRITE setMaximumSize )
     Q_PROPERTY( QRectF geometry READ geometry WRITE setGeometry )
-    Q_PROPERTY( QSizeF sizeHint READ sizeHint )
     Q_PROPERTY( QSizeF size READ size WRITE resize )
     Q_PROPERTY( qreal opacity READ opacity WRITE setOpacity )
 
@@ -101,28 +96,6 @@ public:
      * @return bitmask with the directions that this Widget can be expanded.
      */
     virtual Qt::Orientations expandingDirections() const;
-
-    /**
-     * Sets the minimum size of the Widget.
-     * @param size the size to set as the minimum size.
-     */
-    void setMinimumSize(const QSizeF& size);
-
-    /**
-     * @return minimum size of the Widget.
-     */
-    QSizeF minimumSize() const;
-
-    /**
-     * Sets the maximum size of the Widget.
-     * @param size the size to set as the maximum size.
-     */
-    void setMaximumSize(const QSizeF& size);
-
-    /**
-     * @return maximum size of the Widget.
-     */
-    QSizeF maximumSize() const;
 
     /**
      * This method is used by Plasma::Layout to determine whether this widget
@@ -160,51 +133,9 @@ public:
     QRectF geometry() const;
 
     /**
-    * Sets the geometry of this Widget.
-    */
-    /**
-     * Sets the geometry of this Plasma::Widget
-     * @param geometry the geometry to apply to this Plasma::Widget.
-     */
-    virtual void setGeometry(const QRectF &geometry);
-
-    /**
-     * This method is used to notify any containing Plasma::Layout that it should
-     * reset its geometry.
-     */
-    // NOTE: this is a completely broken concept -MB
-    Q_INVOKABLE void updateGeometry();
-
-    /**
-     * Returns the recommended size for this widget. Note that this size is not
-     * necessarily only the size for the widget, but might also include margins etc.
-     * @return recommended size for this Plasma::Widget.
-     */
-    virtual QSizeF sizeHint() const;
-
-    /**
      * @return the font currently set for this widget
      **/
     QFont font() const;
-
-    /**
-     * Reimplemented from QGraphicsItem
-     * @return the bounding rectangle for this Plasma::Widget
-     */
-    virtual QRectF boundingRect() const;
-
-    /**
-     * Resizes this Plasma::Widget.
-     * @param size the new size of this Plasma::Widget.
-     */
-    Q_INVOKABLE void resize(const QSizeF &size);
-
-    /**
-     * Convenience method for resizing this Plasma::Widget
-     * @param width the new width.
-     * @param height the new height.
-     */
-    Q_INVOKABLE void resize(qreal width, qreal height);
 
     /**
      * @return this Plasma::Widget's parent, returns a null pointer if
@@ -310,9 +241,7 @@ protected:
      * @param widget the parent QWidget (most likely the Corona)
      */
     virtual void paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
-
-    QVariant itemChange(GraphicsItemChange change, const QVariant &value);
-    void managingLayoutChanged();
+    
     virtual bool sceneEvent(QEvent *event);
 
 private:

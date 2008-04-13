@@ -33,7 +33,10 @@
 #include <QTextDocument>
 #include <QTimer>
 #include <QUiLoader>
+#include <QLabel>
 #include <QGraphicsSceneMouseEvent>
+#include <QGraphicsLinearLayout>
+#include <QGraphicsProxyWidget>
 
 #include <KIcon>
 #include <KColorScheme>
@@ -103,7 +106,6 @@ public:
           package(0),
           needsConfigOverlay(0),
           background(0),
-          overlay(0),
           failureText(0),
           script(0),
           configXml(0),
@@ -133,7 +135,6 @@ public:
             DataEngineManager::self()->unload( engine );
         }
         delete background;
-        delete overlay;
         delete package;
         delete configXml;
         delete shadow;
@@ -217,16 +218,6 @@ public:
             applet->setHasConfigurationInterface(true);
         }
     }
-
-    QSizeF contentSize(const Applet* q)
-    {
-        if (failureText) {
-            return failureText->geometry().size();
-        }
-
-        return q->contentSize();
-    }
-
     QString instanceName()
     {
         if (!appletDescription.isValid()) {
@@ -320,7 +311,6 @@ public:
     QList<QGraphicsItem*> watchedForMouseMove;
     QStringList loadedEngines;
     Plasma::SvgPanel *background;
-    Plasma::SvgPanel *overlay;
     Plasma::LineEdit *failureText;
     AppletScript *script;
     ConfigXml* configXml;
@@ -640,26 +630,29 @@ bool Applet::drawStandardBackground() const
 
 void Applet::setDrawStandardBackground(bool drawBackground)
 {
+    if
+      (drawBackground)
+    {
+      setWindowFlags(Qt::Window);
+    }
+    else
+    {
+      setWindowFlags(0);
+    }
     if (drawBackground) {
         if (!d->background) {
             d->background = new Plasma::SvgPanel("widgets/background");
 
-            if (!Plasma::Theme::self()->image("widgets/overlay").isEmpty()) {
-                d->overlay = new Plasma::SvgPanel("widgets/overlay");
-            }
-
             int left, top, right, bottom;
             d->getBorderSize(left, top, right, bottom);
-            setMargins(0, 0, right, bottom);
+            setContentsMargins(0, 0, right, bottom);
             updateGeometry();
             update();
         }
     } else if (d->background) {
         delete d->background;
-        delete d->overlay;
         d->background = 0;
-        d->overlay = 0;
-        setMargins(0, 0, 0, 0);
+        setContentsMargins(0, 0, 0, 0);
         updateGeometry();
         update();
     }
@@ -683,6 +676,15 @@ QString visibleFailureText(const QString& reason)
     return text;
 }
 
+void Applet::paintWindowFrame ( QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget)
+{
+    //Plasma::SvgPanel *background = new Plasma::SvgPanel("widgets/background");
+    //background->paint(painter,geometry());
+    setWindowFrameMargins(1,1,1,1);
+    painter->setPen(QPen(Qt::red));
+    painter->drawRoundedRect(geometry(),5,5);
+}
+
 void Applet::setFailedToLaunch(bool failed, const QString& reason)
 {
     if (d->failed == failed) {
@@ -702,8 +704,9 @@ void Applet::setFailedToLaunch(bool failed, const QString& reason)
 
     if (failed) {
         setDrawStandardBackground(true);
-        Layout* failureLayout = new BoxLayout(BoxLayout::TopToBottom, this);
-        failureLayout->setMargins(0, 0, 0, 0);
+        
+        #ifdef TOPORT
+	Layout* failureLayout = new BoxLayout(BoxLayout::TopToBottom, this);
         d->failureText = new LineEdit(this);
         d->failureText->setTextInteractionFlags( Qt::TextSelectableByMouse );
         d->failureText->setStyled(false);
@@ -715,8 +718,18 @@ void Applet::setFailedToLaunch(bool failed, const QString& reason)
                                                            Theme::self()->colors())
                                                         .brush(QPalette::Normal).color());
         failureLayout->addItem(d->failureText);
-        setGeometry(QRectF(geometry().topLeft(), d->failureText->sizeHint()));
-    }
+	#endif
+
+
+	QGraphicsLinearLayout *failureLayout = new QGraphicsLinearLayout();
+	failureLayout->setContentsMargins(0, 0, 0, 0);
+	QGraphicsProxyWidget * failureWidget = new QGraphicsProxyWidget(this);
+	QLabel * label = new QLabel(visibleFailureText(reason));
+	label->setWordWrap(true);
+	failureWidget->setWidget(label);
+	failureLayout->addItem(failureWidget);
+	setLayout(failureLayout);
+}
 
     update();
 }
@@ -739,7 +752,7 @@ void Applet::setNeedsConfiguring(bool needsConfig)
     }
 
     d->needsConfigOverlay = new OverlayWidget(this);
-    d->needsConfigOverlay->resize(contentSize());
+    d->needsConfigOverlay->resize(boundingRect().size());
 
     int zValue = 100;
     foreach (QGraphicsItem *child, QGraphicsItem::children()) {
@@ -753,7 +766,7 @@ void Applet::setNeedsConfiguring(bool needsConfig)
     PushButton* button = new PushButton(d->needsConfigOverlay);
     button->setText(i18n("Configure..."));
     connect(button, SIGNAL(clicked()), this, SLOT(showConfigurationInterface()));
-    QSizeF s = button->sizeHint();
+    QSizeF s = button->geometry().size();
     button->resize(s);
     button->setPos(d->needsConfigOverlay->boundingRect().width() / 2 - s.width() / 2,
                    d->needsConfigOverlay->boundingRect().height() / 2 - s.height() / 2);
@@ -783,7 +796,7 @@ void Applet::flushUpdatedConstraints()
     d->pendingConstraints = NoConstraint;
 
     if (c & Plasma::SizeConstraint && d->needsConfigOverlay) {
-        d->needsConfigOverlay->setGeometry(QRectF(QPointF(0, 0), contentSize()));
+        d->needsConfigOverlay->setGeometry(QRectF(QPointF(0, 0), boundingRect().size()));
         // FIXME:: rather horrible hack to work around the fact we don't have spacers
         //         for layouts, and with WoC coming i'd rather not expend effort there
         QGraphicsItem * button = d->needsConfigOverlay->QGraphicsItem::children().first();
@@ -852,20 +865,6 @@ int Applet::type() const
     return Type;
 }
 
-QRectF Applet::boundingRect() const
-{
-    QRectF rect = QRectF(QPointF(0,0), d->contentSize(this));
-
-    int left;
-    int right;
-    int top;
-    int bottom;
-
-    d->getBorderSize(left, top, right, bottom);
-    //kDebug() << "Background , Border size" << d->background << left << top << right << bottom;
-    return rect.adjusted(-left, -top, right, bottom);
-}
-
 QPainterPath Applet::shape() const
 {
     if (isContainment()) {
@@ -873,21 +872,6 @@ QPainterPath Applet::shape() const
     }
 
     return Plasma::roundedRectangle(boundingRect().adjusted(-2, -2, 2, 2), 10);
-}
-
-QSizeF Applet::sizeHint() const
-{
-    int left = 0;
-    int right = 0;
-    int top = 0;
-    int bottom = 0;
-
-    d->getBorderSize(left, top, right, bottom);
-    QSizeF borderSize = QSizeF(left + right, top + bottom);
-
-    //kDebug() << "Applet content size hint: " << contentSizeHint() << "plus our borders" << left << right << top << bottom;
-
-    return contentSizeHint() + QSizeF(left + right, top + bottom);
 }
 
 Qt::Orientations Applet::expandingDirections() const
@@ -975,7 +959,7 @@ void Applet::paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *opti
                     coption.view = v;
                 }
 
-                paintInterface(painter, &coption, QRect(QPoint(0,0), d->contentSize(this).toSize()));
+                paintInterface(painter, &coption, QRect(QPoint(0,0), boundingRect().size().toSize()));
             }
 
             painter->restore();
@@ -983,14 +967,7 @@ void Applet::paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *opti
         }
 
         //kDebug() << "paint interface of" << (QObject*) this;
-        paintInterface(painter, option, QRect(QPoint(0,0), d->contentSize(this).toSize()));
-    }
-
-    if (d->overlay &&
-        formFactor() != Plasma::Vertical &&
-        formFactor() != Plasma::Horizontal) {
-        //kDebug() << "option rect is" << option->rect;
-        d->overlay->paint(painter, option->rect);
+        paintInterface(painter, option, QRect(QPoint(0,0),  boundingRect().size().toSize()));
     }
 
     painter->restore();
@@ -1046,124 +1023,6 @@ Location Applet::location() const
     }
 
     return c->location();
-}
-
-QRectF Applet::contentRect() const
-{
-    return QRectF(QPointF(0, 0), contentSize());
-}
-
-QSizeF Applet::contentSize() const
-{
-    int top, left, right, bottom;
-    d->getBorderSize(left, top, right, bottom);
-
-    // kDebug() << "Geometry size: " << geometry().size();
-    // kDebug() << "Borders: " << left << top << right << bottom;
-
-    return (geometry().size() - QSizeF(left + right, top + bottom)).expandedTo(QSizeF(0, 0));
-}
-
-void Applet::setContentSize(const QSizeF &size)
-{
-    int top, left, right, bottom;
-    d->getBorderSize(left, top, right, bottom);
-
-    resize(size + QSizeF(left + right, top + bottom));
-}
-
-void Applet::setContentSize(int width, int height)
-{
-    setContentSize(QSizeF(width, height));
-}
-
-QSizeF Applet::contentSizeHint() const
-{
-    static bool checkingScript = false;
-
-    if (!checkingScript && d->script) {
-        checkingScript = true;
-        return d->script->contentSizeHint();
-    }
-
-    checkingScript = false;
-    QSizeF size;
-    if (layout()) {
-        size = layout()->sizeHint();
-    } else {
-        size = contentSize();
-    }
-
-    QSizeF max = maximumContentSize();
-    size = size.boundedTo(max);
-    if (d->square) {
-        //kDebug() << "SizeHintIn: " << (QObject*)this << size;
-        switch (formFactor()) {
-            case Plasma::Vertical:
-                if (size.width() > max.height()) {
-                    size.setWidth(max.height());
-                }
-
-                size.setHeight(size.width());
-            case Plasma::Horizontal:
-            case Plasma::Planar:
-            case Plasma::MediaCenter:
-                if (size.height() > max.width()) {
-                    size.setHeight(max.width());
-                }
-
-                size.setWidth(size.height());
-            default:
-                break;
-        }
-
-        //kDebug() << "SizeHintOut: " << size;
-        return size;
-    }
-
-    return size;
-}
-
-void Applet::setMinimumContentSize(const QSizeF &minSize)
-{
-    int top, left, right, bottom;
-    d->getBorderSize(left, top, right, bottom);
-
-    setMinimumSize(minSize + QSizeF(left + right, top + bottom));
-}
-
-void Applet::setMinimumContentSize(int minWidth, int minHeight)
-{
-    setMinimumContentSize(QSizeF(minWidth, minHeight));
-}
-
-QSizeF Applet::minimumContentSize() const
-{
-    int top, left, right, bottom;
-    d->getBorderSize(left, top, right, bottom);
-
-    return minimumSize() - QSizeF(left + right, top + bottom);
-}
-
-void Applet::setMaximumContentSize(const QSizeF &maxSize)
-{
-    int top, left, right, bottom;
-    d->getBorderSize(left, top, right, bottom);
-
-    setMaximumSize(maxSize + QSizeF(left + right, top + bottom));
-}
-
-void Applet::setMaximumContentSize(int maxWidth, int maxHeight)
-{
-    setMaximumContentSize(QSizeF(maxWidth, maxHeight));
-}
-
-QSizeF Applet::maximumContentSize() const
-{
-    int top, left, right, bottom;
-    d->getBorderSize(left, top, right, bottom);
-
-    return maximumSize() - QSizeF(left + right, top + bottom);
 }
 
 Qt::AspectRatioMode Applet::aspectRatioMode() const
@@ -1583,27 +1442,10 @@ QVariant Applet::itemChange(GraphicsItemChange change, const QVariant &value)
 
 void Applet::setGeometry(const QRectF& geometry)
 {
-    QSizeF s = size();
-    QPointF p = pos();
-
     Widget::setGeometry(geometry);
-    //kDebug() << s << size();
-    if (s != size()) {
-        if (d->background) {
-            //kDebug() << "setting background to" << size();
-            d->background->resize(size());
-        }
-
-        if (d->overlay) {
-            //kDebug() << "setting overlay to" << size();
-            d->overlay->resize(size());
-        }
-
-        updateConstraints(Plasma::SizeConstraint);
-        emit geometryChanged();
-    } else if (p != pos()) {
-        emit geometryChanged();
-    }
+    updateConstraints(Plasma::SizeConstraint);
+    //FIXME see for who is connect to this???
+    //emit geometryChanged();
 }
 
 void Applet::raise()
