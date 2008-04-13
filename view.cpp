@@ -157,10 +157,10 @@ void View::setContainment(Containment *containment)
     }
 
     d->containment = containment;
-    if (! containment) {
+    if (!containment) {
         return;
     }
-    
+
     if (screen > -1) {
         containment->setScreen(screen);
     }
