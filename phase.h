@@ -116,6 +116,14 @@ public:
     Q_INVOKABLE void setAnimationPixmap(AnimId id, const QPixmap &pixmap);
     Q_INVOKABLE QPixmap animationResult(AnimId id);
 
+    /**
+     * Can be used to query if there are other animations happening. This way
+     * heavy operations can be delayed until all animations are finished.
+     * @return true if there are animations going on.
+     * @since 4.1
+     */
+    Q_INVOKABLE bool isAnimating() const;
+
 Q_SIGNALS:
     void animationComplete(QGraphicsItem *item, Plasma::Phase::Animation anim);
     void movementComplete(QGraphicsItem *item);
