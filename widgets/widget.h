@@ -29,7 +29,6 @@
 #include <QtCore/QSizeF>
 #include <QtCore/QString>
 
-#include <plasma/layouts/layoutitem.h>
 #include <plasma/plasma_export.h>
 
 class QGraphicsView;

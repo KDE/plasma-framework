@@ -66,7 +66,6 @@
 #include "plasma/theme.h"
 #include "plasma/view.h"
 
-#include "plasma/layouts/boxlayout.h"
 #include "plasma/widgets/widget.h"
 
 //#define DYNAMIC_SHADOWS
