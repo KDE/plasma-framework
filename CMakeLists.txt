@@ -137,9 +137,10 @@ install(FILES
     widgets/webcontent.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/plasma/widgets)
 
-install(FILES
-    layouts/borderlayout.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/plasma/layouts)
+#For future
+#install(FILES
+#    layouts/borderlayout.h
+#    DESTINATION ${INCLUDE_INSTALL_DIR}/plasma/layouts)
 
 install(FILES
     scripting/appletscript.h
