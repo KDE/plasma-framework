@@ -144,6 +144,11 @@ class PLASMA_EXPORT Containment : public Applet
         void setContainmentType(Containment::Type type);
 
         /**
+         * Reimplemented from Applet
+         */
+        void setIsContainment(bool isContainment);
+
+        /**
          * Returns the Corona (if any) that this Containment is hosted by
          */
         Corona* corona() const;

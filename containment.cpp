@@ -249,6 +249,7 @@ void Containment::containmentConstraintsUpdated(Plasma::Constraints constraints)
 
     if (constraints & Plasma::ScreenConstraint && d->toolbox) {
         if (d->type == PanelContainment) {
+            //FIXME: geometry() always returns a 0x0 size in the panels
             d->toolbox->setPos(geometry().width() - d->toolbox->boundingRect().width(), geometry().height()/2 - d->toolbox->size());
         } else {
             d->toolbox->setPos(geometry().width() - d->toolbox->boundingRect().width(), 0);
@@ -298,7 +299,7 @@ void Containment::setContainmentType(Containment::Type type)
             QGraphicsWidget *activityTool = addToolBoxTool("addSiblingContainment", "list-add", i18n("Add Activity"));
             connect(activityTool, SIGNAL(clicked()), this, SLOT(addSiblingContainment()));
         }
-    //FIXME: the isContainment fix kinda got vanished in the woc migration
+
     } else if (isContainment() && type == PanelContainment) {
         d->createToolbox();
         d->toolbox->setSize(24);
@@ -307,6 +308,17 @@ void Containment::setContainmentType(Containment::Type type)
         delete d->toolbox;
         d->toolbox = 0;
     }
+}
+
+void Containment::setIsContainment(bool isContainment)
+{
+    Applet::setIsContainment(isContainment);
+
+    // reset the toolbox!
+    delete d->toolbox;
+    d->toolbox = 0;
+
+    setContainmentType(d->type);
 }
 
 Corona* Containment::corona() const
@@ -781,16 +793,12 @@ void Containment::appletAnimationComplete(QGraphicsItem *item, Plasma::Phase::An
 {
     if (anim == Phase::Disappear) {
         QGraphicsItem *parent = item->parentItem();
-	QGraphicsLayout *lay = layout();
-	QGraphicsLinearLayout * linearLay = dynamic_cast<QGraphicsLinearLayout *>(lay);
+
         while (parent) {
             if (parent == this) {
                 Applet *applet = qgraphicsitem_cast<Applet*>(item);
 
                 if (applet) {
-		    if (linearLay) {
-			linearLay->removeItem(applet);
-		    }
                     applet->destroy();
                 }
 
