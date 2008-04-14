@@ -55,7 +55,6 @@ class Widget::Private
             : minimumSize(0,0),
               maximumSize(std::numeric_limits<qreal>::infinity(),
                           std::numeric_limits<qreal>::infinity()),
-              opacity(1.0),
               wasMovable(false),
               toolTip(0)
         { }
@@ -67,8 +66,6 @@ class Widget::Private
 
         QSizeF minimumSize;
         QSizeF maximumSize;
-
-        qreal opacity;
 
         bool wasMovable;
 
@@ -142,16 +139,6 @@ Widget::~Widget()
         ToolTip::self()->hide();
     }
     delete d;
-}
-
-void Widget::setOpacity(qreal opacity)
-{
-    d->opacity = opacity;
-}
-
-qreal Widget::opacity() const
-{
-    return d->opacity;
 }
 
 void Widget::setCachePaintMode(CachePaintMode mode, const QSize &size)
@@ -255,11 +242,7 @@ void Widget::addChild(Widget *w)
 
 void Widget::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-    if (d->opacity < 1.0) {
-        painter->setOpacity(painter->opacity() * d->opacity);
-    }
-
-    /*
+       /*
 NOTE: put this back if we end up needing to control when things paint due to, e.g. zooming.
     if (!d->shouldPaint(painter, transform())) {
         return;

@@ -112,7 +112,6 @@ public:
           mainConfig(0),
           pendingConstraints(NoConstraint),
           aspectRatioMode(Qt::KeepAspectRatio),
-          opacity(1.0),
           kioskImmutable(false),
           immutable(false),
           hasConfigurationInterface(false),
@@ -318,7 +317,6 @@ public:
     KConfigGroup *mainConfig;
     Plasma::Constraints pendingConstraints;
     Qt::AspectRatioMode aspectRatioMode;
-    qreal opacity;
     bool kioskImmutable : 1;
     bool immutable : 1;
     bool hasConfigurationInterface : 1;
@@ -400,7 +398,6 @@ void Applet::save(KConfigGroup* group) const
     //kDebug() << pluginName() << "geometry is" << geometry() << "pos is" << pos() << "bounding rect is" << boundingRect();
     group->writeEntry("geometry", geometry());
     group->writeEntry("zvalue", zValue());
-    group->writeEntry("opacity", d->opacity);
 
     if (transform() == QTransform()) {
         group->deleteEntry("transform");
@@ -438,8 +435,6 @@ void Applet::restore(KConfigGroup *c)
     if (c->readEntry("locked", false)) {
         setImmutable(true);
     }
-
-    setOpacity(c->readEntry("opacity", 1.0));
 }
 
 void Applet::saveState(KConfigGroup* group) const
@@ -918,12 +913,7 @@ void Applet::paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *opti
     }
 
     painter->save();
-
-    //Set opacity
-    if (d->opacity >= 0.1 && d->opacity <= 0.9) {
-        painter->setOpacity(d->opacity);
-    }
-
+    
     if (transform().isRotating()) {
         painter->setRenderHint(QPainter::SmoothPixmapTransform);
         painter->setRenderHint(QPainter::Antialiasing);
@@ -1462,16 +1452,6 @@ bool Applet::isContainment() const
 void Applet::themeChanged()
 {
     update();
-}
-
-void Applet::setOpacity( qreal opacity )
-{
-    d->opacity = opacity;
-}
-
-qreal Applet::opacity() const
-{
-    return d->opacity;
 }
 
 } // Plasma namespace

@@ -68,8 +68,6 @@ class PLASMA_EXPORT Widget  : public QGraphicsWidget
     Q_PROPERTY( Qt::Orientations expandingDirections READ expandingDirections )
     Q_PROPERTY( QRectF geometry READ geometry WRITE setGeometry )
     Q_PROPERTY( QSizeF size READ size WRITE resize )
-    Q_PROPERTY( qreal opacity READ opacity WRITE setOpacity )
-
 public:
     enum CachePaintMode {
         NoCacheMode,
@@ -152,9 +150,6 @@ public:
      * @param widget the widget to reparent to this Plasma::Widget.
      */
     Q_INVOKABLE void addChild(Widget *widget);
-
-    void setOpacity(qreal opacity);
-    qreal opacity() const;
 
     /**
      * Sets the widget's cache paint mode and cache size.
