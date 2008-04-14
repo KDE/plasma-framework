@@ -142,7 +142,6 @@ void SearchContext::resetSearchTerm(const QString &term)
     // delete the matches until after the signal is handled.
     // a bit safer.
     qDeleteAll(matches);
-
     setSearchTerm(term);
 }
 
