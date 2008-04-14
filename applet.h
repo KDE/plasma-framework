@@ -384,10 +384,10 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          **/
         QString name() const;
 
-	/**
-	* @return the font currently set for this widget
-	**/
-	QFont font() const;
+        /**
+         * @return the font currently set for this widget
+         **/
+        QFont font() const;
 
         /**
          * Returns the plugin name for the applet
@@ -442,7 +442,7 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          **/
         void setDrawStandardBackground(bool drawBackground);
 
-	void paintWindowFrame ( QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget);
+        void paintWindowFrame(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
         /**
          * If for some reason, the applet fails to get up on its feet (the
@@ -532,13 +532,13 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          */
         bool isContainment() const;
 
-	/**
+        /**
          * Sets the geometry of this Plasma::Applet. Should not be used directly by
          * applet subclasses.
          * @param geometry the geometry to apply to this Plasma::Applet.
          */
         void setGeometry(const QRectF &geometry);
-  
+
         /**
          * Causes this applet to raise above all other applets.
          */
@@ -716,6 +716,11 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          * @internal manage the mouse movement to drag the applet around
          */
         void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
+
+        /**
+         * @internal manage the mouse movement to drag the applet around
+         */
+        void mousePressEvent(QGraphicsSceneMouseEvent *event);
 
         /**
          * Reimplemented from QGraphicsItem

@@ -1173,6 +1173,17 @@ void Containment::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
     Q_UNUSED(event)
 }
 
+void Containment::keyPressEvent(QKeyEvent *event)
+{
+    kDebug() << "keyPressEvent with" << event->key() << "and hoping and wishing for a" << Qt::Key_Tab;
+    if (event->key() == Qt::Key_Tab) { // && event->modifiers() == 0) {
+        kDebug() << "let's give focus to...." << (QObject*)d->applets.first();
+        if (!d->applets.isEmpty()) {
+            d->applets.first()->setFocus(Qt::TabFocusReason);
+        }
+    }
+}
+
 bool Containment::sceneEventFilter(QGraphicsItem *watched, QEvent *event)
 {
     Applet *applet = qgraphicsitem_cast<Applet*>(watched);

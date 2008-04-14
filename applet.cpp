@@ -145,6 +145,7 @@ public:
         // WARNING: do not access config() OR globalConfig() in this method!
         //          that requires a scene, which is not available at this point
         applet->setAcceptsHoverEvents(true);
+        applet->setFlag(QGraphicsItem::ItemIsFocusable, true);
 
         if (!appletDescription.isValid()) {
             applet->setFailedToLaunch(true, i18n("Invalid applet description"));
@@ -1232,6 +1233,17 @@ void Applet::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     }
 }
 
+void Applet::mousePressEvent(QGraphicsSceneMouseEvent *event)
+{
+    setFocus(Qt::MouseFocusReason);
+    QGraphicsWidget::mousePressEvent(event);
+}
+
+void Applet::focusInEvent(QFocusEvent * event)
+{
+    kDebug() << "FOCUS! FOCUS! FOCUS!";
+    QGraphicsWidget::focusInEvent(event);
+}
 
 void Applet::showConfigurationInterface()
 {

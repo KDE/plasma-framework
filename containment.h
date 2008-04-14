@@ -414,6 +414,7 @@ class PLASMA_EXPORT Containment : public Applet
         void contextMenuEvent(QGraphicsSceneContextMenuEvent * event);
         void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
         void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
+        void keyPressEvent(QKeyEvent *event);
         bool sceneEventFilter(QGraphicsItem *watched, QEvent *event);
         QVariant itemChange(GraphicsItemChange change, const QVariant &value);
 
