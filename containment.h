@@ -338,6 +338,12 @@ class PLASMA_EXPORT Containment : public Applet
         void zoomOut();
 
         /**
+         * Emitted when the containment wants a new containment to be created.
+         * Usually only used for desktop containments.
+         */
+        void addSiblingContainment(Plasma::Containment *);
+
+        /**
          * Emitted when the containment requests an add widgets dialog is shown.
          * Usually only used for desktop containments.
          */
@@ -382,6 +388,11 @@ class PLASMA_EXPORT Containment : public Applet
          * Usually only used for desktop containments.
          */
         void zoomIn();
+
+        /**
+         * Tells the corona to create a new desktop containment
+         */
+        void addSiblingContainment();
 
     protected:
         /**

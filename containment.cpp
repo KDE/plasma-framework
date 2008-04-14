@@ -280,6 +280,9 @@ void Containment::setContainmentType(Containment::Type type)
                                                                           i18n("Lock Widgets"));
                 connect(lockTool, SIGNAL(clicked()), this, SLOT(toggleDesktopImmutability()));
             }
+
+            Plasma::Widget *activityTool = addToolBoxTool("addSiblingContainment", "list-add", i18n("Add Activity"));
+            connect(activityTool, SIGNAL(clicked()), this, SLOT(addSiblingContainment()));
         }
     } else {
         delete d->toolbox;
@@ -540,6 +543,11 @@ void Containment::toggleDesktopImmutability()
 void Containment::zoomIn()
 {
     emit zoomIn(this);
+}
+
+void Containment::addSiblingContainment()
+{
+    emit addSiblingContainment(this);
 }
 
 void Containment::clearApplets()
