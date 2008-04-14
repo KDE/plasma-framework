@@ -278,11 +278,17 @@ void AppletBrowserWidget::destroyApplets(const QString &name)
 
     foreach (Containment *containment, c->containments()) {
         QList<Applet*> applets = containment->applets();
+	QGraphicsLayout *lay = containment->layout();
+	QGraphicsLinearLayout * linearLay = dynamic_cast<QGraphicsLinearLayout *>(lay);
         foreach (Applet *applet,applets) {
             d->appletNames.remove(applet);
             if (applet->name() == name) {
                 applet->disconnect(this);
-                applet->destroy();
+		if (linearLay)
+		{
+		    linearLay->removeItem(applet);
+		}
+		applet->destroy();
             }
         }
     }
