@@ -1,5 +1,6 @@
 install(FILES
     dialogs/background.svg
+    dialogs/krunner.svg
     dialogs/shutdowndialog.svg
     DESTINATION ${DATA_INSTALL_DIR}/desktoptheme/default/dialogs/)
 
