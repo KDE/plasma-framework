@@ -112,13 +112,14 @@ public:
           mainConfig(0),
           pendingConstraints(NoConstraint),
           aspectRatioMode(Qt::KeepAspectRatio),
+          opacity(1.0),
           kioskImmutable(false),
           immutable(false),
           hasConfigurationInterface(false),
           failed(false),
           isContainment(false),
           square(false),
-          opacity(1.0)
+          transient(false)
     {
         if (appletId == 0) {
             appletId = ++s_maxAppletId;
@@ -317,13 +318,14 @@ public:
     KConfigGroup *mainConfig;
     Plasma::Constraints pendingConstraints;
     Qt::AspectRatioMode aspectRatioMode;
+    qreal opacity;
     bool kioskImmutable : 1;
     bool immutable : 1;
     bool hasConfigurationInterface : 1;
     bool failed : 1;
     bool isContainment : 1;
     bool square : 1;
-    qreal opacity;
+    bool transient : 1;
 };
 
 uint Applet::Private::s_maxAppletId = 0;
@@ -356,6 +358,11 @@ Applet::Applet(QObject* parentObject, const QVariantList& args)
 Applet::~Applet()
 {
     needsFocus(false);
+
+    if (d->transient) {
+        resetConfigurationObject();
+    }
+
     delete d;
 }
 
@@ -481,7 +488,7 @@ void Applet::destroy()
         d->configXml->setDefaults();
     }
 
-    resetConfigurationObject();
+    d->transient = true;
     deleteLater();
 }
 
