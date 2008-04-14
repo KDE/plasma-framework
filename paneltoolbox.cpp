@@ -101,13 +101,17 @@ PanelToolbox::PanelToolbox(QGraphicsItem *parent)
 
 QRectF PanelToolbox::boundingRect() const
 {
-    return QRectF(0, 0, size()*2, size()*2);
+    return QRectF(0, 0, -size()*2, size()*4);
 }
 
 void PanelToolbox::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     Q_UNUSED(option)
     Q_UNUSED(widget)
+
+
+    painter->save();
+    painter->translate(boundingRect().topLeft());
 
     QColor color1 = KColorScheme(QPalette::Active, KColorScheme::Window,
                                Plasma::Theme::self()->colors()).background().color();
@@ -118,8 +122,9 @@ void PanelToolbox::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
     color2.setAlpha(64);
 
     QPainterPath p = shape();
-    QRadialGradient gradient(QPoint(size()*2, size()), size() + d->animFrame);
-    gradient.setFocalPoint(QPointF(size()*2, size()));
+    const QPoint gradientCenter(boundingRect().left(), boundingRect().center().y());
+    QRadialGradient gradient(gradientCenter, size() + d->animFrame - 1);
+    gradient.setFocalPoint(gradientCenter);
     gradient.setColorAt(0, color1);
     gradient.setColorAt(.87, color1);
     gradient.setColorAt(.97, color2);
@@ -133,26 +138,30 @@ void PanelToolbox::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
     painter->restore();
 
     const qreal progress = d->animFrame / size();
+    const QRect iconRect(QPoint((int)boundingRect().left() - iconSize().width() + 2, gradientCenter.y() - iconSize().height()/2), iconSize());
 
     if (progress <= 0.9) {
-        d->icon.paint(painter, QRect(QPoint(size()*2 - iconSize().width() + 2, 2), iconSize()), Qt::AlignCenter, QIcon::Disabled, QIcon::Off);
+        d->icon.paint(painter, iconRect, Qt::AlignCenter, QIcon::Disabled, QIcon::Off);
     }
 
     if (progress > 0.1) {
         painter->save();
         painter->setOpacity(progress);
-        d->icon.paint(painter, QRect(QPoint(size()*2 - iconSize().width() + 2, 2), iconSize()));
+        d->icon.paint(painter, iconRect);
         painter->restore();
     }
+
+    painter->restore();
 }
 
 QPainterPath PanelToolbox::shape() const
 {
     QPainterPath path;
     int toolSize = size() + (int)d->animFrame;
-    path.moveTo(size()*2, 0);
-    //path.arcTo(QRectF(size()*2 - toolSize, -toolSize, toolSize*2, toolSize*2), 180, 90);
-    path.addRect(QRectF(0, 0, toolSize*2, toolSize*2));
+    //path.moveTo(size()*2, 0);
+
+    path.arcTo(QRectF(boundingRect().left() - toolSize, boundingRect().center().y() - toolSize, toolSize*2, toolSize*2), 90, 180);
+
     return path;
 }
 

@@ -248,7 +248,11 @@ void Containment::containmentConstraintsUpdated(Plasma::Constraints constraints)
     }
 
     if (constraints & Plasma::ScreenConstraint && d->toolbox) {
-        d->toolbox->setPos(geometry().width() - d->toolbox->boundingRect().width(), 0);
+        if (d->type == PanelContainment) {
+            d->toolbox->setPos(geometry().width() - d->toolbox->boundingRect().width(), geometry().height()/2 - d->toolbox->size());
+        } else {
+            d->toolbox->setPos(geometry().width() - d->toolbox->boundingRect().width(), 0);
+        }
         d->toolbox->enableTool("addwidgets", !isImmutable());
     }
 
@@ -294,7 +298,8 @@ void Containment::setContainmentType(Containment::Type type)
             QGraphicsWidget *activityTool = addToolBoxTool("addSiblingContainment", "list-add", i18n("Add Activity"));
             connect(activityTool, SIGNAL(clicked()), this, SLOT(addSiblingContainment()));
         }
-    } else if (isContainment() && type == PanelContainment){
+    //FIXME: the isContainment fix kinda got vanished in the woc migration
+    } else if (isContainment() && type == PanelContainment) {
         d->createToolbox();
         d->toolbox->setSize(24);
         d->toolbox->setIconSize(QSize(16, 16));
