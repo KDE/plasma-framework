@@ -172,7 +172,7 @@ void View::setContainment(Containment *containment)
     }
 
     updateSceneRect();
-    //connect(containment, SIGNAL(geometryChanged()), this, SLOT(updateSceneRect()));
+    connect(containment, SIGNAL(geometryChanged()), this, SLOT(updateSceneRect()));
 }
 
 Containment* View::containment() const

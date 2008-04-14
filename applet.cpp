@@ -1,6 +1,7 @@
 /*
  *   Copyright 2005 by Aaron Seigo <aseigo@kde.org>
  *   Copyright 2007 by Riccardo Iaconelli <riccardo@kde.org>
+ *   Copyright 2008 by Ménard Alexis <darktears31@gmail.com>
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU Library General Public License as
@@ -379,6 +380,8 @@ void Applet::init()
     if (d->script && !d->script->init()) {
         setFailedToLaunch(true, i18n("Script initialization failed"));
     }
+    //Here is the code for the window frame
+    //setWindowFlags(Qt::Window);
 }
 
 uint Applet::id() const
@@ -634,31 +637,20 @@ bool Applet::drawStandardBackground() const
 
 void Applet::setDrawStandardBackground(bool drawBackground)
 {
-    if
-      (drawBackground)
-    {
-      setWindowFlags(Qt::Window);
-    }
-    else
-    {
-      setWindowFlags(0);
-    }
     if (drawBackground) {
         if (!d->background) {
             d->background = new Plasma::SvgPanel("widgets/background");
-
+	    
             int left, top, right, bottom;
             d->getBorderSize(left, top, right, bottom);
-            setContentsMargins(0, 0, right, bottom);
-            updateGeometry();
-            update();
+            //setContentsMargins(0, 0, right, bottom);
+	    d->background->resize(geometry().size());
+	    d->background->setPos(QPointF(0,0));
         }
     } else if (d->background) {
         delete d->background;
         d->background = 0;
         setContentsMargins(0, 0, 0, 0);
-        updateGeometry();
-        update();
     }
 }
 
@@ -682,11 +674,9 @@ QString visibleFailureText(const QString& reason)
 
 void Applet::paintWindowFrame ( QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget)
 {
-    //Plasma::SvgPanel *background = new Plasma::SvgPanel("widgets/background");
-    //background->paint(painter,geometry());
-    setWindowFrameMargins(1,1,1,1);
-    painter->setPen(QPen(Qt::red));
-    painter->drawRoundedRect(geometry(),5,5);
+    //Here come the code for the window frame
+    //kDebug()<<"ENTER in windowFrame";
+    //painter->drawRoundedRect(windowFrameGeometry(),5,5);
 }
 
 void Applet::setFailedToLaunch(bool failed, const QString& reason)
@@ -941,14 +931,12 @@ void Applet::paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *opti
         painter->setRenderHint(QPainter::SmoothPixmapTransform);
         painter->setRenderHint(QPainter::Antialiasing);
     }
-
     if (d->background &&
         formFactor() != Plasma::Vertical &&
         formFactor() != Plasma::Horizontal) {
         //kDebug() << "option rect is" << option->rect;
-        d->background->paint(painter, option->rect);
+        d->background->paint(painter,option->rect);
     }
-
     if (!d->failed) {
         if (widget && isContainment()) {
             // note that the widget we get is actually the viewport of the view, not the view itself
@@ -971,7 +959,6 @@ void Applet::paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *opti
         //kDebug() << "paint interface of" << (QObject*) this;
         paintInterface(painter, option, QRect(QPoint(0,0),  boundingRect().size().toSize()));
     }
-
     painter->restore();
 }
 
@@ -1444,14 +1431,20 @@ QVariant Applet::itemChange(GraphicsItemChange change, const QVariant &value)
 
 void Applet::setGeometry(const QRectF& geometry)
 {
-    QSizeF beforeSize = Widget::geometry().size();
+    QRectF beforeGeom = Widget::geometry();
     Widget::setGeometry(geometry);
-    if (geometry.size() != beforeSize)
+    if (geometry.size() != beforeGeom.size())
     {
 	updateConstraints(Plasma::SizeConstraint);
+	if (d->background) {
+	    d->background->resize(boundingRect().size());
+	}
+	emit geometryChanged();
     }
-    //FIXME see for who is connect to this???
-    //emit geometryChanged();
+    if (geometry.topLeft() != beforeGeom.topLeft())
+    {
+      emit geometryChanged();
+    }
 }
 
 void Applet::raise()
