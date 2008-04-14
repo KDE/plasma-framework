@@ -1,5 +1,6 @@
 /*
  *   Copyright 2007 by Aaron Seigo <aseigo@kde.org>
+ *   Copyright 2008 by Marco Martin <notmart@gmail.com>
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU Library General Public License as
@@ -17,7 +18,7 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "desktoptoolbox_p.h"
+#include "paneltoolbox_p.h"
 
 #include <QGraphicsSceneHoverEvent>
 #include <QPainter>
@@ -28,8 +29,7 @@
 
 #include <KDebug>
 
-#include <plasma/applet.h>
-
+#include "widgets/widget.h"
 
 namespace Plasma
 {
@@ -75,7 +75,7 @@ class EmptyGraphicsItem : public QGraphicsItem
 // used with QGrahphicsItem::setData
 static const int ToolName = 7001;
 
-class DesktopToolbox::Private
+class PanelToolbox::Private
 {
 public:
     Private()
@@ -92,20 +92,22 @@ public:
     qreal animFrame;
 };
 
-DesktopToolbox::DesktopToolbox(QGraphicsItem *parent)
+PanelToolbox::PanelToolbox(QGraphicsItem *parent)
     : Toolbox(parent),
       d(new Private)
 {
     connect(Plasma::Phase::self(), SIGNAL(movementComplete(QGraphicsItem*)), this, SLOT(toolMoved(QGraphicsItem*)));
 }
 
-void DesktopToolbox::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+QRectF PanelToolbox::boundingRect() const
+{
+    return QRectF(0, 0, size()*2, size()*2);
+}
+
+void PanelToolbox::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     Q_UNUSED(option)
     Q_UNUSED(widget)
-
-    painter->save();
-    painter->translate(boundingRect().topLeft());
 
     QColor color1 = KColorScheme(QPalette::Active, KColorScheme::Window,
                                Plasma::Theme::self()->colors()).background().color();
@@ -116,8 +118,8 @@ void DesktopToolbox::paint(QPainter *painter, const QStyleOptionGraphicsItem *op
     color2.setAlpha(64);
 
     QPainterPath p = shape();
-    QRadialGradient gradient(boundingRect().topLeft(), size() + d->animFrame);
-    gradient.setFocalPoint(boundingRect().topLeft());
+    QRadialGradient gradient(QPoint(size()*2, size()), size() + d->animFrame);
+    gradient.setFocalPoint(QPointF(size()*2, size()));
     gradient.setColorAt(0, color1);
     gradient.setColorAt(.87, color1);
     gradient.setColorAt(.97, color2);
@@ -133,29 +135,28 @@ void DesktopToolbox::paint(QPainter *painter, const QStyleOptionGraphicsItem *op
     const qreal progress = d->animFrame / size();
 
     if (progress <= 0.9) {
-        d->icon.paint(painter, QRect(QPoint((int)boundingRect().left() - iconSize().width() + 2, 2), iconSize()), Qt::AlignCenter, QIcon::Disabled, QIcon::Off);
+        d->icon.paint(painter, QRect(QPoint(size()*2 - iconSize().width() + 2, 2), iconSize()), Qt::AlignCenter, QIcon::Disabled, QIcon::Off);
     }
 
     if (progress > 0.1) {
         painter->save();
         painter->setOpacity(progress);
-        d->icon.paint(painter, QRect(QPoint((int)boundingRect().left() - iconSize().width() + 2, 2), iconSize()));
+        d->icon.paint(painter, QRect(QPoint(size()*2 - iconSize().width() + 2, 2), iconSize()));
         painter->restore();
     }
-
-    painter->restore();
 }
 
-QPainterPath DesktopToolbox::shape() const
+QPainterPath PanelToolbox::shape() const
 {
     QPainterPath path;
     int toolSize = size() + (int)d->animFrame;
-    path.arcTo(QRectF(boundingRect().left() - toolSize, boundingRect().top() - toolSize, toolSize*2, toolSize*2), 180, 90);
-
+    path.moveTo(size()*2, 0);
+    //path.arcTo(QRectF(size()*2 - toolSize, -toolSize, toolSize*2, toolSize*2), 180, 90);
+    path.addRect(QRectF(0, 0, toolSize*2, toolSize*2));
     return path;
 }
 
-void DesktopToolbox::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
+void PanelToolbox::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 {
     if (showing() || d->stopwatch.elapsed() < 100) {
         QGraphicsItem::hoverEnterEvent(event);
@@ -165,7 +166,8 @@ void DesktopToolbox::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
     QPainterPath path;
     int toolSize = size() + (int)d->animFrame - 15;
     path.moveTo(size()*2, 0);
-    path.arcTo(QRectF(size() * 2 - toolSize, -toolSize, toolSize*2, toolSize*2), 180, 90);
+    //path.arcTo(QRectF(size() * 2 - toolSize, -toolSize, toolSize*2, toolSize*2), 180, 90);
+    path.addRect(QRectF(0, 0, toolSize*2, toolSize*2));
     path.lineTo(size()*2, 0);
 
     if (path.contains(event->pos())) {
@@ -177,7 +179,7 @@ void DesktopToolbox::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
     QGraphicsItem::hoverEnterEvent(event);
 }
 
-void DesktopToolbox::showToolbox()
+void PanelToolbox::showToolbox()
 {
     if (showing()) {
         return;
@@ -193,8 +195,8 @@ void DesktopToolbox::showToolbox()
 
     // put tools 5px from icon edge
     const int iconWidth = 32;
-    int x = (int)boundingRect().left() - maxwidth - iconWidth - 5;
-    int y = (int)boundingRect().top() + 5;
+    int x = size()*2 - maxwidth - iconWidth - 5;
+    int y = 5; // pos().y();
     Plasma::Phase* phase = Plasma::Phase::self();
     foreach (QGraphicsItem* tool, QGraphicsItem::children()) {
         if (tool == d->toolBacker) {
@@ -233,7 +235,7 @@ void DesktopToolbox::showToolbox()
     d->stopwatch.restart();
 }
 
-void DesktopToolbox::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
+void PanelToolbox::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 {
     //kDebug() << event->pos() << event->scenePos() << d->toolBacker->rect().contains(event->scenePos().toPoint());
     if ((d->toolBacker && d->toolBacker->rect().contains(event->scenePos().toPoint())) ||
@@ -245,7 +247,7 @@ void DesktopToolbox::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
     QGraphicsItem::hoverLeaveEvent(event);
 }
 
-void DesktopToolbox::hideToolbox()
+void PanelToolbox::hideToolbox()
 {
     if (!showing()) {
         return;
@@ -277,7 +279,7 @@ void DesktopToolbox::hideToolbox()
     d->stopwatch.restart();
 }
 
-void DesktopToolbox::animate(qreal progress)
+void PanelToolbox::animate(qreal progress)
 {
     if (showing()) {
         d->animFrame = size() * progress;
@@ -294,16 +296,16 @@ void DesktopToolbox::animate(qreal progress)
     update();
 }
 
-void DesktopToolbox::toolMoved(QGraphicsItem *item)
+void PanelToolbox::toolMoved(QGraphicsItem *item)
 {
     //kDebug() << "geometry is now " << static_cast<Plasma::Widget*>(item)->geometry();
     if (!showing() &&
-        QGraphicsItem::children().indexOf(static_cast<Plasma::Applet*>(item)) != -1) {
+        QGraphicsItem::children().indexOf(static_cast<Plasma::Widget*>(item)) != -1) {
         item->hide();
     }
 }
 
 } // plasma namespace
 
-#include "desktoptoolbox_p.moc"
+#include "paneltoolbox_p.moc"
 

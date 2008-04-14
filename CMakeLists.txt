@@ -48,6 +48,8 @@ set(plasma_LIB_SRCS
     svgpanel.cpp
     theme.cpp
     timer.cpp
+    toolbox.cpp
+    paneltoolbox.cpp
     desktoptoolbox.cpp
     uiloader.cpp
     view.cpp

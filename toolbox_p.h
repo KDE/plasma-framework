@@ -18,16 +18,11 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef PLASMA_DESKTOPTOOLBOX_P_H
-#define PLASMA_DESKTOPTOOLBOX_P_H
+#ifndef PLASMA_TOOLBOX_P_H
+#define PLASMA_TOOLBOX_P_H
 
 #include <QGraphicsItem>
 #include <QObject>
-#include <QTime>
-
-#include <KIcon>
-
-#include <plasma/toolbox_p.h>
 
 #include "phase.h"
 
@@ -37,25 +32,32 @@ namespace Plasma
 class Widget;
 class EmptyGraphicsItem;
 
-class DesktopToolbox : public Toolbox
+class Toolbox : public QObject, public QGraphicsItem
 {
     Q_OBJECT
 
 public:
-    explicit DesktopToolbox(QGraphicsItem *parent = 0);
-    QPainterPath shape() const;
+    explicit Toolbox(QGraphicsItem *parent = 0);
+    virtual QRectF boundingRect() const;
 
-    void showToolbox();
-    void hideToolbox();
+    void addTool(QGraphicsItem *tool, const QString &name);
+    void enableTool(const QString &tool, bool enabled);
+    bool isToolEnabled(const QString &tool) const;
+    QGraphicsItem* tool(const QString &tool) const;
+    int size() const;
+    void setSize(const int newSize);
+    QSize iconSize() const;
+    void  setIconSize(const QSize newSize);
+    bool showing() const;
+    void setShowing(const bool show);
+
+    virtual void showToolbox() = 0;
+    virtual void hideToolbox() = 0;
 
 protected:
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
-    void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
-    void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
+    virtual void hoverEnterEvent(QGraphicsSceneHoverEvent *event) = 0;
+    virtual void hoverLeaveEvent(QGraphicsSceneHoverEvent *event) = 0;
 
-protected slots:
-    void animate(qreal progress);
-    void toolMoved(QGraphicsItem*);
 private:
     class Private;
     Private *d;

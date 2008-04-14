@@ -45,6 +45,7 @@
 #include "corona.h"
 #include "phase.h"
 #include "desktoptoolbox_p.h"
+#include "paneltoolbox_p.h"
 #include "svg.h"
 
 namespace Plasma
@@ -73,10 +74,18 @@ public:
         applets.clear();
     }
 
-    DesktopToolbox* createToolbox()
+    Toolbox* createToolbox()
     {
         if (!toolbox) {
-            toolbox = new DesktopToolbox(q);
+            switch (type) {
+            case PanelContainment:
+                toolbox = new PanelToolbox(q);
+                break;
+            //defaults to DesktopContainment right now
+            default:
+                toolbox = new DesktopToolbox(q);
+                break;
+            }
             positionToolbox();
         }
 
@@ -93,7 +102,7 @@ public:
             r = desktop->availableGeometry(screen);
         }
 
-        toolbox->setPos(QPointF(r.right() - toolbox->boundingRect().width(), r.y()));
+        toolbox->setPos(QPointF(r.right(), r.y()));
     }
 
     void setLockToolText();
@@ -104,7 +113,7 @@ public:
     Applet::List applets;
     QMap<Applet*, AppletHandle*> handles;
     int screen;
-    DesktopToolbox *toolbox;
+    Toolbox *toolbox;
     Containment::Type type;
     bool positioning;
 };
@@ -285,6 +294,10 @@ void Containment::setContainmentType(Containment::Type type)
             QGraphicsWidget *activityTool = addToolBoxTool("addSiblingContainment", "list-add", i18n("Add Activity"));
             connect(activityTool, SIGNAL(clicked()), this, SLOT(addSiblingContainment()));
         }
+    } else if (isContainment() && type == PanelContainment){
+        createToolbox();
+        toolbox->setSize(24);
+        toolbox->setIconSize(QSize(16, 16));
     } else {
         delete d->toolbox;
         d->toolbox = 0;

@@ -18,8 +18,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef PLASMA_DESKTOPTOOLBOX_P_H
-#define PLASMA_DESKTOPTOOLBOX_P_H
+#ifndef PLASMA_PANELTOOLBOX_P_H
+#define PLASMA_PANELTOOLBOX_P_H
 
 #include <QGraphicsItem>
 #include <QObject>
@@ -37,12 +37,13 @@ namespace Plasma
 class Widget;
 class EmptyGraphicsItem;
 
-class DesktopToolbox : public Toolbox
+class PanelToolbox : public Toolbox
 {
     Q_OBJECT
 
 public:
-    explicit DesktopToolbox(QGraphicsItem *parent = 0);
+    explicit PanelToolbox(QGraphicsItem *parent = 0);
+    virtual QRectF boundingRect() const;
     QPainterPath shape() const;
 
     void showToolbox();
