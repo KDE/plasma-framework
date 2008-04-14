@@ -640,12 +640,11 @@ void Applet::setDrawStandardBackground(bool drawBackground)
     if (drawBackground) {
         if (!d->background) {
             d->background = new Plasma::SvgPanel("widgets/background");
-	    
             int left, top, right, bottom;
             d->getBorderSize(left, top, right, bottom);
             //setContentsMargins(0, 0, right, bottom);
-	    d->background->resize(geometry().size());
-	    d->background->setPos(QPointF(0,0));
+            d->background->resize(geometry().size());
+            d->background->setPos(QPointF(0,0));
         }
     } else if (d->background) {
         delete d->background;
@@ -682,22 +681,20 @@ void Applet::paintWindowFrame ( QPainter * painter, const QStyleOptionGraphicsIt
 void Applet::setFailedToLaunch(bool failed, const QString& reason)
 {
     if (d->failed == failed) {
-       
         return;
     }
 
     d->failed = failed;
     prepareGeometryChange();
 
-    
     qDeleteAll(QGraphicsItem::children());
     setLayout(0);
 
     if (failed) {
         setDrawStandardBackground(true);
-        
+
         #ifdef TOPORT
-	Layout* failureLayout = new BoxLayout(BoxLayout::TopToBottom, this);
+        Layout* failureLayout = new BoxLayout(BoxLayout::TopToBottom, this);
         d->failureText = new LineEdit(this);
         d->failureText->setTextInteractionFlags( Qt::TextSelectableByMouse );
         d->failureText->setStyled(false);
@@ -709,19 +706,18 @@ void Applet::setFailedToLaunch(bool failed, const QString& reason)
                                                            Theme::self()->colors())
                                                         .brush(QPalette::Normal).color());
         failureLayout->addItem(d->failureText);
-	#endif
+        #endif
 
 
-	QGraphicsLinearLayout *failureLayout = new QGraphicsLinearLayout();
-	failureLayout->setContentsMargins(0, 0, 0, 0);
-	QGraphicsProxyWidget * failureWidget = new QGraphicsProxyWidget(this);
-	QLabel * label = new QLabel(visibleFailureText(reason));
-	label->setWordWrap(true);
-	failureWidget->setWidget(label);
-	failureLayout->addItem(failureWidget);
-	setLayout(failureLayout);
-}
-
+        QGraphicsLinearLayout *failureLayout = new QGraphicsLinearLayout();
+        failureLayout->setContentsMargins(0, 0, 0, 0);
+        QGraphicsProxyWidget * failureWidget = new QGraphicsProxyWidget(this);
+        QLabel * label = new QLabel(visibleFailureText(reason));
+        label->setWordWrap(true);
+        failureWidget->setWidget(label);
+        failureLayout->addItem(failureWidget);
+        setLayout(failureLayout);
+    }
     update();
 }
 
