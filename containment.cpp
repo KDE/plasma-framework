@@ -295,9 +295,9 @@ void Containment::setContainmentType(Containment::Type type)
             connect(activityTool, SIGNAL(clicked()), this, SLOT(addSiblingContainment()));
         }
     } else if (isContainment() && type == PanelContainment){
-        createToolbox();
-        toolbox->setSize(24);
-        toolbox->setIconSize(QSize(16, 16));
+        d->createToolbox();
+        d->toolbox->setSize(24);
+        d->toolbox->setIconSize(QSize(16, 16));
     } else {
         delete d->toolbox;
         d->toolbox = 0;
