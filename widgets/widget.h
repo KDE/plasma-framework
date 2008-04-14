@@ -69,13 +69,6 @@ class PLASMA_EXPORT Widget  : public QGraphicsWidget
     Q_PROPERTY( QRectF geometry READ geometry WRITE setGeometry )
     Q_PROPERTY( QSizeF size READ size WRITE resize )
 public:
-    enum CachePaintMode {
-        NoCacheMode,
-        ItemCoordinateCacheMode,
-        DeviceCoordinateCacheMode
-    };
-
-
     /**
      * Creates a new Plasma::Widget.
      * @param parent the QGraphicsItem this icon is parented to.
@@ -150,26 +143,6 @@ public:
      * @param widget the widget to reparent to this Plasma::Widget.
      */
     Q_INVOKABLE void addChild(Widget *widget);
-
-    /**
-     * Sets the widget's cache paint mode and cache size.
-     * @param mode the new cache paint mode
-     * @param size the new cache size, only applies to ItemCoordinateCacheMode
-     */
-    void setCachePaintMode(CachePaintMode mode, const QSize &size = QSize());
-
-    /**
-     * The current cache paint mode.
-     */
-    CachePaintMode cachePaintMode() const;
-
-    /**
-     * Invalidates the widget's cache paint mode for a given item rectangle.
-     * @param rect the optional invalidated rectangle; if null, defaults to boundingRect().
-     */
-    void update(const QRectF &rect = QRectF());
-    inline void update(qreal _x, qreal _y, qreal w, qreal h)
-    { update(QRectF(_x, _y, w, h)); }
 
     virtual QGraphicsItem* graphicsItem();
 

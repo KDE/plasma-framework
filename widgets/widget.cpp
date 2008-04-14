@@ -125,8 +125,7 @@ Widget::Widget(QGraphicsItem *parent, QObject* parentObject)
 {
     setFlag(QGraphicsItem::ItemClipsToShape, true);
     setFlag(QGraphicsItem::ItemClipsChildrenToShape, true);
-    setCacheMode(DeviceCoordinateCache);
-
+   
     Widget *w = dynamic_cast<Widget *>(parent);
     if (w) {
         w->addChild(this);
@@ -139,21 +138,6 @@ Widget::~Widget()
         ToolTip::self()->hide();
     }
     delete d;
-}
-
-void Widget::setCachePaintMode(CachePaintMode mode, const QSize &size)
-{
-    setCacheMode(CacheMode(mode), size);
-}
-
-Widget::CachePaintMode Widget::cachePaintMode() const
-{
-    return CachePaintMode(cacheMode());
-}
-
-void Widget::update(const QRectF &rect)
-{
-    QGraphicsWidget::update(rect);
 }
 
 Qt::Orientations Widget::expandingDirections() const
