@@ -107,14 +107,15 @@ class PLASMA_EXPORT DataEngine : public QObject
          *
          * @param source the name of the data source
          * @param visualization the object to connect the data source to
-         * @param updateInterval the frequency, in milliseconds, with which to signal updates;
+         * @param updateInterval the frequency, in milliseconds, with which to check for updates;
          *                        a value of 0 (the default) means to update only
          *                        when there is new data spontaneously generated
          *                        (e.g. by the engine); any other value results in
          *                        periodic updates from this source. This value is
          *                        per-visualization and can be handy for items that require
          *                        constant updates such as scrolling graphs or clocks.
-         * @param intervalAlignment the number of ms to aling the interval to
+         *                        If the data has not changed, no update will be sent.
+         * @param intervalAlignment the number of ms to align the interval to
          **/
         Q_INVOKABLE void connectSource(const QString& source, QObject* visualization,
                                        uint updateInterval = 0,
@@ -137,14 +138,15 @@ class PLASMA_EXPORT DataEngine : public QObject
          * is still required to achieve that.
          *
          * @param visualization the object to connect the data source to
-         * @param updateInterval the frequency, in milliseconds, with which to signal updates;
+         * @param updateInterval the frequency, in milliseconds, with which to check for updates;
          *                        a value of 0 (the default) means to update only
          *                        when there is new data spontaneously generated
          *                        (e.g. by the engine); any other value results in
          *                        periodic updates from this source. This value is
          *                        per-visualization and can be handy for items that require
          *                        constant updates such as scrolling graphs or clocks.
-         * @param intervalAlignment the number of ms to aling the interval to
+         *                        If the data has not changed, no update will be sent.
+         * @param intervalAlignment the number of ms to align the interval to
          **/
         Q_INVOKABLE void connectAllSources(QObject* visualization, uint updateInterval = 0,
                                            Plasma::IntervalAlignment intervalAlignment = NoAlignment) const;
