@@ -642,9 +642,10 @@ void Applet::setDrawStandardBackground(bool drawBackground)
             d->background = new Plasma::SvgPanel("widgets/background");
             int left, top, right, bottom;
             d->getBorderSize(left, top, right, bottom);
-            //setContentsMargins(0, 0, right, bottom);
-            d->background->resize(geometry().size());
-            d->background->setPos(QPointF(0,0));
+            setContentsMargins(0, 0, right, bottom);
+            d->background->resize(QSize(geometry().width() + right + left, geometry().height() + top + bottom));
+            d->background->setPos(QPointF(-left, -top));
+            //kDebug() << geometry() << left << top << right << bottom;
         }
     } else if (d->background) {
         delete d->background;
@@ -1431,11 +1432,11 @@ void Applet::setGeometry(const QRectF& geometry)
     Widget::setGeometry(geometry);
     if (geometry.size() != beforeGeom.size())
     {
-	updateConstraints(Plasma::SizeConstraint);
-	if (d->background) {
-	    d->background->resize(boundingRect().size());
-	}
-	emit geometryChanged();
+    updateConstraints(Plasma::SizeConstraint);
+    if (d->background) {
+        d->background->resize(boundingRect().size());
+    }
+    emit geometryChanged();
     }
     if (geometry.topLeft() != beforeGeom.topLeft())
     {
