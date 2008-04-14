@@ -192,33 +192,33 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          **/
         const Package* package() const;
 
-	/**
-	* Returns the view this widget is visible on
-	*/
-	QGraphicsView *view() const;
-    
-	/**
-	* Maps a QRect from a view's coordinates to local coordinates.
-	* @param view the view from which rect should be mapped
-	* @param rect the rect to be mapped
-	*/
-	QRectF mapFromView(const QGraphicsView *view, const QRect &rect) const;
-    
-	/**
-	* Maps a QRectF from local coordinates to a view's coordinates.
-	* @param view the view to which rect should be mapped
-	* @param rect the rect to be mapped
-	*/
-	QRect mapToView(const QGraphicsView *view, const QRectF &rect) const;
-       
-	/**
-	* Recomended position for a popup window like a menu or a tooltip
-	* given its size
-	* @param s size of the popup
-	* @returns recomended position
-	*/
-	QPoint popupPosition(const QSize &s) const;
-    
+        /**
+         * Returns the view this widget is visible on
+         */
+        QGraphicsView *view() const;
+
+        /**
+         * Maps a QRect from a view's coordinates to local coordinates.
+         * @param view the view from which rect should be mapped
+         * @param rect the rect to be mapped
+         */
+        QRectF mapFromView(const QGraphicsView *view, const QRect &rect) const;
+
+        /**
+         * Maps a QRectF from local coordinates to a view's coordinates.
+         * @param view the view to which rect should be mapped
+         * @param rect the rect to be mapped
+         */
+        QRect mapToView(const QGraphicsView *view, const QRectF &rect) const;
+
+        /**
+         * Recomended position for a popup window like a menu or a tooltip
+         * given its size
+         * @param s size of the popup
+         * @returns recomended position
+         */
+        QPoint popupPosition(const QSize &s) const;
+
         /**
          * Called when any of the geometry constraints have been updated.
          * This method calls constraintsUpdated, which may be reimplemented,
@@ -716,6 +716,11 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          * @internal manage the mouse movement to drag the applet around
          */
         void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
+
+        /**
+         * Reimplemented from QGraphicsItem
+         */
+        void focusInEvent(QFocusEvent * event);
 
         /**
          * Reimpmlemented from LayoutItem
