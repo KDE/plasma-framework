@@ -135,6 +135,7 @@ install(FILES
 install(FILES
     widgets/icon.h
     widgets/webcontent.h
+    widgets/widget.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/plasma/widgets)
 
 #For future
