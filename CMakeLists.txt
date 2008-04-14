@@ -47,7 +47,6 @@ set(plasma_LIB_SRCS
     svg.cpp
     svgpanel.cpp
     theme.cpp
-    timer.cpp
     toolbox.cpp
     paneltoolbox.cpp
     desktoptoolbox.cpp
@@ -117,7 +116,6 @@ set(plasma_LIB_INCLUDES
     svg.h
     svgpanel.h
     theme.h
-    timer.h
     uiloader.h
     view.h
     delegate.h)
