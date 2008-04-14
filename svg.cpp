@@ -34,6 +34,11 @@
 
 #include "theme.h"
 
+/* If you set SVG_CACHE_BUGFIX to 1 you'll fix the cache bug that makes
+   SVG painting *VERY slow* but you'll break something somewhere.
+*/
+#define SVG_CACHE_BUGFIX 0
+
 namespace Plasma
 {
 
@@ -120,6 +125,7 @@ class Svg::Private
 
         void findInCache(QPixmap& p, const QString& elementId, const QPainter *itemPainter, const QSizeF &size = QSizeF())
         {
+#if SVG_CACHE_BUGFIX
             QSizeF localSize;
             if (elementId.isEmpty() || contentType == Svg::ImageSet) {
                 localSize = size;
@@ -134,10 +140,13 @@ class Svg::Private
                 transform.scale(size.width() / localSize.width(),
                                 size.height() / localSize.height());
             }
+#endif
 
             createRenderer();
+#if SVG_CACHE_BUGFIX
             QLineF v1 = transform.map(QLineF(0, 0, 1, 0));
             QLineF v2 = transform.map(QLineF(0, 0, 0, 1));
+
             QString id = QString::fromLatin1("%7_%6_%5_%4_%3_%2_%1").arg(size.width())
                                                          .arg(size.height())
                                                          .arg((int) v1.dx())
@@ -145,7 +154,11 @@ class Svg::Private
                                                          .arg((int) v2.dx())
                                                          .arg((int) v2.dy())
                                                          .arg(path);
-
+#else
+            QString id = QString::fromLatin1("%3_%2_%1_").arg(size.width())
+                                                         .arg(size.height())
+                                                         .arg(path);
+#endif
             if (!elementId.isEmpty()) {
                 id.append(elementId);
             }
@@ -161,15 +174,30 @@ class Svg::Private
             } else {
                 //kDebug() << "didn't find cached version of " << id << ", so re-rendering";
             }
+#if !SVG_CACHE_BUGFIX
+            // we have to re-render this puppy
+            QSize s;
+            if (elementId.isEmpty() || contentType == Svg::ImageSet) {
+                s = size.toSize();
+            } else {
+                s = elementSize(elementId);
+            }
+            //kDebug() << "size for " << elementId << " is " << s;
+#endif
 
+#if SVG_CACHE_BUGFIX
             QRect deviceRect = transform.mapRect(QRectF(QPointF(), localSize)).toRect();
             if (deviceRect.isEmpty())
                 return;
 
             p = QPixmap(deviceRect.size());
+#else
+            p = QPixmap(s);
+#endif
             p.fill(Qt::transparent);
             QPainter renderPainter(&p);
 
+#if SVG_CACHE_BUGFIX
             QPointF tl = deviceRect.topLeft();
             QTransform xform = QTransform().translate(-tl.x(), -tl.y());
             xform = itemPainter->worldTransform() * xform;
@@ -177,6 +205,7 @@ class Svg::Private
             renderPainter.setRenderHints(renderPainter.renderHints(), false);
             renderPainter.setRenderHints(itemPainter->renderHints(), true);
             renderPainter.setWorldTransform(xform, true);
+#endif
 
             if (elementId.isEmpty()) {
                 renderer->render(&renderPainter);
@@ -289,14 +318,20 @@ void Svg::paint(QPainter* painter, const QPointF& point, const QString& elementI
 {
     QPixmap pix;
     d->findInCache(pix, elementID, painter);
+#if SVG_CACHE_BUGFIX
     if (pix.isNull())
         return;
     painter->save();
     QTransform x = painter->worldTransform();
     painter->setWorldTransform(QTransform(), false);
+
     //kDebug() << "pix size is " << pix.size();
+
     painter->drawPixmap(x.map(point), pix);
     painter->restore();
+#else
+    painter->drawPixmap(QRectF(point, pix.size()), pix, QRectF(QPointF(0,0), pix.size()));
+#endif
 }
 
 void Svg::paint(QPainter* painter, int x, int y, const QString& elementID)
@@ -308,6 +343,7 @@ void Svg::paint(QPainter* painter, const QRectF& rect, const QString& elementID)
 {
     QPixmap pix;
     d->findInCache(pix, elementID, painter, rect.size());
+#if SVG_CACHE_BUGFIX
     if (pix.isNull())
         return;
     painter->save();
@@ -315,6 +351,9 @@ void Svg::paint(QPainter* painter, const QRectF& rect, const QString& elementID)
     painter->setWorldTransform(QTransform());
     painter->drawPixmap(x.map(rect.topLeft()) , pix);
     painter->restore();
+#else
+    painter->drawPixmap(rect, pix, QRectF(QPointF(0,0), pix.size()));
+#endif
 }
 
 void Svg::resize( int width, int height )
