@@ -65,9 +65,6 @@ class Layout;
 class PLASMA_EXPORT Widget  : public QGraphicsWidget
 {
     Q_OBJECT
-    Q_PROPERTY( Qt::Orientations expandingDirections READ expandingDirections )
-    Q_PROPERTY( QRectF geometry READ geometry WRITE setGeometry )
-    Q_PROPERTY( QSizeF size READ size WRITE resize )
 public:
     /**
      * Creates a new Plasma::Widget.
@@ -79,53 +76,6 @@ public:
      * Destroys a Plasma::Widget.
      */
     virtual ~Widget();
-
-    /**
-     * This method is used by Plasma::Layout to determine which directions the
-     * widget naturally expands.
-     * @return bitmask with the directions that this Widget can be expanded.
-     */
-    virtual Qt::Orientations expandingDirections() const;
-
-    /**
-     * This method is used by Plasma::Layout to determine whether this widget
-     * can provide a height value given a width value.
-     * @return whether or not this Widget has heightForWidth.
-     */
-    virtual bool hasHeightForWidth() const;
-
-    /**
-     * This method is used by Plasma::Layout to determine a height value
-     * given a width value.
-     * @param width the width to use to determine height.
-     * @return height calculated using width given.
-     */
-    virtual qreal heightForWidth(qreal width) const;
-
-    /**
-     * This method is used by Plasma::Layout to determine whether this widget
-     * can provide a width value given a height value.
-     * @return whether or not this Widget has widthForHeight.
-     */
-    virtual bool hasWidthForHeight() const;
-
-    /**
-     * This method is used by Plasma::Layout to determine a width value
-     * given a height value.
-     * @param height the width to use to determine width.
-     * @return width calculated using height given.
-     */
-    virtual qreal widthForHeight(qreal h) const;
-
-    /**
-     * @return geometry of this widget.
-     */
-    QRectF geometry() const;
-
-    /**
-     * @return the font currently set for this widget
-     **/
-    QFont font() const;
 
     /**
      * @return this Plasma::Widget's parent, returns a null pointer if
@@ -144,8 +94,6 @@ public:
      */
     Q_INVOKABLE void addChild(Widget *widget);
 
-    virtual QGraphicsItem* graphicsItem();
-    
     #ifdef TOOLTIPMANAGER
     /**
     * The Data from the tooltip
@@ -177,8 +125,6 @@ protected:
     #endif
 private:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
-    void setSize(const QSizeF &);
-
 
     class Private;
     Private *const d;

@@ -385,6 +385,11 @@ class PLASMA_EXPORT Applet : public Widget
          **/
         QString name() const;
 
+	/**
+	* @return the font currently set for this widget
+	**/
+	QFont font() const;
+
         /**
          * Returns the plugin name for the applet
          */
@@ -539,11 +544,6 @@ class PLASMA_EXPORT Applet : public Widget
          * Causes this applet to raise above all other applets.
          */
         void raise();
-
-        /**
-         * Reimplemented from Plasma::Widget
-         */
-        Qt::Orientations expandingDirections() const;
 
         /**
          * Reimplemented from QGraphicsItem

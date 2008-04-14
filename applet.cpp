@@ -634,6 +634,11 @@ QString Applet::name() const
     return d->appletDescription.name();
 }
 
+QFont Applet::font() const
+{
+    return QApplication::font();
+}
+
 QString Applet::icon() const
 {
     if (!d->appletDescription.isValid()) {
@@ -942,15 +947,6 @@ QPainterPath Applet::shape() const
     }
 
     return Plasma::roundedRectangle(boundingRect().adjusted(-2, -2, 2, 2), 10);
-}
-
-Qt::Orientations Applet::expandingDirections() const
-{
-    if (d->square) {
-        return 0;
-    }
-
-    return Widget::expandingDirections();
 }
 
 QList<QAction*> Applet::contextActions()

@@ -42,7 +42,6 @@
 #include "plasma/plasma.h"
 #include "plasma/view.h"
 #include "plasma/containment.h"
-#include "plasma/widgets/tooltip_p.h"
 
 namespace Plasma
 {
@@ -54,13 +53,13 @@ class Widget::Private
             : minimumSize(0,0),
               maximumSize(std::numeric_limits<qreal>::infinity(),
                           std::numeric_limits<qreal>::infinity()),
-              wasMovable(false),
-              toolTip(0)
+              wasMovable(false)
+              //toolTip(0)
         { }
 
         ~Private()
         {
-            delete toolTip;
+            //delete toolTip;
         }
 
         QSizeF minimumSize;
@@ -69,13 +68,8 @@ class Widget::Private
         bool wasMovable;
 
         bool shouldPaint(QPainter *painter, const QTransform &transform);
-        ToolTipData *toolTip;
+        //ToolTipData *toolTip;
 };
-
-QGraphicsItem* Widget::graphicsItem()
-{
-    return this;
-}
 
 bool Widget::Private::shouldPaint(QPainter *painter, const QTransform &transform)
 {
@@ -107,50 +101,6 @@ Widget::~Widget()
     }
     #endif
     delete d;
-}
-
-Qt::Orientations Widget::expandingDirections() const
-{
-    return Qt::Horizontal | Qt::Vertical;
-}
-
-QFont Widget::font() const
-{
-    return QApplication::font();
-}
-
-bool Widget::hasHeightForWidth() const
-{
-    return false;
-}
-
-qreal Widget::heightForWidth(qreal w) const
-{
-    Q_UNUSED(w);
-
-    return -1.0;
-}
-
-bool Widget::hasWidthForHeight() const
-{
-    return false;
-}
-
-qreal Widget::widthForHeight(qreal h) const
-{
-    Q_UNUSED(h);
-
-    return -1.0;
-}
-
-QRectF Widget::geometry() const
-{
-    return QRectF(pos(), size());
-}
-
-void Widget::setSize(const QSizeF &s)
-{
-    resize(s);
 }
 
 Widget *Widget::parent() const
