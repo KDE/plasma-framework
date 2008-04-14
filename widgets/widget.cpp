@@ -86,11 +86,6 @@ Widget::Widget(QGraphicsItem *parent, QObject* parentObject)
 {
     setFlag(QGraphicsItem::ItemClipsToShape, true);
     setFlag(QGraphicsItem::ItemClipsChildrenToShape, true);
-   
-    Widget *w = dynamic_cast<Widget *>(parent);
-    if (w) {
-        w->addChild(this);
-    }
 }
 
 Widget::~Widget()
@@ -103,49 +98,6 @@ Widget::~Widget()
     delete d;
 }
 
-Widget *Widget::parent() const
-{
-    return parent(this);
-}
-
-Widget *Widget::parent(const QGraphicsItem *item)
-{
-    Q_ASSERT(item);
-    QGraphicsItem *parent = item->parentItem();
-
-    while (parent) {
-        Widget *parentWidget = dynamic_cast<Widget *>(parent);
-
-        if (parentWidget) {
-            return parentWidget;
-        }
-
-        parent = parent->parentItem();
-    }
-    return 0;
-}
-
-void Widget::addChild(Widget *w)
-{
-    if (!w || QGraphicsItem::children().contains(w)) {
-        return;
-    }
-
-    w->setParentItem(this);
-
-    //kDebug() << "Added Child Widget" <<  (QObject*)w << "our geom is" << geometry();
-    QGraphicsLinearLayout * lay = dynamic_cast<QGraphicsLinearLayout *>(layout());
-    if (lay) {
-        lay->addItem(w);
-    }
-
-    updateGeometry();
-    //kDebug() << "after the item is added our geom is now" << geometry();
-}
-
-void Widget::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
-{
-}
 
 #ifdef TOOLTIPMANAGER
 const ToolTipData* Widget::toolTip() const

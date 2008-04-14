@@ -30,8 +30,6 @@
 
 #include <KDebug>
 
-#include "widgets/widget.h"
-
 namespace Plasma
 {
 

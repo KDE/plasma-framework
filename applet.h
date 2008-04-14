@@ -24,6 +24,7 @@
 
 #include <QtGui/QGraphicsItem>
 #include <QtGui/QWidget>
+#include <QtGui/QGraphicsWidget>
 
 #include <KDE/KPluginInfo>
 #include <KDE/KGenericFactory>
@@ -31,9 +32,9 @@
 #include <plasma/configxml.h>
 #include <plasma/packagestructure.h>
 #include <plasma/plasma.h>
-#include <plasma/widgets/widget.h>
 
 class KConfigDialog;
+class QGraphicsView;
 
 namespace Plasma
 {
@@ -58,10 +59,9 @@ class Package;
  *
  * See techbase.kde.org for tutorial on writing Applets using this class.
  */
-class PLASMA_EXPORT Applet : public Widget
+class PLASMA_EXPORT Applet : public QGraphicsWidget
 {
     Q_OBJECT
-//    Q_PROPERTY( QRectF maxSizeHint READ maxSizeHint )
     Q_PROPERTY(bool hasConfigurationInterface READ hasConfigurationInterface WRITE setHasConfigurationInterface)
     Q_PROPERTY(QString name READ name)
     Q_PROPERTY(QString category READ category)
@@ -69,7 +69,6 @@ class PLASMA_EXPORT Applet : public Widget
     Q_PROPERTY(bool drawStandardBackground READ drawStandardBackground WRITE setDrawStandardBackground)
     Q_PROPERTY(bool failedToLaunch READ failedToLaunch WRITE setFailedToLaunch)
     Q_PROPERTY(bool needsConfiguring READ needsConfiguring WRITE setNeedsConfiguring)
-    Q_PROPERTY(QRectF boundingRect READ boundingRect)
     Q_PROPERTY(QRectF geometry READ geometry WRITE setGeometry)
     Q_PROPERTY(bool shouldConserveResources READ shouldConserveResources)
     Q_PROPERTY(Qt::AspectRatioMode aspectRatioMode READ aspectRatioMode WRITE setAspectRatioMode)

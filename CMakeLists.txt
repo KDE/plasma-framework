@@ -59,7 +59,6 @@ set(plasma_LIB_SRCS
     scripting/runnerscript.cpp
     scripting/scriptengine.cpp
     widgets/icon.cpp
-    widgets/widget.cpp
     widgets/webcontent.cpp
 )
 
@@ -136,7 +135,6 @@ install(FILES
 install(FILES
     widgets/icon.h
     widgets/webcontent.h
-    widgets/widget.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/plasma/widgets)
 
 #For future

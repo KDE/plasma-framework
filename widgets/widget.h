@@ -77,23 +77,7 @@ public:
      */
     virtual ~Widget();
 
-    /**
-     * @return this Plasma::Widget's parent, returns a null pointer if
-     *         none exist.
-     */
-    Q_INVOKABLE Widget *parent() const;
-
-    /**
-     * @return the Plasma::Widget parent for a given QGraphicsItem
-     */
-    static Widget *parent(const QGraphicsItem *item);
-
-    /**
-     * Add another Plasma::Widget as a child of this one.
-     * @param widget the widget to reparent to this Plasma::Widget.
-     */
-    Q_INVOKABLE void addChild(Widget *widget);
-
+    
     #ifdef TOOLTIPMANAGER
     /**
     * The Data from the tooltip
@@ -124,8 +108,7 @@ protected:
        virtual bool sceneEvent(QEvent *event);
     #endif
 private:
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
-
+    
     class Private;
     Private *const d;
 };

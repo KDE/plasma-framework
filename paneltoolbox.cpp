@@ -29,7 +29,7 @@
 
 #include <KDebug>
 
-#include "widgets/widget.h"
+#include <plasma/applet.h>
 
 namespace Plasma
 {
@@ -300,7 +300,7 @@ void PanelToolbox::toolMoved(QGraphicsItem *item)
 {
     //kDebug() << "geometry is now " << static_cast<Plasma::Widget*>(item)->geometry();
     if (!showing() &&
-        QGraphicsItem::children().indexOf(static_cast<Plasma::Widget*>(item)) != -1) {
+        QGraphicsItem::children().indexOf(static_cast<Plasma::Applet*>(item)) != -1) {
         item->hide();
     }
 }

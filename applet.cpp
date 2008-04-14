@@ -39,6 +39,7 @@
 #include <QGraphicsSceneMouseEvent>
 #include <QGraphicsLinearLayout>
 #include <QDesktopWidget>
+#include <QGraphicsView>
 #include <QGraphicsProxyWidget>
 
 #include <KIcon>
@@ -68,23 +69,21 @@
 #include "plasma/theme.h"
 #include "plasma/view.h"
 
-#include "plasma/widgets/widget.h"
-
 //#define DYNAMIC_SHADOWS
 namespace Plasma
 {
 
-class OverlayWidget : public Widget
+class OverlayWidget : public QGraphicsWidget
 {
 public:
-    OverlayWidget(Widget *parent)
-        : Widget(parent, parent)
+    OverlayWidget(QGraphicsWidget *parent)
+        : QGraphicsWidget(parent)
     {
         resize(parent->size());
     }
 
 protected:
-    void paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0)
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0)
     {
         Q_UNUSED(option)
         Q_UNUSED(widget)
@@ -92,7 +91,7 @@ protected:
         painter->setRenderHint(QPainter::Antialiasing);
         QColor wash = Plasma::Theme::self()->backgroundColor();
         wash.setAlphaF(.6);
-        painter->fillPath(parent()->shape(), wash);
+        painter->fillPath(parentItem()->shape(), wash);
         painter->restore();
     }
 };
@@ -334,7 +333,7 @@ PackageStructure::Ptr Applet::Private::packageStructure(0);
 Applet::Applet(QGraphicsItem *parent,
                const QString& serviceID,
                uint appletId)
-    :  Widget(parent),
+    :  QGraphicsWidget(parent),
        d(new Private(KService::serviceByStorageId(serviceID), appletId))
 {
     // WARNING: do not access config() OR globalConfig() in this method!
@@ -343,7 +342,7 @@ Applet::Applet(QGraphicsItem *parent,
 }
 
 Applet::Applet(QObject* parentObject, const QVariantList& args)
-    :  Widget(0,parentObject),
+    :  QGraphicsWidget(0),
        d(new Private(KService::serviceByStorageId(args.count() > 0 ? args[0].toString() : QString()),
                      args.count() > 1 ? args[1].toInt() : 0))
 {
@@ -943,7 +942,7 @@ int Applet::type() const
 QPainterPath Applet::shape() const
 {
     if (isContainment()) {
-        return Plasma::Widget::shape();
+        return QGraphicsWidget::shape();
     }
 
     return Plasma::roundedRectangle(boundingRect().adjusted(-2, -2, 2, 2), 10);
@@ -1495,13 +1494,13 @@ QVariant Applet::itemChange(GraphicsItemChange change, const QVariant &value)
         break;
     };
 
-    return Widget::itemChange(change, value);
+    return QGraphicsWidget::itemChange(change, value);
 }
 
 void Applet::setGeometry(const QRectF& geometry)
 {
-    QRectF beforeGeom = Widget::geometry();
-    Widget::setGeometry(geometry);
+    QRectF beforeGeom = QGraphicsWidget::geometry();
+    QGraphicsWidget::setGeometry(geometry);
     if (geometry.size() != beforeGeom.size())
     {
     updateConstraints(Plasma::SizeConstraint);

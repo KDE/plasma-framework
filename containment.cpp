@@ -651,14 +651,14 @@ void Containment::addApplet(Applet *applet, const QPointF &pos, bool delayInit)
         applet->removeSceneEventFilter(currentContainment);
         KConfigGroup oldConfig = applet->config();
         currentContainment->d->applets.removeAll(applet);
-        addChild(applet);
+	applet->setParentItem(this);
 
         // now move the old config to the new location
         KConfigGroup c = config().group("Applets").group(QString::number(applet->id()));
         oldConfig.reparent(&c);
         applet->resetConfigurationObject();
     } else {
-        addChild(applet);
+	applet->setParentItem(this);
     }
 
     d->applets << applet;
