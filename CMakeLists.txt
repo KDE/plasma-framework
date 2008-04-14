@@ -184,6 +184,9 @@ endif(QT_QTOPENGL_FOUND AND OPENGL_FOUND)
 
 install(FILES
     includes/ScriptEngine
+    includes/DataEngineScript 
+    includes/RunnerScript 
+    includes/AppletScript
     DESTINATION ${INCLUDE_INSTALL_DIR}/KDE/Plasma/Scripting)
 
 
