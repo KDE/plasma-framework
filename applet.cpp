@@ -38,6 +38,7 @@
 #include <QPushButton>
 #include <QGraphicsSceneMouseEvent>
 #include <QGraphicsLinearLayout>
+#include <QDesktopWidget>
 #include <QGraphicsProxyWidget>
 
 #include <KIcon>
@@ -521,6 +522,91 @@ const Package* Applet::package() const
     return d->package;
 }
 
+QGraphicsView *Applet::view() const
+{
+    // It's assumed that we won't be visible on more than one view here.
+    // Anything that actually needs view() should only really care about
+    // one of them anyway though.
+    if (!scene()) {
+        return 0;
+    }
+
+    foreach (QGraphicsView *view, scene()->views()) {
+        if (view->sceneRect().intersects(sceneBoundingRect()) ||
+            view->sceneRect().contains(scenePos())) {
+            return view;
+        }
+    }
+    return 0;
+}
+
+QRectF Applet::mapFromView(const QGraphicsView *view, const QRect &rect) const
+{
+    // TODO: Confirm that adjusted() is needed and is not covering for some
+    // issue elsewhere
+    return mapFromScene(view->mapToScene(rect)).boundingRect().adjusted(0, 0, 1, 1);
+}
+
+QRect Applet::mapToView(const QGraphicsView *view, const QRectF &rect) const
+{
+    // TODO: Confirm that adjusted() is needed and is not covering for some
+    // issue elsewhere
+    return view->mapFromScene(mapToScene(rect)).boundingRect().adjusted(0, 0, -1, -1);
+}
+
+QPoint Applet::popupPosition(const QSize &s) const
+{
+    QGraphicsView *v = view();
+    Q_ASSERT(v);
+
+    QPoint pos = v->mapFromScene(scenePos());
+    pos = v->mapToGlobal(pos);
+    kDebug() << "==> position is" << scenePos() << v->mapFromScene(scenePos()) << pos;
+    Plasma::View *pv = dynamic_cast<Plasma::View *>(v);
+
+    Plasma::Location loc = Floating;
+    if (pv) {
+        loc = pv->containment()->location();
+    }
+
+    switch (loc) {
+    case BottomEdge:
+        pos = QPoint(pos.x(), pos.y() - s.height());
+        break;
+    case TopEdge:
+        pos = QPoint(pos.x(), pos.y() + (int)size().height());
+        break;
+    case LeftEdge:
+        pos = QPoint(pos.x() + (int)size().width(), pos.y());
+        break;
+    case RightEdge:
+        pos = QPoint(pos.x() - s.width(), pos.y());
+        break;
+    default:
+        if (pos.y() - s.height() > 0) {
+             pos = QPoint(pos.x(), pos.y() - s.height());
+        } else {
+             pos = QPoint(pos.x(), pos.y() + (int)size().height());
+        }
+    }
+
+    //are we out of screen?
+
+    QRect screenRect = QApplication::desktop()->screenGeometry(pv ? pv->containment()->screen() : -1);
+    kDebug() << "==> rect for" << (pv ? pv->containment()->screen() : -1) << "is" << screenRect;
+
+    if (pos.rx() + s.width() > screenRect.right()) {
+        pos.rx() -= ((pos.rx() + s.width()) - screenRect.right());
+    }
+
+    if (pos.ry() + s.height() > screenRect.bottom()) {
+        pos.ry() -= ((pos.ry() + s.height()) - screenRect.bottom());
+    }
+    pos.rx() = qMax(0, pos.rx());
+
+    return pos;
+}
+
 void Applet::updateConstraints(Plasma::Constraints constraints)
 {
     d->scheduleConstraintsUpdate(constraints, this);
@@ -905,7 +991,7 @@ QColor Applet::color() const
     }
 }
 
-void Applet::paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+void Applet::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     if (d->shadow && d->shadow->shadowedSize() != boundingRect().size()) {
         //kDebug() << "sizes are " << d->shadow->shadowedSize() << boundingRect().size();

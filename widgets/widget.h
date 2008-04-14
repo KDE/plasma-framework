@@ -145,26 +145,8 @@ public:
     Q_INVOKABLE void addChild(Widget *widget);
 
     virtual QGraphicsItem* graphicsItem();
-
-    /**
-     * Returns the view this widget is visible on
-     */
-    QGraphicsView *view() const;
-
-    /**
-     * Maps a QRect from a view's coordinates to local coordinates.
-     * @param view the view from which rect should be mapped
-     * @param rect the rect to be mapped
-     */
-    QRectF mapFromView(const QGraphicsView *view, const QRect &rect) const;
-
-    /**
-     * Maps a QRectF from local coordinates to a view's coordinates.
-     * @param view the view to which rect should be mapped
-     * @param rect the rect to be mapped
-     */
-    QRect mapToView(const QGraphicsView *view, const QRectF &rect) const;
-
+    
+    #ifdef TOOLTIPMANAGER
     /**
     * The Data from the tooltip
     * @returns A ToolTip::Data object with current information
@@ -187,30 +169,12 @@ public:
      */
     virtual void updateToolTip(bool update);
 
-    /**
-    * Recomended position for a popup window like a menu or a tooltip
-    * given its size
-    * @param s size of the popup
-    * @returns recomended position
-    */
-    QPoint popupPosition(const QSize &s) const;
-
-    /**
-     * Reimplemented from QGraphicsItem
-     */
-    virtual void contextMenuEvent(QGraphicsSceneContextMenuEvent *event);
+    #endif
 
 protected:
-    /**
-     * Paints the widget
-     * @param painter the QPainter to use to paint.
-     * @param option the style option used to give specific info on the item being dawn.
-     * @param widget the parent QWidget (most likely the Corona)
-     */
-    virtual void paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
-    
-    virtual bool sceneEvent(QEvent *event);
-
+    #ifdef TOOLTIPMANAGER
+       virtual bool sceneEvent(QEvent *event);
+    #endif
 private:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
     void setSize(const QSizeF &);

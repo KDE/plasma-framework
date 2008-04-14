@@ -59,7 +59,6 @@ set(plasma_LIB_SRCS
     scripting/runnerscript.cpp
     scripting/scriptengine.cpp
     widgets/icon.cpp
-    widgets/tooltip.cpp
     widgets/widget.cpp
     widgets/webcontent.cpp
 )
