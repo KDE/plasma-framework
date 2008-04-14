@@ -125,7 +125,7 @@ public:
     Containment* containment() const;
 
     /**
-     * @return a KConfigGroup for this application unique to the view
+     * @return a KConfigGroup in the application's config file unique to the view
      */
     KConfigGroup config() const;
 
@@ -140,8 +140,6 @@ Q_SIGNALS:
      * changed its geometry, but before the View has shifted the viewd scene rect
      * to the new geometry. This is useful for Views which want to keep
      * their rect() in sync with the containment'sa
-     *
-     * @arg rect the new scene rect.
      */
     void sceneRectAboutToChange();
 
@@ -150,8 +148,6 @@ Q_SIGNALS:
      * changed its geometry, and after the View has shifted the viewd scene rect
      * to the new geometry. This is useful for Views which want to keep
      * their rect() in sync with the containment's.
-     *
-     * @arg rect the new scene rect.
      */
     void sceneRectChanged();
 
