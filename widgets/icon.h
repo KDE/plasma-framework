@@ -2,6 +2,7 @@
 *   Copyright (C) 2007 by Siraj Razick <siraj@kde.org>
 *   Copyright (C) 2007 by Riccardo Iaconelli <riccardo@kde.org>
 *   Copyright (C) 2007 by Matt Broadstone <mbroadst@gmail.com>
+*   Copyright 2008 by Ménard Alexis <darktears31@gmail.com>
 *
 *   This program is free software; you can redistribute it and/or modify
 *   it under the terms of the GNU Library General Public License as
@@ -25,11 +26,11 @@
 #include <QtCore/QObject>
 #include <QtGui/QGraphicsTextItem>
 #include <QtGui/QIcon>
+#include <QGraphicsWidget>
 
 #include <plasma/dataengine.h>
 #include <plasma/phase.h>
 #include <plasma/plasma_export.h>
-#include <plasma/widgets/widget.h>
 
 class QAction;
 
