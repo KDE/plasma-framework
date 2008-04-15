@@ -247,12 +247,11 @@ void Containment::containmentConstraintsUpdated(Plasma::Constraints constraints)
         }
     }
 
-    if (constraints & Plasma::ScreenConstraint && d->toolbox) {
+    if ((constraints & Plasma::SizeConstraint || constraints & Plasma::ScreenConstraint) && d->toolbox) {
         if (d->type == PanelContainment) {
-            //FIXME: geometry() always returns a 0x0 size in the panels
-            d->toolbox->setPos(geometry().width() - d->toolbox->boundingRect().width(), geometry().height()/2 - d->toolbox->size());
+            d->toolbox->setPos(geometry().right(), geometry().height()/2 - d->toolbox->boundingRect().height()/2);
         } else {
-            d->toolbox->setPos(geometry().width() - d->toolbox->boundingRect().width(), 0);
+            d->toolbox->setPos(geometry().right() - qAbs(d->toolbox->boundingRect().width()), 0);
         }
         d->toolbox->enableTool("addwidgets", !isImmutable());
     }
