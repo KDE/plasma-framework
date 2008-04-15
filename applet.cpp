@@ -726,14 +726,14 @@ void Applet::setDrawStandardBackground(bool drawBackground)
     if (drawBackground) {
         if (!d->background) {
             d->background = new Plasma::SvgPanel("widgets/background");
-	    d->background->setBorderFlags(Plasma::SvgPanel::DrawAllBorders);
+            d->background->setBorderFlags(Plasma::SvgPanel::DrawAllBorders);
             int left, top, right, bottom;
             d->getBorderSize(left, top, right, bottom);
-	    QSizeF fitSize(left + right, top + bottom);
-	    if (minimumSize().expandedTo(fitSize) != minimumSize()) {
-		setMinimumSize(minimumSize().expandedTo(fitSize));
-	    }
-	    d->background->resize(boundingRect().size());
+            QSizeF fitSize(left + right, top + bottom);
+            if (minimumSize().expandedTo(fitSize) != minimumSize()) {
+                setMinimumSize(minimumSize().expandedTo(fitSize));
+            }
+            d->background->resize(boundingRect().size());
         }
     } else if (d->background) {
         delete d->background;
