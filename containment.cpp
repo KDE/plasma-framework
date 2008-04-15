@@ -493,9 +493,9 @@ void Containment::createLayout(FormFactor formFactor)
         case Horizontal: {
             QGraphicsLinearLayout *lay = new QGraphicsLinearLayout();
             lay->setOrientation(Qt::Horizontal);
-	    lay->setContentsMargins(0, 0, 0, 0);
+            lay->setContentsMargins(0, 0, 0, 0);
             lay->setSpacing(4);
-	    setLayout(lay);
+            setLayout(lay);
             break;
             }
         case Vertical: {
@@ -503,7 +503,7 @@ void Containment::createLayout(FormFactor formFactor)
             lay->setOrientation(Qt::Vertical);
             lay->setContentsMargins(0, 0, 0, 0);
             lay->setSpacing(4);
-	    setLayout(lay);
+            setLayout(lay);
             break;
             }
         default:
@@ -660,7 +660,7 @@ void Containment::addApplet(Applet *applet, const QPointF &pos, bool delayInit)
         // Calculate where the user wants the applet to go before adding it
         //so long as this isn't a new applet with a delayed init
         if (! delayInit || (currentContainment && currentContainment != this)) {
-	    index = indexAt(pos);
+            index = indexAt(pos);
         }
     }
 
@@ -668,7 +668,7 @@ void Containment::addApplet(Applet *applet, const QPointF &pos, bool delayInit)
         applet->removeSceneEventFilter(currentContainment);
         KConfigGroup oldConfig = applet->config();
         currentContainment->d->applets.removeAll(applet);
-	applet->setParentItem(this);
+        applet->setParentItem(this);
 
         // now move the old config to the new location
         KConfigGroup c = config().group("Applets").group(QString::number(applet->id()));
@@ -703,15 +703,14 @@ void Containment::addApplet(Applet *applet, const QPointF &pos, bool delayInit)
             applet->setPos(pos);
         }
 
-	QGraphicsLinearLayout *l = dynamic_cast<QGraphicsLinearLayout *>(lay);
+        QGraphicsLinearLayout *l = dynamic_cast<QGraphicsLinearLayout *>(lay);
         if (l) {
-	    l->addItem(applet);
+            l->addItem(applet);
         }
-	//l->addStretch();
+        //l->addStretch();
     }
 
     prepareApplet(applet, delayInit); //must at least flush constraints
-    
 }
 
 //containment-relative pos... right?

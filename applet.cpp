@@ -729,7 +729,7 @@ void Applet::setDrawStandardBackground(bool drawBackground)
 	    d->background->setBorderFlags(Plasma::SvgPanel::DrawAllBorders);
             int left, top, right, bottom;
             d->getBorderSize(left, top, right, bottom);
-	    QSizeF fitSize(left + right, top + bottom); 
+	    QSizeF fitSize(left + right, top + bottom);
 	    if (minimumSize().expandedTo(fitSize) != minimumSize()) {
 		setMinimumSize(minimumSize().expandedTo(fitSize));
 	    }
@@ -997,7 +997,7 @@ void Applet::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
     }
 
     painter->save();
-    
+
     if (transform().isRotating()) {
         painter->setRenderHint(QPainter::SmoothPixmapTransform);
         painter->setRenderHint(QPainter::Antialiasing);
@@ -1526,7 +1526,7 @@ void Applet::setGeometry(const QRectF& geometry)
     if (geometry.topLeft() != beforeGeom.topLeft())
     {
       if (d->background) {
-	
+
 	kDebug() << QGraphicsWidget::geometry();
       }
       emit geometryChanged();
