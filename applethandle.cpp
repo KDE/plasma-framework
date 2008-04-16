@@ -59,8 +59,8 @@ AppletHandle::AppletHandle(Containment *parent, Applet *applet)
       m_buttonsOnRight(false),
       m_pendingFade(false)
 {
-    KColorScheme colors(QPalette::Active, KColorScheme::View, Theme::self()->colors());
-    m_gradientColor = colors.background(KColorScheme::NormalBackground).color();
+    KColorScheme colorScheme(QPalette::Active, KColorScheme::View, Theme::self()->colorScheme());
+    m_gradientColor = colorScheme.background(KColorScheme::NormalBackground).color();
 
     QTransform originalMatrix = m_applet->transform();
     QRectF rect(m_applet->contentsRect());

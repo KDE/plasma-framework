@@ -36,7 +36,7 @@ namespace Plasma
  *
  * Accessed via Plasma::Theme::self() e.g:
  * \code
- * QString image = Plasma::Theme::self()->image("widgets/clock")
+ * QString imagePath = Plasma::Theme::self()->imagePath("widgets/clock")
  * \endcode
  *
  * Plasma::Theme provides access to a common and standardized set of graphic
@@ -95,14 +95,14 @@ class PLASMA_EXPORT Theme : public QObject
          *           ".svg" part or a leading slash)
          * @return the full path to the requested file for the current theme
          */
-        Q_INVOKABLE QString image( const QString& name ) const;
+        Q_INVOKABLE QString imagePath( const QString& name ) const;
 
         /**
          * Returns the color scheme configurationthat goes along this theme.
          * This can be used with KStatefulBrush and KColorScheme to determine
          * the proper colours to use along with the visual elements in this theme.
          */
-        Q_INVOKABLE KSharedConfigPtr colors() const;
+        Q_INVOKABLE KSharedConfigPtr colorScheme() const;
 
         /**
          * Returns the text color to be used by items resting on the background

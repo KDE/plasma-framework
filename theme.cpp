@@ -231,7 +231,7 @@ QString Theme::Private::findInTheme(const QString &image, const QString &theme) 
     return search;
 }
 
-QString Theme::image(const QString& name)  const
+QString Theme::imagePath(const QString& name)  const
 {
     QString path = d->findInTheme(name, d->themeName);
 
@@ -246,21 +246,21 @@ QString Theme::image(const QString& name)  const
     return path;
 }
 
-KSharedConfigPtr Theme::colors() const
+KSharedConfigPtr Theme::colorScheme() const
 {
     return d->colors;
 }
 
 QColor Theme::textColor() const
 {
-    KColorScheme colors(QPalette::Active, KColorScheme::Window, Theme::self()->colors());
-    return colors.foreground(KColorScheme::NormalText).color();
+    KColorScheme colorScheme(QPalette::Active, KColorScheme::Window, Theme::self()->colorScheme());
+    return colorScheme.foreground(KColorScheme::NormalText).color();
 }
 
 QColor Theme::backgroundColor() const
 {
-    KColorScheme colors(QPalette::Active, KColorScheme::Window, Theme::self()->colors());
-    return colors.background().color();
+    KColorScheme colorScheme(QPalette::Active, KColorScheme::Window, Theme::self()->colorScheme());
+    return colorScheme.background().color();
 }
 
 void Theme::setFont(const QFont &font)

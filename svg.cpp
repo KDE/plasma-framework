@@ -98,7 +98,7 @@ class Svg::Private
                 // check if svg wants colorscheme applied
                 createRenderer();
                 applyColors = renderer->elementExists("hint-apply-color-scheme");
-                if (applyColors && !Theme::self()->colors()) {
+                if (applyColors && !Theme::self()->colorScheme()) {
                     connect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()), q, SLOT(colorsChanged()));
                 }
 
@@ -234,7 +234,7 @@ class Svg::Private
             }
 
             if (themed && path.isEmpty()) {
-                path = Plasma::Theme::self()->image(themePath);
+                path = Plasma::Theme::self()->imagePath(themePath);
             }
 
             QHash<QString, SharedSvgRenderer::Ptr>::const_iterator it = renderers.find(path);
@@ -296,9 +296,9 @@ class Svg::Private
         QString path;
         QList<QString> ids;
         QSizeF size;
+        Svg::ContentType contentType;
         bool themed;
         bool applyColors;
-        Svg::ContentType contentType;
 };
 
 QHash<QString, SharedSvgRenderer::Ptr> Svg::Private::renderers;
@@ -438,7 +438,7 @@ void Svg::themeChanged()
         return;
     }
 
-    QString newPath = Theme::self()->image(d->themePath);
+    QString newPath = Theme::self()->imagePath(d->themePath);
 
     if (d->path == newPath) {
         return;
