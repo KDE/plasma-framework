@@ -101,7 +101,12 @@ PanelToolbox::PanelToolbox(QGraphicsItem *parent)
 
 QRectF PanelToolbox::boundingRect() const
 {
-    return QRectF(0, 0, -size()*2, size()*4);
+    if (orientation() == Qt::Vertical) {
+        return QRectF(0, 0, size()*4, -size()*2);
+    //horizontal
+    } else {
+        return QRectF(0, 0, -size()*2, size()*4);
+    }
 }
 
 void PanelToolbox::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
@@ -122,7 +127,13 @@ void PanelToolbox::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
     color2.setAlpha(64);
 
     QPainterPath p = shape();
-    const QPoint gradientCenter(boundingRect().left(), boundingRect().center().y());
+    QPoint gradientCenter;
+    if (orientation() == Qt::Vertical) {
+        gradientCenter = QPoint(boundingRect().center().x(), boundingRect().top());
+    } else {
+        gradientCenter = QPoint(boundingRect().left(), boundingRect().center().y());
+    }
+
     QRadialGradient gradient(gradientCenter, size() + d->animFrame - 1);
     gradient.setFocalPoint(gradientCenter);
     gradient.setColorAt(0, color1);
@@ -138,7 +149,13 @@ void PanelToolbox::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
     painter->restore();
 
     const qreal progress = d->animFrame / size();
-    const QRect iconRect(QPoint((int)boundingRect().left() - iconSize().width() + 2, gradientCenter.y() - iconSize().height()/2), iconSize());
+    QRect iconRect;
+
+    if (orientation() == Qt::Vertical) {
+        iconRect = QRect(QPoint(gradientCenter.x() - iconSize().width()/2, (int)boundingRect().top() - iconSize().height() - 2), iconSize());
+    } else {
+        iconRect = QRect(QPoint((int)boundingRect().left() - iconSize().width() + 2, gradientCenter.y() - iconSize().height()/2), iconSize());
+    }
 
     if (progress <= 0.9) {
         d->icon.paint(painter, iconRect, Qt::AlignCenter, QIcon::Disabled, QIcon::Off);
@@ -158,9 +175,12 @@ QPainterPath PanelToolbox::shape() const
 {
     QPainterPath path;
     int toolSize = size() + (int)d->animFrame;
-    //path.moveTo(size()*2, 0);
 
-    path.arcTo(QRectF(boundingRect().left() - toolSize, boundingRect().center().y() - toolSize, toolSize*2, toolSize*2), 90, 180);
+    if (orientation() == Qt::Vertical) {
+        path.arcTo(QRectF(boundingRect().center().x() - toolSize, boundingRect().top() - toolSize, toolSize*2, toolSize*2), 0, 180);
+    } else {
+        path.arcTo(QRectF(boundingRect().left() - toolSize, boundingRect().center().y() - toolSize, toolSize*2, toolSize*2), 90, 180);
+    }
 
     return path;
 }

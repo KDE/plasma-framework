@@ -50,6 +50,8 @@ public:
     void  setIconSize(const QSize newSize);
     bool showing() const;
     void setShowing(const bool show);
+    Qt::Orientation orientation() const;
+    void setOrientation(Qt::Orientation orient);
 
     virtual void showToolbox() = 0;
     virtual void hideToolbox() = 0;

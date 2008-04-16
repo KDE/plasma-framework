@@ -43,13 +43,15 @@ public:
       : size(50),
       iconSize(32, 32),
       hidden(false),
-      showing(false)
+      showing(false),
+      orientation(Qt::Horizontal)
     {}
 
     int size;
     QSize iconSize;
     bool hidden;
     bool showing;
+    Qt::Orientation orientation;
 };
 
 Toolbox::Toolbox(QGraphicsItem *parent)
@@ -148,7 +150,17 @@ bool Toolbox::showing() const
 
 void Toolbox::setShowing(const bool show)
 {
-     d->showing = show;
+    d->showing = show;
+}
+
+Qt::Orientation Toolbox::orientation() const
+{
+    return d->orientation;
+}
+
+void Toolbox::setOrientation( Qt::Orientation orient )
+{
+     d->orientation = orient;
 }
 
 } // plasma namespace

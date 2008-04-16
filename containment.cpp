@@ -247,13 +247,29 @@ void Containment::containmentConstraintsUpdated(Plasma::Constraints constraints)
         }
     }
 
-    if ((constraints & Plasma::SizeConstraint || constraints & Plasma::ScreenConstraint) && d->toolbox) {
+    if ((constraints & Plasma::SizeConstraint || constraints & Plasma::ScreenConstraint) &&
+         d->toolbox) {
+        //The placement assumes that the geometry width/height is no more than the screen
         if (d->type == PanelContainment) {
-            d->toolbox->setPos(geometry().right(), geometry().height()/2 - d->toolbox->boundingRect().height()/2);
+            if (formFactor() == Vertical) {
+                d->toolbox->setPos(geometry().width()/2 - d->toolbox->boundingRect().width()/2, geometry().bottom());
+            //defaulting to Horizontal right now
+            } else {
+                d->toolbox->setPos(geometry().right(), geometry().height()/2 - d->toolbox->boundingRect().height()/2);
+            }
         } else {
             d->toolbox->setPos(geometry().right() - qAbs(d->toolbox->boundingRect().width()), 0);
         }
         d->toolbox->enableTool("addwidgets", !isImmutable());
+    }
+
+    if (constraints & Plasma::FormFactorConstraint) {
+        if (formFactor() == Vertical) {
+            d->toolbox->setOrientation(Qt::Vertical);
+        //defaults to horizontal
+        } else {
+            d->toolbox->setOrientation(Qt::Horizontal);
+        }
     }
 
     if (constraints & Plasma::SizeConstraint) {
