@@ -742,7 +742,7 @@ void Applet::setDrawStandardBackground(bool drawBackground)
     }
 }
 
-bool Applet::failedToLaunch() const
+bool Applet::hasFailedToLaunch() const
 {
     return d->failed;
 }
@@ -1164,7 +1164,7 @@ void Applet::needsFocus(bool focus)
     emit requestFocus(focus);
 }
 
-bool Applet::hasConfigurationInterface()
+bool Applet::hasConfigurationInterface() const
 {
     return d->hasConfigurationInterface;
 }
@@ -1307,7 +1307,7 @@ void Applet::createConfigurationInterface(KConfigDialog *parent)
     // do not put anything here ...
 }
 
-KPluginInfo::List Applet::knownApplets(const QString &category,
+KPluginInfo::List Applet::listAppletInfo(const QString &category,
                                        const QString &parentApp)
 {
     QString constraint;
@@ -1330,19 +1330,19 @@ KPluginInfo::List Applet::knownApplets(const QString &category,
     }
 
     KService::List offers = KServiceTypeTrader::self()->query("Plasma/Applet", constraint);
-    //kDebug() << "Applet::knownApplets constraint was '" << constraint << "' which got us " << offers.count() << " matches";
+    //kDebug() << "Applet::listAppletInfo constraint was '" << constraint << "' which got us " << offers.count() << " matches";
     return KPluginInfo::fromServices(offers);
 }
 
-KPluginInfo::List Applet::knownAppletsForMimetype(const QString &mimetype)
+KPluginInfo::List Applet::listAppletInfoForMimetype(const QString &mimetype)
 {
     QString constraint = QString("'%1' in MimeTypes").arg(mimetype);
-    //kDebug() << "knownAppletsForMimetype with" << mimetype << constraint;
+    //kDebug() << "listAppletInfoForMimetype with" << mimetype << constraint;
     KService::List offers = KServiceTypeTrader::self()->query("Plasma/Applet", constraint);
     return KPluginInfo::fromServices(offers);
 }
 
-QStringList Applet::knownCategories(const QString &parentApp, bool visibleOnly)
+QStringList Applet::listCategories(const QString &parentApp, bool visibleOnly)
 {
     QString constraint = "exist [X-KDE-PluginInfo-Category]";
 

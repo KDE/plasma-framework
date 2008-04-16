@@ -110,9 +110,9 @@ void PlasmaAppletItemModel::populateModel()
         }
     }
 
-    //TODO: get recommended, favorite, used, etc out of knownApplets()
-    //kDebug() << "number of applets is" <<  Plasma::Applet::knownApplets(QString(), m_application).count();
-    foreach (const KPluginInfo& info, Plasma::Applet::knownApplets(QString(), m_application)) {
+    //TODO: get recommended, favorite, used, etc out of listAppletInfo()
+    //kDebug() << "number of applets is" <<  Plasma::Applet::listAppletInfo(QString(), m_application).count();
+    foreach (const KPluginInfo& info, Plasma::Applet::listAppletInfo(QString(), m_application)) {
         //kDebug() << info.pluginName() << "NoDisplay" << info.property("NoDisplay").toBool();
         if (info.property("NoDisplay").toBool()) {
             // we don't want to show the hidden category

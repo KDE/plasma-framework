@@ -1152,7 +1152,7 @@ void Containment::dropEvent(QGraphicsSceneDragDropEvent *event)
             QVariantList args;
             args << url.url();
             //             kDebug() << mimeName;
-            KPluginInfo::List appletList = Applet::knownAppletsForMimetype(mimeName);
+            KPluginInfo::List appletList = Applet::listAppletInfoForMimetype(mimeName);
 
             if (appletList.isEmpty()) {
                 // no special applet associated with this mimetype, let's

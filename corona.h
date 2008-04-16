@@ -82,7 +82,7 @@ public:
     /**
      * Clear the Corona from all applets.
      */
-    void clearApplets();
+    void clearContainments();
 
     /**
      * Returns the the config file used to store the configuration for this Corona

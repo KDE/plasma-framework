@@ -204,7 +204,7 @@ bool appletConfigLessThan(const KConfigGroup &c1, const KConfigGroup &c2)
 
 void Corona::loadApplets(const QString& configName)
 {
-    clearApplets();
+    clearContainments();
     KSharedConfigPtr c;
 
     if (configName.isEmpty() || configName == d->configName) {
@@ -309,7 +309,7 @@ QList<Containment*> Corona::containments() const
     return d->containments;
 }
 
-void Corona::clearApplets()
+void Corona::clearContainments()
 {
     foreach (Containment* containment, d->containments) {
         containment->clearApplets();

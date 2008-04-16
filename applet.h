@@ -62,12 +62,12 @@ class Package;
 class PLASMA_EXPORT Applet : public QGraphicsWidget
 {
     Q_OBJECT
-    Q_PROPERTY(bool hasConfigurationInterface READ hasConfigurationInterface WRITE setHasConfigurationInterface)
+    Q_PROPERTY(bool hasConfigurationInterface READ hasConfigurationInterface)
     Q_PROPERTY(QString name READ name)
     Q_PROPERTY(QString category READ category)
     Q_PROPERTY(bool immutable READ isImmutable WRITE setImmutable)
     Q_PROPERTY(bool drawStandardBackground READ drawStandardBackground WRITE setDrawStandardBackground)
-    Q_PROPERTY(bool failedToLaunch READ failedToLaunch WRITE setFailedToLaunch)
+    Q_PROPERTY(bool hasFailedToLaunch READ hasFailedToLaunch WRITE setFailedToLaunch)
     Q_PROPERTY(bool needsConfiguring READ needsConfiguring WRITE setNeedsConfiguring)
     Q_PROPERTY(QRectF geometry READ geometry WRITE setGeometry)
     Q_PROPERTY(bool shouldConserveResources READ shouldConserveResources)
@@ -294,7 +294,7 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          *                  registered to an application.
          * @return list of applets
          **/
-        static KPluginInfo::List knownApplets(const QString &category = QString(),
+        static KPluginInfo::List listAppletInfo(const QString &category = QString(),
                                               const QString &parentApp = QString());
 
         /**
@@ -302,7 +302,7 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          *
          * @return list of applets
          **/
-        static KPluginInfo::List knownAppletsForMimetype(const QString &mimetype);
+        static KPluginInfo::List listAppletInfoForMimetype(const QString &mimetype);
 
         /**
          * Returns a list of all the categories used by
@@ -316,7 +316,7 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          * @return list of categories
          * @param visibleOnly true if it should only return applets that are marked as visible
          */
-        static QStringList knownCategories(const QString &parentApp = QString(), bool visibleOnly = true);
+        static QStringList listCategories(const QString &parentApp = QString(), bool visibleOnly = true);
 
         /**
          * Attempts to load an applet
@@ -449,7 +449,7 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          * library couldn't be loaded, necessary hardware support wasn't found,
          * etc..) this method returns true
          **/
-        bool failedToLaunch() const;
+        bool hasFailedToLaunch() const;
 
         /**
          * Call this method when the applet fails to launch properly. An
@@ -488,18 +488,7 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         /**
          * @return true if this plasmoid provides a GUI configuration
          **/
-        bool hasConfigurationInterface();
-
-        /**
-         * Sets whether or not this applet provides a user interface for
-         * configuring the applet.
-         *
-         * It defaults to false, and if true is passed in you should
-         * also reimplement showConfigurationInterface()
-         *
-         * @param hasInterface whether or not there is a user interface available
-         **/
-        void setHasConfigurationInterface(bool hasInterface);
+        bool hasConfigurationInterface() const;
 
         /**
          * Returns a list of context-related QAction instances.
@@ -653,6 +642,17 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          * during runtime
          **/
         virtual void saveState(KConfigGroup* config) const;
+
+        /**
+         * Sets whether or not this applet provides a user interface for
+         * configuring the applet.
+         *
+         * It defaults to false, and if true is passed in you should
+         * also reimplement showConfigurationInterface()
+         *
+         * @param hasInterface whether or not there is a user interface available
+         **/
+        void setHasConfigurationInterface(bool hasInterface);
 
         /**
          * Returns the name of the applet.
