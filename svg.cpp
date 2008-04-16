@@ -272,7 +272,7 @@ class Svg::Private
             return elementSize.toSize();
         }
 
-        QRect elementRect(const QString& elementId)
+        QRectF elementRect(const QString& elementId)
         {
             createRenderer();
             QRectF elementRect = renderer->boundsOnElement(elementId);
@@ -280,7 +280,7 @@ class Svg::Private
             qreal dx = size.width() / naturalSize.width();
             qreal dy = size.height() / naturalSize.height();
 
-            return QRect(elementRect.x() * dx, elementRect.y() * dy,
+            return QRectF(elementRect.x() * dx, elementRect.y() * dy,
                          elementRect.width() * dx, elementRect.height() * dy);
         }
 
@@ -356,6 +356,11 @@ void Svg::paint(QPainter* painter, const QRectF& rect, const QString& elementID)
 #endif
 }
 
+QSize Svg::size() const
+{
+    return d->size.toSize();
+}
+
 void Svg::resize( int width, int height )
 {
     resize( QSize( width, height ) );
@@ -378,12 +383,12 @@ QSize Svg::elementSize(const QString& elementId) const
     return d->elementSize(elementId);
 }
 
-QRect Svg::elementRect(const QString& elementId) const
+QRectF Svg::elementRect(const QString& elementId) const
 {
     return d->elementRect(elementId);
 }
 
-bool Svg::elementExists(const QString& elementId) const
+bool Svg::hasElement(const QString& elementId) const
 {
     d->createRenderer();
     return d->renderer->elementExists(elementId);
@@ -400,21 +405,10 @@ QString Svg::elementAtPoint(const QPoint &point) const
     return QString(); // d->renderer->elementAtPoint(QPoint(point.x() *dx, naturalSize.height() - point.y() * dy));
 }
 
-QMatrix Svg::matrixForElement(const QString& elementId) const
-{
-    d->createRenderer();
-    return d->renderer->matrixForElement(elementId);
-}
-
 bool Svg::isValid() const
 {
     d->createRenderer();
     return d->renderer->isValid();
-}
-
-QSize Svg::size() const
-{
-    return d->size.toSize();
 }
 
 void Svg::setContentType(ContentType contentType)

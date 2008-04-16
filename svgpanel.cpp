@@ -152,7 +152,7 @@ Plasma::Location SvgPanel::location() const
 
 void SvgPanel::setPrefix(const QString & prefix)
 {
-    if (!d->background->elementExists(prefix + "-center")) {
+    if (!d->background->hasElement(prefix + "-center")) {
         d->prefix.clear();
     } else {
         d->prefix = prefix;
@@ -451,9 +451,9 @@ void SvgPanel::updateSizes()
    }
 
    //since it's rectangular, topWidth and bottomWidth must be the same
-   d->tileCenter = d->background->elementExists("hint-tile-center");
-   d->noBorderPadding = d->background->elementExists("hint-no-border-padding");
-   d->stretchBorders = d->background->elementExists("hint-stretch-borders");
+   d->tileCenter = d->background->hasElement("hint-tile-center");
+   d->noBorderPadding = d->background->hasElement("hint-no-border-padding");
+   d->stretchBorders = d->background->hasElement("hint-stretch-borders");
    emit repaintNeeded();
 }
 

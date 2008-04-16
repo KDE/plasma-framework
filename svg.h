@@ -118,6 +118,12 @@ class PLASMA_EXPORT Svg : public QObject
                                const QString& elementID = QString());
 
         /**
+         * Currently set size of the SVG
+         * @return the current size of a given element
+         **/
+        QSize size() const;
+
+        /**
          * Resizes the rendered image. Rendering will actually take place on
          * the next call to paint.
          * @arg width the new width
@@ -150,14 +156,14 @@ class PLASMA_EXPORT Svg : public QObject
          * @arg elementId the id of the element to check
          * @return the current rect of a given element, given the current size of the Svg
          **/
-        Q_INVOKABLE QRect elementRect(const QString& elementId) const;
+        Q_INVOKABLE QRectF elementRect(const QString& elementId) const;
 
         /**
          * Check when an element exists in the loaded Svg
          * @arg elementId the id of the element to check
          * @return true if the element is defined in the Svg, otherwise false
          **/
-        Q_INVOKABLE bool elementExists( const QString& elementId ) const;
+        Q_INVOKABLE bool hasElement( const QString& elementId ) const;
 
         /**
          * Returns the element (by id) at the given point. An empty string is
@@ -166,25 +172,11 @@ class PLASMA_EXPORT Svg : public QObject
         Q_INVOKABLE QString elementAtPoint(const QPoint &point) const;
 
         /**
-         * The transformation matrix of the element. That includes the 
-         * transformation on the element itself.
-         * @arg elementId the id of the element
-         * @return the matrix for the element
-         **/
-        Q_INVOKABLE QMatrix matrixForElement(const QString& elementId) const;
-        
-        /**
          * @return true if the SVG file exists and the document is valid,
          *         otherwise false. This method can be expensive as it
          *         causes disk access.
          **/
         Q_INVOKABLE bool isValid() const;
-
-        /**
-         * Currently set size of the SVG
-         * @return the current size of a given element
-         **/
-        QSize size() const;
 
         /**
          * Sets what sort of content is in the Svg.
