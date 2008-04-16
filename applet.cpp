@@ -726,7 +726,7 @@ void Applet::setDrawStandardBackground(bool drawBackground)
     if (drawBackground) {
         if (!d->background) {
             d->background = new Plasma::PanelSvg("widgets/background");
-            d->background->setBorderFlags(Plasma::PanelSvg::DrawAllBorders);
+            d->background->setEnabledBorders(Plasma::PanelSvg::AllBorders);
             int left, top, right, bottom;
             d->getBorderSize(left, top, right, bottom);
             QSizeF fitSize(left + right, top + bottom);
@@ -1006,7 +1006,7 @@ void Applet::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
         formFactor() != Plasma::Vertical &&
         formFactor() != Plasma::Horizontal) {
         //kDebug() << "option rect is" << option->rect;
-        d->background->paint(painter,option->rect);
+        d->background->paint(painter, option->rect, QPointF(0,0));
     }
     if (!d->failed) {
         if (widget && isContainment()) {

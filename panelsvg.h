@@ -41,22 +41,21 @@ class QMatrix;
 namespace Plasma
 {
 
-class PLASMA_EXPORT PanelSvg : public QObject
+class PLASMA_EXPORT PanelSvg : public Svg
 {
     Q_OBJECT
     public:
         /**
          * These flags represents what borders should be drawn
          */
-        enum BorderFlag { DrawTopBorder = 1,
-                          DrawBottomBorder = 2,
-                          DrawLeftBorder = 4,
-                          DrawRightBorder = 8,
-                          ContentAtOrigin = 16,
-                          DrawAllBorders = DrawTopBorder | DrawBottomBorder |
-                                           DrawLeftBorder | DrawRightBorder
-                        };
-        Q_DECLARE_FLAGS(BorderFlags, BorderFlag)
+        enum EnabledBorder { TopBorder = 1,
+                             BottomBorder = 2,
+                             LeftBorder = 4,
+                             RightBorder = 8,
+                             AllBorders = TopBorder | BottomBorder |
+                                              LeftBorder | RightBorder
+                           };
+        Q_DECLARE_FLAGS(EnabledBorders, EnabledBorder)
 
         /**
          * Constructs a new PanelSvg that paints the proper named subelements
@@ -70,38 +69,46 @@ class PLASMA_EXPORT PanelSvg : public QObject
          *
          * @related Plasma::Theme
          */
-        explicit PanelSvg(const QString& imagePath = QString(), QObject* parent = 0);
+        explicit PanelSvg(const QString& imagePath, QObject* parent = 0);
         ~PanelSvg();
 
         /**
          * Loads a new Svg
          * @arg imagePath the new file
          */
-        void setFile(const QString& imagePath);
+        void setImagePath(const QString& imagePath);
 
         /**
          * Convenience method to get the svg filepath and name of svg.
          * @return the svg's filepath including name of the svg.
          */
-        QString file() const;
+        QString imagePath() const;
 
         /**
          * Sets what borders should be painted
          * @arg flags borders we want to paint
          */
-        void setBorderFlags(const BorderFlags flags);
+        void setEnabledBorders(const EnabledBorders borders);
 
         /**
-         * Convenience method to get the border flags
+         * Convenience method to get the enabled borders
          * @return what borders are painted
          */
-        BorderFlags borderFlags() const;
+        EnabledBorders enabledBorders() const;
 
         /**
          * Resize the panel maintaining the same border size
          * @arg size the new size of the panel
          */
         void resize(const QSizeF& size);
+
+        /**
+         * Resize the panel maintaining the same border size
+         * This is an overloaded function provided for convenience
+         * @arg width the new width
+         * @arg height the new height
+         **/
+        void resize(qreal width, qreal height);
 
         /**
          * Returns the margin size given the margin edge we want
@@ -111,31 +118,12 @@ class PLASMA_EXPORT PanelSvg : public QObject
         qreal marginSize(const Plasma::MarginEdge edge) const;
 
         /**
-         * Sets the position of the PanelSvg
-         * @arg pos where it should be positioned at
-         */
-        void setPos( const QPointF& pos );
-
-        /**
-         * Returns the position of the PanelSvg
-         * @return the position
-         */
-        QPointF pos() const;
-
-        /**
-         * Sets the prefix (@see setPrefix) to 'north', 'south', 'west' and 'east'
+         * Sets the prefix (@see setElementPrefix) to 'north', 'south', 'west' and 'east'
          * when the location is TopEdge, BottomEdge, LeftEdge and RightEdge,
          * respectively. Clears the prefix in other cases.
          * @arg location location
          */
-        void setLocation(Plasma::Location location);
-
-        /**
-         * Returns the set location for the PanelSvg. Returns 0 if no location is set
-         * or a custom prefix is set (@see setPrefix)
-         * @return the location
-         */
-        Plasma::Location location() const;
+        void setElementPrefix(Plasma::Location location);
 
         /**
          * Sets the prefix for the SVG elements to be used for painting. For example,
@@ -150,7 +138,7 @@ class PLASMA_EXPORT PanelSvg : public QObject
          * If the
          * @arg prefix prefix for the SVG element names
          */
-        void setPrefix(const QString & prefix);
+        void setElementPrefix(const QString & prefix);
 
         /**
          * Returns the prefix for SVG elements of the PanelSvg
@@ -169,22 +157,20 @@ class PLASMA_EXPORT PanelSvg : public QObject
          * @arg painter the QPainter to use
          * @arg rect the exposed rect to draw into
          */
-        Q_INVOKABLE void paint(QPainter* painter, const QRectF& rect);
+        Q_INVOKABLE void paint(QPainter* painter, const QRectF& rect, const QPointF& pos = QPointF(0, 0));
 
     Q_SIGNALS:
         void repaintNeeded();
 
-    private Q_SLOTS:
-        //update sizes of the svg elements
-        void updateSizes();
-
     private:
         class Private;
         Private * const d;
+
+        Q_PRIVATE_SLOT(d, void updateSizes());
 };
 
 } // Plasma namespace
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(Plasma::PanelSvg::BorderFlags)
+Q_DECLARE_OPERATORS_FOR_FLAGS(Plasma::PanelSvg::EnabledBorders)
 
 #endif // multiple inclusion guard

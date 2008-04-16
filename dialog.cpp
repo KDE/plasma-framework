@@ -61,7 +61,7 @@ Dialog::Dialog( QWidget * parent, Qt::WindowFlags f )
       d(new Private)
 {
     d->background = new PanelSvg("dialogs/background", this);
-    d->background->setBorderFlags(PanelSvg::DrawAllBorders);
+    d->background->setEnabledBorders(PanelSvg::AllBorders);
     d->background->resize(size());
 
     connect(d->background, SIGNAL(repaintNeeded()), this, SLOT(update()));
