@@ -207,13 +207,12 @@ class PLASMA_EXPORT Svg : public QObject
     Q_SIGNALS:
         void repaintNeeded();
 
-    private Q_SLOTS:
-        void themeChanged();
-        void colorsChanged();
-
     private:
         class Private;
         Private* const d;
+
+        Q_PRIVATE_SLOT(d, void themeChanged());
+        Q_PRIVATE_SLOT(d, void colorsChanged());
 };
 
 } // Plasma namespace

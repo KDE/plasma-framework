@@ -68,8 +68,9 @@ class SharedSvgRenderer : public KSvgRenderer, public QSharedData
 class Svg::Private
 {
     public:
-        Private(const QString& imagePath, Svg *q)
-            : renderer(0),
+        Private(const QString& imagePath, Svg *svg)
+            : q(svg),
+              renderer(0),
               contentType(Svg::SingleImage),
               themed(false)
         {
@@ -290,6 +291,37 @@ class Svg::Private
             return renderer->matrixForElement(elementId);
         }
 
+        void themeChanged()
+        {
+            if (!themed) {
+                return;
+            }
+
+            QString newPath = Theme::self()->imagePath(themePath);
+
+            if (path == newPath) {
+                return;
+            }
+
+            removeFromCache();
+            path = newPath;
+            //delete d->renderer; we're a KSharedPtr
+            eraseRenderer();
+            emit q->repaintNeeded();
+        }
+
+        void colorsChanged()
+        {
+            if (!applyColors) {
+                return;
+            }
+
+            removeFromCache();
+            eraseRenderer();
+            emit q->repaintNeeded();
+        }
+
+        Svg *q;
         static QHash<QString, SharedSvgRenderer::Ptr> renderers;
         SharedSvgRenderer::Ptr renderer;
         QString themePath;
@@ -430,36 +462,6 @@ void Svg::setFile(const QString &svgFilePath)
 QString Svg::file() const
 {
    return d->themed ? d->themePath : d->path;
-}
-
-void Svg::themeChanged()
-{
-    if (!d->themed) {
-        return;
-    }
-
-    QString newPath = Theme::self()->imagePath(d->themePath);
-
-    if (d->path == newPath) {
-        return;
-    }
-
-    d->removeFromCache();
-    d->path = newPath;
-    //delete d->renderer; we're a KSharedPtr
-    d->eraseRenderer();
-    emit repaintNeeded();
-}
-
-void Svg::colorsChanged()
-{
-    if (!d->applyColors) {
-        return;
-    }
-
-    d->removeFromCache();
-    d->eraseRenderer();
-    emit repaintNeeded();
 }
 
 } // Plasma namespace
