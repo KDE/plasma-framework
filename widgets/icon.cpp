@@ -473,7 +473,7 @@ void Icon::setSvg(const QString &svgFilePath, const QString &elementId)
     if (!d->iconSvg) {
         d->iconSvg = new Plasma::Svg(svgFilePath);
     } else {
-        d->iconSvg->setFile(svgFilePath);
+        d->iconSvg->setImagePath(svgFilePath);
     }
 
     d->iconSvgElement = elementId;

@@ -453,13 +453,13 @@ Svg::ContentType Svg::contentType()
     return d->contentType;
 }
 
-void Svg::setFile(const QString &svgFilePath)
+void Svg::setImagePath(const QString &svgFilePath)
 {
    d->setImagePath(svgFilePath, this);
    d->eraseRenderer();
 }
 
-QString Svg::file() const
+QString Svg::imagePath() const
 {
    return d->themed ? d->themePath : d->path;
 }

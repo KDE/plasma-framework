@@ -90,17 +90,17 @@ PanelSvg::~PanelSvg()
 
 void PanelSvg::setImagePath(const QString& imagePath)
 {
-    if (imagePath == d->background->file()) {
+    if (imagePath == d->background->imagePath()) {
         return;
     }
 
-    d->background->setFile(imagePath);
+    d->background->setImagePath(imagePath);
     setElementPrefix(prefix());
 }
 
 QString PanelSvg::imagePath() const
 {
-   return d->background->file();
+   return d->background->imagePath();
 }
 
 void PanelSvg::setEnabledBorders(const EnabledBorders borders)
