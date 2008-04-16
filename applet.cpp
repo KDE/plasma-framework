@@ -65,7 +65,7 @@
 #include "plasma/scripting/appletscript.h"
 #include "plasma/shadowitem_p.h"
 #include "plasma/svg.h"
-#include "plasma/svgpanel.h"
+#include "plasma/panelsvg.h"
 #include "plasma/theme.h"
 #include "plasma/view.h"
 
@@ -309,7 +309,7 @@ public:
     QList<QObject*> watchedForFocus;
     QList<QGraphicsItem*> watchedForMouseMove;
     QStringList loadedEngines;
-    Plasma::SvgPanel *background;
+    Plasma::PanelSvg *background;
     //Plasma::LineEdit *failureText;
     AppletScript *script;
     ConfigXml* configXml;
@@ -725,8 +725,8 @@ void Applet::setDrawStandardBackground(bool drawBackground)
 {
     if (drawBackground) {
         if (!d->background) {
-            d->background = new Plasma::SvgPanel("widgets/background");
-            d->background->setBorderFlags(Plasma::SvgPanel::DrawAllBorders);
+            d->background = new Plasma::PanelSvg("widgets/background");
+            d->background->setBorderFlags(Plasma::PanelSvg::DrawAllBorders);
             int left, top, right, bottom;
             d->getBorderSize(left, top, right, bottom);
             QSizeF fitSize(left + right, top + bottom);

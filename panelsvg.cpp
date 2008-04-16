@@ -18,7 +18,7 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "svgpanel.h"
+#include "panelsvg.h"
 
 #include <QPainter>
 #include <QSize>
@@ -29,7 +29,7 @@
 namespace Plasma
 {
 
-class SvgPanel::Private
+class PanelSvg::Private
 {
 public:
     Private()
@@ -67,7 +67,7 @@ public:
     bool tileCenter : 1;
 };
 
-SvgPanel::SvgPanel(const QString& imagePath, QObject* parent)
+PanelSvg::PanelSvg(const QString& imagePath, QObject* parent)
     : QObject(parent),
       d(new Private)
 {
@@ -78,12 +78,12 @@ SvgPanel::SvgPanel(const QString& imagePath, QObject* parent)
     d->panelSize = d->background->size();
 }
 
-SvgPanel::~SvgPanel()
+PanelSvg::~PanelSvg()
 {
     delete d;
 }
 
-void SvgPanel::setFile(const QString& imagePath)
+void PanelSvg::setFile(const QString& imagePath)
 {
     if (imagePath == d->background->file()) {
         return;
@@ -93,12 +93,12 @@ void SvgPanel::setFile(const QString& imagePath)
     setPrefix(prefix());
 }
 
-QString SvgPanel::file() const
+QString PanelSvg::file() const
 {
    return d->background->file();
 }
 
-void SvgPanel::setBorderFlags(const BorderFlags flags)
+void PanelSvg::setBorderFlags(const BorderFlags flags)
 {
     if (flags == d->bFlags) {
         return;
@@ -108,22 +108,22 @@ void SvgPanel::setBorderFlags(const BorderFlags flags)
     updateSizes();
 }
 
-SvgPanel::BorderFlags SvgPanel::borderFlags() const
+PanelSvg::BorderFlags PanelSvg::borderFlags() const
 {
     return d->bFlags;
 }
 
-void SvgPanel::setPos(const QPointF& pos)
+void PanelSvg::setPos(const QPointF& pos)
 {
     d->pos = pos;
 }
 
-QPointF SvgPanel::pos() const
+QPointF PanelSvg::pos() const
 {
     return d->pos;
 }
 
-void SvgPanel::setLocation(Plasma::Location location)
+void PanelSvg::setLocation(Plasma::Location location)
 {
     switch (location) {
         case TopEdge:
@@ -145,12 +145,12 @@ void SvgPanel::setLocation(Plasma::Location location)
     d->location = location;
 }
 
-Plasma::Location SvgPanel::location() const
+Plasma::Location PanelSvg::location() const
 {
     return d->location;
 }
 
-void SvgPanel::setPrefix(const QString & prefix)
+void PanelSvg::setPrefix(const QString & prefix)
 {
     if (!d->background->hasElement(prefix + "-center")) {
         d->prefix.clear();
@@ -168,7 +168,7 @@ void SvgPanel::setPrefix(const QString & prefix)
     }
 }
 
-QString SvgPanel::prefix()
+QString PanelSvg::prefix()
 {
     if (d->prefix.isEmpty()) {
         return QString();
@@ -176,7 +176,7 @@ QString SvgPanel::prefix()
     return d->prefix.left(d->prefix.size() - 1);
 }
 
-void SvgPanel::resize(const QSizeF& size)
+void PanelSvg::resize(const QSizeF& size)
 {
     if (!size.isValid() || size.width() < 1 || size.height() < 1 || size == d->panelSize) {
         return;
@@ -186,7 +186,7 @@ void SvgPanel::resize(const QSizeF& size)
     updateSizes();
 }
 
-qreal SvgPanel::marginSize(const Plasma::MarginEdge edge) const
+qreal PanelSvg::marginSize(const Plasma::MarginEdge edge) const
 {
     if (d->noBorderPadding) {
         return .0;
@@ -212,7 +212,7 @@ qreal SvgPanel::marginSize(const Plasma::MarginEdge edge) const
     }
 }
 
-QBitmap SvgPanel::mask() const
+QBitmap PanelSvg::mask() const
 {
     if (!d->cachedBackground) {
         d->generateBackground();
@@ -221,7 +221,7 @@ QBitmap SvgPanel::mask() const
     return d->cachedBackground->alphaChannel().createMaskFromColor(Qt::black);
 }
 
-void SvgPanel::Private::generateBackground()
+void PanelSvg::Private::generateBackground()
 {
     bool origined = bFlags & ContentAtOrigin;
     const int topWidth = background->elementSize(prefix + "top").width();
@@ -404,7 +404,7 @@ void SvgPanel::Private::generateBackground()
    }
 }
 
-void SvgPanel::paint(QPainter* painter, const QRectF& rect)
+void PanelSvg::paint(QPainter* painter, const QRectF& rect)
 {
     if (!d->cachedBackground) {
         d->generateBackground();
@@ -420,7 +420,7 @@ void SvgPanel::paint(QPainter* painter, const QRectF& rect)
     painter->drawPixmap(rect, *d->cachedBackground, rect.translated(-d->pos.x()-leftOffset,-d->pos.y()-topOffset));
 }
 
-void SvgPanel::updateSizes()
+void PanelSvg::updateSizes()
 {
     delete d->cachedBackground;
     d->cachedBackground = 0;
@@ -459,4 +459,4 @@ void SvgPanel::updateSizes()
 
 } // Plasma namespace
 
-#include "svgpanel.moc"
+#include "panelsvg.moc"

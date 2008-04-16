@@ -34,7 +34,7 @@
 #include <KGlobal>
 #include <KWindowSystem>
 #include <plasma/theme.h>
-#include <plasma/svgpanel.h>
+#include <plasma/panelsvg.h>
 
 #ifdef Q_WS_X11
 #include <X11/Xlib.h>
@@ -70,7 +70,7 @@ class ToolTip::Private
     QTimer *showTimer;
     QTimer *hideTimer;
 
-    SvgPanel *background;
+    PanelSvg *background;
 
 };
 
@@ -203,8 +203,8 @@ ToolTip::ToolTip()
     d->imageLabel = new QLabel;
     d->imageLabel->setAlignment(Qt::AlignTop | Qt::AlignLeft);
 
-    d->background = new SvgPanel("widgets/tooltip", this);
-    d->background->setBorderFlags(SvgPanel::DrawAllBorders);
+    d->background = new PanelSvg("widgets/tooltip", this);
+    d->background->setBorderFlags(PanelSvg::DrawAllBorders);
 
     connect(d->background, SIGNAL(repaintNeeded()), this, SLOT(update()));
 

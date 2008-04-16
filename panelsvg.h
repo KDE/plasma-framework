@@ -18,8 +18,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef PLASMA_SVGPANEL_H
-#define PLASMA_SVGPANEL_H
+#ifndef PLASMA_PANELSVG_H
+#define PLASMA_PANELSVG_H
 
 #include <QtCore/QObject>
 #include <QtGui/QPixmap>
@@ -41,7 +41,7 @@ class QMatrix;
 namespace Plasma
 {
 
-class PLASMA_EXPORT SvgPanel : public QObject
+class PLASMA_EXPORT PanelSvg : public QObject
 {
     Q_OBJECT
     public:
@@ -59,7 +59,7 @@ class PLASMA_EXPORT SvgPanel : public QObject
         Q_DECLARE_FLAGS(BorderFlags, BorderFlag)
 
         /**
-         * Constructs a new SvgPanel that paints the proper named subelements
+         * Constructs a new PanelSvg that paints the proper named subelements
          * as borders
          *
          * The size is initialized to be the SVG's native size.
@@ -70,8 +70,8 @@ class PLASMA_EXPORT SvgPanel : public QObject
          *
          * @related Plasma::Theme
          */
-        explicit SvgPanel(const QString& imagePath = QString(), QObject* parent = 0);
-        ~SvgPanel();
+        explicit PanelSvg(const QString& imagePath = QString(), QObject* parent = 0);
+        ~PanelSvg();
 
         /**
          * Loads a new Svg
@@ -111,13 +111,13 @@ class PLASMA_EXPORT SvgPanel : public QObject
         qreal marginSize(const Plasma::MarginEdge edge) const;
 
         /**
-         * Sets the position of the SvgPanel
+         * Sets the position of the PanelSvg
          * @arg pos where it should be positioned at
          */
         void setPos( const QPointF& pos );
 
         /**
-         * Returns the position of the SvgPanel
+         * Returns the position of the PanelSvg
          * @return the position
          */
         QPointF pos() const;
@@ -131,7 +131,7 @@ class PLASMA_EXPORT SvgPanel : public QObject
         void setLocation(Plasma::Location location);
 
         /**
-         * Returns the set location for the SvgPanel. Returns 0 if no location is set
+         * Returns the set location for the PanelSvg. Returns 0 if no location is set
          * or a custom prefix is set (@see setPrefix)
          * @return the location
          */
@@ -153,7 +153,7 @@ class PLASMA_EXPORT SvgPanel : public QObject
         void setPrefix(const QString & prefix);
 
         /**
-         * Returns the prefix for SVG elements of the SvgPanel
+         * Returns the prefix for SVG elements of the PanelSvg
          * @return the prefix
          */
         QString prefix();
@@ -185,6 +185,6 @@ class PLASMA_EXPORT SvgPanel : public QObject
 
 } // Plasma namespace
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(Plasma::SvgPanel::BorderFlags)
+Q_DECLARE_OPERATORS_FOR_FLAGS(Plasma::PanelSvg::BorderFlags)
 
 #endif // multiple inclusion guard

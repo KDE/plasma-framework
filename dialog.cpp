@@ -35,7 +35,7 @@
 #include <KDebug>
 #include <NETRootInfo>
 
-#include <plasma/svgpanel.h>
+#include <plasma/panelsvg.h>
 #include <plasma/theme.h>
 
 #ifdef Q_WS_X11
@@ -53,15 +53,15 @@ public:
      * Holds the background SVG, to be re-rendered when the cache is invalidated,
      * for example by resizing the dialogue.
      */
-    Plasma::SvgPanel *background;
+    Plasma::PanelSvg *background;
 };
 
 Dialog::Dialog( QWidget * parent, Qt::WindowFlags f )
     : QWidget(parent, f),
       d(new Private)
 {
-    d->background = new SvgPanel("dialogs/background", this);
-    d->background->setBorderFlags(SvgPanel::DrawAllBorders);
+    d->background = new PanelSvg("dialogs/background", this);
+    d->background->setBorderFlags(PanelSvg::DrawAllBorders);
     d->background->resize(size());
 
     connect(d->background, SIGNAL(repaintNeeded()), this, SLOT(update()));

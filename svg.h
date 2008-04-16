@@ -129,7 +129,7 @@ class PLASMA_EXPORT Svg : public QObject
          * @arg width the new width
          * @arg height the new height
          **/
-        Q_INVOKABLE void resize( int width, int height );
+        Q_INVOKABLE void resize( qreal width, qreal height );
 
         /**
          * Resizes the rendered image. Rendering will actually take place on

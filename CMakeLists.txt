@@ -45,7 +45,7 @@ set(plasma_LIB_SRCS
     searchcontext.cpp
     shadowitem.cpp
     svg.cpp
-    svgpanel.cpp
+    panelsvg.cpp
     theme.cpp
     toolbox.cpp
     paneltoolbox.cpp
@@ -114,7 +114,7 @@ set(plasma_LIB_INCLUDES
     searchcontext.h
     shadowitem_p.h
     svg.h
-    svgpanel.h
+    panelsvg.h
     theme.h
     uiloader.h
     view.h
@@ -168,7 +168,7 @@ install(FILES
     includes/SearchContext
     includes/SearchMatch
     includes/Svg
-    includes/SvgPanel
+    includes/PanelSvg
     includes/UiLoader
     includes/PackageMetadata
     includes/View

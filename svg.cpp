@@ -361,7 +361,7 @@ QSize Svg::size() const
     return d->size.toSize();
 }
 
-void Svg::resize( int width, int height )
+void Svg::resize( qreal width, qreal height )
 {
     resize( QSize( width, height ) );
 }
