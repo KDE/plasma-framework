@@ -166,7 +166,7 @@ class PLASMA_EXPORT PanelSvg : public Svg
         class Private;
         Private * const d;
 
-        Q_PRIVATE_SLOT(d, void updateSizes());
+        Q_PRIVATE_SLOT(d, void updateSizes())
 };
 
 } // Plasma namespace

@@ -211,8 +211,8 @@ class PLASMA_EXPORT Svg : public QObject
         class Private;
         Private* const d;
 
-        Q_PRIVATE_SLOT(d, void themeChanged());
-        Q_PRIVATE_SLOT(d, void colorsChanged());
+        Q_PRIVATE_SLOT(d, void themeChanged())
+        Q_PRIVATE_SLOT(d, void colorsChanged())
 };
 
 } // Plasma namespace
