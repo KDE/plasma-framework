@@ -54,14 +54,15 @@ public:
      * for example by resizing the dialogue.
      */
     Plasma::PanelSvg *background;
+    Plasma::Dialog *q;
 
-    void themeUpdated(Dialog * dialog)
+    void themeUpdated()
     {
         const int topHeight = background->marginSize(Plasma::TopMargin);
         const int leftWidth = background->marginSize(Plasma::LeftMargin);
         const int rightWidth = background->marginSize(Plasma::RightMargin);
         const int bottomHeight = background->marginSize(Plasma::BottomMargin);
-        dialog->setContentsMargins(leftWidth, topHeight, rightWidth, bottomHeight);
+        q->setContentsMargins(leftWidth, topHeight, rightWidth, bottomHeight);
     }; 
 };
 
@@ -69,14 +70,15 @@ Dialog::Dialog( QWidget * parent, Qt::WindowFlags f )
     : QWidget(parent, f),
       d(new Private)
 {
+    d->q = this;
     d->background = new PanelSvg("dialogs/background", this);
     d->background->setEnabledBorders(PanelSvg::AllBorders);
     d->background->resize(size());
 
     connect(d->background, SIGNAL(repaintNeeded()), this, SLOT(update()));
 
-    connect(Plasma::Theme::self(), SIGNAL(changed()), this, SLOT(themeUpdated(this)));
-    d->themeUpdated(this);
+    connect(Plasma::Theme::self(), SIGNAL(changed()), this, SLOT(themeUpdated()));
+    d->themeUpdated();
 }
 
 Dialog::~Dialog()

@@ -81,7 +81,7 @@ class PLASMA_EXPORT Dialog : public QWidget
         /**
          * React to theme changes 
          */
-        Q_PRIVATE_SLOT(d,void themeUpdated(Dialog * dialog));
+        Q_PRIVATE_SLOT(d, void themeUpdated())
 };
 
 } // Plasma namespace
