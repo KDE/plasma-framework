@@ -54,6 +54,15 @@ public:
      * for example by resizing the dialogue.
      */
     Plasma::PanelSvg *background;
+
+    void themeUpdated(Dialog * dialog)
+    {
+        const int topHeight = background->marginSize(Plasma::TopMargin);
+        const int leftWidth = background->marginSize(Plasma::LeftMargin);
+        const int rightWidth = background->marginSize(Plasma::RightMargin);
+        const int bottomHeight = background->marginSize(Plasma::BottomMargin);
+        dialog->setContentsMargins(leftWidth, topHeight, rightWidth, bottomHeight);
+    }; 
 };
 
 Dialog::Dialog( QWidget * parent, Qt::WindowFlags f )
@@ -66,22 +75,13 @@ Dialog::Dialog( QWidget * parent, Qt::WindowFlags f )
 
     connect(d->background, SIGNAL(repaintNeeded()), this, SLOT(update()));
 
-    connect(Plasma::Theme::self(), SIGNAL(changed()), this, SLOT(themeUpdated()));
-    themeUpdated();
+    connect(Plasma::Theme::self(), SIGNAL(changed()), this, SLOT(themeUpdated(this)));
+    d->themeUpdated(this);
 }
 
 Dialog::~Dialog()
 {
     delete d;
-}
-
-void Dialog::themeUpdated()
-{
-    const int topHeight = d->background->marginSize(Plasma::TopMargin);
-    const int leftWidth = d->background->marginSize(Plasma::LeftMargin);
-    const int rightWidth = d->background->marginSize(Plasma::RightMargin);
-    const int bottomHeight = d->background->marginSize(Plasma::BottomMargin);
-    setContentsMargins(leftWidth, topHeight, rightWidth, bottomHeight);
 }
 
 void Dialog::paintEvent(QPaintEvent *e)
