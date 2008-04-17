@@ -731,9 +731,21 @@ void Applet::setDrawStandardBackground(bool drawBackground)
             int left, top, right, bottom;
             d->getBorderSize(left, top, right, bottom);
             setContentsMargins(left, right, top, bottom);
+
+            QSizeF fitSize(left + right, top + bottom);
+            if (minimumSize().expandedTo(fitSize) != minimumSize()) {
+                setMinimumSize(minimumSize().expandedTo(fitSize));
+            }
             d->background->resize(boundingRect().size());
         }
     } else if (d->background) {
+        int left, top, right, bottom;
+        d->getBorderSize(left, top, right, bottom);
+        //Setting a minimum size of 0,0 would result in the panel to be only
+        //on the first virtual desktop
+        setMinimumSize(qMax(minimumSize().width() - left - right, 1.0),
+                       qMax(minimumSize().height() - top - bottom, 1.0));
+
         delete d->background;
         d->background = 0;
         setContentsMargins(0, 0, 0, 0);
