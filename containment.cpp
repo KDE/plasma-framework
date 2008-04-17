@@ -488,10 +488,8 @@ void Containment::setFormFactor(FormFactor formFactor)
     QGraphicsLinearLayout * linearLay = dynamic_cast<QGraphicsLinearLayout *>(lay);
     if (linearLay) {
         foreach (Applet* applet, d->applets) {
-            linearLay->addItem(applet);
             applet->updateConstraints(Plasma::FormFactorConstraint);
         }
-	//linearLay->addStretch();
     }
     updateConstraints(Plasma::FormFactorConstraint);
 }
@@ -506,20 +504,44 @@ void Containment::createLayout(FormFactor formFactor)
             //setLayout(new QGraphicsLinearLayout());
             break;
         case Horizontal: {
-            QGraphicsLinearLayout *lay = new QGraphicsLinearLayout();
-            lay->setOrientation(Qt::Horizontal);
-            lay->setContentsMargins(0, 0, 0, 0);
-            lay->setSpacing(4);
-            lay->setSizePolicy(QSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding));
-            setLayout(lay);
+            if
+              (!layout())
+            {
+                QGraphicsLinearLayout *lay = new QGraphicsLinearLayout();
+                lay->setOrientation(Qt::Horizontal);
+                lay->setContentsMargins(0, 0, 0, 0);
+                lay->setSpacing(4);
+                lay->setSizePolicy(QSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding));
+                setLayout(lay);
+            }
+            else
+            {
+                QGraphicsLayout *lay = layout();
+                QGraphicsLinearLayout * linearLay = dynamic_cast<QGraphicsLinearLayout *>(lay);
+                if (linearLay) {
+                    linearLay->setOrientation(Qt::Horizontal);
+                }
+            }
             break;
             }
         case Vertical: {
-            QGraphicsLinearLayout *lay = new QGraphicsLinearLayout();
-            lay->setOrientation(Qt::Vertical);
-            lay->setContentsMargins(0, 0, 0, 0);
-            lay->setSpacing(4);
-            setLayout(lay);
+            if
+              (!layout())
+            {
+                QGraphicsLinearLayout *lay = new QGraphicsLinearLayout();
+                lay->setOrientation(Qt::Vertical);
+                lay->setContentsMargins(0, 0, 0, 0);
+                lay->setSpacing(4);
+                setLayout(lay);
+            }
+            else
+            {
+                QGraphicsLayout *lay = layout();
+                QGraphicsLinearLayout * linearLay = dynamic_cast<QGraphicsLinearLayout *>(lay);
+                if (linearLay) {
+                    linearLay->setOrientation(Qt::Vertical);
+                }
+            }
             break;
             }
         default:
