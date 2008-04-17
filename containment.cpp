@@ -263,7 +263,7 @@ void Containment::containmentConstraintsUpdated(Plasma::Constraints constraints)
         d->toolbox->enableTool("addwidgets", !isImmutable());
     }
 
-    if (constraints & Plasma::FormFactorConstraint) {
+    if (constraints & Plasma::FormFactorConstraint && d->toolbox) {
         if (formFactor() == Vertical) {
             d->toolbox->setOrientation(Qt::Vertical);
         //defaults to horizontal
