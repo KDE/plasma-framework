@@ -510,6 +510,7 @@ void Containment::createLayout(FormFactor formFactor)
             lay->setOrientation(Qt::Horizontal);
             lay->setContentsMargins(0, 0, 0, 0);
             lay->setSpacing(4);
+            lay->setSizePolicy(QSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding));
             setLayout(lay);
             break;
             }
