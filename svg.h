@@ -49,26 +49,10 @@ class PLASMA_EXPORT Svg : public QObject
     Q_OBJECT
     Q_ENUMS( ContentType )
     Q_PROPERTY( QSize size READ size )
-    Q_PROPERTY( ContentType contentType READ contentType WRITE setContentType )
+    Q_PROPERTY( bool multipleImages READ containsMultipleImages WRITE setContainsMultipleImages )
     Q_PROPERTY( QString filePath READ imagePath WRITE setImagePath )
 
     public:
-        /**
-         * Describes what is in the Svg document to be loaded. The important
-         * distinction is whether the Svg is a single image (or group of
-         * elements) that are meant to be viewed together, such as a clock face
-         * and hands, or a set of images that are meant to be displayed
-         * individually, such as a deck of cards.
-         */
-        enum ContentType { SingleImage = 0 /**< A set of elements that together
-                                                make an image. Elements may be
-                                                drawn separately to accomplish
-                                                this. This is the default. */,
-                           ImageSet /**< A set of elements, each of which
-                                         constitutes a whole image. Each
-                                         element will therefore be rendered
-                                         to the set size of the Svg object */
-                         };
 
         /**
          * Constructs an SVG object that implicitly shares and caches rendering
@@ -178,19 +162,16 @@ class PLASMA_EXPORT Svg : public QObject
          **/
         Q_INVOKABLE bool isValid() const;
 
-        /**
-         * Sets what sort of content is in the Svg.
-         * @see ContentType
-         * @arg contents whether the Svg is a single image or a set of images
-         */
-        void setContentType(ContentType contentType);
+       /**
+        * Set if the svg contains a single image or multiple ones.
+        * @arg multiple true if the svg contains multiple images
+        */
+        void setContainsMultipleImages(bool multiple);
 
-        /**
-         * Returns the content type of the Svg
-         * @see SetContentType
-         * @arg contents whether the Svg is a single image or a set of images
-         */
-        ContentType contentType();
+       /**
+        * @return whether or not the svg contains multiple images or not
+        */
+        bool containsMultipleImages() const;
 
         /**
          * Convenience method for setting the svg file to use for the Svg.

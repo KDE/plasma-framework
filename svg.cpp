@@ -71,7 +71,7 @@ class Svg::Private
         Private(const QString& imagePath, Svg *svg)
             : q(svg),
               renderer(0),
-              contentType(Svg::SingleImage),
+              multipleImages(false),
               themed(false)
         {
             setImagePath(imagePath, q);
@@ -128,7 +128,7 @@ class Svg::Private
         {
 #if SVG_CACHE_BUGFIX
             QSizeF localSize;
-            if (elementId.isEmpty() || contentType == Svg::ImageSet) {
+            if (elementId.isEmpty() || multipleImages) {
                 localSize = size;
             } else {
                 localSize = elementSize(elementId);
@@ -178,7 +178,7 @@ class Svg::Private
 #if !SVG_CACHE_BUGFIX
             // we have to re-render this puppy
             QSize s;
-            if (elementId.isEmpty() || contentType == Svg::ImageSet) {
+            if (elementId.isEmpty() || multipleImages) {
                 s = size.toSize();
             } else {
                 s = elementSize(elementId);
@@ -328,7 +328,7 @@ class Svg::Private
         QString path;
         QList<QString> ids;
         QSizeF size;
-        Svg::ContentType contentType;
+        bool multipleImages;
         bool themed;
         bool applyColors;
 };
@@ -443,14 +443,14 @@ bool Svg::isValid() const
     return d->renderer->isValid();
 }
 
-void Svg::setContentType(ContentType contentType)
+void Svg::setContainsMultipleImages(bool multiple)
 {
-    d->contentType = contentType;
+    d->multipleImages = multiple;
 }
 
-Svg::ContentType Svg::contentType()
+bool Svg::containsMultipleImages() const
 {
-    return d->contentType;
+    return d->multipleImages;
 }
 
 void Svg::setImagePath(const QString &svgFilePath)
