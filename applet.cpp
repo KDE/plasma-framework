@@ -195,6 +195,7 @@ public:
                 }
             }
         }
+
         applet->setDrawStandardBackground(true);
 
         connect(Plasma::Theme::self(), SIGNAL(changed()), applet, SLOT(themeChanged()));
@@ -729,10 +730,7 @@ void Applet::setDrawStandardBackground(bool drawBackground)
             d->background->setEnabledBorders(Plasma::PanelSvg::AllBorders);
             int left, top, right, bottom;
             d->getBorderSize(left, top, right, bottom);
-            QSizeF fitSize(left + right, top + bottom);
-            if (minimumSize().expandedTo(fitSize) != minimumSize()) {
-                setMinimumSize(minimumSize().expandedTo(fitSize));
-            }
+            setContentsMargins(left, right, top, bottom);
             d->background->resize(boundingRect().size());
         }
     } else if (d->background) {
