@@ -316,9 +316,11 @@ void Containment::setContainmentType(Containment::Type type)
         }
 
     } else if (isContainment() && type == PanelContainment) {
-        d->createToolbox();
-        d->toolbox->setSize(24);
-        d->toolbox->setIconSize(QSize(16, 16));
+        if (!d->toolbox) {
+            d->createToolbox();
+            d->toolbox->setSize(22);
+            d->toolbox->setIconSize(QSize(16, 16));
+        }
     } else {
         delete d->toolbox;
         d->toolbox = 0;

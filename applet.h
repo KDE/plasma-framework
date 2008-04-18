@@ -108,14 +108,6 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         static PackageStructure::Ptr packageStructure();
 
         /**
-         * This method is called once the applet is loaded and added to a Corona.
-         * If the applet requires a QGraphicsScene or has an particularly intensive
-         * set of initialization routines to go through, consider implementing it
-         * in this method instead of the constructor.
-         **/
-        virtual void init();
-
-        /**
          * @return the id of this applet
          */
         uint id() const;
@@ -452,20 +444,6 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         bool hasFailedToLaunch() const;
 
         /**
-         * Call this method when the applet fails to launch properly. An
-         * optional reason can be provided.
-         *
-         * Not that all children items will be deleted when this method is
-         * called. If you have pointers to these items, you will need to
-         * reset them after calling this method.
-         *
-         * @param failed true when the applet failed, false when it succeeded
-         * @param reason an optional reason to show the user why the applet
-         *               failed to launch
-         **/
-        void setFailedToLaunch(bool failed, const QString& reason = QString());
-
-        /**
          * @return true if the applet currently needs to be configured,
          *         otherwise, false
          */
@@ -638,6 +616,28 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
 
     protected:
         /**
+         * This method is called once the applet is loaded and added to a Corona.
+         * If the applet requires a QGraphicsScene or has an particularly intensive
+         * set of initialization routines to go through, consider implementing it
+         * in this method instead of the constructor.
+         **/
+        virtual void init();
+
+        /**
+         * Call this method when the applet fails to launch properly. An
+         * optional reason can be provided.
+         *
+         * Not that all children items will be deleted when this method is
+         * called. If you have pointers to these items, you will need to
+         * reset them after calling this method.
+         *
+         * @param failed true when the applet failed, false when it succeeded
+         * @param reason an optional reason to show the user why the applet
+         *               failed to launch
+         **/
+        void setFailedToLaunch(bool failed, const QString& reason = QString());
+
+        /**
          * Called when a request to save the state of the applet is made
          * during runtime
          **/
@@ -753,6 +753,10 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
 
         class Private;
         Private* const d;
+
+        //Corona needs to access setFailedToLaunch and init
+        friend class Corona;
+        friend class Containment;
 };
 
 } // Plasma namespace

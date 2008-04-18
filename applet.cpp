@@ -298,6 +298,19 @@ public:
         }
     }
 
+    QString visibleFailureText(const QString& reason)
+    {
+        QString text;
+    
+        if (reason.isEmpty()) {
+            text = i18n("This object could not be created.");
+        } else {
+            text = i18n("This object could not be created for the following reason:<p><b>%1</b></p>", reason);
+        }
+    
+        return text;
+    }
+
     //TODO: examine the usage of memory here; there's a pretty large
     //      number of members at this point.
     static uint s_maxAppletId;
@@ -437,6 +450,49 @@ void Applet::restore(KConfigGroup *c)
     if (c->readEntry("locked", false)) {
         setImmutable(true);
     }
+}
+
+void Applet::setFailedToLaunch(bool failed, const QString& reason)
+{
+    if (d->failed == failed) {
+        return;
+    }
+
+    d->failed = failed;
+    prepareGeometryChange();
+
+    qDeleteAll(QGraphicsItem::children());
+    setLayout(0);
+
+    if (failed) {
+        setDrawStandardBackground(true);
+
+        #ifdef TOPORT
+        Layout* failureLayout = new BoxLayout(BoxLayout::TopToBottom, this);
+        d->failureText = new LineEdit(this);
+        d->failureText->setTextInteractionFlags( Qt::TextSelectableByMouse );
+        d->failureText->setStyled(false);
+        d->failureText->document()->setTextWidth(200);
+        d->failureText->setHtml(visibleFailureText(reason));
+        //FIXME: this needs to get the colour from the theme's colour scheme
+        d->failureText->setDefaultTextColor(KStatefulBrush(KColorScheme::Window,
+                                                           KColorScheme::NormalText,
+                                                           Theme::self()->colors())
+                                                        .brush(QPalette::Normal).color());
+        failureLayout->addItem(d->failureText);
+        #endif
+
+
+        QGraphicsLinearLayout *failureLayout = new QGraphicsLinearLayout();
+        failureLayout->setContentsMargins(0, 0, 0, 0);
+        QGraphicsProxyWidget * failureWidget = new QGraphicsProxyWidget(this);
+        QLabel * label = new QLabel(d->visibleFailureText(reason));
+        label->setWordWrap(true);
+        failureWidget->setWidget(label);
+        failureLayout->addItem(failureWidget);
+        setLayout(failureLayout);
+    }
+    update();
 }
 
 void Applet::saveState(KConfigGroup* group) const
@@ -757,67 +813,11 @@ bool Applet::hasFailedToLaunch() const
     return d->failed;
 }
 
-QString visibleFailureText(const QString& reason)
-{
-    QString text;
-
-    if (reason.isEmpty()) {
-        text = i18n("This object could not be created.");
-    } else {
-        text = i18n("This object could not be created for the following reason:<p><b>%1</b></p>", reason);
-    }
-
-    return text;
-}
-
 void Applet::paintWindowFrame ( QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget)
 {
     //Here come the code for the window frame
     //kDebug()<<"ENTER in windowFrame";
     //painter->drawRoundedRect(windowFrameGeometry(),5,5);
-}
-
-void Applet::setFailedToLaunch(bool failed, const QString& reason)
-{
-    if (d->failed == failed) {
-        return;
-    }
-
-    d->failed = failed;
-    prepareGeometryChange();
-
-    qDeleteAll(QGraphicsItem::children());
-    setLayout(0);
-
-    if (failed) {
-        setDrawStandardBackground(true);
-
-        #ifdef TOPORT
-        Layout* failureLayout = new BoxLayout(BoxLayout::TopToBottom, this);
-        d->failureText = new LineEdit(this);
-        d->failureText->setTextInteractionFlags( Qt::TextSelectableByMouse );
-        d->failureText->setStyled(false);
-        d->failureText->document()->setTextWidth(200);
-        d->failureText->setHtml(visibleFailureText(reason));
-        //FIXME: this needs to get the colour from the theme's colour scheme
-        d->failureText->setDefaultTextColor(KStatefulBrush(KColorScheme::Window,
-                                                           KColorScheme::NormalText,
-                                                           Theme::self()->colors())
-                                                        .brush(QPalette::Normal).color());
-        failureLayout->addItem(d->failureText);
-        #endif
-
-
-        QGraphicsLinearLayout *failureLayout = new QGraphicsLinearLayout();
-        failureLayout->setContentsMargins(0, 0, 0, 0);
-        QGraphicsProxyWidget * failureWidget = new QGraphicsProxyWidget(this);
-        QLabel * label = new QLabel(visibleFailureText(reason));
-        label->setWordWrap(true);
-        failureWidget->setWidget(label);
-        failureLayout->addItem(failureWidget);
-        setLayout(failureLayout);
-    }
-    update();
 }
 
 bool Applet::needsConfiguring() const
