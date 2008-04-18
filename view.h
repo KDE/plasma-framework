@@ -68,12 +68,12 @@ public:
      * Sets whether or not to draw the containment wallpaper when painting
      * on this item
      */
-    void setDrawWallpaper(bool draw);
+    void setWallpaperEnabled(bool draw);
 
     /**
      * @return whether or not containments should draw wallpaper
      */
-    bool drawWallpaper() const;
+    bool isWallpaperEnabled() const;
 
     /**
      * Sets which screen this view is associated with, if any.
@@ -125,11 +125,6 @@ public:
     Containment* containment() const;
 
     /**
-     * @return a KConfigGroup in the application's config file unique to the view
-     */
-    KConfigGroup config() const;
-
-    /**
      * @return the id of the View set in the constructor
      */
     int id() const;
@@ -151,14 +146,17 @@ Q_SIGNALS:
      */
     void sceneRectChanged();
 
-protected Q_SLOTS:
-    void updateSceneRect();
+protected:
+    /**
+     * @return a KConfigGroup in the application's config file unique to the view
+     */
+    KConfigGroup config() const;
 
 private:
-    void initGraphicsView();
-
     class Private;
     Private * const d;
+
+    Q_PRIVATE_SLOT(d, void updateSceneRect())
 };
 
 } // namespace Plasma

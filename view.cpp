@@ -33,10 +33,12 @@ namespace Plasma
 class View::Private
 {
 public:
-    Private(int uniqueId)
+    Private(View *view, int uniqueId)
         : drawWallpaper(true),
           desktop(-1),
-          containment(0)
+          containment(0),
+          q(view)
+
     {
         if (uniqueId == 0) {
             viewId = ++s_maxViewId;
@@ -50,10 +52,39 @@ public:
     {
     }
 
+    void updateSceneRect()
+    {
+        if (!containment) {
+            return;
+        }
+
+        kDebug() << "!!!!!!!!!!!!!!!!! setting the scene rect to"
+                 << containment->sceneBoundingRect()
+                 << "associated screen is" << containment->screen();
+
+        emit q->sceneRectAboutToChange();
+        q->setSceneRect(containment->sceneBoundingRect());
+        emit q->sceneRectChanged();
+    }
+
+    void initGraphicsView()
+    {
+        q->setFrameShape(QFrame::NoFrame);
+        q->setAutoFillBackground(true);
+        q->setDragMode(QGraphicsView::NoDrag);
+        //setCacheMode(QGraphicsView::CacheBackground);
+        q->setInteractive(true);
+        q->setAcceptDrops(true);
+        q->setAlignment(Qt::AlignLeft | Qt::AlignTop);
+        q->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+        q->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    }
+
     bool drawWallpaper;
     int desktop;
     int viewId;
     Plasma::Containment *containment;
+    Plasma::View *q;
     static int s_maxViewId;
 };
 
@@ -61,36 +92,24 @@ int View::Private::s_maxViewId(0);
 
 View::View(Containment *containment, QWidget *parent)
     : QGraphicsView(parent),
-      d(new Private(0))
+      d(new Private(this, 0))
 {
     Q_ASSERT(containment);
-    initGraphicsView();
+    d->initGraphicsView();
     setScene(containment->scene());
     setContainment(containment);
 }
 
 View::View(Containment *containment, int viewId, QWidget *parent)
     : QGraphicsView(parent),
-      d(new Private(viewId))
+      d(new Private(this, viewId))
 {
     Q_ASSERT(containment);
-    initGraphicsView();
+    d->initGraphicsView();
     setScene(containment->scene());
     setContainment(containment);
 }
 
-void View::initGraphicsView()
-{
-    setFrameShape(QFrame::NoFrame);
-    setAutoFillBackground(true);
-    setDragMode(QGraphicsView::NoDrag);
-    //setCacheMode(QGraphicsView::CacheBackground);
-    setInteractive(true);
-    setAcceptDrops(true);
-    setAlignment(Qt::AlignLeft | Qt::AlignTop);
-    setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-}
 
 View::~View()
 {
@@ -171,7 +190,7 @@ void View::setContainment(Containment *containment)
         d->desktop = -1;
     }
 
-    updateSceneRect();
+    d->updateSceneRect();
     connect(containment, SIGNAL(geometryChanged()), this, SLOT(updateSceneRect()));
 }
 
@@ -191,29 +210,14 @@ int View::id() const
     return d->viewId;
 }
 
-void View::setDrawWallpaper(bool draw)
+void View::setWallpaperEnabled(bool draw)
 {
     d->drawWallpaper = draw;
 }
 
-bool View::drawWallpaper() const
+bool View::isWallpaperEnabled() const
 {
     return d->drawWallpaper;
-}
-
-void View::updateSceneRect()
-{
-    if (!d->containment) {
-        return;
-    }
-
-    kDebug() << "!!!!!!!!!!!!!!!!! setting the scene rect to"
-             << d->containment->sceneBoundingRect()
-             << "associated screen is" << d->containment->screen();
-
-    emit sceneRectAboutToChange();
-    setSceneRect(d->containment->sceneBoundingRect());
-    emit sceneRectChanged();
 }
 
 } // namespace Plasma
