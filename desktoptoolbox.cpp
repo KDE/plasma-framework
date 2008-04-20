@@ -98,6 +98,16 @@ DesktopToolbox::DesktopToolbox(QGraphicsItem *parent)
       d(new Private)
 {
     connect(Plasma::Phase::self(), SIGNAL(movementComplete(QGraphicsItem*)), this, SLOT(toolMoved(QGraphicsItem*)));
+
+    setZValue(10000000);
+    setFlag(ItemClipsToShape, true);
+    setFlag(ItemClipsChildrenToShape, false);
+    setFlag(ItemIgnoresTransformations, true);
+}
+
+QRectF DesktopToolbox::boundingRect() const
+{
+    return QRectF(0, 0, -size()*2, size()*2);
 }
 
 void DesktopToolbox::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)

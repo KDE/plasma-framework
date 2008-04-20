@@ -38,7 +38,6 @@ class Toolbox : public QObject, public QGraphicsItem
 
 public:
     explicit Toolbox(QGraphicsItem *parent = 0);
-    virtual QRectF boundingRect() const;
 
     void addTool(QGraphicsItem *tool, const QString &name);
     void enableTool(const QString &tool, bool enabled);

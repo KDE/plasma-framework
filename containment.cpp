@@ -252,10 +252,12 @@ void Containment::containmentConstraintsUpdated(Plasma::Constraints constraints)
         //The placement assumes that the geometry width/height is no more than the screen
         if (d->type == PanelContainment) {
             if (formFactor() == Vertical) {
-                d->toolbox->setPos(geometry().width()/2 - d->toolbox->boundingRect().width()/2, geometry().bottom());
+                d->toolbox->setOrientation(Qt::Vertical);
+                d->toolbox->setPos(geometry().width()/2 - d->toolbox->boundingRect().width()/2, geometry().height());
             //defaulting to Horizontal right now
             } else {
-                d->toolbox->setPos(geometry().right(), geometry().height()/2 - d->toolbox->boundingRect().height()/2);
+                d->toolbox->setOrientation(Qt::Horizontal);
+                d->toolbox->setPos(geometry().width(), geometry().height()/2 - d->toolbox->boundingRect().height()/2);
             }
         } else {
             d->toolbox->setPos(geometry().right() - qAbs(d->toolbox->boundingRect().width()), 0);

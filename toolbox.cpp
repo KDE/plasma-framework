@@ -59,15 +59,6 @@ Toolbox::Toolbox(QGraphicsItem *parent)
       d(new Private)
 {
     setAcceptsHoverEvents(true);
-    setZValue(10000000);
-    setFlag(ItemClipsToShape, true);
-    setFlag(ItemClipsChildrenToShape, false);
-    setFlag(ItemIgnoresTransformations, true);
-}
-
-QRectF Toolbox::boundingRect() const
-{
-    return QRectF(0, 0, -size()*2, size()*2);
 }
 
 void Toolbox::addTool(QGraphicsItem *tool, const QString &name)
