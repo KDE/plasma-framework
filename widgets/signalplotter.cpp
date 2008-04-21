@@ -95,8 +95,8 @@ class SignalPlotter::Private
     QList<QList<double> > plotData;
 };
 
-SignalPlotter::SignalPlotter(Widget *parent)
-    : Widget(parent),
+SignalPlotter::SignalPlotter(QGraphicsItem *parent)
+    : QGraphicsWidget(parent),
       d(new Private)
 {
     d->precision = 0;
@@ -130,16 +130,13 @@ SignalPlotter::SignalPlotter(Widget *parent)
 
     d->svgBackground = 0;
     d->backgroundColor = QColor(0,0,0);
+
+    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 }
 
 SignalPlotter::~SignalPlotter()
 {
     delete d;
-}
-
-Qt::Orientations SignalPlotter::expandingDirections() const
-{
-    return Qt::Horizontal | Qt::Vertical;
 }
 
 QString SignalPlotter::unit() const
@@ -519,11 +516,11 @@ QPixmap SignalPlotter::getSnapshotImage(uint w, uint height)
 void SignalPlotter::setGeometry(const QRectF &geometry)
 {
     // First update our size, then update the data buffers accordingly.
-    Widget::setGeometry(geometry);
+    QGraphicsWidget::setGeometry(geometry);
     updateDataBuffers();
 }
 
-void SignalPlotter::paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+void SignalPlotter::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     Q_UNUSED(option);
     Q_UNUSED(widget);

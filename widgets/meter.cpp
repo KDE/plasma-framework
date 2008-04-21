@@ -27,19 +27,19 @@ namespace Plasma {
 class Meter::Private
 {
 public:
-    Private() :
+    Private(Meter* m) :
         minimum(0),
         maximum(100),
         value(0),
         meterType(AnalogMeter),
         image(0),
-        sizeHint(QSizeF(0.0, 0.0)),
         minrotate(0),
-        maxrotate(360) {};
+        maxrotate(360),
+        meter(m) {};
 
     void paint(QPainter *p, const QString& elementID)
     {
-        if (image->elementExists(elementID)) {
+        if (image->hasElement(elementID)) {
             QRectF elementRect = image->elementRect(elementID);
             image->paint(p, elementRect.topLeft(), elementID);
         }
@@ -50,7 +50,7 @@ public:
         QString elementID = QString("label%1").arg(index);
         QString text = labels[index];
 
-        if (image->elementExists(elementID)) {
+        if (image->hasElement(elementID)) {
             QRectF elementRect = image->elementRect(elementID);
             Qt::Alignment align = Qt::AlignCenter;
 
@@ -96,6 +96,27 @@ public:
         paint(p, "foreground");
     }
 
+    void setSizePolicyAndPreferredSize()
+    {
+        switch (meterType) {
+            case BarMeterHorizontal:
+                meter->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+                break;
+            case BarMeterVertical:
+                meter->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
+                break;
+            case AnalogMeter:
+            default:
+                meter->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+                break;
+        }
+        if (image) {
+            meter->setPreferredSize(image->size());
+        } else {
+            meter->setPreferredSize(QSizeF(30, 30));
+        }
+    }
+
     int minimum;
     int maximum;
     int value;
@@ -106,15 +127,16 @@ public:
     QString svg;
     MeterType meterType;
     Plasma::Svg *image;
-    QSizeF sizeHint;
     int minrotate;
     int maxrotate;
+    Meter* meter;
 };
 
-Meter::Meter(QGraphicsItem *parent, QObject *parentObject) :
-        Plasma::Widget(parent, parentObject),
-        d(new Private)
+Meter::Meter(QGraphicsItem *parent) :
+        QGraphicsWidget(parent),
+        d(new Private(this))
 {
+    d->setSizePolicyAndPreferredSize();
 }
 
 Meter::~Meter()
@@ -224,8 +246,8 @@ void Meter::setSvg(const QString &svg)
     d->image = new Plasma::Svg(svg, this);
     // To create renderer and get default size
     d->image->resize();
-    d->sizeHint = d->image->size();
-    if (d->image->elementExists("rotateminmax")) {
+    d->setSizePolicyAndPreferredSize();
+    if (d->image->hasElement("rotateminmax")) {
         QRectF r = d->image->elementRect("rotateminmax");
         d->minrotate = (int)r.height();
         d->maxrotate = (int)r.width();
@@ -249,6 +271,7 @@ void Meter::setMeterType(MeterType meterType)
             setSvg("widgets/analog_meter");
         }
     }
+    d->setSizePolicyAndPreferredSize();
 }
 
 Meter::MeterType Meter::meterType() const
@@ -256,14 +279,9 @@ Meter::MeterType Meter::meterType() const
     return d->meterType;
 }
 
-QSizeF Meter::sizeHint() const
-{
-    return d->sizeHint;
-}
-
-void Meter::paintWidget(QPainter *p,
-                            const QStyleOptionGraphicsItem *option,
-                            QWidget *widget)
+void Meter::paint(QPainter *p,
+                  const QStyleOptionGraphicsItem *option,
+                  QWidget *widget)
 {
     Q_UNUSED(option)
     Q_UNUSED(widget)
@@ -303,7 +321,7 @@ void Meter::paintWidget(QPainter *p,
     case AnalogMeter:
         d->paintBackground(p);
 
-        if (d->image->elementExists("rotatecenter")) {
+        if (d->image->hasElement("rotatecenter")) {
             QRectF r = d->image->elementRect("rotatecenter");
             rotateCenter = QPointF(r.left() + r.width() / 2,
                                    r.top() + r.height() / 2);

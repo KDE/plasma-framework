@@ -22,7 +22,7 @@
 
 #include <plasma/plasma_export.h>
 #include <plasma/dataengine.h>
-#include <plasma/widgets/widget.h>
+#include <QGraphicsWidget>
 
 namespace Plasma
 {
@@ -45,7 +45,7 @@ namespace Plasma
  * @author Petri Damstén
  */
 
-class PLASMA_EXPORT Meter : public Plasma::Widget
+class PLASMA_EXPORT Meter : public QGraphicsWidget
 {
     Q_OBJECT
     Q_ENUMS(MeterType)
@@ -73,7 +73,7 @@ public:
      * @param parent the QGraphicsItem this meter is parented to.
      * @param parent the QObject this meter is parented to.
      */
-    explicit Meter(QGraphicsItem *parent = 0, QObject *parentObject = 0);
+    explicit Meter(QGraphicsItem *parent = 0);
 
     /**
      * Destructor
@@ -130,11 +130,6 @@ public:
      * @return meter type
      */
     MeterType meterType() const;
-
-    /**
-     * Reimplemented from Plasma::Widget
-     */
-    virtual QSizeF sizeHint() const;
 
     /**
      * Set text label for the meter
@@ -198,9 +193,9 @@ protected:
     /**
      * Reimplemented from Plasma::Widget
      */
-    virtual void paintWidget(QPainter *p,
-                             const QStyleOptionGraphicsItem *option,
-                             QWidget *widget = 0);
+    virtual void paint(QPainter *p,
+                       const QStyleOptionGraphicsItem *option,
+                       QWidget *widget = 0);
 
 private:
     class Private;

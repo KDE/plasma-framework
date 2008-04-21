@@ -22,8 +22,9 @@
 #ifndef SIGNALPLOTTER_H
 #define SIGNALPLOTTER_H
 
-#include <plasma/widgets/widget.h>
 #include <QtGui/QFont>
+#include <QGraphicsWidget>
+#include <plasma/plasma_export.h>
 
 namespace Plasma
 {
@@ -34,7 +35,7 @@ struct PlotColor
     QColor darkColor;
 };
 
-class PLASMA_EXPORT SignalPlotter : public Widget
+class PLASMA_EXPORT SignalPlotter : public QGraphicsWidget
 {
     Q_OBJECT
     Q_PROPERTY( QString title READ title WRITE setTitle )
@@ -59,10 +60,8 @@ class PLASMA_EXPORT SignalPlotter : public Widget
     Q_PROPERTY( bool stackPlots READ stackPlots WRITE setStackPlots )
 
 public:
-    SignalPlotter(Widget *parent = 0);
+    SignalPlotter(QGraphicsItem *parent = 0);
     ~SignalPlotter();
-
-    Qt::Orientations expandingDirections() const;
 
     /**
      * Add a new line to the graph plotter, with the specified color.
@@ -420,7 +419,7 @@ protected:
     void updateDataBuffers();
     void calculateNiceRange();
 
-    void paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
     void drawWidget(QPainter *p, uint w, uint height, int horizontalScale);
     void drawBackground(QPainter *p, int w, int h);

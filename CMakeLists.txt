@@ -59,6 +59,8 @@ set(plasma_LIB_SRCS
     scripting/scriptengine.cpp
     widgets/icon.cpp
     widgets/webcontent.cpp
+    widgets/meter.cpp
+    widgets/signalplotter.cpp
 )
 
 kde4_add_ui_files (
@@ -133,6 +135,8 @@ install(FILES
 install(FILES
     widgets/icon.h
     widgets/webcontent.h
+    widgets/meter.h
+    widgets/signalplotter.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/plasma/widgets)
 
 #For future
@@ -183,8 +187,8 @@ endif(QT_QTOPENGL_FOUND AND OPENGL_FOUND)
 
 install(FILES
     includes/ScriptEngine
-    includes/DataEngineScript 
-    includes/RunnerScript 
+    includes/DataEngineScript
+    includes/RunnerScript
     includes/AppletScript
     DESTINATION ${INCLUDE_INSTALL_DIR}/KDE/Plasma/Scripting)
 
