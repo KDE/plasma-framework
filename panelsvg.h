@@ -152,6 +152,24 @@ class PLASMA_EXPORT PanelSvg : public Svg
          */
         QBitmap mask() const;
 
+       /**
+        * Sets whether saving all the rendered prefixes in a cache or not
+        * @arg cache if use the cache or not
+        */
+       void setCacheAllRenderedPanels(bool cache);
+
+       /**
+        * @return if all the different prefixes should be kept in a cache when rendered
+        */
+       bool cacheAllRenderedPanels() const;
+
+       /**
+        * Deletes the internal cache freeing memory: use this if you want to switch the rendered 
+        * element and you don't plan to switch back to the previous one for a long time and you
+        * used setUseCache(true)
+        */
+       void clearCache();
+
         /**
          * Paints the loaded SVG with the elements that represents the border
          * @arg painter the QPainter to use
