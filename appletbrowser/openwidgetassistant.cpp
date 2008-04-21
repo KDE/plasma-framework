@@ -42,7 +42,7 @@ OpenWidgetAssistant::OpenWidgetAssistant(QWidget *parent)
     QWidget *selectWidget = new QWidget(this);
     QVBoxLayout *selectLayout = new QVBoxLayout(selectWidget);
     QLabel *selectLabel = new QLabel(selectWidget);
-    selectLabel->setText(i18n("Select what sort of widget to install from the list below."));
+    selectLabel->setText(i18n("Select the type of widget to install from the list below."));
     m_widgetTypeList = new KListWidget(selectWidget);
     m_widgetTypeList->setSelectionMode(QAbstractItemView::SingleSelection);
     //m_widgetTypeList->setSelectionBehavior(QAbstractItemView::SelectItems);

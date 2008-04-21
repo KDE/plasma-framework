@@ -59,7 +59,7 @@ ThemePackage::ThemePackage(QObject *parent)
     addFileDefinition("dialogs/background", "dialogs/background.svg",
                       i18n("Generic dialog background"));
     addFileDefinition("dialogs/shutdowndialog", "dialogs/shutdowndialog.svg",
-                      i18n("Theme for the log out dialog"));
+                      i18n("Theme for the logout dialog"));
 
     addDirectoryDefinition("widgets", "widgets/", i18n("Images for widgets"));
     addFileDefinition("widgets/background", "widgets/background.svg",
@@ -77,7 +77,7 @@ ThemePackage::ThemePackage(QObject *parent)
     addFileDefinition("opaque/dialogs/background", "opaque/dialogs/background.svg",
                       i18n("Opaque generic dialog background"));
     addFileDefinition("opaque/dialogs/shutdowndialog", "opaque/dialogs/shutdowndialog.svg",
-                      i18n("Opaque theme for the log out dialog"));
+                      i18n("Opaque theme for the logout dialog"));
 
     addDirectoryDefinition("opaque/widgets", "opaque/widgets/", i18n("Opaque images for widgets"));
     addFileDefinition("opaque/widgets/panel-background", "opaque/widgets/panel-background.svg",
@@ -89,7 +89,7 @@ ThemePackage::ThemePackage(QObject *parent)
     addFileDefinition("locolor/dialogs/background", "locolor/dialogs/background.svg",
                       i18n("Low color generic dialog background"));
     addFileDefinition("locolor/dialogs/shutdowndialog", "locolor/dialogs/shutdowndialog.svg",
-                      i18n("Low color theme for the log out dialog"));
+                      i18n("Low color theme for the logout dialog"));
 
     addDirectoryDefinition("locolor/widgets", "locolor/widgets/", i18n("Images for widgets"));
     addFileDefinition("locolor/widgets/background", "locolor/widgets/background.svg",
