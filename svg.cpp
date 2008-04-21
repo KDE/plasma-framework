@@ -183,7 +183,13 @@ class Svg::Private
             } else {
                 s = elementSize(elementId);
             }
+
             //kDebug() << "size for " << elementId << " is " << s;
+
+            if (!s.isValid()) {
+                p = QPixmap();
+                return;
+            }
 #endif
 
 #if SVG_CACHE_BUGFIX
@@ -350,9 +356,12 @@ void Svg::paint(QPainter* painter, const QPointF& point, const QString& elementI
 {
     QPixmap pix;
     d->findInCache(pix, elementID, painter);
-#if SVG_CACHE_BUGFIX
-    if (pix.isNull())
+
+    if (pix.isNull()) {
         return;
+    }
+
+#if SVG_CACHE_BUGFIX
     painter->save();
     QTransform x = painter->worldTransform();
     painter->setWorldTransform(QTransform(), false);
