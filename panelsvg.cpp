@@ -73,19 +73,17 @@ public:
 
     ~Private()
     {
-        delete background;
-
         qDeleteAll(panels);
     }
 
     void generateBackground();
     void updateSizes();
+    void updateAndSignalSizes();
 
     Location location;
     QString prefix;
 
     PanelSvg *q;
-    Svg *background;
 
     bool cacheAll : 1;
 
@@ -96,12 +94,11 @@ PanelSvg::PanelSvg(const QString& imagePath, QObject* parent)
     : Svg(imagePath, parent),
       d(new Private(this))
 {
-    d->background = new Svg(imagePath, this);
-    connect(d->background, SIGNAL(repaintNeeded()), this, SLOT(updateSizes()));
+    connect(this, SIGNAL(repaintNeeded()), this, SLOT(updateSizes()));
 
     d->panels.insert(QString(), new PanelData());
     d->updateSizes();
-    d->panels[QString()]->panelSize = d->background->size();
+    d->panels[QString()]->panelSize = size();
 }
 
 PanelSvg::~PanelSvg()
@@ -109,21 +106,15 @@ PanelSvg::~PanelSvg()
     delete d;
 }
 
-void PanelSvg::setImagePath(const QString& imagePath)
+void PanelSvg::setImagePath(const QString& path)
 {
-    if (imagePath == d->background->imagePath()) {
+    if (path == imagePath()) {
         return;
     }
 
     qDeleteAll(d->panels);
 
-    d->background->setImagePath(imagePath);
-    //setElementPrefix(prefix());
-}
-
-QString PanelSvg::imagePath() const
-{
-   return d->background->imagePath();
+    setImagePath(path);
 }
 
 void PanelSvg::setEnabledBorders(const EnabledBorders borders)
@@ -167,7 +158,7 @@ void PanelSvg::setElementPrefix(const QString & prefix)
 {
     const QString oldPrefix(d->prefix);
 
-    if (!d->background->hasElement(prefix + "-center")) {
+    if (!hasElement(prefix + "-center")) {
         d->prefix.clear();
     } else {
         d->prefix = prefix;
@@ -293,8 +284,8 @@ void PanelSvg::Private::generateBackground()
     PanelData *panel = panels[prefix];
 
     bool origined = panel->contentAtOrigin;
-    const int topWidth = background->elementSize(prefix + "top").width();
-    const int leftHeight = background->elementSize(prefix + "left").height();
+    const int topWidth = q->elementSize(prefix + "top").width();
+    const int leftHeight = q->elementSize(prefix + "left").height();
     const int topOffset = origined ? 0 - panel->topHeight : 0;
     const int leftOffset = origined ? 0 - panel->leftWidth : 0;
 
@@ -306,7 +297,6 @@ void PanelSvg::Private::generateBackground()
         int rightOffset = contentWidth;
         int bottomOffset = contentHeight;
 
-        delete panel->cachedBackground;
         panel->cachedBackground = new QPixmap(panel->leftWidth + contentWidth + panel->rightWidth,
                                           panel->topHeight + contentHeight + panel->bottomHeight);
         panel->cachedBackground->fill(Qt::transparent);
@@ -328,15 +318,15 @@ void PanelSvg::Private::generateBackground()
            if (contentHeight > 0 && contentWidth > 0) {
                int centerTileHeight;
                int centerTileWidth;
-               centerTileHeight = background->elementSize(prefix + "center").height();
-               centerTileWidth = background->elementSize(prefix + "center").width();
+               centerTileHeight = q->elementSize(prefix + "center").height();
+               centerTileWidth = q->elementSize(prefix + "center").width();
                QPixmap center(centerTileWidth, centerTileHeight);
                center.fill(Qt::transparent);
 
                {
                    QPainter centerPainter(&center);
                    centerPainter.setCompositionMode(QPainter::CompositionMode_Source);
-                   background->paint(&centerPainter, QPoint(0, 0), prefix + "center");
+                   q->Svg::paint(&centerPainter, QPoint(0, 0), prefix + "center");
                }
 
                p.drawTiledPixmap(QRect(contentLeft - panel->leftWidth, contentTop - panel->topHeight,
@@ -351,14 +341,13 @@ void PanelSvg::Private::generateBackground()
                                 (panel->topHeight + panel->bottomHeight) +
                                 panel->panelSize.height()*(((qreal)(panel->topHeight + panel->bottomHeight)) / panel->panelSize.height()));
 
-               background->resize(scaledSize.width(), scaledSize.height());
-               background->paint(&p, QRect(contentLeft - panel->leftWidth, contentTop - panel->topHeight,
+               q->Svg::resize(scaledSize.width(), scaledSize.height());
+               q->Svg::paint(&p, QRect(contentLeft - panel->leftWidth, contentTop - panel->topHeight,
                                               contentWidth + panel->leftWidth*2, contentHeight + panel->topHeight*2),
                                    prefix + "center");
-               background->resize();
+               q->Svg::resize();
            }
        }
-
 
         // Corners
         if (panel->enabledBorders & TopBorder) {
@@ -368,7 +357,7 @@ void PanelSvg::Private::generateBackground()
             }
 
             if (panel->enabledBorders & LeftBorder) {
-                background->paint(&p, QRect(leftOffset, topOffset, panel->leftWidth, panel->topHeight), prefix + "topleft");
+                q->Svg::paint(&p, QRect(leftOffset, topOffset, panel->leftWidth, panel->topHeight), prefix + "topleft");
 
                 if (!origined) {
                     contentLeft = panel->leftWidth;
@@ -377,13 +366,13 @@ void PanelSvg::Private::generateBackground()
             }
 
             if (panel->enabledBorders & RightBorder) {
-                background->paint(&p, QRect(rightOffset, topOffset, panel->rightWidth, panel->topHeight), prefix + "topright");
+                q->Svg::paint(&p, QRect(rightOffset, topOffset, panel->rightWidth, panel->topHeight), prefix + "topright");
             }
         }
 
         if (panel->enabledBorders & BottomBorder) {
             if (panel->enabledBorders & LeftBorder) {
-                background->paint(&p, QRect(leftOffset, bottomOffset, panel->leftWidth, panel->bottomHeight), prefix + "bottomleft");
+                q->Svg::paint(&p, QRect(leftOffset, bottomOffset, panel->leftWidth, panel->bottomHeight), prefix + "bottomleft");
 
                 if (!origined) {
                     contentLeft = panel->leftWidth;
@@ -392,26 +381,26 @@ void PanelSvg::Private::generateBackground()
             }
 
             if (panel->enabledBorders & RightBorder) {
-                background->paint(&p, QRect(rightOffset, bottomOffset, panel->rightWidth, panel->bottomHeight), prefix + "bottomright");
+                q->Svg::paint(&p, QRect(rightOffset, bottomOffset, panel->rightWidth, panel->bottomHeight), prefix + "bottomright");
             }
         }
 
         // Sides
         if (panel->stretchBorders) {
             if (panel->enabledBorders & LeftBorder) {
-                background->paint(&p, QRect(leftOffset, contentTop, panel->leftWidth, contentHeight), prefix + "left");
+                q->Svg::paint(&p, QRect(leftOffset, contentTop, panel->leftWidth, contentHeight), prefix + "left");
             }
 
             if (panel->enabledBorders & RightBorder) {
-                background->paint(&p, QRect(rightOffset, contentTop, panel->rightWidth, contentHeight), prefix + "right");
+                q->Svg::paint(&p, QRect(rightOffset, contentTop, panel->rightWidth, contentHeight), prefix + "right");
             }
 
             if (panel->enabledBorders & TopBorder) {
-                background->paint(&p, QRect(contentLeft, topOffset, contentWidth, panel->topHeight), prefix + "top");
+                q->Svg::paint(&p, QRect(contentLeft, topOffset, contentWidth, panel->topHeight), prefix + "top");
             }
 
             if (panel->enabledBorders & BottomBorder) {
-                background->paint(&p, QRect(contentLeft, bottomOffset, contentWidth, panel->bottomHeight), prefix + "bottom");
+                q->Svg::paint(&p, QRect(contentLeft, bottomOffset, contentWidth, panel->bottomHeight), prefix + "bottom");
             }
         } else {
             if (panel->enabledBorders & LeftBorder) {
@@ -421,7 +410,7 @@ void PanelSvg::Private::generateBackground()
                 {
                     QPainter sidePainter(&left);
                     sidePainter.setCompositionMode(QPainter::CompositionMode_Source);
-                    background->paint(&sidePainter, QPoint(0, 0), prefix + "left");
+                    q->Svg::paint(&sidePainter, QPoint(0, 0), prefix + "left");
                 }
 
                 p.drawTiledPixmap(QRect(leftOffset, contentTop, panel->leftWidth, contentHeight), left);
@@ -434,7 +423,7 @@ void PanelSvg::Private::generateBackground()
                 {
                     QPainter sidePainter(&right);
                     sidePainter.setCompositionMode(QPainter::CompositionMode_Source);
-                    background->paint(&sidePainter, QPoint(0, 0), prefix + "right");
+                    q->Svg::paint(&sidePainter, QPoint(0, 0), prefix + "right");
                 }
 
                 p.drawTiledPixmap(QRect(rightOffset, contentTop, panel->rightWidth, contentHeight), right);
@@ -447,7 +436,7 @@ void PanelSvg::Private::generateBackground()
                 {
                     QPainter sidePainter(&top);
                     sidePainter.setCompositionMode(QPainter::CompositionMode_Source);
-                    background->paint(&sidePainter, QPoint(0, 0), prefix + "top");
+                    q->Svg::paint(&sidePainter, QPoint(0, 0), prefix + "top");
                 }
 
                 p.drawTiledPixmap(QRect(contentLeft, topOffset, contentWidth, panel->topHeight), top);
@@ -460,7 +449,7 @@ void PanelSvg::Private::generateBackground()
                 {
                     QPainter sidePainter(&bottom);
                     sidePainter.setCompositionMode(QPainter::CompositionMode_Source);
-                    background->paint(&sidePainter, QPoint(0, 0), prefix + "bottom");
+                    q->Svg::paint(&sidePainter, QPoint(0, 0), prefix + "bottom");
                 }
 
                 p.drawTiledPixmap(QRect(contentLeft, bottomOffset, contentWidth, panel->bottomHeight), bottom);
@@ -468,7 +457,7 @@ void PanelSvg::Private::generateBackground()
         }
 
         // re-enable this once Qt's svg rendering is un-buggered
-        //resize(contentWidth, contentHeight);
+        //q->Svg::resize(contentWidth, contentHeight);
         //paint(&p, QRect(contentLeft, contentTop, contentWidth, contentHeight), "center");
    }
 }
@@ -480,36 +469,41 @@ void PanelSvg::Private::updateSizes()
     delete panel->cachedBackground;
     panel->cachedBackground = 0;
 
-    background->resize();
+    q->Svg::resize();
     if (panel->enabledBorders & TopBorder) {
-        panel->topHeight = background->elementSize(prefix + "top").height();
+        panel->topHeight = q->elementSize(prefix + "top").height();
     } else {
         panel->topHeight = 0;
     }
 
     if (panel->enabledBorders & LeftBorder) {
-        panel->leftWidth = background->elementSize(prefix + "left").width();
+        panel->leftWidth = q->elementSize(prefix + "left").width();
     } else {
         panel->leftWidth = 0;
     }
 
     if (panel->enabledBorders & RightBorder) {
-        panel->rightWidth = background->elementSize(prefix + "right").width();
+        panel->rightWidth = q->elementSize(prefix + "right").width();
     } else {
         panel->rightWidth = 0;
     }
 
-   if (panel->enabledBorders & BottomBorder) {
-       panel->bottomHeight = background->elementSize(prefix + "bottom").height();
-   } else {
-       panel->bottomHeight = 0;
-   }
+    if (panel->enabledBorders & BottomBorder) {
+        panel->bottomHeight = q->elementSize(prefix + "bottom").height();
+    } else {
+        panel->bottomHeight = 0;
+    }
 
-   //since it's rectangular, topWidth and bottomWidth must be the same
-   panel->tileCenter = background->hasElement("hint-tile-center");
-   panel->noBorderPadding = background->hasElement("hint-no-border-padding");
-   panel->stretchBorders = background->hasElement("hint-stretch-borders");
-   emit q->repaintNeeded();
+    //since it's rectangular, topWidth and bottomWidth must be the same
+    panel->tileCenter = q->hasElement("hint-tile-center");
+    panel->noBorderPadding = q->hasElement("hint-no-border-padding");
+    panel->stretchBorders = q->hasElement("hint-stretch-borders");
+}
+
+void PanelSvg::Private::updateAndSignalSizes()
+{
+    updateSizes();
+    emit q->repaintNeeded();
 }
 
 } // Plasma namespace

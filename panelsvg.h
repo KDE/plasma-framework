@@ -76,13 +76,7 @@ class PLASMA_EXPORT PanelSvg : public Svg
          * Loads a new Svg
          * @arg imagePath the new file
          */
-        void setImagePath(const QString& imagePath);
-
-        /**
-         * Convenience method to get the svg filepath and name of svg.
-         * @return the svg's filepath including name of the svg.
-         */
-        QString imagePath() const;
+        void setImagePath(const QString& path);
 
         /**
          * Sets what borders should be painted
