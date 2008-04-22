@@ -86,7 +86,7 @@ public:
 
 K_GLOBAL_STATIC( ThemeSingleton, privateThemeSelf )
 
-Theme* Theme::self()
+Theme* Theme::defaultTheme()
 {
     return &privateThemeSelf->self;
 }
@@ -195,7 +195,7 @@ void Theme::setThemeName(const QString &themeName)
         d->colors = KSharedConfig::openConfig(colorsFile);
     }
 
-    if (this == self()) {
+    if (this == defaultTheme()) {
         // we're the defualt theme, let's save our state
         KConfigGroup cg = d->config();
         if (Private::defaultTheme == d->themeName) {
@@ -257,13 +257,13 @@ KSharedConfigPtr Theme::colorScheme() const
 
 QColor Theme::textColor() const
 {
-    KColorScheme colorScheme(QPalette::Active, KColorScheme::Window, Theme::self()->colorScheme());
+    KColorScheme colorScheme(QPalette::Active, KColorScheme::Window, Theme::defaultTheme()->colorScheme());
     return colorScheme.foreground(KColorScheme::NormalText).color();
 }
 
 QColor Theme::backgroundColor() const
 {
-    KColorScheme colorScheme(QPalette::Active, KColorScheme::Window, Theme::self()->colorScheme());
+    KColorScheme colorScheme(QPalette::Active, KColorScheme::Window, Theme::defaultTheme()->colorScheme());
     return colorScheme.background().color();
 }
 

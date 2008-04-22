@@ -34,9 +34,9 @@ namespace Plasma
 /**
  * @short Interface to the Plasma theme
  *
- * Accessed via Plasma::Theme::self() e.g:
+ * Accessed via Plasma::Theme::defaultTheme() e.g:
  * \code
- * QString imagePath = Plasma::Theme::self()->imagePath("widgets/clock")
+ * QString imagePath = Plasma::Theme::defaultTheme()->imagePath("widgets/clock")
  * \endcode
  *
  * Plasma::Theme provides access to a common and standardized set of graphic
@@ -56,7 +56,7 @@ class PLASMA_EXPORT Theme : public QObject
         /**
          * Singleton pattern accessor
          **/
-        static Theme* self();
+        static Theme* defaultTheme();
 
         /**
          * Default constructor. Usually you want to use the singleton instead.

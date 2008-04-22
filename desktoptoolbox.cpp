@@ -119,11 +119,11 @@ void DesktopToolbox::paint(QPainter *painter, const QStyleOptionGraphicsItem *op
     painter->translate(boundingRect().topLeft());
 
     QColor color1 = KColorScheme(QPalette::Active, KColorScheme::Window,
-                               Plasma::Theme::self()->colorScheme()).background().color();
+                               Plasma::Theme::defaultTheme()->colorScheme()).background().color();
     color1.setAlpha(64);
 
     QColor color2 = KColorScheme(QPalette::Active, KColorScheme::Window,
-                               Plasma::Theme::self()->colorScheme()).foreground().color();
+                               Plasma::Theme::defaultTheme()->colorScheme()).foreground().color();
     color2.setAlpha(64);
 
     QPainterPath p = shape();

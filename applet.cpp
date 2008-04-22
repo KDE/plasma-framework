@@ -89,7 +89,7 @@ protected:
         Q_UNUSED(widget)
         painter->save();
         painter->setRenderHint(QPainter::Antialiasing);
-        QColor wash = Plasma::Theme::self()->backgroundColor();
+        QColor wash = Plasma::Theme::defaultTheme()->backgroundColor();
         wash.setAlphaF(.6);
         painter->fillPath(parentItem()->shape(), wash);
         painter->restore();
@@ -198,7 +198,7 @@ public:
 
         applet->setDrawStandardBackground(true);
 
-        connect(Plasma::Theme::self(), SIGNAL(changed()), applet, SLOT(themeChanged()));
+        connect(Plasma::Theme::defaultTheme(), SIGNAL(changed()), applet, SLOT(themeChanged()));
     }
 
     // put all setup routines for script here. at this point we can assume that
@@ -477,7 +477,7 @@ void Applet::setFailedToLaunch(bool failed, const QString& reason)
         //FIXME: this needs to get the colour from the theme's colour scheme
         d->failureText->setDefaultTextColor(KStatefulBrush(KColorScheme::Window,
                                                            KColorScheme::NormalText,
-                                                           Theme::self()->colors())
+                                                           Theme::defaultTheme()->colors())
                                                         .brush(QPalette::Normal).color());
         failureLayout->addItem(d->failureText);
         #endif

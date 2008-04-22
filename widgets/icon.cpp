@@ -79,8 +79,8 @@ Icon::Private::~Private()
 
 void Icon::readColors() 
 {
-    d->textColor = Plasma::Theme::self()->textColor();
-    d->shadowColor = Plasma::Theme::self()->backgroundColor();
+    d->textColor = Plasma::Theme::defaultTheme()->textColor();
+    d->shadowColor = Plasma::Theme::defaultTheme()->backgroundColor();
 
 }
 
@@ -288,7 +288,7 @@ Icon::~Icon()
 void Icon::init()
 {
     readColors();
-    connect(Plasma::Theme::self(), SIGNAL(changed()), SLOT(readColors()));
+    connect(Plasma::Theme::defaultTheme(), SIGNAL(changed()), SLOT(readColors()));
 
     // setAcceptedMouseButtons(Qt::LeftButton);
     setAcceptsHoverEvents(true);
@@ -391,7 +391,7 @@ QSizeF Icon::Private::displaySizeHint(const QStyleOptionGraphicsItem *option, co
                       horizontalMargin[Private::TextMargin].right;
 
     //allow only five lines of text
-    const qreal maxHeight = numDisplayLines*Plasma::Theme::self()->fontMetrics().lineSpacing();
+    const qreal maxHeight = numDisplayLines*Plasma::Theme::defaultTheme()->fontMetrics().lineSpacing();
 
     // To compute the nominal size for the label + info, we'll just append
     // the information string to the label
@@ -1127,7 +1127,7 @@ QSizeF Icon::sizeFromIconSize(const qreal iconWidth) const
                             Private::ItemMargin);
     }
 
-    QFontMetricsF fm = Plasma::Theme::self()->fontMetrics();
+    QFontMetricsF fm = Plasma::Theme::defaultTheme()->fontMetrics();
     qreal width = 0;
 
     if (d->orientation == Qt::Vertical) {

@@ -80,7 +80,7 @@ class Svg::Private
         void setImagePath(const QString &imagePath, Svg *q)
         {
             if (themed) {
-                disconnect(Plasma::Theme::self(), SIGNAL(changed()), q, SLOT(themeChanged()));
+                disconnect(Plasma::Theme::defaultTheme(), SIGNAL(changed()), q, SLOT(themeChanged()));
                 disconnect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()), q, SLOT(colorsChanged()));
             }
 
@@ -89,12 +89,12 @@ class Svg::Private
 
             if (themed) {
                 themePath = imagePath;
-                connect(Plasma::Theme::self(), SIGNAL(changed()), q, SLOT(themeChanged()));
+                connect(Plasma::Theme::defaultTheme(), SIGNAL(changed()), q, SLOT(themeChanged()));
 
                 // check if svg wants colorscheme applied
                 createRenderer();
                 applyColors = renderer->elementExists("hint-apply-color-scheme");
-                if (applyColors && !Theme::self()->colorScheme()) {
+                if (applyColors && !Theme::defaultTheme()->colorScheme()) {
                     connect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()), q, SLOT(colorsChanged()));
                 }
 
@@ -174,7 +174,7 @@ class Svg::Private
             // Apply current color scheme if the svg asks for it
             if (applyColors) {
                 QImage itmp = p.toImage();
-                KIconEffect::colorize(itmp, Theme::self()->backgroundColor(), 1.0);
+                KIconEffect::colorize(itmp, Theme::defaultTheme()->backgroundColor(), 1.0);
                 p = p.fromImage(itmp);
             }
 
@@ -190,7 +190,7 @@ class Svg::Private
             }
 
             if (themed && path.isEmpty()) {
-                path = Plasma::Theme::self()->imagePath(themePath);
+                path = Plasma::Theme::defaultTheme()->imagePath(themePath);
             }
 
             QHash<QString, SharedSvgRenderer::Ptr>::const_iterator it = renderers.find(path);
@@ -252,7 +252,7 @@ class Svg::Private
                 return;
             }
 
-            QString newPath = Theme::self()->imagePath(themePath);
+            QString newPath = Theme::defaultTheme()->imagePath(themePath);
 
             if (path == newPath) {
                 return;
