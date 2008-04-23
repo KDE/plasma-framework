@@ -71,7 +71,8 @@ Dialog::Dialog( QWidget * parent, Qt::WindowFlags f )
       d(new Private)
 {
     d->q = this;
-    d->background = new PanelSvg("dialogs/background", this);
+    d->background = new PanelSvg(this);
+    d->background->setImagePath("dialogs/background");
     d->background->setEnabledBorders(PanelSvg::AllBorders);
     d->background->resize(size());
 

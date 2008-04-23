@@ -35,6 +35,7 @@ public:
     PanelData()
       : enabledBorders(PanelSvg::AllBorders),
         cachedBackground(0),
+        panelSize(-1,-1),
         contentAtOrigin(false)
     {
     }
@@ -90,15 +91,13 @@ public:
     QHash<QString, PanelData*> panels;
 };
 
-PanelSvg::PanelSvg(const QString& imagePath, QObject* parent)
-    : Svg(imagePath, parent),
+PanelSvg::PanelSvg(QObject* parent)
+    : Svg(parent),
       d(new Private(this))
 {
     connect(this, SIGNAL(repaintNeeded()), this, SLOT(updateSizes()));
 
     d->panels.insert(QString(), new PanelData());
-    d->updateSizes();
-    d->panels[QString()]->panelSize = size();
 }
 
 PanelSvg::~PanelSvg()
@@ -112,9 +111,13 @@ void PanelSvg::setImagePath(const QString& path)
         return;
     }
 
+    Svg::setImagePath(path);
+
     qDeleteAll(d->panels);
 
-    setImagePath(path);
+    d->panels.insert(QString(), new PanelData());
+    d->updateSizes();
+    d->panels[QString()]->panelSize = size();
 }
 
 void PanelSvg::setEnabledBorders(const EnabledBorders borders)

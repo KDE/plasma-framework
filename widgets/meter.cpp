@@ -243,7 +243,8 @@ void Meter::setSvg(const QString &svg)
 {
     d->svg = svg;
     delete d->image;
-    d->image = new Plasma::Svg(svg, this);
+    d->image = new Plasma::Svg(this);
+    d->image->setImagePath(svg);
     // To create renderer and get default size
     d->image->resize();
     d->setSizePolicyAndPreferredSize();

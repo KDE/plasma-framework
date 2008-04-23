@@ -63,13 +63,12 @@ class SharedSvgRenderer : public KSvgRenderer, public QSharedData
 class Svg::Private
 {
     public:
-        Private(const QString& imagePath, Svg *svg)
+        Private(Svg *svg)
             : q(svg),
               renderer(0),
               multipleImages(false),
               themed(false)
         {
-            setImagePath(imagePath, q);
         }
 
         ~Private()
@@ -290,9 +289,9 @@ class Svg::Private
 
 QHash<QString, SharedSvgRenderer::Ptr> Svg::Private::renderers;
 
-Svg::Svg(const QString& imagePath, QObject* parent)
+Svg::Svg(QObject* parent)
     : QObject(parent),
-      d(new Private(imagePath, this))
+      d(new Private(this))
 {
 }
 

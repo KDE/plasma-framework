@@ -782,7 +782,8 @@ void Applet::setDrawStandardBackground(bool drawBackground)
 {
     if (drawBackground) {
         if (!d->background) {
-            d->background = new Plasma::PanelSvg("widgets/background");
+            d->background = new Plasma::PanelSvg();
+            d->background->setImagePath("widgets/background");
             d->background->setEnabledBorders(Plasma::PanelSvg::AllBorders);
             int left, top, right, bottom;
             d->getBorderSize(left, top, right, bottom);

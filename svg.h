@@ -69,7 +69,7 @@ class PLASMA_EXPORT Svg : public QObject
          *
          * @related Plasma::Theme
          */
-        explicit Svg(const QString& imagePath = QString(), QObject* parent = 0);
+        explicit Svg(QObject* parent = 0);
         ~Svg();
 
 
