@@ -29,6 +29,7 @@
 #include <KColorScheme>
 #include <KConfigGroup>
 #include <KDebug>
+#include <KGlobal>
 #include <KSelectionWatcher>
 #include <KSharedConfig>
 #include <KStandardDirs>
@@ -50,24 +51,30 @@ public:
        generalFont = QApplication::font();
    }
 
-   KConfigGroup config()
-   {
-       QString groupName = "Theme";
-       if (!app.isEmpty() && app != "plasma") {
-           groupName.append("-").append(app);
-       }
+    KConfigGroup& config()
+    {
+        if (!cfg.isValid()) {
+            QString groupName = "Theme";
+            QString app = KGlobal::mainComponent().componentName();
 
-       KSharedConfigPtr config = KSharedConfig::openConfig("plasmarc");
-       return KConfigGroup(config, groupName);
-   }
+            if (!app.isEmpty() && app != "plasma") {
+                kDebug() << "using theme for app" << app;
+                groupName.append("-").append(app);
+            }
+
+            cfg = KConfigGroup(KSharedConfig::openConfig("plasmarc"), groupName);
+        }
+
+        return cfg;
+    }
 
     QString findInTheme(const QString &image, const QString &theme) const;
     static const char *defaultTheme;
 
     static PackageStructure::Ptr packageStructure;
     QString themeName;
-    QString app;
     KSharedConfigPtr colors;
+    KConfigGroup cfg;
     QFont generalFont;
     bool locolor;
     bool compositingActive;
@@ -133,14 +140,6 @@ PackageStructure::Ptr Theme::packageStructure()
     return Private::packageStructure;
 }
 
-void Theme::setApplication(const QString &appname)
-{
-    if (d->app != appname) {
-        d->app = appname;
-        settingsChanged();
-    }
-}
-
 void Theme::settingsChanged()
 {
     setThemeName(d->config().readEntry("name", Private::defaultTheme));
@@ -203,7 +202,7 @@ void Theme::setThemeName(const QString &themeName)
 
     if (d->isDefault) {
         // we're the default theme, let's save our state
-        KConfigGroup cg = d->config();
+        KConfigGroup &cg = d->config();
         if (Private::defaultTheme == d->themeName) {
             cg.deleteEntry("name");
         } else {
