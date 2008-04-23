@@ -77,7 +77,7 @@ class PLASMA_EXPORT DataEngineManager: public QObject
         /**
          * Returns a listing of all known engines by name
          */
-        static QStringList knownEngines();
+        static QStringList listAllEngines();
 
     private:
         class Private;

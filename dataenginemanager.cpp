@@ -159,7 +159,7 @@ void DataEngineManager::unload(const QString& name)
     }
 }
 
-QStringList DataEngineManager::knownEngines()
+QStringList DataEngineManager::listAllEngines()
 {
     QStringList engines;
     KService::List offers = KServiceTypeTrader::self()->query("Plasma/DataEngine");
