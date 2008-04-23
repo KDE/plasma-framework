@@ -139,7 +139,7 @@ void PanelToolbox::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
         gradientCenter = QPoint(boundingRect().left(), boundingRect().center().y());
     }
 
-    QRadialGradient gradient(gradientCenter, size() + d->animFrame - 1);
+    QRadialGradient gradient(gradientCenter, size());// + d->animFrame - 1);
     gradient.setFocalPoint(gradientCenter);
     gradient.setColorAt(0, color1);
     gradient.setColorAt(.87, color1);
@@ -179,7 +179,7 @@ void PanelToolbox::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
 QPainterPath PanelToolbox::shape() const
 {
     QPainterPath path;
-    int toolSize = size() + (int)d->animFrame;
+    int toolSize = size();// + (int)d->animFrame;
 
     if (orientation() == Qt::Vertical) {
         path.arcTo(QRectF(boundingRect().center().x() - toolSize, boundingRect().top() - toolSize, toolSize*2, toolSize*2), 0, 180);
