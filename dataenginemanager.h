@@ -55,7 +55,7 @@ class PLASMA_EXPORT DataEngineManager: public QObject
          *
          * @param name the name of the engine
          */
-        Plasma::DataEngine* get(const QString& name) const;
+        Plasma::DataEngine* engine(const QString& name) const;
 
         /**
          * Loads a data engine and increases the reference count on it.

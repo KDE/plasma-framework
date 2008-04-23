@@ -92,7 +92,7 @@ DataEngineManager::~DataEngineManager()
     delete d;
 }
 
-Plasma::DataEngine* DataEngineManager::get(const QString& name) const
+Plasma::DataEngine* DataEngineManager::engine(const QString& name) const
 {
     Plasma::DataEngine::Dict::const_iterator it = d->engines.find(name);
     if (it != d->engines.end()) {

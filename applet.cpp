@@ -563,7 +563,7 @@ DataEngine* Applet::dataEngine(const QString& name) const
 {
     int index = d->loadedEngines.indexOf(name);
     if (index != -1) {
-        return DataEngineManager::self()->get(name);
+        return DataEngineManager::self()->engine(name);
     }
 
     DataEngine* engine = DataEngineManager::self()->load(name);
