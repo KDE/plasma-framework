@@ -66,13 +66,13 @@ class PLASMA_EXPORT DataEngineManager: public QObject
          * @param name the name of the engine
          * @return the data engine that was loaded, or the NullEngine on failure.
          */
-        Plasma::DataEngine* load(const QString& name);
+        Plasma::DataEngine* loadEngine(const QString& name);
 
         /**
          * Decreases the reference count on the engine. If the count reaches
          * zero, then the engine is deleted to save resources.
          */
-        void unload(const QString& name);
+        void unloadEngine(const QString& name);
 
         /**
          * Returns a listing of all known engines by name

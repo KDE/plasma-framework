@@ -130,7 +130,7 @@ public:
     ~Private()
     {
         foreach ( const QString& engine, loadedEngines ) {
-            DataEngineManager::self()->unload( engine );
+            DataEngineManager::self()->unloadEngine( engine );
         }
         delete background;
         delete package;
@@ -566,7 +566,7 @@ DataEngine* Applet::dataEngine(const QString& name) const
         return DataEngineManager::self()->engine(name);
     }
 
-    DataEngine* engine = DataEngineManager::self()->load(name);
+    DataEngine* engine = DataEngineManager::self()->loadEngine(name);
     if (engine->isValid()) {
         d->loadedEngines.append(name);
     }
