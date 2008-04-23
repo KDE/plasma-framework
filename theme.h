@@ -72,7 +72,7 @@ class PLASMA_EXPORT Theme : public QObject
         /**
          * Sets the application the theme setting is associated with. This
          * allows for individual applications that use libplasma to have the
-         * theme set independantly.
+         * theme set independently.
          *
          * @param appname name of the application
          **/
