@@ -127,7 +127,7 @@ void PanelSvg::setEnabledBorders(const EnabledBorders borders)
     }
 
     d->panels[d->prefix]->enabledBorders = borders;
-    d->updateSizes();
+    d->updateAndSignalSizes();
 }
 
 PanelSvg::EnabledBorders PanelSvg::enabledBorders() const
