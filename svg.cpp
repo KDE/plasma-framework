@@ -173,7 +173,7 @@ class Svg::Private
             // Apply current color scheme if the svg asks for it
             if (applyColors) {
                 QImage itmp = p.toImage();
-                KIconEffect::colorize(itmp, Theme::defaultTheme()->backgroundColor(), 1.0);
+                KIconEffect::colorize(itmp, Theme::defaultTheme()->color(Theme::BackgroundColor), 1.0);
                 p = p.fromImage(itmp);
             }
 

@@ -89,7 +89,7 @@ protected:
         Q_UNUSED(widget)
         painter->save();
         painter->setRenderHint(QPainter::Antialiasing);
-        QColor wash = Plasma::Theme::defaultTheme()->backgroundColor();
+        QColor wash = Plasma::Theme::defaultTheme()->color(Theme::BackgroundColor);
         wash.setAlphaF(.6);
         painter->fillPath(parentItem()->shape(), wash);
         painter->restore();

@@ -260,26 +260,30 @@ KSharedConfigPtr Theme::colorScheme() const
     return d->colors;
 }
 
-QColor Theme::textColor() const
+QColor Theme::color(ColorRole role) const
 {
     KColorScheme colorScheme(QPalette::Active, KColorScheme::Window, Theme::defaultTheme()->colorScheme());
-    return colorScheme.foreground(KColorScheme::NormalText).color();
+
+    switch (role) {
+        case TextColor:
+            return colorScheme.foreground(KColorScheme::NormalText).color();
+            break;
+
+        case BackgroundColor:
+            return colorScheme.background().color();
+            break;
+    }
 }
 
-QColor Theme::backgroundColor() const
+void Theme::setFont(const QFont &font, FontRole role)
 {
-    KColorScheme colorScheme(QPalette::Active, KColorScheme::Window, Theme::defaultTheme()->colorScheme());
-    return colorScheme.background().color();
-}
-
-void Theme::setFont(const QFont &font)
-{
+    Q_UNUSED(role)
     d->generalFont = font;
 }
 
-QFont Theme::font() const
+QFont Theme::font(FontRole role) const
 {
-    //TODO: allow this to be overridden with a plasma specific font?
+    Q_UNUSED(role)
     return d->generalFont;
 }
 

@@ -53,6 +53,17 @@ class PLASMA_EXPORT Theme : public QObject
     Q_PROPERTY( QString themeName READ themeName )
 
     public:
+        enum ColorRole
+        {
+            TextColor = 0 /**<  the text color to be used by items resting on the background */,
+            BackgroundColor /**< the default background color */
+        };
+
+        enum FontRole
+        {
+            DefaultFont = 0 /**< The standard text font */
+        };
+
         /**
          * Singleton pattern accessor
          **/
@@ -106,24 +117,26 @@ class PLASMA_EXPORT Theme : public QObject
 
         /**
          * Returns the text color to be used by items resting on the background
+         *
+         * @arg role which role (usage pattern) to get the color for
          */
-        Q_INVOKABLE QColor textColor() const;
-
-        /**
-         * Returns the background color to be used by items resting on the background
-         */
-        Q_INVOKABLE QColor backgroundColor() const;
+        Q_INVOKABLE QColor color(ColorRole role) const;
 
         /**
          * Sets the default font to be used with themed items. Defaults to
          * the application wide default font.
+         *
+         * @arg font the new font
+         * @arg role which role (usage pattern) to set the font for
          */
-        Q_INVOKABLE void setFont(const QFont &font);
+        Q_INVOKABLE void setFont(const QFont &font, FontRole role = DefaultFont);
 
         /**
          * Returns the font to be used by themed items
+         *
+         * @arg role which role (usage pattern) to get the font for
          */
-        Q_INVOKABLE QFont font() const;
+        Q_INVOKABLE QFont font(FontRole role) const;
 
         /**
          * Returns the font metrics for the font to be used by themed items

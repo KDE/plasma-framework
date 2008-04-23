@@ -79,8 +79,8 @@ Icon::Private::~Private()
 
 void Icon::readColors() 
 {
-    d->textColor = Plasma::Theme::defaultTheme()->textColor();
-    d->shadowColor = Plasma::Theme::defaultTheme()->backgroundColor();
+    d->textColor = Plasma::Theme::defaultTheme()->color(Theme::TextColor);
+    d->shadowColor = Plasma::Theme::defaultTheme()->color(Theme::BackgroundColor);
 
 }
 
