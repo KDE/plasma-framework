@@ -54,6 +54,8 @@ class Package;
 class PLASMA_EXPORT DataEngine : public QObject
 {
     friend class DataEngineScript;
+    friend class DataEngineManager;
+    friend class NullEngine;
     Q_OBJECT
     Q_PROPERTY( QStringList sources READ sources )
     Q_PROPERTY( bool valid READ isValid )
@@ -182,25 +184,6 @@ class PLASMA_EXPORT DataEngine : public QObject
          *         exist an empty data set is returned
          **/
         Q_INVOKABLE DataEngine::Data query(const QString& source) const;
-
-        /**
-         * Reference counting method. Calling this method increases the count
-         * by one.
-         **/
-        void ref();
-
-        /**
-         * Reference counting method. Calling this method decreases the count
-         * by one.
-         **/
-        void deref();
-
-        /**
-         * Reference counting method. Used to determine if this DataEngine is
-         * used.
-         * @return true if the reference count is non-zero
-         **/
-        bool isUsed() const;
 
         /**
          * Returns true if this engine is valid, otherwise returns false
@@ -419,6 +402,25 @@ class PLASMA_EXPORT DataEngine : public QObject
         void internalUpdateSource(DataContainer* source);
 
     private:
+        /**
+         * Reference counting method. Calling this method increases the count
+         * by one.
+         **/
+        void ref();
+
+        /**
+         * Reference counting method. Calling this method decreases the count
+         * by one.
+         **/
+        void deref();
+
+        /**
+         * Reference counting method. Used to determine if this DataEngine is
+         * used.
+         * @return true if the reference count is non-zero
+         **/
+        bool isUsed() const;
+
         class Private;
         Private* const d;
 };
