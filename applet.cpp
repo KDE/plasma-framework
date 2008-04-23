@@ -315,6 +315,7 @@ public:
     //      number of members at this point.
     static uint s_maxAppletId;
     static uint s_maxZValue;
+    static uint s_minZValue;
     static PackageStructure::Ptr packageStructure;
     uint appletId;
     KPluginInfo appletDescription;
@@ -343,6 +344,7 @@ public:
 
 uint Applet::Private::s_maxAppletId = 0;
 uint Applet::Private::s_maxZValue = 0;
+uint Applet::Private::s_minZValue = 0;
 PackageStructure::Ptr Applet::Private::packageStructure(0);
 
 Applet::Applet(QGraphicsItem *parent,
@@ -437,11 +439,9 @@ void Applet::restore(KConfigGroup *c)
         setTransform(t);
     }
 
-    qreal z = c->readEntry("zvalue", -1);
+    qreal z = c->readEntry("zvalue", 0);
 
-    if (z < 0) {
-        z = ++Private::s_maxZValue;
-    } else if (z >= Private::s_maxZValue) {
+    if (z >= Private::s_maxZValue) {
         Private::s_maxZValue = z;
     }
 
@@ -1547,6 +1547,11 @@ void Applet::setGeometry(const QRectF& geometry)
 void Applet::raise()
 {
     setZValue(++Private::s_maxZValue);
+}
+
+void Applet::lower()
+{
+    setZValue(--Private::s_minZValue);
 }
 
 void Applet::setIsContainment(bool isContainment)

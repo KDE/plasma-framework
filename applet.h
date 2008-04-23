@@ -507,11 +507,6 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         void setGeometry(const QRectF &geometry);
 
         /**
-         * Causes this applet to raise above all other applets.
-         */
-        void raise();
-
-        /**
          * Reimplemented from QGraphicsItem
          **/
         int type() const;
@@ -597,6 +592,16 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          */
         virtual void createConfigurationInterface(KConfigDialog *parent);
 
+        /**
+         * Causes this applet to raise above all other applets.
+         */
+        void raise();
+
+        /**
+         * Causes this applet to lower below all the other applets.
+         */
+        void lower();
+        
         /**
          * Sends all pending contraints updates to the applet. Will usually
          * be called automatically, but can also be called manually if needed.
