@@ -42,13 +42,6 @@ class PLASMA_EXPORT DataEngineManager: public QObject
         static DataEngineManager* self();
 
         /**
-         * Default constructor. Usually the singleton method self() is the
-         * preferred access mechanism.
-         */
-        DataEngineManager();
-        ~DataEngineManager();
-
-        /**
          * Returns a data engine object if one is loaded and available.
          * On failure, the fallback NullEngine (which does nothing and
          * !isValid()) is returned.
@@ -80,8 +73,17 @@ class PLASMA_EXPORT DataEngineManager: public QObject
         static QStringList listAllEngines();
 
     private:
+        /**
+         * Default constructor. The singleton method self() is the
+         * preferred access mechanism.
+         */
+        DataEngineManager();
+        ~DataEngineManager();
+
         class Private;
         Private* const d;
+
+        friend class DataEngineManagerSingleton;
 };
 
 } // namespace Plasma
