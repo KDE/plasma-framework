@@ -140,7 +140,7 @@ class PLASMA_EXPORT Theme : public QObject
          * Emitted when the user changes the theme. SVGs should be reloaded at
          * that point
          */
-        void changed();
+        void themeChanged();
 
     public Q_SLOTS:
         /**

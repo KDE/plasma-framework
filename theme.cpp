@@ -153,14 +153,14 @@ void Theme::compositingChanged()
 
     if (d->compositingActive != compositingActive) {
         d->compositingActive = compositingActive;
-        emit changed();
+        emit themeChanged();
     }
 #endif
 }
 
 void Theme::colorsChanged()
 {
-    emit changed();
+    emit themeChanged();
 }
 
 void Theme::setThemeName(const QString &themeName)
@@ -211,7 +211,7 @@ void Theme::setThemeName(const QString &themeName)
         }
     }
 
-    emit changed();
+    emit themeChanged();
 }
 
 QString Theme::themeName() const
