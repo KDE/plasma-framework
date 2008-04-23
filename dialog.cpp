@@ -74,7 +74,7 @@ Dialog::Dialog( QWidget * parent, Qt::WindowFlags f )
     d->background = new PanelSvg(this);
     d->background->setImagePath("dialogs/background");
     d->background->setEnabledBorders(PanelSvg::AllBorders);
-    d->background->resize(size());
+    d->background->resizePanel(size());
 
     connect(d->background, SIGNAL(repaintNeeded()), this, SLOT(update()));
 
@@ -99,7 +99,7 @@ void Dialog::paintEvent(QPaintEvent *e)
 
 void Dialog::resizeEvent(QResizeEvent *e)
 {
-    d->background->resize(e->size());
+    d->background->resizePanel(e->size());
 
     setMask(d->background->mask());
 }

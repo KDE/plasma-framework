@@ -793,7 +793,7 @@ void Applet::setDrawStandardBackground(bool drawBackground)
             if (minimumSize().expandedTo(fitSize) != minimumSize()) {
                 setMinimumSize(minimumSize().expandedTo(fitSize));
             }
-            d->background->resize(boundingRect().size());
+            d->background->resizePanel(boundingRect().size());
         }
     } else if (d->background) {
         int left, top, right, bottom;
@@ -1530,7 +1530,7 @@ void Applet::setGeometry(const QRectF& geometry)
     {
     updateConstraints(Plasma::SizeConstraint);
     if (d->background) {
-        d->background->resize(boundingRect().size());
+        d->background->resizePanel(boundingRect().size());
     }
     emit geometryChanged();
     }
