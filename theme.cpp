@@ -43,13 +43,14 @@ namespace Plasma
 class Theme::Private
 {
 public:
-   Private()
-       : locolor(false),
-         compositingActive(KWindowSystem::compositingActive()),
-         isDefault(false)
-   {
-       generalFont = QApplication::font();
-   }
+    Private(Theme *theme)
+        : q(theme),
+          locolor(false),
+          compositingActive(KWindowSystem::compositingActive()),
+        isDefault(false)
+    {
+        generalFont = QApplication::font();
+    }
 
     KConfigGroup& config()
     {
@@ -69,9 +70,12 @@ public:
     }
 
     QString findInTheme(const QString &image, const QString &theme) const;
-    static const char *defaultTheme;
+    void compositingChanged();
 
+    static const char *defaultTheme;
     static PackageStructure::Ptr packageStructure;
+
+    Theme *q;
     QString themeName;
     KSharedConfigPtr colors;
     KConfigGroup cfg;
@@ -86,6 +90,40 @@ public:
 
 PackageStructure::Ptr Theme::Private::packageStructure(0);
 const char *Theme::Private::defaultTheme = "default";
+
+QString Theme::Private::findInTheme(const QString &image, const QString &theme) const
+{
+    //TODO: this should be using Package
+    QString search;
+
+    if (locolor) {
+        search = "desktoptheme/" + theme + "/locolor/" + image + ".svg";
+        search =  KStandardDirs::locate("data", search);
+    } else if (!compositingActive) {
+        search = "desktoptheme/" + theme + "/opaque/" + image + ".svg";
+        search =  KStandardDirs::locate("data", search);
+    }
+
+    //not found or compositing enabled
+    if (search.isEmpty()) {
+        search = "desktoptheme/" + theme + '/' + image + ".svg";
+        search =  KStandardDirs::locate("data", search);
+    }
+
+    return search;
+}
+
+void Theme::Private::compositingChanged()
+{
+#ifdef Q_WS_X11
+    bool nowCompositingActive = compositeWatch->owner() != None;
+
+    if (compositingActive != nowCompositingActive) {
+        compositingActive = nowCompositingActive;
+        emit q->themeChanged();
+    }
+#endif
+}
 
 class ThemeSingleton
 {
@@ -107,7 +145,7 @@ Theme* Theme::defaultTheme()
 
 Theme::Theme(QObject* parent)
     : QObject(parent),
-      d(new Private)
+      d(new Private(this))
 {
     settingsChanged();
 
@@ -145,23 +183,6 @@ void Theme::settingsChanged()
     setThemeName(d->config().readEntry("name", Private::defaultTheme));
 }
 
-void Theme::compositingChanged()
-{
-#ifdef Q_WS_X11
-    bool compositingActive = d->compositeWatch->owner() != None;
-
-    if (d->compositingActive != compositingActive) {
-        d->compositingActive = compositingActive;
-        emit themeChanged();
-    }
-#endif
-}
-
-void Theme::colorsChanged()
-{
-    emit themeChanged();
-}
-
 void Theme::setThemeName(const QString &themeName)
 {
     QString theme = themeName;
@@ -192,10 +213,10 @@ void Theme::setThemeName(const QString &themeName)
     QString colorsFile = KStandardDirs::locate("data", "desktoptheme/" + theme + "/colors");
     //kDebug() << "we're going for..." << colorsFile << "*******************";
 
-    disconnect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()), this, SLOT(colorsChanged()));
+    disconnect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()), this, SIGNAL(themeChanged()));
     if (colorsFile.isEmpty()) {
         d->colors = 0;
-        connect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()), this, SLOT(colorsChanged()));
+        connect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()), this, SIGNAL(themeChanged()));
     } else {
         d->colors = KSharedConfig::openConfig(colorsFile);
     }
@@ -216,28 +237,6 @@ void Theme::setThemeName(const QString &themeName)
 QString Theme::themeName() const
 {
     return d->themeName;
-}
-
-QString Theme::Private::findInTheme(const QString &image, const QString &theme) const
-{
-    //TODO: this should be using Package
-    QString search;
-
-    if (locolor) {
-        search = "desktoptheme/" + theme + "/locolor/" + image + ".svg";
-        search =  KStandardDirs::locate("data", search);
-    } else if (!compositingActive) {
-        search = "desktoptheme/" + theme + "/opaque/" + image + ".svg";
-        search =  KStandardDirs::locate("data", search);
-    }
-
-    //not found or compositing enabled
-    if (search.isEmpty()) {
-        search = "desktoptheme/" + theme + '/' + image + ".svg";
-        search =  KStandardDirs::locate("data", search);
-    }
-
-    return search;
 }
 
 QString Theme::imagePath(const QString& name)  const
@@ -273,6 +272,8 @@ QColor Theme::color(ColorRole role) const
             return colorScheme.background().color();
             break;
     }
+
+    return QColor();
 }
 
 void Theme::setFont(const QFont &font, FontRole role)
@@ -293,7 +294,7 @@ QFontMetrics Theme::fontMetrics() const
     return QFontMetrics(d->generalFont);
 }
 
-bool Theme::compositingActive() const
+bool Theme::windowTranslucencyEnabled() const
 {
     return d->compositingActive;
 }

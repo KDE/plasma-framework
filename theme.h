@@ -144,9 +144,9 @@ class PLASMA_EXPORT Theme : public QObject
         Q_INVOKABLE QFontMetrics fontMetrics() const;
 
         /**
-         * Returns if the window compositing is active or not
+         * Returns if the window manager effects (e.g. translucency, compositing) is active or not
          */
-        Q_INVOKABLE bool compositingActive() const;
+        Q_INVOKABLE bool windowTranslucencyEnabled() const;
 
     Q_SIGNALS:
         /**
@@ -162,14 +162,12 @@ class PLASMA_EXPORT Theme : public QObject
          **/
         void settingsChanged();
 
-    private Q_SLOTS:
-        void compositingChanged();
-        void colorsChanged();
-
     private:
         friend class ThemeSingleton;
         class Private;
         Private* const d;
+
+        Q_PRIVATE_SLOT(d, void compositingChanged())
 };
 
 } // Plasma namespace
