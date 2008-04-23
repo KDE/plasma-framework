@@ -392,7 +392,7 @@ class PLASMA_EXPORT DataEngine : public QObject
         /**
          * @return the list of active DataContainers.
          */
-        SourceDict sourceDict() const;
+        SourceDict containerDict() const;
 
         /**
          * Reimplemented from QObject

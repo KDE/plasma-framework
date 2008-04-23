@@ -520,7 +520,7 @@ void DataEngine::setValid(bool valid)
     d->valid = valid;
 }
 
-DataEngine::SourceDict DataEngine::sourceDict() const
+DataEngine::SourceDict DataEngine::containerDict() const
 {
     return d->sources;
 }
