@@ -154,6 +154,7 @@ class PLASMA_EXPORT Theme : public QObject
         void colorsChanged();
 
     private:
+        friend class ThemeSingleton;
         class Private;
         Private* const d;
 };

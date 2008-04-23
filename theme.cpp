@@ -44,6 +44,7 @@ class Theme::Private
 public:
    Private()
        : locolor(false),
+         isDefault(false),
          compositingActive(KWindowSystem::compositingActive())
    {
        generalFont = QApplication::font();
@@ -64,14 +65,15 @@ public:
     static const char *defaultTheme;
 
     static PackageStructure::Ptr packageStructure;
-   QString themeName;
-   QString app;
-   KSharedConfigPtr colors;
-   QFont generalFont;
-   bool locolor;
-   bool compositingActive;
+    QString themeName;
+    QString app;
+    KSharedConfigPtr colors;
+    QFont generalFont;
+    bool locolor;
+    bool compositingActive;
+    bool isDefault;
 #ifdef Q_WS_X11
-   KSelectionWatcher *compositeWatch;
+    KSelectionWatcher *compositeWatch;
 #endif
 };
 
@@ -81,6 +83,11 @@ const char *Theme::Private::defaultTheme = "default";
 class ThemeSingleton
 {
 public:
+    ThemeSingleton()
+    {
+        self.d->isDefault = true;
+    }
+
    Theme self;
 };
 
@@ -114,7 +121,6 @@ Theme::Theme(QObject* parent)
 
 Theme::~Theme()
 {
-    d->config().writeEntry("name", d->themeName);
     delete d;
 }
 
@@ -195,8 +201,8 @@ void Theme::setThemeName(const QString &themeName)
         d->colors = KSharedConfig::openConfig(colorsFile);
     }
 
-    if (this == defaultTheme()) {
-        // we're the defualt theme, let's save our state
+    if (d->isDefault) {
+        // we're the default theme, let's save our state
         KConfigGroup cg = d->config();
         if (Private::defaultTheme == d->themeName) {
             cg.deleteEntry("name");
