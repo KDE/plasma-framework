@@ -221,7 +221,7 @@ ToolTip::ToolTip()
     connect(d->showTimer, SIGNAL(timeout()), SLOT(showToolTip()));
     connect(d->hideTimer, SIGNAL(timeout()), SLOT(resetShownState()));
 
-    connect(Plasma::Theme::self(), SIGNAL(changed()), this, SLOT(themeUpdated()));
+    connect(Plasma::Theme::self(), SIGNAL(themeChanged()), this, SLOT(themeUpdated()));
     themeUpdated();
 }
 

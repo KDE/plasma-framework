@@ -288,7 +288,7 @@ Icon::~Icon()
 void Icon::init()
 {
     readColors();
-    connect(Plasma::Theme::defaultTheme(), SIGNAL(changed()), SLOT(readColors()));
+    connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()), SLOT(readColors()));
 
     // setAcceptedMouseButtons(Qt::LeftButton);
     setAcceptsHoverEvents(true);

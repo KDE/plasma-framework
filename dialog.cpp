@@ -78,7 +78,7 @@ Dialog::Dialog( QWidget * parent, Qt::WindowFlags f )
 
     connect(d->background, SIGNAL(repaintNeeded()), this, SLOT(update()));
 
-    connect(Plasma::Theme::defaultTheme(), SIGNAL(changed()), this, SLOT(themeUpdated()));
+    connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()), this, SLOT(themeUpdated()));
     d->themeUpdated();
 }
 

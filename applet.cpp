@@ -198,7 +198,7 @@ public:
 
         applet->setDrawStandardBackground(true);
 
-        connect(Plasma::Theme::defaultTheme(), SIGNAL(changed()), applet, SLOT(themeChanged()));
+        connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()), applet, SLOT(themeChanged()));
     }
 
     // put all setup routines for script here. at this point we can assume that

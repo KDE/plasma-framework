@@ -79,7 +79,7 @@ class Svg::Private
         void setImagePath(const QString &imagePath, Svg *q)
         {
             if (themed) {
-                disconnect(Plasma::Theme::defaultTheme(), SIGNAL(changed()), q, SLOT(themeChanged()));
+                disconnect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()), q, SLOT(themeChanged()));
                 disconnect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()), q, SLOT(colorsChanged()));
             }
 
@@ -88,7 +88,7 @@ class Svg::Private
 
             if (themed) {
                 themePath = imagePath;
-                connect(Plasma::Theme::defaultTheme(), SIGNAL(changed()), q, SLOT(themeChanged()));
+                connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()), q, SLOT(themeChanged()));
 
                 // check if svg wants colorscheme applied
                 createRenderer();
