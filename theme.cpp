@@ -44,8 +44,8 @@ class Theme::Private
 public:
    Private()
        : locolor(false),
-         isDefault(false),
-         compositingActive(KWindowSystem::compositingActive())
+         compositingActive(KWindowSystem::compositingActive()),
+         isDefault(false)
    {
        generalFont = QApplication::font();
    }
