@@ -94,15 +94,7 @@ class PLASMA_EXPORT PanelSvg : public Svg
          * Resize the panel maintaining the same border size
          * @arg size the new size of the panel
          */
-        void resize(const QSizeF& size);
-
-        /**
-         * Resize the panel maintaining the same border size
-         * This is an overloaded function provided for convenience
-         * @arg width the new width
-         * @arg height the new height
-         **/
-        void resize(qreal width, qreal height);
+        void resizePanel(const QSizeF& size);
 
         /**
          * Returns the margin size given the margin edge we want

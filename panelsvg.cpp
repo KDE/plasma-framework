@@ -77,7 +77,7 @@ public:
         qDeleteAll(panels);
     }
 
-    void generateBackground();
+    void generateBackground(PanelData *panel);
     void updateSizes();
     void updateAndSignalSizes();
 
@@ -116,8 +116,8 @@ void PanelSvg::setImagePath(const QString& path)
     qDeleteAll(d->panels);
 
     d->panels.insert(QString(), new PanelData());
-    d->updateSizes();
     d->panels[QString()]->panelSize = size();
+    d->updateSizes();
 }
 
 void PanelSvg::setEnabledBorders(const EnabledBorders borders)
@@ -195,7 +195,7 @@ QString PanelSvg::prefix()
     return d->prefix.left(d->prefix.size() - 1);
 }
 
-void PanelSvg::resize(const QSizeF& size)
+void PanelSvg::resizePanel(const QSizeF& size)
 {
     if (!size.isValid() || size.width() < 1 || size.height() < 1 || size == d->panels[d->prefix]->panelSize) {
         return;
@@ -203,11 +203,6 @@ void PanelSvg::resize(const QSizeF& size)
 
     d->panels[d->prefix]->panelSize = size;
     d->updateSizes();
-}
-
-void PanelSvg::resize(qreal width, qreal height)
-{
-    resize(QSize(width, height));
 }
 
 qreal PanelSvg::marginSize(const Plasma::MarginEdge edge) const
@@ -238,11 +233,13 @@ qreal PanelSvg::marginSize(const Plasma::MarginEdge edge) const
 
 QBitmap PanelSvg::mask() const
 {
-    if (!d->panels[d->prefix]->cachedBackground) {
-        d->generateBackground();
+    PanelData *panel = d->panels[d->prefix];
+    if (!panel->cachedBackground) {
+        d->generateBackground(panel);
+        Q_ASSERT(panel->cachedBackground);
     }
 
-    return d->panels[d->prefix]->cachedBackground->alphaChannel().createMaskFromColor(Qt::black);
+    return panel->cachedBackground->alphaChannel().createMaskFromColor(Qt::black);
 }
 
 void PanelSvg::setCacheAllRenderedPanels(bool cache)
@@ -262,207 +259,207 @@ bool PanelSvg::cacheAllRenderedPanels() const
 void PanelSvg::clearCache()
 {
     qDeleteAll(d->panels);
-
-    if (!d->panels.contains(d->prefix)) {
-        d->panels.insert(d->prefix, new PanelData());
-    }
+    d->panels.clear();
+    d->panels.insert(d->prefix, new PanelData());
 }
 
 void PanelSvg::paint(QPainter* painter, const QRectF& rect, const QPointF& pos)
 {
-    if (!d->panels[d->prefix]->cachedBackground) {
-        d->generateBackground();
+    PanelData *panel = d->panels[d->prefix];
+    if (!panel->cachedBackground) {
+        d->generateBackground(panel);
+        Q_ASSERT(panel->cachedBackground);
     }
 
     //FIXME: this is redundant with generatebackground for now
-    bool origined = d->panels[d->prefix]->contentAtOrigin;
-    const int topOffset = origined ? 0 - d->panels[d->prefix]->topHeight : 0;
-    const int leftOffset = origined ? 0 - d->panels[d->prefix]->leftWidth : 0;
+    bool origined = panel->contentAtOrigin;
+    const int topOffset = origined ? 0 - panel->topHeight : 0;
+    const int leftOffset = origined ? 0 - panel->leftWidth : 0;
 
-    painter->drawPixmap(rect, *d->panels[d->prefix]->cachedBackground, rect.translated(-pos.x()-leftOffset,-pos.y()-topOffset));
+    painter->drawPixmap(rect, *(panel->cachedBackground), rect.translated(-pos.x()-leftOffset,-pos.y()-topOffset));
 }
 
-void PanelSvg::Private::generateBackground()
+void PanelSvg::Private::generateBackground(PanelData *panel)
 {
-    PanelData *panel = panels[prefix];
-
     bool origined = panel->contentAtOrigin;
     const int topWidth = q->elementSize(prefix + "top").width();
     const int leftHeight = q->elementSize(prefix + "left").height();
     const int topOffset = origined ? 0 - panel->topHeight : 0;
     const int leftOffset = origined ? 0 - panel->leftWidth : 0;
 
-    if (!panel->cachedBackground) {
-        const int contentWidth = panel->panelSize.width() - panel->leftWidth  - panel->rightWidth;
-        const int contentHeight = panel->panelSize.height() - panel->topHeight  - panel->bottomHeight;
-        int contentTop = 0;
-        int contentLeft = 0;
-        int rightOffset = contentWidth;
-        int bottomOffset = contentHeight;
+    if (panel->cachedBackground) {
+        return;
+    }
 
-        panel->cachedBackground = new QPixmap(panel->leftWidth + contentWidth + panel->rightWidth,
+    const int contentWidth = panel->panelSize.width() - panel->leftWidth  - panel->rightWidth;
+    const int contentHeight = panel->panelSize.height() - panel->topHeight  - panel->bottomHeight;
+    int contentTop = 0;
+    int contentLeft = 0;
+    int rightOffset = contentWidth;
+    int bottomOffset = contentHeight;
+
+    panel->cachedBackground = new QPixmap(panel->leftWidth + contentWidth + panel->rightWidth,
                                           panel->topHeight + contentHeight + panel->bottomHeight);
-        panel->cachedBackground->fill(Qt::transparent);
-        QPainter p(panel->cachedBackground);
-        p.setCompositionMode(QPainter::CompositionMode_Source);
-        p.setRenderHint(QPainter::SmoothPixmapTransform);
+    panel->cachedBackground->fill(Qt::transparent);
+    QPainter p(panel->cachedBackground);
+    p.setCompositionMode(QPainter::CompositionMode_Source);
+    p.setRenderHint(QPainter::SmoothPixmapTransform);
 
-        if (origined) {
-            p.translate(panel->leftWidth, panel->topHeight);
+    if (origined) {
+        p.translate(panel->leftWidth, panel->topHeight);
+    }
+
+    //FIXME: This is a hack to fix a drawing problems with svg files where a thin transparent border is drawn around the svg image.
+    //       the transparent border around the svg seems to vary in size depending on the size of the svg and as a result increasing the
+    //       svg image by 2 all around didn't resolve the issue. For now it resizes based on the border size.
+
+
+    //CENTER
+    if (panel->tileCenter) {
+        if (contentHeight > 0 && contentWidth > 0) {
+            int centerTileHeight;
+            int centerTileWidth;
+            centerTileHeight = q->elementSize(prefix + "center").height();
+            centerTileWidth = q->elementSize(prefix + "center").width();
+            QPixmap center(centerTileWidth, centerTileHeight);
+            center.fill(Qt::transparent);
+
+            {
+                QPainter centerPainter(&center);
+                centerPainter.setCompositionMode(QPainter::CompositionMode_Source);
+                q->Svg::paint(&centerPainter, QPoint(0, 0), prefix + "center");
+            }
+
+            p.drawTiledPixmap(QRect(contentLeft - panel->leftWidth, contentTop - panel->topHeight,
+                        contentWidth + panel->leftWidth*2, contentHeight + panel->topHeight*2), center);
+        }
+    } else {
+        if (contentHeight > 0 && contentWidth > 0) {
+            QSizeF scaledSize = QSizeF(panel->panelSize.width() -
+                    (panel->leftWidth + panel->rightWidth) +
+                    panel->panelSize.width()*(((qreal)(panel->leftWidth + panel->rightWidth)) / panel->panelSize.width()),
+                    panel->panelSize.height() -
+                    (panel->topHeight + panel->bottomHeight) +
+                    panel->panelSize.height()*(((qreal)(panel->topHeight + panel->bottomHeight)) / panel->panelSize.height()));
+
+            q->Svg::resize(scaledSize.width(), scaledSize.height());
+            q->Svg::paint(&p, QRect(contentLeft - panel->leftWidth, contentTop - panel->topHeight,
+                          contentWidth + panel->leftWidth*2, contentHeight + panel->topHeight*2),
+                          prefix + "center");
+            q->Svg::resize();
+        }
+    }
+
+    // Corners
+    if (panel->enabledBorders & TopBorder) {
+        if (!origined) {
+            contentTop = panel->topHeight;
+            bottomOffset += panel->topHeight;
         }
 
-        //FIXME: This is a hack to fix a drawing problems with svg files where a thin transparent border is drawn around the svg image.
-        //       the transparent border around the svg seems to vary in size depending on the size of the svg and as a result increasing the
-        //       svg image by 2 all around didn't resolve the issue. For now it resizes based on the border size.
+        if (panel->enabledBorders & LeftBorder) {
+            q->Svg::paint(&p, QRect(leftOffset, topOffset, panel->leftWidth, panel->topHeight), prefix + "topleft");
 
-
-       //CENTER
-       if (panel->tileCenter) {
-           if (contentHeight > 0 && contentWidth > 0) {
-               int centerTileHeight;
-               int centerTileWidth;
-               centerTileHeight = q->elementSize(prefix + "center").height();
-               centerTileWidth = q->elementSize(prefix + "center").width();
-               QPixmap center(centerTileWidth, centerTileHeight);
-               center.fill(Qt::transparent);
-
-               {
-                   QPainter centerPainter(&center);
-                   centerPainter.setCompositionMode(QPainter::CompositionMode_Source);
-                   q->Svg::paint(&centerPainter, QPoint(0, 0), prefix + "center");
-               }
-
-               p.drawTiledPixmap(QRect(contentLeft - panel->leftWidth, contentTop - panel->topHeight,
-                                          contentWidth + panel->leftWidth*2, contentHeight + panel->topHeight*2), center);
-           }
-       } else {
-           if (contentHeight > 0 && contentWidth > 0) {
-               QSizeF scaledSize = QSizeF(panel->panelSize.width() -
-                                (panel->leftWidth + panel->rightWidth) +
-                                panel->panelSize.width()*(((qreal)(panel->leftWidth + panel->rightWidth)) / panel->panelSize.width()),
-                                panel->panelSize.height() -
-                                (panel->topHeight + panel->bottomHeight) +
-                                panel->panelSize.height()*(((qreal)(panel->topHeight + panel->bottomHeight)) / panel->panelSize.height()));
-
-               q->Svg::resize(scaledSize.width(), scaledSize.height());
-               q->Svg::paint(&p, QRect(contentLeft - panel->leftWidth, contentTop - panel->topHeight,
-                                              contentWidth + panel->leftWidth*2, contentHeight + panel->topHeight*2),
-                                   prefix + "center");
-               q->Svg::resize();
-           }
-       }
-
-        // Corners
-        if (panel->enabledBorders & TopBorder) {
             if (!origined) {
-                contentTop = panel->topHeight;
-                bottomOffset += panel->topHeight;
+                contentLeft = panel->leftWidth;
+                rightOffset = contentWidth + panel->leftWidth;
             }
+        }
 
-            if (panel->enabledBorders & LeftBorder) {
-                q->Svg::paint(&p, QRect(leftOffset, topOffset, panel->leftWidth, panel->topHeight), prefix + "topleft");
+        if (panel->enabledBorders & RightBorder) {
+            q->Svg::paint(&p, QRect(rightOffset, topOffset, panel->rightWidth, panel->topHeight), prefix + "topright");
+        }
+    }
 
-                if (!origined) {
-                    contentLeft = panel->leftWidth;
-                    rightOffset = contentWidth + panel->leftWidth;
-                }
+    if (panel->enabledBorders & BottomBorder) {
+        if (panel->enabledBorders & LeftBorder) {
+            q->Svg::paint(&p, QRect(leftOffset, bottomOffset, panel->leftWidth, panel->bottomHeight), prefix + "bottomleft");
+
+            if (!origined) {
+                contentLeft = panel->leftWidth;
+                rightOffset = contentWidth + panel->leftWidth;
             }
+        }
 
-            if (panel->enabledBorders & RightBorder) {
-                q->Svg::paint(&p, QRect(rightOffset, topOffset, panel->rightWidth, panel->topHeight), prefix + "topright");
-            }
+        if (panel->enabledBorders & RightBorder) {
+            q->Svg::paint(&p, QRect(rightOffset, bottomOffset, panel->rightWidth, panel->bottomHeight), prefix + "bottomright");
+        }
+    }
+
+    // Sides
+    if (panel->stretchBorders) {
+        if (panel->enabledBorders & LeftBorder) {
+            q->Svg::paint(&p, QRect(leftOffset, contentTop, panel->leftWidth, contentHeight), prefix + "left");
+        }
+
+        if (panel->enabledBorders & RightBorder) {
+            q->Svg::paint(&p, QRect(rightOffset, contentTop, panel->rightWidth, contentHeight), prefix + "right");
+        }
+
+        if (panel->enabledBorders & TopBorder) {
+            q->Svg::paint(&p, QRect(contentLeft, topOffset, contentWidth, panel->topHeight), prefix + "top");
         }
 
         if (panel->enabledBorders & BottomBorder) {
-            if (panel->enabledBorders & LeftBorder) {
-                q->Svg::paint(&p, QRect(leftOffset, bottomOffset, panel->leftWidth, panel->bottomHeight), prefix + "bottomleft");
+            q->Svg::paint(&p, QRect(contentLeft, bottomOffset, contentWidth, panel->bottomHeight), prefix + "bottom");
+        }
+    } else {
+        if (panel->enabledBorders & LeftBorder) {
+            QPixmap left(panel->leftWidth, leftHeight);
+            left.fill(Qt::transparent);
 
-                if (!origined) {
-                    contentLeft = panel->leftWidth;
-                    rightOffset = contentWidth + panel->leftWidth;
-                }
+            {
+                QPainter sidePainter(&left);
+                sidePainter.setCompositionMode(QPainter::CompositionMode_Source);
+                q->Svg::paint(&sidePainter, QPoint(0, 0), prefix + "left");
             }
 
-            if (panel->enabledBorders & RightBorder) {
-                q->Svg::paint(&p, QRect(rightOffset, bottomOffset, panel->rightWidth, panel->bottomHeight), prefix + "bottomright");
-            }
+            p.drawTiledPixmap(QRect(leftOffset, contentTop, panel->leftWidth, contentHeight), left);
         }
 
-        // Sides
-        if (panel->stretchBorders) {
-            if (panel->enabledBorders & LeftBorder) {
-                q->Svg::paint(&p, QRect(leftOffset, contentTop, panel->leftWidth, contentHeight), prefix + "left");
+        if (panel->enabledBorders & RightBorder) {
+            QPixmap right(panel->rightWidth, leftHeight);
+            right.fill(Qt::transparent);
+
+            {
+                QPainter sidePainter(&right);
+                sidePainter.setCompositionMode(QPainter::CompositionMode_Source);
+                q->Svg::paint(&sidePainter, QPoint(0, 0), prefix + "right");
             }
 
-            if (panel->enabledBorders & RightBorder) {
-                q->Svg::paint(&p, QRect(rightOffset, contentTop, panel->rightWidth, contentHeight), prefix + "right");
-            }
-
-            if (panel->enabledBorders & TopBorder) {
-                q->Svg::paint(&p, QRect(contentLeft, topOffset, contentWidth, panel->topHeight), prefix + "top");
-            }
-
-            if (panel->enabledBorders & BottomBorder) {
-                q->Svg::paint(&p, QRect(contentLeft, bottomOffset, contentWidth, panel->bottomHeight), prefix + "bottom");
-            }
-        } else {
-            if (panel->enabledBorders & LeftBorder) {
-                QPixmap left(panel->leftWidth, leftHeight);
-                left.fill(Qt::transparent);
-
-                {
-                    QPainter sidePainter(&left);
-                    sidePainter.setCompositionMode(QPainter::CompositionMode_Source);
-                    q->Svg::paint(&sidePainter, QPoint(0, 0), prefix + "left");
-                }
-
-                p.drawTiledPixmap(QRect(leftOffset, contentTop, panel->leftWidth, contentHeight), left);
-            }
-
-            if (panel->enabledBorders & RightBorder) {
-                QPixmap right(panel->rightWidth, leftHeight);
-                right.fill(Qt::transparent);
-
-                {
-                    QPainter sidePainter(&right);
-                    sidePainter.setCompositionMode(QPainter::CompositionMode_Source);
-                    q->Svg::paint(&sidePainter, QPoint(0, 0), prefix + "right");
-                }
-
-                p.drawTiledPixmap(QRect(rightOffset, contentTop, panel->rightWidth, contentHeight), right);
-            }
-
-            if (panel->enabledBorders & TopBorder) {
-                QPixmap top(topWidth, panel->topHeight);
-                top.fill(Qt::transparent);
-
-                {
-                    QPainter sidePainter(&top);
-                    sidePainter.setCompositionMode(QPainter::CompositionMode_Source);
-                    q->Svg::paint(&sidePainter, QPoint(0, 0), prefix + "top");
-                }
-
-                p.drawTiledPixmap(QRect(contentLeft, topOffset, contentWidth, panel->topHeight), top);
-            }
-
-            if (panel->enabledBorders & BottomBorder) {
-                QPixmap bottom(topWidth, panel->bottomHeight);
-                bottom.fill(Qt::transparent);
-
-                {
-                    QPainter sidePainter(&bottom);
-                    sidePainter.setCompositionMode(QPainter::CompositionMode_Source);
-                    q->Svg::paint(&sidePainter, QPoint(0, 0), prefix + "bottom");
-                }
-
-                p.drawTiledPixmap(QRect(contentLeft, bottomOffset, contentWidth, panel->bottomHeight), bottom);
-            }
+            p.drawTiledPixmap(QRect(rightOffset, contentTop, panel->rightWidth, contentHeight), right);
         }
 
-        // re-enable this once Qt's svg rendering is un-buggered
-        //q->Svg::resize(contentWidth, contentHeight);
-        //paint(&p, QRect(contentLeft, contentTop, contentWidth, contentHeight), "center");
-   }
+        if (panel->enabledBorders & TopBorder) {
+            QPixmap top(topWidth, panel->topHeight);
+            top.fill(Qt::transparent);
+
+            {
+                QPainter sidePainter(&top);
+                sidePainter.setCompositionMode(QPainter::CompositionMode_Source);
+                q->Svg::paint(&sidePainter, QPoint(0, 0), prefix + "top");
+            }
+
+            p.drawTiledPixmap(QRect(contentLeft, topOffset, contentWidth, panel->topHeight), top);
+        }
+
+        if (panel->enabledBorders & BottomBorder) {
+            QPixmap bottom(topWidth, panel->bottomHeight);
+            bottom.fill(Qt::transparent);
+
+            {
+                QPainter sidePainter(&bottom);
+                sidePainter.setCompositionMode(QPainter::CompositionMode_Source);
+                q->Svg::paint(&sidePainter, QPoint(0, 0), prefix + "bottom");
+            }
+
+            p.drawTiledPixmap(QRect(contentLeft, bottomOffset, contentWidth, panel->bottomHeight), bottom);
+        }
+    }
+
+    // re-enable this once Qt's svg rendering is un-buggered
+    //q->Svg::resize(contentWidth, contentHeight);
+    //paint(&p, QRect(contentLeft, contentTop, contentWidth, contentHeight), "center");
 }
 
 void PanelSvg::Private::updateSizes()
