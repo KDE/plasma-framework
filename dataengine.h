@@ -96,7 +96,7 @@ class PLASMA_EXPORT DataEngine : public QObject
         /**
          * Returns the engine name for the DataEngine
          */
-        QString engineName() const;
+        QString name() const;
 
         /**
          * Connects a source to an object for data updates. The object must
@@ -381,6 +381,11 @@ class PLASMA_EXPORT DataEngine : public QObject
          * Reimplemented from QObject
          **/
         void timerEvent(QTimerEvent *event);
+
+        /**
+         * Sets the engine name for the DataEngine
+         */
+        void setName(const QString &name);
 
     protected Q_SLOTS:
         /**

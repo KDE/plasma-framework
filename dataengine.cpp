@@ -59,6 +59,9 @@ class DataEngine::Private
             }
 
             engineName = service->property("X-Plasma-EngineName").toString();
+            if (engineName.isEmpty()) {
+                engineName = i18n("Anonymous Engine");
+            }
             e->setObjectName(engineName);
             icon = service->icon();
 
@@ -576,9 +579,15 @@ void DataEngine::checkForUpdates()
     }
 }
 
-QString DataEngine::engineName() const
+QString DataEngine::name() const
 {
     return d->engineName;
+}
+
+void DataEngine::setName(const QString& name)
+{
+    d->engineName = name;
+    setObjectName(name);
 }
 
 }
