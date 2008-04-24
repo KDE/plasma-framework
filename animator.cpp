@@ -48,7 +48,7 @@ int Animator::animationFramesPerSecond(Plasma::Phase::Movement movement) const
     return 20;
 }
 
-int Animator::framesPerSecond(Plasma::Phase::ElementAnimation animation) const
+int Animator::animationFramesPerSecond(Plasma::Phase::ElementAnimation animation) const
 {
     Q_UNUSED(animation)
     return 0;
