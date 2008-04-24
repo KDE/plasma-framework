@@ -431,11 +431,6 @@ bool Corona::isImmutable() const
     return d->kioskImmutable || d->immutable;
 }
 
-bool Corona::isKioskImmutable() const
-{
-    return d->kioskImmutable;
-}
-
 void Corona::setImmutable(bool immutable)
 {
     if (d->immutable == immutable ||
