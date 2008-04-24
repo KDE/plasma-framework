@@ -116,7 +116,7 @@ class DataEngine::Private
             DataContainer* s = new DataContainer(engine);
             s->setObjectName(sourceName);
             sources.insert(sourceName, s);
-            connect(s, SIGNAL(requestUpdate(DataContainer*)), engine, SLOT(internalUpdateSource(DataContainer*)));
+            connect(s, SIGNAL(updateRequested(DataContainer*)), engine, SLOT(internalUpdateSource(DataContainer*)));
 
             if (limit > 0) {
                 trimQueue();

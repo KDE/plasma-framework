@@ -144,7 +144,7 @@ class PLASMA_EXPORT DataContainer : public QObject
          * Emitted when the source, usually due to an internal timer firing,
          * requests to be updated.
          **/
-        void requestUpdate(DataContainer *source);
+        void updateRequested(DataContainer *source);
 
     private:
         friend class SignalRelay;

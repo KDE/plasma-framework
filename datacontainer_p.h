@@ -146,7 +146,7 @@ protected:
             checkAlignment();
         }
 
-        emit dc->requestUpdate(dc);
+        emit dc->updateRequested(dc);
         if (!dc->hasUpdates()) {
             // the source wasn't actually updated; so let's put ourselves in the queue
             // so we get an dataUpdated() when the data does arrive
