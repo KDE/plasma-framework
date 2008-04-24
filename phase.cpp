@@ -515,7 +515,7 @@ void Phase::timerEvent(QTimerEvent *event)
             } else {
                 d->performAnimation(1, state);
                 d->animatedItems.erase(d->animatedItems.find(state->item));
-                emit animationComplete(state->item, state->animation);
+                emit animationFinished(state->item, state->animation);
                 delete state;
             }
         } else {
@@ -538,7 +538,7 @@ void Phase::timerEvent(QTimerEvent *event)
             } else {
                 d->performMovement(1, state);
                 d->movingItems.erase(d->movingItems.find(state->item));
-                emit movementComplete(state->item);
+                emit movementFinished(state->item);
                 delete state;
             }
         } else {
@@ -571,7 +571,7 @@ void Phase::timerEvent(QTimerEvent *event)
                 animationsRemain = true;
             } else {
                 d->animatedElements.remove(state->id);
-                emit elementAnimationComplete(state->id);
+                emit elementAnimationFinished(state->id);
                 delete state;
             }
         } else {
@@ -600,7 +600,7 @@ void Phase::timerEvent(QTimerEvent *event)
             } else {
                 QMetaObject::invokeMethod(state->receiver, state->slot, Q_ARG(qreal, 1));
                 d->customAnims.erase(d->customAnims.find(state->id));
-                emit customAnimationComplete(state->id);
+                emit customAnimationFinished(state->id);
                 delete [] state->slot;
                 delete state;
             }

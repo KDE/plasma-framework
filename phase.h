@@ -125,10 +125,10 @@ public:
     Q_INVOKABLE bool isAnimating() const;
 
 Q_SIGNALS:
-    void animationComplete(QGraphicsItem *item, Plasma::Phase::Animation anim);
-    void movementComplete(QGraphicsItem *item);
-    void elementAnimationComplete(Plasma::Phase::AnimId id);
-    void customAnimationComplete(Plasma::Phase::AnimId id);
+    void animationFinished(QGraphicsItem *item, Plasma::Phase::Animation anim);
+    void movementFinished(QGraphicsItem *item);
+    void elementAnimationFinished(Plasma::Phase::AnimId id);
+    void customAnimationFinished(Plasma::Phase::AnimId id);
 
 protected:
     void timerEvent(QTimerEvent *event);
