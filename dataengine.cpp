@@ -391,7 +391,7 @@ void DataEngine::removeAllData(const QString& source)
 {
     DataContainer* s = d->source(source, false);
     if (s) {
-        s->clearData();
+        s->removeAllData();
         d->queueUpdate();
     }
 }

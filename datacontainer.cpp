@@ -57,7 +57,7 @@ void DataContainer::setData(const QString& key, const QVariant& value)
     d->updateTs.start();
 }
 
-void DataContainer::clearData()
+void DataContainer::removeAllData()
 {
     if (d->data.count() < 1) {
         // avoid an update if we don't have any data anyways

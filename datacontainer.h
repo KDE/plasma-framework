@@ -71,9 +71,9 @@ class PLASMA_EXPORT DataContainer : public QObject
         void setData(const QString& key, const QVariant& value);
 
         /**
-         * Clears all data currently associated with this source
+         * Removes all data currently associated with this source
          **/
-        void clearData();
+        void removeAllData();
 
         /**
          * Checks for whether the data has changed and therefore an update
