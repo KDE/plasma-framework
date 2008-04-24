@@ -102,7 +102,7 @@ void IconAction::show()
 
     rebuildPixmap();
 
-    m_animationId = Phase::self()->animateElement(m_icon, Phase::ElementAppear);
+    m_animationId = Phase::self()->animateElement(m_icon, Phase::AppearAnimation);
     Phase::self()->setInitialPixmap(m_animationId, m_pixmap);
     m_visible = true;
 }
@@ -115,7 +115,7 @@ void IconAction::hide()
 
     rebuildPixmap();
 
-    m_animationId = Phase::self()->animateElement(m_icon, Phase::ElementDisappear);
+    m_animationId = Phase::self()->animateElement(m_icon, Phase::DisappearAnimation);
     Phase::self()->setInitialPixmap(m_animationId, m_pixmap);
     m_visible = false;
 }

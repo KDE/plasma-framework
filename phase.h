@@ -43,17 +43,12 @@ class PLASMA_EXPORT Phase : public QObject
     Q_ENUMS( Movement )
 
 public:
+
     enum Animation
     {
-        Appear = 0 /*<< When some appears in the Corona */,
-        Disappear /*<< When something is about to disappear */,
-        Activate /*<< When something is activated or launched, such as an app icon being clicked */
-    };
-
-    enum ElementAnimation
-    {
-        ElementAppear = 0 /*<< Animate the appearance of an element */,
-        ElementDisappear /*<< Animate the disappearance of an element */
+        AppearAnimation = 0 /*<< Animate the appearance of an element */,
+        DisappearAnimation /*<< Animate the disappearance of an element */,
+        ActivateAnimation /*<< When something is activated or launched, such as an app icon being clicked */
     };
 
     enum CurveShape
@@ -109,7 +104,7 @@ public:
      */
     Q_INVOKABLE void stopCustomAnimation(int id);
 
-    Q_INVOKABLE int animateElement(QGraphicsItem *obj, ElementAnimation);
+    Q_INVOKABLE int animateElement(QGraphicsItem *obj, Animation);
     Q_INVOKABLE void stopElementAnimation(int id);
     Q_INVOKABLE void setInitialPixmap(int id, const QPixmap &pixmap);
     Q_INVOKABLE QPixmap currentPixmap(int id);

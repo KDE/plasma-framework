@@ -52,7 +52,7 @@ struct ElementAnimationState
     QGraphicsItem *item;
     QObject *qobj;
     Phase::CurveShape curve;
-    Phase::ElementAnimation animation;
+    Phase::Animation animation;
     int interval;
     int currentInterval;
     int frames;
@@ -130,16 +130,16 @@ class Phase::Private
         void performAnimation(qreal amount, const AnimationState* state)
         {
             switch (state->animation) {
-                case Phase::Appear:
+                case Phase::AppearAnimation:
                     animator->itemAppear(amount, state->item);
                     break;
-                case Phase::Disappear:
+                case Phase::DisappearAnimation:
                     animator->itemDisappear(amount, state->item);
                     if (amount >= 1) {
                         state->item->hide();
                     }
                     break;
-                case Phase::Activate:
+                case Phase::ActivateAnimation:
                     animator->itemActivated(amount, state->item);
                     break;
             }
@@ -389,7 +389,7 @@ void Phase::stopCustomAnimation(int id)
     //kDebug() << "stopCustomAnimation(AnimId " << id << ") done";
 }
 
-int Phase::animateElement(QGraphicsItem *item, ElementAnimation animation)
+int Phase::animateElement(QGraphicsItem *item, Animation animation)
 {
     //kDebug() << "startElementAnimation(AnimId " << animation << ")";
     ElementAnimationState *state = new ElementAnimationState;
@@ -469,10 +469,10 @@ QPixmap Phase::currentPixmap(int id)
     //kDebug() << "Phase::currentPixmap(" << id <<   " at " << progress;
 
     switch (state->animation) {
-        case ElementAppear:
+        case AppearAnimation:
             return d->animator->elementAppear(progress, state->pixmap);
             break;
-        case ElementDisappear:
+        case DisappearAnimation:
             return d->animator->elementDisappear(progress, state->pixmap);
             break;
     }

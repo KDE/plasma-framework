@@ -330,7 +330,7 @@ void AppletHandle::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
             case RemoveButton:
                 if (m_pressedButton == releasedAtButton) {
                     forceDisappear();
-                    Phase::self()->animateItem(m_applet, Phase::Disappear);
+                    Phase::self()->animateItem(m_applet, Phase::DisappearAnimation);
                 }
                 break;
             case MoveButton: {

@@ -48,7 +48,7 @@ int Animator::movementAnimationFPS(Plasma::Phase::Movement movement) const
     return 20;
 }
 
-int Animator::elementAnimationFPS(Plasma::Phase::ElementAnimation animation) const
+int Animator::elementAnimationFPS(Plasma::Phase::Animation animation) const
 {
     Q_UNUSED(animation)
     return 0;
@@ -73,7 +73,7 @@ int Animator::movementAnimationDuration(Plasma::Phase::Movement movement) const
     return 270;
 }
 
-int Animator::elementAnimationDuration(Plasma::Phase::ElementAnimation) const
+int Animator::elementAnimationDuration(Plasma::Phase::Animation) const
 {
     return 333;
 }
@@ -88,7 +88,7 @@ Phase::CurveShape Animator::movementAnimationCurve(Plasma::Phase::Movement) cons
     return Phase::EaseInOutCurve;
 }
 
-Phase::CurveShape Animator::elementAnimationCurve(Plasma::Phase::ElementAnimation) const
+Phase::CurveShape Animator::elementAnimationCurve(Plasma::Phase::Animation) const
 {
     return Phase::EaseInOutCurve;
 }

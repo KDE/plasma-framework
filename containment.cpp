@@ -497,7 +497,7 @@ void Containment::destroyApplet()
     }
 
     Applet *applet = qobject_cast<Applet*>(action->data().value<QObject*>());
-    Phase::self()->animateItem(applet, Phase::Disappear);
+    Phase::self()->animateItem(applet, Phase::DisappearAnimation);
 }
 
 void Containment::setFormFactor(FormFactor formFactor)
@@ -844,7 +844,7 @@ void Containment::prepareApplet(Applet *applet, bool delayInit)
         }
     } else {
         applet->init();
-        Phase::self()->animateItem(applet, Phase::Appear);
+        Phase::self()->animateItem(applet, Phase::AppearAnimation);
     }
 
     applet->updateConstraints(Plasma::AllConstraints | Plasma::StartupCompletedConstraint);
@@ -878,7 +878,7 @@ void Containment::appletDestroyed(QObject* object)
 
 void Containment::appletAnimationComplete(QGraphicsItem *item, Plasma::Phase::Animation anim)
 {
-    if (anim == Phase::Disappear) {
+    if (anim == Phase::DisappearAnimation) {
         QGraphicsItem *parent = item->parentItem();
 
         while (parent) {
@@ -894,7 +894,7 @@ void Containment::appletAnimationComplete(QGraphicsItem *item, Plasma::Phase::An
 
             parent = parent->parentItem();
         }
-    } else if (anim == Phase::Appear) {
+    } else if (anim == Phase::AppearAnimation) {
         if (containmentType() == DesktopContainment &&
             item->parentItem() == this &&
             qgraphicsitem_cast<Applet*>(item)) {
