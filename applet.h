@@ -507,7 +507,7 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         int type() const;
         enum { Type = Plasma::AppletType };
 
-	/**
+	    /**
          * Reimplemented from QGraphicsItem
          */
         QPainterPath shape() const;
