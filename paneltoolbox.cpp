@@ -96,7 +96,7 @@ PanelToolbox::PanelToolbox(QGraphicsItem *parent)
     : Toolbox(parent),
       d(new Private)
 {
-    connect(Plasma::Phase::self(), SIGNAL(movementComplete(QGraphicsItem*)), this, SLOT(toolMoved(QGraphicsItem*)));
+    connect(Plasma::AnimationDriver::self(), SIGNAL(movementComplete(QGraphicsItem*)), this, SLOT(toolMoved(QGraphicsItem*)));
 
     setZValue(10000000);
     setFlag(ItemClipsToShape, true);
@@ -231,7 +231,7 @@ void PanelToolbox::showToolbox()
     const int iconWidth = 32;
     int x = size()*2 - maxwidth - iconWidth - 5;
     int y = 5; // pos().y();
-    Plasma::Phase* phase = Plasma::Phase::self();
+    Plasma::AnimationDriver* animdriver = Plasma::AnimationDriver::self();
     foreach (QGraphicsItem* tool, QGraphicsItem::children()) {
         if (tool == d->toolBacker) {
             continue;
@@ -240,14 +240,14 @@ void PanelToolbox::showToolbox()
         if (!tool->isEnabled()) {
             if (tool->isVisible()) {
                 const int height = static_cast<int>(tool->boundingRect().height());
-                phase->moveItem(tool, Plasma::Phase::SlideOutMovement, QPoint(size() * 2, -height));
+                animdriver->moveItem(tool, Plasma::AnimationDriver::SlideOutMovement, QPoint(size() * 2, -height));
             }
             continue;
         }
 
         //kDebug() << "let's show and move" << tool << tool->boundingRect();
         tool->show();
-        phase->moveItem(tool, Plasma::Phase::SlideInMovement, QPoint(x, y));
+        animdriver->moveItem(tool, Plasma::AnimationDriver::SlideInMovement, QPoint(x, y));
         //x += 0;
         y += static_cast<int>(tool->boundingRect().height()) + 5;
     }
@@ -259,13 +259,13 @@ void PanelToolbox::showToolbox()
     d->toolBacker->show();
 
     if (d->animId) {
-        phase->stopCustomAnimation(d->animId);
+        animdriver->stopCustomAnimation(d->animId);
     }
 
     setShowing(true);
     // TODO: 10 and 200 shouldn't be hardcoded here. There needs to be a way to
     // match whatever the time is that moveItem() takes. Same in hoverLeaveEvent().
-    d->animId = phase->customAnimation(10, 240, Plasma::Phase::EaseInCurve, this, "animate");
+    d->animId = animdriver->customAnimation(10, 240, Plasma::AnimationDriver::EaseInCurve, this, "animate");
     d->stopwatch.restart();
 }
 
@@ -289,22 +289,22 @@ void PanelToolbox::hideToolbox()
 
     int x = size() * 2;
     int y = 0;
-    Plasma::Phase* phase = Plasma::Phase::self();
+    Plasma::AnimationDriver* animdriver = Plasma::AnimationDriver::self();
     foreach (QGraphicsItem* tool, QGraphicsItem::children()) {
         if (tool == d->toolBacker) {
             continue;
         }
 
         const int height = static_cast<int>(tool->boundingRect().height());
-        phase->moveItem(tool, Plasma::Phase::SlideOutMovement, QPoint(x, y-height));
+        animdriver->moveItem(tool, Plasma::AnimationDriver::SlideOutMovement, QPoint(x, y-height));
     }
 
     if (d->animId) {
-        phase->stopCustomAnimation(d->animId);
+        animdriver->stopCustomAnimation(d->animId);
     }
 
     setShowing(false);
-    d->animId = phase->customAnimation(10, 240, Plasma::Phase::EaseOutCurve, this, "animate");
+    d->animId = animdriver->customAnimation(10, 240, Plasma::AnimationDriver::EaseOutCurve, this, "animate");
 
     if (d->toolBacker) {
         d->toolBacker->hide();

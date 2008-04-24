@@ -192,9 +192,9 @@ void Containment::init()
     setAcceptDrops(true);
     setAcceptsHoverEvents(true);
 
-    //TODO: would be nice to not do this on init, as it causes Phase to init
-    connect(Phase::self(), SIGNAL(animationComplete(QGraphicsItem*,Plasma::Phase::Animation)),
-            this, SLOT(appletAnimationComplete(QGraphicsItem*,Plasma::Phase::Animation)));
+    //TODO: would be nice to not do this on init, as it causes AnimationDriver to init
+    connect(AnimationDriver::self(), SIGNAL(animationComplete(QGraphicsItem*,Plasma::AnimationDriver::Animation)),
+            this, SLOT(appletAnimationComplete(QGraphicsItem*,Plasma::AnimationDriver::Animation)));
 
     if (d->type == NoContainmentType) {
         setContainmentType(DesktopContainment);
@@ -497,7 +497,7 @@ void Containment::destroyApplet()
     }
 
     Applet *applet = qobject_cast<Applet*>(action->data().value<QObject*>());
-    Phase::self()->animateItem(applet, Phase::DisappearAnimation);
+    AnimationDriver::self()->animateItem(applet, AnimationDriver::DisappearAnimation);
 }
 
 void Containment::setFormFactor(FormFactor formFactor)
@@ -756,7 +756,7 @@ void Containment::addApplet(Applet *applet, const QPointF &pos, bool delayInit)
         }
     } else {
         applet->init();
-        Phase::self()->animateItem(applet, Phase::AppearAnimation);
+        AnimationDriver::self()->animateItem(applet, AnimationDriver::AppearAnimation);
     }
 
     applet->updateConstraints(Plasma::AllConstraints | Plasma::StartupCompletedConstraint);
@@ -790,9 +790,9 @@ void Containment::appletDestroyed(QObject* object)
     emit configNeedsSaving();
 }
 
-void Containment::appletAnimationComplete(QGraphicsItem *item, Plasma::Phase::Animation anim)
+void Containment::appletAnimationComplete(QGraphicsItem *item, Plasma::AnimationDriver::Animation anim)
 {
-    if (anim == Phase::DisappearAnimation) {
+    if (anim == AnimationDriver::DisappearAnimation) {
         QGraphicsItem *parent = item->parentItem();
 
         while (parent) {
@@ -808,7 +808,7 @@ void Containment::appletAnimationComplete(QGraphicsItem *item, Plasma::Phase::An
 
             parent = parent->parentItem();
         }
-    } else if (anim == Phase::AppearAnimation) {
+    } else if (anim == AnimationDriver::AppearAnimation) {
         if (containmentType() == DesktopContainment &&
             item->parentItem() == this &&
             qgraphicsitem_cast<Applet*>(item)) {

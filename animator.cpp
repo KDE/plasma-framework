@@ -36,34 +36,34 @@ Animator::~Animator()
 {
 }
 
-int Animator::animationFPS(Plasma::Phase::Animation animation) const
+int Animator::animationFPS(Plasma::AnimationDriver::Animation animation) const
 {
     Q_UNUSED(animation)
     return 0;
 }
 
-int Animator::movementAnimationFPS(Plasma::Phase::Movement movement) const
+int Animator::movementAnimationFPS(Plasma::AnimationDriver::Movement movement) const
 {
     Q_UNUSED(movement)
     return 20;
 }
 
-int Animator::elementAnimationFPS(Plasma::Phase::Animation animation) const
+int Animator::elementAnimationFPS(Plasma::AnimationDriver::Animation animation) const
 {
     Q_UNUSED(animation)
     return 0;
 }
 
-int Animator::animationDuration(Plasma::Phase::Animation) const
+int Animator::animationDuration(Plasma::AnimationDriver::Animation) const
 {
     return 200;
 }
 
-int Animator::movementAnimationDuration(Plasma::Phase::Movement movement) const
+int Animator::movementAnimationDuration(Plasma::AnimationDriver::Movement movement) const
 {
     switch (movement) {
-        case Phase::FastSlideInMovement:
-        case Phase::FastSlideOutMovement:
+        case AnimationDriver::FastSlideInMovement:
+        case AnimationDriver::FastSlideOutMovement:
             return 100;
             break;
         default:
@@ -73,24 +73,24 @@ int Animator::movementAnimationDuration(Plasma::Phase::Movement movement) const
     return 270;
 }
 
-int Animator::elementAnimationDuration(Plasma::Phase::Animation) const
+int Animator::elementAnimationDuration(Plasma::AnimationDriver::Animation) const
 {
     return 333;
 }
 
-Phase::CurveShape Animator::animationCurve(Plasma::Phase::Animation) const
+AnimationDriver::CurveShape Animator::animationCurve(Plasma::AnimationDriver::Animation) const
 {
-    return Phase::EaseInOutCurve;
+    return AnimationDriver::EaseInOutCurve;
 }
 
-Phase::CurveShape Animator::movementAnimationCurve(Plasma::Phase::Movement) const
+AnimationDriver::CurveShape Animator::movementAnimationCurve(Plasma::AnimationDriver::Movement) const
 {
-    return Phase::EaseInOutCurve;
+    return AnimationDriver::EaseInOutCurve;
 }
 
-Phase::CurveShape Animator::elementAnimationCurve(Plasma::Phase::Animation) const
+AnimationDriver::CurveShape Animator::elementAnimationCurve(Plasma::AnimationDriver::Animation) const
 {
-    return Phase::EaseInOutCurve;
+    return AnimationDriver::EaseInOutCurve;
 }
 
 QPixmap Animator::elementAppear(qreal progress, const QPixmap& pixmap)

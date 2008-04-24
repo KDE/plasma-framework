@@ -39,8 +39,8 @@ struct AnimationState
 {
     QGraphicsItem *item;
     QObject *qobj;
-    Phase::Animation animation;
-    Phase::CurveShape curve;
+    AnimationDriver::Animation animation;
+    AnimationDriver::CurveShape curve;
     int interval;
     int currentInterval;
     int frames;
@@ -51,8 +51,8 @@ struct ElementAnimationState
 {
     QGraphicsItem *item;
     QObject *qobj;
-    Phase::CurveShape curve;
-    Phase::Animation animation;
+    AnimationDriver::CurveShape curve;
+    AnimationDriver::Animation animation;
     int interval;
     int currentInterval;
     int frames;
@@ -65,8 +65,8 @@ struct MovementState
 {
     QGraphicsItem *item;
     QObject *qobj;
-    Phase::CurveShape curve;
-    Phase::Movement movement;
+    AnimationDriver::CurveShape curve;
+    AnimationDriver::Movement movement;
     int interval;
     int currentInterval;
     int frames;
@@ -77,7 +77,7 @@ struct MovementState
 
 struct CustomAnimationState
 {
-    Phase::CurveShape curve;
+    AnimationDriver::CurveShape curve;
     int frames;
     int currentFrame;
     int interval;
@@ -87,7 +87,7 @@ struct CustomAnimationState
     char* slot;
 };
 
-class Phase::Private
+class AnimationDriver::Private
 {
     public:
 
@@ -130,16 +130,16 @@ class Phase::Private
         void performAnimation(qreal amount, const AnimationState* state)
         {
             switch (state->animation) {
-                case Phase::AppearAnimation:
+                case AnimationDriver::AppearAnimation:
                     animator->itemAppear(amount, state->item);
                     break;
-                case Phase::DisappearAnimation:
+                case AnimationDriver::DisappearAnimation:
                     animator->itemDisappear(amount, state->item);
                     if (amount >= 1) {
                         state->item->hide();
                     }
                     break;
-                case Phase::ActivateAnimation:
+                case AnimationDriver::ActivateAnimation:
                     animator->itemActivated(amount, state->item);
                     break;
             }
@@ -148,13 +148,13 @@ class Phase::Private
         void performMovement(qreal amount, const MovementState* state)
         {
             switch (state->movement) {
-                case Phase::SlideInMovement:
-                case Phase::FastSlideInMovement:
+                case AnimationDriver::SlideInMovement:
+                case AnimationDriver::FastSlideInMovement:
                     //kDebug() << "performMovement, SlideInMovement";
                     animator->itemSlideIn(amount, state->item, state->start, state->destination);
                     break;
-                case Phase::SlideOutMovement:
-                case Phase::FastSlideOutMovement:
+                case AnimationDriver::SlideOutMovement:
+                case AnimationDriver::FastSlideOutMovement:
                     //kDebug() << "performMovement, SlideOutMovement";
                     animator->itemSlideOut(amount, state->item, state->start, state->destination);
                     break;
@@ -175,33 +175,33 @@ class Phase::Private
         QMap<int, CustomAnimationState*> customAnims;
 };
 
-class PhaseSingleton
+class AnimationDriverSingleton
 {
     public:
-        Phase self;
+        AnimationDriver self;
 };
 
-K_GLOBAL_STATIC( PhaseSingleton, privateSelf )
+K_GLOBAL_STATIC( AnimationDriverSingleton, privateSelf )
 
-Phase* Phase::self()
+AnimationDriver* AnimationDriver::self()
 {
     return &privateSelf->self;
 }
 
 
-Phase::Phase(QObject * parent)
+AnimationDriver::AnimationDriver(QObject * parent)
     : QObject(parent),
       d(new Private)
 {
     init();
 }
 
-Phase::~Phase()
+AnimationDriver::~AnimationDriver()
 {
     delete d;
 }
 
-void Phase::animatedItemDestroyed(QObject* o)
+void AnimationDriver::animatedItemDestroyed(QObject* o)
 {
     //kDebug() << "testing for" << (void*)o;
     QMutableMapIterator<QGraphicsItem*, AnimationState*> it(d->animatedItems);
@@ -216,7 +216,7 @@ void Phase::animatedItemDestroyed(QObject* o)
     }
 }
 
-void Phase::movingItemDestroyed(QObject* o)
+void AnimationDriver::movingItemDestroyed(QObject* o)
 {
     QMutableMapIterator<QGraphicsItem*, MovementState*> it(d->movingItems);
     while (it.hasNext()) {
@@ -228,7 +228,7 @@ void Phase::movingItemDestroyed(QObject* o)
     }
 }
 
-void Phase::animatedElementDestroyed(QObject* o)
+void AnimationDriver::animatedElementDestroyed(QObject* o)
 {
     QMutableMapIterator<int, ElementAnimationState*> it(d->animatedElements);
     while (it.hasNext()) {
@@ -240,7 +240,7 @@ void Phase::animatedElementDestroyed(QObject* o)
     }
 }
 
-void Phase::customAnimReceiverDestroyed(QObject* o)
+void AnimationDriver::customAnimReceiverDestroyed(QObject* o)
 {
     QMutableMapIterator<int, CustomAnimationState*> it(d->customAnims);
     while (it.hasNext()) {
@@ -252,7 +252,7 @@ void Phase::customAnimReceiverDestroyed(QObject* o)
     }
 }
 
-void Phase::animateItem(QGraphicsItem* item, Animation animation)
+void AnimationDriver::animateItem(QGraphicsItem* item, Animation animation)
 {
      //kDebug();
     // get rid of any existing animations on this item.
@@ -298,7 +298,7 @@ void Phase::animateItem(QGraphicsItem* item, Animation animation)
     }
 }
 
-void Phase::moveItem(QGraphicsItem* item, Movement movement, const QPoint &destination)
+void AnimationDriver::moveItem(QGraphicsItem* item, Movement movement, const QPoint &destination)
 {
      //kDebug();
      QMap<QGraphicsItem*, MovementState*>::iterator it = d->movingItems.find(item);
@@ -342,7 +342,7 @@ void Phase::moveItem(QGraphicsItem* item, Movement movement, const QPoint &desti
      }
 }
 
-int Phase::customAnimation(int frames, int duration, Phase::CurveShape curve,
+int AnimationDriver::customAnimation(int frames, int duration, AnimationDriver::CurveShape curve,
                                      QObject* receiver, const char* slot)
 {
     if (frames < 1 || duration < 1 || !receiver || !slot) {
@@ -378,7 +378,7 @@ int Phase::customAnimation(int frames, int duration, Phase::CurveShape curve,
     return state->id;
 }
 
-void Phase::stopCustomAnimation(int id)
+void AnimationDriver::stopCustomAnimation(int id)
 {
     QMap<int, CustomAnimationState*>::iterator it = d->customAnims.find(id);
     if (it != d->customAnims.end()) {
@@ -389,7 +389,7 @@ void Phase::stopCustomAnimation(int id)
     //kDebug() << "stopCustomAnimation(AnimId " << id << ") done";
 }
 
-int Phase::animateElement(QGraphicsItem *item, Animation animation)
+int AnimationDriver::animateElement(QGraphicsItem *item, Animation animation)
 {
     //kDebug() << "startElementAnimation(AnimId " << animation << ")";
     ElementAnimationState *state = new ElementAnimationState;
@@ -430,7 +430,7 @@ int Phase::animateElement(QGraphicsItem *item, Animation animation)
     return state->id;
 }
 
-void Phase::stopElementAnimation(int id)
+void AnimationDriver::stopElementAnimation(int id)
 {
     QMap<int, ElementAnimationState*>::iterator it = d->animatedElements.find(id);
     if (it != d->animatedElements.end()) {
@@ -440,33 +440,33 @@ void Phase::stopElementAnimation(int id)
     //kDebug() << "stopElementAnimation(AnimId " << id << ") done";
 }
 
-void Phase::setInitialPixmap(int id, const QPixmap &pixmap)
+void AnimationDriver::setInitialPixmap(int id, const QPixmap &pixmap)
 {
     QMap<int, ElementAnimationState*>::iterator it = d->animatedElements.find(id);
 
     if (it == d->animatedElements.end()) {
-        kDebug() << "Phase::setInitialPixmap(" << id << ") found no entry for it!";
+        kDebug() << "AnimationDriver::setInitialPixmap(" << id << ") found no entry for it!";
         return;
     }
 
     it.value()->pixmap = pixmap;
 }
 
-QPixmap Phase::currentPixmap(int id)
+QPixmap AnimationDriver::currentPixmap(int id)
 {
     QMap<int, ElementAnimationState*>::const_iterator it = d->animatedElements.find(id);
 
     if (it == d->animatedElements.constEnd()) {
-        //kDebug() << "Phase::currentPixmap(" << id << ") found no entry for it!";
+        //kDebug() << "AnimationDriver::currentPixmap(" << id << ") found no entry for it!";
         return QPixmap();
     }
 
     ElementAnimationState* state = it.value();
     qreal progress = state->frames;
-    //kDebug() << "Phase::currentPixmap(" << id <<   " at " << progress;
+    //kDebug() << "AnimationDriver::currentPixmap(" << id <<   " at " << progress;
     progress = state->currentFrame / progress;
     progress = qMin(qreal(1.0), qMax(qreal(0.0), progress));
-    //kDebug() << "Phase::currentPixmap(" << id <<   " at " << progress;
+    //kDebug() << "AnimationDriver::currentPixmap(" << id <<   " at " << progress;
 
     switch (state->animation) {
         case AppearAnimation:
@@ -480,7 +480,7 @@ QPixmap Phase::currentPixmap(int id)
     return state->pixmap;
 }
 
-bool Phase::isAnimating() const
+bool AnimationDriver::isAnimating() const
 {
     return (!d->animatedItems.isEmpty() ||
             !d->movingItems.isEmpty() ||
@@ -488,7 +488,7 @@ bool Phase::isAnimating() const
             !d->customAnims.isEmpty());
 }
 
-void Phase::timerEvent(QTimerEvent *event)
+void AnimationDriver::timerEvent(QTimerEvent *event)
 {
     Q_UNUSED(event)
     bool animationsRemain = false;
@@ -616,10 +616,10 @@ void Phase::timerEvent(QTimerEvent *event)
     }
 }
 
-void Phase::init()
+void AnimationDriver::init()
 {
     KConfig c("plasmarc");
-    KConfigGroup cg(&c, "Phase");
+    KConfigGroup cg(&c, "AnimationDriver");
     QString pluginName = cg.readEntry("animator", "default");
 
     if (!pluginName.isEmpty()) {

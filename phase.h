@@ -18,8 +18,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef PHASE_H
-#define PHASE_H
+#ifndef ANIMATIONCONTROLLER_H
+#define ANIMATIONCONTROLLER_H
 
 #include <QtGui/QImage>
 #include <QtCore/QObject>
@@ -35,7 +35,7 @@ namespace Plasma
 /**
  * @short A system for applying effects to Plasma elements
  */
-class PLASMA_EXPORT Phase : public QObject
+class PLASMA_EXPORT AnimationDriver : public QObject
 {
     Q_OBJECT
     Q_ENUMS( Animation )
@@ -70,10 +70,10 @@ public:
     /**
      * Singleton accessor
      **/
-    static Phase* self();
+    static AnimationDriver* self();
 
-    explicit Phase(QObject * parent = 0);
-    ~Phase();
+    explicit AnimationDriver(QObject * parent = 0);
+    ~AnimationDriver();
 
     Q_INVOKABLE void animateItem(QGraphicsItem* item, Animation anim);
     Q_INVOKABLE void moveItem(QGraphicsItem* item, Movement movement, const QPoint &destination);
@@ -92,7 +92,7 @@ public:
      *
      * @return an id that can be used to identify this animation.
      */
-    Q_INVOKABLE int customAnimation(int frames, int duration, Phase::CurveShape curve,
+    Q_INVOKABLE int customAnimation(int frames, int duration, AnimationDriver::CurveShape curve,
                                        QObject* receiver, const char* method);
 
     /**
@@ -118,7 +118,7 @@ public:
     Q_INVOKABLE bool isAnimating() const;
 
 Q_SIGNALS:
-    void animationFinished(QGraphicsItem *item, Plasma::Phase::Animation anim);
+    void animationFinished(QGraphicsItem *item, Plasma::AnimationDriver::Animation anim);
     void movementFinished(QGraphicsItem *item);
     void elementAnimationFinished(int id);
     void customAnimationFinished(int id);

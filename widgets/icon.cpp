@@ -97,26 +97,26 @@ IconAction::IconAction(Icon* icon, QAction *action)
 void IconAction::show()
 {
     if (m_animationId) {
-        Phase::self()->stopElementAnimation(m_animationId);
+        AnimationDriver::self()->stopElementAnimation(m_animationId);
     }
 
     rebuildPixmap();
 
-    m_animationId = Phase::self()->animateElement(m_icon, Phase::AppearAnimation);
-    Phase::self()->setInitialPixmap(m_animationId, m_pixmap);
+    m_animationId = AnimationDriver::self()->animateElement(m_icon, AnimationDriver::AppearAnimation);
+    AnimationDriver::self()->setInitialPixmap(m_animationId, m_pixmap);
     m_visible = true;
 }
 
 void IconAction::hide()
 {
     if (m_animationId) {
-        Phase::self()->stopElementAnimation(m_animationId);
+        AnimationDriver::self()->stopElementAnimation(m_animationId);
     }
 
     rebuildPixmap();
 
-    m_animationId = Phase::self()->animateElement(m_icon, Phase::DisappearAnimation);
-    Phase::self()->setInitialPixmap(m_animationId, m_pixmap);
+    m_animationId = AnimationDriver::self()->animateElement(m_icon, AnimationDriver::DisappearAnimation);
+    AnimationDriver::self()->setInitialPixmap(m_animationId, m_pixmap);
     m_visible = false;
 }
 
@@ -247,7 +247,7 @@ void IconAction::paint(QPainter *painter) const
         return;
     }
 
-    QPixmap animPixmap = Phase::self()->currentPixmap(m_animationId);
+    QPixmap animPixmap = AnimationDriver::self()->currentPixmap(m_animationId);
 
     if (m_visible && animPixmap.isNull()) {
         painter->drawPixmap(m_rect.toRect(), m_pixmap);
@@ -485,10 +485,10 @@ void Icon::hoverEffect(bool show)
     const int FadeInDuration = 150;
 
     if (d->m_hoverAnimId != -1) {
-        Phase::self()->stopCustomAnimation(d->m_hoverAnimId);
+        AnimationDriver::self()->stopCustomAnimation(d->m_hoverAnimId);
     }
-    d->m_hoverAnimId = Phase::self()->customAnimation(40 / (1000 / FadeInDuration), FadeInDuration,
-                                                      Phase::EaseOutCurve, this,
+    d->m_hoverAnimId = AnimationDriver::self()->customAnimation(40 / (1000 / FadeInDuration), FadeInDuration,
+                                                      AnimationDriver::EaseOutCurve, this,
                                                       "hoverAnimationUpdate");
 }
 

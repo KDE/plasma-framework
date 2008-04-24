@@ -44,15 +44,15 @@ public:
     ~Animator();
 
     // Parameter definitions
-    virtual int animationFPS(Plasma::Phase::Animation) const;
-    virtual int movementAnimationFPS(Plasma::Phase::Movement) const;
-    virtual int elementAnimationFPS(Plasma::Phase::Animation) const;
-    virtual int animationDuration(Plasma::Phase::Animation) const;
-    virtual int movementAnimationDuration(Plasma::Phase::Movement) const;
-    virtual int elementAnimationDuration(Plasma::Phase::Animation) const;
-    virtual Phase::CurveShape animationCurve(Plasma::Phase::Animation) const;
-    virtual Phase::CurveShape movementAnimationCurve(Plasma::Phase::Movement) const;
-    virtual Phase::CurveShape elementAnimationCurve(Plasma::Phase::Animation) const;
+    virtual int animationFPS(Plasma::AnimationDriver::Animation) const;
+    virtual int movementAnimationFPS(Plasma::AnimationDriver::Movement) const;
+    virtual int elementAnimationFPS(Plasma::AnimationDriver::Animation) const;
+    virtual int animationDuration(Plasma::AnimationDriver::Animation) const;
+    virtual int movementAnimationDuration(Plasma::AnimationDriver::Movement) const;
+    virtual int elementAnimationDuration(Plasma::AnimationDriver::Animation) const;
+    virtual AnimationDriver::CurveShape animationCurve(Plasma::AnimationDriver::Animation) const;
+    virtual AnimationDriver::CurveShape movementAnimationCurve(Plasma::AnimationDriver::Movement) const;
+    virtual AnimationDriver::CurveShape elementAnimationCurve(Plasma::AnimationDriver::Animation) const;
 
     // Element animations
     virtual QPixmap elementAppear(qreal progress, const QPixmap& pixmap);
