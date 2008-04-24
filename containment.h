@@ -85,8 +85,8 @@ class PLASMA_EXPORT Containment : public Applet
         enum Type { NoContainmentType = -1 /**< @internal */,
                     DesktopContainment = 0 /**< A desktop containment */,
                     PanelContainment /**< A desktop panel */,
-                    CustomContainment /**< A containment that is neither a desktop nor a panel,
-                                           but something application specific */
+                    CustomContainment = 127 /**< A containment that is neither a desktop nor a panel,
+                                                 but something application specific */
                   };
 
         /**
