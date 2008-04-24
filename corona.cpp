@@ -82,7 +82,7 @@ public:
         q->setBackgroundBrush(tile);
     }
 
-    void saveApplets(KSharedConfigPtr cg) const
+    void saveLayout(KSharedConfigPtr cg) const
     {
         KConfigGroup containmentsGroup(cg, "Containments");
         foreach (const Containment *containment, containments) {
@@ -142,7 +142,7 @@ QString Corona::appletMimeType()
     return d->mimetype;
 }
 
-void Corona::saveApplets(const QString &configName) const
+void Corona::saveLayout(const QString &configName) const
 {
     KSharedConfigPtr c;
 
@@ -152,7 +152,7 @@ void Corona::saveApplets(const QString &configName) const
         c = KSharedConfig::openConfig(configName);
     }
 
-    d->saveApplets(c);
+    d->saveLayout(c);
 }
 
 void Corona::scheduleConfigSync() const
@@ -177,7 +177,7 @@ bool appletConfigLessThan(const KConfigGroup &c1, const KConfigGroup &c2)
     return p1.y() < p2.y();
 }
 
-void Corona::loadApplets(const QString& configName)
+void Corona::loadLayout(const QString& configName)
 {
     clearContainments();
     KSharedConfigPtr c;

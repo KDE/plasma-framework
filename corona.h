@@ -78,13 +78,13 @@ public Q_SLOTS:
      * @param config the name of the config file to load from,
      *               or the default config file if QString()
      */
-    void loadApplets(const QString &config = QString());
+    void loadLayout(const QString &config = QString());
 
     /**
-     * Save applets to file
+     * Save applets layout to file
      * @arg config the file to save to, or the default config file if QString()
      */
-    void saveApplets(const QString &config = QString()) const;
+    void saveLayout(const QString &config = QString()) const;
 
     /**
      * Called when there have been changes made to configuration that should be saved
