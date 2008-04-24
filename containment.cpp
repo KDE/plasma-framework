@@ -136,20 +136,20 @@ void Containment::Private::setLockToolText()
 
 Containment::StyleOption::StyleOption()
     : QStyleOptionGraphicsItem(),
-      desktop(-1)
+      view(0)
 {
 
 }
 
 Containment::StyleOption::StyleOption(const Containment::StyleOption & other)
     : QStyleOptionGraphicsItem(other),
-      desktop(other.desktop)
+      view(other.view)
 {
 }
 
 Containment::StyleOption::StyleOption(const QStyleOptionGraphicsItem &other)
     : QStyleOptionGraphicsItem(other),
-      desktop(-1)
+      view(0)
 {
 }
 

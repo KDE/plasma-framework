@@ -75,17 +75,6 @@ class PLASMA_EXPORT Containment : public Applet
                 explicit StyleOption(const QStyleOptionGraphicsItem &other);
 
                 /**
-                 * The virtual desktop (starting at 0) that is currently
-                 * being rendered. this should be used to determine which
-                 * desktop is being rendered for at the current time
-                 * rather than relying on the concept of "current desktop"
-                 * since a containment may be displayed concurrently on
-                 * more than one desktop with desktop effects such as 
-                 * desktop grid.
-                 */
-                int desktop;
-
-                /**
                  * The View, if any, that this containment is currently
                  * being rendered into. Note: this may be NULL, so be
                  * sure to check it before using it!
