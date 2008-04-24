@@ -134,7 +134,7 @@ class Phase::Private
                     animator->itemAppear(amount, state->item);
                     break;
                 case Phase::Disappear:
-                    animator->disappear(amount, state->item);
+                    animator->itemDisappear(amount, state->item);
                     if (amount >= 1) {
                         state->item->hide();
                     }

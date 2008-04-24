@@ -114,7 +114,7 @@ void Animator::itemAppear(qreal frame, QGraphicsItem* item)
     Q_UNUSED(item)
 }
 
-void Animator::disappear(qreal frame, QGraphicsItem* item)
+void Animator::itemDisappear(qreal frame, QGraphicsItem* item)
 {
     Q_UNUSED(frame)
     Q_UNUSED(item)

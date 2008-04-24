@@ -60,7 +60,7 @@ public:
 
     // Item animations
     virtual void itemAppear(qreal progress, QGraphicsItem* item);
-    virtual void disappear(qreal progress, QGraphicsItem* item);
+    virtual void itemDisappear(qreal progress, QGraphicsItem* item);
     virtual void activate(qreal progress, QGraphicsItem* item);
 
     // Item movements
