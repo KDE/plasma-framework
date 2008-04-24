@@ -358,7 +358,7 @@ void DataEngine::setData(const QString& source, const QString& key, const QVaria
     s->setData(key, value);
 
     if (isNew) {
-        emit newSource(source);
+        emit sourceAdded(source);
     }
 
     d->queueUpdate();
@@ -380,7 +380,7 @@ void DataEngine::setData(const QString &source, const Data &data)
     }
 
     if (isNew) {
-        emit newSource(source);
+        emit sourceAdded(source);
     }
 
     d->queueUpdate();
@@ -414,7 +414,7 @@ void DataEngine::addSource(DataContainer* source)
     }
 
     d->sources.insert(source->objectName(), source);
-    emit newSource(source->objectName());
+    emit sourceAdded(source->objectName());
 }
 
 void DataEngine::setSourceLimit(uint limit)

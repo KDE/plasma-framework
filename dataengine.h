@@ -214,7 +214,7 @@ class PLASMA_EXPORT DataEngine : public QObject
          * Emitted when a new data source is created
          * @param source the name of the new data source
          **/
-        void newSource(const QString& source);
+        void sourceAdded(const QString& source);
 
         /**
          * Emitted when a data source is removed.
