@@ -134,13 +134,6 @@ Corona::~Corona()
     delete d;
 }
 
-QRectF Corona::maxSizeHint() const
-{
-    //FIXME: this is a bit of a naive implementation, do you think? =)
-    //       we should factor in how much space we actually have left!
-    return sceneRect();
-}
-
 void Corona::setAppletMimeType(const QString& type)
 {
     d->mimetype = type;

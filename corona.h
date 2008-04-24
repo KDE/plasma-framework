@@ -51,12 +51,6 @@ public:
     bool isImmutable() const;
 
     /**
-     * A rect containing the maximum size a plasmoid on this corona should
-     * consider being.
-     **/
-    QRectF maxSizeHint() const;
-
-    /**
      *  Sets the mimetype of Drag/Drop items. Default is
      *  text/x-plasmoidservicename
      */
