@@ -440,7 +440,7 @@ void Phase::stopElementAnimation(AnimId id)
     //kDebug() << "stopElementAnimation(AnimId " << id << ") done";
 }
 
-void Phase::setAnimationPixmap(AnimId id, const QPixmap &pixmap)
+void Phase::setInitialPixmap(AnimId id, const QPixmap &pixmap)
 {
     QMap<AnimId, ElementAnimationState*>::iterator it = d->animatedElements.find(id);
 
