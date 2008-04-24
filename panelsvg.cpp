@@ -96,7 +96,6 @@ PanelSvg::PanelSvg(QObject* parent)
       d(new Private(this))
 {
     connect(this, SIGNAL(repaintNeeded()), this, SLOT(updateSizes()));
-
     d->panels.insert(QString(), new PanelData());
 }
 
@@ -113,11 +112,8 @@ void PanelSvg::setImagePath(const QString& path)
 
     Svg::setImagePath(path);
 
-    qDeleteAll(d->panels);
-
-    d->panels.insert(QString(), new PanelData());
-    d->panels[QString()]->panelSize = size();
-    d->updateSizes();
+    clearCache();
+    d->updateAndSignalSizes();
 }
 
 void PanelSvg::setEnabledBorders(const EnabledBorders borders)
@@ -190,8 +186,9 @@ void PanelSvg::setElementPrefix(const QString & prefix)
 QString PanelSvg::prefix()
 {
     if (d->prefix.isEmpty()) {
-        return QString();
+        return d->prefix;
     }
+
     return d->prefix.left(d->prefix.size() - 1);
 }
 
@@ -258,9 +255,20 @@ bool PanelSvg::cacheAllRenderedPanels() const
 
 void PanelSvg::clearCache()
 {
+    PanelData *panel = d->panels[d->prefix];
+    if (panel) {
+        // make a copy of the panel data to preserve settings,
+        // but then reset the cached image
+        panel = new PanelData(*panel);
+        panel->cachedBackground = 0;
+    } else {
+        panel = new PanelData();
+    }
+
     qDeleteAll(d->panels);
     d->panels.clear();
-    d->panels.insert(d->prefix, new PanelData());
+
+    d->panels[d->prefix] = panel;
 }
 
 void PanelSvg::paint(QPainter* painter, const QRectF& rect, const QPointF& pos)
@@ -342,11 +350,11 @@ void PanelSvg::Private::generateBackground(PanelData *panel)
                     (panel->topHeight + panel->bottomHeight) +
                     panel->panelSize.height()*(((qreal)(panel->topHeight + panel->bottomHeight)) / panel->panelSize.height()));
 
-            q->Svg::resize(scaledSize.width(), scaledSize.height());
+            q->resize(scaledSize.width(), scaledSize.height());
             q->Svg::paint(&p, QRect(contentLeft - panel->leftWidth, contentTop - panel->topHeight,
                           contentWidth + panel->leftWidth*2, contentHeight + panel->topHeight*2),
                           prefix + "center");
-            q->Svg::resize();
+            q->resize();
         }
     }
 
@@ -458,13 +466,16 @@ void PanelSvg::Private::generateBackground(PanelData *panel)
     }
 
     // re-enable this once Qt's svg rendering is un-buggered
-    //q->Svg::resize(contentWidth, contentHeight);
+    //q->resize(contentWidth, contentHeight);
     //paint(&p, QRect(contentLeft, contentTop, contentWidth, contentHeight), "center");
 }
 
 void PanelSvg::Private::updateSizes()
 {
+    //kDebug() << "!!!!!!!!!!!!!!!!!!!!!! updating sizes" << prefix;
+    q->clearCache();
     PanelData *panel = panels[prefix];
+    Q_ASSERT(panel);
 
     delete panel->cachedBackground;
     panel->cachedBackground = 0;
@@ -502,7 +513,7 @@ void PanelSvg::Private::updateSizes()
 
 void PanelSvg::Private::updateAndSignalSizes()
 {
-    updateSizes();
+    // updateSizes(); <-- this gets called when repaintNeeded is emitted
     emit q->repaintNeeded();
 }
 
