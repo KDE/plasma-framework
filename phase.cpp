@@ -131,7 +131,7 @@ class Phase::Private
         {
             switch (state->animation) {
                 case Phase::Appear:
-                    animator->appear(amount, state->item);
+                    animator->itemAppear(amount, state->item);
                     break;
                 case Phase::Disappear:
                     animator->disappear(amount, state->item);

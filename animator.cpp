@@ -108,7 +108,7 @@ QPixmap Animator::elementDisappear(qreal frame, const QPixmap& pixmap)
     return pix;
 }
 
-void Animator::appear(qreal frame, QGraphicsItem* item)
+void Animator::itemAppear(qreal frame, QGraphicsItem* item)
 {
     Q_UNUSED(frame)
     Q_UNUSED(item)

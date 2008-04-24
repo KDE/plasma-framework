@@ -59,7 +59,7 @@ public:
     virtual QPixmap elementDisappear(qreal frame, const QPixmap& pixmap);
 
     // Item animations
-    virtual void appear(qreal progress, QGraphicsItem* item);
+    virtual void itemAppear(qreal progress, QGraphicsItem* item);
     virtual void disappear(qreal progress, QGraphicsItem* item);
     virtual void activate(qreal progress, QGraphicsItem* item);
 
