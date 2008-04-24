@@ -59,7 +59,7 @@ int Animator::animationDuration(Plasma::Phase::Animation) const
     return 200;
 }
 
-int Animator::duration(Plasma::Phase::Movement movement) const
+int Animator::movementAnimationDuration(Plasma::Phase::Movement movement) const
 {
     switch (movement) {
         case Phase::FastSlideIn:
