@@ -488,7 +488,7 @@ void DataEngine::removeSource(const QString& source)
     }
 }
 
-void DataEngine::clearSources()
+void DataEngine::removeAllSources()
 {
     QMutableHashIterator<QString, Plasma::DataContainer*> it(d->sources);
     while (it.hasNext()) {

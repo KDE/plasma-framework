@@ -361,7 +361,7 @@ class PLASMA_EXPORT DataEngine : public QObject
         /**
          * Removes all data sources
          **/
-        void clearSources();
+        void removeAllSources();
 
         /**
          * Sets whether or not this engine is valid, e.g. can be used.

@@ -124,7 +124,7 @@ void DataEngineScript::setPollingInterval(uint frequency)
 void DataEngineScript::clearSources()
 {
     if (d->dataEngine) {
-        d->dataEngine->clearSources();
+        d->dataEngine->removeAllSources();
     }
 }
 
