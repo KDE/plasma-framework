@@ -90,7 +90,7 @@ class SearchContext::Private
         QReadWriteLock lock;
         QList<SearchMatch *> matches;
         QString term;
-        QString mimetype;
+        QString mimeType;
         SearchContext::Type type;
         KCompletion *completer;
         const SearchContext::DataPolicy policy;
@@ -109,7 +109,7 @@ SearchContext::SearchContext(QObject *parent, const SearchContext &other)
 {
     other.d->lockForRead();
     d->term = other.d->term;
-    d->mimetype = other.d->mimetype;
+    d->mimeType = other.d->mimeType;
     d->type = other.d->type;
     other.d->unlock();
 }
@@ -127,7 +127,7 @@ void SearchContext::resetSearchTerm(const QString &term)
     d->matches.clear();
     d->type = SearchContext::UnknownType;
     d->term.clear();
-    d->mimetype.clear();
+    d->mimeType.clear();
 
     if (d->completer) {
         d->completer->clear();
@@ -179,12 +179,12 @@ void SearchContext::determineType()
             QFileInfo info(path);
             if (info.isDir()) {
                 d->type = Directory;
-                d->mimetype = "inode/folder";
+                d->mimeType = "inode/folder";
             } else {
                 d->type = File;
-                KMimeType::Ptr mimetype = KMimeType::findByPath(path);
-                if (mimetype) {
-                    d->mimetype = mimetype->name();
+                KMimeType::Ptr mimeType = KMimeType::findByPath(path);
+                if (mimeType) {
+                    d->mimeType = mimeType->name();
                 }
             }
         } else if (term.contains('.')) {
@@ -208,9 +208,9 @@ SearchContext::Type SearchContext::type() const
     return d->type;
 }
 
-QString SearchContext::mimetype() const
+QString SearchContext::mimeType() const
 {
-    return d->mimetype;
+    return d->mimeType;
 }
 
 KCompletion* SearchContext::completionObject() const

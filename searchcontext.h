@@ -99,7 +99,7 @@ class PLASMA_EXPORT SearchContext : public QObject
          *         the mimetype of the object being referred to by the search
          *         string.
          */
-        QString mimetype() const;
+        QString mimeType() const;
 
         /**
          * @return a completion object that can be used with UI elements
