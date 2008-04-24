@@ -88,7 +88,7 @@ public:
     KIcon icon;
     EmptyGraphicsItem *toolBacker;
     QTime stopwatch;
-    Plasma::Phase::AnimId animId;
+    int animId;
     qreal animFrame;
 };
 

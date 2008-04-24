@@ -87,7 +87,7 @@ class AppletHandle : public QObject, public QGraphicsItem
         Applet *m_applet;
         qreal m_opacity;
         FadeType m_anim;
-        Phase::AnimId m_animId;
+        int m_animId;
         qreal m_angle;
         qreal m_tempAngle;
         qreal m_scaleWidth;

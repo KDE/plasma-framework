@@ -82,7 +82,7 @@ struct CustomAnimationState
     int currentFrame;
     int interval;
     int currentInterval;
-    Phase::AnimId id;
+    int id;
     QObject* receiver;
     char* slot;
 };
@@ -104,7 +104,7 @@ class Phase::Private
             qDeleteAll(animatedElements);
             qDeleteAll(movingItems);
 
-            QMutableMapIterator<AnimId, CustomAnimationState*> it(customAnims);
+            QMutableMapIterator<int, CustomAnimationState*> it(customAnims);
             while (it.hasNext()) {
                 delete it.value()->slot;
                 delete it.value();
@@ -171,8 +171,8 @@ class Phase::Private
         //      and really making the code fun ;)
         QMap<QGraphicsItem*, AnimationState*> animatedItems;
         QMap<QGraphicsItem*, MovementState*> movingItems;
-        QMap<AnimId, ElementAnimationState*> animatedElements;
-        QMap<AnimId, CustomAnimationState*> customAnims;
+        QMap<int, ElementAnimationState*> animatedElements;
+        QMap<int, CustomAnimationState*> customAnims;
 };
 
 class PhaseSingleton
@@ -230,7 +230,7 @@ void Phase::movingItemDestroyed(QObject* o)
 
 void Phase::animatedElementDestroyed(QObject* o)
 {
-    QMutableMapIterator<AnimId, ElementAnimationState*> it(d->animatedElements);
+    QMutableMapIterator<int, ElementAnimationState*> it(d->animatedElements);
     while (it.hasNext()) {
         it.next();
         if (it.value()->qobj == o) {
@@ -242,7 +242,7 @@ void Phase::animatedElementDestroyed(QObject* o)
 
 void Phase::customAnimReceiverDestroyed(QObject* o)
 {
-    QMutableMapIterator<AnimId, CustomAnimationState*> it(d->customAnims);
+    QMutableMapIterator<int, CustomAnimationState*> it(d->customAnims);
     while (it.hasNext()) {
         if (it.next().value()->receiver == o) {
             delete it.value()->slot;
@@ -342,7 +342,7 @@ void Phase::moveItem(QGraphicsItem* item, Movement movement, const QPoint &desti
      }
 }
 
-Phase::AnimId Phase::customAnimation(int frames, int duration, Phase::CurveShape curve,
+int Phase::customAnimation(int frames, int duration, Phase::CurveShape curve,
                                      QObject* receiver, const char* slot)
 {
     if (frames < 1 || duration < 1 || !receiver || !slot) {
@@ -378,9 +378,9 @@ Phase::AnimId Phase::customAnimation(int frames, int duration, Phase::CurveShape
     return state->id;
 }
 
-void Phase::stopCustomAnimation(AnimId id)
+void Phase::stopCustomAnimation(int id)
 {
-    QMap<AnimId, CustomAnimationState*>::iterator it = d->customAnims.find(id);
+    QMap<int, CustomAnimationState*>::iterator it = d->customAnims.find(id);
     if (it != d->customAnims.end()) {
         delete [] it.value()->slot;
         delete it.value();
@@ -389,7 +389,7 @@ void Phase::stopCustomAnimation(AnimId id)
     //kDebug() << "stopCustomAnimation(AnimId " << id << ") done";
 }
 
-Phase::AnimId Phase::animateElement(QGraphicsItem *item, ElementAnimation animation)
+int Phase::animateElement(QGraphicsItem *item, ElementAnimation animation)
 {
     //kDebug() << "startElementAnimation(AnimId " << animation << ")";
     ElementAnimationState *state = new ElementAnimationState;
@@ -430,9 +430,9 @@ Phase::AnimId Phase::animateElement(QGraphicsItem *item, ElementAnimation animat
     return state->id;
 }
 
-void Phase::stopElementAnimation(AnimId id)
+void Phase::stopElementAnimation(int id)
 {
-    QMap<AnimId, ElementAnimationState*>::iterator it = d->animatedElements.find(id);
+    QMap<int, ElementAnimationState*>::iterator it = d->animatedElements.find(id);
     if (it != d->animatedElements.end()) {
         delete it.value();
         d->animatedElements.erase(it);
@@ -440,9 +440,9 @@ void Phase::stopElementAnimation(AnimId id)
     //kDebug() << "stopElementAnimation(AnimId " << id << ") done";
 }
 
-void Phase::setInitialPixmap(AnimId id, const QPixmap &pixmap)
+void Phase::setInitialPixmap(int id, const QPixmap &pixmap)
 {
-    QMap<AnimId, ElementAnimationState*>::iterator it = d->animatedElements.find(id);
+    QMap<int, ElementAnimationState*>::iterator it = d->animatedElements.find(id);
 
     if (it == d->animatedElements.end()) {
         kDebug() << "Phase::setInitialPixmap(" << id << ") found no entry for it!";
@@ -452,9 +452,9 @@ void Phase::setInitialPixmap(AnimId id, const QPixmap &pixmap)
     it.value()->pixmap = pixmap;
 }
 
-QPixmap Phase::currentPixmap(AnimId id)
+QPixmap Phase::currentPixmap(int id)
 {
-    QMap<AnimId, ElementAnimationState*>::const_iterator it = d->animatedElements.find(id);
+    QMap<int, ElementAnimationState*>::const_iterator it = d->animatedElements.find(id);
 
     if (it == d->animatedElements.constEnd()) {
         //kDebug() << "Phase::currentPixmap(" << id << ") found no entry for it!";

@@ -51,7 +51,7 @@ public:
     void hide();
     bool isVisible() const;
 
-    Phase::AnimId animationId() const;
+    int animationId() const;
     QAction* action() const;
 
     void paint(QPainter *painter) const;
@@ -79,7 +79,7 @@ private:
     bool m_selected;
     bool m_visible;
 
-    Phase::AnimId m_animationId;
+    int m_animationId;
 };
 
 
@@ -171,7 +171,7 @@ public:
     QColor textColor;
     QColor shadowColor;
     bool m_fadeIn;
-    Phase::AnimId m_hoverAnimId;
+    int m_hoverAnimId;
     qreal m_hoverAlpha;
     QSizeF iconSize;
     QIcon icon;

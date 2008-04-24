@@ -230,7 +230,7 @@ bool IconAction::event(QEvent::Type type, const QPointF &pos)
     return false;
 }
 
-Phase::AnimId IconAction::animationId() const
+int IconAction::animationId() const
 {
     return m_animationId;
 }

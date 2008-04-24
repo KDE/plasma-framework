@@ -72,8 +72,6 @@ public:
         FastSlideOutMovement
     };
 
-    typedef int AnimId;
-
     /**
      * Singleton accessor
      **/
@@ -99,7 +97,7 @@ public:
      *
      * @return an id that can be used to identify this animation.
      */
-    Q_INVOKABLE AnimId customAnimation(int frames, int duration, Phase::CurveShape curve,
+    Q_INVOKABLE int customAnimation(int frames, int duration, Phase::CurveShape curve,
                                        QObject* receiver, const char* method);
 
     /**
@@ -109,12 +107,12 @@ public:
      *
      * @arg id the id of the animation as returned by customAnimation
      */
-    Q_INVOKABLE void stopCustomAnimation(AnimId id);
+    Q_INVOKABLE void stopCustomAnimation(int id);
 
-    Q_INVOKABLE AnimId animateElement(QGraphicsItem *obj, ElementAnimation);
-    Q_INVOKABLE void stopElementAnimation(AnimId id);
-    Q_INVOKABLE void setInitialPixmap(AnimId id, const QPixmap &pixmap);
-    Q_INVOKABLE QPixmap currentPixmap(AnimId id);
+    Q_INVOKABLE int animateElement(QGraphicsItem *obj, ElementAnimation);
+    Q_INVOKABLE void stopElementAnimation(int id);
+    Q_INVOKABLE void setInitialPixmap(int id, const QPixmap &pixmap);
+    Q_INVOKABLE QPixmap currentPixmap(int id);
 
     /**
      * Can be used to query if there are other animations happening. This way
@@ -127,8 +125,8 @@ public:
 Q_SIGNALS:
     void animationFinished(QGraphicsItem *item, Plasma::Phase::Animation anim);
     void movementFinished(QGraphicsItem *item);
-    void elementAnimationFinished(Plasma::Phase::AnimId id);
-    void customAnimationFinished(Plasma::Phase::AnimId id);
+    void elementAnimationFinished(int id);
+    void customAnimationFinished(int id);
 
 protected:
     void timerEvent(QTimerEvent *event);
