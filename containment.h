@@ -82,9 +82,6 @@ class PLASMA_EXPORT Containment : public Applet
                 Plasma::View *view;
         };
 
-        typedef QList<Applet*> List;
-        typedef QHash<QString, Applet*> Dict;
-
         enum Type { NoContainmentType = -1 /**< @internal */,
                     DesktopContainment = 0 /**< A desktop containment */,
                     PanelContainment /**< A desktop panel */,
