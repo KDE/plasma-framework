@@ -136,7 +136,7 @@ void AbstractRunner::performMatch( Plasma::SearchContext &globalContext )
     }
 
     //If matches were not added, delete items on the heap
-    if (localContext.addMatchesTo(globalContext) &&
+    if (localContext.moveMatchesTo(globalContext) &&
         slowed && runtime < fastEnoughTime) {
         ++d->fastRuns;
 

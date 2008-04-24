@@ -141,14 +141,14 @@ class PLASMA_EXPORT SearchContext : public QObject
         bool addMatch(const QString &term, SearchMatch *match);
 
         /**
-         * Takes the matches from this SearchContext and adds to them another.
+         * Takes the matches from this SearchContext and copies to them another.
          * If successful, the matches are removed from this SearchContext and
          * ownership passed to the other SearchContext
          *
-         * @arg other the SearchContext to add this object's Matches to
+         * @arg other the SearchContext to move this object's Matches to
          * @return true if matches were added, false if matches were e.g. outdated
          */
-        bool addMatchesTo(SearchContext &other);
+        bool moveMatchesTo(SearchContext &other);
 
         /**
          * Retrieves all available matches for the current search term.
