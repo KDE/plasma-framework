@@ -307,7 +307,7 @@ void Phase::moveItem(QGraphicsItem* item, Movement movement, const QPoint &desti
           d->movingItems.erase(it);
      }
 
-     int frames = d->animator->animationFramesPerSecond(movement);
+     int frames = d->animator->movementAnimationFramesPerSecond(movement);
      if (frames <= 1) {
           // evidently this animator doesn't have an implementation
           // for this Animation
