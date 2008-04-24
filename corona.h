@@ -43,8 +43,6 @@ class PLASMA_EXPORT Corona : public QGraphicsScene
 
 public:
     explicit Corona(QObject * parent = 0);
-    explicit Corona(const QRectF & sceneRect, QObject * parent = 0);
-    Corona(qreal x, qreal y, qreal width, qreal height, QObject * parent = 0);
     ~Corona();
 
     /**

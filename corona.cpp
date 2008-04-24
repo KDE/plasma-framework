@@ -124,22 +124,6 @@ Corona::Corona(QObject *parent)
     //setViewport(new QGLWidget(QGLFormat(QGL::StencilBuffer | QGL::AlphaChannel)));
 }
 
-Corona::Corona(const QRectF & sceneRect, QObject * parent )
-    : QGraphicsScene(sceneRect, parent),
-      d(new Private)
-{
-    d->init(this);
-    //setViewport(new QGLWidget(QGLFormat(QGL::StencilBuffer | QGL::AlphaChannel)));
-}
-
-Corona::Corona(qreal x, qreal y, qreal width, qreal height, QObject * parent)
-    : QGraphicsScene(x, y, width, height, parent),
-      d(new Private)
-{
-    d->init(this);
-    //setViewport(new QGLWidget(QGLFormat(QGL::StencilBuffer | QGL::AlphaChannel)));
-}
-
 Corona::~Corona()
 {
     KConfigGroup cg(config(), "General");
