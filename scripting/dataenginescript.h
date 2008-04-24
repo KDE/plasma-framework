@@ -80,7 +80,6 @@ protected:
     void setData(const QString &source, const QVariant &value);
     void clearData(const QString& source);
     void removeData(const QString& source, const QString& key);
-    void setSourceLimit(uint limit);
     void setMinimumPollingInterval(int minimumMs);
     int  minimumPollingInterval() const;
     void setPollingInterval(uint frequency);

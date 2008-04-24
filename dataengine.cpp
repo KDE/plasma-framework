@@ -417,21 +417,6 @@ void DataEngine::addSource(DataContainer* source)
     emit sourceAdded(source->objectName());
 }
 
-void DataEngine::setSourceLimit(uint limit)
-{
-    if (d->limit == limit) {
-        return;
-    }
-
-    d->limit = limit;
-
-    if (d->limit > 0) {
-        d->trimQueue();
-    } else {
-        d->sourceQueue.clear();
-    }
-}
-
 void DataEngine::setMinimumPollingInterval(int minimumMs)
 {
     d->minPollingInterval = minimumMs;
