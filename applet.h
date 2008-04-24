@@ -416,11 +416,6 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         bool isImmutable() const;
 
         /**
-         * @return true if this applet is immutable due to Kiosk settings
-         */
-        bool isKioskImmutable() const;
-
-        /**
          * @return returns whether or not the applet is using the standard
          *         background
          **/
@@ -658,6 +653,14 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          * @param hasInterface whether or not there is a user interface available
          **/
         void setHasConfigurationInterface(bool hasInterface);
+
+        //TODO: remove from API?
+        //At the moment is still needed by Containment because it needs the difference between a state
+        //that can be unlocked and one that can't (Kiosk) to display or not unlock buttons
+        /**
+         * @return true if this applet is immutable due to Kiosk settings
+         */
+        bool isKioskImmutable() const;
 
         /**
          * Returns the name of the applet.
