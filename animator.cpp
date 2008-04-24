@@ -36,19 +36,19 @@ Animator::~Animator()
 {
 }
 
-int Animator::animationFramesPerSecond(Plasma::Phase::Animation animation) const
+int Animator::animationFPS(Plasma::Phase::Animation animation) const
 {
     Q_UNUSED(animation)
     return 0;
 }
 
-int Animator::movementAnimationFramesPerSecond(Plasma::Phase::Movement movement) const
+int Animator::movementAnimationFPS(Plasma::Phase::Movement movement) const
 {
     Q_UNUSED(movement)
     return 20;
 }
 
-int Animator::elementAnimationFramesPerSecond(Plasma::Phase::ElementAnimation animation) const
+int Animator::elementAnimationFPS(Plasma::Phase::ElementAnimation animation) const
 {
     Q_UNUSED(animation)
     return 0;
