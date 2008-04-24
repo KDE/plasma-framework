@@ -151,7 +151,7 @@ class Phase::Private
                 case Phase::SlideIn:
                 case Phase::FastSlideIn:
                     //kDebug() << "performMovement, SlideIn";
-                    animator->slideIn(amount, state->item, state->start, state->destination);
+                    animator->itemSlideIn(amount, state->item, state->start, state->destination);
                     break;
                 case Phase::SlideOut:
                 case Phase::FastSlideOut:

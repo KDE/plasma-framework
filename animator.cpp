@@ -126,7 +126,7 @@ void Animator::itemActivated(qreal frame, QGraphicsItem* item)
     Q_UNUSED(item)
 }
 
-void Animator::slideIn(qreal progress, QGraphicsItem *item, const QPoint &start, const QPoint &destination)
+void Animator::itemSlideIn(qreal progress, QGraphicsItem *item, const QPoint &start, const QPoint &destination)
 {
     double x = start.x() + (destination.x() - start.x()) * progress;
     double y = start.y() + (destination.y() - start.y()) * progress;
