@@ -387,7 +387,7 @@ void DataEngine::setData(const QString &source, const Data &data)
 }
 
 
-void DataEngine::clearData(const QString& source)
+void DataEngine::removeAllData(const QString& source)
 {
     DataContainer* s = d->source(source, false);
     if (s) {

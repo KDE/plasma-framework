@@ -286,11 +286,11 @@ class PLASMA_EXPORT DataEngine : public QObject
         void setData(const QString &source, const Data &data);
 
         /**
-         * Clears all the data associated with a data source.
+         * Removes all the data associated with a data source.
          *
          * @param source the name of the data source
          **/
-        void clearData(const QString& source);
+        void removeAllData(const QString& source);
 
         /**
          * Removes a data entry from a source

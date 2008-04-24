@@ -81,7 +81,7 @@ void DataEngineScript::setData(const QString &source, const QVariant &value)
 void DataEngineScript::clearData(const QString& source)
 {
     if (d->dataEngine) {
-        d->dataEngine->clearData(source);
+        d->dataEngine->removeAllData(source);
     }
 }
 
