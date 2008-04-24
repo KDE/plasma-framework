@@ -1524,21 +1524,17 @@ void Applet::setGeometry(const QRectF& geometry)
 {
     QRectF beforeGeom = QGraphicsWidget::geometry();
     QGraphicsWidget::setGeometry(geometry);
-    if (geometry.size() != beforeGeom.size())
-    {
-    updateConstraints(Plasma::SizeConstraint);
-    if (d->background) {
-        d->background->resizePanel(boundingRect().size());
-    }
-    emit geometryChanged();
-    }
-    if (geometry.topLeft() != beforeGeom.topLeft())
-    {
-      if (d->background) {
-
-	kDebug() << QGraphicsWidget::geometry();
-      }
-      emit geometryChanged();
+    if (geometry.size() != beforeGeom.size()) {
+        updateConstraints(Plasma::SizeConstraint);
+        if (d->background) {
+            d->background->resizePanel(boundingRect().size());
+        }
+        emit geometryChanged();
+    } else  if (geometry.topLeft() != beforeGeom.topLeft()) {
+        /*if (d->background) {
+            kDebug() << QGraphicsWidget::geometry();
+        }*/
+        emit geometryChanged();
     }
 }
 
