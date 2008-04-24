@@ -106,7 +106,7 @@ void DataContainer::setNeedsUpdate(bool update)
 
 bool DataContainer::visualizationIsConnected(QObject *visualization) const
 {
-    return d->relayObjects.find(visualization) != d->relayObjects.constEnd();
+    return d->relayObjects.contains(visualization);
 }
 
 void DataContainer::checkUsage()

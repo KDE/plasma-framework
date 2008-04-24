@@ -141,6 +141,7 @@ class DataEngine::Private
             if (immediateCall) {
                 // we don't want to do an immediate call if we are simply
                 // reconnecting
+                //kDebug() << "immediate call requested, we have:" << s->visualizationIsConnected(visualization);
                 immediateCall = !s->visualizationIsConnected(visualization);
             }
 
