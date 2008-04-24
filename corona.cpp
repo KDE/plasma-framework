@@ -47,8 +47,9 @@ const int CONFIG_SYNC_TIMEOUT = 120000;
 class Corona::Private
 {
 public:
-    Private()
-        : immutability(NotImmutable),
+    Private(Corona *corona)
+        : q(corona),
+          immutability(NotImmutable),
           mimetype("text/x-plasmoidservicename"),
           config(0)
     {
@@ -64,7 +65,7 @@ public:
         qDeleteAll(containments);
     }
 
-    void init(Corona* q)
+    void init()
     {
         configSyncTimer.setSingleShot(true);
         connect(&configSyncTimer, SIGNAL(timeout()), q, SLOT(syncConfig()));
@@ -106,6 +107,26 @@ public:
         }
     }
 
+    void containmentDestroyed(QObject* obj)
+    {
+        // we do a static_cast here since it really isn't an Containment by this
+        // point anymore since we are in the qobject dtor. we don't actually
+        // try and do anything with it, we just need the value of the pointer
+        // so this unsafe looking code is actually just fine.
+        Containment* containment = static_cast<Plasma::Containment*>(obj);
+        int index = containments.indexOf(containment);
+    
+        if (index > -1) {
+            containments.removeAt(index);
+        }
+    }
+    
+    void syncConfig()
+    {
+        q->config()->sync();
+    }
+
+    Corona *q;
     ImmutabilityType immutability;
     QString mimetype;
     QString configName;
@@ -116,9 +137,9 @@ public:
 
 Corona::Corona(QObject *parent)
     : QGraphicsScene(parent),
-      d(new Private)
+      d(new Private(this))
 {
-    d->init(this);
+    d->init();
     //setViewport(new QGLWidget(QGLFormat(QGL::StencilBuffer | QGL::AlphaChannel)));
 }
 
@@ -393,25 +414,6 @@ void Corona::dragMoveEvent(QGraphicsSceneDragDropEvent *event)
 
     event->accept();
     //kDebug() << "Corona::dragMoveEvent(QDragMoveEvent* event)";
-}
-
-void Corona::containmentDestroyed(QObject* obj)
-{
-    // we do a static_cast here since it really isn't an Containment by this
-    // point anymore since we are in the qobject dtor. we don't actually
-    // try and do anything with it, we just need the value of the pointer
-    // so this unsafe looking code is actually just fine.
-    Containment* containment = static_cast<Plasma::Containment*>(obj);
-    int index = d->containments.indexOf(containment);
-
-    if (index > -1) {
-        d->containments.removeAt(index);
-    }
-}
-
-void Corona::syncConfig()
-{
-    config()->sync();
 }
 
 ImmutabilityType Corona::immutability() const

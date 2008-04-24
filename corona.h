@@ -166,13 +166,12 @@ protected:
     void dragLeaveEvent(QGraphicsSceneDragDropEvent* event);
     void dragMoveEvent(QGraphicsSceneDragDropEvent* event);
 
-protected Q_SLOTS:
-    void containmentDestroyed(QObject*);
-    void syncConfig();
-
 private:
     class Private;
     Private * const d;
+
+    Q_PRIVATE_SLOT(d, void containmentDestroyed(QObject*))
+    Q_PRIVATE_SLOT(d, void syncConfig())
 };
 
 } // namespace Plasma
