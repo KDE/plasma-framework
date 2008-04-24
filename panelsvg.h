@@ -61,10 +61,6 @@ class PLASMA_EXPORT PanelSvg : public Svg
          * Constructs a new PanelSvg that paints the proper named subelements
          * as borders
          *
-         * The size is initialized to be the SVG's native size.
-         *
-         * @arg imagePath the image to show. If a relative path is passed, then
-         *      Plasma::Theme is used to load the SVG.
          * @arg parent options QObject to parent this to
          *
          * @related Plasma::Theme
