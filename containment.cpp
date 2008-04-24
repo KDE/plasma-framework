@@ -329,17 +329,6 @@ void Containment::setContainmentType(Containment::Type type)
     }
 }
 
-void Containment::setIsContainment(bool isContainment)
-{
-    Applet::setIsContainment(isContainment);
-
-    // reset the toolbox!
-    delete d->toolbox;
-    d->toolbox = 0;
-
-    setContainmentType(d->type);
-}
-
 Corona* Containment::corona() const
 {
     return dynamic_cast<Corona*>(scene());

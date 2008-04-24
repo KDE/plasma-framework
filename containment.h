@@ -125,16 +125,6 @@ class PLASMA_EXPORT Containment : public Applet
         Type containmentType() const;
 
         /**
-         * Sets the type of this containment.
-         */
-        void setContainmentType(Containment::Type type);
-
-        /**
-         * Reimplemented from Applet
-         */
-        void setIsContainment(bool isContainment);
-
-        /**
          * Returns the Corona (if any) that this Containment is hosted by
          */
         Corona* corona() const;
@@ -388,6 +378,11 @@ class PLASMA_EXPORT Containment : public Applet
 
     protected:
         /**
+         * Sets the type of this containment.
+         */
+        void setContainmentType(Containment::Type type);
+
+        /**
          * Optionally creates a layout for the Containment for the new
          * form factor. This is called before the current form factor is
          * reset, and adding applets to the new layout, if any, is handled
@@ -427,6 +422,7 @@ class PLASMA_EXPORT Containment : public Applet
         void positionPanel(bool force = false);
         void positionContainment();
 
+        friend class Applet;
         class Private;
         Private* const d;
 };

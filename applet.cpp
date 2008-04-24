@@ -363,9 +363,11 @@ Applet::Applet(QObject* parentObject, const QVariantList& args)
        d(new Private(KService::serviceByStorageId(args.count() > 0 ? args[0].toString() : QString()),
                      args.count() > 1 ? args[1].toInt() : 0))
 {
+    setParent(parentObject);
     // WARNING: do not access config() OR globalConfig() in this method!
     //          that requires a scene, which is not available at this point
     d->init(this);
+
     // the brain damage seen in the initialization list is due to the
     // inflexibility of KService::createInstance
 }
@@ -1552,7 +1554,17 @@ void Applet::lower()
 
 void Applet::setIsContainment(bool isContainment)
 {
+    if (d->isContainment == isContainment) {
+        return;
+    }
+
     d->isContainment = isContainment;
+
+    Containment *c = qobject_cast<Containment*>(this);
+    if (c) {
+        // set up the toolbox
+        c->setContainmentType(c->containmentType());
+    }
 }
 
 bool Applet::isContainment() const
