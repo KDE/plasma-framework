@@ -197,11 +197,6 @@ class PLASMA_EXPORT DataEngine : public QObject
         bool isEmpty() const;
 
         /**
-         * Sets the icon for this data engine
-         **/
-        void setIcon(const QString& icon);
-
-        /**
          * @return the name of the icon for this data engine; and empty string
          *         is returned if there is no associated icon.
          **/
@@ -386,6 +381,11 @@ class PLASMA_EXPORT DataEngine : public QObject
          * Sets the engine name for the DataEngine
          */
         void setName(const QString &name);
+
+        /**
+         * Sets the icon for this data engine
+         **/
+        void setIcon(const QString& icon);
 
     protected Q_SLOTS:
         /**
