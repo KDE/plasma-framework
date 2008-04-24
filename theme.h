@@ -81,15 +81,6 @@ class PLASMA_EXPORT Theme : public QObject
         static PackageStructure::Ptr packageStructure();
 
         /**
-         * Sets the application the theme setting is associated with. This
-         * allows for individual applications that use libplasma to have the
-         * theme set independently.
-         *
-         * @param appname name of the application
-         **/
-        void setApplication(const QString &appname);
-
-        /**
          * Sets the current theme being used.
          */
         void setThemeName(const QString &themeName);
