@@ -204,12 +204,6 @@ class PLASMA_EXPORT Containment : public Applet
          */
         void clearApplets();
 
-       	/**
-         * @return the index to insert an applet at if you want it near the point pos.
-         * @param pos the containment-relative position
-         */
-        virtual int indexAt(const QPointF &pos) const;
-	
         /**
          * Sets the physical screen this Containment is associated with.
          *
@@ -291,7 +285,7 @@ class PLASMA_EXPORT Containment : public Applet
         /**
          * This signal is emitted when a new applet is created by the containment
          */
-        void appletAdded(Plasma::Applet* applet);
+        void appletAdded(Plasma::Applet* applet, const QPointF &pos);
 
         /**
          * This signal is emitted when an applet is destroyed
@@ -417,7 +411,6 @@ class PLASMA_EXPORT Containment : public Applet
 
     private:
         bool regionIsEmpty(const QRectF &region, Applet *ignoredApplet=0) const;
-        void prepareApplet(Applet *applet, bool delayInit);
         void positionPanel(bool force = false);
         void positionContainment();
 

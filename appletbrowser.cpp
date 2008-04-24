@@ -172,7 +172,7 @@ void AppletBrowserWidget::initRunningApplets()
     d->runningApplets.clear();
     QList<Containment*> containments = c->containments();
     foreach (Containment * containment,containments) {
-        connect(containment, SIGNAL(appletAdded(Plasma::Applet*)), this, SLOT(appletAdded(Plasma::Applet*)));
+        connect(containment, SIGNAL(appletAdded(Plasma::Applet*,QPointF)), this, SLOT(appletAdded(Plasma::Applet*)));
         //TODO track containments too?
         QList<Applet*>applets=containment->applets();
         foreach (Applet *applet,applets) {

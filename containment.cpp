@@ -695,23 +695,6 @@ Applet* Containment::Private::addApplet(const QString& name, const QVariantList&
         applet = new Applet;
     }
 
-    q->addApplet(applet, appletGeometry.topLeft(), delayInit);
-
-    /*
-    if (containmentType() != PanelContainment) {
-        //kDebug() << "adding applet" << applet->name() << "with a default geometry of" << appletGeometry << appletGeometry.isValid();
-        if (appletGeometry.isValid()) {
-            //applet->setGeometry(appletGeometry);
-        } else if (appletGeometry.x() != -1 && appletGeometry.y() != -1) {
-            // yes, this means we can't have items start -1, -1
-            //applet->setGeometry(QRectF(appletGeometry.topLeft(),
-//                                    applet->sizeHint()));
-        } else if (q->geometry().isValid()) {
-            //applet->setGeometry(geometryForApplet(applet));
-        }
-    }
-    */
-
     //kDebug() << applet->name() << "sizehint:" << applet->sizeHint() << "geometry:" << applet->geometry();
 
     Corona *c = q->corona();
@@ -719,7 +702,7 @@ Applet* Containment::Private::addApplet(const QString& name, const QVariantList&
         connect(applet, SIGNAL(configNeedsSaving()), q->corona(), SLOT(scheduleConfigSync()));
     }
 
-    emit q->appletAdded(applet);
+    q->addApplet(applet, appletGeometry.topLeft(), delayInit);
     return applet;
 }
 
@@ -739,17 +722,10 @@ void Containment::addApplet(Applet *applet, const QPointF &pos, bool delayInit)
     }
 
     Containment *currentContainment = applet->containment();
-    int index = -1;
 
     if (containmentType() == PanelContainment) {
         //panels don't want backgrounds, which is important when setting geometry
         applet->setDrawStandardBackground(false);
-
-        // Calculate where the user wants the applet to go before adding it
-        //so long as this isn't a new applet with a delayed init
-        if (! delayInit || (currentContainment && currentContainment != this)) {
-            index = indexAt(pos);
-        }
     }
 
     if (currentContainment && currentContainment != this) {
@@ -768,76 +744,12 @@ void Containment::addApplet(Applet *applet, const QPointF &pos, bool delayInit)
 
     d->applets << applet;
 
-    connect(applet, SIGNAL(destroyed(QObject*)),
-            this, SLOT(appletDestroyed(QObject*)));
+    connect(applet, SIGNAL(destroyed(QObject*)), this, SLOT(appletDestroyed(QObject*)));
 
-    QGraphicsLayout *lay = layout();
-
-    // Reposition the applet after adding has been done
-    //FIXME adding position incorrect
-    if (index != -1) {
-        QGraphicsLinearLayout *l = dynamic_cast<QGraphicsLinearLayout *>(lay);
-        if (l) {
-            l->insertItem(index, applet);
-            d->applets.removeAll(applet);
-            d->applets.insert(index, applet);
-        } else {
-            index = -1;
-        }
+    if (pos != QPointF(-1, -1)) {
+        applet->setPos(pos);
     }
 
-    if (index == -1) {
-        if (pos != QPointF(-1, -1)) {
-            applet->setPos(pos);
-        }
-
-        QGraphicsLinearLayout *l = dynamic_cast<QGraphicsLinearLayout *>(lay);
-        if (l) {
-            l->addItem(applet);
-        }
-        //l->addStretch();
-    }
-
-    prepareApplet(applet, delayInit); //must at least flush constraints
-}
-
-//containment-relative pos... right?
-int Containment::indexAt(const QPointF &pos) const
-{
-/*    if (pos == QPointF(-1, -1)) {
-        return -1;
-    }
-    QGraphicsLinearLayout *l = dynamic_cast<QGraphicsLinearLayout *>(layout());
-    if (l) {
-        foreach (Applet *existingApplet, d->applets) {
-            if (formFactor() == Horizontal) {
-                qreal middle = (existingApplet->geometry().left() +
-                        existingApplet->geometry().right()) / 2.0;
-                // Applets are checked in order so there is no need to check
-                // if the position is equal to or greater than the applet's
-                // leftmost point. This also allows for dropping in the gap
-                // between applets.
-                if (pos.x() < middle) {
-                    return l->indexOf(existingApplet);
-                } else if (pos.x() <= existingApplet->geometry().right()) {
-                    return l->indexOf(existingApplet) + 1;
-                }
-            } else {
-                qreal middle = (existingApplet->geometry().top() +
-                        existingApplet->geometry().bottom()) / 2.0;
-                if (pos.y() < middle) {
-                    return l->indexOf(existingApplet);
-                } else if (pos.y() <= existingApplet->geometry().bottom()) {
-                    return l->indexOf(existingApplet) + 1;
-                }
-            }
-        }
-    }*/
-    return -1;
-}
-
-void Containment::prepareApplet(Applet *applet, bool delayInit)
-{
     if (delayInit) {
         if (containmentType() == DesktopContainment) {
             applet->installSceneEventFilter(this);
@@ -852,6 +764,8 @@ void Containment::prepareApplet(Applet *applet, bool delayInit)
         applet->flushUpdatedConstraints();
         emit configNeedsSaving();
     }
+
+    emit appletAdded(applet, pos);
 }
 
 bool Containment::regionIsEmpty(const QRectF &region, Applet *ignoredApplet) const
