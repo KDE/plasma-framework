@@ -106,14 +106,6 @@ class PLASMA_EXPORT DataContainer : public QObject
          */
         bool visualizationIsConnected(QObject *visualization) const;
 
-    public Q_SLOTS:
-        /**
-         * Check if the DataContainer is still in use.
-         * If not the signal "becameUnused" will be emitted.
-         * Warning: The DataContainer may be invalid after calling this function.
-         */
-        void checkUsage();
-
         /**
          * Connects an object to this DataContainer. May be called repeatedly
          * for the same visualization without side effects
@@ -122,6 +114,14 @@ class PLASMA_EXPORT DataContainer : public QObject
          * @param pollingInterval the time in milliseconds between updates
          **/
         void connectVisualization(QObject* visualization, uint pollingInterval, Plasma::IntervalAlignment alignment);
+
+    public Q_SLOTS:
+        /**
+         * Check if the DataContainer is still in use.
+         * If not the signal "becameUnused" will be emitted.
+         * Warning: The DataContainer may be invalid after calling this function.
+         */
+        void checkUsage();
 
         /**
          * Disconnects an object from this DataContainer.
