@@ -73,7 +73,7 @@ int Animator::movementAnimationDuration(Plasma::Phase::Movement movement) const
     return 270;
 }
 
-int Animator::duration(Plasma::Phase::ElementAnimation) const
+int Animator::elementAnimationDuration(Plasma::Phase::ElementAnimation) const
 {
     return 333;
 }

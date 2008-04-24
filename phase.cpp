@@ -399,7 +399,7 @@ Phase::AnimId Phase::animateElement(QGraphicsItem *item, ElementAnimation animat
     //TODO: variance in times based on the value of animation
     state->frames = d->animator->elementAnimationFramesPerSecond(animation) / 5;
     state->currentFrame = 0;
-    state->interval = d->animator->duration(animation) / state->frames;
+    state->interval = d->animator->elementAnimationDuration(animation) / state->frames;
     state->interval = (state->interval / MIN_TICK_RATE) * MIN_TICK_RATE;
     state->currentInterval = state->interval;
     state->id = ++d->animId;
