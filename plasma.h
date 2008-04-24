@@ -136,6 +136,16 @@ enum ItemTypes { AppletType = QGraphicsItem::UserType + 1,
                };
 
 /**
+ * Defines the immutability of items like applets, corona and containments
+ * they can be free to modify, locked down by the user or locked down by the system (e.g. kiosk setups)
+ */
+enum ImmutabilityType { NotImmutable = 1 /**The item can be modified in any way **/,
+                        UserImmutable = 2 /**The user has requested a lock down, and can undo the lock down at any time **/,
+                        SystemImmutable = 4 /** the item is locked down by the system, the user can't unlock it **/
+
+                      };
+               
+/**
  * The ComonentType enumeration refers to the various types of components,
  * or plugins, supported by plasma.
  */

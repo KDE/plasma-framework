@@ -48,8 +48,7 @@ class Corona::Private
 {
 public:
     Private()
-        : immutable(false),
-          kioskImmutable(false),
+        : immutability(NotImmutable),
           mimetype("text/x-plasmoidservicename"),
           config(0)
     {
@@ -107,8 +106,7 @@ public:
         }
     }
 
-    bool immutable;
-    bool kioskImmutable;
+    ImmutabilityType immutability;
     QString mimetype;
     QString configName;
     KSharedConfigPtr config;
@@ -130,7 +128,7 @@ Corona::~Corona()
 
     // we call the dptr member directly for locked since isImmutable()
     // also checks kiosk and parent containers
-    cg.writeEntry("locked", d->immutable);
+    cg.writeEntry("immutability", (int)d->immutability);
     delete d;
 }
 
@@ -255,13 +253,12 @@ void Corona::loadApplets(const QString& configName)
         }
     }
 
-    d->kioskImmutable = config()->isImmutable();
-    if (d->kioskImmutable) {
+    if (config()->isImmutable()) {
         d->updateContainmentImmutability();
     }
 
     KConfigGroup coronaConfig(config(), "General");
-    setImmutable(coronaConfig.readEntry("locked", false));
+    setImmutability((ImmutabilityType)coronaConfig.readEntry("immutability", (int)NotImmutable));
 }
 
 void Corona::loadDefaultSetup()
@@ -419,20 +416,20 @@ void Corona::syncConfig()
     config()->sync();
 }
 
-bool Corona::isImmutable() const
+ImmutabilityType Corona::immutability() const
 {
-    return d->kioskImmutable || d->immutable;
+    return d->immutability;
 }
 
-void Corona::setImmutable(bool immutable)
+void Corona::setImmutability(const ImmutabilityType immutable)
 {
-    if (d->immutable == immutable ||
-        (!immutable && d->kioskImmutable)) {
+    if (d->immutability == immutable ||
+        d->immutability == SystemImmutable) {
         return;
     }
-
+    
     kDebug() << "setting immutability to" << immutable;
-    d->immutable = immutable;
+    d->immutability = immutable;
     d->updateContainmentImmutability();
 }
 

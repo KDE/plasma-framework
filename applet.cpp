@@ -112,8 +112,7 @@ public:
           mainConfig(0),
           pendingConstraints(NoConstraint),
           aspectRatioMode(Qt::KeepAspectRatio),
-          kioskImmutable(false),
-          immutable(false),
+          immutability(NotImmutable),
           hasConfigurationInterface(false),
           failed(false),
           isContainment(false),
@@ -333,8 +332,7 @@ public:
     KConfigGroup *mainConfig;
     Plasma::Constraints pendingConstraints;
     Qt::AspectRatioMode aspectRatioMode;
-    bool kioskImmutable : 1;
-    bool immutable : 1;
+    ImmutabilityType immutability;
     bool hasConfigurationInterface : 1;
     bool failed : 1;
     bool isContainment : 1;
@@ -410,7 +408,7 @@ void Applet::save(KConfigGroup* group) const
 {
     // we call the dptr member directly for locked since isImmutable()
     // also checks kiosk and parent containers
-    group->writeEntry("locked", d->immutable);
+    group->writeEntry("immutability", (int)d->immutability);
     group->writeEntry("plugin", pluginName());
     //FIXME: for containments, we need to have some special values here w/regards to
     //       screen affinity (e.g. "bottom of screen 0")
@@ -449,9 +447,7 @@ void Applet::restore(KConfigGroup *c)
 
     setZValue(z);
 
-    if (c->readEntry("locked", false)) {
-        setImmutable(true);
-    }
+    setImmutability((ImmutabilityType)c->readEntry("immutability", (int)NotImmutable));
 }
 
 void Applet::setFailedToLaunch(bool failed, const QString& reason)
@@ -751,27 +747,31 @@ QString Applet::category(const QString& appletName)
     return offers.first()->property("X-KDE-PluginInfo-Category").toString();
 }
 
-bool Applet::isImmutable() const
+ImmutabilityType Applet::immutability() const
 {
-    return  d->immutable || d->kioskImmutable ||
-            (containment() && containment()->isImmutable()) ||
-            (dynamic_cast<Corona*>(scene()) && static_cast<Corona*>(scene())->isImmutable());
+    //Returning the more strict immutability between the applet immutability and Corona one
+    ImmutabilityType coronaImmutability = NotImmutable;
+
+    if (dynamic_cast<Corona*>(scene())) {
+        coronaImmutability = static_cast<Corona*>(scene())->immutability();
+    }
+
+    if (coronaImmutability == SystemImmutable) {
+        return SystemImmutable;
+    } else if (coronaImmutability == UserImmutable && d->immutability != SystemImmutable) {
+        return UserImmutable;
+    } else {
+        return d->immutability;
+    }
 }
 
-bool Applet::isKioskImmutable() const
+void Applet::setImmutability(const ImmutabilityType immutable)
 {
-    Corona *c = dynamic_cast<Corona*>(scene());
-    return d->kioskImmutable || (c && c->isImmutable());
-}
-
-void Applet::setImmutable(bool immutable)
-{
-    if (d->immutable == immutable ||
-        (immutable && d->kioskImmutable)) {
+    if (d->immutability == immutable) {
         return;
     }
 
-    d->immutable = immutable;
+    d->immutability = immutable;
     updateConstraints(ImmutableConstraint);
 }
 
@@ -866,11 +866,11 @@ void Applet::setNeedsConfiguring(bool needsConfig)
 
 void Applet::checkImmutability()
 {
-    d->kioskImmutable = globalConfig().isImmutable() || config().isImmutable() ||
-                        (containment() && containment()->isKioskImmutable()) ||
-                        (dynamic_cast<Corona*>(scene()) && static_cast<Corona*>(scene())->isImmutable());
+    const bool systemImmutable = globalConfig().isImmutable() || config().isImmutable() ||
+                                 (containment() && containment()->immutability() == SystemImmutable) ||
+                                 (dynamic_cast<Corona*>(scene()) && static_cast<Corona*>(scene())->immutability() == SystemImmutable);
 
-    if (d->kioskImmutable) {
+    if (systemImmutable) {
         updateConstraints(ImmutableConstraint);
     }
 }
@@ -1218,7 +1218,7 @@ bool Applet::sceneEventFilter( QGraphicsItem * watched, QEvent * event )
 
 void Applet::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
-    if (!isImmutable() && formFactor() == Plasma::Planar) {
+    if (d->immutability == NotImmutable && formFactor() == Plasma::Planar) {
         QGraphicsItem *parent = parentItem();
         Plasma::Applet *applet = qgraphicsitem_cast<Plasma::Applet*>(parent);
 

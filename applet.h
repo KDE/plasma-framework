@@ -65,7 +65,7 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
     Q_PROPERTY(bool hasConfigurationInterface READ hasConfigurationInterface)
     Q_PROPERTY(QString name READ name)
     Q_PROPERTY(QString category READ category)
-    Q_PROPERTY(bool immutable READ isImmutable WRITE setImmutable)
+    Q_PROPERTY(ImmutabilityType immutability READ immutability WRITE setImmutability)
     Q_PROPERTY(bool drawStandardBackground READ drawStandardBackground WRITE setDrawStandardBackground)
     Q_PROPERTY(bool hasFailedToLaunch READ hasFailedToLaunch WRITE setFailedToLaunch)
     Q_PROPERTY(bool needsConfiguring READ needsConfiguring WRITE setNeedsConfiguring)
@@ -411,9 +411,9 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         QColor color() const;
 
         /**
-         * @return true if this applet is immutable
-         **/
-        bool isImmutable() const;
+         * @return The type of immutability of this applet
+         */
+        ImmutabilityType immutability() const;
 
         /**
          * @return returns whether or not the applet is using the standard
@@ -556,11 +556,10 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
 
     public Q_SLOTS:
         /**
-         * Sets whether or not this applet is immutable or not.
-         *
-         * @param immutable true if this applet should not be changeable
-         **/
-        void setImmutable(bool immutable);
+         * Sets the immutability type for this applet (not immutable, user immutable or system immutable)
+         * @arg immutable the new immutability type of this applet
+         */
+        void setImmutability(const ImmutabilityType immutable);
 
         /**
          * Destroys the applet; it will be deleted and configurations reset.
@@ -653,14 +652,6 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          * @param hasInterface whether or not there is a user interface available
          **/
         void setHasConfigurationInterface(bool hasInterface);
-
-        //TODO: remove from API?
-        //At the moment is still needed by Containment because it needs the difference between a state
-        //that can be unlocked and one that can't (Kiosk) to display or not unlock buttons
-        /**
-         * @return true if this applet is immutable due to Kiosk settings
-         */
-        bool isKioskImmutable() const;
 
         /**
          * Returns the name of the applet.

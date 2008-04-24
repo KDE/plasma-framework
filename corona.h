@@ -133,9 +133,15 @@ public Q_SLOTS:
     QList<Containment*> containments() const;
 
     /**
-     * Sets if the applets are Immutable
+     * @return The type of immutability of this applet
      */
-    void setImmutable(bool immutable_);
+    ImmutabilityType immutability() const;
+
+    /**
+     * Sets the immutability type for this applet (not immutable, user immutable or system immutable)
+     * @arg immutable the new immutability type of this applet
+     */
+    void setImmutability(const ImmutabilityType immutable);
 
 Q_SIGNALS:
     /**

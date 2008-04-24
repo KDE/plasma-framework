@@ -124,7 +124,7 @@ void Containment::Private::setLockToolText()
         Icon *icon = dynamic_cast<Plasma::Icon*>(toolbox->tool("lockWidgets"));
         if (icon) {
             // we know it's an icon becase we made it
-            icon->setText(q->isImmutable() ? i18n("Unlock Widgets") :
+            icon->setText(q->immutability() != NotImmutable ? i18n("Unlock Widgets") :
                                              i18n("Lock Widgets"));
             QSizeF iconSize = icon->sizeFromIconSize(22);
             icon->setMinimumSize(iconSize);
@@ -262,7 +262,7 @@ void Containment::containmentConstraintsUpdated(Plasma::Constraints constraints)
         } else {
             d->toolbox->setPos(geometry().right() - qAbs(d->toolbox->boundingRect().width()), 0);
         }
-        d->toolbox->enableTool("addwidgets", !isImmutable());
+        d->toolbox->enableTool("addwidgets", immutability() == NotImmutable);
     }
 
     if (constraints & Plasma::FormFactorConstraint && d->toolbox) {
@@ -306,9 +306,9 @@ void Containment::setContainmentType(Containment::Type type)
             QGraphicsWidget *zoomOutTool = addToolBoxTool("zoomOut", "zoom-out", i18n("Zoom Out"));
             connect(zoomOutTool, SIGNAL(clicked()), this, SIGNAL(zoomOut()));
 
-            if (!isKioskImmutable()) {
+            if (immutability() != SystemImmutable) {
                 QGraphicsWidget *lockTool = addToolBoxTool("lockWidgets", "object-locked",
-                                                          isImmutable() ? i18n("Unlock Widgets") :
+                                                          immutability() == UserImmutable ? i18n("Unlock Widgets") :
                                                                           i18n("Lock Widgets"));
                 connect(lockTool, SIGNAL(clicked()), this, SLOT(toggleDesktopImmutability()));
             }
@@ -401,7 +401,7 @@ void Containment::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
             }
         }
 
-        if (scene() && !static_cast<Corona*>(scene())->isImmutable()) {
+        if (scene() && !static_cast<Corona*>(scene())->immutability() != NotImmutable) {
             if (hasEntries) {
                 desktopMenu.addSeparator();
             }
@@ -423,7 +423,7 @@ void Containment::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
             return;
         }
     } else {
-        if (!scene() || (static_cast<Corona*>(scene())->isImmutable() && !KAuthorized::authorizeKAction("unlock_desktop"))) {
+        if (!scene() || (static_cast<Corona*>(scene())->immutability() != NotImmutable && !KAuthorized::authorizeKAction("unlock_desktop"))) {
             //kDebug() << "immutability";
             Applet::contextMenuEvent(event);
             return;
@@ -594,9 +594,17 @@ Location Containment::location() const
 void Containment::toggleDesktopImmutability()
 {
     if (corona()) {
-        corona()->setImmutable(!corona()->isImmutable());
+        if (corona()->immutability() == NotImmutable) { 
+            corona()->setImmutability(UserImmutable);
+        } else if (corona()->immutability() == UserImmutable) { 
+            corona()->setImmutability(NotImmutable);
+        }
     } else {
-        setImmutable(!isImmutable());
+        if (immutability() == NotImmutable) {
+            setImmutability(UserImmutable);
+        } else if (immutability() == UserImmutable) { 
+            setImmutability(NotImmutable);
+        }
     }
 
     d->setLockToolText();
@@ -620,7 +628,7 @@ void Containment::clearApplets()
 
 Applet* Containment::addApplet(const QString& name, const QVariantList& args, uint id, const QRectF& appletGeometry, bool delayInit)
 {
-    if (!delayInit && isImmutable()) {
+    if (!delayInit && immutability() != NotImmutable) {
         kDebug() << "addApplet for" << name << "requested, but we're currently immutable!";
         return 0;
     }
@@ -672,7 +680,7 @@ Applet* Containment::addApplet(const QString& name, const QVariantList& args, ui
 //there.
 void Containment::addApplet(Applet *applet, const QPointF &pos, bool delayInit)
 {
-    if (!delayInit && isImmutable()) {
+    if (!delayInit && immutability() != NotImmutable) {
         return;
     }
 
@@ -1227,8 +1235,8 @@ bool Containment::sceneEventFilter(QGraphicsItem *watched, QEvent *event)
 
     switch (event->type()) {
     case QEvent::GraphicsSceneHoverEnter:
-        //kDebug() << "got hoverenterEvent" << isImmutable() << " " << applet->isImmutable();
-        if (!isImmutable() && !applet->isImmutable()) {
+        //kDebug() << "got hoverenterEvent" << immutability() << " " << applet->immutability();
+        if (immutability() == NotImmutable && applet->immutability() == NotImmutable) {
             if (d->handles.contains(applet)) {
                 d->handles[applet]->startFading(AppletHandle::FadeIn);
             } else {
