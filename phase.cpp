@@ -394,7 +394,7 @@ Phase::AnimId Phase::animateElement(QGraphicsItem *item, ElementAnimation animat
     //kDebug() << "startElementAnimation(AnimId " << animation << ")";
     ElementAnimationState *state = new ElementAnimationState;
     state->item = item;
-    state->curve = d->animator->curve(animation);
+    state->curve = d->animator->elementAnimationCurve(animation);
     state->animation = animation;
     //TODO: variance in times based on the value of animation
     state->frames = d->animator->elementAnimationFramesPerSecond(animation) / 5;

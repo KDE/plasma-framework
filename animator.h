@@ -52,7 +52,7 @@ public:
     virtual int elementAnimationDuration(Plasma::Phase::ElementAnimation) const;
     virtual Phase::CurveShape animationCurve(Plasma::Phase::Animation) const;
     virtual Phase::CurveShape movementAnimationCurve(Plasma::Phase::Movement) const;
-    virtual Phase::CurveShape curve(Plasma::Phase::ElementAnimation) const;
+    virtual Phase::CurveShape elementAnimationCurve(Plasma::Phase::ElementAnimation) const;
 
     // Element animations
     virtual QPixmap elementAppear(qreal progress, const QPixmap& pixmap);
