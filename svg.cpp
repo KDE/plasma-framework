@@ -393,6 +393,7 @@ void Svg::setImagePath(const QString &svgFilePath)
 {
    d->setImagePath(svgFilePath, this);
    d->eraseRenderer();
+   emit repaintNeeded();
 }
 
 QString Svg::imagePath() const
