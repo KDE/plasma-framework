@@ -114,7 +114,7 @@ public:
     Q_INVOKABLE AnimId animateElement(QGraphicsItem *obj, ElementAnimation);
     Q_INVOKABLE void stopElementAnimation(AnimId id);
     Q_INVOKABLE void setInitialPixmap(AnimId id, const QPixmap &pixmap);
-    Q_INVOKABLE QPixmap animationResult(AnimId id);
+    Q_INVOKABLE QPixmap currentPixmap(AnimId id);
 
     /**
      * Can be used to query if there are other animations happening. This way

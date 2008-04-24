@@ -247,7 +247,7 @@ void IconAction::paint(QPainter *painter) const
         return;
     }
 
-    QPixmap animPixmap = Phase::self()->animationResult(m_animationId);
+    QPixmap animPixmap = Phase::self()->currentPixmap(m_animationId);
 
     if (m_visible && animPixmap.isNull()) {
         painter->drawPixmap(m_rect.toRect(), m_pixmap);

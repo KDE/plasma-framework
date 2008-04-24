@@ -445,28 +445,28 @@ void Phase::setInitialPixmap(AnimId id, const QPixmap &pixmap)
     QMap<AnimId, ElementAnimationState*>::iterator it = d->animatedElements.find(id);
 
     if (it == d->animatedElements.end()) {
-        kDebug() << "Phase::setAnimationPixmap(" << id << ") found no entry for it!";
+        kDebug() << "Phase::setInitialPixmap(" << id << ") found no entry for it!";
         return;
     }
 
     it.value()->pixmap = pixmap;
 }
 
-QPixmap Phase::animationResult(AnimId id)
+QPixmap Phase::currentPixmap(AnimId id)
 {
     QMap<AnimId, ElementAnimationState*>::const_iterator it = d->animatedElements.find(id);
 
     if (it == d->animatedElements.constEnd()) {
-        //kDebug() << "Phase::animationResult(" << id << ") found no entry for it!";
+        //kDebug() << "Phase::currentPixmap(" << id << ") found no entry for it!";
         return QPixmap();
     }
 
     ElementAnimationState* state = it.value();
     qreal progress = state->frames;
-    //kDebug() << "Phase::animationResult(" << id <<   " at " << progress;
+    //kDebug() << "Phase::currentPixmap(" << id <<   " at " << progress;
     progress = state->currentFrame / progress;
     progress = qMin(qreal(1.0), qMax(qreal(0.0), progress));
-    //kDebug() << "Phase::animationResult(" << id <<   " at " << progress;
+    //kDebug() << "Phase::currentPixmap(" << id <<   " at " << progress;
 
     switch (state->animation) {
         case ElementAppear:
