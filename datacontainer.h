@@ -101,6 +101,11 @@ class PLASMA_EXPORT DataContainer : public QObject
          **/
         void setNeedsUpdate(bool update = true);
 
+        /**
+         * @return true if the visualization is currently connected
+         */
+        bool visualizationIsConnected(QObject *visualization) const;
+
     public Q_SLOTS:
         /**
          * Check if the DataContainer is still in use.

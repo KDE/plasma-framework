@@ -138,6 +138,12 @@ class DataEngine::Private
                 pollingInterval = pollingInterval - (pollingInterval % 50);
             }
 
+            if (immediateCall) {
+                // we don't want to do an immediate call if we are simply
+                // reconnecting
+                immediateCall = !s->visualizationIsConnected(visualization);
+            }
+
             s->connectVisualization(visualization, pollingInterval, align);
 
             if (immediateCall) {

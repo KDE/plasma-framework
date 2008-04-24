@@ -104,6 +104,11 @@ void DataContainer::setNeedsUpdate(bool update)
     d->cached = update;
 }
 
+bool DataContainer::visualizationIsConnected(QObject *visualization) const
+{
+    return d->relayObjects.find(visualization) != d->relayObjects.constEnd();
+}
+
 void DataContainer::checkUsage()
 {
     if (d->relays.count() < 1 &&
