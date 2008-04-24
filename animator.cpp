@@ -83,7 +83,7 @@ Phase::CurveShape Animator::animationCurve(Plasma::Phase::Animation) const
     return Phase::EaseInOutCurve;
 }
 
-Phase::CurveShape Animator::curve(Plasma::Phase::Movement) const
+Phase::CurveShape Animator::movementAnimationCurve(Plasma::Phase::Movement) const
 {
     return Phase::EaseInOutCurve;
 }

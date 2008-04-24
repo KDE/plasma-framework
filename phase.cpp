@@ -319,7 +319,7 @@ void Phase::moveItem(QGraphicsItem* item, Movement movement, const QPoint &desti
      state->start = item->pos().toPoint();
      state->item = item;
      state->movement = movement;
-     state->curve = d->animator->curve(movement);
+     state->curve = d->animator->movementAnimationCurve(movement);
      //TODO: variance in times based on the value of animation
      state->frames = frames / 2;
      state->currentFrame = 0;
