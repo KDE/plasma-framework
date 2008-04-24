@@ -255,7 +255,7 @@ class PLASMA_EXPORT DataEngine : public QObject
          * @return true if the data was changed, or false if there was no
          *         change or if the change will occur later
          **/
-        virtual bool updateSource(const QString& source);
+        virtual bool updateSourceEvent(const QString& source);
 
         /**
          * Sets a value for a data source. If the source
@@ -336,8 +336,8 @@ class PLASMA_EXPORT DataEngine : public QObject
 
         /**
          * Sets up an internal update tick for all data sources. On every update,
-         * updateSource will be called for each applicable source.
-         * @see updateSource
+         * updateSourceEvent will be called for each applicable source.
+         * @see updateSourceEvent
          *
          * @param frequency the time, in milliseconds, between updates. A value of 0
          *                  will stop internally triggered updates.

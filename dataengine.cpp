@@ -306,7 +306,7 @@ void DataEngine::internalUpdateSource(DataContainer* source)
         return;
     }
 
-    if (updateSource(source->objectName())) {
+    if (updateSourceEvent(source->objectName())) {
         d->queueUpdate();
     }
 }
@@ -331,7 +331,7 @@ bool DataEngine::sourceRequestEvent(const QString &name)
     }
 }
 
-bool DataEngine::updateSource(const QString& source)
+bool DataEngine::updateSourceEvent(const QString& source)
 {
     if (d->script) {
         return d->script->updateSource(source);
@@ -556,7 +556,7 @@ void DataEngine::timerEvent(QTimerEvent *event)
     QHashIterator<QString, Plasma::DataContainer*> it(d->sources);
     while (it.hasNext()) {
         it.next();
-        updateSource(it.key());
+        updateSourceEvent(it.key());
     }
     checkForUpdates();
 }
