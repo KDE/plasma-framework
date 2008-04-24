@@ -65,7 +65,7 @@ public:
 
     // Item movements
     virtual void itemSlideIn(qreal progress, QGraphicsItem* item, const QPoint &start, const QPoint &destination);
-    virtual void slideOut(qreal progress, QGraphicsItem* item, const QPoint &start, const QPoint &destination);
+    virtual void itemSlideOut(qreal progress, QGraphicsItem* item, const QPoint &start, const QPoint &destination);
 
 private:
     class Private;

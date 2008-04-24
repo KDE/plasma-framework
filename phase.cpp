@@ -156,7 +156,7 @@ class Phase::Private
                 case Phase::SlideOut:
                 case Phase::FastSlideOut:
                     //kDebug() << "performMovement, SlideOut";
-                    animator->slideOut(amount, state->item, state->start, state->destination);
+                    animator->itemSlideOut(amount, state->item, state->start, state->destination);
                     break;
             }
         }
