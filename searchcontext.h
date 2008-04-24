@@ -161,9 +161,9 @@ class PLASMA_EXPORT SearchContext : public QObject
         void determineType();
 
         /**
-         * Clears matches
+         * Removes all matches from this SearchContext.
          */
-        void clearMatches();
+        void removeAllMatches();
 
     Q_SIGNALS:
         void matchesChanged();

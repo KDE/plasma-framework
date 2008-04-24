@@ -284,7 +284,7 @@ bool SearchContext::moveMatchesTo(SearchContext &other)
     //NOTE: we have moveMatchesTo instead of the more 'natural' addMatches
     // because we can get away with one write lock on the local object
     // this way, otherwise we'd need to lock once for searchTerm, once
-    // for matches() and again for clearMatches() (2 read, one write)
+    // for matches() and again for removeAllMatches() (2 read, one write)
     d->lockForWrite();
 
     const bool success = other.addMatches(d->term, d->matches);
@@ -307,7 +307,7 @@ QList<SearchMatch *> SearchContext::matches() const
     return matches;
 }
 
-void SearchContext::clearMatches()
+void SearchContext::removeAllMatches()
 {
     d->lockForWrite();
 
