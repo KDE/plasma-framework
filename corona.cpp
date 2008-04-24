@@ -237,7 +237,7 @@ void Corona::loadApplets(const QString& configName)
     }
 
     if (d->containments.count() < 1) {
-        loadDefaultSetup();
+        loadDefaultLayout();
     } else {
         foreach (Containment* containment, d->containments) {
             QString cid = QString::number(containment->id());
@@ -259,10 +259,6 @@ void Corona::loadApplets(const QString& configName)
 
     KConfigGroup coronaConfig(config(), "General");
     setImmutability((ImmutabilityType)coronaConfig.readEntry("immutability", (int)NotImmutable));
-}
-
-void Corona::loadDefaultSetup()
-{
 }
 
 Containment* Corona::containmentForScreen(int screen) const
@@ -361,6 +357,10 @@ void Corona::destroyContainment(Containment *c)
     d->containments.removeAll(c);
     c->config().deleteGroup();
     c->deleteLater();
+}
+
+void Corona::loadDefaultLayout()
+{
 }
 
 void Corona::dragEnterEvent( QGraphicsSceneDragDropEvent *event)

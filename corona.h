@@ -62,11 +62,6 @@ public:
     QString appletMimeType();
 
     /**
-     * Loads the default (system wide) layout for this user
-     **/
-    virtual void loadDefaultSetup();
-
-    /**
      * Clear the Corona from all applets.
      */
     void clearContainments();
@@ -165,7 +160,13 @@ Q_SIGNALS:
      */
     void screenOwnerChanged(int wasScreen, int isScreen, Plasma::Containment *containment);
 
-protected:  
+protected:
+    /**
+     * Loads the default (system wide) layout for this user
+     **/
+    virtual void loadDefaultLayout();
+
+    //Reimplemented from QGraphicsScene
     void dragEnterEvent(QGraphicsSceneDragDropEvent* event);
     void dragLeaveEvent(QGraphicsSceneDragDropEvent* event);
     void dragMoveEvent(QGraphicsSceneDragDropEvent* event);
