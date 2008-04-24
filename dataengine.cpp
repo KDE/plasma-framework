@@ -44,7 +44,7 @@ class DataEngine::Private
             : engine(e),
               ref(-1), // first ref
               updateTimerId(0),
-              minUpdateInterval(-1),
+              minPollingInterval(-1),
               limit(0),
               valid(true),
               script(0),
@@ -125,20 +125,20 @@ class DataEngine::Private
             return s;
         }
 
-        void connectSource(DataContainer* s, QObject* visualization, uint updateInterval,
+        void connectSource(DataContainer* s, QObject* visualization, uint pollingInterval,
                            Plasma::IntervalAlignment align, bool immediateCall = true)
         {
-            //kDebug() << "connect source called with interval" << updateInterval;
-            if (updateInterval > 0) {
+            //kDebug() << "connect source called with interval" << pollingInterval;
+            if (pollingInterval > 0) {
                 // never more frequently than allowed, never more than 20 times per second
-                uint min = qMax(50, minUpdateInterval); // for qMin below
-                updateInterval = qMax(min, updateInterval);
+                uint min = qMax(50, minPollingInterval); // for qMin below
+                pollingInterval = qMax(min, pollingInterval);
 
                 // align on the 50ms
-                updateInterval = updateInterval - (updateInterval % 50);
+                pollingInterval = pollingInterval - (pollingInterval % 50);
             }
 
-            s->connectVisualization(visualization, updateInterval, align);
+            s->connectVisualization(visualization, pollingInterval, align);
 
             if (immediateCall) {
                 QMetaObject::invokeMethod(visualization, "dataUpdated",
@@ -197,7 +197,7 @@ class DataEngine::Private
         DataEngine* engine;
         int ref;
         int updateTimerId;
-        int minUpdateInterval;
+        int minPollingInterval;
         QTime updateTimestamp;
         DataEngine::SourceDict sources;
         QQueue<DataContainer*> sourceQueue;
@@ -237,7 +237,7 @@ QStringList DataEngine::sources() const
 }
 
 void DataEngine::connectSource(const QString& source, QObject* visualization,
-                               uint updateInterval, Plasma::IntervalAlignment intervalAlignment) const
+                               uint pollingInterval, Plasma::IntervalAlignment intervalAlignment) const
 {
     //kDebug() << "connectSource" << source;
     bool newSource;
@@ -247,16 +247,16 @@ void DataEngine::connectSource(const QString& source, QObject* visualization,
         // we suppress the immediate invocation of dataUpdated here if the source was prexisting and they
         // don't request delayed updates (we want to do an immediate update in that case so they
         // don't have to wait for the first time out)
-        d->connectSource(s, visualization, updateInterval, intervalAlignment, !newSource || updateInterval > 0);
+        d->connectSource(s, visualization, pollingInterval, intervalAlignment, !newSource || pollingInterval > 0);
         //kDebug() << " ==> source connected";
     }
 }
 
-void DataEngine::connectAllSources(QObject* visualization, uint updateInterval,
+void DataEngine::connectAllSources(QObject* visualization, uint pollingInterval,
                                    Plasma::IntervalAlignment intervalAlignment) const
 {
     foreach (DataContainer* s, d->sources) {
-        d->connectSource(s, visualization, updateInterval, intervalAlignment);
+        d->connectSource(s, visualization, pollingInterval, intervalAlignment);
     }
 }
 
@@ -289,10 +289,10 @@ DataEngine::Data DataEngine::query(const QString& source) const
 
 void DataEngine::internalUpdateSource(DataContainer* source)
 {
-    if (d->minUpdateInterval > 0 &&
-        source->timeSinceLastUpdate() < d->minUpdateInterval) {
+    if (d->minPollingInterval > 0 &&
+        source->timeSinceLastUpdate() < d->minPollingInterval) {
         // skip updating this source; it's been too soon
-        //kDebug() << "internal update source is delaying" << source->timeSinceLastUpdate() << d->minUpdateInterval;
+        //kDebug() << "internal update source is delaying" << source->timeSinceLastUpdate() << d->minPollingInterval;
         //but fake an update so that the signalrelay that triggered this gets the data from the
         //recent update. this way we don't have to worry about queuing - the relay will send a
         //signal immediately and everyone else is undisturbed.
@@ -426,17 +426,17 @@ void DataEngine::setSourceLimit(uint limit)
     }
 }
 
-void DataEngine::setMinimumUpdateInterval(int minimumMs)
+void DataEngine::setMinimumPollingInterval(int minimumMs)
 {
-    d->minUpdateInterval = minimumMs;
+    d->minPollingInterval = minimumMs;
 }
 
-int DataEngine::minimumUpdateInterval() const
+int DataEngine::minimumPollingInterval() const
 {
-    return d->minUpdateInterval;
+    return d->minPollingInterval;
 }
 
-void DataEngine::setUpdateInterval(uint frequency)
+void DataEngine::setPollingInterval(uint frequency)
 {
     killTimer(d->updateTimerId);
     d->updateTimerId = 0;
@@ -451,9 +451,9 @@ NOTE: This is not implemented to prevent having to store the value internally.
       When there is a good use case for needing access to this value, we can
       add another member to the Private class and add this method.
 
-void DataEngine::updateInterval()
+void DataEngine::pollingInterval()
 {
-    return d->updateInterval;
+    return d->pollingInterval;
 }
 */
 
@@ -537,12 +537,12 @@ void DataEngine::timerEvent(QTimerEvent *event)
     event->accept();
 
     // if the freq update is less than 0, don't bother
-    if (d->minUpdateInterval < 0) {
+    if (d->minPollingInterval < 0) {
         return;
     }
 
-    // minUpdateInterval
-    if (d->updateTimestamp.elapsed() < d->minUpdateInterval) {
+    // minPollingInterval
+    if (d->updateTimestamp.elapsed() < d->minPollingInterval) {
         return;
     }
 

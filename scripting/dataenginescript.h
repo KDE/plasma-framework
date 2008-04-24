@@ -81,9 +81,9 @@ protected:
     void clearData(const QString& source);
     void removeData(const QString& source, const QString& key);
     void setSourceLimit(uint limit);
-    void setMinimumUpdateInterval(int minimumMs);
-    int  minimumUpdateInterval() const;
-    void setUpdateInterval(uint frequency);
+    void setMinimumPollingInterval(int minimumMs);
+    int  minimumPollingInterval() const;
+    void setPollingInterval(uint frequency);
     void clearSources();
 
 private:

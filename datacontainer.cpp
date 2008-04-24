@@ -113,9 +113,9 @@ void DataContainer::checkUsage()
     }
 }
 
-void DataContainer::connectVisualization(QObject* visualization, uint updateInterval, Plasma::IntervalAlignment alignment)
+void DataContainer::connectVisualization(QObject* visualization, uint pollingInterval, Plasma::IntervalAlignment alignment)
 {
-    //kDebug() << "connecting visualization" << visualization << "at interval of" << updateInterval;
+    //kDebug() << "connecting visualization" << visualization << "at interval of" << pollingInterval;
     QMap<QObject *, SignalRelay *>::iterator objIt = d->relayObjects.find(visualization);
     bool connected = objIt != d->relayObjects.end();
     if (connected) {
@@ -135,7 +135,7 @@ void DataContainer::connectVisualization(QObject* visualization, uint updateInte
                            visualization, SLOT(dataUpdated(QString,Plasma::DataEngine::Data)));
                 //relay->isUnused();
             }
-        } else if (updateInterval < 1) {
+        } else if (pollingInterval < 1) {
             // the visualization was connected already, but not to a relay
             // and it still doesn't want to connect to a relay, so we have
             // nothing to do!
@@ -151,14 +151,14 @@ void DataContainer::connectVisualization(QObject* visualization, uint updateInte
     }
 
 
-    if (updateInterval < 1) {
+    if (pollingInterval < 1) {
 //        kDebug() << "    connecting directly";
         d->relayObjects[visualization] = 0;
         connect(this, SIGNAL(dataUpdated(QString,Plasma::DataEngine::Data)),
                 visualization, SLOT(dataUpdated(QString,Plasma::DataEngine::Data)));
     } else {
 //        kDebug() << "    connecting to a relay";
-        SignalRelay *relay = d->signalRelay(this, visualization, updateInterval, alignment);
+        SignalRelay *relay = d->signalRelay(this, visualization, pollingInterval, alignment);
         connect(relay, SIGNAL(dataUpdated(QString,Plasma::DataEngine::Data)),
                 visualization, SLOT(dataUpdated(QString,Plasma::DataEngine::Data)));
     }

@@ -114,9 +114,9 @@ class PLASMA_EXPORT DataContainer : public QObject
          * for the same visualization without side effects
          *
          * @param visualization the object to connect to this DataContainer
-         * @param updateInterval the time in milliseconds between updates
+         * @param pollingInterval the time in milliseconds between updates
          **/
-        void connectVisualization(QObject* visualization, uint updateInterval, Plasma::IntervalAlignment alignment);
+        void connectVisualization(QObject* visualization, uint pollingInterval, Plasma::IntervalAlignment alignment);
 
         /**
          * Disconnects an object from this DataContainer.

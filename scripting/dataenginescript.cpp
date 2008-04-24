@@ -99,25 +99,25 @@ void DataEngineScript::setSourceLimit(uint limit)
     }
 }
 
-void DataEngineScript::setMinimumUpdateInterval(int minimumMs)
+void DataEngineScript::setMinimumPollingInterval(int minimumMs)
 {
     if (d->dataEngine) {
-        d->dataEngine->setMinimumUpdateInterval(minimumMs);
+        d->dataEngine->setMinimumPollingInterval(minimumMs);
     }
 }
 
-int DataEngineScript::minimumUpdateInterval() const
+int DataEngineScript::minimumPollingInterval() const
 {
     if (d->dataEngine) {
-        return d->dataEngine->minimumUpdateInterval();
+        return d->dataEngine->minimumPollingInterval();
     }
     return 0;
 }
 
-void DataEngineScript::setUpdateInterval(uint frequency)
+void DataEngineScript::setPollingInterval(uint frequency)
 {
     if (d->dataEngine) {
-        d->dataEngine->setUpdateInterval(frequency);
+        d->dataEngine->setPollingInterval(frequency);
     }
 }
 

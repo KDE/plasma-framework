@@ -109,7 +109,7 @@ class PLASMA_EXPORT DataEngine : public QObject
          *
          * @param source the name of the data source
          * @param visualization the object to connect the data source to
-         * @param updateInterval the frequency, in milliseconds, with which to check for updates;
+         * @param pollingInterval the frequency, in milliseconds, with which to check for updates;
          *                        a value of 0 (the default) means to update only
          *                        when there is new data spontaneously generated
          *                        (e.g. by the engine); any other value results in
@@ -120,7 +120,7 @@ class PLASMA_EXPORT DataEngine : public QObject
          * @param intervalAlignment the number of ms to align the interval to
          **/
         Q_INVOKABLE void connectSource(const QString& source, QObject* visualization,
-                                       uint updateInterval = 0,
+                                       uint pollingInterval = 0,
                                        Plasma::IntervalAlignment intervalAlignment = NoAlignment) const;
 
         /**
@@ -133,14 +133,14 @@ class PLASMA_EXPORT DataEngine : public QObject
          * one data source to provide sets of related data.
          *
          * This method may be called multiple times for the same visualization
-         * without side-effects. This can be useful to change the updateInterval.
+         * without side-effects. This can be useful to change the pollingInterval.
          *
          * Note that this method does not automatically connect sources that
          * may appear later on. Connecting and responding to the sourceAdded sigal
          * is still required to achieve that.
          *
          * @param visualization the object to connect the data source to
-         * @param updateInterval the frequency, in milliseconds, with which to check for updates;
+         * @param pollingInterval the frequency, in milliseconds, with which to check for updates;
          *                        a value of 0 (the default) means to update only
          *                        when there is new data spontaneously generated
          *                        (e.g. by the engine); any other value results in
@@ -150,7 +150,7 @@ class PLASMA_EXPORT DataEngine : public QObject
          *                        If the data has not changed, no update will be sent.
          * @param intervalAlignment the number of ms to align the interval to
          **/
-        Q_INVOKABLE void connectAllSources(QObject* visualization, uint updateInterval = 0,
+        Q_INVOKABLE void connectAllSources(QObject* visualization, uint pollingInterval = 0,
                                            Plasma::IntervalAlignment intervalAlignment = NoAlignment) const;
 
         /**
@@ -253,8 +253,8 @@ class PLASMA_EXPORT DataEngine : public QObject
         /**
          * Called by internal updating mechanisms to trigger the engine
          * to refresh the data contained in a given source. Reimplement this
-         * method when using facilities such as setUpdateInterval.
-         * @see setUpdateInterval
+         * method when using facilities such as setPollingInterval.
+         * @see setPollingInterval
          *
          * @param source the name of the source that should be updated
          * @return true if the data was changed, or false if there was no
@@ -332,12 +332,12 @@ class PLASMA_EXPORT DataEngine : public QObject
          *                a value of 0 means update immediately on every update request,
          *                a value >0 will result in a minimum time lapse being enforced.
          **/
-        void setMinimumUpdateInterval(int minimumMs);
+        void setMinimumPollingInterval(int minimumMs);
 
         /**
-         * @return the minimum time between updates. @see setMinimumupdateInterval
+         * @return the minimum time between updates. @see setMinimumPollingInterval
          **/
-        int minimumUpdateInterval() const;
+        int minimumPollingInterval() const;
 
         /**
          * Sets up an internal update tick for all data sources. On every update,
@@ -347,15 +347,15 @@ class PLASMA_EXPORT DataEngine : public QObject
          * @param frequency the time, in milliseconds, between updates. A value of 0
          *                  will stop internally triggered updates.
          **/
-        void setUpdateInterval(uint frequency);
+        void setPollingInterval(uint frequency);
 
         /**
          * Returns the current update frequency.
-         * @see setUpdateInterval
+         * @see setPollingInterval
          NOTE: This is not implemented to prevent having to store the value internally.
                When there is a good use case for needing access to this value, we can
                add another member to the Private class and add this method.
-        uint updateInterval();
+        uint pollingInterval();
          **/
 
         /**

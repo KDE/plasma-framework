@@ -36,7 +36,7 @@ public:
     {}
 
     SignalRelay* signalRelay(const DataContainer* dc, QObject *visualization,
-                             uint updateInterval, Plasma::IntervalAlignment align);
+                             uint pollingInterval, Plasma::IntervalAlignment align);
 
     DataEngine::Data data;
     QMap<QObject *, SignalRelay *> relayObjects;
@@ -111,7 +111,7 @@ public:
             //      constant queueing due to more-or-less constant time
             //      async update time? this might make sense for
             //      staggered accesses to the same source by multiple
-            //      visualizations causing a minimumUpdateInterval violation.
+            //      visualizations causing a minimumPollingInterval violation.
             //      it may not make sense for purely async-and-takes-a-while
             //      type operations (e.g. network fetching).
             //      we need more real world data before making such a change
@@ -158,15 +158,15 @@ protected:
     }
 };
 
-SignalRelay* DataContainer::Private::signalRelay(const DataContainer* dc, QObject *visualization, uint updateInterval, Plasma::IntervalAlignment align)
+SignalRelay* DataContainer::Private::signalRelay(const DataContainer* dc, QObject *visualization, uint pollingInterval, Plasma::IntervalAlignment align)
 {
-    QMap<uint, SignalRelay *>::const_iterator relayIt = relays.find(updateInterval);
+    QMap<uint, SignalRelay *>::const_iterator relayIt = relays.find(pollingInterval);
     SignalRelay *relay = 0;
 
     //FIXME what if we have two applets with the same interval and different alignment?
     if (relayIt == relays.end()) {
-        relay = new SignalRelay(const_cast<DataContainer*>(dc), this, updateInterval, align);
-        relays[updateInterval] = relay;
+        relay = new SignalRelay(const_cast<DataContainer*>(dc), this, pollingInterval, align);
+        relays[pollingInterval] = relay;
     } else {
         relay = relayIt.value();
     }
