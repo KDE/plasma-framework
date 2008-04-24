@@ -114,7 +114,7 @@ void DataContainer::checkUsage()
     if (d->relays.count() < 1 &&
         receivers(SIGNAL(dataUpdated(QString, Plasma::DataEngine::Data))) < 1) {
         // DO NOT CALL ANYTHING AFTER THIS LINE AS IT MAY GET DELETED!
-        emit unused(objectName());
+        emit becameUnused(objectName());
     }
 }
 

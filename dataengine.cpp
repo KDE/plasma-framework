@@ -175,7 +175,7 @@ class DataEngine::Private
                         if (newSource) {
                             *newSource = true;
                         }
-                        connect(s, SIGNAL(unused(QString)), engine, SLOT(removeSource(QString)));
+                        connect(s, SIGNAL(becameUnused(QString)), engine, SLOT(removeSource(QString)));
                     }
                 }
             }

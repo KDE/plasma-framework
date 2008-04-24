@@ -109,7 +109,7 @@ class PLASMA_EXPORT DataContainer : public QObject
     public Q_SLOTS:
         /**
          * Check if the DataContainer is still in use.
-         * If not the signal "unused" will be emitted.
+         * If not the signal "becameUnused" will be emitted.
          * Warning: The DataContainer may be invalid after calling this function.
          */
         void checkUsage();
@@ -138,7 +138,7 @@ class PLASMA_EXPORT DataContainer : public QObject
         /**
          * Emitted when this source becomes unused
          **/
-        void unused(const QString& source);
+        void becameUnused(const QString& source);
 
         /**
          * Emitted when the source, usually due to an internal timer firing,
