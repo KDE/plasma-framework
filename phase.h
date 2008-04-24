@@ -66,10 +66,10 @@ public:
 
     enum Movement
     {
-        SlideIn = 0,
-        SlideOut,
-        FastSlideIn,
-        FastSlideOut
+        SlideInMovement = 0,
+        SlideOutMovement,
+        FastSlideInMovement,
+        FastSlideOutMovement
     };
 
     typedef int AnimId;

@@ -148,14 +148,14 @@ class Phase::Private
         void performMovement(qreal amount, const MovementState* state)
         {
             switch (state->movement) {
-                case Phase::SlideIn:
-                case Phase::FastSlideIn:
-                    //kDebug() << "performMovement, SlideIn";
+                case Phase::SlideInMovement:
+                case Phase::FastSlideInMovement:
+                    //kDebug() << "performMovement, SlideInMovement";
                     animator->itemSlideIn(amount, state->item, state->start, state->destination);
                     break;
-                case Phase::SlideOut:
-                case Phase::FastSlideOut:
-                    //kDebug() << "performMovement, SlideOut";
+                case Phase::SlideOutMovement:
+                case Phase::FastSlideOutMovement:
+                    //kDebug() << "performMovement, SlideOutMovement";
                     animator->itemSlideOut(amount, state->item, state->start, state->destination);
                     break;
             }

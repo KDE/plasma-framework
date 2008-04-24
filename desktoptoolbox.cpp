@@ -215,14 +215,14 @@ void DesktopToolbox::showToolbox()
         if (!tool->isEnabled()) {
             if (tool->isVisible()) {
                 const int height = static_cast<int>(tool->boundingRect().height());
-                phase->moveItem(tool, Plasma::Phase::SlideOut, QPoint(size() * 2, -height));
+                phase->moveItem(tool, Plasma::Phase::SlideOutMovement, QPoint(size() * 2, -height));
             }
             continue;
         }
 
         //kDebug() << "let's show and move" << tool << tool->boundingRect();
         tool->show();
-        phase->moveItem(tool, Plasma::Phase::SlideIn, QPoint(x, y));
+        phase->moveItem(tool, Plasma::Phase::SlideInMovement, QPoint(x, y));
         //x += 0;
         y += static_cast<int>(tool->boundingRect().height()) + 5;
     }
@@ -271,7 +271,7 @@ void DesktopToolbox::hideToolbox()
         }
 
         const int height = static_cast<int>(tool->boundingRect().height());
-        phase->moveItem(tool, Plasma::Phase::SlideOut, QPoint(x, y-height));
+        phase->moveItem(tool, Plasma::Phase::SlideOutMovement, QPoint(x, y-height));
     }
 
     if (d->animId) {
