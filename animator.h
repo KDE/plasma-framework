@@ -47,7 +47,7 @@ public:
     virtual int animationFramesPerSecond(Plasma::Phase::Animation) const;
     virtual int animationFramesPerSecond(Plasma::Phase::Movement) const;
     virtual int animationFramesPerSecond(Plasma::Phase::ElementAnimation) const;
-    virtual int duration(Plasma::Phase::Animation) const;
+    virtual int animationDuration(Plasma::Phase::Animation) const;
     virtual int duration(Plasma::Phase::Movement) const;
     virtual int duration(Plasma::Phase::ElementAnimation) const;
     virtual Phase::CurveShape curve(Plasma::Phase::Animation) const;

@@ -54,7 +54,7 @@ int Animator::animationFramesPerSecond(Plasma::Phase::ElementAnimation animation
     return 0;
 }
 
-int Animator::duration(Plasma::Phase::Animation) const
+int Animator::animationDuration(Plasma::Phase::Animation) const
 {
     return 200;
 }

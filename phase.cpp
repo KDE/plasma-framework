@@ -278,7 +278,7 @@ void Phase::animateItem(QGraphicsItem* item, Animation animation)
     //TODO: variance in times based on the value of animation
     state->frames = frames / 3;
     state->currentFrame = 0;
-    state->interval = d->animator->duration(animation) / state->frames;
+    state->interval = d->animator->animationDuration(animation) / state->frames;
     state->interval = (state->interval / MIN_TICK_RATE) * MIN_TICK_RATE;
     state->currentInterval = state->interval;
     state->qobj = dynamic_cast<QObject*>(item);
