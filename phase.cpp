@@ -274,7 +274,7 @@ void Phase::animateItem(QGraphicsItem* item, Animation animation)
     AnimationState* state = new AnimationState;
     state->item = item;
     state->animation = animation;
-    state->curve = d->animator->curve(animation);
+    state->curve = d->animator->animationCurve(animation);
     //TODO: variance in times based on the value of animation
     state->frames = frames / 3;
     state->currentFrame = 0;

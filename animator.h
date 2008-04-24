@@ -50,7 +50,7 @@ public:
     virtual int animationDuration(Plasma::Phase::Animation) const;
     virtual int movementAnimationDuration(Plasma::Phase::Movement) const;
     virtual int elementAnimationDuration(Plasma::Phase::ElementAnimation) const;
-    virtual Phase::CurveShape curve(Plasma::Phase::Animation) const;
+    virtual Phase::CurveShape animationCurve(Plasma::Phase::Animation) const;
     virtual Phase::CurveShape curve(Plasma::Phase::Movement) const;
     virtual Phase::CurveShape curve(Plasma::Phase::ElementAnimation) const;
 
