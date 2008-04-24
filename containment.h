@@ -160,15 +160,15 @@ class PLASMA_EXPORT Containment : public Applet
          *                  registered to an application.
          * @return list of applets
          **/
-        static KPluginInfo::List knownContainments(const QString &category = QString(),
-                                                   const QString &parentApp = QString());
+        static KPluginInfo::List listContainments(const QString &category = QString(),
+                                                  const QString &parentApp = QString());
 
         /**
          * Returns a list of all known applets associated with a certain mimetype
          *
          * @return list of applets
          **/
-        static KPluginInfo::List knownContainmentsForMimetype(const QString &mimetype);
+        static KPluginInfo::List listContainmentsForMimetype(const QString &mimetype);
 
         /**
          * Adds an applet to this Containment

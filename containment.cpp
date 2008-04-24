@@ -1118,8 +1118,8 @@ QPoint Containment::effectiveScreenPos() const
     }
 }
 
-KPluginInfo::List Containment::knownContainments(const QString &category,
-                                                 const QString &parentApp)
+KPluginInfo::List Containment::listContainments(const QString &category,
+                                                const QString &parentApp)
 {
     QString constraint;
 
@@ -1145,17 +1145,17 @@ KPluginInfo::List Containment::knownContainments(const QString &category,
     return KPluginInfo::fromServices(offers);
 }
 
-KPluginInfo::List Containment::knownContainmentsForMimetype(const QString &mimetype)
+KPluginInfo::List Containment::listContainmentsForMimetype(const QString &mimetype)
 {
     QString constraint = QString("'%1' in MimeTypes").arg(mimetype);
-    //kDebug() << "knownContainmentsForMimetype with" << mimetype << constraint;
+    //kDebug() << mimetype << constraint;
     KService::List offers = KServiceTypeTrader::self()->query("Plasma/Containment", constraint);
     return KPluginInfo::fromServices(offers);
 }
 
 void Containment::dropEvent(QGraphicsSceneDragDropEvent *event)
 {
-    //kDebug() << "drop event:" << event->mimeData()->text();
+    //kDebug() << event->mimeData()->text();
 
     QString mimetype(static_cast<Corona*>(scene())->appletMimeType());
 
