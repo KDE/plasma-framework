@@ -167,7 +167,7 @@ class DataEngine::Private
                 /*kDebug() << "DataEngine " << engine->objectName()
                     << ": could not find DataContainer " << sourceName
                     << " will create on request" << endl;*/
-                if (engine->sourceRequested(sourceName)) {
+                if (engine->sourceRequestEvent(sourceName)) {
                     s = source(sourceName, false);
                     if (s) {
                         // now we have a source; since it was created on demand, assume
@@ -322,7 +322,7 @@ void DataEngine::init()
     }
 }
 
-bool DataEngine::sourceRequested(const QString &name)
+bool DataEngine::sourceRequestEvent(const QString &name)
 {
     if (d->script) {
         return d->script->sourceRequested(name);

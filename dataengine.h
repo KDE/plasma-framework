@@ -229,7 +229,7 @@ class PLASMA_EXPORT DataEngine : public QObject
          * opportunity to create one.
          *
          * The name of the data source (e.g. the source parameter passed into
-         * setData) must be the same as the name passed to sourceRequested
+         * setData) must be the same as the name passed to sourceRequestEvent
          * otherwise the requesting visualization may not receive notice of a
          * data update.
          *
@@ -243,7 +243,7 @@ class PLASMA_EXPORT DataEngine : public QObject
          * @param source the name of the source that has been requested
          * @return true if a DataContainer was set up, false otherwise
          */
-        virtual bool sourceRequested(const QString &source);
+        virtual bool sourceRequestEvent(const QString &source);
 
         /**
          * Called by internal updating mechanisms to trigger the engine
