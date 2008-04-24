@@ -44,7 +44,7 @@ public:
     ~Animator();
 
     // Parameter definitions
-    virtual int framesPerSecond(Plasma::Phase::Animation) const;
+    virtual int animationFramesPerSecond(Plasma::Phase::Animation) const;
     virtual int framesPerSecond(Plasma::Phase::Movement) const;
     virtual int framesPerSecond(Plasma::Phase::ElementAnimation) const;
     virtual int duration(Plasma::Phase::Animation) const;

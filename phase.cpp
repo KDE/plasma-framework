@@ -263,7 +263,7 @@ void Phase::animateItem(QGraphicsItem* item, Animation animation)
         d->animatedItems.erase(it);
     }
 
-    int frames = d->animator->framesPerSecond(animation);
+    int frames = d->animator->animationFramesPerSecond(animation);
 
     if (frames < 1) {
         // evidently this animator doesn't have an implementation
