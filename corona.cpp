@@ -273,7 +273,7 @@ Containment* Corona::containmentForScreen(int screen) const
     foreach (Containment* containment, d->containments) {
         if (containment->screen() == screen &&
             (containment->containmentType() == Containment::DesktopContainment ||
-             containment->containmentType() == Containment::CustomContainment)) {
+             containment->containmentType() >= Containment::CustomContainment)) {
             return containment;
         }
     }

@@ -865,7 +865,7 @@ Applet::List Containment::applets() const
 void Containment::setScreen(int screen)
 {
     // screen of -1 means no associated screen.
-    if (containmentType() == DesktopContainment || containmentType() == CustomContainment) {
+    if (containmentType() == DesktopContainment || containmentType() >= CustomContainment) {
 #ifndef Q_OS_WIN
         // we want to listen to changes in work area if our screen changes
         if (d->screen < 0 && screen > -1) {
@@ -894,7 +894,7 @@ void Containment::setScreen(int screen)
     //kDebug() << "setting screen to " << screen << "and type is" << containmentType();
     if (screen < numScreens && screen > -1) {
         if (containmentType() == DesktopContainment ||
-            containmentType() == CustomContainment) {
+            containmentType() >= CustomContainment) {
             resize(desktop->screenGeometry(screen).size());
         }
     }
