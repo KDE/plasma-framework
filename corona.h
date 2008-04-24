@@ -140,11 +140,6 @@ public Q_SLOTS:
 
 Q_SIGNALS:
     /**
-     * This signal indicates that a application launch was triggered
-     */
-    void launchActivated();
-
-    /**
      * This signal indicates a new containment has been added to
      * the Corona
      */
