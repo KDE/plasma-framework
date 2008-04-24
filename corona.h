@@ -62,6 +62,11 @@ public:
     QString appletMimeType();
 
     /**
+     * @return all containments on this Corona
+     */
+    QList<Containment*> containments() const;
+
+    /**
      * Clear the Corona from all applets.
      */
     void clearContainments();
@@ -121,11 +126,6 @@ public Q_SLOTS:
      * @param screen number of the physical screen to locate
      */
     Containment* containmentForScreen(int screen) const;
-
-    /**
-     * Returns all containments on this Corona
-     */
-    QList<Containment*> containments() const;
 
     /**
      * @return The type of immutability of this applet
