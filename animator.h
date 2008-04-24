@@ -61,7 +61,7 @@ public:
     // Item animations
     virtual void itemAppear(qreal progress, QGraphicsItem* item);
     virtual void itemDisappear(qreal progress, QGraphicsItem* item);
-    virtual void activate(qreal progress, QGraphicsItem* item);
+    virtual void itemActivated(qreal progress, QGraphicsItem* item);
 
     // Item movements
     virtual void slideIn(qreal progress, QGraphicsItem* item, const QPoint &start, const QPoint &destination);

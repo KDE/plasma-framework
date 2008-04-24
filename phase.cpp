@@ -140,7 +140,7 @@ class Phase::Private
                     }
                     break;
                 case Phase::Activate:
-                    animator->activate(amount, state->item);
+                    animator->itemActivated(amount, state->item);
                     break;
             }
         }
