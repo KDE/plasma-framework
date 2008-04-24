@@ -93,15 +93,15 @@ Phase::CurveShape Animator::curve(Plasma::Phase::ElementAnimation) const
     return Phase::EaseInOutCurve;
 }
 
-QPixmap Animator::elementAppear(qreal frame, const QPixmap& pixmap)
+QPixmap Animator::elementAppear(qreal progress, const QPixmap& pixmap)
 {
-    Q_UNUSED(frame)
+    Q_UNUSED(progress)
     return pixmap;
 }
 
-QPixmap Animator::elementDisappear(qreal frame, const QPixmap& pixmap)
+QPixmap Animator::elementDisappear(qreal progress, const QPixmap& pixmap)
 {
-    Q_UNUSED(frame)
+    Q_UNUSED(progress)
     QPixmap pix(pixmap.size());
     pix.fill(Qt::transparent);
 

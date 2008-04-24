@@ -55,8 +55,8 @@ public:
     virtual Phase::CurveShape curve(Plasma::Phase::ElementAnimation) const;
 
     // Element animations
-    virtual QPixmap elementAppear(qreal frame, const QPixmap& pixmap);
-    virtual QPixmap elementDisappear(qreal frame, const QPixmap& pixmap);
+    virtual QPixmap elementAppear(qreal progress, const QPixmap& pixmap);
+    virtual QPixmap elementDisappear(qreal progress, const QPixmap& pixmap);
 
     // Item animations
     virtual void itemAppear(qreal progress, QGraphicsItem* item);
