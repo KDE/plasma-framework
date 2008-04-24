@@ -119,7 +119,7 @@ SearchContext::~SearchContext()
     delete d;
 }
 
-void SearchContext::resetSearchTerm(const QString &term)
+void SearchContext::reset()
 {
     d->lockForWrite();
     QList<SearchMatch*> matches = d->matches;
@@ -142,7 +142,6 @@ void SearchContext::resetSearchTerm(const QString &term)
     // delete the matches until after the signal is handled.
     // a bit safer.
     qDeleteAll(matches);
-    setSearchTerm(term);
 }
 
 void SearchContext::setSearchTerm(const QString &term)
