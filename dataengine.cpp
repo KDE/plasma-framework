@@ -221,14 +221,14 @@ DataEngine::DataEngine(QObject* parent, KService::Ptr service)
     : QObject(parent),
       d(new Private(this, service))
 {
-    connect(d->updateTimer, SIGNAL(timeout()), this, SLOT(checkForUpdates()));
+    connect(d->updateTimer, SIGNAL(timeout()), this, SLOT(scheduleSourcesUpdated()));
 }
 
 DataEngine::DataEngine(QObject* parent, const QVariantList& args)
     : QObject(parent),
       d(new Private(this, KService::serviceByStorageId(args.count() > 0 ? args[0].toString() : QString())))
 {
-    connect(d->updateTimer, SIGNAL(timeout()), this, SLOT(checkForUpdates()));
+    connect(d->updateTimer, SIGNAL(timeout()), this, SLOT(scheduleSourcesUpdated()));
 }
 
 DataEngine::~DataEngine()
@@ -558,7 +558,7 @@ void DataEngine::timerEvent(QTimerEvent *event)
         it.next();
         updateSourceEvent(it.key());
     }
-    checkForUpdates();
+    scheduleSourcesUpdated();
 }
 
 void DataEngine::setIcon(const QString& icon)
@@ -576,7 +576,7 @@ const Package *DataEngine::package() const
     return d->package;
 }
 
-void DataEngine::checkForUpdates()
+void DataEngine::scheduleSourcesUpdated()
 {
     QHashIterator<QString, Plasma::DataContainer*> it(d->sources);
     while (it.hasNext()) {

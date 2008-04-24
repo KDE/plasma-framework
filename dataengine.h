@@ -393,7 +393,7 @@ class PLASMA_EXPORT DataEngine : public QObject
          * of using the DataEngine::setData methods.
          * If this method is not called, no dataUpdated(..) signals will be emitted!
          */
-        void checkForUpdates();
+        void scheduleSourcesUpdated();
 
         /**
          * Removes a data source.
