@@ -70,13 +70,13 @@ void WebContent::setHtml(const QByteArray &html, const QUrl &baseUrl)
     }
 }
 
-QSizeF WebContent::geometry() const
+QRectF WebContent::geometry() const
 {
     if (d->loaded && d->page) {
-        return d->page->mainFrame()->contentsSize();
+        return d->page->mainFrame()->geometry();
     }
 
-    return QGraphicsWidget::geometry().size();
+    return QGraphicsWidget::geometry();
 }
 
 void WebContent::setPage(QWebPage *page)

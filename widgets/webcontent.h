@@ -59,7 +59,7 @@ class PLASMA_EXPORT WebContent : public QGraphicsWidget
         /**
          * Reimplementation
          */
-        QSizeF geometry() const;
+        QRectF geometry() const;
 
         /**
          * Sets the page to use in this item. The owner of the webpage remains,
