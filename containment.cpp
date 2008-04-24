@@ -106,6 +106,9 @@ public:
     }
 
     void setLockToolText();
+    Applet* addApplet(const QString& name, const QVariantList& args = QVariantList(),
+                      const QRectF &geometry = QRectF(-1, -1, -1, -1), uint id = 0,
+                      bool delayedInit = false);
 
     Containment *q;
     FormFactor formFactor;
@@ -200,7 +203,18 @@ void Containment::init()
     Applet::init();
 }
 
-void Containment::loadConstraints(KConfigGroup* group)
+// helper function for sorting the list of applets
+bool appletConfigLessThan(const KConfigGroup &c1, const KConfigGroup &c2)
+{
+    QPointF p1 = c1.readEntry("geometry", QRectF()).topLeft();
+    QPointF p2 = c2.readEntry("geometry", QRectF()).topLeft();
+    if (p1.x() != p2.x()) {
+        return p1.x() < p2.x();
+    }
+    return p1.y() < p2.y();
+}
+
+void Containment::loadContainment(KConfigGroup* group)
 {
     /*kDebug() << "!!!!!!!!!!!!initConstraints" << group->name() << containmentType();
     kDebug() << "    location:" << group->readEntry("location", (int)d->location);
@@ -221,9 +235,36 @@ void Containment::loadConstraints(KConfigGroup* group)
     setLocation((Plasma::Location)group->readEntry("location", (int)d->location));
     setFormFactor((Plasma::FormFactor)group->readEntry("formfactor", (int)d->formFactor));
     setScreen(group->readEntry("screen", d->screen));
+
+    flushUpdatedConstraints();
+    //kDebug() << "Containment" << id() << "geometry is" << geometry() << "config'd with" << appletConfig.name();
+    KConfigGroup applets(group, "Applets");
+
+    // Sort the applet configs in order of geometry to ensure that applets
+    // are added from left to right or top to bottom for a panel containment
+    QList<KConfigGroup> appletConfigs;
+    foreach (const QString &appletGroup, applets.groupList()) {
+        //kDebug() << "reading from applet group" << appletGroup;
+        KConfigGroup appletConfig(&applets, appletGroup);
+        appletConfigs.append(appletConfig);
+    }
+    qSort(appletConfigs.begin(), appletConfigs.end(), appletConfigLessThan);
+
+    foreach (KConfigGroup appletConfig, appletConfigs) {
+        int appId = appletConfig.name().toUInt();
+        //kDebug() << "the name is" << appletConfig.name();
+        QString plugin = appletConfig.readEntry("plugin", QString());
+
+        if (plugin.isEmpty()) {
+            continue;
+        }
+
+        Applet *applet = d->addApplet(plugin, QVariantList(), appletConfig.readEntry("geometry", QRectF()), appId, true);
+        applet->restore(&appletConfig);
+    }
 }
 
-void Containment::saveConstraints(KConfigGroup* group) const
+void Containment::saveContainment(KConfigGroup* group) const
 {
     // locking is saved in Applet::save
     group->writeEntry("screen", d->screen);
@@ -626,14 +667,20 @@ void Containment::clearApplets()
     d->applets.clear();
 }
 
-Applet* Containment::addApplet(const QString& name, const QVariantList& args, uint id, const QRectF& appletGeometry, bool delayInit)
+Applet* Containment::addApplet(const QString& name, const QVariantList& args, const QRectF &appletGeometry)
 {
-    if (!delayInit && immutability() != NotImmutable) {
+    return d->addApplet(name, args, appletGeometry);
+}
+
+Applet* Containment::Private::addApplet(const QString& name, const QVariantList& args,
+                                        const QRectF& appletGeometry, uint id, bool delayInit)
+{
+    if (!delayInit && q->immutability() != NotImmutable) {
         kDebug() << "addApplet for" << name << "requested, but we're currently immutable!";
         return 0;
     }
 
-    QGraphicsView *v = view();
+    QGraphicsView *v = q->view();
     if (v) {
         v->setCursor(Qt::BusyCursor);
     }
@@ -648,8 +695,9 @@ Applet* Containment::addApplet(const QString& name, const QVariantList& args, ui
         applet = new Applet;
     }
 
-    addApplet(applet, appletGeometry.topLeft(), delayInit);
+    q->addApplet(applet, appletGeometry.topLeft(), delayInit);
 
+    /*
     if (containmentType() != PanelContainment) {
         //kDebug() << "adding applet" << applet->name() << "with a default geometry of" << appletGeometry << appletGeometry.isValid();
         if (appletGeometry.isValid()) {
@@ -658,19 +706,20 @@ Applet* Containment::addApplet(const QString& name, const QVariantList& args, ui
             // yes, this means we can't have items start -1, -1
             //applet->setGeometry(QRectF(appletGeometry.topLeft(),
 //                                    applet->sizeHint()));
-        } else if (geometry().isValid()) {
+        } else if (q->geometry().isValid()) {
             //applet->setGeometry(geometryForApplet(applet));
         }
     }
+    */
 
     //kDebug() << applet->name() << "sizehint:" << applet->sizeHint() << "geometry:" << applet->geometry();
 
-    Corona *c = corona();
+    Corona *c = q->corona();
     if (c) {
-        connect(applet, SIGNAL(configNeedsSaving()), corona(), SLOT(scheduleConfigSync()));
+        connect(applet, SIGNAL(configNeedsSaving()), q->corona(), SLOT(scheduleConfigSync()));
     }
 
-    emit appletAdded(applet);
+    emit q->appletAdded(applet);
     return applet;
 }
 
@@ -1163,7 +1212,7 @@ void Containment::dropEvent(QGraphicsSceneDragDropEvent *event)
         QString plasmoidName;
         plasmoidName = event->mimeData()->data(mimetype);
         QRectF geom(mapFromScene(event->scenePos()), QSize(0, 0));
-        addApplet(plasmoidName, QVariantList(), 0, geom);
+        addApplet(plasmoidName, QVariantList(), geom);
         event->acceptProposedAction();
     } else if (KUrl::List::canDecode(event->mimeData())) {
         //TODO: collect the mimetypes of available script engines and offer
@@ -1180,11 +1229,11 @@ void Containment::dropEvent(QGraphicsSceneDragDropEvent *event)
 
             if (appletList.isEmpty()) {
                 // no special applet associated with this mimetype, let's
-                addApplet("icon", args, 0, geom);
+                addApplet("icon", args, geom);
             } else {
                 //TODO: should we show a dialog here to choose which plasmoid load if
                 //!appletList.isEmpty()
-                addApplet(appletList.first().pluginName(), args, 0, geom);
+                addApplet(appletList.first().pluginName(), args, geom);
             }
         }
         event->acceptProposedAction();

@@ -184,8 +184,15 @@ class PLASMA_EXPORT Containment : public Applet
          * @return a pointer to the applet on success, or 0 on failure
          */
         Applet* addApplet(const QString& name, const QVariantList& args = QVariantList(),
-                          uint id = 0, const QRectF &geometry = QRectF(-1, -1, -1, -1),
-                          bool delayedInit = false);
+                          const QRectF &geometry = QRectF(-1, -1, -1, -1));
+
+        /**
+         * add existing applet to this containment at pos
+         * @param applet the applet that should be added
+         * @param pos the containment-relative position
+         * @param dontInit if true, init() will not be called on the applet
+         */
+        void addApplet(Applet *applet, const QPointF &pos = QPointF(-1, -1), bool dontInit = true);
 
         /**
          * @return the applets currently in this Containment
@@ -196,14 +203,6 @@ class PLASMA_EXPORT Containment : public Applet
          * Removes all applets from this Containment
          */
         void clearApplets();
-
-        /**
-         * add existing applet to this containment at pos
-         * @param applet the applet that should be added
-         * @param pos the containment-relative position
-         * @param dontInit if true, init() will not be called on the applet
-         */
-        void addApplet(Applet *applet, const QPointF &pos = QPointF(-1, -1), bool dontInit = true);
 
        	/**
          * @return the index to insert an applet at if you want it near the point pos.
@@ -234,12 +233,12 @@ class PLASMA_EXPORT Containment : public Applet
         /**
          * @internal
          */
-        void saveConstraints(KConfigGroup* group) const;
+        void saveContainment(KConfigGroup* group) const;
 
         /**
          * @internal
          */
-        void loadConstraints(KConfigGroup* group);
+        void loadContainment(KConfigGroup* group);
 
         /**
          * Emits the launchActivated() signal
