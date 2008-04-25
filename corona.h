@@ -119,12 +119,12 @@ public Q_SLOTS:
     Containment* containmentForScreen(int screen) const;
 
     /**
-     * @return The type of immutability of this applet
+     * @return The type of immutability of this Corona
      */
     ImmutabilityType immutability() const;
 
     /**
-     * Sets the immutability type for this applet (not immutable, user immutable or system immutable)
+     * Sets the immutability type for this Corona (not immutable, user immutable or system immutable)
      * @arg immutable the new immutability type of this applet
      */
     void setImmutability(const ImmutabilityType immutable);
