@@ -19,6 +19,7 @@
  */
 
 #include "containment.h"
+#include "containment_p.h"
 
 #include <QAction>
 #include <QDesktopWidget>
@@ -50,109 +51,6 @@
 
 namespace Plasma
 {
-
-static const int INTER_CONTAINMENT_MARGIN = 6;
-static const int VERTICAL_STACKING_OFFSET = 10000;
-
-class Containment::Private
-{
-public:
-    Private(Containment* c)
-        : q(c),
-          formFactor(Planar),
-          location(Floating),
-          screen(-1), // no screen
-          toolbox(0),
-          type(Containment::NoContainmentType),
-          positioning(false)
-    {
-    }
-
-    ~Private()
-    {
-        qDeleteAll(applets);
-        applets.clear();
-    }
-
-    Toolbox* createToolbox()
-    {
-        if (!toolbox) {
-            switch (type) {
-            case PanelContainment:
-                toolbox = new PanelToolbox(q);
-                break;
-            //defaults to DesktopContainment right now
-            default:
-                toolbox = new DesktopToolbox(q);
-                break;
-            }
-            positionToolbox();
-        }
-
-        return toolbox;
-    }
-
-    void positionToolbox()
-    {
-        QRectF r;
-        if (screen < 0) {
-            r = q->geometry();
-        } else {
-            QDesktopWidget *desktop = QApplication::desktop();
-            r = desktop->availableGeometry(screen);
-        }
-
-        toolbox->setPos(QPointF(r.right(), r.y()));
-    }
-
-    void triggerShowAddWidgets()
-    {
-        emit q->showAddWidgetsInterface(QPointF());
-    }
-
-    bool regionIsEmpty(const QRectF &region, Applet *ignoredApplet=0) const;
-    void positionPanel(bool force = false);
-    void positionContainment();
-    void setLockToolText();
-    void handleDisappeared(AppletHandle *handle);
-    void destroyApplet();
-    /**
-     * Repositions the Plasma toolbox.  Useful to ensure its always in the correct place within the view.
-     */
-    void repositionToolbox();
-    void appletDestroyed(QObject*);
-    void appletAnimationComplete(QGraphicsItem *item, Plasma::Animator::Animation anim);
-
-    Applet* addApplet(const QString& name, const QVariantList& args = QVariantList(),
-                      const QRectF &geometry = QRectF(-1, -1, -1, -1), uint id = 0,
-                      bool delayedInit = false);
-
-    Containment *q;
-    FormFactor formFactor;
-    Location location;
-    Applet::List applets;
-    QMap<Applet*, AppletHandle*> handles;
-    int screen;
-    Toolbox *toolbox;
-    Containment::Type type;
-    bool positioning;
-};
-
-void Containment::Private::setLockToolText()
-{
-    if (toolbox) {
-        Icon *icon = dynamic_cast<Plasma::Icon*>(toolbox->tool("lockWidgets"));
-        if (icon) {
-            // we know it's an icon becase we made it
-            icon->setText(q->immutability() != NotImmutable ? i18n("Unlock Widgets") :
-                                             i18n("Lock Widgets"));
-            QSizeF iconSize = icon->sizeFromIconSize(22);
-            icon->setMinimumSize(iconSize);
-            icon->setMaximumSize(iconSize);
-            icon->resize(icon->size());
-        }
-    }
-}
 
 Containment::StyleOption::StyleOption()
     : QStyleOptionGraphicsItem(),
@@ -289,61 +187,6 @@ void Containment::saveContainment(KConfigGroup* group) const
     group->writeEntry("location", (int)d->location);
 }
 
-void Containment::containmentConstraintsUpdated(Plasma::Constraints constraints)
-{
-    if (!isContainment()) {
-        return;
-    }
-
-    //kDebug() << "got containmentConstraintsUpdated" << constraints << (QObject*)d->toolbox;
-    if (constraints & Plasma::ImmutableConstraint) {
-        d->setLockToolText();
-
-        // tell the applets too
-        foreach (Applet *a, d->applets) {
-            a->constraintsUpdated(ImmutableConstraint);
-        }
-    }
-
-    if ((constraints & Plasma::SizeConstraint || constraints & Plasma::ScreenConstraint) &&
-         d->toolbox) {
-        //The placement assumes that the geometry width/height is no more than the screen
-        if (d->type == PanelContainment) {
-            if (formFactor() == Vertical) {
-                d->toolbox->setOrientation(Qt::Vertical);
-                d->toolbox->setPos(geometry().width()/2 - d->toolbox->boundingRect().width()/2, geometry().height());
-            //defaulting to Horizontal right now
-            } else {
-                d->toolbox->setOrientation(Qt::Horizontal);
-                d->toolbox->setPos(geometry().width(), geometry().height()/2 - d->toolbox->boundingRect().height()/2);
-            }
-        } else {
-            d->toolbox->setPos(geometry().right() - qAbs(d->toolbox->boundingRect().width()), 0);
-        }
-        d->toolbox->enableTool("addwidgets", immutability() == NotImmutable);
-    }
-
-    if (constraints & Plasma::FormFactorConstraint && d->toolbox) {
-        if (formFactor() == Vertical) {
-            d->toolbox->setOrientation(Qt::Vertical);
-        //defaults to horizontal
-        } else {
-            d->toolbox->setOrientation(Qt::Horizontal);
-        }
-    }
-
-    if (constraints & Plasma::SizeConstraint) {
-        switch (containmentType()) {
-            case PanelContainment:
-                d->positionPanel();
-                break;
-            default:
-                d->positionContainment();
-                break;
-        }
-    }
-}
-
 Containment::Type Containment::containmentType() const
 {
     return d->type;
@@ -354,7 +197,7 @@ void Containment::setContainmentType(Containment::Type type)
     d->type = type;
 
     if (isContainment() && type == DesktopContainment) {
-        if (!d->toolbox) {
+        if (!d->toolBox) {
             QGraphicsWidget *addWidgetTool = addToolBoxTool("addwidgets", "list-add", i18n("Add Widgets"));
             connect(addWidgetTool, SIGNAL(clicked()), this, SLOT(triggerShowAddWidgets()));
 
@@ -376,14 +219,14 @@ void Containment::setContainmentType(Containment::Type type)
         }
 
     } else if (isContainment() && type == PanelContainment) {
-        if (!d->toolbox) {
-            d->createToolbox();
-            d->toolbox->setSize(22);
-            d->toolbox->setIconSize(QSize(16, 16));
+        if (!d->toolBox) {
+            d->createToolBox();
+            d->toolBox->setSize(22);
+            d->toolBox->setIconSize(QSize(16, 16));
         }
     } else {
-        delete d->toolbox;
-        d->toolbox = 0;
+        delete d->toolBox;
+        d->toolBox = 0;
     }
 }
 
@@ -502,18 +345,6 @@ void Containment::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
     event->accept();
     //kDebug() << "executing at" << event->screenPos();
     desktopMenu.exec(event->screenPos());
-}
-
-void Containment::Private::destroyApplet()
-{
-    QAction *action = qobject_cast<QAction*>(q->sender());
-
-    if (!action) {
-        return;
-    }
-
-    Applet *applet = qobject_cast<Applet*>(action->data().value<QObject*>());
-    Animator::self()->animateItem(applet, Animator::DisappearAnimation);
 }
 
 void Containment::setFormFactor(FormFactor formFactor)
@@ -688,37 +519,6 @@ Applet* Containment::addApplet(const QString& name, const QVariantList& args, co
     return d->addApplet(name, args, appletGeometry);
 }
 
-Applet* Containment::Private::addApplet(const QString& name, const QVariantList& args,
-                                        const QRectF& appletGeometry, uint id, bool delayInit)
-{
-    if (!delayInit && q->immutability() != NotImmutable) {
-        kDebug() << "addApplet for" << name << "requested, but we're currently immutable!";
-        return 0;
-    }
-
-    QGraphicsView *v = q->view();
-    if (v) {
-        v->setCursor(Qt::BusyCursor);
-    }
-
-    Applet* applet = Applet::load(name, id, args);
-    if (v) {
-        v->unsetCursor();
-    }
-
-    if (!applet) {
-        kDebug() << "Applet" << name << "could not be loaded.";
-        applet = new Applet;
-    }
-
-    //kDebug() << applet->name() << "sizehint:" << applet->sizeHint() << "geometry:" << applet->geometry();
-
-    connect(applet, SIGNAL(configNeedsSaving()), q, SIGNAL(configNeedsSaving()));
-    connect(applet, SIGNAL(launchActivated()), q, SIGNAL(launchActivated()));
-    q->addApplet(applet, appletGeometry.topLeft(), delayInit);
-    return applet;
-}
-
 //pos must be relative to the containment already. use mapfromscene.
 //what we're trying to do here for panels is make the applet go to the requested position,
 //or somewhere close to it, and get integrated properly into the containment as if it were created
@@ -781,55 +581,6 @@ void Containment::addApplet(Applet *applet, const QPointF &pos, bool delayInit)
     emit appletAdded(applet, pos);
 }
 
-bool Containment::Private::regionIsEmpty(const QRectF &region, Applet *ignoredApplet) const
-{
-    foreach (Applet *applet, applets) {
-        if (applet != ignoredApplet && applet->geometry().intersects(region)) {
-            return false;
-        }
-    }
-    return true;
-}
-
-void Containment::Private::appletDestroyed(QObject* object)
-{
-    // we do a static_cast here since it really isn't an Applet by this
-    // point anymore since we are in the qobject dtor. we don't actually
-    // try and do anything with it, we just need the value of the pointer
-    // so this unsafe looking code is actually just fine.
-    Applet* applet = static_cast<Plasma::Applet*>(object);
-    applets.removeAll(applet);
-    emit q->appletRemoved(applet);
-    emit q->configNeedsSaving();
-}
-
-void Containment::Private::appletAnimationComplete(QGraphicsItem *item, Plasma::Animator::Animation anim)
-{
-    if (anim == Animator::DisappearAnimation) {
-        QGraphicsItem *parent = item->parentItem();
-
-        while (parent) {
-            if (parent == q) {
-                Applet *applet = qgraphicsitem_cast<Applet*>(item);
-
-                if (applet) {
-                    applet->destroy();
-                }
-
-                break;
-            }
-
-            parent = parent->parentItem();
-        }
-    } else if (anim == Animator::AppearAnimation) {
-        if (q->containmentType() == DesktopContainment &&
-            item->parentItem() == q &&
-            qgraphicsitem_cast<Applet*>(item)) {
-                item->installSceneEventFilter(q);
-        }
-    }
-}
-
 Applet::List Containment::applets() const
 {
     return d->applets;
@@ -842,9 +593,9 @@ void Containment::setScreen(int screen)
 #ifndef Q_OS_WIN
         // we want to listen to changes in work area if our screen changes
         if (d->screen < 0 && screen > -1) {
-            connect(KWindowSystem::self(), SIGNAL(workAreaChanged()), this, SLOT(repositionToolbox()));
+            connect(KWindowSystem::self(), SIGNAL(workAreaChanged()), this, SLOT(positionToolbox()));
         } else if (screen < 0) {
-            disconnect(KWindowSystem::self(), SIGNAL(workAreaChanged()), this, SLOT(repositionToolbox()));
+            disconnect(KWindowSystem::self(), SIGNAL(workAreaChanged()), this, SLOT(positionToolbox()));
         }
 #endif
         if (screen > -1 && corona()) {
@@ -878,180 +629,6 @@ void Containment::setScreen(int screen)
     if (oldScreen != screen) {
         emit screenChanged(oldScreen, screen, this);
     }
-}
-
-void Containment::Private::positionContainment()
-{
-    Corona *c = q->corona();
-    if (!c) {
-        return;
-    }
-
-    QList<Containment*> containments = c->containments();
-    QMutableListIterator<Containment*> it(containments);
-
-    while (it.hasNext()) {
-        Containment *containment = it.next();
-        if (containment == q ||
-            containment->containmentType() == PanelContainment) {
-            // weed out all containments we don't care about at all
-            // e.g. Panels and ourself
-            it.remove();
-            continue;
-        }
-
-        if (q->collidesWithItem(containment)) {
-            break;
-        }
-    }
-
-    if (!it.hasNext()) {
-        // we made it all the way through the list, we have no
-        // collisions
-        return;
-    }
-
-    // we need to find how many screens are to our top and left
-    // to calculate the proper offsets for the margins.
-    int width = 0;
-    int height = 0;
-
-    QDesktopWidget *desktop = QApplication::desktop();
-    int numScreens = desktop->numScreens();
-
-    for (int i = 0; i < numScreens; ++i) {
-        QRect otherScreen = desktop->screenGeometry(i);
-
-        if (width < otherScreen.width()) {
-            width = otherScreen.width();
-        }
-
-        if (height < otherScreen.height()) {
-            height = otherScreen.height();
-        }
-    }
-
-    //this magic number (4) is the number of columns to try before going to the next row
-    width = (width + INTER_CONTAINMENT_MARGIN) * 4;
-    height += INTER_CONTAINMENT_MARGIN;
-
-    // a mildly naive "find the first slot" approach
-    QRectF r = q->boundingRect();
-    QPointF topLeft(0, 0);
-    q->setPos(topLeft);
-
-    positioning = true;
-    while (true) {
-        it.toFront();
-
-        while (it.hasNext()) {
-            Containment *containment = it.next();
-            if (q->collidesWithItem(containment)) {
-                break;
-            }
-
-            QPointF pos = containment->pos();
-            if (pos.x() <= topLeft.x() && pos.y() <= topLeft.y()) {
-                // we don't colid with this containment, and it's above
-                // and to the left of us, so let's not bother checking
-                // it again if we go through this loop again
-                it.remove();
-            }
-        }
-
-        if (!it.hasNext()) {
-            // success! no collisions!
-            break;
-        }
-
-        if (topLeft.x() + (r.width() * 2) + INTER_CONTAINMENT_MARGIN > width) {
-            // we ran out of width room, try another row
-            topLeft = QPoint(0, topLeft.y() + height);
-        } else {
-            topLeft.setX(topLeft.x() + r.width() + INTER_CONTAINMENT_MARGIN);
-        }
-
-        kDebug() << "trying at" << topLeft;
-        q->setPos(topLeft);
-        //kDebug() << collidingItems().count() << collidingItems()[0] << (QGraphicsItem*)this;
-    }
-
-    positioning = false;
-}
-
-void Containment::Private::positionPanel(bool force)
-{
-    if (!q->scene()) {
-        kDebug() << "no scene yet";
-        return;
-    }
-
-    // we position panels in negative coordinates, and stack all horizontal
-    // and all vertical panels with each other.
-
-    const QPointF p = q->pos();
-
-    if (!force &&
-        p.y() + q->size().height() < -INTER_CONTAINMENT_MARGIN &&
-        q->scene()->collidingItems(q).isEmpty()) {
-        // already positioned and not running into any other panels
-        return;
-    }
-
-    //TODO: research how non-Horizontal, non-Vertical (e.g. Planar) panels behave here
-    bool horiz = q->formFactor() == Plasma::Horizontal;
-    qreal bottom = horiz ? 0 : VERTICAL_STACKING_OFFSET;
-    qreal lastHeight = 0;
-
-    // this should be ok for small numbers of panels, but we ever end
-    // up managing hundreds of them, this simplistic alogrithm will
-    // likely be too slow.
-    foreach (const Containment* other, q->corona()->containments()) {
-        if (other == q ||
-            other->containmentType() != PanelContainment ||
-            horiz != (other->formFactor() == Plasma::Horizontal)) {
-            // only line up with panels of the same orientation
-            continue;
-        }
-
-        if (horiz) {
-            qreal y = other->pos().y();
-            if (y < bottom) {
-                lastHeight = other->size().height();
-                bottom = y;
-            }
-        } else {
-            qreal width = other->size().width();
-            qreal x = other->pos().x() + width;
-            if (x > bottom) {
-                lastHeight = width;
-                bottom = x + lastHeight;
-            }
-        }
-    }
-
-    kDebug() << "positioning" << (horiz ? "" : "non-") << "horizontal panel; forced?" << force;
-    // give a space equal to the height again of the last item so there is
-    // room to grow.
-    QPointF newPos;
-    if (horiz) {
-        bottom -= lastHeight + INTER_CONTAINMENT_MARGIN;
-        //TODO: fix x position for non-flush-left panels
-        kDebug() << "moved to" << QPointF(0, bottom - q->size().height());
-        newPos = QPointF(0, bottom - q->size().height());
-    } else {
-        bottom += lastHeight + INTER_CONTAINMENT_MARGIN;
-        //TODO: fix y position for non-flush-top panels
-        kDebug() << "moved to" << QPointF(bottom + q->size().width(), -INTER_CONTAINMENT_MARGIN - q->size().height());
-        newPos = QPointF(bottom + q->size().width(), -INTER_CONTAINMENT_MARGIN - q->size().height());
-    }
-
-    positioning = true;
-    if (p != newPos) {
-        q->setPos(newPos);
-        emit q->geometryChanged();
-    }
-    positioning = false;
 }
 
 int Containment::screen() const
@@ -1243,12 +820,6 @@ bool Containment::sceneEventFilter(QGraphicsItem *watched, QEvent *event)
     return false;
 }
 
-void Containment::Private::handleDisappeared(AppletHandle *handle)
-{
-    handles.remove(handle->applet());
-    handle->deleteLater();
-}
-
 QVariant Containment::itemChange(GraphicsItemChange change, const QVariant &value)
 {
     Q_UNUSED(value)
@@ -1282,47 +853,428 @@ QGraphicsWidget * Containment::addToolBoxTool(const QString& toolName, const QSt
     tool->setMaximumSize(iconSize);
     tool->resize(tool->size());
 
-    d->createToolbox()->addTool(tool, toolName);
+    d->createToolBox()->addTool(tool, toolName);
 
     return tool;
 }
 
 void Containment::enableToolBoxTool(const QString &toolname, bool enable)
 {
-    if (d->toolbox) {
-        d->toolbox->enableTool(toolname, enable);
+    if (d->toolBox) {
+        d->toolBox->enableTool(toolname, enable);
     }
 }
 
 bool Containment::isToolboxToolEnabled(const QString &toolname) const
 {
-    if (d->toolbox) {
-        return d->toolbox->isToolEnabled(toolname);
+    if (d->toolBox) {
+        return d->toolBox->isToolEnabled(toolname);
     }
     return false;
 }
 
 void Containment::showToolbox()
 {
-    if (d->toolbox) {
-        d->toolbox->showToolbox();
+    if (d->toolBox) {
+        d->toolBox->showToolbox();
     }
 }
 
 void Containment::hideToolbox()
 {
-    if (d->toolbox) {
-        d->toolbox->hideToolbox();
+    if (d->toolBox) {
+        d->toolBox->hideToolbox();
     }
 }
 
-void Containment::Private::repositionToolbox()
+
+// Private class implementation
+
+Toolbox* Containment::Private::createToolBox()
 {
-    //kDebug() << "reposition" << d->screen << (QObject*)d->toolbox;
-    if (toolbox) {
-        positionToolbox();
+    if (!toolBox) {
+        switch (type) {
+        case PanelContainment:
+            toolBox = new PanelToolbox(q);
+            break;
+        //defaults to DesktopContainment right now
+        default:
+            toolBox = new DesktopToolbox(q);
+            break;
+        }
+        positionToolBox();
+    }
+
+    return toolBox;
+}
+
+void Containment::Private::positionToolBox()
+{
+    if (!toolBox) {
+        return;
+    }
+
+    QRectF r;
+    if (screen < 0) {
+        r = q->geometry();
+    } else {
+        QDesktopWidget *desktop = QApplication::desktop();
+        r = desktop->availableGeometry(screen);
+    }
+
+    toolBox->setPos(QPointF(r.right(), r.y()));
+}
+
+void Containment::Private::triggerShowAddWidgets()
+{
+    emit q->showAddWidgetsInterface(QPointF());
+}
+
+void Containment::Private::handleDisappeared(AppletHandle *handle)
+{
+    handles.remove(handle->applet());
+    handle->deleteLater();
+}
+
+void Containment::Private::setLockToolText()
+{
+    if (!toolBox) {
+        return;
+    }
+
+    Icon *icon = dynamic_cast<Plasma::Icon*>(toolBox->tool("lockWidgets"));
+    if (icon) {
+        // we know it's an icon becase we made it
+        icon->setText(q->immutability() != NotImmutable ? i18n("Unlock Widgets") :
+                                            i18n("Lock Widgets"));
+        QSizeF iconSize = icon->sizeFromIconSize(22);
+        icon->setMinimumSize(iconSize);
+        icon->setMaximumSize(iconSize);
+        icon->resize(icon->size());
     }
 }
+
+void Containment::Private::containmentConstraintsUpdated(Plasma::Constraints constraints)
+{
+    if (!q->isContainment()) {
+        return;
+    }
+
+    //kDebug() << "got containmentConstraintsUpdated" << constraints << (QObject*)toolBox;
+    if (constraints & Plasma::ImmutableConstraint) {
+        setLockToolText();
+
+        // tell the applets too
+        foreach (Applet *a, applets) {
+            a->constraintsUpdated(ImmutableConstraint);
+        }
+    }
+
+    if ((constraints & Plasma::SizeConstraint || constraints & Plasma::ScreenConstraint) &&
+         toolBox) {
+        //The placement assumes that the geometry width/height is no more than the screen
+        if (type == PanelContainment) {
+            if (q->formFactor() == Vertical) {
+                toolBox->setOrientation(Qt::Vertical);
+                toolBox->setPos(q->geometry().width()/2 - toolBox->boundingRect().width()/2, q->geometry().height());
+            //defaulting to Horizontal right now
+            } else {
+                toolBox->setOrientation(Qt::Horizontal);
+                toolBox->setPos(q->geometry().width(), q->geometry().height()/2 - toolBox->boundingRect().height()/2);
+            }
+        } else {
+            toolBox->setPos(q->geometry().right() - qAbs(toolBox->boundingRect().width()), 0);
+        }
+        toolBox->enableTool("addwidgets", q->immutability() == NotImmutable);
+    }
+
+    if (constraints & Plasma::FormFactorConstraint && toolBox) {
+        if (q->formFactor() == Vertical) {
+            toolBox->setOrientation(Qt::Vertical);
+        //defaults to horizontal
+        } else {
+            toolBox->setOrientation(Qt::Horizontal);
+        }
+    }
+
+    if (constraints & Plasma::SizeConstraint) {
+        switch (q->containmentType()) {
+            case PanelContainment:
+                positionPanel();
+                break;
+            default:
+                positionContainment();
+                break;
+        }
+    }
+}
+
+void Containment::Private::destroyApplet()
+{
+    QAction *action = qobject_cast<QAction*>(q->sender());
+
+    if (!action) {
+        return;
+    }
+
+    Applet *applet = qobject_cast<Applet*>(action->data().value<QObject*>());
+    Animator::self()->animateItem(applet, Animator::DisappearAnimation);
+}
+
+Applet* Containment::Private::addApplet(const QString& name, const QVariantList& args,
+                                        const QRectF& appletGeometry, uint id, bool delayInit)
+{
+    if (!delayInit && q->immutability() != NotImmutable) {
+        kDebug() << "addApplet for" << name << "requested, but we're currently immutable!";
+        return 0;
+    }
+
+    QGraphicsView *v = q->view();
+    if (v) {
+        v->setCursor(Qt::BusyCursor);
+    }
+
+    Applet* applet = Applet::load(name, id, args);
+    if (v) {
+        v->unsetCursor();
+    }
+
+    if (!applet) {
+        kDebug() << "Applet" << name << "could not be loaded.";
+        applet = new Applet;
+    }
+
+    //kDebug() << applet->name() << "sizehint:" << applet->sizeHint() << "geometry:" << applet->geometry();
+
+    connect(applet, SIGNAL(configNeedsSaving()), q, SIGNAL(configNeedsSaving()));
+    connect(applet, SIGNAL(launchActivated()), q, SIGNAL(launchActivated()));
+    q->addApplet(applet, appletGeometry.topLeft(), delayInit);
+    return applet;
+}
+
+bool Containment::Private::regionIsEmpty(const QRectF &region, Applet *ignoredApplet) const
+{
+    foreach (Applet *applet, applets) {
+        if (applet != ignoredApplet && applet->geometry().intersects(region)) {
+            return false;
+        }
+    }
+    return true;
+}
+
+void Containment::Private::appletDestroyed(QObject* object)
+{
+    // we do a static_cast here since it really isn't an Applet by this
+    // point anymore since we are in the qobject dtor. we don't actually
+    // try and do anything with it, we just need the value of the pointer
+    // so this unsafe looking code is actually just fine.
+    Applet* applet = static_cast<Plasma::Applet*>(object);
+    applets.removeAll(applet);
+    emit q->appletRemoved(applet);
+    emit q->configNeedsSaving();
+}
+
+void Containment::Private::appletAnimationComplete(QGraphicsItem *item, Plasma::Animator::Animation anim)
+{
+    if (anim == Animator::DisappearAnimation) {
+        QGraphicsItem *parent = item->parentItem();
+
+        while (parent) {
+            if (parent == q) {
+                Applet *applet = qgraphicsitem_cast<Applet*>(item);
+
+                if (applet) {
+                    applet->destroy();
+                }
+
+                break;
+            }
+
+            parent = parent->parentItem();
+        }
+    } else if (anim == Animator::AppearAnimation) {
+        if (q->containmentType() == DesktopContainment &&
+            item->parentItem() == q &&
+            qgraphicsitem_cast<Applet*>(item)) {
+                item->installSceneEventFilter(q);
+        }
+    }
+}
+
+void Containment::Private::positionContainment()
+{
+    Corona *c = q->corona();
+    if (!c) {
+        return;
+    }
+
+    QList<Containment*> containments = c->containments();
+    QMutableListIterator<Containment*> it(containments);
+
+    while (it.hasNext()) {
+        Containment *containment = it.next();
+        if (containment == q ||
+            containment->containmentType() == PanelContainment) {
+            // weed out all containments we don't care about at all
+            // e.g. Panels and ourself
+            it.remove();
+            continue;
+        }
+
+        if (q->collidesWithItem(containment)) {
+            break;
+        }
+    }
+
+    if (!it.hasNext()) {
+        // we made it all the way through the list, we have no
+        // collisions
+        return;
+    }
+
+    // we need to find how many screens are to our top and left
+    // to calculate the proper offsets for the margins.
+    int width = 0;
+    int height = 0;
+
+    QDesktopWidget *desktop = QApplication::desktop();
+    int numScreens = desktop->numScreens();
+
+    for (int i = 0; i < numScreens; ++i) {
+        QRect otherScreen = desktop->screenGeometry(i);
+
+        if (width < otherScreen.width()) {
+            width = otherScreen.width();
+        }
+
+        if (height < otherScreen.height()) {
+            height = otherScreen.height();
+        }
+    }
+
+    //this magic number (4) is the number of columns to try before going to the next row
+    width = (width + INTER_CONTAINMENT_MARGIN) * 4;
+    height += INTER_CONTAINMENT_MARGIN;
+
+    // a mildly naive "find the first slot" approach
+    QRectF r = q->boundingRect();
+    QPointF topLeft(0, 0);
+    q->setPos(topLeft);
+
+    positioning = true;
+    while (true) {
+        it.toFront();
+
+        while (it.hasNext()) {
+            Containment *containment = it.next();
+            if (q->collidesWithItem(containment)) {
+                break;
+            }
+
+            QPointF pos = containment->pos();
+            if (pos.x() <= topLeft.x() && pos.y() <= topLeft.y()) {
+                // we don't colid with this containment, and it's above
+                // and to the left of us, so let's not bother checking
+                // it again if we go through this loop again
+                it.remove();
+            }
+        }
+
+        if (!it.hasNext()) {
+            // success! no collisions!
+            break;
+        }
+
+        if (topLeft.x() + (r.width() * 2) + INTER_CONTAINMENT_MARGIN > width) {
+            // we ran out of width room, try another row
+            topLeft = QPoint(0, topLeft.y() + height);
+        } else {
+            topLeft.setX(topLeft.x() + r.width() + INTER_CONTAINMENT_MARGIN);
+        }
+
+        kDebug() << "trying at" << topLeft;
+        q->setPos(topLeft);
+        //kDebug() << collidingItems().count() << collidingItems()[0] << (QGraphicsItem*)this;
+    }
+
+    positioning = false;
+}
+
+void Containment::Private::positionPanel(bool force)
+{
+    if (!q->scene()) {
+        kDebug() << "no scene yet";
+        return;
+    }
+
+    // we position panels in negative coordinates, and stack all horizontal
+    // and all vertical panels with each other.
+
+    const QPointF p = q->pos();
+
+    if (!force &&
+        p.y() + q->size().height() < -INTER_CONTAINMENT_MARGIN &&
+        q->scene()->collidingItems(q).isEmpty()) {
+        // already positioned and not running into any other panels
+        return;
+    }
+
+    //TODO: research how non-Horizontal, non-Vertical (e.g. Planar) panels behave here
+    bool horiz = q->formFactor() == Plasma::Horizontal;
+    qreal bottom = horiz ? 0 : VERTICAL_STACKING_OFFSET;
+    qreal lastHeight = 0;
+
+    // this should be ok for small numbers of panels, but we ever end
+    // up managing hundreds of them, this simplistic alogrithm will
+    // likely be too slow.
+    foreach (const Containment* other, q->corona()->containments()) {
+        if (other == q ||
+            other->containmentType() != PanelContainment ||
+            horiz != (other->formFactor() == Plasma::Horizontal)) {
+            // only line up with panels of the same orientation
+            continue;
+        }
+
+        if (horiz) {
+            qreal y = other->pos().y();
+            if (y < bottom) {
+                lastHeight = other->size().height();
+                bottom = y;
+            }
+        } else {
+            qreal width = other->size().width();
+            qreal x = other->pos().x() + width;
+            if (x > bottom) {
+                lastHeight = width;
+                bottom = x + lastHeight;
+            }
+        }
+    }
+
+    kDebug() << "positioning" << (horiz ? "" : "non-") << "horizontal panel; forced?" << force;
+    // give a space equal to the height again of the last item so there is
+    // room to grow.
+    QPointF newPos;
+    if (horiz) {
+        bottom -= lastHeight + INTER_CONTAINMENT_MARGIN;
+        //TODO: fix x position for non-flush-left panels
+        kDebug() << "moved to" << QPointF(0, bottom - q->size().height());
+        newPos = QPointF(0, bottom - q->size().height());
+    } else {
+        bottom += lastHeight + INTER_CONTAINMENT_MARGIN;
+        //TODO: fix y position for non-flush-top panels
+        kDebug() << "moved to" << QPointF(bottom + q->size().width(), -INTER_CONTAINMENT_MARGIN - q->size().height());
+        newPos = QPointF(bottom + q->size().width(), -INTER_CONTAINMENT_MARGIN - q->size().height());
+    }
+
+    positioning = true;
+    if (p != newPos) {
+        q->setPos(newPos);
+        emit q->geometryChanged();
+    }
+    positioning = false;
+}
+
 
 } // Plasma namespace
 

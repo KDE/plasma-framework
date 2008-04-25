@@ -259,14 +259,6 @@ class PLASMA_EXPORT Containment : public Applet
         bool isToolboxToolEnabled(const QString &toolName) const;
 
         /**
-         * @internal
-         * Called when constraints have been updated on this containment to provide
-         * constraint services common to all containments. Containments should still
-         * implement their own constraintsUpdated method
-         */
-        void containmentConstraintsUpdated(Plasma::Constraints constraints);
-
-        /**
          * Open the Plasma toolbox
          */
         void showToolbox();
@@ -394,7 +386,7 @@ class PLASMA_EXPORT Containment : public Applet
         Q_PRIVATE_SLOT(d, void triggerShowAddWidgets())
         Q_PRIVATE_SLOT(d, void handleDisappeared(AppletHandle *handle))
         Q_PRIVATE_SLOT(d, void destroyApplet())
-        Q_PRIVATE_SLOT(d, void repositionToolbox())
+        Q_PRIVATE_SLOT(d, void positionToolBox())
 
         friend class Applet;
         class Private;

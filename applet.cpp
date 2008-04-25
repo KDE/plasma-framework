@@ -57,6 +57,7 @@
 
 #include "plasma/configxml.h"
 #include "plasma/containment.h"
+#include "plasma/containment_p.h"
 #include "plasma/corona.h"
 #include "plasma/dataenginemanager.h"
 #include "plasma/package.h"
@@ -933,7 +934,7 @@ void Applet::flushUpdatedConstraints()
 
     Containment* containment = qobject_cast<Plasma::Containment*>(this);
     if (isContainment() && containment) {
-        containment->containmentConstraintsUpdated(c);
+        containment->d->containmentConstraintsUpdated(c);
     }
 
     constraintsUpdated(c);
