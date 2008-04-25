@@ -297,7 +297,7 @@ DataEngine::Data DataEngine::query(const QString& source) const
 void DataEngine::internalUpdateSource(DataContainer* source)
 {
     if (d->minPollingInterval > 0 &&
-        source->timeSinceLastUpdate() < d->minPollingInterval) {
+        source->timeSinceLastUpdate() < (uint)d->minPollingInterval) {
         // skip updating this source; it's been too soon
         //kDebug() << "internal update source is delaying" << source->timeSinceLastUpdate() << d->minPollingInterval;
         //but fake an update so that the signalrelay that triggered this gets the data from the

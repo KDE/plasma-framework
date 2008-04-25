@@ -77,21 +77,6 @@ class PLASMA_EXPORT DataContainer : public QObject
         void removeAllData();
 
         /**
-         * @internal
-         **/
-        bool hasUpdates() const;
-
-        /**
-         * Indicates that the data should be treated as dirty the next time hasUpdates() is called.
-         *
-         * why? because if one SignalRelay times out just after another, the minimum update
-         * interval stops a real update from being done - but that relay still needs to be given
-         * data, because it won't have been in the queue and won't have gotten that last update.
-         * when it checks hasUpdates() we'll lie, and then everything will return to normal.
-         **/
-        void setNeedsUpdate(bool update = true);
-
-        /**
          * @return true if the visualization is currently connected
          */
         bool visualizationIsConnected(QObject *visualization) const;
@@ -106,12 +91,6 @@ class PLASMA_EXPORT DataContainer : public QObject
         void connectVisualization(QObject* visualization, uint pollingInterval, Plasma::IntervalAlignment alignment);
 
     public Q_SLOTS:
-        /**
-         * Check if the DataContainer is still in use.
-         * If not the signal "becameUnused" will be emitted.
-         * Warning: The DataContainer may be invalid after calling this function.
-         */
-        void checkUsage();
 
         /**
          * Disconnects an object from this DataContainer.
@@ -146,6 +125,24 @@ class PLASMA_EXPORT DataContainer : public QObject
          * Returns how long ago, in msecs, that the data in this container was last updated
          **/
         uint timeSinceLastUpdate() const;
+
+        /**
+         * Indicates that the data should be treated as dirty the next time hasUpdates() is called.
+         *
+         * why? because if one SignalRelay times out just after another, the minimum update
+         * interval stops a real update from being done - but that relay still needs to be given
+         * data, because it won't have been in the queue and won't have gotten that last update.
+         * when it checks hasUpdates() we'll lie, and then everything will return to normal.
+         **/
+        void setNeedsUpdate(bool update = true);
+
+protected Q_SLOTS:
+        /**
+         * Check if the DataContainer is still in use.
+         * If not the signal "becameUnused" will be emitted.
+         * Warning: The DataContainer may be invalid after calling this function.
+         */
+        void checkUsage();
 
 
     private:

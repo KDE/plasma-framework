@@ -69,33 +69,9 @@ void DataContainer::removeAllData()
     d->updateTs.start();
 }
 
-bool DataContainer::hasUpdates() const
-{
-    if (d->cached) {
-        //some signalrelay needs us to pretend we did an update
-        d->cached = false;
-        return true;
-    }
-    return d->dirty;
-}
-
-void DataContainer::setNeedsUpdate(bool update)
-{
-    d->cached = update;
-}
-
 bool DataContainer::visualizationIsConnected(QObject *visualization) const
 {
     return d->relayObjects.contains(visualization);
-}
-
-void DataContainer::checkUsage()
-{
-    if (d->relays.count() < 1 &&
-        receivers(SIGNAL(dataUpdated(QString, Plasma::DataEngine::Data))) < 1) {
-        // DO NOT CALL ANYTHING AFTER THIS LINE AS IT MAY GET DELETED!
-        emit becameUnused(objectName());
-    }
 }
 
 void DataContainer::connectVisualization(QObject* visualization, uint pollingInterval, Plasma::IntervalAlignment alignment)
@@ -191,6 +167,20 @@ uint DataContainer::timeSinceLastUpdate() const
     //FIXME: we still assume it's been <24h
     //and ignore possible daylight savings changes
     return d->updateTs.elapsed();
+}
+
+void DataContainer::setNeedsUpdate(bool update)
+{
+    d->cached = update;
+}
+
+void DataContainer::checkUsage()
+{
+    if (d->relays.count() < 1 &&
+        receivers(SIGNAL(dataUpdated(QString, Plasma::DataEngine::Data))) < 1) {
+        // DO NOT CALL ANYTHING AFTER THIS LINE AS IT MAY GET DELETED!
+        emit becameUnused(objectName());
+    }
 }
 
 } // Plasma namespace

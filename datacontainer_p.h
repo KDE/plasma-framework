@@ -37,7 +37,9 @@ public:
 
     SignalRelay* signalRelay(const DataContainer* dc, QObject *visualization,
                              uint pollingInterval, Plasma::IntervalAlignment align);
-
+    
+    bool hasUpdates();
+       
     DataEngine::Data data;
     QMap<QObject *, SignalRelay *> relayObjects;
     QMap<uint, SignalRelay *> relays;
@@ -147,7 +149,7 @@ protected:
         }
 
         emit dc->updateRequested(dc);
-        if (!dc->hasUpdates()) {
+        if (!d->hasUpdates()) {
             // the source wasn't actually updated; so let's put ourselves in the queue
             // so we get an dataUpdated() when the data does arrive
             m_queued = true;
@@ -173,6 +175,16 @@ SignalRelay* DataContainer::Private::signalRelay(const DataContainer* dc, QObjec
 
     relayObjects[visualization] = relay;
     return relay;
+}
+
+bool DataContainer::Private::hasUpdates()
+{
+  if (cached) {
+      //some signalrelay needs us to pretend we did an update
+      cached = false;
+      return true;
+  }
+  return dirty;
 }
 
 }
