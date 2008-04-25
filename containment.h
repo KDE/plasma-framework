@@ -321,8 +321,11 @@ class PLASMA_EXPORT Containment : public Applet
         /**
          * Emitted when the containment requests an add widgets dialog is shown.
          * Usually only used for desktop containments.
+         *
+         * @param pos where in the containment this request was made from, or
+         *            an invalid position (QPointF()) is not location specific
          */
-        void showAddWidgets();
+        void showAddWidgetsInterface(const QPointF &pos);
 
         /**
          * This signal indicates that a containment has been newly
@@ -400,19 +403,11 @@ class PLASMA_EXPORT Containment : public Applet
         void appletAnimationComplete(QGraphicsItem *item, Plasma::AnimationDriver::Animation anim);
         void dropEvent(QGraphicsSceneDragDropEvent* event);
 
-    private Q_SLOTS:
-        void handleDisappeared(AppletHandle *handle);
-        void destroyApplet();
-
-        /**
-         * Repositions the Plasma toolbox.  Useful to ensure its always in the correct place within the view.
-         */
-        void repositionToolbox();
-
     private:
-        bool regionIsEmpty(const QRectF &region, Applet *ignoredApplet=0) const;
-        void positionPanel(bool force = false);
-        void positionContainment();
+        Q_PRIVATE_SLOT(d, void triggerShowAddWidgets())
+        Q_PRIVATE_SLOT(d, void handleDisappeared(AppletHandle *handle));
+        Q_PRIVATE_SLOT(d, void destroyApplet());
+        Q_PRIVATE_SLOT(d, void repositionToolbox());
 
         friend class Applet;
         class Private;

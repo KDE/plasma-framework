@@ -105,7 +105,22 @@ public:
         toolbox->setPos(QPointF(r.right(), r.y()));
     }
 
+    void triggerShowAddWidgets()
+    {
+        emit q->showAddWidgetsInterface(QPointF());
+    }
+
+    bool regionIsEmpty(const QRectF &region, Applet *ignoredApplet=0) const;
+    void positionPanel(bool force = false);
+    void positionContainment();
     void setLockToolText();
+    void handleDisappeared(AppletHandle *handle);
+    void destroyApplet();
+    /**
+     * Repositions the Plasma toolbox.  Useful to ensure its always in the correct place within the view.
+     */
+    void repositionToolbox();
+
     Applet* addApplet(const QString& name, const QVariantList& args = QVariantList(),
                       const QRectF &geometry = QRectF(-1, -1, -1, -1), uint id = 0,
                       bool delayedInit = false);
@@ -318,10 +333,10 @@ void Containment::containmentConstraintsUpdated(Plasma::Constraints constraints)
     if (constraints & Plasma::SizeConstraint) {
         switch (containmentType()) {
             case PanelContainment:
-                positionPanel();
+                d->positionPanel();
                 break;
             default:
-                positionContainment();
+                d->positionContainment();
                 break;
         }
     }
@@ -339,7 +354,7 @@ void Containment::setContainmentType(Containment::Type type)
     if (isContainment() && type == DesktopContainment) {
         if (!d->toolbox) {
             QGraphicsWidget *addWidgetTool = addToolBoxTool("addwidgets", "list-add", i18n("Add Widgets"));
-            connect(addWidgetTool, SIGNAL(clicked()), this, SIGNAL(showAddWidgets()));
+            connect(addWidgetTool, SIGNAL(clicked()), this, SLOT(triggerShowAddWidgets()));
 
             QGraphicsWidget *zoomInTool = addToolBoxTool("zoomIn", "zoom-in", i18n("Zoom In"));
             connect(zoomInTool, SIGNAL(clicked()), this, SLOT(zoomIn()));
@@ -452,8 +467,7 @@ void Containment::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
             appletV.setValue((QObject*)applet);
             closeApplet->setData(appletV);
             closeApplet->setIcon(KIcon("edit-delete"));
-            connect(closeApplet, SIGNAL(triggered(bool)),
-                    this, SLOT(destroyApplet()));
+            connect(closeApplet, SIGNAL(triggered(bool)), this, SLOT(destroyApplet()));
             desktopMenu.addAction(closeApplet);
             hasEntries = true;
         }
@@ -488,9 +502,9 @@ void Containment::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
     desktopMenu.exec(event->screenPos());
 }
 
-void Containment::destroyApplet()
+void Containment::Private::destroyApplet()
 {
-    QAction *action = qobject_cast<QAction*>(sender());
+    QAction *action = qobject_cast<QAction*>(q->sender());
 
     if (!action) {
         return;
@@ -515,7 +529,7 @@ void Containment::setFormFactor(FormFactor formFactor)
 
     if (isContainment() && containmentType() == PanelContainment && was != formFactor) {
         // we are a panel and we have chaged our orientation
-        positionPanel(true);
+        d->positionPanel(true);
     }
 
     QGraphicsLayout *lay = layout();
@@ -768,9 +782,9 @@ void Containment::addApplet(Applet *applet, const QPointF &pos, bool delayInit)
     emit appletAdded(applet, pos);
 }
 
-bool Containment::regionIsEmpty(const QRectF &region, Applet *ignoredApplet) const
+bool Containment::Private::regionIsEmpty(const QRectF &region, Applet *ignoredApplet) const
 {
-    foreach (Applet *applet, d->applets) {
+    foreach (Applet *applet, applets) {
         if (applet != ignoredApplet && applet->geometry().intersects(region)) {
             return false;
         }
@@ -867,9 +881,9 @@ void Containment::setScreen(int screen)
     }
 }
 
-void Containment::positionContainment()
+void Containment::Private::positionContainment()
 {
-    Corona *c = corona();
+    Corona *c = q->corona();
     if (!c) {
         return;
     }
@@ -879,7 +893,7 @@ void Containment::positionContainment()
 
     while (it.hasNext()) {
         Containment *containment = it.next();
-        if (containment == this ||
+        if (containment == q ||
             containment->containmentType() == PanelContainment) {
             // weed out all containments we don't care about at all
             // e.g. Panels and ourself
@@ -887,7 +901,7 @@ void Containment::positionContainment()
             continue;
         }
 
-        if (collidesWithItem(containment)) {
+        if (q->collidesWithItem(containment)) {
             break;
         }
     }
@@ -923,17 +937,17 @@ void Containment::positionContainment()
     height += INTER_CONTAINMENT_MARGIN;
 
     // a mildly naive "find the first slot" approach
-    QRectF r = boundingRect();
+    QRectF r = q->boundingRect();
     QPointF topLeft(0, 0);
-    setPos(topLeft);
+    q->setPos(topLeft);
 
-    d->positioning = true;
+    positioning = true;
     while (true) {
         it.toFront();
 
         while (it.hasNext()) {
             Containment *containment = it.next();
-            if (collidesWithItem(containment)) {
+            if (q->collidesWithItem(containment)) {
                 break;
             }
 
@@ -959,16 +973,16 @@ void Containment::positionContainment()
         }
 
         kDebug() << "trying at" << topLeft;
-        setPos(topLeft);
+        q->setPos(topLeft);
         //kDebug() << collidingItems().count() << collidingItems()[0] << (QGraphicsItem*)this;
     }
 
-    d->positioning = false;
+    positioning = false;
 }
 
-void Containment::positionPanel(bool force)
+void Containment::Private::positionPanel(bool force)
 {
-    if (!scene()) {
+    if (!q->scene()) {
         kDebug() << "no scene yet";
         return;
     }
@@ -976,25 +990,25 @@ void Containment::positionPanel(bool force)
     // we position panels in negative coordinates, and stack all horizontal
     // and all vertical panels with each other.
 
-    const QPointF p = pos();
+    const QPointF p = q->pos();
 
     if (!force &&
-        p.y() + size().height() < -INTER_CONTAINMENT_MARGIN &&
-        scene()->collidingItems(this).isEmpty()) {
+        p.y() + q->size().height() < -INTER_CONTAINMENT_MARGIN &&
+        q->scene()->collidingItems(q).isEmpty()) {
         // already positioned and not running into any other panels
         return;
     }
 
     //TODO: research how non-Horizontal, non-Vertical (e.g. Planar) panels behave here
-    bool horiz = formFactor() == Plasma::Horizontal;
+    bool horiz = q->formFactor() == Plasma::Horizontal;
     qreal bottom = horiz ? 0 : VERTICAL_STACKING_OFFSET;
     qreal lastHeight = 0;
 
     // this should be ok for small numbers of panels, but we ever end
     // up managing hundreds of them, this simplistic alogrithm will
     // likely be too slow.
-    foreach (const Containment* other, corona()->containments()) {
-        if (other == this ||
+    foreach (const Containment* other, q->corona()->containments()) {
+        if (other == q ||
             other->containmentType() != PanelContainment ||
             horiz != (other->formFactor() == Plasma::Horizontal)) {
             // only line up with panels of the same orientation
@@ -1024,21 +1038,21 @@ void Containment::positionPanel(bool force)
     if (horiz) {
         bottom -= lastHeight + INTER_CONTAINMENT_MARGIN;
         //TODO: fix x position for non-flush-left panels
-        kDebug() << "moved to" << QPointF(0, bottom - size().height());
-        newPos = QPointF(0, bottom - size().height());
+        kDebug() << "moved to" << QPointF(0, bottom - q->size().height());
+        newPos = QPointF(0, bottom - q->size().height());
     } else {
         bottom += lastHeight + INTER_CONTAINMENT_MARGIN;
         //TODO: fix y position for non-flush-top panels
-        kDebug() << "moved to" << QPointF(bottom + size().width(), -INTER_CONTAINMENT_MARGIN - size().height());
-        newPos = QPointF(bottom + size().width(), -INTER_CONTAINMENT_MARGIN - size().height());
+        kDebug() << "moved to" << QPointF(bottom + q->size().width(), -INTER_CONTAINMENT_MARGIN - q->size().height());
+        newPos = QPointF(bottom + q->size().width(), -INTER_CONTAINMENT_MARGIN - q->size().height());
     }
 
-    d->positioning = true;
+    positioning = true;
     if (p != newPos) {
-        setPos(newPos);
-        emit geometryChanged();
+        q->setPos(newPos);
+        emit q->geometryChanged();
     }
-    d->positioning = false;
+    positioning = false;
 }
 
 int Containment::screen() const
@@ -1230,9 +1244,9 @@ bool Containment::sceneEventFilter(QGraphicsItem *watched, QEvent *event)
     return false;
 }
 
-void Containment::handleDisappeared(AppletHandle *handle)
+void Containment::Private::handleDisappeared(AppletHandle *handle)
 {
-    d->handles.remove(handle->applet());
+    handles.remove(handle->applet());
     handle->deleteLater();
 }
 
@@ -1245,10 +1259,10 @@ QVariant Containment::itemChange(GraphicsItemChange change, const QVariant &valu
         !d->positioning) {
         switch (containmentType()) {
             case PanelContainment:
-                positionPanel();
+                d->positionPanel();
                 break;
             default:
-                positionContainment();
+                d->positionContainment();
                 break;
         }
     }
@@ -1309,11 +1323,11 @@ void Containment::hideToolbox()
     }
 }
 
-void Containment::repositionToolbox()
+void Containment::Private::repositionToolbox()
 {
     //kDebug() << "reposition" << d->screen << (QObject*)d->toolbox;
-    if (d->toolbox) {
-        d->positionToolbox();
+    if (toolbox) {
+        positionToolbox();
     }
 }
 
