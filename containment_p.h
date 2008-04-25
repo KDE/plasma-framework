@@ -72,6 +72,13 @@ public:
     void zoomIn();
     void zoomOut();
 
+    /**
+     * Locks or unlocks plasma's applets.
+     * When plasma is locked, applets cannot be transformed, added or deleted
+     * but they can still be configured.
+     */
+    void toggleDesktopImmutability();
+
     Applet* addApplet(const QString& name, const QVariantList& args = QVariantList(),
                       const QRectF &geometry = QRectF(-1, -1, -1, -1), uint id = 0,
                       bool delayedInit = false);

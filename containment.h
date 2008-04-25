@@ -334,13 +334,6 @@ class PLASMA_EXPORT Containment : public Applet
         void setFormFactor(Plasma::FormFactor formFactor);
 
         /**
-         * Locks or unlocks plasma's applets.
-         * When plasma is locked, applets cannot be transformed, added or deleted
-         * but they can still be configured.
-         */
-        void toggleDesktopImmutability();
-
-        /**
          * Tells the corona to create a new desktop containment
          */
         void addSiblingContainment();
@@ -383,6 +376,7 @@ class PLASMA_EXPORT Containment : public Applet
         Q_PRIVATE_SLOT(d, void positionToolBox())
         Q_PRIVATE_SLOT(d, void zoomIn())
         Q_PRIVATE_SLOT(d, void zoomOut())
+        Q_PRIVATE_SLOT(d, void toggleDesktopImmutability());
 
         friend class Applet;
         class Private;

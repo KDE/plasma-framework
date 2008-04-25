@@ -479,25 +479,6 @@ Location Containment::location() const
     return d->location;
 }
 
-void Containment::toggleDesktopImmutability()
-{
-    if (corona()) {
-        if (corona()->immutability() == NotImmutable) { 
-            corona()->setImmutability(UserImmutable);
-        } else if (corona()->immutability() == UserImmutable) { 
-            corona()->setImmutability(NotImmutable);
-        }
-    } else {
-        if (immutability() == NotImmutable) {
-            setImmutability(UserImmutable);
-        } else if (immutability() == UserImmutable) { 
-            setImmutability(NotImmutable);
-        }
-    }
-
-    d->setLockToolText();
-}
-
 void Containment::addSiblingContainment()
 {
     emit addSiblingContainment(this);
@@ -893,6 +874,25 @@ void Containment::closeToolBox()
 
 
 // Private class implementation
+
+void Containment::Private::toggleDesktopImmutability()
+{
+    if (q->corona()) {
+        if (q->corona()->immutability() == NotImmutable) { 
+            q->corona()->setImmutability(UserImmutable);
+        } else if (q->corona()->immutability() == UserImmutable) { 
+            q->corona()->setImmutability(NotImmutable);
+        }
+    } else {
+        if (q->immutability() == NotImmutable) {
+            q->setImmutability(UserImmutable);
+        } else if (q->immutability() == UserImmutable) { 
+            q->setImmutability(NotImmutable);
+        }
+    }
+
+    setLockToolText();
+}
 
 void Containment::Private::zoomIn()
 {
