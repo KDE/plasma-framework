@@ -287,16 +287,9 @@ class PLASMA_EXPORT Containment : public Applet
         void appletRemoved(Plasma::Applet* applet);
 
         /**
-         * Emitted when the containment requests zooming in one step.
-         * Usually only used for desktop containments.
+         * Emitted when the containment requests zooming in or out one step.
          */
-        void zoomIn(Plasma::Containment *);
-
-        /**
-         * Emitted when the containment requests zooming out one step.
-         * Usually only used for desktop containments.
-         */
-        void zoomOut();
+        void zoomRequested(Plasma::Containment * containment, Plasma::ZoomDirection direction);
 
         /**
          * Emitted when the containment wants a new containment to be created.
@@ -348,12 +341,6 @@ class PLASMA_EXPORT Containment : public Applet
         void toggleDesktopImmutability();
 
         /**
-         * Make the containment request zooming in one step.
-         * Usually only used for desktop containments.
-         */
-        void zoomIn();
-
-        /**
          * Tells the corona to create a new desktop containment
          */
         void addSiblingContainment();
@@ -394,6 +381,8 @@ class PLASMA_EXPORT Containment : public Applet
         Q_PRIVATE_SLOT(d, void handleDisappeared(AppletHandle *handle))
         Q_PRIVATE_SLOT(d, void destroyApplet())
         Q_PRIVATE_SLOT(d, void positionToolBox())
+        Q_PRIVATE_SLOT(d, void zoomIn())
+        Q_PRIVATE_SLOT(d, void zoomOut())
 
         friend class Applet;
         class Private;

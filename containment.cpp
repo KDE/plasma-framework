@@ -205,7 +205,7 @@ void Containment::setContainmentType(Containment::Type type)
             connect(zoomInTool, SIGNAL(clicked()), this, SLOT(zoomIn()));
 
             QGraphicsWidget *zoomOutTool = addToolBoxTool("zoomOut", "zoom-out", i18n("Zoom Out"));
-            connect(zoomOutTool, SIGNAL(clicked()), this, SIGNAL(zoomOut()));
+            connect(zoomOutTool, SIGNAL(clicked()), this, SLOT(zoomOut()));
 
             if (immutability() != SystemImmutable) {
                 QGraphicsWidget *lockTool = addToolBoxTool("lockWidgets", "object-locked",
@@ -496,11 +496,6 @@ void Containment::toggleDesktopImmutability()
     }
 
     d->setLockToolText();
-}
-
-void Containment::zoomIn()
-{
-    emit zoomIn(this);
 }
 
 void Containment::addSiblingContainment()
@@ -898,6 +893,16 @@ void Containment::closeToolBox()
 
 
 // Private class implementation
+
+void Containment::Private::zoomIn()
+{
+    emit q->zoomRequested(q, Plasma::ZoomIn);
+}
+
+void Containment::Private::zoomOut()
+{
+    emit q->zoomRequested(q, Plasma::ZoomOut);
+}
 
 Toolbox* Containment::Private::createToolBox()
 {

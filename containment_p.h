@@ -69,6 +69,8 @@ public:
     void destroyApplet();
     void appletDestroyed(QObject*);
     void appletAnimationComplete(QGraphicsItem *item, Plasma::Animator::Animation anim);
+    void zoomIn();
+    void zoomOut();
 
     Applet* addApplet(const QString& name, const QVariantList& args = QVariantList(),
                       const QRectF &geometry = QRectF(-1, -1, -1, -1), uint id = 0,
