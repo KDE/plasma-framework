@@ -208,7 +208,7 @@ void Containment::init()
     setAcceptsHoverEvents(true);
 
     //TODO: would be nice to not do this on init, as it causes AnimationDriver to init
-    connect(AnimationDriver::self(), SIGNAL(animationComplete(QGraphicsItem*,Plasma::AnimationDriver::Animation)),
+    connect(AnimationDriver::self(), SIGNAL(animationFinished(QGraphicsItem*,Plasma::AnimationDriver::Animation)),
             this, SLOT(appletAnimationComplete(QGraphicsItem*,Plasma::AnimationDriver::Animation)));
 
     if (d->type == NoContainmentType) {
