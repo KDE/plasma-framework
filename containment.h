@@ -235,7 +235,7 @@ class PLASMA_EXPORT Containment : public Applet
         void loadContainment(KConfigGroup* group);
 
         /**
-         * Constructs a toolbox item and adds it to the toolbox. The toolbox takes over ownership of the item. Returns the constructed tool.
+         * Constructs a ToolBox item and adds it to the toolbox. The toolbox takes over ownership of the item. Returns the constructed tool.
          * 
          * @param toolName the name of the tool
          * @param iconName the name of the icon
@@ -256,17 +256,24 @@ class PLASMA_EXPORT Containment : public Applet
         /**
          * Returns whether or not a given toolbox tool is enabled
          */
-        bool isToolboxToolEnabled(const QString &toolName) const;
+        bool isToolBoxToolEnabled(const QString &toolName) const;
 
         /**
-         * Open the Plasma toolbox
+         * Sets the open or closed state of the Containment's toolbox
+         *
+         * @arg open true to open the ToolBox, false to close it
          */
-        void showToolbox();
+        void setToolBoxOpen(bool open);
 
         /**
-         * Close the Plasma toolbox
+         * Open the Containment's toolbox
          */
-        void hideToolbox();
+        void openToolBox();
+
+        /**
+         * Closes Containment's toolbox
+         */
+        void closeToolBox();
 
     Q_SIGNALS:
         /**

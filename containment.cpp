@@ -865,7 +865,7 @@ void Containment::enableToolBoxTool(const QString &toolname, bool enable)
     }
 }
 
-bool Containment::isToolboxToolEnabled(const QString &toolname) const
+bool Containment::isToolBoxToolEnabled(const QString &toolname) const
 {
     if (d->toolBox) {
         return d->toolBox->isToolEnabled(toolname);
@@ -873,14 +873,23 @@ bool Containment::isToolboxToolEnabled(const QString &toolname) const
     return false;
 }
 
-void Containment::showToolbox()
+void Containment::setToolBoxOpen(bool open)
+{
+    if (open) {
+        openToolBox();
+    } else {
+        closeToolBox();
+    }
+}
+
+void Containment::openToolBox()
 {
     if (d->toolBox) {
         d->toolBox->showToolbox();
     }
 }
 
-void Containment::hideToolbox()
+void Containment::closeToolBox()
 {
     if (d->toolBox) {
         d->toolBox->hideToolbox();
