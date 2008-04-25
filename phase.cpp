@@ -28,7 +28,7 @@
 #include <KServiceTypeTrader>
 #include <KGlobalSettings>
 
-#include "animator.h"
+#include "animationdriver.h"
 
 namespace Plasma
 {
@@ -474,6 +474,8 @@ QPixmap Animator::currentPixmap(int id)
             break;
         case DisappearAnimation:
             return d->driver->elementDisappear(progress, state->pixmap);
+            break;
+        case ActivateAnimation:
             break;
     }
 

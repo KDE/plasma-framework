@@ -18,7 +18,7 @@ set(plasmagik_SRCS
 set(plasma_LIB_SRCS
     ${plasmagik_SRCS}
     abstractrunner.cpp
-    animator.cpp
+    animationdriver.cpp
     applet.cpp
     appletbrowser.cpp
     appletbrowser/customdragtreeview.cpp
@@ -99,7 +99,7 @@ install(FILES ${plasmagik_HEADERS} DESTINATION ${INCLUDE_INSTALL_DIR}/plasma/)
 
 set(plasma_LIB_INCLUDES
     abstractrunner.h
-    animator.h
+    animationdriver.h
     applet.h
     appletbrowser.h
     configxml.h
@@ -154,7 +154,7 @@ install(FILES
 
 install(FILES
     includes/AbstractRunner
-    includes/Animator
+    includes/AnimationDriver
     includes/Applet
     includes/AppletBrowser
     includes/ConfigXml

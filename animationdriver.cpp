@@ -18,7 +18,7 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "animator.h"
+#include "animationdriver.h"
 
 #include <QPainter>
 #include <QGraphicsItem>
@@ -143,4 +143,4 @@ void AnimationDriver::itemSlideOut(qreal progress, QGraphicsItem *item, const QP
 
 } // Plasma namespace
 
-#include "animator.moc"
+#include "animationdriver.moc"
