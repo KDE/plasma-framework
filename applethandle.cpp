@@ -323,7 +323,6 @@ void AppletHandle::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
             case ConfigureButton:
                 //FIXME: Remove this call once the configuration management change was done
                 if (m_pressedButton == releasedAtButton) {
-                    m_containment->emitLaunchActivated();
                     m_applet->showConfigurationInterface();
                 }
                 break;

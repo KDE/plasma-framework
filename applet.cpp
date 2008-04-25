@@ -943,13 +943,6 @@ void Applet::flushUpdatedConstraints()
     }
 }
 
-void Applet::launchActivated()
-{
-    if (containment()) {
-        containment()->emitLaunchActivated();
-    }
-}
-
 int Applet::type() const
 {
     return Type;
@@ -1307,6 +1300,8 @@ void Applet::showConfigurationInterface()
         dialog->show();
         dialog->enableButtonApply(true);
     }
+
+    emit launchActivated();
 }
 
 void Applet::createConfigurationInterface(KConfigDialog *parent)

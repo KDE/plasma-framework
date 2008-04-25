@@ -524,6 +524,14 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
 
     Q_SIGNALS:
         /**
+         * This signal indicates that an application launch, window
+         * creation or window focus event was triggered. This is used, for instance,
+         * to ensure that the Dashboard view in Plasma hides when such an event is
+         * triggered by an item it is displaying.
+         */
+        void launchActivated();
+
+        /**
          * Emitted when the applet needs to take (or lose) keyboard focus.
          *
          * An applet should emit this signal to ensure that autohiding
@@ -595,18 +603,12 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          * Causes this applet to lower below all the other applets.
          */
         void lower();
-        
+
         /**
          * Sends all pending contraints updates to the applet. Will usually
          * be called automatically, but can also be called manually if needed.
          */
         void flushUpdatedConstraints();
-
-        /**
-         * This method should be invoked whenever an application launch or other window
-         * creation of focussing event was triggered
-         */
-        void launchActivated();
 
         /**
          * called when the Plasma::Theme has changed

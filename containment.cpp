@@ -713,11 +713,8 @@ Applet* Containment::Private::addApplet(const QString& name, const QVariantList&
 
     //kDebug() << applet->name() << "sizehint:" << applet->sizeHint() << "geometry:" << applet->geometry();
 
-    Corona *c = q->corona();
-    if (c) {
-        connect(applet, SIGNAL(configNeedsSaving()), q->corona(), SLOT(scheduleConfigSync()));
-    }
-
+    connect(applet, SIGNAL(configNeedsSaving()), q, SIGNAL(configNeedsSaving()));
+    connect(applet, SIGNAL(launchActivated()), q, SIGNAL(launchActivated()));
     q->addApplet(applet, appletGeometry.topLeft(), delayInit);
     return applet;
 }
@@ -1270,12 +1267,6 @@ QVariant Containment::itemChange(GraphicsItemChange change, const QVariant &valu
     }
 
     return Applet::itemChange(change, value);
-}
-
-void Containment::emitLaunchActivated()
-{
-    kDebug();
-    emit launchActivated();
 }
 
 QGraphicsWidget * Containment::addToolBoxTool(const QString& toolName, const QString& iconName, const QString& iconText)

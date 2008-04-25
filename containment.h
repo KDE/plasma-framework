@@ -235,11 +235,6 @@ class PLASMA_EXPORT Containment : public Applet
         void loadContainment(KConfigGroup* group);
 
         /**
-         * Emits the launchActivated() signal
-         */ 
-        void emitLaunchActivated();
-
-        /**
          * Constructs a toolbox item and adds it to the toolbox. The toolbox takes over ownership of the item. Returns the constructed tool.
          * 
          * @param toolName the name of the tool
@@ -291,14 +286,6 @@ class PLASMA_EXPORT Containment : public Applet
          * This signal is emitted when an applet is destroyed
          */
         void appletRemoved(Plasma::Applet* applet);
-
-        /**
-         * This signal indicates that an application launch, window
-         * creation or window focus event was triggered. This is used, for instance,
-         * to ensure that the Dashboard view in Plasma hides when such an event is
-         * triggered by an item it is displaying.
-         */
-        void launchActivated();
 
         /**
          * Emitted when the containment requests zooming in one step.
