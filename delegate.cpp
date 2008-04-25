@@ -134,9 +134,14 @@ Delegate::~Delegate()
     delete d;
 }
 
-void Delegate::setRole(SpecificRoles role, int actual)
+void Delegate::setRoleMapping(SpecificRoles role, int actual)
 {
     d->roles[role] = actual;
+}
+
+int Delegate::roleMapping(SpecificRoles role) const
+{
+    return d->roles[role];
 }
 
 QRect Delegate::rectAfterTitle(const QStyleOptionViewItem& option, const QModelIndex& index) const

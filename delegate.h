@@ -65,7 +65,9 @@ public:
      * @param role a role belonging to SpecificRoles
      * @param actual an arbitrary role of the model we are using
      */
-    void setRole(SpecificRoles role, int actual);
+    void setRoleMapping(SpecificRoles role, int actual);
+
+    int roleMapping(SpecificRoles role) const;
 
     static const int ICON_TEXT_MARGIN = 10;
     static const int TEXT_RIGHT_MARGIN = 5;
