@@ -1019,7 +1019,7 @@ void Applet::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
         formFactor() != Plasma::Vertical &&
         formFactor() != Plasma::Horizontal) {
         //kDebug() << "option rect is" << option->rect;
-        d->background->paint(painter, option->rect, QPointF(0,0));
+        d->background->paintPanel(painter, option->rect, QPointF(0,0));
     }
     if (!d->failed) {
         if (widget && isContainment()) {

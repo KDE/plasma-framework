@@ -59,7 +59,8 @@ class PLASMA_EXPORT PanelSvg : public Svg
 
         /**
          * Constructs a new PanelSvg that paints the proper named subelements
-         * as borders
+         * as borders. It may also be used as a regular Plasma::Svg object
+         * for direct access to elements in the Svg.
          *
          * @arg parent options QObject to parent this to
          *
@@ -157,7 +158,7 @@ class PLASMA_EXPORT PanelSvg : public Svg
          * @arg painter the QPainter to use
          * @arg rect the exposed rect to draw into
          */
-        Q_INVOKABLE void paint(QPainter* painter, const QRectF& rect, const QPointF& pos = QPointF(0, 0));
+        Q_INVOKABLE void paintPanel(QPainter* painter, const QRectF& rect, const QPointF& pos = QPointF(0, 0));
 
     Q_SIGNALS:
         void repaintNeeded();

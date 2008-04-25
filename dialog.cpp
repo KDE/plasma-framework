@@ -94,7 +94,7 @@ void Dialog::paintEvent(QPaintEvent *e)
     p.setClipRect(e->rect());
     p.setCompositionMode(QPainter::CompositionMode_Source );
     p.fillRect(rect(), Qt::transparent);
-    d->background->paint(&p, e->rect());
+    d->background->paintPanel(&p, e->rect());
 }
 
 void Dialog::resizeEvent(QResizeEvent *e)
