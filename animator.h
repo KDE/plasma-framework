@@ -18,8 +18,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef ANIMATOR_H
-#define ANIMATOR_H
+#ifndef ANIMATORDRIVER_H
+#define ANIMATORDRIVER_H
 
 #include <QtCore/QObject>
 #include <QtGui/QRegion>
@@ -35,24 +35,24 @@ class QGraphicsItem;
 namespace Plasma
 {
 
-class PLASMA_EXPORT Animator : public QObject
+class PLASMA_EXPORT AnimationDriver : public QObject
 {
     Q_OBJECT
 
 public:
-    explicit Animator(QObject *parent = 0);
-    ~Animator();
+    explicit AnimationDriver(QObject *parent = 0);
+    ~AnimationDriver();
 
     // Parameter definitions
-    virtual int animationFPS(Plasma::AnimationDriver::Animation) const;
-    virtual int movementAnimationFPS(Plasma::AnimationDriver::Movement) const;
-    virtual int elementAnimationFPS(Plasma::AnimationDriver::Animation) const;
-    virtual int animationDuration(Plasma::AnimationDriver::Animation) const;
-    virtual int movementAnimationDuration(Plasma::AnimationDriver::Movement) const;
-    virtual int elementAnimationDuration(Plasma::AnimationDriver::Animation) const;
-    virtual AnimationDriver::CurveShape animationCurve(Plasma::AnimationDriver::Animation) const;
-    virtual AnimationDriver::CurveShape movementAnimationCurve(Plasma::AnimationDriver::Movement) const;
-    virtual AnimationDriver::CurveShape elementAnimationCurve(Plasma::AnimationDriver::Animation) const;
+    virtual int animationFPS(Plasma::Animator::Animation) const;
+    virtual int movementAnimationFPS(Plasma::Animator::Movement) const;
+    virtual int elementAnimationFPS(Plasma::Animator::Animation) const;
+    virtual int animationDuration(Plasma::Animator::Animation) const;
+    virtual int movementAnimationDuration(Plasma::Animator::Movement) const;
+    virtual int elementAnimationDuration(Plasma::Animator::Animation) const;
+    virtual Animator::CurveShape animationCurve(Plasma::Animator::Animation) const;
+    virtual Animator::CurveShape movementAnimationCurve(Plasma::Animator::Movement) const;
+    virtual Animator::CurveShape elementAnimationCurve(Plasma::Animator::Animation) const;
 
     // Element animations
     virtual QPixmap elementAppear(qreal progress, const QPixmap& pixmap);

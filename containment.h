@@ -400,7 +400,7 @@ class PLASMA_EXPORT Containment : public Applet
          * @internal
          */
         void appletDestroyed(QObject*);
-        void appletAnimationComplete(QGraphicsItem *item, Plasma::AnimationDriver::Animation anim);
+        void appletAnimationComplete(QGraphicsItem *item, Plasma::Animator::Animation anim);
         void dropEvent(QGraphicsSceneDragDropEvent* event);
 
     private:

@@ -97,7 +97,7 @@ DesktopToolbox::DesktopToolbox(QGraphicsItem *parent)
     : Toolbox(parent),
       d(new Private)
 {
-    connect(Plasma::AnimationDriver::self(), SIGNAL(movementComplete(QGraphicsItem*)), this, SLOT(toolMoved(QGraphicsItem*)));
+    connect(Plasma::Animator::self(), SIGNAL(movementComplete(QGraphicsItem*)), this, SLOT(toolMoved(QGraphicsItem*)));
 
     setZValue(10000000);
     setFlag(ItemClipsToShape, true);
@@ -206,7 +206,7 @@ void DesktopToolbox::showToolbox()
     const int iconWidth = 32;
     int x = (int)boundingRect().left() - maxwidth - iconWidth - 5;
     int y = (int)boundingRect().top() + 5;
-    Plasma::AnimationDriver* animdriver = Plasma::AnimationDriver::self();
+    Plasma::Animator* animdriver = Plasma::Animator::self();
     foreach (QGraphicsItem* tool, QGraphicsItem::children()) {
         if (tool == d->toolBacker) {
             continue;
@@ -215,14 +215,14 @@ void DesktopToolbox::showToolbox()
         if (!tool->isEnabled()) {
             if (tool->isVisible()) {
                 const int height = static_cast<int>(tool->boundingRect().height());
-                animdriver->moveItem(tool, Plasma::AnimationDriver::SlideOutMovement, QPoint(size() * 2, -height));
+                animdriver->moveItem(tool, Plasma::Animator::SlideOutMovement, QPoint(size() * 2, -height));
             }
             continue;
         }
 
         //kDebug() << "let's show and move" << tool << tool->boundingRect();
         tool->show();
-        animdriver->moveItem(tool, Plasma::AnimationDriver::SlideInMovement, QPoint(x, y));
+        animdriver->moveItem(tool, Plasma::Animator::SlideInMovement, QPoint(x, y));
         //x += 0;
         y += static_cast<int>(tool->boundingRect().height()) + 5;
     }
@@ -240,7 +240,7 @@ void DesktopToolbox::showToolbox()
     setShowing(true);
     // TODO: 10 and 200 shouldn't be hardcoded here. There needs to be a way to
     // match whatever the time is that moveItem() takes. Same in hoverLeaveEvent().
-    d->animId = animdriver->customAnimation(10, 240, Plasma::AnimationDriver::EaseInCurve, this, "animate");
+    d->animId = animdriver->customAnimation(10, 240, Plasma::Animator::EaseInCurve, this, "animate");
     d->stopwatch.restart();
 }
 
@@ -264,14 +264,14 @@ void DesktopToolbox::hideToolbox()
 
     int x = size() * 2;
     int y = 0;
-    Plasma::AnimationDriver* animdriver = Plasma::AnimationDriver::self();
+    Plasma::Animator* animdriver = Plasma::Animator::self();
     foreach (QGraphicsItem* tool, QGraphicsItem::children()) {
         if (tool == d->toolBacker) {
             continue;
         }
 
         const int height = static_cast<int>(tool->boundingRect().height());
-        animdriver->moveItem(tool, Plasma::AnimationDriver::SlideOutMovement, QPoint(x, y-height));
+        animdriver->moveItem(tool, Plasma::Animator::SlideOutMovement, QPoint(x, y-height));
     }
 
     if (d->animId) {
@@ -279,7 +279,7 @@ void DesktopToolbox::hideToolbox()
     }
 
     setShowing(false);
-    d->animId = animdriver->customAnimation(10, 240, Plasma::AnimationDriver::EaseOutCurve, this, "animate");
+    d->animId = animdriver->customAnimation(10, 240, Plasma::Animator::EaseOutCurve, this, "animate");
 
     if (d->toolBacker) {
         d->toolBacker->hide();

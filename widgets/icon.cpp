@@ -97,26 +97,26 @@ IconAction::IconAction(Icon* icon, QAction *action)
 void IconAction::show()
 {
     if (m_animationId) {
-        AnimationDriver::self()->stopElementAnimation(m_animationId);
+        Animator::self()->stopElementAnimation(m_animationId);
     }
 
     rebuildPixmap();
 
-    m_animationId = AnimationDriver::self()->animateElement(m_icon, AnimationDriver::AppearAnimation);
-    AnimationDriver::self()->setInitialPixmap(m_animationId, m_pixmap);
+    m_animationId = Animator::self()->animateElement(m_icon, Animator::AppearAnimation);
+    Animator::self()->setInitialPixmap(m_animationId, m_pixmap);
     m_visible = true;
 }
 
 void IconAction::hide()
 {
     if (m_animationId) {
-        AnimationDriver::self()->stopElementAnimation(m_animationId);
+        Animator::self()->stopElementAnimation(m_animationId);
     }
 
     rebuildPixmap();
 
-    m_animationId = AnimationDriver::self()->animateElement(m_icon, AnimationDriver::DisappearAnimation);
-    AnimationDriver::self()->setInitialPixmap(m_animationId, m_pixmap);
+    m_animationId = Animator::self()->animateElement(m_icon, Animator::DisappearAnimation);
+    Animator::self()->setInitialPixmap(m_animationId, m_pixmap);
     m_visible = false;
 }
 
@@ -247,7 +247,7 @@ void IconAction::paint(QPainter *painter) const
         return;
     }
 
-    QPixmap animPixmap = AnimationDriver::self()->currentPixmap(m_animationId);
+    QPixmap animPixmap = Animator::self()->currentPixmap(m_animationId);
 
     if (m_visible && animPixmap.isNull()) {
         painter->drawPixmap(m_rect.toRect(), m_pixmap);
@@ -485,11 +485,11 @@ void Icon::hoverEffect(bool show)
     const int FadeInDuration = 150;
 
     if (d->m_hoverAnimId != -1) {
-        AnimationDriver::self()->stopCustomAnimation(d->m_hoverAnimId);
+        Animator::self()->stopCustomAnimation(d->m_hoverAnimId);
     }
-    d->m_hoverAnimId = AnimationDriver::self()->customAnimation(40 / (1000 / FadeInDuration), FadeInDuration,
-                                                      AnimationDriver::EaseOutCurve, this,
-                                                      "hoverAnimationUpdate");
+    d->m_hoverAnimId = Animator::self()->customAnimation(40 / (1000 / FadeInDuration), FadeInDuration,
+                                                         Animator::EaseOutCurve, this,
+                                                         "hoverAnimationUpdate");
 }
 
 void Icon::hoverAnimationUpdate(qreal progress) 

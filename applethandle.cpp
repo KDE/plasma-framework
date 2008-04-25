@@ -330,7 +330,7 @@ void AppletHandle::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
             case RemoveButton:
                 if (m_pressedButton == releasedAtButton) {
                     forceDisappear();
-                    AnimationDriver::self()->animateItem(m_applet, AnimationDriver::DisappearAnimation);
+                    Animator::self()->animateItem(m_applet, Animator::DisappearAnimation);
                 }
                 break;
             case MoveButton: {
@@ -615,7 +615,7 @@ void AppletHandle::appletResized()
 void AppletHandle::startFading(FadeType anim)
 {
     if (m_animId != 0) {
-        AnimationDriver::self()->stopCustomAnimation(m_animId);
+        Animator::self()->stopCustomAnimation(m_animId);
     }
 
     m_anim = anim;
@@ -638,7 +638,7 @@ void AppletHandle::startFading(FadeType anim)
         time *= m_opacity;
     }
 
-    m_animId = AnimationDriver::self()->customAnimation(40, (int)time, AnimationDriver::EaseInOutCurve, this, "fadeAnimation");
+    m_animId = Animator::self()->customAnimation(40, (int)time, Animator::EaseInOutCurve, this, "fadeAnimation");
 }
 
 void AppletHandle::forceDisappear()

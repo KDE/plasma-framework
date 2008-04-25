@@ -26,44 +26,44 @@
 namespace Plasma
 {
 
-Animator::Animator(QObject *parent)
+AnimationDriver::AnimationDriver(QObject *parent)
     : QObject(parent),
       d(0)
 {
 }
 
-Animator::~Animator()
+AnimationDriver::~AnimationDriver()
 {
 }
 
-int Animator::animationFPS(Plasma::AnimationDriver::Animation animation) const
+int AnimationDriver::animationFPS(Plasma::Animator::Animation animation) const
 {
     Q_UNUSED(animation)
     return 0;
 }
 
-int Animator::movementAnimationFPS(Plasma::AnimationDriver::Movement movement) const
+int AnimationDriver::movementAnimationFPS(Plasma::Animator::Movement movement) const
 {
     Q_UNUSED(movement)
     return 20;
 }
 
-int Animator::elementAnimationFPS(Plasma::AnimationDriver::Animation animation) const
+int AnimationDriver::elementAnimationFPS(Plasma::Animator::Animation animation) const
 {
     Q_UNUSED(animation)
     return 0;
 }
 
-int Animator::animationDuration(Plasma::AnimationDriver::Animation) const
+int AnimationDriver::animationDuration(Plasma::Animator::Animation) const
 {
     return 200;
 }
 
-int Animator::movementAnimationDuration(Plasma::AnimationDriver::Movement movement) const
+int AnimationDriver::movementAnimationDuration(Plasma::Animator::Movement movement) const
 {
     switch (movement) {
-        case AnimationDriver::FastSlideInMovement:
-        case AnimationDriver::FastSlideOutMovement:
+        case Animator::FastSlideInMovement:
+        case Animator::FastSlideOutMovement:
             return 100;
             break;
         default:
@@ -73,33 +73,33 @@ int Animator::movementAnimationDuration(Plasma::AnimationDriver::Movement moveme
     return 270;
 }
 
-int Animator::elementAnimationDuration(Plasma::AnimationDriver::Animation) const
+int AnimationDriver::elementAnimationDuration(Plasma::Animator::Animation) const
 {
     return 333;
 }
 
-AnimationDriver::CurveShape Animator::animationCurve(Plasma::AnimationDriver::Animation) const
+Animator::CurveShape AnimationDriver::animationCurve(Plasma::Animator::Animation) const
 {
-    return AnimationDriver::EaseInOutCurve;
+    return Animator::EaseInOutCurve;
 }
 
-AnimationDriver::CurveShape Animator::movementAnimationCurve(Plasma::AnimationDriver::Movement) const
+Animator::CurveShape AnimationDriver::movementAnimationCurve(Plasma::Animator::Movement) const
 {
-    return AnimationDriver::EaseInOutCurve;
+    return Animator::EaseInOutCurve;
 }
 
-AnimationDriver::CurveShape Animator::elementAnimationCurve(Plasma::AnimationDriver::Animation) const
+Animator::CurveShape AnimationDriver::elementAnimationCurve(Plasma::Animator::Animation) const
 {
-    return AnimationDriver::EaseInOutCurve;
+    return Animator::EaseInOutCurve;
 }
 
-QPixmap Animator::elementAppear(qreal progress, const QPixmap& pixmap)
+QPixmap AnimationDriver::elementAppear(qreal progress, const QPixmap& pixmap)
 {
     Q_UNUSED(progress)
     return pixmap;
 }
 
-QPixmap Animator::elementDisappear(qreal progress, const QPixmap& pixmap)
+QPixmap AnimationDriver::elementDisappear(qreal progress, const QPixmap& pixmap)
 {
     Q_UNUSED(progress)
     QPixmap pix(pixmap.size());
@@ -108,32 +108,32 @@ QPixmap Animator::elementDisappear(qreal progress, const QPixmap& pixmap)
     return pix;
 }
 
-void Animator::itemAppear(qreal frame, QGraphicsItem* item)
+void AnimationDriver::itemAppear(qreal frame, QGraphicsItem* item)
 {
     Q_UNUSED(frame)
     Q_UNUSED(item)
 }
 
-void Animator::itemDisappear(qreal frame, QGraphicsItem* item)
+void AnimationDriver::itemDisappear(qreal frame, QGraphicsItem* item)
 {
     Q_UNUSED(frame)
     Q_UNUSED(item)
 }
 
-void Animator::itemActivated(qreal frame, QGraphicsItem* item)
+void AnimationDriver::itemActivated(qreal frame, QGraphicsItem* item)
 {
     Q_UNUSED(frame)
     Q_UNUSED(item)
 }
 
-void Animator::itemSlideIn(qreal progress, QGraphicsItem *item, const QPoint &start, const QPoint &destination)
+void AnimationDriver::itemSlideIn(qreal progress, QGraphicsItem *item, const QPoint &start, const QPoint &destination)
 {
     double x = start.x() + (destination.x() - start.x()) * progress;
     double y = start.y() + (destination.y() - start.y()) * progress;
     item->setPos(x, y);
 }
 
-void Animator::itemSlideOut(qreal progress, QGraphicsItem *item, const QPoint &start, const QPoint &destination)
+void AnimationDriver::itemSlideOut(qreal progress, QGraphicsItem *item, const QPoint &start, const QPoint &destination)
 {
     //kDebug();
     double x = start.x() + (destination.x() - start.x()) * progress;
