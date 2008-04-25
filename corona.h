@@ -46,11 +46,6 @@ public:
     ~Corona();
 
     /**
-     * The applets and Corona surface are changeable or not
-     **/
-    bool isImmutable() const;
-
-    /**
      *  Sets the mimetype of Drag/Drop items. Default is
      *  text/x-plasmoidservicename
      */
