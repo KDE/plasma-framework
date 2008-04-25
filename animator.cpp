@@ -18,7 +18,7 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "phase.h"
+#include "animator.h"
 
 #include <QGraphicsItem>
 
@@ -644,4 +644,4 @@ void Animator::init()
 
 } // namespace Plasma
 
-#include <phase.moc>
+#include <animator.moc>

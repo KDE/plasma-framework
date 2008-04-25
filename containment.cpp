@@ -43,7 +43,7 @@
 
 #include "applethandle_p.h"
 #include "corona.h"
-#include "phase.h"
+#include "animator.h"
 #include "desktoptoolbox_p.h"
 #include "paneltoolbox_p.h"
 #include "svg.h"

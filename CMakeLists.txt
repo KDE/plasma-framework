@@ -19,6 +19,7 @@ set(plasma_LIB_SRCS
     ${plasmagik_SRCS}
     abstractrunner.cpp
     animationdriver.cpp
+    animator.cpp
     applet.cpp
     appletbrowser.cpp
     appletbrowser/customdragtreeview.cpp
@@ -38,7 +39,6 @@ set(plasma_LIB_SRCS
     #FOR FUTURE
     #layouts/borderlayout.cpp
     packages.cpp
-    phase.cpp
     plasma.cpp
     plasma_export.h
     searchmatch.cpp
@@ -100,6 +100,7 @@ install(FILES ${plasmagik_HEADERS} DESTINATION ${INCLUDE_INSTALL_DIR}/plasma/)
 set(plasma_LIB_INCLUDES
     abstractrunner.h
     animationdriver.h
+    animator.h
     applet.h
     appletbrowser.h
     configxml.h
@@ -109,7 +110,6 @@ set(plasma_LIB_INCLUDES
     dataengine.h
     dataenginemanager.h
     dialog.h
-    phase.h
     plasma.h
     plasma_export.h
     searchmatch.h
@@ -155,13 +155,13 @@ install(FILES
 install(FILES
     includes/AbstractRunner
     includes/AnimationDriver
+    includes/Animator
     includes/Applet
     includes/AppletBrowser
     includes/ConfigXml
     includes/Corona
     includes/Containment
     includes/Dialog
-    includes/Phase
     includes/Plasma
     includes/Package
     includes/PackageStructure

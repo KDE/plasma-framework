@@ -30,7 +30,7 @@
 #include <kgenericfactory.h>
 
 #include <plasma/applet.h>
-#include <plasma/phase.h>
+#include <plasma/animator.h>
 
 #include "widgets/icon.h"
 

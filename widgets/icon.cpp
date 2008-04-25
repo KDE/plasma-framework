@@ -52,7 +52,7 @@
 
 #include <plasma/theme.h>
 
-#include "phase.h"
+#include "animator.h"
 #include "svg.h"
 
 namespace Plasma

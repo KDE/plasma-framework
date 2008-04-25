@@ -24,7 +24,7 @@
 #include <QGraphicsItem>
 #include <QObject>
 
-#include "phase.h"
+#include "animator.h"
 
 namespace Plasma
 {

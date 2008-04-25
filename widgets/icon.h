@@ -29,7 +29,7 @@
 #include <QGraphicsWidget>
 
 #include <plasma/dataengine.h>
-#include <plasma/phase.h>
+#include <plasma/animator.h>
 #include <plasma/plasma_export.h>
 
 class QAction;

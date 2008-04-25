@@ -33,7 +33,7 @@
 #include <plasma/svg.h>
 
 #include "icon.h"
-#include "phase.h"
+#include "animator.h"
 
 class QAction;
 class QPainter;

@@ -24,7 +24,7 @@
 #include <QtGui/QGraphicsItem>
 #include <QTimer>
 
-#include "phase.h"
+#include "animator.h"
 #include "svg.h"
 
 namespace Plasma

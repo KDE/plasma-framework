@@ -28,7 +28,7 @@
 #include <kgenericfactory.h>
 
 #include <plasma/plasma_export.h>
-#include <plasma/phase.h>
+#include <plasma/animator.h>
 
 class QGraphicsItem;
 

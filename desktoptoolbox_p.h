@@ -29,7 +29,7 @@
 
 #include <plasma/toolbox_p.h>
 
-#include "phase.h"
+#include "animator.h"
 
 namespace Plasma
 {
