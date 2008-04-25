@@ -71,6 +71,20 @@ public:
      */
     KSharedConfig::Ptr config() const;
 
+    /**
+     * Adds a Containment to the Corona
+     *
+     * @param name the plugin name for the containment, as given by
+     *        KPluginInfo::pluginName(). If an empty string is passed in, the defalt
+     *        containment plugin will be used (usually DesktopContainment). If the
+     *        string literal "null" is passed in, then no plugin will be loaded and
+     *        a simple Containment object will be created instead.
+     * @param args argument list to pass to the containment
+     *
+     * @return a pointer to the containment on success, or 0 on failure
+     */
+    Containment* addContainment(const QString& name, const QVariantList& args = QVariantList());
+
 public Q_SLOTS:
     /**
      * Load applet layout from a config file
@@ -91,24 +105,6 @@ public Q_SLOTS:
      * to disk at the next convenient moment
      */
     void scheduleConfigSync() const;
-
-    /**
-     * Adds a Containment to the Corona
-     *
-     * @param name the plugin name for the containment, as given by
-     *        KPluginInfo::pluginName(). If an empty string is passed in, the defalt
-     *        containment plugin will be used (usually DesktopContainment). If the
-     *        string literal "null" is passed in, then no plugin will be loaded and
-     *        a simple Containment object will be created instead.
-     * @param args argument list to pass to the containment
-     * @param id to assign to this containment, or 0 to auto-assign it a new id
-     * @param geometry where to place the containment, or to auto-place it if an invalid
-     *                 is provided
-     *
-     * @return a pointer to the containment on success, or 0 on failure
-     */
-    Containment* addContainment(const QString& name, const QVariantList& args = QVariantList(),
-                                uint id = 0, bool delayInit = false);
 
     /**
      * Removes a given containment from the corona

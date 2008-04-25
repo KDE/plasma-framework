@@ -125,6 +125,57 @@ public:
     {
         q->config()->sync();
     }
+    
+    Containment* addContainment(const QString& name, const QVariantList& args, uint id, bool delayedInit)
+    {
+        QString pluginName = name;
+        Containment* containment = 0;
+        Applet* applet = 0;
+
+        //kDebug() << "Loading" << name << args << id;
+
+        if (pluginName.isEmpty()) {
+            // default to the desktop containment
+            pluginName = "desktop";
+        } else if (pluginName != "null") {
+            applet = Applet::load(pluginName, id, args);
+            containment = dynamic_cast<Containment*>(applet);
+        }
+
+        if (!containment) {
+            kDebug() << "loading of containment" << name << "failed.";
+
+            // in case we got a non-Containment from Applet::loadApplet or a null containment was requested
+            delete applet;
+            containment = new Containment(0, 0, id);
+
+            // we want to provide something and don't care about the failure to launch
+            containment->setFailedToLaunch(false);
+            containment->setFormFactor(Plasma::Planar);
+        }
+
+        containment->setIsContainment(true);
+
+        if (!delayedInit) {
+            q->addItem(containment);
+            containment->init();
+            containment->updateConstraints(Plasma::StartupCompletedConstraint);
+        }
+
+        containments.append(containment);
+        connect(containment, SIGNAL(destroyed(QObject*)),
+                q, SLOT(containmentDestroyed(QObject*)));
+        connect(containment, SIGNAL(configNeedsSaving()),
+                q, SLOT(scheduleConfigSync()));
+        connect(containment, SIGNAL(screenChanged(int,int,Plasma::Containment*)),
+                q, SIGNAL(screenOwnerChanged(int,int,Plasma::Containment*)));
+
+        if (!delayedInit) {
+            emit q->containmentAdded(containment);
+        }
+
+        return containment;
+    }
 
     Corona *q;
     ImmutabilityType immutability;
@@ -210,8 +261,8 @@ void Corona::loadLayout(const QString& configName)
 
         int cid = group.toUInt();
         //kDebug() << "got a containment in the config, trying to make a" << containmentConfig.readEntry("plugin", QString()) << "from" << group;
-        Containment *c = addContainment(containmentConfig.readEntry("plugin", QString()), QVariantList(),
-                                        cid, true);
+        Containment *c = d->addContainment(containmentConfig.readEntry("plugin", QString()), QVariantList(),
+                                           cid, true);
         if (!c) {
             continue;
         }
@@ -280,55 +331,9 @@ KSharedConfigPtr Corona::config() const
     return d->config;
 }
 
-Containment* Corona::addContainment(const QString& name, const QVariantList& args, uint id, bool delayedInit)
+Containment* Corona::addContainment(const QString& name, const QVariantList& args)
 {
-    QString pluginName = name;
-    Containment* containment = 0;
-    Applet* applet = 0;
-
-    //kDebug() << "Loading" << name << args << id;
-
-    if (pluginName.isEmpty()) {
-        // default to the desktop containment
-        pluginName = "desktop";
-    } else if (pluginName != "null") {
-        applet = Applet::load(pluginName, id, args);
-        containment = dynamic_cast<Containment*>(applet);
-    }
-
-    if (!containment) {
-        kDebug() << "loading of containment" << name << "failed.";
-
-        // in case we got a non-Containment from Applet::loadApplet or a null containment was requested
-        delete applet;
-        containment = new Containment(0, 0, id);
-
-        // we want to provide something and don't care about the failure to launch
-        containment->setFailedToLaunch(false);
-        containment->setFormFactor(Plasma::Planar);
-    }
-
-    containment->setIsContainment(true);
-
-    if (!delayedInit) {
-        addItem(containment);
-        containment->init();
-        containment->updateConstraints(Plasma::StartupCompletedConstraint);
-    }
-
-    d->containments.append(containment);
-    connect(containment, SIGNAL(destroyed(QObject*)),
-            this, SLOT(containmentDestroyed(QObject*)));
-    connect(containment, SIGNAL(configNeedsSaving()),
-            SLOT(scheduleConfigSync()));
-    connect(containment, SIGNAL(screenChanged(int,int,Plasma::Containment*)),
-            this, SIGNAL(screenOwnerChanged(int,int,Plasma::Containment*)));
-
-    if (!delayedInit) {
-        emit containmentAdded(containment);
-    }
-
-    return containment;
+    return d->addContainment(name, args, 0, false);
 }
 
 void Corona::destroyContainment(Containment *c)
