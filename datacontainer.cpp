@@ -69,26 +69,6 @@ void DataContainer::removeAllData()
     d->updateTs.start();
 }
 
-void DataContainer::checkForUpdate()
-{
-    if (d->dirty) {
-        emit dataUpdated(objectName(), d->data);
-
-        foreach (SignalRelay* relay, d->relays) {
-            relay->checkQueueing();
-        }
-
-        d->dirty = false;
-    }
-}
-
-int DataContainer::timeSinceLastUpdate() const
-{
-    //FIXME: we still assume it's been <24h
-    //and ignore possible daylight savings changes
-    return d->updateTs.elapsed();
-}
-
 bool DataContainer::hasUpdates() const
 {
     if (d->cached) {
@@ -191,6 +171,26 @@ void DataContainer::disconnectVisualization(QObject* visualization)
 
     d->relayObjects.erase(objIt);
     checkUsage();
+}
+
+void DataContainer::checkForUpdate()
+{
+    if (d->dirty) {
+        emit dataUpdated(objectName(), d->data);
+
+        foreach (SignalRelay* relay, d->relays) {
+            relay->checkQueueing();
+        }
+
+        d->dirty = false;
+    }
+}
+
+uint DataContainer::timeSinceLastUpdate() const
+{
+    //FIXME: we still assume it's been <24h
+    //and ignore possible daylight savings changes
+    return d->updateTs.elapsed();
 }
 
 } // Plasma namespace

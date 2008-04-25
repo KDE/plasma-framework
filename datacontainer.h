@@ -41,6 +41,7 @@ namespace Plasma
  **/
 class PLASMA_EXPORT DataContainer : public QObject
 {
+    friend class DataEngine;
     Q_OBJECT
 
     public:
@@ -74,17 +75,6 @@ class PLASMA_EXPORT DataContainer : public QObject
          * Removes all data currently associated with this source
          **/
         void removeAllData();
-
-        /**
-         * Checks for whether the data has changed and therefore an update
-         * signal needs to be emitted.
-         **/
-        void checkForUpdate();
-
-        /**
-         * Returns how long ago, in msecs, that the data in this container was last updated
-         **/
-        int timeSinceLastUpdate() const;
 
         /**
          * @internal
@@ -145,6 +135,18 @@ class PLASMA_EXPORT DataContainer : public QObject
          * requests to be updated.
          **/
         void updateRequested(DataContainer *source);
+    protected:
+        /**
+         * Checks for whether the data has changed and therefore an update
+         * signal needs to be emitted.
+         **/
+        void checkForUpdate();
+
+        /**
+         * Returns how long ago, in msecs, that the data in this container was last updated
+         **/
+        uint timeSinceLastUpdate() const;
+
 
     private:
         friend class SignalRelay;
