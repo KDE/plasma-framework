@@ -958,10 +958,10 @@ QPainterPath Applet::shape() const
     return Plasma::roundedRectangle(boundingRect().adjusted(-2, -2, 2, 2), 10);
 }
 
-QList<QAction*> Applet::contextActions()
+QList<QAction*> Applet::contextualActions()
 {
     //kDebug() << "empty context actions";
-    return d->script ? d->script->contextActions() : QList<QAction*>();
+    return d->script ? d->script->contextualActions() : QList<QAction*>();
 }
 
 QColor Applet::color() const

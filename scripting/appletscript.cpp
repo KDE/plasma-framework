@@ -61,15 +61,10 @@ void AppletScript::paintInterface(QPainter* painter, const QStyleOptionGraphicsI
     Q_UNUSED(contentsRect)
 }
 
-QSizeF AppletScript::contentSizeHint() const
-{
-    return applet()->boundingRect().size();
-}
-
 QSizeF AppletScript::size() const
 {
     if (applet()) {
-        return applet()->boundingRect().size();
+        return applet()->size();
     }
 
     return QSizeF();
@@ -80,7 +75,7 @@ void AppletScript::constraintsUpdated(Plasma::Constraints constraints)
     Q_UNUSED(constraints);
 }
 
-QList<QAction*> AppletScript::contextActions()
+QList<QAction*> AppletScript::contextualActions()
 {
     return QList<QAction*>();
 }

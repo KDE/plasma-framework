@@ -472,7 +472,7 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          * @return A list of actions. The default implementation returns an
          *         empty list.
          **/
-        virtual QList<QAction*> contextActions();
+        virtual QList<QAction*> contextualActions();
 
         /**
          * Sets shadow for the given applet.

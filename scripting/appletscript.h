@@ -73,12 +73,6 @@ public:
                                 const QRect &contentsRect);
 
     /**
-     * Called to discover the content size hint for the item.
-     * The default implementation simply returns the Applet's contentSizeHint
-     */
-    virtual QSizeF contentSizeHint() const;
-
-    /**
      * Returns the area within which contents can be painted.
      **/
     Q_INVOKABLE QSizeF size() const;
@@ -102,7 +96,7 @@ public:
      * @return A list of actions. The default implementation returns an
      *         empty list.
      */
-    virtual QList<QAction*> contextActions();
+    virtual QList<QAction*> contextualActions();
 
 public Q_SLOTS:
 

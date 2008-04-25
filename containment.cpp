@@ -267,7 +267,7 @@ void Containment::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
     if (applet) {
         bool hasEntries = false;
 
-        QList<QAction*> actions = applet->contextActions();
+        QList<QAction*> actions = applet->contextualActions();
         if (!actions.isEmpty()) {
             foreach(QAction* action, actions) {
                 desktopMenu.addAction(action);
@@ -284,7 +284,7 @@ void Containment::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
             hasEntries = true;
         }
 
-        QList<QAction*> containmentActions = contextActions();
+        QList<QAction*> containmentActions = contextualActions();
         if (!containmentActions.isEmpty()) {
             if (hasEntries) {
                 desktopMenu.addSeparator();
@@ -329,7 +329,7 @@ void Containment::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
             return;
         }
 
-        QList<QAction*> actions = contextActions();
+        QList<QAction*> actions = contextualActions();
 
         if (actions.count() < 1) {
             //kDebug() << "no applet, but no actions";
