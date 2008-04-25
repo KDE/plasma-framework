@@ -120,6 +120,8 @@ public:
      * Repositions the Plasma toolbox.  Useful to ensure its always in the correct place within the view.
      */
     void repositionToolbox();
+    void appletDestroyed(QObject*);
+    void appletAnimationComplete(QGraphicsItem *item, Plasma::Animator::Animation anim);
 
     Applet* addApplet(const QString& name, const QVariantList& args = QVariantList(),
                       const QRectF &geometry = QRectF(-1, -1, -1, -1), uint id = 0,
@@ -792,25 +794,25 @@ bool Containment::Private::regionIsEmpty(const QRectF &region, Applet *ignoredAp
     return true;
 }
 
-void Containment::appletDestroyed(QObject* object)
+void Containment::Private::appletDestroyed(QObject* object)
 {
     // we do a static_cast here since it really isn't an Applet by this
     // point anymore since we are in the qobject dtor. we don't actually
     // try and do anything with it, we just need the value of the pointer
     // so this unsafe looking code is actually just fine.
     Applet* applet = static_cast<Plasma::Applet*>(object);
-    d->applets.removeAll(applet);
-    emit appletRemoved(applet);
-    emit configNeedsSaving();
+    applets.removeAll(applet);
+    emit q->appletRemoved(applet);
+    emit q->configNeedsSaving();
 }
 
-void Containment::appletAnimationComplete(QGraphicsItem *item, Plasma::Animator::Animation anim)
+void Containment::Private::appletAnimationComplete(QGraphicsItem *item, Plasma::Animator::Animation anim)
 {
     if (anim == Animator::DisappearAnimation) {
         QGraphicsItem *parent = item->parentItem();
 
         while (parent) {
-            if (parent == this) {
+            if (parent == q) {
                 Applet *applet = qgraphicsitem_cast<Applet*>(item);
 
                 if (applet) {
@@ -823,10 +825,10 @@ void Containment::appletAnimationComplete(QGraphicsItem *item, Plasma::Animator:
             parent = parent->parentItem();
         }
     } else if (anim == Animator::AppearAnimation) {
-        if (containmentType() == DesktopContainment &&
-            item->parentItem() == this &&
+        if (q->containmentType() == DesktopContainment &&
+            item->parentItem() == q &&
             qgraphicsitem_cast<Applet*>(item)) {
-                item->installSceneEventFilter(this);
+                item->installSceneEventFilter(q);
         }
     }
 }
