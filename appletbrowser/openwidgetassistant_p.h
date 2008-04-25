@@ -41,6 +41,7 @@ public:
 protected Q_SLOTS:
     void prepPage(KPageWidgetItem *current, KPageWidgetItem *before);
     void finished();
+    void slotHelpClicked();
 
 private:
     KPageWidgetItem *m_typePage;

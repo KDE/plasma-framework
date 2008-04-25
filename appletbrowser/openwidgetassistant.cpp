@@ -82,7 +82,8 @@ OpenWidgetAssistant::OpenWidgetAssistant(QWidget *parent)
 
     connect(this, SIGNAL(currentPageChanged(KPageWidgetItem*,KPageWidgetItem*)), SLOT(prepPage(KPageWidgetItem*,KPageWidgetItem*)));
     connect(this, SIGNAL(user1Clicked()), this, SLOT(finished()));
-
+    enableButton( KDialog::Help, false );
+    //connect( this, SIGNAL( helpClicked() ), this, SLOT( slotHelpClicked() ) );
     m_widgetTypeList->setFocus();
     resize(QSize(560, 400).expandedTo(minimumSizeHint()));
 }
@@ -133,6 +134,11 @@ void OpenWidgetAssistant::prepPage(KPageWidgetItem *current, KPageWidgetItem *be
         mimes << "application/x-plasma";
         m_fileDialog->setMimeFilter(mimes);
     }
+}
+
+void OpenWidgetAssistant::slotHelpClicked()
+{
+    //enable it when doc will created
 }
 
 void OpenWidgetAssistant::finished()
