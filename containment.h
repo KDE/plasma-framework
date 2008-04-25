@@ -369,12 +369,11 @@ class PLASMA_EXPORT Containment : public Applet
          */
         void addSiblingContainment();
 
+    protected:
         /**
          * Sets the type of this containment.
          */
         void setContainmentType(Containment::Type type);
-
-    protected:
 
         /**
          * Optionally creates a layout for the Containment for the new
