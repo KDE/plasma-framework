@@ -418,7 +418,7 @@ void DataEngine::addSource(DataContainer* source)
     emit sourceAdded(source->objectName());
 }
 
-void DataEngine::setSourceLimit(uint limit)
+void DataEngine::setMaxSourceCount(uint limit)
 {
     if (d->limit == limit) {
         return;
@@ -433,7 +433,7 @@ void DataEngine::setSourceLimit(uint limit)
     }
 }
 
-uint DataEngine::sourceLimit() const
+uint DataEngine::maxSourceCount() const
 {
     return d->limit;
 }
