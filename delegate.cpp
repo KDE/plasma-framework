@@ -123,8 +123,9 @@ QRect Delegate::Private::subTitleRect(const QStyleOptionViewItem& option, const 
     return textRect;
 }
 
-Delegate::Delegate()
-    : d(new Private)
+Delegate::Delegate(QObject *parent)
+    : QAbstractItemDelegate(parent),
+      d(new Private)
 {
 }
 

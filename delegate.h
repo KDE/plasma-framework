@@ -55,7 +55,7 @@ public:
          SecondaryActionColumn = 2
     };
 
-    Delegate();
+    Delegate(QObject *parent = 0);
     ~Delegate();
 
     /**
