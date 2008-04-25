@@ -92,10 +92,10 @@ void DataEngineScript::removeData(const QString& source, const QString& key)
     }
 }
 
-void DataEngineScript::setSourceLimit(uint limit)
+void DataEngineScript::setMaxSourceCount(uint limit)
 {
     if (d->dataEngine) {
-        d->dataEngine->setSourceLimit(limit);
+        d->dataEngine->setMaxSourceCount(limit);
     }
 }
 
