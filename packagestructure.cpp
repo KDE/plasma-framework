@@ -244,7 +244,7 @@ void PackageStructure::setRequired(const char* key, bool required)
     it.value().required = required;
 }
 
-bool PackageStructure::required(const char* key) const
+bool PackageStructure::isRequired(const char* key) const
 {
     QMap<QByteArray, ContentStructure>::const_iterator it = d->contents.find(key);
     if (it == d->contents.constEnd()) {

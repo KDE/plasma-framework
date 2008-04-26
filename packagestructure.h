@@ -166,7 +166,7 @@ public:
     /**
      * @return true if the item at path exists and is required
      **/
-    bool required(const char* key) const;
+    bool isRequired(const char* key) const;
 
     /**
      * Defines the default mimetypes for any definitions that do not have
