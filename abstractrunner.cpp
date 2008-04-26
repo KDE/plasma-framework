@@ -159,7 +159,7 @@ void AbstractRunner::setHasRunOptions(bool hasRunOptions)
     d->hasRunOptions = hasRunOptions;
 }
 
-void AbstractRunner::createMatchOptions(QWidget *parent)
+void AbstractRunner::createRunOptions(QWidget *parent)
 {
     Q_UNUSED(parent)
 }

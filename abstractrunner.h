@@ -113,13 +113,13 @@ class PLASMA_EXPORT AbstractRunner : public QObject
         bool hasRunOptions();
 
         /**
-         * If hasMatchOptions() returns true, this method may be called to get
+         * If hasRunOptions() returns true, this method may be called to get
          * a widget displaying the options the user can interact with to modify
          * the behaviour of what happens when a given match is selected.
          *
          * @param widget the parent of the options widgets.
          */
-        virtual void createMatchOptions(QWidget *widget);
+        virtual void createRunOptions(QWidget *widget);
 
         /**
          * If the runner itself has configuration options, this method returns true
