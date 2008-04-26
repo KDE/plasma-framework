@@ -154,7 +154,7 @@ public:
             containment->setFormFactor(Plasma::Planar);
         }
 
-        containment->setIsContainment(true);
+        containment->setActAsContainment(true);
 
         if (!delayedInit) {
             q->addItem(containment);
