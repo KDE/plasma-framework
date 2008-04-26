@@ -73,13 +73,6 @@ class PLASMA_EXPORT AbstractRunner : public QObject
          */
         static List load(QObject* parent, const QStringList& whitelist = QStringList());
 
-        /**
-         * Constructs a Runner object. Since AbstractRunner has pure virtuals,
-         * this constructor can not be called directly. Rather a subclass must
-         * be created
-         */
-        explicit AbstractRunner(QObject* parent = 0, const QString& serviceId = QString());
-        AbstractRunner(QObject* parent, const QVariantList& args);
         virtual ~AbstractRunner();
 
         /**
@@ -178,6 +171,14 @@ class PLASMA_EXPORT AbstractRunner : public QObject
         const Package* package() const;
 
     protected:
+        /**
+         * Constructs a Runner object. Since AbstractRunner has pure virtuals,
+         * this constructor can not be called directly. Rather a subclass must
+         * be created
+         */
+        explicit AbstractRunner(QObject* parent = 0, const QString& serviceId = QString());
+        AbstractRunner(QObject* parent, const QVariantList& args);
+
         /**
          * Sets whether or not the the runner has options for matches
          */
