@@ -102,6 +102,7 @@ class Applet::Private
 public:
     Private(KService::Ptr service, int uniqueID)
         : appletId(uniqueID),
+          backgroundHints(StandardBackground),
           appletDescription(service),
           package(0),
           needsConfigOverlay(0),
@@ -196,7 +197,7 @@ public:
             }
         }
 
-        applet->setDrawStandardBackground(true);
+        applet->setBackgroundHints(DefaultBackground);
 
         connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()), applet, SLOT(themeChanged()));
     }
@@ -310,6 +311,68 @@ public:
     
         return text;
     }
+    
+    void applyBackgroundHints(const BackgroundHints hints)
+    {
+#if 0
+        backgroundHints = hints;
+
+        //Draw the standard background?
+        if (hints & StandardBackground) {
+            if (!background) {
+                background = new Plasma::PanelSvg();
+                background->setImagePath("widgets/background");
+                background->setEnabledBorders(Plasma::PanelSvg::AllBorders);
+                int left, top, right, bottom;
+                getBorderSize(left, top, right, bottom);
+                setContentsMargins(left, right, top, bottom);
+
+                QSizeF fitSize(left + right, top + bottom);
+                if (minimumSize().expandedTo(fitSize) != minimumSize()) {
+                    setMinimumSize(minimumSize().expandedTo(fitSize));
+                }
+                background->resizePanel(boundingRect().size());
+            }
+        } else if (background) {
+            int left, top, right, bottom;
+            getBorderSize(left, top, right, bottom);
+            //Setting a minimum size of 0,0 would result in the panel to be only
+            //on the first virtual desktop
+            setMinimumSize(qMax(minimumSize().width() - left - right, 1.0),
+                        qMax(minimumSize().height() - top - bottom, 1.0));
+    
+            delete d->background;
+            background = 0;
+            setContentsMargins(0, 0, 0, 0);
+        }
+
+        //Draw the shadow?
+        //There are various problems with shadows right now:
+        //
+        //1) shadows can be seen through translucent areas, which is probably technically correct ubt
+        //looks odd
+        //2) the shape of the item odesn't conform to the shape of the standard background, e.g. with
+        //rounded corners
+#ifdef DYNAMIC_SHADOWS
+        if (hints & ShadowedBackground) {
+            if (shadow) {
+                shadow->setVisible(true);
+            } else {
+                shadow = new ShadowItem(this);
+                if (scene()) {
+                    scene()->addItem(d->shadow);
+                    shadow->show();
+                }
+            }
+        } else {
+            delete d->shadow;
+            shadow = 0;
+        }
+#else
+        Q_UNUSED(shown);
+#endif
+#endif
+    }
 
     //TODO: examine the usage of memory here; there's a pretty large
     //      number of members at this point.
@@ -318,6 +381,7 @@ public:
     static uint s_minZValue;
     static PackageStructure::Ptr packageStructure;
     uint appletId;
+    BackgroundHints backgroundHints;
     KPluginInfo appletDescription;
     Package* package;
     OverlayWidget *needsConfigOverlay;
@@ -464,7 +528,7 @@ void Applet::setFailedToLaunch(bool failed, const QString& reason)
     setLayout(0);
 
     if (failed) {
-        setDrawStandardBackground(true);
+        setBackgroundHints(d->backgroundHints|StandardBackground);
 
         #ifdef TOPORT
         Layout* failureLayout = new BoxLayout(BoxLayout::TopToBottom, this);
@@ -776,14 +840,17 @@ void Applet::setImmutability(const ImmutabilityType immutable)
     updateConstraints(ImmutableConstraint);
 }
 
-bool Applet::drawStandardBackground() const
+Applet::BackgroundHints Applet::backgroundHints() const
 {
-    return d->background != 0;
+    return d->backgroundHints;
 }
 
-void Applet::setDrawStandardBackground(bool drawBackground)
+void Applet::setBackgroundHints(const BackgroundHints hints)
 {
-    if (drawBackground) {
+    d->backgroundHints = hints;
+
+    //Draw the standard background?
+    if (hints & StandardBackground) {
         if (!d->background) {
             d->background = new Plasma::PanelSvg();
             d->background->setImagePath("widgets/background");
@@ -804,12 +871,36 @@ void Applet::setDrawStandardBackground(bool drawBackground)
         //Setting a minimum size of 0,0 would result in the panel to be only
         //on the first virtual desktop
         setMinimumSize(qMax(minimumSize().width() - left - right, 1.0),
-                       qMax(minimumSize().height() - top - bottom, 1.0));
+                    qMax(minimumSize().height() - top - bottom, 1.0));
 
         delete d->background;
         d->background = 0;
         setContentsMargins(0, 0, 0, 0);
     }
+
+    //Draw the shadow?
+    //There are various problems with shadows right now:
+    //
+    //1) shadows can be seen through translucent areas, which is probably technically correct ubt
+    //looks odd
+    //2) the shape of the item odesn't conform to the shape of the standard background, e.g. with
+    //rounded corners
+#ifdef DYNAMIC_SHADOWS
+    if (hints & ShadowedBackground) {
+        if (d->shadow) {
+            d->shadow->setVisible(true);
+        } else {
+            shadow = new ShadowItem(this);
+            if (scene()) {
+                scene()->addItem(d->shadow);
+                d->shadow->show();
+            }
+        }
+    } else {
+        delete d->shadow;
+        d->shadow = 0;
+    }
+#endif
 }
 
 bool Applet::hasFailedToLaunch() const
@@ -900,8 +991,17 @@ void Applet::flushUpdatedConstraints()
 
     if (c & Plasma::FormFactorConstraint) {
         FormFactor f = formFactor();
-        setShadowShown(f == Planar);
-        setDrawStandardBackground(!isContainment() && f != Vertical && f != Horizontal);
+        if (f == Planar) {
+            setBackgroundHints(d->backgroundHints|ShadowedBackground);
+        } else {
+            setBackgroundHints(d->backgroundHints^ShadowedBackground);
+        }
+
+        if (!isContainment() && f != Vertical && f != Horizontal) {
+            setBackgroundHints(d->backgroundHints|StandardBackground);
+        } else {
+            setBackgroundHints(d->backgroundHints^StandardBackground);
+        }
 
         /**
          FIXME: what follows was an attempt to constrain the size of applets. it is, however,
@@ -1436,39 +1536,6 @@ Applet* Applet::load(const KPluginInfo& info, uint appletId, const QVariantList&
     }
 
     return load(info.pluginName(), appletId, args);
-}
-
-void Applet::setShadowShown(bool shown)
-{
-    //There are various problems with shadows right now:
-    //
-    //1) shadows can be seen through translucent areas, which is probably technically correct ubt
-    //looks odd
-    //2) the shape of the item odesn't conform to the shape of the standard background, e.g. with
-    //rounded corners
-#ifdef DYNAMIC_SHADOWS
-    if (shown) {
-        if (d->shadow) {
-            d->shadow->setVisible(true);
-        } else {
-            d->shadow = new ShadowItem(this);
-            if (scene()) {
-                scene()->addItem(d->shadow);
-                d->shadow->show();
-            }
-        }
-    } else {
-        delete d->shadow;
-        d->shadow = 0;
-    }
-#else
-    Q_UNUSED(shown);
-#endif
-}
-
-bool Applet::isShadowShown() const
-{
-    return d->shadow && d->shadow->isVisible();
 }
 
 QPointF Applet::topLeft() const

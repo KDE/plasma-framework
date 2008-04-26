@@ -80,7 +80,7 @@ Containment::Containment(QGraphicsItem* parent,
     // WARNING: do not access config() OR globalConfig() in this method!
     //          that requires a scene, which is not available at this point
     setPos(0, 0);
-    setDrawStandardBackground(false);
+    setBackgroundHints(DefaultBackground);
     setContainmentType(CustomContainment);
 }
 
@@ -91,7 +91,7 @@ Containment::Containment(QObject* parent, const QVariantList& args)
     // WARNING: do not access config() OR globalConfig() in this method!
     //          that requires a scene, which is not available at this point
     setPos(0, 0);
-    setDrawStandardBackground(false);
+    setBackgroundHints(NoBackground);
 }
 
 Containment::~Containment()
@@ -514,7 +514,7 @@ void Containment::addApplet(Applet *applet, const QPointF &pos, bool delayInit)
 
     if (containmentType() == PanelContainment) {
         //panels don't want backgrounds, which is important when setting geometry
-        applet->setDrawStandardBackground(false);
+        setBackgroundHints(NoBackground);
     }
 
     if (currentContainment && currentContainment != this) {

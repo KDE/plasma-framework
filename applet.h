@@ -66,7 +66,6 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
     Q_PROPERTY(QString name READ name)
     Q_PROPERTY(QString category READ category)
     Q_PROPERTY(ImmutabilityType immutability READ immutability WRITE setImmutability)
-    Q_PROPERTY(bool drawStandardBackground READ drawStandardBackground WRITE setDrawStandardBackground)
     Q_PROPERTY(bool hasFailedToLaunch READ hasFailedToLaunch WRITE setFailedToLaunch)
     Q_PROPERTY(bool needsConfiguring READ needsConfiguring WRITE setNeedsConfiguring)
     Q_PROPERTY(QRectF geometry READ geometry WRITE setGeometry)
@@ -76,6 +75,16 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
     public:
         typedef QList<Applet*> List;
         typedef QHash<QString, Applet*> Dict;
+
+        /**
+         * Description on how draw a background for the applet
+         */
+        enum BackgroundHint { NoBackground = 0 /** Not drawing a background under the applet, the applet has its own implementation */,
+                              StandardBackground /** The standard background from the theme is drawn */,
+                              ShadowedBackground /** The applet has a drop shadow */,
+                              DefaultBackground = StandardBackground | ShadowedBackground /** Default settings: both standard background and shadow */
+                            };
+        Q_DECLARE_FLAGS(BackgroundHints, BackgroundHint)
 
         /**
          * @param parent the QGraphicsItem this applet is parented to
@@ -415,20 +424,6 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          */
         ImmutabilityType immutability() const;
 
-        /**
-         * @return returns whether or not the applet is using the standard
-         *         background
-         **/
-        bool drawStandardBackground() const;
-
-        /**
-         * Sets whether the applet should automatically draw the standard
-         * background.
-         *
-         * Defaults to true
-         **/
-        void setDrawStandardBackground(bool drawBackground);
-
         void paintWindowFrame(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
         /**
@@ -475,14 +470,10 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         virtual QList<QAction*> contextualActions();
 
         /**
-         * Sets shadow for the given applet.
+         * @return BackgroundHints flags combination telling if the standard background is shown
+         *         and if it has a drop shadow
          */
-        void setShadowShown(bool);
-
-        /**
-         * Returns true if the given item has a shadow shown.
-         */
-        bool isShadowShown() const;
+        BackgroundHints backgroundHints() const;
 
         /**
          * Sets whether or not this Applet is acting as a Containment
@@ -671,6 +662,13 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         QString instanceName() const;
 
         /**
+         * Sets the BackgroundHints for this applet @see BackgroundHint
+         *
+         * @param hints the BackgroundHint combination for this applet
+         */
+        void setBackgroundHints(const BackgroundHints hints);
+
+        /**
         * Register widgets that can receive keyboard focus.
         *
         * Calling this results in an eventFilter being placed on the widget.
@@ -761,6 +759,8 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
 };
 
 } // Plasma namespace
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(Plasma::Applet::BackgroundHints)
 
 /**
  * Register an applet when it is contained in a loadable module
