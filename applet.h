@@ -453,9 +453,14 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         BackgroundHints backgroundHints() const;
 
         /**
+         * Sets whether or not this Applet is acting as a Containment
+         */
+        void setIsContainment(bool isContainment);
+
+        /**
          * @return true if this Applet is currently being used as a Containment, false otherwise
          */
-        bool actAsContainment() const;
+        bool isContainment() const;
 
         /**
          * Sets the geometry of this Plasma::Applet. Should not be used directly by
@@ -655,11 +660,6 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          * applet. Combines the global name with the applet id
          **/
         QString instanceName() const;
-
-        /**
-         * Sets whether or not this Applet is acting as a Containment
-         */
-        void setActAsContainment(bool isContainment);
 
         /**
          * Sets the BackgroundHints for this applet @see BackgroundHint
