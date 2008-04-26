@@ -76,11 +76,6 @@ class PLASMA_EXPORT AbstractRunner : public QObject
         virtual ~AbstractRunner();
 
         /**
-         * Provides access to the runner's configuration object.
-         */
-        KConfigGroup config() const;
-
-        /**
          * This is the main query method. It should trigger creation of
          * SearchMatch instances through SearchContext::addInformationalMatch,
          * SearchContext::addExactMatch, and SearchContext::addPossibleMatch.
@@ -178,6 +173,11 @@ class PLASMA_EXPORT AbstractRunner : public QObject
          */
         explicit AbstractRunner(QObject* parent = 0, const QString& serviceId = QString());
         AbstractRunner(QObject* parent, const QVariantList& args);
+
+        /**
+         * Provides access to the runner's configuration object.
+         */
+        KConfigGroup config() const;
 
         /**
          * Sets whether or not the the runner has options for matches
