@@ -110,7 +110,7 @@ class PLASMA_EXPORT AbstractRunner : public QObject
          * what happens when exec or one of the actions created in fillMatches
          * is called, the runner should return true
          */
-        bool hasMatchOptions();
+        bool hasRunOptions();
 
         /**
          * If hasMatchOptions() returns true, this method may be called to get
@@ -182,7 +182,7 @@ class PLASMA_EXPORT AbstractRunner : public QObject
         /**
          * Sets whether or not the the runner has options for matches
          */
-        void setHasMatchOptions(bool hasMatchOptions);
+        void setHasRunOptions(bool hasRunOptions);
 
         /**
          * Sets whether or not the runner has configuration options itself

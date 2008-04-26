@@ -69,7 +69,7 @@ public:
         }
     }
 
-    bool hasMatchOptions;
+    bool hasRunOptions;
     bool hasConfig;
     Priority priority;
     Speed speed;
@@ -149,14 +149,14 @@ void AbstractRunner::performMatch( Plasma::SearchContext &globalContext )
     }
 }
 
-bool AbstractRunner::hasMatchOptions()
+bool AbstractRunner::hasRunOptions()
 {
-    return d->hasMatchOptions;
+    return d->hasRunOptions;
 }
 
-void AbstractRunner::setHasMatchOptions(bool hasMatchOptions)
+void AbstractRunner::setHasRunOptions(bool hasRunOptions)
 {
-    d->hasMatchOptions = hasMatchOptions;
+    d->hasRunOptions = hasRunOptions;
 }
 
 void AbstractRunner::createMatchOptions(QWidget *parent)
