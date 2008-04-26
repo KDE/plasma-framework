@@ -53,8 +53,8 @@ class PLASMA_EXPORT AbstractRunner : public QObject
     Q_OBJECT
 
     public:
-        enum Speed { NormalSpeed,
-                     SlowSpeed
+        enum Speed { SlowSpeed,
+                     NormalSpeed
                    };
 
         enum Priority { LowestPriority = 0,
