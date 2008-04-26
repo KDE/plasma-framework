@@ -244,7 +244,7 @@ void AbstractRunner::init()
     }
 }
 
-AbstractRunner::List AbstractRunner::load(QObject* parent, const QStringList& whitelist)
+AbstractRunner::List AbstractRunner::loadAll(QObject* parent, const QStringList& whitelist)
 {
     List firstRunners;
     List runners;
