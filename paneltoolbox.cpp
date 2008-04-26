@@ -96,7 +96,7 @@ PanelToolbox::PanelToolbox(QGraphicsItem *parent)
     : Toolbox(parent),
       d(new Private)
 {
-    connect(Plasma::Animator::self(), SIGNAL(movementComplete(QGraphicsItem*)), this, SLOT(toolMoved(QGraphicsItem*)));
+    connect(Plasma::Animator::self(), SIGNAL(movementFinished(QGraphicsItem*)), this, SLOT(toolMoved(QGraphicsItem*)));
 
     setZValue(10000000);
     setFlag(ItemClipsToShape, true);
