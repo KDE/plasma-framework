@@ -243,7 +243,7 @@ public:
     void scheduleConstraintsUpdate(Plasma::Constraints c, Applet* applet)
     {
         if (pendingConstraints == NoConstraint) {
-            QTimer::singleShot(0, applet, SLOT(flushUpdatedConstraints()));
+            QTimer::singleShot(0, applet, SLOT(flushPendingConstraintsEvents()));
         }
         pendingConstraints |= c;
     }
@@ -675,7 +675,7 @@ void Applet::constraintsUpdated(Plasma::Constraints constraints)
     //NOTE: do NOT put any code in here that reacts to constraints updates
     //      as it will not get called for any applet that reimplements constraintsUpdated
     //      without calling the Applet:: version as well, which it shouldn't need to.
-    //      INSTEAD put such code into flushUpdatedConstraints
+    //      INSTEAD put such code into flushPendingConstraintsEvents
     Q_UNUSED(constraints)
     //kDebug() << constraints << "constraints are FormFactor: " << formFactor() << ", Location: " << location();
     if (d->script) {
@@ -905,7 +905,7 @@ void Applet::checkImmutability()
     }
 }
 
-void Applet::flushUpdatedConstraints()
+void Applet::flushPendingConstraintsEvents()
 {
     if (d->pendingConstraints == NoConstraint) {
         return;

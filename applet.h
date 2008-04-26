@@ -571,7 +571,7 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          * Sends all pending contraints updates to the applet. Will usually
          * be called automatically, but can also be called manually if needed.
          */
-        void flushUpdatedConstraints();
+        void flushPendingConstraintsEvents();
 
         /**
          * called when the Plasma::Theme has changed

@@ -283,7 +283,7 @@ void Corona::loadLayout(const QString& configName)
             }
 
             containment->updateConstraints(Plasma::StartupCompletedConstraint);
-            containment->flushUpdatedConstraints();
+            containment->flushPendingConstraintsEvents();
             emit containmentAdded(containment);
         }
     }

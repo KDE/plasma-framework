@@ -151,7 +151,7 @@ void Containment::loadContainment(KConfigGroup* group)
     setFormFactor((Plasma::FormFactor)group->readEntry("formfactor", (int)d->formFactor));
     setScreen(group->readEntry("screen", d->screen));
 
-    flushUpdatedConstraints();
+    flushPendingConstraintsEvents();
     //kDebug() << "Containment" << id() << "geometry is" << geometry() << "config'd with" << appletConfig.name();
     KConfigGroup applets(group, "Applets");
 
@@ -550,7 +550,7 @@ void Containment::addApplet(Applet *applet, const QPointF &pos, bool delayInit)
 
     applet->updateConstraints(Plasma::AllConstraints | Plasma::StartupCompletedConstraint);
     if (!delayInit) {
-        applet->flushUpdatedConstraints();
+        applet->flushPendingConstraintsEvents();
         emit configNeedsSaving();
     }
 
