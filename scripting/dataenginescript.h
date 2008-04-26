@@ -78,7 +78,7 @@ protected:
     void setData(const QString& source, const QString& key,
                  const QVariant& value);
     void setData(const QString &source, const QVariant &value);
-    void clearData(const QString& source);
+    void removeAllData(const QString& source);
     void removeData(const QString& source, const QString& key);
     void setMaxSourceCount(uint limit);
     void setMinimumPollingInterval(int minimumMs);

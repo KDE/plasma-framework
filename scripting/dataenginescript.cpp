@@ -78,7 +78,7 @@ void DataEngineScript::setData(const QString &source, const QVariant &value)
     }
 }
 
-void DataEngineScript::clearData(const QString& source)
+void DataEngineScript::removeAllData(const QString& source)
 {
     if (d->dataEngine) {
         d->dataEngine->removeAllData(source);
