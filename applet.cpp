@@ -312,68 +312,6 @@ public:
         return text;
     }
     
-    void applyBackgroundHints(const BackgroundHints hints)
-    {
-#if 0
-        backgroundHints = hints;
-
-        //Draw the standard background?
-        if (hints & StandardBackground) {
-            if (!background) {
-                background = new Plasma::PanelSvg();
-                background->setImagePath("widgets/background");
-                background->setEnabledBorders(Plasma::PanelSvg::AllBorders);
-                int left, top, right, bottom;
-                getBorderSize(left, top, right, bottom);
-                setContentsMargins(left, right, top, bottom);
-
-                QSizeF fitSize(left + right, top + bottom);
-                if (minimumSize().expandedTo(fitSize) != minimumSize()) {
-                    setMinimumSize(minimumSize().expandedTo(fitSize));
-                }
-                background->resizePanel(boundingRect().size());
-            }
-        } else if (background) {
-            int left, top, right, bottom;
-            getBorderSize(left, top, right, bottom);
-            //Setting a minimum size of 0,0 would result in the panel to be only
-            //on the first virtual desktop
-            setMinimumSize(qMax(minimumSize().width() - left - right, 1.0),
-                        qMax(minimumSize().height() - top - bottom, 1.0));
-    
-            delete d->background;
-            background = 0;
-            setContentsMargins(0, 0, 0, 0);
-        }
-
-        //Draw the shadow?
-        //There are various problems with shadows right now:
-        //
-        //1) shadows can be seen through translucent areas, which is probably technically correct ubt
-        //looks odd
-        //2) the shape of the item odesn't conform to the shape of the standard background, e.g. with
-        //rounded corners
-#ifdef DYNAMIC_SHADOWS
-        if (hints & ShadowedBackground) {
-            if (shadow) {
-                shadow->setVisible(true);
-            } else {
-                shadow = new ShadowItem(this);
-                if (scene()) {
-                    scene()->addItem(d->shadow);
-                    shadow->show();
-                }
-            }
-        } else {
-            delete d->shadow;
-            shadow = 0;
-        }
-#else
-        Q_UNUSED(shown);
-#endif
-#endif
-    }
-
     //TODO: examine the usage of memory here; there's a pretty large
     //      number of members at this point.
     static uint s_maxAppletId;
