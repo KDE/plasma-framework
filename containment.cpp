@@ -569,9 +569,9 @@ void Containment::setScreen(int screen)
 #ifndef Q_OS_WIN
         // we want to listen to changes in work area if our screen changes
         if (d->screen < 0 && screen > -1) {
-            connect(KWindowSystem::self(), SIGNAL(workAreaChanged()), this, SLOT(positionToolbox()));
+            connect(KWindowSystem::self(), SIGNAL(workAreaChanged()), this, SLOT(positionToolBox()));
         } else if (screen < 0) {
-            disconnect(KWindowSystem::self(), SIGNAL(workAreaChanged()), this, SLOT(positionToolbox()));
+            disconnect(KWindowSystem::self(), SIGNAL(workAreaChanged()), this, SLOT(positionToolBox()));
         }
 #endif
         if (screen > -1 && corona()) {
