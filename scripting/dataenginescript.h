@@ -84,7 +84,7 @@ protected:
     void setMinimumPollingInterval(int minimumMs);
     int  minimumPollingInterval() const;
     void setPollingInterval(uint frequency);
-    void clearSources();
+    void removeAllSources();
 
 private:
     class Private;
