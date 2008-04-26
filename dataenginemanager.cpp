@@ -163,7 +163,7 @@ QStringList DataEngineManager::listAllEngines()
 {
     QStringList engines;
     KService::List offers = KServiceTypeTrader::self()->query("Plasma/DataEngine");
-    foreach (KService::Ptr service, offers) {
+    foreach (const KService::Ptr &service, offers) {
         engines.append(service->property("X-Plasma-EngineName").toString());
     }
 

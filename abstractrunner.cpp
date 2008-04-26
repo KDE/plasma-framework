@@ -252,7 +252,7 @@ AbstractRunner::List AbstractRunner::loadAll(QObject* parent, const QStringList&
 
     KService::List offers = KServiceTypeTrader::self()->query("Plasma/Runner");
     QString error;
-    foreach (KService::Ptr service, offers) {
+    foreach (const KService::Ptr &service, offers) {
         if (whitelist.empty() || whitelist.contains(service->name())) {
             QString language = service->property("X-Plasma-Language").toString();
             AbstractRunner* runner = 0;

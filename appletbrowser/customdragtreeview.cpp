@@ -55,7 +55,7 @@ void CustomDragTreeView::startDrag ( Qt::DropActions supportedActions )
         QPainter painter(&pixmap);
         QRect rect(0, 0, PIX_SIZE, PIX_SIZE);
 
-        foreach (QModelIndex index, indexes) {
+        foreach (const QModelIndex &index, indexes) {
             if (index.column() != 0) continue;
 
             KCategorizedItemsViewModels::AbstractItem * item =

@@ -97,7 +97,7 @@ QStringList knownLanguages(ComponentTypes types)
     //kDebug() << "Applet::knownApplets constraint was '" << constraint << "' which got us " << offers.count() << " matches";
 
     QStringList languages;
-    foreach (KService::Ptr service, offers) {
+    foreach (const KService::Ptr &service, offers) {
         QString language = service->property("X-Plasma-Language").toString();
         if (!languages.contains(language)) {
             languages.append(language);
@@ -155,7 +155,7 @@ ScriptEngine* loadEngine(const QString &language, ComponentType type, QObject *p
     QString error;
 
     ScriptEngine *engine = 0;
-    foreach (KService::Ptr service, offers) {
+    foreach (const KService::Ptr &service, offers) {
         switch (type) {
             case AppletComponent:
                 engine = service->createInstance<Plasma::AppletScript>(parent, args, &error);

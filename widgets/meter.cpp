@@ -231,7 +231,7 @@ void Meter::dataUpdated(const QString &sourceName, const Plasma::DataEngine::Dat
 {
     Q_UNUSED(sourceName)
 
-    foreach (QVariant d, data) {
+    foreach (const QVariant &d, data) {
         if (d.canConvert(QVariant::Int)) {
             setValue(d.toInt());
             return;

@@ -181,7 +181,7 @@ AbstractItem * KCategorizedItemsView::getItemByProxyIndex(const QModelIndex & in
 
 QList < AbstractItem * > KCategorizedItemsView::selectedItems() const {
     QList < AbstractItem * > items;
-    foreach (QModelIndex index, itemsView->selectionModel()->selectedIndexes()) {
+    foreach (const QModelIndex &index, itemsView->selectionModel()->selectedIndexes()) {
         if (index.column() == 0) {
             items << getItemByProxyIndex(index);
         }

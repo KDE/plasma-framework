@@ -1397,7 +1397,7 @@ QStringList Applet::listCategories(const QString &parentApp, bool visibleOnly)
 
     KService::List offers = KServiceTypeTrader::self()->query("Plasma/Applet", constraint);
     QStringList categories;
-    foreach (const KService::Ptr applet, offers) {
+    foreach (const KService::Ptr &applet, offers) {
         QString appletCategory = applet->property("X-KDE-PluginInfo-Category").toString();
         if (visibleOnly && applet->noDisplay()) {
             // we don't want to show the hidden category

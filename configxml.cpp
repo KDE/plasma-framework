@@ -410,7 +410,7 @@ void ConfigXmlHandler::addItem()
     } else if (m_type == "intlist") {
         QStringList tmpList = m_default.split(",");
         QList<qint32> defaultList;
-        foreach (QString tmp, tmpList) {
+        foreach (const QString &tmp, tmpList) {
             defaultList.append(tmp.toInt());
         }
         item = m_config->addItemIntList(m_name, *d->newIntList(), defaultList, m_key);

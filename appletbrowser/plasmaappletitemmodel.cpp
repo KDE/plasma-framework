@@ -105,7 +105,7 @@ void PlasmaAppletItemModel::populateModel()
         if (!rx.exactMatch(i.key())) continue;
         QString id = rx.cap(1);
 
-        foreach (QString plugin, i.value().split(",")) {
+        foreach (const QString &plugin, i.value().split(",")) {
             extraPluginAttrs[plugin]["recommended." + id] = true;
         }
     }

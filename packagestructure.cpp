@@ -306,7 +306,7 @@ void PackageStructure::read(const KConfigBase *config)
     d->type = config->group("").readEntry("Type", QString()); 
 
     QStringList groups = config->groupList();
-    foreach (QString group, groups) {
+    foreach (const QString &group, groups) {
         QByteArray key = group.toAscii();
         KConfigGroup entry = config->group(group);
 
