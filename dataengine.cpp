@@ -326,7 +326,7 @@ void DataEngine::init()
 bool DataEngine::sourceRequestEvent(const QString &name)
 {
     if (d->script) {
-        return d->script->sourceRequested(name);
+        return d->script->sourceRequestEvent(name);
     } else {
         return false;
     }
@@ -335,7 +335,7 @@ bool DataEngine::sourceRequestEvent(const QString &name)
 bool DataEngine::updateSourceEvent(const QString& source)
 {
     if (d->script) {
-        return d->script->updateSource(source);
+        return d->script->updateSourceEvent(source);
     } else {
         //kDebug() << "updateSource source" << endl;
         return false; //TODO: should this be true to trigger, even needless, updates on every tick?

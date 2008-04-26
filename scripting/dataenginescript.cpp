@@ -51,13 +51,13 @@ DataEngine* DataEngineScript::dataEngine() const
     return d->dataEngine;
 }
 
-bool DataEngineScript::sourceRequested(const QString &name)
+bool DataEngineScript::sourceRequestEvent(const QString &name)
 {
     Q_UNUSED(name)
     return false;
 }
 
-bool DataEngineScript::updateSource(const QString& source)
+bool DataEngineScript::updateSourceEvent(const QString& source)
 {
     Q_UNUSED(source)
     return false;

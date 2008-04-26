@@ -62,7 +62,7 @@ public:
      * @param name the name of the source that should be created
      * @return true if a DataContainer was set up, false otherwise
      */
-    virtual bool sourceRequested(const QString &name);
+    virtual bool sourceRequestEvent(const QString &name);
 
     /**
      * Called when the script should refresh the data contained in a given
@@ -72,7 +72,7 @@ public:
      * @return true if the data was changed, or false if there was no
      *         change or if the change will occur later
      **/
-    virtual bool updateSource(const QString& source);
+    virtual bool updateSourceEvent(const QString& source);
 
 protected:
     void setData(const QString& source, const QString& key,
