@@ -363,7 +363,7 @@ bool Package::createPackage(const PackageMetadata &metadata,
                             const QString &destination,
                             const QString &icon) // static
 {
-    if (!metadata.isComplete()) {
+    if (!metadata.isValid()) {
         kWarning(550) << "Metadata file is not complete";
         return false;
     }

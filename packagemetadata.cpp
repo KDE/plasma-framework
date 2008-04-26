@@ -61,7 +61,7 @@ PackageMetadata::~PackageMetadata()
     delete d;
 }
 
-bool PackageMetadata::isComplete() const
+bool PackageMetadata::isValid() const
 {
     return ! (d->name.isEmpty() ||
               d->author.isEmpty() ||

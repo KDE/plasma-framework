@@ -43,7 +43,7 @@ public:
     PackageMetadata(const QString& path);
     ~PackageMetadata();
 
-    bool isComplete() const;
+    bool isValid() const;
 
     /**
      * Writes out the metadata to filename, which should be a .desktop
