@@ -156,7 +156,7 @@ class PLASMA_EXPORT AbstractRunner : public QObject
         /**
           * Returns the engine name for the Runner
           */
-        QString runnerName() const;
+        QString name() const;
 
         /**
          * Accessor for the associated Package object if any.
