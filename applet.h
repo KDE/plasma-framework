@@ -86,29 +86,6 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
                             };
         Q_DECLARE_FLAGS(BackgroundHints, BackgroundHint)
 
-        /**
-         * @param parent the QGraphicsItem this applet is parented to
-         * @param serviceId the name of the .desktop file containing the
-         *      information about the widget
-         * @param appletId a unique id used to differentiate between multiple
-         *      instances of the same Applet type
-         */
-        explicit Applet(QGraphicsItem* parent = 0,
-                        const QString& serviceId = QString(),
-                        uint appletId = 0);
-
-        /**
-         * This constructor is to be used with the plugin loading systems
-         * found in KPluginInfo and KService. The argument list is expected
-         * to have two elements: the KService service ID for the desktop entry
-         * and an applet ID which must be a base 10 number.
-         *
-         * @param parent a QObject parent; you probably want to pass in 0
-         * @param args a list of strings containing two entries: the service id
-         *      and the applet id
-         */
-        Applet(QObject* parent, const QVariantList& args);
-
         ~Applet();
 
         /**
@@ -607,6 +584,29 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         void themeChanged();
 
     protected:
+        /**
+         * @param parent the QGraphicsItem this applet is parented to
+         * @param serviceId the name of the .desktop file containing the
+         *      information about the widget
+         * @param appletId a unique id used to differentiate between multiple
+         *      instances of the same Applet type
+         */
+        explicit Applet(QGraphicsItem* parent = 0,
+                        const QString& serviceId = QString(),
+                        uint appletId = 0);
+
+        /**
+         * This constructor is to be used with the plugin loading systems
+         * found in KPluginInfo and KService. The argument list is expected
+         * to have two elements: the KService service ID for the desktop entry
+         * and an applet ID which must be a base 10 number.
+         *
+         * @param parent a QObject parent; you probably want to pass in 0
+         * @param args a list of strings containing two entries: the service id
+         *      and the applet id
+         */
+        Applet(QObject* parent, const QVariantList& args);
+
         /**
          * This method is called once the applet is loaded and added to a Corona.
          * If the applet requires a QGraphicsScene or has an particularly intensive
