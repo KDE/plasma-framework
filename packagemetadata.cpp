@@ -71,7 +71,7 @@ bool PackageMetadata::isValid() const
               d->type.isEmpty());
 }
 
-void PackageMetadata::write(const QString &filename, const QString &icon) const
+void PackageMetadata::write(const QString &filename) const
 {
     KDesktopFile cfg(filename);
     KConfigGroup config = cfg.desktopGroup();
@@ -79,9 +79,6 @@ void PackageMetadata::write(const QString &filename, const QString &icon) const
 
     config.writeEntry("Name", d->name);
     config.writeEntry("Comment", d->description);
-    if (!icon.isNull()) {
-        config.writeEntry("Icon", icon);
-    }
     config.writeEntry("X-KDE-ServiceTypes", d->serviceType);
     config.writeEntry("X-KDE-PluginInfo-Name", d->pluginName);
     config.writeEntry("X-KDE-PluginInfo-Author", d->author);

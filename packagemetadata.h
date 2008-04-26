@@ -52,9 +52,8 @@ public:
      * @see KPluginInfo
      *
      * @arg filename path to the file to write to
-     * @arg icon path to the package icon
      **/
-    void write(const QString& filename, const QString &icon = QString()) const;
+    void write(const QString& filename) const;
 
     /**
      * Reads in metadata from a file, which should be a .desktop

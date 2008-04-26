@@ -311,7 +311,7 @@ bool Package::installPackage(const QString& package,
     QFile icon(packageRoot + cg.readEntry("Icon"));
     if (icon.exists()) {
         QString installedIcon("plasma_applet_" + meta.pluginName() + cg.readEntry("Icon"));
-        meta.write(targetName, installedIcon);
+        meta.write(targetName);
         installedIcon = KStandardDirs::locateLocal("icon", installedIcon);
         job = KIO::file_copy(icon.fileName(), installedIcon, -1, KIO::HideProgressInfo);
         job->exec();
@@ -373,7 +373,7 @@ bool Package::createPackage(const PackageMetadata &metadata,
     if (!metadataFile.open()) {
         return false;
     }
-    metadata.write(metadataFile.fileName(), icon);
+    metadata.write(metadataFile.fileName());
 
     // put everything into a zip archive
     KZip creation(destination);
