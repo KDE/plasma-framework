@@ -154,6 +154,18 @@ void Toolbox::setOrientation( Qt::Orientation orient )
      d->orientation = orient;
 }
 
+void Toolbox::mousePressEvent(QGraphicsSceneMouseEvent *event)
+{
+    event->accept();
+}
+
+void Toolbox::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
+{
+    if (boundingRect().contains(event->pos())) {
+        emit toggled();
+    }
+}
+
 } // plasma namespace
 
 #include "toolbox_p.moc"

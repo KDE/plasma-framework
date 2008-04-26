@@ -55,9 +55,12 @@ public:
     virtual void showToolbox() = 0;
     virtual void hideToolbox() = 0;
 
+Q_SIGNALS:
+    void toggled();
+
 protected:
-    virtual void hoverEnterEvent(QGraphicsSceneHoverEvent *event) = 0;
-    virtual void hoverLeaveEvent(QGraphicsSceneHoverEvent *event) = 0;
+    void mousePressEvent(QGraphicsSceneMouseEvent *event);
+    void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
 
 private:
     class Private;
