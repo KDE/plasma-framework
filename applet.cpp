@@ -926,6 +926,9 @@ void Applet::flushPendingConstraintsEvents()
 
     if (c & Plasma::FormFactorConstraint) {
         FormFactor f = formFactor();
+        //FIXME: this is a bit of a mess: calling setBackgroundHints twice,
+        //       and moving an item to a non-vert/horiz containment that
+        //       normally doesn't request a background would then get one!
         if (f == Planar) {
             setBackgroundHints(d->backgroundHints|ShadowedBackground);
         } else {
@@ -937,34 +940,6 @@ void Applet::flushPendingConstraintsEvents()
         } else {
             setBackgroundHints(d->backgroundHints^StandardBackground);
         }
-
-        /**
-         FIXME: what follows was an attempt to constrain the size of applets. it is, however,
-                broken for the following reasons:
-
-                * it constrains to the size of an icon, when clearly this is not valid for
-                  any non-single-icon applet
-                * it is far too pessimistic for horizontal constraints
-
-        QSizeF newMax;
-        const QSizeF infSize(std::numeric_limits<qreal>::infinity(),
-                std::numeric_limits<qreal>::infinity());
-        if (f == Plasma::Vertical && !(expandingDirections() & Qt::Vertical)) {
-            newMax = QSizeF(maximumContentSize().width(), IconSize(KIconLoader::Panel));
-        } else if (f == Plasma::Horizontal && !(expandingDirections() & Qt::Horizontal)) {
-            newMax = QSizeF(IconSize(KIconLoader::Panel), maximumContentSize().height());
-        } else if (maximumContentSize() != infSize) {
-            newMax = infSize;
-        }
-
-        if (newMax.isValid()) {
-            setMaximumContentSize(newMax);
-            if (newMax.width() < contentSize().width() ||
-                newMax.height() < contentSize().height()) {
-                updateGeometry();
-            }
-        }
-        */
     }
 
     Containment* containment = qobject_cast<Plasma::Containment*>(this);
@@ -1012,12 +987,14 @@ void Applet::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
         painter->setRenderHint(QPainter::SmoothPixmapTransform);
         painter->setRenderHint(QPainter::Antialiasing);
     }
+
     if (d->background &&
         formFactor() != Plasma::Vertical &&
         formFactor() != Plasma::Horizontal) {
         //kDebug() << "option rect is" << option->rect;
         d->background->paintPanel(painter, option->rect, QPointF(0,0));
     }
+
     if (!d->failed) {
         if (widget && isContainment()) {
             // note that the widget we get is actually the viewport of the view, not the view itself
