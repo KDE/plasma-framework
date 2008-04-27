@@ -676,17 +676,6 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         void watchForMouseMove(QGraphicsItem *widget, bool watch);
 
         /**
-        * Call this whenever focus is needed or not needed.
-        *
-        * You do not have to call this method for widgets that have
-        * been registered with watchForFocus
-        *
-        * @see watchForFocus
-        * @param focus whether to or not to request focus
-        */
-        void needsFocus(bool focus);
-
-        /**
          * @internal event filter; used for focus watching
          **/
         bool eventFilter( QObject *o, QEvent *e );

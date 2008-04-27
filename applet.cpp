@@ -375,8 +375,6 @@ Applet::Applet(QObject* parentObject, const QVariantList& args)
 
 Applet::~Applet()
 {
-    needsFocus(false);
-
     if (d->transient) {
         resetConfigurationObject();
     }
@@ -1196,13 +1194,6 @@ void Applet::watchForMouseMove( QGraphicsItem * watched, bool watch )
     }
 }
 
-void Applet::needsFocus(bool focus)
-{
-    if (focus == QGraphicsItem::hasFocus()) {
-        return;
-    }
-}
-
 bool Applet::hasConfigurationInterface() const
 {
     return d->hasConfigurationInterface;
@@ -1219,9 +1210,9 @@ bool Applet::eventFilter( QObject *o, QEvent * e )
     {
         if ( e->type() == QEvent::MouseButtonRelease ||
              e->type() == QEvent::FocusIn ) {
-            needsFocus( true );
+            //needsFocus( true ); <-- died
         } else if ( e->type() == QEvent::FocusOut ) {
-            needsFocus( false );
+            //needsFocus( false ); <-- died
         }
     }
 
