@@ -183,7 +183,7 @@ const PackageStructure::Ptr Package::structure() const
 
 //TODO: provide a version of this that allows one to ask for certain types of packages, etc?
 //      should we be using KService here instead/as well?
-QStringList Package::knownPackages(const QString& packageRoot) // static
+QStringList Package::listInstalled(const QString& packageRoot) // static
 {
     QDir dir(packageRoot);
 

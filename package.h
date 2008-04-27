@@ -117,7 +117,7 @@ class PLASMA_EXPORT Package
          *                    have been installed to
          * @return a list of installed Plasmagik packages
          **/
-        static QStringList knownPackages(const QString &packageRoot);
+        static QStringList listInstalled(const QString &packageRoot);
 
         /**
          * Installs a package.
