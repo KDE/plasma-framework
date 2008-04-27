@@ -44,9 +44,9 @@ public:
     ~AnimationDriver();
 
     // Parameter definitions
-    virtual int animationFPS(Plasma::Animator::Animation) const;
-    virtual int movementAnimationFPS(Plasma::Animator::Movement) const;
-    virtual int elementAnimationFPS(Plasma::Animator::Animation) const;
+    virtual int animationFps(Plasma::Animator::Animation) const;
+    virtual int movementAnimationFps(Plasma::Animator::Movement) const;
+    virtual int elementAnimationFps(Plasma::Animator::Animation) const;
     virtual int animationDuration(Plasma::Animator::Animation) const;
     virtual int movementAnimationDuration(Plasma::Animator::Movement) const;
     virtual int elementAnimationDuration(Plasma::Animator::Animation) const;

@@ -263,7 +263,7 @@ void Animator::animateItem(QGraphicsItem* item, Animation animation)
         d->animatedItems.erase(it);
     }
 
-    int frames = d->driver->animationFPS(animation);
+    int frames = d->driver->animationFps(animation);
 
     if (frames < 1) {
         // evidently this animator doesn't have an implementation
@@ -307,7 +307,7 @@ void Animator::moveItem(QGraphicsItem* item, Movement movement, const QPoint &de
           d->movingItems.erase(it);
      }
 
-     int frames = d->driver->movementAnimationFPS(movement);
+     int frames = d->driver->movementAnimationFps(movement);
      if (frames <= 1) {
           // evidently this animator doesn't have an implementation
           // for this Animation
@@ -397,7 +397,7 @@ int Animator::animateElement(QGraphicsItem *item, Animation animation)
     state->curve = d->driver->elementAnimationCurve(animation);
     state->animation = animation;
     //TODO: variance in times based on the value of animation
-    state->frames = d->driver->elementAnimationFPS(animation) / 5;
+    state->frames = d->driver->elementAnimationFps(animation) / 5;
     state->currentFrame = 0;
     state->interval = d->driver->elementAnimationDuration(animation) / state->frames;
     state->interval = (state->interval / MIN_TICK_RATE) * MIN_TICK_RATE;

@@ -36,19 +36,19 @@ AnimationDriver::~AnimationDriver()
 {
 }
 
-int AnimationDriver::animationFPS(Plasma::Animator::Animation animation) const
+int AnimationDriver::animationFps(Plasma::Animator::Animation animation) const
 {
     Q_UNUSED(animation)
     return 0;
 }
 
-int AnimationDriver::movementAnimationFPS(Plasma::Animator::Movement movement) const
+int AnimationDriver::movementAnimationFps(Plasma::Animator::Movement movement) const
 {
     Q_UNUSED(movement)
     return 20;
 }
 
-int AnimationDriver::elementAnimationFPS(Plasma::Animator::Animation animation) const
+int AnimationDriver::elementAnimationFps(Plasma::Animator::Animation animation) const
 {
     Q_UNUSED(animation)
     return 0;
