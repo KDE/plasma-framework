@@ -676,7 +676,7 @@ void Applet::constraintsEvent(Plasma::Constraints constraints)
     Q_UNUSED(constraints)
     //kDebug() << constraints << "constraints are FormFactor: " << formFactor() << ", Location: " << location();
     if (d->script) {
-        d->script->constraintsUpdated(constraints);
+        d->script->constraintsEvent(constraints);
     }
 }
 

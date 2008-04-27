@@ -70,7 +70,7 @@ QSizeF AppletScript::size() const
     return QSizeF();
 }
 
-void AppletScript::constraintsUpdated(Plasma::Constraints constraints)
+void AppletScript::constraintsEvent(Plasma::Constraints constraints)
 {
     Q_UNUSED(constraints);
 }

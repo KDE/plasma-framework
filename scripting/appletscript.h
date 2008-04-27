@@ -88,7 +88,7 @@ public:
      *
      * @param constraints the type of constraints that were updated
      */
-    virtual void constraintsUpdated(Plasma::Constraints constraints);
+    virtual void constraintsEvent(Plasma::Constraints constraints);
 
     /**
      * Returns a list of context-related QAction instances.
