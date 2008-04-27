@@ -196,7 +196,7 @@ void Containment::setContainmentType(Containment::Type type)
 {
     d->type = type;
 
-    if (actAsContainment() && type == DesktopContainment) {
+    if (isContainment() && type == DesktopContainment) {
         if (!d->toolBox) {
             QGraphicsWidget *addWidgetTool = addToolBoxTool("addwidgets", "list-add", i18n("Add Widgets"));
             connect(addWidgetTool, SIGNAL(clicked()), this, SLOT(triggerShowAddWidgets()));
@@ -218,7 +218,7 @@ void Containment::setContainmentType(Containment::Type type)
             connect(activityTool, SIGNAL(clicked()), this, SLOT(addSiblingContainment()));
         }
 
-    } else if (actAsContainment() && type == PanelContainment) {
+    } else if (isContainment() && type == PanelContainment) {
         if (!d->toolBox) {
             d->createToolBox();
             d->toolBox->setSize(22);
@@ -238,7 +238,7 @@ Corona* Containment::corona() const
 void Containment::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
 {
     //kDebug() << "let's see if we manage to get a context menu here, huh";
-    if (!actAsContainment() || !scene() || !KAuthorized::authorizeKAction("desktop_contextmenu")) {
+    if (!isContainment() || !scene() || !KAuthorized::authorizeKAction("desktop_contextmenu")) {
         Applet::contextMenuEvent(event);
         return;
     }
@@ -253,7 +253,7 @@ void Containment::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
 
     while (item) {
         applet = qgraphicsitem_cast<Applet*>(item);
-        if (applet && !applet->actAsContainment()) {
+        if (applet && !applet->isContainment()) {
             break;
         }
 
@@ -360,7 +360,7 @@ void Containment::setFormFactor(FormFactor formFactor)
 
     d->formFactor = formFactor;
 
-    if (actAsContainment() && containmentType() == PanelContainment && was != formFactor) {
+    if (isContainment() && containmentType() == PanelContainment && was != formFactor) {
         // we are a panel and we have chaged our orientation
         d->positionPanel(true);
     }
@@ -434,7 +434,7 @@ void Containment::createLayout(FormFactor formFactor)
 
 FormFactor Containment::formFactor() const
 {
-    if (actAsContainment()) {
+    if (isContainment()) {
         return d->formFactor;
     }
 
@@ -800,7 +800,7 @@ QVariant Containment::itemChange(GraphicsItemChange change, const QVariant &valu
 {
     Q_UNUSED(value)
 
-    if (actAsContainment() &&
+    if (isContainment() &&
         (change == QGraphicsItem::ItemSceneHasChanged || change == QGraphicsItem::ItemPositionHasChanged) &&
         !d->positioning) {
         switch (containmentType()) {
@@ -970,7 +970,7 @@ void Containment::Private::setLockToolText()
 
 void Containment::Private::containmentConstraintsEvent(Plasma::Constraints constraints)
 {
-    if (!q->actAsContainment()) {
+    if (!q->isContainment()) {
         return;
     }
 

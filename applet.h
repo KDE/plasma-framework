@@ -436,7 +436,7 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         /**
          * @return true if this Applet is currently being used as a Containment, false otherwise
          */
-        bool actAsContainment() const;
+        bool isContainment() const;
 
         /**
          * Sets the geometry of this Plasma::Applet. Should not be used directly by
@@ -625,7 +625,7 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         /**
          * Sets whether or not this Applet is acting as a Containment
          */
-        void setActAsContainment(bool actAsContainment);
+        void setIsContainment(bool isContainment);
 
         /**
          * Called when any of the geometry constraints have been updated.

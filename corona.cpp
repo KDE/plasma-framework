@@ -120,12 +120,12 @@ public:
             containments.removeAt(index);
         }
     }
-    
+
     void syncConfig()
     {
         q->config()->sync();
     }
-    
+
     Containment* addContainment(const QString& name, const QVariantList& args, uint id, bool delayedInit)
     {
         QString pluginName = name;
@@ -154,7 +154,7 @@ public:
             containment->setFormFactor(Plasma::Planar);
         }
 
-        containment->setActAsContainment(true);
+        containment->setIsContainment(true);
 
         if (!delayedInit) {
             q->addItem(containment);

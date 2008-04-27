@@ -117,7 +117,7 @@ public:
           immutability(NotImmutable),
           hasConfigurationInterface(false),
           failed(false),
-          actAsContainment(false),
+          isContainment(false),
           square(false),
           transient(false)
     {
@@ -254,7 +254,7 @@ public:
             return mainConfig;
         }
 
-        if (actAsContainment) {
+        if (isContainment) {
             const Containment *asContainment = qobject_cast<Containment*>(const_cast<Applet*>(q));
             Q_ASSERT(asContainment);
 
@@ -337,7 +337,7 @@ public:
     ImmutabilityType immutability;
     bool hasConfigurationInterface : 1;
     bool failed : 1;
-    bool actAsContainment : 1;
+    bool isContainment : 1;
     bool square : 1;
     bool transient : 1;
 };
@@ -511,7 +511,7 @@ KConfigGroup Applet::config(const QString &group) const
 
 KConfigGroup Applet::config() const
 {
-    if (d->actAsContainment) {
+    if (d->isContainment) {
         return *(d->mainConfigGroup(this));
     }
 
@@ -521,8 +521,8 @@ KConfigGroup Applet::config() const
 KConfigGroup Applet::globalConfig() const
 {
     KConfigGroup globalAppletConfig;
-    const Containment *c = actAsContainment() ? dynamic_cast<const Containment*>(this) : containment();
-    QString group = actAsContainment() ? "ContainmentGlobals" : "AppletGlobals";
+    const Containment *c = isContainment() ? dynamic_cast<const Containment*>(this) : containment();
+    QString group = isContainment() ? "ContainmentGlobals" : "AppletGlobals";
 
     if (c && c->corona()) {
         KSharedConfig::Ptr coronaConfig = c->corona()->config();
@@ -932,7 +932,7 @@ void Applet::flushPendingConstraintsEvents()
             setBackgroundHints(d->backgroundHints^ShadowedBackground);
         }
 
-        if (!actAsContainment() && f != Vertical && f != Horizontal) {
+        if (!isContainment() && f != Vertical && f != Horizontal) {
             setBackgroundHints(d->backgroundHints|StandardBackground);
         } else {
             setBackgroundHints(d->backgroundHints^StandardBackground);
@@ -968,7 +968,7 @@ void Applet::flushPendingConstraintsEvents()
     }
 
     Containment* containment = qobject_cast<Plasma::Containment*>(this);
-    if (actAsContainment() && containment) {
+    if (isContainment() && containment) {
         containment->d->containmentConstraintsEvent(c);
     }
 
@@ -986,7 +986,7 @@ int Applet::type() const
 
 QPainterPath Applet::shape() const
 {
-    if (actAsContainment()) {
+    if (isContainment()) {
         return QGraphicsWidget::shape();
     }
 
@@ -1019,7 +1019,7 @@ void Applet::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
         d->background->paintPanel(painter, option->rect, QPointF(0,0));
     }
     if (!d->failed) {
-        if (widget && actAsContainment()) {
+        if (widget && isContainment()) {
             // note that the widget we get is actually the viewport of the view, not the view itself
             View* v = qobject_cast<Plasma::View*>(widget->parent());
             if (!v || v->isWallpaperEnabled()) {
@@ -1060,7 +1060,7 @@ Containment* Applet::containment() const
 /*
  * while this is probably "more correct", much of the code in applet assumes containment
  * returns zero in the case that this is a containment itself.
- * if (actAsContainment()) {
+ * if (isContainment()) {
         return dynamic_cast<Containment*>(const_cast<Applet*>(this));
     }
 */
@@ -1070,7 +1070,7 @@ Containment* Applet::containment() const
 
     while (parent) {
         Containment *possibleC =  dynamic_cast<Containment*>(parent);
-        if (possibleC && possibleC->actAsContainment()) {
+        if (possibleC && possibleC->isContainment()) {
             c = possibleC;
             break;
         }
@@ -1182,7 +1182,7 @@ void Applet::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
         QGraphicsItem *parent = parentItem();
         Plasma::Applet *applet = qgraphicsitem_cast<Plasma::Applet*>(parent);
 
-        if (applet && applet->actAsContainment()) {
+        if (applet && applet->isContainment()) {
             // our direct parent is a containment. just move ourselves.
             QPointF curPos = event->pos();
             QPointF lastPos = event->lastPos();
@@ -1355,12 +1355,12 @@ Applet* Applet::load(const QString& appletName, uint appletId, const QVariantLis
     QString constraint = QString("[X-KDE-PluginInfo-Name] == '%1'").arg(appletName);
     KService::List offers = KServiceTypeTrader::self()->query("Plasma/Applet", constraint);
 
-    bool actAsContainment = false;
+    bool isContainment = false;
     if (offers.isEmpty()) {
         //TODO: what would be -really- cool is offer to try and download the applet
         //      from the network at this point
         offers = KServiceTypeTrader::self()->query("Plasma/Containment", constraint);
-        actAsContainment = true;
+        isContainment = true;
         if (offers.isEmpty()) {
             kDebug() << "offers is empty for " << appletName;
             return 0;
@@ -1377,7 +1377,7 @@ Applet* Applet::load(const QString& appletName, uint appletId, const QVariantLis
 
     if (!offer->property("X-Plasma-Language").toString().isEmpty()) {
         kDebug() << "we have a script in the language of" << offer->property("X-Plasma-Language").toString();
-        if (actAsContainment) {
+        if (isContainment) {
             return new Containment(0, offer->storageId(), appletId);
         }
         return new Applet(0, offer->storageId(), appletId);
@@ -1472,13 +1472,13 @@ void Applet::lower()
     setZValue(--Private::s_minZValue);
 }
 
-void Applet::setActAsContainment(bool actAsContainment)
+void Applet::setIsContainment(bool isContainment)
 {
-    if (d->actAsContainment == actAsContainment) {
+    if (d->isContainment == isContainment) {
         return;
     }
 
-    d->actAsContainment = actAsContainment;
+    d->isContainment = isContainment;
 
     Containment *c = qobject_cast<Containment*>(this);
     if (c) {
@@ -1487,9 +1487,9 @@ void Applet::setActAsContainment(bool actAsContainment)
     }
 }
 
-bool Applet::actAsContainment() const
+bool Applet::isContainment() const
 {
-    return d->actAsContainment;
+    return d->isContainment;
 }
 
 void Applet::themeChanged()
