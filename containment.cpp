@@ -80,7 +80,7 @@ Containment::Containment(QGraphicsItem* parent,
     // WARNING: do not access config() OR globalConfig() in this method!
     //          that requires a scene, which is not available at this point
     setPos(0, 0);
-    setBackgroundHints(DefaultBackground);
+    setBackgroundHints(NoBackground);
     setContainmentType(CustomContainment);
 }
 
@@ -217,7 +217,6 @@ void Containment::setContainmentType(Containment::Type type)
             QGraphicsWidget *activityTool = addToolBoxTool("addSiblingContainment", "list-add", i18n("Add Activity"));
             connect(activityTool, SIGNAL(clicked()), this, SLOT(addSiblingContainment()));
         }
-
     } else if (isContainment() && type == PanelContainment) {
         if (!d->toolBox) {
             d->createToolBox();
@@ -980,7 +979,7 @@ void Containment::Private::containmentConstraintsEvent(Plasma::Constraints const
 
         // tell the applets too
         foreach (Applet *a, applets) {
-            a->constraintsEvent(ImmutableConstraint);
+            a->updateConstraints(ImmutableConstraint);
         }
     }
 
