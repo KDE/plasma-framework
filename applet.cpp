@@ -999,38 +999,6 @@ QList<QAction*> Applet::contextualActions()
     return d->script ? d->script->contextualActions() : QList<QAction*>();
 }
 
-QColor Applet::color() const
-{
-    // TODO: add more colors for more categories and
-    // maybe read from config?
-    QString c = category();
-    int alpha = 200;
-    // Colors taken from Oxygen color palette
-    if (c == "Date and Time") {
-        return QColor(191, 94, 0, alpha);
-    } else if (c == "Environment & Weather") {
-        return QColor(191, 0, 0, alpha);
-    } else if (c == "Examples") {
-        return QColor(204, 0, 154, alpha);
-    } else if (c == "File System") {
-        return QColor(90, 0, 179, alpha);
-    } else if (c == "Graphics") {
-        return QColor(0, 0, 255, alpha);
-    } else if (c == "Language") {
-        return QColor(0, 191, 0, alpha);
-    } else if (c == "Mapping") {
-        return QColor(191, 245, 0, alpha);
-    } else if (c == "Online Services") {
-        return QColor(255, 213, 0, alpha);
-    } else if (c == "System Information") {
-        return QColor(0, 196, 204, alpha);
-    } else if (c == "Windows and Tasks") {
-        return QColor(255, 126, 0, alpha);
-    } else {
-        return QColor(136, 136, 136, alpha);
-    }
-}
-
 void Applet::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     if (d->shadow && d->shadow->shadowedSize() != boundingRect().size()) {

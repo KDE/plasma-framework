@@ -378,11 +378,6 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         QString category() const;
 
         /**
-         * Returns the color corresponding to the applet's category.
-         */
-        QColor color() const;
-
-        /**
          * @return The type of immutability of this applet
          */
         ImmutabilityType immutability() const;
