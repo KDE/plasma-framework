@@ -969,7 +969,7 @@ void Applet::flushPendingConstraintsEvents()
 
     Containment* containment = qobject_cast<Plasma::Containment*>(this);
     if (actAsContainment() && containment) {
-        containment->d->containmentConstraintsUpdated(c);
+        containment->d->containmentConstraintsEvent(c);
     }
 
     constraintsEvent(c);

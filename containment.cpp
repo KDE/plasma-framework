@@ -968,13 +968,13 @@ void Containment::Private::setLockToolText()
     }
 }
 
-void Containment::Private::containmentConstraintsUpdated(Plasma::Constraints constraints)
+void Containment::Private::containmentConstraintsEvent(Plasma::Constraints constraints)
 {
     if (!q->actAsContainment()) {
         return;
     }
 
-    //kDebug() << "got containmentConstraintsUpdated" << constraints << (QObject*)toolBox;
+    //kDebug() << "got containmentConstraintsEvent" << constraints << (QObject*)toolBox;
     if (constraints & Plasma::ImmutableConstraint) {
         setLockToolText();
 

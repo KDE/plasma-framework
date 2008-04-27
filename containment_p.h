@@ -57,9 +57,9 @@ public:
     /**
      * Called when constraints have been updated on this containment to provide
      * constraint services common to all containments. Containments should still
-     * implement their own constraintsUpdated method
+     * implement their own constraintsEvent method
      */
-    void containmentConstraintsUpdated(Plasma::Constraints constraints);
+    void containmentConstraintsEvent(Plasma::Constraints constraints);
 
     bool regionIsEmpty(const QRectF &region, Applet *ignoredApplet=0) const;
     void positionPanel(bool force = false);
