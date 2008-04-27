@@ -67,7 +67,8 @@ class Svg::Private
             : q(svg),
               renderer(0),
               multipleImages(false),
-              themed(false)
+              themed(false),
+              applyColors(false)
         {
         }
 
