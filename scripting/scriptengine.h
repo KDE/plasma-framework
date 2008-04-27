@@ -70,7 +70,7 @@ public:
      */
     virtual bool init();
 
-protected Q_SLOTS:
+protected:
     /**
      * @return absolute path to the main script file for this plasmoid
      */
