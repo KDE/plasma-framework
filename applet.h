@@ -654,16 +654,6 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         void setBackgroundHints(const BackgroundHints hints);
 
         /**
-        * Register widgets that can receive keyboard focus.
-        *
-        * Calling this results in an eventFilter being placed on the widget.
-        *
-        * @param widget the widget to watch for keyboard focus
-        * @param watch whether to start watching the widget, or to stop doing so
-        */
-        void watchForFocus(QObject *widget, bool watch = true);
-
-        /**
          * Register the widgets that manages mouse clicks but you still want
          * to be able to drag the applet around when holding the mouse pointer
          * on that widgets.

@@ -323,7 +323,6 @@ public:
     KPluginInfo appletDescription;
     Package* package;
     OverlayWidget *needsConfigOverlay;
-    QList<QObject*> watchedForFocus;
     QList<QGraphicsItem*> watchedForMouseMove;
     QStringList loadedEngines;
     Plasma::PanelSvg *background;
@@ -1158,24 +1157,6 @@ QString Applet::instanceName() const
     return d->instanceName();
 }
 
-void Applet::watchForFocus(QObject *widget, bool watch)
-{
-    if (!widget) {
-        return;
-    }
-
-    int index = d->watchedForFocus.indexOf(widget);
-    if (watch) {
-        if (index == -1) {
-            d->watchedForFocus.append(widget);
-            widget->installEventFilter(this);
-        }
-    } else if (index != -1) {
-        d->watchedForFocus.removeAt(index);
-        widget->removeEventFilter(this);
-    }
-}
-
 void Applet::watchForMouseMove( QGraphicsItem * watched, bool watch )
 {
     if (!watched) {
@@ -1206,16 +1187,6 @@ void Applet::setHasConfigurationInterface(bool hasInterface)
 
 bool Applet::eventFilter( QObject *o, QEvent * e )
 {
-    if ( !d->watchedForFocus.contains( o ) )
-    {
-        if ( e->type() == QEvent::MouseButtonRelease ||
-             e->type() == QEvent::FocusIn ) {
-            //needsFocus( true ); <-- died
-        } else if ( e->type() == QEvent::FocusOut ) {
-            //needsFocus( false ); <-- died
-        }
-    }
-
     return QObject::eventFilter(o, e);
 }
 
