@@ -1436,11 +1436,6 @@ Applet* Applet::load(const KPluginInfo& info, uint appletId, const QVariantList&
     return load(info.pluginName(), appletId, args);
 }
 
-QPointF Applet::topLeft() const
-{
-    return boundingRect().topLeft();
-}
-
 QVariant Applet::itemChange(GraphicsItemChange change, const QVariant &value)
 {
     switch (change) {

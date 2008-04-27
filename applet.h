@@ -691,11 +691,6 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         void focusInEvent(QFocusEvent * event);
 
         /**
-         * Reimpmlemented from LayoutItem
-         */
-        QPointF topLeft() const;
-
-        /**
          * Reimplemented from QGraphicsItem
          */
         QVariant itemChange(GraphicsItemChange change, const QVariant &value);
