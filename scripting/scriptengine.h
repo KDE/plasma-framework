@@ -62,7 +62,6 @@ class PLASMA_EXPORT ScriptEngine : public QObject
     Q_OBJECT
 
 public:
-    explicit ScriptEngine(QObject *parent = 0);
     ~ScriptEngine();
 
     /**
@@ -71,6 +70,8 @@ public:
     virtual bool init();
 
 protected:
+    explicit ScriptEngine(QObject *parent = 0);
+
     /**
      * @return absolute path to the main script file for this plasmoid
      */
