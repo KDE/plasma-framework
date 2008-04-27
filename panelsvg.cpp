@@ -194,7 +194,10 @@ QString PanelSvg::prefix()
 
 void PanelSvg::resizePanel(const QSizeF& size)
 {
-    if (!size.isValid() || size.width() < 1 || size.height() < 1 || size == d->panels[d->prefix]->panelSize) {
+    bool sizeValid = size.width() > 0 && size.height() > 0;
+    if (!sizeValid || size == d->panels[d->prefix]->panelSize) {
+        if (!sizeValid)
+            kWarning() << "Invalid size" << size;
         return;
     }
 
@@ -296,6 +299,11 @@ void PanelSvg::Private::generateBackground(PanelData *panel)
     const int leftOffset = origined ? 0 - panel->leftWidth : 0;
 
     if (panel->cachedBackground) {
+        return;
+    }
+    if (!panel->panelSize.isValid()) {
+        kWarning() << "Invalid panel size" << panel->panelSize;
+        panel->cachedBackground = new QPixmap();
         return;
     }
 
