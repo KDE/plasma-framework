@@ -70,7 +70,7 @@ public:
      */
     virtual void exec(const Plasma::SearchContext *search, const Plasma::SearchMatch *action);
 
-protected Q_SLOTS:
+protected:
     /**
      * @return absolute path to the main script file for this plasmoid
      */
