@@ -495,21 +495,6 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         void launchActivated();
 
         /**
-         * Emitted when the applet needs to take (or lose) keyboard focus.
-         *
-         * An applet should emit this signal to ensure that autohiding
-         * elements stay unhidden and other bits of bookkeeping are
-         * performed to ensure proper function.
-         *
-         * If you call watchForFocus on your applet, then this is handled for
-         * the applet and it is not necessary to emit the signal directly.
-         *
-         * @param focus true if the applet is taking keyboard focus, false if
-         *        it is giving it up
-         **/
-        void requestFocus( bool focus );
-
-        /**
          * Emitted whenever the applet makes a geometry change, so that views
          * can coordinate themselves with these changes if they desire.
          */

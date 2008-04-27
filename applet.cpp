@@ -1201,8 +1201,6 @@ void Applet::needsFocus(bool focus)
     if (focus == QGraphicsItem::hasFocus()) {
         return;
     }
-
-    emit requestFocus(focus);
 }
 
 bool Applet::hasConfigurationInterface() const
