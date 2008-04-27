@@ -538,7 +538,7 @@ void AppletHandle::switchContainment(Containment *containment, const QPointF &po
 QVariant AppletHandle::itemChange(GraphicsItemChange change, const QVariant &value)
 {
     if (change == ItemPositionHasChanged && m_applet) {
-        m_applet->constraintsUpdated(Plasma::LocationConstraint);
+        m_applet->updateConstraints(Plasma::LocationConstraint);
     }
     return QGraphicsItem::itemChange(change, value);
 }

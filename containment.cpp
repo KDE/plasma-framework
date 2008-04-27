@@ -980,7 +980,7 @@ void Containment::Private::containmentConstraintsUpdated(Plasma::Constraints con
 
         // tell the applets too
         foreach (Applet *a, applets) {
-            a->constraintsUpdated(ImmutableConstraint);
+            a->constraintsEvent(ImmutableConstraint);
         }
     }
 

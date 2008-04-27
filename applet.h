@@ -199,26 +199,12 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
 
         /**
          * Called when any of the geometry constraints have been updated.
-         * This method calls constraintsUpdated, which may be reimplemented,
+         * This method calls constraintsEvent, which may be reimplemented,
          * once the Applet has been prepared for updating the constraints.
          *
          * @param constraints the type of constraints that were updated
          */
         void updateConstraints(Plasma::Constraints constraints = Plasma::AllConstraints);
-
-        /**
-         * Called when any of the geometry constraints have been updated.
-         *
-         * This is always called prior to painting and should be used as an
-         * opportunity to layout the widget, calculate sizings, etc.
-         *
-         * Do not call update() from this method; an update() will be triggered
-         * at the appropriate time for the applet.
-         *
-         * @param constraints the type of constraints that were updated
-         * @property constraint
-         */
-        virtual void constraintsUpdated(Plasma::Constraints constraints);
 
         /**
          * Returns the current form factor the applet is being displayed in.
@@ -645,6 +631,20 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          * Sets whether or not this Applet is acting as a Containment
          */
         void setActAsContainment(bool actAsContainment);
+
+        /**
+         * Called when any of the geometry constraints have been updated.
+         *
+         * This is always called prior to painting and should be used as an
+         * opportunity to layout the widget, calculate sizings, etc.
+         *
+         * Do not call update() from this method; an update() will be triggered
+         * at the appropriate time for the applet.
+         *
+         * @param constraints the type of constraints that were updated
+         * @property constraint
+         */
+        virtual void constraintsEvent(Plasma::Constraints constraints);
 
         /**
          * Sets the BackgroundHints for this applet @see BackgroundHint

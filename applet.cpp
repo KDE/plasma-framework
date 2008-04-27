@@ -667,10 +667,10 @@ void Applet::updateConstraints(Plasma::Constraints constraints)
     d->scheduleConstraintsUpdate(constraints, this);
 }
 
-void Applet::constraintsUpdated(Plasma::Constraints constraints)
+void Applet::constraintsEvent(Plasma::Constraints constraints)
 {
     //NOTE: do NOT put any code in here that reacts to constraints updates
-    //      as it will not get called for any applet that reimplements constraintsUpdated
+    //      as it will not get called for any applet that reimplements constraintsEvent
     //      without calling the Applet:: version as well, which it shouldn't need to.
     //      INSTEAD put such code into flushPendingConstraintsEvents
     Q_UNUSED(constraints)
@@ -972,7 +972,7 @@ void Applet::flushPendingConstraintsEvents()
         containment->d->containmentConstraintsUpdated(c);
     }
 
-    constraintsUpdated(c);
+    constraintsEvent(c);
 
     if (layout()) {
         layout()->updateGeometry();
