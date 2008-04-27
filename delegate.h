@@ -69,19 +69,6 @@ public:
 
     int roleMapping(SpecificRoles role) const;
 
-    static const int ICON_TEXT_MARGIN = 10;
-    static const int TEXT_RIGHT_MARGIN = 5;
-    static const int ICON_SIZE = 32;
-    static const int ACTION_ICON_SIZE = 22;
-
-    static const int ITEM_LEFT_MARGIN = 5;
-    static const int ITEM_RIGHT_MARGIN = 5;
-    static const int ITEM_TOP_MARGIN = 5;
-    static const int ITEM_BOTTOM_MARGIN = 5;
-
-    /* give some space between icons */
-    static const int ITEM_HEIGHT = ICON_SIZE + ITEM_TOP_MARGIN + ITEM_BOTTOM_MARGIN;
-
 protected:
     /**
      * Returns the empty area after the title.

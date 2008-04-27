@@ -58,6 +58,15 @@ class Delegate::Private
         QRect subTitleRect(const QStyleOptionViewItem& option, const QModelIndex& index) const;
 
         QMap<int, int> roles;
+
+        static const int ICON_TEXT_MARGIN = 10;
+        static const int TEXT_RIGHT_MARGIN = 5;
+        static const int ACTION_ICON_SIZE = 22;
+
+        static const int ITEM_LEFT_MARGIN = 5;
+        static const int ITEM_RIGHT_MARGIN = 5;
+        static const int ITEM_TOP_MARGIN = 5;
+        static const int ITEM_BOTTOM_MARGIN = 5;
 };
 
 
@@ -79,9 +88,9 @@ QRect Delegate::Private::titleRect(const QStyleOptionViewItem& option, const QMo
 
     QRect emptyRect;
     if (option.direction == Qt::LeftToRight) {
-        emptyRect = option.rect.adjusted(ICON_SIZE+ICON_TEXT_MARGIN+ITEM_LEFT_MARGIN, ITEM_TOP_MARGIN, -ITEM_RIGHT_MARGIN, -ITEM_BOTTOM_MARGIN);
+        emptyRect = option.rect.adjusted(option.decorationSize.width()+ICON_TEXT_MARGIN+ITEM_LEFT_MARGIN, ITEM_TOP_MARGIN, -ITEM_RIGHT_MARGIN, -ITEM_BOTTOM_MARGIN);
     } else {
-        emptyRect = option.rect.adjusted(ITEM_LEFT_MARGIN, ITEM_TOP_MARGIN, -ITEM_RIGHT_MARGIN-ICON_SIZE-ICON_TEXT_MARGIN, -ITEM_BOTTOM_MARGIN);
+        emptyRect = option.rect.adjusted(ITEM_LEFT_MARGIN, ITEM_TOP_MARGIN, -ITEM_RIGHT_MARGIN-option.decorationSize.width()-ICON_TEXT_MARGIN, -ITEM_BOTTOM_MARGIN);
     }
 
     if (emptyRect.width() < 0) {
@@ -148,7 +157,7 @@ QRect Delegate::rectAfterTitle(const QStyleOptionViewItem& option, const QModelI
 {
     QRect textRect = d->titleRect(option, index);
 
-    QRect emptyRect(0, textRect.top(), option.rect.width() - textRect.width() - ITEM_LEFT_MARGIN - ITEM_RIGHT_MARGIN - ICON_SIZE - ICON_TEXT_MARGIN, textRect.height());
+    QRect emptyRect(0, textRect.top(), option.rect.width() - textRect.width() - Private::ITEM_LEFT_MARGIN - Private::ITEM_RIGHT_MARGIN - option.decorationSize.width() - Private::ICON_TEXT_MARGIN, textRect.height());
 
     if (option.direction == Qt::LeftToRight) {
         emptyRect.moveLeft(textRect.right());
@@ -167,7 +176,7 @@ QRect Delegate::rectAfterSubTitle(const QStyleOptionViewItem& option, const QMod
 {
     QRect textRect = d->subTitleRect(option, index);
 
-    QRect emptyRect(0, textRect.top(), option.rect.width() - textRect.width() - ITEM_LEFT_MARGIN - ITEM_RIGHT_MARGIN - ICON_SIZE - ICON_TEXT_MARGIN, textRect.height());
+    QRect emptyRect(0, textRect.top(), option.rect.width() - textRect.width() - Private::ITEM_LEFT_MARGIN - Private::ITEM_RIGHT_MARGIN - option.decorationSize.width() - Private::ICON_TEXT_MARGIN, textRect.height());
 
     if (option.direction == Qt::LeftToRight) {
         emptyRect.moveLeft(textRect.right());
@@ -205,7 +214,7 @@ void Delegate::paint(QPainter *painter, const QStyleOptionViewItem& option, cons
                                                option.decorationPosition == QStyleOptionViewItem::Left ?
                                                                         Qt::AlignLeft : Qt::AlignRight,
                                                option.decorationSize,
-                                               contentRect.adjusted(ITEM_LEFT_MARGIN,ITEM_TOP_MARGIN,-ITEM_RIGHT_MARGIN,-ITEM_BOTTOM_MARGIN));
+                                               contentRect.adjusted(Private::ITEM_LEFT_MARGIN,Private::ITEM_TOP_MARGIN,-Private::ITEM_RIGHT_MARGIN,-Private::ITEM_BOTTOM_MARGIN));
 
 
     QString titleText = index.data(Qt::DisplayRole).value<QString>();
@@ -262,11 +271,11 @@ void Delegate::paint(QPainter *painter, const QStyleOptionViewItem& option, cons
             //clip right (or left for rtl languages) to make the connection with the next column
             if (columns > 1) {
                 if (option.direction == Qt::LeftToRight) {
-                    painter->setClipRect(option.rect.adjusted(0, 0, ITEM_RIGHT_MARGIN, 0));
-                    highlightRect.adjust(0, 0, ITEM_RIGHT_MARGIN+roundedRadius, 0);
+                    painter->setClipRect(option.rect);
+                    highlightRect.adjust(0, 0, roundedRadius, 0);
                 } else {
-                    painter->setClipRect(option.rect.adjusted(-ITEM_LEFT_MARGIN, 0, 0, 0));
-                    highlightRect.adjust(-ITEM_LEFT_MARGIN-roundedRadius, 0, 0, 0);
+                    painter->setClipRect(option.rect);
+                    highlightRect.adjust(-roundedRadius, 0, 0, 0);
                 }
             }
 
@@ -289,17 +298,17 @@ void Delegate::paint(QPainter *painter, const QStyleOptionViewItem& option, cons
         //last column, clip left (right for rtl)
         } else if (column == columns-1) {
             if (option.direction == Qt::LeftToRight) {
-                painter->setClipRect(option.rect.adjusted(-ITEM_LEFT_MARGIN, 0, 0, 0));
-                highlightRect.adjust(-ITEM_LEFT_MARGIN-roundedRadius, 0, 0, 0);
+                painter->setClipRect(option.rect);
+                highlightRect.adjust(-roundedRadius, 0, 0, 0);
             } else {
-                painter->setClipRect(option.rect.adjusted(0, 0, ITEM_RIGHT_MARGIN, 0));
-                highlightRect.adjust(0, 0, ITEM_RIGHT_MARGIN+roundedRadius, 0);
+                painter->setClipRect(option.rect);
+                highlightRect.adjust(0, 0, +roundedRadius, 0);
             }
 
         //column < columns-1; clip both ways
         } else {
-            painter->setClipRect(option.rect.adjusted(-ITEM_LEFT_MARGIN, 0, ITEM_RIGHT_MARGIN, 0));
-            highlightRect.adjust(-ITEM_LEFT_MARGIN-roundedRadius, 0, ITEM_RIGHT_MARGIN+roundedRadius, 0);
+            painter->setClipRect(option.rect);
+            highlightRect.adjust(-roundedRadius, 0, +roundedRadius, 0);
         }
 
         painter->setPen(outlinePen);
@@ -314,7 +323,7 @@ void Delegate::paint(QPainter *painter, const QStyleOptionViewItem& option, cons
     if (index.data(d->roles[ColumnTypeRole]).toInt() == SecondaryActionColumn) {
         if (hover) {
             // Only draw on hover
-            const int delta = floor((qreal)(ICON_SIZE - ACTION_ICON_SIZE)/2.0);
+            const int delta = floor((qreal)(option.decorationSize.width() - Private::ACTION_ICON_SIZE)/2.0);
             decorationRect.adjust(delta, delta-1, -delta-1, -delta);
             decorationIcon.paint(painter, decorationRect, option.decorationAlignment);
         }
