@@ -603,21 +603,6 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         void setHasConfigurationInterface(bool hasInterface);
 
         /**
-         * Returns the name of the applet.
-         *
-         * This will be the same for all instances of this applet.
-         **/
-        QString globalName() const;
-
-        /**
-         * Returns a name unique to the instance of this applet.
-         *
-         * Useful for being able to refer directly to a particular
-         * applet. Combines the global name with the applet id
-         **/
-        QString instanceName() const;
-
-        /**
          * Sets whether or not this Applet is acting as a Containment
          */
         void setIsContainment(bool isContainment);

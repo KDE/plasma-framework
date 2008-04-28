@@ -221,6 +221,15 @@ public:
         }
     }
 
+    QString globalName() const
+    {
+        if (!appletDescription.isValid()) {
+            return QString();
+        }
+
+        return appletDescription.service()->library();
+    }
+
     QString instanceName()
     {
         if (!appletDescription.isValid()) {
@@ -550,7 +559,7 @@ KConfigGroup Applet::globalConfig() const
         globalAppletConfig = KConfigGroup(KGlobal::config(), group);
     }
 
-    return KConfigGroup(&globalAppletConfig, globalName());
+    return KConfigGroup(&globalAppletConfig, d->globalName());
 }
 
 void Applet::destroy()
@@ -1094,20 +1103,6 @@ bool Applet::remainSquare() const
 void Applet::setRemainSquare(bool square)
 {
     d->square = square;
-}
-
-QString Applet::globalName() const
-{
-    if (!d->appletDescription.isValid()) {
-        return QString();
-    }
-
-    return d->appletDescription.service()->library();
-}
-
-QString Applet::instanceName() const
-{
-    return d->instanceName();
 }
 
 void Applet::watchForMouseMove( QGraphicsItem * watched, bool watch )
