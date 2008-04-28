@@ -931,13 +931,13 @@ void Applet::flushPendingConstraintsEvents()
         //       normally doesn't request a background would then get one!
         if (f == Planar) {
             setBackgroundHints(d->backgroundHints|ShadowedBackground);
-        } else {
+        } else if (d->backgroundHints&ShadowedBackground) {
             setBackgroundHints(d->backgroundHints^ShadowedBackground);
         }
 
         if (!isContainment() && f != Vertical && f != Horizontal) {
             setBackgroundHints(d->backgroundHints|StandardBackground);
-        } else {
+        } else if(d->backgroundHints&StandardBackground) {
             setBackgroundHints(d->backgroundHints^StandardBackground);
         }
     }
