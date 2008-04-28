@@ -834,7 +834,7 @@ void Applet::setBackgroundHints(const BackgroundHints hints)
         //Setting a minimum size of 0,0 would result in the panel to be only
         //on the first virtual desktop
         setMinimumSize(qMax(minimumSize().width() - left - right, 1.0),
-                    qMax(minimumSize().height() - top - bottom, 1.0));
+                       qMax(minimumSize().height() - top - bottom, 1.0));
 
         delete d->background;
         d->background = 0;
