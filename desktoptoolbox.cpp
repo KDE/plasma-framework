@@ -176,7 +176,7 @@ void DesktopToolbox::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
     QPainterPath path;
     int toolSize = size() + (int)d->animFrame - 15;
     path.moveTo(size()*2, 0);
-    path.arcTo(QRectF(size() * 2 - toolSize, -toolSize, toolSize*2, toolSize*2), 180, 90);
+    path.arcTo(QRectF(boundingRect().left() - toolSize, boundingRect().top() - toolSize, toolSize*2, toolSize*2), 180, 90);
     path.lineTo(size()*2, 0);
 
     if (path.contains(event->pos())) {
