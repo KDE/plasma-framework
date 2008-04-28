@@ -23,6 +23,7 @@
 #include <QGraphicsSceneHoverEvent>
 #include <QPainter>
 #include <QRadialGradient>
+#include <QGraphicsView>
 
 #include <plasma/theme.h>
 #include <KColorScheme>
@@ -173,15 +174,19 @@ void DesktopToolbox::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
         return;
     }
 
-    QPainterPath path;
-    int toolSize = size() + (int)d->animFrame - 15;
-    path.moveTo(size()*2, 0);
-    path.arcTo(QRectF(boundingRect().left() - toolSize, boundingRect().top() - toolSize, toolSize*2, toolSize*2), 180, 90);
-    path.lineTo(size()*2, 0);
+    Plasma::Applet *applet = qgraphicsitem_cast<Plasma::Applet *>(parentItem());
 
-    if (path.contains(event->pos())) {
-        QGraphicsItem::hoverEnterEvent(event);
-        return;
+    if (applet && applet->view() && !applet->view()->transform().isScaling()) {
+        QPainterPath path;
+        int toolSize = size() + (int)d->animFrame - 15;
+        path.moveTo(size()*2, 0);
+        path.arcTo(QRectF(boundingRect().left() - toolSize, boundingRect().top() - toolSize, toolSize*2, toolSize*2), 180, 90);
+        path.lineTo(size()*2, 0);
+
+        if (path.contains(event->pos())) {
+            QGraphicsItem::hoverEnterEvent(event);
+            return;
+        }
     }
 
     showToolbox();

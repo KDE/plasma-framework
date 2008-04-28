@@ -107,10 +107,10 @@ PanelToolbox::PanelToolbox(QGraphicsItem *parent)
 QRectF PanelToolbox::boundingRect() const
 {
     if (orientation() == Qt::Vertical) {
-        return QRectF(0, 0, size()*4, -size()*2);
+        return QRectF(0, 0, size()*2, -size());
     //horizontal
     } else {
-        return QRectF(0, 0, -size()*2, size()*4);
+        return QRectF(0, 0, -size(), size()*2);
     }
 }
 
@@ -193,18 +193,6 @@ QPainterPath PanelToolbox::shape() const
 void PanelToolbox::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 {
     if (showing() || d->stopwatch.elapsed() < 100) {
-        QGraphicsItem::hoverEnterEvent(event);
-        return;
-    }
-
-    QPainterPath path;
-    int toolSize = size() + (int)d->animFrame - 15;
-    path.moveTo(size()*2, 0);
-    //path.arcTo(QRectF(size() * 2 - toolSize, -toolSize, toolSize*2, toolSize*2), 180, 90);
-    path.addRect(QRectF(0, 0, toolSize*2, toolSize*2));
-    path.lineTo(size()*2, 0);
-
-    if (path.contains(event->pos())) {
         QGraphicsItem::hoverEnterEvent(event);
         return;
     }
