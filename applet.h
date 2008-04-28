@@ -514,16 +514,6 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         virtual void showConfigurationInterface();
 
         /**
-         * Reimplement this method so provide a configuration interface,
-         * parented to the supplied widget. Ownership of the widgets is passed
-         * to the parent widget.
-         *
-         * @param parent the dialog which is the parent of the configuration
-         *               widgets
-         */
-        virtual void createConfigurationInterface(KConfigDialog *parent);
-
-        /**
          * Causes this applet to raise above all other applets.
          */
         void raise();
@@ -601,6 +591,16 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          * @param hasInterface whether or not there is a user interface available
          **/
         void setHasConfigurationInterface(bool hasInterface);
+
+        /**
+         * Reimplement this method so provide a configuration interface,
+         * parented to the supplied widget. Ownership of the widgets is passed
+         * to the parent widget.
+         *
+         * @param parent the dialog which is the parent of the configuration
+         *               widgets
+         */
+        virtual void createConfigurationInterface(KConfigDialog *parent);
 
         /**
          * Sets whether or not this Applet is acting as a Containment
