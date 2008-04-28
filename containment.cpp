@@ -355,8 +355,6 @@ void Containment::setFormFactor(FormFactor formFactor)
     //kDebug() << "switching FF to " << formFactor;
     FormFactor was = d->formFactor;
 
-    createLayout(formFactor);
-
     d->formFactor = formFactor;
 
     if (isContainment() && containmentType() == PanelContainment && was != formFactor) {
@@ -364,71 +362,7 @@ void Containment::setFormFactor(FormFactor formFactor)
         d->positionPanel(true);
     }
 
-    QGraphicsLayout *lay = layout();
-    QGraphicsLinearLayout * linearLay = dynamic_cast<QGraphicsLinearLayout *>(lay);
-    if (linearLay) {
-        foreach (Applet* applet, d->applets) {
-            applet->updateConstraints(Plasma::FormFactorConstraint);
-        }
-    }
     updateConstraints(Plasma::FormFactorConstraint);
-}
-
-void Containment::createLayout(FormFactor formFactor)
-{
-    //note: setting a new layout autodeletes the old one
-    //and creating a layout calls setLayout on the parent
-    switch (formFactor) {
-        case Planar:
-        case MediaCenter:
-            //setLayout(new QGraphicsLinearLayout());
-            break;
-        case Horizontal: {
-            if
-              (!layout())
-            {
-                QGraphicsLinearLayout *lay = new QGraphicsLinearLayout();
-                lay->setOrientation(Qt::Horizontal);
-                lay->setContentsMargins(0, 0, 0, 0);
-                lay->setSpacing(4);
-                lay->setSizePolicy(QSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding));
-                setLayout(lay);
-            }
-            else
-            {
-                QGraphicsLayout *lay = layout();
-                QGraphicsLinearLayout * linearLay = dynamic_cast<QGraphicsLinearLayout *>(lay);
-                if (linearLay) {
-                    linearLay->setOrientation(Qt::Horizontal);
-                }
-            }
-            break;
-            }
-        case Vertical: {
-            if
-              (!layout())
-            {
-                QGraphicsLinearLayout *lay = new QGraphicsLinearLayout();
-                lay->setOrientation(Qt::Vertical);
-                lay->setContentsMargins(0, 0, 0, 0);
-                lay->setSpacing(4);
-                setLayout(lay);
-            }
-            else
-            {
-                QGraphicsLayout *lay = layout();
-                QGraphicsLinearLayout * linearLay = dynamic_cast<QGraphicsLinearLayout *>(lay);
-                if (linearLay) {
-                    linearLay->setOrientation(Qt::Vertical);
-                }
-            }
-            break;
-            }
-        default:
-            kDebug() << "This can't be happening! Or... can it? ;)" << d->formFactor;
-            //setLayout(0); //auto-delete
-            break;
-    }
 }
 
 FormFactor Containment::formFactor() const
@@ -1001,12 +935,18 @@ void Containment::Private::containmentConstraintsEvent(Plasma::Constraints const
         toolBox->enableTool("addwidgets", q->immutability() == NotImmutable);
     }
 
-    if (constraints & Plasma::FormFactorConstraint && toolBox) {
-        if (q->formFactor() == Vertical) {
-            toolBox->setOrientation(Qt::Vertical);
-        //defaults to horizontal
-        } else {
-            toolBox->setOrientation(Qt::Horizontal);
+    if (constraints & Plasma::FormFactorConstraint) {
+        if (toolBox) {
+            if (q->formFactor() == Vertical) {
+                toolBox->setOrientation(Qt::Vertical);
+                //defaults to horizontal
+            } else {
+                toolBox->setOrientation(Qt::Horizontal);
+            }
+        }
+
+        foreach (Applet *applet, applets) {
+            applet->updateConstraints(Plasma::FormFactorConstraint);
         }
     }
 

@@ -344,16 +344,6 @@ class PLASMA_EXPORT Containment : public Applet
          */
         void setContainmentType(Containment::Type type);
 
-        /**
-         * Optionally creates a layout for the Containment for the new
-         * form factor. This is called before the current form factor is
-         * reset, and adding applets to the new layout, if any, is handled
-         * automatically.
-         *
-         * @param formFactor the new FormFacto
-         */
-        virtual void createLayout(FormFactor formFactor);
-
         void contextMenuEvent(QGraphicsSceneContextMenuEvent * event);
         void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
         void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
