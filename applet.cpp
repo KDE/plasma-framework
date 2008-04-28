@@ -324,6 +324,11 @@ public:
             q->updateConstraints(ImmutableConstraint);
         }
     }
+
+    void themeChanged()
+    {
+        q->update();
+    }
     
     //TODO: examine the usage of memory here; there's a pretty large
     //      number of members at this point.
@@ -1470,11 +1475,6 @@ void Applet::setIsContainment(bool isContainment)
 bool Applet::isContainment() const
 {
     return d->isContainment;
-}
-
-void Applet::themeChanged()
-{
-    update();
 }
 
 } // Plasma namespace

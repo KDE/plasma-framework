@@ -539,11 +539,6 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          */
         void flushPendingConstraintsEvents();
 
-        /**
-         * called when the Plasma::Theme has changed
-         */
-        void themeChanged();
-
     protected:
         /**
          * @param parent the QGraphicsItem this applet is parented to
@@ -693,6 +688,7 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
     private:
         Q_DISABLE_COPY(Applet)
         Q_PRIVATE_SLOT(d, void checkImmutability())
+        Q_PRIVATE_SLOT(d, void themeChanged())
 
         /**
          * Reimplemented from QGraphicsItem
