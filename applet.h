@@ -507,11 +507,8 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          * Lets the user interact with the plasmoid options.
          * Called when the user selects the configure entry
          * from the context menu.
-         *
-         * Applets should NOT reimplement this method unless there is good
-         * reason to do so, but instead reimplment createConfigurationInterface
          */
-        virtual void showConfigurationInterface();
+        void showConfigurationInterface();
 
         /**
          * Causes this applet to raise above all other applets.
