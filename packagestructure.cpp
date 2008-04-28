@@ -286,17 +286,11 @@ QStringList PackageStructure::mimetypes(const char* key) const
 void PackageStructure::setPath(const QString &path)
 {
     d->path = path;
-    pathChanged();
 }
 
 QString PackageStructure::path() const
 {
     return d->path;
-}
-
-void PackageStructure::pathChanged()
-{
-    // Do nothing ... subclasses might, however.
 }
 
 void PackageStructure::read(const KConfigBase *config)

@@ -249,8 +249,6 @@ protected:
      */
     void setContentsPrefix(const QString &prefix);
 
-    virtual void pathChanged();
-
 private:
     class Private;
      Private * const d;
