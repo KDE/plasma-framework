@@ -690,14 +690,9 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          */
         QVariant itemChange(GraphicsItemChange change, const QVariant &value);
 
-    protected Q_SLOTS:
-        /**
-         * @internal used to check the immutability of the item in the config file
-         */
-        void checkImmutability();
-
     private:
         Q_DISABLE_COPY(Applet)
+        Q_PRIVATE_SLOT(d, void checkImmutability())
 
         /**
          * Reimplemented from QGraphicsItem

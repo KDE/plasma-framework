@@ -100,8 +100,9 @@ protected:
 class Applet::Private
 {
 public:
-    Private(KService::Ptr service, int uniqueID)
+    Private(KService::Ptr service, int uniqueID, Applet *applet)
         : appletId(uniqueID),
+          q(applet),
           backgroundHints(StandardBackground),
           appletDescription(service),
           package(0),
@@ -141,15 +142,15 @@ public:
         delete mainConfig;
     }
 
-    void init(Applet* applet)
+    void init()
     {
         // WARNING: do not access config() OR globalConfig() in this method!
         //          that requires a scene, which is not available at this point
-        applet->setAcceptsHoverEvents(true);
-        applet->setFlag(QGraphicsItem::ItemIsFocusable, true);
+        q->setAcceptsHoverEvents(true);
+        q->setFlag(QGraphicsItem::ItemIsFocusable, true);
 
         if (!appletDescription.isValid()) {
-            applet->setFailedToLaunch(true, i18n("Invalid applet description"));
+            q->setFailedToLaunch(true, i18n("Invalid applet description"));
             return;
         }
 
@@ -163,7 +164,7 @@ public:
                                                  "/");
 
             if (path.isEmpty()) {
-                applet->setFailedToLaunch(true, i18n("Could not locate the %1 package required for the %2 widget.",
+                q->setFailedToLaunch(true, i18n("Could not locate the %1 package required for the %2 widget.",
                                                      appletDescription.pluginName(), appletDescription.name()));
             } else {
                 // create the package and see if we have something real
@@ -177,48 +178,49 @@ public:
                     // it will be parented to this applet and so will get
                     // deleted when the applet does
 
-                    script = Plasma::loadScriptEngine(language, applet);
+                    script = Plasma::loadScriptEngine(language, q);
                     if (!script) {
                         delete package;
                         package = 0;
-                        applet->setFailedToLaunch(true, i18n("Could not create a %1 ScriptEngine for the %2 widget.",
+                        q->setFailedToLaunch(true, i18n("Could not create a %1 ScriptEngine for the %2 widget.",
                                                              language, appletDescription.name()));
                     }
                 } else {
-                    applet->setFailedToLaunch(true, i18n("Could not open the %1 package required for the %2 widget.",
+                    q->setFailedToLaunch(true, i18n("Could not open the %1 package required for the %2 widget.",
                                                          appletDescription.pluginName(), appletDescription.name()));
                     delete package;
                     package = 0;
                 }
 
                 if (package) {
-                    setupScriptSupport(applet);
+                    setupScriptSupport();
                 }
             }
         }
 
-        applet->setBackgroundHints(DefaultBackground);
+        q->setBackgroundHints(DefaultBackground);
 
-        connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()), applet, SLOT(themeChanged()));
+        connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()), q, SLOT(themeChanged()));
     }
 
     // put all setup routines for script here. at this point we can assume that
     // package exists and that we have a script engin
-    void setupScriptSupport(Applet* applet)
+    void setupScriptSupport()
     {
         Q_ASSERT(package);
         QString xmlPath = package->filePath("mainconfigxml");
         if (!xmlPath.isEmpty()) {
             QFile file(xmlPath);
             // FIXME: KConfigSkeleton doesn't play well with KConfigGroup =/
-            KConfigGroup config = applet->config();
+            KConfigGroup config = q->config();
             configXml = new ConfigXml(&config, &file);
         }
 
         if (!package->filePath("mainconfigui").isEmpty()) {
-            applet->setHasConfigurationInterface(true);
+            q->setHasConfigurationInterface(true);
         }
     }
+
     QString instanceName()
     {
         if (!appletDescription.isValid()) {
@@ -240,15 +242,15 @@ public:
         }
     }
 
-    void scheduleConstraintsUpdate(Plasma::Constraints c, Applet* applet)
+    void scheduleConstraintsUpdate(Plasma::Constraints c)
     {
         if (pendingConstraints == NoConstraint) {
-            QTimer::singleShot(0, applet, SLOT(flushPendingConstraintsEvents()));
+            QTimer::singleShot(0, q, SLOT(flushPendingConstraintsEvents()));
         }
         pendingConstraints |= c;
     }
 
-    KConfigGroup* mainConfigGroup(const Applet* q)
+    KConfigGroup* mainConfigGroup()
     {
         if (mainConfig) {
             return mainConfig;
@@ -311,6 +313,17 @@ public:
     
         return text;
     }
+
+    void checkImmutability()
+    {
+        const bool systemImmutable = q->globalConfig().isImmutable() || q->config().isImmutable() ||
+                                    (q->containment() && q->containment()->immutability() == SystemImmutable) ||
+                                    (dynamic_cast<Corona*>(q->scene()) && static_cast<Corona*>(q->scene())->immutability() == SystemImmutable);
+
+        if (systemImmutable) {
+            q->updateConstraints(ImmutableConstraint);
+        }
+    }
     
     //TODO: examine the usage of memory here; there's a pretty large
     //      number of members at this point.
@@ -319,6 +332,7 @@ public:
     static uint s_minZValue;
     static PackageStructure::Ptr packageStructure;
     uint appletId;
+    Applet *q;
     BackgroundHints backgroundHints;
     KPluginInfo appletDescription;
     Package* package;
@@ -351,22 +365,22 @@ Applet::Applet(QGraphicsItem *parent,
                const QString& serviceID,
                uint appletId)
     :  QGraphicsWidget(parent),
-       d(new Private(KService::serviceByStorageId(serviceID), appletId))
+       d(new Private(KService::serviceByStorageId(serviceID), appletId, this))
 {
     // WARNING: do not access config() OR globalConfig() in this method!
     //          that requires a scene, which is not available at this point
-    d->init(this);
+    d->init();
 }
 
 Applet::Applet(QObject* parentObject, const QVariantList& args)
     :  QGraphicsWidget(0),
        d(new Private(KService::serviceByStorageId(args.count() > 0 ? args[0].toString() : QString()),
-                     args.count() > 1 ? args[1].toInt() : 0))
+                     args.count() > 1 ? args[1].toInt() : 0, this))
 {
     setParent(parentObject);
     // WARNING: do not access config() OR globalConfig() in this method!
     //          that requires a scene, which is not available at this point
-    d->init(this);
+    d->init();
 
     // the brain damage seen in the initialization list is due to the
     // inflexibility of KService::createInstance
@@ -512,10 +526,10 @@ KConfigGroup Applet::config(const QString &group) const
 KConfigGroup Applet::config() const
 {
     if (d->isContainment) {
-        return *(d->mainConfigGroup(this));
+        return *(d->mainConfigGroup());
     }
 
-    return KConfigGroup(d->mainConfigGroup(this), "Configuration");
+    return KConfigGroup(d->mainConfigGroup(), "Configuration");
 }
 
 KConfigGroup Applet::globalConfig() const
@@ -547,7 +561,7 @@ void Applet::destroy()
 
 void Applet::resetConfigurationObject()
 {
-    d->mainConfigGroup(this)->deleteGroup();
+    d->mainConfigGroup()->deleteGroup();
     delete d->mainConfig;
     d->mainConfig = 0;
 }
@@ -664,7 +678,7 @@ QPoint Applet::popupPosition(const QSize &s) const
 
 void Applet::updateConstraints(Plasma::Constraints constraints)
 {
-    d->scheduleConstraintsUpdate(constraints, this);
+    d->scheduleConstraintsUpdate(constraints);
 }
 
 void Applet::constraintsEvent(Plasma::Constraints constraints)
@@ -889,17 +903,6 @@ void Applet::setNeedsConfiguring(bool needsConfig)
     configLayout->addItem(configWidget);
     setLayout(configLayout);
     d->needsConfigOverlay->show();
-}
-
-void Applet::checkImmutability()
-{
-    const bool systemImmutable = globalConfig().isImmutable() || config().isImmutable() ||
-                                 (containment() && containment()->immutability() == SystemImmutable) ||
-                                 (dynamic_cast<Corona*>(scene()) && static_cast<Corona*>(scene())->immutability() == SystemImmutable);
-
-    if (systemImmutable) {
-        updateConstraints(ImmutableConstraint);
-    }
 }
 
 void Applet::flushPendingConstraintsEvents()
@@ -1392,7 +1395,7 @@ QVariant Applet::itemChange(GraphicsItemChange change, const QVariant &value)
     case ItemSceneHasChanged: {
         QGraphicsScene *newScene = qvariant_cast<QGraphicsScene*>(value);
         if (newScene) {
-            checkImmutability();
+            d->checkImmutability();
         }
 
         if (d->shadow) {
