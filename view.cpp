@@ -35,6 +35,7 @@ class View::Private
 public:
     Private(View *view, int uniqueId)
         : drawWallpaper(true),
+          trackChanges(true),
           desktop(-1),
           containment(0),
           q(view)
@@ -54,7 +55,7 @@ public:
 
     void updateSceneRect()
     {
-        if (!containment) {
+        if (!containment || !trackChanges) {
             return;
         }
 
@@ -81,6 +82,7 @@ public:
     }
 
     bool drawWallpaper;
+    bool trackChanges;
     int desktop;
     int viewId;
     Plasma::Containment *containment;

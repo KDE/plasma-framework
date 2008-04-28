@@ -125,6 +125,17 @@ public:
     Containment* containment() const;
 
     /**
+     * Surpress the default behavior where the view tracks changes to the
+     * containment, and adapts itself to it.
+     */
+    void setTrackContainmentChanges(bool trackChanges);
+
+    /**
+     * @return whether or not the view tracks changes to the containment
+     */
+    bool trackContainmentChanges();
+
+    /**
      * @return the id of the View set in the constructor
      */
     int id() const;
