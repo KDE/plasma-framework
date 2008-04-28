@@ -222,6 +222,17 @@ bool View::isWallpaperEnabled() const
     return d->drawWallpaper;
 }
 
+void View::setTrackContainmentChanges(bool trackChanges)
+{
+    d->trackChanges = trackChanges;
+}
+
+bool View::trackContainmentChanges()
+{
+    return d->trackChanges;
+}
+
+
 } // namespace Plasma
 
 #include "view.moc"
