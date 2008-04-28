@@ -89,8 +89,8 @@ class PLASMA_EXPORT AbstractRunner : public QObject
          * The match will be activated if the user selects it.
          *
          * If this runner's exact match is selected, it will be passed into
-         * the exec method.
-         * @see exec
+         * the run method.
+         * @see run
          *
          * Since each runner is executed in its own thread there is no need
          * to return from this method right away, nor to create all matches
@@ -107,7 +107,7 @@ class PLASMA_EXPORT AbstractRunner : public QObject
 
         /**
          * If the runner has options that the user can interact with to modify
-         * what happens when exec or one of the actions created in fillMatches
+         * what happens when run or one of the actions created in fillMatches
          * is called, the runner should return true
          */
         bool hasRunOptions();
@@ -139,7 +139,7 @@ class PLASMA_EXPORT AbstractRunner : public QObject
          * Called whenever an exact or possible match associated with this
          * runner is triggered.
          */
-        virtual void exec(const Plasma::SearchContext *context, const Plasma::SearchMatch *action);
+        virtual void run(const Plasma::SearchContext *context, const Plasma::SearchMatch *action);
 
         /**
          * The nominal speed of the runner.

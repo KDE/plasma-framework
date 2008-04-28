@@ -106,7 +106,7 @@ class PLASMA_EXPORT SearchMatch
 
         bool operator<(const SearchMatch& other) const;
 
-        void exec(const SearchContext *context) const;
+        void run(const SearchContext *context) const;
 
     private:
         class Private;

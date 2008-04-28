@@ -142,14 +142,14 @@ bool SearchMatch::operator<(const SearchMatch& other) const
     return d->relevance < other.d->relevance;
 }
 
-void SearchMatch::exec(const SearchContext *context) const
+void SearchMatch::run(const SearchContext *context) const
 {
     Q_ASSERT(context);
 
     //kDebug() << "we have" << context->searchTerm() << context->mimetype();
     if (d->runner) {
         //TODO: this could be dangerous if the runner is deleted behind our backs.
-        d->runner->exec(context, this);
+        d->runner->run(context, this);
     }
 }
 

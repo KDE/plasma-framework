@@ -68,7 +68,7 @@ public:
      * Called whenever an exact or possible match associated with this
      * runner is triggered.
      */
-    virtual void exec(const Plasma::SearchContext *search, const Plasma::SearchMatch *action);
+    virtual void run(const Plasma::SearchContext *search, const Plasma::SearchMatch *action);
 
 protected:
     /**

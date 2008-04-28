@@ -210,10 +210,10 @@ QMutex* AbstractRunner::bigLock() const
     return &Private::bigLock;
 }
 
-void AbstractRunner::exec(const Plasma::SearchContext *search, const Plasma::SearchMatch *action)
+void AbstractRunner::run(const Plasma::SearchContext *search, const Plasma::SearchMatch *action)
 {
     if (d->script) {
-        return d->script->exec(search, action);
+        return d->script->run(search, action);
     }
 }
 
