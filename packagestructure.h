@@ -227,11 +227,11 @@ public:
     /**
      * Uninstalls a package matching this package structure.
      *
-     * @arg package the name of the package to remove
+     * @arg packageName the name of the package to remove
      * @arg packageRoot path to the directory where the package should be installed to
      * @return true on successful removal of the package, false otherwise
      */
-    virtual bool uninstallPackage(const QString& package, const QString& packageRoot);
+    virtual bool uninstallPackage(const QString& packageName, const QString& packageRoot);
 
     /**
      * @return the prefix inserted between the base path and content entries

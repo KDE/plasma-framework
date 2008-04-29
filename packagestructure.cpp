@@ -359,7 +359,7 @@ bool PackageStructure::installPackage(const QString &package, const QString &pac
     return Package::installPackage(package, packageRoot);
 }
 
-bool PackageStructure::uninstallPackage(const QString &package, const QString &packageRoot)
+bool PackageStructure::uninstallPackage(const QString &packageName, const QString &packageRoot)
 {
     //TODO: implement
     return false;
