@@ -176,6 +176,12 @@ public:
         return containment;
     }
 
+    /**
+     * Called when there have been changes made to configuration that should be saved
+     * to disk at the next convenient moment
+     */
+    void scheduleConfigSync();
+
     Corona *q;
     ImmutabilityType immutability;
     QString mimetype;
@@ -226,15 +232,15 @@ void Corona::saveLayout(const QString &configName) const
     d->saveLayout(c);
 }
 
-void Corona::scheduleConfigSync() const
+void Corona::Private::scheduleConfigSync()
 {
     //NOTE: this is a pretty simplistic model: we simply save no more than CONFIG_SYNC_TIMEOUT
     //      after the first time this is called. not much of a heuristic for save points, but
     //      it should at least compress these activities a bit and provide a way for applet
     //      authors to ween themselves from the sync() disease. A more interesting/dynamic
     //      algorithm for determining when to actually sync() to disk might be better, though.
-    if (!d->configSyncTimer.isActive()) {
-        d->configSyncTimer.start(CONFIG_SYNC_TIMEOUT);
+    if (!configSyncTimer.isActive()) {
+        configSyncTimer.start(CONFIG_SYNC_TIMEOUT);
     }
 }
 

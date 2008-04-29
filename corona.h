@@ -108,12 +108,6 @@ public Q_SLOTS:
     void saveLayout(const QString &config = QString()) const;
 
     /**
-     * Called when there have been changes made to configuration that should be saved
-     * to disk at the next convenient moment
-     */
-    void scheduleConfigSync() const;
-
-    /**
      * Removes a given containment from the corona
      */
     void destroyContainment(Containment *containment);
@@ -171,6 +165,7 @@ private:
 
     Q_PRIVATE_SLOT(d, void containmentDestroyed(QObject*))
     Q_PRIVATE_SLOT(d, void syncConfig())
+    Q_PRIVATE_SLOT(d, void scheduleConfigSync())
 };
 
 } // namespace Plasma
