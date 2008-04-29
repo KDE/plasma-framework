@@ -75,8 +75,41 @@ public:
     explicit Animator(QObject * parent = 0);
     ~Animator();
 
-    Q_INVOKABLE void animateItem(QGraphicsItem* item, Animation anim);
-    Q_INVOKABLE void moveItem(QGraphicsItem* item, Movement movement, const QPoint &destination);
+    /**
+     * Starts a standard animation on a QGraphicsItem.
+     *
+     * @arg item the item to animate in some fashion
+     * @arg anim the the type of animation to perform
+     * @return the id of the animation
+     **/
+    Q_INVOKABLE int animateItem(QGraphicsItem* item, Animation anim);
+
+    /**
+     * Stops an item animation before the animation is complete.
+     * Note that it is not necessary to call
+     * this on normal completion of the animation.
+     *
+     * @arg id the id of the animation as returned by animateItem
+     */
+    Q_INVOKABLE void stopItemAnimation(int id);
+
+    /**
+     * Starts a standard animation on a QGraphicsItem.
+     *
+     * @arg item the item to animate in some fashion
+     * @arg anim the the type of animation to perform
+     * @return the id of the animation
+     **/
+    Q_INVOKABLE int moveItem(QGraphicsItem* item, Movement movement, const QPoint &destination);
+
+    /**
+     * Stops an item movement before the animation is complete.
+     * Note that it is not necessary to call
+     * this on normal completion of the animation.
+     *
+     * @arg id the id of the animation as returned by moveItem
+     */
+    Q_INVOKABLE void stopItemMovement(int id);
 
     /**
      * Starts a custom animation, preventing the need to create a timeline

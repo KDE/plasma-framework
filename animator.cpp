@@ -45,6 +45,7 @@ struct AnimationState
     int currentInterval;
     int frames;
     int currentFrame;
+    int id;
 };
 
 struct ElementAnimationState
@@ -73,6 +74,7 @@ struct MovementState
     int currentFrame;
     QPoint start;
     QPoint destination;
+    int id;
 };
 
 struct CustomAnimationState
@@ -252,7 +254,7 @@ void Animator::customAnimReceiverDestroyed(QObject* o)
     }
 }
 
-void Animator::animateItem(QGraphicsItem* item, Animation animation)
+int Animator::animateItem(QGraphicsItem* item, Animation animation)
 {
      //kDebug();
     // get rid of any existing animations on this item.
@@ -268,10 +270,11 @@ void Animator::animateItem(QGraphicsItem* item, Animation animation)
     if (frames < 1) {
         // evidently this animator doesn't have an implementation
         // for this Animation
-        return;
+        return -1;
     }
 
     AnimationState* state = new AnimationState;
+    state->id = ++d->animId;
     state->item = item;
     state->animation = animation;
     state->curve = d->driver->animationCurve(animation);
@@ -296,9 +299,11 @@ void Animator::animateItem(QGraphicsItem* item, Animation animation)
         d->timerId = startTimer(MIN_TICK_RATE);
         d->time.restart();
     }
+
+    return state->id;
 }
 
-void Animator::moveItem(QGraphicsItem* item, Movement movement, const QPoint &destination)
+int Animator::moveItem(QGraphicsItem* item, Movement movement, const QPoint &destination)
 {
      //kDebug();
      QMap<QGraphicsItem*, MovementState*>::iterator it = d->movingItems.find(item);
@@ -311,10 +316,11 @@ void Animator::moveItem(QGraphicsItem* item, Movement movement, const QPoint &de
      if (frames <= 1) {
           // evidently this animator doesn't have an implementation
           // for this Animation
-          return;
+          return -1;
      }
 
      MovementState* state = new MovementState;
+     state->id = ++d->animId;
      state->destination = destination;
      state->start = item->pos().toPoint();
      state->item = item;
@@ -340,6 +346,8 @@ void Animator::moveItem(QGraphicsItem* item, Movement movement, const QPoint &de
           d->timerId = startTimer(MIN_TICK_RATE);
           d->time.restart();
      }
+
+     return state->id;
 }
 
 int Animator::customAnimation(int frames, int duration, Animator::CurveShape curve,
@@ -387,6 +395,32 @@ void Animator::stopCustomAnimation(int id)
         d->customAnims.erase(it);
     }
     //kDebug() << "stopCustomAnimation(AnimId " << id << ") done";
+}
+
+void Animator::stopItemAnimation(int id)
+{
+    QMutableMapIterator<QGraphicsItem*, AnimationState*> it(d->animatedItems);
+    while (it.hasNext()) {
+        it.next();
+        if (it.value()->id == id) {
+            delete it.value();
+            it.remove();
+            return;
+        }
+    }
+}
+
+void Animator::stopItemMovement(int id)
+{
+    QMutableMapIterator<QGraphicsItem*, MovementState*> it(d->movingItems);
+    while (it.hasNext()) {
+        it.next();
+        if (it.value()->id == id) {
+            delete it.value();
+            it.remove();
+            return;
+        }
+    }
 }
 
 int Animator::animateElement(QGraphicsItem *item, Animation animation)
