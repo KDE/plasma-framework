@@ -387,7 +387,6 @@ void DataEngine::setData(const QString &source, const Data &data)
     d->queueUpdate();
 }
 
-
 void DataEngine::removeAllData(const QString& source)
 {
     DataContainer* s = d->source(source, false);

@@ -76,7 +76,8 @@ bool DataContainer::visualizationIsConnected(QObject *visualization) const
 
 void DataContainer::connectVisualization(QObject* visualization, uint pollingInterval, Plasma::IntervalAlignment alignment)
 {
-    //kDebug() << "connecting visualization" << visualization << "at interval of" << pollingInterval;
+    //kDebug() << "connecting visualization" << visualization << "at interval of"
+    //         << pollingInterval << "to" << objectName();
     QMap<QObject *, SignalRelay *>::iterator objIt = d->relayObjects.find(visualization);
     bool connected = objIt != d->relayObjects.end();
     if (connected) {
@@ -113,12 +114,12 @@ void DataContainer::connectVisualization(QObject* visualization, uint pollingInt
 
 
     if (pollingInterval < 1) {
-//        kDebug() << "    connecting directly";
+        //kDebug() << "    connecting directly";
         d->relayObjects[visualization] = 0;
         connect(this, SIGNAL(dataUpdated(QString,Plasma::DataEngine::Data)),
                 visualization, SLOT(dataUpdated(QString,Plasma::DataEngine::Data)));
     } else {
-//        kDebug() << "    connecting to a relay";
+        //kDebug() << "    connecting to a relay";
         SignalRelay *relay = d->signalRelay(this, visualization, pollingInterval, alignment);
         connect(relay, SIGNAL(dataUpdated(QString,Plasma::DataEngine::Data)),
                 visualization, SLOT(dataUpdated(QString,Plasma::DataEngine::Data)));
