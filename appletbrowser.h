@@ -75,8 +75,8 @@ public Q_SLOTS:
     void openWidgetFile();
 
 private:
-    Q_PRIVATE_SLOT(d, void appletAdded(Plasma::Applet*));
-    Q_PRIVATE_SLOT(d, void appletDestroyed(QObject*));
+    Q_PRIVATE_SLOT(d, void appletAdded(Plasma::Applet*))
+    Q_PRIVATE_SLOT(d, void appletDestroyed(QObject*))
 
     class Private;
     Private * const d;
