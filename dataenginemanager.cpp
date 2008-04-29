@@ -18,10 +18,12 @@
  */
 
 #include "dataenginemanager.h"
-#include "scripting/scriptengine.h"
 
 #include <KDebug>
 #include <KServiceTypeTrader>
+
+#include "dataengine_p.h"
+#include "scripting/scriptengine.h"
 
 namespace Plasma
 {
@@ -36,7 +38,7 @@ class NullEngine : public DataEngine
             setValid(false);
 
             // ref() ourselves to ensure we never get deleted
-            ref();
+            d->ref();
         }
 };
 
@@ -111,7 +113,7 @@ Plasma::DataEngine* DataEngineManager::loadEngine(const QString& name)
 
     if (it != d->engines.end()) {
         engine = *it;
-        engine->ref();
+        engine->d->ref();
         return engine;
     }
 
@@ -150,9 +152,9 @@ void DataEngineManager::unloadEngine(const QString& name)
 
     if (it != d->engines.end()) {
         Plasma::DataEngine* engine = *it;
-        engine->deref();
+        engine->d->deref();
 
-        if (!engine->isUsed()) {
+        if (!engine->d->isUsed()) {
             d->engines.erase(it);
             delete engine;
         }

@@ -18,6 +18,7 @@
  */
 
 #include "dataengine.h"
+#include "dataengine_p.h"
 
 #include <QQueue>
 #include <QTimer>
@@ -36,186 +37,6 @@
 
 namespace Plasma
 {
-
-class DataEngine::Private
-{
-    public:
-        Private(DataEngine* e, KService::Ptr service)
-            : engine(e),
-              ref(-1), // first ref
-              updateTimerId(0),
-              minPollingInterval(-1),
-              limit(0),
-              valid(true),
-              script(0),
-              package(0)
-        {
-            updateTimer = new QTimer(engine);
-            updateTimer->setSingleShot(true);
-            updateTimestamp.start();
-
-            if (!service) {
-                return;
-            }
-
-            engineName = service->property("X-Plasma-EngineName").toString();
-            if (engineName.isEmpty()) {
-                engineName = i18n("Anonymous Engine");
-            }
-            e->setObjectName(engineName);
-            icon = service->icon();
-
-            KPluginInfo dataEngineDescription(service);
-            if (dataEngineDescription.isValid()) {
-                QString language = dataEngineDescription.property("X-Plasma-Language").toString();
-
-                if (!language.isEmpty()) {
-                    const QString path = KStandardDirs::locate("data",
-                                                               "plasma/engines/" + dataEngineDescription.pluginName() + "/");
-                    PackageStructure::Ptr structure = Plasma::packageStructure(language, Plasma::RunnerComponent);
-                    structure->setPath(path);
-                    package = new Package(path, structure);
-
-                    script = Plasma::loadScriptEngine(language, engine);
-                    if (!script) {
-                        kDebug() << "Could not create a" << language << "ScriptEngine for the"
-                                << dataEngineDescription.name() << "DataEngine.";
-                        delete package;
-                        package = 0;
-                    }
-                }
-            }
-        }
-
-        DataContainer* source(const QString& sourceName, bool createWhenMissing = true)
-        {
-            DataEngine::SourceDict::const_iterator it = sources.find(sourceName);
-            if (it != sources.constEnd()) {
-                DataContainer* s = it.value();
-                if (limit > 0) {
-                    QQueue<DataContainer*>::iterator it = sourceQueue.begin();
-                    while (it != sourceQueue.end()) {
-                        if (*it == s) {
-                            sourceQueue.erase(it);
-                            break;
-                        }
-                        ++it;
-                    }
-                    sourceQueue.enqueue(s);
-                }
-                return it.value();
-            }
-
-            if (!createWhenMissing) {
-                return 0;
-            }
-
-            /*kDebug() << "DataEngine " << engine->objectName()
-                     << ": could not find DataContainer " << sourceName
-                     << ", creating" << endl;*/
-            DataContainer* s = new DataContainer(engine);
-            s->setObjectName(sourceName);
-            sources.insert(sourceName, s);
-            connect(s, SIGNAL(updateRequested(DataContainer*)), engine, SLOT(internalUpdateSource(DataContainer*)));
-
-            if (limit > 0) {
-                trimQueue();
-                sourceQueue.enqueue(s);
-            }
-            return s;
-        }
-
-        void connectSource(DataContainer* s, QObject* visualization, uint pollingInterval,
-                           Plasma::IntervalAlignment align, bool immediateCall = true)
-        {
-            //kDebug() << "connect source called with interval" << pollingInterval;
-            if (pollingInterval > 0) {
-                // never more frequently than allowed, never more than 20 times per second
-                uint min = qMax(50, minPollingInterval); // for qMin below
-                pollingInterval = qMax(min, pollingInterval);
-
-                // align on the 50ms
-                pollingInterval = pollingInterval - (pollingInterval % 50);
-            }
-
-            if (immediateCall) {
-                // we don't want to do an immediate call if we are simply
-                // reconnecting
-                //kDebug() << "immediate call requested, we have:" << s->visualizationIsConnected(visualization);
-                immediateCall = !s->visualizationIsConnected(visualization);
-            }
-
-            s->connectVisualization(visualization, pollingInterval, align);
-
-            if (immediateCall) {
-                QMetaObject::invokeMethod(visualization, "dataUpdated",
-                                          Q_ARG(QString, s->objectName()),
-                                          Q_ARG(Plasma::DataEngine::Data, s->data()));
-            }
-        }
-
-        DataContainer* requestSource(const QString& sourceName, bool* newSource = 0)
-        {
-            if (newSource) {
-                *newSource = false;
-            }
-
-            //kDebug() << "requesting source " << sourceName;
-            DataContainer* s = source(sourceName, false);
-
-            if (!s) {
-                // we didn't find a data source, so give the engine an opportunity to make one
-                /*kDebug() << "DataEngine " << engine->objectName()
-                    << ": could not find DataContainer " << sourceName
-                    << " will create on request" << endl;*/
-                if (engine->sourceRequestEvent(sourceName)) {
-                    s = source(sourceName, false);
-                    if (s) {
-                        // now we have a source; since it was created on demand, assume
-                        // it should be removed when not used
-                        if (newSource) {
-                            *newSource = true;
-                        }
-                        connect(s, SIGNAL(becameUnused(QString)), engine, SLOT(removeSource(QString)));
-                    }
-                }
-            }
-
-            return s;
-        }
-
-        void trimQueue()
-        {
-            uint queueCount = sourceQueue.count();
-            while (queueCount >= limit) {
-                DataContainer* punted = sourceQueue.dequeue();
-                engine->removeSource(punted->objectName());
-            }
-        }
-
-        void queueUpdate()
-        {
-            if (updateTimer->isActive()) {
-                return;
-            }
-            updateTimer->start(0);
-        }
-
-        DataEngine* engine;
-        int ref;
-        int updateTimerId;
-        int minPollingInterval;
-        QTime updateTimestamp;
-        DataEngine::SourceDict sources;
-        QQueue<DataContainer*> sourceQueue;
-        QTimer* updateTimer;
-        QString icon;
-        uint limit;
-        bool valid;
-        DataEngineScript* script;
-        QString engineName;
-        Package *package;
-};
 
 
 DataEngine::DataEngine(QObject* parent, KService::Ptr service)
@@ -292,24 +113,6 @@ DataEngine::Data DataEngine::query(const QString& source) const
     DataEngine::Data data = s->data();
     s->checkUsage();
     return data;
-}
-
-void DataEngine::internalUpdateSource(DataContainer* source)
-{
-    if (d->minPollingInterval > 0 &&
-        source->timeSinceLastUpdate() < (uint)d->minPollingInterval) {
-        // skip updating this source; it's been too soon
-        //kDebug() << "internal update source is delaying" << source->timeSinceLastUpdate() << d->minPollingInterval;
-        //but fake an update so that the signalrelay that triggered this gets the data from the
-        //recent update. this way we don't have to worry about queuing - the relay will send a
-        //signal immediately and everyone else is undisturbed.
-        source->setNeedsUpdate();
-        return;
-    }
-
-    if (updateSourceEvent(source->objectName())) {
-        d->queueUpdate();
-    }
 }
 
 void DataEngine::init()
@@ -504,21 +307,6 @@ void DataEngine::removeAllSources()
     }
 }
 
-void DataEngine::ref()
-{
-    --d->ref;
-}
-
-void DataEngine::deref()
-{
-    ++d->ref;
-}
-
-bool DataEngine::isUsed() const
-{
-    return d->ref != 0;
-}
-
 bool DataEngine::isValid() const
 {
     return d->valid;
@@ -599,6 +387,203 @@ void DataEngine::setName(const QString& name)
 {
     d->engineName = name;
     setObjectName(name);
+}
+
+// Private class implementations
+DataEngine::Private::Private(DataEngine* e, KService::Ptr service)
+    : q(e),
+      refCount(-1), // first ref
+      updateTimerId(0),
+      minPollingInterval(-1),
+      limit(0),
+      valid(true),
+      script(0),
+      package(0)
+{
+    updateTimer = new QTimer(q);
+    updateTimer->setSingleShot(true);
+    updateTimestamp.start();
+
+    if (!service) {
+        return;
+    }
+
+    engineName = service->property("X-Plasma-EngineName").toString();
+    if (engineName.isEmpty()) {
+        engineName = i18n("Anonymous Engine");
+    }
+    e->setObjectName(engineName);
+    icon = service->icon();
+
+    KPluginInfo dataEngineDescription(service);
+    if (dataEngineDescription.isValid()) {
+        QString language = dataEngineDescription.property("X-Plasma-Language").toString();
+
+        if (!language.isEmpty()) {
+            const QString path = KStandardDirs::locate("data",
+                                                        "plasma/engines/" + dataEngineDescription.pluginName() + "/");
+            PackageStructure::Ptr structure = Plasma::packageStructure(language, Plasma::RunnerComponent);
+            structure->setPath(path);
+            package = new Package(path, structure);
+
+            script = Plasma::loadScriptEngine(language, q);
+            if (!script) {
+                kDebug() << "Could not create a" << language << "ScriptEngine for the"
+                        << dataEngineDescription.name() << "DataEngine.";
+                delete package;
+                package = 0;
+            }
+        }
+    }
+}
+
+void DataEngine::Private::internalUpdateSource(DataContainer* source)
+{
+    if (minPollingInterval > 0 &&
+        source->timeSinceLastUpdate() < (uint)minPollingInterval) {
+        // skip updating this source; it's been too soon
+        //kDebug() << "internal update source is delaying" << source->timeSinceLastUpdate() << d->minPollingInterval;
+        //but fake an update so that the signalrelay that triggered this gets the data from the
+        //recent update. this way we don't have to worry about queuing - the relay will send a
+        //signal immediately and everyone else is undisturbed.
+        source->setNeedsUpdate();
+        return;
+    }
+
+    if (q->updateSourceEvent(source->objectName())) {
+        queueUpdate();
+    }
+}
+
+void DataEngine::Private::ref()
+{
+    --refCount;
+}
+
+void DataEngine::Private::deref()
+{
+    ++refCount;
+}
+
+bool DataEngine::Private::isUsed() const
+{
+    return refCount != 0;
+}
+
+DataContainer* DataEngine::Private::source(const QString& sourceName, bool createWhenMissing)
+{
+    DataEngine::SourceDict::const_iterator it = sources.find(sourceName);
+    if (it != sources.constEnd()) {
+        DataContainer* s = it.value();
+        if (limit > 0) {
+            QQueue<DataContainer*>::iterator it = sourceQueue.begin();
+            while (it != sourceQueue.end()) {
+                if (*it == s) {
+                    sourceQueue.erase(it);
+                    break;
+                }
+                ++it;
+            }
+            sourceQueue.enqueue(s);
+        }
+        return it.value();
+    }
+
+    if (!createWhenMissing) {
+        return 0;
+    }
+
+    /*kDebug() << "DataEngine " << q->objectName()
+                << ": could not find DataContainer " << sourceName
+                << ", creating" << endl;*/
+    DataContainer* s = new DataContainer(q);
+    s->setObjectName(sourceName);
+    sources.insert(sourceName, s);
+    connect(s, SIGNAL(updateRequested(DataContainer*)),
+            q, SLOT(internalUpdateSource(DataContainer*)));
+
+    if (limit > 0) {
+        trimQueue();
+        sourceQueue.enqueue(s);
+    }
+    return s;
+}
+
+void DataEngine::Private::connectSource(DataContainer* s, QObject* visualization,
+                                        uint pollingInterval,
+                                        Plasma::IntervalAlignment align, bool immediateCall)
+{
+    //kDebug() << "connect source called with interval" << pollingInterval;
+    if (pollingInterval > 0) {
+        // never more frequently than allowed, never more than 20 times per second
+        uint min = qMax(50, minPollingInterval); // for qMin below
+        pollingInterval = qMax(min, pollingInterval);
+
+        // align on the 50ms
+        pollingInterval = pollingInterval - (pollingInterval % 50);
+    }
+
+    if (immediateCall) {
+        // we don't want to do an immediate call if we are simply
+        // reconnecting
+        //kDebug() << "immediate call requested, we have:" << s->visualizationIsConnected(visualization);
+        immediateCall = !s->visualizationIsConnected(visualization);
+    }
+
+    s->connectVisualization(visualization, pollingInterval, align);
+
+    if (immediateCall) {
+        QMetaObject::invokeMethod(visualization, "dataUpdated",
+                                    Q_ARG(QString, s->objectName()),
+                                    Q_ARG(Plasma::DataEngine::Data, s->data()));
+    }
+}
+
+DataContainer* DataEngine::Private::requestSource(const QString& sourceName, bool* newSource)
+{
+    if (newSource) {
+        *newSource = false;
+    }
+
+    //kDebug() << "requesting source " << sourceName;
+    DataContainer* s = source(sourceName, false);
+
+    if (!s) {
+        // we didn't find a data source, so give the engine an opportunity to make one
+        /*kDebug() << "DataEngine " << q->objectName()
+            << ": could not find DataContainer " << sourceName
+            << " will create on request" << endl;*/
+        if (q->sourceRequestEvent(sourceName)) {
+            s = source(sourceName, false);
+            if (s) {
+                // now we have a source; since it was created on demand, assume
+                // it should be removed when not used
+                if (newSource) {
+                    *newSource = true;
+                }
+                connect(s, SIGNAL(becameUnused(QString)), q, SLOT(removeSource(QString)));
+            }
+        }
+    }
+
+    return s;
+}
+
+void DataEngine::Private::trimQueue()
+{
+    uint queueCount = sourceQueue.count();
+    while (queueCount >= limit) {
+        DataContainer* punted = sourceQueue.dequeue();
+        q->removeSource(punted->objectName());
+    }
+}
+
+void DataEngine::Private::queueUpdate()
+{
+    if (updateTimer->isActive()) {
+        return;
+    }
+    updateTimer->start(0);
 }
 
 }

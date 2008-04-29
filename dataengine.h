@@ -56,6 +56,7 @@ class PLASMA_EXPORT DataEngine : public QObject
     friend class DataEngineScript;
     friend class DataEngineManager;
     friend class NullEngine;
+
     Q_OBJECT
     Q_PROPERTY( QStringList sources READ sources )
     Q_PROPERTY( bool valid READ isValid )
@@ -409,30 +410,8 @@ class PLASMA_EXPORT DataEngine : public QObject
          **/
         void removeSource(const QString& source);
 
-        /**
-         * @internal
-         **/
-        void internalUpdateSource(DataContainer* source);
-
     private:
-        /**
-         * Reference counting method. Calling this method increases the count
-         * by one.
-         **/
-        void ref();
-
-        /**
-         * Reference counting method. Calling this method decreases the count
-         * by one.
-         **/
-        void deref();
-
-        /**
-         * Reference counting method. Used to determine if this DataEngine is
-         * used.
-         * @return true if the reference count is non-zero
-         **/
-        bool isUsed() const;
+        Q_PRIVATE_SLOT(d, void internalUpdateSource(DataContainer* source))
 
         class Private;
         Private* const d;
