@@ -417,18 +417,18 @@ DataEngine::Private::Private(DataEngine* e, KService::Ptr service)
 
     KPluginInfo dataEngineDescription(service);
     if (dataEngineDescription.isValid()) {
-        QString language = dataEngineDescription.property("X-Plasma-Language").toString();
+        QString api = dataEngineDescription.property("X-Plasma-API").toString();
 
-        if (!language.isEmpty()) {
+        if (!api.isEmpty()) {
             const QString path = KStandardDirs::locate("data",
                                                         "plasma/engines/" + dataEngineDescription.pluginName() + "/");
-            PackageStructure::Ptr structure = Plasma::packageStructure(language, Plasma::RunnerComponent);
+            PackageStructure::Ptr structure = Plasma::packageStructure(api, Plasma::RunnerComponent);
             structure->setPath(path);
             package = new Package(path, structure);
 
-            script = Plasma::loadScriptEngine(language, q);
+            script = Plasma::loadScriptEngine(api, q);
             if (!script) {
-                kDebug() << "Could not create a" << language << "ScriptEngine for the"
+                kDebug() << "Could not create a" << api << "ScriptEngine for the"
                         << dataEngineDescription.name() << "DataEngine.";
                 delete package;
                 package = 0;

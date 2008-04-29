@@ -154,10 +154,10 @@ public:
             return;
         }
 
-        QString language = appletDescription.property("X-Plasma-Language").toString();
+        QString api = appletDescription.property("X-Plasma-API").toString();
 
         // we have a scripted plasmoid
-        if (!language.isEmpty()) {
+        if (!api.isEmpty()) {
             // find where the Package is
             QString path = KStandardDirs::locate("data",
                                                  "plasma/plasmoids/" + appletDescription.pluginName() +
@@ -169,7 +169,7 @@ public:
             } else {
                 // create the package and see if we have something real
                 //kDebug() << "trying for" << path;
-                PackageStructure::Ptr structure = Plasma::packageStructure(language, Plasma::AppletComponent);
+                PackageStructure::Ptr structure = Plasma::packageStructure(api, Plasma::AppletComponent);
                 structure->setPath(path);
                 package = new Package(path, structure);
 
@@ -178,12 +178,12 @@ public:
                     // it will be parented to this applet and so will get
                     // deleted when the applet does
 
-                    script = Plasma::loadScriptEngine(language, q);
+                    script = Plasma::loadScriptEngine(api, q);
                     if (!script) {
                         delete package;
                         package = 0;
                         q->setFailedToLaunch(true, i18n("Could not create a %1 ScriptEngine for the %2 widget.",
-                                                             language, appletDescription.name()));
+                                                        api, appletDescription.name()));
                     }
                 } else {
                     q->setFailedToLaunch(true, i18n("Could not open the %1 package required for the %2 widget.",
@@ -1341,8 +1341,8 @@ Applet* Applet::load(const QString& appletName, uint appletId, const QVariantLis
         appletId = ++Private::s_maxAppletId;
     }
 
-    if (!offer->property("X-Plasma-Language").toString().isEmpty()) {
-        kDebug() << "we have a script in the language of" << offer->property("X-Plasma-Language").toString();
+    if (!offer->property("X-Plasma-API").toString().isEmpty()) {
+        kDebug() << "we have a script using the" << offer->property("X-Plasma-API").toString() << "API";
         if (isContainment) {
             return new Containment(0, offer->storageId(), appletId);
         }

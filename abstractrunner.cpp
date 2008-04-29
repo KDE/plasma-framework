@@ -48,17 +48,17 @@ public:
         package(0)
     {
         if (runnerDescription.isValid()) {
-            const QString language = runnerDescription.property("X-Plasma-Language").toString();
-            if (!language.isEmpty()) {
+            const QString api = runnerDescription.property("X-Plasma-API").toString();
+            if (!api.isEmpty()) {
                 const QString path = KStandardDirs::locate("data",
                                     "plasma/runners/" + runnerDescription.pluginName() + "/");
-                PackageStructure::Ptr structure = Plasma::packageStructure(language, Plasma::RunnerComponent);
+                PackageStructure::Ptr structure = Plasma::packageStructure(api, Plasma::RunnerComponent);
                 structure->setPath(path);
                 package = new Package(path, structure);
 
-                script = Plasma::loadScriptEngine(language, runner);
+                script = Plasma::loadScriptEngine(api, runner);
                 if (!script) {
-                    kDebug() << "Could not create a" << language << "ScriptEngine for the"
+                    kDebug() << "Could not create a" << api << "ScriptEngine for the"
                     << runnerDescription.name() << "Runner.";
                     delete package;
                     package = 0;
@@ -254,10 +254,10 @@ AbstractRunner::List AbstractRunner::loadAll(QObject* parent, const QStringList&
     QString error;
     foreach (const KService::Ptr &service, offers) {
         if (whitelist.empty() || whitelist.contains(service->name())) {
-            QString language = service->property("X-Plasma-Language").toString();
+            QString api = service->property("X-Plasma-API").toString();
             AbstractRunner* runner = 0;
 
-            if (language.isEmpty()) {
+            if (api.isEmpty()) {
                 QVariantList args;
                 args << service->storageId();
                 runner = service->createInstance<AbstractRunner>(parent, args, &error);

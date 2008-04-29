@@ -76,7 +76,7 @@ public:
     QString application() const;
     QString requiredVersion() const;
     QString pluginName() const;
-    QString implementationLanguage() const;
+    QString implementationApi() const;
 
     QString type() const;
 
@@ -92,7 +92,7 @@ public:
     void setRequiredVersion(const QString &);
     void setType(const QString& type);
     void setPluginName(const QString& name);
-    void setImplementationLanguage(const QString& language);
+    void setImplementationApi(const QString& language);
 
 private:
     class Private;

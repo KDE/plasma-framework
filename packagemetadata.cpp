@@ -42,7 +42,7 @@ class PackageMetadata::Private
         QString pluginName;
         QString type;
         QString serviceType;
-        QString language;
+        QString api;
 };
 
 PackageMetadata::PackageMetadata()
@@ -87,7 +87,7 @@ void PackageMetadata::write(const QString &filename) const
     config.writeEntry("X-KDE-PluginInfo-Website", d->website);
     config.writeEntry("X-KDE-PluginInfo-License", d->license);
     config.writeEntry("X-KDE-PluginInfo-Category", d->type);
-    config.writeEntry("X-Plasma-Language", d->language);
+    config.writeEntry("X-Plasma-API", d->api);
     config.writeEntry("X-KDE-Plasmagik-ApplicationName", d->app);
     config.writeEntry("X-KDE-Plasmagik-RequiredVersion", d->requiredVersion);
 }
@@ -166,14 +166,14 @@ QString PackageMetadata::type() const
     return d->type;
 }
 
-QString PackageMetadata::implementationLanguage() const
+QString PackageMetadata::implementationApi() const
 {
-    return d->language;
+    return d->api;
 }
 
-void PackageMetadata::setImplementationLanguage(const QString& language)
+void PackageMetadata::setImplementationApi(const QString& api)
 {
-    d->language = language;
+    d->api = api;
 }
 
 QString PackageMetadata::pluginName() const

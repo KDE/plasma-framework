@@ -128,8 +128,8 @@ Plasma::DataEngine* DataEngineManager::loadEngine(const QString& name)
     } else {
         QVariantList allArgs;
         allArgs << offers.first()->storageId();
-        QString language = offers.first()->property("X-Plasma-Language").toString();
-        if (language.isEmpty()) {
+        QString api = offers.first()->property("X-Plasma-API").toString();
+        if (api.isEmpty()) {
             engine = offers.first()->createInstance<Plasma::DataEngine>(0, allArgs, &error);
         } else {
             engine = new DataEngine(0, offers.first());
