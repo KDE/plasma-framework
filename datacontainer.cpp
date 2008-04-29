@@ -87,6 +87,11 @@ void DataContainer::connectVisualization(QObject* visualization, uint pollingInt
         if (relay) {
             // connected to a relay
             //kDebug() << "     already connected, but to a relay";
+            if (relay->m_interval == pollingInterval) {
+                //kDebug() << "    already connected to a relay of the same interval of"
+                //          << pollingInterval << ", nothing to do";
+                return;
+            }
 
             if (relay->receiverCount() == 1) {
                 //kDebug() << "    removing relay, as it is now unused";
