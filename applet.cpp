@@ -354,7 +354,6 @@ public:
     QList<QGraphicsItem*> watchedForMouseMove;
     QStringList loadedEngines;
     Plasma::PanelSvg *background;
-    //Plasma::LineEdit *failureText;
     AppletScript *script;
     ConfigXml* configXml;
     ShadowItem* shadow;
@@ -492,30 +491,21 @@ void Applet::setFailedToLaunch(bool failed, const QString& reason)
     if (failed) {
         setBackgroundHints(d->backgroundHints|StandardBackground);
 
-        #ifdef TOPORT
-        Layout* failureLayout = new BoxLayout(BoxLayout::TopToBottom, this);
-        d->failureText = new LineEdit(this);
-        d->failureText->setTextInteractionFlags( Qt::TextSelectableByMouse );
-        d->failureText->setStyled(false);
-        d->failureText->document()->setTextWidth(200);
-        d->failureText->setHtml(visibleFailureText(reason));
-        //FIXME: this needs to get the colour from the theme's colour scheme
-        d->failureText->setDefaultTextColor(KStatefulBrush(KColorScheme::Window,
-                                                           KColorScheme::NormalText,
-                                                           Theme::defaultTheme()->colors())
-                                                        .brush(QPalette::Normal).color());
-        failureLayout->addItem(d->failureText);
-        #endif
-
-
         QGraphicsLinearLayout *failureLayout = new QGraphicsLinearLayout();
         failureLayout->setContentsMargins(0, 0, 0, 0);
         QGraphicsProxyWidget * failureWidget = new QGraphicsProxyWidget(this);
         QLabel * label = new QLabel(d->visibleFailureText(reason));
+        //FIXME : Get the theme color font
+        label->setAttribute(Qt::WA_NoSystemBackground);
+        label->setAutoFillBackground(false);
         label->setWordWrap(true);
         failureWidget->setWidget(label);
         failureLayout->addItem(failureWidget);
         setLayout(failureLayout);
+        setMinimumSize(label->size());
+        resize(300,250);
+        d->background->resizePanel(geometry().size());
+
     }
     update();
 }
