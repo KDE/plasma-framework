@@ -149,12 +149,14 @@ protected:
         }
 
         emit dc->updateRequested(dc);
-        if (!d->hasUpdates()) {
+        if (d->hasUpdates()) {
+            //kDebug() << "emitting data updated directly" << d->data;
+            emit dataUpdated(dc->objectName(), d->data);
+        } else {
             // the source wasn't actually updated; so let's put ourselves in the queue
             // so we get an dataUpdated() when the data does arrive
+            //kDebug() << "queued";
             m_queued = true;
-        } else {
-            emit dataUpdated(dc->objectName(), d->data);
         }
         event->accept();
     }
