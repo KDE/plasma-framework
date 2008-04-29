@@ -398,20 +398,6 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         bool configurationRequired() const;
 
         /**
-         * When the applet needs to be configured before being usable, this
-         * method can be called to show a standard interface prompting the user
-         * to configure the applet
-         *
-         * Not that all children items will be deleted when this method is
-         * called. If you have pointers to these items, you will need to
-         * reset them after calling this method.
-         *
-         * @param needsConfiguring true if the applet needs to be configured,
-         *                         or false if it doesn't
-         */
-        void setConfigurationRequired(bool needsConfiguring);
-
-        /**
          * @return true if this plasmoid provides a GUI configuration
          **/
         bool hasConfigurationInterface() const;
@@ -583,6 +569,20 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          * @param hasInterface whether or not there is a user interface available
          **/
         void setHasConfigurationInterface(bool hasInterface);
+
+        /**
+         * When the applet needs to be configured before being usable, this
+         * method can be called to show a standard interface prompting the user
+         * to configure the applet
+         *
+         * Not that all children items will be deleted when this method is
+         * called. If you have pointers to these items, you will need to
+         * reset them after calling this method.
+         *
+         * @param needsConfiguring true if the applet needs to be configured,
+         *                         or false if it doesn't
+         */
+        void setConfigurationRequired(bool needsConfiguring);
 
         /**
          * Reimplement this method so provide a configuration interface,
