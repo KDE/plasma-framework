@@ -163,6 +163,8 @@ class Animator::Private
             }
         }
 
+        void init(Animator *q);
+
         AnimationDriver* driver;
         int animId;
         int timerId;
@@ -195,7 +197,7 @@ Animator::Animator(QObject * parent)
     : QObject(parent),
       d(new Private)
 {
-    init();
+    d->init(this);
 }
 
 Animator::~Animator()
@@ -652,8 +654,9 @@ void Animator::timerEvent(QTimerEvent *event)
     }
 }
 
-void Animator::init()
+void Animator::Private::init(Animator *q)
 {
+    //FIXME: usage between different applications?
     KConfig c("plasmarc");
     KConfigGroup cg(&c, "Animator");
     QString pluginName = cg.readEntry("driver", "default");
@@ -664,15 +667,15 @@ void Animator::init()
 
         if (!offers.isEmpty()) {
             QString error;
-            d->driver = offers.first()->createInstance<Plasma::AnimationDriver>(0, QVariantList(), &error);
-            if (!d->driver) {
+            driver = offers.first()->createInstance<Plasma::AnimationDriver>(0, QVariantList(), &error);
+            if (!driver) {
                 kDebug() << "Could not load requested animator " << offers.first() << ". Error given: " << error;
             }
         }
     }
 
-    if (!d->driver) {
-        d->driver = new AnimationDriver(this);
+    if (!driver) {
+        driver = new AnimationDriver(q);
     }
 }
 

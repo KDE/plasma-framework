@@ -72,9 +72,6 @@ public:
      **/
     static Animator* self();
 
-    explicit Animator(QObject * parent = 0);
-    ~Animator();
-
     /**
      * Starts a standard animation on a QGraphicsItem.
      *
@@ -166,7 +163,9 @@ protected Q_SLOTS:
     void customAnimReceiverDestroyed(QObject*);
 
 private:
-    void init();
+    friend class AnimatorSingleton;
+    explicit Animator(QObject * parent = 0);
+    ~Animator();
 
     class Private;
     Private * const d;
