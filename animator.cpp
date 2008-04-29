@@ -164,6 +164,10 @@ class Animator::Private
         }
 
         void init(Animator *q);
+        void animatedItemDestroyed(QObject*);
+        void movingItemDestroyed(QObject*);
+        void animatedElementDestroyed(QObject*);
+        void customAnimReceiverDestroyed(QObject*);
 
         AnimationDriver* driver;
         int animId;
@@ -205,10 +209,10 @@ Animator::~Animator()
     delete d;
 }
 
-void Animator::animatedItemDestroyed(QObject* o)
+void Animator::Private::animatedItemDestroyed(QObject* o)
 {
     //kDebug() << "testing for" << (void*)o;
-    QMutableMapIterator<QGraphicsItem*, AnimationState*> it(d->animatedItems);
+    QMutableMapIterator<QGraphicsItem*, AnimationState*> it(animatedItems);
     while (it.hasNext()) {
         it.next();
         //kDebug() << "comparing against" << it.value()->qobj;
@@ -220,9 +224,9 @@ void Animator::animatedItemDestroyed(QObject* o)
     }
 }
 
-void Animator::movingItemDestroyed(QObject* o)
+void Animator::Private::movingItemDestroyed(QObject* o)
 {
-    QMutableMapIterator<QGraphicsItem*, MovementState*> it(d->movingItems);
+    QMutableMapIterator<QGraphicsItem*, MovementState*> it(movingItems);
     while (it.hasNext()) {
         it.next();
         if (it.value()->qobj == o) {
@@ -232,9 +236,9 @@ void Animator::movingItemDestroyed(QObject* o)
     }
 }
 
-void Animator::animatedElementDestroyed(QObject* o)
+void Animator::Private::animatedElementDestroyed(QObject* o)
 {
-    QMutableMapIterator<int, ElementAnimationState*> it(d->animatedElements);
+    QMutableMapIterator<int, ElementAnimationState*> it(animatedElements);
     while (it.hasNext()) {
         it.next();
         if (it.value()->qobj == o) {
@@ -244,9 +248,9 @@ void Animator::animatedElementDestroyed(QObject* o)
     }
 }
 
-void Animator::customAnimReceiverDestroyed(QObject* o)
+void Animator::Private::customAnimReceiverDestroyed(QObject* o)
 {
-    QMutableMapIterator<int, CustomAnimationState*> it(d->customAnims);
+    QMutableMapIterator<int, CustomAnimationState*> it(customAnims);
     while (it.hasNext()) {
         if (it.next().value()->receiver == o) {
             delete it.value()->slot;

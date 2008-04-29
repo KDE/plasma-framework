@@ -156,16 +156,15 @@ Q_SIGNALS:
 protected:
     void timerEvent(QTimerEvent *event);
 
-protected Q_SLOTS:
-    void animatedItemDestroyed(QObject*);
-    void movingItemDestroyed(QObject*);
-    void animatedElementDestroyed(QObject*);
-    void customAnimReceiverDestroyed(QObject*);
-
 private:
     friend class AnimatorSingleton;
     explicit Animator(QObject * parent = 0);
     ~Animator();
+
+    Q_PRIVATE_SLOT(d, void animatedItemDestroyed(QObject*));
+    Q_PRIVATE_SLOT(d, void movingItemDestroyed(QObject*));
+    Q_PRIVATE_SLOT(d, void animatedElementDestroyed(QObject*));
+    Q_PRIVATE_SLOT(d, void customAnimReceiverDestroyed(QObject*));
 
     class Private;
     Private * const d;
