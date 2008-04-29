@@ -977,15 +977,6 @@ int Applet::type() const
     return Type;
 }
 
-QPainterPath Applet::shape() const
-{
-    if (isContainment()) {
-        return QGraphicsWidget::shape();
-    }
-
-    return Plasma::roundedRectangle(boundingRect().adjusted(-2, -2, 2, 2), 10);
-}
-
 QList<QAction*> Applet::contextualActions()
 {
     //kDebug() << "empty context actions";
