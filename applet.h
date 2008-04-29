@@ -678,6 +678,7 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         //Corona needs to access setFailedToLaunch and init
         friend class Corona;
         friend class Containment;
+        friend class AppletScript;
 };
 
 } // Plasma namespace
