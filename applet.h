@@ -70,7 +70,6 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
     Q_PROPERTY(bool configurationRequired READ configurationRequired WRITE setConfigurationRequired)
     Q_PROPERTY(QRectF geometry READ geometry WRITE setGeometry)
     Q_PROPERTY(bool shouldConserveResources READ shouldConserveResources)
-    Q_PROPERTY(Qt::AspectRatioMode aspectRatioMode READ aspectRatioMode WRITE setAspectRatioMode)
 
     public:
         typedef QList<Applet*> List;
@@ -223,24 +222,12 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
 	/**
          * @return the prefered aspect ratio mode for placement and resizing
          */
-        Qt::AspectRatioMode aspectRatioMode() const;
+        Plasma::AspectRatio aspectRatioMode() const;
 
         /**
          * Sets the prefered aspect ratio mode for placement and resizing
          */
-        void setAspectRatioMode(Qt::AspectRatioMode);
-
-        /**
-         * @return whether or not to keep this applet square.
-         */
-        bool remainSquare() const;
-
-        /**
-         * Sets whether or not this applet should be kept square.
-         *
-         * @param square true if the applet should always be square in shape.
-         */
-        void setRemainSquare(bool square);
+        void setAspectRatioMode(Plasma::AspectRatio);
 
         /**
          * Returns a list of all known applets.
@@ -661,6 +648,11 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          * Reimplemented from QGraphicsItem
          */
         QVariant itemChange(GraphicsItemChange change, const QVariant &value);
+
+        /**
+         * Reimplemented from QGraphicsLayoutItem
+         */
+         QSizeF sizeHint(Qt::SizeHint which, const QSizeF & constraint = QSizeF()) const;
 
     private:
         Q_DISABLE_COPY(Applet)

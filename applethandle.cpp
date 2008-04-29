@@ -443,7 +443,7 @@ void AppletHandle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
                 min += QSizeF(16, 16);
             }
 
-            bool ignoreAspectRatio = m_applet->aspectRatioMode() == Qt::IgnoreAspectRatio;
+            bool ignoreAspectRatio = m_applet->aspectRatioMode() == Plasma::IgnoreAspectRatio;
 
             if (QApplication::keyboardModifiers() & Qt::ControlModifier) {
                 ignoreAspectRatio = !ignoreAspectRatio;

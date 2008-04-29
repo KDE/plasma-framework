@@ -114,12 +114,11 @@ public:
           cachedBackground(0),
           mainConfig(0),
           pendingConstraints(NoConstraint),
-          aspectRatioMode(Qt::KeepAspectRatio),
+          aspectRatioMode(Plasma::KeepAspectRatio),
           immutability(NotImmutable),
           hasConfigurationInterface(false),
           failed(false),
           isContainment(false),
-          square(false),
           transient(false)
     {
         if (appletId == 0) {
@@ -362,12 +361,11 @@ public:
     QPixmap* cachedBackground;
     KConfigGroup *mainConfig;
     Plasma::Constraints pendingConstraints;
-    Qt::AspectRatioMode aspectRatioMode;
+    Plasma::AspectRatio aspectRatioMode;
     ImmutabilityType immutability;
     bool hasConfigurationInterface : 1;
     bool failed : 1;
     bool isContainment : 1;
-    bool square : 1;
     bool transient : 1;
 };
 
@@ -1071,24 +1069,14 @@ Location Applet::location() const
     return c ? c->d->location : Plasma::Desktop;
 }
 
-Qt::AspectRatioMode Applet::aspectRatioMode() const
+Plasma::AspectRatio Applet::aspectRatioMode() const
 {
     return d->aspectRatioMode;
 }
 
-void Applet::setAspectRatioMode(Qt::AspectRatioMode mode)
+void Applet::setAspectRatioMode(Plasma::AspectRatio mode)
 {
     d->aspectRatioMode = mode;
-}
-
-bool Applet::remainSquare() const
-{
-    return d->square;
-}
-
-void Applet::setRemainSquare(bool square)
-{
-    d->square = square;
 }
 
 void Applet::watchForMouseMove( QGraphicsItem * watched, bool watch )
@@ -1408,6 +1396,21 @@ QVariant Applet::itemChange(GraphicsItemChange change, const QVariant &value)
     };
 
     return QGraphicsWidget::itemChange(change, value);
+}
+
+QSizeF Applet::sizeHint(Qt::SizeHint which, const QSizeF & constraint) const
+{
+    QSizeF hint = QGraphicsWidget::sizeHint(which, constraint);
+
+    if (d->aspectRatioMode == Plasma::Square) {
+        if (formFactor() == Horizontal) {
+            hint.setWidth(hint.height());
+        } else {
+            hint.setHeight(hint.width());
+        }
+    }
+
+    return hint;
 }
 
 void Applet::setGeometry(const QRectF& geometry)

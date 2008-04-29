@@ -151,7 +151,15 @@ enum ImmutabilityType { NotImmutable = 1 /**The item can be modified in any way 
                         SystemImmutable = 4 /** the item is locked down by the system, the user can't unlock it **/
 
                       };
-               
+
+/**
+ * Defines the aspect ratio used when scaling an applet
+ */
+enum AspectRatio { IgnoreAspectRatio = 0 /** The applet can be freely resized */,
+                   KeepAspectRatio = 1 /** The applet keeps a fixed aspect ratio */,
+                   Square = 2 /** The applet is always a square */
+                 };                  
+
 /**
  * The ComonentType enumeration refers to the various types of components,
  * or plugins, supported by plasma.
