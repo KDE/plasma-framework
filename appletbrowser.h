@@ -35,7 +35,7 @@ class PLASMA_EXPORT AppletBrowserWidget : public QWidget
 {
     Q_OBJECT
 public:
-    AppletBrowserWidget(Plasma::Containment *containment, QWidget *parent = 0, Qt::WindowFlags f = 0);
+    AppletBrowserWidget(QWidget *parent = 0, Qt::WindowFlags f = 0);
     virtual ~AppletBrowserWidget();
 
     void setApplication(const QString& application = QString());
@@ -53,21 +53,11 @@ public:
      */
     Containment* containment() const;
 
-protected Q_SLOTS:
+public Q_SLOTS:
     /**
      * Adds currently selected applets
      */
     void addApplet();
-
-    /**
-     * Tracks a new running applet
-     */
-    void appletAdded(Plasma::Applet* applet);
-
-    /**
-     * A running applet is no more
-     */
-    void appletDestroyed(QObject* applet);
 
     /**
      * Destroy all applets with this name
@@ -85,8 +75,9 @@ protected Q_SLOTS:
     void openWidgetFile();
 
 private:
-    void init();
-    void initRunningApplets();
+    Q_PRIVATE_SLOT(d, void appletAdded(Plasma::Applet*));
+    Q_PRIVATE_SLOT(d, void appletDestroyed(QObject*));
+
     class Private;
     Private * const d;
 };
@@ -95,7 +86,7 @@ class PLASMA_EXPORT AppletBrowser: public KDialog
 {
     Q_OBJECT
 public:
-    explicit AppletBrowser(Plasma::Containment *containment, QWidget *parent = 0, Qt::WindowFlags f = 0);
+    explicit AppletBrowser(QWidget *parent = 0, Qt::WindowFlags f = 0);
     virtual ~AppletBrowser();
 
     void setApplication(const QString& application = QString());

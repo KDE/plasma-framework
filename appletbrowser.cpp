@@ -44,8 +44,9 @@ namespace Plasma
 class AppletBrowserWidget::Private
 {
 public:
-    Private(Containment* cont, AppletBrowserWidget* w)
-        : containment(cont),
+    Private(AppletBrowserWidget* w)
+        : q(w),
+          containment(0),
           appletList(0),
           config("plasmarc"),
           configGroup(&config, "Applet Browser"),
@@ -55,7 +56,20 @@ public:
     }
 
     void initFilters();
+    void init();
+    void initRunningApplets();
 
+    /**
+     * Tracks a new running applet
+     */
+    void appletAdded(Plasma::Applet* applet);
+
+    /**
+     * A running applet is no more
+     */
+    void appletDestroyed(QObject* applet);
+
+    AppletBrowserWidget *q;
     QString application;
     Plasma::Containment *containment;
     KCategorizedItemsView *appletList;
@@ -117,11 +131,11 @@ void AppletBrowserWidget::Private::initFilters()
     }
 }
 
-AppletBrowserWidget::AppletBrowserWidget(Plasma::Containment * containment, QWidget * parent, Qt::WindowFlags f)
+AppletBrowserWidget::AppletBrowserWidget(QWidget * parent, Qt::WindowFlags f)
     : QWidget(parent, f),
-    d(new Private(containment, this))
+    d(new Private(this))
 {
-    init();
+    d->init();
 }
 
 AppletBrowserWidget::~AppletBrowserWidget()
@@ -129,37 +143,37 @@ AppletBrowserWidget::~AppletBrowserWidget()
     delete d;
 }
 
-void AppletBrowserWidget::init()
+void AppletBrowserWidget::Private::init()
 {
-    QVBoxLayout *layout = new QVBoxLayout(this);
+    QVBoxLayout *layout = new QVBoxLayout(q);
 
-    d->appletList = new KCategorizedItemsView(this);
-    connect(d->appletList, SIGNAL(activated(const QModelIndex &)), this, SLOT(addApplet()));
-    layout->addWidget( d->appletList );
+    appletList = new KCategorizedItemsView(q);
+    connect(appletList, SIGNAL(activated(const QModelIndex &)), q, SLOT(addApplet()));
+    layout->addWidget(appletList);
 
     // Other Emblems
-    d->appletList->addEmblem(i18n("Widgets I Have Used Before"), new KIcon("view-history"),
-                                KCategorizedItemsViewModels::Filter("used", true));
+    appletList->addEmblem(i18n("Widgets I Have Used Before"), new KIcon("view-history"),
+                          KCategorizedItemsViewModels::Filter("used", true));
 
-    d->initFilters();
-    d->appletList->setFilterModel(&d->filterModel);
+    initFilters();
+    appletList->setFilterModel(&filterModel);
 
     // Other models
-    d->appletList->setItemModel(&d->itemModel);
+    appletList->setItemModel(&itemModel);
     initRunningApplets();
 
-    setLayout(layout);
+    q->setLayout(layout);
 }
 
-void AppletBrowserWidget::initRunningApplets()
+void AppletBrowserWidget::Private::initRunningApplets()
 {
 //get applets from corona, count them, send results to model
-    if (!d->containment) {
+    if (!containment) {
         return;
     }
 
-    kDebug() << d->runningApplets.count();
-    Plasma::Corona *c = d->containment->corona();
+    //kDebug() << runningApplets.count();
+    Plasma::Corona *c = containment->corona();
 
     //we've tried our best to get a corona
     //we don't want just one containment, we want them all
@@ -168,22 +182,22 @@ void AppletBrowserWidget::initRunningApplets()
         return;
     }
 
-    d->appletNames.clear();
-    d->runningApplets.clear();
+    appletNames.clear();
+    runningApplets.clear();
     QList<Containment*> containments = c->containments();
     foreach (Containment * containment,containments) {
-        connect(containment, SIGNAL(appletAdded(Plasma::Applet*,QPointF)), this, SLOT(appletAdded(Plasma::Applet*)));
+        connect(containment, SIGNAL(appletAdded(Plasma::Applet*,QPointF)), q, SLOT(appletAdded(Plasma::Applet*)));
         //TODO track containments too?
-        QList<Applet*>applets=containment->applets();
+        QList<Applet*>applets = containment->applets();
         foreach (Applet *applet,applets) {
-            d->runningApplets[applet->name()]++;
-            d->appletNames.insert(applet, applet->name());
-            connect(applet, SIGNAL(destroyed(QObject*)), this, SLOT(appletDestroyed(QObject*)));
+            runningApplets[applet->name()]++;
+            appletNames.insert(applet, applet->name());
+            connect(applet, SIGNAL(destroyed(QObject*)), q, SLOT(appletDestroyed(QObject*)));
         }
     }
 
-    kDebug() << d->runningApplets;
-    d->itemModel.setRunningApplets(d->runningApplets);
+    //kDebug() << runningApplets;
+    itemModel.setRunningApplets(runningApplets);
 }
 
 void AppletBrowserWidget::setApplication(const QString& app)
@@ -229,36 +243,36 @@ void AppletBrowserWidget::addApplet()
     }
 }
 
-void AppletBrowserWidget::appletAdded(Plasma::Applet* applet)
+void AppletBrowserWidget::Private::appletAdded(Plasma::Applet* applet)
 {
     QString name = applet->name();
-    kDebug() << name;
+    //kDebug() << name;
 
-    d->runningApplets[name]++;
-    d->appletNames.insert(applet, name);
-    connect(applet, SIGNAL(destroyed(QObject*)), this, SLOT(appletDestroyed(QObject*)));
-    d->itemModel.setRunningApplets(name, d->runningApplets[name]);
+    runningApplets[name]++;
+    appletNames.insert(applet, name);
+    connect(applet, SIGNAL(destroyed(QObject*)), q, SLOT(appletDestroyed(QObject*)));
+    itemModel.setRunningApplets(name, runningApplets[name]);
 }
 
-void AppletBrowserWidget::appletDestroyed(QObject* applet)
+void AppletBrowserWidget::Private::appletDestroyed(QObject* applet)
 {
-    kDebug() << applet;
+    //kDebug() << applet;
     Plasma::Applet* a = (Plasma::Applet*)applet; //don't care if it's valid, just need the address
 
-    QString name = d->appletNames.take(a);
+    QString name = appletNames.take(a);
 
     int count = 0;
-    if (d->runningApplets.contains(name)) {
-        count = d->runningApplets[name] - 1;
+    if (runningApplets.contains(name)) {
+        count = runningApplets[name] - 1;
 
         if (count < 1) {
-            d->runningApplets.remove(name);
+            runningApplets.remove(name);
         } else {
-            d->runningApplets[name] = count;
+            runningApplets[name] = count;
         }
     }
 
-    d->itemModel.setRunningApplets(name, count);
+    itemModel.setRunningApplets(name, count);
 }
 
 void AppletBrowserWidget::destroyApplets(const QString &name)
@@ -278,17 +292,11 @@ void AppletBrowserWidget::destroyApplets(const QString &name)
 
     foreach (Containment *containment, c->containments()) {
         QList<Applet*> applets = containment->applets();
-	QGraphicsLayout *lay = containment->layout();
-	QGraphicsLinearLayout * linearLay = dynamic_cast<QGraphicsLinearLayout *>(lay);
-        foreach (Applet *applet,applets) {
-            d->appletNames.remove(applet);
+        foreach (Applet *applet, applets) {
             if (applet->name() == name) {
+                d->appletNames.remove(applet);
                 applet->disconnect(this);
-		if (linearLay)
-		{
-		    linearLay->removeItem(applet);
-		}
-		applet->destroy();
+                applet->destroy();
             }
         }
     }
@@ -314,20 +322,20 @@ void AppletBrowserWidget::openWidgetFile()
 class AppletBrowser::Private
 {
 public:
-    void init(AppletBrowser*, Plasma::Containment*);
+    void init(AppletBrowser*);
     AppletBrowserWidget *widget;
 };
 
-AppletBrowser::AppletBrowser(Plasma::Containment * containment, QWidget * parent, Qt::WindowFlags f)
+AppletBrowser::AppletBrowser(QWidget * parent, Qt::WindowFlags f)
     : KDialog(parent, f),
       d(new Private)
 {
-    d->init(this, containment);
+    d->init(this);
 }
 
-void AppletBrowser::Private::init(AppletBrowser *q, Plasma::Containment *containment)
+void AppletBrowser::Private::init(AppletBrowser *q)
 {
-    widget = new AppletBrowserWidget(containment, q);
+    widget = new AppletBrowserWidget(q);
 
     q->setMainWidget(widget);
     q->setWindowTitle(i18n("Widgets"));
