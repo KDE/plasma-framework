@@ -146,7 +146,7 @@ Q_SIGNALS:
      * to ensure that the Dashboard view in Plasma hides when such an event is
      * triggered by an item it is displaying.
      */
-    void launchActivated();
+    void releaseVisualFocus();
 
 protected:
     /**

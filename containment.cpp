@@ -986,7 +986,7 @@ Applet* Containment::Private::addApplet(const QString& name, const QVariantList&
     //kDebug() << applet->name() << "sizehint:" << applet->sizeHint() << "geometry:" << applet->geometry();
 
     connect(applet, SIGNAL(configNeedsSaving()), q, SIGNAL(configNeedsSaving()));
-    connect(applet, SIGNAL(launchActivated()), q, SIGNAL(launchActivated()));
+    connect(applet, SIGNAL(releaseVisualFocus()), q, SIGNAL(releaseVisualFocus()));
     q->addApplet(applet, appletGeometry.topLeft(), delayInit);
     return applet;
 }

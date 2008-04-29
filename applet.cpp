@@ -581,7 +581,7 @@ void Applet::resetConfigurationObject()
     d->mainConfig = 0;
 }
 
-ConfigXml* Applet::configXml() const
+ConfigXml* Applet::configScheme() const
 {
     return d->configXml;
 }
@@ -1243,7 +1243,7 @@ void Applet::showConfigurationInterface()
         dialog->enableButtonApply(true);
     }
 
-    emit launchActivated();
+    emit releaseVisualFocus();
 }
 
 void Applet::createConfigurationInterface(KConfigDialog *parent)

@@ -141,7 +141,7 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          *
          * @return config skeleton object, or 0 if none
          **/
-        ConfigXml* configXml() const;
+        ConfigXml* configScheme() const;
 
         /**
          * Loads the given DataEngine
@@ -473,7 +473,7 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          * to ensure that the Dashboard view in Plasma hides when such an event is
          * triggered by an item it is displaying.
          */
-        void launchActivated();
+        void releaseVisualFocus();
 
         /**
          * Emitted whenever the applet makes a geometry change, so that views

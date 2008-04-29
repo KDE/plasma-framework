@@ -165,7 +165,7 @@ public:
         containments.append(containment);
         connect(containment, SIGNAL(destroyed(QObject*)), q, SLOT(containmentDestroyed(QObject*)));
         connect(containment, SIGNAL(configNeedsSaving()), q, SLOT(scheduleConfigSync()));
-        connect(containment, SIGNAL(launchActivated()), q, SIGNAL(launchActivated()));
+        connect(containment, SIGNAL(releaseVisualFocus()), q, SIGNAL(releaseVisualFocus()));
         connect(containment, SIGNAL(screenChanged(int,int,Plasma::Containment*)),
                 q, SIGNAL(screenOwnerChanged(int,int,Plasma::Containment*)));
 
