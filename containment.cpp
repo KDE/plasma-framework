@@ -365,15 +365,6 @@ void Containment::setFormFactor(FormFactor formFactor)
     updateConstraints(Plasma::FormFactorConstraint);
 }
 
-FormFactor Containment::formFactor() const
-{
-    if (isContainment()) {
-        return d->formFactor;
-    }
-
-    return Applet::formFactor();
-}
-
 void Containment::setLocation(Location location)
 {
     if (d->location == location) {
@@ -405,11 +396,6 @@ void Containment::setLocation(Location location)
     }
 
     updateConstraints(Plasma::LocationConstraint);
-}
-
-Location Containment::location() const
-{
-    return d->location;
 }
 
 void Containment::addSiblingContainment()

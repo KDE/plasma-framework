@@ -326,7 +326,8 @@ public:
     void checkImmutability()
     {
         const bool systemImmutable = q->globalConfig().isImmutable() || q->config().isImmutable() ||
-                                    (q->containment() && q->containment()->immutability() == SystemImmutable) ||
+                                    ((!isContainment && q->containment()) &&
+                                     q->containment()->immutability() == SystemImmutable) ||
                                     (dynamic_cast<Corona*>(q->scene()) && static_cast<Corona*>(q->scene())->immutability() == SystemImmutable);
 
         if (systemImmutable) {
@@ -549,7 +550,7 @@ KConfigGroup Applet::config() const
 KConfigGroup Applet::globalConfig() const
 {
     KConfigGroup globalAppletConfig;
-    const Containment *c = isContainment() ? dynamic_cast<const Containment*>(this) : containment();
+    const Containment *c = containment();
     QString group = isContainment() ? "ContainmentGlobals" : "AppletGlobals";
 
     if (c && c->corona()) {
@@ -1046,24 +1047,23 @@ void Applet::paintInterface(QPainter *painter, const QStyleOptionGraphicsItem *o
 FormFactor Applet::formFactor() const
 {
     Containment* c = containment();
-    return c ? c->formFactor() : Plasma::Planar;
+    return c ? c->d->formFactor : Plasma::Planar;
 }
 
 Containment* Applet::containment() const
 {
-/*
- * while this is probably "more correct", much of the code in applet assumes containment
- * returns zero in the case that this is a containment itself.
- * if (isContainment()) {
-        return dynamic_cast<Containment*>(const_cast<Applet*>(this));
+    if (isContainment()) {
+        Containment *c = dynamic_cast<Containment*>(const_cast<Applet*>(this));
+        if (c) {
+            return c;
+        }
     }
-*/
 
     QGraphicsItem *parent = parentItem();
     Containment *c = 0;
 
     while (parent) {
-        Containment *possibleC =  dynamic_cast<Containment*>(parent);
+        Containment *possibleC = dynamic_cast<Containment*>(parent);
         if (possibleC && possibleC->isContainment()) {
             c = possibleC;
             break;
@@ -1077,12 +1077,7 @@ Containment* Applet::containment() const
 Location Applet::location() const
 {
     Containment* c = containment();
-
-    if (!c) {
-        return Plasma::Desktop;
-    }
-
-    return c->location();
+    return c ? c->d->location : Plasma::Desktop;
 }
 
 Qt::AspectRatioMode Applet::aspectRatioMode() const

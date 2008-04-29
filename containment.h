@@ -130,21 +130,6 @@ class PLASMA_EXPORT Containment : public Applet
         Corona* corona() const;
 
         /**
-         * Returns the current form factor the applets in this Containment
-         * are being displayed in.
-         *
-         * @see Plasma::FormFactor
-         */
-        FormFactor formFactor() const;
-
-        /**
-         * Returns the location of this Containment
-         *
-         * @see Plasma::Location
-         */
-        Location location() const;
-
-        /**
          * Returns a list of all known containments.
          *
          * @param category Only applets matchin this category will be returned.
