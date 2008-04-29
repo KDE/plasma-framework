@@ -67,7 +67,7 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
     Q_PROPERTY(QString category READ category)
     Q_PROPERTY(ImmutabilityType immutability READ immutability WRITE setImmutability)
     Q_PROPERTY(bool hasFailedToLaunch READ hasFailedToLaunch WRITE setFailedToLaunch)
-    Q_PROPERTY(bool needsConfiguring READ needsConfiguring WRITE setNeedsConfiguring)
+    Q_PROPERTY(bool configurationRequired READ configurationRequired WRITE setConfigurationRequired)
     Q_PROPERTY(QRectF geometry READ geometry WRITE setGeometry)
     Q_PROPERTY(bool shouldConserveResources READ shouldConserveResources)
     Q_PROPERTY(Qt::AspectRatioMode aspectRatioMode READ aspectRatioMode WRITE setAspectRatioMode)
@@ -395,7 +395,7 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          * @return true if the applet currently needs to be configured,
          *         otherwise, false
          */
-        bool needsConfiguring() const;
+        bool configurationRequired() const;
 
         /**
          * When the applet needs to be configured before being usable, this
@@ -409,7 +409,7 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          * @param needsConfiguring true if the applet needs to be configured,
          *                         or false if it doesn't
          */
-        void setNeedsConfiguring(bool needsConfiguring);
+        void setConfigurationRequired(bool needsConfiguring);
 
         /**
          * @return true if this plasmoid provides a GUI configuration

@@ -879,12 +879,12 @@ void Applet::paintWindowFrame ( QPainter * painter, const QStyleOptionGraphicsIt
     //painter->drawRoundedRect(windowFrameGeometry(),5,5);
 }
 
-bool Applet::needsConfiguring() const
+bool Applet::configurationRequired() const
 {
     return d->needsConfigOverlay != 0;
 }
 
-void Applet::setNeedsConfiguring(bool needsConfig)
+void Applet::setConfigurationRequired(bool needsConfig)
 {
     if ((d->needsConfigOverlay != 0) == needsConfig) {
         return;
