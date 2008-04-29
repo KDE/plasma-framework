@@ -234,6 +234,8 @@ void Corona::saveLayout(const QString &configName) const
 
 void Corona::Private::scheduleConfigSync()
 {
+    // TODO: should we check into our immutability before doing this?
+
     //NOTE: this is a pretty simplistic model: we simply save no more than CONFIG_SYNC_TIMEOUT
     //      after the first time this is called. not much of a heuristic for save points, but
     //      it should at least compress these activities a bit and provide a way for applet
@@ -277,8 +279,11 @@ void Corona::loadLayout(const QString& configName)
         c->loadContainment(&containmentConfig);
     }
 
-    if (d->containments.count() < 1) {
+    if (d->containments.isEmpty()) {
         loadDefaultLayout();
+        if (!d->containments.isEmpty()) {
+            d->scheduleConfigSync();
+        }
     } else {
         foreach (Containment* containment, d->containments) {
             QString cid = QString::number(containment->id());
