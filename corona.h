@@ -85,6 +85,13 @@ public:
      */
     Containment* addContainment(const QString& name, const QVariantList& args = QVariantList());
 
+    /**
+     * Returns the Containment, if any, for a given physical screen
+     *
+     * @param screen number of the physical screen to locate
+     */
+    Containment* containmentForScreen(int screen) const;
+
 public Q_SLOTS:
     /**
      * Load applet layout from a config file
@@ -110,13 +117,6 @@ public Q_SLOTS:
      * Removes a given containment from the corona
      */
     void destroyContainment(Containment *containment);
-
-    /**
-     * Returns the Containment, if any, for a given physical screen
-     *
-     * @param screen number of the physical screen to locate
-     */
-    Containment* containmentForScreen(int screen) const;
 
     /**
      * @return The type of immutability of this Corona
