@@ -25,6 +25,9 @@
 #include <QImage>
 #include <QDebug>
 
+namespace Plasma
+{
+
 ShadowItem::ShadowItem(QGraphicsItem *item)
 {
     setZValue(20);
@@ -101,4 +104,6 @@ void ShadowItem::setOffset(const QPointF &offset)
 QPointF ShadowItem::offset() const
 {
     return m_offset;
+}
+
 }

@@ -22,6 +22,8 @@
 
 #include <QtGui/QGraphicsPixmapItem>
 
+namespace Plasma
+{
 
 class ShadowItem : public QGraphicsPixmapItem
 {
@@ -42,5 +44,7 @@ private:
     QGraphicsItem *m_shadowParent;
     QPointF m_offset;
 };
+
+}
 
 #endif
