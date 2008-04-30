@@ -98,7 +98,7 @@ QStringList knownLanguages(ComponentTypes types)
 
     QStringList languages;
     foreach (const KService::Ptr &service, offers) {
-        QString language = service->property("X-Plasma-Language").toString();
+        QString language = service->property("X-Plasma-API").toString();
         if (!languages.contains(language)) {
             languages.append(language);
         }
@@ -135,7 +135,7 @@ KService::List engineOffers(const QString &language, ComponentType type)
             break;
     }
 
-    QString constraint = QString("[X-Plasma-Language] == '%1' and "
+    QString constraint = QString("[X-Plasma-API] == '%1' and "
                                  "'%2' in [X-Plasma-ComponentTypes]").arg(language, component);
     KService::List offers = KServiceTypeTrader::self()->query("Plasma/ScriptEngine", constraint);
 /*    kDebug() << "********************* loadingApplet with Plasma/ScriptEngine" << constraint
