@@ -761,12 +761,12 @@ Location Applet::location() const
     return c ? c->d->location : Plasma::Desktop;
 }
 
-Plasma::AspectRatio Applet::aspectRatioMode() const
+Plasma::AspectRatioMode Applet::aspectRatioMode() const
 {
     return d->aspectRatioMode;
 }
 
-void Applet::setAspectRatioMode(Plasma::AspectRatio mode)
+void Applet::setAspectRatioMode(Plasma::AspectRatioMode mode)
 {
     d->aspectRatioMode = mode;
 }
@@ -1183,7 +1183,7 @@ Applet::Private::Private(KService::Ptr service, int uniqueID, Applet *applet)
           cachedBackground(0),
           mainConfig(0),
           pendingConstraints(NoConstraint),
-          aspectRatioMode(Qt::KeepAspectRatio),
+          aspectRatioMode(Plasma::KeepAspectRatio),
           immutability(NotImmutable),
           hasConfigurationInterface(false),
           failed(false),

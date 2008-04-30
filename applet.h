@@ -218,16 +218,16 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          * @see Plasma::Location
          */
         virtual Location location() const;
-     
-	/**
+
+        /**
          * @return the prefered aspect ratio mode for placement and resizing
          */
-        Plasma::AspectRatio aspectRatioMode() const;
+        Plasma::AspectRatioMode aspectRatioMode() const;
 
         /**
          * Sets the prefered aspect ratio mode for placement and resizing
          */
-        void setAspectRatioMode(Plasma::AspectRatio);
+        void setAspectRatioMode(Plasma::AspectRatioMode);
 
         /**
          * Returns a list of all known applets.
