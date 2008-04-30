@@ -56,6 +56,6 @@ Comment[x-test]=xxPlasma appletxx
 Comment[zh_CN]=Plasma 小程序
 Comment[zh_TW]=Plasma 小程式
 
-[PropertyDef::X-Plasma-Language]
+[PropertyDef::X-Plasma-API]
 Type=QString
 
