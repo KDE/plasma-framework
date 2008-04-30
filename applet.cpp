@@ -20,6 +20,7 @@
  */
 
 #include "applet.h"
+#include "applet_p.h"
 
 #include <cmath>
 #include <limits>
@@ -73,305 +74,6 @@
 //#define DYNAMIC_SHADOWS
 namespace Plasma
 {
-
-class OverlayWidget : public QGraphicsWidget
-{
-public:
-    OverlayWidget(QGraphicsWidget *parent)
-        : QGraphicsWidget(parent)
-    {
-        resize(parent->size());
-    }
-
-protected:
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0)
-    {
-        Q_UNUSED(option)
-        Q_UNUSED(widget)
-        painter->save();
-        painter->setRenderHint(QPainter::Antialiasing);
-        QColor wash = Plasma::Theme::defaultTheme()->color(Theme::BackgroundColor);
-        wash.setAlphaF(.6);
-        painter->fillPath(parentItem()->shape(), wash);
-        painter->restore();
-    }
-};
-
-class Applet::Private
-{
-public:
-    Private(KService::Ptr service, int uniqueID, Applet *applet)
-        : appletId(uniqueID),
-          q(applet),
-          backgroundHints(StandardBackground),
-          appletDescription(service),
-          package(0),
-          needsConfigOverlay(0),
-          background(0),
-          script(0),
-          configXml(0),
-          shadow(0),
-          cachedBackground(0),
-          mainConfig(0),
-          pendingConstraints(NoConstraint),
-          aspectRatioMode(Plasma::KeepAspectRatio),
-          immutability(NotImmutable),
-          hasConfigurationInterface(false),
-          failed(false),
-          isContainment(false),
-          transient(false)
-    {
-        if (appletId == 0) {
-            appletId = ++s_maxAppletId;
-        } else if (appletId > s_maxAppletId) {
-            s_maxAppletId = appletId;
-        }
-    }
-
-    ~Private()
-    {
-        foreach ( const QString& engine, loadedEngines ) {
-            DataEngineManager::self()->unloadEngine( engine );
-        }
-        delete background;
-        delete package;
-        delete configXml;
-        delete shadow;
-        delete cachedBackground;
-        delete mainConfig;
-    }
-
-    void init()
-    {
-        // WARNING: do not access config() OR globalConfig() in this method!
-        //          that requires a scene, which is not available at this point
-        q->setAcceptsHoverEvents(true);
-        q->setFlag(QGraphicsItem::ItemIsFocusable, true);
-
-        if (!appletDescription.isValid()) {
-            q->setFailedToLaunch(true, i18n("Invalid applet description"));
-            return;
-        }
-
-        QString api = appletDescription.property("X-Plasma-API").toString();
-
-        // we have a scripted plasmoid
-        if (!api.isEmpty()) {
-            // find where the Package is
-            QString path = KStandardDirs::locate("data",
-                                                 "plasma/plasmoids/" + appletDescription.pluginName() +
-                                                 "/");
-
-            if (path.isEmpty()) {
-                q->setFailedToLaunch(true, i18n("Could not locate the %1 package required for the %2 widget.",
-                                                     appletDescription.pluginName(), appletDescription.name()));
-            } else {
-                // create the package and see if we have something real
-                //kDebug() << "trying for" << path;
-                PackageStructure::Ptr structure = Plasma::packageStructure(api, Plasma::AppletComponent);
-                structure->setPath(path);
-                package = new Package(path, structure);
-
-                if (package->isValid()) {
-                    // now we try and set up the script engine.
-                    // it will be parented to this applet and so will get
-                    // deleted when the applet does
-
-                    script = Plasma::loadScriptEngine(api, q);
-                    if (!script) {
-                        delete package;
-                        package = 0;
-                        q->setFailedToLaunch(true, i18n("Could not create a %1 ScriptEngine for the %2 widget.",
-                                                        api, appletDescription.name()));
-                    }
-                } else {
-                    q->setFailedToLaunch(true, i18n("Could not open the %1 package required for the %2 widget.",
-                                                         appletDescription.pluginName(), appletDescription.name()));
-                    delete package;
-                    package = 0;
-                }
-
-                if (package) {
-                    setupScriptSupport();
-                }
-            }
-        }
-
-        q->setBackgroundHints(DefaultBackground);
-
-        connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()), q, SLOT(themeChanged()));
-    }
-
-    // put all setup routines for script here. at this point we can assume that
-    // package exists and that we have a script engin
-    void setupScriptSupport()
-    {
-        Q_ASSERT(package);
-        QString xmlPath = package->filePath("mainconfigxml");
-        if (!xmlPath.isEmpty()) {
-            QFile file(xmlPath);
-            // FIXME: KConfigSkeleton doesn't play well with KConfigGroup =/
-            KConfigGroup config = q->config();
-            configXml = new ConfigXml(&config, &file);
-        }
-
-        if (!package->filePath("mainconfigui").isEmpty()) {
-            q->setHasConfigurationInterface(true);
-        }
-    }
-
-    QString globalName() const
-    {
-        if (!appletDescription.isValid()) {
-            return QString();
-        }
-
-        return appletDescription.service()->library();
-    }
-
-    QString instanceName()
-    {
-        if (!appletDescription.isValid()) {
-            return QString();
-        }
-
-        return appletDescription.service()->library() + QString::number(appletId);
-    }
-
-    void getBorderSize(int& left , int& top, int &right, int& bottom)
-    {
-        if (background) {
-            top = background->marginSize(Plasma::TopMargin);
-            left = background->marginSize(Plasma::LeftMargin);
-            right = background->marginSize(Plasma::RightMargin);
-            bottom = background->marginSize(Plasma::BottomMargin);
-        } else {
-            top = left = right = bottom = 0;
-        }
-    }
-
-    void scheduleConstraintsUpdate(Plasma::Constraints c)
-    {
-        if (pendingConstraints == NoConstraint) {
-            QTimer::singleShot(0, q, SLOT(flushPendingConstraintsEvents()));
-        }
-        pendingConstraints |= c;
-    }
-
-    KConfigGroup* mainConfigGroup()
-    {
-        if (mainConfig) {
-            return mainConfig;
-        }
-
-        if (isContainment) {
-            const Containment *asContainment = qobject_cast<Containment*>(const_cast<Applet*>(q));
-            Q_ASSERT(asContainment);
-
-            KConfigGroup containmentConfig;
-            //kDebug() << "got a corona, baby?" << (QObject*)asContainment->corona();
-            if (asContainment->corona()) {
-                containmentConfig = KConfigGroup(asContainment->corona()->config(), "Containments");
-            } else {
-                containmentConfig =  KConfigGroup(KGlobal::config(), "Containments");
-            }
-
-            mainConfig = new KConfigGroup(&containmentConfig, QString::number(appletId));
-        } else {
-            KConfigGroup appletConfig;
-            if (q->containment()) {
-                appletConfig = q->containment()->config();
-                appletConfig = KConfigGroup(&appletConfig, "Applets");
-            } else {
-                kWarning() << "requesting config for" << q->name() << "without a containment!";
-                appletConfig = KConfigGroup(KGlobal::config(), "Applets");
-            }
-
-            mainConfig = new KConfigGroup(&appletConfig, QString::number(appletId));
-        }
-
-        return mainConfig;
-    }
-
-    void copyEntries(KConfigGroup *source, KConfigGroup *destination)
-    {
-        foreach (const QString &group, source->groupList()) {
-            KConfigGroup subSource(source, group);
-            KConfigGroup subDest(destination, group);
-            copyEntries(&subSource, &subDest);
-        }
-
-        QMap<QString, QString> entries = source->entryMap();
-        QMapIterator<QString, QString> it(entries);
-        while (it.hasNext()) {
-            it.next();
-            destination->writeEntry(it.key(), it.value());
-        }
-    }
-
-    QString visibleFailureText(const QString& reason)
-    {
-        QString text;
-    
-        if (reason.isEmpty()) {
-            text = i18n("This object could not be created.");
-        } else {
-            text = i18n("This object could not be created for the following reason:<p><b>%1</b></p>", reason);
-        }
-    
-        return text;
-    }
-
-    void checkImmutability()
-    {
-        const bool systemImmutable = q->globalConfig().isImmutable() || q->config().isImmutable() ||
-                                    ((!isContainment && q->containment()) &&
-                                     q->containment()->immutability() == SystemImmutable) ||
-                                    (dynamic_cast<Corona*>(q->scene()) && static_cast<Corona*>(q->scene())->immutability() == SystemImmutable);
-
-        if (systemImmutable) {
-            q->updateConstraints(ImmutableConstraint);
-        }
-    }
-
-    void themeChanged()
-    {
-        q->update();
-    }
-    
-    //TODO: examine the usage of memory here; there's a pretty large
-    //      number of members at this point.
-    static uint s_maxAppletId;
-    static uint s_maxZValue;
-    static uint s_minZValue;
-    static PackageStructure::Ptr packageStructure;
-    uint appletId;
-    Applet *q;
-    BackgroundHints backgroundHints;
-    KPluginInfo appletDescription;
-    Package* package;
-    OverlayWidget *needsConfigOverlay;
-    QList<QGraphicsItem*> registeredAsDragHandle;
-    QStringList loadedEngines;
-    Plasma::PanelSvg *background;
-    AppletScript *script;
-    ConfigXml* configXml;
-    ShadowItem* shadow;
-    QPixmap* cachedBackground;
-    KConfigGroup *mainConfig;
-    Plasma::Constraints pendingConstraints;
-    Plasma::AspectRatio aspectRatioMode;
-    ImmutabilityType immutability;
-    bool hasConfigurationInterface : 1;
-    bool failed : 1;
-    bool isContainment : 1;
-    bool transient : 1;
-};
-
-uint Applet::Private::s_maxAppletId = 0;
-uint Applet::Private::s_maxZValue = 0;
-uint Applet::Private::s_minZValue = 0;
-PackageStructure::Ptr Applet::Private::packageStructure(0);
 
 Applet::Applet(QGraphicsItem *parent,
                const QString& serviceID,
@@ -884,7 +586,7 @@ void Applet::setConfigurationRequired(bool needsConfig)
         return;
     }
 
-    d->needsConfigOverlay = new OverlayWidget(this);
+    d->needsConfigOverlay = new AppletOverlayWidget(this);
     d->needsConfigOverlay->resize(boundingRect().size());
 
     int zValue = 100;
@@ -1462,6 +1164,274 @@ void Applet::setIsContainment(bool isContainment)
 bool Applet::isContainment() const
 {
     return d->isContainment;
+}
+
+
+// PRIVATE CLASS IMPLEMENTATION
+
+Applet::Private::Private(KService::Ptr service, int uniqueID, Applet *applet)
+        : appletId(uniqueID),
+          q(applet),
+          backgroundHints(StandardBackground),
+          appletDescription(service),
+          package(0),
+          needsConfigOverlay(0),
+          background(0),
+          script(0),
+          configXml(0),
+          shadow(0),
+          cachedBackground(0),
+          mainConfig(0),
+          pendingConstraints(NoConstraint),
+          aspectRatioMode(Qt::KeepAspectRatio),
+          immutability(NotImmutable),
+          hasConfigurationInterface(false),
+          failed(false),
+          isContainment(false),
+          square(false),
+          transient(false)
+{
+    if (appletId == 0) {
+        appletId = ++s_maxAppletId;
+    } else if (appletId > s_maxAppletId) {
+        s_maxAppletId = appletId;
+    }
+}
+
+Applet::Private::~Private()
+{
+    foreach ( const QString& engine, loadedEngines ) {
+        DataEngineManager::self()->unloadEngine( engine );
+    }
+    delete background;
+    delete package;
+    delete configXml;
+    delete shadow;
+    delete cachedBackground;
+    delete mainConfig;
+}
+
+void Applet::Private::init()
+{
+    // WARNING: do not access config() OR globalConfig() in this method!
+    //          that requires a scene, which is not available at this point
+    q->setAcceptsHoverEvents(true);
+    q->setFlag(QGraphicsItem::ItemIsFocusable, true);
+
+    if (!appletDescription.isValid()) {
+        q->setFailedToLaunch(true, i18n("Invalid applet description"));
+        return;
+    }
+
+    QString api = appletDescription.property("X-Plasma-API").toString();
+
+    // we have a scripted plasmoid
+    if (!api.isEmpty()) {
+        // find where the Package is
+        QString path = KStandardDirs::locate("data",
+                                                "plasma/plasmoids/" + appletDescription.pluginName() +
+                                                "/");
+
+        if (path.isEmpty()) {
+            q->setFailedToLaunch(true, i18n("Could not locate the %1 package required for the %2 widget.",
+                                                    appletDescription.pluginName(), appletDescription.name()));
+        } else {
+            // create the package and see if we have something real
+            //kDebug() << "trying for" << path;
+            PackageStructure::Ptr structure = Plasma::packageStructure(api, Plasma::AppletComponent);
+            structure->setPath(path);
+            package = new Package(path, structure);
+
+            if (package->isValid()) {
+                // now we try and set up the script engine.
+                // it will be parented to this applet and so will get
+                // deleted when the applet does
+
+                script = Plasma::loadScriptEngine(api, q);
+                if (!script) {
+                    delete package;
+                    package = 0;
+                    q->setFailedToLaunch(true, i18n("Could not create a %1 ScriptEngine for the %2 widget.",
+                                                    api, appletDescription.name()));
+                }
+            } else {
+                q->setFailedToLaunch(true, i18n("Could not open the %1 package required for the %2 widget.",
+                                                        appletDescription.pluginName(), appletDescription.name()));
+                delete package;
+                package = 0;
+            }
+
+            if (package) {
+                setupScriptSupport();
+            }
+        }
+    }
+
+    q->setBackgroundHints(DefaultBackground);
+
+    connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()), q, SLOT(themeChanged()));
+}
+
+// put all setup routines for script here. at this point we can assume that
+// package exists and that we have a script engin
+void Applet::Private::setupScriptSupport()
+{
+    Q_ASSERT(package);
+    QString xmlPath = package->filePath("mainconfigxml");
+    if (!xmlPath.isEmpty()) {
+        QFile file(xmlPath);
+        // FIXME: KConfigSkeleton doesn't play well with KConfigGroup =/
+        KConfigGroup config = q->config();
+        configXml = new ConfigXml(&config, &file);
+    }
+
+    if (!package->filePath("mainconfigui").isEmpty()) {
+        q->setHasConfigurationInterface(true);
+    }
+}
+
+QString Applet::Private::globalName() const
+{
+    if (!appletDescription.isValid()) {
+        return QString();
+    }
+
+    return appletDescription.service()->library();
+}
+
+QString Applet::Private::instanceName()
+{
+    if (!appletDescription.isValid()) {
+        return QString();
+    }
+
+    return appletDescription.service()->library() + QString::number(appletId);
+}
+
+void Applet::Private::getBorderSize(int& left , int& top, int &right, int& bottom)
+{
+    if (background) {
+        top = background->marginSize(Plasma::TopMargin);
+        left = background->marginSize(Plasma::LeftMargin);
+        right = background->marginSize(Plasma::RightMargin);
+        bottom = background->marginSize(Plasma::BottomMargin);
+    } else {
+        top = left = right = bottom = 0;
+    }
+}
+
+void Applet::Private::scheduleConstraintsUpdate(Plasma::Constraints c)
+{
+    if (pendingConstraints == NoConstraint) {
+        QTimer::singleShot(0, q, SLOT(flushPendingConstraintsEvents()));
+    }
+    pendingConstraints |= c;
+}
+
+KConfigGroup* Applet::Private::mainConfigGroup()
+{
+    if (mainConfig) {
+        return mainConfig;
+    }
+
+    if (isContainment) {
+        const Containment *asContainment = qobject_cast<Containment*>(const_cast<Applet*>(q));
+        Q_ASSERT(asContainment);
+
+        KConfigGroup containmentConfig;
+        //kDebug() << "got a corona, baby?" << (QObject*)asContainment->corona();
+        if (asContainment->corona()) {
+            containmentConfig = KConfigGroup(asContainment->corona()->config(), "Containments");
+        } else {
+            containmentConfig =  KConfigGroup(KGlobal::config(), "Containments");
+        }
+
+        mainConfig = new KConfigGroup(&containmentConfig, QString::number(appletId));
+    } else {
+        KConfigGroup appletConfig;
+        if (q->containment()) {
+            appletConfig = q->containment()->config();
+            appletConfig = KConfigGroup(&appletConfig, "Applets");
+        } else {
+            kWarning() << "requesting config for" << q->name() << "without a containment!";
+            appletConfig = KConfigGroup(KGlobal::config(), "Applets");
+        }
+
+        mainConfig = new KConfigGroup(&appletConfig, QString::number(appletId));
+    }
+
+    return mainConfig;
+}
+
+void Applet::Private::copyEntries(KConfigGroup *source, KConfigGroup *destination)
+{
+    foreach (const QString &group, source->groupList()) {
+        KConfigGroup subSource(source, group);
+        KConfigGroup subDest(destination, group);
+        copyEntries(&subSource, &subDest);
+    }
+
+    QMap<QString, QString> entries = source->entryMap();
+    QMapIterator<QString, QString> it(entries);
+    while (it.hasNext()) {
+        it.next();
+        destination->writeEntry(it.key(), it.value());
+    }
+}
+
+QString Applet::Private::visibleFailureText(const QString& reason)
+{
+    QString text;
+
+    if (reason.isEmpty()) {
+        text = i18n("This object could not be created.");
+    } else {
+        text = i18n("This object could not be created for the following reason:<p><b>%1</b></p>", reason);
+    }
+
+    return text;
+}
+
+void Applet::Private::checkImmutability()
+{
+    const bool systemImmutable = q->globalConfig().isImmutable() || q->config().isImmutable() ||
+                                ((!isContainment && q->containment()) &&
+                                    q->containment()->immutability() == SystemImmutable) ||
+                                (dynamic_cast<Corona*>(q->scene()) && static_cast<Corona*>(q->scene())->immutability() == SystemImmutable);
+
+    if (systemImmutable) {
+        q->updateConstraints(ImmutableConstraint);
+    }
+}
+
+void Applet::Private::themeChanged()
+{
+    q->update();
+}
+
+uint Applet::Private::s_maxAppletId = 0;
+uint Applet::Private::s_maxZValue = 0;
+uint Applet::Private::s_minZValue = 0;
+PackageStructure::Ptr Applet::Private::packageStructure(0);
+
+AppletOverlayWidget::AppletOverlayWidget(QGraphicsWidget *parent)
+    : QGraphicsWidget(parent)
+{
+    resize(parent->size());
+}
+
+void AppletOverlayWidget::paint(QPainter *painter,
+                                const QStyleOptionGraphicsItem *option,
+                                QWidget *widget)
+{
+    Q_UNUSED(option)
+    Q_UNUSED(widget)
+    painter->save();
+    painter->setRenderHint(QPainter::Antialiasing);
+    QColor wash = Plasma::Theme::defaultTheme()->color(Theme::BackgroundColor);
+    wash.setAlphaF(.6);
+    painter->fillPath(parentItem()->shape(), wash);
+    painter->restore();
 }
 
 } // Plasma namespace
