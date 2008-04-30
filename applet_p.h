@@ -83,7 +83,7 @@ public:
     QPixmap* cachedBackground;
     KConfigGroup *mainConfig;
     Plasma::Constraints pendingConstraints;
-    Qt::AspectRatioMode aspectRatioMode;
+    Plasma::AspectRatioMode aspectRatioMode;
     ImmutabilityType immutability;
     bool hasConfigurationInterface : 1;
     bool failed : 1;
