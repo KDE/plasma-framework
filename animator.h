@@ -161,10 +161,10 @@ private:
     explicit Animator(QObject * parent = 0);
     ~Animator();
 
-    Q_PRIVATE_SLOT(d, void animatedItemDestroyed(QObject*));
-    Q_PRIVATE_SLOT(d, void movingItemDestroyed(QObject*));
-    Q_PRIVATE_SLOT(d, void animatedElementDestroyed(QObject*));
-    Q_PRIVATE_SLOT(d, void customAnimReceiverDestroyed(QObject*));
+    Q_PRIVATE_SLOT(d, void animatedItemDestroyed(QObject*))
+    Q_PRIVATE_SLOT(d, void movingItemDestroyed(QObject*))
+    Q_PRIVATE_SLOT(d, void animatedElementDestroyed(QObject*))
+    Q_PRIVATE_SLOT(d, void customAnimReceiverDestroyed(QObject*))
 
     class Private;
     Private * const d;
