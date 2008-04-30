@@ -351,7 +351,7 @@ public:
     KPluginInfo appletDescription;
     Package* package;
     OverlayWidget *needsConfigOverlay;
-    QList<QGraphicsItem*> watchedForMouseMove;
+    QList<QGraphicsItem*> registeredAsDragHandle;
     QStringList loadedEngines;
     Plasma::PanelSvg *background;
     AppletScript *script;
@@ -1069,22 +1069,35 @@ void Applet::setAspectRatioMode(Plasma::AspectRatio mode)
     d->aspectRatioMode = mode;
 }
 
-void Applet::watchForMouseMove( QGraphicsItem * watched, bool watch )
+void Applet::registerAsDragHandle( QGraphicsItem * item )
 {
-    if (!watched) {
+    if (!item) {
         return;
     }
 
-    int index = d->watchedForMouseMove.indexOf(watched);
-    if (watch) {
-        if (index == -1) {
-            d->watchedForMouseMove.append(watched);
-            watched->installSceneEventFilter(this);
-        }
-    } else if (index != -1) {
-        d->watchedForMouseMove.removeAt(index);
-        watched->removeSceneEventFilter(this);
+    int index = d->registeredAsDragHandle.indexOf(item);
+    if (index == -1) {
+        d->registeredAsDragHandle.append(item);
+        item->installSceneEventFilter(this);
     }
+}
+
+void Applet::unregisterDragHandle( QGraphicsItem * item )
+{
+    if (!item) {
+        return;
+    }
+
+    int index = d->registeredAsDragHandle.indexOf(item);
+    if (index != -1) {
+        d->registeredAsDragHandle.removeAt(index);
+        item->removeSceneEventFilter(this);
+    }
+}
+
+bool Applet::isRegisteredAsDragHandle( QGraphicsItem * item )
+{
+    return (d->registeredAsDragHandle.indexOf(item) != -1);
 }
 
 bool Applet::hasConfigurationInterface() const
@@ -1106,7 +1119,7 @@ bool Applet::sceneEventFilter( QGraphicsItem * watched, QEvent * event )
 {
     switch (event->type()) {
         case QEvent::GraphicsSceneMouseMove: {
-            if (d->watchedForMouseMove.contains( watched )) {
+            if (d->registeredAsDragHandle.contains( watched )) {
                 mouseMoveEvent(static_cast<QGraphicsSceneMouseEvent*>(event));
                 return true;
             }

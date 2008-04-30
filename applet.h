@@ -608,16 +608,28 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         void setBackgroundHints(const BackgroundHints hints);
 
         /**
-         * Register the widgets that manages mouse clicks but you still want
+         * Register the widgets that manage mouse clicks but you still want
          * to be able to drag the applet around when holding the mouse pointer
-         * on that widgets.
+         * on that widget.
          *
          * Calling this results in an eventFilter being places on the widget.
          *
-         * @param widget the widget to watch for mouse move
-         * @param watch whether to start watching the widget, or to stop doing so
+         * @param item the item to watch for mouse move
          */
-        void watchForMouseMove(QGraphicsItem *widget, bool watch);
+        void registerAsDragHandle( QGraphicsItem * item );
+
+        /**
+         * Unregister a widget registered with registerAsDragHandle.
+         *
+         * @param item the item to unregister
+         */
+        void unregisterDragHandle( QGraphicsItem * item );
+
+        /**
+         * @param item the item to look for if it is registered or not
+         * @return true if it is registered, false otherwise
+         */
+        bool isRegisteredAsDragHandle( QGraphicsItem * item );
 
         /**
          * @internal event filter; used for focus watching
