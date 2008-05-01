@@ -33,7 +33,7 @@ namespace Plasma
     class SearchMatch;
     class AbstractRunner;
     class SearchContext; 
-    
+
 /**
  * @short The RunnerManager class decides what installed runners are runnable,
  *        and their ratings. It is the main proxy to the runners.
@@ -41,10 +41,9 @@ namespace Plasma
 class PLASMA_EXPORT RunnerManager : public QObject
 {
     Q_OBJECT
-    
+
 
     public:
-    
         explicit RunnerManager(QObject *parent=0);
         explicit RunnerManager(KConfigGroup& config, QObject *parent=0);
         ~RunnerManager();
@@ -67,7 +66,7 @@ class PLASMA_EXPORT RunnerManager : public QObject
          * @return List of matches
          */
         QList<SearchMatch *> matches() const;
-  
+
         /**
          * Runs a given match
          * @arg pointer to the match to be executed
@@ -75,7 +74,6 @@ class PLASMA_EXPORT RunnerManager : public QObject
          void run(const SearchMatch *match);
 
     public Q_SLOTS:
-
         /**
          * Launch a query, this will create threads and return inmediately. 
          * When the information will be available can be known using the 
@@ -103,7 +101,6 @@ class PLASMA_EXPORT RunnerManager : public QObject
         void reset();
 
     Q_SIGNALS:
-
         /**
          * Emited each time a new match is added to the list
          */
@@ -113,7 +110,7 @@ class PLASMA_EXPORT RunnerManager : public QObject
          * Emited when all the matches have been found
          */
         void matchesCompleted();
-        
+
     private:
         class Private;
         Private * const d;

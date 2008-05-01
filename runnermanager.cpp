@@ -190,14 +190,14 @@ public:
 
     Private(RunnerManager *parent)
       : q(parent)
-        {
-            connect(&context, SIGNAL(matchesChanged()), q, SIGNAL(matchesChanged()));
-            connect(Weaver::instance(), SIGNAL(finished()), q, SIGNAL(matchesCompleted()));
-        }
-
-    void configure(KConfigGroup& conf)
     {
-        config=conf;
+        connect(&context, SIGNAL(matchesChanged()), q, SIGNAL(matchesChanged()));
+        connect(Weaver::instance(), SIGNAL(finished()), q, SIGNAL(matchesCompleted()));
+    }
+
+    void loadConfiguration(KConfigGroup& conf)
+    {
+        config = conf;
 
         //The number of threads used scales with the number of processors.     
         const int numProcs = qMax(Solid::Device::listFromType(Solid::DeviceInterface::Processor).count(), 1);
@@ -212,15 +212,14 @@ public:
 
         //If set, this list defines which runners won't be used at runtime
         blacklist = config.readEntry("blacklist", QStringList());
-
     }
-    
+
     void loadAll()
     {
         AbstractRunner::List firstRunners;
         AbstractRunner::List normalRunners;
         AbstractRunner::List lastRunners;
-    
+
         KService::List offers = KServiceTypeTrader::self()->query("Plasma/Runner");
         QString error;
         foreach (const KService::Ptr &service, offers) {
@@ -256,10 +255,10 @@ public:
                 kDebug() << "failed to load runner : " << service->name() << ". error reported: " << error;
             }
         }
-      
+
         firstRunners << normalRunners << lastRunners;
         runners.clear();
-        runners = firstRunners;    
+        runners = firstRunners;
         kDebug() << "All runners loaded, total:" << runners.count();
     }
     
@@ -283,7 +282,7 @@ RunnerManager::RunnerManager(QObject *parent)
       d(new Private(this))
 {
     KConfigGroup config(KGlobal::config(), "PlasmaRunnerManager");
-    d->configure(config);
+    d->loadConfiguration(config);
     d->loadAll();
     //ThreadWeaver::setDebugLevel(true, 4);
        
@@ -294,7 +293,7 @@ RunnerManager::RunnerManager(KConfigGroup& config, QObject *parent)
     : QObject(parent), 
       d(new Private(this))
 {
-    d->configure(config);
+    d->loadConfiguration(config);
     d->loadAll();
     //ThreadWeaver::setDebugLevel(true, 4);
 }
@@ -335,7 +334,6 @@ void RunnerManager::run(const SearchMatch *match)
     match->run(&d->context);
 }
 
-
 void RunnerManager::launchQuery (const QString & term, const QString & runnerName)
 {
     if (term.isEmpty()) {
@@ -360,6 +358,7 @@ void RunnerManager::launchQuery (const QString & term, const QString & runnerNam
     } else {
         runable = d->runners; 
     }
+
     bool jobsLaunched=false;
     foreach (Plasma::AbstractRunner* r, runable) {
         if ((r->ignoredTypes() & d->context.type()) == 0) {
@@ -370,21 +369,22 @@ void RunnerManager::launchQuery (const QString & term, const QString & runnerNam
             d->searchJobs.append( job );
         }
     }
+
     if (!jobsLaunched) {
         emit matchesCompleted();
-    } 
+    }
 }
 
 bool RunnerManager::execQuery (const QString & term, const QString & runnerName)
 {
     if (term.isEmpty()) {
         reset();
-        return 0;
+        return false;
     }
 
     if (d->context.searchTerm() == term) {
         // we already are searching for this!
-        return 0;
+        return false;
     }
 
     reset();
@@ -394,26 +394,25 @@ bool RunnerManager::execQuery (const QString & term, const QString & runnerName)
     AbstractRunner *r = runner(runnerName);
 
     if (!r) {
-        return 0;
+        return false;
     }
 
     if ((r->ignoredTypes() & d->context.type()) != 0) {
-        return 0;
+        return false;
     }
 
     r->performMatch(d->context);
     emit matchesCompleted();
-    return 1;
+    return true;
 }
 
 void RunnerManager::reset()
-{   
+{
     // If ThreadWeaver is idle, it is safe to clear previous jobs 
-    if ( Weaver::instance()->isIdle() ) {
-        qDeleteAll( d->searchJobs );
+    if (Weaver::instance()->isIdle()) {
+        qDeleteAll(d->searchJobs);
         d->searchJobs.clear();
-    }
-    else {
+    } else {
         Weaver::instance()->dequeue();
     }
     d->context.reset();
