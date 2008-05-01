@@ -52,7 +52,6 @@ public:
 
     QString globalName() const;
     QString instanceName();
-    void getBorderSize(int& left , int& top, int &right, int& bottom);
     void scheduleConstraintsUpdate(Plasma::Constraints c);
     KConfigGroup* mainConfigGroup();
     void copyEntries(KConfigGroup *source, KConfigGroup *destination);
