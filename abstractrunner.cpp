@@ -28,8 +28,11 @@
 #include <KStandardDirs>
 #include <QTimer>
 
-#include "package.h"
+#include <plasma/searchmatch.h>
+#include <plasma/package.h>
+
 #include "scripting/runnerscript.h"
+
 #include "searchcontext.h"
 
 namespace Plasma
@@ -41,6 +44,7 @@ public:
     Private(AbstractRunner* r, KService::Ptr service)
       : priority(NormalPriority),
         speed(NormalSpeed),
+        blackListed(0),
         script(0),
         runnerDescription(service),
         runner(r),
@@ -73,6 +77,7 @@ public:
     bool hasConfig;
     Priority priority;
     Speed speed;
+    SearchContext::Types blackListed;
     RunnerScript* script;
     KPluginInfo runnerDescription;
     AbstractRunner* runner;
@@ -119,10 +124,9 @@ void AbstractRunner::performMatch( Plasma::SearchContext &globalContext )
     static const int fastEnoughTime = 250;
 
     d->runtime.restart();
-    SearchContext localContext(0, globalContext);
-
+//TODO :this is a copy ctor
+    SearchContext localContext(globalContext,0);
     match(&localContext);
-
     // automatically rate limit runners that become slooow
     const int runtime = d->runtime.elapsed();
     bool slowed = speed() == SlowSpeed;
@@ -136,8 +140,7 @@ void AbstractRunner::performMatch( Plasma::SearchContext &globalContext )
     }
 
     //If matches were not added, delete items on the heap
-    if (localContext.moveMatchesTo(globalContext) &&
-        slowed && runtime < fastEnoughTime) {
+    if (slowed && runtime < fastEnoughTime) {
         ++d->fastRuns;
 
         if (d->fastRuns > 2) {
@@ -199,12 +202,24 @@ void AbstractRunner::setPriority(Priority priority)
     d->priority = priority;
 }
 
+SearchContext::Types AbstractRunner::ignoredTypes() const
+{
+    return d->blackListed;
+}
+
+void AbstractRunner::setIgnoredTypes(SearchContext::Types types)
+{
+    d->blackListed = types;
+}
+
+
+
 KService::List AbstractRunner::serviceQuery(const QString &serviceType, const QString &constraint) const
 {
     QMutexLocker lock(&Private::bigLock);
     return KServiceTypeTrader::self()->query(serviceType, constraint);
 }
-
+ 
 QMutex* AbstractRunner::bigLock() const
 {
     return &Private::bigLock;
@@ -232,6 +247,15 @@ QString AbstractRunner::name() const
     return d->runnerDescription.property("X-Plasma-RunnerName").toString();
 }
 
+QString AbstractRunner::description() const
+{
+    if (!d->runnerDescription.isValid()) {
+        return objectName();
+    }
+    return d->runnerDescription.property("Comment").toString();
+}
+
+
 const Package* AbstractRunner::package() const
 {
     return d->package;
@@ -242,47 +266,6 @@ void AbstractRunner::init()
     if (d->script) {
         d->script->init();
     }
-}
-
-AbstractRunner::List AbstractRunner::loadAll(QObject* parent, const QStringList& whitelist)
-{
-    List firstRunners;
-    List runners;
-    List lastRunners;
-
-    KService::List offers = KServiceTypeTrader::self()->query("Plasma/Runner");
-    QString error;
-    foreach (const KService::Ptr &service, offers) {
-        if (whitelist.empty() || whitelist.contains(service->name())) {
-            QString api = service->property("X-Plasma-API").toString();
-            AbstractRunner* runner = 0;
-
-            if (api.isEmpty()) {
-                QVariantList args;
-                args << service->storageId();
-                runner = service->createInstance<AbstractRunner>(parent, args, &error);
-            } else {
-                runner = new AbstractRunner(parent, service->storageId());
-            }
-
-            if (runner) {
-                //kDebug() << "loaded runner : " << service->name();
-                QString phase = service->property("X-Plasma-RunnerPhase").toString();
-                if (phase == "last") {
-                    lastRunners.append(runner);
-                } else if (phase == "first") {
-                    firstRunners.append(runner);
-                } else {
-                    runners.append(runner);
-                }
-            } else {
-                kDebug() << "failed to load runner : " << service->name() << ". error reported: " << error;
-            }
-        }
-    }
-
-    firstRunners << runners << lastRunners;
-    return firstRunners;
 }
 
 } // Plasma namespace

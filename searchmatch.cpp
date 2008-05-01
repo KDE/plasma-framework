@@ -19,6 +19,7 @@
 
 #include "searchmatch.h"
 
+#include <QPointer>
 #include <QVariant>
 #include <QStringList>
 #include <QIcon>
@@ -41,7 +42,7 @@ class SearchMatch::Private
         {
         }
 
-        AbstractRunner *runner;
+        QPointer<AbstractRunner> runner;
         SearchMatch::Type type;
         QString text;
         QString subtext;
@@ -55,6 +56,7 @@ class SearchMatch::Private
 SearchMatch::SearchMatch(AbstractRunner *runner)
     : d(new Private(runner))
 {
+//    kDebug() << "new match created";
 }
 
 SearchMatch::~SearchMatch()
@@ -146,7 +148,7 @@ void SearchMatch::run(const SearchContext *context) const
 {
     Q_ASSERT(context);
 
-    //kDebug() << "we have" << context->searchTerm() << context->mimetype();
+    //kDebug() << "we run the term" << context->searchTerm() << "whose type is" << context->mimetype();
     if (d->runner) {
         //TODO: this could be dangerous if the runner is deleted behind our backs.
         d->runner->run(context, this);

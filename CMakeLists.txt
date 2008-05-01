@@ -41,6 +41,7 @@ set(plasma_LIB_SRCS
     packages.cpp
     plasma.cpp
     plasma_export.h
+    runnermanager.cpp
     searchmatch.cpp
     searchcontext.cpp
     shadowitem.cpp
@@ -77,7 +78,8 @@ endif(QT_QTOPENGL_FOUND AND OPENGL_FOUND)
 
 kde4_add_library(plasma SHARED ${plasma_LIB_SRCS})
 
-target_link_libraries(plasma ${KDE4_KIO_LIBS} ${KDE4_KFILE_LIBS} ${QT_QTUITOOLS_LIBRARY} ${QT_QTWEBKIT_LIBRARY})
+target_link_libraries(plasma ${KDE4_KIO_LIBS} ${KDE4_KFILE_LIBS}
+${QT_QTUITOOLS_LIBRARY} ${QT_QTWEBKIT_LIBRARY} ${KDE4_THREADWEAVER_LIBRARIES})
 
 if(QT_QTOPENGL_FOUND AND OPENGL_FOUND)
     target_link_libraries(plasma ${QT_QTOPENGL_LIBRARY} ${OPENGL_gl_LIBRARY})
@@ -112,6 +114,7 @@ set(plasma_LIB_INCLUDES
     dialog.h
     plasma.h
     plasma_export.h
+    runnermanager.h
     searchmatch.h
     searchcontext.h
     shadowitem_p.h

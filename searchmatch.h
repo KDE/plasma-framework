@@ -38,7 +38,8 @@ class PLASMA_EXPORT SearchMatch
         /**
          * The type of match. Value is important here as it is used for sorting
          */
-        enum Type { PossibleMatch = 0 /**< Something that may match the query */,
+        enum Type { CompletionMatch = 10 /**< Possible completion for the data of the query */,
+                    PossibleMatch = 30 /**< Something that may match the query */,
                     InformationalMatch = 50 /**< A purely informational, non-actionable match,
                                                  such as the answer to a question or calculation*/,
                     HelperMatch = 70 /**< A match that represents an action not directly related
@@ -50,6 +51,7 @@ class PLASMA_EXPORT SearchMatch
                                           be activated, but unlike InformationalMatch cause
                                           an action to be triggered. */,
                     ExactMatch = 100 /**< An exact match to the query */};
+
 
         /**
          * Constructs a PossibleMatch associated with a given SearchContext

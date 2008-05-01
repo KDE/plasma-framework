@@ -22,6 +22,8 @@
 
 #include <QtCore/QList>
 #include <QtCore/QObject>
+#include <QSharedDataPointer>
+#include <QFlags>
 
 #include <plasma/plasma_export.h>
 
@@ -43,19 +45,22 @@ class PLASMA_EXPORT SearchContext : public QObject
     Q_OBJECT
 
     public:
-        enum Type { UnknownType = 0,
-                    Directory,
-                    File,
-                    NetworkLocation,
-                    Executable,
-                    ShellCommand,
-                    Help
+        enum Type { None = 0,
+                    UnknownType = 1,
+                    Directory = 2,
+                    File = 4,
+                    NetworkLocation = 8,
+                    Executable = 16,
+                    ShellCommand = 32,
+                    Help = 64
                   };
+
+        Q_DECLARE_FLAGS(Types, Type)
 
         enum DataPolicy { Shared = 0,
                           SingleConsumer
                         };
-
+        
         explicit SearchContext(QObject *parent = 0, DataPolicy policy = Shared);
 
         /**
@@ -64,7 +69,8 @@ class PLASMA_EXPORT SearchContext : public QObject
          * matches) from the passed in SearchContext. Primarily useful for creating
          * a thread-local copy of a Shared SearchContext.
          */
-        SearchContext(QObject *parent, const SearchContext& other);
+        explicit SearchContext(SearchContext& other, QObject *parent = 0);
+
         ~SearchContext();
 
 
@@ -100,22 +106,7 @@ class PLASMA_EXPORT SearchContext : public QObject
          */
         QString mimeType() const;
 
-        /**
-         * @return a completion object that can be used with UI elements
-         */
-        KCompletion* completionObject() const;
-
-        /**
-         * Adds an item to the completion object.
-         */
-        void addStringCompletion(const QString& completion);
-
-        /**
-         * Adds multiple items to the completion object.
-         */
-        void addStringCompletions(const QStringList& completions);
-
-        /**
+         /**
          * Appends lists of matches to the list of matches.
          * The SearchContext takes over ownership of the matches on successful addition.
          *
@@ -155,11 +146,6 @@ class PLASMA_EXPORT SearchContext : public QObject
         QList<SearchMatch *> matches() const;
 
         /**
-         * Determines type of query
-         */
-        void determineType();
-
-        /**
          * Removes all matches from this SearchContext.
          */
         void removeAllMatches();
@@ -169,9 +155,11 @@ class PLASMA_EXPORT SearchContext : public QObject
 
     private:
         class Private;
-        Private * const d;
+        QExplicitlySharedDataPointer<Private> d;
 };
 
 }
+
+Q_DECLARE_OPERATORS_FOR_FLAGS (Plasma::SearchContext::Types)
 
 #endif

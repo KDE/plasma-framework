@@ -23,6 +23,7 @@
 
 #include <QFile>
 #include <QFileInfo>
+#include <QSharedData>
 
 #include <KCompletion>
 #include <KDebug>
@@ -36,34 +37,31 @@
 namespace Plasma
 {
 
-class SearchContext::Private
+class SearchContext::Private : public QSharedData
 {
     public:
-        Private(SearchContext::DataPolicy p)
+        Private(SearchContext *context, SearchContext::DataPolicy p)
             : type(SearchContext::UnknownType),
-              completer(0),
+              q(context), 
               policy(p)
+        {
+        }
+
+        Private(const SearchContext::Private& p)
+            : term(p.term), 
+              mimeType(p.mimeType),
+              type(p.type),
+              q(p.q),
+              policy(p.policy)
         {
         }
 
         ~Private()
         {
+            lockForWrite();
             qDeleteAll(matches);
             matches.clear();
-            delete completer;
-        }
-
-        void resetState()
-        {
-        }
-
-        KCompletion* completionObject()
-        {
-            if (!completer) {
-                completer = new KCompletion;
-            }
-
-            return completer;
+            unlock();
         }
 
         void lockForRead()
@@ -87,61 +85,90 @@ class SearchContext::Private
             }
         }
 
+        /**
+         * Determines type of query
+         */
+        void determineType()
+        {
+            lockForWrite();
+            QString path = KShell::tildeExpand(term);
+        
+            int space = term.indexOf(' ');
+            if (space > 0) {
+                if (!KStandardDirs::findExe(path.left(space)).isEmpty()) {
+                    type = ShellCommand;
+                }
+            } else if (!KStandardDirs::findExe(path.left(space)).isEmpty()) {
+                type = Executable;
+            } else {
+                KUrl url(term);
+                if (!url.protocol().isEmpty() && !url.host().isEmpty()) {
+                    type = NetworkLocation;
+                } else  if (QFile::exists(path)) {
+                    QFileInfo info(path);
+                    if (info.isDir()) {
+                        type = Directory;
+                        mimeType = "inode/folder";
+                    } else {
+                        type = File;
+                        KMimeType::Ptr mimeTypePtr = KMimeType::findByPath(path);
+                        if (mimeTypePtr) {
+                            mimeType = mimeTypePtr->name();
+                        }
+                    }
+                } else if (term.contains('.')) {
+                    // default to a network location so we can can do things like www.kde.org
+                    type = NetworkLocation;
+                }
+            }
+            unlock();
+        }
+        
         QReadWriteLock lock;
-        QList<SearchMatch *> matches;
+        QList<SearchMatch*> matches;
         QString term;
         QString mimeType;
         SearchContext::Type type;
-        KCompletion *completer;
+        SearchContext * q;
         const SearchContext::DataPolicy policy;
 };
 
 
 SearchContext::SearchContext(QObject *parent, DataPolicy policy)
     : QObject(parent),
-      d(new Private(policy))
+      d(new Private(this, policy))
 {
 }
 
-SearchContext::SearchContext(QObject *parent, const SearchContext &other)
-    : QObject(parent),
-      d(new Private(SingleConsumer))
+//copy ctor
+SearchContext::SearchContext(SearchContext &other, QObject *parent)
+     : QObject(parent)
 {
     other.d->lockForRead();
-    d->term = other.d->term;
-    d->mimeType = other.d->mimeType;
-    d->type = other.d->type;
+    d=other.d;
     other.d->unlock();
 }
 
 SearchContext::~SearchContext()
 {
-    delete d;
 }
 
 void SearchContext::reset()
 {
-    d->lockForWrite();
-    QList<SearchMatch*> matches = d->matches;
+    // Locks are needed as other contexts can be copied of this one
 
-    d->matches.clear();
+    // We will detach if we are a copy of someone. But we will reset 
+    // if we are the 'main' context others copied from. Resetting 
+    // one SearchContext makes all the copies oneobsolete.  
+    d.detach();
+
+    //kDebug() << "reset searchContext";
+    d->lockForWrite();
     d->type = SearchContext::UnknownType;
     d->term.clear();
     d->mimeType.clear();
-
-    if (d->completer) {
-        d->completer->clear();
-    }
-
     d->unlock();
-
-    emit matchesChanged();
-
-    // in case someone is still holding on to the Matches
-    // when we emit the matchesChanged() signal, we don't
-    // delete the matches until after the signal is handled.
-    // a bit safer.
-    qDeleteAll(matches);
+    removeAllMatches();
 }
 
 void SearchContext::setSearchTerm(const QString &term)
@@ -153,46 +180,9 @@ void SearchContext::setSearchTerm(const QString &term)
     d->lockForWrite();
     d->term = term;
     d->unlock();
-    determineType();
+    d->determineType();
 }
 
-void SearchContext::determineType()
-{
-    d->lockForWrite();
-    QString term = d->term;
-    QString path = KShell::tildeExpand(term);
-
-    int space = term.indexOf(' ');
-    if (space > 0) {
-        if (!KStandardDirs::findExe(path.left(space)).isEmpty()) {
-            d->type = ShellCommand;
-        }
-    } else if (!KStandardDirs::findExe(path.left(space)).isEmpty()) {
-        d->type = Executable;
-    } else {
-        KUrl url(term);
-
-        if (!url.protocol().isEmpty() && !url.host().isEmpty()) {
-            d->type = NetworkLocation;
-        } else  if (QFile::exists(path)) {
-            QFileInfo info(path);
-            if (info.isDir()) {
-                d->type = Directory;
-                d->mimeType = "inode/folder";
-            } else {
-                d->type = File;
-                KMimeType::Ptr mimeType = KMimeType::findByPath(path);
-                if (mimeType) {
-                    d->mimeType = mimeType->name();
-                }
-            }
-        } else if (term.contains('.')) {
-            // default to a network location so we can can do things like www.kde.org
-            d->type = NetworkLocation;
-        }
-    }
-    d->unlock();
-}
 
 QString SearchContext::searchTerm() const
 {
@@ -212,40 +202,6 @@ QString SearchContext::mimeType() const
     return d->mimeType;
 }
 
-KCompletion* SearchContext::completionObject() const
-{
-    d->lockForRead();
-    KCompletion* comp = d->completionObject();
-    d->unlock();
-    return comp;
-}
-
-void SearchContext::addStringCompletion(const QString &completion)
-{
-    d->lockForWrite();
-    if (!d->completer) {
-        d->unlock();
-        // if the completion object isn't actually used, don't bother
-        return;
-    }
-
-    d->completer->addItem(completion);
-    d->unlock();
-}
-
-void SearchContext::addStringCompletions(const QStringList &completion)
-{
-    d->lockForWrite();
-    if (!d->completer) {
-        d->unlock();
-        // if the completion object isn't actually used, don't bother
-        return;
-    }
-
-    d->completer->insertItems(completion);
-    d->unlock();
-}
-
 bool SearchContext::addMatches(const QString& term, const QList<SearchMatch*> &matches)
 {
     if (searchTerm() != term || matches.isEmpty()) {
@@ -255,12 +211,11 @@ bool SearchContext::addMatches(const QString& term, const QList<SearchMatch*> &m
     d->lockForWrite();
     d->matches << matches;
     d->unlock();
-
-    // TODO: perhaps queue this signal so that it is only emitted after a small delay?
-    //       currently we do this in krunner's Interface class, but it would probably
-    //       be better to move that detail to SearchContext so that other apps that
-    //       use SearchContext can also benefit from it
-    emit matchesChanged();
+    //kDebug()<< "add matches";
+    // A copied searchContext may share the d pointer, 
+    // we always want to sent the signal of the object that created
+    // the d pointer 
+    emit d->q->matchesChanged();
     return true;
 }
 
@@ -273,30 +228,12 @@ bool SearchContext::addMatch(const QString &term, SearchMatch *match)
     d->lockForWrite();
     d->matches << match;
     d->unlock();
-    emit matchesChanged();
+    //kDebug()<< "added match" << match->text();
+    emit d->q->matchesChanged();
 
     return true;
 }
 
-bool SearchContext::moveMatchesTo(SearchContext &other)
-{
-    //NOTE: we have moveMatchesTo instead of the more 'natural' addMatches
-    // because we can get away with one write lock on the local object
-    // this way, otherwise we'd need to lock once for searchTerm, once
-    // for matches() and again for removeAllMatches() (2 read, one write)
-    d->lockForWrite();
-
-    const bool success = other.addMatches(d->term, d->matches);
-
-    if (success) {
-        // the matches no longer belong to this SearchContext,
-        // so remove them from the data
-        d->matches.clear();
-    }
-
-    d->unlock();
-    return success;
-}
 
 QList<SearchMatch *> SearchContext::matches() const
 {
@@ -309,18 +246,19 @@ QList<SearchMatch *> SearchContext::matches() const
 void SearchContext::removeAllMatches()
 {
     d->lockForWrite();
-
-    QList<SearchMatch*> matches = d->matches;
-    d->matches.clear();
+    bool emptyMatches = d->matches.isEmpty();
+    if (!emptyMatches) {
+        d->matches.clear();
+        d->unlock();
+        emit d->q->matchesChanged();
+        // in case someone is still holding on to the Matches
+        // when we emit the matchesChanged() signal, we don't
+        // delete the matches until after the signal is handled.
+        // a bit safer.
+       d->lockForWrite();
+       qDeleteAll(d->matches);
+    }
     d->unlock();
-
-    emit matchesChanged();
-
-    // in case someone is still holding on to the Matches
-    // when we emit the matchesChanged() signal, we don't
-    // delete the matches until after the signal is handled.
-    // a bit safer.
-    qDeleteAll(matches);
 }
 
 }

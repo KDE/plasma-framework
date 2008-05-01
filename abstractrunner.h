@@ -28,9 +28,8 @@
 #include <KDE/KService>
 
 #include <plasma/plasma_export.h>
-#include <plasma/package.h>
-#include <plasma/searchmatch.h>
 #include <plasma/searchcontext.h>
+#include <plasma/searchmatch.h>
 
 class KCompletion;
 
@@ -39,6 +38,7 @@ namespace Plasma
 
 class Package;
 class RunnerScript;
+class SearchMatch;
 
 /**
  * An abstract base class for Plasma Runner plugins
@@ -63,15 +63,8 @@ class PLASMA_EXPORT AbstractRunner : public QObject
                         HighPriority,
                         HighestPriority
                       };
-
+        
         typedef QList<AbstractRunner*> List;
-
-        /**
-         * Static method is called to load and get a list available of Runners.
-         *
-         * @param whitelist An optional whitelist of runners to load
-         */
-        static List loadAll(QObject* parent, const QStringList& whitelist = QStringList());
 
         virtual ~AbstractRunner();
 
@@ -154,9 +147,27 @@ class PLASMA_EXPORT AbstractRunner : public QObject
         Priority priority() const;
 
         /**
+         * Returns the OR'ed value of all the Information types (as defined in SearchContext::Type)
+         * this runner is not interested in. 
+         * @return OR'ed value of black listed types
+         */
+        SearchContext::Types ignoredTypes() const;
+
+        /**
+         * Sets the types this runner will ignore 
+         * @param types OR'ed listed of ignored types
+         */
+        void setIgnoredTypes(SearchContext::Types types);
+
+        /**
           * Returns the engine name for the Runner
           */
         QString name() const;
+
+        /**
+          * Returns the description of this Runner
+          */
+        QString description() const;
 
         /**
          * Accessor for the associated Package object if any.
