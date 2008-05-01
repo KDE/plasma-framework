@@ -231,6 +231,14 @@ qreal PanelSvg::marginSize(const Plasma::MarginEdge edge) const
     }
 }
 
+void PanelSvg::getMargins(qreal &left, qreal &top, qreal &right, qreal &bottom) const
+{
+    top = marginSize(Plasma::TopMargin);
+    left = marginSize(Plasma::LeftMargin);
+    right = marginSize(Plasma::RightMargin);
+    bottom = marginSize(Plasma::BottomMargin);
+}
+
 QBitmap PanelSvg::mask() const
 {
     PanelData *panel = d->panels[d->prefix];

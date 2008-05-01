@@ -101,6 +101,16 @@ class PLASMA_EXPORT PanelSvg : public Svg
         qreal marginSize(const Plasma::MarginEdge edge) const;
 
         /**
+         * Convenience method that extracts the size of the four margins
+         * in the four output parameters
+         * @arg left left margin size
+         * @arg top top margin size
+         * @arg right right margin size
+         * @arg bottom bottom margin size
+         */
+        void getMargins(qreal &left, qreal &top, qreal &right, qreal &bottom) const;
+
+        /**
          * Sets the prefix (@see setElementPrefix) to 'north', 'south', 'west' and 'east'
          * when the location is TopEdge, BottomEdge, LeftEdge and RightEdge,
          * respectively. Clears the prefix in other cases.

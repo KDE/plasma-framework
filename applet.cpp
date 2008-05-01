@@ -502,8 +502,8 @@ void Applet::setBackgroundHints(const BackgroundHints hints)
             d->background = new Plasma::PanelSvg();
             d->background->setImagePath("widgets/background");
             d->background->setEnabledBorders(Plasma::PanelSvg::AllBorders);
-            int left, top, right, bottom;
-            d->getBorderSize(left, top, right, bottom);
+            qreal left, top, right, bottom;
+            d->background->getMargins(left, top, right, bottom);
             setContentsMargins(left, right, top, bottom);
 
             QSizeF fitSize(left + right, top + bottom);
@@ -513,8 +513,8 @@ void Applet::setBackgroundHints(const BackgroundHints hints)
             d->background->resizePanel(boundingRect().size());
         }
     } else if (d->background) {
-        int left, top, right, bottom;
-        d->getBorderSize(left, top, right, bottom);
+        qreal left, top, right, bottom;
+        d->background->getMargins(left, top, right, bottom);
         //Setting a minimum size of 0,0 would result in the panel to be only
         //on the first virtual desktop
         setMinimumSize(qMax(minimumSize().width() - left - right, 1.0),
@@ -1299,18 +1299,6 @@ QString Applet::Private::instanceName()
     }
 
     return appletDescription.service()->library() + QString::number(appletId);
-}
-
-void Applet::Private::getBorderSize(int& left , int& top, int &right, int& bottom)
-{
-    if (background) {
-        top = background->marginSize(Plasma::TopMargin);
-        left = background->marginSize(Plasma::LeftMargin);
-        right = background->marginSize(Plasma::RightMargin);
-        bottom = background->marginSize(Plasma::BottomMargin);
-    } else {
-        top = left = right = bottom = 0;
-    }
 }
 
 void Applet::Private::scheduleConstraintsUpdate(Plasma::Constraints c)
