@@ -52,7 +52,8 @@ class PLASMA_EXPORT SearchContext : public QObject
                     NetworkLocation = 8,
                     Executable = 16,
                     ShellCommand = 32,
-                    Help = 64
+                    Help = 64,
+                    FileSystem = Directory | File | Executable | ShellCommand
                   };
 
         Q_DECLARE_FLAGS(Types, Type)
