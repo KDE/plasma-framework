@@ -37,7 +37,7 @@
 #include <QTimer>
 #include <QCoreApplication>
 
-#include <Plasma/SearchMatch>
+#include "searchmatch.h"
 
 #include "runnermanager.h"
 
@@ -266,7 +266,6 @@ public:
         RunnerManager *q;
         SearchContext context;
         AbstractRunner::List runners;
-        QList<SearchMatch *> matches;
         QList<ThreadWeaver::Job*> searchJobs;
         QStringList prioritylist;
         QStringList blacklist;
