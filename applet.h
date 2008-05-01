@@ -425,11 +425,6 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         enum { Type = Plasma::AppletType };
 
         /**
-         * @internal
-         */
-        void resetConfigurationObject();
-
-        /**
          * @return the Containment, if any, this applet belongs to
          **/
         Containment* containment() const;

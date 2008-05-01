@@ -42,6 +42,7 @@
 #include <KStandardDirs>
 #include <KWindowSystem>
 
+#include "applet_p.h"
 #include "applethandle_p.h"
 #include "corona.h"
 #include "animator.h"
@@ -445,7 +446,7 @@ void Containment::addApplet(Applet *applet, const QPointF &pos, bool delayInit)
         // now move the old config to the new location
         KConfigGroup c = config().group("Applets").group(QString::number(applet->id()));
         oldConfig.reparent(&c);
-        applet->resetConfigurationObject();
+        applet->d->resetConfigurationObject();
     } else {
 	applet->setParentItem(this);
     }

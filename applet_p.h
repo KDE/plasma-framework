@@ -59,6 +59,7 @@ public:
     QString visibleFailureText(const QString& reason);
     void checkImmutability();
     void themeChanged();
+    void resetConfigurationObject();
 
     static uint s_maxAppletId;
     static uint s_maxZValue;

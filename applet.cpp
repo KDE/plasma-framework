@@ -103,7 +103,7 @@ Applet::Applet(QObject* parentObject, const QVariantList& args)
 Applet::~Applet()
 {
     if (d->transient) {
-        resetConfigurationObject();
+        d->resetConfigurationObject();
     }
 
     delete d;
@@ -262,13 +262,6 @@ void Applet::destroy()
 
     d->transient = true;
     deleteLater();
-}
-
-void Applet::resetConfigurationObject()
-{
-    d->mainConfigGroup()->deleteGroup();
-    delete d->mainConfig;
-    d->mainConfig = 0;
 }
 
 ConfigXml* Applet::configScheme() const
@@ -1407,6 +1400,13 @@ void Applet::Private::checkImmutability()
 void Applet::Private::themeChanged()
 {
     q->update();
+}
+
+void Applet::Private::resetConfigurationObject()
+{
+    mainConfigGroup()->deleteGroup();
+    delete mainConfig;
+    mainConfig = 0;
 }
 
 uint Applet::Private::s_maxAppletId = 0;
