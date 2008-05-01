@@ -837,6 +837,8 @@ Toolbox* Containment::Private::createToolBox()
             break;
         }
         positionToolBox();
+
+        connect(toolBox, SIGNAL(toggled()), q, SIGNAL(toolBoxToggled()));
     }
 
     return toolBox;

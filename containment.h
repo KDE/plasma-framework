@@ -277,6 +277,11 @@ class PLASMA_EXPORT Containment : public Applet
         void zoomRequested(Plasma::Containment * containment, Plasma::ZoomDirection direction);
 
         /**
+         * Emitted when the user clicks on the toolbox
+         */
+        void toolBoxToggled();
+
+        /**
          * Emitted when the containment wants a new containment to be created.
          * Usually only used for desktop containments.
          */
