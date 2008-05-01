@@ -34,6 +34,14 @@
 
 #include "searchmatch.h"
 
+#define LOCK_FOR_READ(context) if (context->d->policy == Shared) { context->d->lock.lockForRead(); }
+#define LOCK_FOR_WRITE(context) if (context->d->policy == Shared) { context->d->lock.lockForWrite(); }
+#define UNLOCK(context) if (context->d->policy == Shared) { context->d->lock.unlock(); }
+/*
+#define LOCK_FOR_READ(context) context->d->lock.lockForRead();
+#define LOCK_FOR_WRITE(context) context->d->lock.lockForWrite();
+#define UNLOCK(context) context->d->lock.unlock();
+*/
 namespace Plasma
 {
 
@@ -61,28 +69,11 @@ class RunnerContext::Private : public QSharedData
 
         ~Private()
         {
-            lockForWrite();
-            qDeleteAll(matches);
-            matches.clear();
-            unlock();
-        }
-
-        void lockForRead()
-        {
-            if (policy == Shared) {
-                lock.lockForRead();
-            }
-        }
-
-        void lockForWrite()
-        {
             if (policy == Shared) {
                 lock.lockForWrite();
             }
-        }
-
-        void unlock()
-        {
+            qDeleteAll(matches);
+            matches.clear();
             if (policy == Shared) {
                 lock.unlock();
             }
@@ -93,9 +84,12 @@ class RunnerContext::Private : public QSharedData
          */
         void determineType()
         {
-            lockForWrite();
+            if (policy == Shared) {
+                lock.lockForWrite();
+            }
+
             QString path = KShell::tildeExpand(term);
-        
+
             int space = term.indexOf(' ');
             if (space > 0) {
                 if (!KStandardDirs::findExe(path.left(space)).isEmpty()) {
@@ -124,9 +118,12 @@ class RunnerContext::Private : public QSharedData
                     type = NetworkLocation;
                 }
             }
-            unlock();
+
+            if (policy == Shared) {
+                lock.unlock();
+            }
         }
-        
+
         QReadWriteLock lock;
         QList<SearchMatch*> matches;
         QString term;
@@ -147,9 +144,9 @@ RunnerContext::RunnerContext(QObject *parent, DataPolicy policy)
 RunnerContext::RunnerContext(RunnerContext &other, QObject *parent)
      : QObject(parent)
 {
-    other.d->lockForRead();
-    d=other.d;
-    other.d->unlock();
+    LOCK_FOR_READ((&other))
+    d = other.d;
+    UNLOCK((&other))
 }
 
 RunnerContext::~RunnerContext()
@@ -163,14 +160,14 @@ void RunnerContext::reset()
     // We will detach if we are a copy of someone. But we will reset 
     // if we are the 'main' context others copied from. Resetting 
     // one RunnerContext makes all the copies oneobsolete.  
+    LOCK_FOR_WRITE(this)
     d.detach();
 
     //kDebug() << "reset searchContext";
-    d->lockForWrite();
     d->type = RunnerContext::UnknownType;
     d->term.clear();
     d->mimeType.clear();
-    d->unlock();
+    UNLOCK(this);
 
     // we still have to remove all the matches, since if the
     // ref count was 1 (e.g. only the RunnerContext is using
@@ -188,18 +185,18 @@ void RunnerContext::setSearchTerm(const QString &term)
         return;
     }
 
-    d->lockForWrite();
+    LOCK_FOR_WRITE(this)
     d->term = term;
-    d->unlock();
+    UNLOCK(this);
     d->determineType();
 }
 
 
 QString RunnerContext::searchTerm() const
 {
-    d->lockForRead();
+    LOCK_FOR_READ(this)
     QString term = d->term;
-    d->unlock();
+    UNLOCK(this);
     return term;
 }
 
@@ -219,9 +216,9 @@ bool RunnerContext::addMatches(const QString& term, const QList<SearchMatch*> &m
         return false;
     }
 
-    d->lockForWrite();
+    LOCK_FOR_WRITE(this)
     d->matches << matches;
-    d->unlock();
+    UNLOCK(this);
     //kDebug()<< "add matches";
     // A copied searchContext may share the d pointer, 
     // we always want to sent the signal of the object that created
@@ -236,9 +233,9 @@ bool RunnerContext::addMatch(const QString &term, SearchMatch *match)
         return false;
     }
 
-    d->lockForWrite();
+    LOCK_FOR_WRITE(this)
     d->matches << match;
-    d->unlock();
+    UNLOCK(this);
     //kDebug()<< "added match" << match->text();
     emit d->q->matchesChanged();
 
@@ -248,27 +245,30 @@ bool RunnerContext::addMatch(const QString &term, SearchMatch *match)
 
 QList<SearchMatch *> RunnerContext::matches() const
 {
-    d->lockForRead();
+    LOCK_FOR_READ(this)
     QList<SearchMatch *> matches = d->matches;
-    d->unlock();
+    UNLOCK(this);
     return matches;
 }
 
 void RunnerContext::removeAllMatches()
 {
-    d->lockForWrite();
+    LOCK_FOR_WRITE(this)
     if (!d->matches.isEmpty()) {
+        QList<SearchMatch*> matches = d->matches;
         d->matches.clear();
-        d->unlock();
-        emit d->q->matchesChanged();
+        UNLOCK(this);
+
         // in case someone is still holding on to the Matches
         // when we emit the matchesChanged() signal, we don't
         // delete the matches until after the signal is handled.
         // a bit safer.
-       d->lockForWrite();
-       qDeleteAll(d->matches);
+        emit d->q->matchesChanged();
+
+        qDeleteAll(matches);
+    } else {
+        UNLOCK(this);
     }
-    d->unlock();
 }
 
 }
