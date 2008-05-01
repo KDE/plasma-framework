@@ -337,6 +337,15 @@ void PanelSvg::Private::generateBackground(PanelData *panel)
     //       the transparent border around the svg seems to vary in size depending on the size of the svg and as a result increasing the
     //       svg image by 2 all around didn't resolve the issue. For now it resizes based on the border size.
 
+    //if we must stretch the center or the borders we compute how much we will have to stretch
+    //the svg to get the desired element sizes
+    QSizeF  scaledContentSize(0,0);
+    if (q->elementSize(prefix + "center").width() > 0 &&
+        q->elementSize(prefix + "center").height() > 0 &&
+        (!panel->tileCenter || panel->stretchBorders)) {
+        scaledContentSize = QSizeF(contentWidth * ((qreal)q->size().width() / (qreal)q->elementSize(prefix + "center").width()),
+                                   contentHeight * ((qreal)q->size().height() / (qreal)q->elementSize(prefix + "center").height()));
+    }
 
     //CENTER
     if (panel->tileCenter) {
@@ -354,22 +363,18 @@ void PanelSvg::Private::generateBackground(PanelData *panel)
                 q->paint(&centerPainter, QPoint(0, 0), prefix + "center");
             }
 
-            p.drawTiledPixmap(QRect(contentLeft - panel->leftWidth, contentTop - panel->topHeight,
-                        contentWidth + panel->leftWidth*2, contentHeight + panel->topHeight*2), center);
+            p.drawTiledPixmap(QRect(panel->leftWidth, panel->topHeight,
+                                    contentWidth, contentHeight),
+                                    prefix + "center"), center);
         }
     } else {
         if (contentHeight > 0 && contentWidth > 0) {
-            QSizeF scaledSize = QSizeF(panel->panelSize.width() -
-                    (panel->leftWidth + panel->rightWidth) +
-                    panel->panelSize.width()*(((qreal)(panel->leftWidth + panel->rightWidth)) / panel->panelSize.width()),
-                    panel->panelSize.height() -
-                    (panel->topHeight + panel->bottomHeight) +
-                    panel->panelSize.height()*(((qreal)(panel->topHeight + panel->bottomHeight)) / panel->panelSize.height()));
 
-            q->resize(scaledSize.width(), scaledSize.height());
-            q->paint(&p, QRect(contentLeft - panel->leftWidth, contentTop - panel->topHeight,
-                          contentWidth + panel->leftWidth*2, contentHeight + panel->topHeight*2),
-                          prefix + "center");
+            q->resize(scaledContentSize);
+            
+            q->paint(&p, QRect(panel->leftWidth, panel->topHeight,
+                               contentWidth, contentHeight),
+                               prefix + "center");
             q->resize();
         }
     }
@@ -412,20 +417,32 @@ void PanelSvg::Private::generateBackground(PanelData *panel)
 
     // Sides
     if (panel->stretchBorders) {
-        if (panel->enabledBorders & LeftBorder) {
-            q->paint(&p, QRect(leftOffset, contentTop, panel->leftWidth, contentHeight), prefix + "left");
+        if (panel->enabledBorders & LeftBorder || panel->enabledBorders & RightBorder) {
+            q->resize(q->size().width(), scaledContentSize.height());
+
+            if (panel->enabledBorders & LeftBorder) {
+                q->paint(&p, QRect(leftOffset, contentTop, panel->leftWidth, contentHeight), prefix + "left");
+            }
+
+            if (panel->enabledBorders & RightBorder) {
+                q->paint(&p, QRect(rightOffset, contentTop, panel->rightWidth, contentHeight), prefix + "right");
+            }
+
+            q->resize();
         }
 
-        if (panel->enabledBorders & RightBorder) {
-            q->paint(&p, QRect(rightOffset, contentTop, panel->rightWidth, contentHeight), prefix + "right");
-        }
+        if (panel->enabledBorders & TopBorder || panel->enabledBorders & BottomBorder) {
+            q->resize(scaledContentSize.width(), q->size().height());
 
-        if (panel->enabledBorders & TopBorder) {
-            q->paint(&p, QRect(contentLeft, topOffset, contentWidth, panel->topHeight), prefix + "top");
-        }
+            if (panel->enabledBorders & TopBorder) {
+                q->paint(&p, QRect(contentLeft, topOffset, contentWidth, panel->topHeight), prefix + "top");
+            }
 
-        if (panel->enabledBorders & BottomBorder) {
-            q->paint(&p, QRect(contentLeft, bottomOffset, contentWidth, panel->bottomHeight), prefix + "bottom");
+            if (panel->enabledBorders & BottomBorder) {
+                q->paint(&p, QRect(contentLeft, bottomOffset, contentWidth, panel->bottomHeight), prefix + "bottom");
+            }
+
+            q->resize();
         }
     } else {
         if (panel->enabledBorders & LeftBorder) {
