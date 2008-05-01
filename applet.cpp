@@ -688,6 +688,10 @@ void Applet::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
     }
 
     if (!d->failed) {
+        qreal left, top, right, bottom;
+        getContentsMargins(&left, &top, &right, &bottom);
+        const QRect contentsRect = QRectF(QPointF(0,0), boundingRect().size())
+                        .adjusted(left, top, -right, -bottom).toAlignedRect();
         if (widget && isContainment()) {
             // note that the widget we get is actually the viewport of the view, not the view itself
             View* v = qobject_cast<Plasma::View*>(widget->parent());
@@ -695,7 +699,7 @@ void Applet::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
                 Containment::StyleOption coption(*option);
                 coption.view = v;
 
-                paintInterface(painter, &coption, QRect(QPoint(0,0), boundingRect().size().toSize()));
+                paintInterface(painter, &coption, contentsRect);
             }
 
             painter->restore();
@@ -703,7 +707,7 @@ void Applet::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
         }
 
         //kDebug() << "paint interface of" << (QObject*) this;
-        paintInterface(painter, option, QRect(QPoint(0,0),  boundingRect().size().toSize()));
+        paintInterface(painter, option, contentsRect);
     }
     painter->restore();
 }
