@@ -17,7 +17,7 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "searchcontext.h"
+#include "runnercontext.h"
 
 #include <QReadWriteLock>
 
@@ -37,18 +37,18 @@
 namespace Plasma
 {
 
-class SearchContext::Private : public QSharedData
+class RunnerContext::Private : public QSharedData
 {
     public:
-        Private(SearchContext *context, SearchContext::DataPolicy p)
+        Private(RunnerContext *context, RunnerContext::DataPolicy p)
             : QSharedData(),
-              type(SearchContext::UnknownType),
+              type(RunnerContext::UnknownType),
               q(context),
               policy(p)
         {
         }
 
-        Private(const SearchContext::Private& p)
+        Private(const RunnerContext::Private& p)
             : QSharedData(),
               term(p.term),
               mimeType(p.mimeType),
@@ -131,20 +131,20 @@ class SearchContext::Private : public QSharedData
         QList<SearchMatch*> matches;
         QString term;
         QString mimeType;
-        SearchContext::Type type;
-        SearchContext * q;
-        const SearchContext::DataPolicy policy;
+        RunnerContext::Type type;
+        RunnerContext * q;
+        const RunnerContext::DataPolicy policy;
 };
 
 
-SearchContext::SearchContext(QObject *parent, DataPolicy policy)
+RunnerContext::RunnerContext(QObject *parent, DataPolicy policy)
     : QObject(parent),
       d(new Private(this, policy))
 {
 }
 
 //copy ctor
-SearchContext::SearchContext(SearchContext &other, QObject *parent)
+RunnerContext::RunnerContext(RunnerContext &other, QObject *parent)
      : QObject(parent)
 {
     other.d->lockForRead();
@@ -152,35 +152,35 @@ SearchContext::SearchContext(SearchContext &other, QObject *parent)
     other.d->unlock();
 }
 
-SearchContext::~SearchContext()
+RunnerContext::~RunnerContext()
 {
 }
 
-void SearchContext::reset()
+void RunnerContext::reset()
 {
     // Locks are needed as other contexts can be copied of this one
 
     // We will detach if we are a copy of someone. But we will reset 
     // if we are the 'main' context others copied from. Resetting 
-    // one SearchContext makes all the copies oneobsolete.  
+    // one RunnerContext makes all the copies oneobsolete.  
     d.detach();
 
     //kDebug() << "reset searchContext";
     d->lockForWrite();
-    d->type = SearchContext::UnknownType;
+    d->type = RunnerContext::UnknownType;
     d->term.clear();
     d->mimeType.clear();
     d->unlock();
 
     // we still have to remove all the matches, since if the
-    // ref count was 1 (e.g. only the SearchContext is using
+    // ref count was 1 (e.g. only the RunnerContext is using
     // the dptr) then we won't get a copy made
     removeAllMatches();
 
     //kDebug() << "match count" << d->matches.count();
 }
 
-void SearchContext::setSearchTerm(const QString &term)
+void RunnerContext::setSearchTerm(const QString &term)
 {
     reset();
 
@@ -195,7 +195,7 @@ void SearchContext::setSearchTerm(const QString &term)
 }
 
 
-QString SearchContext::searchTerm() const
+QString RunnerContext::searchTerm() const
 {
     d->lockForRead();
     QString term = d->term;
@@ -203,17 +203,17 @@ QString SearchContext::searchTerm() const
     return term;
 }
 
-SearchContext::Type SearchContext::type() const
+RunnerContext::Type RunnerContext::type() const
 {
     return d->type;
 }
 
-QString SearchContext::mimeType() const
+QString RunnerContext::mimeType() const
 {
     return d->mimeType;
 }
 
-bool SearchContext::addMatches(const QString& term, const QList<SearchMatch*> &matches)
+bool RunnerContext::addMatches(const QString& term, const QList<SearchMatch*> &matches)
 {
     if (searchTerm() != term || matches.isEmpty()) {
         return false;
@@ -230,7 +230,7 @@ bool SearchContext::addMatches(const QString& term, const QList<SearchMatch*> &m
     return true;
 }
 
-bool SearchContext::addMatch(const QString &term, SearchMatch *match)
+bool RunnerContext::addMatch(const QString &term, SearchMatch *match)
 {
     if (searchTerm() != term) {
         return false;
@@ -246,7 +246,7 @@ bool SearchContext::addMatch(const QString &term, SearchMatch *match)
 }
 
 
-QList<SearchMatch *> SearchContext::matches() const
+QList<SearchMatch *> RunnerContext::matches() const
 {
     d->lockForRead();
     QList<SearchMatch *> matches = d->matches;
@@ -254,7 +254,7 @@ QList<SearchMatch *> SearchContext::matches() const
     return matches;
 }
 
-void SearchContext::removeAllMatches()
+void RunnerContext::removeAllMatches()
 {
     d->lockForWrite();
     if (!d->matches.isEmpty()) {
@@ -273,4 +273,4 @@ void SearchContext::removeAllMatches()
 
 }
 
-#include "searchcontext.moc"
+#include "runnercontext.moc"

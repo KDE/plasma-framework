@@ -144,7 +144,7 @@ bool SearchMatch::operator<(const SearchMatch& other) const
     return d->relevance < other.d->relevance;
 }
 
-void SearchMatch::run(const SearchContext *context) const
+void SearchMatch::run(const RunnerContext *context) const
 {
     Q_ASSERT(context);
 

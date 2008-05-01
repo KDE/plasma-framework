@@ -17,8 +17,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef SEARCHCONTEXT_H
-#define SEARCHCONTEXT_H
+#ifndef RUNNERCONTEXT_H
+#define RUNNERCONTEXT_H
 
 #include <QtCore/QList>
 #include <QtCore/QObject>
@@ -36,11 +36,11 @@ class SearchMatch;
 class AbstractRunner;
 
 /**
- * @short The SearchContext class provides information related to a search,
+ * @short The RunnerContext class provides information related to a search,
  *        including the search term, metadata on the search term and collected
  *        matches.
  */
-class PLASMA_EXPORT SearchContext : public QObject
+class PLASMA_EXPORT RunnerContext : public QObject
 {
     Q_OBJECT
 
@@ -61,18 +61,18 @@ class PLASMA_EXPORT SearchContext : public QObject
         enum DataPolicy { Shared = 0,
                           SingleConsumer
                         };
-        
-        explicit SearchContext(QObject *parent = 0, DataPolicy policy = Shared);
+
+        explicit RunnerContext(QObject *parent = 0, DataPolicy policy = Shared);
 
         /**
-         * Constructs a SearchContext with a DataPolicy of SingleConsumer that
+         * Constructs a RunnerContext with a DataPolicy of SingleConsumer that
          * contains the search metadata (though none of the currently registered
-         * matches) from the passed in SearchContext. Primarily useful for creating
-         * a thread-local copy of a Shared SearchContext.
+         * matches) from the passed in RunnerContext. Primarily useful for creating
+         * a thread-local copy of a Shared RunnerContext.
          */
-        explicit SearchContext(SearchContext& other, QObject *parent = 0);
+        explicit RunnerContext(RunnerContext& other, QObject *parent = 0);
 
-        ~SearchContext();
+        ~RunnerContext();
 
 
         /**
@@ -109,7 +109,7 @@ class PLASMA_EXPORT SearchContext : public QObject
 
          /**
          * Appends lists of matches to the list of matches.
-         * The SearchContext takes over ownership of the matches on successful addition.
+         * The RunnerContext takes over ownership of the matches on successful addition.
          *
          * This method is thread safe and causes the matchesChanged() signal to be emitted.
          *
@@ -119,7 +119,7 @@ class PLASMA_EXPORT SearchContext : public QObject
 
         /**
          * Appends a match to the existing list of matches.
-         * The SearchContext takes over ownership of the match on successful addition.
+         * The RunnerContext takes over ownership of the match on successful addition.
          *
          * If you are going to be adding multiple matches, it is better to use
          * addMatches instead.
@@ -132,14 +132,14 @@ class PLASMA_EXPORT SearchContext : public QObject
         bool addMatch(const QString &term, SearchMatch *match);
 
         /**
-         * Takes the matches from this SearchContext and copies to them another.
-         * If successful, the matches are removed from this SearchContext and
-         * ownership passed to the other SearchContext
+         * Takes the matches from this RunnerContext and copies to them another.
+         * If successful, the matches are removed from this RunnerContext and
+         * ownership passed to the other RunnerContext
          *
-         * @arg other the SearchContext to move this object's Matches to
+         * @arg other the RunnerContext to move this object's Matches to
          * @return true if matches were added, false if matches were e.g. outdated
          */
-        bool moveMatchesTo(SearchContext &other);
+        bool moveMatchesTo(RunnerContext &other);
 
         /**
          * Retrieves all available matches for the current search term.
@@ -147,7 +147,7 @@ class PLASMA_EXPORT SearchContext : public QObject
         QList<SearchMatch *> matches() const;
 
         /**
-         * Removes all matches from this SearchContext.
+         * Removes all matches from this RunnerContext.
          */
         void removeAllMatches();
 
@@ -161,6 +161,6 @@ class PLASMA_EXPORT SearchContext : public QObject
 
 }
 
-Q_DECLARE_OPERATORS_FOR_FLAGS (Plasma::SearchContext::Types)
+Q_DECLARE_OPERATORS_FOR_FLAGS(Plasma::RunnerContext::Types)
 
 #endif

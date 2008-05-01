@@ -52,12 +52,12 @@ AbstractRunner* RunnerScript::runner() const
     return d->runner;
 }
 
-void RunnerScript::match(Plasma::SearchContext *search)
+void RunnerScript::match(Plasma::RunnerContext *search)
 {
     Q_UNUSED(search)
 }
 
-void RunnerScript::run(const Plasma::SearchContext *search, const Plasma::SearchMatch *action)
+void RunnerScript::run(const Plasma::RunnerContext *search, const Plasma::SearchMatch *action)
 {
     Q_UNUSED(search)
     Q_UNUSED(action)

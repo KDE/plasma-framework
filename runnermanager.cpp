@@ -143,7 +143,7 @@ void RunnerRestrictionPolicy::destructed(Job* job)
 class FindMatchesJob : public Job
 {
 public:
-    FindMatchesJob(const QString& term, Plasma::AbstractRunner* runner, Plasma::SearchContext* context, QObject* parent = 0);
+    FindMatchesJob(const QString& term, Plasma::AbstractRunner* runner, Plasma::RunnerContext* context, QObject* parent = 0);
 
     int priority() const;
 
@@ -151,12 +151,12 @@ protected:
     void run();
 private:
     QString m_term;
-    Plasma::SearchContext* m_context;
+    Plasma::RunnerContext* m_context;
     Plasma::AbstractRunner* m_runner;
 };
 
 FindMatchesJob::FindMatchesJob( const QString& term, Plasma::AbstractRunner* runner, 
-                                Plasma::SearchContext* context, QObject* parent )
+                                Plasma::RunnerContext* context, QObject* parent )
     : ThreadWeaver::Job(parent),
       m_term(term),
       m_context(context),
@@ -263,7 +263,7 @@ public:
     }
     
         RunnerManager *q;
-        SearchContext context;
+        RunnerContext context;
         AbstractRunner::List runners;
         QList<ThreadWeaver::Job*> searchJobs;
         QStringList prioritylist;
@@ -317,7 +317,7 @@ AbstractRunner* RunnerManager::runner(const QString &name) const
 }
 
 
-SearchContext* RunnerManager::searchContext() const
+RunnerContext* RunnerManager::searchContext() const
 {
     return &d->context;
 }

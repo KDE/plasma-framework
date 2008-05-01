@@ -32,7 +32,7 @@ namespace Plasma
 {
     class SearchMatch;
     class AbstractRunner;
-    class SearchContext; 
+    class RunnerContext; 
 
 /**
  * @short The RunnerManager class decides what installed runners are runnable,
@@ -59,7 +59,7 @@ class PLASMA_EXPORT RunnerManager : public QObject
          * Retrieves the current context
          * @return pointer to the current context
          */
-        SearchContext* searchContext() const;
+        RunnerContext* searchContext() const;
 
         /**
          * Retrieves all available matches found so far for the previously launched query 

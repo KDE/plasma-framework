@@ -28,7 +28,7 @@
 #include <KDE/KService>
 
 #include <plasma/plasma_export.h>
-#include <plasma/searchcontext.h>
+#include <plasma/runnercontext.h>
 #include <plasma/searchmatch.h>
 
 class KCompletion;
@@ -70,14 +70,14 @@ class PLASMA_EXPORT AbstractRunner : public QObject
 
         /**
          * This is the main query method. It should trigger creation of
-         * SearchMatch instances through SearchContext::addInformationalMatch,
-         * SearchContext::addExactMatch, and SearchContext::addPossibleMatch.
+         * SearchMatch instances through RunnerContext::addInformationalMatch,
+         * RunnerContext::addExactMatch, and RunnerContext::addPossibleMatch.
          *
-         * If the runner can run precisely the requested term (SearchContext::searchTerm),
-         * it should create an exact match (SearchContext::addExactMatch).
+         * If the runner can run precisely the requested term (RunnerContext::searchTerm),
+         * it should create an exact match (RunnerContext::addExactMatch).
          * The first runner that creates a SearchMatch will be the
          * default runner. Other runner's matches will be suggested in the
-         * interface. Non-exact matches should be offered via SearchContext::addPossibleMatch.
+         * interface. Non-exact matches should be offered via RunnerContext::addPossibleMatch.
          *
          * The match will be activated if the user selects it.
          *
@@ -89,14 +89,14 @@ class PLASMA_EXPORT AbstractRunner : public QObject
          * to return from this method right away, nor to create all matches
          * here.
          */
-        virtual void match(Plasma::SearchContext *search);
+        virtual void match(Plasma::RunnerContext *search);
 
         /**
          * Triggers a call to match.
          *
          * @arg globalContext the search context used in executing this match.
          */
-        void performMatch(Plasma::SearchContext &globalContext);
+        void performMatch(Plasma::RunnerContext &globalContext);
 
         /**
          * If the runner has options that the user can interact with to modify
@@ -132,7 +132,7 @@ class PLASMA_EXPORT AbstractRunner : public QObject
          * Called whenever an exact or possible match associated with this
          * runner is triggered.
          */
-        virtual void run(const Plasma::SearchContext *context, const Plasma::SearchMatch *action);
+        virtual void run(const Plasma::RunnerContext *context, const Plasma::SearchMatch *action);
 
         /**
          * The nominal speed of the runner.
@@ -147,17 +147,17 @@ class PLASMA_EXPORT AbstractRunner : public QObject
         Priority priority() const;
 
         /**
-         * Returns the OR'ed value of all the Information types (as defined in SearchContext::Type)
+         * Returns the OR'ed value of all the Information types (as defined in RunnerContext::Type)
          * this runner is not interested in. 
          * @return OR'ed value of black listed types
          */
-        SearchContext::Types ignoredTypes() const;
+        RunnerContext::Types ignoredTypes() const;
 
         /**
          * Sets the types this runner will ignore 
          * @param types OR'ed listed of ignored types
          */
-        void setIgnoredTypes(SearchContext::Types types);
+        void setIgnoredTypes(RunnerContext::Types types);
 
         /**
           * Returns the engine name for the Runner

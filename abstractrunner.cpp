@@ -33,7 +33,7 @@
 
 #include "scripting/runnerscript.h"
 
-#include "searchcontext.h"
+#include "runnercontext.h"
 
 namespace Plasma
 {
@@ -77,7 +77,7 @@ public:
     bool hasConfig;
     Priority priority;
     Speed speed;
-    SearchContext::Types blackListed;
+    RunnerContext::Types blackListed;
     RunnerScript* script;
     KPluginInfo runnerDescription;
     AbstractRunner* runner;
@@ -118,14 +118,14 @@ KConfigGroup AbstractRunner::config() const
     return KConfigGroup(&runners, group);
 }
 
-void AbstractRunner::performMatch( Plasma::SearchContext &globalContext )
+void AbstractRunner::performMatch( Plasma::RunnerContext &globalContext )
 {
     static const int reasonableRunTime = 1500;
     static const int fastEnoughTime = 250;
 
     d->runtime.restart();
 //TODO :this is a copy ctor
-    SearchContext localContext(globalContext,0);
+    RunnerContext localContext(globalContext,0);
     match(&localContext);
     // automatically rate limit runners that become slooow
     const int runtime = d->runtime.elapsed();
@@ -202,12 +202,12 @@ void AbstractRunner::setPriority(Priority priority)
     d->priority = priority;
 }
 
-SearchContext::Types AbstractRunner::ignoredTypes() const
+RunnerContext::Types AbstractRunner::ignoredTypes() const
 {
     return d->blackListed;
 }
 
-void AbstractRunner::setIgnoredTypes(SearchContext::Types types)
+void AbstractRunner::setIgnoredTypes(RunnerContext::Types types)
 {
     d->blackListed = types;
 }
@@ -225,14 +225,14 @@ QMutex* AbstractRunner::bigLock() const
     return &Private::bigLock;
 }
 
-void AbstractRunner::run(const Plasma::SearchContext *search, const Plasma::SearchMatch *action)
+void AbstractRunner::run(const Plasma::RunnerContext *search, const Plasma::SearchMatch *action)
 {
     if (d->script) {
         return d->script->run(search, action);
     }
 }
 
-void AbstractRunner::match(Plasma::SearchContext *search)
+void AbstractRunner::match(Plasma::RunnerContext *search)
 {
     if (d->script) {
         return d->script->match(search);

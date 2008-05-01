@@ -29,7 +29,7 @@ class QString;
 namespace Plasma
 {
 
-class SearchContext;
+class RunnerContext;
 class AbstractRunner;
 
 class PLASMA_EXPORT SearchMatch
@@ -54,10 +54,10 @@ class PLASMA_EXPORT SearchMatch
 
 
         /**
-         * Constructs a PossibleMatch associated with a given SearchContext
+         * Constructs a PossibleMatch associated with a given RunnerContext
          * and runner.
          *
-         * @arg search the SearchContext this match belongs to
+         * @arg search the RunnerContext this match belongs to
          * @arg runner the runner this match belongs to
          */
         explicit SearchMatch(AbstractRunner *runner);
@@ -108,7 +108,7 @@ class PLASMA_EXPORT SearchMatch
 
         bool operator<(const SearchMatch& other) const;
 
-        void run(const SearchContext *context) const;
+        void run(const RunnerContext *context) const;
 
     private:
         class Private;
