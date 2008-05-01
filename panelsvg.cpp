@@ -153,6 +153,13 @@ void PanelSvg::setElementPrefix(Plasma::Location location)
     d->location = location;
 }
 
+bool PanelSvg::hasElementPrefix(const QString & prefix) const
+{
+    //for now it simply checks if a center element exists,
+    //because it could make sense for certain themes to not have all the elements
+    return hasElement(prefix + "-center");
+}
+
 void PanelSvg::setElementPrefix(const QString & prefix)
 {
     const QString oldPrefix(d->prefix);
@@ -364,8 +371,7 @@ void PanelSvg::Private::generateBackground(PanelData *panel)
             }
 
             p.drawTiledPixmap(QRect(panel->leftWidth, panel->topHeight,
-                                    contentWidth, contentHeight),
-                                    prefix + "center"), center);
+                                    contentWidth, contentHeight), center);
         }
     } else {
         if (contentHeight > 0 && contentWidth > 0) {

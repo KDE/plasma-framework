@@ -134,6 +134,13 @@ class PLASMA_EXPORT PanelSvg : public Svg
         void setElementPrefix(const QString & prefix);
 
         /**
+         * @return true if the svg has the necessary elements with the given prefix
+         * to draw a panel
+         * @arg prefix the given prefix we want to check if drawable
+         */
+        bool hasElementPrefix(const QString & prefix) const;
+
+        /**
          * Returns the prefix for SVG elements of the PanelSvg
          * @return the prefix
          */
