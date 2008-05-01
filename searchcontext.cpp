@@ -41,19 +41,22 @@ class SearchContext::Private : public QSharedData
 {
     public:
         Private(SearchContext *context, SearchContext::DataPolicy p)
-            : type(SearchContext::UnknownType),
-              q(context), 
+            : QSharedData(),
+              type(SearchContext::UnknownType),
+              q(context),
               policy(p)
         {
         }
 
         Private(const SearchContext::Private& p)
-            : term(p.term), 
+            : QSharedData(),
+              term(p.term),
               mimeType(p.mimeType),
               type(p.type),
               q(p.q),
               policy(p.policy)
         {
+            //kDebug() << "¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿boo yeah";
         }
 
         ~Private()
@@ -168,11 +171,19 @@ void SearchContext::reset()
     d->term.clear();
     d->mimeType.clear();
     d->unlock();
+
+    // we still have to remove all the matches, since if the
+    // ref count was 1 (e.g. only the SearchContext is using
+    // the dptr) then we won't get a copy made
     removeAllMatches();
+
+    //kDebug() << "match count" << d->matches.count();
 }
 
 void SearchContext::setSearchTerm(const QString &term)
 {
+    reset();
+
     if (term.isEmpty()) {
         return;
     }
@@ -246,8 +257,7 @@ QList<SearchMatch *> SearchContext::matches() const
 void SearchContext::removeAllMatches()
 {
     d->lockForWrite();
-    bool emptyMatches = d->matches.isEmpty();
-    if (!emptyMatches) {
+    if (!d->matches.isEmpty()) {
         d->matches.clear();
         d->unlock();
         emit d->q->matchesChanged();
