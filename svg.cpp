@@ -208,7 +208,7 @@ class Svg::Private
 
         void eraseRenderer()
         {
-            if (renderer.count() == 2) {
+            if ( renderer && renderer.count() == 2) {
                 // this and the cache reference it; and boy is this not thread safe ;)
                 renderers.erase(renderers.find(themePath));
             }
