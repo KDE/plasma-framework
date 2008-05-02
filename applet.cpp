@@ -781,7 +781,7 @@ void Applet::registerAsDragHandle( QGraphicsItem * item )
     }
 }
 
-void Applet::unregisterDragHandle( QGraphicsItem * item )
+void Applet::unregisterAsDragHandle(QGraphicsItem *item)
 {
     if (!item) {
         return;

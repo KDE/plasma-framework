@@ -611,20 +611,20 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          *
          * @param item the item to watch for mouse move
          */
-        void registerAsDragHandle( QGraphicsItem * item );
+        void registerAsDragHandle(QGraphicsItem *item);
 
         /**
          * Unregister a widget registered with registerAsDragHandle.
          *
          * @param item the item to unregister
          */
-        void unregisterDragHandle( QGraphicsItem * item );
+        void unregisterAsDragHandle(QGraphicsItem *item);
 
         /**
          * @param item the item to look for if it is registered or not
          * @return true if it is registered, false otherwise
          */
-        bool isRegisteredAsDragHandle( QGraphicsItem * item );
+        bool isRegisteredAsDragHandle(QGraphicsItem *item);
 
         /**
          * @internal event filter; used for focus watching
