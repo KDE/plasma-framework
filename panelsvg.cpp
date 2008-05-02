@@ -75,6 +75,7 @@ public:
     ~Private()
     {
         qDeleteAll(panels);
+        panels.clear();
     }
 
     void generateBackground(PanelData *panel);
@@ -208,8 +209,8 @@ void PanelSvg::resizePanel(const QSizeF& size)
         return;
     }
 
-    d->panels[d->prefix]->panelSize = size;
     d->updateSizes();
+    d->panels[d->prefix]->panelSize = size;
 }
 
 qreal PanelSvg::marginSize(const Plasma::MarginEdge edge) const
@@ -512,7 +513,6 @@ void PanelSvg::Private::generateBackground(PanelData *panel)
 void PanelSvg::Private::updateSizes()
 {
     //kDebug() << "!!!!!!!!!!!!!!!!!!!!!! updating sizes" << prefix;
-    q->clearCache();
     PanelData *panel = panels[prefix];
     Q_ASSERT(panel);
 
