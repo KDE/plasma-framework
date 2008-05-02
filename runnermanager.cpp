@@ -341,14 +341,14 @@ void RunnerManager::launchQuery (const QString & term, const QString & runnerNam
         return;
     }
 
-    if (d->context.searchTerm() == term) {
+    if (d->context.query() == term) {
         // we already are searching for this!
         return;
     }
 
     reset();
 //    kDebug() << "runners searching for" << term << "on" << runnerName;
-    d->context.setSearchTerm(term);
+    d->context.setQuery(term);
 
     AbstractRunner::List runable;
 
@@ -382,14 +382,14 @@ bool RunnerManager::execQuery (const QString & term, const QString & runnerName)
         return false;
     }
 
-    if (d->context.searchTerm() == term) {
+    if (d->context.query() == term) {
         // we already are searching for this!
         return false;
     }
 
     reset();
 //    kDebug() << "executing query about " << term << "on" << runnerName;
-    d->context.setSearchTerm(term);
+    d->context.setQuery(term);
 
     AbstractRunner *r = runner(runnerName);
 

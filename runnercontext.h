@@ -82,15 +82,15 @@ class PLASMA_EXPORT RunnerContext : public QObject
         void reset();
 
         /**
-         * Sets the search term for this object and attempts to determine
+         * Sets the query term for this object and attempts to determine
          * the type of the search.
          */
-        void setSearchTerm(const QString&);
+        void setQuery(const QString& term);
 
         /**
-         * @return the current search term.
+         * @return the current search query term.
          */
-        QString searchTerm() const;
+        QString query() const;
 
         /**
          * The type of item the search term might refer to.

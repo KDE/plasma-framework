@@ -73,7 +73,7 @@ class PLASMA_EXPORT AbstractRunner : public QObject
          * SearchMatch instances through RunnerContext::addInformationalMatch,
          * RunnerContext::addExactMatch, and RunnerContext::addPossibleMatch.
          *
-         * If the runner can run precisely the requested term (RunnerContext::searchTerm),
+         * If the runner can run precisely the requested term (RunnerContext::query()),
          * it should create an exact match (RunnerContext::addExactMatch).
          * The first runner that creates a SearchMatch will be the
          * default runner. Other runner's matches will be suggested in the

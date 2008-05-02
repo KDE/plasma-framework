@@ -148,7 +148,7 @@ void SearchMatch::run(const RunnerContext *context) const
 {
     Q_ASSERT(context);
 
-    //kDebug() << "we run the term" << context->searchTerm() << "whose type is" << context->mimetype();
+    //kDebug() << "we run the term" << context->query() << "whose type is" << context->mimetype();
     if (d->runner) {
         //TODO: this could be dangerous if the runner is deleted behind our backs.
         d->runner->run(context, this);

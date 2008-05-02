@@ -177,7 +177,7 @@ void RunnerContext::reset()
     //kDebug() << "match count" << d->matches.count();
 }
 
-void RunnerContext::setSearchTerm(const QString &term)
+void RunnerContext::setQuery(const QString &term)
 {
     reset();
 
@@ -192,7 +192,7 @@ void RunnerContext::setSearchTerm(const QString &term)
 }
 
 
-QString RunnerContext::searchTerm() const
+QString RunnerContext::query() const
 {
     LOCK_FOR_READ(this)
     QString term = d->term;
@@ -212,7 +212,7 @@ QString RunnerContext::mimeType() const
 
 bool RunnerContext::addMatches(const QString& term, const QList<SearchMatch*> &matches)
 {
-    if (searchTerm() != term || matches.isEmpty()) {
+    if (query() != term || matches.isEmpty()) {
         return false;
     }
 
@@ -229,7 +229,7 @@ bool RunnerContext::addMatches(const QString& term, const QList<SearchMatch*> &m
 
 bool RunnerContext::addMatch(const QString &term, SearchMatch *match)
 {
-    if (searchTerm() != term) {
+    if (query() != term) {
         return false;
     }
 
