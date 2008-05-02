@@ -57,7 +57,7 @@ void RunnerScript::match(Plasma::RunnerContext *search)
     Q_UNUSED(search)
 }
 
-void RunnerScript::run(const Plasma::RunnerContext *search, const Plasma::SearchMatch *action)
+void RunnerScript::run(const Plasma::RunnerContext *search, const Plasma::QueryMatch *action)
 {
     Q_UNUSED(search)
     Q_UNUSED(action)

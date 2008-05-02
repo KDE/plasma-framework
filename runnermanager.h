@@ -30,7 +30,7 @@
 
 namespace Plasma
 {
-    class SearchMatch;
+    class QueryMatch;
     class AbstractRunner;
     class RunnerContext; 
 
@@ -65,13 +65,13 @@ class PLASMA_EXPORT RunnerManager : public QObject
          * Retrieves all available matches found so far for the previously launched query 
          * @return List of matches
          */
-        QList<SearchMatch *> matches() const;
+        QList<QueryMatch *> matches() const;
 
         /**
          * Runs a given match
          * @arg pointer to the match to be executed
          */
-         void run(const SearchMatch *match);
+         void run(const QueryMatch *match);
 
     public Q_SLOTS:
         /**

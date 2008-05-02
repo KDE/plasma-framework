@@ -28,7 +28,7 @@
 #include <KStandardDirs>
 #include <QTimer>
 
-#include <plasma/searchmatch.h>
+#include <plasma/querymatch.h>
 #include <plasma/package.h>
 
 #include "scripting/runnerscript.h"
@@ -225,7 +225,7 @@ QMutex* AbstractRunner::bigLock() const
     return &Private::bigLock;
 }
 
-void AbstractRunner::run(const Plasma::RunnerContext *search, const Plasma::SearchMatch *action)
+void AbstractRunner::run(const Plasma::RunnerContext *search, const Plasma::QueryMatch *action)
 {
     if (d->script) {
         return d->script->run(search, action);

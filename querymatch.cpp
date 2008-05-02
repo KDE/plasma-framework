@@ -17,7 +17,7 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "searchmatch.h"
+#include "querymatch.h"
 
 #include <QPointer>
 #include <QVariant>
@@ -31,19 +31,19 @@
 namespace Plasma
 {
 
-class SearchMatch::Private
+class QueryMatch::Private
 {
     public:
         Private(AbstractRunner *r)
             : runner(r),
-              type(SearchMatch::ExactMatch),
+              type(QueryMatch::ExactMatch),
               enabled(true),
               relevance(.7)
         {
         }
 
         QPointer<AbstractRunner> runner;
-        SearchMatch::Type type;
+        QueryMatch::Type type;
         QString text;
         QString subtext;
         QIcon icon;
@@ -53,98 +53,98 @@ class SearchMatch::Private
 };
 
 
-SearchMatch::SearchMatch(AbstractRunner *runner)
+QueryMatch::QueryMatch(AbstractRunner *runner)
     : d(new Private(runner))
 {
 //    kDebug() << "new match created";
 }
 
-SearchMatch::~SearchMatch()
+QueryMatch::~QueryMatch()
 {
     delete d;
 }
 
-void SearchMatch::setType(Type type)
+void QueryMatch::setType(Type type)
 {
     d->type = type;
 }
 
-SearchMatch::Type SearchMatch::type() const
+QueryMatch::Type QueryMatch::type() const
 {
     return d->type;
 }
 
-void SearchMatch::setRelevance(qreal relevance)
+void QueryMatch::setRelevance(qreal relevance)
 {
     d->relevance = qMax(qreal(0.0), qMin(qreal(1.0), relevance));
 }
 
-qreal SearchMatch::relevance() const
+qreal QueryMatch::relevance() const
 {
     return d->relevance;
 }
 
-AbstractRunner* SearchMatch::runner() const
+AbstractRunner* QueryMatch::runner() const
 {
     return d->runner;
 }
 
-void SearchMatch::setText(const QString& text)
+void QueryMatch::setText(const QString& text)
 {
     d->text = text;
 }
 
-void SearchMatch::setSubtext(const QString& subtext)
+void QueryMatch::setSubtext(const QString& subtext)
 {
     d->subtext = subtext;
 }
 
-void SearchMatch::setData(const QVariant& data)
+void QueryMatch::setData(const QVariant& data)
 {
     d->data = data;
 }
 
-void SearchMatch::setIcon(const QIcon& icon)
+void QueryMatch::setIcon(const QIcon& icon)
 {
     d->icon = icon;
 }
 
-QVariant SearchMatch::data() const
+QVariant QueryMatch::data() const
 {
     return d->data;
 }
 
-QString SearchMatch::text() const
+QString QueryMatch::text() const
 {
     return d->text;
 }
 
-QString SearchMatch::subtext() const
+QString QueryMatch::subtext() const
 {
     return d->subtext;
 }
 
-QIcon SearchMatch::icon() const
+QIcon QueryMatch::icon() const
 {
     return d->icon;
 }
 
-void SearchMatch::setEnabled( bool enabled )
+void QueryMatch::setEnabled( bool enabled )
 {
     d->enabled = enabled;
 }
 
-bool SearchMatch::isEnabled() const
+bool QueryMatch::isEnabled() const
 {
   return d->enabled;
 }
 
-bool SearchMatch::operator<(const SearchMatch& other) const
+bool QueryMatch::operator<(const QueryMatch& other) const
 {
     return d->relevance < other.d->relevance;
 }
 
-void SearchMatch::run(const RunnerContext *context) const
+void QueryMatch::run(const RunnerContext *context) const
 {
     Q_ASSERT(context);
 

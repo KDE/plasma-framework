@@ -41,9 +41,9 @@ set(plasma_LIB_SRCS
     packages.cpp
     plasma.cpp
     plasma_export.h
+    querymatch.cpp
     runnercontext.cpp
     runnermanager.cpp
-    searchmatch.cpp
     shadowitem.cpp
     svg.cpp
     panelsvg.cpp
@@ -116,7 +116,7 @@ set(plasma_LIB_INCLUDES
     plasma_export.h
     runnercontext.h
     runnermanager.h
-    searchmatch.h
+    querymatch.h
     shadowitem_p.h
     svg.h
     panelsvg.h
@@ -173,7 +173,7 @@ install(FILES
     includes/DataEngine
     includes/DataEngineManager
     includes/RunnerContext
-    includes/SearchMatch
+    includes/QueryMatch
     includes/Svg
     includes/PanelSvg
     includes/UiLoader

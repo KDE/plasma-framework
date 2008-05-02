@@ -32,7 +32,7 @@
 #include <KStandardDirs>
 #include <KUrl>
 
-#include "searchmatch.h"
+#include "querymatch.h"
 
 #define LOCK_FOR_READ(context) if (context->d->policy == Shared) { context->d->lock.lockForRead(); }
 #define LOCK_FOR_WRITE(context) if (context->d->policy == Shared) { context->d->lock.lockForWrite(); }
@@ -125,7 +125,7 @@ class RunnerContext::Private : public QSharedData
         }
 
         QReadWriteLock lock;
-        QList<SearchMatch*> matches;
+        QList<QueryMatch*> matches;
         QString term;
         QString mimeType;
         RunnerContext::Type type;
@@ -210,7 +210,7 @@ QString RunnerContext::mimeType() const
     return d->mimeType;
 }
 
-bool RunnerContext::addMatches(const QString& term, const QList<SearchMatch*> &matches)
+bool RunnerContext::addMatches(const QString& term, const QList<QueryMatch*> &matches)
 {
     if (query() != term || matches.isEmpty()) {
         return false;
@@ -227,7 +227,7 @@ bool RunnerContext::addMatches(const QString& term, const QList<SearchMatch*> &m
     return true;
 }
 
-bool RunnerContext::addMatch(const QString &term, SearchMatch *match)
+bool RunnerContext::addMatch(const QString &term, QueryMatch *match)
 {
     if (query() != term) {
         return false;
@@ -243,10 +243,10 @@ bool RunnerContext::addMatch(const QString &term, SearchMatch *match)
 }
 
 
-QList<SearchMatch *> RunnerContext::matches() const
+QList<QueryMatch *> RunnerContext::matches() const
 {
     LOCK_FOR_READ(this)
-    QList<SearchMatch *> matches = d->matches;
+    QList<QueryMatch *> matches = d->matches;
     UNLOCK(this);
     return matches;
 }
@@ -255,7 +255,7 @@ void RunnerContext::removeAllMatches()
 {
     LOCK_FOR_WRITE(this)
     if (!d->matches.isEmpty()) {
-        QList<SearchMatch*> matches = d->matches;
+        QList<QueryMatch*> matches = d->matches;
         d->matches.clear();
         UNLOCK(this);
 

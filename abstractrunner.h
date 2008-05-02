@@ -29,7 +29,7 @@
 
 #include <plasma/plasma_export.h>
 #include <plasma/runnercontext.h>
-#include <plasma/searchmatch.h>
+#include <plasma/querymatch.h>
 
 class KCompletion;
 
@@ -38,7 +38,7 @@ namespace Plasma
 
 class Package;
 class RunnerScript;
-class SearchMatch;
+class QueryMatch;
 
 /**
  * An abstract base class for Plasma Runner plugins
@@ -70,12 +70,12 @@ class PLASMA_EXPORT AbstractRunner : public QObject
 
         /**
          * This is the main query method. It should trigger creation of
-         * SearchMatch instances through RunnerContext::addInformationalMatch,
+         * QueryMatch instances through RunnerContext::addInformationalMatch,
          * RunnerContext::addExactMatch, and RunnerContext::addPossibleMatch.
          *
          * If the runner can run precisely the requested term (RunnerContext::query()),
          * it should create an exact match (RunnerContext::addExactMatch).
-         * The first runner that creates a SearchMatch will be the
+         * The first runner that creates a QueryMatch will be the
          * default runner. Other runner's matches will be suggested in the
          * interface. Non-exact matches should be offered via RunnerContext::addPossibleMatch.
          *
@@ -132,7 +132,7 @@ class PLASMA_EXPORT AbstractRunner : public QObject
          * Called whenever an exact or possible match associated with this
          * runner is triggered.
          */
-        virtual void run(const Plasma::RunnerContext *context, const Plasma::SearchMatch *action);
+        virtual void run(const Plasma::RunnerContext *context, const Plasma::QueryMatch *action);
 
         /**
          * The nominal speed of the runner.

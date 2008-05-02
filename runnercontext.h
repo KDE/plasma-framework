@@ -32,7 +32,7 @@ class KCompletion;
 namespace Plasma
 {
 
-class SearchMatch;
+class QueryMatch;
 class AbstractRunner;
 
 /**
@@ -115,7 +115,7 @@ class PLASMA_EXPORT RunnerContext : public QObject
          *
          * @return true if matches were added, false if matches were e.g. outdated
          */
-        bool addMatches(const QString& term, const QList<SearchMatch *> &matches);
+        bool addMatches(const QString& term, const QList<QueryMatch *> &matches);
 
         /**
          * Appends a match to the existing list of matches.
@@ -129,7 +129,7 @@ class PLASMA_EXPORT RunnerContext : public QObject
          *
          * @return true if the match was added, false otherwise.
          */
-        bool addMatch(const QString &term, SearchMatch *match);
+        bool addMatch(const QString &term, QueryMatch *match);
 
         /**
          * Takes the matches from this RunnerContext and copies to them another.
@@ -144,7 +144,7 @@ class PLASMA_EXPORT RunnerContext : public QObject
         /**
          * Retrieves all available matches for the current search term.
          */
-        QList<SearchMatch *> matches() const;
+        QList<QueryMatch *> matches() const;
 
         /**
          * Removes all matches from this RunnerContext.

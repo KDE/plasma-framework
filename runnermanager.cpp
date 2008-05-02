@@ -37,7 +37,7 @@
 #include <QTimer>
 #include <QCoreApplication>
 
-#include "searchmatch.h"
+#include "querymatch.h"
 
 #include "runnermanager.h"
 
@@ -323,12 +323,12 @@ RunnerContext* RunnerManager::searchContext() const
 }
 
 //Reordering is here so data is not reordered till strictly needed
-QList<SearchMatch *> RunnerManager::matches() const
+QList<QueryMatch *> RunnerManager::matches() const
 {
     return d->context.matches();
 }
 
-void RunnerManager::run(const SearchMatch *match)
+void RunnerManager::run(const QueryMatch *match)
 {
     //TODO: this function is not const as it may be used for learning
     match->run(&d->context);

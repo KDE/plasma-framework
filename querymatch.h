@@ -17,8 +17,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef SEARCHMATCH_H
-#define SEARCHMATCH_H
+#ifndef QUERYMATCH_H
+#define QUERYMATCH_H
 
 #include <plasma/plasma_export.h>
 
@@ -32,7 +32,7 @@ namespace Plasma
 class RunnerContext;
 class AbstractRunner;
 
-class PLASMA_EXPORT SearchMatch
+class PLASMA_EXPORT QueryMatch
 {
     public:
         /**
@@ -60,8 +60,8 @@ class PLASMA_EXPORT SearchMatch
          * @arg search the RunnerContext this match belongs to
          * @arg runner the runner this match belongs to
          */
-        explicit SearchMatch(AbstractRunner *runner);
-        ~SearchMatch();
+        explicit QueryMatch(AbstractRunner *runner);
+        ~QueryMatch();
 
         /**
          * Sets the type of match this action represents.
@@ -106,7 +106,7 @@ class PLASMA_EXPORT SearchMatch
         QIcon icon() const;
         bool isEnabled() const;
 
-        bool operator<(const SearchMatch& other) const;
+        bool operator<(const QueryMatch& other) const;
 
         void run(const RunnerContext *context) const;
 
