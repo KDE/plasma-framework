@@ -154,13 +154,6 @@ void PanelSvg::setElementPrefix(Plasma::Location location)
     d->location = location;
 }
 
-bool PanelSvg::hasElementPrefix(const QString & prefix) const
-{
-    //for now it simply checks if a center element exists,
-    //because it could make sense for certain themes to not have all the elements
-    return hasElement(prefix + "-center");
-}
-
 void PanelSvg::setElementPrefix(const QString & prefix)
 {
     const QString oldPrefix(d->prefix);
@@ -189,6 +182,34 @@ void PanelSvg::setElementPrefix(const QString & prefix)
     }
 
     d->location = Floating;
+}
+
+bool PanelSvg::hasElementPrefix(const QString & prefix) const
+{
+    //for now it simply checks if a center element exists,
+    //because it could make sense for certain themes to not have all the elements
+    return hasElement(prefix + "-center");
+}
+
+bool PanelSvg::hasElementPrefix(Plasma::Location location) const
+{
+    switch (location) {
+        case TopEdge:
+            return hasElementPrefix("north");
+            break;
+        case BottomEdge:
+            return hasElementPrefix("south");
+            break;
+        case LeftEdge:
+            return hasElementPrefix("west");
+            break;
+        case RightEdge:
+            return hasElementPrefix("east");
+            break;
+        default:
+            return hasElementPrefix(QString());
+            break;
+    }
 }
 
 QString PanelSvg::prefix()

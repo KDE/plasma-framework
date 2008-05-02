@@ -141,6 +141,16 @@ class PLASMA_EXPORT PanelSvg : public Svg
         bool hasElementPrefix(const QString & prefix) const;
 
         /**
+         * This is an overloaded method provided for convenience equivalent to 
+         * hasElementPrefix("north"), hasElementPrefix("south")
+         * hasElementPrefix("west") and hasElementPrefix("east")
+         * @return true if the svg has the necessary elements with the given prefix
+         * to draw a panel.
+         * @arg location the given prefix we want to check if drawable
+         */
+        bool hasElementPrefix(Plasma::Location location) const;
+
+        /**
          * Returns the prefix for SVG elements of the PanelSvg
          * @return the prefix
          */
