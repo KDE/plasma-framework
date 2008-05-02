@@ -160,9 +160,9 @@ void RunnerContext::reset()
     // We will detach if we are a copy of someone. But we will reset 
     // if we are the 'main' context others copied from. Resetting 
     // one RunnerContext makes all the copies oneobsolete.  
-    LOCK_FOR_WRITE(this)
     d.detach();
 
+    LOCK_FOR_WRITE(this)
     //kDebug() << "reset searchContext";
     d->type = RunnerContext::UnknownType;
     d->term.clear();
