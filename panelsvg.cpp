@@ -129,7 +129,11 @@ void PanelSvg::setEnabledBorders(const EnabledBorders borders)
 
 PanelSvg::EnabledBorders PanelSvg::enabledBorders() const
 {
-    return d->panels[d->prefix]->enabledBorders;
+    if (d->panels.contains(d->prefix)) {
+        return d->panels[d->prefix]->enabledBorders;
+    } else {
+        return NoBorder;
+    }
 }
 
 void PanelSvg::setElementPrefix(Plasma::Location location)
@@ -232,6 +236,15 @@ void PanelSvg::resizePanel(const QSizeF& size)
 
     d->updateSizes();
     d->panels[d->prefix]->panelSize = size;
+}
+
+QSizeF PanelSvg::panelSize() const
+{
+    if (d->panels.contains(d->prefix)) {
+        return d->panels[d->prefix]->panelSize;
+    } else {
+        return QSize(-1, -1);
+    }
 }
 
 qreal PanelSvg::marginSize(const Plasma::MarginEdge edge) const

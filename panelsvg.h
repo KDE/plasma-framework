@@ -48,7 +48,8 @@ class PLASMA_EXPORT PanelSvg : public Svg
         /**
          * These flags represents what borders should be drawn
          */
-        enum EnabledBorder { TopBorder = 1,
+        enum EnabledBorder { NoBorder = 0,
+                             TopBorder = 1,
                              BottomBorder = 2,
                              LeftBorder = 4,
                              RightBorder = 8,
@@ -92,6 +93,11 @@ class PLASMA_EXPORT PanelSvg : public Svg
          * @arg size the new size of the panel
          */
         void resizePanel(const QSizeF& size);
+
+        /**
+         * @returns the size of the panel
+         */
+        QSizeF panelSize() const;
 
         /**
          * Returns the margin size given the margin edge we want
