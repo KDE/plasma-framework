@@ -129,8 +129,10 @@ void PanelSvg::setEnabledBorders(const EnabledBorders borders)
 
 PanelSvg::EnabledBorders PanelSvg::enabledBorders() const
 {
-    if (d->panels.contains(d->prefix)) {
-        return d->panels[d->prefix]->enabledBorders;
+    QHash<QString, PanelData*>::const_iterator it = d->panels.constFind(d->prefix);
+
+    if (it != d->panels.constEnd()) {
+        return it.value()->enabledBorders;
     } else {
         return NoBorder;
     }
@@ -240,8 +242,10 @@ void PanelSvg::resizePanel(const QSizeF& size)
 
 QSizeF PanelSvg::panelSize() const
 {
-    if (d->panels.contains(d->prefix)) {
-        return d->panels[d->prefix]->panelSize;
+    QHash<QString, PanelData*>::const_iterator it = d->panels.constFind(d->prefix);
+
+    if (it != d->panels.constEnd()) {
+        return it.value()->panelSize;
     } else {
         return QSize(-1, -1);
     }
