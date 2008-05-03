@@ -219,6 +219,11 @@ class Svg::Private
         QSize elementSize(const QString& elementId)
         {
             createRenderer();
+
+            if (!renderer->elementExists(elementId)) {
+                return QSize(0, 0);
+            }
+
             QSizeF elementSize = renderer->boundsOnElement(elementId).size();
             QSizeF naturalSize = renderer->defaultSize();
             qreal dx = size.width() / naturalSize.width();
