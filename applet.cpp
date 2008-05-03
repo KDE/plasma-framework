@@ -505,7 +505,6 @@ void Applet::setBackgroundHints(const BackgroundHints hints)
             qreal left, top, right, bottom;
             d->background->getMargins(left, top, right, bottom);
             setContentsMargins(left, right, top, bottom);
-
             QSizeF fitSize(left + right, top + bottom);
             if (minimumSize().expandedTo(fitSize) != minimumSize()) {
                 setMinimumSize(minimumSize().expandedTo(fitSize));
