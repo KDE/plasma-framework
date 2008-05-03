@@ -546,7 +546,7 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          * configuring the applet.
          *
          * It defaults to false, and if true is passed in you should
-         * also reimplement showConfigurationInterface()
+         * also reimplement createConfigurationInterface()
          *
          * @param hasInterface whether or not there is a user interface available
          **/
