@@ -425,13 +425,13 @@ void PanelSvg::Private::generateBackground(PanelData *panel)
     }
 
     // Corners
-    if (panel->enabledBorders & TopBorder) {
+    if (q->hasElement(prefix + "top") && panel->enabledBorders & TopBorder) {
         if (!origined) {
             contentTop = panel->topHeight;
             bottomOffset += panel->topHeight;
         }
 
-        if (panel->enabledBorders & LeftBorder) {
+        if (q->hasElement(prefix + "topleft") && panel->enabledBorders & LeftBorder) {
             q->paint(&p, QRect(leftOffset, topOffset, panel->leftWidth, panel->topHeight), prefix + "topleft");
 
             if (!origined) {
@@ -440,13 +440,13 @@ void PanelSvg::Private::generateBackground(PanelData *panel)
             }
         }
 
-        if (panel->enabledBorders & RightBorder) {
+        if (q->hasElement(prefix + "topright") && panel->enabledBorders & RightBorder) {
             q->paint(&p, QRect(rightOffset, topOffset, panel->rightWidth, panel->topHeight), prefix + "topright");
         }
     }
 
-    if (panel->enabledBorders & BottomBorder) {
-        if (panel->enabledBorders & LeftBorder) {
+    if (q->hasElement(prefix + "bottom") && panel->enabledBorders & BottomBorder) {
+        if (q->hasElement(prefix + "bottomleft") && panel->enabledBorders & LeftBorder) {
             q->paint(&p, QRect(leftOffset, bottomOffset, panel->leftWidth, panel->bottomHeight), prefix + "bottomleft");
 
             if (!origined) {
@@ -455,7 +455,7 @@ void PanelSvg::Private::generateBackground(PanelData *panel)
             }
         }
 
-        if (panel->enabledBorders & RightBorder) {
+        if (q->hasElement(prefix + "bottomright") && panel->enabledBorders & RightBorder) {
             q->paint(&p, QRect(rightOffset, bottomOffset, panel->rightWidth, panel->bottomHeight), prefix + "bottomright");
         }
     }
@@ -465,11 +465,11 @@ void PanelSvg::Private::generateBackground(PanelData *panel)
         if (panel->enabledBorders & LeftBorder || panel->enabledBorders & RightBorder) {
             q->resize(q->size().width(), scaledContentSize.height());
 
-            if (panel->enabledBorders & LeftBorder) {
+            if (q->hasElement(prefix + "left") && panel->enabledBorders & LeftBorder) {
                 q->paint(&p, QRect(leftOffset, contentTop, panel->leftWidth, contentHeight), prefix + "left");
             }
 
-            if (panel->enabledBorders & RightBorder) {
+            if (q->hasElement(prefix + "right") && panel->enabledBorders & RightBorder) {
                 q->paint(&p, QRect(rightOffset, contentTop, panel->rightWidth, contentHeight), prefix + "right");
             }
 
@@ -479,65 +479,57 @@ void PanelSvg::Private::generateBackground(PanelData *panel)
         if (panel->enabledBorders & TopBorder || panel->enabledBorders & BottomBorder) {
             q->resize(scaledContentSize.width(), q->size().height());
 
-            if (panel->enabledBorders & TopBorder) {
+            if (q->hasElement(prefix + "top") && panel->enabledBorders & TopBorder) {
                 q->paint(&p, QRect(contentLeft, topOffset, contentWidth, panel->topHeight), prefix + "top");
             }
 
-            if (panel->enabledBorders & BottomBorder) {
+            if (q->hasElement(prefix + "bottom") && panel->enabledBorders & BottomBorder) {
                 q->paint(&p, QRect(contentLeft, bottomOffset, contentWidth, panel->bottomHeight), prefix + "bottom");
             }
 
             q->resize();
         }
     } else {
-        if (panel->enabledBorders & LeftBorder) {
+        if (q->hasElement(prefix + "left") && panel->enabledBorders & LeftBorder) {
             QPixmap left(panel->leftWidth, leftHeight);
             left.fill(Qt::transparent);
 
-            {
-                QPainter sidePainter(&left);
-                sidePainter.setCompositionMode(QPainter::CompositionMode_Source);
-                q->paint(&sidePainter, QPoint(0, 0), prefix + "left");
-            }
+            QPainter sidePainter(&left);
+            sidePainter.setCompositionMode(QPainter::CompositionMode_Source);
+            q->paint(&sidePainter, QPoint(0, 0), prefix + "left");
 
             p.drawTiledPixmap(QRect(leftOffset, contentTop, panel->leftWidth, contentHeight), left);
         }
 
-        if (panel->enabledBorders & RightBorder) {
+        if (q->hasElement(prefix + "right") && panel->enabledBorders & RightBorder) {
             QPixmap right(panel->rightWidth, leftHeight);
             right.fill(Qt::transparent);
 
-            {
-                QPainter sidePainter(&right);
-                sidePainter.setCompositionMode(QPainter::CompositionMode_Source);
-                q->paint(&sidePainter, QPoint(0, 0), prefix + "right");
-            }
+            QPainter sidePainter(&right);
+            sidePainter.setCompositionMode(QPainter::CompositionMode_Source);
+            q->paint(&sidePainter, QPoint(0, 0), prefix + "right");
 
             p.drawTiledPixmap(QRect(rightOffset, contentTop, panel->rightWidth, contentHeight), right);
         }
 
-        if (panel->enabledBorders & TopBorder) {
+        if (q->hasElement(prefix + "top") && panel->enabledBorders & TopBorder) {
             QPixmap top(topWidth, panel->topHeight);
             top.fill(Qt::transparent);
 
-            {
-                QPainter sidePainter(&top);
-                sidePainter.setCompositionMode(QPainter::CompositionMode_Source);
-                q->paint(&sidePainter, QPoint(0, 0), prefix + "top");
-            }
+            QPainter sidePainter(&top);
+            sidePainter.setCompositionMode(QPainter::CompositionMode_Source);
+            q->paint(&sidePainter, QPoint(0, 0), prefix + "top");
 
             p.drawTiledPixmap(QRect(contentLeft, topOffset, contentWidth, panel->topHeight), top);
         }
 
-        if (panel->enabledBorders & BottomBorder) {
+        if (q->hasElement(prefix + "bottom") && panel->enabledBorders & BottomBorder) {
             QPixmap bottom(topWidth, panel->bottomHeight);
             bottom.fill(Qt::transparent);
 
-            {
-                QPainter sidePainter(&bottom);
-                sidePainter.setCompositionMode(QPainter::CompositionMode_Source);
-                q->paint(&sidePainter, QPoint(0, 0), prefix + "bottom");
-            }
+            QPainter sidePainter(&bottom);
+            sidePainter.setCompositionMode(QPainter::CompositionMode_Source);
+            q->paint(&sidePainter, QPoint(0, 0), prefix + "bottom");
 
             p.drawTiledPixmap(QRect(contentLeft, bottomOffset, contentWidth, panel->bottomHeight), bottom);
         }
