@@ -22,7 +22,7 @@
 
 #include <plasma/plasma_export.h>
 #include <plasma/dataengine.h>
-#include <QGraphicsWidget>
+#include <QtGui/QGraphicsWidget>
 
 namespace Plasma
 {

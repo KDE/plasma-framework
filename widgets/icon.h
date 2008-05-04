@@ -26,7 +26,7 @@
 #include <QtCore/QObject>
 #include <QtGui/QGraphicsTextItem>
 #include <QtGui/QIcon>
-#include <QGraphicsWidget>
+#include <QtGui/QGraphicsWidget>
 
 #include <plasma/dataengine.h>
 #include <plasma/animator.h>

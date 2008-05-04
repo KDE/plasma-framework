@@ -21,7 +21,8 @@
 #define PLASMA_WEBCONTENT_H
 
 #include <plasma/plasma_export.h>
-#include <QGraphicsWidget>
+#include <QtGui/QGraphicsWidget>
+
 class QWebPage;
 class QWebFrame;
 class QKeyEvent;
