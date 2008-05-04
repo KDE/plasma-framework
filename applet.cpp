@@ -536,7 +536,7 @@ void Applet::setBackgroundHints(const BackgroundHints hints)
         if (d->shadow) {
             d->shadow->setVisible(true);
         } else {
-            shadow = new ShadowItem(this);
+            d->shadow = new ShadowItem(this);
             if (scene()) {
                 scene()->addItem(d->shadow);
                 d->shadow->show();
