@@ -107,7 +107,7 @@ class PLASMA_EXPORT RunnerManager : public QObject
         void matchesChanged(const QList<Plasma::QueryMatch*> &matches);
 
     private:
-        Q_PRIVATE_SLOT(d, void matchesChanged());
+        Q_PRIVATE_SLOT(d, void matchesChanged())
         class Private;
         Private * const d;
 };
