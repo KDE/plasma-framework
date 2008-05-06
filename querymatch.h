@@ -119,13 +119,10 @@ class PLASMA_EXPORT QueryMatch
 
         void run(const RunnerContext *context) const;
 
-    protected:
-        friend class AbstractRunner;
-
         /**
          * Sets data to be used internally by the associated
-         * AbstractRunner. When set, it also is used to form
-         * part of the id for the match.
+         * AbstractRunner. When set, it is also used to form
+         * part of the id() for this match.
          */
         void setData(const QVariant& data);
 
