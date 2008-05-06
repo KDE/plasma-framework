@@ -160,9 +160,14 @@ class PLASMA_EXPORT AbstractRunner : public QObject
         void setIgnoredTypes(RunnerContext::Types types);
 
         /**
-          * Returns the engine name for the Runner
+          * Returns the user visible engine name for the Runner
           */
         QString name() const;
+
+        /**
+          * Returns an id string for the Runner
+          */
+        QString id() const;
 
         /**
           * Returns the description of this Runner

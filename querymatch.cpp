@@ -44,6 +44,7 @@ class QueryMatch::Private
 
         QPointer<AbstractRunner> runner;
         QueryMatch::Type type;
+        QString id;
         QString text;
         QString subtext;
         QIcon icon;
@@ -56,12 +57,18 @@ class QueryMatch::Private
 QueryMatch::QueryMatch(AbstractRunner *runner)
     : d(new Private(runner))
 {
+    d->id = runner->id();
 //    kDebug() << "new match created";
 }
 
 QueryMatch::~QueryMatch()
 {
     delete d;
+}
+
+QString QueryMatch::id() const
+{
+    return d->id;
 }
 
 void QueryMatch::setType(Type type)
@@ -102,6 +109,7 @@ void QueryMatch::setSubtext(const QString& subtext)
 void QueryMatch::setData(const QVariant& data)
 {
     d->data = data;
+    d->id = d->runner->id() + '_' + data.toString();
 }
 
 void QueryMatch::setIcon(const QIcon& icon)

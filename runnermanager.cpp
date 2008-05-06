@@ -224,7 +224,7 @@ public:
         QString error;
         foreach (const KService::Ptr &service, offers) {
             KPluginInfo description(service);
-            QString runnerName = description.property("X-Plasma-RunnerName").toString();   
+            QString runnerName = description.pluginName();
             if (blacklist.contains(runnerName)) {
                 kDebug() << "The plugin" << service->name() << "was blackListed and will not load";
                 continue;
@@ -309,7 +309,7 @@ AbstractRunner* RunnerManager::runner(const QString &name) const
 {
    //TODO: using a list of runners, if this gets slow, switch to hash
     foreach (Plasma::AbstractRunner* runner, d->runners) {
-        if (name == runner->name()) {
+        if (name == runner->id()) {
             return runner;
         }
     }

@@ -134,7 +134,7 @@ void AbstractRunner::performMatch( Plasma::RunnerContext &globalContext )
     if (!slowed && runtime > reasonableRunTime) {
         // we punish runners that return too slowly, even if they don't bring
         // back matches
-        kDebug() << name() << "runner is too slow, putting it on the back burner.";
+        kDebug() << id() << "runner is too slow, putting it on the back burner.";
         d->fastRuns = 0;
         setSpeed(SlowSpeed);
     }
@@ -146,7 +146,7 @@ void AbstractRunner::performMatch( Plasma::RunnerContext &globalContext )
         if (d->fastRuns > 2) {
             // we reward slowed runners who bring back matches fast enough
             // 3 times in a row
-            kDebug() << name() << "runner is faster than we thought, kicking it up a notch";
+            kDebug() << id() << "runner is faster than we thought, kicking it up a notch";
             setSpeed(NormalSpeed);
         }
     }
@@ -244,7 +244,15 @@ QString AbstractRunner::name() const
     if (!d->runnerDescription.isValid()) {
         return objectName();
     }
-    return d->runnerDescription.property("X-Plasma-RunnerName").toString();
+    return d->runnerDescription.name();
+}
+
+QString AbstractRunner::id() const
+{
+    if (!d->runnerDescription.isValid()) {
+        return objectName();
+    }
+    return d->runnerDescription.pluginName();
 }
 
 QString AbstractRunner::description() const
@@ -254,7 +262,6 @@ QString AbstractRunner::description() const
     }
     return d->runnerDescription.property("Comment").toString();
 }
-
 
 const Package* AbstractRunner::package() const
 {

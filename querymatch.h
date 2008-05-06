@@ -32,6 +32,11 @@ namespace Plasma
 class RunnerContext;
 class AbstractRunner;
 
+/**
+ * @short A match returned by an AbstractRunner in response to a given
+ * RunnerContext.
+ */
+
 class PLASMA_EXPORT QueryMatch
 {
     public:
@@ -94,11 +99,15 @@ class PLASMA_EXPORT QueryMatch
          */
         AbstractRunner* runner() const;
 
-        void setText(const QString& text);
-        void setSubtext(const QString& text);
-        void setData(const QVariant& data);
-        void setIcon(const QIcon& icon);
-        void setEnabled(bool enable);
+        /**
+         * A string that can be used as an ID for this match,
+         * even between different queries. It is based in part
+         * on the source of the match (the AbstractRunner) and
+         * distinguishing information provided by the runner,
+         * ensuring global uniqueness as well as consistency
+         * between query matches.
+         */
+        QString id() const;
 
         QString text() const;
         QString subtext() const;
@@ -109,6 +118,21 @@ class PLASMA_EXPORT QueryMatch
         bool operator<(const QueryMatch& other) const;
 
         void run(const RunnerContext *context) const;
+
+    protected:
+        friend class AbstractRunner;
+
+        /**
+         * Sets data to be used internally by the associated
+         * AbstractRunner. When set, it also is used to form
+         * part of the id for the match.
+         */
+        void setData(const QVariant& data);
+
+        void setText(const QString& text);
+        void setSubtext(const QString& text);
+        void setIcon(const QIcon& icon);
+        void setEnabled(bool enable);
 
     private:
         class Private;
