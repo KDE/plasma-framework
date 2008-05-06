@@ -63,7 +63,7 @@ public:
                 script = Plasma::loadScriptEngine(api, runner);
                 if (!script) {
                     kDebug() << "Could not create a" << api << "ScriptEngine for the"
-                    << runnerDescription.name() << "Runner.";
+                             << runnerDescription.name() << "Runner.";
                     delete package;
                     package = 0;
                 } else {
@@ -90,8 +90,8 @@ public:
 
 QMutex AbstractRunner::Private::bigLock;
 
-    AbstractRunner::AbstractRunner(QObject* parent, const QString& serviceId)
-: QObject(parent),
+AbstractRunner::AbstractRunner(QObject* parent, const QString& serviceId)
+    : QObject(parent),
     d(new Private(this, KService::serviceByStorageId(serviceId)))
 {
 }

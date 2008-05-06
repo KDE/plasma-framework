@@ -182,6 +182,8 @@ class PLASMA_EXPORT AbstractRunner : public QObject
         const Package* package() const;
 
     protected:
+        friend class RunnerManager;
+
         /**
          * Constructs a Runner object. Since AbstractRunner has pure virtuals,
          * this constructor can not be called directly. Rather a subclass must
@@ -212,14 +214,6 @@ class PLASMA_EXPORT AbstractRunner : public QObject
          * this within their constructors.
          */
         void setSpeed(Speed newSpeed);
-
-//For 4.1
-//         /**
-//          * Sets the run tier of the runner. Higher tier runners execute only
-//          * after all lower-level runners execute. Call this method if your runner
-//          * depends on the output of previous runners.
-//          */
-//         void setTier(int tier);
 
         /**
          * Sets the priority of the runner. Lower priority runners are executed
