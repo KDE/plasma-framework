@@ -25,6 +25,7 @@ install(FILES
     widgets/analog_meter.svg
     widgets/bar_meter_horizontal.svg
     widgets/bar_meter_vertical.svg
+    widgets/containment-controls.svg
     DESTINATION ${DATA_INSTALL_DIR}/desktoptheme/default/widgets/)
 
 install(FILES
