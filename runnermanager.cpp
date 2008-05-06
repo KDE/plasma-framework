@@ -162,7 +162,6 @@ FindMatchesJob::FindMatchesJob( const QString& term, Plasma::AbstractRunner* run
       m_context(context),
       m_runner(runner)
 {
-//     setObjectName( runner->objectName() );
     if (runner->speed() == Plasma::AbstractRunner::SlowSpeed) {
         assignQueuePolicy(&RunnerRestrictionPolicy::instance());
     }
@@ -227,6 +226,7 @@ public:
         KService::List offers = KServiceTypeTrader::self()->query("Plasma/Runner");
         QString error;
         foreach (const KService::Ptr &service, offers) {
+            //kDebug() << "Loading runner: " << service->name() << service->storageId();
             KPluginInfo description(service);
             QString runnerName = description.pluginName();
             if (blacklist.contains(runnerName)) {
@@ -241,12 +241,12 @@ public:
                 args << service->storageId();
                 runner = service->createInstance<AbstractRunner>(q, args, &error);
             } else {
-                 //FIXME: this line should be uncommented, but the constructor is protected
-                //runner = new AbstractRunner(q, service->storageId());
+                //kDebug() << "got a script runner known as" << api;
+                runner = new AbstractRunner(q, service->storageId());
             }
 
             if (runner) {
-//                kDebug() << "loading runner: " << service->name();
+                //kDebug() << "loading runner: " << service->name();
                 QString phase = service->property("X-Plasma-RunnerPhase").toString();
                 if (phase == "last") {
                     lastRunners.append(runner);
@@ -263,16 +263,16 @@ public:
         firstRunners << normalRunners << lastRunners;
         runners.clear();
         runners = firstRunners;
-        kDebug() << "All runners loaded, total:" << runners.count();
+        //kDebug() << "All runners loaded, total:" << runners.count();
     }
-    
-        RunnerManager *q;
-        RunnerContext context;
-        AbstractRunner::List runners;
-        QList<ThreadWeaver::Job*> searchJobs;
-        QStringList prioritylist;
-        QStringList blacklist;
-        KConfigGroup config;
+
+    RunnerManager *q;
+    RunnerContext context;
+    AbstractRunner::List runners;
+    QList<ThreadWeaver::Job*> searchJobs;
+    QStringList prioritylist;
+    QStringList blacklist;
+    KConfigGroup config;
 };
 
 
@@ -313,6 +313,7 @@ AbstractRunner* RunnerManager::runner(const QString &name) const
 {
    //TODO: using a list of runners, if this gets slow, switch to hash
     foreach (Plasma::AbstractRunner* runner, d->runners) {
+        //kDebug() << "comparing" << name << "with" << runner->id() << runner->name();
         if (name == runner->id()) {
             return runner;
         }
@@ -375,7 +376,7 @@ void RunnerManager::launchQuery (const QString & term, const QString & runnerNam
     }
 }
 
-bool RunnerManager::execQuery(const QString & term, const QString & runnerName)
+bool RunnerManager::execQuery(const QString &term, const QString &runnerName)
 {
     if (term.isEmpty()) {
         reset();
@@ -384,24 +385,27 @@ bool RunnerManager::execQuery(const QString & term, const QString & runnerName)
 
     if (d->context.query() == term) {
         // we already are searching for this!
+        emit matchesChanged(d->context.matches());
         return false;
     }
 
     reset();
-//    kDebug() << "executing query about " << term << "on" << runnerName;
+    //kDebug() << "executing query about " << term << "on" << runnerName;
     d->context.setQuery(term);
-
     AbstractRunner *r = runner(runnerName);
 
     if (!r) {
+        //kDebug() << "failed to find the runner";
         return false;
     }
 
     if ((r->ignoredTypes() & d->context.type()) != 0) {
+        //kDebug() << "ignored!";
         return false;
     }
 
     r->performMatch(d->context);
+    //kDebug() << "succeeded with" << d->context.matches().count() << "results";
     emit matchesChanged(d->context.matches());
     return true;
 }
