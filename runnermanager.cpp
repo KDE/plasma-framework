@@ -190,7 +190,14 @@ public:
     Private(RunnerManager *parent)
       : q(parent)
     {
+        matchChangeTimer.setSingleShot(true);
+        connect(&matchChangeTimer, SIGNAL(timeout()), q, SLOT(scheduleMatchesChanged()));
         connect(&context, SIGNAL(matchesChanged()), q, SLOT(matchesChanged()));
+    }
+
+    void scheduleMatchesChanged()
+    {
+        matchChangeTimer.start(100);
     }
 
     void matchesChanged()
@@ -268,6 +275,7 @@ public:
 
     RunnerManager *q;
     RunnerContext context;
+    QTimer matchChangeTimer;
     AbstractRunner::List runners;
     QList<ThreadWeaver::Job*> searchJobs;
     QStringList prioritylist;
