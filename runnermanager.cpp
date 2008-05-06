@@ -191,8 +191,12 @@ public:
     Private(RunnerManager *parent)
       : q(parent)
     {
-        connect(&context, SIGNAL(matchesChanged()), q, SIGNAL(matchesChanged()));
-        connect(Weaver::instance(), SIGNAL(finished()), q, SIGNAL(matchesCompleted()));
+        connect(&context, SIGNAL(matchesChanged()), q, SLOT(matchesChanged()));
+    }
+
+    void matchesChanged()
+    {
+        emit q->matchesChanged(context.matches());
     }
 
     void loadConfiguration(KConfigGroup& conf)
@@ -369,13 +373,9 @@ void RunnerManager::launchQuery (const QString & term, const QString & runnerNam
             d->searchJobs.append( job );
         }
     }
-
-    if (!jobsLaunched) {
-        emit matchesCompleted();
-    }
 }
 
-bool RunnerManager::execQuery (const QString & term, const QString & runnerName)
+bool RunnerManager::execQuery(const QString & term, const QString & runnerName)
 {
     if (term.isEmpty()) {
         reset();
@@ -402,7 +402,7 @@ bool RunnerManager::execQuery (const QString & term, const QString & runnerName)
     }
 
     r->performMatch(d->context);
-    emit matchesCompleted();
+    emit matchesChanged(d->context.matches());
     return true;
 }
 

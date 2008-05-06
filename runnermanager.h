@@ -77,8 +77,8 @@ class PLASMA_EXPORT RunnerManager : public QObject
         /**
          * Launch a query, this will create threads and return inmediately. 
          * When the information will be available can be known using the 
-         * matchesChanged, matchesUpdated, matchesCompleted signals
-         * The information can be retrieved calling matches 
+         * matchesChanged signal.
+         *
          * @arg term the term we want to find matches for
          * @arg runner optional, if only one specific runner is to be used 
          */
@@ -104,14 +104,10 @@ class PLASMA_EXPORT RunnerManager : public QObject
         /**
          * Emited each time a new match is added to the list
          */
-        void matchesChanged();
-
-        /**
-         * Emited when all the matches have been found
-         */
-        void matchesCompleted();
+        void matchesChanged(const QList<Plasma::QueryMatch*> &matches);
 
     private:
+        Q_PRIVATE_SLOT(d, void matchesChanged());
         class Private;
         Private * const d;
 };
