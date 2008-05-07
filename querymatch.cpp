@@ -109,7 +109,16 @@ void QueryMatch::setSubtext(const QString& subtext)
 void QueryMatch::setData(const QVariant& data)
 {
     d->data = data;
-    d->id = d->runner->id() + '_' + data.toString();
+    setId(data.toString());
+}
+
+void QueryMatch::setId(const QString &id)
+{
+    d->id = d->runner->id();
+
+    if (!id.isEmpty()) {
+        d->id.append('_').append(id);
+    }
 }
 
 void QueryMatch::setIcon(const QIcon& icon)

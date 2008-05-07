@@ -121,10 +121,25 @@ class PLASMA_EXPORT QueryMatch
 
         /**
          * Sets data to be used internally by the associated
-         * AbstractRunner. When set, it is also used to form
-         * part of the id() for this match.
+         * AbstractRunner.
+         *
+         * When set, it is also used to form
+         * part of the id() for this match. If that is innapropriate
+         * as an id, the runner may generate its own id and set that
+         * with setId(const QString&) directly after calling setData
          */
         void setData(const QVariant& data);
+
+        /**
+         * Sets the id for this match; useful if the id does not
+         * match data().toString(). The id must be unique to all
+         * matches from this runner, and should remain constant
+         * for the same query for best results.
+         *
+         * @param id the new identifying string to use to refer
+         *           to this entry
+         */
+        void setId(const QString &id);
 
         void setText(const QString& text);
         void setSubtext(const QString& text);
