@@ -49,7 +49,7 @@ class Corona::Private
 public:
     Private(Corona *corona)
         : q(corona),
-          immutability(NotImmutable),
+          immutability(Mutable),
           mimetype("text/x-plasmoidservicename"),
           config(0)
     {
@@ -304,7 +304,7 @@ void Corona::loadLayout(const QString& configName)
     }
 
     KConfigGroup coronaConfig(config(), "General");
-    setImmutability((ImmutabilityType)coronaConfig.readEntry("immutability", (int)NotImmutable));
+    setImmutability((ImmutabilityType)coronaConfig.readEntry("immutability", (int)Mutable));
 }
 
 Containment* Corona::containmentForScreen(int screen) const

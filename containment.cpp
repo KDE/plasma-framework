@@ -302,7 +302,7 @@ void Containment::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
             }
         }
 
-        if (scene() && !static_cast<Corona*>(scene())->immutability() != NotImmutable) {
+        if (scene() && !static_cast<Corona*>(scene())->immutability() != Mutable) {
             if (hasEntries) {
                 desktopMenu.addSeparator();
             }
@@ -323,7 +323,7 @@ void Containment::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
             return;
         }
     } else {
-        if (!scene() || (static_cast<Corona*>(scene())->immutability() != NotImmutable && !KAuthorized::authorizeKAction("unlock_desktop"))) {
+        if (!scene() || (static_cast<Corona*>(scene())->immutability() != Mutable && !KAuthorized::authorizeKAction("unlock_desktop"))) {
             //kDebug() << "immutability";
             Applet::contextMenuEvent(event);
             return;
@@ -421,7 +421,7 @@ Applet* Containment::addApplet(const QString& name, const QVariantList& args, co
 //there.
 void Containment::addApplet(Applet *applet, const QPointF &pos, bool delayInit)
 {
-    if (!delayInit && immutability() != NotImmutable) {
+    if (!delayInit && immutability() != Mutable) {
         return;
     }
 
@@ -685,7 +685,7 @@ bool Containment::sceneEventFilter(QGraphicsItem *watched, QEvent *event)
     switch (event->type()) {
     case QEvent::GraphicsSceneHoverEnter:
         //kDebug() << "got hoverenterEvent" << immutability() << " " << applet->immutability();
-        if (immutability() == NotImmutable && applet->immutability() == NotImmutable) {
+        if (immutability() == Mutable && applet->immutability() == Mutable) {
             if (d->handles.contains(applet)) {
                 d->handles[applet]->startFading(AppletHandle::FadeIn);
             } else {
@@ -798,16 +798,16 @@ void Containment::closeToolBox()
 void Containment::Private::toggleDesktopImmutability()
 {
     if (q->corona()) {
-        if (q->corona()->immutability() == NotImmutable) { 
+        if (q->corona()->immutability() == Mutable) { 
             q->corona()->setImmutability(UserImmutable);
         } else if (q->corona()->immutability() == UserImmutable) { 
-            q->corona()->setImmutability(NotImmutable);
+            q->corona()->setImmutability(Mutable);
         }
     } else {
-        if (q->immutability() == NotImmutable) {
+        if (q->immutability() == Mutable) {
             q->setImmutability(UserImmutable);
         } else if (q->immutability() == UserImmutable) { 
-            q->setImmutability(NotImmutable);
+            q->setImmutability(Mutable);
         }
     }
 
@@ -881,7 +881,7 @@ void Containment::Private::setLockToolText()
     Icon *icon = dynamic_cast<Plasma::Icon*>(toolBox->tool("lockWidgets"));
     if (icon) {
         // we know it's an icon becase we made it
-        icon->setText(q->immutability() != NotImmutable ? i18n("Unlock Widgets") :
+        icon->setText(q->immutability() != Mutable ? i18n("Unlock Widgets") :
                                             i18n("Lock Widgets"));
         QSizeF iconSize = icon->sizeFromIconSize(22);
         icon->setMinimumSize(iconSize);
@@ -921,7 +921,7 @@ void Containment::Private::containmentConstraintsEvent(Plasma::Constraints const
         } else {
             toolBox->setPos(q->geometry().right() - qAbs(toolBox->boundingRect().width()), 0);
         }
-        toolBox->enableTool("addwidgets", q->immutability() == NotImmutable);
+        toolBox->enableTool("addwidgets", q->immutability() == Mutable);
     }
 
     if (constraints & Plasma::FormFactorConstraint) {
@@ -966,7 +966,7 @@ void Containment::Private::destroyApplet()
 Applet* Containment::Private::addApplet(const QString& name, const QVariantList& args,
                                         const QRectF& appletGeometry, uint id, bool delayInit)
 {
-    if (!delayInit && q->immutability() != NotImmutable) {
+    if (!delayInit && q->immutability() != Mutable) {
         kDebug() << "addApplet for" << name << "requested, but we're currently immutable!";
         return 0;
     }

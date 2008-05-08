@@ -175,7 +175,7 @@ void Applet::restore(KConfigGroup *c)
 
     setZValue(z);
 
-    setImmutability((ImmutabilityType)c->readEntry("immutability", (int)NotImmutable));
+    setImmutability((ImmutabilityType)c->readEntry("immutability", (int)Mutable));
 }
 
 void Applet::setFailedToLaunch(bool failed, const QString& reason)
@@ -462,7 +462,7 @@ QString Applet::category(const QString& appletName)
 ImmutabilityType Applet::immutability() const
 {
     //Returning the more strict immutability between the applet immutability and Corona one
-    ImmutabilityType coronaImmutability = NotImmutable;
+    ImmutabilityType coronaImmutability = Mutable;
 
     if (dynamic_cast<Corona*>(scene())) {
         coronaImmutability = static_cast<Corona*>(scene())->immutability();
@@ -833,7 +833,7 @@ bool Applet::sceneEventFilter( QGraphicsItem * watched, QEvent * event )
 
 void Applet::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
-    if (d->immutability == NotImmutable && formFactor() == Plasma::Planar) {
+    if (d->immutability == Mutable && formFactor() == Plasma::Planar) {
         QGraphicsItem *parent = parentItem();
         Plasma::Applet *applet = qgraphicsitem_cast<Plasma::Applet*>(parent);
 
@@ -1180,7 +1180,7 @@ Applet::Private::Private(KService::Ptr service, int uniqueID, Applet *applet)
           mainConfig(0),
           pendingConstraints(NoConstraint),
           aspectRatioMode(Plasma::KeepAspectRatio),
-          immutability(NotImmutable),
+          immutability(Mutable),
           hasConfigurationInterface(false),
           failed(false),
           isContainment(false),
