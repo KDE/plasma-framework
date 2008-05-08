@@ -194,7 +194,11 @@ bool PanelSvg::hasElementPrefix(const QString & prefix) const
 {
     //for now it simply checks if a center element exists,
     //because it could make sense for certain themes to not have all the elements
-    return hasElement(prefix + "-center");
+    if (prefix.isEmpty()) {
+        return hasElement("center");
+    } else {
+        return hasElement(prefix + "-center");
+    }
 }
 
 bool PanelSvg::hasElementPrefix(Plasma::Location location) const
