@@ -1,5 +1,8 @@
 [Desktop Entry]
 Name=Test Data Engine
+Name[pa]=ਟੈਸਟ ਡਾਟਾ ਇੰਜਣ
+Name[sv]=Testdatagränssnitt
+Name[tr]=Test Veri Motoru
 X-KDE-ServiceTypes=Plasma/DataEngine
 Type=Service
 Icon=unknown
