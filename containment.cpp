@@ -1024,15 +1024,7 @@ void Containment::Private::appletAnimationComplete(QGraphicsItem *item, Plasma::
         while (parent) {
             if (parent == q) {
                 Applet *applet = qgraphicsitem_cast<Applet*>(item);
-
-                if (applet) {
-                    QGraphicsLinearLayout * lay = dynamic_cast<QGraphicsLinearLayout *>(q->layout());
-                    if (lay) {
-                       lay->removeItem(applet);
-                    }
-                    applet->destroy();
-                }
-
+                applet->destroy();
                 break;
             }
 

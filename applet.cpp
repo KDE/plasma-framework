@@ -256,6 +256,14 @@ KConfigGroup Applet::globalConfig() const
 void Applet::destroy()
 {
     //kDebug() << "???????????????? DESTROYING APPLET" << name() << " ???????????????????????????";
+    QGraphicsWidget * item = dynamic_cast<QGraphicsWidget *>(parentItem());
+    //is the applet in a containment and is the containment have a layout? if yes, we remove the applet in the layout
+    if (item) {
+      QGraphicsLinearLayout * lay = dynamic_cast<QGraphicsLinearLayout *>(item->layout());
+      if (lay) {
+          lay->removeItem(this);
+      }
+    }
     if (d->configXml) {
         d->configXml->setDefaults();
     }
