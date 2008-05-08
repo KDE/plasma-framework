@@ -909,7 +909,7 @@ void Applet::showConfigurationInterface()
         dialog->addPage(w, i18n("Settings"), icon(), i18n("%1 Settings", name()));
         dialog->show();
     } else if (d->script) {
-        d->script->showConfigurationInterface();
+        d->script->createConfigurationInterface();
     } else {
         KConfigSkeleton *nullManager = new KConfigSkeleton(0);
         KConfigDialog *dialog = new KConfigDialog(0, dialogId, nullManager);

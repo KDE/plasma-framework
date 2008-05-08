@@ -80,7 +80,7 @@ QList<QAction*> AppletScript::contextualActions()
     return QList<QAction*>();
 }
 
-void AppletScript::showConfigurationInterface()
+void AppletScript::createConfigurationInterface()
 {
 }
 
