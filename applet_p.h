@@ -85,6 +85,7 @@ public:
     Plasma::Constraints pendingConstraints;
     Plasma::AspectRatioMode aspectRatioMode;
     ImmutabilityType immutability;
+    int constraintsTimerId;
     bool hasConfigurationInterface : 1;
     bool failed : 1;
     bool isContainment : 1;

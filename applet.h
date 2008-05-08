@@ -661,6 +661,11 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          */
          QSizeF sizeHint(Qt::SizeHint which, const QSizeF & constraint = QSizeF()) const;
 
+         /**
+          * Reimplemented from QObject
+          */
+        void timerEvent (QTimerEvent *event);
+
     private:
         Q_DISABLE_COPY(Applet)
         Q_PRIVATE_SLOT(d, void checkImmutability())
