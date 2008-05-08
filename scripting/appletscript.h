@@ -103,7 +103,7 @@ public Q_SLOTS:
     /**
      * Show a configuration dialog.
      */
-    virtual void createConfigurationInterface();
+    virtual void showConfigurationInterface();
 
 protected:
     /**
