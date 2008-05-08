@@ -51,7 +51,7 @@ class Flash::Private
         int defaultDuration;
         FlashType type;
 
-        Plasma::Phase::AnimId animId;
+        int animId;
         QPixmap renderedPixmap;
 
         QTextOption textOption;
@@ -62,7 +62,7 @@ class Flash::Private
 
 
 Flash::Flash(QGraphicsItem *parent)
-    : Plasma::Widget(parent),
+    : QGraphicsWidget(parent),
       d(new Private)
 {
     d->defaultDuration = 3000;
@@ -70,7 +70,8 @@ Flash::Flash(QGraphicsItem *parent)
     d->color = Qt::black;
     d->animId = 0;
     d->state = Private::Invisible;
-    resize(QSizeF(40, 100));
+
+    setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Minimum );
 
     setCacheMode(NoCache);
 }
@@ -78,11 +79,6 @@ Flash::Flash(QGraphicsItem *parent)
 Flash::~Flash()
 {
     delete d;
-}
-
-QRectF Flash::boundingRect() const
-{
-    return QRectF(0, 0, size().width(), size().height());
 }
 
 void Flash::setDuration( int duration )
@@ -129,8 +125,8 @@ void Flash::fadeIn()
 {
     d->state = Private::Visible;
     d->renderedPixmap = renderPixmap();
-    d->animId = Plasma::Phase::self()->animateElement(this, Plasma::Phase::ElementAppear);
-    Plasma::Phase::self()->setAnimationPixmap( d->animId, d->renderedPixmap );
+    d->animId = Plasma::Animator::self()->animateElement(this, Plasma::Animator::AppearAnimation);
+    Plasma::Animator::self()->setInitialPixmap( d->animId, d->renderedPixmap );
     if( d->duration > 0 )
         QTimer::singleShot( d->duration, this, SLOT(fadeOut()) );
 }
@@ -141,8 +137,8 @@ void Flash::fadeOut()
         return;    // Flash was already killed - do not animate again
 
     d->state = Private::Invisible;
-    d->animId = Plasma::Phase::self()->animateElement(this, Plasma::Phase::ElementDisappear);
-    Plasma::Phase::self()->setAnimationPixmap( d->animId, d->renderedPixmap );
+    d->animId = Plasma::Animator::self()->animateElement(this, Plasma::Animator::DisappearAnimation);
+    Plasma::Animator::self()->setInitialPixmap( d->animId, d->renderedPixmap );
 }
 
 QPixmap Flash::renderPixmap()
@@ -175,13 +171,13 @@ QPixmap Flash::renderPixmap()
     }
     return pm;
 }
-void Flash::paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+void Flash::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     Q_UNUSED(option)
     Q_UNUSED(widget)
 
-    if( d->animId && !Plasma::Phase::self()->animationResult(d->animId).isNull() ) {
-        painter->drawPixmap( 0, 0, Plasma::Phase::self()->animationResult(d->animId) );
+    if( d->animId && !Plasma::Animator::self()->currentPixmap(d->animId).isNull() ) {
+        painter->drawPixmap( 0, 0, Plasma::Animator::self()->currentPixmap(d->animId) );
     } else if( d->state == Private::Visible ) {
         painter->drawPixmap( 0, 0, d->renderedPixmap );
     }

@@ -61,6 +61,7 @@ set(plasma_LIB_SRCS
     widgets/webcontent.cpp
     widgets/meter.cpp
     widgets/signalplotter.cpp
+    widgets/flash.cpp
 )
 
 kde4_add_ui_files (
@@ -139,6 +140,7 @@ install(FILES
     widgets/webcontent.h
     widgets/meter.h
     widgets/signalplotter.h
+    widgets/flash.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/plasma/widgets)
 
 #For future

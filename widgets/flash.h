@@ -21,12 +21,10 @@
 #ifndef FLASH_H_
 #define FLASH_H_
 
-#include <QtCore/QObject>
-#include <QtGui/QGraphicsItem>
+#include <QtGui/QGraphicsWidget>
 #include <QtGui/QTextOption>
 
 #include <plasma/plasma_export.h>
-#include <plasma/widgets/widget.h>
 
 namespace Plasma
 {
@@ -34,15 +32,14 @@ namespace Plasma
 /**
  * Class that allows to flash text or icons inside plasma
  */
-class PLASMA_EXPORT Flash : public Plasma::Widget
+class PLASMA_EXPORT Flash : public QGraphicsWidget
 {
     Q_OBJECT
     public:
-        Flash(QGraphicsItem *parent = 0);
+        explicit Flash(QGraphicsItem *parent = 0);
         virtual ~Flash();
 
-        void paintWidget(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
-        QRectF boundingRect() const;
+        void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
 
         void setFont( const QFont & );
         void setColor( const QColor & );
