@@ -257,13 +257,18 @@ void Applet::destroy()
 {
     //kDebug() << "???????????????? DESTROYING APPLET" << name() << " ???????????????????????????";
     QGraphicsWidget * item = dynamic_cast<QGraphicsWidget *>(parentItem());
+
     //is the applet in a containment and is the containment have a layout? if yes, we remove the applet in the layout
-    if (item) {
-      QGraphicsLinearLayout * lay = dynamic_cast<QGraphicsLinearLayout *>(item->layout());
-      if (lay) {
-          lay->removeItem(this);
-      }
+    if (item && item->layout()) {
+        QGraphicsLayout *l = item->layout();
+        for (int i = 0; i < l->count(); ++i) {
+            if (this == l->itemAt(i)) {
+                l->removeAt(i);
+                break;
+            }
+        }
     }
+
     if (d->configXml) {
         d->configXml->setDefaults();
     }
@@ -616,6 +621,11 @@ void Applet::flushPendingConstraintsEvents()
         return;
     }
 
+    if (d->constraintsTimerId) {
+        killTimer(d->constraintsTimerId);
+        d->constraintsTimerId = 0;
+    }
+
     //kDebug() << "fushing constraints: " << d->pendingConstraints << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";
     Plasma::Constraints c = d->pendingConstraints;
     d->pendingConstraints = NoConstraint;
@@ -908,6 +918,10 @@ void Applet::showConfigurationInterface()
         QFile f(uiFile);
         if (!f.open(QIODevice::ReadOnly)) {
             delete dialog;
+
+            if (d->script) {
+                d->script->showConfigurationInterface();
+            }
             return;
         }
 
@@ -1122,6 +1136,14 @@ QSizeF Applet::sizeHint(Qt::SizeHint which, const QSizeF & constraint) const
     return hint;
 }
 
+void Applet::timerEvent(QTimerEvent *event)
+{
+    if (event->timerId() == d->constraintsTimerId) {
+        d->constraintsTimerId = 0;
+        flushPendingConstraintsEvents();
+    }
+}
+
 void Applet::setGeometry(const QRectF& geometry)
 {
     QRectF beforeGeom = QGraphicsWidget::geometry();
@@ -1189,6 +1211,7 @@ Applet::Private::Private(KService::Ptr service, int uniqueID, Applet *applet)
           pendingConstraints(NoConstraint),
           aspectRatioMode(Plasma::KeepAspectRatio),
           immutability(Mutable),
+          constraintsTimerId(0),
           hasConfigurationInterface(false),
           failed(false),
           isContainment(false),
@@ -1314,8 +1337,8 @@ QString Applet::Private::instanceName()
 
 void Applet::Private::scheduleConstraintsUpdate(Plasma::Constraints c)
 {
-    if (pendingConstraints == NoConstraint) {
-        QTimer::singleShot(0, q, SLOT(flushPendingConstraintsEvents()));
+    if (!constraintsTimerId) {
+        constraintsTimerId = q->startTimer(0);
     }
     pendingConstraints |= c;
 }
