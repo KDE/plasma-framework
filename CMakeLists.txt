@@ -174,6 +174,7 @@ install(FILES
     includes/DataEngine
     includes/DataEngineManager
     includes/RunnerContext
+    includes/RunnerManager
     includes/QueryMatch
     includes/Svg
     includes/PanelSvg
