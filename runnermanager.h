@@ -73,6 +73,11 @@ class PLASMA_EXPORT RunnerManager : public QObject
          */
          void run(const QueryMatch &match);
 
+        /**
+         * @return the current query term
+         */
+        QString query() const;
+
     public Q_SLOTS:
         /**
          * Launch a query, this will create threads and return inmediately. 
@@ -82,7 +87,12 @@ class PLASMA_EXPORT RunnerManager : public QObject
          * @arg term the term we want to find matches for
          * @arg runner optional, if only one specific runner is to be used 
          */
-        void launchQuery(const QString &term, const QString & runnerName=QString());
+        void launchQuery(const QString &term, const QString & runnerName);
+
+        /**
+         * Convenience version of above
+         */
+        void launchQuery(const QString &term);
 
         /**
          * Execute a query, this method will only return when the query is executed
@@ -96,9 +106,9 @@ class PLASMA_EXPORT RunnerManager : public QObject
         bool execQuery(const QString &term, const QString & runnerName);
 
         /**
-         * @return the current query term
+         * Convenience version of above
          */
-        QString query() const;
+        bool execQuery(const QString &term);
 
         /**
          * Reset the current data and stops the query

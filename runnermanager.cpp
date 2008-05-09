@@ -380,7 +380,12 @@ void RunnerManager::run(const QueryMatch &match)
     }
 }
 
-void RunnerManager::launchQuery(const QString & term, const QString & runnerName)
+void RunnerManager::launchQuery(const QString &term)
+{
+    launchQuery(term, QString());
+}
+
+void RunnerManager::launchQuery(const QString &term, const QString &runnerName)
 {
     if (term.isEmpty()) {
         reset();
@@ -414,6 +419,11 @@ void RunnerManager::launchQuery(const QString & term, const QString & runnerName
             d->searchJobs.append(job);
         }
     }
+}
+
+bool RunnerManager::execQuery(const QString &term)
+{
+    return execQuery(term, QString());
 }
 
 bool RunnerManager::execQuery(const QString &term, const QString &runnerName)
