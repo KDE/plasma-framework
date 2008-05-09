@@ -312,9 +312,7 @@ RunnerManager::RunnerManager(QObject *parent)
 {
     KConfigGroup config(KGlobal::config(), "PlasmaRunnerManager");
     d->loadConfiguration(config);
-    d->loadAll();
     //ThreadWeaver::setDebugLevel(true, 4);
-       
 }
 
 
@@ -323,7 +321,6 @@ RunnerManager::RunnerManager(KConfigGroup& config, QObject *parent)
       d(new Private(this))
 {
     d->loadConfiguration(config);
-    d->loadAll();
     //ThreadWeaver::setDebugLevel(true, 4);
 }
 
@@ -334,6 +331,10 @@ RunnerManager::~RunnerManager()
 
 AbstractRunner* RunnerManager::runner(const QString &name) const
 {
+    if (d->runners.isEmpty()) {
+        d->loadAll();
+    }
+
    //TODO: using a list of runners, if this gets slow, switch to hash
     foreach (Plasma::AbstractRunner* runner, d->runners) {
         //kDebug() << "comparing" << name << "with" << runner->id() << runner->name();
@@ -387,6 +388,10 @@ void RunnerManager::launchQuery(const QString &term)
 
 void RunnerManager::launchQuery(const QString &term, const QString &runnerName)
 {
+    if (d->runners.isEmpty()) {
+        d->loadAll();
+    }
+
     if (term.isEmpty()) {
         reset();
         return;
