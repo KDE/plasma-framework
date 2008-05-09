@@ -1139,6 +1139,7 @@ QSizeF Applet::sizeHint(Qt::SizeHint which, const QSizeF & constraint) const
 void Applet::timerEvent(QTimerEvent *event)
 {
     if (event->timerId() == d->constraintsTimerId) {
+        killTimer(d->constraintsTimerId);
         d->constraintsTimerId = 0;
         flushPendingConstraintsEvents();
     }
