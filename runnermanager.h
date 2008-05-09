@@ -96,6 +96,11 @@ class PLASMA_EXPORT RunnerManager : public QObject
         bool execQuery(const QString &term, const QString & runnerName);
 
         /**
+         * @return the current query term
+         */
+        QString query() const;
+
+        /**
          * Reset the current data and stops the query
          */
         void reset();
@@ -109,6 +114,7 @@ class PLASMA_EXPORT RunnerManager : public QObject
     private:
         Q_PRIVATE_SLOT(d, void scheduleMatchesChanged())
         Q_PRIVATE_SLOT(d, void matchesChanged())
+        Q_PRIVATE_SLOT(d, void jobDone(ThreadWeaver::Job*))
 
         class Private;
         Private * const d;

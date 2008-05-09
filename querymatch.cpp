@@ -169,7 +169,7 @@ void QueryMatch::setEnabled( bool enabled )
 
 bool QueryMatch::isEnabled() const
 {
-  return d->enabled;
+    return d->enabled && d->runner;
 }
 
 bool QueryMatch::operator<(const QueryMatch& other) const
@@ -190,7 +190,6 @@ void QueryMatch::run(const RunnerContext &context) const
 {
     //kDebug() << "we run the term" << context->query() << "whose type is" << context->mimetype();
     if (d->runner) {
-        //TODO: this could be dangerous if the runner is deleted behind our backs.
         d->runner->run(context, *this);
     }
 }

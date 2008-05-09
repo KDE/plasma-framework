@@ -143,22 +143,21 @@ void RunnerRestrictionPolicy::destructed(Job* job)
 class FindMatchesJob : public Job
 {
 public:
-    FindMatchesJob(const QString& term, Plasma::AbstractRunner* runner, Plasma::RunnerContext* context, QObject* parent = 0);
+    FindMatchesJob(Plasma::AbstractRunner* runner, Plasma::RunnerContext* context, QObject* parent = 0);
 
     int priority() const;
+    Plasma::AbstractRunner* runner() const;
 
 protected:
     void run();
 private:
-    QString m_term;
     Plasma::RunnerContext* m_context;
     Plasma::AbstractRunner* m_runner;
 };
 
-FindMatchesJob::FindMatchesJob( const QString& term, Plasma::AbstractRunner* runner, 
-                                Plasma::RunnerContext* context, QObject* parent )
+FindMatchesJob::FindMatchesJob(Plasma::AbstractRunner* runner,
+                               Plasma::RunnerContext* context, QObject* parent)
     : ThreadWeaver::Job(parent),
-      m_term(term),
       m_context(context),
       m_runner(runner)
 {
@@ -178,6 +177,10 @@ int FindMatchesJob::priority() const
     return m_runner->priority();
 }
 
+Plasma::AbstractRunner* FindMatchesJob::runner() const
+{
+    return m_runner;
+}
 
 /*****************************************************
 *  RunnerManager::Private class
@@ -188,7 +191,8 @@ class RunnerManager::Private
 public:
 
     Private(RunnerManager *parent)
-      : q(parent)
+      : q(parent),
+        deferredRun(0)
     {
         matchChangeTimer.setSingleShot(true);
         connect(&matchChangeTimer, SIGNAL(timeout()), q, SLOT(scheduleMatchesChanged()));
@@ -273,11 +277,24 @@ public:
         //kDebug() << "All runners loaded, total:" << runners.count();
     }
 
+    void jobDone(ThreadWeaver::Job* job)
+    {
+        FindMatchesJob *runJob = static_cast<FindMatchesJob*>(job);
+        if (deferredRun.isEnabled() && runJob->runner() == deferredRun.runner()) {
+            //kDebug() << "job actually done, running now **************";
+            deferredRun.run(context);
+            deferredRun = QueryMatch(0);
+        }
+        searchJobs.removeAll(runJob);
+        delete runJob;
+    }
+
     RunnerManager *q;
+    QueryMatch deferredRun;
     RunnerContext context;
     QTimer matchChangeTimer;
     AbstractRunner::List runners;
-    QList<ThreadWeaver::Job*> searchJobs;
+    QList<FindMatchesJob*> searchJobs;
     QStringList prioritylist;
     QStringList blacklist;
     KConfigGroup config;
@@ -341,11 +358,29 @@ QList<QueryMatch> RunnerManager::matches() const
 
 void RunnerManager::run(const QueryMatch &match)
 {
+    if (!match.isEnabled()) {
+        return;
+    }
+
     //TODO: this function is not const as it may be used for learning
+    AbstractRunner *runner = match.runner();
+
+    foreach (FindMatchesJob *job, d->searchJobs) {
+        if (job->runner() == runner && !job->isFinished()) {
+            //kDebug() << "!!!!!!!!!!!!!!!!!!! uh oh!";
+            d->deferredRun = match;
+            return;
+        }
+    }
+
     match.run(d->context);
+
+    if (d->deferredRun.isValid()) {
+        d->deferredRun = QueryMatch(0);
+    }
 }
 
-void RunnerManager::launchQuery (const QString & term, const QString & runnerName)
+void RunnerManager::launchQuery(const QString & term, const QString & runnerName)
 {
     if (term.isEmpty()) {
         reset();
@@ -370,14 +405,13 @@ void RunnerManager::launchQuery (const QString & term, const QString & runnerNam
         runable = d->runners; 
     }
 
-    bool jobsLaunched=false;
     foreach (Plasma::AbstractRunner* r, runable) {
         if ((r->ignoredTypes() & d->context.type()) == 0) {
 //            kDebug() << "launching" << r->name();
-            jobsLaunched=true;
-            Job *job = new FindMatchesJob(term, r, &d->context, this);
-            Weaver::instance()->enqueue( job );
-            d->searchJobs.append( job );
+            FindMatchesJob *job = new FindMatchesJob(r, &d->context, this);
+            connect(job, SIGNAL(done(ThreadWeaver::Job*)), this, SLOT(jobDone(ThreadWeaver::Job*)));
+            Weaver::instance()->enqueue(job);
+            d->searchJobs.append(job);
         }
     }
 }
@@ -416,6 +450,11 @@ bool RunnerManager::execQuery(const QString &term, const QString &runnerName)
     return true;
 }
 
+QString RunnerManager::query() const
+{
+    return d->context.query();
+}
+
 void RunnerManager::reset()
 {
     // If ThreadWeaver is idle, it is safe to clear previous jobs 
@@ -425,6 +464,13 @@ void RunnerManager::reset()
     } else {
         Weaver::instance()->dequeue();
     }
+
+    if (d->deferredRun.isEnabled()) {
+        //kDebug() << "job actually done, running now **************";
+        d->deferredRun.run(d->context);
+        d->deferredRun = QueryMatch(0);
+    }
+
     d->context.reset();
 
    //FIXME: if the weaver is not idle we have a number of jobs that 
@@ -433,7 +479,6 @@ void RunnerManager::reset()
    //      or discard results 
 }
 
-
-}
+} // Plasma namespace
 
 #include "runnermanager.moc"
