@@ -255,26 +255,41 @@ KConfigGroup Applet::globalConfig() const
 
 void Applet::destroy()
 {
+    if (d->transient) {
+        return; //don't double delete
+    }
+    d->transient = true;
+    connect(Animator::self(), SIGNAL(animationFinished(QGraphicsItem*,Plasma::Animator::Animation)),
+                        this, SLOT(appletAnimationComplete(QGraphicsItem*,Plasma::Animator::Animation)));
+    Animator::self()->animateItem(this, Animator::DisappearAnimation);
+}
+
+void Applet::Private::appletAnimationComplete(QGraphicsItem *item, Plasma::Animator::Animation anim)
+{
+    if (anim != Animator::DisappearAnimation || item != q) {
+        return; //it's not our time yet
+    }
     //kDebug() << "???????????????? DESTROYING APPLET" << name() << " ???????????????????????????";
-    QGraphicsWidget * item = dynamic_cast<QGraphicsWidget *>(parentItem());
+    QGraphicsWidget *parent = dynamic_cast<QGraphicsWidget *>(q->parentItem());
+    //it probably won't matter, but right now if there are applethandles, *they* are the parent.
+    //not the containment.
 
     //is the applet in a containment and is the containment have a layout? if yes, we remove the applet in the layout
-    if (item && item->layout()) {
-        QGraphicsLayout *l = item->layout();
+    if (parent && parent->layout()) {
+        QGraphicsLayout *l = parent->layout();
         for (int i = 0; i < l->count(); ++i) {
-            if (this == l->itemAt(i)) {
+            if (q == l->itemAt(i)) {
                 l->removeAt(i);
                 break;
             }
         }
     }
 
-    if (d->configXml) {
-        d->configXml->setDefaults();
+    if (configXml) {
+        configXml->setDefaults();
     }
 
-    d->transient = true;
-    deleteLater();
+    q->deleteLater();
 }
 
 ConfigXml* Applet::configScheme() const

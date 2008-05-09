@@ -32,6 +32,7 @@
 #include <plasma/configxml.h>
 #include <plasma/packagestructure.h>
 #include <plasma/plasma.h>
+#include <plasma/animator.h>
 
 class KConfigDialog;
 class QGraphicsView;
@@ -462,7 +463,8 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         void setImmutability(const ImmutabilityType immutable);
 
         /**
-         * Destroys the applet; it will be deleted and configurations reset.
+         * Destroys the applet; it will be removed nicely and deleted.
+         * Its configuration will also be deleted.
          */
         void destroy();
 
@@ -670,6 +672,7 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         Q_DISABLE_COPY(Applet)
         Q_PRIVATE_SLOT(d, void checkImmutability())
         Q_PRIVATE_SLOT(d, void themeChanged())
+        Q_PRIVATE_SLOT(d, void appletAnimationComplete(QGraphicsItem *item, Plasma::Animator::Animation anim))
 
         /**
          * Reimplemented from QGraphicsItem

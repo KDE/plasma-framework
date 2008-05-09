@@ -59,6 +59,7 @@ public:
     void checkImmutability();
     void themeChanged();
     void resetConfigurationObject();
+    void appletAnimationComplete(QGraphicsItem *item, Plasma::Animator::Animation anim);
 
     static uint s_maxAppletId;
     static uint s_maxZValue;

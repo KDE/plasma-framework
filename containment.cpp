@@ -308,11 +308,8 @@ void Containment::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
             }
 
             QAction* closeApplet = new QAction(i18n("Remove this %1", applet->name()), &desktopMenu);
-            QVariant appletV;
-            appletV.setValue((QObject*)applet);
-            closeApplet->setData(appletV);
             closeApplet->setIcon(KIcon("edit-delete"));
-            connect(closeApplet, SIGNAL(triggered(bool)), this, SLOT(destroyApplet()));
+            connect(closeApplet, SIGNAL(triggered(bool)), applet, SLOT(destroy()));
             desktopMenu.addAction(closeApplet);
             hasEntries = true;
         }
@@ -951,18 +948,6 @@ void Containment::Private::containmentConstraintsEvent(Plasma::Constraints const
     }
 }
 
-void Containment::Private::destroyApplet()
-{
-    QAction *action = qobject_cast<QAction*>(q->sender());
-
-    if (!action) {
-        return;
-    }
-
-    Applet *applet = qobject_cast<Applet*>(action->data().value<QObject*>());
-    Animator::self()->animateItem(applet, Animator::DisappearAnimation);
-}
-
 Applet* Containment::Private::addApplet(const QString& name, const QVariantList& args,
                                         const QRectF& appletGeometry, uint id, bool delayInit)
 {
@@ -1018,19 +1003,7 @@ void Containment::Private::appletDestroyed(QObject* object)
 
 void Containment::Private::appletAnimationComplete(QGraphicsItem *item, Plasma::Animator::Animation anim)
 {
-    if (anim == Animator::DisappearAnimation) {
-        QGraphicsItem *parent = item->parentItem();
-
-        while (parent) {
-            if (parent == q) {
-                Applet *applet = qgraphicsitem_cast<Applet*>(item);
-                applet->destroy();
-                break;
-            }
-
-            parent = parent->parentItem();
-        }
-    } else if (anim == Animator::AppearAnimation) {
+    if (anim == Animator::AppearAnimation) {
         if (q->containmentType() == DesktopContainment &&
             item->parentItem() == q &&
             qgraphicsitem_cast<Applet*>(item)) {
