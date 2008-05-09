@@ -310,12 +310,9 @@ RunnerManager::RunnerManager(KConfigGroup& config, QObject *parent)
     //ThreadWeaver::setDebugLevel(true, 4);
 }
 
-
 RunnerManager::~RunnerManager()
 {
-    d->context.removeAllMatches();
 }
-
 
 AbstractRunner* RunnerManager::runner(const QString &name) const
 {
@@ -336,15 +333,15 @@ RunnerContext* RunnerManager::searchContext() const
 }
 
 //Reordering is here so data is not reordered till strictly needed
-QList<QueryMatch *> RunnerManager::matches() const
+QList<QueryMatch> RunnerManager::matches() const
 {
     return d->context.matches();
 }
 
-void RunnerManager::run(const QueryMatch *match)
+void RunnerManager::run(const QueryMatch &match)
 {
     //TODO: this function is not const as it may be used for learning
-    match->run(&d->context);
+    match.run(d->context);
 }
 
 void RunnerManager::launchQuery (const QString & term, const QString & runnerName)

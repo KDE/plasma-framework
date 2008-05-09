@@ -62,13 +62,13 @@ public:
      * RunnerContext::addInformationalMatch, RunnerContext::addExactMatch, and
      * RunnerContext::addPossibleMatch.
      */
-    virtual void match(Plasma::RunnerContext *search);
+    virtual void match(Plasma::RunnerContext &search);
 
     /**
      * Called whenever an exact or possible match associated with this
      * runner is triggered.
      */
-    virtual void run(const Plasma::RunnerContext *search, const Plasma::QueryMatch *action);
+    virtual void run(const Plasma::RunnerContext &search, const Plasma::QueryMatch &action);
 
 protected:
     /**

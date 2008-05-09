@@ -20,6 +20,8 @@
 #ifndef QUERYMATCH_H
 #define QUERYMATCH_H
 
+#include <QSharedDataPointer>
+
 #include <plasma/plasma_export.h>
 
 class QIcon;
@@ -43,7 +45,8 @@ class PLASMA_EXPORT QueryMatch
         /**
          * The type of match. Value is important here as it is used for sorting
          */
-        enum Type { CompletionMatch = 10 /**< Possible completion for the data of the query */,
+        enum Type { NoMatch = 0 /**< Null match */,
+                    CompletionMatch = 10 /**< Possible completion for the data of the query */,
                     PossibleMatch = 30 /**< Something that may match the query */,
                     InformationalMatch = 50 /**< A purely informational, non-actionable match,
                                                  such as the answer to a question or calculation*/,
@@ -66,6 +69,12 @@ class PLASMA_EXPORT QueryMatch
          * @arg runner the runner this match belongs to
          */
         explicit QueryMatch(AbstractRunner *runner);
+
+        /**
+         * Copy constructor
+         */
+        QueryMatch(const QueryMatch &other);
+
         ~QueryMatch();
 
         /**
@@ -116,8 +125,14 @@ class PLASMA_EXPORT QueryMatch
         bool isEnabled() const;
 
         bool operator<(const QueryMatch& other) const;
+        QueryMatch& operator=(const QueryMatch &other);
 
-        void run(const RunnerContext *context) const;
+        /**
+         * Requests this match to activae using the given context
+         *
+         * @param context the context to use in conjunction with this run
+         */
+        void run(const RunnerContext &context) const;
 
         /**
          * Sets data to be used internally by the associated
@@ -148,7 +163,7 @@ class PLASMA_EXPORT QueryMatch
 
     private:
         class Private;
-        Private * const d;
+        QSharedDataPointer<Private> d;
 };
 
 }

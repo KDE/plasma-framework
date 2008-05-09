@@ -21,6 +21,7 @@
 
 #include <QPointer>
 #include <QVariant>
+#include <QSharedData>
 #include <QStringList>
 #include <QIcon>
 
@@ -31,15 +32,30 @@
 namespace Plasma
 {
 
-class QueryMatch::Private
+class QueryMatch::Private : public QSharedData
 {
     public:
         Private(AbstractRunner *r)
-            : runner(r),
+            : QSharedData(),
+              runner(r),
               type(QueryMatch::ExactMatch),
               enabled(true),
               relevance(.7)
         {
+        }
+
+        Private(const Private &other)
+        {
+            kDebug() << "copy";
+            runner = other.runner;
+            type = other.type;
+            id = other.id;
+            text = other.text;
+            subtext = other.subtext;
+            icon = other.icon;
+            data = other.data;
+            enabled = other.enabled;
+            relevance = other.relevance;
         }
 
         QPointer<AbstractRunner> runner;
@@ -61,9 +77,13 @@ QueryMatch::QueryMatch(AbstractRunner *runner)
 //    kDebug() << "new match created";
 }
 
+QueryMatch::QueryMatch(const QueryMatch &other)
+    : d(other.d)
+{
+}
+
 QueryMatch::~QueryMatch()
 {
-    delete d;
 }
 
 QString QueryMatch::id() const
@@ -161,14 +181,19 @@ bool QueryMatch::operator<(const QueryMatch& other) const
     return d->relevance < other.d->relevance;
 }
 
-void QueryMatch::run(const RunnerContext *context) const
+QueryMatch& QueryMatch::operator=(const QueryMatch &other)
 {
-    Q_ASSERT(context);
+    kDebug();
+    d = other.d;
+    return *this;
+}
 
+void QueryMatch::run(const RunnerContext &context) const
+{
     //kDebug() << "we run the term" << context->query() << "whose type is" << context->mimetype();
     if (d->runner) {
         //TODO: this could be dangerous if the runner is deleted behind our backs.
-        d->runner->run(context, this);
+        d->runner->run(context, *this);
     }
 }
 

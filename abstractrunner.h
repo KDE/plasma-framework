@@ -89,14 +89,14 @@ class PLASMA_EXPORT AbstractRunner : public QObject
          * to return from this method right away, nor to create all matches
          * here.
          */
-        virtual void match(Plasma::RunnerContext *search);
+        virtual void match(Plasma::RunnerContext &context);
 
         /**
          * Triggers a call to match.
          *
          * @arg globalContext the search context used in executing this match.
          */
-        void performMatch(Plasma::RunnerContext &globalContext);
+        void performMatch(Plasma::RunnerContext &context);
 
         /**
          * If the runner has options that the user can interact with to modify
@@ -132,7 +132,7 @@ class PLASMA_EXPORT AbstractRunner : public QObject
          * Called whenever an exact or possible match associated with this
          * runner is triggered.
          */
-        virtual void run(const Plasma::RunnerContext *context, const Plasma::QueryMatch *action);
+        virtual void run(const Plasma::RunnerContext &context, const Plasma::QueryMatch &action);
 
         /**
          * The nominal speed of the runner.

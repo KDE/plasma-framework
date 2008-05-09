@@ -65,13 +65,13 @@ class PLASMA_EXPORT RunnerManager : public QObject
          * Retrieves all available matches found so far for the previously launched query 
          * @return List of matches
          */
-        QList<QueryMatch *> matches() const;
+        QList<QueryMatch> matches() const;
 
         /**
          * Runs a given match
          * @arg pointer to the match to be executed
          */
-         void run(const QueryMatch *match);
+         void run(const QueryMatch &match);
 
     public Q_SLOTS:
         /**
@@ -104,7 +104,7 @@ class PLASMA_EXPORT RunnerManager : public QObject
         /**
          * Emited each time a new match is added to the list
          */
-        void matchesChanged(const QList<Plasma::QueryMatch*> &matches);
+        void matchesChanged(const QList<Plasma::QueryMatch> &matches);
 
     private:
         Q_PRIVATE_SLOT(d, void scheduleMatchesChanged())

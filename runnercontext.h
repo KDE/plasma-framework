@@ -57,17 +57,10 @@ class PLASMA_EXPORT RunnerContext : public QObject
 
         Q_DECLARE_FLAGS(Types, Type)
 
-        enum DataPolicy { Shared = 0,
-                          SingleConsumer
-                        };
-
-        explicit RunnerContext(QObject *parent = 0, DataPolicy policy = Shared);
+        explicit RunnerContext(QObject *parent = 0);
 
         /**
-         * Constructs a RunnerContext with a DataPolicy of SingleConsumer that
-         * contains the search metadata (though none of the currently registered
-         * matches) from the passed in RunnerContext. Primarily useful for creating
-         * a thread-local copy of a Shared RunnerContext.
+         * Copy constructor
          */
         explicit RunnerContext(RunnerContext& other, QObject *parent = 0);
 
@@ -114,21 +107,20 @@ class PLASMA_EXPORT RunnerContext : public QObject
          *
          * @return true if matches were added, false if matches were e.g. outdated
          */
-        bool addMatches(const QString& term, const QList<QueryMatch *> &matches);
+        bool addMatches(const QString& term, const QList<QueryMatch> &matches);
 
         /**
          * Appends a match to the existing list of matches.
          * The RunnerContext takes over ownership of the match on successful addition.
          *
-         * If you are going to be adding multiple matches, it is better to use
-         * addMatches instead.
+         * If you are going to be adding multiple matches, use addMatches instead.
          *
          * @arg term the search term that this match was generated for
          * @arg match the match to add
          *
          * @return true if the match was added, false otherwise.
          */
-        bool addMatch(const QString &term, QueryMatch *match);
+        bool addMatch(const QString &term, const QueryMatch &match);
 
         /**
          * Takes the matches from this RunnerContext and copies to them another.
@@ -143,12 +135,7 @@ class PLASMA_EXPORT RunnerContext : public QObject
         /**
          * Retrieves all available matches for the current search term.
          */
-        QList<QueryMatch *> matches() const;
-
-        /**
-         * Removes all matches from this RunnerContext.
-         */
-        void removeAllMatches();
+        QList<QueryMatch> matches() const;
 
     Q_SIGNALS:
         void matchesChanged();

@@ -62,7 +62,7 @@ public:
 
                 script = Plasma::loadScriptEngine(api, runner);
                 if (!script) {
-                    kDebug() << "Could not create a" << api << "ScriptEngine for the"
+                    kDebug() << "Could not create a(n)" << api << "ScriptEngine for the"
                              << runnerDescription.name() << "Runner.";
                     delete package;
                     package = 0;
@@ -118,7 +118,7 @@ KConfigGroup AbstractRunner::config() const
     return KConfigGroup(&runners, group);
 }
 
-void AbstractRunner::performMatch( Plasma::RunnerContext &globalContext )
+void AbstractRunner::performMatch(Plasma::RunnerContext &globalContext)
 {
     static const int reasonableRunTime = 1500;
     static const int fastEnoughTime = 250;
@@ -126,7 +126,7 @@ void AbstractRunner::performMatch( Plasma::RunnerContext &globalContext )
     d->runtime.restart();
 //TODO :this is a copy ctor
     RunnerContext localContext(globalContext,0);
-    match(&localContext);
+    match(localContext);
     // automatically rate limit runners that become slooow
     const int runtime = d->runtime.elapsed();
     bool slowed = speed() == SlowSpeed;
@@ -212,8 +212,6 @@ void AbstractRunner::setIgnoredTypes(RunnerContext::Types types)
     d->blackListed = types;
 }
 
-
-
 KService::List AbstractRunner::serviceQuery(const QString &serviceType, const QString &constraint) const
 {
     QMutexLocker lock(&Private::bigLock);
@@ -225,14 +223,14 @@ QMutex* AbstractRunner::bigLock() const
     return &Private::bigLock;
 }
 
-void AbstractRunner::run(const Plasma::RunnerContext *search, const Plasma::QueryMatch *action)
+void AbstractRunner::run(const Plasma::RunnerContext &search, const Plasma::QueryMatch &action)
 {
     if (d->script) {
         return d->script->run(search, action);
     }
 }
 
-void AbstractRunner::match(Plasma::RunnerContext *search)
+void AbstractRunner::match(Plasma::RunnerContext &search)
 {
     if (d->script) {
         return d->script->match(search);
