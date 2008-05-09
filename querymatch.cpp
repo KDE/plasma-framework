@@ -180,7 +180,6 @@ bool QueryMatch::operator<(const QueryMatch& other) const
 QueryMatch& QueryMatch::operator=(const QueryMatch &other)
 {
     if (d != other.d) {
-        kDebug();
         d = other.d;
     }
 
