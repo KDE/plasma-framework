@@ -44,20 +44,6 @@ class QueryMatch::Private : public QSharedData
         {
         }
 
-        Private(const Private &other)
-        {
-            kDebug() << "copy";
-            runner = other.runner;
-            type = other.type;
-            id = other.id;
-            text = other.text;
-            subtext = other.subtext;
-            icon = other.icon;
-            data = other.data;
-            enabled = other.enabled;
-            relevance = other.relevance;
-        }
-
         QPointer<AbstractRunner> runner;
         QueryMatch::Type type;
         QString id;
@@ -73,7 +59,7 @@ class QueryMatch::Private : public QSharedData
 QueryMatch::QueryMatch(AbstractRunner *runner)
     : d(new Private(runner))
 {
-    if (d->runner) {
+    if (runner) {
         d->id = runner->id();
     }
 //    kDebug() << "new match created";
@@ -193,8 +179,11 @@ bool QueryMatch::operator<(const QueryMatch& other) const
 
 QueryMatch& QueryMatch::operator=(const QueryMatch &other)
 {
-    kDebug();
-    d = other.d;
+    if (d != other.d) {
+        kDebug();
+        d = other.d;
+    }
+
     return *this;
 }
 
