@@ -102,7 +102,7 @@ class PLASMA_EXPORT RunnerManager : public QObject
 
     Q_SIGNALS:
         /**
-         * Emited each time a new match is added to the list
+         * Emitted each time a new match is added to the list
          */
         void matchesChanged(const QList<Plasma::QueryMatch> &matches);
 

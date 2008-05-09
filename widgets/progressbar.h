@@ -60,12 +60,12 @@ public:
     QString format() const;
 
     /**
-     * @return wether the Plasma::ProgressBar is inverted or not.
+     * @return whether the Plasma::ProgressBar is inverted or not.
      */
     bool invertedAppearance();
 
     /**
-     * @return wether the text is visible or not.
+     * @return whether the text is visible or not.
      */
     bool isTextVisible() const;
 

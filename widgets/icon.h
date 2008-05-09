@@ -166,7 +166,7 @@ public:
 
     /**
     * @return optimal size given a size for the icon
-    * @param  iconWidth desidered width of the icon
+    * @param  iconWidth desired width of the icon
     */
     QSizeF sizeFromIconSize(const qreal iconWidth) const;
 

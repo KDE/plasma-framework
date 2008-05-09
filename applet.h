@@ -190,10 +190,10 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         QRect mapToView(const QGraphicsView *view, const QRectF &rect) const;
 
         /**
-         * Recomended position for a popup window like a menu or a tooltip
+         * Reccomended position for a popup window like a menu or a tooltip
          * given its size
          * @param s size of the popup
-         * @returns recomended position
+         * @returns reccomended position
          */
         QPoint popupPosition(const QSize &s) const;
 
@@ -221,12 +221,12 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         virtual Location location() const;
 
         /**
-         * @return the prefered aspect ratio mode for placement and resizing
+         * @return the preferred aspect ratio mode for placement and resizing
          */
         Plasma::AspectRatioMode aspectRatioMode() const;
 
         /**
-         * Sets the prefered aspect ratio mode for placement and resizing
+         * Sets the preferred aspect ratio mode for placement and resizing
          */
         void setAspectRatioMode(Plasma::AspectRatioMode);
 

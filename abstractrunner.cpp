@@ -55,7 +55,7 @@ public:
             const QString api = runnerDescription.property("X-Plasma-API").toString();
             if (!api.isEmpty()) {
                 const QString path = KStandardDirs::locate("data",
-                                    "plasma/runners/" + runnerDescription.pluginName() + "/");
+                                    "plasma/runners/" + runnerDescription.pluginName() + '/');
                 PackageStructure::Ptr structure = Plasma::packageStructure(api, Plasma::RunnerComponent);
                 structure->setPath(path);
                 package = new Package(path, structure);

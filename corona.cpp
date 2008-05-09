@@ -40,7 +40,7 @@ using namespace Plasma;
 namespace Plasma
 {
 
-// constant controling how long between requesting a configuration sync
+// constant controlling how long between requesting a configuration sync
 // and one happening should occur. currently 2 minutes.
 const int CONFIG_SYNC_TIMEOUT = 120000;
 

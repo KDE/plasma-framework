@@ -19,6 +19,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
+#include "runnermanager.h"
+
 #include <KServiceTypeTrader>
 #include <KPluginInfo>
 #include <KDebug>
@@ -38,8 +40,6 @@
 #include <QCoreApplication>
 
 #include "querymatch.h"
-
-#include "runnermanager.h"
 
 using ThreadWeaver::Weaver;
 using ThreadWeaver::Job;

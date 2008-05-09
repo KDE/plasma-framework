@@ -99,7 +99,7 @@ void ToolTip::show(Plasma::Widget *widget)
     d->showTimer->stop();
 
     if (d->isShown) {
-        // small delay to prevent unecessary showing when the mouse is moving quickly across items
+        // small delay to prevent unnecessary showing when the mouse is moving quickly across items
         // which can be too much for less powerful CPUs to keep up with
         d->showTimer->start(200);
     } else {

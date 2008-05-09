@@ -35,7 +35,7 @@ class PLASMA_EXPORT AppletBrowserWidget : public QWidget
 {
     Q_OBJECT
 public:
-    AppletBrowserWidget(QWidget *parent = 0, Qt::WindowFlags f = 0);
+    explicit AppletBrowserWidget(QWidget *parent = 0, Qt::WindowFlags f = 0);
     virtual ~AppletBrowserWidget();
 
     void setApplication(const QString& application = QString());

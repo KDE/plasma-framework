@@ -639,7 +639,7 @@ void Containment::dropEvent(QGraphicsSceneDragDropEvent *event)
 
 void Containment::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 {
-    //FIXME Qt4.4 check to see if this is still necessary to avoid unecessary repaints
+    //FIXME Qt4.4 check to see if this is still necessary to avoid unnecessary repaints
     //            check with QT_FLUSH_PAINT=1 and mouse through applets that accept hover,
     //            applets that don't and system windows
     if (event->spontaneous()) {
@@ -650,7 +650,7 @@ void Containment::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 
 void Containment::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 {
-    //FIXME Qt4.4 check to see if this is still necessary to avoid unecessary repaints
+    //FIXME Qt4.4 check to see if this is still necessary to avoid unnecessary repaints
     //            check with QT_FLUSH_PAINT=1 and mouse through applets that accept hover,
     //            applets that don't and system windows
 //    Applet::hoverLeaveEvent(event);

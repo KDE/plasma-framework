@@ -196,7 +196,7 @@ void Theme::setThemeName(const QString &themeName)
     }
 
     //TODO: should we care about names with relative paths in them?
-    QString themePath = KStandardDirs::locate("data", "desktoptheme/" + theme + "/");
+    QString themePath = KStandardDirs::locate("data", "desktoptheme/" + theme + '/');
     if (themePath.isEmpty() && d->themeName.isEmpty()) {
         themePath = KStandardDirs::locate("data", "desktoptheme/default/");
 
