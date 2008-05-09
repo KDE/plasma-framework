@@ -104,6 +104,11 @@ PanelToolbox::PanelToolbox(QGraphicsItem *parent)
     setFlag(ItemIgnoresTransformations, true);
 }
 
+PanelToolbox::~PanelToolbox()
+{
+    delete d;
+}
+
 QRectF PanelToolbox::boundingRect() const
 {
     if (orientation() == Qt::Vertical) {

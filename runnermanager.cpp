@@ -312,6 +312,7 @@ RunnerManager::RunnerManager(KConfigGroup& config, QObject *parent)
 
 RunnerManager::~RunnerManager()
 {
+    delete d;
 }
 
 AbstractRunner* RunnerManager::runner(const QString &name) const

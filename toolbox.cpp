@@ -61,6 +61,11 @@ Toolbox::Toolbox(QGraphicsItem *parent)
     setAcceptsHoverEvents(true);
 }
 
+Toolbox::~Toolbox()
+{
+    delete d;
+}
+
 void Toolbox::addTool(QGraphicsItem *tool, const QString &name)
 {
     if (!tool) {
