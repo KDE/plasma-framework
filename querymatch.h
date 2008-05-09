@@ -77,6 +77,8 @@ class PLASMA_EXPORT QueryMatch
 
         ~QueryMatch();
 
+        bool isValid() const;
+
         /**
          * Sets the type of match this action represents.
          */

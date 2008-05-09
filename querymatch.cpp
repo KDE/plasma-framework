@@ -73,7 +73,9 @@ class QueryMatch::Private : public QSharedData
 QueryMatch::QueryMatch(AbstractRunner *runner)
     : d(new Private(runner))
 {
-    d->id = runner->id();
+    if (d->runner) {
+        d->id = runner->id();
+    }
 //    kDebug() << "new match created";
 }
 
@@ -84,6 +86,11 @@ QueryMatch::QueryMatch(const QueryMatch &other)
 
 QueryMatch::~QueryMatch()
 {
+}
+
+bool QueryMatch::isValid() const
+{
+    return d->runner != 0;
 }
 
 QString QueryMatch::id() const
@@ -134,7 +141,10 @@ void QueryMatch::setData(const QVariant& data)
 
 void QueryMatch::setId(const QString &id)
 {
-    d->id = d->runner->id();
+    if (d->runner) {
+        d->id = d->runner->id();
+    }
+
 
     if (!id.isEmpty()) {
         d->id.append('_').append(id);
