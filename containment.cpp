@@ -913,7 +913,11 @@ void Containment::Private::containmentConstraintsEvent(Plasma::Constraints const
             //defaulting to Horizontal right now
             } else {
                 toolBox->setOrientation(Qt::Horizontal);
-                toolBox->setPos(q->geometry().width(), q->geometry().height()/2 - toolBox->boundingRect().height()/2);
+                if (QApplication::layoutDirection() == Qt::RightToLeft) {
+                    toolBox->setPos(q->geometry().left(), q->geometry().height()/2 - toolBox->boundingRect().height()/2);
+                } else {
+                    toolBox->setPos(q->geometry().width(), q->geometry().height()/2 - toolBox->boundingRect().height()/2);
+                }
             }
         } else {
             toolBox->setPos(q->geometry().right() - qAbs(toolBox->boundingRect().width()), 0);

@@ -23,6 +23,7 @@
 #include <QGraphicsSceneHoverEvent>
 #include <QPainter>
 #include <QRadialGradient>
+#include <QApplication>
 
 #include <plasma/theme.h>
 #include <KColorScheme>
@@ -114,6 +115,8 @@ QRectF PanelToolbox::boundingRect() const
     if (orientation() == Qt::Vertical) {
         return QRectF(0, 0, size()*2, -size());
     //horizontal
+    } else if (QApplication::layoutDirection() == Qt::RightToLeft) {
+        return QRectF(0, 0, size(), size()*2);
     } else {
         return QRectF(0, 0, -size(), size()*2);
     }
@@ -163,6 +166,8 @@ void PanelToolbox::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
 
     if (orientation() == Qt::Vertical) {
         iconRect = QRect(QPoint(gradientCenter.x() - iconSize().width()/2, (int)boundingRect().top() - iconSize().height() - 2), iconSize());
+    } else if (QApplication::layoutDirection() == Qt::RightToLeft) {
+        iconRect = QRect(QPoint(2, gradientCenter.y() - iconSize().height()/2), iconSize());
     } else {
         iconRect = QRect(QPoint((int)boundingRect().left() - iconSize().width() + 2, gradientCenter.y() - iconSize().height()/2), iconSize());
     }
@@ -188,6 +193,8 @@ QPainterPath PanelToolbox::shape() const
 
     if (orientation() == Qt::Vertical) {
         path.arcTo(QRectF(boundingRect().center().x() - toolSize, boundingRect().top() - toolSize, toolSize*2, toolSize*2), 0, 180);
+    } else if (QApplication::layoutDirection() == Qt::RightToLeft) {
+        path.arcTo(QRectF(boundingRect().left() - toolSize, boundingRect().center().y() - toolSize, toolSize*2, toolSize*2), 90, -180);
     } else {
         path.arcTo(QRectF(boundingRect().left() - toolSize, boundingRect().center().y() - toolSize, toolSize*2, toolSize*2), 90, 180);
     }
