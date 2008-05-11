@@ -433,6 +433,11 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         void setGeometry(const QRectF &geometry);
 
         /**
+         * @return a rect of the applet in screen coordinates.
+         */
+        QRect screenRect() const;
+
+        /**
          * Reimplemented from QGraphicsItem
          **/
         int type() const;

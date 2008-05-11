@@ -701,7 +701,8 @@ QList<QAction*> Applet::contextualActions()
 void Applet::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     QPainter *p;
-    QPixmap pixmap(size().toSize());
+    //FIXME: we should probably set the pixmap to screenSize(), but that breaks stuff atm.
+    QPixmap pixmap(boundingRect().size().toSize());
 
     QGraphicsView* qgv = qobject_cast<QGraphicsView*>(widget->parent());
     bool ghost = (qgv && (qgv == d->ghostView));
@@ -771,7 +772,6 @@ void Applet::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
 
         delete p;
 
-        kDebug() << "draw the pixmap!";
         painter->drawPixmap(0, 0, pixmap);
     }
 }
@@ -1219,6 +1219,18 @@ void Applet::setGeometry(const QRectF& geometry)
         }*/
         emit geometryChanged();
     }
+}
+
+QRect Applet::screenRect() const
+{
+    QPointF bottomRight = pos();
+    bottomRight.setX(bottomRight.x() + size().width());
+    bottomRight.setY(bottomRight.y() + size().height());
+
+    QPoint tL = view()->mapToGlobal(view()->mapFromScene(pos()));
+    QPoint bR = view()->mapToGlobal(view()->mapFromScene(bottomRight));
+
+    return QRect(QPoint(0, 0), QSize(bR.x() - tL.x(), bR.y() - tL.y()));
 }
 
 void Applet::raise()

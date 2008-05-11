@@ -421,20 +421,18 @@ void AppletHandle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
             m_topview->setWallpaperEnabled(false);
 
+            m_topview->resize(m_applet->screenRect().size());
+            kDebug() << "resizing topview to: " << m_applet->screenRect().size();
+
             //TODO: when zoomed out, this doesn't work correctly
             m_topview->setSceneRect(m_applet->sceneBoundingRect());
 
-            // Calculate the size of the applet in screen coordinates.
-            QPointF bottomRight = m_applet->pos();
-            bottomRight.setX(bottomRight.x() + m_applet->size().width());
-            bottomRight.setY(bottomRight.y() + m_applet->size().height());
+            m_topview->centerOn(m_applet);
+            //We might have to scale the qgv, because we might be zoomed out.
+            qreal scale = m_applet->screenRect().width() / m_applet->boundingRect().width();
+            kDebug() << "scaling topview with: " << scale;
+            m_topview->scale(scale, scale);
 
-            QPoint tL = m_applet->view()->mapToGlobal(m_applet->view()->mapFromScene(
-                                                                        m_applet->pos()));
-            QPoint bR = m_applet->view()->mapToGlobal(m_applet->view()->mapFromScene(
-                                                                        bottomRight));
-
-            m_topview->resize(bR.x() - tL.x(), bR.y() - tL.y());
             m_topview->show();
 
             m_applet->setGhostView(m_applet->containment()->view());
