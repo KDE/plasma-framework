@@ -85,6 +85,7 @@ public:
     KConfigGroup *mainConfig;
     Plasma::Constraints pendingConstraints;
     Plasma::AspectRatioMode aspectRatioMode;
+    QGraphicsView* ghostView;
     ImmutabilityType immutability;
     int constraintsTimerId;
     bool hasConfigurationInterface : 1;

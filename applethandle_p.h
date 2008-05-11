@@ -31,6 +31,7 @@ namespace Plasma
 {
 class Applet;
 class Containment;
+class View;
 
 class AppletHandle : public QObject, public QGraphicsItem
 {
@@ -96,6 +97,9 @@ class AppletHandle : public QObject, public QGraphicsItem
         QTimer *m_hoverTimer;
         bool m_buttonsOnRight;
         bool m_pendingFade;
+        View *m_topview;
+        QPoint m_mousePos; //the position of the mousecursor relative to the
+                           //applets position.
 };
 
 }

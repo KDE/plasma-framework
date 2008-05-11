@@ -231,6 +231,19 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         void setAspectRatioMode(Plasma::AspectRatioMode);
 
         /**
+         * @return The view where the applet appears ghosted.
+         */
+        QGraphicsView * ghostView();
+
+        /**
+         * Sets a view which displays the applet semi transparent.
+         *
+         * @param view The view where the applet should appear 'ghosted'. Set to
+         * 0 to don't ghost the applet anywhere.
+         */
+        void setGhostView(QGraphicsView * view);
+
+        /**
          * Returns a list of all known applets.
          *
          * @param category Only applets matchin this category will be returned.

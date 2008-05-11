@@ -28,6 +28,7 @@
 #include <KColorScheme>
 #include <KGlobalSettings>
 #include <KIcon>
+#include <KWindowSystem>
 
 #include <cmath>
 #include <math.h>
@@ -57,7 +58,8 @@ AppletHandle::AppletHandle(Containment *parent, Applet *applet)
       m_scaleWidth(1.0),
       m_scaleHeight(1.0),
       m_buttonsOnRight(false),
-      m_pendingFade(false)
+      m_pendingFade(false),
+      m_topview(0)
 {
     KColorScheme colorScheme(QPalette::Active, KColorScheme::View, Theme::defaultTheme()->colorScheme());
     m_gradientColor = colorScheme.background(KColorScheme::NormalBackground).color();
@@ -270,6 +272,10 @@ void AppletHandle::mousePressEvent(QGraphicsSceneMouseEvent *event)
             setZValue(m_applet->zValue());
         }
         event->accept();
+        //set mousePos to the position in the applet, in screencoords, so it becomes easy
+        //to reposition the toplevel view to the correct position.
+        m_mousePos = event->screenPos() - m_applet->view()->mapToGlobal(
+                                                    m_applet->view()->mapFromScene(m_applet->pos()));
         update();
         return;
     }
@@ -333,6 +339,12 @@ void AppletHandle::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
                 }
                 break;
             case MoveButton: {
+                if (m_topview) {
+                    m_topview->hide();
+                    delete m_topview;
+                    m_topview = 0;
+                    m_applet->setGhostView(0);
+                }
                 //find out if we were dropped on a panel or something
                 QWidget *w = QApplication::topLevelAt(event->screenPos());
                 kDebug() << "move to widget" << w;
@@ -340,14 +352,21 @@ void AppletHandle::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
                     Plasma::View *v = qobject_cast<Plasma::View *>(w);
                     if (v) {
                         Containment *c = v->containment();
-                        //XXX the dashboard view won't give us a containment. if it did, this could
+                        QPoint pos = v->mapFromGlobal(event->screenPos() - m_mousePos);
+
+                        //XXX the dashboard view won't give us a
+                        //containment. if it did, this could
                         //break shit.
                         if (c && c != m_containment) {
-                            //we actually have been dropped on another containment, so move there
+                            //we actually have been dropped on another
+                            //containment, so move there
                             //we have a screenpos, we need a scenepos
                             //FIXME how reliable is this transform?
-                            QPoint pos = v->mapFromGlobal(event->screenPos());
                             switchContainment(c, v->mapToScene(pos));
+                        } else {
+                            //just update the position
+                            kDebug() << "just update the position";
+                            m_applet->setPos(v->mapToScene(pos));
                         }
                     }
                 }
@@ -392,25 +411,37 @@ void AppletHandle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     QPointF delta = curPos-lastPos;
 
     if (m_pressedButton == MoveButton) {
-        setPos(pos()+delta);
-        // test for containment change
-        if (!m_containment->sceneBoundingRect().contains(event->scenePos())) {
-            // see which containment it belongs to
-            Corona * corona = qobject_cast<Corona*>(scene());
-            if (corona) {
-                QList<Containment*> containments = corona->containments();
-                for (int i = 0; i < containments.size(); ++i) {
-                    if (containments[i]->sceneBoundingRect().contains(event->scenePos())) {
-                        // add the applet to the new containment
-                        // and take it from the old one
-                        //kDebug() << "moving to other containment with position" << pos() << event->scenePos();
-                        //kDebug() << "position before reparenting" << pos() << scenePos();
-                        switchContainment(containments[i], scenePos());
-                        break;
-                    }
-                }
-            }
+        if (!m_topview) { //create a new toplevel view
+            m_topview = new View(m_applet->containment(), -1, 0);
+            m_topview->setTrackContainmentChanges(false);
+
+            m_topview->setWindowFlags(Qt::Widget | Qt::FramelessWindowHint
+                                                 | Qt::WindowStaysOnTopHint);
+            KWindowSystem::setState(m_topview->winId(), NET::SkipTaskbar | NET::SkipPager);
+
+            m_topview->setWallpaperEnabled(false);
+
+            //TODO: when zoomed out, this doesn't work correctly
+            m_topview->setSceneRect(m_applet->sceneBoundingRect());
+
+            // Calculate the size of the applet in screen coordinates.
+            QPointF bottomRight = m_applet->pos();
+            bottomRight.setX(bottomRight.x() + m_applet->size().width());
+            bottomRight.setY(bottomRight.y() + m_applet->size().height());
+
+            QPoint tL = m_applet->view()->mapToGlobal(m_applet->view()->mapFromScene(
+                                                                        m_applet->pos()));
+            QPoint bR = m_applet->view()->mapToGlobal(m_applet->view()->mapFromScene(
+                                                                        bottomRight));
+
+            m_topview->resize(bR.x() - tL.x(), bR.y() - tL.y());
+            m_topview->show();
+
+            m_applet->setGhostView(m_applet->containment()->view());
         }
+
+        m_topview->move((event->screenPos() - m_mousePos));
+
     } else if (m_pressedButton == RotateButton ||
                m_pressedButton == ResizeButton) {
         if (_k_distanceForPoint(delta) <= 1.0) {
@@ -509,6 +540,7 @@ void AppletHandle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
         QGraphicsItem::mouseMoveEvent(event);
     }
 }
+
 
 //pos relative to scene
 void AppletHandle::switchContainment(Containment *containment, const QPointF &pos)
@@ -665,7 +697,6 @@ void AppletHandle::calculateSize()
     }
 
     m_rect.adjust(-HANDLE_WIDTH, -HANDLE_WIDTH, HANDLE_WIDTH, HANDLE_WIDTH);
-
     if (m_applet->pos().x() <= ((HANDLE_WIDTH * 2) + ICON_SIZE)) {
         m_rect.adjust(0.0, 0.0, ICON_SIZE, 0.0);
         m_buttonsOnRight = true;

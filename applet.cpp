@@ -700,23 +700,43 @@ QList<QAction*> Applet::contextualActions()
 
 void Applet::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
+    QPainter *p;
+    QPixmap pixmap(size().toSize());
+
+    QGraphicsView* qgv = qobject_cast<QGraphicsView*>(widget->parent());
+    bool ghost = (qgv && (qgv == d->ghostView));
+
+    if (ghost) {
+        // The applet has to be displayed semi transparent. Create a pixmap and a painter on
+        // that pixmap where the applet can draw on so we can draw the result transparently
+        // at the end.
+        kDebug() << "Painting ghosted...";
+
+        pixmap.fill(Qt::transparent);
+
+        p = new QPainter();
+        p->begin(&pixmap);
+    } else {
+        p = painter;
+    }
+
     if (d->shadow && d->shadow->shadowedSize() != boundingRect().size()) {
         //kDebug() << "sizes are " << d->shadow->shadowedSize() << boundingRect().size();
         d->shadow->generate();
     }
 
-    painter->save();
+    p->save();
 
     if (transform().isRotating()) {
-        painter->setRenderHint(QPainter::SmoothPixmapTransform);
-        painter->setRenderHint(QPainter::Antialiasing);
+        p->setRenderHint(QPainter::SmoothPixmapTransform);
+        p->setRenderHint(QPainter::Antialiasing);
     }
 
     if (d->background &&
         formFactor() != Plasma::Vertical &&
         formFactor() != Plasma::Horizontal) {
         //kDebug() << "option rect is" << option->rect;
-        d->background->paintPanel(painter, option->rect, QPointF(0,0));
+        d->background->paintPanel(p, option->rect, QPointF(0,0));
     }
 
     if (!d->failed) {
@@ -731,17 +751,29 @@ void Applet::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
                 Containment::StyleOption coption(*option);
                 coption.view = v;
 
-                paintInterface(painter, &coption, contentsRect);
+                paintInterface(p, &coption, contentsRect);
             }
 
-            painter->restore();
+            p->restore();
             return;
         }
 
         //kDebug() << "paint interface of" << (QObject*) this;
-        paintInterface(painter, option, contentsRect);
+        paintInterface(p, option, contentsRect);
     }
-    painter->restore();
+    p->restore();
+
+    if (ghost) {
+        // Lets display the pixmap that we've just drawn... transparently.
+        p->setCompositionMode(QPainter::CompositionMode_DestinationIn);
+        p->fillRect(pixmap.rect(), QColor(0, 0, 0, (0.3 * 255)));
+        p->end();
+
+        delete p;
+
+        kDebug() << "draw the pixmap!";
+        painter->drawPixmap(0, 0, pixmap);
+    }
 }
 
 void Applet::paintInterface(QPainter *painter, const QStyleOptionGraphicsItem *option,
@@ -798,6 +830,17 @@ Plasma::AspectRatioMode Applet::aspectRatioMode() const
 void Applet::setAspectRatioMode(Plasma::AspectRatioMode mode)
 {
     d->aspectRatioMode = mode;
+}
+
+QGraphicsView * Applet::ghostView()
+{
+    return d->ghostView;
+}
+
+void Applet::setGhostView( QGraphicsView * view )
+{
+    d->ghostView = view;
+    update();
 }
 
 void Applet::registerAsDragHandle( QGraphicsItem * item )
