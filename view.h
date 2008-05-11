@@ -20,6 +20,7 @@
 #ifndef VIEW_H
 #define VIEW_H
 
+#include <QApplication>
 #include <QtGui/QGraphicsView>
 
 #include <KDE/KConfigGroup>
@@ -134,6 +135,12 @@ public:
      * @return whether or not the view tracks changes to the containment
      */
     bool trackContainmentChanges();
+
+    /**
+     * @param pos the position in screen coordinates.
+     * @return the Plasma::View that is at position pos.
+     */
+    static View * topLevelViewAt(const QPoint & pos);
 
     /**
      * @return the id of the View set in the constructor

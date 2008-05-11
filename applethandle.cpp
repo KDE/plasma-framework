@@ -252,6 +252,7 @@ AppletHandle::ButtonType AppletHandle::mapToButton(const QPointF &point) const
     //return m_applet->mapToParent(m_applet->shape()).contains(point) ? NoButton : MoveButton;
 }
 
+
 void AppletHandle::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     if (m_pendingFade) {
@@ -345,29 +346,22 @@ void AppletHandle::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
                     m_topview = 0;
                     m_applet->setGhostView(0);
                 }
-                //find out if we were dropped on a panel or something
-                QWidget *w = QApplication::topLevelAt(event->screenPos());
-                kDebug() << "move to widget" << w;
-                if (w) {
-                    Plasma::View *v = qobject_cast<Plasma::View *>(w);
-                    if (v) {
-                        Containment *c = v->containment();
-                        QPoint pos = v->mapFromGlobal(event->screenPos() - m_mousePos);
 
-                        //XXX the dashboard view won't give us a
-                        //containment. if it did, this could
-                        //break shit.
-                        if (c && c != m_containment) {
-                            //we actually have been dropped on another
-                            //containment, so move there
-                            //we have a screenpos, we need a scenepos
-                            //FIXME how reliable is this transform?
-                            switchContainment(c, v->mapToScene(pos));
-                        } else {
-                            //just update the position
-                            kDebug() << "just update the position";
-                            m_applet->setPos(v->mapToScene(pos));
-                        }
+                //find out if we were dropped on a panel or something
+                Plasma::View *v = Plasma::View::topLevelViewAt(event->screenPos());
+                if (v) {
+                    Containment *c = v->containment();
+                    QPoint pos = v->mapFromGlobal(event->screenPos() - m_mousePos);
+
+                    //XXX the dashboard view won't give us a
+                    //containment. if it did, this could
+                    //break shit.
+                    if (c && c != m_containment) {
+                        //we actually have been dropped on another
+                        //containment, so move there
+                        //we have a screenpos, we need a scenepos
+                        //FIXME how reliable is this transform?
+                        switchContainment(c, v->mapToScene(pos));
                     }
                 }
                 break;
@@ -397,6 +391,15 @@ qreal _k_angleForPoints(const QPointF &center, const QPointF &pt1, const QPointF
     return beta - alpha;
 }
 
+bool AppletHandle::goTopLevel(const QPoint & pos) {
+    Plasma::View *v = Plasma::View::topLevelViewAt(pos);
+    if (v != m_applet->containment()->view()) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 void AppletHandle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
     static const qreal snapAngle = M_PI_2 /* $i 3.14159 / 2.0 */;
@@ -411,34 +414,65 @@ void AppletHandle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     QPointF delta = curPos-lastPos;
 
     if (m_pressedButton == MoveButton) {
-        if (!m_topview) { //create a new toplevel view
-            m_topview = new View(m_applet->containment(), -1, 0);
-            m_topview->setTrackContainmentChanges(false);
-
-            m_topview->setWindowFlags(Qt::Widget | Qt::FramelessWindowHint
-                                                 | Qt::WindowStaysOnTopHint);
-            KWindowSystem::setState(m_topview->winId(), NET::SkipTaskbar | NET::SkipPager);
-
-            m_topview->setWallpaperEnabled(false);
-
-            m_topview->resize(m_applet->screenRect().size());
-            kDebug() << "resizing topview to: " << m_applet->screenRect().size();
-
-            //TODO: when zoomed out, this doesn't work correctly
-            m_topview->setSceneRect(m_applet->sceneBoundingRect());
-
-            m_topview->centerOn(m_applet);
-            //We might have to scale the qgv, because we might be zoomed out.
-            qreal scale = m_applet->screenRect().width() / m_applet->boundingRect().width();
-            kDebug() << "scaling topview with: " << scale;
-            m_topview->scale(scale, scale);
-
-            m_topview->show();
-
-            m_applet->setGhostView(m_applet->containment()->view());
+        if (m_pos == QPointF(0, 0)) {
+            m_pos = pos();
         }
+        m_pos = m_pos + delta;
 
-        m_topview->move((event->screenPos() - m_mousePos));
+        QRect screenRect = QRect(event->screenPos() - m_mousePos,
+                                 m_applet->screenRect().size());
+        kDebug() << "screenRect = " << screenRect;
+        //add a 1 pixelmargin to the screenRect so, that when we check
+        //if we are over another view than the source view, we won't
+        //detect the top level view.
+        screenRect.adjust(-1, -1, 1, 1);
+
+        //Are we moving out of the current view?
+        bool toTopLevel = goTopLevel(screenRect.topLeft()) ||
+                          goTopLevel(screenRect.topRight()) ||
+                          goTopLevel(screenRect.bottomLeft()) ||
+                          goTopLevel(screenRect.bottomRight());
+
+        kDebug() << "toTopLevel = " << toTopLevel;
+        if (!toTopLevel) {
+            setPos(m_pos);
+            if (m_topview) {
+                m_topview->hide();
+                delete m_topview;
+                m_topview = 0;
+                m_applet->setGhostView(0);
+            }
+        } else {
+            if (!m_topview) { //create a new toplevel view
+                m_topview = new View(m_applet->containment(), -1, 0);
+                m_topview->setTrackContainmentChanges(false);
+
+                m_topview->setWindowFlags(Qt::Widget | Qt::FramelessWindowHint
+                                                     | Qt::WindowStaysOnTopHint);
+                KWindowSystem::setState(m_topview->winId(), NET::SkipTaskbar | NET::SkipPager);
+
+                m_topview->setWallpaperEnabled(false);
+
+                m_topview->resize(m_applet->screenRect().size());
+                kDebug() << "resizing topview to: " << m_applet->screenRect().size();
+
+                //TODO: when zoomed out, this doesn't work correctly
+                m_topview->setSceneRect(m_applet->sceneBoundingRect());
+
+                m_topview->centerOn(m_applet);
+                //We might have to scale the qgv, because we might be zoomed out.
+                qreal scale = m_applet->screenRect().width() / m_applet->boundingRect().width();
+                kDebug() << "scaling topview with: " << scale;
+                m_topview->scale(scale, scale);
+
+                m_topview->show();
+
+                m_applet->setGhostView(m_applet->containment()->view());
+            }
+
+
+            m_topview->move((event->screenPos() - m_mousePos));
+        }
 
     } else if (m_pressedButton == RotateButton ||
                m_pressedButton == ResizeButton) {
@@ -669,6 +703,7 @@ void AppletHandle::startFading(FadeType anim)
 
     m_animId = Animator::self()->customAnimation(40, (int)time, Animator::EaseInOutCurve, this, "fadeAnimation");
 }
+
 
 void AppletHandle::forceDisappear()
 {

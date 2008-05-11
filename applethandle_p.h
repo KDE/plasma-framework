@@ -81,6 +81,7 @@ class AppletHandle : public QObject, public QGraphicsItem
          * @param pos the (scene-relative) position to place it at
          */
         void switchContainment(Containment *containment, const QPointF &pos);
+        bool goTopLevel(const QPoint & pos);
 
         QRectF m_rect;
         ButtonType m_pressedButton;
@@ -100,6 +101,7 @@ class AppletHandle : public QObject, public QGraphicsItem
         View *m_topview;
         QPoint m_mousePos; //the position of the mousecursor relative to the
                            //applets position.
+        QPointF m_pos;
 };
 
 }

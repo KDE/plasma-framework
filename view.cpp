@@ -232,6 +232,16 @@ bool View::trackContainmentChanges()
     return d->trackChanges;
 }
 
+View * View::topLevelViewAt(const QPoint & pos)
+{
+    QWidget *w = QApplication::topLevelAt(pos);
+    if (w) {
+        Plasma::View *v = qobject_cast<Plasma::View *>(w);
+        return v;
+    } else {
+        return 0;
+    }
+}
 
 } // namespace Plasma
 
