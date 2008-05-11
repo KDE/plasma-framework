@@ -405,12 +405,13 @@ DataEngine::Private::Private(DataEngine* e, KService::Ptr service)
     updateTimestamp.start();
 
     if (!service) {
+        engineName = i18n("Unnamed");
         return;
     }
 
     engineName = service->property("X-Plasma-EngineName").toString();
     if (engineName.isEmpty()) {
-        engineName = i18n("Anonymous Engine");
+        engineName = i18n("Unnamed");
     }
     e->setObjectName(engineName);
     icon = service->icon();
