@@ -106,6 +106,11 @@ DesktopToolbox::DesktopToolbox(QGraphicsItem *parent)
     setFlag(ItemIgnoresTransformations, true);
 }
 
+DesktopToolbox::~DesktopToolbox()
+{
+    delete d;
+}
+
 QRectF DesktopToolbox::boundingRect() const
 {
     return QRectF(0, 0, -size()*2, size()*2);
