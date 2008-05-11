@@ -1,10 +1,15 @@
 [Desktop Entry]
 Name=Test Data Engine
+Name[ca]=Motor de dades de prova
+Name[ga]=Inneall Sonraí Trialach
 Name[gu]=ચકાસણી માહિતી એન્જિન
 Name[km]=សាកល្បង​ម៉ាស៊ីន​ទិន្នន័យ
+Name[nds]=Test-Hanteerkarn
 Name[pa]=ਟੈਸਟ ਡਾਟਾ ਇੰਜਣ
+Name[sl]=Preizkusni pogon s podatki
 Name[sv]=Testdatagränssnitt
 Name[tr]=Test Veri Motoru
+Name[uk]=Тестовий рушій даних
 Name[zh_TW]=測試資料引擎
 X-KDE-ServiceTypes=Plasma/DataEngine
 Type=Service
