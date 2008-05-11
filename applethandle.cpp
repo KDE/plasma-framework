@@ -20,6 +20,7 @@
 #include "applethandle_p.h"
 
 #include <QApplication>
+#include <QBitmap>
 #include <QtGui/QGraphicsSceneMouseEvent>
 #include <QtGui/QLinearGradient>
 #include <QtGui/QPainter>
@@ -464,6 +465,24 @@ void AppletHandle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
                 qreal scale = m_applet->screenRect().width() / m_applet->boundingRect().width();
                 kDebug() << "scaling topview with: " << scale;
                 m_topview->scale(scale, scale);
+
+                //Paint a mask based on the applets shape.
+                //TODO: might be useful to have this in applet?
+                QBitmap bitmap(m_applet->screenRect().size());
+                QPainter * shapePainter = new QPainter();
+                shapePainter->begin(&bitmap);
+                shapePainter->fillRect(0, 0, m_applet->screenRect().width(),
+                                             m_applet->screenRect().height(),
+                                             Qt::white);
+                shapePainter->setBrush(Qt::black);
+
+                shapePainter->drawPath(m_applet->shape());
+
+                shapePainter->end();
+
+                delete shapePainter;
+
+                m_topview->setMask(bitmap);
 
                 m_topview->show();
 
