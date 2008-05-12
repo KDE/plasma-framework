@@ -20,7 +20,7 @@
 #ifndef VIEW_H
 #define VIEW_H
 
-#include <QApplication>
+#include <QtGui/QApplication>
 #include <QtGui/QGraphicsView>
 
 #include <KDE/KConfigGroup>
