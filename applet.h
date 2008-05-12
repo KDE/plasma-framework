@@ -448,6 +448,17 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          **/
         Containment* containment() const;
 
+        /**
+         * @param parent the QGraphicsItem this applet is parented to
+         * @param serviceId the name of the .desktop file containing the
+         *      information about the widget
+         * @param appletId a unique id used to differentiate between multiple
+         *      instances of the same Applet type
+         */
+        explicit Applet(QGraphicsItem* parent = 0,
+                        const QString& serviceId = QString(),
+                        uint appletId = 0);
+
     Q_SIGNALS:
         /**
          * This signal indicates that an application launch, window
@@ -472,17 +483,6 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          * applets.
          */
         void configNeedsSaving();
-
-        /**
-         * @param parent the QGraphicsItem this applet is parented to
-         * @param serviceId the name of the .desktop file containing the
-         *      information about the widget
-         * @param appletId a unique id used to differentiate between multiple
-         *      instances of the same Applet type
-         */
-        explicit Applet(QGraphicsItem* parent = 0,
-                        const QString& serviceId = QString(),
-                        uint appletId = 0);
 
     public Q_SLOTS:
         /**
