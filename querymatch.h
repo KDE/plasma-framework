@@ -20,7 +20,7 @@
 #ifndef QUERYMATCH_H
 #define QUERYMATCH_H
 
-#include <QSharedDataPointer>
+#include <QtCore/QSharedDataPointer>
 
 #include <plasma/plasma_export.h>
 
