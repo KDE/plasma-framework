@@ -473,6 +473,17 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          */
         void configNeedsSaving();
 
+        /**
+         * @param parent the QGraphicsItem this applet is parented to
+         * @param serviceId the name of the .desktop file containing the
+         *      information about the widget
+         * @param appletId a unique id used to differentiate between multiple
+         *      instances of the same Applet type
+         */
+        explicit Applet(QGraphicsItem* parent = 0,
+                        const QString& serviceId = QString(),
+                        uint appletId = 0);
+
     public Q_SLOTS:
         /**
          * Sets the immutability type for this applet (not immutable, user immutable or system immutable)
@@ -510,17 +521,6 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         void flushPendingConstraintsEvents();
 
     protected:
-        /**
-         * @param parent the QGraphicsItem this applet is parented to
-         * @param serviceId the name of the .desktop file containing the
-         *      information about the widget
-         * @param appletId a unique id used to differentiate between multiple
-         *      instances of the same Applet type
-         */
-        explicit Applet(QGraphicsItem* parent = 0,
-                        const QString& serviceId = QString(),
-                        uint appletId = 0);
-
         /**
          * This constructor is to be used with the plugin loading systems
          * found in KPluginInfo and KService. The argument list is expected
