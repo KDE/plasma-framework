@@ -134,8 +134,19 @@ class PLASMA_EXPORT RunnerContext : public QObject
 
         /**
          * Retrieves all available matches for the current search term.
+         *
+         * @return a list of matches
          */
         QList<QueryMatch> matches() const;
+
+        /**
+         * Retrieves a match by id.
+         *
+         * @param id the id of the match to return
+         * @return the match associated with this id, or an invalid QueryMatch object
+         *         if the id does not eixst
+         */
+        QueryMatch match(const QString &id) const;
 
     Q_SIGNALS:
         void matchesChanged();

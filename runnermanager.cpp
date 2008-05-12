@@ -357,6 +357,11 @@ QList<QueryMatch> RunnerManager::matches() const
     return d->context.matches();
 }
 
+void RunnerManager::run(const QString &id)
+{
+    run(d->context.match(id));
+}
+
 void RunnerManager::run(const QueryMatch &match)
 {
     if (!match.isEnabled()) {

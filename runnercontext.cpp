@@ -32,6 +32,7 @@
 #include <KStandardDirs>
 #include <KUrl>
 
+#include "abstractrunner.h"
 #include "querymatch.h"
 
 //#define LOCK_FOR_READ(context) if (context->d->policy == Shared) { context->d->lock.lockForRead(); }
@@ -107,6 +108,7 @@ class RunnerContext::Private : public QSharedData
 
         QReadWriteLock lock;
         QList<QueryMatch> matches;
+        QMap<QString, const QueryMatch*> matchesById;
         QString term;
         QString mimeType;
         RunnerContext::Type type;
@@ -144,6 +146,7 @@ void RunnerContext::reset()
     // ref count was 1 (e.g. only the RunnerContext is using
     // the dptr) then we won't get a copy made
     if (!d->matches.isEmpty()) {
+        d->matchesById.clear();
         d->matches.clear();
         emit d->q->matchesChanged();
     }
@@ -194,7 +197,15 @@ bool RunnerContext::addMatches(const QString& term, const QList<QueryMatch> &mat
     }
 
     LOCK_FOR_WRITE(this)
-    d->matches << matches;
+    foreach (const QueryMatch &match, matches) {
+        d->matches.append(match);
+#ifndef NDEBUG
+        if (d->matchesById.contains(match.id())) {
+                kDebug() << "Duplicate match id " << match.id() << "from" << match.runner()->name();
+        }
+#endif
+        d->matchesById.insert(match.id(), &d->matches.at(d->matches.size() - 1));
+    }
     UNLOCK(this);
     //kDebug()<< "add matches";
     // A copied searchContext may share the d pointer, 
@@ -209,7 +220,8 @@ bool RunnerContext::addMatch(const QString &term, const QueryMatch &match)
     Q_UNUSED(term)
 
     LOCK_FOR_WRITE(this)
-    d->matches << match;
+    d->matches.append(match);
+    d->matchesById.insert(match.id(), &d->matches.at(d->matches.size() - 1));
     UNLOCK(this);
     //kDebug()<< "added match" << match->text();
     emit d->q->matchesChanged();
@@ -225,6 +237,18 @@ QList<QueryMatch> RunnerContext::matches() const
     return matches;
 }
 
+QueryMatch RunnerContext::match(const QString &id) const
+{
+    LOCK_FOR_READ(this)
+    if (d->matchesById.contains(id)) {
+        return *d->matchesById.value(id);
+    }
+    UNLOCK(this)
+
+    return QueryMatch(0);
+
 }
+
+} // Plasma namespace
 
 #include "runnercontext.moc"

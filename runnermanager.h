@@ -69,9 +69,15 @@ class PLASMA_EXPORT RunnerManager : public QObject
 
         /**
          * Runs a given match
-         * @arg pointer to the match to be executed
+         * @arg match the match to be executed
          */
          void run(const QueryMatch &match);
+
+        /**
+         * Runs a given match
+         * @arg id the id of the match to run
+         */
+         void run(const QString &id);
 
         /**
          * @return the current query term
