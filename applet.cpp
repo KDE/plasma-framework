@@ -176,6 +176,11 @@ void Applet::restore(KConfigGroup *c)
     setZValue(z);
 
     setImmutability((ImmutabilityType)c->readEntry("immutability", (int)Mutable));
+
+    QRectF geom = c->readEntry("geometry",QRectF());
+    if (geom.width() > 0) {
+        setGeometry(geom);
+    }
 }
 
 void Applet::setFailedToLaunch(bool failed, const QString& reason)
