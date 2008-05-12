@@ -139,6 +139,20 @@ class PLASMA_EXPORT Theme : public QObject
          */
         Q_INVOKABLE bool windowTranslucencyEnabled() const;
 
+        /**
+         * Tells the theme whether to follow the global settings or use application
+         * specific settings
+         *
+         * @arg useGlobal pass in true to follow the global settings
+         */
+        void setUseGlobalSettings(bool useGlobal);
+
+        /**
+         * @return true if the global settings are followed, false if application
+         * specific settings are used.
+         */
+        bool useGlobalSettings() const;
+
     Q_SIGNALS:
         /**
          * Emitted when the user changes the theme. SVGs should be reloaded at

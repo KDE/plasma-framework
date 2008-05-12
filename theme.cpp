@@ -47,7 +47,8 @@ public:
         : q(theme),
           locolor(false),
           compositingActive(KWindowSystem::compositingActive()),
-        isDefault(false)
+          isDefault(false),
+          useGlobal(true)
     {
         generalFont = QApplication::font();
     }
@@ -56,11 +57,14 @@ public:
     {
         if (!cfg.isValid()) {
             QString groupName = "Theme";
-            QString app = KGlobal::mainComponent().componentName();
 
-            if (!app.isEmpty() && app != "plasma") {
-                kDebug() << "using theme for app" << app;
-                groupName.append("-").append(app);
+            if (!useGlobal) {
+                QString app = KGlobal::mainComponent().componentName();
+
+                if (!app.isEmpty() && app != "plasma") {
+                    kDebug() << "using theme for app" << app;
+                    groupName.append("-").append(app);
+                }
             }
 
             cfg = KConfigGroup(KSharedConfig::openConfig("plasmarc"), groupName);
@@ -80,12 +84,13 @@ public:
     KSharedConfigPtr colors;
     KConfigGroup cfg;
     QFont generalFont;
-    bool locolor;
-    bool compositingActive;
-    bool isDefault;
 #ifdef Q_WS_X11
     KSelectionWatcher *compositeWatch;
 #endif
+    bool locolor : 1;
+    bool compositingActive : 1;
+    bool isDefault : 1;
+    bool useGlobal : 1;
 };
 
 PackageStructure::Ptr Theme::Private::packageStructure(0);
@@ -297,6 +302,16 @@ QFontMetrics Theme::fontMetrics() const
 bool Theme::windowTranslucencyEnabled() const
 {
     return d->compositingActive;
+}
+
+void Theme::setUseGlobalSettings(bool useGlobal)
+{
+    d->useGlobal = useGlobal;
+}
+
+bool Theme::useGlobalSettings() const
+{
+    return d->useGlobal;
 }
 
 }
