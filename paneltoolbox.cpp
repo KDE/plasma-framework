@@ -127,19 +127,8 @@ void PanelToolbox::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
     Q_UNUSED(option)
     Q_UNUSED(widget)
 
+    const qreal progress = d->animFrame / size();
 
-    painter->save();
-    painter->translate(boundingRect().topLeft());
-
-    QColor color1 = KColorScheme(QPalette::Active, KColorScheme::Window,
-                               Plasma::Theme::defaultTheme()->colorScheme()).background().color();
-    color1.setAlpha(64);
-
-    QColor color2 = KColorScheme(QPalette::Active, KColorScheme::Window,
-                               Plasma::Theme::defaultTheme()->colorScheme()).foreground().color();
-    color2.setAlpha(64);
-
-    QPainterPath p = shape();
     QPoint gradientCenter;
     if (orientation() == Qt::Vertical) {
         gradientCenter = QPoint(boundingRect().center().x(), boundingRect().top());
@@ -147,21 +136,34 @@ void PanelToolbox::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
         gradientCenter = QPoint(boundingRect().left(), boundingRect().center().y());
     }
 
-    QRadialGradient gradient(gradientCenter, size());// + d->animFrame - 1);
-    gradient.setFocalPoint(gradientCenter);
-    gradient.setColorAt(0, color1);
-    gradient.setColorAt(.87, color1);
-    gradient.setColorAt(.97, color2);
-    color2.setAlpha(0);
-    gradient.setColorAt(1, color2);
-    painter->save();
-    painter->setPen(Qt::NoPen);
-    painter->setRenderHint(QPainter::Antialiasing, true);
-    painter->setBrush(gradient);
-    painter->drawPath(p);
-    painter->restore();
+    if (progress > 0) {
+        painter->translate(boundingRect().topLeft());
 
-    const qreal progress = d->animFrame / size();
+        QColor color1 = KColorScheme(QPalette::Active, KColorScheme::Window,
+                                Plasma::Theme::defaultTheme()->colorScheme()).background().color();
+        color1.setAlpha(progress * 64.0);
+
+        QColor color2 = KColorScheme(QPalette::Active, KColorScheme::Window,
+                                Plasma::Theme::defaultTheme()->colorScheme()).foreground().color();
+        color2.setAlpha(progress * 64.0);
+
+        QPainterPath p = shape();
+
+        QRadialGradient gradient(gradientCenter, size() - 2);
+        gradient.setFocalPoint(gradientCenter);
+        gradient.setColorAt(0, color1);
+        gradient.setColorAt(.87, color1);
+        gradient.setColorAt(.97, color2);
+        color2.setAlpha(0);
+        gradient.setColorAt(1, color2);
+        painter->save();
+        painter->setPen(Qt::NoPen);
+        painter->setRenderHint(QPainter::Antialiasing, true);
+        painter->setBrush(gradient);
+        painter->drawPath(p);
+        painter->restore();
+    }
+
     QRect iconRect;
 
     if (orientation() == Qt::Vertical) {
@@ -169,7 +171,7 @@ void PanelToolbox::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
     } else if (QApplication::layoutDirection() == Qt::RightToLeft) {
         iconRect = QRect(QPoint(2, gradientCenter.y() - iconSize().height()/2), iconSize());
     } else {
-        iconRect = QRect(QPoint((int)boundingRect().left() - iconSize().width() + 2, gradientCenter.y() - iconSize().height()/2), iconSize());
+        iconRect = QRect(QPoint((int)boundingRect().left() - iconSize().width() + 1, gradientCenter.y() - iconSize().height()/2), iconSize());
     }
 
     if (progress <= 0.9) {
@@ -183,7 +185,6 @@ void PanelToolbox::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
         painter->restore();
     }
 
-    painter->restore();
 }
 
 QPainterPath PanelToolbox::shape() const
