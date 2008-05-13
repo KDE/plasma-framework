@@ -94,7 +94,7 @@ private:
  *            language support for
  * @return a list of all supported languages for the given type(s).
  **/
-QStringList knownLanguages(ComponentTypes types);
+PLASMA_EXPORT QStringList knownLanguages(ComponentTypes types);
 
 /**
  * Loads an Applet script engine for the given language.
@@ -104,7 +104,7 @@ QStringList knownLanguages(ComponentTypes types);
  * @return pointer to the AppletScript or 0 on failure; the caller is responsible
  *         for the return object which will be parented to the Applet
  **/
-AppletScript* loadScriptEngine(const QString &language, Applet *applet);
+PLASMA_EXPORT AppletScript* loadScriptEngine(const QString &language, Applet *applet);
 
 /**
  * Loads an DataEngine script engine for the given language.
@@ -114,7 +114,7 @@ AppletScript* loadScriptEngine(const QString &language, Applet *applet);
  * @return pointer to the DataEngineScript or 0 on failure; the caller is responsible
  *         for the return object which will be parented to the DataEngine
  **/
-DataEngineScript* loadScriptEngine(const QString &language, DataEngine *dataEngine);
+PLASMA_EXPORT DataEngineScript* loadScriptEngine(const QString &language, DataEngine *dataEngine);
 
 /**
  * Loads an Applet script engine for the given language.
@@ -124,7 +124,7 @@ DataEngineScript* loadScriptEngine(const QString &language, DataEngine *dataEngi
  * @return pointer to the RunnerScript or 0 on failure; the caller is responsible
  *         for the return object which will be parented to the AbstractRunner
  **/
-RunnerScript* loadScriptEngine(const QString &language, AbstractRunner *runner);
+PLASMA_EXPORT RunnerScript* loadScriptEngine(const QString &language, AbstractRunner *runner);
 
 /**
  * Loads an appropriate PackageStructure for the given language and type
@@ -133,7 +133,7 @@ RunnerScript* loadScriptEngine(const QString &language, AbstractRunner *runner);
  * @param type the component type
  * @return a guarded PackageStructure pointer
  */
-PackageStructure::Ptr packageStructure(const QString &language, ComponentType type);
+PLASMA_EXPORT PackageStructure::Ptr packageStructure(const QString &language, ComponentType type);
 
 } // namespace Plasma
 
