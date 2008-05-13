@@ -438,6 +438,10 @@ bool RunnerManager::execQuery(const QString &term)
 
 bool RunnerManager::execQuery(const QString &term, const QString &runnerName)
 {
+    if (d->runners.isEmpty()) {
+        d->loadAll();
+    }
+
     if (term.isEmpty()) {
         reset();
         return false;
