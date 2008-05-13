@@ -178,7 +178,7 @@ void Applet::restore(KConfigGroup *c)
     setImmutability((ImmutabilityType)c->readEntry("immutability", (int)Mutable));
 
     QRectF geom = c->readEntry("geometry",QRectF());
-    if (geom.width() > 0) {
+    if (geom.isValid()) {
         setGeometry(geom);
     }
 }
