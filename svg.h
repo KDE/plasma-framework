@@ -63,8 +63,6 @@ class PLASMA_EXPORT Svg : public QObject
          *
          * The size is initialized to be the SVG's native size.
          *
-         * @arg imagePath the image to show. If a relative path is passed, then
-         *      Plasma::Theme is used to load the SVG.
          * @arg parent options QObject to parent this to
          *
          * @related Plasma::Theme
