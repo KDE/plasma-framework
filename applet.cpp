@@ -946,7 +946,6 @@ void Applet::mousePressEvent(QGraphicsSceneMouseEvent *event)
 
 void Applet::focusInEvent(QFocusEvent * event)
 {
-    kDebug() << "FOCUS! FOCUS! FOCUS!";
     QGraphicsWidget::focusInEvent(event);
 }
 
