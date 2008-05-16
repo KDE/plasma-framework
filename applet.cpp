@@ -1232,10 +1232,11 @@ QRect Applet::screenRect() const
     bottomRight.setX(bottomRight.x() + size().width());
     bottomRight.setY(bottomRight.y() + size().height());
 
-    QPoint tL = view()->mapToGlobal(view()->mapFromScene(pos()));
-    QPoint bR = view()->mapToGlobal(view()->mapFromScene(bottomRight));
+    QPoint tL = view()->mapToGlobal(containment()->view()->mapFromScene(pos()));
+    QPoint bR = view()->mapToGlobal(containment()->view()->mapFromScene(bottomRight));
+    kDebug() << "screenRect = " << QPoint(tL.x(), tL.y()), QSize(bR.x() - tL.x(), bR.y() - tL.y());
 
-    return QRect(QPoint(0, 0), QSize(bR.x() - tL.x(), bR.y() - tL.y()));
+    return QRect(QPoint(tL.x(), tL.y()), QSize(bR.x() - tL.x(), bR.y() - tL.y()));
 }
 
 void Applet::raise()

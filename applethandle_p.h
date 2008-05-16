@@ -99,9 +99,10 @@ class AppletHandle : public QObject, public QGraphicsItem
         bool m_buttonsOnRight;
         bool m_pendingFade;
         View *m_topview;
-        QPoint m_mousePos; //the position of the mousecursor relative to the
-                           //applets position.
-        QPointF m_pos;
+
+        QPoint m_mousePos;  //mousepos relative to applet
+        QRect m_screenRect; //boudingrect of applet in screencoords
+        QPointF m_pos;      //current position of applet in sceneCoords
 };
 
 }
