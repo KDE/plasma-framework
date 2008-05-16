@@ -302,6 +302,19 @@ void AppletHandle::mousePressEvent(QGraphicsSceneMouseEvent *event)
     QGraphicsItem::mousePressEvent(event);
 }
 
+bool AppletHandle::goTopLevel(const QPoint & pos) {
+    Plasma::View *v = Plasma::View::topLevelViewAt(pos);
+    if (v) {
+        Containment *c = v->containment();
+
+        if (c && c != m_containment) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+}
+
 void AppletHandle::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
     //kDebug() << "button pressed:" << m_pressedButton << ", fade pending?" << m_pendingFade;
@@ -366,16 +379,13 @@ void AppletHandle::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
                 }
 
                 //find out if we were dropped on a panel or something
-                Plasma::View *v = Plasma::View::topLevelViewAt(m_screenRect.center());
-                if (v) {
-                    Containment *c = v->containment();
-                    //We decide where we've been dropped by looking at the center of the
-                    //applet.
-                    QPoint pos = v->mapFromGlobal(m_screenRect.center());
-
-                    //XXX the dashboard view won't give us a containment. if it did,
-                    //this could break shit.
-                    if (c && c != m_containment) {
+                if (goTopLevel(m_screenRect.center())) {
+                    Plasma::View *v = Plasma::View::topLevelViewAt(m_screenRect.center());
+                    if (v) {
+                        Containment *c = v->containment();
+                        //We decide where we've been dropped by looking at the center of the
+                        //applet.
+                        QPoint pos = v->mapFromGlobal(m_screenRect.center());
                         //we actually have been dropped on another containment, so
                         //move there: we have a screenpos, we need a scenepos
                         //FIXME how reliable is this transform?
@@ -407,15 +417,6 @@ qreal _k_angleForPoints(const QPointF &center, const QPointF &pt1, const QPointF
     qreal beta = std::atan2(vec2.y(), vec2.x());
 
     return beta - alpha;
-}
-
-bool AppletHandle::goTopLevel(const QPoint & pos) {
-    Plasma::View *v = Plasma::View::topLevelViewAt(pos);
-    if (v != m_applet->containment()->view()) {
-        return true;
-    } else {
-        return false;
-    }
 }
 
 void AppletHandle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
