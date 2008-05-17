@@ -382,7 +382,11 @@ int Animator::customAnimation(int frames, int duration, Animator::CurveShape cur
     connect(receiver, SIGNAL(destroyed(QObject*)),
             this, SLOT(customAnimReceiverDestroyed(QObject*)));
 
-    QMetaObject::invokeMethod(receiver, slot, Q_ARG(qreal, 0));
+    // try with only progress as argument
+    if (!QMetaObject::invokeMethod(receiver, slot, Q_ARG(qreal, 0))) {
+        //try to pass also the animation id
+        QMetaObject::invokeMethod(receiver, slot, Q_ARG(qreal, 0), Q_ARG(int, state->id));
+    }
 
     if (!d->timerId) {
         d->timerId = startTimer(MIN_TICK_RATE);
@@ -636,11 +640,19 @@ void Animator::timerEvent(QTimerEvent *event)
                 state->currentInterval = state->interval;
                 animationsRemain = true;
                 // signal the object
-                QMetaObject::invokeMethod(state->receiver, state->slot,
+                // try with only progress as argument
+                if (!QMetaObject::invokeMethod(state->receiver, state->slot,
                                           Q_ARG(qreal,
-                                                d->calculateProgress(state->frames, state->currentFrame)));
+                                                d->calculateProgress(state->frames, state->currentFrame)))) {
+                //if fails try to add the animation id
+                    QMetaObject::invokeMethod(state->receiver, state->slot,
+                                            Q_ARG(qreal,
+                                                  d->calculateProgress(state->frames, state->currentFrame)), Q_ARG(int, state->id));
+                }
             } else {
-                QMetaObject::invokeMethod(state->receiver, state->slot, Q_ARG(qreal, 1));
+                if (!QMetaObject::invokeMethod(state->receiver, state->slot, Q_ARG(qreal, 1))) {
+                    QMetaObject::invokeMethod(state->receiver, state->slot, Q_ARG(qreal, 1), Q_ARG(int, state->id));
+                }
                 d->customAnims.erase(d->customAnims.find(state->id));
                 emit customAnimationFinished(state->id);
                 delete [] state->slot;

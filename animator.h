@@ -119,6 +119,9 @@ public:
      * @arg method the method name of slot to be invoked on each update.
      *             It must take a qreal. So if the slot is animate(qreal),
      *             pass in "animate" as the method parameter.
+     *             It has an optional integer paramenter that takes an
+     *             integer that reapresents the animation id, useful if
+     *             you want to manage multiple animations with a sigle slot
      *
      * @return an id that can be used to identify this animation.
      */
