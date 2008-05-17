@@ -3,6 +3,7 @@ Type=ServiceType
 X-KDE-ServiceType=Plasma/DataEngine
 
 Comment=Plasma Data Engine
+Comment[af]=Plasma data-enjin
 Comment[be]=Рухавік дадзеных Plasma
 Comment[ca]=Motor de dades del Plasma
 Comment[csb]=Mòtór dostónków plazmë
