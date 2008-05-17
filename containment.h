@@ -260,6 +260,18 @@ class PLASMA_EXPORT Containment : public Applet
          */
         void closeToolBox();
 
+        /**
+         * associate actions with this widget, including ones added after this call.
+         * needed to make keyboard shortcuts work.
+         */
+        void addAssociatedWidget(QWidget *widget);
+
+        /**
+         * un-associate actions from this widget, including ones added after this call.
+         * needed to make keyboard shortcuts work.
+         */
+        void removeAssociatedWidget(QWidget *widget);
+
     Q_SIGNALS:
         /**
          * This signal is emitted when a new applet is created by the containment
@@ -327,6 +339,16 @@ class PLASMA_EXPORT Containment : public Applet
          * Tells the corona to create a new desktop containment
          */
         void addSiblingContainment();
+
+        /**
+         * switch keyboard focus to the next of our applets
+         */
+        void focusNextApplet();
+
+        /**
+         * switch keyboard focus to the previous one of our applets
+         */
+        void focusPreviousApplet();
 
     protected:
         /**

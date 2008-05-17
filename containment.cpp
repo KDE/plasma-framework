@@ -116,6 +116,59 @@ void Containment::init()
         setContainmentType(DesktopContainment);
     }
 
+    //common actions
+    bool unlocked = immutability() == Mutable;
+
+    QAction *appletBrowserAction = new QAction(i18n("Add Widgets..."), this);
+    appletBrowserAction->setIcon(KIcon("list-add"));
+    appletBrowserAction->setVisible(unlocked);
+    appletBrowserAction->setEnabled(unlocked);
+    connect(appletBrowserAction, SIGNAL(triggered()), this, SLOT(triggerShowAddWidgets()));
+    appletBrowserAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+    appletBrowserAction->setShortcut(QKeySequence("ctrl+a"));
+    d->actions().addAction("add widgets", appletBrowserAction);
+
+    QAction *action = new QAction(i18n("Next Applet"), this);
+    //no icon
+    connect(action, SIGNAL(triggered()), this, SLOT(focusNextApplet()));
+    action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+    action->setShortcut(QKeySequence("ctrl+n"));
+    d->actions().addAction("next applet", action);
+
+    action = new QAction(i18n("Previous Applet"), this);
+    //no icon
+    connect(action, SIGNAL(triggered()), this, SLOT(focusPreviousApplet()));
+    action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+    action->setShortcut(QKeySequence("ctrl+p"));
+    d->actions().addAction("previous applet", action);
+
+    if (immutability() != SystemImmutable) {
+        //FIXME I'm not certain this belongs in Containment
+        //but it sure is nice to have the keyboard shortcut in every containment by default
+        QAction *lockDesktopAction = new QAction(unlocked ? i18n("Lock Widgets") : i18n("Unlock Widgets"), this);
+        lockDesktopAction->setIcon(KIcon("object-locked"));
+        connect(lockDesktopAction, SIGNAL(triggered(bool)), this, SLOT(toggleDesktopImmutability()));
+        lockDesktopAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+        lockDesktopAction->setShortcut(QKeySequence("ctrl+l"));
+        d->actions().addAction("lock widgets", lockDesktopAction);
+    }
+
+    if (d->type == DesktopContainment) { //this means custom containments are left out
+        QAction *zoomAction = new QAction(i18n("Zoom In"), this);
+        zoomAction->setIcon(KIcon("zoom-in"));
+        connect(zoomAction, SIGNAL(triggered(bool)), this, SLOT(zoomIn()));
+        zoomAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+        zoomAction->setShortcut(QKeySequence("ctrl+="));
+        d->actions().addAction("zoom in", zoomAction);
+
+        zoomAction = new QAction(i18n("Zoom Out"), this);
+        zoomAction->setIcon(KIcon("zoom-out"));
+        connect(zoomAction, SIGNAL(triggered(bool)), this, SLOT(zoomOut()));
+        zoomAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+        zoomAction->setShortcut(QKeySequence("ctrl+-"));
+        d->actions().addAction("zoom out", zoomAction);
+    }
+
     Applet::init();
 }
 
@@ -276,12 +329,11 @@ void Containment::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
         }
 
         if (applet->hasConfigurationInterface()) {
-            QAction* configureApplet = new QAction(i18n("%1 Settings", applet->name()), &desktopMenu);
-            configureApplet->setIcon(KIcon("configure"));
-            connect(configureApplet, SIGNAL(triggered(bool)),
-                    applet, SLOT(showConfigurationInterface()));
-            desktopMenu.addAction(configureApplet);
-            hasEntries = true;
+            QAction* configureApplet = applet->d->actions.action("configure");
+            if (configureApplet) {
+                desktopMenu.addAction(configureApplet);
+                hasEntries = true;
+            }
         }
 
         QList<QAction*> containmentActions = contextualActions();
@@ -302,14 +354,18 @@ void Containment::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
             }
         }
 
-        if (scene() && !static_cast<Corona*>(scene())->immutability() != Mutable) {
+        if (scene() && static_cast<Corona*>(scene())->immutability() == Mutable) {
             if (hasEntries) {
                 desktopMenu.addSeparator();
             }
 
-            QAction* closeApplet = new QAction(i18n("Remove this %1", applet->name()), &desktopMenu);
-            closeApplet->setIcon(KIcon("edit-delete"));
-            connect(closeApplet, SIGNAL(triggered(bool)), applet, SLOT(destroy()));
+            QAction* closeApplet = applet->d->actions.action("remove");
+            if (! closeApplet) { //unlikely but not impossible
+                kDebug() << "wtf!! no remove action!!!!!!!!";
+                closeApplet = new QAction(i18n("Remove this %1", applet->name()), &desktopMenu);
+                closeApplet->setIcon(KIcon("edit-delete"));
+                connect(closeApplet, SIGNAL(triggered(bool)), applet, SLOT(destroy()));
+            }
             desktopMenu.addAction(closeApplet);
             hasEntries = true;
         }
@@ -716,6 +772,7 @@ bool Containment::sceneEventFilter(QGraphicsItem *watched, QEvent *event)
 QVariant Containment::itemChange(GraphicsItemChange change, const QVariant &value)
 {
     Q_UNUSED(value)
+    //FIXME if the applet is moved to another containment we need to unfocus it
 
     if (isContainment() &&
         (change == QGraphicsItem::ItemSceneHasChanged || change == QGraphicsItem::ItemPositionHasChanged) &&
@@ -789,6 +846,84 @@ void Containment::closeToolBox()
     }
 }
 
+void Containment::addAssociatedWidget(QWidget *widget)
+{
+    Applet::addAssociatedWidget(widget);
+    if (d->focusedApplet) {
+        d->focusedApplet->addAssociatedWidget(widget);
+    }
+}
+
+void Containment::removeAssociatedWidget(QWidget *widget)
+{
+    Applet::removeAssociatedWidget(widget);
+    if (d->focusedApplet) {
+        d->focusedApplet->removeAssociatedWidget(widget);
+    }
+}
+
+KActionCollection& Containment::Private::actions()
+{
+    return static_cast<Applet*>(q)->d->actions;
+}
+
+void Containment::Private::focusApplet(Plasma::Applet *applet)
+{
+    kDebug();
+    if (focusedApplet == applet) {
+        return;
+    }
+
+    QList<QWidget *> widgets = actions().associatedWidgets();
+    if (focusedApplet) {
+        foreach (QWidget *w, widgets) {
+            focusedApplet->removeAssociatedWidget(w);
+        }
+    }
+    //but what if applet isn't really one of our applets?
+    //FIXME should we really unfocus the old applet?
+    if (applets.contains(applet)) {
+        kDebug() << "switching to" << applet->name();
+        focusedApplet = applet;
+        if (focusedApplet) {
+            foreach (QWidget *w, widgets) {
+                focusedApplet->addAssociatedWidget(w);
+            }
+        }
+        applet->setFocus(Qt::ShortcutFocusReason);
+    } else {
+        focusedApplet = 0;
+    }
+}
+
+void Containment::focusNextApplet()
+{
+    kDebug();
+    if (d->applets.isEmpty()) {
+        return;
+    }
+    int index = d->focusedApplet ? d->applets.indexOf(d->focusedApplet) + 1 : 0;
+    if (index >= d->applets.size()) {
+        index = 0;
+    }
+    kDebug() << "index" << index;
+    d->focusApplet(d->applets.at(index));
+}
+
+void Containment::focusPreviousApplet()
+{
+    kDebug();
+    if (d->applets.isEmpty()) {
+        return;
+    }
+    int index = d->focusedApplet ? d->applets.indexOf(d->focusedApplet) - 1 : -1;
+    if (index < 0) {
+        index = d->applets.size() - 1;
+    }
+    kDebug() << "index" << index;
+    d->focusApplet(d->applets.at(index));
+}
+
 
 // Private class implementation
 
@@ -808,7 +943,7 @@ void Containment::Private::toggleDesktopImmutability()
         }
     }
 
-    setLockToolText();
+    //setLockToolText();
 }
 
 void Containment::Private::zoomIn()
@@ -896,6 +1031,17 @@ void Containment::Private::containmentConstraintsEvent(Plasma::Constraints const
     //kDebug() << "got containmentConstraintsEvent" << constraints << (QObject*)toolBox;
     if (constraints & Plasma::ImmutableConstraint) {
         setLockToolText();
+        //update actions
+        bool unlocked = q->immutability() == Mutable;
+        QAction *action = actions().action("add widgets");
+        if (action) {
+            action->setVisible(unlocked);
+            action->setEnabled(unlocked);
+        }
+        action = actions().action("lock widgets");
+        if (action) {
+            action->setText(unlocked ? i18n("Lock Widgets") : i18n("Unlock Widgets"));
+        }
 
         // tell the applets too
         foreach (Applet *a, applets) {
@@ -1001,6 +1147,9 @@ void Containment::Private::appletDestroyed(QObject* object)
     // so this unsafe looking code is actually just fine.
     Applet* applet = static_cast<Plasma::Applet*>(object);
     applets.removeAll(applet);
+    if (focusedApplet == applet) {
+        focusedApplet = 0;
+    }
     emit q->appletRemoved(applet);
     emit q->configNeedsSaving();
 }

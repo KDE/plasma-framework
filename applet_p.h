@@ -22,6 +22,8 @@
 #ifndef PLASMA_APPLET_P_H
 #define PLASMA_APPLET_P_H
 
+#include <KActionCollection>
+
 namespace Plasma
 {
 
@@ -87,6 +89,7 @@ public:
     Plasma::AspectRatioMode aspectRatioMode;
     QGraphicsView* ghostView;
     ImmutabilityType immutability;
+    KActionCollection actions;
     int constraintsTimerId;
     bool hasConfigurationInterface : 1;
     bool failed : 1;

@@ -37,6 +37,7 @@ public:
         : q(c),
           formFactor(Planar),
           location(Floating),
+          focusedApplet(0),
           screen(-1), // no screen
           toolBox(0),
           type(Containment::NoContainmentType),
@@ -82,10 +83,18 @@ public:
                       const QRectF &geometry = QRectF(-1, -1, -1, -1), uint id = 0,
                       bool delayedInit = false);
 
+    KActionCollection& actions();
+
+    /**
+     * give keyboard focus to applet within this containment
+     */
+    void focusApplet(Plasma::Applet *applet);
+
     Containment *q;
     FormFactor formFactor;
     Location location;
     Applet::List applets;
+    Applet *focusedApplet;
     QMap<Applet*, AppletHandle*> handles;
     int screen;
     Toolbox *toolBox;

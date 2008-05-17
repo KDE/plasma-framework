@@ -36,6 +36,7 @@
 
 class KConfigDialog;
 class QGraphicsView;
+class KActionCollection;
 
 namespace Plasma
 {
@@ -415,6 +416,16 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         virtual QList<QAction*> contextualActions();
 
         /**
+         * Returns the QAction with the given name from our collection
+         */
+        QAction* action(QString name) const;
+
+        /**
+         * Adds the action to our collection under the given name
+         */
+        void addAction(QString name, QAction *action);
+
+        /**
          * @return BackgroundHints flags combination telling if the standard background is shown
          *         and if it has a drop shadow
          */
@@ -447,6 +458,18 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          * @return the Containment, if any, this applet belongs to
          **/
         Containment* containment() const;
+
+        /**
+         * associate actions with this widget, including ones added after this call.
+         * needed to make keyboard shortcuts work.
+         */
+        virtual void addAssociatedWidget(QWidget *widget);
+
+        /**
+         * un-associate actions from this widget, including ones added after this call.
+         * needed to make keyboard shortcuts work.
+         */
+        virtual void removeAssociatedWidget(QWidget *widget);
 
         /**
          * @param parent the QGraphicsItem this applet is parented to

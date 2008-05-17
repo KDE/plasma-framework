@@ -42,6 +42,7 @@
 #include <QDesktopWidget>
 #include <QGraphicsView>
 #include <QGraphicsProxyWidget>
+#include <QAction>
 
 #include <KIcon>
 #include <KColorScheme>
@@ -53,6 +54,7 @@
 #include <KService>
 #include <KServiceTypeTrader>
 #include <KWindowSystem>
+#include <KActionCollection>
 
 #include <Solid/PowerManagement>
 
@@ -650,6 +652,34 @@ void Applet::flushPendingConstraintsEvents()
     Plasma::Constraints c = d->pendingConstraints;
     d->pendingConstraints = NoConstraint;
 
+    if (c & Plasma::StartupCompletedConstraint) {
+        //common actions
+        bool unlocked = immutability() == Mutable;
+        //FIXME make it work for containments
+        //also, don't allow to delete the last desktop containment
+        //heck, can desktop ctmts even handle being deleted yet?
+        //so panel has a remove() that tears it down nicely. what does desktop have?
+        QAction* closeApplet = new QAction(i18n("Remove this %1", name()), this);
+        closeApplet->setIcon(KIcon("edit-delete"));
+        closeApplet->setEnabled(unlocked);
+        closeApplet->setVisible(unlocked);
+        closeApplet->setShortcutContext(Qt::WidgetWithChildrenShortcut); //don't clash with other views
+        if (! isContainment()) {
+            closeApplet->setShortcut(QKeySequence("ctrl+r"));
+            connect(closeApplet, SIGNAL(triggered(bool)), this, SLOT(destroy()));
+        }
+        d->actions.addAction("remove", closeApplet);
+    }
+
+    if (c & Plasma::ImmutableConstraint) {
+        bool unlocked = immutability() == Mutable;
+        QAction *action = d->actions.action("remove");
+        if (action) {
+            action->setVisible(unlocked);
+            action->setEnabled(unlocked);
+        }
+    }
+
     if (c & Plasma::SizeConstraint && d->needsConfigOverlay) {
         d->needsConfigOverlay->setGeometry(QRectF(QPointF(0, 0), boundingRect().size()));
         // FIXME:: rather horrible hack to work around the fact we don't have spacers
@@ -701,6 +731,16 @@ QList<QAction*> Applet::contextualActions()
 {
     //kDebug() << "empty context actions";
     return d->script ? d->script->contextualActions() : QList<QAction*>();
+}
+
+QAction* Applet::action(QString name) const
+{
+    return d->actions.action(name);
+}
+
+void Applet::addAction(QString name, QAction *action)
+{
+    d->actions.addAction(name, action);
 }
 
 void Applet::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
@@ -821,6 +861,16 @@ Containment* Applet::containment() const
     return c;
 }
 
+void Applet::addAssociatedWidget(QWidget *widget)
+{
+    d->actions.addAssociatedWidget(widget);
+}
+
+void Applet::removeAssociatedWidget(QWidget *widget)
+{
+    d->actions.removeAssociatedWidget(widget);
+}
+
 Location Applet::location() const
 {
     Containment* c = containment();
@@ -886,7 +936,32 @@ bool Applet::hasConfigurationInterface() const
 
 void Applet::setHasConfigurationInterface(bool hasInterface)
 {
+    if (d->hasConfigurationInterface == hasInterface) {
+        return;
+    }
     d->hasConfigurationInterface = hasInterface;
+    //config action
+    //TODO respect security when it's implemented (4.2)
+    QAction *configAction = d->actions.action("configure");
+    if (hasInterface) {
+        if (! configAction) { //should be always true
+            configAction = new QAction(i18n("%1 Settings", name()), this);
+            configAction->setIcon(KIcon("configure"));
+            configAction->setShortcutContext(Qt::WidgetWithChildrenShortcut); //don't clash with other views
+            if (isContainment()) {
+                //kDebug() << "I am a containment";
+                configAction->setShortcut(QKeySequence("ctrl+shift+s"));
+            } else {
+                configAction->setShortcut(QKeySequence("ctrl+s"));
+            }
+            //TODO how can we handle configuration of the shortcut in a way that spans all applets?
+            connect(configAction, SIGNAL(triggered(bool)),
+                    this, SLOT(showConfigurationInterface()));
+            d->actions.addAction("configure", configAction);
+        }
+    } else {
+        d->actions.removeAction(configAction);
+    }
 }
 
 bool Applet::eventFilter( QObject *o, QEvent * e )
@@ -946,6 +1021,12 @@ void Applet::mousePressEvent(QGraphicsSceneMouseEvent *event)
 
 void Applet::focusInEvent(QFocusEvent * event)
 {
+    if (containment()) {
+        containment()->d->focusApplet(this);
+        //XXX if we are a containment we'll attempt to focus ourself
+        //which should be harmless
+        //focusing an applet may trigger this event again, but we won't be here more than twice
+    }
     QGraphicsWidget::focusInEvent(event);
 }
 
@@ -1145,6 +1226,7 @@ Applet* Applet::load(const KPluginInfo& info, uint appletId, const QVariantList&
 
 QVariant Applet::itemChange(GraphicsItemChange change, const QVariant &value)
 {
+    //kDebug() << change;
     switch (change) {
     case ItemPositionChange:
         if (d->shadow) {
@@ -1287,6 +1369,7 @@ Applet::Private::Private(KService::Ptr service, int uniqueID, Applet *applet)
           pendingConstraints(NoConstraint),
           aspectRatioMode(Plasma::KeepAspectRatio),
           immutability(Mutable),
+          actions(applet),
           constraintsTimerId(0),
           hasConfigurationInterface(false),
           failed(false),

@@ -21,6 +21,7 @@
 
 #include <KGlobal>
 #include <KWindowSystem>
+#include <KActionCollection>
 
 #include "corona.h"
 #include "containment.h"
@@ -175,13 +176,18 @@ void View::setContainment(Containment *containment)
     if (d->containment) {
         disconnect(d->containment, SIGNAL(geometryChanged()), this, SLOT(updateSceneRect()));
         screen = d->containment->screen();
+        //remove all the old containment's actions
+        d->containment->removeAssociatedWidget(this);
     }
 
     d->containment = containment;
     if (! containment) {
         return;
     }
-    
+
+    //add keyboard-shortcut actions
+    d->containment->addAssociatedWidget(this);
+
     if (screen > -1) {
         containment->setScreen(screen);
     }
