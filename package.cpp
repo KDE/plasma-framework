@@ -338,7 +338,8 @@ bool Package::registerPackage(const PackageMetadata &data, const QString &iconPa
 
     KDesktopFile config(service);
     KConfigGroup cg = config.desktopGroup();
-    cg.writeEntry("Type", "Service");
+    const QString type = data.type().isNull() ? "Service" : data.type();
+    cg.writeEntry("Type", type);
     const QString serviceTypes = data.serviceType().isNull() ? "Plasma/Applet,Plasma/Containment" : data.serviceType();
     cg.writeEntry("X-KDE-ServiceTypes", serviceTypes);
     cg.writeEntry("X-KDE-PluginInfo-EnabledByDefault", true);

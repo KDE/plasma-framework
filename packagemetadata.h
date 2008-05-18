@@ -80,18 +80,87 @@ public:
 
     QString type() const;
 
+    /**
+     * Set the name of the package used to displayed
+     * a short describing name.
+     */
     void setName(const QString &);
+
+    /**
+     * Set the description used to provide some general
+     * information what the package is about.
+     */
     void setDescription(const QString &);
+
+    /**
+     * Set the service-type which defines the X-KDE-ServiceTypes
+     * type within the desktop file. If not defined this
+     * defaults to "Plasma/Applet,Plasma/Containment" in the
+     * desktop file.
+     */
     void setServiceType(const QString &);
+
+    /**
+     * Set the name of the author of the package.
+     */
     void setAuthor(const QString &);
+
+    /**
+     * Set the E-Mail address of the author or of the project
+     * that provided the package.
+     */
     void setEmail(const QString &);
+
+    /**
+     * Set the version of the package.
+     */
     void setVersion(const QString &);
+
+    /**
+     * Set the website URL where the package is hosted or
+     * where additional details about the project are available.
+     */
     void setWebsite(const QString &);
+
+    /**
+     * Set the license the package is distributed under.
+     */
     void setLicense(const QString &);
+
+    /**
+     * Set the name of the application this package may
+     * belongs to. This is used only for display purposes
+     * so far.
+     */
     void setApplication(const QString &);
+
+    /**
+     * Set the required version. See also the setVersion()
+     * method.
+     */
     void setRequiredVersion(const QString &);
+
+    /**
+     * Set the type of the package. If not defined this
+     * defaults to "Service" in the desktop file.
+     */
     void setType(const QString& type);
+
+    /**
+     * Set the plugin name of the package.
+     *
+     * The plugin name is used to locate the package;
+     * @code
+     * QString serviceName("plasma-applet-" + data.pluginName());
+     * QString service = KStandardDirs::locateLocal("services", serviceName + ".desktop");
+     * @endcode
+     */
     void setPluginName(const QString& name);
+
+    /**
+     * Set the implementation API string. This is used for
+     * display purposes only so far.
+     */
     void setImplementationApi(const QString& language);
 
 private:
