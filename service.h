@@ -20,11 +20,11 @@
 #ifndef PLASMA_SERVICE_H
 #define PLASMA_SERVICE_H
 
-#include <QMap>
-#include <QObject>
-#include <QVariant>
+#include <QtCore/QMap>
+#include <QtCore/QObject>
+#include <QtCore/QVariant>
 
-#include <KConfigGroup>
+#include <KDE/KConfigGroup>
 
 class QIODevice;
 

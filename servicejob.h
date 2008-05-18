@@ -20,10 +20,10 @@
 #ifndef PLASMA_SERVICEJOB_H
 #define PLASMA_SERVICEJOB_H
 
-#include <QVariant>
+#include <QtCore/QVariant>
 
-#include <KJob>
-#include <KService>
+#include <KDE/KJob>
+#include <KDE/KService>
 
 namespace Plasma
 {
