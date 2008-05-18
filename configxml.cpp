@@ -193,6 +193,7 @@ class ConfigXml::Private
         QList<QSize*> sizes;
         QList<quint64*> ulonglongs;
         QList<KUrl::List*> urllists;
+        QMap<QString, QString> keysToNames;
 };
 
 class ConfigXmlHandler : public QXmlDefaultHandler
@@ -476,6 +477,7 @@ void ConfigXmlHandler::addItem()
     if (item) {
         item->setLabel(m_label);
         item->setWhatsThis(m_whatsThis);
+        d->keysToNames.insert(item->group() + item->key(), item->name());
     }
 }
 
@@ -526,6 +528,11 @@ ConfigXml::ConfigXml(const KConfigGroup *config, QIODevice *xml, QObject *parent
 ConfigXml::~ConfigXml()
 {
     delete d;
+}
+
+KConfigSkeletonItem* ConfigXml::findItem(const QString &group, const QString &key)
+{
+    return KConfigSkeleton::findItem(d->keysToNames[group + key]);
 }
 
 } // Plasma namespace

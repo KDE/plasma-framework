@@ -102,6 +102,8 @@ public:
     ConfigXml(const KConfigGroup *config, QIODevice *xml, QObject *parent = 0);
     ~ConfigXml();
 
+    KConfigSkeletonItem* findItem(const QString &group, const QString &key);
+
     class Private;
 private:
     Private * const d;
