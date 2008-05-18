@@ -146,7 +146,7 @@ void Containment::init()
         //FIXME I'm not certain this belongs in Containment
         //but it sure is nice to have the keyboard shortcut in every containment by default
         QAction *lockDesktopAction = new QAction(unlocked ? i18n("Lock Widgets") : i18n("Unlock Widgets"), this);
-        lockDesktopAction->setIcon(KIcon("object-locked"));
+        lockDesktopAction->setIcon(KIcon(unlocked ? "object-locked" : "object-unlocked"));
         connect(lockDesktopAction, SIGNAL(triggered(bool)), this, SLOT(toggleDesktopImmutability()));
         lockDesktopAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
         lockDesktopAction->setShortcut(QKeySequence("ctrl+l"));
@@ -1041,6 +1041,7 @@ void Containment::Private::containmentConstraintsEvent(Plasma::Constraints const
         action = actions().action("lock widgets");
         if (action) {
             action->setText(unlocked ? i18n("Lock Widgets") : i18n("Unlock Widgets"));
+            action->setIcon(KIcon(unlocked ? "object-locked" : "object-unlocked"));
         }
 
         // tell the applets too
