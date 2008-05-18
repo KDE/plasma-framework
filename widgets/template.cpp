@@ -61,8 +61,8 @@ public:
         }
 
         //TODO: load image into widget
-        //static_cast<<Native>*>(widget())->setPixmap();
-        //static_cast<<Native>*>(widget())->setIcon(QIcon();
+        //static_cast<<Native>*>(q->widget())->setPixmappm(pm);
+        //static_cast<<Native>*>(q->widget())->setIcon(QIcon(pm));
     }
 
     QString imagePath;
