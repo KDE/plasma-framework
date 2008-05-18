@@ -33,6 +33,8 @@
 
 #include "datacontainer.h"
 #include "package.h"
+#include "service.h"
+#include "service_p.h"
 #include "scripting/dataenginescript.h"
 
 namespace Plasma
@@ -62,6 +64,11 @@ DataEngine::~DataEngine()
 QStringList DataEngine::sources() const
 {
     return d->sources.keys();
+}
+
+Service* DataEngine::serviceForSource(const QString &source)
+{
+    return new NullService(this);
 }
 
 void DataEngine::connectSource(const QString& source, QObject* visualization,

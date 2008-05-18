@@ -36,6 +36,7 @@ namespace Plasma
 class DataContainer;
 class DataEngineScript;
 class Package;
+class Service;
 
 /**
  * @class DataEngine
@@ -76,7 +77,7 @@ class PLASMA_EXPORT DataEngine : public QObject
          **/
         explicit DataEngine(QObject* parent = 0, KService::Ptr service = KService::Ptr(0));
         DataEngine(QObject* parent, const QVariantList& args);
-        virtual ~DataEngine();
+        ~DataEngine();
 
         /**
          * This method is called when the DataEngine is started. When this
@@ -93,6 +94,14 @@ class PLASMA_EXPORT DataEngine : public QObject
          *         DataEngine to decide.
          **/
         virtual QStringList sources() const;
+
+        /**
+         * @param source the source to targe the Service at
+         * @return a Service that has the source as a destination. The service
+         *         is parented to the DataEngine, but may be deleted by the
+         *         caller when finished with it
+         */
+        virtual Service* serviceForSource(const QString &source);
 
         /**
          * Returns the engine name for the DataEngine
