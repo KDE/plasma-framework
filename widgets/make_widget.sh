@@ -21,5 +21,5 @@ perl -pi -e "s,<Native>,$NATIVE,g" $BOTH
 
 echo "#include ../../plasma/${HEADER}" > ../includes/${NAME}
 
-#svn add ../includes/${NAME} $BOTH
+svn add ../includes/${NAME} $BOTH
 
