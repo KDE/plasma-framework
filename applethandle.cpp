@@ -133,6 +133,9 @@ AppletHandle::~AppletHandle()
 
         m_applet->update(); // re-render the background, now we've transformed the applet
     }
+    if (m_topview) {
+        delete m_topview;
+    }
 }
 
 Applet *AppletHandle::applet() const
@@ -312,6 +315,8 @@ bool AppletHandle::goTopLevel(const QPoint & pos) {
         } else {
             return false;
         }
+    } else {
+        return true;
     }
 }
 
