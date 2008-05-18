@@ -34,6 +34,8 @@ set(plasma_LIB_SRCS
     datacontainer.cpp
     dataengine.cpp
     dataenginemanager.cpp
+    delegate.cpp
+    desktoptoolbox.cpp
     dialog.cpp
     #FOR FUTURE
     #layouts/borderlayout.cpp
@@ -43,16 +45,16 @@ set(plasma_LIB_SRCS
     querymatch.cpp
     runnercontext.cpp
     runnermanager.cpp
+    service.cpp
+    servicejob.cpp
     shadowitem.cpp
     svg.cpp
     panelsvg.cpp
     theme.cpp
     toolbox.cpp
     paneltoolbox.cpp
-    desktoptoolbox.cpp
     uiloader.cpp
     view.cpp
-    delegate.cpp
     scripting/appletscript.cpp
     scripting/dataenginescript.cpp
     scripting/runnerscript.cpp
@@ -79,13 +81,14 @@ endif(QT_QTOPENGL_FOUND AND OPENGL_FOUND)
 kde4_add_library(plasma SHARED ${plasma_LIB_SRCS})
 
 target_link_libraries(plasma ${KDE4_KIO_LIBS} ${KDE4_KFILE_LIBS}
-${QT_QTUITOOLS_LIBRARY} ${QT_QTWEBKIT_LIBRARY} ${KDE4_THREADWEAVER_LIBRARIES})
+                             ${QT_QTUITOOLS_LIBRARY} ${QT_QTWEBKIT_LIBRARY}
+                             ${KDE4_THREADWEAVER_LIBRARIES})
 
 if(QT_QTOPENGL_FOUND AND OPENGL_FOUND)
     target_link_libraries(plasma ${QT_QTOPENGL_LIBRARY} ${OPENGL_gl_LIBRARY})
 endif(QT_QTOPENGL_FOUND AND OPENGL_FOUND)
 
-set_target_properties(plasma PROPERTIES VERSION 1.0.0 SOVERSION 1)
+set_target_properties(plasma PROPERTIES VERSION 2.0.0 SOVERSION 2)
 install(TARGETS plasma ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 
@@ -117,7 +120,8 @@ set(plasma_LIB_INCLUDES
     runnercontext.h
     runnermanager.h
     querymatch.h
-    shadowitem_p.h
+    service.h
+    servicejob.h
     svg.h
     panelsvg.h
     theme.h
@@ -176,6 +180,8 @@ install(FILES
     includes/RunnerContext
     includes/RunnerManager
     includes/QueryMatch
+    includes/Service
+    includes/ServiceJob
     includes/Svg
     includes/PanelSvg
     includes/UiLoader
