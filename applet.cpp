@@ -204,7 +204,11 @@ void Applet::setFailedToLaunch(bool failed, const QString& reason)
         failureLayout->setContentsMargins(0, 0, 0, 0);
         QGraphicsProxyWidget * failureWidget = new QGraphicsProxyWidget(this);
         QLabel * label = new QLabel(d->visibleFailureText(reason));
-        //FIXME : Get the theme color font
+        QPalette p = label->palette();
+        QColor color = Theme::defaultTheme()->color(Theme::TextColor);
+        p.setColor(QPalette::Normal, QPalette::WindowText, color);
+        p.setColor(QPalette::Inactive, QPalette::WindowText, color);
+        label->setPalette(p);
         label->setAttribute(Qt::WA_NoSystemBackground);
         label->setAutoFillBackground(false);
         label->setWordWrap(true);
