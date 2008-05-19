@@ -60,6 +60,7 @@ set(plasma_LIB_SRCS
     uiloader.cpp
     view.cpp
     widgets/checkbox.cpp
+    widgets/combobox.cpp
     widgets/flash.cpp
     widgets/icon.cpp
     widgets/label.cpp
@@ -147,6 +148,7 @@ install(FILES
 
 install(FILES
     widgets/checkbox.h
+    widgets/combobox.h
     widgets/flash.h
     widgets/icon.h
     widgets/label.h
