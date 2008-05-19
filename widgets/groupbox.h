@@ -25,10 +25,12 @@
 
 class QGroupBox;
 
+#include <plasma/plasma_export.h>
+
 namespace Plasma
 {
 
-class GroupBox : public QGraphicsProxyWidget
+class PLASMA_EXPORT GroupBox : public QGraphicsProxyWidget
 {
     Q_OBJECT
 

@@ -25,10 +25,12 @@
 
 class QComboBox;
 
+#include <plasma/plasma_export.h>
+
 namespace Plasma
 {
 
-class ComboBox : public QGraphicsProxyWidget
+class PLASMA_EXPORT ComboBox : public QGraphicsProxyWidget
 {
     Q_OBJECT
 
