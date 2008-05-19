@@ -72,6 +72,7 @@
 #include "plasma/panelsvg.h"
 #include "plasma/theme.h"
 #include "plasma/view.h"
+#include "plasma/widgets/label.h"
 
 //#define DYNAMIC_SHADOWS
 namespace Plasma
@@ -202,23 +203,16 @@ void Applet::setFailedToLaunch(bool failed, const QString& reason)
 
         QGraphicsLinearLayout *failureLayout = new QGraphicsLinearLayout();
         failureLayout->setContentsMargins(0, 0, 0, 0);
-        QGraphicsProxyWidget * failureWidget = new QGraphicsProxyWidget(this);
-        QLabel * label = new QLabel(d->visibleFailureText(reason));
-        QPalette p = label->palette();
-        QColor color = Theme::defaultTheme()->color(Theme::TextColor);
-        p.setColor(QPalette::Normal, QPalette::WindowText, color);
-        p.setColor(QPalette::Inactive, QPalette::WindowText, color);
-        label->setPalette(p);
-        label->setAttribute(Qt::WA_NoSystemBackground);
-        label->setAutoFillBackground(false);
+        Label *failureWidget = new Plasma::Label(this);
+        failureWidget->setText(d->visibleFailureText(reason));
+        QLabel *label = failureWidget->nativeWidget();
         label->setWordWrap(true);
-        failureWidget->setWidget(label);
         failureLayout->addItem(failureWidget);
         setLayout(failureLayout);
-        setMinimumSize(label->size());
         resize(300,250);
+        setMinimumSize(failureWidget->size());
+        //resize(label->size());
         d->background->resizePanel(geometry().size());
-
     }
     update();
 }
