@@ -710,6 +710,17 @@ void Applet::flushPendingConstraintsEvents()
         }
     }
 
+    //enforce square size in panels
+    if (aspectRatioMode() == Plasma::Square && (c & Plasma::SizeConstraint || c & Plasma::FormFactorConstraint)) {
+        if (formFactor() == Horizontal) {
+            setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Expanding));
+            resize(QSizeF(size().height(), size().height()));
+        } else if (formFactor() == Vertical) {
+            setSizePolicy(QSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed));
+            resize(QSizeF(size().width(), size().width()));
+        }
+    }
+
     Containment* containment = qobject_cast<Plasma::Containment*>(this);
     if (isContainment() && containment) {
         containment->d->containmentConstraintsEvent(c);
@@ -1374,7 +1385,6 @@ Applet::Private::Private(KService::Ptr service, int uniqueID, Applet *applet)
           hasConfigurationInterface(false),
           failed(false),
           isContainment(false),
-          square(false),
           transient(false)
 {
     if (appletId == 0) {
