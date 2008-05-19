@@ -212,7 +212,7 @@ install(FILES
    includes/PushButton
    includes/RadioButton
    includes/WebContent
-   DESTINATION ${INCLUDE_INSTALL_DIR}/KDE/Plasma/Widgets)
+   DESTINATION ${INCLUDE_INSTALL_DIR}/KDE/Plasma)
 
 
 if(QT_QTOPENGL_FOUND AND OPENGL_FOUND)
