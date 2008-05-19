@@ -1,1 +1,1 @@
-#include ../../plasma/widgets/label.h
+#include "../../plasma/widgets/label.h"
