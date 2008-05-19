@@ -1,1 +1,1 @@
-#include ../../plasma/pushbutton.h
+#include ../../plasma/widgets/pushbutton.h

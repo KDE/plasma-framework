@@ -59,14 +59,15 @@ set(plasma_LIB_SRCS
     scripting/dataenginescript.cpp
     scripting/runnerscript.cpp
     scripting/scriptengine.cpp
+    widgets/flash.cpp
     widgets/icon.cpp
     widgets/label.cpp
     widgets/lineedit.cpp
-    widgets/webcontent.cpp
     widgets/meter.cpp
     widgets/pushbutton.cpp
+    widgets/radiobutton.cpp
     widgets/signalplotter.cpp
-    widgets/flash.cpp
+    widgets/webcontent.cpp
 )
 
 kde4_add_ui_files (
@@ -143,13 +144,15 @@ install(FILES
         DESTINATION ${INCLUDE_INSTALL_DIR}/plasma)
 
 install(FILES
+    widgets/flash.h
     widgets/icon.h
     widgets/label.h
     widgets/lineedit.h
-    widgets/webcontent.h
     widgets/meter.h
+    widgets/pushbutton.h
+    widgets/radiobutton.h
     widgets/signalplotter.h
-    widgets/flash.h
+    widgets/webcontent.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/plasma/widgets)
 
 #For future
@@ -194,6 +197,15 @@ install(FILES
     includes/View
     includes/Delegate
     DESTINATION ${INCLUDE_INSTALL_DIR}/KDE/Plasma)
+
+install(FILES
+   includes/Label
+   includes/LineEdit
+   includes/PushButton
+   includes/RadioButton
+   includes/WebContent
+   DESTINATION ${INCLUDE_INSTALL_DIR}/KDE/Plasma/Widgets)
+
 
 if(QT_QTOPENGL_FOUND AND OPENGL_FOUND)
 install(FILES
