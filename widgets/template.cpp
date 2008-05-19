@@ -76,6 +76,7 @@ public:
 {
     <Native>* native = new <Native>;
     //TODO: forward signals
+    //connect(native, SIGNAL(()), this, SIGNAL(()));
     setWidget(native);
     native->setAttribute(Qt::WA_NoSystemBackground);
 }
