@@ -241,12 +241,13 @@ QueryMatch RunnerContext::match(const QString &id) const
 {
     LOCK_FOR_READ(this)
     if (d->matchesById.contains(id)) {
-        return *d->matchesById.value(id);
+        const QueryMatch *match = d->matchesById.value(id);
+        UNLOCK(this)
+        return *match;
     }
     UNLOCK(this)
 
     return QueryMatch(0);
-
 }
 
 } // Plasma namespace
