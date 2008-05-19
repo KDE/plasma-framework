@@ -63,7 +63,7 @@ class PLASMA_EXPORT AbstractRunner : public QObject
                         HighPriority,
                         HighestPriority
                       };
-        
+
         typedef QList<AbstractRunner*> List;
 
         virtual ~AbstractRunner();
@@ -113,20 +113,6 @@ class PLASMA_EXPORT AbstractRunner : public QObject
          * @param widget the parent of the options widgets.
          */
         virtual void createRunOptions(QWidget *widget);
-
-        /**
-         * If the runner itself has configuration options, this method returns true
-         */
-        bool isConfigurable();
-
-        /**
-         * If isConfigurable() returns true, this method may to get
-         * a widget displaying the options the user can interact with to modify
-         * the behaviour of what happens when a given match is selected.
-         *
-         * @param widget the parent of the options widgets.
-         */
-        virtual void createConfigurationInterface(QWidget *widget);
 
         /**
          * Called whenever an exact or possible match associated with this
@@ -181,6 +167,11 @@ class PLASMA_EXPORT AbstractRunner : public QObject
          **/
         const Package* package() const;
 
+        /**
+         * Signal runner to reload its configuration.
+         */
+        virtual void reloadConfiguration();
+
     protected:
         friend class RunnerManager;
 
@@ -201,11 +192,6 @@ class PLASMA_EXPORT AbstractRunner : public QObject
          * Sets whether or not the the runner has options for matches
          */
         void setHasRunOptions(bool hasRunOptions);
-
-        /**
-         * Sets whether or not the runner has configuration options itself
-         */
-        void setIsConfigurable(bool canBeConfigured);
 
         /**
          * Sets the nominal speed of the runner. Only slow runners need
@@ -250,5 +236,10 @@ class PLASMA_EXPORT AbstractRunner : public QObject
 #define K_EXPORT_PLASMA_RUNNER( libname, classname )     \
 K_PLUGIN_FACTORY(factory, registerPlugin<classname>();) \
 K_EXPORT_PLUGIN(factory("plasma_runner_" #libname))
+
+
+#define K_EXPORT_RUNNER_CONFIG( name, classname )     \
+K_PLUGIN_FACTORY(ConfigFactory, registerPlugin<classname>();) \
+K_EXPORT_PLUGIN(ConfigFactory("kcm_krunner_" #name))
 
 #endif

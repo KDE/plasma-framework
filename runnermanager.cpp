@@ -1,5 +1,5 @@
 /*
- *   Copyright (C) 2006-2007 Ryan P. Bitanga <ryan.bitanga@gmail.com> 
+ *   Copyright (C) 2007 Ryan P. Bitanga <ryan.bitanga@gmail.com> 
  *   Copyright (C) 2006 Aaron Seigo <aseigo@kde.org> 
  *   Copyright 2008 Jordi Polo <mumismo@gmail.com>
  *
@@ -31,10 +31,8 @@
 #include <threadweaver/DebuggingAids.h>
 #include <ThreadWeaver/Thread>
 #include <ThreadWeaver/Job>
-#include <ThreadWeaver/State>
 #include <ThreadWeaver/QueuePolicy>
 #include <ThreadWeaver/Weaver>
-#include <ThreadWeaver/WeaverObserver>
 #include <QMutex>
 #include <QTimer>
 #include <QCoreApplication>
@@ -218,62 +216,62 @@ public:
         //This entry allows to define a hard upper limit independent of the number of processors.
         const int maxThreads = config.readEntry("maxThreads",16);
         const int numThreads = qMin(maxThreads, 2 + ((numProcs - 1) * 2));
-//        kDebug() << "setting up" << numThreads << "threads for" << numProcs << "processors";
+        //kDebug() << "setting up" << numThreads << "threads for" << numProcs << "processors";
         Weaver::instance()->setMaximumNumberOfThreads(numThreads);
 
         //Preferred order of execution of runners
         //prioritylist = config.readEntry("priority", QStringList());
 
         //If set, this list defines which runners won't be used at runtime
-        blacklist = config.readEntry("blacklist", QStringList());
+        //blacklist = config.readEntry("blacklist", QStringList());
     }
 
-    void loadAll()
+    void loadRunners()
     {
-        AbstractRunner::List firstRunners;
-        AbstractRunner::List normalRunners;
-        AbstractRunner::List lastRunners;
-
         KService::List offers = KServiceTypeTrader::self()->query("Plasma/Runner");
-        QString error;
+
+        bool loadAll = config.readEntry("loadAll", false);
+        KConfigGroup conf(&config, "Plugins");
+
         foreach (const KService::Ptr &service, offers) {
             //kDebug() << "Loading runner: " << service->name() << service->storageId();
             KPluginInfo description(service);
             QString runnerName = description.pluginName();
-            if (blacklist.contains(runnerName)) {
-                kDebug() << "The plugin" << service->name() << "was blackListed and will not load";
-                continue;
-            }
-            QString api = service->property("X-Plasma-API").toString();
-            AbstractRunner* runner = 0;
+            description.load(conf);
 
-            if (api.isEmpty()) {
-                QVariantList args;
-                args << service->storageId();
-                runner = service->createInstance<AbstractRunner>(q, args, &error);
-            } else {
-                //kDebug() << "got a script runner known as" << api;
-                runner = new AbstractRunner(q, service->storageId());
-            }
+            bool loaded = runners.contains(runnerName);
+            bool selected = loadAll || description.isPluginEnabled();
 
-            if (runner) {
-                //kDebug() << "loading runner: " << service->name();
-                QString phase = service->property("X-Plasma-RunnerPhase").toString();
-                if (phase == "last") {
-                    lastRunners.append(runner);
-                } else if (phase == "first") {
-                    firstRunners.append(runner);
-                } else {
-                    normalRunners.append(runner);
+            if (selected) {
+                if (!loaded) {
+                    QString api = service->property("X-Plasma-API").toString();
+                    QString error;
+                    AbstractRunner* runner = 0;
+
+                    if (api.isEmpty()) {
+                        QVariantList args;
+                        args << service->storageId();
+                        runner = service->createInstance<AbstractRunner>(q, args, &error);
+                    } else {
+                        //kDebug() << "got a script runner known as" << api;
+                        runner = new AbstractRunner(q, service->storageId());
+                    }
+
+                    if (runner) {
+                        kDebug() << "loading runner:" << service->name();
+                        runners.insert(runnerName, runner);
+                    } else {
+                        kDebug() << "failed to load runner:" << service->name() << ". error reported:" << error;
+                    }
                 }
-            } else {
-                kDebug() << "failed to load runner : " << service->name() << ". error reported: " << error;
+            } else if (loaded) {
+                //Remove runner
+                AbstractRunner* runner = runners.take(runnerName);
+                kDebug() << "Removing runner: " << runnerName;
+                delete runner;
             }
         }
 
-        firstRunners << normalRunners << lastRunners;
-        runners.clear();
-        runners = firstRunners;
         //kDebug() << "All runners loaded, total:" << runners.count();
     }
 
@@ -293,10 +291,10 @@ public:
     QueryMatch deferredRun;
     RunnerContext context;
     QTimer matchChangeTimer;
-    AbstractRunner::List runners;
+    QHash<QString, AbstractRunner*> runners;
     QList<FindMatchesJob*> searchJobs;
-    QStringList prioritylist;
-    QStringList blacklist;
+//     QStringList prioritylist;
+    bool loadAll;
     KConfigGroup config;
 };
 
@@ -329,22 +327,20 @@ RunnerManager::~RunnerManager()
     delete d;
 }
 
+void RunnerManager::reloadConfiguration()
+{
+    d->loadConfiguration(d->config);
+    d->loadRunners();
+}
+
 AbstractRunner* RunnerManager::runner(const QString &name) const
 {
     if (d->runners.isEmpty()) {
-        d->loadAll();
+        d->loadRunners();
     }
 
-   //TODO: using a list of runners, if this gets slow, switch to hash
-    foreach (Plasma::AbstractRunner* runner, d->runners) {
-        //kDebug() << "comparing" << name << "with" << runner->id() << runner->name();
-        if (name == runner->id()) {
-            return runner;
-        }
-    }
-    return 0;
+    return d->runners.value(name);
 }
-
 
 RunnerContext* RunnerManager::searchContext() const
 {
@@ -394,7 +390,7 @@ void RunnerManager::launchQuery(const QString &term)
 void RunnerManager::launchQuery(const QString &term, const QString &runnerName)
 {
     if (d->runners.isEmpty()) {
-        d->loadAll();
+        d->loadRunners();
     }
 
     if (term.isEmpty()) {
@@ -417,7 +413,7 @@ void RunnerManager::launchQuery(const QString &term, const QString &runnerName)
     if (!runnerName.isEmpty()) {
         runable.append(runner(runnerName));
     } else {
-        runable = d->runners; 
+        runable = d->runners.values(); 
     }
 
     foreach (Plasma::AbstractRunner* r, runable) {
@@ -439,7 +435,7 @@ bool RunnerManager::execQuery(const QString &term)
 bool RunnerManager::execQuery(const QString &term, const QString &runnerName)
 {
     if (d->runners.isEmpty()) {
-        d->loadAll();
+        d->loadRunners();
     }
 
     if (term.isEmpty()) {
@@ -496,11 +492,6 @@ void RunnerManager::reset()
     }
 
     d->context.reset();
-
-   //FIXME: if the weaver is not idle we have a number of jobs that 
-   //      will eventually return their matches
-   //      we need a way to stop them (Weaver::requestAbort() Job::requestAbort ) 
-   //      or discard results 
 }
 
 } // Plasma namespace

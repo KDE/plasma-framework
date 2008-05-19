@@ -28,6 +28,8 @@
 #include <plasma/plasma_export.h>
 #include "abstractrunner.h"
 
+class KConfigGroup;
+
 namespace Plasma
 {
     class QueryMatch;
@@ -83,6 +85,11 @@ class PLASMA_EXPORT RunnerManager : public QObject
          * @return the current query term
          */
         QString query() const;
+
+        /**
+         * Causes a reload of the current configuration
+         */
+        void reloadConfiguration();
 
     public Q_SLOTS:
         /**

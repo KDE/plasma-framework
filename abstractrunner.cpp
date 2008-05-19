@@ -118,6 +118,10 @@ KConfigGroup AbstractRunner::config() const
     return KConfigGroup(&runners, group);
 }
 
+void AbstractRunner::reloadConfiguration()
+{
+}
+
 void AbstractRunner::performMatch(Plasma::RunnerContext &globalContext)
 {
     static const int reasonableRunTime = 1500;
@@ -165,21 +169,6 @@ void AbstractRunner::setHasRunOptions(bool hasRunOptions)
 void AbstractRunner::createRunOptions(QWidget *parent)
 {
     Q_UNUSED(parent)
-}
-
-bool AbstractRunner::isConfigurable()
-{
-    return d->hasConfig;
-}
-
-void AbstractRunner::setIsConfigurable(bool hasConfig)
-{
-    d->hasConfig = hasConfig;
-}
-
-void AbstractRunner::createConfigurationInterface(QWidget *widget)
-{
-    Q_UNUSED(widget)
 }
 
 AbstractRunner::Speed AbstractRunner::speed() const
