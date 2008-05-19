@@ -1052,6 +1052,14 @@ void Containment::Private::containmentConstraintsEvent(Plasma::Constraints const
         foreach (Applet *a, applets) {
             a->updateConstraints(ImmutableConstraint);
         }
+
+        if (q->isContainment() && type == PanelContainment) {
+            if (unlocked) {
+                toolBox->show();
+            } else {
+                toolBox->hide();
+            }
+        }
     }
 
     if ((constraints & Plasma::SizeConstraint || constraints & Plasma::ScreenConstraint) &&
