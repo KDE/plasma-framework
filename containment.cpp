@@ -962,15 +962,16 @@ Toolbox* Containment::Private::createToolBox()
         switch (type) {
         case PanelContainment:
             toolBox = new PanelToolbox(q);
+            connect(toolBox, SIGNAL(toggled()), q, SIGNAL(toolBoxToggled()));
             break;
         //defaults to DesktopContainment right now
         default:
             toolBox = new DesktopToolbox(q);
+            connect(toolBox, SIGNAL(toggled()), toolBox, SLOT(toggle()));
             break;
         }
         positionToolBox();
 
-        connect(toolBox, SIGNAL(toggled()), q, SIGNAL(toolBoxToggled()));
     }
 
     return toolBox;

@@ -56,8 +56,13 @@ protected:
     void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
 
 protected slots:
-    void animate(qreal progress);
+    void animateCircle(qreal progress);
+    void animateHighlight(qreal progress);
     void toolMoved(QGraphicsItem*);
+    /**
+     * show/hide the toolbox
+     */
+    void toggle();
 private:
     class Private;
     Private *d;

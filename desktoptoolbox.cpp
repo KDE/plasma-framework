@@ -83,15 +83,20 @@ public:
     Private()
       : icon("plasma"),
         toolBacker(0),
-        animId(0),
-        animFrame(0)
+        animCircleId(0),
+        animHighlightId(0),
+        animCircleFrame(0),
+        animHighlightFrame(0),
+        hovering(0)
     {}
 
     KIcon icon;
     EmptyGraphicsItem *toolBacker;
-    QTime stopwatch;
-    int animId;
-    qreal animFrame;
+    int animCircleId;
+    int animHighlightId;
+    qreal animCircleFrame;
+    qreal animHighlightFrame;
+    bool hovering : 1;
 };
 
 DesktopToolbox::DesktopToolbox(QGraphicsItem *parent)
@@ -133,7 +138,7 @@ void DesktopToolbox::paint(QPainter *painter, const QStyleOptionGraphicsItem *op
     color2.setAlpha(64);
 
     QPainterPath p = shape();
-    QRadialGradient gradient(boundingRect().topLeft(), size() + d->animFrame);
+    QRadialGradient gradient(boundingRect().topLeft(), size() + d->animCircleFrame);
     gradient.setFocalPoint(boundingRect().topLeft());
     gradient.setColorAt(0, color1);
     gradient.setColorAt(.87, color1);
@@ -147,7 +152,7 @@ void DesktopToolbox::paint(QPainter *painter, const QStyleOptionGraphicsItem *op
     painter->drawPath(p);
     painter->restore();
 
-    const qreal progress = d->animFrame / size();
+    const qreal progress = d->animHighlightFrame;
 
     if (progress <= 0.9) {
         d->icon.paint(painter, QRect(QPoint((int)boundingRect().left() - iconSize().width() + 2, 2), iconSize()), Qt::AlignCenter, QIcon::Disabled, QIcon::Off);
@@ -166,7 +171,7 @@ void DesktopToolbox::paint(QPainter *painter, const QStyleOptionGraphicsItem *op
 QPainterPath DesktopToolbox::shape() const
 {
     QPainterPath path;
-    int toolSize = size() + (int)d->animFrame;
+    int toolSize = size() + (int)d->animCircleFrame;
     path.arcTo(QRectF(boundingRect().left() - toolSize, boundingRect().top() - toolSize, toolSize*2, toolSize*2), 180, 90);
 
     return path;
@@ -174,27 +179,17 @@ QPainterPath DesktopToolbox::shape() const
 
 void DesktopToolbox::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 {
-    if (showing() || d->stopwatch.elapsed() < 100) {
+    if (showing() || d->hovering) {
         QGraphicsItem::hoverEnterEvent(event);
         return;
     }
-
-    Plasma::Applet *applet = qgraphicsitem_cast<Plasma::Applet *>(parentItem());
-
-    if (applet && applet->view() && !applet->view()->transform().isScaling()) {
-        QPainterPath path;
-        int toolSize = size() + (int)d->animFrame - 15;
-        path.moveTo(size()*2, 0);
-        path.arcTo(QRectF(boundingRect().left() - toolSize, boundingRect().top() - toolSize, toolSize*2, toolSize*2), 180, 90);
-        path.lineTo(size()*2, 0);
-
-        if (path.contains(event->pos())) {
-            QGraphicsItem::hoverEnterEvent(event);
-            return;
-        }
+    Plasma::Animator* animdriver = Plasma::Animator::self();
+    if (d->animHighlightId) {
+        animdriver->stopCustomAnimation(d->animHighlightId);
     }
+    d->hovering = true;
+    d->animHighlightId = animdriver->customAnimation(10, 240, Plasma::Animator::EaseInCurve, this, "animateHighlight");
 
-    showToolbox();
     QGraphicsItem::hoverEnterEvent(event);
 }
 
@@ -243,26 +238,32 @@ void DesktopToolbox::showToolbox()
     d->toolBacker->setRect(QRectF(QPointF(x, 0), QSizeF(maxwidth, y - 10)));
     d->toolBacker->show();
 
-    if (d->animId) {
-        animdriver->stopCustomAnimation(d->animId);
+    if (d->animCircleId) {
+        animdriver->stopCustomAnimation(d->animCircleId);
     }
 
     setShowing(true);
     // TODO: 10 and 200 shouldn't be hardcoded here. There needs to be a way to
     // match whatever the time is that moveItem() takes. Same in hoverLeaveEvent().
-    d->animId = animdriver->customAnimation(10, 240, Plasma::Animator::EaseInCurve, this, "animate");
-    d->stopwatch.restart();
+    d->animCircleId = animdriver->customAnimation(10, 240, Plasma::Animator::EaseInCurve, this, "animateCircle");
 }
 
 void DesktopToolbox::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 {
     //kDebug() << event->pos() << event->scenePos() << d->toolBacker->rect().contains(event->scenePos().toPoint());
-    if ((d->toolBacker && d->toolBacker->rect().contains(event->scenePos().toPoint())) ||
-        d->stopwatch.elapsed() < 100) {
+    if (! d->hovering) {
         QGraphicsItem::hoverLeaveEvent(event);
         return;
     }
+
     hideToolbox();
+    Plasma::Animator* animdriver = Plasma::Animator::self();
+    if (d->animHighlightId) {
+        animdriver->stopCustomAnimation(d->animHighlightId);
+    }
+    d->hovering = false;
+    d->animHighlightId = animdriver->customAnimation(10, 240, Plasma::Animator::EaseOutCurve, this, "animateHighlight");
+
     QGraphicsItem::hoverLeaveEvent(event);
 }
 
@@ -284,32 +285,43 @@ void DesktopToolbox::hideToolbox()
         animdriver->moveItem(tool, Plasma::Animator::SlideOutMovement, QPoint(x, y-height));
     }
 
-    if (d->animId) {
-        animdriver->stopCustomAnimation(d->animId);
+    if (d->animCircleId) {
+        animdriver->stopCustomAnimation(d->animCircleId);
     }
 
     setShowing(false);
-    d->animId = animdriver->customAnimation(10, 240, Plasma::Animator::EaseOutCurve, this, "animate");
+    d->animCircleId = animdriver->customAnimation(10, 240, Plasma::Animator::EaseOutCurve, this, "animateCircle");
 
     if (d->toolBacker) {
         d->toolBacker->hide();
     }
-
-    d->stopwatch.restart();
 }
 
-void DesktopToolbox::animate(qreal progress)
+void DesktopToolbox::animateCircle(qreal progress)
 {
     if (showing()) {
-        d->animFrame = size() * progress;
+        d->animCircleFrame = size() * progress;
     } else {
-        d->animFrame = size() * (1.0 - progress);
+        d->animCircleFrame = size() * (1.0 - progress);
     }
 
-    //kDebug() << "animating at" << progress << "for" << d->animFrame;
+    if (progress >= 1) {
+        d->animCircleId = 0;
+    }
+
+    update();
+}
+
+void DesktopToolbox::animateHighlight(qreal progress)
+{
+    if (d->hovering) {
+        d->animHighlightFrame = progress;
+    } else {
+        d->animHighlightFrame = 1.0 - progress;
+    }
 
     if (progress >= 1) {
-        d->animId = 0;
+        d->animHighlightId = 0;
     }
 
     update();
@@ -321,6 +333,15 @@ void DesktopToolbox::toolMoved(QGraphicsItem *item)
     if (!showing() &&
         QGraphicsItem::children().indexOf(static_cast<Plasma::Applet*>(item)) != -1) {
         item->hide();
+    }
+}
+
+void DesktopToolbox::toggle()
+{
+    if (showing()) {
+        hideToolbox();
+    } else {
+        showToolbox();
     }
 }
 
