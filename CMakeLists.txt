@@ -62,6 +62,7 @@ set(plasma_LIB_SRCS
     widgets/checkbox.cpp
     widgets/combobox.cpp
     widgets/flash.cpp
+    widgets/groupbox.cpp
     widgets/icon.cpp
     widgets/label.cpp
     widgets/lineedit.cpp
@@ -150,6 +151,7 @@ install(FILES
     widgets/checkbox.h
     widgets/combobox.h
     widgets/flash.h
+    widgets/groupbox.h
     widgets/icon.h
     widgets/label.h
     widgets/lineedit.h
