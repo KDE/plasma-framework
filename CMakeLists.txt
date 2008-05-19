@@ -64,6 +64,7 @@ set(plasma_LIB_SRCS
     widgets/lineedit.cpp
     widgets/webcontent.cpp
     widgets/meter.cpp
+    widgets/pushbutton.cpp
     widgets/signalplotter.cpp
     widgets/flash.cpp
 )
