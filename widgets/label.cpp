@@ -149,9 +149,8 @@ QLabel* Label::nativeWidget() const
 
 void Label::resizeEvent(QGraphicsSceneResizeEvent *event)
 {
-    Q_UNUSED(event)
     d->setPixmap(this);
-    widget()->resize(size().toSize());
+    QGraphicsProxyWidget::resizeEvent(event);
 }
 
 } // namespace Plasma

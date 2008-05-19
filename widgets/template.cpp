@@ -145,9 +145,8 @@ QString <Name>::stylesheet()
 
 void <Name>::resizeEvent(QGraphicsSceneResizeEvent *event)
 {
-    Q_UNUSED(event)
     d->setPixmap(this);
-    widget()->resize(size().toSize());
+    QGraphicsProxyWidget::resizeEvent(event);
 }
 
 } // namespace Plasma

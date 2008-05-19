@@ -145,8 +145,8 @@ QLineEdit* LineEdit::nativeWidget() const
 
 void LineEdit::resizeEvent(QGraphicsSceneResizeEvent *event)
 {
-    Q_UNUSED(event)
     d->setPixmap(this);
+    QGraphicsProxyWidget::resizeEvent(event);
 }
 
 } // namespace Plasma
