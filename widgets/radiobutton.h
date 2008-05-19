@@ -25,10 +25,12 @@
 
 class QRadioButton;
 
+#include <plasma/plasma_export.h>
+
 namespace Plasma
 {
 
-class RadioButton : public QGraphicsProxyWidget
+class PLASMA_EXPORT RadioButton : public QGraphicsProxyWidget
 {
     Q_OBJECT
 

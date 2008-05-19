@@ -25,10 +25,12 @@
 
 class QPushButton;
 
+#include <plasma/plasma_export.h>
+
 namespace Plasma
 {
 
-class PushButton : public QGraphicsProxyWidget
+class PLASMA_EXPORT PushButton : public QGraphicsProxyWidget
 {
     Q_OBJECT
 

@@ -25,10 +25,12 @@
 
 class QLineEdit;
 
+#include <plasma/plasma_export.h>
+
 namespace Plasma
 {
 
-class LineEdit : public QGraphicsProxyWidget
+class PLASMA_EXPORT LineEdit : public QGraphicsProxyWidget
 {
     Q_OBJECT
 

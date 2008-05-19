@@ -23,12 +23,14 @@
 
 #include <QGraphicsProxyWidget>
 
+#include <plasma/plasma_export.h>
+
 class QCheckBox;
 
 namespace Plasma
 {
 
-class CheckBox : public QGraphicsProxyWidget
+class PLASMA_EXPORT CheckBox : public QGraphicsProxyWidget
 {
     Q_OBJECT
 

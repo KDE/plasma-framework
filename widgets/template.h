@@ -23,12 +23,14 @@
 
 #include <QGraphicsProxyWidget>
 
+#include <plasma/plasma_export.h>
+
 class <Native>;
 
 namespace Plasma
 {
 
-class <Name> : public QGraphicsProxyWidget
+class PLASMA_EXPORT <Name> : public QGraphicsProxyWidget
 {
     Q_OBJECT
 
