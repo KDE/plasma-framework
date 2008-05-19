@@ -77,6 +77,7 @@ public:
     <Native>* native = new <Native>;
     //TODO: forward signals
     setWidget(native);
+    native->setAttribute(Qt::WA_NoSystemBackground);
 }
 
 <Name>::~<Name>()
@@ -146,6 +147,7 @@ void <Name>::resizeEvent(QGraphicsSceneResizeEvent *event)
 {
     Q_UNUSED(event)
     d->setPixmap(this);
+    widget()->resize(size().toSize());
 }
 
 } // namespace Plasma
