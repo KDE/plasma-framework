@@ -494,6 +494,9 @@ void Containment::addApplet(Applet *applet, const QPointF &pos, bool delayInit)
         applet->removeSceneEventFilter(currentContainment);
         KConfigGroup oldConfig = applet->config();
         currentContainment->d->applets.removeAll(applet);
+        if (currentContainment->d->handles.contains(applet)) {
+            currentContainment->d->handles.remove(applet);
+        }
         applet->setParentItem(this);
 
         // now move the old config to the new location
@@ -501,7 +504,7 @@ void Containment::addApplet(Applet *applet, const QPointF &pos, bool delayInit)
         oldConfig.reparent(&c);
         applet->d->resetConfigurationObject();
     } else {
-	applet->setParentItem(this);
+        applet->setParentItem(this);
     }
 
     d->applets << applet;

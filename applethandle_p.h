@@ -81,7 +81,7 @@ class AppletHandle : public QObject, public QGraphicsItem
          * @param pos the (scene-relative) position to place it at
          */
         void switchContainment(Containment *containment, const QPointF &pos);
-        bool goTopLevel(const QPoint & pos);
+        bool leaveCurrentView(const QRect &rect) const;
 
         QRectF m_rect;
         ButtonType m_pressedButton;
@@ -103,6 +103,7 @@ class AppletHandle : public QObject, public QGraphicsItem
         QPoint m_mousePos;  //mousepos relative to applet
         QRect m_screenRect; //boudingrect of applet in screencoords
         QPointF m_pos;      //current position of applet in sceneCoords
+        qreal m_zValue;     //current zValue of the applet, so it can be restored after drag.
 };
 
 }

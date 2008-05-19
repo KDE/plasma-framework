@@ -98,10 +98,6 @@ AppletHandle::AppletHandle(Containment *parent, Applet *applet)
     //will only update this after the handle is destroyed, and we
     //will track changes to it in the mouseMoveEvent.
     m_screenRect = m_applet->screenRect();
-    //add a small margin to the screenRect so, that when we check
-    //if we are over another view than the source view, we won't
-    //detect the top level view.
-    m_screenRect.adjust(-2, -2, 2, 2);
 
     connect(m_hoverTimer, SIGNAL(timeout()), this, SLOT(fadeIn()));
     connect(m_applet, SIGNAL(destroyed(QObject*)), this, SLOT(appletDestroyed()));
@@ -109,6 +105,13 @@ AppletHandle::AppletHandle(Containment *parent, Applet *applet)
     setAcceptsHoverEvents(true);
     m_hoverTimer->start();
 
+    //We got to be able to see the applet while dragging to to another containment,
+    //so we want a high zValue.
+    //TODO: restore applets original zValue before destroying the handle.
+    //FIXME: apparently this doesn't work: sometimes an applet still get's drawn behind
+    //the containment it's being dragged to, sometimes it doesn't.
+    m_zValue = m_applet->zValue();
+    m_applet->raise();
     setZValue(m_applet->zValue());
 }
 
@@ -292,12 +295,8 @@ void AppletHandle::mousePressEvent(QGraphicsSceneMouseEvent *event)
 
         //set mousePos to the position in the applet, in screencoords, so it becomes easy
         //to reposition the toplevel view to the correct position.
-        QPoint localpos = m_applet->containment()->view()
-                                  ->mapFromScene(m_applet->pos() + m_pos);
-        m_mousePos = event->screenPos() - m_applet->containment()->view()
-                                                  ->mapToGlobal(localpos);
-        //set the starting position
-        m_pos = pos();
+        QPoint localpos = m_containment->view()->mapFromScene(m_applet->scenePos());
+        m_mousePos = event->screenPos() - m_containment->view()->mapToGlobal(localpos);
 
         return;
     }
@@ -305,20 +304,23 @@ void AppletHandle::mousePressEvent(QGraphicsSceneMouseEvent *event)
     QGraphicsItem::mousePressEvent(event);
 }
 
-bool AppletHandle::goTopLevel(const QPoint & pos) {
-    Plasma::View *v = Plasma::View::topLevelViewAt(pos);
-    if (v) {
-        Containment *c = v->containment();
-
-        if (c && c != m_containment) {
-            return true;
-        } else {
-            return false;
+bool AppletHandle::leaveCurrentView(const QRect &rect) const
+{
+    foreach (QWidget *widget, QApplication::topLevelWidgets()) {
+        if (widget->geometry().intersects(rect)) {
+            //is this widget a plasma view, a different view then our current one,
+            //AND not a dashboardview?
+            Plasma::View *v = qobject_cast<Plasma::View *>(widget);
+            if (v && v != m_applet->containment()->view()
+                  && v != m_topview
+                  && v->containment() != m_containment) {
+                return true;
+            }
         }
-    } else {
-        return true;
     }
+    return false;
 }
+
 
 void AppletHandle::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
@@ -384,9 +386,9 @@ void AppletHandle::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
                 }
 
                 //find out if we were dropped on a panel or something
-                if (goTopLevel(m_screenRect.center())) {
+                if (leaveCurrentView(m_screenRect)) {
                     Plasma::View *v = Plasma::View::topLevelViewAt(m_screenRect.center());
-                    if (v) {
+                    if (v && v != m_containment->view()) {
                         Containment *c = v->containment();
                         //We decide where we've been dropped by looking at the center of the
                         //applet.
@@ -395,6 +397,30 @@ void AppletHandle::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
                         //move there: we have a screenpos, we need a scenepos
                         //FIXME how reliable is this transform?
                         switchContainment(c, v->mapToScene(pos));
+                    }
+                } else {
+                    // test for containment change
+                    kDebug() << "testing for containment change, sceneBoundingRect = " << m_containment->sceneBoundingRect();
+                    if (!m_containment->sceneBoundingRect().contains(m_applet->scenePos())) {
+                        // see which containment it belongs to
+                        Corona * corona = qobject_cast<Corona*>(scene());
+                        if (corona) {
+                            QList<Containment*> containments = corona->containments();
+                            for (int i = 0; i < containments.size(); ++i) {
+                                QPointF pos;
+                                pos = containments[i]->view()->mapToScene(containments[i]->view()
+                                                     ->mapFromGlobal(m_screenRect.topLeft()));
+
+                                if (containments[i]->sceneBoundingRect().contains(pos)) {
+                                    //kDebug() << "new containment = " << containments[i];
+                                    kDebug() << "rect = " << containments[i]->sceneBoundingRect();
+                                    // add the applet to the new containment and take it from the old one
+                                    kDebug() << "moving to other containment with position" << pos;;
+                                    switchContainment(containments[i], pos);
+                                    break;
+                                }
+                            }
+                        }
                     }
                 }
                 break;
@@ -445,17 +471,10 @@ void AppletHandle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
         m_screenRect = QRect(event->screenPos() - m_mousePos,
                              m_applet->screenRect().size());
 
-        //add a small margin, to avoid detecting the toplevel view when checking
-        //if we have to move to a toplevel window.
-        m_screenRect.adjust(-2, -2, 2, 2);
-
         kDebug() << "m_screenRect = " << m_screenRect;
 
         //Are we moving out of the current view?
-        bool toTopLevel = goTopLevel(m_screenRect.topLeft()) ||
-                          goTopLevel(m_screenRect.topRight()) ||
-                          goTopLevel(m_screenRect.bottomLeft()) ||
-                          goTopLevel(m_screenRect.bottomRight());
+        bool toTopLevel = leaveCurrentView(m_screenRect);
 
         if (!toTopLevel) {
             setPos(m_pos);
@@ -469,7 +488,7 @@ void AppletHandle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
             }
         } else {
             if (!m_topview) { //create a new toplevel view
-                m_topview = new View(m_applet->containment(), -1, 0);
+                m_topview = new View(m_containment, -1, 0);
 
                 m_topview->setTrackContainmentChanges(false);
                 m_topview->setWindowFlags(Qt::ToolTip | Qt::FramelessWindowHint
@@ -502,7 +521,7 @@ void AppletHandle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
                 m_topview->show();
 
-                m_applet->setGhostView(m_applet->containment()->view());
+                m_applet->setGhostView(m_containment->view());
 
                 //TODO: non compositing users are screwed: masking looks terrible.
                 //Consider always enabling the applet background. Stuff like the analog clock
@@ -623,6 +642,7 @@ void AppletHandle::switchContainment(Containment *containment, const QPointF &po
         case Containment::PanelContainment:
             kDebug() << "panel";
             //we need to fully disassociate the applet and handle, then kill the handle
+            applet->setZValue(m_zValue);
             forceDisappear(); //takes care of event filter and killing handle
             m_applet=0; //make sure we don't try to act on the applet again
             applet->disconnect(this); //make sure the applet doesn't tell us to do anything
@@ -631,11 +651,18 @@ void AppletHandle::switchContainment(Containment *containment, const QPointF &po
         default: //FIXME assuming everything else behaves like desktop
             kDebug() << "desktop";
             m_containment = containment;
-            containment->addApplet(m_applet);
-            setParentItem(containment);
-            m_applet->setParentItem(this);
-            setPos(containment->mapFromScene(pos));
-            //setPos(pos);
+            //FIXME: destorying the applethandle might not be necesarry. I'm having issues
+            //getting it to work correctly while keeping the handle though, so for now just
+            //destroy it.
+            applet->setZValue(m_zValue);
+            forceDisappear();
+            m_applet=0;
+            applet->disconnect(this);
+            containment->addApplet(applet, containment->mapFromScene(pos));
+            //setParentItem(containment);
+            //m_applet->setParentItem(this);
+            //setPos(containment->mapFromScene(pos));
+            //update();
     }
     update();
 }
