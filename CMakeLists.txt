@@ -60,6 +60,8 @@ set(plasma_LIB_SRCS
     scripting/runnerscript.cpp
     scripting/scriptengine.cpp
     widgets/icon.cpp
+    widgets/label.cpp
+    widgets/lineedit.cpp
     widgets/webcontent.cpp
     widgets/meter.cpp
     widgets/signalplotter.cpp
@@ -141,6 +143,8 @@ install(FILES
 
 install(FILES
     widgets/icon.h
+    widgets/label.h
+    widgets/lineedit.h
     widgets/webcontent.h
     widgets/meter.h
     widgets/signalplotter.h
