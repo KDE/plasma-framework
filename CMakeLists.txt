@@ -47,6 +47,10 @@ set(plasma_LIB_SRCS
     querymatch.cpp
     runnercontext.cpp
     runnermanager.cpp
+    scripting/appletscript.cpp
+    scripting/dataenginescript.cpp
+    scripting/runnerscript.cpp
+    scripting/scriptengine.cpp
     service.cpp
     servicejob.cpp
     shadowitem.cpp
@@ -55,10 +59,6 @@ set(plasma_LIB_SRCS
     toolbox.cpp
     uiloader.cpp
     view.cpp
-    scripting/appletscript.cpp
-    scripting/dataenginescript.cpp
-    scripting/runnerscript.cpp
-    scripting/scriptengine.cpp
     widgets/checkbox.cpp
     widgets/flash.cpp
     widgets/icon.cpp
@@ -68,6 +68,7 @@ set(plasma_LIB_SRCS
     widgets/pushbutton.cpp
     widgets/radiobutton.cpp
     widgets/signalplotter.cpp
+    widgets/textedit.cpp
     widgets/webcontent.cpp
 )
 
@@ -154,6 +155,7 @@ install(FILES
     widgets/pushbutton.h
     widgets/radiobutton.h
     widgets/signalplotter.h
+    widgets/textedit.h
     widgets/webcontent.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/plasma/widgets)
 
