@@ -40,6 +40,8 @@ set(plasma_LIB_SRCS
     #FOR FUTURE
     #layouts/borderlayout.cpp
     packages.cpp
+    panelsvg.cpp
+    paneltoolbox.cpp
     plasma.cpp
     plasma_export.h
     querymatch.cpp
@@ -49,16 +51,15 @@ set(plasma_LIB_SRCS
     servicejob.cpp
     shadowitem.cpp
     svg.cpp
-    panelsvg.cpp
     theme.cpp
     toolbox.cpp
-    paneltoolbox.cpp
     uiloader.cpp
     view.cpp
     scripting/appletscript.cpp
     scripting/dataenginescript.cpp
     scripting/runnerscript.cpp
     scripting/scriptengine.cpp
+    widgets/checkbox.cpp
     widgets/flash.cpp
     widgets/icon.cpp
     widgets/label.cpp
@@ -118,20 +119,20 @@ set(plasma_LIB_INCLUDES
     datacontainer.h
     dataengine.h
     dataenginemanager.h
+    delegate.h
     dialog.h
+    panelsvg.h
     plasma.h
     plasma_export.h
+    querymatch.h
     runnercontext.h
     runnermanager.h
-    querymatch.h
     service.h
     servicejob.h
     svg.h
-    panelsvg.h
     theme.h
     uiloader.h
-    view.h
-    delegate.h)
+    view.h)
 
 if(QT_QTOPENGL_FOUND AND OPENGL_FOUND)
 set(plasma_LIB_INCLUDES
@@ -144,6 +145,7 @@ install(FILES
         DESTINATION ${INCLUDE_INSTALL_DIR}/plasma)
 
 install(FILES
+    widgets/checkbox.h
     widgets/flash.h
     widgets/icon.h
     widgets/label.h
