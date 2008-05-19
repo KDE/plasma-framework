@@ -19,7 +19,7 @@ perl -pi -e "s,<NAME>,${CAPNAME},g" $BOTH
 perl -pi -e "s,<name>,${LOWERNAME},g" $BOTH
 perl -pi -e "s,<Native>,$NATIVE,g" $BOTH
 
-echo "#include ../../plasma/${HEADER}" > ../includes/${NAME}
+echo "#include \"../../plasma/${HEADER}\"" > ../includes/${NAME}
 
 svn add ../includes/${NAME} $BOTH
 
