@@ -34,40 +34,12 @@ class LineEdit::Private
 {
 public:
     Private()
-        : svg(0)
     {
     }
 
     ~Private()
     {
-        delete svg;
     }
-
-    void setPixmap(LineEdit *q)
-    {
-        if (imagePath.isEmpty()) {
-            return;
-        }
-
-        KMimeType::Ptr mime = KMimeType::findByPath(absImagePath);
-        QPixmap pm(q->size().toSize());
-
-        if (mime->is("image/svg+xml")) {
-            svg = new Svg();
-            QPainter p(&pm);
-            svg->paint(&p, pm.rect());
-        } else {
-            pm = QPixmap(absImagePath);
-        }
-
-        //TODO: load image into widget
-        //static_cast<QLineEdit*>(widget())->setPixmap();
-        //static_cast<QLineEdit*>(widget())->setIcon(QIcon();
-    }
-
-    QString imagePath;
-    QString absImagePath;
-    Svg *svg;
 };
 
 LineEdit::LineEdit(QGraphicsWidget *parent)
@@ -75,7 +47,9 @@ LineEdit::LineEdit(QGraphicsWidget *parent)
       d(new Private)
 {
     QLineEdit* native = new QLineEdit;
-    //TODO: forward signals
+    connect(native, SIGNAL(editingFinished()), this, SIGNAL(editingFinished()));
+    connect(native, SIGNAL(returnPressed()), this, SIGNAL(returnPressed()));
+    connect(native, SIGNAL(textEdited(const QString&)), this, SIGNAL(textEdited(const QString&)));
     setWidget(native);
     native->setAttribute(Qt::WA_NoSystemBackground);
 }
@@ -95,39 +69,6 @@ QString LineEdit::text() const
     return static_cast<QLineEdit*>(widget())->text();
 }
 
-void LineEdit::setImage(const QString &path)
-{
-    if (d->imagePath == path) {
-        return;
-    }
-
-    delete d->svg;
-    d->svg = 0;
-    d->imagePath = path;
-
-    bool absolutePath = !path.isEmpty() && 
-                        #ifdef Q_WS_WIN
-                            !QDir::isRelativePath(path)
-                        #else
-                            path[0] == '/'
-                        #endif
-        ;
-
-    if (absolutePath) {
-        d->absImagePath = path;
-    } else {
-        //TODO: package support
-        d->absImagePath = Theme::defaultTheme()->imagePath(path);
-    }
-
-    d->setPixmap(this);
-}
-
-QString LineEdit::image() const
-{
-    return d->imagePath;
-}
-
 void LineEdit::setStylesheet(const QString &stylesheet)
 {
     widget()->setStyleSheet(stylesheet);
@@ -141,12 +82,6 @@ QString LineEdit::stylesheet()
 QLineEdit* LineEdit::nativeWidget() const
 {
     return static_cast<QLineEdit*>(widget());
-}
-
-void LineEdit::resizeEvent(QGraphicsSceneResizeEvent *event)
-{
-    d->setPixmap(this);
-    QGraphicsProxyWidget::resizeEvent(event);
 }
 
 } // namespace Plasma

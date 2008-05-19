@@ -34,7 +34,6 @@ class LineEdit : public QGraphicsProxyWidget
 
     Q_PROPERTY(QGraphicsWidget* parentWidget READ parentWidget)
     Q_PROPERTY(QString text READ text WRITE setText)
-    Q_PROPERTY(QString image READ image WRITE setImage)
     Q_PROPERTY(QString stylesheet READ stylesheet WRITE setStylesheet)
     Q_PROPERTY(QLineEdit* nativeWidget READ nativeWidget)
 
@@ -55,18 +54,6 @@ public:
     QString text() const;
 
     /**
-     * Sets the path to an image to display.
-     *
-     * @arg path the path to the image; if a relative path, then a themed image will be loaded.
-     */
-    void setImage(const QString &path);
-
-    /**
-     * @return the image path being displayed currently, or an empty string if none.
-     */
-    QString image() const;
-
-    /**
      * Sets the style sheet used to control the visual display of this LineEdit
      *
      * @arg stylehseet a CSS string
@@ -84,9 +71,9 @@ public:
     QLineEdit* nativeWidget() const;
 
 Q_SIGNALS:
-
-protected:
-    void resizeEvent(QGraphicsSceneResizeEvent *event);
+    void editingFinished();
+    void returnPressed();
+    void textEdited(const QString & text);
 
 private:
     class Private;
