@@ -118,7 +118,7 @@ public:
      *
      * @arg containment the containment to center the view on
      */
-    void setContainment(Containment *containment);
+    virtual void setContainment(Containment *containment);
 
     /**
      * @return the containment associated with this view, or 0 if none is
