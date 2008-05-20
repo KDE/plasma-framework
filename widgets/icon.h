@@ -20,8 +20,8 @@
 *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
-#ifndef ICON_H
-#define ICON_H
+#ifndef PLASMA_ICON_H
+#define PLASMA_ICON_H
 
 #include <QtCore/QObject>
 #include <QtGui/QGraphicsTextItem>

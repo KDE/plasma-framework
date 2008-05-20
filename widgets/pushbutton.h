@@ -18,8 +18,8 @@
  */
 
 
-#ifndef PLASMA__H
-#define PLASMA__H
+#ifndef PLASMA_PUSHBUTTON_H
+#define PLASMA_PUSHBUTTON_H
 
 #include <QGraphicsProxyWidget>
 

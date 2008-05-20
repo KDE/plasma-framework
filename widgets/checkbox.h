@@ -18,8 +18,8 @@
  */
 
 
-#ifndef PLASMA__H
-#define PLASMA__H
+#ifndef PLASMA_CHECKBOX_H
+#define PLASMA_CHECKBOX_H
 
 #include <QGraphicsProxyWidget>
 

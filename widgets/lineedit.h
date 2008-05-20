@@ -18,8 +18,8 @@
  */
 
 
-#ifndef PLASMA__H
-#define PLASMA__H
+#ifndef PLASMA_LINEEDIT_H
+#define PLASMA_LINEEDIT_H
 
 #include <QGraphicsProxyWidget>
 

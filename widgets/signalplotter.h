@@ -19,8 +19,8 @@
  *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef SIGNALPLOTTER_H
-#define SIGNALPLOTTER_H
+#ifndef PLASMA_SIGNALPLOTTER_H
+#define PLASMA_SIGNALPLOTTER_H
 
 #include <QtGui/QFont>
 #include <QtGui/QGraphicsWidget>

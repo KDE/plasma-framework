@@ -18,8 +18,8 @@
  */
 
 
-#ifndef PLASMA__H
-#define PLASMA__H
+#ifndef PLASMA_RADIOBUTTON_H
+#define PLASMA_RADIOBUTTON_H
 
 #include <QGraphicsProxyWidget>
 
