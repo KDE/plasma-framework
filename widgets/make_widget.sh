@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# usege: make_widget LineEdit
+# usage: make_widget LineEdit
 
 LOWERNAME=`echo $1 | tr [:upper:] [:lower:]`
 NAME=$1
