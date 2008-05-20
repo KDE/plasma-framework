@@ -655,10 +655,9 @@ void Applet::flushPendingConstraintsEvents()
     if (c & Plasma::StartupCompletedConstraint) {
         //common actions
         bool unlocked = immutability() == Mutable;
-        //FIXME make it work for containments
-        //also, don't allow to delete the last desktop containment
-        //heck, can desktop ctmts even handle being deleted yet?
-        //so panel has a remove() that tears it down nicely. what does desktop have?
+        //FIXME desktop containments can't be removed while in use.
+        //it's kinda silly to have a keyboard shortcut for something that can only be used when the
+        //shortcut isn't active.
         QAction* closeApplet = new QAction(i18n("Remove this %1", name()), this);
         closeApplet->setIcon(KIcon("edit-delete"));
         closeApplet->setEnabled(unlocked);
@@ -666,8 +665,10 @@ void Applet::flushPendingConstraintsEvents()
         closeApplet->setShortcutContext(Qt::WidgetWithChildrenShortcut); //don't clash with other views
         if (! isContainment()) {
             closeApplet->setShortcut(QKeySequence("ctrl+r"));
-            connect(closeApplet, SIGNAL(triggered(bool)), this, SLOT(destroy()));
+        } else {
+            closeApplet->setShortcut(QKeySequence("ctrl+shift+r"));
         }
+        connect(closeApplet, SIGNAL(triggered(bool)), this, SLOT(destroy()));
         d->actions.addAction("remove", closeApplet);
     }
 

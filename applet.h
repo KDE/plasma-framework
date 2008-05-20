@@ -518,7 +518,7 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          * Destroys the applet; it will be removed nicely and deleted.
          * Its configuration will also be deleted.
          */
-        void destroy();
+        virtual void destroy();
 
         /**
          * Lets the user interact with the plasmoid options.

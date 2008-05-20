@@ -36,6 +36,7 @@
 #include <KAuthorized>
 #include <KIcon>
 #include <KMenu>
+#include <KMessageBox>
 #include <KMimeType>
 #include <KRun>
 #include <KServiceTypeTrader>
@@ -925,6 +926,19 @@ void Containment::focusPreviousApplet()
     }
     kDebug() << "index" << index;
     d->focusApplet(d->applets.at(index));
+}
+
+void Containment::destroy()
+{
+    if (immutability() != Mutable) {
+        return;
+    }
+    //FIXME maybe that %1 should be the containment type not the name
+    if (KMessageBox::warningContinueCancel(0, i18n("Do you really want to remove this %1?", name()),
+                     i18n("Remove %1", name()), KStandardGuiItem::remove()) == KMessageBox::Continue ) {
+         clearApplets();
+         corona()->destroyContainment(this);
+    }
 }
 
 

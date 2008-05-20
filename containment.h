@@ -350,6 +350,13 @@ class PLASMA_EXPORT Containment : public Applet
          */
         void focusPreviousApplet();
 
+        /**
+         * Destroys this containment and all its applets (after a confirmation dialog);
+         * it will be removed nicely and deleted.
+         * Its configuration will also be deleted.
+         */
+        void destroy();
+
     protected:
         /**
          * Sets the type of this containment.
