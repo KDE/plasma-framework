@@ -174,7 +174,15 @@ bool QueryMatch::isEnabled() const
 
 bool QueryMatch::operator<(const QueryMatch& other) const
 {
-    return d->relevance < other.d->relevance;
+    if (d->type == other.d->type) {
+        if (isEnabled() != other.isEnabled()) {
+            return other.isEnabled();
+        }
+
+        return d->relevance < other.d->relevance;
+    }
+
+    return d->type < other.d->type;
 }
 
 QueryMatch& QueryMatch::operator=(const QueryMatch &other)
