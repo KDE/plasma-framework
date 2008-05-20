@@ -4,7 +4,7 @@
 
 LOWERNAME=`echo $1 | tr [:upper:] [:lower:]`
 NAME=$1
-CAPNAME=`echo $3 | tr [:lower:] [:upper:]`
+CAPNAME=`echo $1 | tr [:lower:] [:upper:]`
 NATIVE="Q${NAME}"
 HEADER="${LOWERNAME}.h"
 SOURCE="${LOWERNAME}.cpp"
