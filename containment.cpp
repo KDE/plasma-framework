@@ -1004,15 +1004,24 @@ void Containment::Private::positionToolBox()
         return;
     }
 
-    QRectF r;
-    if (screen < 0) {
-        r = q->geometry();
+    //The placement assumes that the geometry width/height is no more than the screen
+    if (type == PanelContainment) {
+        if (q->formFactor() == Vertical) {
+            toolBox->setOrientation(Qt::Vertical);
+            toolBox->setPos(q->geometry().width()/2 - toolBox->boundingRect().width()/2, q->geometry().height());
+        //defaulting to Horizontal right now
+        } else {
+            toolBox->setOrientation(Qt::Horizontal);
+            if (QApplication::layoutDirection() == Qt::RightToLeft) {
+                toolBox->setPos(q->geometry().left(), q->geometry().height()/2 - toolBox->boundingRect().height()/2);
+            } else {
+                toolBox->setPos(q->geometry().width(), q->geometry().height()/2 - toolBox->boundingRect().height()/2);
+            }
+        }
     } else {
-        QDesktopWidget *desktop = QApplication::desktop();
-        r = desktop->availableGeometry(screen);
+        toolBox->setPos(q->mapFromScene(QPointF(q->geometry().topRight())));
     }
-
-    toolBox->setPos(QPointF(r.right(), r.y()));
+    
 }
 
 void Containment::Private::triggerShowAddWidgets()
@@ -1082,23 +1091,7 @@ void Containment::Private::containmentConstraintsEvent(Plasma::Constraints const
 
     if ((constraints & Plasma::SizeConstraint || constraints & Plasma::ScreenConstraint) &&
          toolBox) {
-        //The placement assumes that the geometry width/height is no more than the screen
-        if (type == PanelContainment) {
-            if (q->formFactor() == Vertical) {
-                toolBox->setOrientation(Qt::Vertical);
-                toolBox->setPos(q->geometry().width()/2 - toolBox->boundingRect().width()/2, q->geometry().height());
-            //defaulting to Horizontal right now
-            } else {
-                toolBox->setOrientation(Qt::Horizontal);
-                if (QApplication::layoutDirection() == Qt::RightToLeft) {
-                    toolBox->setPos(q->geometry().left(), q->geometry().height()/2 - toolBox->boundingRect().height()/2);
-                } else {
-                    toolBox->setPos(q->geometry().width(), q->geometry().height()/2 - toolBox->boundingRect().height()/2);
-                }
-            }
-        } else {
-            toolBox->setPos(q->geometry().right() - qAbs(toolBox->boundingRect().width()), 0);
-        }
+        positionToolBox();
         toolBox->enableTool("addwidgets", q->immutability() == Mutable);
     }
 
