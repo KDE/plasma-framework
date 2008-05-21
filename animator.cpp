@@ -33,6 +33,7 @@
 namespace Plasma
 {
 
+static const int MIN_TICK_RATE_INT = 40;
 static const qreal MIN_TICK_RATE = 40;
 
 struct AnimationState
@@ -333,10 +334,13 @@ int Animator::moveItem(QGraphicsItem* item, Movement movement, const QPoint &des
      state->movement = movement;
      state->curve = d->driver->movementAnimationCurve(movement);
      //TODO: variance in times based on the value of animation
-     state->frames = frames / 2;
+     int duration = d->driver->movementAnimationDuration(movement);
+     state->frames = (duration / 1000.0) * frames;
      state->currentFrame = 0;
-     state->interval = d->driver->movementAnimationDuration(movement) / state->frames;
-     state->interval = (state->interval / MIN_TICK_RATE) * MIN_TICK_RATE;
+     state->interval = duration / state->frames;
+     state->interval -= qMax(MIN_TICK_RATE_INT, state->interval % MIN_TICK_RATE_INT);
+//     state->interval = (state->interval / MIN_TICK_RATE) * MIN_TICK_RATE;
+     //kDebug() << "interval of" << state->interval;
      state->currentInterval = state->interval;
      state->qobj = dynamic_cast<QObject*>(item);
 
@@ -577,11 +581,13 @@ void Animator::timerEvent(QTimerEvent *event)
                                    qMax(1, elapsed / state->interval) : state->frames - state->currentFrame;
 
             if (state->currentFrame < state->frames) {
+                //kDebug() << "movement";
                 d->performMovement(d->calculateProgress(state->frames, state->currentFrame), state);
                 //TODO: calculate a proper interval based on the curve
                 state->currentInterval = state->interval;
                 animationsRemain = true;
             } else {
+                //kDebug() << "movement";
                 d->performMovement(1, state);
                 d->movingItems.erase(d->movingItems.find(state->item));
                 emit movementFinished(state->item);

@@ -64,7 +64,7 @@ int AnimationDriver::movementAnimationDuration(Plasma::Animator::Movement moveme
     switch (movement) {
         case Animator::FastSlideInMovement:
         case Animator::FastSlideOutMovement:
-            return 100;
+            return 150;
             break;
         default:
             break;
