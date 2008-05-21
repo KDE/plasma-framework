@@ -30,7 +30,7 @@
 
 class TestEngine : public Plasma::DataEngine
 {
-    Q_OBJECT;
+    Q_OBJECT
 
 public:
     struct MyUserType {

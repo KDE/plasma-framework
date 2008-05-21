@@ -35,18 +35,18 @@
 #include <QtGui/QTextFormat>
 
 
-Q_DECLARE_METATYPE(TestEngine::MyUserType);
+Q_DECLARE_METATYPE(TestEngine::MyUserType)
 
 
 TestEngine::TestEngine(QObject *parent, const QVariantList &args)
     : Plasma::DataEngine(parent, args)
 {
-}; // ctor()
+} // ctor()
 
 
 TestEngine::~TestEngine()
 {
-}; // dtor()
+} // dtor()
 
 
 void TestEngine::init()
@@ -164,15 +164,15 @@ void TestEngine::init()
     QVariant v;
     v.setValue(userType);
     setData(dsn, "UserType", v);
-}; // init()
+} // init()
 
 
 bool TestEngine::sourceRequestEvent(const QString &source)
 {
     // Nothing to do...
-    Q_UNUSED(source);
+    Q_UNUSED(source)
     return true;
-}; // sourceRequestEvent()
+} // sourceRequestEvent()
 
 
 #include "testengine.moc"
