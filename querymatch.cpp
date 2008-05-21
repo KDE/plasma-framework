@@ -179,7 +179,13 @@ bool QueryMatch::operator<(const QueryMatch& other) const
             return other.isEnabled();
         }
 
-        return d->relevance < other.d->relevance;
+        if (d->relevance != other.d->relevance) {
+            return d->relevance < other.d->relevance;
+        }
+
+        // when resorting to sort by alpha, we want the
+        // reverse sort order!
+        return d->text > other.d->text;
     }
 
     return d->type < other.d->type;
