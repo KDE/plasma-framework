@@ -96,8 +96,8 @@ class PLASMA_EXPORT Containment : public Applet
          * @param containmentId a unique id used to differentiate between multiple
          *      instances of the same Applet type
          */
-        explicit Containment(QGraphicsItem* parent = 0,
-                             const QString& serviceId = QString(),
+        explicit Containment(QGraphicsItem *parent = 0,
+                             const QString &serviceId = QString(),
                              uint containmentId = 0);
 
         /**
@@ -110,7 +110,7 @@ class PLASMA_EXPORT Containment : public Applet
          * @param args a list of strings containing two entries: the service id
          *      and the applet id
          */
-        Containment(QObject* parent, const QVariantList& args);
+        Containment(QObject *parent, const QVariantList &args);
 
         ~Containment();
 
@@ -168,7 +168,7 @@ class PLASMA_EXPORT Containment : public Applet
          *
          * @return a pointer to the applet on success, or 0 on failure
          */
-        Applet* addApplet(const QString& name, const QVariantList& args = QVariantList(),
+        Applet* addApplet(const QString &name, const QVariantList &args = QVariantList(),
                           const QRectF &geometry = QRectF(-1, -1, -1, -1));
 
         /**
@@ -212,12 +212,12 @@ class PLASMA_EXPORT Containment : public Applet
         /**
          * @internal
          */
-        void saveContainment(KConfigGroup* group) const;
+        void saveContainment(KConfigGroup *group) const;
 
         /**
          * @internal
          */
-        void loadContainment(KConfigGroup* group);
+        void loadContainment(KConfigGroup *group);
 
         /**
          * Constructs a ToolBox item and adds it to the toolbox. The toolbox takes over ownership of the item. Returns the constructed tool.
@@ -228,7 +228,7 @@ class PLASMA_EXPORT Containment : public Applet
          *
          * @return the constructed tool
          */
-        QGraphicsWidget * addToolBoxTool(const QString &toolName = QString(), const QString &iconName = QString(), const QString &iconText = QString());
+        QGraphicsWidget* addToolBoxTool(const QString &toolName = QString(), const QString &iconName = QString(), const QString &iconText = QString());
 
         /**
          * Enables or disables a toolbox tool by name
@@ -276,17 +276,17 @@ class PLASMA_EXPORT Containment : public Applet
         /**
          * This signal is emitted when a new applet is created by the containment
          */
-        void appletAdded(Plasma::Applet* applet, const QPointF &pos);
+        void appletAdded(Plasma::Applet *applet, const QPointF &pos);
 
         /**
          * This signal is emitted when an applet is destroyed
          */
-        void appletRemoved(Plasma::Applet* applet);
+        void appletRemoved(Plasma::Applet *applet);
 
         /**
          * Emitted when the containment requests zooming in or out one step.
          */
-        void zoomRequested(Plasma::Containment * containment, Plasma::ZoomDirection direction);
+        void zoomRequested(Plasma::Containment *containment, Plasma::ZoomDirection direction);
 
         /**
          * Emitted when the user clicks on the toolbox
@@ -363,7 +363,7 @@ class PLASMA_EXPORT Containment : public Applet
          */
         void setContainmentType(Containment::Type type);
 
-        void contextMenuEvent(QGraphicsSceneContextMenuEvent * event);
+        void contextMenuEvent(QGraphicsSceneContextMenuEvent *event);
         void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
         void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
         void keyPressEvent(QKeyEvent *event);
@@ -374,7 +374,7 @@ class PLASMA_EXPORT Containment : public Applet
         /**
          * @internal
          */
-        void dropEvent(QGraphicsSceneDragDropEvent* event);
+        void dropEvent(QGraphicsSceneDragDropEvent *event);
 
     private:
         Q_PRIVATE_SLOT(d, void appletDestroyed(QObject*))

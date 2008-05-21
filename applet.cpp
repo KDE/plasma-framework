@@ -289,11 +289,11 @@ void Applet::Private::appletAnimationComplete(QGraphicsItem *item, Plasma::Anima
             }
         }
     }
-    
+
     if (configXml) {
         configXml->setDefaults();
     }
-    
+
     q->scene()->removeItem(q);
 
     q->deleteLater();
