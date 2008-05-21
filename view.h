@@ -113,14 +113,6 @@ public:
     int effectiveDesktop() const;
 
     /**
-     * Sets the containment for this view, which will also cause the view
-     * to track the geometry of the containment.
-     *
-     * @arg containment the containment to center the view on
-     */
-    virtual void setContainment(Containment *containment);
-
-    /**
      * @return the containment associated with this view, or 0 if none is
      */
     Containment* containment() const;
@@ -163,6 +155,15 @@ Q_SIGNALS:
      * their rect() in sync with the containment's.
      */
     void sceneRectChanged();
+
+public Q_SLOTS:
+    /**
+     * Sets the containment for this view, which will also cause the view
+     * to track the geometry of the containment.
+     *
+     * @arg containment the containment to center the view on
+     */
+    virtual void setContainment(Containment *containment);
 
 protected:
     /**

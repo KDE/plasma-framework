@@ -318,6 +318,12 @@ class PLASMA_EXPORT Containment : public Applet
          */
         void screenChanged(int wasScreen, int isScreen, Plasma::Containment *containment);
 
+        /**
+         * Emitted when the containment wants to become active.
+         * Usually only used for desktop containments.
+         */
+        void focusRequested(Plasma::Containment *containment);
+
     public Q_SLOTS:
         /**
          * Informs the Corona as to what position it is in. This is informational

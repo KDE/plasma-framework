@@ -873,9 +873,14 @@ KActionCollection& Containment::Private::actions()
 
 void Containment::Private::focusApplet(Plasma::Applet *applet)
 {
-    kDebug();
     if (focusedApplet == applet) {
         return;
+    }
+
+    if (q->screen() == -1) {
+        //what's the point of having focus if you're not on screen? :)
+        //also, clicking a containment to switch to it makes the ZUI waay nicer.
+        emit q->focusRequested(q);
     }
 
     QList<QWidget *> widgets = actions().associatedWidgets();
