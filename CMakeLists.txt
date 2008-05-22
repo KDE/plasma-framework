@@ -17,6 +17,9 @@ install(FILES
     widgets/branding.svg
     widgets/tooltip.svg
     widgets/clock.svg
+    widgets/pager.svg
+    widgets/systemtray.svg
+    widgets/tasks.svg
     widgets/toolbox-button.svg
     widgets/connection-established.svg
     widgets/plot-background.svg
