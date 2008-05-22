@@ -83,7 +83,6 @@ public:
     AppletScript *script;
     ConfigXml* configXml;
     ShadowItem* shadow;
-    QPixmap* cachedBackground;
     KConfigGroup *mainConfig;
     Plasma::Constraints pendingConstraints;
     Plasma::AspectRatioMode aspectRatioMode;

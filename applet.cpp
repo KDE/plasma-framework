@@ -1376,7 +1376,6 @@ Applet::Private::Private(KService::Ptr service, int uniqueID, Applet *applet)
           script(0),
           configXml(0),
           shadow(0),
-          cachedBackground(0),
           mainConfig(0),
           pendingConstraints(NoConstraint),
           aspectRatioMode(Plasma::KeepAspectRatio),
@@ -1404,7 +1403,6 @@ Applet::Private::~Private()
     delete package;
     delete configXml;
     delete shadow;
-    delete cachedBackground;
     delete mainConfig;
 }
 
