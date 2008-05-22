@@ -193,8 +193,8 @@ public:
         deferredRun(0)
     {
         matchChangeTimer.setSingleShot(true);
-        connect(&matchChangeTimer, SIGNAL(timeout()), q, SLOT(scheduleMatchesChanged()));
-        connect(&context, SIGNAL(matchesChanged()), q, SLOT(matchesChanged()));
+        connect(&matchChangeTimer, SIGNAL(timeout()), q, SLOT(matchesChanged()));
+        connect(&context, SIGNAL(matchesChanged()), q, SLOT(scheduleMatchesChanged()));
     }
 
     void scheduleMatchesChanged()
