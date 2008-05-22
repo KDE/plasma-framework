@@ -1414,8 +1414,7 @@ void Applet::Private::init()
     q->setFlag(QGraphicsItem::ItemIsFocusable, true);
 
     if (!appletDescription.isValid()) {
-        q->setFailedToLaunch(true, i18n("Invalid applet description"));
-        kDebug() << "Check your constructor! You must be passing a Service::Ptr or a QVariantList args through!";
+        kDebug() << "Check your constructor! You probaly want to be passing a Service::Ptr or a QVariantList with a valid storageid as arg[0] in.";
         return;
     }
 
