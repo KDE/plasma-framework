@@ -544,6 +544,14 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          */
         void flushPendingConstraintsEvents();
 
+        /**
+         * This method is called once the applet is loaded and added to a Corona.
+         * If the applet requires a QGraphicsScene or has an particularly intensive
+         * set of initialization routines to go through, consider implementing it
+         * in this method instead of the constructor.
+         **/
+        virtual void init();
+
     protected:
         /**
          * This constructor is to be used with the plugin loading systems
@@ -556,14 +564,6 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          *      and the applet id
          */
         Applet(QObject* parent, const QVariantList& args);
-
-        /**
-         * This method is called once the applet is loaded and added to a Corona.
-         * If the applet requires a QGraphicsScene or has an particularly intensive
-         * set of initialization routines to go through, consider implementing it
-         * in this method instead of the constructor.
-         **/
-        virtual void init();
 
         /**
          * Call this method when the applet fails to launch properly. An
