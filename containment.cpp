@@ -194,6 +194,8 @@ void Containment::loadContainment(KConfigGroup* group)
 
     QRectF geo = group->readEntry("geometry", geometry());
     //override max/min
+    //this ensures panels are set to their saved size even when they have max & min set to prevent
+    //resizing
     if (geo.size() != geo.size().boundedTo(maximumSize())) {
         setMaximumSize(maximumSize().expandedTo(geo.size()));
     }
