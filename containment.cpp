@@ -1047,7 +1047,14 @@ void Containment::Private::positionToolBox()
             }
         }
     } else {
-        toolBox->setPos(q->mapFromScene(QPointF(q->geometry().topRight())));
+        QRectF r;
+        QDesktopWidget *desktop = QApplication::desktop();
+        r = desktop->availableGeometry(screen);
+        if (q->view() && !q->view()->transform().isScaling()) {
+            toolBox->setPos(r.topRight());
+        } else {
+            toolBox->setPos(q->mapFromScene(QPointF(q->geometry().topRight())));
+        }
     }
     
 }
