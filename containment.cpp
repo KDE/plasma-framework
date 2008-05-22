@@ -184,15 +184,19 @@ bool appletConfigLessThan(const KConfigGroup &c1, const KConfigGroup &c2)
     return p1.y() < p2.y();
 }
 
-void Containment::loadContainment(KConfigGroup* group)
+void Containment::restore(KConfigGroup &group)
 {
-    /*kDebug() << "!!!!!!!!!!!!initConstraints" << group->name() << containmentType();
-    kDebug() << "    location:" << group->readEntry("location", (int)d->location);
-    kDebug() << "    geom:" << group->readEntry("geometry", geometry());
-    kDebug() << "    formfactor:" << group->readEntry("formfactor", (int)d->formFactor);
-    kDebug() << "    screen:" << group->readEntry("screen", d->screen);*/
+    /*kDebug() << "!!!!!!!!!!!!initConstraints" << group.name() << containmentType();
+    kDebug() << "    location:" << group.readEntry("location", (int)d->location);
+    kDebug() << "    geom:" << group.readEntry("geometry", geometry());
+    kDebug() << "    formfactor:" << group.readEntry("formfactor", (int)d->formFactor);
+    kDebug() << "    screen:" << group.readEntry("screen", d->screen);*/
+    if (!isContainment()) {
+        Applet::restore(group);
+        return;
+    }
 
-    QRectF geo = group->readEntry("geometry", geometry());
+    QRectF geo = group.readEntry("geometry", geometry());
     //override max/min
     //this ensures panels are set to their saved size even when they have max & min set to prevent
     //resizing
@@ -204,13 +208,38 @@ void Containment::loadContainment(KConfigGroup* group)
     }
     setGeometry(geo);
 
-    setLocation((Plasma::Location)group->readEntry("location", (int)d->location));
-    setFormFactor((Plasma::FormFactor)group->readEntry("formfactor", (int)d->formFactor));
-    setScreen(group->readEntry("screen", d->screen));
+    setLocation((Plasma::Location)group.readEntry("location", (int)d->location));
+    setFormFactor((Plasma::FormFactor)group.readEntry("formfactor", (int)d->formFactor));
+    setScreen(group.readEntry("screen", d->screen));
 
     flushPendingConstraintsEvents();
     //kDebug() << "Containment" << id() << "geometry is" << geometry() << "config'd with" << appletConfig.name();
-    KConfigGroup applets(group, "Applets");
+    restoreContents(group);
+    setImmutability((ImmutabilityType)group.readEntry("immutability", (int)Mutable));
+}
+
+void Containment::save(KConfigGroup &group) const
+{
+    // locking is saved in Applet::save
+    Applet::save(group);
+    group.writeEntry("screen", d->screen);
+    group.writeEntry("formfactor", (int)d->formFactor);
+    group.writeEntry("location", (int)d->location);
+    saveContents(group);
+}
+
+void Containment::saveContents(KConfigGroup &group) const
+{
+    KConfigGroup applets(&group, "Applets");
+    foreach (const Applet* applet, d->applets) {
+        KConfigGroup appletConfig(&applets, QString::number(applet->id()));
+        applet->save(appletConfig);
+    }
+}
+
+void Containment::restoreContents(KConfigGroup &group)
+{
+    KConfigGroup applets(&group, "Applets");
 
     // Sort the applet configs in order of geometry to ensure that applets
     // are added from left to right or top to bottom for a panel containment
@@ -232,16 +261,8 @@ void Containment::loadContainment(KConfigGroup* group)
         }
 
         Applet *applet = d->addApplet(plugin, QVariantList(), appletConfig.readEntry("geometry", QRectF()), appId, true);
-        applet->restore(&appletConfig);
+        applet->restore(appletConfig);
     }
-}
-
-void Containment::saveContainment(KConfigGroup* group) const
-{
-    // locking is saved in Applet::save
-    group->writeEntry("screen", d->screen);
-    group->writeEntry("formfactor", (int)d->formFactor);
-    group->writeEntry("location", (int)d->location);
 }
 
 Containment::Type Containment::containmentType() const

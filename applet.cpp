@@ -135,42 +135,42 @@ uint Applet::id() const
     return d->appletId;
 }
 
-void Applet::save(KConfigGroup* group) const
+void Applet::save(KConfigGroup &group) const
 {
     // we call the dptr member directly for locked since isImmutable()
     // also checks kiosk and parent containers
-    group->writeEntry("immutability", (int)d->immutability);
-    group->writeEntry("plugin", pluginName());
+    group.writeEntry("immutability", (int)d->immutability);
+    group.writeEntry("plugin", pluginName());
     //FIXME: for containments, we need to have some special values here w/regards to
     //       screen affinity (e.g. "bottom of screen 0")
     //kDebug() << pluginName() << "geometry is" << geometry() << "pos is" << pos() << "bounding rect is" << boundingRect();
-    group->writeEntry("geometry", geometry());
-    group->writeEntry("zvalue", zValue());
+    group.writeEntry("geometry", geometry());
+    group.writeEntry("zvalue", zValue());
 
     if (transform() == QTransform()) {
-        group->deleteEntry("transform");
+        group.deleteEntry("transform");
     } else {
         QList<qreal> m;
         QTransform t = transform();
         m << t.m11() << t.m12() << t.m13() << t.m21() << t.m22() << t.m23() << t.m31() << t.m32() << t.m33();
-        group->writeEntry("transform", m);
-        //group->writeEntry("transform", transformToString(transform()));
+        group.writeEntry("transform", m);
+        //group.writeEntry("transform", transformToString(transform()));
     }
 
-    KConfigGroup appletConfigGroup(group, "Configuration");
+    KConfigGroup appletConfigGroup(&group, "Configuration");
     //FIXME: we need a global save state too
-    saveState(&appletConfigGroup);
+    saveState(appletConfigGroup);
 }
 
-void Applet::restore(KConfigGroup *c)
+void Applet::restore(KConfigGroup &group)
 {
-    QList<qreal> m = c->readEntry("transform", QList<qreal>());
+    QList<qreal> m = group.readEntry("transform", QList<qreal>());
     if (m.count() == 9) {
         QTransform t(m[0], m[1], m[2], m[3], m[4], m[5], m[6], m[7], m[8]);
         setTransform(t);
     }
 
-    qreal z = c->readEntry("zvalue", 0);
+    qreal z = group.readEntry("zvalue", 0);
 
     if (z >= Private::s_maxZValue) {
         Private::s_maxZValue = z;
@@ -178,9 +178,9 @@ void Applet::restore(KConfigGroup *c)
 
     setZValue(z);
 
-    setImmutability((ImmutabilityType)c->readEntry("immutability", (int)Mutable));
+    setImmutability((ImmutabilityType)group.readEntry("immutability", (int)Mutable));
 
-    QRectF geom = c->readEntry("geometry",QRectF());
+    QRectF geom = group.readEntry("geometry",QRectF());
     if (geom.isValid()) {
         setGeometry(geom);
     }
@@ -217,13 +217,13 @@ void Applet::setFailedToLaunch(bool failed, const QString& reason)
     update();
 }
 
-void Applet::saveState(KConfigGroup* group) const
+void Applet::saveState(KConfigGroup &group) const
 {
-    if (group->config()->name() != config().config()->name()) {
+    if (group.config()->name() != config().config()->name()) {
         // we're being saved to a different file!
         // let's just copy the current values in our configuration over
         KConfigGroup c = config();
-        d->copyEntries(&c, group);
+        c.copyTo(&group);
     }
 }
 
@@ -589,7 +589,7 @@ bool Applet::hasFailedToLaunch() const
     return d->failed;
 }
 
-void Applet::paintWindowFrame ( QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget)
+void Applet::paintWindowFrame(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget)
 {
     //Here come the code for the window frame
     //kDebug()<<"ENTER in windowFrame";
@@ -1415,6 +1415,7 @@ void Applet::Private::init()
 
     if (!appletDescription.isValid()) {
         q->setFailedToLaunch(true, i18n("Invalid applet description"));
+        kDebug() << "Check your constructor! You must be passing a Service::Ptr or a QVariantList args through!";
         return;
     }
 
@@ -1544,22 +1545,6 @@ KConfigGroup* Applet::Private::mainConfigGroup()
     }
 
     return mainConfig;
-}
-
-void Applet::Private::copyEntries(KConfigGroup *source, KConfigGroup *destination)
-{
-    foreach (const QString &group, source->groupList()) {
-        KConfigGroup subSource(source, group);
-        KConfigGroup subDest(destination, group);
-        copyEntries(&subSource, &subDest);
-    }
-
-    QMap<QString, QString> entries = source->entryMap();
-    QMapIterator<QString, QString> it(entries);
-    while (it.hasNext()) {
-        it.next();
-        destination->writeEntry(it.key(), it.value());
-    }
 }
 
 QString Applet::Private::visibleFailureText(const QString& reason)

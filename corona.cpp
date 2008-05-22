@@ -89,13 +89,7 @@ public:
         foreach (const Containment *containment, containments) {
             QString cid = QString::number(containment->id());
             KConfigGroup containmentConfig(&containmentsGroup, cid);
-            containment->saveContainment(&containmentConfig);
-            containment->save(&containmentConfig);
-            KConfigGroup applets(&containmentConfig, "Applets");
-            foreach (const Applet* applet, containment->applets()) {
-                KConfigGroup appletConfig(&applets, QString::number(applet->id()));
-                applet->save(&appletConfig);
-            }
+            containment->save(containmentConfig);
         }
     }
 
@@ -115,7 +109,7 @@ public:
         // so this unsafe looking code is actually just fine.
         Containment* containment = static_cast<Plasma::Containment*>(obj);
         int index = containments.indexOf(containment);
-    
+
         if (index > -1) {
             containments.removeAt(index);
         }
@@ -276,7 +270,7 @@ void Corona::loadLayout(const QString& configName)
 
         addItem(c);
         c->init();
-        c->loadContainment(&containmentConfig);
+        c->restore(containmentConfig);
     }
 
     if (d->containments.isEmpty()) {

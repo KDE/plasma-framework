@@ -26,8 +26,9 @@
 #include <QtGui/QWidget>
 #include <QtGui/QGraphicsWidget>
 
-#include <KDE/KPluginInfo>
+#include <KDE/KConfigGroup>
 #include <KDE/KGenericFactory>
+#include <KDE/KPluginInfo>
 
 #include <plasma/configxml.h>
 #include <plasma/packagestructure.h>
@@ -120,12 +121,12 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         /**
          * Saves state information about this applet.
          **/
-        void save(KConfigGroup* group) const;
+        virtual void save(KConfigGroup &group) const;
 
         /**
          * Restores state information about this applet.
          **/
-        void restore(KConfigGroup* group);
+        virtual void restore(KConfigGroup &group);
 
         /**
          * Returns a KConfigGroup object to be shared by all applets of this
@@ -582,7 +583,7 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          * Called when a request to save the state of the applet is made
          * during runtime
          **/
-        virtual void saveState(KConfigGroup* config) const;
+        virtual void saveState(KConfigGroup &config) const;
 
         /**
          * Sets whether or not this applet provides a user interface for

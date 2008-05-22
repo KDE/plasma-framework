@@ -210,14 +210,14 @@ class PLASMA_EXPORT Containment : public Applet
         QPoint effectiveScreenPos() const;
 
         /**
-         * @internal
+         * @reimplemented from Applet
          */
-        void saveContainment(KConfigGroup *group) const;
+        void save(KConfigGroup &group) const;
 
         /**
-         * @internal
+         * @reimplemented from Applet
          */
-        void loadContainment(KConfigGroup *group);
+        void restore(KConfigGroup &group);
 
         /**
          * Constructs a ToolBox item and adds it to the toolbox. The toolbox takes over ownership of the item. Returns the constructed tool.
@@ -368,6 +368,23 @@ class PLASMA_EXPORT Containment : public Applet
          * Sets the type of this containment.
          */
         void setContainmentType(Containment::Type type);
+
+        /**
+         * Called when the contents of the containment should be saved. By default this saves
+         * all loaded Applets
+         *
+         * @param group the KConfigGroup to save settings under
+         */
+        virtual void saveContents(KConfigGroup &group) const;
+
+        /**
+         * Called when the contents of the containment should be loaded. By default this loads
+         * all previously saved Applets
+         *
+         * @param group the KConfigGroup to save settings under
+         */
+        virtual void restoreContents(KConfigGroup &group);
+
 
         void contextMenuEvent(QGraphicsSceneContextMenuEvent *event);
         void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
