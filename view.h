@@ -118,8 +118,10 @@ public:
     Containment* containment() const;
 
     /**
-     * Surpress the default behavior where the view tracks changes to the
-     * containment, and adapts itself to it.
+     * Set whether or not the view should adjust its size when the associated
+     * containment does.
+     * @arg trackChanges true to syncronize the view's size with the containment's
+     * (this is the default behaviour), false to ignore containment size changes
      */
     void setTrackContainmentChanges(bool trackChanges);
 
