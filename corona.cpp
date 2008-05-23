@@ -240,9 +240,28 @@ void Corona::Private::scheduleConfigSync()
     }
 }
 
-void Corona::loadLayout(const QString& configName)
+void Corona::initializeLayout(const QString &configName)
 {
     clearContainments();
+    loadLayout(configName);
+
+    if (d->containments.isEmpty()) {
+        loadDefaultLayout();
+        if (!d->containments.isEmpty()) {
+            d->scheduleConfigSync();
+        }
+    }
+
+    if (config()->isImmutable()) {
+        d->updateContainmentImmutability();
+    }
+
+    KConfigGroup coronaConfig(config(), "General");
+    setImmutability((ImmutabilityType)coronaConfig.readEntry("immutability", (int)Mutable));
+}
+
+void Corona::loadLayout(const QString& configName)
+{
     KSharedConfigPtr c;
 
     if (configName.isEmpty() || configName == d->configName) {
@@ -273,32 +292,18 @@ void Corona::loadLayout(const QString& configName)
         c->restore(containmentConfig);
     }
 
-    if (d->containments.isEmpty()) {
-        loadDefaultLayout();
-        if (!d->containments.isEmpty()) {
-            d->scheduleConfigSync();
+    foreach (Containment* containment, d->containments) {
+        QString cid = QString::number(containment->id());
+        KConfigGroup containmentConfig(&containments, cid);
+
+        foreach(Applet* applet, containment->applets()) {
+            applet->init();
         }
-    } else {
-        foreach (Containment* containment, d->containments) {
-            QString cid = QString::number(containment->id());
-            KConfigGroup containmentConfig(&containments, cid);
 
-            foreach(Applet* applet, containment->applets()) {
-                applet->init();
-            }
-
-            containment->updateConstraints(Plasma::StartupCompletedConstraint);
-            containment->flushPendingConstraintsEvents();
-            emit containmentAdded(containment);
-        }
+        containment->updateConstraints(Plasma::StartupCompletedConstraint);
+        containment->flushPendingConstraintsEvents();
+        emit containmentAdded(containment);
     }
-
-    if (config()->isImmutable()) {
-        d->updateContainmentImmutability();
-    }
-
-    KConfigGroup coronaConfig(config(), "General");
-    setImmutability((ImmutabilityType)coronaConfig.readEntry("immutability", (int)Mutable));
 }
 
 Containment* Corona::containmentForScreen(int screen) const

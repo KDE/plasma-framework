@@ -94,7 +94,18 @@ public:
 
 public Q_SLOTS:
     /**
-     * Load applet layout from a config file
+     * Initializes the layout from a config file. This will first clear any existing
+     * Containments, load a layout from the requested configuration file, request the
+     * default layout if needed and update immutability.
+     *
+     * @param config the name of the config file to load from,
+     *               or the default config file if QString()
+     */
+    void initializeLayout(const QString &config = QString());
+
+    /**
+     * Load applet layout from a config file. The results will be added to the
+     * current set of Containments.
      *
      * @param config the name of the config file to load from,
      *               or the default config file if QString()
