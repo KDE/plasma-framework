@@ -1379,6 +1379,7 @@ Applet::Private::Private(KService::Ptr service, int uniqueID, Applet *applet)
           mainConfig(0),
           pendingConstraints(NoConstraint),
           aspectRatioMode(Plasma::KeepAspectRatio),
+          ghostView(0),
           immutability(Mutable),
           actions(applet),
           constraintsTimerId(0),
