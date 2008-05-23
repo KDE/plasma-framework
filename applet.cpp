@@ -1325,11 +1325,25 @@ QRect Applet::screenRect() const
     bottomRight.setX(bottomRight.x() + size().width());
     bottomRight.setY(bottomRight.y() + size().height());
 
-    QPoint tL = containment()->view()->mapToGlobal(containment()->view()->mapFromScene(pos()));
-    QPoint bR = containment()->view()->mapToGlobal(containment()->view()->mapFromScene(bottomRight));
-    kDebug() << "screenRect = " << QPoint(tL.x(), tL.y()), QSize(bR.x() - tL.x(), bR.y() - tL.y());
+    Containment *c;
+    c = containment();
 
-    return QRect(QPoint(tL.x(), tL.y()), QSize(bR.x() - tL.x(), bR.y() - tL.y()));
+    if (c) {
+        QGraphicsView *v;
+        v = c->view();
+
+        if (v) {
+            QPoint tL = v->mapToGlobal(v->mapFromScene(pos()));
+            QPoint bR = v->mapToGlobal(v->mapFromScene(bottomRight));
+
+            kDebug() << "screenRect = " << QPoint(tL.x(), tL.y()), QSize(bR.x() - tL.x(), bR.y() - tL.y());
+            return QRect(QPoint(tL.x(), tL.y()), QSize(bR.x() - tL.x(), bR.y() - tL.y()));
+        }
+    }
+
+    //The applet isn't in any containment, or in a containment that doesn't have a view on it.
+    //So a screenRect isn't relevant.
+    return QRect(QPoint(0, 0), QSize(0, 0));
 }
 
 void Applet::raise()
