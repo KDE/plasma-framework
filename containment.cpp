@@ -676,7 +676,7 @@ KPluginInfo::List Containment::listContainments(const QString &category,
 
 KPluginInfo::List Containment::listContainmentsForMimetype(const QString &mimetype)
 {
-    QString constraint = QString("'%1' in MimeTypes").arg(mimetype);
+    QString constraint = QString("'%1' in [X-Plasma-DropMimeTypes]").arg(mimetype);
     //kDebug() << mimetype << constraint;
     KService::List offers = KServiceTypeTrader::self()->query("Plasma/Containment", constraint);
     return KPluginInfo::fromServices(offers);
@@ -713,7 +713,24 @@ void Containment::dropEvent(QGraphicsSceneDragDropEvent *event)
             } else {
                 //TODO: should we show a dialog here to choose which plasmoid load if
                 //!appletList.isEmpty()
-                addApplet(appletList.first().pluginName(), args, geom);
+                QMenu choices;
+                QHash<QAction*, QString> actionsToPlugins;
+                foreach (const KPluginInfo &info, appletList) {
+                    QAction *action;
+                    if (!info.icon().isEmpty()) {
+                        action = choices.addAction(KIcon(info.icon()), info.name());
+                    } else {
+                        action = choices.addAction(info.name());
+                    }
+
+                    actionsToPlugins.insert(action, info.pluginName());
+                }
+
+                actionsToPlugins.insert(choices.addAction(i18n("Icon")), "icon");
+                QAction *choice = choices.exec(event->screenPos());
+                if (choice) {
+                    addApplet(actionsToPlugins[choice], args, geom);
+                }
             }
         }
         event->acceptProposedAction();
