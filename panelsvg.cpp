@@ -40,6 +40,14 @@ public:
     {
     }
 
+    PanelData(const PanelData &other)
+      : enabledBorders(other.enabledBorders),
+        cachedBackground(0),
+        panelSize(other.panelSize),
+        contentAtOrigin(other.contentAtOrigin)
+    {
+    }
+
     ~PanelData()
     {
         delete cachedBackground;
@@ -178,13 +186,14 @@ void PanelSvg::setElementPrefix(const QString & prefix)
         return;
     }
 
+    if (!d->panels.contains(d->prefix)) {
+        d->panels.insert(d->prefix, new PanelData(*(d->panels[oldPrefix])));
+        d->updateSizes();
+    }
+
     if (!d->cacheAll) {
         delete d->panels[oldPrefix];
         d->panels.remove(oldPrefix);
-    }
-
-    if (!d->panels.contains(d->prefix)) {
-        d->panels.insert(d->prefix, new PanelData());
     }
 
     d->location = Floating;
@@ -233,10 +242,12 @@ QString PanelSvg::prefix()
 
 void PanelSvg::resizePanel(const QSizeF& size)
 {
-    bool sizeValid = size.width() > 0 && size.height() > 0;
-    if (!sizeValid || size == d->panels[d->prefix]->panelSize) {
-        if (!sizeValid)
-            kWarning() << "Invalid size" << size;
+    if (size.isEmpty()) {
+        kWarning() << "Invalid size" << size;
+        return;
+    }
+
+    if (size == d->panels[d->prefix]->panelSize) {
         return;
     }
 
@@ -283,10 +294,17 @@ qreal PanelSvg::marginSize(const Plasma::MarginEdge edge) const
 
 void PanelSvg::getMargins(qreal &left, qreal &top, qreal &right, qreal &bottom) const
 {
-    top = marginSize(Plasma::TopMargin);
-    left = marginSize(Plasma::LeftMargin);
-    right = marginSize(Plasma::RightMargin);
-    bottom = marginSize(Plasma::BottomMargin);
+    PanelData *panel = d->panels[d->prefix];
+
+    if (!panel || panel->noBorderPadding) {
+        left = top = right = bottom = 0;
+        return;
+    }
+
+    top = panel->topHeight;
+    left = panel->leftWidth;
+    right = panel->rightWidth;
+    bottom = panel->bottomHeight;
 }
 
 QBitmap PanelSvg::mask() const
@@ -317,23 +335,21 @@ bool PanelSvg::cacheAllRenderedPanels() const
 void PanelSvg::clearCache()
 {
     PanelData *panel = d->panels[d->prefix];
-    if (panel) {
-        // make a copy of the panel data to preserve settings,
-        // but then reset the cached image
-        panel = new PanelData(*panel);
-        panel->cachedBackground = 0;
-    } else {
-        panel = new PanelData();
+
+    // delete all the panels that aren't this one
+    QMutableHashIterator<QString, PanelData*> it(d->panels);
+    while (it.hasNext()) {
+        PanelData *p = it.next().value();
+        if (panel != p) {
+            delete p;
+            it.remove();
+        }
     }
-
-    qDeleteAll(d->panels);
-    d->panels.clear();
-
-    d->panels[d->prefix] = panel;
 }
 
 void PanelSvg::paintPanel(QPainter* painter, const QRectF& rect, const QPointF& pos)
 {
+    //kDebug();
     PanelData *panel = d->panels[d->prefix];
     if (!panel->cachedBackground) {
         d->generateBackground(panel);
@@ -350,6 +366,7 @@ void PanelSvg::paintPanel(QPainter* painter, const QRectF& rect, const QPointF& 
 
 void PanelSvg::Private::generateBackground(PanelData *panel)
 {
+    kDebug() << "generating background";
     bool origined = panel->contentAtOrigin;
     const int topWidth = q->elementSize(prefix + "top").width();
     const int leftHeight = q->elementSize(prefix + "left").height();
@@ -359,6 +376,7 @@ void PanelSvg::Private::generateBackground(PanelData *panel)
     if (panel->cachedBackground) {
         return;
     }
+
     if (!panel->panelSize.isValid()) {
         kWarning() << "Invalid panel size" << panel->panelSize;
         panel->cachedBackground = new QPixmap();
