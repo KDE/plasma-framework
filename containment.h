@@ -395,7 +395,7 @@ class PLASMA_EXPORT Containment : public Applet
 
     private:
         Q_PRIVATE_SLOT(d, void appletDestroyed(QObject*))
-        Q_PRIVATE_SLOT(d, void appletAnimationComplete(QGraphicsItem *item, Plasma::Animator::Animation anim))
+        Q_PRIVATE_SLOT(d, void containmentAppletAnimationComplete(QGraphicsItem *item, Plasma::Animator::Animation anim))
         Q_PRIVATE_SLOT(d, void triggerShowAddWidgets())
         Q_PRIVATE_SLOT(d, void handleDisappeared(AppletHandle *handle))
         Q_PRIVATE_SLOT(d, void positionToolBox())

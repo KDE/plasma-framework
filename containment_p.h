@@ -68,7 +68,7 @@ public:
     void setLockToolText();
     void handleDisappeared(AppletHandle *handle);
     void appletDestroyed(QObject*);
-    void appletAnimationComplete(QGraphicsItem *item, Plasma::Animator::Animation anim);
+    void containmentAppletAnimationComplete(QGraphicsItem *item, Plasma::Animator::Animation anim);
     void zoomIn();
     void zoomOut();
 

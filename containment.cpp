@@ -111,7 +111,7 @@ void Containment::init()
 
     //TODO: would be nice to not do this on init, as it causes Animator to init
     connect(Animator::self(), SIGNAL(animationFinished(QGraphicsItem*,Plasma::Animator::Animation)),
-            this, SLOT(appletAnimationComplete(QGraphicsItem*,Plasma::Animator::Animation)));
+            this, SLOT(containmentAppletAnimationComplete(QGraphicsItem*,Plasma::Animator::Animation)));
 
     if (d->type == NoContainmentType) {
         setContainmentType(DesktopContainment);
@@ -1206,7 +1206,7 @@ void Containment::Private::appletDestroyed(QObject* object)
     emit q->configNeedsSaving();
 }
 
-void Containment::Private::appletAnimationComplete(QGraphicsItem *item, Plasma::Animator::Animation anim)
+void Containment::Private::containmentAppletAnimationComplete(QGraphicsItem *item, Plasma::Animator::Animation anim)
 {
     if (anim == Animator::AppearAnimation) {
         if (q->containmentType() == DesktopContainment &&
