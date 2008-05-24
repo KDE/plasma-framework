@@ -1588,6 +1588,14 @@ void Applet::Private::checkImmutability()
 
 void Applet::Private::themeChanged()
 {
+    if (background) {
+        qreal left;
+        qreal right;
+        qreal top;
+        qreal bottom;
+        background->getMargins(left, top, right, bottom);
+        q->setContentsMargins(left, right, top, bottom);
+    }
     q->update();
 }
 
