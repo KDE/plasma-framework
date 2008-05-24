@@ -193,14 +193,12 @@ class PLASMA_EXPORT PanelSvg : public Svg
          */
         Q_INVOKABLE void paintPanel(QPainter* painter, const QRectF& rect, const QPointF& pos = QPointF(0, 0));
 
-    Q_SIGNALS:
-        void repaintNeeded();
-
     private:
         class Private;
         Private * const d;
 
         Q_PRIVATE_SLOT(d, void updateSizes())
+        Q_PRIVATE_SLOT(d, void updateNeeded())
 };
 
 } // Plasma namespace

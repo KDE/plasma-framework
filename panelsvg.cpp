@@ -26,6 +26,8 @@
 
 #include <KDebug>
 
+#include <plasma/theme.h>
+
 namespace Plasma
 {
 
@@ -88,6 +90,7 @@ public:
 
     void generateBackground(PanelData *panel);
     void updateSizes();
+    void updateNeeded();
     void updateAndSignalSizes();
 
     Location location;
@@ -104,7 +107,7 @@ PanelSvg::PanelSvg(QObject* parent)
     : Svg(parent),
       d(new Private(this))
 {
-    connect(this, SIGNAL(repaintNeeded()), this, SLOT(updateSizes()));
+    connect(this, SIGNAL(repaintNeeded()), this, SLOT(updateNeeded()));
     d->panels.insert(QString(), new PanelData());
 }
 
@@ -602,9 +605,15 @@ void PanelSvg::Private::updateSizes()
     panel->stretchBorders = q->hasElement("hint-stretch-borders");
 }
 
+void PanelSvg::Private::updateNeeded()
+{
+    q->clearCache();
+    updateSizes();
+}
+
 void PanelSvg::Private::updateAndSignalSizes()
 {
-    // updateSizes(); <-- this gets called when repaintNeeded is emitted
+    updateSizes();
     emit q->repaintNeeded();
 }
 
