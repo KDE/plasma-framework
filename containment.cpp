@@ -169,12 +169,22 @@ void Containment::init()
         zoomAction->setShortcut(QKeySequence("ctrl+-"));
         d->actions().addAction("zoom out", zoomAction);
 
+        QAction *activityAction = new QAction(i18n("Add Activity"), this);
+        activityAction->setIcon(KIcon("list-add"));
+        activityAction->setVisible(unlocked);
+        activityAction->setEnabled(unlocked);
+        connect(activityAction, SIGNAL(triggered(bool)), this, SLOT(addSiblingContainment()));
+        activityAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+        activityAction->setShortcut(QKeySequence("ctrl+shift+a"));
+        d->actions().addAction("addSiblingContainment", activityAction);
+
         d->toolBox->addTool(this->action("add widgets"));
         d->toolBox->addTool(this->action("zoom in"));
         d->toolBox->addTool(this->action("zoom out"));
         if (immutability() != SystemImmutable) {
             d->toolBox->addTool(this->action("lock widgets"));
         }
+        d->toolBox->addTool(this->action("addSiblingContainment"));
     }
 
     Applet::init();
@@ -284,11 +294,6 @@ void Containment::setContainmentType(Containment::Type type)
     if (isContainment() && type == DesktopContainment) {
         if (!d->toolBox) {
             d->createToolBox();
-
-            /* FIXME activity action
-            QGraphicsWidget *activityTool = addToolBoxTool("addSiblingContainment", "list-add", i18n("Add Activity"));
-            connect(activityTool, SIGNAL(clicked()), this, SLOT(addSiblingContainment()));
-            */
         }
     } else if (isContainment() && type == PanelContainment) {
         if (!d->toolBox) {
@@ -1070,6 +1075,12 @@ void Containment::Private::containmentConstraintsEvent(Plasma::Constraints const
             action->setVisible(unlocked);
             action->setEnabled(unlocked);
         }
+        //FIXME immutability changes conflict with zoom changes
+        /*action = actions().action("addSiblingContainment");
+        if (action) {
+            action->setVisible(unlocked);
+            action->setEnabled(unlocked);
+        }*/
         action = actions().action("lock widgets");
         if (action) {
             action->setText(unlocked ? i18n("Lock Widgets") : i18n("Unlock Widgets"));
@@ -1093,7 +1104,6 @@ void Containment::Private::containmentConstraintsEvent(Plasma::Constraints const
     if ((constraints & Plasma::SizeConstraint || constraints & Plasma::ScreenConstraint) &&
          toolBox) {
         positionToolBox();
-        //toolBox->enableTool("addwidgets", q->immutability() == Mutable);
     }
 
     if (constraints & Plasma::FormFactorConstraint) {
