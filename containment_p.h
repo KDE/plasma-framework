@@ -39,7 +39,7 @@ public:
           location(Floating),
           focusedApplet(0),
           screen(-1), // no screen
-          toolBox(0),
+          toolbox(0),
           type(Containment::NoContainmentType),
           positioning(false)
     {
@@ -51,8 +51,8 @@ public:
         applets.clear();
     }
 
-    Toolbox* createToolBox();
-    void positionToolBox();
+    Toolbox* createToolbox();
+    void positionToolbox();
     void triggerShowAddWidgets();
 
     /**
@@ -97,7 +97,7 @@ public:
     Applet *focusedApplet;
     QMap<Applet*, AppletHandle*> handles;
     int screen;
-    Toolbox *toolBox;
+    Toolbox *toolbox;
     Containment::Type type;
     bool positioning;
 };

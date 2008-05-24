@@ -240,19 +240,19 @@ class PLASMA_EXPORT Containment : public Applet
         /**
          * Sets the open or closed state of the Containment's toolbox
          *
-         * @arg open true to open the ToolBox, false to close it
+         * @arg open true to open the Toolbox, false to close it
          */
-        void setToolBoxOpen(bool open);
+        void setToolboxOpen(bool open);
 
         /**
          * Open the Containment's toolbox
          */
-        void openToolBox();
+        void openToolbox();
 
         /**
          * Closes Containment's toolbox
          */
-        void closeToolBox();
+        void closeToolbox();
 
         /**
          * associate actions with this widget, including ones added after this call.
@@ -285,7 +285,7 @@ class PLASMA_EXPORT Containment : public Applet
         /**
          * Emitted when the user clicks on the toolbox
          */
-        void toolBoxToggled();
+        void toolboxToggled();
 
         /**
          * Emitted when the containment wants a new containment to be created.
@@ -398,7 +398,7 @@ class PLASMA_EXPORT Containment : public Applet
         Q_PRIVATE_SLOT(d, void appletAnimationComplete(QGraphicsItem *item, Plasma::Animator::Animation anim))
         Q_PRIVATE_SLOT(d, void triggerShowAddWidgets())
         Q_PRIVATE_SLOT(d, void handleDisappeared(AppletHandle *handle))
-        Q_PRIVATE_SLOT(d, void positionToolBox())
+        Q_PRIVATE_SLOT(d, void positionToolbox())
         Q_PRIVATE_SLOT(d, void zoomIn())
         Q_PRIVATE_SLOT(d, void zoomOut())
         Q_PRIVATE_SLOT(d, void toggleDesktopImmutability())
