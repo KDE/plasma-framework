@@ -28,7 +28,7 @@ namespace Plasma
 {
 
 class Containment;
-class Toolbox;
+class ToolBox;
 
 class Containment::Private
 {
@@ -39,7 +39,7 @@ public:
           location(Floating),
           focusedApplet(0),
           screen(-1), // no screen
-          toolbox(0),
+          toolBox(0),
           type(Containment::NoContainmentType),
           positioning(false)
     {
@@ -51,8 +51,8 @@ public:
         applets.clear();
     }
 
-    Toolbox* createToolbox();
-    void positionToolbox();
+    ToolBox* createToolBox();
+    void positionToolBox();
     void triggerShowAddWidgets();
 
     /**
@@ -97,7 +97,7 @@ public:
     Applet *focusedApplet;
     QMap<Applet*, AppletHandle*> handles;
     int screen;
-    Toolbox *toolbox;
+    ToolBox *toolBox;
     Containment::Type type;
     bool positioning;
 };

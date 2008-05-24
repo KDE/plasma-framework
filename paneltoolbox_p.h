@@ -37,18 +37,18 @@ namespace Plasma
 class Widget;
 class EmptyGraphicsItem;
 
-class PanelToolbox : public Toolbox
+class PanelToolBox : public ToolBox
 {
     Q_OBJECT
 
 public:
-    explicit PanelToolbox(QGraphicsItem *parent = 0);
-    ~PanelToolbox();
+    explicit PanelToolBox(QGraphicsItem *parent = 0);
+    ~PanelToolBox();
     QRectF boundingRect() const;
     QPainterPath shape() const;
 
-    void showToolbox();
-    void hideToolbox();
+    void showToolBox();
+    void hideToolBox();
 
 protected:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);

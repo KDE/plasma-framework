@@ -35,7 +35,7 @@
 namespace Plasma
 {
 
-class Toolbox::Private
+class ToolBox::Private
 {
 public:
     Private()
@@ -53,19 +53,19 @@ public:
     Qt::Orientation orientation;
 };
 
-Toolbox::Toolbox(QGraphicsItem *parent)
+ToolBox::ToolBox(QGraphicsItem *parent)
     : QGraphicsItem(parent),
       d(new Private)
 {
     setAcceptsHoverEvents(true);
 }
 
-Toolbox::~Toolbox()
+ToolBox::~ToolBox()
 {
     delete d;
 }
 
-void Toolbox::addTool(QAction *action)
+void ToolBox::addTool(QAction *action)
 {
     if (!action) {
         return;
@@ -87,18 +87,18 @@ void Toolbox::addTool(QAction *action)
     tool->setZValue(zValue() + 1);
 
     //make enabled/disabled tools appear/disappear instantly
-    connect(tool, SIGNAL(changed()), this, SLOT(updateToolbox()));
+    connect(tool, SIGNAL(changed()), this, SLOT(updateToolBox()));
 }
 
-void Toolbox::updateToolbox()
+void ToolBox::updateToolBox()
 {
     if ( d->showing) {
         d->showing = false;
-        showToolbox();
+        showToolBox();
     }
 }
 
-void Toolbox::removeTool(QAction *action)
+void ToolBox::removeTool(QAction *action)
 {
     foreach (QGraphicsItem *child, QGraphicsItem::children()) {
         //kDebug() << "checking tool" << child << child->data(ToolName);
@@ -111,52 +111,52 @@ void Toolbox::removeTool(QAction *action)
     }
 }
 
-int Toolbox::size() const
+int ToolBox::size() const
 {
     return  d->size;
 }
 
-void Toolbox::setSize(const int newSize)
+void ToolBox::setSize(const int newSize)
 {
     d->size = newSize;
 }
 
-QSize Toolbox::iconSize() const
+QSize ToolBox::iconSize() const
 {
     return d->iconSize;
 }
 
-void Toolbox::setIconSize(const QSize newSize)
+void ToolBox::setIconSize(const QSize newSize)
 {
     d->iconSize = newSize;
 }
 
-bool Toolbox::showing() const
+bool ToolBox::showing() const
 {
     return  d->showing;
 }
 
-void Toolbox::setShowing(const bool show)
+void ToolBox::setShowing(const bool show)
 {
     d->showing = show;
 }
 
-Qt::Orientation Toolbox::orientation() const
+Qt::Orientation ToolBox::orientation() const
 {
     return d->orientation;
 }
 
-void Toolbox::setOrientation( Qt::Orientation orient )
+void ToolBox::setOrientation( Qt::Orientation orient )
 {
      d->orientation = orient;
 }
 
-void Toolbox::mousePressEvent(QGraphicsSceneMouseEvent *event)
+void ToolBox::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     event->accept();
 }
 
-void Toolbox::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
+void ToolBox::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
     if (boundingRect().contains(event->pos())) {
         emit toggled();

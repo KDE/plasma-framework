@@ -34,13 +34,13 @@ namespace Plasma
 //class Widget;
 //class EmptyGraphicsItem;
 
-class Toolbox : public QObject, public QGraphicsItem
+class ToolBox : public QObject, public QGraphicsItem
 {
     Q_OBJECT
 
 public:
-    explicit Toolbox(QGraphicsItem *parent = 0);
-    ~Toolbox();
+    explicit ToolBox(QGraphicsItem *parent = 0);
+    ~ToolBox();
 
     /**
      * create a toolbox tool from the given action
@@ -60,13 +60,13 @@ public:
     Qt::Orientation orientation() const;
     void setOrientation(Qt::Orientation orient);
 
-    virtual void showToolbox() = 0;
-    virtual void hideToolbox() = 0;
+    virtual void showToolBox() = 0;
+    virtual void hideToolBox() = 0;
 public Q_SLOTS:
     /**
      * re-show the toolbox, in case any tools have changed
      */
-    void updateToolbox();
+    void updateToolBox();
 Q_SIGNALS:
     void toggled();
 

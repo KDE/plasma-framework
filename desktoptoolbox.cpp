@@ -77,7 +77,7 @@ class EmptyGraphicsItem : public QGraphicsItem
 // used with QGrahphicsItem::setData
 static const int ToolName = 7001;
 
-class DesktopToolbox::Private
+class DesktopToolBox::Private
 {
 public:
     Private()
@@ -99,8 +99,8 @@ public:
     bool hovering : 1;
 };
 
-DesktopToolbox::DesktopToolbox(QGraphicsItem *parent)
-    : Toolbox(parent),
+DesktopToolBox::DesktopToolBox(QGraphicsItem *parent)
+    : ToolBox(parent),
       d(new Private)
 {
     connect(Plasma::Animator::self(), SIGNAL(movementFinished(QGraphicsItem*)), this, SLOT(toolMoved(QGraphicsItem*)));
@@ -111,17 +111,17 @@ DesktopToolbox::DesktopToolbox(QGraphicsItem *parent)
     setFlag(ItemIgnoresTransformations, true);
 }
 
-DesktopToolbox::~DesktopToolbox()
+DesktopToolBox::~DesktopToolBox()
 {
     delete d;
 }
 
-QRectF DesktopToolbox::boundingRect() const
+QRectF DesktopToolBox::boundingRect() const
 {
     return QRectF(0, 0, -size()*2, size()*2);
 }
 
-void DesktopToolbox::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+void DesktopToolBox::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     Q_UNUSED(option)
     Q_UNUSED(widget)
@@ -168,7 +168,7 @@ void DesktopToolbox::paint(QPainter *painter, const QStyleOptionGraphicsItem *op
     painter->restore();
 }
 
-QPainterPath DesktopToolbox::shape() const
+QPainterPath DesktopToolBox::shape() const
 {
     QPainterPath path;
     int toolSize = size() + (int)d->animCircleFrame;
@@ -177,7 +177,7 @@ QPainterPath DesktopToolbox::shape() const
     return path;
 }
 
-void DesktopToolbox::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
+void DesktopToolBox::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 {
     if (showing() || d->hovering) {
         QGraphicsItem::hoverEnterEvent(event);
@@ -193,7 +193,7 @@ void DesktopToolbox::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
     QGraphicsItem::hoverEnterEvent(event);
 }
 
-void DesktopToolbox::showToolbox()
+void DesktopToolBox::showToolBox()
 {
     if (showing()) {
         return;
@@ -248,7 +248,7 @@ void DesktopToolbox::showToolbox()
     d->animCircleId = animdriver->customAnimation(10, 240, Plasma::Animator::EaseInCurve, this, "animateCircle");
 }
 
-void DesktopToolbox::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
+void DesktopToolBox::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 {
     //kDebug() << event->pos() << event->scenePos() << d->toolBacker->rect().contains(event->scenePos().toPoint());
     if (! d->hovering) {
@@ -256,7 +256,7 @@ void DesktopToolbox::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
         return;
     }
 
-    hideToolbox();
+    hideToolBox();
     Plasma::Animator* animdriver = Plasma::Animator::self();
     if (d->animHighlightId) {
         animdriver->stopCustomAnimation(d->animHighlightId);
@@ -267,7 +267,7 @@ void DesktopToolbox::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
     QGraphicsItem::hoverLeaveEvent(event);
 }
 
-void DesktopToolbox::hideToolbox()
+void DesktopToolBox::hideToolBox()
 {
     if (!showing()) {
         return;
@@ -297,7 +297,7 @@ void DesktopToolbox::hideToolbox()
     }
 }
 
-void DesktopToolbox::animateCircle(qreal progress)
+void DesktopToolBox::animateCircle(qreal progress)
 {
     if (showing()) {
         d->animCircleFrame = size() * progress;
@@ -312,7 +312,7 @@ void DesktopToolbox::animateCircle(qreal progress)
     update();
 }
 
-void DesktopToolbox::animateHighlight(qreal progress)
+void DesktopToolBox::animateHighlight(qreal progress)
 {
     if (d->hovering) {
         d->animHighlightFrame = progress;
@@ -327,7 +327,7 @@ void DesktopToolbox::animateHighlight(qreal progress)
     update();
 }
 
-void DesktopToolbox::toolMoved(QGraphicsItem *item)
+void DesktopToolBox::toolMoved(QGraphicsItem *item)
 {
     //kDebug() << "geometry is now " << static_cast<Plasma::Widget*>(item)->geometry();
     if (!showing() &&
@@ -336,12 +336,12 @@ void DesktopToolbox::toolMoved(QGraphicsItem *item)
     }
 }
 
-void DesktopToolbox::toggle()
+void DesktopToolBox::toggle()
 {
     if (showing()) {
-        hideToolbox();
+        hideToolBox();
     } else {
-        showToolbox();
+        showToolBox();
     }
 }
 

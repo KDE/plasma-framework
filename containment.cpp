@@ -178,13 +178,13 @@ void Containment::init()
         activityAction->setShortcut(QKeySequence("ctrl+shift+a"));
         d->actions().addAction("addSiblingContainment", activityAction);
 
-        d->toolbox->addTool(this->action("add widgets"));
-        d->toolbox->addTool(this->action("zoom in"));
-        d->toolbox->addTool(this->action("zoom out"));
+        d->toolBox->addTool(this->action("add widgets"));
+        d->toolBox->addTool(this->action("zoom in"));
+        d->toolBox->addTool(this->action("zoom out"));
         if (immutability() != SystemImmutable) {
-            d->toolbox->addTool(this->action("lock widgets"));
+            d->toolBox->addTool(this->action("lock widgets"));
         }
-        d->toolbox->addTool(this->action("addSiblingContainment"));
+        d->toolBox->addTool(this->action("addSiblingContainment"));
     }
 
     Applet::init();
@@ -292,18 +292,18 @@ void Containment::setContainmentType(Containment::Type type)
     d->type = type;
 
     if (isContainment() && type == DesktopContainment) {
-        if (!d->toolbox) {
-            d->createToolbox();
+        if (!d->toolBox) {
+            d->createToolBox();
         }
     } else if (isContainment() && type == PanelContainment) {
-        if (!d->toolbox) {
-            d->createToolbox();
-            d->toolbox->setSize(22);
-            d->toolbox->setIconSize(QSize(16, 16));
+        if (!d->toolBox) {
+            d->createToolBox();
+            d->toolBox->setSize(22);
+            d->toolBox->setIconSize(QSize(16, 16));
         }
     } else {
-        delete d->toolbox;
-        d->toolbox = 0;
+        delete d->toolBox;
+        d->toolBox = 0;
     }
 }
 
@@ -569,9 +569,9 @@ void Containment::setScreen(int screen)
 #ifndef Q_OS_WIN
         // we want to listen to changes in work area if our screen changes
         if (d->screen < 0 && screen > -1) {
-            connect(KWindowSystem::self(), SIGNAL(workAreaChanged()), this, SLOT(positionToolbox()));
+            connect(KWindowSystem::self(), SIGNAL(workAreaChanged()), this, SLOT(positionToolBox()));
         } else if (screen < 0) {
-            disconnect(KWindowSystem::self(), SIGNAL(workAreaChanged()), this, SLOT(positionToolbox()));
+            disconnect(KWindowSystem::self(), SIGNAL(workAreaChanged()), this, SLOT(positionToolBox()));
         }
 #endif
         if (screen > -1 && corona()) {
@@ -843,40 +843,40 @@ void Containment::enableAction(const QString &name, bool enable)
     }
 }
 
-void Containment::addToolboxTool(QAction *action)
+void Containment::addToolBoxTool(QAction *action)
 {
-    if (d->toolbox) {
-        d->toolbox->addTool(action);
+    if (d->toolBox) {
+        d->toolBox->addTool(action);
     }
 }
 
-void Containment::removeToolboxTool(QAction *action)
+void Containment::removeToolBoxTool(QAction *action)
 {
-    if (d->toolbox) {
-        d->toolbox->removeTool(action);
+    if (d->toolBox) {
+        d->toolBox->removeTool(action);
     }
 }
 
-void Containment::setToolboxOpen(bool open)
+void Containment::setToolBoxOpen(bool open)
 {
     if (open) {
-        openToolbox();
+        openToolBox();
     } else {
-        closeToolbox();
+        closeToolBox();
     }
 }
 
-void Containment::openToolbox()
+void Containment::openToolBox()
 {
-    if (d->toolbox) {
-        d->toolbox->showToolbox();
+    if (d->toolBox) {
+        d->toolBox->showToolBox();
     }
 }
 
-void Containment::closeToolbox()
+void Containment::closeToolBox()
 {
-    if (d->toolbox) {
-        d->toolbox->hideToolbox();
+    if (d->toolBox) {
+        d->toolBox->hideToolBox();
     }
 }
 
@@ -986,15 +986,15 @@ void Containment::destroy()
 void Containment::Private::toggleDesktopImmutability()
 {
     if (q->corona()) {
-        if (q->corona()->immutability() == Mutable) { 
+        if (q->corona()->immutability() == Mutable) {
             q->corona()->setImmutability(UserImmutable);
-        } else if (q->corona()->immutability() == UserImmutable) { 
+        } else if (q->corona()->immutability() == UserImmutable) {
             q->corona()->setImmutability(Mutable);
         }
     } else {
         if (q->immutability() == Mutable) {
             q->setImmutability(UserImmutable);
-        } else if (q->immutability() == UserImmutable) { 
+        } else if (q->immutability() == UserImmutable) {
             q->setImmutability(Mutable);
         }
     }
@@ -1012,45 +1012,45 @@ void Containment::Private::zoomOut()
     emit q->zoomRequested(q, Plasma::ZoomOut);
 }
 
-Toolbox* Containment::Private::createToolbox()
+ToolBox* Containment::Private::createToolBox()
 {
-    if (!toolbox) {
+    if (!toolBox) {
         switch (type) {
         case PanelContainment:
-            toolbox = new PanelToolbox(q);
-            connect(toolbox, SIGNAL(toggled()), q, SIGNAL(toolboxToggled()));
+            toolBox = new PanelToolBox(q);
+            connect(toolBox, SIGNAL(toggled()), q, SIGNAL(toolBoxToggled()));
             break;
         //defaults to DesktopContainment right now
         default:
-            toolbox = new DesktopToolbox(q);
-            connect(toolbox, SIGNAL(toggled()), toolbox, SLOT(toggle()));
+            toolBox = new DesktopToolBox(q);
+            connect(toolBox, SIGNAL(toggled()), toolBox, SLOT(toggle()));
             break;
         }
-        positionToolbox();
+        positionToolBox();
 
     }
 
-    return toolbox;
+    return toolBox;
 }
 
-void Containment::Private::positionToolbox()
+void Containment::Private::positionToolBox()
 {
-    if (!toolbox) {
+    if (!toolBox) {
         return;
     }
 
     //The placement assumes that the geometry width/height is no more than the screen
     if (type == PanelContainment) {
         if (q->formFactor() == Vertical) {
-            toolbox->setOrientation(Qt::Vertical);
-            toolbox->setPos(q->geometry().width()/2 - toolbox->boundingRect().width()/2, q->geometry().height());
+            toolBox->setOrientation(Qt::Vertical);
+            toolBox->setPos(q->geometry().width()/2 - toolBox->boundingRect().width()/2, q->geometry().height());
         //defaulting to Horizontal right now
         } else {
-            toolbox->setOrientation(Qt::Horizontal);
+            toolBox->setOrientation(Qt::Horizontal);
             if (QApplication::layoutDirection() == Qt::RightToLeft) {
-                toolbox->setPos(q->geometry().left(), q->geometry().height()/2 - toolbox->boundingRect().height()/2);
+                toolBox->setPos(q->geometry().left(), q->geometry().height()/2 - toolBox->boundingRect().height()/2);
             } else {
-                toolbox->setPos(q->geometry().width(), q->geometry().height()/2 - toolbox->boundingRect().height()/2);
+                toolBox->setPos(q->geometry().width(), q->geometry().height()/2 - toolBox->boundingRect().height()/2);
             }
         }
     } else {
@@ -1058,12 +1058,12 @@ void Containment::Private::positionToolbox()
         QDesktopWidget *desktop = QApplication::desktop();
         r = desktop->availableGeometry(screen);
         if (q->view() && !q->view()->transform().isScaling()) {
-            toolbox->setPos(r.topRight());
+            toolBox->setPos(r.topRight());
         } else {
-            toolbox->setPos(q->mapFromScene(QPointF(q->geometry().topRight())));
+            toolBox->setPos(q->mapFromScene(QPointF(q->geometry().topRight())));
         }
     }
-    
+
 }
 
 void Containment::Private::triggerShowAddWidgets()
@@ -1083,7 +1083,7 @@ void Containment::Private::containmentConstraintsEvent(Plasma::Constraints const
         return;
     }
 
-    //kDebug() << "got containmentConstraintsEvent" << constraints << (QObject*)toolbox;
+    //kDebug() << "got containmentConstraintsEvent" << constraints << (QObject*)toolBox;
     if (constraints & Plasma::ImmutableConstraint) {
         //update actions
         bool unlocked = q->immutability() == Mutable;
@@ -1111,25 +1111,25 @@ void Containment::Private::containmentConstraintsEvent(Plasma::Constraints const
 
         if (q->isContainment() && type == PanelContainment) {
             if (unlocked) {
-                toolbox->show();
+                toolBox->show();
             } else {
-                toolbox->hide();
+                toolBox->hide();
             }
         }
     }
 
     if ((constraints & Plasma::SizeConstraint || constraints & Plasma::ScreenConstraint) &&
-         toolbox) {
-        positionToolbox();
+         toolBox) {
+        positionToolBox();
     }
 
     if (constraints & Plasma::FormFactorConstraint) {
-        if (toolbox) {
+        if (toolBox) {
             if (q->formFactor() == Vertical) {
-                toolbox->setOrientation(Qt::Vertical);
+                toolBox->setOrientation(Qt::Vertical);
                 //defaults to horizontal
             } else {
-                toolbox->setOrientation(Qt::Horizontal);
+                toolBox->setOrientation(Qt::Horizontal);
             }
         }
 

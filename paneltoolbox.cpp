@@ -76,7 +76,7 @@ class EmptyGraphicsItem : public QGraphicsItem
 // used with QGrahphicsItem::setData
 static const int ToolName = 7001;
 
-class PanelToolbox::Private
+class PanelToolBox::Private
 {
 public:
     Private()
@@ -93,8 +93,8 @@ public:
     qreal animFrame;
 };
 
-PanelToolbox::PanelToolbox(QGraphicsItem *parent)
-    : Toolbox(parent),
+PanelToolBox::PanelToolBox(QGraphicsItem *parent)
+    : ToolBox(parent),
       d(new Private)
 {
     connect(Plasma::Animator::self(), SIGNAL(movementFinished(QGraphicsItem*)), this, SLOT(toolMoved(QGraphicsItem*)));
@@ -105,12 +105,12 @@ PanelToolbox::PanelToolbox(QGraphicsItem *parent)
     setFlag(ItemIgnoresTransformations, true);
 }
 
-PanelToolbox::~PanelToolbox()
+PanelToolBox::~PanelToolBox()
 {
     delete d;
 }
 
-QRectF PanelToolbox::boundingRect() const
+QRectF PanelToolBox::boundingRect() const
 {
     if (orientation() == Qt::Vertical) {
         return QRectF(0, 0, size()*2, -size());
@@ -122,7 +122,7 @@ QRectF PanelToolbox::boundingRect() const
     }
 }
 
-void PanelToolbox::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+void PanelToolBox::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     Q_UNUSED(option)
     Q_UNUSED(widget)
@@ -187,7 +187,7 @@ void PanelToolbox::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
 
 }
 
-QPainterPath PanelToolbox::shape() const
+QPainterPath PanelToolBox::shape() const
 {
     QPainterPath path;
     int toolSize = size();// + (int)d->animFrame;
@@ -203,18 +203,18 @@ QPainterPath PanelToolbox::shape() const
     return path;
 }
 
-void PanelToolbox::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
+void PanelToolBox::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 {
     if (showing() || d->stopwatch.elapsed() < 100) {
         QGraphicsItem::hoverEnterEvent(event);
         return;
     }
 
-    showToolbox();
+    showToolBox();
     QGraphicsItem::hoverEnterEvent(event);
 }
 
-void PanelToolbox::showToolbox()
+void PanelToolBox::showToolBox()
 {
     if (showing()) {
         return;
@@ -270,7 +270,7 @@ void PanelToolbox::showToolbox()
     d->stopwatch.restart();
 }
 
-void PanelToolbox::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
+void PanelToolBox::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 {
     //kDebug() << event->pos() << event->scenePos() << d->toolBacker->rect().contains(event->scenePos().toPoint());
     if ((d->toolBacker && d->toolBacker->rect().contains(event->scenePos().toPoint())) ||
@@ -278,11 +278,11 @@ void PanelToolbox::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
         QGraphicsItem::hoverLeaveEvent(event);
         return;
     }
-    hideToolbox();
+    hideToolBox();
     QGraphicsItem::hoverLeaveEvent(event);
 }
 
-void PanelToolbox::hideToolbox()
+void PanelToolBox::hideToolBox()
 {
     if (!showing()) {
         return;
@@ -314,7 +314,7 @@ void PanelToolbox::hideToolbox()
     d->stopwatch.restart();
 }
 
-void PanelToolbox::animate(qreal progress)
+void PanelToolBox::animate(qreal progress)
 {
     if (showing()) {
         d->animFrame = size() * progress;
@@ -331,7 +331,7 @@ void PanelToolbox::animate(qreal progress)
     update();
 }
 
-void PanelToolbox::toolMoved(QGraphicsItem *item)
+void PanelToolBox::toolMoved(QGraphicsItem *item)
 {
     //kDebug() << "geometry is now " << static_cast<Plasma::Widget*>(item)->geometry();
     if (!showing() &&

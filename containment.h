@@ -49,7 +49,7 @@ class View;
  * Containment objects provide the means to group applets into functional sets.
  * They also provide the following:
  *
- * creation of focussing event 
+ * creation of focussing event
  * - drawing of the background image (which can be interactive)
  * - form factors (e.g. panel, desktop, full screen, etc)
  * - applet layout management
@@ -230,29 +230,29 @@ class PLASMA_EXPORT Containment : public Applet
         /**
          * Add an action to the toolbox
          */
-        void addToolboxTool(QAction *action);
+        void addToolBoxTool(QAction *action);
 
         /**
          * Remove an action from the toolbox
          */
-        void removeToolboxTool(QAction *action);
+        void removeToolBoxTool(QAction *action);
 
         /**
          * Sets the open or closed state of the Containment's toolbox
          *
-         * @arg open true to open the Toolbox, false to close it
+         * @arg open true to open the ToolBox, false to close it
          */
-        void setToolboxOpen(bool open);
+        void setToolBoxOpen(bool open);
 
         /**
          * Open the Containment's toolbox
          */
-        void openToolbox();
+        void openToolBox();
 
         /**
          * Closes Containment's toolbox
          */
-        void closeToolbox();
+        void closeToolBox();
 
         /**
          * associate actions with this widget, including ones added after this call.
@@ -285,7 +285,7 @@ class PLASMA_EXPORT Containment : public Applet
         /**
          * Emitted when the user clicks on the toolbox
          */
-        void toolboxToggled();
+        void toolBoxToggled();
 
         /**
          * Emitted when the containment wants a new containment to be created.
@@ -398,7 +398,7 @@ class PLASMA_EXPORT Containment : public Applet
         Q_PRIVATE_SLOT(d, void appletAnimationComplete(QGraphicsItem *item, Plasma::Animator::Animation anim))
         Q_PRIVATE_SLOT(d, void triggerShowAddWidgets())
         Q_PRIVATE_SLOT(d, void handleDisappeared(AppletHandle *handle))
-        Q_PRIVATE_SLOT(d, void positionToolbox())
+        Q_PRIVATE_SLOT(d, void positionToolBox())
         Q_PRIVATE_SLOT(d, void zoomIn())
         Q_PRIVATE_SLOT(d, void zoomOut())
         Q_PRIVATE_SLOT(d, void toggleDesktopImmutability())
