@@ -6,7 +6,7 @@
  *   it under the terms of the GNU Library General Public License as
  *   published by the Free Software Foundation; either version 2, or
  *   (at your option) any later version.
- *
+
  *   This program is distributed in the hope that it will be useful,
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of
  *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -26,11 +26,13 @@
 
 #include "animator.h"
 
+class QAction;
+
 namespace Plasma
 {
 
-class Widget;
-class EmptyGraphicsItem;
+//class Widget;
+//class EmptyGraphicsItem;
 
 class Toolbox : public QObject, public QGraphicsItem
 {
@@ -40,10 +42,15 @@ public:
     explicit Toolbox(QGraphicsItem *parent = 0);
     ~Toolbox();
 
-    void addTool(QGraphicsItem *tool, const QString &name);
-    void enableTool(const QString &tool, bool enabled);
-    bool isToolEnabled(const QString &tool) const;
-    QGraphicsItem* tool(const QString &tool) const;
+    /**
+     * create a toolbox tool from the given action
+     * @p action the action to associate hte tool with
+     */
+    void addTool(QAction *action);
+    /**
+     * remove the tool associated with this action
+     */
+    void removeTool(QAction *action);
     int size() const;
     void setSize(const int newSize);
     QSize iconSize() const;
@@ -55,7 +62,11 @@ public:
 
     virtual void showToolbox() = 0;
     virtual void hideToolbox() = 0;
-
+public Q_SLOTS:
+    /**
+     * re-show the toolbox, in case any tools have changed
+     */
+    void updateToolbox();
 Q_SIGNALS:
     void toggled();
 

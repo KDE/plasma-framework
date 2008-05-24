@@ -103,7 +103,7 @@ public:
     Q_DECLARE_FLAGS(IconStates, IconState)
 
 public:
-    Private();
+    Private(Icon *i);
     ~Private();
 
     void drawBackground(QPainter *painter, IconState state);
@@ -162,7 +162,12 @@ public:
     inline QSizeF subtractMargin(const QSizeF &size, MarginType type) const;
     inline QRectF actionRect(ActionPosition position) const;
 
+    /**
+     * update the icon's text, icon, etc. to reflect the properties of its associated action.
+     */
+    void syncToAction();
 
+    Icon *q;
     QString text;
     QString infoText;
     Svg *iconSvg;
@@ -184,6 +189,7 @@ public:
     QPointF clickStartPos;
 
     QList<IconAction*> cornerActions;
+    QAction *action;
 
     Margin verticalMargin[NMargins];
     Margin horizontalMargin[NMargins];

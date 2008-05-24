@@ -21,20 +21,19 @@
 
 #include "toolbox_p.h"
 
+#include <QAction>
 #include <QGraphicsSceneHoverEvent>
 #include <QPainter>
 #include <QRadialGradient>
 
-#include <plasma/theme.h>
 #include <KColorScheme>
-
 #include <KDebug>
+
+#include <plasma/theme.h>
+#include "widgets/icon.h"
 
 namespace Plasma
 {
-
-// used with QGrahphicsItem::setData
-static const int ToolName = 7001;
 
 class Toolbox::Private
 {
@@ -66,57 +65,50 @@ Toolbox::~Toolbox()
     delete d;
 }
 
-void Toolbox::addTool(QGraphicsItem *tool, const QString &name)
+void Toolbox::addTool(QAction *action)
 {
-    if (!tool) {
+    if (!action) {
         return;
     }
+
+    Plasma::Icon *tool = new Plasma::Icon(this);
+
+    tool->setAction(action);
+    tool->setDrawBackground(true);
+    tool->setOrientation(Qt::Horizontal);
+    QSizeF iconSize = tool->sizeFromIconSize(22);
+    tool->setMinimumSize(iconSize);
+    tool->setMaximumSize(iconSize);
+    tool->resize(tool->size());
 
     tool->hide();
     const int height = static_cast<int>(tool->boundingRect().height());
     tool->setPos(QPoint( d->size*2,-height));
     tool->setZValue(zValue() + 1);
-    tool->setParentItem(this);
-    tool->setData(ToolName, name);
+
+    //make enabled/disabled tools appear/disappear instantly
+    connect(tool, SIGNAL(changed()), this, SLOT(updateToolbox()));
 }
 
-void Toolbox::enableTool(const QString &toolName, bool visible)
+void Toolbox::updateToolbox()
 {
-    //kDebug() << (visible? "enabling" : "disabling") << "tool" << toolName;
-    QGraphicsItem *t = tool(toolName);
-
-    if (t && t->isEnabled() != visible) {
-        t->setEnabled(visible);
-        // adjust the visible items
-        if ( d->showing) {
-             d->showing = false;
-            showToolbox();
-        }
+    if ( d->showing) {
+        d->showing = false;
+        showToolbox();
     }
 }
 
-bool Toolbox::isToolEnabled(const QString &toolName) const
-{
-    QGraphicsItem *t = tool(toolName);
-
-    if (t) {
-        return t->isEnabled();
-    }
-
-    return false;
-}
-
-QGraphicsItem* Toolbox::tool(const QString &toolName) const
+void Toolbox::removeTool(QAction *action)
 {
     foreach (QGraphicsItem *child, QGraphicsItem::children()) {
         //kDebug() << "checking tool" << child << child->data(ToolName);
-        if (child->data(ToolName).toString() == toolName) {
+        Plasma::Icon *tool = dynamic_cast<Plasma::Icon*>(child);
+        if (tool && tool->action() == action) {
             //kDebug() << "tool found!";
-            return child;
+            tool->deleteLater();
+            break;
         }
     }
-
-    return 0;
 }
 
 int Toolbox::size() const

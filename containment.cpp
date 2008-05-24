@@ -168,6 +168,13 @@ void Containment::init()
         zoomAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
         zoomAction->setShortcut(QKeySequence("ctrl+-"));
         d->actions().addAction("zoom out", zoomAction);
+
+        d->toolBox->addTool(this->action("add widgets"));
+        d->toolBox->addTool(this->action("zoom in"));
+        d->toolBox->addTool(this->action("zoom out"));
+        if (immutability() != SystemImmutable) {
+            d->toolBox->addTool(this->action("lock widgets"));
+        }
     }
 
     Applet::init();
@@ -276,24 +283,12 @@ void Containment::setContainmentType(Containment::Type type)
 
     if (isContainment() && type == DesktopContainment) {
         if (!d->toolBox) {
-            QGraphicsWidget *addWidgetTool = addToolBoxTool("addwidgets", "list-add", i18n("Add Widgets"));
-            connect(addWidgetTool, SIGNAL(clicked()), this, SLOT(triggerShowAddWidgets()));
+            d->createToolBox();
 
-            QGraphicsWidget *zoomInTool = addToolBoxTool("zoomIn", "zoom-in", i18n("Zoom In"));
-            connect(zoomInTool, SIGNAL(clicked()), this, SLOT(zoomIn()));
-
-            QGraphicsWidget *zoomOutTool = addToolBoxTool("zoomOut", "zoom-out", i18n("Zoom Out"));
-            connect(zoomOutTool, SIGNAL(clicked()), this, SLOT(zoomOut()));
-
-            if (immutability() != SystemImmutable) {
-                QGraphicsWidget *lockTool = addToolBoxTool("lockWidgets", "object-locked",
-                                                          immutability() == UserImmutable ? i18n("Unlock Widgets") :
-                                                                          i18n("Lock Widgets"));
-                connect(lockTool, SIGNAL(clicked()), this, SLOT(toggleDesktopImmutability()));
-            }
-
+            /* FIXME activity action
             QGraphicsWidget *activityTool = addToolBoxTool("addSiblingContainment", "list-add", i18n("Add Activity"));
             connect(activityTool, SIGNAL(clicked()), this, SLOT(addSiblingContainment()));
+            */
         }
     } else if (isContainment() && type == PanelContainment) {
         if (!d->toolBox) {
@@ -817,37 +812,27 @@ QVariant Containment::itemChange(GraphicsItemChange change, const QVariant &valu
     return Applet::itemChange(change, value);
 }
 
-QGraphicsWidget * Containment::addToolBoxTool(const QString& toolName, const QString& iconName, const QString& iconText)
+void Containment::enableAction(const QString &name, bool enable)
 {
-    Plasma::Icon *tool = new Plasma::Icon(this);
-
-    tool->setDrawBackground(true);
-    tool->setIcon(KIcon(iconName));
-    tool->setText(iconText);
-    tool->setOrientation(Qt::Horizontal);
-    QSizeF iconSize = tool->sizeFromIconSize(22);
-    tool->setMinimumSize(iconSize);
-    tool->setMaximumSize(iconSize);
-    tool->resize(tool->size());
-
-    d->createToolBox()->addTool(tool, toolName);
-
-    return tool;
-}
-
-void Containment::enableToolBoxTool(const QString &toolname, bool enable)
-{
-    if (d->toolBox) {
-        d->toolBox->enableTool(toolname, enable);
+    QAction *action = this->action(name);
+    if (action) {
+        action->setEnabled(enable);
+        action->setVisible(enable);
     }
 }
 
-bool Containment::isToolBoxToolEnabled(const QString &toolname) const
+void Containment::addToolboxTool(QAction *action)
 {
     if (d->toolBox) {
-        return d->toolBox->isToolEnabled(toolname);
+        d->toolBox->addTool(action);
     }
-    return false;
+}
+
+void Containment::removeToolboxTool(QAction *action)
+{
+    if (d->toolBox) {
+        d->toolBox->removeTool(action);
+    }
 }
 
 void Containment::setToolBoxOpen(bool open)
@@ -1070,24 +1055,6 @@ void Containment::Private::handleDisappeared(AppletHandle *handle)
     handle->deleteLater();
 }
 
-void Containment::Private::setLockToolText()
-{
-    if (!toolBox) {
-        return;
-    }
-
-    Icon *icon = dynamic_cast<Plasma::Icon*>(toolBox->tool("lockWidgets"));
-    if (icon) {
-        // we know it's an icon becase we made it
-        icon->setText(q->immutability() != Mutable ? i18n("Unlock Widgets") :
-                                            i18n("Lock Widgets"));
-        QSizeF iconSize = icon->sizeFromIconSize(22);
-        icon->setMinimumSize(iconSize);
-        icon->setMaximumSize(iconSize);
-        icon->resize(icon->size());
-    }
-}
-
 void Containment::Private::containmentConstraintsEvent(Plasma::Constraints constraints)
 {
     if (!q->isContainment()) {
@@ -1096,7 +1063,6 @@ void Containment::Private::containmentConstraintsEvent(Plasma::Constraints const
 
     //kDebug() << "got containmentConstraintsEvent" << constraints << (QObject*)toolBox;
     if (constraints & Plasma::ImmutableConstraint) {
-        setLockToolText();
         //update actions
         bool unlocked = q->immutability() == Mutable;
         QAction *action = actions().action("add widgets");
@@ -1127,7 +1093,7 @@ void Containment::Private::containmentConstraintsEvent(Plasma::Constraints const
     if ((constraints & Plasma::SizeConstraint || constraints & Plasma::ScreenConstraint) &&
          toolBox) {
         positionToolBox();
-        toolBox->enableTool("addwidgets", q->immutability() == Mutable);
+        //toolBox->enableTool("addwidgets", q->immutability() == Mutable);
     }
 
     if (constraints & Plasma::FormFactorConstraint) {

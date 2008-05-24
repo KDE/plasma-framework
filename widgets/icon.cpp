@@ -58,14 +58,16 @@
 namespace Plasma
 {
 
-Icon::Private::Private()
-    : iconSvg(0),
+Icon::Private::Private(Icon *i)
+    : q(i),
+      iconSvg(0),
       iconSize(48, 48),
       states(Private::NoState),
       orientation(Qt::Vertical),
       numDisplayLines(2),
       invertLayout(false),
-      drawBg(false)
+      drawBg(false),
+      action(0)
 {
     m_hoverAnimId = -1;
     m_hoverAlpha = 20/255;
@@ -258,14 +260,14 @@ void IconAction::paint(QPainter *painter) const
 
 Icon::Icon(QGraphicsItem *parent)
     : QGraphicsWidget(parent),
-      d(new Private)
+      d(new Private(this))
 {
     init();
 }
 
 Icon::Icon(const QString &text, QGraphicsItem *parent)
     : QGraphicsWidget(parent),
-      d(new Private)
+      d(new Private(this))
 {
     setText(text);
     init();
@@ -273,7 +275,7 @@ Icon::Icon(const QString &text, QGraphicsItem *parent)
 
 Icon::Icon(const QIcon &icon, const QString &text, QGraphicsItem *parent)
     : QGraphicsWidget(parent),
-      d(new Private)
+      d(new Private(this))
 {
     setText(text);
     setIcon(icon);
@@ -311,11 +313,11 @@ void Icon::init()
     //setDrawStandardBackground(false);
 }
 
-void Icon::addAction(QAction *action)
+void Icon::addIconAction(QAction *action)
 {
     int count = d->cornerActions.count();
     if (count > 3) {
-        kDebug() << "Icon::addAction(QAction*) no more room for more actions!";
+        kDebug() << "no more room for more actions!";
     }
 
     IconAction* iconAction = new IconAction(this, action);
@@ -323,6 +325,25 @@ void Icon::addAction(QAction *action)
     connect(action, SIGNAL(destroyed(QObject*)), this, SLOT(actionDestroyed(QObject*)));
 
     iconAction->setRect(d->actionRect((Private::ActionPosition)count));
+}
+
+void Icon::setAction(QAction *action)
+{
+    if (d->action) {
+        disconnect(d->action, 0, this, 0);
+        disconnect(this, 0, d->action, 0);
+    }
+    d->action = action;
+    if (action) {
+        connect(action, SIGNAL(changed()), this, SLOT(syncToAction()));
+        connect(this, SIGNAL(clicked()), action, SLOT(trigger()));
+        d->syncToAction();
+    }
+}
+
+QAction* Icon::action() const
+{
+    return d->action;
 }
 
 void Icon::actionDestroyed(QObject* action)
@@ -1101,6 +1122,21 @@ void Icon::setPressed(bool pressed)
 void Icon::setUnpressed()
 {
     setPressed(false);
+}
+
+void Icon::Private::syncToAction()
+{
+    if (!action) {
+        return;
+    }
+    //we don't get told *what* changed, just that something changed
+    //so we update everything we care about
+    q->setIcon(action->icon());
+    q->setText(action->iconText());
+    q->setEnabled(action->isEnabled());
+    //TODO use action's tooltip too
+
+    emit q->changed();
 }
 
 void Icon::setOrientation(Qt::Orientation orientation)

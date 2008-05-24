@@ -220,28 +220,22 @@ class PLASMA_EXPORT Containment : public Applet
         void restore(KConfigGroup &group);
 
         /**
-         * Constructs a ToolBox item and adds it to the toolbox. The toolbox takes over ownership of the item. Returns the constructed tool.
-         * 
-         * @param toolName the name of the tool
-         * @param iconName the name of the icon
-         * @param iconText the text to be displayed on the icon
+         * convenience function - enables or disables an action by name
          *
-         * @return the constructed tool
-         */
-        QGraphicsWidget* addToolBoxTool(const QString &toolName = QString(), const QString &iconName = QString(), const QString &iconText = QString());
-
-        /**
-         * Enables or disables a toolbox tool by name
-         *
-         * @param toolName the name of the tool
+         * @param name the name of the action in our collection
          * @param enable true to enable, false to disable
          */
-        void enableToolBoxTool(const QString &toolName, bool enable);
+        void enableAction(const QString &name, bool enable);
 
         /**
-         * Returns whether or not a given toolbox tool is enabled
+         * Add an action to the toolbox
          */
-        bool isToolBoxToolEnabled(const QString &toolName) const;
+        void addToolboxTool(QAction *action);
+
+        /**
+         * Remove an action from the toolbox
+         */
+        void removeToolboxTool(QAction *action);
 
         /**
          * Sets the open or closed state of the Containment's toolbox

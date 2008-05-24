@@ -54,6 +54,7 @@ class PLASMA_EXPORT Icon : public QGraphicsWidget
     Q_PROPERTY( QIcon icon READ icon WRITE setIcon )
     Q_PROPERTY( QSizeF iconSize READ iconSize )
     Q_PROPERTY( QString svg WRITE setSvg )
+//    Q_PROPERTY( QAction action READ action WRITE setAction )
 public:
     /**
     * Creates a new Plasma::Icon.
@@ -136,12 +137,24 @@ public:
 
     /**
     * Plasma::Icon allows the user to specify a number of actions
-    * (current four) to be displayed around the widget. This method
-    * allows for a created QAction (not a KAction!) to be added to 
-    * the Plasma::Icon.
+    * (currently four) to be displayed around the widget. This method
+    * allows for a created QAction to be added to the Plasma::Icon.
     * @param action the QAction to associate with this icon.
     */
-    void addAction(QAction* action);
+    void addIconAction(QAction* action);
+
+    /**
+     * Associate an action with this Icon
+     * this makes the Icon follow the state of the action, using its icon, text, etc.
+     * when the Icon is clicked, it will also trigger the action.
+     * Unlike addIconAction, there can be only one associated action.
+     */
+    void setAction(QAction *action);
+
+    /**
+     * @return the currently associated action, if any.
+     */
+    QAction* action() const;
 
     /**
     * let set the orientation of the icon
@@ -235,6 +248,12 @@ Q_SIGNALS:
     */
     void activated();
 
+    /**
+     * Indicates that something about the icon may have changed (image, text, etc)
+     * only actually works for icons associated with an action
+     */
+    void changed();
+
 protected:
     bool isDown();
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
@@ -254,6 +273,7 @@ public:
     void drawActionButtonBase(QPainter* painter, const QSize &size, int element);
 
 private:
+    Q_PRIVATE_SLOT(d, void syncToAction())
     void init();
     void layoutIcons(const QStyleOptionGraphicsItem *option);
     void hoverEffect(bool);
