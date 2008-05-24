@@ -366,7 +366,7 @@ void PanelSvg::paintPanel(QPainter* painter, const QRectF& rect, const QPointF& 
 
 void PanelSvg::Private::generateBackground(PanelData *panel)
 {
-    kDebug() << "generating background";
+    //kDebug() << "generating background";
     bool origined = panel->contentAtOrigin;
     const int topWidth = q->elementSize(prefix + "top").width();
     const int leftHeight = q->elementSize(prefix + "left").height();
