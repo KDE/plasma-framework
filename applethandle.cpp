@@ -408,16 +408,18 @@ void AppletHandle::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
                             QList<Containment*> containments = corona->containments();
                             for (int i = 0; i < containments.size(); ++i) {
                                 QPointF pos;
-                                pos = containments[i]->view()->mapToScene(containments[i]->view()
-                                                     ->mapFromGlobal(m_screenRect.topLeft()));
+                                if (containments[i]->view()) {
+                                    pos = containments[i]->view()->mapToScene(containments[i]->view()
+                                                         ->mapFromGlobal(m_screenRect.topLeft()));
 
-                                if (containments[i]->sceneBoundingRect().contains(pos)) {
-                                    //kDebug() << "new containment = " << containments[i];
-                                    kDebug() << "rect = " << containments[i]->sceneBoundingRect();
-                                    // add the applet to the new containment and take it from the old one
-                                    kDebug() << "moving to other containment with position" << pos;;
-                                    switchContainment(containments[i], pos);
-                                    break;
+                                    if (containments[i]->sceneBoundingRect().contains(pos)) {
+                                        //kDebug() << "new containment = " << containments[i];
+                                        kDebug() << "rect = " << containments[i]->sceneBoundingRect();
+                                        // add the applet to the new containment and take it from the old one
+                                        kDebug() << "moving to other containment with position" << pos;;
+                                        switchContainment(containments[i], pos);
+                                        break;
+                                    }
                                 }
                             }
                         }
