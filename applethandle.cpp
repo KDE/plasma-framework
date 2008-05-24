@@ -35,6 +35,7 @@
 #include <math.h>
 
 #include "applet.h"
+#include "applet_p.h"
 #include "containment.h"
 #include "corona.h"
 #include "theme.h"
@@ -382,7 +383,8 @@ void AppletHandle::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
                     m_topview->hide();
                     delete m_topview;
                     m_topview = 0;
-                    m_applet->setGhostView(0);
+                    m_applet->d->ghostView = 0;
+                    m_applet->update();
                 }
 
                 //find out if we were dropped on a panel or something
@@ -486,7 +488,8 @@ void AppletHandle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
                 m_topview->hide();
                 delete m_topview;
                 m_topview = 0;
-                m_applet->setGhostView(0);
+                m_applet->d->ghostView = 0;
+                m_applet->update();
             }
         } else {
             if (!m_topview) { //create a new toplevel view
@@ -523,7 +526,8 @@ void AppletHandle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
                 m_topview->show();
 
-                m_applet->setGhostView(m_containment->view());
+                m_applet->d->ghostView = m_containment->view();
+                m_applet->update();
 
                 //TODO: non compositing users are screwed: masking looks terrible.
                 //Consider always enabling the applet background. Stuff like the analog clock

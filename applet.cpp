@@ -899,17 +899,6 @@ void Applet::setAspectRatioMode(Plasma::AspectRatioMode mode)
     d->aspectRatioMode = mode;
 }
 
-QGraphicsView * Applet::ghostView()
-{
-    return d->ghostView;
-}
-
-void Applet::setGhostView( QGraphicsView * view )
-{
-    d->ghostView = view;
-    update();
-}
-
 void Applet::registerAsDragHandle( QGraphicsItem * item )
 {
     if (!item) {
