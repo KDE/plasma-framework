@@ -502,6 +502,10 @@ void Icon::setSvg(const QString &svgFilePath, const QString &elementId)
 
 void Icon::hoverEffect(bool show)
 {
+    if (d->m_hoverAnimId == -1 && !d->drawBg) {
+        return;
+    }
+
     d->m_fadeIn = show;
     const int FadeInDuration = 150;
 
