@@ -69,6 +69,19 @@ void KCategorizedItemsViewDelegate::paint(QPainter *painter,
     }
 }
 
+int KCategorizedItemsViewDelegate::calcItemHeight(const QStyleOptionViewItem &option) const
+{
+    // Painting main column
+    QStyleOptionViewItem local_option_title(option);
+    QStyleOptionViewItem local_option_normal(option);
+
+    local_option_title.font.setBold(true);
+    local_option_title.font.setPointSize(local_option_title.font.pointSize() + 2);
+
+    int textHeight = QFontInfo(local_option_title.font).pixelSize() + QFontInfo(local_option_normal.font).pixelSize();
+    return qMax(textHeight, MAIN_ICON_SIZE) + 2 * UNIVERSAL_PADDING;
+}
+
 void KCategorizedItemsViewDelegate::paintColMain(QPainter *painter,
         const QStyleOptionViewItem &option, const KCategorizedItemsViewModels::AbstractItem * item) const
 {
@@ -103,19 +116,20 @@ void KCategorizedItemsViewDelegate::paintColMain(QPainter *painter,
 
     // Text
     int textInner = 2 * UNIVERSAL_PADDING + MAIN_ICON_SIZE;
+    const int itemHeight = calcItemHeight(option);
 
     p.setPen(foregroundColor);
     p.setFont(local_option_title.font);
     p.drawText(
             left + (leftToRight ? textInner : 0),
-            top + UNIVERSAL_PADDING,
-            width - textInner, MAIN_ICON_SIZE / 2,
+            top,
+            width - textInner, itemHeight / 2,
             Qt::AlignBottom | Qt::AlignLeft, title);
     p.setFont(local_option_normal.font);
     p.drawText(
             left + (leftToRight ? textInner : 0),
-            top + UNIVERSAL_PADDING + MAIN_ICON_SIZE / 2,
-            width - textInner, MAIN_ICON_SIZE / 2,
+            top + itemHeight / 2,
+            width - textInner, itemHeight / 2,
             Qt::AlignTop | Qt::AlignLeft, description);
 
     // Main icon
@@ -274,11 +288,8 @@ bool KCategorizedItemsViewDelegate::editorEvent(QEvent *event,
 QSize KCategorizedItemsViewDelegate::sizeHint(const QStyleOptionViewItem &option,
         const QModelIndex &index ) const
 {
-    Q_UNUSED(option);
-
-    //Q_UNUSED(index);
     int width = (index.column() == 0) ? 0 : FAV_ICON_SIZE;
-    return QSize(width, MAIN_ICON_SIZE + 2 * UNIVERSAL_PADDING);
+    return QSize(width, calcItemHeight(option));
 }
 
 int KCategorizedItemsViewDelegate::columnWidth (int column, int viewWidth) const {

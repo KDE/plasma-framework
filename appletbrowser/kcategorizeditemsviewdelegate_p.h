@@ -71,6 +71,8 @@ private:
             const QStyleOptionViewItem &option, const KCategorizedItemsViewModels::AbstractItem * item) const;
     void paintColRemove(QPainter *painter,
             const QStyleOptionViewItem &option, const KCategorizedItemsViewModels::AbstractItem * item) const;
+    
+    int calcItemHeight(const QStyleOptionViewItem &option) const;
 };
 
 /**
