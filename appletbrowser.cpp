@@ -221,7 +221,10 @@ QString AppletBrowserWidget::application()
 
 void AppletBrowserWidget::setContainment(Plasma::Containment *containment)
 {
-    d->containment = containment;
+    if (d->containment != containment) {
+        d->containment = containment;
+        d->initRunningApplets();
+    }
 }
 
 Containment *AppletBrowserWidget::containment() const
