@@ -502,7 +502,17 @@ void Icon::setSvg(const QString &svgFilePath, const QString &elementId)
 
 void Icon::hoverEffect(bool show)
 {
+    if (show) {
+        d->states |= Private::HoverState;
+    }
+
     if (d->m_hoverAnimId == -1 && !d->drawBg) {
+        // we do this only when we don't do the anim, because
+        // this gets set at animation end when we are animating
+        if (!show) {
+            d->states &= ~Private::HoverState;
+        }
+
         return;
     }
 
@@ -1091,7 +1101,6 @@ void Icon::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
         action->show();
         action->event(event->type(), event->pos());
     }
-    d->states |= Private::HoverState;
     hoverEffect(true);
     update();
 
