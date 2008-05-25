@@ -344,16 +344,12 @@ QGraphicsView *Applet::view() const
 
 QRectF Applet::mapFromView(const QGraphicsView *view, const QRect &rect) const
 {
-    // TODO: Confirm that adjusted() is needed and is not covering for some
-    // issue elsewhere
-    return mapFromScene(view->mapToScene(rect)).boundingRect().adjusted(0, 0, 1, 1);
+    return mapFromScene(view->mapToScene(rect)).boundingRect();
 }
 
 QRect Applet::mapToView(const QGraphicsView *view, const QRectF &rect) const
 {
-    // TODO: Confirm that adjusted() is needed and is not covering for some
-    // issue elsewhere
-    return view->mapFromScene(mapToScene(rect)).boundingRect().adjusted(0, 0, -1, -1);
+    return view->mapFromScene(mapToScene(rect)).boundingRect();
 }
 
 QPoint Applet::popupPosition(const QSize &s) const
