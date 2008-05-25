@@ -1,1 +1,1 @@
-#include "../../../plasma/scripting/appletscript.h"
+#include "../../plasma/scripting/appletscript.h"

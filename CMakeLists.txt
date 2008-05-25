@@ -177,65 +177,61 @@ install(FILES
 
 
 install(FILES
-    includes/AbstractRunner
-    includes/AnimationDriver
-    includes/Animator
-    includes/Applet
-    includes/AppletBrowser
-    includes/ConfigXml
-    includes/Corona
-    includes/Containment
-    includes/Dialog
-    includes/Plasma
-    includes/Package
-    includes/PackageStructure
-    includes/Theme
-    includes/DataContainer
-    includes/DataEngine
-    includes/DataEngineManager
-    includes/RunnerContext
-    includes/RunnerManager
-    includes/QueryMatch
-    includes/Service
-    includes/ServiceJob
-    includes/Svg
-    includes/PanelSvg
-    includes/UiLoader
-    includes/PackageMetadata
-    includes/View
-    includes/Delegate
-    DESTINATION ${INCLUDE_INSTALL_DIR}/KDE/Plasma)
-
-install(FILES
-   includes/Label
-   includes/LineEdit
-   includes/PushButton
-   includes/RadioButton
-   includes/WebContent
-   DESTINATION ${INCLUDE_INSTALL_DIR}/KDE/Plasma)
-
+includes/AbstractRunner
+includes/AnimationDriver
+includes/Animator
+includes/Applet
+includes/AppletBrowser
+includes/AppletScript
+includes/CheckBox
+includes/ComboBox
+includes/ConfigXml
+includes/Containment
+includes/Corona
+includes/DataContainer
+includes/DataEngine
+includes/DataEngineManager
+includes/DataEngineScript
+includes/Delegate
+includes/Dialog
+includes/GroupBox
+includes/Label
+includes/LineEdit
+includes/Package
+includes/PackageMetadata
+includes/PackageStructure
+includes/PanelSvg
+includes/Plasma
+includes/PushButton
+includes/QueryMatch
+includes/RadioButton
+includes/RunnerContext
+includes/RunnerManager
+includes/RunnerScript
+includes/ScriptEngine
+includes/Service
+includes/ServiceJob
+includes/Svg
+includes/TextEdit
+includes/Theme
+includes/UiLoader
+includes/View
+includes/WebContent
+DESTINATION ${INCLUDE_INSTALL_DIR}/KDE/Plasma)
 
 if(QT_QTOPENGL_FOUND AND OPENGL_FOUND)
-install(FILES
-    includes/GLApplet
-    DESTINATION ${INCLUDE_INSTALL_DIR}/KDE/Plasma)
+   install(FILES
+      includes/GLApplet
+      DESTINATION ${INCLUDE_INSTALL_DIR}/KDE/Plasma)
 endif(QT_QTOPENGL_FOUND AND OPENGL_FOUND)
 
 install(FILES
-    includes/ScriptEngine
-    includes/DataEngineScript
-    includes/RunnerScript
-    includes/AppletScript
-    DESTINATION ${INCLUDE_INSTALL_DIR}/KDE/Plasma/Scripting)
-
-
-install(FILES
-    servicetypes/plasma-animator.desktop
-    servicetypes/plasma-applet.desktop
-    servicetypes/plasma-containment.desktop
-    servicetypes/plasma-dataengine.desktop
-    servicetypes/plasma-packagestructure.desktop
-    servicetypes/plasma-runner.desktop
+   servicetypes/plasma-animator.desktop
+   servicetypes/plasma-applet.desktop
+   servicetypes/plasma-containment.desktop
+   servicetypes/plasma-dataengine.desktop
+   servicetypes/plasma-packagestructure.desktop
+   servicetypes/plasma-runner.desktop
     servicetypes/plasma-scriptengine.desktop
     DESTINATION ${SERVICETYPES_INSTALL_DIR})
 
