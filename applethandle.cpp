@@ -94,12 +94,6 @@ AppletHandle::AppletHandle(Containment *parent, Applet *applet)
     m_hoverTimer->setSingleShot(true);
     m_hoverTimer->setInterval(333);
 
-    //This variable contains the bounding rect of the applet in
-    //screen coordinates. Only set this once: the applet itself
-    //will only update this after the handle is destroyed, and we
-    //will track changes to it in the mouseMoveEvent.
-    m_screenRect = m_applet->screenRect();
-
     connect(m_hoverTimer, SIGNAL(timeout()), this, SLOT(fadeIn()));
     connect(m_applet, SIGNAL(destroyed(QObject*)), this, SLOT(appletDestroyed()));
 
@@ -108,7 +102,6 @@ AppletHandle::AppletHandle(Containment *parent, Applet *applet)
 
     //We got to be able to see the applet while dragging to to another containment,
     //so we want a high zValue.
-    //TODO: restore applets original zValue before destroying the handle.
     //FIXME: apparently this doesn't work: sometimes an applet still get's drawn behind
     //the containment it's being dragged to, sometimes it doesn't.
     m_zValue = m_applet->zValue();
@@ -134,6 +127,8 @@ AppletHandle::~AppletHandle()
         m_applet->setTransform(matrix);
 
         m_applet->setParentItem(m_containment);
+
+        m_applet->setZValue(m_zValue);
 
         m_applet->update(); // re-render the background, now we've transformed the applet
     }
@@ -305,10 +300,10 @@ void AppletHandle::mousePressEvent(QGraphicsSceneMouseEvent *event)
     QGraphicsItem::mousePressEvent(event);
 }
 
-bool AppletHandle::leaveCurrentView(const QRect &rect) const
+bool AppletHandle::leaveCurrentView(const QPoint &pos) const
 {
     foreach (QWidget *widget, QApplication::topLevelWidgets()) {
-        if (widget->geometry().intersects(rect)) {
+        if (widget->geometry().contains(pos)) {
             //is this widget a plasma view, a different view then our current one,
             //AND not a dashboardview?
             Plasma::View *v = qobject_cast<Plasma::View *>(widget);
@@ -388,13 +383,11 @@ void AppletHandle::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
                 }
 
                 //find out if we were dropped on a panel or something
-                if (leaveCurrentView(m_screenRect)) {
-                    Plasma::View *v = Plasma::View::topLevelViewAt(m_screenRect.center());
+                if (leaveCurrentView(event->screenPos())) {
+                    Plasma::View *v = Plasma::View::topLevelViewAt(event->screenPos());
                     if (v && v != m_containment->view()) {
                         Containment *c = v->containment();
-                        //We decide where we've been dropped by looking at the center of the
-                        //applet.
-                        QPoint pos = v->mapFromGlobal(m_screenRect.center());
+                        QPoint pos = v->mapFromGlobal(event->screenPos());
                         //we actually have been dropped on another containment, so
                         //move there: we have a screenpos, we need a scenepos
                         //FIXME how reliable is this transform?
@@ -410,9 +403,10 @@ void AppletHandle::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
                             QList<Containment*> containments = corona->containments();
                             for (int i = 0; i < containments.size(); ++i) {
                                 QPointF pos;
-                                if (containments[i]->view()) {
-                                    pos = containments[i]->view()->mapToScene(containments[i]->view()
-                                                         ->mapFromGlobal(m_screenRect.topLeft()));
+                                QGraphicsView *v;
+                                v = containments[i]->view();
+                                if (v) {
+                                    pos = v->mapToScene(v->mapFromGlobal(event->screenPos() - m_mousePos));
 
                                     if (containments[i]->sceneBoundingRect().contains(pos)) {
                                         //kDebug() << "new containment = " << containments[i];
@@ -469,16 +463,8 @@ void AppletHandle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     if (m_pressedButton == MoveButton) {
         m_pos += deltaScene;
 
-        //set the screenRect correctly. the screenRect contains the bounding
-        //rect of the applet in screen coordinates. m_mousePos contains the
-        //position of the mouse relative to the applet, in screen coords.
-        m_screenRect = QRect(event->screenPos() - m_mousePos,
-                             m_applet->screenRect().size());
-
-        kDebug() << "m_screenRect = " << m_screenRect;
-
         //Are we moving out of the current view?
-        bool toTopLevel = leaveCurrentView(m_screenRect);
+        bool toTopLevel = leaveCurrentView(event->screenPos());
 
         if (!toTopLevel) {
             setPos(m_pos);
@@ -489,9 +475,16 @@ void AppletHandle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
                 delete m_topview;
                 m_topview = 0;
                 m_applet->d->ghostView = 0;
-                m_applet->update();
             }
         } else {
+            //set the screenRect correctly. the screenRect contains the bounding
+            //rect of the applet in screen coordinates. m_mousePos contains the
+            //position of the mouse relative to the applet, in screen coords.
+            QRect screenRect = QRect(event->screenPos() - m_mousePos,
+                                     m_applet->screenRect().size());
+
+            kDebug() << "screenRect = " << screenRect;
+
             if (!m_topview) { //create a new toplevel view
                 m_topview = new View(m_containment, -1, 0);
 
@@ -499,12 +492,12 @@ void AppletHandle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
                 m_topview->setWindowFlags(Qt::ToolTip | Qt::FramelessWindowHint
                                                       | Qt::WindowStaysOnTopHint);
                 m_topview->setWallpaperEnabled(false);
-                m_topview->resize(m_screenRect.size());
+                m_topview->resize(screenRect.size());
                 m_topview->setSceneRect(m_applet->sceneBoundingRect());
                 m_topview->centerOn(m_applet);
 
                 //We might have to scale the view, because we might be zoomed out.
-                qreal scale = m_screenRect.width() / m_applet->boundingRect().width();
+                qreal scale = screenRect.width() / m_applet->boundingRect().width();
                 m_topview->scale(scale, scale);
 
                 //Paint a mask based on the applets shape.
@@ -512,11 +505,11 @@ void AppletHandle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
                 //TODO: When the corona tiled background is disabled, disable the
                 //mask when compositing is enabled.
                 //FIXME: the mask doesn't function correctly when zoomed out.
-                QBitmap bitmap(m_screenRect.size());
+                QBitmap bitmap(screenRect.size());
                 QPainter * shapePainter = new QPainter();
                 shapePainter->begin(&bitmap);
-                shapePainter->fillRect(0, 0, m_screenRect.width(),
-                                             m_screenRect.height(),
+                shapePainter->fillRect(0, 0, screenRect.width(),
+                                             screenRect.height(),
                                              Qt::white);
                 shapePainter->setBrush(Qt::black);
                 shapePainter->drawPath(m_applet->shape());
@@ -527,7 +520,6 @@ void AppletHandle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
                 m_topview->show();
 
                 m_applet->d->ghostView = m_containment->view();
-                m_applet->update();
 
                 //TODO: non compositing users are screwed: masking looks terrible.
                 //Consider always enabling the applet background. Stuff like the analog clock
@@ -536,8 +528,7 @@ void AppletHandle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
                 //function correctly right now for applets drawing standard backgrounds.
             }
 
-            //m_topview->move(m_topview.pos() + deltaScreen);
-            m_topview->setGeometry(m_screenRect);
+            m_topview->setGeometry(screenRect);
         }
 
     } else if (m_pressedButton == RotateButton ||
