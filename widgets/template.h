@@ -21,7 +21,7 @@
 #ifndef PLASMA_<NAME>_H
 #define PLASMA_<NAME>_H
 
-#include <QGraphicsProxyWidget>
+#include <QtGui/QGraphicsProxyWidget>
 
 #include <plasma/plasma_export.h>
 

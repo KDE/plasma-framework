@@ -21,7 +21,7 @@
 #ifndef PLASMA_TEXTEDIT_H
 #define PLASMA_TEXTEDIT_H
 
-#include <QGraphicsProxyWidget>
+#include <QtGui/QGraphicsProxyWidget>
 
 class QTextEdit;
 

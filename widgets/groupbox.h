@@ -21,7 +21,7 @@
 #ifndef PLASMA_GROUPBOX_H
 #define PLASMA_GROUPBOX_H
 
-#include <QGraphicsProxyWidget>
+#include <QtGui/QGraphicsProxyWidget>
 
 class QGroupBox;
 
