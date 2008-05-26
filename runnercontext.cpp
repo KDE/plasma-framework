@@ -88,7 +88,7 @@ class RunnerContext::Private : public QSharedData
                 type = Executable;
             } else {
                 KUrl url(term);
-                if (!url.protocol().isEmpty() && !url.host().isEmpty()) {
+                if (!url.protocol().isEmpty()) {
                     type = NetworkLocation;
                 } else  if (QFile::exists(path)) {
                     QFileInfo info(path);
