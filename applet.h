@@ -82,8 +82,9 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          * Description on how draw a background for the applet
          */
         enum BackgroundHint { NoBackground = 0 /** Not drawing a background under the applet, the applet has its own implementation */,
-                              StandardBackground /** The standard background from the theme is drawn */,
-                              ShadowedBackground /** The applet has a drop shadow */,
+                              StandardBackground = 1 /** The standard background from the theme is drawn */,
+                              TranslucentBackground = 2 /** An alternate version of the background is drawn, usually more translucent */,
+                              ShadowedBackground = 4 /** The applet has a drop shadow */,
                               DefaultBackground = StandardBackground | ShadowedBackground /** Default settings: both standard background and shadow */
                             };
         Q_DECLARE_FLAGS(BackgroundHints, BackgroundHint)

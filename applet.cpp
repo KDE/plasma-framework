@@ -540,20 +540,31 @@ void Applet::setBackgroundHints(const BackgroundHints hints)
     d->backgroundHints = hints;
 
     //Draw the standard background?
-    if (hints & StandardBackground) {
+    if ((hints & StandardBackground) || (hints & TranslucentBackground)) {
         if (!d->background) {
             d->background = new Plasma::PanelSvg();
-            d->background->setImagePath("widgets/background");
-            d->background->setEnabledBorders(Plasma::PanelSvg::AllBorders);
-            qreal left, top, right, bottom;
-            d->background->getMargins(left, top, right, bottom);
-            setContentsMargins(left, right, top, bottom);
-            QSizeF fitSize(left + right, top + bottom);
-            if (minimumSize().expandedTo(fitSize) != minimumSize()) {
-                setMinimumSize(minimumSize().expandedTo(fitSize));
-            }
-            d->background->resizePanel(boundingRect().size());
         }
+
+        if (hints & TranslucentBackground) {
+            d->background->setImagePath("widgets/translucentbackground");
+            
+            //FIXME: this fallback is an hack, an api like Plasma::Theme::hasImage() would be needed to make this clean
+            if (!Plasma::Theme::defaultTheme()->imagePath("widgets/translucentbackground").contains(Plasma::Theme::defaultTheme()->themeName())) {
+                d->background->setImagePath("widgets/background");
+            }
+        } else {
+            d->background->setImagePath("widgets/background");
+        }
+
+        d->background->setEnabledBorders(Plasma::PanelSvg::AllBorders);
+        qreal left, top, right, bottom;
+        d->background->getMargins(left, top, right, bottom);
+        setContentsMargins(left, right, top, bottom);
+        QSizeF fitSize(left + right, top + bottom);
+        if (minimumSize().expandedTo(fitSize) != minimumSize()) {
+            setMinimumSize(minimumSize().expandedTo(fitSize));
+        }
+        d->background->resizePanel(boundingRect().size());
     } else if (d->background) {
         qreal left, top, right, bottom;
         d->background->getMargins(left, top, right, bottom);
@@ -1597,6 +1608,9 @@ void Applet::Private::checkImmutability()
 void Applet::Private::themeChanged()
 {
     if (background) {
+        //do again the translucent background fallback
+        q->setBackgroundHints(backgroundHints);
+
         qreal left;
         qreal right;
         qreal top;
