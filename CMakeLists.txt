@@ -18,6 +18,7 @@ install(FILES
     widgets/tooltip.svg
     widgets/clock.svg
     widgets/pager.svg
+    widgets/translucentbackground.svg
     widgets/systemtray.svg
     widgets/tasks.svg
     widgets/toolbox-button.svg
