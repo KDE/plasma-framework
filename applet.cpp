@@ -720,14 +720,24 @@ void Applet::flushPendingConstraintsEvents()
     }
 
     //enforce square size in panels
-    if (aspectRatioMode() == Plasma::Square && (c & Plasma::SizeConstraint || c & Plasma::FormFactorConstraint)) {
+    if (aspectRatioMode() == Plasma::Square && (c & Plasma::SizeConstraint || c & Plasma::FormFactorConstraint) &&
+        size().height() != size().width()) {
         if (formFactor() == Horizontal) {
-            setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Expanding));
+            setSizePolicy(QSizePolicy(QSizePolicy::Maximum,QSizePolicy::Expanding));
             resize(QSizeF(size().height(), size().height()));
+            //FIXME: it shouldn't be used maximum and minimum sizes, layouts are weird
+            setMaximumWidth(size().height());
+            setMinimumWidth(size().height());
         } else if (formFactor() == Vertical) {
             setSizePolicy(QSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed));
             resize(QSizeF(size().width(), size().width()));
+            setMaximumHeight(size().width());
+            setMinimumHeight(size().width());
         }
+    //if we are on desktop again restore maximum size
+    } else if (aspectRatioMode() == Plasma::Square && (c & Plasma::FormFactorConstraint) && formFactor() != Horizontal && formFactor() != Vertical) {
+        setMaximumSize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX);
+        setMinimumSize(0, 0);
     }
 
     Containment* containment = qobject_cast<Plasma::Containment*>(this);
