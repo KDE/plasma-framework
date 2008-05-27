@@ -99,7 +99,7 @@ void PackageStructureTest::name()
 
 void PackageStructureTest::required()
 {
-    QVERIFY(ps->required("mainscript"));
+    QVERIFY(ps->isRequired("mainscript"));
 }
 
 void PackageStructureTest::mimetypes()
@@ -112,7 +112,7 @@ void PackageStructureTest::mimetypes()
 void PackageStructureTest::read()
 {
     QString structurePath = QString(KDESRCDIR) + "/plasmoidpackagerc";
-    KConfig config(structurePath);
+    KConfig config(structurePath, KConfig::SimpleConfig);
     Plasma::PackageStructure structure;
     structure.read(&config);
 
@@ -142,7 +142,7 @@ void PackageStructureTest::read()
     
     // compare directories
     QList <const char *> dirs;
-    dirs << "config" << "configui" << "images" << "scripts";
+    dirs << "config" << "configui" << "images" << "scripts" << "ui";
     QList <const char *> psDirs = structure.directories();
     QCOMPARE(psDirs.count(), dirs.count());
     for (int i = 0; i < dirs.count(); i++) {
@@ -156,7 +156,7 @@ void PackageStructureTest::write()
     QString file1 = QDir::homePath() + "/.kde-unit-test/packagerc";
     QString file2 = QString(KDESRCDIR) + "/plasmoidpackagerc";
     
-    KConfig config(file1);
+    KConfig config(file1, KConfig::SimpleConfig);
     ps->write(&config);
     
     // check type
