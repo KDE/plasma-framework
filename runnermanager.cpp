@@ -231,7 +231,7 @@ public:
         KService::List offers = KServiceTypeTrader::self()->query("Plasma/Runner");
 
         bool loadAll = config.readEntry("loadAll", false);
-        KConfigGroup conf(&config, "Plugins");
+        KConfigGroup conf(KGlobal::config(), "Plugins");
 
         foreach (const KService::Ptr &service, offers) {
             //kDebug() << "Loading runner: " << service->name() << service->storageId();
