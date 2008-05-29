@@ -1,1 +1,1 @@
-#include "../../plasma/textedit.h"
+#include "../../plasma/widgets/textedit.h"

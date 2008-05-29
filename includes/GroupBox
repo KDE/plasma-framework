@@ -1,1 +1,1 @@
-#include "../../plasma/groupbox.h"
+#include "../../plasma/widgets/groupbox.h"
