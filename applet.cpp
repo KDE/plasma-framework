@@ -702,9 +702,13 @@ void Applet::flushPendingConstraintsEvents()
 
     if (c & Plasma::SizeConstraint && d->needsConfigOverlay) {
         d->needsConfigOverlay->setGeometry(QRectF(QPointF(0, 0), boundingRect().size()));
-        // FIXME:: rather horrible hack to work around the fact we don't have spacers
-        //         for layouts, and with WoC coming i'd rather not expend effort there
-        QGraphicsItem * button = d->needsConfigOverlay->QGraphicsItem::children().first();
+        QGraphicsItem *button = 0;
+        QList<QGraphicsItem*> children = d->needsConfigOverlay->QGraphicsItem::children();
+
+        if (!children.isEmpty()) {
+            button = children.first();
+        }
+
         if (button) {
             QSizeF s = button->boundingRect().size();
             button->setPos(d->needsConfigOverlay->boundingRect().width() / 2 - s.width() / 2,
