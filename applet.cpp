@@ -36,12 +36,10 @@
 #include <QTimer>
 #include <QUiLoader>
 #include <QLabel>
-#include <QPushButton>
 #include <QGraphicsSceneMouseEvent>
 #include <QGraphicsLinearLayout>
 #include <QDesktopWidget>
 #include <QGraphicsView>
-#include <QGraphicsProxyWidget>
 #include <QAction>
 
 #include <KIcon>
@@ -73,6 +71,7 @@
 #include "plasma/theme.h"
 #include "plasma/view.h"
 #include "plasma/widgets/label.h"
+#include "plasma/widgets/pushbutton.h"
 
 //#define DYNAMIC_SHADOWS
 namespace Plasma
@@ -633,7 +632,7 @@ void Applet::setConfigurationRequired(bool needsConfig)
     }
 
     d->needsConfigOverlay = new AppletOverlayWidget(this);
-    d->needsConfigOverlay->resize(boundingRect().size());
+    d->needsConfigOverlay->resize(contentsRect().size());
 
     int zValue = 100;
     foreach (QGraphicsItem *child, QGraphicsItem::children()) {
@@ -644,13 +643,11 @@ void Applet::setConfigurationRequired(bool needsConfig)
     d->needsConfigOverlay->setZValue(zValue);
 
     qDeleteAll(d->needsConfigOverlay->QGraphicsItem::children());
-    QPushButton* button = new QPushButton();
-    button->setText(i18n("Configure..."));
-    connect(button, SIGNAL(clicked()), this, SLOT(showConfigurationInterface()));
     QGraphicsLinearLayout *configLayout = new QGraphicsLinearLayout(this);
     configLayout->setContentsMargins(0, 0, 0, 0);
-    QGraphicsProxyWidget * configWidget = new QGraphicsProxyWidget(this);
-    configWidget->setWidget(button);
+    PushButton *configWidget = new PushButton(this);
+    configWidget->setText(i18n("Configure..."));
+    connect(configWidget, SIGNAL(clicked()), this, SLOT(showConfigurationInterface()));
     configLayout->addItem(configWidget);
     setLayout(configLayout);
     d->needsConfigOverlay->show();
@@ -701,7 +698,7 @@ void Applet::flushPendingConstraintsEvents()
     }
 
     if (c & Plasma::SizeConstraint && d->needsConfigOverlay) {
-        d->needsConfigOverlay->setGeometry(QRectF(QPointF(0, 0), boundingRect().size()));
+        d->needsConfigOverlay->setGeometry(QRectF(QPointF(0, 0), contentsRect().size()));
         QGraphicsItem *button = 0;
         QList<QGraphicsItem*> children = d->needsConfigOverlay->QGraphicsItem::children();
 
