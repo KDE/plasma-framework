@@ -98,7 +98,7 @@ public:
     /**
      * @return the possible operations for this profile
      */
-    QStringList operationList() const;
+    QStringList operationNames() const;
 
     /**
      * Retrieves the parameters for a given operation
@@ -106,7 +106,7 @@ public:
      * @param operation the operation to retrieve parameters for
      * @return KConfigGroup containing the parameters
      */
-    KConfigGroup operationParameters(const QString &operation);
+    KConfigGroup operationDescription(const QString &operationName);
 
     /**
      * Called to create a ServiceJob which is associated with a given
@@ -115,7 +115,7 @@ public:
      * @return a started ServiceJob; the consumer may connect to relevant
      *         signals before returning to the event loop
      */
-    ServiceJob* startOperation(const KConfigGroup &parameters);
+    ServiceJob* startOperationCall(const KConfigGroup &description);
 
     /**
      * The name of this service

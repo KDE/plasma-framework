@@ -90,7 +90,7 @@ QString Service::destination() const
     return d->destination;
 }
 
-QStringList Service::operationList() const
+QStringList Service::operationNames() const
 {
     if (!d->config) {
         return QStringList();
@@ -99,17 +99,17 @@ QStringList Service::operationList() const
     return d->config->config()->groupList();
 }
 
-KConfigGroup Service::operationParameters(const QString &operation)
+KConfigGroup Service::operationDescription(const QString &operationName)
 {
     if (!d->config) {
         return KConfigGroup();
     }
 
-    KConfigGroup params(d->config->config(), operation);
+    KConfigGroup params(d->config->config(), operationName);
     return params;
 }
 
-ServiceJob* Service::startOperation(const KConfigGroup &parameters)
+ServiceJob* Service::startOperationCall(const KConfigGroup &description)
 {
     // TODO: nested groups?
     if (!d->config) {
@@ -118,16 +118,17 @@ ServiceJob* Service::startOperation(const KConfigGroup &parameters)
 
     d->config->writeConfig();
     QMap<QString, QVariant> params;
-    QString op = parameters.name();
-    foreach (const QString &key, parameters.keyList()) {
+    QString op = description.name();
+    foreach (const QString &key, description.keyList()) {
         KConfigSkeletonItem *item = d->config->findItem(op, key);
         if (item) {
             params.insert(key, item->property());
         }
     }
 
-    ServiceJob *job = createJob(parameters.name(), params);
+    ServiceJob *job = createJob(description.name(), params);
     connect(job, SIGNAL(finished(KJob*)), this, SLOT(jobFinished(KJob*)));
+    job->start();
     return job;
 }
 
