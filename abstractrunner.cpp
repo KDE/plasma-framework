@@ -84,10 +84,9 @@ public:
     QTime runtime;
     int fastRuns;
     Package *package;
-
-    QMutex bigLock;
 };
 
+K_GLOBAL_STATIC(QMutex, s_bigLock)
 
 AbstractRunner::AbstractRunner(QObject* parent, const QString& serviceId)
     : QObject(parent),
@@ -202,13 +201,13 @@ void AbstractRunner::setIgnoredTypes(RunnerContext::Types types)
 
 KService::List AbstractRunner::serviceQuery(const QString &serviceType, const QString &constraint) const
 {
-    QMutexLocker lock(&d->bigLock);
+    QMutexLocker lock(s_bigLock);
     return KServiceTypeTrader::self()->query(serviceType, constraint);
 }
  
 QMutex* AbstractRunner::bigLock() const
 {
-    return &d->bigLock;
+    return s_bigLock;
 }
 
 void AbstractRunner::run(const Plasma::RunnerContext &search, const Plasma::QueryMatch &action)
