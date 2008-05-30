@@ -102,7 +102,9 @@ PanelToolBox::PanelToolBox(QGraphicsItem *parent)
     setZValue(10000000);
     setFlag(ItemClipsToShape, true);
     setFlag(ItemClipsChildrenToShape, false);
-    setFlag(ItemIgnoresTransformations, true);
+    //panel toolbox is allowed to zoom, otherwise a part of it will be displayed behind the desktop
+    //toolbox when the desktop is zoomed out
+    setFlag(ItemIgnoresTransformations, false);
 }
 
 PanelToolBox::~PanelToolBox()
