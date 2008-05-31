@@ -16,9 +16,9 @@
    width="25"
    height="25"
    version="1.0"
-   sodipodi:docname="systemtray_beta.svg"
+   sodipodi:docname="systemtray.svg"
    inkscape:output_extension="org.inkscape.output.svg.inkscape"
-   sodipodi:docbase="/home/diau/failed Graphics attempts/plasma background/archived">
+   sodipodi:docbase="/home/diau/failed Graphics attempts/plasma background/41/widgets">
   <metadata
      id="metadata11329">
     <rdf:RDF>
@@ -87,7 +87,7 @@
        x1="208"
        y1="797.00684"
        x2="208"
-       y2="759.90039" />
+       y2="770" />
     <linearGradient
        inkscape:collect="always"
        xlink:href="#linearGradient3372"
@@ -98,6 +98,29 @@
        y1="89.277901"
        x2="50.10762"
        y2="9.2778997" />
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient7175">
+      <stop
+         id="stop7177"
+         style="stop-color:#ffffff;stop-opacity:1;"
+         offset="0" />
+      <stop
+         id="stop7179"
+         style="stop-color:#ffffff;stop-opacity:0;"
+         offset="1" />
+    </linearGradient>
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient7175"
+       id="radialGradient11091"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(3.4479595e-2,0,0,4.5493533e-2,6.1038061,-19.732348)"
+       cx="185.50665"
+       cy="796.50342"
+       fx="185.50665"
+       fy="796.50342"
+       r="72.506653" />
     <linearGradient
        inkscape:collect="always"
        xlink:href="#linearGradient7231"
@@ -544,11 +567,10 @@
        fy="14.998932"
        r="2.5000048" />
     <linearGradient
-       inkscape:collect="always"
        id="linearGradient7231">
       <stop
          id="stop7233"
-         style="stop-color:#000000;stop-opacity:1;"
+         style="stop-color:#000000;stop-opacity:0.3137255;"
          offset="0" />
       <stop
          id="stop7235"
@@ -586,9 +608,9 @@
      pagecolor="#ffffff"
      id="base"
      showgrid="false"
-     inkscape:zoom="39.734862"
-     inkscape:cx="13.052107"
-     inkscape:cy="11.822553"
+     inkscape:zoom="9.9337154"
+     inkscape:cx="28.774292"
+     inkscape:cy="21.896283"
      inkscape:window-x="12"
      inkscape:window-y="55"
      inkscape:current-layer="svg11324"
@@ -642,7 +664,7 @@
        y="16"
        width="5"
        id="rect7173"
-       style="opacity:0.65;fill:#ababab;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:1, 1;stroke-dashoffset:0;stroke-opacity:1" />
+       style="opacity:0.65;fill:url(#radialGradient11091);fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:1, 1;stroke-dashoffset:0;stroke-opacity:1" />
     <path
        style="opacity:0;fill:url(#linearGradient11088);fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:1.08779998;stroke-opacity:1"
        d="M 10,16 L 10,22 L 15,22 L 15,16 L 10,16 z "
