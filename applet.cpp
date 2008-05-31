@@ -1116,8 +1116,9 @@ void Applet::showConfigurationInterface()
         createConfigurationInterface(dialog);
         //TODO: would be nice to not show dialog if there are no pages added?
         connect(dialog, SIGNAL(finished()), nullManager, SLOT(deleteLater()));
+        //TODO: Apply button does not correctly work for now, so do not show it
+        dialog->showButton( KDialog::Apply, false );
         dialog->show();
-        dialog->enableButtonApply(true);
     }
 
     emit releaseVisualFocus();
