@@ -21,6 +21,7 @@
 
 #include <QCheckBox>
 #include <QPainter>
+#include <QDir>
 
 #include <KMimeType>
 

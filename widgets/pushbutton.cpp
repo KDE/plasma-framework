@@ -21,6 +21,7 @@
 
 #include <QPushButton>
 #include <QPainter>
+#include <QDir>
 
 #include <KMimeType>
 

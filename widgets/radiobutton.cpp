@@ -21,6 +21,7 @@
 
 #include <QRadioButton>
 #include <QPainter>
+#include <QDir>
 
 #include <KMimeType>
 

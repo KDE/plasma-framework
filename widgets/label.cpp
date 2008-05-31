@@ -21,6 +21,7 @@
 
 #include <QLabel>
 #include <QPainter>
+#include <QDir>
 
 #include <KMimeType>
 
