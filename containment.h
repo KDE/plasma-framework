@@ -394,7 +394,6 @@ class PLASMA_EXPORT Containment : public Applet
         void dropEvent(QGraphicsSceneDragDropEvent *event);
 
     private:
-        Q_DISABLE_COPY(Containment)
         Q_PRIVATE_SLOT(d, void appletDestroyed(QObject*))
         Q_PRIVATE_SLOT(d, void containmentAppletAnimationComplete(QGraphicsItem *item, Plasma::Animator::Animation anim))
         Q_PRIVATE_SLOT(d, void triggerShowAddWidgets())
