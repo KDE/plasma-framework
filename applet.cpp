@@ -173,6 +173,11 @@ void Applet::save(KConfigGroup &group) const
     KConfigGroup appletConfigGroup(&group, "Configuration");
     //FIXME: we need a global save state too
     saveState(appletConfigGroup);
+
+    if (d->activationAction) {
+        KConfigGroup shortcutConfig(&group, "Shortcuts");
+        shortcutConfig.writeEntry("global", d->activationAction->globalShortcut().toString());
+    }
 }
 
 void Applet::restore(KConfigGroup &group)
