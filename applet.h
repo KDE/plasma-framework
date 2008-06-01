@@ -426,13 +426,6 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         bool isContainment() const;
 
         /**
-         * Sets the geometry of this Plasma::Applet. Should not be used directly by
-         * applet subclasses.
-         * @param geometry the geometry to apply to this Plasma::Applet.
-         */
-        void setGeometry(const QRectF &geometry);
-
-        /**
          * @return a rect of the applet in screen coordinates.
          */
         QRect screenRect() const;
@@ -495,6 +488,12 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          * applets.
          */
         void configNeedsSaving();
+
+        /**
+         * Emitted when activation is requested due to, for example, a global
+         * keyboard shortcut. By default the wiget is given focus.
+         */
+        void activate();
 
     public Q_SLOTS:
         /**
@@ -681,7 +680,12 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         /**
          * Reimplemented from QGraphicsItem
          */
-        void focusInEvent(QFocusEvent * event);
+        void focusInEvent(QFocusEvent *event);
+
+        /**
+         * Reimplemented from QGraphicsItem
+         */
+        void resizeEvent(QGraphicsSceneResizeEvent *event);
 
         /**
          * Reimplemented from QGraphicsItem
@@ -699,7 +703,7 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         void timerEvent (QTimerEvent *event);
 
     private:
-        Q_DISABLE_COPY(Applet)
+        Q_PRIVATE_SLOT(d, void setFocus())
         Q_PRIVATE_SLOT(d, void checkImmutability())
         Q_PRIVATE_SLOT(d, void themeChanged())
         Q_PRIVATE_SLOT(d, void appletAnimationComplete(QGraphicsItem *item, Plasma::Animator::Animation anim))

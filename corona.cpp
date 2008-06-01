@@ -22,7 +22,6 @@
 #include "corona.h"
 
 #include <QApplication>
-#include <QDesktopWidget>
 #include <QGraphicsSceneDragDropEvent>
 #include <QMimeData>
 #include <QPainter>

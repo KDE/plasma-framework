@@ -32,6 +32,7 @@
 #include <QGraphicsLayout>
 #include <QGraphicsLinearLayout>
 
+#include <KAction>
 #include <KApplication>
 #include <KAuthorized>
 #include <KIcon>
@@ -886,6 +887,12 @@ void Containment::addAssociatedWidget(QWidget *widget)
     if (d->focusedApplet) {
         d->focusedApplet->addAssociatedWidget(widget);
     }
+
+    foreach (const Applet* applet, d->applets) {
+        if (applet->d->activationAction) {
+            widget->addAction(applet->d->activationAction);
+        }
+    }
 }
 
 void Containment::removeAssociatedWidget(QWidget *widget)
@@ -893,6 +900,12 @@ void Containment::removeAssociatedWidget(QWidget *widget)
     Applet::removeAssociatedWidget(widget);
     if (d->focusedApplet) {
         d->focusedApplet->removeAssociatedWidget(widget);
+    }
+
+    foreach (const Applet* applet, d->applets) {
+        if (applet->d->activationAction) {
+            widget->removeAction(applet->d->activationAction);
+        }
     }
 }
 
@@ -1171,6 +1184,8 @@ Applet* Containment::Private::addApplet(const QString& name, const QVariantList&
     if (!applet) {
         kDebug() << "Applet" << name << "could not be loaded.";
         applet = new Applet;
+        //TODO: uncomment this when not in string freeze.
+        //applet->setFailedToLaunch(true, QString("Could not find requested component: %1").arg(name));
     }
 
     //kDebug() << applet->name() << "sizehint:" << applet->sizeHint() << "geometry:" << applet->geometry();

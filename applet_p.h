@@ -62,6 +62,7 @@ public:
     void themeChanged();
     void resetConfigurationObject();
     void appletAnimationComplete(QGraphicsItem *item, Plasma::Animator::Animation anim);
+    void setFocus();
 
     static uint s_maxAppletId;
     static uint s_maxZValue;
@@ -89,6 +90,7 @@ public:
     QGraphicsView* ghostView;
     ImmutabilityType immutability;
     KActionCollection actions;
+    KAction *activationAction;
     int constraintsTimerId;
     bool hasConfigurationInterface : 1;
     bool failed : 1;

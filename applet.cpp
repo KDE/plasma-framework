@@ -42,6 +42,7 @@
 #include <QGraphicsView>
 #include <QAction>
 
+#include <KAction>
 #include <KIcon>
 #include <KColorScheme>
 #include <KConfigDialog>
@@ -51,6 +52,7 @@
 #include <KStandardDirs>
 #include <KService>
 #include <KServiceTypeTrader>
+#include <KShortcut>
 #include <KWindowSystem>
 #include <KActionCollection>
 
@@ -191,10 +193,41 @@ void Applet::restore(KConfigGroup &group)
 
     setImmutability((ImmutabilityType)group.readEntry("immutability", (int)Mutable));
 
-    QRectF geom = group.readEntry("geometry",QRectF());
+    QRectF geom = group.readEntry("geometry", QRectF());
     if (geom.isValid()) {
         setGeometry(geom);
     }
+
+    KConfigGroup shortcutConfig(&group, "Shortcuts");
+    QString shortcutText = shortcutConfig.readEntry("global", QString());
+    if (!shortcutText.isEmpty()) {
+        if (!d->activationAction) {
+            d->activationAction = new KAction(this);
+            //TODO: add better text when we aren't in a string freeze
+            d->activationAction->setText(name());
+            d->activationAction->setObjectName(QString("Activate %1 Widget").arg(name())); // NO I18N
+            connect(d->activationAction, SIGNAL(triggered()), this, SIGNAL(activate()));
+            connect(this, SIGNAL(activate()), this, SLOT(setFocus()));
+        }
+
+        KShortcut shortcut(shortcutText);
+        d->activationAction->setGlobalShortcut(shortcut);
+    }
+
+    // local shortcut, if any
+    //TODO: implement; the shortcut will need to be registered with the containment
+    /*
+    shortcutText = shortcutConfig.readEntry("local", QString());
+    if (!shortcutText.isEmpty()) {
+        //TODO: implement; the shortcut 
+    }
+    */
+}
+
+void Applet::Private::setFocus()
+{
+    kDebug() << "setting focus";
+    q->setFocus(Qt::ShortcutFocusReason);
 }
 
 void Applet::setFailedToLaunch(bool failed, const QString& reason)
@@ -1059,7 +1092,19 @@ void Applet::focusInEvent(QFocusEvent * event)
         //which should be harmless
         //focusing an applet may trigger this event again, but we won't be here more than twice
     }
+
     QGraphicsWidget::focusInEvent(event);
+}
+
+void Applet::resizeEvent(QGraphicsSceneResizeEvent *event)
+{
+    QGraphicsWidget::resizeEvent(event);
+
+    if (d->background) {
+        d->background->resizePanel(boundingRect().size());
+    }
+
+    updateConstraints(Plasma::SizeConstraint);
 }
 
 void Applet::showConfigurationInterface()
@@ -1291,6 +1336,9 @@ QVariant Applet::itemChange(GraphicsItemChange change, const QVariant &value)
             d->shadow->setVisible(isVisible());
         }
         break;
+    case ItemPositionHasChanged:
+        emit geometryChanged();
+        break;
     default:
         break;
     };
@@ -1319,24 +1367,6 @@ void Applet::timerEvent(QTimerEvent *event)
         killTimer(d->constraintsTimerId);
         d->constraintsTimerId = 0;
         flushPendingConstraintsEvents();
-    }
-}
-
-void Applet::setGeometry(const QRectF& geometry)
-{
-    QRectF beforeGeom = QGraphicsWidget::geometry();
-    QGraphicsWidget::setGeometry(geometry);
-    if (geometry.size() != beforeGeom.size()) {
-        updateConstraints(Plasma::SizeConstraint);
-        if (d->background) {
-            d->background->resizePanel(boundingRect().size());
-        }
-        emit geometryChanged();
-    } else  if (geometry.topLeft() != beforeGeom.topLeft()) {
-        /*if (d->background) {
-            kDebug() << QGraphicsWidget::geometry();
-        }*/
-        emit geometryChanged();
     }
 }
 
@@ -1417,6 +1447,7 @@ Applet::Private::Private(KService::Ptr service, int uniqueID, Applet *applet)
           ghostView(0),
           immutability(Mutable),
           actions(applet),
+          activationAction(0),
           constraintsTimerId(0),
           hasConfigurationInterface(false),
           failed(false),
