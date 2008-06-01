@@ -29,6 +29,7 @@
 #include <KDE/KConfigGroup>
 #include <KDE/KGenericFactory>
 #include <KDE/KPluginInfo>
+#include <KDE/KShortcut>
 
 #include <plasma/configxml.h>
 #include <plasma/packagestructure.h>
@@ -440,6 +441,17 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          * @return the Containment, if any, this applet belongs to
          **/
         Containment* containment() const;
+
+        /**
+         * Sets the global shorcut to associate with this widget.
+         */
+        void setGlobalShortcut(const KShortcut &shortcut);
+
+        /**
+         * @return the global shortcut associated with this wiget, or
+         * an empty shortcut if no global shortcut is associated.
+         */
+        KShortcut globalShortcut() const;
 
         /**
          * associate actions with this widget, including ones added after this call.

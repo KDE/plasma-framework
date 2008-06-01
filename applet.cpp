@@ -189,7 +189,9 @@ void Applet::restore(KConfigGroup &group)
         Private::s_maxZValue = z;
     }
 
-    setZValue(z);
+    if (z > 0) {
+        setZValue(z);
+    }
 
     setImmutability((ImmutabilityType)group.readEntry("immutability", (int)Mutable));
 
@@ -201,17 +203,7 @@ void Applet::restore(KConfigGroup &group)
     KConfigGroup shortcutConfig(&group, "Shortcuts");
     QString shortcutText = shortcutConfig.readEntry("global", QString());
     if (!shortcutText.isEmpty()) {
-        if (!d->activationAction) {
-            d->activationAction = new KAction(this);
-            //TODO: add better text when we aren't in a string freeze
-            d->activationAction->setText(name());
-            d->activationAction->setObjectName(QString("Activate %1 Widget").arg(name())); // NO I18N
-            connect(d->activationAction, SIGNAL(triggered()), this, SIGNAL(activate()));
-            connect(this, SIGNAL(activate()), this, SLOT(setFocus()));
-        }
-
-        KShortcut shortcut(shortcutText);
-        d->activationAction->setGlobalShortcut(shortcut);
+        setGlobalShortcut(KShortcut(shortcutText));
     }
 
     // local shortcut, if any
@@ -934,6 +926,34 @@ Containment* Applet::containment() const
     }
 
     return c;
+}
+
+void Applet::setGlobalShortcut(const KShortcut &shortcut)
+{
+    if (!d->activationAction) {
+        d->activationAction = new KAction(this);
+        //TODO: add better text when we aren't in a string freeze
+        d->activationAction->setText(name());
+        d->activationAction->setObjectName(QString("Activate %1 Widget").arg(name())); // NO I18N
+        connect(d->activationAction, SIGNAL(triggered()), this, SIGNAL(activate()));
+        connect(this, SIGNAL(activate()), this, SLOT(setFocus()));
+
+        QList<QWidget *> widgets = d->actions.associatedWidgets();
+        foreach (QWidget *w, widgets) {
+            w->addAction(d->activationAction);
+        }
+    }
+
+    d->activationAction->setGlobalShortcut(shortcut);
+}
+
+KShortcut Applet::globalShortcut() const
+{
+    if (d->activationAction) {
+        return d->activationAction->globalShortcut();
+    }
+
+    return KShortcut();
 }
 
 void Applet::addAssociatedWidget(QWidget *widget)
