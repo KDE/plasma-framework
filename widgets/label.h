@@ -71,7 +71,7 @@ public:
     /**
      * Sets the style sheet used to control the visual display of this Label
      *
-     * @arg stylehseet a CSS string
+     * @arg stylesheet a CSS string
      */
     void setStylesheet(const QString &stylesheet);
 
