@@ -758,6 +758,8 @@ void Applet::flushPendingConstraintsEvents()
             setBackgroundHints(d->backgroundHints|StandardBackground);
         } else if(d->backgroundHints&StandardBackground) {
             setBackgroundHints(d->backgroundHints^StandardBackground);
+        } else if(d->backgroundHints&TranslucentBackground) {
+            setBackgroundHints(d->backgroundHints^TranslucentBackground);
         }
     }
 
