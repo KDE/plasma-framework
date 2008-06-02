@@ -942,11 +942,8 @@ void Applet::setGlobalShortcut(const KShortcut &shortcut)
         d->activationAction->setObjectName(QString("Activate %1 Widget").arg(name())); // NO I18N
         connect(d->activationAction, SIGNAL(triggered()), this, SIGNAL(activate()));
         connect(this, SIGNAL(activate()), this, SLOT(setFocus()));
-
-        QList<QWidget *> widgets = d->actions.associatedWidgets();
-        foreach (QWidget *w, widgets) {
-            w->addAction(d->activationAction);
-        }
+        //TODO: when local shortcuts are possible, we'll need to always be associated with the right
+        //widget
     }
 
     d->activationAction->setGlobalShortcut(shortcut);
