@@ -133,7 +133,7 @@ QString Label::image() const
     return d->imagePath;
 }
 
-void Label::setStylesheet(const QString &stylesheet)
+void Label::setStyleSheet(const QString &stylesheet)
 {
     widget()->setStyleSheet(stylesheet);
 }
