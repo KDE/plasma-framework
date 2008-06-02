@@ -15,8 +15,8 @@
    id="svg3642"
    sodipodi:version="0.32"
    inkscape:version="0.45.1"
-   sodipodi:docbase="/home/diau/failed Graphics attempts/plasma background/41/widgets"
-   sodipodi:docname="folderview.svg"
+   sodipodi:docbase="/opt/svn/kdebase/workspace/plasma/desktoptheme/widgets"
+   sodipodi:docname="translucentbackground.svg"
    inkscape:output_extension="org.inkscape.output.svg.inkscape"
    version="1.0">
   <sodipodi:namedview
@@ -27,8 +27,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="11.313709"
-     inkscape:cx="55.741545"
-     inkscape:cy="27.466428"
+     inkscape:cx="54.878876"
+     inkscape:cy="25.442624"
      inkscape:current-layer="layer1"
      showgrid="true"
      inkscape:grid-bbox="true"
@@ -485,16 +485,6 @@
        fx="214.5"
        fy="1575.4911"
        r="91.609375" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#linearGradient7141"
-       id="linearGradient7649"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(-0.7142857,0,0,7.5757576e-2,7.07687,20.688919)"
-       x1="50.10762"
-       y1="89.277901"
-       x2="50.10762"
-       y2="9.2778997" />
     <radialGradient
        inkscape:collect="always"
        xlink:href="#linearGradient3215"
@@ -1183,6 +1173,16 @@
        fx="2132.25"
        fy="136.14069"
        r="91.609398" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient7141"
+       id="linearGradient3512"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.7142857,0,0,7.5724258e-2,41.923129,20.693875)"
+       x1="50.10762"
+       y1="105.72868"
+       x2="50.10762"
+       y2="9.2778997" />
   </defs>
   <metadata
      id="metadata3647">
@@ -1442,10 +1442,6 @@
            sodipodi:nodetypes="cccccccc" />
       </g>
     </g>
-    <path
-       id="center"
-       d="M 27,21.997819 L 27,26.997819 L 22,26.997819 L 22,21.997819 L 27,21.997819 z "
-       style="fill:url(#linearGradient7649);fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:1.08779998;stroke-opacity:1;opacity:0.3" />
     <g
        id="top"
        transform="translate(-50,-49)"
@@ -1500,5 +1496,9 @@
        width="5"
        id="hint-stretch-borders"
        style="opacity:0.875;fill:#008000;fill-opacity:1;stroke:none;stroke-width:0;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+    <path
+       id="center"
+       d="M 22,22.002199 L 22,27 L 27,27 L 27,22.002199 L 22,22.002199 z "
+       style="opacity:0.27;fill:url(#linearGradient3512);fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:1.08779998;stroke-opacity:1" />
   </g>
 </svg>
