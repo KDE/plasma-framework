@@ -160,14 +160,18 @@ void Containment::init()
         zoomAction->setIcon(KIcon("zoom-in"));
         connect(zoomAction, SIGNAL(triggered(bool)), this, SLOT(zoomIn()));
         zoomAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
-        zoomAction->setShortcut(QKeySequence("ctrl+="));
+        //two shortcuts because I hate ctrl-+ but others expect it
+        QList<QKeySequence> keys;
+        keys << QKeySequence(QKeySequence::ZoomIn);
+        keys <<QKeySequence("ctrl+=");
+        zoomAction->setShortcuts(keys);
         d->actions().addAction("zoom in", zoomAction);
 
         zoomAction = new QAction(i18n("Zoom Out"), this);
         zoomAction->setIcon(KIcon("zoom-out"));
         connect(zoomAction, SIGNAL(triggered(bool)), this, SLOT(zoomOut()));
         zoomAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
-        zoomAction->setShortcut(QKeySequence("ctrl+-"));
+        zoomAction->setShortcut(QKeySequence(QKeySequence::ZoomOut));
         d->actions().addAction("zoom out", zoomAction);
 
         QAction *activityAction = new QAction(i18n("Add Activity"), this);
