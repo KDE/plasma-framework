@@ -138,7 +138,7 @@ void Label::setStyleSheet(const QString &stylesheet)
     widget()->setStyleSheet(stylesheet);
 }
 
-QString Label::stylesheet()
+QString Label::styleSheet()
 {
     return widget()->styleSheet();
 }

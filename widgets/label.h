@@ -37,7 +37,7 @@ class PLASMA_EXPORT Label : public QGraphicsProxyWidget
     Q_PROPERTY(QGraphicsWidget* parentWidget READ parentWidget)
     Q_PROPERTY(QString text READ text WRITE setText)
     Q_PROPERTY(QString image READ image WRITE setImage)
-    Q_PROPERTY(QString stylesheet READ stylesheet WRITE setStyleSheet)
+    Q_PROPERTY(QString styleSheet READ styleSheet WRITE setStyleSheet)
     Q_PROPERTY(QLabel* nativeWidget READ nativeWidget)
 
 public:
@@ -78,7 +78,7 @@ public:
     /**
      * @return the stylesheet currently used with this widget
      */
-    QString stylesheet();
+    QString styleSheet();
 
     /**
      * @return the native widget wrapped by this Label
