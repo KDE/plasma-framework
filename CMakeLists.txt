@@ -11,6 +11,7 @@ install(FILES
 
 install(FILES
     opaque/widgets/tooltip.svg
+    opaque/widgets/panel-background.svg
     DESTINATION ${DATA_INSTALL_DIR}/desktoptheme/default/opaque/widgets/)
 
 install(FILES
