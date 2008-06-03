@@ -56,6 +56,7 @@ class PLASMA_EXPORT Theme : public QObject
         enum ColorRole
         {
             TextColor = 0 /**<  the text color to be used by items resting on the background */,
+            HighlightColor = 1 /**<  the text higlight color to be used by items resting on the background */,
             BackgroundColor /**< the default background color */
         };
 

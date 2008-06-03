@@ -273,6 +273,10 @@ QColor Theme::color(ColorRole role) const
             return colorScheme.foreground(KColorScheme::NormalText).color();
             break;
 
+        case HighlightColor:
+            return colorScheme.background(KColorScheme::ActiveBackground).color();
+            break;
+
         case BackgroundColor:
             return colorScheme.background().color();
             break;
