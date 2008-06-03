@@ -6,6 +6,7 @@ install(FILES
 
 install(FILES
     opaque/dialogs/background.svg
+    opaque/dialogs/krunner.svg
     DESTINATION ${DATA_INSTALL_DIR}/desktoptheme/default/opaque/dialogs/)
 
 install(FILES
