@@ -574,13 +574,8 @@ void Applet::setBackgroundHints(const BackgroundHints hints)
             d->background = new Plasma::PanelSvg();
         }
 
-        if (hints & TranslucentBackground) {
+        if ((hints & TranslucentBackground) && Plasma::Theme::defaultTheme()->currentThemeHasImage("widgets/translucentbackground")) {
             d->background->setImagePath("widgets/translucentbackground");
-            
-            //FIXME: this fallback is an hack, an api like Plasma::Theme::hasImage() would be needed to make this clean
-            if (!Plasma::Theme::defaultTheme()->imagePath("widgets/translucentbackground").contains(Plasma::Theme::defaultTheme()->themeName())) {
-                d->background->setImagePath("widgets/background");
-            }
         } else {
             d->background->setImagePath("widgets/background");
         }

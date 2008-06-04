@@ -259,6 +259,11 @@ QString Theme::imagePath(const QString& name)  const
     return path;
 }
 
+bool Theme::currentThemeHasImage(const QString& name)  const
+{
+    return (!d->findInTheme(name, d->themeName).isEmpty());
+}
+
 KSharedConfigPtr Theme::colorScheme() const
 {
     return d->colors;
