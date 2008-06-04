@@ -215,7 +215,7 @@ void Delegate::paint(QPainter *painter, const QStyleOptionViewItem& option, cons
                                                                         Qt::AlignLeft : Qt::AlignRight,
                                                option.decorationSize,
                                                contentRect.adjusted(Private::ITEM_LEFT_MARGIN,Private::ITEM_TOP_MARGIN,-Private::ITEM_RIGHT_MARGIN,-Private::ITEM_BOTTOM_MARGIN));
-
+    decorationRect.moveTop(contentRect.top() + qMax(0, (contentRect.height() - decorationRect.height())) / 2);
 
     QString titleText = index.data(Qt::DisplayRole).value<QString>();
     QString subTitleText = index.data(d->roles[SubTitleRole]).value<QString>();
