@@ -267,6 +267,16 @@ class Svg::Private
             path = newPath;
             //delete d->renderer; we're a KSharedPtr
             eraseRenderer();
+
+            // check if new theme svg wants colorscheme applied
+            createRenderer();
+            applyColors = renderer->elementExists("hint-apply-color-scheme");
+            if (applyColors && !Theme::defaultTheme()->colorScheme()) {
+                connect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()), q, SLOT(colorsChanged()));
+            } else {
+                disconnect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()), q, SLOT(colorsChanged()));
+            }
+
             emit q->repaintNeeded();
         }
 
