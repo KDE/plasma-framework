@@ -157,7 +157,8 @@ enum ImmutabilityType { Mutable = 1 /**< The item can be modified in any way **/
  */
 enum AspectRatioMode { IgnoreAspectRatio = 0 /**< The applet can be freely resized */,
                        KeepAspectRatio = 1 /**< The applet keeps a fixed aspect ratio */,
-                       Square = 2 /**< The applet is always a square */
+                       Square = 2 /**< The applet is always a square */,
+                       ConstrainedSquare = 3 /** The applet is no wider (in horizontal formfactors) or no higher (in vertical ones) than a square*/
                      };
 
 /**
