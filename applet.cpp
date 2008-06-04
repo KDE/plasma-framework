@@ -313,6 +313,12 @@ void Applet::Private::appletAnimationComplete(QGraphicsItem *item, Plasma::Anima
     if (anim != Animator::DisappearAnimation || item != q) {
         return; //it's not our time yet
     }
+
+    cleanUpAndDelete();
+}
+
+void Applet::Private::cleanUpAndDelete()
+{
     //kDebug() << "???????????????? DESTROYING APPLET" << name() << " ???????????????????????????";
     QGraphicsWidget *parent = dynamic_cast<QGraphicsWidget *>(q->parentItem());
     //it probably won't matter, but right now if there are applethandles, *they* are the parent.
@@ -334,7 +340,6 @@ void Applet::Private::appletAnimationComplete(QGraphicsItem *item, Plasma::Anima
     }
 
     q->scene()->removeItem(q);
-
     q->deleteLater();
 }
 

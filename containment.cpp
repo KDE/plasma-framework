@@ -488,7 +488,10 @@ void Containment::addSiblingContainment()
 
 void Containment::clearApplets()
 {
-    qDeleteAll(d->applets);
+    foreach (Applet *applet, d->applets) {
+        applet->d->cleanUpAndDelete();
+    }
+
     d->applets.clear();
 }
 
@@ -986,6 +989,7 @@ void Containment::destroy()
     if (immutability() != Mutable) {
         return;
     }
+
     if (isContainment()) {
         //FIXME maybe that %1 should be the containment type not the name
         if (KMessageBox::warningContinueCancel(0, i18n("Do you really want to remove this %1?", name()),

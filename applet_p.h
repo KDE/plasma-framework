@@ -63,6 +63,7 @@ public:
     void resetConfigurationObject();
     void appletAnimationComplete(QGraphicsItem *item, Plasma::Animator::Animation anim);
     void setFocus();
+    void cleanUpAndDelete();
 
     static uint s_maxAppletId;
     static uint s_maxZValue;
