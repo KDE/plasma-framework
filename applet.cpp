@@ -139,8 +139,6 @@ void Applet::init()
     if (d->script && !d->script->init()) {
         setFailedToLaunch(true, i18n("Script initialization failed"));
     }
-    //Here is the code for the window frame
-    //setWindowFlags(Qt::Window);
 }
 
 uint Applet::id() const
@@ -635,8 +633,8 @@ bool Applet::hasFailedToLaunch() const
 void Applet::paintWindowFrame(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget)
 {
     //Here come the code for the window frame
-    //kDebug()<<"ENTER in windowFrame";
-    //painter->drawRoundedRect(windowFrameGeometry(),5,5);
+    //kDebug() << windowFrameGeometry();
+    //painter->drawRoundedRect(windowFrameGeometry(), 5, 5);
 }
 
 bool Applet::configurationRequired() const
@@ -704,10 +702,10 @@ void Applet::flushPendingConstraintsEvents()
         closeApplet->setEnabled(unlocked);
         closeApplet->setVisible(unlocked);
         closeApplet->setShortcutContext(Qt::WidgetWithChildrenShortcut); //don't clash with other views
-        if (! isContainment()) {
-            closeApplet->setShortcut(QKeySequence("ctrl+r"));
-        } else {
+        if (isContainment()) {
             closeApplet->setShortcut(QKeySequence("ctrl+shift+r"));
+        } else {
+            closeApplet->setShortcut(QKeySequence("ctrl+r"));
         }
         connect(closeApplet, SIGNAL(triggered(bool)), this, SLOT(destroy()));
         d->actions.addAction("remove", closeApplet);

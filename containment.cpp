@@ -389,7 +389,7 @@ void Containment::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
             }
 
             QAction* closeApplet = applet->d->actions.action("remove");
-            if (! closeApplet) { //unlikely but not impossible
+            if (!closeApplet) { //unlikely but not impossible
                 kDebug() << "wtf!! no remove action!!!!!!!!";
                 closeApplet = new QAction(i18n("Remove this %1", applet->name()), &desktopMenu);
                 closeApplet->setIcon(KIcon("edit-delete"));
@@ -547,6 +547,7 @@ void Containment::addApplet(Applet *applet, const QPointF &pos, bool delayInit)
     if (delayInit) {
         if (containmentType() == DesktopContainment) {
             applet->installSceneEventFilter(this);
+            //applet->setWindowFlags(Qt::Window);
         }
     } else {
         applet->init();
@@ -1227,11 +1228,14 @@ void Containment::Private::appletDestroyed(QObject* object)
 
 void Containment::Private::containmentAppletAnimationComplete(QGraphicsItem *item, Plasma::Animator::Animation anim)
 {
-    if (anim == Animator::AppearAnimation) {
-        if (q->containmentType() == DesktopContainment &&
-            item->parentItem() == q &&
-            qgraphicsitem_cast<Applet*>(item)) {
-                item->installSceneEventFilter(q);
+    if (anim == Animator::AppearAnimation &&
+        q->containmentType() == DesktopContainment &&
+        item->parentItem() == q) {
+        Applet *applet = qgraphicsitem_cast<Applet*>(item);
+
+        if (applet) {
+            applet->installSceneEventFilter(q);
+            //applet->setWindowFlags(Qt::Window);
         }
     }
 }
