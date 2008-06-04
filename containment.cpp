@@ -766,8 +766,8 @@ void Containment::keyPressEvent(QKeyEvent *event)
 {
     kDebug() << "keyPressEvent with" << event->key() << "and hoping and wishing for a" << Qt::Key_Tab;
     if (event->key() == Qt::Key_Tab) { // && event->modifiers() == 0) {
-        kDebug() << "let's give focus to...." << (QObject*)d->applets.first();
         if (!d->applets.isEmpty()) {
+            kDebug() << "let's give focus to...." << (QObject*)d->applets.first();
             d->applets.first()->setFocus(Qt::TabFocusReason);
         }
     }
