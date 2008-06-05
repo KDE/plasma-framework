@@ -249,6 +249,12 @@ protected:
      */
     void setContentsPrefix(const QString &prefix);
 
+    /**
+     * Called whenever the path changes so that subclasses may take
+     * package specific actions.
+     */
+    virtual void pathChanged();
+
 private:
     class Private;
      Private * const d;
