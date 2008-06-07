@@ -25,6 +25,7 @@
 
 class KFileWidget;
 class KListWidget;
+class QListWidgetItem;
 
 namespace Plasma
 {
@@ -42,7 +43,7 @@ protected Q_SLOTS:
     void prepPage(KPageWidgetItem *current, KPageWidgetItem *before);
     void finished();
     void slotHelpClicked();
-
+    void slotItemChanged();
 private:
     KPageWidgetItem *m_typePage;
     KPageWidgetItem *m_filePage;
