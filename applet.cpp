@@ -388,12 +388,14 @@ QGraphicsView *Applet::view() const
 
 QRectF Applet::mapFromView(const QGraphicsView *view, const QRect &rect) const
 {
-    return mapFromScene(view->mapToScene(rect)).boundingRect();
+    // Why is this adjustment needed? Qt calculation error?
+    return mapFromScene(view->mapToScene(rect)).boundingRect().adjusted(0, 0, 1, 1);;
 }
 
 QRect Applet::mapToView(const QGraphicsView *view, const QRectF &rect) const
 {
-    return view->mapFromScene(mapToScene(rect)).boundingRect();
+    // Why is this adjustment needed? Qt calculation error?
+    return view->mapFromScene(mapToScene(rect)).boundingRect().adjusted(0, 0, -1, -1);;
 }
 
 QPoint Applet::popupPosition(const QSize &s) const
