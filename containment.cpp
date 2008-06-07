@@ -1275,8 +1275,6 @@ void Containment::Private::positionContainment()
         return;
     }
 
-    // we need to find how many screens are to our top and left
-    // to calculate the proper offsets for the margins.
     int width = 0;
     int height = 0;
 
@@ -1307,10 +1305,12 @@ void Containment::Private::positionContainment()
     positioning = true;
     while (true) {
         it.toFront();
+        int shift = 0;
 
         while (it.hasNext()) {
             Containment *containment = it.next();
             if (q->collidesWithItem(containment)) {
+                shift = containment->boundingRect().right();
                 break;
             }
 
@@ -1323,16 +1323,16 @@ void Containment::Private::positionContainment()
             }
         }
 
-        if (!it.hasNext()) {
+        if (shift == 0) {
             // success! no collisions!
             break;
         }
 
-        if (topLeft.x() + (r.width() * 2) + INTER_CONTAINMENT_MARGIN > width) {
+        if (shift + r.width() + INTER_CONTAINMENT_MARGIN > width) {
             // we ran out of width room, try another row
             topLeft = QPoint(0, topLeft.y() + height);
         } else {
-            topLeft.setX(topLeft.x() + r.width() + INTER_CONTAINMENT_MARGIN);
+            topLeft.setX(shift + INTER_CONTAINMENT_MARGIN);
         }
 
         kDebug() << "trying at" << topLeft;
