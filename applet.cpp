@@ -1143,6 +1143,7 @@ void Applet::resizeEvent(QGraphicsSceneResizeEvent *event)
     }
 
     updateConstraints(Plasma::SizeConstraint);
+    emit geometryChanged();
 }
 
 void Applet::showConfigurationInterface()
