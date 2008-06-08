@@ -329,7 +329,7 @@ class PLASMA_EXPORT Containment : public Applet
         void setLocation(Plasma::Location location);
 
         /**
-         * Sets the form factor for this Corona. This may cause changes in both
+         * Sets the form factor for this Containment. This may cause changes in both
          * the arrangement of Applets as well as the display choices of individual
          * Applets.
          */
