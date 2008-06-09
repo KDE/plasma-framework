@@ -145,7 +145,7 @@ endif(QT_QTOPENGL_FOUND AND OPENGL_FOUND)
 
 install(FILES
         ${plasma_LIB_INCLUDES}
-        DESTINATION ${INCLUDE_INSTALL_DIR}/plasma)
+        DESTINATION ${INCLUDE_INSTALL_DIR}/plasma COMPONENT Devel)
 
 install(FILES
     widgets/checkbox.h
@@ -161,7 +161,7 @@ install(FILES
     widgets/signalplotter.h
     widgets/textedit.h
     widgets/webcontent.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/plasma/widgets)
+    DESTINATION ${INCLUDE_INSTALL_DIR}/plasma/widgets COMPONENT Devel)
 
 #For future
 #install(FILES
@@ -173,7 +173,7 @@ install(FILES
     scripting/dataenginescript.h
     scripting/runnerscript.h
     scripting/scriptengine.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/plasma/scripting)
+    DESTINATION ${INCLUDE_INSTALL_DIR}/plasma/scripting COMPONENT Devel)
 
 
 install(FILES
@@ -217,12 +217,12 @@ includes/Theme
 includes/UiLoader
 includes/View
 includes/WebContent
-DESTINATION ${INCLUDE_INSTALL_DIR}/KDE/Plasma)
+DESTINATION ${INCLUDE_INSTALL_DIR}/KDE/Plasma COMPONENT Devel)
 
 if(QT_QTOPENGL_FOUND AND OPENGL_FOUND)
    install(FILES
       includes/GLApplet
-      DESTINATION ${INCLUDE_INSTALL_DIR}/KDE/Plasma)
+      DESTINATION ${INCLUDE_INSTALL_DIR}/KDE/Plasma COMPONENT Devel)
 endif(QT_QTOPENGL_FOUND AND OPENGL_FOUND)
 
 install(FILES
