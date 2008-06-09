@@ -710,7 +710,7 @@ void Containment::dropEvent(QGraphicsSceneDragDropEvent *event)
         foreach (const KUrl& url, urls) {
             KMimeType::Ptr mime = KMimeType::findByUrl(url);
             QString mimeName = mime->name();
-            QRectF geom(event->scenePos(), QSize(0, 0));
+            QRectF geom(event->pos(), QSize());
             QVariantList args;
             args << url.url();
             //             kDebug() << mimeName;
