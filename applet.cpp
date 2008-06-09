@@ -1520,6 +1520,9 @@ void Applet::Private::init()
     //          that requires a scene, which is not available at this point
     q->setAcceptsHoverEvents(true);
     q->setFlag(QGraphicsItem::ItemIsFocusable, true);
+    // FIXME: adding here because nothing seems to be doing it in QGraphicsView,
+    // but it doesn't actually work anyways =/
+    q->setLayoutDirection(qApp->layoutDirection());
 
     if (!appletDescription.isValid()) {
         kDebug() << "Check your constructor! You probaly want to be passing a Service::Ptr or a QVariantList with a valid storageid as arg[0] in.";
