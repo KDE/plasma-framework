@@ -1254,6 +1254,7 @@ void Containment::Private::positionContainment()
     QList<Containment*> containments = c->containments();
     QMutableListIterator<Containment*> it(containments);
 
+    bool noCollissions = true;
     while (it.hasNext()) {
         Containment *containment = it.next();
         if (containment == q ||
@@ -1264,12 +1265,12 @@ void Containment::Private::positionContainment()
             continue;
         }
 
-        if (q->collidesWithItem(containment)) {
-            break;
+        if (noCollissions && q->collidesWithItem(containment)) {
+            noCollissions = false;
         }
     }
 
-    if (!it.hasNext()) {
+    if (noCollissions) {
         // we made it all the way through the list, we have no
         // collisions
         return;
@@ -1309,8 +1310,11 @@ void Containment::Private::positionContainment()
 
         while (it.hasNext()) {
             Containment *containment = it.next();
+
             if (q->collidesWithItem(containment)) {
                 shift = containment->boundingRect().right();
+                //TODO: is it safe to remove a containment once we've
+                // collided with it?
                 break;
             }
 
