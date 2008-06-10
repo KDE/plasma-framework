@@ -39,14 +39,18 @@ public:
           trackChanges(true),
           desktop(-1),
           containment(0),
-          q(view)
-
+          q(view),
+          viewId(0)
     {
-        if (uniqueId == 0) {
-            viewId = ++s_maxViewId;
-        } else if (uniqueId > s_maxViewId) {
+        if (uniqueId > s_maxViewId) {
             s_maxViewId = uniqueId;
             viewId = uniqueId;
+        }
+
+        if (viewId == 0) {
+            // we didn't get a sane value assigned to us, so lets
+            // grab the next available id
+            viewId = ++s_maxViewId;
         }
     }
 
