@@ -21,6 +21,7 @@
 
 #include <QReadWriteLock>
 
+#include <QDir>
 #include <QFile>
 #include <QFileInfo>
 #include <QSharedData>
@@ -77,7 +78,7 @@ class RunnerContext::Private : public QSharedData
             // code that may be running in multiple threads
             // with the same data.
             type = UnknownType;
-            QString path = KShell::tildeExpand(term);
+            QString path = QDir::cleanPath(KShell::tildeExpand(term));
 
             int space = term.indexOf(' ');
             if (space > 0) {
@@ -88,9 +89,9 @@ class RunnerContext::Private : public QSharedData
                 type = Executable;
             } else {
                 KUrl url(term);
-                if (!url.protocol().isEmpty()) {
+                if (!url.protocol().isEmpty() && !url.isLocalFile()) {
                     type = NetworkLocation;
-                } else  if (QFile::exists(path)) {
+                } else if (QFile::exists(path)) {
                     QFileInfo info(path);
                     if (info.isDir()) {
                         type = Directory;
