@@ -93,10 +93,14 @@ class RunnerContext::Private : public QSharedData
                     type = NetworkLocation;
                 } else if (QFile::exists(path)) {
                     QFileInfo info(path);
+                    if (info.isSymLink()) {
+                        path = info.canonicalFilePath();
+                        info = QFileInfo(path);
+                    }
                     if (info.isDir()) {
                         type = Directory;
                         mimeType = "inode/folder";
-                    } else {
+                    } else if (info.isFile()) {
                         type = File;
                         KMimeType::Ptr mimeTypePtr = KMimeType::findByPath(path);
                         if (mimeTypePtr) {
