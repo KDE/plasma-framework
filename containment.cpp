@@ -352,7 +352,9 @@ void Containment::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
         QList<QAction*> actions = applet->contextualActions();
         if (!actions.isEmpty()) {
             foreach(QAction* action, actions) {
-                desktopMenu.addAction(action);
+                if (action) {
+                    desktopMenu.addAction(action);
+                }
             }
             hasEntries = true;
         }
@@ -370,6 +372,7 @@ void Containment::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
             if (hasEntries) {
                 desktopMenu.addSeparator();
             }
+
             hasEntries = true;
             QMenu *containmentActionMenu = &desktopMenu;
 
@@ -378,8 +381,10 @@ void Containment::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
                 desktopMenu.addMenu(containmentActionMenu);
             }
 
-            foreach(QAction* action, containmentActions) {
-                containmentActionMenu->addAction(action);
+            foreach (QAction* action, containmentActions) {
+                if (action) {
+                    containmentActionMenu->addAction(action);
+                }
             }
         }
 
@@ -419,8 +424,10 @@ void Containment::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
             return;
         }
 
-        foreach(QAction* action, actions) {
-            desktopMenu.addAction(action);
+        foreach (QAction* action, actions) {
+            if (action) {
+                desktopMenu.addAction(action);
+            }
         }
     }
 
@@ -693,7 +700,7 @@ KPluginInfo::List Containment::listContainmentsForMimetype(const QString &mimety
 
 void Containment::dragEnterEvent(QGraphicsSceneDragDropEvent *event)
 {
-    kDebug() << immutability() << Mutable << (immutability() == Mutable);
+    //kDebug() << immutability() << Mutable << (immutability() == Mutable);
     event->setAccepted(immutability() == Mutable &&
                        (event->mimeData()->hasFormat(static_cast<Corona*>(scene())->appletMimeType()) ||
                         KUrl::List::canDecode(event->mimeData())));
@@ -1114,6 +1121,8 @@ void Containment::Private::containmentConstraintsEvent(Plasma::Constraints const
     if (constraints & Plasma::ImmutableConstraint) {
         //update actions
         bool unlocked = q->immutability() == Mutable;
+        q->setAcceptDrops(unlocked);
+
         QAction *action = actions().action("add widgets");
         if (action) {
             action->setVisible(unlocked);
