@@ -390,7 +390,7 @@ void Containment::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
 
             QAction* closeApplet = applet->d->actions.action("remove");
             if (!closeApplet) { //unlikely but not impossible
-                kDebug() << "wtf!! no remove action!!!!!!!!";
+                kDebug() << "no remove action!!!!!!!!";
                 closeApplet = new QAction(i18n("Remove this %1", applet->name()), &desktopMenu);
                 closeApplet->setIcon(KIcon("edit-delete"));
                 connect(closeApplet, SIGNAL(triggered(bool)), applet, SLOT(destroy()));
@@ -768,7 +768,7 @@ void Containment::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 
 void Containment::keyPressEvent(QKeyEvent *event)
 {
-    kDebug() << "keyPressEvent with" << event->key() << "and hoping and wishing for a" << Qt::Key_Tab;
+    //kDebug() << "keyPressEvent with" << event->key() << "and hoping and wishing for a" << Qt::Key_Tab;
     if (event->key() == Qt::Key_Tab) { // && event->modifiers() == 0) {
         if (!d->applets.isEmpty()) {
             kDebug() << "let's give focus to...." << (QObject*)d->applets.first();
@@ -782,12 +782,12 @@ bool Containment::sceneEventFilter(QGraphicsItem *watched, QEvent *event)
     Applet *applet = qgraphicsitem_cast<Applet*>(watched);
 
     // Otherwise we're watching something we shouldn't be...
-    //kDebug() << "got sceneEvent";
     Q_ASSERT(applet!=0);
     if (!d->applets.contains(applet)) {
         return false;
     }
 
+    //kDebug() << "got sceneEvent";
     switch (event->type()) {
     case QEvent::GraphicsSceneHoverEnter:
         //kDebug() << "got hoverenterEvent" << immutability() << " " << applet->immutability();
@@ -824,7 +824,6 @@ bool Containment::sceneEventFilter(QGraphicsItem *watched, QEvent *event)
 
 QVariant Containment::itemChange(GraphicsItemChange change, const QVariant &value)
 {
-    Q_UNUSED(value)
     //FIXME if the applet is moved to another containment we need to unfocus it
 
     if (isContainment() &&
@@ -958,7 +957,6 @@ void Containment::Private::focusApplet(Plasma::Applet *applet)
 
 void Containment::focusNextApplet()
 {
-    kDebug();
     if (d->applets.isEmpty()) {
         return;
     }
@@ -972,7 +970,6 @@ void Containment::focusNextApplet()
 
 void Containment::focusPreviousApplet()
 {
-    kDebug();
     if (d->applets.isEmpty()) {
         return;
     }
@@ -1312,7 +1309,9 @@ void Containment::Private::positionContainment()
             Containment *containment = it.next();
 
             if (q->collidesWithItem(containment)) {
-                shift = containment->boundingRect().right();
+                shift = containment->geometry().right();
+                /*kDebug() << (QObject*)q << "collides with" << (QObject*)containment
+                         << containment->geometry() << "so shift to: " << shift;*/
                 //TODO: is it safe to remove a containment once we've
                 // collided with it?
                 break;
@@ -1339,8 +1338,8 @@ void Containment::Private::positionContainment()
             topLeft.setX(shift + INTER_CONTAINMENT_MARGIN);
         }
 
-        kDebug() << "trying at" << topLeft;
         q->setPos(topLeft);
+        //kDebug() << "trying at" << topLeft << q->geometry();
         //kDebug() << collidingItems().count() << collidingItems()[0] << (QGraphicsItem*)this;
     }
 
