@@ -673,13 +673,14 @@ void Applet::setConfigurationRequired(bool needsConfig)
     d->needsConfigOverlay->setZValue(zValue);
 
     qDeleteAll(d->needsConfigOverlay->QGraphicsItem::children());
-    QGraphicsLinearLayout *configLayout = new QGraphicsLinearLayout(this);
+    QGraphicsLinearLayout *configLayout = new QGraphicsLinearLayout(d->needsConfigOverlay);
     configLayout->setContentsMargins(0, 0, 0, 0);
-    PushButton *configWidget = new PushButton(this);
+    PushButton *configWidget = new PushButton(d->needsConfigOverlay);
     configWidget->setText(i18n("Configure..."));
     connect(configWidget, SIGNAL(clicked()), this, SLOT(showConfigurationInterface()));
+    configLayout->addStretch();
     configLayout->addItem(configWidget);
-    setLayout(configLayout);
+    d->needsConfigOverlay->setLayout(configLayout);
     d->needsConfigOverlay->show();
 }
 
