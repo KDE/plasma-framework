@@ -354,38 +354,19 @@ void Corona::loadDefaultLayout()
 {
 }
 
-void Corona::dragEnterEvent( QGraphicsSceneDragDropEvent *event)
+void Corona::dragEnterEvent(QGraphicsSceneDragDropEvent *event)
 {
-//    kDebug() << "Corona::dragEnterEvent(QGraphicsSceneDragDropEvent* event)";
-    if (event->mimeData()->hasFormat(d->mimetype) ||
-        KUrl::List::canDecode(event->mimeData())) {
-        event->acceptProposedAction();
-        //TODO Create the applet, move to mouse position then send the
-        //     following event to lock it to the mouse
-        //QMouseEvent event(QEvent::MouseButtonPress, event->pos(), Qt::LeftButton, event->mouseButtons(), 0);
-        //QApplication::sendEvent(this, &event);
-    }
-
-    event->accept();
-    //TODO Allow dragging an applet from another Corona into this one while
-    //     keeping its settings etc.
+    QGraphicsScene::dragEnterEvent(event);
 }
 
 void Corona::dragLeaveEvent(QGraphicsSceneDragDropEvent *event)
 {
-   // kDebug() << "Corona::dragLeaveEvent(QGraphicsSceneDragDropEvent* event)";
-    //TODO If an established Applet is dragged out of the Corona, remove it and
-    //     create a QDrag type thing to keep the Applet's settings
-
     QGraphicsScene::dragLeaveEvent(event);
 }
 
 void Corona::dragMoveEvent(QGraphicsSceneDragDropEvent *event)
 {
     QGraphicsScene::dragMoveEvent(event);
-
-    event->accept();
-    //kDebug() << "Corona::dragMoveEvent(QDragMoveEvent* event)";
 }
 
 ImmutabilityType Corona::immutability() const
