@@ -691,6 +691,14 @@ KPluginInfo::List Containment::listContainmentsForMimetype(const QString &mimety
     return KPluginInfo::fromServices(offers);
 }
 
+void Containment::dragEnterEvent(QGraphicsSceneDragDropEvent *event)
+{
+    kDebug() << immutability() << Mutable << (immutability() == Mutable);
+    event->setAccepted(immutability() == Mutable &&
+                       (event->mimeData()->hasFormat(static_cast<Corona*>(scene())->appletMimeType()) ||
+                        KUrl::List::canDecode(event->mimeData())));
+}
+
 void Containment::dropEvent(QGraphicsSceneDragDropEvent *event)
 {
     //kDebug() << event->mimeData()->text();

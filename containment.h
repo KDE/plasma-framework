@@ -387,9 +387,13 @@ class PLASMA_EXPORT Containment : public Applet
         bool sceneEventFilter(QGraphicsItem *watched, QEvent *event);
         QVariant itemChange(GraphicsItemChange change, const QVariant &value);
 
-    protected Q_SLOTS:
         /**
-         * @internal
+         * @reimplemented from QGraphicsItem
+         */
+        void dragEnterEvent(QGraphicsSceneDragDropEvent *event);
+
+        /**
+         * @reimplemented from QGraphicsItem
          */
         void dropEvent(QGraphicsSceneDragDropEvent *event);
 
