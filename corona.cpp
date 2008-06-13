@@ -329,7 +329,9 @@ KSharedConfigPtr Corona::config() const
 
 Containment* Corona::addContainment(const QString& name, const QVariantList& args)
 {
-    return d->addContainment(name, args, 0, false);
+    Containment *c = d->addContainment(name, args, 0, false);
+    d->scheduleConfigSync();
+    return c;
 }
 
 void Corona::destroyContainment(Containment *c)
@@ -348,6 +350,7 @@ void Corona::destroyContainment(Containment *c)
     removeItem(c);
     c->config().deleteGroup();
     c->deleteLater();
+    d->scheduleConfigSync();
 }
 
 void Corona::loadDefaultLayout()
@@ -380,7 +383,7 @@ void Corona::setImmutability(const ImmutabilityType immutable)
         d->immutability == SystemImmutable) {
         return;
     }
-    
+
     kDebug() << "setting immutability to" << immutable;
     d->immutability = immutable;
     d->updateContainmentImmutability();
