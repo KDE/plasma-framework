@@ -46,9 +46,10 @@ KCategorizedItemsViewDelegate::KCategorizedItemsViewDelegate(QObject * parent)
 void KCategorizedItemsViewDelegate::paint(QPainter *painter,
         const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
-    KCategorizedItemsViewModels::AbstractItem * item =
-        getItemByProxyIndex(index);
-    if (!item) return;
+    KCategorizedItemsViewModels::AbstractItem * item = getItemByProxyIndex(index);
+    if (!item) {
+        return;
+    }
 
     QStyleOptionViewItemV4 opt(option);
     QStyle *style = opt.widget ? opt.widget->style() : QApplication::style();
@@ -72,22 +73,22 @@ void KCategorizedItemsViewDelegate::paint(QPainter *painter,
 int KCategorizedItemsViewDelegate::calcItemHeight(const QStyleOptionViewItem &option) const
 {
     // Painting main column
-    QStyleOptionViewItem local_option_title(option);
-    QStyleOptionViewItem local_option_normal(option);
+    QFont titleFont = option.font;
+    titleFont.setBold(true);
+    titleFont.setPointSize(titleFont.pointSize() + 2);
 
-    local_option_title.font.setBold(true);
-    local_option_title.font.setPointSize(local_option_title.font.pointSize() + 2);
-
-    int textHeight = QFontInfo(local_option_title.font).pixelSize() + QFontInfo(local_option_normal.font).pixelSize();
+    int textHeight = QFontInfo(titleFont).pixelSize() + QFontInfo(option.font).pixelSize();
+    //kDebug() << textHeight << qMax(textHeight, MAIN_ICON_SIZE) + 2 * UNIVERSAL_PADDING;
     return qMax(textHeight, MAIN_ICON_SIZE) + 2 * UNIVERSAL_PADDING;
 }
 
 void KCategorizedItemsViewDelegate::paintColMain(QPainter *painter,
         const QStyleOptionViewItem &option, const KCategorizedItemsViewModels::AbstractItem * item) const
 {
-    int left = option.rect.left();
-    int top = option.rect.top();
-    int width = option.rect.width();
+    const int left = option.rect.left();
+    const int top = option.rect.top();
+    const int width = option.rect.width();
+    const int height = calcItemHeight(option);
 
     bool leftToRight = (painter->layoutDirection() == Qt::LeftToRight);
     QIcon::Mode iconMode = QIcon::Normal;
@@ -95,14 +96,12 @@ void KCategorizedItemsViewDelegate::paintColMain(QPainter *painter,
     QColor foregroundColor = (option.state.testFlag(QStyle::State_Selected))?
         option.palette.color(QPalette::HighlightedText):option.palette.color(QPalette::Text);
 
-    // Painting main column             
-    QStyleOptionViewItem local_option_title(option);
-    QStyleOptionViewItem local_option_normal(option);
+    // Painting main column
+    QFont titleFont = option.font;
+    titleFont.setBold(true);
+    titleFont.setPointSize(titleFont.pointSize() + 2);
 
-    local_option_title.font.setBold(true);
-    local_option_title.font.setPointSize(local_option_title.font.pointSize() + 2);
-
-    QPixmap pixmap(option.rect.size());
+    QPixmap pixmap(width, height);
     pixmap.fill(Qt::transparent);
     QPainter p(&pixmap);
     p.translate(-option.rect.topLeft());
@@ -116,21 +115,17 @@ void KCategorizedItemsViewDelegate::paintColMain(QPainter *painter,
 
     // Text
     int textInner = 2 * UNIVERSAL_PADDING + MAIN_ICON_SIZE;
-    const int itemHeight = calcItemHeight(option);
 
     p.setPen(foregroundColor);
-    p.setFont(local_option_title.font);
-    p.drawText(
-            left + (leftToRight ? textInner : 0),
-            top,
-            width - textInner, itemHeight / 2,
-            Qt::AlignBottom | Qt::AlignLeft, title);
-    p.setFont(local_option_normal.font);
-    p.drawText(
-            left + (leftToRight ? textInner : 0),
-            top + itemHeight / 2,
-            width - textInner, itemHeight / 2,
-            Qt::AlignTop | Qt::AlignLeft, description);
+    p.setFont(titleFont);
+    p.drawText(left + (leftToRight ? textInner : 0),
+               top, width - textInner, height / 2,
+               Qt::AlignBottom | Qt::AlignLeft, title);
+    p.setFont(option.font);
+    p.drawText(left + (leftToRight ? textInner : 0),
+               top + height / 2,
+               width - textInner, height / 2,
+               Qt::AlignTop | Qt::AlignLeft, description);
 
     // Main icon
     item->icon().paint(&p, 
@@ -194,6 +189,7 @@ void KCategorizedItemsViewDelegate::paintColMain(QPainter *painter,
     p.end();
 
     painter->drawPixmap(option.rect.topLeft(), pixmap);
+    kDebug();
 }
 
 void KCategorizedItemsViewDelegate::paintColFav(QPainter *painter,
