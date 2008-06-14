@@ -134,6 +134,12 @@ public Q_SLOTS:
      */
     void setImmutability(const ImmutabilityType immutable);
 
+    /**
+     * Schedules a flush-to-disk synchronization of the configuration state
+     * at the next convenient moment.
+     */
+    void requestConfigSync();
+
 Q_SIGNALS:
     /**
      * This signal indicates a new containment has been added to
@@ -159,6 +165,11 @@ Q_SIGNALS:
      */
     void releaseVisualFocus();
 
+    /**
+     * This signal indicates that the configuration file was flushed to disc.
+     */
+    void configSynced();
+
 protected:
     /**
      * Loads the default (system wide) layout for this user
@@ -176,7 +187,6 @@ private:
 
     Q_PRIVATE_SLOT(d, void containmentDestroyed(QObject*))
     Q_PRIVATE_SLOT(d, void syncConfig())
-    Q_PRIVATE_SLOT(d, void scheduleConfigSync())
 };
 
 } // namespace Plasma

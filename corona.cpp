@@ -105,6 +105,7 @@ public:
     void syncConfig()
     {
         q->config()->sync();
+        emit q->configSynced();
     }
 
     Containment* addContainment(const QString& name, const QVariantList& args, uint id, bool delayedInit)
@@ -145,7 +146,7 @@ public:
 
         containments.append(containment);
         connect(containment, SIGNAL(destroyed(QObject*)), q, SLOT(containmentDestroyed(QObject*)));
-        connect(containment, SIGNAL(configNeedsSaving()), q, SLOT(scheduleConfigSync()));
+        connect(containment, SIGNAL(configNeedsSaving()), q, SLOT(requestConfigSync()));
         connect(containment, SIGNAL(releaseVisualFocus()), q, SIGNAL(releaseVisualFocus()));
         connect(containment, SIGNAL(screenChanged(int,int,Plasma::Containment*)),
                 q, SIGNAL(screenOwnerChanged(int,int,Plasma::Containment*)));
@@ -161,7 +162,7 @@ public:
      * Called when there have been changes made to configuration that should be saved
      * to disk at the next convenient moment
      */
-    void scheduleConfigSync();
+    void requestConfigSync();
 
     Corona *q;
     ImmutabilityType immutability;
@@ -213,7 +214,7 @@ void Corona::saveLayout(const QString &configName) const
     d->saveLayout(c);
 }
 
-void Corona::Private::scheduleConfigSync()
+void Corona::requestConfigSync()
 {
     // TODO: should we check into our immutability before doing this?
 
@@ -222,8 +223,8 @@ void Corona::Private::scheduleConfigSync()
     //      it should at least compress these activities a bit and provide a way for applet
     //      authors to ween themselves from the sync() disease. A more interesting/dynamic
     //      algorithm for determining when to actually sync() to disk might be better, though.
-    if (!configSyncTimer.isActive()) {
-        configSyncTimer.start(CONFIG_SYNC_TIMEOUT);
+    if (!d->configSyncTimer.isActive()) {
+        d->configSyncTimer.start(CONFIG_SYNC_TIMEOUT);
     }
 }
 
@@ -235,7 +236,7 @@ void Corona::initializeLayout(const QString &configName)
     if (d->containments.isEmpty()) {
         loadDefaultLayout();
         if (!d->containments.isEmpty()) {
-            d->scheduleConfigSync();
+            requestConfigSync();
         }
     }
 
@@ -330,7 +331,7 @@ KSharedConfigPtr Corona::config() const
 Containment* Corona::addContainment(const QString& name, const QVariantList& args)
 {
     Containment *c = d->addContainment(name, args, 0, false);
-    d->scheduleConfigSync();
+    requestConfigSync();
     return c;
 }
 
@@ -350,7 +351,7 @@ void Corona::destroyContainment(Containment *c)
     removeItem(c);
     c->config().deleteGroup();
     c->deleteLater();
-    d->scheduleConfigSync();
+    requestConfigSync();
 }
 
 void Corona::loadDefaultLayout()
