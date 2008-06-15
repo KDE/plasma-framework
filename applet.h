@@ -121,12 +121,24 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         KConfigGroup config(const QString &group) const;
 
         /**
-         * Saves state information about this applet.
+         * Saves state information about this applet that will
+         * be accessed when next instantiated in the restore(KConfigGroup&) method.
+         *
+         * This method does not need to be reimplmented by Applet
+         * subclasses, but can be useful for Applet specializations
+         * (such as Containment) to do so.
+         *
+         * Applet subclasses may instead want to reimplement saveState().
          **/
         virtual void save(KConfigGroup &group) const;
 
         /**
-         * Restores state information about this applet.
+         * Restores state information about this applet saved previously
+         * in save(KConfigGroup&).
+         *
+         * This method does not need to be reimplmented by Applet
+         * subclasses, but can be useful for Applet specializations
+         * (such as Containment) to do so.
          **/
         virtual void restore(KConfigGroup &group);
 
@@ -579,8 +591,13 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         void setFailedToLaunch(bool failed, const QString& reason = QString());
 
         /**
-         * Called when a request to save the state of the applet is made
-         * during runtime
+         * When called, the Applet should write any information needed as part
+         * of the Applet's running state to the configuration object in config()
+         * and/or globalConfig().
+         *
+         * Applets that always sync their settings/state with the config
+         * objects when these settings/states change do not need to reimplement
+         * this method.
          **/
         virtual void saveState(KConfigGroup &config) const;
 
