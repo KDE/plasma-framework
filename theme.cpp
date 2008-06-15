@@ -315,7 +315,14 @@ bool Theme::windowTranslucencyEnabled() const
 
 void Theme::setUseGlobalSettings(bool useGlobal)
 {
+    if (d->useGlobal == useGlobal) {
+        return;
+    }
+
     d->useGlobal = useGlobal;
+    d->cfg = KConfigGroup();
+    d->themeName = QString();
+    settingsChanged();
 }
 
 bool Theme::useGlobalSettings() const
