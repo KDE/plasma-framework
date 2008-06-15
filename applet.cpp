@@ -762,6 +762,11 @@ void Applet::flushPendingConstraintsEvents()
         } else if(d->backgroundHints&TranslucentBackground) {
             setBackgroundHints(d->backgroundHints^TranslucentBackground);
         }
+        
+        //ensure the applet won't break the panel layout
+        if ((f == Horizontal || f == Vertical) && !isContainment()) {
+            setMinimumSize(QSizeF(0,0));
+        }
     }
 
     //enforce square size in panels
