@@ -123,16 +123,6 @@ class PLASMA_EXPORT RunnerContext : public QObject
         bool addMatch(const QString &term, const QueryMatch &match);
 
         /**
-         * Takes the matches from this RunnerContext and copies to them another.
-         * If successful, the matches are removed from this RunnerContext and
-         * ownership passed to the other RunnerContext
-         *
-         * @arg other the RunnerContext to move this object's Matches to
-         * @return true if matches were added, false if matches were e.g. outdated
-         */
-        bool moveMatchesTo(RunnerContext &other);
-
-        /**
          * Retrieves all available matches for the current search term.
          *
          * @return a list of matches
