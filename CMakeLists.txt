@@ -195,6 +195,7 @@ includes/DataEngineScript
 includes/Delegate
 includes/Dialog
 includes/GroupBox
+includes/Icon
 includes/Label
 includes/LineEdit
 includes/Package
