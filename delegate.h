@@ -69,6 +69,9 @@ public:
 
     int roleMapping(SpecificRoles role) const;
 
+    //Reimplemented
+    virtual void paint(QPainter *painter,const QStyleOptionViewItem& option,const QModelIndex& index) const;
+
 protected:
     /**
      * Returns the empty area after the title.
@@ -99,9 +102,6 @@ protected:
      * @param index model index that we want to compute the free area
      */
     QRect emptyRect(const QStyleOptionViewItem& option, const QModelIndex& index) const;
-
-    //Reimplemented
-    virtual void paint(QPainter *painter,const QStyleOptionViewItem& option,const QModelIndex& index) const;
 
     virtual QSize sizeHint(const QStyleOptionViewItem& option , const QModelIndex& index) const;
 
