@@ -158,12 +158,6 @@ public:
         return containment;
     }
 
-    /**
-     * Called when there have been changes made to configuration that should be saved
-     * to disk at the next convenient moment
-     */
-    void requestConfigSync();
-
     Corona *q;
     ImmutabilityType immutability;
     QString mimetype;
