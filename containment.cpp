@@ -1004,7 +1004,7 @@ void Containment::destroy()
 
     if (isContainment()) {
         //FIXME maybe that %1 should be the containment type not the name
-        if (KMessageBox::warningContinueCancel(0, i18n("Do you really want to remove this %1?", name()),
+        if (KMessageBox::warningContinueCancel(view(), i18n("Do you really want to remove this %1?", name()),
                     i18n("Remove %1", name()), KStandardGuiItem::remove()) == KMessageBox::Continue ) {
             clearApplets();
             corona()->destroyContainment(this);
