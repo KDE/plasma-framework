@@ -23,7 +23,7 @@
 
 #include <QtGui/QGraphicsProxyWidget>
 
-class QComboBox;
+class KComboBox;
 
 #include <plasma/plasma_export.h>
 
@@ -37,7 +37,7 @@ class PLASMA_EXPORT ComboBox : public QGraphicsProxyWidget
     Q_PROPERTY(QGraphicsWidget* parentWidget READ parentWidget)
     Q_PROPERTY(QString text READ text)
     Q_PROPERTY(QString stylesheet READ stylesheet WRITE setStylesheet)
-    Q_PROPERTY(QComboBox* nativeWidget READ nativeWidget)
+    Q_PROPERTY(KComboBox* nativeWidget READ nativeWidget)
 
 public:
     explicit ComboBox(QGraphicsWidget *parent = 0);
@@ -63,7 +63,7 @@ public:
     /**
      * @return the native widget wrapped by this ComboBox
      */
-    QComboBox* nativeWidget() const;
+    KComboBox* nativeWidget() const;
 
     /**
      * Adds an item to the combobox with the given text. The

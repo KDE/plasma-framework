@@ -19,7 +19,7 @@
 
 #include "combobox.h"
 
-#include <QComboBox>
+#include <KComboBox>
 #include <QPainter>
 
 #include <KMimeType>
@@ -46,7 +46,7 @@ ComboBox::ComboBox(QGraphicsWidget *parent)
     : QGraphicsProxyWidget(parent),
       d(new Private)
 {
-    QComboBox* native = new QComboBox;
+    KComboBox* native = new KComboBox;
     connect(native, SIGNAL(activated(const QString &)), this, SIGNAL(activated(const QString &)));
     setWidget(native);
     native->setAttribute(Qt::WA_NoSystemBackground);
@@ -59,7 +59,7 @@ ComboBox::~ComboBox()
 
 QString ComboBox::text() const
 {
-    return static_cast<QComboBox*>(widget())->currentText();
+    return static_cast<KComboBox*>(widget())->currentText();
 }
 
 void ComboBox::setStylesheet(const QString &stylesheet)
@@ -72,19 +72,19 @@ QString ComboBox::stylesheet()
     return widget()->styleSheet();
 }
 
-QComboBox* ComboBox::nativeWidget() const
+KComboBox* ComboBox::nativeWidget() const
 {
-    return static_cast<QComboBox*>(widget());
+    return static_cast<KComboBox*>(widget());
 }
 
 void ComboBox::addItem(const QString &text)
 {
-    static_cast<QComboBox*>(widget())->addItem(text);
+    static_cast<KComboBox*>(widget())->addItem(text);
 }
 
 void ComboBox::clear()
 {
-    static_cast<QComboBox*>(widget())->clear();
+    static_cast<KComboBox*>(widget())->clear();
 }
 
 void ComboBox::resizeEvent(QGraphicsSceneResizeEvent *event)

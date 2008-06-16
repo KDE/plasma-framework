@@ -19,7 +19,7 @@
 
 #include "textedit.h"
 
-#include <QTextEdit>
+#include <KTextEdit>
 #include <QPainter>
 
 #include <KMimeType>
@@ -46,7 +46,7 @@ TextEdit::TextEdit(QGraphicsWidget *parent)
     : QGraphicsProxyWidget(parent),
       d(new Private)
 {
-    QTextEdit* native = new QTextEdit;
+    KTextEdit* native = new KTextEdit;
     connect(native, SIGNAL(textChanged()), this, SIGNAL(textChanged()));
     setWidget(native);
     native->setAttribute(Qt::WA_NoSystemBackground);
@@ -60,12 +60,12 @@ TextEdit::~TextEdit()
 void TextEdit::setText(const QString &text)
 {
     //FIXME I'm not certain about using only the html methods. look at this again later.
-    static_cast<QTextEdit*>(widget())->setHtml(text);
+    static_cast<KTextEdit*>(widget())->setHtml(text);
 }
 
 QString TextEdit::text() const
 {
-    return static_cast<QTextEdit*>(widget())->toHtml();
+    return static_cast<KTextEdit*>(widget())->toHtml();
 }
 
 void TextEdit::setStylesheet(const QString &stylesheet)
@@ -78,9 +78,9 @@ QString TextEdit::stylesheet()
     return widget()->styleSheet();
 }
 
-QTextEdit* TextEdit::nativeWidget() const
+KTextEdit* TextEdit::nativeWidget() const
 {
-    return static_cast<QTextEdit*>(widget());
+    return static_cast<KTextEdit*>(widget());
 }
 
 void TextEdit::resizeEvent(QGraphicsSceneResizeEvent *event)

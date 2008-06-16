@@ -19,7 +19,7 @@
 
 #include "pushbutton.h"
 
-#include <QPushButton>
+#include <KPushButton>
 #include <QPainter>
 #include <QDir>
 
@@ -61,7 +61,7 @@ public:
             pm = QPixmap(absImagePath);
         }
 
-        static_cast<QPushButton*>(q->widget())->setIcon(QIcon(pm));
+        static_cast<KPushButton*>(q->widget())->setIcon(QIcon(pm));
     }
 
     QString imagePath;
@@ -73,7 +73,7 @@ PushButton::PushButton(QGraphicsWidget *parent)
     : QGraphicsProxyWidget(parent),
       d(new Private)
 {
-    QPushButton* native = new QPushButton;
+    KPushButton* native = new KPushButton;
     connect(native, SIGNAL(clicked()), this, SIGNAL(clicked()));
     setWidget(native);
     native->setAttribute(Qt::WA_NoSystemBackground);
@@ -86,12 +86,12 @@ PushButton::~PushButton()
 
 void PushButton::setText(const QString &text)
 {
-    static_cast<QPushButton*>(widget())->setText(text);
+    static_cast<KPushButton*>(widget())->setText(text);
 }
 
 QString PushButton::text() const
 {
-    return static_cast<QPushButton*>(widget())->text();
+    return static_cast<KPushButton*>(widget())->text();
 }
 
 void PushButton::setImage(const QString &path)
@@ -137,9 +137,9 @@ QString PushButton::stylesheet()
     return widget()->styleSheet();
 }
 
-QPushButton* PushButton::nativeWidget() const
+KPushButton* PushButton::nativeWidget() const
 {
-    return static_cast<QPushButton*>(widget());
+    return static_cast<KPushButton*>(widget());
 }
 
 void PushButton::resizeEvent(QGraphicsSceneResizeEvent *event)

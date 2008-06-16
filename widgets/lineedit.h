@@ -23,7 +23,7 @@
 
 #include <QtGui/QGraphicsProxyWidget>
 
-class QLineEdit;
+class KLineEdit;
 
 #include <plasma/plasma_export.h>
 
@@ -37,7 +37,7 @@ class PLASMA_EXPORT LineEdit : public QGraphicsProxyWidget
     Q_PROPERTY(QGraphicsWidget* parentWidget READ parentWidget)
     Q_PROPERTY(QString text READ text WRITE setText)
     Q_PROPERTY(QString stylesheet READ stylesheet WRITE setStylesheet)
-    Q_PROPERTY(QLineEdit* nativeWidget READ nativeWidget)
+    Q_PROPERTY(KLineEdit* nativeWidget READ nativeWidget)
 
 public:
     explicit LineEdit(QGraphicsWidget *parent = 0);
@@ -70,7 +70,7 @@ public:
     /**
      * @return the native widget wrapped by this LineEdit
      */
-    QLineEdit* nativeWidget() const;
+    KLineEdit* nativeWidget() const;
 
 Q_SIGNALS:
     void editingFinished();

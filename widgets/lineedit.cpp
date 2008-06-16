@@ -19,7 +19,7 @@
 
 #include "lineedit.h"
 
-#include <QLineEdit>
+#include <KLineEdit>
 #include <QPainter>
 
 #include <KMimeType>
@@ -46,7 +46,7 @@ LineEdit::LineEdit(QGraphicsWidget *parent)
     : QGraphicsProxyWidget(parent),
       d(new Private)
 {
-    QLineEdit* native = new QLineEdit;
+    KLineEdit* native = new KLineEdit;
     connect(native, SIGNAL(editingFinished()), this, SIGNAL(editingFinished()));
     connect(native, SIGNAL(returnPressed()), this, SIGNAL(returnPressed()));
     connect(native, SIGNAL(textEdited(const QString&)), this, SIGNAL(textEdited(const QString&)));
@@ -61,12 +61,12 @@ LineEdit::~LineEdit()
 
 void LineEdit::setText(const QString &text)
 {
-    static_cast<QLineEdit*>(widget())->setText(text);
+    static_cast<KLineEdit*>(widget())->setText(text);
 }
 
 QString LineEdit::text() const
 {
-    return static_cast<QLineEdit*>(widget())->text();
+    return static_cast<KLineEdit*>(widget())->text();
 }
 
 void LineEdit::setStylesheet(const QString &stylesheet)
@@ -79,9 +79,9 @@ QString LineEdit::stylesheet()
     return widget()->styleSheet();
 }
 
-QLineEdit* LineEdit::nativeWidget() const
+KLineEdit* LineEdit::nativeWidget() const
 {
-    return static_cast<QLineEdit*>(widget());
+    return static_cast<KLineEdit*>(widget());
 }
 
 } // namespace Plasma

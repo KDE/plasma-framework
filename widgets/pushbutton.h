@@ -23,7 +23,7 @@
 
 #include <QtGui/QGraphicsProxyWidget>
 
-class QPushButton;
+class KPushButton;
 
 #include <plasma/plasma_export.h>
 
@@ -38,7 +38,7 @@ class PLASMA_EXPORT PushButton : public QGraphicsProxyWidget
     Q_PROPERTY(QString text READ text WRITE setText)
     Q_PROPERTY(QString image READ image WRITE setImage)
     Q_PROPERTY(QString stylesheet READ stylesheet WRITE setStylesheet)
-    Q_PROPERTY(QPushButton* nativeWidget READ nativeWidget)
+    Q_PROPERTY(KPushButton* nativeWidget READ nativeWidget)
 
 public:
     explicit PushButton(QGraphicsWidget *parent = 0);
@@ -83,7 +83,7 @@ public:
     /**
      * @return the native widget wrapped by this PushButton
      */
-    QPushButton* nativeWidget() const;
+    KPushButton* nativeWidget() const;
 
 Q_SIGNALS:
     void clicked();
