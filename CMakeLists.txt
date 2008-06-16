@@ -88,7 +88,7 @@ endif(QT_QTOPENGL_FOUND AND OPENGL_FOUND)
 
 kde4_add_library(plasma SHARED ${plasma_LIB_SRCS})
 
-target_link_libraries(plasma ${KDE4_KIO_LIBS} ${KDE4_KFILE_LIBS}
+target_link_libraries(plasma ${KDE4_KIO_LIBS} ${KDE4_KFILE_LIBS} ${KDE4_KNEWSTUFF2_LIBS}
                              ${QT_QTUITOOLS_LIBRARY} ${QT_QTWEBKIT_LIBRARY}
                              ${KDE4_THREADWEAVER_LIBRARIES})
 
@@ -234,4 +234,6 @@ install(FILES
    servicetypes/plasma-runner.desktop
     servicetypes/plasma-scriptengine.desktop
     DESTINATION ${SERVICETYPES_INSTALL_DIR})
+
+install(FILES scripting/plasmoids.knsrc DESTINATION  ${CONFIG_INSTALL_DIR})
 

@@ -31,6 +31,8 @@
 #include <KServiceTypeTrader>
 #include <KStandardAction>
 
+#include <knewstuff2/engine.h>
+
 #include "plasma/applet.h"
 #include "plasma/corona.h"
 #include "plasma/containment.h"
@@ -310,8 +312,10 @@ void AppletBrowserWidget::destroyApplets(const QString &name)
 
 void AppletBrowserWidget::downloadWidgets()
 {
-    //TODO: implement
-    kDebug() << "GHNS button clicked";
+    KNS::Engine engine(0);
+    if (engine.init("plasmoids.knsrc")) {
+        KNS::Entry::List entries = engine.downloadDialogModal(this);
+    }
 }
 
 void AppletBrowserWidget::openWidgetFile()
