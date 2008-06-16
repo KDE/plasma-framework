@@ -842,7 +842,7 @@ void Applet::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
     //FIXME: we should probably set the pixmap to screenSize(), but that breaks stuff atm.
     QPixmap pixmap(boundingRect().size().toSize());
 
-    QGraphicsView* qgv = qobject_cast<QGraphicsView*>(widget->parent());
+    QGraphicsView* qgv = qobject_cast<QGraphicsView*>(widget ? widget->parent() : 0);
     bool ghost = (qgv && (qgv == d->ghostView));
 
     if (ghost) {
@@ -1120,7 +1120,6 @@ void Applet::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
             parent->setPos(parent->pos() + delta);
         }
-
     }
 }
 
@@ -1524,6 +1523,7 @@ void Applet::Private::init()
 {
     // WARNING: do not access config() OR globalConfig() in this method!
     //          that requires a scene, which is not available at this point
+    q->setCacheMode(DeviceCoordinateCache);
     q->setAcceptsHoverEvents(true);
     q->setFlag(QGraphicsItem::ItemIsFocusable, true);
     // FIXME: adding here because nothing seems to be doing it in QGraphicsView,
