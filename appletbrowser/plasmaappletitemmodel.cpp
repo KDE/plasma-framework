@@ -19,9 +19,11 @@
 
 #include "plasmaappletitemmodel_p.h"
 
+#include <KSycoca>
+
 PlasmaAppletItem::PlasmaAppletItem(PlasmaAppletItemModel * model, const QMap<QString, QVariant>& info,
-        FilterFlags flags, QMap<QString, QVariant> * extraAttrs) :
-    QObject(model), m_model(model)
+                                   FilterFlags flags, QMap<QString, QVariant> * extraAttrs)
+    : QObject(model), m_model(model)
 {
     QMap<QString, QVariant> attrs(info);
 
@@ -89,6 +91,7 @@ PlasmaAppletItemModel::PlasmaAppletItemModel(KConfigGroup configGroup, QObject *
 {
     m_used = m_configGroup.readEntry("used").split(",");
     m_favorites = m_configGroup.readEntry("favorites").split(",");
+    connect(KSycoca::self(), SIGNAL(databaseChanged()), this, SLOT(populateModel()));
 }
 
 void PlasmaAppletItemModel::populateModel()
@@ -224,3 +227,6 @@ QString& PlasmaAppletItemModel::Application()
 {
     return m_application;
 }
+
+#include <plasmaappletitemmodel_p.moc>
+

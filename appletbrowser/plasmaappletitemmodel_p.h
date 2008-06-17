@@ -31,9 +31,10 @@ class PlasmaAppletItemModel;
 /**
  * Implementation of the KCategorizedItemsViewModels::AbstractItem
  */
-class PlasmaAppletItem : public KCategorizedItemsViewModels::AbstractItem,
-        QObject
+class PlasmaAppletItem : public QObject, public KCategorizedItemsViewModels::AbstractItem
 {
+    Q_OBJECT
+
 public:
     enum FilterFlag {NoFilter = 0,
         Favorite = 1,
@@ -62,6 +63,8 @@ private:
 class PlasmaAppletItemModel :
     public KCategorizedItemsViewModels::DefaultItemModel
 {
+    Q_OBJECT
+
 public:
     explicit PlasmaAppletItemModel(KConfigGroup configGroup, QObject * parent = 0);
 
@@ -81,6 +84,7 @@ private:
     QStringList m_used;
     KConfigGroup m_configGroup;
 
+private slots:
     void populateModel();
 };
 

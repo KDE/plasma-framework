@@ -45,15 +45,15 @@ KCategorizedItemsView::KCategorizedItemsView(QWidget * parent, Qt::WindowFlags f
             this, SLOT(filterChanged(int)));
 
     // we filter "activated" signals to re-emit them only when wanted
-    connect (itemsView, SIGNAL(activated(const QModelIndex &)),
-                  this, SLOT(itemActivated(const QModelIndex &)));
+    connect(itemsView, SIGNAL(activated(const QModelIndex &)),
+            this, SLOT(itemActivated(const QModelIndex &)));
 
     connect (itemsView, SIGNAL(clicked(const QModelIndex &)),
-                  this, SIGNAL(clicked(const QModelIndex &)));
+             this, SIGNAL(clicked(const QModelIndex &)));
     connect (itemsView, SIGNAL(entered(const QModelIndex &)),
-                  this, SIGNAL(entered(const QModelIndex &)));
+             this, SIGNAL(entered(const QModelIndex &)));
     connect (itemsView, SIGNAL(pressed(const QModelIndex &)),
-                  this, SIGNAL(pressed(const QModelIndex &)));
+             this, SIGNAL(pressed(const QModelIndex &)));
 
     itemsView->header()->setVisible(false);
 
@@ -61,7 +61,7 @@ KCategorizedItemsView::KCategorizedItemsView(QWidget * parent, Qt::WindowFlags f
     //itemsView->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
 
     connect (m_delegate, SIGNAL(destroyApplets(const QString)),
-                  parent, SLOT(destroyApplets(const QString)));
+             parent, SLOT(destroyApplets(const QString)));
 
     comboFilters->setItemDelegate(new KCategorizedItemsViewFilterDelegate(this));
 
@@ -112,8 +112,9 @@ void KCategorizedItemsView::setItemModel(QStandardItemModel * model)
     }
 
     m_modelItems = model;
-    m_modelFilterItems->setSourceModel(m_modelItems);
     m_modelFilterItems->setSortCaseSensitivity(Qt::CaseInsensitive);
+    m_modelFilterItems->setDynamicSortFilter(true);
+    m_modelFilterItems->setSourceModel(m_modelItems);
     m_modelFilterItems->sort(0);
 
     itemsView->setModel(m_modelFilterItems);
