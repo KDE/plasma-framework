@@ -55,7 +55,7 @@ class PLASMA_EXPORT WebContent : public QGraphicsWidget
          * @param html the html to display in the content area
          * @param baseUrl the base url for relative references
          */
-        void setHtml(const QByteArray &html, const QUrl &baseUrl);
+        void setHtml(const QByteArray &html, const QUrl &baseUrl = QUrl());
 
         /**
          * Reimplementation
