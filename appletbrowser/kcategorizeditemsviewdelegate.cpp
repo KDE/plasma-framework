@@ -189,7 +189,6 @@ void KCategorizedItemsViewDelegate::paintColMain(QPainter *painter,
     p.end();
 
     painter->drawPixmap(option.rect.topLeft(), pixmap);
-    kDebug();
 }
 
 void KCategorizedItemsViewDelegate::paintColFav(QPainter *painter,
