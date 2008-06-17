@@ -194,6 +194,7 @@ includes/DataEngineManager
 includes/DataEngineScript
 includes/Delegate
 includes/Dialog
+includes/Flash
 includes/GroupBox
 includes/Icon
 includes/Label
