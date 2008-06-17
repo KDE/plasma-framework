@@ -716,10 +716,14 @@ void Containment::dropEvent(QGraphicsSceneDragDropEvent *event)
     QString mimetype(static_cast<Corona*>(scene())->appletMimeType());
 
     if (event->mimeData()->hasFormat(mimetype) && scene()) {
-        QString plasmoidName;
-        plasmoidName = event->mimeData()->data(mimetype);
-        QRectF geom(mapFromScene(event->scenePos()), QSize(0, 0));
-        addApplet(plasmoidName, QVariantList(), geom);
+        QString data = event->mimeData()->data(mimetype);
+        QStringList appletNames = data.split('\n', QString::SkipEmptyParts);
+
+        foreach (const QString &appletName, appletNames) {
+            //kDebug() << "doing" << appletName;
+            QRectF geom(mapFromScene(event->scenePos()), QSize(0, 0));
+            addApplet(appletName, QVariantList(), geom);
+        }
         event->acceptProposedAction();
     } else if (KUrl::List::canDecode(event->mimeData())) {
         //TODO: collect the mimetypes of available script engines and offer

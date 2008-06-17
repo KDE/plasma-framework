@@ -181,12 +181,20 @@ QMimeData* PlasmaAppletItemModel::mimeData(const QModelIndexList & indexes) cons
 
     QString format = types.at(0);
 
-    PlasmaAppletItem
-            * selectedItem = (PlasmaAppletItem *) itemFromIndex(indexes[0]);
-    QByteArray appletName(selectedItem->pluginName().toUtf8());
+    QByteArray appletNames;
+    int lastRow = -1;
+    foreach (const QModelIndex &index, indexes) {
+        if (index.row() == lastRow) {
+            continue;
+        }
 
-    data->setData(format, appletName);
+        lastRow = index.row();
+        PlasmaAppletItem *selectedItem = (PlasmaAppletItem *) itemFromIndex(index);
+        appletNames += '\n' + selectedItem->pluginName().toUtf8();
+        //kDebug() << selectedItem->pluginName() << index.column() << index.row();
+    }
 
+    data->setData(format, appletNames);
     return data;
 }
 

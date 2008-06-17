@@ -33,7 +33,9 @@ void CustomDragTreeView::startDrag ( Qt::DropActions supportedActions )
     // TODO: calculate real size for pixmap - using the icon sizes, not fixed
     //       like now
 
-    if (!m_view) return;
+    if (!m_view) {
+        return;
+    }
 
     QModelIndexList indexes = selectedIndexes();
     if (indexes.count() > 0) {
@@ -48,7 +50,7 @@ void CustomDragTreeView::startDrag ( Qt::DropActions supportedActions )
             off = (MAX_OFFSET * MAX_COUNT) / indexes.count();
         }
 
-        kDebug() << "Size: " << size << " Off: " << off << "\n";
+        //kDebug() << "Size: " << size << " Off: " << off << "\n";
 
         QPixmap pixmap(size, size);
         pixmap.fill(QColor(255, 255, 255, 0)); // TODO: Transparent. Now it flickers when it's transparent
@@ -56,7 +58,9 @@ void CustomDragTreeView::startDrag ( Qt::DropActions supportedActions )
         QRect rect(0, 0, PIX_SIZE, PIX_SIZE);
 
         foreach (const QModelIndex &index, indexes) {
-            if (index.column() != 0) continue;
+            if (index.column() != 0) {
+                continue;
+            }
 
             KCategorizedItemsViewModels::AbstractItem * item =
                 m_view->getItemByProxyIndex(index);
