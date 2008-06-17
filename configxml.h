@@ -84,6 +84,7 @@ public:
     /**
      * Creates a KConfigSkeleton populated using the definition found in
      * the XML data passed in.
+     * FIXME/WARNING: DOES NOT WORK IN KDE 4.1 - FIX KCONFIGSKELETON
      *
      * @param config the configuration object to use
      * @param xml the xml data; must be valid KConfigXT data
@@ -94,6 +95,7 @@ public:
     /**
      * Creates a KConfigSkeleton populated using the definition found in
      * the XML data passed in.
+     * FIXME/WARNING: DOES NOT WORK IN KDE 4.1 - FIX KCONFIGSKELETON
      *
      * @param config the group to use as the root for configuration items
      * @param xml the xml data; must be valid KConfigXT data
