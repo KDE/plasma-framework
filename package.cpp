@@ -213,14 +213,14 @@ bool Package::installPackage(const QString& package,
     if (!root.exists()) {
         KStandardDirs::makeDir(packageRoot);
         if (!root.exists()) {
-            kWarning(505) << "Could not create package root directory:" << packageRoot;
+            kWarning() << "Could not create package root directory:" << packageRoot;
             return false;
         }
     }
 
     QFileInfo fileInfo(package);
     if (!fileInfo.exists()) {
-        kWarning(505) << "No such file:" << package;
+        kWarning() << "No such file:" << package;
         return false;
     }
 
@@ -239,7 +239,7 @@ bool Package::installPackage(const QString& package,
     } else {
         KZip archive(package);
         if (!archive.open(QIODevice::ReadOnly)) {
-            kWarning(505) << "Could not open package file:" << package;
+            kWarning() << "Could not open package file:" << package;
             return false;
         }
 
@@ -248,7 +248,7 @@ bool Package::installPackage(const QString& package,
         const KArchiveEntry* metadata = source->entry("metadata.desktop");
 
         if (!metadata) {
-            kWarning(505) << "No metadata file in package" << package;
+            kWarning() << "No metadata file in package" << package;
             return false;
         }
 
@@ -258,7 +258,7 @@ bool Package::installPackage(const QString& package,
 
     QString metadataPath = path + "metadata.desktop";
     if (!QFile::exists(metadataPath)) {
-        kWarning(505) << "No metadata file in package" << package;
+        kWarning() << "No metadata file in package" << package;
         return false;
     }
 
@@ -266,13 +266,13 @@ bool Package::installPackage(const QString& package,
     QString targetName = meta.pluginName();
 
     if (targetName.isEmpty()) {
-        kWarning(505) << "Package plugin name not specified";
+        kWarning() << "Package plugin name not specified";
         return false;
     }
 
     targetName = packageRoot + '/' + targetName;
     if (QFile::exists(targetName)) {
-        kWarning(505) << targetName << "already exists";
+        kWarning() << targetName << "already exists";
         return false;
     }
 
@@ -288,7 +288,7 @@ bool Package::installPackage(const QString& package,
     }
 
     if (!job->exec()) {
-        kWarning(505) << "Could not move package to destination:" << targetName;
+        kWarning() << "Could not move package to destination:" << targetName;
         return false;
     }
 
