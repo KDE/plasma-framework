@@ -69,7 +69,7 @@ public:
     /**
      * A running applet is no more
      */
-    void appletDestroyed(QObject* applet);
+    void appletRemoved(Plasma::Applet* applet);
 
     AppletBrowserWidget *q;
     QString application;
@@ -189,13 +189,7 @@ void AppletBrowserWidget::Private::initRunningApplets()
     QList<Containment*> containments = c->containments();
     foreach (Containment * containment,containments) {
         connect(containment, SIGNAL(appletAdded(Plasma::Applet*,QPointF)), q, SLOT(appletAdded(Plasma::Applet*)));
-        //TODO track containments too?
-        QList<Applet*>applets = containment->applets();
-        foreach (Applet *applet,applets) {
-            runningApplets[applet->name()]++;
-            appletNames.insert(applet, applet->name());
-            connect(applet, SIGNAL(destroyed(QObject*)), q, SLOT(appletDestroyed(QObject*)));
-        }
+        connect(containment, SIGNAL(appletRemoved(Plasma::Applet*)), q, SLOT(appletRemoved(Plasma::Applet*)));
     }
 
     //kDebug() << runningApplets;
@@ -255,13 +249,12 @@ void AppletBrowserWidget::Private::appletAdded(Plasma::Applet* applet)
 
     runningApplets[name]++;
     appletNames.insert(applet, name);
-    connect(applet, SIGNAL(destroyed(QObject*)), q, SLOT(appletDestroyed(QObject*)));
     itemModel.setRunningApplets(name, runningApplets[name]);
 }
 
-void AppletBrowserWidget::Private::appletDestroyed(QObject* applet)
+void AppletBrowserWidget::Private::appletRemoved(Plasma::Applet* applet)
 {
-    //kDebug() << applet;
+    //kDebug() << (QObject*)applet;
     Plasma::Applet* a = (Plasma::Applet*)applet; //don't care if it's valid, just need the address
 
     QString name = appletNames.take(a);
