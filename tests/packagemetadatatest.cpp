@@ -63,7 +63,7 @@ void PackageMetadataTest::read()
 {
     pm->read("packagemetadatatest.desktop");
 
-    QVERIFY(pm->isComplete());
+    QVERIFY(pm->isValid());
 
     QCOMPARE(pm->name(), QString("test"));
     QCOMPARE(pm->description(), QString("Some fancy test description"));

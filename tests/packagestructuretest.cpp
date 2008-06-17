@@ -142,7 +142,7 @@ void PackageStructureTest::read()
     
     // compare directories
     QList <const char *> dirs;
-    dirs << "config" << "configui" << "images" << "scripts" << "ui";
+    dirs << "config" << "configui" << "images" << "scripts";
     QList <const char *> psDirs = structure.directories();
     QCOMPARE(psDirs.count(), dirs.count());
     for (int i = 0; i < dirs.count(); i++) {

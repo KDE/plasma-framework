@@ -29,23 +29,20 @@
 void PlasmoidPackageTest::init()
 {
     mPackage = QString("Package");
-    mPackageRoot = QDir::homePath() + "/.kde-unit-test/packageRoot";
-
+    mPackageRoot = QDir::homePath() + "/.kde-unit-test/packageRoot/";
     ps = Plasma::Applet::packageStructure();
 }
 
 void PlasmoidPackageTest::cleanup()
 {
-    if( p )
-    {
+    if (p) {
         delete p;
         p = 0;
     }
 
     // Clean things up.
     QDir local = QDir::homePath() + QLatin1String("/.kde-unit-test/packageRoot/");
-    foreach(const QString &dir, local.entryList(QDir::Dirs))
-    {
+    foreach(const QString &dir, local.entryList(QDir::Dirs)) {
         removeDir(QLatin1String("packageRoot/" + dir.toLatin1() + "/contents/code"));
         removeDir(QLatin1String("packageRoot/" + dir.toLatin1() + "/contents/images"));
         removeDir(QLatin1String("packageRoot/" + dir.toLatin1() + "/contents"));
@@ -246,20 +243,20 @@ void PlasmoidPackageTest::knownPackages()
     QDir pRoot = QDir(mPackageRoot + "blah");
     QVERIFY(!pRoot.exists());
     p = new Plasma::Package(mPackageRoot + "blah", mPackage, ps);
-    QCOMPARE(p->knownPackages(mPackageRoot), QStringList());
+    QCOMPARE(Plasma::Package::listInstalled(mPackageRoot), QStringList());
     delete p;
 
     // Don't do strange things when an empty package root exists
     QVERIFY(QDir().mkpath(mPackageRoot));
     //QVERIFY(pRoot.exists());
     p = new Plasma::Package(mPackageRoot, mPackage, ps);
-    QCOMPARE(p->knownPackages(mPackageRoot), QStringList());
+    QCOMPARE(Plasma::Package::listInstalled(mPackageRoot), QStringList());
     delete p;
 
     // Do not return a directory as package if it has no metadata.desktop file
     QVERIFY(QDir().mkpath(mPackageRoot + "/invalid_plasmoid"));
     p = new Plasma::Package(mPackageRoot, mPackage, ps);
-    QCOMPARE(p->knownPackages(mPackageRoot), QStringList());
+    QCOMPARE(Plasma::Package::listInstalled(mPackageRoot), QStringList());
     delete p;
 
     // Let's add a valid package and see what happens.
@@ -267,16 +264,16 @@ void PlasmoidPackageTest::knownPackages()
     createTestPackage(plamoid1);
     p = new Plasma::Package(mPackageRoot, mPackage, ps);
 
-    QStringList packages = p->knownPackages(mPackageRoot);
+    QStringList packages = Plasma::Package::listInstalled(mPackageRoot);
     QCOMPARE(packages.size(), 1);
     QVERIFY(packages.contains(plamoid1));
 
     // Ok.... one more valid package.
-    QString plamoid2("anoter_valid_plasmoid");
+    QString plamoid2("another_valid_plasmoid");
     createTestPackage(plamoid2);
     p = new Plasma::Package(mPackageRoot, mPackage, ps);
 
-    packages = p->knownPackages(mPackageRoot);
+    packages = Plasma::Package::listInstalled(mPackageRoot);
     QCOMPARE(packages.size(), 2);
     QVERIFY(packages.contains(plamoid1));
     QVERIFY(packages.contains(plamoid2));
@@ -302,11 +299,11 @@ void PlasmoidPackageTest::createAndInstallPackage()
     QString packagePath = mPackageRoot + '/' + "package.zip";
     Plasma::PackageMetadata metadata(
         QString(KDESRCDIR) + "/packagemetadatatest.desktop");
-    QVERIFY(Plasma::Package::createPackage(metadata, 
-                                   mPackageRoot + '/' + plasmoid + "/contents",
-                                   packagePath));
+    QVERIFY(Plasma::Package::createPackage(metadata,
+                                           mPackageRoot + '/' + plasmoid + "/contents",
+                                           packagePath));
     QVERIFY(QFile::exists(packagePath));
-    
+
     KZip package(packagePath);
     QVERIFY(package.open(QIODevice::ReadOnly));
     const KArchiveDirectory *dir = package.directory();
@@ -319,14 +316,14 @@ void PlasmoidPackageTest::createAndInstallPackage()
         static_cast<const KArchiveDirectory *>(contentsEntry);
     QVERIFY(contents->entry("code"));
     QVERIFY(contents->entry("images"));
-    
-    Plasma::Package::installPackage(packagePath, mPackageRoot);
+
+    QVERIFY(Plasma::Package::installPackage(packagePath, mPackageRoot));
     QString installedPackage = mPackageRoot + "/test";
-    
+
     QVERIFY(QFile::exists(installedPackage));
-    
+
     p = new Plasma::Package(installedPackage, ps);
-    QVERIFY(p->isValid());    
+    QVERIFY(p->isValid());
 }
 
 QTEST_KDEMAIN(PlasmoidPackageTest, NoGUI)
