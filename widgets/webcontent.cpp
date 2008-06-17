@@ -62,6 +62,14 @@ void WebContent::setUrl(const QUrl &url)
     }
 }
 
+void WebContent::setHtml(const QByteArray &html, const QUrl &baseUrl)
+{
+    d->loaded = false;
+    if (d->page) {
+        d->page->mainFrame()->setContent(html, QString(), baseUrl);
+    }
+}
+
 void WebContent::setHtml(const QString &html, const QUrl &baseUrl)
 {
     d->loaded = false;
