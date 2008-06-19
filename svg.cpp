@@ -319,7 +319,12 @@ Svg::~Svg()
 void Svg::paint(QPainter* painter, const QPointF& point, const QString& elementID)
 {
     QPixmap pix;
-    d->findInCache(pix, elementID, painter);
+ 
+    if (elementID.isNull()) {
+        d->findInCache(pix, elementID, painter, size());
+    } else {
+        d->findInCache(pix, elementID, painter);
+    }
 
     if (pix.isNull()) {
         return;
