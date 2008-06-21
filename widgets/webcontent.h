@@ -21,6 +21,7 @@
 #define PLASMA_WEBCONTENT_H
 
 #include <plasma/plasma_export.h>
+#include <QtCore/QUrl>
 #include <QtGui/QGraphicsWidget>
 
 class QWebPage;
