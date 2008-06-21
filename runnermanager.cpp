@@ -83,8 +83,8 @@ private:
 
 RunnerRestrictionPolicy::RunnerRestrictionPolicy()
     : QueuePolicy(),
-      m_cap(2),
-      m_count(0)
+      m_count(0),
+      m_cap(2)
 {
 }
 
