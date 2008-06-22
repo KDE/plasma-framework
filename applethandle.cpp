@@ -94,7 +94,12 @@ AppletHandle::AppletHandle(Containment *parent, Applet *applet)
     m_hoverTimer->setSingleShot(true);
     m_hoverTimer->setInterval(333);
 
+    m_leaveTimer = new QTimer(this);
+    m_leaveTimer->setSingleShot(true);
+    m_leaveTimer->setInterval(333);
+
     connect(m_hoverTimer, SIGNAL(timeout()), this, SLOT(fadeIn()));
+    connect(m_leaveTimer, SIGNAL(timeout()), this, SLOT(leaveTimeout()));
     connect(m_applet, SIGNAL(destroyed(QObject*)), this, SLOT(appletDestroyed()));
 
     setAcceptsHoverEvents(true);
@@ -106,6 +111,7 @@ AppletHandle::AppletHandle(Containment *parent, Applet *applet)
     //the containment it's being dragged to, sometimes it doesn't.
     m_zValue = m_applet->zValue();
     m_applet->raise();
+    m_applet->installSceneEventFilter(this);
     setZValue(m_applet->zValue());
 }
 
@@ -277,11 +283,6 @@ void AppletHandle::mousePressEvent(QGraphicsSceneMouseEvent *event)
         m_pressedButton = mapToButton(event->pos());
         //kDebug() << "button pressed:" << m_pressedButton;
         if (m_pressedButton != NoButton) {
-            // when the mouse goes over a window, the applet is likely to
-            // get a hover out event that we really don't want to respond to
-            // so while we have a button pressed we intercept these events
-            // and handle them ourselves here in AppletHandle
-            m_applet->installSceneEventFilter(this);
             m_applet->raise();
             setZValue(m_applet->zValue());
         }
@@ -321,9 +322,6 @@ bool AppletHandle::leaveCurrentView(const QPoint &pos) const
 void AppletHandle::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
     //kDebug() << "button pressed:" << m_pressedButton << ", fade pending?" << m_pendingFade;
-    if (m_applet) {
-        m_applet->removeSceneEventFilter(this);
-    }
 
     if (m_pendingFade) {
         startFading(FadeOut);
@@ -676,6 +674,10 @@ void AppletHandle::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 {
     Q_UNUSED(event);
     //kDebug() << "hover enter";
+
+    //if a disappear was scheduled stop the timer
+    m_leaveTimer->stop();
+    //schedule appear
     m_hoverTimer->start();
 }
 
@@ -688,7 +690,8 @@ void AppletHandle::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
     if (m_pressedButton != NoButton) {
         m_pendingFade = true;
     } else {
-        startFading(FadeOut);
+        //wait a moment to hide the handle in order to recheck the mouse position
+        m_leaveTimer->start();
     }
 }
 
@@ -712,10 +715,6 @@ void AppletHandle::fadeAnimation(qreal progress)
     m_opacity += (endOpacity - m_opacity) * progress;
 
     if (progress >= 1.0 && m_anim == FadeOut) {
-        if (m_applet) {
-            m_applet->removeSceneEventFilter(this);
-        }
-
         emit disappearDone(this);
     }
 
@@ -725,6 +724,11 @@ void AppletHandle::fadeAnimation(qreal progress)
 void AppletHandle::fadeIn()
 {
     startFading(FadeIn);
+}
+
+void AppletHandle::leaveTimeout()
+{
+    startFading(FadeOut);
 }
 
 void AppletHandle::appletDestroyed()

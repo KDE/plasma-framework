@@ -66,6 +66,7 @@ class AppletHandle : public QObject, public QGraphicsItem
         void appletDestroyed();
         void appletResized();
         void fadeIn();
+        void leaveTimeout();
 
     private:
         static const int HANDLE_WIDTH = 5;
@@ -96,6 +97,7 @@ class AppletHandle : public QObject, public QGraphicsItem
         qreal m_scaleHeight;
         QColor m_gradientColor;
         QTimer *m_hoverTimer;
+        QTimer *m_leaveTimer;
         bool m_buttonsOnRight;
         bool m_pendingFade;
         View *m_topview;
