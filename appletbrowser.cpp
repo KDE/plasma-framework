@@ -187,9 +187,13 @@ void AppletBrowserWidget::Private::initRunningApplets()
     appletNames.clear();
     runningApplets.clear();
     QList<Containment*> containments = c->containments();
-    foreach (Containment * containment,containments) {
+    foreach (Containment *containment, containments) {
         connect(containment, SIGNAL(appletAdded(Plasma::Applet*,QPointF)), q, SLOT(appletAdded(Plasma::Applet*)));
         connect(containment, SIGNAL(appletRemoved(Plasma::Applet*)), q, SLOT(appletRemoved(Plasma::Applet*)));
+
+        foreach (Applet *applet, containment->applets()) {
+            runningApplets[applet->name()]++;
+        }
     }
 
     //kDebug() << runningApplets;
