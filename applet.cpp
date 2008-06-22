@@ -1531,7 +1531,7 @@ void Applet::Private::init()
     q->setLayoutDirection(qApp->layoutDirection());
 
     if (!appletDescription.isValid()) {
-        kDebug() << "Check your constructor! You probaly want to be passing a Service::Ptr or a QVariantList with a valid storageid as arg[0] in.";
+        kDebug() << "Check your constructor! You probably want to be passing in a Service::Ptr or a QVariantList with a valid storageid as arg[0].";
         return;
     }
 
