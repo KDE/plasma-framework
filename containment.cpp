@@ -709,6 +709,12 @@ void Containment::dragEnterEvent(QGraphicsSceneDragDropEvent *event)
                         KUrl::List::canDecode(event->mimeData())));
 }
 
+void Containment::dragMoveEvent(QGraphicsSceneDragDropEvent *event)
+{
+    QGraphicsItem *item = scene()->itemAt(event->scenePos());
+    event->setAccepted(item == this || !item);
+}
+
 void Containment::dropEvent(QGraphicsSceneDragDropEvent *event)
 {
     //kDebug() << event->mimeData()->text();

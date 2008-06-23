@@ -395,6 +395,11 @@ class PLASMA_EXPORT Containment : public Applet
         /**
          * @reimplemented from QGraphicsItem
          */
+        void dragMoveEvent(QGraphicsSceneDragDropEvent *event);
+
+        /**
+         * @reimplemented from QGraphicsItem
+         */
         void dropEvent(QGraphicsSceneDragDropEvent *event);
 
     private:
