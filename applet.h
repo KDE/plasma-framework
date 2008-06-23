@@ -536,8 +536,14 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          * Lets the user interact with the plasmoid options.
          * Called when the user selects the configure entry
          * from the context menu.
+         *
+         * Unless there is good reason for overriding this method,
+         * Applet subclasses should actually override createConfigurationInterface
+         * instead. A good example of when this isn't plausible is
+         * when using a dialog prepared by another library, such
+         * as KPropertiesDialog from libkfile.
          */
-        void showConfigurationInterface();
+        virtual void showConfigurationInterface();
 
         /**
          * Causes this applet to raise above all other applets.
