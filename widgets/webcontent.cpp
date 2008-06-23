@@ -101,7 +101,7 @@ void WebContent::setPage(QWebPage *page)
 
     if (d->page) {
         connect(d->page, SIGNAL(loadProgress(int)), this, SIGNAL(loadProgress(int)));
-        connect(d->page->mainFrame(), SIGNAL(loadDone(bool)), this, SLOT(loadingComplete(bool)));
+        connect(d->page, SIGNAL(loadFinished(bool)), this, SLOT(loadingComplete(bool)));
     }
 }
 
