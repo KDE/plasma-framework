@@ -762,45 +762,31 @@ void Applet::flushPendingConstraintsEvents()
         } else if(d->backgroundHints&TranslucentBackground) {
             setBackgroundHints(d->backgroundHints^TranslucentBackground);
         }
-        
-        //ensure the applet won't break the panel layout
-        if ((f == Horizontal || f == Vertical) && !isContainment()) {
-            setMinimumSize(QSizeF(0,0));
-        }
     }
 
     //enforce square size in panels
     if ((c & Plasma::SizeConstraint || c & Plasma::FormFactorConstraint) &&
-        aspectRatioMode() == Plasma::Square && size().height() != size().width()) {
+        aspectRatioMode() == Plasma::Square) {
         if (formFactor() == Horizontal) {
-            setSizePolicy(QSizePolicy(QSizePolicy::Maximum,QSizePolicy::Expanding));
-            resize(QSizeF(size().height(), size().height()));
-            //FIXME: it shouldn't be used maximum and minimum sizes, layouts are weird
-            setMaximumWidth(size().height());
-            setMinimumWidth(size().height());
+            setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Expanding));
         } else if (formFactor() == Vertical) {
             setSizePolicy(QSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed));
-            resize(QSizeF(size().width(), size().width()));
-            setMaximumHeight(size().width());
-            setMinimumHeight(size().width());
         }
 
-    //or enforce a ConstrainedSquare size
-    } else if ((c & Plasma::SizeConstraint || c & Plasma::FormFactorConstraint) &&
-               aspectRatioMode() == Plasma::ConstrainedSquare && size().height() != size().width()) {
-        if (formFactor() == Horizontal) {
-            //FIXME: it shouldn't be used maximum and minimum sizes, layouts are weird
-            setMaximumSize(size().height(), QWIDGETSIZE_MAX);
-        } else if (formFactor() == Vertical) {
-            setMaximumSize(QWIDGETSIZE_MAX, size().width());
-        }
-    //if we are on desktop again restore maximum size
-    } else if ((c & Plasma::FormFactorConstraint) && aspectRatioMode() == Plasma::Square  ||
-               aspectRatioMode() == Plasma::ConstrainedSquare && formFactor() != Horizontal && formFactor() != Vertical) {
-        setMaximumSize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX);
-        setMinimumSize(0, 0);
+        updateGeometry();
     }
 
+    //enforce a constrained square size in panels
+    if ((c & Plasma::SizeConstraint || c & Plasma::FormFactorConstraint) &&
+        aspectRatioMode() == Plasma::ConstrainedSquare) {
+        if (formFactor() == Horizontal) {
+            setSizePolicy(QSizePolicy(QSizePolicy::Maximum,QSizePolicy::Expanding));
+        } else if (formFactor() == Vertical) {
+            setSizePolicy(QSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed));
+        }
+
+        updateGeometry();
+    }
 
 
     Containment* containment = qobject_cast<Plasma::Containment*>(this);
@@ -1396,11 +1382,27 @@ QSizeF Applet::sizeHint(Qt::SizeHint which, const QSizeF & constraint) const
 {
     QSizeF hint = QGraphicsWidget::sizeHint(which, constraint);
 
+    //in panels make sure that the contents won't exit from the panel
+    if (formFactor() == Horizontal && which == Qt::MinimumSize) {
+        hint.setHeight(0);
+    } else if (formFactor() == Vertical && which == Qt::MinimumSize) {
+        hint.setWidth(0);
+    }
+    
+    // enforce a square size in panels
     if (d->aspectRatioMode == Plasma::Square) {
         if (formFactor() == Horizontal) {
-            hint.setWidth(hint.height());
-        } else {
-            hint.setHeight(hint.width());
+            hint.setWidth(size().height());
+        } else if (formFactor() == Vertical) {
+            hint.setHeight(size().width());
+        }
+    } else if (d->aspectRatioMode == Plasma::ConstrainedSquare) {
+        //enforce a size not wider than tall
+        if (formFactor() == Horizontal && (which == Qt::MaximumSize || size().height() <= KIconLoader::SizeLarge)) {
+            hint.setWidth(size().height());
+        //enforce a size not taller than wide
+        } else if (formFactor() == Vertical && (which == Qt::MaximumSize || size().width() <= KIconLoader::SizeLarge)) {
+            hint.setHeight(size().width());
         }
     }
 
