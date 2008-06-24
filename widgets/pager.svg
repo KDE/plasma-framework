@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
 <svg
-   xmlns:ns="http://creativecommons.org/ns#"
    xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://web.resource.org/cc/"
+   xmlns:cc="http://creativecommons.org/ns#"
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
@@ -12,7 +11,7 @@
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    id="svg11324"
    sodipodi:version="0.32"
-   inkscape:version="0.45.1"
+   inkscape:version="0.46"
    width="50"
    height="50"
    version="1.0"
@@ -22,18 +21,18 @@
   <metadata
      id="metadata11329">
     <rdf:RDF>
-      <ns:Work
+      <cc:Work
          rdf:about="">
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-      </ns:Work>
-      <ns:Work
+      </cc:Work>
+      <cc:Work
          rdf:about="">
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-      </ns:Work>
+      </cc:Work>
       <cc:Work
          rdf:about="">
         <dc:format>image/svg+xml</dc:format>
@@ -105,16 +104,6 @@
        y2="9.2778997" />
     <linearGradient
        inkscape:collect="always"
-       xlink:href="#linearGradient7231"
-       id="linearGradient11055"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(3.447966e-2,0,0,0.185218,6.103786,-134.62586)"
-       x1="208"
-       y1="797.00684"
-       x2="208"
-       y2="770" />
-    <linearGradient
-       inkscape:collect="always"
        xlink:href="#linearGradient3372"
        id="linearGradient11088"
        gradientUnits="userSpaceOnUse"
@@ -140,7 +129,7 @@
        xlink:href="#linearGradient7175"
        id="radialGradient11091"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(3.4479595e-2,0,0,4.5493533e-2,6.1038061,-19.732348)"
+       gradientTransform="matrix(3.4479595e-2,0,0,4.5493533e-2,6.1037966,-19.739153)"
        cx="185.50665"
        cy="796.50342"
        fx="185.50665"
@@ -560,7 +549,7 @@
        y2="779.31116" />
   </defs>
   <sodipodi:namedview
-     inkscape:window-height="685"
+     inkscape:window-height="768"
      inkscape:window-width="986"
      inkscape:pageshadow="2"
      inkscape:pageopacity="0.0"
@@ -575,9 +564,9 @@
      inkscape:zoom="14.048395"
      inkscape:cx="35.734376"
      inkscape:cy="29.091153"
-     inkscape:window-x="535"
-     inkscape:window-y="234"
-     inkscape:current-layer="svg11324"
+     inkscape:window-x="294"
+     inkscape:window-y="115"
+     inkscape:current-layer="bottom"
      width="50px"
      height="50px"
      inkscape:grid-points="true">
@@ -623,21 +612,14 @@
      y="7.9919968"
      width="5.0000095"
      id="center"
-     style="fill:url(#linearGradient11055);fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:1, 1;stroke-dashoffset:0;stroke-opacity:1" />
+     style="fill:#000000;fill-opacity:0;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:1, 1;stroke-dashoffset:0;stroke-opacity:1" />
   <g
      id="bottom"
      transform="translate(9.5367432e-6,-1)">
     <rect
-       height="1"
-       x="9.9999905"
-       y="16"
-       width="5.0000095"
-       id="rect11079"
-       style="fill:url(#linearGradient11081);fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:1, 1;stroke-dashoffset:0;stroke-opacity:1" />
-    <rect
        height="1.0068054"
-       x="10"
-       y="16"
+       x="9.9999905"
+       y="15.993195"
        width="5"
        id="rect7173"
        style="opacity:0.65;fill:url(#radialGradient11091);fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:1, 1;stroke-dashoffset:0;stroke-opacity:1" />
