@@ -34,8 +34,9 @@ namespace Plasma
 class Label::Private
 {
 public:
-    Private()
-        : svg(0)
+    Private(Label *label)
+        : q(label),
+          svg(0)
     {
     }
 
@@ -64,6 +65,17 @@ public:
         static_cast<QLabel*>(q->widget())->setPixmap(pm);
     }
 
+    void setPalette()
+    {
+        QLabel *native = q->nativeWidget();
+        QColor color = Theme::defaultTheme()->color(Theme::TextColor);
+        QPalette p = native->palette();
+        p.setColor(QPalette::Normal, QPalette::WindowText, color);
+        p.setColor(QPalette::Inactive, QPalette::WindowText, color);
+        native->setPalette(p);
+    }
+
+    Label *q;
     QString imagePath;
     QString absImagePath;
     Svg *svg;
@@ -71,18 +83,15 @@ public:
 
 Label::Label(QGraphicsWidget *parent)
     : QGraphicsProxyWidget(parent),
-      d(new Private)
+      d(new Private(this))
 {
     QLabel* native = new QLabel;
-    QPalette p = native->palette();
 
-    QColor color = Theme::defaultTheme()->color(Theme::TextColor);
-    p.setColor(QPalette::Normal, QPalette::WindowText, color);
-    p.setColor(QPalette::Inactive, QPalette::WindowText, color);
-    native->setPalette(p);
-
-    setWidget(native);
+    connect(Theme::defaultTheme(), SIGNAL(themeChanged()), this, SLOT(setPalette()));
     native->setAttribute(Qt::WA_NoSystemBackground);
+    native->setWordWrap(true);
+    setWidget(native);
+    d->setPalette();
 }
 
 Label::~Label()

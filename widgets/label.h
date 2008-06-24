@@ -91,6 +91,8 @@ protected:
     void resizeEvent(QGraphicsSceneResizeEvent *event);
 
 private:
+    Q_PRIVATE_SLOT(d, void setPalette())
+
     class Private;
     Private * const d;
 };
