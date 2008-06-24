@@ -25,22 +25,23 @@
 #include <cmath>
 #include <limits>
 
+#include <QAction>
 #include <QApplication>
+#include <QDesktopWidget>
 #include <QEvent>
 #include <QFile>
+#include <QGraphicsGridLayout>
+#include <QGraphicsSceneMouseEvent>
+#include <QGraphicsView>
+#include <QLabel>
 #include <QList>
+#include <QGraphicsLinearLayout>
 #include <QPainter>
 #include <QSize>
 #include <QStyleOptionGraphicsItem>
 #include <QTextDocument>
 #include <QTimer>
 #include <QUiLoader>
-#include <QLabel>
-#include <QGraphicsSceneMouseEvent>
-#include <QGraphicsLinearLayout>
-#include <QDesktopWidget>
-#include <QGraphicsView>
-#include <QAction>
 
 #include <KAction>
 #include <KIcon>
@@ -649,7 +650,7 @@ bool Applet::configurationRequired() const
     return d->needsConfigOverlay != 0;
 }
 
-void Applet::setConfigurationRequired(bool needsConfig)
+void Applet::setConfigurationRequired(bool needsConfig, const QString &reason)
 {
     if ((d->needsConfigOverlay != 0) == needsConfig) {
         return;
@@ -663,6 +664,7 @@ void Applet::setConfigurationRequired(bool needsConfig)
 
     d->needsConfigOverlay = new AppletOverlayWidget(this);
     d->needsConfigOverlay->resize(contentsRect().size());
+    d->needsConfigOverlay->setPos(contentsRect().topLeft());
 
     int zValue = 100;
     foreach (QGraphicsItem *child, QGraphicsItem::children()) {
@@ -673,14 +675,32 @@ void Applet::setConfigurationRequired(bool needsConfig)
     d->needsConfigOverlay->setZValue(zValue);
 
     qDeleteAll(d->needsConfigOverlay->QGraphicsItem::children());
-    QGraphicsLinearLayout *configLayout = new QGraphicsLinearLayout(d->needsConfigOverlay);
+    QGraphicsGridLayout *configLayout = new QGraphicsGridLayout(d->needsConfigOverlay);
     configLayout->setContentsMargins(0, 0, 0, 0);
+
+  //  configLayout->addStretch();
+    configLayout->setColumnStretchFactor(0, 10);
+    configLayout->setColumnStretchFactor(2, 10);
+    configLayout->setRowStretchFactor(0, 10);
+    configLayout->setRowStretchFactor(3, 10);
+
+    int row = 1;
+    if (!reason.isEmpty()) {
+        Label *explanation = new Label(d->needsConfigOverlay);
+        explanation->setText(reason);
+        configLayout->addItem(explanation, row, 1);
+        configLayout->setColumnStretchFactor(1, 10);
+        ++row;
+        //configLayout->setAlignment(explanation, Qt::AlignBottom | Qt::AlignCenter);
+    }
+
     PushButton *configWidget = new PushButton(d->needsConfigOverlay);
     configWidget->setText(i18n("Configure..."));
     connect(configWidget, SIGNAL(clicked()), this, SLOT(showConfigurationInterface()));
-    configLayout->addStretch();
-    configLayout->addItem(configWidget);
-    d->needsConfigOverlay->setLayout(configLayout);
+    configLayout->addItem(configWidget, row, 1);
+    //configLayout->setAlignment(configWidget, Qt::AlignTop | Qt::AlignCenter);
+    //configLayout->addStretch();
+
     d->needsConfigOverlay->show();
 }
 
