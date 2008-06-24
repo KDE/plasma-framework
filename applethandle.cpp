@@ -760,10 +760,6 @@ void AppletHandle::startFading(FadeType anim)
         return;
     }
 
-    if (m_applet) {
-        m_applet->removeSceneEventFilter(this);
-    }
-
     if (anim == FadeIn) {
         time *= 1.0 - m_opacity;
     } else {
