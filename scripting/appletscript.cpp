@@ -80,6 +80,17 @@ QList<QAction*> AppletScript::contextualActions()
     return QList<QAction*>();
 }
 
+QPainterPath AppletScript::shape() const
+{
+    if (applet()) {
+        QPainterPath path;
+        path.addRect(applet()->boundingRect());
+        return path;
+    }
+
+    return QPainterPath();
+}
+
 void AppletScript::showConfigurationInterface()
 {
 }

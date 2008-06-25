@@ -728,6 +728,11 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         QVariant itemChange(GraphicsItemChange change, const QVariant &value);
 
         /**
+         * Reimplemented from QGraphicsItem
+         */
+        QPainterPath shape() const;
+
+        /**
          * Reimplemented from QGraphicsLayoutItem
          */
          QSizeF sizeHint(Qt::SizeHint which, const QSizeF & constraint = QSizeF()) const;

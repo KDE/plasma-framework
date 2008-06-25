@@ -98,6 +98,11 @@ public:
      */
     virtual QList<QAction*> contextualActions();
 
+    /**
+     * Returns the shape of the widget, defaults to the bounding rect
+     */
+    virtual QPainterPath shape() const;
+
 public Q_SLOTS:
 
     /**

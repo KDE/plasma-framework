@@ -1398,6 +1398,15 @@ QVariant Applet::itemChange(GraphicsItemChange change, const QVariant &value)
     return QGraphicsWidget::itemChange(change, value);
 }
 
+QPainterPath Applet::shape() const
+{
+    if (d->script) {
+        return d->script->shape();
+    }
+
+    return QGraphicsWidget::shape();
+}
+
 QSizeF Applet::sizeHint(Qt::SizeHint which, const QSizeF & constraint) const
 {
     QSizeF hint = QGraphicsWidget::sizeHint(which, constraint);
