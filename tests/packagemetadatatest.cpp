@@ -25,24 +25,20 @@
 void PackageMetadataTest::init()
 {
     pm = new Plasma::PackageMetadata;
-    
+
     // Create data dir
-    mDataDir = QDir::homePath() + "/.kde-unit-test/share/config";
+    mDataDir = QDir::homePath() + "/.kde-unit-test/share/config/";
     QVERIFY(QDir().mkpath(mDataDir));
-    
+
     QDir dir(mDataDir);
     QFile::copy(QString::fromLatin1(KDESRCDIR) 
-        + QLatin1String("/packagemetadatatest.desktop"), mDataDir 
-        + QLatin1String("/packagemetadatatest.desktop"));
+        + QLatin1String("packagemetadatatest.desktop"), mDataDir 
+        + QLatin1String("packagemetadatatest.desktop"));
 }
 
 void PackageMetadataTest::cleanup()
 {
     delete pm;
-    
-    // Clean things up.
-    removeDir(QLatin1String("share/config"));
-    QDir().rmpath(QDir::homePath() + "/.kde-unit-test/share");
 }
 
 // Copied from ktimezonetest.h
@@ -65,8 +61,8 @@ void PackageMetadataTest::read()
 
     QVERIFY(pm->isValid());
 
-    QCOMPARE(pm->name(), QString("test"));
-    QCOMPARE(pm->description(), QString("Some fancy test description"));
+    QCOMPARE(pm->name(), QString("Package metadata test file"));
+    QCOMPARE(pm->description(), QString("A test desktop file to test the PackageMetaData class."));
     QCOMPARE(pm->serviceType(), QString("Plasma/Applet"));
     QCOMPARE(pm->author(), QString("Bertjan Broeksema"));
     QCOMPARE(pm->email(), QString("b.broeksema@kdemail.net"));
@@ -80,8 +76,8 @@ void PackageMetadataTest::read()
 
 void PackageMetadataTest::write()
 {
-    pm->setName(QString("Package metadata test file"));
-    pm->setDescription(QString("Some fancy test description"));
+    pm->setName(QString("Package metadata test file copy"));
+    pm->setDescription(QString("Some other fancy test description"));
     pm->setServiceType(QString("Plasma/Applet"));
     pm->setAuthor(QString("Bertjan Broeksema"));
     pm->setEmail(QString("b.broeksema@kdemail.net"));
@@ -90,14 +86,14 @@ void PackageMetadataTest::write()
     pm->setLicense(QString("GPL"));
     pm->setApplication(QString("A Test name"));
     pm->setRequiredVersion(QString("1.2.3"));
-    
-    pm->write("somefile.desktop");
+
+    pm->write(mDataDir + "somefile.desktop");
     delete pm;
-    
-    pm = new Plasma::PackageMetadata("somefile.desktop");
-    
-    QCOMPARE(pm->name(), QString("Package metadata test file"));
-    QCOMPARE(pm->description(), QString("Some fancy test description"));
+
+    pm = new Plasma::PackageMetadata(mDataDir + "somefile.desktop");
+
+    QCOMPARE(pm->name(), QString("Package metadata test file copy"));
+    QCOMPARE(pm->description(), QString("Some other fancy test description"));
     QCOMPARE(pm->serviceType(), QString("Plasma/Applet"));
     QCOMPARE(pm->author(), QString("Bertjan Broeksema"));
     QCOMPARE(pm->email(), QString("b.broeksema@kdemail.net"));
