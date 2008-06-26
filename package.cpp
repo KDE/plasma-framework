@@ -281,7 +281,7 @@ bool Package::installPackage(const QString& package,
         // it's in a temp dir, so just move it over.
         KIO::CopyJob *job = KIO::move(KUrl(path), KUrl(targetName), KIO::HideProgressInfo);
         if (!job->exec()) {
-            kWarning() << "Could not copy package to destination:" << targetName << " : " << job->errorString();
+            kWarning() << "Could not move package to destination:" << targetName << " : " << job->errorString();
             return false;
         }
     } else {
@@ -289,7 +289,7 @@ bool Package::installPackage(const QString& package,
         // than move them
         KIO::CopyJob *job = KIO::copy(KUrl(path), KUrl(targetName), KIO::HideProgressInfo);
         if (!job->exec()) {
-            kWarning() << "Could not move package to destination:" << targetName << " : " << job->errorString();
+            kWarning() << "Could not copy package to destination:" << targetName << " : " << job->errorString();
             return false;
         }
     }
