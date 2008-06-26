@@ -27,6 +27,7 @@
 #include <KArchiveEntry>
 #include <KComponentData>
 #include <KDesktopFile>
+#include <KIO/CopyJob>
 #include <KIO/FileCopyJob>
 #include <KIO/Job>
 #include <KPluginInfo>
@@ -281,15 +282,19 @@ bool Package::installPackage(const QString& package,
     if (archivedPackage) {
         // it's in a temp dir, so just move it over.
         job = KIO::file_move(path, targetName, -1, KIO::HideProgressInfo);
+        if (!job->exec()) {
+            kWarning() << "Could not copy package to destination:" << targetName << " : " << job->errorString();
+            return false;
+        }
     } else {
         // it's a directory containing the stuff, so copy the contents rather
         // than move them
-        job = KIO::file_copy(path, targetName, -1, KIO::HideProgressInfo);
-    }
-
-    if (!job->exec()) {
-        kWarning() << "Could not move package to destination:" << targetName;
-        return false;
+        KIO::CopyJob* job(0);
+        job = KIO::copy(KUrl(path), KUrl(targetName), KIO::HideProgressInfo);
+        if (!job->exec()) {
+            kWarning() << "Could not move package to destination:" << targetName << " : " << job->errorString();
+            return false;
+        }
     }
 
     if (archivedPackage) {
