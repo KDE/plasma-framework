@@ -632,33 +632,19 @@ void AppletHandle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 //pos relative to scene
 void AppletHandle::switchContainment(Containment *containment, const QPointF &pos)
 {
-    Applet *applet=m_applet;
-    switch (containment->containmentType()) {
-        case Containment::PanelContainment:
-            kDebug() << "panel";
-            //we need to fully disassociate the applet and handle, then kill the handle
-            applet->setZValue(m_zValue);
-            forceDisappear(); //takes care of event filter and killing handle
-            m_applet=0; //make sure we don't try to act on the applet again
-            applet->disconnect(this); //make sure the applet doesn't tell us to do anything
-            containment->addApplet(applet, containment->mapFromScene(pos));
-            break;
-        default: //FIXME assuming everything else behaves like desktop
-            kDebug() << "desktop";
-            m_containment = containment;
-            //FIXME: destorying the applethandle might not be necesarry. I'm having issues
-            //getting it to work correctly while keeping the handle though, so for now just
-            //destroy it.
-            applet->setZValue(m_zValue);
-            forceDisappear();
-            m_applet=0;
-            applet->disconnect(this);
-            containment->addApplet(applet, containment->mapFromScene(pos));
-            //setParentItem(containment);
-            //m_applet->setParentItem(this);
-            //setPos(containment->mapFromScene(pos));
-            //update();
+    switch (containment->containmentType() != Containment::PanelContainment) {
+        //FIXME assuming everything else behaves like desktop?
+        kDebug() << "desktop";
+        m_containment = containment;
     }
+
+    Applet *applet = m_applet;
+    m_applet = 0; //make sure we don't try to act on the applet again
+    applet->removeSceneEventFilter(this);
+    forceDisappear(); //takes care of event filter and killing handle
+    applet->disconnect(this); //make sure the applet doesn't tell us to do anything
+    applet->setZValue(m_zValue);
+    containment->addApplet(applet, containment->mapFromScene(pos));
     update();
 }
 
