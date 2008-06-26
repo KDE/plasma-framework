@@ -1,6 +1,6 @@
 /******************************************************************************
-*   Copyright 2007 by Aaron Seigo <aseigo@kde.org>                        *
-*   Copyright 2007 by Riccardo Iaconelli <riccardo@kde.org>               *
+*   Copyright 2007 by Aaron Seigo <aseigo@kde.org>                            *
+*   Copyright 2007 by Riccardo Iaconelli <riccardo@kde.org>                   *
 *                                                                             *
 *   This library is free software; you can redistribute it and/or             *
 *   modify it under the terms of the GNU Library General Public               *
@@ -277,11 +277,9 @@ bool Package::installPackage(const QString& package,
         return false;
     }
 
-    KIO::FileCopyJob* job(0);
-
     if (archivedPackage) {
         // it's in a temp dir, so just move it over.
-        job = KIO::file_move(path, targetName, -1, KIO::HideProgressInfo);
+        KIO::CopyJob *job = KIO::move(KUrl(path), KUrl(targetName), KIO::HideProgressInfo);
         if (!job->exec()) {
             kWarning() << "Could not copy package to destination:" << targetName << " : " << job->errorString();
             return false;
@@ -289,8 +287,7 @@ bool Package::installPackage(const QString& package,
     } else {
         // it's a directory containing the stuff, so copy the contents rather
         // than move them
-        KIO::CopyJob* job(0);
-        job = KIO::copy(KUrl(path), KUrl(targetName), KIO::HideProgressInfo);
+        KIO::CopyJob *job = KIO::copy(KUrl(path), KUrl(targetName), KIO::HideProgressInfo);
         if (!job->exec()) {
             kWarning() << "Could not move package to destination:" << targetName << " : " << job->errorString();
             return false;
@@ -303,29 +300,33 @@ bool Package::installPackage(const QString& package,
     }
 
     // and now we register it as a service =)
-    targetName.append("/metadata.desktop");
-    KConfigGroup cg = KDesktopFile(targetName).desktopGroup();
+    QString metaPath = targetName + "/metadata.desktop";
+    KConfigGroup cg = KDesktopFile(metaPath).desktopGroup();
 
-    // should not installing it as a service disqualify it?
-    // i don't think so since KServiceTypeTrader may not be
+    // Q: should not installing it as a service disqualify it?
+    // Q: i don't think so since KServiceTypeTrader may not be
     // used by the installing app in any case, and the
     // package is properly installed - aseigo
 
     //TODO: reduce code duplication with registerPackage below
 
-    QFile icon(packageRoot + cg.readEntry("Icon"));
-    if (icon.exists()) {
-        QString installedIcon("plasma_applet_" + meta.pluginName() + cg.readEntry("Icon"));
-        meta.write(targetName);
-        installedIcon = KStandardDirs::locateLocal("icon", installedIcon);
-        job = KIO::file_copy(icon.fileName(), installedIcon, -1, KIO::HideProgressInfo);
-        job->exec();
+    QString serviceName;
+    if (KGlobal::hasMainComponent()) {
+        serviceName = KGlobal::mainComponent().componentName();
     }
+    serviceName.append("_plasma_applet_" + meta.pluginName());
 
-    QString serviceName(KGlobal::mainComponent().componentName() + "_plasma_applet_" + meta.pluginName());
     QString service = KStandardDirs::locateLocal("services", serviceName + ".desktop");
-    job = KIO::file_copy(targetName, service, -1, KIO::HideProgressInfo);
-    job->exec();
+    KIO::FileCopyJob *job = KIO::file_copy(metaPath, service, -1, KIO::HideProgressInfo);
+    if (job->exec()) {
+        // the icon in the installed file needs to point to the icon in the
+        // installation dir!
+        QString iconPath = targetName + '/' + cg.readEntry("Icon");
+        QFile icon(iconPath);
+        if (icon.exists()) {
+            cg.writeEntry("Icon", iconPath);
+        }
+    }
 
     return true;
 }
