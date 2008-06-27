@@ -108,7 +108,7 @@ set(plasmagik_HEADERS
     package.h
     )
 
-install(FILES ${plasmagik_HEADERS} DESTINATION ${INCLUDE_INSTALL_DIR}/plasma/)
+install(FILES ${plasmagik_HEADERS} DESTINATION ${INCLUDE_INSTALL_DIR}/plasma/ COMPONENT Devel)
 
 set(plasma_LIB_INCLUDES
     abstractrunner.h
