@@ -1073,8 +1073,12 @@ ToolBox* Containment::Private::createToolBox()
             connect(toolBox, SIGNAL(toggled()), toolBox, SLOT(toggle()));
             break;
         }
+
         positionToolBox();
 
+        if (type == PanelContainment && q->immutability() != Mutable) {
+            toolBox->hide();
+        }
     }
 
     return toolBox;
