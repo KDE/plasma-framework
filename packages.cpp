@@ -61,7 +61,7 @@ ThemePackage::ThemePackage(QObject *parent)
     addFileDefinition("dialogs/shutdowndialog", "dialogs/shutdowndialog.svg",
                       i18n("Theme for the logout dialog"));
 
-    addDirectoryDefinition("wallpapers", "wallpapers/", "Wallpapers"); //FIXME 4.2: i18n("Wallpapers"));
+    addDirectoryDefinition("wallpapers", "wallpapers/", "Wallpapers"); //FIXME 4.2: i18n("Wallpaper Packages"));
 
     addDirectoryDefinition("widgets", "widgets/", i18n("Images for widgets"));
     addFileDefinition("widgets/background", "widgets/background.svg",
