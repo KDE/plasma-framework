@@ -316,14 +316,14 @@ QString Theme::wallpaperPath(const QSize &size) const
 
     if (fullPath.isEmpty()) {
         // we failed to find it in the theme, so look in the standard directories
-        kDebug() << "looking for" << image;
+        //kDebug() << "looking for" << image;
         fullPath = KStandardDirs::locate("wallpaper", image);
     }
 
     if (fullPath.isEmpty()) {
         // we still failed to find it in the theme, so look for the default in
         // the standard directories
-        kDebug() << "looking for" << defaultImage;
+        //kDebug() << "looking for" << defaultImage;
         fullPath = KStandardDirs::locate("wallpaper", defaultImage);
 
         if (fullPath.isEmpty()) {
