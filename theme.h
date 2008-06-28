@@ -98,7 +98,16 @@ class PLASMA_EXPORT Theme : public QObject
          *           ".svg" part or a leading slash)
          * @return the full path to the requested file for the current theme
          */
-        Q_INVOKABLE QString imagePath( const QString& name ) const;
+        Q_INVOKABLE QString imagePath(const QString& name) const;
+
+        /**
+         * Retreives the default wallpaper associated with this theme.
+         * 
+         * @arg size the target height and width of the wallpaper; if an invalid size
+         *           is passed in, then a default size will be provided instead.
+         * @return the full path to the wallpaper image
+         */
+         Q_INVOKABLE QString wallpaperPath(const QSize &size = QSize()) const;
 
         /**
          * Checks if this theme has an image named in a certain way

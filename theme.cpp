@@ -40,6 +40,11 @@
 namespace Plasma
 {
 
+#define DEFAULT_WALLPAPER_THEME "Blue_Curl";
+#define DEFAULT_WALLPAPER_FORMAT ".jpg";
+static const int DEFAULT_WALLPAPER_WIDTH = 1920;
+static const int DEFAULT_WALLPAPER_HEIGHT = 1200;
+
 class Theme::Private
 {
 public:
@@ -102,16 +107,16 @@ QString Theme::Private::findInTheme(const QString &image, const QString &theme) 
     QString search;
 
     if (locolor) {
-        search = "desktoptheme/" + theme + "/locolor/" + image + ".svg";
+        search = "desktoptheme/" + theme + "/locolor/" + image;
         search =  KStandardDirs::locate("data", search);
     } else if (!compositingActive) {
-        search = "desktoptheme/" + theme + "/opaque/" + image + ".svg";
+        search = "desktoptheme/" + theme + "/opaque/" + image;
         search =  KStandardDirs::locate("data", search);
     }
 
     //not found or compositing enabled
     if (search.isEmpty()) {
-        search = "desktoptheme/" + theme + '/' + image + ".svg";
+        search = "desktoptheme/" + theme + '/' + image;
         search =  KStandardDirs::locate("data", search);
     }
 
@@ -246,10 +251,10 @@ QString Theme::themeName() const
 
 QString Theme::imagePath(const QString& name)  const
 {
-    QString path = d->findInTheme(name, d->themeName);
+    QString path = d->findInTheme(name + ".svg", d->themeName);
 
     if (path.isEmpty() && d->themeName != Private::defaultTheme) {
-        path = d->findInTheme(name, Private::defaultTheme);
+        path = d->findInTheme(name + ".svg", Private::defaultTheme);
     }
 
     if (path.isEmpty()) {
@@ -259,9 +264,79 @@ QString Theme::imagePath(const QString& name)  const
     return path;
 }
 
+QString Theme::wallpaperPath(const QSize &size) const
+{
+    QString fullPath;
+    QString image = DEFAULT_WALLPAPER_THEME;
+    QString format = DEFAULT_WALLPAPER_FORMAT;
+    int width = DEFAULT_WALLPAPER_WIDTH;
+    int height = DEFAULT_WALLPAPER_HEIGHT;
+
+    if (size.isValid()) {
+        width = size.width();
+        height = size.height();
+    }
+
+    bool checkInTheme = false;
+    if (d->colors) {
+        // we have a theme color config, so let's also check to see if
+        // there is a wallpaper defined in there.
+        KConfigGroup cg(d->colors, "Wallpaper");
+        if (cg.hasKey("wallpaper")) {
+            checkInTheme = true;
+            image = cg.readEntry("defaultTheme", image);
+            format = cg.readEntry("defaultFileSuffix", format);
+            width = cg.readEntry("defaultWidth", width);
+            height = cg.readEntry("defaultHeight", height);
+        }
+    }
+
+    if (!checkInTheme) {
+        // since we didn't find an entry in the theme, let's look in the main
+        // theme config
+        KConfigGroup &cg = d->config();
+        image = cg.readEntry("defaultTheme", image);
+    }
+
+    image.append("/contents/images/%1x%2").append(format);
+    //TODO: this should do better than just fallback to the default size.
+    //      a "best fit" matching would be far better, so we don't end
+    //      up returning a 1900x1200 wallpaper for a 640x480 request ;)
+    QString defaultImage = image.arg(DEFAULT_WALLPAPER_WIDTH).arg(DEFAULT_WALLPAPER_HEIGHT);
+    image = image.arg(width).arg(height);
+
+    if (checkInTheme) {
+        // check in the theme, since it was defined in the colors config
+        fullPath = d->findInTheme("wallpaper/" + image, d->themeName);
+
+        if (fullPath.isEmpty()) {
+            fullPath = d->findInTheme("wallpaper/" + defaultImage, d->themeName);
+        }
+    }
+
+    if (fullPath.isEmpty()) {
+        // we failed to find it in the theme, so look in the standard directories
+        kDebug() << "looking for" << image;
+        fullPath = KStandardDirs::locate("wallpaper", image);
+    }
+
+    if (fullPath.isEmpty()) {
+        // we still failed to find it in the theme, so look for the default in
+        // the standard directories
+        kDebug() << "looking for" << defaultImage;
+        fullPath = KStandardDirs::locate("wallpaper", defaultImage);
+
+        if (fullPath.isEmpty()) {
+            kDebug() << "exhausted every effort to find a wallpaper.";
+        }
+    }
+
+    return fullPath;
+}
+
 bool Theme::currentThemeHasImage(const QString& name)  const
 {
-    return (!d->findInTheme(name, d->themeName).isEmpty());
+    return (!d->findInTheme(name + ".svg", d->themeName).isEmpty());
 }
 
 KSharedConfigPtr Theme::colorScheme() const
