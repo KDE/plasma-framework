@@ -428,6 +428,13 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         void addAction(QString name, QAction *action);
 
         /**
+         * Sets the BackgroundHints for this applet @see BackgroundHint
+         *
+         * @param hints the BackgroundHint combination for this applet
+         */
+        void setBackgroundHints(const BackgroundHints hints);
+
+        /**
          * @return BackgroundHints flags combination telling if the standard background is shown
          *         and if it has a drop shadow
          */
@@ -660,13 +667,6 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          * @property constraint
          */
         virtual void constraintsEvent(Plasma::Constraints constraints);
-
-        /**
-         * Sets the BackgroundHints for this applet @see BackgroundHint
-         *
-         * @param hints the BackgroundHint combination for this applet
-         */
-        void setBackgroundHints(const BackgroundHints hints);
 
         /**
          * Register the widgets that manage mouse clicks but you still want
