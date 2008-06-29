@@ -70,6 +70,7 @@ protected slots:
 
 private slots:
     void itemActivated( const QModelIndex& index );
+    void itemDoubleClicked( const QModelIndex& index );
 
 Q_SIGNALS:
     void activated ( const QModelIndex & index );

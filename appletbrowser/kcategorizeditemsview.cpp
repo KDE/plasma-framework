@@ -47,6 +47,8 @@ KCategorizedItemsView::KCategorizedItemsView(QWidget * parent, Qt::WindowFlags f
     // we filter "activated" signals to re-emit them only when wanted
     connect(itemsView, SIGNAL(activated(const QModelIndex &)),
             this, SLOT(itemActivated(const QModelIndex &)));
+    connect(itemsView, SIGNAL(doubleClicked(const QModelIndex &)),
+            this, SLOT(itemDoubleClicked(const QModelIndex &)));
 
     connect (itemsView, SIGNAL(clicked(const QModelIndex &)),
              this, SIGNAL(clicked(const QModelIndex &)));
@@ -150,6 +152,18 @@ void KCategorizedItemsView::itemActivated( const QModelIndex& index )
     }
 
     emit activated(index);
+}
+
+void KCategorizedItemsView::itemDoubleClicked(const QModelIndex& index)
+{
+    // don't emit activated signal for "favicon" and "remove applet"
+    // columns so double clicking on these columns won't unexpectedly
+    // add an applet to the containment
+    if ( index.column() == 1 || index.column() == 2 ) {
+        return;
+    }
+
+    emit doubleClicked(index);
 }
 
 void KCategorizedItemsView::updateColumnsWidth(bool force)

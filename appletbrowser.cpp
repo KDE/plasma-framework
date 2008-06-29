@@ -150,7 +150,7 @@ void AppletBrowserWidget::Private::init()
     QVBoxLayout *layout = new QVBoxLayout(q);
 
     appletList = new KCategorizedItemsView(q);
-    connect(appletList, SIGNAL(activated(const QModelIndex &)), q, SLOT(addApplet()));
+    connect(appletList, SIGNAL(doubleClicked(const QModelIndex &)), q, SLOT(addApplet()));
     layout->addWidget(appletList);
 
     // Other Emblems
@@ -210,7 +210,7 @@ void AppletBrowserWidget::setApplication(const QString& app)
     //       maze of models and views is screwing up
     d->appletList->setItemModel(&d->itemModel);
 
-    kDebug() << d->runningApplets;
+    //kDebug() << d->runningApplets;
     d->itemModel.setRunningApplets(d->runningApplets);
 }
 
@@ -234,14 +234,13 @@ Containment *AppletBrowserWidget::containment() const
 
 void AppletBrowserWidget::addApplet()
 {
-    kDebug() << "Button ADD clicked";
     if (!d->containment) {
         return;
     }
 
     foreach (AbstractItem *item, d->appletList->selectedItems()) {
         PlasmaAppletItem *selectedItem = (PlasmaAppletItem *) item;
-        kDebug() << "Adding applet " << selectedItem->name() << "to containment";
+        //kDebug() << "Adding applet " << selectedItem->name() << "to containment";
         d->containment->addApplet(selectedItem->pluginName(), selectedItem->arguments());
     }
 }
