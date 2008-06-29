@@ -37,13 +37,21 @@ namespace Plasma
 class WebContent::Private
 {
 public:
+    Private(WebContent *parent)
+        : q(parent)
+    {
+    }
+
+    void loadingFinished(bool success);
+
+    WebContent *q;
     QWebPage *page;
     bool loaded;
 };
 
 WebContent::WebContent(QGraphicsItem *parent)
     : QGraphicsWidget(parent),
-      d(new Private)
+      d(new Private(this))
 {
     d->page = 0;
     d->loaded = false;
@@ -101,7 +109,7 @@ void WebContent::setPage(QWebPage *page)
 
     if (d->page) {
         connect(d->page, SIGNAL(loadProgress(int)), this, SIGNAL(loadProgress(int)));
-        connect(d->page, SIGNAL(loadFinished(bool)), this, SLOT(loadingComplete(bool)));
+        connect(d->page, SIGNAL(loadFinished(bool)), this, SLOT(loadingFinished(bool)));
     }
 }
 
@@ -336,10 +344,10 @@ void WebContent::setGeometry(const QRectF &geometry)
     d->page->setViewportSize(geometry.size().toSize());
 }
 
-void WebContent::loadingComplete(bool success)
+void WebContent::Private::loadingFinished(bool success)
 {
-    d->loaded = success;
-    emit loadDone(success);
+    loaded = success;
+    emit q->loadFinished(success);
 }
 
 } // namespace Plasma

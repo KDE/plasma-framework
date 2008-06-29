@@ -112,7 +112,7 @@ class PLASMA_EXPORT WebContent : public QGraphicsWidget
          * @param success true if the content was loaded successfully,
          *                otherwise false
          */
-        void loadDone(bool success);
+        void loadFinished(bool success);
 
     protected:
         /**
@@ -134,13 +134,9 @@ class PLASMA_EXPORT WebContent : public QGraphicsWidget
         void dragMoveEvent(QGraphicsSceneDragDropEvent * event);
         void dropEvent(QGraphicsSceneDragDropEvent * event);
 
-    private Q_SLOTS:
-        /**
-         * @internal
-         */
-        void loadingComplete(bool success);
-
     private:
+        Q_PRIVATE_SLOT(d, void loadingFinished(bool success))
+
         class Private;
         Private * const d;
 };
