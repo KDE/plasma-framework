@@ -632,7 +632,7 @@ void AppletHandle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 //pos relative to scene
 void AppletHandle::switchContainment(Containment *containment, const QPointF &pos)
 {
-    switch (containment->containmentType() != Containment::PanelContainment) {
+    if (containment->containmentType() != Containment::PanelContainment) {
         //FIXME assuming everything else behaves like desktop?
         kDebug() << "desktop";
         m_containment = containment;
