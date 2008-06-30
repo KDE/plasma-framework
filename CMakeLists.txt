@@ -199,6 +199,7 @@ includes/GroupBox
 includes/Icon
 includes/Label
 includes/LineEdit
+includes/Meter
 includes/Package
 includes/PackageMetadata
 includes/PackageStructure
@@ -213,6 +214,7 @@ includes/RunnerScript
 includes/ScriptEngine
 includes/Service
 includes/ServiceJob
+includes/SignalPlotter
 includes/Svg
 includes/TextEdit
 includes/Theme
