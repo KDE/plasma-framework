@@ -26,6 +26,7 @@
 class KTextEdit;
 
 #include <plasma/plasma_export.h>
+#include <plasma/dataengine.h>
 
 namespace Plasma
 {
@@ -71,6 +72,9 @@ public:
      * @return the native widget wrapped by this TextEdit
      */
     KTextEdit* nativeWidget() const;
+
+public Q_SLOTS:
+    void dataUpdated(const QString &sourceName, const Plasma::DataEngine::Data &data);
 
 Q_SIGNALS:
     void textChanged();

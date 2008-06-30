@@ -83,6 +83,20 @@ KTextEdit* TextEdit::nativeWidget() const
     return static_cast<KTextEdit*>(widget());
 }
 
+void TextEdit::dataUpdated(const QString &sourceName, const Plasma::DataEngine::Data &data)
+{
+    Q_UNUSED(sourceName)
+
+    KTextEdit * te = nativeWidget();
+    te->clear();
+
+    foreach (const QVariant& v, data) {
+        if (v.canConvert(QVariant::String)) {
+            te->append(v.toString() + "\n");
+        }
+    }
+}
+
 void TextEdit::resizeEvent(QGraphicsSceneResizeEvent *event)
 {
     QGraphicsProxyWidget::resizeEvent(event);

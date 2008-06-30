@@ -24,6 +24,7 @@
 #include <QtGui/QGraphicsProxyWidget>
 
 #include <plasma/plasma_export.h>
+#include <plasma/dataengine.h>
 
 class QLabel;
 
@@ -85,7 +86,8 @@ public:
      */
     QLabel* nativeWidget() const;
 
-Q_SIGNALS:
+public Q_SLOTS:
+    void dataUpdated(const QString &sourceName, const Plasma::DataEngine::Data &data);
 
 protected:
     void resizeEvent(QGraphicsSceneResizeEvent *event);

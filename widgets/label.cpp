@@ -157,6 +157,20 @@ QLabel* Label::nativeWidget() const
     return static_cast<QLabel*>(widget());
 }
 
+void Label::dataUpdated(const QString &sourceName, const Plasma::DataEngine::Data &data)
+{
+    Q_UNUSED(sourceName)
+
+    QStringList texts;
+    foreach (const QVariant& v, data) {
+        if (v.canConvert(QVariant::String)) {
+            texts << v.toString();
+        }
+    }
+
+    setText(texts.join(" "));
+}
+
 void Label::resizeEvent(QGraphicsSceneResizeEvent *event)
 {
     d->setPixmap(this);
