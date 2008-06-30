@@ -176,6 +176,7 @@ void View::setContainment(Containment *containment)
     }
 
     int screen = -1;
+    Containment *oldContainment = d->containment;
 
     if (d->containment) {
         disconnect(d->containment, SIGNAL(geometryChanged()), this, SLOT(updateSceneRect()));
@@ -185,12 +186,17 @@ void View::setContainment(Containment *containment)
     }
 
     d->containment = containment;
-    if (! containment) {
+    if (!containment) {
         return;
     }
 
     //add keyboard-shortcut actions
     d->containment->addAssociatedWidget(this);
+
+    int otherScreen = containment->screen();
+    if (oldContainment && otherScreen > -1) {
+        oldContainment->setScreen(otherScreen);
+    }
 
     if (screen > -1) {
         containment->setScreen(screen);
