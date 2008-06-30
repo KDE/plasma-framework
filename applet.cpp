@@ -1021,6 +1021,7 @@ void Applet::registerAsDragHandle( QGraphicsItem * item )
     }
 
     int index = d->registeredAsDragHandle.indexOf(item);
+
     if (index == -1) {
         d->registeredAsDragHandle.append(item);
         item->installSceneEventFilter(this);
@@ -1106,7 +1107,7 @@ bool Applet::sceneEventFilter( QGraphicsItem * watched, QEvent * event )
 
 void Applet::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
-    if (d->immutability == Mutable && formFactor() == Plasma::Planar) {
+    if (immutability() == Mutable && formFactor() == Plasma::Planar) {
         QGraphicsItem *parent = parentItem();
         Plasma::Applet *applet = qgraphicsitem_cast<Plasma::Applet*>(parent);
 
