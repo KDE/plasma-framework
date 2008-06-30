@@ -60,6 +60,7 @@ WebContent::WebContent(QGraphicsItem *parent)
 
 WebContent::~WebContent()
 {
+   delete d;
 }
 
 void WebContent::setUrl(const QUrl &url)
