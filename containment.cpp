@@ -157,7 +157,7 @@ void Containment::init()
         d->actions().addAction("lock widgets", lockDesktopAction);
     }
 
-    if (d->type == DesktopContainment) { //this means custom containments are left out
+    if (d->type != PanelContainment) {
         QAction *zoomAction = new QAction(i18n("Zoom In"), this);
         zoomAction->setIcon(KIcon("zoom-in"));
         connect(zoomAction, SIGNAL(triggered(bool)), this, SLOT(zoomIn()));
@@ -165,7 +165,7 @@ void Containment::init()
         //two shortcuts because I hate ctrl-+ but others expect it
         QList<QKeySequence> keys;
         keys << QKeySequence(QKeySequence::ZoomIn);
-        keys <<QKeySequence("ctrl+=");
+        keys << QKeySequence("ctrl+=");
         zoomAction->setShortcuts(keys);
         d->actions().addAction("zoom in", zoomAction);
 
@@ -185,13 +185,15 @@ void Containment::init()
         activityAction->setShortcut(QKeySequence("ctrl+shift+a"));
         d->actions().addAction("addSiblingContainment", activityAction);
 
-        d->toolBox->addTool(this->action("add widgets"));
-        d->toolBox->addTool(this->action("zoom in"));
-        d->toolBox->addTool(this->action("zoom out"));
-        if (immutability() != SystemImmutable) {
-            d->toolBox->addTool(this->action("lock widgets"));
+        if (d->type == DesktopContainment) {
+            d->toolBox->addTool(this->action("add widgets"));
+            d->toolBox->addTool(this->action("zoom in"));
+            d->toolBox->addTool(this->action("zoom out"));
+            if (immutability() != SystemImmutable) {
+                d->toolBox->addTool(this->action("lock widgets"));
+            }
+            d->toolBox->addTool(this->action("addSiblingContainment"));
         }
-        d->toolBox->addTool(this->action("addSiblingContainment"));
     }
 
     Applet::init();
@@ -970,7 +972,7 @@ void Containment::Private::focusApplet(Plasma::Applet *applet)
     //but what if applet isn't really one of our applets?
     //FIXME should we really unfocus the old applet?
     if (applets.contains(applet)) {
-        kDebug() << "switching to" << applet->name();
+        //kDebug() << "switching to" << applet->name();
         focusedApplet = applet;
         if (focusedApplet) {
             foreach (QWidget *w, widgets) {
