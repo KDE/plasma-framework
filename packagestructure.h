@@ -34,6 +34,8 @@ class KConfigBase;
 namespace Plasma
 {
 
+class PackageStructurePrivate;
+
 /**
  * @brief A description of the expected file structure of a given package type
  *
@@ -256,8 +258,7 @@ protected:
     virtual void pathChanged();
 
 private:
-    class Private;
-     Private * const d;
+    PackageStructurePrivate * const d;
 };
 
 /**

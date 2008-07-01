@@ -30,15 +30,15 @@
 namespace Plasma
 {
 
-class <Name>::Private
+class <Name>Private
 {
 public:
-    Private()
+    <Name>Private()
         : svg(0)
     {
     }
 
-    ~Private()
+    ~<Name>Private()
     {
         delete svg;
     }
@@ -72,7 +72,7 @@ public:
 
 <Name>::<Name>(QGraphicsWidget *parent)
     : QGraphicsProxyWidget(parent),
-      d(new Private)
+      d(new <Name>Private)
 {
     <Native>* native = new <Native>;
     //TODO: forward signals

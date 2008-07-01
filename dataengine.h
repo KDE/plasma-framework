@@ -37,6 +37,7 @@ class DataContainer;
 class DataEngineScript;
 class Package;
 class Service;
+class DataEnginePrivate;
 
 /**
  * @class DataEngine
@@ -54,6 +55,7 @@ class Service;
  **/
 class PLASMA_EXPORT DataEngine : public QObject
 {
+    friend class DataEnginePrivate;
     friend class DataEngineScript;
     friend class DataEngineManager;
     friend class NullEngine;
@@ -422,8 +424,7 @@ class PLASMA_EXPORT DataEngine : public QObject
     private:
         Q_PRIVATE_SLOT(d, void internalUpdateSource(DataContainer* source))
 
-        class Private;
-        Private* const d;
+        DataEnginePrivate* const d;
 };
 
 } // Plasma namespace

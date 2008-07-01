@@ -30,21 +30,21 @@
 namespace Plasma
 {
 
-class ComboBox::Private
+class ComboBoxPrivate
 {
 public:
-    Private()
+    ComboBoxPrivate()
     {
     }
 
-    ~Private()
+    ~ComboBoxPrivate()
     {
     }
 };
 
 ComboBox::ComboBox(QGraphicsWidget *parent)
     : QGraphicsProxyWidget(parent),
-      d(new Private)
+      d(new ComboBoxPrivate)
 {
     KComboBox* native = new KComboBox;
     connect(native, SIGNAL(activated(const QString &)), this, SIGNAL(activated(const QString &)));

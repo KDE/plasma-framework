@@ -46,7 +46,7 @@
 namespace Plasma
 {
 
-class Dialog::Private
+class DialogPrivate
 {
 public:
     /**
@@ -68,7 +68,7 @@ public:
 
 Dialog::Dialog( QWidget * parent, Qt::WindowFlags f )
     : QWidget(parent, f),
-      d(new Private)
+      d(new DialogPrivate)
 {
     d->q = this;
     d->background = new PanelSvg(this);

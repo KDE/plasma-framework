@@ -43,14 +43,14 @@ namespace Plasma
 
 DataEngine::DataEngine(QObject* parent, KService::Ptr service)
     : QObject(parent),
-      d(new Private(this, service))
+      d(new DataEnginePrivate(this, service))
 {
     connect(d->updateTimer, SIGNAL(timeout()), this, SLOT(scheduleSourcesUpdated()));
 }
 
 DataEngine::DataEngine(QObject* parent, const QVariantList& args)
     : QObject(parent),
-      d(new Private(this, KService::serviceByStorageId(args.count() > 0 ? args[0].toString() : QString())))
+      d(new DataEnginePrivate(this, KService::serviceByStorageId(args.count() > 0 ? args[0].toString() : QString())))
 {
     connect(d->updateTimer, SIGNAL(timeout()), this, SLOT(scheduleSourcesUpdated()));
 }
@@ -397,7 +397,7 @@ void DataEngine::setName(const QString& name)
 }
 
 // Private class implementations
-DataEngine::Private::Private(DataEngine* e, KService::Ptr service)
+DataEnginePrivate::DataEnginePrivate(DataEngine* e, KService::Ptr service)
     : q(e),
       refCount(-1), // first ref
       updateTimerId(0),
@@ -445,7 +445,7 @@ DataEngine::Private::Private(DataEngine* e, KService::Ptr service)
     }
 }
 
-void DataEngine::Private::internalUpdateSource(DataContainer* source)
+void DataEnginePrivate::internalUpdateSource(DataContainer* source)
 {
     if (minPollingInterval > 0 &&
         source->timeSinceLastUpdate() < (uint)minPollingInterval) {
@@ -463,22 +463,22 @@ void DataEngine::Private::internalUpdateSource(DataContainer* source)
     }
 }
 
-void DataEngine::Private::ref()
+void DataEnginePrivate::ref()
 {
     --refCount;
 }
 
-void DataEngine::Private::deref()
+void DataEnginePrivate::deref()
 {
     ++refCount;
 }
 
-bool DataEngine::Private::isUsed() const
+bool DataEnginePrivate::isUsed() const
 {
     return refCount != 0;
 }
 
-DataContainer* DataEngine::Private::source(const QString& sourceName, bool createWhenMissing)
+DataContainer* DataEnginePrivate::source(const QString& sourceName, bool createWhenMissing)
 {
     DataEngine::SourceDict::const_iterator it = sources.find(sourceName);
     if (it != sources.constEnd()) {
@@ -507,7 +507,7 @@ DataContainer* DataEngine::Private::source(const QString& sourceName, bool creat
     DataContainer* s = new DataContainer(q);
     s->setObjectName(sourceName);
     sources.insert(sourceName, s);
-    connect(s, SIGNAL(updateRequested(DataContainer*)),
+    QObject::connect(s, SIGNAL(updateRequested(DataContainer*)),
             q, SLOT(internalUpdateSource(DataContainer*)));
 
     if (limit > 0) {
@@ -517,7 +517,7 @@ DataContainer* DataEngine::Private::source(const QString& sourceName, bool creat
     return s;
 }
 
-void DataEngine::Private::connectSource(DataContainer* s, QObject* visualization,
+void DataEnginePrivate::connectSource(DataContainer* s, QObject* visualization,
                                         uint pollingInterval,
                                         Plasma::IntervalAlignment align, bool immediateCall)
 {
@@ -547,7 +547,7 @@ void DataEngine::Private::connectSource(DataContainer* s, QObject* visualization
     }
 }
 
-DataContainer* DataEngine::Private::requestSource(const QString& sourceName, bool* newSource)
+DataContainer* DataEnginePrivate::requestSource(const QString& sourceName, bool* newSource)
 {
     if (newSource) {
         *newSource = false;
@@ -569,7 +569,7 @@ DataContainer* DataEngine::Private::requestSource(const QString& sourceName, boo
                 if (newSource) {
                     *newSource = true;
                 }
-                connect(s, SIGNAL(becameUnused(QString)), q, SLOT(removeSource(QString)));
+                QObject::connect(s, SIGNAL(becameUnused(QString)), q, SLOT(removeSource(QString)));
             }
         }
     }
@@ -577,7 +577,7 @@ DataContainer* DataEngine::Private::requestSource(const QString& sourceName, boo
     return s;
 }
 
-void DataEngine::Private::trimQueue()
+void DataEnginePrivate::trimQueue()
 {
     uint queueCount = sourceQueue.count();
     while (queueCount >= limit) {
@@ -586,7 +586,7 @@ void DataEngine::Private::trimQueue()
     }
 }
 
-void DataEngine::Private::queueUpdate()
+void DataEnginePrivate::queueUpdate()
 {
     if (updateTimer->isActive()) {
         return;

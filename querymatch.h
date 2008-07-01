@@ -33,6 +33,7 @@ namespace Plasma
 
 class RunnerContext;
 class AbstractRunner;
+class QueryMatchPrivate;
 
 /**
  * @short A match returned by an AbstractRunner in response to a given
@@ -164,8 +165,7 @@ class PLASMA_EXPORT QueryMatch
         void setEnabled(bool enable);
 
     private:
-        class Private;
-        QSharedDataPointer<Private> d;
+        QSharedDataPointer<QueryMatchPrivate> d;
 };
 
 }

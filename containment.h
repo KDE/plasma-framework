@@ -42,6 +42,7 @@ class DataEngine;
 class Package;
 class Corona;
 class View;
+class ContainmentPrivate;
 
 /**
  * @short The base class for plugins that provide backgrounds and applet grouping containers
@@ -413,8 +414,8 @@ class PLASMA_EXPORT Containment : public Applet
         Q_PRIVATE_SLOT(d, void toggleDesktopImmutability())
 
         friend class Applet;
-        class Private;
-        Private* const d;
+        friend class ContainmentPrivate;
+        ContainmentPrivate* const d;
 };
 
 } // Plasma namespace

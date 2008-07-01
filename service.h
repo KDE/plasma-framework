@@ -32,6 +32,7 @@ namespace Plasma
 {
 
 class ServiceJob;
+class ServicePrivate;
 
 /**
  * @brief This class provides a generic API for write access to settings or services.
@@ -173,8 +174,9 @@ protected:
 private:
     Q_PRIVATE_SLOT(d, void jobFinished(KJob*))
 
-    class Private;
-    Private * const d;
+    ServicePrivate * const d;
+
+    friend class ServicePrivate;
 };
 
 } // namespace Plasma

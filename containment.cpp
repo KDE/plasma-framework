@@ -78,7 +78,7 @@ Containment::Containment(QGraphicsItem* parent,
                          const QString& serviceId,
                          uint containmentId)
     : Applet(parent, serviceId, containmentId),
-      d(new Private(this))
+      d(new ContainmentPrivate(this))
 {
     // WARNING: do not access config() OR globalConfig() in this method!
     //          that requires a scene, which is not available at this point
@@ -89,7 +89,7 @@ Containment::Containment(QGraphicsItem* parent,
 
 Containment::Containment(QObject* parent, const QVariantList& args)
     : Applet(parent, args),
-      d(new Private(this))
+      d(new ContainmentPrivate(this))
 {
     // WARNING: do not access config() OR globalConfig() in this method!
     //          that requires a scene, which is not available at this point
@@ -946,12 +946,12 @@ void Containment::removeAssociatedWidget(QWidget *widget)
     }
 }
 
-KActionCollection& Containment::Private::actions()
+KActionCollection& ContainmentPrivate::actions()
 {
     return static_cast<Applet*>(q)->d->actions;
 }
 
-void Containment::Private::focusApplet(Plasma::Applet *applet)
+void ContainmentPrivate::focusApplet(Plasma::Applet *applet)
 {
     if (focusedApplet == applet) {
         return;
@@ -1032,7 +1032,7 @@ void Containment::destroy()
 
 // Private class implementation
 
-void Containment::Private::toggleDesktopImmutability()
+void ContainmentPrivate::toggleDesktopImmutability()
 {
     if (q->corona()) {
         if (q->corona()->immutability() == Mutable) {
@@ -1051,34 +1051,34 @@ void Containment::Private::toggleDesktopImmutability()
     //setLockToolText();
 }
 
-void Containment::Private::zoomIn()
+void ContainmentPrivate::zoomIn()
 {
     emit q->zoomRequested(q, Plasma::ZoomIn);
 }
 
-void Containment::Private::zoomOut()
+void ContainmentPrivate::zoomOut()
 {
     emit q->zoomRequested(q, Plasma::ZoomOut);
 }
 
-ToolBox* Containment::Private::createToolBox()
+ToolBox* ContainmentPrivate::createToolBox()
 {
     if (!toolBox) {
         switch (type) {
-        case PanelContainment:
+        case Containment::PanelContainment:
             toolBox = new PanelToolBox(q);
-            connect(toolBox, SIGNAL(toggled()), q, SIGNAL(toolBoxToggled()));
+            QObject::connect(toolBox, SIGNAL(toggled()), q, SIGNAL(toolBoxToggled()));
             break;
         //defaults to DesktopContainment right now
         default:
             toolBox = new DesktopToolBox(q);
-            connect(toolBox, SIGNAL(toggled()), toolBox, SLOT(toggle()));
+            QObject::connect(toolBox, SIGNAL(toggled()), toolBox, SLOT(toggle()));
             break;
         }
 
         positionToolBox();
 
-        if (type == PanelContainment && q->immutability() != Mutable) {
+        if (type == Containment::PanelContainment && q->immutability() != Mutable) {
             toolBox->hide();
         }
     }
@@ -1086,14 +1086,14 @@ ToolBox* Containment::Private::createToolBox()
     return toolBox;
 }
 
-void Containment::Private::positionToolBox()
+void ContainmentPrivate::positionToolBox()
 {
     if (!toolBox) {
         return;
     }
 
     //The placement assumes that the geometry width/height is no more than the screen
-    if (type == PanelContainment) {
+    if (type == Containment::PanelContainment) {
         if (q->formFactor() == Vertical) {
             toolBox->setOrientation(Qt::Vertical);
             toolBox->setPos(q->geometry().width()/2 - toolBox->boundingRect().width()/2, q->geometry().height());
@@ -1117,18 +1117,18 @@ void Containment::Private::positionToolBox()
     }
 }
 
-void Containment::Private::triggerShowAddWidgets()
+void ContainmentPrivate::triggerShowAddWidgets()
 {
     emit q->showAddWidgetsInterface(QPointF());
 }
 
-void Containment::Private::handleDisappeared(AppletHandle *handle)
+void ContainmentPrivate::handleDisappeared(AppletHandle *handle)
 {
     handles.remove(handle->applet());
     handle->deleteLater();
 }
 
-void Containment::Private::containmentConstraintsEvent(Plasma::Constraints constraints)
+void ContainmentPrivate::containmentConstraintsEvent(Plasma::Constraints constraints)
 {
     if (!q->isContainment()) {
         return;
@@ -1162,7 +1162,7 @@ void Containment::Private::containmentConstraintsEvent(Plasma::Constraints const
             a->updateConstraints(ImmutableConstraint);
         }
 
-        if (q->isContainment() && type == PanelContainment) {
+        if (q->isContainment() && type == Containment::PanelContainment) {
             if (unlocked) {
                 toolBox->show();
             } else {
@@ -1193,7 +1193,7 @@ void Containment::Private::containmentConstraintsEvent(Plasma::Constraints const
 
     if (constraints & Plasma::SizeConstraint) {
         switch (q->containmentType()) {
-            case PanelContainment:
+            case Containment::PanelContainment:
                 positionPanel();
                 break;
             default:
@@ -1203,7 +1203,7 @@ void Containment::Private::containmentConstraintsEvent(Plasma::Constraints const
     }
 }
 
-Applet* Containment::Private::addApplet(const QString& name, const QVariantList& args,
+Applet* ContainmentPrivate::addApplet(const QString& name, const QVariantList& args,
                                         const QRectF& appletGeometry, uint id, bool delayInit)
 {
     if (!delayInit && q->immutability() != Mutable) {
@@ -1230,13 +1230,13 @@ Applet* Containment::Private::addApplet(const QString& name, const QVariantList&
 
     //kDebug() << applet->name() << "sizehint:" << applet->sizeHint() << "geometry:" << applet->geometry();
 
-    connect(applet, SIGNAL(configNeedsSaving()), q, SIGNAL(configNeedsSaving()));
-    connect(applet, SIGNAL(releaseVisualFocus()), q, SIGNAL(releaseVisualFocus()));
+    QObject::connect(applet, SIGNAL(configNeedsSaving()), q, SIGNAL(configNeedsSaving()));
+    QObject::connect(applet, SIGNAL(releaseVisualFocus()), q, SIGNAL(releaseVisualFocus()));
     q->addApplet(applet, appletGeometry.topLeft(), delayInit);
     return applet;
 }
 
-bool Containment::Private::regionIsEmpty(const QRectF &region, Applet *ignoredApplet) const
+bool ContainmentPrivate::regionIsEmpty(const QRectF &region, Applet *ignoredApplet) const
 {
     foreach (Applet *applet, applets) {
         if (applet != ignoredApplet && applet->geometry().intersects(region)) {
@@ -1246,7 +1246,7 @@ bool Containment::Private::regionIsEmpty(const QRectF &region, Applet *ignoredAp
     return true;
 }
 
-void Containment::Private::appletDestroyed(QObject* object)
+void ContainmentPrivate::appletDestroyed(QObject* object)
 {
     // we do a static_cast here since it really isn't an Applet by this
     // point anymore since we are in the qobject dtor. we don't actually
@@ -1261,10 +1261,10 @@ void Containment::Private::appletDestroyed(QObject* object)
     emit q->configNeedsSaving();
 }
 
-void Containment::Private::containmentAppletAnimationComplete(QGraphicsItem *item, Plasma::Animator::Animation anim)
+void ContainmentPrivate::containmentAppletAnimationComplete(QGraphicsItem *item, Plasma::Animator::Animation anim)
 {
     if (anim == Animator::AppearAnimation &&
-        q->containmentType() == DesktopContainment &&
+        q->containmentType() == Containment::DesktopContainment &&
         item->parentItem() == q) {
         Applet *applet = qgraphicsitem_cast<Applet*>(item);
 
@@ -1275,7 +1275,7 @@ void Containment::Private::containmentAppletAnimationComplete(QGraphicsItem *ite
     }
 }
 
-void Containment::Private::positionContainment()
+void ContainmentPrivate::positionContainment()
 {
     Corona *c = q->corona();
     if (!c) {
@@ -1289,7 +1289,7 @@ void Containment::Private::positionContainment()
     while (it.hasNext()) {
         Containment *containment = it.next();
         if (containment == q ||
-            containment->containmentType() == PanelContainment) {
+            containment->containmentType() == Containment::PanelContainment) {
             // weed out all containments we don't care about at all
             // e.g. Panels and ourself
             it.remove();
@@ -1380,7 +1380,7 @@ void Containment::Private::positionContainment()
     positioning = false;
 }
 
-void Containment::Private::positionPanel(bool force)
+void ContainmentPrivate::positionPanel(bool force)
 {
     if (!q->scene()) {
         kDebug() << "no scene yet";
@@ -1409,7 +1409,7 @@ void Containment::Private::positionPanel(bool force)
     // likely be too slow.
     foreach (const Containment* other, q->corona()->containments()) {
         if (other == q ||
-            other->containmentType() != PanelContainment ||
+            other->containmentType() != Containment::PanelContainment ||
             horiz != (other->formFactor() == Plasma::Horizontal)) {
             // only line up with panels of the same orientation
             continue;

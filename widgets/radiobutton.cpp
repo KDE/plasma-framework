@@ -31,15 +31,15 @@
 namespace Plasma
 {
 
-class RadioButton::Private
+class RadioButtonPrivate
 {
 public:
-    Private()
+    RadioButtonPrivate()
         : svg(0)
     {
     }
 
-    ~Private()
+    ~RadioButtonPrivate()
     {
         delete svg;
     }
@@ -71,7 +71,7 @@ public:
 
 RadioButton::RadioButton(QGraphicsWidget *parent)
     : QGraphicsProxyWidget(parent),
-      d(new Private)
+      d(new RadioButtonPrivate)
 {
     QRadioButton* native = new QRadioButton;
     connect(native, SIGNAL(toggled(bool)), this, SIGNAL(toggled(bool)));

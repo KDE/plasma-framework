@@ -56,10 +56,10 @@ public:
     }
 };
 
-class Service::Private
+class ServicePrivate
 {
 public:
-    Private(Service *service)
+    ServicePrivate(Service *service)
         : q(service),
           config(0),
           tempFile(0)

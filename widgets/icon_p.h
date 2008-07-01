@@ -88,7 +88,7 @@ struct Margin
     qreal left, right, top, bottom;
 };
 
-class Icon::Private
+class IconPrivate
 {
 public:
     enum MarginType { ItemMargin = 0, TextMargin, IconMargin, NMargins };
@@ -103,8 +103,8 @@ public:
     Q_DECLARE_FLAGS(IconStates, IconState)
 
 public:
-    Private(Icon *i);
-    ~Private();
+    IconPrivate(Icon *i);
+    ~IconPrivate();
 
     void drawBackground(QPainter *painter, IconState state);
     void drawText(QPainter *painter);
@@ -200,10 +200,10 @@ public:
     static const int iconActionMargin = 4;
 };
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(Icon::Private::IconStates)
+Q_DECLARE_OPERATORS_FOR_FLAGS(IconPrivate::IconStates)
 
 // Inline methods
-void Icon::Private::setLayoutOptions(QTextLayout &layout, const QStyleOptionGraphicsItem *option) const
+void IconPrivate::setLayoutOptions(QTextLayout &layout, const QStyleOptionGraphicsItem *option) const
 {
     QTextOption textoption;
     textoption.setTextDirection(option->direction);
@@ -214,7 +214,7 @@ void Icon::Private::setLayoutOptions(QTextLayout &layout, const QStyleOptionGrap
     layout.setTextOption(textoption);
 }
 
-Qt::LayoutDirection Icon::Private::iconDirection(const QStyleOptionGraphicsItem *option) const
+Qt::LayoutDirection IconPrivate::iconDirection(const QStyleOptionGraphicsItem *option) const
 {
     Qt::LayoutDirection direction;
 
@@ -231,13 +231,13 @@ Qt::LayoutDirection Icon::Private::iconDirection(const QStyleOptionGraphicsItem 
     return direction;
 }
 
-void Icon::Private::setActiveMargins()
+void IconPrivate::setActiveMargins()
 {
     activeMargins = (orientation == Qt::Horizontal ?
             horizontalMargin : verticalMargin);
 }
 
-void Icon::Private::setVerticalMargin(MarginType type, qreal left, qreal top, qreal right, qreal bottom)
+void IconPrivate::setVerticalMargin(MarginType type, qreal left, qreal top, qreal right, qreal bottom)
 {
     verticalMargin[type].left   = left;
     verticalMargin[type].right  = right;
@@ -245,7 +245,7 @@ void Icon::Private::setVerticalMargin(MarginType type, qreal left, qreal top, qr
     verticalMargin[type].bottom = bottom;
 }
 
-void Icon::Private::setHorizontalMargin(MarginType type, qreal left, qreal top, qreal right, qreal bottom)
+void IconPrivate::setHorizontalMargin(MarginType type, qreal left, qreal top, qreal right, qreal bottom)
 {
     horizontalMargin[type].left   = left;
     horizontalMargin[type].right  = right;
@@ -253,41 +253,41 @@ void Icon::Private::setHorizontalMargin(MarginType type, qreal left, qreal top, 
     horizontalMargin[type].bottom = bottom;
 }
 
-void Icon::Private::setVerticalMargin(MarginType type, qreal horizontal, qreal vertical)
+void IconPrivate::setVerticalMargin(MarginType type, qreal horizontal, qreal vertical)
 {
     setVerticalMargin(type, horizontal, vertical, horizontal, vertical);
 }
 
-void Icon::Private::setHorizontalMargin(MarginType type, qreal horizontal, qreal vertical)
+void IconPrivate::setHorizontalMargin(MarginType type, qreal horizontal, qreal vertical)
 {
     setHorizontalMargin(type, horizontal, vertical, horizontal, vertical);
 }
 
-QRectF Icon::Private::addMargin(const QRectF &rect, MarginType type) const
+QRectF IconPrivate::addMargin(const QRectF &rect, MarginType type) const
 {
     const Margin &m = activeMargins[type];
     return rect.adjusted(-m.left, -m.top, m.right, m.bottom);
 }
 
-QRectF Icon::Private::subtractMargin(const QRectF &rect, MarginType type) const
+QRectF IconPrivate::subtractMargin(const QRectF &rect, MarginType type) const
 {
     const Margin &m = activeMargins[type];
     return rect.adjusted(m.left, m.top, -m.right, -m.bottom);
 }
 
-QSizeF Icon::Private::addMargin(const QSizeF &size, MarginType type) const
+QSizeF IconPrivate::addMargin(const QSizeF &size, MarginType type) const
 {
     const Margin &m = activeMargins[type];
     return QSizeF(size.width() + m.left + m.right, size.height() + m.top + m.bottom);
 }
 
-QSizeF Icon::Private::subtractMargin(const QSizeF &size, MarginType type) const
+QSizeF IconPrivate::subtractMargin(const QSizeF &size, MarginType type) const
 {
     const Margin &m = activeMargins[type];
     return QSizeF(size.width() - m.left - m.right, size.height() - m.top - m.bottom);
 }
 
-QRectF Icon::Private::actionRect(ActionPosition position) const
+QRectF IconPrivate::actionRect(ActionPosition position) const
 {
     switch (position) {
     case TopLeft:

@@ -34,6 +34,8 @@ class QGraphicsSceneWheelEvent;
 namespace Plasma
 {
 
+class WebContentPrivate;
+
 class PLASMA_EXPORT WebContent : public QGraphicsWidget
 {
     Q_OBJECT
@@ -137,8 +139,8 @@ class PLASMA_EXPORT WebContent : public QGraphicsWidget
     private:
         Q_PRIVATE_SLOT(d, void loadingFinished(bool success))
 
-        class Private;
-        Private * const d;
+        WebContentPrivate * const d;
+        friend class WebContentPrivate;
 };
 
 } // namespace Plasma

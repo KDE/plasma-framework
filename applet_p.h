@@ -1,4 +1,4 @@
-/*
+ /*
  *   Copyright 2005 by Aaron Seigo <aseigo@kde.org>
  *   Copyright 2007 by Riccardo Iaconelli <riccardo@kde.org>
  *   Copyright 2008 by Ménard Alexis <darktears31@gmail.com>
@@ -40,11 +40,11 @@ protected:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
 };
 
-class Applet::Private
+class AppletPrivate
 {
 public:
-    Private(KService::Ptr service, int uniqueID, Applet *applet);
-    ~Private();
+    AppletPrivate(KService::Ptr service, int uniqueID, Applet *applet);
+    ~AppletPrivate();
 
     void init();
 
@@ -74,7 +74,7 @@ public:
     //      number of members at this point.
     uint appletId;
     Applet *q;
-    BackgroundHints backgroundHints;
+    Applet::BackgroundHints backgroundHints;
     KPluginInfo appletDescription;
     Package* package;
     AppletOverlayWidget *needsConfigOverlay;

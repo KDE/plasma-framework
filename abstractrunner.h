@@ -39,6 +39,7 @@ namespace Plasma
 class Package;
 class RunnerScript;
 class QueryMatch;
+class AbstractRunnerPrivate;
 
 /**
  * An abstract base class for Plasma Runner plugins
@@ -174,6 +175,7 @@ class PLASMA_EXPORT AbstractRunner : public QObject
 
     protected:
         friend class RunnerManager;
+        friend class RunnerManagerPrivate;
 
         /**
          * Constructs a Runner object. Since AbstractRunner has pure virtuals,
@@ -227,8 +229,7 @@ class PLASMA_EXPORT AbstractRunner : public QObject
         void init();
 
     private:
-        class Private;
-        Private* const d;
+        AbstractRunnerPrivate* const d;
 };
 
 } // Plasma namespace

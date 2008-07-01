@@ -31,6 +31,8 @@ class KTextEdit;
 namespace Plasma
 {
 
+class TextEditPrivate;
+
 class PLASMA_EXPORT TextEdit : public QGraphicsProxyWidget
 {
     Q_OBJECT
@@ -83,8 +85,7 @@ protected:
     void resizeEvent(QGraphicsSceneResizeEvent *event);
 
 private:
-    class Private;
-    Private * const d;
+    TextEditPrivate * const d;
 };
 
 } // namespace Plasma

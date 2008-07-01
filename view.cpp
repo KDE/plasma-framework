@@ -31,10 +31,10 @@ using namespace Plasma;
 namespace Plasma
 {
 
-class View::Private
+class ViewPrivate
 {
 public:
-    Private(View *view, int uniqueId)
+    ViewPrivate(View *view, int uniqueId)
         : drawWallpaper(true),
           trackChanges(true),
           desktop(-1),
@@ -54,7 +54,7 @@ public:
         }
     }
 
-    ~Private()
+    ~ViewPrivate()
     {
     }
 
@@ -95,11 +95,11 @@ public:
     static int s_maxViewId;
 };
 
-int View::Private::s_maxViewId(0);
+int ViewPrivate::s_maxViewId(0);
 
 View::View(Containment *containment, QWidget *parent)
     : QGraphicsView(parent),
-      d(new Private(this, 0))
+      d(new ViewPrivate(this, 0))
 {
     Q_ASSERT(containment);
     d->initGraphicsView();
@@ -109,7 +109,7 @@ View::View(Containment *containment, QWidget *parent)
 
 View::View(Containment *containment, int viewId, QWidget *parent)
     : QGraphicsView(parent),
-      d(new Private(this, viewId))
+      d(new ViewPrivate(this, viewId))
 {
     Q_ASSERT(containment);
     d->initGraphicsView();

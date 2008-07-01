@@ -36,6 +36,9 @@ class QMatrix;
 namespace Plasma
 {
 
+class SvgPrivate;
+class PanelSvgPrivate;
+
 /**
  * @brief A theme aware image-centric SVG class
  *
@@ -187,11 +190,13 @@ class PLASMA_EXPORT Svg : public QObject
         void repaintNeeded();
 
     private:
-        class Private;
-        Private* const d;
+        SvgPrivate* const d;
 
         Q_PRIVATE_SLOT(d, void themeChanged())
         Q_PRIVATE_SLOT(d, void colorsChanged())
+
+        friend class SvgPrivate;
+        friend class PanelSvgPrivate;
 };
 
 } // Plasma namespace

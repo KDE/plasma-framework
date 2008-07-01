@@ -43,10 +43,10 @@ namespace Plasma
 // and one happening should occur. currently 30 seconds
 const int CONFIG_SYNC_TIMEOUT = 30000;
 
-class Corona::Private
+class CoronaPrivate
 {
 public:
-    Private(Corona *corona)
+    CoronaPrivate(Corona *corona)
         : q(corona),
           immutability(Mutable),
           mimetype("text/x-plasmoidservicename"),
@@ -59,7 +59,7 @@ public:
         }
     }
 
-    ~Private()
+    ~CoronaPrivate()
     {
         qDeleteAll(containments);
     }
@@ -67,7 +67,7 @@ public:
     void init()
     {
         configSyncTimer.setSingleShot(true);
-        connect(&configSyncTimer, SIGNAL(timeout()), q, SLOT(syncConfig()));
+        QObject::connect(&configSyncTimer, SIGNAL(timeout()), q, SLOT(syncConfig()));
     }
 
     void saveLayout(KSharedConfigPtr cg) const
@@ -145,10 +145,10 @@ public:
         }
 
         containments.append(containment);
-        connect(containment, SIGNAL(destroyed(QObject*)), q, SLOT(containmentDestroyed(QObject*)));
-        connect(containment, SIGNAL(configNeedsSaving()), q, SLOT(requestConfigSync()));
-        connect(containment, SIGNAL(releaseVisualFocus()), q, SIGNAL(releaseVisualFocus()));
-        connect(containment, SIGNAL(screenChanged(int,int,Plasma::Containment*)),
+        QObject::connect(containment, SIGNAL(destroyed(QObject*)), q, SLOT(containmentDestroyed(QObject*)));
+        QObject::connect(containment, SIGNAL(configNeedsSaving()), q, SLOT(requestConfigSync()));
+        QObject::connect(containment, SIGNAL(releaseVisualFocus()), q, SIGNAL(releaseVisualFocus()));
+        QObject::connect(containment, SIGNAL(screenChanged(int,int,Plasma::Containment*)),
                 q, SIGNAL(screenOwnerChanged(int,int,Plasma::Containment*)));
 
         if (!delayedInit) {
@@ -169,7 +169,7 @@ public:
 
 Corona::Corona(QObject *parent)
     : QGraphicsScene(parent),
-      d(new Private(this))
+      d(new CoronaPrivate(this))
 {
     d->init();
     //setViewport(new QGLWidget(QGLFormat(QGL::StencilBuffer | QGL::AlphaChannel)));

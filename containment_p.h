@@ -30,10 +30,10 @@ namespace Plasma
 class Containment;
 class ToolBox;
 
-class Containment::Private
+class ContainmentPrivate
 {
 public:
-    Private(Containment* c)
+    ContainmentPrivate(Containment* c)
         : q(c),
           formFactor(Planar),
           location(Floating),
@@ -45,7 +45,7 @@ public:
     {
     }
 
-    ~Private()
+    ~ContainmentPrivate()
     {
         qDeleteAll(applets);
         applets.clear();

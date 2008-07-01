@@ -43,13 +43,13 @@
 namespace Plasma
 {
 
-class SignalPlotter::Private
+class SignalPlotterPrivate
 {
     public:
-        Private()
+        SignalPlotterPrivate()
             : svgBackground(0)
         { }
-        ~Private() { }
+        ~SignalPlotterPrivate() { }
 
     int precision;
     uint samples;
@@ -97,7 +97,7 @@ class SignalPlotter::Private
 
 SignalPlotter::SignalPlotter(QGraphicsItem *parent)
     : QGraphicsWidget(parent),
-      d(new Private)
+      d(new SignalPlotterPrivate)
 {
     d->precision = 0;
     d->bezierCurveOffset = 0;

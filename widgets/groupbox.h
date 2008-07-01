@@ -30,6 +30,8 @@ class QGroupBox;
 namespace Plasma
 {
 
+class GroupBoxPrivate;
+
 class PLASMA_EXPORT GroupBox : public QGraphicsProxyWidget
 {
     Q_OBJECT
@@ -78,8 +80,7 @@ protected:
     void resizeEvent(QGraphicsSceneResizeEvent *event);
 
 private:
-    class Private;
-    Private * const d;
+    GroupBoxPrivate * const d;
 };
 
 } // namespace Plasma

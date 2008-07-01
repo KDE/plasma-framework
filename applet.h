@@ -46,6 +46,7 @@ namespace Plasma
 class Containment;
 class DataEngine;
 class Package;
+class AppletPrivate;
 
 /**
  * @short The base Applet class
@@ -753,14 +754,16 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          **/
         void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
 
-        class Private;
-        Private* const d;
+        AppletPrivate* const d;
 
         //Corona needs to access setFailedToLaunch and init
         friend class Corona;
+        friend class CoronaPrivate;
         friend class Containment;
+        friend class ContainmentPrivate;
         friend class AppletScript;
         friend class AppletHandle;
+        friend class AppletPrivate;
 };
 
 } // Plasma namespace

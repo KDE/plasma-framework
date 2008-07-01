@@ -27,6 +27,8 @@
 namespace Plasma
 {
 
+class MeterPrivate;
+
 /**
  * This class provides generic meter widget for the Plasma desktop.
  *
@@ -198,8 +200,7 @@ protected:
                        QWidget *widget = 0);
 
 private:
-    class Private;
-    Private *const d;
+    MeterPrivate *const d;
 };
 
 } // End of namepace

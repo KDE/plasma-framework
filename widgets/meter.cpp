@@ -24,14 +24,14 @@
 
 namespace Plasma {
 
-class Meter::Private
+class MeterPrivate
 {
 public:
-    Private(Meter* m) :
+    MeterPrivate(Meter* m) :
         minimum(0),
         maximum(100),
         value(0),
-        meterType(AnalogMeter),
+        meterType(Meter::AnalogMeter),
         image(0),
         minrotate(0),
         maxrotate(360),
@@ -99,13 +99,13 @@ public:
     void setSizePolicyAndPreferredSize()
     {
         switch (meterType) {
-            case BarMeterHorizontal:
+            case Meter::BarMeterHorizontal:
                 meter->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
                 break;
-            case BarMeterVertical:
+            case Meter::BarMeterVertical:
                 meter->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
                 break;
-            case AnalogMeter:
+            case Meter::AnalogMeter:
             default:
                 meter->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
                 break;
@@ -125,7 +125,7 @@ public:
     QList<QColor> colors;
     QList<QFont> fonts;
     QString svg;
-    MeterType meterType;
+    Meter::MeterType meterType;
     Plasma::Svg *image;
     int minrotate;
     int maxrotate;
@@ -134,7 +134,7 @@ public:
 
 Meter::Meter(QGraphicsItem *parent) :
         QGraphicsWidget(parent),
-        d(new Private(this))
+        d(new MeterPrivate(this))
 {
     d->setSizePolicyAndPreferredSize();
 }

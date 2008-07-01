@@ -22,10 +22,10 @@
 namespace Plasma
 {
 
-class ServiceJob::Private
+class ServiceJobPrivate
 {
 public:
-    Private(const QString &dest, const QString &op, const QMap<QString, QVariant> &params)
+    ServiceJobPrivate(const QString &dest, const QString &op, const QMap<QString, QVariant> &params)
         : destination(dest),
           operation(op),
           parameters(params)
@@ -40,7 +40,7 @@ public:
 ServiceJob::ServiceJob(const QString &destination, const QString &operation,
                        const QMap<QString, QVariant> &parameters, QObject *parent)
     : KJob(parent),
-      d(new Private(destination, operation, parameters))
+      d(new ServiceJobPrivate(destination, operation, parameters))
 {
 }
 

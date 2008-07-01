@@ -31,6 +31,7 @@ namespace Plasma
 class AbstractRunner;
 class RunnerContext;
 class QueryMatch;
+class RunnerScriptPrivate;
 
 class PLASMA_EXPORT RunnerScript : public ScriptEngine
 {
@@ -84,8 +85,7 @@ protected:
     const Package* package() const;
 
 private:
-    class Private;
-    Private * const d;
+    RunnerScriptPrivate * const d;
 };
 
 #define K_EXPORT_PLASMA_RUNNERSCRIPTENGINE(libname, classname) \

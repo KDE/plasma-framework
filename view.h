@@ -32,6 +32,7 @@ namespace Plasma
 
 class Containment;
 class Corona;
+class ViewPrivate;
 
 /**
  * @short A QGraphicsView for Plasma::Applets. Each View is associated with
@@ -174,10 +175,11 @@ protected:
     KConfigGroup config() const;
 
 private:
-    class Private;
-    Private * const d;
+    ViewPrivate * const d;
 
     Q_PRIVATE_SLOT(d, void updateSceneRect())
+
+    friend class ViewPrivate;
 };
 
 } // namespace Plasma

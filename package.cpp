@@ -42,10 +42,10 @@
 namespace Plasma
 {
 
-class Package::Private
+class PackagePrivate
 {
 public:
-    Private(const PackageStructure::Ptr st, const QString& p)
+    PackagePrivate(const PackageStructure::Ptr st, const QString& p)
         : structure(st),
           basePath(p),
           valid(QFile::exists(basePath)),
@@ -56,7 +56,7 @@ public:
         }
     }
 
-    ~Private()
+    ~PackagePrivate()
     {
         delete metadata;
     }
@@ -68,13 +68,13 @@ public:
 };
 
 Package::Package(const QString& packageRoot, const QString& package, PackageStructure::Ptr structure)
-    : d(new Private(structure, packageRoot + '/' + package))
+    : d(new PackagePrivate(structure, packageRoot + '/' + package))
 {
     structure->setPath(d->basePath);
 }
 
 Package::Package(const QString &packagePath, PackageStructure::Ptr structure)
-    : d(new Private(structure, packagePath))
+    : d(new PackagePrivate(structure, packagePath))
 {
     structure->setPath(d->basePath);
 }

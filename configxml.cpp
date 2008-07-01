@@ -31,10 +31,10 @@
 namespace Plasma
 {
 
-class ConfigXml::Private
+class ConfigXmlPrivate
 {
     public:
-        ~Private()
+        ~ConfigXmlPrivate()
         {
             qDeleteAll(bools);
             qDeleteAll(strings);
@@ -199,7 +199,7 @@ class ConfigXml::Private
 class ConfigXmlHandler : public QXmlDefaultHandler
 {
 public:
-    ConfigXmlHandler(ConfigXml* config, ConfigXml::Private* d);
+    ConfigXmlHandler(ConfigXml* config, ConfigXmlPrivate* d);
     bool startElement(const QString &namespaceURI, const QString & localName, const QString &qName, const QXmlAttributes &atts);
     bool endElement(const QString &namespaceURI, const QString &localName, const QString &qName);
     bool characters(const QString &ch);
@@ -209,7 +209,7 @@ private:
     void resetState();
 
     ConfigXml* m_config;
-    ConfigXml::Private* d;
+    ConfigXmlPrivate* d;
     int m_min;
     int m_max;
     QString m_name;
@@ -226,7 +226,7 @@ private:
     bool m_inChoice;
 };
 
-void ConfigXml::Private::parse(ConfigXml *configXml, QIODevice *xml)
+void ConfigXmlPrivate::parse(ConfigXml *configXml, QIODevice *xml)
 {
     QXmlInputSource source(xml);
     QXmlSimpleReader reader;
@@ -235,7 +235,7 @@ void ConfigXml::Private::parse(ConfigXml *configXml, QIODevice *xml)
     reader.parse(&source, false);
 }
 
-ConfigXmlHandler::ConfigXmlHandler(ConfigXml* config, ConfigXml::Private* d)
+ConfigXmlHandler::ConfigXmlHandler(ConfigXml* config, ConfigXmlPrivate* d)
     : QXmlDefaultHandler(),
       m_config(config),
       d(d)
@@ -499,7 +499,7 @@ void ConfigXmlHandler::resetState()
 
 ConfigXml::ConfigXml(const QString &configFile, QIODevice *xml, QObject *parent)
     : KConfigSkeleton(configFile, parent),
-      d(new Private)
+      d(new ConfigXmlPrivate)
 {
     QXmlInputSource source(xml);
     QXmlSimpleReader reader;
@@ -510,7 +510,7 @@ ConfigXml::ConfigXml(const QString &configFile, QIODevice *xml, QObject *parent)
 
 ConfigXml::ConfigXml(KSharedConfigPtr config, QIODevice *xml, QObject *parent)
     : KConfigSkeleton(config, parent),
-      d(new Private)
+      d(new ConfigXmlPrivate)
 {
     d->parse(this, xml);
 }
@@ -520,7 +520,7 @@ ConfigXml::ConfigXml(KSharedConfigPtr config, QIODevice *xml, QObject *parent)
 //       at which point this can be addressed properly
 ConfigXml::ConfigXml(const KConfigGroup *config, QIODevice *xml, QObject *parent)
     : KConfigSkeleton(KSharedConfig::openConfig(config->config()->name()), parent),
-      d(new Private)
+      d(new ConfigXmlPrivate)
 {
     d->parse(this, xml);
 }

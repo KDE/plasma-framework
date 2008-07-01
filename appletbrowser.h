@@ -30,6 +30,8 @@ namespace Plasma
 class Corona;
 class Containment;
 class Applet;
+class AppletBrowserPrivate;
+class AppletBrowserWidgetPrivate;
 
 class PLASMA_EXPORT AppletBrowserWidget : public QWidget
 {
@@ -78,8 +80,7 @@ private:
     Q_PRIVATE_SLOT(d, void appletAdded(Plasma::Applet*))
     Q_PRIVATE_SLOT(d, void appletRemoved(Plasma::Applet*))
 
-    class Private;
-    Private * const d;
+    AppletBrowserWidgetPrivate * const d;
 };
 
 class PLASMA_EXPORT AppletBrowser: public KDialog
@@ -105,8 +106,7 @@ public:
     Containment* containment() const;
 
 private:
-    class Private;
-    Private * const d;
+    AppletBrowserPrivate * const d;
 };
 
 } // namespace Plasma

@@ -29,6 +29,7 @@ namespace Plasma
 {
 
 class DataEngine;
+class DataEngineScriptPrivate;
 
 class PLASMA_EXPORT DataEngineScript : public ScriptEngine
 {
@@ -87,8 +88,7 @@ protected:
     void removeAllSources();
 
 private:
-    class Private;
-    Private * const d;
+    DataEngineScriptPrivate * const d;
 };
 
 #define K_EXPORT_PLASMA_DATAENGINESCRIPTENGINE(libname, classname) \

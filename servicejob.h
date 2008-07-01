@@ -28,6 +28,8 @@
 namespace Plasma
 {
 
+class ServiceJobPrivate;
+
 /**
  * @brief This class provides jobs for use with Plasma::Service
  */
@@ -76,8 +78,7 @@ protected:
     void setResult(const QVariant &result);
 
 private:
-    class Private;
-    Private * const d;
+    ServiceJobPrivate * const d;
 };
 
 } // namespace Plasma

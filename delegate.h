@@ -30,6 +30,8 @@
 namespace Plasma
 {
 
+class DelegatePrivate;
+
 /**
  * Item delegate for rendering items in Plasma menus implemented with item views.
  *
@@ -106,8 +108,7 @@ protected:
     virtual QSize sizeHint(const QStyleOptionViewItem& option , const QModelIndex& index) const;
 
 private:
-    class Private;
-    Private * const d;
+    DelegatePrivate * const d;
 };
 
 }

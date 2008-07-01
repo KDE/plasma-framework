@@ -46,6 +46,8 @@ class QAction;
 namespace Plasma
 {
 
+class IconPrivate;
+
 class PLASMA_EXPORT Icon : public QGraphicsWidget
 {
     Q_OBJECT
@@ -265,8 +267,6 @@ protected:
     void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
 
 public:
-    class Private;
-
     /**
     * @internal
     **/
@@ -278,8 +278,9 @@ private:
     void layoutIcons(const QStyleOptionGraphicsItem *option);
     void hoverEffect(bool);
 
-    Private * const d;
+    IconPrivate * const d;
 
+    friend class IconPrivate;
 private Q_SLOTS:
     void actionDestroyed(QObject* obj);
     void readColors();

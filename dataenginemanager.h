@@ -26,6 +26,8 @@
 namespace Plasma
 {
 
+class DataEngineManagerPrivate;
+
 /**
  * @brief DataEngine loader and life time manager
  *
@@ -80,8 +82,7 @@ class PLASMA_EXPORT DataEngineManager: public QObject
         DataEngineManager();
         ~DataEngineManager();
 
-        class Private;
-        Private* const d;
+        DataEngineManagerPrivate* const d;
 
         friend class DataEngineManagerSingleton;
 };

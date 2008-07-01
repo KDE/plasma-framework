@@ -35,10 +35,10 @@
 namespace Plasma
 {
 
-class ToolBox::Private
+class ToolBoxPrivate
 {
 public:
-    Private()
+    ToolBoxPrivate()
       : size(50),
       iconSize(32, 32),
       hidden(false),
@@ -55,7 +55,7 @@ public:
 
 ToolBox::ToolBox(QGraphicsItem *parent)
     : QGraphicsItem(parent),
-      d(new Private)
+      d(new ToolBoxPrivate)
 {
     setAcceptsHoverEvents(true);
 }

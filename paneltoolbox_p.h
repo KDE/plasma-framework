@@ -36,6 +36,7 @@ namespace Plasma
 
 class Widget;
 class EmptyGraphicsItem;
+class PanelToolBoxPrivate;
 
 class PanelToolBox : public ToolBox
 {
@@ -59,8 +60,7 @@ protected slots:
     void animate(qreal progress);
     void toolMoved(QGraphicsItem*);
 private:
-    class Private;
-    Private *d;
+    PanelToolBoxPrivate *d;
 };
 
 } // Plasma namespace

@@ -31,6 +31,9 @@
 
 namespace Plasma
 {
+
+class ThemePrivate;
+
 /**
  * @short Interface to the Plasma theme
  *
@@ -188,8 +191,8 @@ class PLASMA_EXPORT Theme : public QObject
 
     private:
         friend class ThemeSingleton;
-        class Private;
-        Private* const d;
+        friend class ThemePrivate;
+        ThemePrivate* const d;
 
         Q_PRIVATE_SLOT(d, void compositingChanged())
 };

@@ -30,6 +30,8 @@ class <Native>;
 namespace Plasma
 {
 
+class <Name>Private;
+
 class PLASMA_EXPORT <Name> : public QGraphicsProxyWidget
 {
     Q_OBJECT
@@ -91,8 +93,7 @@ protected:
     void resizeEvent(QGraphicsSceneResizeEvent *event);
 
 private:
-    class Private;
-    Private * const d;
+    <Name>Private * const d;
 };
 
 } // namespace Plasma

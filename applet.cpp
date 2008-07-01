@@ -84,7 +84,7 @@ Applet::Applet(QGraphicsItem *parent,
                const QString& serviceID,
                uint appletId)
     :  QGraphicsWidget(parent),
-       d(new Private(KService::serviceByStorageId(serviceID), appletId, this))
+       d(new AppletPrivate(KService::serviceByStorageId(serviceID), appletId, this))
 {
     // WARNING: do not access config() OR globalConfig() in this method!
     //          that requires a scene, which is not available at this point
@@ -93,7 +93,7 @@ Applet::Applet(QGraphicsItem *parent,
 
 Applet::Applet(QObject* parentObject, const QVariantList& args)
     :  QGraphicsWidget(0),
-       d(new Private(KService::serviceByStorageId(args.count() > 0 ? args[0].toString() : QString()),
+       d(new AppletPrivate(KService::serviceByStorageId(args.count() > 0 ? args[0].toString() : QString()),
                      args.count() > 1 ? args[1].toInt() : 0, this))
 {
     // now remove those first two items since those are managed by Applet and subclasses shouldn't
@@ -128,11 +128,11 @@ Applet::~Applet()
 
 PackageStructure::Ptr Applet::packageStructure()
 {
-    if (!Private::packageStructure) {
-        Private::packageStructure = new PlasmoidPackage();
+    if (!AppletPrivate::packageStructure) {
+        AppletPrivate::packageStructure = new PlasmoidPackage();
     }
 
-    return Private::packageStructure;
+    return AppletPrivate::packageStructure;
 }
 
 void Applet::init()
@@ -189,8 +189,8 @@ void Applet::restore(KConfigGroup &group)
 
     qreal z = group.readEntry("zvalue", 0);
 
-    if (z >= Private::s_maxZValue) {
-        Private::s_maxZValue = z;
+    if (z >= AppletPrivate::s_maxZValue) {
+        AppletPrivate::s_maxZValue = z;
     }
 
     if (z > 0) {
@@ -220,7 +220,7 @@ void Applet::restore(KConfigGroup &group)
     */
 }
 
-void Applet::Private::setFocus()
+void AppletPrivate::setFocus()
 {
     kDebug() << "setting focus";
     q->setFocus(Qt::ShortcutFocusReason);
@@ -309,7 +309,7 @@ void Applet::destroy()
     Animator::self()->animateItem(this, Animator::DisappearAnimation);
 }
 
-void Applet::Private::appletAnimationComplete(QGraphicsItem *item, Plasma::Animator::Animation anim)
+void AppletPrivate::appletAnimationComplete(QGraphicsItem *item, Plasma::Animator::Animation anim)
 {
     if (anim != Animator::DisappearAnimation || item != q) {
         return; //it's not our time yet
@@ -318,7 +318,7 @@ void Applet::Private::appletAnimationComplete(QGraphicsItem *item, Plasma::Anima
     cleanUpAndDelete();
 }
 
-void Applet::Private::cleanUpAndDelete()
+void AppletPrivate::cleanUpAndDelete()
 {
     //kDebug() << "???????????????? DESTROYING APPLET" << name() << " ???????????????????????????";
     QGraphicsWidget *parent = dynamic_cast<QGraphicsWidget *>(q->parentItem());
@@ -1323,7 +1323,7 @@ Applet* Applet::load(const QString& appletName, uint appletId, const QVariantLis
     KService::Ptr offer = offers.first();
 
     if (appletId == 0) {
-        appletId = ++Private::s_maxAppletId;
+        appletId = ++AppletPrivate::s_maxAppletId;
     }
 
     if (!offer->property("X-Plasma-API").toString().isEmpty()) {
@@ -1477,12 +1477,12 @@ QRect Applet::screenRect() const
 
 void Applet::raise()
 {
-    setZValue(++Private::s_maxZValue);
+    setZValue(++AppletPrivate::s_maxZValue);
 }
 
 void Applet::lower()
 {
-    setZValue(--Private::s_minZValue);
+    setZValue(--AppletPrivate::s_minZValue);
 }
 
 void Applet::setIsContainment(bool isContainment)
@@ -1508,10 +1508,10 @@ bool Applet::isContainment() const
 
 // PRIVATE CLASS IMPLEMENTATION
 
-Applet::Private::Private(KService::Ptr service, int uniqueID, Applet *applet)
+AppletPrivate::AppletPrivate(KService::Ptr service, int uniqueID, Applet *applet)
         : appletId(uniqueID),
           q(applet),
-          backgroundHints(StandardBackground),
+          backgroundHints(Applet::StandardBackground),
           appletDescription(service),
           package(0),
           needsConfigOverlay(0),
@@ -1539,7 +1539,7 @@ Applet::Private::Private(KService::Ptr service, int uniqueID, Applet *applet)
     }
 }
 
-Applet::Private::~Private()
+AppletPrivate::~AppletPrivate()
 {
     foreach ( const QString& engine, loadedEngines ) {
         DataEngineManager::self()->unloadEngine( engine );
@@ -1551,11 +1551,11 @@ Applet::Private::~Private()
     delete mainConfig;
 }
 
-void Applet::Private::init()
+void AppletPrivate::init()
 {
     // WARNING: do not access config() OR globalConfig() in this method!
     //          that requires a scene, which is not available at this point
-    q->setCacheMode(DeviceCoordinateCache);
+    q->setCacheMode(Applet::DeviceCoordinateCache);
     q->setAcceptsHoverEvents(true);
     q->setFlag(QGraphicsItem::ItemIsFocusable, true);
     // FIXME: adding here because nothing seems to be doing it in QGraphicsView,
@@ -1611,14 +1611,14 @@ void Applet::Private::init()
         }
     }
 
-    q->setBackgroundHints(DefaultBackground);
+    q->setBackgroundHints(Applet::DefaultBackground);
 
-    connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()), q, SLOT(themeChanged()));
+    QObject::connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()), q, SLOT(themeChanged()));
 }
 
 // put all setup routines for script here. at this point we can assume that
 // package exists and that we have a script engin
-void Applet::Private::setupScriptSupport()
+void AppletPrivate::setupScriptSupport()
 {
     Q_ASSERT(package);
     QString xmlPath = package->filePath("mainconfigxml");
@@ -1634,7 +1634,7 @@ void Applet::Private::setupScriptSupport()
     }
 }
 
-QString Applet::Private::globalName() const
+QString AppletPrivate::globalName() const
 {
     if (!appletDescription.isValid()) {
         return QString();
@@ -1643,7 +1643,7 @@ QString Applet::Private::globalName() const
     return appletDescription.service()->library();
 }
 
-QString Applet::Private::instanceName()
+QString AppletPrivate::instanceName()
 {
     if (!appletDescription.isValid()) {
         return QString();
@@ -1652,7 +1652,7 @@ QString Applet::Private::instanceName()
     return appletDescription.service()->library() + QString::number(appletId);
 }
 
-void Applet::Private::scheduleConstraintsUpdate(Plasma::Constraints c)
+void AppletPrivate::scheduleConstraintsUpdate(Plasma::Constraints c)
 {
     if (!constraintsTimerId) {
         constraintsTimerId = q->startTimer(0);
@@ -1660,7 +1660,7 @@ void Applet::Private::scheduleConstraintsUpdate(Plasma::Constraints c)
     pendingConstraints |= c;
 }
 
-KConfigGroup* Applet::Private::mainConfigGroup()
+KConfigGroup* AppletPrivate::mainConfigGroup()
 {
     if (mainConfig) {
         return mainConfig;
@@ -1695,7 +1695,7 @@ KConfigGroup* Applet::Private::mainConfigGroup()
     return mainConfig;
 }
 
-QString Applet::Private::visibleFailureText(const QString& reason)
+QString AppletPrivate::visibleFailureText(const QString& reason)
 {
     QString text;
 
@@ -1708,7 +1708,7 @@ QString Applet::Private::visibleFailureText(const QString& reason)
     return text;
 }
 
-void Applet::Private::checkImmutability()
+void AppletPrivate::checkImmutability()
 {
     const bool systemImmutable = q->globalConfig().isImmutable() || q->config().isImmutable() ||
                                 ((!isContainment && q->containment()) &&
@@ -1720,7 +1720,7 @@ void Applet::Private::checkImmutability()
     }
 }
 
-void Applet::Private::themeChanged()
+void AppletPrivate::themeChanged()
 {
     if (background) {
         //do again the translucent background fallback
@@ -1736,17 +1736,17 @@ void Applet::Private::themeChanged()
     q->update();
 }
 
-void Applet::Private::resetConfigurationObject()
+void AppletPrivate::resetConfigurationObject()
 {
     mainConfigGroup()->deleteGroup();
     delete mainConfig;
     mainConfig = 0;
 }
 
-uint Applet::Private::s_maxAppletId = 0;
-uint Applet::Private::s_maxZValue = 0;
-uint Applet::Private::s_minZValue = 0;
-PackageStructure::Ptr Applet::Private::packageStructure(0);
+uint AppletPrivate::s_maxAppletId = 0;
+uint AppletPrivate::s_maxZValue = 0;
+uint AppletPrivate::s_minZValue = 0;
+PackageStructure::Ptr AppletPrivate::packageStructure(0);
 
 AppletOverlayWidget::AppletOverlayWidget(QGraphicsWidget *parent)
     : QGraphicsWidget(parent)

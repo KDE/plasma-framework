@@ -28,6 +28,9 @@
 
 namespace Plasma
 {
+
+class DataContainerPrivate;
+
 /**
  * @brief A set of data exported via a DataEngine
  *
@@ -42,6 +45,7 @@ namespace Plasma
 class PLASMA_EXPORT DataContainer : public QObject
 {
     friend class DataEngine;
+    friend class DataEnginePrivate;
     Q_OBJECT
 
     public:
@@ -147,8 +151,7 @@ protected Q_SLOTS:
 
     private:
         friend class SignalRelay;
-        class Private;
-        Private* const d;
+        DataContainerPrivate* const d;
 };
 
 } // Plasma namespace

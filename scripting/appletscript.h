@@ -37,6 +37,8 @@ class QStyleOptionGraphicsItem;
 namespace Plasma
 {
 
+class AppletScriptPrivate;
+
 class PLASMA_EXPORT AppletScript : public ScriptEngine
 {
     Q_OBJECT
@@ -130,8 +132,7 @@ protected:
     const Package* package() const;
 
 private:
-    class Private;
-    Private * const d;
+    AppletScriptPrivate * const d;
 };
 
 #define K_EXPORT_PLASMA_APPLETSCRIPTENGINE(libname, classname) \

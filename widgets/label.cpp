@@ -31,16 +31,16 @@
 namespace Plasma
 {
 
-class Label::Private
+class LabelPrivate
 {
 public:
-    Private(Label *label)
+    LabelPrivate(Label *label)
         : q(label),
           svg(0)
     {
     }
 
-    ~Private()
+    ~LabelPrivate()
     {
         delete svg;
     }
@@ -83,7 +83,7 @@ public:
 
 Label::Label(QGraphicsWidget *parent)
     : QGraphicsProxyWidget(parent),
-      d(new Private(this))
+      d(new LabelPrivate(this))
 {
     QLabel* native = new QLabel;
 

@@ -27,6 +27,8 @@
 namespace Plasma
 {
 
+class PackageMetadataPrivate;
+
 class PLASMA_EXPORT PackageMetadata
 {
 public:
@@ -164,8 +166,7 @@ public:
     void setImplementationApi(const QString& language);
 
 private:
-    class Private;
-    Private * const d;
+    PackageMetadataPrivate * const d;
 };
 
 }

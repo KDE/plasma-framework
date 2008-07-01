@@ -32,6 +32,8 @@ class QTimeLine;
 namespace Plasma
 {
 
+class AnimatorPrivate;
+
 /**
  * @short A system for applying effects to Plasma elements
  */
@@ -169,8 +171,7 @@ private:
     Q_PRIVATE_SLOT(d, void animatedElementDestroyed(QObject*))
     Q_PRIVATE_SLOT(d, void customAnimReceiverDestroyed(QObject*))
 
-    class Private;
-    Private * const d;
+    AnimatorPrivate * const d;
 };
 
 } // namespace Plasma

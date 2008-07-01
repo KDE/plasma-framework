@@ -41,6 +41,8 @@ class QMatrix;
 namespace Plasma
 {
 
+class PanelSvgPrivate;
+
 class PLASMA_EXPORT PanelSvg : public Svg
 {
     Q_OBJECT
@@ -194,8 +196,7 @@ class PLASMA_EXPORT PanelSvg : public Svg
         Q_INVOKABLE void paintPanel(QPainter* painter, const QRectF& rect, const QPointF& pos = QPointF(0, 0));
 
     private:
-        class Private;
-        Private * const d;
+        PanelSvgPrivate * const d;
 
         Q_PRIVATE_SLOT(d, void updateSizes())
         Q_PRIVATE_SLOT(d, void updateNeeded())

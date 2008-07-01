@@ -31,6 +31,7 @@ namespace Plasma
 {
 
 class Containment;
+class CoronaPrivate;
 
 /**
  * @short A QGraphicsScene for Plasma::Applets
@@ -182,11 +183,12 @@ protected:
     void dragMoveEvent(QGraphicsSceneDragDropEvent* event);
 
 private:
-    class Private;
-    Private * const d;
+    CoronaPrivate * const d;
 
     Q_PRIVATE_SLOT(d, void containmentDestroyed(QObject*))
     Q_PRIVATE_SLOT(d, void syncConfig())
+
+    friend class CoronaPrivate;
 };
 
 } // namespace Plasma

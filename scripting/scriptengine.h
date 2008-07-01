@@ -41,6 +41,7 @@ class DataEngine;
 class DataEngineScript;
 class RunnerScript;
 class Package;
+class ScriptEnginePrivate;
 
 /**
  * @brief The base class for scripting interfaces to be used in loading
@@ -85,8 +86,7 @@ protected:
     virtual const Package* package() const;
 
 private:
-        class Private;
-    Private * const d;
+    ScriptEnginePrivate * const d;
 };
 
 /**

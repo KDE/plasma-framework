@@ -33,6 +33,7 @@ namespace Plasma
 class Widget;
 class Layout;
 class LayoutItem;
+class UiLoaderPrivate;
 
 /**
  * Dynamically create plasma Widgets and Layouts.
@@ -54,8 +55,7 @@ public:
     Layout *createLayout(const QString &className, LayoutItem *parent);
 
 private:
-    class Private;
-    Private *const d;
+    UiLoaderPrivate *const d;
 };
 
 }

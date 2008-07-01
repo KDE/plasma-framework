@@ -24,7 +24,7 @@
 namespace Plasma
 {
 
-class DataEngineScript::Private
+class DataEngineScriptPrivate
 {
 public:
     DataEngine* dataEngine;
@@ -32,7 +32,7 @@ public:
 
 DataEngineScript::DataEngineScript(QObject *parent)
     : ScriptEngine(parent),
-      d(new Private)
+      d(new DataEngineScriptPrivate)
 {
 }
 

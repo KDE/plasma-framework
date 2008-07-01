@@ -56,7 +56,7 @@ class ContentStructure
 };
 
 
-class PackageStructure::Private
+class PackageStructurePrivate
 {
 public:
     QString type;
@@ -67,11 +67,11 @@ public:
     static QHash<QString, PackageStructure::Ptr> structures;
  };
 
-QHash<QString, PackageStructure::Ptr> PackageStructure::Private::structures;
+QHash<QString, PackageStructure::Ptr> PackageStructurePrivate::structures;
 
 PackageStructure::PackageStructure(QObject *parent, const QString &type)
     : QObject(parent),
-      d(new Private)
+      d(new PackageStructurePrivate)
 {
     d->type = type;
     d->contentsPrefix = "contents/";
@@ -88,7 +88,7 @@ PackageStructure::Ptr PackageStructure::load(const QString &packageFormat)
         return Ptr(new PackageStructure());
     }
 
-    PackageStructure::Ptr structure = Private::structures[packageFormat];
+    PackageStructure::Ptr structure = PackageStructurePrivate::structures[packageFormat];
 
     if (structure) {
         return structure;
@@ -118,7 +118,7 @@ PackageStructure::Ptr PackageStructure::load(const QString &packageFormat)
     if (!configPath.isEmpty()) {
         KConfig config(configPath);
         structure->read(&config);
-        Private::structures[packageFormat] = structure;
+        PackageStructurePrivate::structures[packageFormat] = structure;
     }
 
     return structure;

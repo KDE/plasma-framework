@@ -25,14 +25,14 @@
 
 namespace Plasma {
 
-class GLApplet::Private
+class GLAppletPrivate
 {
 public:
-    Private()
+    GLAppletPrivate()
     {
         init();
     }
-    ~Private()
+    ~GLAppletPrivate()
     {
         delete pbuf;
         delete dummy;
@@ -68,7 +68,7 @@ GLApplet::GLApplet(QGraphicsItem *parent,
                    const QString &serviceId,
                    int appletId)
     : Applet(parent, serviceId, appletId),
-      d(new Private)
+      d(new GLAppletPrivate)
 {
     if (!d->dummy->isValid() ||
         !QGLPixelBuffer::hasOpenGLPbuffers() ||
@@ -79,7 +79,7 @@ GLApplet::GLApplet(QGraphicsItem *parent,
 
 GLApplet::GLApplet(QObject *parent, const QVariantList &args)
     : Applet(parent, args),
-      d(new Private)
+      d(new GLAppletPrivate)
 {
     if (!d->dummy->isValid() ||
         !QGLPixelBuffer::hasOpenGLPbuffers() ||

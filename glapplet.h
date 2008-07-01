@@ -27,6 +27,8 @@
 namespace Plasma
 {
 
+class GLAppletPrivate;
+
 /**
  * @short Plasma Applet that is fully rendered using OpengGL
  *
@@ -77,8 +79,7 @@ class PLASMA_EXPORT GLApplet : public Applet
                                     const QStyleOptionGraphicsItem *option,
                                     const QRect &contentsRect);
     private:
-        class Private;
-        Private *const d;
+        GLAppletPrivate *const d;
 };
 
 }

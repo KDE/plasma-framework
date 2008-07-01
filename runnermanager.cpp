@@ -185,17 +185,17 @@ Plasma::AbstractRunner* FindMatchesJob::runner() const
 *  RunnerManager::Private class
 *
 *****************************************************/
-class RunnerManager::Private
+class RunnerManagerPrivate
 {
 public:
 
-    Private(RunnerManager *parent)
+    RunnerManagerPrivate(RunnerManager *parent)
       : q(parent),
         deferredRun(0)
     {
         matchChangeTimer.setSingleShot(true);
-        connect(&matchChangeTimer, SIGNAL(timeout()), q, SLOT(matchesChanged()));
-        connect(&context, SIGNAL(matchesChanged()), q, SLOT(scheduleMatchesChanged()));
+        QObject::connect(&matchChangeTimer, SIGNAL(timeout()), q, SLOT(matchesChanged()));
+        QObject::connect(&context, SIGNAL(matchesChanged()), q, SLOT(scheduleMatchesChanged()));
     }
 
     void scheduleMatchesChanged()
@@ -307,7 +307,7 @@ public:
 *****************************************************/
 RunnerManager::RunnerManager(QObject *parent)
     : QObject(parent), 
-      d(new Private(this))
+      d(new RunnerManagerPrivate(this))
 {
     KConfigGroup config(KGlobal::config(), "PlasmaRunnerManager");
     d->loadConfiguration(config);
@@ -317,7 +317,7 @@ RunnerManager::RunnerManager(QObject *parent)
 
 RunnerManager::RunnerManager(KConfigGroup& config, QObject *parent)
     : QObject(parent), 
-      d(new Private(this))
+      d(new RunnerManagerPrivate(this))
 {
     d->loadConfiguration(config);
     //ThreadWeaver::setDebugLevel(true, 4);

@@ -30,21 +30,21 @@
 namespace Plasma
 {
 
-class TextEdit::Private
+class TextEditPrivate
 {
 public:
-    Private()
+    TextEditPrivate()
     {
     }
 
-    ~Private()
+    ~TextEditPrivate()
     {
     }
 };
 
 TextEdit::TextEdit(QGraphicsWidget *parent)
     : QGraphicsProxyWidget(parent),
-      d(new Private)
+      d(new TextEditPrivate)
 {
     KTextEdit* native = new KTextEdit;
     connect(native, SIGNAL(textChanged()), this, SIGNAL(textChanged()));

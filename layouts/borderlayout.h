@@ -28,6 +28,8 @@
 
 namespace Plasma {
 
+class BorderLayoutPrivate;
+
 /**
  * A layout which lays one item per border (left, top, bottom, right)
  * and one item in center.
@@ -89,8 +91,7 @@ protected:
     void releaseManagedItems();
 
 private:
-    class Private;
-    Private * const d;
+    BorderLayoutPrivate * const d;
 };
 
 }

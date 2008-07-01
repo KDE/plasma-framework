@@ -35,6 +35,8 @@ class QGraphicsItem;
 namespace Plasma
 {
 
+class AnimationDriverPrivate;
+
 class PLASMA_EXPORT AnimationDriver : public QObject
 {
     Q_OBJECT
@@ -68,8 +70,7 @@ public:
     virtual void itemSlideOut(qreal progress, QGraphicsItem* item, const QPoint &start, const QPoint &destination);
 
 private:
-    class Private;
-    Private * const d;
+    AnimationDriverPrivate * const d;
 };
 
 } // Plasma namespace

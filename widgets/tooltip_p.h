@@ -31,6 +31,7 @@
 namespace Plasma {
 
     class ToolTipData;
+    class ToolTipPrivate;
 
 /**
     @author Dan Meltzer
@@ -67,8 +68,7 @@ private Q_SLOTS:
 private:
     void setData(const Plasma::ToolTipData &data);
 
-    class Private;
-    Private *const d;
+    ToolTipPrivate *const d;
 };
 
 class WindowPreview : public QWidget

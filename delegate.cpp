@@ -46,12 +46,12 @@
 namespace Plasma
 {
 
-class Delegate::Private
+class DelegatePrivate
 {
     public:
-        Private() { }
+        DelegatePrivate() { }
 
-        ~Private() { }
+        ~DelegatePrivate() { }
 
         QFont fontForSubTitle(const QFont& titleFont) const;
         QRect titleRect(const QStyleOptionViewItem& option, const QModelIndex& index) const;
@@ -70,7 +70,7 @@ class Delegate::Private
 };
 
 
-QFont Delegate::Private::fontForSubTitle(const QFont& titleFont) const
+QFont DelegatePrivate::fontForSubTitle(const QFont& titleFont) const
 {
     QFont subTitleFont = titleFont;
     subTitleFont.setPointSize(qMax(subTitleFont.pointSize() - 2,
@@ -78,7 +78,7 @@ QFont Delegate::Private::fontForSubTitle(const QFont& titleFont) const
     return subTitleFont;
 }
 
-QRect Delegate::Private::titleRect(const QStyleOptionViewItem& option, const QModelIndex& index) const
+QRect DelegatePrivate::titleRect(const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
     QFont font(option.font);
     font.setBold(true);
@@ -108,9 +108,9 @@ QRect Delegate::Private::titleRect(const QStyleOptionViewItem& option, const QMo
     return textRect;
 }
 
-QRect Delegate::Private::subTitleRect(const QStyleOptionViewItem& option, const QModelIndex& index) const
+QRect DelegatePrivate::subTitleRect(const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
-    QString subTitle = index.data(roles[SubTitleRole]).toString();
+    QString subTitle = index.data(roles[Delegate::SubTitleRole]).toString();
 
     QFontMetrics fm(fontForSubTitle(option.font));
 
@@ -134,7 +134,7 @@ QRect Delegate::Private::subTitleRect(const QStyleOptionViewItem& option, const 
 
 Delegate::Delegate(QObject *parent)
     : QAbstractItemDelegate(parent),
-      d(new Private)
+      d(new DelegatePrivate)
 {
 }
 
@@ -157,7 +157,7 @@ QRect Delegate::rectAfterTitle(const QStyleOptionViewItem& option, const QModelI
 {
     QRect textRect = d->titleRect(option, index);
 
-    QRect emptyRect(0, textRect.top(), option.rect.width() - textRect.width() - Private::ITEM_LEFT_MARGIN - Private::ITEM_RIGHT_MARGIN - option.decorationSize.width() - Private::ICON_TEXT_MARGIN, textRect.height());
+    QRect emptyRect(0, textRect.top(), option.rect.width() - textRect.width() - DelegatePrivate::ITEM_LEFT_MARGIN - DelegatePrivate::ITEM_RIGHT_MARGIN - option.decorationSize.width() - DelegatePrivate::ICON_TEXT_MARGIN, textRect.height());
 
     if (option.direction == Qt::LeftToRight) {
         emptyRect.moveLeft(textRect.right());
@@ -176,7 +176,7 @@ QRect Delegate::rectAfterSubTitle(const QStyleOptionViewItem& option, const QMod
 {
     QRect textRect = d->subTitleRect(option, index);
 
-    QRect emptyRect(0, textRect.top(), option.rect.width() - textRect.width() - Private::ITEM_LEFT_MARGIN - Private::ITEM_RIGHT_MARGIN - option.decorationSize.width() - Private::ICON_TEXT_MARGIN, textRect.height());
+    QRect emptyRect(0, textRect.top(), option.rect.width() - textRect.width() - DelegatePrivate::ITEM_LEFT_MARGIN - DelegatePrivate::ITEM_RIGHT_MARGIN - option.decorationSize.width() - DelegatePrivate::ICON_TEXT_MARGIN, textRect.height());
 
     if (option.direction == Qt::LeftToRight) {
         emptyRect.moveLeft(textRect.right());
@@ -214,7 +214,7 @@ void Delegate::paint(QPainter *painter, const QStyleOptionViewItem& option, cons
                                                option.decorationPosition == QStyleOptionViewItem::Left ?
                                                                         Qt::AlignLeft : Qt::AlignRight,
                                                option.decorationSize,
-                                               contentRect.adjusted(Private::ITEM_LEFT_MARGIN,Private::ITEM_TOP_MARGIN,-Private::ITEM_RIGHT_MARGIN,-Private::ITEM_BOTTOM_MARGIN));
+                                               contentRect.adjusted(DelegatePrivate::ITEM_LEFT_MARGIN, DelegatePrivate::ITEM_TOP_MARGIN,-DelegatePrivate::ITEM_RIGHT_MARGIN,-DelegatePrivate::ITEM_BOTTOM_MARGIN));
     decorationRect.moveTop(contentRect.top() + qMax(0, (contentRect.height() - decorationRect.height())) / 2);
 
     QString titleText = index.data(Qt::DisplayRole).value<QString>();
@@ -323,7 +323,7 @@ void Delegate::paint(QPainter *painter, const QStyleOptionViewItem& option, cons
     if (index.data(d->roles[ColumnTypeRole]).toInt() == SecondaryActionColumn) {
         if (hover) {
             // Only draw on hover
-            const int delta = floor((qreal)(option.decorationSize.width() - Private::ACTION_ICON_SIZE)/2.0);
+            const int delta = floor((qreal)(option.decorationSize.width() - DelegatePrivate::ACTION_ICON_SIZE)/2.0);
             decorationRect.adjust(delta, delta-1, -delta-1, -delta);
             decorationIcon.paint(painter, decorationRect, option.decorationAlignment);
         }

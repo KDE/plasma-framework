@@ -42,14 +42,14 @@ class NullEngine : public DataEngine
         }
 };
 
-class DataEngineManager::Private
+class DataEngineManagerPrivate
 {
     public:
-        Private()
+        DataEngineManagerPrivate()
             : nullEng(0)
         {}
 
-        ~Private()
+        ~DataEngineManagerPrivate()
         {
             foreach (Plasma::DataEngine* engine, engines) {
                 delete engine;
@@ -85,7 +85,7 @@ DataEngineManager* DataEngineManager::self()
 }
 
 DataEngineManager::DataEngineManager()
-    : d(new Private())
+    : d(new DataEngineManagerPrivate())
 {
 }
 

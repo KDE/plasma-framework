@@ -45,10 +45,10 @@ namespace Plasma
 static const int DEFAULT_WALLPAPER_WIDTH = 1920;
 static const int DEFAULT_WALLPAPER_HEIGHT = 1200;
 
-class Theme::Private
+class ThemePrivate
 {
 public:
-    Private(Theme *theme)
+    ThemePrivate(Theme *theme)
         : q(theme),
           defaultWallpaperTheme(DEFAULT_WALLPAPER_THEME),
           defaultWallpaperSuffix(DEFAULT_WALLPAPER_SUFFIX),
@@ -109,10 +109,10 @@ public:
     bool hasWallpapers : 1;
 };
 
-PackageStructure::Ptr Theme::Private::packageStructure(0);
-const char *Theme::Private::defaultTheme = "default";
+PackageStructure::Ptr ThemePrivate::packageStructure(0);
+const char *ThemePrivate::defaultTheme = "default";
 
-QString Theme::Private::findInTheme(const QString &image, const QString &theme) const
+QString ThemePrivate::findInTheme(const QString &image, const QString &theme) const
 {
     //TODO: this should be using Package
     QString search;
@@ -134,7 +134,7 @@ QString Theme::Private::findInTheme(const QString &image, const QString &theme) 
     return search;
 }
 
-void Theme::Private::compositingChanged()
+void ThemePrivate::compositingChanged()
 {
 #ifdef Q_WS_X11
     bool nowCompositingActive = compositeWatch->owner() != None;
@@ -166,7 +166,7 @@ Theme* Theme::defaultTheme()
 
 Theme::Theme(QObject* parent)
     : QObject(parent),
-      d(new Private(this))
+      d(new ThemePrivate(this))
 {
     settingsChanged();
 
@@ -192,16 +192,16 @@ Theme::~Theme()
 
 PackageStructure::Ptr Theme::packageStructure()
 {
-    if (!Private::packageStructure) {
-        Private::packageStructure = new ThemePackage();
+    if (!ThemePrivate::packageStructure) {
+        ThemePrivate::packageStructure = new ThemePackage();
     }
 
-    return Private::packageStructure;
+    return ThemePrivate::packageStructure;
 }
 
 void Theme::settingsChanged()
 {
-    setThemeName(d->config().readEntry("name", Private::defaultTheme));
+    setThemeName(d->config().readEntry("name", ThemePrivate::defaultTheme));
 }
 
 void Theme::setThemeName(const QString &themeName)
@@ -210,7 +210,7 @@ void Theme::setThemeName(const QString &themeName)
     if (theme.isEmpty() || theme == d->themeName) {
         // let's try and get the default theme at least
         if (d->themeName.isEmpty()) {
-            theme = Private::defaultTheme;
+            theme = ThemePrivate::defaultTheme;
         } else {
             return;
         }
@@ -225,7 +225,7 @@ void Theme::setThemeName(const QString &themeName)
             return;
         }
 
-        theme = Private::defaultTheme;
+        theme = ThemePrivate::defaultTheme;
     }
 
     d->themeName = theme;
@@ -265,7 +265,7 @@ void Theme::setThemeName(const QString &themeName)
     if (d->isDefault) {
         // we're the default theme, let's save our state
         KConfigGroup &cg = d->config();
-        if (Private::defaultTheme == d->themeName) {
+        if (ThemePrivate::defaultTheme == d->themeName) {
             cg.deleteEntry("name");
         } else {
             cg.writeEntry("name", d->themeName);
@@ -284,8 +284,8 @@ QString Theme::imagePath(const QString& name)  const
 {
     QString path = d->findInTheme(name + ".svg", d->themeName);
 
-    if (path.isEmpty() && d->themeName != Private::defaultTheme) {
-        path = d->findInTheme(name + ".svg", Private::defaultTheme);
+    if (path.isEmpty() && d->themeName != ThemePrivate::defaultTheme) {
+        path = d->findInTheme(name + ".svg", ThemePrivate::defaultTheme);
     }
 
     if (path.isEmpty()) {

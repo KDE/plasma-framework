@@ -24,7 +24,7 @@
 namespace Plasma
 {
 
-class UiLoader::Private
+class UiLoaderPrivate
 {
 public:
     QStringList widgets;
@@ -32,7 +32,7 @@ public:
 };
 
 UiLoader::UiLoader( QObject *parent )
-    : d( new Private() )
+    : d( new UiLoaderPrivate() )
 {
     d->widgets
         << "CheckBox"

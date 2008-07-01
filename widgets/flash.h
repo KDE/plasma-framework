@@ -29,6 +29,8 @@
 namespace Plasma
 {
 
+class FlashPrivate;
+
 /**
  * Class that allows to flash text or icons inside plasma
  */
@@ -59,8 +61,7 @@ class PLASMA_EXPORT Flash : public QGraphicsWidget
         QPixmap renderPixmap();
 
     private:
-        class Private;
-        Private * const d;
+        FlashPrivate * const d;
 };
 
 }

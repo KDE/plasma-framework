@@ -33,6 +33,7 @@ namespace Plasma
 
 //class Widget;
 //class EmptyGraphicsItem;
+class ToolBoxPrivate;
 
 class ToolBox : public QObject, public QGraphicsItem
 {
@@ -75,8 +76,7 @@ protected:
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
 
 private:
-    class Private;
-    Private *d;
+    ToolBoxPrivate *d;
 };
 
 } // Plasma namespace

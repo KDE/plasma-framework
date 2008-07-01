@@ -27,7 +27,7 @@
 namespace Plasma
 {
 
-class PackageMetadata::Private
+class PackageMetadataPrivate
 {
     public:
         QString name;
@@ -46,12 +46,12 @@ class PackageMetadata::Private
 };
 
 PackageMetadata::PackageMetadata()
-    : d(new Private)
+    : d(new PackageMetadataPrivate)
 {
 }
 
 PackageMetadata::PackageMetadata(const QString& path)
-    : d(new Private)
+    : d(new PackageMetadataPrivate)
 {
     read(path);
 }

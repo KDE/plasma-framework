@@ -31,15 +31,15 @@
 namespace Plasma
 {
 
-class CheckBox::Private
+class CheckBoxPrivate
 {
 public:
-    Private()
+    CheckBoxPrivate()
         : svg(0)
     {
     }
 
-    ~Private()
+    ~CheckBoxPrivate()
     {
         delete svg;
     }
@@ -71,7 +71,7 @@ public:
 
 CheckBox::CheckBox(QGraphicsWidget *parent)
     : QGraphicsProxyWidget(parent),
-      d(new Private)
+      d(new CheckBoxPrivate)
 {
     QCheckBox* native = new QCheckBox;
     connect(native, SIGNAL(toggled(bool)), this, SIGNAL(toggled(bool)));

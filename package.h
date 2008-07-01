@@ -34,6 +34,7 @@ namespace Plasma
  **/
 
 class PackageMetadata;
+class PackagePrivate;
 
 class PLASMA_EXPORT Package
 {
@@ -155,8 +156,7 @@ class PLASMA_EXPORT Package
 
     private:
         Q_DISABLE_COPY(Package)
-        class Private;
-        Private * const d;
+        PackagePrivate * const d;
 };
 
 } // Namespace

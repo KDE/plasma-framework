@@ -30,6 +30,8 @@ class KLineEdit;
 namespace Plasma
 {
 
+class LineEditPrivate;
+
 class PLASMA_EXPORT LineEdit : public QGraphicsProxyWidget
 {
     Q_OBJECT
@@ -78,8 +80,7 @@ Q_SIGNALS:
     void textEdited(const QString & text);
 
 private:
-    class Private;
-    Private * const d;
+    LineEditPrivate * const d;
 };
 
 } // namespace Plasma

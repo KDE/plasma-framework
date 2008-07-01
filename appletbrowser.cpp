@@ -43,10 +43,10 @@
 namespace Plasma
 {
 
-class AppletBrowserWidget::Private
+class AppletBrowserWidgetPrivate
 {
 public:
-    Private(AppletBrowserWidget* w)
+    AppletBrowserWidgetPrivate(AppletBrowserWidget* w)
         : q(w),
           containment(0),
           appletList(0),
@@ -86,7 +86,7 @@ public:
     KCategorizedItemsViewModels::DefaultFilterModel filterModel;
 };
 
-void AppletBrowserWidget::Private::initFilters()
+void AppletBrowserWidgetPrivate::initFilters()
 {
     filterModel.clear();
 
@@ -135,7 +135,7 @@ void AppletBrowserWidget::Private::initFilters()
 
 AppletBrowserWidget::AppletBrowserWidget(QWidget * parent, Qt::WindowFlags f)
     : QWidget(parent, f),
-    d(new Private(this))
+    d(new AppletBrowserWidgetPrivate(this))
 {
     d->init();
 }
@@ -145,12 +145,12 @@ AppletBrowserWidget::~AppletBrowserWidget()
     delete d;
 }
 
-void AppletBrowserWidget::Private::init()
+void AppletBrowserWidgetPrivate::init()
 {
     QVBoxLayout *layout = new QVBoxLayout(q);
 
     appletList = new KCategorizedItemsView(q);
-    connect(appletList, SIGNAL(doubleClicked(const QModelIndex &)), q, SLOT(addApplet()));
+    QObject::connect(appletList, SIGNAL(doubleClicked(const QModelIndex &)), q, SLOT(addApplet()));
     layout->addWidget(appletList);
 
     // Other Emblems
@@ -167,7 +167,7 @@ void AppletBrowserWidget::Private::init()
     q->setLayout(layout);
 }
 
-void AppletBrowserWidget::Private::initRunningApplets()
+void AppletBrowserWidgetPrivate::initRunningApplets()
 {
 //get applets from corona, count them, send results to model
     if (!containment) {
@@ -188,8 +188,8 @@ void AppletBrowserWidget::Private::initRunningApplets()
     runningApplets.clear();
     QList<Containment*> containments = c->containments();
     foreach (Containment *containment, containments) {
-        connect(containment, SIGNAL(appletAdded(Plasma::Applet*,QPointF)), q, SLOT(appletAdded(Plasma::Applet*)));
-        connect(containment, SIGNAL(appletRemoved(Plasma::Applet*)), q, SLOT(appletRemoved(Plasma::Applet*)));
+        QObject::connect(containment, SIGNAL(appletAdded(Plasma::Applet*,QPointF)), q, SLOT(appletAdded(Plasma::Applet*)));
+        QObject::connect(containment, SIGNAL(appletRemoved(Plasma::Applet*)), q, SLOT(appletRemoved(Plasma::Applet*)));
 
         foreach (Applet *applet, containment->applets()) {
             runningApplets[applet->name()]++;
@@ -245,7 +245,7 @@ void AppletBrowserWidget::addApplet()
     }
 }
 
-void AppletBrowserWidget::Private::appletAdded(Plasma::Applet* applet)
+void AppletBrowserWidgetPrivate::appletAdded(Plasma::Applet* applet)
 {
     QString name = applet->name();
     //kDebug() << name;
@@ -255,7 +255,7 @@ void AppletBrowserWidget::Private::appletAdded(Plasma::Applet* applet)
     itemModel.setRunningApplets(name, runningApplets[name]);
 }
 
-void AppletBrowserWidget::Private::appletRemoved(Plasma::Applet* applet)
+void AppletBrowserWidgetPrivate::appletRemoved(Plasma::Applet* applet)
 {
     //kDebug() << (QObject*)applet;
     Plasma::Applet* a = (Plasma::Applet*)applet; //don't care if it's valid, just need the address
@@ -322,7 +322,7 @@ void AppletBrowserWidget::openWidgetFile()
     assistant->show();
 }
 
-class AppletBrowser::Private
+class AppletBrowserPrivate
 {
 public:
     void init(AppletBrowser*);
@@ -331,12 +331,12 @@ public:
 
 AppletBrowser::AppletBrowser(QWidget * parent, Qt::WindowFlags f)
     : KDialog(parent, f),
-      d(new Private)
+      d(new AppletBrowserPrivate)
 {
     d->init(this);
 }
 
-void AppletBrowser::Private::init(AppletBrowser *q)
+void AppletBrowserPrivate::init(AppletBrowser *q)
 {
     widget = new AppletBrowserWidget(q);
 
@@ -350,12 +350,12 @@ void AppletBrowser::Private::init(AppletBrowser *q)
     KMenu *widgetsMenu = new KMenu(i18n("Get New Widgets"), q);
     QAction *action = new QAction(KIcon("applications-internet"),
                                   i18n("Download From Internet"), q);
-    connect(action, SIGNAL(triggered(bool)), widget, SLOT(downloadWidgets()));
+    QObject::connect(action, SIGNAL(triggered(bool)), widget, SLOT(downloadWidgets()));
     widgetsMenu->addAction(action);
 
     action = new QAction(KIcon("applications-internet"),
                          i18n("Install From File..."), q);
-    connect(action, SIGNAL(triggered(bool)), widget, SLOT(openWidgetFile()));
+    QObject::connect(action, SIGNAL(triggered(bool)), widget, SLOT(openWidgetFile()));
     widgetsMenu->addAction(action);
     q->button(KDialog::User1)->setMenu(widgetsMenu);
 
@@ -366,7 +366,7 @@ void AppletBrowser::Private::init(AppletBrowser *q)
     q->setButtonToolTip(KDialog::User1, i18n("Install new widgets"));
     q->setButtonWhatsThis(KDialog::User1, i18n("<qt>Selecting <b>Get New Widgets</b> will show a window that allows you to download new widgets directly from the Internet, while Install From File allows you to add new widgets from files you have on disk.</qt>"));
 
-    connect(q, SIGNAL(applyClicked()), widget, SLOT(addApplet()));
+    QObject::connect(q, SIGNAL(applyClicked()), widget, SLOT(addApplet()));
 
     q->setInitialSize(QSize(400, 600));
     KConfigGroup cg(KGlobal::config(), "PlasmaAppletBrowserDialog");

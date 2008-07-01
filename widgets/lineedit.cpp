@@ -30,21 +30,21 @@
 namespace Plasma
 {
 
-class LineEdit::Private
+class LineEditPrivate
 {
 public:
-    Private()
+    LineEditPrivate()
     {
     }
 
-    ~Private()
+    ~LineEditPrivate()
     {
     }
 };
 
 LineEdit::LineEdit(QGraphicsWidget *parent)
     : QGraphicsProxyWidget(parent),
-      d(new Private)
+      d(new LineEditPrivate)
 {
     KLineEdit* native = new KLineEdit;
     connect(native, SIGNAL(editingFinished()), this, SIGNAL(editingFinished()));

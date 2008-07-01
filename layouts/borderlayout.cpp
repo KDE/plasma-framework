@@ -21,11 +21,11 @@
 
 namespace Plasma {
 
-class BorderLayout::Private {
+class BorderLayoutPrivate {
 public:
     BorderLayout * q;
 
-    explicit Private(BorderLayout * parent = 0)
+    explicit BorderLayoutPrivate(BorderLayout * parent = 0)
         : q(parent)
     {
         sizes[LeftPositioned] = -1;
@@ -36,7 +36,7 @@ public:
 
     }
 
-    virtual ~Private()
+    virtual ~BorderLayoutPrivate()
     {
     }
 
@@ -47,7 +47,7 @@ public:
 
 
 BorderLayout::BorderLayout(LayoutItem * parent) :
-    Layout(parent), d(new Private(this))
+    Layout(parent), d(new BorderLayoutPrivate(this))
 {
     if (parent) {
         parent->setLayout(this);

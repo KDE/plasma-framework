@@ -47,17 +47,17 @@
 namespace Plasma
 {
 
-class RunnerContext::Private : public QSharedData
+class RunnerContextPrivate : public QSharedData
 {
     public:
-        Private(RunnerContext *context)
+        RunnerContextPrivate(RunnerContext *context)
             : QSharedData(),
               type(RunnerContext::UnknownType),
               q(context)
         {
         }
 
-        Private(const RunnerContext::Private& p)
+        RunnerContextPrivate(const RunnerContextPrivate& p)
             : QSharedData(),
               type(RunnerContext::None),
               q(p.q)
@@ -65,7 +65,7 @@ class RunnerContext::Private : public QSharedData
             //kDebug() << "¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿boo yeah" << type;
         }
 
-        ~Private()
+        ~RunnerContextPrivate()
         {
         }
 
@@ -77,20 +77,20 @@ class RunnerContext::Private : public QSharedData
             // NOTE! this method must NEVER be called from
             // code that may be running in multiple threads
             // with the same data.
-            type = UnknownType;
+            type = RunnerContext::UnknownType;
             QString path = QDir::cleanPath(KShell::tildeExpand(term));
 
             int space = term.indexOf(' ');
             if (space > 0) {
                 if (!KStandardDirs::findExe(path.left(space)).isEmpty()) {
-                    type = ShellCommand;
+                    type = RunnerContext::ShellCommand;
                 }
             } else if (!KStandardDirs::findExe(path.left(space)).isEmpty()) {
-                type = Executable;
+                type = RunnerContext::Executable;
             } else {
                 KUrl url(term);
                 if (!url.protocol().isEmpty() && !url.isLocalFile()) {
-                    type = NetworkLocation;
+                    type = RunnerContext::NetworkLocation;
                 } else if (QFile::exists(path)) {
                     QFileInfo info(path);
                     if (info.isSymLink()) {
@@ -98,10 +98,10 @@ class RunnerContext::Private : public QSharedData
                         info = QFileInfo(path);
                     }
                     if (info.isDir()) {
-                        type = Directory;
+                        type = RunnerContext::Directory;
                         mimeType = "inode/folder";
                     } else if (info.isFile()) {
-                        type = File;
+                        type = RunnerContext::File;
                         KMimeType::Ptr mimeTypePtr = KMimeType::findByPath(path);
                         if (mimeTypePtr) {
                             mimeType = mimeTypePtr->name();
@@ -123,7 +123,7 @@ class RunnerContext::Private : public QSharedData
 
 RunnerContext::RunnerContext(QObject *parent)
     : QObject(parent),
-      d(new Private(this))
+      d(new RunnerContextPrivate(this))
 {
 }
 

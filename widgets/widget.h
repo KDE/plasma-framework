@@ -47,7 +47,7 @@ struct PLASMA_EXPORT ToolTipData
 };
 
 class Layout;
-
+class WidgetPrivate;
 
 /**
  * Base class for all Widgets in Plasma.
@@ -109,8 +109,7 @@ protected:
     #endif
 private:
     
-    class Private;
-    Private *const d;
+    WidgetPrivate *const d;
 };
 
 } // Plasma namespace

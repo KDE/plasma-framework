@@ -30,6 +30,8 @@ class QCheckBox;
 namespace Plasma
 {
 
+class CheckBoxPrivate;
+
 class PLASMA_EXPORT CheckBox : public QGraphicsProxyWidget
 {
     Q_OBJECT
@@ -105,8 +107,7 @@ protected:
     void resizeEvent(QGraphicsSceneResizeEvent *event);
 
 private:
-    class Private;
-    Private * const d;
+    CheckBoxPrivate * const d;
 };
 
 } // namespace Plasma

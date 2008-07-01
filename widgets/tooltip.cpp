@@ -45,10 +45,10 @@
 
 namespace Plasma {
 
-class ToolTip::Private
+class ToolTipPrivate
 {
     public:
-        Private()
+        ToolTipPrivate()
         : label(0)
         , imageLabel(0)
         , preview(0)
@@ -192,7 +192,7 @@ void ToolTip::mouseReleaseEvent(QMouseEvent* event)
 
 ToolTip::ToolTip()
     : QWidget(0)
-    , d( new Private )
+    , d( new ToolTipPrivate )
 {
     setWindowFlags(Qt::ToolTip);
     QGridLayout *l = new QGridLayout;

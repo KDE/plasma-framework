@@ -73,16 +73,16 @@ public:
     bool contentAtOrigin : 1;
 };
 
-class PanelSvg::Private
+class PanelSvgPrivate
 {
 public:
-    Private(PanelSvg *psvg)
+    PanelSvgPrivate(PanelSvg *psvg)
       : q(psvg),
         cacheAll(false)
     {
     }
 
-    ~Private()
+    ~PanelSvgPrivate()
     {
         qDeleteAll(panels);
         panels.clear();
@@ -105,7 +105,7 @@ public:
 
 PanelSvg::PanelSvg(QObject* parent)
     : Svg(parent),
-      d(new Private(this))
+      d(new PanelSvgPrivate(this))
 {
     connect(this, SIGNAL(repaintNeeded()), this, SLOT(updateNeeded()));
     d->panels.insert(QString(), new PanelData());
@@ -367,7 +367,7 @@ void PanelSvg::paintPanel(QPainter* painter, const QRectF& rect, const QPointF& 
     painter->drawPixmap(rect, *(panel->cachedBackground), rect.translated(-pos.x()-leftOffset,-pos.y()-topOffset));
 }
 
-void PanelSvg::Private::generateBackground(PanelData *panel)
+void PanelSvgPrivate::generateBackground(PanelData *panel)
 {
     //kDebug() << "generating background";
     bool origined = panel->contentAtOrigin;
@@ -450,13 +450,13 @@ void PanelSvg::Private::generateBackground(PanelData *panel)
     }
 
     // Corners
-    if (q->hasElement(prefix + "top") && panel->enabledBorders & TopBorder) {
+    if (q->hasElement(prefix + "top") && panel->enabledBorders & PanelSvg::TopBorder) {
         if (!origined) {
             contentTop = panel->topHeight;
             bottomOffset += panel->topHeight;
         }
 
-        if (q->hasElement(prefix + "topleft") && panel->enabledBorders & LeftBorder) {
+        if (q->hasElement(prefix + "topleft") && panel->enabledBorders & PanelSvg::LeftBorder) {
             q->paint(&p, QRect(leftOffset, topOffset, panel->leftWidth, panel->topHeight), prefix + "topleft");
 
             if (!origined) {
@@ -465,13 +465,13 @@ void PanelSvg::Private::generateBackground(PanelData *panel)
             }
         }
 
-        if (q->hasElement(prefix + "topright") && panel->enabledBorders & RightBorder) {
+        if (q->hasElement(prefix + "topright") && panel->enabledBorders & PanelSvg::RightBorder) {
             q->paint(&p, QRect(rightOffset, topOffset, panel->rightWidth, panel->topHeight), prefix + "topright");
         }
     }
 
-    if (q->hasElement(prefix + "bottom") && panel->enabledBorders & BottomBorder) {
-        if (q->hasElement(prefix + "bottomleft") && panel->enabledBorders & LeftBorder) {
+    if (q->hasElement(prefix + "bottom") && panel->enabledBorders & PanelSvg::BottomBorder) {
+        if (q->hasElement(prefix + "bottomleft") && panel->enabledBorders & PanelSvg::LeftBorder) {
             q->paint(&p, QRect(leftOffset, bottomOffset, panel->leftWidth, panel->bottomHeight), prefix + "bottomleft");
 
             if (!origined) {
@@ -480,42 +480,42 @@ void PanelSvg::Private::generateBackground(PanelData *panel)
             }
         }
 
-        if (q->hasElement(prefix + "bottomright") && panel->enabledBorders & RightBorder) {
+        if (q->hasElement(prefix + "bottomright") && panel->enabledBorders & PanelSvg::RightBorder) {
             q->paint(&p, QRect(rightOffset, bottomOffset, panel->rightWidth, panel->bottomHeight), prefix + "bottomright");
         }
     }
 
     // Sides
     if (panel->stretchBorders) {
-        if (panel->enabledBorders & LeftBorder || panel->enabledBorders & RightBorder) {
+        if (panel->enabledBorders & PanelSvg::LeftBorder || panel->enabledBorders & PanelSvg::RightBorder) {
             q->resize(q->size().width(), scaledContentSize.height());
 
-            if (q->hasElement(prefix + "left") && panel->enabledBorders & LeftBorder) {
+            if (q->hasElement(prefix + "left") && panel->enabledBorders & PanelSvg::LeftBorder) {
                 q->paint(&p, QRect(leftOffset, contentTop, panel->leftWidth, contentHeight), prefix + "left");
             }
 
-            if (q->hasElement(prefix + "right") && panel->enabledBorders & RightBorder) {
+            if (q->hasElement(prefix + "right") && panel->enabledBorders & PanelSvg::RightBorder) {
                 q->paint(&p, QRect(rightOffset, contentTop, panel->rightWidth, contentHeight), prefix + "right");
             }
 
             q->resize();
         }
 
-        if (panel->enabledBorders & TopBorder || panel->enabledBorders & BottomBorder) {
+        if (panel->enabledBorders & PanelSvg::TopBorder || panel->enabledBorders & PanelSvg::BottomBorder) {
             q->resize(scaledContentSize.width(), q->size().height());
 
-            if (q->hasElement(prefix + "top") && panel->enabledBorders & TopBorder) {
+            if (q->hasElement(prefix + "top") && panel->enabledBorders & PanelSvg::TopBorder) {
                 q->paint(&p, QRect(contentLeft, topOffset, contentWidth, panel->topHeight), prefix + "top");
             }
 
-            if (q->hasElement(prefix + "bottom") && panel->enabledBorders & BottomBorder) {
+            if (q->hasElement(prefix + "bottom") && panel->enabledBorders & PanelSvg::BottomBorder) {
                 q->paint(&p, QRect(contentLeft, bottomOffset, contentWidth, panel->bottomHeight), prefix + "bottom");
             }
 
             q->resize();
         }
     } else {
-        if (q->hasElement(prefix + "left") && panel->enabledBorders & LeftBorder) {
+        if (q->hasElement(prefix + "left") && panel->enabledBorders & PanelSvg::LeftBorder) {
             QPixmap left(panel->leftWidth, leftHeight);
             left.fill(Qt::transparent);
 
@@ -526,7 +526,7 @@ void PanelSvg::Private::generateBackground(PanelData *panel)
             p.drawTiledPixmap(QRect(leftOffset, contentTop, panel->leftWidth, contentHeight), left);
         }
 
-        if (q->hasElement(prefix + "right") && panel->enabledBorders & RightBorder) {
+        if (q->hasElement(prefix + "right") && panel->enabledBorders & PanelSvg::RightBorder) {
             QPixmap right(panel->rightWidth, leftHeight);
             right.fill(Qt::transparent);
 
@@ -537,7 +537,7 @@ void PanelSvg::Private::generateBackground(PanelData *panel)
             p.drawTiledPixmap(QRect(rightOffset, contentTop, panel->rightWidth, contentHeight), right);
         }
 
-        if (q->hasElement(prefix + "top") && panel->enabledBorders & TopBorder) {
+        if (q->hasElement(prefix + "top") && panel->enabledBorders & PanelSvg::TopBorder) {
             QPixmap top(topWidth, panel->topHeight);
             top.fill(Qt::transparent);
 
@@ -548,7 +548,7 @@ void PanelSvg::Private::generateBackground(PanelData *panel)
             p.drawTiledPixmap(QRect(contentLeft, topOffset, contentWidth, panel->topHeight), top);
         }
 
-        if (q->hasElement(prefix + "bottom") && panel->enabledBorders & BottomBorder) {
+        if (q->hasElement(prefix + "bottom") && panel->enabledBorders & PanelSvg::BottomBorder) {
             QPixmap bottom(topWidth, panel->bottomHeight);
             bottom.fill(Qt::transparent);
 
@@ -565,7 +565,7 @@ void PanelSvg::Private::generateBackground(PanelData *panel)
     //paint(&p, QRect(contentLeft, contentTop, contentWidth, contentHeight), "center");
 }
 
-void PanelSvg::Private::updateSizes()
+void PanelSvgPrivate::updateSizes()
 {
     //kDebug() << "!!!!!!!!!!!!!!!!!!!!!! updating sizes" << prefix;
     PanelData *panel = panels[prefix];
@@ -575,25 +575,25 @@ void PanelSvg::Private::updateSizes()
     panel->cachedBackground = 0;
 
     q->Svg::resize();
-    if (panel->enabledBorders & TopBorder) {
+    if (panel->enabledBorders & PanelSvg::TopBorder) {
         panel->topHeight = q->elementSize(prefix + "top").height();
     } else {
         panel->topHeight = 0;
     }
 
-    if (panel->enabledBorders & LeftBorder) {
+    if (panel->enabledBorders & PanelSvg::LeftBorder) {
         panel->leftWidth = q->elementSize(prefix + "left").width();
     } else {
         panel->leftWidth = 0;
     }
 
-    if (panel->enabledBorders & RightBorder) {
+    if (panel->enabledBorders & PanelSvg::RightBorder) {
         panel->rightWidth = q->elementSize(prefix + "right").width();
     } else {
         panel->rightWidth = 0;
     }
 
-    if (panel->enabledBorders & BottomBorder) {
+    if (panel->enabledBorders & PanelSvg::BottomBorder) {
         panel->bottomHeight = q->elementSize(prefix + "bottom").height();
     } else {
         panel->bottomHeight = 0;
@@ -605,13 +605,13 @@ void PanelSvg::Private::updateSizes()
     panel->stretchBorders = q->hasElement("hint-stretch-borders");
 }
 
-void PanelSvg::Private::updateNeeded()
+void PanelSvgPrivate::updateNeeded()
 {
     q->clearCache();
     updateSizes();
 }
 
-void PanelSvg::Private::updateAndSignalSizes()
+void PanelSvgPrivate::updateAndSignalSizes()
 {
     updateSizes();
     emit q->repaintNeeded();

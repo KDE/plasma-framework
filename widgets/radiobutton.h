@@ -30,6 +30,8 @@ class QRadioButton;
 namespace Plasma
 {
 
+class RadioButtonPrivate;
+
 class PLASMA_EXPORT RadioButton : public QGraphicsProxyWidget
 {
     Q_OBJECT
@@ -105,8 +107,7 @@ protected:
     void resizeEvent(QGraphicsSceneResizeEvent *event);
 
 private:
-    class Private;
-    Private * const d;
+    RadioButtonPrivate * const d;
 };
 
 } // namespace Plasma

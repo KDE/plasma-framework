@@ -25,7 +25,7 @@
 namespace Plasma
 {
 
-class AppletScript::Private
+class AppletScriptPrivate
 {
 public:
     Applet* applet;
@@ -33,7 +33,7 @@ public:
 
 AppletScript::AppletScript(QObject *parent)
     : ScriptEngine(parent),
-      d(new Private)
+      d(new AppletScriptPrivate)
 {
     d->applet = 0;
 }

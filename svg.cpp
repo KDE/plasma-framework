@@ -60,10 +60,10 @@ class SharedSvgRenderer : public KSvgRenderer, public QSharedData
         }
 };
 
-class Svg::Private
+class SvgPrivate
 {
     public:
-        Private(Svg *svg)
+        SvgPrivate(Svg *svg)
             : q(svg),
               renderer(0),
               multipleImages(false),
@@ -72,7 +72,7 @@ class Svg::Private
         {
         }
 
-        ~Private()
+        ~SvgPrivate()
         {
             eraseRenderer();
         }
@@ -80,8 +80,8 @@ class Svg::Private
         void setImagePath(const QString &imagePath, Svg *q)
         {
             if (themed) {
-                disconnect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()), q, SLOT(themeChanged()));
-                disconnect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()), q, SLOT(colorsChanged()));
+                QObject::disconnect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()), q, SLOT(themeChanged()));
+                QObject::disconnect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()), q, SLOT(colorsChanged()));
             }
 
             themed = !QDir::isAbsolutePath(imagePath);
@@ -89,13 +89,13 @@ class Svg::Private
 
             if (themed) {
                 themePath = imagePath;
-                connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()), q, SLOT(themeChanged()));
+                QObject::connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()), q, SLOT(themeChanged()));
 
                 // check if svg wants colorscheme applied
                 createRenderer();
                 applyColors = renderer->elementExists("hint-apply-color-scheme");
                 if (applyColors && !Theme::defaultTheme()->colorScheme()) {
-                    connect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()), q, SLOT(colorsChanged()));
+                    QObject::connect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()), q, SLOT(colorsChanged()));
                 }
 
             } else {
@@ -272,9 +272,9 @@ class Svg::Private
             createRenderer();
             applyColors = renderer->elementExists("hint-apply-color-scheme");
             if (applyColors && !Theme::defaultTheme()->colorScheme()) {
-                connect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()), q, SLOT(colorsChanged()));
+                QObject::connect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()), q, SLOT(colorsChanged()));
             } else {
-                disconnect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()), q, SLOT(colorsChanged()));
+                QObject::disconnect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()), q, SLOT(colorsChanged()));
             }
 
             emit q->repaintNeeded();
@@ -303,11 +303,11 @@ class Svg::Private
         bool applyColors;
 };
 
-QHash<QString, SharedSvgRenderer::Ptr> Svg::Private::renderers;
+QHash<QString, SharedSvgRenderer::Ptr> SvgPrivate::renderers;
 
 Svg::Svg(QObject* parent)
     : QObject(parent),
-      d(new Private(this))
+      d(new SvgPrivate(this))
 {
 }
 

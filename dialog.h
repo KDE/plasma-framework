@@ -31,6 +31,8 @@
 namespace Plasma
 {
 
+class DialogPrivate;
+
 /**
  * @short A dialog that uses the Plasma style
  *
@@ -76,8 +78,7 @@ class PLASMA_EXPORT Dialog : public QWidget
         void resizeEvent(QResizeEvent *e);
 
     private:
-        class Private;
-        Private * const d;
+        DialogPrivate * const d;
         /**
          * React to theme changes 
          */

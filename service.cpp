@@ -36,13 +36,13 @@ namespace Plasma
 
 Service::Service(QObject *parent)
     : QObject(parent),
-      d(new Private(this))
+      d(new ServicePrivate(this))
 {
 }
 
 Service::Service(QObject *parent, const QVariantList &args)
     : QObject(parent),
-      d(new Private(this))
+      d(new ServicePrivate(this))
 {
     Q_UNUSED(args);
 }

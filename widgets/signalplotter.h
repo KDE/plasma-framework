@@ -29,6 +29,8 @@
 namespace Plasma
 {
 
+class SignalPlotterPrivate;
+
 struct PlotColor
 {
     QColor color;
@@ -432,8 +434,7 @@ protected:
     void drawHorizontalLines(QPainter *p, int top, int w, int h);
 
 private:
-    class Private;
-    Private *const d;
+    SignalPlotterPrivate *const d;
 };
 
 } // Plasma namespace

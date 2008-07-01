@@ -32,10 +32,10 @@
 namespace Plasma
 {
 
-class QueryMatch::Private : public QSharedData
+class QueryMatchPrivate : public QSharedData
 {
     public:
-        Private(AbstractRunner *r)
+        QueryMatchPrivate(AbstractRunner *r)
             : QSharedData(),
               runner(r),
               type(QueryMatch::ExactMatch),
@@ -57,7 +57,7 @@ class QueryMatch::Private : public QSharedData
 
 
 QueryMatch::QueryMatch(AbstractRunner *runner)
-    : d(new Private(runner))
+    : d(new QueryMatchPrivate(runner))
 {
     if (runner) {
         d->id = runner->id();

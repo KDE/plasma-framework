@@ -33,6 +33,7 @@ namespace Plasma
 
 class QueryMatch;
 class AbstractRunner;
+class RunnerContextPrivate;
 
 /**
  * @short The RunnerContext class provides information related to a search,
@@ -142,8 +143,7 @@ class PLASMA_EXPORT RunnerContext : public QObject
         void matchesChanged();
 
     private:
-        class Private;
-        QExplicitlySharedDataPointer<Private> d;
+        QExplicitlySharedDataPointer<RunnerContextPrivate> d;
 };
 
 }

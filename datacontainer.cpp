@@ -31,7 +31,7 @@ namespace Plasma
 
 DataContainer::DataContainer(QObject* parent)
     : QObject(parent),
-      d(new Private())
+      d(new DataContainerPrivate())
 {
 }
 

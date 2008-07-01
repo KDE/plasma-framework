@@ -35,6 +35,7 @@ namespace Plasma
     class QueryMatch;
     class AbstractRunner;
     class RunnerContext; 
+    class RunnerManagerPrivate;
 
 /**
  * @short The RunnerManager class decides what installed runners are runnable,
@@ -139,8 +140,9 @@ class PLASMA_EXPORT RunnerManager : public QObject
         Q_PRIVATE_SLOT(d, void matchesChanged())
         Q_PRIVATE_SLOT(d, void jobDone(ThreadWeaver::Job*))
 
-        class Private;
-        Private * const d;
+        RunnerManagerPrivate * const d;
+
+        friend class RunnerManagerPrivate;
 };
 
 }

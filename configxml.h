@@ -68,6 +68,8 @@
 namespace Plasma
 {
 
+class ConfigXmlPrivate;
+
 class PLASMA_EXPORT ConfigXml : public KConfigSkeleton
 {
 public:
@@ -106,9 +108,8 @@ public:
 
     KConfigSkeletonItem* findItem(const QString &group, const QString &key);
 
-    class Private;
 private:
-    Private * const d;
+    ConfigXmlPrivate * const d;
 };
 
 } // Plasma namespace

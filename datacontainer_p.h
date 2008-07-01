@@ -28,10 +28,10 @@ namespace Plasma
 
 class SignalRelay;
 
-class DataContainer::Private
+class DataContainerPrivate
 {
 public:
-    Private()
+    DataContainerPrivate()
         : dirty(false), cached(false)
     {}
 
@@ -53,7 +53,7 @@ class SignalRelay : public QObject
     Q_OBJECT
 
 public:
-    SignalRelay(DataContainer* parent, DataContainer::Private *data, uint ival, Plasma::IntervalAlignment align)
+    SignalRelay(DataContainer* parent, DataContainerPrivate *data, uint ival, Plasma::IntervalAlignment align)
         : QObject(parent),
           dc(parent),
           d(data),
@@ -125,7 +125,7 @@ public:
     }
 
     DataContainer *dc;
-    DataContainer::Private *d;
+    DataContainerPrivate *d;
     uint m_interval;
     Plasma::IntervalAlignment m_align;
     int m_timerId;
@@ -162,7 +162,7 @@ protected:
     }
 };
 
-SignalRelay* DataContainer::Private::signalRelay(const DataContainer* dc, QObject *visualization, uint pollingInterval, Plasma::IntervalAlignment align)
+SignalRelay* DataContainerPrivate::signalRelay(const DataContainer* dc, QObject *visualization, uint pollingInterval, Plasma::IntervalAlignment align)
 {
     QMap<uint, SignalRelay *>::const_iterator relayIt = relays.find(pollingInterval);
     SignalRelay *relay = 0;
@@ -179,7 +179,7 @@ SignalRelay* DataContainer::Private::signalRelay(const DataContainer* dc, QObjec
     return relay;
 }
 
-bool DataContainer::Private::hasUpdates()
+bool DataContainerPrivate::hasUpdates()
 {
   if (cached) {
       //some signalrelay needs us to pretend we did an update

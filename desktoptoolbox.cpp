@@ -77,10 +77,10 @@ class EmptyGraphicsItem : public QGraphicsItem
 // used with QGrahphicsItem::setData
 static const int ToolName = 7001;
 
-class DesktopToolBox::Private
+class DesktopToolBoxPrivate
 {
 public:
-    Private()
+    DesktopToolBoxPrivate()
       : icon("plasma"),
         toolBacker(0),
         animCircleId(0),
@@ -101,7 +101,7 @@ public:
 
 DesktopToolBox::DesktopToolBox(QGraphicsItem *parent)
     : ToolBox(parent),
-      d(new Private)
+      d(new DesktopToolBoxPrivate)
 {
     connect(Plasma::Animator::self(), SIGNAL(movementFinished(QGraphicsItem*)), this, SLOT(toolMoved(QGraphicsItem*)));
 

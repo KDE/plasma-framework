@@ -46,10 +46,10 @@
 namespace Plasma
 {
 
-class Widget::Private
+class WidgetPrivate
 {
     public:
-        Private()
+        WidgetPrivate()
             : minimumSize(0,0),
               maximumSize(std::numeric_limits<qreal>::infinity(),
                           std::numeric_limits<qreal>::infinity()),
@@ -57,7 +57,7 @@ class Widget::Private
               //toolTip(0)
         { }
 
-        ~Private()
+        ~WidgetPrivate()
         {
             //delete toolTip;
         }
@@ -71,7 +71,7 @@ class Widget::Private
         //ToolTipData *toolTip;
 };
 
-bool Widget::Private::shouldPaint(QPainter *painter, const QTransform &transform)
+bool WidgetPrivate::shouldPaint(QPainter *painter, const QTransform &transform)
 {
     Q_UNUSED(painter)
     Q_UNUSED(transform)
@@ -82,7 +82,7 @@ bool Widget::Private::shouldPaint(QPainter *painter, const QTransform &transform
 
 Widget::Widget(QGraphicsItem *parent, QObject* parentObject)
   : QGraphicsWidget(parent),
-    d(new Private)
+    d(new WidgetPrivate)
 {
     setFlag(QGraphicsItem::ItemClipsToShape, true);
     setFlag(QGraphicsItem::ItemClipsChildrenToShape, true);

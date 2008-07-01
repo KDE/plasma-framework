@@ -31,15 +31,15 @@
 namespace Plasma
 {
 
-class PushButton::Private
+class PushButtonPrivate
 {
 public:
-    Private()
+    PushButtonPrivate()
         : svg(0)
     {
     }
 
-    ~Private()
+    ~PushButtonPrivate()
     {
         delete svg;
     }
@@ -71,7 +71,7 @@ public:
 
 PushButton::PushButton(QGraphicsWidget *parent)
     : QGraphicsProxyWidget(parent),
-      d(new Private)
+      d(new PushButtonPrivate)
 {
     KPushButton* native = new KPushButton;
     connect(native, SIGNAL(clicked()), this, SIGNAL(clicked()));

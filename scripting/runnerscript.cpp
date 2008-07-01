@@ -25,7 +25,7 @@
 namespace Plasma
 {
 
-class RunnerScript::Private
+class RunnerScriptPrivate
 {
 public:
     AbstractRunner* runner;
@@ -33,7 +33,7 @@ public:
 
 RunnerScript::RunnerScript(QObject *parent)
     : ScriptEngine(parent),
-      d(new Private)
+      d(new RunnerScriptPrivate)
 {
 }
 

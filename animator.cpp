@@ -90,18 +90,18 @@ struct CustomAnimationState
     char* slot;
 };
 
-class Animator::Private
+class AnimatorPrivate
 {
     public:
 
-        Private()
+        AnimatorPrivate()
             : driver(0),
               animId(0),
               timerId(0)
         {
         }
 
-        ~Private()
+        ~AnimatorPrivate()
         {
             qDeleteAll(animatedItems);
             qDeleteAll(animatedElements);
@@ -200,7 +200,7 @@ Animator* Animator::self()
 
 Animator::Animator(QObject * parent)
     : QObject(parent),
-      d(new Private)
+      d(new AnimatorPrivate)
 {
     d->init(this);
 }
@@ -210,7 +210,7 @@ Animator::~Animator()
     delete d;
 }
 
-void Animator::Private::animatedItemDestroyed(QObject* o)
+void AnimatorPrivate::animatedItemDestroyed(QObject* o)
 {
     //kDebug() << "testing for" << (void*)o;
     QMutableMapIterator<QGraphicsItem*, AnimationState*> it(animatedItems);
@@ -225,7 +225,7 @@ void Animator::Private::animatedItemDestroyed(QObject* o)
     }
 }
 
-void Animator::Private::movingItemDestroyed(QObject* o)
+void AnimatorPrivate::movingItemDestroyed(QObject* o)
 {
     QMutableMapIterator<QGraphicsItem*, MovementState*> it(movingItems);
     while (it.hasNext()) {
@@ -237,7 +237,7 @@ void Animator::Private::movingItemDestroyed(QObject* o)
     }
 }
 
-void Animator::Private::animatedElementDestroyed(QObject* o)
+void AnimatorPrivate::animatedElementDestroyed(QObject* o)
 {
     QMutableMapIterator<int, ElementAnimationState*> it(animatedElements);
     while (it.hasNext()) {
@@ -249,7 +249,7 @@ void Animator::Private::animatedElementDestroyed(QObject* o)
     }
 }
 
-void Animator::Private::customAnimReceiverDestroyed(QObject* o)
+void AnimatorPrivate::customAnimReceiverDestroyed(QObject* o)
 {
     QMutableMapIterator<int, CustomAnimationState*> it(customAnims);
     while (it.hasNext()) {
@@ -676,7 +676,7 @@ void Animator::timerEvent(QTimerEvent *event)
     }
 }
 
-void Animator::Private::init(Animator *q)
+void AnimatorPrivate::init(Animator *q)
 {
     //FIXME: usage between different applications?
     KConfig c("plasmarc");

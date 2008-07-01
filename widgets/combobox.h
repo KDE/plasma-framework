@@ -30,6 +30,8 @@ class KComboBox;
 namespace Plasma
 {
 
+class ComboBoxPrivate;
+
 class PLASMA_EXPORT ComboBox : public QGraphicsProxyWidget
 {
     Q_OBJECT
@@ -81,8 +83,7 @@ protected:
     void resizeEvent(QGraphicsSceneResizeEvent *event);
 
 private:
-    class Private;
-    Private * const d;
+    ComboBoxPrivate * const d;
 };
 
 } // namespace Plasma

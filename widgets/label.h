@@ -31,6 +31,8 @@ class QLabel;
 namespace Plasma
 {
 
+class LabelPrivate;
+
 class PLASMA_EXPORT Label : public QGraphicsProxyWidget
 {
     Q_OBJECT
@@ -95,8 +97,7 @@ protected:
 private:
     Q_PRIVATE_SLOT(d, void setPalette())
 
-    class Private;
-    Private * const d;
+    LabelPrivate * const d;
 };
 
 } // namespace Plasma

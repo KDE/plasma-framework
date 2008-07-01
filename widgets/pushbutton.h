@@ -30,6 +30,8 @@ class KPushButton;
 namespace Plasma
 {
 
+class PushButtonPrivate;
+
 class PLASMA_EXPORT PushButton : public QGraphicsProxyWidget
 {
     Q_OBJECT
@@ -92,8 +94,7 @@ protected:
     void resizeEvent(QGraphicsSceneResizeEvent *event);
 
 private:
-    class Private;
-    Private * const d;
+    PushButtonPrivate * const d;
 };
 
 } // namespace Plasma

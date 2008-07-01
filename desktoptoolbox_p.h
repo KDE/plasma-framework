@@ -36,6 +36,7 @@ namespace Plasma
 
 class Widget;
 class EmptyGraphicsItem;
+class DesktopToolBoxPrivate;
 
 class DesktopToolBox : public ToolBox
 {
@@ -64,8 +65,7 @@ protected slots:
      */
     void toggle();
 private:
-    class Private;
-    Private *d;
+    DesktopToolBoxPrivate *d;
 };
 
 } // Plasma namespace

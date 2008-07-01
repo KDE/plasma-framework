@@ -28,10 +28,10 @@ class QTime;
 namespace Plasma
 {
 
-class DataEngine::Private
+class DataEnginePrivate
 {
     public:
-        Private(DataEngine* e, KService::Ptr service);
+        DataEnginePrivate(DataEngine* e, KService::Ptr service);
         DataContainer* source(const QString& sourceName, bool createWhenMissing = true);
         void connectSource(DataContainer* s, QObject* visualization, uint pollingInterval,
                            Plasma::IntervalAlignment align, bool immediateCall = true);

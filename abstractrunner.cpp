@@ -38,12 +38,12 @@
 namespace Plasma
 {
 
-class AbstractRunner::Private
+class AbstractRunnerPrivate
 {
 public:
-    Private(AbstractRunner* r, KService::Ptr service)
-      : priority(NormalPriority),
-        speed(NormalSpeed),
+    AbstractRunnerPrivate(AbstractRunner* r, KService::Ptr service)
+      : priority(AbstractRunner::NormalPriority),
+        speed(AbstractRunner::NormalSpeed),
         blackListed(0),
         script(0),
         runnerDescription(service),
@@ -75,8 +75,8 @@ public:
 
     bool hasRunOptions;
     bool hasConfig;
-    Priority priority;
-    Speed speed;
+    AbstractRunner::Priority priority;
+    AbstractRunner::Speed speed;
     RunnerContext::Types blackListed;
     RunnerScript* script;
     KPluginInfo runnerDescription;
@@ -90,13 +90,13 @@ K_GLOBAL_STATIC(QMutex, s_bigLock)
 
 AbstractRunner::AbstractRunner(QObject* parent, const QString& serviceId)
     : QObject(parent),
-    d(new Private(this, KService::serviceByStorageId(serviceId)))
+    d(new AbstractRunnerPrivate(this, KService::serviceByStorageId(serviceId)))
 {
 }
 
 AbstractRunner::AbstractRunner(QObject* parent, const QVariantList& args)
     : QObject(parent),
-      d(new Private(this, KService::serviceByStorageId(args.count() > 0 ? args[0].toString() : QString())))
+      d(new AbstractRunnerPrivate(this, KService::serviceByStorageId(args.count() > 0 ? args[0].toString() : QString())))
 {
 }
 

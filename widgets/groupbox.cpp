@@ -30,21 +30,21 @@
 namespace Plasma
 {
 
-class GroupBox::Private
+class GroupBoxPrivate
 {
 public:
-    Private()
+    GroupBoxPrivate()
     {
     }
 
-    ~Private()
+    ~GroupBoxPrivate()
     {
     }
 };
 
 GroupBox::GroupBox(QGraphicsWidget *parent)
     : QGraphicsProxyWidget(parent),
-      d(new Private)
+      d(new GroupBoxPrivate)
 {
     QGroupBox* native = new QGroupBox;
     setWidget(native);
