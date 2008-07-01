@@ -183,7 +183,7 @@ void Containment::init()
         connect(activityAction, SIGNAL(triggered(bool)), this, SLOT(addSiblingContainment()));
         activityAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
         activityAction->setShortcut(QKeySequence("ctrl+shift+a"));
-        d->actions().addAction("addSiblingContainment", activityAction);
+        d->actions().addAction("add sibling containment", activityAction);
 
         if (d->type == DesktopContainment) {
             d->toolBox->addTool(this->action("add widgets"));
@@ -192,7 +192,7 @@ void Containment::init()
             if (immutability() != SystemImmutable) {
                 d->toolBox->addTool(this->action("lock widgets"));
             }
-            d->toolBox->addTool(this->action("addSiblingContainment"));
+            d->toolBox->addTool(this->action("add sibling containment"));
         }
     }
 
@@ -1146,7 +1146,7 @@ void Containment::Private::containmentConstraintsEvent(Plasma::Constraints const
             action->setEnabled(unlocked);
         }
         //FIXME immutability changes conflict with zoom changes
-        /*action = actions().action("addSiblingContainment");
+        /*action = actions().action("add sibling containment");
         if (action) {
             action->setVisible(unlocked);
             action->setEnabled(unlocked);
