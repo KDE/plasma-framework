@@ -39,6 +39,7 @@ set(plasma_LIB_SRCS
     dialog.cpp
     #FOR FUTURE
     #layouts/borderlayout.cpp
+    imageeffects.cpp
     packages.cpp
     panelsvg.cpp
     paneltoolbox.cpp
@@ -127,6 +128,7 @@ set(plasma_LIB_INCLUDES
     dataenginemanager.h
     delegate.h
     dialog.h
+    imageeffects.h
     panelsvg.h
     plasma.h
     plasma_export.h
@@ -200,6 +202,7 @@ includes/Dialog
 includes/Flash
 includes/GroupBox
 includes/Icon
+includes/ImageEffects
 includes/Label
 includes/LineEdit
 includes/Meter
