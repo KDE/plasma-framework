@@ -206,13 +206,13 @@ public:
     QString path() const;
 
     /**
-      * Read a package structure from a config file.
-      */
+     * Read a package structure from a config file.
+     */
     void read(const KConfigBase *config);
 
     /**
-      * Write this package structure to a config file.
-      */
+     * Write this package structure to a config file.
+     */
     void write(KConfigBase *config) const;
 
     /**
