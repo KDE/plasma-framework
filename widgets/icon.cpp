@@ -926,15 +926,21 @@ void Icon::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWid
     QRectF textBoundingRect;
     d->layoutTextItems(option, icon, &labelLayout, &infoLayout, &textBoundingRect);
 
-    QImage shadow(textBoundingRect.size().toSize()+QSize(6,6), QImage::Format_ARGB32_Premultiplied);
+    QImage shadow(textBoundingRect.size().toSize()+QSize(4,4), QImage::Format_ARGB32_Premultiplied);
     shadow.fill(Qt::transparent);
     {
         QPainter buffPainter(&shadow);
         buffPainter.translate(-textBoundingRect.x(), -textBoundingRect.y());
         d->drawTextItems(&buffPainter, option, labelLayout, infoLayout);
     }
-    Plasma::ImageEffects::shadowBlur(shadow, 3, d->shadowColor);
-    painter->drawImage(textBoundingRect.topLeft()+QPoint(2,2), shadow);
+
+    QPoint shadowOffset = QPoint(1,1);
+    if (d->shadowColor.value() > 128) {
+        shadowOffset = QPoint(0,0);
+    }
+
+    Plasma::ImageEffects::shadowBlur(shadow, 2, d->shadowColor);
+    painter->drawImage(textBoundingRect.topLeft()+shadowOffset, shadow);
     d->drawTextItems(painter, option, labelLayout, infoLayout);
 }
 
