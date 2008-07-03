@@ -160,10 +160,9 @@ public:
     void setPluginName(const QString& name);
 
     /**
-     * Set the implementation API string. This is used for
-     * display purposes only so far.
+     * Set the implementation API this package uses.
      */
-    void setImplementationApi(const QString& language);
+    void setImplementationApi(const QString& api);
 
 private:
     PackageMetadataPrivate * const d;

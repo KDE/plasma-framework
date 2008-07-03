@@ -1,4 +1,3 @@
-
 /*
  *   Copyright 2005 by Aaron Seigo <aseigo@kde.org>
  *   Copyright 2008 by Andrew Lake <jamboarder@yahoo.com>
@@ -51,7 +50,7 @@ PLASMA_EXPORT QPixmap shadowText(QString text,
     QColor shadowColor = Plasma::Theme::defaultTheme()->color(Plasma::Theme::BackgroundColor), 
     QPoint offset = QPoint(1,1), 
     int radius = 2);
- 
+
 } // ImageEffects namespace
 
 } // Plasma namespace
