@@ -50,7 +50,8 @@
 #include <KDebug>
 #include <KColorScheme>
 
-#include <plasma/theme.h>
+#include <Plasma/Theme>
+#include <Plasma/ImageEffects>
 
 #include "animator.h"
 #include "svg.h"
@@ -572,9 +573,9 @@ void IconPrivate::drawBackground(QPainter *painter, IconState state)
         default:
             break;
     }
-
-    border.setAlphaF(.2);
-    shadow.setAlphaF(.6);
+    
+    border.setAlphaF(0.3*m_hoverAlpha);
+    shadow.setAlphaF(0.6*m_hoverAlpha);
 
     painter->save();
     painter->translate(0.5, 0.5);
@@ -924,6 +925,16 @@ void Icon::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWid
     QTextLayout labelLayout, infoLayout;
     QRectF textBoundingRect;
     d->layoutTextItems(option, icon, &labelLayout, &infoLayout, &textBoundingRect);
+
+    QImage shadow(textBoundingRect.size().toSize()+QSize(6,6), QImage::Format_ARGB32_Premultiplied);
+    shadow.fill(Qt::transparent);
+    {
+        QPainter buffPainter(&shadow);
+        buffPainter.translate(-textBoundingRect.x(), -textBoundingRect.y());
+        d->drawTextItems(&buffPainter, option, labelLayout, infoLayout);
+    }
+    Plasma::ImageEffects::shadowBlur(shadow, 3, d->shadowColor);
+    painter->drawImage(textBoundingRect.topLeft()+QPoint(2,2), shadow);
     d->drawTextItems(painter, option, labelLayout, infoLayout);
 }
 
