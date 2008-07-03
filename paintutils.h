@@ -33,7 +33,7 @@ namespace Plasma
 /**
  *  Namespace for all Image Effects specific to Plasma
  **/
-namespace ImageEffects
+namespace PaintUtils
 {
 
 /**
@@ -51,7 +51,12 @@ PLASMA_EXPORT QPixmap shadowText(QString text,
     QPoint offset = QPoint(1,1), 
     int radius = 2);
 
-} // ImageEffects namespace
+/**
+ * Returns a nicely rounded rectanglular path for painting.
+ */
+PLASMA_EXPORT QPainterPath roundedRectangle(const QRectF& rect, qreal radius);
+
+} // PaintUtils namespace
 
 } // Plasma namespace
 

@@ -193,11 +193,6 @@ PLASMA_EXPORT qreal scalingFactor(ZoomLevel level);
  **/
 PLASMA_EXPORT Direction locationToDirection(Location location);
 
-/**
- * Returns a nicely rounded rectanglular path for painting.
- */
-PLASMA_EXPORT QPainterPath roundedRectangle(const QRectF& rect, qreal radius);
-
 } // Plasma namespace
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Plasma::Constraints)

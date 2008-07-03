@@ -62,19 +62,4 @@ Direction locationToDirection(Location location)
     return Down;
 }
 
-QPainterPath roundedRectangle(const QRectF& rect, qreal radius)
-{
-    QPainterPath path(QPointF(rect.left(), rect.top() + radius));
-    path.quadTo(rect.left(), rect.top(), rect.left() + radius, rect.top());         // Top left corner
-    path.lineTo(rect.right() - radius, rect.top());                                 // Top side
-    path.quadTo(rect.right(), rect.top(), rect.right(), rect.top() + radius);       // Top right corner
-    path.lineTo(rect.right(), rect.bottom() - radius);                              // Right side
-    path.quadTo(rect.right(), rect.bottom(), rect.right() - radius, rect.bottom()); // Bottom right corner
-    path.lineTo(rect.left() + radius, rect.bottom());                               // Bottom side
-    path.quadTo(rect.left(), rect.bottom(), rect.left(), rect.bottom() - radius);   // Bottom left corner
-    path.closeSubpath();
-
-    return path;
-}
-
 } // Plasma namespace

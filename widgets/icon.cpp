@@ -50,8 +50,8 @@
 #include <KDebug>
 #include <KColorScheme>
 
+#include <plasma/paintutils.h>
 #include <plasma/theme.h>
-#include <plasma/imageeffects.h>
 
 #include "animator.h"
 #include "svg.h"
@@ -394,7 +394,7 @@ QPainterPath Icon::shape() const
         return QGraphicsItem::shape();
     }
 
-    return roundedRectangle(QRectF(QPointF(0.0, 0.0), d->currentSize).adjusted(-2, -2, 2, 2), 10.0);
+    return PaintUtils::roundedRectangle(QRectF(QPointF(0.0, 0.0), d->currentSize).adjusted(-2, -2, 2, 2), 10.0);
 }
 
 QSizeF IconPrivate::displaySizeHint(const QStyleOptionGraphicsItem *option, const qreal width) const
@@ -582,7 +582,7 @@ void IconPrivate::drawBackground(QPainter *painter, IconState state)
     painter->setRenderHint(QPainter::Antialiasing);
     painter->setBrush(shadow);
     painter->setPen(QPen(border, 1));
-    painter->drawPath(roundedRectangle(QRectF(QPointF(1, 1), QSize((int)currentSize.width()-2, (int)currentSize.height()-2)), 5.0));
+    painter->drawPath(PaintUtils::roundedRectangle(QRectF(QPointF(1, 1), QSize((int)currentSize.width()-2, (int)currentSize.height()-2)), 5.0));
     painter->restore();
 }
 
@@ -939,7 +939,7 @@ void Icon::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWid
         shadowOffset = QPoint(0,0);
     }
 
-    Plasma::ImageEffects::shadowBlur(shadow, 2, d->shadowColor);
+    PaintUtils::shadowBlur(shadow, 2, d->shadowColor);
     painter->drawImage(textBoundingRect.topLeft()+shadowOffset, shadow);
     d->drawTextItems(painter, option, labelLayout, infoLayout);
 }

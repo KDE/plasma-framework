@@ -38,6 +38,7 @@
 #include "applet_p.h"
 #include "containment.h"
 #include "corona.h"
+#include "paintutils.h"
 #include "theme.h"
 #include "view.h"
 
@@ -170,7 +171,7 @@ void AppletHandle::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
     gr.setColorAt(0.1, KColorScheme::shade(m_gradientColor, KColorScheme::LightShade));
     gr.setColorAt(1, KColorScheme::shade(m_gradientColor, KColorScheme::DarkShade));
     painter->setBrush(gr);
-    QPainterPath path = Plasma::roundedRectangle(boundingRect(), 10);
+    QPainterPath path = PaintUtils::roundedRectangle(boundingRect(), 10);
 
     if (m_applet) {
         QPainterPath shape = m_applet->shape();

@@ -41,7 +41,7 @@
 #include <KColorScheme>
 
 // plasma
-#include <plasma/plasma.h>
+#include <plasma/paintutils.h>
 
 namespace Plasma
 {
@@ -312,7 +312,7 @@ void Delegate::paint(QPainter *painter, const QStyleOptionViewItem& option, cons
         }
 
         painter->setPen(outlinePen);
-        painter->drawPath(Plasma::roundedRectangle(highlightRect, roundedRadius));
+        painter->drawPath(PaintUtils::roundedRectangle(highlightRect, roundedRadius));
 
         painter->restore();
     }

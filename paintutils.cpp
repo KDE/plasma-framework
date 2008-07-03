@@ -18,16 +18,18 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include <imageeffects.h>
-#include "effects/blur.cpp"
+#include <paintutils.h>
+
 #include <QImage>
 #include <QPainter>
 #include <QPixmap>
 
+#include "effects/blur.cpp"
+
 namespace Plasma
 {
-    
-namespace ImageEffects
+
+namespace PaintUtils
 {
 
 void shadowBlur(QImage &image, int radius, const QColor &color)
@@ -76,7 +78,22 @@ QPixmap shadowText(QString text, QColor textColor, QColor shadowColor, QPoint of
     return finalPixmap;
 }
 
-} //ImageEffects namespace
+QPainterPath roundedRectangle(const QRectF& rect, qreal radius)
+{
+    QPainterPath path(QPointF(rect.left(), rect.top() + radius));
+    path.quadTo(rect.left(), rect.top(), rect.left() + radius, rect.top());         // Top left corner
+    path.lineTo(rect.right() - radius, rect.top());                                 // Top side
+    path.quadTo(rect.right(), rect.top(), rect.right(), rect.top() + radius);       // Top right corner
+    path.lineTo(rect.right(), rect.bottom() - radius);                              // Right side
+    path.quadTo(rect.right(), rect.bottom(), rect.right() - radius, rect.bottom()); // Bottom right corner
+    path.lineTo(rect.left() + radius, rect.bottom());                               // Bottom side
+    path.quadTo(rect.left(), rect.bottom(), rect.left(), rect.bottom() - radius);   // Bottom left corner
+    path.closeSubpath();
+
+    return path;
+}
+
+} // PaintUtils namespace
 
 } // Plasma namespace
 
