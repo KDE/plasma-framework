@@ -1573,12 +1573,11 @@ void AppletPrivate::init()
     if (!api.isEmpty()) {
         // find where the Package is
         QString path = KStandardDirs::locate("data",
-                                                "plasma/plasmoids/" + appletDescription.pluginName() +
-                                                "/");
+                                             "plasma/plasmoids/" + appletDescription.pluginName() + "/");
 
         if (path.isEmpty()) {
             q->setFailedToLaunch(true, i18n("Could not locate the %1 package required for the %2 widget.",
-                                                    appletDescription.pluginName(), appletDescription.name()));
+                                            appletDescription.pluginName(), appletDescription.name()));
         } else {
             // create the package and see if we have something real
             //kDebug() << "trying for" << path;

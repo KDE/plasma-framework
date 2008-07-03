@@ -325,6 +325,8 @@ KSharedConfigPtr Corona::config() const
 Containment* Corona::addContainment(const QString& name, const QVariantList& args)
 {
     Containment *c = d->addContainment(name, args, 0, false);
+    KConfigGroup cg = c->config();
+    c->save(cg);
     requestConfigSync();
     return c;
 }

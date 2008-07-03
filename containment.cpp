@@ -572,6 +572,8 @@ void Containment::addApplet(Applet *applet, const QPointF &pos, bool delayInit)
     applet->updateConstraints(Plasma::AllConstraints | Plasma::StartupCompletedConstraint);
     if (!delayInit) {
         applet->flushPendingConstraintsEvents();
+        KConfigGroup *cg = applet->d->mainConfigGroup();
+        applet->save(*cg);
         emit configNeedsSaving();
     }
 
