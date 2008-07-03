@@ -214,13 +214,13 @@ void PackageStructure::addFileDefinition(const char* key, const QString& path, c
 
 QString PackageStructure::path(const char* key) const
 {
-    kDebug() << "looking for" << key;
+    //kDebug() << "looking for" << key;
     QMap<QByteArray, ContentStructure>::const_iterator it = d->contents.find(key);
     if (it == d->contents.constEnd()) {
         return QString();
     }
 
-    kDebug() << "found" << key << "and the value is" << it.value().path;
+    //kDebug() << "found" << key << "and the value is" << it.value().path;
     return it.value().path;
 }
 

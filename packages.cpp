@@ -19,6 +19,8 @@
 
 #include "packages_p.h"
 
+#include <KConfigGroup>
+#include <KDesktopFile>
 #include <KLocale>
 
 namespace Plasma
@@ -50,6 +52,17 @@ PlasmoidPackage::PlasmoidPackage(QObject *parent)
     addFileDefinition("mainconfigxml", "config/main.xml", i18n("Configuration XML file"));
     addFileDefinition("mainscript", "code/main", i18n("Main Script File"));
     setRequired("mainscript", true);
+}
+
+void PlasmoidPackage::pathChanged()
+{
+    KDesktopFile config(path() + "/metadata.desktop");
+    KConfigGroup cg = config.desktopGroup();
+    QString mainScript = cg.readEntry("X-Plasma-MainScript", QString());
+    if (!mainScript.isEmpty()) {
+        addFileDefinition("mainscript", mainScript, i18n("Main Script File"));
+        setRequired("mainscript", true);
+    }
 }
 
 ThemePackage::ThemePackage(QObject *parent)
