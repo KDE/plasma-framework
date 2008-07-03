@@ -50,8 +50,8 @@
 #include <KDebug>
 #include <KColorScheme>
 
-#include <Plasma/Theme>
-#include <Plasma/ImageEffects>
+#include <plasma/theme.h>
+#include <plasma/imageeffects.h>
 
 #include "animator.h"
 #include "svg.h"
