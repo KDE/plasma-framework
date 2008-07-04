@@ -75,6 +75,7 @@ class PLASMA_EXPORT Containment : public Applet
                 explicit StyleOption(const StyleOption &other);
                 explicit StyleOption(const QStyleOptionGraphicsItem &other);
 
+                enum StyleOptionType { Type = SO_CustomBase + 1 };
                 enum StyleOptionVersion { Version = QStyleOptionGraphicsItem::Version + 1 };
 
                 /**
