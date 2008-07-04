@@ -83,7 +83,8 @@ public:
       : icon("plasma"),
         toolBacker(0),
         animId(0),
-        animFrame(0)
+        animFrame(0),
+        toggled(false)
     {}
 
     KIcon icon;
@@ -91,6 +92,7 @@ public:
     QTime stopwatch;
     int animId;
     qreal animFrame;
+    bool toggled;
 };
 
 PanelToolBox::PanelToolBox(QGraphicsItem *parent)
@@ -98,6 +100,7 @@ PanelToolBox::PanelToolBox(QGraphicsItem *parent)
       d(new PanelToolBoxPrivate)
 {
     connect(Plasma::Animator::self(), SIGNAL(movementFinished(QGraphicsItem*)), this, SLOT(toolMoved(QGraphicsItem*)));
+    connect(this, SIGNAL(toggled()), this, SLOT(toggle()));
 
     setZValue(10000000);
     setFlag(ItemClipsToShape, true);
@@ -276,10 +279,11 @@ void PanelToolBox::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 {
     //kDebug() << event->pos() << event->scenePos() << d->toolBacker->rect().contains(event->scenePos().toPoint());
     if ((d->toolBacker && d->toolBacker->rect().contains(event->scenePos().toPoint())) ||
-        d->stopwatch.elapsed() < 100) {
+        d->stopwatch.elapsed() < 100 || d->toggled) {
         QGraphicsItem::hoverLeaveEvent(event);
         return;
     }
+
     hideToolBox();
     QGraphicsItem::hoverLeaveEvent(event);
 }
@@ -290,6 +294,7 @@ void PanelToolBox::hideToolBox()
         return;
     }
 
+    d->toggled = false;
     int x = size() * 2;
     int y = 0;
     Plasma::Animator* animdriver = Plasma::Animator::self();
@@ -339,6 +344,14 @@ void PanelToolBox::toolMoved(QGraphicsItem *item)
     if (!showing() &&
         QGraphicsItem::children().indexOf(static_cast<Plasma::Applet*>(item)) != -1) {
         item->hide();
+    }
+}
+
+void PanelToolBox::toggle()
+{
+    d->toggled = !d->toggled;
+    if (showing() && !d->toggled) {
+        hideToolBox();
     }
 }
 
