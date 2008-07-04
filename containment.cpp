@@ -1069,15 +1069,14 @@ ToolBox* ContainmentPrivate::createToolBox()
         switch (type) {
         case Containment::PanelContainment:
             toolBox = new PanelToolBox(q);
-            QObject::connect(toolBox, SIGNAL(toggled()), q, SIGNAL(toolBoxToggled()));
             break;
         //defaults to DesktopContainment right now
         default:
             toolBox = new DesktopToolBox(q);
-            QObject::connect(toolBox, SIGNAL(toggled()), toolBox, SLOT(toggle()));
             break;
         }
 
+        QObject::connect(toolBox, SIGNAL(toggled()), q, SIGNAL(toolBoxToggled()));
         positionToolBox();
 
         if (type == Containment::PanelContainment && q->immutability() != Mutable) {
