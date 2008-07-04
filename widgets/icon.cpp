@@ -934,9 +934,9 @@ void Icon::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWid
         d->drawTextItems(&buffPainter, option, labelLayout, infoLayout);
     }
 
-    QPoint shadowOffset = QPoint(1,1);
+    QPoint shadowOffset = QPoint(1,2);
     if (d->shadowColor.value() > 128) {
-        shadowOffset = QPoint(0,0);
+        shadowOffset = QPoint(0,1);
     }
 
     PaintUtils::shadowBlur(shadow, 2, d->shadowColor);
