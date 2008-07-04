@@ -1132,7 +1132,9 @@ void Applet::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
 void Applet::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-    setFocus(Qt::MouseFocusReason);
+    if (view() && !view()->transform().isScaling()) {
+        setFocus(Qt::MouseFocusReason);
+    }
     QGraphicsWidget::mousePressEvent(event);
 }
 
