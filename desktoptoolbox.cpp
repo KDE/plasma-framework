@@ -104,6 +104,7 @@ DesktopToolBox::DesktopToolBox(QGraphicsItem *parent)
       d(new DesktopToolBoxPrivate)
 {
     connect(Plasma::Animator::self(), SIGNAL(movementFinished(QGraphicsItem*)), this, SLOT(toolMoved(QGraphicsItem*)));
+    connect(this, SIGNAL(toggled()), this, SLOT(toggle()));
 
     setZValue(10000000);
     setFlag(ItemClipsToShape, true);
