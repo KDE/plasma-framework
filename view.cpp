@@ -175,32 +175,44 @@ void View::setContainment(Containment *containment)
         return;
     }
 
-    int screen = -1;
-    Containment *oldContainment = d->containment;
-
     if (d->containment) {
         disconnect(d->containment, SIGNAL(geometryChanged()), this, SLOT(updateSceneRect()));
-        screen = d->containment->screen();
-        //remove all the old containment's actions
         d->containment->removeAssociatedWidget(this);
     }
 
-    d->containment = containment;
     if (!containment) {
+        d->containment = 0;
         return;
     }
+
+    Containment *oldContainment = d->containment;
+
+    int screen = -1;
+    if (oldContainment) {
+        screen = d->containment->screen();
+    }
+
+    d->containment = containment;
 
     //add keyboard-shortcut actions
     d->containment->addAssociatedWidget(this);
 
     int otherScreen = containment->screen();
-    if (oldContainment && otherScreen > -1) {
-        oldContainment->setScreen(otherScreen);
-    }
 
     if (screen > -1) {
         containment->setScreen(screen);
     }
+
+    if (oldContainment && otherScreen > -1) {
+        oldContainment->setScreen(otherScreen);
+    }
+
+    /*
+    if (oldContainment) {
+        kDebug() << (QObject*)oldContainment << screen << oldContainment->screen()
+                 << (QObject*)containment << otherScreen << containment->screen();
+    }
+    */
 
     if (containment->screen() > -1 && d->desktop < -1) {
         // we want to set it to "all desktops" if we get ownership of
