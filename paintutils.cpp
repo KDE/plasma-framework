@@ -47,13 +47,11 @@ void shadowBlur(QImage &image, int radius, const QColor &color)
 QPixmap shadowText(QString text, QColor textColor, QColor shadowColor, QPoint offset, int radius)
 {
     // Draw text 
-    QPixmap pixmap(10,10);
-    QPainter p(&pixmap);
-    QRect textRect = p.fontMetrics().boundingRect(text);
-    p.end();
+    QFontMetrics fm(text);
+    QRect textRect = fm.boundingRect(text);
     QPixmap textPixmap(textRect.size());
     textPixmap.fill(Qt::transparent);
-    p.begin(&textPixmap);
+    QPainter p(&textPixmap);
     p.setPen(textColor);
     p.drawText(textPixmap.rect(), Qt::AlignLeft, text);
     p.end();
@@ -63,16 +61,37 @@ QPixmap shadowText(QString text, QColor textColor, QColor shadowColor, QPoint of
     QImage::Format_ARGB32_Premultiplied);
     img.fill(Qt::transparent);
     p.begin(&img);
-    p.drawImage(QPoint(0,0), textPixmap.toImage());
+    p.drawImage(QPoint(radius,radius), textPixmap.toImage());
     p.end();
     shadowBlur(img, radius, shadowColor);
 
     //Compose text and shadow
-    QPixmap finalPixmap(img.size() + QSize(offset.x(), offset.y()));
+    int addSizeX;
+    int addSizeY;
+    if (offset.x() > radius) {
+        addSizeX = abs(offset.x()) - radius;
+    } else {
+        addSizeX = 0;
+    }
+    if (offset.y() > radius) {
+        addSizeY = abs(offset.y()) - radius;
+    } else {
+        addSizeY = 0;
+    }
+
+    QPixmap finalPixmap(img.size() + QSize(addSizeX, addSizeY));
     finalPixmap.fill(Qt::transparent);
     p.begin(&finalPixmap);
-    p.drawImage(finalPixmap.rect().topLeft() + QPoint(offset.x(), offset.y()), img);
-    p.drawPixmap(finalPixmap.rect().topLeft(), textPixmap);
+    QPointF offsetF(offset);
+    QPointF textTopLeft(finalPixmap.rect().topLeft() + 
+            QPointF ((finalPixmap.width() - textPixmap.width()) / 2.0, (finalPixmap.height() - textPixmap.height()) / 2.0) -
+            (offsetF / 2.0));     
+    QPointF shadowTopLeft(finalPixmap.rect().topLeft() + 
+            QPointF ((finalPixmap.width() - img.width()) / 2.0, (finalPixmap.height() - img.height()) / 2.0) + 
+            (offsetF / 2.0));     
+
+    p.drawImage(shadowTopLeft, img);
+    p.drawPixmap(textTopLeft, textPixmap);
     p.end();
 
     return finalPixmap;
