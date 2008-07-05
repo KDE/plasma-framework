@@ -439,9 +439,7 @@ void PanelSvgPrivate::generateBackground(PanelData *panel)
         }
     } else {
         if (contentHeight > 0 && contentWidth > 0) {
-
             q->resize(scaledContentSize);
-            
             q->paint(&p, QRect(panel->leftWidth, panel->topHeight,
                                contentWidth, contentHeight),
                                prefix + "center");
