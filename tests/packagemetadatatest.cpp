@@ -71,7 +71,7 @@ void PackageMetadataTest::read()
     QCOMPARE(pm->license(), QString("GPL"));
     QCOMPARE(pm->application(), QString("A Test name"));
     QCOMPARE(pm->requiredVersion(), QString("1.2.3"));
-    QCOMPARE(pm->type(), QString("System test"));
+    QCOMPARE(pm->category(), QString("System test"));
 }
 
 void PackageMetadataTest::write()
