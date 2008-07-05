@@ -30,6 +30,11 @@ namespace Plasma
 class PackageMetadataPrivate
 {
     public:
+        PackageMetadataPrivate()
+            : type("Service")
+        {
+        }
+
         QString name;
         QString description;
         QString author;
@@ -38,6 +43,7 @@ class PackageMetadataPrivate
         QString website;
         QString license;
         QString app;
+        QString category;
         QString requiredVersion;
         QString pluginName;
         QString type;
@@ -86,7 +92,7 @@ void PackageMetadata::write(const QString &filename) const
     config.writeEntry("X-KDE-PluginInfo-Version", d->version);
     config.writeEntry("X-KDE-PluginInfo-Website", d->website);
     config.writeEntry("X-KDE-PluginInfo-License", d->license);
-    config.writeEntry("X-KDE-PluginInfo-Category", d->type);
+    config.writeEntry("X-KDE-PluginInfo-Category", d->category);
     config.writeEntry("X-Plasma-API", d->api);
     config.writeEntry("X-KDE-Plasmagik-ApplicationName", d->app);
     config.writeEntry("X-KDE-Plasmagik-RequiredVersion", d->requiredVersion);
@@ -106,7 +112,8 @@ void PackageMetadata::read(const QString& filename)
     d->version = config.readEntry("X-KDE-PluginInfo-Version", d->version);
     d->website = config.readEntry("X-KDE-PluginInfo-Website", d->website);
     d->license = config.readEntry("X-KDE-PluginInfo-License", d->license);
-    d->type = config.readEntry("X-KDE-PluginInfo-Category", d->type);
+    d->type = config.readEntry("Type", d->type);
+    d->category = config.readEntry("X-KDE-PluginInfo-Category", d->category);
     d->app = config.readEntry("X-KDE-Plasmagik-ApplicationName", d->app);
     d->requiredVersion = config.readEntry("X-KDE-Plasmagik-RequiredVersion", d->requiredVersion);
 }
@@ -154,6 +161,11 @@ QString PackageMetadata::license() const
 QString PackageMetadata::application() const
 {
     return d->app;
+}
+
+QString PackageMetadata::category() const
+{
+    return d->category;
 }
 
 QString PackageMetadata::requiredVersion() const
@@ -229,6 +241,11 @@ void PackageMetadata::setLicense(const QString &license)
 void PackageMetadata::setApplication(const QString &application)
 {
     d->app = application;
+}
+
+void PackageMetadata::setCategory(const QString &category)
+{
+    d->category = category;
 }
 
 void PackageMetadata::setRequiredVersion(const QString &requiredVersion)

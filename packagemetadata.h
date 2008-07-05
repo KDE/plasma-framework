@@ -76,6 +76,7 @@ public:
     QString website() const;
     QString license() const;
     QString application() const;
+    QString category() const;
     QString requiredVersion() const;
     QString pluginName() const;
     QString implementationApi() const;
@@ -135,6 +136,11 @@ public:
      * so far.
      */
     void setApplication(const QString &);
+
+    /**
+     * Sets the category this package belongs in
+     */
+    void setCategory(const QString &);
 
     /**
      * Set the required version. See also the setVersion()
