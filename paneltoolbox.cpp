@@ -141,30 +141,30 @@ void PanelToolBox::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
         gradientCenter = QPoint(boundingRect().left(), boundingRect().center().y());
     }
 
-    if (progress > 0) {
+    {
         painter->translate(boundingRect().topLeft());
 
-        QColor color1 = KColorScheme(QPalette::Active, KColorScheme::Window,
-                                Plasma::Theme::defaultTheme()->colorScheme()).background().color();
-        color1.setAlpha(progress * 64.0);
+        KColorScheme colors(QPalette::Active, KColorScheme::Window,
+                            Plasma::Theme::defaultTheme()->colorScheme());
+        QColor color1 = colors.background().color();
+        color1.setAlpha(64.0);
 
-        QColor color2 = KColorScheme(QPalette::Active, KColorScheme::Window,
-                                Plasma::Theme::defaultTheme()->colorScheme()).foreground().color();
-        color2.setAlpha(progress * 64.0);
-
-        QPainterPath p = shape();
+        QColor color2 = colors.foreground().color();
+        color2.setAlpha(64.0);
 
         QRadialGradient gradient(gradientCenter, size() - 2);
         gradient.setFocalPoint(gradientCenter);
         gradient.setColorAt(0, color1);
-        gradient.setColorAt(.87, color1);
-        gradient.setColorAt(.97, color2);
+        gradient.setColorAt(.85, color1);
+        gradient.setColorAt(.95, color2);
         color2.setAlpha(0);
         gradient.setColorAt(1, color2);
+
         painter->save();
         painter->setPen(Qt::NoPen);
         painter->setRenderHint(QPainter::Antialiasing, true);
         painter->setBrush(gradient);
+        QPainterPath p = shape();
         painter->drawPath(p);
         painter->restore();
     }
