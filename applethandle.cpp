@@ -212,7 +212,7 @@ void AppletHandle::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
         break;
     }
 
-    painter->drawPixmap(basePoint + shiftM, KIcon("transform-move").pixmap(ICON_SIZE, ICON_SIZE)); //FIXME no transform-resize icon
+    painter->drawPixmap(basePoint + shiftM, KIcon("transform-scale").pixmap(ICON_SIZE, ICON_SIZE)); //FIXME no transform-resize icon
 
     basePoint += step;
     painter->drawPixmap(basePoint + shiftR, KIcon("transform-rotate").pixmap(ICON_SIZE, ICON_SIZE));
