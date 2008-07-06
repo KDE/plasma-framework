@@ -72,6 +72,7 @@
 #include "plasma/svg.h"
 #include "plasma/panelsvg.h"
 #include "plasma/theme.h"
+#include "plasma/toolbox_p.h"
 #include "plasma/view.h"
 #include "plasma/widgets/label.h"
 #include "plasma/widgets/pushbutton.h"
@@ -1497,8 +1498,13 @@ void Applet::setIsContainment(bool isContainment)
 
     Containment *c = qobject_cast<Containment*>(this);
     if (c) {
-        // set up the toolbox
-        c->setContainmentType(c->containmentType());
+        if (isContainment) {
+            // set up the toolbox
+            c->d->createToolBox();
+        } else {
+            delete c->d->toolBox;
+            c->d->toolBox = 0;
+        }
     }
 }
 

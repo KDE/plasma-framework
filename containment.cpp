@@ -316,16 +316,8 @@ void Containment::setContainmentType(Containment::Type type)
         return;
     }
 
-    if (type == DesktopContainment) {
-        if (!d->toolBox) {
-            d->createToolBox();
-        }
-    } else if (type == PanelContainment) {
-        if (!d->toolBox) {
-            d->createToolBox();
-            d->toolBox->setSize(22);
-            d->toolBox->setIconSize(QSize(16, 16));
-        }
+    if ((type == DesktopContainment || type == PanelContainment)) {
+        d->createToolBox();
     }
 }
 
@@ -1086,6 +1078,11 @@ ToolBox* ContainmentPrivate::createToolBox()
         switch (type) {
         case Containment::PanelContainment:
             toolBox = new PanelToolBox(q);
+            toolBox->setSize(22);
+            toolBox->setIconSize(QSize(16, 16));
+            if (q->immutability() != Mutable) {
+                toolBox->hide();
+            }
             break;
         case Containment::DesktopContainment:
             toolBox = new DesktopToolBox(q);
@@ -1097,10 +1094,6 @@ ToolBox* ContainmentPrivate::createToolBox()
         if (toolBox) {
             QObject::connect(toolBox, SIGNAL(toggled()), q, SIGNAL(toolBoxToggled()));
             positionToolBox();
-
-            if (type == Containment::PanelContainment && q->immutability() != Mutable) {
-                toolBox->hide();
-            }
         }
     }
 
