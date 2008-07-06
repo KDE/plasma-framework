@@ -35,11 +35,11 @@ class ViewPrivate
 {
 public:
     ViewPrivate(View *view, int uniqueId)
-        : drawWallpaper(true),
+        : q(view),
+          containment(0),
+          drawWallpaper(true),
           trackChanges(true),
           desktop(-1),
-          containment(0),
-          q(view),
           viewId(0)
     {
         if (uniqueId > s_maxViewId) {
@@ -86,12 +86,12 @@ public:
         q->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     }
 
+    Plasma::View *q;
+    Plasma::Containment *containment;
     bool drawWallpaper;
     bool trackChanges;
     int desktop;
     int viewId;
-    Plasma::Containment *containment;
-    Plasma::View *q;
     static int s_maxViewId;
 };
 
