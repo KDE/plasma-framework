@@ -301,13 +301,19 @@ KConfigGroup Applet::globalConfig() const
 
 void Applet::destroy()
 {
-    if (d->transient) {
+    if (immutability() != Mutable || d->transient) {
         return; //don't double delete
     }
+
     d->transient = true;
-    connect(Animator::self(), SIGNAL(animationFinished(QGraphicsItem*,Plasma::Animator::Animation)),
-                        this, SLOT(appletAnimationComplete(QGraphicsItem*,Plasma::Animator::Animation)));
-    Animator::self()->animateItem(this, Animator::DisappearAnimation);
+
+    if (isContainment()) {
+        d->cleanUpAndDelete();
+    } else {
+        connect(Animator::self(), SIGNAL(animationFinished(QGraphicsItem*,Plasma::Animator::Animation)),
+                this, SLOT(appletAnimationComplete(QGraphicsItem*,Plasma::Animator::Animation)));
+        Animator::self()->animateItem(this, Animator::DisappearAnimation);
+    }
 }
 
 void AppletPrivate::appletAnimationComplete(QGraphicsItem *item, Plasma::Animator::Animation anim)
@@ -317,6 +323,27 @@ void AppletPrivate::appletAnimationComplete(QGraphicsItem *item, Plasma::Animato
     }
 
     cleanUpAndDelete();
+}
+
+void AppletPrivate::selectItemToDestroy()
+{
+    //FIXME: this will not work nicely with multiple screens and being zoomed out!
+    if (q->isContainment() &&
+        q->view() && q->view()->transform().isScaling() &&
+        q->scene()->focusItem() != q) {
+        QGraphicsItem *focus = q->scene()->focusItem();
+
+        if (focus) {
+            Containment *toDestroy = dynamic_cast<Containment*>(focus->topLevelItem());
+
+            if (toDestroy) {
+                toDestroy->destroy();
+                return;
+            }
+        }
+    }
+
+    q->destroy();
 }
 
 void AppletPrivate::cleanUpAndDelete()
@@ -736,7 +763,7 @@ void Applet::flushPendingConstraintsEvents()
         } else {
             closeApplet->setShortcut(QKeySequence("ctrl+r"));
         }
-        connect(closeApplet, SIGNAL(triggered(bool)), this, SLOT(destroy()));
+        connect(closeApplet, SIGNAL(triggered(bool)), this, SLOT(selectItemToDestroy()));
         d->actions.addAction("remove", closeApplet);
     }
 
@@ -1133,19 +1160,15 @@ void Applet::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
 void Applet::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-    if (!isContainment() || (view() && !view()->transform().isScaling())) {
-        setFocus(Qt::MouseFocusReason);
-    }
+    setFocus(Qt::MouseFocusReason);
     QGraphicsWidget::mousePressEvent(event);
 }
 
 void Applet::focusInEvent(QFocusEvent * event)
 {
-    if (containment()) {
-        containment()->d->focusApplet(this);
-        //XXX if we are a containment we'll attempt to focus ourself
-        //which should be harmless
+    if (!isContainment() && containment()) {
         //focusing an applet may trigger this event again, but we won't be here more than twice
+        containment()->d->focusApplet(this);
     }
 
     QGraphicsWidget::focusInEvent(event);

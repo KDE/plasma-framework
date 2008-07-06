@@ -748,6 +748,7 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         Q_PRIVATE_SLOT(d, void checkImmutability())
         Q_PRIVATE_SLOT(d, void themeChanged())
         Q_PRIVATE_SLOT(d, void appletAnimationComplete(QGraphicsItem *item, Plasma::Animator::Animation anim))
+        Q_PRIVATE_SLOT(d, void selectItemToDestroy())
 
         /**
          * Reimplemented from QGraphicsItem

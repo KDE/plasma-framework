@@ -120,11 +120,6 @@ public Q_SLOTS:
     void saveLayout(const QString &config = QString()) const;
 
     /**
-     * Removes a given containment from the corona
-     */
-    void destroyContainment(Containment *containment);
-
-    /**
      * @return The type of immutability of this Corona
      */
     ImmutabilityType immutability() const;

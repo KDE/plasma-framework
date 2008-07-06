@@ -99,6 +99,7 @@ public:
 
         if (index > -1) {
             containments.removeAt(index);
+            q->requestConfigSync();
         }
     }
 
@@ -149,7 +150,7 @@ public:
         QObject::connect(containment, SIGNAL(configNeedsSaving()), q, SLOT(requestConfigSync()));
         QObject::connect(containment, SIGNAL(releaseVisualFocus()), q, SIGNAL(releaseVisualFocus()));
         QObject::connect(containment, SIGNAL(screenChanged(int,int,Plasma::Containment*)),
-                q, SIGNAL(screenOwnerChanged(int,int,Plasma::Containment*)));
+                         q, SIGNAL(screenOwnerChanged(int,int,Plasma::Containment*)));
 
         if (!delayedInit) {
             emit q->containmentAdded(containment);
@@ -329,25 +330,6 @@ Containment* Corona::addContainment(const QString& name, const QVariantList& arg
     c->save(cg);
     requestConfigSync();
     return c;
-}
-
-void Corona::destroyContainment(Containment *c)
-{
-    if (!d->containments.contains(c)) {
-        return;
-    }
-
-    //don't remove a desktop that's in use
-    //FIXME allow removal of containments for screens that don't currently exist
-    if (c->containmentType() != Containment::PanelContainment && c->screen() != -1) {
-        return;
-    }
-
-    d->containments.removeAll(c);
-    removeItem(c);
-    c->config().deleteGroup();
-    c->deleteLater();
-    requestConfigSync();
 }
 
 void Corona::loadDefaultLayout()

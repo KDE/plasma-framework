@@ -595,7 +595,7 @@ Applet::List Containment::applets() const
 void Containment::setScreen(int screen)
 {
     // screen of -1 means no associated screen.
-    if (containmentType() == DesktopContainment || containmentType() >= CustomContainment) {
+    if (d->type == DesktopContainment || d->type == CustomContainment) {
 #ifndef Q_OS_WIN
         // we want to listen to changes in work area if our screen changes
         if (d->screen < 0 && screen > -1) {
@@ -1029,11 +1029,19 @@ void Containment::destroy()
     }
 
     if (isContainment()) {
+        //don't remove a desktop that's in use
+        //FIXME allow removal of containments for screens that don't currently exist
+        if (d->type != PanelContainment && d->type != CustomPanelContainment &&
+            (d->screen != -1 || d->screen >= QApplication::desktop()->numScreens())) {
+            kDebug() << (QObject*)this << "containment has a screen number?" << d->screen;
+            return;
+        }
+
         //FIXME maybe that %1 should be the containment type not the name
         if (KMessageBox::warningContinueCancel(view(), i18n("Do you really want to remove this %1?", name()),
                     i18n("Remove %1", name()), KStandardGuiItem::remove()) == KMessageBox::Continue ) {
-            clearApplets();
-            corona()->destroyContainment(this);
+            //clearApplets();
+            Applet::destroy();
         }
     } else {
         Applet::destroy();

@@ -62,6 +62,7 @@ public:
     void themeChanged();
     void resetConfigurationObject();
     void appletAnimationComplete(QGraphicsItem *item, Plasma::Animator::Animation anim);
+    void selectItemToDestroy();
     void setFocus();
     void cleanUpAndDelete();
 
