@@ -162,7 +162,8 @@ void Containment::init()
         d->actions().addAction("lock widgets", lockDesktopAction);
     }
 
-    if (d->type != PanelContainment) {
+    if (d->type != PanelContainment &&
+        d->type != CustomPanelContainment) {
         QAction *zoomAction = new QAction(i18n("Zoom In"), this);
         zoomAction->setIcon(KIcon("zoom-in"));
         connect(zoomAction, SIGNAL(triggered(bool)), this, SLOT(zoomIn()));
@@ -303,21 +304,28 @@ Containment::Type Containment::containmentType() const
 
 void Containment::setContainmentType(Containment::Type type)
 {
+    if (d->type == type) {
+        return;
+    }
+
+    delete d->toolBox;
+    d->toolBox = 0;
     d->type = type;
 
-    if (isContainment() && type == DesktopContainment) {
+    if (!isContainment()) {
+        return;
+    }
+
+    if (type == DesktopContainment) {
         if (!d->toolBox) {
             d->createToolBox();
         }
-    } else if (isContainment() && type == PanelContainment) {
+    } else if (type == PanelContainment) {
         if (!d->toolBox) {
             d->createToolBox();
             d->toolBox->setSize(22);
             d->toolBox->setIconSize(QSize(16, 16));
         }
-    } else {
-        delete d->toolBox;
-        d->toolBox = 0;
     }
 }
 
@@ -453,10 +461,12 @@ void Containment::setFormFactor(FormFactor formFactor)
 
     //kDebug() << "switching FF to " << formFactor;
     FormFactor was = d->formFactor;
-
     d->formFactor = formFactor;
 
-    if (isContainment() && containmentType() == PanelContainment && was != formFactor) {
+    if (isContainment() &&
+        was != formFactor &&
+        (d->type == PanelContainment ||
+         d->type == CustomPanelContainment)) {
         // we are a panel and we have chaged our orientation
         d->positionPanel(true);
     }
@@ -647,7 +657,8 @@ QPoint Containment::effectiveScreenPos() const
     }
 
     QRect r = QApplication::desktop()->screenGeometry(d->screen);
-    if (containmentType() == PanelContainment) {
+    if (containmentType() == PanelContainment ||
+        containmentType() == CustomPanelContainment) {
         QRectF p = geometry();
 
         switch (d->location) {
@@ -868,6 +879,7 @@ QVariant Containment::itemChange(GraphicsItemChange change, const QVariant &valu
         !d->positioning) {
         switch (containmentType()) {
             case PanelContainment:
+            case CustomPanelContainment:
                 d->positionPanel();
                 break;
             default:
@@ -1075,17 +1087,20 @@ ToolBox* ContainmentPrivate::createToolBox()
         case Containment::PanelContainment:
             toolBox = new PanelToolBox(q);
             break;
-        //defaults to DesktopContainment right now
-        default:
+        case Containment::DesktopContainment:
             toolBox = new DesktopToolBox(q);
+            break;
+        default:
             break;
         }
 
-        QObject::connect(toolBox, SIGNAL(toggled()), q, SIGNAL(toolBoxToggled()));
-        positionToolBox();
+        if (toolBox) {
+            QObject::connect(toolBox, SIGNAL(toggled()), q, SIGNAL(toolBoxToggled()));
+            positionToolBox();
 
-        if (type == Containment::PanelContainment && q->immutability() != Mutable) {
-            toolBox->hide();
+            if (type == Containment::PanelContainment && q->immutability() != Mutable) {
+                toolBox->hide();
+            }
         }
     }
 
@@ -1200,6 +1215,7 @@ void ContainmentPrivate::containmentConstraintsEvent(Plasma::Constraints constra
     if (constraints & Plasma::SizeConstraint) {
         switch (q->containmentType()) {
             case Containment::PanelContainment:
+            case Containment::CustomPanelContainment:
                 positionPanel();
                 break;
             default:
@@ -1295,7 +1311,8 @@ void ContainmentPrivate::positionContainment()
     while (it.hasNext()) {
         Containment *containment = it.next();
         if (containment == q ||
-            containment->containmentType() == Containment::PanelContainment) {
+            containment->containmentType() == Containment::PanelContainment ||
+            containment->containmentType() == Containment::CustomPanelContainment) {
             // weed out all containments we don't care about at all
             // e.g. Panels and ourself
             it.remove();
@@ -1410,12 +1427,13 @@ void ContainmentPrivate::positionPanel(bool force)
     qreal bottom = horiz ? 0 : VERTICAL_STACKING_OFFSET;
     qreal lastHeight = 0;
 
-    // this should be ok for small numbers of panels, but we ever end
+    // this should be ok for small numbers of panels, but if we ever end
     // up managing hundreds of them, this simplistic alogrithm will
     // likely be too slow.
     foreach (const Containment* other, q->corona()->containments()) {
         if (other == q ||
-            other->containmentType() != Containment::PanelContainment ||
+            (other->containmentType() != Containment::PanelContainment &&
+             other->containmentType() != Containment::CustomPanelContainment) ||
             horiz != (other->formFactor() == Plasma::Horizontal)) {
             // only line up with panels of the same orientation
             continue;
