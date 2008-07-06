@@ -46,6 +46,7 @@ class AppletHandle : public QObject, public QGraphicsItem
         Applet *applet() const;
 
         QRectF boundingRect() const;
+        QPainterPath shape() const;
         void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
         void startFading(FadeType anim);
 
@@ -69,7 +70,7 @@ class AppletHandle : public QObject, public QGraphicsItem
         void leaveTimeout();
 
     private:
-        static const int HANDLE_WIDTH = 5;
+        static const int HANDLE_WIDTH = 22;
         static const int ICON_SIZE = 16;
         static const int ICON_MARGIN = 8;
 
@@ -85,6 +86,7 @@ class AppletHandle : public QObject, public QGraphicsItem
         bool leaveCurrentView(const QPoint &pos) const;
 
         QRectF m_rect;
+        QRectF m_totalRect;
         ButtonType m_pressedButton;
         Containment *m_containment;
         Applet *m_applet;
