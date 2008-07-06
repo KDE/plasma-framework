@@ -156,8 +156,13 @@ QRectF Plasma::AppletHandle::boundingRect() const
 
 QPainterPath AppletHandle::shape() const
 {
-    QPainterPath path = PaintUtils::roundedRectangle(m_rect, 10);
-    return path.united(m_applet->mapToParent(m_applet->shape()));
+    //when the containment changes the applet is resetted to 0
+    if (m_applet) {
+        QPainterPath path = PaintUtils::roundedRectangle(m_rect, 10);
+        return path.united(m_applet->mapToParent(m_applet->shape()));
+    } else {
+        return QGraphicsItem::shape();
+    }
 }
 
 void AppletHandle::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
@@ -267,6 +272,12 @@ AppletHandle::ButtonType AppletHandle::mapToButton(const QPointF &point) const
 
 void AppletHandle::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
+    //containment recently switched?
+    if (!m_applet) {
+        QGraphicsItem::mousePressEvent(event);
+        return;
+    }
+
     if (m_pendingFade) {
         //m_pendingFade = false;
         return;
