@@ -97,7 +97,7 @@ AppletHandle::AppletHandle(Containment *parent, Applet *applet)
 
     m_leaveTimer = new QTimer(this);
     m_leaveTimer->setSingleShot(true);
-    m_leaveTimer->setInterval(333);
+    m_leaveTimer->setInterval(500);
 
     connect(m_hoverTimer, SIGNAL(timeout()), this, SLOT(fadeIn()));
     connect(m_leaveTimer, SIGNAL(timeout()), this, SLOT(leaveTimeout()));
@@ -776,28 +776,22 @@ void AppletHandle::calculateSize()
         requiredHeight += (ICON_SIZE + ICON_MARGIN);
     }
 
+    int top = m_applet->contentsRect().top();
+    if (requiredHeight > m_applet->size().height()) {
+        top += (m_applet->contentsRect().height() - requiredHeight) / 2.0;
+    }
+    
     if (m_applet->pos().x() <= (HANDLE_WIDTH * 2)) {
         //put the rect on the right of the applet
-        if (requiredHeight > m_applet->size().height()) {
-            m_rect = QRectF(m_applet->size().width(), (m_applet->size().height() - requiredHeight) / 2.0, HANDLE_WIDTH, requiredHeight);
-        }
-        else {
-            m_rect = QRectF(m_applet->size().width(), 0, HANDLE_WIDTH, requiredHeight);
-        }
-        m_rect = m_applet->mapToParent(m_rect).boundingRect();
+        m_rect = QRectF(m_applet->size().width(), top, HANDLE_WIDTH, requiredHeight);
 
         m_buttonsOnRight = true;
     } else {
         //put the rect on the left of the applet
-        if (requiredHeight > m_applet->size().height()) {
-            m_rect = QRectF(- HANDLE_WIDTH, (m_applet->size().height() - requiredHeight) / 2.0, HANDLE_WIDTH, requiredHeight);
-        }
-        else {
-            m_rect = QRectF(- HANDLE_WIDTH, 0, HANDLE_WIDTH, requiredHeight);
-        }
-        m_rect = m_applet->mapToParent(m_rect).boundingRect();
+        m_rect = QRectF(- HANDLE_WIDTH, top, HANDLE_WIDTH, requiredHeight);
     }
 
+    m_rect = m_applet->mapToParent(m_rect).boundingRect();
     m_totalRect = m_rect.united(m_applet->geometry());
 }
 
