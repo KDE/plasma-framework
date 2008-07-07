@@ -120,7 +120,9 @@ public:
         if (pluginName.isEmpty()) {
             // default to the desktop containment
             pluginName = "desktop";
-        } else if (pluginName != "null") {
+        }
+
+        if (pluginName != "null") {
             applet = Applet::load(pluginName, id, args);
             containment = dynamic_cast<Containment*>(applet);
         }
@@ -138,11 +140,14 @@ public:
         }
 
         containment->setIsContainment(true);
+        q->addItem(containment);
 
         if (!delayedInit) {
-            q->addItem(containment);
             containment->init();
             containment->updateConstraints(Plasma::StartupCompletedConstraint);
+            KConfigGroup cg = containment->config();
+            containment->save(cg);
+            q->requestConfigSync();
         }
 
         containments.append(containment);
@@ -270,7 +275,7 @@ void Corona::loadLayout(const QString& configName)
             continue;
         }
 
-        addItem(c);
+        //addItem(c);
         c->init();
         c->restore(containmentConfig);
     }
@@ -325,11 +330,12 @@ KSharedConfigPtr Corona::config() const
 
 Containment* Corona::addContainment(const QString& name, const QVariantList& args)
 {
-    Containment *c = d->addContainment(name, args, 0, false);
-    KConfigGroup cg = c->config();
-    c->save(cg);
-    requestConfigSync();
-    return c;
+    return d->addContainment(name, args, 0, false);
+}
+
+Containment* Corona::addContainmentDelayed(const QString& name, const QVariantList& args)
+{
+    return d->addContainment(name, args, 0, true);
 }
 
 void Corona::loadDefaultLayout()

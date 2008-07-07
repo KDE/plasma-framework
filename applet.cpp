@@ -148,8 +148,13 @@ uint Applet::id() const
     return d->appletId;
 }
 
-void Applet::save(KConfigGroup &group) const
+void Applet::save(KConfigGroup &g) const
 {
+    KConfigGroup group = g;
+    if (!group.isValid()) {
+        group = *d->mainConfigGroup();
+    }
+
     // we call the dptr member directly for locked since isImmutable()
     // also checks kiosk and parent containers
     group.writeEntry("immutability", (int)d->immutability);
@@ -1444,7 +1449,7 @@ QSizeF Applet::sizeHint(Qt::SizeHint which, const QSizeF & constraint) const
     } else if (formFactor() == Vertical && which == Qt::MinimumSize) {
         hint.setWidth(0);
     }
-    
+
     // enforce a square size in panels
     if (d->aspectRatioMode == Plasma::Square) {
         if (formFactor() == Horizontal) {

@@ -250,8 +250,13 @@ void Containment::restore(KConfigGroup &group)
     setImmutability((ImmutabilityType)group.readEntry("immutability", (int)Mutable));
 }
 
-void Containment::save(KConfigGroup &group) const
+void Containment::save(KConfigGroup &g) const
 {
+    KConfigGroup group = g;
+    if (!group.isValid()) {
+        group = config();
+    }
+
     // locking is saved in Applet::save
     Applet::save(group);
     group.writeEntry("screen", d->screen);
@@ -533,6 +538,10 @@ void Containment::addApplet(Applet *applet, const QPointF &pos, bool delayInit)
         return;
     }
 
+    if (d->applets.contains(applet)) {
+        kDebug() << "already have this applet!";
+    }
+
     Containment *currentContainment = applet->containment();
 
     if (containmentType() == PanelContainment) {
@@ -560,6 +569,8 @@ void Containment::addApplet(Applet *applet, const QPointF &pos, bool delayInit)
 
     d->applets << applet;
 
+    connect(applet, SIGNAL(configNeedsSaving()), this, SIGNAL(configNeedsSaving()));
+    connect(applet, SIGNAL(releaseVisualFocus()), this, SIGNAL(releaseVisualFocus()));
     connect(applet, SIGNAL(destroyed(QObject*)), this, SLOT(appletDestroyed(QObject*)));
 
     if (pos != QPointF(-1, -1)) {
@@ -1253,8 +1264,6 @@ Applet* ContainmentPrivate::addApplet(const QString& name, const QVariantList& a
 
     //kDebug() << applet->name() << "sizehint:" << applet->sizeHint() << "geometry:" << applet->geometry();
 
-    QObject::connect(applet, SIGNAL(configNeedsSaving()), q, SIGNAL(configNeedsSaving()));
-    QObject::connect(applet, SIGNAL(releaseVisualFocus()), q, SIGNAL(releaseVisualFocus()));
     q->addApplet(applet, appletGeometry.topLeft(), delayInit);
     return applet;
 }
