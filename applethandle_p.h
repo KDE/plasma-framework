@@ -40,7 +40,7 @@ class AppletHandle : public QObject, public QGraphicsItem
         enum FadeType { FadeIn, FadeOut };
         enum ButtonType { NoButton, MoveButton, RotateButton, ConfigureButton, RemoveButton, ResizeButton };
 
-        AppletHandle(Containment *parent, Applet *applet);
+        AppletHandle(Containment *parent, Applet *applet, const QPointF &hoverPos);
         virtual ~AppletHandle();
 
         Applet *applet() const;
@@ -48,13 +48,14 @@ class AppletHandle : public QObject, public QGraphicsItem
         QRectF boundingRect() const;
         QPainterPath shape() const;
         void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
-        void startFading(FadeType anim);
+        void startFading(FadeType anim, const QPointF &hoverPos);
 
     protected:
         void mousePressEvent(QGraphicsSceneMouseEvent *event);
         void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
         void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
         void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
+        void hoverMoveEvent(QGraphicsSceneHoverEvent *event);
         void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
         QVariant itemChange(GraphicsItemChange change, const QVariant &value);
         bool sceneEventFilter(QGraphicsItem *watched, QEvent *event);
@@ -105,6 +106,7 @@ class AppletHandle : public QObject, public QGraphicsItem
         View *m_topview;
 
         QPoint m_mousePos;  //mousepos relative to applet
+        QPointF m_entryPos; //where the hover in event occurred
         QPointF m_pos;      //current position of applet in sceneCoords
         qreal m_zValue;     //current zValue of the applet, so it can be restored after drag.
 };

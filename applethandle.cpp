@@ -47,7 +47,7 @@ namespace Plasma
 
 qreal _k_angleForPoints(const QPointF &center, const QPointF &pt1, const QPointF &pt2);
 
-AppletHandle::AppletHandle(Containment *parent, Applet *applet)
+AppletHandle::AppletHandle(Containment *parent, Applet *applet, const QPointF &hoverPos)
     : QObject(),
       QGraphicsItem(parent),
       m_pressedButton(NoButton),
@@ -62,12 +62,15 @@ AppletHandle::AppletHandle(Containment *parent, Applet *applet)
       m_scaleHeight(1.0),
       m_buttonsOnRight(false),
       m_pendingFade(false),
-      m_topview(0)
+      m_topview(0),
+      m_entryPos(hoverPos)
 {
     KColorScheme colorScheme(QPalette::Active, KColorScheme::View, Theme::defaultTheme()->colorScheme());
     m_gradientColor = colorScheme.background(KColorScheme::NormalBackground).color();
 
     QTransform originalMatrix = m_applet->transform();
+    m_applet->resetTransform();
+
     QRectF rect(m_applet->contentsRect());
     QPointF center = rect.center();
     originalMatrix.translate(center.x(), center.y());
@@ -79,9 +82,6 @@ AppletHandle::AppletHandle(Containment *parent, Applet *applet)
                                 QPointF(1, 0),
                                 QPointF(cosine, sine));
 
-    m_applet->resetTransform();
-
-    calculateSize();
     m_applet->setParentItem(this);
 
     rect = QRectF(m_applet->pos(), m_applet->size());
@@ -91,6 +91,7 @@ AppletHandle::AppletHandle(Containment *parent, Applet *applet)
     matrix.rotateRadians(m_angle);
     matrix.translate(-center.x(), -center.y());
     setTransform(matrix);
+
     m_hoverTimer = new QTimer(this);
     m_hoverTimer->setSingleShot(true);
     m_hoverTimer->setInterval(333);
@@ -165,6 +166,31 @@ QPainterPath AppletHandle::shape() const
     }
 }
 
+QPainterPath handleRect(const QRectF &rect, int radius, bool onRight)
+{
+    QPainterPath path;
+    if (onRight) {
+        // make the left side straight
+        path.moveTo(rect.left(), rect.top());                                            // Top left
+        path.lineTo(rect.right() - radius, rect.top());                                 // Top side
+        path.quadTo(rect.right(), rect.top(), rect.right(), rect.top() + radius);       // Top right corner
+        path.lineTo(rect.right(), rect.bottom() - radius);                              // Right side
+        path.quadTo(rect.right(), rect.bottom(), rect.right() - radius, rect.bottom()); // Bottom right corner
+        path.lineTo(rect.left(), rect.bottom());                                        // Bottom side
+    } else {
+        // make the right side straight
+        path.moveTo(QPointF(rect.left(), rect.top() + radius));
+        path.quadTo(rect.left(), rect.top(), rect.left() + radius, rect.top());         // Top left corner
+        path.lineTo(rect.right(), rect.top());                                          // Top side
+        path.lineTo(rect.right(), rect.bottom());                                       // Right side
+        path.lineTo(rect.left() + radius, rect.bottom());                               // Bottom side
+        path.quadTo(rect.left(), rect.bottom(), rect.left(), rect.bottom() - radius);   // Bottom left corner
+    }
+
+    path.closeSubpath();
+    return path;
+}
+
 void AppletHandle::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     Q_UNUSED(option);
@@ -174,11 +200,11 @@ void AppletHandle::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
     painter->setOpacity(m_opacity);
 
     painter->save();
-    painter->setOpacity(m_opacity * 0.3);
+    painter->setOpacity(m_opacity * 0.8);
     painter->setPen(Qt::NoPen);
     painter->setRenderHints(QPainter::Antialiasing);
 
-    QPainterPath path = PaintUtils::roundedRectangle(m_rect, 10);
+    QPainterPath path = handleRect(m_rect, 10, m_buttonsOnRight);
     painter->strokePath(path, m_gradientColor);
     painter->fillPath(path, m_gradientColor.lighter());
     painter->restore();
@@ -222,10 +248,7 @@ void AppletHandle::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
         painter->drawPixmap(basePoint + shiftC, KIcon("configure").pixmap(ICON_SIZE, ICON_SIZE));
     }
 
-    //add one step to let space so the user can move the applet
-    basePoint += step;
-
-    basePoint += separator;
+    basePoint = m_rect.bottomLeft() + QPointF((HANDLE_WIDTH - ICON_SIZE) / 2, 0) - step;
     painter->drawPixmap(basePoint + shiftD, KIcon("edit-delete").pixmap(ICON_SIZE, ICON_SIZE));
 
     painter->restore();
@@ -239,29 +262,26 @@ AppletHandle::ButtonType AppletHandle::mapToButton(const QPointF &point) const
     QPointF separator = step + QPointF(0, ICON_MARGIN);
    //end duplicate code
 
-    QPolygonF activeArea = QPolygonF(QRectF(basePoint, QSizeF(ICON_SIZE, ICON_SIZE)));
+    QRectF activeArea = QRectF(basePoint, QSizeF(ICON_SIZE, ICON_SIZE));
 
-    if (activeArea.containsPoint(point, Qt::OddEvenFill)) {
+    if (activeArea.contains(point)) {
         return ResizeButton;
     }
 
     activeArea.translate(step);
-    if (activeArea.containsPoint(point, Qt::OddEvenFill)) {
+    if (activeArea.contains(point)) {
         return RotateButton;
     }
 
     if (m_applet && m_applet->hasConfigurationInterface()) {
         activeArea.translate(step);
-        if (activeArea.containsPoint(point, Qt::OddEvenFill)) {
+        if (activeArea.contains(point)) {
             return ConfigureButton;
         }
     }
 
-    //add one step to let space so the user can move the applet
-    activeArea.translate(step);
-
-    activeArea.translate(separator);
-    if (activeArea.containsPoint(point, Qt::OddEvenFill)) {
+    activeArea.moveTop(m_rect.bottom() - activeArea.height() - ICON_MARGIN);
+    if (activeArea.contains(point)) {
         return RemoveButton;
     }
 
@@ -289,6 +309,10 @@ void AppletHandle::mousePressEvent(QGraphicsSceneMouseEvent *event)
         if (m_pressedButton != NoButton) {
             m_applet->raise();
             setZValue(m_applet->zValue());
+        }
+
+        if (m_pressedButton == MoveButton) {
+            m_pos = pos();
         }
         event->accept();
 
@@ -328,7 +352,7 @@ void AppletHandle::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     //kDebug() << "button pressed:" << m_pressedButton << ", fade pending?" << m_pendingFade;
 
     if (m_pendingFade) {
-        startFading(FadeOut);
+        startFading(FadeOut, m_entryPos);
         m_pendingFade = false;
     }
 
@@ -397,7 +421,7 @@ void AppletHandle::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
                     }
                 } else {
                     // test for containment change
-                    kDebug() << "testing for containment change, sceneBoundingRect = " << m_containment->sceneBoundingRect();
+                    //kDebug() << "testing for containment change, sceneBoundingRect = " << m_containment->sceneBoundingRect();
                     if (!m_containment->sceneBoundingRect().contains(m_applet->scenePos())) {
                         // see which containment it belongs to
                         Corona * corona = qobject_cast<Corona*>(scene());
@@ -412,9 +436,9 @@ void AppletHandle::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 
                                     if (containments[i]->sceneBoundingRect().contains(pos)) {
                                         //kDebug() << "new containment = " << containments[i];
-                                        kDebug() << "rect = " << containments[i]->sceneBoundingRect();
+                                        //kDebug() << "rect = " << containments[i]->sceneBoundingRect();
                                         // add the applet to the new containment and take it from the old one
-                                        kDebug() << "moving to other containment with position" << pos;;
+                                        //kDebug() << "moving to other containment with position" << pos;;
                                         switchContainment(containments[i], pos);
                                         break;
                                     }
@@ -485,7 +509,7 @@ void AppletHandle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
             QRect screenRect = QRect(event->screenPos() - m_mousePos,
                                      m_applet->screenRect().size());
 
-            kDebug() << "screenRect = " << screenRect;
+            //kDebug() << "screenRect = " << screenRect;
 
             if (!m_topview) { //create a new toplevel view
                 m_topview = new View(m_containment, -1, 0);
@@ -671,10 +695,15 @@ void AppletHandle::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
     m_hoverTimer->start();
 }
 
+void AppletHandle::hoverMoveEvent(QGraphicsSceneHoverEvent *event)
+{
+    Q_UNUSED(event);
+    m_leaveTimer->stop();
+}
+
 void AppletHandle::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 {
     Q_UNUSED(event);
-    //kDebug() << "hover leave" << m_pressedButton;
     m_hoverTimer->stop();
 
     if (m_pressedButton != NoButton) {
@@ -697,13 +726,9 @@ bool AppletHandle::sceneEventFilter(QGraphicsItem *watched, QEvent *event)
 
 void AppletHandle::fadeAnimation(qreal progress)
 {
-    qreal endOpacity = 1.0;
-    if (m_anim == FadeOut) {
-        endOpacity = 0.0;
-    }
-
+    qreal endOpacity = (m_anim == FadeIn) ? 1.0 : 0.0;
     m_opacity += (endOpacity - m_opacity) * progress;
-
+    //kDebug() << "progress" << progress << "m_opacity" << m_opacity << endOpacity;
     if (progress >= 1.0 && m_anim == FadeOut) {
         emit disappearDone(this);
     }
@@ -713,12 +738,12 @@ void AppletHandle::fadeAnimation(qreal progress)
 
 void AppletHandle::fadeIn()
 {
-    startFading(FadeIn);
+    startFading(FadeIn, m_entryPos);
 }
 
 void AppletHandle::leaveTimeout()
 {
-    startFading(FadeOut);
+    startFading(FadeOut, m_entryPos);
 }
 
 void AppletHandle::appletDestroyed()
@@ -734,28 +759,61 @@ void AppletHandle::appletResized()
     update();
 }
 
-void AppletHandle::startFading(FadeType anim)
+void AppletHandle::startFading(FadeType anim, const QPointF &hoverPos)
 {
     if (m_animId != 0) {
         Animator::self()->stopCustomAnimation(m_animId);
     }
 
-    m_anim = anim;
+    m_hoverTimer->stop();
+    m_leaveTimer->stop();
+
+    m_entryPos = hoverPos;
     qreal time = 250;
 
-    if (anim == FadeOut && m_hoverTimer->isActive()) {
+    if (!m_applet || (anim == FadeOut && m_hoverTimer->isActive())) {
         // fading out before we've started fading in
-        m_hoverTimer->stop();
         fadeAnimation(1.0);
         return;
     }
 
     if (anim == FadeIn) {
+        //kDebug() << m_entryPos.x() << m_applet->pos().x();
+        prepareGeometryChange();
+        bool wasOnRight = m_buttonsOnRight;
+        m_buttonsOnRight = m_entryPos.x() > (m_applet->size().width() / 2);
+        calculateSize();
+        QPolygonF region = mapToParent(m_rect).intersected(parentWidget()->boundingRect());
+        //kDebug() << region << m_rect << mapToParent(m_rect) << parentWidget()->boundingRect();
+        if (region != mapToParent(m_rect)) {
+            // switch sides
+            //kDebug() << "switch sides";
+            m_buttonsOnRight = !m_buttonsOnRight;
+            calculateSize();
+            QPolygonF region2 = mapToParent(m_rect).intersected(parentWidget()->boundingRect());
+            if (region2 != mapToParent(m_rect)) {
+                // ok, both sides failed to be perfect... which one is more perfect?
+                QRectF f1 = region.boundingRect();
+                QRectF f2 = region2.boundingRect();
+                //kDebug() << "still not a perfect world" << f2.width() << f2.height() << f1.width() << f1.height();
+                if ((f2.width() * f2.height()) < (f1.width() * f1.height())) {
+                    //kDebug() << "we did better the first time";
+                    m_buttonsOnRight = !m_buttonsOnRight;
+                    calculateSize();
+                }
+            }
+        }
+
+        if (wasOnRight != m_buttonsOnRight && m_anim == FadeIn && anim == FadeIn && m_opacity <= 1) {
+            m_opacity = 0.0;
+        }
+
         time *= 1.0 - m_opacity;
     } else {
         time *= m_opacity;
     }
 
+    m_anim = anim;
     m_animId = Animator::self()->customAnimation(40, (int)time, Animator::EaseInOutCurve, this, "fadeAnimation");
 }
 
@@ -763,7 +821,7 @@ void AppletHandle::startFading(FadeType anim)
 void AppletHandle::forceDisappear()
 {
     setAcceptsHoverEvents(false);
-    startFading(FadeOut);
+    startFading(FadeOut, m_entryPos);
 }
 
 void AppletHandle::calculateSize()
@@ -777,24 +835,25 @@ void AppletHandle::calculateSize()
     }
 
     int top = m_applet->contentsRect().top();
-    if (requiredHeight > m_applet->size().height()) {
+
+    if (requiredHeight > m_applet->contentsRect().height()) {
         top += (m_applet->contentsRect().height() - requiredHeight) / 2.0;
+    } else {
+        requiredHeight = m_applet->contentsRect().height();
     }
-    
-    if (m_applet->pos().x() <= (HANDLE_WIDTH * 2)) {
+
+    if (m_buttonsOnRight) {
         //put the rect on the right of the applet
         m_rect = QRectF(m_applet->size().width(), top, HANDLE_WIDTH, requiredHeight);
-
-        m_buttonsOnRight = true;
     } else {
         //put the rect on the left of the applet
-        m_rect = QRectF(- HANDLE_WIDTH, top, HANDLE_WIDTH, requiredHeight);
+        m_rect = QRectF(-HANDLE_WIDTH, top, HANDLE_WIDTH, requiredHeight);
     }
 
     m_rect = m_applet->mapToParent(m_rect).boundingRect();
     m_totalRect = m_rect.united(m_applet->geometry());
 }
 
-}
+} // Plasma Namespace
 
 #include "applethandle_p.moc"

@@ -843,13 +843,14 @@ bool Containment::sceneEventFilter(QGraphicsItem *watched, QEvent *event)
     case QEvent::GraphicsSceneHoverEnter:
         //kDebug() << "got hoverenterEvent" << immutability() << " " << applet->immutability();
         if (immutability() == Mutable && applet->immutability() == Mutable) {
+            QGraphicsSceneHoverEvent *he = static_cast<QGraphicsSceneHoverEvent*>(event);
             if (d->handles.contains(applet)) {
-                d->handles[applet]->startFading(AppletHandle::FadeIn);
+                d->handles[applet]->startFading(AppletHandle::FadeIn, he->pos());
             } else {
                 //kDebug() << "generated applet handle";
                 //TODO: there should be a small delay on showing these. they pop up too quickly/easily
                 //      right now
-                AppletHandle *handle = new AppletHandle(this, applet);
+                AppletHandle *handle = new AppletHandle(this, applet, he->pos());
                 d->handles[applet] = handle;
                 connect(handle, SIGNAL(disappearDone(AppletHandle*)),
                         this, SLOT(handleDisappeared(AppletHandle*)));
@@ -863,7 +864,7 @@ bool Containment::sceneEventFilter(QGraphicsItem *watched, QEvent *event)
         if (d->handles.contains(applet)) {
             QGraphicsSceneHoverEvent *he = static_cast<QGraphicsSceneHoverEvent *>(event);
             if (!d->handles[applet]->boundingRect().contains(d->handles[applet]->mapFromScene(he->scenePos()))) {
-                d->handles[applet]->startFading(AppletHandle::FadeOut);
+                d->handles[applet]->startFading(AppletHandle::FadeOut, he->pos());
             }
         }
     default:
