@@ -206,7 +206,25 @@ void AppletHandle::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
 
     QPainterPath path = handleRect(m_rect, 10, m_buttonsOnRight);
     painter->strokePath(path, m_gradientColor);
-    painter->fillPath(path, m_gradientColor.lighter());
+
+    int minHeight = minimumHeight();
+    qreal h = m_rect.height();
+    if (h > minHeight * 1.25) {
+        QLinearGradient g(m_rect.topLeft(), m_rect.bottomLeft());
+        // where the top icons stop
+        qreal firstStop = (ICON_SIZE + ICON_MARGIN) * 3 + ICON_MARGIN * 2;
+        // now between that and where the close icon is
+        firstStop = firstStop + (((h - (ICON_SIZE + ICON_MARGIN * 2)) - firstStop) * 0.7);
+        // now the ratio of the height
+        firstStop /= h;
+
+        g.setColorAt(0.0, m_gradientColor.lighter());
+        g.setColorAt(firstStop, Qt::transparent);
+        g.setColorAt(1.0, m_gradientColor.lighter());
+        painter->fillPath(path, g);
+    } else {
+        painter->fillPath(path, m_gradientColor.lighter());
+    }
     painter->restore();
 
     //XXX this code is duplicated in the next function
@@ -825,16 +843,22 @@ void AppletHandle::forceDisappear()
     startFading(FadeOut, m_entryPos);
 }
 
-void AppletHandle::calculateSize()
+int AppletHandle::minimumHeight()
 {
     int requiredHeight =  ICON_MARGIN + //first margin
                           (ICON_SIZE + ICON_MARGIN) * 4 + //XXX remember to update this if the number of buttons changes
                           ICON_MARGIN;  //blank space before the close button
 
-    if (m_applet->hasConfigurationInterface()) {
+    if (m_applet && m_applet->hasConfigurationInterface()) {
         requiredHeight += (ICON_SIZE + ICON_MARGIN);
     }
 
+    return requiredHeight;
+}
+
+void AppletHandle::calculateSize()
+{
+    int requiredHeight = minimumHeight();
     int top = m_applet->contentsRect().top();
 
     if (requiredHeight > m_applet->contentsRect().height()) {
