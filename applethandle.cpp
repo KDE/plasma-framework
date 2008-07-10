@@ -836,7 +836,6 @@ void AppletHandle::startFading(FadeType anim, const QPointF &hoverPos)
     m_animId = Animator::self()->customAnimation(40, (int)time, Animator::EaseInOutCurve, this, "fadeAnimation");
 }
 
-
 void AppletHandle::forceDisappear()
 {
     setAcceptsHoverEvents(false);
@@ -858,21 +857,22 @@ int AppletHandle::minimumHeight()
 
 void AppletHandle::calculateSize()
 {
-    int requiredHeight = minimumHeight();
+    int handleHeight = minimumHeight();
     int top = m_applet->contentsRect().top();
 
-    if (requiredHeight > m_applet->contentsRect().height()) {
-        top += (m_applet->contentsRect().height() - requiredHeight) / 2.0;
+    if (handleHeight > m_applet->contentsRect().height()) {
+        //center the handle if it is higher than the applet
+        top += (m_applet->contentsRect().height() - handleHeight) / 2.0;
     } else {
-        requiredHeight = m_applet->contentsRect().height();
+        handleHeight = m_applet->contentsRect().height();
     }
 
     if (m_buttonsOnRight) {
         //put the rect on the right of the applet
-        m_rect = QRectF(m_applet->size().width(), top, HANDLE_WIDTH, requiredHeight);
+        m_rect = QRectF(m_applet->size().width(), top, HANDLE_WIDTH, handleHeight);
     } else {
         //put the rect on the left of the applet
-        m_rect = QRectF(-HANDLE_WIDTH, top, HANDLE_WIDTH, requiredHeight);
+        m_rect = QRectF(-HANDLE_WIDTH, top, HANDLE_WIDTH, handleHeight);
     }
 
     m_rect = m_applet->mapToParent(m_rect).boundingRect();
