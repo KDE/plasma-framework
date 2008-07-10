@@ -78,6 +78,8 @@ class AppletHandle : public QObject, public QGraphicsItem
         void calculateSize();
         ButtonType mapToButton(const QPointF &point) const;
         void forceDisappear();
+        int minimumHeight();
+
         /**
          * move our applet to another containment
          * @param containment the containment to move to
