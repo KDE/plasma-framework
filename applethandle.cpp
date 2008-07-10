@@ -308,7 +308,8 @@ void AppletHandle::mousePressEvent(QGraphicsSceneMouseEvent *event)
         //kDebug() << "button pressed:" << m_pressedButton;
         if (m_pressedButton != NoButton) {
             m_applet->raise();
-            setZValue(m_applet->zValue());
+            m_zValue = m_applet->zValue();
+            setZValue(m_zValue);
         }
 
         if (m_pressedButton == MoveButton) {
