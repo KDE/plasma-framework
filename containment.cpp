@@ -590,9 +590,6 @@ void Containment::addApplet(Applet *applet, const QPointF &pos, bool delayInit)
     applet->updateConstraints(Plasma::AllConstraints | Plasma::StartupCompletedConstraint);
     if (!delayInit) {
         applet->flushPendingConstraintsEvents();
-        KConfigGroup *cg = applet->d->mainConfigGroup();
-        applet->save(*cg);
-        emit configNeedsSaving();
     }
 
     emit appletAdded(applet, pos);
@@ -1303,6 +1300,9 @@ void ContainmentPrivate::containmentAppletAnimationComplete(QGraphicsItem *item,
 
         if (applet) {
             applet->installSceneEventFilter(q);
+            KConfigGroup *cg = applet->d->mainConfigGroup();
+            applet->save(*cg);
+            emit q->configNeedsSaving();
             //applet->setWindowFlags(Qt::Window);
         }
     }
