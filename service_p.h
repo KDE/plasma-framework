@@ -17,10 +17,9 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-class KTemporaryFile;
 
 #include "servicejob.h"
-
+#include <KTemporaryFile>
 namespace Plasma
 {
 
@@ -64,6 +63,10 @@ public:
           config(0),
           tempFile(0)
     {
+    }
+    ~ServicePrivate()
+    {
+        delete tempFile;
     }
 
     Service *q;
