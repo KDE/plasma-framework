@@ -301,7 +301,8 @@ bool Package::installPackage(const QString& package,
 
     // and now we register it as a service =)
     QString metaPath = targetName + "/metadata.desktop";
-    KConfigGroup cg = KDesktopFile(metaPath).desktopGroup();
+    KDesktopFile df(metaPath);
+    KConfigGroup cg = df.desktopGroup();
 
     // Q: should not installing it as a service disqualify it?
     // Q: i don't think so since KServiceTypeTrader may not be
