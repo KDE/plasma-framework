@@ -616,6 +616,8 @@ void Animator::timerEvent(QTimerEvent *event)
                     << state->currentFrame + qMax(1, elapsed / state->interval) << endl;*/
             state->currentFrame += (KGlobalSettings::graphicEffectsLevel() & KGlobalSettings::SimpleAnimationEffects) ?
                                    qMax(1, elapsed / state->interval) : state->frames - state->currentFrame;
+                                   
+            state->item->update();
             if (state->currentFrame < state->frames) {
                 state->currentInterval = state->interval;
                 //TODO: calculate a proper interval based on the curve
