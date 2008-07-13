@@ -429,6 +429,7 @@ void AppletHandle::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 
                 //find out if we were dropped on a panel or something
                 if (leaveCurrentView(event->screenPos())) {
+                    startFading(FadeOut, m_entryPos);
                     Plasma::View *v = Plasma::View::topLevelViewAt(event->screenPos());
                     if (v && v != m_containment->view()) {
                         Containment *c = v->containment();
