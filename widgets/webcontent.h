@@ -30,6 +30,7 @@ class QKeyEvent;
 class QGraphicsSceneDragDropEvent;
 class QGraphicsSceneMouseEvent;
 class QGraphicsSceneWheelEvent;
+class QRect;
 
 namespace Plasma
 {
@@ -97,7 +98,7 @@ class PLASMA_EXPORT WebContent : public QGraphicsWidget
         /**
          * Reimplementation
          */
-        void setGeometry(const QRectF &geometry);
+        void setGeometry(const QRectF &geometry);         
 
     Q_SIGNALS:
         /**
@@ -138,6 +139,7 @@ class PLASMA_EXPORT WebContent : public QGraphicsWidget
 
     private:
         Q_PRIVATE_SLOT(d, void loadingFinished(bool success))
+        Q_PRIVATE_SLOT(d, void updateRequested(const QRect& dirtyRect))
 
         WebContentPrivate * const d;
         friend class WebContentPrivate;
