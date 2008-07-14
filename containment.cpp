@@ -845,8 +845,6 @@ bool Containment::sceneEventFilter(QGraphicsItem *watched, QEvent *event)
                 d->handles[applet]->startFading(AppletHandle::FadeIn, he->pos());
             } else {
                 //kDebug() << "generated applet handle";
-                //TODO: there should be a small delay on showing these. they pop up too quickly/easily
-                //      right now
                 AppletHandle *handle = new AppletHandle(this, applet, he->pos());
                 d->handles[applet] = handle;
                 connect(handle, SIGNAL(disappearDone(AppletHandle*)),
@@ -1074,6 +1072,13 @@ void ContainmentPrivate::toggleDesktopImmutability()
         } else if (q->immutability() == UserImmutable) {
             q->setImmutability(Mutable);
         }
+    }
+
+    if (q->immutability() != Mutable) {
+        foreach (AppletHandle* handle, handles) {
+            handle->deleteLater();
+        }
+        handles.clear();
     }
 
     //setLockToolText();
