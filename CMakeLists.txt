@@ -59,6 +59,7 @@ set(plasma_LIB_SRCS
     theme.cpp
     toolbox.cpp
     uiloader.cpp
+    version.cpp
     view.cpp
     widgets/checkbox.cpp
     widgets/combobox.cpp
@@ -140,6 +141,7 @@ set(plasma_LIB_INCLUDES
     svg.h
     theme.h
     uiloader.h
+    version.h
     view.h)
 
 if(QT_QTOPENGL_FOUND AND OPENGL_FOUND)
@@ -226,6 +228,7 @@ includes/TextEdit
 includes/Theme
 includes/UiLoader
 includes/View
+includes/Version
 includes/WebContent
 DESTINATION ${INCLUDE_INSTALL_DIR}/KDE/Plasma COMPONENT Devel)
 
@@ -242,8 +245,8 @@ install(FILES
    servicetypes/plasma-dataengine.desktop
    servicetypes/plasma-packagestructure.desktop
    servicetypes/plasma-runner.desktop
-    servicetypes/plasma-scriptengine.desktop
-    DESTINATION ${SERVICETYPES_INSTALL_DIR})
+   servicetypes/plasma-scriptengine.desktop
+   DESTINATION ${SERVICETYPES_INSTALL_DIR})
 
 install(FILES scripting/plasmoids.knsrc DESTINATION  ${CONFIG_INSTALL_DIR})
 
