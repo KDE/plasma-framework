@@ -21,7 +21,7 @@
 #define PLASMA_SERVICEJOB_H
 
 #include <QtCore/QVariant>
-
+#include <plasma/plasma_export.h>
 #include <KDE/KJob>
 #include <KDE/KService>
 
@@ -33,7 +33,7 @@ class ServiceJobPrivate;
 /**
  * @brief This class provides jobs for use with Plasma::Service
  */
-class ServiceJob : public KJob
+class PLASMA_EXPORT ServiceJob : public KJob
 {
     Q_OBJECT
 

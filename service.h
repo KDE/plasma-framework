@@ -25,7 +25,7 @@
 #include <QtCore/QVariant>
 
 #include <KDE/KConfigGroup>
-
+#include <plasma/plasma_export.h>
 class QIODevice;
 
 namespace Plasma
@@ -66,7 +66,7 @@ class ServicePrivate;
  * connect(job, SIGNAL(finished(KJob*)), this, SLOT(jobCompeted()));
  * @endcode
  */
-class Service : public QObject
+class PLASMA_EXPORT Service : public QObject
 {
     Q_OBJECT
 public:
