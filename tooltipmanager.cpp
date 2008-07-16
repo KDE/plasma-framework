@@ -220,7 +220,7 @@ void ToolTipManagerPrivate::resetShownState()
 {
     if (currentWidget) {
       ToolTip * tooltip = tooltips.value(currentWidget);
-      if ((tooltip && !tooltip->isVisible()) || delayedHide) {
+      if (tooltip && (!tooltip->isVisible() || delayedHide)) {
               //One might have moused out and back in again
               delayedHide = false;
               isShown = false;
