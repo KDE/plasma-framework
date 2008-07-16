@@ -38,6 +38,7 @@ Service::Service(QObject *parent)
     : QObject(parent),
       d(new ServicePrivate(this))
 {
+    registerOperationsScheme();
 }
 
 Service::Service(QObject *parent, const QVariantList &args)
@@ -45,6 +46,7 @@ Service::Service(QObject *parent, const QVariantList &args)
       d(new ServicePrivate(this))
 {
     Q_UNUSED(args);
+    registerOperationsScheme();
 }
 
 Service::~Service()

@@ -26,6 +26,7 @@
 
 #include <KDE/KConfigGroup>
 #include <plasma/plasma_export.h>
+
 class QIODevice;
 
 namespace Plasma
@@ -183,6 +184,9 @@ private:
 
 } // namespace Plasma
 
+/**
+ * Register a service when it is contained in a loadable module
+ */
 #define K_EXPORT_PLASMA_SERVICE(libname, classname) \
 K_PLUGIN_FACTORY(factory, registerPlugin<classname>();) \
 K_EXPORT_PLUGIN(factory("plasma_service_" #libname))
