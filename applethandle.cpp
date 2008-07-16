@@ -863,10 +863,9 @@ int AppletHandle::minimumHeight()
 
 void AppletHandle::calculateSize()
 {
-    KIconLoader *iconLoader = new KIconLoader();
+    KIconLoader *iconLoader = KIconLoader::global();
     //m_iconSize = iconLoader->currentSize(KIconLoader::Small); //does not work with double sized icon
     m_iconSize = iconLoader->loadIcon("transform-scale", KIconLoader::Small).width(); //workaround
-    delete iconLoader;
 
     int handleHeight = minimumHeight();
     int handleWidth = m_iconSize + 2 * HANDLE_MARGIN;
