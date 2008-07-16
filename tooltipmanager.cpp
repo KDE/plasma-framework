@@ -183,11 +183,6 @@ void ToolTipManager::setWidgetToolTipContent(QGraphicsWidget *widget,const ToolT
     }
 }
 
-bool ToolTipManager::widgetHasToolTip(QGraphicsWidget *widget)
-{
-    return d->tooltips.contains(widget);
-}
-
 void ToolTipManager::themeUpdated()
 {
   QMapIterator<QGraphicsWidget*, ToolTip *> iterator(d->tooltips);
@@ -206,7 +201,6 @@ void ToolTipManager::onWidgetDestroyed(QObject * object)
             if (iterator.key() == object) {
                 ToolTip * tooltip = iterator.value();
                 d->tooltips.remove(iterator.key());
-                kDebug()<<"Tooltip destroyed"<<(int)object;
                 d->showTimer->stop();  // stop the timer to show the tooltip
                 d->delayedHide = false;
                 d->currentWidget = 0;
