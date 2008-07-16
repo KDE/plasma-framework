@@ -38,7 +38,7 @@ class ToolTip : public QWidget
 {
     Q_OBJECT
 public:
-    ToolTip();
+    ToolTip(QObject *source);
     ~ToolTip();
     void updateTheme();
     void setContent(const ToolTipManager::ToolTipContent &data);
@@ -46,10 +46,14 @@ public:
 
 protected:
     void showEvent(QShowEvent *);
+    void hideEvent(QHideEvent *);
     void mouseReleaseEvent(QMouseEvent *);
 
     void resizeEvent(QResizeEvent *);
     void paintEvent(QPaintEvent *);
+
+private Q_SLOTS:
+    void sourceDestroyed();
 
 private:
     ToolTipPrivate *const d;

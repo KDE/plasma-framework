@@ -49,11 +49,12 @@ namespace Plasma {
 class ToolTipPrivate
 {
     public:
-        ToolTipPrivate()
+        ToolTipPrivate(QObject *s)
         : label(0)
         , imageLabel(0)
         , preview(0)
         , windowToPreview(0)
+        , source(s)
     { }
 
     QLabel *label;
@@ -61,13 +62,21 @@ class ToolTipPrivate
     WindowPreview *preview;
     WId windowToPreview;
     PanelSvg *background;
-
+    QObject *source;
 };
 
 void ToolTip::showEvent(QShowEvent *e)
 {
     QWidget::showEvent(e);
     d->preview->setInfo();
+}
+
+void ToolTip::hideEvent(QHideEvent *e)
+{
+    QWidget::hideEvent(e);
+    if (d->source) {
+        QMetaObject::invokeMethod(d->source, SLOT(toolTipHidden()));
+    }
 }
 
 void ToolTip::mouseReleaseEvent(QMouseEvent* event)
@@ -77,10 +86,14 @@ void ToolTip::mouseReleaseEvent(QMouseEvent* event)
     }
 }
 
-ToolTip::ToolTip()
+ToolTip::ToolTip(QObject *source)
     : QWidget(0)
-    , d( new ToolTipPrivate )
+    , d(new ToolTipPrivate(source))
 {
+    if (source) {
+        connect(source, SIGNAL(destroyed(QObject*)), this, SLOT(sourceDestroyed()));
+    }
+
     setWindowFlags(Qt::ToolTip);
     QGridLayout *l = new QGridLayout;
     d->preview = new WindowPreview;
@@ -97,7 +110,6 @@ ToolTip::ToolTip()
     l->addWidget(d->imageLabel, 1, 0);
     l->addWidget(d->label, 1, 1);
     setLayout(l);
-
 }
 
 ToolTip::~ToolTip()
@@ -120,16 +132,20 @@ void ToolTip::setContent(const ToolTipManager::ToolTipContent &data)
 
 void ToolTip::prepareShowing()
 {
-  if( d->windowToPreview != 0 ) {
+    if (d->source) {
+        QMetaObject::invokeMethod(d->source, SLOT(toolTipAboutToShow()));
+    }
+
+    if (d->windowToPreview != 0) {
         // show/hide the preview area
         d->preview->show();
     } else {
         d->preview->hide();
     }
-    layout()->activate();
 
+    layout()->activate();
     resize(sizeHint());
-    
+
     if (isVisible()) {
         d->preview->setInfo();
     } else {
@@ -154,6 +170,11 @@ void ToolTip::paintEvent(QPaintEvent *e)
     painter.fillRect(rect(), Qt::transparent);
 
     d->background->paintPanel(&painter, rect());
+}
+
+void ToolTip::sourceDestroyed()
+{
+    d->source = 0;
 }
 
 void ToolTip::updateTheme()

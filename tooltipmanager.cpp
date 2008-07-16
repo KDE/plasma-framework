@@ -1,22 +1,23 @@
-/**************************************************************************
-*   Copyright 2007 by Dan Meltzer <hydrogen@notyetimplemented.com>        *
-*   Copyright (C) 2008 by Alexis Ménard <darktears31@gmail.com>           *
-*                                                                         *
-*   This program is free software; you can redistribute it and/or modify  *
-*   it under the terms of the GNU General Public License as published by  *
-*   the Free Software Foundation; either version 2 of the License, or     *
-*   (at your option) any later version.                                   *
-*                                                                         *
-*   This program is distributed in the hope that it will be useful,       *
-*   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
-*   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
-*   GNU General Public License for more details.                          *
-*                                                                         *
-*   You should have received a copy of the GNU General Public License     *
-*   along with this program; if not, write to the                         *
-*   Free Software Foundation, Inc.,                                       *
-*   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA .        *
-***************************************************************************/
+/***************************************************************************
+ *   Copyright 2007 by Dan Meltzer <hydrogen@notyetimplemented.com>        *
+ *   Copyright 2008 by Aaron Seigo <aseigo@kde.org>                        *
+ *   Copyright 2008 by Alexis Ménard <darktears31@gmail.com>               *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, write to the                         *
+ *   Free Software Foundation, Inc.,                                       *
+ *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA .        *
+ ***************************************************************************/
 #include "tooltipmanager.h"
 
 //Qt
@@ -90,6 +91,16 @@ ToolTipManager *ToolTipManager::self()
     return &privateInstance->self;
 }
 
+ToolTipManager::ToolTipContent::ToolTipContent()
+    : windowToPreview(0)
+{
+}
+
+bool ToolTipManager::ToolTipContent::isEmpty() const
+{
+    return mainText.isEmpty() && subText.isEmpty() && image.isNull() && windowToPreview == 0;
+}
+
 ToolTipManager::ToolTipManager(QObject* parent)
   : QObject(parent),
     d(new ToolTipManagerPrivate)
@@ -113,7 +124,7 @@ ToolTipManager::~ToolTipManager()
 
 void ToolTipManager::showToolTip(QGraphicsWidget *widget)
 {
-   ToolTip * tooltip = d->tooltips.value(widget);
+   ToolTip *tooltip = d->tooltips.value(widget);
    if (tooltip) {
       if (d->currentWidget) {
           hideToolTip(d->currentWidget);
@@ -134,11 +145,10 @@ void ToolTipManager::showToolTip(QGraphicsWidget *widget)
 
 bool ToolTipManager::isWidgetToolTipDisplayed(QGraphicsWidget *widget)
 {
-   ToolTip * tooltip = d->tooltips.value(widget);
+   ToolTip *tooltip = d->tooltips.value(widget);
    if (tooltip) {
       return tooltip->isVisible();
-   }
-   else {
+   } else {
       return false;
    }
 }
@@ -152,23 +162,23 @@ void ToolTipManager::delayedHideToolTip()
 
 void ToolTipManager::hideToolTip(QGraphicsWidget *widget)
 {
-   ToolTip * tooltip = d->tooltips.value(widget);
-   if (tooltip) {
-      d->showTimer->stop();  // stop the timer to show the tooltip
-      d->delayedHide = false;
-      d->currentWidget = 0;
-      tooltip->hide();
-  }
+    ToolTip *tooltip = d->tooltips.value(widget);
+    if (tooltip) {
+        d->showTimer->stop();  // stop the timer to show the tooltip
+        d->delayedHide = false;
+        d->currentWidget = 0;
+        tooltip->hide();
+    }
 }
 
 void ToolTipManager::registerWidget(QGraphicsWidget *widget)
 {
     if (!d->tooltips.contains(widget)) {
         //the tooltip is not registered we add it in our map of tooltips
-        d->tooltips.insert(widget,new ToolTip());
+        d->tooltips.insert(widget, 0);
         widget->installEventFilter(this);
         //connect to object destruction
-        connect(widget,SIGNAL(destroyed(QObject *)),this,SLOT(onWidgetDestroyed(QObject *)));
+        connect(widget, SIGNAL(destroyed(QObject *)),this,SLOT(onWidgetDestroyed(QObject *)));
     }
 }
 
@@ -178,19 +188,30 @@ void ToolTipManager::unregisterWidget(QGraphicsWidget *widget)
         return;
     }
     widget->removeEventFilter(this);
-    ToolTip * tooltip = d->tooltips.take(widget);
+    ToolTip *tooltip = d->tooltips.take(widget);
     if (tooltip) {
         delete tooltip;
     }
 }
 
-void ToolTipManager::setWidgetToolTipContent(QGraphicsWidget *widget,const ToolTipContent &data)
+void ToolTipManager::setToolTipContent(QGraphicsWidget *widget, const ToolTipContent &data)
 {
     if (!d->tooltips.contains(widget)) {
+        registerWidget(widget);
+    }
+
+    ToolTip *tooltip = d->tooltips.value(widget);
+
+    if (data.isEmpty()) {
+        delete tooltip;
+        d->tooltips.insert(widget, 0);
         return;
     }
 
-    ToolTip * tooltip = d->tooltips.value(widget);
+    if (!tooltip) {
+        d->tooltips.insert(widget, new ToolTip(widget));
+    }
+
     tooltip->setContent(data);
     tooltip->updateTheme();
 }
@@ -234,10 +255,12 @@ void ToolTipManagerPrivate::onWidgetDestroyed(QObject *object)
     while (iterator.hasNext()) {
         iterator.next();
         if (iterator.key() == w) {
-            ToolTip * tooltip = iterator.value();
+            ToolTip *tooltip = iterator.value();
             tooltips.remove(iterator.key());
-            tooltip->hide();
-            delete tooltip;
+            if (tooltip) {
+                tooltip->hide();
+                delete tooltip;
+            }
         }
     }
 }
@@ -262,7 +285,7 @@ void ToolTipManagerPrivate::showToolTip()
         return;
     }
 
-    ToolTip * tooltip = tooltips.value(currentWidget);
+    ToolTip *tooltip = tooltips.value(currentWidget);
     if (tooltip) {
         tooltip->prepareShowing();
         tooltip->move(ToolTipManager::popupPosition(currentWidget,tooltip->size()));
@@ -295,7 +318,10 @@ bool ToolTipManager::eventFilter(QObject *watched, QEvent *event)
             // created the widget can receive a hover event before it is fully
             // initialized, in which case view() will return 0.
             const Applet * applet = ToolTipManager::getItemItsApplet(widget);
-            if (!applet) break;
+            if (!applet) {
+                break;
+            }
+
             QGraphicsView *parentView = applet->view();
             if (parentView) {
                 showToolTip(widget);
