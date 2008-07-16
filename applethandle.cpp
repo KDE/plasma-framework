@@ -259,18 +259,18 @@ void AppletHandle::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
         break;
     }
 
-    painter->drawPixmap(basePoint + shiftM, KIcon("transform-scale").pixmap(m_iconSize, m_iconSize)); //FIXME no transform-resize icon
+    painter->drawPixmap(basePoint + shiftM, SmallIcon("transform-scale")); //FIXME no transform-resize icon
 
     basePoint += step;
-    painter->drawPixmap(basePoint + shiftR, KIcon("transform-rotate").pixmap(m_iconSize, m_iconSize));
+    painter->drawPixmap(basePoint + shiftR, SmallIcon("transform-rotate"));
 
     if (m_applet && m_applet->hasConfigurationInterface()) {
         basePoint += step;
-        painter->drawPixmap(basePoint + shiftC, KIcon("configure").pixmap(m_iconSize, m_iconSize));
+        painter->drawPixmap(basePoint + shiftC, SmallIcon("configure"));
     }
 
     basePoint = m_rect.bottomLeft() + QPointF(HANDLE_MARGIN, 0) - step;
-    painter->drawPixmap(basePoint + shiftD, KIcon("edit-delete").pixmap(m_iconSize, m_iconSize));
+    painter->drawPixmap(basePoint + shiftD, SmallIcon("edit-delete"));
 
     painter->restore();
 }
@@ -863,7 +863,10 @@ int AppletHandle::minimumHeight()
 
 void AppletHandle::calculateSize()
 {
-    m_iconSize = IconSize(KIconLoader::Small);
+    KIconLoader *iconLoader = new KIconLoader();
+    //m_iconSize = iconLoader->currentSize(KIconLoader::Small); //does not work with double sized icon
+    m_iconSize = iconLoader->loadIcon("transform-scale", KIconLoader::Small).width(); //workaround
+    delete iconLoader;
 
     int handleHeight = minimumHeight();
     int handleWidth = m_iconSize + 2 * HANDLE_MARGIN;

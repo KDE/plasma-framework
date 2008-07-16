@@ -88,10 +88,10 @@ class AppletHandle : public QObject, public QGraphicsItem
 
         QRectF m_rect;
         QRectF m_totalRect;
-        int m_iconSize;
         ButtonType m_pressedButton;
         Containment *m_containment;
         Applet *m_applet;
+        int m_iconSize;
         qreal m_opacity;
         FadeType m_anim;
         int m_animId;
