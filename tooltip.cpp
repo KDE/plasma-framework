@@ -123,7 +123,6 @@ void ToolTip::prepareShowing()
   if( d->windowToPreview != 0 ) {
         // show/hide the preview area
         d->preview->show();
-        kDebug()<<"Show Preview of window";
     } else {
         d->preview->hide();
     }
