@@ -1075,10 +1075,12 @@ void ContainmentPrivate::toggleDesktopImmutability()
     }
 
     if (q->immutability() != Mutable) {
-        foreach (AppletHandle* handle, handles) {
+        QMap<Applet*, AppletHandle*> h = handles;
+        handles.clear();
+
+        foreach (AppletHandle* handle, h) {
             handle->deleteLater();
         }
-        handles.clear();
     }
 
     //setLockToolText();
@@ -1160,8 +1162,10 @@ void ContainmentPrivate::triggerShowAddWidgets()
 
 void ContainmentPrivate::handleDisappeared(AppletHandle *handle)
 {
-    handles.remove(handle->applet());
-    handle->deleteLater();
+    if (handles.contains(handle->applet())) {
+        handles.remove(handle->applet());
+        handle->deleteLater();
+    }
 }
 
 void ContainmentPrivate::containmentConstraintsEvent(Plasma::Constraints constraints)
