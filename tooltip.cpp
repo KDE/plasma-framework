@@ -235,7 +235,6 @@ void WindowPreview::readWindowSize() const
     } else {
         windowSize = QSize();
     }
-    kDebug()<<windowSize;
 #else
     windowSize = QSize();
 #endif
