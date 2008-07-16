@@ -29,6 +29,7 @@
 #include <KColorScheme>
 #include <KGlobalSettings>
 #include <KIcon>
+#include <KIconLoader>
 #include <KWindowSystem>
 
 #include <cmath>
@@ -53,6 +54,7 @@ AppletHandle::AppletHandle(Containment *parent, Applet *applet, const QPointF &h
       m_pressedButton(NoButton),
       m_containment(parent),
       m_applet(applet),
+      m_iconSize(16),
       m_opacity(0.0),
       m_anim(FadeIn),
       m_animId(0),
@@ -207,14 +209,15 @@ void AppletHandle::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
     QPainterPath path = handleRect(m_rect, 10, m_buttonsOnRight);
     painter->strokePath(path, m_gradientColor);
 
+    int iconMargin = m_iconSize / 2;
     int minHeight = minimumHeight();
     qreal h = m_rect.height();
     if (h > minHeight * 1.25) {
         QLinearGradient g(m_rect.topLeft(), m_rect.bottomLeft());
         // where the top icons stop
-        qreal firstStop = (ICON_SIZE + ICON_MARGIN) * 3 + ICON_MARGIN * 2;
+        qreal firstStop = (m_iconSize + iconMargin) * 3 + iconMargin * 2;
         // now between that and where the close icon is
-        firstStop = firstStop + (((h - (ICON_SIZE + ICON_MARGIN * 2)) - firstStop) * 0.7);
+        firstStop = firstStop + (((h - (m_iconSize + iconMargin * 2)) - firstStop) * 0.7);
         // now the ratio of the height
         firstStop /= h;
 
@@ -228,9 +231,9 @@ void AppletHandle::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
     painter->restore();
 
     //XXX this code is duplicated in the next function
-    QPointF basePoint = m_rect.topLeft() + QPointF((HANDLE_WIDTH - ICON_SIZE) / 2, ICON_MARGIN);
-    QPointF step = QPointF(0, ICON_SIZE + ICON_MARGIN);
-    QPointF separator = step + QPointF(0, ICON_MARGIN);
+    QPointF basePoint = m_rect.topLeft() + QPointF(HANDLE_MARGIN, iconMargin);
+    QPointF step = QPointF(0, m_iconSize + iconMargin);
+    QPointF separator = step + QPointF(0, iconMargin);
     //end duplicate code
 
     QPointF shiftC;
@@ -256,31 +259,32 @@ void AppletHandle::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
         break;
     }
 
-    painter->drawPixmap(basePoint + shiftM, KIcon("transform-scale").pixmap(ICON_SIZE, ICON_SIZE)); //FIXME no transform-resize icon
+    painter->drawPixmap(basePoint + shiftM, KIcon("transform-scale").pixmap(m_iconSize, m_iconSize)); //FIXME no transform-resize icon
 
     basePoint += step;
-    painter->drawPixmap(basePoint + shiftR, KIcon("transform-rotate").pixmap(ICON_SIZE, ICON_SIZE));
+    painter->drawPixmap(basePoint + shiftR, KIcon("transform-rotate").pixmap(m_iconSize, m_iconSize));
 
     if (m_applet && m_applet->hasConfigurationInterface()) {
         basePoint += step;
-        painter->drawPixmap(basePoint + shiftC, KIcon("configure").pixmap(ICON_SIZE, ICON_SIZE));
+        painter->drawPixmap(basePoint + shiftC, KIcon("configure").pixmap(m_iconSize, m_iconSize));
     }
 
-    basePoint = m_rect.bottomLeft() + QPointF((HANDLE_WIDTH - ICON_SIZE) / 2, 0) - step;
-    painter->drawPixmap(basePoint + shiftD, KIcon("edit-delete").pixmap(ICON_SIZE, ICON_SIZE));
+    basePoint = m_rect.bottomLeft() + QPointF(HANDLE_MARGIN, 0) - step;
+    painter->drawPixmap(basePoint + shiftD, KIcon("edit-delete").pixmap(m_iconSize, m_iconSize));
 
     painter->restore();
 }
 
 AppletHandle::ButtonType AppletHandle::mapToButton(const QPointF &point) const
 {
+    int iconMargin = m_iconSize / 2;
     //XXX this code is duplicated in the prev. function
-    QPointF basePoint = m_rect.topLeft() + QPointF((HANDLE_WIDTH - ICON_SIZE) / 2, ICON_MARGIN);
-    QPointF step = QPointF(0, ICON_SIZE + ICON_MARGIN);
-    QPointF separator = step + QPointF(0, ICON_MARGIN);
+    QPointF basePoint = m_rect.topLeft() + QPointF(HANDLE_MARGIN, iconMargin);
+    QPointF step = QPointF(0, m_iconSize + iconMargin);
+    QPointF separator = step + QPointF(0, iconMargin);
    //end duplicate code
 
-    QRectF activeArea = QRectF(basePoint, QSizeF(ICON_SIZE, ICON_SIZE));
+    QRectF activeArea = QRectF(basePoint, QSizeF(m_iconSize, m_iconSize));
 
     if (activeArea.contains(point)) {
         return ResizeButton;
@@ -298,7 +302,7 @@ AppletHandle::ButtonType AppletHandle::mapToButton(const QPointF &point) const
         }
     }
 
-    activeArea.moveTop(m_rect.bottom() - activeArea.height() - ICON_MARGIN);
+    activeArea.moveTop(m_rect.bottom() - activeArea.height() - iconMargin);
     if (activeArea.contains(point)) {
         return RemoveButton;
     }
@@ -845,12 +849,13 @@ void AppletHandle::forceDisappear()
 
 int AppletHandle::minimumHeight()
 {
-    int requiredHeight =  ICON_MARGIN + //first margin
-                          (ICON_SIZE + ICON_MARGIN) * 4 + //XXX remember to update this if the number of buttons changes
-                          ICON_MARGIN;  //blank space before the close button
+    int iconMargin = m_iconSize / 2;
+    int requiredHeight =  iconMargin  + //first margin
+                          (m_iconSize + iconMargin ) * 4 + //XXX remember to update this if the number of buttons changes
+                          iconMargin ;  //blank space before the close button
 
     if (m_applet && m_applet->hasConfigurationInterface()) {
-        requiredHeight += (ICON_SIZE + ICON_MARGIN);
+        requiredHeight += (m_iconSize + iconMargin );
     }
 
     return requiredHeight;
@@ -858,7 +863,10 @@ int AppletHandle::minimumHeight()
 
 void AppletHandle::calculateSize()
 {
+    m_iconSize = IconSize(KIconLoader::Small);
+
     int handleHeight = minimumHeight();
+    int handleWidth = m_iconSize + 2 * HANDLE_MARGIN;
     int top = m_applet->contentsRect().top();
 
     if (handleHeight > m_applet->contentsRect().height()) {
@@ -870,10 +878,10 @@ void AppletHandle::calculateSize()
 
     if (m_buttonsOnRight) {
         //put the rect on the right of the applet
-        m_rect = QRectF(m_applet->size().width(), top, HANDLE_WIDTH, handleHeight);
+        m_rect = QRectF(m_applet->size().width(), top, handleWidth, handleHeight);
     } else {
         //put the rect on the left of the applet
-        m_rect = QRectF(-HANDLE_WIDTH, top, HANDLE_WIDTH, handleHeight);
+        m_rect = QRectF(-handleWidth, top, handleWidth, handleHeight);
     }
 
     m_rect = m_applet->mapToParent(m_rect).boundingRect();

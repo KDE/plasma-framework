@@ -71,9 +71,7 @@ class AppletHandle : public QObject, public QGraphicsItem
         void leaveTimeout();
 
     private:
-        static const int HANDLE_WIDTH = 22;
-        static const int ICON_SIZE = 16;
-        static const int ICON_MARGIN = 8;
+        static const int HANDLE_MARGIN = 3;
 
         void calculateSize();
         ButtonType mapToButton(const QPointF &point) const;
@@ -90,6 +88,7 @@ class AppletHandle : public QObject, public QGraphicsItem
 
         QRectF m_rect;
         QRectF m_totalRect;
+        int m_iconSize;
         ButtonType m_pressedButton;
         Containment *m_containment;
         Applet *m_applet;
