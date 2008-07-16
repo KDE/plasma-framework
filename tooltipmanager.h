@@ -149,25 +149,8 @@ namespace Plasma
       */
       bool widgetHasToolTip(QGraphicsWidget *widget) const;
 
-      /**
-      * Reccomended position for a popup window like a menu or a tooltip
-      * given its size
-      * @param s size of the popup
-      * @returns reccomended position
-      */
-      static QPoint popupPosition(const QGraphicsItem * item, const QSize &s);
-
-      /**
-      * Take an item and return its owning applet
-      * @param item the item on which we search an applet return NULL if no parent plasma applet
-      * found
-      */
-      static const Applet * getItemItsApplet(const QGraphicsItem * item);
-
-
   private:
       friend class ToolTipManagerSingleton;
-    
       bool eventFilter(QObject * watched, QEvent * event);
 
       ToolTipManagerPrivate* const d;

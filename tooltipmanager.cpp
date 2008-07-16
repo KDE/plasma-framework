@@ -288,7 +288,7 @@ void ToolTipManagerPrivate::showToolTip()
     ToolTip *tooltip = tooltips.value(currentWidget);
     if (tooltip) {
         tooltip->prepareShowing();
-        tooltip->move(ToolTipManager::popupPosition(currentWidget,tooltip->size()));
+        tooltip->move(popupPosition(currentWidget, tooltip->size()));
         isShown = true;  //ToolTip is visible
     }
 }
@@ -299,6 +299,7 @@ bool ToolTipManager::eventFilter(QObject *watched, QEvent *event)
     if (!widget) { 
       return QObject::eventFilter(watched,event);
     }
+
     switch (event->type()) {
         case QEvent::GraphicsSceneHoverMove:
             // If the tooltip isn't visible, run through showing the tooltip again
@@ -317,12 +318,7 @@ bool ToolTipManager::eventFilter(QObject *watched, QEvent *event)
             // If the mouse is in the widget's area at the time that it is being
             // created the widget can receive a hover event before it is fully
             // initialized, in which case view() will return 0.
-            const Applet * applet = ToolTipManager::getItemItsApplet(widget);
-            if (!applet) {
-                break;
-            }
-
-            QGraphicsView *parentView = applet->view();
+            QGraphicsView *parentView = viewFor(widget);
             if (parentView) {
                 showToolTip(widget);
             }
@@ -345,77 +341,7 @@ bool ToolTipManager::eventFilter(QObject *watched, QEvent *event)
     return QObject::eventFilter(watched,event);
 }
 
-const Applet * ToolTipManager::getItemItsApplet(const QGraphicsItem * item)
-{
-    const Plasma::Applet * applet = dynamic_cast<const Applet *>(item);
-    if (!applet) {
-        const QGraphicsItem * currentItem = item->parentItem();
-        while(currentItem->parentItem() && !dynamic_cast<const Applet *>(currentItem))
-        {
-            currentItem=currentItem->parentItem();
-        }
-        applet = dynamic_cast<const Applet *>(currentItem);
-        if (!applet) return 0;
-    }
-    return applet;
-}
-
-QPoint ToolTipManager::popupPosition(const QGraphicsItem * item, const QSize &s)
-{
-    const Applet * applet = ToolTipManager::getItemItsApplet(item);
-    if (!applet) return QPoint(0,0);
-    QGraphicsView *v = applet->view();
-    Q_ASSERT(v);
-
-    QPoint pos = v->mapFromScene(item->scenePos());
-    pos = v->mapToGlobal(pos);
-    //kDebug() << "==> position is" << scenePos() << v->mapFromScene(scenePos()) << pos;
-    Plasma::View *pv = dynamic_cast<Plasma::View *>(v);
-
-    Plasma::Location loc = Floating;
-    if (pv) {
-        loc = pv->containment()->location();
-    }
-
-    switch (loc) {
-    case BottomEdge:
-        pos = QPoint(pos.x(), pos.y() - s.height());
-        break;
-    case TopEdge:
-        pos = QPoint(pos.x(), pos.y() + (int)item->boundingRect().size().height());
-        break;
-    case LeftEdge:
-        pos = QPoint(pos.x() + (int)item->boundingRect().size().width(), pos.y());
-        break;
-    case RightEdge:
-        pos = QPoint(pos.x() - s.width(), pos.y());
-        break;
-    default:
-        if (pos.y() - s.height() > 0) {
-             pos = QPoint(pos.x(), pos.y() - s.height());
-        } else {
-             pos = QPoint(pos.x(), pos.y() + (int)item->boundingRect().size().height());
-        }
-    }
-
-    //are we out of screen?
-
-    QRect screenRect = QApplication::desktop()->screenGeometry(pv ? pv->containment()->screen() : -1);
-    //kDebug() << "==> rect for" << (pv ? pv->containment()->screen() : -1) << "is" << screenRect;
-
-    if (pos.rx() + s.width() > screenRect.right()) {
-        pos.rx() -= ((pos.rx() + s.width()) - screenRect.right());
-    }
-
-    if (pos.ry() + s.height() > screenRect.bottom()) {
-        pos.ry() -= ((pos.ry() + s.height()) - screenRect.bottom());
-    }
-    pos.rx() = qMax(0, pos.rx());
-
-    return pos;
-}
-
-}
+} // Plasma namespace
 
 #include "tooltipmanager.moc"
 

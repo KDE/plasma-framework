@@ -411,13 +411,16 @@ QGraphicsView *Applet::view() const
         return 0;
     }
 
+    QGraphicsView *found = 0;
     foreach (QGraphicsView *view, scene()->views()) {
         if (view->sceneRect().intersects(sceneBoundingRect()) ||
             view->sceneRect().contains(scenePos())) {
-            return view;
+            if (!found || view->isActiveWindow()) {
+                found = view;
+            }
         }
     }
-    return 0;
+    return found;
 }
 
 QRectF Applet::mapFromView(const QGraphicsView *view, const QRect &rect) const
@@ -434,7 +437,7 @@ QRect Applet::mapToView(const QGraphicsView *view, const QRectF &rect) const
 
 QPoint Applet::popupPosition(const QSize &s) const
 {
-    return ToolTipManager::popupPosition(this,s);
+    return Plasma::popupPosition(this, s);
 }
 
 void Applet::updateConstraints(Plasma::Constraints constraints)

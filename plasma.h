@@ -25,6 +25,8 @@
 
 #include <plasma/plasma_export.h>
 
+class QGraphicsView;
+
 /**
  * Namespace for everything in libplasma
  */
@@ -192,6 +194,22 @@ PLASMA_EXPORT qreal scalingFactor(ZoomLevel level);
  * @reutrn the visual direction of the element should be oriented in
  **/
 PLASMA_EXPORT Direction locationToDirection(Location location);
+
+/**
+ * Reccomended position for a popup window like a menu or a tooltip
+ * given its size
+ * @param s size of the popup
+ * @returns reccomended position
+ */
+PLASMA_EXPORT QPoint popupPosition(const QGraphicsItem *item, const QSize &s);
+
+/**
+ * Returns the most appropriate QGraphicsView for the item.
+ *
+ * @arg item the QGraphicsItem to locate a view for
+ * @return pointer to a view, or 0 if none was found
+ */
+PLASMA_EXPORT QGraphicsView *viewFor(const QGraphicsItem *item);
 
 } // Plasma namespace
 
