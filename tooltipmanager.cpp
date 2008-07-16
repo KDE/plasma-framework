@@ -173,11 +173,13 @@ void ToolTipManager::registerWidget(QGraphicsWidget *widget)
 
 void ToolTipManager::unregisterWidget(QGraphicsWidget *widget)
 {
-    if (d->tooltips.contains(widget)) {
-        ToolTip * tooltip = d->tooltips.take(widget);
-        if (tooltip) {
-            delete tooltip;
-        }
+    if (!d->tooltips.contains(widget)) {
+        return;
+    }
+
+    ToolTip * tooltip = d->tooltips.take(widget);
+    if (tooltip) {
+        delete tooltip;
     }
 }
 
@@ -186,11 +188,10 @@ void ToolTipManager::setWidgetToolTipContent(QGraphicsWidget *widget,const ToolT
     if (!d->tooltips.contains(widget)) {
         return;
     }
-    else {
-        ToolTip * tooltip = d->tooltips.value(widget);
-        tooltip->setContent(data);
-        tooltip->updateTheme();
-    }
+
+    ToolTip * tooltip = d->tooltips.value(widget);
+    tooltip->setContent(data);
+    tooltip->updateTheme();
 }
 
 bool ToolTipManager::widgetHasToolTip(QGraphicsWidget *widget)
