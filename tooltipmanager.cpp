@@ -183,6 +183,11 @@ void ToolTipManager::setWidgetToolTipContent(QGraphicsWidget *widget,const ToolT
     }
 }
 
+bool ToolTipManager::widgetHasToolTip(QGraphicsWidget *widget)
+{
+    return d->tooltips.contains(widget);
+}
+
 void ToolTipManager::themeUpdated()
 {
   QMapIterator<QGraphicsWidget*, ToolTip *> iterator(d->tooltips);

@@ -126,6 +126,13 @@ namespace Plasma
       void setWidgetToolTipContent(QGraphicsWidget *widget,const ToolTipContent &data);
       
       /**
+      * Function to know if widget has a tooltip registered in the tooltip manager
+      * @param widget the widget
+      * @return true if this widget has a tooltip
+      */
+      bool widgetHasToolTip(QGraphicsWidget *widget);
+      
+      /**
       * Reccomended position for a popup window like a menu or a tooltip
       * given its size
       * @param s size of the popup
