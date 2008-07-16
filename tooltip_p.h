@@ -28,17 +28,12 @@
 #include <QString> // stack allocated
 #include <QGraphicsWidget>
 
-#include <plasma/tooltipmanager.h> //ToolTipData struct
+#include <plasma/tooltipmanager.h> //ToolTipContent struct
 
 namespace Plasma {
 
     class ToolTipPrivate;
 
-/**
-    @author Dan Meltzer
-*   A Singleton tooltip.  Before calling show it is necessary to
-*   call setLocation and setData
-*/
 class ToolTip : public QWidget
 {
     Q_OBJECT

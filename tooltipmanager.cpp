@@ -308,7 +308,6 @@ QPoint ToolTipManager::popupPosition(const QGraphicsItem * item, const QSize &s)
     return pos;
 }
 
-//PRIVATE CLASS IMPLEMENTATION
 }
 
 #include "tooltipmanager.moc"
