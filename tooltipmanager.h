@@ -41,6 +41,7 @@
 namespace Plasma
 {
   class ToolTipManagerPrivate;
+  class Applet;
 
   /**
   * @short The class to manage tooltips on QGraphicsWidget in Plasma
@@ -140,8 +141,19 @@ namespace Plasma
       */
       static QPoint popupPosition(const QGraphicsItem * item, const QSize &s);
 
+      /**
+      * Take an item and return its owning applet
+      * @param item the item on which we search an applet return NULL if no parent plasma applet
+      * found
+      */
+      static const Applet * getItemItsApplet(const QGraphicsItem * item);
+
+
   private:
       friend class ToolTipManagerSingleton;
+    
+      bool eventFilter(QObject * watched, QEvent * event);
+
       ToolTipManagerPrivate* const d;
       Q_PRIVATE_SLOT(d, void showToolTip())
       Q_PRIVATE_SLOT(d, void resetShownState())

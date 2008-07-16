@@ -166,6 +166,7 @@ void ToolTipManager::registerWidget(QGraphicsWidget *widget)
     if (!d->tooltips.contains(widget)) {
         //the tooltip is not registered we add it in our map of tooltips
         d->tooltips.insert(widget,new ToolTip());
+        widget->installEventFilter(this);
         //connect to object destruction
         connect(widget,SIGNAL(destroyed(QObject *)),this,SLOT(onWidgetDestroyed(QObject *)));
     }
@@ -176,7 +177,7 @@ void ToolTipManager::unregisterWidget(QGraphicsWidget *widget)
     if (!d->tooltips.contains(widget)) {
         return;
     }
-
+    widget->removeEventFilter(this);
     ToolTip * tooltip = d->tooltips.take(widget);
     if (tooltip) {
         delete tooltip;
@@ -269,7 +270,56 @@ void ToolTipManagerPrivate::showToolTip()
     }
 }
 
-QPoint ToolTipManager::popupPosition(const QGraphicsItem * item, const QSize &s)
+bool ToolTipManager::eventFilter(QObject *watched, QEvent *event)
+{
+    QGraphicsWidget * widget = dynamic_cast<QGraphicsWidget *>(watched);
+    if (!widget) { 
+      return QObject::eventFilter(watched,event);
+    }
+    switch (event->type()) {
+        case QEvent::GraphicsSceneHoverMove:
+            // If the tooltip isn't visible, run through showing the tooltip again
+            // so that it only becomes visible after a stationary hover
+            if (Plasma::ToolTipManager::self()->isWidgetToolTipDisplayed(widget)) {
+                break;
+            }
+
+        case QEvent::GraphicsSceneHoverEnter:
+        {
+            // Check that there is a tooltip to show
+            if (!widgetHasToolTip(widget)) {
+                break;
+            }
+
+            // If the mouse is in the widget's area at the time that it is being
+            // created the widget can receive a hover event before it is fully
+            // initialized, in which case view() will return 0.
+            const Applet * applet = ToolTipManager::getItemItsApplet(widget);
+            if (!applet) break;
+            QGraphicsView *parentView = applet->view();
+            if (parentView) {
+                showToolTip(widget);
+            }
+
+            break;
+        }
+
+        case QEvent::GraphicsSceneHoverLeave:
+            delayedHideToolTip();
+            break;
+
+        case QEvent::GraphicsSceneMousePress:
+        case QEvent::GraphicsSceneWheel:
+            hideToolTip(widget);
+
+        default:
+            break;
+    }
+
+    return QObject::eventFilter(watched,event);
+}
+
+const Applet * ToolTipManager::getItemItsApplet(const QGraphicsItem * item)
 {
     const Plasma::Applet * applet = dynamic_cast<const Applet *>(item);
     if (!applet) {
@@ -279,8 +329,15 @@ QPoint ToolTipManager::popupPosition(const QGraphicsItem * item, const QSize &s)
             currentItem=currentItem->parentItem();
         }
         applet = dynamic_cast<const Applet *>(currentItem);
-        if (!applet) return QPoint(0,0);
+        if (!applet) return 0;
     }
+    return applet;
+}
+
+QPoint ToolTipManager::popupPosition(const QGraphicsItem * item, const QSize &s)
+{
+    const Applet * applet = ToolTipManager::getItemItsApplet(item);
+    if (!applet) return QPoint(0,0);
     QGraphicsView *v = applet->view();
     Q_ASSERT(v);
 

@@ -1382,49 +1382,6 @@ QVariant Applet::itemChange(GraphicsItemChange change, const QVariant &value)
     return QGraphicsWidget::itemChange(change, value);
 }
 
-bool Applet::sceneEvent(QEvent *event)
-{
-    switch (event->type()) {
-    case QEvent::GraphicsSceneHoverMove:
-        // If the tooltip isn't visible, run through showing the tooltip again
-        // so that it only becomes visible after a stationary hover
-        if (Plasma::ToolTipManager::self()->isWidgetToolTipDisplayed(this)) {
-            break;
-        }
-
-    case QEvent::GraphicsSceneHoverEnter:
-    {
-        // Check that there is a tooltip to show
-        if (!Plasma::ToolTipManager::self()->widgetHasToolTip(this)) {
-            break;
-        }
-
-        // If the mouse is in the widget's area at the time that it is being
-        // created the widget can receive a hover event before it is fully
-        // initialized, in which case view() will return 0.
-        QGraphicsView *parentView = view();
-        if (parentView) {
-            Plasma::ToolTipManager::self()->showToolTip(this);
-        }
-
-        break;
-    }
-
-    case QEvent::GraphicsSceneHoverLeave:
-        Plasma::ToolTipManager::self()->delayedHideToolTip();
-        break;
-
-    case QEvent::GraphicsSceneMousePress:
-    case QEvent::GraphicsSceneWheel:
-        Plasma::ToolTipManager::self()->hideToolTip(this);
-
-    default:
-        break;
-    }
-
-    return QGraphicsWidget::sceneEvent(event);
-}
-
 QPainterPath Applet::shape() const
 {
     if (d->script) {
