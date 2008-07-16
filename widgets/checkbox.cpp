@@ -127,12 +127,12 @@ QString CheckBox::image() const
     return d->imagePath;
 }
 
-void CheckBox::setStylesheet(const QString &stylesheet)
+void CheckBox::setStyleSheet(const QString &stylesheet)
 {
     widget()->setStyleSheet(stylesheet);
 }
 
-QString CheckBox::stylesheet()
+QString CheckBox::styleSheet()
 {
     return widget()->styleSheet();
 }

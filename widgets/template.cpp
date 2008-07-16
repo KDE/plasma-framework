@@ -129,12 +129,12 @@ QString <Name>::image() const
     return d->imagePath;
 }
 
-void <Name>::setStylesheet(const QString &stylesheet)
+void <Name>::setStyleSheet(const QString &stylesheet)
 {
     widget()->setStyleSheet(stylesheet);
 }
 
-QString <Name>::stylesheet()
+QString <Name>::styleSheet()
 {
     return widget()->styleSheet();
 }

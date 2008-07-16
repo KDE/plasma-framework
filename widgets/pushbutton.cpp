@@ -127,12 +127,12 @@ QString PushButton::image() const
     return d->imagePath;
 }
 
-void PushButton::setStylesheet(const QString &stylesheet)
+void PushButton::setStyleSheet(const QString &stylesheet)
 {
     widget()->setStyleSheet(stylesheet);
 }
 
-QString PushButton::stylesheet()
+QString PushButton::styleSheet()
 {
     return widget()->styleSheet();
 }

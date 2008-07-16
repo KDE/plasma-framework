@@ -62,12 +62,12 @@ QString ComboBox::text() const
     return static_cast<KComboBox*>(widget())->currentText();
 }
 
-void ComboBox::setStylesheet(const QString &stylesheet)
+void ComboBox::setStyleSheet(const QString &stylesheet)
 {
     widget()->setStyleSheet(stylesheet);
 }
 
-QString ComboBox::stylesheet()
+QString ComboBox::styleSheet()
 {
     return widget()->styleSheet();
 }

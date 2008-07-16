@@ -127,12 +127,12 @@ QString RadioButton::image() const
     return d->imagePath;
 }
 
-void RadioButton::setStylesheet(const QString &stylesheet)
+void RadioButton::setStyleSheet(const QString &stylesheet)
 {
     widget()->setStyleSheet(stylesheet);
 }
 
-QString RadioButton::stylesheet()
+QString RadioButton::styleSheet()
 {
     return widget()->styleSheet();
 }

@@ -39,7 +39,7 @@ class PLASMA_EXPORT PushButton : public QGraphicsProxyWidget
     Q_PROPERTY(QGraphicsWidget* parentWidget READ parentWidget)
     Q_PROPERTY(QString text READ text WRITE setText)
     Q_PROPERTY(QString image READ image WRITE setImage)
-    Q_PROPERTY(QString stylesheet READ stylesheet WRITE setStylesheet)
+    Q_PROPERTY(QString stylesheet READ styleSheet WRITE setStyleSheet)
     Q_PROPERTY(KPushButton* nativeWidget READ nativeWidget)
 
 public:
@@ -71,16 +71,16 @@ public:
     QString image() const;
 
     /**
-     * Sets the style sheet used to control the visual display of this PushButton
+     * Sets the stylesheet used to control the visual display of this PushButton
      *
-     * @arg stylehseet a CSS string
+     * @arg stylesheet a CSS string
      */
-    void setStylesheet(const QString &stylesheet);
+    void setStyleSheet(const QString &stylesheet);
 
     /**
      * @return the stylesheet currently used with this widget
      */
-    QString stylesheet();
+    QString styleSheet();
 
     /**
      * @return the native widget wrapped by this PushButton

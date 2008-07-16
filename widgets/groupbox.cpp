@@ -66,12 +66,12 @@ QString GroupBox::text() const
     return static_cast<QGroupBox*>(widget())->title();
 }
 
-void GroupBox::setStylesheet(const QString &stylesheet)
+void GroupBox::setStyleSheet(const QString &stylesheet)
 {
     widget()->setStyleSheet(stylesheet);
 }
 
-QString GroupBox::stylesheet()
+QString GroupBox::styleSheet()
 {
     return widget()->styleSheet();
 }

@@ -72,7 +72,7 @@ public:
     QString image() const;
 
     /**
-     * Sets the style sheet used to control the visual display of this Label
+     * Sets the stylesheet used to control the visual display of this Label
      *
      * @arg stylesheet a CSS string
      */

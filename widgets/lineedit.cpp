@@ -69,12 +69,12 @@ QString LineEdit::text() const
     return static_cast<KLineEdit*>(widget())->text();
 }
 
-void LineEdit::setStylesheet(const QString &stylesheet)
+void LineEdit::setStyleSheet(const QString &stylesheet)
 {
     widget()->setStyleSheet(stylesheet);
 }
 
-QString LineEdit::stylesheet()
+QString LineEdit::styleSheet()
 {
     return widget()->styleSheet();
 }

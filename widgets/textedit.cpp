@@ -68,12 +68,12 @@ QString TextEdit::text() const
     return static_cast<KTextEdit*>(widget())->toHtml();
 }
 
-void TextEdit::setStylesheet(const QString &stylesheet)
+void TextEdit::setStyleSheet(const QString &stylesheet)
 {
     widget()->setStyleSheet(stylesheet);
 }
 
-QString TextEdit::stylesheet()
+QString TextEdit::styleSheet()
 {
     return widget()->styleSheet();
 }
