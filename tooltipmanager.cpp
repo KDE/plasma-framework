@@ -194,7 +194,7 @@ void ToolTipManager::setWidgetToolTipContent(QGraphicsWidget *widget,const ToolT
     tooltip->updateTheme();
 }
 
-bool ToolTipManager::widgetHasToolTip(QGraphicsWidget *widget)
+bool ToolTipManager::widgetHasToolTip(QGraphicsWidget *widget) const
 {
     return d->tooltips.contains(widget);
 }
@@ -214,6 +214,13 @@ void ToolTipManagerPrivate::onWidgetDestroyed(QObject *object)
         return;
     }
 
+    // we do a static_cast here since it really isn't a QGraphicsWidget by this
+    // point anymore since we are in the QObject dtor. we don't actually
+    // try and do anything with it, we just need the value of the pointer
+    // so this unsafe looking code is actually just fine.
+    //
+    // NOTE: DO NOT USE THE w VARIABLE FOR ANYTHING OTHER THAN COMPARING
+    //       THE ADDRESS! ACTUALLY USING THE OBJECT WILL RESULT IN A CRASH!!!
     QGraphicsWidget *w = static_cast<QGraphicsWidget*>(object);
 
     if (currentWidget == w) {

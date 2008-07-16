@@ -1291,6 +1291,9 @@ void ContainmentPrivate::appletDestroyed(QObject* object)
     // point anymore since we are in the qobject dtor. we don't actually
     // try and do anything with it, we just need the value of the pointer
     // so this unsafe looking code is actually just fine.
+    //
+    // NOTE: DO NOT USE THE applet VARIABLE FOR ANYTHING OTHER THAN COMPARING
+    //       THE ADDRESS! ACTUALLY USING THE OBJECT WILL RESULT IN A CRASH!!!
     Applet* applet = static_cast<Plasma::Applet*>(object);
     applets.removeAll(applet);
     if (focusedApplet == applet) {

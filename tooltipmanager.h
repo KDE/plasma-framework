@@ -130,7 +130,7 @@ namespace Plasma
       * @param widget the widget
       * @return true if this widget has a tooltip
       */
-      bool widgetHasToolTip(QGraphicsWidget *widget);
+      bool widgetHasToolTip(QGraphicsWidget *widget) const;
       
       /**
       * Reccomended position for a popup window like a menu or a tooltip
