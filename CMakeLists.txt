@@ -58,6 +58,8 @@ set(plasma_LIB_SRCS
     svg.cpp
     theme.cpp
     toolbox.cpp
+    tooltipmanager.cpp
+    tooltip.cpp
     uiloader.cpp
     version.cpp
     view.cpp
@@ -140,7 +142,9 @@ set(plasma_LIB_INCLUDES
     servicejob.h
     svg.h
     theme.h
+    tooltipmanager.h
     uiloader.h
+    tooltipmanager.h
     version.h
     view.h)
 
@@ -225,6 +229,7 @@ includes/ServiceJob
 includes/SignalPlotter
 includes/Svg
 includes/TextEdit
+includes/ToolTipManager
 includes/Theme
 includes/UiLoader
 includes/View

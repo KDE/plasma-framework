@@ -731,6 +731,11 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         /**
          * Reimplemented from QGraphicsItem
          */
+        bool sceneEvent(QEvent *event);
+
+        /**
+         * Reimplemented from QGraphicsItem
+         */
         QPainterPath shape() const;
 
         /**

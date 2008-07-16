@@ -27,7 +27,6 @@
 
 #include <QAction>
 #include <QApplication>
-#include <QDesktopWidget>
 #include <QEvent>
 #include <QFile>
 #include <QGraphicsGridLayout>
@@ -76,6 +75,7 @@
 #include "plasma/view.h"
 #include "plasma/widgets/label.h"
 #include "plasma/widgets/pushbutton.h"
+#include "plasma/tooltipmanager.h"
 
 //#define DYNAMIC_SHADOWS
 namespace Plasma
@@ -434,7 +434,8 @@ QRect Applet::mapToView(const QGraphicsView *view, const QRectF &rect) const
 
 QPoint Applet::popupPosition(const QSize &s) const
 {
-    QGraphicsView *v = view();
+    return ToolTipManager::popupPosition(this,s);
+    /*QGraphicsView *v = view();
     Q_ASSERT(v);
 
     QPoint pos = v->mapFromScene(scenePos());
@@ -482,7 +483,7 @@ QPoint Applet::popupPosition(const QSize &s) const
     }
     pos.rx() = qMax(0, pos.rx());
 
-    return pos;
+    return pos;*/
 }
 
 void Applet::updateConstraints(Plasma::Constraints constraints)
@@ -1428,6 +1429,49 @@ QVariant Applet::itemChange(GraphicsItemChange change, const QVariant &value)
     };
 
     return QGraphicsWidget::itemChange(change, value);
+}
+
+bool Applet::sceneEvent(QEvent *event)
+{
+    switch (event->type()) {
+    case QEvent::GraphicsSceneHoverMove:
+        // If the tooltip isn't visible, run through showing the tooltip again
+        // so that it only becomes visible after a stationary hover
+        if (Plasma::ToolTipManager::self()->isVisible(this)) {
+            break;
+        }
+
+    case QEvent::GraphicsSceneHoverEnter:
+    {
+        // Check that there is a tooltip to show
+        if (!Plasma::ToolTipManager::self()->hasToolTip(this)) {
+            break;
+        }
+
+        // If the mouse is in the widget's area at the time that it is being
+        // created the widget can receive a hover event before it is fully
+        // initialized, in which case view() will return 0.
+        QGraphicsView *parentView = view();
+        if (parentView) {
+            Plasma::ToolTipManager::self()->showToolTip(this);
+        }
+
+        break;
+    }
+
+    case QEvent::GraphicsSceneHoverLeave:
+        Plasma::ToolTipManager::self()->delayedHideToolTip();
+        break;
+
+    case QEvent::GraphicsSceneMousePress:
+    case QEvent::GraphicsSceneWheel:
+        Plasma::ToolTipManager::self()->hideToolTip(this);
+
+    default:
+        break;
+    }
+
+    return QGraphicsWidget::sceneEvent(event);
 }
 
 QPainterPath Applet::shape() const
