@@ -140,21 +140,13 @@ namespace Plasma
       */
       static QPoint popupPosition(const QGraphicsItem * item, const QSize &s);
 
-  private Q_SLOTS:
-    /**
-      * @internal called when the theme of plasma has change
-      */
-    void themeUpdated();
-    /**
-      * @internal called when a widget inside the tooltip manager is deleted
-      */
-    void onWidgetDestroyed(QObject * object);
-
   private:
       friend class ToolTipManagerSingleton;
       ToolTipManagerPrivate* const d;
       Q_PRIVATE_SLOT(d, void showToolTip())
       Q_PRIVATE_SLOT(d, void resetShownState())
+      Q_PRIVATE_SLOT(d, void onWidgetDestroyed(QObject*))
+      Q_PRIVATE_SLOT(d, void themeUpdated())
   };
 }
 #endif
