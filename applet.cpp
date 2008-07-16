@@ -1437,14 +1437,14 @@ bool Applet::sceneEvent(QEvent *event)
     case QEvent::GraphicsSceneHoverMove:
         // If the tooltip isn't visible, run through showing the tooltip again
         // so that it only becomes visible after a stationary hover
-        if (Plasma::ToolTipManager::self()->isVisible(this)) {
+        if (Plasma::ToolTipManager::self()->isWidgetToolTipDisplayed(this)) {
             break;
         }
 
     case QEvent::GraphicsSceneHoverEnter:
     {
         // Check that there is a tooltip to show
-        if (!Plasma::ToolTipManager::self()->hasToolTip(this)) {
+        if (!Plasma::ToolTipManager::self()->widgetHasToolTip(this)) {
             break;
         }
 

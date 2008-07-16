@@ -42,9 +42,9 @@ class ToolTipManagerPrivate
 {
 public :
     ToolTipManagerPrivate()
-        : showTimer(0)
+        : currentWidget(0)
+        , showTimer(0)
         , hideTimer(0)
-        , currentWidget(0)
     {
 
     }
@@ -122,7 +122,7 @@ void ToolTipManager::showToolTip(QGraphicsWidget *widget)
    }
 }
 
-bool ToolTipManager::isVisible(QGraphicsWidget *widget)
+bool ToolTipManager::isWidgetToolTipDisplayed(QGraphicsWidget *widget)
 {
    ToolTip * tooltip = d->tooltips.value(widget);
    if (tooltip) {
@@ -151,18 +151,17 @@ void ToolTipManager::hideToolTip(QGraphicsWidget *widget)
   }
 }
 
-void ToolTipManager::registerToolTipData(QGraphicsWidget *widget,const ToolTipManager::ToolTipData &data)
+void ToolTipManager::registerWidget(QGraphicsWidget *widget)
 {
     if (!d->tooltips.contains(widget)) {
         //the tooltip is not registered we add it in our map of tooltips
         d->tooltips.insert(widget,new ToolTip());
-        ToolTip * tooltip = d->tooltips.value(widget);
-        tooltip->setData(data);
-        tooltip->updateTheme();
+        //connect to object destruction
+        connect(widget,SIGNAL(destroyed(QObject *)),this,SLOT(onWidgetDestroyed(QObject *)));
     }
 }
 
-void ToolTipManager::unregisterToolTip(QGraphicsWidget *widget)
+void ToolTipManager::unregisterWidget(QGraphicsWidget *widget)
 {
     if (d->tooltips.contains(widget)) {
         ToolTip * tooltip = d->tooltips.take(widget);
@@ -172,18 +171,19 @@ void ToolTipManager::unregisterToolTip(QGraphicsWidget *widget)
     }
 }
 
-void ToolTipManager::updateToolTipData(QGraphicsWidget *widget,const ToolTipData &data)
+void ToolTipManager::setWidgetToolTipContent(QGraphicsWidget *widget,const ToolTipContent &data)
 {
     if (!d->tooltips.contains(widget)) {
         return;
     }
     else {
         ToolTip * tooltip = d->tooltips.value(widget);
-        tooltip->setData(data);
+        tooltip->setContent(data);
+        tooltip->updateTheme();
     }
 }
 
-bool ToolTipManager::hasToolTip(QGraphicsWidget *widget)
+bool ToolTipManager::widgetHasToolTip(QGraphicsWidget *widget)
 {
     return d->tooltips.contains(widget);
 }
@@ -195,6 +195,26 @@ void ToolTipManager::themeUpdated()
       iterator.next();
       iterator.value()->updateTheme();
   }
+}
+
+void ToolTipManager::onWidgetDestroyed(QObject * object)
+{
+    if (object) {
+        QMapIterator<QGraphicsWidget*, ToolTip *> iterator(d->tooltips);
+        while (iterator.hasNext()) {
+            iterator.next();
+            if (iterator.key() == object) {
+                ToolTip * tooltip = iterator.value();
+                d->tooltips.remove(iterator.key());
+                kDebug()<<"Tooltip destroyed"<<(int)object;
+                d->showTimer->stop();  // stop the timer to show the tooltip
+                d->delayedHide = false;
+                d->currentWidget = 0;
+                tooltip->hide();
+                delete tooltip;
+            }
+        }
+    }
 }
 
 void ToolTipManagerPrivate::resetShownState()

@@ -46,7 +46,7 @@ public:
     ToolTip();
     ~ToolTip();
     void updateTheme();
-    void setData(const ToolTipManager::ToolTipData &data);
+    void setContent(const ToolTipManager::ToolTipContent &data);
     void prepareShowing();
 
 protected:

@@ -51,33 +51,52 @@ namespace Plasma
   {
       Q_OBJECT
   public:
-      struct ToolTipData
+      struct ToolTipContent
       {
-	  ToolTipData() : windowToPreview( 0 ) {}
+	  ToolTipContent() : windowToPreview( 0 ) {}
 	  QString mainText; //Important information
 	  QString subText; //Elaborates on the Main Text
 	  QPixmap image; // Icon to show;
 	  WId windowToPreview; // Id of window to show preview
       };
 
+      /**
+        *
+        * @return The singleton instance of the manager.
+        **/
       static ToolTipManager *self();
+      
       /**
         * Default constructor. Usually you want to use the singleton instead.
         */
       explicit ToolTipManager(QObject* parent = 0);
+      
+      /**
+        * Default destructor.
+        */
       ~ToolTipManager();
+
       void showToolTip(QGraphicsWidget *widget);
-      bool isVisible(QGraphicsWidget *widget);
+
+      bool isWidgetToolTipDisplayed(QGraphicsWidget *widget);
+
       void delayedHideToolTip();
+
       void hideToolTip(QGraphicsWidget *widget);
-      void registerToolTipData(QGraphicsWidget *widget,const ToolTipData &data);
-      void unregisterToolTip(QGraphicsWidget *widget);
-      void updateToolTipData(QGraphicsWidget *widget,const ToolTipData &data);
-      bool hasToolTip(QGraphicsWidget *widget);
+
+      void registerWidget(QGraphicsWidget *widget);
+
+      void unregisterWidget(QGraphicsWidget *widget);
+
+      void setWidgetToolTipContent(QGraphicsWidget *widget,const ToolTipContent &data);
+      
+      bool widgetHasToolTip(QGraphicsWidget *widget);
+      
       static QPoint popupPosition(const QGraphicsItem * item, const QSize &s);
 
   private Q_SLOTS:
     void themeUpdated();
+    void onWidgetDestroyed(QObject * object);
 
   private:
       friend class ToolTipManagerSingleton;
