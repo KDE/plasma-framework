@@ -200,11 +200,11 @@ bool ToolTipManager::widgetHasToolTip(QGraphicsWidget *widget)
 
 void ToolTipManagerPrivate::themeUpdated()
 {
-  QMapIterator<QGraphicsWidget*, ToolTip *> iterator(tooltips);
-  while (iterator.hasNext()) {
-      iterator.next();
-      iterator.value()->updateTheme();
-  }
+    QMapIterator<QGraphicsWidget*, ToolTip *> iterator(tooltips);
+    while (iterator.hasNext()) {
+        iterator.next();
+        iterator.value()->updateTheme();
+    }
 }
 
 void ToolTipManagerPrivate::onWidgetDestroyed(QObject *object)
