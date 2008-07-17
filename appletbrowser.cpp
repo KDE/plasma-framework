@@ -60,6 +60,7 @@ public:
     void initFilters();
     void init();
     void initRunningApplets();
+    void containmentDestroyed();
 
     /**
      * Tracks a new running applet
@@ -222,7 +223,16 @@ QString AppletBrowserWidget::application()
 void AppletBrowserWidget::setContainment(Plasma::Containment *containment)
 {
     if (d->containment != containment) {
+        if (d->containment) {
+            d->containment->disconnect(this);
+        }
+
         d->containment = containment;
+
+        if (d->containment) {
+            connect(d->containment, SIGNAL(destroyed(QObject*)), this, SLOT(containmentDestroyed()));
+        }
+
         d->initRunningApplets();
     }
 }
@@ -230,6 +240,11 @@ void AppletBrowserWidget::setContainment(Plasma::Containment *containment)
 Containment *AppletBrowserWidget::containment() const
 {
     return d->containment;
+}
+
+void AppletBrowserWidgetPrivate::containmentDestroyed()
+{
+    containment = 0;
 }
 
 void AppletBrowserWidget::addApplet()
