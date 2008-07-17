@@ -290,7 +290,6 @@ void Containment::restoreContents(KConfigGroup &group)
 
     foreach (KConfigGroup appletConfig, appletConfigs) {
         int appId = appletConfig.name().toUInt();
-        //kDebug() << "the name is" << appletConfig.name();
         QString plugin = appletConfig.readEntry("plugin", QString());
 
         if (plugin.isEmpty()) {
@@ -1265,9 +1264,8 @@ Applet* ContainmentPrivate::addApplet(const QString& name, const QVariantList& a
 
     if (!applet) {
         kDebug() << "Applet" << name << "could not be loaded.";
-        applet = new Applet;
-        //TODO: uncomment this when not in string freeze.
-        //applet->setFailedToLaunch(true, QString("Could not find requested component: %1").arg(name));
+        applet = new Applet(0, QString(), id);
+        applet->setFailedToLaunch(true, QString("Could not find requested component: %1").arg(name));
     }
 
     //kDebug() << applet->name() << "sizehint:" << applet->sizeHint() << "geometry:" << applet->geometry();
