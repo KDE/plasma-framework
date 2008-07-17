@@ -26,23 +26,11 @@
 #include <plasma/plasma.h>
 #include <plasma/plasma_export.h>
 
-//KDE
-#include <KDE/KWindowSystem>
-
-#ifdef Q_WS_X11
-#include <QtGui/QX11Info>
-#endif
-
-//X11
-#ifdef Q_WS_X11
-#include <X11/Xlib.h>
-#include <fixx11h.h>
-#endif
-
 namespace Plasma
 {
-  class ToolTipManagerPrivate;
-  class Applet;
+
+class ToolTipManagerPrivate;
+class Applet;
 
   /**
   * @short The class to manage tooltips on QGraphicsWidget in Plasma
@@ -60,8 +48,8 @@ namespace Plasma
   * will be invoked if it exists. This allows widgets to provide on-demand tooltip data.
   */
 
-  class PLASMA_EXPORT ToolTipManager  : public QObject
-  {
+class PLASMA_EXPORT ToolTipManager  : public QObject
+{
       Q_OBJECT
   public:
 

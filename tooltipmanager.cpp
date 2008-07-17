@@ -18,6 +18,7 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA .        *
  ***************************************************************************/
+
 #include "tooltipmanager.h"
 
 //Qt
@@ -30,15 +31,25 @@
 //KDE
 #include <KWindowSystem>
 
+//X11
+#ifdef Q_WS_X11
+#include <QtGui/QX11Info>
+#include <X11/Xlib.h>
+#include <fixx11h.h>
+#endif
+
+
 //Plasma
-#include <plasma/theme.h>
-#include <plasma/panelsvg.h>
-#include <plasma/tooltip_p.h>
 #include <plasma/applet.h>
-#include <plasma/view.h>
 #include <plasma/containment.h>
+#include <plasma/panelsvg.h>
+#include <plasma/theme.h>
+#include <plasma/tooltip_p.h>
+#include <plasma/view.h>
+
 namespace Plasma
 {
+
 class ToolTipManagerPrivate
 {
 public :
