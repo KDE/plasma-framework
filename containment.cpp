@@ -1079,6 +1079,7 @@ void ContainmentPrivate::toggleDesktopImmutability()
         handles.clear();
 
         foreach (AppletHandle* handle, h) {
+            handle->disconnect(q);
             handle->deleteLater();
         }
     }
