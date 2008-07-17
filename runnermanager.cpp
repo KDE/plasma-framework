@@ -252,7 +252,9 @@ public:
                     if (api.isEmpty()) {
                         QVariantList args;
                         args << service->storageId();
-                        runner = service->createInstance<AbstractRunner>(q, args, &error);
+                        if (Plasma::isPluginVersionCompatible(KPluginLoader(*service).pluginVersion())) {
+                            runner = service->createInstance<AbstractRunner>(q, args, &error);
+                        }
                     } else {
                         //kDebug() << "got a script runner known as" << api;
                         runner = new AbstractRunner(q, service->storageId());

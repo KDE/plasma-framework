@@ -31,6 +31,8 @@
 
 #include "configxml.h"
 
+#include "version.h"
+
 namespace Plasma
 {
 
@@ -72,7 +74,10 @@ Service* Service::load(const QString &name, QObject *parent)
     KService::Ptr offer = offers.first();
     QString error;
     QVariantList args;
-    Service* service = offer->createInstance<Plasma::Service>(parent, args, &error);
+    Service* service = 0;
+
+    if (Plasma::isPluginVersionCompatible(KPluginLoader(*offer).pluginVersion()))
+        service = offer->createInstance<Plasma::Service>(parent, args, &error);
 
     if (!service) {
         kDebug() << "Couldn't load Service \"" << name << "\"! reason given: " << error;

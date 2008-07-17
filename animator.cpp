@@ -691,7 +691,12 @@ void AnimatorPrivate::init(Animator *q)
 
         if (!offers.isEmpty()) {
             QString error;
-            driver = offers.first()->createInstance<Plasma::AnimationDriver>(0, QVariantList(), &error);
+
+            KPluginLoader plugin(*offers.first());
+
+            if (Plasma::isPluginVersionCompatible(plugin.pluginVersion()))
+                driver = offers.first()->createInstance<Plasma::AnimationDriver>(0, QVariantList(), &error);
+
             if (!driver) {
                 kDebug() << "Could not load requested animator " << offers.first() << ". Error given: " << error;
             }
