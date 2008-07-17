@@ -52,7 +52,7 @@ protected:
     void hidePopup();
 
 private:
-    Q_PRIVATE_SLOT(d, void togglePopup());
+    Q_PRIVATE_SLOT(d, void togglePopup())
     PopupAppletPrivate * const d;
 };
 
