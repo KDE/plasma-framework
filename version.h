@@ -80,6 +80,12 @@ PLASMA_EXPORT unsigned int versionRelease();
  */
 PLASMA_EXPORT const char *versionString();
 
+/**
+ * Verifies that a plugin is compatible with plasma
+ */
+PLASMA_EXPORT bool isPluginVersionCompatible(unsigned int version);
+
+
 } // Plasma namespace
 
 #endif // multiple inclusion guard

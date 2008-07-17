@@ -18,6 +18,7 @@
  */
 
 #include <plasma/version.h>
+#include <kdebug.h>
 
 namespace Plasma
 {
@@ -45,6 +46,21 @@ unsigned int versionRelease()
 const char *versionString()
 {
     return PLASMA_VERSION_STRING;
+}
+
+bool isPluginVersionCompatible(unsigned int version)
+{
+    // we require PLASMA_VERSION_MAJOR and PLASMA_VERSION_MINOR
+    const quint32 minVersion = PLASMA_MAKE_VERSION(PLASMA_VERSION_MAJOR, PLASMA_VERSION_MINOR, 0);
+    const quint32 maxVersion = PLASMA_MAKE_VERSION(PLASMA_VERSION_MAJOR, PLASMA_VERSION_MINOR, 60);
+
+    if (version < minVersion || version > maxVersion)
+    {
+        kDebug() << "plugin is compiled against incompatible Plasma version  " << version;
+        return false;
+    }
+
+    return true;
 }
 
 } // Plasma namespace

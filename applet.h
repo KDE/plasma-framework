@@ -35,6 +35,7 @@
 #include <plasma/packagestructure.h>
 #include <plasma/plasma.h>
 #include <plasma/animator.h>
+#include <plasma/version.h>
 
 class KConfigDialog;
 class QGraphicsView;
@@ -776,6 +777,7 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(Plasma::Applet::BackgroundHints)
  */
 #define K_EXPORT_PLASMA_APPLET(libname, classname) \
 K_PLUGIN_FACTORY(factory, registerPlugin<classname>();) \
-K_EXPORT_PLUGIN(factory("plasma_applet_" #libname))
+K_EXPORT_PLUGIN(factory("plasma_applet_" #libname)) \
+K_EXPORT_PLUGIN_VERSION(PLASMA_VERSION)
 
 #endif // multiple inclusion guard
