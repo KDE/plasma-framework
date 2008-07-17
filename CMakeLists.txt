@@ -44,7 +44,7 @@ set(plasma_LIB_SRCS
     panelsvg.cpp
     paneltoolbox.cpp
     plasma.cpp
-    plasma_export.h
+    popupapplet.cpp
     querymatch.cpp
     runnercontext.cpp
     runnermanager.cpp
@@ -135,6 +135,7 @@ set(plasma_LIB_INCLUDES
     panelsvg.h
     plasma.h
     plasma_export.h
+    popupapplet.h
     querymatch.h
     runnercontext.h
     runnermanager.h
@@ -217,6 +218,7 @@ includes/PackageStructure
 includes/PaintUtils
 includes/PanelSvg
 includes/Plasma
+includes/PopupApplet
 includes/PushButton
 includes/QueryMatch
 includes/RadioButton
