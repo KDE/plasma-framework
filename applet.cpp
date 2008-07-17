@@ -952,9 +952,8 @@ void Applet::setGlobalShortcut(const KShortcut &shortcut)
 {
     if (!d->activationAction) {
         d->activationAction = new KAction(this);
-        //TODO: add better text when we aren't in a string freeze
-        d->activationAction->setText(name());
-        d->activationAction->setObjectName(QString("Activate %1 Widget").arg(name())); // NO I18N
+        d->activationAction->setText(i18n("Activate %1 Widget").arg(name()));
+        d->activationAction->setObjectName(QString("activate widget %1").arg(name())); // NO I18N
         connect(d->activationAction, SIGNAL(triggered()), this, SIGNAL(activate()));
         connect(this, SIGNAL(activate()), this, SLOT(setFocus()));
 
