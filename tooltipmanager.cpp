@@ -209,7 +209,8 @@ void ToolTipManager::setToolTipContent(QGraphicsWidget *widget, const ToolTipCon
     }
 
     if (!tooltip) {
-        d->tooltips.insert(widget, new ToolTip(widget));
+        tooltip = new ToolTip(widget);
+        d->tooltips.insert(widget, tooltip);
     }
 
     tooltip->setContent(data);
