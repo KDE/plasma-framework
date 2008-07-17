@@ -68,7 +68,7 @@ namespace Plasma
      /**
       * Content of a tooltip
       */
-      struct ToolTipContent
+      struct PLASMA_EXPORT ToolTipContent
       {
           ToolTipContent();
           bool isEmpty() const;
