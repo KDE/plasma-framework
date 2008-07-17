@@ -713,14 +713,16 @@ void Applet::flushPendingConstraintsEvents()
         //FIXME desktop containments can't be removed while in use.
         //it's kinda silly to have a keyboard shortcut for something that can only be used when the
         //shortcut isn't active.
-        QAction* closeApplet = new QAction(i18n("Remove this %1", name()), this);
+        QAction* closeApplet = new QAction(this);
         closeApplet->setIcon(KIcon("edit-delete"));
         closeApplet->setEnabled(unlocked);
         closeApplet->setVisible(unlocked);
         closeApplet->setShortcutContext(Qt::WidgetWithChildrenShortcut); //don't clash with other views
         if (isContainment()) {
+            closeApplet->setText(i18n("Remove this %1 Activity", name()));
             closeApplet->setShortcut(QKeySequence("ctrl+shift+r"));
         } else {
+            closeApplet->setText(i18n("Remove this %1", name()));
             closeApplet->setShortcut(QKeySequence("ctrl+r"));
         }
         connect(closeApplet, SIGNAL(triggered(bool)), this, SLOT(selectItemToDestroy()));
