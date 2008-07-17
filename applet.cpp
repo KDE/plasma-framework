@@ -952,7 +952,7 @@ void Applet::setGlobalShortcut(const KShortcut &shortcut)
 {
     if (!d->activationAction) {
         d->activationAction = new KAction(this);
-        d->activationAction->setText(i18n("Activate %1 Widget").arg(name()));
+        d->activationAction->setText(i18n("Activate %1 Widget", name()));
         d->activationAction->setObjectName(QString("activate widget %1").arg(name())); // NO I18N
         connect(d->activationAction, SIGNAL(triggered()), this, SIGNAL(activate()));
         connect(this, SIGNAL(activate()), this, SLOT(setFocus()));
