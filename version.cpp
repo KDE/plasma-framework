@@ -54,8 +54,7 @@ bool isPluginVersionCompatible(unsigned int version)
     const quint32 minVersion = PLASMA_MAKE_VERSION(PLASMA_VERSION_MAJOR, PLASMA_VERSION_MINOR, 0);
     const quint32 maxVersion = PLASMA_MAKE_VERSION(PLASMA_VERSION_MAJOR, PLASMA_VERSION_MINOR, 60);
 
-    if (version < minVersion || version > maxVersion)
-    {
+    if (version < minVersion || version > maxVersion) {
         kDebug() << "plugin is compiled against incompatible Plasma version  " << version;
         return false;
     }

@@ -1322,8 +1322,9 @@ Applet* Applet::load(const QString& appletName, uint appletId, const QVariantLis
 
     KPluginLoader plugin(*offer);
 
-    if (!Plasma::isPluginVersionCompatible(plugin.pluginVersion()))
+    if (!Plasma::isPluginVersionCompatible(plugin.pluginVersion())) {
         return 0;
+    }
 
     QVariantList allArgs;
     allArgs << offer->storageId() << appletId << args;

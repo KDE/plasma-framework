@@ -27,7 +27,7 @@
 #include <KDE/KGenericFactory>
 #include <KDE/KService>
 
-#include <plasma/plasma_export.h>
+#include <plasma/version.h>
 #include <plasma/plasma.h>
 
 namespace Plasma
@@ -434,6 +434,8 @@ class PLASMA_EXPORT DataEngine : public QObject
  */
 #define K_EXPORT_PLASMA_DATAENGINE(libname, classname) \
 K_PLUGIN_FACTORY(factory, registerPlugin<classname>();) \
-K_EXPORT_PLUGIN(factory("plasma_engine_" #libname))
+K_EXPORT_PLUGIN(factory("plasma_engine_" #libname)) \
+K_EXPORT_PLUGIN_VERSION(PLASMA_VERSION)
+
 #endif // multiple inclusion guard
 

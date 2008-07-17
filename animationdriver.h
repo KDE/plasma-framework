@@ -27,7 +27,7 @@
 
 #include <kgenericfactory.h>
 
-#include <plasma/plasma_export.h>
+#include <plasma/version.h>
 #include <plasma/animator.h>
 
 class QGraphicsItem;
@@ -77,6 +77,7 @@ private:
 
 #define K_EXPORT_PLASMA_ANIMATOR(libname, classname) \
 K_PLUGIN_FACTORY(factory, registerPlugin<classname>();) \
-K_EXPORT_PLUGIN(factory("plasma_animator_" #libname))
+K_EXPORT_PLUGIN(factory("plasma_animator_" #libname)) \
+K_EXPORT_PLUGIN_VERSION(PLASMA_VERSION)
 
 #endif // multiple inclusion guard
