@@ -51,7 +51,7 @@ const char *versionString()
 bool isPluginVersionCompatible(unsigned int version)
 {
     // we require PLASMA_VERSION_MAJOR and PLASMA_VERSION_MINOR
-    const quint32 minVersion = PLASMA_MAKE_VERSION(PLASMA_VERSION_MAJOR, PLASMA_VERSION_MINOR, 0);
+    const quint32 minVersion = PLASMA_MAKE_VERSION(PLASMA_VERSION_MAJOR, 0, 0);
     const quint32 maxVersion = PLASMA_MAKE_VERSION(PLASMA_VERSION_MAJOR, PLASMA_VERSION_MINOR, 60);
 
     if (version < minVersion || version > maxVersion) {
