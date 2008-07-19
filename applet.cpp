@@ -1160,6 +1160,9 @@ void Applet::showConfigurationInterface()
     if (!hasConfigurationInterface()) {
         return;
     }
+    if (immutability() != Mutable && !KAuthorized::authorize("PlasmaAllowConfigureWhenLocked")) {
+        return;
+    }
 
     const QString dialogId = QString("%1settings%2").arg(id()).arg(name());
     KConfigDialog * dlg = KConfigDialog::exists(dialogId);
