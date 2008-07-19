@@ -100,6 +100,7 @@ QString Service::destination() const
 QStringList Service::operationNames() const
 {
     if (!d->config) {
+        kDebug() << "No valid operations scheme has been registered";
         return QStringList();
     }
 
@@ -109,6 +110,7 @@ QStringList Service::operationNames() const
 KConfigGroup Service::operationDescription(const QString &operationName)
 {
     if (!d->config) {
+        kDebug() << "No valid operations scheme has been registered";
         return KConfigGroup();
     }
 
@@ -120,6 +122,7 @@ ServiceJob* Service::startOperationCall(const KConfigGroup &description)
 {
     // TODO: nested groups?
     if (!d->config) {
+        kDebug() << "No valid operations scheme has been registered";
         return new NullServiceJob(parent());
     }
 
@@ -163,12 +166,14 @@ void Service::setOperationsScheme(QIODevice *xml)
 void Service::registerOperationsScheme()
 {
     if (d->name.isEmpty()) {
+        kDebug() << "No name found";
         return;
     }
 
     QString path = KStandardDirs::locate("data", "plasma/services/" + d->name + ".operations");
 
     if (path.isEmpty()) {
+        kDebug() << "Cannot find operations description";
         return;
     }
 
