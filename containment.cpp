@@ -1089,11 +1089,13 @@ void ContainmentPrivate::toggleDesktopImmutability()
 void ContainmentPrivate::zoomIn()
 {
     emit q->zoomRequested(q, Plasma::ZoomIn);
+    positionToolBox();
 }
 
 void ContainmentPrivate::zoomOut()
 {
     emit q->zoomRequested(q, Plasma::ZoomOut);
+    positionToolBox();
 }
 
 ToolBox* ContainmentPrivate::createToolBox()
