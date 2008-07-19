@@ -55,6 +55,7 @@
 #include <KShortcut>
 #include <KWindowSystem>
 #include <KActionCollection>
+#include <KAuthorized>
 
 #include <Solid/PowerManagement>
 
@@ -735,6 +736,13 @@ void Applet::flushPendingConstraintsEvents()
         if (action) {
             action->setVisible(unlocked);
             action->setEnabled(unlocked);
+        }
+        if (!KAuthorized::authorize("PlasmaAllowConfigureWhenLocked")) {
+            action = d->actions.action("configure");
+            if (action) {
+                action->setVisible(unlocked);
+                action->setEnabled(unlocked);
+            }
         }
     }
 
