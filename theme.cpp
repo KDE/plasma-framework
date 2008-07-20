@@ -282,10 +282,23 @@ QString Theme::themeName() const
 
 QString Theme::imagePath(const QString& name)  const
 {
-    QString path = d->findInTheme(name + ".svg", d->themeName);
+    // look for a compressed svg file in the theme
+    QString path = d->findInTheme(name + ".svgz", d->themeName);
 
-    if (path.isEmpty() && d->themeName != ThemePrivate::defaultTheme) {
-        path = d->findInTheme(name + ".svg", ThemePrivate::defaultTheme);
+    if (path.isEmpty()) {
+        // try for an uncompressed svg file
+        path = d->findInTheme(name + ".svg", d->themeName);
+
+        if (path.isEmpty() && d->themeName != ThemePrivate::defaultTheme) {
+            // try a compressed svg file in the default theme
+            path = d->findInTheme(name + ".svgz", ThemePrivate::defaultTheme);
+
+            if (path.isEmpty()) {
+                // try an uncompressed svg file in the default theme
+                path = d->findInTheme(name + ".svg", d->themeName);
+            }
+        }
+
     }
 
     if (path.isEmpty()) {
