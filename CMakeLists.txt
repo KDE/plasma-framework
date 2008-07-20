@@ -102,7 +102,7 @@ endif(QT_QTOPENGL_FOUND AND OPENGL_FOUND)
 
 set_target_properties(plasma PROPERTIES VERSION 2.0.0 SOVERSION 2)
 
-kde4_target_link_interface_libraries(plasma "${KDE4_KDEUI_LIBS}")
+_kde4_target_link_interface_libraries(plasma "${KDE4_KDEUI_LIBS}")
 
 install(TARGETS plasma ${INSTALL_TARGETS_DEFAULT_ARGS})
 
