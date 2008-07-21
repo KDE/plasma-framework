@@ -569,7 +569,8 @@ void Applet::setBackgroundHints(const BackgroundHints hints)
             d->background = new Plasma::PanelSvg();
         }
 
-        if ((hints & TranslucentBackground) && Plasma::Theme::defaultTheme()->currentThemeHasImage("widgets/translucentbackground")) {
+        if ((hints & TranslucentBackground) &&
+            Plasma::Theme::defaultTheme()->currentThemeHasImage("widgets/translucentbackground")) {
             d->background->setImagePath("widgets/translucentbackground");
         } else {
             d->background->setImagePath("widgets/background");

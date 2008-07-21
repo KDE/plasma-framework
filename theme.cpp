@@ -360,7 +360,8 @@ QString Theme::wallpaperPath(const QSize &size) const
 
 bool Theme::currentThemeHasImage(const QString& name)  const
 {
-    return (!d->findInTheme(name + ".svg", d->themeName).isEmpty());
+    return !(d->findInTheme(name + ".svgz", d->themeName).isEmpty()) ||
+           !(d->findInTheme(name + ".svg", d->themeName).isEmpty());
 }
 
 KSharedConfigPtr Theme::colorScheme() const
