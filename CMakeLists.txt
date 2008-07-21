@@ -100,9 +100,11 @@ if(QT_QTOPENGL_FOUND AND OPENGL_FOUND)
     target_link_libraries(plasma ${QT_QTOPENGL_LIBRARY} ${OPENGL_gl_LIBRARY})
 endif(QT_QTOPENGL_FOUND AND OPENGL_FOUND)
 
-set_target_properties(plasma PROPERTIES VERSION 2.0.0 SOVERSION 2)
-
-_kde4_target_link_interface_libraries(plasma "${KDE4_KDEUI_LIBS}")
+set_target_properties(plasma PROPERTIES 
+                             VERSION 2.0.0 
+                             SOVERSION 2
+                             ${KDE4_DISABLE_PROPERTY_}LINK_INTERFACE_LIBRARIES  "${KDE4_KDEUI_LIBS}"
+                      )
 
 install(TARGETS plasma ${INSTALL_TARGETS_DEFAULT_ARGS})
 
