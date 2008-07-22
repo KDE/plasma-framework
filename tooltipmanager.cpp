@@ -130,7 +130,7 @@ ToolTipManager::ToolTipManager(QObject* parent)
 
 ToolTipManager::~ToolTipManager()
 {
-    if (d) delete d;
+    delete d;
 }
 
 void ToolTipManager::showToolTip(QGraphicsWidget *widget)
