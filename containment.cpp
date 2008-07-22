@@ -191,7 +191,7 @@ void Containment::init()
         activityAction->setShortcut(QKeySequence("ctrl+shift+a"));
         d->actions().addAction("add sibling containment", activityAction);
 
-        if (d->type == DesktopContainment) {
+        if (d->type == DesktopContainment && d->toolBox) {
             d->toolBox->addTool(this->action("add widgets"));
             d->toolBox->addTool(this->action("zoom in"));
             d->toolBox->addTool(this->action("zoom out"));
