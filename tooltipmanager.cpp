@@ -238,7 +238,9 @@ void ToolTipManagerPrivate::themeUpdated()
     QMapIterator<QGraphicsWidget*, ToolTip *> iterator(tooltips);
     while (iterator.hasNext()) {
         iterator.next();
-        iterator.value()->updateTheme();
+        if (iterator.value()) {
+            iterator.value()->updateTheme();
+        }
     }
 }
 
