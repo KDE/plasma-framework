@@ -37,16 +37,14 @@ public:
     PanelData()
       : enabledBorders(PanelSvg::AllBorders),
         cachedBackground(0),
-        panelSize(-1,-1),
-        contentAtOrigin(false)
+        panelSize(-1,-1)
     {
     }
 
     PanelData(const PanelData &other)
       : enabledBorders(other.enabledBorders),
         cachedBackground(0),
-        panelSize(other.panelSize),
-        contentAtOrigin(other.contentAtOrigin)
+        panelSize(other.panelSize)
     {
     }
 
@@ -64,13 +62,18 @@ public:
     int leftWidth;
     int rightWidth;
     int bottomHeight;
+    
+    //margins, are equal to the measures by default
+    int topMargin;
+    int leftMargin;
+    int rightMargin;
+    int bottomMargin;
 
     //size of the svg where the size of the "center"
     //element is contentWidth x contentHeight
     bool noBorderPadding : 1;
     bool stretchBorders : 1;
     bool tileCenter : 1;
-    bool contentAtOrigin : 1;
 };
 
 class PanelSvgPrivate
@@ -277,20 +280,20 @@ qreal PanelSvg::marginSize(const Plasma::MarginEdge edge) const
 
     switch (edge) {
     case Plasma::TopMargin:
-        return d->panels[d->prefix]->topHeight;
+        return d->panels[d->prefix]->topMargin;
     break;
 
     case Plasma::LeftMargin:
-        return d->panels[d->prefix]->leftWidth;
+        return d->panels[d->prefix]->leftMargin;
     break;
 
     case Plasma::RightMargin:
-        return d->panels[d->prefix]->rightWidth;
+        return d->panels[d->prefix]->rightMargin;
     break;
 
     //Plasma::BottomMargin
     default:
-        return d->panels[d->prefix]->bottomHeight;
+        return d->panels[d->prefix]->bottomMargin;
     break;
     }
 }
@@ -304,10 +307,10 @@ void PanelSvg::getMargins(qreal &left, qreal &top, qreal &right, qreal &bottom) 
         return;
     }
 
-    top = panel->topHeight;
-    left = panel->leftWidth;
-    right = panel->rightWidth;
-    bottom = panel->bottomHeight;
+    top = panel->topMargin;
+    left = panel->leftMargin;
+    right = panel->rightMargin;
+    bottom = panel->bottomMargin;
 }
 
 QBitmap PanelSvg::mask() const
@@ -359,22 +362,16 @@ void PanelSvg::paintPanel(QPainter* painter, const QRectF& rect, const QPointF& 
         Q_ASSERT(panel->cachedBackground);
     }
 
-    //FIXME: this is redundant with generatebackground for now
-    bool origined = panel->contentAtOrigin;
-    const int topOffset = origined ? 0 - panel->topHeight : 0;
-    const int leftOffset = origined ? 0 - panel->leftWidth : 0;
-
-    painter->drawPixmap(rect, *(panel->cachedBackground), rect.translated(-pos.x()-leftOffset,-pos.y()-topOffset));
+    painter->drawPixmap(rect, *(panel->cachedBackground), rect.translated(-pos.x(),-pos.y()));
 }
 
 void PanelSvgPrivate::generateBackground(PanelData *panel)
 {
     //kDebug() << "generating background";
-    bool origined = panel->contentAtOrigin;
     const int topWidth = q->elementSize(prefix + "top").width();
     const int leftHeight = q->elementSize(prefix + "left").height();
-    const int topOffset = origined ? 0 - panel->topHeight : 0;
-    const int leftOffset = origined ? 0 - panel->leftWidth : 0;
+    const int topOffset = 0;
+    const int leftOffset = 0;
 
     if (panel->cachedBackground) {
         return;
@@ -400,13 +397,6 @@ void PanelSvgPrivate::generateBackground(PanelData *panel)
     p.setCompositionMode(QPainter::CompositionMode_Source);
     p.setRenderHint(QPainter::SmoothPixmapTransform);
 
-    if (origined) {
-        p.translate(panel->leftWidth, panel->topHeight);
-    }
-
-    //FIXME: This is a hack to fix a drawing problems with svg files where a thin transparent border is drawn around the svg image.
-    //       the transparent border around the svg seems to vary in size depending on the size of the svg and as a result increasing the
-    //       svg image by 2 all around didn't resolve the issue. For now it resizes based on the border size.
 
     //if we must stretch the center or the borders we compute how much we will have to stretch
     //the svg to get the desired element sizes
@@ -449,18 +439,14 @@ void PanelSvgPrivate::generateBackground(PanelData *panel)
 
     // Corners
     if (q->hasElement(prefix + "top") && panel->enabledBorders & PanelSvg::TopBorder) {
-        if (!origined) {
-            contentTop = panel->topHeight;
-            bottomOffset += panel->topHeight;
-        }
+        contentTop = panel->topHeight;
+        bottomOffset += panel->topHeight;
 
         if (q->hasElement(prefix + "topleft") && panel->enabledBorders & PanelSvg::LeftBorder) {
             q->paint(&p, QRect(leftOffset, topOffset, panel->leftWidth, panel->topHeight), prefix + "topleft");
 
-            if (!origined) {
-                contentLeft = panel->leftWidth;
-                rightOffset = contentWidth + panel->leftWidth;
-            }
+            contentLeft = panel->leftWidth;
+            rightOffset = contentWidth + panel->leftWidth;
         }
 
         if (q->hasElement(prefix + "topright") && panel->enabledBorders & PanelSvg::RightBorder) {
@@ -472,10 +458,8 @@ void PanelSvgPrivate::generateBackground(PanelData *panel)
         if (q->hasElement(prefix + "bottomleft") && panel->enabledBorders & PanelSvg::LeftBorder) {
             q->paint(&p, QRect(leftOffset, bottomOffset, panel->leftWidth, panel->bottomHeight), prefix + "bottomleft");
 
-            if (!origined) {
-                contentLeft = panel->leftWidth;
-                rightOffset = contentWidth + panel->leftWidth;
-            }
+            contentLeft = panel->leftWidth;
+            rightOffset = contentWidth + panel->leftWidth;
         }
 
         if (q->hasElement(prefix + "bottomright") && panel->enabledBorders & PanelSvg::RightBorder) {
@@ -575,26 +559,50 @@ void PanelSvgPrivate::updateSizes()
     q->Svg::resize();
     if (panel->enabledBorders & PanelSvg::TopBorder) {
         panel->topHeight = q->elementSize(prefix + "top").height();
+        
+        if (q->hasElement(prefix + "hint-top-margin")) {
+            panel->topMargin = q->elementSize(prefix + "hint-top-margin").height();
+        } else {
+            panel->topMargin = panel->topHeight;
+        }
     } else {
-        panel->topHeight = 0;
+        panel->topMargin = panel->topHeight = 0;
     }
 
     if (panel->enabledBorders & PanelSvg::LeftBorder) {
         panel->leftWidth = q->elementSize(prefix + "left").width();
+        
+        if (q->hasElement(prefix + "hint-left-margin")) {
+            panel->leftMargin = q->elementSize(prefix + "hint-left-margin").height();
+        } else {
+            panel->leftMargin = panel->leftWidth;
+        }
     } else {
-        panel->leftWidth = 0;
+        panel->leftMargin = panel->leftWidth = 0;
     }
 
     if (panel->enabledBorders & PanelSvg::RightBorder) {
         panel->rightWidth = q->elementSize(prefix + "right").width();
+        
+        if (q->hasElement(prefix + "hint-right-margin")) {
+            panel->rightMargin = q->elementSize(prefix + "hint-right-margin").height();
+        } else {
+            panel->rightMargin = panel->rightWidth;
+        }
     } else {
-        panel->rightWidth = 0;
+        panel->rightMargin = panel->rightWidth = 0;
     }
 
     if (panel->enabledBorders & PanelSvg::BottomBorder) {
         panel->bottomHeight = q->elementSize(prefix + "bottom").height();
+        
+        if (q->hasElement(prefix + "hint-bottom-margin")) {
+            panel->bottomMargin = q->elementSize(prefix + "hint-bottom-margin").height();
+        } else {
+            panel->bottomMargin = panel->bottomHeight;
+        }
     } else {
-        panel->bottomHeight = 0;
+        panel->bottomMargin = panel->bottomHeight = 0;
     }
 
     //since it's rectangular, topWidth and bottomWidth must be the same
