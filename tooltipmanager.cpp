@@ -308,8 +308,8 @@ void ToolTipManagerPrivate::showToolTip()
 bool ToolTipManager::eventFilter(QObject *watched, QEvent *event)
 {
     QGraphicsWidget * widget = dynamic_cast<QGraphicsWidget *>(watched);
-    if (!widget) { 
-      return QObject::eventFilter(watched,event);
+    if (!widget) {
+        return QObject::eventFilter(watched, event);
     }
 
     switch (event->type()) {
@@ -317,6 +317,13 @@ bool ToolTipManager::eventFilter(QObject *watched, QEvent *event)
             // If the tooltip isn't visible, run through showing the tooltip again
             // so that it only becomes visible after a stationary hover
             if (Plasma::ToolTipManager::self()->isWidgetToolTipDisplayed(widget)) {
+                break;
+            }
+
+            // Don't restart the show timer on a mouse move event if there hasn't
+            // been an enter event or the current widget has been cleared by a click
+            // or wheel event.
+            if (!d->currentWidget) {
                 break;
             }
 
