@@ -122,7 +122,7 @@ void PopupApplet::constraintsEvent(Plasma::Constraints constraints)
         d->layout->removeAt(0);
         switch (formFactor()) {
         case Plasma::Planar:
-        case Plasma::MediaCenter:
+        case Plasma::MediaCenter: {
             delete d->dialog;
             d->dialog = 0;
 
@@ -134,10 +134,13 @@ void PopupApplet::constraintsEvent(Plasma::Constraints constraints)
                 d->proxy->show();
             }
 
-            d->layout->addItem(d->proxy);
-            setMinimumSize(widget() ? widget()->minimumSize() : QSizeF(300, 200));
-            break;
+            //get the margins
+            QSizeF marginSize = size() - contentsRect().size();
 
+            d->layout->addItem(d->proxy);
+            setMinimumSize(widget() ? widget()->minimumSize() + marginSize : QSizeF(300, 200));
+            break;
+        }
         case Plasma::Horizontal:
         case Plasma::Vertical:
             setAspectRatioMode(Plasma::Square);
