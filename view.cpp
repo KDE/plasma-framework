@@ -69,7 +69,13 @@ public:
                  << "associated screen is" << containment->screen();
 
         emit q->sceneRectAboutToChange();
-        q->setSceneRect(containment->sceneBoundingRect());
+        if (q->transform().isIdentity()) { //we're not zoomed out
+            q->setSceneRect(containment->sceneBoundingRect());
+        } else {
+            //kDebug() << "trying to show the containment nicely";
+            q->ensureVisible(containment->sceneBoundingRect());
+            //q->centerOn(containment);
+        }
         emit q->sceneRectChanged();
     }
 
