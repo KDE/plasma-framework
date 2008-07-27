@@ -511,6 +511,11 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          * can coordinate themselves with these changes if they desire.
          */
         void geometryChanged();
+        
+        /**
+         * Emitted by Applet subclasses when they change a sizeHint and wants to announce the change
+         */
+        void sizeHintChanged(Qt::SizeHint which);
 
         /**
          * Emitted when an applet has changed values in its configuration
