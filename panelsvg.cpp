@@ -353,16 +353,26 @@ void PanelSvg::clearCache()
     }
 }
 
-void PanelSvg::paintPanel(QPainter* painter, const QRectF& rect, const QPointF& pos)
+void PanelSvg::paintPanel(QPainter* painter, const QRectF& target, const QRectF& source)
 {
-    //kDebug();
     PanelData *panel = d->panels[d->prefix];
     if (!panel->cachedBackground) {
         d->generateBackground(panel);
         Q_ASSERT(panel->cachedBackground);
     }
 
-    painter->drawPixmap(rect, *(panel->cachedBackground), rect.translated(-pos.x(),-pos.y()));
+    painter->drawPixmap(target, *(panel->cachedBackground), source);
+}
+
+void PanelSvg::paintPanel(QPainter* painter, const QPointF& pos)
+{
+    PanelData *panel = d->panels[d->prefix];
+    if (!panel->cachedBackground) {
+        d->generateBackground(panel);
+        Q_ASSERT(panel->cachedBackground);
+    }
+
+    painter->drawPixmap(pos, *(panel->cachedBackground));
 }
 
 void PanelSvgPrivate::generateBackground(PanelData *panel)

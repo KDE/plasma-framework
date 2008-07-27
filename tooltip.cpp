@@ -169,7 +169,7 @@ void ToolTip::paintEvent(QPaintEvent *e)
     painter.setCompositionMode(QPainter::CompositionMode_Source );
     painter.fillRect(rect(), Qt::transparent);
 
-    d->background->paintPanel(&painter, rect());
+    d->background->paintPanel(&painter);
 }
 
 void ToolTip::sourceDestroyed()

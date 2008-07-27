@@ -880,7 +880,7 @@ void Applet::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
         formFactor() != Plasma::Vertical &&
         formFactor() != Plasma::Horizontal) {
         //kDebug() << "option rect is" << option->rect;
-        d->background->paintPanel(p, option->rect, QPointF(0,0));
+        d->background->paintPanel(p);
     }
 
     if (!d->failed) {
