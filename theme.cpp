@@ -295,7 +295,7 @@ QString Theme::imagePath(const QString& name)  const
 
             if (path.isEmpty()) {
                 // try an uncompressed svg file in the default theme
-                path = d->findInTheme(name + ".svg", d->themeName);
+                path = d->findInTheme(name + ".svg", ThemePrivate::defaultTheme);
             }
         }
 
