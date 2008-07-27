@@ -22,6 +22,7 @@
 #include <QGraphicsProxyWidget>
 #include <QGraphicsLinearLayout>
 #include <QVBoxLayout>
+#include <QTimer>
 
 #include <KIcon>
 #include <KIconLoader>
@@ -40,7 +41,9 @@ public:
           icon(0),
           dialog(0),
           layout(0),
-          proxy(0)
+          proxy(0),
+          savedAspectRatio(Plasma::InvalidAspectRatioMode),
+          timer(0)
     {
     }
 
@@ -55,12 +58,15 @@ public:
     }
 
     void togglePopup();
+    void hideTimedPopup();
 
     PopupApplet *q;
     Plasma::Icon *icon;
     Plasma::Dialog *dialog;
     QGraphicsLinearLayout *layout;
     QGraphicsProxyWidget *proxy;
+    Plasma::AspectRatioMode savedAspectRatio;
+    QTimer *timer;
 };
 
 PopupApplet::PopupApplet(QObject *parent, const QVariantList &args)
@@ -99,6 +105,16 @@ QIcon PopupApplet::icon() const
     return d->icon->icon();
 }
 
+QWidget *PopupApplet::widget()
+{
+    return 0;
+};
+
+QGraphicsWidget *PopupApplet::graphicsWidget()
+{
+    return 0;
+};
+
 void PopupApplet::constraintsEvent(Plasma::Constraints constraints)
 {
     if (constraints & Plasma::StartupCompletedConstraint) {
@@ -115,35 +131,55 @@ void PopupApplet::constraintsEvent(Plasma::Constraints constraints)
         d->layout->setMaximumSize(INT_MAX, INT_MAX);
         d->layout->setOrientation(Qt::Horizontal);
         setLayout(d->layout);
+
         connect(d->icon, SIGNAL(clicked()), this, SLOT(togglePopup()));
     }
 
     if (constraints & Plasma::FormFactorConstraint) {
         d->layout->removeAt(0);
+
         switch (formFactor()) {
         case Plasma::Planar:
         case Plasma::MediaCenter: {
-            delete d->dialog;
-            d->dialog = 0;
+            if (d->savedAspectRatio != Plasma::InvalidAspectRatioMode) {
+                setAspectRatioMode(d->savedAspectRatio);
+            }
 
-            setAspectRatioMode(Plasma::IgnoreAspectRatio);
+            if (d->dialog) {
+                if (d->dialog->layout() && widget()) {
+                    //we dont want to delete Widget inside the dialog layout
+                    d->dialog->layout()->removeWidget(widget());
+                }
 
-            if (!d->proxy) {
-                d->proxy = new QGraphicsProxyWidget(this);
-                d->proxy->setWidget(widget());
-                d->proxy->show();
+                delete d->dialog;
+                d->dialog = 0;
             }
 
             //get the margins
             QSizeF marginSize = size() - contentsRect().size();
 
-            d->layout->addItem(d->proxy);
-            setMinimumSize(widget() ? widget()->minimumSize() + marginSize : QSizeF(300, 200));
+            if (graphicsWidget()) {
+                d->layout->addItem(graphicsWidget());
+                setMinimumSize(graphicsWidget()->minimumSize() + marginSize);
+            }
+            else {
+                if (!d->proxy) {
+                    d->proxy = new QGraphicsProxyWidget(this);
+                    d->proxy->setWidget(widget());
+                    d->proxy->show();
+                }
+
+                d->layout->addItem(d->proxy);
+                setMinimumSize(widget() ? widget()->minimumSize() + marginSize : QSizeF(300, 200));
+            }
+
             break;
         }
         case Plasma::Horizontal:
         case Plasma::Vertical:
-            setAspectRatioMode(Plasma::Square);
+            //save the aspect ratio mode in case we drag'n drop in the Desktop later
+            d->savedAspectRatio = aspectRatioMode();
+            setAspectRatioMode(Plasma::ConstrainedSquare);
 
             if (d->proxy) {
                 d->proxy->setWidget(0); // prevent it from deleting our widget!
@@ -154,24 +190,48 @@ void PopupApplet::constraintsEvent(Plasma::Constraints constraints)
             if (!d->dialog) {
                 d->dialog = new Plasma::Dialog();
                 d->dialog->setWindowFlags(Qt::Popup);
+
                 QVBoxLayout *l_layout = new QVBoxLayout(d->dialog);
                 l_layout->setSpacing(0);
                 l_layout->setMargin(0);
-                l_layout->addWidget(widget());
-                d->dialog->adjustSize();
+
+                if (graphicsWidget()) {
+                    QGraphicsScene *scene = new QGraphicsScene(d->dialog);
+                    QGraphicsView *view = new QGraphicsView(scene, d->dialog);
+
+                    scene->addItem(graphicsWidget());
+                    l_layout->addWidget(view);
+                    view->show();
+                } else {
+                    l_layout->addWidget(widget());
+                }
             }
 
+            d->dialog->adjustSize();
             d->layout->addItem(d->icon);
             break;
         }
     }
 }
 
-void PopupApplet::showPopup()
+void PopupApplet::showPopup(uint popupDuration)
 {
     if (d->dialog && (formFactor() == Horizontal || formFactor() == Vertical)) {
         d->dialog->move(popupPosition(d->dialog->sizeHint()));
         d->dialog->show();
+
+        if (d->timer) {
+            d->timer->stop();
+        }
+
+        if (popupDuration > 0) {
+            if (!d->timer) {
+                d->timer = new QTimer(this);
+                connect(d->timer, SIGNAL(timeout()), this, SLOT(hideTimedPopup()));
+            }
+
+            d->timer->start(popupDuration);
+        }
     }
 }
 
@@ -184,18 +244,22 @@ void PopupApplet::hidePopup()
 
 void PopupAppletPrivate::togglePopup()
 {
-    if (!dialog) {
-        return;
-    }
+   if (dialog) {
+        if (dialog->isVisible()) {
+            dialog->hide();
+        } else {
+            dialog->move(q->popupPosition(dialog->sizeHint()));
+            dialog->show();
+        }
 
-    if (dialog->isVisible()) {
-        dialog->hide();
-    } else {
-        dialog->move(q->popupPosition(dialog->sizeHint()));
-        dialog->show();
+        dialog->clearFocus();
     }
+}
 
-    dialog->clearFocus();
+void PopupAppletPrivate::hideTimedPopup()
+{
+    timer->stop();
+    q->hidePopup();
 }
 
 } // Plasma namespace

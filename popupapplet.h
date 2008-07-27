@@ -44,15 +44,17 @@ public:
     void setIcon(const QString &iconName);
     QIcon icon() const;
 
-    virtual QWidget *widget() = 0;
+    virtual QWidget *widget();
+    virtual QGraphicsWidget *graphicsWidget();
 
+    void showPopup(uint displayTime = 0);
+    void hidePopup();
 protected:
     void constraintsEvent(Plasma::Constraints constraints);
-    void showPopup();
-    void hidePopup();
 
 private:
     Q_PRIVATE_SLOT(d, void togglePopup())
+    Q_PRIVATE_SLOT(d, void hideTimedPopup())
     PopupAppletPrivate * const d;
 };
 
