@@ -108,12 +108,12 @@ QIcon PopupApplet::icon() const
 QWidget *PopupApplet::widget()
 {
     return 0;
-};
+}
 
 QGraphicsWidget *PopupApplet::graphicsWidget()
 {
     return 0;
-};
+}
 
 void PopupApplet::constraintsEvent(Plasma::Constraints constraints)
 {
