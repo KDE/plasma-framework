@@ -150,6 +150,9 @@ QString Service::name() const
 void Service::setName(const QString &name)
 {
     d->name = name;
+    if (!d->config) {
+        registerOperationsScheme();
+    }
 }
 
 void Service::setOperationsScheme(QIODevice *xml)
