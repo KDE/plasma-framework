@@ -47,7 +47,15 @@ Service::Service(QObject *parent, const QVariantList &args)
     : QObject(parent),
       d(new ServicePrivate(this))
 {
-    Q_UNUSED(args);
+    // remove those first item since those are managed by Service and subclasses shouldn't
+    // need to worry about it. yes, it violates the constness of this var, but it lets us add
+    // or remove items later while applets can just pretend that their args always start at 0
+    QVariantList &mutableArgs = const_cast<QVariantList&>(args);
+    if (!mutableArgs.isEmpty()) {
+        setName(mutableArgs[0].toString());
+        mutableArgs.removeFirst();
+    }
+
     registerOperationsScheme();
 }
 
@@ -74,10 +82,12 @@ Service* Service::load(const QString &name, QObject *parent)
     KService::Ptr offer = offers.first();
     QString error;
     QVariantList args;
+    args << name;
     Service* service = 0;
 
-    if (Plasma::isPluginVersionCompatible(KPluginLoader(*offer).pluginVersion()))
+    if (Plasma::isPluginVersionCompatible(KPluginLoader(*offer).pluginVersion())) {
         service = offer->createInstance<Plasma::Service>(parent, args, &error);
+    }
 
     if (!service) {
         kDebug() << "Couldn't load Service \"" << name << "\"! reason given: " << error;
@@ -150,9 +160,15 @@ QString Service::name() const
 void Service::setName(const QString &name)
 {
     d->name = name;
-    if (!d->config) {
-        registerOperationsScheme();
-    }
+
+    // now reset the config, which may be based on our name
+    delete d->config;
+    d->config = 0;
+
+    delete d->tempFile;
+    d->tempFile = 0;
+
+    registerOperationsScheme();
 }
 
 void Service::setOperationsScheme(QIODevice *xml)
@@ -168,6 +184,11 @@ void Service::setOperationsScheme(QIODevice *xml)
 
 void Service::registerOperationsScheme()
 {
+    if (d->config) {
+        // we've already done our job. let's go home.
+        return;
+    }
+
     if (d->name.isEmpty()) {
         kDebug() << "No name found";
         return;
