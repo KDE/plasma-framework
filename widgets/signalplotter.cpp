@@ -849,8 +849,6 @@ void SignalPlotter::drawPlots(QPainter *p, int top, int w, int h, int horizontal
                  j < prev_prev_datapoints.count() &&
                  j < prev_datapoints.count()) {
 
-                QPolygon curve(4);
-
                 // The height of the whole widget is h+top->  The height of the area we are plotting in is just h.
                 // The y coordinate system starts from the top, so at the bottom the y coordinate is h+top.
                 // So to draw a point at value y', we need to put this at  h+top-y'
