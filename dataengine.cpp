@@ -225,6 +225,7 @@ void DataEngine::addSource(DataContainer* source)
 
     d->sources.insert(source->objectName(), source);
     emit sourceAdded(source->objectName());
+    d->queueUpdate();
 }
 
 void DataEngine::setMaxSourceCount(uint limit)
