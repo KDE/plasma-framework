@@ -49,7 +49,10 @@ class SignalPlotterPrivate
         SignalPlotterPrivate()
             : svgBackground(0)
         { }
-        ~SignalPlotterPrivate() { }
+        ~SignalPlotterPrivate()
+        {
+            delete svgBackground;
+        }
 
     int precision;
     uint samples;
