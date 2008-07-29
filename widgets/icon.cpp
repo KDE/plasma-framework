@@ -974,7 +974,10 @@ void Icon::setText(const QString& text)
 {
     d->text = text;
     // cause a relayout
+    // FIXME: is invalidating d->currentSize really necessary?
+    // FIXME: is d->currentSize really necessary at all?
     d->currentSize = QSizeF(-1, -1);
+    resize(sizeFromIconSize(d->iconSize.width()));
 }
 
 QString Icon::text() const
@@ -986,7 +989,10 @@ void Icon::setInfoText(const QString& text)
 {
     d->infoText = text;
     // cause a relayout
+    // FIXME: is invalidating d->currentSize really necessary?
+    // FIXME: is d->currentSize really necessary at all?
     d->currentSize = QSizeF(-1, -1);
+    resize(sizeFromIconSize(d->iconSize.width()));
 }
 
 QString Icon::infoText() const
