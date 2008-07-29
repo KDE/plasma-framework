@@ -91,10 +91,19 @@ Q_SIGNALS:
     void clicked();
 
 protected:
+    void paint(QPainter *painter,
+               const QStyleOptionGraphicsItem *option,
+               QWidget *widget = 0);
     void resizeEvent(QGraphicsSceneResizeEvent *event);
+    void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
+    void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
 
 private:
     PushButtonPrivate * const d;
+
+    friend class PushButtonPrivate;
+    Q_PRIVATE_SLOT(d, void syncBorders())
+    Q_PRIVATE_SLOT(d, void elementAnimationFinished(int id))
 };
 
 } // namespace Plasma
