@@ -278,9 +278,9 @@ Icon::Icon(const QIcon &icon, const QString &text, QGraphicsItem *parent)
     : QGraphicsWidget(parent),
       d(new IconPrivate(this))
 {
+    init();
     setText(text);
     setIcon(icon);
-    init();
 }
 
 Icon::~Icon()
