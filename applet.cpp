@@ -68,7 +68,6 @@
 #include "plasma/packages_p.h"
 #include "plasma/plasma.h"
 #include "plasma/scripting/appletscript.h"
-#include "plasma/shadowitem_p.h"
 #include "plasma/svg.h"
 #include "plasma/panelsvg.h"
 #include "plasma/theme.h"
@@ -597,30 +596,6 @@ void Applet::setBackgroundHints(const BackgroundHints hints)
         d->background = 0;
         setContentsMargins(0, 0, 0, 0);
     }
-
-    //Draw the shadow?
-    //There are various problems with shadows right now:
-    //
-    //1) shadows can be seen through translucent areas, which is probably technically correct ubt
-    //looks odd
-    //2) the shape of the item odesn't conform to the shape of the standard background, e.g. with
-    //rounded corners
-#ifdef DYNAMIC_SHADOWS
-    if (hints & ShadowedBackground) {
-        if (d->shadow) {
-            d->shadow->setVisible(true);
-        } else {
-            d->shadow = new ShadowItem(this);
-            if (scene()) {
-                scene()->addItem(d->shadow);
-                d->shadow->show();
-            }
-        }
-    } else {
-        delete d->shadow;
-        d->shadow = 0;
-    }
-#endif
 }
 
 bool Applet::hasFailedToLaunch() const
@@ -765,21 +740,12 @@ void Applet::flushPendingConstraintsEvents()
 
     if (c & Plasma::FormFactorConstraint) {
         FormFactor f = formFactor();
-        //FIXME: this is a bit of a mess: calling setBackgroundHints twice,
-        //       and moving an item to a non-vert/horiz containment that
-        //       normally doesn't request a background would then get one!
-        if (f == Planar) {
-            setBackgroundHints(d->backgroundHints|ShadowedBackground);
-        } else if (d->backgroundHints&ShadowedBackground) {
-            setBackgroundHints(d->backgroundHints^ShadowedBackground);
-        }
-
         if (!isContainment() && f != Vertical && f != Horizontal) {
-            setBackgroundHints(d->backgroundHints|StandardBackground);
-        } else if(d->backgroundHints&StandardBackground) {
-            setBackgroundHints(d->backgroundHints^StandardBackground);
-        } else if(d->backgroundHints&TranslucentBackground) {
-            setBackgroundHints(d->backgroundHints^TranslucentBackground);
+            setBackgroundHints(d->backgroundHints | StandardBackground);
+        } else if(d->backgroundHints & StandardBackground) {
+            setBackgroundHints(d->backgroundHints ^ StandardBackground);
+        } else if(d->backgroundHints & TranslucentBackground) {
+            setBackgroundHints(d->backgroundHints ^ TranslucentBackground);
         }
     }
 
@@ -862,11 +828,6 @@ void Applet::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
         p->begin(&pixmap);
     } else {
         p = painter;
-    }
-
-    if (d->shadow && d->shadow->shadowedSize() != boundingRect().size()) {
-        //kDebug() << "sizes are " << d->shadow->shadowedSize() << boundingRect().size();
-        d->shadow->generate();
     }
 
     p->save();
@@ -1364,35 +1325,12 @@ QVariant Applet::itemChange(GraphicsItemChange change, const QVariant &value)
 {
     //kDebug() << change;
     switch (change) {
-    case ItemPositionChange:
-        if (d->shadow) {
-            d->shadow->adjustPosition();
-        }
-        break;
     case ItemSceneHasChanged: {
         QGraphicsScene *newScene = qvariant_cast<QGraphicsScene*>(value);
         if (newScene) {
             d->checkImmutability();
         }
-
-        if (d->shadow) {
-            if (d->shadow->scene()) {
-                d->shadow->scene()->removeItem(d->shadow);
-            }
-
-            if (newScene) {
-                newScene->addItem(d->shadow);
-                d->shadow->generate();
-                d->shadow->adjustPosition();
-                d->shadow->show();
-            }
-        }
     }
-        break;
-    case ItemVisibleChange:
-        if (d->shadow) {
-            d->shadow->setVisible(isVisible());
-        }
         break;
     case ItemPositionHasChanged:
         emit geometryChanged();
@@ -1528,7 +1466,6 @@ AppletPrivate::AppletPrivate(KService::Ptr service, int uniqueID, Applet *applet
           background(0),
           script(0),
           configXml(0),
-          shadow(0),
           mainConfig(0),
           pendingConstraints(NoConstraint),
           aspectRatioMode(Plasma::KeepAspectRatio),
@@ -1551,13 +1488,12 @@ AppletPrivate::AppletPrivate(KService::Ptr service, int uniqueID, Applet *applet
 
 AppletPrivate::~AppletPrivate()
 {
-    foreach ( const QString& engine, loadedEngines ) {
+    foreach (const QString& engine, loadedEngines) {
         DataEngineManager::self()->unloadEngine( engine );
     }
     delete background;
     delete package;
     delete configXml;
-    delete shadow;
     delete mainConfig;
 }
 

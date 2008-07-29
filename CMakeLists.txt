@@ -54,7 +54,6 @@ set(plasma_LIB_SRCS
     scripting/scriptengine.cpp
     service.cpp
     servicejob.cpp
-    shadowitem.cpp
     svg.cpp
     theme.cpp
     toolbox.cpp
