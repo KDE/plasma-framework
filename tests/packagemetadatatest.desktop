@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Package metadata test file
+Name[bn_IN]=প্যাকেজ মিটা-ডাটার পরীক্ষার ফাইল
 Name[ca]=Fitxer de proves de metadades de paquet
 Name[da]=Testfil med pakkemetadata
 Name[de]=Paket-Metadaten Testdatei
@@ -19,6 +20,8 @@ Name[it]=File di test per i metadati dei pacchetti
 Name[km]=ឯកសារ​សាកល្បង​ទិន្នន័យ​មេតា​កញ្ចប់
 Name[ko]=패키지 메타데이터 테스트 파일
 Name[lv]=Pakotņu metadatu testa fails
+Name[ml]=പാക്കേജ് മെറ്റാഡേറ്റാ പരീക്ഷണ ഫയല്‍
+Name[mr]=संकुल मेटाडाटा चाचणी फाइल
 Name[nb]=Testfil for Package metadata
 Name[nds]=Paketmetadaten-Testdatei
 Name[nl]=Testbestand voor pakketmetadata
@@ -60,6 +63,8 @@ Comment[it]=Un file desktop di test per la classe PackageMetaData.
 Comment[km]=ឯកសារ​ផ្ទៃតុ​សាកល្បង​ ត្រូវ​សាកល្បង​ថ្នាក់​ទិន្នន័យ​មេតា​កញ្ចប់ ។
 Comment[ko]=PackageMetaData 클래스를 테스트하는 데스크톱 파일.
 Comment[lv]=Testa .dekstop fails lai pārbaudītu PackageMetaData klasi.
+Comment[ml]=PackageMetaData ക്ലാസ്സ് പരീക്ഷിക്കുന്നതിനുള്ള ഒരു പരീക്ഷണ പണിയിട ഫയല്‍.
+Comment[mr]=PackageMetaData क्लासची चाचणी करीता एक चाचणी डेस्कटॉप फाइल.
 Comment[nb]=En skrivebordsfil med testdata for klassen PackageMetaData.
 Comment[nds]=Schriefdisch-Datei för't Utproberen vun de PackageMetaData-Klass
 Comment[nl]=Een desktop-bestand voor het testen van de klasse PackageMetaData.
