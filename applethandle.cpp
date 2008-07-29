@@ -742,7 +742,6 @@ bool AppletHandle::sceneEventFilter(QGraphicsItem *watched, QEvent *event)
 {
     if (watched == m_applet && event->type() == QEvent::GraphicsSceneHoverLeave) {
         hoverLeaveEvent(static_cast<QGraphicsSceneHoverEvent*>(event));
-        return true;
     }
 
     return false;

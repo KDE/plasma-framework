@@ -840,9 +840,7 @@ bool Containment::sceneEventFilter(QGraphicsItem *watched, QEvent *event)
         //kDebug() << "got hoverenterEvent" << immutability() << " " << applet->immutability();
         if (immutability() == Mutable && applet->immutability() == Mutable) {
             QGraphicsSceneHoverEvent *he = static_cast<QGraphicsSceneHoverEvent*>(event);
-            if (d->handles.contains(applet)) {
-                d->handles[applet]->startFading(AppletHandle::FadeIn, he->pos());
-            } else {
+            if (!d->handles.contains(applet)) {
                 //kDebug() << "generated applet handle";
                 AppletHandle *handle = new AppletHandle(this, applet, he->pos());
                 d->handles[applet] = handle;
@@ -853,14 +851,6 @@ bool Containment::sceneEventFilter(QGraphicsItem *watched, QEvent *event)
             }
         }
         break;
-    case QEvent::GraphicsSceneHoverLeave:
-        //kDebug() << "got hoverLeaveEvent";
-        if (d->handles.contains(applet)) {
-            QGraphicsSceneHoverEvent *he = static_cast<QGraphicsSceneHoverEvent *>(event);
-            if (!d->handles[applet]->boundingRect().contains(d->handles[applet]->mapFromScene(he->scenePos()))) {
-                d->handles[applet]->startFading(AppletHandle::FadeOut, he->pos());
-            }
-        }
     default:
         break;
     }
