@@ -166,10 +166,8 @@ class PLASMA_EXPORT Containment : public Applet
          * @param name the plugin name for the applet, as given by
          *        KPluginInfo::pluginName()
          * @param args argument list to pass to the plasmoid
-         * @param id to assign to this applet, or 0 to auto-assign it a new id
          * @param geometry where to place the applet, or to auto-place it if an invalid
          *                 is provided
-         * @param delayedInit if true, init() will not be called on the applet
          *
          * @return a pointer to the applet on success, or 0 on failure
          */
