@@ -49,6 +49,7 @@ class SignalPlotterPrivate
         SignalPlotterPrivate()
             : svgBackground(0)
         { }
+
         ~SignalPlotterPrivate()
         {
             delete svgBackground;
