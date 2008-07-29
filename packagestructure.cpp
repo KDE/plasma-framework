@@ -24,6 +24,10 @@
 #include <KConfigGroup>
 #include <KStandardDirs>
 #include <KServiceTypeTrader>
+#include <KUrl>
+#include <KTemporaryFile>
+#include <kio/netaccess.h>
+#include <kio/job.h>
 
 #include "package.h"
 
@@ -119,6 +123,26 @@ PackageStructure::Ptr PackageStructure::load(const QString &packageFormat)
         KConfig config(configPath);
         structure->read(&config);
         PackageStructurePrivate::structures[packageFormat] = structure;
+        return structure;
+    }
+
+    // try to load from absolute file path
+    KUrl url(packageFormat);
+    if (url.isLocalFile()) {
+        KConfig config(KIO::NetAccess::mostLocalUrl(url, NULL).path(), KConfig::SimpleConfig);
+        structure->read(&config);
+        PackageStructurePrivate::structures[structure->type()] = structure;
+    } else {
+        KTemporaryFile tmp;
+        if (tmp.open()) {
+            KIO::Job *job = KIO::file_copy(url, KUrl(tmp.fileName()),
+                                           -1, KIO::Overwrite | KIO::HideProgressInfo);
+            if (job->exec()) {
+                KConfig config(tmp.fileName(), KConfig::SimpleConfig);
+                structure->read(&config);
+                PackageStructurePrivate::structures[structure->type()] = structure;
+            }
+        }
     }
 
     return structure;
