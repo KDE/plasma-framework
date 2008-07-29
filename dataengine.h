@@ -322,7 +322,9 @@ class PLASMA_EXPORT DataEngine : public QObject
 
         /**
          * Adds an already constructed data source. The DataEngine takes
-         * ownership of the DataContainer object.
+         * ownership of the DataContainer object. The objectName of the source
+         * is used for the source name.
+         *
          * @param source the DataContainer to add to the DataEngine
          **/
         void addSource(DataContainer* source);
