@@ -76,10 +76,7 @@ void ToolBox::addTool(QAction *action)
     tool->setAction(action);
     tool->setDrawBackground(true);
     tool->setOrientation(Qt::Horizontal);
-    QSizeF iconSize = tool->sizeFromIconSize(22);
-    tool->setMinimumSize(iconSize);
-    tool->setMaximumSize(iconSize);
-    tool->resize(tool->size());
+    tool->resize(tool->sizeFromIconSize(22));
 
     tool->hide();
     const int height = static_cast<int>(tool->boundingRect().height());
