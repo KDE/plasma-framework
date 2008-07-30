@@ -18,7 +18,7 @@
  */
 
 #include "service.h"
-#include "service_p.h"
+#include "private/service_p.h"
 
 #include <QFile>
 

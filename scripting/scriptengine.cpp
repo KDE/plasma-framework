@@ -27,10 +27,11 @@
 #include "applet.h"
 #include "dataengine.h"
 #include "package.h"
-#include "packages_p.h"
 #include "scripting/appletscript.h"
 #include "scripting/dataenginescript.h"
 #include "scripting/runnerscript.h"
+
+#include "private/packages_p.h"
 
 namespace Plasma
 {

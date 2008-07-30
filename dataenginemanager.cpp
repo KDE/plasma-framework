@@ -22,7 +22,7 @@
 #include <KDebug>
 #include <KServiceTypeTrader>
 
-#include "dataengine_p.h"
+#include "private/dataengine_p.h"
 #include "scripting/scriptengine.h"
 
 namespace Plasma

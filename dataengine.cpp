@@ -18,7 +18,7 @@
  */
 
 #include "dataengine.h"
-#include "dataengine_p.h"
+#include "private/dataengine_p.h"
 
 #include <QQueue>
 #include <QTimer>
@@ -34,8 +34,9 @@
 #include "datacontainer.h"
 #include "package.h"
 #include "service.h"
-#include "service_p.h"
 #include "scripting/dataenginescript.h"
+
+#include "private/service_p.h"
 
 namespace Plasma
 {

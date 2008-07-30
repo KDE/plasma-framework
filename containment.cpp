@@ -19,7 +19,7 @@
  */
 
 #include "containment.h"
-#include "containment_p.h"
+#include "private/containment_p.h"
 
 #include <QAction>
 #include <QDesktopWidget>
@@ -44,13 +44,14 @@
 #include <KStandardDirs>
 #include <KWindowSystem>
 
-#include "applet_p.h"
-#include "applethandle_p.h"
-#include "corona.h"
 #include "animator.h"
-#include "desktoptoolbox_p.h"
-#include "paneltoolbox_p.h"
+#include "corona.h"
 #include "svg.h"
+
+#include "private/applet_p.h"
+#include "private/applethandle_p.h"
+#include "private/desktoptoolbox_p.h"
+#include "private/paneltoolbox_p.h"
 
 namespace Plasma
 {

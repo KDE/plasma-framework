@@ -18,8 +18,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef PLASMA_PANELTOOLBOX_P_H
-#define PLASMA_PANELTOOLBOX_P_H
+#ifndef PLASMA_DESKTOPTOOLBOX_P_H
+#define PLASMA_DESKTOPTOOLBOX_P_H
 
 #include <QGraphicsItem>
 #include <QObject>
@@ -27,7 +27,7 @@
 
 #include <KIcon>
 
-#include <plasma/toolbox_p.h>
+#include <private/toolbox_p.h>
 
 #include "animator.h"
 
@@ -36,15 +36,15 @@ namespace Plasma
 
 class Widget;
 class EmptyGraphicsItem;
-class PanelToolBoxPrivate;
+class DesktopToolBoxPrivate;
 
-class PanelToolBox : public ToolBox
+class DesktopToolBox : public ToolBox
 {
     Q_OBJECT
 
 public:
-    explicit PanelToolBox(QGraphicsItem *parent = 0);
-    ~PanelToolBox();
+    explicit DesktopToolBox(QGraphicsItem *parent = 0);
+    ~DesktopToolBox();
     QRectF boundingRect() const;
     QPainterPath shape() const;
 
@@ -57,12 +57,15 @@ protected:
     void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
 
 protected slots:
-    void animate(qreal progress);
+    void animateCircle(qreal progress);
+    void animateHighlight(qreal progress);
     void toolMoved(QGraphicsItem*);
+    /**
+     * show/hide the toolbox
+     */
     void toggle();
-
 private:
-    PanelToolBoxPrivate *d;
+    DesktopToolBoxPrivate *d;
 };
 
 } // Plasma namespace

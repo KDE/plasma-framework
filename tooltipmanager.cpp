@@ -40,12 +40,12 @@
 
 
 //Plasma
-#include <plasma/applet.h>
-#include <plasma/containment.h>
-#include <plasma/panelsvg.h>
-#include <plasma/theme.h>
-#include <plasma/tooltip_p.h>
-#include <plasma/view.h>
+#include <applet.h>
+#include <containment.h>
+#include <panelsvg.h>
+#include <theme.h>
+#include <view.h>
+#include <private/tooltip_p.h>
 
 namespace Plasma
 {

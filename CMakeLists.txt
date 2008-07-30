@@ -27,7 +27,6 @@ set(plasma_LIB_SRCS
     appletbrowser/kcategorizeditemsviewmodels.cpp
     appletbrowser/openwidgetassistant.cpp
     appletbrowser/plasmaappletitemmodel.cpp
-    applethandle.cpp
     configxml.cpp
     containment.cpp
     corona.cpp
@@ -35,16 +34,20 @@ set(plasma_LIB_SRCS
     dataengine.cpp
     dataenginemanager.cpp
     delegate.cpp
-    desktoptoolbox.cpp
     dialog.cpp
     #FOR FUTURE
     #layouts/borderlayout.cpp
-    packages.cpp
     paintutils.cpp
     panelsvg.cpp
-    paneltoolbox.cpp
     plasma.cpp
     popupapplet.cpp
+    private/applethandle.cpp
+    private/datacontainer_p.cpp
+    private/desktoptoolbox.cpp
+    private/packages.cpp
+    private/paneltoolbox.cpp
+    private/toolbox.cpp
+    private/tooltip.cpp
     querymatch.cpp
     runnercontext.cpp
     runnermanager.cpp
@@ -56,9 +59,7 @@ set(plasma_LIB_SRCS
     servicejob.cpp
     svg.cpp
     theme.cpp
-    toolbox.cpp
     tooltipmanager.cpp
-    tooltip.cpp
     uiloader.cpp
     version.cpp
     view.cpp

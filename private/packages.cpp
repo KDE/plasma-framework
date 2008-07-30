@@ -17,7 +17,7 @@
 *   Boston, MA 02110-1301, USA.                                               *
 *******************************************************************************/
 
-#include "packages_p.h"
+#include "private/packages_p.h"
 
 #include <KConfigGroup>
 #include <KDesktopFile>

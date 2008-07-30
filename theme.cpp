@@ -35,7 +35,7 @@
 #include <KStandardDirs>
 #include <KGlobalSettings>
 
-#include "plasma/packages_p.h"
+#include "private/packages_p.h"
 
 namespace Plasma
 {

@@ -20,7 +20,7 @@
  */
 
 #include "applet.h"
-#include "applet_p.h"
+#include "private/applet_p.h"
 
 #include <cmath>
 #include <limits>
@@ -59,23 +59,24 @@
 
 #include <Solid/PowerManagement>
 
-#include "plasma/configxml.h"
-#include "plasma/containment.h"
-#include "plasma/containment_p.h"
-#include "plasma/corona.h"
-#include "plasma/dataenginemanager.h"
-#include "plasma/package.h"
-#include "plasma/packages_p.h"
-#include "plasma/plasma.h"
-#include "plasma/scripting/appletscript.h"
-#include "plasma/svg.h"
-#include "plasma/panelsvg.h"
-#include "plasma/theme.h"
-#include "plasma/toolbox_p.h"
-#include "plasma/view.h"
-#include "plasma/widgets/label.h"
-#include "plasma/widgets/pushbutton.h"
-#include "plasma/tooltipmanager.h"
+#include "configxml.h"
+#include "containment.h"
+#include "corona.h"
+#include "dataenginemanager.h"
+#include "package.h"
+#include "plasma.h"
+#include "scripting/appletscript.h"
+#include "svg.h"
+#include "panelsvg.h"
+#include "theme.h"
+#include "view.h"
+#include "widgets/label.h"
+#include "widgets/pushbutton.h"
+#include "tooltipmanager.h"
+
+#include "private/containment_p.h"
+#include "private/packages_p.h"
+#include "private/toolbox_p.h"
 
 //#define DYNAMIC_SHADOWS
 namespace Plasma

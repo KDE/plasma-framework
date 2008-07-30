@@ -18,7 +18,7 @@
  */
 
 #include "datacontainer.h"
-#include "datacontainer_p.h"
+#include "private/datacontainer_p.h"
 
 #include <QVariant>
 
@@ -192,5 +192,4 @@ void DataContainer::checkUsage()
 } // Plasma namespace
 
 #include "datacontainer.moc"
-#include "datacontainer_p.moc"
 

@@ -17,7 +17,7 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "applethandle_p.h"
+#include "private/applethandle_p.h"
 
 #include <QApplication>
 #include <QBitmap>
@@ -892,3 +892,4 @@ void AppletHandle::calculateSize()
 } // Plasma Namespace
 
 #include "applethandle_p.moc"
+

@@ -17,9 +17,13 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
+#ifndef SERVICE_P_H
+#define SERVICE_P_H
 
 #include "servicejob.h"
+
 #include <KTemporaryFile>
+
 namespace Plasma
 {
 
@@ -83,4 +87,5 @@ public:
 
 } // namespace Plasma
 
+#endif
 
