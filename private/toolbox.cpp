@@ -19,7 +19,7 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "private/toolbox_p.h"
+#include "toolbox_p.h"
 
 #include <QAction>
 #include <QGraphicsSceneHoverEvent>
@@ -76,10 +76,7 @@ void ToolBox::addTool(QAction *action)
     tool->setAction(action);
     tool->setDrawBackground(true);
     tool->setOrientation(Qt::Horizontal);
-    QSizeF iconSize = tool->sizeFromIconSize(22);
-    tool->setMinimumSize(iconSize);
-    tool->setMaximumSize(iconSize);
-    tool->resize(tool->size());
+    tool->resize(tool->sizeFromIconSize(22));
 
     tool->hide();
     const int height = static_cast<int>(tool->boundingRect().height());
