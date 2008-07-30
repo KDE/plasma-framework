@@ -265,24 +265,28 @@ void IconPrivate::setHorizontalMargin(MarginType type, qreal horizontal, qreal v
 
 QRectF IconPrivate::addMargin(const QRectF &rect, MarginType type) const
 {
+    Q_ASSERT(activeMargins);
     const Margin &m = activeMargins[type];
     return rect.adjusted(-m.left, -m.top, m.right, m.bottom);
 }
 
 QRectF IconPrivate::subtractMargin(const QRectF &rect, MarginType type) const
 {
+    Q_ASSERT(activeMargins);
     const Margin &m = activeMargins[type];
     return rect.adjusted(m.left, m.top, -m.right, -m.bottom);
 }
 
 QSizeF IconPrivate::addMargin(const QSizeF &size, MarginType type) const
 {
+    Q_ASSERT(activeMargins);
     const Margin &m = activeMargins[type];
     return QSizeF(size.width() + m.left + m.right, size.height() + m.top + m.bottom);
 }
 
 QSizeF IconPrivate::subtractMargin(const QSizeF &size, MarginType type) const
 {
+    Q_ASSERT(activeMargins);
     const Margin &m = activeMargins[type];
     return QSizeF(size.width() - m.left - m.right, size.height() - m.top - m.bottom);
 }

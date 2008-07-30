@@ -68,7 +68,8 @@ IconPrivate::IconPrivate(Icon *i)
       numDisplayLines(2),
       invertLayout(false),
       drawBg(false),
-      action(0)
+      action(0),
+      activeMargins(0)
 {
     m_hoverAnimId = -1;
     m_hoverAlpha = 20/255;
