@@ -35,8 +35,6 @@ set(plasma_LIB_SRCS
     dataenginemanager.cpp
     delegate.cpp
     dialog.cpp
-    #FOR FUTURE
-    #layouts/borderlayout.cpp
     paintutils.cpp
     panelsvg.cpp
     plasma.cpp
@@ -178,11 +176,6 @@ install(FILES
     widgets/textedit.h
     widgets/webcontent.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/plasma/widgets COMPONENT Devel)
-
-#For future
-#install(FILES
-#    layouts/borderlayout.h
-#    DESTINATION ${INCLUDE_INSTALL_DIR}/plasma/layouts)
 
 install(FILES
     scripting/appletscript.h
