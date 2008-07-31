@@ -976,6 +976,10 @@ void Icon::setText(const QString& text)
     d->text = text;
     // cause a relayout
     d->currentSize = QSizeF(-1, -1);
+    //try to relayout, needed if an icon was never shown before
+    if (!isVisible()) {
+        layoutIcons(new QStyleOptionGraphicsItem);
+    }
     resize(sizeFromIconSize(d->iconSize.width()));
 }
 
@@ -989,6 +993,10 @@ void Icon::setInfoText(const QString& text)
     d->infoText = text;
     // cause a relayout
     d->currentSize = QSizeF(-1, -1);
+    //try to relayout, needed if an icon was never shown before
+    if (!isVisible()) {
+        layoutIcons(new QStyleOptionGraphicsItem);
+    }
     resize(sizeFromIconSize(d->iconSize.width()));
 }
 
