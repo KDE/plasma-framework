@@ -200,7 +200,7 @@ public:
 
     void scheduleMatchesChanged()
     {
-        matchChangeTimer.start(100);
+        matchChangeTimer.start(0);
     }
 
     void matchesChanged()
