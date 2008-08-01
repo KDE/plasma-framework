@@ -134,21 +134,21 @@ void Containment::init()
     appletBrowserAction->setVisible(unlocked);
     appletBrowserAction->setEnabled(unlocked);
     connect(appletBrowserAction, SIGNAL(triggered()), this, SLOT(triggerShowAddWidgets()));
-    appletBrowserAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+    appletBrowserAction->setShortcutContext(Qt::WidgetShortcut);
     appletBrowserAction->setShortcut(QKeySequence("ctrl+a"));
     d->actions().addAction("add widgets", appletBrowserAction);
 
     QAction *action = new QAction(i18n("Next Applet"), this);
     //no icon
     connect(action, SIGNAL(triggered()), this, SLOT(focusNextApplet()));
-    action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+    action->setShortcutContext(Qt::WidgetShortcut);
     action->setShortcut(QKeySequence("ctrl+n"));
     d->actions().addAction("next applet", action);
 
     action = new QAction(i18n("Previous Applet"), this);
     //no icon
     connect(action, SIGNAL(triggered()), this, SLOT(focusPreviousApplet()));
-    action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+    action->setShortcutContext(Qt::WidgetShortcut);
     action->setShortcut(QKeySequence("ctrl+p"));
     d->actions().addAction("previous applet", action);
 
@@ -158,7 +158,7 @@ void Containment::init()
         QAction *lockDesktopAction = new QAction(unlocked ? i18n("Lock Widgets") : i18n("Unlock Widgets"), this);
         lockDesktopAction->setIcon(KIcon(unlocked ? "object-locked" : "object-unlocked"));
         connect(lockDesktopAction, SIGNAL(triggered(bool)), this, SLOT(toggleDesktopImmutability()));
-        lockDesktopAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+        lockDesktopAction->setShortcutContext(Qt::WidgetShortcut);
         lockDesktopAction->setShortcut(QKeySequence("ctrl+l"));
         d->actions().addAction("lock widgets", lockDesktopAction);
     }
@@ -168,7 +168,7 @@ void Containment::init()
         QAction *zoomAction = new QAction(i18n("Zoom In"), this);
         zoomAction->setIcon(KIcon("zoom-in"));
         connect(zoomAction, SIGNAL(triggered(bool)), this, SLOT(zoomIn()));
-        zoomAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+        zoomAction->setShortcutContext(Qt::WidgetShortcut);
         //two shortcuts because I hate ctrl-+ but others expect it
         QList<QKeySequence> keys;
         keys << QKeySequence(QKeySequence::ZoomIn);
@@ -179,7 +179,7 @@ void Containment::init()
         zoomAction = new QAction(i18n("Zoom Out"), this);
         zoomAction->setIcon(KIcon("zoom-out"));
         connect(zoomAction, SIGNAL(triggered(bool)), this, SLOT(zoomOut()));
-        zoomAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+        zoomAction->setShortcutContext(Qt::WidgetShortcut);
         zoomAction->setShortcut(QKeySequence(QKeySequence::ZoomOut));
         d->actions().addAction("zoom out", zoomAction);
 
@@ -188,7 +188,7 @@ void Containment::init()
         activityAction->setVisible(unlocked);
         activityAction->setEnabled(unlocked);
         connect(activityAction, SIGNAL(triggered(bool)), this, SLOT(addSiblingContainment()));
-        activityAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+        activityAction->setShortcutContext(Qt::WidgetShortcut);
         activityAction->setShortcut(QKeySequence("ctrl+shift+a"));
         d->actions().addAction("add sibling containment", activityAction);
 

@@ -695,7 +695,7 @@ void Applet::flushPendingConstraintsEvents()
         closeApplet->setIcon(KIcon("edit-delete"));
         closeApplet->setEnabled(unlocked);
         closeApplet->setVisible(unlocked);
-        closeApplet->setShortcutContext(Qt::WidgetWithChildrenShortcut); //don't clash with other views
+        closeApplet->setShortcutContext(Qt::WidgetShortcut); //don't clash with other views
         if (isContainment()) {
             closeApplet->setText(i18n("Remove this %1 Activity", name()));
             closeApplet->setShortcut(QKeySequence("ctrl+shift+r"));
@@ -1024,7 +1024,7 @@ void Applet::setHasConfigurationInterface(bool hasInterface)
         if (! configAction) { //should be always true
             configAction = new QAction(i18n("%1 Settings", name()), this);
             configAction->setIcon(KIcon("configure"));
-            configAction->setShortcutContext(Qt::WidgetWithChildrenShortcut); //don't clash with other views
+            configAction->setShortcutContext(Qt::WidgetShortcut); //don't clash with other views
             if (isContainment()) {
                 //kDebug() << "I am a containment";
                 configAction->setShortcut(QKeySequence("ctrl+shift+s"));
