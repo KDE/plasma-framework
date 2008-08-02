@@ -54,8 +54,9 @@ public:
         KMimeType::Ptr mime = KMimeType::findByPath(absImagePath);
         QPixmap pm(q->size().toSize());
 
-        if (mime->is("image/svg+xml")) {
+        if (mime->is("image/svg+xml") || mime->is("application/x-gzip")) {
             svg = new Svg();
+            svg->setImagePath(imagePath);
             QPainter p(&pm);
             svg->paint(&p, pm.rect());
         } else {
