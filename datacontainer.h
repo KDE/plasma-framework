@@ -95,7 +95,6 @@ class PLASMA_EXPORT DataContainer : public QObject
         void connectVisualization(QObject* visualization, uint pollingInterval, Plasma::IntervalAlignment alignment);
 
     public Q_SLOTS:
-
         /**
          * Disconnects an object from this DataContainer.
          **/
@@ -118,6 +117,7 @@ class PLASMA_EXPORT DataContainer : public QObject
          * requests to be updated.
          **/
         void updateRequested(DataContainer *source);
+
     protected:
         /**
          * Checks for whether the data has changed and therefore an update
@@ -147,7 +147,6 @@ protected Q_SLOTS:
          * Warning: The DataContainer may be invalid after calling this function.
          */
         void checkUsage();
-
 
     private:
         friend class SignalRelay;

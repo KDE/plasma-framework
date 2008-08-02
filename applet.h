@@ -44,12 +44,12 @@ class KActionCollection;
 namespace Plasma
 {
 
+class AppletPrivate;
 class Containment;
 class DataEngine;
-class Package;
-class AppletPrivate;
-class ExtenderItem;
 class Extender;
+class ExtenderItem;
+class Package;
 
 /**
  * @short The base Applet class

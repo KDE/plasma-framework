@@ -35,6 +35,8 @@ set(plasma_LIB_SRCS
     dataenginemanager.cpp
     delegate.cpp
     dialog.cpp
+    extender.cpp
+    extenderitem.cpp
     paintutils.cpp
     panelsvg.cpp
     plasma.cpp
@@ -63,8 +65,6 @@ set(plasma_LIB_SRCS
     view.cpp
     widgets/checkbox.cpp
     widgets/combobox.cpp
-    widgets/extender.cpp
-    widgets/extenderitem.cpp
     widgets/flash.cpp
     widgets/frame.cpp
     widgets/groupbox.cpp
@@ -135,6 +135,8 @@ set(plasma_LIB_INCLUDES
     dataenginemanager.h
     delegate.h
     dialog.h
+    extender.h
+    extenderitem.h
     paintutils.h
     panelsvg.h
     plasma.h
@@ -166,8 +168,6 @@ install(FILES
 install(FILES
     widgets/checkbox.h
     widgets/combobox.h
-    widgets/extender.h
-    widgets/extenderitem.h
     widgets/flash.h
     widgets/frame.h
     widgets/groupbox.h

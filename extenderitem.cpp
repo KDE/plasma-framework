@@ -19,27 +19,28 @@
 
 #include "extenderitem.h"
 
-#include <QtGui/QPainter>
-#include <QtGui/QGraphicsSceneResizeEvent>
-#include <QtGui/QGraphicsSceneMouseEvent>
-#include <QtGui/QGraphicsLinearLayout>
 #include <QApplication>
 #include <QAction>
+#include <QGraphicsSceneResizeEvent>
+#include <QGraphicsSceneMouseEvent>
+#include <QGraphicsLinearLayout>
+#include <QPainter>
 #include <QTimer>
 
-#include <KDE/KDebug>
-#include <KDE/KIcon>
-#include <KDE/KWindowSystem>
+#include <KDebug>
+#include <KIcon>
+#include <KWindowSystem>
 
-#include "plasma/corona.h"
-#include "plasma/containment.h"
-#include "plasma/theme.h"
-#include "plasma/view.h"
-#include "plasma/applet.h"
-#include "plasma/private/applet_p.h"
-#include "plasma/panelsvg.h"
-#include "plasma/widgets/extender.h"
-#include "plasma/widgets/extender_p.h"
+#include "applet.h"
+#include "containment.h"
+#include "corona.h"
+#include "extender.h"
+#include "panelsvg.h"
+#include "theme.h"
+#include "view.h"
+
+#include "private/applet_p.h"
+#include "private/extender_p.h"
 
 namespace Plasma
 {

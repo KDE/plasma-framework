@@ -63,6 +63,8 @@
 #include "containment.h"
 #include "corona.h"
 #include "dataenginemanager.h"
+#include "extender.h"
+#include "extenderitem.h"
 #include "package.h"
 #include "plasma.h"
 #include "scripting/appletscript.h"
@@ -72,8 +74,6 @@
 #include "view.h"
 #include "widgets/label.h"
 #include "widgets/pushbutton.h"
-#include "widgets/extender.h"
-#include "widgets/extenderitem.h"
 #include "tooltipmanager.h"
 
 #include "private/containment_p.h"

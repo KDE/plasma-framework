@@ -523,10 +523,6 @@ Applet* Containment::addApplet(const QString& name, const QVariantList& args, co
     return d->addApplet(name, args, appletGeometry);
 }
 
-//pos must be relative to the containment already. use mapfromscene.
-//what we're trying to do here for panels is make the applet go to the requested position,
-//or somewhere close to it, and get integrated properly into the containment as if it were created
-//there.
 void Containment::addApplet(Applet *applet, const QPointF &pos, bool delayInit)
 {
     if (!delayInit && immutability() != Mutable) {

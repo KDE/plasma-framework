@@ -55,11 +55,6 @@ class DataEnginePrivate;
  **/
 class PLASMA_EXPORT DataEngine : public QObject
 {
-    friend class DataEnginePrivate;
-    friend class DataEngineScript;
-    friend class DataEngineManager;
-    friend class NullEngine;
-
     Q_OBJECT
     Q_PROPERTY( QStringList sources READ sources )
     Q_PROPERTY( bool valid READ isValid )
@@ -424,6 +419,11 @@ class PLASMA_EXPORT DataEngine : public QObject
         void removeSource(const QString& source);
 
     private:
+        friend class DataEnginePrivate;
+        friend class DataEngineScript;
+        friend class DataEngineManager;
+        friend class NullEngine;
+
         Q_PRIVATE_SLOT(d, void internalUpdateSource(DataContainer* source))
 
         DataEnginePrivate* const d;

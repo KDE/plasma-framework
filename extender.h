@@ -31,16 +31,18 @@ class ExtenderItem;
 class Applet;
 
 /**
- * An extender is a widget where items can be added to. These so called ExtenderItems can be
- * detached by the user an dropped in other extenders or somewhere else, in which case a new
- * extenderapplet is created and the item is added there.
- * This widget allows using ExtenderItems in you applet. Extender takes care of the presentation
- * of a collection of extenderitems, and keeps track of extenderItems that originated in it.
- * This default extender displays extender items in a vertical layout, and shows spacers in this
- * layout when hovering with an extender item over it, which is probably good for most cases.
+ * An Extender is a widget that visually extends the normal contents of an applet with
+ * additional dynamic widgets called ExtenderItems. These ExtenderItems can be
+ * detached by the user and dropped either on another Extender or on the canvas directly.
+ *
+ * This widget allows using ExtenderItems in your applet. Extender takes care of the presentation
+ * of a collection of ExtenderItems and keeps track of ExtenderItems that originate in it.
+ *
+ * The default Extender implementation displays extender items in a vertical layout with
+ * spacers that appear when dropping an ExtenderItem over it.
+ *
  * If you wish to have a different presentation of extender items, you can choose to subclass
- * this class. In this case you'll need to reimplement the extenderItem* events and optionally
- * the saveState function.
+ * Extender and reimplement the extenderItem* events and, optionally, the saveState function.
  */
 class PLASMA_EXPORT Extender : public QGraphicsWidget
 {
@@ -175,3 +177,4 @@ class PLASMA_EXPORT Extender : public QGraphicsWidget
 } // Plasma namespace
 
 #endif //EXTENDER_H
+

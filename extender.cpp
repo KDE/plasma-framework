@@ -17,19 +17,20 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA .        *
  ***************************************************************************/
 
-#include "extender_p.h"
 #include "extender.h"
 
-#include <QGraphicsLinearLayout>
-#include <QGraphicsGridLayout>
 #include <QAction>
+#include <QGraphicsGridLayout>
+#include <QGraphicsLinearLayout>
 
-#include "plasma/applet.h"
-#include "plasma/private/applet_p.h"
-#include "plasma/containment.h"
-#include "plasma/corona.h"
-#include "plasma/widgets/extenderitem.h"
-#include "plasma/widgets/label.h"
+#include "applet.h"
+#include "containment.h"
+#include "corona.h"
+#include "extenderitem.h"
+#include "widgets/label.h"
+
+#include "private/applet_p.h"
+#include "private/extender_p.h"
 
 namespace Plasma
 {
