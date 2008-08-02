@@ -23,6 +23,7 @@
 #include <QPainter>
 #include <QGraphicsSceneResizeEvent>
 #include <QWidget>
+#include <QDir>
 #include <QApplication>
 
 //KDE
@@ -71,10 +72,10 @@ void FramePrivate::syncBorders()
     qreal left, top, right, bottom;
 
     svg->getMargins(left, top, right, bottom);
-
+kWarning()<<top;
     if (!text.isNull()) {
         QFontMetricsF fm(QApplication::font());
-        top += fm.height();
+        top += fm.height();kWarning()<<top;
     }
 
     q->setContentsMargins(left, top, right, bottom);
