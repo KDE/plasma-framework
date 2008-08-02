@@ -21,6 +21,7 @@
 #include "private/service_p.h"
 
 #include <QFile>
+#include <QTimer>
 
 #include <KDebug>
 #include <KService>
@@ -148,7 +149,7 @@ ServiceJob* Service::startOperationCall(const KConfigGroup &description)
 
     ServiceJob *job = createJob(description.name(), params);
     connect(job, SIGNAL(finished(KJob*)), this, SLOT(jobFinished(KJob*)));
-    job->start();
+    QTimer::singleShot(0, job, SLOT(slotStart()));
     return job;
 }
 

@@ -32,6 +32,19 @@ class ServiceJobPrivate;
 
 /**
  * @brief This class provides jobs for use with Plasma::Service
+ *
+ * Unlike KJob, you can do the work in start(), since Plasma::Service already
+ * delays the call to start() until the event loop is reached.
+ *
+ * If the job is quick enough that it is not worth reporting the progress,
+ * you just need to implement start() to do the task, then call emitResult()
+ * at the end of it.  If the task does not complete successfully, you should
+ * set a non-zero error code with setError(int) and an error message with
+ * setErrorText(QString).
+ *
+ * If the job is longer (involving network access, for instance), you should
+ * report the progress at regular intervals.  See the KJob documentation for
+ * information on how to do this.
  */
 class PLASMA_EXPORT ServiceJob : public KJob
 {
@@ -41,7 +54,10 @@ public:
     /**
      * Default constructor
      *
-     * @arg parent the parent object for this service
+     * @arg destination the subject that the job is acting on
+     * @arg operation   the action that the job is performing on the @p destination
+     * @arg parameters  the parameters of the @p action
+     * @arg parent      the parent object for this service
      */
     ServiceJob(const QString &destination, const QString &operation,
                const QMap<QString, QVariant> &parameters, QObject *parent = 0);
@@ -52,22 +68,30 @@ public:
     ~ServiceJob();
 
     /**
-     * @return the destination, if any, that this service is associated with
+     * @return the subject that the job is acting on
      */
     QString destination() const;
 
     /**
-     * @return the operation this job should perform
+     * @return the operation the job is performing on the destination
      */
     QString operationName() const;
 
     /**
-     * @return the parameters for the job
+     * @return the parameters for the operation
      */
     QMap<QString, QVariant> parameters() const;
 
     /**
-     * @return the resulting value from the operation
+     * Returns the result of the operation
+     *
+     * The result will be invalid if the job has not completed yet, or
+     * if the job does not have a meaningful result.
+     *
+     * Note that this should not be used to find out whether the operation
+     * was successful.  Instead, you should check the value of error().
+     *
+     * @return the result of the operation
      */
     QVariant result() const;
 
@@ -78,6 +102,8 @@ protected:
     void setResult(const QVariant &result);
 
 private:
+    Q_PRIVATE_SLOT(d, void slotStart())
+
     ServiceJobPrivate * const d;
 };
 
