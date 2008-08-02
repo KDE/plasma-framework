@@ -66,6 +66,7 @@ set(plasma_LIB_SRCS
     widgets/extender.cpp
     widgets/extenderitem.cpp
     widgets/flash.cpp
+    widgets/frame.cpp
     widgets/groupbox.cpp
     widgets/icon.cpp
     widgets/label.cpp
@@ -168,6 +169,7 @@ install(FILES
     widgets/extender.h
     widgets/extenderitem.h
     widgets/flash.h
+    widgets/frame.h
     widgets/groupbox.h
     widgets/icon.h
     widgets/label.h
