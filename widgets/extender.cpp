@@ -25,7 +25,7 @@
 #include <QAction>
 
 #include "plasma/applet.h"
-#include "plasma/applet_p.h"
+#include "plasma/private/applet_p.h"
 #include "plasma/containment.h"
 #include "plasma/corona.h"
 #include "plasma/widgets/extenderitem.h"

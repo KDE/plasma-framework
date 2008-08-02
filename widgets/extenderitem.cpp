@@ -36,7 +36,7 @@
 #include "plasma/theme.h"
 #include "plasma/view.h"
 #include "plasma/applet.h"
-#include "plasma/applet_p.h"
+#include "plasma/private/applet_p.h"
 #include "plasma/panelsvg.h"
 #include "plasma/widgets/extender.h"
 #include "plasma/widgets/extender_p.h"
