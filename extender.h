@@ -20,7 +20,7 @@
 #ifndef EXTENDER_H
 #define EXTENDER_H
 
-#include <QGraphicsWidget>
+#include <QtGui/QGraphicsWidget>
 
 #include "plasma/plasma_export.h"
 
