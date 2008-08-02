@@ -231,9 +231,11 @@ void Meter::dataUpdated(const QString &sourceName, const Plasma::DataEngine::Dat
 {
     Q_UNUSED(sourceName)
 
-    foreach (const QVariant &d, data) {
-        if (d.canConvert(QVariant::Int)) {
-            setValue(d.toInt());
+    foreach (const QVariant &v, data) {
+        if (v.type() == QVariant::Int || v.type() == QVariant::UInt
+                                      || v.type() == QVariant::LongLong
+                                      || v.type() == QVariant::ULongLong) {
+            setValue(v.toInt());
             return;
         }
     }

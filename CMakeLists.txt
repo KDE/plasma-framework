@@ -63,6 +63,8 @@ set(plasma_LIB_SRCS
     view.cpp
     widgets/checkbox.cpp
     widgets/combobox.cpp
+    widgets/extender.cpp
+    widgets/extenderitem.cpp
     widgets/flash.cpp
     widgets/groupbox.cpp
     widgets/icon.cpp
@@ -163,6 +165,8 @@ install(FILES
 install(FILES
     widgets/checkbox.h
     widgets/combobox.h
+    widgets/extender.h
+    widgets/extenderitem.h
     widgets/flash.h
     widgets/groupbox.h
     widgets/icon.h
@@ -203,6 +207,8 @@ includes/DataEngineManager
 includes/DataEngineScript
 includes/Delegate
 includes/Dialog
+includes/Extender
+includes/ExtenderItem
 includes/Flash
 includes/GroupBox
 includes/Icon

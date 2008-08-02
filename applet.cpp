@@ -72,6 +72,8 @@
 #include "view.h"
 #include "widgets/label.h"
 #include "widgets/pushbutton.h"
+#include "widgets/extender.h"
+#include "widgets/extenderitem.h"
 #include "tooltipmanager.h"
 
 #include "private/containment_p.h"
@@ -177,6 +179,11 @@ void Applet::save(KConfigGroup &g) const
     }
 
     KConfigGroup appletConfigGroup(&group, "Configuration");
+
+    if (extender()) {
+        extender()->saveState();
+    }
+
     //FIXME: we need a global save state too
     saveState(appletConfigGroup);
 
@@ -185,6 +192,7 @@ void Applet::save(KConfigGroup &g) const
         shortcutConfig.writeEntry("global", d->activationAction->globalShortcut().toString());
     }
 }
+
 
 void Applet::restore(KConfigGroup &group)
 {
@@ -457,6 +465,17 @@ void Applet::constraintsEvent(Plasma::Constraints constraints)
     if (d->script) {
         d->script->constraintsEvent(constraints);
     }
+}
+
+void Applet::initExtenderItem(ExtenderItem *item)
+{
+    Q_UNUSED(item)
+    item->destroy();
+}
+
+Extender *Applet::extender() const
+{
+    return d->extender;
 }
 
 QString Applet::name() const
@@ -1460,6 +1479,7 @@ bool Applet::isContainment() const
 AppletPrivate::AppletPrivate(KService::Ptr service, int uniqueID, Applet *applet)
         : appletId(uniqueID),
           q(applet),
+          extender(0),
           backgroundHints(Applet::StandardBackground),
           appletDescription(service),
           package(0),

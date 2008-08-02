@@ -48,6 +48,8 @@ class Containment;
 class DataEngine;
 class Package;
 class AppletPrivate;
+class ExtenderItem;
+class Extender;
 
 /**
  * @short The base Applet class
@@ -511,7 +513,7 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          * can coordinate themselves with these changes if they desire.
          */
         void geometryChanged();
-        
+
         /**
          * Emitted by Applet subclasses when they change a sizeHint and wants to announce the change
          */
@@ -582,6 +584,27 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          * in this method instead of the constructor.
          **/
         virtual void init();
+
+        /**
+         * Get's called when and extender item has to be initialized after a plasma restart. If you
+         * create ExtenderItems in your applet, you should implement this function to again create
+         * the widget that should be shown in this extender item. This function might look something
+         * like this:
+         *
+         * @code
+         * SuperCoolWidget *widget = new SuperCoolWidget();
+         * dataEngine("engine")->connectSource(item->config("dataSourceName"), widget);
+         * item->setWidget(widget);
+         * @endcode
+         *
+         * You can also add one or more custom qactions to this extender item in this function.
+         */
+        virtual void initExtenderItem(ExtenderItem *item);
+
+        /**
+         * @return the extender this applet has.
+         */
+        Extender *extender() const;
 
     protected:
         /**
@@ -674,6 +697,7 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          * @property constraint
          */
         virtual void constraintsEvent(Plasma::Constraints constraints);
+
 
         /**
          * Register the widgets that manage mouse clicks but you still want
@@ -771,6 +795,10 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         friend class AppletScript;
         friend class AppletHandle;
         friend class AppletPrivate;
+
+        //FIXME: this shouldn't be necesarry.
+        friend class Extender;
+        friend class ExtenderItem;
 };
 
 } // Plasma namespace

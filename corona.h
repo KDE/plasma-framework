@@ -27,6 +27,8 @@
 #include <plasma/plasma.h>
 #include <plasma/plasma_export.h>
 
+class QGraphicsGridLayout;
+
 namespace Plasma
 {
 
@@ -92,6 +94,20 @@ public:
      * @param screen number of the physical screen to locate
      */
     Containment* containmentForScreen(int screen) const;
+
+    /**
+     * Adds a widget in the topleft quadrant in the scene. Widgets in the topleft quadrant are
+     * normally never shown unless you specifically aim a view at it, which makes it ideal for
+     * toplevel views etc.
+     * @param widget the widget to add.
+     */
+    void addOffscreenWidget(QGraphicsWidget *widget);
+
+    /**
+     * Removes a widget from the topleft quadrant in the scene.
+     * @param widget the widget to remove.
+     */
+    void removeOffscreenWidget(QGraphicsWidget *widget);
 
 public Q_SLOTS:
     /**

@@ -23,6 +23,7 @@
 
 #include <QApplication>
 #include <QGraphicsSceneDragDropEvent>
+#include <QGraphicsGridLayout>
 #include <QMimeData>
 #include <QPainter>
 #include <QTimer>
@@ -50,7 +51,8 @@ public:
         : q(corona),
           immutability(Mutable),
           mimetype("text/x-plasmoidservicename"),
-          config(0)
+          config(0),
+          offscreenLayout(0)
     {
         if (KGlobal::hasMainComponent()) {
             configName = KGlobal::mainComponent().componentName() + "-appletsrc";
@@ -171,6 +173,7 @@ public:
     KSharedConfigPtr config;
     QTimer configSyncTimer;
     QList<Containment*> containments;
+    QGraphicsGridLayout *offscreenLayout;
 };
 
 Corona::Corona(QObject *parent)
@@ -336,6 +339,43 @@ Containment* Corona::addContainment(const QString& name, const QVariantList& arg
 Containment* Corona::addContainmentDelayed(const QString& name, const QVariantList& args)
 {
     return d->addContainment(name, args, 0, true);
+}
+
+void Corona::addOffscreenWidget(QGraphicsWidget *widget)
+{
+    kDebug() << "adding offscreen widget.";
+    widget->setParentItem(0);
+    if (!d->offscreenLayout) {
+    kDebug() << "adding offscreen widget.";
+        QGraphicsWidget *offscreenWidget = new QGraphicsWidget(0);
+        addItem(offscreenWidget);
+        d->offscreenLayout = new QGraphicsGridLayout(offscreenWidget);
+        //FIXME: do this a nice way.
+        offscreenWidget->setPos(-10000, -10000);
+        offscreenWidget->setLayout(d->offscreenLayout);
+    }
+
+    d->offscreenLayout->addItem(widget, d->offscreenLayout->rowCount() + 1,
+                                        d->offscreenLayout->columnCount() + 1);
+
+    d->offscreenLayout->invalidate();
+
+    kDebug() << "current scenerect = " << widget->sceneBoundingRect();
+}
+
+void Corona::removeOffscreenWidget(QGraphicsWidget *widget)
+{
+    if (!d->offscreenLayout) {
+        return;
+    }
+
+    for (int i = 0; i < d->offscreenLayout->count(); i++) {
+        QGraphicsWidget *foundWidget =
+            dynamic_cast<QGraphicsWidget*>(d->offscreenLayout->itemAt(i));
+        if (foundWidget == widget) {
+            d->offscreenLayout->removeAt(i);
+        }
+    }
 }
 
 void Corona::loadDefaultLayout()

@@ -75,6 +75,7 @@ public:
     //      number of members at this point.
     uint appletId;
     Applet *q;
+    Extender *extender;
     Applet::BackgroundHints backgroundHints;
     KPluginInfo appletDescription;
     Package* package;
