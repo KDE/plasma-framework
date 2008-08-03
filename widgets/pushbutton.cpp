@@ -19,14 +19,15 @@
 
 #include "pushbutton.h"
 
-#include <KPushButton>
 #include <QStyleOptionGraphicsItem>
 #include <QPainter>
 #include <QDir>
 #include <QApplication>
 
-#include <KMimeType>
+#include <KIcon>
 #include <KIconEffect>
+#include <KMimeType>
+#include <KPushButton>
 
 #include "theme.h"
 #include "svg.h"
@@ -70,7 +71,7 @@ public:
             pm = QPixmap(absImagePath);
         }
 
-        static_cast<KPushButton*>(q->widget())->setIcon(QIcon(pm));
+        static_cast<KPushButton*>(q->widget())->setIcon(KIcon(pm));
     }
 
     void renderActiveBackgroundPixmap();
