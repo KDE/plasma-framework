@@ -390,9 +390,7 @@ QIcon ExtenderItem::icon() const
 
 void ExtenderItem::setExtender(Extender *extender, const QPointF &pos)
 {
-    kDebug() << "setExtender";
     //We are switching extender...
-
     //first remove this item from the old extender.
     if (d->extender) {
         d->extender->d->removeExtenderItem(this);
@@ -437,10 +435,14 @@ bool ExtenderItem::isCollapsed() const
 void ExtenderItem::setAutoExpireDelay(uint time)
 {
     if (!isDetached()) {
-        d->expirationTimer = new QTimer(this);
+        if (!d->expirationTimer) {
+            d->expirationTimer = new QTimer(this);
+            connect(d->expirationTimer, SIGNAL(timeout()), this, SLOT(destroy()));
+        }
+
+        d->expirationTimer->stop();
         d->expirationTimer->setSingleShot(true);
         d->expirationTimer->setInterval(time);
-        connect(d->expirationTimer, SIGNAL(timeout()), this, SLOT(destroy()));
         d->expirationTimer->start();
     }
 }
