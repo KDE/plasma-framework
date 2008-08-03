@@ -503,6 +503,7 @@ void ExtenderItem::setCollapsed(bool collapsed)
         setMinimumSize(QSizeF(0, d->dragHandleRect().height()));
         //FIXME: wasn't there some sort of QWIDGETMAXSIZE thingy?
         setMaximumSize(QSizeF(1000, d->dragHandleRect().height()));
+        setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
         updateGeometry();
         return;
     }
@@ -516,6 +517,7 @@ void ExtenderItem::setCollapsed(bool collapsed)
         setPreferredSize(QSizeF(d->widget->preferredWidth(), d->dragHandleRect().height()));
         setMinimumSize(QSizeF(d->widget->minimumWidth(), d->dragHandleRect().height()));
         setMaximumSize(QSizeF(d->widget->maximumWidth(), d->dragHandleRect().height()));
+        setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
         //FIXME: why don't tooltips work?
         //d->collapseIcon->setToolTip(i18n("Expand this widget"));
     } else {
@@ -525,6 +527,8 @@ void ExtenderItem::setCollapsed(bool collapsed)
                          d->widget->minimumHeight() + d->dragHandleRect().height()));
         setMaximumSize(  QSizeF(d->widget->maximumWidth(),
                          d->widget->maximumHeight() + d->dragHandleRect().height()));
+
+        setSizePolicy(d->widget->sizePolicy());
         //d->collapseIcon->setToolTip(i18n("Collapse this widget"));
     }
 
