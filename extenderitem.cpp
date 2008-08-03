@@ -75,8 +75,8 @@ class ExtenderItemPrivate
         {
             qreal left, top, right, bottom;
             dragger->getMargins(left, top, right, bottom);
-            QRectF rect(0, 0, q->size().width(), top + bottom +
-                        dragger->elementSize("hint-preferred-icon-size").height());
+            QRectF rect(0, 0, q->size().width(),
+                        dragger->elementSize("hint-preferred-icon-size").height() + top + bottom);
 
             return rect;
         }
@@ -85,7 +85,7 @@ class ExtenderItemPrivate
         {
             qreal left, top, right, bottom;
             dragger->getMargins(left, top, right, bottom);
-            return dragHandleRect().adjusted(left + collapseIcon->size().width(), top,
+            return dragHandleRect().adjusted(left + collapseIcon->size().width() + 1, top,
                                              -toolbox->size().width(), -bottom);
         }
 
@@ -396,14 +396,13 @@ void ExtenderItem::setExtender(Extender *extender, const QPointF &pos)
     //first remove this item from the old extender.
     if (d->extender) {
         d->extender->d->removeExtenderItem(this);
+        emit d->extender->itemDetached(this);
     }
 
     //move the configuration.
     if (d->hostApplet() && (extender != d->extender)) {
         kDebug() << "moving configuration";
         KConfigGroup c = extender->d->applet->config("ExtenderItems");
-        kDebug() << "hostAppletId is " << d->hostApplet()->id();
-        kDebug() << "config name is " << config().name();
         config().reparent(&c);
     }
 
@@ -490,8 +489,7 @@ uint ExtenderItem::sourceAppletId() const
 
 void ExtenderItem::destroy()
 {
-    kDebug() << "deleting config group.";
-    d->hostApplet()->config("ExtenderItem").deleteGroup(QString::number(d->extenderItemId));
+    d->hostApplet()->config("ExtenderItems").deleteGroup(QString::number(d->extenderItemId));
     if (d->extender) {
         d->extender->d->removeExtenderItem(this);
     }

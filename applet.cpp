@@ -181,6 +181,19 @@ void Applet::save(KConfigGroup &g) const
     KConfigGroup appletConfigGroup(&group, "Configuration");
 
     if (extender()) {
+        //This would probably be nicer if it was located in extender. But in it's dtor, this won't
+        //work since when that get's called, the applet's config() isn't accesible anymore. (same
+        //problem with calling saveState(). Doing this in saveState() might be a possibility, but
+        //that would require every extender savestate implementation to call it's parent function,
+        //which isn't very nice.
+        foreach (ExtenderItem *item, extender()->attachedItems()) {
+            if (!item->isDetached() && item->autoExpireDelay()) {
+                //destroy temporary extender items, so their configuration won't linger after a 
+                //plasma restart.
+                item->destroy();
+            }
+        }
+
         extender()->saveState();
     }
 

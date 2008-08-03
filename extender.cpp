@@ -56,14 +56,6 @@ Extender::Extender(Applet *applet)
 
 Extender::~Extender()
 {
-    //FIXME: this used to work, not anymore... fix.
-    foreach (ExtenderItem *item, attachedItems()) {
-        if (!item->isDetached() && item->autoExpireDelay()) {
-            //destroy temporary extender items, so their configuration won't linger after a plasma
-            //restart.
-            item->destroy();
-        }
-    }
     delete d;
 }
 
@@ -264,7 +256,6 @@ void ExtenderPrivate::removeExtenderItem(ExtenderItem *item)
 {
     attachedExtenderItems.removeOne(item);
     q->itemRemovedEvent(item);
-    emit q->itemDetached(item);
 }
 
 void ExtenderPrivate::adjustSizeHints()
