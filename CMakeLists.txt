@@ -103,8 +103,8 @@ if(QT_QTOPENGL_FOUND AND OPENGL_FOUND)
 endif(QT_QTOPENGL_FOUND AND OPENGL_FOUND)
 
 set_target_properties(plasma PROPERTIES 
-                             VERSION 2.0.0 
-                             SOVERSION 2
+                             VERSION 3.0.0
+                             SOVERSION 3
                              ${KDE4_DISABLE_PROPERTY_}LINK_INTERFACE_LIBRARIES  "${KDE4_KDEUI_LIBS}"
                       )
 
