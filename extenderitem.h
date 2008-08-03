@@ -136,7 +136,7 @@ class PLASMA_EXPORT ExtenderItem : public QGraphicsWidget
          * @param time (in ms) before this extender item destroys itself unless it is detached,
          * in which case this extender stays around. 0 means forever and is the default.
          */
-        void setAutoExpireDelay(uint time = 0);
+        void setAutoExpireDelay(uint time);
 
         /**
          * @return whether or not this extender item has an auto expire delay.

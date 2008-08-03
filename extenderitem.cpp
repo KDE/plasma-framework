@@ -434,6 +434,15 @@ bool ExtenderItem::isCollapsed() const
 
 void ExtenderItem::setAutoExpireDelay(uint time)
 {
+    if (!time) {
+        if (d->expirationTimer) {
+            d->expirationTimer->stop();
+            delete d->expirationTimer;
+            d->expirationTimer = 0;
+        }
+        return;
+    }
+
     if (!isDetached()) {
         if (!d->expirationTimer) {
             d->expirationTimer = new QTimer(this);
