@@ -1254,7 +1254,7 @@ Applet* ContainmentPrivate::addApplet(const QString& name, const QVariantList& a
     if (!applet) {
         kDebug() << "Applet" << name << "could not be loaded.";
         applet = new Applet(0, QString(), id);
-        applet->setFailedToLaunch(true, QString("Could not find requested component: %1").arg(name));
+        applet->setFailedToLaunch(true, i18n("Could not find requested component: %1", name));
     }
 
     //kDebug() << applet->name() << "sizehint:" << applet->sizeHint() << "geometry:" << applet->geometry();
