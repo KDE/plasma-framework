@@ -116,6 +116,11 @@ NativeTabBar::NativeTabBar(QWidget *parent)
     setSizePolicy( QSizePolicy::Preferred, QSizePolicy::Preferred );
 }
 
+NativeTabBar::~NativeTabBar()
+{  
+    delete d;
+}
+
 QRect NativeTabBar::tabRect(int index) const
 {
     QRect rect = QTabBar::tabRect(index).translated(d->left, d->top);

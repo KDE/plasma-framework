@@ -34,6 +34,7 @@ class NativeTabBar : public QTabBar
 
 public:
     NativeTabBar(QWidget *parent = 0);
+    ~NativeTabBar();
 
     QRect tabRect(int index) const;
     QSize tabSizeHint(int index) const;
