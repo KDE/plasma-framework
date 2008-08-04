@@ -153,6 +153,18 @@ ServiceJob* Service::startOperationCall(const KConfigGroup &description)
     return job;
 }
 
+void Service::associateWidget(QWidget *widget, const QString &operation)
+{
+    d->associatedWidgets.insert(widget, operation);
+    connect(widget, SIGNAL(destroyed(QObject*)), this, SLOT(associatedWidgetDestroyed(QObject*)));
+}
+
+void Service::associateWidget(QGraphicsWidget *widget, const QString &operation)
+{
+    d->associatedGraphicsWidgets.insert(widget, operation);
+    connect(widget, SIGNAL(destroyed(QObject*)), this, SLOT(associatedGraphicsWidgetDestroyed(QObject*)));
+}
+
 QString Service::name() const
 {
     return d->name;
@@ -180,7 +192,25 @@ void Service::setOperationsScheme(QIODevice *xml)
     //FIXME: make KSharedConfig and KConfigSkeleton not braindamaged in 4.2 and then get rid of the
     //       temp file object here
     d->tempFile = new KTemporaryFile;
-    d->config = new ConfigXml(KSharedConfig::openConfig(d->tempFile->fileName()), xml, this);
+    KSharedConfigPtr c = KSharedConfig::openConfig(d->tempFile->fileName());
+    d->config = new ConfigXml(c, xml, this);
+    emit operationsChanged();
+
+    {
+        QHashIterator<QWidget *, QString> it(d->associatedWidgets);
+        while (it.hasNext()) {
+            it.next();
+            it.key()->setEnabled(d->config->hasGroup(it.value()));
+        }
+    }
+
+    {
+        QHashIterator<QGraphicsWidget *, QString> it(d->associatedGraphicsWidgets);
+        while (it.hasNext()) {
+            it.next();
+            it.key()->setEnabled(d->config->hasGroup(it.value()));
+        }
+    }
 }
 
 void Service::registerOperationsScheme()

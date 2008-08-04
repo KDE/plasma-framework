@@ -27,7 +27,9 @@
 #include <KDE/KConfigGroup>
 #include <plasma/plasma_export.h>
 
+class QGraphicsWidget;
 class QIODevice;
+class QWidget;
 
 namespace Plasma
 {
@@ -126,8 +128,36 @@ public:
      */
     QString name() const;
 
+    /**
+     * Assoicates a widget with an operation, which allows the service to
+     * automatically manage, for example, the enabled state of a widget.
+     *
+     * @param widget the QWidget to associate with the service
+     * @param operation the operation to associate the widget with
+     */
+    void associateWidget(QWidget *widget, const QString &operation);
+
+    /**
+     * Assoicates a widget with an operation, which allows the service to
+     * automatically manage, for example, the enabled state of a widget.
+     *
+     * @param widget the QGraphicsItem to associate with the service
+     * @param operation the operation to associate the widget with
+     */
+    void associateWidget(QGraphicsWidget *widget, const QString &operation);
+
 Q_SIGNALS:
+    /**
+     * Emitted when a job associated with this Service completes its task
+     */
     void finished(ServiceJob* job);
+
+    /**
+     * Emitted when the Service's operations change. For example, a
+     * media player service may change what operations are available
+     * in response to the state of the player.
+     */
+    void operationsChanged();
 
 protected:
     /**
@@ -175,7 +205,9 @@ protected:
     void setName(const QString &name);
 
 private:
-    Q_PRIVATE_SLOT(d, void jobFinished(KJob*))
+    Q_PRIVATE_SLOT(d, void jobFinished(KJob *))
+    Q_PRIVATE_SLOT(d, void associatedWidgetDestroyed(QObject *))
+    Q_PRIVATE_SLOT(d, void associatedGraphicsWidgetDestroyed(QObject *))
 
     ServicePrivate * const d;
 

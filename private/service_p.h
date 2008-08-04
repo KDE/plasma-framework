@@ -22,6 +22,10 @@
 
 #include "servicejob.h"
 
+#include <QGraphicsWidget>
+#include <QMultiHash>
+#include <QWidget>
+
 #include <KTemporaryFile>
 
 namespace Plasma
@@ -78,10 +82,22 @@ public:
     QString name;
     ConfigXml *config;
     KTemporaryFile *tempFile;
+    QMultiHash<QWidget *, QString> associatedWidgets;
+    QMultiHash<QGraphicsWidget *, QString> associatedGraphicsWidgets;
 
     void jobFinished(KJob* job)
     {
         emit q->finished(static_cast<ServiceJob*>(job));
+    }
+
+    void associatedWidgetDestroyed(QObject *obj)
+    {
+        associatedWidgets.remove(static_cast<QWidget*>(obj));
+    }
+
+    void associatedGraphicsWidgetDestroyed(QObject *obj)
+    {
+        associatedGraphicsWidgets.remove(static_cast<QGraphicsWidget*>(obj));
     }
 };
 
