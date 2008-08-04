@@ -30,7 +30,7 @@
 
 #include <plasma/animator.h>
 
-#include "nativetabbar.h"
+#include "private/nativetabbar_p.h"
 
 namespace Plasma
 {

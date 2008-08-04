@@ -19,7 +19,7 @@
 */
 
 // Own
-#include "nativetabbar.h"
+#include "nativetabbar_p.h"
 
 // KDE
 #include <KDebug>
@@ -343,4 +343,6 @@ QSize NativeTabBar::tabSize(int index) const
 }
 
 }
-#include "nativetabbar.moc"
+
+#include "nativetabbar_p.moc"
+

@@ -24,7 +24,7 @@
 #include <QtGui/QGraphicsWidget>
 #include <QtGui/QTabBar>
 
-#include "plasma_widgets_export.h"
+#include "plasma_export.h"
 
 class QString;
 class QIcon;
@@ -40,7 +40,7 @@ class TabBarPrivate;
  * Only one of them is displayed at a given time. It is possible to add and remove tabs
  * or modify their text label or their icon.
  */
-class PLASMA_TABBAR_EXPORT TabBar : public QGraphicsWidget
+class PLASMA_EXPORT TabBar : public QGraphicsWidget
 {
     Q_OBJECT
 

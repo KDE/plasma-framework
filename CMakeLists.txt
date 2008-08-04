@@ -44,6 +44,7 @@ set(plasma_LIB_SRCS
     private/applethandle.cpp
     private/datacontainer_p.cpp
     private/desktoptoolbox.cpp
+    private/nativetabbar.cpp
     private/packages.cpp
     private/paneltoolbox.cpp
     private/toolbox.cpp
@@ -236,6 +237,7 @@ includes/ServiceJob
 includes/SignalPlotter
 includes/Slider
 includes/Svg
+includes/TabBar
 includes/TextEdit
 includes/ToolTipManager
 includes/Theme

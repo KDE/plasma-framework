@@ -23,14 +23,12 @@
 
 #include <QTabBar>
 
-#include "plasma_widgets_export.h"
-
 namespace Plasma
 {
 
 class NativeTabBarPrivate;
 
-class PLASMA_NATIVETABBAR_EXPORT NativeTabBar : public QTabBar
+class NativeTabBar : public QTabBar
 {
     Q_OBJECT
 
