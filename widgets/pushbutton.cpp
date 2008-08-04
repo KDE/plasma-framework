@@ -302,8 +302,8 @@ void PushButton::paint(QPainter *painter,
         d->background->paintPanel(painter);
     }
 
-    //FIXME: theme will need a ButtonColor and ButtonTextColor
-    painter->setPen(Plasma::Theme::defaultTheme()->color(Theme::BackgroundColor));
+
+    painter->setPen(Plasma::Theme::defaultTheme()->color(Theme::ButtonTextColor));
 
 
     if (nativeWidget()->isDown()) {

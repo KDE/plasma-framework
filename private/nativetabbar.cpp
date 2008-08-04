@@ -239,7 +239,7 @@ void NativeTabBar::paintEvent(QPaintEvent *event)
         // draw tab text
         if (i == currentIndex() && d->animProgress == 1) {
             //FIXME: theme will need a ButtonColor and ButtonTextColor
-            painter.setPen(Plasma::Theme::defaultTheme()->color(Theme::BackgroundColor));
+            painter.setPen(Plasma::Theme::defaultTheme()->color(Theme::ButtonTextColor));
         } else {
             QColor color(Plasma::Theme::defaultTheme()->color(Theme::TextColor));
             if (!isTabEnabled(i)) {
