@@ -77,6 +77,7 @@ set(plasma_LIB_SRCS
     widgets/radiobutton.cpp
     widgets/signalplotter.cpp
     widgets/slider.cpp
+    widgets/tabbar.cpp
     widgets/textedit.cpp
     widgets/webcontent.cpp
 )
@@ -180,6 +181,7 @@ install(FILES
     widgets/radiobutton.h
     widgets/signalplotter.h
     widgets/slider.h
+    widgets/tabbar.h
     widgets/textedit.h
     widgets/webcontent.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/plasma/widgets COMPONENT Devel)

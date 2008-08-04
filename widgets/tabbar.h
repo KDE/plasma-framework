@@ -24,7 +24,7 @@
 #include <QtGui/QGraphicsWidget>
 #include <QtGui/QTabBar>
 
-#include "plasma_export.h"
+#include <plasma/plasma_export.h>
 
 class QString;
 class QIcon;
