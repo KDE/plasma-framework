@@ -21,7 +21,7 @@
 
 #include <QColor>
 #include <QFont>
-#include <QSet>
+#include <QHash>
 #include <QXmlContentHandler>
 #include <QXmlInputSource>
 #include <QXmlSimpleReader>
