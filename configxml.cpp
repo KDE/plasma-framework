@@ -21,6 +21,7 @@
 
 #include <QColor>
 #include <QFont>
+#include <QSet>
 #include <QXmlContentHandler>
 #include <QXmlInputSource>
 #include <QXmlSimpleReader>
@@ -193,7 +194,7 @@ class ConfigXmlPrivate
         QList<QSize*> sizes;
         QList<quint64*> ulonglongs;
         QList<KUrl::List*> urllists;
-        QMap<QString, QString> keysToNames;
+        QHash<QString, QString> keysToNames;
 };
 
 class ConfigXmlHandler : public QXmlDefaultHandler
@@ -257,6 +258,7 @@ bool ConfigXmlHandler::startElement(const QString &namespaceURI, const QString &
             QString name = attrs.localName(i).toLower();
             if (name == "name") {
                 kDebug() << "set group to " << attrs.value(i);
+                d->keysToNames.insert(attrs.value(i), QString());
                 m_config->setCurrentGroup(attrs.value(i));
             }
         }
@@ -533,6 +535,11 @@ ConfigXml::~ConfigXml()
 KConfigSkeletonItem* ConfigXml::findItem(const QString &group, const QString &key)
 {
     return KConfigSkeleton::findItem(d->keysToNames[group + key]);
+}
+
+bool ConfigXml::hasGroup(const QString &group) const
+{
+    return d->keysToNames.contains(group);
 }
 
 } // Plasma namespace

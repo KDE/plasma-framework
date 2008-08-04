@@ -108,6 +108,14 @@ public:
 
     KConfigSkeletonItem* findItem(const QString &group, const QString &key);
 
+    /**
+     * Check to see if a group exists
+     *
+     * @param group the name of the group to check for
+     * @return true if the group exists, or false if it does not
+     */
+    bool hasGroup(const QString &group) const;
+
 private:
     ConfigXmlPrivate * const d;
 };
