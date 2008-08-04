@@ -1006,7 +1006,7 @@ void Applet::setAspectRatioMode(Plasma::AspectRatioMode mode)
     d->aspectRatioMode = mode;
 }
 
-void Applet::registerAsDragHandle( QGraphicsItem * item )
+void Applet::registerAsDragHandle(QGraphicsItem *item)
 {
     if (!item) {
         return;
@@ -1082,8 +1082,10 @@ bool Applet::sceneEventFilter( QGraphicsItem * watched, QEvent * event )
 {
     switch (event->type()) {
         case QEvent::GraphicsSceneMouseMove: {
-            //don't move when the containment is not mutable, in the rare case the containment doesn't exists consider it as mutable
-            if ((!containment() || containment()->immutability() == Mutable) && d->registeredAsDragHandle.contains( watched )) {
+            // don't move when the containment is not mutable,
+            // in the rare case the containment doesn't exists consider it as mutable
+            if ((!containment() || containment()->immutability() == Mutable) &&
+                d->registeredAsDragHandle.contains(watched)) {
                 mouseMoveEvent(static_cast<QGraphicsSceneMouseEvent*>(event));
                 return true;
             }
