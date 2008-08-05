@@ -55,20 +55,6 @@ class PLASMA_EXPORT Dialog : public QWidget
          */
         explicit Dialog(QWidget * parent = 0, Qt::WindowFlags f =  Qt::Window);
         virtual ~Dialog();
-        /**
-         * @arg event the event that is used to position the dialog. Usually, you want
-         * to pass this on from the mouseevent.
-         * @arg boundingRect the boundingRect() from the applet.
-         * @arg scenePos the absolute position on the scene.
-         */
-        void position(QGraphicsSceneEvent *event, const QRectF boundingRect, QPointF scenePos);
-
-        /**
-         * @arg view The QGV where is displayed the applet
-         * @arg scenePos the absolute position on the scene.
-         * @arg boundingRect the boundingRect() from the applet.
-         */
-        void position(QGraphicsView * view,const QRectF boundingRect,QPointF scenePos);
 
     protected:
         /**

@@ -104,36 +104,5 @@ void Dialog::resizeEvent(QResizeEvent *e)
     setMask(d->background->mask());
 }
 
-void Dialog::position(QGraphicsSceneEvent *event, const QRectF boundingRect, QPointF scenePos)
-{
-    QWidget *viewWidget = event->widget() ? event->widget()->parentWidget() : 0;
-    //QPointF scenePos = mapToScene(boundingRect.topLeft());
-    QGraphicsView *view = qobject_cast<QGraphicsView*>(viewWidget);
-    position(view,boundingRect,scenePos);
-}
-
-void Dialog::position(QGraphicsView * view,const QRectF boundingRect,QPointF scenePos)
-{
-    if (view) {
-        QPoint viewPos = view->mapFromScene(scenePos);
-        QPoint globalPos = view->mapToGlobal(viewPos);
-
-        if ((globalPos.ry()-height())< 0) {
-            scenePos = QPointF(scenePos.x() + boundingRect.width(), scenePos.y() + boundingRect.height());
-            viewPos = view->mapFromScene(scenePos);
-            globalPos = view->mapToGlobal(viewPos)+QPoint(0,10);
-        } else {
-            globalPos.ry() -= (height()+10);
-        }
-
-        if ((globalPos.rx() + width()) > view->width()) {
-            globalPos.rx()-=((globalPos.rx() + width())-view->width());
-        }
-
-        move(globalPos);
-        kDebug() << globalPos;
-    }
-}
-
 }
 #include "dialog.moc"
