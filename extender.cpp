@@ -130,6 +130,22 @@ void Extender::saveState()
     }
 }
 
+QVariant Extender::itemChange(GraphicsItemChange change, const QVariant &value)
+{
+    if (change == QGraphicsItem::ItemPositionHasChanged) {
+        emit geometryChanged();
+    }
+
+    return QGraphicsWidget::itemChange(change, value);
+}
+
+
+void Extender::resizeEvent(QGraphicsSceneResizeEvent *event)
+{
+    QGraphicsWidget::resizeEvent(event);
+    emit geometryChanged();
+}
+
 void Extender::itemAddedEvent(ExtenderItem *item, const QPointF &pos)
 {
     kDebug() << "Adding item to layout.";
@@ -271,8 +287,6 @@ void ExtenderPrivate::adjustSizeHints()
     q->setMaximumSize(q->layout()->maximumSize());
 
     q->updateGeometry();
-
-    emit q->geometryChanged();
 }
 
 int ExtenderPrivate::insertIndexFromPos(const QPointF &pos) const

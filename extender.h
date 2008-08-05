@@ -148,6 +148,16 @@ class PLASMA_EXPORT Extender : public QGraphicsWidget
          */
         virtual void saveState();
 
+        /**
+         * @reimplemented from QGraphicsWidget
+         */
+        QVariant itemChange(GraphicsItemChange change, const QVariant &value);
+
+        /**
+         * @reimplemented from QGraphicsWidget
+         */
+        void resizeEvent(QGraphicsSceneResizeEvent *event);
+
     Q_SIGNALS:
         /**
          * Fires when an extender item is added to this extender.
