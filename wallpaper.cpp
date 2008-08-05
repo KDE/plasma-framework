@@ -183,7 +183,7 @@ void Wallpaper::init(const QString &action)
     Q_UNUSED(action);
 }
 
-QWidget *Wallpaper::configuration(QWidget *parent)
+QWidget *Wallpaper::createConfigurationInterface(QWidget *parent)
 {
     Q_UNUSED(parent);
     return 0;

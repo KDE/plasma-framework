@@ -150,7 +150,7 @@ class PLASMA_EXPORT Wallpaper : public QObject
         /**
          * Returns widget for configuration dialog.
          */
-        virtual QWidget *configuration(QWidget *parent);
+        virtual QWidget *createConfigurationInterface(QWidget *parent);
 
     Q_SIGNALS:
         /**
