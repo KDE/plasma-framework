@@ -282,13 +282,18 @@ class PLASMA_EXPORT Containment : public Applet
 
         /**
          * Sets wallpaper plugin.
+         *
+         * @param pluginName the name of the wallpaper to attempt to load
+         * @param mode optional mode or the wallpaper plugin (e.g. "Slideshow").
+         *        These values are pugin specific and enumerated in the plugin's
+         *        .desktop file.
          */
-        void setWallpaper(const QString &pluginName, const QString &action = QString());
+        void setWallpaper(const QString &pluginName, const QString &mode = QString());
 
        /**
          * Return wallpaper plugin.
          */
-        Plasma::Wallpaper* wallpaper();
+        Plasma::Wallpaper* wallpaper() const;
 
 
     Q_SIGNALS:

@@ -972,7 +972,7 @@ bool Containment::drawWallpaper()
     return d->drawWallpaper;
 }
 
-void Containment::setWallpaper(const QString &pluginName, const QString &action)
+void Containment::setWallpaper(const QString &pluginName, const QString &mode)
 {
     delete d->wallpaper;
     if (!pluginName.isEmpty()) {
@@ -980,7 +980,7 @@ void Containment::setWallpaper(const QString &pluginName, const QString &action)
         setDrawWallpaper(d->wallpaper != 0);
         if (d->wallpaper) {
             d->wallpaper->setBoundingRect(geometry());
-            d->wallpaper->init(action);
+            d->wallpaper->init(mode);
             connect(d->wallpaper, SIGNAL(update(const QRectF&)),
                     this, SLOT(updateRect(const QRectF&)));
         }
@@ -990,7 +990,7 @@ void Containment::setWallpaper(const QString &pluginName, const QString &action)
     }
 }
 
-Plasma::Wallpaper* Containment::wallpaper()
+Plasma::Wallpaper* Containment::wallpaper() const
 {
     return d->wallpaper;
 }
