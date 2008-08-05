@@ -45,8 +45,6 @@ class PLASMA_EXPORT Slider : public QGraphicsProxyWidget
     Q_PROPERTY(QSlider* nativeWidget READ nativeWidget)
 
 public:
-    explicit Slider(Qt::Orientation orientation = Qt::Vertical,
-                    QGraphicsWidget *parent = 0);
     explicit Slider(QGraphicsWidget *parent = 0);
     ~Slider();
 

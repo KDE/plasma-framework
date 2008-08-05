@@ -43,25 +43,11 @@ public:
 };
 
 
-Slider::Slider(Qt::Orientation orientation, QGraphicsWidget *parent)
-    : QGraphicsProxyWidget(parent),
-      d(0)
-{
-    QSlider* native = new QSlider;
-
-    connect(native, SIGNAL(sliderMoved(int)), this, SIGNAL(sliderMoved(int)));
-    connect(native, SIGNAL(valueChanged(int)), this, SIGNAL(valueChanged(int)));
-
-    setWidget(native);
-    native->setAttribute(Qt::WA_NoSystemBackground);
-    native->setOrientation(orientation);
-}
-
 Slider::Slider(QGraphicsWidget *parent)
     : QGraphicsProxyWidget(parent),
       d(0)
 {
-    QSlider* native = new QSlider;
+    QSlider *native = new QSlider;
 
     connect(native, SIGNAL(sliderMoved(int)), this, SIGNAL(sliderMoved(int)));
     connect(native, SIGNAL(valueChanged(int)), this, SIGNAL(valueChanged(int)));
