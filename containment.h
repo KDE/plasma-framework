@@ -42,6 +42,7 @@ class DataEngine;
 class Package;
 class Corona;
 class View;
+class Wallpaper;
 class ContainmentPrivate;
 
 /**
@@ -269,6 +270,27 @@ class PLASMA_EXPORT Containment : public Applet
          */
         void removeAssociatedWidget(QWidget *widget);
 
+        /**
+         * Sets whether wallpaper is painted or not.
+         */
+        void setDrawWallpaper(bool drawWallpaper);
+
+        /**
+         * Return whether wallpaper is painted or not.
+         */
+        bool drawWallpaper();
+
+        /**
+         * Sets wallpaper plugin.
+         */
+        void setWallpaper(const QString &pluginName, const QString &action = QString());
+
+       /**
+         * Return wallpaper plugin.
+         */
+        Plasma::Wallpaper* wallpaper();
+
+
     Q_SIGNALS:
         /**
          * This signal is emitted when a new applet is created by the containment
@@ -404,6 +426,11 @@ class PLASMA_EXPORT Containment : public Applet
          * @reimplemented from QGraphicsItem
          */
         void dropEvent(QGraphicsSceneDragDropEvent *event);
+
+        /**
+         * @reimplemented from QGraphicsItem
+         */
+        void resizeEvent(QGraphicsSceneResizeEvent *event);
 
     private:
         Q_PRIVATE_SLOT(d, void appletDestroyed(QObject*))

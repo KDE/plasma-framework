@@ -64,6 +64,7 @@ set(plasma_LIB_SRCS
     uiloader.cpp
     version.cpp
     view.cpp
+    wallpaper.cpp
     widgets/checkbox.cpp
     widgets/combobox.cpp
     widgets/flash.cpp
@@ -104,7 +105,7 @@ if(QT_QTOPENGL_FOUND AND OPENGL_FOUND)
     target_link_libraries(plasma ${QT_QTOPENGL_LIBRARY} ${OPENGL_gl_LIBRARY})
 endif(QT_QTOPENGL_FOUND AND OPENGL_FOUND)
 
-set_target_properties(plasma PROPERTIES 
+set_target_properties(plasma PROPERTIES
                              VERSION 3.0.0
                              SOVERSION 3
                              ${KDE4_DISABLE_PROPERTY_}LINK_INTERFACE_LIBRARIES  "${KDE4_KDEUI_LIBS}"
@@ -155,7 +156,8 @@ set(plasma_LIB_INCLUDES
     uiloader.h
     tooltipmanager.h
     version.h
-    view.h)
+    view.h
+    wallpaper.h)
 
 if(QT_QTOPENGL_FOUND AND OPENGL_FOUND)
 set(plasma_LIB_INCLUDES
@@ -246,6 +248,7 @@ includes/Theme
 includes/UiLoader
 includes/View
 includes/Version
+includes/Wallpaper
 includes/WebContent
 DESTINATION ${INCLUDE_INSTALL_DIR}/KDE/Plasma COMPONENT Devel)
 
@@ -263,6 +266,7 @@ install(FILES
    servicetypes/plasma-packagestructure.desktop
    servicetypes/plasma-runner.desktop
    servicetypes/plasma-scriptengine.desktop
+   servicetypes/plasma-wallpaper.desktop
    DESTINATION ${SERVICETYPES_INSTALL_DIR})
 
 install(FILES scripting/plasmoids.knsrc DESTINATION  ${CONFIG_INSTALL_DIR})

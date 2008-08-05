@@ -30,6 +30,7 @@ namespace Plasma
 class PanelSvg;
 class AppletScript;
 class ShadowItem;
+class Wallpaper;
 
 class AppletOverlayWidget : public QGraphicsWidget
 {
@@ -63,6 +64,7 @@ public:
     void resetConfigurationObject();
     void appletAnimationComplete(QGraphicsItem *item, Plasma::Animator::Animation anim);
     void selectItemToDestroy();
+    void updateRect(const QRectF& rect);
     void setFocus();
     void cleanUpAndDelete();
 

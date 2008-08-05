@@ -75,6 +75,7 @@
 #include "widgets/label.h"
 #include "widgets/pushbutton.h"
 #include "tooltipmanager.h"
+#include "wallpaper.h"
 
 #include "private/containment_p.h"
 #include "private/packages_p.h"
@@ -243,7 +244,7 @@ void Applet::restore(KConfigGroup &group)
     /*
     shortcutText = shortcutConfig.readEntry("local", QString());
     if (!shortcutText.isEmpty()) {
-        //TODO: implement; the shortcut 
+        //TODO: implement; the shortcut
     }
     */
 }
@@ -371,6 +372,11 @@ void AppletPrivate::selectItemToDestroy()
     }
 
     q->destroy();
+}
+
+void AppletPrivate::updateRect(const QRectF& rect)
+{
+    q->update(rect);
 }
 
 void AppletPrivate::cleanUpAndDelete()
@@ -886,12 +892,16 @@ void Applet::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
             // note that the widget we get is actually the viewport of the view, not the view itself
             View* v = qobject_cast<Plasma::View*>(widget->parent());
             if (!v || v->isWallpaperEnabled()) {
-                Containment::StyleOption coption(*option);
-                coption.view = v;
+                Containment* c = qobject_cast<Plasma::Containment*>(this);
+                if (c && c->drawWallpaper() && c->wallpaper()) {
+                    c->wallpaper()->paint(p, contentsRect);
+                } else {
+                    Containment::StyleOption coption(*option);
+                    coption.view = v;
 
-                paintInterface(p, &coption, contentsRect);
+                    paintInterface(p, &coption, contentsRect);
+                }
             }
-
             p->restore();
             return;
         }

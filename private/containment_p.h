@@ -38,10 +38,12 @@ public:
           formFactor(Planar),
           location(Floating),
           focusedApplet(0),
+          wallpaper(0),
           screen(-1), // no screen
           toolBox(0),
           type(Containment::NoContainmentType),
-          positioning(false)
+          positioning(false),
+          drawWallpaper(false)
     {
     }
 
@@ -95,11 +97,13 @@ public:
     Location location;
     Applet::List applets;
     Applet *focusedApplet;
+    Plasma::Wallpaper *wallpaper;
     QMap<Applet*, AppletHandle*> handles;
     int screen;
     ToolBox *toolBox;
     Containment::Type type;
     bool positioning;
+    bool drawWallpaper;
 };
 
 } // Plasma namespace

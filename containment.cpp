@@ -47,6 +47,7 @@
 #include "animator.h"
 #include "corona.h"
 #include "svg.h"
+#include "wallpaper.h"
 
 #include "private/applet_p.h"
 #include "private/applethandle_p.h"
@@ -249,6 +250,9 @@ void Containment::restore(KConfigGroup &group)
     //kDebug() << "Containment" << id() << "geometry is" << geometry() << "config'd with" << appletConfig.name();
     restoreContents(group);
     setImmutability((ImmutabilityType)group.readEntry("immutability", (int)Mutable));
+
+    setWallpaper(group.readEntry("wallpaperplugin", QString()),
+                 group.readEntry("wallpaperpluginmode", QString()));
 }
 
 void Containment::save(KConfigGroup &g) const
@@ -790,6 +794,14 @@ void Containment::dropEvent(QGraphicsSceneDragDropEvent *event)
     }
 }
 
+void Containment::resizeEvent(QGraphicsSceneResizeEvent *event)
+{
+    Applet::resizeEvent(event);
+    if (d->wallpaper) {
+        d->wallpaper->setBoundingRect(geometry());
+    }
+}
+
 void Containment::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 {
     //FIXME Qt4.4 check to see if this is still necessary to avoid unnecessary repaints
@@ -948,6 +960,39 @@ void Containment::removeAssociatedWidget(QWidget *widget)
             widget->removeAction(applet->d->activationAction);
         }
     }
+}
+
+void Containment::setDrawWallpaper(bool drawWallpaper)
+{
+    d->drawWallpaper = drawWallpaper;
+}
+
+bool Containment::drawWallpaper()
+{
+    return d->drawWallpaper;
+}
+
+void Containment::setWallpaper(const QString &pluginName, const QString &action)
+{
+    delete d->wallpaper;
+    if (!pluginName.isEmpty()) {
+        d->wallpaper = Plasma::Wallpaper::load(pluginName);
+        setDrawWallpaper(d->wallpaper != 0);
+        if (d->wallpaper) {
+            d->wallpaper->setBoundingRect(geometry());
+            d->wallpaper->init(action);
+            connect(d->wallpaper, SIGNAL(update(const QRectF&)),
+                    this, SLOT(updateRect(const QRectF&)));
+        }
+    } else {
+        d->wallpaper = 0;
+        setDrawWallpaper(false);
+    }
+}
+
+Plasma::Wallpaper* Containment::wallpaper()
+{
+    return d->wallpaper;
 }
 
 KActionCollection& ContainmentPrivate::actions()

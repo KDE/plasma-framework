@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=ServiceType
+X-KDE-ServiceType=Plasma/Wallpaper
+
+Comment=Plasma wallpaper
+
+[PropertyDef::X-Plasma-FormFactors]
+Type=QStringList
+
