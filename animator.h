@@ -18,8 +18,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef ANIMATOR_H
-#define ANIMATOR_H
+#ifndef PLASMA_ANIMATOR_H
+#define PLASMA_ANIMATOR_H
 
 #include <QtGui/QImage>
 #include <QtCore/QObject>

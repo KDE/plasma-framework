@@ -18,8 +18,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef CORONA_H
-#define CORONA_H
+#ifndef PLASMA_CORONA_H
+#define PLASMA_CORONA_H
 
 #include <QtGui/QGraphicsScene>
 

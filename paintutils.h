@@ -18,8 +18,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef PAINTUTILS_H
-#define PAINTUTILS_H
+#ifndef PLASMA_PAINTUTILS_H
+#define PLASMA_PAINTUTILS_H
 
 #include <QtGui/QGraphicsItem>
 #include <QtGui/QPainterPath>

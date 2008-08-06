@@ -17,8 +17,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA .        *
  ***************************************************************************/
 
-#ifndef EXTENDER_H
-#define EXTENDER_H
+#ifndef PLASMA_EXTENDER_H
+#define PLASMA_EXTENDER_H
 
 #include <QtGui/QGraphicsWidget>
 
@@ -186,5 +186,5 @@ class PLASMA_EXPORT Extender : public QGraphicsWidget
     };
 } // Plasma namespace
 
-#endif //EXTENDER_H
+#endif //PLASMA_EXTENDER_H
 

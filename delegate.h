@@ -18,8 +18,8 @@
     Boston, MA 02110-1301, USA.
 */
 
-#ifndef DELEGATE_H
-#define DELEGATE_H
+#ifndef PLASMA_DELEGATE_H
+#define PLASMA_DELEGATE_H
 
 // Qt
 #include <QtGui/QAbstractItemDelegate>
@@ -113,4 +113,4 @@ private:
 
 }
 
-#endif // ITEMDELEGATE_H 
+#endif // PLASMA_DELEGATE_H 

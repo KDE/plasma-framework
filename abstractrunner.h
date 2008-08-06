@@ -17,8 +17,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef RUNNER_H
-#define RUNNER_H
+#ifndef PLASMA_RUNNER_H
+#define PLASMA_RUNNER_H
 
 #include <QtCore/QObject>
 #include <QtCore/QMutex>

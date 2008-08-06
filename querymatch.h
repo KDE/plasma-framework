@@ -17,8 +17,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef QUERYMATCH_H
-#define QUERYMATCH_H
+#ifndef PLASMA_QUERYMATCH_H
+#define PLASMA_QUERYMATCH_H
 
 #include <QtCore/QSharedDataPointer>
 

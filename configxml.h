@@ -17,8 +17,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef CONFIGXML_H
-#define CONFIGXML_H
+#ifndef PLASMA_CONFIGXML_H
+#define PLASMA_CONFIGXML_H
 
 #include <KDE/KConfigGroup>
 #include <KDE/KConfigSkeleton>

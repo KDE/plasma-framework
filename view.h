@@ -17,8 +17,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef VIEW_H
-#define VIEW_H
+#ifndef PLASMA_VIEW_H
+#define PLASMA_VIEW_H
 
 #include <QtGui/QApplication>
 #include <QtGui/QGraphicsView>

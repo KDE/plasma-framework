@@ -17,8 +17,8 @@
 *   Boston, MA 02110-1301, USA.                                               *
 *******************************************************************************/
 
-#ifndef PACKAGESTRUCTURE_H
-#define PACKAGESTRUCTURE_H
+#ifndef PLASMA_PACKAGESTRUCTURE_H
+#define PLASMA_PACKAGESTRUCTURE_H
 
 #include <QtCore/QStringList>
 #include <QtCore/QSharedData>
