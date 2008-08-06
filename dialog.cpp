@@ -29,8 +29,10 @@
 #include <QX11Info>
 #endif
 #include <QBitmap>
-#include <QGraphicsView>
+#include <QtGui/QVBoxLayout>
 #include <QtGui/QGraphicsSceneEvent>
+#include <QtGui/QGraphicsView>
+#include <QtGui/QGraphicsWidget>
 
 #include <KDebug>
 #include <NETRootInfo>
@@ -49,28 +51,53 @@ namespace Plasma
 class DialogPrivate
 {
 public:
+    DialogPrivate(Dialog *dialog)
+            : q(dialog),
+              background(0),
+              view(0),
+              widget(0)
+    {
+    }
+
+    ~DialogPrivate()
+    {
+    }
+
+    void themeUpdated();
+    void adjustView();
+
+
+    Plasma::Dialog *q;
     /**
      * Holds the background SVG, to be re-rendered when the cache is invalidated,
      * for example by resizing the dialogue.
      */
     Plasma::PanelSvg *background;
-    Plasma::Dialog *q;
-
-    void themeUpdated()
-    {
-        const int topHeight = background->marginSize(Plasma::TopMargin);
-        const int leftWidth = background->marginSize(Plasma::LeftMargin);
-        const int rightWidth = background->marginSize(Plasma::RightMargin);
-        const int bottomHeight = background->marginSize(Plasma::BottomMargin);
-        q->setContentsMargins(leftWidth, topHeight, rightWidth, bottomHeight);
-    }; 
+    QGraphicsView *view;
+    QGraphicsWidget *widget;
 };
+
+void DialogPrivate::themeUpdated()
+{
+    const int topHeight = background->marginSize(Plasma::TopMargin);
+    const int leftWidth = background->marginSize(Plasma::LeftMargin);
+    const int rightWidth = background->marginSize(Plasma::RightMargin);
+    const int bottomHeight = background->marginSize(Plasma::BottomMargin);
+    q->setContentsMargins(leftWidth, topHeight, rightWidth, bottomHeight);
+}
+
+void DialogPrivate::adjustView()
+{
+    if (view && widget) {
+        view->setSceneRect(widget->mapToScene(widget->boundingRect()).boundingRect());
+        view->resize(widget->size().toSize());
+    }
+}
 
 Dialog::Dialog( QWidget * parent, Qt::WindowFlags f )
     : QWidget(parent, f),
-      d(new DialogPrivate)
+      d(new DialogPrivate(this))
 {
-    d->q = this;
     d->background = new PanelSvg(this);
     d->background->setImagePath("dialogs/background");
     d->background->setEnabledBorders(PanelSvg::AllBorders);
@@ -102,6 +129,41 @@ void Dialog::resizeEvent(QResizeEvent *e)
     d->background->resizePanel(e->size());
 
     setMask(d->background->mask());
+}
+
+void Dialog::setGraphicsWidget(QGraphicsWidget *widget)
+{
+    d->widget = widget;
+
+    if (widget) {
+        if (!layout()) {
+            QVBoxLayout *lay = new QVBoxLayout(this);
+            lay->setMargin(0);
+            lay->setSpacing(0);
+        }
+
+        if (!d->view) {
+            d->view = new QGraphicsView(this);
+            d->view->setFrameShape(QFrame::NoFrame);
+            d->view->viewport()->setAutoFillBackground(false);
+            layout()->addWidget(d->view);
+        }
+
+        d->view->setScene(widget->scene());
+        d->adjustView();
+
+        adjustSize();
+
+        connect(widget, SIGNAL(geometryChanged()), this, SLOT(adjustView()));
+    } else {
+        delete d->view;
+        d->view = 0;
+    }
+}
+
+QGraphicsWidget *Dialog::graphicsWidget()
+{
+    return d->widget;
 }
 
 }

@@ -28,6 +28,7 @@
 #include <KIconLoader>
 
 #include <plasma/dialog.h>
+#include <plasma/corona.h>
 #include <plasma/widgets/icon.h>
 
 namespace Plasma
@@ -191,18 +192,19 @@ void PopupApplet::constraintsEvent(Plasma::Constraints constraints)
                 d->dialog = new Plasma::Dialog();
                 d->dialog->setWindowFlags(Qt::Popup);
 
-                QVBoxLayout *l_layout = new QVBoxLayout(d->dialog);
-                l_layout->setSpacing(0);
-                l_layout->setMargin(0);
-
                 if (graphicsWidget()) {
-                    QGraphicsScene *scene = new QGraphicsScene(d->dialog);
-                    QGraphicsView *view = new QGraphicsView(scene, d->dialog);
+                    Corona *corona = qobject_cast<Corona *>(graphicsWidget()->scene());
 
-                    scene->addItem(graphicsWidget());
-                    l_layout->addWidget(view);
-                    view->show();
+                    //could that cast ever fail??
+                    if (corona) {
+                        corona->addOffscreenWidget(graphicsWidget());
+                        graphicsWidget()->resize(graphicsWidget()->preferredSize());
+                        d->dialog->setGraphicsWidget(graphicsWidget());
+                    }
                 } else {
+                    QVBoxLayout *l_layout = new QVBoxLayout(d->dialog);
+                    l_layout->setSpacing(0);
+                    l_layout->setMargin(0);
                     l_layout->addWidget(widget());
                 }
             }

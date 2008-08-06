@@ -56,6 +56,9 @@ class PLASMA_EXPORT Dialog : public QWidget
         explicit Dialog(QWidget * parent = 0, Qt::WindowFlags f =  Qt::Window);
         virtual ~Dialog();
 
+        void setGraphicsWidget(QGraphicsWidget *widget);
+        QGraphicsWidget *graphicsWidget();
+
     protected:
         /**
          * Reimplemented from QWidget
@@ -69,6 +72,7 @@ class PLASMA_EXPORT Dialog : public QWidget
          * React to theme changes 
          */
         Q_PRIVATE_SLOT(d, void themeUpdated())
+        Q_PRIVATE_SLOT(d, void adjustView())
 };
 
 } // Plasma namespace
