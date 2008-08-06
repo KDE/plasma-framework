@@ -38,7 +38,7 @@ class PLASMA_EXPORT ComboBox : public QGraphicsProxyWidget
 
     Q_PROPERTY(QGraphicsWidget* parentWidget READ parentWidget)
     Q_PROPERTY(QString text READ text)
-    Q_PROPERTY(QString stylesheet READ styleSheet WRITE setStyleSheet)
+    Q_PROPERTY(QString styleSheet READ styleSheet WRITE setStyleSheet)
     Q_PROPERTY(KComboBox* nativeWidget READ nativeWidget)
 
 public:

@@ -38,7 +38,7 @@ class PLASMA_EXPORT LineEdit : public QGraphicsProxyWidget
 
     Q_PROPERTY(QGraphicsWidget* parentWidget READ parentWidget)
     Q_PROPERTY(QString text READ text WRITE setText)
-    Q_PROPERTY(QString stylesheet READ styleSheet WRITE setStyleSheet)
+    Q_PROPERTY(QString styleSheet READ styleSheet WRITE setStyleSheet)
     Q_PROPERTY(KLineEdit* nativeWidget READ nativeWidget)
 
 public:
