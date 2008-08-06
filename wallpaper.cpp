@@ -189,6 +189,21 @@ QWidget *Wallpaper::createConfigurationInterface(QWidget *parent)
     return 0;
 }
 
+void Wallpaper::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
+{
+    Q_UNUSED(event)
+}
+
+void Wallpaper::mousePressEvent(QGraphicsSceneMouseEvent *event)
+{
+    Q_UNUSED(event)
+}
+
+void Wallpaper::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
+{
+    Q_UNUSED(event)
+}
+
 } // Plasma namespace
 
 #include "wallpaper.moc"

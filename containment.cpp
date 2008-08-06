@@ -335,6 +335,42 @@ Corona* Containment::corona() const
     return dynamic_cast<Corona*>(scene());
 }
 
+void Containment::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
+{
+    if (d->wallpaper) {
+        QGraphicsItem* item = scene()->itemAt(event->scenePos());
+        if (item == this) {
+            d->wallpaper->mouseMoveEvent(event);
+        }
+    }
+
+    Applet::mouseMoveEvent(event);
+}
+
+void Containment::mousePressEvent(QGraphicsSceneMouseEvent *event)
+{
+    if (d->wallpaper) {
+        QGraphicsItem* item = scene()->itemAt(event->scenePos());
+        if (item == this) {
+            d->wallpaper->mousePressEvent(event);
+        }
+    }
+
+    Applet::mousePressEvent(event);
+}
+
+void Containment::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
+{
+    if (d->wallpaper) {
+        QGraphicsItem* item = scene()->itemAt(event->scenePos());
+        if (item == this) {
+            d->wallpaper->mouseReleaseEvent(event);
+        }
+    }
+
+    Applet::mouseReleaseEvent(event);
+}
+
 void Containment::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
 {
     //kDebug() << "let's see if we manage to get a context menu here, huh";

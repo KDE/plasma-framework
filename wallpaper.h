@@ -154,6 +154,27 @@ class PLASMA_EXPORT Wallpaper : public QObject
          */
         virtual QWidget *createConfigurationInterface(QWidget *parent);
 
+        /**
+         * Mouse move event
+         *
+         * @param event the mouse event object
+         */
+        virtual void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
+
+        /**
+         * Mouse press event
+         *
+         * @param event the mouse event object
+         */
+        virtual void mousePressEvent(QGraphicsSceneMouseEvent *event);
+
+        /**
+         * Mouse release event
+         *
+         * @param event the mouse event object
+         */
+        virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
+
     Q_SIGNALS:
         /**
          * This signal indicates that wallpaper needs to be repainted.
