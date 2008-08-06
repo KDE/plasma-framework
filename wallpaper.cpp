@@ -62,6 +62,7 @@ Wallpaper::Wallpaper(QObject* parentObject, const QVariantList& args)
 
 Wallpaper::~Wallpaper()
 {
+    delete d;
 }
 
 KPluginInfo::List Wallpaper::listWallpaperInfo(const QString &formFactor)
