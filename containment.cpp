@@ -833,6 +833,28 @@ void Containment::keyPressEvent(QKeyEvent *event)
     }
 }
 
+void Containment::wheelEvent(QGraphicsSceneWheelEvent *event)
+{
+    if (containmentType() == DesktopContainment) {
+        QGraphicsItem* item = scene()->itemAt(event->scenePos());
+        if (item == this) {
+            int numDesktops = KWindowSystem::numberOfDesktops();
+            int currentDesktop = KWindowSystem::currentDesktop();
+
+            if (event->delta() > 0) {
+                KWindowSystem::setCurrentDesktop(currentDesktop % numDesktops + 1);
+            } else {
+                KWindowSystem::setCurrentDesktop((numDesktops + currentDesktop - 2) % numDesktops + 1);
+            }
+
+            event->accept();
+            return;
+        }
+    }
+
+    Applet::wheelEvent(event);
+}
+
 bool Containment::sceneEventFilter(QGraphicsItem *watched, QEvent *event)
 {
     Applet *applet = qgraphicsitem_cast<Applet*>(watched);
