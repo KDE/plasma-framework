@@ -50,8 +50,10 @@ class PLASMA_EXPORT Wallpaper : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QRectF boundingRect READ boundingRect WRITE setBoundingRect)
-    //Q_PROPERTY(QStringList formFactors READ formFactors WRITE setFormFactors)
     Q_PROPERTY(QString name READ name)
+    Q_PROPERTY(QString pluginName READ pluginName)
+    Q_PROPERTY(QStringList modes READ modes)
+    Q_PROPERTY(QRectF boundingRect READ boundingRect WRITE setBoundingRect)
 
     public:
         ~Wallpaper();
@@ -114,7 +116,7 @@ class PLASMA_EXPORT Wallpaper : public QObject
         QStringList modes() const;
 
        /**
-         * Returns name for the mode.
+         * Returns the translted name for the mode.
          */
         QString modeName(const QString& mode) const;
 
