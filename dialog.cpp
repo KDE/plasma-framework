@@ -172,7 +172,8 @@ QGraphicsWidget *Dialog::graphicsWidget()
 
 bool Dialog::eventFilter(QObject *watched, QEvent *event)
 {
-    if (watched == d->widget && event->type() == QEvent::GraphicsSceneResize) {
+    if (watched == d->widget && (event->type() == QEvent::GraphicsSceneResize ||
+                                 event->type() == QEvent::GraphicsSceneMove)) {
         d->adjustView();
     }
 

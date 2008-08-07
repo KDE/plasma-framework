@@ -199,6 +199,7 @@ void PopupApplet::constraintsEvent(Plasma::Constraints constraints)
                     if (corona) {
                         corona->addOffscreenWidget(graphicsWidget());
                         graphicsWidget()->resize(graphicsWidget()->preferredSize());
+                        graphicsWidget()->setMinimumSize(graphicsWidget()->preferredSize());
                         d->dialog->setGraphicsWidget(graphicsWidget());
                     }
                 } else {
