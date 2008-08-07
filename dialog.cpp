@@ -133,6 +133,10 @@ void Dialog::resizeEvent(QResizeEvent *e)
 
 void Dialog::setGraphicsWidget(QGraphicsWidget *widget)
 {
+    if (d->widget) {
+        d->widget->removeEventFilter(this);
+    }
+
     d->widget = widget;
 
     if (widget) {
@@ -154,7 +158,7 @@ void Dialog::setGraphicsWidget(QGraphicsWidget *widget)
 
         adjustSize();
 
-        connect(widget, SIGNAL(geometryChanged()), this, SLOT(adjustView()));
+        widget->installEventFilter(this);
     } else {
         delete d->view;
         d->view = 0;
@@ -164,6 +168,15 @@ void Dialog::setGraphicsWidget(QGraphicsWidget *widget)
 QGraphicsWidget *Dialog::graphicsWidget()
 {
     return d->widget;
+}
+
+bool Dialog::eventFilter(QObject *watched, QEvent *event)
+{
+    if (watched == d->widget && event->type() == QEvent::GraphicsSceneResize) {
+        d->adjustView();
+    }
+
+    return QWidget::eventFilter(watched, event);
 }
 
 }

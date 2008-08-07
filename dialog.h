@@ -65,6 +65,7 @@ class PLASMA_EXPORT Dialog : public QWidget
          */
         void paintEvent(QPaintEvent *e);
         void resizeEvent(QResizeEvent *e);
+        bool eventFilter(QObject *watched, QEvent *event);
 
     private:
         DialogPrivate * const d;
@@ -72,7 +73,6 @@ class PLASMA_EXPORT Dialog : public QWidget
          * React to theme changes 
          */
         Q_PRIVATE_SLOT(d, void themeUpdated())
-        Q_PRIVATE_SLOT(d, void adjustView())
 };
 
 } // Plasma namespace
