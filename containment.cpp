@@ -800,10 +800,7 @@ void Containment::dropEvent(QGraphicsSceneDragDropEvent *event)
             //             kDebug() << mimeName;
             KPluginInfo::List appletList = Applet::listAppletInfoForMimetype(mimeName);
 
-            if (appletList.isEmpty()) {
-                // no special applet associated with this mimetype, let's
-                addApplet("icon", args, geom);
-            } else {
+            if (!appletList.isEmpty()) {
                 //TODO: should we show a dialog here to choose which plasmoid load if
                 //!appletList.isEmpty()
                 QMenu choices;
@@ -824,6 +821,10 @@ void Containment::dropEvent(QGraphicsSceneDragDropEvent *event)
                 if (choice) {
                     addApplet(actionsToPlugins[choice], args, geom);
                 }
+            } else if (url.protocol() != "data") {
+                // We don't try to do anything with data: URIs
+                // no special applet associated with this mimetype, let's
+                addApplet("icon", args, geom);
             }
         }
         event->acceptProposedAction();
