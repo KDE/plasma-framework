@@ -25,12 +25,12 @@
 #include <plasma/plasma_export.h>
 #include <plasma/applet.h>
 
-class QGraphicsItem;
+class QGraphicsWidget;
+class QGraphicsProxyWidget;
 
 namespace Plasma
 {
 
-class Widget;
 class Layout;
 class LayoutItem;
 class UiLoaderPrivate;
@@ -49,7 +49,7 @@ public:
     virtual ~UiLoader();
 
     QStringList availableWidgets() const;
-    Applet *createWidget(const QString &className, Applet *parent = 0);
+    QGraphicsWidget *createWidget(const QString &className, QGraphicsWidget *parent = 0);
 
     QStringList availableLayouts() const;
     Layout *createLayout(const QString &className, LayoutItem *parent);

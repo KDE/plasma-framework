@@ -20,6 +20,19 @@
 #include "uiloader.h"
 
 #include <QStringList>
+#include "widgets/checkbox.h"
+#include "widgets/combobox.h"
+#include "widgets/flash.h"
+#include "widgets/frame.h"
+#include "widgets/groupbox.h"
+#include "widgets/icon.h"
+#include "widgets/label.h"
+#include "widgets/lineedit.h"
+#include "widgets/pushbutton.h"
+#include "widgets/radiobutton.h"
+#include "widgets/slider.h"
+#include "widgets/tabbar.h"
+#include "widgets/textedit.h"
 
 namespace Plasma
 {
@@ -32,21 +45,23 @@ public:
 };
 
 UiLoader::UiLoader( QObject *parent )
-    : d( new UiLoaderPrivate() )
+    : QObject( parent ),
+      d( new UiLoaderPrivate() )
 {
     d->widgets
         << "CheckBox"
+	<< "ComboBox"
         << "Flash"
-        << "Icon"
+	<< "Frame"
+        << "GroupBox"
+	<< "Icon"
         << "Label"
-        << "PushButton"
-        << "RadioButton"
-        << "Meter";
-
-    d->layouts
-        << "VBoxLayout"
-        << "HBoxLayout"
-        << "FlowLayout";
+        << "LineEdit"
+	<< "PushButton"
+	<< "RadioButton"
+	<< "Slider"
+	<< "TabBar"
+	<< "TextEdit";
 }
 
 UiLoader::~UiLoader()
@@ -59,31 +74,48 @@ QStringList UiLoader::availableWidgets() const
     return d->widgets;
 }
 
-Applet *UiLoader::createWidget( const QString &className, Applet *parent )
+QGraphicsWidget *UiLoader::createWidget( const QString &className, QGraphicsWidget *parent )
 {
-    #ifdef RICHARD_WORK
     if (className == QString("CheckBox")) {
         return new CheckBox( parent );
     }
+    else if (className == QString("ComboBox")) {
+        return new ComboBox( parent );
+    }
     else if (className == QString("Flash")) {
         return new Flash( parent );
+    }
+    else if (className == QString("Frame")) {
+        return new Frame( parent );
+    }
+    else if (className == QString("GroupBox")) {
+        return new GroupBox( parent );
     }
     else if (className == QString("Icon")) {
         return new Icon( parent );
     }
     else if (className == QString("Label")) {
-        return new Label( parent ); // Constructor here requires a Widget
+        return new Label( parent );
+    }
+    else if (className == QString("LineEdit")) {
+        return new LineEdit( parent );
     }
     else if (className == QString("PushButton")) {
-        return new PushButton( parent ); // Constructor here requires a Widget
+        return new PushButton( parent );
     }
     else if (className == QString("RadioButton")) {
         return new RadioButton( parent );
     }
-    else if (className == QString("Meter")) {
-        return new Meter( parent );
+    else if (className == QString("Slider")) {
+        return new Slider( parent );
     }
-    #endif
+    else if (className == QString("TabBar")) {
+        return new TabBar( parent );
+    }
+    else if (className == QString("TextEdit")) {
+        return new TextEdit( parent );
+    }
+
     return 0;
 }
 
