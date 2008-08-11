@@ -55,6 +55,8 @@ class ToolTipManagerPrivate
 public :
     ToolTipManagerPrivate()
         : currentWidget(0)
+        , isShown(false)
+        , delayedHide(false)
         , showTimer(0)
         , hideTimer(0)
     {
