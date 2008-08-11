@@ -49,7 +49,7 @@ public:
 
     ~FramePrivate()
     {
-        delete svg;
+        delete pixmap;
     }
 
     void syncBorders();
