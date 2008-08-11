@@ -111,6 +111,7 @@ void KCategorizedItemsView::setItemModel(QStandardItemModel * model)
 {
     if (!m_modelFilterItems) {
         m_modelFilterItems = new DefaultItemFilterProxyModel(this);
+        connect(m_modelFilterItems, SIGNAL(searchTermChanged(QString)), this, SLOT(slotSearchTermChanged(QString)));
     }
 
     m_modelItems = model;
@@ -164,6 +165,11 @@ void KCategorizedItemsView::itemDoubleClicked(const QModelIndex& index)
     }
 
     emit doubleClicked(index);
+}
+
+void KCategorizedItemsView::slotSearchTermChanged( const QString& term )
+{
+    updateColumnsWidth();
 }
 
 void KCategorizedItemsView::updateColumnsWidth(bool force)

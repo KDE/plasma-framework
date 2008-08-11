@@ -138,6 +138,7 @@ void DefaultItemFilterProxyModel::setSearch(const QString & pattern)
 {
     m_searchPattern = pattern;
     invalidateFilter();
+    emit searchTermChanged(pattern);
 }
 
 void DefaultItemFilterProxyModel::setFilter(const Filter & filter)

@@ -106,6 +106,8 @@ public:
  */
 class DefaultItemFilterProxyModel : public QSortFilterProxyModel
 {
+Q_OBJECT
+
 public:
     DefaultItemFilterProxyModel(QObject * parent = 0);
 
@@ -122,6 +124,9 @@ public:
     int columnCount(const QModelIndex& index) const;
 
     QVariant data(const QModelIndex & index, int role = Qt::DisplayRole) const;
+
+Q_SIGNALS:
+    void searchTermChanged(const QString &term);
 
 private:
 
