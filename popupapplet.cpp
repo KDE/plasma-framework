@@ -142,6 +142,10 @@ void PopupApplet::constraintsEvent(Plasma::Constraints constraints)
         switch (formFactor()) {
         case Plasma::Planar:
         case Plasma::MediaCenter: {
+            if (d->icon) {
+                d->icon->hide();
+            }
+
             if (d->savedAspectRatio != Plasma::InvalidAspectRatioMode) {
                 setAspectRatioMode(d->savedAspectRatio);
             }
@@ -181,6 +185,10 @@ void PopupApplet::constraintsEvent(Plasma::Constraints constraints)
             //save the aspect ratio mode in case we drag'n drop in the Desktop later
             d->savedAspectRatio = aspectRatioMode();
             setAspectRatioMode(Plasma::ConstrainedSquare);
+
+            if (d->icon) {
+                d->icon->show();
+            }
 
             if (d->proxy) {
                 d->proxy->setWidget(0); // prevent it from deleting our widget!
