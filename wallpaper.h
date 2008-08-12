@@ -145,9 +145,10 @@ class PLASMA_EXPORT Wallpaper : public QObject
 
         /**
          * This method is called once the wallpaper is loaded.
-         * @param action One of the actions spedified in the desktop file (if any).
+         * @param mode One of the modes supported by the plugin,
+         *        or an empty string for the default mode.
          **/
-        virtual void init(const QString &action = QString());
+        virtual void init(const QString &mode = QString());
 
         /**
          * Returns widget for configuration dialog.

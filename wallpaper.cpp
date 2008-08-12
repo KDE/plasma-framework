@@ -179,7 +179,7 @@ void Wallpaper::setBoundingRect(const QRectF& boundingRect)
     d->boundingRect = boundingRect;
 }
 
-void Wallpaper::init(const QString &action)
+void Wallpaper::init(const QString &mode)
 {
     Q_UNUSED(action);
 }
