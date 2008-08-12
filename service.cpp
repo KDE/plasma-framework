@@ -137,9 +137,14 @@ ServiceJob* Service::startOperationCall(const KConfigGroup &description)
         return new NullServiceJob(parent());
     }
 
+    QString op = description.name();
+    if (d->disabledOperations.contains(op)) {
+        kDebug() << "Operation" << op << "is disabled";
+        return new NullServiceJob(parent());
+    }
+
     d->config->writeConfig();
     QMap<QString, QVariant> params;
-    QString op = description.name();
     foreach (const QString &key, description.keyList()) {
         KConfigSkeletonItem *item = d->config->findItem(op, key);
         if (item) {
@@ -157,12 +162,20 @@ void Service::associateWidget(QWidget *widget, const QString &operation)
 {
     d->associatedWidgets.insert(widget, operation);
     connect(widget, SIGNAL(destroyed(QObject*)), this, SLOT(associatedWidgetDestroyed(QObject*)));
+
+    if (d->disabledOperations.contains(operation)) {
+        widget->setEnabled(false);
+    }
 }
 
 void Service::associateWidget(QGraphicsWidget *widget, const QString &operation)
 {
     d->associatedGraphicsWidgets.insert(widget, operation);
     connect(widget, SIGNAL(destroyed(QObject*)), this, SLOT(associatedGraphicsWidgetDestroyed(QObject*)));
+
+    if (d->disabledOperations.contains(operation)) {
+        widget->setEnabled(false);
+    }
 }
 
 QString Service::name() const
@@ -182,6 +195,44 @@ void Service::setName(const QString &name)
     d->tempFile = 0;
 
     registerOperationsScheme();
+}
+
+void Service::setOperationEnabled(const QString &operation, bool enable)
+{
+    if (!d->config->hasGroup(operation)) {
+        return;
+    }
+
+    if (enable) {
+        d->disabledOperations.remove(operation);
+    } else if (!d->disabledOperations.contains(operation)) {
+        d->disabledOperations.insert(operation);
+    }
+
+    {
+        QHashIterator<QWidget *, QString> it(d->associatedWidgets);
+        while (it.hasNext()) {
+            it.next();
+            if (it.value() == operation) {
+                it.key()->setEnabled(enable);
+            }
+        }
+    }
+
+    {
+        QHashIterator<QGraphicsWidget *, QString> it(d->associatedGraphicsWidgets);
+        while (it.hasNext()) {
+            it.next();
+            if (it.value() == operation) {
+                it.key()->setEnabled(enable);
+            }
+        }
+    }
+}
+
+bool Service::operationIsEnabled(const QString &operation) const
+{
+    d->config->hasGroup(operation) && !d->disabledOperations.contains(operation);
 }
 
 void Service::setOperationsScheme(QIODevice *xml)

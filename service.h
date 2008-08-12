@@ -204,6 +204,22 @@ protected:
      */
     void setName(const QString &name);
 
+    /**
+     * Enables a given service by name
+     *
+     * @param operation the name of the operation to enable or disable
+     * @param enable true if the operation should be enabld, false if disabled
+     */
+    void setOperationEnabled(const QString &operation, bool enable);
+
+    /**
+     * Query to find if an operation is enabled or not.
+     *
+     * @param operation the name of the operation to check
+     * @return true if the operation is enabled, false otherwise
+     */
+    bool operationIsEnabled(const QString &operation) const;
+
 private:
     Q_PRIVATE_SLOT(d, void jobFinished(KJob *))
     Q_PRIVATE_SLOT(d, void associatedWidgetDestroyed(QObject *))

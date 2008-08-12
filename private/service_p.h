@@ -25,6 +25,7 @@
 #include <QGraphicsWidget>
 #include <QMultiHash>
 #include <QWidget>
+#include <QSet>
 
 #include <KTemporaryFile>
 
@@ -77,14 +78,6 @@ public:
         delete tempFile;
     }
 
-    Service *q;
-    QString destination;
-    QString name;
-    ConfigXml *config;
-    KTemporaryFile *tempFile;
-    QMultiHash<QWidget *, QString> associatedWidgets;
-    QMultiHash<QGraphicsWidget *, QString> associatedGraphicsWidgets;
-
     void jobFinished(KJob* job)
     {
         emit q->finished(static_cast<ServiceJob*>(job));
@@ -99,6 +92,15 @@ public:
     {
         associatedGraphicsWidgets.remove(static_cast<QGraphicsWidget*>(obj));
     }
+
+    Service *q;
+    QString destination;
+    QString name;
+    ConfigXml *config;
+    KTemporaryFile *tempFile;
+    QMultiHash<QWidget *, QString> associatedWidgets;
+    QMultiHash<QGraphicsWidget *, QString> associatedGraphicsWidgets;
+    QSet<QString> disabledOperations;
 };
 
 } // namespace Plasma
