@@ -134,7 +134,7 @@ void ToolTip::setContent(const ToolTipManager::ToolTipContent &data)
 void ToolTip::prepareShowing()
 {
     if (d->source) {
-        QMetaObject::invokeMethod(d->source, SLOT(toolTipAboutToShow()));
+        QMetaObject::invokeMethod(d->source, "toolTipAboutToShow");
     }
 
     if (d->windowToPreview != 0) {
