@@ -181,7 +181,7 @@ void Wallpaper::setBoundingRect(const QRectF& boundingRect)
 
 void Wallpaper::init(const QString &mode)
 {
-    Q_UNUSED(action);
+    Q_UNUSED(mode);
 }
 
 QWidget *Wallpaper::createConfigurationInterface(QWidget *parent)
