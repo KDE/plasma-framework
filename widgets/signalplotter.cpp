@@ -514,6 +514,7 @@ QPixmap SignalPlotter::getSnapshotImage(uint w, uint height)
     QPixmap image = QPixmap(newWidth, height);
     QPainter p(&image);
     drawWidget(&p, newWidth, height, newWidth);
+    p.end();
     return image;
 }
 

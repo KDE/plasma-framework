@@ -42,6 +42,7 @@ void shadowBlur(QImage &image, int radius, const QColor &color)
     QPainter p(&image);
     p.setCompositionMode(QPainter::CompositionMode_SourceIn);
     p.fillRect(image.rect(), color);
+    p.end();
 }
 
 QPixmap shadowText(QString text, QColor textColor, QColor shadowColor, QPoint offset, int radius)
