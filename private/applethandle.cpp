@@ -713,10 +713,15 @@ void AppletHandle::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
     Q_UNUSED(event);
     //kDebug() << "hover enter";
 
-    //if a disappear was scheduled stop the timer
-    m_leaveTimer->stop();
-    //schedule appear
-    m_hoverTimer->start();
+    // if we're already fading out, fade back in
+    if (m_animId != 0) {
+        startFading(FadeIn, m_entryPos);
+    } else {
+        //if a disappear was scheduled stop the timer
+        m_leaveTimer->stop();
+        //schedule appear
+        m_hoverTimer->start();
+    }
 }
 
 void AppletHandle::hoverMoveEvent(QGraphicsSceneHoverEvent *event)
