@@ -105,5 +105,5 @@ void Style::drawComplexControl(ComplexControl control,
     painter->restore();
 }
 
-};
+}
 
