@@ -21,11 +21,13 @@
 
 #include <KTextEdit>
 #include <QPainter>
+#include <QScrollBar>
 
 #include <KMimeType>
 
 #include "theme.h"
 #include "svg.h"
+#include "private/style.h"
 
 namespace Plasma
 {
@@ -50,6 +52,9 @@ TextEdit::TextEdit(QGraphicsWidget *parent)
     connect(native, SIGNAL(textChanged()), this, SIGNAL(textChanged()));
     setWidget(native);
     native->setAttribute(Qt::WA_NoSystemBackground);
+    Plasma::Style *style = new Plasma::Style();
+    native->verticalScrollBar()->setStyle(style);
+    native->horizontalScrollBar()->setStyle(style);
 }
 
 TextEdit::~TextEdit()

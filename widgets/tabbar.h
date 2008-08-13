@@ -187,11 +187,16 @@ Q_SIGNALS:
     void currentChanged(int index);
 
 protected:
+    void paint(QPainter *painter,
+               const QStyleOptionGraphicsItem *option,
+               QWidget *widget);
+    void resizeEvent(QGraphicsSceneResizeEvent *event);
     void wheelEvent(QGraphicsSceneWheelEvent *event);
     
 private:
     TabBarPrivate * const d;
 
+    Q_PRIVATE_SLOT(d, void syncBorders())
     Q_PRIVATE_SLOT(d, void slidingCompleted(QGraphicsItem *item))
     Q_PRIVATE_SLOT(d, void shapeChanged(const QTabBar::Shape shape))
 };

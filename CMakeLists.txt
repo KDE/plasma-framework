@@ -47,6 +47,7 @@ set(plasma_LIB_SRCS
     private/nativetabbar.cpp
     private/packages.cpp
     private/paneltoolbox.cpp
+    private/style.cpp
     private/toolbox.cpp
     private/tooltip.cpp
     querymatch.cpp
@@ -76,6 +77,7 @@ set(plasma_LIB_SRCS
     widgets/meter.cpp
     widgets/pushbutton.cpp
     widgets/radiobutton.cpp
+    widgets/scrollbar.cpp
     widgets/signalplotter.cpp
     widgets/slider.cpp
     widgets/tabbar.cpp
@@ -181,6 +183,7 @@ install(FILES
     widgets/meter.h
     widgets/pushbutton.h
     widgets/radiobutton.h
+    widgets/scrollbar.h
     widgets/signalplotter.h
     widgets/slider.h
     widgets/tabbar.h
@@ -236,6 +239,7 @@ includes/RunnerContext
 includes/RunnerManager
 includes/RunnerScript
 includes/ScriptEngine
+includes/ScrollBar
 includes/Service
 includes/ServiceJob
 includes/SignalPlotter
