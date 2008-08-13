@@ -48,7 +48,10 @@ public:
     virtual QGraphicsWidget *graphicsWidget();
 
     void showPopup(uint displayTime = 0);
+
+public slots:
     void hidePopup();
+
 protected:
     void constraintsEvent(Plasma::Constraints constraints);
 
