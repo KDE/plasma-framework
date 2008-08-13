@@ -89,6 +89,6 @@ QScrollBar *ScrollBar::nativeWidget() const
    return static_cast<QScrollBar*>(widget());
 }
 
-};
+}
 
 #include <scrollbar.moc>

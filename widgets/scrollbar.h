@@ -45,4 +45,4 @@ public:
     QScrollBar *nativeWidget() const;
 };
 
-};
+}
