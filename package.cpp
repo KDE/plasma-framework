@@ -28,6 +28,7 @@
 #include <KComponentData>
 #include <KDesktopFile>
 #include <KIO/CopyJob>
+#include <KIO/DeleteJob>
 #include <KIO/FileCopyJob>
 #include <KIO/Job>
 #include <KPluginInfo>
@@ -327,6 +328,42 @@ bool Package::installPackage(const QString& package,
         if (icon.exists()) {
             cg.writeEntry("Icon", iconPath);
         }
+    }
+
+    return true;
+}
+
+bool Package::uninstallPackage(const QString& pluginName,
+			       const QString& packageRoot) // static
+{
+    // We need to remove the package directory and its metadata file.
+    QString targetName = pluginName;
+    targetName = packageRoot + '/' + targetName;
+
+    if (!QFile::exists(targetName)) {
+        kWarning() << targetName << "does not exist";
+        return false;
+    }
+
+    QString serviceName;
+    if (KGlobal::hasMainComponent()) {
+        serviceName = KGlobal::mainComponent().componentName();
+    }
+    serviceName.append("_plasma_applet_" + pluginName);
+
+    QString service = KStandardDirs::locateLocal("services", serviceName + ".desktop");
+    kDebug() << "Removing service file " << service;
+    bool ok = QFile::remove( service );
+
+    if ( !ok ) {
+	kWarning() << "Unable to remove " << service;
+	return ok;
+    }
+
+    KIO::DeleteJob *job = KIO::del( KUrl(targetName) );
+    if (!job->exec()) {
+	kWarning() << "Could not delete package from:" << targetName << " : " << job->errorString();
+	return false;
     }
 
     return true;

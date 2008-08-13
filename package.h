@@ -132,6 +132,18 @@ class PLASMA_EXPORT Package
                                    const QString &packageRoot);
 
         /**
+         * Uninstalls a package.
+         *
+         * @param package path to the Plasmagik package
+         * @param packageRoot path to the directory where the package should be
+         *                    installed to
+         * @return true on successful uninstallation, false otherwise
+         **/
+        static bool uninstallPackage(const QString &package,
+                                   const QString &packageRoot);
+
+
+        /**
          * Registers a package described by the given desktop file
          *
          * @arg the full path to the desktop file (must be KPluginInfo compatible)

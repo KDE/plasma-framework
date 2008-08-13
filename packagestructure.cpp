@@ -391,8 +391,7 @@ bool PackageStructure::installPackage(const QString &package, const QString &pac
 
 bool PackageStructure::uninstallPackage(const QString &packageName, const QString &packageRoot)
 {
-    //TODO: implement
-    return false;
+    return Package::uninstallPackage(packageName, packageRoot);
 }
 
 } // Plasma namespace
