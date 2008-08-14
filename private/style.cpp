@@ -54,6 +54,7 @@ Style::Style()
 
 Style::~Style()
 {
+    delete d;
 }
 
 void Style::drawComplexControl(ComplexControl control,
