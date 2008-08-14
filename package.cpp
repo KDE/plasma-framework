@@ -22,6 +22,7 @@
 
 #include <QDir>
 #include <QFile>
+#include <QRegExp>
 
 #include <KArchiveDirectory>
 #include <KArchiveEntry>
@@ -270,6 +271,14 @@ bool Package::installPackage(const QString& package,
     if (targetName.isEmpty()) {
         kWarning() << "Package plugin name not specified";
         return false;
+    }
+
+    // Ensure that package names are safe so package uninstall can't inject
+    // bad characters into the paths used for removal.
+    QRegExp validatePluginName("^[\\w-\\.]+$"); // Only allow letters, numbers, underscore and period.
+    if ( !validatePluginName.exactMatch(targetName) ) {
+        kWarning() << "Package plugin name " << targetName << "contains invalid characters";
+	return false;
     }
 
     targetName = packageRoot + '/' + targetName;
