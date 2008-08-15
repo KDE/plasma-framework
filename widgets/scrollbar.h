@@ -18,8 +18,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include <QScrollBar>
-#include <QGraphicsProxyWidget>
+#include <QtGui/QScrollBar>
+#include <QtGui/QGraphicsProxyWidget>
 
 #include <plasma/plasma_export.h>
 
