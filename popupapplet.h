@@ -49,7 +49,7 @@ public:
 
     void showPopup(uint displayTime = 0);
 
-public slots:
+public Q_SLOTS:
     void hidePopup();
 
 protected:
