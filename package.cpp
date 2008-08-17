@@ -133,7 +133,13 @@ QString Package::filePath(const char* fileType, const QString& filename) const
     }
 
     if (QFile::exists(path)) {
-        return path;
+        // ensure that we don't return files outside of our base path
+        // due to symlink or ../ games
+        QDir dir(path);
+        QString canonicalized = dir.canonicalPath();
+        if (canonicalized.startsWith(d->basePath)) {
+            return path;
+        }
     }
 
     kDebug() << path << "does not exist";
@@ -158,11 +164,16 @@ QStringList Package::entryList(const char* fileType) const
 
     QDir dir(d->basePath + d->structure->contentsPrefix() + path);
 
-    if (!dir.exists()) {
-        return QStringList();
+    if (dir.exists()) {
+        // ensure that we don't return files outside of our base path
+        // due to symlink or ../ games
+        QString canonicalized = dir.canonicalPath();
+        if (canonicalized.startsWith(d->basePath)) {
+            return dir.entryList(QDir::Files | QDir::Readable);
+        }
     }
 
-    return dir.entryList(QDir::Files | QDir::Readable);
+    return QStringList();
 }
 
 const PackageMetadata* Package::metadata() const
@@ -362,17 +373,17 @@ bool Package::uninstallPackage(const QString& pluginName,
 
     QString service = KStandardDirs::locateLocal("services", serviceName + ".desktop");
     kDebug() << "Removing service file " << service;
-    bool ok = QFile::remove( service );
+    bool ok = QFile::remove(service);
 
-    if ( !ok ) {
-	kWarning() << "Unable to remove " << service;
-	return ok;
+    if (!ok) {
+        kWarning() << "Unable to remove " << service;
+        return ok;
     }
 
-    KIO::DeleteJob *job = KIO::del( KUrl(targetName) );
+    KIO::DeleteJob *job = KIO::del(KUrl(targetName));
     if (!job->exec()) {
-	kWarning() << "Could not delete package from:" << targetName << " : " << job->errorString();
-	return false;
+        kWarning() << "Could not delete package from:" << targetName << " : " << job->errorString();
+        return false;
     }
 
     return true;

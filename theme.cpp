@@ -283,6 +283,11 @@ QString Theme::themeName() const
 QString Theme::imagePath(const QString& name)  const
 {
     // look for a compressed svg file in the theme
+    if (name.contains("../")) {
+        // we don't support relative paths
+        return QString();
+    }
+
     QString path = d->findInTheme(name + ".svgz", d->themeName);
 
     if (path.isEmpty()) {
@@ -360,6 +365,11 @@ QString Theme::wallpaperPath(const QSize &size) const
 
 bool Theme::currentThemeHasImage(const QString& name)  const
 {
+    if (name.contains("../")) {
+        // we don't support relative paths
+        return false;
+    }
+
     return !(d->findInTheme(name + ".svgz", d->themeName).isEmpty()) ||
            !(d->findInTheme(name + ".svg", d->themeName).isEmpty());
 }
