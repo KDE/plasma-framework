@@ -29,8 +29,6 @@
 #include <KDebug>
 
 #include <plasma/animator.h>
-#include <plasma/panelsvg.h>
-#include <plasma/theme.h>
 
 #include "private/nativetabbar_p.h"
 
@@ -55,13 +53,11 @@ public:
     {
     }
 
-    void syncBorders();
     void slidingCompleted(QGraphicsItem *item);
     void shapeChanged(const QTabBar::Shape shape);
 
     TabBar *q;
     NativeTabBar *tabBar;
-    PanelSvg *background;
     QList<QGraphicsWidget *> pages;
     QGraphicsLinearLayout *mainLayout;
     QGraphicsLinearLayout *tabBarLayout;
@@ -73,15 +69,6 @@ public:
     int newPageAnimId;
 };
 
-void TabBarPrivate::syncBorders()
-{
-    //set margins from the normal element
-    qreal left, top, right, bottom;
-
-    background->getMargins(left, top, right, bottom);
-
-    q->setContentsMargins(left, top, right, bottom);
-}
 
 void TabBarPrivate::slidingCompleted(QGraphicsItem *item)
 {
@@ -145,13 +132,6 @@ TabBar::TabBar(QGraphicsWidget *parent)
     d->tabBarLayout->addItem(tabProxy);
     d->tabBarLayout->addStretch();
 
-    //background painting stuff
-    d->background = new Plasma::PanelSvg(this);
-    d->background->setImagePath("widgets/frame");
-    d->background->setElementPrefix("sunken");
-
-    connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()), SLOT(syncBorders()));
-    
     connect(d->tabBar, SIGNAL(currentChanged(int)), this, SLOT(setCurrentIndex(int)));
     connect(d->tabBar, SIGNAL(shapeChanged(QTabBar::Shape)), this, SLOT(shapeChanged(QTabBar::Shape)));
     connect(Plasma::Animator::self(), SIGNAL(movementFinished(QGraphicsItem*)), this, SLOT(slidingCompleted(QGraphicsItem*)));
@@ -334,21 +314,6 @@ QString TabBar::styleSheet() const
 QTabBar *TabBar::nativeWidget() const
 {
     return d->tabBar;
-}
-
-void TabBar::paint(QPainter *painter,
-                   const QStyleOptionGraphicsItem *option,
-                   QWidget *widget)
-{
-    Q_UNUSED(option)
-    Q_UNUSED(widget)
-
-    d->background->paintPanel(painter, QPoint(contentsRect().left(), contentsRect().top() + nativeWidget()->height()/1.5));
-}
-
-void TabBar::resizeEvent(QGraphicsSceneResizeEvent *event)
-{
-    d->background->resizePanel(event->newSize() - QSize(0, nativeWidget()->height()/2));
 }
 
 void TabBar::wheelEvent(QGraphicsSceneWheelEvent * event)
