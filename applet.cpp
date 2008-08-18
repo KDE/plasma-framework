@@ -1006,6 +1006,12 @@ Location Applet::location() const
     return c ? c->d->location : Plasma::Desktop;
 }
 
+QString Applet::context() const
+{
+    Containment *c = containment();
+    return c->Containment::context();
+}
+
 Plasma::AspectRatioMode Applet::aspectRatioMode() const
 {
     return d->aspectRatioMode;
@@ -1058,6 +1064,7 @@ void Applet::setHasConfigurationInterface(bool hasInterface)
     if (d->hasConfigurationInterface == hasInterface) {
         return;
     }
+
     d->hasConfigurationInterface = hasInterface;
     //config action
     //TODO respect security when it's implemented (4.2)

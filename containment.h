@@ -290,11 +290,23 @@ class PLASMA_EXPORT Containment : public Applet
          */
         void setWallpaper(const QString &pluginName, const QString &mode = QString());
 
-       /**
+        /**
          * Return wallpaper plugin.
          */
         Plasma::Wallpaper* wallpaper() const;
 
+        /**
+         * Sets the current context
+         *
+         * @param context the name of the context; if it doesn't exist in the
+         *        semantic store, it will be created.
+         */
+        void setContext(const QString &context);
+
+        /**
+         * @return the current context associated with this activity
+         */
+        QString context() const;
 
     Q_SIGNALS:
         /**

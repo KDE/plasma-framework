@@ -45,6 +45,7 @@
 #include <KWindowSystem>
 
 #include "animator.h"
+#include "context.h"
 #include "corona.h"
 #include "svg.h"
 #include "wallpaper.h"
@@ -1052,6 +1053,27 @@ void Containment::setWallpaper(const QString &pluginName, const QString &mode)
 Plasma::Wallpaper* Containment::wallpaper() const
 {
     return d->wallpaper;
+}
+
+void Containment::setContext(const QString &context)
+{
+    if (d->context != context) {
+        d->context = context;
+        Context c;
+        QStringList contexts = c.contexts();
+        if (!contexts.contains(context)) {
+            c.createContext(context);
+        }
+
+        foreach (Applet *a, d->applets) {
+            a->updateConstraints(ContextConstraint);
+        }
+    }
+}
+
+QString Containment::context() const
+{
+    return d->context;
 }
 
 KActionCollection& ContainmentPrivate::actions()

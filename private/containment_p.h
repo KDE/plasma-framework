@@ -102,6 +102,7 @@ public:
     int screen;
     ToolBox *toolBox;
     Containment::Type type;
+    QString context;
     bool positioning;
     bool drawWallpaper;
 };

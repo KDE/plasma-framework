@@ -241,6 +241,11 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         virtual Location location() const;
 
         /**
+         * Returns the workspace context which the applet is operating in
+         */
+        QString context() const;
+
+        /**
          * @return the preferred aspect ratio mode for placement and resizing
          */
         Plasma::AspectRatioMode aspectRatioMode() const;
