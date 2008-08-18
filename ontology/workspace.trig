@@ -1,0 +1,44 @@
+@prefix workspacecontext:	<http://plasma.kde.org/ontologies/workspacecontext#> .
+@prefix nie:	<http://www.semanticdesktop.org/ontologies/2007/01/19/nie#> .
+@prefix nao:     <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#> .
+@prefix nrl:     <http://www.semanticdesktop.org/ontologies/2007/08/15/nrl#> .
+@prefix rdf:	<http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:	<http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:	<http://www.w3.org/2001/XMLSchema#> .
+
+semn: {
+	semn:Context
+		a rdfs:Context ;
+		rdfs:comment "Represents a workspace context, such as a user project or activity." ;
+		rdfs:label "Context" ;
+		rdfs:subClassOf nie:InformationElement .
+		
+	semn:name
+		a       rdf:Property ;
+		rdfs:comment "A workspace context name.";
+		rdfs:label "name" ;
+		rdfs:domain workspacecontext:Context ;
+		rdfs:range xsd:string .
+		
+	semn:name
+		a       rdf:Property ;
+		rdfs:comment "Is this context the active one?";
+		rdfs:label "isActive" ;
+		rdfs:domain workspacecontext:Context ;
+		rdfs:range xsd:boolean .
+}
+
+<http://plasma.kde.org/ontologies/workspacecontext_metadata#> {
+	workspacecontext: 
+		a <http://www.semanticdesktop.org/ontologies/2007/08/15/nrl#Ontology> ;
+		nao:creator "http://www.dfki.uni-kl.de/~mylka" ;
+		nao:hasDefaultNamespace "http://plasma.kde.org/ontologies/workspacecontext#" ;
+		nao:hasDefaultNamespaceAbbreviation "workspacecontext" ;
+		nao:status "Unstable" ;
+		nao:updatable "0 " ;
+		nao:version "0.1" .
+
+	<http://plasma.kde.org/ontologies/workspacecontext_metadata#>
+		a       nrl:GraphMetadata ;
+		nrl:coreGraphMetadataFor workspacecontext: .
+}

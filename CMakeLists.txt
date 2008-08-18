@@ -29,6 +29,7 @@ set(plasma_LIB_SRCS
     appletbrowser/plasmaappletitemmodel.cpp
     configxml.cpp
     containment.cpp
+    context.cpp
     corona.cpp
     datacontainer.cpp
     dataengine.cpp
@@ -134,6 +135,7 @@ set(plasma_LIB_INCLUDES
     appletbrowser.h
     configxml.h
     containment.h
+    context.h
     corona.h
     datacontainer.h
     dataengine.h
@@ -210,6 +212,7 @@ includes/CheckBox
 includes/ComboBox
 includes/ConfigXml
 includes/Containment
+includes/Context
 includes/Corona
 includes/DataContainer
 includes/DataEngine
@@ -274,4 +277,14 @@ install(FILES
    DESTINATION ${SERVICETYPES_INSTALL_DIR})
 
 install(FILES scripting/plasmoids.knsrc DESTINATION  ${CONFIG_INSTALL_DIR})
+
+# Nepomuk integration
+configure_file(ontology/workspace.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/workspace.desktop)
+
+install(FILES
+  ontology/workspace.trig
+  ${CMAKE_CURRENT_BINARY_DIR}/workspace.desktop
+  DESTINATION
+  ${DATA_INSTALL_DIR}/nepomuk/ontologies
+)
 
