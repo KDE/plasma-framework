@@ -206,6 +206,8 @@ void AppletHandle::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
     painter->setPen(Qt::NoPen);
     painter->setRenderHints(QPainter::Antialiasing);
 
+    painter->translate(0.5, 0.5);
+
     QPainterPath path = handleRect(m_rect, 10, m_buttonsOnRight);
     painter->strokePath(path, m_gradientColor);
 
