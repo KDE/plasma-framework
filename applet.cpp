@@ -804,7 +804,7 @@ void Applet::flushPendingConstraintsEvents()
     if ((c & Plasma::SizeConstraint || c & Plasma::FormFactorConstraint) &&
         aspectRatioMode() == Plasma::ConstrainedSquare) {
         if (formFactor() == Horizontal) {
-            setSizePolicy(QSizePolicy(QSizePolicy::Maximum,QSizePolicy::Expanding));
+            setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Expanding));
         } else if (formFactor() == Vertical) {
             setSizePolicy(QSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed));
         }
