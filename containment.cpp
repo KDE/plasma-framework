@@ -246,6 +246,7 @@ void Containment::restore(KConfigGroup &group)
     setLocation((Plasma::Location)group.readEntry("location", (int)d->location));
     setFormFactor((Plasma::FormFactor)group.readEntry("formfactor", (int)d->formFactor));
     setScreen(group.readEntry("screen", d->screen));
+    setContext(group.readEntry("context", QString()));
 
     flushPendingConstraintsEvents();
     //kDebug() << "Containment" << id() << "geometry is" << geometry() << "config'd with" << appletConfig.name();
@@ -268,6 +269,7 @@ void Containment::save(KConfigGroup &g) const
     group.writeEntry("screen", d->screen);
     group.writeEntry("formfactor", (int)d->formFactor);
     group.writeEntry("location", (int)d->location);
+    group.writeEntry("context", d->context);
     saveContents(group);
 }
 
