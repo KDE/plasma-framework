@@ -1375,6 +1375,8 @@ Applet* Applet::load(const KPluginInfo& info, uint appletId, const QVariantList&
 
 QVariant Applet::itemChange(GraphicsItemChange change, const QVariant &value)
 {
+    QVariant ret = QGraphicsWidget::itemChange(change, value);
+
     //kDebug() << change;
     switch (change) {
     case ItemSceneHasChanged: {
@@ -1391,7 +1393,7 @@ QVariant Applet::itemChange(GraphicsItemChange change, const QVariant &value)
         break;
     };
 
-    return QGraphicsWidget::itemChange(change, value);
+    return ret;
 }
 
 QPainterPath Applet::shape() const
