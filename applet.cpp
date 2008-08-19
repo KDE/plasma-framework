@@ -762,7 +762,8 @@ void Applet::flushPendingConstraintsEvents()
     }
 
     if (c & Plasma::SizeConstraint && d->needsConfigOverlay) {
-        d->needsConfigOverlay->setGeometry(QRectF(QPointF(0, 0), contentsRect().size()));
+        d->needsConfigOverlay->setGeometry(QRectF(QPointF(0,0), geometry().size()));
+
         QGraphicsItem *button = 0;
         QList<QGraphicsItem*> children = d->needsConfigOverlay->QGraphicsItem::children();
 
@@ -1764,7 +1765,15 @@ void AppletOverlayWidget::paint(QPainter *painter,
     painter->setRenderHint(QPainter::Antialiasing);
     QColor wash = Plasma::Theme::defaultTheme()->color(Theme::BackgroundColor);
     wash.setAlphaF(.6);
-    painter->fillPath(parentItem()->shape(), wash);
+
+    Applet *applet = qobject_cast<Applet *>(parentWidget());
+
+    if (applet->backgroundHints() & Applet::StandardBackground) {
+        painter->fillRect(parentWidget()->contentsRect(), wash);
+    } else {
+        painter->fillPath(parentItem()->shape(), wash);
+    }
+
     painter->restore();
 }
 
