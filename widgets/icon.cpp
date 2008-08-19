@@ -93,8 +93,8 @@ IconAction::IconAction(Icon* icon, QAction *action)
       m_action(action),
       m_hovered(false),
       m_pressed(false),
-      m_visible(false),
       m_selected(false),
+      m_visible(false),
       m_animationId(-1)
 {
 }
