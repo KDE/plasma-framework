@@ -62,6 +62,9 @@ namespace Plasma
 IconPrivate::IconPrivate(Icon *i)
     : q(i),
       iconSvg(0),
+      m_fadeIn(false),
+      m_hoverAnimId(-1),
+      m_hoverAlpha(20/255),
       iconSize(48, 48),
       states(IconPrivate::NoState),
       orientation(Qt::Vertical),
@@ -71,14 +74,11 @@ IconPrivate::IconPrivate(Icon *i)
       action(0),
       activeMargins(0)
 {
-    m_hoverAnimId = -1;
-    m_hoverAlpha = 20/255;
 }
 
 IconPrivate::~IconPrivate()
 {
     qDeleteAll(cornerActions);
-    delete iconSvg;
 }
 
 void Icon::readColors() 
@@ -94,6 +94,7 @@ IconAction::IconAction(Icon* icon, QAction *action)
       m_hovered(false),
       m_pressed(false),
       m_visible(false),
+      m_selected(false),
       m_animationId(-1)
 {
 }
@@ -494,7 +495,7 @@ void Icon::layoutIcons(const QStyleOptionGraphicsItem *option)
 void Icon::setSvg(const QString &svgFilePath, const QString &elementId)
 {
     if (!d->iconSvg) {
-        d->iconSvg = new Plasma::Svg();
+        d->iconSvg = new Plasma::Svg(this);
     }
 
     d->iconSvg->setImagePath(svgFilePath);
