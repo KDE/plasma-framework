@@ -1655,7 +1655,9 @@ QString AppletPrivate::instanceName()
 
 void AppletPrivate::scheduleConstraintsUpdate(Plasma::Constraints c)
 {
-    if (!constraintsTimerId) {
+    // Don't start up a timer if we're just starting up
+    // flushPendingConstraints will be called by Corona
+    if (!constraintsTimerId && !(c & Plasma::StartupCompletedConstraint)) {
         constraintsTimerId = q->startTimer(0);
     }
     pendingConstraints |= c;

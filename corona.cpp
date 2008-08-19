@@ -289,6 +289,8 @@ void Corona::loadLayout(const QString& configName)
 
         foreach(Applet* applet, containment->applets()) {
             applet->init();
+            // We have to flush the applet constraints manually
+            applet->flushPendingConstraintsEvents();
         }
 
         containment->updateConstraints(Plasma::StartupCompletedConstraint);

@@ -176,7 +176,12 @@ class PLASMA_EXPORT Containment : public Applet
                           const QRectF &geometry = QRectF(-1, -1, -1, -1));
 
         /**
-         * add existing applet to this containment at pos
+         * Add an existing applet to this Containment
+         *
+         * If dontInit is true, the pending constraints are not flushed either.
+         * So it is your responsibility to call both init() and
+         * flushPendingConstraints() on the applet.
+         *
          * @param applet the applet that should be added
          * @param pos the containment-relative position
          * @param dontInit if true, init() will not be called on the applet
