@@ -96,6 +96,7 @@ void TabBarPrivate::shapeChanged(const QTabBar::Shape shape)
     case QTabBar::TriangularEast:
         mainLayout->setOrientation(Qt::Horizontal);
         mainLayout->itemAt(0)->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
+        mainLayout->itemAt(1)->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
         break;
 
     case QTabBar::RoundedSouth:
@@ -106,6 +107,7 @@ void TabBarPrivate::shapeChanged(const QTabBar::Shape shape)
     default:
         mainLayout->setOrientation(Qt::Vertical);
         mainLayout->itemAt(0)->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
+        mainLayout->itemAt(1)->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     }
 }
 
@@ -152,7 +154,7 @@ int TabBar::insertTab(int index, const QIcon &icon, const QString &label, QGraph
         page->setLayout(layout);
         layout->addItem(content);
     } else {
-        page->setMaximumHeight(0);
+        page->setPreferredSize(0, 0);
     }
 
     d->pages.insert(qBound(0, index, d->pages.count()), page);
