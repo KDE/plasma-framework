@@ -35,6 +35,7 @@ Context::Context(QObject *parent)
 
 Context::~Context()
 {
+      delete d;
 }
 
 void Context::createContext(const QString &name)
