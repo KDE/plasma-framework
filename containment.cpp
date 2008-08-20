@@ -246,7 +246,7 @@ void Containment::restore(KConfigGroup &group)
     setLocation((Plasma::Location)group.readEntry("location", (int)d->location));
     setFormFactor((Plasma::FormFactor)group.readEntry("formfactor", (int)d->formFactor));
     setScreen(group.readEntry("screen", d->screen));
-    setContext(group.readEntry("context", QString()));
+    setActivity(group.readEntry("activity", QString()));
 
     flushPendingConstraintsEvents();
     restoreContents(group);
@@ -276,11 +276,13 @@ void Containment::save(KConfigGroup &g) const
     group.writeEntry("screen", d->screen);
     group.writeEntry("formfactor", (int)d->formFactor);
     group.writeEntry("location", (int)d->location);
-    group.writeEntry("context", d->context);
+    group.writeEntry("activity", d->activity);
 
     if (d->wallpaper) {
         group.writeEntry("wallpaperplugin", d->wallpaper->pluginName());
         group.writeEntry("wallpaperpluginmode", d->wallpaper->renderingMode().name());
+        KConfigGroup wallpaperConfig(&group, "Wallpaper");
+        d->wallpaper->save(wallpaperConfig);
     }
 
     saveContents(group);
@@ -639,7 +641,12 @@ void Containment::addApplet(Applet *applet, const QPointF &pos, bool delayInit)
         Animator::self()->animateItem(applet, Animator::AppearAnimation);
     }
 
-    applet->updateConstraints(Plasma::AllConstraints | Plasma::StartupCompletedConstraint);
+    applet->updateConstraints(Plasma::AllConstraints);
+
+    if (!currentContainment) {
+        applet->updateConstraints(Plasma::StartupCompletedConstraint);
+    }
+
     if (!delayInit) {
         applet->flushPendingConstraintsEvents();
     }
@@ -1093,14 +1100,14 @@ QString Containment::wallpaperMode() const
     return cfg.readEntry("wallpaperpluginmode", QString());
 }
 
-void Containment::setContext(const QString &context)
+void Containment::setActivity(const QString &activity)
 {
-    if (d->context != context) {
-        d->context = context;
+    if (d->activity != activity) {
+        d->activity = activity;
         Context c;
-        QStringList contexts = c.contexts();
-        if (!contexts.contains(context)) {
-            c.createContext(context);
+        QStringList activities = c.listActivities();
+        if (!activities.contains(activity)) {
+            c.createActivity(activity);
         }
 
         foreach (Applet *a, d->applets) {
@@ -1109,9 +1116,9 @@ void Containment::setContext(const QString &context)
     }
 }
 
-QString Containment::context() const
+QString Containment::activity() const
 {
-    return d->context;
+    return d->activity;
 }
 
 KActionCollection& ContainmentPrivate::actions()

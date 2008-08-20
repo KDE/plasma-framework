@@ -301,17 +301,17 @@ class PLASMA_EXPORT Containment : public Applet
         QString wallpaperMode() const;
 
         /**
-         * Sets the current context
+         * Sets the current activity by name
          *
-         * @param context the name of the context; if it doesn't exist in the
+         * @param activity the name of the activity; if it doesn't exist in the
          *        semantic store, it will be created.
          */
-        void setContext(const QString &context);
+        void setActivity(const QString &activity);
 
         /**
-         * @return the current context associated with this activity
+         * @return the current activity associated with this activity
          */
-        QString context() const;
+        QString activity() const;
 
     Q_SIGNALS:
         /**
