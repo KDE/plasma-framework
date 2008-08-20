@@ -122,11 +122,10 @@ public:
      * Swap the containment for this view, which will also cause the view
      * to track the geometry of the containment.
      *
-     * @param old Pointer to old containment
      * @param name the plugin name for the new containment.
      * @param args argument list to pass to the containment
      */
-    Containment* swapContainment(Containment* old, const QString& name,
+    Containment* swapContainment(const QString& name,
                                  const QVariantList& args = QVariantList());
 
     /**

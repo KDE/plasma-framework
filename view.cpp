@@ -236,27 +236,38 @@ Containment* View::containment() const
     return d->containment;
 }
 
-Containment* View::swapContainment(Containment* old, const QString& name, const QVariantList& args)
+Containment* View::swapContainment(const QString& name, const QVariantList& args)
 {
+    Containment *old = d->containment;
     Plasma::Corona* corona = old->corona();
     KConfigGroup containmentConfig = old->config();
     Plasma::Containment *c = corona->addContainment(name, args);
     if (c) {
-        KConfigGroup cfg = c->config();
-        if (old->wallpaper()) {
-            old->wallpaper()->save(KConfigGroup(&cfg, "Wallpaper"));
-        }
+        // ensure that the old containments configuration is up to date
+        old->save(containmentConfig);
+
+        // load the configuration of the old containment into the new one
         c->restore(containmentConfig);
+
+        // move the applets from the old to the new containment
         foreach (QGraphicsItem* item, old->childItems()) {
             Plasma::Applet* applet = dynamic_cast<Plasma::Applet*>(item);
             if (applet) {
-                QRectF geom = applet->geometry();
-                item->setParentItem(c);
-                applet->setGeometry(geom);
+                c->addApplet(applet, applet->pos(), true);
             }
         }
+
+        // set our containment
         setContainment(c);
+
+        // destroy the old one
         old->destroy();
+
+        // and now save the config
+        containmentConfig = c->config();
+        c->save(containmentConfig);
+        corona->requestConfigSync();
+
         return c;
     }
     return old;
