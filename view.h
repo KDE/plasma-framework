@@ -119,6 +119,17 @@ public:
     Containment* containment() const;
 
     /**
+     * Swap the containment for this view, which will also cause the view
+     * to track the geometry of the containment.
+     *
+     * @param old Pointer to old containment
+     * @param name the plugin name for the new containment.
+     * @param args argument list to pass to the containment
+     */
+    Containment* swapContainment(Containment* old, const QString& name,
+                                 const QVariantList& args = QVariantList());
+
+    /**
      * Set whether or not the view should adjust its size when the associated
      * containment does.
      * @arg trackChanges true to syncronize the view's size with the containment's

@@ -25,6 +25,7 @@
 
 #include "corona.h"
 #include "containment.h"
+#include "wallpaper.h"
 
 using namespace Plasma;
 
@@ -233,6 +234,32 @@ void View::setContainment(Containment *containment)
 Containment* View::containment() const
 {
     return d->containment;
+}
+
+Containment* View::swapContainment(Containment* old, const QString& name, const QVariantList& args)
+{
+    Plasma::Corona* corona = old->corona();
+    KConfigGroup containmentConfig = old->config();
+    Plasma::Containment *c = corona->addContainment(name, args);
+    if (c) {
+        KConfigGroup cfg = c->config();
+        if (old->wallpaper()) {
+            old->wallpaper()->save(KConfigGroup(&cfg, "Wallpaper"));
+        }
+        c->restore(containmentConfig);
+        foreach (QGraphicsItem* item, old->childItems()) {
+            Plasma::Applet* applet = dynamic_cast<Plasma::Applet*>(item);
+            if (applet) {
+                QRectF geom = applet->geometry();
+                item->setParentItem(c);
+                applet->setGeometry(geom);
+            }
+        }
+        setContainment(c);
+        old->destroy();
+        return c;
+    }
+    return old;
 }
 
 KConfigGroup View::config() const
