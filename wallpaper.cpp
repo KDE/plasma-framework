@@ -171,13 +171,14 @@ void Wallpaper::setBoundingRect(const QRectF& boundingRect)
 
 void Wallpaper::restore(const KConfigGroup &config, const QString &mode)
 {
-    KServiceAction modeAction;
+    d->mode = KServiceAction();
     if (!mode.isEmpty()) {
         QList<KServiceAction> modes = listRenderingModes();
 
         foreach (const KServiceAction &action, modes) {
             if (action.name() == mode) {
-                modeAction = action;
+                d->mode = action;
+                break;
             }
         }
     }
