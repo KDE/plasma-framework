@@ -53,7 +53,8 @@ class PLASMA_EXPORT Wallpaper : public QObject
     Q_PROPERTY(QString name READ name)
     Q_PROPERTY(QString pluginName READ pluginName)
     Q_PROPERTY(QString icon READ icon)
-    Q_PROPERTY(QList<KServiceAction> renderingModes READ renderingModes)
+    Q_PROPERTY(KServiceAction renderingMode READ renderingMode)
+    Q_PROPERTY(QList<KServiceAction> listRenderingModes READ listRenderingModes)
     Q_PROPERTY(QRectF boundingRect READ boundingRect WRITE setBoundingRect)
 
     public:
@@ -111,10 +112,15 @@ class PLASMA_EXPORT Wallpaper : public QObject
         QString icon() const;
 
         /**
+         * @return the currently active rendering mode
+         */
+        KServiceAction renderingMode() const;
+
+        /**
          * Returns modes the wallpaper has, as specified in the
          * .desktop file.
          */
-        QList<KServiceAction> renderingModes() const;
+        QList<KServiceAction> listRenderingModes() const;
 
         /**
          * Returns bounding rectangle
@@ -135,12 +141,13 @@ class PLASMA_EXPORT Wallpaper : public QObject
         virtual void paint(QPainter *painter, const QRectF& exposedRect) = 0;
 
         /**
-         * This method is called once the wallpaper is loaded or mode is changed.
+         * This method should be called once the wallpaper is loaded or mode is changed.
          * @param config Config group to load settings
          * @param mode One of the modes supported by the plugin,
          *        or an empty string for the default mode.
+         * @see init
          **/
-        virtual void init(const KConfigGroup &config, const QString &mode = QString());
+        void restore(const KConfigGroup &config, const QString &mode = QString());
 
         /**
          * This method is called when settings need to be saved.
@@ -190,6 +197,15 @@ class PLASMA_EXPORT Wallpaper : public QObject
          * @param args a list of strings containing one entry: the service id
          */
         Wallpaper(QObject* parent, const QVariantList& args);
+
+        /**
+         * This method is called once the wallpaper is loaded or mode is changed.
+         * The mode can be retrieved using the @see renderMode() method.
+         * @param config Config group to load settings
+         * @param mode One of the modes supported by the plugin,
+         *        or an empty string for the default mode.
+         **/
+        virtual void init(const KConfigGroup &config);
 
     private:
         WallpaperPrivate* const d;

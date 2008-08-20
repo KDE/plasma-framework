@@ -44,6 +44,7 @@ public:
     Wallpaper *q;
     KPluginInfo wallpaperDescription;
     QRectF boundingRect;
+    KServiceAction mode;
 };
 
 Wallpaper::Wallpaper(QObject* parentObject, const QVariantList& args)
@@ -122,6 +123,7 @@ QString Wallpaper::name() const
     if (!d->wallpaperDescription.isValid()) {
         return i18n("Unknown Wallpaper");
     }
+
     return d->wallpaperDescription.name();
 }
 
@@ -130,6 +132,7 @@ QString Wallpaper::icon() const
     if (!d->wallpaperDescription.isValid()) {
         return QString();
     }
+
     return d->wallpaperDescription.icon();
 }
 
@@ -138,14 +141,21 @@ QString Wallpaper::pluginName() const
     if (!d->wallpaperDescription.isValid()) {
         return QString();
     }
+
     return d->wallpaperDescription.pluginName();
 }
 
-QList<KServiceAction> Wallpaper::renderingModes() const
+KServiceAction Wallpaper::renderingMode() const
+{
+    return d->mode;
+}
+
+QList<KServiceAction> Wallpaper::listRenderingModes() const
 {
     if (!d->wallpaperDescription.isValid()) {
         return QList<KServiceAction>();
     }
+
     return d->wallpaperDescription.service()->actions();
 }
 
@@ -159,10 +169,25 @@ void Wallpaper::setBoundingRect(const QRectF& boundingRect)
     d->boundingRect = boundingRect;
 }
 
-void Wallpaper::init(const KConfigGroup &config, const QString &mode)
+void Wallpaper::restore(const KConfigGroup &config, const QString &mode)
+{
+    KServiceAction modeAction;
+    if (!mode.isEmpty()) {
+        QList<KServiceAction> modes = listRenderingModes();
+
+        foreach (const KServiceAction &action, modes) {
+            if (action.name() == mode) {
+                modeAction = action;
+            }
+        }
+    }
+
+    init(config);
+}
+
+void Wallpaper::init(const KConfigGroup &config)
 {
     Q_UNUSED(config);
-    Q_UNUSED(mode);
 }
 
 void Wallpaper::save(KConfigGroup config)
