@@ -153,7 +153,7 @@ class PLASMA_EXPORT Wallpaper : public QObject
          * This method is called when settings need to be saved.
          * @param config Config group to save settings
          **/
-        virtual void save(KConfigGroup config);
+        virtual void save(KConfigGroup &config);
 
         /**
          * Returns widget for configuration dialog.

@@ -190,7 +190,7 @@ void Wallpaper::init(const KConfigGroup &config)
     Q_UNUSED(config);
 }
 
-void Wallpaper::save(KConfigGroup config)
+void Wallpaper::save(KConfigGroup &config)
 {
     Q_UNUSED(config);
 }
