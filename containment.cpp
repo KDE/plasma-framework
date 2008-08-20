@@ -1311,6 +1311,7 @@ void ContainmentPrivate::handleDisappeared(AppletHandle *handle)
 {
     if (handles.contains(handle->applet())) {
         handles.remove(handle->applet());
+        handle->detachApplet();
         handle->deleteLater();
     }
 }

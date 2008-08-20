@@ -121,27 +121,7 @@ AppletHandle::AppletHandle(Containment *parent, Applet *applet, const QPointF &h
 
 AppletHandle::~AppletHandle()
 {
-    if (m_applet) {
-        m_applet->removeSceneEventFilter(this);
-
-        QRectF rect = QRectF(m_applet->pos(), m_applet->size());
-        QPointF center = m_applet->mapFromParent(rect.center());
-
-        QPointF newPos = transform().inverted().map(m_applet->pos());
-        m_applet->setPos(mapToParent(newPos));
-
-        QTransform matrix;
-        matrix.translate(center.x(), center.y());
-        matrix.rotateRadians(m_angle);
-        matrix.translate(-center.x(), -center.y());
-        m_applet->setTransform(matrix);
-
-        m_applet->setParentItem(m_containment);
-
-        m_applet->setZValue(m_zValue);
-
-        m_applet->update(); // re-render the background, now we've transformed the applet
-    }
+    detachApplet();
     if (m_topview) {
         delete m_topview;
     }
@@ -150,6 +130,39 @@ AppletHandle::~AppletHandle()
 Applet *AppletHandle::applet() const
 {
     return m_applet;
+}
+
+void AppletHandle::detachApplet ()
+{
+    if (!m_applet) {
+        return;
+    }
+
+    disconnect(m_hoverTimer, SIGNAL(timeout()), this, SLOT(fadeIn()));
+    disconnect(m_leaveTimer, SIGNAL(timeout()), this, SLOT(leaveTimeout()));
+    m_applet->disconnect(this);
+
+    m_applet->removeSceneEventFilter(this);
+
+    QRectF rect = QRectF(m_applet->pos(), m_applet->size());
+    QPointF center = m_applet->mapFromParent(rect.center());
+
+    QPointF newPos = transform().inverted().map(m_applet->pos());
+    m_applet->setPos(mapToParent(newPos));
+
+    QTransform matrix;
+    matrix.translate(center.x(), center.y());
+    matrix.rotateRadians(m_angle);
+    matrix.translate(-center.x(), -center.y());
+    m_applet->setTransform(matrix);
+
+    m_applet->setParentItem(m_containment);
+
+    m_applet->setZValue(m_zValue);
+
+    m_applet->update(); // re-render the background, now we've transformed the applet
+
+    m_applet = 0;
 }
 
 QRectF Plasma::AppletHandle::boundingRect() const
@@ -715,12 +728,13 @@ void AppletHandle::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
     Q_UNUSED(event);
     //kDebug() << "hover enter";
 
+    //if a disappear was scheduled stop the timer
+    m_leaveTimer->stop();
+
     // if we're already fading out, fade back in
-    if (m_animId != 0) {
+    if (m_animId != 0 && m_anim == FadeOut) {
         startFading(FadeIn, m_entryPos);
     } else {
-        //if a disappear was scheduled stop the timer
-        m_leaveTimer->stop();
         //schedule appear
         m_hoverTimer->start();
     }
@@ -759,6 +773,9 @@ void AppletHandle::fadeAnimation(qreal progress)
     qreal endOpacity = (m_anim == FadeIn) ? 1.0 : 0.0;
     m_opacity += (endOpacity - m_opacity) * progress;
     //kDebug() << "progress" << progress << "m_opacity" << m_opacity << endOpacity;
+    if (progress >= 1.0) {
+        m_animId = 0;
+    }
     if (progress >= 1.0 && m_anim == FadeOut) {
         emit disappearDone(this);
     }
