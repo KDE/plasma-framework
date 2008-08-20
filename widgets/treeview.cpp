@@ -27,6 +27,8 @@
 
 #include "private/style.h"
 
+namespace Plasma
+{
 
 class TreeViewPrivate
 {
@@ -47,9 +49,7 @@ TreeView::TreeView(QGraphicsWidget *parent)
     QTreeView* native = new QTreeView;
     setWidget(native);
     native->setAttribute(Qt::WA_NoSystemBackground);
-    native->viewport()->setAutoFillBackground(false);
     native->setFrameStyle(QFrame::NoFrame);
-    native->setIconSize(QSize(KIconLoader::SizeSmallMedium, KIconLoader::SizeSmallMedium));
 
     Plasma::Style *style = new Plasma::Style();
     native->verticalScrollBar()->setStyle(style);
@@ -85,6 +85,8 @@ QTreeView* TreeView::nativeWidget() const
 {
     return static_cast<QTreeView*>(widget());
 }
+
+};
 
 #include <treeview.moc>
 

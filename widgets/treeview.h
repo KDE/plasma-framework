@@ -23,13 +23,17 @@
 
 #include <QtGui/QGraphicsProxyWidget>
 
+#include <plasma/plasma_export.h>
+
 class QTreeView;
 class QAbstractItemModel;
 
+namespace Plasma
+{
 
 class TreeViewPrivate;
 
-class TreeView : public QGraphicsProxyWidget
+class PLASMA_EXPORT TreeView : public QGraphicsProxyWidget
 {
     Q_OBJECT
 
@@ -75,4 +79,5 @@ private:
     TreeViewPrivate * const d;
 };
 
+};
 #endif // multiple inclusion guard
