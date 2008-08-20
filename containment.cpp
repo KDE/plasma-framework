@@ -277,6 +277,12 @@ void Containment::save(KConfigGroup &g) const
     group.writeEntry("formfactor", (int)d->formFactor);
     group.writeEntry("location", (int)d->location);
     group.writeEntry("context", d->context);
+
+    if (d->wallpaper) {
+        group.writeEntry("wallpaperplugin", d->wallpaper->pluginName());
+        group.writeEntry("wallpaperpluginmode", d->wallpaper->renderingMode().name());
+    }
+
     saveContents(group);
 }
 
@@ -1058,15 +1064,18 @@ void Containment::setWallpaper(const QString &pluginName, const QString &mode)
             delete d->wallpaper;
             d->wallpaper = 0;
         }
+
         if (!pluginName.isEmpty() && !d->wallpaper) {
             d->wallpaper = Plasma::Wallpaper::load(pluginName);
         }
+
         if (d->wallpaper) {
             d->wallpaper->setBoundingRect(geometry());
-            d->wallpaper->init(KConfigGroup(&cfg, "Wallpaper"), mode);
+            d->wallpaper->restore(KConfigGroup(&cfg, "Wallpaper"), mode);
             connect(d->wallpaper, SIGNAL(update(const QRectF&)),
                     this, SLOT(updateRect(const QRectF&)));
         }
+
         update();
     }
     cfg.writeEntry("wallpaperplugin", pluginName);
