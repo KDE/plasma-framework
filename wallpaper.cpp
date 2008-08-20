@@ -141,32 +141,12 @@ QString Wallpaper::pluginName() const
     return d->wallpaperDescription.pluginName();
 }
 
-QStringList Wallpaper::modes() const
+QList<KServiceAction> Wallpaper::renderingModes() const
 {
     if (!d->wallpaperDescription.isValid()) {
-        return QStringList();
+        return QList<KServiceAction>();
     }
-    return d->wallpaperDescription.property("Actions").toStringList();
-}
-
-QString Wallpaper::modeName(const QString& mode) const
-{
-    if (!d->wallpaperDescription.isValid()) {
-        return QString();
-    }
-    KConfigGroup wallpaperCfg = d->wallpaperDescription.config();
-    KConfigGroup cfg(&wallpaperCfg, QString("Desktop Action %1").arg(mode));
-    return cfg.readEntry("Name");
-}
-
-QString Wallpaper::modeIcon(const QString& mode) const
-{
-    if (!d->wallpaperDescription.isValid()) {
-        return QString();
-    }
-    KConfigGroup wallpaperCfg = d->wallpaperDescription.config();
-    KConfigGroup cfg(&wallpaperCfg, QString("Desktop Action %1").arg(mode));
-    return cfg.readEntry("Icon");
+    return d->wallpaperDescription.service()->actions();
 }
 
 QRectF Wallpaper::boundingRect() const
@@ -179,9 +159,15 @@ void Wallpaper::setBoundingRect(const QRectF& boundingRect)
     d->boundingRect = boundingRect;
 }
 
-void Wallpaper::init(const QString &mode)
+void Wallpaper::init(const KConfigGroup &config, const QString &mode)
 {
+    Q_UNUSED(config);
     Q_UNUSED(mode);
+}
+
+void Wallpaper::save(KConfigGroup config)
+{
+    Q_UNUSED(config);
 }
 
 QWidget *Wallpaper::createConfigurationInterface(QWidget *parent)

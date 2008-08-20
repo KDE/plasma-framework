@@ -276,11 +276,6 @@ class PLASMA_EXPORT Containment : public Applet
         void removeAssociatedWidget(QWidget *widget);
 
         /**
-         * Sets whether wallpaper is painted or not.
-         */
-        void setDrawWallpaper(bool drawWallpaper);
-
-        /**
          * Return whether wallpaper is painted or not.
          */
         bool drawWallpaper();
@@ -299,6 +294,11 @@ class PLASMA_EXPORT Containment : public Applet
          * Return wallpaper plugin.
          */
         Plasma::Wallpaper* wallpaper() const;
+
+        /**
+         * Return wallpaper mode.
+         */
+        QString wallpaperMode() const;
 
         /**
          * Sets the current context
@@ -365,6 +365,11 @@ class PLASMA_EXPORT Containment : public Applet
          */
         void focusRequested(Plasma::Containment *containment);
 
+        /**
+         * Emitted when the user wants to configure/change containment.
+         */
+        void configureRequested();
+
     public Q_SLOTS:
         /**
          * Informs the Corona as to what position it is in. This is informational
@@ -409,6 +414,11 @@ class PLASMA_EXPORT Containment : public Applet
          * Sets the type of this containment.
          */
         void setContainmentType(Containment::Type type);
+
+        /**
+         * Sets whether wallpaper is painted or not.
+         */
+        void setDrawWallpaper(bool drawWallpaper);
 
         /**
          * Called when the contents of the containment should be saved. By default this saves

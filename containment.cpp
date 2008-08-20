@@ -249,12 +249,19 @@ void Containment::restore(KConfigGroup &group)
     setContext(group.readEntry("context", QString()));
 
     flushPendingConstraintsEvents();
-    //kDebug() << "Containment" << id() << "geometry is" << geometry() << "config'd with" << appletConfig.name();
     restoreContents(group);
     setImmutability((ImmutabilityType)group.readEntry("immutability", (int)Mutable));
 
-    setWallpaper(group.readEntry("wallpaperplugin", QString()),
-                 group.readEntry("wallpaperpluginmode", QString()));
+    setWallpaper(group.readEntry("wallpaperplugin", "image"),
+                 group.readEntry("wallpaperpluginmode", "SingleImage"));
+    /*
+    kDebug() << "Containment" << id() <<
+                "screen" << screen() <<
+                "geometry is" << geometry() <<
+                "wallpaper" << ((d->wallpaper) ? d->wallpaper->pluginName() : QString()) <<
+                "wallpaper mode" << wallpaperMode() <<
+                "config entries" << group.entryMap();
+    */
 }
 
 void Containment::save(KConfigGroup &g) const
@@ -1027,6 +1034,14 @@ void Containment::removeAssociatedWidget(QWidget *widget)
 void Containment::setDrawWallpaper(bool drawWallpaper)
 {
     d->drawWallpaper = drawWallpaper;
+    if (d->drawWallpaper) {
+        KConfigGroup cfg = config();
+        setWallpaper(cfg.readEntry("wallpaperplugin", "image"),
+                     cfg.readEntry("wallpaperpluginmode", "SingleImage"));
+    } else if (!d->drawWallpaper && d->wallpaper) {
+        delete d->wallpaper;
+        d->wallpaper = 0;
+    }
 }
 
 bool Containment::drawWallpaper()
@@ -1036,25 +1051,37 @@ bool Containment::drawWallpaper()
 
 void Containment::setWallpaper(const QString &pluginName, const QString &mode)
 {
-    delete d->wallpaper;
-    if (!pluginName.isEmpty()) {
-        d->wallpaper = Plasma::Wallpaper::load(pluginName);
-        setDrawWallpaper(d->wallpaper != 0);
+    KConfigGroup cfg = config();
+
+    if (d->drawWallpaper) {
+        if (d->wallpaper && d->wallpaper->pluginName() != pluginName) {
+            delete d->wallpaper;
+            d->wallpaper = 0;
+        }
+        if (!pluginName.isEmpty() && !d->wallpaper) {
+            d->wallpaper = Plasma::Wallpaper::load(pluginName);
+        }
         if (d->wallpaper) {
             d->wallpaper->setBoundingRect(geometry());
-            d->wallpaper->init(mode);
+            d->wallpaper->init(KConfigGroup(&cfg, "Wallpaper"), mode);
             connect(d->wallpaper, SIGNAL(update(const QRectF&)),
                     this, SLOT(updateRect(const QRectF&)));
         }
-    } else {
-        d->wallpaper = 0;
-        setDrawWallpaper(false);
+        update();
     }
+    cfg.writeEntry("wallpaperplugin", pluginName);
+    cfg.writeEntry("wallpaperpluginmode", mode);
 }
 
 Plasma::Wallpaper* Containment::wallpaper() const
 {
     return d->wallpaper;
+}
+
+QString Containment::wallpaperMode() const
+{
+    KConfigGroup cfg = config();
+    return cfg.readEntry("wallpaperpluginmode", QString());
 }
 
 void Containment::setContext(const QString &context)
@@ -1149,6 +1176,8 @@ void Containment::destroy()
         return;
     }
 
+    //TODO For desktop containment change we need to remove containment so do we need these?
+    #if 0
     if (isContainment()) {
         //don't remove a desktop that's in use
         //FIXME allow removal of containments for screens that don't currently exist
@@ -1165,8 +1194,9 @@ void Containment::destroy()
             Applet::destroy();
         }
     } else {
+    #endif
         Applet::destroy();
-    }
+    //}
 }
 
 
@@ -1415,14 +1445,14 @@ void ContainmentPrivate::appletDestroyed(QObject* object)
     if (focusedApplet == applet) {
         focusedApplet = 0;
     }
-    
+
     foreach (AppletHandle* handle, handles) {
         if (handles.contains(applet)) {
             handles.remove(handle->applet());
             handle->deleteLater();
         }
     }
-   
+
     emit q->appletRemoved(applet);
     emit q->configNeedsSaving();
 }

@@ -43,7 +43,7 @@ public:
           toolBox(0),
           type(Containment::NoContainmentType),
           positioning(false),
-          drawWallpaper(false)
+          drawWallpaper(true)
     {
     }
 

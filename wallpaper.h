@@ -52,7 +52,8 @@ class PLASMA_EXPORT Wallpaper : public QObject
     Q_PROPERTY(QRectF boundingRect READ boundingRect WRITE setBoundingRect)
     Q_PROPERTY(QString name READ name)
     Q_PROPERTY(QString pluginName READ pluginName)
-    Q_PROPERTY(QStringList modes READ modes)
+    Q_PROPERTY(QString icon READ icon)
+    Q_PROPERTY(QList<KServiceAction> renderingModes READ renderingModes)
     Q_PROPERTY(QRectF boundingRect READ boundingRect WRITE setBoundingRect)
 
     public:
@@ -113,17 +114,7 @@ class PLASMA_EXPORT Wallpaper : public QObject
          * Returns modes the wallpaper has, as specified in the
          * .desktop file.
          */
-        QStringList modes() const;
-
-       /**
-         * Returns the translted name for the mode.
-         */
-        QString modeName(const QString& mode) const;
-
-       /**
-         * Returns icon for the mode.
-         */
-        QString modeIcon(const QString& mode) const;
+        QList<KServiceAction> renderingModes() const;
 
         /**
          * Returns bounding rectangle
@@ -144,11 +135,18 @@ class PLASMA_EXPORT Wallpaper : public QObject
         virtual void paint(QPainter *painter, const QRectF& exposedRect) = 0;
 
         /**
-         * This method is called once the wallpaper is loaded.
+         * This method is called once the wallpaper is loaded or mode is changed.
+         * @param config Config group to load settings
          * @param mode One of the modes supported by the plugin,
          *        or an empty string for the default mode.
          **/
-        virtual void init(const QString &mode = QString());
+        virtual void init(const KConfigGroup &config, const QString &mode = QString());
+
+        /**
+         * This method is called when settings need to be saved.
+         * @param config Config group to save settings
+         **/
+        virtual void save(KConfigGroup config);
 
         /**
          * Returns widget for configuration dialog.
