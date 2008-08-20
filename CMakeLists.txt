@@ -82,6 +82,7 @@ set(plasma_LIB_SRCS
     widgets/signalplotter.cpp
     widgets/slider.cpp
     widgets/tabbar.cpp
+    widgets/treeview.cpp
     widgets/textedit.cpp
     widgets/webcontent.cpp
 )
@@ -189,6 +190,7 @@ install(FILES
     widgets/signalplotter.h
     widgets/slider.h
     widgets/tabbar.h
+    widgets/treeview.h
     widgets/textedit.h
     widgets/webcontent.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/plasma/widgets COMPONENT Devel)
@@ -252,6 +254,7 @@ includes/TabBar
 includes/TextEdit
 includes/ToolTipManager
 includes/Theme
+includes/TreeView
 includes/UiLoader
 includes/View
 includes/Version
