@@ -38,11 +38,11 @@ public:
     explicit Context(QObject *parent = 0);
     ~Context();
 
-    void createContext(const QString &name);
-    QStringList contexts() const;
+    void createActivity(const QString &name);
+    QStringList listActivities() const;
 
-    void setCurrentContext(const QString &name);
-    QString currentContext() const;
+    void setCurrentActivity(const QString &name);
+    QString currentActivity() const;
 
 Q_SIGNALS:
     void currentChanged(const QString &);

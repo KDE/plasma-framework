@@ -38,20 +38,20 @@ Context::~Context()
       delete d;
 }
 
-void Context::createContext(const QString &name)
+void Context::createActivity(const QString &name)
 {
 }
 
-QStringList Context::contexts() const
+QStringList Context::listActivities() const
 {
     return QStringList();
 }
 
-void Context::setCurrentContext(const QString &name)
+void Context::setCurrentActivity(const QString &name)
 {
 }
 
-QString Context::currentContext() const
+QString Context::currentActivity() const
 {
     return QString();
 }
