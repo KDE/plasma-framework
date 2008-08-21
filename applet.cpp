@@ -892,17 +892,18 @@ void Applet::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
         if (widget && isContainment()) {
             // note that the widget we get is actually the viewport of the view, not the view itself
             View* v = qobject_cast<Plasma::View*>(widget->parent());
+
             if (!v || v->isWallpaperEnabled()) {
                 Containment* c = qobject_cast<Plasma::Containment*>(this);
                 if (c && c->drawWallpaper() && c->wallpaper()) {
                     c->wallpaper()->paint(p, contentsRect);
-                } else {
-                    Containment::StyleOption coption(*option);
-                    coption.view = v;
-
-                    paintInterface(p, &coption, contentsRect);
                 }
+
+                Containment::StyleOption coption(*option);
+                coption.view = v;
+                paintInterface(p, &coption, contentsRect);
             }
+
             p->restore();
             return;
         }
