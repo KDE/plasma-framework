@@ -409,6 +409,15 @@ class PLASMA_EXPORT Containment : public Applet
          */
         void destroy();
 
+        /**
+         * Destroys this containment and all its applets (after a confirmation dialog);
+         * it will be removed nicely and deleted.
+         * Its configuration will also be deleted.
+         *
+         * @arg confirm whether or not confirmation from the user should be requested
+         */
+        void destroy(bool confirm);
+
     protected:
         /**
          * Sets the type of this containment.

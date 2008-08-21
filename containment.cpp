@@ -1188,12 +1188,15 @@ void Containment::focusPreviousApplet()
 
 void Containment::destroy()
 {
+    destroy(true);
+}
+
+void Containment::destroy(bool confirm)
+{
     if (immutability() != Mutable) {
         return;
     }
 
-    //TODO For desktop containment change we need to remove containment so do we need these?
-    #if 0
     if (isContainment()) {
         //don't remove a desktop that's in use
         //FIXME allow removal of containments for screens that don't currently exist
@@ -1210,9 +1213,8 @@ void Containment::destroy()
             Applet::destroy();
         }
     } else {
-    #endif
         Applet::destroy();
-    //}
+    }
 }
 
 

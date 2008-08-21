@@ -257,11 +257,11 @@ Containment* View::swapContainment(const QString& name, const QVariantList& args
             }
         }
 
-        // set our containment
+        // set our containment to the new one
         setContainment(c);
 
         // destroy the old one
-        old->destroy();
+        old->destroy(false);
 
         // and now save the config
         containmentConfig = c->config();
