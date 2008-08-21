@@ -112,10 +112,12 @@ Containment::~Containment()
 
 void Containment::init()
 {
-    if (isContainment()) {
-        setCacheMode(NoCache);
-        setFlag(QGraphicsItem::ItemIsMovable, false);
+    if (!isContainment()) {
+        return;
     }
+
+    setCacheMode(NoCache);
+    setFlag(QGraphicsItem::ItemIsMovable, false);
     setFlag(QGraphicsItem::ItemClipsChildrenToShape, false);
     setAcceptDrops(true);
     setAcceptsHoverEvents(true);
@@ -204,8 +206,6 @@ void Containment::init()
             d->toolBox->addTool(this->action("add sibling containment"));
         }
     }
-
-    Applet::init();
 }
 
 // helper function for sorting the list of applets
