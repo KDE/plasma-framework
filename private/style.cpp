@@ -70,39 +70,68 @@ void Style::drawComplexControl(ComplexControl control,
     painter->save();
     painter->setRenderHint(QPainter::Antialiasing);
 
+    const bool sunken =option->state & State_Sunken;
     const QStyleOptionSlider *scrollOption = qstyleoption_cast<const QStyleOptionSlider *>(option);
+    QString prefix;
+
+    if (option->state & State_MouseOver) {
+        prefix= "mouseover-";
+    }
 
     QRect subLine;
     QRect addLine;
     if (scrollOption && scrollOption->orientation == Qt::Horizontal) {
-        subLine = d->scrollbar->elementRect("arrow-left").toRect();
-        addLine = d->scrollbar->elementRect("arrow-right").toRect();
+        subLine = d->scrollbar->elementRect(prefix + "arrow-left").toRect();
+        addLine = d->scrollbar->elementRect(prefix + "arrow-right").toRect();
     } else {
-        subLine = d->scrollbar->elementRect("arrow-up").toRect();
-        addLine = d->scrollbar->elementRect("arrow-down").toRect();
+        subLine = d->scrollbar->elementRect(prefix + "arrow-up").toRect();
+        addLine = d->scrollbar->elementRect(prefix + "arrow-down").toRect();
     }
-    
+
     subLine.moveCenter(subControlRect(control, option, SC_ScrollBarSubLine, widget).center());
     addLine.moveCenter(subControlRect(control, option, SC_ScrollBarAddLine, widget).center());
-    
+
     const QRect slider = subControlRect(control, option, SC_ScrollBarSlider, widget).adjusted(1, 0, -1, 0);
 
     d->scrollbar->setElementPrefix("background");
     d->scrollbar->resizePanel(option->rect.size());
     d->scrollbar->paintPanel(painter);
-    
-    d->scrollbar->setElementPrefix("slider");
+
+    if (sunken && scrollOption->activeSubControls & SC_ScrollBarSlider) {
+        d->scrollbar->setElementPrefix("sunken-slider");
+    } else {
+        d->scrollbar->setElementPrefix(prefix + "slider");
+    }
+
     d->scrollbar->resizePanel(slider.size());
     d->scrollbar->paintPanel(painter, slider.topLeft());
 
     if (scrollOption && scrollOption->orientation == Qt::Horizontal) {
-        d->scrollbar->paint(painter, addLine.topLeft(), "arrow-left");
-        d->scrollbar->paint(painter, subLine.topLeft(), "arrow-right");
+        if (sunken && scrollOption->activeSubControls & SC_ScrollBarAddLine) {
+            d->scrollbar->paint(painter, addLine.topLeft(), "sunken-arrow-right");
+        } else {
+            d->scrollbar->paint(painter, addLine.topLeft(), prefix + "arrow-right");
+        }
+
+        if (sunken && scrollOption->activeSubControls & SC_ScrollBarSubLine) {
+            d->scrollbar->paint(painter, subLine.topLeft(), "sunken-arrow-left");
+        } else {
+            d->scrollbar->paint(painter, subLine.topLeft(), prefix + "arrow-left");
+        }
     } else {
-        d->scrollbar->paint(painter, addLine.topLeft(), "arrow-down");
-        d->scrollbar->paint(painter, subLine.topLeft(), "arrow-up"); 
+        if (sunken && scrollOption->activeSubControls & SC_ScrollBarAddLine) {
+            d->scrollbar->paint(painter, addLine.topLeft(), "sunken-arrow-down");
+        } else {
+            d->scrollbar->paint(painter, addLine.topLeft(), prefix + "arrow-down");
+        }
+
+        if (sunken && scrollOption->activeSubControls & SC_ScrollBarSubLine) {
+            d->scrollbar->paint(painter, subLine.topLeft(), "sunken-arrow-up");
+        } else {
+            d->scrollbar->paint(painter, subLine.topLeft(), prefix + "arrow-up");
+        }
     }
-    
+
     painter->restore();
 }
 
