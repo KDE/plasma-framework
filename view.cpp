@@ -128,6 +128,8 @@ View::View(Containment *containment, int viewId, QWidget *parent)
 View::~View()
 {
     delete d;
+    // FIXME FIX a focus crash but i wasn't able to reproduce in a simple test case for Qt guys
+    clearFocus();
 }
 
 void View::setScreen(int screen)
