@@ -42,6 +42,7 @@
 #include <KRun>
 #include <KServiceTypeTrader>
 #include <KStandardDirs>
+#include <KTemporaryFile>
 #include <KWindowSystem>
 
 #include "animator.h"
@@ -786,6 +787,19 @@ void Containment::dragEnterEvent(QGraphicsSceneDragDropEvent *event)
     event->setAccepted(immutability() == Mutable &&
                        (event->mimeData()->hasFormat(static_cast<Corona*>(scene())->appletMimeType()) ||
                         KUrl::List::canDecode(event->mimeData())));
+
+    if (!event->isAccepted()) {
+        // check to see if we have an applet that accepts the format.
+        QStringList formats = event->mimeData()->formats();
+
+        foreach (const QString &format, formats) {
+            KPluginInfo::List appletList = Applet::listAppletInfoForMimetype(format);
+            if (!appletList.isEmpty()) {
+                event->setAccepted(true);
+                break;
+            }
+        }
+    }
 }
 
 void Containment::dragMoveEvent(QGraphicsSceneDragDropEvent *event)
@@ -851,6 +865,74 @@ void Containment::dropEvent(QGraphicsSceneDragDropEvent *event)
             }
         }
         event->acceptProposedAction();
+    } else {
+        QStringList formats = event->mimeData()->formats();
+        QHash<QString, KPluginInfo> seenPlugins;
+        QHash<QString, QString> pluginFormats;
+
+        foreach (const QString &format, formats) {
+            KPluginInfo::List plugins = Applet::listAppletInfoForMimetype(format);
+
+            foreach (const KPluginInfo &plugin, plugins) {
+                if (seenPlugins.contains(plugin.pluginName())) {
+                    continue;
+                }
+
+                seenPlugins.insert(plugin.pluginName(), plugin);
+                pluginFormats.insert(plugin.pluginName(), format);
+            }
+        }
+
+        QString selectedPlugin;
+
+        if (seenPlugins.isEmpty()) {
+            // do nothing, we have no matches =/
+        }
+
+        if (seenPlugins.count() == 1) {
+            selectedPlugin = seenPlugins.constBegin().key();
+        } else {
+            QMenu choices;
+            QHash<QAction*, QString > actionsToPlugins;
+            foreach (const KPluginInfo &info, seenPlugins) {
+                QAction *action;
+                if (!info.icon().isEmpty()) {
+                    action = choices.addAction(KIcon(info.icon()), info.name());
+                } else {
+                    action = choices.addAction(info.name());
+                }
+
+                actionsToPlugins.insert(action, info.pluginName());
+            }
+
+            QAction *choice = choices.exec(event->screenPos());
+            if (choice) {
+                selectedPlugin = actionsToPlugins[choice];
+            }
+        }
+
+        if (!selectedPlugin.isEmpty()) {
+            KTemporaryFile tempFile;
+            if (tempFile.open()) {
+                //TODO: what should we do with files after the applet is done with them??
+                tempFile.setAutoRemove(false);
+
+                {
+                    QDataStream stream(&tempFile);
+                    QByteArray data = event->mimeData()->data(pluginFormats[selectedPlugin]);
+                    stream.writeRawData(data, data.size());
+                }
+
+
+                QRectF geom(event->pos(), QSize());
+                QVariantList args;
+                args << tempFile.fileName();
+                kDebug() << args;
+                tempFile.close();
+
+                addApplet(selectedPlugin, args, geom);
+            }
+        }
     }
 }
 
@@ -1207,7 +1289,8 @@ void Containment::destroy(bool confirm)
         }
 
         //FIXME maybe that %1 should be the containment type not the name
-        if (KMessageBox::warningContinueCancel(view(), i18n("Do you really want to remove this %1?", name()),
+        if (!confirm ||
+            KMessageBox::warningContinueCancel(view(), i18n("Do you really want to remove this %1?", name()),
                     i18n("Remove %1", name()), KStandardGuiItem::remove()) == KMessageBox::Continue ) {
             //clearApplets();
             Applet::destroy();
