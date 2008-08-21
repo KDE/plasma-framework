@@ -86,7 +86,7 @@ QTreeView* TreeView::nativeWidget() const
     return static_cast<QTreeView*>(widget());
 }
 
-};
+}
 
 #include <treeview.moc>
 

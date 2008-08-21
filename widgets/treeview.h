@@ -79,5 +79,5 @@ private:
     TreeViewPrivate * const d;
 };
 
-};
+}
 #endif // multiple inclusion guard
