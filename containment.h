@@ -296,11 +296,6 @@ class PLASMA_EXPORT Containment : public Applet
         Plasma::Wallpaper* wallpaper() const;
 
         /**
-         * Return wallpaper mode.
-         */
-        QString wallpaperMode() const;
-
-        /**
          * Sets the current activity by name
          *
          * @param activity the name of the activity; if it doesn't exist in the

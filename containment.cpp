@@ -1176,12 +1176,6 @@ Plasma::Wallpaper* Containment::wallpaper() const
     return d->wallpaper;
 }
 
-QString Containment::wallpaperMode() const
-{
-    KConfigGroup cfg = config();
-    return cfg.readEntry("wallpaperpluginmode", QString());
-}
-
 void Containment::setActivity(const QString &activity)
 {
     if (d->activity != activity) {
