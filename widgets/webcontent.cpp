@@ -44,6 +44,7 @@ public:
 
     void loadingFinished(bool success);
     void updateRequested(const QRect& dirtyRect);
+    void scrollRequested(int dx, int dy, const QRect &scrollRect);
 
     WebContent *q;
     QWebPage *page;
@@ -113,6 +114,7 @@ void WebContent::setPage(QWebPage *page)
         connect(d->page, SIGNAL(loadProgress(int)), this, SIGNAL(loadProgress(int)));
         connect(d->page, SIGNAL(loadFinished(bool)), this, SLOT(loadingFinished(bool)));
         connect(d->page, SIGNAL(repaintRequested(const QRect&)), this, SLOT(updateRequested(const QRect&)));
+        connect(d->page, SIGNAL(scrollRequested(int, int, const QRect &)), this, SLOT(scrollRequested(int, int, const QRect &)));
     }
 }
 
@@ -359,6 +361,11 @@ void WebContentPrivate::updateRequested(const QRect& dirtyRect)
     if (loaded && page) {
        q->update(QRectF(dirtyRect.topLeft().x(), dirtyRect.topLeft().y(), dirtyRect.width(), dirtyRect.height()));
     }
+}
+
+void WebContentPrivate::scrollRequested(int dx, int dy, const QRect &scrollRect)
+{
+    updateRequested(scrollRect);
 }
 
 } // namespace Plasma
