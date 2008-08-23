@@ -270,7 +270,7 @@ void Applet::setFailedToLaunch(bool failed, const QString& reason)
     if (failed) {
         setBackgroundHints(d->backgroundHints|StandardBackground);
 
-        QGraphicsLinearLayout *failureLayout = new QGraphicsLinearLayout();
+        QGraphicsLinearLayout *failureLayout = new QGraphicsLinearLayout(this);
         failureLayout->setContentsMargins(0, 0, 0, 0);
         Label *failureWidget = new Plasma::Label(this);
         failureWidget->setText(d->visibleFailureText(reason));
@@ -604,7 +604,7 @@ void Applet::setBackgroundHints(const BackgroundHints hints)
     //Draw the standard background?
     if ((hints & StandardBackground) || (hints & TranslucentBackground)) {
         if (!d->background) {
-            d->background = new Plasma::PanelSvg();
+            d->background = new Plasma::PanelSvg(this);
         }
 
         if ((hints & TranslucentBackground) &&
@@ -1548,7 +1548,6 @@ AppletPrivate::~AppletPrivate()
     foreach (const QString& engine, loadedEngines) {
         DataEngineManager::self()->unloadEngine( engine );
     }
-    delete background;
     delete package;
     delete configXml;
     delete mainConfig;
