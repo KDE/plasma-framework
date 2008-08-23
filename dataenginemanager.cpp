@@ -85,7 +85,7 @@ DataEngineManager* DataEngineManager::self()
 }
 
 DataEngineManager::DataEngineManager()
-    : d(new DataEngineManagerPrivate())
+    : d(new DataEngineManagerPrivate)
 {
 }
 
