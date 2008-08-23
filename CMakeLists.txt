@@ -106,7 +106,7 @@ endif(QT_QTOPENGL_FOUND AND OPENGL_FOUND)
 kde4_add_library(plasma SHARED ${plasma_LIB_SRCS})
 
 target_link_libraries(plasma ${KDE4_KIO_LIBS} ${KDE4_KFILE_LIBS} ${KDE4_KNEWSTUFF2_LIBS}
-                             ${QT_QTUITOOLS_LIBRARY} ${QT_QTWEBKIT_LIBRARY}
+                             ${QT_QTUITOOLS_LIBRARY} ${QT_QTWEBKIT_LIBRARY} ${DL_LIBRARY}
                              ${KDE4_THREADWEAVER_LIBRARIES} ${KDE4_SOLID_LIBS} ${X11_LIBRARIES})
 
 if(QT_QTOPENGL_FOUND AND OPENGL_FOUND)
