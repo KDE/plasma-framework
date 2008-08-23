@@ -192,6 +192,11 @@ Corona::~Corona()
     // also checks kiosk and parent containers
     cg.writeEntry("immutability", (int)d->immutability);
     delete d;
+
+    // FIXME: Same fix as in Plasma::View - make sure that when the focused widget is
+    //        destroyed we don't try to transfer it to something that's already been
+    //        deleted.
+    clearFocus();
 }
 
 void Corona::setAppletMimeType(const QString& type)

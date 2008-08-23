@@ -129,6 +129,7 @@ View::~View()
 {
     delete d;
     // FIXME FIX a focus crash but i wasn't able to reproduce in a simple test case for Qt guys
+    //       NB: this is also done in Corona
     clearFocus();
 }
 
