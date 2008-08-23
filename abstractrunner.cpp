@@ -73,6 +73,11 @@ public:
         }
     }
 
+    ~AbstractRunnerPrivate()
+    {
+        delete package;
+    }
+
     bool hasRunOptions;
     bool hasConfig;
     AbstractRunner::Priority priority;

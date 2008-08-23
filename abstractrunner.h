@@ -165,6 +165,9 @@ class PLASMA_EXPORT AbstractRunner : public QObject
         /**
          * Accessor for the associated Package object if any.
          *
+         * Note that the returned pointer is only valid for the lifetime of
+         * the runner.
+         *
          * @return the Package object, or 0 if none
          **/
         const Package* package() const;
