@@ -32,6 +32,7 @@ class DataEnginePrivate
 {
     public:
         DataEnginePrivate(DataEngine* e, KService::Ptr service);
+        ~DataEnginePrivate();
         DataContainer* source(const QString& sourceName, bool createWhenMissing = true);
         void connectSource(DataContainer* s, QObject* visualization, uint pollingInterval,
                            Plasma::IntervalAlignment align, bool immediateCall = true);
