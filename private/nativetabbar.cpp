@@ -64,8 +64,7 @@ public:
     void storeLastIndex();
 
     NativeTabBar *q;
-    //used to keep track of shape() changes
-    QTabBar::Shape shape;
+    QTabBar::Shape shape; //used to keep track of shape() changes
     PanelSvg *backgroundSvg;
     qreal left, top, right, bottom;
     PanelSvg *buttonSvg;
@@ -117,7 +116,7 @@ NativeTabBar::NativeTabBar(QWidget *parent)
 }
 
 NativeTabBar::~NativeTabBar()
-{  
+{
     delete d;
 }
 
@@ -138,7 +137,8 @@ int NativeTabBar::lastIndex() const
 }
 
 QSize NativeTabBar::tabSizeHint(int index) const
-{//return QTabBar::tabSizeHint(index);
+{
+    //return QTabBar::tabSizeHint(index);
     QSize hint = tabSize(index);
     int minwidth = 0;
     int minheight = 0;
@@ -347,7 +347,7 @@ QSize NativeTabBar::tabSize(int index) const
     return hint;
 }
 
-}
+} // namespace Plasma
 
 #include "nativetabbar_p.moc"
 
