@@ -40,7 +40,7 @@ Extender::Extender(Applet *applet)
           d(new ExtenderPrivate(applet, this))
 {
     applet->d->extender = this;
-    d->layout = new QGraphicsLinearLayout();
+    d->layout = new QGraphicsLinearLayout(this);
     d->layout->setOrientation(Qt::Vertical);
     setLayout(d->layout);
 

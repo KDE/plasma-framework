@@ -64,8 +64,6 @@ class ExtenderItemPrivate
         ~ExtenderItemPrivate()
         {
             delete toplevel;
-            delete appletBackground;
-            delete dragger;
         }
 
         /**
@@ -282,16 +280,16 @@ ExtenderItem::ExtenderItem(Extender *hostExtender, uint extenderItemId)
     }
 
     //create the dragger and standard applet background.
-    d->dragger = new PanelSvg();
+    d->dragger = new PanelSvg(this);
     d->dragger->setImagePath("widgets/dragger");
 
-    d->appletBackground = new PanelSvg();
+    d->appletBackground = new PanelSvg(this);
     d->appletBackground->setImagePath("widgets/background");
     d->appletBackground->setEnabledBorders(0);
 
     //create the toolbox.
     d->toolbox = new QGraphicsWidget(this);
-    d->toolboxLayout = new QGraphicsLinearLayout();
+    d->toolboxLayout = new QGraphicsLinearLayout(this);
     d->toolbox->setLayout(d->toolboxLayout);
 
     //allow the theme to set the size of the icon.
