@@ -18,45 +18,42 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef PLASMA_TOOLTIP_P_H
-#define PLASMA_TOOLTIP_P_H
+#ifndef PLASMA_WINDOWPREVIEW_P_H
+#define PLASMA_WINDOWPREVIEW_P_H
 
 #include <QWidget> // base class
-
-#include <plasma/tooltipmanager.h> //ToolTipContent struct
+#include <QSize> // stack allocated
 
 namespace Plasma {
 
-class ToolTipPrivate;
-
-class ToolTip : public QWidget
+/**
+ * @internal
+ *
+ * A widget which reserves area for window preview and sets hints on the toplevel
+ * tooltip widget that tells KWin to render the preview in this area. This depends
+ * on KWin's TaskbarThumbnail compositing effect (which is automaticaly detected).
+ */
+class WindowPreview : public QWidget
 {
     Q_OBJECT
 
 public:
-    ToolTip(QObject *source);
-    ~ToolTip();
+    static bool previewsAvailable();
 
-    void updateTheme();
-    void setContent(const ToolTipManager::ToolTipContent &data);
-    void prepareShowing();
+    WindowPreview(QWidget *parent = 0);
 
-protected:
-    void showEvent(QShowEvent *);
-    void hideEvent(QHideEvent *);
-    void mouseReleaseEvent(QMouseEvent *);
-
-    void resizeEvent(QResizeEvent *);
-    void paintEvent(QPaintEvent *);
-
-private Q_SLOTS:
-    void sourceDestroyed();
+    void setWindowId(WId w);
+    void setInfo();
+    virtual QSize sizeHint() const;
 
 private:
-    ToolTipPrivate * const d;
+    void readWindowSize() const;
+
+    WId id;
+    mutable QSize windowSize;
 };
 
 } // namespace Plasma
 
-#endif // PLASMA_TOOLTIP_P_H
+#endif // PLASMA_WINDOWPREVIEW_P_H
 
