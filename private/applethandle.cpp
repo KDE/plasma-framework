@@ -571,15 +571,16 @@ void AppletHandle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
                 //mask when compositing is enabled.
                 //FIXME: the mask doesn't function correctly when zoomed out.
                 QBitmap bitmap(screenRect.size());
-                QPainter * shapePainter = new QPainter();
-                shapePainter->begin(&bitmap);
-                shapePainter->fillRect(0, 0, screenRect.width(),
-                                             screenRect.height(),
-                                             Qt::white);
-                shapePainter->setBrush(Qt::black);
-                shapePainter->drawPath(m_applet->shape());
-                shapePainter->end();
-                delete shapePainter;
+                {
+                    QPainter shapePainter;
+                    shapePainter.begin(&bitmap);
+                    shapePainter.fillRect(0, 0, screenRect.width(),
+                                                screenRect.height(),
+                                                Qt::white);
+                    shapePainter.setBrush(Qt::black);
+                    shapePainter.drawPath(m_applet->shape());
+                    shapePainter.end();
+                }
                 m_topview->setMask(bitmap);
 
                 m_topview->show();
