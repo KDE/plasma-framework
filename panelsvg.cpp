@@ -62,7 +62,7 @@ public:
     int leftWidth;
     int rightWidth;
     int bottomHeight;
-    
+
     //margins, are equal to the measures by default
     int topMargin;
     int leftMargin;
@@ -311,6 +311,20 @@ void PanelSvg::getMargins(qreal &left, qreal &top, qreal &right, qreal &bottom) 
     left = panel->leftMargin;
     right = panel->rightMargin;
     bottom = panel->bottomMargin;
+}
+
+QRectF PanelSvg::contentsRect() const
+{
+    QSizeF size(panelSize());
+
+    if (size.isValid()) {
+        QRectF rect(QPointF(0, 0), size);
+        PanelData *panel = d->panels[d->prefix];
+
+        return rect.adjusted(panel->leftMargin, panel->topMargin, -panel->rightMargin, -panel->bottomMargin);
+    } else {
+        return QRectF();
+    }
 }
 
 QBitmap PanelSvg::mask() const

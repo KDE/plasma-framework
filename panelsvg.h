@@ -119,6 +119,11 @@ class PLASMA_EXPORT PanelSvg : public Svg
         void getMargins(qreal &left, qreal &top, qreal &right, qreal &bottom) const;
 
         /**
+         * @return the rectangle of the center element, taking the margins into account.
+         */
+        QRectF contentsRect() const;
+
+        /**
          * Sets the prefix (@see setElementPrefix) to 'north', 'south', 'west' and 'east'
          * when the location is TopEdge, BottomEdge, LeftEdge and RightEdge,
          * respectively. Clears the prefix in other cases.
