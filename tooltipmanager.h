@@ -19,8 +19,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA .        *
  ***************************************************************************/
 
-#ifndef PLASMA_TOOLTIP_MANAGER_H
-#define PLASMA_TOOLTIP_MANAGER_H
+#ifndef PLASMA_TOOL_TIP_MANAGER_H
+#define PLASMA_TOOL_TIP_MANAGER_H
 
 //plasma
 #include <plasma/plasma.h>
@@ -32,120 +32,168 @@ namespace Plasma
 class ToolTipManagerPrivate;
 class Applet;
 
-  /**
-  * @short The class to manage tooltips on QGraphicsWidget in Plasma
-  *
-  * Manage tooltips on QGraphicsWidget. First you have to register your widget by calling
-  * registerWidget on the ToolTipManager singleton. After this you have to set the content of
-  * the tooltip by calling setToolTipContent using the struct ToolTipContent. Calling
-  * setToolTipContent on a widget that is not registered will cause it to be registered.
-  *
-  * The tooltip manager unregister automatically the widget when it is destroyed but if 
-  * you want to do it manually call unregisterWidget. 
-  *
-  * When a tooltip for a widget is about to be shown, the widget's toolTipAboutToShow slot will be
-  * invoked if it exists. Similarly, when a tooltip is hidden, the widget's toolTipHidden() slow
-  * will be invoked if it exists. This allows widgets to provide on-demand tooltip data.
-  */
-
+/**
+ * @class ToolTipManager plasma/tooltipmanager.h <Plasma/ToolTipManager>
+ *
+ * @short Manages tooltips for QGraphicsWidgets in Plasma
+ *
+ * If you want a widget to have a tooltip displayed when the mouse is hovered over
+ * it, you should do something like:
+ *
+ * @code
+ * // widget is a QGraphicsWidget*
+ * Plasma::ToolTipManager::ToolTipContent data;
+ * data.mainText = i18n("My Title");
+ * data.subText = i18n("This is a little tooltip");
+ * data.image = KIcon("some-icon").pixmap(IconSize(KIconLoader::Desktop));
+ * Plasma::ToolTipManager::self()->setToolTipContent(widget, data);
+ * @endcode
+ *
+ * Note that, since a Plasma::Applet is a QGraphicsWidget, you can use
+ * Plasma::ToolTipManager::self()->setToolTipContent(this, data); in the
+ * applet's init() method to set a tooltip for the whole applet.
+ *
+ * The tooltip will be registered automatically by setToolTipContent().  It will be
+ * automatically unregistered when the associated widget is deleted, freeing the
+ * memory used by the tooltip, but you can manually unregister it at any time by
+ * calling unregisterWidget().
+ *
+ * When a tooltip for a widget is about to be shown, the widget's toolTipAboutToShow slot will be
+ * invoked if it exists. Similarly, when a tooltip is hidden, the widget's toolTipHidden() slot
+ * will be invoked if it exists. This allows widgets to provide on-demand tooltip data.
+ */
 class PLASMA_EXPORT ToolTipManager  : public QObject
 {
-      Q_OBJECT
-  public:
+    Q_OBJECT
+public:
 
-     /**
-      * Content of a tooltip
-      */
-      struct PLASMA_EXPORT ToolTipContent
-      {
-          ToolTipContent();
-          bool isEmpty() const;
+    /**
+     * This provides the content for a tooltip.
+     *
+     * Normally you will want to set at least the @p mainText and
+     * @p subText.
+     */
+    struct PLASMA_EXPORT ToolTipContent
+    {
+        ToolTipContent();
+        bool isEmpty() const;
 
-          QString mainText; /**Important information, e.g. the title*/
-          QString subText; /** Elaborates on the Main Text */
-          QPixmap image; /** Icon to show */
-          WId windowToPreview; /** Id of a window if you want to show a preview */
-      };
+        /** Important information, e.g. the title */
+        QString mainText;
+        /** Elaborates on the @p mainText */
+        QString subText;
+        /** An icon to display */
+        QPixmap image;
+        /** Id of a window if you want to show a preview */
+        WId windowToPreview;
+    };
 
-      /**
-        *
-        * @return The singleton instance of the manager.
-        **/
-      static ToolTipManager *self();
-      
-      /**
-        * Default constructor. Usually you want to use the singleton instead.
-        */
-      explicit ToolTipManager(QObject* parent = 0);
+    /**
+     * @return The singleton instance of the manager.
+     */
+    static ToolTipManager *self();
 
-      /**
-        * Default destructor.
-        */
-      ~ToolTipManager();
+    /**
+     * Default constructor.
+     *
+     * You should normall use self() instead.
+     */
+    explicit ToolTipManager(QObject* parent = 0);
 
-      /**
-      * Function to show a tooltip of a widget registered in the tooltip manager
-      * @param widget the widget on which the tooltip will be displayed
-      */
-      void showToolTip(QGraphicsWidget *widget);
+    /**
+     * Default destructor.
+     */
+    ~ToolTipManager();
 
-      /**
-      * Function to know if a tooltip of a widget is displayed
-      * @param widget the desired widget
-      * @return true if te tooltip of the widget is currently displayed, otherwhise no
-      */
-      bool isWidgetToolTipDisplayed(QGraphicsWidget *widget);
+    /**
+     * Show the tooltip for a widget registered in the tooltip manager
+     *
+     * @param widget the widget for which the tooltip will be displayed
+     */
+    void showToolTip(QGraphicsWidget *widget);
 
-      /**
-      * Function to launch a delayed hide of the current displayed tooltip
-      * @param widget the desired widget
-      */
-      void delayedHideToolTip();
+    /**
+     * Find out whether the tooltip for a given widget is currently being displayed.
+     *
+     * @param widget the widget to check the tooltip for
+     * @return true if the tooltip of the widget is currently displayed,
+     *         false if not
+     */
+    bool isWidgetToolTipDisplayed(QGraphicsWidget *widget);
 
-      /**
-      * Function to hide the tooltip of the desired widget
-      * @param widget the desired widget
-      */
-      void hideToolTip(QGraphicsWidget *widget);
+    /**
+     * Hides the currently showing tooltip after a short amount of time.
+     */
+    void delayedHideToolTip();
 
-      /**
-      * Function to register a widget to the tooltip manager, after this a setWidgetToolTipContent
-      * must be called
-      * @param widget the desired widget
-      */
-      void registerWidget(QGraphicsWidget *widget);
+    /**
+     * Hides the tooltip for a widget immediately.
+     *
+     * @param widget the widget to hide the tooltip for
+     */
+    void hideToolTip(QGraphicsWidget *widget);
 
-      /**
-      * Function to unregister a widget in the tooltip manager, i.e. means that memory will be free
-      * @param widget the desired widget to delete
-      */
-      void unregisterWidget(QGraphicsWidget *widget);
+    /**
+     * Registers a widget with the tooltip manager.
+     *
+     * Note that setToolTipContent() will register the widget if it
+     * has not already been registered, and so you do not normally
+     * need to use the method.
+     *
+     * This is useful for creating tooltip content on demand.  You can
+     * register your widget with registerWidget(), then implement
+     * a slot named toolTipAboutToShow for the widget.  This will be
+     * called before the tooltip is shown, allowing you to set the
+     * data with setToolTipContent().
+     *
+     * If the widget also has a toolTipHidden slot, this will be called
+     * after the tooltip is hidden.
+     *
+     * @param widget the desired widget
+     */
+    void registerWidget(QGraphicsWidget *widget);
 
-      /**
-       * Function to set the content of a tooltip on a desired widget.
-       * 
-       * @param widget the desired widget
-       * @param data the content of the tooltip. If an empty ToolTipContent is passed in,
-       *        the tooltip content will be reset.
-       */
-      void setToolTipContent(QGraphicsWidget *widget, const ToolTipContent &data);
+    /**
+     * Unregisters a widget from the tooltip manager.
+     *
+     * This will free the memory used by the tooltip associated with the widget.
+     *
+     * @param widget the desired widget to delete
+     */
+    void unregisterWidget(QGraphicsWidget *widget);
 
-      /**
-      * Function to know if widget has a tooltip registered in the tooltip manager
-      * @param widget the widget
-      * @return true if this widget has a tooltip
-      */
-      bool widgetHasToolTip(QGraphicsWidget *widget) const;
+    /**
+     * Sets the content for the tooltip associated with a widget.
+     *
+     * Note that this will register the widget with the ToolTipManager if
+     * necessary, so there is usually no need to call registerWidget().
+     *
+     * @param widget the widget the tooltip should be associated with
+     * @param data   the content of the tooltip. If an empty ToolTipContent
+     *               is passed in, the tooltip content will be reset.
+     */
+    void setToolTipContent(QGraphicsWidget *widget, const ToolTipContent &data);
 
-  private:
-      friend class ToolTipManagerSingleton;
-      bool eventFilter(QObject * watched, QEvent * event);
+    /**
+     * Checks whether a widget has a tooltip associated with it.
+     *
+     * @param widget the widget to check for an associated tooltip
+     * @return true if the widget has a tooltip associated,
+     *         false if it does not
+     */
+    bool widgetHasToolTip(QGraphicsWidget *widget) const;
 
-      ToolTipManagerPrivate* const d;
-      Q_PRIVATE_SLOT(d, void showToolTip())
-      Q_PRIVATE_SLOT(d, void resetShownState())
-      Q_PRIVATE_SLOT(d, void onWidgetDestroyed(QObject*))
-      Q_PRIVATE_SLOT(d, void themeUpdated())
-  };
-}
-#endif
+private:
+    friend class ToolTipManagerSingleton;
+    bool eventFilter(QObject *watched, QEvent *event);
+
+    ToolTipManagerPrivate* const d;
+    Q_PRIVATE_SLOT(d, void showToolTip())
+    Q_PRIVATE_SLOT(d, void resetShownState())
+    Q_PRIVATE_SLOT(d, void onWidgetDestroyed(QObject*))
+    Q_PRIVATE_SLOT(d, void themeUpdated())
+};
+
+} // namespace Plasma
+
+#endif // PLASMA_TOOL_TIP_MANAGER_H
