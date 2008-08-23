@@ -135,7 +135,7 @@ void KCategorizedItemsViewDelegate::paintColMain(QPainter *painter,
 
     // Counting the number of emblems for this item
     int emblemCount = 0;
-    QPair < Filter, QIcon * > emblem;
+    QPair < Filter, QIcon > emblem;
     foreach (emblem, m_parent->m_emblems) {
         if (item->passesFiltering(emblem.first)) ++emblemCount;
     }
@@ -176,7 +176,7 @@ void KCategorizedItemsViewDelegate::paintColMain(QPainter *painter,
     int emblemLeft = leftToRight ? (left + width - EMBLEM_ICON_SIZE) : left; // - FAV_ICON_SIZE - 2 * UNIVERSAL_PADDING
     foreach (emblem, m_parent->m_emblems) {
         if (item->passesFiltering(emblem.first)) {
-            emblem.second->paint(&p, 
+            emblem.second.paint(&p, 
                     emblemLeft, top + UNIVERSAL_PADDING, 
                     EMBLEM_ICON_SIZE, EMBLEM_ICON_SIZE, Qt::AlignCenter, iconMode);
             if (leftToRight) {
@@ -214,10 +214,10 @@ void KCategorizedItemsViewDelegate::paintColFav(QPainter *painter,
             left + width - FAV_ICON_SIZE - UNIVERSAL_PADDING, top + UNIVERSAL_PADDING, 
             FAV_ICON_SIZE, FAV_ICON_SIZE, Qt::AlignCenter, iconMode);
 
-    const KIcon * icon = (item->isFavorite())? & m_removeIcon : & m_favoriteAddIcon;
+    const KIcon & icon = (item->isFavorite())? m_removeIcon : m_favoriteAddIcon;
 
     if ((option.state & QStyle::State_MouseOver) && (m_onFavoriteIconItem != item))
-        icon->paint(painter, 
+        icon.paint(painter, 
                 left + width - EMBLEM_ICON_SIZE - UNIVERSAL_PADDING, top + UNIVERSAL_PADDING, 
                 EMBLEM_ICON_SIZE, EMBLEM_ICON_SIZE, Qt::AlignCenter, iconMode);
 }

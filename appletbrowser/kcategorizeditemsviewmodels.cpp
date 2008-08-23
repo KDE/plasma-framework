@@ -57,12 +57,12 @@ DefaultFilterModel::DefaultFilterModel(QObject * parent) :
 }
 
 void DefaultFilterModel::addFilter(const QString & caption,
-        const Filter & filter, const KIcon * icon)
+        const Filter & filter, const KIcon & icon)
 {
     QList<QStandardItem *> newRow;
     QStandardItem * item = new QStandardItem(caption);
     item->setData(qVariantFromValue<Filter>(filter));
-    if (icon) item->setIcon(*icon);
+    if (!icon.isNull()) item->setIcon(icon);
 
     newRow << item;
     appendRow(newRow);

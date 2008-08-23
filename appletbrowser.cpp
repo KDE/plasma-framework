@@ -92,7 +92,7 @@ void AppletBrowserWidgetPrivate::initFilters()
     filterModel.clear();
 
     filterModel.addFilter(i18n("All Widgets"),
-                          KCategorizedItemsViewModels::Filter(), new KIcon("plasma"));
+                          KCategorizedItemsViewModels::Filter(), KIcon("plasma"));
 
     // Recommended emblems and filters
     QRegExp rx("recommended[.]([0-9A-Za-z]+)[.]caption");
@@ -109,22 +109,22 @@ void AppletBrowserWidgetPrivate::initFilters()
         QString icon    = configGroup.readEntry("recommended." + id + ".icon");
         QString plugins = configGroup.readEntry("recommended." + id + ".plugins");
 
-        appletList->addEmblem(i18n("Recommended by %1", caption), new KIcon(icon),
+        appletList->addEmblem(i18n("Recommended by %1", caption), KIcon(icon),
                               KCategorizedItemsViewModels::Filter("recommended." + id, true));
         filterModel.addFilter(i18n("Recommended by %1", caption),
-                              KCategorizedItemsViewModels::Filter("recommended." + id, true), new KIcon(icon));
+                              KCategorizedItemsViewModels::Filter("recommended." + id, true), KIcon(icon));
     }
 
     // Filters: Special
     filterModel.addFilter(i18n("My Favorite Widgets"),
                           KCategorizedItemsViewModels::Filter("favorite", true),
-                          new KIcon("bookmarks"));
+                          KIcon("bookmarks"));
     filterModel.addFilter(i18n("Widgets I Have Used Before"),
                           KCategorizedItemsViewModels::Filter("used", true),
-                          new KIcon("view-history"));
+                          KIcon("view-history"));
     filterModel.addFilter(i18n("Currently Running Widgets"),
                           KCategorizedItemsViewModels::Filter("running", true),
-                          new KIcon("view-history"));
+                          KIcon("view-history"));
 
     filterModel.addSeparator(i18n("Categories:"));
 
@@ -155,7 +155,7 @@ void AppletBrowserWidgetPrivate::init()
     layout->addWidget(appletList);
 
     // Other Emblems
-    appletList->addEmblem(i18n("Widgets I Have Used Before"), new KIcon("view-history"),
+    appletList->addEmblem(i18n("Widgets I Have Used Before"), KIcon("view-history"),
                           KCategorizedItemsViewModels::Filter("used", true));
 
     initFilters();

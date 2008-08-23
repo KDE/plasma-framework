@@ -185,8 +185,8 @@ void KCategorizedItemsView::updateColumnsWidth(bool force)
     itemsView->setColumnWidth(2, m_delegate->columnWidth(2, m_viewWidth));
 }
 
-void KCategorizedItemsView::addEmblem(const QString & title, QIcon * icon, const Filter & filter) {
-    m_emblems[title] = QPair<Filter, QIcon *>(filter, icon);
+void KCategorizedItemsView::addEmblem(const QString & title, const QIcon & icon, const Filter & filter) {
+    m_emblems[title] = QPair<Filter, QIcon>(filter, icon);
 }
 
 void KCategorizedItemsView::clearEmblems() {

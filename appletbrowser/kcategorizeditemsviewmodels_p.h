@@ -92,7 +92,7 @@ public:
      * @param caption The localized string to be displayed as a name of the filter
      * @param filter The filter structure
      */
-    void addFilter(const QString & caption, const Filter & filter, const KIcon * icon = NULL);
+    void addFilter(const QString & caption, const Filter & filter, const KIcon & icon = KIcon());
 
     /**
      * Adds a separator to the model 

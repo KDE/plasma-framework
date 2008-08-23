@@ -55,7 +55,7 @@ public:
     void setFilterModel(QStandardItemModel * model);             ///< Sets the filters model
     void setItemModel(QStandardItemModel * model);               ///< Sets the item model, as mentioned items must implement AbstractItem class
 
-    void addEmblem(const QString & title, QIcon * icon, const Filter & filter);
+    void addEmblem(const QString & title, const QIcon & icon, const Filter & filter);
     void clearEmblems();
 
     QList < AbstractItem * > selectedItems() const;
@@ -92,7 +92,7 @@ private:
 
     int m_viewWidth;
 
-    QMap < QString, QPair < Filter, QIcon * > > m_emblems;
+    QMap < QString, QPair < Filter, QIcon > > m_emblems;
     AbstractItem * getItemByProxyIndex(const QModelIndex & index) const;
 
     friend class KCategorizedItemsViewDelegate;
