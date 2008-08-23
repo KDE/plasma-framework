@@ -202,9 +202,7 @@ void ToolTipManager::unregisterWidget(QGraphicsWidget *widget)
     }
     widget->removeEventFilter(this);
     ToolTip *tooltip = d->tooltips.take(widget);
-    if (tooltip) {
-        delete tooltip;
-    }
+    delete tooltip;
 }
 
 void ToolTipManager::setToolTipContent(QGraphicsWidget *widget, const ToolTipContent &data)
