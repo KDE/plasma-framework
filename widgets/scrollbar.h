@@ -29,22 +29,91 @@
 namespace Plasma
 {
 
-// Wraps a QScrollBar in a QGraphicsProxyWidget
+/**
+ * @short Wraps a QScrollBar in a QGraphicsProxyWidget
+ */
 class PLASMA_EXPORT ScrollBar : public QGraphicsProxyWidget
 {
+    Q_OBJECT
+
+    Q_PROPERTY(int singleStep READ singleStep WRITE setSingleStep)
+    Q_PROPERTY(int pageStep READ pageStep WRITE setPageStep)
+    Q_PROPERTY(int value READ value WRITE setValue)
+    Q_PROPERTY(int minimum READ minimum)
+    Q_PROPERTY(int maximum READ maximum)
+    Q_PROPERTY(QString stylesheet READ styleSheet WRITE setStyleSheet)
+    Q_PROPERTY(QScrollBar* nativeWidget READ nativeWidget)
+
 public:
     explicit ScrollBar(Qt::Orientation orientation, QGraphicsWidget *parent);
     ~ScrollBar();
 
+    /**
+     * Sets the scrollbar minimum and maximum values
+     * @arg min minimum value
+     * @arg max maximum value
+     */
     void setRange(int min, int max);
+
+    /**
+     * Sets the amount of the single step
+     * i.e how much the slider will move when the user press an arrow button
+     * @arg val
+     */
     void setSingleStep(int val);
+
+    /**
+     * @return the amount of the single step
+     */
+    int singleStep();
+
+    /**
+     * Sets the amount the slider will scroll when the user press page up or page down
+     * @arg val
+     */
     void setPageStep(int val);
+
+    /**
+     * @return the amount of the page step
+     */
+    int pageStep();
+
+    /**
+     * Sets the current value for the ScrollBar
+     * @arg value must be minimum() <= value <= maximum()
+     */
     void setValue(int val);
+
+    /**
+     * @return the current scrollbar value
+     */
     int value() const;
+
+    /**
+     * @return the minimum value bound of this ScrollBar
+     */
     int minimum() const;
+
+    /**
+     * @return the maximum value bound of this ScrollBar
+     */
     int maximum() const;
+
+    /**
+     * Sets the stylesheet used to control the visual display of this ScrollBar
+     *
+     * @arg stylesheet a CSS string
+     */
     void setStyleSheet(const QString &stylesheet);
+
+    /**
+     * @return the stylesheet currently used with this widget
+     */
     QString styleSheet();
+
+    /**
+     * @return the native widget wrapped by this ScrollBar
+     */
     QScrollBar *nativeWidget() const;
 };
 

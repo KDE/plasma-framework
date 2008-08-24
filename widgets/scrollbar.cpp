@@ -49,9 +49,19 @@ void ScrollBar::setSingleStep(int val)
    static_cast<QScrollBar*>(widget())->setSingleStep(val);
 }
 
+int ScrollBar::singleStep()
+{
+   return static_cast<QScrollBar*>(widget())->singleStep();
+}
+
 void ScrollBar::setPageStep(int val)
-{ 
+{
    static_cast<QScrollBar*>(widget())->setPageStep(val);
+}
+
+int ScrollBar::pageStep()
+{
+   return static_cast<QScrollBar*>(widget())->pageStep();
 }
 
 void ScrollBar::setValue(int val)
