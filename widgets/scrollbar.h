@@ -18,6 +18,9 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
+#ifndef PLASMA_SCROLLBAR_H
+#define PLASMA_SCROLLBAR_H
+
 #include <QtGui/QScrollBar>
 #include <QtGui/QGraphicsProxyWidget>
 
@@ -46,3 +49,5 @@ public:
 };
 
 }
+
+#endif
