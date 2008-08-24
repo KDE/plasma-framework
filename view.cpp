@@ -243,14 +243,22 @@ Containment* View::swapContainment(const QString& name, const QVariantList& args
 {
     Containment *old = d->containment;
     Plasma::Corona* corona = old->corona();
-    KConfigGroup containmentConfig = old->config();
     Plasma::Containment *c = corona->addContainment(name, args);
     if (c) {
+        KConfigGroup oldConfig = old->config();
+        KConfigGroup newConfig = c->config();
+
         // ensure that the old containments configuration is up to date
-        old->save(containmentConfig);
+        old->save(oldConfig);
+
+        // set our containment to the new one
+        setContainment(c);
+
+        // Copy configuration to new containment
+        oldConfig.copyTo(&newConfig);
 
         // load the configuration of the old containment into the new one
-        c->restore(containmentConfig);
+        c->restore(newConfig);
 
         // move the applets from the old to the new containment
         foreach (QGraphicsItem* item, old->childItems()) {
@@ -260,15 +268,11 @@ Containment* View::swapContainment(const QString& name, const QVariantList& args
             }
         }
 
-        // set our containment to the new one
-        setContainment(c);
-
         // destroy the old one
         old->destroy(false);
 
         // and now save the config
-        containmentConfig = c->config();
-        c->save(containmentConfig);
+        c->save(newConfig);
         corona->requestConfigSync();
 
         return c;
