@@ -108,20 +108,24 @@ View::View(Containment *containment, QWidget *parent)
     : QGraphicsView(parent),
       d(new ViewPrivate(this, 0))
 {
-    Q_ASSERT(containment);
     d->initGraphicsView();
-    setScene(containment->scene());
-    setContainment(containment);
+
+    if (containment) {
+        setScene(containment->scene());
+        setContainment(containment);
+    }
 }
 
 View::View(Containment *containment, int viewId, QWidget *parent)
     : QGraphicsView(parent),
       d(new ViewPrivate(this, viewId))
 {
-    Q_ASSERT(containment);
     d->initGraphicsView();
-    setScene(containment->scene());
-    setContainment(containment);
+
+    if (containment) {
+        setScene(containment->scene());
+        setContainment(containment);
+    }
 }
 
 
@@ -200,6 +204,8 @@ void View::setContainment(Plasma::Containment *containment)
     int screen = -1;
     if (oldContainment) {
         screen = d->containment->screen();
+    } else {
+        setScene(containment->scene());
     }
 
     d->containment = containment;
