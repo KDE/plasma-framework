@@ -188,9 +188,9 @@ void Applet::save(KConfigGroup &g) const
         //that would require every extender savestate implementation to call it's parent function,
         //which isn't very nice.
         foreach (ExtenderItem *item, extender()->attachedItems()) {
-            if (!item->isDetached() && item->autoExpireDelay()) {
-                //destroy temporary extender items, so their configuration won't linger after a 
-                //plasma restart.
+            if (!item->isDetached() || item->autoExpireDelay()) {
+                //destroy temporary extender items, or items that aren't detached, so their 
+                //configuration won't linger after a plasma restart.
                 item->destroy();
             }
         }

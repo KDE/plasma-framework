@@ -151,9 +151,11 @@ class ExtenderItemPrivate
 
                 //position the toolbox correctly.
                 QSizeF minimum = toolboxLayout->minimumSize();
+                toolbox->resize(minimum);
                 toolbox->setPos(q->size().width() - minimum.width(),
                                 ((dragger->size().height() + top + bottom)/2) -
                                 (minimum.height()/2));
+                toolbox->update();
             }
         }
 
@@ -289,7 +291,7 @@ ExtenderItem::ExtenderItem(Extender *hostExtender, uint extenderItemId)
 
     //create the toolbox.
     d->toolbox = new QGraphicsWidget(this);
-    d->toolboxLayout = new QGraphicsLinearLayout(this);
+    d->toolboxLayout = new QGraphicsLinearLayout(d->toolbox);
     d->toolbox->setLayout(d->toolboxLayout);
 
     //allow the theme to set the size of the icon.
