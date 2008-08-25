@@ -32,6 +32,11 @@ namespace Plasma
 
 class RadioButtonPrivate;
 
+/**
+ * @class RadioButton plasma/widgets/radiobutton.h <Plasma/Widgets/RadioButton>
+ *
+ * @short Provides a plasma-themed QRadioButton.
+ */
 class PLASMA_EXPORT RadioButton : public QGraphicsProxyWidget
 {
     Q_OBJECT

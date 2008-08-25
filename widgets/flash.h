@@ -32,7 +32,9 @@ namespace Plasma
 class FlashPrivate;
 
 /**
- * Class that allows to flash text or icons inside plasma
+ * @class Flash plasma/widgets/flash.h <Plasma/Widgets/Flash>
+ *
+ * @short Provides flashing text or icons inside Plasma
  */
 class PLASMA_EXPORT Flash : public QGraphicsWidget
 {

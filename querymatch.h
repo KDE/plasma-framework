@@ -36,10 +36,11 @@ class AbstractRunner;
 class QueryMatchPrivate;
 
 /**
+ * @class QueryMatch plasma/querymatch.h <Plasma/QueryMatch>
+ *
  * @short A match returned by an AbstractRunner in response to a given
  * RunnerContext.
  */
-
 class PLASMA_EXPORT QueryMatch
 {
     public:

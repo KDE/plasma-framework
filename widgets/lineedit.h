@@ -32,6 +32,11 @@ namespace Plasma
 
 class LineEditPrivate;
 
+/**
+ * @class LineEdit plasma/widgets/lineedit.h <Plasma/Widgets/LineEdit>
+ *
+ * @short Provides a plasma-themed KLineEdit.
+ */
 class PLASMA_EXPORT LineEdit : public QGraphicsProxyWidget
 {
     Q_OBJECT

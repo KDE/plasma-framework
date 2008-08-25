@@ -39,6 +39,11 @@ namespace Plasma
 
 class AppletScriptPrivate;
 
+/**
+ * @class AppletScript plasma/scripting/appletscript.h <Plasma/Scripting/AppletScript>
+ *
+ * @short Provides a restricted interface for scripted applets.
+ */
 class PLASMA_EXPORT AppletScript : public ScriptEngine
 {
     Q_OBJECT
@@ -46,6 +51,7 @@ class PLASMA_EXPORT AppletScript : public ScriptEngine
 public:
     /**
      * Default constructor for an AppletScript.
+     *
      * Subclasses should not attempt to access the Plasma::Applet
      * associated with this AppletScript in the constructor. All
      * such set up that requires the Applet itself should be done

@@ -32,6 +32,11 @@ namespace Plasma
 
 class CheckBoxPrivate;
 
+/**
+ * @class CheckBox plasma/widgets/checkbox.h <Plasma/Widgets/CheckBox>
+ *
+ * @short Provides a Plasma-themed checkbox.
+ */
 class PLASMA_EXPORT CheckBox : public QGraphicsProxyWidget
 {
     Q_OBJECT

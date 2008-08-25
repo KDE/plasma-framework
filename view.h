@@ -35,11 +35,14 @@ class Corona;
 class ViewPrivate;
 
 /**
- * @short A QGraphicsView for Plasma::Applets. Each View is associated with
- * a Plasma::Containment and tracks geometry changes, maps to the current desktop
- * (if any) among other helpful utilities. It isn't stricly required to use
- * a Plasma::View with Plasma enabled applications, but it can make some
- * things easier.
+ * @class View plasma/view.h <Plasma/View>
+ *
+ * @short A QGraphicsView for a single Containment
+ *
+ * Each View is associated with a Plasma::Containment and tracks geometry
+ * changes, maps to the current desktop (if any) among other helpful
+ * utilities. It isn't stricly required to use a Plasma::View with Plasma
+ * enabled applications, but it can make some things easier.
  */
 class PLASMA_EXPORT View : public QGraphicsView
 {

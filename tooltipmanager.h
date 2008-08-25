@@ -68,6 +68,8 @@ class PLASMA_EXPORT ToolTipManager  : public QObject
 public:
 
     /**
+     * @struct ToolTipContent plasma/tooltipmanager.h <Plasma/ToolTipManager>
+     *
      * This provides the content for a tooltip.
      *
      * Normally you will want to set at least the @p mainText and
@@ -75,7 +77,10 @@ public:
      */
     struct PLASMA_EXPORT ToolTipContent
     {
+        /** Creates an empty ToolTipContent */
         ToolTipContent();
+
+        /** @return true if all the fields are empty */
         bool isEmpty() const;
 
         /** Important information, e.g. the title */

@@ -31,6 +31,11 @@ namespace Plasma
 class DataEngine;
 class DataEngineScriptPrivate;
 
+/**
+ * @class DataEngineScript plasma/scripting/dataenginescript.h <Plasma/Scripting/DataEngineScript>
+ *
+ * @short Provides a restricted interface for scripting a DataEngine
+ */
 class PLASMA_EXPORT DataEngineScript : public ScriptEngine
 {
     Q_OBJECT

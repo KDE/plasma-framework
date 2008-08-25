@@ -32,6 +32,11 @@ namespace Plasma
 
 class SliderPrivate;
 
+/**
+ * @class Slider plasma/widgets/slider.h <Plasma/Widgets/Slider>
+ *
+ * @short Provides a plasma-themed QSlider.
+ */
 class PLASMA_EXPORT Slider : public QGraphicsProxyWidget
 {
     Q_OBJECT

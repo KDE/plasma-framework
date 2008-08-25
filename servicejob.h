@@ -31,7 +31,9 @@ namespace Plasma
 class ServiceJobPrivate;
 
 /**
- * @brief This class provides jobs for use with Plasma::Service
+ * @class ServiceJob plasma/servicejob.h <Plasma/ServiceJob>
+ *
+ * @short This class provides jobs for use with Plasma::Service
  *
  * Unlike KJob, you can do the work in start(), since Plasma::Service already
  * delays the call to start() until the event loop is reached.

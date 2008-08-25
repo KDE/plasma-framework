@@ -27,6 +27,8 @@
 #include <plasma/plasma_export.h>
 #include "theme.h"
 
+/** @headerfile plasma/paintutils.h <Plasma/PaintUtils> */
+
 namespace Plasma
 {
 

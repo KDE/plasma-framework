@@ -44,7 +44,9 @@ class Package;
 class ScriptEnginePrivate;
 
 /**
- * @brief The base class for scripting interfaces to be used in loading
+ * @class ScriptEngine plasma/scripting/scriptengine.h <Plasma/Scripting/ScriptEngine>
+ *
+ * @short The base class for scripting interfaces to be used in loading
  *        plasmoids of a given language.
  *
  * All ScriptEngines should export as consistent an interface as possible

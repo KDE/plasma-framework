@@ -20,6 +20,8 @@
 #ifndef PLASMA_VERSION_H
 #define PLASMA_VERSION_H
 
+/** @header plasma/version.h <Plasma/Version> */
+
 #include <plasma/plasma_export.h>
 
 /**

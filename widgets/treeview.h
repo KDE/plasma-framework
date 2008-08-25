@@ -33,6 +33,11 @@ namespace Plasma
 
 class TreeViewPrivate;
 
+/**
+ * @class TreeView plasma/widgets/treeview.h <Plasma/Widgets/TreeView>
+ *
+ * @short Provides a plasma-themed QTreeView.
+ */
 class PLASMA_EXPORT TreeView : public QGraphicsProxyWidget
 {
     Q_OBJECT

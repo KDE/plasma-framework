@@ -43,6 +43,36 @@ namespace Plasma
 
 class PanelSvgPrivate;
 
+/**
+ * @class PanelSvg plasma/panelsvg.h <Plasma/PanelSvg>
+ *
+ * @short Provides an SVG with borders.
+ *
+ * When using SVG images for a background of an object that may change
+ * its aspect ratio, such as a dialog, simply scaling a single image
+ * may not be enough.
+ *
+ * PanelSvg allows SVGs to provide several elements for borders as well
+ * as a central element, each of which are scaled individually.  These
+ * elements should be named
+ *
+ *  - @c center  - the central element, which will be scaled in both directions
+ *  - @c top     - the top border; the height is fixed, but it will be scaled
+ *                 horizontally to the same width as @c center
+ *  - @c bottom  - the bottom border; scaled in the same way as @c top
+ *  - @c left    - the left border; the width is fixed, but it will be scaled
+ *                 vertically to the same height as @c center
+ *  - @c right   - the right border; scaled in the same way as @c left
+ *  - @c topleft - fixed size; must be the same height as @c top and the same
+ *                 width as @c left
+ *  - @c bottomleft, @c topright, @c bottomright - similar to @c topleft
+ *
+ * @c center must exist, but all the others are optional.  @c topleft and
+ * @c topright will be ignored if @c top does not exist, and similarly for
+ * @c bottomleft and @c bottomright.
+ *
+ * @see Plamsa::Svg
+ **/
 class PLASMA_EXPORT PanelSvg : public Svg
 {
     Q_OBJECT

@@ -33,6 +33,11 @@ class RunnerContext;
 class QueryMatch;
 class RunnerScriptPrivate;
 
+/**
+ * @class RunnerScript plasma/scripting/runnerscript.h <Plasma/Scripting/RunnerScript>
+ *
+ * @short Provides a restricted interface for scripting a runner.
+ */
 class PLASMA_EXPORT RunnerScript : public ScriptEngine
 {
     Q_OBJECT

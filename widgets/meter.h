@@ -30,7 +30,9 @@ namespace Plasma
 class MeterPrivate;
 
 /**
- * This class provides generic meter widget for the Plasma desktop.
+ * @class Meter plasma/widgets/meter.h <Plasma/Widgets/Meter>
+ *
+ * @short Provides generic meter widget for Plasma
  *
  * Analog and bar meters are supported.
  *

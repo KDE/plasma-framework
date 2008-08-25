@@ -33,6 +33,11 @@ namespace Plasma
 
 class LabelPrivate;
 
+/**
+ * @class Label plasma/widgets/label.h <Plasma/Widgets/Label>
+ *
+ * @short Provides a plasma-themed QLabel.
+ */
 class PLASMA_EXPORT Label : public QGraphicsProxyWidget
 {
     Q_OBJECT

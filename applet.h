@@ -52,6 +52,8 @@ class ExtenderItem;
 class Package;
 
 /**
+ * @class Applet plasma/applet.h <Plasma/Applet>
+ *
  * @short The base Applet class
  *
  * Applet provides several important roles for add-ons widgets in Plasma.

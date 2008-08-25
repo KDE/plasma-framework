@@ -32,6 +32,11 @@ namespace Plasma
 
 class GroupBoxPrivate;
 
+/**
+ * @class GroupBox plasma/widgets/groupbox.h <Plasma/Widgets/GroupBox>
+ *
+ * @short Provides a plasma-themed QGroupBox.
+ */
 class PLASMA_EXPORT GroupBox : public QGraphicsProxyWidget
 {
     Q_OBJECT

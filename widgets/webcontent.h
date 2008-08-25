@@ -37,6 +37,11 @@ namespace Plasma
 
 class WebContentPrivate;
 
+/**
+ * @class WebContent plasma/widgets/webcontent.h <Plasma/Widgets/WebContent>
+ *
+ * @short Provides a widget to display html content in Plasma.
+ */
 class PLASMA_EXPORT WebContent : public QGraphicsWidget
 {
     Q_OBJECT

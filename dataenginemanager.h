@@ -29,7 +29,9 @@ namespace Plasma
 class DataEngineManagerPrivate;
 
 /**
- * @brief DataEngine loader and life time manager
+ * @class DataEngineManager plasma/dataenginemanager.h <Plasma/DataEngineManager>
+ *
+ * @short DataEngine loader and life time manager
  *
  * Plasma::DataEngineManager provides facilities for listing, loading and
  * according to reference count unloading of DataEngines.

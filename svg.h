@@ -40,12 +40,16 @@ class SvgPrivate;
 class PanelSvgPrivate;
 
 /**
- * @brief A theme aware image-centric SVG class
+ * @class Svg plasma/svg.h <Plasma/Svg>
+ *
+ * @short A theme aware image-centric SVG class
  *
  * Plasma::Svg provides a class for rendering SVG images to a QPainter in a
  * convenient manner. Unless an absolute path to a file is provided, it loads
  * the SVG document using Plasma::Theme. It also provides a number of internal
  * optimizations to help lower the cost of painting SVGs, such as caching.
+ *
+ * @see Plasma::PanelSvg
  **/
 class PLASMA_EXPORT Svg : public QObject
 {

@@ -30,8 +30,9 @@ namespace Plasma
 class GLAppletPrivate;
 
 /**
- * @short Plasma Applet that is fully rendered using OpengGL
+ * @class GLApplet plasma/glapplet.h <Plasma/GLApplet>
  *
+ * @short Plasma Applet that is fully rendered using OpengGL
  */
 class PLASMA_EXPORT GLApplet : public Applet
 {

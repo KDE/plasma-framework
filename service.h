@@ -38,7 +38,9 @@ class ServiceJob;
 class ServicePrivate;
 
 /**
- * @brief This class provides a generic API for write access to settings or services.
+ * @class Service plasma/service.h <Plasma/Service>
+ *
+ * @short This class provides a generic API for write access to settings or services.
  *
  * Plasma::Service allows interaction with a "destination", the definition of which
  * depends on the Service itself. For a network settings Service this might be a

@@ -43,7 +43,9 @@ class QueryMatch;
 class AbstractRunnerPrivate;
 
 /**
- * An abstract base class for Plasma Runner plugins
+ * @class AbstractRunner plasma/abstractrunner.h <Plasma/AbstractRunner>
+ *
+ * @short An abstract base class for Plasma Runner plugins.
  *
  * Be aware that runners have to be thread-safe. This is due to
  * the fact that each runner is executed in its own thread for
@@ -55,10 +57,12 @@ class PLASMA_EXPORT AbstractRunner : public QObject
     Q_OBJECT
 
     public:
+        /** Specifies a nominal speed for the runner */
         enum Speed { SlowSpeed,
                      NormalSpeed
                    };
 
+        /** Specifies a priority for the runner */
         enum Priority { LowestPriority = 0,
                         LowPriority,
                         NormalPriority,
@@ -66,6 +70,7 @@ class PLASMA_EXPORT AbstractRunner : public QObject
                         HighestPriority
                       };
 
+        /** An ordered list of runners */
         typedef QList<AbstractRunner*> List;
 
         virtual ~AbstractRunner();

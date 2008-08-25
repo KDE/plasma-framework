@@ -32,6 +32,11 @@ namespace Plasma
 
 class ComboBoxPrivate;
 
+/**
+ * @class ComboBox plasma/widgets/combobox.h <Plasma/Widgets/ComboBox>
+ *
+ * @short Provides a Plasma-themed combo box.
+ */
 class PLASMA_EXPORT ComboBox : public QGraphicsProxyWidget
 {
     Q_OBJECT

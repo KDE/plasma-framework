@@ -30,7 +30,9 @@ namespace Plasma
 {
 
 /**
- * @brief object representing an installed Plasmagik package
+ * @class Package plasma/package.h <Plasma/Package>
+ *
+ * @short object representing an installed Plasmagik package
  **/
 
 class PackageMetadata;

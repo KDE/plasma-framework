@@ -33,6 +33,8 @@ namespace Plasma
 class DelegatePrivate;
 
 /**
+ * @class Delegate plasma/delegate.h <Plasma/Delegate>
+ *
  * Item delegate for rendering items in Plasma menus implemented with item views.
  *
  * The delegate makes use of its own data roles that are:

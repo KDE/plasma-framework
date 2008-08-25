@@ -37,7 +37,9 @@ namespace Plasma
 class PackageStructurePrivate;
 
 /**
- * @brief A description of the expected file structure of a given package type
+ * @class PackageStructure plasma/packagestructure.h <Plasma/PackageStructure>
+ *
+ * @short A description of the expected file structure of a given package type
  *
  * PackageStructure defines what is in a package. This information is used
  * to create packages and provides a way to programatically refer to contents.

@@ -34,6 +34,8 @@ namespace Plasma
 class DialogPrivate;
 
 /**
+ * @class Dialog plasma/dialog.h <Plasma/Dialog>
+ *
  * @short A dialog that uses the Plasma style
  *
  * Dialog provides a dialog-like widget that can be used to display additional

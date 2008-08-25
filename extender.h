@@ -31,6 +31,10 @@ class ExtenderItem;
 class Applet;
 
 /**
+ * @class Extender plasma/extender.h <Plasma/Extender>
+ *
+ * @short Extends applets to allow detachable parts
+ *
  * An Extender is a widget that visually extends the normal contents of an applet with
  * additional dynamic widgets called ExtenderItems. These ExtenderItems can be
  * detached by the user and dropped either on another Extender or on the canvas directly.

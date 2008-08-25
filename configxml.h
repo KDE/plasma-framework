@@ -27,7 +27,9 @@
 #include <plasma/plasma_export.h>
 
 /**
- * @brief A KConfigSkeleton that populates itself based on KConfigXT XML
+ * @class ConfigXml plasma/configxml.h <Plasma/ConfigXml>
+ *
+ * @short A KConfigSkeleton that populates itself based on KConfigXT XML
  *
  * This class allows one to ship an XML file and reconstitute it into a
  * KConfigSkeleton object at runtime. Common usage might look like this:

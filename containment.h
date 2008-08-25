@@ -46,6 +46,8 @@ class Wallpaper;
 class ContainmentPrivate;
 
 /**
+ * @class Containment plasma/containment.h <Plasma/Containment>
+ *
  * @short The base class for plugins that provide backgrounds and applet grouping containers
  *
  * Containment objects provide the means to group applets into functional sets.

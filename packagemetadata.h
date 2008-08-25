@@ -29,6 +29,11 @@ namespace Plasma
 
 class PackageMetadataPrivate;
 
+/**
+ * @class PackageMetadata plasma/packagemetadata.h <Plasma/PackageMetadata>
+ *
+ * @short Provides metadata for a Package.
+ **/
 class PLASMA_EXPORT PackageMetadata
 {
 public:

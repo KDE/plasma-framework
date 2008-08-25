@@ -35,6 +35,8 @@ namespace Plasma
 class AnimatorPrivate;
 
 /**
+ * @class Animator plasma/animator.h <Plasma/Animator>
+ *
  * @short A system for applying effects to Plasma elements
  */
 class PLASMA_EXPORT Animator : public QObject

@@ -36,6 +36,8 @@ class Containment;
 class CoronaPrivate;
 
 /**
+ * @class Corona plasma/corona.h <Plasma/Corona>
+ *
  * @short A QGraphicsScene for Plasma::Applets
  */
 class PLASMA_EXPORT Corona : public QGraphicsScene

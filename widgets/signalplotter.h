@@ -37,6 +37,11 @@ struct PlotColor
     QColor darkColor;
 };
 
+/**
+ * @class SignalPlotter plasma/widgets/signalplotter.h <Plasma/Widgets/SignalPlotter>
+ *
+ * @short Provides a signal plotter for plasma.
+ */
 class PLASMA_EXPORT SignalPlotter : public QGraphicsWidget
 {
     Q_OBJECT

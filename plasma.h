@@ -20,6 +20,8 @@
 #ifndef PLASMA_DEFS_H
 #define PLASMA_DEFS_H
 
+/** @header plasma/plasma.h <Plasma/Plasma> */
+
 #include <QtGui/QGraphicsItem>
 #include <QtGui/QPainterPath>
 

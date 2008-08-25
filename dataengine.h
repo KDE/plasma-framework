@@ -40,8 +40,9 @@ class Service;
 class DataEnginePrivate;
 
 /**
- * @class DataEngine
- * @brief Data provider for plasmoids (Plasma plugins)
+ * @class DataEngine plasma/dataengine.h <Plasma/DataEngine>
+ *
+ * @short Data provider for plasmoids (Plasma plugins)
  *
  * This is the base class for DataEngines, which provide access to bodies of
  * data via a common and consistent interface. The common use of a DataEngine

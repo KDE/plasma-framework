@@ -36,6 +36,8 @@ class LayoutItem;
 class UiLoaderPrivate;
 
 /**
+ * @class UiLoader plasma/uiloader.h <Plasma/UiLoader>
+ *
  * Dynamically create plasma Widgets and Layouts.
  *
  * @author Richard J. Moore, <rich@kde.org>

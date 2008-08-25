@@ -35,6 +35,8 @@ namespace Plasma
 class ThemePrivate;
 
 /**
+ * @class Theme plasma/theme.h <Plasma/Theme>
+ *
  * @short Interface to the Plasma theme
  *
  * Accessed via Plasma::Theme::defaultTheme() e.g:

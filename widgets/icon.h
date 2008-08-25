@@ -35,10 +35,13 @@
 class QAction;
 
 /**
- * This class provides a generic Icon for the Plasma desktop. An icon, in this
- * sense, is not restricted to just an image, but can also contain text. Currently,
- * the Icon class is primarily used for desktop items, but is designed to be used
- * anywhere an icon is needed in an applet.
+ * @class Icon plasma/widgets/icon.h <Plasma/Widgets/Icon>
+ *
+ * @short Provides a generic icon.
+ *
+ * An icon, in this sense, is not restricted to just an image, but can also
+ * contain text. Currently, the Icon class is primarily used for desktop items,
+ * but is designed to be used anywhere an icon is needed in an applet.
  *
  * @author Siraj Razick <siraj@kde.org>
  * @author Matt Broadstone <mbroadst@gmail.com>

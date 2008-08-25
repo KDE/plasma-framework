@@ -31,6 +31,8 @@ namespace Plasma
 class WallpaperPrivate;
 
 /**
+ * @class Wallpaper plasma/wallpaper.h <Plasma/Wallpaper>
+ *
  * @short The base Wallpaper class
  *
  * "Wallpapers" are components that paint the background for Containments that

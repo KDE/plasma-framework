@@ -32,6 +32,11 @@ namespace Plasma
 
 class PushButtonPrivate;
 
+/**
+ * @class PushButton plasma/widgets/pushbutton.h <Plasma/Widgets/PushButton>
+ *
+ * @short Provides a plasma-themed KPushButton.
+ */
 class PLASMA_EXPORT PushButton : public QGraphicsProxyWidget
 {
     Q_OBJECT

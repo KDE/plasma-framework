@@ -30,7 +30,9 @@ namespace Plasma
 {
 
 /**
- * @short Wraps a QScrollBar in a QGraphicsProxyWidget
+ * @class ScrollBar plasma/widgets/scrollbar.h <Plasma/Widgets/ScrollBar>
+ *
+ * @short Provides a plasma-themed QScrollBar.
  */
 class PLASMA_EXPORT ScrollBar : public QGraphicsProxyWidget
 {

@@ -33,7 +33,10 @@ namespace Plasma
 class FramePrivate;
 
 /**
+ * @class Frame plasma/widgets/frame.h <Plasma/Widgets/Frame>
+ *
  * @short A widget that provides a simple frame
+ *
  * A simple frame to group widgets, it can have a plain, sunken or raise aspect
  * the default aspect is plain
  */

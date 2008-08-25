@@ -33,6 +33,11 @@ namespace Plasma
 
 class TextEditPrivate;
 
+/**
+ * @class TextEdit plasma/widgets/textedit.h <Plasma/Widgets/TextEdit>
+ *
+ * @short Provides a plasma-themed KTextEdit.
+ */
 class PLASMA_EXPORT TextEdit : public QGraphicsProxyWidget
 {
     Q_OBJECT

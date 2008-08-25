@@ -36,6 +36,8 @@ class AbstractRunner;
 class RunnerContextPrivate;
 
 /**
+ * @class RunnerContext plasma/runnercontext.h <Plasma/RunnerContext>
+ *
  * @short The RunnerContext class provides information related to a search,
  *        including the search term, metadata on the search term and collected
  *        matches.

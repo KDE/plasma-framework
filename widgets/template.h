@@ -32,6 +32,11 @@ namespace Plasma
 
 class <Name>Private;
 
+/**
+ * @class <Name> plasma/widgets/<name>.h <Plasma/Widgets/<Name>>
+ *
+ * @short Provides a plasma-themed <Native>.
+ */
 class PLASMA_EXPORT <Name> : public QGraphicsProxyWidget
 {
     Q_OBJECT

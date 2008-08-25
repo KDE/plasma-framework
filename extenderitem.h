@@ -35,6 +35,10 @@ class Extender;
 class ExtenderItemPrivate;
 
 /**
+ * @class ExtenderItem plasma/extenderitem.h <Plasma/ExtenderItem>
+ *
+ * @short Provides detachable items for an Extender
+ *
  * This class wraps around a QGraphicsWidget and provides drag&drop handling, a draghandle,
  * title and ability to display qactions as a row of icon, ability to expand, collapse, return
  * to source and tracks configuration associated with this item for you.
