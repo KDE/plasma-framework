@@ -259,13 +259,10 @@ Containment* View::swapContainment(const QString& name, const QVariantList& args
 
         // load the configuration of the old containment into the new one
         c->restore(newConfig);
-
-        // move the applets from the old to the new containment
-        foreach (QGraphicsItem* item, old->childItems()) {
-            Plasma::Applet* applet = dynamic_cast<Plasma::Applet*>(item);
-            if (applet) {
-                c->addApplet(applet, applet->pos(), true);
-            }
+        foreach(Applet* applet, c->applets()) {
+            applet->init();
+            // We have to flush the applet constraints manually
+            applet->flushPendingConstraintsEvents();
         }
 
         // destroy the old one
