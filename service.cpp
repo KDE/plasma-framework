@@ -232,7 +232,7 @@ void Service::setOperationEnabled(const QString &operation, bool enable)
 
 bool Service::operationIsEnabled(const QString &operation) const
 {
-    d->config->hasGroup(operation) && !d->disabledOperations.contains(operation);
+    return d->config->hasGroup(operation) && !d->disabledOperations.contains(operation);
 }
 
 void Service::setOperationsScheme(QIODevice *xml)
