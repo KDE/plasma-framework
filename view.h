@@ -176,7 +176,7 @@ public Q_SLOTS:
      *
      * @arg containment the containment to center the view on
      */
-    virtual void setContainment(Containment *containment);
+    virtual void setContainment(Plasma::Containment *containment);
 
 protected:
     /**

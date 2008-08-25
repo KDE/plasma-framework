@@ -179,7 +179,7 @@ int View::effectiveDesktop() const
     return d->desktop > -1 ? d->desktop : KWindowSystem::currentDesktop();
 }
 
-void View::setContainment(Containment *containment)
+void View::setContainment(Plasma::Containment *containment)
 {
     if (containment == d->containment) {
         return;
