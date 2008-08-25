@@ -29,6 +29,7 @@
 
 #include <plasma/dialog.h>
 #include <plasma/corona.h>
+#include <plasma/containment.h>
 #include <plasma/widgets/icon.h>
 
 namespace Plasma
@@ -136,6 +137,12 @@ void PopupApplet::constraintsEvent(Plasma::Constraints constraints)
         connect(d->icon, SIGNAL(clicked()), this, SLOT(togglePopup()));
     }
 
+    //since we call this function when an extender's geometry gets updated, we want to avoid doing
+    //anything if the StartupCompletedConstraint hasn't been called yet.
+    if (!d->layout) {
+        return;
+    }
+
     if (constraints & Plasma::FormFactorConstraint) {
         d->layout->removeAt(0);
 
@@ -220,6 +227,11 @@ void PopupApplet::constraintsEvent(Plasma::Constraints constraints)
 
             d->dialog->adjustSize();
             d->layout->addItem(d->icon);
+
+            setMinimumSize(QSizeF(0, 0));
+            setMaximumWidth(containment()->size().height());
+            setMaximumHeight(containment()->size().height());
+
             break;
         }
     }
@@ -250,6 +262,21 @@ void PopupApplet::hidePopup()
 {
     if (d->dialog && (formFactor() == Horizontal || formFactor() == Vertical)) {
         d->dialog->hide();
+    }
+}
+
+void PopupApplet::widgetGeometryChanged()
+{
+    if (graphicsWidget()) {
+        //sizes are recalculated in the constraintsevent so let's just call that.
+        if (layout()) {
+            constraintsEvent(Plasma::FormFactorConstraint);
+
+            //resize vertically if necesarry.
+            if (formFactor() == Plasma::MediaCenter || formFactor() == Plasma::Planar) {
+                resize(QSizeF(size().width(), minimumHeight()));
+            }
+        }
     }
 }
 

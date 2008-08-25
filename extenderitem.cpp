@@ -95,14 +95,14 @@ class ExtenderItemPrivate
                 if (widget->geometry().intersects(rect)) {
                     //is this widget a plasma view, a different view then our current one,
                     //AND not a dashboardview?
-                    Plasma::View *v = qobject_cast<View*>(widget);
-                    Plasma::View *currentV = 0;
+                    QGraphicsView *v = qobject_cast<QGraphicsView*>(widget);
+                    QGraphicsView *currentV = 0;
 
                     if (hostApplet()) {
-                        currentV = qobject_cast<View*>(hostApplet()->containment()->view());
+                        currentV = qobject_cast<QGraphicsView*>(hostApplet()->containment()->view());
                     }
-                    if (v && v != currentV
-                          && v->containment() != hostApplet()->containment()) {
+
+                    if (v && v != currentV) {
                         return true;
                     }
                 }
@@ -474,7 +474,6 @@ bool ExtenderItem::isDetached() const
 
 void ExtenderItem::addAction(const QString &name, QAction *action)
 {
-
     Q_ASSERT(action);
 
     d->actions[name] = action;
@@ -652,6 +651,11 @@ void ExtenderItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
         d->extender->itemHoverEnterEvent(this);
         d->extender->itemHoverMoveEvent(this, d->extender->mapFromScene(mousePos));
     }
+
+    //call the move event, since that spawns a toplevel view when this extender item is in a
+    //Plasma::Dialog, which is very essential since else the dialog will close before having been
+    //able to receive any move events.
+    mouseMoveEvent(event);
 
     QApplication::setOverrideCursor(Qt::ClosedHandCursor);
 }

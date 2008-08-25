@@ -51,6 +51,7 @@ public:
 
 public Q_SLOTS:
     void hidePopup();
+    void widgetGeometryChanged();
 
 protected:
     void constraintsEvent(Plasma::Constraints constraints);
