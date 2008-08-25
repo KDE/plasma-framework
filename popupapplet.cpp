@@ -30,6 +30,7 @@
 #include <plasma/dialog.h>
 #include <plasma/corona.h>
 #include <plasma/containment.h>
+#include <plasma/extender.h>
 #include <plasma/widgets/icon.h>
 
 namespace Plasma
@@ -240,7 +241,8 @@ void PopupApplet::constraintsEvent(Plasma::Constraints constraints)
 void PopupApplet::showPopup(uint popupDuration)
 {
     if (d->dialog && (formFactor() == Horizontal || formFactor() == Vertical)) {
-        d->dialog->move(popupPosition(d->dialog->sizeHint()));
+        d->dialog->adjustView();
+        d->dialog->move(popupPosition(d->dialog->size()));
         d->dialog->show();
 
         if (d->timer) {
@@ -275,6 +277,15 @@ void PopupApplet::widgetGeometryChanged()
             //resize vertically if necesarry.
             if (formFactor() == Plasma::MediaCenter || formFactor() == Plasma::Planar) {
                 resize(QSizeF(size().width(), minimumHeight()));
+            } else {
+                if (graphicsWidget()) {
+                    graphicsWidget()->resize(graphicsWidget()->minimumSize());
+                    graphicsWidget()->update();
+                }
+                if (d->dialog) {
+                    d->dialog->adjustView();
+                    d->dialog->move(popupPosition(d->dialog->size()));
+                }
             }
         }
     }

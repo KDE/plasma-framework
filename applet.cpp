@@ -1464,7 +1464,6 @@ QRect Applet::screenRect() const
             QPoint tL = v->mapToGlobal(v->mapFromScene(pos()));
             QPoint bR = v->mapToGlobal(v->mapFromScene(bottomRight));
 
-            kDebug() << "screenRect = " << QPoint(tL.x(), tL.y()), QSize(bR.x() - tL.x(), bR.y() - tL.y());
             return QRect(QPoint(tL.x(), tL.y()), QSize(bR.x() - tL.x(), bR.y() - tL.y()));
         }
     }

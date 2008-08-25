@@ -90,7 +90,8 @@ void DialogPrivate::adjustView()
 {
     if (view && widget) {
         view->setSceneRect(widget->mapToScene(widget->boundingRect()).boundingRect());
-        view->resize(widget->size().toSize());
+        view->resize(widget->minimumSize().toSize());
+        view->centerOn(widget);
     }
 }
 
@@ -168,6 +169,12 @@ void Dialog::setGraphicsWidget(QGraphicsWidget *widget)
 QGraphicsWidget *Dialog::graphicsWidget()
 {
     return d->widget;
+}
+
+void Dialog::adjustView()
+{
+    d->adjustView();
+    adjustSize();
 }
 
 bool Dialog::eventFilter(QObject *watched, QEvent *event)

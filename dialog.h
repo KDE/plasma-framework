@@ -61,6 +61,13 @@ class PLASMA_EXPORT Dialog : public QWidget
         void setGraphicsWidget(QGraphicsWidget *widget);
         QGraphicsWidget *graphicsWidget();
 
+    public Q_SLOTS:
+        /**
+         * Call when the size of the graphicsWidget changes, to adjust the view and resize the
+         * dialog.
+         */
+        void adjustView();
+
     protected:
         /**
          * Reimplemented from QWidget

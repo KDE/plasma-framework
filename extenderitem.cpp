@@ -91,8 +91,15 @@ class ExtenderItemPrivate
         //returns true if the applet overlaps with a different view then the current one.
         bool leaveCurrentView(const QRect &rect)
         {
+            if ((q->sceneBoundingRect().left() < 0)) {
+                //always leaveCurrentView when the item is in a Plasma::Dialog which can easy be
+                //seen by checking if it is in topleft quadrant and it's not just there because it's
+                //being viewed by the toplevel view.
+                return true;
+            }
+
             foreach (QWidget *widget, QApplication::topLevelWidgets()) {
-                if (widget->geometry().intersects(rect)) {
+                if (widget->geometry().intersects(rect) && widget->isVisible() && widget != toplevel) {
                     //is this widget a plasma view, a different view then our current one,
                     //AND not a dashboardview?
                     QGraphicsView *v = qobject_cast<QGraphicsView*>(widget);
@@ -639,10 +646,7 @@ void ExtenderItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 
     Applet *parentApplet = d->hostApplet();
 
-    QGraphicsView *v = parentApplet->view();
-    QPoint localpos = v->mapFromScene(scenePos());
-    d->mousePos = event->screenPos() - v->mapToGlobal(localpos);
-    QPointF mousePos = v->mapToScene(v->mapFromGlobal(event->screenPos()));
+    d->mousePos = event->pos().toPoint();
 
     parentApplet->raise();
     setZValue(parentApplet->zValue());
@@ -651,7 +655,7 @@ void ExtenderItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 
     if (d->extender) {
         d->extender->itemHoverEnterEvent(this);
-        d->extender->itemHoverMoveEvent(this, d->extender->mapFromScene(mousePos));
+        d->extender->itemHoverMoveEvent(this, d->extender->mapFromScene(event->scenePos()));
     }
 
     //call the move event, since that spawns a toplevel view when this extender item is in a
@@ -690,8 +694,11 @@ void ExtenderItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
             Corona *corona = d->hostApplet()->containment()->corona();
             d->toplevel = new QGraphicsView(corona, 0);
             //TODO: use addOffscreenWidget
-            setParentItem(0);
-            setPos(-12000, -12000);
+            if (sceneBoundingRect().left() > 0) {
+                setParentItem(0);
+                //only move to topleft quadrant if it isn't there allready.
+                setPos(-12000, -12000);
+            }
 
             d->toplevel->setWindowFlags(Qt::ToolTip | Qt::FramelessWindowHint
                                                     | Qt::WindowStaysOnTopHint);
@@ -711,6 +718,7 @@ void ExtenderItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
         }
 
         //move the toplevel view.
+        d->toplevel->setSceneRect(sceneBoundingRect());
         d->toplevel->setGeometry(screenRect);
     } else {
         setParentItem(d->hostApplet());
