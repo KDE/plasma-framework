@@ -32,6 +32,8 @@ namespace Plasma
 class DataContainerPrivate;
 
 /**
+ * @class DataContainer plasma/datacontainer.h <Plasma/DataContainer>
+ *
  * @brief A set of data exported via a DataEngine
  *
  * Plasma::DataContainer wraps the data exported by a DataEngine
@@ -41,6 +43,20 @@ class DataContainerPrivate;
  * are keyed by strings. The data itself is stored as QVariants. This allows
  * easy and flexible retrieval of the information associated with this object
  * without writing DataContainer or DataEngine specific code in visualizations.
+ *
+ * If you are creating your own DataContainer objects (and are passing them to
+ * DataEngine::addSource()), you normally just need to listen to the
+ * updateRequested() signal (as well as any other methods you might have of
+ * being notified of new data) and call setData() to actually update the data.
+ * Then you need to either trigger the scheduleSourcesUpdated signal of the
+ * parent DataEngine or call checkForUpdate() on the DataContainer.
+ *
+ * You also need to set a suitable name for the source with setObjectName().
+ * See DataEngine::addSource() for more information.
+ *
+ * Note that there is normally no need to subclass DataContainer, except as
+ * a way of encapsulating the data retreival for a source, since all notifications
+ * are done via signals rather than virtual methods.
  **/
 class PLASMA_EXPORT DataContainer : public QObject
 {
@@ -49,13 +65,11 @@ class PLASMA_EXPORT DataContainer : public QObject
     Q_OBJECT
 
     public:
-        //typedef QHash<QString, DataEngine::SourceDict> Grouping;
-
         /**
-         * Constructs a default DataContainer, which has no name or data
+         * Constructs a default DataContainer that has no name or data
          * associated with it
          **/
-        explicit DataContainer(QObject* parent = 0);
+        explicit DataContainer(QObject *parent = 0);
         virtual ~DataContainer();
 
         /**
@@ -64,19 +78,29 @@ class PLASMA_EXPORT DataContainer : public QObject
         const DataEngine::Data data() const;
 
         /**
-         * Set a value for a key. This also marks this source as needing
-         * to signal an update. After calling this, a call to checkForUpdate()
-         * is done by the engine. This allows for batching updates.
+         * Set a value for a key.
+         *
+         * This also marks this source as needing to signal an update.
+         *
+         * If you call setData() directly on a DataContainer, you need to
+         * either trigger the scheduleSourcesUpdated() slot for the
+         * data engine it belongs to or call checkForUpdate() on the
+         * DataContainer.
          *
          * @param key a string used as the key for the data
          * @param value a QVariant holding the actual data. If a null or invalid
          *              QVariant is passed in and the key currently exists in the
          *              data, then the data entry is removed
          **/
-        void setData(const QString& key, const QVariant& value);
+        void setData(const QString &key, const QVariant &value);
 
         /**
          * Removes all data currently associated with this source
+         *
+         * If you call removeAllData() on a DataContainer, you need to
+         * either trigger the scheduleSourcesUpdated() slot for the
+         * data engine it belongs to or call checkForUpdate() on the
+         * DataContainer.
          **/
         void removeAllData();
 
@@ -86,66 +110,99 @@ class PLASMA_EXPORT DataContainer : public QObject
         bool visualizationIsConnected(QObject *visualization) const;
 
         /**
-         * Connects an object to this DataContainer. May be called repeatedly
-         * for the same visualization without side effects
+         * Connects an object to this DataContainer.
+         *
+         * May be called repeatedly for the same visualization without
+         * side effects
          *
          * @param visualization the object to connect to this DataContainer
          * @param pollingInterval the time in milliseconds between updates
          **/
-        void connectVisualization(QObject* visualization, uint pollingInterval, Plasma::IntervalAlignment alignment);
+        void connectVisualization(QObject *visualization, uint pollingInterval, Plasma::IntervalAlignment alignment);
 
     public Q_SLOTS:
         /**
          * Disconnects an object from this DataContainer.
+         *
+         * Note that if this source was created by DataEngine::sourceRequestEvent(),
+         * it will be deleted by DataEngine once control returns to the event loop.
          **/
-        void disconnectVisualization(QObject* visualization);
+        void disconnectVisualization(QObject *visualization);
 
     Q_SIGNALS:
         /**
-         * Emitted when the data has been updated, allowing visualization to
+         * Emitted when the data has been updated, allowing visualizations to
          * reflect the new data.
+         *
+         * Note that you should not normally emit this directly.  Instead, use
+         * checkForUpdates() or the DataEngine::scheduleSourcesUpdated() slot.
+         *
+         * @param source the objectName() of the DataContainer (and hence the name
+         *               of the source) that updated its data
+         * @param data   the updated data
          **/
-        void dataUpdated(const QString& source, const Plasma::DataEngine::Data& data);
+        void dataUpdated(const QString &source, const Plasma::DataEngine::Data &data);
 
         /**
-         * Emitted when this source becomes unused
+         * Emitted when the last visualization is disconnected.
+         *
+         * Note that if this source was created by DataEngine::sourceRequestEvent(),
+         * it will be deleted by DataEngine once control returns to the event loop
+         * after this signal is emitted.
+         *
+         * @param source  the name of the source that became unused
          **/
-        void becameUnused(const QString& source);
+        void becameUnused(const QString &source);
 
         /**
-         * Emitted when the source, usually due to an internal timer firing,
-         * requests to be updated.
+         * Emitted when an update is requested.
+         *
+         * If a polling interval was passed connectVisualization(), this signal
+         * will be emitted every time the interval expires.
+         *
+         * Note that if you create your own DataContainer (and pass it to
+         * DataEngine::addSource()), you will need to listen to this signal
+         * and refresh the data when it is triggered.
+         *
+         * @param source  the datacontainer the update was requested for.  Useful
+         *                for classes that update the data for several containers.
          **/
         void updateRequested(DataContainer *source);
 
     protected:
         /**
-         * Checks for whether the data has changed and therefore an update
-         * signal needs to be emitted.
+         * Checks whether any data has changed and, if so, emits dataUpdated().
          **/
         void checkForUpdate();
 
         /**
-         * Returns how long ago, in msecs, that the data in this container was last updated
+         * Returns how long ago, in msecs, that the data in this container was last updated.
+         *
+         * This is used by DataEngine to compress updates that happen more quickly than the
+         * minimum polling interval by calling setNeedsUpdate() instead of calling
+         * updateSourceEvent() immediately.
          **/
         uint timeSinceLastUpdate() const;
 
         /**
          * Indicates that the data should be treated as dirty the next time hasUpdates() is called.
          *
-         * why? because if one SignalRelay times out just after another, the minimum update
-         * interval stops a real update from being done - but that relay still needs to be given
-         * data, because it won't have been in the queue and won't have gotten that last update.
-         * when it checks hasUpdates() we'll lie, and then everything will return to normal.
+         * This is needed for the case where updateRequested() is triggered but we don't want to
+         * update the data immediately because it has just been updated.  The second request won't
+         * be fulfilled in this case, because we never updated the data and so never called
+         * checkForUpdate().  So we claim it needs an update anyway.
          **/
         void setNeedsUpdate(bool update = true);
 
-protected Q_SLOTS:
+    protected Q_SLOTS:
         /**
          * Check if the DataContainer is still in use.
+         *
          * If not the signal "becameUnused" will be emitted.
-         * Warning: The DataContainer may be invalid after calling this function.
-         */
+         *
+         * Warning: The DataContainer may be invalid after calling this function, because a listener
+         * to becameUnused() may have deleted it.
+         **/
         void checkUsage();
 
     private:
