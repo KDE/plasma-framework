@@ -1,19 +1,61 @@
 /** @mainpage Plasma libraries
 
-This directory contains the classes making up libplasma, which provides the
-core framework used by %Plasma and its components. This includes applet and
-extension definitions and loading, common GUI elements, etc.
+libplasma is the core of the Plasma desktop.  It provides a framework of graphical
+widgets (Plasma::Applet) that can be organised into managed groupings
+(Plasma::Containment), such as a desktop or panel.  It also provides a data
+abstraction layer (Plasma::DataEngine) and a corresponding service interaction
+layer (Plasma::Service) to make implementing widgets easier and a
+system of callouts (Plasma::AbstractRunner) that provide responses to queries,
+from running an application to performing a quick calculation.
 
-Domain specific sets of functionality, e.g. for network awareness or sensors,
-are not found here but in one of the %Plasma
-<a href="../../../plasma/engines/html/index.html">engines</a>.
+The <a href="http://doc.trolltech.com/latest/graphicsview.html">Qt Graphics View
+framework</a> and the <a href="http://api.kde.org/4.x-api/kdelibs-apidocs/">KDE
+libraries</a> provide the underpinning for libplasma.  As a result, it should
+work anywhere that Qt and KDE do.
 
-Please refer to the <a href="http://plasma.kde.org">Plasma website</a> for API
-documentation and design documents regarding this library.
+Although libplasma is developed for the use of Plasma, the new desktop shell in
+KDE 4, it is general enough to be useful in other applications.
+<a href="http://amarok.kde.org">Amarok</a> is already using it for its context
+view, allowing for pluggable widgets to display and interact with the music
+collection, such as "current track" and "tag cloud" widgets.
 
-If you want to write plasmoids (%Plasma plugins), have a look at the
+libplasma itself only provides a framework, and the widgets, containments,
+data engines and runners are all implemented as plugins.  However, the framework
+is designed to make implementing these plugins as easy as possible, including
+providing scripting support.  Also, infrastructure such as a dialog to install
+new widgets and even download them from the web (Plasma::AppletBrowser) is also
+included.
+
+Other important classes are:
+
+ - Plasma::Corona: the canvas that containments are placed on
+ - Plasma::View: a QWidget for displaying a containment
+ - Plasma::Theme: provides theming support
+ - Plasma::Animator: provides animations for things like elements appearing
+   and disappearing
+ - Plasma::Delegate: provides an item delegate for Qt's
+   <a href="http://doc.trolltech.com/latest/model-view-programming.html">Model /
+   View framework</a> for menu items.
+ - Plasma::ToolTipManager: allows widgets have (themed) tooltips displayed when the
+   mouse is hovered over them
+ - Plasma::Dialog: displays a themed application dialog
+ - Plasma::Extender: provides detachable sections to Plasma::Applet
+ - Plasma::GLApplet: provides an OpneGL-rendered Plasma::Applet
+ - Plasma::PackageStructure: provides descriptions of packages containing plugins
+   for libplasma
+ - Plasma::PopupApplet: provides a simple way of implementing a Plasma::Applet
+   consisting of an icon that shows a popup when clicked
+ - Plasma::Svg and Plasma::PanelSvg: provides themable, cached SVGs
+ - Plasma::Wallpaper: provides pluggable backgrounds for containments
+ - Plasma::AppletScript, Plasma::DataEngineScript, Plasma::RunnerScript and
+   Plasma::ScriptEngine: provide scripting interfaces for plugins
+ - Various themed QGraphicsWidgets for use in creating a Plasma::Applet
+
+
+The
 <a href="http://techbase.kde.org/Development/Tutorials/Plasma">Plasma tutorials</a>
-on TechBase.
+on TechBase provide a good introduction to writing plugins, such as widgets and
+data engines, for libplasma-based applications.
 
 @authors
 Aaron Seigo \<aseigo@kde.org\><br>
