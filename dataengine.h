@@ -228,12 +228,24 @@ class PLASMA_EXPORT DataEngine : public QObject
     Q_SIGNALS:
         /**
          * Emitted when a new data source is created
+         *
+         * Note that you do not need to emit this yourself unless
+         * you are reimplementing sources() and want to advertise
+         * that a new source is available (but hasn't been created
+         * yet).
+         *
          * @param source the name of the new data source
          **/
         void sourceAdded(const QString& source);
 
         /**
          * Emitted when a data source is removed.
+         *
+         * Note that you do not need to emit this yourself unless
+         * you have reimplemented sources() and want to signal that
+         * a source that was available but was never created is no
+         * longer available.
+         *
          * @param source the name of the data source that was removed
          **/
         void sourceRemoved(const QString& source);
