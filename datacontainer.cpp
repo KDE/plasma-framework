@@ -125,7 +125,11 @@ void DataContainer::connectVisualization(QObject* visualization, uint pollingInt
                 visualization, SLOT(dataUpdated(QString,Plasma::DataEngine::Data)));
     } else {
         //kDebug() << "    connecting to a relay";
-        SignalRelay *relay = d->signalRelay(this, visualization, pollingInterval, alignment);
+        // we only want to do an imediate update if this is not the first object to connect to us
+        // if it is the first visualization, then the source will already have been populated
+        // engine's sourceRequested method
+        bool immediateUpdate = connected || d->relayObjects.count() > 1;
+        SignalRelay *relay = d->signalRelay(this, visualization, pollingInterval, alignment, immediateUpdate);
         connect(relay, SIGNAL(dataUpdated(QString,Plasma::DataEngine::Data)),
                 visualization, SLOT(dataUpdated(QString,Plasma::DataEngine::Data)));
     }

@@ -23,14 +23,16 @@
 namespace Plasma
 {
 
-SignalRelay* DataContainerPrivate::signalRelay(const DataContainer* dc, QObject *visualization, uint pollingInterval, Plasma::IntervalAlignment align)
+SignalRelay* DataContainerPrivate::signalRelay(const DataContainer* dc, QObject *visualization,
+                                               uint pollingInterval, Plasma::IntervalAlignment align,
+                                               bool immediateUpdate)
 {
     QMap<uint, SignalRelay *>::const_iterator relayIt = relays.find(pollingInterval);
     SignalRelay *relay = 0;
 
     //FIXME what if we have two applets with the same interval and different alignment?
     if (relayIt == relays.end()) {
-        relay = new SignalRelay(const_cast<DataContainer*>(dc), this, pollingInterval, align);
+        relay = new SignalRelay(const_cast<DataContainer*>(dc), this, pollingInterval, align, immediateUpdate);
         relays[pollingInterval] = relay;
     } else {
         relay = relayIt.value();
@@ -49,6 +51,33 @@ bool DataContainerPrivate::hasUpdates()
     }
 
     return dirty;
+}
+
+SignalRelay::SignalRelay(DataContainer* parent, DataContainerPrivate *data, uint ival,
+                         Plasma::IntervalAlignment align, bool immediateUpdate)
+    : QObject(parent),
+      dc(parent),
+      d(data),
+      m_interval(ival),
+      m_align(align),
+      m_resetTimer(true),
+      m_queued(false)
+{
+    //kDebug() << "signal relay with time of" << m_timerId << "being set up";
+    m_timerId = startTimer(immediateUpdate ? 0 : m_interval);
+    if (m_align != Plasma::NoAlignment) {
+        checkAlignment();
+    }
+}
+
+int SignalRelay::receiverCount() const
+{
+    return receivers(SIGNAL(dataUpdated(QString,Plasma::DataEngine::Data)));
+}
+
+bool SignalRelay::isUnused()
+{
+    return receivers(SIGNAL(dataUpdated(QString,Plasma::DataEngine::Data))) < 1;
 }
 
 void SignalRelay::checkAlignment()
@@ -115,7 +144,7 @@ void SignalRelay::timerEvent(QTimerEvent *event)
         emit dataUpdated(dc->objectName(), d->data);
     } else {
         // the source wasn't actually updated; so let's put ourselves in the queue
-        // so we get an dataUpdated() when the data does arrive
+        // so we get a dataUpdated() call when the data does arrive
         //kDebug() << "queued";
         m_queued = true;
     }

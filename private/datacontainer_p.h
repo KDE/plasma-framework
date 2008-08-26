@@ -36,7 +36,8 @@ public:
     {}
 
     SignalRelay* signalRelay(const DataContainer* dc, QObject *visualization,
-                             uint pollingInterval, Plasma::IntervalAlignment align);
+                             uint pollingInterval, Plasma::IntervalAlignment align,
+                             bool immediateUpdate);
 
     bool hasUpdates();
 
@@ -53,31 +54,11 @@ class SignalRelay : public QObject
     Q_OBJECT
 
 public:
-    SignalRelay(DataContainer* parent, DataContainerPrivate *data, uint ival, Plasma::IntervalAlignment align)
-        : QObject(parent),
-          dc(parent),
-          d(data),
-          m_interval(ival),
-          m_align(align),
-          m_resetTimer(true),
-          m_queued(false)
-    {
-        //kDebug() << "signal relay with time of" << m_timerId << "being set up";
-        m_timerId = startTimer(0);
-        if (m_align != Plasma::NoAlignment) {
-            checkAlignment();
-        }
-    }
+    SignalRelay(DataContainer* parent, DataContainerPrivate *data,
+                uint ival, Plasma::IntervalAlignment align, bool immediateUpdate);
 
-    int receiverCount() const
-    {
-        return receivers(SIGNAL(dataUpdated(QString,Plasma::DataEngine::Data)));
-    }
-
-    bool isUnused()
-    {
-        return receivers(SIGNAL(dataUpdated(QString,Plasma::DataEngine::Data))) < 1;
-    }
+    int receiverCount() const;
+    bool isUnused();
 
     void checkAlignment();
     void checkQueueing();

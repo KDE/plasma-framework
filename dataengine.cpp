@@ -515,7 +515,7 @@ DataContainer* DataEnginePrivate::source(const QString& sourceName, bool createW
     s->setObjectName(sourceName);
     sources.insert(sourceName, s);
     QObject::connect(s, SIGNAL(updateRequested(DataContainer*)),
-            q, SLOT(internalUpdateSource(DataContainer*)));
+                     q, SLOT(internalUpdateSource(DataContainer*)));
 
     if (limit > 0) {
         trimQueue();
@@ -524,14 +524,13 @@ DataContainer* DataEnginePrivate::source(const QString& sourceName, bool createW
     return s;
 }
 
-void DataEnginePrivate::connectSource(DataContainer* s, QObject* visualization,
-                                        uint pollingInterval,
-                                        Plasma::IntervalAlignment align, bool immediateCall)
+void DataEnginePrivate::connectSource(DataContainer* s, QObject* visualization, uint pollingInterval,
+                                      Plasma::IntervalAlignment align, bool immediateCall)
 {
     //kDebug() << "connect source called with interval" << pollingInterval;
     if (pollingInterval > 0) {
         // never more frequently than allowed, never more than 20 times per second
-        uint min = qMax(50, minPollingInterval); // for qMin below
+        uint min = qMax(50, minPollingInterval); // for qMax below
         pollingInterval = qMax(min, pollingInterval);
 
         // align on the 50ms
@@ -549,8 +548,8 @@ void DataEnginePrivate::connectSource(DataContainer* s, QObject* visualization,
 
     if (immediateCall) {
         QMetaObject::invokeMethod(visualization, "dataUpdated",
-                                    Q_ARG(QString, s->objectName()),
-                                    Q_ARG(Plasma::DataEngine::Data, s->data()));
+                                  Q_ARG(QString, s->objectName()),
+                                  Q_ARG(Plasma::DataEngine::Data, s->data()));
     }
 }
 
