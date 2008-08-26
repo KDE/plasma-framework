@@ -160,22 +160,32 @@ ServiceJob* Service::startOperationCall(const KConfigGroup &description)
 
 void Service::associateWidget(QWidget *widget, const QString &operation)
 {
+    disassociateWidget(widget);
     d->associatedWidgets.insert(widget, operation);
     connect(widget, SIGNAL(destroyed(QObject*)), this, SLOT(associatedWidgetDestroyed(QObject*)));
 
-    if (d->disabledOperations.contains(operation)) {
-        widget->setEnabled(false);
-    }
+    widget->setEnabled(!d->disabledOperations.contains(operation));
+}
+
+void Service::disassociateWidget(QWidget *widget)
+{
+    disconnect(widget, SIGNAL(destroyed(QObject*)), this, SLOT(associatedWidgetDestroyed(QObject*)));
+    d->associatedWidgets.remove(widget);
 }
 
 void Service::associateWidget(QGraphicsWidget *widget, const QString &operation)
 {
+    disassociateWidget(widget);
     d->associatedGraphicsWidgets.insert(widget, operation);
     connect(widget, SIGNAL(destroyed(QObject*)), this, SLOT(associatedGraphicsWidgetDestroyed(QObject*)));
 
-    if (d->disabledOperations.contains(operation)) {
-        widget->setEnabled(false);
-    }
+    widget->setEnabled(!d->disabledOperations.contains(operation));
+}
+
+void Service::disassociateWidget(QGraphicsWidget *widget)
+{
+    disconnect(widget, SIGNAL(destroyed(QObject*)), this, SLOT(associatedGraphicsWidgetDestroyed(QObject*)));
+    d->associatedGraphicsWidgets.remove(widget);
 }
 
 QString Service::name() const
@@ -230,7 +240,7 @@ void Service::setOperationEnabled(const QString &operation, bool enable)
     }
 }
 
-bool Service::operationIsEnabled(const QString &operation) const
+bool Service::isOperationEnabled(const QString &operation) const
 {
     return d->config->hasGroup(operation) && !d->disabledOperations.contains(operation);
 }

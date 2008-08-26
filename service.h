@@ -131,7 +131,7 @@ public:
      * @param operation the name of the operation to check
      * @return true if the operation is enabled, false otherwise
      */
-    bool operationIsEnabled(const QString &operation) const;
+    bool isOperationEnabled(const QString &operation) const;
 
     /**
      * The name of this service
@@ -142,19 +142,45 @@ public:
      * Assoicates a widget with an operation, which allows the service to
      * automatically manage, for example, the enabled state of a widget.
      *
+     * This will remove any previous associations the widget had with
+     * operations on this engine.
+     *
      * @param widget the QWidget to associate with the service
      * @param operation the operation to associate the widget with
      */
     void associateWidget(QWidget *widget, const QString &operation);
 
     /**
+     * Disassociates a widget if it has been associated with an operation
+     * on this service.
+     *
+     * This will not change the enabled state of the widget.
+     *
+     * @param widget the QWidget to disassociate.
+     */
+    void disassociateWidget(QWidget *widget);
+
+    /**
      * Assoicates a widget with an operation, which allows the service to
      * automatically manage, for example, the enabled state of a widget.
+     *
+     * This will remove any previous associations the widget had with
+     * operations on this engine.
      *
      * @param widget the QGraphicsItem to associate with the service
      * @param operation the operation to associate the widget with
      */
     void associateWidget(QGraphicsWidget *widget, const QString &operation);
+
+    /**
+     * Disassociates a widget if it has been associated with an operation
+     * on this service.
+     *
+     * This will not change the enabled state of the widget.
+     *
+     * @param widget the QGraphicsWidget to disassociate.
+     */
+    void disassociateWidget(QGraphicsWidget *widget);
 
 Q_SIGNALS:
     /**
