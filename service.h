@@ -126,6 +126,14 @@ public:
     ServiceJob* startOperationCall(const KConfigGroup &description);
 
     /**
+     * Query to find if an operation is enabled or not.
+     *
+     * @param operation the name of the operation to check
+     * @return true if the operation is enabled, false otherwise
+     */
+    bool operationIsEnabled(const QString &operation) const;
+
+    /**
      * The name of this service
      */
     QString name() const;
@@ -213,14 +221,6 @@ protected:
      * @param enable true if the operation should be enabld, false if disabled
      */
     void setOperationEnabled(const QString &operation, bool enable);
-
-    /**
-     * Query to find if an operation is enabled or not.
-     *
-     * @param operation the name of the operation to check
-     * @return true if the operation is enabled, false otherwise
-     */
-    bool operationIsEnabled(const QString &operation) const;
 
 private:
     Q_PRIVATE_SLOT(d, void jobFinished(KJob *))
