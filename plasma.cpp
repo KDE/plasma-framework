@@ -79,7 +79,7 @@ QPoint popupPosition(const QGraphicsItem * item, const QSize &s)
 
     QPoint pos = v->mapFromScene(item->scenePos());
     pos = v->mapToGlobal(pos);
-    //kDebug() << "==> position is" << scenePos() << v->mapFromScene(scenePos()) << pos;
+    //kDebug() << "==> position is" << item->scenePos() << v->mapFromScene(item->scenePos()) << pos;
     Plasma::View *pv = dynamic_cast<Plasma::View *>(v);
 
     Plasma::Location loc = Floating;
