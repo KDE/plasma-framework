@@ -1,5 +1,6 @@
 /***************************************************************************
  *   Copyright (C) 2008 by Montel Laurent <montel@kde.org>                 *
+ *   Copyright (C) 2008 by Alessandro Diaferia <alediaferia@gmail.com>     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -46,7 +47,8 @@ public:
           layout(0),
           proxy(0),
           savedAspectRatio(Plasma::InvalidAspectRatioMode),
-          timer(0)
+          timer(0),
+          alwaysIconified(false)
     {
     }
 
@@ -70,6 +72,7 @@ public:
     QGraphicsProxyWidget *proxy;
     Plasma::AspectRatioMode savedAspectRatio;
     QTimer *timer;
+    bool alwaysIconified;
 };
 
 PopupApplet::PopupApplet(QObject *parent, const QVariantList &args)
@@ -147,7 +150,12 @@ void PopupApplet::constraintsEvent(Plasma::Constraints constraints)
     if (constraints & Plasma::FormFactorConstraint) {
         d->layout->removeAt(0);
 
-        switch (formFactor()) {
+        Plasma::FormFactor factor = formFactor();
+
+        if(d->alwaysIconified)
+           factor = Plasma::Vertical;
+
+        switch (factor) {
         case Plasma::Planar:
         case Plasma::MediaCenter: {
             if (d->icon) {
@@ -289,6 +297,16 @@ void PopupApplet::widgetGeometryChanged()
             }
         }
     }
+}
+
+void PopupApplet::setAlwaysIconified(bool set)
+{
+   d->alwaysIconified = set;
+}
+
+bool PopupApplet::alwaysIconified()
+{
+   return d->alwaysIconified;
 }
 
 void PopupAppletPrivate::togglePopup()
