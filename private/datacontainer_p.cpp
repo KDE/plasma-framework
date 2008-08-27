@@ -61,7 +61,7 @@ SignalRelay::SignalRelay(DataContainer* parent, DataContainerPrivate *data, uint
       m_interval(ival),
       m_align(align),
       m_resetTimer(true),
-      m_queued(false)
+      m_queued(true)
 {
     //kDebug() << "signal relay with time of" << m_timerId << "being set up";
     m_timerId = startTimer(immediateUpdate ? 0 : m_interval);
@@ -142,6 +142,7 @@ void SignalRelay::timerEvent(QTimerEvent *event)
     if (d->hasUpdates()) {
         //kDebug() << "emitting data updated directly" << d->data;
         emit dataUpdated(dc->objectName(), d->data);
+        m_queued = false;
     } else {
         // the source wasn't actually updated; so let's put ourselves in the queue
         // so we get a dataUpdated() call when the data does arrive
