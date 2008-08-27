@@ -797,7 +797,6 @@ void AppletHandle::leaveTimeout()
 void AppletHandle::appletDestroyed()
 {
     m_applet = 0;
-    deleteLater();
 }
 
 void AppletHandle::appletResized()
