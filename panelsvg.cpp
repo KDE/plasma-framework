@@ -36,14 +36,14 @@ class PanelData
 public:
     PanelData()
       : enabledBorders(PanelSvg::AllBorders),
-        cachedBackground(0),
+        cachedBackground(0), cachedMask(0),
         panelSize(-1,-1)
     {
     }
 
     PanelData(const PanelData &other)
       : enabledBorders(other.enabledBorders),
-        cachedBackground(0),
+        cachedBackground(0), cachedMask(0),
         panelSize(other.panelSize)
     {
     }
@@ -55,6 +55,7 @@ public:
 
     PanelSvg::EnabledBorders enabledBorders;
     QPixmap *cachedBackground;
+    QBitmap *cachedMask;
     QSizeF panelSize;
 
     //measures
@@ -330,12 +331,15 @@ QRectF PanelSvg::contentsRect() const
 QBitmap PanelSvg::mask() const
 {
     PanelData *panel = d->panels[d->prefix];
-    if (!panel->cachedBackground) {
-        d->generateBackground(panel);
-        Q_ASSERT(panel->cachedBackground);
+    
+    if (!panel->cachedMask) {
+        if (!panel->cachedBackground) {
+            d->generateBackground(panel);
+            Q_ASSERT(panel->cachedBackground);
+        }
+        panel->cachedMask = new QBitmap(panel->cachedBackground->alphaChannel().createMaskFromColor(Qt::black));
     }
-
-    return panel->cachedBackground->alphaChannel().createMaskFromColor(Qt::black);
+    return *(panel->cachedMask);
 }
 
 void PanelSvg::setCacheAllRenderedPanels(bool cache)
@@ -579,6 +583,8 @@ void PanelSvgPrivate::updateSizes()
 
     delete panel->cachedBackground;
     panel->cachedBackground = 0;
+    delete panel->cachedMask;
+    panel->cachedMask = 0;
 
     q->Svg::resize();
     if (panel->enabledBorders & PanelSvg::TopBorder) {
