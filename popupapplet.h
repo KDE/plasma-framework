@@ -17,8 +17,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA          *
  ***************************************************************************/
 
-#ifndef PLASMAAPPLETDIALOG_H
-#define PLASMAAPPLETDIALOG_H
+#ifndef POPUPAPPLET_H
+#define POPUPAPPLET_H
 
 #include <plasma/applet.h>
 #include <plasma/plasma_export.h>
@@ -111,5 +111,5 @@ private:
 
 } // Plasma namespace
 
-#endif /* PLASMAAPPLETDIALOG_H */
+#endif /* POPUPAPPLET_H */
 
