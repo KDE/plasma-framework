@@ -1,6 +1,5 @@
 /***************************************************************************
  *   Copyright (C) 2008 by Montel Laurent <montel@kde.org>                 *
- *   Copyright (C) 2008 by Alessandro Diaferia <alediaferia@gmail.com>     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -88,16 +87,6 @@ public:
      * always (until the user closes it again, that is).
      */
     void showPopup(uint displayTime = 0);
-
-    /**
-     * Shows the applet always as an icon, even when put on the desktop.
-     */
-    void setAlwaysIconified(bool set);
- 
-    /**
-     * @return true if the PopupApplet is set to be always shown as icon.
-     */
-    bool alwaysIconified();
 
 public Q_SLOTS:
     /**
