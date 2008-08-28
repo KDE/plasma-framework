@@ -137,11 +137,6 @@ void ToolTip::prepareShowing()
     layout()->activate();
     resize(sizeHint());
 
-    if (isVisible()) {
-        d->preview->setInfo();
-    } else {
-        show();
-    }
 }
 
 void ToolTip::resizeEvent(QResizeEvent *e)

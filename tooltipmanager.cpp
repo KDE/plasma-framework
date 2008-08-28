@@ -301,9 +301,11 @@ void ToolTipManagerPrivate::showToolTip()
 
     ToolTip *tooltip = tooltips.value(currentWidget);
     if (tooltip) {
+        tooltip->setVisible(false);
         tooltip->prepareShowing();
         tooltip->move(popupPosition(currentWidget, tooltip->size()));
         isShown = true;  //ToolTip is visible
+        tooltip->setVisible(true);
     }
 }
 
