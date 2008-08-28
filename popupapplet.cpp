@@ -243,6 +243,7 @@ void PopupApplet::constraintsEvent(Plasma::Constraints constraints)
 void PopupApplet::showPopup(uint popupDuration)
 {
     if (d->dialog && (formFactor() == Horizontal || formFactor() == Vertical)) {
+        popupEvent(true);
         d->dialog->move(popupPosition(d->dialog->size()));
         d->dialog->show();
 
@@ -264,8 +265,14 @@ void PopupApplet::showPopup(uint popupDuration)
 void PopupApplet::hidePopup()
 {
     if (d->dialog && (formFactor() == Horizontal || formFactor() == Vertical)) {
+        popupEvent(false);
         d->dialog->hide();
     }
+}
+
+void PopupApplet::popupEvent(bool)
+{
+
 }
 
 void PopupApplet::widgetGeometryChanged()
@@ -284,6 +291,8 @@ void PopupApplet::widgetGeometryChanged()
 void PopupAppletPrivate::togglePopup()
 {
    if (dialog) {
+        q->popupEvent(!dialog->isVisible());
+
         if (dialog->isVisible()) {
             dialog->hide();
         } else {
