@@ -88,12 +88,6 @@ public:
      */
     void showPopup(uint displayTime = 0);
 
-    /**
-     * This event handler can be reimplemented in a subclass to receive an event before the popup is showed or hidden.
-     * @arg show true if the popup is going to be showed, false if the popup is going to be hiden.
-     */
-     virtual void popupEvent(bool show);
-
 public Q_SLOTS:
     /**
      * Hides the popup.
@@ -108,6 +102,12 @@ public Q_SLOTS:
 
 protected:
     void constraintsEvent(Plasma::Constraints constraints);
+
+    /**
+     * This event handler can be reimplemented in a subclass to receive an event before the popup is showed or hidden.
+     * @arg show true if the popup is going to be showed, false if the popup is going to be hiden.
+     */
+     virtual void popupEvent(bool show);
 
 private:
     Q_PRIVATE_SLOT(d, void togglePopup())
