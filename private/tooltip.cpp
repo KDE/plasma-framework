@@ -46,6 +46,7 @@ class ToolTipPrivate
         , preview(0)
         , windowToPreview(0)
         , source(s)
+        , isActivated(true)
     { }
 
     QLabel *label;
@@ -54,6 +55,7 @@ class ToolTipPrivate
     WId windowToPreview;
     PanelSvg *background;
     QObject *source;
+    bool isActivated;
 };
 
 void ToolTip::showEvent(QShowEvent *e)
@@ -137,6 +139,16 @@ void ToolTip::prepareShowing()
     layout()->activate();
     resize(sizeHint());
 
+}
+
+void ToolTip::setActivated(bool value)
+{
+    d->isActivated = value;
+}
+
+bool ToolTip::isActivated()
+{
+    return d->isActivated;
 }
 
 void ToolTip::resizeEvent(QResizeEvent *e)

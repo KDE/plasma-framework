@@ -40,6 +40,8 @@ public:
     void updateTheme();
     void setContent(const ToolTipManager::ToolTipContent &data);
     void prepareShowing();
+    void setActivated(bool value);
+    bool isActivated();
 
 protected:
     void showEvent(QShowEvent *);

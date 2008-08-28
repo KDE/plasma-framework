@@ -188,6 +188,19 @@ public:
      */
     bool widgetHasToolTip(QGraphicsWidget *widget) const;
 
+    /**
+     *  Enable/or disable a Tooltip, this method is usefull is we want
+     *  to have a tooltip activated on demand.
+     *  @param widget the widget to change tooltip behaviour
+     *  @param enable if we need the tooltip or not
+     */
+    void setToolTipActivated(QGraphicsWidget *widget, bool enable);
+
+    /**
+     * Return true is the tooltip will be displayed, false otherwise
+     */
+    bool isToolTipActivated(QGraphicsWidget *widget);
+
 private:
     friend class ToolTipManagerSingleton;
     bool eventFilter(QObject *watched, QEvent *event);

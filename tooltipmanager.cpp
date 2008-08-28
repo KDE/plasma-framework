@@ -233,6 +233,26 @@ bool ToolTipManager::widgetHasToolTip(QGraphicsWidget *widget) const
     return d->tooltips.contains(widget);
 }
 
+void ToolTipManager::setToolTipActivated(QGraphicsWidget *widget, bool enable)
+{
+    if (!d->tooltips.contains(widget)) {
+        registerWidget(widget);
+    }
+
+    ToolTip *tooltip = d->tooltips.value(widget);
+    tooltip->setActivated(enable);
+}
+
+bool ToolTipManager::isToolTipActivated(QGraphicsWidget *widget)
+{
+    if (!d->tooltips.contains(widget)) {
+        registerWidget(widget);
+    }
+
+    ToolTip *tooltip = d->tooltips.value(widget);
+    return tooltip->isActivated();
+}
+
 void ToolTipManagerPrivate::themeUpdated()
 {
     QMapIterator<QGraphicsWidget*, ToolTip *> iterator(tooltips);
@@ -300,7 +320,7 @@ void ToolTipManagerPrivate::showToolTip()
     }
 
     ToolTip *tooltip = tooltips.value(currentWidget);
-    if (tooltip) {
+    if (tooltip && tooltip->isActivated()) {
         tooltip->setVisible(false);
         tooltip->prepareShowing();
         tooltip->move(popupPosition(currentWidget, tooltip->size()));
