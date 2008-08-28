@@ -294,6 +294,7 @@ void PopupAppletPrivate::togglePopup()
         q->popupEvent(!dialog->isVisible());
 
         if (dialog->isVisible()) {
+            //TODO: probably this code is never executed... I can't understand why
             dialog->hide();
         } else {
             dialog->move(q->popupPosition(dialog->size()));
@@ -308,6 +309,7 @@ void PopupAppletPrivate::hideTimedPopup()
 {
     timer->stop();
     q->hidePopup();
+    q->popupEvent(false);
 }
 
 void PopupAppletPrivate::dialogSizeChanged()
