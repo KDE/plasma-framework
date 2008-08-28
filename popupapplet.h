@@ -106,6 +106,7 @@ protected:
 private:
     Q_PRIVATE_SLOT(d, void togglePopup())
     Q_PRIVATE_SLOT(d, void hideTimedPopup())
+    Q_PRIVATE_SLOT(d, void dialogSizeChanged())
     PopupAppletPrivate * const d;
 };
 

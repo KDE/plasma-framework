@@ -128,7 +128,6 @@ class ExtenderItemPrivate
 
         void updateToolBox() {
             if (toolbox && dragger && toolboxLayout) {
-                kDebug() << "updating toolbox";
                 //clean the layout.
                 uint iconHeight = dragger->elementSize("hint-preferred-icon-size").height();
 
@@ -651,11 +650,9 @@ void ExtenderItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
     parentApplet->raise();
     setZValue(parentApplet->zValue());
 
-    d->extender->d->removeExtenderItem(this);
-
     if (d->extender) {
         d->extender->itemHoverEnterEvent(this);
-        d->extender->itemHoverMoveEvent(this, d->extender->mapFromScene(event->scenePos()));
+        //d->extender->itemHoverMoveEvent(this, d->extender->mapFromScene(event->scenePos()));
     }
 
     //call the move event, since that spawns a toplevel view when this extender item is in a
@@ -663,13 +660,13 @@ void ExtenderItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
     //able to receive any move events.
     mouseMoveEvent(event);
 
+    d->extender->d->removeExtenderItem(this);
+
     QApplication::setOverrideCursor(Qt::ClosedHandCursor);
 }
 
 void ExtenderItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
-    Q_UNUSED(event);
-
     if (!d->mousePressed) {
         return;
     }
@@ -684,6 +681,8 @@ void ExtenderItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     screenRect.setTopLeft(event->screenPos() - d->mousePos);
     screenRect.setSize(d->screenRect().size());
 
+    Corona *corona = d->hostApplet()->containment()->corona();
+
     if (d->leaveCurrentView(screenRect)) {
         //we're moving the applet to a toplevel view, so place it somewhere out of sight
         //first: in the topleft quadrant.
@@ -691,14 +690,9 @@ void ExtenderItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
         if (!d->toplevel) {
             //XXX duplication from applethandle
             //create a toplevel view and aim it at the applet.
-            Corona *corona = d->hostApplet()->containment()->corona();
             d->toplevel = new QGraphicsView(corona, 0);
-            //TODO: use addOffscreenWidget
-            if (sceneBoundingRect().left() > 0) {
-                setParentItem(0);
-                //only move to topleft quadrant if it isn't there allready.
-                setPos(-12000, -12000);
-            }
+
+            corona->addOffscreenWidget(this);
 
             d->toplevel->setWindowFlags(Qt::ToolTip | Qt::FramelessWindowHint
                                                     | Qt::WindowStaysOnTopHint);
@@ -721,6 +715,7 @@ void ExtenderItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
         d->toplevel->setSceneRect(sceneBoundingRect());
         d->toplevel->setGeometry(screenRect);
     } else {
+        corona->removeOffscreenWidget(this);
         setParentItem(d->hostApplet());
         setPos(d->deltaScene);
 
@@ -739,7 +734,6 @@ void ExtenderItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
     //find the extender we're hovering over.
     Extender *targetExtender = 0;
-    Corona *corona = qobject_cast<Corona*>(scene());
     foreach (Containment *containment, corona->containments()) {
         foreach (Applet *applet, containment->applets()) {
             if (applet->extender() && (applet->sceneBoundingRect().contains(mousePos)
@@ -813,6 +807,9 @@ void ExtenderItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
         //find the extender we're hovering over.
         Extender *targetExtender = 0;
         Corona *corona = qobject_cast<Corona*>(scene());
+
+        corona->removeOffscreenWidget(this);
+
         foreach (Containment *containment, corona->containments()) {
             foreach (Applet *applet, containment->applets()) {
                 if (applet->extender() && (applet->sceneBoundingRect().contains(mousePos)

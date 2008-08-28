@@ -162,8 +162,7 @@ void Extender::itemAddedEvent(ExtenderItem *item, const QPointF &pos)
     //remove the empty extender message if needed.
     if (d->emptyExtenderLabel) {
         d->layout->removeItem(d->emptyExtenderLabel);
-        delete d->emptyExtenderLabel;
-        d->emptyExtenderLabel = 0;
+        d->emptyExtenderLabel->hide();
     }
 
     d->adjustSizeHints();
@@ -176,9 +175,10 @@ void Extender::itemRemovedEvent(ExtenderItem *item)
     d->layout->removeItem(item);
 
     //add the empty extender message if needed.
-    if (!attachedItems().count() && !d->emptyExtenderLabel) {
-        d->emptyExtenderLabel = new Label(this);
-        d->emptyExtenderLabel->setText(d->emptyExtenderMessage);
+    if (!attachedItems().count()) {
+        d->emptyExtenderLabel->show();
+        //just in case:
+        d->layout->removeItem(d->emptyExtenderLabel);
         d->layout->addItem(d->emptyExtenderLabel);
     }
 
@@ -187,7 +187,7 @@ void Extender::itemRemovedEvent(ExtenderItem *item)
 
 void Extender::itemHoverEnterEvent(ExtenderItem *item)
 {
-    Q_UNUSED(item);
+    itemHoverMoveEvent(item, QPointF(0, 0));
 }
 
 void Extender::itemHoverMoveEvent(ExtenderItem *item, const QPointF &pos)
@@ -215,8 +215,7 @@ void Extender::itemHoverMoveEvent(ExtenderItem *item, const QPointF &pos)
     //XXX: duplicated from itemAttachedEvent.
     if (d->emptyExtenderLabel) {
         d->layout->removeItem(d->emptyExtenderLabel);
-        delete d->emptyExtenderLabel;
-        d->emptyExtenderLabel = 0;
+        d->emptyExtenderLabel->hide();
     }
 
     d->adjustSizeHints();
@@ -235,9 +234,9 @@ void Extender::itemHoverLeaveEvent(ExtenderItem *item)
         d->currentSpacerIndex = -1;
 
         //Make sure we add a 'no detachables' label when the layout is empty.
-        if (!attachedItems().count() && !d->emptyExtenderLabel) {
-            d->emptyExtenderLabel = new Label(this);
-            d->emptyExtenderLabel->setText(d->emptyExtenderMessage);
+        if (!attachedItems().count()) {
+            d->emptyExtenderLabel->show();
+            d->layout->removeItem(d->emptyExtenderLabel);
             d->layout->addItem(d->emptyExtenderLabel);
         }
 

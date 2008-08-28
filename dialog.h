@@ -61,12 +61,11 @@ class PLASMA_EXPORT Dialog : public QWidget
         void setGraphicsWidget(QGraphicsWidget *widget);
         QGraphicsWidget *graphicsWidget();
 
-    public Q_SLOTS:
+    Q_SIGNALS:
         /**
-         * Call when the size of the graphicsWidget changes, to adjust the view and resize the
-         * dialog.
+         * Fires when the dialog automatically resizes.
          */
-        void adjustView();
+        void dialogResized();
 
     protected:
         /**
@@ -78,6 +77,8 @@ class PLASMA_EXPORT Dialog : public QWidget
 
     private:
         DialogPrivate * const d;
+
+        friend class DialogPrivate;
         /**
          * React to theme changes 
          */

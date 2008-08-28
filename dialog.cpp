@@ -66,7 +66,6 @@ public:
     void themeUpdated();
     void adjustView();
 
-
     Plasma::Dialog *q;
     /**
      * Holds the background SVG, to be re-rendered when the cache is invalidated,
@@ -89,9 +88,26 @@ void DialogPrivate::themeUpdated()
 void DialogPrivate::adjustView()
 {
     if (view && widget) {
+        QSize prevSize = q->size();
+
+        //reposition and resize the view.
         view->setSceneRect(widget->mapToScene(widget->boundingRect()).boundingRect());
-        view->resize(widget->minimumSize().toSize());
+        view->resize(widget->preferredSize().toSize());
         view->centerOn(widget);
+
+        //set the sizehints correctly:
+        int left, top, right, bottom;
+        q->getContentsMargins(&left, &top, &right, &bottom);
+        q->setMinimumSize(view->size().width() + left + right,
+                          view->size().height() + top + bottom);
+        q->setMaximumSize(view->size().width() + left + right,
+                          view->size().height() + top + bottom);
+        q->updateGeometry();
+
+        if (q->size() != prevSize) {
+            //the size of the dialog has changed, emit the signal:
+            emit q->dialogResized();
+        }
     }
 }
 
@@ -169,12 +185,6 @@ void Dialog::setGraphicsWidget(QGraphicsWidget *widget)
 QGraphicsWidget *Dialog::graphicsWidget()
 {
     return d->widget;
-}
-
-void Dialog::adjustView()
-{
-    d->adjustView();
-    adjustSize();
 }
 
 bool Dialog::eventFilter(QObject *watched, QEvent *event)

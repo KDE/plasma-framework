@@ -62,6 +62,7 @@ public:
 
     void togglePopup();
     void hideTimedPopup();
+    void dialogSizeChanged();
 
     PopupApplet *q;
     Plasma::Icon *icon;
@@ -207,6 +208,7 @@ void PopupApplet::constraintsEvent(Plasma::Constraints constraints)
             if (!d->dialog) {
                 d->dialog = new Plasma::Dialog();
                 d->dialog->setWindowFlags(Qt::Popup);
+                connect(d->dialog, SIGNAL(dialogResized()), this, SLOT(dialogSizeChanged()));
 
                 if (graphicsWidget()) {
                     Corona *corona = qobject_cast<Corona *>(graphicsWidget()->scene());
@@ -241,7 +243,6 @@ void PopupApplet::constraintsEvent(Plasma::Constraints constraints)
 void PopupApplet::showPopup(uint popupDuration)
 {
     if (d->dialog && (formFactor() == Horizontal || formFactor() == Vertical)) {
-        d->dialog->adjustView();
         d->dialog->move(popupPosition(d->dialog->size()));
         d->dialog->show();
 
@@ -269,24 +270,13 @@ void PopupApplet::hidePopup()
 
 void PopupApplet::widgetGeometryChanged()
 {
-    if (graphicsWidget()) {
+    if (graphicsWidget() && layout()) {
         //sizes are recalculated in the constraintsevent so let's just call that.
-        if (layout()) {
-            constraintsEvent(Plasma::FormFactorConstraint);
+        constraintsEvent(Plasma::FormFactorConstraint);
 
-            //resize vertically if necesarry.
-            if (formFactor() == Plasma::MediaCenter || formFactor() == Plasma::Planar) {
-                resize(QSizeF(size().width(), minimumHeight()));
-            } else {
-                if (graphicsWidget()) {
-                    graphicsWidget()->resize(graphicsWidget()->minimumSize());
-                    graphicsWidget()->update();
-                }
-                if (d->dialog) {
-                    d->dialog->adjustView();
-                    d->dialog->move(popupPosition(d->dialog->size()));
-                }
-            }
+        //resize vertically if necesarry.
+        if (formFactor() == Plasma::MediaCenter || formFactor() == Plasma::Planar) {
+            resize(QSizeF(size().width(), minimumHeight()));
         }
     }
 }
@@ -297,7 +287,7 @@ void PopupAppletPrivate::togglePopup()
         if (dialog->isVisible()) {
             dialog->hide();
         } else {
-            dialog->move(q->popupPosition(dialog->sizeHint()));
+            dialog->move(q->popupPosition(dialog->size()));
             dialog->show();
         }
 
@@ -309,6 +299,15 @@ void PopupAppletPrivate::hideTimedPopup()
 {
     timer->stop();
     q->hidePopup();
+}
+
+void PopupAppletPrivate::dialogSizeChanged()
+{
+    //Reposition the dialog.
+    if (dialog) {
+        dialog->updateGeometry();
+        dialog->move(q->popupPosition(dialog->size()));
+    }
 }
 
 } // Plasma namespace

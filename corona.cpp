@@ -350,16 +350,25 @@ Containment* Corona::addContainmentDelayed(const QString& name, const QVariantLi
 
 void Corona::addOffscreenWidget(QGraphicsWidget *widget)
 {
-    kDebug() << "adding offscreen widget.";
     widget->setParentItem(0);
     if (!d->offscreenLayout) {
-    kDebug() << "adding offscreen widget.";
+        kDebug() << "adding offscreen widget.";
         QGraphicsWidget *offscreenWidget = new QGraphicsWidget(0);
         addItem(offscreenWidget);
         d->offscreenLayout = new QGraphicsGridLayout(offscreenWidget);
         //FIXME: do this a nice way.
         offscreenWidget->setPos(-10000, -10000);
         offscreenWidget->setLayout(d->offscreenLayout);
+    }
+
+    //check if the layout allready contains this widget.
+    //XXX: duplicated from removeOffscreenWidget()
+    for (int i = 0; i < d->offscreenLayout->count(); i++) {
+        QGraphicsWidget *foundWidget =
+            dynamic_cast<QGraphicsWidget*>(d->offscreenLayout->itemAt(i));
+        if (foundWidget == widget) {
+            return;
+        }
     }
 
     d->offscreenLayout->addItem(widget, d->offscreenLayout->rowCount() + 1,
@@ -381,6 +390,7 @@ void Corona::removeOffscreenWidget(QGraphicsWidget *widget)
             dynamic_cast<QGraphicsWidget*>(d->offscreenLayout->itemAt(i));
         if (foundWidget == widget) {
             d->offscreenLayout->removeAt(i);
+            d->offscreenLayout->invalidate();
         }
     }
 }
