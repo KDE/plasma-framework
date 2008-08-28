@@ -96,6 +96,7 @@ public:
     int animHighlightId;
     qreal animCircleFrame;
     qreal animHighlightFrame;
+    QRect shapeRect;
     bool hovering : 1;
 };
 
@@ -119,7 +120,31 @@ DesktopToolBox::~DesktopToolBox()
 
 QRectF DesktopToolBox::boundingRect() const
 {
-    return QRectF(0, 0, -size()*2, size()*2);
+    Corner c = corner();
+    qreal width;
+    qreal height;
+
+    if (c == Left || c == Right) {
+        height = size()*4;
+    } else {
+        height = size()*2;
+    }
+
+    if (c == Bottom || c == BottomRight || c == BottomLeft) {
+        height = -height;
+    }
+
+    if (c == Top || c == Bottom) {
+        width = size()*4;
+    } else {
+        width = size()*2;
+    }
+
+    if (c == Right || c == TopRight || c == BottomRight) {
+        width = -width;
+    } 
+
+    return QRectF(0, 0, width, height);
 }
 
 void DesktopToolBox::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
@@ -139,8 +164,47 @@ void DesktopToolBox::paint(QPainter *painter, const QStyleOptionGraphicsItem *op
     color2.setAlpha(64);
 
     QPainterPath p = shape();
-    QRadialGradient gradient(boundingRect().topLeft(), size() + d->animCircleFrame);
-    gradient.setFocalPoint(boundingRect().topLeft());
+
+    QPoint iconPos;
+    QPointF gradientCenter;
+    switch (corner()) {
+    case TopRight:
+        iconPos = QPoint((int)boundingRect().left() - iconSize().width() + 2, 2);
+        gradientCenter = boundingRect().topLeft();
+        break;
+    case Top:
+        iconPos = QPoint(boundingRect().center().x() - iconSize().width() / 2, 2);
+        gradientCenter = QPoint(boundingRect().center().x(), boundingRect().y());
+        break;
+    case TopLeft:
+        iconPos = QPoint(2, 2);
+        gradientCenter = boundingRect().topLeft();
+        break;
+    case Left:
+        iconPos = QPoint(2, boundingRect().center().y() - iconSize().height() / 2);
+        gradientCenter = QPointF(boundingRect().left(), boundingRect().center().y());
+        break;
+    case Right:
+        iconPos = QPoint((int)boundingRect().left() - iconSize().width() + 2, boundingRect().center().y() - iconSize().height() / 2);
+        gradientCenter = QPointF(boundingRect().left(), boundingRect().center().y());
+        break;
+    case BottomLeft:
+        iconPos = QPoint(2, boundingRect().top() - iconSize().height() - 2);
+        gradientCenter = boundingRect().topLeft();
+        break;
+    case Bottom:
+        iconPos = QPoint(boundingRect().center().x() - iconSize().width() / 2, boundingRect().top() - iconSize().height() - 2);
+        gradientCenter = QPointF(boundingRect().center().x(), boundingRect().top());
+        break;
+    case BottomRight:
+    default:
+        iconPos = QPoint((int)boundingRect().left() - iconSize().width() - 2, (int)boundingRect().top() - iconSize().height() - 2);
+        gradientCenter = boundingRect().topLeft();
+        break;
+    }
+
+    QRadialGradient gradient(gradientCenter, size() + d->animCircleFrame);
+    gradient.setFocalPoint(gradientCenter);
     gradient.setColorAt(0, color1);
     gradient.setColorAt(.87, color1);
     gradient.setColorAt(.97, color2);
@@ -155,14 +219,15 @@ void DesktopToolBox::paint(QPainter *painter, const QStyleOptionGraphicsItem *op
 
     const qreal progress = d->animHighlightFrame;
 
+
     if (progress <= 0.9) {
-        d->icon.paint(painter, QRect(QPoint((int)boundingRect().left() - iconSize().width() + 2, 2), iconSize()), Qt::AlignCenter, QIcon::Disabled, QIcon::Off);
+        d->icon.paint(painter, QRect(iconPos, iconSize()), Qt::AlignCenter, QIcon::Disabled, QIcon::Off);
     }
 
     if (progress > 0.1) {
         painter->save();
         painter->setOpacity(progress);
-        d->icon.paint(painter, QRect(QPoint((int)boundingRect().left() - iconSize().width() + 2, 2), iconSize()));
+        d->icon.paint(painter, QRect(iconPos, iconSize()));
         painter->restore();
     }
 
@@ -173,7 +238,34 @@ QPainterPath DesktopToolBox::shape() const
 {
     QPainterPath path;
     int toolSize = size() + (int)d->animCircleFrame;
-    path.arcTo(QRectF(boundingRect().left() - toolSize, boundingRect().top() - toolSize, toolSize*2, toolSize*2), 180, 90);
+
+    switch (corner()) {
+    case TopRight:
+        path.arcTo(QRectF(boundingRect().left() - toolSize, boundingRect().top() - toolSize, toolSize*2, toolSize*2), 180, 90);
+        break;
+    case Top:
+        path.arcTo(QRectF(boundingRect().center().x() - toolSize, boundingRect().top() - toolSize, toolSize*2, toolSize*2), 180, 180);
+        break;
+    case TopLeft:
+        path.arcTo(QRectF(boundingRect().left() - toolSize, boundingRect().top() - toolSize, toolSize*2, toolSize*2), 270, 90);
+        break;
+    case Left:
+        path.arcTo(QRectF(boundingRect().left() - toolSize, boundingRect().center().y() - toolSize, toolSize*2, toolSize*2), 270, 180);
+        break;
+    case Right:
+        path.arcTo(QRectF(boundingRect().left() - toolSize, boundingRect().center().y() - toolSize, toolSize*2, toolSize*2), 90, 180);
+        break;
+    case BottomLeft:
+        path.arcTo(QRectF(boundingRect().left() - toolSize, boundingRect().top() - toolSize, toolSize*2, toolSize*2), 0, 90);
+        break;
+    case Bottom:
+        path.arcTo(QRectF(boundingRect().center().x() - toolSize, boundingRect().top() - toolSize, toolSize*2, toolSize*2), 0, 180);
+        break;
+    case BottomRight:
+    default:
+        path.arcTo(QRectF(boundingRect().left() - toolSize, boundingRect().top() - toolSize, toolSize*2, toolSize*2), 90, 90);
+        break;
+    }
 
     return path;
 }
@@ -210,8 +302,43 @@ void DesktopToolBox::showToolBox()
 
     // put tools 5px from icon edge
     const int iconWidth = 32;
-    int x = (int)boundingRect().left() - maxwidth - iconWidth - 5;
-    int y = (int)boundingRect().top() + 5;
+    int x;
+    int y;
+    switch (corner()) {
+    case TopRight:
+        x = (int)boundingRect().left() - maxwidth - iconWidth - 5;
+        y = (int)boundingRect().top() + 5;
+        break;
+    case Top:
+        x = (int)boundingRect().center().x() - iconWidth;
+        y = (int)boundingRect().top() + iconWidth + 5;
+        break;
+    case TopLeft:
+        x = (int)boundingRect().left() + iconWidth + 5;
+        y = (int)boundingRect().top() + 5;
+        break;
+    case Left:
+        x = (int)boundingRect().left() + iconWidth + 5;
+        y = (int)boundingRect().center().y() - iconWidth;
+        break;
+    case Right:
+        x = (int)boundingRect().left() - maxwidth - iconWidth - 5;
+        y = (int)boundingRect().center().y() - iconWidth;
+        break;
+    case BottomLeft:
+        x = (int)boundingRect().left() + iconWidth + 5;
+        y = (int)boundingRect().bottom() - 5;
+        break;
+    case Bottom:
+        x = (int)boundingRect().center().x() - iconWidth;
+        y = (int)boundingRect().bottom() - iconWidth - 5;
+        break;
+    case BottomRight:
+    default:
+        x = (int)boundingRect().left() - maxwidth - iconWidth - 5;
+        y = (int)boundingRect().bottom() - iconWidth - 5;
+        break;
+    }
     Plasma::Animator* animdriver = Plasma::Animator::self();
     foreach (QGraphicsItem* tool, QGraphicsItem::children()) {
         if (tool == d->toolBacker) {
@@ -221,7 +348,7 @@ void DesktopToolBox::showToolBox()
         if (!tool->isEnabled()) {
             if (tool->isVisible()) {
                 const int height = static_cast<int>(tool->boundingRect().height());
-                animdriver->moveItem(tool, Plasma::Animator::SlideOutMovement, QPoint(size() * 2, -height));
+                animdriver->moveItem(tool, Plasma::Animator::SlideOutMovement, toolPosition(height));
             }
             continue;
         }
@@ -274,8 +401,6 @@ void DesktopToolBox::hideToolBox()
         return;
     }
 
-    int x = size() * 2;
-    int y = 0;
     Plasma::Animator* animdriver = Plasma::Animator::self();
     foreach (QGraphicsItem* tool, QGraphicsItem::children()) {
         if (tool == d->toolBacker) {
@@ -283,7 +408,7 @@ void DesktopToolBox::hideToolBox()
         }
 
         const int height = static_cast<int>(tool->boundingRect().height());
-        animdriver->moveItem(tool, Plasma::Animator::SlideOutMovement, QPoint(x, y-height));
+        animdriver->moveItem(tool, Plasma::Animator::SlideOutMovement, toolPosition(height));
     }
 
     if (d->animCircleId) {

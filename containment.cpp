@@ -1375,24 +1375,56 @@ void ContainmentPrivate::positionToolBox()
     //The placement assumes that the geometry width/height is no more than the screen
     if (type == Containment::PanelContainment) {
         if (q->formFactor() == Vertical) {
-            toolBox->setOrientation(Qt::Vertical);
+            toolBox->setCorner(ToolBox::Bottom);
             toolBox->setPos(q->geometry().width()/2 - toolBox->boundingRect().width()/2, q->geometry().height());
         //defaulting to Horizontal right now
         } else {
-            toolBox->setOrientation(Qt::Horizontal);
             if (QApplication::layoutDirection() == Qt::RightToLeft) {
                 toolBox->setPos(q->geometry().left(), q->geometry().height()/2 - toolBox->boundingRect().height()/2);
+                toolBox->setCorner(ToolBox::Left);
             } else {
                 toolBox->setPos(q->geometry().width(), q->geometry().height()/2 - toolBox->boundingRect().height()/2);
+                toolBox->setCorner(ToolBox::Right);
             }
         }
     } else {
         QDesktopWidget *desktop = QApplication::desktop();
-        QRectF r = desktop->availableGeometry(screen);
+        QRectF avail = desktop->availableGeometry(screen);
+        QRectF screenGeom = desktop->screenGeometry(screen);
+
         if (q->view() && !q->view()->transform().isScaling()) {
-            toolBox->setPos(r.topRight());
+
+            if (QApplication::layoutDirection() == Qt::RightToLeft) {
+                if (avail.top() > screenGeom.top()) {
+                    toolBox->setPos(avail.topLeft() - QPoint(0, toolBox->size()));
+                    toolBox->setCorner(ToolBox::Left);
+                } else if (avail.left() > screenGeom.left()) {
+                    toolBox->setPos(avail.topLeft() - QPoint(toolBox->size(), 0));
+                    toolBox->setCorner(ToolBox::Top);
+                } else {
+                    toolBox->setPos(avail.topLeft());
+                    toolBox->setCorner(ToolBox::TopLeft);
+                }
+            } else {
+                if (avail.top() > screenGeom.top()) {
+                    toolBox->setPos(avail.topRight() - QPoint(0, toolBox->size()));
+                    toolBox->setCorner(ToolBox::Right);
+                } else if (avail.right() < screenGeom.right()) {
+                    toolBox->setPos(QPoint(avail.right() - toolBox->boundingRect().width(), avail.top()));
+                    toolBox->setCorner(ToolBox::Top);
+                } else {
+                    toolBox->setPos(avail.topRight());
+                    toolBox->setCorner(ToolBox::TopRight);
+                }
+            }
         } else {
-            toolBox->setPos(q->mapFromScene(QPointF(q->geometry().topRight())));
+            if (QApplication::layoutDirection() == Qt::RightToLeft) {
+                toolBox->setPos(q->mapFromScene(QPointF(q->geometry().topLeft())));
+                toolBox->setCorner(ToolBox::TopLeft);
+            } else {
+                toolBox->setPos(q->mapFromScene(QPointF(q->geometry().topRight())));
+                toolBox->setCorner(ToolBox::TopRight);
+            }
         }
     }
 }
@@ -1462,10 +1494,12 @@ void ContainmentPrivate::containmentConstraintsEvent(Plasma::Constraints constra
     if (constraints & Plasma::FormFactorConstraint) {
         if (toolBox) {
             if (q->formFactor() == Vertical) {
-                toolBox->setOrientation(Qt::Vertical);
+                toolBox->setCorner(ToolBox::Bottom);
                 //defaults to horizontal
+            } else if (QApplication::layoutDirection() == Qt::RightToLeft) {
+                toolBox->setCorner(ToolBox::Left);
             } else {
-                toolBox->setOrientation(Qt::Horizontal);
+                toolBox->setCorner(ToolBox::Right);
             }
         }
 

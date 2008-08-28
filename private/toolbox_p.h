@@ -40,6 +40,19 @@ class ToolBox : public QObject, public QGraphicsItem
     Q_OBJECT
 
 public:
+    /**
+    * These flags represents what borders should be drawn
+    */
+    enum Corner { Top = 0,
+                  TopRight,
+                  TopLeft,
+                  Left,
+                  Right,
+                  Bottom,
+                  BottomRight,
+                  BottomLeft
+                };
+
     explicit ToolBox(QGraphicsItem *parent = 0);
     ~ToolBox();
 
@@ -58,8 +71,8 @@ public:
     void  setIconSize(const QSize newSize);
     bool showing() const;
     void setShowing(const bool show);
-    Qt::Orientation orientation() const;
-    void setOrientation(Qt::Orientation orient);
+    void setCorner(Corner corner);
+    Corner corner() const;
 
     virtual void showToolBox() = 0;
     virtual void hideToolBox() = 0;
@@ -72,6 +85,7 @@ Q_SIGNALS:
     void toggled();
 
 protected:
+    QPoint toolPosition(int toolHeight);
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
 

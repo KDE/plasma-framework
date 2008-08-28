@@ -117,11 +117,11 @@ PanelToolBox::~PanelToolBox()
 
 QRectF PanelToolBox::boundingRect() const
 {
-    if (orientation() == Qt::Vertical) {
+    if (corner() == ToolBox::Bottom) {
         return QRectF(0, 0, size()*2, -size());
-    //horizontal
-    } else if (QApplication::layoutDirection() == Qt::RightToLeft) {
+    } else if (corner() == ToolBox::Left) {
         return QRectF(0, 0, size(), size()*2);
+    //Only Left,Right and Bottom supported, default to Right
     } else {
         return QRectF(0, 0, -size(), size()*2);
     }
@@ -135,7 +135,7 @@ void PanelToolBox::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
     const qreal progress = d->animFrame / size();
 
     QPoint gradientCenter;
-    if (orientation() == Qt::Vertical) {
+    if (corner() == ToolBox::Bottom) {
         gradientCenter = QPoint(boundingRect().center().x(), boundingRect().top());
     } else {
         gradientCenter = QPoint(boundingRect().left(), boundingRect().center().y());
@@ -171,10 +171,11 @@ void PanelToolBox::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
 
     QRect iconRect;
 
-    if (orientation() == Qt::Vertical) {
+    if (corner() == ToolBox::Bottom) {
         iconRect = QRect(QPoint(gradientCenter.x() - iconSize().width()/2, (int)boundingRect().top() - iconSize().height() - 2), iconSize());
-    } else if (QApplication::layoutDirection() == Qt::RightToLeft) {
+    } else if (corner() == ToolBox::Left) {
         iconRect = QRect(QPoint(2, gradientCenter.y() - iconSize().height()/2), iconSize());
+    //Only Left,Right and Bottom supported, default to Right
     } else {
         iconRect = QRect(QPoint((int)boundingRect().left() - iconSize().width() + 1, gradientCenter.y() - iconSize().height()/2), iconSize());
     }
@@ -197,10 +198,11 @@ QPainterPath PanelToolBox::shape() const
     QPainterPath path;
     int toolSize = size();// + (int)d->animFrame;
 
-    if (orientation() == Qt::Vertical) {
+    if (corner() == ToolBox::Bottom) {
         path.arcTo(QRectF(boundingRect().center().x() - toolSize, boundingRect().top() - toolSize, toolSize*2, toolSize*2), 0, 180);
-    } else if (QApplication::layoutDirection() == Qt::RightToLeft) {
+    } else if (corner() == ToolBox::Left) {
         path.arcTo(QRectF(boundingRect().left() - toolSize, boundingRect().center().y() - toolSize, toolSize*2, toolSize*2), 90, -180);
+    //Only Left,Right and Bottom supported, default to Right
     } else {
         path.arcTo(QRectF(boundingRect().left() - toolSize, boundingRect().center().y() - toolSize, toolSize*2, toolSize*2), 90, 180);
     }

@@ -43,14 +43,14 @@ public:
       iconSize(32, 32),
       hidden(false),
       showing(false),
-      orientation(Qt::Horizontal)
+      corner(ToolBox::TopRight)
     {}
 
     int size;
     QSize iconSize;
     bool hidden;
     bool showing;
-    Qt::Orientation orientation;
+    ToolBox::Corner corner;
 };
 
 ToolBox::ToolBox(QGraphicsItem *parent)
@@ -63,6 +63,29 @@ ToolBox::ToolBox(QGraphicsItem *parent)
 ToolBox::~ToolBox()
 {
     delete d;
+}
+
+QPoint ToolBox::toolPosition(int toolHeight)
+{
+    switch (d->corner) {
+    case TopRight:
+        return QPoint( d->size*2, -toolHeight);
+    case Top:
+        return QPoint( (int)boundingRect().center().x() - d->iconSize.width(), -toolHeight);
+    case TopLeft:
+        return QPoint( -d->size*2, -toolHeight);
+    case Left:
+        return QPoint( -d->size*2, (int)boundingRect().center().y() - d->iconSize.height());
+    case Right:
+        return QPoint( d->size*2, (int)boundingRect().center().y() - d->iconSize.height());
+    case BottomLeft:
+        return QPoint( -d->size*2,toolHeight);
+    case Bottom:
+        return QPoint( (int)boundingRect().center().x() - d->iconSize.width(), toolHeight);
+    case BottomRight:
+    default:
+        return QPoint( d->size*2, toolHeight);
+    }
 }
 
 void ToolBox::addTool(QAction *action)
@@ -80,7 +103,7 @@ void ToolBox::addTool(QAction *action)
 
     tool->hide();
     const int height = static_cast<int>(tool->boundingRect().height());
-    tool->setPos(QPoint( d->size*2,-height));
+    tool->setPos(toolPosition(height));
     tool->setZValue(zValue() + 1);
 
     //make enabled/disabled tools appear/disappear instantly
@@ -138,14 +161,14 @@ void ToolBox::setShowing(const bool show)
     d->showing = show;
 }
 
-Qt::Orientation ToolBox::orientation() const
+void ToolBox::setCorner(const Corner corner)
 {
-    return d->orientation;
+    d->corner = corner;
 }
 
-void ToolBox::setOrientation( Qt::Orientation orient )
+ToolBox::Corner ToolBox::corner() const
 {
-     d->orientation = orient;
+    return d->corner;
 }
 
 void ToolBox::mousePressEvent(QGraphicsSceneMouseEvent *event)
