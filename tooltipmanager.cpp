@@ -241,6 +241,11 @@ void ToolTipManager::setToolTipActivated(QGraphicsWidget *widget, bool enable)
 
     ToolTip *tooltip = d->tooltips.value(widget);
     tooltip->setActivated(enable);
+    if (!enable) {
+        hideToolTip(widget);
+    } else {
+        showToolTip(widget);
+    }
 }
 
 bool ToolTipManager::isToolTipActivated(QGraphicsWidget *widget)
