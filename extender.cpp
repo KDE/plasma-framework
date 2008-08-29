@@ -51,6 +51,8 @@ Extender::Extender(Applet *applet)
     d->emptyExtenderLabel->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
     d->layout->addItem(d->emptyExtenderLabel);
 
+    d->adjustSizeHints();
+
     d->loadExtenderItems();
 }
 
