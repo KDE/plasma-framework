@@ -24,6 +24,7 @@
 #include <QGraphicsSceneResizeEvent>
 #include <QGraphicsSceneMouseEvent>
 #include <QGraphicsLinearLayout>
+#include <QLayout>
 #include <QPainter>
 #include <QTimer>
 
@@ -34,6 +35,7 @@
 #include "applet.h"
 #include "containment.h"
 #include "corona.h"
+#include "dialog.h"
 #include "extender.h"
 #include "panelsvg.h"
 #include "theme.h"
@@ -177,9 +179,24 @@ class ExtenderItemPrivate
 
             QGraphicsView *found = 0;
             foreach (QWidget *w, QApplication::topLevelWidgets()) {
-                QGraphicsView *v = qobject_cast<QGraphicsView *>(w);
-                if (v && v->isVisible() && v->geometry().contains(pos)) {
-                    if (found) {
+                QGraphicsView *v = 0;
+
+                //first check if we're over a Dialog.
+                Dialog *dialog = qobject_cast<Dialog*>(w);
+                if (dialog) {
+                    if (dialog->isVisible() && dialog->geometry().contains(pos)) {
+                        v = qobject_cast<QGraphicsView*>(dialog->layout()->itemAt(0)->widget());
+                        if (v) {
+                            return v->mapToScene(v->mapFromGlobal(pos));
+                        }
+                    }
+                } else {
+                    v = qobject_cast<QGraphicsView *>(w);
+                }
+
+                //else check if it is a QGV:
+                if (v && w->isVisible() && w->geometry().contains(pos)) {
+                    if (found && order.contains(found->winId())) {
                         if (order.indexOf(found->winId()) < order.indexOf(v->winId())) {
                             found = v;
                         }
@@ -405,7 +422,6 @@ void ExtenderItem::setExtender(Extender *extender, const QPointF &pos)
 
     //move the configuration.
     if (d->hostApplet() && (extender != d->extender)) {
-        kDebug() << "moving configuration";
         KConfigGroup c = extender->d->applet->config("ExtenderItems");
         config().reparent(&c);
     }
@@ -636,6 +652,7 @@ void ExtenderItem::resizeEvent(QGraphicsSceneResizeEvent *event)
 
 void ExtenderItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
+    kDebug() << "the mouse pressed yeah yeah yeah!";
     if (!(d->dragHandleRect().contains(event->pos()))) {
         return;
     }
@@ -651,16 +668,17 @@ void ExtenderItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
     setZValue(parentApplet->zValue());
 
     if (d->extender) {
-        d->extender->itemHoverEnterEvent(this);
+        //d->extender->itemHoverEnterEvent(this);
         //d->extender->itemHoverMoveEvent(this, d->extender->mapFromScene(event->scenePos()));
+        d->extender->itemHoverMoveEvent(this, d->extender->mapFromScene(d->scenePosFromScreenPos(event->screenPos())));
     }
+
+    d->extender->d->removeExtenderItem(this);
 
     //call the move event, since that spawns a toplevel view when this extender item is in a
     //Plasma::Dialog, which is very essential since else the dialog will close before having been
     //able to receive any move events.
-    mouseMoveEvent(event);
-
-    d->extender->d->removeExtenderItem(this);
+    //mouseMoveEvent(event);
 
     QApplication::setOverrideCursor(Qt::ClosedHandCursor);
 }

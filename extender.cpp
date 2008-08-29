@@ -46,9 +46,9 @@ Extender::Extender(Applet *applet)
 
     d->emptyExtenderLabel = new Label(this);
     d->emptyExtenderLabel->setText(d->emptyExtenderMessage);
-    d->emptyExtenderLabel->setMinimumSize(QSizeF(150, 24));
-    d->emptyExtenderLabel->setPreferredSize(QSizeF(200, 48));
-    d->emptyExtenderLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+    d->emptyExtenderLabel->setMinimumSize(QSizeF(150, 64));
+    d->emptyExtenderLabel->setPreferredSize(QSizeF(200, 64));
+    d->emptyExtenderLabel->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
     d->layout->addItem(d->emptyExtenderLabel);
 
     d->loadExtenderItems();

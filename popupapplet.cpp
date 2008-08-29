@@ -175,6 +175,7 @@ void PopupApplet::constraintsEvent(Plasma::Constraints constraints)
             if (graphicsWidget()) {
                 d->layout->addItem(graphicsWidget());
                 setMinimumSize(graphicsWidget()->minimumSize() + marginSize);
+                graphicsWidget()->installEventFilter(this);
             }
             else {
                 if (!d->proxy) {
@@ -240,6 +241,21 @@ void PopupApplet::constraintsEvent(Plasma::Constraints constraints)
     }
 }
 
+bool PopupApplet::eventFilter(QObject *watched, QEvent *event)
+{
+    if (watched == graphicsWidget() && (event->type() == QEvent::GraphicsSceneResize)) {
+        //sizes are recalculated in the constraintsevent so let's just call that.
+        constraintsEvent(Plasma::FormFactorConstraint);
+
+        //resize vertically if necesarry.
+        if (formFactor() == Plasma::MediaCenter || formFactor() == Plasma::Planar) {
+            resize(QSizeF(size().width(), minimumHeight()));
+        }
+    }
+
+    return Applet::eventFilter(watched, event);
+}
+
 void PopupApplet::showPopup(uint popupDuration)
 {
     if (d->dialog && (formFactor() == Horizontal || formFactor() == Vertical)) {
@@ -273,19 +289,6 @@ void PopupApplet::hidePopup()
 void PopupApplet::popupEvent(bool)
 {
 
-}
-
-void PopupApplet::widgetGeometryChanged()
-{
-    if (graphicsWidget() && layout()) {
-        //sizes are recalculated in the constraintsevent so let's just call that.
-        constraintsEvent(Plasma::FormFactorConstraint);
-
-        //resize vertically if necesarry.
-        if (formFactor() == Plasma::MediaCenter || formFactor() == Plasma::Planar) {
-            resize(QSizeF(size().width(), minimumHeight()));
-        }
-    }
 }
 
 void PopupAppletPrivate::togglePopup()

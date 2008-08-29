@@ -374,8 +374,6 @@ void Corona::addOffscreenWidget(QGraphicsWidget *widget)
     d->offscreenLayout->addItem(widget, d->offscreenLayout->rowCount() + 1,
                                         d->offscreenLayout->columnCount() + 1);
 
-    d->offscreenLayout->invalidate();
-
     kDebug() << "current scenerect = " << widget->sceneBoundingRect();
 }
 
@@ -390,7 +388,6 @@ void Corona::removeOffscreenWidget(QGraphicsWidget *widget)
             dynamic_cast<QGraphicsWidget*>(d->offscreenLayout->itemAt(i));
         if (foundWidget == widget) {
             d->offscreenLayout->removeAt(i);
-            d->offscreenLayout->invalidate();
         }
     }
 }

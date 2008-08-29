@@ -100,14 +100,9 @@ public Q_SLOTS:
      */
     void hidePopup();
 
-    /**
-     * Notify PopupApplet that the geometry of the graphicsWidget has changed. When you use an
-     * extender you'll want to connect the extender's geometryChanged() signal to this slot.
-     */
-    void widgetGeometryChanged();
-
 protected:
     void constraintsEvent(Plasma::Constraints constraints);
+    bool eventFilter(QObject *watched, QEvent *event);
 
 private:
     Q_PRIVATE_SLOT(d, void togglePopup())
