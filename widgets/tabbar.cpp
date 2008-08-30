@@ -53,11 +53,15 @@ public:
     {
     }
 
+    void updateTabWidgetMode();
     void slidingCompleted(QGraphicsItem *item);
     void shapeChanged(const QTabBar::Shape shape);
 
     TabBar *q;
     NativeTabBar *tabBar;
+    QGraphicsProxyWidget *tabProxy;
+    QGraphicsWidget *leftSpacer;
+    QGraphicsWidget *rightSpacer;
     QList<QGraphicsWidget *> pages;
     QGraphicsLinearLayout *mainLayout;
     QGraphicsLinearLayout *tabBarLayout;
@@ -69,6 +73,31 @@ public:
     int newPageAnimId;
 };
 
+
+
+void TabBarPrivate::updateTabWidgetMode()
+{
+    bool tabWidget = false;
+
+    foreach (QGraphicsWidget *page, pages) {
+        if (page->preferredSize() != QSize(0, 0)) {
+            tabWidget = true;
+            break;
+        }
+    }
+
+    if (tabWidget && tabBarLayout->count() < 3) {
+        tabBarLayout->insertItem(0, leftSpacer);
+        tabBarLayout->insertItem(2, rightSpacer);
+        leftSpacer->show();
+        rightSpacer->show();
+    } else if (!tabWidget && tabBarLayout->count() >= 3) {
+        tabBarLayout->removeItem(leftSpacer);
+        tabBarLayout->removeItem(rightSpacer);
+        leftSpacer->hide();
+        rightSpacer->hide();
+    }
+}
 
 void TabBarPrivate::slidingCompleted(QGraphicsItem *item)
 {
@@ -94,9 +123,11 @@ void TabBarPrivate::shapeChanged(const QTabBar::Shape shape)
 
     case QTabBar::RoundedEast:
     case QTabBar::TriangularEast:
+        tabBarLayout->setOrientation(Qt::Vertical);
         mainLayout->setOrientation(Qt::Horizontal);
         mainLayout->itemAt(0)->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
-        mainLayout->itemAt(1)->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
+        mainLayout->itemAt(1)->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        tabProxy->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
         break;
 
     case QTabBar::RoundedSouth:
@@ -105,10 +136,13 @@ void TabBarPrivate::shapeChanged(const QTabBar::Shape shape)
     case QTabBar::RoundedNorth:
     case QTabBar::TriangularNorth:
     default:
+        tabBarLayout->setOrientation(Qt::Horizontal);
         mainLayout->setOrientation(Qt::Vertical);
-        mainLayout->itemAt(0)->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
-        mainLayout->itemAt(1)->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+        mainLayout->itemAt(0)->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+        mainLayout->itemAt(1)->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        tabProxy->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     }
+    tabProxy->setPreferredSize(tabBar->sizeHint());
 }
 
 
@@ -125,14 +159,20 @@ TabBar::TabBar(QGraphicsWidget *parent)
 
     d->mainLayout->addItem(d->tabBarLayout);
 
-    QGraphicsProxyWidget *tabProxy = new QGraphicsProxyWidget(this);
-    tabProxy->setWidget(d->tabBar);
-    tabProxy->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
+    d->tabProxy = new QGraphicsProxyWidget(this);
+    d->tabProxy->setWidget(d->tabBar);
+    d->tabProxy->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
 
-    //tabBar are centered, so a stretch at begin one at the end
-    d->tabBarLayout->addStretch();
-    d->tabBarLayout->addItem(tabProxy);
-    d->tabBarLayout->addStretch();
+    //tabBar is centered, so a stretch at begin one at the end
+    //FIXME: doesn't seem to be possible to remove stretches from a layout
+    d->leftSpacer = new QGraphicsWidget(this);
+    d->rightSpacer = new QGraphicsWidget(this);
+    d->leftSpacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    d->rightSpacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    d->tabBarLayout->addItem(d->leftSpacer);
+    d->tabBarLayout->addItem(d->tabProxy);
+    d->tabBarLayout->addItem(d->rightSpacer);
+    //d->tabBarLayout->setStretchFactor(d->tabProxy, 2);
 
     connect(d->tabBar, SIGNAL(currentChanged(int)), this, SLOT(setCurrentIndex(int)));
     connect(d->tabBar, SIGNAL(shapeChanged(QTabBar::Shape)), this, SLOT(shapeChanged(QTabBar::Shape)));
@@ -168,7 +208,13 @@ int TabBar::insertTab(int index, const QIcon &icon, const QString &label, QGraph
         page->setEnabled(false);
     }
 
-    return d->tabBar->insertTab(index, icon, label);
+    d->tabProxy->setPreferredSize(d->tabBar->sizeHint());
+    d->updateTabWidgetMode();
+
+    int actualIndex = d->tabBar->insertTab(index, icon, label);
+    d->tabProxy->setPreferredSize(d->tabBar->sizeHint());
+    d->updateTabWidgetMode();
+    return actualIndex;
 }
 
 int TabBar::insertTab(int index, const QString &label, QGraphicsLayoutItem *content)
@@ -221,7 +267,7 @@ void TabBar::setCurrentIndex(int index)
         }
         if (d->newPageAnimId != -1) {
             Animator::self()->stopItemMovement(d->newPageAnimId);
-        }    
+        }
         if (d->oldPageAnimId != -1) {
             Animator::self()->stopItemMovement(d->oldPageAnimId);
         }
@@ -277,6 +323,9 @@ void TabBar::removeTab(int index)
 
     scene()->removeItem(page);
     page->deleteLater();
+
+    d->updateTabWidgetMode();
+    d->tabProxy->setPreferredSize(d->tabBar->sizeHint());
 }
 
 void TabBar::setTabText(int index, const QString &label)

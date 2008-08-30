@@ -142,6 +142,7 @@ QSize NativeTabBar::tabSizeHint(int index) const
     QSize hint = tabSize(index);
     int minwidth = 0;
     int minheight = 0;
+    int maxwidth = 0;
 
     Shape s = shape();
     switch (s) {
@@ -158,6 +159,7 @@ QSize NativeTabBar::tabSizeHint(int index) const
                 if (minwidth < width()) {
                     hint.rwidth() += (width() - minwidth) / count();
                 }
+                hint.rheight() += d->top + d->bottom;
             }
             break;
         case RoundedWest:
@@ -167,14 +169,17 @@ QSize NativeTabBar::tabSizeHint(int index) const
             if (count() > 0) {
                 for (int i = count() - 1; i >= 0; i--) {
                     minheight += tabSize(i).height();
+                    if (tabSize(i).width() > maxwidth) {
+                        maxwidth = tabSize(i).width();
+                    }
                 }
                 minheight += d->top + d->bottom;
 
                 if (minheight < height()) {
                     hint.rheight() += (height() - minheight) / count();
                 }
+                hint.rwidth() = maxwidth + d->left + d->right;
             }
-            hint.rwidth() = qMax( hint.width(), width() );
             break;
     }
     return hint;
@@ -183,17 +188,21 @@ QSize NativeTabBar::tabSizeHint(int index) const
 //FIXME: this shouldn't be necessary but it seems to return wring numbers the base implementation?
 QSize NativeTabBar::sizeHint() const
 {
-    if (count() < 1) {
-        return QTabBar::sizeHint();
-    }
-
-    int width = tabRect(0).width();
-    int height = tabRect(0).height();
+    int width = 0;
+    int height = 0;
 
     if (isVertical()) {
-        height *= count();
+        for (int i = count() - 1; i >= 0; i--) {
+             height += tabRect(i).height();
+        }
+
+        width = tabRect(0).width();
     } else {
-        width *= count();
+        for (int i = count() - 1; i >= 0; i--) {
+             width += tabRect(i).width();
+        }
+
+        height = tabRect(0).height();
     }
     return QSize(width+d->left+d->right, height+d->top+d->bottom);
 }
