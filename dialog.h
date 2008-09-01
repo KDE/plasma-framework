@@ -67,6 +67,11 @@ class PLASMA_EXPORT Dialog : public QWidget
          */
         void dialogResized();
 
+        /**
+         * Emit a signal when the dialog become visible/invisible
+         */
+        void dialogVisible(bool status);
+
     protected:
         /**
          * Reimplemented from QWidget
@@ -74,6 +79,9 @@ class PLASMA_EXPORT Dialog : public QWidget
         void paintEvent(QPaintEvent *e);
         void resizeEvent(QResizeEvent *e);
         bool eventFilter(QObject *watched, QEvent *event);
+        void hideEvent (QHideEvent * event);
+        void showEvent (QShowEvent * event);
+        
 
     private:
         DialogPrivate * const d;

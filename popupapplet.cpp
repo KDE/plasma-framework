@@ -63,6 +63,7 @@ public:
     void togglePopup();
     void hideTimedPopup();
     void dialogSizeChanged();
+    void dialogStatusChanged(bool status);
 
     PopupApplet *q;
     Plasma::Icon *icon;
@@ -210,7 +211,7 @@ void PopupApplet::constraintsEvent(Plasma::Constraints constraints)
                 d->dialog = new Plasma::Dialog();
                 d->dialog->setWindowFlags(Qt::Popup);
                 connect(d->dialog, SIGNAL(dialogResized()), this, SLOT(dialogSizeChanged()));
-
+                connect(d->dialog, SIGNAL(dialogVisible(bool)), this , SLOT(dialogStatusChanged(bool)));
                 if (graphicsWidget()) {
                     Corona *corona = qobject_cast<Corona *>(graphicsWidget()->scene());
 
@@ -259,7 +260,6 @@ bool PopupApplet::eventFilter(QObject *watched, QEvent *event)
 void PopupApplet::showPopup(uint popupDuration)
 {
     if (d->dialog && (formFactor() == Horizontal || formFactor() == Vertical)) {
-        popupEvent(true);
         d->dialog->move(popupPosition(d->dialog->size()));
         d->dialog->show();
 
@@ -281,7 +281,6 @@ void PopupApplet::showPopup(uint popupDuration)
 void PopupApplet::hidePopup()
 {
     if (d->dialog && (formFactor() == Horizontal || formFactor() == Vertical)) {
-        popupEvent(false);
         d->dialog->hide();
     }
 }
@@ -294,16 +293,9 @@ void PopupApplet::popupEvent(bool)
 void PopupAppletPrivate::togglePopup()
 {
    if (dialog) {
-        q->popupEvent(!dialog->isVisible());
-
-        if (dialog->isVisible()) {
-            //TODO: probably this code is never executed... I can't understand why
-            dialog->hide();
-        } else {
-            dialog->move(q->popupPosition(dialog->size()));
-            dialog->show();
-        }
-
+        dialog->move(q->popupPosition(dialog->size()));
+        dialog->show();
+        
         dialog->clearFocus();
     }
 }
@@ -312,7 +304,6 @@ void PopupAppletPrivate::hideTimedPopup()
 {
     timer->stop();
     q->hidePopup();
-    q->popupEvent(false);
 }
 
 void PopupAppletPrivate::dialogSizeChanged()
@@ -322,6 +313,11 @@ void PopupAppletPrivate::dialogSizeChanged()
         dialog->updateGeometry();
         dialog->move(q->popupPosition(dialog->size()));
     }
+}
+
+void PopupAppletPrivate::dialogStatusChanged(bool status)
+{
+    q->popupEvent(status);
 }
 
 } // Plasma namespace

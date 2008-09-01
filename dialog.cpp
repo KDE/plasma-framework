@@ -197,5 +197,17 @@ bool Dialog::eventFilter(QObject *watched, QEvent *event)
     return QWidget::eventFilter(watched, event);
 }
 
+void Dialog::hideEvent(QHideEvent * event)
+{
+    Q_UNUSED(event);
+    emit dialogVisible(false);
+}
+
+void Dialog::showEvent(QShowEvent * event)
+{
+    Q_UNUSED(event);
+    emit dialogVisible(true);
+}
+
 }
 #include "dialog.moc"
