@@ -243,7 +243,7 @@ void ToolTipManager::setToolTipActivated(QGraphicsWidget *widget, bool enable)
     tooltip->setActivated(enable);
     if (!enable) {
         hideToolTip(widget);
-    } else {
+    } else if (d->currentWidget) {
         showToolTip(widget);
     }
 }
