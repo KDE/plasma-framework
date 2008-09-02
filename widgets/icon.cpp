@@ -499,13 +499,7 @@ void Icon::setSvg(const QString &svgFilePath, const QString &elementId)
     }
 
     d->iconSvg->setImagePath(svgFilePath);
-
-    if (!elementId.isNull()) {
-        d->iconSvg->setContainsMultipleImages(true);
-    } else {
-        d->iconSvg->setContainsMultipleImages(false);
-    }
-
+    d->iconSvg->setContainsMultipleImages(!elementId.isNull());
     d->iconSvgElement = elementId;
 }
 
