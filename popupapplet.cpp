@@ -293,10 +293,14 @@ void PopupApplet::popupEvent(bool)
 void PopupAppletPrivate::togglePopup()
 {
    if (dialog) {
-        dialog->move(q->popupPosition(dialog->size()));
-        dialog->show();
-        
-        dialog->clearFocus();
+       if (timer) {
+           timer->stop();
+       }
+
+       dialog->move(q->popupPosition(dialog->size()));
+       dialog->show();
+
+       dialog->clearFocus();
     }
 }
 
