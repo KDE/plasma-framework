@@ -851,7 +851,7 @@ void Applet::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
 {
     QPainter *p;
     //FIXME: we should probably set the pixmap to screenSize(), but that breaks stuff atm.
-    QPixmap pixmap(boundingRect().size().toSize());
+    QPixmap *pixmap = 0;
 
     QGraphicsView* qgv = qobject_cast<QGraphicsView*>(widget ? widget->parent() : 0);
     bool ghost = (qgv && (qgv == d->ghostView));
@@ -861,11 +861,11 @@ void Applet::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
         // that pixmap where the applet can draw on so we can draw the result transparently
         // at the end.
         kDebug() << "Painting ghosted...";
-
-        pixmap.fill(Qt::transparent);
+        pixmap = new QPixmap(boundingRect().size().toSize());
+        pixmap->fill(Qt::transparent);
 
         p = new QPainter();
-        p->begin(&pixmap);
+        p->begin(pixmap);
     } else {
         p = painter;
     }
@@ -887,8 +887,16 @@ void Applet::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
     if (!d->failed) {
         qreal left, top, right, bottom;
         getContentsMargins(&left, &top, &right, &bottom);
-        const QRect contentsRect = QRectF(QPointF(0,0), boundingRect().size())
-                        .adjusted(left, top, -right, -bottom).toAlignedRect();
+        QRectF contentsRect = QRectF(QPointF(0,0), boundingRect().size())
+                                    .adjusted(left, top, -right, -bottom);
+
+        if (!ghost) {
+            // only paint the bare minimum when not ghosting
+            contentsRect = option->exposedRect.intersected(contentsRect);
+        }
+
+        QRect exposed = contentsRect.toAlignedRect();
+
         if (widget && isContainment()) {
             // note that the widget we get is actually the viewport of the view, not the view itself
             View* v = qobject_cast<Plasma::View*>(widget->parent());
@@ -896,12 +904,12 @@ void Applet::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
             if (!v || v->isWallpaperEnabled()) {
                 Containment* c = qobject_cast<Plasma::Containment*>(this);
                 if (c && c->drawWallpaper() && c->wallpaper()) {
-                    c->wallpaper()->paint(p, contentsRect);
+                    c->wallpaper()->paint(p, exposed);
                 }
 
                 Containment::StyleOption coption(*option);
                 coption.view = v;
-                paintInterface(p, &coption, contentsRect);
+                paintInterface(p, &coption, exposed);
             }
 
             p->restore();
@@ -909,19 +917,19 @@ void Applet::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
         }
 
         //kDebug() << "paint interface of" << (QObject*) this;
-        paintInterface(p, option, contentsRect);
+        paintInterface(p, option, exposed);
     }
     p->restore();
 
     if (ghost) {
         // Lets display the pixmap that we've just drawn... transparently.
         p->setCompositionMode(QPainter::CompositionMode_DestinationIn);
-        p->fillRect(pixmap.rect(), QColor(0, 0, 0, (0.3 * 255)));
+        p->fillRect(pixmap->rect(), QColor(0, 0, 0, (0.3 * 255)));
         p->end();
-
         delete p;
 
-        painter->drawPixmap(0, 0, pixmap);
+        painter->drawPixmap(0, 0, *pixmap);
+        delete pixmap;
     }
 }
 
