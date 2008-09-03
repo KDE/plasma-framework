@@ -115,7 +115,7 @@ QStringList Service::operationNames() const
         return QStringList();
     }
 
-    return d->config->config()->groupList();
+    return d->config->groupList();
 }
 
 KConfigGroup Service::operationDescription(const QString &operationName)
@@ -253,7 +253,7 @@ void Service::setOperationsScheme(QIODevice *xml)
     //FIXME: make KSharedConfig and KConfigSkeleton not braindamaged in 4.2 and then get rid of the
     //       temp file object here
     d->tempFile = new KTemporaryFile;
-    KSharedConfigPtr c = KSharedConfig::openConfig(d->tempFile->fileName());
+    KSharedConfigPtr c = KSharedConfig::openConfig(d->tempFile->fileName(), KConfig::NoGlobals);
     d->config = new ConfigXml(c, xml, this);
     emit operationsChanged();
 

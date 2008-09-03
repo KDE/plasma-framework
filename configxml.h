@@ -118,6 +118,10 @@ public:
      */
     bool hasGroup(const QString &group) const;
 
+    /**
+     * @return the list of groups defined by the XML
+     */
+    QStringList groupList() const;
 private:
     ConfigXmlPrivate * const d;
 };

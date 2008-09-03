@@ -194,6 +194,7 @@ class ConfigXmlPrivate
         QList<QSize*> sizes;
         QList<quint64*> ulonglongs;
         QList<KUrl::List*> urllists;
+        QStringList groups;
         QHash<QString, QString> keysToNames;
 };
 
@@ -258,7 +259,7 @@ bool ConfigXmlHandler::startElement(const QString &namespaceURI, const QString &
             QString name = attrs.localName(i).toLower();
             if (name == "name") {
                 kDebug() << "set group to " << attrs.value(i);
-                d->keysToNames.insert(attrs.value(i), QString());
+                d->groups.append(attrs.value(i));
                 m_config->setCurrentGroup(attrs.value(i));
             }
         }
@@ -539,7 +540,12 @@ KConfigSkeletonItem* ConfigXml::findItem(const QString &group, const QString &ke
 
 bool ConfigXml::hasGroup(const QString &group) const
 {
-    return d->keysToNames.contains(group);
+    return d->groups.contains(group);
+}
+
+QStringList ConfigXml::groupList() const
+{
+    return d->groups;
 }
 
 } // Plasma namespace
