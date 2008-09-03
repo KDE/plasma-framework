@@ -69,7 +69,7 @@ QStringList DataEngine::sources() const
 
 Service* DataEngine::serviceForSource(const QString &source)
 {
-    return new NullService(this);
+    return new NullService(source, this);
 }
 
 void DataEngine::connectSource(const QString& source, QObject* visualization,
@@ -112,10 +112,16 @@ DataContainer* DataEngine::containerForSource(const QString &source)
 
 DataEngine::Data DataEngine::query(const QString& source) const
 {
-    DataContainer* s = d->requestSource(source);
+    bool newSource;
+    DataContainer* s = d->requestSource(source, &newSource);
 
     if (!s) {
         return DataEngine::Data();
+    } else if (!newSource && d->minPollingInterval >= 0 &&
+               s->timeSinceLastUpdate() >= uint(d->minPollingInterval)) {
+        if (const_cast<DataEngine*>(this)->updateSourceEvent(source)) {
+            d->queueUpdate();
+        }
     }
 
     DataEngine::Data data = s->data();
@@ -251,6 +257,10 @@ uint DataEngine::maxSourceCount() const
 
 void DataEngine::setMinimumPollingInterval(int minimumMs)
 {
+    if (minimumMs < 0) {
+        minimumMs = 0;
+    }
+
     d->minPollingInterval = minimumMs;
 }
 
