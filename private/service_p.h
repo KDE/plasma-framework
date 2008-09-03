@@ -52,9 +52,10 @@ public:
 class NullService : public Service
 {
 public:
-    NullService(QObject *parent)
+    NullService(const QString &target, QObject *parent)
         : Service(parent)
     {
+        setDestination(target);
         setName("NullService");
     }
 

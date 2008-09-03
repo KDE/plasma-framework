@@ -69,7 +69,7 @@ Service* Service::load(const QString &name, QObject *parent)
 {
     //TODO: scripting API support
     if (name.isEmpty()) {
-        return new NullService(parent);
+        return new NullService(QString(), parent);
     }
 
     QString constraint = QString("[X-KDE-PluginInfo-Name] == '%1'").arg(name);
@@ -77,7 +77,7 @@ Service* Service::load(const QString &name, QObject *parent)
 
     if (offers.isEmpty()) {
         kDebug() << "offers is empty for " << name;
-        return new NullService(parent);
+        return new NullService(name, parent);
     }
 
     KService::Ptr offer = offers.first();
@@ -92,7 +92,7 @@ Service* Service::load(const QString &name, QObject *parent)
 
     if (!service) {
         kDebug() << "Couldn't load Service \"" << name << "\"! reason given: " << error;
-        return new NullService(parent);
+        return new NullService(name, parent);
     }
 
     return service;
