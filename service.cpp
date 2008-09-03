@@ -125,6 +125,7 @@ KConfigGroup Service::operationDescription(const QString &operationName)
         return KConfigGroup();
     }
 
+    d->config->writeConfig();
     KConfigGroup params(d->config->config(), operationName);
     return params;
 }

@@ -308,18 +308,18 @@ bool ConfigXmlHandler::endElement(const QString &namespaceURI, const QString &lo
         resetState();
     } else if (tag == "label") {
         if (m_inChoice) {
-            m_choice.label = m_cdata;
+            m_choice.label = m_cdata.trimmed();
         } else {
-            m_label = m_cdata;
+            m_label = m_cdata.trimmed();
         }
     } else if (tag == "whatsthis") {
         if (m_inChoice) {
-            m_choice.whatsThis = m_cdata;
+            m_choice.whatsThis = m_cdata.trimmed();
         } else {
-            m_whatsThis = m_cdata;
+            m_whatsThis = m_cdata.trimmed();
         }
     } else if (tag == "default") {
-        m_default = m_cdata;
+        m_default = m_cdata.trimmed();
     } else if (tag == "min") {
         m_min = m_cdata.toInt(&m_haveMin);
     } else if (tag == "max") {
@@ -361,16 +361,17 @@ void ConfigXmlHandler::addItem()
     } else if (m_type == "font") {
         item = m_config->addItemFont(m_name, *d->newFont(), QFont(m_default), m_key);
     } else if (m_type == "int") {
-        KConfigSkeleton::ItemInt* intItem = m_config->addItemInt(m_name,
-                *d->newInt(),
-                           m_default.toInt(),
-                                           m_key);
+        KConfigSkeleton::ItemInt* intItem = m_config->addItemInt(m_name, *d->newInt(),
+                                                                 m_default.toInt(), m_key);
+
         if (m_haveMin) {
             intItem->setMinValue(m_min);
         }
+
         if (m_haveMax) {
             intItem->setMaxValue(m_max);
         }
+
         item = intItem;
     } else if (m_type == "password") {
         item = m_config->addItemPassword(m_name, *d->newString(), m_default, m_key);
@@ -504,11 +505,7 @@ ConfigXml::ConfigXml(const QString &configFile, QIODevice *xml, QObject *parent)
     : KConfigSkeleton(configFile, parent),
       d(new ConfigXmlPrivate)
 {
-    QXmlInputSource source(xml);
-    QXmlSimpleReader reader;
-    ConfigXmlHandler handler(this, d);
-    reader.setContentHandler(&handler);
-    reader.parse(&source, false);
+    d->parse(this, xml);
 }
 
 ConfigXml::ConfigXml(KSharedConfigPtr config, QIODevice *xml, QObject *parent)

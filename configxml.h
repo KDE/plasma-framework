@@ -108,6 +108,13 @@ public:
     ConfigXml(const KConfigGroup *config, QIODevice *xml, QObject *parent = 0);
     ~ConfigXml();
 
+    /**
+     * Finds the item for the given group and key.
+     *
+     * @arg group the group in the config file to look in
+     * @arg key the configuration key to find
+     * @return the associated KConfigSkeletonItem, or 0 if none
+     */
     KConfigSkeletonItem* findItem(const QString &group, const QString &key);
 
     /**
@@ -122,6 +129,7 @@ public:
      * @return the list of groups defined by the XML
      */
     QStringList groupList() const;
+
 private:
     ConfigXmlPrivate * const d;
 };

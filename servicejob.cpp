@@ -35,6 +35,12 @@ public:
           parameters(params)
     {
     }
+
+    void slotStart()
+    {
+        q->start();
+    }
+
     ServiceJob* q;
     QString destination;
     QString operation;

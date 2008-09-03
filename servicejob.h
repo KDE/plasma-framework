@@ -110,6 +110,8 @@ protected:
     void setResult(const QVariant &result);
 
 private:
+    Q_PRIVATE_SLOT(d, void slotStart())
+
     ServiceJobPrivate * const d;
 };
 
