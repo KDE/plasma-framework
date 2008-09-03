@@ -356,6 +356,7 @@ Corona* Containment::corona() const
 
 void Containment::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
+    event->ignore();
     if (d->wallpaper) {
         QGraphicsItem* item = scene()->itemAt(event->scenePos());
         if (item == this) {
@@ -363,11 +364,15 @@ void Containment::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
         }
     }
 
-    Applet::mouseMoveEvent(event);
+    if (!event->isAccepted()) {
+        event->accept();
+        Applet::mouseMoveEvent(event);
+    }
 }
 
 void Containment::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
+    event->ignore();
     if (d->wallpaper) {
         QGraphicsItem* item = scene()->itemAt(event->scenePos());
         if (item == this) {
@@ -375,11 +380,15 @@ void Containment::mousePressEvent(QGraphicsSceneMouseEvent *event)
         }
     }
 
-    Applet::mousePressEvent(event);
+    if (!event->isAccepted()) {
+        event->accept();
+        Applet::mousePressEvent(event);
+    }
 }
 
 void Containment::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
+    event->ignore();
     if (d->wallpaper) {
         QGraphicsItem* item = scene()->itemAt(event->scenePos());
         if (item == this) {
@@ -387,7 +396,10 @@ void Containment::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
         }
     }
 
-    Applet::mouseReleaseEvent(event);
+    if (!event->isAccepted()) {
+        event->accept();
+        Applet::mouseReleaseEvent(event);
+    }
 }
 
 void Containment::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)

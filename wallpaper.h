@@ -163,21 +163,24 @@ class PLASMA_EXPORT Wallpaper : public QObject
         virtual QWidget *createConfigurationInterface(QWidget *parent);
 
         /**
-         * Mouse move event
+         * Mouse move event. To prevent further propagation of the event,
+         * the event must be accepted.
          *
          * @param event the mouse event object
          */
         virtual void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
 
         /**
-         * Mouse press event
+         * Mouse press event. To prevent further propagation of the even,
+         * and to receive mouseMoveEvents, the event must be accepted.
          *
          * @param event the mouse event object
          */
         virtual void mousePressEvent(QGraphicsSceneMouseEvent *event);
 
         /**
-         * Mouse release event
+         * Mouse release event. To prevent further propagation of the event,
+         * the event must be accepted.
          *
          * @param event the mouse event object
          */
