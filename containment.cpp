@@ -380,7 +380,9 @@ void Containment::mousePressEvent(QGraphicsSceneMouseEvent *event)
         }
     }
 
-    if (!event->isAccepted()) {
+    if (event->isAccepted()) {
+        setFocus(Qt::MouseFocusReason);
+    } else {
         event->accept();
         Applet::mousePressEvent(event);
     }
