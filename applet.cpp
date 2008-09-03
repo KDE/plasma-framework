@@ -895,7 +895,7 @@ void Applet::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
             contentsRect = option->exposedRect.intersected(contentsRect);
         }
 
-        QRect exposed = contentsRect.toAlignedRect();
+        QRect exposed = contentsRect.toRect();
 
         if (widget && isContainment()) {
             // note that the widget we get is actually the viewport of the view, not the view itself
