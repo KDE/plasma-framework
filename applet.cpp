@@ -234,7 +234,7 @@ void Applet::restore(KConfigGroup &group)
     }
 
     KConfigGroup shortcutConfig(&group, "Shortcuts");
-    QString shortcutText = shortcutConfig.readEntry("global", QString());
+    QString shortcutText = shortcutConfig.readEntryUntranslated("global", QString());
     if (!shortcutText.isEmpty()) {
         setGlobalShortcut(KShortcut(shortcutText));
     }
@@ -242,7 +242,7 @@ void Applet::restore(KConfigGroup &group)
     // local shortcut, if any
     //TODO: implement; the shortcut will need to be registered with the containment
     /*
-    shortcutText = shortcutConfig.readEntry("local", QString());
+    shortcutText = shortcutConfig.readEntryUntranslated("local", QString());
     if (!shortcutText.isEmpty()) {
         //TODO: implement; the shortcut
     }
