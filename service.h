@@ -186,7 +186,7 @@ Q_SIGNALS:
     /**
      * Emitted when a job associated with this Service completes its task
      */
-    void finished(ServiceJob* job);
+    void finished(Plasma::ServiceJob* job);
 
     /**
      * Emitted when the Service's operations change. For example, a
