@@ -37,8 +37,8 @@ class ConfigXml;
 class NullServiceJob : public ServiceJob
 {
 public:
-    NullServiceJob(QObject *parent)
-        : ServiceJob(QString(), QString(), QMap<QString, QVariant>(), parent)
+    NullServiceJob(const QString &destination, const QString &operation, QObject *parent)
+        : ServiceJob(destination, operation, QMap<QString, QVariant>(), parent)
     {
     }
 
@@ -59,9 +59,9 @@ public:
         setName("NullService");
     }
 
-    ServiceJob *createJob(const QString &, QMap<QString, QVariant> &)
+    ServiceJob *createJob(const QString &operation, QMap<QString, QVariant> &)
     {
-        return new NullServiceJob(parent());
+        return new NullServiceJob(destination(), operation, this);
     }
 };
 

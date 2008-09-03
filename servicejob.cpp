@@ -83,6 +83,7 @@ QVariant ServiceJob::result() const
 void ServiceJob::setResult(const QVariant &result)
 {
     d->result = result;
+    emitResult();
 }
 
 void ServiceJob::start()

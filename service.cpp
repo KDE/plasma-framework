@@ -133,27 +133,31 @@ KConfigGroup Service::operationDescription(const QString &operationName)
 ServiceJob* Service::startOperationCall(const KConfigGroup &description)
 {
     // TODO: nested groups?
+    ServiceJob *job = 0;
+    QString op = description.name();
     if (!d->config) {
         kDebug() << "No valid operations scheme has been registered";
-        return new NullServiceJob(parent());
-    }
+    } else {
+        if (d->disabledOperations.contains(op)) {
+            kDebug() << "Operation" << op << "is disabled";
+        } else {
+            d->config->writeConfig();
+            QMap<QString, QVariant> params;
+            foreach (const QString &key, description.keyList()) {
+                KConfigSkeletonItem *item = d->config->findItem(op, key);
+                if (item) {
+                    params.insert(key, item->property());
+                }
+            }
 
-    QString op = description.name();
-    if (d->disabledOperations.contains(op)) {
-        kDebug() << "Operation" << op << "is disabled";
-        return new NullServiceJob(parent());
-    }
-
-    d->config->writeConfig();
-    QMap<QString, QVariant> params;
-    foreach (const QString &key, description.keyList()) {
-        KConfigSkeletonItem *item = d->config->findItem(op, key);
-        if (item) {
-            params.insert(key, item->property());
+            job = createJob(description.name(), params);
         }
     }
 
-    ServiceJob *job = createJob(description.name(), params);
+    if (!job) {
+        job = new NullServiceJob(destination(), op, this);
+    }
+
     connect(job, SIGNAL(finished(KJob*)), this, SLOT(jobFinished(KJob*)));
     QTimer::singleShot(0, job, SLOT(slotStart()));
     return job;
