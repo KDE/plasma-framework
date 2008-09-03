@@ -40,11 +40,6 @@ public:
     QString operation;
     QMap<QString, QVariant> parameters;
     QVariant result;
-
-    void slotStart()
-    {
-        q->start();
-    }
 };
 
 ServiceJob::ServiceJob(const QString &destination, const QString &operation,
@@ -82,6 +77,11 @@ QVariant ServiceJob::result() const
 void ServiceJob::setResult(const QVariant &result)
 {
     d->result = result;
+}
+
+void ServiceJob::start()
+{
+    setResult(false);
 }
 
 } // namespace Plasma

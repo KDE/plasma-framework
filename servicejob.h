@@ -97,6 +97,12 @@ public:
      */
     QVariant result() const;
 
+    /**
+     * Default implementation of start, which simply sets the results to false.
+     * This makes it easy to create a "failure" job.
+     */
+    virtual void start();
+
 protected:
     /**
      * Sets the result for an operation.
@@ -104,8 +110,6 @@ protected:
     void setResult(const QVariant &result);
 
 private:
-    Q_PRIVATE_SLOT(d, void slotStart())
-
     ServiceJobPrivate * const d;
 };
 
