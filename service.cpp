@@ -141,12 +141,11 @@ ServiceJob* Service::startOperationCall(const KConfigGroup &description)
         if (d->disabledOperations.contains(op)) {
             kDebug() << "Operation" << op << "is disabled";
         } else {
-            d->config->writeConfig();
             QMap<QString, QVariant> params;
             foreach (const QString &key, description.keyList()) {
                 KConfigSkeletonItem *item = d->config->findItem(op, key);
                 if (item) {
-                    params.insert(key, item->property());
+                    params.insert(key, description.readEntry(key, item->property()));
                 }
             }
 

@@ -1022,6 +1022,7 @@ void Containment::wheelEvent(QGraphicsSceneWheelEvent *event)
         }
     }
 
+    event->ignore();
     Applet::wheelEvent(event);
 }
 
