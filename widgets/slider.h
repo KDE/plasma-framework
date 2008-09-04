@@ -90,6 +90,9 @@ public:
      */
     QSlider* nativeWidget() const;
 
+protected:
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+
 public Q_SLOTS:
     /**
      * Sets the maximum value the slider can take.

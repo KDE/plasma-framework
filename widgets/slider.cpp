@@ -21,11 +21,12 @@
 
 #include <QSlider>
 #include <QPainter>
+#include <QStyleOptionSlider>
 
 #include <KMimeType>
 
 #include "theme.h"
-#include "svg.h"
+#include "panelsvg.h"
 
 namespace Plasma
 {
@@ -40,12 +41,15 @@ public:
     ~SliderPrivate()
     {
     }
+
+    Plasma::PanelSvg *background;
+    Plasma::PanelSvg *handle;
 };
 
 
 Slider::Slider(QGraphicsWidget *parent)
     : QGraphicsProxyWidget(parent),
-      d(0)
+      d(new SliderPrivate)
 {
     QSlider *native = new QSlider;
 
@@ -54,11 +58,68 @@ Slider::Slider(QGraphicsWidget *parent)
 
     setWidget(native);
     native->setAttribute(Qt::WA_NoSystemBackground);
+
+    d->background = new Plasma::PanelSvg(this);
+    d->background->setImagePath("widgets/frame");
+    d->background->setElementPrefix("sunken");
+
+    d->handle = new Plasma::PanelSvg(this);
+    d->handle->setImagePath("widgets/button");
+    d->handle->setElementPrefix("normal");
 }
 
 Slider::~Slider()
 {
     delete d;
+}
+
+void Slider::paint(QPainter *painter,
+                       const QStyleOptionGraphicsItem *option,
+                       QWidget *widget)
+{
+    if (!styleSheet().isNull()) {
+        QGraphicsProxyWidget::paint(painter, option, widget);
+        return;
+    }
+
+    QSlider *slider = nativeWidget();
+    QStyle *style = slider->style();
+    QStyleOptionSlider sliderOpt;
+    sliderOpt.initFrom(slider);
+
+    //init the other stuff in the slider, taken from initStyleOption()
+    sliderOpt.subControls = QStyle::SC_None;
+    sliderOpt.activeSubControls = QStyle::SC_None;
+    sliderOpt.orientation = slider->orientation();
+    sliderOpt.maximum = slider->maximum();
+    sliderOpt.minimum = slider->minimum();
+    sliderOpt.tickPosition = (QSlider::TickPosition)slider->tickPosition();
+    sliderOpt.tickInterval = slider->tickInterval();
+    sliderOpt.upsideDown = (slider->orientation() == Qt::Horizontal) ?
+                     (slider->invertedAppearance() != (sliderOpt.direction == Qt::RightToLeft))
+                     : (!slider->invertedAppearance());
+    sliderOpt.direction = Qt::LeftToRight; // we use the upsideDown option instead
+    sliderOpt.sliderPosition = slider->sliderPosition();
+    sliderOpt.sliderValue = slider->value();
+    sliderOpt.singleStep = slider->singleStep();
+    sliderOpt.pageStep = slider->pageStep();
+    if (slider->orientation() == Qt::Horizontal)
+        sliderOpt.state |= QStyle::State_Horizontal;
+
+    QRect backgroundRect = style->subControlRect(QStyle::CC_Slider, &sliderOpt, QStyle::SC_SliderGroove, slider);
+    d->background->resizePanel(backgroundRect.size());
+    d->background->paintPanel(painter, backgroundRect.topLeft());
+
+    //Thickmarks
+    if (sliderOpt.tickPosition != QSlider::NoTicks) {
+        sliderOpt.subControls = QStyle::SC_SliderTickmarks;
+        sliderOpt.palette.setColor(QPalette::WindowText, Plasma::Theme::defaultTheme()->color(Theme::TextColor));
+        style->drawComplexControl(QStyle::CC_Slider, &sliderOpt, painter, slider);
+    }
+
+    QRect handleRect = style->subControlRect(QStyle::CC_Slider, &sliderOpt, QStyle::SC_SliderHandle, slider);
+    d->handle->resizePanel(handleRect.size());
+    d->handle->paintPanel(painter, handleRect.topLeft());
 }
 
 void Slider::setMaximum(int max)
@@ -120,6 +181,7 @@ QSlider* Slider::nativeWidget() const
 {
     return static_cast<QSlider*>(widget());
 }
+
 
 } // namespace Plasma
 
