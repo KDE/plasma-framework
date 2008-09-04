@@ -217,6 +217,11 @@ void Wallpaper::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     Q_UNUSED(event)
 }
 
+void Wallpaper::mouseWheelEvent(QGraphicsSceneWheelEvent *event)
+{
+    Q_UNUSED(event)
+}
+
 } // Plasma namespace
 
 #include "wallpaper.moc"

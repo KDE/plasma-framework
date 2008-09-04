@@ -991,6 +991,20 @@ void Containment::keyPressEvent(QKeyEvent *event)
 
 void Containment::wheelEvent(QGraphicsSceneWheelEvent *event)
 {
+    if (d->wallpaper) {
+        QGraphicsItem* item = scene()->itemAt(event->scenePos());
+        if (item == this) {
+            event->ignore();
+            d->wallpaper->mouseWheelEvent(event);
+
+            if (event->isAccepted()) {
+                return;
+            }
+
+            event->accept();
+        }
+    }
+
     if (containmentType() == DesktopContainment) {
         QGraphicsItem* item = scene()->itemAt(event->scenePos());
         if (item == this) {

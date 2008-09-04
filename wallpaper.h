@@ -186,6 +186,14 @@ class PLASMA_EXPORT Wallpaper : public QObject
          */
         virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
 
+        /**
+         * Mouse wheel event. To prevent further propagation of the event,
+         * the event must be accepted.
+         *
+         * @param event the wheel event object
+         */
+        virtual void mouseWheelEvent(QGraphicsSceneWheelEvent *event);
+
     Q_SIGNALS:
         /**
          * This signal indicates that wallpaper needs to be repainted.
