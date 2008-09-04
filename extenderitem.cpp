@@ -712,8 +712,11 @@ void ExtenderItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
             corona->addOffscreenWidget(this);
 
+            update();
+
             d->toplevel->setWindowFlags(Qt::ToolTip | Qt::FramelessWindowHint
                                                     | Qt::WindowStaysOnTopHint);
+            d->toplevel->setFrameShape(QFrame::NoFrame);
             d->toplevel->resize(screenRect.size());
             d->toplevel->setSceneRect(sceneBoundingRect());
             d->toplevel->centerOn(this);

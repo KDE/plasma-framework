@@ -26,6 +26,7 @@
 
 #include <KIcon>
 #include <KIconLoader>
+#include <KWindowSystem>
 
 #include <plasma/dialog.h>
 #include <plasma/corona.h>
@@ -209,7 +210,15 @@ void PopupApplet::constraintsEvent(Plasma::Constraints constraints)
 
             if (!d->dialog) {
                 d->dialog = new Plasma::Dialog();
-                d->dialog->setWindowFlags(Qt::Popup);
+
+                //no longer use Qt::Popup since that seems to cause a lot of problem when you drag
+                //stuff out of your Dialog (extenders). Monitor WindowDeactivate events so we can
+                //emulate the same kind of behavior as Qt::Popup (close when you click somewhere
+                //else.
+                d->dialog->setWindowFlags(Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
+                KWindowSystem::setState(d->dialog->winId(), NET::SkipTaskbar | NET::SkipPager);
+                d->dialog->installEventFilter(this);
+
                 connect(d->dialog, SIGNAL(dialogResized()), this, SLOT(dialogSizeChanged()));
                 connect(d->dialog, SIGNAL(dialogVisible(bool)), this , SLOT(dialogStatusChanged(bool)));
                 if (graphicsWidget()) {
@@ -244,6 +253,10 @@ void PopupApplet::constraintsEvent(Plasma::Constraints constraints)
 
 bool PopupApplet::eventFilter(QObject *watched, QEvent *event)
 {
+    if (watched == d->dialog && (event->type() == QEvent::WindowDeactivate)) {
+        hidePopup();
+    }
+
     if (watched == graphicsWidget() && (event->type() == QEvent::GraphicsSceneResize)) {
         //sizes are recalculated in the constraintsevent so let's just call that.
         constraintsEvent(Plasma::FormFactorConstraint);
@@ -262,6 +275,7 @@ void PopupApplet::showPopup(uint popupDuration)
     if (d->dialog && (formFactor() == Horizontal || formFactor() == Vertical)) {
         d->dialog->move(popupPosition(d->dialog->size()));
         d->dialog->show();
+        KWindowSystem::setState(d->dialog->winId(), NET::SkipTaskbar | NET::SkipPager);
 
         if (d->timer) {
             d->timer->stop();
@@ -298,7 +312,13 @@ void PopupAppletPrivate::togglePopup()
        }
 
        dialog->move(q->popupPosition(dialog->size()));
-       dialog->show();
+
+       if (dialog->isVisible()) {
+           dialog->hide();
+       } else {
+           dialog->show();
+           KWindowSystem::setState(dialog->winId(), NET::SkipTaskbar | NET::SkipPager);
+       }
 
        dialog->clearFocus();
     }

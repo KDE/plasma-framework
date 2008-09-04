@@ -377,8 +377,6 @@ void ExtenderPrivate::loadExtenderItems()
     adjustSizeHints();
 }
 
-QGraphicsGridLayout *ExtenderPrivate::s_popupLayout = 0;
-
 } // Plasma namespace
 
 #include "extender.moc"

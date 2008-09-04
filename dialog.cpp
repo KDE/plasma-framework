@@ -88,11 +88,12 @@ void DialogPrivate::themeUpdated()
 void DialogPrivate::adjustView()
 {
     if (view && widget) {
+        kDebug() << "resize the view.";
         QSize prevSize = q->size();
 
         //reposition and resize the view.
         view->setSceneRect(widget->mapToScene(widget->boundingRect()).boundingRect());
-        view->resize(widget->preferredSize().toSize());
+        view->resize(widget->size().toSize());
         view->centerOn(widget);
 
         //set the sizehints correctly:

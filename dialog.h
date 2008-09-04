@@ -81,7 +81,6 @@ class PLASMA_EXPORT Dialog : public QWidget
         bool eventFilter(QObject *watched, QEvent *event);
         void hideEvent (QHideEvent * event);
         void showEvent (QShowEvent * event);
-        
 
     private:
         DialogPrivate * const d;
