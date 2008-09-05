@@ -103,6 +103,7 @@ public Q_SLOTS:
 protected:
     void constraintsEvent(Plasma::Constraints constraints);
     bool eventFilter(QObject *watched, QEvent *event);
+    QVariant itemChange(GraphicsItemChange change, const QVariant &value);
 
 private:
     Q_PRIVATE_SLOT(d, void togglePopup())

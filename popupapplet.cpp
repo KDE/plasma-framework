@@ -206,7 +206,7 @@ void PopupApplet::constraintsEvent(Plasma::Constraints constraints)
             }
 
             if (!d->dialog) {
-                d->dialog = new Plasma::Dialog();
+                d->dialog = new Plasma::Dialog(view());
 
                 //no longer use Qt::Popup since that seems to cause a lot of problem when you drag
                 //stuff out of your Dialog (extenders). Monitor WindowDeactivate events so we can
@@ -261,6 +261,15 @@ bool PopupApplet::eventFilter(QObject *watched, QEvent *event)
     }
 
     return Applet::eventFilter(watched, event);
+}
+
+QVariant PopupApplet::itemChange(GraphicsItemChange change, const QVariant &value)
+{
+    if (change == QGraphicsItem::ItemParentHasChanged && d->dialog) {
+        d->dialog->setParent(view());
+    }
+
+    return Applet::itemChange(change, value);
 }
 
 void PopupApplet::showPopup(uint popupDuration)
