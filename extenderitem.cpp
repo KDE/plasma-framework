@@ -522,6 +522,11 @@ uint ExtenderItem::sourceAppletId() const
 
 void ExtenderItem::destroy()
 {
+    if (d->mousePressed) {
+        //avoid being destroyed while we're being dragged.
+        return;
+    }
+
     d->hostApplet()->config("ExtenderItems").deleteGroup(QString::number(d->extenderItemId));
     if (d->extender) {
         d->extender->d->removeExtenderItem(this);
