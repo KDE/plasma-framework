@@ -995,7 +995,7 @@ void Containment::wheelEvent(QGraphicsSceneWheelEvent *event)
         QGraphicsItem* item = scene()->itemAt(event->scenePos());
         if (item == this) {
             event->ignore();
-            d->wallpaper->mouseWheelEvent(event);
+            d->wallpaper->wheelEvent(event);
 
             if (event->isAccepted()) {
                 return;

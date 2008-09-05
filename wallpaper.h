@@ -192,7 +192,7 @@ class PLASMA_EXPORT Wallpaper : public QObject
          *
          * @param event the wheel event object
          */
-        virtual void mouseWheelEvent(QGraphicsSceneWheelEvent *event);
+        virtual void wheelEvent(QGraphicsSceneWheelEvent *event);
 
     Q_SIGNALS:
         /**

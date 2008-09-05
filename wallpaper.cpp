@@ -217,7 +217,7 @@ void Wallpaper::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     Q_UNUSED(event)
 }
 
-void Wallpaper::mouseWheelEvent(QGraphicsSceneWheelEvent *event)
+void Wallpaper::wheelEvent(QGraphicsSceneWheelEvent *event)
 {
     Q_UNUSED(event)
 }
