@@ -440,15 +440,18 @@ QGraphicsView *Applet::view() const
     }
 
     QGraphicsView *found = 0;
+    QGraphicsView *possibleFind = 0;
     foreach (QGraphicsView *view, scene()->views()) {
         if (view->sceneRect().intersects(sceneBoundingRect()) ||
             view->sceneRect().contains(scenePos())) {
-            if (!found || view->isActiveWindow()) {
+            if (view->isActiveWindow()) {
                 found = view;
+            } else {
+                possibleFind = view;
             }
         }
     }
-    return found;
+    return found ? found : possibleFind;
 }
 
 QRectF Applet::mapFromView(const QGraphicsView *view, const QRect &rect) const
