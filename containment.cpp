@@ -283,6 +283,7 @@ void Containment::save(KConfigGroup &g) const
         group.writeEntry("wallpaperplugin", d->wallpaper->pluginName());
         group.writeEntry("wallpaperpluginmode", d->wallpaper->renderingMode().name());
         KConfigGroup wallpaperConfig(&group, "Wallpaper");
+        wallpaperConfig = KConfigGroup(&wallpaperConfig, d->wallpaper->pluginName());
         d->wallpaper->save(wallpaperConfig);
     }
 
@@ -1180,13 +1181,11 @@ void Containment::setWallpaper(const QString &pluginName, const QString &mode)
     bool newMode = true;
 
     if (d->drawWallpaper) {
-        KConfigGroup paperConfig = KConfigGroup(&cfg, "Wallpaper");
         if (d->wallpaper) {
             // we have a wallpaper, so let's decide whether we need to swap it out
             if (d->wallpaper->pluginName() != pluginName) {
                 delete d->wallpaper;
                 d->wallpaper = 0;
-                paperConfig.deleteGroup();
             } else {
                 // it's the same plugin, so let's save its state now so when
                 // we call restore later on we're safe
@@ -1201,7 +1200,11 @@ void Containment::setWallpaper(const QString &pluginName, const QString &mode)
 
         if (d->wallpaper) {
             d->wallpaper->setBoundingRect(geometry());
-            d->wallpaper->restore(paperConfig, mode);
+
+            KConfigGroup wallpaperConfig = KConfigGroup(&cfg, "Wallpaper");
+            wallpaperConfig = KConfigGroup(&wallpaperConfig, pluginName);
+            d->wallpaper->restore(wallpaperConfig, mode);
+
             if (newPlugin) {
                 connect(d->wallpaper, SIGNAL(update(const QRectF&)),
                         this, SLOT(updateRect(const QRectF&)));
