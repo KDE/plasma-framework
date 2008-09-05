@@ -128,14 +128,11 @@ void PopupApplet::constraintsEvent(Plasma::Constraints constraints)
             d->icon = new Plasma::Icon(KIcon("icons"), QString(), this);
         }
 
-        setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
-        setMaximumSize(INT_MAX, INT_MAX);
         d->layout = new QGraphicsLinearLayout(this);
         d->layout->setContentsMargins(0, 0, 0, 0);
         d->layout->setSpacing(0);
-        d->layout->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
-        d->layout->setMaximumSize(INT_MAX, INT_MAX);
         d->layout->setOrientation(Qt::Horizontal);
+        setAspectRatioMode(Plasma::ConstrainedSquare);
         setLayout(d->layout);
 
         connect(d->icon, SIGNAL(clicked()), this, SLOT(togglePopup()));
@@ -241,10 +238,6 @@ void PopupApplet::constraintsEvent(Plasma::Constraints constraints)
 
             d->dialog->adjustSize();
             d->layout->addItem(d->icon);
-
-            setMinimumSize(QSizeF(0, 0));
-            setMaximumWidth(containment()->size().height());
-            setMaximumHeight(containment()->size().height());
 
             break;
         }
