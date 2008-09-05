@@ -18,6 +18,7 @@
  */
 
 #include "kcategorizeditemsviewmodels_p.h"
+#include <klocale.h>
 
 namespace KCategorizedItemsViewModels {
 
@@ -53,7 +54,7 @@ bool AbstractItem::matches(const QString & pattern) const
 DefaultFilterModel::DefaultFilterModel(QObject * parent) :
     QStandardItemModel(0, 1, parent)
 {
-    setHeaderData(1, Qt::Horizontal, tr("Filters"));
+    setHeaderData(1, Qt::Horizontal, i18n("Filters"));
 }
 
 void DefaultFilterModel::addFilter(const QString & caption,
