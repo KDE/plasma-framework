@@ -47,6 +47,7 @@ public:
     //TODO: location
 
 Q_SIGNALS:
+    void contextChanged(Plasma::Context *context);
     void activityChanged(Plasma::Context *context);
     void locationChanged(Plasma::Context *context);
 

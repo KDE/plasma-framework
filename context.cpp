@@ -57,6 +57,7 @@ void Context::setCurrentActivity(const QString &name)
 
     d->activity = name;
     emit activityChanged(this);
+    emit contextChanged(this);
 
     QStringList activities = listActivities();
     if (!activities.contains(name)) {
