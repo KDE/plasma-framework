@@ -179,6 +179,7 @@ void Extender::itemRemovedEvent(ExtenderItem *item)
     //add the empty extender message if needed.
     if (!attachedItems().count()) {
         d->emptyExtenderLabel->show();
+        d->emptyExtenderLabel->setMinimumSize(item->size());
         //just in case:
         d->layout->removeItem(d->emptyExtenderLabel);
         d->layout->addItem(d->emptyExtenderLabel);
@@ -208,7 +209,7 @@ void Extender::itemHoverMoveEvent(ExtenderItem *item, const QPointF &pos)
 
     //Create a widget that functions as spacer, and add that to the layout.
     QGraphicsWidget *widget = new QGraphicsWidget(this);
-    widget->setPreferredSize(QSizeF(150, item->size().height()));
+    widget->setPreferredSize(QSizeF(item->size().width(), item->size().height()));
     widget->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     d->spacerWidget = widget;
     d->layout->insertItem(insertIndex, widget);
@@ -238,6 +239,7 @@ void Extender::itemHoverLeaveEvent(ExtenderItem *item)
         //Make sure we add a 'no detachables' label when the layout is empty.
         if (!attachedItems().count()) {
             d->emptyExtenderLabel->show();
+            d->emptyExtenderLabel->setMinimumSize(item->size());
             d->layout->removeItem(d->emptyExtenderLabel);
             d->layout->addItem(d->emptyExtenderLabel);
         }
