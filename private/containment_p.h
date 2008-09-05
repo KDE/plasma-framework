@@ -74,6 +74,7 @@ public:
     void containmentAppletAnimationComplete(QGraphicsItem *item, Plasma::Animator::Animation anim);
     void zoomIn();
     void zoomOut();
+    bool showContextMenu(const QPointF &point, const QPoint &screenPos, bool includeApplet);
 
     /**
      * Locks or unlocks plasma's applets.

@@ -405,6 +405,11 @@ void Containment::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     }
 }
 
+void Containment::showContextMenu(const QPointF &containmentPos, const QPoint &screenPos)
+{
+    d->showContextMenu(mapToScene(containmentPos), screenPos, false);
+}
+
 void Containment::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
 {
     //kDebug() << "let's see if we manage to get a context menu here, huh";
@@ -413,13 +418,21 @@ void Containment::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
         return;
     }
 
-    QPointF point = event->scenePos();
-    QGraphicsItem* item = scene()->itemAt(point);
-    if (item == this) {
+    if (!d->showContextMenu(event->scenePos(), event->screenPos(), true)) {
+        Applet::contextMenuEvent(event);
+    } else {
+        event->accept();
+    }
+}
+
+bool ContainmentPrivate::showContextMenu(const QPointF &point, const QPoint &screenPos, bool includeApplet)
+{
+    Applet* applet = 0;
+
+    QGraphicsItem* item = q->scene()->itemAt(point);
+    if (item == q) {
         item = 0;
     }
-
-    Applet* applet = 0;
 
     while (item) {
         applet = qgraphicsitem_cast<Applet*>(item);
@@ -436,15 +449,18 @@ void Containment::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
     //kDebug() << "context menu event " << (QObject*)applet;
     if (applet) {
         bool hasEntries = false;
+        QList<QAction*> actions;
 
-        QList<QAction*> actions = applet->contextualActions();
-        if (!actions.isEmpty()) {
-            foreach(QAction* action, actions) {
-                if (action) {
-                    desktopMenu.addAction(action);
+        if (includeApplet) {
+            actions = applet->contextualActions();
+            if (!actions.isEmpty()) {
+                foreach(QAction* action, actions) {
+                    if (action) {
+                        desktopMenu.addAction(action);
+                    }
                 }
+                hasEntries = true;
             }
-            hasEntries = true;
         }
 
         if (applet->hasConfigurationInterface()) {
@@ -455,7 +471,7 @@ void Containment::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
             }
         }
 
-        QList<QAction*> containmentActions = contextualActions();
+        QList<QAction*> containmentActions = q->contextualActions();
         if (!containmentActions.isEmpty()) {
             if (hasEntries) {
                 desktopMenu.addSeparator();
@@ -465,7 +481,7 @@ void Containment::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
             QMenu *containmentActionMenu = &desktopMenu;
 
             if (!actions.isEmpty() && containmentActions.count() > 2) {
-                containmentActionMenu = new KMenu(i18n("%1 Options", name()), &desktopMenu);
+                containmentActionMenu = new KMenu(i18n("%1 Options", q->name()), &desktopMenu);
                 desktopMenu.addMenu(containmentActionMenu);
             }
 
@@ -476,7 +492,7 @@ void Containment::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
             }
         }
 
-        if (scene() && static_cast<Corona*>(scene())->immutability() == Mutable) {
+        if (static_cast<Corona*>(q->scene())->immutability() == Mutable) {
             if (hasEntries) {
                 desktopMenu.addSeparator();
             }
@@ -486,30 +502,28 @@ void Containment::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
                 kDebug() << "no remove action!!!!!!!!";
                 closeApplet = new QAction(i18n("Remove this %1", applet->name()), &desktopMenu);
                 closeApplet->setIcon(KIcon("edit-delete"));
-                connect(closeApplet, SIGNAL(triggered(bool)), applet, SLOT(destroy()));
+                QObject::connect(closeApplet, SIGNAL(triggered(bool)), applet, SLOT(destroy()));
             }
             desktopMenu.addAction(closeApplet);
             hasEntries = true;
         }
 
         if (!hasEntries) {
-            Applet::contextMenuEvent(event);
             kDebug() << "no entries";
-            return;
+            return false;
         }
     } else {
-        if (!scene() || (static_cast<Corona*>(scene())->immutability() != Mutable && !KAuthorized::authorizeKAction("unlock_desktop"))) {
+        if (static_cast<Corona*>(q->scene())->immutability() != Mutable &&
+            !KAuthorized::authorizeKAction("unlock_desktop")) {
             //kDebug() << "immutability";
-            Applet::contextMenuEvent(event);
-            return;
+            return false;
         }
 
-        QList<QAction*> actions = contextualActions();
+        QList<QAction*> actions = q->contextualActions();
 
         if (actions.count() < 1) {
             //kDebug() << "no applet, but no actions";
-            Applet::contextMenuEvent(event);
-            return;
+            return false;
         }
 
         foreach (QAction* action, actions) {
@@ -519,9 +533,9 @@ void Containment::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
         }
     }
 
-    event->accept();
-    //kDebug() << "executing at" << event->screenPos();
-    desktopMenu.exec(event->screenPos());
+    //kDebug() << "executing at" << screenPos;
+    desktopMenu.exec(screenPos);
+    return true;
 }
 
 void Containment::setFormFactor(FormFactor formFactor)

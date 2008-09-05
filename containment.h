@@ -310,6 +310,12 @@ class PLASMA_EXPORT Containment : public Applet
          */
         QString activity() const;
 
+        /**
+         * Shows the context menu for the containment directly, bypassing Applets
+         * altogether.
+         */
+        void showContextMenu(const QPointF &containmentPos, const QPoint &screenPos);
+
     Q_SIGNALS:
         /**
          * This signal is emitted when a new applet is created by the containment
