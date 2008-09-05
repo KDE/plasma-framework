@@ -1176,6 +1176,8 @@ bool Containment::drawWallpaper()
 void Containment::setWallpaper(const QString &pluginName, const QString &mode)
 {
     KConfigGroup cfg = config();
+    bool newPlugin = true;
+    bool newMode = true;
 
     if (d->drawWallpaper) {
         KConfigGroup paperConfig = KConfigGroup(&cfg, "Wallpaper");
@@ -1188,7 +1190,8 @@ void Containment::setWallpaper(const QString &pluginName, const QString &mode)
             } else {
                 // it's the same plugin, so let's save its state now so when
                 // we call restore later on we're safe
-                d->wallpaper->save(paperConfig);
+                newMode = d->wallpaper->renderingMode().name() != mode;
+                newPlugin = false;
             }
         }
 
@@ -1199,14 +1202,28 @@ void Containment::setWallpaper(const QString &pluginName, const QString &mode)
         if (d->wallpaper) {
             d->wallpaper->setBoundingRect(geometry());
             d->wallpaper->restore(paperConfig, mode);
-            connect(d->wallpaper, SIGNAL(update(const QRectF&)),
-                    this, SLOT(updateRect(const QRectF&)));
+            if (newPlugin) {
+                connect(d->wallpaper, SIGNAL(update(const QRectF&)),
+                        this, SLOT(updateRect(const QRectF&)));
+                cfg.writeEntry("wallpaperplugin", pluginName);
+            }
+
+            if (newMode) {
+                cfg.writeEntry("wallpaperpluginmode", mode);
+            }
         }
 
         update();
     }
-    cfg.writeEntry("wallpaperplugin", pluginName);
-    cfg.writeEntry("wallpaperpluginmode", mode);
+
+    if (!d->wallpaper) {
+        cfg.deleteEntry("wallpaperplugin");
+        cfg.deleteEntry("wallpaperpluginmode");
+    }
+
+    if (newPlugin || newMode) {
+        emit configNeedsSaving();
+    }
 }
 
 Plasma::Wallpaper* Containment::wallpaper() const
