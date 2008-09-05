@@ -41,6 +41,7 @@ public:
           wallpaper(0),
           screen(-1), // no screen
           toolBox(0),
+          con(0),
           type(Containment::NoContainmentType),
           positioning(false),
           drawWallpaper(true)
@@ -92,6 +93,11 @@ public:
      */
     void focusApplet(Plasma::Applet *applet);
 
+    /**
+     * returns the Context for this Containment
+     */
+    Context* context();
+
     Containment *q;
     FormFactor formFactor;
     Location location;
@@ -101,8 +107,8 @@ public:
     QMap<Applet*, AppletHandle*> handles;
     int screen;
     ToolBox *toolBox;
+    Context *con;
     Containment::Type type;
-    QString activity;
     bool positioning;
     bool drawWallpaper;
 };

@@ -1016,10 +1016,11 @@ Location Applet::location() const
     return c ? c->d->location : Plasma::Desktop;
 }
 
-QString Applet::context() const
+Context* Applet::context() const
 {
     Containment *c = containment();
-    return c->Containment::context();
+    Q_ASSERT(c);
+    return c->d->context();
 }
 
 Plasma::AspectRatioMode Applet::aspectRatioMode() const

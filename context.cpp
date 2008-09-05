@@ -25,12 +25,14 @@ namespace Plasma
 class ContextPrivate
 {
 public:
+    QString activity;
 };
 
 Context::Context(QObject *parent)
     : QObject(parent),
       d(new ContextPrivate)
 {
+    //TODO: look up activity in Nepomuk
 }
 
 Context::~Context()
@@ -49,11 +51,22 @@ QStringList Context::listActivities() const
 
 void Context::setCurrentActivity(const QString &name)
 {
+    if (d->activity == name || name.isEmpty()) {
+        return;
+    }
+
+    d->activity = name;
+    emit activityChanged(this);
+
+    QStringList activities = listActivities();
+    if (!activities.contains(name)) {
+        createActivity(name);
+    }
 }
 
 QString Context::currentActivity() const
 {
-    return QString();
+    return d->activity;
 }
 
 } // namespace Plasma

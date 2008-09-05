@@ -277,7 +277,7 @@ void Containment::save(KConfigGroup &g) const
     group.writeEntry("screen", d->screen);
     group.writeEntry("formfactor", (int)d->formFactor);
     group.writeEntry("location", (int)d->location);
-    group.writeEntry("activity", d->activity);
+    group.writeEntry("activity", d->context()->currentActivity());
 
     if (d->wallpaper) {
         group.writeEntry("wallpaperplugin", d->wallpaper->pluginName());
@@ -1207,13 +1207,9 @@ Plasma::Wallpaper* Containment::wallpaper() const
 
 void Containment::setActivity(const QString &activity)
 {
-    if (d->activity != activity) {
-        d->activity = activity;
-        Context c;
-        QStringList activities = c.listActivities();
-        if (!activities.contains(activity)) {
-            c.createActivity(activity);
-        }
+    Context *context = d->context();
+    if (context->currentActivity() != activity) {
+        context->setCurrentActivity(activity);
 
         foreach (Applet *a, d->applets) {
             a->updateConstraints(ContextConstraint);
@@ -1223,7 +1219,16 @@ void Containment::setActivity(const QString &activity)
 
 QString Containment::activity() const
 {
-    return d->activity;
+    return d->context()->currentActivity();
+}
+
+Context* ContainmentPrivate::context()
+{
+    if (!con) {
+        con = new Context(q);
+    }
+
+    return con;
 }
 
 KActionCollection& ContainmentPrivate::actions()

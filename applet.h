@@ -46,6 +46,7 @@ namespace Plasma
 
 class AppletPrivate;
 class Containment;
+class Context;
 class DataEngine;
 class Extender;
 class ExtenderItem;
@@ -245,7 +246,7 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         /**
          * Returns the workspace context which the applet is operating in
          */
-        QString context() const;
+        Context *context() const;
 
         /**
          * @return the preferred aspect ratio mode for placement and resizing

@@ -44,8 +44,11 @@ public:
     void setCurrentActivity(const QString &name);
     QString currentActivity() const;
 
+    //TODO: location
+
 Q_SIGNALS:
-    void currentChanged(const QString &);
+    void activityChanged(Plasma::Context *context);
+    void locationChanged(Plasma::Context *context);
 
 private:
     ContextPrivate * const d;
