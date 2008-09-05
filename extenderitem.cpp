@@ -38,6 +38,7 @@
 #include "dialog.h"
 #include "extender.h"
 #include "panelsvg.h"
+#include "popupapplet.h"
 #include "theme.h"
 #include "view.h"
 
@@ -712,8 +713,6 @@ void ExtenderItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
             corona->addOffscreenWidget(this);
 
-            update();
-
             d->toplevel->setWindowFlags(Qt::ToolTip | Qt::FramelessWindowHint
                                                     | Qt::WindowStaysOnTopHint);
             d->toplevel->setFrameShape(QFrame::NoFrame);
@@ -735,6 +734,7 @@ void ExtenderItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
         //move the toplevel view.
         d->toplevel->setSceneRect(sceneBoundingRect());
         d->toplevel->setGeometry(screenRect);
+        update();
     } else {
         corona->removeOffscreenWidget(this);
         setParentItem(d->hostApplet());
@@ -760,6 +760,13 @@ void ExtenderItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
             if (applet->extender() && (applet->sceneBoundingRect().contains(mousePos)
                 ||  applet->extender()->sceneBoundingRect().contains(mousePos))) {
                 targetExtender = applet->extender();
+
+                //check if we're hovering over an popupapplet, and open it up in case it does.
+                PopupApplet *popupApplet = qobject_cast<PopupApplet*>(applet);
+                if (popupApplet && (applet->formFactor() == Plasma::Horizontal ||
+                                    applet->formFactor() == Plasma::Vertical)) {
+                    popupApplet->showPopup();
+                }
             }
         }
     }
