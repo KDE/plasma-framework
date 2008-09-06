@@ -373,6 +373,11 @@ class PLASMA_EXPORT Containment : public Applet
          */
         void configureRequested();
 
+        /**
+         * The activity associated to this containemnt has changed
+         */
+        void contextChanged(Plasma::Context *context);
+
     public Q_SLOTS:
         /**
          * Informs the Corona as to what position it is in. This is informational

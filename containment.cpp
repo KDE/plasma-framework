@@ -1269,6 +1269,8 @@ Context* ContainmentPrivate::context()
 {
     if (!con) {
         con = new Context(q);
+        q->connect(con, SIGNAL(changed(Plasma::Context*)),
+                   q, SIGNAL(contextChanged(Plasma::Context*)));
     }
 
     return con;
