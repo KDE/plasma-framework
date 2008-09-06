@@ -30,7 +30,7 @@ namespace Plasma
 
 class ContextPrivate;
 
-class PLASMA_EXPORT Context : QObject
+class PLASMA_EXPORT Context : public QObject
 {
     Q_OBJECT
 
@@ -47,7 +47,7 @@ public:
     //TODO: location
 
 Q_SIGNALS:
-    void contextChanged(Plasma::Context *context);
+    void changed(Plasma::Context *context);
     void activityChanged(Plasma::Context *context);
     void locationChanged(Plasma::Context *context);
 
