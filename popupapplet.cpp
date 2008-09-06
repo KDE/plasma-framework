@@ -206,7 +206,7 @@ void PopupApplet::constraintsEvent(Plasma::Constraints constraints)
             }
 
             if (!d->dialog) {
-                d->dialog = new Plasma::Dialog(view());
+                d->dialog = new Plasma::Dialog();
 
                 //no longer use Qt::Popup since that seems to cause a lot of problem when you drag
                 //stuff out of your Dialog (extenders). Monitor WindowDeactivate events so we can
