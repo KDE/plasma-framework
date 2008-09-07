@@ -59,6 +59,9 @@
 namespace Plasma
 {
 
+static const char *defaultWallpaper = "image";
+static const char *defaultWallpaperMode = "SingleImage";
+
 Containment::StyleOption::StyleOption()
     : QStyleOptionGraphicsItem(),
       view(0)
@@ -253,8 +256,8 @@ void Containment::restore(KConfigGroup &group)
     restoreContents(group);
     setImmutability((ImmutabilityType)group.readEntry("immutability", (int)Mutable));
 
-    setWallpaper(group.readEntry("wallpaperplugin", "image"),
-                 group.readEntry("wallpaperpluginmode", "SingleImage"));
+    setWallpaper(group.readEntry("wallpaperplugin", defaultWallpaper),
+                 group.readEntry("wallpaperpluginmode", defaultWallpaperMode));
     /*
     kDebug() << "Containment" << id() <<
                 "screen" << screen() <<
@@ -1175,8 +1178,8 @@ void Containment::setDrawWallpaper(bool drawWallpaper)
     d->drawWallpaper = drawWallpaper;
     if (d->drawWallpaper) {
         KConfigGroup cfg = config();
-        setWallpaper(cfg.readEntry("wallpaperplugin", "image"),
-                     cfg.readEntry("wallpaperpluginmode", "SingleImage"));
+        setWallpaper(cfg.readEntry("wallpaperplugin", defaultWallpaper),
+                     cfg.readEntry("wallpaperpluginmode", defaultWallpaperMode));
     } else if (!d->drawWallpaper && d->wallpaper) {
         delete d->wallpaper;
         d->wallpaper = 0;
