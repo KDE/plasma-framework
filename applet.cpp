@@ -442,8 +442,11 @@ QGraphicsView *Applet::view() const
     QGraphicsView *found = 0;
     QGraphicsView *possibleFind = 0;
     foreach (QGraphicsView *view, scene()->views()) {
+        kDebug() << "checking" << view->sceneRect() << "against" << sceneBoundingRect() 
+                 << scenePos();
         if (view->sceneRect().intersects(sceneBoundingRect()) ||
             view->sceneRect().contains(scenePos())) {
+            kDebug() << "found something!" << view->isActiveWindow();
             if (view->isActiveWindow()) {
                 found = view;
             } else {
@@ -890,15 +893,9 @@ void Applet::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
     if (!d->failed) {
         qreal left, top, right, bottom;
         getContentsMargins(&left, &top, &right, &bottom);
-        QRectF contentsRect = QRectF(QPointF(0,0), boundingRect().size())
-                                    .adjusted(left, top, -right, -bottom);
+        QRect contentsRect = QRectF(QPointF(0,0), boundingRect().size())
+                                    .adjusted(left, top, -right, -bottom).toRect();
 
-        if (!ghost) {
-            // only paint the bare minimum when not ghosting
-            contentsRect = option->exposedRect.intersected(contentsRect);
-        }
-
-        QRect exposed = contentsRect.toRect();
 
         if (widget && isContainment()) {
             // note that the widget we get is actually the viewport of the view, not the view itself
@@ -907,12 +904,12 @@ void Applet::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
             if (!v || v->isWallpaperEnabled()) {
                 Containment* c = qobject_cast<Plasma::Containment*>(this);
                 if (c && c->drawWallpaper() && c->wallpaper()) {
-                    c->wallpaper()->paint(p, exposed);
+                    c->wallpaper()->paint(p, option->exposedRect);
                 }
 
                 Containment::StyleOption coption(*option);
                 coption.view = v;
-                paintInterface(p, &coption, exposed);
+                paintInterface(p, &coption, contentsRect);
             }
 
             p->restore();
@@ -920,7 +917,7 @@ void Applet::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
         }
 
         //kDebug() << "paint interface of" << (QObject*) this;
-        paintInterface(p, option, exposed);
+        paintInterface(p, option, contentsRect);
     }
     p->restore();
 
