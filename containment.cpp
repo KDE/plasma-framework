@@ -59,8 +59,8 @@
 namespace Plasma
 {
 
-static const char *defaultWallpaper = "image";
-static const char *defaultWallpaperMode = "SingleImage";
+static const char defaultWallpaper[] = "image";
+static const char defaultWallpaperMode[] = "SingleImage";
 
 Containment::StyleOption::StyleOption()
     : QStyleOptionGraphicsItem(),
