@@ -68,15 +68,15 @@ public:
     QIcon icon() const;
 
     /**
-     * Implement either this function or graphicsWidget.
-     * @return the widget that will get shown in either a layout in the applet, or in a Dialog,
+     * Implement either this function or graphicsWidget().
+     * @return the widget that will get shown in either a layout, in the applet or in a Dialog,
      * depending on the form factor of the applet.
      */
     virtual QWidget *widget();
 
     /**
-     * Implement either this function or widget.
-     * @return the widget that will get shown in either a layout in the applet, or in a Dialog,
+     * Implement either this function or widget().
+     * @return the widget that will get shown in either a layout, in the applet or in a Dialog,
      * depending on the form factor of the applet.
      */
     virtual QGraphicsWidget *graphicsWidget();
@@ -89,8 +89,9 @@ public:
     void showPopup(uint displayTime = 0);
 
     /**
-     * This event handler can be reimplemented in a subclass to receive an event before the popup is showed or hidden.
-     * @arg show true if the popup is going to be showed, false if the popup is going to be hiden.
+     * This event handler can be reimplemented in a subclass to receive an event before the popup is shown or hidden.
+     * @arg show true if the popup is going to be shown, false if the popup is going to be hidden.
+     * Note that showing and hiding the popup on click is already done in PopupApplet.
      */
      virtual void popupEvent(bool show);
 

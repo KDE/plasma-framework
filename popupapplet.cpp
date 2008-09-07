@@ -171,12 +171,12 @@ void PopupApplet::constraintsEvent(Plasma::Constraints constraints)
             //get the margins
             QSizeF marginSize = size() - contentsRect().size();
 
-            if (graphicsWidget()) {
-                d->layout->addItem(graphicsWidget());
-                setMinimumSize(graphicsWidget()->minimumSize() + marginSize);
-                graphicsWidget()->installEventFilter(this);
-            }
-            else {
+            QGraphicsWidget *gWidget = graphicsWidget();
+            if (gWidget) {
+                d->layout->addItem(gWidget);
+                setMinimumSize(gWidget->minimumSize() + marginSize);
+                gWidget->installEventFilter(this);
+            } else {
                 if (!d->proxy) {
                     d->proxy = new QGraphicsProxyWidget(this);
                     d->proxy->setWidget(widget());
@@ -218,15 +218,16 @@ void PopupApplet::constraintsEvent(Plasma::Constraints constraints)
 
                 connect(d->dialog, SIGNAL(dialogResized()), this, SLOT(dialogSizeChanged()));
                 connect(d->dialog, SIGNAL(dialogVisible(bool)), this , SLOT(dialogStatusChanged(bool)));
-                if (graphicsWidget()) {
-                    Corona *corona = qobject_cast<Corona *>(graphicsWidget()->scene());
+                QGraphicsWidget *gWidget = graphicsWidget();
+                if (gWidget) {
+                    Corona *corona = qobject_cast<Corona *>(gWidget->scene());
 
                     //could that cast ever fail??
                     if (corona) {
-                        corona->addOffscreenWidget(graphicsWidget());
-                        graphicsWidget()->resize(graphicsWidget()->preferredSize());
-                        graphicsWidget()->setMinimumSize(graphicsWidget()->preferredSize());
-                        d->dialog->setGraphicsWidget(graphicsWidget());
+                        corona->addOffscreenWidget(gWidget);
+                        graphicsWidget()->resize(gWidget->preferredSize());
+                        graphicsWidget()->setMinimumSize(gWidget->preferredSize());
+                        d->dialog->setGraphicsWidget(gWidget);
                     }
                 } else {
                     QVBoxLayout *l_layout = new QVBoxLayout(d->dialog);
@@ -308,21 +309,21 @@ void PopupApplet::popupEvent(bool)
 
 void PopupAppletPrivate::togglePopup()
 {
-   if (dialog) {
-       if (timer) {
-           timer->stop();
-       }
+    if (dialog) {
+        if (timer) {
+            timer->stop();
+        }
 
-       dialog->move(q->popupPosition(dialog->size()));
+        dialog->move(q->popupPosition(dialog->size()));
 
-       if (dialog->isVisible()) {
-           dialog->hide();
-       } else {
-           dialog->show();
-           KWindowSystem::setState(dialog->winId(), NET::SkipTaskbar | NET::SkipPager);
-       }
+        if (dialog->isVisible()) {
+            dialog->hide();
+        } else {
+            dialog->show();
+            KWindowSystem::setState(dialog->winId(), NET::SkipTaskbar | NET::SkipPager);
+        }
 
-       dialog->clearFocus();
+        dialog->clearFocus();
     }
 }
 
