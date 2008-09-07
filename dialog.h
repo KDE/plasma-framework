@@ -1,4 +1,5 @@
 /***************************************************************************
+ *   Copyright (C) 2008 by Alessandro Diaferia <alediaferia@gmail.com>     *
  *   Copyright (C) 2007 by Alexis Ménard <darktears31@gmail.com>           *
  *   Copyright (C) 2007 Sebastian Kuegler <sebas@kde.org>                  *
  *   Copyright (C) 2006 Aaron Seigo <aseigo@kde.org>                       *
@@ -52,6 +53,18 @@ class PLASMA_EXPORT Dialog : public QWidget
 
     public:
         /**
+         * Use these flags to choose the active resize corners.
+         */
+        enum ResizeCorner { NoCorner = 0,
+                            NorthEast = 1,
+                            SouthEast = 2,
+                            NorthWest = 4,
+                            SouthWest = 8,
+                            All = NorthEast | SouthEast | NorthWest | SouthWest
+                           };
+        Q_DECLARE_FLAGS(ResizeCorners, ResizeCorner)
+
+        /**
          * @arg parent the parent widget, for plasmoids, this is usually 0.
          * @arg f the Qt::WindowFlags, default is to not show a windowborder.
          */
@@ -60,6 +73,17 @@ class PLASMA_EXPORT Dialog : public QWidget
 
         void setGraphicsWidget(QGraphicsWidget *widget);
         QGraphicsWidget *graphicsWidget();
+
+        /**
+         * @arg corners the corners the resize handlers should be placed in.
+         */
+        void setResizeHandleCorners(ResizeCorners corners);
+
+        /**
+         * Convenience method to get the enabled resize corners.
+         * @return which resize corners are active.
+         */
+        ResizeCorners resizeCorners() const;
 
     Q_SIGNALS:
         /**
@@ -81,6 +105,9 @@ class PLASMA_EXPORT Dialog : public QWidget
         bool eventFilter(QObject *watched, QEvent *event);
         void hideEvent (QHideEvent * event);
         void showEvent (QShowEvent * event);
+        void mouseMoveEvent (QMouseEvent * event);
+        void mousePressEvent (QMouseEvent * event);
+        void mouseReleaseEvent (QMouseEvent * event);
 
     private:
         DialogPrivate * const d;
@@ -93,5 +120,7 @@ class PLASMA_EXPORT Dialog : public QWidget
 };
 
 } // Plasma namespace
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(Plasma::Dialog::ResizeCorners)
 
 #endif
