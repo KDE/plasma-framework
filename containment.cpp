@@ -1222,7 +1222,7 @@ void Containment::setWallpaper(const QString &pluginName, const QString &mode)
         }
 
         if (d->wallpaper) {
-            d->wallpaper->setBoundingRect(geometry());
+            d->wallpaper->setBoundingRect(boundingRect());
 
             KConfigGroup wallpaperConfig = KConfigGroup(&cfg, "Wallpaper");
             wallpaperConfig = KConfigGroup(&wallpaperConfig, pluginName);
