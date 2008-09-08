@@ -428,7 +428,7 @@ DataEnginePrivate::DataEnginePrivate(DataEngine* e, KService::Ptr service)
         return;
     }
 
-    engineName = service->property("X-Plasma-EngineName").toString();
+    engineName = service->name();
     if (engineName.isEmpty()) {
         engineName = i18n("Unnamed");
     }
