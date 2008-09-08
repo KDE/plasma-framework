@@ -978,7 +978,7 @@ void Containment::resizeEvent(QGraphicsSceneResizeEvent *event)
 {
     Applet::resizeEvent(event);
     if (d->wallpaper) {
-        d->wallpaper->setBoundingRect(geometry());
+        d->wallpaper->setBoundingRect(boundingRect());
     }
 }
 
