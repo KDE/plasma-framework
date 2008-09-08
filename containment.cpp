@@ -209,6 +209,12 @@ void Containment::init()
             }
             d->toolBox->addTool(this->action("add sibling containment"));
         }
+
+        //Set a default wallpaper the first time the containment is created,
+        //for instance from the toolbox by the user
+        if (d->drawWallpaper) {
+            setDrawWallpaper(true);
+        }
     }
 }
 
