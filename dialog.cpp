@@ -256,7 +256,10 @@ void Dialog::mousePressEvent(QMouseEvent *event)
 
 void Dialog::mouseReleaseEvent(QMouseEvent *event)
 {
-    d->resizeStartCorner = Dialog::NoCorner;
+    if (d->resizeStartCorner != Dialog::NoCorner) {
+        d->resizeStartCorner = Dialog::NoCorner;
+        emit dialogResized();
+    }
 
     QWidget::mouseReleaseEvent(event);
 }
