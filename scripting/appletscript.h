@@ -111,6 +111,13 @@ public:
      */
     virtual QPainterPath shape() const;
 
+    /**
+     * Sets whether or not this script has a configuration interface or not
+     *
+     * @arg hasInterface true if the applet is user configurable
+     */
+    void setHasConfigurationInterface(bool hasInterface);
+
 public Q_SLOTS:
 
     /**

@@ -91,6 +91,13 @@ QPainterPath AppletScript::shape() const
     return QPainterPath();
 }
 
+void AppletScript::setHasConfigurationInterface(bool hasInterface)
+{
+    if (applet()) {
+        applet()->setHasConfigurationInterface(true);
+    }
+}
+
 void AppletScript::showConfigurationInterface()
 {
 }
