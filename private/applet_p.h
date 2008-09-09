@@ -92,7 +92,6 @@ public:
     KConfigGroup *mainConfig;
     Plasma::Constraints pendingConstraints;
     Plasma::AspectRatioMode aspectRatioMode;
-    QGraphicsView* ghostView;
     ImmutabilityType immutability;
     KActionCollection actions;
     KAction *activationAction;
@@ -102,6 +101,7 @@ public:
     bool isContainment : 1;
     bool square : 1;
     bool transient : 1;
+    bool ghost : 1;
 };
 
 } // Plasma namespace

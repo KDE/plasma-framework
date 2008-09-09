@@ -859,10 +859,7 @@ void Applet::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
     //FIXME: we should probably set the pixmap to screenSize(), but that breaks stuff atm.
     QPixmap *pixmap = 0;
 
-    QGraphicsView* qgv = qobject_cast<QGraphicsView*>(widget ? widget->parent() : 0);
-    bool ghost = (qgv && (qgv == d->ghostView));
-
-    if (ghost) {
+    if (d->ghost) {
         // The applet has to be displayed semi transparent. Create a pixmap and a painter on
         // that pixmap where the applet can draw on so we can draw the result transparently
         // at the end.
@@ -921,7 +918,7 @@ void Applet::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
     }
     p->restore();
 
-    if (ghost) {
+    if (d->ghost) {
         // Lets display the pixmap that we've just drawn... transparently.
         p->setCompositionMode(QPainter::CompositionMode_DestinationIn);
         p->fillRect(pixmap->rect(), QColor(0, 0, 0, (0.3 * 255)));
@@ -1534,7 +1531,6 @@ AppletPrivate::AppletPrivate(KService::Ptr service, int uniqueID, Applet *applet
           mainConfig(0),
           pendingConstraints(NoConstraint),
           aspectRatioMode(Plasma::KeepAspectRatio),
-          ghostView(0),
           immutability(Mutable),
           actions(applet),
           activationAction(0),
@@ -1542,7 +1538,8 @@ AppletPrivate::AppletPrivate(KService::Ptr service, int uniqueID, Applet *applet
           hasConfigurationInterface(false),
           failed(false),
           isContainment(false),
-          transient(false)
+          transient(false),
+          ghost(false)
 {
     if (appletId == 0) {
         appletId = ++s_maxAppletId;

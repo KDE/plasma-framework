@@ -27,6 +27,8 @@
 #include "animator.h"
 #include "svg.h"
 
+class QGraphicsView;
+
 namespace Plasma
 {
 class Applet;
@@ -104,14 +106,16 @@ class AppletHandle : public QObject, public QGraphicsItem
         QColor m_gradientColor;
         QTimer *m_hoverTimer;
         QTimer *m_leaveTimer;
-        bool m_buttonsOnRight;
-        bool m_pendingFade;
         View *m_topview;
+        QGraphicsView *m_currentView;
 
         QPoint m_mousePos;  //mousepos relative to applet
         QPointF m_entryPos; //where the hover in event occurred
         QPointF m_pos;      //current position of applet in sceneCoords
         qreal m_zValue;     //current zValue of the applet, so it can be restored after drag.
+
+        bool m_buttonsOnRight : 1;
+        bool m_pendingFade : 1;
 };
 
 }

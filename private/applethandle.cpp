@@ -62,10 +62,11 @@ AppletHandle::AppletHandle(Containment *parent, Applet *applet, const QPointF &h
       m_tempAngle(0.0),
       m_scaleWidth(1.0),
       m_scaleHeight(1.0),
-      m_buttonsOnRight(false),
-      m_pendingFade(false),
       m_topview(0),
-      m_entryPos(hoverPos)
+      m_currentView(applet->view()),
+      m_entryPos(hoverPos),
+      m_buttonsOnRight(false),
+      m_pendingFade(false)
 {
     KColorScheme colorScheme(QPalette::Active, KColorScheme::View, Theme::defaultTheme()->colorScheme());
     m_gradientColor = colorScheme.background(KColorScheme::NormalBackground).color();
@@ -374,7 +375,7 @@ bool AppletHandle::leaveCurrentView(const QPoint &pos) const
             //is this widget a plasma view, a different view then our current one,
             //AND not a dashboardview?
             Plasma::View *v = qobject_cast<Plasma::View *>(widget);
-            if (v && v != m_applet->containment()->view()
+            if (v && v != m_currentView
                   && v != m_topview
                   && v->containment() != m_containment) {
                 return true;
@@ -442,7 +443,7 @@ void AppletHandle::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
                     m_topview->hide();
                     delete m_topview;
                     m_topview = 0;
-                    m_applet->d->ghostView = 0;
+                    m_applet->d->ghost = false;
                     m_applet->update();
                 }
 
@@ -450,7 +451,7 @@ void AppletHandle::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
                 if (leaveCurrentView(event->screenPos())) {
                     startFading(FadeOut, m_entryPos);
                     Plasma::View *v = Plasma::View::topLevelViewAt(event->screenPos());
-                    if (v && v != m_containment->view()) {
+                    if (v && v != m_currentView) {
                         Containment *c = v->containment();
                         QPoint pos = v->mapFromGlobal(event->screenPos());
                         //we actually have been dropped on another containment, so
@@ -539,7 +540,7 @@ void AppletHandle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
                 m_topview->hide();
                 delete m_topview;
                 m_topview = 0;
-                m_applet->d->ghostView = 0;
+                m_applet->d->ghost = false;
             }
         } else {
             //set the screenRect correctly. the screenRect contains the bounding
@@ -585,7 +586,7 @@ void AppletHandle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
                 m_topview->show();
 
-                m_applet->d->ghostView = m_containment->view();
+                m_applet->d->ghost = true;
 
                 //TODO: non compositing users are screwed: masking looks terrible.
                 //Consider always enabling the applet background. Stuff like the analog clock
