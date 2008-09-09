@@ -1184,8 +1184,9 @@ void Containment::setDrawWallpaper(bool drawWallpaper)
     d->drawWallpaper = drawWallpaper;
     if (d->drawWallpaper) {
         KConfigGroup cfg = config();
-        setWallpaper(cfg.readEntry("wallpaperplugin", defaultWallpaper),
-                     cfg.readEntry("wallpaperpluginmode", defaultWallpaperMode));
+        QString wallpaper = cfg.readEntry("wallpaperplugin", defaultWallpaper);
+        QString mode = cfg.readEntry("wallpaperpluginmode", defaultWallpaperMode);
+        setWallpaper(wallpaper, mode);
     } else if (!d->drawWallpaper && d->wallpaper) {
         delete d->wallpaper;
         d->wallpaper = 0;

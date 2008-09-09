@@ -136,6 +136,10 @@ public:
             delete applet;
             containment = new Containment(0, 0, id);
 
+            if (pluginName == "null") {
+                containment->setDrawWallpaper(false);
+            }
+
             // we want to provide something and don't care about the failure to launch
             containment->setFailedToLaunch(false);
             containment->setFormFactor(Plasma::Planar);
