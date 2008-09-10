@@ -1078,7 +1078,7 @@ void Applet::setHasConfigurationInterface(bool hasInterface)
     //TODO respect security when it's implemented (4.2)
     QAction *configAction = d->actions.action("configure");
     if (hasInterface) {
-        if (! configAction) { //should be always true
+        if (!configAction) { //should be always true
             configAction = new QAction(i18n("%1 Settings", name()), this);
             configAction->setIcon(KIcon("configure"));
             configAction->setShortcutContext(Qt::WidgetShortcut); //don't clash with other views
@@ -1182,6 +1182,7 @@ void Applet::showConfigurationInterface()
     if (!hasConfigurationInterface()) {
         return;
     }
+
     if (immutability() != Mutable && !KAuthorized::authorize("PlasmaAllowConfigureWhenLocked")) {
         return;
     }

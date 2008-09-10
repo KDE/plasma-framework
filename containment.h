@@ -426,6 +426,10 @@ class PLASMA_EXPORT Containment : public Applet
          */
         void destroy(bool confirm);
 
+        /**
+         * @reimplemented from Plasma::Applet
+         */
+        void showConfigurationInterface();
     protected:
         /**
          * Sets the type of this containment.

@@ -1391,6 +1391,12 @@ void Containment::destroy(bool confirm)
     }
 }
 
+void Containment::showConfigurationInterface()
+{
+    if (isContainment()) {
+        emit configureRequested();
+    }
+}
 
 // Private class implementation
 
