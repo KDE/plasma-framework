@@ -45,7 +45,7 @@ int AnimationDriver::animationFps(Plasma::Animator::Animation animation) const
 int AnimationDriver::movementAnimationFps(Plasma::Animator::Movement movement) const
 {
     Q_UNUSED(movement)
-    return 20;
+    return 40;
 }
 
 int AnimationDriver::elementAnimationFps(Plasma::Animator::Animation animation) const
@@ -70,7 +70,7 @@ int AnimationDriver::movementAnimationDuration(Plasma::Animator::Movement moveme
             break;
     }
 
-    return 270;
+    return 250;
 }
 
 int AnimationDriver::elementAnimationDuration(Plasma::Animator::Animation) const

@@ -338,9 +338,9 @@ int Animator::moveItem(QGraphicsItem* item, Movement movement, const QPoint &des
      state->frames = (duration / 1000.0) * frames;
      state->currentFrame = 0;
      state->interval = duration / state->frames;
-     state->interval -= qMax(MIN_TICK_RATE_INT, state->interval % MIN_TICK_RATE_INT);
+     state->interval = qMax(MIN_TICK_RATE_INT, state->interval - (state->interval % MIN_TICK_RATE_INT));
 //     state->interval = (state->interval / MIN_TICK_RATE) * MIN_TICK_RATE;
-     //kDebug() << "interval of" << state->interval;
+//     kDebug() << "interval of" << state->interval << state->frames << duration << frames;
      state->currentInterval = state->interval;
      state->qobj = dynamic_cast<QObject*>(item);
 
