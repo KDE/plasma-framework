@@ -21,6 +21,7 @@
 #include "animator.h"
 
 #include <QGraphicsItem>
+#include <QTimeLine>
 
 #include <KConfig>
 #include <KConfigGroup>
@@ -118,15 +119,15 @@ class AnimatorPrivate
             // and we don't own the items
         }
 
-        qreal calculateProgress(int frames, int currentFrame)
+        qreal calculateProgress(int time, int duration, Animator::CurveShape curve)
         {
             if (!(KGlobalSettings::graphicEffectsLevel() & KGlobalSettings::SimpleAnimationEffects)) {
                 return qreal(1.0);
             }
 
-            qreal progress = frames;
-            progress = currentFrame / progress;
-            progress = qMin(qreal(1.0), qMax(qreal(0.0), progress));
+            timeline.setCurveShape(static_cast<QTimeLine::CurveShape>(curve));
+            timeline.setDuration(duration);
+            qreal progress = timeline.valueForTime(time);
             return progress;
         }
 
@@ -174,6 +175,7 @@ class AnimatorPrivate
         int animId;
         int timerId;
         QTime time;
+        QTimeLine timeline;
 
         //TODO: eventually perhaps we should allow multiple animations simulataneously
         //      which would imply changing this to a QMap<QGraphicsItem*, QList<QTimeLine*> >
@@ -190,7 +192,7 @@ class AnimatorSingleton
         Animator self;
 };
 
-K_GLOBAL_STATIC( AnimatorSingleton, privateSelf )
+K_GLOBAL_STATIC(AnimatorSingleton, privateSelf)
 
 Animator* Animator::self()
 {
@@ -510,10 +512,9 @@ QPixmap Animator::currentPixmap(int id)
     }
 
     ElementAnimationState* state = it.value();
-    qreal progress = state->frames;
-    //kDebug() << "Animator::currentPixmap(" << id <<   " at " << progress;
-    progress = state->currentFrame / progress;
-    progress = qMin(qreal(1.0), qMax(qreal(0.0), progress));
+    qreal progress = d->calculateProgress(state->currentFrame * state->interval,
+                                          state->frames *  state->interval,
+                                          state->curve);
     //kDebug() << "Animator::currentPixmap(" << id <<   " at " << progress;
 
     switch (state->animation) {
@@ -556,11 +557,11 @@ void Animator::timerEvent(QTimerEvent *event)
                                    qMax(1, elapsed / state->interval) : state->frames - state->currentFrame;
 
             if (state->currentFrame < state->frames) {
-                qreal progress = d->calculateProgress(state->frames, state->currentFrame);
+                qreal progress = d->calculateProgress(state->currentFrame * state->interval,
+                                                      state->frames *  state->interval,
+                                                      state->curve);
                 d->performAnimation(progress, state);
                 state->currentInterval = state->interval;
-                //TODO: calculate a proper interval based on the curve
-                state->interval *= 1 - progress;
                 animationsRemain = true;
             } else {
                 d->performAnimation(1, state);
@@ -582,9 +583,10 @@ void Animator::timerEvent(QTimerEvent *event)
 
             if (state->currentFrame < state->frames) {
                 //kDebug() << "movement";
-                d->performMovement(d->calculateProgress(state->frames, state->currentFrame), state);
-                //TODO: calculate a proper interval based on the curve
-                state->currentInterval = state->interval;
+                qreal progress = d->calculateProgress(state->currentFrame * state->interval,
+                                                      state->frames *  state->interval,
+                                                      state->curve);
+                d->performMovement(progress, state);
                 animationsRemain = true;
             } else {
                 //kDebug() << "movement";
@@ -616,12 +618,10 @@ void Animator::timerEvent(QTimerEvent *event)
                     << state->currentFrame + qMax(1, elapsed / state->interval) << endl;*/
             state->currentFrame += (KGlobalSettings::graphicEffectsLevel() & KGlobalSettings::SimpleAnimationEffects) ?
                                    qMax(1, elapsed / state->interval) : state->frames - state->currentFrame;
-                                   
+
             state->item->update();
             if (state->currentFrame < state->frames) {
                 state->currentInterval = state->interval;
-                //TODO: calculate a proper interval based on the curve
-                state->interval *= 1 - d->calculateProgress(state->frames, state->currentFrame);
                 animationsRemain = true;
             } else {
                 d->animatedElements.remove(state->id);
@@ -649,13 +649,13 @@ void Animator::timerEvent(QTimerEvent *event)
                 animationsRemain = true;
                 // signal the object
                 // try with only progress as argument
-                if (!QMetaObject::invokeMethod(state->receiver, state->slot,
-                                          Q_ARG(qreal,
-                                                d->calculateProgress(state->frames, state->currentFrame)))) {
+                qreal progress = d->calculateProgress(state->currentFrame * state->interval,
+                                                      state->frames *  state->interval,
+                                                      state->curve);
+                if (!QMetaObject::invokeMethod(state->receiver, state->slot, Q_ARG(qreal, progress))) {
                 //if fails try to add the animation id
-                    QMetaObject::invokeMethod(state->receiver, state->slot,
-                                            Q_ARG(qreal,
-                                                  d->calculateProgress(state->frames, state->currentFrame)), Q_ARG(int, state->id));
+                    QMetaObject::invokeMethod(state->receiver, state->slot, Q_ARG(qreal, progress),
+                                              Q_ARG(int, state->id));
                 }
             } else {
                 if (!QMetaObject::invokeMethod(state->receiver, state->slot, Q_ARG(qreal, 1))) {
