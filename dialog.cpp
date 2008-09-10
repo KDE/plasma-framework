@@ -94,12 +94,18 @@ void DialogPrivate::themeUpdated()
 void DialogPrivate::adjustView()
 {
     if (view && widget) {
-        kDebug() << "resize the view.";
         QSize prevSize = q->size();
 
+        kDebug() << "Widget size:" << widget->size()
+                 << "| Widget size hint:" << widget->effectiveSizeHint(Qt::PreferredSize)
+                 << "| Widget bounding rect:" << widget->boundingRect();
+
+        QRectF boundingRect = widget->boundingRect();
+        boundingRect.setSize(widget->effectiveSizeHint(Qt::PreferredSize));
+
         //reposition and resize the view.
-        view->setSceneRect(widget->mapToScene(widget->boundingRect()).boundingRect());
-        view->resize(widget->size().toSize());
+        view->setSceneRect(widget->mapToScene(boundingRect).boundingRect());
+        view->resize(view->mapFromScene(view->sceneRect()).boundingRect().size());
         view->centerOn(widget);
 
         //set the sizehints correctly:
