@@ -208,6 +208,14 @@ void Containment::init()
                 d->toolBox->addTool(this->action("lock widgets"));
             }
             d->toolBox->addTool(this->action("add sibling containment"));
+            if (hasConfigurationInterface()) {
+                // re-use the contianment's action.
+                QAction* configureContainment = this->action("configure");
+                if (configureContainment) {
+                    d->toolBox->addTool(this->action("configure"));
+                }
+            }
+
         }
 
         //Set a default wallpaper the first time the containment is created,
