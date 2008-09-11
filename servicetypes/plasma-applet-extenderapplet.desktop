@@ -1,9 +1,6 @@
 [Desktop Entry]
-Name=ExtenderApplet
-Name[et]=Laiendusaplett
-Name[sv]=Utökningsminiprogram
+Name=Internal Extender Container
 Type=Service
-Hidden=True
 X-KDE-ServiceTypes=Plasma/Applet
-X-KDE-PluginInfo-Name=extenderapplet
-X-KDE-PluginInfo-EnabledByDefault=true
+X-KDE-PluginInfo-Name=extender
+X-KDE-PluginInfo-EnabledByDefault=false
