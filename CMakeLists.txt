@@ -48,6 +48,7 @@ set(plasma_LIB_SRCS
     private/applethandle.cpp
     private/datacontainer_p.cpp
     private/desktoptoolbox.cpp
+    private/extenderapplet.cpp
     private/nativetabbar.cpp
     private/packages.cpp
     private/paneltoolbox.cpp
@@ -285,6 +286,10 @@ install(FILES
    servicetypes/plasma-scriptengine.desktop
    servicetypes/plasma-wallpaper.desktop
    DESTINATION ${SERVICETYPES_INSTALL_DIR})
+
+install(FILES
+   servicetypes/plasma-applet-extenderapplet.desktop
+   DESTINATION ${SERVICES_INSTALL_DIR})
 
 install(FILES scripting/plasmoids.knsrc DESTINATION  ${CONFIG_INSTALL_DIR})
 

@@ -78,6 +78,7 @@
 #include "wallpaper.h"
 
 #include "private/containment_p.h"
+#include "private/extenderapplet_p.h"
 #include "private/packages_p.h"
 #include "private/toolbox_p.h"
 
@@ -1324,6 +1325,7 @@ Applet* Applet::load(const QString& appletName, uint appletId, const QVariantLis
         return 0;
     }
 
+
     QString constraint = QString("[X-KDE-PluginInfo-Name] == '%1'").arg(appletName);
     KService::List offers = KServiceTypeTrader::self()->query("Plasma/Applet", constraint);
 
@@ -1364,7 +1366,13 @@ Applet* Applet::load(const QString& appletName, uint appletId, const QVariantLis
     QVariantList allArgs;
     allArgs << offer->storageId() << appletId << args;
     QString error;
-    Applet* applet = offer->createInstance<Plasma::Applet>(0, allArgs, &error);
+    Applet *applet;
+
+    if (appletName == "extenderapplet") {
+        applet = new ExtenderApplet(0, allArgs);
+    } else {
+        applet = offer->createInstance<Plasma::Applet>(0, allArgs, &error);
+    }
 
     if (!applet) {
         kDebug() << "Couldn't load applet \"" << appletName << "\"! reason given: " << error;

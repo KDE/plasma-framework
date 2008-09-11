@@ -606,6 +606,9 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          * @endcode
          *
          * You can also add one or more custom qactions to this extender item in this function.
+         *
+         * Note that by default, not all ExtenderItems are persistent. Only items that are detached,
+         * will have there configuration stored when plasma exists.
          */
         virtual void initExtenderItem(ExtenderItem *item);
 
