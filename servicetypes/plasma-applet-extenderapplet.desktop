@@ -2,5 +2,5 @@
 Name=Internal Extender Container
 Type=Service
 X-KDE-ServiceTypes=Plasma/Applet
-X-KDE-PluginInfo-Name=extender
+X-KDE-PluginInfo-Name=internal:extender
 X-KDE-PluginInfo-EnabledByDefault=false

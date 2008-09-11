@@ -1359,7 +1359,7 @@ Applet* Applet::load(const QString& appletName, uint appletId, const QVariantLis
 
     KPluginLoader plugin(*offer);
 
-    if (!Plasma::isPluginVersionCompatible(plugin.pluginVersion()) && (appletName != "extender")) {
+    if (!Plasma::isPluginVersionCompatible(plugin.pluginVersion()) && (appletName != "internal:extender")) {
         return 0;
     }
 
@@ -1368,7 +1368,7 @@ Applet* Applet::load(const QString& appletName, uint appletId, const QVariantLis
     QString error;
     Applet *applet;
 
-    if (appletName == "extender") {
+    if (appletName == "internal:extender") {
         applet = new ExtenderApplet(0, allArgs);
     } else {
         applet = offer->createInstance<Plasma::Applet>(0, allArgs, &error);

@@ -866,7 +866,7 @@ void ExtenderItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
             mousePos = d->scenePosFromScreenPos(event->screenPos() - d->mousePos);
             foreach (Containment *containment, corona->containments()) {
                 if (containment->sceneBoundingRect().contains(mousePos)) {
-                    Applet *applet = containment->addApplet("extender",
+                    Applet *applet = containment->addApplet("internal:extender",
                                                             QVariantList(),
                                                             QRectF(mousePos, size()));
                     setExtender(applet->extender());
