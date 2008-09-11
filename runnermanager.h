@@ -1,7 +1,7 @@
 /*
- *   Copyright (C) 2006-2007 Ryan P. Bitanga <ryan.bitanga@gmail.com> 
- *   Copyright (C) 2006 Aaron Seigo <aseigo@kde.org> 
- *   Copyright 2008 Jordi Polo <mumismo@gmail.com>
+ *   Copyright (C) 2006 Aaron Seigo <aseigo@kde.org>
+ *   Copyright (C) 2007 Ryan P. Bitanga <ryan.bitanga@gmail.com>
+ *   Copyright (C) 2008 Jordi Polo <mumismo@gmail.com>
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU Library General Public License as
@@ -34,7 +34,7 @@ namespace Plasma
 {
     class QueryMatch;
     class AbstractRunner;
-    class RunnerContext; 
+    class RunnerContext;
     class RunnerManagerPrivate;
 
 /**
@@ -50,13 +50,13 @@ class PLASMA_EXPORT RunnerManager : public QObject
 
     public:
         explicit RunnerManager(QObject *parent=0);
-        explicit RunnerManager(KConfigGroup& config, QObject *parent=0);
+        explicit RunnerManager(KConfigGroup &config, QObject *parent=0);
         ~RunnerManager();
 
         /**
          * Finds and returns a loaded runner or NULL
          * @arg name the name of the runner
-         * @return Pointer to the runner 
+         * @return Pointer to the runner
          */
         AbstractRunner* runner(const QString &name) const;
 
@@ -96,14 +96,14 @@ class PLASMA_EXPORT RunnerManager : public QObject
 
     public Q_SLOTS:
         /**
-         * Launch a query, this will create threads and return inmediately. 
-         * When the information will be available can be known using the 
+         * Launch a query, this will create threads and return inmediately.
+         * When the information will be available can be known using the
          * matchesChanged signal.
          *
          * @arg term the term we want to find matches for
-         * @arg runner optional, if only one specific runner is to be used 
+         * @arg runner optional, if only one specific runner is to be used
          */
-        void launchQuery(const QString &term, const QString & runnerName);
+        void launchQuery(const QString &term, const QString &runnerName);
 
         /**
          * Convenience version of above
@@ -119,7 +119,7 @@ class PLASMA_EXPORT RunnerManager : public QObject
          * @arg runner the runner we will use, it is mandatory
          * @return 0 if nothing was launched, 1 if launched.
          */
-        bool execQuery(const QString &term, const QString & runnerName);
+        bool execQuery(const QString &term, const QString &runnerName);
 
         /**
          * Convenience version of above

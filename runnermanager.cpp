@@ -1,7 +1,7 @@
 /*
- *   Copyright (C) 2007 Ryan P. Bitanga <ryan.bitanga@gmail.com> 
- *   Copyright (C) 2006 Aaron Seigo <aseigo@kde.org> 
- *   Copyright 2008 Jordi Polo <mumismo@gmail.com>
+ *   Copyright (C) 2006 Aaron Seigo <aseigo@kde.org>
+ *   Copyright (C) 2007 Ryan P. Bitanga <ryan.bitanga@gmail.com>
+ *   Copyright (2) 2008 Jordi Polo <mumismo@gmail.com>
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU Library General Public License as
@@ -68,14 +68,13 @@ public:
         return m_cap;
     }
 
-    bool canRun(Job* job);
-    void free(Job* job);
-    void release(Job* job);
-    void destructed(Job* job);
+    bool canRun(Job *job);
+    void free(Job *job);
+    void release(Job *job);
+    void destructed(Job *job);
 private:
     RunnerRestrictionPolicy();
 
-//     QHash<QString, int> m_runCounts;
     int m_count;
     int m_cap;
     QMutex m_mutex;
@@ -98,42 +97,34 @@ RunnerRestrictionPolicy& RunnerRestrictionPolicy::instance()
     return policy;
 }
 
-bool RunnerRestrictionPolicy::canRun(Job* job)
+bool RunnerRestrictionPolicy::canRun(Job *job)
 {
     Q_UNUSED(job)
     QMutexLocker l(&m_mutex);
-//     QString type = job->objectName();
-    if (m_count/*m_runCounts.value(type)*/ > m_cap) {
-//         kDebug() << "Denying job " << type << " because of " << m_count/*m_runCounts[type]*/ << " current jobs" << endl;
+    if (m_count > m_cap) {
         return false;
     } else {
-//         m_runCounts[type]++;
         ++m_count;
         return true;
     }
 }
 
-void RunnerRestrictionPolicy::free(Job* job)
+void RunnerRestrictionPolicy::free(Job *job)
 {
     Q_UNUSED(job)
     QMutexLocker l(&m_mutex);
-//     QString type = job->objectName();
     --m_count;
-//     if (m_runCounts.value(type)) {
-//         m_runCounts[type]--;
-//     }
 }
 
-void RunnerRestrictionPolicy::release(Job* job)
+void RunnerRestrictionPolicy::release(Job *job)
 {
     free(job);
 }
 
-void RunnerRestrictionPolicy::destructed(Job* job)
+void RunnerRestrictionPolicy::destructed(Job *job)
 {
     Q_UNUSED(job)
 }
-
 
 /*****************************************************
 *  FindMatchesJob class
@@ -142,7 +133,7 @@ void RunnerRestrictionPolicy::destructed(Job* job)
 class FindMatchesJob : public Job
 {
 public:
-    FindMatchesJob(Plasma::AbstractRunner* runner, Plasma::RunnerContext* context, QObject* parent = 0);
+    FindMatchesJob(Plasma::AbstractRunner *runner, Plasma::RunnerContext *context, QObject *parent = 0);
 
     int priority() const;
     Plasma::AbstractRunner* runner() const;
@@ -150,12 +141,12 @@ public:
 protected:
     void run();
 private:
-    Plasma::RunnerContext* m_context;
-    Plasma::AbstractRunner* m_runner;
+    Plasma::RunnerContext *m_context;
+    Plasma::AbstractRunner *m_runner;
 };
 
-FindMatchesJob::FindMatchesJob(Plasma::AbstractRunner* runner,
-                               Plasma::RunnerContext* context, QObject* parent)
+FindMatchesJob::FindMatchesJob(Plasma::AbstractRunner *runner,
+                               Plasma::RunnerContext *context, QObject *parent)
     : ThreadWeaver::Job(parent),
       m_context(context),
       m_runner(runner)
@@ -208,7 +199,7 @@ public:
         emit q->matchesChanged(context.matches());
     }
 
-    void loadConfiguration(KConfigGroup& conf)
+    void loadConfiguration(KConfigGroup &conf)
     {
         config = conf;
 
@@ -247,7 +238,7 @@ public:
                 if (!loaded) {
                     QString api = service->property("X-Plasma-API").toString();
                     QString error;
-                    AbstractRunner* runner = 0;
+                    AbstractRunner *runner = 0;
 
                     if (api.isEmpty()) {
                         QVariantList args;
@@ -269,7 +260,7 @@ public:
                 }
             } else if (loaded) {
                 //Remove runner
-                AbstractRunner* runner = runners.take(runnerName);
+                AbstractRunner *runner = runners.take(runnerName);
                 kDebug() << "Removing runner: " << runnerName;
                 delete runner;
             }
@@ -278,7 +269,7 @@ public:
         //kDebug() << "All runners loaded, total:" << runners.count();
     }
 
-    void jobDone(ThreadWeaver::Job* job)
+    void jobDone(ThreadWeaver::Job *job)
     {
         FindMatchesJob *runJob = static_cast<FindMatchesJob*>(job);
         if (deferredRun.isEnabled() && runJob->runner() == deferredRun.runner()) {
@@ -308,7 +299,7 @@ public:
 *
 *****************************************************/
 RunnerManager::RunnerManager(QObject *parent)
-    : QObject(parent), 
+    : QObject(parent),
       d(new RunnerManagerPrivate(this))
 {
     KConfigGroup config(KGlobal::config(), "PlasmaRunnerManager");
@@ -317,8 +308,8 @@ RunnerManager::RunnerManager(QObject *parent)
 }
 
 
-RunnerManager::RunnerManager(KConfigGroup& config, QObject *parent)
-    : QObject(parent), 
+RunnerManager::RunnerManager(KConfigGroup &config, QObject *parent)
+    : QObject(parent),
       d(new RunnerManagerPrivate(this))
 {
     d->loadConfiguration(config);
@@ -416,10 +407,10 @@ void RunnerManager::launchQuery(const QString &term, const QString &runnerName)
     if (!runnerName.isEmpty()) {
         runable.append(runner(runnerName));
     } else {
-        runable = d->runners.values(); 
+        runable = d->runners.values();
     }
 
-    foreach (Plasma::AbstractRunner* r, runable) {
+    foreach (Plasma::AbstractRunner *r, runable) {
         if ((r->ignoredTypes() & d->context.type()) == 0) {
 //            kDebug() << "launching" << r->name();
             FindMatchesJob *job = new FindMatchesJob(r, &d->context, this);
