@@ -57,7 +57,6 @@ class PLASMA_EXPORT Wallpaper : public QObject
     Q_PROPERTY(QString icon READ icon)
     Q_PROPERTY(KServiceAction renderingMode READ renderingMode)
     Q_PROPERTY(QList<KServiceAction> listRenderingModes READ listRenderingModes)
-    Q_PROPERTY(QRectF boundingRect READ boundingRect WRITE setBoundingRect)
 
     public:
         ~Wallpaper();
