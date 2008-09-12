@@ -346,6 +346,8 @@ bool Package::installPackage(const QString& package,
         QString iconPath = targetName + '/' + cg.readEntry("Icon");
         QFile icon(iconPath);
         if (icon.exists()) {
+            KDesktopFile df(service);
+            KConfigGroup cg = df.desktopGroup();
             cg.writeEntry("Icon", iconPath);
         }
     }
@@ -427,6 +429,7 @@ bool Package::createPackage(const PackageMetadata &metadata,
                             const QString &destination,
                             const QString &icon) // static
 {
+    Q_UNUSED(icon)
     if (!metadata.isValid()) {
         kWarning(550) << "Metadata file is not complete";
         return false;
