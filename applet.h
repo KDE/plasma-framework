@@ -594,6 +594,11 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         virtual void init();
 
         /**
+         * Called when applet configuration values has changed.
+         */
+        virtual void configChanged();
+
+        /**
          * Get's called when and extender item has to be initialized after a plasma restart. If you
          * create ExtenderItems in your applet, you should implement this function to again create
          * the widget that should be shown in this extender item. This function might look something

@@ -190,7 +190,7 @@ void Applet::save(KConfigGroup &g) const
         //which isn't very nice.
         foreach (ExtenderItem *item, extender()->attachedItems()) {
             if (!item->isDetached() || item->autoExpireDelay()) {
-                //destroy temporary extender items, or items that aren't detached, so their 
+                //destroy temporary extender items, or items that aren't detached, so their
                 //configuration won't linger after a plasma restart.
                 item->destroy();
             }
@@ -443,7 +443,7 @@ QGraphicsView *Applet::view() const
     QGraphicsView *found = 0;
     QGraphicsView *possibleFind = 0;
     foreach (QGraphicsView *view, scene()->views()) {
-        kDebug() << "checking" << view->sceneRect() << "against" << sceneBoundingRect() 
+        kDebug() << "checking" << view->sceneRect() << "against" << sceneBoundingRect()
                  << scenePos();
         if (view->sceneRect().intersects(sceneBoundingRect()) ||
             view->sceneRect().contains(scenePos())) {
@@ -651,9 +651,9 @@ bool Applet::hasFailedToLaunch() const
 
 void Applet::paintWindowFrame(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget)
 {
-    Q_UNUSED( painter );
-    Q_UNUSED( option );
-    Q_UNUSED( widget );
+    Q_UNUSED(painter)
+    Q_UNUSED(option)
+    Q_UNUSED(widget)
     //Here come the code for the window frame
     //kDebug() << windowFrameGeometry();
     //painter->drawRoundedRect(windowFrameGeometry(), 5, 5);
@@ -1241,10 +1241,19 @@ void Applet::showConfigurationInterface()
         connect(dialog, SIGNAL(finished()), nullManager, SLOT(deleteLater()));
         //TODO: Apply button does not correctly work for now, so do not show it
         dialog->showButton( KDialog::Apply, false );
+        connect(dialog, SIGNAL(applyClicked()), this, SLOT(configChanged()));
+        connect(dialog, SIGNAL(okClicked()), this, SLOT(configChanged()));
         dialog->show();
     }
 
     emit releaseVisualFocus();
+}
+
+void Applet::configChanged()
+{
+    if (d->script) {
+        d->script->configChanged();
+    }
 }
 
 void Applet::createConfigurationInterface(KConfigDialog *parent)
@@ -1645,6 +1654,7 @@ void AppletPrivate::setupScriptSupport()
         // FIXME: KConfigSkeleton doesn't play well with KConfigGroup =/
         KConfigGroup config = q->config();
         configXml = new ConfigXml(&config, &file);
+        QObject::connect(configXml, SIGNAL(configChanged()), q, SLOT(configChanged()));
     }
 
     if (!package->filePath("mainconfigui").isEmpty()) {

@@ -125,6 +125,11 @@ public Q_SLOTS:
      */
     virtual void showConfigurationInterface();
 
+    /**
+     * Configure was changed.
+     */
+    virtual void configChanged();
+
 protected:
     /**
      * @arg engine name of the engine
