@@ -651,6 +651,9 @@ bool Applet::hasFailedToLaunch() const
 
 void Applet::paintWindowFrame(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget)
 {
+    Q_UNUSED( painter );
+    Q_UNUSED( option );
+    Q_UNUSED( widget );
     //Here come the code for the window frame
     //kDebug() << windowFrameGeometry();
     //painter->drawRoundedRect(windowFrameGeometry(), 5, 5);
