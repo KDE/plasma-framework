@@ -23,6 +23,8 @@
 #include <QGraphicsLinearLayout>
 #include <QVBoxLayout>
 #include <QTimer>
+#include <QApplication>
+#include <QDesktopWidget>
 
 #include <KIcon>
 #include <KIconLoader>
@@ -46,6 +48,7 @@ public:
           dialog(0),
           layout(0),
           proxy(0),
+          popupPlacement(Plasma::FloatingPopup),
           savedAspectRatio(Plasma::InvalidAspectRatioMode),
           timer(0)
     {
@@ -65,12 +68,14 @@ public:
     void hideTimedPopup();
     void dialogSizeChanged();
     void dialogStatusChanged(bool status);
+    void updateDialogPosition();
 
     PopupApplet *q;
     Plasma::Icon *icon;
     Plasma::Dialog *dialog;
     QGraphicsLinearLayout *layout;
     QGraphicsProxyWidget *proxy;
+    Plasma::PopupPlacement popupPlacement;
     Plasma::AspectRatioMode savedAspectRatio;
     QTimer *timer;
 };
@@ -273,10 +278,11 @@ QVariant PopupApplet::itemChange(GraphicsItemChange change, const QVariant &valu
     return Applet::itemChange(change, value);
 }
 
+
 void PopupApplet::showPopup(uint popupDuration)
 {
     if (d->dialog && (formFactor() == Horizontal || formFactor() == Vertical)) {
-        d->dialog->move(popupPosition(d->dialog->size()));
+        d->updateDialogPosition();
         d->dialog->show();
         KWindowSystem::setState(d->dialog->winId(), NET::SkipTaskbar | NET::SkipPager);
 
@@ -302,6 +308,11 @@ void PopupApplet::hidePopup()
     }
 }
 
+Plasma::PopupPlacement PopupApplet::popupPlacement() const
+{
+    return d->popupPlacement;
+}
+
 void PopupApplet::popupEvent(bool)
 {
 
@@ -314,11 +325,10 @@ void PopupAppletPrivate::togglePopup()
             timer->stop();
         }
 
-        dialog->move(q->popupPosition(dialog->size()));
-
         if (dialog->isVisible()) {
             dialog->hide();
         } else {
+            updateDialogPosition();
             dialog->show();
             KWindowSystem::setState(dialog->winId(), NET::SkipTaskbar | NET::SkipPager);
         }
@@ -335,10 +345,16 @@ void PopupAppletPrivate::hideTimedPopup()
 
 void PopupAppletPrivate::dialogSizeChanged()
 {
-    //Reposition the dialog.
+    //Reposition the dialog
     if (dialog) {
         dialog->updateGeometry();
         dialog->move(q->popupPosition(dialog->size()));
+
+        KConfigGroup sizeGroup = KConfigGroup(&q->config(), "PopupApplet");
+        sizeGroup.writeEntry("DialogHeight", dialog->height());
+        sizeGroup.writeEntry("DialogWidth", dialog->width());
+
+        emit q->configNeedsSaving();
     }
 }
 
@@ -347,6 +363,93 @@ void PopupAppletPrivate::dialogStatusChanged(bool status)
     q->popupEvent(status);
 }
 
+void PopupAppletPrivate::updateDialogPosition()
+{
+    KConfigGroup sizeGroup = KConfigGroup(&q->config(), "PopupApplet");
+    const int width = qMin(sizeGroup.readEntry("DialogWidth", 0), QApplication::desktop()->screen()->width() - 50);
+    const int height = qMin(sizeGroup.readEntry("DialogHeight", 0), QApplication::desktop()->screen()->height() - 50);
+
+    QSize saved(width, height);
+
+    if (saved.isNull()) {
+        dialog->adjustSize();
+    } else {
+        saved = saved.expandedTo(dialog->minimumSizeHint());
+        dialog->resize(saved);
+    }
+
+    QSize s = dialog->size();
+    QPoint pos = q->view()->mapFromScene(q->scenePos());
+    pos = q->view()->mapToGlobal(pos);
+
+    switch (q->location()) {
+    case BottomEdge:
+        pos = QPoint(pos.x(), pos.y() - s.height());
+        popupPlacement = Plasma::TopPosedLeftAlignedPopup;
+        dialog->setResizeHandleCorners(Dialog::NorthEast);
+
+        break;
+    case TopEdge:
+        pos = QPoint(pos.x(), pos.y() + (int)q->boundingRect().size().height());
+        popupPlacement = Plasma::BottomPosedLeftAlignedPopup;
+        dialog->setResizeHandleCorners(Dialog::SouthEast);
+
+        break;
+    case LeftEdge:
+        pos = QPoint(pos.x() + (int)q->boundingRect().size().width(), pos.y());
+        popupPlacement = Plasma::RightPosedTopAlignedPopup;
+        dialog->setResizeHandleCorners(Dialog::SouthEast);
+
+        break;
+
+    case RightEdge:
+        pos = QPoint(pos.x() - s.width(), pos.y());
+        popupPlacement = Plasma::LeftPosedTopAlignedPopup;
+        dialog->setResizeHandleCorners(Dialog::SouthWest);
+
+        break;
+    default:
+        if (pos.y() - s.height() > 0) {
+            pos = QPoint(pos.x(), pos.y() - s.height());
+        } else {
+            pos = QPoint(pos.x(), pos.y() + (int)q->boundingRect().size().height());
+        }
+
+        dialog->setResizeHandleCorners(Dialog::NorthEast);
+    }
+    //are we out of screen?
+
+    QRect screenRect = QApplication::desktop()->screenGeometry(q->containment() ? q->containment()->screen() : -1);
+    //kDebug() << "==> rect for" << (containment() ? containment()->screen() : -1) << "is" << screenRect;
+
+    if (pos.rx() + s.width() > screenRect.right()) {
+        pos.rx() += (int)q->boundingRect().size().width() - s.width();
+
+        if (q->location() == BottomEdge) {
+            popupPlacement = Plasma::TopPosedRightAlignedPopup;
+            dialog->setResizeHandleCorners(Dialog::NorthWest);
+        } else if (q->location() == TopEdge) {
+            popupPlacement = Plasma::BottomPosedRightAlignedPopup;
+            dialog->setResizeHandleCorners(Dialog::SouthWest);
+        }
+    }
+
+    if (pos.ry() + s.height() > screenRect.bottom()) {
+        pos.ry() += (int)q->boundingRect().size().height() - s.height();
+
+        if (q->location() == LeftEdge) {
+            popupPlacement = Plasma::RightPosedBottomAlignedPopup;
+            dialog->setResizeHandleCorners(Dialog::NorthEast);
+        } else if (q->location() == RightEdge) {
+            popupPlacement = Plasma::LeftPosedBottomAlignedPopup;
+            dialog->setResizeHandleCorners(Dialog::NorthWest);
+        }
+    }
+
+    pos.rx() = qMax(0, pos.rx());
+
+    dialog->move(pos);
+}
 } // Plasma namespace
 
 #include "popupapplet.moc"

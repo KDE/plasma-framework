@@ -120,6 +120,22 @@ enum Position { LeftPositioned    /**< Positioned left */,
               };
 
 /**
+ * The popup position enumeration relatively to his attached widget
+ *
+ **/
+
+enum PopupPlacement { FloatingPopup = 0 /**< Free floating, non attached popup */,
+                      TopPosedLeftAlignedPopup     /**< Popup positioned on the top, aligned to the left of the wigdet */,
+                      TopPosedRightAlignedPopup    /**< Popup positioned on the top, aligned to the right of the widget */,
+                      LeftPosedTopAlignedPopup     /**< Popup positioned on the left, aligned to the right of the wigdet */,
+                      LeftPosedBottomAlignedPopup  /**< Popup positioned on the left, aligned to the bottom of the widget */,
+                      BottomPosedLeftAlignedPopup  /**< Popup positioned on the bottom, aligned to the left of the wigdet */,
+                      BottomPosedRightAlignedPopup /**< Popup positioned on the bottom, aligned to the right of the widget */,
+                      RightPosedTopAlignedPopup    /**< Popup positioned on the right, aligned to the top of the wigdet */,
+                      RightPosedBottomAlignedPopup /**< Popup positioned on the right, aligned to the bottom of the widget */
+                    };
+
+/**
  * Flip enumeration
  */
 enum FlipDirection { NoFlip = 0          /**< Do not flip */,

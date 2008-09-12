@@ -812,6 +812,7 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         friend class AppletScript;
         friend class AppletHandle;
         friend class AppletPrivate;
+        friend class PopupAppletPrivate;
 
         //FIXME: this shouldn't be necesarry.
         friend class Extender;
