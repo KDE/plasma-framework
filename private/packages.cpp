@@ -48,7 +48,7 @@ PlasmoidPackage::PlasmoidPackage(QObject *parent)
     mimetypes << "text/*";
     setMimetypes("scripts", mimetypes);
 
-    addFileDefinition("mainconfiggui", "ui/config.ui", i18n("Main Config UI File"));
+    addFileDefinition("mainconfigui", "ui/config.ui", i18n("Main Config UI File"));
     addFileDefinition("mainconfigxml", "config/main.xml", i18n("Configuration XML file"));
     addFileDefinition("mainscript", "code/main", i18n("Main Script File"));
     setRequired("mainscript", true);
