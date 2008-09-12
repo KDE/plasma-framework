@@ -29,6 +29,7 @@
 #include <KIcon>
 #include <KIconLoader>
 #include <KWindowSystem>
+#include <KGlobalSettings>
 
 #include <plasma/dialog.h>
 #include <plasma/corona.h>
@@ -50,7 +51,8 @@ public:
           proxy(0),
           popupPlacement(Plasma::FloatingPopup),
           savedAspectRatio(Plasma::InvalidAspectRatioMode),
-          timer(0)
+          timer(0),
+          startupComplete(false)
     {
     }
 
@@ -78,6 +80,8 @@ public:
     Plasma::PopupPlacement popupPlacement;
     Plasma::AspectRatioMode savedAspectRatio;
     QTimer *timer;
+    QPoint clicked;
+    bool startupComplete;
 };
 
 PopupApplet::PopupApplet(QObject *parent, const QVariantList &args)
@@ -86,6 +90,11 @@ PopupApplet::PopupApplet(QObject *parent, const QVariantList &args)
 {
     int iconSize = IconSize(KIconLoader::Desktop);
     resize(iconSize, iconSize);
+    if (!icon().isNull()) {
+        setPopupIcon(KIcon(icon()));
+    } else {
+        setPopupIcon(KIcon("icons"));
+    }
 }
 
 PopupApplet::~PopupApplet()
@@ -93,27 +102,41 @@ PopupApplet::~PopupApplet()
     delete d;
 }
 
-void PopupApplet::setIcon(const QIcon &icon)
+void PopupApplet::setPopupIcon(const QIcon &icon)
 {
+    if (icon.isNull()) {
+        if (d->icon) {
+            delete d->icon;
+            d->icon = 0;
+            setLayout(0);
+        }
+
+        return;
+    }
+
     if (!d->icon) {
         d->icon = new Plasma::Icon(icon, QString(), this);
+        connect(d->icon, SIGNAL(clicked()), this, SLOT(togglePopup()));
+
+        QGraphicsLinearLayout *layout = new QGraphicsLinearLayout();
+        layout->setContentsMargins(0, 0, 0, 0);
+        layout->setSpacing(0);
+        layout->setOrientation(Qt::Horizontal);
+        setAspectRatioMode(Plasma::ConstrainedSquare);
+        setLayout(layout);
     } else {
         d->icon->setIcon(icon);
     }
 }
 
-void PopupApplet::setIcon(const QString &iconName)
+void PopupApplet::setPopupIcon(const QString &iconName)
 {
-    if (!d->icon) {
-        d->icon = new Plasma::Icon(KIcon(iconName), QString(), this);
-    } else {
-        d->icon->setIcon(iconName);
-    }
+    setPopupIcon(KIcon(iconName));
 }
 
-QIcon PopupApplet::icon() const
+QIcon PopupApplet::popupIcon() const
 {
-    return d->icon->icon();
+    return d->icon ? d->icon->icon() : QIcon();
 }
 
 QWidget *PopupApplet::widget()
@@ -129,35 +152,26 @@ QGraphicsWidget *PopupApplet::graphicsWidget()
 void PopupApplet::constraintsEvent(Plasma::Constraints constraints)
 {
     if (constraints & Plasma::StartupCompletedConstraint) {
-        if (!d->icon) {
-            d->icon = new Plasma::Icon(KIcon("icons"), QString(), this);
-        }
-
-        d->layout = new QGraphicsLinearLayout(this);
-        d->layout->setContentsMargins(0, 0, 0, 0);
-        d->layout->setSpacing(0);
-        d->layout->setOrientation(Qt::Horizontal);
-        setAspectRatioMode(Plasma::ConstrainedSquare);
-        setLayout(d->layout);
-
-        connect(d->icon, SIGNAL(clicked()), this, SLOT(togglePopup()));
+        d->startupComplete = true;
     }
 
-    //since we call this function when an extender's geometry gets updated, we want to avoid doing
-    //anything if the StartupCompletedConstraint hasn't been called yet.
-    if (!d->layout) {
+    if (!d->startupComplete) {
         return;
     }
 
-    if (constraints & Plasma::FormFactorConstraint) {
-        d->layout->removeAt(0);
+    QGraphicsLinearLayout *lay = dynamic_cast<QGraphicsLinearLayout *>(layout());
 
-        switch (formFactor()) {
-        case Plasma::Planar:
-        case Plasma::MediaCenter: {
-            if (d->icon) {
-                d->icon->hide();
-            }
+    if (constraints & Plasma::FormFactorConstraint) {
+        if (lay) {
+            lay->removeAt(0);
+        }
+
+        if ((formFactor() != Plasma::Vertical && formFactor() != Plasma::Horizontal) &&
+             d->icon) {
+            // we only switch to expanded if we aren't horiz/vert constrained and
+            // this applet has an icon.
+            // otherwise, we leave it up to the applet itself to figure it out
+            d->icon->hide();
 
             if (d->savedAspectRatio != Plasma::InvalidAspectRatioMode) {
                 setAspectRatioMode(d->savedAspectRatio);
@@ -178,24 +192,24 @@ void PopupApplet::constraintsEvent(Plasma::Constraints constraints)
 
             QGraphicsWidget *gWidget = graphicsWidget();
             if (gWidget) {
-                d->layout->addItem(gWidget);
+                if (lay) {
+                    lay->addItem(gWidget);
+                }
                 setMinimumSize(gWidget->minimumSize() + marginSize);
                 gWidget->installEventFilter(this);
-            } else {
+            } else if (widget()) {
                 if (!d->proxy) {
                     d->proxy = new QGraphicsProxyWidget(this);
                     d->proxy->setWidget(widget());
                     d->proxy->show();
                 }
 
-                d->layout->addItem(d->proxy);
+                if (lay) {
+                    lay->addItem(d->proxy);
+                }
                 setMinimumSize(widget() ? widget()->minimumSize() + marginSize : QSizeF(300, 200));
             }
-
-            break;
-        }
-        case Plasma::Horizontal:
-        case Plasma::Vertical:
+        } else {
             //save the aspect ratio mode in case we drag'n drop in the Desktop later
             d->savedAspectRatio = aspectRatioMode();
             setAspectRatioMode(Plasma::ConstrainedSquare);
@@ -211,6 +225,7 @@ void PopupApplet::constraintsEvent(Plasma::Constraints constraints)
             }
 
             if (!d->dialog) {
+                kDebug() << "making dialog with view" << view();
                 d->dialog = new Plasma::Dialog();
 
                 //no longer use Qt::Popup since that seems to cause a lot of problem when you drag
@@ -234,7 +249,7 @@ void PopupApplet::constraintsEvent(Plasma::Constraints constraints)
                         graphicsWidget()->setMinimumSize(gWidget->preferredSize());
                         d->dialog->setGraphicsWidget(gWidget);
                     }
-                } else {
+                } else if (widget()) {
                     QVBoxLayout *l_layout = new QVBoxLayout(d->dialog);
                     l_layout->setSpacing(0);
                     l_layout->setMargin(0);
@@ -243,10 +258,31 @@ void PopupApplet::constraintsEvent(Plasma::Constraints constraints)
             }
 
             d->dialog->adjustSize();
-            d->layout->addItem(d->icon);
 
-            break;
+            if (d->icon && lay) {
+                lay->addItem(d->icon);
+            }
         }
+    }
+}
+
+void PopupApplet::mousePressEvent(QGraphicsSceneMouseEvent *event)
+{
+    if (!d->icon && event->buttons() == Qt::LeftButton) {
+        d->clicked = scenePos().toPoint();
+        event->setAccepted(true);
+        return;
+    } else {
+        Applet::mousePressEvent(event);
+    }
+}
+
+void PopupApplet::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
+{
+    if (!d->icon && (d->clicked - scenePos().toPoint()).manhattanLength() < KGlobalSettings::dndEventDelay()) {
+        d->togglePopup();
+    } else {
+        Applet::mouseReleaseEvent(event);
     }
 }
 

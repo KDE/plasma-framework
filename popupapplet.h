@@ -55,17 +55,17 @@ public:
     /**
      * @arg icon the icon that has to be displayed when the applet is in a panel.
      */
-    void setIcon(const QIcon &icon);
+    void setPopupIcon(const QIcon &icon);
 
     /**
      * @arg icon the icon that has to be displayed when the applet is in a panel.
      */
-    void setIcon(const QString &iconName);
+    void setPopupIcon(const QString &iconName);
 
     /**
      * @return the icon that is displayed when the applet is in a panel.
      */
-    QIcon icon() const;
+    QIcon popupIcon() const;
 
     /**
      * Implement either this function or graphicsWidget().
@@ -108,6 +108,8 @@ public Q_SLOTS:
 
 protected:
     void constraintsEvent(Plasma::Constraints constraints);
+    void mousePressEvent(QGraphicsSceneMouseEvent *event);
+    void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
     bool eventFilter(QObject *watched, QEvent *event);
     QVariant itemChange(GraphicsItemChange change, const QVariant &value);
 
