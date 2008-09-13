@@ -275,9 +275,10 @@ void AppletHandle::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
         break;
     }
 
-    painter->drawPixmap(basePoint + shiftM, SmallIcon("transform-scale")); //FIXME no transform-resize icon
-
-    basePoint += step;
+    if (m_applet && m_applet->aspectRatioMode() != FixedSize) {
+        painter->drawPixmap(basePoint + shiftM, SmallIcon("transform-scale")); //FIXME no transform-resize icon
+        basePoint += step;
+    }
     painter->drawPixmap(basePoint + shiftR, SmallIcon("transform-rotate"));
 
     if (m_applet && m_applet->hasConfigurationInterface()) {
@@ -302,11 +303,13 @@ AppletHandle::ButtonType AppletHandle::mapToButton(const QPointF &point) const
 
     QRectF activeArea = QRectF(basePoint, QSizeF(m_iconSize, m_iconSize));
 
-    if (activeArea.contains(point)) {
-        return ResizeButton;
+    if (m_applet && m_applet->aspectRatioMode() != FixedSize) {
+        if (activeArea.contains(point)) {
+            return ResizeButton;
+        }
+        activeArea.translate(step);
     }
 
-    activeArea.translate(step);
     if (activeArea.contains(point)) {
         return RotateButton;
     }
