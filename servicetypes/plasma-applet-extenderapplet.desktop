@@ -1,5 +1,8 @@
 [Desktop Entry]
 Name=Internal Extender Container
+Name[pt]=Contentor de Extensão Interno
+Name[pt_BR]=Contentor de Extensão Interno
+Name[uk]=Внутрішній контейнер розширювача
 Type=Service
 X-KDE-ServiceTypes=Plasma/Applet
 X-KDE-PluginInfo-Name=internal:extender
