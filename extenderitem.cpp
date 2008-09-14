@@ -386,8 +386,10 @@ QString ExtenderItem::name() const
 
 void ExtenderItem::setWidget(QGraphicsWidget *widget)
 {
+    qreal left, top, right, bottom;
+    d->dragger->getMargins(left, top, right, bottom);
     widget->setParentItem(this);
-    widget->setPos(QPointF(0, d->dragHandleRect().height()));
+    widget->setPos(QPointF(left, d->dragHandleRect().height() + bottom));
     d->widget = widget;
     setCollapsed(isCollapsed()); //updates the size hints.
 }
@@ -552,23 +554,35 @@ void ExtenderItem::setCollapsed(bool collapsed)
     d->widget->setVisible(!collapsed);
 
     if (collapsed) {
-        setPreferredSize(QSizeF(d->widget->preferredWidth(), d->dragHandleRect().height()));
-        setMinimumSize(QSizeF(d->widget->minimumWidth(), d->dragHandleRect().height()));
-        setMaximumSize(QSizeF(d->widget->maximumWidth(), d->dragHandleRect().height()));
+        setPreferredSize(QSizeF(d->widget->preferredWidth() + left + right,
+                                d->dragHandleRect().height()));
+        setMinimumSize(QSizeF(d->widget->minimumWidth() + left + right,
+                              d->dragHandleRect().height()));
+        setMaximumSize(QSizeF(d->widget->maximumWidth() + left + right,
+                              d->dragHandleRect().height()));
         setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
         //FIXME: why don't tooltips work?
-        //d->collapseIcon->setToolTip(i18n("Expand this widget"));
+        if (d->collapseIcon) {
+            d->collapseIcon->setToolTip(i18n("Expand this widget"));
+        }
     } else {
-        setPreferredSize(QSizeF(d->widget->preferredWidth(),
-                         d->widget->preferredHeight() + d->dragHandleRect().height()));
-        setMinimumSize(  QSizeF(d->widget->minimumWidth(),
-                         d->widget->minimumHeight() + d->dragHandleRect().height()));
-        setMaximumSize(  QSizeF(d->widget->maximumWidth(),
-                         d->widget->maximumHeight() + d->dragHandleRect().height()));
+        setPreferredSize(QSizeF(d->widget->preferredWidth() + left + right,
+                         d->widget->preferredHeight() +
+                         d->dragHandleRect().height() + top + bottom));
+        setMinimumSize(  QSizeF(d->widget->minimumWidth() + left + right,
+                         d->widget->minimumHeight() +
+                         d->dragHandleRect().height() + top + bottom));
+        setMaximumSize(  QSizeF(d->widget->maximumWidth() + left + right,
+                         d->widget->maximumHeight() +
+                         d->dragHandleRect().height() + top + bottom));
 
         setSizePolicy(d->widget->sizePolicy());
-        //d->collapseIcon->setToolTip(i18n("Collapse this widget"));
+        if (d->collapseIcon) {
+            d->collapseIcon->setToolTip(i18n("Collapse this widget"));
+        }
     }
+
+    updateGeometry();
 
     if (d->extender) {
         d->extender->d->adjustSizeHints();
@@ -650,6 +664,7 @@ void ExtenderItem::resizeEvent(QGraphicsSceneResizeEvent *event)
     if (d->widget) {
         QSizeF newWidgetSize = event->newSize();
         newWidgetSize.setHeight(newWidgetSize.height() - d->dragger->size().height() - top - bottom);
+        newWidgetSize.setWidth(newWidgetSize.width() - left - right);
         d->widget->resize(newWidgetSize);
     }
 
@@ -660,6 +675,7 @@ void ExtenderItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     kDebug() << "the mouse pressed yeah yeah yeah!";
     if (!(d->dragHandleRect().contains(event->pos()))) {
+        event->ignore();
         return;
     }
 
@@ -674,17 +690,10 @@ void ExtenderItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
     setZValue(parentApplet->zValue());
 
     if (d->extender) {
-        //d->extender->itemHoverEnterEvent(this);
-        //d->extender->itemHoverMoveEvent(this, d->extender->mapFromScene(event->scenePos()));
         d->extender->itemHoverMoveEvent(this, d->extender->mapFromScene(d->scenePosFromScreenPos(event->screenPos())));
     }
 
     d->extender->d->removeExtenderItem(this);
-
-    //call the move event, since that spawns a toplevel view when this extender item is in a
-    //Plasma::Dialog, which is very essential since else the dialog will close before having been
-    //able to receive any move events.
-    //mouseMoveEvent(event);
 
     QApplication::setOverrideCursor(Qt::ClosedHandCursor);
 }
