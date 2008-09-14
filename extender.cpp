@@ -177,7 +177,7 @@ void Extender::itemRemovedEvent(ExtenderItem *item)
     d->layout->removeItem(item);
 
     //add the empty extender message if needed.
-    if (!attachedItems().count()) {
+    if (!attachedItems().count() && !d->spacerWidget) {
         d->emptyExtenderLabel->show();
         d->emptyExtenderLabel->setMinimumSize(item->size());
         //just in case:
