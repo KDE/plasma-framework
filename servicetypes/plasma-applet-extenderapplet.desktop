@@ -1,8 +1,10 @@
 [Desktop Entry]
 Name=Internal Extender Container
+Name[gl]=Continente de extensor interno
 Name[nds]=Intern Verwiederngelaats
 Name[pt]=Contentor de Extensão Interno
 Name[pt_BR]=Contentor de Extensão Interno
+Name[sv]=Intern utökningsbehållare
 Name[uk]=Внутрішній контейнер розширювача
 Type=Service
 X-KDE-ServiceTypes=Plasma/Applet
