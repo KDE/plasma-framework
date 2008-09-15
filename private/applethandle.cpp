@@ -110,6 +110,12 @@ AppletHandle::AppletHandle(Containment *parent, Applet *applet, const QPointF &h
     setAcceptsHoverEvents(true);
     m_hoverTimer->start();
 
+    //icons
+    m_configureIcons = new Plasma::Svg(this);
+    m_configureIcons->setImagePath("widgets/configuration-icons");
+    //FIXME: this should be of course true, but works only if false
+    m_configureIcons->setContainsMultipleImages(true);
+
     //We got to be able to see the applet while dragging to to another containment,
     //so we want a high zValue.
     //FIXME: apparently this doesn't work: sometimes an applet still get's drawn behind
@@ -275,19 +281,25 @@ void AppletHandle::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
         break;
     }
 
+    const QSizeF iconSize(KIconLoader::SizeSmall, KIconLoader::SizeSmall);
+
     if (m_applet && m_applet->aspectRatioMode() != FixedSize) {
-        painter->drawPixmap(basePoint + shiftM, SmallIcon("transform-scale")); //FIXME no transform-resize icon
+        if (m_buttonsOnRight) {
+            m_configureIcons->paint(painter, QRectF(basePoint + shiftM, iconSize), "size-diagonal-tr2bl");
+        } else {
+            m_configureIcons->paint(painter, QRectF(basePoint + shiftM, iconSize), "size-diagonal-tl2br");
+        }
         basePoint += step;
     }
-    painter->drawPixmap(basePoint + shiftR, SmallIcon("transform-rotate"));
+    m_configureIcons->paint(painter, QRectF(basePoint + shiftR, iconSize), "rotate");
 
     if (m_applet && m_applet->hasConfigurationInterface()) {
         basePoint += step;
-        painter->drawPixmap(basePoint + shiftC, SmallIcon("configure"));
+        m_configureIcons->paint(painter, QRectF(basePoint + shiftC, iconSize), "configure");
     }
 
     basePoint = m_rect.bottomLeft() + QPointF(HANDLE_MARGIN, 0) - step;
-    painter->drawPixmap(basePoint + shiftD, SmallIcon("edit-delete"));
+    m_configureIcons->paint(painter, QRectF(basePoint + shiftD, iconSize), "close");
 
     painter->restore();
 }

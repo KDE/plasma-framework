@@ -109,6 +109,8 @@ class AppletHandle : public QObject, public QGraphicsItem
         View *m_topview;
         QGraphicsView *m_currentView;
 
+        Plasma::Svg *m_configureIcons;
+
         QPoint m_mousePos;  //mousepos relative to applet
         QPointF m_entryPos; //where the hover in event occurred
         QPointF m_pos;      //current position of applet in sceneCoords
