@@ -136,7 +136,7 @@ QString Package::filePath(const char* fileType, const QString& filename) const
         // ensure that we don't return files outside of our base path
         // due to symlink or ../ games
         QDir dir(path);
-        QString canonicalized = dir.canonicalPath();
+        QString canonicalized = dir.canonicalPath() + QDir::separator();
         if (canonicalized.startsWith(d->basePath)) {
             return path;
         }
