@@ -54,10 +54,10 @@ class PanelSvgPrivate;
 class PLASMA_EXPORT Svg : public QObject
 {
     Q_OBJECT
-    Q_ENUMS( ContentType )
-    Q_PROPERTY( QSize size READ size )
-    Q_PROPERTY( bool multipleImages READ containsMultipleImages WRITE setContainsMultipleImages )
-    Q_PROPERTY( QString filePath READ imagePath WRITE setImagePath )
+    Q_ENUMS(ContentType)
+    Q_PROPERTY(QSize size READ size)
+    Q_PROPERTY(bool multipleImages READ containsMultipleImages WRITE setContainsMultipleImages)
+    Q_PROPERTY(QString imagePath READ imagePath WRITE setImagePath)
 
     public:
 
