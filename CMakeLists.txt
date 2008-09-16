@@ -233,6 +233,7 @@ includes/Dialog
 includes/Extender
 includes/ExtenderItem
 includes/Flash
+includes/Frame
 includes/GroupBox
 includes/Icon
 includes/Label
