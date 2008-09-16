@@ -624,6 +624,7 @@ void ExtenderItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
     Plasma::Theme *theme = Plasma::Theme::defaultTheme();
     QFont font = theme->font(Plasma::Theme::DefaultFont);
     font.setPointSize(font.pointSize() - 2);
+    font.setWeight(QFont::Bold);
 
     //XXX: duplicated from windowtaskitem.
     //TODO: hmm, create something generic for this... there's probably more stuff that wants to have

@@ -116,7 +116,7 @@ QList<ExtenderItem*> Extender::detachedItems() const
 ExtenderItem *Extender::item(const QString &name) const
 {
     foreach (ExtenderItem *item, items()) {
-        if (item->config().readEntry("extenderItemName", "") == name) {
+        if (item->name() == name) {
             return item;
         }
     }
@@ -150,8 +150,6 @@ void Extender::resizeEvent(QGraphicsSceneResizeEvent *event)
 
 void Extender::itemAddedEvent(ExtenderItem *item, const QPointF &pos)
 {
-    kDebug() << "Adding item to layout.";
-
     //this is a sane size policy imo.
     item->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
 
@@ -172,8 +170,6 @@ void Extender::itemAddedEvent(ExtenderItem *item, const QPointF &pos)
 
 void Extender::itemRemovedEvent(ExtenderItem *item)
 {
-    kDebug() << "Removing item from layout.";
-
     d->layout->removeItem(item);
 
     //add the empty extender message if needed.
@@ -368,6 +364,7 @@ void ExtenderPrivate::loadExtenderItems()
             kDebug() << "                      extenderItemId = " << extenderItemId;
         } else {
             ExtenderItem *item = new ExtenderItem(q, extenderItemId.toInt());
+            sourceApplet->setName(extenderItemName);
             sourceApplet->initExtenderItem(item);
 
             if (temporarySourceApplet) {
