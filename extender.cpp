@@ -364,7 +364,7 @@ void ExtenderPrivate::loadExtenderItems()
             kDebug() << "                      extenderItemId = " << extenderItemId;
         } else {
             ExtenderItem *item = new ExtenderItem(q, extenderItemId.toInt());
-            sourceApplet->setName(extenderItemName);
+            item->setName(extenderItemName);
             sourceApplet->initExtenderItem(item);
 
             if (temporarySourceApplet) {
