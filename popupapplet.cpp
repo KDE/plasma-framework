@@ -96,6 +96,8 @@ PopupApplet::PopupApplet(QObject *parent, const QVariantList &args)
     } else {
         setPopupIcon(KIcon("icons"));
     }
+
+    connect(this, SIGNAL(activate()), this, SLOT(togglePopup()));
 }
 
 PopupApplet::~PopupApplet()
@@ -332,7 +334,6 @@ QVariant PopupApplet::itemChange(GraphicsItemChange change, const QVariant &valu
     return Applet::itemChange(change, value);
 }
 
-
 void PopupApplet::showPopup(uint popupDuration)
 {
     if (d->dialog && (formFactor() == Horizontal || formFactor() == Vertical)) {
@@ -404,7 +405,8 @@ void PopupAppletPrivate::dialogSizeChanged()
         dialog->updateGeometry();
         dialog->move(q->popupPosition(dialog->size()));
 
-        KConfigGroup sizeGroup = KConfigGroup(&q->config(), "PopupApplet");
+        KConfigGroup sizeGroup = q->config();
+        sizeGroup = KConfigGroup(&sizeGroup, "PopupApplet");
         sizeGroup.writeEntry("DialogHeight", dialog->height());
         sizeGroup.writeEntry("DialogWidth", dialog->width());
 
@@ -419,7 +421,8 @@ void PopupAppletPrivate::dialogStatusChanged(bool status)
 
 void PopupAppletPrivate::updateDialogPosition()
 {
-    KConfigGroup sizeGroup = KConfigGroup(&q->config(), "PopupApplet");
+    KConfigGroup sizeGroup = q->config();
+    sizeGroup = KConfigGroup(&sizeGroup, "PopupApplet");
     const int width = qMin(sizeGroup.readEntry("DialogWidth", 0), QApplication::desktop()->screen()->width() - 50);
     const int height = qMin(sizeGroup.readEntry("DialogHeight", 0), QApplication::desktop()->screen()->height() - 50);
 

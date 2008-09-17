@@ -118,6 +118,7 @@ private:
     Q_PRIVATE_SLOT(d, void hideTimedPopup())
     Q_PRIVATE_SLOT(d, void dialogSizeChanged())
     Q_PRIVATE_SLOT(d, void dialogStatusChanged(bool))
+
     PopupAppletPrivate * const d;
 };
 
