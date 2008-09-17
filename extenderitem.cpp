@@ -416,6 +416,13 @@ QIcon ExtenderItem::icon() const
 
 void ExtenderItem::setExtender(Extender *extender, const QPointF &pos)
 {
+    if (extender == d->extender) {
+        //We're not moving between extenders, so just insert this item back into the layout.
+        setParentItem(extender);
+        extender->d->addExtenderItem(this, pos);
+        return;
+    }
+
     //We are switching extender...
     //first remove this item from the old extender.
     if (d->extender) {
