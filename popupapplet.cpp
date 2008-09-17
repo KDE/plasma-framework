@@ -1,5 +1,6 @@
 /*
  * Copyright 2008 by Montel Laurent <montel@kde.org>
+ * Copyright 2008 by Marco Martin <notmart@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -160,14 +161,32 @@ void PopupApplet::constraintsEvent(Plasma::Constraints constraints)
     }
 
     QGraphicsLinearLayout *lay = dynamic_cast<QGraphicsLinearLayout *>(layout());
+    Plasma::FormFactor f = formFactor();
 
-    if (constraints & Plasma::FormFactorConstraint) {
+    if (constraints & Plasma::FormFactorConstraint ||
+        (constraints & Plasma::SizeConstraint && (f == Plasma::Vertical || f == Plasma::Horizontal))) {
         if (lay) {
             lay->removeAt(0);
         }
 
-        if ((formFactor() != Plasma::Vertical && formFactor() != Plasma::Horizontal) &&
-             d->icon) {
+        QSizeF minimum;
+        QSizeF containmentSize;
+
+        QGraphicsWidget *gWidget = graphicsWidget();
+
+        if (gWidget) {
+            minimum = gWidget->minimumSize();
+        } else if (widget()) {
+            minimum = widget()->minimumSizeHint();
+        }
+
+        if (containment()) {
+            containmentSize = containment()->size();
+        }
+
+        if (d->icon &&
+            ((f != Plasma::Vertical && f != Plasma::Horizontal) ||
+             ((f == Plasma::Vertical && containmentSize.width() >= minimum.width()) ||(f == Plasma::Horizontal && containmentSize.height() >= minimum.height())))) {
             // we only switch to expanded if we aren't horiz/vert constrained and
             // this applet has an icon.
             // otherwise, we leave it up to the applet itself to figure it out
@@ -190,7 +209,6 @@ void PopupApplet::constraintsEvent(Plasma::Constraints constraints)
             //get the margins
             QSizeF marginSize = size() - contentsRect().size();
 
-            QGraphicsWidget *gWidget = graphicsWidget();
             if (gWidget) {
                 if (lay) {
                     lay->addItem(gWidget);
@@ -238,7 +256,7 @@ void PopupApplet::constraintsEvent(Plasma::Constraints constraints)
 
                 connect(d->dialog, SIGNAL(dialogResized()), this, SLOT(dialogSizeChanged()));
                 connect(d->dialog, SIGNAL(dialogVisible(bool)), this , SLOT(dialogStatusChanged(bool)));
-                QGraphicsWidget *gWidget = graphicsWidget();
+                setMinimumSize(QSize(0, 0));
                 if (gWidget) {
                     Corona *corona = qobject_cast<Corona *>(gWidget->scene());
 
