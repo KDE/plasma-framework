@@ -238,6 +238,9 @@ void Applet::restore(KConfigGroup &group)
     QString shortcutText = shortcutConfig.readEntryUntranslated("global", QString());
     if (!shortcutText.isEmpty()) {
         setGlobalShortcut(KShortcut(shortcutText));
+        kDebug() << "got global shortcut for" << name() << "of" << QKeySequence(shortcutText);
+        kDebug() << "set to" << d->activationAction->objectName()
+                 << d->activationAction->globalShortcut().primary();
     }
 
     // local shortcut, if any
@@ -989,7 +992,11 @@ void Applet::setGlobalShortcut(const KShortcut &shortcut)
         }
     }
 
-    d->activationAction->setGlobalShortcut(shortcut);
+    //kDebug() << "before" << shortcut.primary() << d->activationAction->globalShortcut().primary();
+    d->activationAction->setGlobalShortcut(shortcut,
+                                           KAction::ShortcutTypes(KAction::ActiveShortcut | KAction::DefaultShortcut),
+                                           KAction::NoAutoloading);
+    //kDebug() << "after" << shortcut.primary() << d->activationAction->globalShortcut().primary();
 }
 
 KShortcut Applet::globalShortcut() const
@@ -1571,9 +1578,15 @@ AppletPrivate::AppletPrivate(KService::Ptr service, int uniqueID, Applet *applet
 
 AppletPrivate::~AppletPrivate()
 {
+    if (activationAction && activationAction->isGlobalShortcutEnabled()) {
+        //kDebug() << "reseting global action for" << q->name() << activationAction->objectName();
+        activationAction->forgetGlobalShortcut();
+    }
+
     foreach (const QString& engine, loadedEngines) {
         DataEngineManager::self()->unloadEngine( engine );
     }
+
     delete package;
     delete configXml;
     delete mainConfig;
