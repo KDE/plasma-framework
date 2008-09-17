@@ -121,6 +121,7 @@ class SvgPrivate
 
         void findInCache(QPixmap& p, const QString& elementId, const QPainter *itemPainter, const QSizeF &s = QSizeF())
         {
+            Q_UNUSED( itemPainter );
             createRenderer();
 
             QSize size;
@@ -319,7 +320,7 @@ Svg::~Svg()
 void Svg::paint(QPainter* painter, const QPointF& point, const QString& elementID)
 {
     QPixmap pix;
- 
+
     if (elementID.isNull()) {
         d->findInCache(pix, elementID, painter, size());
     } else {
