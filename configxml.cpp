@@ -350,12 +350,12 @@ void ConfigXmlHandler::addItem()
         item = m_config->addItemDateTime(m_name, *d->newDateTime(),
                                          QDateTime::fromString(m_default), m_key);
     } else if (m_type == "enum") {
+        m_key = (m_key.isEmpty()) ? m_name : m_key;
         KConfigSkeleton::ItemEnum* enumItem =
                 new KConfigSkeleton::ItemEnum(m_config->currentGroup(),
                                               m_key, *d->newInt(),
                                               m_enumChoices,
                                               m_default.toUInt());
-        enumItem->setName(m_name);
         m_config->addItem(enumItem, m_name);
         item = enumItem;
     } else if (m_type == "font") {
@@ -395,11 +395,11 @@ void ConfigXmlHandler::addItem()
         }
         item = uintItem;
     } else if (m_type == "url") {
+        m_key = (m_key.isEmpty()) ? m_name : m_key;
         KConfigSkeleton::ItemUrl* urlItem =
                 new KConfigSkeleton::ItemUrl(m_config->currentGroup(),
                                              m_key, *d->newUrl(),
                                              m_default);
-        urlItem->setName(m_name);
         m_config->addItem(urlItem, m_name);
         item = urlItem;
     } else if (m_type == "double") {
@@ -515,7 +515,7 @@ ConfigXml::ConfigXml(KSharedConfigPtr config, QIODevice *xml, QObject *parent)
     d->parse(this, xml);
 }
 
-//FIXME: obviously this is broken and should be using the group as the root, 
+//FIXME: obviously this is broken and should be using the group as the root,
 //       but KConfigSkeleton does not currently support this. it will eventually though,
 //       at which point this can be addressed properly
 ConfigXml::ConfigXml(const KConfigGroup *config, QIODevice *xml, QObject *parent)
