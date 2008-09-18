@@ -258,7 +258,7 @@ bool ConfigXmlHandler::startElement(const QString &namespaceURI, const QString &
         for (int i = 0; i < numAttrs; ++i) {
             QString name = attrs.localName(i).toLower();
             if (name == "name") {
-                kDebug() << "set group to " << attrs.value(i);
+                //kDebug() << "set group to" << attrs.value(i);
                 d->groups.append(attrs.value(i));
                 m_config->setCurrentGroup(attrs.value(i));
             }
