@@ -68,7 +68,7 @@ void ToolTip::hideEvent(QHideEvent *e)
 {
     QWidget::hideEvent(e);
     if (d->source) {
-        QMetaObject::invokeMethod(d->source, SLOT(toolTipHidden()));
+        QMetaObject::invokeMethod(d->source, "toolTipHidden");
     }
 }
 
@@ -123,9 +123,9 @@ void ToolTip::setContent(const ToolTipManager::ToolTipContent &data)
     }
 }
 
-void ToolTip::prepareShowing()
+void ToolTip::prepareShowing(bool cueUpdate)
 {
-    if (d->source) {
+    if (cueUpdate && d->source) {
         QMetaObject::invokeMethod(d->source, "toolTipAboutToShow");
     }
 
@@ -138,7 +138,6 @@ void ToolTip::prepareShowing()
 
     layout()->activate();
     resize(sizeHint());
-
 }
 
 void ToolTip::setActivated(bool value)

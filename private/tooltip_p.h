@@ -39,7 +39,7 @@ public:
 
     void updateTheme();
     void setContent(const ToolTipManager::ToolTipContent &data);
-    void prepareShowing();
+    void prepareShowing(bool cueUpdate);
     void setActivated(bool value);
     bool isActivated();
 
