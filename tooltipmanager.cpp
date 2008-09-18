@@ -85,7 +85,7 @@ public :
     bool delayedHide;
     QTimer *showTimer;
     QTimer *hideTimer;
-    QMap<QGraphicsWidget *, ToolTip *> tooltips;
+    QHash<QGraphicsWidget *, ToolTip *> tooltips;
 };
 
 //TOOLTIP IMPLEMENTATION
@@ -186,11 +186,15 @@ void ToolTipManager::hideToolTip(QGraphicsWidget *widget)
 
 void ToolTipManager::registerWidget(QGraphicsWidget *widget)
 {
+    if (d->tooltips.contains(widget)) {
+        return;
+    }
+
     //the tooltip is not registered we add it in our map of tooltips
     d->tooltips.insert(widget, 0);
     widget->installEventFilter(this);
     //connect to object destruction
-    connect(widget, SIGNAL(destroyed(QObject *)),this,SLOT(onWidgetDestroyed(QObject *)));
+    connect(widget, SIGNAL(destroyed(QObject*)), this, SLOT(onWidgetDestroyed(QObject*)));
 }
 
 void ToolTipManager::unregisterWidget(QGraphicsWidget *widget)
@@ -198,6 +202,7 @@ void ToolTipManager::unregisterWidget(QGraphicsWidget *widget)
     if (!d->tooltips.contains(widget)) {
         return;
     }
+
     widget->removeEventFilter(this);
     ToolTip *tooltip = d->tooltips.take(widget);
     delete tooltip;
@@ -205,9 +210,7 @@ void ToolTipManager::unregisterWidget(QGraphicsWidget *widget)
 
 void ToolTipManager::setToolTipContent(QGraphicsWidget *widget, const ToolTipContent &data)
 {
-    if (!d->tooltips.contains(widget)) {
-        registerWidget(widget);
-    }
+    registerWidget(widget);
 
     ToolTip *tooltip = d->tooltips.value(widget);
 
@@ -233,9 +236,7 @@ bool ToolTipManager::widgetHasToolTip(QGraphicsWidget *widget) const
 
 void ToolTipManager::setToolTipActivated(QGraphicsWidget *widget, bool enable)
 {
-    if (!d->tooltips.contains(widget)) {
-        registerWidget(widget);
-    }
+    registerWidget(widget);
 
     ToolTip *tooltip = d->tooltips.value(widget);
     tooltip->setActivated(enable);
@@ -249,7 +250,7 @@ void ToolTipManager::setToolTipActivated(QGraphicsWidget *widget, bool enable)
 bool ToolTipManager::isToolTipActivated(QGraphicsWidget *widget)
 {
     if (!d->tooltips.contains(widget)) {
-        registerWidget(widget);
+        return false;
     }
 
     ToolTip *tooltip = d->tooltips.value(widget);
@@ -258,7 +259,7 @@ bool ToolTipManager::isToolTipActivated(QGraphicsWidget *widget)
 
 void ToolTipManagerPrivate::themeUpdated()
 {
-    QMapIterator<QGraphicsWidget*, ToolTip *> iterator(tooltips);
+    QHashIterator<QGraphicsWidget*, ToolTip *> iterator(tooltips);
     while (iterator.hasNext()) {
         iterator.next();
         if (iterator.value()) {
@@ -273,6 +274,7 @@ void ToolTipManagerPrivate::onWidgetDestroyed(QObject *object)
         return;
     }
 
+    kDebug();
     // we do a static_cast here since it really isn't a QGraphicsWidget by this
     // point anymore since we are in the QObject dtor. we don't actually
     // try and do anything with it, we just need the value of the pointer
@@ -288,16 +290,19 @@ void ToolTipManagerPrivate::onWidgetDestroyed(QObject *object)
         delayedHide = false;
     }
 
-    QMapIterator<QGraphicsWidget*, ToolTip *> iterator(tooltips);
+    QMutableHashIterator<QGraphicsWidget*, ToolTip *> iterator(tooltips);
     while (iterator.hasNext()) {
         iterator.next();
+        //kDebug() << (int)iterator.key() << (int)w;
         if (iterator.key() == w) {
             ToolTip *tooltip = iterator.value();
-            tooltips.remove(iterator.key());
+            iterator.remove();
             if (tooltip) {
+                //kDebug() << "deleting the tooltip!";
                 tooltip->hide();
                 delete tooltip;
             }
+            return;
         }
     }
 }
