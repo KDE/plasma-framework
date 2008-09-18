@@ -1,5 +1,7 @@
 find_package(KDE4 REQUIRED)
+find_package(Nepomuk REQUIRED)
 include (KDE4Defaults)
+include(NepomukMacros)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${KDEBASE_WORKSPACE_SOURCE_DIR}/libs ${CMAKE_CURRENT_SOURCE_DIR}/.. ${KDE4_INCLUDES})
 if(QT_QTOPENGL_FOUND AND OPENGL_FOUND)
@@ -91,6 +93,14 @@ set(plasma_LIB_SRCS
     widgets/textedit.cpp
     widgets/webcontent.cpp
 )
+
+#NEPOMUK_GENERATE_FROM_ONTOLOGY(
+#   nwc.nrl
+#   ${metadata_test_BINARY_DIR}
+#   TEST_HEADERS
+#   TEST_SOURCES
+#   TEST_INCLUDES
+#)
 
 kde4_add_ui_files (
     plasma_LIB_SRCS
@@ -293,14 +303,4 @@ install(FILES
    DESTINATION ${SERVICES_INSTALL_DIR})
 
 install(FILES scripting/plasmoids.knsrc DESTINATION  ${CONFIG_INSTALL_DIR})
-
-# Nepomuk integration
-configure_file(ontology/workspace.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/workspace.desktop)
-
-install(FILES
-  ontology/workspace.trig
-  ${CMAKE_CURRENT_BINARY_DIR}/workspace.desktop
-  DESTINATION
-  ${DATA_INSTALL_DIR}/nepomuk/ontologies
-)
 
