@@ -54,11 +54,11 @@ class ToolTipManagerPrivate
 {
 public :
     ToolTipManagerPrivate()
-        : currentWidget(0)
-        , isShown(false)
-        , delayedHide(false)
-        , showTimer(0)
-        , hideTimer(0)
+        : currentWidget(0),
+          showTimer(0),
+          hideTimer(0),
+          isShown(false),
+          delayedHide(false)
     {
 
     }
@@ -81,11 +81,11 @@ public :
 
 
     QGraphicsWidget *currentWidget;
-    bool isShown;
-    bool delayedHide;
     QTimer *showTimer;
     QTimer *hideTimer;
     QHash<QGraphicsWidget *, ToolTip *> tooltips;
+    bool isShown : 1;
+    bool delayedHide : 1;
 };
 
 //TOOLTIP IMPLEMENTATION
@@ -137,33 +137,36 @@ ToolTipManager::~ToolTipManager()
 
 void ToolTipManager::showToolTip(QGraphicsWidget *widget)
 {
-   ToolTip *tooltip = d->tooltips.value(widget);
-   if (tooltip) {
-      if (d->currentWidget) {
-          hideToolTip(d->currentWidget);
-      }
-      d->hideTimer->stop();
-      d->delayedHide = false;
-      d->showTimer->stop();
-      d->currentWidget = widget;
-      if (d->isShown) {
-          // small delay to prevent unnecessary showing when the mouse is moving quickly across items
-          // which can be too much for less powerful CPUs to keep up with
-          d->showTimer->start(200);
-      } else {
-          d->showTimer->start(500);
-      }
-   }
+    if (!d->tooltips.contains(widget)) {
+        return;
+    }
+
+    if (d->currentWidget) {
+        hideToolTip(d->currentWidget);
+    }
+
+    d->hideTimer->stop();
+    d->delayedHide = false;
+    d->showTimer->stop();
+    d->currentWidget = widget;
+
+    if (d->isShown) {
+        // small delay to prevent unnecessary showing when the mouse is moving quickly across items
+        // which can be too much for less powerful CPUs to keep up with
+        d->showTimer->start(200);
+    } else {
+        d->showTimer->start(500);
+    }
 }
 
 bool ToolTipManager::isWidgetToolTipDisplayed(QGraphicsWidget *widget)
 {
-   ToolTip *tooltip = d->tooltips.value(widget);
-   if (tooltip) {
-      return tooltip->isVisible();
-   } else {
-      return false;
-   }
+    ToolTip *tooltip = d->tooltips.value(widget);
+    if (tooltip) {
+        return tooltip->isVisible();
+    } else {
+        return false;
+    }
 }
 
 void ToolTipManager::delayedHideToolTip()
@@ -205,7 +208,9 @@ void ToolTipManager::unregisterWidget(QGraphicsWidget *widget)
 
     widget->removeEventFilter(this);
     ToolTip *tooltip = d->tooltips.take(widget);
-    delete tooltip;
+    if (tooltip) {
+        tooltip->deleteLater();
+    }
 }
 
 void ToolTipManager::setToolTipContent(QGraphicsWidget *widget, const ToolTipContent &data)
@@ -215,7 +220,9 @@ void ToolTipManager::setToolTipContent(QGraphicsWidget *widget, const ToolTipCon
     ToolTip *tooltip = d->tooltips.value(widget);
 
     if (data.isEmpty()) {
-        delete tooltip;
+        if (tooltip) {
+            tooltip->deleteLater();
+        }
         d->tooltips.insert(widget, 0);
         return;
     }
@@ -299,7 +306,7 @@ void ToolTipManagerPrivate::onWidgetDestroyed(QObject *object)
             if (tooltip) {
                 //kDebug() << "deleting the tooltip!";
                 tooltip->hide();
-                delete tooltip;
+                tooltip->deleteLater();
             }
             return;
         }
@@ -327,9 +334,24 @@ void ToolTipManagerPrivate::showToolTip()
     }
 
     ToolTip *tooltip = tooltips.value(currentWidget);
-    if (tooltip && tooltip->isActivated()) {
+    bool justCreated = false;
+
+    if (!tooltip) {
+        // give the object a chance for delayed loading of the tip
+        QMetaObject::invokeMethod(currentWidget, "toolTipAboutToShow");
+        tooltip = tooltips.value(currentWidget);
+        if (tooltip) {
+            justCreated = true;
+        } else {
+            currentWidget = 0;
+            return;
+        }
+    }
+
+    if (tooltip->isActivated()) {
         tooltip->setVisible(false);
-        tooltip->prepareShowing();
+        //kDebug() << "about to show" << justCreated;
+        tooltip->prepareShowing(!justCreated);
         tooltip->move(popupPosition(currentWidget, tooltip->size()));
         isShown = true;  //ToolTip is visible
         tooltip->setVisible(true);
