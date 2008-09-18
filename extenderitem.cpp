@@ -358,7 +358,7 @@ ExtenderItem::~ExtenderItem()
 
 KConfigGroup ExtenderItem::config() const
 {
-    KConfigGroup cg = extender()->d->applet->config("ExtenderItems");
+    KConfigGroup cg = d->extender->d->applet->config("ExtenderItems");
     return KConfigGroup(&cg, QString::number(d->extenderItemId));
 }
 
@@ -787,9 +787,10 @@ void ExtenderItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     Extender *targetExtender = 0;
     foreach (Containment *containment, corona->containments()) {
         foreach (Applet *applet, containment->applets()) {
-            if (applet->extender() && (applet->sceneBoundingRect().contains(mousePos)
-                ||  applet->extender()->sceneBoundingRect().contains(mousePos))) {
-                targetExtender = applet->extender();
+            if (applet->d->extender &&
+                (applet->sceneBoundingRect().contains(mousePos) ||
+                 applet->d->extender->sceneBoundingRect().contains(mousePos))) {
+                targetExtender = applet->d->extender;
 
                 //check if we're hovering over an popupapplet, and open it up in case it does.
                 PopupApplet *popupApplet = qobject_cast<PopupApplet*>(applet);
@@ -870,9 +871,10 @@ void ExtenderItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 
         foreach (Containment *containment, corona->containments()) {
             foreach (Applet *applet, containment->applets()) {
-                if (applet->extender() && (applet->sceneBoundingRect().contains(mousePos)
-                    ||  applet->extender()->sceneBoundingRect().contains(mousePos))) {
-                    targetExtender = applet->extender();
+                if (applet->d->extender &&
+                    (applet->sceneBoundingRect().contains(mousePos) ||
+                     applet->d->extender->sceneBoundingRect().contains(mousePos))) {
+                    targetExtender = applet->d->extender;
                 }
             }
         }
@@ -894,7 +896,7 @@ void ExtenderItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
                     Applet *applet = containment->addApplet("internal:extender",
                                                             QVariantList(),
                                                             QRectF(mousePos, size()));
-                    setExtender(applet->extender());
+                    setExtender(applet->d->extender);
                 }
             }
         }

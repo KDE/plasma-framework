@@ -79,11 +79,12 @@ QList<ExtenderItem*> Extender::items() const
 {
     QList<ExtenderItem*> result;
 
+    //FIXME: a triple nested loop ... ew. there should be a more efficient way to do this
     //iterate through all extenders we can find and check each extenders source applet.
     foreach (Containment *c, d->applet->containment()->corona()->containments()) {
         foreach (Applet *applet, c->applets()) {
-            if (applet->extender()) {
-                foreach (ExtenderItem *item, applet->extender()->attachedItems()) {
+            if (applet->d->extender) {
+                foreach (ExtenderItem *item, applet->d->extender->attachedItems()) {
                     if (item->sourceAppletId() == d->applet->id()) {
                         result.append(item);
                     }
