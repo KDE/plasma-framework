@@ -32,11 +32,12 @@
 #include <KWindowSystem>
 #include <KGlobalSettings>
 
-#include <plasma/dialog.h>
-#include <plasma/corona.h>
-#include <plasma/containment.h>
-#include <plasma/extender.h>
-#include <plasma/widgets/icon.h>
+#include "plasma/private/applet_p.h"
+#include "plasma/dialog.h"
+#include "plasma/corona.h"
+#include "plasma/containment.h"
+#include "plasma/extender.h"
+#include "plasma/widgets/icon.h"
 
 namespace Plasma
 {
@@ -149,7 +150,7 @@ QWidget *PopupApplet::widget()
 
 QGraphicsWidget *PopupApplet::graphicsWidget()
 {
-    return extender();
+    return static_cast<Applet*>(this)->d->extender;
 }
 
 void PopupApplet::constraintsEvent(Plasma::Constraints constraints)
