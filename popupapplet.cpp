@@ -384,7 +384,6 @@ void PopupApplet::popupEvent(bool)
 
 void PopupAppletPrivate::togglePopup()
 {
-    kDebug();
     if (dialog) {
         if (timer) {
             timer->stop();
