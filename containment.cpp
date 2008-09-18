@@ -1395,6 +1395,8 @@ void Containment::showConfigurationInterface()
 {
     if (isContainment()) {
         emit configureRequested();
+    } else {
+        Applet::showConfigurationInterface();
     }
 }
 
