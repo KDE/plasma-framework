@@ -36,13 +36,14 @@ class PopupAppletPrivate;
 /**
  * Allows applets to automatically 'collapse' into an icon when put in an panel, and is a convenient
  * base class for any applet that wishes to use extenders.
+ *
  * Applets that subclass this class should implement either widget() or graphicsWidget() to return a
  * widget that will be displayed in the applet if the applet is in a Planar or MediaCenter form
  * factor. If the applet is put in a panel, an icon will be displayed instead, which shows the
  * widget in a popup when clicked.
- * If you use this class as a base class for your extender using applet, you should implement
- * graphicsWidget() to return extender(), and connect the extenders geometryChanged() signal to the
- * widgetGeometryChanged() slot.
+ *
+ * If you use this class as a base class for your extender using applet, the extender will
+ * automaticaly be used for the popup; reimplementing graphicsWidget() is unecessary in this case.
  */
 
 class PLASMA_EXPORT PopupApplet : public Plasma::Applet
