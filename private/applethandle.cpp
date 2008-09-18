@@ -42,6 +42,7 @@
 #include "paintutils.h"
 #include "theme.h"
 #include "view.h"
+#include "panelsvg.h"
 
 namespace Plasma
 {
@@ -63,6 +64,7 @@ AppletHandle::AppletHandle(Containment *parent, Applet *applet, const QPointF &h
       m_scaleWidth(1.0),
       m_scaleHeight(1.0),
       m_topview(0),
+      m_backgroundBuffer(0),
       m_currentView(applet->view()),
       m_entryPos(hoverPos),
       m_buttonsOnRight(false),
@@ -111,16 +113,19 @@ AppletHandle::AppletHandle(Containment *parent, Applet *applet, const QPointF &h
     m_hoverTimer->start();
 
     //icons
-    m_configureIcons = new Plasma::Svg(this);
+    m_configureIcons = new Svg(this);
     m_configureIcons->setImagePath("widgets/configuration-icons");
     //FIXME: this should be of course true, but works only if false
     m_configureIcons->setContainsMultipleImages(true);
+
+    m_background = new PanelSvg(this);
+    m_background->setImagePath("widgets/background");
 
     //We got to be able to see the applet while dragging to to another containment,
     //so we want a high zValue.
     //FIXME: apparently this doesn't work: sometimes an applet still get's drawn behind
     //the containment it's being dragged to, sometimes it doesn't.
-    m_zValue = m_applet->zValue();
+    m_zValue = m_applet->zValue()-1;
     m_applet->raise();
     m_applet->installSceneEventFilter(this);
     setZValue(m_applet->zValue());
@@ -181,7 +186,7 @@ QPainterPath AppletHandle::shape() const
 {
     //when the containment changes the applet is resetted to 0
     if (m_applet) {
-        QPainterPath path = PaintUtils::roundedRectangle(m_rect, 10);
+        QPainterPath path = PaintUtils::roundedRectangle(m_decorationRect, 10);
         return path.united(m_applet->mapToParent(m_applet->shape()));
     } else {
         return QGraphicsItem::shape();
@@ -218,39 +223,88 @@ void AppletHandle::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
     Q_UNUSED(option);
     Q_UNUSED(widget);
 
-    painter->save();
-    painter->setOpacity(m_opacity);
+    if (m_opacity == 0) {
+        return;
+    }
 
     painter->save();
-    painter->setOpacity(m_opacity * 0.8);
+
+    if (m_buttonsOnRight) {
+        painter->translate(-(1 - m_opacity) * m_rect.width(), 0);
+    } else {
+        painter->translate((1 - m_opacity) * m_rect.width(), 0);
+    }
+
     painter->setPen(Qt::NoPen);
     painter->setRenderHints(QPainter::Antialiasing);
 
-    painter->translate(0.5, 0.5);
-
-    QPainterPath path = handleRect(m_rect, 10, m_buttonsOnRight);
-    painter->strokePath(path, m_gradientColor);
 
     int iconMargin = m_iconSize / 2;
-    int minHeight = minimumHeight();
-    qreal h = m_rect.height();
-    if (h > minHeight * 1.25) {
-        QLinearGradient g(m_rect.topLeft(), m_rect.bottomLeft());
-        // where the top icons stop
-        qreal firstStop = (m_iconSize + iconMargin) * 3 + iconMargin * 2;
-        // now between that and where the close icon is
-        firstStop = firstStop + (((h - (m_iconSize + iconMargin * 2)) - firstStop) * 0.7);
-        // now the ratio of the height
-        firstStop /= h;
 
-        g.setColorAt(0.0, m_gradientColor.lighter());
-        g.setColorAt(firstStop, Qt::transparent);
-        g.setColorAt(1.0, m_gradientColor.lighter());
-        painter->fillPath(path, g);
-    } else {
-        painter->fillPath(path, m_gradientColor.lighter());
+    const QSize pixmapSize(m_decorationRect.width() + m_iconSize + 1, m_decorationRect.height());
+    const QSizeF iconSize(KIconLoader::SizeSmall, KIconLoader::SizeSmall);
+
+    //regenerate our buffer?
+    if (m_animId > 0 || !m_backgroundBuffer || m_backgroundBuffer->size() != pixmapSize) {
+        QColor transparencyColor = Qt::black;
+        transparencyColor.setAlphaF(qMin(m_opacity, qreal(0.99)));
+
+        QLinearGradient g(QPoint(0,0), QPoint(m_decorationRect.width(),0));
+        //fading out panel
+        if (m_rect.height() > qreal(minimumHeight()) * 1.25) {
+            if (m_buttonsOnRight) {
+                qreal opaquePoint = m_background->marginSize(LeftMargin) / m_decorationRect.width();
+                g.setColorAt(0.0, Qt::transparent);
+                g.setColorAt(opaquePoint-0.05, Qt::transparent);
+                g.setColorAt(opaquePoint, transparencyColor);
+                g.setColorAt(1.0, transparencyColor);
+            } else {
+                qreal opaquePoint = 1 - (m_background->marginSize(RightMargin) / m_decorationRect.width());
+                g.setColorAt(1.0, Qt::transparent);
+                g.setColorAt(opaquePoint, Qt::transparent);
+                g.setColorAt(opaquePoint-0.05, transparencyColor);
+                g.setColorAt(0.0, transparencyColor);
+            }
+        //complete panel
+        } else {
+            g.setColorAt(0.0, transparencyColor);
+        }
+
+        m_background->resizePanel(m_decorationRect.size());
+
+        if (!m_backgroundBuffer || m_backgroundBuffer->size() != pixmapSize) {
+            delete m_backgroundBuffer;
+            m_backgroundBuffer = new QPixmap(pixmapSize);
+        }
+        m_backgroundBuffer->fill(Qt::transparent);
+        QPainter buffPainter(m_backgroundBuffer);
+
+        m_background->paintPanel(&buffPainter);
+
+        //+1 because otherwise due to rounding errors when rotated could appear one pixel
+        //of the icon at the border of the applet
+        QRectF iconRect(QPointF(pixmapSize.width() - m_iconSize + 1, m_iconSize), iconSize);
+        if (m_buttonsOnRight) {
+            m_configureIcons->paint(&buffPainter, iconRect, "size-diagonal-tr2bl");
+        } else {
+            m_configureIcons->paint(&buffPainter, iconRect, "size-diagonal-tl2br");
+        }
+
+        iconRect.translate(0, m_iconSize);
+        m_configureIcons->paint(&buffPainter, iconRect, "rotate");
+        iconRect.translate(0, m_iconSize);
+        m_configureIcons->paint(&buffPainter, iconRect, "configure");
+        iconRect.translate(0, m_iconSize);
+        m_configureIcons->paint(&buffPainter, iconRect, "close");
+
+        buffPainter.setCompositionMode(QPainter::CompositionMode_DestinationIn);
+        //blend the background
+        buffPainter.fillRect(QRect(QPoint(0,0),m_decorationRect.size().toSize()), g);
+        //blend the icons
+        buffPainter.fillRect(QRect(QPoint((int)m_decorationRect.width(), 0), QSize(m_iconSize + 1, (int)m_decorationRect.height())), transparencyColor);
     }
-    painter->restore();
+
+    painter->drawPixmap(m_decorationRect.toRect(), *m_backgroundBuffer, QRect(QPoint(0,0), m_decorationRect.size().toSize()));
 
     //XXX this code is duplicated in the next function
     QPointF basePoint = m_rect.topLeft() + QPointF(HANDLE_MARGIN, iconMargin);
@@ -281,25 +335,28 @@ void AppletHandle::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
         break;
     }
 
-    const QSizeF iconSize(KIconLoader::SizeSmall, KIconLoader::SizeSmall);
+    QRectF sourceIconRect(QPointF(pixmapSize.width() - m_iconSize + 1, m_iconSize), iconSize);
 
     if (m_applet && m_applet->aspectRatioMode() != FixedSize) {
-        if (m_buttonsOnRight) {
-            m_configureIcons->paint(painter, QRectF(basePoint + shiftM, iconSize), "size-diagonal-tr2bl");
-        } else {
-            m_configureIcons->paint(painter, QRectF(basePoint + shiftM, iconSize), "size-diagonal-tl2br");
-        }
+        //resize
+        painter->drawPixmap(QRectF(basePoint + shiftM, iconSize), *m_backgroundBuffer, sourceIconRect);
         basePoint += step;
     }
-    m_configureIcons->paint(painter, QRectF(basePoint + shiftR, iconSize), "rotate");
+
+    //rotate
+    sourceIconRect.translate(0, m_iconSize);
+    painter->drawPixmap(QRectF(basePoint + shiftR, iconSize), *m_backgroundBuffer, sourceIconRect);
 
     if (m_applet && m_applet->hasConfigurationInterface()) {
         basePoint += step;
-        m_configureIcons->paint(painter, QRectF(basePoint + shiftC, iconSize), "configure");
+        sourceIconRect.translate(0, m_iconSize);
+        painter->drawPixmap(QRectF(basePoint + shiftC, iconSize), *m_backgroundBuffer, sourceIconRect);
     }
 
+    //close
     basePoint = m_rect.bottomLeft() + QPointF(HANDLE_MARGIN, 0) - step;
-    m_configureIcons->paint(painter, QRectF(basePoint + shiftD, iconSize), "close");
+    sourceIconRect.translate(0, m_iconSize);
+    painter->drawPixmap(QRectF(basePoint + shiftD, iconSize), *m_backgroundBuffer, sourceIconRect);
 
     painter->restore();
 }
@@ -792,6 +849,8 @@ void AppletHandle::fadeAnimation(qreal progress)
     //kDebug() << "progress" << progress << "m_opacity" << m_opacity << endOpacity;
     if (progress >= 1.0) {
         m_animId = 0;
+        delete m_backgroundBuffer;
+        m_backgroundBuffer = 0;
     }
     if (progress >= 1.0 && m_anim == FadeOut) {
         emit disappearDone(this);
@@ -877,7 +936,7 @@ void AppletHandle::startFading(FadeType anim, const QPointF &hoverPos)
     }
 
     m_anim = anim;
-    m_animId = Animator::self()->customAnimation(40, (int)time, Animator::EaseInOutCurve, this, "fadeAnimation");
+    m_animId = Animator::self()->customAnimation(40, (int)time, Animator::EaseInCurve, this, "fadeAnimation");
 }
 
 void AppletHandle::forceDisappear()
@@ -906,16 +965,12 @@ void AppletHandle::calculateSize()
     //m_iconSize = iconLoader->currentSize(KIconLoader::Small); //does not work with double sized icon
     m_iconSize = iconLoader->loadIcon("transform-scale", KIconLoader::Small).width(); //workaround
 
-    int handleHeight = minimumHeight();
+    int handleHeight = qMax(minimumHeight(), int(m_applet->contentsRect().height() * 0.8));
     int handleWidth = m_iconSize + 2 * HANDLE_MARGIN;
-    int top = m_applet->contentsRect().top();
+    int top = m_applet->contentsRect().top() + (m_applet->contentsRect().height() - handleHeight) / 2.0;
 
-    if (handleHeight > m_applet->contentsRect().height()) {
-        //center the handle if it is higher than the applet
-        top += (m_applet->contentsRect().height() - handleHeight) / 2.0;
-    } else {
-        handleHeight = m_applet->contentsRect().height();
-    }
+    qreal marginLeft, marginTop, marginRight, marginBottom;
+    m_background->getMargins(marginLeft, marginTop, marginRight, marginBottom);
 
     if (m_buttonsOnRight) {
         //put the rect on the right of the applet
@@ -925,8 +980,23 @@ void AppletHandle::calculateSize()
         m_rect = QRectF(-handleWidth, top, handleWidth, handleHeight);
     }
 
+
+    if (m_applet->contentsRect().height() > qreal(minimumHeight()) * 1.25) {
+        int addedMargin = marginLeft/2;
+        if (!m_applet->shape().contains(m_applet->contentsRect())) {
+            addedMargin = m_applet->contentsRect().width()/2;
+        }
+
+        if (m_buttonsOnRight) {
+            marginLeft += addedMargin;
+        } else {
+            marginRight += addedMargin;
+        }
+    }
+
     m_rect = m_applet->mapToParent(m_rect).boundingRect();
-    m_totalRect = m_rect.united(m_applet->geometry());
+    m_decorationRect = m_rect.adjusted(-marginLeft, -marginTop, marginRight, marginBottom);
+    m_totalRect = m_decorationRect.united(m_applet->geometry());
 }
 
 } // Plasma Namespace

@@ -33,6 +33,7 @@ namespace Plasma
 {
 class Applet;
 class Containment;
+class PanelSvg;
 class View;
 
 class AppletHandle : public QObject, public QGraphicsItem
@@ -91,6 +92,7 @@ class AppletHandle : public QObject, public QGraphicsItem
         bool leaveCurrentView(const QPoint &pos) const;
 
         QRectF m_rect;
+        QRectF m_decorationRect;
         QRectF m_totalRect;
         ButtonType m_pressedButton;
         Containment *m_containment;
@@ -107,9 +109,11 @@ class AppletHandle : public QObject, public QGraphicsItem
         QTimer *m_hoverTimer;
         QTimer *m_leaveTimer;
         View *m_topview;
+        QPixmap *m_backgroundBuffer;
         QGraphicsView *m_currentView;
 
-        Plasma::Svg *m_configureIcons;
+        Svg *m_configureIcons;
+        PanelSvg *m_background;
 
         QPoint m_mousePos;  //mousepos relative to applet
         QPointF m_entryPos; //where the hover in event occurred
