@@ -127,6 +127,8 @@ KConfigGroup Service::operationDescription(const QString &operationName)
 
     d->config->writeConfig();
     KConfigGroup params(d->config->config(), operationName);
+    //kDebug() << "operation" << operationName << "requested, has keys" << params.keyList() << "from" 
+    //         << d->config->config()->name();
     return params;
 }
 
@@ -257,8 +259,11 @@ void Service::setOperationsScheme(QIODevice *xml)
     //FIXME: make KSharedConfig and KConfigSkeleton not braindamaged in 4.2 and then get rid of the
     //       temp file object here
     d->tempFile = new KTemporaryFile;
+    d->tempFile->open();
+
     KSharedConfigPtr c = KSharedConfig::openConfig(d->tempFile->fileName(), KConfig::NoGlobals);
     d->config = new ConfigXml(c, xml, this);
+
     emit operationsChanged();
 
     {
