@@ -125,13 +125,13 @@ Applet::Applet(QObject* parentObject, const QVariantList& args)
 
 Applet::~Applet()
 {
-    if (extender()) {
+    if (d->extender) {
         //This would probably be nicer if it was located in extender. But in it's dtor, this won't
         //work since when that get's called, the applet's config() isn't accesible anymore. (same
         //problem with calling saveState(). Doing this in saveState() might be a possibility, but
         //that would require every extender savestate implementation to call it's parent function,
         //which isn't very nice.
-        foreach (ExtenderItem *item, extender()->attachedItems()) {
+        foreach (ExtenderItem *item, d->extender->attachedItems()) {
             if (!item->isDetached() || item->autoExpireDelay()) {
                 //destroy temporary extender items, or items that aren't detached, so their 
                 //configuration won't linger after a plasma restart.
@@ -139,7 +139,7 @@ Applet::~Applet()
             }
         }
 
-        extender()->saveState();
+        d->extender->saveState();
     }
 
     if (d->transient) {
