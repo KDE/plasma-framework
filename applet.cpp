@@ -504,6 +504,10 @@ void Applet::initExtenderItem(ExtenderItem *item)
 
 Extender *Applet::extender() const
 {
+    if (!d->extender) {
+        new Extender(const_cast<Applet*>(this));
+    }
+
     return d->extender;
 }
 
