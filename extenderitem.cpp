@@ -207,7 +207,9 @@ class ExtenderItemPrivate
                 }
             }
 
-            Q_ASSERT(found);
+            if (!found) {
+                return QPointF();
+            }
 
             return found->mapToScene(found->mapFromGlobal(pos));
         }
@@ -706,7 +708,11 @@ void ExtenderItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
     setZValue(parentApplet->zValue());
 
     if (d->extender) {
-        d->extender->itemHoverMoveEvent(this, d->extender->mapFromScene(d->scenePosFromScreenPos(event->screenPos())));
+        QPointF mousePos = d->scenePosFromScreenPos(event->screenPos());
+
+        if (!mousePos.isNull()) {
+            d->extender->itemHoverMoveEvent(this, d->extender->mapFromScene(mousePos));
+        }
     }
 
     d->extender->d->removeExtenderItem(this);
@@ -785,18 +791,21 @@ void ExtenderItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
     //find the extender we're hovering over.
     Extender *targetExtender = 0;
-    foreach (Containment *containment, corona->containments()) {
-        foreach (Applet *applet, containment->applets()) {
-            if (applet->d->extender &&
-                (applet->sceneBoundingRect().contains(mousePos) ||
-                 applet->d->extender->sceneBoundingRect().contains(mousePos))) {
-                targetExtender = applet->d->extender;
 
-                //check if we're hovering over an popupapplet, and open it up in case it does.
-                PopupApplet *popupApplet = qobject_cast<PopupApplet*>(applet);
-                if (popupApplet && (applet->formFactor() == Plasma::Horizontal ||
-                                    applet->formFactor() == Plasma::Vertical)) {
-                    popupApplet->showPopup();
+    if (!mousePos.isNull()) {
+        foreach (Containment *containment, corona->containments()) {
+            foreach (Applet *applet, containment->applets()) {
+                if (applet->d->extender &&
+                        (applet->sceneBoundingRect().contains(mousePos) ||
+                         applet->d->extender->sceneBoundingRect().contains(mousePos))) {
+                    targetExtender = applet->d->extender;
+
+                    //check if we're hovering over an popupapplet, and open it up in case it does.
+                    PopupApplet *popupApplet = qobject_cast<PopupApplet*>(applet);
+                    if (popupApplet && (applet->formFactor() == Plasma::Horizontal ||
+                                applet->formFactor() == Plasma::Vertical)) {
+                        popupApplet->showPopup();
+                    }
                 }
             }
         }
@@ -869,12 +878,14 @@ void ExtenderItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 
         corona->removeOffscreenWidget(this);
 
-        foreach (Containment *containment, corona->containments()) {
-            foreach (Applet *applet, containment->applets()) {
-                if (applet->d->extender &&
-                    (applet->sceneBoundingRect().contains(mousePos) ||
-                     applet->d->extender->sceneBoundingRect().contains(mousePos))) {
-                    targetExtender = applet->d->extender;
+        if (!mousePos.isNull()) {
+            foreach (Containment *containment, corona->containments()) {
+                foreach (Applet *applet, containment->applets()) {
+                    if (applet->d->extender &&
+                        (applet->sceneBoundingRect().contains(mousePos) ||
+                         applet->d->extender->sceneBoundingRect().contains(mousePos))) {
+                        targetExtender = applet->d->extender;
+                    }
                 }
             }
         }
@@ -891,12 +902,14 @@ void ExtenderItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
             //TODO: maybe we alow the user to choose a default extenderapplet.
             kDebug() << "Instantiate a new ExtenderApplet";
             mousePos = d->scenePosFromScreenPos(event->screenPos() - d->mousePos);
-            foreach (Containment *containment, corona->containments()) {
-                if (containment->sceneBoundingRect().contains(mousePos)) {
-                    Applet *applet = containment->addApplet("internal:extender",
-                                                            QVariantList(),
-                                                            QRectF(mousePos, size()));
-                    setExtender(applet->d->extender);
+            if (!mousePos.isNull()) {
+                foreach (Containment *containment, corona->containments()) {
+                    if (containment->sceneBoundingRect().contains(mousePos)) {
+                        Applet *applet = containment->addApplet("internal:extender",
+                                QVariantList(),
+                                QRectF(mousePos, size()));
+                        setExtender(applet->d->extender);
+                    }
                 }
             }
         }
