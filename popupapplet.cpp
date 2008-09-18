@@ -54,7 +54,8 @@ public:
           popupPlacement(Plasma::FloatingPopup),
           savedAspectRatio(Plasma::InvalidAspectRatioMode),
           timer(0),
-          startupComplete(false)
+          startupComplete(false),
+          popupLostFocus(false)
     {
     }
 
@@ -70,6 +71,7 @@ public:
 
     void togglePopup();
     void hideTimedPopup();
+    void clearPopupLostFocus();
     void dialogSizeChanged();
     void dialogStatusChanged(bool status);
     void updateDialogPosition();
@@ -83,7 +85,8 @@ public:
     Plasma::AspectRatioMode savedAspectRatio;
     QTimer *timer;
     QPoint clicked;
-    bool startupComplete;
+    bool startupComplete : 1;
+    bool popupLostFocus : 1;
 };
 
 PopupApplet::PopupApplet(QObject *parent, const QVariantList &args)
@@ -291,11 +294,12 @@ void PopupApplet::constraintsEvent(Plasma::Constraints constraints)
 
 void PopupApplet::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-    if (!d->icon && event->buttons() == Qt::LeftButton) {
+    if (!d->icon && !d->popupLostFocus && event->buttons() == Qt::LeftButton) {
         d->clicked = scenePos().toPoint();
         event->setAccepted(true);
         return;
     } else {
+        d->popupLostFocus = false;
         Applet::mousePressEvent(event);
     }
 }
@@ -312,7 +316,9 @@ void PopupApplet::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 bool PopupApplet::eventFilter(QObject *watched, QEvent *event)
 {
     if (watched == d->dialog && (event->type() == QEvent::WindowDeactivate)) {
+        d->popupLostFocus = true;
         hidePopup();
+        QTimer::singleShot(100, this, SLOT(clearPopupLostFocus()));
     }
 
     if (watched == graphicsWidget() && (event->type() == QEvent::GraphicsSceneResize)) {
@@ -378,6 +384,7 @@ void PopupApplet::popupEvent(bool)
 
 void PopupAppletPrivate::togglePopup()
 {
+    kDebug();
     if (dialog) {
         if (timer) {
             timer->stop();
@@ -399,6 +406,11 @@ void PopupAppletPrivate::hideTimedPopup()
 {
     timer->stop();
     q->hidePopup();
+}
+
+void PopupAppletPrivate::clearPopupLostFocus()
+{
+    popupLostFocus = false;
 }
 
 void PopupAppletPrivate::dialogSizeChanged()
