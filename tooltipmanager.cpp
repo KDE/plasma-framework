@@ -274,7 +274,6 @@ void ToolTipManagerPrivate::onWidgetDestroyed(QObject *object)
         return;
     }
 
-    kDebug();
     // we do a static_cast here since it really isn't a QGraphicsWidget by this
     // point anymore since we are in the QObject dtor. we don't actually
     // try and do anything with it, we just need the value of the pointer
