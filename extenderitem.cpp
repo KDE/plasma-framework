@@ -743,7 +743,7 @@ void ExtenderItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
         //first: in the topleft quadrant.
 
         if (!d->toplevel) {
-            //XXX duplication from applethandle
+            //FIXME: duplication from applethandle
             //create a toplevel view and aim it at the applet.
             d->toplevel = new QGraphicsView(corona, 0);
 
