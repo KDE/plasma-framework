@@ -149,7 +149,7 @@ QWidget *PopupApplet::widget()
 
 QGraphicsWidget *PopupApplet::graphicsWidget()
 {
-    return 0;
+    return extender();
 }
 
 void PopupApplet::constraintsEvent(Plasma::Constraints constraints)
@@ -175,11 +175,12 @@ void PopupApplet::constraintsEvent(Plasma::Constraints constraints)
         QSizeF containmentSize;
 
         QGraphicsWidget *gWidget = graphicsWidget();
+        QWidget *qWidget = widget();
 
         if (gWidget) {
             minimum = gWidget->minimumSize();
-        } else if (widget()) {
-            minimum = widget()->minimumSizeHint();
+        } else if (qWidget) {
+            minimum = qWidget->minimumSizeHint();
         }
 
         if (containment()) {
@@ -199,9 +200,9 @@ void PopupApplet::constraintsEvent(Plasma::Constraints constraints)
             }
 
             if (d->dialog) {
-                if (d->dialog->layout() && widget()) {
+                if (d->dialog->layout() && qWidget) {
                     //we dont want to delete Widget inside the dialog layout
-                    d->dialog->layout()->removeWidget(widget());
+                    d->dialog->layout()->removeWidget(qWidget);
                 }
 
                 delete d->dialog;
@@ -217,17 +218,18 @@ void PopupApplet::constraintsEvent(Plasma::Constraints constraints)
                 }
                 setMinimumSize(gWidget->minimumSize() + marginSize);
                 gWidget->installEventFilter(this);
-            } else if (widget()) {
+            } else if (qWidget) {
                 if (!d->proxy) {
                     d->proxy = new QGraphicsProxyWidget(this);
-                    d->proxy->setWidget(widget());
+                    d->proxy->setWidget(qWidget);
                     d->proxy->show();
                 }
 
                 if (lay) {
                     lay->addItem(d->proxy);
                 }
-                setMinimumSize(widget() ? widget()->minimumSize() + marginSize : QSizeF(300, 200));
+
+                setMinimumSize(qWidget ? qWidget->minimumSize() + marginSize : QSizeF(300, 200));
             }
         } else {
             //save the aspect ratio mode in case we drag'n drop in the Desktop later
@@ -269,11 +271,11 @@ void PopupApplet::constraintsEvent(Plasma::Constraints constraints)
                         graphicsWidget()->setMinimumSize(gWidget->preferredSize());
                         d->dialog->setGraphicsWidget(gWidget);
                     }
-                } else if (widget()) {
+                } else if (qWidget) {
                     QVBoxLayout *l_layout = new QVBoxLayout(d->dialog);
                     l_layout->setSpacing(0);
                     l_layout->setMargin(0);
-                    l_layout->addWidget(widget());
+                    l_layout->addWidget(qWidget);
                 }
             }
 
