@@ -119,9 +119,8 @@ class SvgPrivate
             ids.clear();
         }
 
-        void findInCache(QPixmap& p, const QString& elementId, const QPainter *itemPainter, const QSizeF &s = QSizeF())
+        QPixmap findInCache(const QString &elementId, const QSizeF &s = QSizeF())
         {
-            Q_UNUSED( itemPainter );
             createRenderer();
 
             QSize size;
@@ -132,8 +131,7 @@ class SvgPrivate
             }
 
             if (!size.isValid()) {
-                p = QPixmap();
-                return;
+                return QPixmap();
             }
 
             QString id = QString::fromLatin1("%3_%2_%1_").arg(size.width())
@@ -149,9 +147,11 @@ class SvgPrivate
                 ids.append(id);
             }
 
+            QPixmap p;
+
             if (QPixmapCache::find(id, p)) {
                 //kDebug() << "found cached version of " << id;
-                return;
+                return p;
             } else {
                 //kDebug() << "didn't find cached version of " << id << ", so re-rendering";
             }
@@ -182,6 +182,8 @@ class SvgPrivate
             if (!QPixmapCache::insert(id, p)) {
                 //kDebug() << "pixmap cache is too small for inserting" << id << "of size" << s;
             }
+
+            return p;
         }
 
         void createRenderer()
@@ -317,15 +319,19 @@ Svg::~Svg()
     delete d;
 }
 
+QPixmap Svg::pixmap(const QString &elementID)
+{
+    if (elementID.isNull()) {
+        return d->findInCache(elementID, size());
+    } else {
+        return d->findInCache(elementID);
+    }
+}
+
 void Svg::paint(QPainter* painter, const QPointF& point, const QString& elementID)
 {
-    QPixmap pix;
-
-    if (elementID.isNull()) {
-        d->findInCache(pix, elementID, painter, size());
-    } else {
-        d->findInCache(pix, elementID, painter);
-    }
+    QPixmap pix(elementID.isNull() ? d->findInCache(elementID, size()) :
+                                     d->findInCache(elementID));
 
     if (pix.isNull()) {
         return;
@@ -341,8 +347,7 @@ void Svg::paint(QPainter* painter, int x, int y, const QString& elementID)
 
 void Svg::paint(QPainter* painter, const QRectF& rect, const QString& elementID)
 {
-    QPixmap pix;
-    d->findInCache(pix, elementID, painter, rect.size());
+    QPixmap pix(d->findInCache(elementID, rect.size()));
     painter->drawPixmap(rect, pix, QRectF(QPointF(0,0), pix.size()));
 }
 
@@ -386,6 +391,9 @@ bool Svg::hasElement(const QString& elementId) const
 
 QString Svg::elementAtPoint(const QPoint &point) const
 {
+    return QString();
+/*
+FIXME: implement when Qt can support us!
     d->createRenderer();
     QSizeF naturalSize = d->renderer->defaultSize();
     qreal dx = d->size.width() / naturalSize.width();
@@ -393,6 +401,7 @@ QString Svg::elementAtPoint(const QPoint &point) const
     //kDebug() << point << "is really" << QPoint(point.x() *dx, naturalSize.height() - point.y() * dy);
 
     return QString(); // d->renderer->elementAtPoint(QPoint(point.x() *dx, naturalSize.height() - point.y() * dy));
+    */
 }
 
 bool Svg::isValid() const

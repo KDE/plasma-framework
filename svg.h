@@ -21,6 +21,7 @@
 #define PLASMA_SVG_H
 
 #include <QtCore/QObject>
+#include <QtGui/QPixmap>
 
 #include <plasma/plasma_export.h>
 
@@ -79,32 +80,46 @@ class PLASMA_EXPORT Svg : public QObject
 
 
         /**
+         * Returns a pixmap of the SVG represented by this object.
+         *
+         * @arg elelementId the ID string of the element to render, or an empty
+         *                  string for the whole SVG (the default)
+         * @return a QPixmap of the rendered SVG
+         */
+        Q_INVOKABLE QPixmap pixmap(const QString &elementID = QString());
+
+        /**
          * Paints the SVG represented by this object
          * @arg painter the QPainter to use
          * @arg point the position to start drawing; the entire svg will be
          *      drawn starting at this point.
+         * @arg elelementId the ID string of the element to render, or an empty
+         *                  string for the whole SVG (the default)
          */
-        Q_INVOKABLE void paint(QPainter* painter, const QPointF& point,
-                               const QString& elementID = QString());
+        Q_INVOKABLE void paint(QPainter *painter, const QPointF &point,
+                               const QString &elementID = QString());
 
         /**
          * Paints the SVG represented by this object
          * @arg painter the QPainter to use
          * @arg x the horizontal coordinate to start painting from
          * @arg y the vertical coordinate to start painting from
+         * @arg elelementId the ID string of the element to render, or an empty
+         *                  string for the whole SVG (the default)
          */
-        Q_INVOKABLE void paint(QPainter* painter, int x, int y,
-                               const QString& elementID = QString());
+        Q_INVOKABLE void paint(QPainter *painter, int x, int y,
+                               const QString &elementID = QString());
 
         /**
          * Paints the SVG represented by this object
          * @arg painter the QPainter to use
-         * @arg rect the rect to draw into; if small than the current size
-         *           of the 
-         *      drawn starting at this point.
+         * @arg rect the rect to draw into; if smaller than the current size
+         *           the drawing is starting at this point.
+         * @arg elelementId the ID string of the element to render, or an empty
+         *                  string for the whole SVG (the default)
          */
-        Q_INVOKABLE void paint(QPainter* painter, const QRectF& rect,
-                               const QString& elementID = QString());
+        Q_INVOKABLE void paint(QPainter *painter, const QRectF &rect,
+                               const QString &elementID = QString());
 
         /**
          * Currently set size of the SVG
@@ -118,7 +133,7 @@ class PLASMA_EXPORT Svg : public QObject
          * @arg width the new width
          * @arg height the new height
          **/
-        Q_INVOKABLE void resize( qreal width, qreal height );
+        Q_INVOKABLE void resize(qreal width, qreal height);
 
         /**
          * Resizes the rendered image. Rendering will actually take place on
