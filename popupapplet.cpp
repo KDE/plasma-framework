@@ -19,6 +19,7 @@
  */
 
 #include "popupapplet.h"
+#include "private/popupapplet_p.h"
 
 #include <QGraphicsProxyWidget>
 #include <QGraphicsLinearLayout>
@@ -41,53 +42,6 @@
 
 namespace Plasma
 {
-
-class PopupAppletPrivate
-{
-public:
-    PopupAppletPrivate(PopupApplet *applet)
-        : q(applet),
-          icon(0),
-          dialog(0),
-          layout(0),
-          proxy(0),
-          popupPlacement(Plasma::FloatingPopup),
-          savedAspectRatio(Plasma::InvalidAspectRatioMode),
-          timer(0),
-          startupComplete(false),
-          popupLostFocus(false)
-    {
-    }
-
-    ~PopupAppletPrivate()
-    {
-        if (proxy) {
-            proxy->setWidget(0);
-        }
-
-        delete dialog;
-        delete icon;
-    }
-
-    void togglePopup();
-    void hideTimedPopup();
-    void clearPopupLostFocus();
-    void dialogSizeChanged();
-    void dialogStatusChanged(bool status);
-    void updateDialogPosition();
-
-    PopupApplet *q;
-    Plasma::Icon *icon;
-    Plasma::Dialog *dialog;
-    QGraphicsLinearLayout *layout;
-    QGraphicsProxyWidget *proxy;
-    Plasma::PopupPlacement popupPlacement;
-    Plasma::AspectRatioMode savedAspectRatio;
-    QTimer *timer;
-    QPoint clicked;
-    bool startupComplete : 1;
-    bool popupLostFocus : 1;
-};
 
 PopupApplet::PopupApplet(QObject *parent, const QVariantList &args)
     : Plasma::Applet(parent, args),
@@ -156,18 +110,18 @@ QGraphicsWidget *PopupApplet::graphicsWidget()
     return static_cast<Applet*>(this)->d->extender;
 }
 
-void PopupApplet::constraintsEvent(Plasma::Constraints constraints)
+void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
 {
     if (constraints & Plasma::StartupCompletedConstraint) {
-        d->startupComplete = true;
+        startupComplete = true;
     }
 
-    if (!d->startupComplete) {
+    if (!startupComplete) {
         return;
     }
 
-    QGraphicsLinearLayout *lay = dynamic_cast<QGraphicsLinearLayout *>(layout());
-    Plasma::FormFactor f = formFactor();
+    QGraphicsLinearLayout *lay = dynamic_cast<QGraphicsLinearLayout *>(q->layout());
+    Plasma::FormFactor f = q->formFactor();
 
     if (constraints & Plasma::FormFactorConstraint ||
         (constraints & Plasma::SizeConstraint && (f == Plasma::Vertical || f == Plasma::Horizontal))) {
@@ -178,8 +132,8 @@ void PopupApplet::constraintsEvent(Plasma::Constraints constraints)
         QSizeF minimum;
         QSizeF containmentSize;
 
-        QGraphicsWidget *gWidget = graphicsWidget();
-        QWidget *qWidget = widget();
+        QGraphicsWidget *gWidget = q->graphicsWidget();
+        QWidget *qWidget = q->widget();
 
         if (gWidget) {
             minimum = gWidget->minimumSize();
@@ -187,106 +141,106 @@ void PopupApplet::constraintsEvent(Plasma::Constraints constraints)
             minimum = qWidget->minimumSizeHint();
         }
 
-        if (containment()) {
-            containmentSize = containment()->size();
+        if (q->containment()) {
+            containmentSize = q->containment()->size();
         }
 
-        if (d->icon &&
+        if (icon &&
             ((f != Plasma::Vertical && f != Plasma::Horizontal) ||
              ((f == Plasma::Vertical && containmentSize.width() >= minimum.width()) ||(f == Plasma::Horizontal && containmentSize.height() >= minimum.height())))) {
             // we only switch to expanded if we aren't horiz/vert constrained and
             // this applet has an icon.
             // otherwise, we leave it up to the applet itself to figure it out
-            d->icon->hide();
+            icon->hide();
 
-            if (d->savedAspectRatio != Plasma::InvalidAspectRatioMode) {
-                setAspectRatioMode(d->savedAspectRatio);
+            if (savedAspectRatio != Plasma::InvalidAspectRatioMode) {
+                q->setAspectRatioMode(savedAspectRatio);
             }
 
-            if (d->dialog) {
-                if (d->dialog->layout() && qWidget) {
+            if (dialog) {
+                if (dialog->layout() && qWidget) {
                     //we dont want to delete Widget inside the dialog layout
-                    d->dialog->layout()->removeWidget(qWidget);
+                    dialog->layout()->removeWidget(qWidget);
                 }
 
-                delete d->dialog;
-                d->dialog = 0;
+                delete dialog;
+                dialog = 0;
             }
 
             //get the margins
-            QSizeF marginSize = size() - contentsRect().size();
+            QSizeF marginSize = q->size() - q->contentsRect().size();
 
             if (gWidget) {
                 if (lay) {
                     lay->addItem(gWidget);
                 }
-                setMinimumSize(gWidget->minimumSize() + marginSize);
-                gWidget->installEventFilter(this);
+                q->setMinimumSize(gWidget->minimumSize() + marginSize);
+                gWidget->installEventFilter(q);
             } else if (qWidget) {
-                if (!d->proxy) {
-                    d->proxy = new QGraphicsProxyWidget(this);
-                    d->proxy->setWidget(qWidget);
-                    d->proxy->show();
+                if (!proxy) {
+                    proxy = new QGraphicsProxyWidget(q);
+                    proxy->setWidget(qWidget);
+                    proxy->show();
                 }
 
                 if (lay) {
-                    lay->addItem(d->proxy);
+                    lay->addItem(proxy);
                 }
 
-                setMinimumSize(qWidget ? qWidget->minimumSize() + marginSize : QSizeF(300, 200));
+                q->setMinimumSize(qWidget ? qWidget->minimumSize() + marginSize : QSizeF(300, 200));
             }
         } else {
             //save the aspect ratio mode in case we drag'n drop in the Desktop later
-            d->savedAspectRatio = aspectRatioMode();
-            setAspectRatioMode(Plasma::ConstrainedSquare);
+            savedAspectRatio = q->aspectRatioMode();
+            q->setAspectRatioMode(Plasma::ConstrainedSquare);
 
-            if (d->icon) {
-                d->icon->show();
+            if (icon) {
+                icon->show();
             }
 
-            if (d->proxy) {
-                d->proxy->setWidget(0); // prevent it from deleting our widget!
-                delete d->proxy;
-                d->proxy = 0;
+            if (proxy) {
+                proxy->setWidget(0); // prevent it from deleting our widget!
+                delete proxy;
+                proxy = 0;
             }
 
-            if (!d->dialog) {
-                kDebug() << "making dialog with view" << view();
-                d->dialog = new Plasma::Dialog();
+            if (!dialog) {
+                //kDebug() << "making dialog with view" << q->view();
+                dialog = new Plasma::Dialog();
 
                 //no longer use Qt::Popup since that seems to cause a lot of problem when you drag
                 //stuff out of your Dialog (extenders). Monitor WindowDeactivate events so we can
                 //emulate the same kind of behavior as Qt::Popup (close when you click somewhere
                 //else.
-                d->dialog->setWindowFlags(Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
-                KWindowSystem::setState(d->dialog->winId(), NET::SkipTaskbar | NET::SkipPager);
-                d->dialog->installEventFilter(this);
+                dialog->setWindowFlags(Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
+                KWindowSystem::setState(dialog->winId(), NET::SkipTaskbar | NET::SkipPager);
+                dialog->installEventFilter(q);
 
-                connect(d->dialog, SIGNAL(dialogResized()), this, SLOT(dialogSizeChanged()));
-                connect(d->dialog, SIGNAL(dialogVisible(bool)), this , SLOT(dialogStatusChanged(bool)));
-                setMinimumSize(QSize(0, 0));
+                QObject::connect(dialog, SIGNAL(dialogResized()), q, SLOT(dialogSizeChanged()));
+                QObject::connect(dialog, SIGNAL(dialogVisible(bool)), q, SLOT(dialogStatusChanged(bool)));
+                q->setMinimumSize(QSize(0, 0));
                 if (gWidget) {
                     Corona *corona = qobject_cast<Corona *>(gWidget->scene());
 
                     //could that cast ever fail??
                     if (corona) {
                         corona->addOffscreenWidget(gWidget);
-                        graphicsWidget()->resize(gWidget->preferredSize());
-                        graphicsWidget()->setMinimumSize(gWidget->preferredSize());
-                        d->dialog->setGraphicsWidget(gWidget);
+                        gWidget->resize(gWidget->preferredSize());
+                        gWidget->setMinimumSize(gWidget->preferredSize());
+                        dialog->setGraphicsWidget(gWidget);
                     }
                 } else if (qWidget) {
-                    QVBoxLayout *l_layout = new QVBoxLayout(d->dialog);
+                    QVBoxLayout *l_layout = new QVBoxLayout(dialog);
                     l_layout->setSpacing(0);
                     l_layout->setMargin(0);
                     l_layout->addWidget(qWidget);
                 }
             }
 
-            d->dialog->adjustSize();
+            dialog->adjustSize();
 
-            if (d->icon && lay) {
-                lay->addItem(d->icon);
+            if (icon && lay) {
+                lay->addItem(icon);
             }
         }
     }
@@ -380,6 +334,30 @@ Plasma::PopupPlacement PopupApplet::popupPlacement() const
 void PopupApplet::popupEvent(bool)
 {
 
+}
+
+PopupAppletPrivate::PopupAppletPrivate(PopupApplet *applet)
+        : q(applet),
+          icon(0),
+          dialog(0),
+          layout(0),
+          proxy(0),
+          popupPlacement(Plasma::FloatingPopup),
+          savedAspectRatio(Plasma::InvalidAspectRatioMode),
+          timer(0),
+          startupComplete(false),
+          popupLostFocus(false)
+{
+}
+
+PopupAppletPrivate::~PopupAppletPrivate()
+{
+    if (proxy) {
+        proxy->setWidget(0);
+    }
+
+    delete dialog;
+    delete icon;
 }
 
 void PopupAppletPrivate::togglePopup()

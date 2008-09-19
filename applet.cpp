@@ -70,6 +70,7 @@
 #include "scripting/appletscript.h"
 #include "svg.h"
 #include "panelsvg.h"
+#include "popupapplet.h"
 #include "theme.h"
 #include "view.h"
 #include "widgets/label.h"
@@ -80,6 +81,7 @@
 #include "private/containment_p.h"
 #include "private/extenderapplet_p.h"
 #include "private/packages_p.h"
+#include "private/popupapplet_p.h"
 #include "private/toolbox_p.h"
 
 //#define DYNAMIC_SHADOWS
@@ -834,6 +836,11 @@ void Applet::flushPendingConstraintsEvents()
     Containment* containment = qobject_cast<Plasma::Containment*>(this);
     if (isContainment() && containment) {
         containment->d->containmentConstraintsEvent(c);
+    }
+
+    PopupApplet* popup = qobject_cast<Plasma::PopupApplet*>(this);
+    if (popup) {
+        popup->d->popupConstraintsEvent(c);
     }
 
     constraintsEvent(c);

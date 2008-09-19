@@ -108,7 +108,6 @@ public Q_SLOTS:
     void hidePopup();
 
 protected:
-    void constraintsEvent(Plasma::Constraints constraints);
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
     bool eventFilter(QObject *watched, QEvent *event);
@@ -121,6 +120,7 @@ private:
     Q_PRIVATE_SLOT(d, void dialogSizeChanged())
     Q_PRIVATE_SLOT(d, void dialogStatusChanged(bool))
 
+    friend class Applet;
     PopupAppletPrivate * const d;
 };
 
