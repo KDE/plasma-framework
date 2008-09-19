@@ -515,7 +515,16 @@ Extender *Applet::extender() const
 
 QString Applet::name() const
 {
-    if (!d->appletDescription.isValid()) {
+    if (isContainment()) {
+        if (!d->appletDescription.isValid()) {
+            return i18n("Unknown Activity");
+        }
+
+        const Containment *c = qobject_cast<const Containment*>(this);
+        if (c && !c->activity().isNull()) {
+            return i18n("%1 Activity", c->activity());
+        }
+    } else if (!d->appletDescription.isValid()) {
         return i18n("Unknown Applet");
     }
 
@@ -753,11 +762,10 @@ void Applet::flushPendingConstraintsEvents()
         closeApplet->setEnabled(unlocked);
         closeApplet->setVisible(unlocked);
         closeApplet->setShortcutContext(Qt::WidgetShortcut); //don't clash with other views
+        closeApplet->setText(i18n("Remove this %1", name()));
         if (isContainment()) {
-            closeApplet->setText(i18n("Remove this %1 Activity", name()));
             closeApplet->setShortcut(QKeySequence("ctrl+shift+r"));
         } else {
-            closeApplet->setText(i18n("Remove this %1", name()));
             closeApplet->setShortcut(QKeySequence("ctrl+r"));
         }
         connect(closeApplet, SIGNAL(triggered(bool)), this, SLOT(selectItemToDestroy()));
