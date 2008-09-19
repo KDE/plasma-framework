@@ -225,7 +225,7 @@ class ExtenderItemPrivate
 
         ExtenderItem *q;
 
-        QGraphicsWidget *widget;
+        QGraphicsItem *widget;
         QGraphicsWidget *toolbox;
         QGraphicsLinearLayout *toolboxLayout;
         QGraphicsView *toplevel;
@@ -386,7 +386,7 @@ QString ExtenderItem::name() const
     return d->name;
 }
 
-void ExtenderItem::setWidget(QGraphicsWidget *widget)
+void ExtenderItem::setWidget(QGraphicsItem *widget)
 {
     qreal left, top, right, bottom;
     d->dragger->getMargins(left, top, right, bottom);
@@ -396,7 +396,7 @@ void ExtenderItem::setWidget(QGraphicsWidget *widget)
     setCollapsed(isCollapsed()); //updates the size hints.
 }
 
-QGraphicsWidget *ExtenderItem::widget() const
+QGraphicsItem *ExtenderItem::widget() const
 {
     return d->widget;
 }
@@ -570,12 +570,27 @@ void ExtenderItem::setCollapsed(bool collapsed)
 
     d->widget->setVisible(!collapsed);
 
+    QSizeF minimumSize;
+    QSizeF preferredSize;
+    QSizeF maximumSize;
+
+    if (d->widget->isWidget()) {
+        QGraphicsWidget *graphicsWidget = static_cast<QGraphicsWidget*>(d->widget);
+        minimumSize = graphicsWidget->minimumSize();
+        preferredSize = graphicsWidget->preferredSize();
+        maximumSize = graphicsWidget->maximumSize();
+    } else {
+        minimumSize = d->widget->boundingRect().size();
+        preferredSize = d->widget->boundingRect().size();
+        maximumSize = d->widget->boundingRect().size();
+    }
+
     if (collapsed) {
-        setPreferredSize(QSizeF(d->widget->preferredWidth() + left + right,
+        setPreferredSize(QSizeF(preferredSize.width() + left + right,
                                 d->dragHandleRect().height()));
-        setMinimumSize(QSizeF(d->widget->minimumWidth() + left + right,
+        setMinimumSize(QSizeF(minimumSize.width() + left + right,
                               d->dragHandleRect().height()));
-        setMaximumSize(QSizeF(d->widget->maximumWidth() + left + right,
+        setMaximumSize(QSizeF(maximumSize.width() + left + right,
                               d->dragHandleRect().height()));
         setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
         //FIXME: why don't tooltips work?
@@ -583,17 +598,23 @@ void ExtenderItem::setCollapsed(bool collapsed)
             d->collapseIcon->setToolTip(i18n("Expand this widget"));
         }
     } else {
-        setPreferredSize(QSizeF(d->widget->preferredWidth() + left + right,
-                         d->widget->preferredHeight() +
+        setPreferredSize(QSizeF(preferredSize.width() + left + right,
+                         preferredSize.height() +
                          d->dragHandleRect().height() + top + bottom));
-        setMinimumSize(  QSizeF(d->widget->minimumWidth() + left + right,
-                         d->widget->minimumHeight() +
+        setMinimumSize(  QSizeF(minimumSize.width() + left + right,
+                         minimumSize.height() +
                          d->dragHandleRect().height() + top + bottom));
-        setMaximumSize(  QSizeF(d->widget->maximumWidth() + left + right,
-                         d->widget->maximumHeight() +
+        setMaximumSize(  QSizeF(maximumSize.width() + left + right,
+                         maximumSize.height() +
                          d->dragHandleRect().height() + top + bottom));
 
-        setSizePolicy(d->widget->sizePolicy());
+        if (d->widget->isWidget()) {
+            QGraphicsWidget *graphicsWidget = static_cast<QGraphicsWidget*>(d->widget);
+            setSizePolicy(graphicsWidget->sizePolicy());
+        } else {
+            setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+        }
+
         if (d->collapseIcon) {
             d->collapseIcon->setToolTip(i18n("Collapse this widget"));
         }
@@ -679,11 +700,13 @@ void ExtenderItem::resizeEvent(QGraphicsSceneResizeEvent *event)
     d->appletBackground->resizePanel(event->newSize());
 
     //resize the widget
-    if (d->widget) {
+    if (d->widget && d->widget->isWidget()) {
         QSizeF newWidgetSize = event->newSize();
         newWidgetSize.setHeight(newWidgetSize.height() - d->dragger->size().height() - top - bottom);
         newWidgetSize.setWidth(newWidgetSize.width() - left - right);
-        d->widget->resize(newWidgetSize);
+
+        QGraphicsWidget *graphicsWidget = static_cast<QGraphicsWidget*>(d->widget);
+        graphicsWidget->resize(newWidgetSize);
     }
 
     d->updateToolBox();
@@ -691,7 +714,6 @@ void ExtenderItem::resizeEvent(QGraphicsSceneResizeEvent *event)
 
 void ExtenderItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-    kDebug() << "the mouse pressed yeah yeah yeah!";
     if (!(d->dragHandleRect().contains(event->pos()))) {
         event->ignore();
         return;

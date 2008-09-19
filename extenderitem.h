@@ -46,7 +46,7 @@ class ExtenderItemPrivate;
 class PLASMA_EXPORT ExtenderItem : public QGraphicsWidget
 {
     Q_OBJECT
-    Q_PROPERTY(QGraphicsWidget * widget READ widget WRITE setWidget)
+    Q_PROPERTY(QGraphicsItem * widget READ widget WRITE setWidget)
     Q_PROPERTY(QString title READ title WRITE setTitle)
     Q_PROPERTY(QString name READ name WRITE setName)
     Q_PROPERTY(QIcon icon READ icon WRITE setIcon)
@@ -77,12 +77,12 @@ class PLASMA_EXPORT ExtenderItem : public QGraphicsWidget
         /**
          * @param widget The widget that should be wrapped into the extender item.
          */
-        void setWidget(QGraphicsWidget *widget);
+        void setWidget(QGraphicsItem *widget);
 
         /**
          * @return The widget that is wrapped into the extender item.
          */
-        QGraphicsWidget *widget() const;
+        QGraphicsItem *widget() const;
 
         /**
          * @param title the title that will be shown in the extender item's dragger. Default is
