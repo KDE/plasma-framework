@@ -34,8 +34,8 @@
 namespace Plasma
 {
 
-static const int MIN_TICK_RATE_INT = 40;
-static const qreal MIN_TICK_RATE = 40;
+static const int MIN_TICK_RATE_INT = 10;
+static const qreal MIN_TICK_RATE = 10;
 
 struct AnimationState
 {
@@ -363,7 +363,7 @@ int Animator::moveItem(QGraphicsItem* item, Movement movement, const QPoint &des
 }
 
 int Animator::customAnimation(int frames, int duration, Animator::CurveShape curve,
-                                     QObject* receiver, const char* slot)
+                              QObject* receiver, const char* slot)
 {
     if (frames < 1 || duration < 1 || !receiver || !slot) {
         return -1;
