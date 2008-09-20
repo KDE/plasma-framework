@@ -623,8 +623,7 @@ void AppletHandle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
             //set the screenRect correctly. the screenRect contains the bounding
             //rect of the applet in screen coordinates. m_mousePos contains the
             //position of the mouse relative to the applet, in screen coords.
-            QRect screenRect = QRect(event->screenPos() - m_mousePos,
-                                     m_applet->screenRect().size());
+            QRect screenRect = QRect(event->screenPos() - m_mousePos, m_applet->size().toSize());
 
             //kDebug() << "screenRect = " << screenRect;
 

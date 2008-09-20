@@ -362,17 +362,19 @@ void AppletPrivate::appletAnimationComplete(QGraphicsItem *item, Plasma::Animato
 void AppletPrivate::selectItemToDestroy()
 {
     //FIXME: this will not work nicely with multiple screens and being zoomed out!
-    if (q->isContainment() &&
-        q->view() && q->view()->transform().isScaling() &&
-        q->scene()->focusItem() != q) {
-        QGraphicsItem *focus = q->scene()->focusItem();
+    if (q->isContainment()) {
+        QGraphicsView *view = q->view();
+        if (view && view->transform().isScaling() &&
+            q->scene()->focusItem() != q) {
+            QGraphicsItem *focus = q->scene()->focusItem();
 
-        if (focus) {
-            Containment *toDestroy = dynamic_cast<Containment*>(focus->topLevelItem());
+            if (focus) {
+                Containment *toDestroy = dynamic_cast<Containment*>(focus->topLevelItem());
 
-            if (toDestroy) {
-                toDestroy->destroy();
-                return;
+                if (toDestroy) {
+                    toDestroy->destroy();
+                    return;
+                }
             }
         }
     }
@@ -447,12 +449,12 @@ QGraphicsView *Applet::view() const
 
     QGraphicsView *found = 0;
     QGraphicsView *possibleFind = 0;
+    //kDebug() << "looking through" << scene()->views().count() << "views";
     foreach (QGraphicsView *view, scene()->views()) {
-        kDebug() << "checking" << view->sceneRect() << "against" << sceneBoundingRect()
-                 << scenePos();
+        //kDebug() << "     checking" << view << view->sceneRect() << "against" << sceneBoundingRect() << scenePos();
         if (view->sceneRect().intersects(sceneBoundingRect()) ||
             view->sceneRect().contains(scenePos())) {
-            kDebug() << "found something!" << view->isActiveWindow();
+            //kDebug() << "     found something!" << view->isActiveWindow();
             if (view->isActiveWindow()) {
                 found = view;
             } else {
@@ -460,6 +462,7 @@ QGraphicsView *Applet::view() const
             }
         }
     }
+
     return found ? found : possibleFind;
 }
 
@@ -1502,26 +1505,19 @@ void Applet::timerEvent(QTimerEvent *event)
 
 QRect Applet::screenRect() const
 {
-    QPointF bottomRight = pos();
-    bottomRight.setX(bottomRight.x() + size().width());
-    bottomRight.setY(bottomRight.y() + size().height());
+    QGraphicsView *v = view();
 
-    Containment *c;
-    c = containment();
+    if (v) {
+        QPointF bottomRight = pos();
+        bottomRight.rx() += size().width();
+        bottomRight.ry() += size().height();
 
-    if (c) {
-        QGraphicsView *v;
-        v = c->view();
-
-        if (v) {
-            QPoint tL = v->mapToGlobal(v->mapFromScene(pos()));
-            QPoint bR = v->mapToGlobal(v->mapFromScene(bottomRight));
-
-            return QRect(QPoint(tL.x(), tL.y()), QSize(bR.x() - tL.x(), bR.y() - tL.y()));
-        }
+        QPoint tL = v->mapToGlobal(v->mapFromScene(pos()));
+        QPoint bR = v->mapToGlobal(v->mapFromScene(bottomRight));
+        return QRect(QPoint(tL.x(), tL.y()), QSize(bR.x() - tL.x(), bR.y() - tL.y()));
     }
 
-    //The applet isn't in any containment, or in a containment that doesn't have a view on it.
+    //The applet doesn't have a view on it.
     //So a screenRect isn't relevant.
     return QRect(QPoint(0, 0), QSize(0, 0));
 }
