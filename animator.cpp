@@ -290,8 +290,8 @@ int Animator::animateItem(QGraphicsItem* item, Animation animation)
     //TODO: variance in times based on the value of animation
     state->frames = frames / 3;
     state->currentFrame = 0;
-    state->interval = d->driver->animationDuration(animation) / state->frames;
-    state->interval = (state->interval / MIN_TICK_RATE) * MIN_TICK_RATE;
+    state->interval = d->driver->animationDuration(animation) / qreal(state->frames);
+    state->interval = qMax(MIN_TICK_RATE_INT, state->interval - (state->interval % MIN_TICK_RATE_INT));
     state->currentInterval = state->interval;
     state->qobj = dynamic_cast<QObject*>(item);
 
@@ -339,7 +339,7 @@ int Animator::moveItem(QGraphicsItem* item, Movement movement, const QPoint &des
      int duration = d->driver->movementAnimationDuration(movement);
      state->frames = (duration / 1000.0) * frames;
      state->currentFrame = 0;
-     state->interval = duration / state->frames;
+     state->interval = duration / qreal(state->frames);
      state->interval = qMax(MIN_TICK_RATE_INT, state->interval - (state->interval % MIN_TICK_RATE_INT));
 //     state->interval = (state->interval / MIN_TICK_RATE) * MIN_TICK_RATE;
 //     kDebug() << "interval of" << state->interval << state->frames << duration << frames;
@@ -375,8 +375,7 @@ int Animator::customAnimation(int frames, int duration, Animator::CurveShape cur
     state->currentFrame = 0;
     state->curve = curve;
     state->interval = duration / qreal(state->frames);
-    state->interval = qMax( 1, state->interval );
-    state->interval = (state->interval / MIN_TICK_RATE) * MIN_TICK_RATE;
+    state->interval = qMax(MIN_TICK_RATE_INT, state->interval - (state->interval % MIN_TICK_RATE_INT));
     state->currentInterval = state->interval;
     state->receiver = receiver;
     state->slot = qstrdup(slot);
@@ -449,8 +448,8 @@ int Animator::animateElement(QGraphicsItem *item, Animation animation)
     //TODO: variance in times based on the value of animation
     state->frames = d->driver->elementAnimationFps(animation) / 5;
     state->currentFrame = 0;
-    state->interval = d->driver->elementAnimationDuration(animation) / state->frames;
-    state->interval = (state->interval / MIN_TICK_RATE) * MIN_TICK_RATE;
+    state->interval = d->driver->elementAnimationDuration(animation) / qreal(state->frames);
+    state->interval = qMax(MIN_TICK_RATE_INT, state->interval - (state->interval % MIN_TICK_RATE_INT));
     state->currentInterval = state->interval;
     state->id = ++d->animId;
     state->qobj = dynamic_cast<QObject*>(item);
