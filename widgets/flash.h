@@ -59,9 +59,6 @@ class PLASMA_EXPORT Flash : public QGraphicsWidget
         void fadeIn();
         void fadeOut();
 
-    protected:
-        QPixmap renderPixmap();
-
     private:
         FlashPrivate * const d;
 };
