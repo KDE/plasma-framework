@@ -254,20 +254,18 @@ void AppletHandle::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
         //fading out panel
         if (m_rect.height() > qreal(minimumHeight()) * 1.25) {
             if (m_buttonsOnRight) {
-                qreal opaquePoint = qMax(0.05, m_background->marginSize(LeftMargin) /
-                                               m_decorationRect.width());
+                qreal opaquePoint = m_background->marginSize(LeftMargin) / m_decorationRect.width();
                 //kDebug() << "opaquePoint" << opaquePoint
                 //         << m_background->marginSize(LeftMargin) << m_decorationRect.width();
                 g.setColorAt(0.0, Qt::transparent);
-                g.setColorAt(opaquePoint-0.05, Qt::transparent);
+                g.setColorAt(qMax(0.0, opaquePoint - 0.05), Qt::transparent);
                 g.setColorAt(opaquePoint, transparencyColor);
                 g.setColorAt(1.0, transparencyColor);
             } else {
-                qreal opaquePoint = 1 - qMin(0.05, (m_background->marginSize(RightMargin) /
-                                                    m_decorationRect.width()));
+                qreal opaquePoint = 1 - (m_background->marginSize(RightMargin) / m_decorationRect.width());
                 g.setColorAt(1.0, Qt::transparent);
                 g.setColorAt(opaquePoint, Qt::transparent);
-                g.setColorAt(opaquePoint-0.05, transparencyColor);
+                g.setColorAt(qMax(0.0, opaquePoint - 0.05), transparencyColor);
                 g.setColorAt(0.0, transparencyColor);
             }
         //complete panel
