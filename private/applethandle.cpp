@@ -436,8 +436,8 @@ void AppletHandle::mousePressEvent(QGraphicsSceneMouseEvent *event)
 
         //set mousePos to the position in the applet, in screencoords, so it becomes easy
         //to reposition the toplevel view to the correct position.
-        QPoint localpos = m_containment->view()->mapFromScene(m_applet->scenePos());
-        m_mousePos = event->screenPos() - m_containment->view()->mapToGlobal(localpos);
+        QPoint localpos = m_currentView->mapFromScene(m_applet->scenePos());
+        m_mousePos = event->screenPos() - m_currentView->mapToGlobal(localpos);
 
         return;
     }
