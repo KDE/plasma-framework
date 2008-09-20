@@ -223,13 +223,14 @@ void AppletHandle::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
     Q_UNUSED(option);
     Q_UNUSED(widget);
 
-    if (m_opacity == 0) {
+    if (qFuzzyCompare(m_opacity, 0.0)) {
         return;
     }
 
     painter->save();
 
     if (m_buttonsOnRight) {
+        //kDebug() << "translating by" << m_opacity << (-(1 - m_opacity) * m_rect.width()) << m_rect.width();
         painter->translate(-(1 - m_opacity) * m_rect.width(), 0);
     } else {
         painter->translate((1 - m_opacity) * m_rect.width(), 0);
@@ -253,13 +254,17 @@ void AppletHandle::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
         //fading out panel
         if (m_rect.height() > qreal(minimumHeight()) * 1.25) {
             if (m_buttonsOnRight) {
-                qreal opaquePoint = m_background->marginSize(LeftMargin) / m_decorationRect.width();
+                qreal opaquePoint = qMax(0.05, m_background->marginSize(LeftMargin) /
+                                               m_decorationRect.width());
+                //kDebug() << "opaquePoint" << opaquePoint
+                //         << m_background->marginSize(LeftMargin) << m_decorationRect.width();
                 g.setColorAt(0.0, Qt::transparent);
                 g.setColorAt(opaquePoint-0.05, Qt::transparent);
                 g.setColorAt(opaquePoint, transparencyColor);
                 g.setColorAt(1.0, transparencyColor);
             } else {
-                qreal opaquePoint = 1 - (m_background->marginSize(RightMargin) / m_decorationRect.width());
+                qreal opaquePoint = 1 - qMin(0.05, (m_background->marginSize(RightMargin) /
+                                                    m_decorationRect.width()));
                 g.setColorAt(1.0, Qt::transparent);
                 g.setColorAt(opaquePoint, Qt::transparent);
                 g.setColorAt(opaquePoint-0.05, transparencyColor);
@@ -844,16 +849,21 @@ bool AppletHandle::sceneEventFilter(QGraphicsItem *watched, QEvent *event)
 
 void AppletHandle::fadeAnimation(qreal progress)
 {
-    qreal endOpacity = (m_anim == FadeIn) ? 1.0 : 0.0;
-    m_opacity += (endOpacity - m_opacity) * progress;
-    //kDebug() << "progress" << progress << "m_opacity" << m_opacity << endOpacity;
-    if (progress >= 1.0) {
+    //qreal endOpacity = (m_anim == FadeIn) ? 1.0 : -1.0;
+    if (m_anim == FadeIn) {
+        m_opacity = progress;
+    } else {
+        m_opacity = 1 - progress;
+    }
+    //kDebug() << "progress" << progress << "m_opacity" << m_opacity;// << endOpacity;
+    if (qFuzzyCompare(progress, 1.0)) {
         m_animId = 0;
         delete m_backgroundBuffer;
         m_backgroundBuffer = 0;
-    }
-    if (progress >= 1.0 && m_anim == FadeOut) {
-        emit disappearDone(this);
+
+        if (m_anim == FadeOut) {
+            emit disappearDone(this);
+        }
     }
 
     update();
@@ -891,7 +901,7 @@ void AppletHandle::startFading(FadeType anim, const QPointF &hoverPos)
     m_leaveTimer->stop();
 
     m_entryPos = hoverPos;
-    qreal time = 250;
+    qreal time = 100;
 
     if (!m_applet || (anim == FadeOut && m_hoverTimer->isActive())) {
         // fading out before we've started fading in
@@ -936,7 +946,8 @@ void AppletHandle::startFading(FadeType anim, const QPointF &hoverPos)
     }
 
     m_anim = anim;
-    m_animId = Animator::self()->customAnimation(40, (int)time, Animator::EaseInCurve, this, "fadeAnimation");
+    //kDebug() << "animating for " << time << "ms";
+    m_animId = Animator::self()->customAnimation(80*(time/1000.0), (int)time, Animator::EaseInCurve, this, "fadeAnimation");
 }
 
 void AppletHandle::forceDisappear()
