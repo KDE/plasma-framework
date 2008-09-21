@@ -295,8 +295,11 @@ void AppletHandle::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
 
         iconRect.translate(0, m_iconSize);
         m_configureIcons->paint(&buffPainter, iconRect, "rotate");
-        iconRect.translate(0, m_iconSize);
-        m_configureIcons->paint(&buffPainter, iconRect, "configure");
+
+        if (m_applet && m_applet->hasConfigurationInterface()) {
+            iconRect.translate(0, m_iconSize);
+            m_configureIcons->paint(&buffPainter, iconRect, "configure");
+        }
         iconRect.translate(0, m_iconSize);
         m_configureIcons->paint(&buffPainter, iconRect, "close");
 
