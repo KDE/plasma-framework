@@ -262,7 +262,7 @@ void PushButton::paint(QPainter *painter,
         return;
     }
 
-    QPixmap *bufferPixmap = 0;
+    QPixmap bufferPixmap;
 
     //Normal button, pressed or not
     if (isEnabled()) {
@@ -274,15 +274,15 @@ void PushButton::paint(QPainter *painter,
         d->background->paintPanel(painter);
     //flat or disabled
     } else if (!isEnabled() || nativeWidget()->isFlat()) {
-        bufferPixmap = new QPixmap(rect().size().toSize());
-        bufferPixmap->fill(Qt::transparent);
+        bufferPixmap = QPixmap(rect().size().toSize());
+        bufferPixmap.fill(Qt::transparent);
 
-        QPainter buffPainter(bufferPixmap);
+        QPainter buffPainter(&bufferPixmap);
         d->background->paintPanel(&buffPainter);
         buffPainter.setCompositionMode(QPainter::CompositionMode_DestinationIn);
-        buffPainter.fillRect(bufferPixmap->rect(), QColor(0,0,0,128));
+        buffPainter.fillRect(bufferPixmap.rect(), QColor(0,0,0,128));
 
-        painter->drawPixmap( 0, 0, *bufferPixmap);
+        painter->drawPixmap( 0, 0, bufferPixmap);
     }
 
     //if is under mouse draw the animated glow overlay
@@ -331,13 +331,12 @@ void PushButton::paint(QPainter *painter,
     //if there is not enough room for the text make it to fade out
     QFontMetricsF fm(QApplication::font());
     if (rect.width() < fm.width(nativeWidget()->text())) {
-        if (!bufferPixmap) {
-            bufferPixmap = new QPixmap(rect.size().toSize());
+        if (bufferPixmap.isNull()) {
+            bufferPixmap = QPixmap(rect.size().toSize());
         }
+        bufferPixmap.fill(Qt::transparent);
 
-        bufferPixmap->fill(Qt::transparent);
-
-        QPainter p(bufferPixmap);
+        QPainter p(&bufferPixmap);
         p.setPen(painter->pen());
 
         // Create the alpha gradient for the fade out effect
@@ -346,17 +345,17 @@ void PushButton::paint(QPainter *painter,
         if (option->direction == Qt::LeftToRight) {
             alphaGradient.setColorAt(0, QColor(0, 0, 0, 255));
             alphaGradient.setColorAt(1, QColor(0, 0, 0, 0));
-            p.drawText(bufferPixmap->rect(), Qt::AlignLeft|Qt::AlignVCenter, nativeWidget()->text() );
+            p.drawText(bufferPixmap.rect(), Qt::AlignLeft|Qt::AlignVCenter, nativeWidget()->text() );
         } else {
             alphaGradient.setColorAt(0, QColor(0, 0, 0, 0));
             alphaGradient.setColorAt(1, QColor(0, 0, 0, 255));
-            p.drawText(bufferPixmap->rect(), Qt::AlignRight|Qt::AlignVCenter, nativeWidget()->text() );
+            p.drawText(bufferPixmap.rect(), Qt::AlignRight|Qt::AlignVCenter, nativeWidget()->text() );
         }
 
         p.setCompositionMode(QPainter::CompositionMode_DestinationIn);
-        p.fillRect(bufferPixmap->rect(), alphaGradient);
+        p.fillRect(bufferPixmap.rect(), alphaGradient);
 
-        painter->drawPixmap(rect.topLeft(), *bufferPixmap);
+        painter->drawPixmap(rect.topLeft(), bufferPixmap);
     } else {
         painter->drawText(rect, Qt::AlignCenter, nativeWidget()->text() );
     }
