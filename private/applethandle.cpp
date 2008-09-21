@@ -223,18 +223,23 @@ void AppletHandle::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
     Q_UNUSED(option);
     Q_UNUSED(widget);
 
+
     if (qFuzzyCompare(m_opacity, 0.0)) {
         return;
     }
 
     painter->save();
 
+    qreal translation;
+
     if (m_buttonsOnRight) {
         //kDebug() << "translating by" << m_opacity << (-(1 - m_opacity) * m_rect.width()) << m_rect.width();
-        painter->translate(-(1 - m_opacity) * m_rect.width(), 0);
+        translation = -(1 - m_opacity) * m_rect.width();
     } else {
-        painter->translate((1 - m_opacity) * m_rect.width(), 0);
+        translation = (1 - m_opacity) * m_rect.width();
     }
+
+    painter->translate(translation, 0);
 
     painter->setPen(Qt::NoPen);
     painter->setRenderHints(QPainter::Antialiasing);
@@ -242,7 +247,7 @@ void AppletHandle::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
 
     int iconMargin = m_iconSize / 2;
 
-    const QSize pixmapSize(m_decorationRect.width() + m_iconSize + 1, m_decorationRect.height());
+    const QSize pixmapSize(m_decorationRect.width(), m_decorationRect.height() + m_iconSize*4 + 1);
     const QSizeF iconSize(KIconLoader::SizeSmall, KIconLoader::SizeSmall);
 
     //regenerate our buffer?
@@ -254,7 +259,7 @@ void AppletHandle::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
         //fading out panel
         if (m_rect.height() > qreal(minimumHeight()) * 1.25) {
             if (m_buttonsOnRight) {
-                qreal opaquePoint = m_background->marginSize(LeftMargin) / m_decorationRect.width();
+                qreal opaquePoint = (m_background->marginSize(LeftMargin) - translation) / m_decorationRect.width();
                 //kDebug() << "opaquePoint" << opaquePoint
                 //         << m_background->marginSize(LeftMargin) << m_decorationRect.width();
                 g.setColorAt(0.0, Qt::transparent);
@@ -262,7 +267,7 @@ void AppletHandle::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
                 g.setColorAt(opaquePoint, transparencyColor);
                 g.setColorAt(1.0, transparencyColor);
             } else {
-                qreal opaquePoint = 1 - (m_background->marginSize(RightMargin) / m_decorationRect.width());
+                qreal opaquePoint = 1 - ((m_background->marginSize(RightMargin) + translation) / m_decorationRect.width());
                 g.setColorAt(1.0, Qt::transparent);
                 g.setColorAt(opaquePoint, Qt::transparent);
                 g.setColorAt(qMax(0.0, opaquePoint - 0.05), transparencyColor);
@@ -286,10 +291,13 @@ void AppletHandle::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
 
         //+1 because otherwise due to rounding errors when rotated could appear one pixel
         //of the icon at the border of the applet
-        QRectF iconRect(QPointF(pixmapSize.width() - m_iconSize + 1, m_iconSize), iconSize);
+        //QRectF iconRect(QPointF(pixmapSize.width() - m_iconSize + 1, m_iconSize), iconSize);
+        QRectF iconRect(QPointF(0, m_decorationRect.height() + 1), iconSize);
         if (m_buttonsOnRight) {
+            iconRect.moveLeft(pixmapSize.width() - m_iconSize - m_background->marginSize(LeftMargin));
             m_configureIcons->paint(&buffPainter, iconRect, "size-diagonal-tr2bl");
         } else {
+            iconRect.moveLeft(m_background->marginSize(RightMargin));
             m_configureIcons->paint(&buffPainter, iconRect, "size-diagonal-tl2br");
         }
 
@@ -305,9 +313,9 @@ void AppletHandle::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
 
         buffPainter.setCompositionMode(QPainter::CompositionMode_DestinationIn);
         //blend the background
-        buffPainter.fillRect(QRect(QPoint(0,0),m_decorationRect.size().toSize()), g);
+        buffPainter.fillRect(m_backgroundBuffer->rect(), g);
         //blend the icons
-        buffPainter.fillRect(QRect(QPoint((int)m_decorationRect.width(), 0), QSize(m_iconSize + 1, (int)m_decorationRect.height())), transparencyColor);
+        //buffPainter.fillRect(QRect(QPoint((int)m_decorationRect.width(), 0), QSize(m_iconSize + 1, (int)m_decorationRect.height())), transparencyColor);
     }
 
     painter->drawPixmap(m_decorationRect.toRect(), *m_backgroundBuffer, QRect(QPoint(0,0), m_decorationRect.size().toSize()));
@@ -341,7 +349,12 @@ void AppletHandle::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
         break;
     }
 
-    QRectF sourceIconRect(QPointF(pixmapSize.width() - m_iconSize + 1, m_iconSize), iconSize);
+    QRectF sourceIconRect(QPointF(0, m_decorationRect.height() + 1), iconSize);
+    if (m_buttonsOnRight) {
+        sourceIconRect.moveLeft(pixmapSize.width() - m_iconSize - m_background->marginSize(LeftMargin));
+    } else {
+        sourceIconRect.moveLeft(m_background->marginSize(RightMargin));
+    }
 
     if (m_applet && m_applet->aspectRatioMode() != FixedSize) {
         //resize
