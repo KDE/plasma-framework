@@ -125,7 +125,7 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
 
     if (constraints & Plasma::FormFactorConstraint ||
         (constraints & Plasma::SizeConstraint && (f == Plasma::Vertical || f == Plasma::Horizontal))) {
-        if (lay) {
+        if (icon && lay) {
             lay->removeAt(0);
         }
 
