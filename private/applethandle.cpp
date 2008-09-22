@@ -223,8 +223,7 @@ void AppletHandle::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
     Q_UNUSED(option);
     Q_UNUSED(widget);
 
-
-    if (qFuzzyCompare(m_opacity, 0.0)) {
+    if (qFuzzyCompare(m_opacity + 1.0, 1.0)) {
         return;
     }
 
