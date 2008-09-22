@@ -1194,12 +1194,12 @@ void Containment::removeAssociatedWidget(QWidget *widget)
 void Containment::setDrawWallpaper(bool drawWallpaper)
 {
     d->drawWallpaper = drawWallpaper;
-    if (d->drawWallpaper) {
+    if (drawWallpaper) {
         KConfigGroup cfg = config();
         QString wallpaper = cfg.readEntry("wallpaperplugin", defaultWallpaper);
         QString mode = cfg.readEntry("wallpaperpluginmode", defaultWallpaperMode);
         setWallpaper(wallpaper, mode);
-    } else if (!d->drawWallpaper && d->wallpaper) {
+    } else {
         delete d->wallpaper;
         d->wallpaper = 0;
     }
