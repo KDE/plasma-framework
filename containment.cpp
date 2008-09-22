@@ -1323,15 +1323,13 @@ void ContainmentPrivate::focusApplet(Plasma::Applet *applet)
     }
     //but what if applet isn't really one of our applets?
     //FIXME should we really unfocus the old applet?
-    if (applets.contains(applet)) {
+    if (applet && applets.contains(applet)) {
         //kDebug() << "switching to" << applet->name();
         focusedApplet = applet;
-        if (focusedApplet) {
-            foreach (QWidget *w, widgets) {
-                focusedApplet->addAssociatedWidget(w);
-            }
+        foreach (QWidget *w, widgets) {
+            focusedApplet->addAssociatedWidget(w);
         }
-        applet->setFocus(Qt::ShortcutFocusReason);
+        focusedApplet->setFocus(Qt::ShortcutFocusReason);
     } else {
         focusedApplet = 0;
     }
