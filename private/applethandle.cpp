@@ -224,6 +224,9 @@ void AppletHandle::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
     Q_UNUSED(widget);
 
     if (qFuzzyCompare(m_opacity + 1.0, 1.0)) {
+        if (m_anim == FadeOut) {
+            QTimer::singleShot(0, this, SLOT(emitDisappear()));
+        }
         return;
     }
 
@@ -377,6 +380,11 @@ void AppletHandle::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
     painter->drawPixmap(QRectF(basePoint + shiftD, iconSize), *m_backgroundBuffer, sourceIconRect);
 
     painter->restore();
+}
+
+void AppletHandle::emitDisappear()
+{
+    emit disappearDone(this);
 }
 
 AppletHandle::ButtonType AppletHandle::mapToButton(const QPointF &point) const
@@ -872,10 +880,6 @@ void AppletHandle::fadeAnimation(qreal progress)
         m_animId = 0;
         delete m_backgroundBuffer;
         m_backgroundBuffer = 0;
-
-        if (m_anim == FadeOut) {
-            emit disappearDone(this);
-        }
     }
 
     update();

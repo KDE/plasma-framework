@@ -74,6 +74,7 @@ class AppletHandle : public QObject, public QGraphicsItem
         void appletResized();
         void fadeIn();
         void leaveTimeout();
+        void emitDisappear();
 
     private:
         static const int HANDLE_MARGIN = 3;
