@@ -1532,15 +1532,15 @@ void Applet::lower()
     setZValue(--AppletPrivate::s_minZValue);
 }
 
-void Applet::setIsContainment(bool isContainment)
+void AppletPrivate::setIsContainment(bool nowIsContainment)
 {
-    if (d->isContainment == isContainment) {
+    if (isContainment == nowIsContainment) {
         return;
     }
 
-    d->isContainment = isContainment;
+    isContainment = nowIsContainment;
 
-    Containment *c = qobject_cast<Containment*>(this);
+    Containment *c = qobject_cast<Containment*>(q);
     if (c) {
         if (isContainment) {
             // set up the toolbox

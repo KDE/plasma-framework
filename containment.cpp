@@ -630,7 +630,7 @@ Applet* Containment::addApplet(const QString& name, const QVariantList& args, co
 
 void Containment::addApplet(Applet *applet, const QPointF &pos, bool delayInit)
 {
-    if (!delayInit && immutability() != Mutable) {
+    if (!isContainment() || (!delayInit && immutability() != Mutable)) {
         return;
     }
 
@@ -857,6 +857,10 @@ void Containment::dragMoveEvent(QGraphicsSceneDragDropEvent *event)
 void Containment::dropEvent(QGraphicsSceneDragDropEvent *event)
 {
     //kDebug() << event->mimeData()->text();
+    if (!isContainment()) {
+        Applet::dropEvent(event);
+        return;
+    }
 
     QString mimetype(static_cast<Corona*>(scene())->appletMimeType());
 
@@ -1627,8 +1631,12 @@ void ContainmentPrivate::containmentConstraintsEvent(Plasma::Constraints constra
 }
 
 Applet* ContainmentPrivate::addApplet(const QString& name, const QVariantList& args,
-                                        const QRectF& appletGeometry, uint id, bool delayInit)
+                                      const QRectF& appletGeometry, uint id, bool delayInit)
 {
+    if (!q->isContainment()) {
+        return 0;
+    }
+
     if (!delayInit && q->immutability() != Mutable) {
         kDebug() << "addApplet for" << name << "requested, but we're currently immutable!";
         return 0;

@@ -499,6 +499,7 @@ class PLASMA_EXPORT Containment : public Applet
         Q_PRIVATE_SLOT(d, void toggleDesktopImmutability())
 
         friend class Applet;
+        friend class AppletPrivate;
         friend class CoronaPrivate;
         friend class ContainmentPrivate;
         ContainmentPrivate* const d;

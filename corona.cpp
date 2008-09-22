@@ -34,6 +34,7 @@
 #include <KMimeType>
 
 #include "containment.h"
+#include "private/applet_p.h"
 
 using namespace Plasma;
 
@@ -145,7 +146,7 @@ public:
             containment->setFormFactor(Plasma::Planar);
         }
 
-        containment->setIsContainment(true);
+        static_cast<Applet*>(containment)->d->setIsContainment(true);
         q->addItem(containment);
 
         if (!delayedInit) {

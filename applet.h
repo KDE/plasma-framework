@@ -696,11 +696,6 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         virtual void createConfigurationInterface(KConfigDialog *parent);
 
         /**
-         * Sets whether or not this Applet is acting as a Containment
-         */
-        void setIsContainment(bool isContainment);
-
-        /**
          * Called when any of the geometry constraints have been updated.
          *
          * This is always called prior to painting and should be used as an

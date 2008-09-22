@@ -53,6 +53,11 @@ public:
     // package exists and that we have a script engin
     void setupScriptSupport();
 
+    /**
+     * Sets whether or not this Applet is acting as a Containment
+     */
+    void setIsContainment(bool isContainment);
+
     QString globalName() const;
     QString instanceName();
     void scheduleConstraintsUpdate(Plasma::Constraints c);
