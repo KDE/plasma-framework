@@ -229,7 +229,8 @@ class PLASMA_EXPORT PanelSvg : public Svg
          * @arg target the target rectangle on the paint device
          * @arg source the portion rectangle of the source image
          */
-        Q_INVOKABLE void paintPanel(QPainter* painter, const QRectF& target, const QRectF& source);
+        Q_INVOKABLE void paintPanel(QPainter* painter, const QRectF& target,
+                                     const QRectF& source = QRectF());
 
         /**
          * Paints the loaded SVG with the elements that represents the border

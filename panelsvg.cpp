@@ -379,7 +379,7 @@ void PanelSvg::paintPanel(QPainter* painter, const QRectF& target, const QRectF&
         Q_ASSERT(panel->cachedBackground);
     }
 
-    painter->drawPixmap(target, *(panel->cachedBackground), source);
+    painter->drawPixmap(target, *(panel->cachedBackground), source.isValid() ? source : target);
 }
 
 void PanelSvg::paintPanel(QPainter* painter, const QPointF& pos)
