@@ -194,6 +194,7 @@ class ConfigXmlPrivate
         QList<QSize*> sizes;
         QList<quint64*> ulonglongs;
         QList<KUrl::List*> urllists;
+        QString baseGroup;
         QStringList groups;
         QHash<QString, QString> keysToNames;
 };
@@ -255,14 +256,23 @@ bool ConfigXmlHandler::startElement(const QString &namespaceURI, const QString &
     int numAttrs = attrs.count();
     QString tag = localName.toLower();
     if (tag == "group") {
+        QString group;
         for (int i = 0; i < numAttrs; ++i) {
             QString name = attrs.localName(i).toLower();
             if (name == "name") {
                 //kDebug() << "set group to" << attrs.value(i);
-                d->groups.append(attrs.value(i));
-                m_config->setCurrentGroup(attrs.value(i));
+                group = attrs.value(i);
             }
         }
+        if (group.isEmpty()) {
+            group = d->baseGroup;
+        } else {
+            d->groups.append(group);
+            if (!d->baseGroup.isEmpty()) {
+                group = d->baseGroup + '\x1d' + group;
+            }
+        }
+        m_config->setCurrentGroup(group);
     } else if (tag == "entry") {
         for (int i = 0; i < numAttrs; ++i) {
             QString name = attrs.localName(i).toLower();
@@ -522,6 +532,12 @@ ConfigXml::ConfigXml(const KConfigGroup *config, QIODevice *xml, QObject *parent
     : KConfigSkeleton(KSharedConfig::openConfig(config->config()->name()), parent),
       d(new ConfigXmlPrivate)
 {
+    KConfigGroup group = config->parent();
+    d->baseGroup = config->name();
+    while (group.isValid() && group.name() != "<default>") {
+        d->baseGroup = group.name() + '\x1d' + d->baseGroup;
+        group = group.parent();
+    }
     d->parse(this, xml);
 }
 
