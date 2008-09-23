@@ -321,7 +321,7 @@ Svg::~Svg()
 
 QPixmap Svg::pixmap(const QString &elementID)
 {
-    if (elementID.isNull()) {
+    if (elementID.isNull() || d->multipleImages) {
         return d->findInCache(elementID, size());
     } else {
         return d->findInCache(elementID);
