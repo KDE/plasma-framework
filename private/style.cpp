@@ -97,7 +97,7 @@ void Style::drawComplexControl(ComplexControl control,
     d->scrollbar->resizePanel(option->rect.size());
     d->scrollbar->paintPanel(painter);
 
-    if (sunken && scrollOption->activeSubControls & SC_ScrollBarSlider) {
+    if (sunken && scrollOption && scrollOption->activeSubControls & SC_ScrollBarSlider) {
         d->scrollbar->setElementPrefix("sunken-slider");
     } else {
         d->scrollbar->setElementPrefix(prefix + "slider");
@@ -119,13 +119,13 @@ void Style::drawComplexControl(ComplexControl control,
             d->scrollbar->paint(painter, subLine.topLeft(), prefix + "arrow-left");
         }
     } else {
-        if (sunken && scrollOption->activeSubControls & SC_ScrollBarAddLine) {
+        if (sunken && scrollOption && scrollOption->activeSubControls & SC_ScrollBarAddLine) {
             d->scrollbar->paint(painter, addLine.topLeft(), "sunken-arrow-down");
         } else {
             d->scrollbar->paint(painter, addLine.topLeft(), prefix + "arrow-down");
         }
 
-        if (sunken && scrollOption->activeSubControls & SC_ScrollBarSubLine) {
+        if (sunken && scrollOption && scrollOption->activeSubControls & SC_ScrollBarSubLine) {
             d->scrollbar->paint(painter, subLine.topLeft(), "sunken-arrow-up");
         } else {
             d->scrollbar->paint(painter, subLine.topLeft(), prefix + "arrow-up");
