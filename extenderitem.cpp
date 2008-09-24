@@ -418,6 +418,8 @@ QIcon ExtenderItem::icon() const
 
 void ExtenderItem::setExtender(Extender *extender, const QPointF &pos)
 {
+    Q_ASSERT(extender);
+
     if (extender == d->extender) {
         //We're not moving between extenders, so just insert this item back into the layout.
         setParentItem(extender);
@@ -427,16 +429,14 @@ void ExtenderItem::setExtender(Extender *extender, const QPointF &pos)
 
     //We are switching extender...
     //first remove this item from the old extender.
-    if (d->extender) {
-        d->extender->d->removeExtenderItem(this);
-        emit d->extender->itemDetached(this);
+    d->extender->d->removeExtenderItem(this);
+    emit d->extender->itemDetached(this);
 
-        //collapse the popupapplet if the last item is removed.
-        if (!d->extender->attachedItems().count()) {
-            PopupApplet *applet = qobject_cast<PopupApplet*>(d->extender->d->applet);
-            if (applet) {
-                applet->hidePopup();
-            }
+    //collapse the popupapplet if the last item is removed.
+    if (!d->extender->attachedItems().count()) {
+        PopupApplet *applet = qobject_cast<PopupApplet*>(d->extender->d->applet);
+        if (applet) {
+            applet->hidePopup();
         }
     }
 
@@ -547,9 +547,7 @@ void ExtenderItem::destroy()
     }
 
     d->hostApplet()->config("ExtenderItems").deleteGroup(QString::number(d->extenderItemId));
-    if (d->extender) {
-        d->extender->d->removeExtenderItem(this);
-    }
+    d->extender->d->removeExtenderItem(this);
     deleteLater();
 }
 
@@ -622,9 +620,7 @@ void ExtenderItem::setCollapsed(bool collapsed)
 
     updateGeometry();
 
-    if (d->extender) {
-        d->extender->d->adjustSizeHints();
-    }
+    d->extender->d->adjustSizeHints();
 }
 
 void ExtenderItem::moveBackToSource()
@@ -729,16 +725,13 @@ void ExtenderItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
     parentApplet->raise();
     setZValue(parentApplet->zValue());
 
-    if (d->extender) {
-        QPointF mousePos = d->scenePosFromScreenPos(event->screenPos());
+    QPointF mousePos = d->scenePosFromScreenPos(event->screenPos());
 
-        if (!mousePos.isNull()) {
-            d->extender->itemHoverMoveEvent(this, d->extender->mapFromScene(mousePos));
-        }
+    if (!mousePos.isNull()) {
+        d->extender->itemHoverMoveEvent(this, d->extender->mapFromScene(mousePos));
     }
 
     d->extender->d->removeExtenderItem(this);
-
     QApplication::setOverrideCursor(Qt::ClosedHandCursor);
 }
 
