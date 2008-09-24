@@ -369,8 +369,7 @@ void Corona::addOffscreenWidget(QGraphicsWidget *widget)
     //check if the layout allready contains this widget.
     //XXX: duplicated from removeOffscreenWidget()
     for (int i = 0; i < d->offscreenLayout->count(); i++) {
-        QGraphicsWidget *foundWidget =
-            dynamic_cast<QGraphicsWidget*>(d->offscreenLayout->itemAt(i));
+        QGraphicsWidget *foundWidget = dynamic_cast<QGraphicsWidget*>(d->offscreenLayout->itemAt(i));
         if (foundWidget == widget) {
             return;
         }
@@ -388,8 +387,7 @@ void Corona::removeOffscreenWidget(QGraphicsWidget *widget)
     }
 
     for (int i = 0; i < d->offscreenLayout->count(); i++) {
-        QGraphicsWidget *foundWidget =
-            dynamic_cast<QGraphicsWidget*>(d->offscreenLayout->itemAt(i));
+        QGraphicsWidget *foundWidget = dynamic_cast<QGraphicsWidget*>(d->offscreenLayout->itemAt(i));
         if (foundWidget == widget) {
             d->offscreenLayout->removeAt(i);
         }
