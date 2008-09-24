@@ -134,6 +134,7 @@ AppletHandle::AppletHandle(Containment *parent, Applet *applet, const QPointF &h
 AppletHandle::~AppletHandle()
 {
     detachApplet();
+    delete m_backgroundBuffer;
     if (m_topview) {
         delete m_topview;
     }
