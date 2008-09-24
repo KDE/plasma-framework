@@ -250,8 +250,8 @@ void AppletHandle::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
 
     int iconMargin = m_iconSize / 2;
 
-    const QSize pixmapSize(m_decorationRect.width(), m_decorationRect.height() + m_iconSize*4 + 1);
-    const QSizeF iconSize(KIconLoader::SizeSmall, KIconLoader::SizeSmall);
+    const QSize pixmapSize(int(m_decorationRect.width()), int(m_decorationRect.height()) + m_iconSize*4 + 1);
+    const QSize iconSize(KIconLoader::SizeSmall, KIconLoader::SizeSmall);
 
     //regenerate our buffer?
     if (m_animId > 0 || !m_backgroundBuffer || m_backgroundBuffer->size() != pixmapSize) {
@@ -877,7 +877,7 @@ void AppletHandle::fadeAnimation(qreal progress)
         m_opacity = 1 - progress;
     }
     //kDebug() << "progress" << progress << "m_opacity" << m_opacity;// << endOpacity;
-    if (qFuzzyCompare(progress, 1.0)) {
+    if (qFuzzyCompare(progress, qreal(1.0))) {
         m_animId = 0;
         delete m_backgroundBuffer;
         m_backgroundBuffer = 0;
