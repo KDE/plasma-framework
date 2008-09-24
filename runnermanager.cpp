@@ -223,7 +223,7 @@ public:
         KService::List offers = KServiceTypeTrader::self()->query("Plasma/Runner");
 
         bool loadAll = config.readEntry("loadAll", false);
-        KConfigGroup conf(KGlobal::config(), "Plugins");
+        KConfigGroup conf(&config, "Plugins");
 
         foreach (const KService::Ptr &service, offers) {
             //kDebug() << "Loading runner: " << service->name() << service->storageId();
@@ -308,10 +308,11 @@ RunnerManager::RunnerManager(QObject *parent)
 }
 
 
-RunnerManager::RunnerManager(KConfigGroup &config, QObject *parent)
+RunnerManager::RunnerManager(KConfigGroup &c, QObject *parent)
     : QObject(parent),
       d(new RunnerManagerPrivate(this))
 {
+    KConfigGroup config(&config, "PlasmaRunnerManager");
     d->loadConfiguration(config);
     //ThreadWeaver::setDebugLevel(true, 4);
 }
