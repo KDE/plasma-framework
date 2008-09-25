@@ -312,7 +312,9 @@ RunnerManager::RunnerManager(KConfigGroup &c, QObject *parent)
     : QObject(parent),
       d(new RunnerManagerPrivate(this))
 {
-    KConfigGroup config(&config, "PlasmaRunnerManager");
+    // Should this be really needed? Maybe d->loadConfiguration(c) would make
+    // more sense.
+    KConfigGroup config(&c, "PlasmaRunnerManager");
     d->loadConfiguration(config);
     //ThreadWeaver::setDebugLevel(true, 4);
 }
