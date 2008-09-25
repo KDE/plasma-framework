@@ -200,7 +200,7 @@ class PLASMA_EXPORT AbstractRunner : public QObject
         KConfigGroup config() const;
 
         /**
-         * Sets whether or not the the runner has options for matches
+         * Sets whether or not the runner has options for matches
          */
         void setHasRunOptions(bool hasRunOptions);
 
@@ -224,7 +224,7 @@ class PLASMA_EXPORT AbstractRunner : public QObject
          * be used instead of calling KServiceTypeTrader::query(..) directly.
          *
          * @arg serviceType a service type like "Plasma/Applet" or "KFilePlugin"
-         * @arg constraint a constraint to limit the the choices returned.
+         * @arg constraint a constraint to limit the choices returned.
          * @see KServiceTypeTrader::query(const QString&, const QString&)
          *
          * @return a list of services that satisfy the query.

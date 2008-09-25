@@ -132,7 +132,7 @@ public:
      * a not-required element with no associated mimetypes.
      *
      * @param key  used as an internal label for this directory
-     * @param path the path within the the package for this directory
+     * @param path the path within the package for this directory
      * @param name the user visible (translated) name for the directory
      **/
     void addDirectoryDefinition(const char* key, const QString& path, const QString& name);
@@ -142,7 +142,7 @@ public:
      * a not-required element with no associated mimetypes.
      *
      * @param key  used as an internal label for this file
-     * @param path the path within the the package for this file
+     * @param path the path within the package for this file
      * @param name the user visible (translated) name for the file
      **/
     void addFileDefinition(const char* key, const QString& path, const QString& name);

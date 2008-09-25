@@ -80,7 +80,7 @@ public:
      * Starts a standard animation on a QGraphicsItem.
      *
      * @arg item the item to animate in some fashion
-     * @arg anim the the type of animation to perform
+     * @arg anim the type of animation to perform
      * @return the id of the animation
      **/
     Q_INVOKABLE int animateItem(QGraphicsItem* item, Animation anim);
@@ -98,7 +98,7 @@ public:
      * Starts a standard animation on a QGraphicsItem.
      *
      * @arg item the item to animate in some fashion
-     * @arg anim the the type of animation to perform
+     * @arg anim the type of animation to perform
      * @return the id of the animation
      **/
     Q_INVOKABLE int moveItem(QGraphicsItem* item, Movement movement, const QPoint &destination);

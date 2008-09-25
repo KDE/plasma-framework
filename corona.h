@@ -72,7 +72,7 @@ public:
     void clearContainments();
 
     /**
-     * Returns the the config file used to store the configuration for this Corona
+     * Returns the config file used to store the configuration for this Corona
      */
     KSharedConfig::Ptr config() const;
 
