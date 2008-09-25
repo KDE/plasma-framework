@@ -31,6 +31,7 @@
 #include <KDebug>
 #include <KIcon>
 #include <KWindowSystem>
+#include <KGlobalSettings>
 
 #include "applet.h"
 #include "containment.h"
@@ -649,7 +650,7 @@ void ExtenderItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
     //draw the title.
     Plasma::Theme *theme = Plasma::Theme::defaultTheme();
     QFont font = theme->font(Plasma::Theme::DefaultFont);
-    font.setPointSize(font.pointSize() - 2);
+    font.setPointSize(KGlobalSettings::smallestReadableFont().pointSize());
     font.setWeight(QFont::Bold);
 
     //XXX: duplicated from windowtaskitem.
