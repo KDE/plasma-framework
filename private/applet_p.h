@@ -29,7 +29,6 @@ namespace Plasma
 
 class PanelSvg;
 class AppletScript;
-class ShadowItem;
 class Wallpaper;
 
 class AppletOverlayWidget : public QGraphicsWidget
@@ -62,7 +61,6 @@ public:
     QString instanceName();
     void scheduleConstraintsUpdate(Plasma::Constraints c);
     KConfigGroup* mainConfigGroup();
-    void copyEntries(KConfigGroup *source, KConfigGroup *destination);
     QString visibleFailureText(const QString& reason);
     void checkImmutability();
     void themeChanged();
@@ -82,18 +80,17 @@ public:
     //      number of members at this point.
     uint appletId;
     Applet *q;
+
     Extender *extender;
     Applet::BackgroundHints backgroundHints;
     KPluginInfo appletDescription;
-    Package* package;
     AppletOverlayWidget *needsConfigOverlay;
     QList<QGraphicsItem*> registeredAsDragHandle;
     QStringList loadedEngines;
     Plasma::PanelSvg *background;
-    //Plasma::LineEdit *failureText;
     AppletScript *script;
-    ConfigXml* configXml;
-    ShadowItem* shadow;
+    Package *package;
+    ConfigXml *configXml;
     KConfigGroup *mainConfig;
     Plasma::Constraints pendingConstraints;
     Plasma::AspectRatioMode aspectRatioMode;
@@ -101,6 +98,7 @@ public:
     KActionCollection actions;
     KAction *activationAction;
     int constraintsTimerId;
+    int modificationsTimerId;
     bool hasConfigurationInterface : 1;
     bool failed : 1;
     bool isContainment : 1;

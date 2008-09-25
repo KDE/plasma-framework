@@ -39,7 +39,6 @@
 #include <QSize>
 #include <QStyleOptionGraphicsItem>
 #include <QTextDocument>
-#include <QTimer>
 #include <QUiLoader>
 
 #include <KAction>
@@ -1446,6 +1445,13 @@ QVariant Applet::itemChange(GraphicsItemChange change, const QVariant &value)
         break;
     case ItemPositionHasChanged:
         emit geometryChanged();
+        // fall through!
+    case ItemTransformHasChanged: {
+        if (d->modificationsTimerId) {
+            killTimer(d->modificationsTimerId);
+        }
+        d->modificationsTimerId = startTimer(1000);
+    }
         break;
     default:
         break;
@@ -1500,6 +1506,11 @@ void Applet::timerEvent(QTimerEvent *event)
         killTimer(d->constraintsTimerId);
         d->constraintsTimerId = 0;
         flushPendingConstraintsEvents();
+    } else if (event->timerId() == d->modificationsTimerId) {
+        killTimer(d->modificationsTimerId);
+        KConfigGroup cg = config();
+        save(cg);
+        emit configNeedsSaving();
     }
 }
 
@@ -1566,10 +1577,10 @@ AppletPrivate::AppletPrivate(KService::Ptr service, int uniqueID, Applet *applet
           extender(0),
           backgroundHints(Applet::StandardBackground),
           appletDescription(service),
-          package(0),
           needsConfigOverlay(0),
           background(0),
           script(0),
+          package(0),
           configXml(0),
           mainConfig(0),
           pendingConstraints(NoConstraint),
@@ -1602,9 +1613,14 @@ AppletPrivate::~AppletPrivate()
         DataEngineManager::self()->unloadEngine( engine );
     }
 
+    delete script;
+    script = 0;
     delete package;
+    package = 0;
     delete configXml;
+    configXml = 0;
     delete mainConfig;
+    mainConfig = 0;
 }
 
 void AppletPrivate::init()
