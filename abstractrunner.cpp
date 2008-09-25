@@ -75,7 +75,10 @@ public:
 
     ~AbstractRunnerPrivate()
     {
+        delete script;
+        script = 0;
         delete package;
+        package = 0;
     }
 
     bool hasRunOptions;

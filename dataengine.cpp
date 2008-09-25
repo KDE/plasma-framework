@@ -459,7 +459,10 @@ DataEnginePrivate::DataEnginePrivate(DataEngine* e, KService::Ptr service)
 
 DataEnginePrivate::~DataEnginePrivate()
 {
+    delete script;
+    script = 0;
     delete package;
+    package = 0;
 }
 
 void DataEnginePrivate::internalUpdateSource(DataContainer* source)
