@@ -53,7 +53,7 @@ class PLASMA_EXPORT Package
 
         /**
           * Construct a Package object.
-          * 
+          *
           * @arg packagePath full path to the package directory
           * @arg structure the package structure describing this package
           */
@@ -131,7 +131,8 @@ class PLASMA_EXPORT Package
          * @return true on successful installation, false otherwise
          **/
         static bool installPackage(const QString &package,
-                                   const QString &packageRoot);
+                                   const QString &packageRoot,
+                                   const QString &servicePrefix);
 
         /**
          * Uninstalls a package.
@@ -142,7 +143,8 @@ class PLASMA_EXPORT Package
          * @return true on successful uninstallation, false otherwise
          **/
         static bool uninstallPackage(const QString &package,
-                                   const QString &packageRoot);
+                                     const QString &packageRoot,
+                                     const QString &servicePrefix);
 
 
         /**

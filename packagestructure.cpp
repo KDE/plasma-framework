@@ -66,6 +66,8 @@ public:
     QString type;
     QString path;
     QString contentsPrefix;
+    QString packageRoot;
+    QString servicePrefix;
     QMap<QByteArray, ContentStructure> contents;
     QStringList mimetypes;
     static QHash<QString, PackageStructure::Ptr> structures;
@@ -79,6 +81,8 @@ PackageStructure::PackageStructure(QObject *parent, const QString &type)
 {
     d->type = type;
     d->contentsPrefix = "contents/";
+    d->packageRoot = "plasma/plasmoids/";
+    d->servicePrefix = "plasma-applet-";
 }
 
 PackageStructure::~PackageStructure()
@@ -327,7 +331,7 @@ void PackageStructure::read(const KConfigBase *config)
 {
     d->contents.clear();
     d->mimetypes.clear();
-    d->type = config->group("").readEntry("Type", QString()); 
+    d->type = config->group("").readEntry("Type", QString());
 
     QStringList groups = config->groupList();
     foreach (const QString &group, groups) {
@@ -386,12 +390,32 @@ void PackageStructure::setContentsPrefix(const QString &prefix)
 
 bool PackageStructure::installPackage(const QString &package, const QString &packageRoot)
 {
-    return Package::installPackage(package, packageRoot);
+    return Package::installPackage(package, packageRoot, d->servicePrefix);
 }
 
 bool PackageStructure::uninstallPackage(const QString &packageName, const QString &packageRoot)
 {
-    return Package::uninstallPackage(packageName, packageRoot);
+    return Package::uninstallPackage(packageName, packageRoot, d->servicePrefix);
+}
+
+QString PackageStructure::defaultPackageRoot() const
+{
+    return d->packageRoot;
+}
+
+QString PackageStructure::servicePrefix() const
+{
+    return d->servicePrefix;
+}
+
+void PackageStructure::setDefaultPackageRoot(const QString &packageRoot)
+{
+    d->packageRoot = packageRoot;
+}
+
+void PackageStructure::setServicePrefix(const QString &servicePrefix)
+{
+    d->servicePrefix = servicePrefix;
 }
 
 } // Plasma namespace

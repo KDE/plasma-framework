@@ -219,7 +219,8 @@ QStringList Package::listInstalled(const QString& packageRoot) // static
 }
 
 bool Package::installPackage(const QString& package,
-                             const QString& packageRoot) // static
+                             const QString& packageRoot,
+                             const QString& servicePrefix) // static
 {
     //TODO: report *what* failed if something does fail
     QDir root(packageRoot);
@@ -332,11 +333,7 @@ bool Package::installPackage(const QString& package,
 
     //TODO: reduce code duplication with registerPackage below
 
-    QString serviceName;
-    if (KGlobal::hasMainComponent()) {
-        serviceName = KGlobal::mainComponent().componentName();
-    }
-    serviceName.append("_plasma_applet_" + meta.pluginName());
+    QString serviceName = servicePrefix + meta.pluginName();
 
     QString service = KStandardDirs::locateLocal("services", serviceName + ".desktop");
     KIO::FileCopyJob *job = KIO::file_copy(metaPath, service, -1, KIO::HideProgressInfo);
@@ -356,7 +353,8 @@ bool Package::installPackage(const QString& package,
 }
 
 bool Package::uninstallPackage(const QString& pluginName,
-			       const QString& packageRoot) // static
+                               const QString& packageRoot,
+                               const QString& servicePrefix) // static
 {
     // We need to remove the package directory and its metadata file.
     QString targetName = pluginName;
@@ -367,11 +365,7 @@ bool Package::uninstallPackage(const QString& pluginName,
         return false;
     }
 
-    QString serviceName;
-    if (KGlobal::hasMainComponent()) {
-        serviceName = KGlobal::mainComponent().componentName();
-    }
-    serviceName.append("_plasma_applet_" + pluginName);
+    QString serviceName = servicePrefix + pluginName;
 
     QString service = KStandardDirs::locateLocal("services", serviceName + ".desktop");
     kDebug() << "Removing service file " << service;

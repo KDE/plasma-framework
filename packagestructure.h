@@ -185,7 +185,7 @@ public:
      * Define mimetypes for a given part of the structure
      * The path must already have been added using addDirectoryDefinition
      * or addFileDefinition.
-     * 
+     *
      * @param path the path of the entry within the package
      * @param mimetypes a list of mimetypes
      **/
@@ -242,6 +242,21 @@ public:
      */
     QString contentsPrefix() const;
 
+    /**
+     * @return preferred package root. This defaults to plasma/plasmoids/
+     */
+    QString defaultPackageRoot() const;
+
+    /**
+     * @return service prefix used in desktop files. This defaults to plasma-applet-
+     */
+    QString servicePrefix() const;
+
+    /**
+     * Sets service prefix.
+     */
+    void setServicePrefix(const QString &servicePrefix);
+
 protected:
     /**
      * Sets the prefix that all the contents in this package should
@@ -252,6 +267,11 @@ protected:
      * @arg prefix the directory prefix to use
      */
     void setContentsPrefix(const QString &prefix);
+
+    /**
+     * Sets preferred package root.
+     */
+    void setDefaultPackageRoot(const QString &packageRoot);
 
     /**
      * Called whenever the path changes so that subclasses may take
