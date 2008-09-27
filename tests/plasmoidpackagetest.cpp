@@ -317,7 +317,7 @@ void PlasmoidPackageTest::createAndInstallPackage()
     QVERIFY(contents->entry("code"));
     QVERIFY(contents->entry("images"));
 
-    QVERIFY(Plasma::Package::installPackage(packagePath, mPackageRoot));
+    QVERIFY(Plasma::Package::installPackage(packagePath, mPackageRoot, "plasma-applet-"));
     QString installedPackage = mPackageRoot + "/test";
 
     QVERIFY(QFile::exists(installedPackage));
