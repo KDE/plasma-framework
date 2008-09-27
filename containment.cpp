@@ -574,6 +574,9 @@ void Containment::setFormFactor(FormFactor formFactor)
     }
 
     updateConstraints(Plasma::FormFactorConstraint);
+
+    KConfigGroup c = config();
+    c.writeEntry("formfactor", (int)formFactor);
 }
 
 void Containment::setLocation(Location location)
@@ -607,6 +610,9 @@ void Containment::setLocation(Location location)
     }
 
     updateConstraints(Plasma::LocationConstraint);
+
+    KConfigGroup c = config();
+    c.writeEntry("location", (int)location);
 }
 
 void Containment::addSiblingContainment()
@@ -749,6 +755,9 @@ void Containment::setScreen(int screen)
     if (oldScreen != screen) {
         emit screenChanged(oldScreen, screen, this);
     }
+
+    KConfigGroup c = config();
+    c.writeEntry("screen", d->screen);
 }
 
 int Containment::screen() const
@@ -1279,6 +1288,9 @@ void Containment::setActivity(const QString &activity)
         foreach (Applet *a, d->applets) {
             a->updateConstraints(ContextConstraint);
         }
+
+        KConfigGroup c = config();
+        c.writeEntry("activity", activity);
     }
 }
 
