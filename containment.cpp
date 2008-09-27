@@ -557,7 +557,7 @@ bool ContainmentPrivate::showContextMenu(const QPointF &point, const QPoint &scr
 
 void Containment::setFormFactor(FormFactor formFactor)
 {
-    if (d->formFactor == formFactor && layout()) {
+    if (d->formFactor == formFactor) {
         return;
     }
 
@@ -577,6 +577,7 @@ void Containment::setFormFactor(FormFactor formFactor)
 
     KConfigGroup c = config();
     c.writeEntry("formfactor", (int)formFactor);
+    emit configNeedsSaving();
 }
 
 void Containment::setLocation(Location location)
@@ -613,6 +614,7 @@ void Containment::setLocation(Location location)
 
     KConfigGroup c = config();
     c.writeEntry("location", (int)location);
+    emit configNeedsSaving();
 }
 
 void Containment::addSiblingContainment()
@@ -754,10 +756,11 @@ void Containment::setScreen(int screen)
     updateConstraints(Plasma::ScreenConstraint);
     if (oldScreen != screen) {
         emit screenChanged(oldScreen, screen, this);
-    }
 
-    KConfigGroup c = config();
-    c.writeEntry("screen", d->screen);
+        KConfigGroup c = config();
+        c.writeEntry("screen", d->screen);
+        emit configNeedsSaving();
+    }
 }
 
 int Containment::screen() const
@@ -1291,6 +1294,7 @@ void Containment::setActivity(const QString &activity)
 
         KConfigGroup c = config();
         c.writeEntry("activity", activity);
+        emit configNeedsSaving();
     }
 }
 
