@@ -25,6 +25,7 @@
 #include <KDebug>
 #include <kfilewidget.h>
 #include <KListWidget>
+#include <KMessageBox>
 #include <KService>
 #include <KServiceTypeTrader>
 #include <KStandardDirs>
@@ -82,7 +83,6 @@ OpenWidgetAssistant::OpenWidgetAssistant(QWidget *parent)
     addPage(m_filePage);
 
     connect(this, SIGNAL(currentPageChanged(KPageWidgetItem*,KPageWidgetItem*)), SLOT(prepPage(KPageWidgetItem*,KPageWidgetItem*)));
-    connect(this, SIGNAL(user1Clicked()), this, SLOT(finished()));
     enableButton( KDialog::Help, false );
     //connect( this, SIGNAL( helpClicked() ), this, SLOT( slotHelpClicked() ) );
     m_widgetTypeList->setFocus();
@@ -109,6 +109,8 @@ void OpenWidgetAssistant::prepPage(KPageWidgetItem *current, KPageWidgetItem *be
         m_fileDialog = new KFileWidget(KUrl(), m_filePageWidget);
         m_fileDialog->setOperationMode(KFileWidget::Opening);
         m_fileDialog->setMode(KFile::File | KFile::ExistingOnly);
+        connect(this, SIGNAL(user1Clicked()), m_fileDialog, SLOT(slotOk()));
+        connect(m_fileDialog, SIGNAL(accepted()), this, SLOT(finished()));
         //m_fileDialog->setWindowFlags(Qt::Widget);
         layout->addWidget(m_fileDialog);
     }
@@ -151,15 +153,15 @@ void OpenWidgetAssistant::slotHelpClicked()
 
 void OpenWidgetAssistant::finished()
 {
-    m_fileDialog->slotOk();
     m_fileDialog->accept(); // how interesting .. accept() must be called before the state is set
-
-    if (m_fileDialog->selectedFile().isEmpty()) {
+    QString packageFilePath = m_fileDialog->selectedFile();
+    if (packageFilePath.isEmpty()) {
         //TODO: user visible error handling
+        kDebug() << "hm. no file path?";
         return;
     }
 
-    //kDebug() << "selected uri is" << m_fileDialog->selectedFile() << "of type" << m_fileDialog->currentFilter();
+    kDebug() << "selected uri is" << packageFilePath << "of type" << m_fileDialog->currentFilter();
     PackageStructure *installer = 0;
     if (m_packageStructureService) {
         QString error;
@@ -167,6 +169,9 @@ void OpenWidgetAssistant::finished()
         if (!installer) {
             kDebug() << "Could not load requested PackageStructure installer "
                      << m_packageStructureService << ". Error given: " << error;
+            KMessageBox::error(this, i18n("Could not load the required installer %1. The error given was: ",
+                                          m_packageStructureService, error),
+                               i18n("Installation Failure"));
             return;
         }
     } else {
@@ -174,12 +179,14 @@ void OpenWidgetAssistant::finished()
     }
 
     QString root = KStandardDirs::locateLocal("data", "plasma/plasmoids/");
-    //kDebug() << "installing to root dir of" << root;
-    bool success = installer->installPackage(m_fileDialog->selectedFile(), root);
+    kDebug() << "installing" << packageFilePath << "to root dir of" << root;
+    bool success = installer->installPackage(packageFilePath, root);
 
     delete installer;
-    kDebug() << "install returned. were we successful?" << success;
-    //TODO: user visible feedback
+    if (!success) {
+        KMessageBox::error(this, i18n("Installing the package %1 failed.", packageFilePath),
+                           i18n("Installation Failure"));
+    }
 }
 
 } // Plasma namespace
