@@ -132,7 +132,7 @@ KConfigGroup Service::operationDescription(const QString &operationName)
     return params;
 }
 
-ServiceJob* Service::startOperationCall(const KConfigGroup &description)
+ServiceJob* Service::startOperationCall(const KConfigGroup &description, QObject *parent)
 {
     // TODO: nested groups?
     ServiceJob *job = 0;
@@ -159,6 +159,7 @@ ServiceJob* Service::startOperationCall(const KConfigGroup &description)
         job = new NullServiceJob(destination(), op, this);
     }
 
+    job->setParent(parent ? parent : this);
     connect(job, SIGNAL(finished(KJob*)), this, SLOT(jobFinished(KJob*)));
     QTimer::singleShot(0, job, SLOT(slotStart()));
     return job;

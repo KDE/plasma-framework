@@ -123,7 +123,7 @@ public:
      * @return a started ServiceJob; the consumer may connect to relevant
      *         signals before returning to the event loop
      */
-    ServiceJob* startOperationCall(const KConfigGroup &description);
+    ServiceJob* startOperationCall(const KConfigGroup &description, QObject *parent = 0);
 
     /**
      * Query to find if an operation is enabled or not.
