@@ -87,6 +87,7 @@ Label::Label(QGraphicsWidget *parent)
       d(new LabelPrivate(this))
 {
     QLabel* native = new QLabel;
+    connect(native, SIGNAL(linkActivated(QString)), this, SIGNAL(linkActivated(QString)));
 
     connect(Theme::defaultTheme(), SIGNAL(themeChanged()), this, SLOT(setPalette()));
     native->setAttribute(Qt::WA_NoSystemBackground);

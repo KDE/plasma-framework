@@ -93,6 +93,9 @@ public:
      */
     QLabel* nativeWidget() const;
 
+Q_SIGNALS:
+    void linkActivated(const QString &link);
+
 public Q_SLOTS:
     void dataUpdated(const QString &sourceName, const Plasma::DataEngine::Data &data);
 
