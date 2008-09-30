@@ -223,6 +223,15 @@ class PLASMA_EXPORT PanelSvg : public Svg
         */
        void clearCache();
 
+       /**
+         * Returns a pixmap of the SVG represented by this object.
+         *
+         * @arg elelementId the ID string of the element to render, or an empty
+         *                  string for the whole SVG (the default)
+         * @return a QPixmap of the rendered SVG
+         */
+        Q_INVOKABLE QPixmap panelPixmap();
+
         /**
          * Paints the loaded SVG with the elements that represents the border
          * @arg painter the QPainter to use

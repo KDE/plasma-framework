@@ -371,6 +371,17 @@ void PanelSvg::clearCache()
     }
 }
 
+QPixmap PanelSvg::panelPixmap()
+{
+    PanelData *panel = d->panels[d->prefix];
+    if (!panel->cachedBackground) {
+        d->generateBackground(panel);
+        Q_ASSERT(panel->cachedBackground);
+    }
+
+    return *panel->cachedBackground;
+}
+
 void PanelSvg::paintPanel(QPainter* painter, const QRectF& target, const QRectF& source)
 {
     PanelData *panel = d->panels[d->prefix];
