@@ -236,6 +236,12 @@ void ToolTipManager::setToolTipContent(QGraphicsWidget *widget, const ToolTipCon
     tooltip->updateTheme();
 }
 
+void ToolTipManager::clearToolTipContent(QGraphicsWidget *widget)
+{
+    ToolTipContent t;
+    setToolTipContent(widget, t);
+}
+
 bool ToolTipManager::widgetHasToolTip(QGraphicsWidget *widget) const
 {
     return d->tooltips.contains(widget);

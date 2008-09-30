@@ -180,6 +180,12 @@ public:
     void setToolTipContent(QGraphicsWidget *widget, const ToolTipContent &data);
 
     /**
+     * Clears the tooltip data associated with this widget, but keeps
+     * the widget registered.
+     */
+    void clearToolTipContent(QGraphicsWidget *widget);
+
+    /**
      * Checks whether a widget has a tooltip associated with it.
      *
      * @param widget the widget to check for an associated tooltip
