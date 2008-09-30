@@ -509,16 +509,6 @@ void Icon::hoverEffect(bool show)
         d->states |= IconPrivate::HoverState;
     }
 
-    if (d->m_hoverAnimId == -1 && !d->drawBg) {
-        // we do this only when we don't do the anim, because
-        // this gets set at animation end when we are animating
-        if (!show) {
-            d->states &= ~IconPrivate::HoverState;
-        }
-
-        return;
-    }
-
     d->m_fadeIn = show;
     const int FadeInDuration = 150;
 
@@ -614,13 +604,17 @@ QPixmap IconPrivate::decoration(const QStyleOptionGraphicsItem *option, bool use
 
     // We disable the iconeffect here since we cannot get it into sync with
     // the fade animation. TODO: Enable it when animations are switched off
-    if (!result.isNull() && useHoverEffect && !drawBg) {
+    if (!result.isNull() && useHoverEffect) {
         KIconEffect *effect = KIconLoader::global()->iconEffect();
         // Note that in KIconLoader terminology, active = hover.
         // We're assuming that the icon group is desktop/filemanager, since this
         // is KFileItemDelegate.
         if (effect->hasEffect(KIconLoader::Desktop, KIconLoader::ActiveState)) {
-            result = effect->apply(result, KIconLoader::Desktop, KIconLoader::ActiveState);
+            if (qFuzzyCompare(qreal(1.0), m_hoverAlpha)) {
+                result = effect->apply(result, KIconLoader::Desktop, KIconLoader::ActiveState);
+            } else {
+                result = PaintUtils::transition(result, effect->apply(result, KIconLoader::Desktop, KIconLoader::ActiveState), m_hoverAlpha);
+            }
         }
     }
 

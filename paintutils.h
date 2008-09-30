@@ -58,6 +58,11 @@ PLASMA_EXPORT QPixmap shadowText(QString text,
  */
 PLASMA_EXPORT QPainterPath roundedRectangle(const QRectF& rect, qreal radius);
 
+/**
+ * Blends a pixmap into another
+ */
+PLASMA_EXPORT QPixmap transition(const QPixmap &from, const QPixmap &to, qreal amount);
+
 } // PaintUtils namespace
 
 } // Plasma namespace
