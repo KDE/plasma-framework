@@ -180,13 +180,13 @@ void OpenWidgetAssistant::finished()
 
     QString root = KStandardDirs::locateLocal("data", "plasma/plasmoids/");
     kDebug() << "installing" << packageFilePath << "to root dir of" << root;
-    bool success = installer->installPackage(packageFilePath, root);
 
-    delete installer;
-    if (!success) {
+    if (!installer->installPackage(packageFilePath, root)) {
         KMessageBox::error(this, i18n("Installing the package %1 failed.", packageFilePath),
                            i18n("Installation Failure"));
     }
+
+    delete installer;
 }
 
 } // Plasma namespace
