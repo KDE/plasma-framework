@@ -26,6 +26,7 @@
 #include <QApplication>
 
 #include <plasma/theme.h>
+#include <plasma/paintutils.h>
 #include <KColorScheme>
 
 #include <KDebug>
@@ -180,17 +181,16 @@ void PanelToolBox::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
         iconRect = QRect(QPoint((int)boundingRect().left() - iconSize().width() + 1, gradientCenter.y() - iconSize().height()/2), iconSize());
     }
 
-    if (progress <= 0.9) {
-        d->icon.paint(painter, iconRect, Qt::AlignCenter, QIcon::Disabled, QIcon::Off);
-    }
-
-    if (progress > 0.1) {
-        painter->save();
-        painter->setOpacity(progress);
+    if (qFuzzyCompare(qreal(1.0), progress)) {
         d->icon.paint(painter, iconRect);
-        painter->restore();
+    } else if (qFuzzyCompare(qreal(1.0), 1 + progress)) {
+        d->icon.paint(painter, iconRect, Qt::AlignCenter, QIcon::Disabled, QIcon::Off);
+    } else {
+        QPixmap disabled = d->icon.pixmap(iconSize(), QIcon::Disabled, QIcon::Off);
+        QPixmap enabled = d->icon.pixmap(iconSize());
+        QPixmap result = PaintUtils::transition(d->icon.pixmap(iconSize(), QIcon::Disabled, QIcon::Off), d->icon.pixmap(iconSize()), progress);
+        painter->drawPixmap(iconRect, result);
     }
-
 }
 
 QPainterPath PanelToolBox::shape() const
