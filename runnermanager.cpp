@@ -21,9 +21,14 @@
 
 #include "runnermanager.h"
 
-#include <KServiceTypeTrader>
-#include <KPluginInfo>
+#include <QMutex>
+#include <QTimer>
+#include <QCoreApplication>
+
 #include <KDebug>
+#include <KPluginInfo>
+#include <KServiceTypeTrader>
+#include <KStandardDirs>
 
 #include <Solid/Device>
 #include <Solid/DeviceInterface>
@@ -33,9 +38,6 @@
 #include <ThreadWeaver/Job>
 #include <ThreadWeaver/QueuePolicy>
 #include <ThreadWeaver/Weaver>
-#include <QMutex>
-#include <QTimer>
-#include <QCoreApplication>
 
 #include "querymatch.h"
 
@@ -227,6 +229,13 @@ public:
 
         foreach (const KService::Ptr &service, offers) {
             //kDebug() << "Loading runner: " << service->name() << service->storageId();
+            QString tryExec = service->property("TryExec", QVariant::String).toString();
+            kDebug() << "tryExec is" << tryExec;
+            if (!tryExec.isEmpty() && KStandardDirs::findExe(tryExec).isEmpty()) {
+                // we don't actually have this application!
+                continue;
+            }
+
             KPluginInfo description(service);
             QString runnerName = description.pluginName();
             description.load(conf);
