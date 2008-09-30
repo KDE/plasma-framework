@@ -86,9 +86,18 @@ Q_SIGNALS:
 
 protected:
     void resizeEvent(QGraphicsSceneResizeEvent *event);
+    void paint(QPainter *painter,
+               const QStyleOptionGraphicsItem *option,
+               QWidget *widget);
+    void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
+    void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
 
 private:
     ComboBoxPrivate * const d;
+
+    friend class ComboBoxPrivate;
+    Q_PRIVATE_SLOT(d, void syncBorders())
+    Q_PRIVATE_SLOT(d, void elementAnimationFinished(int id))
 };
 
 } // namespace Plasma
