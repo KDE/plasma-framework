@@ -42,8 +42,8 @@ namespace Plasma
 {
 
 // constant controlling how long between requesting a configuration sync
-// and one happening should occur. currently 30 seconds
-const int CONFIG_SYNC_TIMEOUT = 30000;
+// and one happening should occur. currently 10 seconds
+const int CONFIG_SYNC_TIMEOUT = 10000;
 
 class CoronaPrivate
 {

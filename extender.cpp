@@ -58,6 +58,7 @@ Extender::Extender(Applet *applet)
 
 Extender::~Extender()
 {
+    d->applet->d->extender = 0;
     delete d;
 }
 

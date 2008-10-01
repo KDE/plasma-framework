@@ -178,6 +178,7 @@ void Applet::save(KConfigGroup &g) const
         group = *d->mainConfigGroup();
     }
 
+    kDebug() << "saving to" << group.name();
     // we call the dptr member directly for locked since isImmutable()
     // also checks kiosk and parent containers
     group.writeEntry("immutability", (int)d->immutability);
@@ -252,6 +253,11 @@ void Applet::restore(KConfigGroup &group)
         //TODO: implement; the shortcut
     }
     */
+    // start up is done, we can now go do a mod timer
+    if (d->modificationsTimerId > 0) {
+        killTimer(d->modificationsTimerId);
+    }
+    d->modificationsTimerId = 0;
 }
 
 void AppletPrivate::setFocus()
@@ -1206,6 +1212,15 @@ void Applet::resizeEvent(QGraphicsSceneResizeEvent *event)
     }
 
     updateConstraints(Plasma::SizeConstraint);
+
+    if (d->modificationsTimerId != -1) {
+        // schedule a save
+        if (d->modificationsTimerId) {
+            killTimer(d->modificationsTimerId);
+        }
+        d->modificationsTimerId = startTimer(1000);
+    }
+
     emit geometryChanged();
 }
 
@@ -1447,10 +1462,12 @@ QVariant Applet::itemChange(GraphicsItemChange change, const QVariant &value)
         emit geometryChanged();
         // fall through!
     case ItemTransformHasChanged: {
-        if (d->modificationsTimerId) {
-            killTimer(d->modificationsTimerId);
+        if (d->modificationsTimerId != -1) {
+            if (d->modificationsTimerId) {
+                killTimer(d->modificationsTimerId);
+            }
+            d->modificationsTimerId = startTimer(1000);
         }
-        d->modificationsTimerId = startTimer(1000);
     }
         break;
     default:
@@ -1502,13 +1519,21 @@ QSizeF Applet::sizeHint(Qt::SizeHint which, const QSizeF & constraint) const
 
 void Applet::timerEvent(QTimerEvent *event)
 {
+    if (d->transient) {
+        killTimer(d->constraintsTimerId);
+        killTimer(d->modificationsTimerId);
+        return;
+    }
+
     if (event->timerId() == d->constraintsTimerId) {
         killTimer(d->constraintsTimerId);
         d->constraintsTimerId = 0;
         flushPendingConstraintsEvents();
     } else if (event->timerId() == d->modificationsTimerId) {
         killTimer(d->modificationsTimerId);
-        KConfigGroup cg = config();
+        d->modificationsTimerId = 0;
+        // invalid group, will result in save using the default group
+        KConfigGroup cg;
         save(cg);
         emit configNeedsSaving();
     }
@@ -1589,6 +1614,7 @@ AppletPrivate::AppletPrivate(KService::Ptr service, int uniqueID, Applet *applet
           actions(applet),
           activationAction(0),
           constraintsTimerId(0),
+          modificationsTimerId(-1),
           hasConfigurationInterface(false),
           failed(false),
           isContainment(false),
@@ -1604,6 +1630,8 @@ AppletPrivate::AppletPrivate(KService::Ptr service, int uniqueID, Applet *applet
 
 AppletPrivate::~AppletPrivate()
 {
+    modificationsTimerId = -1;
+
     if (activationAction && activationAction->isGlobalShortcutEnabled()) {
         //kDebug() << "reseting global action for" << q->name() << activationAction->objectName();
         activationAction->forgetGlobalShortcut();
@@ -1611,6 +1639,11 @@ AppletPrivate::~AppletPrivate()
 
     foreach (const QString& engine, loadedEngines) {
         DataEngineManager::self()->unloadEngine( engine );
+    }
+
+    if (extender) {
+        delete extender;
+        extender = 0;
     }
 
     delete script;
@@ -1731,6 +1764,7 @@ void AppletPrivate::scheduleConstraintsUpdate(Plasma::Constraints c)
     if (!constraintsTimerId && !(c & Plasma::StartupCompletedConstraint)) {
         constraintsTimerId = q->startTimer(0);
     }
+
     pendingConstraints |= c;
 }
 
