@@ -127,6 +127,10 @@ QPixmap transition(const QPixmap &from, const QPixmap &to, qreal amount)
     QColor color;
     color.setAlphaF(amount);
 
+    //paint to in the center of from
+    QRect toRect = to.rect();
+    toRect.moveCenter(from.rect().center());
+
     // If the native paint engine supports Porter/Duff compositing and CompositionMode_Plus
     if (from.paintEngine()->hasFeature(QPaintEngine::PorterDuff) &&
         from.paintEngine()->hasFeature(QPaintEngine::BlendModes)) {
@@ -143,7 +147,7 @@ QPixmap transition(const QPixmap &from, const QPixmap &to, qreal amount)
         p.setCompositionMode(QPainter::CompositionMode_DestinationOut);
         p.fillRect(under.rect(), color);
         p.setCompositionMode(QPainter::CompositionMode_Plus);
-        p.drawPixmap(0, 0, over);
+        p.drawPixmap(toRect.topLeft(), over);
         p.end();
 
         return under;
@@ -190,7 +194,7 @@ QPixmap transition(const QPixmap &from, const QPixmap &to, qreal amount)
         // Add source * opacity to the destination
         XRenderComposite(dpy, PictOpAdd, source.x11PictureHandle(), alpha,
                          destination.x11PictureHandle(),
-                         0, 0, 0, 0, 0, 0, destination.width(), destination.height());
+                         toRect.x(), toRect.y(), 0, 0, 0, 0, destination.width(), destination.height());
 
         XRenderFreePicture(dpy, alpha);
         return destination;
@@ -211,7 +215,7 @@ QPixmap transition(const QPixmap &from, const QPixmap &to, qreal amount)
         p.setCompositionMode(QPainter::CompositionMode_DestinationOut);
         p.fillRect(under.rect(), color);
         p.setCompositionMode(QPainter::CompositionMode_Plus);
-        p.drawImage(0, 0, over);
+        p.drawImage(toRect.topLeft(), over);
         p.end();
 
         return QPixmap::fromImage(under);
