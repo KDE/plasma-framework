@@ -174,16 +174,12 @@ void Dialog::mouseMoveEvent(QMouseEvent *event)
 {
     if (d->resizeAreas[Dialog::NorthEast].contains(event->pos()) && d->resizeCorners & Dialog::NorthEast) {
         setCursor(Qt::SizeBDiagCursor);
-
     } else if (d->resizeAreas[Dialog::NorthWest].contains(event->pos()) && d->resizeCorners & Dialog::NorthWest) {
         setCursor(Qt::SizeFDiagCursor);
-
     } else if (d->resizeAreas[Dialog::SouthEast].contains(event->pos()) && d->resizeCorners & Dialog::SouthEast) {
         setCursor(Qt::SizeFDiagCursor);
-
     } else if (d->resizeAreas[Dialog::SouthWest].contains(event->pos()) && d->resizeCorners & Dialog::SouthWest) {
         setCursor(Qt::SizeBDiagCursor);
-
     } else {
         unsetCursor();
     }
