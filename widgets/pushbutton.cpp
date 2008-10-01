@@ -1,5 +1,6 @@
 /*
  *   Copyright 2008 Aaron Seigo <aseigo@kde.org>
+ *   Copyright 2008 Marco Martin <notmart@gmail.com>
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU Library General Public License as
@@ -33,6 +34,7 @@
 #include "svg.h"
 #include "panelsvg.h"
 #include "animator.h"
+#include "paintutils.h"
 
 namespace Plasma
 {
@@ -44,7 +46,8 @@ public:
         : q(pushButton),
           background(0),
           activeBackgroundPixmap(0),
-          animId(0),
+          animId(-1),
+          fadeIn(false),
           svg(0)
     {
     }
@@ -74,16 +77,18 @@ public:
         static_cast<KPushButton*>(q->widget())->setIcon(KIcon(pm));
     }
 
-    void renderActiveBackgroundPixmap();
     void syncActiveRect();
     void syncBorders();
-    void elementAnimationFinished(int id);
+    void animationUpdate(qreal progress);
 
     PushButton *q;
 
     PanelSvg *background;
     QPixmap *activeBackgroundPixmap;
+    QPixmap *backgroundPixmap;
     int animId;
+    bool fadeIn;
+    qreal opacity;
     QRectF activeRect;
 
     QString imagePath;
@@ -91,17 +96,6 @@ public:
     Svg *svg;
 };
 
-
-void PushButtonPrivate::renderActiveBackgroundPixmap()
-{
-    background->setElementPrefix("active");
-
-    activeBackgroundPixmap = new QPixmap(activeRect.size().toSize());
-    activeBackgroundPixmap->fill(Qt::transparent);
-
-    QPainter painter(activeBackgroundPixmap);
-    background->paintPanel(&painter);
-}
 
 void PushButtonPrivate::syncActiveRect()
 {
@@ -133,13 +127,19 @@ void PushButtonPrivate::syncBorders()
     syncActiveRect();
 }
 
-void PushButtonPrivate::elementAnimationFinished(int id)
-{
-    if (id == animId) {
-        animId = -1;
-    }
-}
 
+void PushButtonPrivate::animationUpdate(qreal progress)
+{
+    if (progress == 1) {
+        animId = -1;
+        fadeIn = true;
+    }
+
+    opacity = fadeIn ? progress : 1 - progress;
+
+    // explicit update
+    q->update();
+}
 
 
 PushButton::PushButton(QGraphicsWidget *parent)
@@ -157,7 +157,6 @@ PushButton::PushButton(QGraphicsWidget *parent)
     d->background->setElementPrefix("normal");
     d->syncBorders();
     setAcceptHoverEvents(true);
-    connect(Plasma::Animator::self(), SIGNAL(elementAnimationFinished(int)), this, SLOT(elementAnimationFinished(int)));
     connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()), SLOT(syncBorders()));
 }
 
@@ -271,7 +270,9 @@ void PushButton::paint(QPainter *painter,
         } else {
             d->background->setElementPrefix("normal");
         }
-        d->background->paintPanel(painter);
+        if (d->animId == -1) {
+            d->background->paintPanel(painter);
+        }
     //flat or disabled
     } else if (!isEnabled() || nativeWidget()->isFlat()) {
         bufferPixmap = QPixmap(rect().size().toSize());
@@ -288,12 +289,13 @@ void PushButton::paint(QPainter *painter,
     //if is under mouse draw the animated glow overlay
     if (!nativeWidget()->isDown() && isEnabled() && acceptHoverEvents()) {
         if (d->animId != -1) {
-            painter->drawPixmap(d->activeRect.topLeft(), Plasma::Animator::self()->currentPixmap(d->animId) );
+            //QPixmap normalPix = QPixmap(d->activeRect.size());
+            QPixmap normalPix = d->background->panelPixmap();
+            d->background->setElementPrefix("active");
+            painter->drawPixmap(d->activeRect.topLeft(), PaintUtils::transition(d->background->panelPixmap(), normalPix, 1 - d->opacity));
         } else if (isUnderMouse() || nativeWidget()->isDefault()) {
-            if (d->activeBackgroundPixmap == 0) {
-                d->renderActiveBackgroundPixmap();
-            }
-            painter->drawPixmap( d->activeRect.topLeft(), *d->activeBackgroundPixmap );
+            d->background->setElementPrefix("active");
+            d->background->paintPanel(painter, d->activeRect.topLeft());
         }
     }
 
@@ -363,34 +365,30 @@ void PushButton::paint(QPainter *painter,
 
 void PushButton::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 {
+    const int FadeInDuration = 75;
+
     if (d->animId != -1) {
-        Plasma::Animator::self()->stopElementAnimation(d->animId);
+        Plasma::Animator::self()->stopCustomAnimation(d->animId);
     }
-    d->animId = Plasma::Animator::self()->animateElement(this, Plasma::Animator::AppearAnimation);
+    d->animId = Plasma::Animator::self()->customAnimation(40 / (1000 / FadeInDuration), FadeInDuration,Plasma::Animator::LinearCurve, this, "animationUpdate");
 
     d->background->setElementPrefix("active");
-
-    if (!d->activeBackgroundPixmap) {
-        d->renderActiveBackgroundPixmap();
-    }
-    Plasma::Animator::self()->setInitialPixmap( d->animId, *d->activeBackgroundPixmap );
 
     QGraphicsProxyWidget::hoverEnterEvent(event);
 }
 
 void PushButton::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 {
+    const int FadeOutDuration = 150;
+
     if (d->animId != -1) {
-        Plasma::Animator::self()->stopElementAnimation(d->animId);
+        Plasma::Animator::self()->stopCustomAnimation(d->animId != -1);
     }
-    d->animId = Plasma::Animator::self()->animateElement(this, Plasma::Animator::DisappearAnimation);
+
+    d->fadeIn = false;
+    d->animId = Plasma::Animator::self()->customAnimation(40 / (1000 / FadeOutDuration), FadeOutDuration,Plasma::Animator::LinearCurve, this, "animationUpdate");
 
     d->background->setElementPrefix("active");
-
-    if (!d->activeBackgroundPixmap) {
-        d->renderActiveBackgroundPixmap();
-    }
-    Plasma::Animator::self()->setInitialPixmap( d->animId, *d->activeBackgroundPixmap );
 
     QGraphicsProxyWidget::hoverLeaveEvent(event);
 }

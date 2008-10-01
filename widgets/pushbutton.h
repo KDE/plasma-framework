@@ -108,7 +108,7 @@ private:
 
     friend class PushButtonPrivate;
     Q_PRIVATE_SLOT(d, void syncBorders())
-    Q_PRIVATE_SLOT(d, void elementAnimationFinished(int id))
+    Q_PRIVATE_SLOT(d, void animationUpdate(qreal progress))
 };
 
 } // namespace Plasma
