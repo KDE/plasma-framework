@@ -1011,8 +1011,18 @@ void AppletHandle::calculateSize()
 
     if (m_applet->contentsRect().height() > qreal(minimumHeight()) * 1.25) {
         int addedMargin = marginLeft/2;
+
+        // now we check to see if the shape is smaller than the contents,
+        // and that the shape is not just the bounding rect; in those cases
+        // we have a shaped guy and we draw a full panel;
+        // TODO: allow applets to mark when they have translucent areas and
+        //       should therefore skip this test?
         if (!m_applet->shape().contains(m_applet->contentsRect())) {
-            addedMargin = m_applet->contentsRect().width()/2;
+            QPainterPath p;
+            p.addRect(m_applet->boundingRect());
+            if (m_applet->shape() != p) {
+                addedMargin = m_applet->contentsRect().width()/2;
+            }
         }
 
         if (m_buttonsOnRight) {
