@@ -157,17 +157,25 @@ void Dialog::paintEvent(QPaintEvent *e)
 
     //we set the resize handlers
     d->resizeAreas.clear();
-    d->resizeAreas[Dialog::NorthEast] = QRect(rect().right() - resizeAreaMargin, 0, 
-                                         resizeAreaMargin, resizeAreaMargin);
+    if (d->resizeCorners & Dialog::NorthEast) {
+        d->resizeAreas[Dialog::NorthEast] = QRect(rect().right() - resizeAreaMargin, 0, 
+                                             resizeAreaMargin, resizeAreaMargin);
+    }
 
-    d->resizeAreas[Dialog::NorthWest] = QRect(0,0, resizeAreaMargin, resizeAreaMargin);
+    if (d->resizeCorners & Dialog::NorthWest) {
+        d->resizeAreas[Dialog::NorthWest] = QRect(0,0, resizeAreaMargin, resizeAreaMargin);
+    }
 
-    d->resizeAreas[Dialog::SouthEast] = QRect(rect().right() - resizeAreaMargin,
-                                        rect().bottom() - resizeAreaMargin,
-                                        resizeAreaMargin, resizeAreaMargin);
+    if (d->resizeCorners & Dialog::SouthEast) {
+        d->resizeAreas[Dialog::SouthEast] = QRect(rect().right() - resizeAreaMargin,
+                                            rect().bottom() - resizeAreaMargin,
+                                            resizeAreaMargin, resizeAreaMargin);
+    }
 
-    d->resizeAreas[Dialog::SouthWest] = QRect(0, rect().bottom() - resizeAreaMargin,
-                                        resizeAreaMargin, resizeAreaMargin);
+    if (d->resizeCorners & Dialog::SouthWest) {
+        d->resizeAreas[Dialog::SouthWest] = QRect(0, rect().bottom() - resizeAreaMargin,
+                                            resizeAreaMargin, resizeAreaMargin);
+    }
 }
 
 void Dialog::mouseMoveEvent(QMouseEvent *event)
@@ -344,6 +352,17 @@ Dialog::ResizeCorners Dialog::resizeCorners() const
 {
     return d->resizeCorners;
 }
+
+bool Dialog::inControlArea(const QPoint &point)
+{
+    foreach(const QRect &r, d->resizeAreas) {
+        if (r.contains(point)) {
+            return true;
+        }
+    }
+    return false;
+}
+
 
 }
 #include "dialog.moc"

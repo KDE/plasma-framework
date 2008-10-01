@@ -109,6 +109,14 @@ class PLASMA_EXPORT Dialog : public QWidget
         void mousePressEvent (QMouseEvent * event);
         void mouseReleaseEvent (QMouseEvent * event);
 
+        /**
+         * Convenience method to know whether the point is in a control area (e.g. resize area)
+         * or not.
+         * @return true if the point is in the control area.
+         */
+         bool inControlArea(const QPoint &point);
+
+
     private:
         DialogPrivate * const d;
 
