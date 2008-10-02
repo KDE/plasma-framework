@@ -697,8 +697,10 @@ void Applet::setConfigurationRequired(bool needsConfig, const QString &reason)
     }
 
     if (d->needsConfigOverlay) {
-        delete d->needsConfigOverlay;
+        QGraphicsWidget *w = d->needsConfigOverlay;
         d->needsConfigOverlay = 0;
+        w->hide();
+        w->deleteLater();
         return;
     }
 
@@ -735,6 +737,7 @@ void Applet::setConfigurationRequired(bool needsConfig, const QString &reason)
     }
 
     PushButton *configWidget = new PushButton(d->needsConfigOverlay);
+    configWidget = new PushButton(d->needsConfigOverlay);
     configWidget->setText(i18n("Configure..."));
     connect(configWidget, SIGNAL(clicked()), this, SLOT(showConfigurationInterface()));
     configLayout->addItem(configWidget, row, 1);
