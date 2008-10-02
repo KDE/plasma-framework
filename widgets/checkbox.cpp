@@ -34,8 +34,9 @@ namespace Plasma
 class CheckBoxPrivate
 {
 public:
-    CheckBoxPrivate()
-        : svg(0)
+    CheckBoxPrivate(CheckBox *c)
+        : q(c),
+          svg(0)
     {
     }
 
@@ -44,7 +45,7 @@ public:
         delete svg;
     }
 
-    void setPixmap(CheckBox *q)
+    void setPixmap()
     {
         if (imagePath.isEmpty()) {
             return;
@@ -64,7 +65,7 @@ public:
         static_cast<QCheckBox*>(q->widget())->setIcon(QIcon(pm));
     }
 
-    void setPalette(CheckBox *q)
+    void setPalette()
     {
         QCheckBox *native = q->nativeWidget();
         QColor color = Theme::defaultTheme()->color(Theme::TextColor);
@@ -74,6 +75,7 @@ public:
         native->setPalette(p);
     }
 
+    CheckBox *q;
     QString imagePath;
     QString absImagePath;
     Svg *svg;
@@ -81,13 +83,14 @@ public:
 
 CheckBox::CheckBox(QGraphicsWidget *parent)
     : QGraphicsProxyWidget(parent),
-      d(new CheckBoxPrivate)
+      d(new CheckBoxPrivate(this))
 {
     QCheckBox* native = new QCheckBox;
     connect(native, SIGNAL(toggled(bool)), this, SIGNAL(toggled(bool)));
     setWidget(native);
-    d->setPalette(this);
+    d->setPalette();
     native->setAttribute(Qt::WA_NoSystemBackground);
+    connect(Theme::defaultTheme(), SIGNAL(themeChanged()), this, SLOT(setPalette()));
 }
 
 CheckBox::~CheckBox()
@@ -130,7 +133,7 @@ void CheckBox::setImage(const QString &path)
         d->absImagePath = Theme::defaultTheme()->imagePath(path);
     }
 
-    d->setPixmap(this);
+    d->setPixmap();
 }
 
 QString CheckBox::image() const
@@ -155,7 +158,7 @@ QCheckBox* CheckBox::nativeWidget() const
 
 void CheckBox::resizeEvent(QGraphicsSceneResizeEvent *event)
 {
-    d->setPixmap(this);
+    d->setPixmap();
     QGraphicsProxyWidget::resizeEvent(event);
 }
 
