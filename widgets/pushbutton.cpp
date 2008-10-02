@@ -45,7 +45,6 @@ public:
     PushButtonPrivate(PushButton *pushButton)
         : q(pushButton),
           background(0),
-          activeBackgroundPixmap(0),
           animId(-1),
           fadeIn(false),
           svg(0)
@@ -84,8 +83,6 @@ public:
     PushButton *q;
 
     PanelSvg *background;
-    QPixmap *activeBackgroundPixmap;
-    QPixmap *backgroundPixmap;
     int animId;
     bool fadeIn;
     qreal opacity;
@@ -229,8 +226,6 @@ void PushButton::resizeEvent(QGraphicsSceneResizeEvent *event)
 
    if (d->background) {
         //resize all four panels
-        d->background->setElementPrefix("normal");
-        d->background->resizePanel(size());
         d->background->setElementPrefix("pressed");
         d->background->resizePanel(size());
         d->background->setElementPrefix("focus");
@@ -242,11 +237,7 @@ void PushButton::resizeEvent(QGraphicsSceneResizeEvent *event)
         d->background->resizePanel(d->activeRect.size());
 
         d->background->setElementPrefix("normal");
-
-        if (d->activeBackgroundPixmap) {
-            delete d->activeBackgroundPixmap;
-            d->activeBackgroundPixmap = 0;
-        }
+        d->background->resizePanel(size());
    }
 
     QGraphicsProxyWidget::resizeEvent(event);
@@ -289,7 +280,6 @@ void PushButton::paint(QPainter *painter,
     //if is under mouse draw the animated glow overlay
     if (!nativeWidget()->isDown() && isEnabled() && acceptHoverEvents()) {
         if (d->animId != -1) {
-            //QPixmap normalPix = QPixmap(d->activeRect.size());
             QPixmap normalPix = d->background->panelPixmap();
             d->background->setElementPrefix("active");
             painter->drawPixmap(d->activeRect.topLeft(), PaintUtils::transition(d->background->panelPixmap(), normalPix, 1 - d->opacity));

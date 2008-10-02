@@ -30,6 +30,7 @@
 #include "theme.h"
 #include "panelsvg.h"
 #include "animator.h"
+#include "paintutils.h"
 
 namespace Plasma
 {
@@ -39,8 +40,7 @@ class ComboBoxPrivate
 public:
     ComboBoxPrivate(ComboBox *comboBox)
          : q(comboBox),
-           background(0),
-           activeBackgroundPixmap(0)
+           background(0)
     {
     }
 
@@ -48,29 +48,19 @@ public:
     {
     }
 
-    void renderActiveBackgroundPixmap();
     void syncActiveRect();
     void syncBorders();
-    void elementAnimationFinished(int id);
+    void animationUpdate(qreal progress);
 
     ComboBox *q;
 
     PanelSvg *background;
-    QPixmap *activeBackgroundPixmap;
     int animId;
+    bool fadeIn;
+    qreal opacity;
     QRectF activeRect;
 };
 
-void ComboBoxPrivate::renderActiveBackgroundPixmap()
-{
-    background->setElementPrefix("active");
-
-    activeBackgroundPixmap = new QPixmap(activeRect.size().toSize());
-    activeBackgroundPixmap->fill(Qt::transparent);
-
-    QPainter painter(activeBackgroundPixmap);
-    background->paintPanel(&painter);
-}
 
 void ComboBoxPrivate::syncActiveRect()
 {
@@ -102,12 +92,19 @@ void ComboBoxPrivate::syncBorders()
     syncActiveRect();
 }
 
-void ComboBoxPrivate::elementAnimationFinished(int id)
+void ComboBoxPrivate::animationUpdate(qreal progress)
 {
-    if (id == animId) {
+    if (progress == 1) {
         animId = -1;
+        fadeIn = true;
     }
+
+    opacity = fadeIn ? progress : 1 - progress;
+
+    // explicit update
+    q->update();
 }
+
 
 
 ComboBox::ComboBox(QGraphicsWidget *parent)
@@ -126,7 +123,6 @@ ComboBox::ComboBox(QGraphicsWidget *parent)
 
     d->syncBorders();
     setAcceptHoverEvents(true);
-    connect(Plasma::Animator::self(), SIGNAL(elementAnimationFinished(int)), this, SLOT(elementAnimationFinished(int)));
     connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()), SLOT(syncBorders()));
 }
 
@@ -179,11 +175,6 @@ void ComboBox::resizeEvent(QGraphicsSceneResizeEvent *event)
 
         d->background->setElementPrefix("normal");
         d->background->resizePanel(size());
-
-        if (d->activeBackgroundPixmap) {
-            delete d->activeBackgroundPixmap;
-            d->activeBackgroundPixmap = 0;
-        }
    }
 
     QGraphicsProxyWidget::resizeEvent(event);
@@ -200,12 +191,15 @@ void ComboBox::paint(QPainter *painter,
 
     QPixmap bufferPixmap;
 
-    //Normal button, pressed or not
+    //normal button
     if (isEnabled()) {
         d->background->setElementPrefix("normal");
-        d->background->paintPanel(painter);
-    //flat or disabled
-    } else if (!isEnabled()) {
+
+        if (d->animId == -1) {
+            d->background->paintPanel(painter);
+        }
+    //disabled widget
+    } else {
         bufferPixmap = QPixmap(rect().size().toSize());
         bufferPixmap.fill(Qt::transparent);
 
@@ -220,12 +214,13 @@ void ComboBox::paint(QPainter *painter,
     //if is under mouse draw the animated glow overlay
     if (isEnabled() && acceptHoverEvents()) {
         if (d->animId != -1) {
-            painter->drawPixmap(d->activeRect.topLeft(), Plasma::Animator::self()->currentPixmap(d->animId) );
+            d->background->setElementPrefix("normal");
+            QPixmap normalPix = d->background->panelPixmap();
+            d->background->setElementPrefix("active");
+            painter->drawPixmap(d->activeRect.topLeft(), PaintUtils::transition(d->background->panelPixmap(), normalPix, 1 - d->opacity));
         } else if (isUnderMouse()) {
-            if (d->activeBackgroundPixmap == 0) {
-                d->renderActiveBackgroundPixmap();
-            }
-            painter->drawPixmap( d->activeRect.topLeft(), *d->activeBackgroundPixmap );
+            d->background->setElementPrefix("active");
+            d->background->paintPanel(painter, d->activeRect.topLeft());
         }
     }
 
@@ -253,34 +248,30 @@ void ComboBox::paint(QPainter *painter,
 
 void ComboBox::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 {
+    const int FadeInDuration = 75;
+
     if (d->animId != -1) {
-        Plasma::Animator::self()->stopElementAnimation(d->animId);
+        Plasma::Animator::self()->stopCustomAnimation(d->animId);
     }
-    d->animId = Plasma::Animator::self()->animateElement(this, Plasma::Animator::AppearAnimation);
+    d->animId = Plasma::Animator::self()->customAnimation(40 / (1000 / FadeInDuration), FadeInDuration,Plasma::Animator::LinearCurve, this, "animationUpdate");
 
     d->background->setElementPrefix("active");
-
-    if (!d->activeBackgroundPixmap) {
-        d->renderActiveBackgroundPixmap();
-    }
-    Plasma::Animator::self()->setInitialPixmap( d->animId, *d->activeBackgroundPixmap );
 
     QGraphicsProxyWidget::hoverEnterEvent(event);
 }
 
 void ComboBox::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 {
+    const int FadeOutDuration = 150;
+
     if (d->animId != -1) {
-        Plasma::Animator::self()->stopElementAnimation(d->animId);
+        Plasma::Animator::self()->stopCustomAnimation(d->animId != -1);
     }
-    d->animId = Plasma::Animator::self()->animateElement(this, Plasma::Animator::DisappearAnimation);
+
+    d->fadeIn = false;
+    d->animId = Plasma::Animator::self()->customAnimation(40 / (1000 / FadeOutDuration), FadeOutDuration,Plasma::Animator::LinearCurve, this, "animationUpdate");
 
     d->background->setElementPrefix("active");
-
-    if (!d->activeBackgroundPixmap) {
-        d->renderActiveBackgroundPixmap();
-    }
-    Plasma::Animator::self()->setInitialPixmap( d->animId, *d->activeBackgroundPixmap );
 
     QGraphicsProxyWidget::hoverLeaveEvent(event);
 }
