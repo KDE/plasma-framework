@@ -64,6 +64,16 @@ public:
         static_cast<QCheckBox*>(q->widget())->setIcon(QIcon(pm));
     }
 
+    void setPalette(CheckBox *q)
+    {
+        QCheckBox *native = q->nativeWidget();
+        QColor color = Theme::defaultTheme()->color(Theme::TextColor);
+        QPalette p = native->palette();
+        p.setColor(QPalette::Normal, QPalette::WindowText, color);
+        p.setColor(QPalette::Inactive, QPalette::WindowText, color);
+        native->setPalette(p);
+    }
+
     QString imagePath;
     QString absImagePath;
     Svg *svg;
@@ -76,6 +86,7 @@ CheckBox::CheckBox(QGraphicsWidget *parent)
     QCheckBox* native = new QCheckBox;
     connect(native, SIGNAL(toggled(bool)), this, SIGNAL(toggled(bool)));
     setWidget(native);
+    d->setPalette(this);
     native->setAttribute(Qt::WA_NoSystemBackground);
 }
 
@@ -104,7 +115,7 @@ void CheckBox::setImage(const QString &path)
     d->svg = 0;
     d->imagePath = path;
 
-    bool absolutePath = !path.isEmpty() && 
+    bool absolutePath = !path.isEmpty() &&
                         #ifdef Q_WS_WIN
                             !QDir::isRelativePath(path)
                         #else
