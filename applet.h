@@ -458,6 +458,12 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         bool isContainment() const;
 
         /**
+         * This method returns screen coordinates for the widget; this method can be somewhat
+         * expensive and should ONLY be called when screen coordinates are required. For
+         * example when positioning top level widgets on top of the view to create the
+         * appearance of unit. This should NOT be used for popups (@see popupPosition) or
+         * for normal widget use (use Plasma:: widgets or QGraphicsProxyWidget instead).
+         *
          * @return a rect of the applet in screen coordinates.
          */
         QRect screenRect() const;
