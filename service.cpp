@@ -139,7 +139,7 @@ ServiceJob* Service::startOperationCall(const KConfigGroup &description, QObject
     QString op = description.name();
     if (!d->config) {
         kDebug() << "No valid operations scheme has been registered";
-    } else {
+    } else if (d->config->hasGroup(op)) {
         if (d->disabledOperations.contains(op)) {
             kDebug() << "Operation" << op << "is disabled";
         } else {
@@ -153,6 +153,8 @@ ServiceJob* Service::startOperationCall(const KConfigGroup &description, QObject
 
             job = createJob(description.name(), params);
         }
+    } else {
+        kDebug() << "Not a valid group!";
     }
 
     if (!job) {
