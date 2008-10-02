@@ -118,6 +118,7 @@ protected:
                QWidget *widget = 0);
 
     void resizeEvent(QGraphicsSceneResizeEvent *event);
+    QSizeF sizeHint(Qt::SizeHint which, const QSizeF & constraint) const;
 
 private:
     FramePrivate * const d;

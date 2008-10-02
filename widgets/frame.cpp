@@ -208,8 +208,8 @@ void Frame::paint(QPainter *painter,
 
     if (!d->text.isNull()) {
         QFontMetricsF fm(QApplication::font());
-        QRectF textRect = contentsRect();
-        textRect.translate(0, -fm.height());
+        QRectF textRect = d->svg->contentsRect();
+        textRect.setHeight(fm.height());
         painter->setPen(Plasma::Theme::defaultTheme()->color(Theme::TextColor));
         painter->drawText(textRect, Qt::AlignHCenter|Qt::AlignTop, d->text);
     }
@@ -231,6 +231,23 @@ void Frame::resizeEvent(QGraphicsSceneResizeEvent *event)
         d->image->resize(contentsRect().size());
     }
 }
+
+QSizeF Frame::sizeHint(Qt::SizeHint which, const QSizeF & constraint) const
+{
+    QSizeF hint = QGraphicsWidget::sizeHint(which, constraint);
+
+    if (!d->image && !layout()) {
+        QFontMetricsF fm(QApplication::font());
+
+        qreal left, top, right, bottom;
+        d->svg->getMargins(left, top, right, bottom);
+
+        hint.setHeight(fm.height() + top + bottom);
+    }
+
+    return hint;
+}
+
 
 } // namespace Plasma
 
