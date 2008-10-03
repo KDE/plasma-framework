@@ -281,28 +281,26 @@ ExtenderItem::ExtenderItem(Extender *hostExtender, uint extenderItemId)
     d->sourceApplet = hostExtender->d->applet;
 
     //create items's configgroup
-    if (hostExtender->d->applet) {
-        KConfigGroup cg = hostExtender->d->applet->config("ExtenderItems");
-        KConfigGroup dg = KConfigGroup(&cg, QString::number(d->extenderItemId));
+    KConfigGroup cg = hostExtender->d->applet->config("ExtenderItems");
+    KConfigGroup dg = KConfigGroup(&cg, QString::number(d->extenderItemId));
 
-        if (!dg.readEntry("sourceAppletId", 0)) {
-            //The item is new
-            dg.writeEntry("sourceAppletPluginName", hostExtender->d->applet->pluginName());
-            dg.writeEntry("sourceAppletId", hostExtender->d->applet->id());
-            d->sourceAppletId = hostExtender->d->applet->id();
-            d->sourceApplet = hostExtender->d->applet;
-        } else {
-            //The item allready exists.
-            d->name = dg.readEntry("extenderItemName", "");
-            d->sourceAppletId = dg.readEntry("sourceAppletId", 0);
-            //Set the sourceapplet.
-            Corona *corona = hostExtender->d->applet->containment()->corona();
-            foreach (Containment *containment, corona->containments()) {
-                foreach (Applet *applet, containment->applets()) {
-                    if (applet->id() == d->sourceAppletId &&
+    if (!dg.readEntry("sourceAppletId", 0)) {
+        //The item is new
+        dg.writeEntry("sourceAppletPluginName", hostExtender->d->applet->pluginName());
+        dg.writeEntry("sourceAppletId", hostExtender->d->applet->id());
+        d->sourceAppletId = hostExtender->d->applet->id();
+        d->sourceApplet = hostExtender->d->applet;
+    } else {
+        //The item allready exists.
+        d->name = dg.readEntry("extenderItemName", "");
+        d->sourceAppletId = dg.readEntry("sourceAppletId", 0);
+        //Set the sourceapplet.
+        Corona *corona = hostExtender->d->applet->containment()->corona();
+        foreach (Containment *containment, corona->containments()) {
+            foreach (Applet *applet, containment->applets()) {
+                if (applet->id() == d->sourceAppletId &&
                         applet->pluginName() == dg.readEntry("sourceAppletPluginName", "")) {
-                        d->sourceApplet = applet;
-                    }
+                    d->sourceApplet = applet;
                 }
             }
         }
