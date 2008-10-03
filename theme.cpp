@@ -50,6 +50,7 @@ class ThemePrivate
 public:
     ThemePrivate(Theme *theme)
         : q(theme),
+          colorScheme(QPalette::Active, KColorScheme::Window, KSharedConfigPtr(0)),
           defaultWallpaperTheme(DEFAULT_WALLPAPER_THEME),
           defaultWallpaperSuffix(DEFAULT_WALLPAPER_SUFFIX),
           defaultWallpaperWidth(DEFAULT_WALLPAPER_WIDTH),
@@ -92,6 +93,7 @@ public:
     Theme *q;
     QString themeName;
     KSharedConfigPtr colors;
+    KColorScheme colorScheme;
     KConfigGroup cfg;
     QFont generalFont;
     QString defaultWallpaperTheme;
@@ -260,6 +262,7 @@ void Theme::setThemeName(const QString &themeName)
         d->colors = KSharedConfig::openConfig(colorsFile);
     }
 
+    d->colorScheme = KColorScheme(QPalette::Active, KColorScheme::Window, d->colors);
     d->hasWallpapers = !KStandardDirs::locate("data", "desktoptheme/" + theme + "/wallpapers").isEmpty();
 
     if (d->isDefault) {
@@ -381,19 +384,17 @@ KSharedConfigPtr Theme::colorScheme() const
 
 QColor Theme::color(ColorRole role) const
 {
-    KColorScheme colorScheme(QPalette::Active, KColorScheme::Window, Theme::defaultTheme()->colorScheme());
-
     switch (role) {
         case TextColor:
-            return colorScheme.foreground(KColorScheme::NormalText).color();
+            return d->colorScheme.foreground(KColorScheme::NormalText).color();
             break;
 
         case HighlightColor:
-            return colorScheme.background(KColorScheme::ActiveBackground).color();
+            return d->colorScheme.background(KColorScheme::ActiveBackground).color();
             break;
 
         case BackgroundColor:
-            return colorScheme.background().color();
+            return d->colorScheme.background().color();
             break;
     }
 
