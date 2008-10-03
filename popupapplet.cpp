@@ -49,12 +49,6 @@ PopupApplet::PopupApplet(QObject *parent, const QVariantList &args)
 {
     int iconSize = IconSize(KIconLoader::Desktop);
     resize(iconSize, iconSize);
-    if (!icon().isNull()) {
-        setPopupIcon(KIcon(icon()));
-    } else {
-        setPopupIcon(KIcon("icons"));
-    }
-
     connect(this, SIGNAL(activate()), this, SLOT(togglePopup()));
 }
 
@@ -71,7 +65,6 @@ void PopupApplet::setPopupIcon(const QIcon &icon)
             d->icon = 0;
             setLayout(0);
         }
-
         return;
     }
 
@@ -120,11 +113,11 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
         return;
     }
 
-    QGraphicsLinearLayout *lay = dynamic_cast<QGraphicsLinearLayout *>(q->layout());
     Plasma::FormFactor f = q->formFactor();
-
     if (constraints & Plasma::FormFactorConstraint ||
         (constraints & Plasma::SizeConstraint && (f == Plasma::Vertical || f == Plasma::Horizontal))) {
+        QGraphicsLinearLayout *lay = dynamic_cast<QGraphicsLinearLayout *>(q->layout());
+
         if (icon && lay) {
             lay->removeAt(0);
         }
@@ -133,6 +126,7 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
         QSizeF containmentSize;
 
         QGraphicsWidget *gWidget = q->graphicsWidget();
+        kDebug() << "graphics widget is" << (QObject*)gWidget;
         QWidget *qWidget = q->widget();
 
         if (gWidget) {
@@ -145,13 +139,15 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
             containmentSize = q->containment()->size();
         }
 
-        if (icon &&
-            ((f != Plasma::Vertical && f != Plasma::Horizontal) ||
-             ((f == Plasma::Vertical && containmentSize.width() >= minimum.width()) ||(f == Plasma::Horizontal && containmentSize.height() >= minimum.height())))) {
+        if ((f != Plasma::Vertical && f != Plasma::Horizontal) ||
+            ((f == Plasma::Vertical && containmentSize.width() >= minimum.width()) ||
+             (f == Plasma::Horizontal && containmentSize.height() >= minimum.height()))) {
             // we only switch to expanded if we aren't horiz/vert constrained and
             // this applet has an icon.
             // otherwise, we leave it up to the applet itself to figure it out
-            icon->hide();
+            if (icon) {
+                icon->hide();
+            }
 
             if (savedAspectRatio != Plasma::InvalidAspectRatioMode) {
                 q->setAspectRatioMode(savedAspectRatio);
@@ -171,11 +167,21 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
             QSizeF marginSize = q->size() - q->contentsRect().size();
 
             if (gWidget) {
+                q->setMinimumSize(gWidget->minimumSize() + marginSize);
+                kDebug() << lay << q->layout();
+                if (!lay && !q->layout()) {
+                    lay = new QGraphicsLinearLayout();
+                    lay->setContentsMargins(0, 0, 0, 0);
+                    lay->setSpacing(0);
+                    lay->setOrientation(Qt::Horizontal);
+                    q->setLayout(lay);
+                }
+
                 if (lay) {
+                    //kDebug() << "adding gwidget to layout";
                     lay->addItem(gWidget);
                 }
-                q->setMinimumSize(gWidget->minimumSize() + marginSize);
-                gWidget->installEventFilter(q);
+                //gWidget->installEventFilter(q);
             } else if (qWidget) {
                 if (!proxy) {
                     proxy = new QGraphicsProxyWidget(q);
@@ -275,6 +281,7 @@ bool PopupApplet::eventFilter(QObject *watched, QEvent *event)
         QTimer::singleShot(100, this, SLOT(clearPopupLostFocus()));
     }
 
+/*
     if (watched == graphicsWidget() && (event->type() == QEvent::GraphicsSceneResize)) {
         //sizes are recalculated in the constraintsevent so let's just call that.
         constraintsEvent(Plasma::FormFactorConstraint);
@@ -284,7 +291,7 @@ bool PopupApplet::eventFilter(QObject *watched, QEvent *event)
             resize(QSizeF(size().width(), minimumHeight()));
         }
     }
-
+*/
     return Applet::eventFilter(watched, event);
 }
 
@@ -340,7 +347,6 @@ PopupAppletPrivate::PopupAppletPrivate(PopupApplet *applet)
         : q(applet),
           icon(0),
           dialog(0),
-          layout(0),
           proxy(0),
           popupPlacement(Plasma::FloatingPopup),
           savedAspectRatio(Plasma::InvalidAspectRatioMode),
