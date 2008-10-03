@@ -139,9 +139,9 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
             containmentSize = q->containment()->size();
         }
 
-        if ((f != Plasma::Vertical && f != Plasma::Horizontal) ||
+        if (icon && !icon->icon().isNull() && ((f != Plasma::Vertical && f != Plasma::Horizontal) ||
             ((f == Plasma::Vertical && containmentSize.width() >= minimum.width()) ||
-             (f == Plasma::Horizontal && containmentSize.height() >= minimum.height()))) {
+             (f == Plasma::Horizontal && containmentSize.height() >= minimum.height())))) {
             // we only switch to expanded if we aren't horiz/vert constrained and
             // this applet has an icon.
             // otherwise, we leave it up to the applet itself to figure it out
