@@ -39,7 +39,7 @@ public:
 
     PopupApplet *q;
     Plasma::Icon *icon;
-    Plasma::Dialog *dialog;
+    QPointer<Plasma::Dialog> dialog;
     QGraphicsProxyWidget *proxy;
     Plasma::PopupPlacement popupPlacement;
     Plasma::AspectRatioMode savedAspectRatio;
