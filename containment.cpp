@@ -1059,7 +1059,7 @@ void Containment::wheelEvent(QGraphicsSceneWheelEvent *event)
             int numDesktops = KWindowSystem::numberOfDesktops();
             int currentDesktop = KWindowSystem::currentDesktop();
 
-            if (event->delta() > 0) {
+            if (event->delta() < 0) {
                 KWindowSystem::setCurrentDesktop(currentDesktop % numDesktops + 1);
             } else {
                 KWindowSystem::setCurrentDesktop((numDesktops + currentDesktop - 2) % numDesktops + 1);
