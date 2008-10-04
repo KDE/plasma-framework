@@ -58,7 +58,8 @@ public:
               background(0),
               view(0),
               widget(0),
-              resizeCorners(Dialog::NoCorner)
+              resizeCorners(Dialog::NoCorner),
+              resizeStartCorner(Dialog::NoCorner)
     {
     }
 
