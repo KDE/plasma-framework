@@ -62,7 +62,7 @@ void PackageStructureTest::requiredDirectories()
 void PackageStructureTest::files()
 {
     QList<const char*> files;
-    files << "mainconfiggui" << "mainconfigxml" << "mainscript";
+    files << "mainconfigui" << "mainconfigxml" << "mainscript";
 
     QList<const char*> psFiles = ps->files();
 
@@ -165,7 +165,7 @@ void PackageStructureTest::write()
     // check groups
     QStringList groups;
     groups << "images" << "config" << "scripts"
-           << "mainconfiggui" << "mainconfigxml" << "mainscript" << "ui";
+           << "mainconfigui" << "mainconfigxml" << "mainscript" << "ui";
     groups.sort();
 
     QStringList actualGroups = config.groupList();
