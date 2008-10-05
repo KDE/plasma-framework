@@ -213,7 +213,7 @@ class SvgPrivate
         {
             if ( renderer && renderer.count() == 2) {
                 // this and the cache reference it; and boy is this not thread safe ;)
-                renderers.erase(renderers.find(themePath));
+                renderers.erase(renderers.find(path));
             }
 
             renderer = 0;
