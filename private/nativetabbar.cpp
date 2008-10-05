@@ -30,6 +30,8 @@
 #include <QMouseEvent>
 #include <QPainter>
 #include <QApplication>
+#include <QStyleOption>
+#include <QToolButton>
 
 #include <QGradient>
 #include <QLinearGradient>
@@ -38,6 +40,9 @@
 #include "plasma/theme.h"
 #include "plasma/animator.h"
 #include "plasma/panelsvg.h"
+#include "plasma/paintutils.h"
+
+#include "private/style.h"
 
 
 namespace Plasma
@@ -264,6 +269,44 @@ void NativeTabBar::paintEvent(QPaintEvent *event)
         }
 
         painter.drawText(textRect, Qt::AlignCenter | Qt::TextHideMnemonic, tabText(i));
+    }
+
+    QRect scrollButtonsRect;
+    foreach (QObject *child, children()) {
+        QToolButton *childWidget = qobject_cast<QToolButton *>(child);
+        if (childWidget) {
+            if (!childWidget->isVisible()) {
+                continue;
+            }
+
+            if (scrollButtonsRect.isValid()) {
+                scrollButtonsRect = scrollButtonsRect.united(childWidget->geometry());
+            } else {
+                scrollButtonsRect = childWidget->geometry();
+            }
+        }
+    }
+
+    if (scrollButtonsRect.isValid()) {
+        scrollButtonsRect.adjust(2, 4, -2, -4);
+        painter.save();
+
+        QColor background(Plasma::Theme::defaultTheme()->color(Theme::BackgroundColor));
+        background.setAlphaF(0.75);
+
+        painter.setRenderHint(QPainter::Antialiasing);
+        painter.fillPath(PaintUtils::roundedRectangle(scrollButtonsRect, 5), background);
+        painter.restore();
+
+        QStyleOption so;
+        so.initFrom(this);
+        so.palette.setColor(QPalette::ButtonText, Plasma::Theme::defaultTheme()->color(Theme::TextColor));
+
+        so.rect = scrollButtonsRect.adjusted(0, 0, -scrollButtonsRect.width()/2, 0);
+        style()->drawPrimitive(QStyle::PE_IndicatorArrowLeft, &so, &painter, this);
+
+        so.rect = scrollButtonsRect.adjusted(scrollButtonsRect.width()/2, 0, 0, 0);
+        style()->drawPrimitive(QStyle::PE_IndicatorArrowRight, &so, &painter, this);
     }
 }
 

@@ -26,6 +26,8 @@
 #include <QGraphicsProxyWidget>
 #include <QGraphicsSceneWheelEvent>
 #include <QIcon>
+#include <QStyleOption>
+#include <QPainter>
 #include <KDebug>
 
 #include <plasma/animator.h>
@@ -35,12 +37,37 @@
 namespace Plasma
 {
 
+class TabBarProxy : public QGraphicsProxyWidget
+{
+public:
+    TabBarProxy(QGraphicsWidget *parent)
+    : QGraphicsProxyWidget(parent)
+    {
+        native = new NativeTabBar();
+        native->setAttribute(Qt::WA_NoSystemBackground);
+        setWidget(native);
+        setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
+    }
+
+    void paint(QPainter *painter,
+               const QStyleOptionGraphicsItem *option,
+               QWidget *widget)
+    {
+        Q_UNUSED(option)
+        Q_UNUSED(widget)
+        //Don't paint the child widgets
+        static_cast<NativeTabBar *>(QGraphicsProxyWidget::widget())->render(painter, QPoint(0,0), QRegion(), 0);
+    }
+
+    NativeTabBar *native;
+};
+
 class TabBarPrivate
 {
 public:
     TabBarPrivate(TabBar *parent)
         : q(parent),
-          tabBar(0),
+          tabProxy(0),
           currentIndex(0),
           oldPage(0),
           newPage(0),
@@ -58,8 +85,7 @@ public:
     void shapeChanged(const QTabBar::Shape shape);
 
     TabBar *q;
-    NativeTabBar *tabBar;
-    QGraphicsProxyWidget *tabProxy;
+    TabBarProxy *tabProxy;
     QGraphicsWidget *leftSpacer;
     QGraphicsWidget *rightSpacer;
     QList<QGraphicsWidget *> pages;
@@ -142,7 +168,7 @@ void TabBarPrivate::shapeChanged(const QTabBar::Shape shape)
         mainLayout->itemAt(1)->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         tabProxy->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     }
-    tabProxy->setPreferredSize(tabBar->sizeHint());
+    tabProxy->setPreferredSize(tabProxy->native->sizeHint());
 }
 
 
@@ -150,8 +176,7 @@ TabBar::TabBar(QGraphicsWidget *parent)
     : QGraphicsWidget(parent),
       d(new TabBarPrivate(this))
 {
-    d->tabBar = new NativeTabBar();
-    d->tabBar->setAttribute(Qt::WA_NoSystemBackground);
+    d->tabProxy = new TabBarProxy(this);
     d->mainLayout = new QGraphicsLinearLayout(Qt::Vertical);
     d->tabBarLayout = new QGraphicsLinearLayout(Qt::Horizontal);
 
@@ -159,9 +184,6 @@ TabBar::TabBar(QGraphicsWidget *parent)
 
     d->mainLayout->addItem(d->tabBarLayout);
 
-    d->tabProxy = new QGraphicsProxyWidget(this);
-    d->tabProxy->setWidget(d->tabBar);
-    d->tabProxy->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
 
     //tabBar is centered, so a stretch at begin one at the end
     //FIXME: doesn't seem to be possible to remove stretches from a layout
@@ -174,8 +196,8 @@ TabBar::TabBar(QGraphicsWidget *parent)
     d->tabBarLayout->addItem(d->rightSpacer);
     //d->tabBarLayout->setStretchFactor(d->tabProxy, 2);
 
-    connect(d->tabBar, SIGNAL(currentChanged(int)), this, SLOT(setCurrentIndex(int)));
-    connect(d->tabBar, SIGNAL(shapeChanged(QTabBar::Shape)), this, SLOT(shapeChanged(QTabBar::Shape)));
+    connect(d->tabProxy->native, SIGNAL(currentChanged(int)), this, SLOT(setCurrentIndex(int)));
+    connect(d->tabProxy->native, SIGNAL(shapeChanged(QTabBar::Shape)), this, SLOT(shapeChanged(QTabBar::Shape)));
     connect(Plasma::Animator::self(), SIGNAL(movementFinished(QGraphicsItem*)), this, SLOT(slidingCompleted(QGraphicsItem*)));
 }
 
@@ -208,11 +230,11 @@ int TabBar::insertTab(int index, const QIcon &icon, const QString &label, QGraph
         page->setEnabled(false);
     }
 
-    d->tabProxy->setPreferredSize(d->tabBar->sizeHint());
+    d->tabProxy->setPreferredSize(d->tabProxy->native->sizeHint());
     d->updateTabWidgetMode();
 
-    int actualIndex = d->tabBar->insertTab(index, icon, label);
-    d->tabProxy->setPreferredSize(d->tabBar->sizeHint());
+    int actualIndex = d->tabProxy->native->insertTab(index, icon, label);
+    d->tabProxy->setPreferredSize(d->tabProxy->native->sizeHint());
     d->updateTabWidgetMode();
     return actualIndex;
 }
@@ -234,17 +256,17 @@ int TabBar::addTab(const QString &label, QGraphicsLayoutItem *content)
 
 int TabBar::currentIndex() const
 {
-    return d->tabBar->currentIndex();
+    return d->tabProxy->native->currentIndex();
 }
 
 void TabBar::setCurrentIndex(int index)
 {
-    if (index > d->tabBar->count() || d->tabBar->count() <= 1) {
+    if (index > d->tabProxy->native->count() || d->tabProxy->native->count() <= 1) {
         return;
     }
 
     if (d->currentIndex != index) {
-        d->tabBar->setCurrentIndex(index);
+        d->tabProxy->native->setCurrentIndex(index);
     }
 
     d->mainLayout->removeAt(1);
@@ -312,9 +334,9 @@ void TabBar::removeTab(int index)
         return;
     }
 
-    int currentIndex = d->tabBar->currentIndex();
+    int currentIndex = d->tabProxy->native->currentIndex();
 
-    d->tabBar->removeTab(index);
+    d->tabProxy->native->removeTab(index);
     QGraphicsWidget *page = d->pages.takeAt(index);
 
     if (index == currentIndex) {
@@ -325,7 +347,7 @@ void TabBar::removeTab(int index)
     page->deleteLater();
 
     d->updateTabWidgetMode();
-    d->tabProxy->setPreferredSize(d->tabBar->sizeHint());
+    d->tabProxy->setPreferredSize(d->tabProxy->native->sizeHint());
 }
 
 void TabBar::setTabText(int index, const QString &label)
@@ -334,66 +356,66 @@ void TabBar::setTabText(int index, const QString &label)
         return;
     }
 
-    d->tabBar->setTabText(index, label);
+    d->tabProxy->native->setTabText(index, label);
 }
 
 QString TabBar::tabText(int index) const
 {
-    return d->tabBar->tabText(index);
+    return d->tabProxy->native->tabText(index);
 }
 
 void TabBar::setTabIcon(int index, const QIcon &icon)
 {
-    d->tabBar->setTabIcon(index, icon);
+    d->tabProxy->native->setTabIcon(index, icon);
 }
 
 QIcon TabBar::tabIcon(int index) const
 {
-    return d->tabBar->tabIcon(index);
+    return d->tabProxy->native->tabIcon(index);
 }
 
 void TabBar::setStyleSheet(const QString &stylesheet)
 {
-    d->tabBar->setStyleSheet(stylesheet);
+    d->tabProxy->native->setStyleSheet(stylesheet);
 }
 
 QString TabBar::styleSheet() const
 {
-    return d->tabBar->styleSheet();
+    return d->tabProxy->native->styleSheet();
 }
 
 QTabBar *TabBar::nativeWidget() const
 {
-    return d->tabBar;
+    return d->tabProxy->native;
 }
 
 void TabBar::wheelEvent(QGraphicsSceneWheelEvent * event)
 {
     //FIXME: probably this would make more sense in NativeTabBar, but it works only here
 
-    if (d->tabBar->underMouse()) {
+    if (d->tabProxy->native->underMouse()) {
         //Cycle tabs with the circular array tecnique
         if (event->delta() < 0) {
-            int index = d->tabBar->currentIndex();
+            int index = d->tabProxy->native->currentIndex();
             //search for an enabled tab
-            for (int i = 0; i < d->tabBar->count()-1; ++i) {
-                index = (index + 1) % d->tabBar->count();
-                if (d->tabBar->isTabEnabled(index)) {
+            for (int i = 0; i < d->tabProxy->native->count()-1; ++i) {
+                index = (index + 1) % d->tabProxy->native->count();
+                if (d->tabProxy->native->isTabEnabled(index)) {
                     break;
                 }
             }
 
-            d->tabBar->setCurrentIndex(index);
+            d->tabProxy->native->setCurrentIndex(index);
         } else {
-            int index = d->tabBar->currentIndex();
-            for (int i = 0; i < d->tabBar->count()-1; ++i) {
-                index = (d->tabBar->count() + index -1) % d->tabBar->count();
-                if (d->tabBar->isTabEnabled(index)) {
+            int index = d->tabProxy->native->currentIndex();
+            for (int i = 0; i < d->tabProxy->native->count()-1; ++i) {
+                index = (d->tabProxy->native->count() + index -1) % d->tabProxy->native->count();
+                if (d->tabProxy->native->isTabEnabled(index)) {
                     break;
                 }
             }
 
-            d->tabBar->setCurrentIndex(index);
+            d->tabProxy->native->setCurrentIndex(index);
         }
     } else {
         QGraphicsWidget::wheelEvent(event);
