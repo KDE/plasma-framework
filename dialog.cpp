@@ -112,10 +112,11 @@ void DialogPrivate::adjustView()
         //set the sizehints correctly:
         int left, top, right, bottom;
         q->getContentsMargins(&left, &top, &right, &bottom);
-        q->setMinimumSize(view->size().width() + left + right,
-                          view->size().height() + top + bottom);
-        q->setMaximumSize(view->size().width() + left + right,
-                          view->size().height() + top + bottom);
+
+        q->setMinimumSize(qMin(int(widget->minimumSize().width()) + left + right, QWIDGETSIZE_MAX),
+                          qMin(int(widget->minimumSize().height()) + top + bottom, QWIDGETSIZE_MAX));
+        q->setMaximumSize(qMin(int(widget->maximumSize().width()) + left + right, QWIDGETSIZE_MAX),
+                          qMin(int(widget->maximumSize().height()) + top + bottom, QWIDGETSIZE_MAX));
         q->updateGeometry();
 
         if (q->size() != prevSize) {
@@ -280,6 +281,12 @@ void Dialog::resizeEvent(QResizeEvent *e)
     d->background->resizePanel(e->size());
 
     setMask(d->background->mask());
+
+    if (d->resizeStartCorner != Dialog::NoCorner && d->view && d->widget) {
+        d->widget->resize(d->view->size());
+        d->view->setSceneRect(d->widget->mapToScene(d->widget->boundingRect()).boundingRect());
+        d->view->centerOn(d->widget);
+    }
 }
 
 void Dialog::setGraphicsWidget(QGraphicsWidget *widget)
@@ -323,8 +330,8 @@ QGraphicsWidget *Dialog::graphicsWidget()
 
 bool Dialog::eventFilter(QObject *watched, QEvent *event)
 {
-    if (watched == d->widget && (event->type() == QEvent::GraphicsSceneResize ||
-                                 event->type() == QEvent::GraphicsSceneMove)) {
+    if (d->resizeStartCorner == Dialog::NoCorner && watched == d->widget &&
+        (event->type() == QEvent::GraphicsSceneResize || event->type() == QEvent::GraphicsSceneMove)) {
         d->adjustView();
     }
 
