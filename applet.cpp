@@ -1519,6 +1519,16 @@ QSizeF Applet::sizeHint(Qt::SizeHint which, const QSizeF & constraint) const
     return hint;
 }
 
+void Applet::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
+{
+    Q_UNUSED(event)
+}
+
+void Applet::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
+{
+    Q_UNUSED(event)
+}
+
 void Applet::timerEvent(QTimerEvent *event)
 {
     if (d->transient) {
