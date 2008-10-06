@@ -51,6 +51,7 @@ public:
     ThemePrivate(Theme *theme)
         : q(theme),
           colorScheme(QPalette::Active, KColorScheme::Window, KSharedConfigPtr(0)),
+          buttonColorScheme(QPalette::Active, KColorScheme::Button, KSharedConfigPtr(0)),
           defaultWallpaperTheme(DEFAULT_WALLPAPER_THEME),
           defaultWallpaperSuffix(DEFAULT_WALLPAPER_SUFFIX),
           defaultWallpaperWidth(DEFAULT_WALLPAPER_WIDTH),
@@ -94,6 +95,7 @@ public:
     QString themeName;
     KSharedConfigPtr colors;
     KColorScheme colorScheme;
+    KColorScheme buttonColorScheme;
     KConfigGroup cfg;
     QFont generalFont;
     QString defaultWallpaperTheme;
@@ -263,6 +265,7 @@ void Theme::setThemeName(const QString &themeName)
     }
 
     d->colorScheme = KColorScheme(QPalette::Active, KColorScheme::Window, d->colors);
+    d->buttonColorScheme = KColorScheme(QPalette::Active, KColorScheme::Button, d->colors);
     d->hasWallpapers = !KStandardDirs::locate("data", "desktoptheme/" + theme + "/wallpapers").isEmpty();
 
     if (d->isDefault) {
@@ -396,6 +399,14 @@ QColor Theme::color(ColorRole role) const
         case BackgroundColor:
             return d->colorScheme.background().color();
             break;
+
+        case ButtonTextColor:
+            return d->buttonColorScheme.foreground(KColorScheme::NormalText).color();
+            break;
+
+        case ButtonBackgroundColor:
+            return d->buttonColorScheme.background(KColorScheme::ActiveBackground).color();
+            break;
     }
 
     return QColor();
@@ -410,7 +421,17 @@ void Theme::setFont(const QFont &font, FontRole role)
 QFont Theme::font(FontRole role) const
 {
     Q_UNUSED(role)
-    return d->generalFont;
+    switch (role) {
+        case DesktopFont: {
+            KConfigGroup cg(KGlobal::config(), "General");
+            return cg.readEntry("desktopFont", QFont("Sans Serif", 10));
+        }
+            break;
+        case DefaultFont:
+        default:
+            return d->generalFont;
+            break;
+    }
 }
 
 QFontMetrics Theme::fontMetrics() const
