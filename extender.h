@@ -97,7 +97,7 @@ class PLASMA_EXPORT Extender : public QGraphicsWidget
          * in a extender item somewhere, so your applet doesn't duplicate this item. Say the applet
          * displays 'jobs', from an engine which add's a source for every job. In sourceAdded you
          * could do something like:
-         * if (!extenderItem(source)) {
+         * if (!item(source)) {
          *     //add an extender item monitoring this source.
          * }
          */

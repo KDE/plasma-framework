@@ -177,10 +177,8 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
                     q->setLayout(lay);
                 }
 
-                if (lay) {
-                    //kDebug() << "adding gwidget to layout";
-                    lay->addItem(gWidget);
-                }
+                lay->addItem(gWidget);
+
                 //gWidget->installEventFilter(q);
             } else if (qWidget) {
                 if (!proxy) {
@@ -211,7 +209,6 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
             }
 
             if (!dialog) {
-                //kDebug() << "making dialog with view" << q->view();
                 dialog = new Plasma::Dialog();
 
                 //no longer use Qt::Popup since that seems to cause a lot of problem when you drag
@@ -281,17 +278,19 @@ bool PopupApplet::eventFilter(QObject *watched, QEvent *event)
         QTimer::singleShot(100, this, SLOT(clearPopupLostFocus()));
     }
 
-/*
+    /*
     if (watched == graphicsWidget() && (event->type() == QEvent::GraphicsSceneResize)) {
+        kDebug() << "do the resize!";
         //sizes are recalculated in the constraintsevent so let's just call that.
-        constraintsEvent(Plasma::FormFactorConstraint);
+        d->popupConstraintsEvent(Plasma::FormFactorConstraint);
 
         //resize vertically if necesarry.
         if (formFactor() == Plasma::MediaCenter || formFactor() == Plasma::Planar) {
             resize(QSizeF(size().width(), minimumHeight()));
         }
     }
-*/
+    */
+
     return Applet::eventFilter(watched, event);
 }
 

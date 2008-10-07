@@ -208,6 +208,7 @@ class PLASMA_EXPORT ExtenderItem : public QGraphicsWidget
     private:
         Q_PRIVATE_SLOT(d, void toggleCollapse())
         Q_PRIVATE_SLOT(d, void updateToolBox())
+        Q_PRIVATE_SLOT(d, void themeChanged())
 
         ExtenderItemPrivate * const d;
 

@@ -52,6 +52,7 @@ class ExtenderPrivate
 
         Applet *applet;
         QGraphicsLinearLayout *layout;
+        PanelSvg *background;
 
         int currentSpacerIndex;
         QGraphicsWidget *spacerWidget;

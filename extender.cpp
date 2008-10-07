@@ -42,6 +42,8 @@ Extender::Extender(Applet *applet)
     applet->d->extender = this;
     d->layout = new QGraphicsLinearLayout(this);
     d->layout->setOrientation(Qt::Vertical);
+    d->layout->setContentsMargins(0, 0, 0, 0);
+    d->layout->setSpacing(0);
     setLayout(d->layout);
 
     d->emptyExtenderLabel = new Label(this);

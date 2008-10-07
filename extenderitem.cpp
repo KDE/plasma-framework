@@ -21,6 +21,7 @@
 
 #include <QApplication>
 #include <QAction>
+#include <QBitmap>
 #include <QGraphicsSceneResizeEvent>
 #include <QGraphicsSceneMouseEvent>
 #include <QGraphicsLinearLayout>
@@ -75,20 +76,17 @@ class ExtenderItemPrivate
          */
         QRectF dragHandleRect()
         {
-            qreal left, top, right, bottom;
-            dragger->getMargins(left, top, right, bottom);
-            QRectF rect(0, 0, q->size().width(),
-                        dragger->elementSize("hint-preferred-icon-size").height() + top + bottom);
+            QRectF rect(bgLeft, bgTop, q->size().width() - bgLeft - bgRight,
+                        dragger->elementSize("hint-preferred-icon-size").height() +
+                        dragTop + dragBottom);
 
             return rect;
         }
 
         QRectF titleRect()
         {
-            qreal left, top, right, bottom;
-            dragger->getMargins(left, top, right, bottom);
-            return dragHandleRect().adjusted(left + collapseIcon->size().width() + 1, top,
-                                             -toolbox->size().width(), -bottom);
+            return dragHandleRect().adjusted(dragLeft + collapseIcon->size().width() + 1, dragTop,
+                                             -toolbox->size().width() - dragRight, -dragBottom);
         }
 
         //XXX kinda duplicated from applethandle.
@@ -156,15 +154,12 @@ class ExtenderItemPrivate
 
                 toolboxLayout->updateGeometry();
 
-                qreal left, top, right, bottom;
-                dragger->getMargins(left, top, right, bottom);
-
                 //position the toolbox correctly.
                 QSizeF minimum = toolboxLayout->minimumSize();
                 toolbox->resize(minimum);
-                toolbox->setPos(q->size().width() - minimum.width(),
-                                ((dragger->size().height() + top + bottom)/2) -
-                                (minimum.height()/2));
+                toolbox->setPos(q->size().width() - minimum.width() - bgRight,
+                                ((dragger->size().height() + dragTop + dragBottom)/2) -
+                                (minimum.height()/2) + bgTop);
                 toolbox->update();
             }
         }
@@ -224,6 +219,19 @@ class ExtenderItemPrivate
             }
         }
 
+        void themeChanged()
+        {
+            dragger->setImagePath("widgets/extender-dragger");
+            background->setImagePath("widgets/extender-background");
+
+            dragger->getMargins(dragLeft, dragTop, dragRight, dragBottom);
+            background->getMargins(bgLeft, bgTop, bgRight, bgBottom);
+
+            //setCollapsed recalculates size hints.
+            q->setCollapsed(q->isCollapsed());
+            q->update();
+        }
+
         ExtenderItem *q;
 
         QGraphicsItem *widget;
@@ -238,7 +246,7 @@ class ExtenderItemPrivate
         KConfigGroup config;
 
         PanelSvg *dragger;
-        PanelSvg *appletBackground;
+        PanelSvg *background;
 
         Icon *collapseIcon;
         QAction *returnAction;
@@ -249,6 +257,9 @@ class ExtenderItemPrivate
 
         uint sourceAppletId;
         uint extenderItemId;
+
+        qreal dragLeft, dragTop, dragRight, dragBottom;
+        qreal bgLeft, bgTop, bgRight, bgBottom;
 
         QPointF deltaScene;
         QPoint mousePos;
@@ -308,11 +319,8 @@ ExtenderItem::ExtenderItem(Extender *hostExtender, uint extenderItemId)
 
     //create the dragger and standard applet background.
     d->dragger = new PanelSvg(this);
-    d->dragger->setImagePath("widgets/dragger");
-
-    d->appletBackground = new PanelSvg(this);
-    d->appletBackground->setImagePath("widgets/background");
-    d->appletBackground->setEnabledBorders(0);
+    d->background = new PanelSvg(this);
+    d->themeChanged();
 
     //create the toolbox.
     d->toolbox = new QGraphicsWidget(this);
@@ -324,14 +332,12 @@ ExtenderItem::ExtenderItem(Extender *hostExtender, uint extenderItemId)
     //like this approach, but it works...
     QSizeF iconSize = d->dragger->elementSize("hint-preferred-icon-size");
 
-    qreal left, top, right, bottom;
-    d->dragger->getMargins(left, top, right, bottom);
-
     //create the collapse/applet icon.
     d->collapseIcon = new Icon(KIcon(hostExtender->d->applet->icon()), "", this);
     d->collapseIcon->resize(d->collapseIcon->sizeFromIconSize(iconSize.height()));
-    d->collapseIcon->setPos(left, (d->dragger->size().height() + top + bottom)/2 -
-                                   d->collapseIcon->size().height()/2);
+    d->collapseIcon->setPos(d->bgLeft + d->dragLeft,
+                            (d->dragger->size().height() + d->dragTop + d->dragBottom)/2 -
+                            d->collapseIcon->size().height()/2 + d->bgTop);
     connect(d->collapseIcon, SIGNAL(clicked()), this, SLOT(toggleCollapse()));
 
     //Add the return to source action.
@@ -345,11 +351,12 @@ ExtenderItem::ExtenderItem(Extender *hostExtender, uint extenderItemId)
     //set the extender we want to move to.
     setExtender(hostExtender);
 
-    setCollapsed(false); //sets the size hints.
     setAcceptHoverEvents(true);
 
     d->updateToolBox();
     updateGeometry();
+
+    connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()), this, SLOT(themeChanged()));
 }
 
 ExtenderItem::~ExtenderItem()
@@ -387,10 +394,9 @@ QString ExtenderItem::name() const
 
 void ExtenderItem::setWidget(QGraphicsItem *widget)
 {
-    qreal left, top, right, bottom;
-    d->dragger->getMargins(left, top, right, bottom);
     widget->setParentItem(this);
-    widget->setPos(QPointF(left, d->dragHandleRect().height() + bottom));
+    widget->setPos(QPointF(d->bgLeft + d->dragLeft, d->dragHandleRect().height() +
+                                                    d->bgTop + d->dragTop));
     d->widget = widget;
     setCollapsed(isCollapsed()); //updates the size hints.
 }
@@ -552,6 +558,9 @@ void ExtenderItem::destroy()
 
 void ExtenderItem::setCollapsed(bool collapsed)
 {
+    qreal marginWidth = d->bgLeft + d->bgRight + d->dragLeft + d->dragRight;
+    qreal marginHeight = d->bgTop + d->bgBottom + 2*d->dragTop + 2*d->dragBottom;
+
     if (!d->widget) {
         setPreferredSize(QSizeF(200, d->dragHandleRect().height()));
         setMinimumSize(QSizeF(0, d->dragHandleRect().height()));
@@ -561,9 +570,6 @@ void ExtenderItem::setCollapsed(bool collapsed)
         updateGeometry();
         return;
     }
-
-    qreal left, top, right, bottom;
-    d->dragger->getMargins(left, top, right, bottom);
 
     d->widget->setVisible(!collapsed);
 
@@ -583,27 +589,24 @@ void ExtenderItem::setCollapsed(bool collapsed)
     }
 
     if (collapsed) {
-        setPreferredSize(QSizeF(preferredSize.width() + left + right,
-                                d->dragHandleRect().height()));
-        setMinimumSize(QSizeF(minimumSize.width() + left + right,
-                              d->dragHandleRect().height()));
-        setMaximumSize(QSizeF(maximumSize.width() + left + right,
-                              d->dragHandleRect().height()));
+        setPreferredSize(QSizeF(preferredSize.width() + marginWidth,
+                                d->dragHandleRect().height() + marginHeight));
+        setMinimumSize(QSizeF(minimumSize.width() + marginWidth,
+                              d->dragHandleRect().height() + marginHeight));
+        setMaximumSize(QSizeF(maximumSize.width() + marginWidth,
+                              d->dragHandleRect().height() + marginHeight));
         setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-        //FIXME: why don't tooltips work?
+
         if (d->collapseIcon) {
             d->collapseIcon->setToolTip(i18n("Expand this widget"));
         }
     } else {
-        setPreferredSize(QSizeF(preferredSize.width() + left + right,
-                         preferredSize.height() +
-                         d->dragHandleRect().height() + top + bottom));
-        setMinimumSize(  QSizeF(minimumSize.width() + left + right,
-                         minimumSize.height() +
-                         d->dragHandleRect().height() + top + bottom));
-        setMaximumSize(  QSizeF(maximumSize.width() + left + right,
-                         maximumSize.height() +
-                         d->dragHandleRect().height() + top + bottom));
+        setPreferredSize(QSizeF(preferredSize.width() + marginWidth,
+                         preferredSize.height() + d->dragHandleRect().height() + marginHeight));
+        setMinimumSize(  QSizeF(minimumSize.width() + marginWidth,
+                         minimumSize.height() + d->dragHandleRect().height() + marginHeight));
+        setMaximumSize(  QSizeF(maximumSize.width() + marginWidth,
+                         maximumSize.height() + d->dragHandleRect().height() + marginHeight));
 
         if (d->widget->isWidget()) {
             QGraphicsWidget *graphicsWidget = static_cast<QGraphicsWidget*>(d->widget);
@@ -639,11 +642,9 @@ void ExtenderItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
     painter->setRenderHint(QPainter::TextAntialiasing, true);
     painter->setRenderHint(QPainter::Antialiasing, true);
 
-    if (d->mousePressed) {
-        //only paint the standard applet background when dragging the thing around.
-        d->appletBackground->paintPanel(painter); //, QRectF(QPointF(0,0), size()));
-    }
-    d->dragger->paintPanel(painter); //, d->dragHandleRect());
+    d->background->paintPanel(painter);
+
+    d->dragger->paintPanel(painter, QPointF(d->bgLeft, d->bgTop));
 
     //draw the title.
     Plasma::Theme *theme = Plasma::Theme::defaultTheme();
@@ -683,22 +684,23 @@ void ExtenderItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
 
 void ExtenderItem::resizeEvent(QGraphicsSceneResizeEvent *event)
 {
-    qreal left, top, right, bottom;
-    d->dragger->getMargins(left, top, right, bottom);
+    qreal width = event->newSize().width();
+    qreal height = event->newSize().height();
 
     //resize the dragger
-    QSizeF newDraggerSize = event->newSize();
-    newDraggerSize.setHeight(d->dragger->elementSize("hint-preferred-icon-size").height() + top + bottom);
+    QSizeF newDraggerSize(width - d->bgLeft - d->bgRight,
+                          d->dragger->elementSize("hint-preferred-icon-size").height() +
+                          d->dragTop + d->dragBottom);
     d->dragger->resizePanel(newDraggerSize);
 
     //resize the applet background
-    d->appletBackground->resizePanel(event->newSize());
+    d->background->resizePanel(event->newSize());
 
     //resize the widget
     if (d->widget && d->widget->isWidget()) {
-        QSizeF newWidgetSize = event->newSize();
-        newWidgetSize.setHeight(newWidgetSize.height() - d->dragger->size().height() - top - bottom);
-        newWidgetSize.setWidth(newWidgetSize.width() - left - right);
+        QSizeF newWidgetSize(width - d->bgLeft - d->bgRight - d->dragLeft - d->dragRight,
+                             height - d->dragger->size().height() - d->bgTop - d->bgBottom
+                                    - 2*d->dragTop - 2*d->dragBottom);
 
         QGraphicsWidget *graphicsWidget = static_cast<QGraphicsWidget*>(d->widget);
         graphicsWidget->resize(newWidgetSize);
@@ -771,11 +773,13 @@ void ExtenderItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
             d->toplevel->centerOn(this);
 
             //We might have to scale the view, because we might be zoomed out.
-            qreal scale = screenRect.width() / boundingRect().width();
+            qreal scale = screenRect.width() / size().width();
             d->toplevel->scale(scale, scale);
 
             d->toplevel->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
             d->toplevel->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
+            d->toplevel->setMask(d->background->mask());
 
             d->toplevel->update();
             d->toplevel->show();
