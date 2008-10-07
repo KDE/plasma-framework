@@ -155,7 +155,7 @@ void ToolTipManager::showToolTip(QGraphicsWidget *widget)
         // which can be too much for less powerful CPUs to keep up with
         d->showTimer->start(200);
     } else {
-        d->showTimer->start(500);
+        d->showTimer->start(700);
     }
 }
 
