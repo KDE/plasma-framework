@@ -283,16 +283,29 @@ void Applet::setFailedToLaunch(bool failed, const QString& reason)
 
         QGraphicsLinearLayout *failureLayout = new QGraphicsLinearLayout(this);
         failureLayout->setContentsMargins(0, 0, 0, 0);
+
+        Icon *failureIcon = new Icon(this);
+        failureIcon->setIcon(KIcon("dialog-error"));
+        failureLayout->addItem(failureIcon);
+
         Label *failureWidget = new Plasma::Label(this);
         failureWidget->setText(d->visibleFailureText(reason));
         QLabel *label = failureWidget->nativeWidget();
         label->setWordWrap(true);
         failureLayout->addItem(failureWidget);
+
+        Plasma::ToolTipManager::self()->registerWidget(failureIcon);
+        Plasma::ToolTipManager::ToolTipContent data;
+        data.mainText = i18n("Unable to load the widget");
+        data.subText = reason;
+        data.image = KIcon("dialog-error").pixmap(IconSize(KIconLoader::Desktop));
+        Plasma::ToolTipManager::self()->setToolTipContent(failureIcon, data);
+
         setLayout(failureLayout);
         resize(300,250);
-        setMinimumSize(failureWidget->size());
-        //resize(label->size());
+        setMinimumSize(failureLayout->minimumSize());
         d->background->resizePanel(geometry().size());
+
     }
     update();
 }
@@ -823,6 +836,15 @@ void Applet::flushPendingConstraintsEvents()
             setBackgroundHints(d->backgroundHints ^ StandardBackground);
         } else if(d->backgroundHints & TranslucentBackground) {
             setBackgroundHints(d->backgroundHints ^ TranslucentBackground);
+        }
+
+        if (d->failed) {
+            if (f == Vertical || f == Horizontal) {
+                setMinimumSize(0,0);
+                QGraphicsLayoutItem *item = layout()->itemAt(1);
+                layout()->removeAt(1);
+                delete item;
+            }
         }
     }
 
