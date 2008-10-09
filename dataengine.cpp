@@ -154,7 +154,7 @@ bool DataEngine::updateSourceEvent(const QString& source)
     if (d->script) {
         return d->script->updateSourceEvent(source);
     } else {
-        //kDebug() << "updateSource source" << endl;
+        //kDebug() << source;
         return false; //TODO: should this be true to trigger, even needless, updates on every tick?
     }
 }
@@ -224,12 +224,13 @@ void DataEngine::removeData(const QString& source, const QString& key)
 
 void DataEngine::addSource(DataContainer* source)
 {
-    SourceDict::const_iterator it = d->sources.find(source->objectName());
-    if (it != d->sources.constEnd()) {
+    if (d->sources.contains(source->objectName())) {
         kDebug() << "source named \"" << source->objectName() << "\" already exists.";
         return;
     }
 
+    QObject::connect(source, SIGNAL(updateRequested(DataContainer*)),
+                     this, SLOT(internalUpdateSource(DataContainer*)));
     d->sources.insert(source->objectName(), source);
     emit sourceAdded(source->objectName());
     d->queueUpdate();
@@ -349,6 +350,7 @@ DataEngine::SourceDict DataEngine::containerDict() const
 void DataEngine::timerEvent(QTimerEvent *event)
 {
     if (event->timerId() != d->updateTimerId) {
+        kDebug() << "bzzzt";
         return;
     }
 
@@ -356,11 +358,13 @@ void DataEngine::timerEvent(QTimerEvent *event)
 
     // if the freq update is less than 0, don't bother
     if (d->minPollingInterval < 0) {
+        //kDebug() << "uh oh.. no polling allowed!";
         return;
     }
 
     // minPollingInterval
     if (d->updateTimestamp.elapsed() < d->minPollingInterval) {
+        //kDebug() << "hey now.. slow down!";
         return;
     }
 
@@ -368,8 +372,10 @@ void DataEngine::timerEvent(QTimerEvent *event)
     QHashIterator<QString, Plasma::DataContainer*> it(d->sources);
     while (it.hasNext()) {
         it.next();
+        //kDebug() << "updating" << it.key();
         updateSourceEvent(it.key());
     }
+
     scheduleSourcesUpdated();
 }
 
@@ -470,7 +476,7 @@ void DataEnginePrivate::internalUpdateSource(DataContainer* source)
     if (minPollingInterval > 0 &&
         source->timeSinceLastUpdate() < (uint)minPollingInterval) {
         // skip updating this source; it's been too soon
-        //kDebug() << "internal update source is delaying" << source->timeSinceLastUpdate() << d->minPollingInterval;
+        //kDebug() << "internal update source is delaying" << source->timeSinceLastUpdate() << minPollingInterval;
         //but fake an update so that the signalrelay that triggered this gets the data from the
         //recent update. this way we don't have to worry about queuing - the relay will send a
         //signal immediately and everyone else is undisturbed.
@@ -479,8 +485,11 @@ void DataEnginePrivate::internalUpdateSource(DataContainer* source)
     }
 
     if (q->updateSourceEvent(source->objectName())) {
+        //kDebug() << "queuing an update";
         queueUpdate();
-    }
+    }/* else {
+        kDebug() << "no update";
+    }*/
 }
 
 void DataEnginePrivate::ref()
@@ -540,7 +549,7 @@ DataContainer* DataEnginePrivate::source(const QString& sourceName, bool createW
 void DataEnginePrivate::connectSource(DataContainer* s, QObject* visualization, uint pollingInterval,
                                       Plasma::IntervalAlignment align, bool immediateCall)
 {
-    //kDebug() << "connect source called with interval" << pollingInterval;
+    //kDebug() << "connect source called" << s->objectName() << "with interval" << pollingInterval;
     if (pollingInterval > 0) {
         // never more frequently than allowed, never more than 20 times per second
         uint min = qMax(50, minPollingInterval); // for qMax below
