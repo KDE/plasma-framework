@@ -130,6 +130,7 @@ Dialog::Dialog( QWidget * parent, Qt::WindowFlags f )
     : QWidget(parent, f),
       d(new DialogPrivate(this))
 {
+    setWindowFlags(Qt::FramelessWindowHint);
     d->background = new PanelSvg(this);
     d->background->setImagePath("dialogs/background");
     d->background->setEnabledBorders(PanelSvg::AllBorders);
