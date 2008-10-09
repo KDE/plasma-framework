@@ -959,7 +959,9 @@ void Applet::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
             if (!v || v->isWallpaperEnabled()) {
                 Containment* c = qobject_cast<Plasma::Containment*>(this);
                 if (c && c->drawWallpaper() && c->wallpaper()) {
+                    p->save();
                     c->wallpaper()->paint(p, option->exposedRect);
+                    p->restore();
                 }
 
                 Containment::StyleOption coption(*option);
