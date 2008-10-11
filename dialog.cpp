@@ -115,6 +115,8 @@ void DialogPrivate::adjustView()
 
         q->setMinimumSize(qMin(int(widget->minimumSize().width()) + left + right, QWIDGETSIZE_MAX),
                           qMin(int(widget->minimumSize().height()) + top + bottom, QWIDGETSIZE_MAX));
+        q->resize(qMin(int(widget->minimumSize().width()) + left + right, QWIDGETSIZE_MAX),
+                          qMin(int(widget->minimumSize().height()) + top + bottom, QWIDGETSIZE_MAX));
         q->setMaximumSize(qMin(int(widget->maximumSize().width()) + left + right, QWIDGETSIZE_MAX),
                           qMin(int(widget->maximumSize().height()) + top + bottom, QWIDGETSIZE_MAX));
         q->updateGeometry();
