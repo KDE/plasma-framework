@@ -45,7 +45,7 @@ protected:
 
     // reimplemented from QTabBar
     virtual void paintEvent(QPaintEvent *event);
-    virtual void resizeEvent(QResizeEvent* event);
+    virtual void resizeEvent(QResizeEvent *event);
     void tabInserted(int index);
     void tabRemoved(int index);
     void tabLayoutChange();

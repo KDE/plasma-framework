@@ -23,8 +23,9 @@
 namespace Plasma
 {
 
-SignalRelay* DataContainerPrivate::signalRelay(const DataContainer* dc, QObject *visualization,
-                                               uint pollingInterval, Plasma::IntervalAlignment align,
+SignalRelay *DataContainerPrivate::signalRelay(const DataContainer *dc, QObject *visualization,
+                                               uint pollingInterval,
+                                               Plasma::IntervalAlignment align,
                                                bool immediateUpdate)
 {
     QMap<uint, SignalRelay *>::const_iterator relayIt = relays.find(pollingInterval);
@@ -32,7 +33,8 @@ SignalRelay* DataContainerPrivate::signalRelay(const DataContainer* dc, QObject 
 
     //FIXME what if we have two applets with the same interval and different alignment?
     if (relayIt == relays.end()) {
-        relay = new SignalRelay(const_cast<DataContainer*>(dc), this, pollingInterval, align, immediateUpdate);
+        relay = new SignalRelay(const_cast<DataContainer*>(dc), this,
+                                pollingInterval, align, immediateUpdate);
         relays[pollingInterval] = relay;
     } else {
         relay = relayIt.value();
@@ -53,7 +55,7 @@ bool DataContainerPrivate::hasUpdates()
     return dirty;
 }
 
-SignalRelay::SignalRelay(DataContainer* parent, DataContainerPrivate *data, uint ival,
+SignalRelay::SignalRelay(DataContainer *parent, DataContainerPrivate *data, uint ival,
                          Plasma::IntervalAlignment align, bool immediateUpdate)
     : QObject(parent),
       dc(parent),

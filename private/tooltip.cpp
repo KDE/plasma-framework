@@ -41,12 +41,12 @@ class ToolTipPrivate
 {
     public:
         ToolTipPrivate(QObject *s)
-        : label(0)
-        , imageLabel(0)
-        , preview(0)
-        , windowToPreview(0)
-        , source(s)
-        , isActivated(true)
+        : label(0),
+          imageLabel(0),
+          preview(0),
+          windowToPreview(0),
+          source(s),
+          isActivated(true)
     { }
 
     QLabel *label;
@@ -72,7 +72,7 @@ void ToolTip::hideEvent(QHideEvent *e)
     }
 }
 
-void ToolTip::mouseReleaseEvent(QMouseEvent* event)
+void ToolTip::mouseReleaseEvent(QMouseEvent *event)
 {
     if (rect().contains(event->pos())) {
         hide();
@@ -80,8 +80,8 @@ void ToolTip::mouseReleaseEvent(QMouseEvent* event)
 }
 
 ToolTip::ToolTip(QObject *source)
-    : QWidget(0)
-    , d(new ToolTipPrivate(source))
+    : QWidget(0),
+      d(new ToolTipPrivate(source))
 {
     if (source) {
         connect(source, SIGNAL(destroyed(QObject*)), this, SLOT(sourceDestroyed()));
@@ -116,7 +116,7 @@ void ToolTip::setContent(const ToolTipManager::ToolTipContent &data)
     d->label->setText("<qt><b>" + data.mainText + "</b><br>" + data.subText + "</qt>");
     d->imageLabel->setPixmap(data.image);
     d->windowToPreview = data.windowToPreview;
-    d->preview->setWindowId( d->windowToPreview );
+    d->preview->setWindowId(d->windowToPreview);
 
     if (isVisible()) {
         resize(sizeHint());
@@ -163,7 +163,7 @@ void ToolTip::paintEvent(QPaintEvent *e)
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
     painter.setClipRect(e->rect());
-    painter.setCompositionMode(QPainter::CompositionMode_Source );
+    painter.setCompositionMode(QPainter::CompositionMode_Source);
     painter.fillRect(rect(), Qt::transparent);
 
     d->background->paintPanel(&painter);
@@ -187,12 +187,13 @@ void ToolTip::updateTheme()
 
     // Make the tooltip use Plasma's colorscheme
     QPalette plasmaPalette = QPalette();
-    plasmaPalette.setColor(QPalette::Window, Plasma::Theme::defaultTheme()->color(Plasma::Theme::BackgroundColor));
-    plasmaPalette.setColor(QPalette::WindowText, Plasma::Theme::defaultTheme()->color(Plasma::Theme::TextColor));
+    plasmaPalette.setColor(QPalette::Window,
+                           Plasma::Theme::defaultTheme()->color(Plasma::Theme::BackgroundColor));
+    plasmaPalette.setColor(QPalette::WindowText,
+                           Plasma::Theme::defaultTheme()->color(Plasma::Theme::TextColor));
     setAutoFillBackground(true);
     setPalette(plasmaPalette);
 }
-
 
 } // namespace Plasma
 

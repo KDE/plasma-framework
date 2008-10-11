@@ -100,7 +100,8 @@ ThemePackage::ThemePackage(QObject *parent)
     addFileDefinition("opaque/widgets/tooltip", "opaque/widgets/tooltip.svg",
                       i18n("Opaque background image for tooltips"));
 
-    addDirectoryDefinition("locolor/dialogs", "locolor/dialogs/", i18n("Low color images for dialogs"));
+    addDirectoryDefinition("locolor/dialogs", "locolor/dialogs/",
+                           i18n("Low color images for dialogs"));
     addFileDefinition("locolor/dialogs/background", "locolor/dialogs/background.svg",
                       i18n("Low color generic dialog background"));
     addFileDefinition("locolor/dialogs/shutdowndialog", "locolor/dialogs/shutdowndialog.svg",

@@ -60,14 +60,14 @@ public:
     QString globalName() const;
     QString instanceName();
     void scheduleConstraintsUpdate(Plasma::Constraints c);
-    KConfigGroup* mainConfigGroup();
-    QString visibleFailureText(const QString& reason);
+    KConfigGroup *mainConfigGroup();
+    QString visibleFailureText(const QString &reason);
     void checkImmutability();
     void themeChanged();
     void resetConfigurationObject();
     void appletAnimationComplete(QGraphicsItem *item, Plasma::Animator::Animation anim);
     void selectItemToDestroy();
-    void updateRect(const QRectF& rect);
+    void updateRect(const QRectF &rect);
     void setFocus();
     void cleanUpAndDelete();
 

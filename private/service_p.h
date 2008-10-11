@@ -79,7 +79,7 @@ public:
         delete tempFile;
     }
 
-    void jobFinished(KJob* job)
+    void jobFinished(KJob *job)
     {
         emit q->finished(static_cast<ServiceJob*>(job));
     }

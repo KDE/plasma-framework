@@ -33,7 +33,7 @@ class ToolBox;
 class ContainmentPrivate
 {
 public:
-    ContainmentPrivate(Containment* c)
+    ContainmentPrivate(Containment *c)
         : q(c),
           formFactor(Planar),
           location(Floating),
@@ -54,7 +54,7 @@ public:
         applets.clear();
     }
 
-    ToolBox* createToolBox();
+    ToolBox *createToolBox();
     void positionToolBox();
     void triggerShowAddWidgets();
 
@@ -83,11 +83,11 @@ public:
      */
     void toggleDesktopImmutability();
 
-    Applet* addApplet(const QString& name, const QVariantList& args = QVariantList(),
+    Applet *addApplet(const QString &name, const QVariantList &args = QVariantList(),
                       const QRectF &geometry = QRectF(-1, -1, -1, -1), uint id = 0,
                       bool delayedInit = false);
 
-    KActionCollection& actions();
+    KActionCollection &actions();
 
     /**
      * give keyboard focus to applet within this containment
@@ -97,7 +97,7 @@ public:
     /**
      * returns the Context for this Containment
      */
-    Context* context();
+    Context *context();
 
     Containment *q;
     FormFactor formFactor;

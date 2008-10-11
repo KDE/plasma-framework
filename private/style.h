@@ -1,6 +1,6 @@
 /*
  *   Copyright © 2008 Fredrik Höglund <fredrik@kde.org>
- *   Copyright © 2008 Marco Martin <notmart@gmail.com> 
+ *   Copyright © 2008 Marco Martin <notmart@gmail.com>
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU Library General Public License as
@@ -17,7 +17,6 @@
  *   Free Software Foundation, Inc.,
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-
 
 #ifndef PLASMA_STYLE_H
 #define PLASMA_STYLE_H

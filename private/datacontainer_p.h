@@ -35,7 +35,7 @@ public:
         : dirty(false), cached(false)
     {}
 
-    SignalRelay* signalRelay(const DataContainer* dc, QObject *visualization,
+    SignalRelay *signalRelay(const DataContainer *dc, QObject *visualization,
                              uint pollingInterval, Plasma::IntervalAlignment align,
                              bool immediateUpdate);
 
@@ -54,7 +54,7 @@ class SignalRelay : public QObject
     Q_OBJECT
 
 public:
-    SignalRelay(DataContainer* parent, DataContainerPrivate *data,
+    SignalRelay(DataContainer *parent, DataContainerPrivate *data,
                 uint ival, Plasma::IntervalAlignment align, bool immediateUpdate);
 
     int receiverCount() const;
@@ -72,7 +72,7 @@ public:
     bool m_queued;
 
 signals:
-    void dataUpdated(const QString&, const Plasma::DataEngine::Data&);
+    void dataUpdated(const QString &, const Plasma::DataEngine::Data &);
 
 protected:
     void timerEvent(QTimerEvent *event);

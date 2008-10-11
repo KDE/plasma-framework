@@ -40,8 +40,18 @@ class AppletHandle : public QObject, public QGraphicsItem
 {
     Q_OBJECT
     public:
-        enum FadeType { FadeIn, FadeOut };
-        enum ButtonType { NoButton, MoveButton, RotateButton, ConfigureButton, RemoveButton, ResizeButton };
+        enum FadeType {
+            FadeIn,
+            FadeOut
+        };
+        enum ButtonType {
+            NoButton,
+            MoveButton,
+            RotateButton,
+            ConfigureButton,
+            RemoveButton,
+            ResizeButton
+        };
 
         AppletHandle(Containment *parent, Applet *applet, const QPointF &hoverPos);
         virtual ~AppletHandle();

@@ -32,7 +32,7 @@ class ExtenderApplet : public Plasma::Applet
         void init();
 
     public Q_SLOTS:
-        void itemDetached(Plasma::ExtenderItem*);
+        void itemDetached(Plasma::ExtenderItem *);
         void adjustSize();
 };
 

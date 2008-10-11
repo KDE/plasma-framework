@@ -59,10 +59,10 @@ void ExtenderApplet::adjustSize()
 
     setPreferredSize(QSizeF(left + right + layout()->preferredWidth(),
                             top + bottom + layout()->preferredHeight()));
-    setMinimumSize(  QSizeF(left + right + layout()->minimumWidth(),
-                            top + bottom + layout()->minimumHeight()));
-    setMaximumSize(  QSizeF(left + right + layout()->maximumWidth(),
-                            top + bottom + layout()->maximumHeight()));
+    setMinimumSize(QSizeF(left + right + layout()->minimumWidth(),
+                          top + bottom + layout()->minimumHeight()));
+    setMaximumSize(QSizeF(left + right + layout()->maximumWidth(),
+                          top + bottom + layout()->maximumHeight()));
 
     updateGeometry();
     //This wasn't necesarry before... but it is now. weirdness.
@@ -70,7 +70,7 @@ void ExtenderApplet::adjustSize()
     layout()->invalidate();
 }
 
-void ExtenderApplet::itemDetached(Plasma::ExtenderItem*)
+void ExtenderApplet::itemDetached(Plasma::ExtenderItem *)
 {
     kDebug() << "item detached: " << extender()->attachedItems().count();
     if (!extender()->attachedItems().count()) {
@@ -79,7 +79,6 @@ void ExtenderApplet::itemDetached(Plasma::ExtenderItem*)
         kDebug() << "delete the extender applet...";
     }
 }
-
 
 #include "extenderapplet_p.moc"
 

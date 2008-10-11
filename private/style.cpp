@@ -1,6 +1,6 @@
 /*
  *   Copyright © 2008 Fredrik Höglund <fredrik@kde.org>
- *   Copyright © 2008 Marco Martin <notmart@gmail.com> 
+ *   Copyright © 2008 Marco Martin <notmart@gmail.com>
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU Library General Public License as
@@ -29,7 +29,8 @@
 
 namespace Plasma {
 
-class StylePrivate {
+class StylePrivate
+{
 public:
     StylePrivate()
         : scrollbar(0)
@@ -39,7 +40,7 @@ public:
     ~StylePrivate()
     {
     }
-    
+
     Plasma::PanelSvg *scrollbar;
 };
 
@@ -70,7 +71,7 @@ void Style::drawComplexControl(ComplexControl control,
     painter->save();
     painter->setRenderHint(QPainter::Antialiasing);
 
-    const bool sunken =option->state & State_Sunken;
+    const bool sunken = option->state & State_Sunken;
     const QStyleOptionSlider *scrollOption = qstyleoption_cast<const QStyleOptionSlider *>(option);
     QString prefix;
 
@@ -91,7 +92,8 @@ void Style::drawComplexControl(ComplexControl control,
     subLine.moveCenter(subControlRect(control, option, SC_ScrollBarSubLine, widget).center());
     addLine.moveCenter(subControlRect(control, option, SC_ScrollBarAddLine, widget).center());
 
-    const QRect slider = subControlRect(control, option, SC_ScrollBarSlider, widget).adjusted(1, 0, -1, 0);
+    const QRect slider =
+        subControlRect(control, option, SC_ScrollBarSlider, widget).adjusted(1, 0, -1, 0);
 
     d->scrollbar->setElementPrefix("background");
     d->scrollbar->resizePanel(option->rect.size());

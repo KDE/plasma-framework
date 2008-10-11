@@ -17,7 +17,6 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-
 #ifndef PLASMA_SHAREDTIMER_P_H
 #define PLASMA_SHAREDTIMER_P_H
 
@@ -38,7 +37,7 @@ public:
     void unregisterTimer(const Timer *t, int msec);
 
 protected:
-    void timerEvent(QTimerEvent* event);
+    void timerEvent(QTimerEvent *event);
 
 private:
     friend class TimerDriveSingleton;

@@ -44,7 +44,6 @@
 
 #include "private/style.h"
 
-
 namespace Plasma
 {
 
@@ -98,8 +97,6 @@ void NativeTabBarPrivate::storeLastIndex()
     lastIndex[1] = q->currentIndex();
 }
 
-
-
 NativeTabBar::NativeTabBar(QWidget *parent)
         : QTabBar(parent),
           d(new NativeTabBarPrivate(this))
@@ -117,7 +114,7 @@ NativeTabBar::NativeTabBar(QWidget *parent)
     d->lastIndex[0] = -1;
     connect(this, SIGNAL(currentChanged(int)), this, SLOT(startAnimation()));
 
-    setSizePolicy( QSizePolicy::Preferred, QSizePolicy::Preferred );
+    setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
 }
 
 NativeTabBar::~NativeTabBar()
@@ -209,7 +206,7 @@ QSize NativeTabBar::sizeHint() const
 
         height = tabRect(0).height();
     }
-    return QSize(width+d->left+d->right, height+d->top+d->bottom);
+    return QSize(width + d->left + d->right, height + d->top + d->bottom);
 }
 
 void NativeTabBar::paintEvent(QPaintEvent *event)
@@ -237,7 +234,6 @@ void NativeTabBar::paintEvent(QPaintEvent *event)
     //resizing here because in resizeevent the first time is invalid (still no tabs)
     d->buttonSvg->resizePanel(movingRect.size());
     d->buttonSvg->paintPanel(&painter, movingRect.topLeft());
-
 
     QFontMetrics metrics(painter.font());
 
@@ -300,17 +296,18 @@ void NativeTabBar::paintEvent(QPaintEvent *event)
 
         QStyleOption so;
         so.initFrom(this);
-        so.palette.setColor(QPalette::ButtonText, Plasma::Theme::defaultTheme()->color(Theme::TextColor));
+        so.palette.setColor(QPalette::ButtonText,
+                            Plasma::Theme::defaultTheme()->color(Theme::TextColor));
 
-        so.rect = scrollButtonsRect.adjusted(0, 0, -scrollButtonsRect.width()/2, 0);
+        so.rect = scrollButtonsRect.adjusted(0, 0, -scrollButtonsRect.width() / 2, 0);
         style()->drawPrimitive(QStyle::PE_IndicatorArrowLeft, &so, &painter, this);
 
-        so.rect = scrollButtonsRect.adjusted(scrollButtonsRect.width()/2, 0, 0, 0);
+        so.rect = scrollButtonsRect.adjusted(scrollButtonsRect.width() / 2, 0, 0, 0);
         style()->drawPrimitive(QStyle::PE_IndicatorArrowRight, &so, &painter, this);
     }
 }
 
-void NativeTabBar::resizeEvent(QResizeEvent* event)
+void NativeTabBar::resizeEvent(QResizeEvent *event)
 {
     QTabBar::resizeEvent(event);
     d->currentAnimRect = tabRect(currentIndex());
@@ -344,7 +341,8 @@ void NativeTabBar::tabLayoutChange()
 void NativeTabBar::startAnimation()
 {
     d->storeLastIndex();
-    Plasma::Animator::self()->customAnimation(10, 150, Plasma::Animator::EaseInOutCurve, this, "onValueChanged");
+    Plasma::Animator::self()->customAnimation(
+        10, 150, Plasma::Animator::EaseInOutCurve, this, "onValueChanged");
 }
 
 void NativeTabBar::onValueChanged(qreal value)
@@ -373,10 +371,10 @@ void NativeTabBar::animationFinished()
 bool NativeTabBar::isVertical() const
 {
     Shape s = shape();
-    if( s == RoundedWest ||
-        s == RoundedEast ||
-        s == TriangularWest ||
-        s == TriangularEast ) {
+    if(s == RoundedWest ||
+       s == RoundedEast ||
+       s == TriangularWest ||
+       s == TriangularEast) {
         return true;
     }
     return false;

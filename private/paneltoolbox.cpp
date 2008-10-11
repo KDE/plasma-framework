@@ -63,7 +63,7 @@ class EmptyGraphicsItem : public QGraphicsItem
             setPos(rect.topLeft());
         }
 
-        void paint(QPainter * p, const QStyleOptionGraphicsItem*, QWidget*)
+        void paint(QPainter *p, const QStyleOptionGraphicsItem *, QWidget *)
         {
             Q_UNUSED(p)
             //p->setPen(Qt::red);
@@ -100,7 +100,8 @@ PanelToolBox::PanelToolBox(QGraphicsItem *parent)
     : ToolBox(parent),
       d(new PanelToolBoxPrivate)
 {
-    connect(Plasma::Animator::self(), SIGNAL(movementFinished(QGraphicsItem*)), this, SLOT(toolMoved(QGraphicsItem*)));
+    connect(Plasma::Animator::self(), SIGNAL(movementFinished(QGraphicsItem*)),
+            this, SLOT(toolMoved(QGraphicsItem*)));
     connect(this, SIGNAL(toggled()), this, SLOT(toggle()));
 
     setZValue(10000000);
@@ -119,12 +120,12 @@ PanelToolBox::~PanelToolBox()
 QRectF PanelToolBox::boundingRect() const
 {
     if (corner() == ToolBox::Bottom) {
-        return QRectF(0, 0, size()*2, -size());
+        return QRectF(0, 0, size() * 2, -size());
     } else if (corner() == ToolBox::Left) {
-        return QRectF(0, 0, size(), size()*2);
+        return QRectF(0, 0, size(), size() * 2);
     //Only Left,Right and Bottom supported, default to Right
     } else {
-        return QRectF(0, 0, -size(), size()*2);
+        return QRectF(0, 0, -size(), size() * 2);
     }
 }
 
@@ -173,12 +174,14 @@ void PanelToolBox::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
     QRect iconRect;
 
     if (corner() == ToolBox::Bottom) {
-        iconRect = QRect(QPoint(gradientCenter.x() - iconSize().width()/2, (int)boundingRect().top() - iconSize().height() - 2), iconSize());
+        iconRect = QRect(QPoint(gradientCenter.x() - iconSize().width() / 2,
+                                (int)boundingRect().top() - iconSize().height() - 2), iconSize());
     } else if (corner() == ToolBox::Left) {
-        iconRect = QRect(QPoint(2, gradientCenter.y() - iconSize().height()/2), iconSize());
+        iconRect = QRect(QPoint(2, gradientCenter.y() - iconSize().height() / 2), iconSize());
     //Only Left,Right and Bottom supported, default to Right
     } else {
-        iconRect = QRect(QPoint((int)boundingRect().left() - iconSize().width() + 1, gradientCenter.y() - iconSize().height()/2), iconSize());
+        iconRect = QRect(QPoint((int)boundingRect().left() - iconSize().width() + 1,
+                                gradientCenter.y() - iconSize().height() / 2), iconSize());
     }
 
     if (qFuzzyCompare(qreal(1.0), progress)) {
@@ -188,7 +191,9 @@ void PanelToolBox::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
     } else {
         QPixmap disabled = d->icon.pixmap(iconSize(), QIcon::Disabled, QIcon::Off);
         QPixmap enabled = d->icon.pixmap(iconSize());
-        QPixmap result = PaintUtils::transition(d->icon.pixmap(iconSize(), QIcon::Disabled, QIcon::Off), d->icon.pixmap(iconSize()), progress);
+        QPixmap result = PaintUtils::transition(
+            d->icon.pixmap(iconSize(), QIcon::Disabled, QIcon::Off),
+            d->icon.pixmap(iconSize()), progress);
         painter->drawPixmap(iconRect, result);
     }
 }
@@ -199,12 +204,21 @@ QPainterPath PanelToolBox::shape() const
     int toolSize = size();// + (int)d->animFrame;
 
     if (corner() == ToolBox::Bottom) {
-        path.arcTo(QRectF(boundingRect().center().x() - toolSize, boundingRect().top() - toolSize, toolSize*2, toolSize*2), 0, 180);
+        path.arcTo(QRectF(boundingRect().center().x() - toolSize,
+                          boundingRect().top() - toolSize,
+                          toolSize * 2,
+                          toolSize * 2), 0, 180);
     } else if (corner() == ToolBox::Left) {
-        path.arcTo(QRectF(boundingRect().left() - toolSize, boundingRect().center().y() - toolSize, toolSize*2, toolSize*2), 90, -180);
+        path.arcTo(QRectF(boundingRect().left() - toolSize,
+                          boundingRect().center().y() - toolSize,
+                          toolSize * 2,
+                          toolSize * 2), 90, -180);
     //Only Left,Right and Bottom supported, default to Right
     } else {
-        path.arcTo(QRectF(boundingRect().left() - toolSize, boundingRect().center().y() - toolSize, toolSize*2, toolSize*2), 90, 180);
+        path.arcTo(QRectF(boundingRect().left() - toolSize,
+                          boundingRect().center().y() - toolSize,
+                          toolSize * 2,
+                          toolSize * 2), 90, 180);
     }
 
     return path;
@@ -228,7 +242,7 @@ void PanelToolBox::showToolBox()
     }
 
     int maxwidth = 0;
-    foreach (QGraphicsItem* tool, QGraphicsItem::children()) {
+    foreach (QGraphicsItem *tool, QGraphicsItem::children()) {
         if (!tool->isEnabled()) {
             continue;
         }
@@ -237,10 +251,10 @@ void PanelToolBox::showToolBox()
 
     // put tools 5px from icon edge
     const int iconWidth = 32;
-    int x = size()*2 - maxwidth - iconWidth - 5;
+    int x = size() * 2 - maxwidth - iconWidth - 5;
     int y = 5; // pos().y();
-    Plasma::Animator* animdriver = Plasma::Animator::self();
-    foreach (QGraphicsItem* tool, QGraphicsItem::children()) {
+    Plasma::Animator *animdriver = Plasma::Animator::self();
+    foreach (QGraphicsItem *tool, QGraphicsItem::children()) {
         if (tool == d->toolBacker) {
             continue;
         }
@@ -248,7 +262,8 @@ void PanelToolBox::showToolBox()
         if (!tool->isEnabled()) {
             if (tool->isVisible()) {
                 const int height = static_cast<int>(tool->boundingRect().height());
-                animdriver->moveItem(tool, Plasma::Animator::SlideOutMovement, QPoint(size() * 2, -height));
+                animdriver->moveItem(tool, Plasma::Animator::SlideOutMovement,
+                                     QPoint(size() * 2, -height));
             }
             continue;
         }
@@ -273,13 +288,15 @@ void PanelToolBox::showToolBox()
     setShowing(true);
     // TODO: 10 and 200 shouldn't be hardcoded here. There needs to be a way to
     // match whatever the time is that moveItem() takes. Same in hoverLeaveEvent().
-    d->animId = animdriver->customAnimation(10, 240, Plasma::Animator::EaseInCurve, this, "animate");
+    d->animId = animdriver->customAnimation(
+        10, 240, Plasma::Animator::EaseInCurve, this, "animate");
     d->stopwatch.restart();
 }
 
 void PanelToolBox::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 {
-    //kDebug() << event->pos() << event->scenePos() << d->toolBacker->rect().contains(event->scenePos().toPoint());
+    //kDebug() << event->pos() << event->scenePos()
+    //         << d->toolBacker->rect().contains(event->scenePos().toPoint());
     if ((d->toolBacker && d->toolBacker->rect().contains(event->scenePos().toPoint())) ||
         d->stopwatch.elapsed() < 100 || d->toggled) {
         QGraphicsItem::hoverLeaveEvent(event);
@@ -299,8 +316,8 @@ void PanelToolBox::hideToolBox()
     d->toggled = false;
     int x = size() * 2;
     int y = 0;
-    Plasma::Animator* animdriver = Plasma::Animator::self();
-    foreach (QGraphicsItem* tool, QGraphicsItem::children()) {
+    Plasma::Animator *animdriver = Plasma::Animator::self();
+    foreach (QGraphicsItem *tool, QGraphicsItem::children()) {
         if (tool == d->toolBacker) {
             continue;
         }
@@ -314,7 +331,8 @@ void PanelToolBox::hideToolBox()
     }
 
     setShowing(false);
-    d->animId = animdriver->customAnimation(10, 240, Plasma::Animator::EaseOutCurve, this, "animate");
+    d->animId = animdriver->customAnimation(
+        10, 240, Plasma::Animator::EaseOutCurve, this, "animate");
 
     if (d->toolBacker) {
         d->toolBacker->hide();

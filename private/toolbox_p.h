@@ -43,15 +43,16 @@ public:
     /**
     * These flags represents what borders should be drawn
     */
-    enum Corner { Top = 0,
-                  TopRight,
-                  TopLeft,
-                  Left,
-                  Right,
-                  Bottom,
-                  BottomRight,
-                  BottomLeft
-                };
+    enum Corner {
+        Top = 0,
+        TopRight,
+        TopLeft,
+        Left,
+        Right,
+        Bottom,
+        BottomRight,
+        BottomLeft
+    };
 
     explicit ToolBox(QGraphicsItem *parent = 0);
     ~ToolBox();

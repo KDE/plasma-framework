@@ -31,12 +31,12 @@ namespace Plasma
 class DataEnginePrivate
 {
     public:
-        DataEnginePrivate(DataEngine* e, KService::Ptr service);
+        DataEnginePrivate(DataEngine *e, KService::Ptr service);
         ~DataEnginePrivate();
-        DataContainer* source(const QString& sourceName, bool createWhenMissing = true);
-        void connectSource(DataContainer* s, QObject* visualization, uint pollingInterval,
+        DataContainer *source(const QString &sourceName, bool createWhenMissing = true);
+        void connectSource(DataContainer *s, QObject *visualization, uint pollingInterval,
                            Plasma::IntervalAlignment align, bool immediateCall = true);
-        DataContainer* requestSource(const QString& sourceName, bool* newSource = 0);
+        DataContainer *requestSource(const QString &sourceName, bool *newSource = 0);
         void trimQueue();
         void queueUpdate();
         void internalUpdateSource(DataContainer*);
@@ -60,19 +60,18 @@ class DataEnginePrivate
          **/
         bool isUsed() const;
 
-
-        DataEngine* q;
+        DataEngine *q;
         int refCount;
         int updateTimerId;
         int minPollingInterval;
         QTime updateTimestamp;
         DataEngine::SourceDict sources;
         QQueue<DataContainer*> sourceQueue;
-        QTimer* updateTimer;
+        QTimer *updateTimer;
         QString icon;
         uint limit;
         bool valid;
-        DataEngineScript* script;
+        DataEngineScript *script;
         QString engineName;
         Package *package;
 };
