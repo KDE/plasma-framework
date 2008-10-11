@@ -103,7 +103,7 @@ public:
      *
      * You should normall use self() instead.
      */
-    explicit ToolTipManager(QObject* parent = 0);
+    explicit ToolTipManager(QObject *parent = 0);
 
     /**
      * Default destructor.
@@ -211,7 +211,7 @@ private:
     friend class ToolTipManagerSingleton;
     bool eventFilter(QObject *watched, QEvent *event);
 
-    ToolTipManagerPrivate* const d;
+    ToolTipManagerPrivate *const d;
     Q_PRIVATE_SLOT(d, void showToolTip())
     Q_PRIVATE_SLOT(d, void resetShownState())
     Q_PRIVATE_SLOT(d, void onWidgetDestroyed(QObject*))

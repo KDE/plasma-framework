@@ -58,17 +58,19 @@ class PLASMA_EXPORT AbstractRunner : public QObject
 
     public:
         /** Specifies a nominal speed for the runner */
-        enum Speed { SlowSpeed,
-                     NormalSpeed
-                   };
+        enum Speed {
+            SlowSpeed,
+            NormalSpeed
+        };
 
         /** Specifies a priority for the runner */
-        enum Priority { LowestPriority = 0,
-                        LowPriority,
-                        NormalPriority,
-                        HighPriority,
-                        HighestPriority
-                      };
+        enum Priority {
+            LowestPriority = 0,
+            LowPriority,
+            NormalPriority,
+            HighPriority,
+            HighestPriority
+        };
 
         /** An ordered list of runners */
         typedef QList<AbstractRunner*> List;
@@ -141,13 +143,13 @@ class PLASMA_EXPORT AbstractRunner : public QObject
 
         /**
          * Returns the OR'ed value of all the Information types (as defined in RunnerContext::Type)
-         * this runner is not interested in. 
+         * this runner is not interested in.
          * @return OR'ed value of black listed types
          */
         RunnerContext::Types ignoredTypes() const;
 
         /**
-         * Sets the types this runner will ignore 
+         * Sets the types this runner will ignore
          * @param types OR'ed listed of ignored types
          */
         void setIgnoredTypes(RunnerContext::Types types);
@@ -175,7 +177,7 @@ class PLASMA_EXPORT AbstractRunner : public QObject
          *
          * @return the Package object, or 0 if none
          **/
-        const Package* package() const;
+        const Package *package() const;
 
         /**
          * Signal runner to reload its configuration.
@@ -191,8 +193,8 @@ class PLASMA_EXPORT AbstractRunner : public QObject
          * this constructor can not be called directly. Rather a subclass must
          * be created
          */
-        explicit AbstractRunner(QObject* parent = 0, const QString& serviceId = QString());
-        AbstractRunner(QObject* parent, const QVariantList& args);
+        explicit AbstractRunner(QObject *parent = 0, const QString &serviceId = QString());
+        AbstractRunner(QObject *parent, const QVariantList &args);
 
         /**
          * Provides access to the runner's configuration object.
@@ -232,13 +234,13 @@ class PLASMA_EXPORT AbstractRunner : public QObject
         KService::List serviceQuery(const QString &serviceType,
                                     const QString &constraint = QString()) const;
 
-        QMutex* bigLock() const;
+        QMutex *bigLock() const;
 
     protected Q_SLOTS:
         void init();
 
     private:
-        AbstractRunnerPrivate* const d;
+        AbstractRunnerPrivate *const d;
 };
 
 } // Plasma namespace
@@ -247,7 +249,6 @@ class PLASMA_EXPORT AbstractRunner : public QObject
 K_PLUGIN_FACTORY(factory, registerPlugin<classname>();) \
 K_EXPORT_PLUGIN(factory("plasma_runner_" #libname)) \
 K_EXPORT_PLUGIN_VERSION(PLASMA_VERSION)
-
 
 #define K_EXPORT_RUNNER_CONFIG( name, classname )     \
 K_PLUGIN_FACTORY(ConfigFactory, registerPlugin<classname>();) \

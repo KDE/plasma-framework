@@ -113,7 +113,7 @@ public:
      * @arg key the configuration key to find
      * @return the associated KConfigSkeletonItem, or 0 if none
      */
-    KConfigSkeletonItem* findItem(const QString &group, const QString &key);
+    KConfigSkeletonItem *findItem(const QString &group, const QString &key);
 
     /**
      * Check to see if a group exists

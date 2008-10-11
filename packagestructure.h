@@ -90,7 +90,7 @@ public:
     /**
      * Assignment operator
      **/
-    PackageStructure& operator=(const PackageStructure& rhs);
+    PackageStructure &operator=(const PackageStructure &rhs);
 
     /**
      * Loads a package format by name.
@@ -135,7 +135,7 @@ public:
      * @param path the path within the package for this directory
      * @param name the user visible (translated) name for the directory
      **/
-    void addDirectoryDefinition(const char* key, const QString& path, const QString& name);
+    void addDirectoryDefinition(const char *key, const QString &path, const QString &name);
 
     /**
      * Adds a file to the structure of the package. It is added as
@@ -145,17 +145,17 @@ public:
      * @param path the path within the package for this file
      * @param name the user visible (translated) name for the file
      **/
-    void addFileDefinition(const char* key, const QString& path, const QString& name);
+    void addFileDefinition(const char *key, const QString &path, const QString &name);
 
     /**
      * @return path relative to the package root for the given entry
      **/
-    QString path(const char* key) const;
+    QString path(const char *key) const;
 
     /**
      * @return user visible name for the given entry
      **/
-    QString name(const char* key) const;
+    QString name(const char *key) const;
 
     /**
      * Sets whether or not a given part of the structure is required or not.
@@ -165,12 +165,12 @@ public:
      * @param path the path of the entry within the package
      * @param required true if this entry is required, false if not
      */
-    void setRequired(const char* key, bool required);
+    void setRequired(const char *key, bool required);
 
     /**
      * @return true if the item at path exists and is required
      **/
-    bool isRequired(const char* key) const;
+    bool isRequired(const char *key) const;
 
     /**
      * Defines the default mimetypes for any definitions that do not have
@@ -189,12 +189,12 @@ public:
      * @param path the path of the entry within the package
      * @param mimetypes a list of mimetypes
      **/
-    void setMimetypes(const char* key, QStringList mimetypes);
+    void setMimetypes(const char *key, QStringList mimetypes);
 
     /**
      * @return the mimetypes associated with the path, if any
      **/
-    QStringList mimetypes(const char* key) const;
+    QStringList mimetypes(const char *key) const;
 
     /**
      * Sets the path to the package. Useful for package formats
@@ -235,7 +235,7 @@ public:
      * @arg packageRoot path to the directory where the package should be installed to
      * @return true on successful removal of the package, false otherwise
      */
-    virtual bool uninstallPackage(const QString& packageName, const QString& packageRoot);
+    virtual bool uninstallPackage(const QString &packageName, const QString &packageRoot);
 
     /**
      * @return the prefix inserted between the base path and content entries

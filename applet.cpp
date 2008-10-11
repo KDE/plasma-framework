@@ -134,7 +134,7 @@ Applet::~Applet()
         //which isn't very nice.
         foreach (ExtenderItem *item, d->extender->attachedItems()) {
             if (!item->isDetached() || item->autoExpireDelay()) {
-                //destroy temporary extender items, or items that aren't detached, so their 
+                //destroy temporary extender items, or items that aren't detached, so their
                 //configuration won't linger after a plasma restart.
                 item->destroy();
             }
@@ -991,7 +991,7 @@ void Applet::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
 }
 
 void Applet::paintInterface(QPainter *painter, const QStyleOptionGraphicsItem *option,
-                            const QRect & contentsRect)
+                            const QRect &contentsRect)
 {
     if (d->script) {
         d->script->paintInterface(painter, option, contentsRect);
@@ -1073,7 +1073,7 @@ void Applet::removeAssociatedWidget(QWidget *widget)
 
 Location Applet::location() const
 {
-    Containment* c = containment();
+    Containment *c = containment();
     return c ? c->d->location : Plasma::Desktop;
 }
 

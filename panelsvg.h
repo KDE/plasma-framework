@@ -80,14 +80,14 @@ class PLASMA_EXPORT PanelSvg : public Svg
         /**
          * These flags represents what borders should be drawn
          */
-        enum EnabledBorder { NoBorder = 0,
-                             TopBorder = 1,
-                             BottomBorder = 2,
-                             LeftBorder = 4,
-                             RightBorder = 8,
-                             AllBorders = TopBorder | BottomBorder |
-                                              LeftBorder | RightBorder
-                           };
+        enum EnabledBorder {
+            NoBorder = 0,
+            TopBorder = 1,
+            BottomBorder = 2,
+            LeftBorder = 4,
+            RightBorder = 8,
+            AllBorders = TopBorder | BottomBorder | LeftBorder | RightBorder
+        };
         Q_DECLARE_FLAGS(EnabledBorders, EnabledBorder)
 
         /**
@@ -99,14 +99,14 @@ class PLASMA_EXPORT PanelSvg : public Svg
          *
          * @related Plasma::Theme
          */
-        explicit PanelSvg(QObject* parent = 0);
+        explicit PanelSvg(QObject *parent = 0);
         ~PanelSvg();
 
         /**
          * Loads a new Svg
          * @arg imagePath the new file
          */
-        void setImagePath(const QString& path);
+        void setImagePath(const QString &path);
 
         /**
          * Sets what borders should be painted
@@ -124,7 +124,7 @@ class PLASMA_EXPORT PanelSvg : public Svg
          * Resize the panel maintaining the same border size
          * @arg size the new size of the panel
          */
-        void resizePanel(const QSizeF& size);
+        void resizePanel(const QSizeF &size);
 
         /**
          * @returns the size of the panel
@@ -184,7 +184,7 @@ class PLASMA_EXPORT PanelSvg : public Svg
         bool hasElementPrefix(const QString & prefix) const;
 
         /**
-         * This is an overloaded method provided for convenience equivalent to 
+         * This is an overloaded method provided for convenience equivalent to
          * hasElementPrefix("north"), hasElementPrefix("south")
          * hasElementPrefix("west") and hasElementPrefix("east")
          * @return true if the svg has the necessary elements with the given prefix
@@ -209,19 +209,19 @@ class PLASMA_EXPORT PanelSvg : public Svg
         * Sets whether saving all the rendered prefixes in a cache or not
         * @arg cache if use the cache or not
         */
-       void setCacheAllRenderedPanels(bool cache);
+        void setCacheAllRenderedPanels(bool cache);
 
        /**
         * @return if all the different prefixes should be kept in a cache when rendered
         */
-       bool cacheAllRenderedPanels() const;
+        bool cacheAllRenderedPanels() const;
 
        /**
-        * Deletes the internal cache freeing memory: use this if you want to switch the rendered 
+        * Deletes the internal cache freeing memory: use this if you want to switch the rendered
         * element and you don't plan to switch back to the previous one for a long time and you
         * used setUseCache(true)
         */
-       void clearCache();
+        void clearCache();
 
        /**
          * Returns a pixmap of the SVG represented by this object.
@@ -238,8 +238,8 @@ class PLASMA_EXPORT PanelSvg : public Svg
          * @arg target the target rectangle on the paint device
          * @arg source the portion rectangle of the source image
          */
-        Q_INVOKABLE void paintPanel(QPainter* painter, const QRectF& target,
-                                     const QRectF& source = QRectF());
+        Q_INVOKABLE void paintPanel(QPainter *painter, const QRectF &target,
+                                    const QRectF &source = QRectF());
 
         /**
          * Paints the loaded SVG with the elements that represents the border
@@ -247,10 +247,10 @@ class PLASMA_EXPORT PanelSvg : public Svg
          * @arg painter the QPainter to use
          * @arg pos where to paint the svg
          */
-        Q_INVOKABLE void paintPanel(QPainter* painter, const QPointF& pos = QPointF(0, 0));
+        Q_INVOKABLE void paintPanel(QPainter *painter, const QPointF &pos = QPointF(0, 0));
 
     private:
-        PanelSvgPrivate * const d;
+        PanelSvgPrivate *const d;
 
         Q_PRIVATE_SLOT(d, void updateSizes())
         Q_PRIVATE_SLOT(d, void updateNeeded())

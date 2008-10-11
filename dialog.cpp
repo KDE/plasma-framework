@@ -128,7 +128,7 @@ void DialogPrivate::adjustView()
     }
 }
 
-Dialog::Dialog( QWidget * parent, Qt::WindowFlags f )
+Dialog::Dialog(QWidget *parent, Qt::WindowFlags f)
     : QWidget(parent, f),
       d(new DialogPrivate(this))
 {
@@ -163,12 +163,12 @@ void Dialog::paintEvent(QPaintEvent *e)
     //we set the resize handlers
     d->resizeAreas.clear();
     if (d->resizeCorners & Dialog::NorthEast) {
-        d->resizeAreas[Dialog::NorthEast] = QRect(rect().right() - resizeAreaMargin, 0, 
+        d->resizeAreas[Dialog::NorthEast] = QRect(rect().right() - resizeAreaMargin, 0,
                                              resizeAreaMargin, resizeAreaMargin);
     }
 
     if (d->resizeCorners & Dialog::NorthWest) {
-        d->resizeAreas[Dialog::NorthWest] = QRect(0,0, resizeAreaMargin, resizeAreaMargin);
+        d->resizeAreas[Dialog::NorthWest] = QRect(0, 0, resizeAreaMargin, resizeAreaMargin);
     }
 
     if (d->resizeCorners & Dialog::SouthEast) {
@@ -382,7 +382,6 @@ bool Dialog::inControlArea(const QPoint &point)
     }
     return false;
 }
-
 
 }
 #include "dialog.moc"

@@ -43,7 +43,7 @@ class PLASMA_EXPORT DataEngineManager: public QObject
         /**
          * Singleton pattern accessor.
          */
-        static DataEngineManager* self();
+        static DataEngineManager *self();
 
         /**
          * Returns a data engine object if one is loaded and available.
@@ -52,7 +52,7 @@ class PLASMA_EXPORT DataEngineManager: public QObject
          *
          * @param name the name of the engine
          */
-        Plasma::DataEngine* engine(const QString& name) const;
+        Plasma::DataEngine *engine(const QString &name) const;
 
         /**
          * Loads a data engine and increases the reference count on it.
@@ -63,13 +63,13 @@ class PLASMA_EXPORT DataEngineManager: public QObject
          * @param name the name of the engine
          * @return the data engine that was loaded, or the NullEngine on failure.
          */
-        Plasma::DataEngine* loadEngine(const QString& name);
+        Plasma::DataEngine *loadEngine(const QString &name);
 
         /**
          * Decreases the reference count on the engine. If the count reaches
          * zero, then the engine is deleted to save resources.
          */
-        void unloadEngine(const QString& name);
+        void unloadEngine(const QString &name);
 
         /**
          * Returns a listing of all known engines by name
@@ -84,7 +84,7 @@ class PLASMA_EXPORT DataEngineManager: public QObject
         DataEngineManager();
         ~DataEngineManager();
 
-        DataEngineManagerPrivate* const d;
+        DataEngineManagerPrivate *const d;
 
         friend class DataEngineManagerSingleton;
 };

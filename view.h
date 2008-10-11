@@ -119,7 +119,7 @@ public:
     /**
      * @return the containment associated with this view, or 0 if none is
      */
-    Containment* containment() const;
+    Containment *containment() const;
 
     /**
      * Swap the containment for this view, which will also cause the view
@@ -128,8 +128,8 @@ public:
      * @param name the plugin name for the new containment.
      * @param args argument list to pass to the containment
      */
-    Containment* swapContainment(const QString& name,
-                                 const QVariantList& args = QVariantList());
+    Containment *swapContainment(const QString &name,
+                                 const QVariantList &args = QVariantList());
 
     /**
      * Set whether or not the view should adjust its size when the associated
@@ -198,5 +198,4 @@ private:
 } // namespace Plasma
 
 #endif
-
 

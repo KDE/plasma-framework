@@ -108,8 +108,8 @@ class PLASMA_EXPORT ExtenderItem : public QGraphicsWidget
         QString name() const;
 
         /**
-         * @param icon the icon name to display in the extender item's drag handle. Defaults to 
-         * the source applet's icon.
+         * @param icon the icon name to display in the extender item's
+         * drag handle. Defaults to the source applet's icon.
          */
         void setIcon(const QString &icon);
 

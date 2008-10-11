@@ -48,7 +48,7 @@ class PLASMA_EXPORT Package
          * @arg package the name of the package
          * @arg structure the package structure describing this package
          **/
-        Package(const QString& packageRoot, const QString& package,
+        Package(const QString &packageRoot, const QString &package,
                 PackageStructure::Ptr structure);
 
         /**
@@ -77,7 +77,7 @@ class PLASMA_EXPORT Package
          * @arg filename the name of the file
          * @return path to the file on disk. QString() if not found.
          **/
-        QString filePath(const char* fileType, const QString& filename) const;
+        QString filePath(const char *fileType, const QString &filename) const;
 
         /**
          * Get the path to a given file.
@@ -87,7 +87,7 @@ class PLASMA_EXPORT Package
          *               in the package structure and not a directory.
          * @return path to the file on disk. QString() if not found
          **/
-        QString filePath(const char* fileType) const;
+        QString filePath(const char *fileType) const;
 
         /**
          * Get the list of files of a given type.
@@ -96,7 +96,7 @@ class PLASMA_EXPORT Package
          *               package structure.
          * @return list of files by name, suitable for passing to filePath
          **/
-        QStringList entryList(const char* fileType) const;
+        QStringList entryList(const char *fileType) const;
 
         /**
           * @return the package metadata object.
@@ -145,7 +145,6 @@ class PLASMA_EXPORT Package
         static bool uninstallPackage(const QString &package,
                                      const QString &packageRoot,
                                      const QString &servicePrefix);
-
 
         /**
          * Registers a package described by the given desktop file

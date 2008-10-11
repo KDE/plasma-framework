@@ -96,8 +96,9 @@ GLApplet::~GLApplet()
 GLuint GLApplet::bindTexture(const QImage &image, GLenum target)
 {
     Q_ASSERT(d->pbuf);
-    if (!d->dummy->isValid())
+    if (!d->dummy->isValid()) {
         return 0;
+    }
     return d->dummy->bindTexture(image, target);
 }
 
@@ -120,15 +121,18 @@ static inline QPainterPath headerPath(const QRectF &r, int roundness,
     QPainterPath path;
     int xRnd = roundness;
     int yRnd = roundness;
-    if (r.width() > r.height())
+    if (r.width() > r.height()) {
         xRnd = int(roundness * r.height()/r.width());
-    else
+    } else {
         yRnd = int(roundness * r.width()/r.height());
+    }
 
-    if(xRnd >= 100)                          // fix ranges
+    if(xRnd >= 100) {                        // fix ranges
         xRnd = 99;
-    if(yRnd >= 100)
+    }
+    if(yRnd >= 100) {
         yRnd = 99;
+    }
     if(xRnd <= 0 || yRnd <= 0) {             // add normal rectangle
         path.addRect(r);
         return path;
@@ -143,23 +147,25 @@ static inline QPainterPath headerPath(const QRectF &r, int roundness,
     qreal y = rect.y();
     qreal w = rect.width();
     qreal h = rect.height();
-    qreal rxx = w*xRnd/200;
-    qreal ryy = h*yRnd/200;
+    qreal rxx = w * xRnd / 200;
+    qreal ryy = h * yRnd / 200;
     // were there overflows?
-    if (rxx < 0)
-        rxx = w/200*xRnd;
-    if (ryy < 0)
-        ryy = h/200*yRnd;
+    if (rxx < 0) {
+        rxx = w / 200 * xRnd;
+    }
+    if (ryy < 0) {
+        ryy = h / 200 * yRnd;
+    }
     qreal rxx2 = 2*rxx;
     qreal ryy2 = 2*ryy;
 
     path.arcMoveTo(x, y, rxx2, ryy2, 90);
-    path.arcTo(x,        y, rxx2, ryy2, 90, 90);
+    path.arcTo(x, y, rxx2, ryy2, 90, 90);
     QPointF pt = path.currentPosition();
     path.lineTo(x, pt.y()+headerHeight);
-    path.lineTo(x+w, pt.y()+headerHeight);
-    path.lineTo(x+w, pt.y());
-    path.arcTo(x+w-rxx2, y, rxx2, ryy2, 0, 90);
+    path.lineTo(x + w, pt.y() + headerHeight);
+    path.lineTo(x + w, pt.y());
+    path.arcTo(x + w - rxx2, y, rxx2, ryy2, 0, 90);
     path.closeSubpath();
 
     return path;

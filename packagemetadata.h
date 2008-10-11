@@ -47,7 +47,7 @@ public:
      *
      * @param path path to a metadata.desktop file
      **/
-    PackageMetadata(const QString& path);
+    PackageMetadata(const QString &path);
     ~PackageMetadata();
 
     bool isValid() const;
@@ -60,7 +60,7 @@ public:
      *
      * @arg filename path to the file to write to
      **/
-    void write(const QString& filename) const;
+    void write(const QString &filename) const;
 
     /**
      * Reads in metadata from a file, which should be a .desktop
@@ -157,7 +157,7 @@ public:
      * Set the type of the package. If not defined this
      * defaults to "Service" in the desktop file.
      */
-    void setType(const QString& type);
+    void setType(const QString &type);
 
     /**
      * Set the plugin name of the package.
@@ -168,12 +168,12 @@ public:
      * QString service = KStandardDirs::locateLocal("services", serviceName + ".desktop");
      * @endcode
      */
-    void setPluginName(const QString& name);
+    void setPluginName(const QString &name);
 
     /**
      * Set the implementation API this package uses.
      */
-    void setImplementationApi(const QString& api);
+    void setImplementationApi(const QString &api);
 
 private:
     PackageMetadataPrivate * const d;

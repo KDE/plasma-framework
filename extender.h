@@ -51,8 +51,7 @@ class Applet;
 class PLASMA_EXPORT Extender : public QGraphicsWidget
 {
     Q_OBJECT
-    Q_PROPERTY(QString emptyExtenderMessage READ emptyExtenderMessage
-                                            WRITE setEmptyExtenderMessage)
+    Q_PROPERTY(QString emptyExtenderMessage READ emptyExtenderMessage WRITE setEmptyExtenderMessage)
 
     public:
         /**
@@ -179,7 +178,7 @@ class PLASMA_EXPORT Extender : public QGraphicsWidget
         void geometryChanged();
 
     private:
-        ExtenderPrivate* const d;
+        ExtenderPrivate *const d;
 
         friend class ExtenderPrivate;
         friend class ExtenderItem;

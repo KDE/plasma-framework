@@ -43,7 +43,7 @@ class ContentStructure
         {
         }
 
-        ContentStructure(const ContentStructure& other)
+        ContentStructure(const ContentStructure &other)
         {
             path = other.path;
             name = other.name;
@@ -58,7 +58,6 @@ class ContentStructure
         bool directory;
         bool required;
 };
-
 
 class PackageStructurePrivate
 {
@@ -104,18 +103,21 @@ PackageStructure::Ptr PackageStructure::load(const QString &packageFormat)
 
     // first we check for plugins in sycoca
     QString constraint = QString("[X-KDE-PluginInfo-Name] == '%1'").arg(packageFormat);
-    KService::List offers = KServiceTypeTrader::self()->query("Plasma/PackageStructure", constraint);
+    KService::List offers =
+        KServiceTypeTrader::self()->query("Plasma/PackageStructure", constraint);
 
     QVariantList args;
     QString error;
     foreach (const KService::Ptr &offer, offers) {
-        PackageStructure::Ptr structure(offer->createInstance<Plasma::PackageStructure>(0, args, &error));
+        PackageStructure::Ptr structure(
+            offer->createInstance<Plasma::PackageStructure>(0, args, &error));
 
         if (structure) {
             return structure;
         }
 
-        kDebug() << "Couldn't load PackageStructure for" << packageFormat << "! reason given: " << error;
+        kDebug() << "Couldn't load PackageStructure for" << packageFormat
+                 << "! reason given: " << error;
     }
 
     // if that didn't give us any love, then we try to load from a config file
@@ -152,7 +154,7 @@ PackageStructure::Ptr PackageStructure::load(const QString &packageFormat)
     return structure;
 }
 
-PackageStructure& PackageStructure::operator=(const PackageStructure& rhs)
+PackageStructure &PackageStructure::operator=(const PackageStructure &rhs)
 {
     if (this == &rhs) {
         return *this;
@@ -220,7 +222,8 @@ QList<const char*> PackageStructure::requiredFiles() const
     return files;
 }
 
-void PackageStructure::addDirectoryDefinition(const char* key, const QString& path, const QString& name)
+void PackageStructure::addDirectoryDefinition(const char *key,
+                                              const QString &path, const QString &name)
 {
     ContentStructure s;
     s.name = name;
@@ -230,7 +233,7 @@ void PackageStructure::addDirectoryDefinition(const char* key, const QString& pa
     d->contents[key] = s;
 }
 
-void PackageStructure::addFileDefinition(const char* key, const QString& path, const QString& name)
+void PackageStructure::addFileDefinition(const char *key, const QString &path, const QString &name)
 {
     ContentStructure s;
     s.name = name;
@@ -240,7 +243,7 @@ void PackageStructure::addFileDefinition(const char* key, const QString& path, c
     d->contents[key] = s;
 }
 
-QString PackageStructure::path(const char* key) const
+QString PackageStructure::path(const char *key) const
 {
     //kDebug() << "looking for" << key;
     QMap<QByteArray, ContentStructure>::const_iterator it = d->contents.find(key);
@@ -252,7 +255,7 @@ QString PackageStructure::path(const char* key) const
     return it.value().path;
 }
 
-QString PackageStructure::name(const char* key) const
+QString PackageStructure::name(const char *key) const
 {
     QMap<QByteArray, ContentStructure>::const_iterator it = d->contents.find(key);
     if (it == d->contents.constEnd()) {
@@ -262,7 +265,7 @@ QString PackageStructure::name(const char* key) const
     return it.value().name;
 }
 
-void PackageStructure::setRequired(const char* key, bool required)
+void PackageStructure::setRequired(const char *key, bool required)
 {
     QMap<QByteArray, ContentStructure>::iterator it = d->contents.find(key);
     if (it == d->contents.end()) {
@@ -272,7 +275,7 @@ void PackageStructure::setRequired(const char* key, bool required)
     it.value().required = required;
 }
 
-bool PackageStructure::isRequired(const char* key) const
+bool PackageStructure::isRequired(const char *key) const
 {
     QMap<QByteArray, ContentStructure>::const_iterator it = d->contents.find(key);
     if (it == d->contents.constEnd()) {
@@ -287,7 +290,7 @@ void PackageStructure::setDefaultMimetypes(QStringList mimetypes)
     d->mimetypes = mimetypes;
 }
 
-void PackageStructure::setMimetypes(const char* key, QStringList mimetypes)
+void PackageStructure::setMimetypes(const char *key, QStringList mimetypes)
 {
     QMap<QByteArray, ContentStructure>::iterator it = d->contents.find(key);
     if (it == d->contents.end()) {
@@ -297,7 +300,7 @@ void PackageStructure::setMimetypes(const char* key, QStringList mimetypes)
     it.value().mimetypes = mimetypes;
 }
 
-QStringList PackageStructure::mimetypes(const char* key) const
+QStringList PackageStructure::mimetypes(const char *key) const
 {
     QMap<QByteArray, ContentStructure>::const_iterator it = d->contents.find(key);
     if (it == d->contents.constEnd()) {

@@ -356,12 +356,12 @@ QSize Svg::size() const
     return d->size.toSize();
 }
 
-void Svg::resize( qreal width, qreal height )
+void Svg::resize(qreal width, qreal height)
 {
-    resize( QSize( width, height ) );
+    resize(QSize(width, height));
 }
 
-void Svg::resize( const QSizeF& size )
+void Svg::resize(const QSizeF &size)
 {
     d->createRenderer();
     d->size = size;
@@ -373,17 +373,17 @@ void Svg::resize()
     d->size = d->renderer->defaultSize();
 }
 
-QSize Svg::elementSize(const QString& elementId) const
+QSize Svg::elementSize(const QString &elementId) const
 {
     return d->elementSize(elementId);
 }
 
-QRectF Svg::elementRect(const QString& elementId) const
+QRectF Svg::elementRect(const QString &elementId) const
 {
     return d->elementRect(elementId);
 }
 
-bool Svg::hasElement(const QString& elementId) const
+bool Svg::hasElement(const QString &elementId) const
 {
     d->createRenderer();
     return d->renderer->elementExists(elementId);

@@ -43,7 +43,7 @@
  * Compile time macro for the version number of libplasma
  */
 #define PLASMA_VERSION \
-      PLASMA_MAKE_VERSION(PLASMA_VERSION_MAJOR,PLASMA_VERSION_MINOR,PLASMA_VERSION_RELEASE)
+    PLASMA_MAKE_VERSION(PLASMA_VERSION_MAJOR, PLASMA_VERSION_MINOR, PLASMA_VERSION_RELEASE)
 
 /**
  * Compile-time macro for checking the plasma version. Not useful for
@@ -86,7 +86,6 @@ PLASMA_EXPORT const char *versionString();
  * Verifies that a plugin is compatible with plasma
  */
 PLASMA_EXPORT bool isPluginVersionCompatible(unsigned int version);
-
 
 } // Plasma namespace
 

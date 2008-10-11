@@ -44,9 +44,9 @@ public:
     QStringList layouts;
 };
 
-UiLoader::UiLoader( QObject *parent )
-    : QObject( parent ),
-      d( new UiLoaderPrivate() )
+UiLoader::UiLoader(QObject *parent)
+    : QObject(parent),
+      d(new UiLoaderPrivate())
 {
     d->widgets
         << "CheckBox"
@@ -74,46 +74,46 @@ QStringList UiLoader::availableWidgets() const
     return d->widgets;
 }
 
-QGraphicsWidget *UiLoader::createWidget( const QString &className, QGraphicsWidget *parent )
+QGraphicsWidget *UiLoader::createWidget(const QString &className, QGraphicsWidget *parent)
 {
     if (className == QString("CheckBox")) {
-        return new CheckBox( parent );
+        return new CheckBox(parent);
     }
     else if (className == QString("ComboBox")) {
-        return new ComboBox( parent );
+        return new ComboBox(parent);
     }
     else if (className == QString("Flash")) {
-        return new Flash( parent );
+        return new Flash(parent);
     }
     else if (className == QString("Frame")) {
-        return new Frame( parent );
+        return new Frame(parent);
     }
     else if (className == QString("GroupBox")) {
-        return new GroupBox( parent );
+        return new GroupBox(parent);
     }
     else if (className == QString("Icon")) {
-        return new Icon( parent );
+        return new Icon(parent);
     }
     else if (className == QString("Label")) {
-        return new Label( parent );
+        return new Label(parent);
     }
     else if (className == QString("LineEdit")) {
-        return new LineEdit( parent );
+        return new LineEdit(parent);
     }
     else if (className == QString("PushButton")) {
-        return new PushButton( parent );
+        return new PushButton(parent);
     }
     else if (className == QString("RadioButton")) {
-        return new RadioButton( parent );
+        return new RadioButton(parent);
     }
     else if (className == QString("Slider")) {
-        return new Slider( parent );
+        return new Slider(parent);
     }
     else if (className == QString("TabBar")) {
-        return new TabBar( parent );
+        return new TabBar(parent);
     }
     else if (className == QString("TextEdit")) {
-        return new TextEdit( parent );
+        return new TextEdit(parent);
     }
 
     return 0;

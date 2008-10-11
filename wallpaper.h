@@ -79,7 +79,7 @@ class PLASMA_EXPORT Wallpaper : public QObject
          * @param args to send the wallpaper extra arguments
          * @return a pointer to the loaded wallpaper, or 0 on load failure
          **/
-        static Wallpaper* load(const QString &name, const QVariantList& args = QVariantList());
+        static Wallpaper *load(const QString &name, const QVariantList &args = QVariantList());
 
         /**
          * Attempts to load an wallpaper
@@ -92,7 +92,7 @@ class PLASMA_EXPORT Wallpaper : public QObject
          * @param args to send the wallpaper extra arguments
          * @return a pointer to the loaded wallpaper, or 0 on load failure
          **/
-        static Wallpaper* load(const KPluginInfo& info, const QVariantList& args = QVariantList());
+        static Wallpaper *load(const KPluginInfo &info, const QVariantList &args = QVariantList());
 
         /**
          * Returns the user-visible name for the wallpaper, as specified in the
@@ -131,7 +131,7 @@ class PLASMA_EXPORT Wallpaper : public QObject
         /**
          * Sets bounding rectangle
          */
-        void setBoundingRect(const QRectF& boundingRect);
+        void setBoundingRect(const QRectF &boundingRect);
 
        /**
          * This method is called when the wallpaper should be painted.
@@ -139,7 +139,7 @@ class PLASMA_EXPORT Wallpaper : public QObject
          * @param painter the QPainter to use to do the painting
          * @param exposedRect the rect to paint within
          **/
-        virtual void paint(QPainter *painter, const QRectF& exposedRect) = 0;
+        virtual void paint(QPainter *painter, const QRectF &exposedRect) = 0;
 
         /**
          * This method should be called once the wallpaper is loaded or mode is changed.
@@ -208,7 +208,7 @@ class PLASMA_EXPORT Wallpaper : public QObject
          * @param parent a QObject parent; you probably want to pass in 0
          * @param args a list of strings containing one entry: the service id
          */
-        Wallpaper(QObject* parent, const QVariantList& args);
+        Wallpaper(QObject *parent, const QVariantList &args);
 
         /**
          * This method is called once the wallpaper is loaded or mode is changed.
@@ -220,7 +220,7 @@ class PLASMA_EXPORT Wallpaper : public QObject
         virtual void init(const KConfigGroup &config);
 
     private:
-        WallpaperPrivate* const d;
+        WallpaperPrivate *const d;
 };
 
 } // Plasma namespace

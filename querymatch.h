@@ -47,21 +47,22 @@ class PLASMA_EXPORT QueryMatch
         /**
          * The type of match. Value is important here as it is used for sorting
          */
-        enum Type { NoMatch = 0 /**< Null match */,
-                    CompletionMatch = 10 /**< Possible completion for the data of the query */,
-                    PossibleMatch = 30 /**< Something that may match the query */,
-                    InformationalMatch = 50 /**< A purely informational, non-actionable match,
-                                                 such as the answer to a question or calculation*/,
-                    HelperMatch = 70 /**< A match that represents an action not directly related
-                                          to activating the given search term, such as a search
-                                          in an external tool or a command learning trigger. Helper
-                                          matches tend to be generic to the query and should not
-                                          be autoactivated just because the user hits "Enter"
-                                          while typing. They must be explicitly selected to 
-                                          be activated, but unlike InformationalMatch cause
-                                          an action to be triggered. */,
-                    ExactMatch = 100 /**< An exact match to the query */};
-
+        enum Type {
+            NoMatch = 0,         /**< Null match */
+            CompletionMatch = 10, /**< Possible completion for the data of the query */
+            PossibleMatch = 30,   /**< Something that may match the query */
+            InformationalMatch = 50, /**< A purely informational, non-actionable match,
+                                       such as the answer to a question or calculation*/
+            HelperMatch = 70, /**< A match that represents an action not directly related
+                                 to activating the given search term, such as a search
+                                 in an external tool or a command learning trigger. Helper
+                                 matches tend to be generic to the query and should not
+                                 be autoactivated just because the user hits "Enter"
+                                 while typing. They must be explicitly selected to
+                                 be activated, but unlike InformationalMatch cause
+                                 an action to be triggered. */
+            ExactMatch = 100 /**< An exact match to the query */
+        };
 
         /**
          * Constructs a PossibleMatch associated with a given RunnerContext
@@ -110,7 +111,7 @@ class PLASMA_EXPORT QueryMatch
         /**
          * The runner associated with this action
          */
-        AbstractRunner* runner() const;
+        AbstractRunner *runner() const;
 
         /**
          * A string that can be used as an ID for this match,
@@ -128,8 +129,8 @@ class PLASMA_EXPORT QueryMatch
         QIcon icon() const;
         bool isEnabled() const;
 
-        bool operator<(const QueryMatch& other) const;
-        QueryMatch& operator=(const QueryMatch &other);
+        bool operator<(const QueryMatch &other) const;
+        QueryMatch &operator=(const QueryMatch &other);
 
         /**
          * Requests this match to activae using the given context
@@ -147,7 +148,7 @@ class PLASMA_EXPORT QueryMatch
          * as an id, the runner may generate its own id and set that
          * with setId(const QString&) directly after calling setData
          */
-        void setData(const QVariant& data);
+        void setData(const QVariant &data);
 
         /**
          * Sets the id for this match; useful if the id does not
@@ -160,9 +161,9 @@ class PLASMA_EXPORT QueryMatch
          */
         void setId(const QString &id);
 
-        void setText(const QString& text);
-        void setSubtext(const QString& text);
-        void setIcon(const QIcon& icon);
+        void setText(const QString &text);
+        void setSubtext(const QString &text);
+        void setIcon(const QIcon &icon);
         void setEnabled(bool enable);
 
     private:

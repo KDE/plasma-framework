@@ -59,7 +59,7 @@ class RunnerRestrictionPolicy : public ThreadWeaver::QueuePolicy
 public:
     ~RunnerRestrictionPolicy();
 
-    static RunnerRestrictionPolicy& instance();
+    static RunnerRestrictionPolicy &instance();
 
     void setCap(int cap)
     {
@@ -93,7 +93,7 @@ RunnerRestrictionPolicy::~RunnerRestrictionPolicy()
 {
 }
 
-RunnerRestrictionPolicy& RunnerRestrictionPolicy::instance()
+RunnerRestrictionPolicy &RunnerRestrictionPolicy::instance()
 {
     static RunnerRestrictionPolicy policy;
     return policy;
@@ -138,7 +138,7 @@ public:
     FindMatchesJob(Plasma::AbstractRunner *runner, Plasma::RunnerContext *context, QObject *parent = 0);
 
     int priority() const;
-    Plasma::AbstractRunner* runner() const;
+    Plasma::AbstractRunner *runner() const;
 
 protected:
     void run();
@@ -169,7 +169,7 @@ int FindMatchesJob::priority() const
     return m_runner->priority();
 }
 
-Plasma::AbstractRunner* FindMatchesJob::runner() const
+Plasma::AbstractRunner *FindMatchesJob::runner() const
 {
     return m_runner;
 }
@@ -205,10 +205,10 @@ public:
     {
         config = conf;
 
-        //The number of threads used scales with the number of processors.     
+        //The number of threads used scales with the number of processors.
         const int numProcs = qMax(Solid::Device::listFromType(Solid::DeviceInterface::Processor).count(), 1);
         //This entry allows to define a hard upper limit independent of the number of processors.
-        const int maxThreads = config.readEntry("maxThreads",16);
+        const int maxThreads = config.readEntry("maxThreads", 16);
         const int numThreads = qMin(maxThreads, 2 + ((numProcs - 1) * 2));
         //kDebug() << "setting up" << numThreads << "threads for" << numProcs << "processors";
         Weaver::instance()->setMaximumNumberOfThreads(numThreads);
@@ -339,7 +339,7 @@ void RunnerManager::reloadConfiguration()
     d->loadRunners();
 }
 
-AbstractRunner* RunnerManager::runner(const QString &name) const
+AbstractRunner *RunnerManager::runner(const QString &name) const
 {
     if (d->runners.isEmpty()) {
         d->loadRunners();
@@ -348,7 +348,7 @@ AbstractRunner* RunnerManager::runner(const QString &name) const
     return d->runners.value(name);
 }
 
-RunnerContext* RunnerManager::searchContext() const
+RunnerContext *RunnerManager::searchContext() const
 {
     return &d->context;
 }
@@ -483,7 +483,7 @@ QString RunnerManager::query() const
 
 void RunnerManager::reset()
 {
-    // If ThreadWeaver is idle, it is safe to clear previous jobs 
+    // If ThreadWeaver is idle, it is safe to clear previous jobs
     if (Weaver::instance()->isIdle()) {
         qDeleteAll(d->searchJobs);
         d->searchJobs.clear();

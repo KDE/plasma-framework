@@ -118,7 +118,8 @@ class PLASMA_EXPORT DataContainer : public QObject
          * @param visualization the object to connect to this DataContainer
          * @param pollingInterval the time in milliseconds between updates
          **/
-        void connectVisualization(QObject *visualization, uint pollingInterval, Plasma::IntervalAlignment alignment);
+        void connectVisualization(QObject *visualization, uint pollingInterval,
+                                  Plasma::IntervalAlignment alignment);
 
     public Q_SLOTS:
         /**
@@ -207,7 +208,7 @@ class PLASMA_EXPORT DataContainer : public QObject
 
     private:
         friend class SignalRelay;
-        DataContainerPrivate* const d;
+        DataContainerPrivate *const d;
 };
 
 } // Plasma namespace

@@ -40,7 +40,7 @@ public:
     explicit AppletBrowserWidget(QWidget *parent = 0, Qt::WindowFlags f = 0);
     virtual ~AppletBrowserWidget();
 
-    void setApplication(const QString& application = QString());
+    void setApplication(const QString &application = QString());
     QString application();
 
     /**
@@ -53,7 +53,7 @@ public:
     /**
      * @return the current default containment to add applets to
      */
-    Containment* containment() const;
+    Containment *containment() const;
 
 public Q_SLOTS:
     /**
@@ -91,7 +91,7 @@ public:
     explicit AppletBrowser(QWidget *parent = 0, Qt::WindowFlags f = 0);
     virtual ~AppletBrowser();
 
-    void setApplication(const QString& application = QString());
+    void setApplication(const QString &application = QString());
     QString application();
 
     /**
@@ -104,7 +104,7 @@ public:
     /**
      * @return the current default containment to add applets to
      */
-    Containment* containment() const;
+    Containment *containment() const;
 
 private:
     AppletBrowserPrivate * const d;

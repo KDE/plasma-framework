@@ -41,7 +41,7 @@ public:
         q->start();
     }
 
-    ServiceJob* q;
+    ServiceJob *q;
     QString destination;
     QString operation;
     QMap<QString, QVariant> parameters;

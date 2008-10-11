@@ -95,11 +95,13 @@ public:
     Plasma::PopupPlacement popupPlacement() const;
 
     /**
-     * This event handler can be reimplemented in a subclass to receive an event before the popup is shown or hidden.
-     * @arg show true if the popup is going to be shown, false if the popup is going to be hidden.
+     * This event handler can be reimplemented in a subclass to receive an
+     * event before the popup is shown or hidden.
+     * @arg show true if the popup is going to be shown, false if the popup
+     * is going to be hidden.
      * Note that showing and hiding the popup on click is already done in PopupApplet.
      */
-     virtual void popupEvent(bool show);
+    virtual void popupEvent(bool show);
 
 public Q_SLOTS:
     /**

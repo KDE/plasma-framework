@@ -86,8 +86,8 @@ Containment::StyleOption::StyleOption(const QStyleOptionGraphicsItem &other)
     type = Type;
 }
 
-Containment::Containment(QGraphicsItem* parent,
-                         const QString& serviceId,
+Containment::Containment(QGraphicsItem *parent,
+                         const QString &serviceId,
                          uint containmentId)
     : Applet(parent, serviceId, containmentId),
       d(new ContainmentPrivate(this))
@@ -99,7 +99,7 @@ Containment::Containment(QGraphicsItem* parent,
     setContainmentType(CustomContainment);
 }
 
-Containment::Containment(QObject* parent, const QVariantList& args)
+Containment::Containment(QObject *parent, const QVariantList &args)
     : Applet(parent, args),
       d(new ContainmentPrivate(this))
 {
@@ -367,7 +367,7 @@ void Containment::setContainmentType(Containment::Type type)
     }
 }
 
-Corona* Containment::corona() const
+Corona *Containment::corona() const
 {
     return dynamic_cast<Corona*>(scene());
 }
@@ -376,7 +376,7 @@ void Containment::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
     event->ignore();
     if (d->wallpaper) {
-        QGraphicsItem* item = scene()->itemAt(event->scenePos());
+        QGraphicsItem *item = scene()->itemAt(event->scenePos());
         if (item == this) {
             d->wallpaper->mouseMoveEvent(event);
         }
@@ -392,7 +392,7 @@ void Containment::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     event->ignore();
     if (d->wallpaper) {
-        QGraphicsItem* item = scene()->itemAt(event->scenePos());
+        QGraphicsItem *item = scene()->itemAt(event->scenePos());
         if (item == this) {
             d->wallpaper->mousePressEvent(event);
         }
@@ -410,7 +410,7 @@ void Containment::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
     event->ignore();
     if (d->wallpaper) {
-        QGraphicsItem* item = scene()->itemAt(event->scenePos());
+        QGraphicsItem *item = scene()->itemAt(event->scenePos());
         if (item == this) {
             d->wallpaper->mouseReleaseEvent(event);
         }
@@ -427,7 +427,7 @@ void Containment::showContextMenu(const QPointF &containmentPos, const QPoint &s
     d->showContextMenu(mapToScene(containmentPos), screenPos, false);
 }
 
-void Containment::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
+void Containment::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
 {
     //kDebug() << "let's see if we manage to get a context menu here, huh";
     if (!isContainment() || !scene() || !KAuthorized::authorizeKAction("desktop_contextmenu")) {
@@ -471,7 +471,7 @@ bool ContainmentPrivate::showContextMenu(const QPointF &point, const QPoint &scr
         if (includeApplet) {
             actions = applet->contextualActions();
             if (!actions.isEmpty()) {
-                foreach(QAction* action, actions) {
+                foreach (QAction *action, actions) {
                     if (action) {
                         desktopMenu.addAction(action);
                     }
@@ -1176,7 +1176,7 @@ void Containment::removeAssociatedWidget(QWidget *widget)
         d->focusedApplet->removeAssociatedWidget(widget);
     }
 
-    foreach (const Applet* applet, d->applets) {
+    foreach (const Applet *applet, d->applets) {
         if (applet->d->activationAction) {
             widget->removeAction(applet->d->activationAction);
         }
@@ -1380,7 +1380,7 @@ void Containment::destroy(bool confirm)
         //FIXME maybe that %1 should be the containment type not the name
         if (!confirm ||
             KMessageBox::warningContinueCancel(view(), i18n("Do you really want to remove this %1?", name()),
-                    i18n("Remove %1", name()), KStandardGuiItem::remove()) == KMessageBox::Continue ) {
+                    i18n("Remove %1", name()), KStandardGuiItem::remove()) == KMessageBox::Continue) {
             //clearApplets();
             Applet::destroy();
         }
@@ -1420,7 +1420,7 @@ void ContainmentPrivate::toggleDesktopImmutability()
         QMap<Applet*, AppletHandle*> h = handles;
         handles.clear();
 
-        foreach (AppletHandle* handle, h) {
+        foreach (AppletHandle *handle, h) {
             handle->disconnect(q);
             handle->deleteLater();
         }

@@ -56,7 +56,7 @@ PackageMetadata::PackageMetadata()
 {
 }
 
-PackageMetadata::PackageMetadata(const QString& path)
+PackageMetadata::PackageMetadata(const QString &path)
     : d(new PackageMetadataPrivate)
 {
     read(path);
@@ -98,7 +98,7 @@ void PackageMetadata::write(const QString &filename) const
     config.writeEntry("X-KDE-Plasmagik-RequiredVersion", d->requiredVersion);
 }
 
-void PackageMetadata::read(const QString& filename)
+void PackageMetadata::read(const QString &filename)
 {
     KConfig cfg(filename);
     KConfigGroup config(&cfg, "Desktop Entry");
@@ -183,7 +183,7 @@ QString PackageMetadata::implementationApi() const
     return d->api;
 }
 
-void PackageMetadata::setImplementationApi(const QString& api)
+void PackageMetadata::setImplementationApi(const QString &api)
 {
     d->api = api;
 }
@@ -253,11 +253,10 @@ void PackageMetadata::setRequiredVersion(const QString &requiredVersion)
     d->requiredVersion = requiredVersion;
 }
 
-void PackageMetadata::setType(const QString& type)
+void PackageMetadata::setType(const QString &type)
 {
     d->type = type;
 }
 
 } // namespace Plasma
-
 

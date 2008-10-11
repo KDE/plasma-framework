@@ -55,33 +55,32 @@ class ThemePrivate;
 class PLASMA_EXPORT Theme : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY( QString themeName READ themeName )
+    Q_PROPERTY(QString themeName READ themeName)
 
     public:
-        enum ColorRole
-        {
-            TextColor = 0 /**<  the text color to be used by items resting on the background */,
-            HighlightColor = 1 /**<  the text higlight color to be used by items resting on the background */,
-            BackgroundColor = 2 /**< the default background color */,
-            ButtonTextColor = 4 /** text color for buttons */,
+        enum ColorRole {
+            TextColor = 0, /**<  the text color to be used by items resting on the background */
+            HighlightColor = 1, /**<  the text higlight color to be used by items resting
+                                   on the background */
+            BackgroundColor = 2, /**< the default background color */
+            ButtonTextColor = 4, /** text color for buttons */
             ButtonBackgroundColor = 8 /** background color for buttons*/
         };
 
-        enum FontRole
-        {
-            DefaultFont = 0 /**< The standard text font */,
+        enum FontRole {
+            DefaultFont = 0, /**< The standard text font */
             DesktopFont /**< The standard text font */
         };
 
         /**
          * Singleton pattern accessor
          **/
-        static Theme* defaultTheme();
+        static Theme *defaultTheme();
 
         /**
          * Default constructor. Usually you want to use the singleton instead.
          */
-        explicit Theme( QObject* parent = 0 );
+        explicit Theme(QObject *parent = 0);
         ~Theme();
 
         /**
@@ -106,16 +105,16 @@ class PLASMA_EXPORT Theme : public QObject
          *           ".svg" part or a leading slash)
          * @return the full path to the requested file for the current theme
          */
-        Q_INVOKABLE QString imagePath(const QString& name) const;
+        Q_INVOKABLE QString imagePath(const QString &name) const;
 
         /**
          * Retreives the default wallpaper associated with this theme.
-         * 
+         *
          * @arg size the target height and width of the wallpaper; if an invalid size
          *           is passed in, then a default size will be provided instead.
          * @return the full path to the wallpaper image
          */
-         Q_INVOKABLE QString wallpaperPath(const QSize &size = QSize()) const;
+        Q_INVOKABLE QString wallpaperPath(const QSize &size = QSize()) const;
 
         /**
          * Checks if this theme has an image named in a certain way
@@ -124,7 +123,7 @@ class PLASMA_EXPORT Theme : public QObject
          *           ".svg" part or a leading slash)
          * @return true if the image exists for this theme
          */
-        Q_INVOKABLE bool currentThemeHasImage(const QString& name) const;
+        Q_INVOKABLE bool currentThemeHasImage(const QString &name) const;
 
         /**
          * Returns the color scheme configurationthat goes along this theme.
@@ -197,7 +196,7 @@ class PLASMA_EXPORT Theme : public QObject
     private:
         friend class ThemeSingleton;
         friend class ThemePrivate;
-        ThemePrivate* const d;
+        ThemePrivate *const d;
 
         Q_PRIVATE_SLOT(d, void compositingChanged())
 };

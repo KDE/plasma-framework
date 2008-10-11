@@ -47,16 +47,17 @@ class PLASMA_EXPORT RunnerContext : public QObject
     Q_OBJECT
 
     public:
-        enum Type { None = 0,
-                    UnknownType = 1,
-                    Directory = 2,
-                    File = 4,
-                    NetworkLocation = 8,
-                    Executable = 16,
-                    ShellCommand = 32,
-                    Help = 64,
-                    FileSystem = Directory | File | Executable | ShellCommand
-                  };
+        enum Type {
+            None = 0,
+            UnknownType = 1,
+            Directory = 2,
+            File = 4,
+            NetworkLocation = 8,
+            Executable = 16,
+            ShellCommand = 32,
+            Help = 64,
+            FileSystem = Directory | File | Executable | ShellCommand
+        };
 
         Q_DECLARE_FLAGS(Types, Type)
 
@@ -65,10 +66,9 @@ class PLASMA_EXPORT RunnerContext : public QObject
         /**
          * Copy constructor
          */
-        explicit RunnerContext(RunnerContext& other, QObject *parent = 0);
+        explicit RunnerContext(RunnerContext &other, QObject *parent = 0);
 
         ~RunnerContext();
-
 
         /**
          * Resets the search term for this object.
@@ -80,7 +80,7 @@ class PLASMA_EXPORT RunnerContext : public QObject
          * Sets the query term for this object and attempts to determine
          * the type of the search.
          */
-        void setQuery(const QString& term);
+        void setQuery(const QString &term);
 
         /**
          * @return the current search query term.
@@ -110,7 +110,7 @@ class PLASMA_EXPORT RunnerContext : public QObject
          *
          * @return true if matches were added, false if matches were e.g. outdated
          */
-        bool addMatches(const QString& term, const QList<QueryMatch> &matches);
+        bool addMatches(const QString &term, const QList<QueryMatch> &matches);
 
         /**
          * Appends a match to the existing list of matches.

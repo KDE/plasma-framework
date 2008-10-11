@@ -46,7 +46,7 @@ namespace Plasma
 class AppletBrowserWidgetPrivate
 {
 public:
-    AppletBrowserWidgetPrivate(AppletBrowserWidget* w)
+    AppletBrowserWidgetPrivate(AppletBrowserWidget *w)
         : q(w),
           containment(0),
           appletList(0),
@@ -65,12 +65,12 @@ public:
     /**
      * Tracks a new running applet
      */
-    void appletAdded(Plasma::Applet* applet);
+    void appletAdded(Plasma::Applet *applet);
 
     /**
      * A running applet is no more
      */
-    void appletRemoved(Plasma::Applet* applet);
+    void appletRemoved(Plasma::Applet *applet);
 
     AppletBrowserWidget *q;
     QString application;
@@ -128,7 +128,7 @@ void AppletBrowserWidgetPrivate::initFilters()
 
     filterModel.addSeparator(i18n("Categories:"));
 
-    foreach (const QString& category, Plasma::Applet::listCategories(application)) {
+    foreach (const QString &category, Plasma::Applet::listCategories(application)) {
         filterModel.addFilter(category,
                               KCategorizedItemsViewModels::Filter("category", category));
     }
@@ -201,7 +201,7 @@ void AppletBrowserWidgetPrivate::initRunningApplets()
     itemModel.setRunningApplets(runningApplets);
 }
 
-void AppletBrowserWidget::setApplication(const QString& app)
+void AppletBrowserWidget::setApplication(const QString &app)
 {
     d->application = app;
     d->initFilters();
@@ -260,7 +260,7 @@ void AppletBrowserWidget::addApplet()
     }
 }
 
-void AppletBrowserWidgetPrivate::appletAdded(Plasma::Applet* applet)
+void AppletBrowserWidgetPrivate::appletAdded(Plasma::Applet *applet)
 {
     QString name = applet->name();
     //kDebug() << name;
@@ -270,10 +270,10 @@ void AppletBrowserWidgetPrivate::appletAdded(Plasma::Applet* applet)
     itemModel.setRunningApplets(name, runningApplets[name]);
 }
 
-void AppletBrowserWidgetPrivate::appletRemoved(Plasma::Applet* applet)
+void AppletBrowserWidgetPrivate::appletRemoved(Plasma::Applet *applet)
 {
     //kDebug() << (QObject*)applet;
-    Plasma::Applet* a = (Plasma::Applet*)applet; //don't care if it's valid, just need the address
+    Plasma::Applet *a = (Plasma::Applet *)applet; //don't care if it's valid, just need the address
 
     QString name = appletNames.take(a);
 
@@ -394,9 +394,9 @@ AppletBrowser::~AppletBrowser()
     saveDialogSize(cg);
 }
 
-void AppletBrowser::setApplication(const QString& app)
+void AppletBrowser::setApplication(const QString &app)
 {
-    d->widget->setApplication( app );
+    d->widget->setApplication(app);
 }
 
 QString AppletBrowser::application()
@@ -409,7 +409,7 @@ void AppletBrowser::setContainment(Plasma::Containment *containment)
     d->widget->setContainment(containment);
 }
 
-Containment* AppletBrowser::containment() const
+Containment *AppletBrowser::containment() const
 {
     return d->widget->containment();
 }

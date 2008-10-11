@@ -1,4 +1,4 @@
-/*  
+/*
     Copyright 2007 Robert Knight <robertknight@gmail.com>
     Copyright 2008 Marco Martin <notmart@gmail.com>
 
@@ -39,9 +39,11 @@ class DelegatePrivate;
  *
  * The delegate makes use of its own data roles that are:
  * SubTitleRole: the text of the subtitle
- * SubTitleMandatoryRole: if the subtitle is to always be displayed (as default the subtitle is displayed only on mouse over)
+ * SubTitleMandatoryRole: if the subtitle is to always be displayed
+ *   (as default the subtitle is displayed only on mouse over)
  * ColumnTypeRole: if the column is a main column (with title and subtitle)
- * or a secondary action column (only a little icon that appears on mouse over is displayed)
+ * or a secondary action column (only a little icon that appears on mouse
+ * over is displayed)
  */
 class PLASMA_EXPORT Delegate : public QAbstractItemDelegate
 {
@@ -49,14 +51,14 @@ class PLASMA_EXPORT Delegate : public QAbstractItemDelegate
 public:
 
     enum SpecificRoles {
-         SubTitleRole = Qt::UserRole + 1,
-         SubTitleMandatoryRole = Qt::UserRole + 2,
-         ColumnTypeRole = Qt::UserRole + 3
+        SubTitleRole = Qt::UserRole + 1,
+        SubTitleMandatoryRole = Qt::UserRole + 2,
+        ColumnTypeRole = Qt::UserRole + 3
     };
 
     enum ColumnType {
-         MainColumn = 1,
-         SecondaryActionColumn = 2
+        MainColumn = 1,
+        SecondaryActionColumn = 2
     };
 
     Delegate(QObject *parent = 0);
@@ -74,18 +76,20 @@ public:
     int roleMapping(SpecificRoles role) const;
 
     //Reimplemented
-    virtual void paint(QPainter *painter,const QStyleOptionViewItem& option,const QModelIndex& index) const;
+    virtual void paint(QPainter *painter, const QStyleOptionViewItem &option,
+                       const QModelIndex &index) const;
 
 protected:
     /**
      * Returns the empty area after the title.
      * The height is the height of the subtitle.
-     * It can be used by subclasses that wants to paint additional data after calling the paint function of the superclass.
+     * It can be used by subclasses that wants to paint additional data after
+     * calling the paint function of the superclass.
      *
      * @param option options for the title text
      * @param index model index that we want to compute the free area
      */
-    QRect rectAfterTitle(const QStyleOptionViewItem& option, const QModelIndex& index) const;
+    QRect rectAfterTitle(const QStyleOptionViewItem &option, const QModelIndex &index) const;
 
     /**
      * Returns the empty area after the subtitle.
@@ -95,7 +99,7 @@ protected:
      * @param option options for the subtitle text
      * @param index model index that we want to compute the free area
      */
-    QRect rectAfterSubTitle(const QStyleOptionViewItem& option, const QModelIndex& index) const;
+    QRect rectAfterSubTitle(const QStyleOptionViewItem &option, const QModelIndex &index) const;
 
     /**
      * Returns the empty area after both the title and the subtitle.
@@ -105,14 +109,14 @@ protected:
      * @param option options for the title and subtitle text
      * @param index model index that we want to compute the free area
      */
-    QRect emptyRect(const QStyleOptionViewItem& option, const QModelIndex& index) const;
+    QRect emptyRect(const QStyleOptionViewItem &option, const QModelIndex &index) const;
 
-    virtual QSize sizeHint(const QStyleOptionViewItem& option , const QModelIndex& index) const;
+    virtual QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const;
 
 private:
-    DelegatePrivate * const d;
+    DelegatePrivate *const d;
 };
 
 }
 
-#endif // PLASMA_DELEGATE_H 
+#endif // PLASMA_DELEGATE_H

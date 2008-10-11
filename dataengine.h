@@ -57,9 +57,9 @@ class DataEnginePrivate;
 class PLASMA_EXPORT DataEngine : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY( QStringList sources READ sources )
-    Q_PROPERTY( bool valid READ isValid )
-    Q_PROPERTY( QString icon READ icon WRITE setIcon )
+    Q_PROPERTY(QStringList sources READ sources)
+    Q_PROPERTY(bool valid READ isValid)
+    Q_PROPERTY(QString icon READ icon WRITE setIcon)
 
     public:
         typedef QHash<QString, DataEngine*> Dict;
@@ -73,8 +73,8 @@ class PLASMA_EXPORT DataEngine : public QObject
          * @param parent The parent object.
          * @param service pointer to the service that describes the engine
          **/
-        explicit DataEngine(QObject* parent = 0, KService::Ptr service = KService::Ptr(0));
-        DataEngine(QObject* parent, const QVariantList& args);
+        explicit DataEngine(QObject *parent = 0, KService::Ptr service = KService::Ptr(0));
+        DataEngine(QObject *parent, const QVariantList &args);
         ~DataEngine();
 
         /**
@@ -99,7 +99,7 @@ class PLASMA_EXPORT DataEngine : public QObject
          *         is parented to the DataEngine, but may be deleted by the
          *         caller when finished with it
          */
-        virtual Service* serviceForSource(const QString &source);
+        virtual Service *serviceForSource(const QString &source);
 
         /**
          * Returns the engine name for the DataEngine
@@ -127,9 +127,10 @@ class PLASMA_EXPORT DataEngine : public QObject
          *                        If the data has not changed, no update will be sent.
          * @param intervalAlignment the number of ms to align the interval to
          **/
-        Q_INVOKABLE void connectSource(const QString& source, QObject* visualization,
-                                       uint pollingInterval = 0,
-                                       Plasma::IntervalAlignment intervalAlignment = NoAlignment) const;
+        Q_INVOKABLE void connectSource(
+            const QString &source, QObject *visualization,
+            uint pollingInterval = 0,
+            Plasma::IntervalAlignment intervalAlignment = NoAlignment) const;
 
         /**
          * Connects all currently existing sources to an object for data updates.
@@ -158,8 +159,9 @@ class PLASMA_EXPORT DataEngine : public QObject
          *                        If the data has not changed, no update will be sent.
          * @param intervalAlignment the number of ms to align the interval to
          **/
-        Q_INVOKABLE void connectAllSources(QObject* visualization, uint pollingInterval = 0,
-                                           Plasma::IntervalAlignment intervalAlignment = NoAlignment) const;
+        Q_INVOKABLE void connectAllSources(
+            QObject *visualization, uint pollingInterval = 0,
+            Plasma::IntervalAlignment intervalAlignment = NoAlignment) const;
 
         /**
          * Disconnects a source to an object that was receiving data updates.
@@ -167,7 +169,7 @@ class PLASMA_EXPORT DataEngine : public QObject
          * @param source the name of the data source
          * @param visualization the object to connect the data source to
          **/
-        Q_INVOKABLE void disconnectSource(const QString& source, QObject* visualization) const;
+        Q_INVOKABLE void disconnectSource(const QString &source, QObject *visualization) const;
 
         /**
          * Retrevies a pointer to the DataContainer for a given source. This method
@@ -179,7 +181,7 @@ class PLASMA_EXPORT DataEngine : public QObject
          * @param source the name of the source.
          * @return pointer to a DataContainer, or zero on failure
          **/
-        Q_INVOKABLE DataContainer* containerForSource(const QString &source);
+        Q_INVOKABLE DataContainer *containerForSource(const QString &source);
 
         /**
          * Gets the Data associated with a data source.
@@ -191,7 +193,7 @@ class PLASMA_EXPORT DataEngine : public QObject
          * @return the Data associated with the source; if the source doesn't
          *         exist an empty data set is returned
          **/
-        Q_INVOKABLE DataEngine::Data query(const QString& source) const;
+        Q_INVOKABLE DataEngine::Data query(const QString &source) const;
 
         /**
          * Returns true if this engine is valid, otherwise returns false
@@ -223,7 +225,7 @@ class PLASMA_EXPORT DataEngine : public QObject
          *
          * @return the Package object, or 0 if none
          **/
-        const Package* package() const;
+        const Package *package() const;
 
     Q_SIGNALS:
         /**
@@ -236,7 +238,7 @@ class PLASMA_EXPORT DataEngine : public QObject
          *
          * @param source the name of the new data source
          **/
-        void sourceAdded(const QString& source);
+        void sourceAdded(const QString &source);
 
         /**
          * Emitted when a data source is removed.
@@ -248,7 +250,7 @@ class PLASMA_EXPORT DataEngine : public QObject
          *
          * @param source the name of the data source that was removed
          **/
-        void sourceRemoved(const QString& source);
+        void sourceRemoved(const QString &source);
 
     protected:
         /**
@@ -283,7 +285,7 @@ class PLASMA_EXPORT DataEngine : public QObject
          * @return true if the data was changed, or false if there was no
          *         change or if the change will occur later
          **/
-        virtual bool updateSourceEvent(const QString& source);
+        virtual bool updateSourceEvent(const QString &source);
 
         /**
          * Sets a value for a data source. If the source
@@ -302,7 +304,7 @@ class PLASMA_EXPORT DataEngine : public QObject
          * @param key the key to use for the data
          * @param value the data to associated with the source
          **/
-        void setData(const QString& source, const QString& key, const QVariant& value);
+        void setData(const QString &source, const QString &key, const QVariant &value);
 
         /**
          * Adds a set of data to a data source. If the source
@@ -318,7 +320,7 @@ class PLASMA_EXPORT DataEngine : public QObject
          *
          * @param source the name of the data source
          **/
-        void removeAllData(const QString& source);
+        void removeAllData(const QString &source);
 
         /**
          * Removes a data entry from a source
@@ -326,7 +328,7 @@ class PLASMA_EXPORT DataEngine : public QObject
          * @param source the name of the data source
          * @param key the data entry to remove
          **/
-        void removeData(const QString& source, const QString& key);
+        void removeData(const QString &source, const QString &key);
 
         /**
          * Adds an already constructed data source. The DataEngine takes
@@ -335,7 +337,7 @@ class PLASMA_EXPORT DataEngine : public QObject
          *
          * @param source the DataContainer to add to the DataEngine
          **/
-        void addSource(DataContainer* source);
+        void addSource(DataContainer *source);
 
         /**
          * Sets an upper limit on the number of data sources to keep in this engine.
@@ -415,7 +417,7 @@ class PLASMA_EXPORT DataEngine : public QObject
         /**
          * Sets the icon for this data engine
          **/
-        void setIcon(const QString& icon);
+        void setIcon(const QString &icon);
 
     protected Q_SLOTS:
         /**
@@ -429,7 +431,7 @@ class PLASMA_EXPORT DataEngine : public QObject
          * Removes a data source.
          * @param source the name of the data source to remove
          **/
-        void removeSource(const QString& source);
+        void removeSource(const QString &source);
 
     private:
         friend class DataEnginePrivate;
@@ -437,9 +439,9 @@ class PLASMA_EXPORT DataEngine : public QObject
         friend class DataEngineManager;
         friend class NullEngine;
 
-        Q_PRIVATE_SLOT(d, void internalUpdateSource(DataContainer* source))
+        Q_PRIVATE_SLOT(d, void internalUpdateSource(DataContainer *source))
 
-        DataEnginePrivate* const d;
+        DataEnginePrivate *const d;
 };
 
 } // Plasma namespace

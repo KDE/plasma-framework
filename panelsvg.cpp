@@ -107,7 +107,7 @@ public:
     QHash<QString, PanelData*> panels;
 };
 
-PanelSvg::PanelSvg(QObject* parent)
+PanelSvg::PanelSvg(QObject *parent)
     : Svg(parent),
       d(new PanelSvgPrivate(this))
 {
@@ -120,7 +120,7 @@ PanelSvg::~PanelSvg()
     delete d;
 }
 
-void PanelSvg::setImagePath(const QString& path)
+void PanelSvg::setImagePath(const QString &path)
 {
     if (path == imagePath()) {
         return;
@@ -247,7 +247,7 @@ QString PanelSvg::prefix()
     return d->prefix.left(d->prefix.size() - 1);
 }
 
-void PanelSvg::resizePanel(const QSizeF& size)
+void PanelSvg::resizePanel(const QSizeF &size)
 {
     if (size.isEmpty()) {
         kWarning() << "Invalid size" << size;
@@ -322,7 +322,8 @@ QRectF PanelSvg::contentsRect() const
         QRectF rect(QPointF(0, 0), size);
         PanelData *panel = d->panels[d->prefix];
 
-        return rect.adjusted(panel->leftMargin, panel->topMargin, -panel->rightMargin, -panel->bottomMargin);
+        return rect.adjusted(panel->leftMargin, panel->topMargin,
+                             -panel->rightMargin, -panel->bottomMargin);
     } else {
         return QRectF();
     }
@@ -331,13 +332,14 @@ QRectF PanelSvg::contentsRect() const
 QBitmap PanelSvg::mask() const
 {
     PanelData *panel = d->panels[d->prefix];
-    
+
     if (!panel->cachedMask) {
         if (!panel->cachedBackground) {
             d->generateBackground(panel);
             Q_ASSERT(panel->cachedBackground);
         }
-        panel->cachedMask = new QBitmap(panel->cachedBackground->alphaChannel().createMaskFromColor(Qt::black));
+        panel->cachedMask =
+            new QBitmap(panel->cachedBackground->alphaChannel().createMaskFromColor(Qt::black));
     }
     return *(panel->cachedMask);
 }
@@ -382,7 +384,7 @@ QPixmap PanelSvg::panelPixmap()
     return *panel->cachedBackground;
 }
 
-void PanelSvg::paintPanel(QPainter* painter, const QRectF& target, const QRectF& source)
+void PanelSvg::paintPanel(QPainter *painter, const QRectF &target, const QRectF &source)
 {
     PanelData *panel = d->panels[d->prefix];
     if (!panel->cachedBackground) {
@@ -393,7 +395,7 @@ void PanelSvg::paintPanel(QPainter* painter, const QRectF& target, const QRectF&
     painter->drawPixmap(target, *(panel->cachedBackground), source.isValid() ? source : target);
 }
 
-void PanelSvg::paintPanel(QPainter* painter, const QPointF& pos)
+void PanelSvg::paintPanel(QPainter *painter, const QPointF &pos)
 {
     PanelData *panel = d->panels[d->prefix];
     if (!panel->cachedBackground) {
@@ -436,10 +438,9 @@ void PanelSvgPrivate::generateBackground(PanelData *panel)
     p.setCompositionMode(QPainter::CompositionMode_Source);
     p.setRenderHint(QPainter::SmoothPixmapTransform);
 
-
     //if we must stretch the center or the borders we compute how much we will have to stretch
     //the svg to get the desired element sizes
-    QSizeF  scaledContentSize(0,0);
+    QSizeF  scaledContentSize(0, 0);
     if (q->elementSize(prefix + "center").width() > 0 &&
         q->elementSize(prefix + "center").height() > 0 &&
         (!panel->tileCenter || panel->stretchBorders)) {
@@ -511,32 +512,38 @@ void PanelSvgPrivate::generateBackground(PanelData *panel)
         if (panel->enabledBorders & PanelSvg::LeftBorder || panel->enabledBorders & PanelSvg::RightBorder) {
             q->resize(q->size().width(), scaledContentSize.height());
 
-            if (q->hasElement(prefix + "left") && panel->enabledBorders & PanelSvg::LeftBorder) {
+            if (q->hasElement(prefix + "left") &&
+                panel->enabledBorders & PanelSvg::LeftBorder) {
                 q->paint(&p, QRect(leftOffset, contentTop, panel->leftWidth, contentHeight), prefix + "left");
             }
 
-            if (q->hasElement(prefix + "right") && panel->enabledBorders & PanelSvg::RightBorder) {
+            if (q->hasElement(prefix + "right") &&
+                panel->enabledBorders & PanelSvg::RightBorder) {
                 q->paint(&p, QRect(rightOffset, contentTop, panel->rightWidth, contentHeight), prefix + "right");
             }
 
             q->resize();
         }
 
-        if (panel->enabledBorders & PanelSvg::TopBorder || panel->enabledBorders & PanelSvg::BottomBorder) {
+        if (panel->enabledBorders & PanelSvg::TopBorder ||
+            panel->enabledBorders & PanelSvg::BottomBorder) {
             q->resize(scaledContentSize.width(), q->size().height());
 
-            if (q->hasElement(prefix + "top") && panel->enabledBorders & PanelSvg::TopBorder) {
+            if (q->hasElement(prefix + "top") &&
+                panel->enabledBorders & PanelSvg::TopBorder) {
                 q->paint(&p, QRect(contentLeft, topOffset, contentWidth, panel->topHeight), prefix + "top");
             }
 
-            if (q->hasElement(prefix + "bottom") && panel->enabledBorders & PanelSvg::BottomBorder) {
+            if (q->hasElement(prefix + "bottom") &&
+                panel->enabledBorders & PanelSvg::BottomBorder) {
                 q->paint(&p, QRect(contentLeft, bottomOffset, contentWidth, panel->bottomHeight), prefix + "bottom");
             }
 
             q->resize();
         }
     } else {
-        if (q->hasElement(prefix + "left") && panel->enabledBorders & PanelSvg::LeftBorder) {
+        if (q->hasElement(prefix + "left") &&
+            panel->enabledBorders & PanelSvg::LeftBorder) {
             QPixmap left(panel->leftWidth, leftHeight);
             left.fill(Qt::transparent);
 
@@ -600,7 +607,7 @@ void PanelSvgPrivate::updateSizes()
     q->Svg::resize();
     if (panel->enabledBorders & PanelSvg::TopBorder) {
         panel->topHeight = q->elementSize(prefix + "top").height();
-        
+
         if (q->hasElement(prefix + "hint-top-margin")) {
             panel->topMargin = q->elementSize(prefix + "hint-top-margin").height();
         } else {
@@ -612,7 +619,7 @@ void PanelSvgPrivate::updateSizes()
 
     if (panel->enabledBorders & PanelSvg::LeftBorder) {
         panel->leftWidth = q->elementSize(prefix + "left").width();
-        
+
         if (q->hasElement(prefix + "hint-left-margin")) {
             panel->leftMargin = q->elementSize(prefix + "hint-left-margin").height();
         } else {
@@ -624,7 +631,7 @@ void PanelSvgPrivate::updateSizes()
 
     if (panel->enabledBorders & PanelSvg::RightBorder) {
         panel->rightWidth = q->elementSize(prefix + "right").width();
-        
+
         if (q->hasElement(prefix + "hint-right-margin")) {
             panel->rightMargin = q->elementSize(prefix + "hint-right-margin").height();
         } else {
@@ -636,7 +643,7 @@ void PanelSvgPrivate::updateSizes()
 
     if (panel->enabledBorders & PanelSvg::BottomBorder) {
         panel->bottomHeight = q->elementSize(prefix + "bottom").height();
-        
+
         if (q->hasElement(prefix + "hint-bottom-margin")) {
             panel->bottomMargin = q->elementSize(prefix + "hint-bottom-margin").height();
         } else {

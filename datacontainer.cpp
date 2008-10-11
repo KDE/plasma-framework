@@ -29,7 +29,7 @@
 namespace Plasma
 {
 
-DataContainer::DataContainer(QObject* parent)
+DataContainer::DataContainer(QObject *parent)
     : QObject(parent),
       d(new DataContainerPrivate)
 {
@@ -45,7 +45,7 @@ const DataEngine::Data DataContainer::data() const
     return d->data;
 }
 
-void DataContainer::setData(const QString& key, const QVariant& value)
+void DataContainer::setData(const QString &key, const QVariant &value)
 {
     if (value.isNull() || !value.isValid()) {
         d->data.remove(key);
@@ -74,7 +74,8 @@ bool DataContainer::visualizationIsConnected(QObject *visualization) const
     return d->relayObjects.contains(visualization);
 }
 
-void DataContainer::connectVisualization(QObject* visualization, uint pollingInterval, Plasma::IntervalAlignment alignment)
+void DataContainer::connectVisualization(QObject *visualization, uint pollingInterval,
+                                         Plasma::IntervalAlignment alignment)
 {
     //kDebug() << "connecting visualization" << visualization << "at interval of"
     //         << pollingInterval << "to" << objectName();
@@ -117,7 +118,6 @@ void DataContainer::connectVisualization(QObject* visualization, uint pollingInt
                 this, SLOT(disconnectVisualization(QObject*)));//, Qt::QueuedConnection);
     }
 
-
     if (pollingInterval < 1) {
         //kDebug() << "    connecting directly";
         d->relayObjects[visualization] = 0;
@@ -129,13 +129,14 @@ void DataContainer::connectVisualization(QObject* visualization, uint pollingInt
         // if it is the first visualization, then the source will already have been populated
         // engine's sourceRequested method
         bool immediateUpdate = connected || d->relayObjects.count() > 1;
-        SignalRelay *relay = d->signalRelay(this, visualization, pollingInterval, alignment, immediateUpdate);
+        SignalRelay *relay = d->signalRelay(this, visualization, pollingInterval,
+                                            alignment, immediateUpdate);
         connect(relay, SIGNAL(dataUpdated(QString,Plasma::DataEngine::Data)),
                 visualization, SLOT(dataUpdated(QString,Plasma::DataEngine::Data)));
     }
 }
 
-void DataContainer::disconnectVisualization(QObject* visualization)
+void DataContainer::disconnectVisualization(QObject *visualization)
 {
     QMap<QObject *, SignalRelay *>::iterator objIt = d->relayObjects.find(visualization);
 
@@ -164,7 +165,7 @@ void DataContainer::checkForUpdate()
     if (d->dirty) {
         emit dataUpdated(objectName(), d->data);
 
-        foreach (SignalRelay* relay, d->relays) {
+        foreach (SignalRelay *relay, d->relays) {
             relay->checkQueueing();
         }
 

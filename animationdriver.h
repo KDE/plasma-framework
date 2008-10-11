@@ -1,6 +1,6 @@
 /*
  *   Copyright 2007 Aaron Seigo <aseigo@kde.org>
- *                 2007 Alexis Ménard <darktears31@gmail.com>
+ *   Copyright 2007 Alexis Ménard <darktears31@gmail.com>
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU Library General Public License as
@@ -57,20 +57,22 @@ public:
     virtual Animator::CurveShape elementAnimationCurve(Plasma::Animator::Animation) const;
 
     // Element animations
-    virtual QPixmap elementAppear(qreal progress, const QPixmap& pixmap);
-    virtual QPixmap elementDisappear(qreal progress, const QPixmap& pixmap);
+    virtual QPixmap elementAppear(qreal progress, const QPixmap &pixmap);
+    virtual QPixmap elementDisappear(qreal progress, const QPixmap &pixmap);
 
     // Item animations
-    virtual void itemAppear(qreal progress, QGraphicsItem* item);
-    virtual void itemDisappear(qreal progress, QGraphicsItem* item);
-    virtual void itemActivated(qreal progress, QGraphicsItem* item);
+    virtual void itemAppear(qreal progress, QGraphicsItem *item);
+    virtual void itemDisappear(qreal progress, QGraphicsItem *item);
+    virtual void itemActivated(qreal progress, QGraphicsItem *item);
 
     // Item movements
-    virtual void itemSlideIn(qreal progress, QGraphicsItem* item, const QPoint &start, const QPoint &destination);
-    virtual void itemSlideOut(qreal progress, QGraphicsItem* item, const QPoint &start, const QPoint &destination);
+    virtual void itemSlideIn(qreal progress, QGraphicsItem *item,
+                             const QPoint &start, const QPoint &destination);
+    virtual void itemSlideOut(qreal progress, QGraphicsItem *item,
+                              const QPoint &start, const QPoint &destination);
 
 private:
-    AnimationDriverPrivate * const d;
+    AnimationDriverPrivate *const d;
 };
 
 } // Plasma namespace

@@ -88,7 +88,7 @@ public:
      *
      * @return a Service object, guaranteed to be not null.
      */
-    static Service* load(const QString &name, QObject *parent = 0);
+    static Service *load(const QString &name, QObject *parent = 0);
 
     /**
      * Sets the destination for this Service to operate on
@@ -123,7 +123,7 @@ public:
      * @return a started ServiceJob; the consumer may connect to relevant
      *         signals before returning to the event loop
      */
-    ServiceJob* startOperationCall(const KConfigGroup &description, QObject *parent = 0);
+    ServiceJob *startOperationCall(const KConfigGroup &description, QObject *parent = 0);
 
     /**
      * Query to find if an operation is enabled or not.
@@ -186,7 +186,7 @@ Q_SIGNALS:
     /**
      * Emitted when a job associated with this Service completes its task
      */
-    void finished(Plasma::ServiceJob* job);
+    void finished(Plasma::ServiceJob *job);
 
     /**
      * Emitted when the Service's operations change. For example, a
@@ -215,7 +215,7 @@ protected:
      * @param parameters the parameters set by the user for the operation
      * @return a ServiceJob that can be started and monitored by the consumer
      */
-    virtual ServiceJob* createJob(const QString &operation,
+    virtual ServiceJob *createJob(const QString &operation,
                                   QMap<QString, QVariant> &parameters) = 0;
 
     /**

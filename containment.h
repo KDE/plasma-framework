@@ -78,8 +78,12 @@ class PLASMA_EXPORT Containment : public Applet
                 explicit StyleOption(const StyleOption &other);
                 explicit StyleOption(const QStyleOptionGraphicsItem &other);
 
-                enum StyleOptionType { Type = SO_CustomBase + 1 };
-                enum StyleOptionVersion { Version = QStyleOptionGraphicsItem::Version + 1 };
+                enum StyleOptionType {
+                    Type = SO_CustomBase + 1
+                };
+                enum StyleOptionVersion {
+                    Version = QStyleOptionGraphicsItem::Version + 1
+                };
 
                 /**
                  * The View, if any, that this containment is currently
@@ -89,13 +93,14 @@ class PLASMA_EXPORT Containment : public Applet
                 Plasma::View *view;
         };
 
-        enum Type { NoContainmentType = -1 /**< @internal */,
-                    DesktopContainment = 0 /**< A desktop containment */,
-                    PanelContainment /**< A desktop panel */,
-                    CustomContainment = 127 /**< A containment that is neither a desktop nor a panel,
-                                                 but something application specific */,
-                    CustomPanelContainment = 128 /**< A customized desktop panel */
-                  };
+        enum Type {
+            NoContainmentType = -1,  /**< @internal */
+            DesktopContainment = 0,  /**< A desktop containment */
+            PanelContainment,        /**< A desktop panel */
+            CustomContainment = 127, /**< A containment that is neither a desktop nor a panel
+                                        but something application specific */
+            CustomPanelContainment = 128 /**< A customized desktop panel */
+        };
 
         /**
          * @param parent the QGraphicsItem this applet is parented to
@@ -135,7 +140,7 @@ class PLASMA_EXPORT Containment : public Applet
         /**
          * Returns the Corona (if any) that this Containment is hosted by
          */
-        Corona* corona() const;
+        Corona *corona() const;
 
         /**
          * Returns a list of all known containments.
@@ -174,7 +179,7 @@ class PLASMA_EXPORT Containment : public Applet
          *
          * @return a pointer to the applet on success, or 0 on failure
          */
-        Applet* addApplet(const QString &name, const QVariantList &args = QVariantList(),
+        Applet *addApplet(const QString &name, const QVariantList &args = QVariantList(),
                           const QRectF &geometry = QRectF(-1, -1, -1, -1));
 
         /**
@@ -295,7 +300,7 @@ class PLASMA_EXPORT Containment : public Applet
         /**
          * Return wallpaper plugin.
          */
-        Plasma::Wallpaper* wallpaper() const;
+        Plasma::Wallpaper *wallpaper() const;
 
         /**
          * Sets the current activity by name
@@ -488,7 +493,8 @@ class PLASMA_EXPORT Containment : public Applet
 
     private:
         Q_PRIVATE_SLOT(d, void appletDestroyed(QObject*))
-        Q_PRIVATE_SLOT(d, void containmentAppletAnimationComplete(QGraphicsItem *item, Plasma::Animator::Animation anim))
+        Q_PRIVATE_SLOT(d, void containmentAppletAnimationComplete(QGraphicsItem *item,
+                                                                  Plasma::Animator::Animation anim))
         Q_PRIVATE_SLOT(d, void triggerShowAddWidgets())
         Q_PRIVATE_SLOT(d, void handleDisappeared(AppletHandle *handle))
         Q_PRIVATE_SLOT(d, void positionToolBox())
@@ -500,10 +506,9 @@ class PLASMA_EXPORT Containment : public Applet
         friend class AppletPrivate;
         friend class CoronaPrivate;
         friend class ContainmentPrivate;
-        ContainmentPrivate* const d;
+        ContainmentPrivate *const d;
 };
 
 } // Plasma namespace
-
 
 #endif // multiple inclusion guard

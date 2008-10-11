@@ -42,29 +42,27 @@ class AnimatorPrivate;
 class PLASMA_EXPORT Animator : public QObject
 {
     Q_OBJECT
-    Q_ENUMS( Animation )
-    Q_ENUMS( CurveShape )
-    Q_ENUMS( Movement )
+    Q_ENUMS(Animation)
+    Q_ENUMS(CurveShape)
+    Q_ENUMS(Movement)
 
 public:
 
-    enum Animation
-    {
-        AppearAnimation = 0 /*<< Animate the appearance of an element */,
-        DisappearAnimation /*<< Animate the disappearance of an element */,
-        ActivateAnimation /*<< When something is activated or launched, such as an app icon being clicked */
+    enum Animation {
+        AppearAnimation = 0, /*<< Animate the appearance of an element */
+        DisappearAnimation,  /*<< Animate the disappearance of an element */
+        ActivateAnimation    /*<< When something is activated or launched,
+                               such as an app icon being clicked */
     };
 
-    enum CurveShape
-    {
+    enum CurveShape {
         EaseInCurve = 0,
         EaseOutCurve,
         EaseInOutCurve,
         LinearCurve
     };
 
-    enum Movement
-    {
+    enum Movement {
         SlideInMovement = 0,
         SlideOutMovement,
         FastSlideInMovement,
@@ -74,7 +72,7 @@ public:
     /**
      * Singleton accessor
      **/
-    static Animator* self();
+    static Animator *self();
 
     /**
      * Starts a standard animation on a QGraphicsItem.
@@ -83,7 +81,7 @@ public:
      * @arg anim the type of animation to perform
      * @return the id of the animation
      **/
-    Q_INVOKABLE int animateItem(QGraphicsItem* item, Animation anim);
+    Q_INVOKABLE int animateItem(QGraphicsItem *item, Animation anim);
 
     /**
      * Stops an item animation before the animation is complete.
@@ -101,7 +99,7 @@ public:
      * @arg anim the type of animation to perform
      * @return the id of the animation
      **/
-    Q_INVOKABLE int moveItem(QGraphicsItem* item, Movement movement, const QPoint &destination);
+    Q_INVOKABLE int moveItem(QGraphicsItem *item, Movement movement, const QPoint &destination);
 
     /**
      * Stops an item movement before the animation is complete.
@@ -130,7 +128,7 @@ public:
      * @return an id that can be used to identify this animation.
      */
     Q_INVOKABLE int customAnimation(int frames, int duration, Animator::CurveShape curve,
-                                       QObject* receiver, const char* method);
+                                    QObject *receiver, const char *method);
 
     /**
      * Stops a custom animation. Note that it is not necessary to call

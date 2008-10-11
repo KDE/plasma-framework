@@ -75,9 +75,8 @@ class PLASMA_EXPORT Svg : public QObject
          *
          * @related Plasma::Theme
          */
-        explicit Svg(QObject* parent = 0);
+        explicit Svg(QObject *parent = 0);
         ~Svg();
-
 
         /**
          * Returns a pixmap of the SVG represented by this object.
@@ -140,7 +139,7 @@ class PLASMA_EXPORT Svg : public QObject
          * the next call to paint.
          * @arg size the new size of the image
          **/
-        Q_INVOKABLE void resize( const QSizeF& size );
+        Q_INVOKABLE void resize(const QSizeF &size);
 
         /**
          * Resizes the rendered image to the natural size of the SVG.
@@ -153,21 +152,21 @@ class PLASMA_EXPORT Svg : public QObject
          * @arg elementId the id of the element to check
          * @return the current size of a given element, given the current size of the Svg
          **/
-        Q_INVOKABLE QSize elementSize( const QString& elementId ) const;
+        Q_INVOKABLE QSize elementSize(const QString &elementId) const;
 
         /**
          * The bounding rect of a given element
          * @arg elementId the id of the element to check
          * @return the current rect of a given element, given the current size of the Svg
          **/
-        Q_INVOKABLE QRectF elementRect(const QString& elementId) const;
+        Q_INVOKABLE QRectF elementRect(const QString &elementId) const;
 
         /**
          * Check when an element exists in the loaded Svg
          * @arg elementId the id of the element to check
          * @return true if the element is defined in the Svg, otherwise false
          **/
-        Q_INVOKABLE bool hasElement( const QString& elementId ) const;
+        Q_INVOKABLE bool hasElement(const QString &elementId) const;
 
         /**
          * Returns the element (by id) at the given point. An empty string is
@@ -209,7 +208,7 @@ class PLASMA_EXPORT Svg : public QObject
         void repaintNeeded();
 
     private:
-        SvgPrivate* const d;
+        SvgPrivate *const d;
 
         Q_PRIVATE_SLOT(d, void themeChanged())
         Q_PRIVATE_SLOT(d, void colorsChanged())

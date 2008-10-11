@@ -55,13 +55,14 @@ class PLASMA_EXPORT Dialog : public QWidget
         /**
          * Use these flags to choose the active resize corners.
          */
-        enum ResizeCorner { NoCorner = 0,
-                            NorthEast = 1,
-                            SouthEast = 2,
-                            NorthWest = 4,
-                            SouthWest = 8,
-                            All = NorthEast | SouthEast | NorthWest | SouthWest
-                           };
+        enum ResizeCorner {
+            NoCorner = 0,
+            NorthEast = 1,
+            SouthEast = 2,
+            NorthWest = 4,
+            SouthWest = 8,
+            All = NorthEast | SouthEast | NorthWest | SouthWest
+        };
         Q_DECLARE_FLAGS(ResizeCorners, ResizeCorner)
 
         /**
@@ -103,26 +104,25 @@ class PLASMA_EXPORT Dialog : public QWidget
         void paintEvent(QPaintEvent *e);
         void resizeEvent(QResizeEvent *e);
         bool eventFilter(QObject *watched, QEvent *event);
-        void hideEvent (QHideEvent * event);
-        void showEvent (QShowEvent * event);
-        void mouseMoveEvent (QMouseEvent * event);
-        void mousePressEvent (QMouseEvent * event);
-        void mouseReleaseEvent (QMouseEvent * event);
+        void hideEvent (QHideEvent *event);
+        void showEvent (QShowEvent *event);
+        void mouseMoveEvent (QMouseEvent *event);
+        void mousePressEvent (QMouseEvent *event);
+        void mouseReleaseEvent (QMouseEvent *event);
 
         /**
          * Convenience method to know whether the point is in a control area (e.g. resize area)
          * or not.
          * @return true if the point is in the control area.
          */
-         bool inControlArea(const QPoint &point);
-
+        bool inControlArea(const QPoint &point);
 
     private:
-        DialogPrivate * const d;
+        DialogPrivate *const d;
 
         friend class DialogPrivate;
         /**
-         * React to theme changes 
+         * React to theme changes
          */
         Q_PRIVATE_SLOT(d, void themeUpdated())
 };

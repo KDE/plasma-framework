@@ -128,7 +128,6 @@ View::View(Containment *containment, int viewId, QWidget *parent)
     }
 }
 
-
 View::~View()
 {
     delete d;
@@ -240,15 +239,15 @@ void View::setContainment(Plasma::Containment *containment)
     connect(containment, SIGNAL(geometryChanged()), this, SLOT(updateSceneRect()));
 }
 
-Containment* View::containment() const
+Containment *View::containment() const
 {
     return d->containment;
 }
 
-Containment* View::swapContainment(const QString& name, const QVariantList& args)
+Containment *View::swapContainment(const QString &name, const QVariantList &args)
 {
     Containment *old = d->containment;
-    Plasma::Corona* corona = old->corona();
+    Plasma::Corona *corona = old->corona();
     Plasma::Containment *c = corona->addContainment(name, args);
     if (c) {
         KConfigGroup oldConfig = old->config();
@@ -265,7 +264,7 @@ Containment* View::swapContainment(const QString& name, const QVariantList& args
 
         // load the configuration of the old containment into the new one
         c->restore(newConfig);
-        foreach(Applet* applet, c->applets()) {
+        foreach (Applet *applet, c->applets()) {
             applet->init();
             // We have to flush the applet constraints manually
             applet->flushPendingConstraintsEvents();

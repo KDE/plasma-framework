@@ -47,7 +47,6 @@ class PLASMA_EXPORT RunnerManager : public QObject
 {
     Q_OBJECT
 
-
     public:
         explicit RunnerManager(QObject *parent=0);
         explicit RunnerManager(KConfigGroup &config, QObject *parent=0);
@@ -58,16 +57,16 @@ class PLASMA_EXPORT RunnerManager : public QObject
          * @arg name the name of the runner
          * @return Pointer to the runner
          */
-        AbstractRunner* runner(const QString &name) const;
+        AbstractRunner *runner(const QString &name) const;
 
         /**
          * Retrieves the current context
          * @return pointer to the current context
          */
-        RunnerContext* searchContext() const;
+        RunnerContext *searchContext() const;
 
         /**
-         * Retrieves all available matches found so far for the previously launched query 
+         * Retrieves all available matches found so far for the previously launched query
          * @return List of matches
          */
         QList<QueryMatch> matches() const;
@@ -76,13 +75,13 @@ class PLASMA_EXPORT RunnerManager : public QObject
          * Runs a given match
          * @arg match the match to be executed
          */
-         void run(const QueryMatch &match);
+        void run(const QueryMatch &match);
 
         /**
          * Runs a given match
          * @arg id the id of the match to run
          */
-         void run(const QString &id);
+        void run(const QString &id);
 
         /**
          * @return the current query term

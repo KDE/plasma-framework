@@ -88,14 +88,14 @@ public:
      *
      * @return a pointer to the containment on success, or 0 on failure
      */
-    Containment* addContainment(const QString& name, const QVariantList& args = QVariantList());
+    Containment *addContainment(const QString &name, const QVariantList &args = QVariantList());
 
     /**
      * Returns the Containment, if any, for a given physical screen
      *
      * @param screen number of the physical screen to locate
      */
-    Containment* containmentForScreen(int screen) const;
+    Containment *containmentForScreen(int screen) const;
 
     /**
      * Adds a widget in the topleft quadrant in the scene. Widgets in the topleft quadrant are
@@ -143,7 +143,8 @@ public Q_SLOTS:
     ImmutabilityType immutability() const;
 
     /**
-     * Sets the immutability type for this Corona (not immutable, user immutable or system immutable)
+     * Sets the immutability type for this Corona (not immutable,
+     * user immutable or system immutable)
      * @arg immutable the new immutability type of this applet
      */
     void setImmutability(const ImmutabilityType immutable);
@@ -204,15 +205,16 @@ protected:
      *
      * @return a pointer to the containment on success, or 0 on failure
      **/
-    Containment *addContainmentDelayed(const QString& name, const QVariantList& args = QVariantList());
+    Containment *addContainmentDelayed(const QString &name,
+                                       const QVariantList &args = QVariantList());
 
     //Reimplemented from QGraphicsScene
-    void dragEnterEvent(QGraphicsSceneDragDropEvent* event);
-    void dragLeaveEvent(QGraphicsSceneDragDropEvent* event);
-    void dragMoveEvent(QGraphicsSceneDragDropEvent* event);
+    void dragEnterEvent(QGraphicsSceneDragDropEvent *event);
+    void dragLeaveEvent(QGraphicsSceneDragDropEvent *event);
+    void dragMoveEvent(QGraphicsSceneDragDropEvent *event);
 
 private:
-    CoronaPrivate * const d;
+    CoronaPrivate *const d;
 
     Q_PRIVATE_SLOT(d, void containmentDestroyed(QObject*))
     Q_PRIVATE_SLOT(d, void syncConfig())
@@ -223,5 +225,4 @@ private:
 } // namespace Plasma
 
 #endif
-
 

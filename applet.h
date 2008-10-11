@@ -89,12 +89,18 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         /**
          * Description on how draw a background for the applet
          */
-        enum BackgroundHint { NoBackground = 0 /** Not drawing a background under the applet, the applet has its own implementation */,
-                              StandardBackground = 1 /** The standard background from the theme is drawn */,
-                              TranslucentBackground = 2 /** An alternate version of the background is drawn, usually more translucent */,
-                              ShadowedBackground = 4 /** The applet has a drop shadow */,
-                              DefaultBackground = StandardBackground | ShadowedBackground /** Default settings: both standard background and shadow */
-                            };
+        enum BackgroundHint {
+            NoBackground = 0,         /** Not drawing a background under the
+                                          applet, the applet has its own implementation */
+            StandardBackground = 1,   /** The standard background from the theme is drawn */
+            TranslucentBackground = 2,/** An alternate version of the background is drawn,
+                                          usually more translucent */
+            ShadowedBackground = 4,   /** The applet has a drop shadow */
+            DefaultBackground = StandardBackground | ShadowedBackground
+                                      /** Default settings:
+                                          both standard background
+                                          and shadow */
+        };
         Q_DECLARE_FLAGS(BackgroundHints, BackgroundHint)
 
         ~Applet();
@@ -164,7 +170,7 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          *
          * @return config skeleton object, or 0 if none
          **/
-        ConfigXml* configScheme() const;
+        ConfigXml *configScheme() const;
 
         /**
          * Loads the given DataEngine
@@ -183,7 +189,7 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          *         or an invalid data engine if the requested engine
          *         could not be loaded
          */
-        Q_INVOKABLE DataEngine* dataEngine(const QString& name) const;
+        Q_INVOKABLE DataEngine *dataEngine(const QString &name) const;
 
         /**
          * Accessor for the associated Package object if any.
@@ -191,7 +197,7 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          *
          * @return the Package object, or 0 if none
          **/
-        const Package* package() const;
+        const Package *package() const;
 
         /**
          * Returns the view this widget is visible on
@@ -296,7 +302,8 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          * @return list of categories
          * @param visibleOnly true if it should only return applets that are marked as visible
          */
-        static QStringList listCategories(const QString &parentApp = QString(), bool visibleOnly = true);
+        static QStringList listCategories(const QString &parentApp = QString(),
+                                          bool visibleOnly = true);
 
         /**
          * Attempts to load an applet
@@ -311,8 +318,8 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          * @param args to send the applet extra arguments
          * @return a pointer to the loaded applet, or 0 on load failure
          **/
-        static Applet* load(const QString &name, uint appletId = 0,
-                            const QVariantList& args = QVariantList());
+        static Applet *load(const QString &name, uint appletId = 0,
+                            const QVariantList &args = QVariantList());
 
         /**
          * Attempts to load an applet
@@ -327,22 +334,22 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          * @param args to send the applet extra arguments
          * @return a pointer to the loaded applet, or 0 on load failure
          **/
-        static Applet* load(const KPluginInfo& info, uint appletId = 0,
-                                  const QVariantList& args = QVariantList());
+        static Applet *load(const KPluginInfo &info, uint appletId = 0,
+                            const QVariantList &args = QVariantList());
 
         /**
          * Get the category of the given applet
          *
          * @param applet a KPluginInfo object for the applet
          */
-        static QString category(const KPluginInfo& applet);
+        static QString category(const KPluginInfo &applet);
 
         /**
          * Get the category of the given applet
          *
          * @param appletName the name of the applet
          */
-        static QString category(const QString& appletName);
+        static QString category(const QString &appletName);
 
         /**
          * This method is called when the interface should be painted.
@@ -354,7 +361,7 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          **/
         virtual void paintInterface(QPainter *painter,
                                     const QStyleOptionGraphicsItem *option,
-                                    const QRect& contentsRect);
+                                    const QRect &contentsRect);
 
         /**
          * Returns the user-visible name for the applet, as specified in the
@@ -398,7 +405,8 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          */
         ImmutabilityType immutability() const;
 
-        void paintWindowFrame(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+        void paintWindowFrame(QPainter *painter,
+                              const QStyleOptionGraphicsItem *option, QWidget *widget);
 
         /**
          * If for some reason, the applet fails to get up on its feet (the
@@ -432,7 +440,7 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         /**
          * Returns the QAction with the given name from our collection
          */
-        QAction* action(QString name) const;
+        QAction *action(QString name) const;
 
         /**
          * Adds the action to our collection under the given name
@@ -472,12 +480,14 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          * Reimplemented from QGraphicsItem
          **/
         int type() const;
-        enum { Type = Plasma::AppletType };
+        enum {
+            Type = Plasma::AppletType
+        };
 
         /**
          * @return the Containment, if any, this applet belongs to
          **/
-        Containment* containment() const;
+        Containment *containment() const;
 
         /**
          * Sets the global shorcut to associate with this widget.
@@ -509,8 +519,8 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          * @param appletId a unique id used to differentiate between multiple
          *      instances of the same Applet type
          */
-        explicit Applet(QGraphicsItem* parent = 0,
-                        const QString& serviceId = QString(),
+        explicit Applet(QGraphicsItem *parent = 0,
+                        const QString &serviceId = QString(),
                         uint appletId = 0);
 
     Q_SIGNALS:
@@ -551,7 +561,8 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
 
     public Q_SLOTS:
         /**
-         * Sets the immutability type for this applet (not immutable, user immutable or system immutable)
+         * Sets the immutability type for this applet (not immutable,
+         * user immutable or system immutable)
          * @arg immutable the new immutability type of this applet
          */
         void setImmutability(const ImmutabilityType immutable);
@@ -639,7 +650,7 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          * @param args a list of strings containing two entries: the service id
          *      and the applet id
          */
-        Applet(QObject* parent, const QVariantList& args);
+        Applet(QObject *parent, const QVariantList &args);
 
         /**
          * Call this method when the applet fails to launch properly. An
@@ -653,7 +664,7 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          * @param reason an optional reason to show the user why the applet
          *               failed to launch
          **/
-        void setFailedToLaunch(bool failed, const QString& reason = QString());
+        void setFailedToLaunch(bool failed, const QString &reason = QString());
 
         /**
          * When called, the Applet should write any information needed as part
@@ -689,7 +700,7 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          * @param needsConfiguring true if the applet needs to be configured,
          *                         or false if it doesn't
          */
-        void setConfigurationRequired(bool needsConfiguring, const QString& reason = QString());
+        void setConfigurationRequired(bool needsConfiguring, const QString &reason = QString());
 
         /**
          * Reimplement this method so provide a configuration interface,
@@ -714,7 +725,6 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          * @property constraint
          */
         virtual void constraintsEvent(Plasma::Constraints constraints);
-
 
         /**
          * Register the widgets that manage mouse clicks but you still want
@@ -743,12 +753,12 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         /**
          * @internal event filter; used for focus watching
          **/
-        bool eventFilter( QObject *o, QEvent *e );
+        bool eventFilter(QObject *o, QEvent *e);
 
         /**
          * @internal scene event filter; used to manage applet dragging
          */
-        bool sceneEventFilter ( QGraphicsItem * watched, QEvent * event );
+        bool sceneEventFilter (QGraphicsItem *watched, QEvent *event);
 
         /**
          * @internal manage the mouse movement to drag the applet around
@@ -804,7 +814,8 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         Q_PRIVATE_SLOT(d, void setFocus())
         Q_PRIVATE_SLOT(d, void checkImmutability())
         Q_PRIVATE_SLOT(d, void themeChanged())
-        Q_PRIVATE_SLOT(d, void appletAnimationComplete(QGraphicsItem *item, Plasma::Animator::Animation anim))
+        Q_PRIVATE_SLOT(d, void appletAnimationComplete(QGraphicsItem *item,
+                                                       Plasma::Animator::Animation anim))
         Q_PRIVATE_SLOT(d, void selectItemToDestroy())
         Q_PRIVATE_SLOT(d, void updateRect(const QRectF& rect))
 
@@ -813,7 +824,7 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          **/
         void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
 
-        AppletPrivate* const d;
+        AppletPrivate *const d;
 
         //Corona needs to access setFailedToLaunch and init
         friend class Corona;
