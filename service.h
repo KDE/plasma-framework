@@ -65,9 +65,9 @@ class ServicePrivate;
  * @code
  * Plasma::DataEngine *twitter = dataEngine("twitter");
  * Plasma::Service *service = twitter.serviceForSource("aseigo");
- * KConfigGroup op = service->operationParameters("update");
+ * KConfigGroup op = service->operationDescription("update");
  * op.writeEntry("tweet", "Hacking on plasma!");
- * Plasma::ServiceJob *job = service->startOperation(op);
+ * Plasma::ServiceJob *job = service->startOperationCall(op);
  * connect(job, SIGNAL(finished(KJob*)), this, SLOT(jobCompeted()));
  * @endcode
  */
