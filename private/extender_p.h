@@ -35,6 +35,7 @@ class Applet;
 class Extender;
 class ExtenderItem;
 class Label;
+class Svg;
 
 class ExtenderPrivate
 {

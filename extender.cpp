@@ -27,6 +27,8 @@
 #include "containment.h"
 #include "corona.h"
 #include "extenderitem.h"
+#include "popupapplet.h"
+#include "svg.h"
 #include "widgets/label.h"
 
 #include "private/applet_p.h"
@@ -130,7 +132,6 @@ ExtenderItem *Extender::item(const QString &name) const
 
 void Extender::saveState()
 {
-    kDebug() << "saving state";
     foreach (ExtenderItem *item, attachedItems()) {
         item->config().writeEntry("extenderItemPosition", item->geometry().y());
     }
@@ -144,7 +145,6 @@ QVariant Extender::itemChange(GraphicsItemChange change, const QVariant &value)
 
     return QGraphicsWidget::itemChange(change, value);
 }
-
 
 void Extender::resizeEvent(QGraphicsSceneResizeEvent *event)
 {
@@ -265,7 +265,6 @@ ExtenderPrivate::~ExtenderPrivate()
 void ExtenderPrivate::addExtenderItem(ExtenderItem *item, const QPointF &pos)
 {
     attachedExtenderItems.append(item);
-    item->action("returntosource")->setVisible(item->isDetached());
     q->itemAddedEvent(item, pos);
     q->itemHoverLeaveEvent(item);
     emit q->itemAttached(item);

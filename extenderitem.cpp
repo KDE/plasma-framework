@@ -152,6 +152,17 @@ class ExtenderItemPrivate
                     }
                 }
 
+                if (q->isDetached() && sourceApplet) {
+                    Icon *returnToSource = new Icon(q);
+                    returnToSource->setSvg("widgets/configuration-icons", "return-to-source");
+                    QSizeF iconSize = returnToSource->sizeFromIconSize(iconHeight);
+                    returnToSource->setMinimumSize(iconSize);
+                    returnToSource->setMaximumSize(iconSize);
+
+                    toolboxLayout->addItem(returnToSource);
+                    QObject::connect(returnToSource, SIGNAL(clicked()), q, SLOT(moveBackToSource()));
+                }
+
                 toolboxLayout->updateGeometry();
 
                 //position the toolbox correctly.
@@ -249,7 +260,7 @@ class ExtenderItemPrivate
         PanelSvg *background;
 
         Icon *collapseIcon;
-        QAction *returnAction;
+
         QMap<QString, QAction*> actions;
 
         QString title;
@@ -328,8 +339,6 @@ ExtenderItem::ExtenderItem(Extender *hostExtender, uint extenderItemId)
     d->toolbox->setLayout(d->toolboxLayout);
 
     //allow the theme to set the size of the icon.
-    //TODO: discuss with others to determine details of the theming implementation. I don't really
-    //like this approach, but it works...
     QSizeF iconSize = d->dragger->elementSize("hint-preferred-icon-size");
 
     //create the collapse/applet icon.
@@ -339,14 +348,6 @@ ExtenderItem::ExtenderItem(Extender *hostExtender, uint extenderItemId)
                             (d->dragger->size().height() + d->dragTop + d->dragBottom)/2 -
                             d->collapseIcon->size().height()/2 + d->bgTop);
     connect(d->collapseIcon, SIGNAL(clicked()), this, SLOT(toggleCollapse()));
-
-    //Add the return to source action.
-    d->returnAction = new QAction(this);
-    d->returnAction->setIcon(KIcon("returntosource"));
-    d->returnAction->setEnabled(true);
-    d->returnAction->setVisible(true);
-    connect(d->returnAction, SIGNAL(triggered()), this, SLOT(moveBackToSource()));
-    addAction("returntosource", d->returnAction);
 
     //set the extender we want to move to.
     setExtender(hostExtender);
@@ -463,6 +464,9 @@ void ExtenderItem::setExtender(Extender *extender, const QPointF &pos)
         delete d->expirationTimer;
         d->expirationTimer = 0;
     }
+
+    //we might have to enable or disable the returnToSource button.
+    d->updateToolBox();
 }
 
 Extender *ExtenderItem::extender() const
