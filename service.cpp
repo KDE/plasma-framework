@@ -41,7 +41,6 @@ Service::Service(QObject *parent)
     : QObject(parent),
       d(new ServicePrivate(this))
 {
-    registerOperationsScheme();
 }
 
 Service::Service(QObject *parent, const QVariantList &args)
@@ -222,7 +221,7 @@ void Service::setName(const QString &name)
 
 void Service::setOperationEnabled(const QString &operation, bool enable)
 {
-    if (!d->config->hasGroup(operation)) {
+    if (!d->config || !d->config->hasGroup(operation)) {
         return;
     }
 
@@ -255,7 +254,7 @@ void Service::setOperationEnabled(const QString &operation, bool enable)
 
 bool Service::isOperationEnabled(const QString &operation) const
 {
-    return d->config->hasGroup(operation) && !d->disabledOperations.contains(operation);
+    return d->config && d->config->hasGroup(operation) && !d->disabledOperations.contains(operation);
 }
 
 void Service::setOperationsScheme(QIODevice *xml)
