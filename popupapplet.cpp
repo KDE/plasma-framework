@@ -294,15 +294,6 @@ bool PopupApplet::eventFilter(QObject *watched, QEvent *event)
     return Applet::eventFilter(watched, event);
 }
 
-QVariant PopupApplet::itemChange(GraphicsItemChange change, const QVariant &value)
-{
-    if (change == QGraphicsItem::ItemParentHasChanged && d->dialog) {
-        d->dialog->setParent(view());
-    }
-
-    return Applet::itemChange(change, value);
-}
-
 void PopupApplet::showPopup(uint popupDuration)
 {
     if (d->dialog && (formFactor() == Horizontal || formFactor() == Vertical)) {
