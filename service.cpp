@@ -55,8 +55,6 @@ Service::Service(QObject *parent, const QVariantList &args)
         setName(mutableArgs[0].toString());
         mutableArgs.removeFirst();
     }
-
-    registerOperationsScheme();
 }
 
 Service::~Service()
