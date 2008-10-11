@@ -57,7 +57,7 @@ class RunnerContextPrivate : public QSharedData
         {
         }
 
-        RunnerContextPrivate(const RunnerContextPrivate& p)
+        RunnerContextPrivate(const RunnerContextPrivate &p)
             : QSharedData(),
               type(RunnerContext::None),
               q(p.q)
@@ -120,7 +120,6 @@ class RunnerContextPrivate : public QSharedData
         RunnerContext * q;
 };
 
-
 RunnerContext::RunnerContext(QObject *parent)
     : QObject(parent),
       d(new RunnerContextPrivate(this))
@@ -129,7 +128,7 @@ RunnerContext::RunnerContext(QObject *parent)
 
 //copy ctor
 RunnerContext::RunnerContext(RunnerContext &other, QObject *parent)
-     : QObject(parent)
+    : QObject(parent)
 {
     LOCK_FOR_READ((&other))
     d = other.d;
@@ -142,9 +141,9 @@ RunnerContext::~RunnerContext()
 
 void RunnerContext::reset()
 {
-    // We will detach if we are a copy of someone. But we will reset 
-    // if we are the 'main' context others copied from. Resetting 
-    // one RunnerContext makes all the copies oneobsolete.  
+    // We will detach if we are a copy of someone. But we will reset
+    // if we are the 'main' context others copied from. Resetting
+    // one RunnerContext makes all the copies oneobsolete.
     d.detach();
 
     // we still have to remove all the matches, since if the
@@ -174,7 +173,6 @@ void RunnerContext::setQuery(const QString &term)
     d->determineType();
 }
 
-
 QString RunnerContext::query() const
 {
     // the query term should never be set after
@@ -193,7 +191,7 @@ QString RunnerContext::mimeType() const
     return d->mimeType;
 }
 
-bool RunnerContext::addMatches(const QString& term, const QList<QueryMatch> &matches)
+bool RunnerContext::addMatches(const QString &term, const QList<QueryMatch> &matches)
 {
     Q_UNUSED(term)
 
@@ -213,9 +211,9 @@ bool RunnerContext::addMatches(const QString& term, const QList<QueryMatch> &mat
     }
     UNLOCK(this);
     //kDebug()<< "add matches";
-    // A copied searchContext may share the d pointer, 
+    // A copied searchContext may share the d pointer,
     // we always want to sent the signal of the object that created
-    // the d pointer 
+    // the d pointer
     emit d->q->matchesChanged();
     return true;
 }

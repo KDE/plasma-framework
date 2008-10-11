@@ -41,7 +41,7 @@ namespace Plasma
 class AbstractRunnerPrivate
 {
 public:
-    AbstractRunnerPrivate(AbstractRunner* r, KService::Ptr service)
+    AbstractRunnerPrivate(AbstractRunner *r, KService::Ptr service)
       : priority(AbstractRunner::NormalPriority),
         speed(AbstractRunner::NormalSpeed),
         blackListed(0),
@@ -56,7 +56,8 @@ public:
             if (!api.isEmpty()) {
                 const QString path = KStandardDirs::locate("data",
                                     "plasma/runners/" + runnerDescription.pluginName() + '/');
-                PackageStructure::Ptr structure = Plasma::packageStructure(api, Plasma::RunnerComponent);
+                PackageStructure::Ptr structure =
+                    Plasma::packageStructure(api, Plasma::RunnerComponent);
                 structure->setPath(path);
                 package = new Package(path, structure);
 
@@ -86,9 +87,9 @@ public:
     AbstractRunner::Priority priority;
     AbstractRunner::Speed speed;
     RunnerContext::Types blackListed;
-    RunnerScript* script;
+    RunnerScript *script;
     KPluginInfo runnerDescription;
-    AbstractRunner* runner;
+    AbstractRunner *runner;
     QTime runtime;
     int fastRuns;
     Package *package;
@@ -96,13 +97,13 @@ public:
 
 K_GLOBAL_STATIC(QMutex, s_bigLock)
 
-AbstractRunner::AbstractRunner(QObject* parent, const QString& serviceId)
+AbstractRunner::AbstractRunner(QObject *parent, const QString &serviceId)
     : QObject(parent),
     d(new AbstractRunnerPrivate(this, KService::serviceByStorageId(serviceId)))
 {
 }
 
-AbstractRunner::AbstractRunner(QObject* parent, const QVariantList& args)
+AbstractRunner::AbstractRunner(QObject *parent, const QVariantList &args)
     : QObject(parent),
       d(new AbstractRunnerPrivate(this, KService::serviceByStorageId(args.count() > 0 ? args[0].toString() : QString())))
 {
@@ -212,8 +213,8 @@ KService::List AbstractRunner::serviceQuery(const QString &serviceType, const QS
     QMutexLocker lock(s_bigLock);
     return KServiceTypeTrader::self()->query(serviceType, constraint);
 }
- 
-QMutex* AbstractRunner::bigLock() const
+
+QMutex *AbstractRunner::bigLock() const
 {
     return s_bigLock;
 }
@@ -256,7 +257,7 @@ QString AbstractRunner::description() const
     return d->runnerDescription.property("Comment").toString();
 }
 
-const Package* AbstractRunner::package() const
+const Package *AbstractRunner::package() const
 {
     return d->package;
 }

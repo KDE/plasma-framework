@@ -47,7 +47,7 @@ namespace Plasma
 class PackagePrivate
 {
 public:
-    PackagePrivate(const PackageStructure::Ptr st, const QString& p)
+    PackagePrivate(const PackageStructure::Ptr st, const QString &p)
         : structure(st),
           basePath(p),
           valid(QFile::exists(basePath)),
@@ -69,7 +69,8 @@ public:
     PackageMetadata *metadata;
 };
 
-Package::Package(const QString& packageRoot, const QString& package, PackageStructure::Ptr structure)
+Package::Package(const QString &packageRoot, const QString &package,
+                 PackageStructure::Ptr structure)
     : d(new PackagePrivate(structure, packageRoot + '/' + package))
 {
     structure->setPath(d->basePath);
@@ -112,7 +113,7 @@ bool Package::isValid() const
     return true;
 }
 
-QString Package::filePath(const char* fileType, const QString& filename) const
+QString Package::filePath(const char *fileType, const QString &filename) const
 {
     if (!d->valid) {
         kDebug() << "package is not valid";
@@ -146,12 +147,12 @@ QString Package::filePath(const char* fileType, const QString& filename) const
     return QString();
 }
 
-QString Package::filePath(const char* fileType) const
+QString Package::filePath(const char *fileType) const
 {
     return filePath(fileType, QString());
 }
 
-QStringList Package::entryList(const char* fileType) const
+QStringList Package::entryList(const char *fileType) const
 {
     if (!d->valid) {
         return QStringList();
@@ -176,7 +177,7 @@ QStringList Package::entryList(const char* fileType) const
     return QStringList();
 }
 
-const PackageMetadata* Package::metadata() const
+const PackageMetadata *Package::metadata() const
 {
     //FIXME: this only works for native plasma packges; should fall back to... PackageStructure?
     if (!d->metadata) {
@@ -197,7 +198,7 @@ const PackageStructure::Ptr Package::structure() const
 
 //TODO: provide a version of this that allows one to ask for certain types of packages, etc?
 //      should we be using KService here instead/as well?
-QStringList Package::listInstalled(const QString& packageRoot) // static
+QStringList Package::listInstalled(const QString &packageRoot) // static
 {
     QDir dir(packageRoot);
 
@@ -207,7 +208,7 @@ QStringList Package::listInstalled(const QString& packageRoot) // static
 
     QStringList packages;
 
-    foreach (const QString& sdir, dir.entryList(QDir::AllDirs | QDir::Readable)) {
+    foreach (const QString &sdir, dir.entryList(QDir::AllDirs | QDir::Readable)) {
         QString metadata = packageRoot + '/' + sdir + "/metadata.desktop";
         if (QFile::exists(metadata)) {
             PackageMetadata m(metadata);
@@ -218,9 +219,9 @@ QStringList Package::listInstalled(const QString& packageRoot) // static
     return packages;
 }
 
-bool Package::installPackage(const QString& package,
-                             const QString& packageRoot,
-                             const QString& servicePrefix) // static
+bool Package::installPackage(const QString &package,
+                             const QString &packageRoot,
+                             const QString &servicePrefix) // static
 {
     //TODO: report *what* failed if something does fail
     QDir root(packageRoot);
@@ -259,8 +260,8 @@ bool Package::installPackage(const QString& package,
         }
 
         archivedPackage = true;
-        const KArchiveDirectory* source = archive.directory();
-        const KArchiveEntry* metadata = source->entry("metadata.desktop");
+        const KArchiveDirectory *source = archive.directory();
+        const KArchiveEntry *metadata = source->entry("metadata.desktop");
 
         if (!metadata) {
             kWarning() << "No metadata file in package" << package;
@@ -288,9 +289,9 @@ bool Package::installPackage(const QString& package,
     // Ensure that package names are safe so package uninstall can't inject
     // bad characters into the paths used for removal.
     QRegExp validatePluginName("^[\\w-\\.]+$"); // Only allow letters, numbers, underscore and period.
-    if ( !validatePluginName.exactMatch(targetName) ) {
+    if (!validatePluginName.exactMatch(targetName)) {
         kWarning() << "Package plugin name " << targetName << "contains invalid characters";
-	return false;
+        return false;
     }
 
     targetName = packageRoot + '/' + targetName;
@@ -352,9 +353,9 @@ bool Package::installPackage(const QString& package,
     return true;
 }
 
-bool Package::uninstallPackage(const QString& pluginName,
-                               const QString& packageRoot,
-                               const QString& servicePrefix) // static
+bool Package::uninstallPackage(const QString &pluginName,
+                               const QString &packageRoot,
+                               const QString &servicePrefix) // static
 {
     // We need to remove the package directory and its metadata file.
     QString targetName = pluginName;
@@ -448,6 +449,5 @@ bool Package::createPackage(const PackageMetadata &metadata,
     creation.close();
     return true;
 }
-
 
 } // Namespace

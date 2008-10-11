@@ -65,7 +65,7 @@ public:
         generalFont = QApplication::font();
     }
 
-    KConfigGroup& config()
+    KConfigGroup &config()
     {
         if (!cfg.isValid()) {
             QString groupName = "Theme";
@@ -161,14 +161,14 @@ public:
    Theme self;
 };
 
-K_GLOBAL_STATIC( ThemeSingleton, privateThemeSelf )
+K_GLOBAL_STATIC(ThemeSingleton, privateThemeSelf)
 
-Theme* Theme::defaultTheme()
+Theme *Theme::defaultTheme()
 {
     return &privateThemeSelf->self;
 }
 
-Theme::Theme(QObject* parent)
+Theme::Theme(QObject *parent)
     : QObject(parent),
       d(new ThemePrivate(this))
 {
@@ -256,17 +256,20 @@ void Theme::setThemeName(const QString &themeName)
     d->defaultWallpaperWidth = cg.readEntry("defaultWidth", DEFAULT_WALLPAPER_WIDTH);
     d->defaultWallpaperHeight = cg.readEntry("defaultHeight", DEFAULT_WALLPAPER_HEIGHT);
 
-    disconnect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()), this, SIGNAL(themeChanged()));
+    disconnect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()),
+               this, SIGNAL(themeChanged()));
     if (colorsFile.isEmpty()) {
         d->colors = 0;
-        connect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()), this, SIGNAL(themeChanged()));
+        connect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()),
+                this, SIGNAL(themeChanged()));
     } else {
         d->colors = KSharedConfig::openConfig(colorsFile);
     }
 
     d->colorScheme = KColorScheme(QPalette::Active, KColorScheme::Window, d->colors);
     d->buttonColorScheme = KColorScheme(QPalette::Active, KColorScheme::Button, d->colors);
-    d->hasWallpapers = !KStandardDirs::locate("data", "desktoptheme/" + theme + "/wallpapers").isEmpty();
+    d->hasWallpapers =
+        !KStandardDirs::locate("data", "desktoptheme/" + theme + "/wallpapers").isEmpty();
 
     if (d->isDefault) {
         // we're the default theme, let's save our state
@@ -286,7 +289,7 @@ QString Theme::themeName() const
     return d->themeName;
 }
 
-QString Theme::imagePath(const QString& name)  const
+QString Theme::imagePath(const QString &name) const
 {
     // look for a compressed svg file in the theme
     if (name.contains("../")) {
@@ -369,7 +372,7 @@ QString Theme::wallpaperPath(const QSize &size) const
     return fullPath;
 }
 
-bool Theme::currentThemeHasImage(const QString& name)  const
+bool Theme::currentThemeHasImage(const QString &name) const
 {
     if (name.contains("../")) {
         // we don't support relative paths
@@ -422,15 +425,16 @@ QFont Theme::font(FontRole role) const
 {
     Q_UNUSED(role)
     switch (role) {
-        case DesktopFont: {
-            KConfigGroup cg(KGlobal::config(), "General");
-            return cg.readEntry("desktopFont", QFont("Sans Serif", 10));
-        }
-            break;
-        case DefaultFont:
-        default:
-            return d->generalFont;
-            break;
+    case DesktopFont:
+    {
+        KConfigGroup cg(KGlobal::config(), "General");
+        return cg.readEntry("desktopFont", QFont("Sans Serif", 10));
+    }
+    break;
+    case DefaultFont:
+    default:
+        return d->generalFont;
+        break;
     }
 }
 

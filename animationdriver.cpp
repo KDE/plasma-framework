@@ -93,13 +93,13 @@ Animator::CurveShape AnimationDriver::elementAnimationCurve(Plasma::Animator::An
     return Animator::EaseInOutCurve;
 }
 
-QPixmap AnimationDriver::elementAppear(qreal progress, const QPixmap& pixmap)
+QPixmap AnimationDriver::elementAppear(qreal progress, const QPixmap &pixmap)
 {
     Q_UNUSED(progress)
     return pixmap;
 }
 
-QPixmap AnimationDriver::elementDisappear(qreal progress, const QPixmap& pixmap)
+QPixmap AnimationDriver::elementDisappear(qreal progress, const QPixmap &pixmap)
 {
     Q_UNUSED(progress)
     QPixmap pix(pixmap.size());
@@ -108,19 +108,19 @@ QPixmap AnimationDriver::elementDisappear(qreal progress, const QPixmap& pixmap)
     return pix;
 }
 
-void AnimationDriver::itemAppear(qreal frame, QGraphicsItem* item)
+void AnimationDriver::itemAppear(qreal frame, QGraphicsItem *item)
 {
     Q_UNUSED(frame)
     Q_UNUSED(item)
 }
 
-void AnimationDriver::itemDisappear(qreal frame, QGraphicsItem* item)
+void AnimationDriver::itemDisappear(qreal frame, QGraphicsItem *item)
 {
     Q_UNUSED(frame)
     Q_UNUSED(item)
 }
 
-void AnimationDriver::itemActivated(qreal frame, QGraphicsItem* item)
+void AnimationDriver::itemActivated(qreal frame, QGraphicsItem *item)
 {
     Q_UNUSED(frame)
     Q_UNUSED(item)

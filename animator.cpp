@@ -87,8 +87,8 @@ struct CustomAnimationState
     int interval;
     int currentInterval;
     int id;
-    QObject* receiver;
-    char* slot;
+    QObject *receiver;
+    char *slot;
 };
 
 class AnimatorPrivate
@@ -131,25 +131,25 @@ class AnimatorPrivate
             return progress;
         }
 
-        void performAnimation(qreal amount, const AnimationState* state)
+        void performAnimation(qreal amount, const AnimationState *state)
         {
             switch (state->animation) {
-                case Animator::AppearAnimation:
-                    driver->itemAppear(amount, state->item);
-                    break;
-                case Animator::DisappearAnimation:
-                    driver->itemDisappear(amount, state->item);
-                    if (amount >= 1) {
-                        state->item->hide();
-                    }
-                    break;
-                case Animator::ActivateAnimation:
-                    driver->itemActivated(amount, state->item);
-                    break;
+            case Animator::AppearAnimation:
+                driver->itemAppear(amount, state->item);
+                break;
+            case Animator::DisappearAnimation:
+                driver->itemDisappear(amount, state->item);
+                if (amount >= 1) {
+                    state->item->hide();
+                }
+                break;
+            case Animator::ActivateAnimation:
+                driver->itemActivated(amount, state->item);
+                break;
             }
         }
 
-        void performMovement(qreal amount, const MovementState* state)
+        void performMovement(qreal amount, const MovementState *state)
         {
             switch (state->movement) {
                 case Animator::SlideInMovement:
@@ -171,7 +171,7 @@ class AnimatorPrivate
         void animatedElementDestroyed(QObject*);
         void customAnimReceiverDestroyed(QObject*);
 
-        AnimationDriver* driver;
+        AnimationDriver *driver;
         int animId;
         int timerId;
         QTime time;
@@ -194,13 +194,12 @@ class AnimatorSingleton
 
 K_GLOBAL_STATIC(AnimatorSingleton, privateSelf)
 
-Animator* Animator::self()
+Animator *Animator::self()
 {
     return &privateSelf->self;
 }
 
-
-Animator::Animator(QObject * parent)
+Animator::Animator(QObject *parent)
     : QObject(parent),
       d(new AnimatorPrivate)
 {
@@ -212,7 +211,7 @@ Animator::~Animator()
     delete d;
 }
 
-void AnimatorPrivate::animatedItemDestroyed(QObject* o)
+void AnimatorPrivate::animatedItemDestroyed(QObject *o)
 {
     //kDebug() << "testing for" << (void*)o;
     QMutableMapIterator<QGraphicsItem*, AnimationState*> it(animatedItems);
@@ -227,7 +226,7 @@ void AnimatorPrivate::animatedItemDestroyed(QObject* o)
     }
 }
 
-void AnimatorPrivate::movingItemDestroyed(QObject* o)
+void AnimatorPrivate::movingItemDestroyed(QObject *o)
 {
     QMutableMapIterator<QGraphicsItem*, MovementState*> it(movingItems);
     while (it.hasNext()) {
@@ -239,7 +238,7 @@ void AnimatorPrivate::movingItemDestroyed(QObject* o)
     }
 }
 
-void AnimatorPrivate::animatedElementDestroyed(QObject* o)
+void AnimatorPrivate::animatedElementDestroyed(QObject *o)
 {
     QMutableMapIterator<int, ElementAnimationState*> it(animatedElements);
     while (it.hasNext()) {
@@ -251,7 +250,7 @@ void AnimatorPrivate::animatedElementDestroyed(QObject* o)
     }
 }
 
-void AnimatorPrivate::customAnimReceiverDestroyed(QObject* o)
+void AnimatorPrivate::customAnimReceiverDestroyed(QObject *o)
 {
     QMutableMapIterator<int, CustomAnimationState*> it(customAnims);
     while (it.hasNext()) {
@@ -263,7 +262,7 @@ void AnimatorPrivate::customAnimReceiverDestroyed(QObject* o)
     }
 }
 
-int Animator::animateItem(QGraphicsItem* item, Animation animation)
+int Animator::animateItem(QGraphicsItem *item, Animation animation)
 {
      //kDebug();
     // get rid of any existing animations on this item.
@@ -284,7 +283,7 @@ int Animator::animateItem(QGraphicsItem* item, Animation animation)
 
     int duration = d->driver->animationDuration(animation);
 
-    AnimationState* state = new AnimationState;
+    AnimationState *state = new AnimationState;
     state->id = ++d->animId;
     state->item = item;
     state->animation = animation;
@@ -296,11 +295,13 @@ int Animator::animateItem(QGraphicsItem* item, Animation animation)
     state->currentInterval = state->interval;
     state->qobj = dynamic_cast<QObject*>(item);
 
-     if (state->qobj) {
-         //kDebug() << "!!!!!!!!!!!!!!!!!!!!!!!!! got us an object!";
-         disconnect(state->qobj, SIGNAL(destroyed(QObject*)), this, SLOT(animatedItemDestroyed(QObject*)));
-         connect(state->qobj, SIGNAL(destroyed(QObject*)), this, SLOT(animatedItemDestroyed(QObject*)));
-     }
+    if (state->qobj) {
+        //kDebug() << "!!!!!!!!!!!!!!!!!!!!!!!!! got us an object!";
+        disconnect(state->qobj, SIGNAL(destroyed(QObject*)),
+                   this, SLOT(animatedItemDestroyed(QObject*)));
+        connect(state->qobj, SIGNAL(destroyed(QObject*)),
+                this, SLOT(animatedItemDestroyed(QObject*)));
+    }
 
     d->animatedItems[item] = state;
     d->performAnimation(0, state);
@@ -313,7 +314,7 @@ int Animator::animateItem(QGraphicsItem* item, Animation animation)
     return state->id;
 }
 
-int Animator::moveItem(QGraphicsItem* item, Movement movement, const QPoint &destination)
+int Animator::moveItem(QGraphicsItem *item, Movement movement, const QPoint &destination)
 {
      //kDebug();
      QMap<QGraphicsItem*, MovementState*>::iterator it = d->movingItems.find(item);
@@ -329,7 +330,7 @@ int Animator::moveItem(QGraphicsItem* item, Movement movement, const QPoint &des
           return -1;
      }
 
-     MovementState* state = new MovementState;
+     MovementState *state = new MovementState;
      state->id = ++d->animId;
      state->destination = destination;
      state->start = item->pos().toPoint();
@@ -364,7 +365,7 @@ int Animator::moveItem(QGraphicsItem* item, Movement movement, const QPoint &des
 }
 
 int Animator::customAnimation(int frames, int duration, Animator::CurveShape curve,
-                              QObject* receiver, const char* slot)
+                              QObject *receiver, const char *slot)
 {
     if (frames < 1 || duration < 1 || !receiver || !slot) {
         return -1;
@@ -457,12 +458,15 @@ int Animator::animateElement(QGraphicsItem *item, Animation animation)
     state->id = ++d->animId;
     state->qobj = dynamic_cast<QObject*>(item);
 
-     if (state->qobj) {
-         disconnect(state->qobj, SIGNAL(destroyed(QObject*)), this, SLOT(animatedElementDestroyed(QObject*)));
-         connect(state->qobj, SIGNAL(destroyed(QObject*)), this, SLOT(animatedElementDestroyed(QObject*)));
-     }
+    if (state->qobj) {
+        disconnect(state->qobj, SIGNAL(destroyed(QObject*)),
+                   this, SLOT(animatedElementDestroyed(QObject*)));
+        connect(state->qobj, SIGNAL(destroyed(QObject*)),
+                this, SLOT(animatedElementDestroyed(QObject*)));
+    }
 
-    //kDebug() << "animateElement " << animation << ", interval: " << state->interval << ", frames: " << state->frames;
+    //kDebug() << "animateElement " << animation << ", interval: "
+    //         << state->interval << ", frames: " << state->frames;
     bool needTimer = true;
     if (state->frames < 1) {
         state->frames = 1;
@@ -471,7 +475,7 @@ int Animator::animateElement(QGraphicsItem *item, Animation animation)
     }
 
     d->animatedElements[state->id] = state;
-    
+
     //kDebug() << "startElementAnimation(AnimId " << animation << ") returning " << state->id;
     if (needTimer && !d->timerId) {
         // start a 20fps timer;
@@ -513,7 +517,7 @@ QPixmap Animator::currentPixmap(int id)
         return QPixmap();
     }
 
-    ElementAnimationState* state = it.value();
+    ElementAnimationState *state = it.value();
     qreal progress = d->calculateProgress(state->currentFrame * state->interval,
                                           state->frames *  state->interval,
                                           state->curve);
@@ -552,11 +556,12 @@ void Animator::timerEvent(QTimerEvent *event)
     d->time.restart();
     //kDebug() << "timeEvent, elapsed time: " << elapsed;
 
-    foreach (AnimationState* state, d->animatedItems) {
+    foreach (AnimationState *state, d->animatedItems) {
         if (state->currentInterval <= elapsed) {
             // we need to step forward!
-            state->currentFrame += (KGlobalSettings::graphicEffectsLevel() & KGlobalSettings::SimpleAnimationEffects) ?
-                                   qMax(1, elapsed / state->interval) : state->frames - state->currentFrame;
+            state->currentFrame +=
+                (KGlobalSettings::graphicEffectsLevel() & KGlobalSettings::SimpleAnimationEffects) ?
+                qMax(1, elapsed / state->interval) : state->frames - state->currentFrame;
 
             if (state->currentFrame < state->frames) {
                 qreal progress = d->calculateProgress(state->currentFrame * state->interval,
@@ -577,11 +582,12 @@ void Animator::timerEvent(QTimerEvent *event)
         }
     }
 
-    foreach (MovementState* state, d->movingItems) {
+    foreach (MovementState *state, d->movingItems) {
         if (state->currentInterval <= elapsed) {
             // we need to step forward!
-            state->currentFrame += (KGlobalSettings::graphicEffectsLevel() & KGlobalSettings::SimpleAnimationEffects) ?
-                                   qMax(1, elapsed / state->interval) : state->frames - state->currentFrame;
+            state->currentFrame +=
+                (KGlobalSettings::graphicEffectsLevel() & KGlobalSettings::SimpleAnimationEffects) ?
+                qMax(1, elapsed / state->interval) : state->frames - state->currentFrame;
 
             if (state->currentFrame < state->frames) {
                 //kDebug() << "movement";
@@ -603,9 +609,10 @@ void Animator::timerEvent(QTimerEvent *event)
         }
     }
 
-    foreach (ElementAnimationState* state, d->animatedElements) {
+    foreach (ElementAnimationState *state, d->animatedElements) {
         if (state->currentFrame == state->frames) {
-            //kDebug() << "skipping" << state->id << "as its already at frame" << state->currentFrame << "of" << state->frames;
+            //kDebug() << "skipping" << state->id << "as its already at frame"
+            //         << state->currentFrame << "of" << state->frames;
             // since we keep element animations around until they are
             // removed, we will end up with finished animations in the queue;
             // just skip them
@@ -615,11 +622,13 @@ void Animator::timerEvent(QTimerEvent *event)
 
         if (state->currentInterval <= elapsed) {
             // we need to step forward!
-            /*kDebug() << "stepping forwards element anim " << state->id << " from " << state->currentFrame
-                    << " by " << qMax(1, elapsed / state->interval) << " to "
-                    << state->currentFrame + qMax(1, elapsed / state->interval) << endl;*/
-            state->currentFrame += (KGlobalSettings::graphicEffectsLevel() & KGlobalSettings::SimpleAnimationEffects) ?
-                                   qMax(1, elapsed / state->interval) : state->frames - state->currentFrame;
+            /*kDebug() << "stepping forwards element anim " << state->id
+                       << " from " << state->currentFrame
+                       << " by " << qMax(1, elapsed / state->interval) << " to "
+                       << state->currentFrame + qMax(1, elapsed / state->interval) << endl;*/
+            state->currentFrame +=
+                (KGlobalSettings::graphicEffectsLevel() & KGlobalSettings::SimpleAnimationEffects) ?
+                qMax(1, elapsed / state->interval) : state->frames - state->currentFrame;
 
             state->item->update();
             if (state->currentFrame < state->frames) {
@@ -639,10 +648,13 @@ void Animator::timerEvent(QTimerEvent *event)
     foreach (CustomAnimationState *state, d->customAnims) {
         if (state->currentInterval <= elapsed) {
             // advance the frame
-            state->currentFrame += (KGlobalSettings::graphicEffectsLevel() & KGlobalSettings::SimpleAnimationEffects) ?
-                                   qMax(1, elapsed / state->interval) : state->frames - state->currentFrame;
-            /*kDebug() << "custom anim for" << state->receiver << "to slot" << state->slot
-                     << "with interval of" << state->interval << "at frame" << state->currentFrame;*/
+            state->currentFrame +=
+                (KGlobalSettings::graphicEffectsLevel() & KGlobalSettings::SimpleAnimationEffects) ?
+                qMax(1, elapsed / state->interval) : state->frames - state->currentFrame;
+            /*kDebug() << "custom anim for" << state->receiver
+                       << "to slot" << state->slot
+                       << "with interval of" << state->interval
+                       << "at frame" << state->currentFrame;*/
 
             if (state->currentFrame < state->frames) {
                 //kDebug () << "not the final frame";
@@ -696,11 +708,13 @@ void AnimatorPrivate::init(Animator *q)
 
             KPluginLoader plugin(*offers.first());
 
-            if (Plasma::isPluginVersionCompatible(plugin.pluginVersion()))
+            if (Plasma::isPluginVersionCompatible(plugin.pluginVersion())) {
                 driver = offers.first()->createInstance<Plasma::AnimationDriver>(0, QVariantList(), &error);
+            }
 
             if (!driver) {
-                kDebug() << "Could not load requested animator " << offers.first() << ". Error given: " << error;
+                kDebug() << "Could not load requested animator "
+                         << offers.first() << ". Error given: " << error;
             }
         }
     }

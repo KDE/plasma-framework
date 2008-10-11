@@ -38,7 +38,6 @@
 #include <fixx11h.h>
 #endif
 
-
 //Plasma
 #include <applet.h>
 #include <containment.h>
@@ -79,7 +78,6 @@ public :
       */
     void onWidgetDestroyed(QObject * object);
 
-
     QGraphicsWidget *currentWidget;
     QTimer *showTimer;
     QTimer *hideTimer;
@@ -97,7 +95,7 @@ class ToolTipManagerSingleton
     }
     ToolTipManager self;
 };
-K_GLOBAL_STATIC( ToolTipManagerSingleton, privateInstance )
+K_GLOBAL_STATIC(ToolTipManagerSingleton, privateInstance)
 
 ToolTipManager *ToolTipManager::self()
 {
@@ -114,7 +112,7 @@ bool ToolTipManager::ToolTipContent::isEmpty() const
     return mainText.isEmpty() && subText.isEmpty() && image.isNull() && windowToPreview == 0;
 }
 
-ToolTipManager::ToolTipManager(QObject* parent)
+ToolTipManager::ToolTipManager(QObject *parent)
   : QObject(parent),
     d(new ToolTipManagerPrivate)
 {
@@ -416,7 +414,7 @@ bool ToolTipManager::eventFilter(QObject *watched, QEvent *event)
             break;
     }
 
-    return QObject::eventFilter(watched,event);
+    return QObject::eventFilter(watched, event);
 }
 
 } // Plasma namespace

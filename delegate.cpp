@@ -53,9 +53,9 @@ class DelegatePrivate
 
         ~DelegatePrivate() { }
 
-        QFont fontForSubTitle(const QFont& titleFont) const;
-        QRect titleRect(const QStyleOptionViewItem& option, const QModelIndex& index) const;
-        QRect subTitleRect(const QStyleOptionViewItem& option, const QModelIndex& index) const;
+        QFont fontForSubTitle(const QFont &titleFont) const;
+        QRect titleRect(const QStyleOptionViewItem &option, const QModelIndex &index) const;
+        QRect subTitleRect(const QStyleOptionViewItem &option, const QModelIndex &index) const;
 
         QMap<int, int> roles;
 
@@ -69,8 +69,7 @@ class DelegatePrivate
         static const int ITEM_BOTTOM_MARGIN = 5;
 };
 
-
-QFont DelegatePrivate::fontForSubTitle(const QFont& titleFont) const
+QFont DelegatePrivate::fontForSubTitle(const QFont &titleFont) const
 {
     QFont subTitleFont = titleFont;
     subTitleFont.setPointSize(qMax(subTitleFont.pointSize() - 2,
@@ -78,19 +77,24 @@ QFont DelegatePrivate::fontForSubTitle(const QFont& titleFont) const
     return subTitleFont;
 }
 
-QRect DelegatePrivate::titleRect(const QStyleOptionViewItem& option, const QModelIndex& index) const
+QRect DelegatePrivate::titleRect(const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     QFont font(option.font);
     font.setBold(true);
     QFontMetrics fm(font);
 
-    Qt::Alignment textAlignment = option.decorationAlignment & Qt::AlignRight ? Qt::AlignRight : Qt::AlignLeft;
+    Qt::Alignment textAlignment =
+        option.decorationAlignment & Qt::AlignRight ? Qt::AlignRight : Qt::AlignLeft;
 
     QRect emptyRect;
     if (option.direction == Qt::LeftToRight) {
-        emptyRect = option.rect.adjusted(option.decorationSize.width()+ICON_TEXT_MARGIN+ITEM_LEFT_MARGIN, ITEM_TOP_MARGIN, -ITEM_RIGHT_MARGIN, -ITEM_BOTTOM_MARGIN);
+        emptyRect = option.rect.adjusted(
+            option.decorationSize.width() + ICON_TEXT_MARGIN + ITEM_LEFT_MARGIN,
+            ITEM_TOP_MARGIN, -ITEM_RIGHT_MARGIN, -ITEM_BOTTOM_MARGIN);
     } else {
-        emptyRect = option.rect.adjusted(ITEM_LEFT_MARGIN, ITEM_TOP_MARGIN, -ITEM_RIGHT_MARGIN-option.decorationSize.width()-ICON_TEXT_MARGIN, -ITEM_BOTTOM_MARGIN);
+        emptyRect = option.rect.adjusted(
+            ITEM_LEFT_MARGIN, ITEM_TOP_MARGIN,
+            -ITEM_RIGHT_MARGIN - option.decorationSize.width() - ICON_TEXT_MARGIN, -ITEM_BOTTOM_MARGIN);
     }
 
     if (emptyRect.width() < 0) {
@@ -98,17 +102,19 @@ QRect DelegatePrivate::titleRect(const QStyleOptionViewItem& option, const QMode
         return emptyRect;
     }
 
-    QRect textRect = QStyle::alignedRect(option.direction,
-                                         textAlignment,
-                                         fm.boundingRect(index.data(Qt::DisplayRole).toString()).size(),
-                                         emptyRect);
+    QRect textRect = QStyle::alignedRect(
+        option.direction,
+        textAlignment,
+        fm.boundingRect(index.data(Qt::DisplayRole).toString()).size(),
+        emptyRect);
 
     textRect.setWidth(textRect.width() + TEXT_RIGHT_MARGIN);
-    textRect.setHeight(emptyRect.height()/2);
+    textRect.setHeight(emptyRect.height() / 2);
     return textRect;
 }
 
-QRect DelegatePrivate::subTitleRect(const QStyleOptionViewItem& option, const QModelIndex& index) const
+QRect DelegatePrivate::subTitleRect(const QStyleOptionViewItem &option,
+                                    const QModelIndex &index) const
 {
     QString subTitle = index.data(roles[Delegate::SubTitleRole]).toString();
 
@@ -153,7 +159,7 @@ int Delegate::roleMapping(SpecificRoles role) const
     return d->roles[role];
 }
 
-QRect Delegate::rectAfterTitle(const QStyleOptionViewItem& option, const QModelIndex& index) const
+QRect Delegate::rectAfterTitle(const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     QRect textRect = d->titleRect(option, index);
 
@@ -172,7 +178,7 @@ QRect Delegate::rectAfterTitle(const QStyleOptionViewItem& option, const QModelI
     return emptyRect;
 }
 
-QRect Delegate::rectAfterSubTitle(const QStyleOptionViewItem& option, const QModelIndex& index) const
+QRect Delegate::rectAfterSubTitle(const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     QRect textRect = d->subTitleRect(option, index);
 
@@ -191,30 +197,31 @@ QRect Delegate::rectAfterSubTitle(const QStyleOptionViewItem& option, const QMod
     return emptyRect;
 }
 
-QRect Delegate::emptyRect(const QStyleOptionViewItem& option, const QModelIndex& index) const
+QRect Delegate::emptyRect(const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     QRect afterTitleRect = rectAfterTitle(option, index);
     QRect afterSubTitleRect = rectAfterSubTitle(option, index);
 
-    afterTitleRect.setHeight(afterTitleRect.height()*2);
+    afterTitleRect.setHeight(afterTitleRect.height() * 2);
     afterSubTitleRect.setTop(afterTitleRect.top());
 
     return afterTitleRect.intersected(afterSubTitleRect);
 }
 
-
-void Delegate::paint(QPainter *painter, const QStyleOptionViewItem& option, const QModelIndex& index) const
+void Delegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
+                     const QModelIndex &index) const
 {
     const bool hover = option.state & (QStyle::State_MouseOver | QStyle::State_Selected);
 
     QRect contentRect = option.rect;
     contentRect.setBottom(contentRect.bottom() - 1);
 
-    QRect decorationRect = QStyle::alignedRect(option.direction,
-                                               option.decorationPosition == QStyleOptionViewItem::Left ?
-                                                                        Qt::AlignLeft : Qt::AlignRight,
-                                               option.decorationSize,
-                                               contentRect.adjusted(DelegatePrivate::ITEM_LEFT_MARGIN, DelegatePrivate::ITEM_TOP_MARGIN,-DelegatePrivate::ITEM_RIGHT_MARGIN,-DelegatePrivate::ITEM_BOTTOM_MARGIN));
+    QRect decorationRect =
+        QStyle::alignedRect(option.direction,
+                            option.decorationPosition == QStyleOptionViewItem::Left ?
+                            Qt::AlignLeft : Qt::AlignRight,
+                            option.decorationSize,
+                            contentRect.adjusted(DelegatePrivate::ITEM_LEFT_MARGIN, DelegatePrivate::ITEM_TOP_MARGIN, -DelegatePrivate::ITEM_RIGHT_MARGIN, -DelegatePrivate::ITEM_BOTTOM_MARGIN));
     decorationRect.moveTop(contentRect.top() + qMax(0, (contentRect.height() - decorationRect.height())) / 2);
 
     QString titleText = index.data(Qt::DisplayRole).value<QString>();
@@ -222,7 +229,6 @@ void Delegate::paint(QPainter *painter, const QStyleOptionViewItem& option, cons
 
     QRect titleRect = d->titleRect(option, index);
     QRect subTitleRect = d->subTitleRect(option, index);
-
 
     bool uniqueTitle = !index.data(d->roles[SubTitleMandatoryRole]).value<bool>();// true;
     if (uniqueTitle) {
@@ -323,7 +329,7 @@ void Delegate::paint(QPainter *painter, const QStyleOptionViewItem& option, cons
     if (index.data(d->roles[ColumnTypeRole]).toInt() == SecondaryActionColumn) {
         if (hover) {
             // Only draw on hover
-            const int delta = floor((qreal)(option.decorationSize.width() - DelegatePrivate::ACTION_ICON_SIZE)/2.0);
+            const int delta = floor((qreal)(option.decorationSize.width() - DelegatePrivate::ACTION_ICON_SIZE) / 2.0);
             decorationRect.adjust(delta, delta-1, -delta-1, -delta);
             decorationIcon.paint(painter, decorationRect, option.decorationAlignment);
         }
@@ -360,7 +366,7 @@ void Delegate::paint(QPainter *painter, const QStyleOptionViewItem& option, cons
 
 }
 
-QSize Delegate::sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const
+QSize Delegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     Q_UNUSED(index)
     QSize size = option.rect.size();
@@ -371,11 +377,9 @@ QSize Delegate::sizeHint(const QStyleOptionViewItem& option, const QModelIndex& 
     size.setHeight(qMax(option.decorationSize.height(), qMax(size.height(), metrics.height() + subMetrics.ascent()) + 3) + 4);
 //    kDebug() << "size hint is" << size << (metrics.height() + subMetrics.ascent());
 
-    size*=1.1;
+    size *= 1.1;
 
     return size;
 }
 
 }
-
-

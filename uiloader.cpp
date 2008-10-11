@@ -50,18 +50,18 @@ UiLoader::UiLoader(QObject *parent)
 {
     d->widgets
         << "CheckBox"
-	<< "ComboBox"
+        << "ComboBox"
         << "Flash"
-	<< "Frame"
+        << "Frame"
         << "GroupBox"
-	<< "Icon"
+        << "Icon"
         << "Label"
         << "LineEdit"
-	<< "PushButton"
-	<< "RadioButton"
-	<< "Slider"
-	<< "TabBar"
-	<< "TextEdit";
+        << "PushButton"
+        << "RadioButton"
+        << "Slider"
+        << "TabBar"
+        << "TextEdit";
 }
 
 UiLoader::~UiLoader()
@@ -78,41 +78,29 @@ QGraphicsWidget *UiLoader::createWidget(const QString &className, QGraphicsWidge
 {
     if (className == QString("CheckBox")) {
         return new CheckBox(parent);
-    }
-    else if (className == QString("ComboBox")) {
+    } else if (className == QString("ComboBox")) {
         return new ComboBox(parent);
-    }
-    else if (className == QString("Flash")) {
+    } else if (className == QString("Flash")) {
         return new Flash(parent);
-    }
-    else if (className == QString("Frame")) {
+    } else if (className == QString("Frame")) {
         return new Frame(parent);
-    }
-    else if (className == QString("GroupBox")) {
+    } else if (className == QString("GroupBox")) {
         return new GroupBox(parent);
-    }
-    else if (className == QString("Icon")) {
+    } else if (className == QString("Icon")) {
         return new Icon(parent);
-    }
-    else if (className == QString("Label")) {
+    } else if (className == QString("Label")) {
         return new Label(parent);
-    }
-    else if (className == QString("LineEdit")) {
+    } else if (className == QString("LineEdit")) {
         return new LineEdit(parent);
-    }
-    else if (className == QString("PushButton")) {
+    } else if (className == QString("PushButton")) {
         return new PushButton(parent);
-    }
-    else if (className == QString("RadioButton")) {
+    } else if (className == QString("RadioButton")) {
         return new RadioButton(parent);
-    }
-    else if (className == QString("Slider")) {
+    } else if (className == QString("Slider")) {
         return new Slider(parent);
-    }
-    else if (className == QString("TabBar")) {
+    } else if (className == QString("TabBar")) {
         return new TabBar(parent);
-    }
-    else if (className == QString("TextEdit")) {
+    } else if (className == QString("TextEdit")) {
         return new TextEdit(parent);
     }
 
@@ -124,17 +112,15 @@ QStringList UiLoader::availableLayouts() const
     return d->layouts;
 }
 
-Layout *UiLoader::createLayout( const QString &className, LayoutItem *parent )
+Layout *UiLoader::createLayout(const QString &className, LayoutItem *parent)
 {
     #ifdef RICHARD_WORK
     if (className == QString("HBoxLayout")) {
-        return new HBoxLayout( parent );
-    }
-    else if (className == QString("VBoxLayout")) {
-        return new VBoxLayout( parent );
-    }
-    else if (className == QString("FlowLayout")) {
-        return new FlowLayout( parent );
+        return new HBoxLayout(parent);
+    } else if (className == QString("VBoxLayout")) {
+        return new VBoxLayout(parent);
+    } else if (className == QString("FlowLayout")) {
+        return new FlowLayout(parent);
     }
     #endif
     return 0;

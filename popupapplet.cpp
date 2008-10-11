@@ -115,7 +115,8 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
 
     Plasma::FormFactor f = q->formFactor();
     if (constraints & Plasma::FormFactorConstraint ||
-        (constraints & Plasma::SizeConstraint && (f == Plasma::Vertical || f == Plasma::Horizontal))) {
+        (constraints & Plasma::SizeConstraint &&
+         (f == Plasma::Vertical || f == Plasma::Horizontal))) {
         QGraphicsLinearLayout *lay = dynamic_cast<QGraphicsLinearLayout *>(q->layout());
 
         if (icon && lay) {
@@ -219,8 +220,10 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
                 KWindowSystem::setState(dialog->winId(), NET::SkipTaskbar | NET::SkipPager);
                 dialog->installEventFilter(q);
 
-                QObject::connect(dialog, SIGNAL(dialogResized()), q, SLOT(dialogSizeChanged()));
-                QObject::connect(dialog, SIGNAL(dialogVisible(bool)), q, SLOT(dialogStatusChanged(bool)));
+                QObject::connect(dialog, SIGNAL(dialogResized()),
+                                 q, SLOT(dialogSizeChanged()));
+                QObject::connect(dialog, SIGNAL(dialogVisible(bool)),
+                                 q, SLOT(dialogStatusChanged(bool)));
                 q->setMinimumSize(QSize(0, 0));
                 if (gWidget) {
                     Corona *corona = qobject_cast<Corona *>(gWidget->scene());
@@ -263,7 +266,8 @@ void PopupApplet::mousePressEvent(QGraphicsSceneMouseEvent *event)
 
 void PopupApplet::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
-    if (!d->icon && (d->clicked - scenePos().toPoint()).manhattanLength() < KGlobalSettings::dndEventDelay()) {
+    if (!d->icon &&
+        (d->clicked - scenePos().toPoint()).manhattanLength() < KGlobalSettings::dndEventDelay()) {
         d->togglePopup();
     } else {
         Applet::mouseReleaseEvent(event);
@@ -411,8 +415,10 @@ void PopupAppletPrivate::updateDialogPosition()
 {
     KConfigGroup sizeGroup = q->config();
     sizeGroup = KConfigGroup(&sizeGroup, "PopupApplet");
-    const int width = qMin(sizeGroup.readEntry("DialogWidth", 0), QApplication::desktop()->screen()->width() - 50);
-    const int height = qMin(sizeGroup.readEntry("DialogHeight", 0), QApplication::desktop()->screen()->height() - 50);
+    const int width = qMin(sizeGroup.readEntry("DialogWidth", 0),
+                           QApplication::desktop()->screen()->width() - 50);
+    const int height = qMin(sizeGroup.readEntry("DialogHeight", 0),
+                            QApplication::desktop()->screen()->height() - 50);
 
     QSize saved(width, height);
 
@@ -464,8 +470,11 @@ void PopupAppletPrivate::updateDialogPosition()
     }
     //are we out of screen?
 
-    QRect screenRect = QApplication::desktop()->screenGeometry(q->containment() ? q->containment()->screen() : -1);
-    //kDebug() << "==> rect for" << (containment() ? containment()->screen() : -1) << "is" << screenRect;
+    QRect screenRect =
+        QApplication::desktop()->screenGeometry(q->containment() ? q->containment()->screen() : -1);
+    //kDebug() << "==> rect for"
+    //         << (containment() ? containment()->screen() : -1)
+    //         << "is" << screenRect;
 
     if (pos.rx() + s.width() > screenRect.right()) {
         pos.rx() += (int)q->boundingRect().size().width() - s.width();

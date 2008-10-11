@@ -91,7 +91,7 @@ public:
         }
     }
 
-    void containmentDestroyed(QObject* obj)
+    void containmentDestroyed(QObject *obj)
     {
         // we do a static_cast here since it really isn't an Containment by this
         // point anymore since we are in the qobject dtor. we don't actually
@@ -112,11 +112,12 @@ public:
         emit q->configSynced();
     }
 
-    Containment* addContainment(const QString& name, const QVariantList& args, uint id, bool delayedInit)
+    Containment *addContainment(const QString &name, const QVariantList &args,
+                                uint id, bool delayedInit)
     {
         QString pluginName = name;
-        Containment* containment = 0;
-        Applet* applet = 0;
+        Containment *containment = 0;
+        Applet *applet = 0;
 
         //kDebug() << "Loading" << name << args << id;
 
@@ -133,7 +134,8 @@ public:
         if (!containment) {
             kDebug() << "loading of containment" << name << "failed.";
 
-            // in case we got a non-Containment from Applet::loadApplet or a null containment was requested
+            // in case we got a non-Containment from Applet::loadApplet or
+            // a null containment was requested
             delete applet;
             containment = new Containment(0, 0, id);
 
@@ -158,9 +160,12 @@ public:
         }
 
         containments.append(containment);
-        QObject::connect(containment, SIGNAL(destroyed(QObject*)), q, SLOT(containmentDestroyed(QObject*)));
-        QObject::connect(containment, SIGNAL(configNeedsSaving()), q, SLOT(requestConfigSync()));
-        QObject::connect(containment, SIGNAL(releaseVisualFocus()), q, SIGNAL(releaseVisualFocus()));
+        QObject::connect(containment, SIGNAL(destroyed(QObject*)),
+                         q, SLOT(containmentDestroyed(QObject*)));
+        QObject::connect(containment, SIGNAL(configNeedsSaving()),
+                         q, SLOT(requestConfigSync()));
+        QObject::connect(containment, SIGNAL(releaseVisualFocus()),
+                         q, SIGNAL(releaseVisualFocus()));
         QObject::connect(containment, SIGNAL(screenChanged(int,int,Plasma::Containment*)),
                          q, SIGNAL(screenOwnerChanged(int,int,Plasma::Containment*)));
 
@@ -204,7 +209,7 @@ Corona::~Corona()
     delete d;
 }
 
-void Corona::setAppletMimeType(const QString& type)
+void Corona::setAppletMimeType(const QString &type)
 {
     d->mimetype = type;
 }
@@ -261,7 +266,7 @@ void Corona::initializeLayout(const QString &configName)
     setImmutability((ImmutabilityType)coronaConfig.readEntry("immutability", (int)Mutable));
 }
 
-void Corona::loadLayout(const QString& configName)
+void Corona::loadLayout(const QString &configName)
 {
     KSharedConfigPtr c;
 
@@ -273,7 +278,7 @@ void Corona::loadLayout(const QString& configName)
 
     KConfigGroup containments(config(), "Containments");
 
-    foreach (const QString& group, containments.groupList()) {
+    foreach (const QString &group, containments.groupList()) {
         KConfigGroup containmentConfig(&containments, group);
 
         if (containmentConfig.entryMap().isEmpty()) {
@@ -293,11 +298,11 @@ void Corona::loadLayout(const QString& configName)
         c->restore(containmentConfig);
     }
 
-    foreach (Containment* containment, d->containments) {
+    foreach (Containment *containment, d->containments) {
         QString cid = QString::number(containment->id());
         KConfigGroup containmentConfig(&containments, cid);
 
-        foreach(Applet* applet, containment->applets()) {
+        foreach (Applet *applet, containment->applets()) {
             applet->init();
             // We have to flush the applet constraints manually
             applet->flushPendingConstraintsEvents();
@@ -309,9 +314,9 @@ void Corona::loadLayout(const QString& configName)
     }
 }
 
-Containment* Corona::containmentForScreen(int screen) const
+Containment *Corona::containmentForScreen(int screen) const
 {
-    foreach (Containment* containment, d->containments) {
+    foreach (Containment *containment, d->containments) {
         if (containment->screen() == screen &&
             (containment->containmentType() == Containment::DesktopContainment ||
              containment->containmentType() >= Containment::CustomContainment)) {
@@ -329,7 +334,7 @@ QList<Containment*> Corona::containments() const
 
 void Corona::clearContainments()
 {
-    foreach (Containment* containment, d->containments) {
+    foreach (Containment *containment, d->containments) {
         containment->clearApplets();
     }
 }
@@ -343,12 +348,12 @@ KSharedConfigPtr Corona::config() const
     return d->config;
 }
 
-Containment* Corona::addContainment(const QString& name, const QVariantList& args)
+Containment *Corona::addContainment(const QString &name, const QVariantList &args)
 {
     return d->addContainment(name, args, 0, false);
 }
 
-Containment* Corona::addContainmentDelayed(const QString& name, const QVariantList& args)
+Containment *Corona::addContainmentDelayed(const QString &name, const QVariantList &args)
 {
     return d->addContainment(name, args, 0, true);
 }

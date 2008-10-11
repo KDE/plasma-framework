@@ -122,9 +122,9 @@ static inline QPainterPath headerPath(const QRectF &r, int roundness,
     int xRnd = roundness;
     int yRnd = roundness;
     if (r.width() > r.height()) {
-        xRnd = int(roundness * r.height()/r.width());
+        xRnd = int(roundness * r.height() / r.width());
     } else {
-        yRnd = int(roundness * r.width()/r.height());
+        yRnd = int(roundness * r.width() / r.height());
     }
 
     if(xRnd >= 100) {                        // fix ranges
@@ -140,8 +140,9 @@ static inline QPainterPath headerPath(const QRectF &r, int roundness,
 
     QRectF rect = r.normalized();
 
-    if (rect.isNull())
+    if (rect.isNull()) {
         return path;
+    }
 
     qreal x = rect.x();
     qreal y = rect.y();
@@ -156,13 +157,13 @@ static inline QPainterPath headerPath(const QRectF &r, int roundness,
     if (ryy < 0) {
         ryy = h / 200 * yRnd;
     }
-    qreal rxx2 = 2*rxx;
-    qreal ryy2 = 2*ryy;
+    qreal rxx2 = 2 * rxx;
+    qreal ryy2 = 2 * ryy;
 
     path.arcMoveTo(x, y, rxx2, ryy2, 90);
     path.arcTo(x, y, rxx2, ryy2, 90, 90);
     QPointF pt = path.currentPosition();
-    path.lineTo(x, pt.y()+headerHeight);
+    path.lineTo(x, pt.y() + headerHeight);
     path.lineTo(x + w, pt.y() + headerHeight);
     path.lineTo(x + w, pt.y());
     path.arcTo(x + w - rxx2, y, rxx2, ryy2, 0, 90);
@@ -206,9 +207,9 @@ void GLApplet::paintInterface(QPainter *painter,
 
 void GLApplet::makeCurrent()
 {
-    if (!d->dummy->isValid() ||
-        !d->pbuf->isValid())
+    if (!d->dummy->isValid() || !d->pbuf->isValid()) {
         d->dummy->makeCurrent();
+    }
 }
 
 } // Plasma namespace

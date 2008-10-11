@@ -49,32 +49,31 @@ qreal scalingFactor(ZoomLevel level)
 
 Direction locationToDirection(Location location)
 {
-    switch (location)
-    {
-        case Floating:
-        case Desktop:
-        case TopEdge:
-        case FullScreen:
-            //TODO: should we be smarter for floating and planer?
-            //      perhaps we should take a QRect and/or QPos as well?
-            return Down;
-        case BottomEdge:
-            return Up;
-        case LeftEdge:
-            return Right;
-        case RightEdge:
-            return Left;
+    switch (location) {
+    case Floating:
+    case Desktop:
+    case TopEdge:
+    case FullScreen:
+        //TODO: should we be smarter for floating and planer?
+        //      perhaps we should take a QRect and/or QPos as well?
+        return Down;
+    case BottomEdge:
+        return Up;
+    case LeftEdge:
+        return Right;
+    case RightEdge:
+        return Left;
     }
 
     return Down;
 }
 
-QPoint popupPosition(const QGraphicsItem * item, const QSize &s)
+QPoint popupPosition(const QGraphicsItem *item, const QSize &s)
 {
     QGraphicsView *v = viewFor(item);
 
     if (!v) {
-        return QPoint(0,0);
+        return QPoint(0, 0);
     }
 
     QPoint pos = v->mapFromScene(item->scenePos());
@@ -109,7 +108,8 @@ QPoint popupPosition(const QGraphicsItem * item, const QSize &s)
     }
 
     //are we out of screen?
-    QRect screenRect = QApplication::desktop()->screenGeometry(pv ? pv->containment()->screen() : -1);
+    QRect screenRect =
+        QApplication::desktop()->screenGeometry(pv ? pv->containment()->screen() : -1);
     //kDebug() << "==> rect for" << (pv ? pv->containment()->screen() : -1) << "is" << screenRect;
 
     if (pos.rx() + s.width() > screenRect.right()) {
@@ -124,7 +124,7 @@ QPoint popupPosition(const QGraphicsItem * item, const QSize &s)
     return pos;
 }
 
-QGraphicsView* viewFor(const QGraphicsItem * item)
+QGraphicsView *viewFor(const QGraphicsItem *item)
 {
     if (!item->scene()) {
         return 0;

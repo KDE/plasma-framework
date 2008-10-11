@@ -35,8 +35,9 @@ namespace PaintUtils
 
 void shadowBlur(QImage &image, int radius, const QColor &color)
 {
-    if (radius < 1)
+    if (radius < 1) {
         return;
+    }
 
     expblur<16, 7>(image, radius);
 
@@ -48,7 +49,7 @@ void shadowBlur(QImage &image, int radius, const QColor &color)
 
 QPixmap shadowText(QString text, QColor textColor, QColor shadowColor, QPoint offset, int radius)
 {
-    // Draw text 
+    // Draw text
     QFontMetrics fm(text);
     QRect textRect = fm.boundingRect(text);
     QPixmap textPixmap(textRect.size());
@@ -63,7 +64,7 @@ QPixmap shadowText(QString text, QColor textColor, QColor shadowColor, QPoint of
     QImage::Format_ARGB32_Premultiplied);
     img.fill(Qt::transparent);
     p.begin(&img);
-    p.drawImage(QPoint(radius,radius), textPixmap.toImage());
+    p.drawImage(QPoint(radius, radius), textPixmap.toImage());
     p.end();
     shadowBlur(img, radius, shadowColor);
 
@@ -85,12 +86,12 @@ QPixmap shadowText(QString text, QColor textColor, QColor shadowColor, QPoint of
     finalPixmap.fill(Qt::transparent);
     p.begin(&finalPixmap);
     QPointF offsetF(offset);
-    QPointF textTopLeft(finalPixmap.rect().topLeft() + 
-            QPointF ((finalPixmap.width() - textPixmap.width()) / 2.0, (finalPixmap.height() - textPixmap.height()) / 2.0) -
-            (offsetF / 2.0));     
-    QPointF shadowTopLeft(finalPixmap.rect().topLeft() + 
-            QPointF ((finalPixmap.width() - img.width()) / 2.0, (finalPixmap.height() - img.height()) / 2.0) + 
-            (offsetF / 2.0));     
+    QPointF textTopLeft(finalPixmap.rect().topLeft() +
+                        QPointF ((finalPixmap.width() - textPixmap.width()) / 2.0, (finalPixmap.height() - textPixmap.height()) / 2.0) -
+                        (offsetF / 2.0));
+    QPointF shadowTopLeft(finalPixmap.rect().topLeft() +
+                          QPointF ((finalPixmap.width() - img.width()) / 2.0, (finalPixmap.height() - img.height()) / 2.0) +
+                          (offsetF / 2.0));
 
     p.drawImage(shadowTopLeft, img);
     p.drawPixmap(textTopLeft, textPixmap);
@@ -99,7 +100,7 @@ QPixmap shadowText(QString text, QColor textColor, QColor shadowColor, QPoint of
     return finalPixmap;
 }
 
-QPainterPath roundedRectangle(const QRectF& rect, qreal radius)
+QPainterPath roundedRectangle(const QRectF &rect, qreal radius)
 {
     QPainterPath path(QPointF(rect.left(), rect.top() + radius));
     path.quadTo(rect.left(), rect.top(), rect.left() + radius, rect.top());         // Top left corner

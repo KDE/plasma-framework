@@ -44,10 +44,8 @@
 using ThreadWeaver::Weaver;
 using ThreadWeaver::Job;
 
-
 namespace Plasma
 {
-
 
 /*****************************************************
 *  RunnerRestrictionPolicy class
@@ -135,7 +133,8 @@ void RunnerRestrictionPolicy::destructed(Job *job)
 class FindMatchesJob : public Job
 {
 public:
-    FindMatchesJob(Plasma::AbstractRunner *runner, Plasma::RunnerContext *context, QObject *parent = 0);
+    FindMatchesJob(Plasma::AbstractRunner *runner,
+                   Plasma::RunnerContext *context, QObject *parent = 0);
 
     int priority() const;
     Plasma::AbstractRunner *runner() const;
@@ -160,7 +159,8 @@ FindMatchesJob::FindMatchesJob(Plasma::AbstractRunner *runner,
 
 void FindMatchesJob::run()
 {
-//     kDebug() << "Running match for " << m_runner->objectName() << " in Thread " << thread()->id() << endl;
+//     kDebug() << "Running match for " << m_runner->objectName()
+//              << " in Thread " << thread()->id() << endl;
     m_runner->performMatch(*m_context);
 }
 
@@ -206,7 +206,8 @@ public:
         config = conf;
 
         //The number of threads used scales with the number of processors.
-        const int numProcs = qMax(Solid::Device::listFromType(Solid::DeviceInterface::Processor).count(), 1);
+        const int numProcs =
+            qMax(Solid::Device::listFromType(Solid::DeviceInterface::Processor).count(), 1);
         //This entry allows to define a hard upper limit independent of the number of processors.
         const int maxThreads = config.readEntry("maxThreads", 16);
         const int numThreads = qMin(maxThreads, 2 + ((numProcs - 1) * 2));
@@ -264,7 +265,8 @@ public:
                         kDebug() << "loading runner:" << service->name();
                         runners.insert(runnerName, runner);
                     } else {
-                        kDebug() << "failed to load runner:" << service->name() << ". error reported:" << error;
+                        kDebug() << "failed to load runner:" << service->name()
+                                 << ". error reported:" << error;
                     }
                 }
             } else if (loaded) {
@@ -301,8 +303,6 @@ public:
     KConfigGroup config;
 };
 
-
-
 /*****************************************************
 *  RunnerManager::Public class
 *
@@ -315,7 +315,6 @@ RunnerManager::RunnerManager(QObject *parent)
     d->loadConfiguration(config);
     //ThreadWeaver::setDebugLevel(true, 4);
 }
-
 
 RunnerManager::RunnerManager(KConfigGroup &c, QObject *parent)
     : QObject(parent),

@@ -156,7 +156,7 @@ void Dialog::paintEvent(QPaintEvent *e)
     QPainter p(this);
     p.setRenderHint(QPainter::Antialiasing);
     p.setClipRect(e->rect());
-    p.setCompositionMode(QPainter::CompositionMode_Source );
+    p.setCompositionMode(QPainter::CompositionMode_Source);
     p.fillRect(rect(), Qt::transparent);
     d->background->paintPanel(&p);
 
@@ -198,7 +198,7 @@ void Dialog::mouseMoveEvent(QMouseEvent *event)
     }
 
     // here we take care of resize..
-    if (d->resizeStartCorner != Dialog::NoCorner ) {
+    if (d->resizeStartCorner != Dialog::NoCorner) {
         int newWidth;
         int newHeight;
         QPoint position;
@@ -375,7 +375,7 @@ Dialog::ResizeCorners Dialog::resizeCorners() const
 
 bool Dialog::inControlArea(const QPoint &point)
 {
-    foreach(const QRect &r, d->resizeAreas) {
+    foreach (const QRect &r, d->resizeAreas) {
         if (r.contains(point)) {
             return true;
         }

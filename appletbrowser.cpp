@@ -78,7 +78,7 @@ public:
     KCategorizedItemsView *appletList;
     QHash<QString, int> runningApplets; // applet name => count
     //extra hash so we can look up the names of deleted applets
-    QHash<Plasma::Applet*, QString> appletNames;
+    QHash<Plasma::Applet *,QString> appletNames;
 
     KConfig config;
     KConfigGroup configGroup;
@@ -112,7 +112,8 @@ void AppletBrowserWidgetPrivate::initFilters()
         appletList->addEmblem(i18n("Recommended by %1", caption), KIcon(icon),
                               KCategorizedItemsViewModels::Filter("recommended." + id, true));
         filterModel.addFilter(i18n("Recommended by %1", caption),
-                              KCategorizedItemsViewModels::Filter("recommended." + id, true), KIcon(icon));
+                              KCategorizedItemsViewModels::Filter("recommended." + id, true),
+                              KIcon(icon));
     }
 
     // Filters: Special
@@ -331,7 +332,8 @@ void AppletBrowserWidget::downloadWidgets()
 
 void AppletBrowserWidget::openWidgetFile()
 {
-    // TODO: if we already have one of these showing and the user clicks to add it again, show the same window?
+    // TODO: if we already have one of these showing and the user clicks to
+    // add it again, show the same window?
     OpenWidgetAssistant *assistant = new OpenWidgetAssistant(topLevelWidget());
     assistant->setAttribute(Qt::WA_DeleteOnClose, true);
     assistant->show();

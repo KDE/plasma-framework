@@ -56,144 +56,144 @@ class ConfigXmlPrivate
             qDeleteAll(urllists);
         }
 
-        bool* newBool()
+        bool *newBool()
         {
-            bool* v = new bool;
+            bool *v = new bool;
             bools.append(v);
             return v;
         }
 
-        QString* newString()
+        QString *newString()
         {
-            QString* v = new QString;
+            QString *v = new QString;
             strings.append(v);
             return v;
         }
 
-        QStringList* newStringList()
+        QStringList *newStringList()
         {
-            QStringList* v = new QStringList;
+            QStringList *v = new QStringList;
             stringlists.append(v);
             return v;
         }
 
-        QColor* newColor()
+        QColor *newColor()
         {
-            QColor* v = new QColor;
+            QColor *v = new QColor;
             colors.append(v);
             return v;
         }
 
-        QFont* newFont()
+        QFont *newFont()
         {
-            QFont* v = new QFont;
+            QFont *v = new QFont;
             fonts.append(v);
             return v;
         }
 
-        qint32* newInt()
+        qint32 *newInt()
         {
-            qint32* v = new qint32;
+            qint32 *v = new qint32;
             ints.append(v);
             return v;
         }
 
-        quint32* newUint()
+        quint32 *newUint()
         {
-            quint32* v = new quint32;
+            quint32 *v = new quint32;
             uints.append(v);
             return v;
         }
 
-        KUrl* newUrl()
+        KUrl *newUrl()
         {
-            KUrl* v = new KUrl;
+            KUrl *v = new KUrl;
             urls.append(v);
             return v;
         }
 
-        QDateTime* newDateTime()
+        QDateTime *newDateTime()
         {
-            QDateTime* v = new QDateTime;
+            QDateTime *v = new QDateTime;
             dateTimes.append(v);
             return v;
         }
 
-        double* newDouble()
+        double *newDouble()
         {
-            double* v = new double;
+            double *v = new double;
             doubles.append(v);
             return v;
         }
 
         QList<qint32>* newIntList()
         {
-            QList<qint32>* v = new QList<qint32>;
+            QList<qint32> *v = new QList<qint32>;
             intlists.append(v);
             return v;
         }
 
-        qint64* newLongLong()
+        qint64 *newLongLong()
         {
-            qint64* v = new qint64;
+            qint64 *v = new qint64;
             longlongs.append(v);
             return v;
         }
 
-        QPoint* newPoint()
+        QPoint *newPoint()
         {
-            QPoint* v = new QPoint;
+            QPoint *v = new QPoint;
             points.append(v);
             return v;
         }
 
-        QRect* newRect()
+        QRect *newRect()
         {
-            QRect* v = new QRect;
+            QRect *v = new QRect;
             rects.append(v);
             return v;
         }
 
-        QSize* newSize()
+        QSize *newSize()
         {
-            QSize* v = new QSize;
+            QSize *v = new QSize;
             sizes.append(v);
             return v;
         }
 
-        quint64* newULongLong()
+        quint64 *newULongLong()
         {
-            quint64* v = new quint64;
+            quint64 *v = new quint64;
             ulonglongs.append(v);
             return v;
         }
 
-        KUrl::List* newUrlList()
+        KUrl::List *newUrlList()
         {
-            KUrl::List* v = new KUrl::List;
+            KUrl::List *v = new KUrl::List;
             urllists.append(v);
             return v;
         }
 
         void parse(ConfigXml *configXml, QIODevice *xml);
 
-        QList<bool*> bools;
-        QList<QString*> strings;
-        QList<QStringList*> stringlists;
-        QList<QColor*> colors;
-        QList<QFont*> fonts;
-        QList<qint32*> ints;
-        QList<quint32*> uints;
-        QList<KUrl*> urls;
-        QList<QDateTime*> dateTimes;
-        QList<double*> doubles;
-        QList<QList<qint32>*> intlists;
-        QList<qint64*> longlongs;
-        QList<QPoint*> points;
-        QList<QRect*> rects;
-        QList<QSize*> sizes;
-        QList<quint64*> ulonglongs;
-        QList<KUrl::List*> urllists;
+        QList<bool *> bools;
+        QList<QString *> strings;
+        QList<QStringList *> stringlists;
+        QList<QColor *> colors;
+        QList<QFont *> fonts;
+        QList<qint32 *> ints;
+        QList<quint32 *> uints;
+        QList<KUrl *> urls;
+        QList<QDateTime *> dateTimes;
+        QList<double *> doubles;
+        QList<QList<qint32> *> intlists;
+        QList<qint64 *> longlongs;
+        QList<QPoint *> points;
+        QList<QRect *> rects;
+        QList<QSize *> sizes;
+        QList<quint64 *> ulonglongs;
+        QList<KUrl::List *> urllists;
         QString baseGroup;
         QStringList groups;
         QHash<QString, QString> keysToNames;
@@ -202,17 +202,19 @@ class ConfigXmlPrivate
 class ConfigXmlHandler : public QXmlDefaultHandler
 {
 public:
-    ConfigXmlHandler(ConfigXml* config, ConfigXmlPrivate* d);
-    bool startElement(const QString &namespaceURI, const QString & localName, const QString &qName, const QXmlAttributes &atts);
-    bool endElement(const QString &namespaceURI, const QString &localName, const QString &qName);
+    ConfigXmlHandler(ConfigXml *config, ConfigXmlPrivate *d);
+    bool startElement(const QString &namespaceURI, const QString &localName,
+                      const QString &qName, const QXmlAttributes &atts);
+    bool endElement(const QString &namespaceURI, const QString &localName,
+                    const QString &qName);
     bool characters(const QString &ch);
 
 private:
     void addItem();
     void resetState();
 
-    ConfigXml* m_config;
-    ConfigXmlPrivate* d;
+    ConfigXml *m_config;
+    ConfigXmlPrivate *d;
     int m_min;
     int m_max;
     QString m_name;
@@ -238,7 +240,7 @@ void ConfigXmlPrivate::parse(ConfigXml *configXml, QIODevice *xml)
     reader.parse(&source, false);
 }
 
-ConfigXmlHandler::ConfigXmlHandler(ConfigXml* config, ConfigXmlPrivate* d)
+ConfigXmlHandler::ConfigXmlHandler(ConfigXml *config, ConfigXmlPrivate *d)
     : QXmlDefaultHandler(),
       m_config(config),
       d(d)
@@ -306,7 +308,8 @@ bool ConfigXmlHandler::characters(const QString &ch)
     return true;
 }
 
-bool ConfigXmlHandler::endElement(const QString &namespaceURI, const QString &localName, const QString &qName)
+bool ConfigXmlHandler::endElement(const QString &namespaceURI,
+                                  const QString &localName, const QString &qName)
 {
     Q_UNUSED(namespaceURI)
     Q_UNUSED(qName)
@@ -349,7 +352,7 @@ void ConfigXmlHandler::addItem()
         return;
     }
 
-    KConfigSkeletonItem* item = 0;
+    KConfigSkeletonItem *item = 0;
 
     if (m_type == "bool") {
         bool defaultValue = m_default.toLower() == "true";
@@ -361,17 +364,17 @@ void ConfigXmlHandler::addItem()
                                          QDateTime::fromString(m_default), m_key);
     } else if (m_type == "enum") {
         m_key = (m_key.isEmpty()) ? m_name : m_key;
-        KConfigSkeleton::ItemEnum* enumItem =
-                new KConfigSkeleton::ItemEnum(m_config->currentGroup(),
-                                              m_key, *d->newInt(),
-                                              m_enumChoices,
-                                              m_default.toUInt());
+        KConfigSkeleton::ItemEnum *enumItem =
+            new KConfigSkeleton::ItemEnum(m_config->currentGroup(),
+                                          m_key, *d->newInt(),
+                                          m_enumChoices,
+                                          m_default.toUInt());
         m_config->addItem(enumItem, m_name);
         item = enumItem;
     } else if (m_type == "font") {
         item = m_config->addItemFont(m_name, *d->newFont(), QFont(m_default), m_key);
     } else if (m_type == "int") {
-        KConfigSkeleton::ItemInt* intItem = m_config->addItemInt(m_name, *d->newInt(),
+        KConfigSkeleton::ItemInt *intItem = m_config->addItemInt(m_name, *d->newInt(),
                                                                  m_default.toInt(), m_key);
 
         if (m_haveMin) {
@@ -391,12 +394,11 @@ void ConfigXmlHandler::addItem()
         item = m_config->addItemString(m_name, *d->newString(), m_default, m_key);
     } else if (m_type == "stringlist") {
         //FIXME: the split() is naive and will break on lists with ,'s in them
-        item = m_config->addItemStringList(m_name, *d->newStringList(), m_default.split(","), m_key);
+        item = m_config->addItemStringList(m_name, *d->newStringList(),
+                                           m_default.split(","), m_key);
     } else if (m_type == "uint") {
-        KConfigSkeleton::ItemUInt* uintItem = m_config->addItemUInt(m_name,
-                *d->newUint(),
-                            m_default.toUInt(),
-                                             m_key);
+        KConfigSkeleton::ItemUInt *uintItem =
+            m_config->addItemUInt(m_name, *d->newUint(), m_default.toUInt(), m_key);
         if (m_haveMin) {
             uintItem->setMinValue(m_min);
         }
@@ -406,14 +408,14 @@ void ConfigXmlHandler::addItem()
         item = uintItem;
     } else if (m_type == "url") {
         m_key = (m_key.isEmpty()) ? m_name : m_key;
-        KConfigSkeleton::ItemUrl* urlItem =
-                new KConfigSkeleton::ItemUrl(m_config->currentGroup(),
-                                             m_key, *d->newUrl(),
-                                             m_default);
+        KConfigSkeleton::ItemUrl *urlItem =
+            new KConfigSkeleton::ItemUrl(m_config->currentGroup(),
+                                         m_key, *d->newUrl(),
+                                         m_default);
         m_config->addItem(urlItem, m_name);
         item = urlItem;
     } else if (m_type == "double") {
-        KConfigSkeleton::ItemDouble* doubleItem = m_config->addItemDouble(m_name,
+        KConfigSkeleton::ItemDouble *doubleItem = m_config->addItemDouble(m_name,
                 *d->newDouble(), m_default.toDouble(), m_key);
         if (m_haveMin) {
             doubleItem->setMinValue(m_min);
@@ -430,7 +432,7 @@ void ConfigXmlHandler::addItem()
         }
         item = m_config->addItemIntList(m_name, *d->newIntList(), defaultList, m_key);
     } else if (m_type == "longlong") {
-        KConfigSkeleton::ItemLongLong* longlongItem = m_config->addItemLongLong(m_name,
+        KConfigSkeleton::ItemLongLong *longlongItem = m_config->addItemLongLong(m_name,
                 *d->newLongLong(), m_default.toLongLong(), m_key);
         if (m_haveMin) {
             longlongItem->setMinValue(m_min);
@@ -442,7 +444,8 @@ void ConfigXmlHandler::addItem()
     /* No addItemPathList in KConfigSkeleton ?
     } else if (m_type == "PathList") {
         //FIXME: the split() is naive and will break on lists with ,'s in them
-        item = m_config->addItemPathList(m_name, *d->newStringList(), m_default.split(","), m_key); */
+        item = m_config->addItemPathList(m_name, *d->newStringList(), m_default.split(","), m_key);
+    */
     } else if (m_type == "point") {
         QPoint defaultPoint;
         QStringList tmpList = m_default.split(",");
@@ -468,8 +471,8 @@ void ConfigXmlHandler::addItem()
         }
         item = m_config->addItemSize(m_name, *d->newSize(), defaultSize, m_key);
     } else if (m_type == "ulonglong") {
-        KConfigSkeleton::ItemULongLong* ulonglongItem = m_config->addItemULongLong(m_name,
-                *d->newULongLong(), m_default.toULongLong(), m_key);
+        KConfigSkeleton::ItemULongLong *ulonglongItem =
+            m_config->addItemULongLong(m_name, *d->newULongLong(), m_default.toULongLong(), m_key);
         if (m_haveMin) {
             ulonglongItem->setMinValue(m_min);
         }
@@ -546,7 +549,7 @@ ConfigXml::~ConfigXml()
     delete d;
 }
 
-KConfigSkeletonItem* ConfigXml::findItem(const QString &group, const QString &key)
+KConfigSkeletonItem *ConfigXml::findItem(const QString &group, const QString &key)
 {
     return KConfigSkeleton::findItem(d->keysToNames[group + key]);
 }

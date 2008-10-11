@@ -47,14 +47,14 @@ public:
     KServiceAction mode;
 };
 
-Wallpaper::Wallpaper(QObject* parentObject, const QVariantList& args)
+Wallpaper::Wallpaper(QObject *parentObject, const QVariantList &args)
     : d(new WallpaperPrivate(KService::serviceByStorageId(args.count() > 0 ?
                              args[0].toString() : QString()), this))
 {
     // now remove first item since those are managed by Wallpaper and subclasses shouldn't
     // need to worry about them. yes, it violates the constness of this var, but it lets us add
     // or remove items later while applets can just pretend that their args always start at 0
-    QVariantList &mutableArgs = const_cast<QVariantList&>(args);
+    QVariantList &mutableArgs = const_cast<QVariantList &>(args);
     if (!mutableArgs.isEmpty()) {
         mutableArgs.removeFirst();
     }
@@ -78,7 +78,7 @@ KPluginInfo::List Wallpaper::listWallpaperInfo(const QString &formFactor)
     return KPluginInfo::fromServices(offers);
 }
 
-Wallpaper* Wallpaper::load(const QString& wallpaperName, const QVariantList& args)
+Wallpaper *Wallpaper::load(const QString &wallpaperName, const QVariantList &args)
 {
     if (wallpaperName.isEmpty()) {
         return 0;
@@ -102,7 +102,7 @@ Wallpaper* Wallpaper::load(const QString& wallpaperName, const QVariantList& arg
     QVariantList allArgs;
     allArgs << offer->storageId() << args;
     QString error;
-    Wallpaper* wallpaper = offer->createInstance<Plasma::Wallpaper>(0, allArgs, &error);
+    Wallpaper *wallpaper = offer->createInstance<Plasma::Wallpaper>(0, allArgs, &error);
 
     if (!wallpaper) {
         kDebug() << "Couldn't load wallpaper \"" << wallpaperName << "\"! reason given: " << error;
@@ -110,7 +110,7 @@ Wallpaper* Wallpaper::load(const QString& wallpaperName, const QVariantList& arg
     return wallpaper;
 }
 
-Wallpaper* Wallpaper::load(const KPluginInfo& info, const QVariantList& args)
+Wallpaper *Wallpaper::load(const KPluginInfo &info, const QVariantList &args)
 {
     if (!info.isValid()) {
         return 0;
@@ -164,7 +164,7 @@ QRectF Wallpaper::boundingRect() const
     return d->boundingRect;
 }
 
-void Wallpaper::setBoundingRect(const QRectF& boundingRect)
+void Wallpaper::setBoundingRect(const QRectF &boundingRect)
 {
     d->boundingRect = boundingRect;
 }

@@ -163,9 +163,11 @@ void Containment::init()
     if (immutability() != SystemImmutable) {
         //FIXME I'm not certain this belongs in Containment
         //but it sure is nice to have the keyboard shortcut in every containment by default
-        QAction *lockDesktopAction = new QAction(unlocked ? i18n("Lock Widgets") : i18n("Unlock Widgets"), this);
+        QAction *lockDesktopAction =
+            new QAction(unlocked ? i18n("Lock Widgets") : i18n("Unlock Widgets"), this);
         lockDesktopAction->setIcon(KIcon(unlocked ? "object-locked" : "object-unlocked"));
-        connect(lockDesktopAction, SIGNAL(triggered(bool)), this, SLOT(toggleDesktopImmutability()));
+        connect(lockDesktopAction, SIGNAL(triggered(bool)),
+                this, SLOT(toggleDesktopImmutability()));
         lockDesktopAction->setShortcutContext(Qt::WidgetShortcut);
         lockDesktopAction->setShortcut(QKeySequence("ctrl+l"));
         d->actions().addAction("lock widgets", lockDesktopAction);
@@ -210,7 +212,7 @@ void Containment::init()
             d->toolBox->addTool(this->action("add sibling containment"));
             if (hasConfigurationInterface()) {
                 // re-use the contianment's action.
-                QAction* configureContainment = this->action("configure");
+                QAction *configureContainment = this->action("configure");
                 if (configureContainment) {
                     d->toolBox->addTool(this->action("configure"));
                 }
@@ -310,7 +312,7 @@ void Containment::save(KConfigGroup &g) const
 void Containment::saveContents(KConfigGroup &group) const
 {
     KConfigGroup applets(&group, "Applets");
-    foreach (const Applet* applet, d->applets) {
+    foreach (const Applet *applet, d->applets) {
         KConfigGroup appletConfig(&applets, QString::number(applet->id()));
         applet->save(appletConfig);
     }
@@ -338,7 +340,9 @@ void Containment::restoreContents(KConfigGroup &group)
             continue;
         }
 
-        Applet *applet = d->addApplet(plugin, QVariantList(), appletConfig.readEntry("geometry", QRectF()), appId, true);
+        Applet *applet =
+            d->addApplet(plugin, QVariantList(),
+                         appletConfig.readEntry("geometry", QRectF()), appId, true);
         applet->restore(appletConfig);
     }
 }
@@ -442,11 +446,12 @@ void Containment::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
     }
 }
 
-bool ContainmentPrivate::showContextMenu(const QPointF &point, const QPoint &screenPos, bool includeApplet)
+bool ContainmentPrivate::showContextMenu(const QPointF &point,
+                                         const QPoint &screenPos, bool includeApplet)
 {
-    Applet* applet = 0;
+    Applet *applet = 0;
 
-    QGraphicsItem* item = q->scene()->itemAt(point);
+    QGraphicsItem *item = q->scene()->itemAt(point);
     if (item == q) {
         item = 0;
     }
@@ -481,7 +486,7 @@ bool ContainmentPrivate::showContextMenu(const QPointF &point, const QPoint &scr
         }
 
         if (applet->hasConfigurationInterface()) {
-            QAction* configureApplet = applet->d->actions.action("configure");
+            QAction *configureApplet = applet->d->actions.action("configure");
             if (configureApplet) {
                 desktopMenu.addAction(configureApplet);
                 hasEntries = true;
@@ -502,7 +507,7 @@ bool ContainmentPrivate::showContextMenu(const QPointF &point, const QPoint &scr
                 desktopMenu.addMenu(containmentActionMenu);
             }
 
-            foreach (QAction* action, containmentActions) {
+            foreach (QAction *action, containmentActions) {
                 if (action) {
                     containmentActionMenu->addAction(action);
                 }
@@ -514,7 +519,7 @@ bool ContainmentPrivate::showContextMenu(const QPointF &point, const QPoint &scr
                 desktopMenu.addSeparator();
             }
 
-            QAction* closeApplet = applet->d->actions.action("remove");
+            QAction *closeApplet = applet->d->actions.action("remove");
             if (!closeApplet) { //unlikely but not impossible
                 kDebug() << "no remove action!!!!!!!!";
                 closeApplet = new QAction(i18n("Remove this %1", applet->name()), &desktopMenu);
@@ -543,7 +548,7 @@ bool ContainmentPrivate::showContextMenu(const QPointF &point, const QPoint &scr
             return false;
         }
 
-        foreach (QAction* action, actions) {
+        foreach (QAction *action, actions) {
             if (action) {
                 desktopMenu.addAction(action);
             }
@@ -600,7 +605,7 @@ void Containment::setLocation(Location location)
 
     d->location = location;
 
-    foreach (Applet* applet, d->applets) {
+    foreach (Applet *applet, d->applets) {
         applet->updateConstraints(Plasma::LocationConstraint);
     }
 
@@ -631,7 +636,8 @@ void Containment::clearApplets()
     d->applets.clear();
 }
 
-Applet* Containment::addApplet(const QString& name, const QVariantList& args, const QRectF &appletGeometry)
+Applet *Containment::addApplet(const QString &name, const QVariantList &args,
+                               const QRectF &appletGeometry)
 {
     return d->addApplet(name, args, appletGeometry);
 }
@@ -721,16 +727,20 @@ void Containment::setScreen(int screen)
 #ifndef Q_OS_WIN
         // we want to listen to changes in work area if our screen changes
         if (d->screen < 0 && screen > -1) {
-            connect(KWindowSystem::self(), SIGNAL(workAreaChanged()), this, SLOT(positionToolBox()));
+            connect(KWindowSystem::self(), SIGNAL(workAreaChanged()),
+                    this, SLOT(positionToolBox()));
         } else if (screen < 0) {
-            disconnect(KWindowSystem::self(), SIGNAL(workAreaChanged()), this, SLOT(positionToolBox()));
+            disconnect(KWindowSystem::self(), SIGNAL(workAreaChanged()),
+                       this, SLOT(positionToolBox()));
         }
 #endif
         if (screen > -1 && corona()) {
             // sanity check to make sure someone else doesn't have this screen already!
-            Containment* currently = corona()->containmentForScreen(screen);
+            Containment *currently = corona()->containmentForScreen(screen);
             if (currently && currently != this) {
-                //kDebug() << "currently is on screen" << currently->screen() << "and is" << currently->name() << (QObject*)currently << (QObject*)this;
+                //kDebug() << "currently is on screen" << currently->screen()
+                //         << "and is" << currently->name()
+                //         << (QObject*)currently << (QObject*)this;
                 currently->setScreen(-1);
             }
         }
@@ -790,7 +800,8 @@ QPoint Containment::effectiveScreenPos() const
                 return QPoint(r.left(), r.top() + (p.bottom() + INTER_CONTAINMENT_MARGIN));
                 break;
             case RightEdge:
-                return QPoint(r.right() - p.width(), r.top() + (p.bottom() + INTER_CONTAINMENT_MARGIN));
+                return QPoint(r.right() - p.width(),
+                              r.top() + (p.bottom() + INTER_CONTAINMENT_MARGIN));
                 break;
             default:
                 //FIXME: implement properly for Floating!
@@ -890,7 +901,7 @@ void Containment::dropEvent(QGraphicsSceneDragDropEvent *event)
         //TODO: collect the mimetypes of available script engines and offer
         //      to create widgets out of the matching URLs, if any
         KUrl::List urls = KUrl::List::fromMimeData(event->mimeData());
-        foreach (const KUrl& url, urls) {
+        foreach (const KUrl &url, urls) {
             KMimeType::Ptr mime = KMimeType::findByUrl(url);
             QString mimeName = mime->name();
             QRectF geom(event->pos(), QSize());
@@ -903,7 +914,7 @@ void Containment::dropEvent(QGraphicsSceneDragDropEvent *event)
                 //TODO: should we show a dialog here to choose which plasmoid load if
                 //!appletList.isEmpty()
                 QMenu choices;
-                QHash<QAction*, QString> actionsToPlugins;
+                QHash<QAction *, QString> actionsToPlugins;
                 foreach (const KPluginInfo &info, appletList) {
                     QAction *action;
                     if (!info.icon().isEmpty()) {
@@ -955,7 +966,7 @@ void Containment::dropEvent(QGraphicsSceneDragDropEvent *event)
             selectedPlugin = seenPlugins.constBegin().key();
         } else {
             QMenu choices;
-            QHash<QAction*, QString > actionsToPlugins;
+            QHash<QAction *, QString> actionsToPlugins;
             foreach (const KPluginInfo &info, seenPlugins) {
                 QAction *action;
                 if (!info.icon().isEmpty()) {
@@ -985,7 +996,6 @@ void Containment::dropEvent(QGraphicsSceneDragDropEvent *event)
                     stream.writeRawData(data, data.size());
                 }
 
-
                 QRectF geom(event->pos(), QSize());
                 QVariantList args;
                 args << tempFile.fileName();
@@ -1008,7 +1018,8 @@ void Containment::resizeEvent(QGraphicsSceneResizeEvent *event)
 
 void Containment::keyPressEvent(QKeyEvent *event)
 {
-    //kDebug() << "keyPressEvent with" << event->key() << "and hoping and wishing for a" << Qt::Key_Tab;
+    //kDebug() << "keyPressEvent with" << event->key()
+    //         << "and hoping and wishing for a" << Qt::Key_Tab;
     if (event->key() == Qt::Key_Tab) { // && event->modifiers() == 0) {
         if (!d->applets.isEmpty()) {
             kDebug() << "let's give focus to...." << (QObject*)d->applets.first();
@@ -1020,7 +1031,7 @@ void Containment::keyPressEvent(QKeyEvent *event)
 void Containment::wheelEvent(QGraphicsSceneWheelEvent *event)
 {
     if (d->wallpaper) {
-        QGraphicsItem* item = scene()->itemAt(event->scenePos());
+        QGraphicsItem *item = scene()->itemAt(event->scenePos());
         if (item == this) {
             event->ignore();
             d->wallpaper->wheelEvent(event);
@@ -1034,7 +1045,7 @@ void Containment::wheelEvent(QGraphicsSceneWheelEvent *event)
     }
 
     if (containmentType() == DesktopContainment) {
-        QGraphicsItem* item = scene()->itemAt(event->scenePos());
+        QGraphicsItem *item = scene()->itemAt(event->scenePos());
         if (item == this) {
             int numDesktops = KWindowSystem::numberOfDesktops();
             int currentDesktop = KWindowSystem::currentDesktop();
@@ -1059,7 +1070,7 @@ bool Containment::sceneEventFilter(QGraphicsItem *watched, QEvent *event)
     Applet *applet = qgraphicsitem_cast<Applet*>(watched);
 
     // Otherwise we're watching something we shouldn't be...
-    Q_ASSERT(applet!=0);
+    Q_ASSERT(applet != 0);
     if (!d->applets.contains(applet)) {
         return false;
     }
@@ -1093,8 +1104,8 @@ QVariant Containment::itemChange(GraphicsItemChange change, const QVariant &valu
     //FIXME if the applet is moved to another containment we need to unfocus it
 
     if (isContainment() &&
-        (change == QGraphicsItem::ItemSceneHasChanged || change == QGraphicsItem::ItemPositionHasChanged) &&
-        !d->positioning) {
+        (change == QGraphicsItem::ItemSceneHasChanged ||
+         change == QGraphicsItem::ItemPositionHasChanged) && !d->positioning) {
         switch (containmentType()) {
             case PanelContainment:
             case CustomPanelContainment:
@@ -1162,7 +1173,7 @@ void Containment::addAssociatedWidget(QWidget *widget)
         d->focusedApplet->addAssociatedWidget(widget);
     }
 
-    foreach (const Applet* applet, d->applets) {
+    foreach (const Applet *applet, d->applets) {
         if (applet->d->activationAction) {
             widget->addAction(applet->d->activationAction);
         }
@@ -1257,7 +1268,7 @@ void Containment::setWallpaper(const QString &pluginName, const QString &mode)
     }
 }
 
-Plasma::Wallpaper* Containment::wallpaper() const
+Plasma::Wallpaper *Containment::wallpaper() const
 {
     return d->wallpaper;
 }
@@ -1283,7 +1294,7 @@ QString Containment::activity() const
     return d->context()->currentActivity();
 }
 
-Context* ContainmentPrivate::context()
+Context *ContainmentPrivate::context()
 {
     if (!con) {
         con = new Context(q);
@@ -1294,7 +1305,7 @@ Context* ContainmentPrivate::context()
     return con;
 }
 
-KActionCollection& ContainmentPrivate::actions()
+KActionCollection &ContainmentPrivate::actions()
 {
     return static_cast<Applet*>(q)->d->actions;
 }
@@ -1379,8 +1390,10 @@ void Containment::destroy(bool confirm)
 
         //FIXME maybe that %1 should be the containment type not the name
         if (!confirm ||
-            KMessageBox::warningContinueCancel(view(), i18n("Do you really want to remove this %1?", name()),
-                    i18n("Remove %1", name()), KStandardGuiItem::remove()) == KMessageBox::Continue) {
+            KMessageBox::warningContinueCancel(
+                view(),
+                i18n("Do you really want to remove this %1?", name()),
+                i18n("Remove %1", name()), KStandardGuiItem::remove()) == KMessageBox::Continue) {
             //clearApplets();
             Applet::destroy();
         }
@@ -1441,7 +1454,7 @@ void ContainmentPrivate::zoomOut()
     positionToolBox();
 }
 
-ToolBox* ContainmentPrivate::createToolBox()
+ToolBox *ContainmentPrivate::createToolBox()
 {
     if (!toolBox) {
         switch (type) {
@@ -1479,14 +1492,17 @@ void ContainmentPrivate::positionToolBox()
     if (type == Containment::PanelContainment) {
         if (q->formFactor() == Vertical) {
             toolBox->setCorner(ToolBox::Bottom);
-            toolBox->setPos(q->geometry().width()/2 - toolBox->boundingRect().width()/2, q->geometry().height());
+            toolBox->setPos(q->geometry().width() / 2 - toolBox->boundingRect().width() / 2,
+                            q->geometry().height());
         //defaulting to Horizontal right now
         } else {
             if (QApplication::layoutDirection() == Qt::RightToLeft) {
-                toolBox->setPos(q->geometry().left(), q->geometry().height()/2 - toolBox->boundingRect().height()/2);
+                toolBox->setPos(q->geometry().left(),
+                                q->geometry().height() / 2 - toolBox->boundingRect().height() / 2);
                 toolBox->setCorner(ToolBox::Left);
             } else {
-                toolBox->setPos(q->geometry().width(), q->geometry().height()/2 - toolBox->boundingRect().height()/2);
+                toolBox->setPos(q->geometry().width(),
+                                q->geometry().height() / 2 - toolBox->boundingRect().height() / 2);
                 toolBox->setCorner(ToolBox::Right);
             }
         }
@@ -1624,8 +1640,8 @@ void ContainmentPrivate::containmentConstraintsEvent(Plasma::Constraints constra
     }
 }
 
-Applet* ContainmentPrivate::addApplet(const QString& name, const QVariantList& args,
-                                      const QRectF& appletGeometry, uint id, bool delayInit)
+Applet *ContainmentPrivate::addApplet(const QString &name, const QVariantList &args,
+                                      const QRectF &appletGeometry, uint id, bool delayInit)
 {
     if (!q->isContainment()) {
         return 0;
@@ -1641,7 +1657,7 @@ Applet* ContainmentPrivate::addApplet(const QString& name, const QVariantList& a
         v->setCursor(Qt::BusyCursor);
     }
 
-    Applet* applet = Applet::load(name, id, args);
+    Applet *applet = Applet::load(name, id, args);
     if (v) {
         v->unsetCursor();
     }
@@ -1668,7 +1684,7 @@ bool ContainmentPrivate::regionIsEmpty(const QRectF &region, Applet *ignoredAppl
     return true;
 }
 
-void ContainmentPrivate::appletDestroyed(QObject* object)
+void ContainmentPrivate::appletDestroyed(QObject *object)
 {
     // we do a static_cast here since it really isn't an Applet by this
     // point anymore since we are in the qobject dtor. we don't actually
@@ -1677,7 +1693,7 @@ void ContainmentPrivate::appletDestroyed(QObject* object)
     //
     // NOTE: DO NOT USE THE applet VARIABLE FOR ANYTHING OTHER THAN COMPARING
     //       THE ADDRESS! ACTUALLY USING THE OBJECT WILL RESULT IN A CRASH!!!
-    Applet* applet = static_cast<Plasma::Applet*>(object);
+    Applet *applet = static_cast<Plasma::Applet*>(object);
     applets.removeAll(applet);
     if (focusedApplet == applet) {
         focusedApplet = 0;
@@ -1843,7 +1859,7 @@ void ContainmentPrivate::positionPanel(bool force)
     // this should be ok for small numbers of panels, but if we ever end
     // up managing hundreds of them, this simplistic alogrithm will
     // likely be too slow.
-    foreach (const Containment* other, q->corona()->containments()) {
+    foreach (const Containment *other, q->corona()->containments()) {
         if (other == q ||
             (other->containmentType() != Containment::PanelContainment &&
              other->containmentType() != Containment::CustomPanelContainment) ||
@@ -1891,7 +1907,6 @@ void ContainmentPrivate::positionPanel(bool force)
     }
     positioning = false;
 }
-
 
 } // Plasma namespace
 

@@ -80,8 +80,10 @@ class SvgPrivate
         void setImagePath(const QString &imagePath, Svg *q)
         {
             if (themed) {
-                QObject::disconnect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()), q, SLOT(themeChanged()));
-                QObject::disconnect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()), q, SLOT(colorsChanged()));
+                QObject::disconnect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()),
+                                    q, SLOT(themeChanged()));
+                QObject::disconnect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()),
+                                    q, SLOT(colorsChanged()));
             }
 
             themed = !QDir::isAbsolutePath(imagePath);
@@ -89,13 +91,15 @@ class SvgPrivate
 
             if (themed) {
                 themePath = imagePath;
-                QObject::connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()), q, SLOT(themeChanged()));
+                QObject::connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()),
+                                 q, SLOT(themeChanged()));
 
                 // check if svg wants colorscheme applied
                 createRenderer();
                 applyColors = renderer->elementExists("hint-apply-color-scheme");
                 if (applyColors && !Theme::defaultTheme()->colorScheme()) {
-                    QObject::connect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()), q, SLOT(colorsChanged()));
+                    QObject::connect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()),
+                                     q, SLOT(colorsChanged()));
                 }
 
             } else {
@@ -134,9 +138,8 @@ class SvgPrivate
                 return QPixmap();
             }
 
-            QString id = QString::fromLatin1("%3_%2_%1_").arg(size.width())
-                                                         .arg(size.height())
-                                                         .arg(path);
+            QString id = QString::fromLatin1("%3_%2_%1_").
+                         arg(size.width()).arg(size.height()).arg(path);
 
             if (!elementId.isEmpty()) {
                 id.append(elementId);
@@ -175,7 +178,8 @@ class SvgPrivate
             // Apply current color scheme if the svg asks for it
             if (applyColors) {
                 QImage itmp = p.toImage();
-                KIconEffect::colorize(itmp, Theme::defaultTheme()->color(Theme::BackgroundColor), 1.0);
+                KIconEffect::colorize(
+                    itmp, Theme::defaultTheme()->color(Theme::BackgroundColor), 1.0);
                 p = p.fromImage(itmp);
             }
 
@@ -211,7 +215,7 @@ class SvgPrivate
 
         void eraseRenderer()
         {
-            if ( renderer && renderer.count() == 2) {
+            if (renderer && renderer.count() == 2) {
                 // this and the cache reference it; and boy is this not thread safe ;)
                 renderers.erase(renderers.find(path));
             }
@@ -219,7 +223,7 @@ class SvgPrivate
             renderer = 0;
         }
 
-        QSize elementSize(const QString& elementId)
+        QSize elementSize(const QString &elementId)
         {
             createRenderer();
 
@@ -231,12 +235,13 @@ class SvgPrivate
             QSizeF naturalSize = renderer->defaultSize();
             qreal dx = size.width() / naturalSize.width();
             qreal dy = size.height() / naturalSize.height();
-            elementSize.scale(elementSize.width() * dx, elementSize.height() * dy, Qt::IgnoreAspectRatio);
+            elementSize.scale(elementSize.width() * dx, elementSize.height() * dy,
+                              Qt::IgnoreAspectRatio);
 
             return elementSize.toSize();
         }
 
-        QRectF elementRect(const QString& elementId)
+        QRectF elementRect(const QString &elementId)
         {
             createRenderer();
             QRectF elementRect = renderer->boundsOnElement(elementId);
@@ -248,7 +253,7 @@ class SvgPrivate
                          elementRect.width() * dx, elementRect.height() * dy);
         }
 
-        QMatrix matrixForElement(const QString& elementId)
+        QMatrix matrixForElement(const QString &elementId)
         {
             createRenderer();
             return renderer->matrixForElement(elementId);
@@ -275,9 +280,11 @@ class SvgPrivate
             createRenderer();
             applyColors = renderer->elementExists("hint-apply-color-scheme");
             if (applyColors && !Theme::defaultTheme()->colorScheme()) {
-                QObject::connect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()), q, SLOT(colorsChanged()));
+                QObject::connect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()),
+                                 q, SLOT(colorsChanged()));
             } else {
-                QObject::disconnect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()), q, SLOT(colorsChanged()));
+                QObject::disconnect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()),
+                                    q, SLOT(colorsChanged()));
             }
 
             emit q->repaintNeeded();
@@ -308,7 +315,7 @@ class SvgPrivate
 
 QHash<QString, SharedSvgRenderer::Ptr> SvgPrivate::renderers;
 
-Svg::Svg(QObject* parent)
+Svg::Svg(QObject *parent)
     : QObject(parent),
       d(new SvgPrivate(this))
 {
@@ -328,7 +335,7 @@ QPixmap Svg::pixmap(const QString &elementID)
     }
 }
 
-void Svg::paint(QPainter* painter, const QPointF& point, const QString& elementID)
+void Svg::paint(QPainter *painter, const QPointF &point, const QString &elementID)
 {
     QPixmap pix(elementID.isNull() ? d->findInCache(elementID, size()) :
                                      d->findInCache(elementID));
@@ -337,18 +344,18 @@ void Svg::paint(QPainter* painter, const QPointF& point, const QString& elementI
         return;
     }
 
-    painter->drawPixmap(QRectF(point, pix.size()), pix, QRectF(QPointF(0,0), pix.size()));
+    painter->drawPixmap(QRectF(point, pix.size()), pix, QRectF(QPointF(0, 0), pix.size()));
 }
 
-void Svg::paint(QPainter* painter, int x, int y, const QString& elementID)
+void Svg::paint(QPainter *painter, int x, int y, const QString &elementID)
 {
     paint(painter, QPointF(x, y), elementID);
 }
 
-void Svg::paint(QPainter* painter, const QRectF& rect, const QString& elementID)
+void Svg::paint(QPainter *painter, const QRectF &rect, const QString &elementID)
 {
     QPixmap pix(d->findInCache(elementID, rect.size()));
-    painter->drawPixmap(rect, pix, QRectF(QPointF(0,0), pix.size()));
+    painter->drawPixmap(rect, pix, QRectF(QPointF(0, 0), pix.size()));
 }
 
 QSize Svg::size() const
@@ -398,7 +405,8 @@ FIXME: implement when Qt can support us!
     QSizeF naturalSize = d->renderer->defaultSize();
     qreal dx = d->size.width() / naturalSize.width();
     qreal dy = d->size.height() / naturalSize.height();
-    //kDebug() << point << "is really" << QPoint(point.x() *dx, naturalSize.height() - point.y() * dy);
+    //kDebug() << point << "is really"
+    //         << QPoint(point.x() *dx, naturalSize.height() - point.y() * dy);
 
     return QString(); // d->renderer->elementAtPoint(QPoint(point.x() *dx, naturalSize.height() - point.y() * dy));
     */

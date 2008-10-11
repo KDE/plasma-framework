@@ -160,7 +160,8 @@ class ExtenderItemPrivate
                     returnToSource->setMaximumSize(iconSize);
 
                     toolboxLayout->addItem(returnToSource);
-                    QObject::connect(returnToSource, SIGNAL(clicked()), q, SLOT(moveBackToSource()));
+                    QObject::connect(returnToSource, SIGNAL(clicked()),
+                                     q, SLOT(moveBackToSource()));
                 }
 
                 toolboxLayout->updateGeometry();
@@ -169,8 +170,8 @@ class ExtenderItemPrivate
                 QSizeF minimum = toolboxLayout->minimumSize();
                 toolbox->resize(minimum);
                 toolbox->setPos(q->size().width() - minimum.width() - bgRight,
-                                ((dragger->size().height() + dragTop + dragBottom)/2) -
-                                (minimum.height()/2) + bgTop);
+                                ((dragger->size().height() + dragTop + dragBottom) / 2) -
+                                (minimum.height() / 2) + bgTop);
                 toolbox->update();
             }
         }
@@ -178,8 +179,9 @@ class ExtenderItemPrivate
         //TODO: something like this as static function in corona might be a good idea.
         QPointF scenePosFromScreenPos(const QPoint &pos) const
         {
-            //get the stacking order of the toplevel windows and remove the toplevel view that's
-            //only here while dragging, since we're not interested in finding that.
+            //get the stacking order of the toplevel windows and remove the
+            //toplevel view that's only here while dragging, since we're not
+            //interested in finding that.
             QList<WId> order = KWindowSystem::stackingOrder();
             if (toplevel) {
                 order.removeOne(toplevel->winId());
@@ -345,8 +347,7 @@ ExtenderItem::ExtenderItem(Extender *hostExtender, uint extenderItemId)
     d->collapseIcon = new Icon(KIcon(hostExtender->d->applet->icon()), "", this);
     d->collapseIcon->resize(d->collapseIcon->sizeFromIconSize(iconSize.height()));
     d->collapseIcon->setPos(d->bgLeft + d->dragLeft,
-                            (d->dragger->size().height() + d->dragTop + d->dragBottom)/2 -
-                            d->collapseIcon->size().height()/2 + d->bgTop);
+                            (d->dragger->size().height() + d->dragTop + d->dragBottom) / 2 - d->collapseIcon->size().height() / 2 + d->bgTop);
     connect(d->collapseIcon, SIGNAL(clicked()), this, SLOT(toggleCollapse()));
 
     //set the extender we want to move to.
@@ -563,7 +564,7 @@ void ExtenderItem::destroy()
 void ExtenderItem::setCollapsed(bool collapsed)
 {
     qreal marginWidth = d->bgLeft + d->bgRight + d->dragLeft + d->dragRight;
-    qreal marginHeight = d->bgTop + d->bgBottom + 2*d->dragTop + 2*d->dragBottom;
+    qreal marginHeight = d->bgTop + d->bgBottom + 2 * d->dragTop + 2 * d->dragBottom;
 
     if (!d->widget) {
         setPreferredSize(QSizeF(200, d->dragHandleRect().height()));
@@ -607,10 +608,10 @@ void ExtenderItem::setCollapsed(bool collapsed)
     } else {
         setPreferredSize(QSizeF(preferredSize.width() + marginWidth,
                          preferredSize.height() + d->dragHandleRect().height() + marginHeight));
-        setMinimumSize(  QSizeF(minimumSize.width() + marginWidth,
-                         minimumSize.height() + d->dragHandleRect().height() + marginHeight));
-        setMaximumSize(  QSizeF(maximumSize.width() + marginWidth,
-                         maximumSize.height() + d->dragHandleRect().height() + marginHeight));
+        setMinimumSize(QSizeF(minimumSize.width() + marginWidth,
+                              minimumSize.height() + d->dragHandleRect().height() + marginHeight));
+        setMaximumSize(QSizeF(maximumSize.width() + marginWidth,
+                              maximumSize.height() + d->dragHandleRect().height() + marginHeight));
 
         if (d->widget->isWidget()) {
             QGraphicsWidget *graphicsWidget = static_cast<QGraphicsWidget*>(d->widget);
@@ -703,8 +704,7 @@ void ExtenderItem::resizeEvent(QGraphicsSceneResizeEvent *event)
     //resize the widget
     if (d->widget && d->widget->isWidget()) {
         QSizeF newWidgetSize(width - d->bgLeft - d->bgRight - d->dragLeft - d->dragRight,
-                             height - d->dragger->size().height() - d->bgTop - d->bgBottom
-                                    - 2*d->dragTop - 2*d->dragBottom);
+                             height - d->dragger->size().height() - d->bgTop - d->bgBottom - 2 * d->dragTop - 2 * d->dragBottom);
 
         QGraphicsWidget *graphicsWidget = static_cast<QGraphicsWidget*>(d->widget);
         graphicsWidget->resize(newWidgetSize);
@@ -769,8 +769,8 @@ void ExtenderItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
             corona->addOffscreenWidget(this);
 
-            d->toplevel->setWindowFlags(Qt::ToolTip | Qt::FramelessWindowHint
-                                                    | Qt::WindowStaysOnTopHint);
+            d->toplevel->setWindowFlags(
+                Qt::ToolTip | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
             d->toplevel->setFrameShape(QFrame::NoFrame);
             d->toplevel->resize(screenRect.size());
             d->toplevel->setSceneRect(sceneBoundingRect());

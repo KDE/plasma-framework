@@ -31,7 +31,7 @@ namespace Plasma
 class NullEngine : public DataEngine
 {
     public:
-        NullEngine(QObject* parent = 0)
+        NullEngine(QObject *parent = 0)
             : DataEngine(parent)
         {
             setObjectName(i18n("Null Engine"));
@@ -51,14 +51,14 @@ class DataEngineManagerPrivate
 
         ~DataEngineManagerPrivate()
         {
-            foreach (Plasma::DataEngine* engine, engines) {
+            foreach (Plasma::DataEngine *engine, engines) {
                 delete engine;
             }
             engines.clear();
             delete nullEng;
         }
 
-        DataEngine* nullEngine()
+        DataEngine *nullEngine()
         {
             if (!nullEng) {
                 nullEng = new NullEngine;
@@ -68,7 +68,7 @@ class DataEngineManagerPrivate
         }
 
         DataEngine::Dict engines;
-        DataEngine* nullEng;
+        DataEngine *nullEng;
 };
 
 class DataEngineManagerSingleton
@@ -79,7 +79,7 @@ class DataEngineManagerSingleton
 
 K_GLOBAL_STATIC(DataEngineManagerSingleton, privateDataEngineManagerSelf)
 
-DataEngineManager* DataEngineManager::self()
+DataEngineManager *DataEngineManager::self()
 {
     return &privateDataEngineManagerSelf->self;
 }
@@ -94,7 +94,7 @@ DataEngineManager::~DataEngineManager()
     delete d;
 }
 
-Plasma::DataEngine* DataEngineManager::engine(const QString& name) const
+Plasma::DataEngine *DataEngineManager::engine(const QString &name) const
 {
     Plasma::DataEngine::Dict::const_iterator it = d->engines.find(name);
     if (it != d->engines.end()) {
@@ -106,9 +106,9 @@ Plasma::DataEngine* DataEngineManager::engine(const QString& name) const
     return d->nullEngine();
 }
 
-Plasma::DataEngine* DataEngineManager::loadEngine(const QString& name)
+Plasma::DataEngine *DataEngineManager::loadEngine(const QString &name)
 {
-    Plasma::DataEngine* engine = 0;
+    Plasma::DataEngine *engine = 0;
     Plasma::DataEngine::Dict::const_iterator it = d->engines.find(name);
 
     if (it != d->engines.end()) {
@@ -132,8 +132,9 @@ Plasma::DataEngine* DataEngineManager::loadEngine(const QString& name)
         if (api.isEmpty()) {
             if (offers.first()) {
                 KPluginLoader plugin(*offers.first());
-                if (Plasma::isPluginVersionCompatible(plugin.pluginVersion()))
+                if (Plasma::isPluginVersionCompatible(plugin.pluginVersion())) {
                     engine = offers.first()->createInstance<Plasma::DataEngine>(0, allArgs, &error);
+                }
             }
         } else {
             engine = new DataEngine(0, offers.first());
@@ -150,12 +151,12 @@ Plasma::DataEngine* DataEngineManager::loadEngine(const QString& name)
     return engine;
 }
 
-void DataEngineManager::unloadEngine(const QString& name)
+void DataEngineManager::unloadEngine(const QString &name)
 {
     Plasma::DataEngine::Dict::iterator it = d->engines.find(name);
 
     if (it != d->engines.end()) {
-        Plasma::DataEngine* engine = *it;
+        Plasma::DataEngine *engine = *it;
         engine->d->deref();
 
         if (!engine->d->isUsed()) {

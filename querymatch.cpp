@@ -55,7 +55,6 @@ class QueryMatchPrivate : public QSharedData
         qreal relevance;
 };
 
-
 QueryMatch::QueryMatch(AbstractRunner *runner)
     : d(new QueryMatchPrivate(runner))
 {
@@ -104,22 +103,22 @@ qreal QueryMatch::relevance() const
     return d->relevance;
 }
 
-AbstractRunner* QueryMatch::runner() const
+AbstractRunner *QueryMatch::runner() const
 {
     return d->runner;
 }
 
-void QueryMatch::setText(const QString& text)
+void QueryMatch::setText(const QString &text)
 {
     d->text = text;
 }
 
-void QueryMatch::setSubtext(const QString& subtext)
+void QueryMatch::setSubtext(const QString &subtext)
 {
     d->subtext = subtext;
 }
 
-void QueryMatch::setData(const QVariant& data)
+void QueryMatch::setData(const QVariant & data)
 {
     d->data = data;
     setId(data.toString());
@@ -131,13 +130,12 @@ void QueryMatch::setId(const QString &id)
         d->id = d->runner->id();
     }
 
-
     if (!id.isEmpty()) {
         d->id.append('_').append(id);
     }
 }
 
-void QueryMatch::setIcon(const QIcon& icon)
+void QueryMatch::setIcon(const QIcon &icon)
 {
     d->icon = icon;
 }
@@ -162,7 +160,7 @@ QIcon QueryMatch::icon() const
     return d->icon;
 }
 
-void QueryMatch::setEnabled( bool enabled )
+void QueryMatch::setEnabled(bool enabled)
 {
     d->enabled = enabled;
 }
@@ -172,7 +170,7 @@ bool QueryMatch::isEnabled() const
     return d->enabled && d->runner;
 }
 
-bool QueryMatch::operator<(const QueryMatch& other) const
+bool QueryMatch::operator<(const QueryMatch &other) const
 {
     if (d->type == other.d->type) {
         if (isEnabled() != other.isEnabled()) {
@@ -191,7 +189,7 @@ bool QueryMatch::operator<(const QueryMatch& other) const
     return d->type < other.d->type;
 }
 
-QueryMatch& QueryMatch::operator=(const QueryMatch &other)
+QueryMatch &QueryMatch::operator=(const QueryMatch &other)
 {
     if (d != other.d) {
         d = other.d;

@@ -51,7 +51,7 @@ Service::Service(QObject *parent, const QVariantList &args)
     // remove those first item since those are managed by Service and subclasses shouldn't
     // need to worry about it. yes, it violates the constness of this var, but it lets us add
     // or remove items later while applets can just pretend that their args always start at 0
-    QVariantList &mutableArgs = const_cast<QVariantList&>(args);
+    QVariantList &mutableArgs = const_cast<QVariantList &>(args);
     if (!mutableArgs.isEmpty()) {
         setName(mutableArgs[0].toString());
         mutableArgs.removeFirst();
@@ -65,7 +65,7 @@ Service::~Service()
     delete d;
 }
 
-Service* Service::load(const QString &name, QObject *parent)
+Service *Service::load(const QString &name, QObject *parent)
 {
     //TODO: scripting API support
     if (name.isEmpty()) {
@@ -84,7 +84,7 @@ Service* Service::load(const QString &name, QObject *parent)
     QString error;
     QVariantList args;
     args << name;
-    Service* service = 0;
+    Service *service = 0;
 
     if (Plasma::isPluginVersionCompatible(KPluginLoader(*offer).pluginVersion())) {
         service = offer->createInstance<Plasma::Service>(parent, args, &error);
@@ -127,12 +127,13 @@ KConfigGroup Service::operationDescription(const QString &operationName)
 
     d->config->writeConfig();
     KConfigGroup params(d->config->config(), operationName);
-    //kDebug() << "operation" << operationName << "requested, has keys" << params.keyList() << "from" 
+    //kDebug() << "operation" << operationName
+    //         << "requested, has keys" << params.keyList() << "from"
     //         << d->config->config()->name();
     return params;
 }
 
-ServiceJob* Service::startOperationCall(const KConfigGroup &description, QObject *parent)
+ServiceJob *Service::startOperationCall(const KConfigGroup &description, QObject *parent)
 {
     // TODO: nested groups?
     ServiceJob *job = 0;
@@ -178,7 +179,8 @@ void Service::associateWidget(QWidget *widget, const QString &operation)
 
 void Service::disassociateWidget(QWidget *widget)
 {
-    disconnect(widget, SIGNAL(destroyed(QObject*)), this, SLOT(associatedWidgetDestroyed(QObject*)));
+    disconnect(widget, SIGNAL(destroyed(QObject*)),
+               this, SLOT(associatedWidgetDestroyed(QObject*)));
     d->associatedWidgets.remove(widget);
 }
 
@@ -186,14 +188,16 @@ void Service::associateWidget(QGraphicsWidget *widget, const QString &operation)
 {
     disassociateWidget(widget);
     d->associatedGraphicsWidgets.insert(widget, operation);
-    connect(widget, SIGNAL(destroyed(QObject*)), this, SLOT(associatedGraphicsWidgetDestroyed(QObject*)));
+    connect(widget, SIGNAL(destroyed(QObject*)),
+            this, SLOT(associatedGraphicsWidgetDestroyed(QObject*)));
 
     widget->setEnabled(!d->disabledOperations.contains(operation));
 }
 
 void Service::disassociateWidget(QGraphicsWidget *widget)
 {
-    disconnect(widget, SIGNAL(destroyed(QObject*)), this, SLOT(associatedGraphicsWidgetDestroyed(QObject*)));
+    disconnect(widget, SIGNAL(destroyed(QObject*)),
+               this, SLOT(associatedGraphicsWidgetDestroyed(QObject*)));
     d->associatedGraphicsWidgets.remove(widget);
 }
 
