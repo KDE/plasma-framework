@@ -1729,7 +1729,7 @@ void AppletPrivate::init()
         // find where the Package is
         QString path = KStandardDirs::locate(
             "data",
-            "plasma/plasmoids/" + appletDescription.pluginName() + "/");
+            "plasma/plasmoids/" + appletDescription.pluginName() + '/');
 
         if (path.isEmpty()) {
             q->setFailedToLaunch(

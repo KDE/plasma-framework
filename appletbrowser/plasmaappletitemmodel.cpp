@@ -93,8 +93,8 @@ PlasmaAppletItemModel::PlasmaAppletItemModel(KConfigGroup configGroup, QObject *
     KCategorizedItemsViewModels::DefaultItemModel(parent),
     m_configGroup(configGroup)
 {
-    m_used = m_configGroup.readEntry("used").split(",");
-    m_favorites = m_configGroup.readEntry("favorites").split(",");
+    m_used = m_configGroup.readEntry("used").split(',');
+    m_favorites = m_configGroup.readEntry("favorites").split(',');
     connect(KSycoca::self(), SIGNAL(databaseChanged()), this, SLOT(populateModel()));
 }
 
@@ -114,7 +114,7 @@ void PlasmaAppletItemModel::populateModel()
         }
         QString id = rx.cap(1);
 
-        foreach (const QString &plugin, i.value().split(",")) {
+        foreach (const QString &plugin, i.value().split(',')) {
             extraPluginAttrs[plugin]["recommended." + id] = true;
         }
     }

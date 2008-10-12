@@ -97,7 +97,7 @@ void TextEdit::dataUpdated(const QString &sourceName, const Plasma::DataEngine::
 
     foreach (const QVariant &v, data) {
         if (v.canConvert(QVariant::String)) {
-            te->append(v.toString() + "\n");
+            te->append(v.toString() + '\n');
         }
     }
 }
