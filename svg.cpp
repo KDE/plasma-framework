@@ -87,7 +87,8 @@ class SvgPrivate
             }
 
             themed = !QDir::isAbsolutePath(imagePath);
-            path = themePath = QString();
+            path.clear();
+            themePath.clear();
 
             if (themed) {
                 themePath = imagePath;

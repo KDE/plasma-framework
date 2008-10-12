@@ -457,7 +457,7 @@ void Theme::setUseGlobalSettings(bool useGlobal)
 
     d->useGlobal = useGlobal;
     d->cfg = KConfigGroup();
-    d->themeName = QString();
+    d->themeName.clear();
     settingsChanged();
 }
 

@@ -246,7 +246,7 @@ void Delegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
     }
 
     if (subTitleText == titleText) {
-        subTitleText = QString();
+        subTitleText.clear();
     }
 
     QFont subTitleFont = d->fontForSubTitle(option.font);
