@@ -315,7 +315,7 @@ ExtenderItem::ExtenderItem(Extender *hostExtender, uint extenderItemId)
         d->sourceAppletId = hostExtender->d->applet->id();
         d->sourceApplet = hostExtender->d->applet;
     } else {
-        //The item allready exists.
+        //The item already exists.
         d->name = dg.readEntry("extenderItemName", "");
         d->sourceAppletId = dg.readEntry("sourceAppletId", 0);
         //Set the sourceapplet.
@@ -805,7 +805,7 @@ void ExtenderItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
         }
     }
 
-    //let's insert spacers in applets we're hovering over for some usefull visual feedback.
+    //let's insert spacers in applets we're hovering over for some useful visual feedback.
     //check which view we're hovering over and use that information to get the mouse
     //position in scene coordinates (event->scenePos won't work, since it doesn't take in
     //consideration that you're leaving the current view).
@@ -888,7 +888,7 @@ void ExtenderItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
             d->toplevel = 0;
         }
 
-        //let's insert spacers in applets we're hovering over for some usefull visual feedback.
+        //let's insert spacers in applets we're hovering over for some useful visual feedback.
         //check which view we're hovering over and use that information to get the mouse
         //position in scene coordinates (event->scenePos won't work, since it doesn't take in
         //consideration that you're leaving the current view).

@@ -134,7 +134,7 @@ public:
     /**
      * Set whether or not the view should adjust its size when the associated
      * containment does.
-     * @arg trackChanges true to syncronize the view's size with the containment's
+     * @arg trackChanges true to synchronize the view's size with the containment's
      * (this is the default behaviour), false to ignore containment size changes
      */
     void setTrackContainmentChanges(bool trackChanges);

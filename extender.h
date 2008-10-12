@@ -92,7 +92,7 @@ class PLASMA_EXPORT Extender : public QGraphicsWidget
         QList<ExtenderItem*> detachedItems() const;
 
         /**
-         * This function can be used for easily determining if a certain item is allready displayed
+         * This function can be used for easily determining if a certain item is already displayed
          * in a extender item somewhere, so your applet doesn't duplicate this item. Say the applet
          * displays 'jobs', from an engine which add's a source for every job. In sourceAdded you
          * could do something like:
@@ -104,7 +104,7 @@ class PLASMA_EXPORT Extender : public QGraphicsWidget
 
     protected:
         /**
-         * Get's called after an item has been added to this extender. The bookkeeping has allready
+         * Get's called after an item has been added to this extender. The bookkeeping has already
          * been done when this function get's called. The only thing left to do is put it somewhere
          * appropriate. The default implementation adds the extenderItem to the appropriate place in
          * a QGraphicsLinearLayout.
@@ -115,7 +115,7 @@ class PLASMA_EXPORT Extender : public QGraphicsWidget
 
         /**
          * Get's called after an item has been removed from this extender. All bookkeeping has
-         * allready been done when this function get's called.
+         * already been done when this function get's called.
          * @param item The item that has just been removed.
          */
         virtual void itemRemovedEvent(ExtenderItem *item);
@@ -131,7 +131,7 @@ class PLASMA_EXPORT Extender : public QGraphicsWidget
          * to give some visual feedback about what will happen when the mouse button is released at
          * that position. The default implementation shows a spacer at the appropriate location in
          * the layout.
-         * @param item The item that's hovering over this extender. Most usefull for obtaining the
+         * @param item The item that's hovering over this extender. Most useful for obtaining the
          * size of the spacer.
          * @param pos The location the item is hovering.
          */

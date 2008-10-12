@@ -202,7 +202,7 @@ void Extender::itemHoverMoveEvent(ExtenderItem *item, const QPointF &pos)
         return;
     }
 
-    //Make sure we remove any spacer that might allready be in the layout.
+    //Make sure we remove any spacer that might already be in the layout.
     itemHoverLeaveEvent(item);
 
     d->currentSpacerIndex = insertIndex;

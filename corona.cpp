@@ -371,7 +371,7 @@ void Corona::addOffscreenWidget(QGraphicsWidget *widget)
         offscreenWidget->setLayout(d->offscreenLayout);
     }
 
-    //check if the layout allready contains this widget.
+    //check if the layout already contains this widget.
     //XXX: duplicated from removeOffscreenWidget()
     for (int i = 0; i < d->offscreenLayout->count(); i++) {
         QGraphicsWidget *foundWidget = dynamic_cast<QGraphicsWidget*>(d->offscreenLayout->itemAt(i));

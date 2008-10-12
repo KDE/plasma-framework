@@ -156,7 +156,7 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
 
             if (dialog) {
                 if (dialog->layout() && qWidget) {
-                    //we dont want to delete Widget inside the dialog layout
+                    //we don't want to delete Widget inside the dialog layout
                     dialog->layout()->removeWidget(qWidget);
                 }
 

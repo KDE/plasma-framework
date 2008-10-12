@@ -186,7 +186,7 @@ QRectF Plasma::AppletHandle::boundingRect() const
 
 QPainterPath AppletHandle::shape() const
 {
-    //when the containment changes the applet is resetted to 0
+    //when the containment changes the applet is reset to 0
     if (m_applet) {
         QPainterPath path = PaintUtils::roundedRectangle(m_decorationRect, 10);
         return path.united(m_applet->mapToParent(m_applet->shape()));

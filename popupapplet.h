@@ -43,7 +43,7 @@ class PopupAppletPrivate;
  * widget in a popup when clicked.
  *
  * If you use this class as a base class for your extender using applet, the extender will
- * automaticaly be used for the popup; reimplementing graphicsWidget() is unecessary in this case.
+ * automatically be used for the popup; reimplementing graphicsWidget() is unnecessary in this case.
  */
 
 class PLASMA_EXPORT PopupApplet : public Plasma::Applet

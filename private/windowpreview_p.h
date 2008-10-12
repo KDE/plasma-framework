@@ -31,7 +31,7 @@ namespace Plasma {
  *
  * A widget which reserves area for window preview and sets hints on the toplevel
  * tooltip widget that tells KWin to render the preview in this area. This depends
- * on KWin's TaskbarThumbnail compositing effect (which is automaticaly detected).
+ * on KWin's TaskbarThumbnail compositing effect (which is automatically detected).
  */
 class WindowPreview : public QWidget
 {

@@ -195,7 +195,7 @@ public:
     bool widgetHasToolTip(QGraphicsWidget *widget) const;
 
     /**
-     *  Enable/or disable a Tooltip, this method is usefull is we want
+     *  Enable/or disable a Tooltip, this method is useful is we want
      *  to have a tooltip activated on demand.
      *  @param widget the widget to change tooltip behaviour
      *  @param enable if we need the tooltip or not
