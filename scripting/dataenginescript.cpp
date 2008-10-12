@@ -27,7 +27,7 @@ namespace Plasma
 class DataEngineScriptPrivate
 {
 public:
-    DataEngine* dataEngine;
+    DataEngine *dataEngine;
 };
 
 DataEngineScript::DataEngineScript(QObject *parent)
@@ -46,25 +46,25 @@ void DataEngineScript::setDataEngine(DataEngine *dataEngine)
     d->dataEngine = dataEngine;
 }
 
-DataEngine* DataEngineScript::dataEngine() const
+DataEngine *DataEngineScript::dataEngine() const
 {
     return d->dataEngine;
 }
 
 bool DataEngineScript::sourceRequestEvent(const QString &name)
 {
-    Q_UNUSED(name)
+    Q_UNUSED(name);
     return false;
 }
 
-bool DataEngineScript::updateSourceEvent(const QString& source)
+bool DataEngineScript::updateSourceEvent(const QString &source)
 {
-    Q_UNUSED(source)
+    Q_UNUSED(source);
     return false;
 }
 
-void DataEngineScript::setData(const QString& source, const QString& key,
-                                    const QVariant& value)
+void DataEngineScript::setData(const QString &source, const QString &key,
+                               const QVariant &value)
 {
     if (d->dataEngine) {
         d->dataEngine->setData(source, key, value);
@@ -78,14 +78,14 @@ void DataEngineScript::setData(const QString &source, const QVariant &value)
     }
 }
 
-void DataEngineScript::removeAllData(const QString& source)
+void DataEngineScript::removeAllData(const QString &source)
 {
     if (d->dataEngine) {
         d->dataEngine->removeAllData(source);
     }
 }
 
-void DataEngineScript::removeData(const QString& source, const QString& key)
+void DataEngineScript::removeData(const QString &source, const QString &key)
 {
     if (d->dataEngine) {
         d->dataEngine->removeData(source, key);

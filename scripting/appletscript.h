@@ -20,7 +20,6 @@
 #ifndef PLASMA_APPLETSCRIPT_H
 #define PLASMA_APPLETSCRIPT_H
 
-
 #include <QtCore/QObject>
 #include <QtCore/QRect>
 #include <QtCore/QSizeF>
@@ -68,7 +67,7 @@ public:
     /**
      * Returns the Plasma::Applet associated with this script component
      */
-    Plasma::Applet* applet() const;
+    Plasma::Applet *applet() const;
 
     /**
      * Called when the script should paint the applet
@@ -76,8 +75,8 @@ public:
      * @param painter the QPainter to use
      * @param option the style option containing such flags as selection, level of detail, etc
      */
-    virtual void paintInterface(QPainter* painter,
-                                const QStyleOptionGraphicsItem* option,
+    virtual void paintInterface(QPainter *painter,
+                                const QStyleOptionGraphicsItem *option,
                                 const QRect &contentsRect);
 
     /**
@@ -135,7 +134,7 @@ protected:
      * @arg engine name of the engine
      * @return a data engine associated with this plasmoid
      */
-    Q_INVOKABLE DataEngine* dataEngine(const QString &engine) const;
+    Q_INVOKABLE DataEngine *dataEngine(const QString &engine) const;
 
     /**
      * @return absolute path to the main script file for this plasmoid
@@ -147,10 +146,10 @@ protected:
      *         be used to request resources, such as images and
      *         interface files.
      */
-    const Package* package() const;
+    const Package *package() const;
 
 private:
-    AppletScriptPrivate * const d;
+    AppletScriptPrivate *const d;
 };
 
 #define K_EXPORT_PLASMA_APPLETSCRIPTENGINE(libname, classname) \

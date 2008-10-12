@@ -28,7 +28,7 @@ namespace Plasma
 class AppletScriptPrivate
 {
 public:
-    Applet* applet;
+    Applet *applet;
 };
 
 AppletScript::AppletScript(QObject *parent)
@@ -48,17 +48,19 @@ void AppletScript::setApplet(Plasma::Applet *applet)
     d->applet = applet;
 }
 
-Applet* AppletScript::applet() const
+Applet *AppletScript::applet() const
 {
     Q_ASSERT(d->applet);
     return d->applet;
 }
 
-void AppletScript::paintInterface(QPainter* painter, const QStyleOptionGraphicsItem* option, const QRect &contentsRect)
+void AppletScript::paintInterface(QPainter *painter,
+                                  const QStyleOptionGraphicsItem *option,
+                                  const QRect &contentsRect)
 {
-    Q_UNUSED(painter)
-    Q_UNUSED(option)
-    Q_UNUSED(contentsRect)
+    Q_UNUSED(painter);
+    Q_UNUSED(option);
+    Q_UNUSED(contentsRect);
 }
 
 QSizeF AppletScript::size() const
@@ -107,7 +109,7 @@ void AppletScript::configChanged()
 {
 }
 
-DataEngine* AppletScript::dataEngine(const QString &engine) const
+DataEngine *AppletScript::dataEngine(const QString &engine) const
 {
     Q_ASSERT(d->applet);
     return d->applet->dataEngine(engine);
@@ -119,7 +121,7 @@ QString AppletScript::mainScript() const
     return d->applet->package()->filePath("mainscript");
 }
 
-const Package* AppletScript::package() const
+const Package *AppletScript::package() const
 {
     Q_ASSERT(d->applet);
     return d->applet->package();

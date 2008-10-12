@@ -59,7 +59,7 @@ public:
     /**
      * Returns the Plasma::DataEngine associated with this script component
      */
-    DataEngine* dataEngine() const;
+    DataEngine *dataEngine() const;
 
     /**
      * Called when the script should create a source that does not currently
@@ -78,14 +78,14 @@ public:
      * @return true if the data was changed, or false if there was no
      *         change or if the change will occur later
      **/
-    virtual bool updateSourceEvent(const QString& source);
+    virtual bool updateSourceEvent(const QString &source);
 
 protected:
-    void setData(const QString& source, const QString& key,
-                 const QVariant& value);
+    void setData(const QString &source, const QString &key,
+                 const QVariant &value);
     void setData(const QString &source, const QVariant &value);
-    void removeAllData(const QString& source);
-    void removeData(const QString& source, const QString& key);
+    void removeAllData(const QString &source);
+    void removeData(const QString &source, const QString &key);
     void setMaxSourceCount(uint limit);
     void setMinimumPollingInterval(int minimumMs);
     int  minimumPollingInterval() const;
@@ -93,7 +93,7 @@ protected:
     void removeAllSources();
 
 private:
-    DataEngineScriptPrivate * const d;
+    DataEngineScriptPrivate *const d;
 };
 
 #define K_EXPORT_PLASMA_DATAENGINESCRIPTENGINE(libname, classname) \

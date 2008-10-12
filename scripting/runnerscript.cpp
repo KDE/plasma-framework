@@ -28,7 +28,7 @@ namespace Plasma
 class RunnerScriptPrivate
 {
 public:
-    AbstractRunner* runner;
+    AbstractRunner *runner;
 };
 
 RunnerScript::RunnerScript(QObject *parent)
@@ -47,23 +47,23 @@ void RunnerScript::setRunner(AbstractRunner *runner)
     d->runner = runner;
 }
 
-AbstractRunner* RunnerScript::runner() const
+AbstractRunner *RunnerScript::runner() const
 {
     return d->runner;
 }
 
 void RunnerScript::match(Plasma::RunnerContext &search)
 {
-    Q_UNUSED(search)
+    Q_UNUSED(search);
 }
 
 void RunnerScript::run(const Plasma::RunnerContext &search, const Plasma::QueryMatch &action)
 {
-    Q_UNUSED(search)
-    Q_UNUSED(action)
+    Q_UNUSED(search);
+    Q_UNUSED(action);
 }
 
-const Package* RunnerScript::package() const
+const Package *RunnerScript::package() const
 {
     return d->runner ? d->runner->package() : 0;
 }

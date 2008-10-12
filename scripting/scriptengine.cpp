@@ -52,7 +52,7 @@ bool ScriptEngine::init()
     return true;
 }
 
-const Package* ScriptEngine::package() const
+const Package *ScriptEngine::package() const
 {
     return 0;
 }
@@ -95,7 +95,8 @@ QStringList knownLanguages(ComponentTypes types)
     }
 
     KService::List offers = KServiceTypeTrader::self()->query("Plasma/ScriptEngine", constraint);
-    //kDebug() << "Applet::knownApplets constraint was '" << constraint << "' which got us " << offers.count() << " matches";
+    //kDebug() << "Applet::knownApplets constraint was '" << constraint
+    //         << "' which got us " << offers.count() << " matches";
 
     QStringList languages;
     foreach (const KService::Ptr &service, offers) {
@@ -148,7 +149,7 @@ KService::List engineOffers(const QString &language, ComponentType type)
     return offers;
 }
 
-ScriptEngine* loadEngine(const QString &language, ComponentType type, QObject *parent)
+ScriptEngine *loadEngine(const QString &language, ComponentType type, QObject *parent)
 {
     KService::List offers = engineOffers(language, type);
 
@@ -176,15 +177,17 @@ ScriptEngine* loadEngine(const QString &language, ComponentType type, QObject *p
             return engine;
         }
 
-        kDebug() << "Couldn't load script engine for language " << language << "! error reported: " << error;
+        kDebug() << "Couldn't load script engine for language " << language
+                 << "! error reported: " << error;
     }
 
     return 0;
 }
 
-AppletScript* loadScriptEngine(const QString &language, Applet *applet)
+AppletScript *loadScriptEngine(const QString &language, Applet *applet)
 {
-    AppletScript *engine = static_cast<AppletScript*>(loadEngine(language, AppletComponent, applet));
+    AppletScript *engine =
+        static_cast<AppletScript*>(loadEngine(language, AppletComponent, applet));
 
     if (engine) {
         engine->setApplet(applet);
@@ -193,9 +196,10 @@ AppletScript* loadScriptEngine(const QString &language, Applet *applet)
     return engine;
 }
 
-DataEngineScript* loadScriptEngine(const QString &language, DataEngine *dataEngine)
+DataEngineScript *loadScriptEngine(const QString &language, DataEngine *dataEngine)
 {
-    DataEngineScript *engine = static_cast<DataEngineScript*>(loadEngine(language, DataEngineComponent, dataEngine));
+    DataEngineScript *engine =
+        static_cast<DataEngineScript*>(loadEngine(language, DataEngineComponent, dataEngine));
 
     if (engine) {
         engine->setDataEngine(dataEngine);
@@ -204,9 +208,10 @@ DataEngineScript* loadScriptEngine(const QString &language, DataEngine *dataEngi
     return engine;
 }
 
-RunnerScript* loadScriptEngine(const QString &language, AbstractRunner *runner)
+RunnerScript *loadScriptEngine(const QString &language, AbstractRunner *runner)
 {
-    RunnerScript* engine = static_cast<RunnerScript*>(loadEngine(language, RunnerComponent, runner));
+    RunnerScript *engine =
+        static_cast<RunnerScript*>(loadEngine(language, RunnerComponent, runner));
 
     if (engine) {
         engine->setRunner(runner);
@@ -218,21 +223,21 @@ RunnerScript* loadScriptEngine(const QString &language, AbstractRunner *runner)
 PackageStructure::Ptr defaultPackageStructure(ComponentType type)
 {
     switch (type) {
-        case AppletComponent:
-            return PackageStructure::Ptr(new PlasmoidPackage());
-            break;
-        case RunnerComponent:
-        case DataEngineComponent:
-        {
-            PackageStructure::Ptr structure(new PackageStructure());
-            structure->addFileDefinition("mainscript", "code/main", i18n("Main Script File"));
-            structure->setRequired("mainscript", true);
-            return structure;
-            break;
-        }
-        default:
-            // TODO: we don't have any special structures for other components yet
-            break;
+    case AppletComponent:
+        return PackageStructure::Ptr(new PlasmoidPackage());
+        break;
+    case RunnerComponent:
+    case DataEngineComponent:
+    {
+        PackageStructure::Ptr structure(new PackageStructure());
+        structure->addFileDefinition("mainscript", "code/main", i18n("Main Script File"));
+        structure->setRequired("mainscript", true);
+        return structure;
+        break;
+    }
+    default:
+        // TODO: we don't have any special structures for other components yet
+        break;
     }
 
     return PackageStructure::Ptr(new PackageStructure());

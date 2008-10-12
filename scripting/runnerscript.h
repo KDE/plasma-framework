@@ -61,7 +61,7 @@ public:
     /**
      * Returns the Plasma::AbstractRunner associated with this script component
      */
-    AbstractRunner* runner() const;
+    AbstractRunner *runner() const;
 
     /**
      * Called when the script should create QueryMatch instances through
@@ -87,10 +87,10 @@ protected:
      *         be used to request resources, such as images and
      *         interface files.
      */
-    const Package* package() const;
+    const Package *package() const;
 
 private:
-    RunnerScriptPrivate * const d;
+    RunnerScriptPrivate *const d;
 };
 
 #define K_EXPORT_PLASMA_RUNNERSCRIPTENGINE(libname, classname) \

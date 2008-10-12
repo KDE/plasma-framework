@@ -85,10 +85,10 @@ protected:
      *         be used to request resources, such as images and
      *         interface files.
      */
-    virtual const Package* package() const;
+    virtual const Package *package() const;
 
 private:
-    ScriptEnginePrivate * const d;
+    ScriptEnginePrivate *const d;
 };
 
 /**
@@ -106,7 +106,7 @@ PLASMA_EXPORT QStringList knownLanguages(ComponentTypes types);
  * @return pointer to the AppletScript or 0 on failure; the caller is responsible
  *         for the return object which will be parented to the Applet
  **/
-PLASMA_EXPORT AppletScript* loadScriptEngine(const QString &language, Applet *applet);
+PLASMA_EXPORT AppletScript *loadScriptEngine(const QString &language, Applet *applet);
 
 /**
  * Loads an DataEngine script engine for the given language.
@@ -116,7 +116,7 @@ PLASMA_EXPORT AppletScript* loadScriptEngine(const QString &language, Applet *ap
  * @return pointer to the DataEngineScript or 0 on failure; the caller is responsible
  *         for the return object which will be parented to the DataEngine
  **/
-PLASMA_EXPORT DataEngineScript* loadScriptEngine(const QString &language, DataEngine *dataEngine);
+PLASMA_EXPORT DataEngineScript *loadScriptEngine(const QString &language, DataEngine *dataEngine);
 
 /**
  * Loads an Applet script engine for the given language.
@@ -126,7 +126,7 @@ PLASMA_EXPORT DataEngineScript* loadScriptEngine(const QString &language, DataEn
  * @return pointer to the RunnerScript or 0 on failure; the caller is responsible
  *         for the return object which will be parented to the AbstractRunner
  **/
-PLASMA_EXPORT RunnerScript* loadScriptEngine(const QString &language, AbstractRunner *runner);
+PLASMA_EXPORT RunnerScript *loadScriptEngine(const QString &language, AbstractRunner *runner);
 
 /**
  * Loads an appropriate PackageStructure for the given language and type
