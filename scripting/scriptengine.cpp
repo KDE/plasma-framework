@@ -123,18 +123,18 @@ KService::List engineOffers(const QString &language, ComponentType type)
 
     QString component;
     switch (type) {
-        case AppletComponent:
-            component = "Applet";
-            break;
-        case DataEngineComponent:
-            component = "DataEngine";
-            break;
-        case RunnerComponent:
-            component = "Runner";
-            break;
-        default:
-            return KService::List();
-            break;
+    case AppletComponent:
+        component = "Applet";
+        break;
+    case DataEngineComponent:
+        component = "DataEngine";
+        break;
+    case RunnerComponent:
+        component = "Runner";
+        break;
+    default:
+        return KService::List();
+        break;
     }
 
     QString constraint = QString("[X-Plasma-API] == '%1' and "
@@ -143,7 +143,7 @@ KService::List engineOffers(const QString &language, ComponentType type)
 /*    kDebug() << "********************* loadingApplet with Plasma/ScriptEngine" << constraint
              << "resulting in" << offers.count() << "results";*/
     if (offers.isEmpty()) {
-        kDebug() << "ScriptEngine::load: no offers for \"" << language << "\"";
+        kDebug() << "No offers for \"" << language << "\"";
     }
 
     return offers;

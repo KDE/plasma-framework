@@ -106,7 +106,7 @@ class SvgPrivate
                 path = imagePath;
 
                 if (!QFile::exists(path)) {
-                    kDebug() << "Plasma::Svg: file '" << path << "' does not exist!";
+                    kDebug() << "file '" << path << "' does not exist!";
                 }
             }
         }

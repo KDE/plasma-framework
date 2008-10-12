@@ -501,7 +501,7 @@ void Animator::setInitialPixmap(int id, const QPixmap &pixmap)
     QMap<int, ElementAnimationState*>::iterator it = d->animatedElements.find(id);
 
     if (it == d->animatedElements.end()) {
-        kDebug() << "Animator::setInitialPixmap(" << id << ") found no entry for it!";
+        kDebug() << "No entry found for id " << id;
         return;
     }
 

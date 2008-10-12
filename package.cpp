@@ -95,7 +95,7 @@ bool Package::isValid() const
 
     foreach (const char *dir, d->structure->requiredDirectories()) {
         if (!QFile::exists(d->basePath + d->structure->contentsPrefix() + d->structure->path(dir))) {
-            kWarning(505) << "Could not find required directory" << dir;
+            kWarning() << "Could not find required directory" << dir;
             d->valid = false;
             return false;
         }
@@ -103,8 +103,8 @@ bool Package::isValid() const
 
     foreach (const char *file, d->structure->requiredFiles()) {
         if (!QFile::exists(d->basePath + d->structure->contentsPrefix() + d->structure->path(file))) {
-            kWarning(505) << "Could not find required file" << file << ", look in"
-                          << d->basePath + d->structure->contentsPrefix() + d->structure->path(file) << endl;
+            kWarning() << "Could not find required file" << file << ", look in"
+                       << d->basePath + d->structure->contentsPrefix() + d->structure->path(file) << endl;
             d->valid = false;
             return false;
         }
@@ -426,7 +426,7 @@ bool Package::createPackage(const PackageMetadata &metadata,
 {
     Q_UNUSED(icon)
     if (!metadata.isValid()) {
-        kWarning(550) << "Metadata file is not complete";
+        kWarning() << "Metadata file is not complete";
         return false;
     }
 

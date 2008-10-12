@@ -169,9 +169,9 @@ void SignalPlotter::addSample(const QList<double>& sampleBuf)
     if (d->samples < 4) {
         // It might be possible, under some race conditions, for addSample
         // to be called before d->samples is set. This is just to be safe.
-        kDebug(1215) << "Error - d->samples is only " << d->samples << endl;
+        kDebug() << "Error - d->samples is only " << d->samples;
         updateDataBuffers();
-        kDebug(1215) << "d->samples is now " << d->samples << endl;
+        kDebug() << "d->samples is now " << d->samples;
         if (d->samples < 4) {
             return;
         }
@@ -207,14 +207,14 @@ void SignalPlotter::addSample(const QList<double>& sampleBuf)
 void SignalPlotter::reorderPlots(const QList<uint>& newOrder)
 {
     if (newOrder.count() != d->plotColors.count()) {
-        kDebug(1215) << "neworder has " << newOrder.count()
-                     << " and plot colors is " << d->plotColors.count() << endl;
+        kDebug() << "neworder has " << newOrder.count()
+                 << " and plot colors is " << d->plotColors.count();
         return;
     }
     foreach (QList<double> data, d->plotData) {
         if (newOrder.count() != data.count()) {
-            kDebug(1215) << "Serious problem in move sample.  plotdata[i] has "
-                         << data.count() << " and neworder has " << newOrder.count() << endl;
+            kDebug() << "Serious problem in move sample.  plotdata[i] has "
+                     << data.count() << " and neworder has " << newOrder.count();
         } else {
             QList<double> newPlot;
             for (int i = 0; i < newOrder.count(); i++) {

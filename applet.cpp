@@ -1716,7 +1716,9 @@ void AppletPrivate::init()
     q->setLayoutDirection(qApp->layoutDirection());
 
     if (!appletDescription.isValid()) {
-        kDebug() << "Check your constructor! You probably want to be passing in a Service::Ptr or a QVariantList with a valid storageid as arg[0].";
+        kDebug() << "Check your constructor! "
+                 << "You probably want to be passing in a Service::Ptr "
+                 << "or a QVariantList with a valid storageid as arg[0].";
         return;
     }
 
@@ -1725,16 +1727,20 @@ void AppletPrivate::init()
     // we have a scripted plasmoid
     if (!api.isEmpty()) {
         // find where the Package is
-        QString path = KStandardDirs::locate("data",
-                                             "plasma/plasmoids/" + appletDescription.pluginName() + "/");
+        QString path = KStandardDirs::locate(
+            "data",
+            "plasma/plasmoids/" + appletDescription.pluginName() + "/");
 
         if (path.isEmpty()) {
-            q->setFailedToLaunch(true, i18n("Could not locate the %1 package required for the %2 widget.",
-                                            appletDescription.pluginName(), appletDescription.name()));
+            q->setFailedToLaunch(
+                true,
+                i18n("Could not locate the %1 package required for the %2 widget.",
+                     appletDescription.pluginName(), appletDescription.name()));
         } else {
             // create the package and see if we have something real
             //kDebug() << "trying for" << path;
-            PackageStructure::Ptr structure = Plasma::packageStructure(api, Plasma::AppletComponent);
+            PackageStructure::Ptr structure =
+                Plasma::packageStructure(api, Plasma::AppletComponent);
             structure->setPath(path);
             package = new Package(path, structure);
 

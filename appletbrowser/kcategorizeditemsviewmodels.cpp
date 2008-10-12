@@ -94,7 +94,7 @@ void DefaultItemFilterProxyModel::setSourceModel(QAbstractItemModel *sourceModel
     QStandardItemModel *model = qobject_cast<QStandardItemModel*>(sourceModel);
 
     if (!model) {
-        kWarning() << "DefaultItemFilterProxyModel::setSourceModel expects a QStandardItemModel!";
+        kWarning() << "Expecting a QStandardItemModel!";
         return;
     }
 
