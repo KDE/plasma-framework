@@ -83,7 +83,7 @@ OpenWidgetAssistant::OpenWidgetAssistant(QWidget *parent)
     addPage(m_filePage);
 
     connect(this, SIGNAL(currentPageChanged(KPageWidgetItem*,KPageWidgetItem*)), SLOT(prepPage(KPageWidgetItem*,KPageWidgetItem*)));
-    enableButton( KDialog::Help, false );
+    enableButton(KDialog::Help, false);
     //connect( this, SIGNAL( helpClicked() ), this, SLOT( slotHelpClicked() ) );
     m_widgetTypeList->setFocus();
     resize(QSize(560, 400).expandedTo(minimumSizeHint()));
@@ -91,14 +91,15 @@ OpenWidgetAssistant::OpenWidgetAssistant(QWidget *parent)
 
 void OpenWidgetAssistant::slotItemChanged()
 {
-    enableButton( KDialog::User2, !m_widgetTypeList->selectedItems().isEmpty() );
+    enableButton(KDialog::User2, !m_widgetTypeList->selectedItems().isEmpty());
 }
 
 void OpenWidgetAssistant::prepPage(KPageWidgetItem *current, KPageWidgetItem *before)
 {
-    Q_UNUSED(before)
-    if ( m_widgetTypeList->selectedItems().isEmpty() )
+    Q_UNUSED(before);
+    if (m_widgetTypeList->selectedItems().isEmpty()) {
         return;
+    }
 
     if (current != m_filePage) {
         return;
@@ -136,7 +137,7 @@ void OpenWidgetAssistant::prepPage(KPageWidgetItem *current, KPageWidgetItem *be
         } else {
             QString filter = m_packageStructureService->property("X-Plasma-PackageFileFilter").toString();
             if (!filter.isEmpty()) {
-                m_fileDialog->setFilter( + '|' + m_packageStructureService->name());
+                m_fileDialog->setFilter(+ '|' + m_packageStructureService->name());
             }
         }
     } else {

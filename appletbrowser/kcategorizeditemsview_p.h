@@ -35,65 +35,65 @@ class KCategorizedItemsViewDelegate;
  * filtering capabilities.
  *
  * To use it, you need to implement KCategorizedItemsView::AbstractItem
- * 
+ *
  * For convenience, there are default implementations of category model
  * (DefaultCategoryModel), filters model (DefaultFilterModel) and the
  * default item mode (DefaultItemModel), but you do not need to use them.
- * 
+ *
  * One constraint is that DefaultItemModel *must* hold the items that
  * are subclassed from KCategorizedItemsView::AbstractItem
- * 
+ *
  */
 class KCategorizedItemsView: public QWidget, public Ui::KCategorizedItemsViewBase
 {
     Q_OBJECT
 public:
 
-    explicit KCategorizedItemsView(QWidget * parent = 0, Qt::WindowFlags f = 0);
+    explicit KCategorizedItemsView(QWidget *parent = 0, Qt::WindowFlags f = 0);
     virtual ~KCategorizedItemsView();
 
-    void setFilterModel(QStandardItemModel * model);             ///< Sets the filters model
-    void setItemModel(QStandardItemModel * model);               ///< Sets the item model, as mentioned items must implement AbstractItem class
+    void setFilterModel(QStandardItemModel *model);             ///< Sets the filters model
+    void setItemModel(QStandardItemModel *model);               ///< Sets the item model, as mentioned items must implement AbstractItem class
 
-    void addEmblem(const QString & title, const QIcon & icon, const Filter & filter);
+    void addEmblem(const QString &title, const QIcon &icon, const Filter &filter);
     void clearEmblems();
 
     QList < AbstractItem * > selectedItems() const;
 
 protected:
-    virtual void resizeEvent ( QResizeEvent * event );
-    virtual bool event ( QEvent * event );
+    virtual void resizeEvent (QResizeEvent *event) ;
+    virtual bool event (QEvent *event);
 
 protected slots:
     void searchTermChanged(const QString &text);
     void filterChanged(int index);
 
 private slots:
-    void itemActivated( const QModelIndex& index );
-    void itemDoubleClicked( const QModelIndex& index );
-    void slotSearchTermChanged( const QString& term );
+    void itemActivated(const QModelIndex &index);
+    void itemDoubleClicked(const QModelIndex &index);
+    void slotSearchTermChanged(const QString &term);
 
 Q_SIGNALS:
-    void activated ( const QModelIndex & index );
-    void clicked ( const QModelIndex & index );
-    void doubleClicked ( const QModelIndex & index );
-    void entered ( const QModelIndex & index );
-    void pressed ( const QModelIndex & index );
+    void activated(const QModelIndex &index);
+    void clicked(const QModelIndex &index);
+    void doubleClicked(const QModelIndex &index);
+    void entered(const QModelIndex &index);
+    void pressed(const QModelIndex &index);
 
 private:
     void updateColumnsWidth(bool force = false);
 
-    QStandardItemModel * m_modelCategories;
-    QStandardItemModel * m_modelFilters;
-    QStandardItemModel * m_modelItems;
+    QStandardItemModel *m_modelCategories;
+    QStandardItemModel *m_modelFilters;
+    QStandardItemModel *m_modelItems;
 
-    DefaultItemFilterProxyModel * m_modelFilterItems;
-    KCategorizedItemsViewDelegate * m_delegate;
+    DefaultItemFilterProxyModel *m_modelFilterItems;
+    KCategorizedItemsViewDelegate *m_delegate;
 
     int m_viewWidth;
 
     QMap < QString, QPair < Filter, QIcon > > m_emblems;
-    AbstractItem * getItemByProxyIndex(const QModelIndex & index) const;
+    AbstractItem *getItemByProxyIndex(const QModelIndex &index) const;
 
     friend class KCategorizedItemsViewDelegate;
     friend class CustomDragTreeView;

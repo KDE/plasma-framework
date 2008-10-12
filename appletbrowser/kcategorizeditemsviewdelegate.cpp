@@ -82,8 +82,9 @@ int KCategorizedItemsViewDelegate::calcItemHeight(const QStyleOptionViewItem &op
     return qMax(textHeight, MAIN_ICON_SIZE) + 2 * UNIVERSAL_PADDING;
 }
 
-void KCategorizedItemsViewDelegate::paintColMain(QPainter *painter,
-        const QStyleOptionViewItem &option, const KCategorizedItemsViewModels::AbstractItem * item) const
+void KCategorizedItemsViewDelegate::paintColMain(
+    QPainter *painter, const QStyleOptionViewItem &option,
+    const KCategorizedItemsViewModels::AbstractItem *item) const
 {
     const int left = option.rect.left();
     const int top = option.rect.top();
@@ -128,27 +129,32 @@ void KCategorizedItemsViewDelegate::paintColMain(QPainter *painter,
                Qt::AlignTop | Qt::AlignLeft, description);
 
     // Main icon
-    item->icon().paint(&p, 
-            leftToRight ? left + UNIVERSAL_PADDING : left + width - UNIVERSAL_PADDING - MAIN_ICON_SIZE,
-            top + UNIVERSAL_PADDING, 
-            MAIN_ICON_SIZE, MAIN_ICON_SIZE, Qt::AlignCenter, iconMode);
+    item->icon().paint(
+        &p,
+        leftToRight ? left + UNIVERSAL_PADDING : left + width - UNIVERSAL_PADDING - MAIN_ICON_SIZE,
+        top + UNIVERSAL_PADDING,
+        MAIN_ICON_SIZE,
+        MAIN_ICON_SIZE,
+        Qt::AlignCenter, iconMode);
 
     // Counting the number of emblems for this item
     int emblemCount = 0;
     QPair < Filter, QIcon > emblem;
     foreach (emblem, m_parent->m_emblems) {
-        if (item->passesFiltering(emblem.first)) ++emblemCount;
+        if (item->passesFiltering(emblem.first)) {
+            ++emblemCount;
+        }
     }
 
     // Gradient part of the background - fading of the text at the end
     if (leftToRight) {
-        gradient = QLinearGradient(left + width - UNIVERSAL_PADDING - FADE_LENGTH, 0, 
-                left + width - UNIVERSAL_PADDING, 0);
+        gradient = QLinearGradient(left + width - UNIVERSAL_PADDING - FADE_LENGTH, 0,
+                                   left + width - UNIVERSAL_PADDING, 0);
         gradient.setColorAt(0, Qt::white);
         gradient.setColorAt(1, Qt::transparent);
     } else {
-        gradient = QLinearGradient(left + UNIVERSAL_PADDING, 0, 
-                left + UNIVERSAL_PADDING + FADE_LENGTH, 0);
+        gradient = QLinearGradient(left + UNIVERSAL_PADDING, 0,
+                                   left + UNIVERSAL_PADDING + FADE_LENGTH, 0);
         gradient.setColorAt(0, Qt::transparent);
         gradient.setColorAt(1, Qt::white);
     }
@@ -158,15 +164,15 @@ void KCategorizedItemsViewDelegate::paintColMain(QPainter *painter,
     p.fillRect(paintRect, gradient);
 
     if (leftToRight) {
-        gradient.setStart(left + width
-                - emblemCount * (UNIVERSAL_PADDING + EMBLEM_ICON_SIZE) - FADE_LENGTH, 0);
-        gradient.setFinalStop(left + width
-                - emblemCount * (UNIVERSAL_PADDING + EMBLEM_ICON_SIZE), 0);
+        gradient.setStart(
+            left + width - emblemCount * (UNIVERSAL_PADDING + EMBLEM_ICON_SIZE) - FADE_LENGTH, 0);
+        gradient.setFinalStop(
+            left + width - emblemCount * (UNIVERSAL_PADDING + EMBLEM_ICON_SIZE), 0);
     } else {
-        gradient.setStart(left + UNIVERSAL_PADDING
-                + emblemCount * (UNIVERSAL_PADDING + EMBLEM_ICON_SIZE), 0);
-        gradient.setFinalStop(left + UNIVERSAL_PADDING
-                + emblemCount * (UNIVERSAL_PADDING + EMBLEM_ICON_SIZE) + FADE_LENGTH, 0);
+        gradient.setStart(
+            left + UNIVERSAL_PADDING + emblemCount * (UNIVERSAL_PADDING + EMBLEM_ICON_SIZE), 0);
+        gradient.setFinalStop(
+            left + UNIVERSAL_PADDING + emblemCount * (UNIVERSAL_PADDING + EMBLEM_ICON_SIZE) + FADE_LENGTH, 0);
     }
     paintRect.setHeight(UNIVERSAL_PADDING + MAIN_ICON_SIZE / 2);
     p.fillRect(paintRect, gradient);
@@ -176,8 +182,8 @@ void KCategorizedItemsViewDelegate::paintColMain(QPainter *painter,
     int emblemLeft = leftToRight ? (left + width - EMBLEM_ICON_SIZE) : left; // - FAV_ICON_SIZE - 2 * UNIVERSAL_PADDING
     foreach (emblem, m_parent->m_emblems) {
         if (item->passesFiltering(emblem.first)) {
-            emblem.second.paint(&p, 
-                    emblemLeft, top + UNIVERSAL_PADDING, 
+            emblem.second.paint(&p,
+                    emblemLeft, top + UNIVERSAL_PADDING,
                     EMBLEM_ICON_SIZE, EMBLEM_ICON_SIZE, Qt::AlignCenter, iconMode);
             if (leftToRight) {
                 emblemLeft -= UNIVERSAL_PADDING + EMBLEM_ICON_SIZE;
@@ -191,8 +197,9 @@ void KCategorizedItemsViewDelegate::paintColMain(QPainter *painter,
     painter->drawPixmap(option.rect.topLeft(), pixmap);
 }
 
-void KCategorizedItemsViewDelegate::paintColFav(QPainter *painter,
-        const QStyleOptionViewItem &option, const KCategorizedItemsViewModels::AbstractItem * item) const
+void KCategorizedItemsViewDelegate::paintColFav(
+    QPainter *painter, const QStyleOptionViewItem &option,
+    const KCategorizedItemsViewModels::AbstractItem *item) const
 {
     int left = option.rect.left();
     int top = option.rect.top();
@@ -200,30 +207,43 @@ void KCategorizedItemsViewDelegate::paintColFav(QPainter *painter,
 
     // Painting favorite icon column
 
-    if (! (option.state & QStyle::State_MouseOver) && m_onFavoriteIconItem == item)
+    if (! (option.state & QStyle::State_MouseOver) && m_onFavoriteIconItem == item) {
         m_onFavoriteIconItem = NULL;
+    }
 
     QIcon::Mode iconMode = QIcon::Normal;
     if (!item->isFavorite()) {
         iconMode = QIcon::Disabled;
     } else if (option.state & QStyle::State_MouseOver) {
         iconMode = QIcon::Active;
-    } 
+    }
 
-    m_favoriteIcon.paint(painter, 
-            left + width - FAV_ICON_SIZE - UNIVERSAL_PADDING, top + UNIVERSAL_PADDING, 
-            FAV_ICON_SIZE, FAV_ICON_SIZE, Qt::AlignCenter, iconMode);
+    m_favoriteIcon.paint(
+        painter,
+        left + width - FAV_ICON_SIZE - UNIVERSAL_PADDING,
+        top + UNIVERSAL_PADDING,
+        FAV_ICON_SIZE,
+        FAV_ICON_SIZE,
+        Qt::AlignCenter,
+        iconMode);
 
-    const KIcon & icon = (item->isFavorite())? m_removeIcon : m_favoriteAddIcon;
+    const KIcon &icon = (item->isFavorite())? m_removeIcon : m_favoriteAddIcon;
 
-    if ((option.state & QStyle::State_MouseOver) && (m_onFavoriteIconItem != item))
-        icon.paint(painter, 
-                left + width - EMBLEM_ICON_SIZE - UNIVERSAL_PADDING, top + UNIVERSAL_PADDING, 
-                EMBLEM_ICON_SIZE, EMBLEM_ICON_SIZE, Qt::AlignCenter, iconMode);
+    if ((option.state & QStyle::State_MouseOver) && (m_onFavoriteIconItem != item)) {
+        icon.paint(
+            painter,
+            left + width - EMBLEM_ICON_SIZE - UNIVERSAL_PADDING,
+            top + UNIVERSAL_PADDING,
+            EMBLEM_ICON_SIZE,
+            EMBLEM_ICON_SIZE,
+            Qt::AlignCenter,
+            iconMode);
+    }
 }
 
-void KCategorizedItemsViewDelegate::paintColRemove(QPainter *painter,
-        const QStyleOptionViewItem &option, const KCategorizedItemsViewModels::AbstractItem * item) const
+void KCategorizedItemsViewDelegate::paintColRemove(
+    QPainter *painter, const QStyleOptionViewItem &option,
+    const KCategorizedItemsViewModels::AbstractItem *item) const
 {
     // Painting remove icon column
     int running = item->running();
@@ -238,10 +258,10 @@ void KCategorizedItemsViewDelegate::paintColRemove(QPainter *painter,
     QIcon::Mode iconMode = QIcon::Normal;
     if (option.state & QStyle::State_MouseOver) {
         iconMode = QIcon::Active;
-    } 
+    }
 
-    m_removeIcon.paint(painter, 
-            left + width - FAV_ICON_SIZE - UNIVERSAL_PADDING, top + UNIVERSAL_PADDING, 
+    m_removeIcon.paint(painter,
+            left + width - FAV_ICON_SIZE - UNIVERSAL_PADDING, top + UNIVERSAL_PADDING,
             FAV_ICON_SIZE, FAV_ICON_SIZE, Qt::AlignCenter, iconMode);
 
     if (running == 1) {
@@ -253,19 +273,18 @@ void KCategorizedItemsViewDelegate::paintColRemove(QPainter *painter,
     painter->setPen(foregroundColor);
     painter->setFont(option.font);
     painter->drawText(
-            left + UNIVERSAL_PADDING, //FIXME might be wrong
-            top + UNIVERSAL_PADDING + MAIN_ICON_SIZE / 2,
-            width - 2 * UNIVERSAL_PADDING, MAIN_ICON_SIZE / 2,
-            Qt::AlignCenter, QString::number(running));
+        left + UNIVERSAL_PADDING, //FIXME might be wrong
+        top + UNIVERSAL_PADDING + MAIN_ICON_SIZE / 2,
+        width - 2 * UNIVERSAL_PADDING, MAIN_ICON_SIZE / 2,
+        Qt::AlignCenter, QString::number(running));
 }
 
-bool KCategorizedItemsViewDelegate::editorEvent(QEvent *event,
-                               QAbstractItemModel *model,
-                               const QStyleOptionViewItem &option,
-                               const QModelIndex &index)
+bool KCategorizedItemsViewDelegate::editorEvent(
+    QEvent *event, QAbstractItemModel *model,
+    const QStyleOptionViewItem &option, const QModelIndex &index)
 {
     if (event->type() == QEvent::MouseButtonPress) {
-        KCategorizedItemsViewModels::AbstractItem * item = getItemByProxyIndex(index);
+        KCategorizedItemsViewModels::AbstractItem *item = getItemByProxyIndex(index);
         if (index.column() == 1) {
             m_onFavoriteIconItem = item;
             item->setFavorite(!item->isFavorite());
@@ -281,7 +300,7 @@ bool KCategorizedItemsViewDelegate::editorEvent(QEvent *event,
 }
 
 QSize KCategorizedItemsViewDelegate::sizeHint(const QStyleOptionViewItem &option,
-        const QModelIndex &index ) const
+        const QModelIndex &index) const
 {
     int width = (index.column() == 0) ? 0 : FAV_ICON_SIZE;
     return QSize(width, calcItemHeight(option));
@@ -290,21 +309,22 @@ QSize KCategorizedItemsViewDelegate::sizeHint(const QStyleOptionViewItem &option
 int KCategorizedItemsViewDelegate::columnWidth (int column, int viewWidth) const {
     if (column != 0) {
         return FAV_ICON_SIZE + 2 * UNIVERSAL_PADDING;
-    } else return viewWidth - 2 * columnWidth(1, viewWidth);
+    } else {
+        return viewWidth - 2 * columnWidth(1, viewWidth);
+    }
 }
 
-
-KCategorizedItemsViewModels::AbstractItem * KCategorizedItemsViewDelegate::getItemByProxyIndex(const QModelIndex & index) const {
-    return (AbstractItem *) m_parent->m_modelItems->itemFromIndex(
-        m_parent->m_modelFilterItems->mapToSource(index)
-    );
+KCategorizedItemsViewModels::AbstractItem *KCategorizedItemsViewDelegate::getItemByProxyIndex(
+    const QModelIndex &index) const
+{
+    return (AbstractItem *)m_parent->m_modelItems->itemFromIndex(m_parent->m_modelFilterItems->mapToSource(index));
 }
 
 //     KCategorizedItemsViewFilterDelegate
 
-
 KCategorizedItemsViewFilterDelegate::KCategorizedItemsViewFilterDelegate(QObject *parent)
-    : QItemDelegate(parent) {
+    : QItemDelegate(parent)
+{
     kDebug() << "KCategorizedItemsViewFilterDelegate(QObject *parent)\n";
 
 }
@@ -318,13 +338,15 @@ void KCategorizedItemsViewFilterDelegate::paint(QPainter *painter,
         QStyleOptionViewItem separatorOption(option);
         int height = QItemDelegate::sizeHint(option, index).height() + 2 * DROPDOWN_PADDING;
 
-        separatorOption.state &= ~(QStyle::State_Selected
-                | QStyle::State_MouseOver | QStyle::State_HasFocus);
-        separatorOption.rect.setTop(separatorOption.rect.top() + separatorOption.rect.height() - height);
+        separatorOption.state &= ~(QStyle::State_Selected |
+                                   QStyle::State_MouseOver |
+                                   QStyle::State_HasFocus);
+        separatorOption.rect.setTop(
+            separatorOption.rect.top() + separatorOption.rect.height() - height);
         separatorOption.rect.setHeight(height);
         QItemDelegate::paint(painter, separatorOption, index);
         /*painter->drawLine(
-                option.rect.left(), 
+                option.rect.left(),
                 option.rect.top() + 1,
                 option.rect.left() + option.rect.width(),
                 option.rect.top() + 1);*/
@@ -332,7 +354,7 @@ void KCategorizedItemsViewFilterDelegate::paint(QPainter *painter,
 }
 
 QSize KCategorizedItemsViewFilterDelegate::sizeHint(const QStyleOptionViewItem &option,
-        const QModelIndex &index ) const
+        const QModelIndex &index) const
 {
     QSize size = QItemDelegate::sizeHint(option, index);
     if (index.flags() & Qt::ItemIsEnabled) {

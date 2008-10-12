@@ -21,8 +21,10 @@
 
 #include <KSycoca>
 
-PlasmaAppletItem::PlasmaAppletItem(PlasmaAppletItemModel * model, const QMap<QString, QVariant>& info,
-                                   FilterFlags flags, QMap<QString, QVariant> * extraAttrs)
+PlasmaAppletItem::PlasmaAppletItem(PlasmaAppletItemModel *model,
+                                   const QMap<QString, QVariant>& info,
+                                   FilterFlags flags,
+                                   QMap<QString, QVariant> *extraAttrs)
     : QObject(model), m_model(model)
 {
     QMap<QString, QVariant> attrs(info);
@@ -30,7 +32,9 @@ PlasmaAppletItem::PlasmaAppletItem(PlasmaAppletItemModel * model, const QMap<QSt
     attrs.insert("favorite", flags & Favorite ? true : false);
     attrs.insert("used", flags & Used ? true : false);
     //attrs.insert("recommended", flags & Recommended ? true : false);
-    if (extraAttrs) attrs.unite(* extraAttrs);
+    if (extraAttrs) {
+        attrs.unite(* extraAttrs);
+    }
     setText(info["name"].toString() + " - "+ info["category"].toString());
     setData(attrs);
     setIcon(qvariant_cast<QIcon>(info["icon"]));
@@ -105,7 +109,9 @@ void PlasmaAppletItemModel::populateModel()
     QMap < QString, QMap < QString, QVariant > > extraPluginAttrs;
     while (i.hasNext()) {
         i.next();
-        if (!rx.exactMatch(i.key())) continue;
+        if (!rx.exactMatch(i.key())) {
+            continue;
+        }
         QString id = rx.cap(1);
 
         foreach (const QString &plugin, i.value().split(",")) {
@@ -114,8 +120,9 @@ void PlasmaAppletItemModel::populateModel()
     }
 
     //TODO: get recommended, favorite, used, etc out of listAppletInfo()
-    //kDebug() << "number of applets is" <<  Plasma::Applet::listAppletInfo(QString(), m_application).count();
-    foreach (const KPluginInfo& info, Plasma::Applet::listAppletInfo(QString(), m_application)) {
+    //kDebug() << "number of applets is"
+    //         <<  Plasma::Applet::listAppletInfo(QString(), m_application).count();
+    foreach (const KPluginInfo &info, Plasma::Applet::listAppletInfo(QString(), m_application)) {
         //kDebug() << info.pluginName() << "NoDisplay" << info.property("NoDisplay").toBool();
         if (info.property("NoDisplay").toBool()) {
             // we don't want to show the hidden category
@@ -128,12 +135,11 @@ void PlasmaAppletItemModel::populateModel()
         attrs.insert("pluginName", info.pluginName());
         attrs.insert("description", info.comment());
         attrs.insert("category", info.category());
-        attrs.insert("icon", static_cast<QIcon>(KIcon(info.icon().isEmpty()?"application-x-plasma":info.icon())));
+        attrs.insert("icon",
+                     static_cast<QIcon>(KIcon(info.icon().isEmpty() ?
+                                              "application-x-plasma" : info.icon())));
 
-        appendRow(new PlasmaAppletItem(this, attrs,
-                    ((m_favorites.contains(info.pluginName())) ? PlasmaAppletItem::Favorite : PlasmaAppletItem::NoFilter) |
-                    ((m_used.contains(info.pluginName())) ? PlasmaAppletItem::Used : PlasmaAppletItem::NoFilter)
-                    , &(extraPluginAttrs[info.pluginName()])));
+        appendRow(new PlasmaAppletItem(this, attrs,((m_favorites.contains(info.pluginName())) ? PlasmaAppletItem::Favorite : PlasmaAppletItem::NoFilter) | ((m_used.contains(info.pluginName())) ? PlasmaAppletItem::Used : PlasmaAppletItem::NoFilter), &(extraPluginAttrs[info.pluginName()])));
     }
 }
 
@@ -167,7 +173,7 @@ QStringList PlasmaAppletItemModel::mimeTypes() const
     return types;
 }
 
-QMimeData* PlasmaAppletItemModel::mimeData(const QModelIndexList & indexes) const
+QMimeData *PlasmaAppletItemModel::mimeData(const QModelIndexList &indexes) const
 {
     kDebug() << "GETTING MIME DATA\n";
     if (indexes.count() <= 0) {
@@ -180,7 +186,7 @@ QMimeData* PlasmaAppletItemModel::mimeData(const QModelIndexList & indexes) cons
         return 0;
     }
 
-    QMimeData * data = new QMimeData();
+    QMimeData *data = new QMimeData();
 
     QString format = types.at(0);
 
@@ -217,13 +223,13 @@ void PlasmaAppletItemModel::setFavorite(const QString &plugin, bool favorite)
 
 }
 
-void PlasmaAppletItemModel::setApplication(const QString& app)
+void PlasmaAppletItemModel::setApplication(const QString &app)
 {
     m_application = app;
     populateModel();
 }
 
-QString& PlasmaAppletItemModel::Application()
+QString &PlasmaAppletItemModel::Application()
 {
     return m_application;
 }

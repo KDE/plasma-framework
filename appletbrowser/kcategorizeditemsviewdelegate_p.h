@@ -39,14 +39,15 @@ namespace KCategorizedItemsViewModels {
 class KCategorizedItemsViewDelegate: public QItemDelegate
 {
     Q_OBJECT
-    
+
 public:
     KCategorizedItemsViewDelegate(QObject *parent = 0);
-    
-    void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
-    QSize sizeHint ( const QStyleOptionViewItem & option, const QModelIndex & index ) const;
+
+    void paint(QPainter *painter, const QStyleOptionViewItem &option,
+               const QModelIndex &index) const;
+    QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const;
     int columnWidth (int column, int viewWidth) const;
-        
+
     bool editorEvent(QEvent *event,
                      QAbstractItemModel *model,
                      const QStyleOptionViewItem &option,
@@ -55,23 +56,22 @@ public:
 Q_SIGNALS:
     void destroyApplets(const QString name);
 private:
-    
-    KCategorizedItemsView * m_parent;
+
+    KCategorizedItemsView *m_parent;
     KIcon m_favoriteIcon;
     KIcon m_favoriteAddIcon;
     KIcon m_removeIcon;
-    
-    mutable KCategorizedItemsViewModels::AbstractItem * m_onFavoriteIconItem;
-    
-    
-    KCategorizedItemsViewModels::AbstractItem * getItemByProxyIndex(const QModelIndex & index) const;
-    void paintColMain(QPainter *painter,
-            const QStyleOptionViewItem &option, const KCategorizedItemsViewModels::AbstractItem * item) const;
-    void paintColFav(QPainter *painter,
-            const QStyleOptionViewItem &option, const KCategorizedItemsViewModels::AbstractItem * item) const;
-    void paintColRemove(QPainter *painter,
-            const QStyleOptionViewItem &option, const KCategorizedItemsViewModels::AbstractItem * item) const;
-    
+
+    mutable KCategorizedItemsViewModels::AbstractItem *m_onFavoriteIconItem;
+
+    KCategorizedItemsViewModels::AbstractItem *getItemByProxyIndex(const QModelIndex & index) const;
+    void paintColMain(QPainter *painter, const QStyleOptionViewItem &option,
+                      const KCategorizedItemsViewModels::AbstractItem * item) const;
+    void paintColFav(QPainter *painter, const QStyleOptionViewItem &option,
+                     const KCategorizedItemsViewModels::AbstractItem * item) const;
+    void paintColRemove(QPainter *painter, const QStyleOptionViewItem &option,
+                        const KCategorizedItemsViewModels::AbstractItem * item) const;
+
     int calcItemHeight(const QStyleOptionViewItem &option) const;
 };
 
@@ -81,12 +81,13 @@ private:
 class KCategorizedItemsViewFilterDelegate: public QItemDelegate
 {
     Q_OBJECT
-    
+
 public:
     KCategorizedItemsViewFilterDelegate(QObject *parent = 0);
-    
-    void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
-    QSize sizeHint ( const QStyleOptionViewItem & option, const QModelIndex & index ) const;
+
+    void paint(QPainter *painter, const QStyleOptionViewItem &option,
+               const QModelIndex &index) const;
+    QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const;
 };
 
 #endif /*KCATEGORIZEDITEMSVIEWDELEGATE_H_*/

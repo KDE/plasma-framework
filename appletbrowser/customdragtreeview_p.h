@@ -28,13 +28,13 @@ class KCategorizedItemsView;
 class CustomDragTreeView: public QTreeView
 {
 public:
-    CustomDragTreeView(QWidget * parent = 0);
+    CustomDragTreeView(QWidget *parent = 0);
 
 protected:
-    void startDrag ( Qt::DropActions supportedActions );
+    void startDrag(Qt::DropActions supportedActions);
 
 private:
-    KCategorizedItemsView * m_view;
+    KCategorizedItemsView *m_view;
 
     friend class KCategorizedItemsView;
 };

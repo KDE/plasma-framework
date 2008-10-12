@@ -35,18 +35,18 @@ class AbstractItem : public QStandardItem
 {
 public:
     /**
-     * Returns a localized string - name of the item 
+     * Returns a localized string - name of the item
      */
     virtual QString name() const;
 
     /**
-     * Returns a localized string - description of the item 
+     * Returns a localized string - description of the item
      */
     virtual QString description() const;
 
     /**
      * Returns if the item is flagged as favorite
-     * Default implementation checks if the item passes the Filter("favorite", "1") filter 
+     * Default implementation checks if the item passes the Filter("favorite", "1") filter
      */
     virtual bool isFavorite() const;
 
@@ -59,12 +59,12 @@ public:
     /**
      * Returns if the item contains string specified by pattern.
      * Default implementation checks whether name or description contain the
-     * string (not needed to be exactly that string) 
+     * string (not needed to be exactly that string)
      */
-    virtual bool matches(const QString & pattern) const;
+    virtual bool matches(const QString &pattern) const;
 
     /**
-     * sets the favorite flag for the item 
+     * sets the favorite flag for the item
      */
     virtual void setFavorite(bool favorite) = 0;
     /**
@@ -73,9 +73,9 @@ public:
     virtual void setRunning(int count) = 0;
 
     /**
-     * Returns if the item passes the filter specified 
+     * Returns if the item passes the filter specified
      */
-    virtual bool passesFiltering(const Filter & filter) const = 0;
+    virtual bool passesFiltering(const Filter &filter) const = 0;
 private:
 };
 
@@ -85,20 +85,20 @@ private:
 class DefaultFilterModel : public QStandardItemModel
 {
 public:
-    DefaultFilterModel(QObject * parent = 0);
+    DefaultFilterModel(QObject *parent = 0);
 
     /**
-     * Adds a filter to the model 
+     * Adds a filter to the model
      * @param caption The localized string to be displayed as a name of the filter
      * @param filter The filter structure
      */
-    void addFilter(const QString & caption, const Filter & filter, const KIcon & icon = KIcon());
+    void addFilter(const QString &caption, const Filter &filter, const KIcon &icon = KIcon());
 
     /**
-     * Adds a separator to the model 
+     * Adds a separator to the model
      * @param caption The localized string to be displayed as a name of the separator
      */
-    void addSeparator(const QString & caption);
+    void addSeparator(const QString &caption);
 };
 
 /**
@@ -109,21 +109,21 @@ class DefaultItemFilterProxyModel : public QSortFilterProxyModel
 Q_OBJECT
 
 public:
-    DefaultItemFilterProxyModel(QObject * parent = 0);
+    DefaultItemFilterProxyModel(QObject *parent = 0);
 
     bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const;
     bool lessThan(const QModelIndex &left, const QModelIndex &right) const;
 
-    void setSearch(const QString & pattern);
-    void setFilter(const Filter & filter);
+    void setSearch(const QString &pattern);
+    void setFilter(const Filter &filter);
 
-    void setSourceModel(QAbstractItemModel * sourceModel);
+    void setSourceModel(QAbstractItemModel *sourceModel);
 
-    QStandardItemModel * sourceModel() const;
+    QStandardItemModel *sourceModel() const;
 
-    int columnCount(const QModelIndex& index) const;
+    int columnCount(const QModelIndex &index) const;
 
-    QVariant data(const QModelIndex & index, int role = Qt::DisplayRole) const;
+    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
 
 Q_SIGNALS:
     void searchTermChanged(const QString &term);
@@ -133,36 +133,35 @@ private:
     class InnerProxyModel : public QAbstractItemModel
     {
     public:
-        InnerProxyModel(QObject * parent = 0);
+        InnerProxyModel(QObject *parent = 0);
 
-        Qt::ItemFlags flags(const QModelIndex & index) const;
+        Qt::ItemFlags flags(const QModelIndex &index) const;
 
-        QVariant data(const QModelIndex & index, bool favoriteColumn,
-                int role = Qt::DisplayRole) const;
-        QVariant data(const QModelIndex & index, int role = Qt::DisplayRole) const;
-        bool setData(const QModelIndex & index, const QVariant & value,
-                int role = Qt::EditRole);
+        QVariant data(const QModelIndex &index, bool favoriteColumn,
+                      int role = Qt::DisplayRole) const;
+        QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+        bool setData(const QModelIndex &index, const QVariant &value,
+                     int role = Qt::EditRole);
 
         QVariant headerData(int section, Qt::Orientation orientation,
-                int role = Qt::DisplayRole) const;
+                            int role = Qt::DisplayRole) const;
         bool setHeaderData(int section, Qt::Orientation orientation,
-                const QVariant & value, int role = Qt::EditRole);
+                           const QVariant &value, int role = Qt::EditRole);
 
-        int rowCount(const QModelIndex & parent = QModelIndex()) const;
-        int columnCount(const QModelIndex& index) const;
-
+        int rowCount(const QModelIndex &parent = QModelIndex()) const;
+        int columnCount(const QModelIndex &index) const;
 
         QModelIndex index(int row, int column,
-                const QModelIndex & parent = QModelIndex()) const;
-        QModelIndex parent(const QModelIndex & index) const;
+                          const QModelIndex &parent = QModelIndex()) const;
+        QModelIndex parent(const QModelIndex &index) const;
 
-        QMimeData * mimeData(const QModelIndexList & indexes) const;
+        QMimeData *mimeData(const QModelIndexList &indexes) const;
 
-        void setSourceModel(QStandardItemModel * sourceModel);
-        QStandardItemModel * sourceModel() const;
+        void setSourceModel(QStandardItemModel *sourceModel);
+        QStandardItemModel *sourceModel() const;
 
     private:
-        QStandardItemModel * m_sourceModel;
+        QStandardItemModel *m_sourceModel;
     };
 
     Filter m_filter;
@@ -177,7 +176,7 @@ private:
 class DefaultItemModel : public QStandardItemModel
 {
 public:
-    DefaultItemModel(QObject * parent = 0);
+    DefaultItemModel(QObject *parent = 0);
 };
 
 }

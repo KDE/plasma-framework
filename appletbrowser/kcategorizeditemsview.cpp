@@ -36,9 +36,9 @@ KCategorizedItemsView::KCategorizedItemsView(QWidget * parent, Qt::WindowFlags f
     itemsView->m_view = this;
 
     textSearch->setClickMessage(i18n("Enter search phrase here"));
-    
+
     textSearch->setFocus();
-    
+
     connect(textSearch, SIGNAL(textChanged(QString)),
             this, SLOT(searchTermChanged(QString)));
     connect(comboFilters, SIGNAL(currentIndexChanged(int)),
@@ -80,38 +80,39 @@ KCategorizedItemsView::~KCategorizedItemsView()
     delete m_delegate;
 }
 
-void KCategorizedItemsView::resizeEvent ( QResizeEvent * event )
+void KCategorizedItemsView::resizeEvent (QResizeEvent *event)
 {
     updateColumnsWidth();
 
     QWidget::resizeEvent(event);
 }
 
-bool KCategorizedItemsView::event ( QEvent * event )
+bool KCategorizedItemsView::event (QEvent *event)
 {
     switch (event->type()) {
-        case QEvent::PolishRequest:
-        case QEvent::Polish:
-            updateColumnsWidth(true);
-            break;
-        default:
-            break;
+    case QEvent::PolishRequest:
+    case QEvent::Polish:
+        updateColumnsWidth(true);
+        break;
+    default:
+        break;
     }
 
     return QWidget::event(event);
 }
 
-void KCategorizedItemsView::setFilterModel(QStandardItemModel * model)
+void KCategorizedItemsView::setFilterModel(QStandardItemModel *model)
 {
     comboFilters->setModel(model);
     m_modelFilters = model;
 }
 
-void KCategorizedItemsView::setItemModel(QStandardItemModel * model)
+void KCategorizedItemsView::setItemModel(QStandardItemModel *model)
 {
     if (!m_modelFilterItems) {
         m_modelFilterItems = new DefaultItemFilterProxyModel(this);
-        connect(m_modelFilterItems, SIGNAL(searchTermChanged(QString)), this, SLOT(slotSearchTermChanged(QString)));
+        connect(m_modelFilterItems, SIGNAL(searchTermChanged(QString)),
+                this, SLOT(slotSearchTermChanged(QString)));
     }
 
     m_modelItems = model;
@@ -127,7 +128,7 @@ void KCategorizedItemsView::setItemModel(QStandardItemModel * model)
     }
 }
 
-void KCategorizedItemsView::searchTermChanged(const QString & text)
+void KCategorizedItemsView::searchTermChanged(const QString &text)
 {
     kDebug() << "EVENT\n" << text;
     if (m_modelFilterItems) {
@@ -143,31 +144,31 @@ void KCategorizedItemsView::filterChanged(int index)
     }
 }
 
-void KCategorizedItemsView::itemActivated( const QModelIndex& index )
+void KCategorizedItemsView::itemActivated(const QModelIndex &index)
 {
     // don't emit activated signal for "favicon" and "remove applet"
     // columns so double clicking on these columns won't unexpectedly
     // add an applet to the containment
-    if ( index.column() == 1 || index.column() == 2 ) {
+    if (index.column() == 1 || index.column() == 2) {
         return;
     }
 
     emit activated(index);
 }
 
-void KCategorizedItemsView::itemDoubleClicked(const QModelIndex& index)
+void KCategorizedItemsView::itemDoubleClicked(const QModelIndex &index)
 {
     // don't emit activated signal for "favicon" and "remove applet"
     // columns so double clicking on these columns won't unexpectedly
     // add an applet to the containment
-    if ( index.column() == 1 || index.column() == 2 ) {
+    if (index.column() == 1 || index.column() == 2) {
         return;
     }
 
     emit doubleClicked(index);
 }
 
-void KCategorizedItemsView::slotSearchTermChanged( const QString& term )
+void KCategorizedItemsView::slotSearchTermChanged(const QString &term)
 {
     updateColumnsWidth();
 }
@@ -185,23 +186,25 @@ void KCategorizedItemsView::updateColumnsWidth(bool force)
     itemsView->setColumnWidth(2, m_delegate->columnWidth(2, m_viewWidth));
 }
 
-void KCategorizedItemsView::addEmblem(const QString & title, const QIcon & icon, const Filter & filter) {
+void KCategorizedItemsView::addEmblem(const QString &title, const QIcon &icon,
+                                      const Filter &filter)
+{
     m_emblems[title] = QPair<Filter, QIcon>(filter, icon);
 }
 
-void KCategorizedItemsView::clearEmblems() {
+void KCategorizedItemsView::clearEmblems()
+{
     m_emblems.clear();
 }
 
-AbstractItem * KCategorizedItemsView::getItemByProxyIndex(const QModelIndex & index) const {
-    return (AbstractItem *) m_modelItems->itemFromIndex(
-        m_modelFilterItems->mapToSource(index)
-    );
+AbstractItem *KCategorizedItemsView::getItemByProxyIndex(const QModelIndex &index) const
+{
+    return (AbstractItem *)m_modelItems->itemFromIndex(m_modelFilterItems->mapToSource(index));
 }
 
-
-QList < AbstractItem * > KCategorizedItemsView::selectedItems() const {
-    QList < AbstractItem * > items;
+QList <AbstractItem *> KCategorizedItemsView::selectedItems() const
+{
+    QList <AbstractItem *> items;
     foreach (const QModelIndex &index, itemsView->selectionModel()->selectedIndexes()) {
         if (index.column() == 0) {
             items << getItemByProxyIndex(index);

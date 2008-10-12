@@ -26,7 +26,7 @@
 CustomDragTreeView::CustomDragTreeView(QWidget * parent)
     : QTreeView(parent) {}
 
-void CustomDragTreeView::startDrag ( Qt::DropActions supportedActions )
+void CustomDragTreeView::startDrag(Qt::DropActions supportedActions)
 {
     Q_UNUSED(supportedActions);
 
@@ -73,7 +73,6 @@ void CustomDragTreeView::startDrag ( Qt::DropActions supportedActions )
             }
         }
         painter.end();
-
 
         QDrag *drag = new QDrag(this);
         drag->setPixmap(pixmap);

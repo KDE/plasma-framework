@@ -35,7 +35,9 @@ class OpenWidgetAssistant : public KAssistantDialog
     Q_OBJECT
 
 public:
-    enum { PackageStructureRole = Qt::UserRole + 1 };
+    enum {
+        PackageStructureRole = Qt::UserRole + 1
+    };
 
     OpenWidgetAssistant(QWidget *parent);
 
@@ -44,6 +46,7 @@ protected Q_SLOTS:
     void finished();
     void slotHelpClicked();
     void slotItemChanged();
+
 private:
     KPageWidgetItem *m_typePage;
     KPageWidgetItem *m_filePage;

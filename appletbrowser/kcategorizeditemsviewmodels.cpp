@@ -44,35 +44,38 @@ int AbstractItem::running() const
     return 0;
 }
 
-bool AbstractItem::matches(const QString & pattern) const
+bool AbstractItem::matches(const QString &pattern) const
 {
-    return name().contains(pattern, Qt::CaseInsensitive) || description().contains(pattern, Qt::CaseInsensitive);
+    return
+        name().contains(pattern, Qt::CaseInsensitive) ||
+        description().contains(pattern, Qt::CaseInsensitive);
 }
 
 // DefaultFilterModel
 
-DefaultFilterModel::DefaultFilterModel(QObject * parent) :
+DefaultFilterModel::DefaultFilterModel(QObject *parent) :
     QStandardItemModel(0, 1, parent)
 {
     setHeaderData(1, Qt::Horizontal, i18n("Filters"));
 }
 
-void DefaultFilterModel::addFilter(const QString & caption,
-        const Filter & filter, const KIcon & icon)
+void DefaultFilterModel::addFilter(const QString &caption, const Filter &filter, const KIcon &icon)
 {
     QList<QStandardItem *> newRow;
-    QStandardItem * item = new QStandardItem(caption);
+    QStandardItem *item = new QStandardItem(caption);
     item->setData(qVariantFromValue<Filter>(filter));
-    if (!icon.isNull()) item->setIcon(icon);
+    if (!icon.isNull()) {
+        item->setIcon(icon);
+    }
 
     newRow << item;
     appendRow(newRow);
 }
 
-void DefaultFilterModel::addSeparator(const QString & caption)
+void DefaultFilterModel::addSeparator(const QString &caption)
 {
     QList<QStandardItem *> newRow;
-    QStandardItem * item = new QStandardItem(caption);
+    QStandardItem *item = new QStandardItem(caption);
     item->setEnabled(false);
 
     newRow << item;
@@ -81,12 +84,12 @@ void DefaultFilterModel::addSeparator(const QString & caption)
 
 // DefaultItemFilterProxyModel
 
-DefaultItemFilterProxyModel::DefaultItemFilterProxyModel(QObject * parent) :
+DefaultItemFilterProxyModel::DefaultItemFilterProxyModel(QObject *parent) :
     QSortFilterProxyModel(parent), m_innerModel(parent)
 {
 }
 
-void DefaultItemFilterProxyModel::setSourceModel(QAbstractItemModel * sourceModel)
+void DefaultItemFilterProxyModel::setSourceModel(QAbstractItemModel *sourceModel)
 {
     QStandardItemModel *model = qobject_cast<QStandardItemModel*>(sourceModel);
 
@@ -99,18 +102,18 @@ void DefaultItemFilterProxyModel::setSourceModel(QAbstractItemModel * sourceMode
     QSortFilterProxyModel::setSourceModel(&m_innerModel);
 }
 
-QStandardItemModel * DefaultItemFilterProxyModel::sourceModel() const
+QStandardItemModel *DefaultItemFilterProxyModel::sourceModel() const
 {
     return m_innerModel.sourceModel();
 }
 
-int DefaultItemFilterProxyModel::columnCount(const QModelIndex& index) const
+int DefaultItemFilterProxyModel::columnCount(const QModelIndex &index) const
 {
     Q_UNUSED(index);
     return 3;
 }
 
-QVariant DefaultItemFilterProxyModel::data(const QModelIndex & index, int role) const
+QVariant DefaultItemFilterProxyModel::data(const QModelIndex &index, int role) const
 {
     return m_innerModel.data(index, (index.column() == 1), role);
 }
@@ -118,31 +121,34 @@ QVariant DefaultItemFilterProxyModel::data(const QModelIndex & index, int role) 
 bool DefaultItemFilterProxyModel::filterAcceptsRow(int sourceRow,
         const QModelIndex &sourceParent) const
 {
-    QStandardItemModel * model = (QStandardItemModel *) sourceModel();
+    QStandardItemModel *model = (QStandardItemModel *) sourceModel();
 
     QModelIndex index = sourceModel()->index(sourceRow, 0, sourceParent);
 
-    AbstractItem * item = (AbstractItem *) model->itemFromIndex(index);
+    AbstractItem *item = (AbstractItem *) model->itemFromIndex(index);
     //kDebug() << "ITEM " << (item ? "IS NOT " : "IS") << " NULL\n";
 
-    return (m_filter.first.isEmpty() || item->passesFiltering(m_filter))
-            &&(m_searchPattern.isEmpty() || item->matches(m_searchPattern));
+    return
+        (m_filter.first.isEmpty() || item->passesFiltering(m_filter)) &&
+        (m_searchPattern.isEmpty() || item->matches(m_searchPattern));
 }
 
 bool DefaultItemFilterProxyModel::lessThan(const QModelIndex &left,
         const QModelIndex &right) const
 {
-    return sourceModel()->data(left).toString().localeAwareCompare(sourceModel()->data(right).toString()) < 0;
+    return
+        sourceModel()->data(left).toString().localeAwareCompare(
+            sourceModel()->data(right).toString()) < 0;
 }
 
-void DefaultItemFilterProxyModel::setSearch(const QString & pattern)
+void DefaultItemFilterProxyModel::setSearch(const QString &pattern)
 {
     m_searchPattern = pattern;
     invalidateFilter();
     emit searchTermChanged(pattern);
 }
 
-void DefaultItemFilterProxyModel::setFilter(const Filter & filter)
+void DefaultItemFilterProxyModel::setFilter(const Filter &filter)
 {
     m_filter = filter;
     invalidateFilter();
@@ -150,60 +156,62 @@ void DefaultItemFilterProxyModel::setFilter(const Filter & filter)
 
 // DefaultItemFilterProxyModel::InnerProxyModel
 
-DefaultItemFilterProxyModel::InnerProxyModel::InnerProxyModel(QObject * parent) :
+DefaultItemFilterProxyModel::InnerProxyModel::InnerProxyModel(QObject *parent) :
     QAbstractItemModel(parent), m_sourceModel(NULL)
 {
 }
 
-Qt::ItemFlags DefaultItemFilterProxyModel::InnerProxyModel::flags(
-        const QModelIndex & index) const
+Qt::ItemFlags DefaultItemFilterProxyModel::InnerProxyModel::flags(const QModelIndex &index) const
 {
-    if (!m_sourceModel)
+    if (!m_sourceModel) {
         return 0;
+    }
     return m_sourceModel->flags(index);
 }
 
 QVariant DefaultItemFilterProxyModel::InnerProxyModel::data(
-        const QModelIndex & index, bool favoriteColumn, int role) const
+    const QModelIndex &index, bool favoriteColumn, int role) const
 {
     Q_UNUSED(favoriteColumn);
     return data(index, role);
 }
 
 QVariant DefaultItemFilterProxyModel::InnerProxyModel::data(
-        const QModelIndex & index, int role) const
+        const QModelIndex &index, int role) const
 {
-    if (!m_sourceModel)
+    if (!m_sourceModel) {
         return QVariant();
+    }
     return m_sourceModel->data(index, role);
 }
 
-QVariant DefaultItemFilterProxyModel::InnerProxyModel::headerData(int section,
-        Qt::Orientation orientation, int role) const
+QVariant DefaultItemFilterProxyModel::InnerProxyModel::headerData(
+    int section, Qt::Orientation orientation, int role) const
 {
     Q_UNUSED(orientation);
     Q_UNUSED(role);
     return QVariant(section);
 }
 
-int DefaultItemFilterProxyModel::InnerProxyModel::rowCount(
-        const QModelIndex & parent) const
+int DefaultItemFilterProxyModel::InnerProxyModel::rowCount(const QModelIndex &parent) const
 {
-    if (!m_sourceModel)
+    if (!m_sourceModel) {
         return 0;
+    }
     return m_sourceModel->rowCount(parent);
 }
 
 bool DefaultItemFilterProxyModel::InnerProxyModel::setData(
-        const QModelIndex & index, const QVariant & value, int role)
+    const QModelIndex &index, const QVariant &value, int role)
 {
-    if (!m_sourceModel)
+    if (!m_sourceModel) {
         return false;
+    }
     return m_sourceModel->setData(index, value, role);
 }
 
-bool DefaultItemFilterProxyModel::InnerProxyModel::setHeaderData(int section,
-        Qt::Orientation orientation, const QVariant & value, int role)
+bool DefaultItemFilterProxyModel::InnerProxyModel::setHeaderData(
+    int section, Qt::Orientation orientation, const QVariant &value, int role)
 {
     Q_UNUSED(section);
     Q_UNUSED(value);
@@ -212,51 +220,51 @@ bool DefaultItemFilterProxyModel::InnerProxyModel::setHeaderData(int section,
     return false;
 }
 
-QModelIndex DefaultItemFilterProxyModel::InnerProxyModel::index(int row,
-        int column, const QModelIndex & parent) const
+QModelIndex DefaultItemFilterProxyModel::InnerProxyModel::index(
+    int row, int column, const QModelIndex &parent) const
 {
     Q_UNUSED(column);
-    if (!m_sourceModel)
+    if (!m_sourceModel) {
         return QModelIndex();
+    }
     return m_sourceModel->index(row, 0, parent);
 }
 
-QModelIndex DefaultItemFilterProxyModel::InnerProxyModel::parent(
-        const QModelIndex & index) const
+QModelIndex DefaultItemFilterProxyModel::InnerProxyModel::parent(const QModelIndex &index) const
 {
-    if (!m_sourceModel)
+    if (!m_sourceModel) {
         return QModelIndex();
+    }
     return m_sourceModel->parent(index);
 }
 
-QMimeData * DefaultItemFilterProxyModel::InnerProxyModel::mimeData(
-        const QModelIndexList & indexes) const
+QMimeData *DefaultItemFilterProxyModel::InnerProxyModel::mimeData(
+    const QModelIndexList &indexes) const
 {
-    if (!m_sourceModel)
+    if (!m_sourceModel) {
         return NULL;
+    }
     return m_sourceModel->mimeData(indexes);
 }
 
-int DefaultItemFilterProxyModel::InnerProxyModel::columnCount(
-        const QModelIndex& index) const
+int DefaultItemFilterProxyModel::InnerProxyModel::columnCount(const QModelIndex &index) const
 {
     Q_UNUSED(index);
     return 3; //FIXME: a hardcoded magic number that appears in two places CANNOT be good
 }
 
-void DefaultItemFilterProxyModel::InnerProxyModel::setSourceModel(
-        QStandardItemModel * sourceModel)
+void DefaultItemFilterProxyModel::InnerProxyModel::setSourceModel(QStandardItemModel *sourceModel)
 {
     m_sourceModel = sourceModel;
 }
 
-QStandardItemModel * DefaultItemFilterProxyModel::InnerProxyModel::sourceModel() const
+QStandardItemModel *DefaultItemFilterProxyModel::InnerProxyModel::sourceModel() const
 {
     return m_sourceModel;
 }
 
 // DefaultItemModel
 
-DefaultItemModel::DefaultItemModel(QObject * parent) :
+DefaultItemModel::DefaultItemModel(QObject *parent) :
     QStandardItemModel(parent) {}
 }

@@ -36,14 +36,15 @@ class PlasmaAppletItem : public QObject, public KCategorizedItemsViewModels::Abs
     Q_OBJECT
 
 public:
-    enum FilterFlag {NoFilter = 0,
+    enum FilterFlag {
+        NoFilter = 0,
         Favorite = 1,
-        Used = 2};
+        Used = 2
+    };
 
     Q_DECLARE_FLAGS(FilterFlags, FilterFlag)
 
-    PlasmaAppletItem(PlasmaAppletItemModel * model, const QMap<QString, QVariant>& info,
-            FilterFlags flags = NoFilter, QMap<QString, QVariant> * extraAttrs = NULL);
+    PlasmaAppletItem(PlasmaAppletItemModel *model, const QMap<QString, QVariant>& info, FilterFlags flags = NoFilter, QMap<QString, QVariant> *extraAttrs = NULL);
 
     virtual QString name() const;
     QString pluginName() const;
@@ -70,14 +71,15 @@ public:
 
     QStringList mimeTypes() const;
 
-    QMimeData* mimeData(const QModelIndexList & indexes) const;
-    
+    QMimeData *mimeData(const QModelIndexList &indexes) const;
+
     void setFavorite(const QString &plugin, bool favorite);
-    void setApplication(const QString& app);
+    void setApplication(const QString &app);
     void setRunningApplets(const QHash<QString, int> &apps);
     void setRunningApplets(const QString &name, int count);
-    
-    QString& Application();
+
+    QString &Application();
+
 private:
     QString m_application;
     QStringList m_favorites;
