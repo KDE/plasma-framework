@@ -17,8 +17,8 @@
  * Boston, MA  02110-1301  USA
  */
 
-#ifndef POPUPAPPLET_H
-#define POPUPAPPLET_H
+#ifndef PLASMA_POPUPAPPLET_H
+#define PLASMA_POPUPAPPLET_H
 
 #include <plasma/applet.h>
 #include <plasma/plasma_export.h>

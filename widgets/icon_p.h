@@ -19,8 +19,8 @@
  *   Free Software Foundation, Inc.,
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#ifndef ICON_P_H
-#define ICON_P_H
+#ifndef PLASMA_ICON_P_H
+#define PLASMA_ICON_P_H
 
 #include <QtCore/QEvent>
 #include <QtGui/QApplication>

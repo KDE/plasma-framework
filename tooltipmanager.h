@@ -19,8 +19,8 @@
  * Boston, MA  02110-1301  USA
  */
 
-#ifndef PLASMA_TOOL_TIP_MANAGER_H
-#define PLASMA_TOOL_TIP_MANAGER_H
+#ifndef PLASMA_TOOLTIP_MANAGER_H
+#define PLASMA_TOOLTIP_MANAGER_H
 
 //plasma
 #include <plasma/plasma.h>

@@ -18,8 +18,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef PLASMA_FLASH_H_
-#define PLASMA_FLASH_H_
+#ifndef PLASMA_FLASH_H
+#define PLASMA_FLASH_H
 
 #include <QtGui/QGraphicsWidget>
 #include <QtGui/QTextOption>

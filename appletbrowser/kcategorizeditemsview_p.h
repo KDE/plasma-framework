@@ -17,8 +17,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef KCategorizedItemsView_H
-#define KCategorizedItemsView_H
+#ifndef PLASMA_KCATEGORIZEDITEMSVIEW_P_H
+#define PLASMA_KCATEGORIZEDITEMSVIEW_P_H
 
 #include <QtGui/QtGui>
 #include <QtCore/QtCore>

@@ -17,8 +17,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef APPLETBROWSERWINDOW_H_
-#define APPLETBROWSERWINDOW_H_
+#ifndef PLASMA_APPLETBROWSER_H
+#define PLASMA_APPLETBROWSER_H
 
 #include <KDE/KDialog>
 

@@ -17,8 +17,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef PLASMAAPPLETITEMMODEL_P_H
-#define PLASMAAPPLETITEMMODEL_P_H
+#ifndef PLASMA_PLASMAAPPLETITEMMODEL_P_H
+#define PLASMA_PLASMAAPPLETITEMMODEL_P_H
 
 #include <KPluginInfo>
 

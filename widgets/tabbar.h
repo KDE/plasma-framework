@@ -17,8 +17,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef PLASMA_TABWIDGET_H
-#define PLASMA_TABWIDGET_H
+#ifndef PLASMA_TABBAR_H
+#define PLASMA_TABBAR_H
 
 #include <QtGui/QGraphicsWidget>
 #include <QtGui/QTabBar>
