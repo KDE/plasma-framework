@@ -47,14 +47,7 @@ Service::Service(QObject *parent, const QVariantList &args)
     : QObject(parent),
       d(new ServicePrivate(this))
 {
-    // remove those first item since those are managed by Service and subclasses shouldn't
-    // need to worry about it. yes, it violates the constness of this var, but it lets us add
-    // or remove items later while applets can just pretend that their args always start at 0
-    QVariantList &mutableArgs = const_cast<QVariantList &>(args);
-    if (!mutableArgs.isEmpty()) {
-        setName(mutableArgs[0].toString());
-        mutableArgs.removeFirst();
-    }
+    Q_UNUSED(args)
 }
 
 Service::~Service()
@@ -80,7 +73,7 @@ Service *Service::load(const QString &name, QObject *parent)
     KService::Ptr offer = offers.first();
     QString error;
     QVariantList args;
-    args << name;
+    //args << name;
     Service *service = 0;
 
     if (Plasma::isPluginVersionCompatible(KPluginLoader(*offer).pluginVersion())) {
@@ -90,6 +83,10 @@ Service *Service::load(const QString &name, QObject *parent)
     if (!service) {
         kDebug() << "Couldn't load Service \"" << name << "\"! reason given: " << error;
         return new NullService(name, parent);
+    }
+
+    if (service->name().isEmpty()) {
+        service->setName(name);
     }
 
     return service;
