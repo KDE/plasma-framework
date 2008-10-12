@@ -1,6 +1,6 @@
 /*
  *   Copyright © 2008 Fredrik Höglund <fredrik@kde.org>
- *   Copyright © 2008 Marco Martin <notmart@gmail.com> 
+ *   Copyright © 2008 Marco Martin <notmart@gmail.com>
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU Library General Public License as
@@ -44,7 +44,7 @@ class PLASMA_EXPORT ScrollBar : public QGraphicsProxyWidget
     Q_PROPERTY(int minimum READ minimum)
     Q_PROPERTY(int maximum READ maximum)
     Q_PROPERTY(QString stylesheet READ styleSheet WRITE setStyleSheet)
-    Q_PROPERTY(QScrollBar* nativeWidget READ nativeWidget)
+    Q_PROPERTY(QScrollBar *nativeWidget READ nativeWidget)
 
 public:
     explicit ScrollBar(Qt::Orientation orientation, QGraphicsWidget *parent);

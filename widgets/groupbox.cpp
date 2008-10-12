@@ -46,7 +46,7 @@ GroupBox::GroupBox(QGraphicsWidget *parent)
     : QGraphicsProxyWidget(parent),
       d(new GroupBoxPrivate)
 {
-    QGroupBox* native = new QGroupBox;
+    QGroupBox *native = new QGroupBox;
     setWidget(native);
     native->setAttribute(Qt::WA_NoSystemBackground);
 }
@@ -76,7 +76,7 @@ QString GroupBox::styleSheet()
     return widget()->styleSheet();
 }
 
-QGroupBox* GroupBox::nativeWidget() const
+QGroupBox *GroupBox::nativeWidget() const
 {
     return static_cast<QGroupBox*>(widget());
 }

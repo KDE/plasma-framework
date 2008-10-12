@@ -45,14 +45,14 @@ namespace Plasma
 class PLASMA_EXPORT IconAction
 {
 public:
-    IconAction(Icon* icon, QAction* action);
+    IconAction(Icon *icon, QAction *action);
 
     void show();
     void hide();
     bool isVisible() const;
 
     int animationId() const;
-    QAction* action() const;
+    QAction *action() const;
 
     void paint(QPainter *painter) const;
     bool event(QEvent::Type type, const QPointF &pos);
@@ -82,7 +82,6 @@ private:
     int m_animationId;
 };
 
-
 struct Margin
 {
     qreal left, right, top, bottom;
@@ -91,10 +90,14 @@ struct Margin
 class IconPrivate
 {
 public:
-    enum MarginType { ItemMargin = 0, TextMargin, IconMargin, NMargins };
+    enum MarginType {
+        ItemMargin = 0,
+        TextMargin,
+        IconMargin,
+        NMargins
+    };
 
-    enum IconState
-    {
+    enum IconState {
         NoState = 0,
         HoverState = 1,
         PressedState = 2,
@@ -119,21 +122,28 @@ public:
     QBrush foregroundBrush(const QStyleOptionGraphicsItem *option) const;
     QBrush backgroundBrush(const QStyleOptionGraphicsItem *option) const;
 
-    QString elidedText(QTextLayout &layout, const QStyleOptionGraphicsItem *option,
-                        const QSizeF &maxSize) const;
-    QSizeF layoutText(QTextLayout &layout, const QStyleOptionGraphicsItem *option,
-                        const QString &text, const QSizeF &constraints) const;
-    QSizeF layoutText(QTextLayout &layout, const QString &text, qreal maxWidth) const;
-    QRectF labelRectangle(const QStyleOptionGraphicsItem *option, const QPixmap &icon,
-                            const QString &string) const;
-    void layoutTextItems(const QStyleOptionGraphicsItem *option, const QPixmap &icon,
-                            QTextLayout *labelLayout, QTextLayout *infoLayout, QRectF *textBoundingRect) const;
+    QString elidedText(QTextLayout &layout,
+                       const QStyleOptionGraphicsItem *option,
+                       const QSizeF &maxSize) const;
 
+    QSizeF layoutText(QTextLayout &layout,
+                      const QStyleOptionGraphicsItem *option,
+                      const QString &text, const QSizeF &constraints) const;
 
-    inline void setLayoutOptions(QTextLayout &layout, const QStyleOptionGraphicsItem *options) const;
+    QSizeF layoutText(QTextLayout &layout, const QString &text,
+                      qreal maxWidth) const;
+
+    QRectF labelRectangle(const QStyleOptionGraphicsItem *option,
+                          const QPixmap &icon, const QString &string) const;
+
+    void layoutTextItems(const QStyleOptionGraphicsItem *option,
+                         const QPixmap &icon, QTextLayout *labelLayout,
+                         QTextLayout *infoLayout, QRectF *textBoundingRect) const;
+
+    inline void setLayoutOptions(QTextLayout &layout,
+                                 const QStyleOptionGraphicsItem *options) const;
 
     inline Qt::LayoutDirection iconDirection(const QStyleOptionGraphicsItem *option) const;
-
 
     enum {
         Minibutton = 64,
@@ -148,7 +158,6 @@ public:
         BottomRight,
         LastIconPosition
     };
-
 
     // Margin functions
     inline void setActiveMargins();
@@ -203,7 +212,8 @@ public:
 Q_DECLARE_OPERATORS_FOR_FLAGS(IconPrivate::IconStates)
 
 // Inline methods
-void IconPrivate::setLayoutOptions(QTextLayout &layout, const QStyleOptionGraphicsItem *option) const
+void IconPrivate::setLayoutOptions(QTextLayout &layout,
+                                   const QStyleOptionGraphicsItem *option) const
 {
     QTextOption textoption;
     textoption.setTextDirection(option->direction);
@@ -221,7 +231,7 @@ Qt::LayoutDirection IconPrivate::iconDirection(const QStyleOptionGraphicsItem *o
     if (invertLayout && orientation == Qt::Horizontal) {
         if (option->direction == Qt::LeftToRight) {
             direction = Qt::RightToLeft;
-        }else{
+        } else {
             direction = Qt::LeftToRight;
         }
     } else {
@@ -237,7 +247,8 @@ void IconPrivate::setActiveMargins()
             horizontalMargin : verticalMargin);
 }
 
-void IconPrivate::setVerticalMargin(MarginType type, qreal left, qreal top, qreal right, qreal bottom)
+void IconPrivate::setVerticalMargin(MarginType type, qreal left, qreal top,
+                                    qreal right, qreal bottom)
 {
     verticalMargin[type].left   = left;
     verticalMargin[type].right  = right;
@@ -245,7 +256,8 @@ void IconPrivate::setVerticalMargin(MarginType type, qreal left, qreal top, qrea
     verticalMargin[type].bottom = bottom;
 }
 
-void IconPrivate::setHorizontalMargin(MarginType type, qreal left, qreal top, qreal right, qreal bottom)
+void IconPrivate::setHorizontalMargin(MarginType type, qreal left, qreal top,
+                                      qreal right, qreal bottom)
 {
     horizontalMargin[type].left   = left;
     horizontalMargin[type].right  = right;

@@ -73,7 +73,7 @@ RadioButton::RadioButton(QGraphicsWidget *parent)
     : QGraphicsProxyWidget(parent),
       d(new RadioButtonPrivate)
 {
-    QRadioButton* native = new QRadioButton;
+    QRadioButton *native = new QRadioButton;
     connect(native, SIGNAL(toggled(bool)), this, SIGNAL(toggled(bool)));
     setWidget(native);
     native->setAttribute(Qt::WA_NoSystemBackground);
@@ -104,7 +104,7 @@ void RadioButton::setImage(const QString &path)
     d->svg = 0;
     d->imagePath = path;
 
-    bool absolutePath = !path.isEmpty() && 
+    bool absolutePath = !path.isEmpty() &&
                         #ifdef Q_WS_WIN
                             !QDir::isRelativePath(path)
                         #else
@@ -137,7 +137,7 @@ QString RadioButton::styleSheet()
     return widget()->styleSheet();
 }
 
-QRadioButton* RadioButton::nativeWidget() const
+QRadioButton *RadioButton::nativeWidget() const
 {
     return static_cast<QRadioButton*>(widget());
 }

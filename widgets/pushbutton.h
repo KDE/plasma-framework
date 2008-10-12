@@ -17,7 +17,6 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-
 #ifndef PLASMA_PUSHBUTTON_H
 #define PLASMA_PUSHBUTTON_H
 
@@ -41,11 +40,11 @@ class PLASMA_EXPORT PushButton : public QGraphicsProxyWidget
 {
     Q_OBJECT
 
-    Q_PROPERTY(QGraphicsWidget* parentWidget READ parentWidget)
+    Q_PROPERTY(QGraphicsWidget *parentWidget READ parentWidget)
     Q_PROPERTY(QString text READ text WRITE setText)
     Q_PROPERTY(QString image READ image WRITE setImage)
     Q_PROPERTY(QString stylesheet READ styleSheet WRITE setStyleSheet)
-    Q_PROPERTY(KPushButton* nativeWidget READ nativeWidget)
+    Q_PROPERTY(KPushButton *nativeWidget READ nativeWidget)
 
 public:
     explicit PushButton(QGraphicsWidget *parent = 0);
@@ -53,7 +52,7 @@ public:
 
     /**
      * Sets the display text for this PushButton
-     * 
+     *
      * @arg text the text to display; should be translated.
      */
     void setText(const QString &text);
@@ -90,7 +89,7 @@ public:
     /**
      * @return the native widget wrapped by this PushButton
      */
-    KPushButton* nativeWidget() const;
+    KPushButton *nativeWidget() const;
 
 Q_SIGNALS:
     void clicked();
@@ -104,7 +103,7 @@ protected:
     void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
 
 private:
-    PushButtonPrivate * const d;
+    PushButtonPrivate *const d;
 
     friend class PushButtonPrivate;
     Q_PRIVATE_SLOT(d, void syncBorders())

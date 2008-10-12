@@ -65,7 +65,6 @@ public:
     QPixmap *pixmap;
 };
 
-
 void FramePrivate::syncBorders()
 {
     //set margins from the normal element
@@ -80,7 +79,6 @@ void FramePrivate::syncBorders()
 
     q->setContentsMargins(left, top, right, bottom);
 }
-
 
 Frame::Frame(QGraphicsWidget *parent)
     : QGraphicsWidget(parent),
@@ -147,7 +145,7 @@ void Frame::setImage(const QString &path)
     delete d->pixmap;
     d->pixmap = 0;
 
-    bool absolutePath = !path.isEmpty() && 
+    bool absolutePath = !path.isEmpty() &&
                         #ifdef Q_WS_WIN
                             !QDir::isRelativePath(path)
                         #else
@@ -192,7 +190,7 @@ QString Frame::styleSheet() const
     return d->styleSheet;
 }
 
-QWidget* Frame::nativeWidget() const
+QWidget *Frame::nativeWidget() const
 {
     return 0;
 }
@@ -247,7 +245,6 @@ QSizeF Frame::sizeHint(Qt::SizeHint which, const QSizeF & constraint) const
 
     return hint;
 }
-
 
 } // namespace Plasma
 

@@ -37,8 +37,14 @@ using namespace Plasma;
 class Plasma::FlashPrivate
 {
     public:
-        enum FlashType { Text, Pixmap };
-        enum State { Visible, Invisible };
+        enum FlashType {
+            Text,
+            Pixmap
+        };
+        enum State {
+            Visible,
+            Invisible
+        };
 
         FlashPrivate()
             : defaultDuration(3000),
@@ -75,7 +81,6 @@ class Plasma::FlashPrivate
 
         State state;
 };
-
 
 Flash::Flash(QGraphicsItem *parent)
     : QGraphicsWidget(parent),
@@ -159,7 +164,8 @@ void Flash::fadeOut()
     }
 
     d->state = FlashPrivate::Invisible;
-    d->animId = Plasma::Animator::self()->animateElement(this, Plasma::Animator::DisappearAnimation);
+    d->animId = Plasma::Animator::self()->animateElement(
+        this, Plasma::Animator::DisappearAnimation);
     Plasma::Animator::self()->setInitialPixmap(d->animId, d->renderedPixmap);
 }
 
@@ -199,7 +205,7 @@ void FlashPrivate::renderPixmap(const QSize &size)
         } else if (alignment & Qt::AlignRight) {
             p.setX(size.width() - pixmap.width());
         } else {
-            p.setX((size.width() - pixmap.width())/2);
+            p.setX((size.width() - pixmap.width()) / 2);
         }
 
         if (alignment & Qt::AlignTop) {
@@ -207,7 +213,7 @@ void FlashPrivate::renderPixmap(const QSize &size)
         } else if (alignment & Qt::AlignRight) {
             p.setY(size.height() - pixmap.height());
         } else {
-            p.setY((size.height() - pixmap.height())/2);
+            p.setY((size.height() - pixmap.height()) / 2);
         }
 
         painter.drawPixmap(p, pixmap);
@@ -235,6 +241,5 @@ void FlashPrivate::setupFlash(Flash *flash, int duration)
         fadeOutTimer.start();
     }
 }
-
 
 #include "flash.moc"

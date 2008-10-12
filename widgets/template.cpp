@@ -106,7 +106,7 @@ void <Name>::setImage(const QString &path)
     d->svg = 0;
     d->imagePath = path;
 
-    bool absolutePath = !path.isEmpty() && 
+    bool absolutePath = !path.isEmpty() &&
                         #ifdef Q_WS_WIN
                             !QDir::isRelativePath(path)
                         #else

@@ -46,7 +46,6 @@ public:
     Plasma::PanelSvg *handle;
 };
 
-
 Slider::Slider(QGraphicsWidget *parent)
     : QGraphicsProxyWidget(parent),
       d(new SliderPrivate)
@@ -103,21 +102,25 @@ void Slider::paint(QPainter *painter,
     sliderOpt.sliderValue = slider->value();
     sliderOpt.singleStep = slider->singleStep();
     sliderOpt.pageStep = slider->pageStep();
-    if (slider->orientation() == Qt::Horizontal)
+    if (slider->orientation() == Qt::Horizontal) {
         sliderOpt.state |= QStyle::State_Horizontal;
+    }
 
-    QRect backgroundRect = style->subControlRect(QStyle::CC_Slider, &sliderOpt, QStyle::SC_SliderGroove, slider);
+    QRect backgroundRect =
+        style->subControlRect(QStyle::CC_Slider, &sliderOpt, QStyle::SC_SliderGroove, slider);
     d->background->resizePanel(backgroundRect.size());
     d->background->paintPanel(painter, backgroundRect.topLeft());
 
     //Thickmarks
     if (sliderOpt.tickPosition != QSlider::NoTicks) {
         sliderOpt.subControls = QStyle::SC_SliderTickmarks;
-        sliderOpt.palette.setColor(QPalette::WindowText, Plasma::Theme::defaultTheme()->color(Theme::TextColor));
+        sliderOpt.palette.setColor(
+            QPalette::WindowText, Plasma::Theme::defaultTheme()->color(Theme::TextColor));
         style->drawComplexControl(QStyle::CC_Slider, &sliderOpt, painter, slider);
     }
 
-    QRect handleRect = style->subControlRect(QStyle::CC_Slider, &sliderOpt, QStyle::SC_SliderHandle, slider);
+    QRect handleRect =
+        style->subControlRect(QStyle::CC_Slider, &sliderOpt, QStyle::SC_SliderHandle, slider);
     d->handle->resizePanel(handleRect.size());
     d->handle->paintPanel(painter, handleRect.topLeft());
 }
@@ -177,11 +180,10 @@ QString Slider::styleSheet()
     return widget()->styleSheet();
 }
 
-QSlider* Slider::nativeWidget() const
+QSlider *Slider::nativeWidget() const
 {
     return static_cast<QSlider*>(widget());
 }
-
 
 } // namespace Plasma
 

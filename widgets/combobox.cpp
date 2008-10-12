@@ -61,7 +61,6 @@ public:
     QRectF activeRect;
 };
 
-
 void ComboBoxPrivate::syncActiveRect()
 {
     background->setElementPrefix("normal");
@@ -73,8 +72,9 @@ void ComboBoxPrivate::syncActiveRect()
     qreal activeLeft, activeTop, activeRight, activeBottom;
     background->getMargins(activeLeft, activeTop, activeRight, activeBottom);
 
-    activeRect = QRectF(QPointF(0,0), q->size());
-    activeRect.adjust(left - activeLeft, top - activeTop, -(right - activeRight), -(bottom - activeBottom));
+    activeRect = QRectF(QPointF(0, 0), q->size());
+    activeRect.adjust(left - activeLeft, top - activeTop,
+                      -(right - activeRight), -(bottom - activeBottom));
 
     background->setElementPrefix("normal");
 }
@@ -105,13 +105,11 @@ void ComboBoxPrivate::animationUpdate(qreal progress)
     q->update();
 }
 
-
-
 ComboBox::ComboBox(QGraphicsWidget *parent)
     : QGraphicsProxyWidget(parent),
       d(new ComboBoxPrivate(this))
 {
-    KComboBox* native = new KComboBox;
+    KComboBox *native = new KComboBox;
     connect(native, SIGNAL(activated(const QString &)), this, SIGNAL(activated(const QString &)));
     setWidget(native);
     native->setAttribute(Qt::WA_NoSystemBackground);
@@ -146,7 +144,7 @@ QString ComboBox::styleSheet()
     return widget()->styleSheet();
 }
 
-KComboBox* ComboBox::nativeWidget() const
+KComboBox *ComboBox::nativeWidget() const
 {
     return static_cast<KComboBox*>(widget());
 }
@@ -177,12 +175,12 @@ void ComboBox::resizeEvent(QGraphicsSceneResizeEvent *event)
         d->background->resizePanel(size());
    }
 
-    QGraphicsProxyWidget::resizeEvent(event);
+   QGraphicsProxyWidget::resizeEvent(event);
 }
 
 void ComboBox::paint(QPainter *painter,
-                       const QStyleOptionGraphicsItem *option,
-                       QWidget *widget)
+                     const QStyleOptionGraphicsItem *option,
+                     QWidget *widget)
 {
     if (!styleSheet().isNull() || nativeWidget()->isEditable()) {
         QGraphicsProxyWidget::paint(painter, option, widget);
@@ -206,9 +204,9 @@ void ComboBox::paint(QPainter *painter,
         QPainter buffPainter(&bufferPixmap);
         d->background->paintPanel(&buffPainter);
         buffPainter.setCompositionMode(QPainter::CompositionMode_DestinationIn);
-        buffPainter.fillRect(bufferPixmap.rect(), QColor(0,0,0,128));
+        buffPainter.fillRect(bufferPixmap.rect(), QColor(0, 0, 0, 128));
 
-        painter->drawPixmap( 0, 0, bufferPixmap);
+        painter->drawPixmap(0, 0, bufferPixmap);
     }
 
     //if is under mouse draw the animated glow overlay
@@ -217,7 +215,9 @@ void ComboBox::paint(QPainter *painter,
             d->background->setElementPrefix("normal");
             QPixmap normalPix = d->background->panelPixmap();
             d->background->setElementPrefix("active");
-            painter->drawPixmap(d->activeRect.topLeft(), PaintUtils::transition(d->background->panelPixmap(), normalPix, 1 - d->opacity));
+            painter->drawPixmap(
+                d->activeRect.topLeft(),
+                PaintUtils::transition(d->background->panelPixmap(), normalPix, 1 - d->opacity));
         } else if (isUnderMouse()) {
             d->background->setElementPrefix("active");
             d->background->paintPanel(painter, d->activeRect.topLeft());
@@ -229,21 +229,26 @@ void ComboBox::paint(QPainter *painter,
         d->background->paintPanel(painter);
     }
 
-
     painter->setPen(Plasma::Theme::defaultTheme()->color(Theme::ButtonTextColor));
 
     QStyleOptionComboBox comboOpt;
 
     comboOpt.initFrom(nativeWidget());
 
-    comboOpt.palette.setColor(QPalette::ButtonText, Plasma::Theme::defaultTheme()->color(Plasma::Theme::ButtonTextColor));
-    comboOpt.currentIcon = nativeWidget()->itemIcon(nativeWidget()->currentIndex());
-    comboOpt.currentText = nativeWidget()->itemText(nativeWidget()->currentIndex());
+    comboOpt.palette.setColor(
+        QPalette::ButtonText, Plasma::Theme::defaultTheme()->color(Plasma::Theme::ButtonTextColor));
+    comboOpt.currentIcon = nativeWidget()->itemIcon(
+        nativeWidget()->currentIndex());
+    comboOpt.currentText = nativeWidget()->itemText(
+        nativeWidget()->currentIndex());
     comboOpt.editable = false;
 
-    nativeWidget()->style()->drawControl(QStyle::CE_ComboBoxLabel, &comboOpt, painter, nativeWidget());
-    comboOpt.rect = nativeWidget()->style()->subControlRect(QStyle::CC_ComboBox, &comboOpt, QStyle::SC_ComboBoxArrow, nativeWidget());
-    nativeWidget()->style()->drawPrimitive(QStyle::PE_IndicatorArrowDown, &comboOpt, painter, nativeWidget());
+    nativeWidget()->style()->drawControl(
+        QStyle::CE_ComboBoxLabel, &comboOpt, painter, nativeWidget());
+    comboOpt.rect = nativeWidget()->style()->subControlRect(
+        QStyle::CC_ComboBox, &comboOpt, QStyle::SC_ComboBoxArrow, nativeWidget());
+    nativeWidget()->style()->drawPrimitive(
+        QStyle::PE_IndicatorArrowDown, &comboOpt, painter, nativeWidget());
 }
 
 void ComboBox::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
@@ -253,7 +258,9 @@ void ComboBox::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
     if (d->animId != -1) {
         Plasma::Animator::self()->stopCustomAnimation(d->animId);
     }
-    d->animId = Plasma::Animator::self()->customAnimation(40 / (1000 / FadeInDuration), FadeInDuration,Plasma::Animator::LinearCurve, this, "animationUpdate");
+    d->animId = Plasma::Animator::self()->customAnimation(
+        40 / (1000 / FadeInDuration), FadeInDuration,
+        Plasma::Animator::LinearCurve, this, "animationUpdate");
 
     d->background->setElementPrefix("active");
 
@@ -269,7 +276,9 @@ void ComboBox::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
     }
 
     d->fadeIn = false;
-    d->animId = Plasma::Animator::self()->customAnimation(40 / (1000 / FadeOutDuration), FadeOutDuration,Plasma::Animator::LinearCurve, this, "animationUpdate");
+    d->animId = Plasma::Animator::self()->customAnimation(
+        40 / (1000 / FadeOutDuration),
+        FadeOutDuration, Plasma::Animator::LinearCurve, this, "animationUpdate");
 
     d->background->setElementPrefix("active");
 

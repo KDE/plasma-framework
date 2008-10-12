@@ -45,12 +45,14 @@ class PLASMA_EXPORT Flash : public QGraphicsWidget
 
         void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
 
-        void setFont( const QFont & );
-        void setColor( const QColor & );
-        void setDuration( int duration );
+        void setFont(const QFont &);
+        void setColor(const QColor &);
+        void setDuration(int duration);
 
-        void flash( const QString &text, int duration = 0, const QTextOption &option = QTextOption(Qt::AlignCenter) );
-        void flash( const QPixmap &pixmap, int duration = 0, Qt::Alignment align = Qt::AlignCenter );
+        void flash(const QString &text, int duration = 0,
+                   const QTextOption &option = QTextOption(Qt::AlignCenter));
+        void flash(const QPixmap &pixmap, int duration = 0,
+                   Qt::Alignment align = Qt::AlignCenter);
 
     public Q_SLOTS:
         void kill();
@@ -60,7 +62,7 @@ class PLASMA_EXPORT Flash : public QGraphicsWidget
         void fadeOut();
 
     private:
-        FlashPrivate * const d;
+        FlashPrivate *const d;
 };
 
 }

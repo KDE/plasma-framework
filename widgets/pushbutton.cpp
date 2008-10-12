@@ -93,7 +93,6 @@ public:
     Svg *svg;
 };
 
-
 void PushButtonPrivate::syncActiveRect()
 {
     background->setElementPrefix("normal");
@@ -105,8 +104,9 @@ void PushButtonPrivate::syncActiveRect()
     qreal activeLeft, activeTop, activeRight, activeBottom;
     background->getMargins(activeLeft, activeTop, activeRight, activeBottom);
 
-    activeRect = QRectF(QPointF(0,0), q->size());
-    activeRect.adjust(left - activeLeft, top - activeTop, -(right - activeRight), -(bottom - activeBottom));
+    activeRect = QRectF(QPointF(0, 0), q->size());
+    activeRect.adjust(left - activeLeft, top - activeTop,
+                      -(right - activeRight), -(bottom - activeBottom));
 
     background->setElementPrefix("normal");
 }
@@ -124,7 +124,6 @@ void PushButtonPrivate::syncBorders()
     syncActiveRect();
 }
 
-
 void PushButtonPrivate::animationUpdate(qreal progress)
 {
     if (progress == 1) {
@@ -138,12 +137,11 @@ void PushButtonPrivate::animationUpdate(qreal progress)
     q->update();
 }
 
-
 PushButton::PushButton(QGraphicsWidget *parent)
     : QGraphicsProxyWidget(parent),
       d(new PushButtonPrivate(this))
 {
-    KPushButton* native = new KPushButton;
+    KPushButton *native = new KPushButton;
     connect(native, SIGNAL(clicked()), this, SIGNAL(clicked()));
     setWidget(native);
     native->setAttribute(Qt::WA_NoSystemBackground);
@@ -182,7 +180,7 @@ void PushButton::setImage(const QString &path)
     d->svg = 0;
     d->imagePath = path;
 
-    bool absolutePath = !path.isEmpty() && 
+    bool absolutePath = !path.isEmpty() &&
                         #ifdef Q_WS_WIN
                             !QDir::isRelativePath(path)
                         #else
@@ -215,7 +213,7 @@ QString PushButton::styleSheet()
     return widget()->styleSheet();
 }
 
-KPushButton* PushButton::nativeWidget() const
+KPushButton *PushButton::nativeWidget() const
 {
     return static_cast<KPushButton*>(widget());
 }
@@ -240,7 +238,7 @@ void PushButton::resizeEvent(QGraphicsSceneResizeEvent *event)
         d->background->resizePanel(size());
    }
 
-    QGraphicsProxyWidget::resizeEvent(event);
+   QGraphicsProxyWidget::resizeEvent(event);
 }
 
 void PushButton::paint(QPainter *painter,
@@ -272,9 +270,9 @@ void PushButton::paint(QPainter *painter,
         QPainter buffPainter(&bufferPixmap);
         d->background->paintPanel(&buffPainter);
         buffPainter.setCompositionMode(QPainter::CompositionMode_DestinationIn);
-        buffPainter.fillRect(bufferPixmap.rect(), QColor(0,0,0,128));
+        buffPainter.fillRect(bufferPixmap.rect(), QColor(0, 0, 0, 128));
 
-        painter->drawPixmap( 0, 0, bufferPixmap);
+        painter->drawPixmap(0, 0, bufferPixmap);
     }
 
     //if is under mouse draw the animated glow overlay
@@ -282,7 +280,9 @@ void PushButton::paint(QPainter *painter,
         if (d->animId != -1) {
             QPixmap normalPix = d->background->panelPixmap();
             d->background->setElementPrefix("active");
-            painter->drawPixmap(d->activeRect.topLeft(), PaintUtils::transition(d->background->panelPixmap(), normalPix, 1 - d->opacity));
+            painter->drawPixmap(
+                d->activeRect.topLeft(),
+                PaintUtils::transition(d->background->panelPixmap(), normalPix, 1 - d->opacity));
         } else if (isUnderMouse() || nativeWidget()->isDefault()) {
             d->background->setElementPrefix("active");
             d->background->paintPanel(painter, d->activeRect.topLeft());
@@ -294,9 +294,7 @@ void PushButton::paint(QPainter *painter,
         d->background->paintPanel(painter);
     }
 
-
     painter->setPen(Plasma::Theme::defaultTheme()->color(Theme::ButtonTextColor));
-
 
     if (nativeWidget()->isDown()) {
         painter->translate(QPoint(1, 1));
@@ -337,11 +335,13 @@ void PushButton::paint(QPainter *painter,
         if (option->direction == Qt::LeftToRight) {
             alphaGradient.setColorAt(0, QColor(0, 0, 0, 255));
             alphaGradient.setColorAt(1, QColor(0, 0, 0, 0));
-            p.drawText(bufferPixmap.rect(), Qt::AlignLeft|Qt::AlignVCenter, nativeWidget()->text() );
+            p.drawText(bufferPixmap.rect(), Qt::AlignLeft|Qt::AlignVCenter,
+                       nativeWidget()->text());
         } else {
             alphaGradient.setColorAt(0, QColor(0, 0, 0, 0));
             alphaGradient.setColorAt(1, QColor(0, 0, 0, 255));
-            p.drawText(bufferPixmap.rect(), Qt::AlignRight|Qt::AlignVCenter, nativeWidget()->text() );
+            p.drawText(bufferPixmap.rect(), Qt::AlignRight|Qt::AlignVCenter,
+                       nativeWidget()->text());
         }
 
         p.setCompositionMode(QPainter::CompositionMode_DestinationIn);
@@ -349,7 +349,7 @@ void PushButton::paint(QPainter *painter,
 
         painter->drawPixmap(rect.topLeft(), bufferPixmap);
     } else {
-        painter->drawText(rect, Qt::AlignCenter, nativeWidget()->text() );
+        painter->drawText(rect, Qt::AlignCenter, nativeWidget()->text());
     }
 }
 
@@ -360,7 +360,9 @@ void PushButton::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
     if (d->animId != -1) {
         Plasma::Animator::self()->stopCustomAnimation(d->animId);
     }
-    d->animId = Plasma::Animator::self()->customAnimation(40 / (1000 / FadeInDuration), FadeInDuration,Plasma::Animator::LinearCurve, this, "animationUpdate");
+    d->animId = Plasma::Animator::self()->customAnimation(
+        40 / (1000 / FadeInDuration), FadeInDuration,
+        Plasma::Animator::LinearCurve, this, "animationUpdate");
 
     d->background->setElementPrefix("active");
 
@@ -376,7 +378,9 @@ void PushButton::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
     }
 
     d->fadeIn = false;
-    d->animId = Plasma::Animator::self()->customAnimation(40 / (1000 / FadeOutDuration), FadeOutDuration,Plasma::Animator::LinearCurve, this, "animationUpdate");
+    d->animId = Plasma::Animator::self()->customAnimation(
+        40 / (1000 / FadeOutDuration), FadeOutDuration,
+        Plasma::Animator::LinearCurve, this, "animationUpdate");
 
     d->background->setElementPrefix("active");
 

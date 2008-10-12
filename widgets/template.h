@@ -17,7 +17,6 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-
 #ifndef PLASMA_<NAME>_H
 #define PLASMA_<NAME>_H
 
@@ -41,7 +40,7 @@ class PLASMA_EXPORT <Name> : public QGraphicsProxyWidget
 {
     Q_OBJECT
 
-    Q_PROPERTY(QGraphicsWidget* parentWidget READ parentWidget)
+    Q_PROPERTY(QGraphicsWidget *parentWidget READ parentWidget)
     Q_PROPERTY(QString text READ text WRITE setText)
     Q_PROPERTY(QString image READ image WRITE setImage)
     Q_PROPERTY(QString styleSheet READ styleSheet WRITE setStyleSheet)
@@ -53,7 +52,7 @@ public:
 
     /**
      * Sets the display text for this <Name>
-     * 
+     *
      * @arg text the text to display; should be translated.
      */
     void setText(const QString &text);

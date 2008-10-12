@@ -43,7 +43,7 @@ public:
     }
 
     void loadingFinished(bool success);
-    void updateRequested(const QRect& dirtyRect);
+    void updateRequested(const QRect &dirtyRect);
     void scrollRequested(int dx, int dy, const QRect &scrollRect);
 
     WebContent *q;
@@ -111,19 +111,23 @@ void WebContent::setPage(QWebPage *page)
     d->page = page;
 
     if (d->page) {
-        connect(d->page, SIGNAL(loadProgress(int)), this, SIGNAL(loadProgress(int)));
-        connect(d->page, SIGNAL(loadFinished(bool)), this, SLOT(loadingFinished(bool)));
-        connect(d->page, SIGNAL(repaintRequested(const QRect&)), this, SLOT(updateRequested(const QRect&)));
-        connect(d->page, SIGNAL(scrollRequested(int, int, const QRect &)), this, SLOT(scrollRequested(int, int, const QRect &)));
+        connect(d->page, SIGNAL(loadProgress(int)),
+                this, SIGNAL(loadProgress(int)));
+        connect(d->page, SIGNAL(loadFinished(bool)),
+                this, SLOT(loadingFinished(bool)));
+        connect(d->page, SIGNAL(repaintRequested(const QRect&)),
+                this, SLOT(updateRequested(const QRect&)));
+        connect(d->page, SIGNAL(scrollRequested(int, int, const QRect &)),
+                this, SLOT(scrollRequested(int, int, const QRect &)));
     }
 }
 
-QWebPage* WebContent::page() const
+QWebPage *WebContent::page() const
 {
     return d->page;
 }
 
-QWebFrame* WebContent::mainFrame() const
+QWebFrame *WebContent::mainFrame() const
 {
     return d->page ? d->page->mainFrame() : 0;
 }
@@ -356,10 +360,11 @@ void WebContentPrivate::loadingFinished(bool success)
     q->update();
 }
 
-void WebContentPrivate::updateRequested(const QRect& dirtyRect)
+void WebContentPrivate::updateRequested(const QRect &dirtyRect)
 {
     if (loaded && page) {
-       q->update(QRectF(dirtyRect.topLeft().x(), dirtyRect.topLeft().y(), dirtyRect.width(), dirtyRect.height()));
+       q->update(QRectF(dirtyRect.topLeft().x(), dirtyRect.topLeft().y(),
+                        dirtyRect.width(), dirtyRect.height()));
     }
 }
 

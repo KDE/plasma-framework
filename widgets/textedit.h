@@ -17,7 +17,6 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-
 #ifndef PLASMA_TEXTEDIT_H
 #define PLASMA_TEXTEDIT_H
 
@@ -42,10 +41,10 @@ class PLASMA_EXPORT TextEdit : public QGraphicsProxyWidget
 {
     Q_OBJECT
 
-    Q_PROPERTY(QGraphicsWidget* parentWidget READ parentWidget)
+    Q_PROPERTY(QGraphicsWidget *parentWidget READ parentWidget)
     Q_PROPERTY(QString text READ text WRITE setText)
     Q_PROPERTY(QString stylesheet READ styleSheet WRITE setStyleSheet)
-    Q_PROPERTY(KTextEdit* nativeWidget READ nativeWidget)
+    Q_PROPERTY(KTextEdit *nativeWidget READ nativeWidget)
 
 public:
     explicit TextEdit(QGraphicsWidget *parent = 0);
@@ -53,7 +52,7 @@ public:
 
     /**
      * Sets the display text for this TextEdit
-     * 
+     *
      * @arg text the text to display; should be translated.
      */
     void setText(const QString &text);
@@ -78,7 +77,7 @@ public:
     /**
      * @return the native widget wrapped by this TextEdit
      */
-    KTextEdit* nativeWidget() const;
+    KTextEdit *nativeWidget() const;
 
 public Q_SLOTS:
     void dataUpdated(const QString &sourceName, const Plasma::DataEngine::Data &data);

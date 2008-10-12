@@ -86,7 +86,7 @@ Label::Label(QGraphicsWidget *parent)
     : QGraphicsProxyWidget(parent),
       d(new LabelPrivate(this))
 {
-    QLabel* native = new QLabel;
+    QLabel *native = new QLabel;
     connect(native, SIGNAL(linkActivated(QString)), this, SIGNAL(linkActivated(QString)));
 
     connect(Theme::defaultTheme(), SIGNAL(themeChanged()), this, SLOT(setPalette()));
@@ -121,7 +121,7 @@ void Label::setImage(const QString &path)
     d->svg = 0;
     d->imagePath = path;
 
-    bool absolutePath = !path.isEmpty() && 
+    bool absolutePath = !path.isEmpty() &&
                         #ifdef Q_WS_WIN
                             !QDir::isRelativePath(path)
                         #else
@@ -154,17 +154,17 @@ QString Label::styleSheet()
     return widget()->styleSheet();
 }
 
-QLabel* Label::nativeWidget() const
+QLabel *Label::nativeWidget() const
 {
     return static_cast<QLabel*>(widget());
 }
 
 void Label::dataUpdated(const QString &sourceName, const Plasma::DataEngine::Data &data)
 {
-    Q_UNUSED(sourceName)
+    Q_UNUSED(sourceName);
 
     QStringList texts;
-    foreach (const QVariant& v, data) {
+    foreach (const QVariant &v, data) {
         if (v.canConvert(QVariant::String)) {
             texts << v.toString();
         }

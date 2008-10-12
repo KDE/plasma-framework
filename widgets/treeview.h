@@ -17,7 +17,6 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-
 #ifndef PLASMA_TREEVIEW_H
 #define PLASMA_TREEVIEW_H
 
@@ -42,10 +41,10 @@ class PLASMA_EXPORT TreeView : public QGraphicsProxyWidget
 {
     Q_OBJECT
 
-    Q_PROPERTY(QAbstractItemModel* model READ model WRITE setModel)
-    Q_PROPERTY(QGraphicsWidget* parentWidget READ parentWidget)
+    Q_PROPERTY(QAbstractItemModel *model READ model WRITE setModel)
+    Q_PROPERTY(QGraphicsWidget *parentWidget READ parentWidget)
     Q_PROPERTY(QString styleSheet READ styleSheet WRITE setStyleSheet)
-    Q_PROPERTY(QTreeView* nativeWidget READ nativeWidget)
+    Q_PROPERTY(QTreeView *nativeWidget READ nativeWidget)
 
 public:
     explicit TreeView(QGraphicsWidget *parent = 0);
@@ -78,10 +77,10 @@ public:
     /**
      * @return the native widget wrapped by this TreeView
      */
-    QTreeView* nativeWidget() const;
+    QTreeView *nativeWidget() const;
 
 private:
-    TreeViewPrivate * const d;
+    TreeViewPrivate *const d;
 };
 
 }

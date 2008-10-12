@@ -93,17 +93,17 @@ class PLASMA_EXPORT WebContent : public QGraphicsWidget
          * The QWebPage associated with this item. Useful when more
          * of the features of the full QWebPage object need to be accessed.
          */
-        QWebPage* page() const;
+        QWebPage *page() const;
 
         /**
          * The main web frame associated with this item.
          */
-        QWebFrame* mainFrame() const;
+        QWebFrame *mainFrame() const;
 
         /**
          * Reimplementation
          */
-        void setGeometry(const QRectF &geometry);         
+        void setGeometry(const QRectF &geometry);
 
     Q_SIGNALS:
         /**

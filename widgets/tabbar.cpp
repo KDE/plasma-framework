@@ -53,10 +53,11 @@ public:
                const QStyleOptionGraphicsItem *option,
                QWidget *widget)
     {
-        Q_UNUSED(option)
-        Q_UNUSED(widget)
+        Q_UNUSED(option);
+        Q_UNUSED(widget);
         //Don't paint the child widgets
-        static_cast<NativeTabBar *>(QGraphicsProxyWidget::widget())->render(painter, QPoint(0,0), QRegion(), 0);
+        static_cast<NativeTabBar *>(QGraphicsProxyWidget::widget())->render(
+            painter, QPoint(0, 0), QRegion(), 0);
     }
 
     NativeTabBar *native;
@@ -98,8 +99,6 @@ public:
     int oldPageAnimId;
     int newPageAnimId;
 };
-
-
 
 void TabBarPrivate::updateTabWidgetMode()
 {
@@ -171,7 +170,6 @@ void TabBarPrivate::shapeChanged(const QTabBar::Shape shape)
     tabProxy->setPreferredSize(tabProxy->native->sizeHint());
 }
 
-
 TabBar::TabBar(QGraphicsWidget *parent)
     : QGraphicsWidget(parent),
       d(new TabBarPrivate(this))
@@ -184,7 +182,6 @@ TabBar::TabBar(QGraphicsWidget *parent)
 
     d->mainLayout->addItem(d->tabBarLayout);
 
-
     //tabBar is centered, so a stretch at begin one at the end
     //FIXME: doesn't seem to be possible to remove stretches from a layout
     d->leftSpacer = new QGraphicsWidget(this);
@@ -196,9 +193,12 @@ TabBar::TabBar(QGraphicsWidget *parent)
     d->tabBarLayout->addItem(d->rightSpacer);
     //d->tabBarLayout->setStretchFactor(d->tabProxy, 2);
 
-    connect(d->tabProxy->native, SIGNAL(currentChanged(int)), this, SLOT(setCurrentIndex(int)));
-    connect(d->tabProxy->native, SIGNAL(shapeChanged(QTabBar::Shape)), this, SLOT(shapeChanged(QTabBar::Shape)));
-    connect(Plasma::Animator::self(), SIGNAL(movementFinished(QGraphicsItem*)), this, SLOT(slidingCompleted(QGraphicsItem*)));
+    connect(d->tabProxy->native, SIGNAL(currentChanged(int)),
+            this, SLOT(setCurrentIndex(int)));
+    connect(d->tabProxy->native, SIGNAL(shapeChanged(QTabBar::Shape)),
+            this, SLOT(shapeChanged(QTabBar::Shape)));
+    connect(Plasma::Animator::self(), SIGNAL(movementFinished(QGraphicsItem*)),
+            this, SLOT(slidingCompleted(QGraphicsItem*)));
 }
 
 TabBar::~TabBar()
@@ -206,7 +206,8 @@ TabBar::~TabBar()
     delete d;
 }
 
-int TabBar::insertTab(int index, const QIcon &icon, const QString &label, QGraphicsLayoutItem *content)
+int TabBar::insertTab(int index, const QIcon &icon, const QString &label,
+                      QGraphicsLayoutItem *content)
 {
     QGraphicsWidget *page = new QGraphicsWidget(this);
     page->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -304,13 +305,19 @@ void TabBar::setCurrentIndex(int index)
     QRect beforeCurrentGeom(d->oldPage->geometry().toRect());
     beforeCurrentGeom.moveTopRight(beforeCurrentGeom.topLeft());
 
-    d->newPageAnimId = Animator::self()->moveItem(d->newPage, Plasma::Animator::SlideOutMovement, d->oldPage->pos().toPoint());
+    d->newPageAnimId = Animator::self()->moveItem(
+        d->newPage, Plasma::Animator::SlideOutMovement,
+        d->oldPage->pos().toPoint());
     if (index > d->currentIndex) {
         d->newPage->setPos(d->oldPage->geometry().topRight());
-        d->oldPageAnimId = Animator::self()->moveItem(d->oldPage, Plasma::Animator::SlideOutMovement, beforeCurrentGeom.topLeft());
+        d->oldPageAnimId = Animator::self()->moveItem(
+            d->oldPage, Plasma::Animator::SlideOutMovement,
+            beforeCurrentGeom.topLeft());
     } else {
         d->newPage->setPos(beforeCurrentGeom.topLeft());
-        d->oldPageAnimId = Animator::self()->moveItem(d->oldPage, Plasma::Animator::SlideOutMovement, d->oldPage->geometry().topRight().toPoint());
+        d->oldPageAnimId = Animator::self()->moveItem(
+            d->oldPage, Plasma::Animator::SlideOutMovement,
+            d->oldPage->geometry().topRight().toPoint());
     }
 #else
     d->mainLayout->addItem(d->pages[index]);

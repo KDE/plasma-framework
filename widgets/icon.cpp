@@ -64,7 +64,7 @@ IconPrivate::IconPrivate(Icon *i)
       iconSvg(0),
       m_fadeIn(false),
       m_hoverAnimId(-1),
-      m_hoverAlpha(20/255),
+      m_hoverAlpha(20 / 255),
       iconSize(48, 48),
       states(IconPrivate::NoState),
       orientation(Qt::Vertical),
@@ -81,14 +81,14 @@ IconPrivate::~IconPrivate()
     qDeleteAll(cornerActions);
 }
 
-void Icon::readColors() 
+void Icon::readColors()
 {
     d->textColor = Plasma::Theme::defaultTheme()->color(Theme::TextColor);
     d->shadowColor = Plasma::Theme::defaultTheme()->color(Theme::BackgroundColor);
 
 }
 
-IconAction::IconAction(Icon* icon, QAction *action)
+IconAction::IconAction(Icon *icon, QAction *action)
     : m_icon(icon),
       m_action(action),
       m_hovered(false),
@@ -186,27 +186,30 @@ void IconAction::rebuildPixmap()
 
 bool IconAction::event(QEvent::Type type, const QPointF &pos)
 {
-    if (m_icon->size().width() < m_rect.width()*2.0 ||
-        m_icon->size().height() < m_rect.height()*2.0) {
+    if (m_icon->size().width() < m_rect.width() * 2.0 ||
+        m_icon->size().height() < m_rect.height() * 2.0) {
         return false;
     }
 
     switch (type) {
-    case QEvent::GraphicsSceneMousePress: {
+    case QEvent::GraphicsSceneMousePress:
+    {
         setSelected(m_rect.contains(pos));
         return isSelected();
-        }
-        break;
+    }
+    break;
 
-    case QEvent::GraphicsSceneMouseMove: {
+    case QEvent::GraphicsSceneMouseMove:
+    {
         bool wasSelected = isSelected();
         bool active = m_rect.contains(pos);
         setSelected(wasSelected && active);
         return (wasSelected != isSelected()) || active;
-        }
-        break;
+    }
+    break;
 
-    case QEvent::GraphicsSceneMouseRelease: {
+    case QEvent::GraphicsSceneMouseRelease:
+    {
         // kDebug() << "IconAction::event got a QEvent::MouseButtonRelease, " << isSelected();
         bool wasSelected = isSelected();
         setSelected(false);
@@ -215,8 +218,8 @@ bool IconAction::event(QEvent::Type type, const QPointF &pos)
         }
 
         return wasSelected;
-        }
-        break;
+    }
+    break;
 
     case QEvent::GraphicsSceneHoverEnter:
         m_pressed = false;
@@ -229,7 +232,7 @@ bool IconAction::event(QEvent::Type type, const QPointF &pos)
         break;
 
     default:
-            break;
+        break;
     }
 
     return false;
@@ -240,15 +243,15 @@ int IconAction::animationId() const
     return m_animationId;
 }
 
-QAction* IconAction::action() const
+QAction *IconAction::action() const
 {
     return m_action;
 }
 
 void IconAction::paint(QPainter *painter) const
 {
-    if (m_icon->size().width() < m_rect.width()*2.0 ||
-        m_icon->size().height() < m_rect.height()*2.0) {
+    if (m_icon->size().width() < m_rect.width() * 2.0 ||
+        m_icon->size().height() < m_rect.height() * 2.0) {
         return;
     }
 
@@ -323,7 +326,7 @@ void Icon::addIconAction(QAction *action)
         kDebug() << "no more room for more actions!";
     }
 
-    IconAction* iconAction = new IconAction(this, action);
+    IconAction *iconAction = new IconAction(this, action);
     d->cornerActions.append(iconAction);
     connect(action, SIGNAL(destroyed(QObject*)), this, SLOT(actionDestroyed(QObject*)));
 
@@ -344,12 +347,12 @@ void Icon::setAction(QAction *action)
     }
 }
 
-QAction* Icon::action() const
+QAction *Icon::action() const
 {
     return d->action;
 }
 
-void Icon::actionDestroyed(QObject* action)
+void Icon::actionDestroyed(QObject *action)
 {
     QList<IconAction*>::iterator it = d->cornerActions.begin();
 
@@ -396,26 +399,27 @@ QPainterPath Icon::shape() const
         return QGraphicsItem::shape();
     }
 
-    return PaintUtils::roundedRectangle(QRectF(QPointF(0.0, 0.0), d->currentSize).adjusted(-2, -2, 2, 2), 10.0);
+    return PaintUtils::roundedRectangle(
+        QRectF(QPointF(0.0, 0.0), d->currentSize).adjusted(-2, -2, 2, 2), 10.0);
 }
 
 QSizeF IconPrivate::displaySizeHint(const QStyleOptionGraphicsItem *option, const qreal width) const
 {
     if (text.isEmpty() && infoText.isEmpty()) {
-      return QSizeF( .0, .0 );
+      return QSizeF(.0, .0);
     }
     QString label = text;
     // const qreal maxWidth = (orientation == Qt::Vertical) ? iconSize.width() + 10 : 32757;
     // NOTE: find a way to use the other layoutText, it currently returns nominal width, when
     //       we actually need the actual width.
 
-
     qreal textWidth = width -
                       horizontalMargin[IconPrivate::TextMargin].left -
                       horizontalMargin[IconPrivate::TextMargin].right;
 
     //allow only five lines of text
-    const qreal maxHeight = numDisplayLines*Plasma::Theme::defaultTheme()->fontMetrics().lineSpacing();
+    const qreal maxHeight =
+        numDisplayLines * Plasma::Theme::defaultTheme()->fontMetrics().lineSpacing();
 
     // To compute the nominal size for the label + info, we'll just append
     // the information string to the label
@@ -451,7 +455,7 @@ void Icon::layoutIcons(const QStyleOptionGraphicsItem *option)
                           d->verticalMargin[IconPrivate::TextMargin].top -
                           d->verticalMargin[IconPrivate::TextMargin].bottom;
             //never make a label higher than half the total height
-            heightAvail = qMax(heightAvail, d->currentSize.height()/2);
+            heightAvail = qMax(heightAvail, d->currentSize.height() / 2);
         } else {
             heightAvail = d->currentSize.height();
         }
@@ -486,7 +490,7 @@ void Icon::layoutIcons(const QStyleOptionGraphicsItem *option)
     d->iconSize = QSizeF(iconWidth, iconWidth);
 
     int count = 0;
-    foreach (IconAction* iconAction, d->cornerActions) {
+    foreach (IconAction *iconAction, d->cornerActions) {
         iconAction->setRect(d->actionRect((IconPrivate::ActionPosition)count));
         ++count;
     }
@@ -515,12 +519,12 @@ void Icon::hoverEffect(bool show)
     if (d->m_hoverAnimId != -1) {
         Animator::self()->stopCustomAnimation(d->m_hoverAnimId);
     }
-    d->m_hoverAnimId = Animator::self()->customAnimation(40 / (1000 / FadeInDuration), FadeInDuration,
-                                                         Animator::EaseOutCurve, this,
-                                                         "hoverAnimationUpdate");
+    d->m_hoverAnimId = Animator::self()->customAnimation(
+        40 / (1000 / FadeInDuration), FadeInDuration,
+        Animator::EaseOutCurve, this, "hoverAnimationUpdate");
 }
 
-void Icon::hoverAnimationUpdate(qreal progress) 
+void Icon::hoverAnimationUpdate(qreal progress)
 {
     if (d->m_fadeIn) {
         d->m_hoverAlpha = progress;
@@ -533,7 +537,7 @@ void Icon::hoverAnimationUpdate(qreal progress)
     if (progress == 1) {
         d->m_hoverAnimId = -1;
     }
-    if (!d->m_fadeIn && progress == 1 ) {
+    if (!d->m_fadeIn && progress == 1) {
         d->states &= ~IconPrivate::HoverState;
     }
     update();
@@ -551,30 +555,37 @@ void IconPrivate::drawBackground(QPainter *painter, IconState state)
 
     switch (state) {
         case IconPrivate::HoverState:
-            shadow.setHsv(shadow.hue(),
-                          shadow.saturation(),
-                          shadow.value() + (int)(darkShadow ? 50 * m_hoverAlpha: -50 * m_hoverAlpha),
-                          200 + (int)m_hoverAlpha * 55); // opacity
+            shadow.setHsv(
+                shadow.hue(),
+                shadow.saturation(),
+                shadow.value() + (int)(darkShadow ? 50 * m_hoverAlpha: -50 * m_hoverAlpha),
+                200 + (int)m_hoverAlpha * 55); // opacity
             break;
         case IconPrivate::PressedState:
-            shadow.setHsv(shadow.hue(),
-                          shadow.saturation(),
-                          shadow.value() + (darkShadow?(int)(50*m_hoverAlpha):(int)(-50*m_hoverAlpha)),
-                          204); //80% opacity
+            shadow.setHsv(
+                shadow.hue(),
+                shadow.saturation(),
+                shadow.value() + (darkShadow ?
+                                  (int)(50 * m_hoverAlpha) : (int)(-50 * m_hoverAlpha)),
+                204); //80% opacity
             break;
         default:
             break;
     }
-    
-    border.setAlphaF(0.3*m_hoverAlpha);
-    shadow.setAlphaF(0.6*m_hoverAlpha);
+
+    border.setAlphaF(0.3 * m_hoverAlpha);
+    shadow.setAlphaF(0.6 * m_hoverAlpha);
 
     painter->save();
     painter->translate(0.5, 0.5);
     painter->setRenderHint(QPainter::Antialiasing);
     painter->setBrush(shadow);
     painter->setPen(QPen(border, 1));
-    painter->drawPath(PaintUtils::roundedRectangle(QRectF(QPointF(1, 1), QSize((int)currentSize.width()-2, (int)currentSize.height()-2)), 5.0));
+    painter->drawPath(
+        PaintUtils::roundedRectangle(
+            QRectF(QPointF(1, 1), QSize((int)currentSize.width() - 2,
+                                        (int)currentSize.height() - 2)),
+            5.0));
     painter->restore();
 }
 
@@ -613,7 +624,10 @@ QPixmap IconPrivate::decoration(const QStyleOptionGraphicsItem *option, bool use
             if (qFuzzyCompare(qreal(1.0), m_hoverAlpha)) {
                 result = effect->apply(result, KIconLoader::Desktop, KIconLoader::ActiveState);
             } else {
-                result = PaintUtils::transition(result, effect->apply(result, KIconLoader::Desktop, KIconLoader::ActiveState), m_hoverAlpha);
+                result = PaintUtils::transition(
+                    result,
+                    effect->apply(result, KIconLoader::Desktop,
+                                  KIconLoader::ActiveState), m_hoverAlpha);
             }
         }
     }
@@ -621,7 +635,8 @@ QPixmap IconPrivate::decoration(const QStyleOptionGraphicsItem *option, bool use
     return result;
 }
 
-QPointF IconPrivate::iconPosition(const QStyleOptionGraphicsItem *option, const QPixmap &pixmap) const
+QPointF IconPrivate::iconPosition(const QStyleOptionGraphicsItem *option,
+                                  const QPixmap &pixmap) const
 {
     const QRectF itemRect = subtractMargin(option->rect, IconPrivate::ItemMargin);
 
@@ -634,14 +649,16 @@ QPointF IconPrivate::iconPosition(const QStyleOptionGraphicsItem *option, const 
     Qt::Alignment alignment;
     if (text.isEmpty() && infoText.isEmpty()) {
         alignment = Qt::AlignCenter;
-    }else if (orientation == Qt::Vertical) {
+    } else if (orientation == Qt::Vertical) {
         alignment = Qt::Alignment(Qt::AlignHCenter | Qt::AlignTop);
     //Horizontal
-    }else{
-        alignment = QStyle::visualAlignment(direction, Qt::Alignment(Qt::AlignLeft | Qt::AlignVCenter));
+    } else {
+        alignment = QStyle::visualAlignment(
+            direction, Qt::Alignment(Qt::AlignLeft | Qt::AlignVCenter));
     }
 
-    const QRect iconRect = QStyle::alignedRect(direction, alignment, size.toSize(), itemRect.toRect());
+    const QRect iconRect =
+        QStyle::alignedRect(direction, alignment, size.toSize(), itemRect.toRect());
 
     // Position the pixmap in the center of the rectangle
     QRect pixmapRect = pixmap.rect();
@@ -653,8 +670,9 @@ QPointF IconPrivate::iconPosition(const QStyleOptionGraphicsItem *option, const 
     return QPointF(pixmapRect.topLeft());
 }
 
-QRectF IconPrivate::labelRectangle(const QStyleOptionGraphicsItem *option, const QPixmap &icon,
-                                    const QString &string) const
+QRectF IconPrivate::labelRectangle(const QStyleOptionGraphicsItem *option,
+                                   const QPixmap &icon,
+                                   const QString &string) const
 {
     Q_UNUSED(string)
 
@@ -683,8 +701,7 @@ QSizeF IconPrivate::layoutText(QTextLayout &layout, const QStyleOptionGraphicsIt
 {
     const QSizeF size = layoutText(layout, text, constraints.width());
 
-    if (size.width() > constraints.width() || size.height() > constraints.height())
-    {
+    if (size.width() > constraints.width() || size.height() > constraints.height()) {
         const QString elided = elidedText(layout, option, constraints);
         return layoutText(layout, elided, constraints.width());
     }
@@ -705,8 +722,7 @@ QSizeF IconPrivate::layoutText(QTextLayout &layout, const QString &text, qreal m
 
     layout.beginLayout();
 
-    while ((line = layout.createLine()).isValid())
-    {
+    while ((line = layout.createLine()).isValid()) {
         line.setLineWidth(maxWidth);
         height += leading;
         line.setPosition(QPointF(0.0, height));
@@ -737,27 +753,29 @@ QString IconPrivate::elidedText(QTextLayout &layout, const QStyleOptionGraphicsI
     QString elided;
     elided.reserve(text.length());
 
-    for (int i = 0; i < layout.lineCount(); i++)
-    {
+    for (int i = 0; i < layout.lineCount(); i++) {
         QTextLine line = layout.lineAt(i);
         int start  = line.textStart();
         int length = line.textLength();
 
         height += metrics.leading();
-        if (height + line.height() + metrics.lineSpacing() > maxHeight)
-        {
-            // Unfortunately, if the line ends because of a line separator, elidedText() will be too
-            // clever and keep adding lines until it finds one that's too wide.
-            if (line.naturalTextWidth() < maxWidth && start+length > 0 && text[start + length - 1] == QChar::LineSeparator)
+        if (height + line.height() + metrics.lineSpacing() > maxHeight) {
+            // Unfortunately, if the line ends because of a line separator,
+            // elidedText() will be too clever and keep adding lines until
+            // it finds one that's too wide.
+            if (line.naturalTextWidth() < maxWidth &&
+                start + length > 0 &&
+                text[start + length - 1] == QChar::LineSeparator) {
                 elided += text.mid(start, length - 1);
-            else
+            } else {
                 elided += metrics.elidedText(text.mid(start), Qt::ElideRight, maxWidth);
+            }
             break;
-        }
-        else if (line.naturalTextWidth() > maxWidth)
+        } else if (line.naturalTextWidth() > maxWidth) {
             elided += metrics.elidedText(text.mid(start, length), Qt::ElideRight, maxWidth);
-        else
+        } else {
             elided += text.mid(start, length);
+        }
 
         height += line.height();
     }
@@ -786,8 +804,7 @@ void IconPrivate::layoutTextItems(const QStyleOptionGraphicsItem *option,
 
     // If we have additional info text, and there's space for at least two lines of text,
     // adjust the max label size to make room for at least one line of the info text
-    if (!infoText.isEmpty() && textRect.height() >= fm.lineSpacing() * 2)
-    {
+    if (!infoText.isEmpty() && textRect.height() >= fm.lineSpacing() * 2) {
         infoLayout->setFont(labelLayout->font());
         infoLayout->setTextOption(labelLayout->textOption());
 
@@ -807,8 +824,10 @@ void IconPrivate::layoutTextItems(const QStyleOptionGraphicsItem *option,
     }
     // Compute the bounding rect of the text
     const Qt::Alignment alignment = labelLayout->textOption().alignment();
-    const QSizeF size(qMax(labelSize.width(), infoSize.width()), labelSize.height() + infoSize.height());
-    *textBoundingRect = QStyle::alignedRect(iconDirection(option), alignment, size.toSize(), textRect.toRect());
+    const QSizeF size(qMax(labelSize.width(), infoSize.width()),
+                      labelSize.height() + infoSize.height());
+    *textBoundingRect =
+        QStyle::alignedRect(iconDirection(option), alignment, size.toSize(), textRect.toRect());
 
     // Compute the positions where we should draw the layouts
     labelLayout->setPosition(QPointF(textRect.x(), textBoundingRect->y()));
@@ -842,8 +861,10 @@ QBrush IconPrivate::backgroundBrush(const QStyleOptionGraphicsItem *option) cons
     return background;
 }
 
-void IconPrivate::drawTextItems(QPainter *painter, const QStyleOptionGraphicsItem *option,
-                                  const QTextLayout &labelLayout, const QTextLayout &infoLayout) const
+void IconPrivate::drawTextItems(QPainter *painter,
+                                const QStyleOptionGraphicsItem *option,
+                                const QTextLayout &labelLayout,
+                                const QTextLayout &infoLayout) const
 {
     Q_UNUSED(option)
 
@@ -863,10 +884,9 @@ void IconPrivate::drawTextItems(QPainter *painter, const QStyleOptionGraphicsIte
     painter->restore();
 }
 
-
 void Icon::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-    Q_UNUSED(widget)
+    Q_UNUSED(widget);
 
 #ifdef BACKINGSTORE_BLUR_HACK
      if (d->state == IconPrivate::HoverState && scene()) {
@@ -922,7 +942,8 @@ void Icon::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWid
     QRectF textBoundingRect;
     d->layoutTextItems(option, icon, &labelLayout, &infoLayout, &textBoundingRect);
 
-    QImage shadow(textBoundingRect.size().toSize()+QSize(4,4), QImage::Format_ARGB32_Premultiplied);
+    QImage shadow(textBoundingRect.size().toSize() + QSize(4, 4),
+                  QImage::Format_ARGB32_Premultiplied);
     shadow.fill(Qt::transparent);
     {
         QPainter buffPainter(&shadow);
@@ -930,19 +951,19 @@ void Icon::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWid
         d->drawTextItems(&buffPainter, option, labelLayout, infoLayout);
     }
 
-    QPoint shadowOffset = QPoint(1,2);
+    QPoint shadowOffset = QPoint(1, 2);
     if (d->shadowColor.value() > 128) {
-        shadowOffset = QPoint(0,1);
+        shadowOffset = QPoint(0, 1);
     }
 
     PaintUtils::shadowBlur(shadow, 2, d->shadowColor);
-    painter->drawImage(textBoundingRect.topLeft()+shadowOffset, shadow);
+    painter->drawImage(textBoundingRect.topLeft() + shadowOffset, shadow);
     d->drawTextItems(painter, option, labelLayout, infoLayout);
 }
 
-void Icon::drawActionButtonBase(QPainter* painter, const QSize &size, int element)
+void Icon::drawActionButtonBase(QPainter *painter, const QSize &size, int element)
 {
-    qreal radius = size.width()/2;
+    qreal radius = size.width() / 2;
     QRadialGradient gradient(radius, radius, radius, radius, radius);
     int alpha;
 
@@ -965,8 +986,7 @@ void Icon::drawActionButtonBase(QPainter* painter, const QSize &size, int elemen
     painter->drawEllipse(QRectF(QPointF(.0, .0), size));
 }
 
-
-void Icon::setText(const QString& text)
+void Icon::setText(const QString &text)
 {
     d->text = text;
     // cause a relayout
@@ -984,7 +1004,7 @@ QString Icon::text() const
     return d->text;
 }
 
-void Icon::setInfoText(const QString& text)
+void Icon::setInfoText(const QString &text)
 {
     d->infoText = text;
     // cause a relayout
@@ -1006,7 +1026,7 @@ QIcon Icon::icon() const
     return d->icon;
 }
 
-void Icon::setIcon(const QString& icon)
+void Icon::setIcon(const QString &icon)
 {
     if (icon.isEmpty()) {
         setIcon(QIcon());
@@ -1016,7 +1036,7 @@ void Icon::setIcon(const QString& icon)
     setIcon(KIcon(icon));
 }
 
-void Icon::setIcon(const QIcon& icon)
+void Icon::setIcon(const QIcon &icon)
 {
     d->icon = icon;
 }
@@ -1137,7 +1157,7 @@ void Icon::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
         action->hide();
         action->event(event->type(), event->pos());
     }
-    // d->states &= ~IconPrivate::HoverState; // Will be set once progress is zero again ... 
+    // d->states &= ~IconPrivate::HoverState; // Will be set once progress is zero again ...
     hoverEffect(false);
     update();
 

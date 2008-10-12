@@ -45,26 +45,26 @@ struct PlotColor
 class PLASMA_EXPORT SignalPlotter : public QGraphicsWidget
 {
     Q_OBJECT
-    Q_PROPERTY( QString title READ title WRITE setTitle )
-    Q_PROPERTY( QString unit READ unit WRITE setUnit )
-    Q_PROPERTY( qreal scale READ scaledBy WRITE scale ) // Note: The naming of the functions here is poor
-    Q_PROPERTY( bool useAutoRange READ useAutoRange WRITE setUseAutoRange )
-    Q_PROPERTY( uint horizontalScale READ horizontalScale WRITE setHorizontalScale )
-    Q_PROPERTY( bool showVerticalLines READ showVerticalLines WRITE setShowVerticalLines )
-    Q_PROPERTY( QColor verticalLinesColor READ verticalLinesColor WRITE setVerticalLinesColor )
-    Q_PROPERTY( uint verticalLinesDistance READ verticalLinesDistance WRITE setVerticalLinesDistance )
-    Q_PROPERTY( bool verticalLinesScroll READ verticalLinesScroll WRITE setVerticalLinesScroll )
-    Q_PROPERTY( bool showHorizontalLines READ showHorizontalLines WRITE setShowHorizontalLines )
-    Q_PROPERTY( QColor horizontalLinesColor READ horizontalLinesColor WRITE setHorizontalLinesColor )
-    Q_PROPERTY( QColor fontColor READ fontColor WRITE setFontColor )
-    Q_PROPERTY( QFont font READ font WRITE setFont )
-    Q_PROPERTY( uint horizontalLinesCount READ horizontalLinesCount WRITE setHorizontalLinesCount )
-    Q_PROPERTY( bool showLabels READ showLabels WRITE setShowLabels )
-    Q_PROPERTY( bool showTopBar READ showTopBar WRITE setShowTopBar )
-    Q_PROPERTY( QColor backgroundColor READ backgroundColor WRITE setBackgroundColor )
-    Q_PROPERTY( QString svgBackground READ svgBackground WRITE setSvgBackground )
-    Q_PROPERTY( bool thinFrame WRITE setThinFrame )
-    Q_PROPERTY( bool stackPlots READ stackPlots WRITE setStackPlots )
+    Q_PROPERTY(QString title READ title WRITE setTitle)
+    Q_PROPERTY(QString unit READ unit WRITE setUnit)
+    Q_PROPERTY(qreal scale READ scaledBy WRITE scale) // Note: The naming of the functions here is poor
+    Q_PROPERTY(bool useAutoRange READ useAutoRange WRITE setUseAutoRange)
+    Q_PROPERTY(uint horizontalScale READ horizontalScale WRITE setHorizontalScale)
+    Q_PROPERTY(bool showVerticalLines READ showVerticalLines WRITE setShowVerticalLines)
+    Q_PROPERTY(QColor verticalLinesColor READ verticalLinesColor WRITE setVerticalLinesColor)
+    Q_PROPERTY(uint verticalLinesDistance READ verticalLinesDistance WRITE setVerticalLinesDistance)
+    Q_PROPERTY(bool verticalLinesScroll READ verticalLinesScroll WRITE setVerticalLinesScroll)
+    Q_PROPERTY(bool showHorizontalLines READ showHorizontalLines WRITE setShowHorizontalLines)
+    Q_PROPERTY(QColor horizontalLinesColor READ horizontalLinesColor WRITE setHorizontalLinesColor)
+    Q_PROPERTY(QColor fontColor READ fontColor WRITE setFontColor)
+    Q_PROPERTY(QFont font READ font WRITE setFont)
+    Q_PROPERTY(uint horizontalLinesCount READ horizontalLinesCount WRITE setHorizontalLinesCount)
+    Q_PROPERTY(bool showLabels READ showLabels WRITE setShowLabels)
+    Q_PROPERTY(bool showTopBar READ showTopBar WRITE setShowTopBar)
+    Q_PROPERTY(QColor backgroundColor READ backgroundColor WRITE setBackgroundColor)
+    Q_PROPERTY(QString svgBackground READ svgBackground WRITE setSvgBackground)
+    Q_PROPERTY(bool thinFrame WRITE setThinFrame)
+    Q_PROPERTY(bool stackPlots READ stackPlots WRITE setStackPlots)
 
 public:
     SignalPlotter(QGraphicsItem *parent = 0);

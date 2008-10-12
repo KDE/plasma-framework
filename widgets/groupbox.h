@@ -17,7 +17,6 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-
 #ifndef PLASMA_GROUPBOX_H
 #define PLASMA_GROUPBOX_H
 
@@ -41,10 +40,10 @@ class PLASMA_EXPORT GroupBox : public QGraphicsProxyWidget
 {
     Q_OBJECT
 
-    Q_PROPERTY(QGraphicsWidget* parentWidget READ parentWidget)
+    Q_PROPERTY(QGraphicsWidget *parentWidget READ parentWidget)
     Q_PROPERTY(QString text READ text WRITE setText)
     Q_PROPERTY(QString styleSheet READ styleSheet WRITE setStyleSheet)
-    Q_PROPERTY(QGroupBox* nativeWidget READ nativeWidget)
+    Q_PROPERTY(QGroupBox *nativeWidget READ nativeWidget)
 
 public:
     explicit GroupBox(QGraphicsWidget *parent = 0);
@@ -52,7 +51,7 @@ public:
 
     /**
      * Sets the display text for this GroupBox
-     * 
+     *
      * @arg text the text to display; should be translated.
      */
     void setText(const QString &text);
@@ -77,7 +76,7 @@ public:
     /**
      * @return the native widget wrapped by this GroupBox
      */
-    QGroupBox* nativeWidget() const;
+    QGroupBox *nativeWidget() const;
 
 Q_SIGNALS:
 

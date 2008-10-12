@@ -17,7 +17,6 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-
 #ifndef PLASMA_FRAME_H
 #define PLASMA_FRAME_H
 
@@ -110,7 +109,7 @@ public:
     /**
      * @return the native widget wrapped by this Label
      */
-    QWidget* nativeWidget() const;
+    QWidget *nativeWidget() const;
 
 protected:
     void paint(QPainter *painter,

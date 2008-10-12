@@ -54,12 +54,13 @@ class IconPrivate;
 class PLASMA_EXPORT Icon : public QGraphicsWidget
 {
     Q_OBJECT
-    Q_PROPERTY( QString text READ text WRITE setText )
-    Q_PROPERTY( QString infoText READ infoText WRITE setInfoText )
-    Q_PROPERTY( QIcon icon READ icon WRITE setIcon )
-    Q_PROPERTY( QSizeF iconSize READ iconSize )
-    Q_PROPERTY( QString svg WRITE setSvg )
-//    Q_PROPERTY( QAction action READ action WRITE setAction )
+    Q_PROPERTY(QString text READ text WRITE setText)
+    Q_PROPERTY(QString infoText READ infoText WRITE setInfoText)
+    Q_PROPERTY(QIcon icon READ icon WRITE setIcon)
+    Q_PROPERTY(QSizeF iconSize READ iconSize)
+    Q_PROPERTY(QString svg WRITE setSvg)
+//    Q_PROPERTY(QAction action READ action WRITE setAction)
+
 public:
     /**
     * Creates a new Plasma::Icon.
@@ -126,14 +127,14 @@ public:
     * Sets the graphical icon for this Plasma::Icon.
     * @param icon the KIcon to associate with this icon.
     */
-    void setIcon(const QIcon& icon);
+    void setIcon(const QIcon &icon);
 
     /**
     * Convenience method to set the icon of this Plasma::Icon
     * using a QString path to the icon.
     * @param icon the path to the icon to associate with this Plasma::Icon.
     */
-    Q_INVOKABLE void setIcon(const QString& icon);
+    Q_INVOKABLE void setIcon(const QString &icon);
 
     /**
     * @return the size of this Plasma::Icon's graphical icon.
@@ -146,7 +147,7 @@ public:
     * allows for a created QAction to be added to the Plasma::Icon.
     * @param action the QAction to associate with this icon.
     */
-    void addIconAction(QAction* action);
+    void addIconAction(QAction *action);
 
     /**
      * Associate an action with this Icon
@@ -159,7 +160,7 @@ public:
     /**
      * @return the currently associated action, if any.
      */
-    QAction* action() const;
+    QAction *action() const;
 
     /**
     * let set the orientation of the icon
@@ -273,7 +274,7 @@ public:
     /**
     * @internal
     **/
-    void drawActionButtonBase(QPainter* painter, const QSize &size, int element);
+    void drawActionButtonBase(QPainter *painter, const QSize &size, int element);
 
 private:
     Q_PRIVATE_SLOT(d, void syncToAction())
@@ -284,15 +285,15 @@ private:
     IconPrivate * const d;
 
     friend class IconPrivate;
+
 private Q_SLOTS:
-    void actionDestroyed(QObject* obj);
+    void actionDestroyed(QObject *obj);
     void readColors();
     void hoverAnimationUpdate(qreal progress);
 
 };
 
 } // namespace Plasma
-
 
 /*
     // Add these to UrlIcon

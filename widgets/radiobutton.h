@@ -17,7 +17,6 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-
 #ifndef PLASMA_RADIOBUTTON_H
 #define PLASMA_RADIOBUTTON_H
 
@@ -41,11 +40,11 @@ class PLASMA_EXPORT RadioButton : public QGraphicsProxyWidget
 {
     Q_OBJECT
 
-    Q_PROPERTY(QGraphicsWidget* parentWidget READ parentWidget)
+    Q_PROPERTY(QGraphicsWidget *parentWidget READ parentWidget)
     Q_PROPERTY(QString text READ text WRITE setText)
     Q_PROPERTY(QString image READ image WRITE setImage)
     Q_PROPERTY(QString styleSheet READ styleSheet WRITE setStyleSheet)
-    Q_PROPERTY(QRadioButton* nativeWidget READ nativeWidget)
+    Q_PROPERTY(QRadioButton *nativeWidget READ nativeWidget)
     Q_PROPERTY(bool isChecked READ isChecked WRITE setChecked)
 
 public:
@@ -54,7 +53,7 @@ public:
 
     /**
      * Sets the display text for this RadioButton
-     * 
+     *
      * @arg text the text to display; should be translated.
      */
     void setText(const QString &text);
@@ -91,7 +90,7 @@ public:
     /**
      * @return the native widget wrapped by this RadioButton
      */
-    QRadioButton* nativeWidget() const;
+    QRadioButton *nativeWidget() const;
 
     /**
      * Sets the checked state.

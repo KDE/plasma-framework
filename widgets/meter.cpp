@@ -27,17 +27,17 @@ namespace Plasma {
 class MeterPrivate
 {
 public:
-    MeterPrivate(Meter* m) :
-        minimum(0),
-        maximum(100),
-        value(0),
-        meterType(Meter::AnalogMeter),
-        image(0),
-        minrotate(0),
-        maxrotate(360),
-        meter(m) {};
+    MeterPrivate(Meter *m)
+        : minimum(0),
+          maximum(100),
+          value(0),
+          meterType(Meter::AnalogMeter),
+          image(0),
+          minrotate(0),
+          maxrotate(360),
+          meter(m) {}
 
-    void paint(QPainter *p, const QString& elementID)
+    void paint(QPainter *p, const QString &elementID)
     {
         if (image->hasElement(elementID)) {
             QRectF elementRect = image->elementRect(elementID);
@@ -129,7 +129,7 @@ public:
     Plasma::Svg *image;
     int minrotate;
     int maxrotate;
-    Meter* meter;
+    Meter *meter;
 };
 
 Meter::Meter(QGraphicsItem *parent) :
@@ -232,9 +232,10 @@ void Meter::dataUpdated(const QString &sourceName, const Plasma::DataEngine::Dat
     Q_UNUSED(sourceName)
 
     foreach (const QVariant &v, data) {
-        if (v.type() == QVariant::Int || v.type() == QVariant::UInt
-                                      || v.type() == QVariant::LongLong
-                                      || v.type() == QVariant::ULongLong) {
+        if (v.type() == QVariant::Int ||
+            v.type() == QVariant::UInt ||
+            v.type() == QVariant::LongLong ||
+            v.type() == QVariant::ULongLong) {
             setValue(v.toInt());
             return;
         }

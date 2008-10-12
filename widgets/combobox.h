@@ -17,7 +17,6 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-
 #ifndef PLASMA_COMBOBOX_H
 #define PLASMA_COMBOBOX_H
 
@@ -41,10 +40,10 @@ class PLASMA_EXPORT ComboBox : public QGraphicsProxyWidget
 {
     Q_OBJECT
 
-    Q_PROPERTY(QGraphicsWidget* parentWidget READ parentWidget)
+    Q_PROPERTY(QGraphicsWidget *parentWidget READ parentWidget)
     Q_PROPERTY(QString text READ text)
     Q_PROPERTY(QString styleSheet READ styleSheet WRITE setStyleSheet)
-    Q_PROPERTY(KComboBox* nativeWidget READ nativeWidget)
+    Q_PROPERTY(KComboBox *nativeWidget READ nativeWidget)
 
 public:
     explicit ComboBox(QGraphicsWidget *parent = 0);
@@ -70,7 +69,7 @@ public:
     /**
      * @return the native widget wrapped by this ComboBox
      */
-    KComboBox* nativeWidget() const;
+    KComboBox *nativeWidget() const;
 
     /**
      * Adds an item to the combobox with the given text. The

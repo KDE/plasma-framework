@@ -17,7 +17,6 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-
 #ifndef PLASMA_LABEL_H
 #define PLASMA_LABEL_H
 
@@ -42,11 +41,11 @@ class PLASMA_EXPORT Label : public QGraphicsProxyWidget
 {
     Q_OBJECT
 
-    Q_PROPERTY(QGraphicsWidget* parentWidget READ parentWidget)
+    Q_PROPERTY(QGraphicsWidget *parentWidget READ parentWidget)
     Q_PROPERTY(QString text READ text WRITE setText)
     Q_PROPERTY(QString image READ image WRITE setImage)
     Q_PROPERTY(QString styleSheet READ styleSheet WRITE setStyleSheet)
-    Q_PROPERTY(QLabel* nativeWidget READ nativeWidget)
+    Q_PROPERTY(QLabel *nativeWidget READ nativeWidget)
 
 public:
     explicit Label(QGraphicsWidget *parent = 0);
@@ -54,7 +53,7 @@ public:
 
     /**
      * Sets the display text for this Label
-     * 
+     *
      * @arg text the text to display; should be translated.
      */
     void setText(const QString &text);
@@ -91,7 +90,7 @@ public:
     /**
      * @return the native widget wrapped by this Label
      */
-    QLabel* nativeWidget() const;
+    QLabel *nativeWidget() const;
 
 Q_SIGNALS:
     void linkActivated(const QString &link);

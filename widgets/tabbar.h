@@ -17,7 +17,6 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-
 #ifndef PLASMA_TABWIDGET_H
 #define PLASMA_TABWIDGET_H
 
@@ -47,9 +46,9 @@ class PLASMA_EXPORT TabBar : public QGraphicsWidget
 {
     Q_OBJECT
 
-    Q_PROPERTY(QTabBar* nativeWidget READ nativeWidget)
-    Q_PROPERTY( int currentIndex READ currentIndex WRITE setCurrentIndex)
-    Q_PROPERTY( int count READ count)
+    Q_PROPERTY(QTabBar *nativeWidget READ nativeWidget)
+    Q_PROPERTY(int currentIndex READ currentIndex WRITE setCurrentIndex)
+    Q_PROPERTY(int count READ count)
     Q_PROPERTY(QString styleSheet READ styleSheet WRITE setStyleSheet)
 
 public:
@@ -72,7 +71,8 @@ public:
      * @arg content the page content that will be shown by this tab
      * @return the index of the inserted tab
      */
-    int insertTab(int index, const QIcon &icon, const QString &label, QGraphicsLayoutItem *content = 0);
+    int insertTab(int index, const QIcon &icon, const QString &label,
+                  QGraphicsLayoutItem *content = 0);
 
     /**
      * Adds a new tab in the desired position
@@ -191,7 +191,7 @@ Q_SIGNALS:
 
 protected:
     void wheelEvent(QGraphicsSceneWheelEvent *event);
-    
+
 private:
     TabBarPrivate * const d;
 

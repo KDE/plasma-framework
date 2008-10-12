@@ -132,7 +132,7 @@ SignalPlotter::SignalPlotter(QGraphicsItem *parent)
     d->fillPlots = true;
 
     d->svgBackground = 0;
-    d->backgroundColor = QColor(0,0,0);
+    d->backgroundColor = QColor(0, 0, 0);
 
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 }
@@ -172,27 +172,34 @@ void SignalPlotter::addSample(const QList<double>& sampleBuf)
         kDebug(1215) << "Error - d->samples is only " << d->samples << endl;
         updateDataBuffers();
         kDebug(1215) << "d->samples is now " << d->samples << endl;
-        if (d->samples < 4)
+        if (d->samples < 4) {
             return;
+        }
     }
     d->plotData.prepend(sampleBuf);
     Q_ASSERT(sampleBuf.count() == d->plotColors.count());
     if ((uint)d->plotData.size() > d->samples) {
         d->plotData.removeLast(); // we have too many.  Remove the last item
-        if ((uint)d->plotData.size() > d->samples)
-            d->plotData.removeLast(); // If we still have too many, then we have resized the widget.  Remove one more.  That way we will slowly resize to the new size
+        if ((uint)d->plotData.size() > d->samples) {
+            // If we still have too many, then we have resized the widget.
+            // Remove one more.  That way we will slowly resize to the new size
+            d->plotData.removeLast();
+        }
     }
 
-    if (d->bezierCurveOffset >= 2) d->bezierCurveOffset = 0;
-    else d->bezierCurveOffset++;
+    if (d->bezierCurveOffset >= 2) {
+        d->bezierCurveOffset = 0;
+    } else {
+        d->bezierCurveOffset++;
+    }
 
     Q_ASSERT((uint)d->plotData.size() >= d->bezierCurveOffset);
 
     // If the vertical lines are scrolling, increment the offset
     // so they move with the data.
     if (d->verticalLinesScroll) {
-        d->verticalLinesOffset = (d->verticalLinesOffset + d->horizontalScale)
-                                 % d->verticalLinesDistance;
+        d->verticalLinesOffset =
+            (d->verticalLinesOffset + d->horizontalScale) % d->verticalLinesDistance;
     }
     update();
 }
@@ -200,12 +207,14 @@ void SignalPlotter::addSample(const QList<double>& sampleBuf)
 void SignalPlotter::reorderPlots(const QList<uint>& newOrder)
 {
     if (newOrder.count() != d->plotColors.count()) {
-        kDebug(1215) << "neworder has " << newOrder.count() << " and plot colors is " << d->plotColors.count() << endl;
+        kDebug(1215) << "neworder has " << newOrder.count()
+                     << " and plot colors is " << d->plotColors.count() << endl;
         return;
     }
     foreach (QList<double> data, d->plotData) {
         if (newOrder.count() != data.count()) {
-            kDebug(1215) << "Serious problem in move sample.  plotdata[i] has " << data.count() << " and neworder has " << newOrder.count() << endl;
+            kDebug(1215) << "Serious problem in move sample.  plotdata[i] has "
+                         << data.count() << " and neworder has " << newOrder.count() << endl;
         } else {
             QList<double> newPlot;
             for (int i = 0; i < newOrder.count(); i++) {
@@ -238,18 +247,23 @@ QList<PlotColor> &SignalPlotter::plotColors()
 
 void SignalPlotter::removePlot(uint pos)
 {
-    if (pos >= (uint)d->plotColors.size()) return;
+    if (pos >= (uint)d->plotColors.size()) {
+        return;
+    }
     d->plotColors.removeAt(pos);
 
     foreach (QList<double> data, d->plotData) {
-        if ((uint)data.size() >= pos)
+        if ((uint)data.size() >= pos) {
             data.removeAt(pos);
+        }
     }
 }
 
 void SignalPlotter::scale(qreal delta)
 {
-    if (d->scaledBy == delta) return;
+    if (d->scaledBy == delta) {
+        return;
+    }
     d->scaledBy = delta;
     d->backgroundPixmap = QPixmap(); // we changed a paint setting, so reset the cache
     calculateNiceRange();
@@ -262,7 +276,9 @@ qreal SignalPlotter::scaledBy() const
 
 void SignalPlotter::setTitle(const QString &title)
 {
-    if (d->title == title) return;
+    if (d->title == title) {
+        return;
+    }
     d->title = title;
     d->backgroundPixmap = QPixmap(); // we changed a paint setting, so reset the cache
 }
@@ -296,8 +312,9 @@ double SignalPlotter::verticalMaxValue() const
 
 void SignalPlotter::setHorizontalScale(uint scale)
 {
-    if (scale == d->horizontalScale)
+    if (scale == d->horizontalScale) {
         return;
+    }
 
     d->horizontalScale = scale;
     updateDataBuffers();
@@ -311,7 +328,9 @@ uint SignalPlotter::horizontalScale() const
 
 void SignalPlotter::setShowVerticalLines(bool value)
 {
-    if (d->showVerticalLines == value) return;
+    if (d->showVerticalLines == value) {
+        return;
+    }
     d->showVerticalLines = value;
     d->backgroundPixmap = QPixmap(); // we changed a paint setting, so reset the cache
 }
@@ -323,7 +342,9 @@ bool SignalPlotter::showVerticalLines() const
 
 void SignalPlotter::setVerticalLinesColor(const QColor &color)
 {
-    if (d->verticalLinesColor == color) return;
+    if (d->verticalLinesColor == color) {
+        return;
+    }
     d->verticalLinesColor = color;
     d->backgroundPixmap = QPixmap(); // we changed a paint setting, so reset the cache
 }
@@ -335,7 +356,9 @@ QColor SignalPlotter::verticalLinesColor() const
 
 void SignalPlotter::setVerticalLinesDistance(uint distance)
 {
-    if (distance == d->verticalLinesDistance) return;
+    if (distance == d->verticalLinesDistance) {
+        return;
+    }
     d->verticalLinesDistance = distance;
     d->backgroundPixmap = QPixmap(); // we changed a paint setting, so reset the cache
 }
@@ -347,7 +370,9 @@ uint SignalPlotter::verticalLinesDistance() const
 
 void SignalPlotter::setVerticalLinesScroll(bool value)
 {
-    if (value == d->verticalLinesScroll) return;
+    if (value == d->verticalLinesScroll) {
+        return;
+    }
     d->verticalLinesScroll = value;
     d->backgroundPixmap = QPixmap(); // we changed a paint setting, so reset the cache
 }
@@ -359,7 +384,9 @@ bool SignalPlotter::verticalLinesScroll() const
 
 void SignalPlotter::setShowHorizontalLines(bool value)
 {
-    if (value == d->showHorizontalLines) return;
+    if (value == d->showHorizontalLines) {
+        return;
+    }
     d->showHorizontalLines = value;
     d->backgroundPixmap = QPixmap(); // we changed a paint setting, so reset the cache
 }
@@ -381,7 +408,9 @@ QColor SignalPlotter::fontColor() const
 
 void SignalPlotter::setHorizontalLinesColor(const QColor &color)
 {
-    if (color == d->horizontalLinesColor) return;
+    if (color == d->horizontalLinesColor) {
+        return;
+    }
     d->horizontalLinesColor = color;
     d->backgroundPixmap = QPixmap(); // we changed a paint setting, so reset the cache
 }
@@ -393,7 +422,9 @@ QColor SignalPlotter::horizontalLinesColor() const
 
 void SignalPlotter::setHorizontalLinesCount(uint count)
 {
-    if (count == d->horizontalLinesCount) return;
+    if (count == d->horizontalLinesCount) {
+        return;
+    }
     d->horizontalLinesCount = count;
     d->backgroundPixmap = QPixmap(); // we changed a paint setting, so reset the cache
     calculateNiceRange();
@@ -406,7 +437,9 @@ uint SignalPlotter::horizontalLinesCount() const
 
 void SignalPlotter::setShowLabels(bool value)
 {
-    if (value == d->showLabels) return;
+    if (value == d->showLabels) {
+        return;
+    }
     d->showLabels = value;
     d->backgroundPixmap = QPixmap(); // we changed a paint setting, so reset the cache
 }
@@ -418,7 +451,9 @@ bool SignalPlotter::showLabels() const
 
 void SignalPlotter::setShowTopBar(bool value)
 {
-    if (d->showTopBar == value) return;
+    if (d->showTopBar == value) {
+        return;
+    }
     d->showTopBar = value;
     d->backgroundPixmap = QPixmap(); // we changed a paint setting, so reset the cache
 }
@@ -446,18 +481,21 @@ QString SignalPlotter::svgBackground()
 
 void SignalPlotter::setSvgBackground(const QString &filename)
 {
-    if (d->svgFilename == filename) return;
+    if (d->svgFilename == filename) {
+        return;
+    }
 
     if (!filename.isEmpty() && filename[0] == '/') {
-        KStandardDirs* kstd = KGlobal::dirs();
+        KStandardDirs *kstd = KGlobal::dirs();
         d->svgFilename = kstd->findResource("data", "ksysguard/" + filename);
     } else {
         d->svgFilename = filename;
     }
 
-    if (!d->svgFilename.isEmpty())
-    {
-        if (d->svgBackground) delete d->svgBackground;
+    if (!d->svgFilename.isEmpty()) {
+        if (d->svgBackground) {
+            delete d->svgBackground;
+        }
         d->svgBackground = new Svg(this);
         d->svgBackground->setImagePath(d->svgFilename);
     }
@@ -466,7 +504,9 @@ void SignalPlotter::setSvgBackground(const QString &filename)
 
 void SignalPlotter::setBackgroundColor(const QColor &color)
 {
-    if (color == d->backgroundColor) return;
+    if (color == d->backgroundColor) {
+        return;
+    }
     d->backgroundColor = color;
     d->backgroundPixmap = QPixmap(); // we changed a paint setting, so reset the cache
 }
@@ -478,7 +518,9 @@ QColor SignalPlotter::backgroundColor() const
 
 void SignalPlotter::setThinFrame(bool set)
 {
-    if (d->showThinFrame == set) return;
+    if (d->showThinFrame == set) {
+        return;
+    }
     d->showThinFrame = set;
     d->backgroundPixmap = QPixmap(); // we changed a paint setting, so reset the cache
 }
@@ -509,7 +551,7 @@ void SignalPlotter::updateDataBuffers()
 
 QPixmap SignalPlotter::getSnapshotImage(uint w, uint height)
 {
-    uint horizontalStep = (uint) ((1.0*w/size().width())+0.5); // get the closest integer horizontal step
+    uint horizontalStep = (uint)((1.0 * w / size().width()) + 0.5); // get the closest integer horizontal step
     uint newWidth = (uint) (horizontalStep * size().width());
     QPixmap image = QPixmap(newWidth, height);
     QPainter p(&image);
@@ -525,7 +567,8 @@ void SignalPlotter::setGeometry(const QRectF &geometry)
     updateDataBuffers();
 }
 
-void SignalPlotter::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+void SignalPlotter::paint(QPainter *painter,
+                          const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     Q_UNUSED(option);
     Q_UNUSED(widget);
@@ -534,8 +577,9 @@ void SignalPlotter::paint(QPainter *painter, const QStyleOptionGraphicsItem *opt
     uint h = (uint) size().height();
 
     // Do not do repaints when the widget is not yet setup properly.
-    if (w <= 2)
+    if (w <= 2) {
         return;
+    }
 
     drawWidget(painter, w, h, d->horizontalScale);
 }
@@ -546,8 +590,12 @@ void SignalPlotter::drawWidget(QPainter *p, uint w, uint height, int horizontalS
     p->setFont(d->font);
 
     uint fontheight = p->fontMetrics().height();
-    if (d->verticalMin < d->niceVertMin || d->verticalMax > d->niceVertMax || d->verticalMax < (d->niceVertRange*0.75 + d->niceVertMin) || d->niceVertRange == 0)
+    if (d->verticalMin < d->niceVertMin ||
+        d->verticalMax > d->niceVertMax ||
+        d->verticalMax < (d->niceVertRange * 0.75 + d->niceVertMin) ||
+        d->niceVertRange == 0) {
         calculateNiceRange();
+    }
     QPen pen;
     pen.setWidth(1);
     pen.setCapStyle(Qt::RoundCap);
@@ -564,7 +612,10 @@ void SignalPlotter::drawWidget(QPainter *p, uint w, uint height, int horizontalS
         top += fontheight; // The top bar has the same height as fontheight. Thus the top of the graph is at fontheight
         h -= fontheight;
     }
-    if (d->backgroundPixmap.isNull() || (uint)d->backgroundPixmap.size().height() != height || (uint)d->backgroundPixmap.size().width() != w) { // recreate on resize etc
+    if (d->backgroundPixmap.isNull() ||
+        (uint)d->backgroundPixmap.size().height() != height ||
+        (uint)d->backgroundPixmap.size().width() != w) {
+        // recreate on resize etc
         d->backgroundPixmap = QPixmap(w, height);
         QPainter pCache(&d->backgroundPixmap);
         pCache.setRenderHint(QPainter::Antialiasing, false);
@@ -587,11 +638,13 @@ void SignalPlotter::drawWidget(QPainter *p, uint w, uint height, int horizontalS
 
         // Draw scope-like grid vertical lines if it doesn't move.
         // If it does move, draw it in the dynamic part of the code.
-        if (!d->verticalLinesScroll && d->showVerticalLines && w > 60)
+        if (!d->verticalLinesScroll && d->showVerticalLines && w > 60) {
             drawVerticalLines(&pCache, top, w, h);
+        }
 
-        if (d->showHorizontalLines)
+        if (d->showHorizontalLines) {
             drawHorizontalLines(&pCache, top, w, h);
+        }
 
     } else {
         if (d->showThinFrame) {
@@ -600,7 +653,7 @@ void SignalPlotter::drawWidget(QPainter *p, uint w, uint height, int horizontalS
             w--;
         }
     }
-    p->drawPixmap(0,0, d->backgroundPixmap);
+    p->drawPixmap(0, 0, d->backgroundPixmap);
     p->setRenderHint(QPainter::Antialiasing, true);
 
     if (showTopBar) {
@@ -611,21 +664,22 @@ void SignalPlotter::drawWidget(QPainter *p, uint w, uint height, int horizontalS
 
     p->setClipRect(0, top, w, h);
     // Draw scope-like grid vertical lines
-    if (d->verticalLinesScroll && d->showVerticalLines && w > 60)
+    if (d->verticalLinesScroll && d->showVerticalLines && w > 60) {
         drawVerticalLines(p, top, w, h);
+    }
 
     drawPlots(p, top, w, h, horizontalScale);
 
-    if (d->showLabels && w > 60 && h > (fontheight + 1))   // if there's room to draw the labels, then draw them!
+    if (d->showLabels && w > 60 && h > (fontheight + 1)) {
+        // if there's room to draw the labels, then draw them!
         drawAxisText(p, top, h);
-
+    }
 }
 
 void SignalPlotter::drawBackground(QPainter *p, int w, int h)
 {
-    p->fillRect(0,0,w, h, d->backgroundColor);
-    if (d->svgBackground)
-    {
+    p->fillRect(0, 0, w, h, d->backgroundColor);
+    if (d->svgBackground) {
         d->svgBackground->resize(w, h);
         d->svgBackground->paint(p, 0, 0);
     }
@@ -645,36 +699,38 @@ void SignalPlotter::calculateNiceRange()
     d->niceVertRange = d->verticalMax - d->verticalMin;
     // If the range is too small we will force it to 1.0 since it
     // looks a lot nicer.
-    if (d->niceVertRange < 0.000001)
+    if (d->niceVertRange < 0.000001) {
         d->niceVertRange = 1.0;
+    }
 
     d->niceVertMin = d->verticalMin;
     if (d->verticalMin != 0.0) {
         double dim = pow(10, floor(log10(fabs(d->verticalMin)))) / 2;
-        if (d->verticalMin < 0.0)
+        if (d->verticalMin < 0.0) {
             d->niceVertMin = dim * floor(d->verticalMin / dim);
-        else
+        } else {
             d->niceVertMin = dim * ceil(d->verticalMin / dim);
+        }
         d->niceVertRange = d->verticalMax - d->niceVertMin;
-        if (d->niceVertRange < 0.000001)
+        if (d->niceVertRange < 0.000001) {
             d->niceVertRange = 1.0;
+        }
     }
     // Massage the range so that the grid shows some nice values.
-    double step = d->niceVertRange / (d->scaledBy*(d->horizontalLinesCount+1));
+    double step = d->niceVertRange / (d->scaledBy * (d->horizontalLinesCount + 1));
     int logdim = (int)floor(log10(step));
     double dim = pow((double)10.0, logdim) / 2;
     int a = (int)ceil(step / dim);
-    if (logdim >= 0)
+    if (logdim >= 0) {
         d->precision = 0;
-    else if (a % 2 == 0){
-        d->precision =-logdim;
+    } else if (a % 2 == 0) {
+        d->precision = -logdim;
     } else {
-	d->precision = 1-logdim;
+        d->precision = 1 - logdim;
     }
-    d->niceVertRange = d->scaledBy*dim * a * (d->horizontalLinesCount+1);
+    d->niceVertRange = d->scaledBy * dim * a * (d->horizontalLinesCount + 1);
     d->niceVertMax = d->niceVertMin + d->niceVertRange;
 }
-
 
 void SignalPlotter::drawTopBarFrame(QPainter *p, int separatorX, int height)
 {
@@ -685,12 +741,13 @@ void SignalPlotter::drawTopBarFrame(QPainter *p, int separatorX, int height)
     p->setPen(d->fontColor);
     p->drawText(0, 1, separatorX, height, Qt::AlignCenter, d->title);
     p->setPen(d->horizontalLinesColor);
-    p->drawLine(separatorX - 1, 1, separatorX - 1, height-1);
+    p->drawLine(separatorX - 1, 1, separatorX - 1, height - 1);
 }
 
 void SignalPlotter::drawTopBarContents(QPainter *p, int x, int width, int height)
 {
-    // The height is the height of the contents, so this will be one pixel less than the height of the topbar
+    // The height is the height of the contents, so this will be
+    // one pixel less than the height of the topbar
     double bias = -d->niceVertMin;
     double scaleFac = width / d->niceVertRange;
     // The top bar shows the current values of all the plot data.
@@ -701,8 +758,8 @@ void SignalPlotter::drawTopBarContents(QPainter *p, int x, int width, int height
             double newest_datapoint = newestData.at(i);
             int start = x + (int)(bias * scaleFac);
             int end = x + (int)((bias += newest_datapoint) * scaleFac);
-            int start2 = qMin(start,end);
-            end = qMax(start,end);
+            int start2 = qMin(start, end);
+            end = qMax(start, end);
             start = start2;
 
             // If the rect is wider than 2 pixels we draw only the last
@@ -710,7 +767,7 @@ void SignalPlotter::drawTopBarContents(QPainter *p, int x, int width, int height
             // a 50% darker color.
 
             p->setPen(Qt::NoPen);
-            QLinearGradient  linearGrad(QPointF(start,1), QPointF(end, 1));
+            QLinearGradient  linearGrad(QPointF(start, 1), QPointF(end, 1));
             linearGrad.setColorAt(0, d->plotColors[i].darkColor);
             linearGrad.setColorAt(1, d->plotColors[i].color);
             p->fillRect(start, 1, end - start, height-1, QBrush(linearGrad));
@@ -721,14 +778,19 @@ void SignalPlotter::drawTopBarContents(QPainter *p, int x, int width, int height
 void SignalPlotter::drawVerticalLines(QPainter *p, int top, int w, int h)
 {
     p->setPen(d->verticalLinesColor);
-    for (int x = d->verticalLinesOffset; x < (w - 2); x += d->verticalLinesDistance)
+    for (int x = d->verticalLinesOffset; x < (w - 2); x += d->verticalLinesDistance) {
         p->drawLine(w - x, top, w - x, h + top -1);
+    }
 }
 
 void SignalPlotter::drawPlots(QPainter *p, int top, int w, int h, int horizontalScale)
 {
-    Q_ASSERT(d->niceVertRange != 0); if (d->niceVertRange == 0) d->niceVertRange = 1;
-    double scaleFac = (h-1) / d->niceVertRange;
+    Q_ASSERT(d->niceVertRange != 0);
+
+    if (d->niceVertRange == 0) {
+        d->niceVertRange = 1;
+    }
+    double scaleFac = (h - 1) / d->niceVertRange;
 
     int xPos = 0;
     QList< QList<double> >::Iterator it = d->plotData.begin();
@@ -746,35 +808,40 @@ void SignalPlotter::drawPlots(QPainter *p, int top, int w, int h, int horizontal
     // calculateNiceRange()  which massages these values into a nicer
     // values.  Rounding etc.  This means it's safe to change these values
     // without affecting any other drawings.
-    if (d->useAutoRange)
+    if (d->useAutoRange) {
         d->verticalMin = d->verticalMax = 0.0;
+    }
 
     // d->bezierCurveOffset is how many points we have at the start.
-    // All the bezier curves are in groups of 3, with the first of the next group being the last point
-    // of the previous group
+    // All the bezier curves are in groups of 3, with the first of the
+    // next group being the last point of the previous group
 
-    // Example, when d->bezierCurveOffset == 0, and we have data, then just plot a normal bezier curve.
-    // (we will have at least 3 points in this case)
-    // When d->bezierCurveOffset == 1, then we want a bezier curve that uses the first data point and
-    // the second data point.  Then the next group starts from the second data point.
-    // When d->bezierCurveOffset == 2, then we want a bezier curve that uses the first, second and third data.
+    // Example, when d->bezierCurveOffset == 0, and we have data, then just
+    // plot a normal bezier curve. (we will have at least 3 points in this case)
+    // When d->bezierCurveOffset == 1, then we want a bezier curve that uses
+    // the first data point and the second data point.  Then the next group
+    // starts from the second data point.
+    //
+    // When d->bezierCurveOffset == 2, then we want a bezier curve that
+    // uses the first, second and third data.
     for (uint i = 0; it != d->plotData.end() && i < d->samples; ++i) {
         QPen pen;
         pen.setWidth(1);
         pen.setCapStyle(Qt::FlatCap);
 
-        // We will plot 1 bezier curve for every 3 points, with the 4th point being the end
-        // of one bezier curve and the start of the second. This does means the bezier curves
-        // will not join nicely, but it should be better than nothing.
+        // We will plot 1 bezier curve for every 3 points, with the 4th point
+        // being the end of one bezier curve and the start of the second.
+        // This does means the bezier curves will not join nicely, but it
+        // should be better than nothing.
         QList<double> datapoints = *it;
         QList<double> prev_datapoints = datapoints;
         QList<double> prev_prev_datapoints = datapoints;
         QList<double> prev_prev_prev_datapoints = datapoints;
 
-        if (i == 0 && d->bezierCurveOffset>0) {
-            // We are plotting an incomplete bezier curve - we don't have all the data we want.
-            // Try to cope.
-            xPos += horizontalScale*d->bezierCurveOffset;
+        if (i == 0 && d->bezierCurveOffset > 0) {
+            // We are plotting an incomplete bezier curve - we don't have
+            // all the data we want. Try to cope.
+            xPos += horizontalScale * d->bezierCurveOffset;
             if (d->bezierCurveOffset == 1) {
                 prev_datapoints = *it;
                 ++it; // Now we are on the first element of the next group, if it exists
@@ -799,7 +866,7 @@ void SignalPlotter::drawPlots(QPainter *p, int top, int w, int h, int horizontal
             }
         } else {
             // We have a group of 3 points at least.  That's 1 start point and 2 control points.
-            xPos += horizontalScale*3;
+            xPos += horizontalScale * 3;
             it++;
             if (it != d->plotData.end()) {
                 prev_datapoints = *it;
@@ -811,7 +878,8 @@ void SignalPlotter::drawPlots(QPainter *p, int top, int w, int h, int horizontal
                         // We have this datapoint, so use it for our finish point
                         prev_prev_prev_datapoints = *it;
                     } else {
-                        // We don't have the next set, so use our last control point as our finish point
+                        // We don't have the next set, so use our last control
+                        // point as our finish point
                         prev_prev_prev_datapoints = prev_prev_datapoints;
                     }
                 } else {
@@ -822,24 +890,32 @@ void SignalPlotter::drawPlots(QPainter *p, int top, int w, int h, int horizontal
             }
         }
 
-        float x0 = w - xPos + 3.0*horizontalScale;
-        float x1 = w - xPos + 2.0*horizontalScale;
-        float x2 = w - xPos + 1.0*horizontalScale;
+        float x0 = w - xPos + 3.0 * horizontalScale;
+        float x1 = w - xPos + 2.0 * horizontalScale;
+        float x2 = w - xPos + 1.0 * horizontalScale;
         float x3 = w - xPos;
-        float y0 = h -1 + top;
+        float y0 = h - 1 + top;
         float y1 = y0;
         float y2 = y0;
         float y3 = y0;
 
         int offset = 0; // Our line is 2 pixels thick.  This means that when we draw the area, we need to offset
-        double max_y=0;
-        double min_y=0;
-        for (int j =  qMin(datapoints.size(), d->plotColors.size())-1; j >=0 ; --j) {
+        double max_y = 0;
+        double min_y = 0;
+        for (int j = qMin(datapoints.size(), d->plotColors.size()) - 1; j >=0; --j) {
             if (d->useAutoRange) {
                 // If we use autorange, then we need to prepare the min and max values for _next_ time we paint.
                 // If we are stacking the plots, then we need to add the maximums together.
-                double current_maxvalue = qMax(datapoints[j], qMax(prev_datapoints[j], qMax(prev_prev_datapoints[j], prev_prev_prev_datapoints[j])));
-                double current_minvalue = qMin(datapoints[j], qMin(prev_datapoints[j], qMin(prev_prev_datapoints[j], prev_prev_prev_datapoints[j])));
+                double current_maxvalue =
+                    qMax(datapoints[j],
+                         qMax(prev_datapoints[j],
+                              qMax(prev_prev_datapoints[j],
+                                   prev_prev_prev_datapoints[j])));
+                double current_minvalue =
+                    qMin(datapoints[j],
+                         qMin(prev_datapoints[j],
+                              qMin(prev_prev_datapoints[j],
+                                   prev_prev_prev_datapoints[j])));
                 d->verticalMax = qMax(d->verticalMax, current_maxvalue);
                 d->verticalMin = qMin(d->verticalMin, current_maxvalue);
                 if (d->stackPlots) {
@@ -853,35 +929,46 @@ void SignalPlotter::drawPlots(QPainter *p, int top, int w, int h, int horizontal
                  j < prev_prev_datapoints.count() &&
                  j < prev_datapoints.count()) {
 
-                // The height of the whole widget is h+top->  The height of the area we are plotting in is just h.
-                // The y coordinate system starts from the top, so at the bottom the y coordinate is h+top.
+                // The height of the whole widget is h+top->  The height of
+                // the area we are plotting in is just h.
+                // The y coordinate system starts from the top, so at the
+                // bottom the y coordinate is h+top.
                 // So to draw a point at value y', we need to put this at  h+top-y'
                 float delta_y0;
-                delta_y0 = (datapoints[j] - d->niceVertMin)*scaleFac;
+                delta_y0 = (datapoints[j] - d->niceVertMin) * scaleFac;
 
                 float delta_y1;
-                delta_y1 = (prev_datapoints[j] - d->niceVertMin)*scaleFac;
+                delta_y1 = (prev_datapoints[j] - d->niceVertMin) * scaleFac;
 
                 float delta_y2;
-                delta_y2 = (prev_prev_datapoints[j] - d->niceVertMin)*scaleFac;
+                delta_y2 = (prev_prev_datapoints[j] - d->niceVertMin) * scaleFac;
 
                 float delta_y3;
-                delta_y3 = (prev_prev_prev_datapoints[j] - d->niceVertMin)*scaleFac;
+                delta_y3 = (prev_prev_prev_datapoints[j] - d->niceVertMin) * scaleFac;
 
                 QPainterPath path;
                 if (d->stackPlots && offset) {
-                    // we don't want the lines to overdraw each other.  This isn't a great solution though :(
-                    if (delta_y0 < 3) delta_y0=3;
-                    if (delta_y1 < 3) delta_y1=3;
-                    if (delta_y2 < 3) delta_y2=3;
-                    if (delta_y3 < 3) delta_y3=3;
+                    // we don't want the lines to overdraw each other.
+                    // This isn't a great solution though :(
+                    if (delta_y0 < 3) {
+                        delta_y0=3;
+                    }
+                    if (delta_y1 < 3) {
+                        delta_y1=3;
+                    }
+                    if (delta_y2 < 3) {
+                        delta_y2=3;
+                    }
+                    if (delta_y3 < 3) {
+                        delta_y3=3;
+                    }
                 }
-                path.moveTo(x0,y0-delta_y0);
-                path.cubicTo(x1,y1-delta_y1,x2,y2-delta_y2,x3,y3-delta_y3);
+                path.moveTo(x0, y0 - delta_y0);
+                path.cubicTo(x1, y1 - delta_y1, x2, y2 - delta_y2, x3, y3 - delta_y3);
 
                 if (d->fillPlots) {
                     QPainterPath path2(path);
-                    QLinearGradient myGradient(0,(h-1+top),0,(h-1+top)/5);
+                    QLinearGradient myGradient(0,(h - 1 + top), 0, (h - 1 + top) / 5);
                     Q_ASSERT(d->plotColors.size() >= j);
                     QColor c0(d->plotColors[j].darkColor);
                     QColor c1(d->plotColors[j].color);
@@ -890,11 +977,14 @@ void SignalPlotter::drawPlots(QPainter *p, int top, int w, int h, int horizontal
                     myGradient.setColorAt(0, c0);
                     myGradient.setColorAt(1, c1);
 
-                    path2.lineTo(x3,y3-offset);
-                    if (d->stackPlots)
-                        path2.cubicTo(x2,y2-offset,x1,y1-offset,x0,y0-offset); // offset is set to 1 after the first plot is drawn, so we don't trample on top of the 2pt thick line
-                    else
-                        path2.lineTo(x0,y0-1);
+                    path2.lineTo(x3, y3 - offset);
+                    if (d->stackPlots) {
+                        // offset is set to 1 after the first plot is drawn,
+                        // so we don't trample on top of the 2pt thick line
+                        path2.cubicTo(x2, y2 - offset, x1, y1 - offset, x0, y0 - offset);
+                    } else {
+                        path2.lineTo(x0, y0 - 1);
+                    }
                     p->setBrush(myGradient);
                     p->setPen(Qt::NoPen);
                     p->drawPath(path2);
@@ -909,10 +999,10 @@ void SignalPlotter::drawPlots(QPainter *p, int top, int w, int h, int horizontal
                     // We can draw the plots stacked on top of each other.
                     // This means that say plot 0 has the value 2 and plot
                     // 1 has the value 3, then we plot plot 0 at 2 and plot 1 at 2+3 = 5.
-                    y0-=delta_y0;
-                    y1-=delta_y1;
-                    y2-=delta_y2;
-                    y3-=delta_y3;
+                    y0 -= delta_y0;
+                    y1 -= delta_y1;
+                    y2 -= delta_y2;
+                    y3 -= delta_y3;
                     offset = 1;  // see the comment further up for int offset;
                 }
             }
@@ -935,17 +1025,27 @@ void SignalPlotter::drawAxisText(QPainter *p, int top, int h)
     // Note we are drawing from 0,0 as the top left corner. So we have to add on top
     // to get to the top of where we are drawing so top+h is the height of the widget.
     p->setPen(d->fontColor);
-    double stepsize = d->niceVertRange/(d->scaledBy*(d->horizontalLinesCount+1));
-    int step = (int)ceil((d->horizontalLinesCount+1) * (p->fontMetrics().height() + p->fontMetrics().leading()/2.0) / h);
-    if (step ==0) step = 1;
-    for (int y = d->horizontalLinesCount+1; y >= 1; y-= step) {
-        int y_coord =  top + (y * (h-1)) / (d->horizontalLinesCount+1); // Make sure it's y*h first to avoid rounding bugs
-        if (y_coord - p->fontMetrics().ascent() < top) continue; // at most, only allow 4 pixels of the text to be covered up by the top bar.  Otherwise just don't bother to draw it
+    double stepsize = d->niceVertRange / (d->scaledBy * (d->horizontalLinesCount + 1));
+    int step =
+        (int)ceil((d->horizontalLinesCount+1) *
+                  (p->fontMetrics().height() + p->fontMetrics().leading() / 2.0) / h);
+    if (step == 0) {
+        step = 1;
+    }
+    for (int y = d->horizontalLinesCount + 1; y >= 1; y-= step) {
+        int y_coord =
+            top + (y * (h - 1)) / (d->horizontalLinesCount + 1); // Make sure it's y*h first to avoid rounding bugs
+        if (y_coord - p->fontMetrics().ascent() < top) {
+            // at most, only allow 4 pixels of the text to be covered up
+            // by the top bar. Otherwise just don't bother to draw it
+            continue;
+        }
         double value;
-        if ((uint)y == d->horizontalLinesCount+1)
+        if ((uint)y == d->horizontalLinesCount + 1) {
             value = d->niceVertMin; // sometimes using the formulas gives us a value very slightly off
-        else
-            value = d->niceVertMax/d->scaledBy - y * stepsize;
+        } else {
+            value = d->niceVertMax / d->scaledBy - y * stepsize;
+        }
 
         QString number = KGlobal::locale()->formatNumber(value, d->precision);
         val = QString("%1 %2").arg(number, d->unit);
@@ -956,22 +1056,26 @@ void SignalPlotter::drawAxisText(QPainter *p, int top, int h)
 void SignalPlotter::drawHorizontalLines(QPainter *p, int top, int w, int h)
 {
     p->setPen(d->horizontalLinesColor);
-    for (uint y = 0; y <= d->horizontalLinesCount+1; y++) {
+    for (uint y = 0; y <= d->horizontalLinesCount + 1; y++) {
         // note that the y_coord starts from 0.  so we draw from pixel number 0 to h-1.  Thus the -1 in the y_coord
-        int y_coord =  top + (y * (h-1)) / (d->horizontalLinesCount+1);  // Make sure it's y*h first to avoid rounding bugs
+        int y_coord =  top + (y * (h - 1)) / (d->horizontalLinesCount + 1);  // Make sure it's y*h first to avoid rounding bugs
         p->drawLine(0, y_coord, w - 2, y_coord);
     }
 }
 
 double SignalPlotter::lastValue(uint i) const
 {
-    if (d->plotData.isEmpty() || d->plotData.first().size() <= (int) i) return 0;
+    if (d->plotData.isEmpty() || d->plotData.first().size() <= (int)i) {
+        return 0;
+    }
     return d->plotData.first()[i];
 }
 
 QString SignalPlotter::lastValueAsString(uint i) const
 {
-    if (d->plotData.isEmpty()) return QString();
+    if (d->plotData.isEmpty()) {
+        return QString();
+    }
     double value = d->plotData.first()[i] / d->scaledBy; // retrieve the newest value for this plot then scale it correct
     QString number = KGlobal::locale()->formatNumber(value, (value >= 100)?0:2);
     return QString("%1 %2").arg(number, d->unit);

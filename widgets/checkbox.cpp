@@ -85,7 +85,7 @@ CheckBox::CheckBox(QGraphicsWidget *parent)
     : QGraphicsProxyWidget(parent),
       d(new CheckBoxPrivate(this))
 {
-    QCheckBox* native = new QCheckBox;
+    QCheckBox *native = new QCheckBox;
     connect(native, SIGNAL(toggled(bool)), this, SIGNAL(toggled(bool)));
     setWidget(native);
     d->setPalette();
@@ -151,7 +151,7 @@ QString CheckBox::styleSheet()
     return widget()->styleSheet();
 }
 
-QCheckBox* CheckBox::nativeWidget() const
+QCheckBox *CheckBox::nativeWidget() const
 {
     return static_cast<QCheckBox*>(widget());
 }

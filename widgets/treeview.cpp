@@ -46,7 +46,7 @@ TreeView::TreeView(QGraphicsWidget *parent)
     : QGraphicsProxyWidget(parent),
       d(new TreeViewPrivate)
 {
-    QTreeView* native = new QTreeView;
+    QTreeView *native = new QTreeView;
     setWidget(native);
     native->setAttribute(Qt::WA_NoSystemBackground);
     native->setFrameStyle(QFrame::NoFrame);
@@ -81,7 +81,7 @@ QString TreeView::styleSheet()
     return widget()->styleSheet();
 }
 
-QTreeView* TreeView::nativeWidget() const
+QTreeView *TreeView::nativeWidget() const
 {
     return static_cast<QTreeView*>(widget());
 }

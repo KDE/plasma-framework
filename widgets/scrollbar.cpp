@@ -1,6 +1,6 @@
 /*
  *   Copyright © 2008 Fredrik Höglund <fredrik@kde.org>
- *   Copyright © 2008 Marco Martin <notmart@gmail.com> 
+ *   Copyright © 2008 Marco Martin <notmart@gmail.com>
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU Library General Public License as
@@ -65,37 +65,37 @@ int ScrollBar::pageStep()
 }
 
 void ScrollBar::setValue(int val)
-{ 
+{
    static_cast<QScrollBar*>(widget())->setValue(val);
 }
 
 int ScrollBar::value() const
-{ 
+{
    return static_cast<QScrollBar*>(widget())->value();
 }
 
 int ScrollBar::minimum() const
-{ 
+{
    return static_cast<QScrollBar*>(widget())->minimum();
 }
 
 int ScrollBar::maximum() const
-{ 
+{
    return static_cast<QScrollBar*>(widget())->maximum();
 }
 
 void ScrollBar::setStyleSheet(const QString &stylesheet)
 {
-   widget()->setStyleSheet(stylesheet); 
+   widget()->setStyleSheet(stylesheet);
 }
 
 QString ScrollBar::styleSheet()
 {
    return widget()->styleSheet();
-}    
-    
+}
+
 QScrollBar *ScrollBar::nativeWidget() const
-{   
+{
    return static_cast<QScrollBar*>(widget());
 }
 

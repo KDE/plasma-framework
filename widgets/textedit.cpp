@@ -48,7 +48,7 @@ TextEdit::TextEdit(QGraphicsWidget *parent)
     : QGraphicsProxyWidget(parent),
       d(new TextEditPrivate)
 {
-    KTextEdit* native = new KTextEdit;
+    KTextEdit *native = new KTextEdit;
     connect(native, SIGNAL(textChanged()), this, SIGNAL(textChanged()));
     setWidget(native);
     native->setAttribute(Qt::WA_NoSystemBackground);
@@ -83,7 +83,7 @@ QString TextEdit::styleSheet()
     return widget()->styleSheet();
 }
 
-KTextEdit* TextEdit::nativeWidget() const
+KTextEdit *TextEdit::nativeWidget() const
 {
     return static_cast<KTextEdit*>(widget());
 }
@@ -92,10 +92,10 @@ void TextEdit::dataUpdated(const QString &sourceName, const Plasma::DataEngine::
 {
     Q_UNUSED(sourceName)
 
-    KTextEdit * te = nativeWidget();
+    KTextEdit *te = nativeWidget();
     te->clear();
 
-    foreach (const QVariant& v, data) {
+    foreach (const QVariant &v, data) {
         if (v.canConvert(QVariant::String)) {
             te->append(v.toString() + "\n");
         }

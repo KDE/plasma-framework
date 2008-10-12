@@ -46,7 +46,7 @@ LineEdit::LineEdit(QGraphicsWidget *parent)
     : QGraphicsProxyWidget(parent),
       d(new LineEditPrivate)
 {
-    KLineEdit* native = new KLineEdit;
+    KLineEdit *native = new KLineEdit;
     connect(native, SIGNAL(editingFinished()), this, SIGNAL(editingFinished()));
     connect(native, SIGNAL(returnPressed()), this, SIGNAL(returnPressed()));
     connect(native, SIGNAL(textEdited(const QString&)), this, SIGNAL(textEdited(const QString&)));
@@ -79,7 +79,7 @@ QString LineEdit::styleSheet()
     return widget()->styleSheet();
 }
 
-KLineEdit* LineEdit::nativeWidget() const
+KLineEdit *LineEdit::nativeWidget() const
 {
     return static_cast<KLineEdit*>(widget());
 }
