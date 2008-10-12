@@ -170,9 +170,12 @@ void OpenWidgetAssistant::finished()
         if (!installer) {
             kDebug() << "Could not load requested PackageStructure installer "
                      << m_packageStructureService << ". Error given: " << error;
-            KMessageBox::error(this, i18n("Could not load the required installer %1. The error given was: ",
-                                          m_packageStructureService, error),
-                               i18n("Installation Failure"));
+            KMessageBox::error(
+                this,
+                i18n("Could not load the required installer %1. "
+                     "The error given was: %2",
+                     m_packageStructureService, error),
+                i18n("Installation Failure"));
             return;
         }
     } else {
