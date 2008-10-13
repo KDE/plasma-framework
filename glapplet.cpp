@@ -73,7 +73,7 @@ GLApplet::GLApplet(QGraphicsItem *parent,
     if (!d->dummy->isValid() ||
         !QGLPixelBuffer::hasOpenGLPbuffers() ||
         !d->pbuf->isValid()) {
-        setFailedToLaunch(true, i18n("This system does not support OpenGL applets."));
+        setFailedToLaunch(true, i18n("This system does not support OpenGL widgets."));
     }
 }
 
@@ -84,7 +84,7 @@ GLApplet::GLApplet(QObject *parent, const QVariantList &args)
     if (!d->dummy->isValid() ||
         !QGLPixelBuffer::hasOpenGLPbuffers() ||
         !d->pbuf->isValid()) {
-        setFailedToLaunch(true, i18n("This system does not support OpenGL applets."));
+        setFailedToLaunch(true, i18n("This system does not support OpenGL widgets."));
     }
 }
 
@@ -181,7 +181,7 @@ void GLApplet::paintInterface(QPainter *painter,
     if ((!d->dummy->isValid() ||
          !d->pbuf->isValid())) {
         if (!hasFailedToLaunch()) {
-            setFailedToLaunch(true, i18n("Your machine does not support OpenGL applets."));
+            setFailedToLaunch(true, i18n("Your machine does not support OpenGL widgets."));
         }
 
         return;

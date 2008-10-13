@@ -550,7 +550,7 @@ QString Applet::name() const
             return i18n("%1 Activity", c->activity());
         }
     } else if (!d->appletDescription.isValid()) {
-        return i18n("Unknown Applet");
+        return i18n("Unknown Widget");
     }
 
     return d->appletDescription.name();

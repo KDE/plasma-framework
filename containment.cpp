@@ -146,14 +146,14 @@ void Containment::init()
     appletBrowserAction->setShortcut(QKeySequence("ctrl+a"));
     d->actions().addAction("add widgets", appletBrowserAction);
 
-    QAction *action = new QAction(i18n("Next Applet"), this);
+    QAction *action = new QAction(i18n("Next Widget"), this);
     //no icon
     connect(action, SIGNAL(triggered()), this, SLOT(focusNextApplet()));
     action->setShortcutContext(Qt::WidgetShortcut);
     action->setShortcut(QKeySequence("ctrl+n"));
     d->actions().addAction("next applet", action);
 
-    action = new QAction(i18n("Previous Applet"), this);
+    action = new QAction(i18n("Previous Widget"), this);
     //no icon
     connect(action, SIGNAL(triggered()), this, SLOT(focusPreviousApplet()));
     action->setShortcutContext(Qt::WidgetShortcut);
