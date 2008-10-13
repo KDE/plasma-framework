@@ -238,6 +238,20 @@ public:
     virtual bool uninstallPackage(const QString &packageName, const QString &packageRoot);
 
     /**
+     * When called, the package plugin should display a window to the user
+     * that they can use to browser, select and then install widgets supported by
+     * this package plugin with.
+     *
+     * The user interface may be an in-process dialog or an out-of-process application.
+     *
+     * When the process is complete, the newWidgetBrowserFinished() signal must be
+     * emitted.
+     *
+     * @args parent the parent widget to use for the widget
+     */
+    virtual void createNewWidgetBrowser(QWidget *parent = 0);
+
+    /**
      * @return the prefix inserted between the base path and content entries
      */
     QString contentsPrefix() const;
@@ -256,6 +270,12 @@ public:
      * Sets service prefix.
      */
     void setServicePrefix(const QString &servicePrefix);
+
+Q_SIGNALS:
+    /**
+     * Emitted when the new widget browser process completes.
+     */
+    void newWidgetBrowserFinished();
 
 protected:
     /**

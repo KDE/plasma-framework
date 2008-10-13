@@ -53,3 +53,7 @@ Type=QString
 [PropertyDef::X-Plasma-PackageFileMimetypes]
 Type=QStringList
 
+[PropertyDef::X-Plasma-ProvidesWidgetBrowser]
+Type=bool
+
+

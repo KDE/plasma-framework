@@ -23,6 +23,8 @@
 #include <KDesktopFile>
 #include <KLocale>
 
+#include <knewstuff2/engine.h>
+
 namespace Plasma
 {
 
@@ -63,6 +65,15 @@ void PlasmoidPackage::pathChanged()
         addFileDefinition("mainscript", mainScript, i18n("Main Script File"));
         setRequired("mainscript", true);
     }
+}
+
+void PlasmoidPackage::createNewWidgetBrowser(QWidget *parent)
+{
+    KNS::Engine engine(0);
+    if (engine.init("plasmoids.knsrc")) {
+        /* KNS::Entry::List entries = */ engine.downloadDialogModal(parent);
+    }
+    emit newWidgetBrowserFinished();
 }
 
 ThemePackage::ThemePackage(QObject *parent)

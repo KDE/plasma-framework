@@ -30,6 +30,7 @@ class PlasmoidPackage : public PackageStructure
     Q_OBJECT
 public:
     explicit PlasmoidPackage(QObject *parent = 0);
+    void createNewWidgetBrowser(QWidget *parent = 0);
 
 protected:
     void pathChanged();

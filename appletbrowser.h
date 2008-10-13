@@ -68,8 +68,12 @@ public Q_SLOTS:
 
     /**
      * Launches a download dialog to retrieve new applets from the Internet
+     *
+     * @arg type the type of widget to download; an empty string means the default
+     *           Plasma widgets will be accessed, any other value should map to a
+     *           PackageStructure PluginInfo-Name entry that provides a widget browser.
      */
-    void downloadWidgets();
+    void downloadWidgets(const QString &type = QString());
 
     /**
      * Opens a file dialog to open a widget from a local file
@@ -107,6 +111,7 @@ public:
     Containment *containment() const;
 
 private:
+    Q_PRIVATE_SLOT(d, void populateWidgetsMenu());
     AppletBrowserPrivate * const d;
 };
 

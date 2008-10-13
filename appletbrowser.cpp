@@ -31,14 +31,13 @@
 #include <KServiceTypeTrader>
 #include <KStandardAction>
 
-#include <knewstuff2/engine.h>
-
 #include "plasma/applet.h"
 #include "plasma/corona.h"
 #include "plasma/containment.h"
 #include "plasma/appletbrowser/kcategorizeditemsview_p.h"
 #include "plasma/appletbrowser/plasmaappletitemmodel_p.h"
 #include "plasma/appletbrowser/openwidgetassistant_p.h"
+#include "plasma/private/packages_p.h"
 
 namespace Plasma
 {
@@ -322,12 +321,41 @@ void AppletBrowserWidget::destroyApplets(const QString &name)
     d->itemModel.setRunningApplets(name, 0);
 }
 
-void AppletBrowserWidget::downloadWidgets()
+void AppletBrowserWidget::downloadWidgets(const QString &type)
 {
-    KNS::Engine engine(0);
-    if (engine.init("plasmoids.knsrc")) {
-        KNS::Entry::List entries = engine.downloadDialogModal(this);
+    kDebug() << type;
+    PackageStructure *installer = 0;
+
+    if (!type.isEmpty()) {
+        QString constraint = QString("'%1' == [X-KDE-PluginInfo-Name]").arg(type);
+        KService::List offers = KServiceTypeTrader::self()->query("Plasma/PackageStructure",
+                                                                  constraint);
+
+        if (offers.isEmpty()) {
+            kDebug() << "could not find requested PackageStructure plugin" << type;
+        } else {
+            KService::Ptr service = offers.first();
+            QString error;
+            installer = service->createInstance<Plasma::PackageStructure>(topLevelWidget(),
+                                                                          QVariantList(), &error);
+
+            if (installer) {
+                connect(installer, SIGNAL(newWidgetBrowserFinished()),
+                        installer, SLOT(deleteLater()));
+            } else {
+                kDebug() << "found, but could not load requested PackageStructure plugin" << type
+                         << "; reported error was" << error;
+            }
+        }
     }
+
+    if (!installer) {
+        // we don't need to delete the default Applet::packageStructure as that
+        // belongs to the applet
+        installer = new PlasmoidPackage();
+    }
+
+    installer->createNewWidgetBrowser(this);
 }
 
 void AppletBrowserWidget::openWidgetFile()
@@ -342,19 +370,51 @@ void AppletBrowserWidget::openWidgetFile()
 class AppletBrowserPrivate
 {
 public:
-    void init(AppletBrowser*);
+    void init(AppletBrowser *browser);
+    void populateWidgetsMenu();
+
+    AppletBrowser *q;
     AppletBrowserWidget *widget;
+    QMenu *widgetsMenu;
 };
 
-AppletBrowser::AppletBrowser(QWidget * parent, Qt::WindowFlags f)
-    : KDialog(parent, f),
-      d(new AppletBrowserPrivate)
+void AppletBrowserPrivate::populateWidgetsMenu()
 {
-    d->init(this);
+    if (!widgetsMenu->actions().isEmpty()) {
+        // already populated.
+        return;
+    }
+
+    QSignalMapper *mapper = new QSignalMapper(q);
+    QObject::connect(mapper, SIGNAL(mapped(QString)), widget, SLOT(downloadWidgets(QString)));
+
+    QAction *action = new QAction(KIcon("applications-internet"),
+                                  i18n("Download New Plasma Widgets"), q);
+    QObject::connect(action, SIGNAL(triggered(bool)), mapper, SLOT(map()));
+    mapper->setMapping(action, QString());
+    widgetsMenu->addAction(action);
+
+    KService::List offers = KServiceTypeTrader::self()->query("Plasma/PackageStructure");
+    foreach (const KService::Ptr service, offers) {
+        if (service->property("X-Plasma-ProvidesWidgetBrowser").toBool()) {
+            QAction *action = new QAction(KIcon("applications-internet"),
+                                          i18n("Download New %1 Widgets", service->name()), q);
+            QObject::connect(action, SIGNAL(triggered(bool)), mapper, SLOT(map()));
+            mapper->setMapping(action, service->property("X-KDE-PluginInfo-Name").toString());
+        }
+    }
+
+    widgetsMenu->addSeparator();
+
+    action = new QAction(KIcon("package-x-generic"),
+                         i18n("Install A Widget From A Local File..."), q);
+    QObject::connect(action, SIGNAL(triggered(bool)), widget, SLOT(openWidgetFile()));
+    widgetsMenu->addAction(action);
 }
 
-void AppletBrowserPrivate::init(AppletBrowser *q)
+void AppletBrowserPrivate::init(AppletBrowser *browser)
 {
+    q = browser;
     widget = new AppletBrowserWidget(q);
 
     q->setMainWidget(widget);
@@ -364,16 +424,8 @@ void AppletBrowserPrivate::init(AppletBrowser *q)
     q->setButtonText(KDialog::Apply, i18n("Add Widget"));
     q->setButtonText(KDialog::User1, i18n("Install New Widgets"));
 
-    KMenu *widgetsMenu = new KMenu(i18n("Get New Widgets"), q);
-    QAction *action = new QAction(KIcon("applications-internet"),
-                                  i18n("Download From Internet"), q);
-    QObject::connect(action, SIGNAL(triggered(bool)), widget, SLOT(downloadWidgets()));
-    widgetsMenu->addAction(action);
-
-    action = new QAction(KIcon("applications-internet"),
-                         i18n("Install From File..."), q);
-    QObject::connect(action, SIGNAL(triggered(bool)), widget, SLOT(openWidgetFile()));
-    widgetsMenu->addAction(action);
+    widgetsMenu = new KMenu(i18n("Get New Widgets"), q);
+    QObject::connect(widgetsMenu, SIGNAL(aboutToShow()), q, SLOT(populateWidgetsMenu()));
     q->button(KDialog::User1)->setMenu(widgetsMenu);
 
     q->setButtonToolTip(KDialog::Close, i18n("Close the dialog"));
@@ -388,6 +440,13 @@ void AppletBrowserPrivate::init(AppletBrowser *q)
     q->setInitialSize(QSize(400, 600));
     KConfigGroup cg(KGlobal::config(), "PlasmaAppletBrowserDialog");
     q->restoreDialogSize(cg);
+}
+
+AppletBrowser::AppletBrowser(QWidget * parent, Qt::WindowFlags f)
+    : KDialog(parent, f),
+      d(new AppletBrowserPrivate)
+{
+    d->init(this);
 }
 
 AppletBrowser::~AppletBrowser()
