@@ -323,7 +323,7 @@ void AppletBrowserWidget::destroyApplets(const QString &name)
 
 void AppletBrowserWidget::downloadWidgets(const QString &type)
 {
-    kDebug() << type;
+    //kDebug() << type;
     PackageStructure *installer = 0;
 
     if (!type.isEmpty()) {
@@ -396,10 +396,11 @@ void AppletBrowserPrivate::populateWidgetsMenu()
 
     KService::List offers = KServiceTypeTrader::self()->query("Plasma/PackageStructure");
     foreach (const KService::Ptr service, offers) {
+        //kDebug() << service->property("X-Plasma-ProvidesWidgetBrowser");
         if (service->property("X-Plasma-ProvidesWidgetBrowser").toBool()) {
             QAction *action = new QAction(KIcon("applications-internet"),
-                                          i18n("Download New %1 Widgets", service->name()), q);
-            QObject::connect(action, SIGNAL(triggered(bool)), mapper, SLOT(map()));
+                                          i18n("Download New %1", service->name()), q);
+            widgetsMenu->addAction(action);
             mapper->setMapping(action, service->property("X-KDE-PluginInfo-Name").toString());
         }
     }
