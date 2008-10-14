@@ -70,6 +70,7 @@ public:
         : q(parent),
           tabProxy(0),
           currentIndex(0),
+          isTabWidget(true),
           oldPage(0),
           newPage(0),
           oldPageAnimId(-1),
@@ -87,12 +88,12 @@ public:
 
     TabBar *q;
     TabBarProxy *tabProxy;
-    QGraphicsWidget *leftSpacer;
-    QGraphicsWidget *rightSpacer;
     QList<QGraphicsWidget *> pages;
     QGraphicsLinearLayout *mainLayout;
+    QGraphicsLinearLayout *tabWidgetLayout;
     QGraphicsLinearLayout *tabBarLayout;
     int currentIndex;
+    bool isTabWidget;
 
     QGraphicsWidget *oldPage;
     QGraphicsWidget *newPage;
@@ -111,24 +112,26 @@ void TabBarPrivate::updateTabWidgetMode()
         }
     }
 
-    if (tabWidget && tabBarLayout->count() < 3) {
-        tabBarLayout->insertItem(0, leftSpacer);
-        tabBarLayout->insertItem(2, rightSpacer);
-        leftSpacer->show();
-        rightSpacer->show();
-    } else if (!tabWidget && tabBarLayout->count() >= 3) {
-        tabBarLayout->removeItem(leftSpacer);
-        tabBarLayout->removeItem(rightSpacer);
-        leftSpacer->hide();
-        rightSpacer->hide();
+    if (tabWidget != isTabWidget) {
+        if (tabWidget) {
+            mainLayout->removeAt(0);
+            tabBarLayout->insertItem(1, tabProxy);
+            mainLayout->addItem(tabWidgetLayout);
+        } else {
+            mainLayout->removeAt(0);
+            tabBarLayout->removeAt(1);
+            mainLayout->addItem(tabProxy);
+        }
     }
+
+    isTabWidget = tabWidget;
 }
 
 void TabBarPrivate::slidingCompleted(QGraphicsItem *item)
 {
     if (item == oldPage || item == newPage) {
         if (item == newPage) {
-            mainLayout->addItem(newPage);
+            tabWidgetLayout->addItem(newPage);
             newPageAnimId = -1;
         } else {
             oldPageAnimId = -1;
@@ -149,9 +152,9 @@ void TabBarPrivate::shapeChanged(const QTabBar::Shape shape)
     case QTabBar::RoundedEast:
     case QTabBar::TriangularEast:
         tabBarLayout->setOrientation(Qt::Vertical);
-        mainLayout->setOrientation(Qt::Horizontal);
-        mainLayout->itemAt(0)->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
-        mainLayout->itemAt(1)->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        tabWidgetLayout->setOrientation(Qt::Horizontal);
+        tabWidgetLayout->itemAt(0)->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
+        tabWidgetLayout->itemAt(1)->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         tabProxy->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
         break;
 
@@ -162,9 +165,9 @@ void TabBarPrivate::shapeChanged(const QTabBar::Shape shape)
     case QTabBar::TriangularNorth:
     default:
         tabBarLayout->setOrientation(Qt::Horizontal);
-        mainLayout->setOrientation(Qt::Vertical);
-        mainLayout->itemAt(0)->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
-        mainLayout->itemAt(1)->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        tabWidgetLayout->setOrientation(Qt::Vertical);
+        tabWidgetLayout->itemAt(0)->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+        tabWidgetLayout->itemAt(1)->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         tabProxy->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     }
     tabProxy->setPreferredSize(tabProxy->native->sizeHint());
@@ -175,22 +178,21 @@ TabBar::TabBar(QGraphicsWidget *parent)
       d(new TabBarPrivate(this))
 {
     d->tabProxy = new TabBarProxy(this);
-    d->mainLayout = new QGraphicsLinearLayout(Qt::Vertical);
+    d->tabWidgetLayout = new QGraphicsLinearLayout(Qt::Vertical);
     d->tabBarLayout = new QGraphicsLinearLayout(Qt::Horizontal);
 
-    setLayout(d->mainLayout);
+    d->mainLayout = new QGraphicsLinearLayout(Qt::Horizontal);
+    d->mainLayout->addItem(d->tabWidgetLayout);
 
-    d->mainLayout->addItem(d->tabBarLayout);
+    setLayout(d->mainLayout);
+    d->mainLayout->setContentsMargins(0,0,0,0);
+
+    d->tabWidgetLayout->addItem(d->tabBarLayout);
 
     //tabBar is centered, so a stretch at begin one at the end
-    //FIXME: doesn't seem to be possible to remove stretches from a layout
-    d->leftSpacer = new QGraphicsWidget(this);
-    d->rightSpacer = new QGraphicsWidget(this);
-    d->leftSpacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    d->rightSpacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    d->tabBarLayout->addItem(d->leftSpacer);
+    d->tabBarLayout->addStretch();
     d->tabBarLayout->addItem(d->tabProxy);
-    d->tabBarLayout->addItem(d->rightSpacer);
+    d->tabBarLayout->addStretch();
     //d->tabBarLayout->setStretchFactor(d->tabProxy, 2);
 
     connect(d->tabProxy->native, SIGNAL(currentChanged(int)),
@@ -205,6 +207,7 @@ TabBar::~TabBar()
 {
     delete d;
 }
+
 
 int TabBar::insertTab(int index, const QIcon &icon, const QString &label,
                       QGraphicsLayoutItem *content)
@@ -223,7 +226,7 @@ int TabBar::insertTab(int index, const QIcon &icon, const QString &label,
     d->pages.insert(qBound(0, index, d->pages.count()), page);
 
     if (d->pages.count() == 1) {
-        d->mainLayout->addItem(page);
+        d->tabWidgetLayout->addItem(page);
         page->setVisible(true);
         page->setEnabled(true);
     } else {
@@ -270,7 +273,7 @@ void TabBar::setCurrentIndex(int index)
         d->tabProxy->native->setCurrentIndex(index);
     }
 
-    d->mainLayout->removeAt(1);
+    d->tabWidgetLayout->removeAt(1);
 
     d->oldPage = d->pages[d->currentIndex];
     d->newPage = d->pages[index];
@@ -320,7 +323,7 @@ void TabBar::setCurrentIndex(int index)
             d->oldPage->geometry().topRight().toPoint());
     }
 #else
-    d->mainLayout->addItem(d->pages[index]);
+    d->tabWidgetLayout->addItem(d->pages[index]);
     d->oldPage->hide();
     d->newPage->show();
     d->newPage->setEnabled(true);
