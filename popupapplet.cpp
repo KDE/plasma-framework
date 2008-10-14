@@ -180,6 +180,7 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
                     q->setLayout(lay);
                 }
 
+                q->setMinimumSize(gWidget->minimumSize() + marginSize);
                 lay->addItem(gWidget);
                 //gWidget->installEventFilter(q);
             } else if (qWidget) {
@@ -193,7 +194,7 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
                     lay->addItem(proxy);
                 }
 
-                q->setMinimumSize(qWidget ? qWidget->minimumSize() + marginSize : QSizeF(300, 200));
+                q->setMinimumSize(qWidget->minimumSize() + marginSize);
             }
         } else {
             //save the aspect ratio mode in case we drag'n drop in the Desktop later
