@@ -111,7 +111,7 @@ public:
     Containment *containment() const;
 
 private:
-    Q_PRIVATE_SLOT(d, void populateWidgetsMenu());
+    Q_PRIVATE_SLOT(d, void populateWidgetsMenu())
     AppletBrowserPrivate * const d;
 };
 
