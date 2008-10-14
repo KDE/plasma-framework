@@ -132,6 +132,8 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
 
         if (gWidget) {
             minimum = gWidget->minimumSize();
+            // our layout may have been replaced on us in the call to graphicsWidget!
+            lay = dynamic_cast<QGraphicsLinearLayout *>(q->layout());
         } else if (qWidget) {
             minimum = qWidget->minimumSizeHint();
         }
@@ -169,7 +171,7 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
 
             if (gWidget) {
                 q->setMinimumSize(gWidget->minimumSize() + marginSize);
-                kDebug() << lay << q->layout();
+                //kDebug() << lay << q->layout();
                 if (!lay && !q->layout()) {
                     lay = new QGraphicsLinearLayout();
                     lay->setContentsMargins(0, 0, 0, 0);
@@ -179,7 +181,6 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
                 }
 
                 lay->addItem(gWidget);
-
                 //gWidget->installEventFilter(q);
             } else if (qWidget) {
                 if (!proxy) {
