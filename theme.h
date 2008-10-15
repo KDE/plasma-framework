@@ -179,6 +179,19 @@ class PLASMA_EXPORT Theme : public QObject
          */
         bool useGlobalSettings() const;
 
+        /**
+         * Tries to load pixmap with the specified key from cache.
+         * @return true when pixmap was found and loaded from cache, false otherwise
+         **/
+        bool findInCache(const QString &key, QPixmap &pix);
+
+        /**
+         * Insert specified pixmap into the cache.
+         * If the cache already contains pixmap with the specified key then it is
+         *  overwritten.
+         **/
+        void insertIntoCache(const QString& key, const QPixmap& pix);
+
     Q_SIGNALS:
         /**
          * Emitted when the user changes the theme. SVGs should be reloaded at

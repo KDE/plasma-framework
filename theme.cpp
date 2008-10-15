@@ -25,15 +25,17 @@
 #include <QX11Info>
 #endif
 
-#include <KWindowSystem>
 #include <KColorScheme>
+#include <KComponentData>
 #include <KConfigGroup>
 #include <KDebug>
 #include <KGlobal>
+#include <KGlobalSettings>
+#include <KPixmapCache>
 #include <KSelectionWatcher>
 #include <KSharedConfig>
 #include <KStandardDirs>
-#include <KGlobalSettings>
+#include <KWindowSystem>
 
 #include "private/packages_p.h"
 
@@ -56,6 +58,7 @@ public:
           defaultWallpaperSuffix(DEFAULT_WALLPAPER_SUFFIX),
           defaultWallpaperWidth(DEFAULT_WALLPAPER_WIDTH),
           defaultWallpaperHeight(DEFAULT_WALLPAPER_HEIGHT),
+          pixmapCache(KGlobal::mainComponent().componentName()),
           locolor(false),
           compositingActive(KWindowSystem::compositingActive()),
           isDefault(false),
@@ -63,6 +66,10 @@ public:
           hasWallpapers(false)
     {
         generalFont = QApplication::font();
+    }
+
+    ~ThemePrivate()
+    {
     }
 
     KConfigGroup &config()
@@ -102,6 +109,7 @@ public:
     QString defaultWallpaperSuffix;
     int defaultWallpaperWidth;
     int defaultWallpaperHeight;
+    KPixmapCache pixmapCache;
 
 #ifdef Q_WS_X11
     KSelectionWatcher *compositeWatch;
@@ -230,6 +238,14 @@ void Theme::setThemeName(const QString &themeName)
         }
 
         theme = ThemePrivate::defaultTheme;
+    }
+
+    if (d->themeName == theme) {
+        return;
+    }
+
+    if (!d->themeName.isEmpty()) {
+        d->pixmapCache.discard();
     }
 
     d->themeName = theme;
@@ -464,6 +480,16 @@ void Theme::setUseGlobalSettings(bool useGlobal)
 bool Theme::useGlobalSettings() const
 {
     return d->useGlobal;
+}
+
+bool Theme::findInCache(const QString &key, QPixmap &pix)
+{
+    return d->pixmapCache.find(key, pix);
+}
+
+void Theme::insertIntoCache(const QString& key, const QPixmap& pix)
+{
+    d->pixmapCache.insert(key, pix);
 }
 
 }

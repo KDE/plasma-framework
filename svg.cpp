@@ -22,15 +22,15 @@
 #include <QDir>
 #include <QMatrix>
 #include <QPainter>
-#include <QPixmapCache>
 #include <QSharedData>
 
-#include <KDebug>
-#include <KSharedPtr>
-#include <KSvgRenderer>
 #include <KColorScheme>
+#include <KConfigGroup>
+#include <KDebug>
 #include <KIconEffect>
 #include <KGlobalSettings>
+#include <KSharedPtr>
+#include <KSvgRenderer>
 
 #include "theme.h"
 
@@ -77,8 +77,21 @@ class SvgPrivate
             eraseRenderer();
         }
 
-        void setImagePath(const QString &imagePath, Svg *q)
+        bool setImagePath(const QString &imagePath, Svg *q)
         {
+            bool isThemed = !QDir::isAbsolutePath(imagePath);
+
+            // lets check to see if we're already set to this file
+            if (isThemed == themed &&
+                ((themed && themePath == imagePath) ||
+                 (!themed && path == imagePath))) {
+                return false;
+            }
+
+            // if we don't have any path right now and are going to set one,
+            // then lets not schedule a repaint because we are just initializing!
+            bool updateNeeded = true; //!path.isEmpty() || !themePath.isEmpty();
+
             if (themed) {
                 QObject::disconnect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()),
                                     q, SLOT(themeChanged()));
@@ -86,7 +99,7 @@ class SvgPrivate
                                     q, SLOT(colorsChanged()));
             }
 
-            themed = !QDir::isAbsolutePath(imagePath);
+            themed = isThemed;
             path.clear();
             themePath.clear();
 
@@ -96,38 +109,22 @@ class SvgPrivate
                                  q, SLOT(themeChanged()));
 
                 // check if svg wants colorscheme applied
-                createRenderer();
-                applyColors = renderer->elementExists("hint-apply-color-scheme");
+                checkApplyColorHint();
                 if (applyColors && !Theme::defaultTheme()->colorScheme()) {
                     QObject::connect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()),
                                      q, SLOT(colorsChanged()));
                 }
-
-            } else {
+            } else if (QFile::exists(imagePath)) {
                 path = imagePath;
-
-                if (!QFile::exists(path)) {
-                    kDebug() << "file '" << path << "' does not exist!";
-                }
-            }
-        }
-
-        void removeFromCache() {
-            if (ids.isEmpty()) {
-                return;
+            } else {
+                kDebug() << "file '" << path << "' does not exist!";
             }
 
-            foreach (const QString &id, ids) {
-                QPixmapCache::remove(id);
-            }
-
-            ids.clear();
+            return updateNeeded;
         }
 
         QPixmap findInCache(const QString &elementId, const QSizeF &s = QSizeF())
         {
-            createRenderer();
-
             QSize size;
             if (elementId.isEmpty() || multipleImages) {
                 size = s.toSize();
@@ -145,16 +142,14 @@ class SvgPrivate
             if (!elementId.isEmpty()) {
                 id.append(elementId);
             }
+
             //kDebug() << "id is " << id;
 
-            if (!ids.contains(id)) {
-                ids.append(id);
-            }
-
+            Theme *theme = Theme::defaultTheme();
             QPixmap p;
 
-            if (QPixmapCache::find(id, p)) {
-                //kDebug() << "found cached version of " << id;
+            if (theme->findInCache(id, p)) {
+                //kDebug() << "found cached version of " << id << p.size();
                 return p;
             } else {
                 //kDebug() << "didn't find cached version of " << id << ", so re-rendering";
@@ -168,6 +163,7 @@ class SvgPrivate
             p.fill(Qt::transparent);
             QPainter renderPainter(&p);
 
+            createRenderer();
             if (elementId.isEmpty()) {
                 renderer->render(&renderPainter);
             } else {
@@ -179,15 +175,11 @@ class SvgPrivate
             // Apply current color scheme if the svg asks for it
             if (applyColors) {
                 QImage itmp = p.toImage();
-                KIconEffect::colorize(
-                    itmp, Theme::defaultTheme()->color(Theme::BackgroundColor), 1.0);
+                KIconEffect::colorize(itmp, theme->color(Theme::BackgroundColor), 1.0);
                 p = p.fromImage(itmp);
             }
 
-            if (!QPixmapCache::insert(id, p)) {
-                //kDebug() << "pixmap cache is too small for inserting" << id << "of size" << s;
-            }
-
+            theme->insertIntoCache(id, p);
             return p;
         }
 
@@ -201,14 +193,14 @@ class SvgPrivate
                 path = Plasma::Theme::defaultTheme()->imagePath(themePath);
             }
 
-            QHash<QString, SharedSvgRenderer::Ptr>::const_iterator it = renderers.find(path);
+            QHash<QString, SharedSvgRenderer::Ptr>::const_iterator it = s_renderers.find(path);
 
-            if (it != renderers.end()) {
+            if (it != s_renderers.end()) {
                 //kDebug() << "gots us an existing one!";
                 renderer = it.value();
             } else {
                 renderer = new SharedSvgRenderer(path);
-                renderers[path] = renderer;
+                s_renderers[path] = renderer;
             }
 
             size = renderer->defaultSize();
@@ -218,7 +210,7 @@ class SvgPrivate
         {
             if (renderer && renderer.count() == 2) {
                 // this and the cache reference it; and boy is this not thread safe ;)
-                renderers.erase(renderers.find(path));
+                s_renderers.erase(s_renderers.find(path));
             }
 
             renderer = 0;
@@ -260,6 +252,19 @@ class SvgPrivate
             return renderer->matrixForElement(elementId);
         }
 
+        void checkApplyColorHint()
+        {
+            KConfigGroup cg(KGlobal::config(), "SvgHints");
+            QString cgKey = themePath + "-hint-apply-color-scheme";
+            if (cg.hasKey(cgKey)) {
+                applyColors = cg.readEntry(cgKey, false);
+            } else {
+                createRenderer();
+                applyColors = renderer->elementExists("hint-apply-color-scheme");
+                cg.writeEntry(cgKey, applyColors);
+            }
+        }
+
         void themeChanged()
         {
             if (!themed) {
@@ -272,22 +277,24 @@ class SvgPrivate
                 return;
             }
 
-            removeFromCache();
             path = newPath;
             //delete d->renderer; we're a KSharedPtr
             eraseRenderer();
 
             // check if new theme svg wants colorscheme applied
-            createRenderer();
-            applyColors = renderer->elementExists("hint-apply-color-scheme");
+            bool wasApplyColors = applyColors;
+            checkApplyColorHint();
             if (applyColors && !Theme::defaultTheme()->colorScheme()) {
-                QObject::connect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()),
-                                 q, SLOT(colorsChanged()));
+                if (!wasApplyColors) {
+                    QObject::connect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()),
+                                     q, SLOT(colorsChanged()));
+                }
             } else {
                 QObject::disconnect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()),
                                     q, SLOT(colorsChanged()));
             }
 
+            //kDebug() << themePath << ">>>>>>>>>>>>>>>>>> theme changed";
             emit q->repaintNeeded();
         }
 
@@ -297,24 +304,22 @@ class SvgPrivate
                 return;
             }
 
-            removeFromCache();
             eraseRenderer();
             emit q->repaintNeeded();
         }
 
         Svg *q;
-        static QHash<QString, SharedSvgRenderer::Ptr> renderers;
+        static QHash<QString, SharedSvgRenderer::Ptr> s_renderers;
         SharedSvgRenderer::Ptr renderer;
         QString themePath;
         QString path;
-        QList<QString> ids;
         QSizeF size;
         bool multipleImages;
         bool themed;
         bool applyColors;
 };
 
-QHash<QString, SharedSvgRenderer::Ptr> SvgPrivate::renderers;
+QHash<QString, SharedSvgRenderer::Ptr> SvgPrivate::s_renderers;
 
 Svg::Svg(QObject *parent)
     : QObject(parent),
@@ -371,14 +376,16 @@ void Svg::resize(qreal width, qreal height)
 
 void Svg::resize(const QSizeF &size)
 {
-    d->createRenderer();
     d->size = size;
 }
 
 void Svg::resize()
 {
-    d->createRenderer();
-    d->size = d->renderer->defaultSize();
+    if (d->renderer) {
+        d->size = d->renderer->defaultSize();
+    } else {
+        d->size = QSizeF();
+    }
 }
 
 QSize Svg::elementSize(const QString &elementId) const
@@ -393,6 +400,10 @@ QRectF Svg::elementRect(const QString &elementId) const
 
 bool Svg::hasElement(const QString &elementId) const
 {
+    if (d->path.isNull() && d->themePath.isNull()) {
+        return false;
+    }
+
     d->createRenderer();
     return d->renderer->elementExists(elementId);
 }
@@ -415,6 +426,10 @@ FIXME: implement when Qt can support us!
 
 bool Svg::isValid() const
 {
+    if (d->path.isNull() && d->themePath.isNull()) {
+        return false;
+    }
+
     d->createRenderer();
     return d->renderer->isValid();
 }
@@ -431,9 +446,10 @@ bool Svg::containsMultipleImages() const
 
 void Svg::setImagePath(const QString &svgFilePath)
 {
-   d->setImagePath(svgFilePath, this);
-   d->eraseRenderer();
-   emit repaintNeeded();
+    if (d->setImagePath(svgFilePath, this)) {
+    }
+        d->eraseRenderer();
+        emit repaintNeeded();
 }
 
 QString Svg::imagePath() const
