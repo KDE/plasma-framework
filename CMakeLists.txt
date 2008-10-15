@@ -25,13 +25,6 @@ set(plasma_LIB_SRCS
     animationdriver.cpp
     animator.cpp
     applet.cpp
-    appletbrowser.cpp
-    appletbrowser/customdragtreeview.cpp
-    appletbrowser/kcategorizeditemsview.cpp
-    appletbrowser/kcategorizeditemsviewdelegate.cpp
-    appletbrowser/kcategorizeditemsviewmodels.cpp
-    appletbrowser/openwidgetassistant.cpp
-    appletbrowser/plasmaappletitemmodel.cpp
     configxml.cpp
     containment.cpp
     context.cpp
@@ -102,11 +95,6 @@ set(plasma_LIB_SRCS
 #   TEST_INCLUDES
 #)
 
-kde4_add_ui_files (
-    plasma_LIB_SRCS
-    appletbrowser/kcategorizeditemsviewbase.ui
-)
-
 if(QT_QTOPENGL_FOUND AND OPENGL_FOUND)
 MESSAGE(STATUS "Adding support for OpenGL applets to libplasma")
 set(plasma_LIB_SRCS
@@ -151,7 +139,6 @@ set(plasma_LIB_INCLUDES
     animationdriver.h
     animator.h
     applet.h
-    appletbrowser.h
     configxml.h
     containment.h
     context.h
@@ -226,7 +213,6 @@ includes/AbstractRunner
 includes/AnimationDriver
 includes/Animator
 includes/Applet
-includes/AppletBrowser
 includes/AppletScript
 includes/CheckBox
 includes/ComboBox
