@@ -191,6 +191,7 @@ private:
     ViewPrivate * const d;
 
     Q_PRIVATE_SLOT(d, void updateSceneRect())
+    Q_PRIVATE_SLOT(d, void containmentDestroyed())
 
     friend class ViewPrivate;
 };

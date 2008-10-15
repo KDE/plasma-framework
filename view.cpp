@@ -80,6 +80,11 @@ public:
         emit q->sceneRectChanged();
     }
 
+    void containmentDestroyed()
+    {
+        containment = 0;
+    }
+
     void initGraphicsView()
     {
         q->setFrameShape(QFrame::NoFrame);
@@ -189,6 +194,7 @@ void View::setContainment(Plasma::Containment *containment)
     }
 
     if (d->containment) {
+        disconnect(containment, SIGNAL(destroyed()), this, SLOT(containmentDestroyed()));
         disconnect(d->containment, SIGNAL(geometryChanged()), this, SLOT(updateSceneRect()));
         d->containment->removeAssociatedWidget(this);
     }
@@ -236,6 +242,7 @@ void View::setContainment(Plasma::Containment *containment)
     }
 
     d->updateSceneRect();
+    connect(containment, SIGNAL(destroyed()), this, SLOT(containmentDestroyed()));
     connect(containment, SIGNAL(geometryChanged()), this, SLOT(updateSceneRect()));
 }
 
