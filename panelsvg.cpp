@@ -36,26 +36,23 @@ class PanelData
 public:
     PanelData()
       : enabledBorders(PanelSvg::AllBorders),
-        cachedBackground(0), cachedMask(0),
         panelSize(-1,-1)
     {
     }
 
     PanelData(const PanelData &other)
       : enabledBorders(other.enabledBorders),
-        cachedBackground(0), cachedMask(0),
         panelSize(other.panelSize)
     {
     }
 
     ~PanelData()
     {
-        delete cachedBackground;
     }
 
     PanelSvg::EnabledBorders enabledBorders;
-    QPixmap *cachedBackground;
-    QBitmap *cachedMask;
+    QPixmap cachedBackground;
+    QBitmap cachedMask;
     QSizeF panelSize;
 
     //measures
@@ -127,6 +124,7 @@ void PanelSvg::setImagePath(const QString &path)
     }
 
     Svg::setImagePath(path);
+    setContainsMultipleImages(true);
 
     clearCache();
     d->updateAndSignalSizes();
@@ -334,14 +332,13 @@ QBitmap PanelSvg::mask() const
     PanelData *panel = d->panels[d->prefix];
 
     if (!panel->cachedMask) {
-        if (!panel->cachedBackground) {
+        if (panel->cachedBackground.isNull()) {
             d->generateBackground(panel);
-            Q_ASSERT(panel->cachedBackground);
+            Q_ASSERT(!panel->cachedBackground.isNull());
         }
-        panel->cachedMask =
-            new QBitmap(panel->cachedBackground->alphaChannel().createMaskFromColor(Qt::black));
+        panel->cachedMask = QBitmap(panel->cachedBackground.alphaChannel().createMaskFromColor(Qt::black));
     }
-    return *(panel->cachedMask);
+    return panel->cachedMask;
 }
 
 void PanelSvg::setCacheAllRenderedPanels(bool cache)
@@ -376,51 +373,56 @@ void PanelSvg::clearCache()
 QPixmap PanelSvg::panelPixmap()
 {
     PanelData *panel = d->panels[d->prefix];
-    if (!panel->cachedBackground) {
+    if (panel->cachedBackground.isNull()) {
         d->generateBackground(panel);
-        Q_ASSERT(panel->cachedBackground);
+        Q_ASSERT(!panel->cachedBackground.isNull());
     }
 
-    return *panel->cachedBackground;
+    return panel->cachedBackground;
 }
 
 void PanelSvg::paintPanel(QPainter *painter, const QRectF &target, const QRectF &source)
 {
     PanelData *panel = d->panels[d->prefix];
-    if (!panel->cachedBackground) {
+    if (panel->cachedBackground.isNull()) {
         d->generateBackground(panel);
-        Q_ASSERT(panel->cachedBackground);
+        Q_ASSERT(!panel->cachedBackground.isNull());
     }
 
-    painter->drawPixmap(target, *(panel->cachedBackground), source.isValid() ? source : target);
+    painter->drawPixmap(target, panel->cachedBackground, source.isValid() ? source : target);
 }
 
 void PanelSvg::paintPanel(QPainter *painter, const QPointF &pos)
 {
     PanelData *panel = d->panels[d->prefix];
-    if (!panel->cachedBackground) {
+    if (panel->cachedBackground.isNull()) {
         d->generateBackground(panel);
-        Q_ASSERT(panel->cachedBackground);
+        Q_ASSERT(!panel->cachedBackground.isNull());
     }
 
-    painter->drawPixmap(pos, *(panel->cachedBackground));
+    painter->drawPixmap(pos, panel->cachedBackground);
 }
 
 void PanelSvgPrivate::generateBackground(PanelData *panel)
 {
+    if (!panel->cachedBackground.isNull()) {
+        return;
+    }
+
+    QString id = QString::fromLatin1("%4_%3_%2_%1_").
+                         arg(panel->panelSize.width()).arg(panel->panelSize.height()).arg(prefix).arg(q->imagePath());
+    Theme *theme = Theme::defaultTheme();
+    theme->findInCache(id, panel->cachedBackground);
+
     //kDebug() << "generating background";
     const int topWidth = q->elementSize(prefix + "top").width();
     const int leftHeight = q->elementSize(prefix + "left").height();
     const int topOffset = 0;
     const int leftOffset = 0;
 
-    if (panel->cachedBackground) {
-        return;
-    }
 
     if (!panel->panelSize.isValid()) {
         kWarning() << "Invalid panel size" << panel->panelSize;
-        panel->cachedBackground = new QPixmap();
         return;
     }
 
@@ -431,10 +433,10 @@ void PanelSvgPrivate::generateBackground(PanelData *panel)
     int rightOffset = contentWidth;
     int bottomOffset = contentHeight;
 
-    panel->cachedBackground = new QPixmap(panel->leftWidth + contentWidth + panel->rightWidth,
-                                          panel->topHeight + contentHeight + panel->bottomHeight);
-    panel->cachedBackground->fill(Qt::transparent);
-    QPainter p(panel->cachedBackground);
+    panel->cachedBackground = QPixmap(panel->leftWidth + contentWidth + panel->rightWidth,
+                                      panel->topHeight + contentHeight + panel->bottomHeight);
+    panel->cachedBackground.fill(Qt::transparent);
+    QPainter p(&panel->cachedBackground);
     p.setCompositionMode(QPainter::CompositionMode_Source);
     p.setRenderHint(QPainter::SmoothPixmapTransform);
 
@@ -469,11 +471,9 @@ void PanelSvgPrivate::generateBackground(PanelData *panel)
         }
     } else {
         if (contentHeight > 0 && contentWidth > 0) {
-            q->resize(scaledContentSize);
             q->paint(&p, QRect(panel->leftWidth, panel->topHeight,
                                contentWidth, contentHeight),
                                prefix + "center");
-            q->resize();
         }
     }
 
@@ -510,7 +510,6 @@ void PanelSvgPrivate::generateBackground(PanelData *panel)
     // Sides
     if (panel->stretchBorders) {
         if (panel->enabledBorders & PanelSvg::LeftBorder || panel->enabledBorders & PanelSvg::RightBorder) {
-            q->resize(q->size().width(), scaledContentSize.height());
 
             if (q->hasElement(prefix + "left") &&
                 panel->enabledBorders & PanelSvg::LeftBorder) {
@@ -521,13 +520,10 @@ void PanelSvgPrivate::generateBackground(PanelData *panel)
                 panel->enabledBorders & PanelSvg::RightBorder) {
                 q->paint(&p, QRect(rightOffset, contentTop, panel->rightWidth, contentHeight), prefix + "right");
             }
-
-            q->resize();
         }
 
         if (panel->enabledBorders & PanelSvg::TopBorder ||
             panel->enabledBorders & PanelSvg::BottomBorder) {
-            q->resize(scaledContentSize.width(), q->size().height());
 
             if (q->hasElement(prefix + "top") &&
                 panel->enabledBorders & PanelSvg::TopBorder) {
@@ -539,7 +535,6 @@ void PanelSvgPrivate::generateBackground(PanelData *panel)
                 q->paint(&p, QRect(contentLeft, bottomOffset, contentWidth, panel->bottomHeight), prefix + "bottom");
             }
 
-            q->resize();
         }
     } else {
         if (q->hasElement(prefix + "left") &&
@@ -588,9 +583,7 @@ void PanelSvgPrivate::generateBackground(PanelData *panel)
         }
     }
 
-    // re-enable this once Qt's svg rendering is un-buggered
-    //q->resize(contentWidth, contentHeight);
-    //paint(&p, QRect(contentLeft, contentTop, contentWidth, contentHeight), "center");
+    theme->insertIntoCache(id, panel->cachedBackground);
 }
 
 void PanelSvgPrivate::updateSizes()
@@ -599,12 +592,9 @@ void PanelSvgPrivate::updateSizes()
     PanelData *panel = panels[prefix];
     Q_ASSERT(panel);
 
-    delete panel->cachedBackground;
-    panel->cachedBackground = 0;
-    delete panel->cachedMask;
-    panel->cachedMask = 0;
+    panel->cachedBackground = QPixmap();
+    panel->cachedMask = QPixmap();
 
-    q->Svg::resize();
     if (panel->enabledBorders & PanelSvg::TopBorder) {
         panel->topHeight = q->elementSize(prefix + "top").height();
 
