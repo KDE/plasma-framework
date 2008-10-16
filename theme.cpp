@@ -502,10 +502,10 @@ void Theme::insertIntoCache(const QString& key, const QPixmap& pix)
 bool Theme::findInRectsCache(const QString &image, const QString &element, QRectF &rect) const
 {
     KConfigGroup imageGroup(d->svgElementsCache, image);
-    rect = imageGroup.readEntry(element, QRectF());
+    rect = imageGroup.readEntry(element+"Size", QRectF());
 
     if (!d->invalidElements.contains(image)) {
-        d->invalidElements[image] = imageGroup.readEntry("invalidGroups", QStringList());
+        d->invalidElements[image] = imageGroup.readEntry("invalidElements", QStringList());
     }
 
     return d->invalidElements[image].contains(element) || rect.isValid();
@@ -515,8 +515,8 @@ void Theme::insertIntoRectsCache(const QString& image, const QString &element, c
 {
     KConfigGroup imageGroup(d->svgElementsCache, image);
     if (rect.isValid()) {
-        imageGroup.writeEntry(element, rect);
-    } else {
+        imageGroup.writeEntry(element+"Size", rect);
+    } else if (!d->invalidElements[image].contains(element)) {
         d->invalidElements[image].append(element);
         if (d->invalidElements[image].count() > 1000) {
             d->invalidElements[image].pop_front();
