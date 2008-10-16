@@ -368,12 +368,6 @@ class PLASMA_EXPORT Containment : public Applet
         void screenChanged(int wasScreen, int isScreen, Plasma::Containment *containment);
 
         /**
-         * Emitted when the containment wants to become active.
-         * Usually only used for desktop containments.
-         */
-        void focusRequested(Plasma::Containment *containment);
-
-        /**
          * Emitted when the user wants to configure/change containment.
          */
         void configureRequested();
