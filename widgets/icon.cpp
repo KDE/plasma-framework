@@ -531,15 +531,17 @@ void Icon::hoverAnimationUpdate(qreal progress)
     } else {
         // If we mouse leaves before the fade in is done, fade out from where we were,
         // not from fully faded in
-        qreal new_alpha = d->m_fadeIn ? progress : 1 - progress;
-        d->m_hoverAlpha = qMin(new_alpha, d->m_hoverAlpha);
+        d->m_hoverAlpha = qMin(1 - progress, d->m_hoverAlpha);
     }
-    if (progress == 1) {
+
+    if (qFuzzyCompare(qreal(1.0), progress)) {
         d->m_hoverAnimId = -1;
+
+        if (!d->m_fadeIn) {
+            d->states &= ~IconPrivate::HoverState;
+        }
     }
-    if (!d->m_fadeIn && progress == 1) {
-        d->states &= ~IconPrivate::HoverState;
-    }
+
     update();
 }
 
