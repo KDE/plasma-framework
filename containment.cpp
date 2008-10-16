@@ -1511,6 +1511,10 @@ void ContainmentPrivate::positionToolBox()
         QRectF avail = desktop->availableGeometry(screen);
         QRectF screenGeom = desktop->screenGeometry(screen);
 
+        // Transform to the containment's coordinate system.
+        avail.translate(-screenGeom.topLeft());
+        screenGeom.moveTo(0, 0);
+
         if (q->view() && !q->view()->transform().isScaling()) {
 
             if (QApplication::layoutDirection() == Qt::RightToLeft) {
