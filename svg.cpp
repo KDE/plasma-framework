@@ -415,7 +415,7 @@ bool Svg::hasElement(const QString &elementId) const
     QRectF elementRect;
     bool found = Theme::defaultTheme()->findInRectsCache(d->themePath, elementId, elementRect);
 
-    if (found && elementRect.isValid()) {
+    if (found && !elementRect.isValid()) {
         return false;
     } else {
         d->createRenderer();
