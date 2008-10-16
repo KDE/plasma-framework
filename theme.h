@@ -192,6 +192,10 @@ class PLASMA_EXPORT Theme : public QObject
          **/
         void insertIntoCache(const QString& key, const QPixmap& pix);
 
+        bool findInRectsCache(const QString &image, const QString &element, QRectF &rect) const;
+        void insertIntoRectsCache(const QString& image, const QString &element, const QRectF &rect);
+        void invalidateRectsCache(const QString& image);
+
     Q_SIGNALS:
         /**
          * Emitted when the user changes the theme. SVGs should be reloaded at

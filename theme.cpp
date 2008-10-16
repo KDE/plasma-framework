@@ -110,6 +110,8 @@ public:
     int defaultWallpaperWidth;
     int defaultWallpaperHeight;
     KPixmapCache pixmapCache;
+    KSharedConfigPtr svgElementsCache;
+    QHash<QString, QList<QString> > invalidElements;
 
 #ifdef Q_WS_X11
     KSelectionWatcher *compositeWatch;
@@ -296,6 +298,11 @@ void Theme::setThemeName(const QString &themeName)
             cg.writeEntry("name", d->themeName);
         }
     }
+
+
+    QString svgElementsFile = KStandardDirs::locateLocal("cache", "plasma-svgelements-"+themeName);
+    d->invalidElements.clear();
+    d->svgElementsCache = KSharedConfig::openConfig(svgElementsFile);
 
     emit themeChanged();
 }
@@ -490,6 +497,38 @@ bool Theme::findInCache(const QString &key, QPixmap &pix)
 void Theme::insertIntoCache(const QString& key, const QPixmap& pix)
 {
     d->pixmapCache.insert(key, pix);
+}
+
+bool Theme::findInRectsCache(const QString &image, const QString &element, QRectF &rect) const
+{
+    KConfigGroup imageGroup(d->svgElementsCache, image);
+    rect = imageGroup.readEntry(element, QRectF());
+
+    if (!d->invalidElements.contains(image)) {
+        d->invalidElements[image] = imageGroup.readEntry("invalidGroups", QStringList());
+    }
+
+    return d->invalidElements[image].contains(element) || rect.isValid();
+}
+
+void Theme::insertIntoRectsCache(const QString& image, const QString &element, const QRectF &rect)
+{
+    KConfigGroup imageGroup(d->svgElementsCache, image);
+    if (rect.isValid()) {
+        imageGroup.writeEntry(element, rect);
+    } else {
+        d->invalidElements[image].append(element);
+        if (d->invalidElements[image].count() > 1000) {
+            d->invalidElements[image].pop_front();
+        }
+        imageGroup.writeEntry("invalidElements", d->invalidElements[image]);
+    }
+}
+
+void Theme::invalidateRectsCache(const QString& image)
+{
+    KConfigGroup imageGroup(d->svgElementsCache, image);
+    imageGroup.deleteGroup();
 }
 
 }

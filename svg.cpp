@@ -81,6 +81,12 @@ class SvgPrivate
         {
             bool isThemed = !QDir::isAbsolutePath(imagePath);
 
+            if (isThemed == themed &&
+                ((themed && themePath == imagePath) ||
+                 (!themed && path == imagePath))) {
+                return false;
+            }
+
             // lets check to see if we're already set to this file
             if (isThemed == themed &&
                 ((themed && themePath == imagePath) ||
@@ -218,32 +224,31 @@ class SvgPrivate
 
         QSize elementSize(const QString &elementId)
         {
-            createRenderer();
-
-            if (!renderer->elementExists(elementId)) {
-                return QSize(0, 0);
-            }
-
-            QSizeF elementSize = renderer->boundsOnElement(elementId).size();
-            QSizeF naturalSize = renderer->defaultSize();
-            qreal dx = size.width() / naturalSize.width();
-            qreal dy = size.height() / naturalSize.height();
-            elementSize.scale(elementSize.width() * dx, elementSize.height() * dy,
-                              Qt::IgnoreAspectRatio);
-
-            return elementSize.toSize();
+            return elementRect(elementId).size().toSize();
         }
 
         QRectF elementRect(const QString &elementId)
         {
+            QRectF rect;
+            bool found = Theme::defaultTheme()->findInRectsCache(themePath, elementId, rect);
+
+            if (found && !rect.isValid()) {
+                return QRect();
+            } else if (rect.isValid()) {
+                return rect;
+            }
+
             createRenderer();
             QRectF elementRect = renderer->boundsOnElement(elementId);
             QSizeF naturalSize = renderer->defaultSize();
             qreal dx = size.width() / naturalSize.width();
             qreal dy = size.height() / naturalSize.height();
 
-            return QRectF(elementRect.x() * dx, elementRect.y() * dy,
-                         elementRect.width() * dx, elementRect.height() * dy);
+            elementRect = QRectF(elementRect.x() * dx, elementRect.y() * dy,
+                                 elementRect.width() * dx, elementRect.height() * dy);
+            Theme::defaultTheme()->insertIntoRectsCache(themePath, elementId, elementRect);
+
+            return elementRect;
         }
 
         QMatrix matrixForElement(const QString &elementId)
@@ -376,11 +381,14 @@ void Svg::resize(qreal width, qreal height)
 
 void Svg::resize(const QSizeF &size)
 {
+    Theme::defaultTheme()->invalidateRectsCache(d->themePath);
     d->size = size;
 }
 
 void Svg::resize()
 {
+    Theme::defaultTheme()->invalidateRectsCache(d->themePath);
+
     if (d->renderer) {
         d->size = d->renderer->defaultSize();
     } else {
@@ -404,8 +412,15 @@ bool Svg::hasElement(const QString &elementId) const
         return false;
     }
 
-    d->createRenderer();
-    return d->renderer->elementExists(elementId);
+    QRectF elementRect;
+    bool found = Theme::defaultTheme()->findInRectsCache(d->themePath, elementId, elementRect);
+
+    if (found && elementRect.isValid()) {
+        return false;
+    } else {
+        d->createRenderer();
+        return d->renderer->elementExists(elementId);
+    }
 }
 
 QString Svg::elementAtPoint(const QPoint &point) const
