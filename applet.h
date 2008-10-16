@@ -200,7 +200,10 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         const Package *package() const;
 
         /**
-         * Returns the view this widget is visible on
+         * Returns the view this widget is visible on, or 0 if none can be found.
+         * @warning do NOT assume this will always return a view!
+         * a null view probably means that either plasma isn't finished loading, or your applet is
+         * on an activity that's not being shown anywhere.
          */
         QGraphicsView *view() const;
 
