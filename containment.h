@@ -370,7 +370,7 @@ class PLASMA_EXPORT Containment : public Applet
         /**
          * Emitted when the user wants to configure/change containment.
          */
-        void configureRequested();
+        void configureRequested(Plasma::Containment *containment);
 
         /**
          * The activity associated to this containemnt has changed

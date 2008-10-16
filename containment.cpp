@@ -1399,7 +1399,7 @@ void Containment::destroy(bool confirm)
 void Containment::showConfigurationInterface()
 {
     if (isContainment()) {
-        emit configureRequested();
+        emit configureRequested(this);
     } else {
         Applet::showConfigurationInterface();
     }
