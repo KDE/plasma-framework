@@ -202,8 +202,29 @@ class PLASMA_EXPORT Theme : public QObject
          **/
         void setCacheLimit(int kbytes);
 
+        /**
+         * Tries to load the rect of a sub element from a disk cache
+         *
+         * @arg image path of the image we want to check
+         * @arg element sub element we want to retrieve
+         * @arg rect output parameter of the element rect found in cache 
+         *           if not found or if we are sure it doesn't exist it will be QRect()
+         * @return true if the element was found in cache or if we are sure the element doesn't exist
+         **/
         bool findInRectsCache(const QString &image, const QString &element, QRectF &rect) const;
+
+        /**
+         * Inserts a rectangle of a sub element of an image into a disk cache
+         *
+         * @arg image path of the image we want to insert informations
+         * @arg element sub element we want insert the rect
+         * @arg rect element rectangle
+         **/
         void insertIntoRectsCache(const QString& image, const QString &element, const QRectF &rect);
+
+        /**
+         * Discards all the informations about a given image from the rectangle disk cache
+         **/
         void invalidateRectsCache(const QString& image);
 
     Q_SIGNALS:
