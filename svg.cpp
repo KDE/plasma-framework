@@ -211,7 +211,7 @@ class SvgPrivate
                 s_renderers[path] = renderer;
             }
 
-            if (size != QSizeF()) {
+            if (size == QSizeF()) {
                 size = renderer->defaultSize();
             }
         }
