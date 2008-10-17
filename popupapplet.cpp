@@ -76,7 +76,12 @@ void PopupApplet::setPopupIcon(const QIcon &icon)
         layout->setContentsMargins(0, 0, 0, 0);
         layout->setSpacing(0);
         layout->setOrientation(Qt::Horizontal);
-        setAspectRatioMode(Plasma::ConstrainedSquare);
+
+        if (formFactor() == Plasma::Vertical || formFactor() == Plasma::Horizontal ) {
+            d->savedAspectRatio = aspectRatioMode();
+	    setAspectRatioMode(Plasma::ConstrainedSquare);
+	}
+
         setLayout(layout);
     } else {
         d->icon->setIcon(icon);
