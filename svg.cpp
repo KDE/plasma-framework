@@ -79,9 +79,14 @@ class SvgPrivate
 
         QString cacheId(const QString &elementId)
         {
-            return QString("%3_%2_%1").arg(int(size.height()))
-                                      .arg(int(size.width()))
-                                      .arg(elementId);
+            if (size.isValid() && size != naturalSize) {
+                return QString("%3_%2_%1").arg(int(size.height()))
+                                        .arg(int(size.width()))
+                                        .arg(elementId);
+            } else {
+                return QString("%2_%1").arg("Natural")
+                                        .arg(elementId);
+            }
         }
 
         bool setImagePath(const QString &imagePath, Svg *q)
@@ -233,7 +238,12 @@ class SvgPrivate
         QRectF elementRect(const QString &elementId)
         {
             QRectF rect;
-            bool found = Theme::defaultTheme()->findInRectsCache(themePath, cacheId(elementId), rect);
+
+            if (themed && path.isEmpty()) {
+                path = Plasma::Theme::defaultTheme()->imagePath(themePath);
+            }
+
+            bool found = Theme::defaultTheme()->findInRectsCache(path, cacheId(elementId), rect);
 
             if (found) {
                 return rect;
@@ -247,7 +257,7 @@ class SvgPrivate
             createRenderer();
             QRectF elementRect = renderer->elementExists(elementId) ?
                                  renderer->boundsOnElement(elementId) : QRectF();
-            QSizeF naturalSize = renderer->defaultSize();
+            naturalSize = renderer->defaultSize();
             qreal dx = size.width() / naturalSize.width();
             qreal dy = size.height() / naturalSize.height();
 
@@ -326,6 +336,7 @@ class SvgPrivate
         QString themePath;
         QString path;
         QSizeF size;
+        QSizeF naturalSize;
         bool multipleImages;
         bool themed;
         bool applyColors;
