@@ -206,9 +206,9 @@ class SvgPrivate
                 path = Plasma::Theme::defaultTheme()->imagePath(themePath);
             }
 
-            kDebug() << "********************************";
-            kDebug() << "FAIL! **************************";
-            kDebug() << path << "**";
+            //kDebug() << "********************************";
+            //kDebug() << "FAIL! **************************";
+            //kDebug() << path << "**";
 
             QHash<QString, SharedSvgRenderer::Ptr>::const_iterator it = s_renderers.find(path);
 
