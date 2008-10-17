@@ -65,6 +65,7 @@ public:
           useGlobal(true),
           hasWallpapers(false)
     {
+        pixmapCache.setCacheLimit(0);
         generalFont = QApplication::font();
     }
 
@@ -529,6 +530,11 @@ void Theme::invalidateRectsCache(const QString& image)
 {
     KConfigGroup imageGroup(d->svgElementsCache, image);
     imageGroup.deleteGroup();
+}
+
+void Theme::setCacheLimit(int kbytes)
+{
+    d->pixmapCache.setCacheLimit(kbytes);
 }
 
 }

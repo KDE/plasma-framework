@@ -192,6 +192,16 @@ class PLASMA_EXPORT Theme : public QObject
          **/
         void insertIntoCache(const QString& key, const QPixmap& pix);
 
+        /**
+         * Sets the maximum size of the cache (in kilobytes). If cache gets bigger
+         * the limit then some entries are removed
+         * Setting cache limit to 0 disables automatic cache size limiting.
+         *
+         * Note that the cleanup might not be done immediately, so the cache might
+         *  temporarily (for a few seconds) grow bigger than the limit.
+         **/
+        void setCacheLimit(int kbytes);
+
         bool findInRectsCache(const QString &image, const QString &element, QRectF &rect) const;
         void insertIntoRectsCache(const QString& image, const QString &element, const QRectF &rect);
         void invalidateRectsCache(const QString& image);
