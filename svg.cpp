@@ -201,6 +201,10 @@ class SvgPrivate
                 path = Plasma::Theme::defaultTheme()->imagePath(themePath);
             }
 
+            kDebug() << "********************************";
+            kDebug() << "FAIL! **************************";
+            kDebug() << path << "**";
+
             QHash<QString, SharedSvgRenderer::Ptr>::const_iterator it = s_renderers.find(path);
 
             if (it != s_renderers.end()) {
@@ -419,7 +423,7 @@ bool Svg::hasElement(const QString &elementId) const
     if (found) {
         return elementRect.isValid();
     } else {
-        kDebug() << "** ** *** !!!!!!!! *** ** ** creating renderer due to hasElement miss" << d->path << elementId;
+//        kDebug() << "** ** *** !!!!!!!! *** ** ** creating renderer due to hasElement miss" << d->path << elementId;
         d->findAndCacheElementRect(elementId);
         return d->renderer->elementExists(elementId);
     }
