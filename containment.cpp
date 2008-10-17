@@ -722,7 +722,17 @@ Applet::List Containment::applets() const
 
 void Containment::setScreen(int screen)
 {
-    // screen of -1 means no associated screen.
+    // What we want to do in here is:
+    //   * claim the screen as our own
+    //   * signal whatever may be watching this containment about the switch
+    //   * if we are a full screen containment, then:
+    //      * resize to match the screen if we're that kind of containment
+    //      * kick other full-screen containments off this screen
+    //          * if we had a screen, then give our screen to the containment
+    //            we kick out
+    //
+    // a screen of -1 means no associated screen.
+    Containment *swapScreensWith(0);
     if (d->type == DesktopContainment || d->type == CustomContainment) {
 #ifndef Q_OS_WIN
         // we want to listen to changes in work area if our screen changes
@@ -742,6 +752,7 @@ void Containment::setScreen(int screen)
                 //         << "and is" << currently->name()
                 //         << (QObject*)currently << (QObject*)this;
                 currently->setScreen(-1);
+                swapScreensWith = currently;
             }
         }
     }
@@ -770,6 +781,10 @@ void Containment::setScreen(int screen)
         KConfigGroup c = config();
         c.writeEntry("screen", d->screen);
         emit configNeedsSaving();
+    }
+
+    if (swapScreensWith) {
+        swapScreensWith->setScreen(oldScreen);
     }
 }
 
