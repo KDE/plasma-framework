@@ -376,6 +376,12 @@ void Svg::paint(QPainter *painter, const QRectF &rect, const QString &elementID)
     painter->drawPixmap(rect, pix, QRectF(QPointF(0, 0), pix.size()));
 }
 
+void Svg::paint(QPainter *painter, int x, int y, int width, int height, const QString &elementID)
+{
+    QPixmap pix(d->findInCache(elementID, QSizeF(width, height)));
+    painter->drawPixmap(x, y, pix, 0, 0, pix.size().width(), pix.size().height());
+}
+
 QSize Svg::size() const
 {
     return d->size.toSize();

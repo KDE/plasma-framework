@@ -121,6 +121,19 @@ class PLASMA_EXPORT Svg : public QObject
                                const QString &elementID = QString());
 
         /**
+         * Paints the SVG represented by this object
+         * @arg painter the QPainter to use
+         * @arg x the horizontal coordinate to start painting from
+         * @arg y the vertical coordinate to start painting from
+         * @arg width the width of the element to draw
+         * @arg height the height of the element do draw
+         * @arg elelementId the ID string of the element to render, or an empty
+         *                  string for the whole SVG (the default)
+         */
+        Q_INVOKABLE void paint(QPainter *painter, int x, int y, int width,
+                               int height, const QString &elementID = QString());
+
+        /**
          * Currently set size of the SVG
          * @return the current size of a given element
          **/
