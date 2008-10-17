@@ -110,27 +110,27 @@ void Style::drawComplexControl(ComplexControl control,
 
     if (scrollOption && scrollOption->orientation == Qt::Horizontal) {
         if (sunken && scrollOption->activeSubControls & SC_ScrollBarAddLine) {
-            d->scrollbar->paint(painter, addLine.topLeft(), "sunken-arrow-right");
+            d->scrollbar->paint(painter, addLine, "sunken-arrow-right");
         } else {
-            d->scrollbar->paint(painter, addLine.topLeft(), prefix + "arrow-right");
+            d->scrollbar->paint(painter, addLine, prefix + "arrow-right");
         }
 
         if (sunken && scrollOption->activeSubControls & SC_ScrollBarSubLine) {
-            d->scrollbar->paint(painter, subLine.topLeft(), "sunken-arrow-left");
+            d->scrollbar->paint(painter, subLine, "sunken-arrow-left");
         } else {
-            d->scrollbar->paint(painter, subLine.topLeft(), prefix + "arrow-left");
+            d->scrollbar->paint(painter, subLine, prefix + "arrow-left");
         }
     } else {
         if (sunken && scrollOption && scrollOption->activeSubControls & SC_ScrollBarAddLine) {
-            d->scrollbar->paint(painter, addLine.topLeft(), "sunken-arrow-down");
+            d->scrollbar->paint(painter, addLine, "sunken-arrow-down");
         } else {
-            d->scrollbar->paint(painter, addLine.topLeft(), prefix + "arrow-down");
+            d->scrollbar->paint(painter, addLine, prefix + "arrow-down");
         }
 
         if (sunken && scrollOption && scrollOption->activeSubControls & SC_ScrollBarSubLine) {
-            d->scrollbar->paint(painter, subLine.topLeft(), "sunken-arrow-up");
+            d->scrollbar->paint(painter, subLine, "sunken-arrow-up");
         } else {
-            d->scrollbar->paint(painter, subLine.topLeft(), prefix + "arrow-up");
+            d->scrollbar->paint(painter, subLine, prefix + "arrow-up");
         }
     }
 
