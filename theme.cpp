@@ -58,14 +58,19 @@ public:
           defaultWallpaperSuffix(DEFAULT_WALLPAPER_SUFFIX),
           defaultWallpaperWidth(DEFAULT_WALLPAPER_WIDTH),
           defaultWallpaperHeight(DEFAULT_WALLPAPER_HEIGHT),
-          pixmapCache(KGlobal::mainComponent().componentName()),
+          pixmapCache(0),
           locolor(false),
           compositingActive(KWindowSystem::compositingActive()),
           isDefault(false),
           useGlobal(true),
           hasWallpapers(false)
     {
-        pixmapCache.setCacheLimit(0);
+        KConfigGroup cg(KGlobal::config(), "CachePolicies");
+        bool useCache = cg.readEntry("CacheTheme", true);
+        if (useCache) {
+            pixmapCache = new KPixmapCache(KGlobal::mainComponent().componentName());
+            pixmapCache->setCacheLimit(cg.readEntry("ThemeCacheKb", 80 * 1024));
+        }
         generalFont = QApplication::font();
     }
 
@@ -110,7 +115,7 @@ public:
     QString defaultWallpaperSuffix;
     int defaultWallpaperWidth;
     int defaultWallpaperHeight;
-    KPixmapCache pixmapCache;
+    KPixmapCache *pixmapCache;
     KSharedConfigPtr svgElementsCache;
     QHash<QString, QList<QString> > invalidElements;
 
@@ -247,8 +252,8 @@ void Theme::setThemeName(const QString &themeName)
         return;
     }
 
-    if (!d->themeName.isEmpty()) {
-        d->pixmapCache.discard();
+    if (!d->themeName.isEmpty() && d->pixmapCache) {
+        d->pixmapCache->discard();
     }
 
     d->themeName = theme;
@@ -492,16 +497,22 @@ bool Theme::useGlobalSettings() const
 
 bool Theme::findInCache(const QString &key, QPixmap &pix)
 {
-    return d->pixmapCache.find(key, pix);
+    return d->pixmapCache && d->pixmapCache->find(key, pix);
 }
 
 void Theme::insertIntoCache(const QString& key, const QPixmap& pix)
 {
-    d->pixmapCache.insert(key, pix);
+    if (d->pixmapCache) {
+        d->pixmapCache->insert(key, pix);
+    }
 }
 
 bool Theme::findInRectsCache(const QString &image, const QString &element, QRectF &rect) const
 {
+    if (!d->pixmapCache) {
+        return false;
+    }
+
     KConfigGroup imageGroup(d->svgElementsCache, image);
     rect = imageGroup.readEntry(element+"Size", QRectF());
 
@@ -514,6 +525,10 @@ bool Theme::findInRectsCache(const QString &image, const QString &element, QRect
 
 void Theme::insertIntoRectsCache(const QString& image, const QString &element, const QRectF &rect)
 {
+    if (!d->pixmapCache) {
+        return;
+    }
+
     KConfigGroup imageGroup(d->svgElementsCache, image);
     if (rect.isValid()) {
         imageGroup.writeEntry(element+"Size", rect);
@@ -534,7 +549,9 @@ void Theme::invalidateRectsCache(const QString& image)
 
 void Theme::setCacheLimit(int kbytes)
 {
-    d->pixmapCache.setCacheLimit(kbytes);
+    if (d->pixmapCache) {
+        d->pixmapCache->setCacheLimit(kbytes);
+    }
 }
 
 }
