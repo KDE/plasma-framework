@@ -77,15 +77,16 @@ class SvgPrivate
             eraseRenderer();
         }
 
+        QString cacheId(const QString &elementId)
+        {
+            return QString("%3_%2_%1").arg(int(size.height()))
+                                      .arg(int(size.width()))
+                                      .arg(elementId);
+        }
+
         bool setImagePath(const QString &imagePath, Svg *q)
         {
             bool isThemed = !QDir::isAbsolutePath(imagePath);
-
-            if (isThemed == themed &&
-                ((themed && themePath == imagePath) ||
-                 (!themed && path == imagePath))) {
-                return false;
-            }
 
             // lets check to see if we're already set to this file
             if (isThemed == themed &&
@@ -135,7 +136,7 @@ class SvgPrivate
             if (elementId.isEmpty() || multipleImages) {
                 size = s.toSize();
             } else {
-                size = elementSize(elementId);
+                size = elementRect(elementId).size().toSize();
             }
 
             if (!size.isValid()) {
@@ -195,6 +196,7 @@ class SvgPrivate
                 return;
             }
 
+            //kDebug() << kBacktrace();
             if (themed && path.isEmpty()) {
                 path = Plasma::Theme::defaultTheme()->imagePath(themePath);
             }
@@ -209,7 +211,9 @@ class SvgPrivate
                 s_renderers[path] = renderer;
             }
 
-            size = renderer->defaultSize();
+            if (size != QSizeF()) {
+                size = renderer->defaultSize();
+            }
         }
 
         void eraseRenderer()
@@ -222,31 +226,30 @@ class SvgPrivate
             renderer = 0;
         }
 
-        QSize elementSize(const QString &elementId)
-        {
-            return elementRect(elementId).size().toSize();
-        }
-
         QRectF elementRect(const QString &elementId)
         {
             QRectF rect;
-            bool found = Theme::defaultTheme()->findInRectsCache(themePath, elementId, rect);
+            bool found = Theme::defaultTheme()->findInRectsCache(themePath, cacheId(elementId), rect);
 
-            if (found && !rect.isValid()) {
-                return QRect();
-            } else if (rect.isValid()) {
+            if (found) {
                 return rect;
             }
 
+            return findAndCacheElementRect(elementId);
+        }
+
+        QRectF findAndCacheElementRect(const QString &elementId)
+        {
             createRenderer();
-            QRectF elementRect = renderer->boundsOnElement(elementId);
+            QRectF elementRect = renderer->elementExists(elementId) ?
+                                 renderer->boundsOnElement(elementId) : QRectF();
             QSizeF naturalSize = renderer->defaultSize();
             qreal dx = size.width() / naturalSize.width();
             qreal dy = size.height() / naturalSize.height();
 
             elementRect = QRectF(elementRect.x() * dx, elementRect.y() * dy,
                                  elementRect.width() * dx, elementRect.height() * dy);
-            Theme::defaultTheme()->insertIntoRectsCache(themePath, elementId, elementRect);
+            Theme::defaultTheme()->insertIntoRectsCache(path, cacheId(elementId), elementRect);
 
             return elementRect;
         }
@@ -381,14 +384,11 @@ void Svg::resize(qreal width, qreal height)
 
 void Svg::resize(const QSizeF &size)
 {
-    Theme::defaultTheme()->invalidateRectsCache(d->themePath);
     d->size = size;
 }
 
 void Svg::resize()
 {
-    Theme::defaultTheme()->invalidateRectsCache(d->themePath);
-
     if (d->renderer) {
         d->size = d->renderer->defaultSize();
     } else {
@@ -398,7 +398,7 @@ void Svg::resize()
 
 QSize Svg::elementSize(const QString &elementId) const
 {
-    return d->elementSize(elementId);
+    return d->elementRect(elementId).size().toSize();
 }
 
 QRectF Svg::elementRect(const QString &elementId) const
@@ -412,13 +412,15 @@ bool Svg::hasElement(const QString &elementId) const
         return false;
     }
 
-    QRectF elementRect;
-    bool found = Theme::defaultTheme()->findInRectsCache(d->themePath, elementId, elementRect);
 
-    if (found && !elementRect.isValid()) {
-        return false;
+    QRectF elementRect;
+    bool found = Theme::defaultTheme()->findInRectsCache(d->path, d->cacheId(elementId), elementRect);
+
+    if (found) {
+        return elementRect.isValid();
     } else {
-        d->createRenderer();
+        kDebug() << "** ** *** !!!!!!!! *** ** ** creating renderer due to hasElement miss" << d->path << elementId;
+        d->findAndCacheElementRect(elementId);
         return d->renderer->elementExists(elementId);
     }
 }
