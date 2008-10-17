@@ -412,7 +412,9 @@ void PanelSvgPrivate::generateBackground(PanelData *panel)
     QString id = QString::fromLatin1("%4_%3_%2_%1_").
                          arg(panel->panelSize.width()).arg(panel->panelSize.height()).arg(prefix).arg(q->imagePath());
     Theme *theme = Theme::defaultTheme();
-    theme->findInCache(id, panel->cachedBackground);
+    if (theme->findInCache(id, panel->cachedBackground)) {
+        return;
+    }
 
     //kDebug() << "generating background";
     const int topWidth = q->elementSize(prefix + "top").width();
