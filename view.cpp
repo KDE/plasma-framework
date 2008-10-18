@@ -253,7 +253,16 @@ Containment *View::containment() const
 
 Containment *View::swapContainment(const QString &name, const QVariantList &args)
 {
-    Containment *old = d->containment;
+    return swapContainment(d->containment, name, args);
+}
+
+Containment *View::swapContainment(Plasma::Containment *existing, const QString &name, const QVariantList &args)
+{
+    if (!existing) {
+        return 0;
+    }
+
+    Containment *old = existing;
     Plasma::Corona *corona = old->corona();
     Plasma::Containment *c = corona->addContainment(name, args);
     if (c) {
@@ -263,8 +272,10 @@ Containment *View::swapContainment(const QString &name, const QVariantList &args
         // ensure that the old containments configuration is up to date
         old->save(oldConfig);
 
-        // set our containment to the new one
-        setContainment(c);
+        if (old == d->containment) {
+            // set our containment to the new one
+            setContainment(c);
+        }
 
         // Copy configuration to new containment
         oldConfig.copyTo(&newConfig);
@@ -286,6 +297,7 @@ Containment *View::swapContainment(const QString &name, const QVariantList &args
 
         return c;
     }
+
     return old;
 }
 
