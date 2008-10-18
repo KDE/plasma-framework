@@ -81,6 +81,7 @@ set(plasma_LIB_SRCS
     widgets/scrollbar.cpp
     widgets/signalplotter.cpp
     widgets/slider.cpp
+    widgets/svgwidget.cpp
     widgets/tabbar.cpp
     widgets/treeview.cpp
     widgets/textedit.cpp
@@ -194,6 +195,7 @@ install(FILES
     widgets/scrollbar.h
     widgets/signalplotter.h
     widgets/slider.h
+    widgets/svgwidget.h
     widgets/tabbar.h
     widgets/treeview.h
     widgets/textedit.h
@@ -255,6 +257,7 @@ includes/ServiceJob
 includes/SignalPlotter
 includes/Slider
 includes/Svg
+includes/SvgWidget
 includes/TabBar
 includes/TextEdit
 includes/ToolTipManager
