@@ -25,64 +25,64 @@
 
 namespace Plasma
 {
-        class SvgWidgetPrivate
-        {
-          public:
-            SvgWidgetPrivate(Svg *s, const QString &element)
-               : svg(s), elementID(element)
-            {
-            }
-
-            Svg *svg;
-            QString elementID;
-        };
-
-        SvgWidget::SvgWidget( QGraphicsItem * parent, Qt::WindowFlags wFlags)
-           : QGraphicsWidget(parent, wFlags),
-             d(new SvgWidgetPrivate(0, QString()))
+class SvgWidgetPrivate
+{
+    public:
+        SvgWidgetPrivate(Svg *s, const QString &element)
+            : svg(s), elementID(element)
         {
         }
 
-        SvgWidget::SvgWidget(Svg *svg, const QString &elementID, QGraphicsItem * parent, Qt::WindowFlags wFlags)
-           : QGraphicsWidget(parent, wFlags),
-             d(new SvgWidgetPrivate(svg, elementID))
-        {
-        }
+        Svg *svg;
+        QString elementID;
+};
 
-        SvgWidget::~SvgWidget()
-        {
-            delete d;
-        }
-        
-        void SvgWidget::setSvg(Svg *svg)
-        {
-            d->svg = svg;
-        }
+SvgWidget::SvgWidget(QGraphicsItem *parent, Qt::WindowFlags wFlags)
+    : QGraphicsWidget(parent, wFlags),
+      d(new SvgWidgetPrivate(0, QString()))
+{
+}
 
-        Svg *SvgWidget::svg() const
-        {
-            return d->svg;
-        }
+SvgWidget::SvgWidget(Svg *svg, const QString &elementID, QGraphicsItem *parent, Qt::WindowFlags wFlags)
+    : QGraphicsWidget(parent, wFlags),
+      d(new SvgWidgetPrivate(svg, elementID))
+{
+}
 
-        void SvgWidget::setElementID(const QString &elementID)
-        {
-            d->elementID = elementID;
-        }
+SvgWidget::~SvgWidget()
+{
+    delete d;
+}
 
-        QString SvgWidget::elementID() const
-        {
-            return d->elementID;
-        }
+void SvgWidget::setSvg(Svg *svg)
+{
+    d->svg = svg;
+}
 
-        void SvgWidget::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
-        {
-            Q_UNUSED(option);
-            Q_UNUSED(widget);
+Svg *SvgWidget::svg() const
+{
+    return d->svg;
+}
 
-            if (d->svg){
-                d->svg->paint(painter, boundingRect(), d->elementID);
-            }
-        }
+void SvgWidget::setElementID(const QString &elementID)
+{
+    d->elementID = elementID;
+}
+
+QString SvgWidget::elementID() const
+{
+    return d->elementID;
+}
+
+void SvgWidget::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+    Q_UNUSED(option);
+    Q_UNUSED(widget);
+
+    if (d->svg){
+        d->svg->paint(painter, boundingRect(), d->elementID);
+    }
+}
 
 } // Plasma namespace
 
