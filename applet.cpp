@@ -963,6 +963,15 @@ void Applet::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
             if (!v || v->isWallpaperEnabled()) {
                 Containment* c = qobject_cast<Plasma::Containment*>(this);
                 if (c && c->drawWallpaper() && c->wallpaper()) {
+                    Wallpaper *w = c->wallpaper();
+                    if (!w->isInitialized()) {
+                        // delayed paper initialization
+                        KConfigGroup wallpaperConfig = c->config();
+                        wallpaperConfig = KConfigGroup(&wallpaperConfig, "Wallpaper");
+                        wallpaperConfig = KConfigGroup(&wallpaperConfig, w->pluginName());
+                        w->restore(wallpaperConfig);
+                    }
+
                     p->save();
                     c->wallpaper()->paint(p, option->exposedRect);
                     p->restore();

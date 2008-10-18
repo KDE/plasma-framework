@@ -301,9 +301,12 @@ void Containment::save(KConfigGroup &g) const
     if (d->wallpaper) {
         group.writeEntry("wallpaperplugin", d->wallpaper->pluginName());
         group.writeEntry("wallpaperpluginmode", d->wallpaper->renderingMode().name());
-        KConfigGroup wallpaperConfig(&group, "Wallpaper");
-        wallpaperConfig = KConfigGroup(&wallpaperConfig, d->wallpaper->pluginName());
-        d->wallpaper->save(wallpaperConfig);
+
+        if (d->wallpaper->isInitialized()) {
+            KConfigGroup wallpaperConfig(&group, "Wallpaper");
+            wallpaperConfig = KConfigGroup(&wallpaperConfig, d->wallpaper->pluginName());
+            d->wallpaper->save(wallpaperConfig);
+        }
     }
 
     saveContents(group);
@@ -379,7 +382,7 @@ Corona *Containment::corona() const
 void Containment::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
     event->ignore();
-    if (d->wallpaper) {
+    if (d->wallpaper && d->wallpaper->isInitialized()) {
         QGraphicsItem *item = scene()->itemAt(event->scenePos());
         if (item == this) {
             d->wallpaper->mouseMoveEvent(event);
@@ -395,7 +398,7 @@ void Containment::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 void Containment::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     event->ignore();
-    if (d->wallpaper) {
+    if (d->wallpaper && d->wallpaper->isInitialized()) {
         QGraphicsItem *item = scene()->itemAt(event->scenePos());
         if (item == this) {
             d->wallpaper->mousePressEvent(event);
@@ -413,7 +416,7 @@ void Containment::mousePressEvent(QGraphicsSceneMouseEvent *event)
 void Containment::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
     event->ignore();
-    if (d->wallpaper) {
+    if (d->wallpaper && d->wallpaper->isInitialized()) {
         QGraphicsItem *item = scene()->itemAt(event->scenePos());
         if (item == this) {
             d->wallpaper->mouseReleaseEvent(event);
@@ -1045,7 +1048,7 @@ void Containment::keyPressEvent(QKeyEvent *event)
 
 void Containment::wheelEvent(QGraphicsSceneWheelEvent *event)
 {
-    if (d->wallpaper) {
+    if (d->wallpaper && d->wallpaper->isInitialized()) {
         QGraphicsItem *item = scene()->itemAt(event->scenePos());
         if (item == this) {
             event->ignore();
@@ -1254,15 +1257,18 @@ void Containment::setWallpaper(const QString &pluginName, const QString &mode)
 
         if (d->wallpaper) {
             d->wallpaper->setBoundingRect(boundingRect());
-
-            KConfigGroup wallpaperConfig = KConfigGroup(&cfg, "Wallpaper");
-            wallpaperConfig = KConfigGroup(&wallpaperConfig, pluginName);
-            d->wallpaper->restore(wallpaperConfig, mode);
+            d->wallpaper->setRenderingMode(mode);
 
             if (newPlugin) {
                 connect(d->wallpaper, SIGNAL(update(const QRectF&)),
                         this, SLOT(updateRect(const QRectF&)));
                 cfg.writeEntry("wallpaperplugin", pluginName);
+            }
+
+            if (d->wallpaper->isInitialized()) {
+                KConfigGroup wallpaperConfig = KConfigGroup(&cfg, "Wallpaper");
+                wallpaperConfig = KConfigGroup(&wallpaperConfig, pluginName);
+                d->wallpaper->restore(wallpaperConfig);
             }
 
             if (newMode) {
