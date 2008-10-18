@@ -30,10 +30,10 @@
 namespace Plasma
 {
 
-  class Svg;
-  class SvgWidgetPrivate;
+class Svg;
+class SvgWidgetPrivate;
 
-  class PLASMA_EXPORT SvgWidget : public QGraphicsWidget
+class PLASMA_EXPORT SvgWidget : public QGraphicsWidget
 {
     public:
         SvgWidget(QGraphicsItem *parent = 0, Qt::WindowFlags wFlags = 0);
