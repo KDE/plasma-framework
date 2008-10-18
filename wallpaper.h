@@ -117,11 +117,24 @@ class PLASMA_EXPORT Wallpaper : public QObject
          */
         KServiceAction renderingMode() const;
 
+
+        /**
+         * Sets the rendering mode for this wallpaper.
+         * @param mode One of the modes supported by the plugin,
+         *             or an empty string for the default mode.
+         */
+        void setRenderingMode(const QString &mode);
+
         /**
          * Returns modes the wallpaper has, as specified in the
          * .desktop file.
          */
         QList<KServiceAction> listRenderingModes() const;
+
+        /**
+         * @return true if initialized (usually by calling retore), false otherwise
+         */
+        bool isInitialized() const;
 
         /**
          * Returns bounding rectangle
@@ -144,11 +157,9 @@ class PLASMA_EXPORT Wallpaper : public QObject
         /**
          * This method should be called once the wallpaper is loaded or mode is changed.
          * @param config Config group to load settings
-         * @param mode One of the modes supported by the plugin,
-         *        or an empty string for the default mode.
          * @see init
          **/
-        void restore(const KConfigGroup &config, const QString &mode = QString());
+        void restore(const KConfigGroup &config);
 
         /**
          * This method is called when settings need to be saved.

@@ -33,7 +33,8 @@ class WallpaperPrivate
 public:
     WallpaperPrivate(KService::Ptr service, Wallpaper *wallpaper) :
         q(wallpaper),
-        wallpaperDescription(service)
+        wallpaperDescription(service),
+        initialized(false)
     {
     };
 
@@ -45,6 +46,7 @@ public:
     KPluginInfo wallpaperDescription;
     QRectF boundingRect;
     KServiceAction mode;
+    bool initialized;
 };
 
 Wallpaper::Wallpaper(QObject *parentObject, const QVariantList &args)
@@ -164,13 +166,22 @@ QRectF Wallpaper::boundingRect() const
     return d->boundingRect;
 }
 
+bool Wallpaper::isInitialized() const
+{
+    return d->initialized;
+}
+
 void Wallpaper::setBoundingRect(const QRectF &boundingRect)
 {
     d->boundingRect = boundingRect;
 }
 
-void Wallpaper::restore(const KConfigGroup &config, const QString &mode)
+void Wallpaper::setRenderingMode(const QString &mode)
 {
+    if (d->mode.name() == mode) {
+        return;
+    }
+
     d->mode = KServiceAction();
     if (!mode.isEmpty()) {
         QList<KServiceAction> modes = listRenderingModes();
@@ -182,7 +193,11 @@ void Wallpaper::restore(const KConfigGroup &config, const QString &mode)
             }
         }
     }
+}
 
+void Wallpaper::restore(const KConfigGroup &config)
+{
+    d->initialized = true;
     init(config);
 }
 
