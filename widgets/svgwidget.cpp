@@ -21,7 +21,7 @@
 
 #include <QtGui/QPainter>
 
-#include <Plasma/Svg>
+#include "svg.h"
 
 namespace Plasma
 {
