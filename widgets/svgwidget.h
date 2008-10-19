@@ -35,6 +35,8 @@ class SvgWidgetPrivate;
 
 class PLASMA_EXPORT SvgWidget : public QGraphicsWidget
 {
+    Q_OBJECT
+
     public:
         SvgWidget(QGraphicsItem *parent = 0, Qt::WindowFlags wFlags = 0);
         SvgWidget(Svg *svg, const QString & elementID = QString(),
