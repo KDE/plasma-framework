@@ -1796,8 +1796,7 @@ void ContainmentPrivate::positionContainment()
         }
     }
 
-    //this magic number (4) is the number of columns to try before going to the next row
-    width = (width + INTER_CONTAINMENT_MARGIN) * 4;
+    width = (width + INTER_CONTAINMENT_MARGIN) * CONTAINMENT_COLUMNS;
     height += INTER_CONTAINMENT_MARGIN;
 
     // a mildly naive "find the first slot" approach
