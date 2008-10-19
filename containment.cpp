@@ -796,43 +796,6 @@ int Containment::screen() const
     return d->screen;
 }
 
-QPoint Containment::effectiveScreenPos() const
-{
-    if (d->screen < 0) {
-        return QPoint();
-    }
-
-    QRect r = QApplication::desktop()->screenGeometry(d->screen);
-    if (containmentType() == PanelContainment ||
-        containmentType() == CustomPanelContainment) {
-        QRectF p = geometry();
-
-        switch (d->location) {
-            case TopEdge:
-                return QPoint(r.left() + p.x(), r.top());
-                break;
-            case BottomEdge:
-                return QPoint(r.left() + p.x(), r.bottom() - p.height());
-                break;
-            case LeftEdge:
-                return QPoint(r.left(), r.top() + (p.bottom() + INTER_CONTAINMENT_MARGIN));
-                break;
-            case RightEdge:
-                return QPoint(r.right() - p.width(),
-                              r.top() + (p.bottom() + INTER_CONTAINMENT_MARGIN));
-                break;
-            default:
-                //FIXME: implement properly for Floating!
-                return p.topLeft().toPoint();
-                break;
-        }
-    } else {
-        //NOTE: if we ever support non-origin'd desktop containments
-        //      this assumption here will have to change
-        return r.topLeft();
-    }
-}
-
 KPluginInfo::List Containment::listContainments(const QString &category,
                                                 const QString &parentApp)
 {

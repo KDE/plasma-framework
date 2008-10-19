@@ -220,12 +220,6 @@ class PLASMA_EXPORT Containment : public Applet
         int screen() const;
 
         /**
-         * @return where top left corner of the containment maps to for the currently
-         *         set screen. If no screen is associated, it will return QPoint()
-         */
-        QPoint effectiveScreenPos() const;
-
-        /**
          * @reimplemented from Applet
          */
         void save(KConfigGroup &group) const;
