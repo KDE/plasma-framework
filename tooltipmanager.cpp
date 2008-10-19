@@ -26,7 +26,6 @@
 #include <QTimer>
 #include <QGridLayout>
 #include <QGraphicsView>
-#include <QDesktopWidget>
 
 //KDE
 #include <KWindowSystem>
