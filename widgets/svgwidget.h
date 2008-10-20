@@ -20,7 +20,6 @@
 #ifndef PLASMA_GRAPHICSSVGITEM_H
 #define PLASMA_GRAPHICSSVGITEM_H
 
-#include <QtCore/QObject>
 #include <QtGui/QGraphicsWidget>
 
 #include <plasma/plasma_export.h>
@@ -37,17 +36,25 @@ class PLASMA_EXPORT SvgWidget : public QGraphicsWidget
 {
     Q_OBJECT
 
+    Q_PROPERTY(Svg *svg READ svg WRITE setSvg)
+    Q_PROPERTY(QString elementID READ elementID WRITE setElementID)
+
     public:
         SvgWidget(QGraphicsItem *parent = 0, Qt::WindowFlags wFlags = 0);
         SvgWidget(Svg *svg, const QString & elementID = QString(),
                   QGraphicsItem *parent = 0, Qt::WindowFlags wFlags = 0);
         virtual ~SvgWidget();
 
+        virtual void mouseReleaseEvent ( QGraphicsSceneMouseEvent * event );
+
         void setSvg(Svg *svg);
         Svg *svg() const;
 
         void setElementID(const QString &elementID);
         QString elementID() const;
+
+    signals:
+        void clicked(Qt::MouseButton);
 
     protected:
         void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);

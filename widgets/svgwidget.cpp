@@ -20,6 +20,7 @@
 #include "svgwidget.h"
 
 #include <QtGui/QPainter>
+#include <QtGui/QGraphicsSceneMouseEvent>
 
 #include "svg.h"
 
@@ -52,6 +53,15 @@ SvgWidget::SvgWidget(Svg *svg, const QString &elementID, QGraphicsItem *parent, 
 SvgWidget::~SvgWidget()
 {
     delete d;
+}
+
+void SvgWidget::mouseReleaseEvent ( QGraphicsSceneMouseEvent * event  )
+{
+    if (receivers(SIGNAL(clicked(Qt::MouseButton)))){
+        emit clicked(event->button());
+    }else{
+        event->accept();
+    }
 }
 
 void SvgWidget::setSvg(Svg *svg)
