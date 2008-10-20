@@ -1360,7 +1360,8 @@ void Containment::destroy(bool confirm)
 
     if (isContainment()) {
         //don't remove a desktop that's in use
-        //FIXME allow removal of containments for screens that don't currently exist
+        //FIXME: this should probably be based on whether any views care or not!
+        //       sth like: foreach (view) { view->requires(this); }
         if (d->type != PanelContainment && d->type != CustomPanelContainment &&
             (d->screen != -1 || d->screen >= QApplication::desktop()->numScreens())) {
             kDebug() << (QObject*)this << "containment has a screen number?" << d->screen;
@@ -1485,7 +1486,10 @@ void ContainmentPrivate::positionToolBox()
                 toolBox->setCorner(ToolBox::Right);
             }
         }
-    } else {
+    } else if (screen > -1) {
+        //TODO: we should probably get these values from the Plasma app itself
+        //      so we actually know what the available space *is*
+        //      perhaps a virtual method in Corona for this?
         QDesktopWidget *desktop = QApplication::desktop();
         QRectF avail = desktop->availableGeometry(screen);
         QRectF screenGeom = desktop->screenGeometry(screen);
@@ -1495,7 +1499,6 @@ void ContainmentPrivate::positionToolBox()
         screenGeom.moveTo(0, 0);
 
         if (q->view() && !q->view()->transform().isScaling()) {
-
             if (QApplication::layoutDirection() == Qt::RightToLeft) {
                 if (avail.top() > screenGeom.top()) {
                     toolBox->setPos(avail.topLeft() - QPoint(0, toolBox->size()));
