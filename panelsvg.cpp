@@ -412,7 +412,7 @@ void PanelSvgPrivate::generateBackground(PanelData *panel)
     QString id = QString::fromLatin1("%5_%4_%3_%2_%1_").
                          arg(panel->enabledBorders).arg(panel->panelSize.width()).arg(panel->panelSize.height()).arg(prefix).arg(q->imagePath());
     Theme *theme = Theme::defaultTheme();
-    if (theme->findInCache(id, panel->cachedBackground)) {
+    if (theme->findInCache(id, panel->cachedBackground) && !panel->cachedBackground.isNull()) {
         return;
     }
 
