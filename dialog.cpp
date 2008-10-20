@@ -38,8 +38,11 @@
 #include <KDebug>
 #include <NETRootInfo>
 
-#include <plasma/panelsvg.h>
-#include <plasma/theme.h>
+#include "plasma/applet.h"
+#include "plasma/extender.h"
+#include "plasma/private/extender_p.h"
+#include "plasma/panelsvg.h"
+#include "plasma/theme.h"
 
 #ifdef Q_WS_X11
 #include <X11/Xlib.h>
@@ -89,7 +92,39 @@ void DialogPrivate::themeUpdated()
     const int leftWidth = background->marginSize(Plasma::LeftMargin);
     const int rightWidth = background->marginSize(Plasma::RightMargin);
     const int bottomHeight = background->marginSize(Plasma::BottomMargin);
-    q->setContentsMargins(leftWidth, topHeight, rightWidth, bottomHeight);
+
+    //TODO: correct handling of the situation when having vertical panels.
+    Extender *extender = qobject_cast<Extender*>(widget);
+    if (extender) {
+        switch (extender->d->applet->location()) {
+        case BottomEdge:
+            background->setEnabledBorders(PanelSvg::LeftBorder | PanelSvg::TopBorder
+                                                               | PanelSvg::RightBorder);
+            q->setContentsMargins(0, topHeight, 0, 0);
+            break;
+        case TopEdge:
+            background->setEnabledBorders(PanelSvg::LeftBorder | PanelSvg::BottomBorder
+                                                               | PanelSvg::RightBorder);
+            q->setContentsMargins(0, 0, 0, bottomHeight);
+            break;
+        case LeftEdge:
+            background->setEnabledBorders(PanelSvg::TopBorder | PanelSvg::BottomBorder
+                                                              | PanelSvg::RightBorder);
+            q->setContentsMargins(0, topHeight, 0, bottomHeight);
+            break;
+        case RightEdge:
+            background->setEnabledBorders(PanelSvg::TopBorder | PanelSvg::BottomBorder
+                                                              | PanelSvg::LeftBorder);
+            q->setContentsMargins(0, topHeight, 0, bottomHeight);
+            break;
+        default:
+            background->setEnabledBorders(PanelSvg::AllBorders);
+            q->setContentsMargins(leftWidth, topHeight, rightWidth, bottomHeight);
+        }
+    } else {
+        q->setContentsMargins(leftWidth, topHeight, rightWidth, bottomHeight);
+    }
+    q->update();
 }
 
 void DialogPrivate::adjustView()
@@ -99,13 +134,15 @@ void DialogPrivate::adjustView()
 
         kDebug() << "Widget size:" << widget->size()
                  << "| Widget size hint:" << widget->effectiveSizeHint(Qt::PreferredSize)
+                 << "| Widget minsize hint:" << widget->minimumSize()
+                 << "| Widget maxsize hint:" << widget->maximumSize()
                  << "| Widget bounding rect:" << widget->boundingRect();
 
         QRectF boundingRect = widget->boundingRect();
         boundingRect.setSize(widget->effectiveSizeHint(Qt::PreferredSize));
 
         //reposition and resize the view.
-        view->setSceneRect(widget->mapToScene(boundingRect).boundingRect());
+        view->setSceneRect(widget->sceneBoundingRect());
         view->resize(view->mapFromScene(view->sceneRect()).boundingRect().size());
         view->centerOn(widget);
 
@@ -115,10 +152,10 @@ void DialogPrivate::adjustView()
 
         q->setMinimumSize(qMin(int(widget->minimumSize().width()) + left + right, QWIDGETSIZE_MAX),
                           qMin(int(widget->minimumSize().height()) + top + bottom, QWIDGETSIZE_MAX));
-        q->resize(qMin(int(widget->minimumSize().width()) + left + right, QWIDGETSIZE_MAX),
-                          qMin(int(widget->minimumSize().height()) + top + bottom, QWIDGETSIZE_MAX));
         q->setMaximumSize(qMin(int(widget->maximumSize().width()) + left + right, QWIDGETSIZE_MAX),
                           qMin(int(widget->maximumSize().height()) + top + bottom, QWIDGETSIZE_MAX));
+        q->resize(qMin(int(view->size().width()) + left + right, QWIDGETSIZE_MAX),
+                          qMin(int(view->size().height()) + top + bottom, QWIDGETSIZE_MAX));
         q->updateGeometry();
 
         if (q->size() != prevSize) {
@@ -315,6 +352,8 @@ void Dialog::setGraphicsWidget(QGraphicsWidget *widget)
             lay->setMargin(0);
             lay->setSpacing(0);
         }
+
+        d->themeUpdated();
 
         if (!d->view) {
             d->view = new QGraphicsView(this);

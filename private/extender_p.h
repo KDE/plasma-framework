@@ -23,6 +23,7 @@
 #include <QString>
 #include <QList>
 #include <QPointF>
+#include "../extender.h"
 
 class QGraphicsGridLayout;
 class QGraphicsLinearLayout;
@@ -45,9 +46,10 @@ class ExtenderPrivate
 
         void addExtenderItem(ExtenderItem *item, const QPointF &pos = QPointF(-1, -1));
         void removeExtenderItem(ExtenderItem *item);
-        void adjustSizeHints();
         int insertIndexFromPos(const QPointF &pos) const;
         void loadExtenderItems();
+        void updateBorders();
+        void adjustSize();
 
         Extender *q;
 
@@ -66,6 +68,8 @@ class ExtenderPrivate
         QList<ExtenderItem*> attachedExtenderItems;
 
         bool popup;
+
+        Extender::Appearance appearance;
 
         static QGraphicsGridLayout *s_popupLayout;
 };

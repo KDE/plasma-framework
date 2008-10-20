@@ -22,6 +22,7 @@
 
 #include <QtGui/QGraphicsWidget>
 
+#include "plasma/panelsvg.h"
 #include "plasma/plasma_export.h"
 
 namespace Plasma
@@ -54,6 +55,27 @@ class PLASMA_EXPORT Extender : public QGraphicsWidget
     Q_PROPERTY(QString emptyExtenderMessage READ emptyExtenderMessage WRITE setEmptyExtenderMessage)
 
     public:
+        /**
+         * Description on how to render the extender's items.
+         */
+        enum Appearance {
+            NoBorders = 0,  /** Draws no borders on the extender's items. When placed in an applet
+                                on the desktop, use this setting and use the standard margins of
+                                the applet containing this extender. */
+            BottomUpStacked = 1, /** Draws no borders on the topmost extenderitem, but draws the
+                                     left, top and right border on subsequent items. When margins
+                                     of the containing dialog are set to 0, except for the top
+                                     margin, this leads to the 'stacked' look, recommended for
+                                     extenders of applet's contained in a panel at the bottom of
+                                     the screen. */
+            TopDownStacked = 2 /** Draws no borders on the bottom extenderitem, but draws the
+                                   left, bottom and right border on subsequent items. When margins
+                                   of the containing dialog are set to 0, except for the bottom
+                                   margin, this leads to the 'stacked' look, recommended for
+                                   extenders of applet's contained in a panel at the top of
+                                   the screen. */
+        };
+
         /**
          * Creates an extender. Note that extender expects applet to have a config(), and needs a
          * scene because of that. So you should only instantiate an extender in init() or later, not
@@ -101,6 +123,18 @@ class PLASMA_EXPORT Extender : public QGraphicsWidget
          * }
          */
         ExtenderItem *item(const QString &name) const;
+
+        /**
+         * Use this function to instruct the extender on how to render it's items. Usually you will
+         * want to call this function in your applet's constraintsEvent, allthough this is already
+         * done for you when using PopupApplet at base class for your applet. Defaults to NoBorders.
+         */
+        void setExtenderAppearance(Appearance appearance);
+
+        /**
+         * @return the current way of rendering extender items that is used.
+         */
+        Appearance extenderAppearance() const;
 
     protected:
         /**
@@ -152,6 +186,14 @@ class PLASMA_EXPORT Extender : public QGraphicsWidget
         virtual void saveState();
 
         /**
+         * This function get's called on every item to determine which background border's to
+         * render.
+         * @param item the item for which it's position or extender has changed.
+         * @return the borders that have to be enabled on it's background.
+         */
+        virtual PanelSvg::EnabledBorders enabledBordersForItem(ExtenderItem *item) const;
+
+        /**
          * @reimplemented from QGraphicsWidget
          */
         QVariant itemChange(GraphicsItemChange change, const QVariant &value);
@@ -183,6 +225,8 @@ class PLASMA_EXPORT Extender : public QGraphicsWidget
         friend class ExtenderPrivate;
         friend class ExtenderItem;
         friend class ExtenderItemPrivate;
+        //dialog needs access to the extender's applet location.
+        friend class DialogPrivate;
         //applet should be able to call saveState();
         friend class Applet;
 

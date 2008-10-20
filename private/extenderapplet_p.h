@@ -22,6 +22,11 @@
 
 #include "applet.h"
 
+/**
+ * This class is used as a 'host' for detached extender items. When an extender item is dropped
+ * somewhere, this applet is added at the location where the item is dropped, and the item is added
+ * to it's extender.
+ */
 class ExtenderApplet : public Plasma::Applet
 {
     Q_OBJECT
@@ -33,7 +38,6 @@ class ExtenderApplet : public Plasma::Applet
 
     public Q_SLOTS:
         void itemDetached(Plasma::ExtenderItem *);
-        void adjustSize();
 };
 
 #endif

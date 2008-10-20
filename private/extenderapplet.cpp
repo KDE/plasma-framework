@@ -19,18 +19,15 @@
 
 #include "extenderapplet_p.h"
 
-#include "extender.h"
-#include "extenderitem.h"
-
-#include <KDebug>
-#include <KIcon>
+#include "../extender.h"
+#include "../extenderitem.h"
 
 #include <QGraphicsLinearLayout>
 
 ExtenderApplet::ExtenderApplet(QObject *parent, const QVariantList &args)
     : Plasma::Applet(parent, args)
 {
-    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 }
 
 ExtenderApplet::~ExtenderApplet()
@@ -39,44 +36,28 @@ ExtenderApplet::~ExtenderApplet()
 
 void ExtenderApplet::init()
 {
-    new Plasma::Extender(this);
-    QGraphicsLinearLayout *layout = new QGraphicsLinearLayout();
+    QGraphicsLinearLayout *layout = new QGraphicsLinearLayout(this);
+    layout->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
+    layout->setContentsMargins(0, 0, 0, 0);
+    layout->setSpacing(0);
     setLayout(layout);
-    extender()->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
-    connect(extender(), SIGNAL(geometryChanged()), this, SLOT(adjustSize()));
-    connect(extender(), SIGNAL(itemDetached(Plasma::ExtenderItem*)),
-            this, SLOT(itemDetached(Plasma::ExtenderItem*)));
-    layout->addItem(extender());
-    adjustSize();
-}
-
-void ExtenderApplet::adjustSize()
-{
-    layout()->updateGeometry();
 
     qreal left, top, right, bottom;
     getContentsMargins(&left, &top, &right, &bottom);
+    extender()->setExtenderAppearance(Plasma::Extender::NoBorders);
+    extender()->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
 
-    setPreferredSize(QSizeF(left + right + layout()->preferredWidth(),
-                            top + bottom + layout()->preferredHeight()));
-    setMinimumSize(QSizeF(left + right + layout()->minimumWidth(),
-                          top + bottom + layout()->minimumHeight()));
-    setMaximumSize(QSizeF(left + right + layout()->maximumWidth(),
-                          top + bottom + layout()->maximumHeight()));
+    connect(extender(), SIGNAL(itemDetached(Plasma::ExtenderItem*)),
+            this, SLOT(itemDetached(Plasma::ExtenderItem*)));
 
+    layout->addItem(extender());
     updateGeometry();
-    //This wasn't necesarry before... but it is now. weirdness.
-    resize(size().width(), preferredHeight());
-    layout()->invalidate();
 }
 
 void ExtenderApplet::itemDetached(Plasma::ExtenderItem *)
 {
-    kDebug() << "item detached: " << extender()->attachedItems().count();
     if (!extender()->attachedItems().count()) {
         destroy();
-        //FIXME: only fire the signal when the item is really detached, not just being dragged away.
-        kDebug() << "delete the extender applet...";
     }
 }
 

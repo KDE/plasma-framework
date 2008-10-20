@@ -27,12 +27,14 @@
 #include "containment.h"
 #include "corona.h"
 #include "extenderitem.h"
+#include "panelsvg.h"
 #include "popupapplet.h"
 #include "svg.h"
 #include "widgets/label.h"
 
 #include "private/applet_p.h"
 #include "private/extender_p.h"
+#include "private/extenderitem_p.h"
 
 namespace Plasma
 {
@@ -42,11 +44,14 @@ Extender::Extender(Applet *applet)
           d(new ExtenderPrivate(applet, this))
 {
     applet->d->extender = this;
+    setContentsMargins(0, 0, 0, 0);
     d->layout = new QGraphicsLinearLayout(this);
     d->layout->setOrientation(Qt::Vertical);
     d->layout->setContentsMargins(0, 0, 0, 0);
     d->layout->setSpacing(0);
     setLayout(d->layout);
+
+    setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
 
     d->emptyExtenderLabel = new Label(this);
     d->emptyExtenderLabel->setText(d->emptyExtenderMessage);
@@ -54,8 +59,6 @@ Extender::Extender(Applet *applet)
     d->emptyExtenderLabel->setPreferredSize(QSizeF(200, 64));
     d->emptyExtenderLabel->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
     d->layout->addItem(d->emptyExtenderLabel);
-
-    d->adjustSizeHints();
 
     d->loadExtenderItems();
 }
@@ -130,6 +133,21 @@ ExtenderItem *Extender::item(const QString &name) const
     return 0;
 }
 
+void Extender::setExtenderAppearance(Appearance appearance)
+{
+    if (d->appearance == appearance) {
+        return;
+    }
+
+    d->appearance = appearance;
+    d->updateBorders();
+}
+
+Extender::Appearance Extender::extenderAppearance() const
+{
+    return d->appearance;
+}
+
 void Extender::saveState()
 {
     foreach (ExtenderItem *item, attachedItems()) {
@@ -140,7 +158,7 @@ void Extender::saveState()
 QVariant Extender::itemChange(GraphicsItemChange change, const QVariant &value)
 {
     if (change == QGraphicsItem::ItemPositionHasChanged) {
-        emit geometryChanged();
+        d->adjustSize();
     }
 
     return QGraphicsWidget::itemChange(change, value);
@@ -169,7 +187,7 @@ void Extender::itemAddedEvent(ExtenderItem *item, const QPointF &pos)
         d->emptyExtenderLabel->hide();
     }
 
-    d->adjustSizeHints();
+    d->adjustSize();
 }
 
 void Extender::itemRemovedEvent(ExtenderItem *item)
@@ -185,7 +203,7 @@ void Extender::itemRemovedEvent(ExtenderItem *item)
         d->layout->addItem(d->emptyExtenderLabel);
     }
 
-    d->adjustSizeHints();
+    d->adjustSize();
 }
 
 void Extender::itemHoverEnterEvent(ExtenderItem *item)
@@ -209,7 +227,7 @@ void Extender::itemHoverMoveEvent(ExtenderItem *item, const QPointF &pos)
 
     //Create a widget that functions as spacer, and add that to the layout.
     QGraphicsWidget *widget = new QGraphicsWidget(this);
-    widget->setPreferredSize(QSizeF(item->size().width(), item->size().height()));
+    widget->setPreferredSize(QSizeF(item->minimumSize().width(), item->size().height()));
     widget->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     d->spacerWidget = widget;
     d->layout->insertItem(insertIndex, widget);
@@ -221,7 +239,7 @@ void Extender::itemHoverMoveEvent(ExtenderItem *item, const QPointF &pos)
         d->emptyExtenderLabel->hide();
     }
 
-    d->adjustSizeHints();
+    d->adjustSize();
 }
 
 void Extender::itemHoverLeaveEvent(ExtenderItem *item)
@@ -244,7 +262,22 @@ void Extender::itemHoverLeaveEvent(ExtenderItem *item)
             d->layout->addItem(d->emptyExtenderLabel);
         }
 
-        d->adjustSizeHints();
+        d->adjustSize();
+    }
+}
+
+PanelSvg::EnabledBorders Extender::enabledBordersForItem(ExtenderItem *item) const
+{
+    ExtenderItem *topItem = dynamic_cast<ExtenderItem*>(d->layout->itemAt(0));
+    ExtenderItem *bottomItem = dynamic_cast<ExtenderItem*>(d->layout->itemAt(d->layout->count() - 1));
+    if (d->appearance == TopDownStacked && bottomItem != item) {
+        return PanelSvg::LeftBorder | PanelSvg::BottomBorder | PanelSvg::RightBorder;
+    } else if (d->appearance == BottomUpStacked && topItem != item) {
+        return PanelSvg::LeftBorder | PanelSvg::TopBorder | PanelSvg::RightBorder;
+    } else if (d->appearance != NoBorders) {
+        return PanelSvg::LeftBorder | PanelSvg::RightBorder;
+    } else {
+        return 0;
     }
 }
 
@@ -254,7 +287,8 @@ ExtenderPrivate::ExtenderPrivate(Applet *applet, Extender *extender) :
     spacerWidget(0),
     emptyExtenderMessage(i18n("no items")),
     emptyExtenderLabel(0),
-    popup(false)
+    popup(false),
+    appearance(Extender::NoBorders)
 {
 }
 
@@ -265,30 +299,17 @@ ExtenderPrivate::~ExtenderPrivate()
 void ExtenderPrivate::addExtenderItem(ExtenderItem *item, const QPointF &pos)
 {
     attachedExtenderItems.append(item);
-    q->itemAddedEvent(item, pos);
     q->itemHoverLeaveEvent(item);
+    q->itemAddedEvent(item, pos);
+    updateBorders();
     emit q->itemAttached(item);
 }
 
 void ExtenderPrivate::removeExtenderItem(ExtenderItem *item)
 {
     attachedExtenderItems.removeOne(item);
+    updateBorders();
     q->itemRemovedEvent(item);
-}
-
-void ExtenderPrivate::adjustSizeHints()
-{
-    if (!q->layout()) {
-        return;
-    }
-
-    q->layout()->updateGeometry();
-
-    q->setMinimumSize(q->layout()->minimumSize());
-    q->setPreferredSize(q->layout()->preferredSize());
-    q->setMaximumSize(q->layout()->maximumSize());
-
-    q->updateGeometry();
 }
 
 int ExtenderPrivate::insertIndexFromPos(const QPointF &pos) const
@@ -376,7 +397,40 @@ void ExtenderPrivate::loadExtenderItems()
         }
     }
 
-    adjustSizeHints();
+    adjustSize();
+}
+
+void ExtenderPrivate::updateBorders()
+{
+    foreach (ExtenderItem *item, q->attachedItems()) {
+        if (item && (item->d->background->enabledBorders() != q->enabledBordersForItem(item))) {
+            //call themeChanged to change the backgrounds enabled borders, and move all contained
+            //widgets according to it's changed margins.
+            item->d->themeChanged();
+        }
+    }
+}
+
+void ExtenderPrivate::adjustSize()
+{
+    if (q->layout()) {
+        q->layout()->updateGeometry();
+        //FIXME: for some reason the preferred size hint get's set correctly,
+        //but the minimumSizeHint doesn't. Investigate why.
+        q->setMinimumSize(q->layout()->preferredSize());
+    }
+
+    //check if our parentItem is an applet, and set the applets correct minimumsize.
+    Applet *applet = qgraphicsitem_cast<Applet*>(q->parentItem());
+    if (applet) {
+        QSizeF marginSize = applet->size() - applet->contentsRect().size();
+        //FIXME: for some reason the preferred size hint get's set correctly,
+        //but the minimumSizeHint doesn't. Investigate why.
+        applet->setMinimumSize(q->minimumSize() + marginSize);
+        applet->adjustSize();
+    }
+
+    emit q->geometryChanged();
 }
 
 } // Plasma namespace

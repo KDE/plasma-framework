@@ -185,6 +185,11 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
                     q->setLayout(lay);
                 }
 
+                Extender *extender = qobject_cast<Extender*>(gWidget);
+                if (extender) {
+                    extender->setExtenderAppearance(Extender::NoBorders);
+                }
+
                 q->setMinimumSize(gWidget->minimumSize() + marginSize);
                 lay->addItem(gWidget);
                 //gWidget->installEventFilter(q);
@@ -234,6 +239,15 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
                 q->setMinimumSize(QSize(0, 0));
                 if (gWidget) {
                     Corona *corona = qobject_cast<Corona *>(gWidget->scene());
+
+                    Extender *extender = qobject_cast<Extender*>(gWidget);
+                    if (extender) {
+                        if (q->location() == TopEdge) {
+                            extender->setExtenderAppearance(Extender::TopDownStacked);
+                        } else {
+                            extender->setExtenderAppearance(Extender::BottomUpStacked);
+                        }
+                    }
 
                     //could that cast ever fail??
                     if (corona) {
@@ -289,9 +303,8 @@ bool PopupApplet::eventFilter(QObject *watched, QEvent *event)
         QTimer::singleShot(100, this, SLOT(clearPopupLostFocus()));
     }
 
-    /*
-    if (watched == graphicsWidget() && (event->type() == QEvent::GraphicsSceneResize)) {
-        kDebug() << "do the resize!";
+    /**
+    if (layout() && watched == graphicsWidget() && (event->type() == QEvent::GraphicsSceneResize)) {
         //sizes are recalculated in the constraintsevent so let's just call that.
         d->popupConstraintsEvent(Plasma::FormFactorConstraint);
 

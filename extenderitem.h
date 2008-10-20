@@ -213,6 +213,7 @@ class PLASMA_EXPORT ExtenderItem : public QGraphicsWidget
         ExtenderItemPrivate * const d;
 
         friend class Extender;
+        friend class ExtenderPrivate;
 };
 } // namespace Plasma
 #endif // PLASMA_EXTENDERITEM_H
