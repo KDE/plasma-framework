@@ -44,7 +44,6 @@ public:
           toolBox(0),
           con(0),
           type(Containment::NoContainmentType),
-          positioning(false),
           drawWallpaper(true)
     {
     }
@@ -111,7 +110,7 @@ public:
     ToolBox *toolBox;
     Context *con;
     Containment::Type type;
-    bool positioning;
+    static bool s_positioning;
     bool drawWallpaper;
 };
 

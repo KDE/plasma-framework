@@ -59,6 +59,7 @@
 namespace Plasma
 {
 
+bool ContainmentPrivate::s_positioning = false;
 static const char defaultWallpaper[] = "image";
 static const char defaultWallpaperMode[] = "SingleImage";
 
@@ -1086,7 +1087,7 @@ QVariant Containment::itemChange(GraphicsItemChange change, const QVariant &valu
 
     if (isContainment() &&
         (change == QGraphicsItem::ItemSceneHasChanged ||
-         change == QGraphicsItem::ItemPositionHasChanged) && !d->positioning) {
+         change == QGraphicsItem::ItemPositionHasChanged) && !ContainmentPrivate::s_positioning) {
         switch (containmentType()) {
             case PanelContainment:
             case CustomPanelContainment:
@@ -1609,7 +1610,7 @@ void ContainmentPrivate::containmentConstraintsEvent(Plasma::Constraints constra
         }
     }
 
-    if (constraints & Plasma::SizeConstraint) {
+    if (constraints & Plasma::SizeConstraint && !ContainmentPrivate::s_positioning) {
         switch (q->containmentType()) {
             case Containment::PanelContainment:
             case Containment::CustomPanelContainment:
@@ -1708,6 +1709,11 @@ void ContainmentPrivate::containmentAppletAnimationComplete(QGraphicsItem *item,
     }
 }
 
+bool containmentSortByPosition(const Containment *c1, const Containment *c2)
+{
+    return c1->id() < c2->id();
+}
+
 void ContainmentPrivate::positionContainment()
 {
     Corona *c = q->corona();
@@ -1715,102 +1721,63 @@ void ContainmentPrivate::positionContainment()
         return;
     }
 
+    //TODO: we should avoid running this too often; consider compressing requests
+    //      with a timer.
     QList<Containment*> containments = c->containments();
     QMutableListIterator<Containment*> it(containments);
 
-    bool noCollissions = true;
     while (it.hasNext()) {
         Containment *containment = it.next();
-        if (containment == q ||
-            containment->containmentType() == Containment::PanelContainment ||
+        if (containment->containmentType() == Containment::PanelContainment ||
             containment->containmentType() == Containment::CustomPanelContainment) {
             // weed out all containments we don't care about at all
             // e.g. Panels and ourself
             it.remove();
             continue;
         }
-
-        if (noCollissions && q->collidesWithItem(containment)) {
-            noCollissions = false;
-        }
     }
 
-    if (noCollissions) {
-        // we made it all the way through the list, we have no
-        // collisions
+    if (containments.isEmpty()) {
         return;
     }
 
-    int width = 0;
-    int height = 0;
+    qSort(containments.begin(), containments.end(), containmentSortByPosition);
+    it.toFront();
 
-    QDesktopWidget *desktop = QApplication::desktop();
-    int numScreens = desktop->numScreens();
+    int column = 0;
+    int x = 0;
+    int y = 0;
+    int rowHeight = 0;
+    //int count = 0;
+    ContainmentPrivate::s_positioning = true;
 
-    for (int i = 0; i < numScreens; ++i) {
-        QRect otherScreen = desktop->screenGeometry(i);
+    //kDebug() << "+++++++++++++++++++++++++++++++++++++++++++++++++++" << containments.count();
+    while (it.hasNext()) {
+        Containment *containment = it.next();
+        containment->setPos(x, y);
+        //kDebug() << ++count << "setting to" << x << y;
 
-        if (width < otherScreen.width()) {
-            width = otherScreen.width();
+        int height = containment->size().height();
+        if (height > rowHeight) {
+            rowHeight = height;
         }
 
-        if (height < otherScreen.height()) {
-            height = otherScreen.height();
-        }
-    }
+        ++column;
 
-    width = (width + INTER_CONTAINMENT_MARGIN) * CONTAINMENT_COLUMNS;
-    height += INTER_CONTAINMENT_MARGIN;
-
-    // a mildly naive "find the first slot" approach
-    QRectF r = q->boundingRect();
-    QPointF topLeft(0, 0);
-    q->setPos(topLeft);
-
-    positioning = true;
-    while (true) {
-        it.toFront();
-        int shift = 0;
-
-        while (it.hasNext()) {
-            Containment *containment = it.next();
-
-            if (q->collidesWithItem(containment)) {
-                shift = containment->geometry().right();
-                /*kDebug() << (QObject*)q << "collides with" << (QObject*)containment
-                         << containment->geometry() << "so shift to: " << shift;*/
-                //TODO: is it safe to remove a containment once we've
-                // collided with it?
-                break;
-            }
-
-            QPointF pos = containment->pos();
-            if (pos.x() <= topLeft.x() && pos.y() <= topLeft.y()) {
-                // we don't colid with this containment, and it's above
-                // and to the left of us, so let's not bother checking
-                // it again if we go through this loop again
-                it.remove();
-            }
-        }
-
-        if (shift == 0) {
-            // success! no collisions!
-            break;
-        }
-
-        if (shift + r.width() + INTER_CONTAINMENT_MARGIN > width) {
-            // we ran out of width room, try another row
-            topLeft = QPoint(0, topLeft.y() + height);
+        if (column == CONTAINMENT_COLUMNS) {
+            column = 0;
+            x = 0;
+            y += rowHeight + INTER_CONTAINMENT_MARGIN;
+            rowHeight = 0;
         } else {
-            topLeft.setX(shift + INTER_CONTAINMENT_MARGIN);
+            x += containment->size().width() + INTER_CONTAINMENT_MARGIN;
         }
-
-        q->setPos(topLeft);
-        //kDebug() << "trying at" << topLeft << q->geometry();
-        //kDebug() << collidingItems().count() << collidingItems()[0] << (QGraphicsItem*)this;
+        //kDebug() << "column: " << column << "; x " << x << "; y" << y << "; width was"
+        //         << containment->size().width();
     }
+    //kDebug() << "+++++++++++++++++++++++++++++++++++++++++++++++++++";
 
-    positioning = false;
+    ContainmentPrivate::s_positioning = false;
 }
 
 void ContainmentPrivate::positionPanel(bool force)
@@ -1881,12 +1848,12 @@ void ContainmentPrivate::positionPanel(bool force)
         newPos = QPointF(bottom + q->size().width(), -INTER_CONTAINMENT_MARGIN - q->size().height());
     }
 
-    positioning = true;
+    ContainmentPrivate::s_positioning = true;
     if (p != newPos) {
         q->setPos(newPos);
         emit q->geometryChanged();
     }
-    positioning = false;
+    ContainmentPrivate::s_positioning = false;
 }
 
 } // Plasma namespace
