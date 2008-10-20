@@ -315,6 +315,14 @@ class PLASMA_EXPORT Containment : public Applet
          */
         void showContextMenu(const QPointF &containmentPos, const QPoint &screenPos);
 
+        /**
+         * Shows a visual clue for drag and drop
+         * This implementation does nothing, reimplement in containments that needs it
+         *
+         * @param pos point where to show the drop target
+         */
+        virtual void showDropZone(const QPoint pos);
+
     Q_SIGNALS:
         /**
          * This signal is emitted when a new applet is created by the containment

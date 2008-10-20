@@ -430,6 +430,11 @@ void Containment::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     }
 }
 
+void Containment::showDropZone(const QPoint pos)
+{
+    //Base implementation does nothing, don't put code here
+}
+
 void Containment::showContextMenu(const QPointF &containmentPos, const QPoint &screenPos)
 {
     d->showContextMenu(mapToScene(containmentPos), screenPos, false);
