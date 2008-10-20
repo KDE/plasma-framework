@@ -433,6 +433,12 @@ void PopupAppletPrivate::dialogStatusChanged(bool status)
 
 void PopupAppletPrivate::updateDialogPosition()
 {
+    QGraphicsView *view = q->view();
+
+    if (!view) {
+        return;
+    }
+
     KConfigGroup sizeGroup = q->config();
     sizeGroup = KConfigGroup(&sizeGroup, "PopupApplet");
     const int width = qMin(sizeGroup.readEntry("DialogWidth", 0),
@@ -450,8 +456,8 @@ void PopupAppletPrivate::updateDialogPosition()
     }
 
     QSize s = dialog->size();
-    QPoint pos = q->view()->mapFromScene(q->scenePos());
-    pos = q->view()->mapToGlobal(pos);
+    QPoint pos = view->mapFromScene(q->scenePos());
+    pos = view->mapToGlobal(pos);
 
     switch (q->location()) {
     case BottomEdge:
