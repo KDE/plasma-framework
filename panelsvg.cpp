@@ -465,7 +465,7 @@ void PanelSvgPrivate::generateBackground(PanelData *panel)
             {
                 QPainter centerPainter(&center);
                 centerPainter.setCompositionMode(QPainter::CompositionMode_Source);
-                q->paint(&centerPainter, QPoint(0, 0), prefix + "center");
+                q->paint(&centerPainter, QRect(QPoint(0, 0), q->elementSize(prefix + "center")), prefix + "center");
             }
 
             p.drawTiledPixmap(QRect(panel->leftWidth, panel->topHeight,
@@ -546,7 +546,7 @@ void PanelSvgPrivate::generateBackground(PanelData *panel)
 
             QPainter sidePainter(&left);
             sidePainter.setCompositionMode(QPainter::CompositionMode_Source);
-            q->paint(&sidePainter, QPoint(0, 0), prefix + "left");
+            q->paint(&sidePainter, QRect(QPoint(0, 0), left.size()), prefix + "left");
 
             p.drawTiledPixmap(QRect(leftOffset, contentTop, panel->leftWidth, contentHeight), left);
         }
@@ -557,7 +557,7 @@ void PanelSvgPrivate::generateBackground(PanelData *panel)
 
             QPainter sidePainter(&right);
             sidePainter.setCompositionMode(QPainter::CompositionMode_Source);
-            q->paint(&sidePainter, QPoint(0, 0), prefix + "right");
+            q->paint(&sidePainter, QRect(QPoint(0, 0), right.size()), prefix + "right");
 
             p.drawTiledPixmap(QRect(rightOffset, contentTop, panel->rightWidth, contentHeight), right);
         }
@@ -568,7 +568,7 @@ void PanelSvgPrivate::generateBackground(PanelData *panel)
 
             QPainter sidePainter(&top);
             sidePainter.setCompositionMode(QPainter::CompositionMode_Source);
-            q->paint(&sidePainter, QPoint(0, 0), prefix + "top");
+            q->paint(&sidePainter, QRect(QPoint(0, 0), top.size()), prefix + "top");
 
             p.drawTiledPixmap(QRect(contentLeft, topOffset, contentWidth, panel->topHeight), top);
         }
@@ -579,7 +579,7 @@ void PanelSvgPrivate::generateBackground(PanelData *panel)
 
             QPainter sidePainter(&bottom);
             sidePainter.setCompositionMode(QPainter::CompositionMode_Source);
-            q->paint(&sidePainter, QPoint(0, 0), prefix + "bottom");
+            q->paint(&sidePainter, QRect(QPoint(0, 0), bottom.size()), prefix + "bottom");
 
             p.drawTiledPixmap(QRect(contentLeft, bottomOffset, contentWidth, panel->bottomHeight), bottom);
         }
