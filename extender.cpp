@@ -215,8 +215,8 @@ void Extender::itemHoverMoveEvent(ExtenderItem *item, const QPointF &pos)
 {
     int insertIndex = d->insertIndexFromPos(pos);
 
-    if (insertIndex == d->currentSpacerIndex) {
-        //relayouting is resource intensive, so don't do that when not necesarry
+    if ((insertIndex == d->currentSpacerIndex) || (insertIndex == -1)) {
+        //relayouting is resource intensive, so don't do that when not necesarry.
         return;
     }
 
@@ -227,7 +227,7 @@ void Extender::itemHoverMoveEvent(ExtenderItem *item, const QPointF &pos)
 
     //Create a widget that functions as spacer, and add that to the layout.
     QGraphicsWidget *widget = new QGraphicsWidget(this);
-    widget->setPreferredSize(QSizeF(item->minimumSize().width(), item->size().height()));
+    widget->setMinimumSize(QSizeF(item->minimumSize().width(), item->size().height()));
     widget->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     d->spacerWidget = widget;
     d->layout->insertItem(insertIndex, widget);
@@ -284,6 +284,7 @@ PanelSvg::EnabledBorders Extender::enabledBordersForItem(ExtenderItem *item) con
 ExtenderPrivate::ExtenderPrivate(Applet *applet, Extender *extender) :
     q(extender),
     applet(applet),
+    currentSpacerIndex(-1),
     spacerWidget(0),
     emptyExtenderMessage(i18n("no items")),
     emptyExtenderLabel(0),
