@@ -334,7 +334,9 @@ QBitmap PanelSvg::mask() const
     if (!panel->cachedMask) {
         if (panel->cachedBackground.isNull()) {
             d->generateBackground(panel);
-            Q_ASSERT(!panel->cachedBackground.isNull());
+            if (panel->cachedBackground.isNull()) {
+                return QBitmap();
+            }
         }
         panel->cachedMask = QBitmap(panel->cachedBackground.alphaChannel().createMaskFromColor(Qt::black));
     }
@@ -375,7 +377,9 @@ QPixmap PanelSvg::panelPixmap()
     PanelData *panel = d->panels[d->prefix];
     if (panel->cachedBackground.isNull()) {
         d->generateBackground(panel);
-        Q_ASSERT(!panel->cachedBackground.isNull());
+        if (panel->cachedBackground.isNull()) {
+            return QPixmap();
+        }
     }
 
     return panel->cachedBackground;
@@ -386,7 +390,9 @@ void PanelSvg::paintPanel(QPainter *painter, const QRectF &target, const QRectF 
     PanelData *panel = d->panels[d->prefix];
     if (panel->cachedBackground.isNull()) {
         d->generateBackground(panel);
-        Q_ASSERT(!panel->cachedBackground.isNull());
+        if (panel->cachedBackground.isNull()) {
+            return;
+        }
     }
 
     painter->drawPixmap(target, panel->cachedBackground, source.isValid() ? source : target);
@@ -397,7 +403,9 @@ void PanelSvg::paintPanel(QPainter *painter, const QPointF &pos)
     PanelData *panel = d->panels[d->prefix];
     if (panel->cachedBackground.isNull()) {
         d->generateBackground(panel);
-        Q_ASSERT(!panel->cachedBackground.isNull());
+        if (panel->cachedBackground.isNull()) {
+            return;
+        }
     }
 
     painter->drawPixmap(pos, panel->cachedBackground);
