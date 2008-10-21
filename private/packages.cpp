@@ -22,6 +22,7 @@
 #include <KConfigGroup>
 #include <KDesktopFile>
 #include <KLocale>
+#include <KMessageBox>
 
 #include <knewstuff2/engine.h>
 
@@ -81,7 +82,9 @@ void PlasmoidPackage::createNewWidgetBrowser(QWidget *parent)
             // install the packges!
             foreach (const QString &package, entry->installedFiles()) {
                 if (!installPackage(package, defaultPackageRoot())) {
-                    kDebug() << "FAIL!";
+                    kDebug() << "FAIL! on install of" << package;
+                    KMessageBox::error(0, i18n("Installation of <b>%1</b> failed!", package),
+                                       i18n("Installation Failed"));
                 }
             }
         }
