@@ -71,7 +71,22 @@ void PlasmoidPackage::createNewWidgetBrowser(QWidget *parent)
 {
     KNS::Engine engine(0);
     if (engine.init("plasmoids.knsrc")) {
-        /* KNS::Entry::List entries = */ engine.downloadDialogModal(parent);
+        KNS::Entry::List entries = engine.downloadDialogModal(parent);
+
+        foreach (KNS::Entry *entry, entries) {
+            if (entry->status() != KNS::Entry::Installed) {
+                continue;
+            }
+
+            // install the packges!
+            foreach (const QString &package, entry->installedFiles()) {
+                if (!installPackage(package, defaultPackageRoot())) {
+                    kDebug() << "FAIL!";
+                }
+            }
+        }
+
+        qDeleteAll(entries);
     }
     emit newWidgetBrowserFinished();
 }

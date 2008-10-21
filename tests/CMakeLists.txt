@@ -14,7 +14,4 @@ PLASMA_UNIT_TESTS(
     plasmoidpackagetest
 )
 
-#set(appletbrowser_SRCS appletbrowser.cpp)
-#kde4_add_executable(plasmaappletbrowser ${appletbrowser_SRCS})
-#target_link_libraries(plasmaappletbrowser plasma ${KDE4_KDEUI_LIBS})
 
