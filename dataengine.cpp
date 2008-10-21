@@ -391,6 +391,15 @@ QString DataEngine::icon() const
     return d->icon;
 }
 
+QString DataEngine::pluginName() const
+{
+    if (!d->dataEngineDescription.isValid()) {
+        return QString();
+    }
+
+    return d->dataEngineDescription.pluginName();
+}
+
 const Package *DataEngine::package() const
 {
     return d->package;
@@ -419,6 +428,7 @@ void DataEngine::setName(const QString &name)
 // Private class implementations
 DataEnginePrivate::DataEnginePrivate(DataEngine *e, KService::Ptr service)
     : q(e),
+      dataEngineDescription(service),
       refCount(-1), // first ref
       updateTimerId(0),
       minPollingInterval(-1),
@@ -443,7 +453,6 @@ DataEnginePrivate::DataEnginePrivate(DataEngine *e, KService::Ptr service)
     e->setObjectName(engineName);
     icon = service->icon();
 
-    KPluginInfo dataEngineDescription(service);
     if (dataEngineDescription.isValid()) {
         QString api = dataEngineDescription.property("X-Plasma-API").toString();
 

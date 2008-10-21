@@ -1784,7 +1784,7 @@ void AppletPrivate::init()
 }
 
 // put all setup routines for script here. at this point we can assume that
-// package exists and that we have a script engin
+// package exists and that we have a script engine
 void AppletPrivate::setupScriptSupport()
 {
     Q_ASSERT(package);

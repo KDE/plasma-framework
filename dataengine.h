@@ -226,6 +226,12 @@ class PLASMA_EXPORT DataEngine : public QObject
          * @return the Package object, or 0 if none
          **/
         const Package *package() const;
+        
+        /**
+         * Returns the plugin name for the applet
+         */
+        QString pluginName() const;
+
 
     Q_SIGNALS:
         /**

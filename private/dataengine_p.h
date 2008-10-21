@@ -22,6 +22,7 @@
 
 #include <QQueue>
 #include <QTime>
+#include <KPluginInfo>
 
 class QTime;
 
@@ -61,6 +62,7 @@ class DataEnginePrivate
         bool isUsed() const;
 
         DataEngine *q;
+        KPluginInfo dataEngineDescription;
         int refCount;
         int updateTimerId;
         int minPollingInterval;
