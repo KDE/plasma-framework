@@ -55,14 +55,16 @@ public :
         : currentWidget(0),
           showTimer(0),
           hideTimer(0),
+          state(ToolTipManager::Activated),
           isShown(false),
           delayedHide(false)
     {
 
     }
+
     ~ToolTipManagerPrivate()
     {
-
+        clearTips();
     }
 
     void showToolTip();
@@ -77,10 +79,13 @@ public :
       */
     void onWidgetDestroyed(QObject * object);
 
+    void clearTips();
+
     QGraphicsWidget *currentWidget;
     QTimer *showTimer;
     QTimer *hideTimer;
     QHash<QGraphicsWidget *, ToolTip *> tooltips;
+    ToolTipManager::State state;
     bool isShown : 1;
     bool delayedHide : 1;
 };
@@ -186,7 +191,7 @@ void ToolTipManager::hide(QGraphicsWidget *widget)
 
 void ToolTipManager::registerWidget(QGraphicsWidget *widget)
 {
-    if (d->tooltips.contains(widget)) {
+    if (d->state == Deactivated || d->tooltips.contains(widget)) {
         return;
     }
 
@@ -212,6 +217,10 @@ void ToolTipManager::unregisterWidget(QGraphicsWidget *widget)
 
 void ToolTipManager::setContent(QGraphicsWidget *widget, const ToolTipContent &data)
 {
+    if (d->state == Deactivated) {
+        return;
+    }
+
     registerWidget(widget);
 
     ToolTip *tooltip = d->tooltips.value(widget);
@@ -231,6 +240,27 @@ void ToolTipManager::setContent(QGraphicsWidget *widget, const ToolTipContent &d
 
     tooltip->setContent(data);
     tooltip->updateTheme();
+}
+
+void ToolTipManager::setState(ToolTipManager::State state)
+{
+    d->state = state;
+
+    switch (state) {
+        case Activated:
+            break;
+        case Deactivated:
+            d->clearTips();
+            //fallthrough
+        case Inhibited:
+            d->resetShownState();
+            break;
+    }
+}
+
+ToolTipManager::State ToolTipManager::state() const
+{
+    return d->state;
 }
 
 void ToolTipManagerPrivate::themeUpdated()
@@ -282,6 +312,15 @@ void ToolTipManagerPrivate::onWidgetDestroyed(QObject *object)
     }
 }
 
+void ToolTipManagerPrivate::clearTips()
+{
+    foreach (ToolTip *tip, tooltips) {
+        delete tip;
+    }
+
+    tooltips.clear();
+}
+
 void ToolTipManagerPrivate::resetShownState()
 {
     if (currentWidget) {
@@ -292,13 +331,13 @@ void ToolTipManagerPrivate::resetShownState()
             isShown = false;
             tooltip->hide();
             currentWidget = 0;
-      }
+        }
     }
 }
 
 void ToolTipManagerPrivate::showToolTip()
 {
-    if (!currentWidget) {
+    if (state != ToolTipManager::Activated || !currentWidget) {
         return;
     }
 
@@ -329,7 +368,7 @@ void ToolTipManagerPrivate::showToolTip()
 bool ToolTipManager::eventFilter(QObject *watched, QEvent *event)
 {
     QGraphicsWidget * widget = dynamic_cast<QGraphicsWidget *>(watched);
-    if (!widget) {
+    if (d->state != Activated || !widget) {
         return QObject::eventFilter(watched, event);
     }
 

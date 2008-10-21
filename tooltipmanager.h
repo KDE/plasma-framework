@@ -67,6 +67,12 @@ class PLASMA_EXPORT ToolTipManager  : public QObject
     Q_OBJECT
 public:
 
+    enum State {
+        Activated = 0 /**<< Will accept tooltip data and show tooltips */,
+        Inhibited /**<< Will accept tooltip data, but not show tooltips */,
+        Deactivated /**<< Will discard tooltip data, and not attempt to show them */
+    };
+
     /**
      * @struct ToolTipContent plasma/tooltipmanager.h <Plasma/ToolTipManager>
      *
@@ -167,6 +173,18 @@ public:
      */
     void setContent(QGraphicsWidget *widget,
                     const ToolTipContent &data = ToolTipContent());
+
+    /**
+     * Sets the current state of the manager.
+     * @see State
+     * @arg state the state to put the manager in
+     */
+    void setState(ToolTipManager::State state);
+
+    /**
+     * @return the current state of the manager; @see State
+     */
+    ToolTipManager::State state() const;
 
 private:
     /**
