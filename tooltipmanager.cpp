@@ -132,14 +132,14 @@ ToolTipManager::~ToolTipManager()
     delete d;
 }
 
-void ToolTipManager::showToolTip(QGraphicsWidget *widget)
+void ToolTipManager::show(QGraphicsWidget *widget)
 {
     if (!d->tooltips.contains(widget)) {
         return;
     }
 
     if (d->currentWidget) {
-        hideToolTip(d->currentWidget);
+        hide(d->currentWidget);
     }
 
     d->hideTimer->stop();
@@ -156,7 +156,7 @@ void ToolTipManager::showToolTip(QGraphicsWidget *widget)
     }
 }
 
-bool ToolTipManager::isToolTipVisible(QGraphicsWidget *widget) const
+bool ToolTipManager::isVisible(QGraphicsWidget *widget) const
 {
     ToolTip *tooltip = d->tooltips.value(widget);
     if (tooltip) {
@@ -166,14 +166,14 @@ bool ToolTipManager::isToolTipVisible(QGraphicsWidget *widget) const
     }
 }
 
-void ToolTipManager::delayedHideToolTip()
+void ToolTipManager::delayedHide()
 {
     d->showTimer->stop();  // stop the timer to show the tooltip
     d->delayedHide = true;
     d->hideTimer->start(250);
 }
 
-void ToolTipManager::hideToolTip(QGraphicsWidget *widget)
+void ToolTipManager::hide(QGraphicsWidget *widget)
 {
     ToolTip *tooltip = d->tooltips.value(widget);
     if (tooltip) {
@@ -210,7 +210,7 @@ void ToolTipManager::unregisterWidget(QGraphicsWidget *widget)
     }
 }
 
-void ToolTipManager::setToolTipContent(QGraphicsWidget *widget, const ToolTipContent &data)
+void ToolTipManager::setContent(QGraphicsWidget *widget, const ToolTipContent &data)
 {
     registerWidget(widget);
 
@@ -309,6 +309,7 @@ void ToolTipManagerPrivate::showToolTip()
         // give the object a chance for delayed loading of the tip
         QMetaObject::invokeMethod(currentWidget, "toolTipAboutToShow");
         tooltip = tooltips.value(currentWidget);
+        kDebug() << "attempt to make one ... we gots" << tooltip;
         if (tooltip) {
             justCreated = true;
         } else {
@@ -317,14 +318,12 @@ void ToolTipManagerPrivate::showToolTip()
         }
     }
 
-    if (tooltip->isActivated()) {
-        tooltip->setVisible(false);
-        //kDebug() << "about to show" << justCreated;
-        tooltip->prepareShowing(!justCreated);
-        tooltip->move(popupPosition(currentWidget, tooltip->size()));
-        isShown = true;  //ToolTip is visible
-        tooltip->setVisible(true);
-    }
+    tooltip->setVisible(false);
+    //kDebug() << "about to show" << justCreated;
+    tooltip->prepareShowing(!justCreated);
+    tooltip->move(popupPosition(currentWidget, tooltip->size()));
+    isShown = true;  //ToolTip is visible
+    tooltip->setVisible(true);
 }
 
 bool ToolTipManager::eventFilter(QObject *watched, QEvent *event)
@@ -338,7 +337,7 @@ bool ToolTipManager::eventFilter(QObject *watched, QEvent *event)
         case QEvent::GraphicsSceneHoverMove:
             // If the tooltip isn't visible, run through showing the tooltip again
             // so that it only becomes visible after a stationary hover
-            if (Plasma::ToolTipManager::self()->isToolTipVisible(widget)) {
+            if (Plasma::ToolTipManager::self()->isVisible(widget)) {
                 break;
             }
 
@@ -361,19 +360,19 @@ bool ToolTipManager::eventFilter(QObject *watched, QEvent *event)
             // initialized, in which case view() will return 0.
             QGraphicsView *parentView = viewFor(widget);
             if (parentView) {
-                showToolTip(widget);
+                show(widget);
             }
 
             break;
         }
 
         case QEvent::GraphicsSceneHoverLeave:
-            delayedHideToolTip();
+            delayedHide();
             break;
 
         case QEvent::GraphicsSceneMousePress:
         case QEvent::GraphicsSceneWheel:
-            hideToolTip(widget);
+            hide(widget);
 
         default:
             break;

@@ -46,14 +46,14 @@ class Applet;
  * data.mainText = i18n("My Title");
  * data.subText = i18n("This is a little tooltip");
  * data.image = KIcon("some-icon").pixmap(IconSize(KIconLoader::Desktop));
- * Plasma::ToolTipManager::self()->setToolTipContent(widget, data);
+ * Plasma::ToolTipManager::self()->setContent(widget, data);
  * @endcode
  *
  * Note that, since a Plasma::Applet is a QGraphicsWidget, you can use
- * Plasma::ToolTipManager::self()->setToolTipContent(this, data); in the
+ * Plasma::ToolTipManager::self()->setContent(this, data); in the
  * applet's init() method to set a tooltip for the whole applet.
  *
- * The tooltip will be registered automatically by setToolTipContent().  It will be
+ * The tooltip will be registered automatically by setContent().  It will be
  * automatically unregistered when the associated widget is deleted, freeing the
  * memory used by the tooltip, but you can manually unregister it at any time by
  * calling unregisterWidget().
@@ -103,7 +103,7 @@ public:
      *
      * @param widget the widget for which the tooltip will be displayed
      */
-    void showToolTip(QGraphicsWidget *widget);
+    void show(QGraphicsWidget *widget);
 
     /**
      * Find out whether the tooltip for a given widget is currently being displayed.
@@ -112,24 +112,24 @@ public:
      * @return true if the tooltip of the widget is currently displayed,
      *         false if not
      */
-    bool isToolTipVisible(QGraphicsWidget *widget) const;
+    bool isVisible(QGraphicsWidget *widget) const;
 
     /**
      * Hides the currently showing tooltip after a short amount of time.
      */
-    void delayedHideToolTip();
+    void delayedHide();
 
     /**
      * Hides the tooltip for a widget immediately.
      *
      * @param widget the widget to hide the tooltip for
      */
-    void hideToolTip(QGraphicsWidget *widget);
+    void hide(QGraphicsWidget *widget);
 
     /**
      * Registers a widget with the tooltip manager.
      *
-     * Note that setToolTipContent() will register the widget if it
+     * Note that setContent() will register the widget if it
      * has not already been registered, and so you do not normally
      * need to use the method.
      *
@@ -137,7 +137,7 @@ public:
      * register your widget with registerWidget(), then implement
      * a slot named toolTipAboutToShow for the widget.  This will be
      * called before the tooltip is shown, allowing you to set the
-     * data with setToolTipContent().
+     * data with setContent().
      *
      * If the widget also has a toolTipHidden slot, this will be called
      * after the tooltip is hidden.
@@ -165,7 +165,8 @@ public:
      * @param data   the content of the tooltip. If an empty ToolTipContent
      *               is passed in, the tooltip content will be reset.
      */
-    void setToolTipContent(QGraphicsWidget *widget, const ToolTipContent &data);
+    void setContent(QGraphicsWidget *widget,
+                    const ToolTipContent &data = ToolTipContent());
 
 private:
     /**
