@@ -23,7 +23,7 @@
 
 #include <QWidget> // base class
 
-#include <plasma/tooltipmanager.h> //ToolTipContent struct
+#include <plasma/tooltipmanager.h> //Content struct
 
 namespace Plasma {
 
@@ -38,7 +38,7 @@ public:
     ~ToolTip();
 
     void updateTheme();
-    void setContent(const ToolTipManager::ToolTipContent &data);
+    void setContent(const ToolTipManager::Content &data);
     void prepareShowing(bool cueUpdate);
     void setActivated(bool value);
     bool isActivated();

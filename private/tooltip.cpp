@@ -108,7 +108,7 @@ ToolTip::~ToolTip()
     delete d;
 }
 
-void ToolTip::setContent(const ToolTipManager::ToolTipContent &data)
+void ToolTip::setContent(const ToolTipManager::Content &data)
 {
     //reset our size
     d->label->setText("<qt><b>" + data.mainText + "</b><br>" + data.subText + "</qt>");

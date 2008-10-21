@@ -106,12 +106,12 @@ ToolTipManager *ToolTipManager::self()
     return &privateInstance->self;
 }
 
-ToolTipManager::ToolTipContent::ToolTipContent()
+ToolTipManager::Content::Content()
     : windowToPreview(0)
 {
 }
 
-bool ToolTipManager::ToolTipContent::isEmpty() const
+bool ToolTipManager::Content::isEmpty() const
 {
     return mainText.isEmpty() && subText.isEmpty() && image.isNull() && windowToPreview == 0;
 }
@@ -215,7 +215,7 @@ void ToolTipManager::unregisterWidget(QGraphicsWidget *widget)
     }
 }
 
-void ToolTipManager::setContent(QGraphicsWidget *widget, const ToolTipContent &data)
+void ToolTipManager::setContent(QGraphicsWidget *widget, const Content &data)
 {
     if (d->state == Deactivated) {
         return;

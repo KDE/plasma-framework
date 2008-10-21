@@ -42,7 +42,7 @@ class Applet;
  *
  * @code
  * // widget is a QGraphicsWidget*
- * Plasma::ToolTipManager::ToolTipContent data;
+ * Plasma::ToolTipManager::Content data;
  * data.mainText = i18n("My Title");
  * data.subText = i18n("This is a little tooltip");
  * data.image = KIcon("some-icon").pixmap(IconSize(KIconLoader::Desktop));
@@ -74,17 +74,17 @@ public:
     };
 
     /**
-     * @struct ToolTipContent plasma/tooltipmanager.h <Plasma/ToolTipManager>
+     * @struct Content plasma/tooltipmanager.h <Plasma/ToolTipManager>
      *
      * This provides the content for a tooltip.
      *
      * Normally you will want to set at least the @p mainText and
      * @p subText.
      */
-    struct PLASMA_EXPORT ToolTipContent
+    struct PLASMA_EXPORT Content
     {
-        /** Creates an empty ToolTipContent */
-        ToolTipContent();
+        /** Creates an empty Content */
+        Content();
 
         /** @return true if all the fields are empty */
         bool isEmpty() const;
@@ -168,11 +168,11 @@ public:
      * necessary, so there is usually no need to call registerWidget().
      *
      * @param widget the widget the tooltip should be associated with
-     * @param data   the content of the tooltip. If an empty ToolTipContent
+     * @param data   the content of the tooltip. If an empty Content
      *               is passed in, the tooltip content will be reset.
      */
     void setContent(QGraphicsWidget *widget,
-                    const ToolTipContent &data = ToolTipContent());
+                    const ToolTipManager::Content &data = ToolTipManager::Content());
 
     /**
      * Sets the current state of the manager.
