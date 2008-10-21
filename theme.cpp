@@ -76,6 +76,7 @@ public:
 
     ~ThemePrivate()
     {
+       delete pixmapCache;
     }
 
     KConfigGroup &config()
