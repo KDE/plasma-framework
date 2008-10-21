@@ -82,7 +82,7 @@ QPoint popupPosition(const QGraphicsItem *item, const QSize &s)
     Plasma::View *pv = dynamic_cast<Plasma::View *>(v);
 
     Plasma::Location loc = Floating;
-    if (pv) {
+    if (pv && pv->containment()) {
         loc = pv->containment()->location();
     }
 
