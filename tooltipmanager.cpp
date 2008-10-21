@@ -156,7 +156,7 @@ void ToolTipManager::showToolTip(QGraphicsWidget *widget)
     }
 }
 
-bool ToolTipManager::isWidgetToolTipDisplayed(QGraphicsWidget *widget)
+bool ToolTipManager::isToolTipVisible(QGraphicsWidget *widget) const
 {
     ToolTip *tooltip = d->tooltips.value(widget);
     if (tooltip) {
@@ -231,40 +231,6 @@ void ToolTipManager::setToolTipContent(QGraphicsWidget *widget, const ToolTipCon
 
     tooltip->setContent(data);
     tooltip->updateTheme();
-}
-
-void ToolTipManager::clearToolTipContent(QGraphicsWidget *widget)
-{
-    ToolTipContent t;
-    setToolTipContent(widget, t);
-}
-
-bool ToolTipManager::widgetHasToolTip(QGraphicsWidget *widget) const
-{
-    return d->tooltips.contains(widget);
-}
-
-void ToolTipManager::setToolTipActivated(QGraphicsWidget *widget, bool enable)
-{
-    registerWidget(widget);
-
-    ToolTip *tooltip = d->tooltips.value(widget);
-    tooltip->setActivated(enable);
-    if (!enable) {
-        hideToolTip(widget);
-    } else if (d->currentWidget) {
-        showToolTip(widget);
-    }
-}
-
-bool ToolTipManager::isToolTipActivated(QGraphicsWidget *widget)
-{
-    if (!d->tooltips.contains(widget)) {
-        return false;
-    }
-
-    ToolTip *tooltip = d->tooltips.value(widget);
-    return tooltip->isActivated();
 }
 
 void ToolTipManagerPrivate::themeUpdated()
@@ -372,7 +338,7 @@ bool ToolTipManager::eventFilter(QObject *watched, QEvent *event)
         case QEvent::GraphicsSceneHoverMove:
             // If the tooltip isn't visible, run through showing the tooltip again
             // so that it only becomes visible after a stationary hover
-            if (Plasma::ToolTipManager::self()->isWidgetToolTipDisplayed(widget)) {
+            if (Plasma::ToolTipManager::self()->isToolTipVisible(widget)) {
                 break;
             }
 
@@ -386,7 +352,7 @@ bool ToolTipManager::eventFilter(QObject *watched, QEvent *event)
         case QEvent::GraphicsSceneHoverEnter:
         {
             // Check that there is a tooltip to show
-            if (!widgetHasToolTip(widget)) {
+            if (!d->tooltips.contains(widget)) {
                 break;
             }
 

@@ -99,18 +99,6 @@ public:
     static ToolTipManager *self();
 
     /**
-     * Default constructor.
-     *
-     * You should normall use self() instead.
-     */
-    explicit ToolTipManager(QObject *parent = 0);
-
-    /**
-     * Default destructor.
-     */
-    ~ToolTipManager();
-
-    /**
      * Show the tooltip for a widget registered in the tooltip manager
      *
      * @param widget the widget for which the tooltip will be displayed
@@ -124,7 +112,7 @@ public:
      * @return true if the tooltip of the widget is currently displayed,
      *         false if not
      */
-    bool isWidgetToolTipDisplayed(QGraphicsWidget *widget);
+    bool isToolTipVisible(QGraphicsWidget *widget) const;
 
     /**
      * Hides the currently showing tooltip after a short amount of time.
@@ -179,35 +167,19 @@ public:
      */
     void setToolTipContent(QGraphicsWidget *widget, const ToolTipContent &data);
 
-    /**
-     * Clears the tooltip data associated with this widget, but keeps
-     * the widget registered.
-     */
-    void clearToolTipContent(QGraphicsWidget *widget);
-
-    /**
-     * Checks whether a widget has a tooltip associated with it.
-     *
-     * @param widget the widget to check for an associated tooltip
-     * @return true if the widget has a tooltip associated,
-     *         false if it does not
-     */
-    bool widgetHasToolTip(QGraphicsWidget *widget) const;
-
-    /**
-     *  Enable/or disable a Tooltip, this method is useful is we want
-     *  to have a tooltip activated on demand.
-     *  @param widget the widget to change tooltip behaviour
-     *  @param enable if we need the tooltip or not
-     */
-    void setToolTipActivated(QGraphicsWidget *widget, bool enable);
-
-    /**
-     * Return true is the tooltip will be displayed, false otherwise
-     */
-    bool isToolTipActivated(QGraphicsWidget *widget);
-
 private:
+    /**
+     * Default constructor.
+     *
+     * You should normall use self() instead.
+     */
+    explicit ToolTipManager(QObject *parent = 0);
+
+    /**
+     * Default destructor.
+     */
+    ~ToolTipManager();
+
     friend class ToolTipManagerSingleton;
     bool eventFilter(QObject *watched, QEvent *event);
 
