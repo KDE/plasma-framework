@@ -109,7 +109,7 @@ QPoint popupPosition(const QGraphicsItem *item, const QSize &s)
 
     //are we out of screen?
     QRect screenRect =
-        QApplication::desktop()->screenGeometry(pv ? pv->containment()->screen() : -1);
+        QApplication::desktop()->screenGeometry((pv && pv->containment()) ? pv->containment()->screen() : -1);
     //kDebug() << "==> rect for" << (pv ? pv->containment()->screen() : -1) << "is" << screenRect;
 
     if (pos.rx() + s.width() > screenRect.right()) {
