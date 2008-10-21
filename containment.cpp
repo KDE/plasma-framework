@@ -1491,7 +1491,7 @@ void ContainmentPrivate::positionToolBox()
                 toolBox->setCorner(ToolBox::Right);
             }
         }
-    } else if (screen > -1) {
+    } else {
         //TODO: we should probably get these values from the Plasma app itself
         //      so we actually know what the available space *is*
         //      perhaps a virtual method in Corona for this?
