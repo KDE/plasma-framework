@@ -17,8 +17,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef PLASMA_GRAPHICSSVGITEM_H
-#define PLASMA_GRAPHICSSVGITEM_H
+#ifndef PLASMA_SVGWIDGET_H
+#define PLASMA_SVGWIDGET_H
 
 #include <QtGui/QGraphicsWidget>
 
@@ -53,7 +53,7 @@ class PLASMA_EXPORT SvgWidget : public QGraphicsWidget
         void setElementID(const QString &elementID);
         QString elementID() const;
 
-    signals:
+    Q_SIGNALS:
         void clicked(Qt::MouseButton);
 
     protected:
