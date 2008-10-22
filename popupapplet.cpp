@@ -54,6 +54,7 @@ PopupApplet::PopupApplet(QObject *parent, const QVariantList &args)
 
 PopupApplet::~PopupApplet()
 {
+    delete widget();
     delete d;
 }
 
@@ -165,6 +166,10 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
                 if (dialog->layout() && qWidget) {
                     //we don't want to delete Widget inside the dialog layout
                     dialog->layout()->removeWidget(qWidget);
+                }
+
+                if (qWidget) {
+                    qWidget->setParent(0);
                 }
 
                 delete dialog;
