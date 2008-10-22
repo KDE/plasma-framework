@@ -337,7 +337,10 @@ void ToolTipManagerPrivate::resetShownState()
 
 void ToolTipManagerPrivate::showToolTip()
 {
-    if (state != ToolTipManager::Activated || !currentWidget) {
+    if (state != ToolTipManager::Activated ||
+        !currentWidget ||
+        QApplication::activePopupWidget() ||
+        QApplication::activeModalWidget()) {
         return;
     }
 
