@@ -53,7 +53,7 @@ class ToolTipPrivate
     WindowPreview *preview;
     WId windowToPreview;
     PanelSvg *background;
-    QObject *source;
+    QPointer<QObject> source;
 };
 
 void ToolTip::showEvent(QShowEvent *e)
