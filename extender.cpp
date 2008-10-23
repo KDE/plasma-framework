@@ -43,6 +43,14 @@ Extender::Extender(Applet *applet)
         : QGraphicsWidget(applet),
           d(new ExtenderPrivate(applet, this))
 {
+    //At multiple places in the extender code, we make the assumption that an applet doesn't have
+    //more then one extender. If a second extender is created, destroy the first one to avoid leaks.
+    if (applet->d->extender) {
+        kWarning() << "Applet already has an extender, and can have only one extender."
+                   << "The previous extender will be destroyed.";
+        delete applet->d->extender;
+    }
+
     applet->d->extender = this;
     setContentsMargins(0, 0, 0, 0);
     d->layout = new QGraphicsLinearLayout(this);
