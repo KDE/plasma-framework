@@ -623,6 +623,13 @@ void ExtenderItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     }
 }
 
+void ExtenderItem::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
+{
+    if (d->titleRect().contains(event->pos())) {
+        d->toggleCollapse();
+    }
+}
+
 void ExtenderItem::hoverMoveEvent(QGraphicsSceneHoverEvent *event)
 {
     if (d->titleRect().contains(event->pos())) {
