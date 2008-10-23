@@ -216,14 +216,14 @@ class PLASMA_EXPORT Theme : public QObject
         /**
          * Inserts a rectangle of a sub element of an image into a disk cache
          *
-         * @arg image path of the image we want to insert informations
+         * @arg image path of the image we want to insert information
          * @arg element sub element we want insert the rect
          * @arg rect element rectangle
          **/
         void insertIntoRectsCache(const QString& image, const QString &element, const QRectF &rect);
 
         /**
-         * Discards all the informations about a given image from the rectangle disk cache
+         * Discards all the information about a given image from the rectangle disk cache
          **/
         void invalidateRectsCache(const QString& image);
 
