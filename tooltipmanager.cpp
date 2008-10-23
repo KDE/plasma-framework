@@ -81,6 +81,8 @@ public :
 
     void clearTips();
 
+    void doDelayedHide();
+
     QGraphicsWidget *currentWidget;
     QTimer *showTimer;
     QTimer *hideTimer;
@@ -171,11 +173,11 @@ bool ToolTipManager::isVisible(QGraphicsWidget *widget) const
     }
 }
 
-void ToolTipManager::delayedHide()
+void ToolTipManagerPrivate::doDelayedHide()
 {
-    d->showTimer->stop();  // stop the timer to show the tooltip
-    d->delayedHide = true;
-    d->hideTimer->start(250);
+    showTimer->stop();  // stop the timer to show the tooltip
+    delayedHide = true;
+    hideTimer->start(250);
 }
 
 void ToolTipManager::hide(QGraphicsWidget *widget)
@@ -240,6 +242,11 @@ void ToolTipManager::setContent(QGraphicsWidget *widget, const Content &data)
 
     tooltip->setContent(data);
     tooltip->updateTheme();
+}
+
+void ToolTipManager::clearContent(QGraphicsWidget *widget)
+{
+    setContent(widget, Content());
 }
 
 void ToolTipManager::setState(ToolTipManager::State state)
@@ -409,7 +416,7 @@ bool ToolTipManager::eventFilter(QObject *watched, QEvent *event)
         }
 
         case QEvent::GraphicsSceneHoverLeave:
-            delayedHide();
+            d->doDelayedHide();
             break;
 
         case QEvent::GraphicsSceneMousePress:

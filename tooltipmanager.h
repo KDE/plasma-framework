@@ -121,11 +121,6 @@ public:
     bool isVisible(QGraphicsWidget *widget) const;
 
     /**
-     * Hides the currently showing tooltip after a short amount of time.
-     */
-    void delayedHide();
-
-    /**
      * Hides the tooltip for a widget immediately.
      *
      * @param widget the widget to hide the tooltip for
@@ -172,7 +167,13 @@ public:
      *               is passed in, the tooltip content will be reset.
      */
     void setContent(QGraphicsWidget *widget,
-                    const ToolTipManager::Content &data = ToolTipManager::Content());
+                    const ToolTipManager::Content &data);
+
+    /**
+     * Clears the tooltip data associated with this widget, but keeps
+     * the widget registered.
+     */
+    void clearContent(QGraphicsWidget *widget);
 
     /**
      * Sets the current state of the manager.
