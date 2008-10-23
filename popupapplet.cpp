@@ -80,8 +80,8 @@ void PopupApplet::setPopupIcon(const QIcon &icon)
 
         if (formFactor() == Plasma::Vertical || formFactor() == Plasma::Horizontal ) {
             d->savedAspectRatio = aspectRatioMode();
-	    setAspectRatioMode(Plasma::ConstrainedSquare);
-	}
+            setAspectRatioMode(Plasma::ConstrainedSquare);
+        }
 
         setLayout(layout);
     } else {
@@ -125,7 +125,7 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
          (f == Plasma::Vertical || f == Plasma::Horizontal))) {
         QGraphicsLinearLayout *lay = dynamic_cast<QGraphicsLinearLayout *>(q->layout());
 
-        if (icon && lay) {
+        if (icon && !icon->icon().isNull() && lay) {
             lay->removeAt(0);
         }
 
@@ -176,28 +176,21 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
                 dialog = 0;
             }
 
-            //get the margins
-            QSizeF marginSize = q->size() - q->contentsRect().size();
+            if (!lay && !q->layout()) {
+                lay = new QGraphicsLinearLayout();
+                lay->setContentsMargins(0, 0, 0, 0);
+                lay->setSpacing(0);
+                lay->setOrientation(Qt::Horizontal);
+                q->setLayout(lay);
+            }
 
             if (gWidget) {
-                q->setMinimumSize(gWidget->minimumSize() + marginSize);
-                //kDebug() << lay << q->layout();
-                if (!lay && !q->layout()) {
-                    lay = new QGraphicsLinearLayout();
-                    lay->setContentsMargins(0, 0, 0, 0);
-                    lay->setSpacing(0);
-                    lay->setOrientation(Qt::Horizontal);
-                    q->setLayout(lay);
-                }
-
                 Extender *extender = qobject_cast<Extender*>(gWidget);
                 if (extender) {
                     extender->setExtenderAppearance(Extender::NoBorders);
                 }
 
-                q->setMinimumSize(gWidget->minimumSize() + marginSize);
                 lay->addItem(gWidget);
-                //gWidget->installEventFilter(q);
             } else if (qWidget) {
                 if (!proxy) {
                     proxy = new QGraphicsProxyWidget(q);
@@ -208,8 +201,6 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
                 if (lay) {
                     lay->addItem(proxy);
                 }
-
-                q->setMinimumSize(qWidget->minimumSize() + marginSize);
             }
         } else {
             //save the aspect ratio mode in case we drag'n drop in the Desktop later
