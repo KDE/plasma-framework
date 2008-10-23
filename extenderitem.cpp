@@ -416,6 +416,11 @@ void ExtenderItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
 
     d->dragger->paintPanel(painter, QPointF(d->bgLeft, d->bgTop));
 
+    //We don't need to paint a title if there is no title.
+    if (d->title.isEmpty()) {
+        return;
+    }
+
     //set the font for the title.
     Plasma::Theme *theme = Plasma::Theme::defaultTheme();
     QFont font = theme->font(Plasma::Theme::DefaultFont);
@@ -423,8 +428,6 @@ void ExtenderItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
     font.setWeight(QFont::Bold);
 
     //create a pixmap with the title that is faded out at the right side of the titleRect.
-    //TODO: hmm, create something generic for this... there's probably more stuff that wants to have
-    //this functionality
     QRectF rect = QRectF(d->titleRect().width() - 30, 0, 30, d->titleRect().height());
 
     QPixmap pixmap(d->titleRect().size().toSize());
@@ -711,11 +714,13 @@ void ExtenderItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 ExtenderItemPrivate::ExtenderItemPrivate(ExtenderItem *extenderItem, Extender *hostExtender)
     : q(extenderItem),
       widget(0),
+      toolbox(0),
       toplevel(0),
       previousTargetExtender(0),
       extender(hostExtender),
       dragger(new PanelSvg(extenderItem)),
       background(new PanelSvg(extenderItem)),
+      collapseIcon(0),
       title(QString()),
       sourceAppletId(hostExtender->d->applet->id()),
       mousePressed(false),
