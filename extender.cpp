@@ -421,16 +421,6 @@ void ExtenderPrivate::adjustSize()
         q->setMinimumSize(q->layout()->preferredSize());
     }
 
-    //check if our parentItem is an applet, and set the applets correct minimumsize.
-    Applet *applet = qgraphicsitem_cast<Applet*>(q->parentItem());
-    if (applet) {
-        QSizeF marginSize = applet->size() - applet->contentsRect().size();
-        //FIXME: for some reason the preferred size hint get's set correctly,
-        //but the minimumSizeHint doesn't. Investigate why.
-        applet->setMinimumSize(q->minimumSize() + marginSize);
-        applet->adjustSize();
-    }
-
     emit q->geometryChanged();
 }
 
