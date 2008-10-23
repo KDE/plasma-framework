@@ -171,11 +171,6 @@ class PLASMA_EXPORT ExtenderItem : public QGraphicsWidget
          */
         QAction *action(const QString &name) const;
 
-        /**
-         * @return the id of the applet this item is created by.
-         */
-        uint sourceAppletId() const;
-
     public Q_SLOTS:
         /**
          * Destroys the extender item. As opposed to calling delete on this class, destroy also
@@ -210,6 +205,7 @@ class PLASMA_EXPORT ExtenderItem : public QGraphicsWidget
         Q_PRIVATE_SLOT(d, void toggleCollapse())
         Q_PRIVATE_SLOT(d, void updateToolBox())
         Q_PRIVATE_SLOT(d, void themeChanged())
+        Q_PRIVATE_SLOT(d, void sourceAppletRemoved())
 
         ExtenderItemPrivate * const d;
 

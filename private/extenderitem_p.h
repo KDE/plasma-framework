@@ -55,6 +55,7 @@ class ExtenderItemPrivate
         QPointF scenePosFromScreenPos(const QPoint &pos) const;
         Applet *hostApplet() const;
         void themeChanged();
+        void sourceAppletRemoved();
 
         ExtenderItem *q;
 
@@ -79,7 +80,6 @@ class ExtenderItemPrivate
         QString title;
         QString name;
 
-        uint sourceAppletId;
         uint extenderItemId;
 
         qreal dragLeft, dragTop, dragRight, dragBottom;

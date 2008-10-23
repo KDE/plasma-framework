@@ -101,7 +101,7 @@ QList<ExtenderItem*> Extender::items() const
         foreach (Applet *applet, c->applets()) {
             if (applet->d->extender) {
                 foreach (ExtenderItem *item, applet->d->extender->attachedItems()) {
-                    if (item->sourceAppletId() == d->applet->id()) {
+                    if (item->d->sourceApplet == d->applet) {
                         result.append(item);
                     }
                 }

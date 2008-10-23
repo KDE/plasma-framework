@@ -66,36 +66,37 @@ ExtenderItem::ExtenderItem(Extender *hostExtender, uint extenderItemId)
         d->extenderItemId = ++ExtenderItemPrivate::s_maxExtenderItemId;
     }
 
-    //TODO: make sourceApplet a function so stuff doesn't break when the source applet has been
-    //removed.
-    d->sourceApplet = hostExtender->d->applet;
-
     //create items's configgroup
     KConfigGroup cg = hostExtender->d->applet->config("ExtenderItems");
     KConfigGroup dg = KConfigGroup(&cg, QString::number(d->extenderItemId));
 
+    uint sourceAppletId = dg.readEntry("sourceAppletId", 0);
+
     //TODO: automatically load title and icon.
-    if (!dg.readEntry("sourceAppletId", 0)) {
+    if (!sourceAppletId) {
         //The item is new
         dg.writeEntry("sourceAppletPluginName", hostExtender->d->applet->pluginName());
         dg.writeEntry("sourceAppletId", hostExtender->d->applet->id());
-        d->sourceAppletId = hostExtender->d->applet->id();
         d->sourceApplet = hostExtender->d->applet;
     } else {
         //The item already exists.
         d->name = dg.readEntry("extenderItemName", "");
-        d->sourceAppletId = dg.readEntry("sourceAppletId", 0);
-        //Set the sourceapplet.
+
+        //Find the sourceapplet.
         Corona *corona = hostExtender->d->applet->containment()->corona();
         foreach (Containment *containment, corona->containments()) {
             foreach (Applet *applet, containment->applets()) {
-                if (applet->id() == d->sourceAppletId &&
+                if (applet->id() == sourceAppletId &&
                         applet->pluginName() == dg.readEntry("sourceAppletPluginName", "")) {
                     d->sourceApplet = applet;
                 }
             }
         }
     }
+
+    //make sure we keep monitoring if the source applet still exists, so the return to source icon
+    //can be hidden if it is removed.
+    connect(d->sourceApplet, SIGNAL(destroyed()), this, SLOT(sourceAppletRemoved()));
 
     //create the toolbox.
     d->toolbox = new QGraphicsWidget(this);
@@ -108,6 +109,9 @@ ExtenderItem::ExtenderItem(Extender *hostExtender, uint extenderItemId)
 
     //set the extender we want to move to.
     setExtender(hostExtender);
+
+    //show or hide the return to source icon.
+    d->updateToolBox();
 
     //set the image paths, image sizes and collapseIcon position.
     d->themeChanged();
@@ -283,7 +287,7 @@ bool ExtenderItem::autoExpireDelay() const
 bool ExtenderItem::isDetached() const
 {
     if (d->hostApplet()) {
-        return (sourceAppletId() != d->hostApplet()->id());
+        return (d->sourceApplet != d->hostApplet());
     } else {
         return false;
     }
@@ -305,11 +309,6 @@ QAction *ExtenderItem::action(const QString &name) const
     } else {
         return 0;
     }
-}
-
-uint ExtenderItem::sourceAppletId() const
-{
-    return d->sourceAppletId;
 }
 
 void ExtenderItem::destroy()
@@ -725,11 +724,11 @@ ExtenderItemPrivate::ExtenderItemPrivate(ExtenderItem *extenderItem, Extender *h
       toplevel(0),
       previousTargetExtender(0),
       extender(hostExtender),
+      sourceApplet(0),
       dragger(new PanelSvg(extenderItem)),
       background(new PanelSvg(extenderItem)),
       collapseIcon(0),
       title(QString()),
-      sourceAppletId(hostExtender->d->applet->id()),
       mousePressed(false),
       mouseOver(false),
       expirationTimer(0)
@@ -949,6 +948,14 @@ void ExtenderItemPrivate::themeChanged()
     q->setCollapsed(q->isCollapsed());
 
     q->update();
+}
+
+void ExtenderItemPrivate::sourceAppletRemoved()
+{
+    //the original source applet is removed, set the pointer to 0 and no longer show the return to
+    //source icon.
+    sourceApplet = 0;
+    updateToolBox();
 }
 
 uint ExtenderItemPrivate::s_maxExtenderItemId = 0;
