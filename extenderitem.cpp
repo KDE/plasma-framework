@@ -719,8 +719,11 @@ ExtenderItemPrivate::ExtenderItemPrivate(ExtenderItem *extenderItem, Extender *h
       title(QString()),
       sourceAppletId(hostExtender->d->applet->id()),
       mousePressed(false),
+      mouseOver(false),
       expirationTimer(0)
 {
+    dragLeft = dragTop = dragRight = dragBottom = 0;
+    bgLeft = bgTop = bgRight = bgBottom = 0;
 }
 
 ExtenderItemPrivate::~ExtenderItemPrivate()
