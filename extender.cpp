@@ -317,8 +317,8 @@ void ExtenderPrivate::addExtenderItem(ExtenderItem *item, const QPointF &pos)
 void ExtenderPrivate::removeExtenderItem(ExtenderItem *item)
 {
     attachedExtenderItems.removeOne(item);
-    updateBorders();
     q->itemRemovedEvent(item);
+    updateBorders();
 }
 
 int ExtenderPrivate::insertIndexFromPos(const QPointF &pos) const
