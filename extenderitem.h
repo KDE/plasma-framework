@@ -90,7 +90,7 @@ class PLASMA_EXPORT ExtenderItem : public QGraphicsWidget
          * @param extenderItemId the id of the extender item. Use the default 0 to assign a new,
          * unique id to this extender item.
          */
-        ExtenderItem(Extender *hostExtender, uint extenderItemId = 0);
+        explicit ExtenderItem(Extender *hostExtender, uint extenderItemId = 0);
 
         ~ExtenderItem();
 
