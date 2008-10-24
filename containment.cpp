@@ -1596,11 +1596,6 @@ void ContainmentPrivate::containmentConstraintsEvent(Plasma::Constraints constra
         }
     }
 
-    if ((constraints & Plasma::SizeConstraint || constraints & Plasma::ScreenConstraint) &&
-         toolBox) {
-        positionToolBox();
-    }
-
     if (constraints & Plasma::FormFactorConstraint) {
         if (toolBox) {
             if (q->formFactor() == Vertical) {
@@ -1628,6 +1623,11 @@ void ContainmentPrivate::containmentConstraintsEvent(Plasma::Constraints constra
                 positionContainment();
                 break;
         }
+    }
+
+    if ((constraints & Plasma::SizeConstraint || constraints & Plasma::ScreenConstraint) &&
+         toolBox) {
+        positionToolBox();
     }
 }
 
