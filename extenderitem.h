@@ -42,6 +42,34 @@ class ExtenderItemPrivate;
  * This class wraps around a QGraphicsWidget and provides drag&drop handling, a draghandle,
  * title and ability to display qactions as a row of icon, ability to expand, collapse, return
  * to source and tracks configuration associated with this item for you.
+ *
+ * Typical usage of ExtenderItems in your applet could look something like this:
+ *
+ * @code
+ * ExtenderItem *item = new ExtenderItem(extender());
+ * //name can be used to later access this item through extender()->item(name):
+ * item->setName("networkmonitoreth0");
+ * item->config().writeEntry("device", "eth0");
+ * initExtenderItem(item);
+ * @endcode
+ *
+ * You'll then need to implement the initExtenderItem function. Having this function in your applet
+ * makes sure that detached extender items get restored after plasma is restarted, just like applets
+ * are. That is also the reason that we write an entry in item->config().
+ * In this function you should instantiate a QGraphicsWidget or QGraphicsItem and call the
+ * setWidget function on the ExtenderItem. This is the only correct way of adding actual content to
+ * a extenderItem. An example:
+ *
+ * @code
+ * void MyApplet::initExtenderItem(Plasma::ExtenderItem *item)
+ * {
+ *     QGraphicsWidget *myNetworkMonitorWidget = new NetworkMonitorWidget(item);
+ *     dataEngine("networktraffic")->connectSource(item->config().readEntry("device", ""),
+ *                                                 myNetworkMonitorWidget);
+ *     item->setWidget(myNetworkMonitorWidget);
+ * }
+ * @endcode
+ *
  */
 class PLASMA_EXPORT ExtenderItem : public QGraphicsWidget
 {
@@ -59,8 +87,6 @@ class PLASMA_EXPORT ExtenderItem : public QGraphicsWidget
         /**
          * The constructor takes care of adding this item to an extender.
          * @param hostExtender The extender where the extender item belongs to.
-         * TODO: extenderItemId might not be necesarry in the constructor if I rewrite some
-         * stuff.
          * @param extenderItemId the id of the extender item. Use the default 0 to assign a new,
          * unique id to this extender item.
          */

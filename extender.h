@@ -48,6 +48,17 @@ class Applet;
  *
  * If you wish to have a different presentation of extender items, you can choose to subclass
  * Extender and reimplement the extenderItem* events and, optionally, the saveState function.
+ *
+ * To use an Extender in you applet, you'll have to instantiate one. A call to extender() in your
+ * applet will create an extender on your applet if you haven't got one already. Every applet can
+ * contain only one extender. Think of it as a decorator that adds some functionality to applets
+ * that require it. Never instantiate an Extender before init() in your applet. This won't work
+ * correctly since a scene is required when an Extender is instantiated.
+ *
+ * As soon as an Extender is instantiated, ExtenderItems contained previously in this Extender are
+ * restored using the initExtenderItem function from the applet the items originally came from. For
+ * more information on how this works and how to use ExtenderItems in general, see the ExtenderItem
+ * API documentation.
  */
 class PLASMA_EXPORT Extender : public QGraphicsWidget
 {
@@ -59,27 +70,29 @@ class PLASMA_EXPORT Extender : public QGraphicsWidget
          * Description on how to render the extender's items.
          */
         enum Appearance {
-            NoBorders = 0,  /** Draws no borders on the extender's items. When placed in an applet
-                                on the desktop, use this setting and use the standard margins of
-                                the applet containing this extender. */
-            BottomUpStacked = 1, /** Draws no borders on the topmost extenderitem, but draws the
-                                     left, top and right border on subsequent items. When margins
-                                     of the containing dialog are set to 0, except for the top
-                                     margin, this leads to the 'stacked' look, recommended for
-                                     extenders of applet's contained in a panel at the bottom of
-                                     the screen. */
-            TopDownStacked = 2 /** Draws no borders on the bottom extenderitem, but draws the
-                                   left, bottom and right border on subsequent items. When margins
-                                   of the containing dialog are set to 0, except for the bottom
-                                   margin, this leads to the 'stacked' look, recommended for
-                                   extenders of applet's contained in a panel at the top of
-                                   the screen. */
+            NoBorders = 0,  /**< Draws no borders on the extender's items. When placed in an applet
+                                 on the desktop, use this setting and use the standard margins of
+                                 the applet containing this extender. */
+            BottomUpStacked = 1, /**< Draws no borders on the topmost extenderitem, but draws the
+                                      left, top and right border on subsequent items. When margins
+                                      of the containing dialog are set to 0, except for the top
+                                      margin, this leads to the 'stacked' look, recommended for
+                                      extenders of applet's contained in a panel at the bottom of
+                                      the screen. */
+            TopDownStacked = 2 /**< Draws no borders on the bottom extenderitem, but draws the
+                                    left, bottom and right border on subsequent items. When margins
+                                    of the containing dialog are set to 0, except for the bottom
+                                    margin, this leads to the 'stacked' look, recommended for
+                                    extenders of applet's contained in a panel at the top of
+                                    the screen. */
         };
 
         /**
          * Creates an extender. Note that extender expects applet to have a config(), and needs a
          * scene because of that. So you should only instantiate an extender in init() or later, not
          * in an applet's constructor.
+         * The constructor also takes care of restoring ExtenderItems that were contained in this
+         * extender before, so ExtenderItems are persistent between sessions.
          * @param applet The applet this extender is part of. Null is not allowed here.
          */
         explicit Extender(Applet *applet);
@@ -87,7 +100,7 @@ class PLASMA_EXPORT Extender : public QGraphicsWidget
         ~Extender();
 
         /**
-         * @param emptyExtenderMessage The text to be shown whenever the applet's extender is empty.
+         * @param message The text to be shown whenever the applet's extender is empty.
          * Defaults to i18n'ed "no items".
          */
         void setEmptyExtenderMessage(const QString &message);
@@ -194,12 +207,12 @@ class PLASMA_EXPORT Extender : public QGraphicsWidget
         virtual PanelSvg::EnabledBorders enabledBordersForItem(ExtenderItem *item) const;
 
         /**
-         * @reimplemented from QGraphicsWidget
+         * Reimplemented from QGraphicsWidget
          */
         QVariant itemChange(GraphicsItemChange change, const QVariant &value);
 
         /**
-         * @reimplemented from QGraphicsWidget
+         * Reimplemented from QGraphicsWidget
          */
         void resizeEvent(QGraphicsSceneResizeEvent *event);
 
