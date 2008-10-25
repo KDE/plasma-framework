@@ -43,7 +43,7 @@ class ExtenderItemPrivate;
  * title and ability to display qactions as a row of icon, ability to expand, collapse, return
  * to source and tracks configuration associated with this item for you.
  *
- * Typical usage of ExtenderItems in your applet could look something like this:
+ * Typical usage of ExtenderItems in your applet could look like this:
  *
  * @code
  * ExtenderItem *item = new ExtenderItem(extender());
@@ -86,7 +86,7 @@ class PLASMA_EXPORT ExtenderItem : public QGraphicsWidget
     public:
         /**
          * The constructor takes care of adding this item to an extender.
-         * @param hostExtender The extender where the extender item belongs to.
+         * @param hostExtender The extender the extender item belongs to.
          * @param extenderItemId the id of the extender item. Use the default 0 to assign a new,
          * unique id to this extender item.
          */
@@ -210,7 +210,7 @@ class PLASMA_EXPORT ExtenderItem : public QGraphicsWidget
         void setCollapsed(bool collapsed);
 
         /**
-         * Returns the extender item to it's source applet.
+         * Returns the extender item to its source applet.
          */
         void moveBackToSource();
 
