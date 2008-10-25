@@ -202,6 +202,10 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
                     lay->addItem(proxy);
                 }
             }
+
+            qreal left, top, right, bottom;
+            q->getContentsMargins(&left, &top, &right, &bottom);
+            q->setMinimumSize(minimum + QSizeF(left+right, top+bottom));
         } else {
             //save the aspect ratio mode in case we drag'n drop in the Desktop later
             savedAspectRatio = q->aspectRatioMode();
@@ -265,6 +269,8 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
             if (icon && lay) {
                 lay->addItem(icon);
             }
+
+            q->setMinimumSize(0,0);
         }
     }
 }
