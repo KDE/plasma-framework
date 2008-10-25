@@ -399,7 +399,8 @@ void ExtenderItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
     painter->setRenderHint(QPainter::TextAntialiasing, true);
     painter->setRenderHint(QPainter::Antialiasing, true);
 
-    if (d->background->enabledBorders() != (PanelSvg::LeftBorder | PanelSvg::RightBorder)) {
+    if (d->background->enabledBorders() != (PanelSvg::LeftBorder | PanelSvg::RightBorder) &&
+        d->background->enabledBorders()) {
         //Don't paint if only the left and right borders are enabled, we only use the left and right
         //border in this situation to set the correct margins on this item.
         d->background->paintPanel(painter, QPointF(0, 0));

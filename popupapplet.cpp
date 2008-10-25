@@ -242,7 +242,9 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
 
                     Extender *extender = qobject_cast<Extender*>(gWidget);
                     if (extender) {
-                        if (q->location() == TopEdge) {
+                        if (q->formFactor() == MediaCenter || q->formFactor() == Planar) {
+                            extender->setExtenderAppearance(Extender::NoBorders);
+                        } else if (q->location() == TopEdge) {
                             extender->setExtenderAppearance(Extender::TopDownStacked);
                         } else {
                             extender->setExtenderAppearance(Extender::BottomUpStacked);
