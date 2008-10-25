@@ -203,14 +203,6 @@ void ExtenderItem::setExtender(Extender *extender, const QPointF &pos)
     d->extender->d->removeExtenderItem(this);
     emit d->extender->itemDetached(this);
 
-    //collapse the popupapplet if the last item is removed.
-    if (!d->extender->attachedItems().count()) {
-        PopupApplet *applet = qobject_cast<PopupApplet*>(d->extender->d->applet);
-        if (applet) {
-            applet->hidePopup();
-        }
-    }
-
     //move the configuration.
     if (d->hostApplet() && (extender != d->extender)) {
         KConfigGroup c = extender->d->applet->config("ExtenderItems");

@@ -317,6 +317,15 @@ void ExtenderPrivate::addExtenderItem(ExtenderItem *item, const QPointF &pos)
 void ExtenderPrivate::removeExtenderItem(ExtenderItem *item)
 {
     attachedExtenderItems.removeOne(item);
+
+    //collapse the popupapplet if the last item is removed.
+    if (!q->attachedItems().count()) {
+        PopupApplet *popupApplet = qobject_cast<PopupApplet*>(applet);
+        if (popupApplet) {
+            popupApplet->hidePopup();
+        }
+    }
+
     q->itemRemovedEvent(item);
     updateBorders();
 }
