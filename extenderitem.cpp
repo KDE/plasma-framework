@@ -275,7 +275,7 @@ void ExtenderItem::setAutoExpireDelay(uint time)
     }
 }
 
-bool ExtenderItem::autoExpireDelay() const
+uint ExtenderItem::autoExpireDelay() const
 {
     if (d->expirationTimer) {
         return d->expirationTimer->interval();

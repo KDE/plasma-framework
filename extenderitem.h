@@ -171,7 +171,7 @@ class PLASMA_EXPORT ExtenderItem : public QGraphicsWidget
         /**
          * @return whether or not this extender item has an auto expire delay.
          */
-        bool autoExpireDelay() const;
+        uint autoExpireDelay() const;
 
         /**
          * @return whether or not this item is detached from it's original source.

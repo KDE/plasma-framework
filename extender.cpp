@@ -50,8 +50,8 @@ Extender::Extender(Applet *applet)
                    << "The previous extender will be destroyed.";
         delete applet->d->extender;
     }
-
     applet->d->extender = this;
+
     setContentsMargins(0, 0, 0, 0);
     d->layout = new QGraphicsLinearLayout(this);
     d->layout->setOrientation(Qt::Vertical);
@@ -65,7 +65,7 @@ Extender::Extender(Applet *applet)
     d->emptyExtenderLabel->setText(d->emptyExtenderMessage);
     d->emptyExtenderLabel->setMinimumSize(QSizeF(150, 64));
     d->emptyExtenderLabel->setPreferredSize(QSizeF(200, 64));
-    d->emptyExtenderLabel->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
+    d->emptyExtenderLabel->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
     d->layout->addItem(d->emptyExtenderLabel);
 
     d->loadExtenderItems();

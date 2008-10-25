@@ -514,6 +514,25 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         virtual void removeAssociatedWidget(QWidget *widget);
 
         /**
+         * Get's called when and extender item has to be initialized after a plasma restart. If you
+         * create ExtenderItems in your applet, you should implement this function to again create
+         * the widget that should be shown in this extender item. This function might look something
+         * like this:
+         *
+         * @code
+         * SuperCoolWidget *widget = new SuperCoolWidget();
+         * dataEngine("engine")->connectSource(item->config("dataSourceName"), widget);
+         * item->setWidget(widget);
+         * @endcode
+         *
+         * You can also add one or more custom qactions to this extender item in this function.
+         *
+         * Note that by default, not all ExtenderItems are persistent. Only items that are detached,
+         * will have there configuration stored when plasma exists.
+         */
+        virtual void initExtenderItem(ExtenderItem *item);
+
+        /**
          * @param parent the QGraphicsItem this applet is parented to
          * @param serviceId the name of the .desktop file containing the
          *      information about the widget
@@ -615,30 +634,6 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          * Called when applet configuration values has changed.
          */
         virtual void configChanged();
-
-        /**
-         * Get's called when and extender item has to be initialized after a plasma restart. If you
-         * create ExtenderItems in your applet, you should implement this function to again create
-         * the widget that should be shown in this extender item. This function might look something
-         * like this:
-         *
-         * @code
-         * SuperCoolWidget *widget = new SuperCoolWidget();
-         * dataEngine("engine")->connectSource(item->config("dataSourceName"), widget);
-         * item->setWidget(widget);
-         * @endcode
-         *
-         * You can also add one or more custom qactions to this extender item in this function.
-         *
-         * Note that by default, not all ExtenderItems are persistent. Only items that are detached,
-         * will have there configuration stored when plasma exists.
-         */
-        virtual void initExtenderItem(ExtenderItem *item);
-
-        /**
-         * @return the extender this applet has.
-         */
-        Extender *extender() const;
 
     protected:
         /**
@@ -751,6 +746,12 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          */
         bool isRegisteredAsDragHandle(QGraphicsItem *item);
 
+
+        /**
+         * @return the extender this applet has.
+         */
+        Extender *extender() const;
+
         /**
          * @internal event filter; used for focus watching
          **/
@@ -838,7 +839,6 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         friend class PopupApplet;
         friend class PopupAppletPrivate;
 
-        //FIXME: this shouldn't be necesarry.
         friend class Extender;
         friend class ExtenderItem;
 };
