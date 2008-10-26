@@ -18,7 +18,8 @@
  */
 
 #include "meter.h"
-#include "plasma/svg.h"
+#include "plasma/panelsvg.h"
+#include <cmath>
 #include <kdebug.h>
 #include <QPainter>
 
@@ -41,7 +42,7 @@ public:
     {
         if (image->hasElement(elementID)) {
             QRectF elementRect = image->elementRect(elementID);
-            image->paint(p, elementRect.topLeft(), elementID);
+            image->paint(p, elementRect, elementID);
         }
     }
 
@@ -81,18 +82,71 @@ public:
         }
     }
 
+    QRectF barRect()
+    {
+        if (labels.count() > 0) {
+            return image->elementRect("background");
+        } else {
+            return QRectF(QPoint(0,0), meter->size());
+        }
+    }
+
     void paintBackground(QPainter *p)
     {
-        paint(p, "background");
-        p->save();
+        //be retrocompatible with themes for kde <= 4.1
+        if (image->hasElement("background-center")) {
+            QRectF elementRect = barRect();
+            QSize imageSize = image->size();
+            image->resize();
+
+            image->setElementPrefix("background");
+            image->resizePanel(elementRect.size());
+            image->paintPanel(p, elementRect.topLeft());
+            image->resize(imageSize);
+
+            paintBar(p, "bar-inactive");
+        } else {
+            paint(p, "background");
+        }
+    }
+
+    void paintBar(QPainter *p, const QString &prefix)
+    {
+        QRectF elementRect = barRect();
+        QSize imageSize = image->size();
+        image->resize();
+        QSize tileSize = image->elementSize("bar-active-center");
+
+        if (elementRect.width() > elementRect.height()) {
+            qreal ratio = tileSize.height() / tileSize.width();
+            int numTiles = elementRect.width()/(elementRect.height()/ratio);
+            tileSize = QSize(elementRect.width()/numTiles, elementRect.height());
+
+            QPoint center = elementRect.center().toPoint();
+            elementRect.setWidth(tileSize.width()*numTiles);
+            elementRect.moveCenter(center);
+        } else {
+            qreal ratio = tileSize.width() / tileSize.height();
+            int numTiles = elementRect.height()/(elementRect.width()/ratio);
+            tileSize = QSize(elementRect.width(), elementRect.height()/numTiles);
+
+            QPoint center = elementRect.center().toPoint();
+            elementRect.setHeight(tileSize.height()*numTiles);
+            elementRect.moveCenter(center);
+        }
+
+        image->setElementPrefix(prefix);
+        image->resizePanel(tileSize);
+        p->drawTiledPixmap(elementRect, image->panelPixmap());
+        image->resize(imageSize);
     }
 
     void paintForeground(QPainter *p)
     {
-        p->restore();
         for (int i = 0; i < labels.count(); ++i) {
             text(p, i);
         }
+
         paint(p, "foreground");
     }
 
@@ -126,7 +180,7 @@ public:
     QList<QFont> fonts;
     QString svg;
     Meter::MeterType meterType;
-    Plasma::Svg *image;
+    Plasma::PanelSvg *image;
     int minrotate;
     int maxrotate;
     Meter *meter;
@@ -246,7 +300,7 @@ void Meter::setSvg(const QString &svg)
 {
     d->svg = svg;
     delete d->image;
-    d->image = new Plasma::Svg(this);
+    d->image = new Plasma::PanelSvg(this);
     d->image->setImagePath(svg);
     // To create renderer and get default size
     d->image->resize();
@@ -309,7 +363,8 @@ void Meter::paint(QPainter *p,
     case BarMeterVertical:
         d->paintBackground(p);
 
-        clipRect = d->image->elementRect("bar");
+        p->save();
+        clipRect = d->barRect();
         if (clipRect.width() > clipRect.height()) {
             clipRect.setWidth(clipRect.width() * percentage);
         } else {
@@ -318,13 +373,20 @@ void Meter::paint(QPainter *p,
             clipRect.moveBottom(bottom);
         }
         p->setClipRect(clipRect);
-        d->paint(p, "bar");
+        //be retrocompatible
+        if (d->image->hasElement("bar-active-center")) {
+            d->paintBar(p, "bar-active");
+        } else {
+            d->paint(p, "bar");
+        }
+        p->restore();
 
         d->paintForeground(p);
         break;
     case AnalogMeter:
         d->paintBackground(p);
 
+        p->save();
         if (d->image->hasElement("rotatecenter")) {
             QRectF r = d->image->elementRect("rotatecenter");
             rotateCenter = QPointF(r.left() + r.width() / 2,
@@ -338,6 +400,7 @@ void Meter::paint(QPainter *p,
         p->rotate(angle);
         p->translate(-1 * rotateCenter);
         d->paint(p, "pointer");
+        p->restore();
 
         d->paintForeground(p);
         break;
