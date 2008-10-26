@@ -45,7 +45,8 @@ class ToolTipPrivate
           imageLabel(0),
           preview(0),
           windowToPreview(0),
-          source(s)
+          source(s),
+          autohide(true)
     { }
 
     QLabel *label;
@@ -54,6 +55,7 @@ class ToolTipPrivate
     WId windowToPreview;
     PanelSvg *background;
     QPointer<QObject> source;
+    bool autohide;
 };
 
 void ToolTip::showEvent(QShowEvent *e)
@@ -115,6 +117,7 @@ void ToolTip::setContent(const ToolTipManager::Content &data)
     d->imageLabel->setPixmap(data.image);
     d->windowToPreview = data.windowToPreview;
     d->preview->setWindowId(d->windowToPreview);
+    d->autohide = data.autohide;
 
     if (isVisible()) {
         resize(sizeHint());
@@ -160,6 +163,11 @@ void ToolTip::paintEvent(QPaintEvent *e)
 void ToolTip::sourceDestroyed()
 {
     d->source = 0;
+}
+
+bool ToolTip::autohide() const
+{
+    return d->autohide;
 }
 
 void ToolTip::updateTheme()

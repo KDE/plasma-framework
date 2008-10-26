@@ -109,7 +109,8 @@ ToolTipManager *ToolTipManager::self()
 }
 
 ToolTipManager::Content::Content()
-    : windowToPreview(0)
+    : windowToPreview(0),
+      autohide(true)
 {
 }
 
@@ -146,7 +147,7 @@ void ToolTipManager::show(QGraphicsWidget *widget)
     }
 
     if (d->currentWidget) {
-        hide(d->currentWidget);
+        //hide(d->currentWidget);
     }
 
     d->hideTimer->stop();
@@ -373,6 +374,12 @@ void ToolTipManagerPrivate::showToolTip()
     tooltip->move(popupPosition(currentWidget, tooltip->size()));
     isShown = true;  //ToolTip is visible
     tooltip->setVisible(true);
+
+    if (tooltip->autohide()) {
+        //kDebug() << "starting authoide";
+        delayedHide = true;
+        hideTimer->start(3000);
+    }
 }
 
 bool ToolTipManager::eventFilter(QObject *watched, QEvent *event)

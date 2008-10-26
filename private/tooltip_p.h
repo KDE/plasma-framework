@@ -41,7 +41,7 @@ public:
     void setContent(const ToolTipManager::Content &data);
     void prepareShowing(bool cueUpdate);
     void setActivated(bool value);
-    bool isActivated();
+    bool autohide() const;
 
 protected:
     void showEvent(QShowEvent *);

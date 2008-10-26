@@ -97,6 +97,8 @@ public:
         QPixmap image;
         /** Id of a window if you want to show a preview */
         WId windowToPreview;
+        /** Whether or not to autohide the tooltip, defaults to true */
+        bool autohide;
     };
 
     /**
