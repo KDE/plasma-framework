@@ -147,7 +147,7 @@ void ToolTipManager::show(QGraphicsWidget *widget)
     }
 
     if (d->currentWidget) {
-        //hide(d->currentWidget);
+        hide(d->currentWidget);
     }
 
     d->hideTimer->stop();
@@ -359,7 +359,7 @@ void ToolTipManagerPrivate::showToolTip()
         // give the object a chance for delayed loading of the tip
         QMetaObject::invokeMethod(currentWidget, "toolTipAboutToShow");
         tooltip = tooltips.value(currentWidget);
-        kDebug() << "attempt to make one ... we gots" << tooltip;
+        //kDebug() << "attempt to make one ... we gots" << tooltip;
         if (tooltip) {
             justCreated = true;
         } else {
@@ -368,16 +368,16 @@ void ToolTipManagerPrivate::showToolTip()
         }
     }
 
-    tooltip->setVisible(false);
+    tooltip->hide();
     //kDebug() << "about to show" << justCreated;
     tooltip->prepareShowing(!justCreated);
     tooltip->move(popupPosition(currentWidget, tooltip->size()));
     isShown = true;  //ToolTip is visible
-    tooltip->setVisible(true);
+    tooltip->show();
 
-    if (tooltip->autohide()) {
+    delayedHide = tooltip->autohide();
+    if (delayedHide) {
         //kDebug() << "starting authoide";
-        delayedHide = true;
         hideTimer->start(3000);
     }
 }
