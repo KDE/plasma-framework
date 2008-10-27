@@ -138,14 +138,6 @@ void DialogPrivate::adjustView()
                  << "| Widget maxsize hint:" << widget->maximumSize()
                  << "| Widget bounding rect:" << widget->boundingRect();
 
-        QRectF boundingRect = widget->boundingRect();
-        boundingRect.setSize(widget->effectiveSizeHint(Qt::PreferredSize));
-
-        //reposition and resize the view.
-        view->setSceneRect(widget->sceneBoundingRect());
-        view->resize(view->mapFromScene(view->sceneRect()).boundingRect().size());
-        view->centerOn(widget);
-
         //set the sizehints correctly:
         int left, top, right, bottom;
         q->getContentsMargins(&left, &top, &right, &bottom);
@@ -157,6 +149,11 @@ void DialogPrivate::adjustView()
         q->resize(qMin(int(view->size().width()) + left + right, QWIDGETSIZE_MAX),
                           qMin(int(view->size().height()) + top + bottom, QWIDGETSIZE_MAX));
         q->updateGeometry();
+
+        //reposition and resize the view.
+        view->setSceneRect(widget->sceneBoundingRect());
+        view->resize(view->mapFromScene(view->sceneRect()).boundingRect().size());
+        view->centerOn(widget);
 
         if (q->size() != prevSize) {
             //the size of the dialog has changed, emit the signal:
