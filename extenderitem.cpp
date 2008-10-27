@@ -699,7 +699,7 @@ void ExtenderItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
                     if (containment->sceneBoundingRect().contains(mousePos)) {
                         Applet *applet = containment->addApplet("internal:extender",
                                 QVariantList(),
-                                QRectF(mousePos, size()));
+                                QRectF(containment->mapFromScene(mousePos), size()));
                         setExtender(applet->d->extender);
                     }
                 }
