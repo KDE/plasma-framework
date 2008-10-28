@@ -46,12 +46,14 @@ class Plasma::FlashPrivate
             Invisible
         };
 
-        FlashPrivate()
-            : defaultDuration(3000),
+        FlashPrivate(Flash *flash)
+            : q(flash),
+              defaultDuration(3000),
               type(FlashPrivate::Text),
               color(Qt::black),
               animId(0),
-              state(FlashPrivate::Invisible)
+              state(FlashPrivate::Invisible),
+              autohide(false)
         {
             //TODO: put this on a diet by using timerEvent instead?
             fadeOutTimer.setInterval(defaultDuration);
@@ -59,11 +61,14 @@ class Plasma::FlashPrivate
             fadeInTimer.setInterval(0);
             fadeInTimer.setSingleShot(true);
         }
+
         ~FlashPrivate() { }
 
         void renderPixmap(const QSize &size);
-        void setupFlash(Flash *flash, int duration);
+        void setupFlash(int duration);
+        void elementAnimationFinished(int);
 
+        Flash *q;
         int defaultDuration;
         FlashType type;
         QTimer fadeInTimer;
@@ -80,11 +85,12 @@ class Plasma::FlashPrivate
         Qt::Alignment alignment;
 
         State state;
+        bool autohide;
 };
 
 Flash::Flash(QGraphicsItem *parent)
     : QGraphicsWidget(parent),
-      d(new FlashPrivate)
+      d(new FlashPrivate(this))
 {
     setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Minimum);
     setCacheMode(NoCache);
@@ -126,7 +132,7 @@ void Flash::flash(const QString &text, int duration, const QTextOption &option)
     d->type = FlashPrivate::Text;
     d->text = text;
     d->textOption = option;
-    d->setupFlash(this, duration);
+    d->setupFlash(duration);
 }
 
 void Flash::flash(const QPixmap &pixmap, int duration, Qt::Alignment align)
@@ -138,7 +144,25 @@ void Flash::flash(const QPixmap &pixmap, int duration, Qt::Alignment align)
     d->type = FlashPrivate::Pixmap;
     d->pixmap = pixmap;
     d->alignment = align;
-    d->setupFlash(this, duration);
+    d->setupFlash(duration);
+}
+
+void Flash::setAutohide(bool autohide)
+{
+    d->autohide = autohide;
+
+    if (autohide) {
+        connect(Plasma::Animator::self(), SIGNAL(elementAnimationFinished(int)),
+                this, SLOT(elementAnimationFinished(int)));
+    } else {
+        disconnect(Plasma::Animator::self(), SIGNAL(elementAnimationFinished(int)),
+                  this, SLOT(elementAnimationFinished(int)));
+    }
+}
+
+bool Flash::autohide() const
+{
+    return d->autohide;
 }
 
 void Flash::kill()
@@ -152,6 +176,10 @@ void Flash::kill()
 void Flash::fadeIn()
 {
     //kDebug();
+    if (d->autohide) {
+        show();
+    }
+
     d->state = FlashPrivate::Visible;
     d->animId = Plasma::Animator::self()->animateElement(this, Plasma::Animator::AppearAnimation);
     Plasma::Animator::self()->setInitialPixmap(d->animId, d->renderedPixmap);
@@ -225,20 +253,27 @@ void FlashPrivate::renderPixmap(const QSize &size)
     }
 }
 
-void FlashPrivate::setupFlash(Flash *flash, int duration)
+void FlashPrivate::setupFlash(int duration)
 {
     fadeOutTimer.stop();
     fadeOutTimer.setInterval(duration > 0 ? duration : defaultDuration);
 
-    renderPixmap(flash->size().toSize());
+    renderPixmap(q->size().toSize());
     if (state != FlashPrivate::Visible) {
         fadeInTimer.start();
     } else {
-        flash->update();
+        q->update();
     }
 
     if (fadeOutTimer.interval() > 0) {
         fadeOutTimer.start();
+    }
+}
+
+void FlashPrivate::elementAnimationFinished(int id)
+{
+    if (autohide && state == FlashPrivate::Invisible && id == animId) {
+        q->hide();
     }
 }
 

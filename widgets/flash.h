@@ -54,6 +54,9 @@ class PLASMA_EXPORT Flash : public QGraphicsWidget
         void flash(const QPixmap &pixmap, int duration = 0,
                    Qt::Alignment align = Qt::AlignCenter);
 
+        void setAutohide(bool autohide);
+        bool autohide() const;
+
     public Q_SLOTS:
         void kill();
 
@@ -62,6 +65,7 @@ class PLASMA_EXPORT Flash : public QGraphicsWidget
         void fadeOut();
 
     private:
+        Q_PRIVATE_SLOT(d, void elementAnimationFinished(int))
         FlashPrivate *const d;
 };
 
