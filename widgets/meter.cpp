@@ -343,6 +343,11 @@ void Meter::paint(QPainter *p,
 {
     Q_UNUSED(option)
     Q_UNUSED(widget)
+
+    if (!d->image) {
+        return;
+    }
+
     QRectF rect(QPointF(0, 0), size());
     QRectF clipRect;
     qreal percentage = 0.0;
