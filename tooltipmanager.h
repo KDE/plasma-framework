@@ -31,6 +31,7 @@ namespace Plasma
 
 class ToolTipManagerPrivate;
 class Applet;
+class Corona;
 
 /**
  * @class ToolTipManager plasma/tooltipmanager.h <Plasma/ToolTipManager>
@@ -203,9 +204,13 @@ private:
     ~ToolTipManager();
 
     friend class ToolTipManagerSingleton;
+    friend class Corona; // The corona needs to register itself
+    friend class ToolTipManagerPrivate;
     bool eventFilter(QObject *watched, QEvent *event);
 
     ToolTipManagerPrivate *const d;
+    Corona* m_corona;
+    
     Q_PRIVATE_SLOT(d, void showToolTip())
     Q_PRIVATE_SLOT(d, void resetShownState())
     Q_PRIVATE_SLOT(d, void onWidgetDestroyed(QObject*))

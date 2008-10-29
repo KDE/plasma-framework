@@ -501,7 +501,9 @@ QRect Applet::mapToView(const QGraphicsView *view, const QRectF &rect) const
 
 QPoint Applet::popupPosition(const QSize &s) const
 {
-    return Plasma::popupPosition(this, s);
+    Q_ASSERT(containment());
+    Q_ASSERT(containment()->corona());
+    return containment()->corona()->popupPosition(this, s);
 }
 
 void Applet::updateConstraints(Plasma::Constraints constraints)

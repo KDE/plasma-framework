@@ -40,6 +40,7 @@
 //Plasma
 #include <applet.h>
 #include <containment.h>
+#include <corona.h>
 #include <panelsvg.h>
 #include <theme.h>
 #include <view.h>
@@ -371,7 +372,7 @@ void ToolTipManagerPrivate::showToolTip()
     tooltip->hide();
     //kDebug() << "about to show" << justCreated;
     tooltip->prepareShowing(!justCreated);
-    tooltip->move(popupPosition(currentWidget, tooltip->size()));
+    tooltip->move(ToolTipManager::self()->m_corona->popupPosition(currentWidget, tooltip->size()));
     isShown = true;  //ToolTip is visible
     tooltip->show();
 

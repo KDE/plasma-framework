@@ -26,7 +26,6 @@
 #include <QVBoxLayout>
 #include <QTimer>
 #include <QApplication>
-#include <QDesktopWidget>
 
 #include <KIcon>
 #include <KIconLoader>
@@ -445,10 +444,13 @@ void PopupAppletPrivate::updateDialogPosition()
 
     KConfigGroup sizeGroup = q->config();
     sizeGroup = KConfigGroup(&sizeGroup, "PopupApplet");
+    
+    Q_ASSERT(q->containment());
+    Q_ASSERT(q->containment()->corona());
     const int width = qMin(sizeGroup.readEntry("DialogWidth", 0),
-                           QApplication::desktop()->screen()->width() - 50);
+                           q->containment()->corona()->screenGeometry(-1).width() - 50);
     const int height = qMin(sizeGroup.readEntry("DialogHeight", 0),
-                            QApplication::desktop()->screen()->height() - 50);
+                            q->containment()->corona()->screenGeometry(-1).height() - 50);
 
     QSize saved(width, height);
 
@@ -501,7 +503,7 @@ void PopupAppletPrivate::updateDialogPosition()
     //are we out of screen?
 
     QRect screenRect =
-        QApplication::desktop()->screenGeometry(q->containment() ? q->containment()->screen() : -1);
+        q->containment()->corona()->screenGeometry(q->containment() ? q->containment()->screen() : -1);
     //kDebug() << "==> rect for"
     //         << (containment() ? containment()->screen() : -1)
     //         << "is" << screenRect;

@@ -111,6 +111,39 @@ public:
      */
     void removeOffscreenWidget(QGraphicsWidget *widget);
 
+    /**
+     * Returns the number of screens available to plasma.
+     * Subclasses should override this method as the default
+     * implementation returns a meaningless value.
+     */
+    virtual int numScreens() const;
+
+    /**
+     * Returns the geometry of a given screen.
+     * Valid screen ids are 0 to numScreen()-1, or -1 for the full desktop geometry.
+     * Subclasses should override this method as the default
+     * implementation returns a meaningless value.
+     */
+    virtual QRect screenGeometry(int id) const;
+
+    /**
+     * Returns the available region for a given screen.
+     * The available region excludes panels and similar windows.
+     * Valid screen ids are 0 to numScreens()-1.
+     * By default this method returns a rectangular region
+     * equal to screenGeometry(id); subclasses that need another
+     * behavior should override this method.
+     */
+    virtual QRegion availableScreenRegion(int id) const;
+    
+    /**
+    * Reccomended position for a popup window like a menu or a tooltip
+    * given its size
+    * @param s size of the popup
+    * @returns reccomended position
+    */
+    QPoint popupPosition(const QGraphicsItem *item, const QSize &s);
+
 public Q_SLOTS:
     /**
      * Initializes the layout from a config file. This will first clear any existing

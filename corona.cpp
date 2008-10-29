@@ -22,6 +22,7 @@
 #include "corona.h"
 
 #include <QApplication>
+#include <QGraphicsView>
 #include <QGraphicsSceneDragDropEvent>
 #include <QGraphicsGridLayout>
 #include <QMimeData>
@@ -34,7 +35,9 @@
 #include <KMimeType>
 
 #include "containment.h"
+#include "view.h"
 #include "private/applet_p.h"
+#include "tooltipmanager.h"
 
 using namespace Plasma;
 
@@ -191,6 +194,7 @@ Corona::Corona(QObject *parent)
       d(new CoronaPrivate(this))
 {
     d->init();
+    ToolTipManager::self()->m_corona = this;
     //setViewport(new QGLWidget(QGLFormat(QGL::StencilBuffer | QGL::AlphaChannel)));
 }
 
@@ -398,6 +402,80 @@ void Corona::removeOffscreenWidget(QGraphicsWidget *widget)
         }
     }
 }
+
+int Corona::numScreens() const
+{
+    return 1;
+}
+
+QRect Corona::screenGeometry(int id) const
+{
+    Q_UNUSED(id);
+    return sceneRect().toRect();
+}
+
+QRegion Corona::availableScreenRegion(int id) const
+{
+    return QRegion(screenGeometry(id));
+}
+
+QPoint Corona::popupPosition(const QGraphicsItem *item, const QSize &s)
+{
+    QGraphicsView *v = viewFor(item);
+
+    if (!v) {
+        return QPoint(0, 0);
+    }
+
+    QPoint pos = v->mapFromScene(item->scenePos());
+    pos = v->mapToGlobal(pos);
+    //kDebug() << "==> position is" << item->scenePos() << v->mapFromScene(item->scenePos()) << pos;
+    Plasma::View *pv = dynamic_cast<Plasma::View *>(v);
+
+    Plasma::Location loc = Floating;
+    if (pv && pv->containment()) {
+        loc = pv->containment()->location();
+    }
+
+    switch (loc) {
+    case BottomEdge:
+        pos = QPoint(pos.x(), pos.y() - s.height());
+        break;
+    case TopEdge:
+        pos = QPoint(pos.x(), pos.y() + (int)item->boundingRect().size().height());
+        break;
+    case LeftEdge:
+        pos = QPoint(pos.x() + (int)item->boundingRect().size().width(), pos.y());
+        break;
+    case RightEdge:
+        pos = QPoint(pos.x() - s.width(), pos.y());
+        break;
+    default:
+        if (pos.y() - s.height() > 0) {
+             pos = QPoint(pos.x(), pos.y() - s.height());
+        } else {
+             pos = QPoint(pos.x(), pos.y() + (int)item->boundingRect().size().height());
+        }
+    }
+
+    //are we out of screen?
+    QRect screenRect =
+        screenGeometry((pv && pv->containment()) ? pv->containment()->screen() : -1);
+    //kDebug() << "==> rect for" << (pv ? pv->containment()->screen() : -1) << "is" << screenRect;
+
+    if (pos.rx() + s.width() > screenRect.right()) {
+        pos.rx() -= ((pos.rx() + s.width()) - screenRect.right());
+    }
+
+    if (pos.ry() + s.height() > screenRect.bottom()) {
+        pos.ry() -= ((pos.ry() + s.height()) - screenRect.bottom());
+    }
+
+    pos.rx() = qMax(0, pos.rx());
+    return pos;
+}
+
+
 
 void Corona::loadDefaultLayout()
 {

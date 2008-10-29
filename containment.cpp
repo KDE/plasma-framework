@@ -22,7 +22,6 @@
 #include "private/containment_p.h"
 
 #include <QAction>
-#include <QDesktopWidget>
 #include <QFile>
 #include <QGraphicsSceneContextMenuEvent>
 #include <QGraphicsView>
@@ -767,8 +766,8 @@ void Containment::setScreen(int screen)
     }
 
     //kDebug() << "setting screen to" << screen << "and we are a" << containmentType();
-    QDesktopWidget *desktop = QApplication::desktop();
-    int numScreens = desktop->numScreens();
+    Q_ASSERT(corona());
+    int numScreens = corona()->numScreens();
     if (screen < -1) {
         screen = -1;
     }
@@ -777,7 +776,7 @@ void Containment::setScreen(int screen)
     if (screen < numScreens && screen > -1) {
         if (containmentType() == DesktopContainment ||
             containmentType() >= CustomContainment) {
-            resize(desktop->screenGeometry(screen).size());
+            resize(corona()->screenGeometry(screen).size());
         }
     }
 
@@ -1367,8 +1366,9 @@ void Containment::destroy(bool confirm)
         //don't remove a desktop that's in use
         //FIXME: this should probably be based on whether any views care or not!
         //       sth like: foreach (view) { view->requires(this); }
+        Q_ASSERT(corona());
         if (d->type != PanelContainment && d->type != CustomPanelContainment &&
-            (d->screen != -1 || d->screen >= QApplication::desktop()->numScreens())) {
+            (d->screen != -1 || d->screen >= corona()->numScreens())) {
             kDebug() << (QObject*)this << "containment has a screen number?" << d->screen;
             return;
         }
@@ -1495,9 +1495,9 @@ void ContainmentPrivate::positionToolBox()
         //TODO: we should probably get these values from the Plasma app itself
         //      so we actually know what the available space *is*
         //      perhaps a virtual method in Corona for this?
-        QDesktopWidget *desktop = QApplication::desktop();
-        QRectF avail = desktop->availableGeometry(screen);
-        QRectF screenGeom = desktop->screenGeometry(screen);
+        Q_ASSERT(q->corona());
+        QRectF avail = q->corona()->availableScreenRegion(screen).boundingRect();
+        QRectF screenGeom = q->corona()->screenGeometry(screen);
 
         // Transform to the containment's coordinate system.
         avail.translate(-screenGeom.topLeft());

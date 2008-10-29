@@ -249,14 +249,6 @@ PLASMA_EXPORT qreal scalingFactor(ZoomLevel level);
 PLASMA_EXPORT Direction locationToDirection(Location location);
 
 /**
- * Reccomended position for a popup window like a menu or a tooltip
- * given its size
- * @param s size of the popup
- * @returns reccomended position
- */
-PLASMA_EXPORT QPoint popupPosition(const QGraphicsItem *item, const QSize &s);
-
-/**
  * Returns the most appropriate QGraphicsView for the item.
  *
  * @arg item the QGraphicsItem to locate a view for
