@@ -17,8 +17,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef PLASMA_CONFIGXML_H
-#define PLASMA_CONFIGXML_H
+#ifndef PLASMA_CONFIGLOADER_H
+#define PLASMA_CONFIGLOADER_H
 
 #include <KDE/KConfigGroup>
 #include <KDE/KConfigSkeleton>
@@ -27,7 +27,7 @@
 #include <plasma/plasma_export.h>
 
 /**
- * @class ConfigXml plasma/configxml.h <Plasma/ConfigXml>
+ * @class ConfigLoader plasma/configloader.h <Plasma/ConfigLoader>
  *
  * @short A KConfigSkeleton that populates itself based on KConfigXT XML
  *
@@ -36,7 +36,7 @@
  *
  * \code
  * QFile file(xmlFilePath);
- * Plasma::ConfigXml appletConfig(configFilePath, &file);
+ * Plasma::ConfigLoader appletConfig(configFilePath, &file);
  * \endcode
  *
  * Alternatively, any QIODevice may be used in place of QFile in the
@@ -70,9 +70,9 @@
 namespace Plasma
 {
 
-class ConfigXmlPrivate;
+class ConfigLoaderPrivate;
 
-class PLASMA_EXPORT ConfigXml : public KConfigSkeleton
+class PLASMA_EXPORT ConfigLoader : public KConfigSkeleton
 {
 public:
     /**
@@ -83,7 +83,7 @@ public:
      * @param xml the xml data; must be valid KConfigXT data
      * @param parent optional QObject parent
      **/
-    ConfigXml(const QString &configFile, QIODevice *xml, QObject *parent = 0);
+    ConfigLoader(const QString &configFile, QIODevice *xml, QObject *parent = 0);
 
     /**
      * Creates a KConfigSkeleton populated using the definition found in
@@ -93,7 +93,7 @@ public:
      * @param xml the xml data; must be valid KConfigXT data
      * @param parent optional QObject parent
      **/
-    ConfigXml(KSharedConfigPtr config, QIODevice *xml, QObject *parent = 0);
+    ConfigLoader(KSharedConfigPtr config, QIODevice *xml, QObject *parent = 0);
 
     /**
      * Creates a KConfigSkeleton populated using the definition found in
@@ -103,8 +103,8 @@ public:
      * @param xml the xml data; must be valid KConfigXT data
      * @param parent optional QObject parent
      **/
-    ConfigXml(const KConfigGroup *config, QIODevice *xml, QObject *parent = 0);
-    ~ConfigXml();
+    ConfigLoader(const KConfigGroup *config, QIODevice *xml, QObject *parent = 0);
+    ~ConfigLoader();
 
     /**
      * Finds the item for the given group and key.
@@ -129,7 +129,7 @@ public:
     QStringList groupList() const;
 
 private:
-    ConfigXmlPrivate * const d;
+    ConfigLoaderPrivate * const d;
 };
 
 } // Plasma namespace

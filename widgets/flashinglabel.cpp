@@ -19,7 +19,7 @@
  *   et, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "flash.h"
+#include "flashinglabel.h"
 
 #include <QtCore/QString>
 #include <QtCore/QTimeLine>
@@ -34,10 +34,10 @@
 
 using namespace Plasma;
 
-class Plasma::FlashPrivate
+class Plasma::FlashingLabelPrivate
 {
     public:
-        enum FlashType {
+        enum FlashingLabelType {
             Text,
             Pixmap
         };
@@ -46,13 +46,13 @@ class Plasma::FlashPrivate
             Invisible
         };
 
-        FlashPrivate(Flash *flash)
+        FlashingLabelPrivate(FlashingLabel *flash)
             : q(flash),
               defaultDuration(3000),
-              type(FlashPrivate::Text),
+              type(FlashingLabelPrivate::Text),
               color(Qt::black),
               animId(0),
-              state(FlashPrivate::Invisible),
+              state(FlashingLabelPrivate::Invisible),
               autohide(false)
         {
             //TODO: put this on a diet by using timerEvent instead?
@@ -62,15 +62,15 @@ class Plasma::FlashPrivate
             fadeInTimer.setSingleShot(true);
         }
 
-        ~FlashPrivate() { }
+        ~FlashingLabelPrivate() { }
 
         void renderPixmap(const QSize &size);
         void setupFlash(int duration);
         void elementAnimationFinished(int);
 
-        Flash *q;
+        FlashingLabel *q;
         int defaultDuration;
-        FlashType type;
+        FlashingLabelType type;
         QTimer fadeInTimer;
         QTimer fadeOutTimer;
         QString text;
@@ -88,9 +88,9 @@ class Plasma::FlashPrivate
         bool autohide;
 };
 
-Flash::Flash(QGraphicsItem *parent)
+FlashingLabel::FlashingLabel(QGraphicsItem *parent)
     : QGraphicsWidget(parent),
-      d(new FlashPrivate(this))
+      d(new FlashingLabelPrivate(this))
 {
     setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Minimum);
     setCacheMode(NoCache);
@@ -98,12 +98,12 @@ Flash::Flash(QGraphicsItem *parent)
     connect(&d->fadeInTimer, SIGNAL(timeout()), this, SLOT(fadeIn()));
 }
 
-Flash::~Flash()
+FlashingLabel::~FlashingLabel()
 {
     delete d;
 }
 
-void Flash::setDuration(int duration)
+void FlashingLabel::setDuration(int duration)
 {
     if (duration < 1) {
         return;
@@ -112,42 +112,42 @@ void Flash::setDuration(int duration)
     d->defaultDuration = duration;
 }
 
-void Flash::setColor(const QColor &color)
+void FlashingLabel::setColor(const QColor &color)
 {
     d->color = color;
 }
 
-void Flash::setFont(const QFont &font)
+void FlashingLabel::setFont(const QFont &font)
 {
     d->font = font;
 }
 
-void Flash::flash(const QString &text, int duration, const QTextOption &option)
+void FlashingLabel::flash(const QString &text, int duration, const QTextOption &option)
 {
     if (text.isEmpty()) {
         return;
     }
 
     //kDebug() << duration << text;
-    d->type = FlashPrivate::Text;
+    d->type = FlashingLabelPrivate::Text;
     d->text = text;
     d->textOption = option;
     d->setupFlash(duration);
 }
 
-void Flash::flash(const QPixmap &pixmap, int duration, Qt::Alignment align)
+void FlashingLabel::flash(const QPixmap &pixmap, int duration, Qt::Alignment align)
 {
     if (pixmap.isNull()) {
         return;
     }
 
-    d->type = FlashPrivate::Pixmap;
+    d->type = FlashingLabelPrivate::Pixmap;
     d->pixmap = pixmap;
     d->alignment = align;
     d->setupFlash(duration);
 }
 
-void Flash::setAutohide(bool autohide)
+void FlashingLabel::setAutohide(bool autohide)
 {
     d->autohide = autohide;
 
@@ -160,44 +160,44 @@ void Flash::setAutohide(bool autohide)
     }
 }
 
-bool Flash::autohide() const
+bool FlashingLabel::autohide() const
 {
     return d->autohide;
 }
 
-void Flash::kill()
+void FlashingLabel::kill()
 {
     d->fadeInTimer.stop();
-    if (d->state == FlashPrivate::Visible) {
+    if (d->state == FlashingLabelPrivate::Visible) {
         fadeOut();
     }
 }
 
-void Flash::fadeIn()
+void FlashingLabel::fadeIn()
 {
     //kDebug();
     if (d->autohide) {
         show();
     }
 
-    d->state = FlashPrivate::Visible;
+    d->state = FlashingLabelPrivate::Visible;
     d->animId = Plasma::Animator::self()->animateElement(this, Plasma::Animator::AppearAnimation);
     Plasma::Animator::self()->setInitialPixmap(d->animId, d->renderedPixmap);
 }
 
-void Flash::fadeOut()
+void FlashingLabel::fadeOut()
 {
-    if (d->state == FlashPrivate::Invisible) {
-        return;    // Flash was already killed - do not animate again
+    if (d->state == FlashingLabelPrivate::Invisible) {
+        return;    // FlashingLabel was already killed - do not animate again
     }
 
-    d->state = FlashPrivate::Invisible;
+    d->state = FlashingLabelPrivate::Invisible;
     d->animId = Plasma::Animator::self()->animateElement(
         this, Plasma::Animator::DisappearAnimation);
     Plasma::Animator::self()->setInitialPixmap(d->animId, d->renderedPixmap);
 }
 
-void Flash::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+void FlashingLabel::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     Q_UNUSED(option)
     Q_UNUSED(widget)
@@ -207,13 +207,13 @@ void Flash::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWi
     } else {
         d->animId = 0;
 
-        if (d->state == FlashPrivate::Visible) {
+        if (d->state == FlashingLabelPrivate::Visible) {
             painter->drawPixmap(0, 0, d->renderedPixmap);
         }
     }
 }
 
-void FlashPrivate::renderPixmap(const QSize &size)
+void FlashingLabelPrivate::renderPixmap(const QSize &size)
 {
     if (renderedPixmap.size() != size) {
         renderedPixmap = QPixmap(size);
@@ -221,11 +221,11 @@ void FlashPrivate::renderPixmap(const QSize &size)
     renderedPixmap.fill(Qt::transparent);
 
     QPainter painter(&renderedPixmap);
-    if (type == FlashPrivate::Text) {
+    if (type == FlashingLabelPrivate::Text) {
         painter.setPen(color);
         painter.setFont(font);
         painter.drawText(QRect(QPoint(0, 0), size), text, textOption);
-    } else if (type == FlashPrivate::Pixmap) {
+    } else if (type == FlashingLabelPrivate::Pixmap) {
         QPoint p;
 
         if(alignment & Qt::AlignLeft) {
@@ -253,13 +253,13 @@ void FlashPrivate::renderPixmap(const QSize &size)
     }
 }
 
-void FlashPrivate::setupFlash(int duration)
+void FlashingLabelPrivate::setupFlash(int duration)
 {
     fadeOutTimer.stop();
     fadeOutTimer.setInterval(duration > 0 ? duration : defaultDuration);
 
     renderPixmap(q->size().toSize());
-    if (state != FlashPrivate::Visible) {
+    if (state != FlashingLabelPrivate::Visible) {
         fadeInTimer.start();
     } else {
         q->update();
@@ -270,11 +270,11 @@ void FlashPrivate::setupFlash(int duration)
     }
 }
 
-void FlashPrivate::elementAnimationFinished(int id)
+void FlashingLabelPrivate::elementAnimationFinished(int id)
 {
-    if (autohide && state == FlashPrivate::Invisible && id == animId) {
+    if (autohide && state == FlashingLabelPrivate::Invisible && id == animId) {
         q->hide();
     }
 }
 
-#include "flash.moc"
+#include "flashinglabel.moc"

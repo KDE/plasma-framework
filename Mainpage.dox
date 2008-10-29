@@ -45,7 +45,7 @@ Other important classes are:
    for libplasma
  - Plasma::PopupApplet: provides a simple way of implementing a Plasma::Applet
    consisting of an icon that shows a popup when clicked
- - Plasma::Svg and Plasma::PanelSvg: provides themable, cached SVGs
+ - Plasma::Svg and Plasma::FrameSvg: provides themable, cached SVGs
  - Plasma::Wallpaper: provides pluggable backgrounds for containments
  - Plasma::AppletScript, Plasma::DataEngineScript, Plasma::RunnerScript and
    Plasma::ScriptEngine: provide scripting interfaces for plugins

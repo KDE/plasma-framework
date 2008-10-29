@@ -31,7 +31,7 @@
 
 //Plasma
 #include "plasma/theme.h"
-#include "plasma/panelsvg.h"
+#include "plasma/framesvg.h"
 
 namespace Plasma
 {
@@ -55,7 +55,7 @@ public:
     void syncBorders();
 
     Frame *q;
-    PanelSvg *svg;
+    FrameSvg *svg;
     Frame::Shadow shadow;
     QString text;
     QString styleSheet;
@@ -84,7 +84,7 @@ Frame::Frame(QGraphicsWidget *parent)
     : QGraphicsWidget(parent),
       d(new FramePrivate(this))
 {
-    d->svg = new Plasma::PanelSvg(this);
+    d->svg = new Plasma::FrameSvg(this);
     d->svg->setImagePath("widgets/frame");
     d->svg->setElementPrefix("plain");
     d->syncBorders();
@@ -202,7 +202,7 @@ void Frame::paint(QPainter *painter,
     Q_UNUSED(option)
     Q_UNUSED(widget)
 
-    d->svg->paintPanel(painter);
+    d->svg->paintFrame(painter);
 
     if (!d->text.isNull()) {
         QFontMetricsF fm(QApplication::font());
@@ -223,7 +223,7 @@ void Frame::paint(QPainter *painter,
 
 void Frame::resizeEvent(QGraphicsSceneResizeEvent *event)
 {
-    d->svg->resizePanel(event->newSize());
+    d->svg->resizeFrame(event->newSize());
 
     if (d->image) {
         d->image->resize(contentsRect().size());

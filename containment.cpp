@@ -1115,14 +1115,14 @@ void Containment::enableAction(const QString &name, bool enable)
     }
 }
 
-void Containment::addToolBoxTool(QAction *action)
+void Containment::addToolBoxAction(QAction *action)
 {
     if (d->toolBox) {
         d->toolBox->addTool(action);
     }
 }
 
-void Containment::removeToolBoxTool(QAction *action)
+void Containment::removeToolBoxAction(QAction *action)
 {
     if (d->toolBox) {
         d->toolBox->removeTool(action);

@@ -29,7 +29,7 @@
 #include <KDebug>
 
 #include <plasma/theme.h>
-#include "widgets/icon.h"
+#include "widgets/iconwidget.h"
 
 namespace Plasma
 {
@@ -93,7 +93,7 @@ void ToolBox::addTool(QAction *action)
         return;
     }
 
-    Plasma::Icon *tool = new Plasma::Icon(this);
+    Plasma::IconWidget *tool = new Plasma::IconWidget(this);
 
     tool->setAction(action);
     tool->setDrawBackground(true);
@@ -121,7 +121,7 @@ void ToolBox::removeTool(QAction *action)
 {
     foreach (QGraphicsItem *child, QGraphicsItem::children()) {
         //kDebug() << "checking tool" << child << child->data(ToolName);
-        Plasma::Icon *tool = dynamic_cast<Plasma::Icon*>(child);
+        Plasma::IconWidget *tool = dynamic_cast<Plasma::IconWidget*>(child);
         if (tool && tool->action() == action) {
             //kDebug() << "tool found!";
             tool->deleteLater();

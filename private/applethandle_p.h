@@ -33,7 +33,7 @@ namespace Plasma
 {
 class Applet;
 class Containment;
-class PanelSvg;
+class FrameSvg;
 class View;
 
 class AppletHandle : public QObject, public QGraphicsItem
@@ -124,7 +124,7 @@ class AppletHandle : public QObject, public QGraphicsItem
         QGraphicsView *m_currentView;
 
         Svg *m_configureIcons;
-        PanelSvg *m_background;
+        FrameSvg *m_background;
 
         QPoint m_mousePos;  //mousepos relative to applet
         QPointF m_entryPos; //where the hover in event occurred

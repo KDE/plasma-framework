@@ -36,8 +36,8 @@ namespace Plasma
     class Applet;
     class ExtenderItem;
     class Extender;
-    class Icon;
-    class PanelSvg;
+    class IconWidget;
+    class FrameSvg;
 
 class ExtenderItemPrivate
 {
@@ -70,10 +70,10 @@ class ExtenderItemPrivate
 
         KConfigGroup config;
 
-        PanelSvg *dragger;
-        PanelSvg *background;
+        FrameSvg *dragger;
+        FrameSvg *background;
 
-        Icon *collapseIcon;
+        IconWidget *collapseIcon;
 
         QMap<QString, QAction*> actions;
 

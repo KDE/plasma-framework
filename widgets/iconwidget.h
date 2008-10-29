@@ -20,8 +20,8 @@
 *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
-#ifndef PLASMA_ICON_H
-#define PLASMA_ICON_H
+#ifndef PLASMA_ICONWIDGET_H
+#define PLASMA_ICONWIDGET_H
 
 #include <QtCore/QObject>
 #include <QtGui/QGraphicsTextItem>
@@ -35,12 +35,12 @@
 class QAction;
 
 /**
- * @class Icon plasma/widgets/icon.h <Plasma/Widgets/Icon>
+ * @class IconWidget plasma/widgets/iconwidget.h <Plasma/Widgets/IconWidget>
  *
  * @short Provides a generic icon.
  *
  * An icon, in this sense, is not restricted to just an image, but can also
- * contain text. Currently, the Icon class is primarily used for desktop items,
+ * contain text. Currently, the IconWidget class is primarily used for desktop items,
  * but is designed to be used anywhere an icon is needed in an applet.
  *
  * @author Siraj Razick <siraj@kde.org>
@@ -49,9 +49,9 @@ class QAction;
 namespace Plasma
 {
 
-class IconPrivate;
+class IconWidgetPrivate;
 
-class PLASMA_EXPORT Icon : public QGraphicsWidget
+class PLASMA_EXPORT IconWidget : public QGraphicsWidget
 {
     Q_OBJECT
     Q_PROPERTY(QString text READ text WRITE setText)
@@ -63,30 +63,30 @@ class PLASMA_EXPORT Icon : public QGraphicsWidget
 
 public:
     /**
-    * Creates a new Plasma::Icon.
+    * Creates a new Plasma::IconWidget.
     * @param parent the QGraphicsItem this icon is parented to.
     */
-    explicit Icon(QGraphicsItem *parent = 0);
+    explicit IconWidget(QGraphicsItem *parent = 0);
 
     /**
-    * Convenience constructor to create a Plasma::Icon with text.
+    * Convenience constructor to create a Plasma::IconWidget with text.
     * @param text the text that will be displayed with this icon.
     * @param parent the QGraphicsItem this icon is parented to.
     */
-    explicit Icon(const QString &text, QGraphicsItem *parent = 0);
+    explicit IconWidget(const QString &text, QGraphicsItem *parent = 0);
 
     /**
-    * Creates a new Plasma::Icon with text and an icon.
+    * Creates a new Plasma::IconWidget with text and an icon.
     * @param icon the icon that will be displayed with this icon.
     * @param text the text that will be displayed with this icon.
     * @param parent The QGraphicsItem this icon is parented to.
     */
-    Icon(const QIcon &icon, const QString &text, QGraphicsItem *parent = 0);
+    IconWidget(const QIcon &icon, const QString &text, QGraphicsItem *parent = 0);
 
     /**
-    * Destroys this Plasma::Icon.
+    * Destroys this Plasma::IconWidget.
     */
-    virtual ~Icon();
+    virtual ~IconWidget();
 
     /**
     * Returns the text associated with this icon.
@@ -124,35 +124,35 @@ public:
     QIcon icon() const;
 
     /**
-    * Sets the graphical icon for this Plasma::Icon.
+    * Sets the graphical icon for this Plasma::IconWidget.
     * @param icon the KIcon to associate with this icon.
     */
     void setIcon(const QIcon &icon);
 
     /**
-    * Convenience method to set the icon of this Plasma::Icon
+    * Convenience method to set the icon of this Plasma::IconWidget
     * using a QString path to the icon.
-    * @param icon the path to the icon to associate with this Plasma::Icon.
+    * @param icon the path to the icon to associate with this Plasma::IconWidget.
     */
     Q_INVOKABLE void setIcon(const QString &icon);
 
     /**
-    * @return the size of this Plasma::Icon's graphical icon.
+    * @return the size of this Plasma::IconWidget's graphical icon.
     */
     QSizeF iconSize() const;
 
     /**
-    * Plasma::Icon allows the user to specify a number of actions
+    * Plasma::IconWidget allows the user to specify a number of actions
     * (currently four) to be displayed around the widget. This method
-    * allows for a created QAction to be added to the Plasma::Icon.
+    * allows for a created QAction to be added to the Plasma::IconWidget.
     * @param action the QAction to associate with this icon.
     */
     void addIconAction(QAction *action);
 
     /**
-     * Associate an action with this Icon
-     * this makes the Icon follow the state of the action, using its icon, text, etc.
-     * when the Icon is clicked, it will also trigger the action.
+     * Associate an action with this IconWidget
+     * this makes the IconWidget follow the state of the action, using its icon, text, etc.
+     * when the IconWidget is clicked, it will also trigger the action.
      * Unlike addIconAction, there can be only one associated action.
      */
     void setAction(QAction *action);
@@ -282,9 +282,9 @@ private:
     void layoutIcons(const QStyleOptionGraphicsItem *option);
     void hoverEffect(bool);
 
-    IconPrivate * const d;
+    IconWidgetPrivate * const d;
 
-    friend class IconPrivate;
+    friend class IconWidgetPrivate;
 
 private Q_SLOTS:
     void actionDestroyed(QObject *obj);

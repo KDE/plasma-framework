@@ -37,7 +37,7 @@
 #include "plasma/corona.h"
 #include "plasma/containment.h"
 #include "plasma/extender.h"
-#include "plasma/widgets/icon.h"
+#include "plasma/widgets/iconwidget.h"
 
 namespace Plasma
 {
@@ -69,7 +69,7 @@ void PopupApplet::setPopupIcon(const QIcon &icon)
     }
 
     if (!d->icon) {
-        d->icon = new Plasma::Icon(icon, QString(), this);
+        d->icon = new Plasma::IconWidget(icon, QString(), this);
         connect(d->icon, SIGNAL(clicked()), this, SLOT(togglePopup()));
 
         QGraphicsLinearLayout *layout = new QGraphicsLinearLayout();

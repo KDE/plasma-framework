@@ -38,7 +38,7 @@ namespace Plasma
 {
 
 class SvgPrivate;
-class PanelSvgPrivate;
+class FrameSvgPrivate;
 
 /**
  * @class Svg plasma/svg.h <Plasma/Svg>
@@ -50,7 +50,7 @@ class PanelSvgPrivate;
  * the SVG document using Plasma::Theme. It also provides a number of internal
  * optimizations to help lower the cost of painting SVGs, such as caching.
  *
- * @see Plasma::PanelSvg
+ * @see Plasma::FrameSvg
  **/
 class PLASMA_EXPORT Svg : public QObject
 {
@@ -227,7 +227,7 @@ class PLASMA_EXPORT Svg : public QObject
         Q_PRIVATE_SLOT(d, void colorsChanged())
 
         friend class SvgPrivate;
-        friend class PanelSvgPrivate;
+        friend class FrameSvgPrivate;
 };
 
 } // Plasma namespace

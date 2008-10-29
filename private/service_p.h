@@ -32,7 +32,7 @@
 namespace Plasma
 {
 
-class ConfigXml;
+class ConfigLoader;
 
 class NullServiceJob : public ServiceJob
 {
@@ -97,7 +97,7 @@ public:
     Service *q;
     QString destination;
     QString name;
-    ConfigXml *config;
+    ConfigLoader *config;
     KTemporaryFile *tempFile;
     QMultiHash<QWidget *, QString> associatedWidgets;
     QMultiHash<QGraphicsWidget *, QString> associatedGraphicsWidgets;

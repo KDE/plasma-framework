@@ -41,7 +41,7 @@
 #include "plasma/applet.h"
 #include "plasma/extender.h"
 #include "plasma/private/extender_p.h"
-#include "plasma/panelsvg.h"
+#include "plasma/framesvg.h"
 #include "plasma/theme.h"
 
 #ifdef Q_WS_X11
@@ -78,7 +78,7 @@ public:
      * Holds the background SVG, to be re-rendered when the cache is invalidated,
      * for example by resizing the dialogue.
      */
-    Plasma::PanelSvg *background;
+    Plasma::FrameSvg *background;
     QGraphicsView *view;
     QGraphicsWidget *widget;
     Dialog::ResizeCorners resizeCorners;
@@ -98,27 +98,27 @@ void DialogPrivate::themeUpdated()
     if (extender) {
         switch (extender->d->applet->location()) {
         case BottomEdge:
-            background->setEnabledBorders(PanelSvg::LeftBorder | PanelSvg::TopBorder
-                                                               | PanelSvg::RightBorder);
+            background->setEnabledBorders(FrameSvg::LeftBorder | FrameSvg::TopBorder
+                                                               | FrameSvg::RightBorder);
             q->setContentsMargins(0, topHeight, 0, 0);
             break;
         case TopEdge:
-            background->setEnabledBorders(PanelSvg::LeftBorder | PanelSvg::BottomBorder
-                                                               | PanelSvg::RightBorder);
+            background->setEnabledBorders(FrameSvg::LeftBorder | FrameSvg::BottomBorder
+                                                               | FrameSvg::RightBorder);
             q->setContentsMargins(0, 0, 0, bottomHeight);
             break;
         case LeftEdge:
-            background->setEnabledBorders(PanelSvg::TopBorder | PanelSvg::BottomBorder
-                                                              | PanelSvg::RightBorder);
+            background->setEnabledBorders(FrameSvg::TopBorder | FrameSvg::BottomBorder
+                                                              | FrameSvg::RightBorder);
             q->setContentsMargins(0, topHeight, 0, bottomHeight);
             break;
         case RightEdge:
-            background->setEnabledBorders(PanelSvg::TopBorder | PanelSvg::BottomBorder
-                                                              | PanelSvg::LeftBorder);
+            background->setEnabledBorders(FrameSvg::TopBorder | FrameSvg::BottomBorder
+                                                              | FrameSvg::LeftBorder);
             q->setContentsMargins(0, topHeight, 0, bottomHeight);
             break;
         default:
-            background->setEnabledBorders(PanelSvg::AllBorders);
+            background->setEnabledBorders(FrameSvg::AllBorders);
             q->setContentsMargins(leftWidth, topHeight, rightWidth, bottomHeight);
         }
     } else {
@@ -167,10 +167,10 @@ Dialog::Dialog(QWidget *parent, Qt::WindowFlags f)
       d(new DialogPrivate(this))
 {
     setWindowFlags(Qt::FramelessWindowHint);
-    d->background = new PanelSvg(this);
+    d->background = new FrameSvg(this);
     d->background->setImagePath("dialogs/background");
-    d->background->setEnabledBorders(PanelSvg::AllBorders);
-    d->background->resizePanel(size());
+    d->background->setEnabledBorders(FrameSvg::AllBorders);
+    d->background->resizeFrame(size());
 
     connect(d->background, SIGNAL(repaintNeeded()), this, SLOT(update()));
 
@@ -192,7 +192,7 @@ void Dialog::paintEvent(QPaintEvent *e)
     p.setClipRect(e->rect());
     p.setCompositionMode(QPainter::CompositionMode_Source);
     p.fillRect(rect(), Qt::transparent);
-    d->background->paintPanel(&p);
+    d->background->paintFrame(&p);
 
     //we set the resize handlers
     d->resizeAreas.clear();
@@ -315,7 +315,7 @@ void Dialog::mouseReleaseEvent(QMouseEvent *event)
 
 void Dialog::resizeEvent(QResizeEvent *e)
 {
-    d->background->resizePanel(e->size());
+    d->background->resizeFrame(e->size());
 
     setMask(d->background->mask());
 

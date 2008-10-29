@@ -18,8 +18,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef PLASMA_PANELSVG_H
-#define PLASMA_PANELSVG_H
+#ifndef PLASMA_FRAMESVG_H
+#define PLASMA_FRAMESVG_H
 
 #include <QtCore/QObject>
 #include <QtGui/QPixmap>
@@ -41,10 +41,10 @@ class QMatrix;
 namespace Plasma
 {
 
-class PanelSvgPrivate;
+class FrameSvgPrivate;
 
 /**
- * @class PanelSvg plasma/panelsvg.h <Plasma/PanelSvg>
+ * @class FrameSvg plasma/framesvg.h <Plasma/FrameSvg>
  *
  * @short Provides an SVG with borders.
  *
@@ -52,7 +52,7 @@ class PanelSvgPrivate;
  * its aspect ratio, such as a dialog, simply scaling a single image
  * may not be enough.
  *
- * PanelSvg allows SVGs to provide several elements for borders as well
+ * FrameSvg allows SVGs to provide several elements for borders as well
  * as a central element, each of which are scaled individually.  These
  * elements should be named
  *
@@ -73,7 +73,7 @@ class PanelSvgPrivate;
  *
  * @see Plamsa::Svg
  **/
-class PLASMA_EXPORT PanelSvg : public Svg
+class PLASMA_EXPORT FrameSvg : public Svg
 {
     Q_OBJECT
     public:
@@ -91,7 +91,7 @@ class PLASMA_EXPORT PanelSvg : public Svg
         Q_DECLARE_FLAGS(EnabledBorders, EnabledBorder)
 
         /**
-         * Constructs a new PanelSvg that paints the proper named subelements
+         * Constructs a new FrameSvg that paints the proper named subelements
          * as borders. It may also be used as a regular Plasma::Svg object
          * for direct access to elements in the Svg.
          *
@@ -99,8 +99,8 @@ class PLASMA_EXPORT PanelSvg : public Svg
          *
          * @related Plasma::Theme
          */
-        explicit PanelSvg(QObject *parent = 0);
-        ~PanelSvg();
+        explicit FrameSvg(QObject *parent = 0);
+        ~FrameSvg();
 
         /**
          * Loads a new Svg
@@ -121,15 +121,15 @@ class PLASMA_EXPORT PanelSvg : public Svg
         EnabledBorders enabledBorders() const;
 
         /**
-         * Resize the panel maintaining the same border size
-         * @arg size the new size of the panel
+         * Resize the frame maintaining the same border size
+         * @arg size the new size of the frame
          */
-        void resizePanel(const QSizeF &size);
+        void resizeFrame(const QSizeF &size);
 
         /**
-         * @returns the size of the panel
+         * @returns the size of the frame
          */
-        QSizeF panelSize() const;
+        QSizeF frameSize() const;
 
         /**
          * Returns the margin size given the margin edge we want
@@ -178,7 +178,7 @@ class PLASMA_EXPORT PanelSvg : public Svg
 
         /**
          * @return true if the svg has the necessary elements with the given prefix
-         * to draw a panel
+         * to draw a frame
          * @arg prefix the given prefix we want to check if drawable
          */
         bool hasElementPrefix(const QString & prefix) const;
@@ -188,13 +188,13 @@ class PLASMA_EXPORT PanelSvg : public Svg
          * hasElementPrefix("north"), hasElementPrefix("south")
          * hasElementPrefix("west") and hasElementPrefix("east")
          * @return true if the svg has the necessary elements with the given prefix
-         * to draw a panel.
+         * to draw a frame.
          * @arg location the given prefix we want to check if drawable
          */
         bool hasElementPrefix(Plasma::Location location) const;
 
         /**
-         * Returns the prefix for SVG elements of the PanelSvg
+         * Returns the prefix for SVG elements of the FrameSvg
          * @return the prefix
          */
         QString prefix();
@@ -209,12 +209,12 @@ class PLASMA_EXPORT PanelSvg : public Svg
         * Sets whether saving all the rendered prefixes in a cache or not
         * @arg cache if use the cache or not
         */
-        void setCacheAllRenderedPanels(bool cache);
+        void setCacheAllRenderedFrames(bool cache);
 
        /**
         * @return if all the different prefixes should be kept in a cache when rendered
         */
-        bool cacheAllRenderedPanels() const;
+        bool cacheAllRenderedFrames() const;
 
        /**
         * Deletes the internal cache freeing memory: use this if you want to switch the rendered
@@ -230,7 +230,7 @@ class PLASMA_EXPORT PanelSvg : public Svg
          *                  string for the whole SVG (the default)
          * @return a QPixmap of the rendered SVG
          */
-        Q_INVOKABLE QPixmap panelPixmap();
+        Q_INVOKABLE QPixmap framePixmap();
 
         /**
          * Paints the loaded SVG with the elements that represents the border
@@ -238,7 +238,7 @@ class PLASMA_EXPORT PanelSvg : public Svg
          * @arg target the target rectangle on the paint device
          * @arg source the portion rectangle of the source image
          */
-        Q_INVOKABLE void paintPanel(QPainter *painter, const QRectF &target,
+        Q_INVOKABLE void paintFrame(QPainter *painter, const QRectF &target,
                                     const QRectF &source = QRectF());
 
         /**
@@ -247,10 +247,10 @@ class PLASMA_EXPORT PanelSvg : public Svg
          * @arg painter the QPainter to use
          * @arg pos where to paint the svg
          */
-        Q_INVOKABLE void paintPanel(QPainter *painter, const QPointF &pos = QPointF(0, 0));
+        Q_INVOKABLE void paintFrame(QPainter *painter, const QPointF &pos = QPointF(0, 0));
 
     private:
-        PanelSvgPrivate *const d;
+        FrameSvgPrivate *const d;
 
         Q_PRIVATE_SLOT(d, void updateSizes())
         Q_PRIVATE_SLOT(d, void updateNeeded())
@@ -258,6 +258,6 @@ class PLASMA_EXPORT PanelSvg : public Svg
 
 } // Plasma namespace
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(Plasma::PanelSvg::EnabledBorders)
+Q_DECLARE_OPERATORS_FOR_FLAGS(Plasma::FrameSvg::EnabledBorders)
 
 #endif // multiple inclusion guard

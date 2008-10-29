@@ -17,7 +17,7 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "configxml.h"
+#include "configloader.h"
 
 #include <QColor>
 #include <QFont>
@@ -32,10 +32,10 @@
 namespace Plasma
 {
 
-class ConfigXmlPrivate
+class ConfigLoaderPrivate
 {
     public:
-        ~ConfigXmlPrivate()
+        ~ConfigLoaderPrivate()
         {
             qDeleteAll(bools);
             qDeleteAll(strings);
@@ -175,7 +175,7 @@ class ConfigXmlPrivate
             return v;
         }
 
-        void parse(ConfigXml *configXml, QIODevice *xml);
+        void parse(ConfigLoader *loader, QIODevice *xml);
 
         QList<bool *> bools;
         QList<QString *> strings;
@@ -199,10 +199,10 @@ class ConfigXmlPrivate
         QHash<QString, QString> keysToNames;
 };
 
-class ConfigXmlHandler : public QXmlDefaultHandler
+class ConfigLoaderHandler : public QXmlDefaultHandler
 {
 public:
-    ConfigXmlHandler(ConfigXml *config, ConfigXmlPrivate *d);
+    ConfigLoaderHandler(ConfigLoader *config, ConfigLoaderPrivate *d);
     bool startElement(const QString &namespaceURI, const QString &localName,
                       const QString &qName, const QXmlAttributes &atts);
     bool endElement(const QString &namespaceURI, const QString &localName,
@@ -213,8 +213,8 @@ private:
     void addItem();
     void resetState();
 
-    ConfigXml *m_config;
-    ConfigXmlPrivate *d;
+    ConfigLoader *m_config;
+    ConfigLoaderPrivate *d;
     int m_min;
     int m_max;
     QString m_name;
@@ -231,16 +231,16 @@ private:
     bool m_inChoice;
 };
 
-void ConfigXmlPrivate::parse(ConfigXml *configXml, QIODevice *xml)
+void ConfigLoaderPrivate::parse(ConfigLoader *loader, QIODevice *xml)
 {
     QXmlInputSource source(xml);
     QXmlSimpleReader reader;
-    ConfigXmlHandler handler(configXml, this);
+    ConfigLoaderHandler handler(loader, this);
     reader.setContentHandler(&handler);
     reader.parse(&source, false);
 }
 
-ConfigXmlHandler::ConfigXmlHandler(ConfigXml *config, ConfigXmlPrivate *d)
+ConfigLoaderHandler::ConfigLoaderHandler(ConfigLoader *config, ConfigLoaderPrivate *d)
     : QXmlDefaultHandler(),
       m_config(config),
       d(d)
@@ -248,13 +248,13 @@ ConfigXmlHandler::ConfigXmlHandler(ConfigXml *config, ConfigXmlPrivate *d)
     resetState();
 }
 
-bool ConfigXmlHandler::startElement(const QString &namespaceURI, const QString &localName,
+bool ConfigLoaderHandler::startElement(const QString &namespaceURI, const QString &localName,
                                     const QString &qName, const QXmlAttributes &attrs)
 {
     Q_UNUSED(namespaceURI)
     Q_UNUSED(qName)
 
-//     kDebug() << "ConfigXmlHandler::startElement(" << localName << qName;
+//     kDebug() << "ConfigLoaderHandler::startElement(" << localName << qName;
     int numAttrs = attrs.count();
     QString tag = localName.toLower();
     if (tag == "group") {
@@ -302,19 +302,19 @@ bool ConfigXmlHandler::startElement(const QString &namespaceURI, const QString &
     return true;
 }
 
-bool ConfigXmlHandler::characters(const QString &ch)
+bool ConfigLoaderHandler::characters(const QString &ch)
 {
     m_cdata.append(ch);
     return true;
 }
 
-bool ConfigXmlHandler::endElement(const QString &namespaceURI,
+bool ConfigLoaderHandler::endElement(const QString &namespaceURI,
                                   const QString &localName, const QString &qName)
 {
     Q_UNUSED(namespaceURI)
     Q_UNUSED(qName)
 
-//     kDebug() << "ConfigXmlHandler::endElement(" << localName << qName;
+//     kDebug() << "ConfigLoaderHandler::endElement(" << localName << qName;
     QString tag = localName.toLower();
     if (tag == "entry") {
         addItem();
@@ -346,7 +346,7 @@ bool ConfigXmlHandler::endElement(const QString &namespaceURI,
     return true;
 }
 
-void ConfigXmlHandler::addItem()
+void ConfigLoaderHandler::addItem()
 {
     if (m_name.isEmpty()) {
         return;
@@ -498,7 +498,7 @@ void ConfigXmlHandler::addItem()
     }
 }
 
-void ConfigXmlHandler::resetState()
+void ConfigLoaderHandler::resetState()
 {
     m_haveMin = false;
     m_min = 0;
@@ -514,16 +514,16 @@ void ConfigXmlHandler::resetState()
     m_inChoice = false;
 }
 
-ConfigXml::ConfigXml(const QString &configFile, QIODevice *xml, QObject *parent)
+ConfigLoader::ConfigLoader(const QString &configFile, QIODevice *xml, QObject *parent)
     : KConfigSkeleton(configFile, parent),
-      d(new ConfigXmlPrivate)
+      d(new ConfigLoaderPrivate)
 {
     d->parse(this, xml);
 }
 
-ConfigXml::ConfigXml(KSharedConfigPtr config, QIODevice *xml, QObject *parent)
+ConfigLoader::ConfigLoader(KSharedConfigPtr config, QIODevice *xml, QObject *parent)
     : KConfigSkeleton(config, parent),
-      d(new ConfigXmlPrivate)
+      d(new ConfigLoaderPrivate)
 {
     d->parse(this, xml);
 }
@@ -531,9 +531,9 @@ ConfigXml::ConfigXml(KSharedConfigPtr config, QIODevice *xml, QObject *parent)
 //FIXME: obviously this is broken and should be using the group as the root,
 //       but KConfigSkeleton does not currently support this. it will eventually though,
 //       at which point this can be addressed properly
-ConfigXml::ConfigXml(const KConfigGroup *config, QIODevice *xml, QObject *parent)
+ConfigLoader::ConfigLoader(const KConfigGroup *config, QIODevice *xml, QObject *parent)
     : KConfigSkeleton(KSharedConfig::openConfig(config->config()->name()), parent),
-      d(new ConfigXmlPrivate)
+      d(new ConfigLoaderPrivate)
 {
     KConfigGroup group = config->parent();
     d->baseGroup = config->name();
@@ -544,22 +544,22 @@ ConfigXml::ConfigXml(const KConfigGroup *config, QIODevice *xml, QObject *parent
     d->parse(this, xml);
 }
 
-ConfigXml::~ConfigXml()
+ConfigLoader::~ConfigLoader()
 {
     delete d;
 }
 
-KConfigSkeletonItem *ConfigXml::findItem(const QString &group, const QString &key)
+KConfigSkeletonItem *ConfigLoader::findItem(const QString &group, const QString &key)
 {
     return KConfigSkeleton::findItem(d->keysToNames[group + key]);
 }
 
-bool ConfigXml::hasGroup(const QString &group) const
+bool ConfigLoader::hasGroup(const QString &group) const
 {
     return d->groups.contains(group);
 }
 
-QStringList ConfigXml::groupList() const
+QStringList ConfigLoader::groupList() const
 {
     return d->groups;
 }

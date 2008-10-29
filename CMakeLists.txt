@@ -25,7 +25,7 @@ set(plasma_LIB_SRCS
     animationdriver.cpp
     animator.cpp
     applet.cpp
-    configxml.cpp
+    configloader.cpp
     containment.cpp
     context.cpp
     corona.cpp
@@ -37,7 +37,7 @@ set(plasma_LIB_SRCS
     extender.cpp
     extenderitem.cpp
     paintutils.cpp
-    panelsvg.cpp
+    framesvg.cpp
     plasma.cpp
     popupapplet.cpp
     private/applethandle.cpp
@@ -69,10 +69,10 @@ set(plasma_LIB_SRCS
     wallpaper.cpp
     widgets/checkbox.cpp
     widgets/combobox.cpp
-    widgets/flash.cpp
+    widgets/flashinglabel.cpp
     widgets/frame.cpp
     widgets/groupbox.cpp
-    widgets/icon.cpp
+    widgets/iconwidget.cpp
     widgets/label.cpp
     widgets/lineedit.cpp
     widgets/meter.cpp
@@ -140,7 +140,7 @@ set(plasma_LIB_INCLUDES
     animationdriver.h
     animator.h
     applet.h
-    configxml.h
+    configloader.h
     containment.h
     context.h
     corona.h
@@ -152,7 +152,7 @@ set(plasma_LIB_INCLUDES
     extender.h
     extenderitem.h
     paintutils.h
-    panelsvg.h
+    framesvg.h
     plasma.h
     plasma_export.h
     popupapplet.h
@@ -183,10 +183,10 @@ install(FILES
 install(FILES
     widgets/checkbox.h
     widgets/combobox.h
-    widgets/flash.h
+    widgets/flashinglabel.h
     widgets/frame.h
     widgets/groupbox.h
-    widgets/icon.h
+    widgets/iconwidget.h
     widgets/label.h
     widgets/lineedit.h
     widgets/meter.h
@@ -218,7 +218,7 @@ includes/Applet
 includes/AppletScript
 includes/CheckBox
 includes/ComboBox
-includes/ConfigXml
+includes/ConfigLoader
 includes/Containment
 includes/Context
 includes/Corona
@@ -230,10 +230,11 @@ includes/Delegate
 includes/Dialog
 includes/Extender
 includes/ExtenderItem
-includes/Flash
+includes/FlashingLabel
 includes/Frame
+includes/FrameSvg
 includes/GroupBox
-includes/Icon
+includes/IconWidget
 includes/Label
 includes/LineEdit
 includes/Meter
@@ -241,7 +242,6 @@ includes/Package
 includes/PackageMetadata
 includes/PackageStructure
 includes/PaintUtils
-includes/PanelSvg
 includes/Plasma
 includes/PopupApplet
 includes/PushButton

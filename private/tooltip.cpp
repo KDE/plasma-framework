@@ -33,7 +33,7 @@
 
 #include <plasma/plasma.h>
 #include <plasma/theme.h>
-#include <plasma/panelsvg.h>
+#include <plasma/framesvg.h>
 
 namespace Plasma {
 
@@ -53,7 +53,7 @@ class ToolTipPrivate
     QLabel *imageLabel;
     WindowPreview *preview;
     WId windowToPreview;
-    PanelSvg *background;
+    FrameSvg *background;
     QPointer<QObject> source;
     bool autohide;
 };
@@ -96,7 +96,7 @@ ToolTip::ToolTip(QObject *source)
     d->imageLabel = new QLabel(this);
     d->imageLabel->setAlignment(Qt::AlignTop | Qt::AlignLeft);
 
-    d->background = new PanelSvg(this);
+    d->background = new FrameSvg(this);
     connect(d->background, SIGNAL(repaintNeeded()), this, SLOT(update()));
 
     l->addWidget(d->preview, 0, 0, 1, 2);
@@ -144,7 +144,7 @@ void ToolTip::prepareShowing(bool cueUpdate)
 void ToolTip::resizeEvent(QResizeEvent *e)
 {
     QWidget::resizeEvent(e);
-    d->background->resizePanel(size());
+    d->background->resizeFrame(size());
 
     setMask(d->background->mask());
 }
@@ -157,7 +157,7 @@ void ToolTip::paintEvent(QPaintEvent *e)
     painter.setCompositionMode(QPainter::CompositionMode_Source);
     painter.fillRect(rect(), Qt::transparent);
 
-    d->background->paintPanel(&painter);
+    d->background->paintFrame(&painter);
 }
 
 void ToolTip::sourceDestroyed()
@@ -173,7 +173,7 @@ bool ToolTip::autohide() const
 void ToolTip::updateTheme()
 {
     d->background->setImagePath("widgets/tooltip");
-    d->background->setEnabledBorders(PanelSvg::AllBorders);
+    d->background->setEnabledBorders(FrameSvg::AllBorders);
 
     const int topHeight = d->background->marginSize(Plasma::TopMargin);
     const int leftWidth = d->background->marginSize(Plasma::LeftMargin);

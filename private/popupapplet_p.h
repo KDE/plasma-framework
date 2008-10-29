@@ -38,7 +38,7 @@ public:
     void popupConstraintsEvent(Plasma::Constraints constraints);
 
     PopupApplet *q;
-    Plasma::Icon *icon;
+    Plasma::IconWidget *icon;
     QPointer<Plasma::Dialog> dialog;
     QGraphicsProxyWidget *proxy;
     Plasma::PopupPlacement popupPlacement;

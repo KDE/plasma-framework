@@ -27,7 +27,7 @@
 #include "containment.h"
 #include "corona.h"
 #include "extenderitem.h"
-#include "panelsvg.h"
+#include "framesvg.h"
 #include "popupapplet.h"
 #include "svg.h"
 #include "widgets/label.h"
@@ -274,16 +274,16 @@ void Extender::itemHoverLeaveEvent(ExtenderItem *item)
     }
 }
 
-PanelSvg::EnabledBorders Extender::enabledBordersForItem(ExtenderItem *item) const
+FrameSvg::EnabledBorders Extender::enabledBordersForItem(ExtenderItem *item) const
 {
     ExtenderItem *topItem = dynamic_cast<ExtenderItem*>(d->layout->itemAt(0));
     ExtenderItem *bottomItem = dynamic_cast<ExtenderItem*>(d->layout->itemAt(d->layout->count() - 1));
     if (d->appearance == TopDownStacked && bottomItem != item) {
-        return PanelSvg::LeftBorder | PanelSvg::BottomBorder | PanelSvg::RightBorder;
+        return FrameSvg::LeftBorder | FrameSvg::BottomBorder | FrameSvg::RightBorder;
     } else if (d->appearance == BottomUpStacked && topItem != item) {
-        return PanelSvg::LeftBorder | PanelSvg::TopBorder | PanelSvg::RightBorder;
+        return FrameSvg::LeftBorder | FrameSvg::TopBorder | FrameSvg::RightBorder;
     } else if (d->appearance != NoBorders) {
-        return PanelSvg::LeftBorder | PanelSvg::RightBorder;
+        return FrameSvg::LeftBorder | FrameSvg::RightBorder;
     } else {
         return 0;
     }

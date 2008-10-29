@@ -22,7 +22,7 @@
 
 #include <QtGui/QGraphicsWidget>
 
-#include "plasma/panelsvg.h"
+#include "plasma/framesvg.h"
 #include "plasma/plasma_export.h"
 
 namespace Plasma
@@ -204,7 +204,7 @@ class PLASMA_EXPORT Extender : public QGraphicsWidget
          * @param item the item for which it's position or extender has changed.
          * @return the borders that have to be enabled on it's background.
          */
-        virtual PanelSvg::EnabledBorders enabledBordersForItem(ExtenderItem *item) const;
+        virtual FrameSvg::EnabledBorders enabledBordersForItem(ExtenderItem *item) const;
 
         /**
          * Reimplemented from QGraphicsWidget

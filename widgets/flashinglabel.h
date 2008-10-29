@@ -18,8 +18,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef PLASMA_FLASH_H
-#define PLASMA_FLASH_H
+#ifndef PLASMA_FLASHINGLABEL_H
+#define PLASMA_FLASHINGLABEL_H
 
 #include <QtGui/QGraphicsWidget>
 #include <QtGui/QTextOption>
@@ -29,19 +29,19 @@
 namespace Plasma
 {
 
-class FlashPrivate;
+class FlashingLabelPrivate;
 
 /**
- * @class Flash plasma/widgets/flash.h <Plasma/Widgets/Flash>
+ * @class FlashingLabel plasma/widgets/flashinglabel.h <Plasma/Widgets/FlashingLabel>
  *
  * @short Provides flashing text or icons inside Plasma
  */
-class PLASMA_EXPORT Flash : public QGraphicsWidget
+class PLASMA_EXPORT FlashingLabel : public QGraphicsWidget
 {
     Q_OBJECT
     public:
-        explicit Flash(QGraphicsItem *parent = 0);
-        virtual ~Flash();
+        explicit FlashingLabel(QGraphicsItem *parent = 0);
+        virtual ~FlashingLabel();
 
         void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
 
@@ -66,7 +66,7 @@ class PLASMA_EXPORT Flash : public QGraphicsWidget
 
     private:
         Q_PRIVATE_SLOT(d, void elementAnimationFinished(int))
-        FlashPrivate *const d;
+        FlashingLabelPrivate *const d;
 };
 
 }

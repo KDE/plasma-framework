@@ -39,7 +39,7 @@
 #include "corona.h"
 #include "dialog.h"
 #include "extender.h"
-#include "panelsvg.h"
+#include "framesvg.h"
 #include "popupapplet.h"
 #include "theme.h"
 #include "view.h"
@@ -47,6 +47,8 @@
 #include "private/applet_p.h"
 #include "private/extender_p.h"
 #include "private/extenderitem_p.h"
+
+#include "widgets/iconwidget.h"
 
 namespace Plasma
 {
@@ -79,12 +81,12 @@ ExtenderItem::ExtenderItem(Extender *hostExtender, uint extenderItemId)
         dg.writeEntry("sourceAppletId", hostExtender->d->applet->id());
         dg.writeEntry("sourceIconName", hostExtender->d->applet->icon());
         d->sourceApplet = hostExtender->d->applet;
-        d->collapseIcon = new Icon(KIcon(hostExtender->d->applet->icon()), "", this);
+        d->collapseIcon = new IconWidget(KIcon(hostExtender->d->applet->icon()), "", this);
     } else {
         //The item already exists.
         d->name = dg.readEntry("extenderItemName", "");
         d->title = dg.readEntry("extenderTitle", "");
-        d->collapseIcon = new Icon(KIcon(dg.readEntry("extenderIconName", "")), "", this);
+        d->collapseIcon = new IconWidget(KIcon(dg.readEntry("extenderIconName", "")), "", this);
 
         //Find the sourceapplet.
         Corona *corona = hostExtender->d->applet->containment()->corona();
@@ -107,7 +109,6 @@ ExtenderItem::ExtenderItem(Extender *hostExtender, uint extenderItemId)
     d->toolbox = new QGraphicsWidget(this);
     d->toolboxLayout = new QGraphicsLinearLayout(d->toolbox);
     d->toolbox->setLayout(d->toolboxLayout);
-
 
     //set the extender we want to move to.
     setExtender(hostExtender);
@@ -403,14 +404,14 @@ void ExtenderItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
     painter->setRenderHint(QPainter::TextAntialiasing, true);
     painter->setRenderHint(QPainter::Antialiasing, true);
 
-    if (d->background->enabledBorders() != (PanelSvg::LeftBorder | PanelSvg::RightBorder) &&
+    if (d->background->enabledBorders() != (FrameSvg::LeftBorder | FrameSvg::RightBorder) &&
         d->background->enabledBorders()) {
         //Don't paint if only the left and right borders are enabled, we only use the left and right
         //border in this situation to set the correct margins on this item.
-        d->background->paintPanel(painter, QPointF(0, 0));
+        d->background->paintFrame(painter, QPointF(0, 0));
     }
 
-    d->dragger->paintPanel(painter, QPointF(d->bgLeft, d->bgTop));
+    d->dragger->paintFrame(painter, QPointF(d->bgLeft, d->bgTop));
 
     //We don't need to paint a title if there is no title.
     if (d->title.isEmpty()) {
@@ -457,12 +458,12 @@ void ExtenderItem::resizeEvent(QGraphicsSceneResizeEvent *event)
     qreal height = event->newSize().height();
 
     //resize the dragger
-    d->dragger->resizePanel(QSizeF(width - d->bgLeft - d->bgRight,
+    d->dragger->resizeFrame(QSizeF(width - d->bgLeft - d->bgRight,
                             d->dragger->elementSize("hint-preferred-icon-size").height() +
                             d->dragTop + d->dragBottom));
 
     //resize the applet background
-    d->background->resizePanel(event->newSize());
+    d->background->resizeFrame(event->newSize());
 
     //resize the widget
     if (d->widget && d->widget->isWidget()) {
@@ -509,7 +510,7 @@ void ExtenderItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
         return;
     }
 
-    if (d->background->enabledBorders() != PanelSvg::AllBorders) {
+    if (d->background->enabledBorders() != FrameSvg::AllBorders) {
         d->themeChanged();
     }
 
@@ -722,8 +723,8 @@ ExtenderItemPrivate::ExtenderItemPrivate(ExtenderItem *extenderItem, Extender *h
       previousTargetExtender(0),
       extender(hostExtender),
       sourceApplet(0),
-      dragger(new PanelSvg(extenderItem)),
-      background(new PanelSvg(extenderItem)),
+      dragger(new FrameSvg(extenderItem)),
+      background(new FrameSvg(extenderItem)),
       collapseIcon(0),
       title(QString()),
       mousePressed(false),
@@ -814,7 +815,7 @@ void ExtenderItemPrivate::updateToolBox()
     //add the actions that are actually set to visible.
     foreach (QAction *action, actions) {
         if (action->isVisible()) {
-            Icon *icon = new Icon(q);
+            IconWidget *icon = new IconWidget(q);
             icon->setAction(action);
             QSizeF iconSize = icon->sizeFromIconSize(iconHeight);
             icon->setMinimumSize(iconSize);
@@ -825,7 +826,7 @@ void ExtenderItemPrivate::updateToolBox()
 
     //add the returntosource icon if we are detached, and have a source applet.
     if (q->isDetached() && sourceApplet) {
-        Icon *returnToSource = new Icon(q);
+        IconWidget *returnToSource = new IconWidget(q);
         returnToSource->setSvg("widgets/configuration-icons", "return-to-source");
         QSizeF iconSize = returnToSource->sizeFromIconSize(iconHeight);
         returnToSource->setMinimumSize(iconSize);
@@ -912,7 +913,7 @@ void ExtenderItemPrivate::themeChanged()
 
     background->setImagePath("widgets/extender-background");
     if (mousePressed) {
-        background->setEnabledBorders(PanelSvg::AllBorders);
+        background->setEnabledBorders(FrameSvg::AllBorders);
     } else {
         background->setEnabledBorders(extender->enabledBordersForItem(q));
     }

@@ -38,10 +38,10 @@ class MeterPrivate;
  *
  * Svgs can have following ids:
  * - background: Drawn first to the bottom
- *       background can be a PanelSvg
+ *       background can be a FrameSvg
  * - label0, label1, ...: Rectangles mark the label places
  * - bar: Bar for the bar meter
- *      can be replaced with bar-active and bar-inactive PanelSvg
+ *      can be replaced with bar-active and bar-inactive FrameSvg
  * - pointer: Pointer for analog meter
  * - rotatecenter: Marks the place of pointer rotation center
  * - rotateminmax: Width and height of this object are the Min and Max rotate

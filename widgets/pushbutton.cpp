@@ -32,7 +32,7 @@
 
 #include "theme.h"
 #include "svg.h"
-#include "panelsvg.h"
+#include "framesvg.h"
 #include "animator.h"
 #include "paintutils.h"
 
@@ -82,7 +82,7 @@ public:
 
     PushButton *q;
 
-    PanelSvg *background;
+    FrameSvg *background;
     int animId;
     bool fadeIn;
     qreal opacity;
@@ -146,9 +146,9 @@ PushButton::PushButton(QGraphicsWidget *parent)
     setWidget(native);
     native->setAttribute(Qt::WA_NoSystemBackground);
 
-    d->background = new PanelSvg(this);
+    d->background = new FrameSvg(this);
     d->background->setImagePath("widgets/button");
-    d->background->setCacheAllRenderedPanels(true);
+    d->background->setCacheAllRenderedFrames(true);
     d->background->setElementPrefix("normal");
     d->syncBorders();
     setAcceptHoverEvents(true);
@@ -225,17 +225,17 @@ void PushButton::resizeEvent(QGraphicsSceneResizeEvent *event)
    if (d->background) {
         //resize all four panels
         d->background->setElementPrefix("pressed");
-        d->background->resizePanel(size());
+        d->background->resizeFrame(size());
         d->background->setElementPrefix("focus");
-        d->background->resizePanel(size());
+        d->background->resizeFrame(size());
 
         d->syncActiveRect();
 
         d->background->setElementPrefix("active");
-        d->background->resizePanel(d->activeRect.size());
+        d->background->resizeFrame(d->activeRect.size());
 
         d->background->setElementPrefix("normal");
-        d->background->resizePanel(size());
+        d->background->resizeFrame(size());
    }
 
    QGraphicsProxyWidget::resizeEvent(event);
@@ -260,7 +260,7 @@ void PushButton::paint(QPainter *painter,
             d->background->setElementPrefix("normal");
         }
         if (d->animId == -1) {
-            d->background->paintPanel(painter);
+            d->background->paintFrame(painter);
         }
     //flat or disabled
     } else if (!isEnabled() || nativeWidget()->isFlat()) {
@@ -268,7 +268,7 @@ void PushButton::paint(QPainter *painter,
         bufferPixmap.fill(Qt::transparent);
 
         QPainter buffPainter(&bufferPixmap);
-        d->background->paintPanel(&buffPainter);
+        d->background->paintFrame(&buffPainter);
         buffPainter.setCompositionMode(QPainter::CompositionMode_DestinationIn);
         buffPainter.fillRect(bufferPixmap.rect(), QColor(0, 0, 0, 128));
 
@@ -278,20 +278,20 @@ void PushButton::paint(QPainter *painter,
     //if is under mouse draw the animated glow overlay
     if (!nativeWidget()->isDown() && isEnabled() && acceptHoverEvents()) {
         if (d->animId != -1) {
-            QPixmap normalPix = d->background->panelPixmap();
+            QPixmap normalPix = d->background->framePixmap();
             d->background->setElementPrefix("active");
             painter->drawPixmap(
                 d->activeRect.topLeft(),
-                PaintUtils::transition(d->background->panelPixmap(), normalPix, 1 - d->opacity));
+                PaintUtils::transition(d->background->framePixmap(), normalPix, 1 - d->opacity));
         } else if (isUnderMouse() || nativeWidget()->isDefault()) {
             d->background->setElementPrefix("active");
-            d->background->paintPanel(painter, d->activeRect.topLeft());
+            d->background->paintFrame(painter, d->activeRect.topLeft());
         }
     }
 
     if (nativeWidget()->hasFocus()) {
         d->background->setElementPrefix("focus");
-        d->background->paintPanel(painter);
+        d->background->paintFrame(painter);
     }
 
     painter->setPen(Plasma::Theme::defaultTheme()->color(Theme::ButtonTextColor));

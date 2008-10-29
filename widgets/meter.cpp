@@ -18,7 +18,7 @@
  */
 
 #include "meter.h"
-#include "plasma/panelsvg.h"
+#include "plasma/framesvg.h"
 #include <cmath>
 #include <kdebug.h>
 #include <QPainter>
@@ -100,8 +100,8 @@ public:
             image->resize();
 
             image->setElementPrefix("background");
-            image->resizePanel(elementRect.size());
-            image->paintPanel(p, elementRect.topLeft());
+            image->resizeFrame(elementRect.size());
+            image->paintFrame(p, elementRect.topLeft());
             image->resize(imageSize);
 
             paintBar(p, "bar-inactive");
@@ -136,8 +136,8 @@ public:
         }
 
         image->setElementPrefix(prefix);
-        image->resizePanel(tileSize);
-        p->drawTiledPixmap(elementRect, image->panelPixmap());
+        image->resizeFrame(tileSize);
+        p->drawTiledPixmap(elementRect, image->framePixmap());
         image->resize(imageSize);
     }
 
@@ -180,7 +180,7 @@ public:
     QList<QFont> fonts;
     QString svg;
     Meter::MeterType meterType;
-    Plasma::PanelSvg *image;
+    Plasma::FrameSvg *image;
     int minrotate;
     int maxrotate;
     Meter *meter;
@@ -300,7 +300,7 @@ void Meter::setSvg(const QString &svg)
 {
     d->svg = svg;
     delete d->image;
-    d->image = new Plasma::PanelSvg(this);
+    d->image = new Plasma::FrameSvg(this);
     d->image->setImagePath(svg);
     // To create renderer and get default size
     d->image->resize();

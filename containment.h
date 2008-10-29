@@ -32,8 +32,6 @@
 #include <plasma/applet.h>
 #include <plasma/animator.h>
 
-#include "widgets/icon.h"
-
 namespace Plasma
 {
 
@@ -240,12 +238,12 @@ class PLASMA_EXPORT Containment : public Applet
         /**
          * Add an action to the toolbox
          */
-        void addToolBoxTool(QAction *action);
+        void addToolBoxAction(QAction *action);
 
         /**
          * Remove an action from the toolbox
          */
-        void removeToolBoxTool(QAction *action);
+        void removeToolBoxAction(QAction *action);
 
         /**
          * Sets the open or closed state of the Containment's toolbox

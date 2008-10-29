@@ -42,7 +42,7 @@
 #include "paintutils.h"
 #include "theme.h"
 #include "view.h"
-#include "panelsvg.h"
+#include "framesvg.h"
 
 namespace Plasma
 {
@@ -119,7 +119,7 @@ AppletHandle::AppletHandle(Containment *parent, Applet *applet, const QPointF &h
     //FIXME: this should be of course true, but works only if false
     m_configureIcons->setContainsMultipleImages(true);
 
-    m_background = new PanelSvg(this);
+    m_background = new FrameSvg(this);
     m_background->setImagePath("widgets/background");
 
     //We got to be able to see the applet while dragging to to another containment,
@@ -289,7 +289,7 @@ void AppletHandle::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
             g.setColorAt(0.0, transparencyColor);
         }
 
-        m_background->resizePanel(m_decorationRect.size());
+        m_background->resizeFrame(m_decorationRect.size());
 
         if (!m_backgroundBuffer || m_backgroundBuffer->size() != pixmapSize) {
             delete m_backgroundBuffer;
@@ -298,7 +298,7 @@ void AppletHandle::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
         m_backgroundBuffer->fill(Qt::transparent);
         QPainter buffPainter(m_backgroundBuffer);
 
-        m_background->paintPanel(&buffPainter);
+        m_background->paintFrame(&buffPainter);
 
         //+1 because otherwise due to rounding errors when rotated could appear one pixel
         //of the icon at the border of the applet

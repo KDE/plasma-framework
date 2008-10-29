@@ -25,7 +25,7 @@
 
 #include <KDebug>
 
-#include <plasma/panelsvg.h>
+#include <plasma/framesvg.h>
 
 namespace Plasma {
 
@@ -41,16 +41,16 @@ public:
     {
     }
 
-    Plasma::PanelSvg *scrollbar;
+    Plasma::FrameSvg *scrollbar;
 };
 
 Style::Style()
      : QCommonStyle(),
        d(new StylePrivate)
 {
-    d->scrollbar = new Plasma::PanelSvg(this);
+    d->scrollbar = new Plasma::FrameSvg(this);
     d->scrollbar->setImagePath("widgets/scrollbar");
-    d->scrollbar->setCacheAllRenderedPanels(true);
+    d->scrollbar->setCacheAllRenderedFrames(true);
 }
 
 Style::~Style()
@@ -96,8 +96,8 @@ void Style::drawComplexControl(ComplexControl control,
         subControlRect(control, option, SC_ScrollBarSlider, widget).adjusted(1, 0, -1, 0);
 
     d->scrollbar->setElementPrefix("background");
-    d->scrollbar->resizePanel(option->rect.size());
-    d->scrollbar->paintPanel(painter);
+    d->scrollbar->resizeFrame(option->rect.size());
+    d->scrollbar->paintFrame(painter);
 
     if (sunken && scrollOption && scrollOption->activeSubControls & SC_ScrollBarSlider) {
         d->scrollbar->setElementPrefix("sunken-slider");
@@ -105,8 +105,8 @@ void Style::drawComplexControl(ComplexControl control,
         d->scrollbar->setElementPrefix(prefix + "slider");
     }
 
-    d->scrollbar->resizePanel(slider.size());
-    d->scrollbar->paintPanel(painter, slider.topLeft());
+    d->scrollbar->resizeFrame(slider.size());
+    d->scrollbar->paintFrame(painter, slider.topLeft());
 
     if (scrollOption && scrollOption->orientation == Qt::Horizontal) {
         if (sunken && scrollOption->activeSubControls & SC_ScrollBarAddLine) {

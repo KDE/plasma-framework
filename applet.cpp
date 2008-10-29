@@ -58,7 +58,7 @@
 
 #include <Solid/PowerManagement>
 
-#include "configxml.h"
+#include "configloader.h"
 #include "containment.h"
 #include "corona.h"
 #include "dataenginemanager.h"
@@ -68,10 +68,11 @@
 #include "plasma.h"
 #include "scripting/appletscript.h"
 #include "svg.h"
-#include "panelsvg.h"
+#include "framesvg.h"
 #include "popupapplet.h"
 #include "theme.h"
 #include "view.h"
+#include "widgets/iconwidget.h"
 #include "widgets/label.h"
 #include "widgets/pushbutton.h"
 #include "tooltipmanager.h"
@@ -285,7 +286,7 @@ void Applet::setFailedToLaunch(bool failed, const QString &reason)
         QGraphicsLinearLayout *failureLayout = new QGraphicsLinearLayout(this);
         failureLayout->setContentsMargins(0, 0, 0, 0);
 
-        Icon *failureIcon = new Icon(this);
+        IconWidget *failureIcon = new IconWidget(this);
         failureIcon->setIcon(KIcon("dialog-error"));
         failureLayout->addItem(failureIcon);
 
@@ -305,7 +306,7 @@ void Applet::setFailedToLaunch(bool failed, const QString &reason)
         setLayout(failureLayout);
         resize(300, 250);
         setMinimumSize(failureLayout->minimumSize());
-        d->background->resizePanel(geometry().size());
+        d->background->resizeFrame(geometry().size());
 
     }
     update();
@@ -425,17 +426,17 @@ void AppletPrivate::cleanUpAndDelete()
         }
     }
 
-    if (configXml) {
-        configXml->setDefaults();
+    if (configLoader) {
+        configLoader->setDefaults();
     }
 
     q->scene()->removeItem(q);
     q->deleteLater();
 }
 
-ConfigXml *Applet::configScheme() const
+ConfigLoader *Applet::configScheme() const
 {
-    return d->configXml;
+    return d->configLoader;
 }
 
 DataEngine *Applet::dataEngine(const QString &name) const
@@ -656,7 +657,7 @@ void Applet::setBackgroundHints(const BackgroundHints hints)
     //Draw the standard background?
     if ((hints & StandardBackground) || (hints & TranslucentBackground)) {
         if (!d->background) {
-            d->background = new Plasma::PanelSvg(this);
+            d->background = new Plasma::FrameSvg(this);
         }
 
         if ((hints & TranslucentBackground) &&
@@ -666,7 +667,7 @@ void Applet::setBackgroundHints(const BackgroundHints hints)
             d->background->setImagePath("widgets/background");
         }
 
-        d->background->setEnabledBorders(Plasma::PanelSvg::AllBorders);
+        d->background->setEnabledBorders(Plasma::FrameSvg::AllBorders);
         qreal left, top, right, bottom;
         d->background->getMargins(left, top, right, bottom);
         setContentsMargins(left, right, top, bottom);
@@ -674,7 +675,7 @@ void Applet::setBackgroundHints(const BackgroundHints hints)
         if (minimumSize().expandedTo(fitSize) != minimumSize()) {
             setMinimumSize(minimumSize().expandedTo(fitSize));
         }
-        d->background->resizePanel(boundingRect().size());
+        d->background->resizeFrame(boundingRect().size());
     } else if (d->background) {
         qreal left, top, right, bottom;
         d->background->getMargins(left, top, right, bottom);
@@ -948,7 +949,7 @@ void Applet::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
         formFactor() != Plasma::Vertical &&
         formFactor() != Plasma::Horizontal) {
         //kDebug() << "option rect is" << option->rect;
-        d->background->paintPanel(p);
+        d->background->paintFrame(p);
     }
 
     if (!d->failed) {
@@ -1252,7 +1253,7 @@ void Applet::resizeEvent(QGraphicsSceneResizeEvent *event)
     QGraphicsWidget::resizeEvent(event);
 
     if (d->background) {
-        d->background->resizePanel(boundingRect().size());
+        d->background->resizeFrame(boundingRect().size());
     }
 
     updateConstraints(Plasma::SizeConstraint);
@@ -1289,13 +1290,13 @@ void Applet::showConfigurationInterface()
     }
 
     const QString windowTitle = i18nc("@title:window", "%1 Settings", name());
-    if (d->package && d->configXml) {
+    if (d->package && d->configLoader) {
         QString uiFile = d->package->filePath("mainconfigui");
         if (uiFile.isEmpty()) {
             return;
         }
 
-        KConfigDialog *dialog = new KConfigDialog(0, dialogId, d->configXml);
+        KConfigDialog *dialog = new KConfigDialog(0, dialogId, d->configLoader);
         dialog->setWindowTitle(windowTitle);
         dialog->setAttribute(Qt::WA_DeleteOnClose, true);
 
@@ -1665,7 +1666,7 @@ AppletPrivate::AppletPrivate(KService::Ptr service, int uniqueID, Applet *applet
           background(0),
           script(0),
           package(0),
-          configXml(0),
+          configLoader(0),
           mainConfig(0),
           pendingConstraints(NoConstraint),
           aspectRatioMode(Plasma::KeepAspectRatio),
@@ -1709,8 +1710,8 @@ AppletPrivate::~AppletPrivate()
     script = 0;
     delete package;
     package = 0;
-    delete configXml;
-    configXml = 0;
+    delete configLoader;
+    configLoader = 0;
     delete mainConfig;
     mainConfig = 0;
 }
@@ -1795,8 +1796,8 @@ void AppletPrivate::setupScriptSupport()
         QFile file(xmlPath);
         // FIXME: KConfigSkeleton doesn't play well with KConfigGroup =/
         KConfigGroup config = q->config();
-        configXml = new ConfigXml(&config, &file);
-        QObject::connect(configXml, SIGNAL(configChanged()), q, SLOT(configChanged()));
+        configLoader = new ConfigLoader(&config, &file);
+        QObject::connect(configLoader, SIGNAL(configChanged()), q, SLOT(configChanged()));
     }
 
     if (!package->filePath("mainconfigui").isEmpty()) {

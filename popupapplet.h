@@ -30,7 +30,7 @@ namespace Plasma
 {
 
 class Dialog;
-class Icon;
+class IconWidget;
 class PopupAppletPrivate;
 
 /**

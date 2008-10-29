@@ -39,7 +39,7 @@
 #include "plasma/plasma.h"
 #include "plasma/theme.h"
 #include "plasma/animator.h"
-#include "plasma/panelsvg.h"
+#include "plasma/framesvg.h"
 #include "plasma/paintutils.h"
 
 #include "private/style.h"
@@ -69,9 +69,9 @@ public:
 
     NativeTabBar *q;
     QTabBar::Shape shape; //used to keep track of shape() changes
-    PanelSvg *backgroundSvg;
+    FrameSvg *backgroundSvg;
     qreal left, top, right, bottom;
-    PanelSvg *buttonSvg;
+    FrameSvg *buttonSvg;
     qreal buttonLeft, buttonTop, buttonRight, buttonBottom;
 
     int animationId;
@@ -101,11 +101,11 @@ NativeTabBar::NativeTabBar(QWidget *parent)
         : QTabBar(parent),
           d(new NativeTabBarPrivate(this))
 {
-    d->backgroundSvg = new Plasma::PanelSvg();
+    d->backgroundSvg = new Plasma::FrameSvg();
     d->backgroundSvg->setImagePath("widgets/frame");
     d->backgroundSvg->setElementPrefix("sunken");
 
-    d->buttonSvg = new Plasma::PanelSvg();
+    d->buttonSvg = new Plasma::FrameSvg();
     d->buttonSvg->setImagePath("widgets/button");
     d->buttonSvg->setElementPrefix("normal");
 
@@ -220,7 +220,7 @@ void NativeTabBar::paintEvent(QPaintEvent *event)
     //int numTabs = count();
     //bool ltr = painter.layoutDirection() == Qt::LeftToRight; // Not yet used
 
-    d->backgroundSvg->paintPanel(&painter);
+    d->backgroundSvg->paintFrame(&painter);
 
     // Drawing Tabborders
     QRect movingRect;
@@ -232,8 +232,8 @@ void NativeTabBar::paintEvent(QPaintEvent *event)
     }
 
     //resizing here because in resizeevent the first time is invalid (still no tabs)
-    d->buttonSvg->resizePanel(movingRect.size());
-    d->buttonSvg->paintPanel(&painter, movingRect.topLeft());
+    d->buttonSvg->resizeFrame(movingRect.size());
+    d->buttonSvg->paintFrame(&painter, movingRect.topLeft());
 
     QFontMetrics metrics(painter.font());
 
@@ -311,7 +311,7 @@ void NativeTabBar::resizeEvent(QResizeEvent *event)
 {
     QTabBar::resizeEvent(event);
     d->currentAnimRect = tabRect(currentIndex());
-    d->backgroundSvg->resizePanel(size());
+    d->backgroundSvg->resizeFrame(size());
 
     update();
 }

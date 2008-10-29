@@ -27,7 +27,7 @@
 namespace Plasma
 {
 
-class PanelSvg;
+class FrameSvg;
 class AppletScript;
 class Wallpaper;
 
@@ -87,10 +87,10 @@ public:
     AppletOverlayWidget *needsConfigOverlay;
     QList<QGraphicsItem*> registeredAsDragHandle;
     QStringList loadedEngines;
-    Plasma::PanelSvg *background;
+    Plasma::FrameSvg *background;
     AppletScript *script;
     Package *package;
-    ConfigXml *configXml;
+    ConfigLoader *configLoader;
     KConfigGroup *mainConfig;
     Plasma::Constraints pendingConstraints;
     Plasma::AspectRatioMode aspectRatioMode;

@@ -31,7 +31,7 @@
 #include <KDE/KPluginInfo>
 #include <KDE/KShortcut>
 
-#include <plasma/configxml.h>
+#include <plasma/configloader.h>
 #include <plasma/packagestructure.h>
 #include <plasma/plasma.h>
 #include <plasma/animator.h>
@@ -168,7 +168,7 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          *
          * @return config skeleton object, or 0 if none
          **/
-        ConfigXml *configScheme() const;
+        ConfigLoader *configScheme() const;
 
         /**
          * Loads the given DataEngine

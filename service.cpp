@@ -30,7 +30,7 @@
 #include <KStandardDirs>
 #include <KTemporaryFile>
 
-#include "configxml.h"
+#include "configloader.h"
 
 #include "version.h"
 
@@ -263,7 +263,7 @@ void Service::setOperationsScheme(QIODevice *xml)
     d->tempFile->open();
 
     KSharedConfigPtr c = KSharedConfig::openConfig(d->tempFile->fileName(), KConfig::NoGlobals);
-    d->config = new ConfigXml(c, xml, this);
+    d->config = new ConfigLoader(c, xml, this);
 
     emit operationsChanged();
 

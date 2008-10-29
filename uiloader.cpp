@@ -22,10 +22,10 @@
 #include <QStringList>
 #include "widgets/checkbox.h"
 #include "widgets/combobox.h"
-#include "widgets/flash.h"
+#include "widgets/flashinglabel.h"
 #include "widgets/frame.h"
 #include "widgets/groupbox.h"
-#include "widgets/icon.h"
+#include "widgets/iconwidget.h"
 #include "widgets/label.h"
 #include "widgets/lineedit.h"
 #include "widgets/pushbutton.h"
@@ -51,10 +51,10 @@ UiLoader::UiLoader(QObject *parent)
     d->widgets
         << "CheckBox"
         << "ComboBox"
-        << "Flash"
+        << "FlashingLabel"
         << "Frame"
         << "GroupBox"
-        << "Icon"
+        << "IconWidget"
         << "Label"
         << "LineEdit"
         << "PushButton"
@@ -80,14 +80,14 @@ QGraphicsWidget *UiLoader::createWidget(const QString &className, QGraphicsWidge
         return new CheckBox(parent);
     } else if (className == QString("ComboBox")) {
         return new ComboBox(parent);
-    } else if (className == QString("Flash")) {
-        return new Flash(parent);
+    } else if (className == QString("FlashingLabel")) {
+        return new FlashingLabel(parent);
     } else if (className == QString("Frame")) {
         return new Frame(parent);
     } else if (className == QString("GroupBox")) {
         return new GroupBox(parent);
-    } else if (className == QString("Icon")) {
-        return new Icon(parent);
+    } else if (className == QString("IconWidget")) {
+        return new IconWidget(parent);
     } else if (className == QString("Label")) {
         return new Label(parent);
     } else if (className == QString("LineEdit")) {

@@ -26,7 +26,7 @@
 #include <KMimeType>
 
 #include "theme.h"
-#include "panelsvg.h"
+#include "framesvg.h"
 
 namespace Plasma
 {
@@ -42,8 +42,8 @@ public:
     {
     }
 
-    Plasma::PanelSvg *background;
-    Plasma::PanelSvg *handle;
+    Plasma::FrameSvg *background;
+    Plasma::FrameSvg *handle;
 };
 
 Slider::Slider(QGraphicsWidget *parent)
@@ -58,11 +58,11 @@ Slider::Slider(QGraphicsWidget *parent)
     setWidget(native);
     native->setAttribute(Qt::WA_NoSystemBackground);
 
-    d->background = new Plasma::PanelSvg(this);
+    d->background = new Plasma::FrameSvg(this);
     d->background->setImagePath("widgets/frame");
     d->background->setElementPrefix("sunken");
 
-    d->handle = new Plasma::PanelSvg(this);
+    d->handle = new Plasma::FrameSvg(this);
     d->handle->setImagePath("widgets/button");
     d->handle->setElementPrefix("normal");
 }
@@ -108,8 +108,8 @@ void Slider::paint(QPainter *painter,
 
     QRect backgroundRect =
         style->subControlRect(QStyle::CC_Slider, &sliderOpt, QStyle::SC_SliderGroove, slider);
-    d->background->resizePanel(backgroundRect.size());
-    d->background->paintPanel(painter, backgroundRect.topLeft());
+    d->background->resizeFrame(backgroundRect.size());
+    d->background->paintFrame(painter, backgroundRect.topLeft());
 
     //Thickmarks
     if (sliderOpt.tickPosition != QSlider::NoTicks) {
@@ -121,8 +121,8 @@ void Slider::paint(QPainter *painter,
 
     QRect handleRect =
         style->subControlRect(QStyle::CC_Slider, &sliderOpt, QStyle::SC_SliderHandle, slider);
-    d->handle->resizePanel(handleRect.size());
-    d->handle->paintPanel(painter, handleRect.topLeft());
+    d->handle->resizeFrame(handleRect.size());
+    d->handle->paintFrame(painter, handleRect.topLeft());
 }
 
 void Slider::setMaximum(int max)

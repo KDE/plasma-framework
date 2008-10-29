@@ -41,7 +41,7 @@
 #include <applet.h>
 #include <containment.h>
 #include <corona.h>
-#include <panelsvg.h>
+#include <framesvg.h>
 #include <theme.h>
 #include <view.h>
 #include <private/tooltip_p.h>

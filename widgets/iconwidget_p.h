@@ -19,8 +19,8 @@
  *   Free Software Foundation, Inc.,
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#ifndef PLASMA_ICON_P_H
-#define PLASMA_ICON_P_H
+#ifndef PLASMA_ICONWIDGET_P_H
+#define PLASMA_ICONWIDGET_P_H
 
 #include <QtCore/QEvent>
 #include <QtGui/QApplication>
@@ -32,7 +32,7 @@
 #include <plasma/plasma_export.h>
 #include <plasma/svg.h>
 
-#include "icon.h"
+#include "iconwidget.h"
 #include "animator.h"
 
 class QAction;
@@ -45,7 +45,7 @@ namespace Plasma
 class PLASMA_EXPORT IconAction
 {
 public:
-    IconAction(Icon *icon, QAction *action);
+    IconAction(IconWidget *icon, QAction *action);
 
     void show();
     void hide();
@@ -69,7 +69,7 @@ public:
 private:
     void rebuildPixmap();
 
-    Icon *m_icon;
+    IconWidget *m_icon;
     QAction *m_action;
     QPixmap m_pixmap;
     QRectF m_rect;
@@ -87,7 +87,7 @@ struct Margin
     qreal left, right, top, bottom;
 };
 
-class IconPrivate
+class IconWidgetPrivate
 {
 public:
     enum MarginType {
@@ -97,19 +97,19 @@ public:
         NMargins
     };
 
-    enum IconState {
+    enum IconWidgetState {
         NoState = 0,
         HoverState = 1,
         PressedState = 2,
         ManualPressedState = 4
     };
-    Q_DECLARE_FLAGS(IconStates, IconState)
+    Q_DECLARE_FLAGS(IconWidgetStates, IconWidgetState)
 
 public:
-    IconPrivate(Icon *i);
-    ~IconPrivate();
+    IconWidgetPrivate(IconWidget *i);
+    ~IconWidgetPrivate();
 
-    void drawBackground(QPainter *painter, IconState state);
+    void drawBackground(QPainter *painter, IconWidgetState state);
     void drawText(QPainter *painter);
     void drawTextItems(QPainter *painter, const QStyleOptionGraphicsItem *option,
                         const QTextLayout &labelLayout, const QTextLayout &infoLayout) const;
@@ -176,7 +176,7 @@ public:
      */
     void syncToAction();
 
-    Icon *q;
+    IconWidget *q;
     QString text;
     QString infoText;
     Svg *iconSvg;
@@ -189,7 +189,7 @@ public:
     qreal m_hoverAlpha;
     QSizeF iconSize;
     QIcon icon;
-    IconStates states;
+    IconWidgetStates states;
     Qt::Orientation orientation;
     int numDisplayLines;
     bool invertLayout;
@@ -209,11 +209,11 @@ public:
     static const int iconActionMargin = 4;
 };
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(IconPrivate::IconStates)
+Q_DECLARE_OPERATORS_FOR_FLAGS(IconWidgetPrivate::IconWidgetStates)
 
 // Inline methods
-void IconPrivate::setLayoutOptions(QTextLayout &layout,
-                                   const QStyleOptionGraphicsItem *option) const
+void IconWidgetPrivate::setLayoutOptions(QTextLayout &layout,
+                                         const QStyleOptionGraphicsItem *option) const
 {
     QTextOption textoption;
     textoption.setTextDirection(option->direction);
@@ -224,7 +224,7 @@ void IconPrivate::setLayoutOptions(QTextLayout &layout,
     layout.setTextOption(textoption);
 }
 
-Qt::LayoutDirection IconPrivate::iconDirection(const QStyleOptionGraphicsItem *option) const
+Qt::LayoutDirection IconWidgetPrivate::iconDirection(const QStyleOptionGraphicsItem *option) const
 {
     Qt::LayoutDirection direction;
 
@@ -241,14 +241,14 @@ Qt::LayoutDirection IconPrivate::iconDirection(const QStyleOptionGraphicsItem *o
     return direction;
 }
 
-void IconPrivate::setActiveMargins()
+void IconWidgetPrivate::setActiveMargins()
 {
     activeMargins = (orientation == Qt::Horizontal ?
             horizontalMargin : verticalMargin);
 }
 
-void IconPrivate::setVerticalMargin(MarginType type, qreal left, qreal top,
-                                    qreal right, qreal bottom)
+void IconWidgetPrivate::setVerticalMargin(MarginType type, qreal left, qreal top,
+                                          qreal right, qreal bottom)
 {
     verticalMargin[type].left   = left;
     verticalMargin[type].right  = right;
@@ -256,8 +256,8 @@ void IconPrivate::setVerticalMargin(MarginType type, qreal left, qreal top,
     verticalMargin[type].bottom = bottom;
 }
 
-void IconPrivate::setHorizontalMargin(MarginType type, qreal left, qreal top,
-                                      qreal right, qreal bottom)
+void IconWidgetPrivate::setHorizontalMargin(MarginType type, qreal left, qreal top,
+                                            qreal right, qreal bottom)
 {
     horizontalMargin[type].left   = left;
     horizontalMargin[type].right  = right;
@@ -265,45 +265,45 @@ void IconPrivate::setHorizontalMargin(MarginType type, qreal left, qreal top,
     horizontalMargin[type].bottom = bottom;
 }
 
-void IconPrivate::setVerticalMargin(MarginType type, qreal horizontal, qreal vertical)
+void IconWidgetPrivate::setVerticalMargin(MarginType type, qreal horizontal, qreal vertical)
 {
     setVerticalMargin(type, horizontal, vertical, horizontal, vertical);
 }
 
-void IconPrivate::setHorizontalMargin(MarginType type, qreal horizontal, qreal vertical)
+void IconWidgetPrivate::setHorizontalMargin(MarginType type, qreal horizontal, qreal vertical)
 {
     setHorizontalMargin(type, horizontal, vertical, horizontal, vertical);
 }
 
-QRectF IconPrivate::addMargin(const QRectF &rect, MarginType type) const
+QRectF IconWidgetPrivate::addMargin(const QRectF &rect, MarginType type) const
 {
     Q_ASSERT(activeMargins);
     const Margin &m = activeMargins[type];
     return rect.adjusted(-m.left, -m.top, m.right, m.bottom);
 }
 
-QRectF IconPrivate::subtractMargin(const QRectF &rect, MarginType type) const
+QRectF IconWidgetPrivate::subtractMargin(const QRectF &rect, MarginType type) const
 {
     Q_ASSERT(activeMargins);
     const Margin &m = activeMargins[type];
     return rect.adjusted(m.left, m.top, -m.right, -m.bottom);
 }
 
-QSizeF IconPrivate::addMargin(const QSizeF &size, MarginType type) const
+QSizeF IconWidgetPrivate::addMargin(const QSizeF &size, MarginType type) const
 {
     Q_ASSERT(activeMargins);
     const Margin &m = activeMargins[type];
     return QSizeF(size.width() + m.left + m.right, size.height() + m.top + m.bottom);
 }
 
-QSizeF IconPrivate::subtractMargin(const QSizeF &size, MarginType type) const
+QSizeF IconWidgetPrivate::subtractMargin(const QSizeF &size, MarginType type) const
 {
     Q_ASSERT(activeMargins);
     const Margin &m = activeMargins[type];
     return QSizeF(size.width() - m.left - m.right, size.height() - m.top - m.bottom);
 }
 
-QRectF IconPrivate::actionRect(ActionPosition position) const
+QRectF IconWidgetPrivate::actionRect(ActionPosition position) const
 {
     switch (position) {
     case TopLeft:
