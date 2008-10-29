@@ -85,7 +85,7 @@ set(plasma_LIB_SRCS
     widgets/tabbar.cpp
     widgets/treeview.cpp
     widgets/textedit.cpp
-    widgets/webcontent.cpp
+    widgets/webview.cpp
 )
 
 #NEPOMUK_GENERATE_FROM_ONTOLOGY(
@@ -199,7 +199,7 @@ install(FILES
     widgets/tabbar.h
     widgets/treeview.h
     widgets/textedit.h
-    widgets/webcontent.h
+    widgets/webview.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/plasma/widgets COMPONENT Devel)
 
 install(FILES
@@ -267,7 +267,7 @@ includes/UiLoader
 includes/View
 includes/Version
 includes/Wallpaper
-includes/WebContent
+includes/WebView
 DESTINATION ${INCLUDE_INSTALL_DIR}/KDE/Plasma COMPONENT Devel)
 
 if(QT_QTOPENGL_FOUND AND OPENGL_FOUND)

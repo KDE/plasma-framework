@@ -29,15 +29,15 @@
 
 #include <KDE/KDebug>
 
-#include "plasma/widgets/webcontent.h"
+#include "plasma/widgets/webview.h"
 
 namespace Plasma
 {
 
-class WebContentPrivate
+class WebViewPrivate
 {
 public:
-    WebContentPrivate(WebContent *parent)
+    WebViewPrivate(WebView *parent)
         : q(parent)
     {
     }
@@ -46,26 +46,26 @@ public:
     void updateRequested(const QRect &dirtyRect);
     void scrollRequested(int dx, int dy, const QRect &scrollRect);
 
-    WebContent *q;
+    WebView *q;
     QWebPage *page;
     bool loaded;
 };
 
-WebContent::WebContent(QGraphicsItem *parent)
+WebView::WebView(QGraphicsItem *parent)
     : QGraphicsWidget(parent),
-      d(new WebContentPrivate(this))
+      d(new WebViewPrivate(this))
 {
     d->page = 0;
     d->loaded = false;
     setPage(new QWebPage(this));
 }
 
-WebContent::~WebContent()
+WebView::~WebView()
 {
    delete d;
 }
 
-void WebContent::setUrl(const QUrl &url)
+void WebView::setUrl(const QUrl &url)
 {
     d->loaded = false;
     if (d->page) {
@@ -73,7 +73,7 @@ void WebContent::setUrl(const QUrl &url)
     }
 }
 
-void WebContent::setHtml(const QByteArray &html, const QUrl &baseUrl)
+void WebView::setHtml(const QByteArray &html, const QUrl &baseUrl)
 {
     d->loaded = false;
     if (d->page) {
@@ -81,7 +81,7 @@ void WebContent::setHtml(const QByteArray &html, const QUrl &baseUrl)
     }
 }
 
-void WebContent::setHtml(const QString &html, const QUrl &baseUrl)
+void WebView::setHtml(const QString &html, const QUrl &baseUrl)
 {
     d->loaded = false;
     if (d->page) {
@@ -89,7 +89,7 @@ void WebContent::setHtml(const QString &html, const QUrl &baseUrl)
     }
 }
 
-QRectF WebContent::geometry() const
+QRectF WebView::geometry() const
 {
     if (d->loaded && d->page) {
         return d->page->mainFrame()->geometry();
@@ -98,7 +98,7 @@ QRectF WebContent::geometry() const
     return QGraphicsWidget::geometry();
 }
 
-void WebContent::setPage(QWebPage *page)
+void WebView::setPage(QWebPage *page)
 {
     if (page == d->page) {
         return;
@@ -122,17 +122,17 @@ void WebContent::setPage(QWebPage *page)
     }
 }
 
-QWebPage *WebContent::page() const
+QWebPage *WebView::page() const
 {
     return d->page;
 }
 
-QWebFrame *WebContent::mainFrame() const
+QWebFrame *WebView::mainFrame() const
 {
     return d->page ? d->page->mainFrame() : 0;
 }
 
-void WebContent::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+void WebView::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     Q_UNUSED(widget)
 
@@ -142,7 +142,7 @@ void WebContent::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
     }
 }
 
-void WebContent::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
+void WebView::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
     if (!d->page) {
         QGraphicsWidget::mouseMoveEvent(event);
@@ -157,7 +157,7 @@ void WebContent::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     }
 }
 
-void WebContent::mousePressEvent(QGraphicsSceneMouseEvent *event)
+void WebView::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     if (!d->page) {
         QGraphicsWidget::mousePressEvent(event);
@@ -172,7 +172,7 @@ void WebContent::mousePressEvent(QGraphicsSceneMouseEvent *event)
     }
 }
 
-void WebContent::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
+void WebView::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
 {
     if (!d->page) {
         QGraphicsWidget::mouseDoubleClickEvent(event);
@@ -187,7 +187,7 @@ void WebContent::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
     }
 }
 
-void WebContent::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
+void WebView::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
     if (!d->page) {
         QGraphicsWidget::mouseReleaseEvent(event);
@@ -202,7 +202,7 @@ void WebContent::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     }
 }
 
-void WebContent::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
+void WebView::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
 {
     if (!d->page) {
         QGraphicsWidget::contextMenuEvent(event);
@@ -217,7 +217,7 @@ void WebContent::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
     }
 }
 
-void WebContent::wheelEvent(QGraphicsSceneWheelEvent *event)
+void WebView::wheelEvent(QGraphicsSceneWheelEvent *event)
 {
     if (!d->page) {
         QGraphicsWidget::wheelEvent(event);
@@ -236,7 +236,7 @@ void WebContent::wheelEvent(QGraphicsSceneWheelEvent *event)
     }
 }
 
-void WebContent::keyPressEvent(QKeyEvent * event)
+void WebView::keyPressEvent(QKeyEvent * event)
 {
     if (!d->page) {
         QGraphicsWidget::keyPressEvent(event);
@@ -250,7 +250,7 @@ void WebContent::keyPressEvent(QKeyEvent * event)
     }
 }
 
-void WebContent::keyReleaseEvent(QKeyEvent * event)
+void WebView::keyReleaseEvent(QKeyEvent * event)
 {
     if (!d->page) {
         QGraphicsWidget::keyReleaseEvent(event);
@@ -264,7 +264,7 @@ void WebContent::keyReleaseEvent(QKeyEvent * event)
     }
 }
 
-void WebContent::focusInEvent(QFocusEvent * event)
+void WebView::focusInEvent(QFocusEvent * event)
 {
     if (d->page) {
         d->page->event(event);
@@ -273,7 +273,7 @@ void WebContent::focusInEvent(QFocusEvent * event)
     QGraphicsWidget::focusInEvent(event);
 }
 
-void WebContent::focusOutEvent(QFocusEvent * event)
+void WebView::focusOutEvent(QFocusEvent * event)
 {
     if (d->page) {
         d->page->event(event);
@@ -282,7 +282,7 @@ void WebContent::focusOutEvent(QFocusEvent * event)
     QGraphicsWidget::focusOutEvent(event);
 }
 
-void WebContent::dragEnterEvent(QGraphicsSceneDragDropEvent * event)
+void WebView::dragEnterEvent(QGraphicsSceneDragDropEvent * event)
 {
     if (!d->page) {
         QGraphicsWidget::dragEnterEvent(event);
@@ -298,7 +298,7 @@ void WebContent::dragEnterEvent(QGraphicsSceneDragDropEvent * event)
     }
 }
 
-void WebContent::dragLeaveEvent(QGraphicsSceneDragDropEvent * event)
+void WebView::dragLeaveEvent(QGraphicsSceneDragDropEvent * event)
 {
     if (!d->page) {
         QGraphicsWidget::dragLeaveEvent(event);
@@ -313,7 +313,7 @@ void WebContent::dragLeaveEvent(QGraphicsSceneDragDropEvent * event)
     }
 }
 
-void WebContent::dragMoveEvent(QGraphicsSceneDragDropEvent * event)
+void WebView::dragMoveEvent(QGraphicsSceneDragDropEvent * event)
 {
     if (!d->page) {
         QGraphicsWidget::dragMoveEvent(event);
@@ -331,7 +331,7 @@ void WebContent::dragMoveEvent(QGraphicsSceneDragDropEvent * event)
     }
 }
 
-void WebContent::dropEvent(QGraphicsSceneDragDropEvent * event)
+void WebView::dropEvent(QGraphicsSceneDragDropEvent * event)
 {
     if (!d->page) {
         QGraphicsWidget::dropEvent(event);
@@ -347,20 +347,20 @@ void WebContent::dropEvent(QGraphicsSceneDragDropEvent * event)
     }
 }
 
-void WebContent::setGeometry(const QRectF &geometry)
+void WebView::setGeometry(const QRectF &geometry)
 {
     QGraphicsWidget::setGeometry(geometry);
     d->page->setViewportSize(geometry.size().toSize());
 }
 
-void WebContentPrivate::loadingFinished(bool success)
+void WebViewPrivate::loadingFinished(bool success)
 {
     loaded = success;
     emit q->loadFinished(success);
     q->update();
 }
 
-void WebContentPrivate::updateRequested(const QRect &dirtyRect)
+void WebViewPrivate::updateRequested(const QRect &dirtyRect)
 {
     if (loaded && page) {
        q->update(QRectF(dirtyRect.topLeft().x(), dirtyRect.topLeft().y(),
@@ -368,12 +368,12 @@ void WebContentPrivate::updateRequested(const QRect &dirtyRect)
     }
 }
 
-void WebContentPrivate::scrollRequested(int dx, int dy, const QRect &scrollRect)
+void WebViewPrivate::scrollRequested(int dx, int dy, const QRect &scrollRect)
 {
     updateRequested(scrollRect);
 }
 
 } // namespace Plasma
 
-#include "webcontent.moc"
+#include "webview.moc"
 

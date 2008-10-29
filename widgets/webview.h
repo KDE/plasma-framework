@@ -17,8 +17,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef PLASMA_WEBCONTENT_H
-#define PLASMA_WEBCONTENT_H
+#ifndef PLASMA_WEBVIEW_H
+#define PLASMA_WEBVIEW_H
 
 #include <plasma/plasma_export.h>
 #include <QtCore/QUrl>
@@ -35,20 +35,20 @@ class QRect;
 namespace Plasma
 {
 
-class WebContentPrivate;
+class WebViewPrivate;
 
 /**
- * @class WebContent plasma/widgets/webcontent.h <Plasma/Widgets/WebContent>
+ * @class WebView plasma/widgets/webcontent.h <Plasma/Widgets/WebView>
  *
  * @short Provides a widget to display html content in Plasma.
  */
-class PLASMA_EXPORT WebContent : public QGraphicsWidget
+class PLASMA_EXPORT WebView : public QGraphicsWidget
 {
     Q_OBJECT
 
     public:
-        explicit WebContent(QGraphicsItem *parent = 0);
-        ~WebContent();
+        explicit WebView(QGraphicsItem *parent = 0);
+        ~WebView();
 
         /**
          * Sets the URL to display. Loading may happen asynchronously.
@@ -82,7 +82,7 @@ class PLASMA_EXPORT WebContent : public QGraphicsWidget
 
         /**
          * Sets the page to use in this item. The owner of the webpage remains,
-         * however if this WebContent object is the owner of the current page,
+         * however if this WebView object is the owner of the current page,
          * then the current page is deleted
          *
          * @param page the page to set in this view
@@ -147,8 +147,8 @@ class PLASMA_EXPORT WebContent : public QGraphicsWidget
         Q_PRIVATE_SLOT(d, void updateRequested(const QRect& dirtyRect))
         Q_PRIVATE_SLOT(d, void scrollRequested(int dx, int dy, const QRect &scrollRect))
 
-        WebContentPrivate * const d;
-        friend class WebContentPrivate;
+        WebViewPrivate * const d;
+        friend class WebViewPrivate;
 };
 
 } // namespace Plasma
