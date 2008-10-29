@@ -72,15 +72,19 @@ ExtenderItem::ExtenderItem(Extender *hostExtender, uint extenderItemId)
 
     uint sourceAppletId = dg.readEntry("sourceAppletId", 0);
 
-    //TODO: automatically load title and icon.
+    //check if we're creating a new item or reinstantiating an existing one.
     if (!sourceAppletId) {
         //The item is new
         dg.writeEntry("sourceAppletPluginName", hostExtender->d->applet->pluginName());
         dg.writeEntry("sourceAppletId", hostExtender->d->applet->id());
+        dg.writeEntry("sourceIconName", hostExtender->d->applet->icon());
         d->sourceApplet = hostExtender->d->applet;
+        d->collapseIcon = new Icon(KIcon(hostExtender->d->applet->icon()), "", this);
     } else {
         //The item already exists.
         d->name = dg.readEntry("extenderItemName", "");
+        d->title = dg.readEntry("extenderTitle", "");
+        d->collapseIcon = new Icon(KIcon(dg.readEntry("extenderIconName", "")), "", this);
 
         //Find the sourceapplet.
         Corona *corona = hostExtender->d->applet->containment()->corona();
@@ -97,15 +101,13 @@ ExtenderItem::ExtenderItem(Extender *hostExtender, uint extenderItemId)
     //make sure we keep monitoring if the source applet still exists, so the return to source icon
     //can be hidden if it is removed.
     connect(d->sourceApplet, SIGNAL(destroyed()), this, SLOT(sourceAppletRemoved()));
+    connect(d->collapseIcon, SIGNAL(clicked()), this, SLOT(toggleCollapse()));
 
     //create the toolbox.
     d->toolbox = new QGraphicsWidget(this);
     d->toolboxLayout = new QGraphicsLinearLayout(d->toolbox);
     d->toolbox->setLayout(d->toolboxLayout);
 
-    //create the collapse/applet icon.
-    d->collapseIcon = new Icon(KIcon(hostExtender->d->applet->icon()), "", this);
-    connect(d->collapseIcon, SIGNAL(clicked()), this, SLOT(toggleCollapse()));
 
     //set the extender we want to move to.
     setExtender(hostExtender);
@@ -135,6 +137,7 @@ KConfigGroup ExtenderItem::config() const
 void ExtenderItem::setTitle(const QString &title)
 {
     d->title = title;
+    config().writeEntry("extenderTitle", title);
     update();
 }
 
@@ -180,6 +183,7 @@ void ExtenderItem::setIcon(const QIcon &icon)
 void ExtenderItem::setIcon(const QString &icon)
 {
     d->collapseIcon->setIcon(icon);
+    config().writeEntry("extenderIconName", icon);
 }
 
 QIcon ExtenderItem::icon() const

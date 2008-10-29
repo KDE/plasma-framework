@@ -112,7 +112,8 @@ class PLASMA_EXPORT ExtenderItem : public QGraphicsWidget
 
         /**
          * @param title the title that will be shown in the extender item's dragger. Default is
-         * no title.
+         * no title. This title will also be stored in the item's configuration, so you don't have
+         * to manually store/restore this information for your extender items.
          */
         void setTitle(const QString &title);
 
@@ -123,7 +124,8 @@ class PLASMA_EXPORT ExtenderItem : public QGraphicsWidget
 
         /**
          * You can assign names to extender items to look them up through the item() function.
-         * Make sure you only use unique names.
+         * Make sure you only use unique names. This name will be stored in the item's
+         * configuration.
          * @param name the name of the item. Defaults to an empty string.
          */
         void setName(const QString &name);
@@ -135,7 +137,9 @@ class PLASMA_EXPORT ExtenderItem : public QGraphicsWidget
 
         /**
          * @param icon the icon name to display in the extender item's
-         * drag handle. Defaults to the source applet's icon.
+         * drag handle. Defaults to the source applet's icon. This icon name will also be stored
+         * in the item's configuration, so you don't have to manually store/restore this
+         * information.
          */
         void setIcon(const QString &icon);
 
