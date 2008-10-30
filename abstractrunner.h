@@ -47,10 +47,9 @@ class AbstractRunnerPrivate;
  *
  * @short An abstract base class for Plasma Runner plugins.
  *
- * Be aware that runners have to be thread-safe. This is due to
- * the fact that each runner is executed in its own thread for
- * each new term. Thus, a runner may be executed more than once
- * at the same time.
+ * Be aware that runners have to be thread-safe. This is due to the fact that
+ * each runner is executed in its own thread for each new term. Thus, a runner
+ * may be executed more than once at the same time. See match() for details.
  */
 class PLASMA_EXPORT AbstractRunner : public QObject
 {
@@ -79,31 +78,56 @@ class PLASMA_EXPORT AbstractRunner : public QObject
 
         /**
          * This is the main query method. It should trigger creation of
-         * QueryMatch instances through RunnerContext::addInformationalMatch,
-         * RunnerContext::addExactMatch, and RunnerContext::addPossibleMatch.
+         * QueryMatch instances through RunnerContext::addMatch and 
+         * RunnerContext::addMatches. It is called internally by performMatch().
          *
          * If the runner can run precisely the requested term (RunnerContext::query()),
-         * it should create an exact match (RunnerContext::addExactMatch).
+         * it should create an exact match by setting the type to RunnerContext::ExactMatch.
          * The first runner that creates a QueryMatch will be the
          * default runner. Other runner's matches will be suggested in the
-         * interface. Non-exact matches should be offered via RunnerContext::addPossibleMatch.
+         * interface. Non-exact matches should be offered via RunnerContext::PossibleMatch.
          *
-         * The match will be activated if the user selects it.
+         * The match will be activated via run() if the user selects it.
          *
-         * If this runner's exact match is selected, it will be passed into
-         * the run method.
-         * @see run
+         * Each runner is executed in its own thread. Whenever the user input changes this
+         * method is called again. Thus, it needs to be thread-safe. Also, all matches need
+         * to be reported once this method returns. Asyncroneous runners therefore need
+         * to make use of a local event loop to wait for all matches.
          *
-         * Since each runner is executed in its own thread there is no need
-         * to return from this method right away, nor to create all matches
-         * here.
+         * It is recommended to use local status data in async runners. The simplest way is 
+         * to have a separate class doing all the work like so:
+         *
+         * \code
+         * void MyFancyAsyncRunner::match( RunnerContext& context )
+         * {
+         *     QEventLoop loop;
+         *     MyAsyncWorker worker( context );
+         *     connect( &worker, SIGNAL(finished()),
+         *              &loop, SLOT(quit()) );
+         *     worker.work();
+         *     loop.exec();
+         * }
+         * \endcode
+         *
+         * Here MyAsyncWorker creates all the matches and calls RunnerContext::addMatch
+         * in some internal slot. It emits the finished() signal once done which will
+         * quit the loop and make the match() method return. The local status is kept
+         * entirely in MyAsyncWorker which makes match() trivially thread-safe.
+         *
+         * @caution This method needs to be thread-safe since KRunner will simply
+         * start a new thread for each new term.
+         *
+         * @caution Returning from this method means to end execution of the runner.
+         *
+         * @sa run(), RunnerContext::addMatch, RunnerContext::addMatches, QueryMatch
          */
+        // trueg: why is this method not protected?
         virtual void match(Plasma::RunnerContext &context);
 
         /**
-         * Triggers a call to match.
+         * Triggers a call to match. This will call match() internally.
          *
-         * @arg globalContext the search context used in executing this match.
+         * @arg context the search context used in executing this match.
          */
         void performMatch(Plasma::RunnerContext &context);
 
@@ -126,8 +150,12 @@ class PLASMA_EXPORT AbstractRunner : public QObject
         /**
          * Called whenever an exact or possible match associated with this
          * runner is triggered.
+         *
+         * @param context The context in which the match is triggered, i.e. for which
+         *                the match was created.
+         * @param match The actual match to run/execute.
          */
-        virtual void run(const Plasma::RunnerContext &context, const Plasma::QueryMatch &action);
+        virtual void run(const Plasma::RunnerContext &context, const Plasma::QueryMatch &match);
 
         /**
          * The nominal speed of the runner.
