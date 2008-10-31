@@ -138,7 +138,7 @@ class SvgPrivate
         QPixmap findInCache(const QString &elementId, const QSizeF &s = QSizeF())
         {
             QSize size;
-            if (elementId.isEmpty() || multipleImages) {
+            if (elementId.isEmpty() || (multipleImages && s.isValid())) {
                 size = s.toSize();
             } else {
                 size = elementRect(elementId).size().toSize();
