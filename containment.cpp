@@ -1491,11 +1491,10 @@ void ContainmentPrivate::positionToolBox()
                 toolBox->setCorner(ToolBox::Right);
             }
         }
-    } else {
+    } else if (q->corona()) {
         //TODO: we should probably get these values from the Plasma app itself
         //      so we actually know what the available space *is*
         //      perhaps a virtual method in Corona for this?
-        Q_ASSERT(q->corona());
         QRectF avail = q->corona()->availableScreenRegion(screen).boundingRect();
         QRectF screenGeom = q->corona()->screenGeometry(screen);
 
