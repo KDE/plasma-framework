@@ -177,13 +177,13 @@ QStringList Package::entryList(const char *fileType) const
     return QStringList();
 }
 
-const PackageMetadata *Package::metadata() const
+PackageMetadata Package::metadata() const
 {
     //FIXME: this only works for native plasma packges; should fall back to... PackageStructure?
     if (!d->metadata) {
         d->metadata = new PackageMetadata(d->basePath + "metadata.desktop");
     }
-    return d->metadata;
+    return *d->metadata;
 }
 
 const QString Package::path() const

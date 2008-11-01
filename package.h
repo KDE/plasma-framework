@@ -101,7 +101,7 @@ class PLASMA_EXPORT Package
         /**
           * @return the package metadata object.
           */
-        const PackageMetadata *metadata() const;
+        PackageMetadata metadata() const;
 
         /**
          * @return the path to the root of this particular package
