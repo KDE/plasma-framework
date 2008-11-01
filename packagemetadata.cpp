@@ -56,6 +56,11 @@ PackageMetadata::PackageMetadata()
 {
 }
 
+PackageMetadata::PackageMetadata(const PackageMetadata &other)
+    : d(new PackageMetadataPrivate(*other.d))
+{
+}
+
 PackageMetadata::PackageMetadata(const QString &path)
     : d(new PackageMetadataPrivate)
 {

@@ -43,6 +43,11 @@ public:
     PackageMetadata();
 
     /**
+     * Copy constructor
+     **/
+    PackageMetadata(const PackageMetadata &other);
+
+    /**
      * Constructs a metadata object using the values in the file at path
      *
      * @param path path to a metadata.desktop file
