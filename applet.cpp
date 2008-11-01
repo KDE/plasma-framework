@@ -1746,8 +1746,9 @@ void AppletPrivate::init()
         if (path.isEmpty()) {
             q->setFailedToLaunch(
                 true,
-                i18n("Could not locate the %1 package required for the %2 widget.",
-                     appletDescription.pluginName(), appletDescription.name()));
+                i18nc("Package file, name of the widget",
+                      "Could not locate the %1 package required for the %2 widget.")
+                      .arg(appletDescription.pluginName(), appletDescription.name()));
         } else {
             // create the package and see if we have something real
             //kDebug() << "trying for" << path;
@@ -1765,12 +1766,15 @@ void AppletPrivate::init()
                 if (!script) {
                     delete package;
                     package = 0;
-                    q->setFailedToLaunch(true, i18n("Could not create a %1 ScriptEngine for the %2 widget.",
-                                                    api, appletDescription.name()));
+                    q->setFailedToLaunch(true,
+                                         i18nc("API or programming language the widget was written in, name of the widget",
+                                               "Could not create a %1 ScriptEngine for the %2 widget.")
+                                               .arg(api, appletDescription.name()));
                 }
             } else {
-                q->setFailedToLaunch(true, i18n("Could not open the %1 package required for the %2 widget.",
-                                                        appletDescription.pluginName(), appletDescription.name()));
+                q->setFailedToLaunch(true, i18nc("Package file, name of the widget",
+                                                 "Could not open the %1 package required for the %2 widget.")
+                                                 .arg(appletDescription.pluginName(), appletDescription.name()));
                 delete package;
                 package = 0;
             }

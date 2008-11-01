@@ -80,7 +80,8 @@ public:
      *
      * @arg type the type of package. This is often application specific.
      **/
-    explicit PackageStructure(QObject *parent = 0, const QString &type = i18n("Invalid"));
+    explicit PackageStructure(QObject *parent = 0, 
+                              const QString &type = i18nc("A non-functional package", "Invalid"));
 
     /**
      * Destructor

@@ -34,7 +34,6 @@ class NullEngine : public DataEngine
         NullEngine(QObject *parent = 0)
             : DataEngine(parent)
         {
-            setObjectName(i18n("Null Engine"));
             setValid(false);
 
             // ref() ourselves to ensure we never get deleted
