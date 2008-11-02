@@ -173,6 +173,7 @@ void ToolTip::moveTo(const QPoint &to)
     if (!d->timeline) {
         d->timeline = new QTimeLine(250, this);
         d->timeline->setFrameRange(0, 10);
+        d->timeline->setCurveShape(QTimeLine::EaseInCurve);
         connect(d->timeline, SIGNAL(valueChanged(qreal)), this, SLOT(animateMove(qreal)));
     }
 
