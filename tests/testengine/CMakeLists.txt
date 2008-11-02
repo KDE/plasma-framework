@@ -1,6 +1,5 @@
 project(plasma_testengine_dataengine)
 
-find_package(KDE4 REQUIRED)
 find_package(Plasma REQUIRED)
 
 include(KDE4Defaults)
