@@ -286,9 +286,9 @@ void PlasmoidPackageTest::metadata()
 
     QString path = mPackageRoot + '/' + plasmoid + "/metadata.desktop";
     p = new Plasma::Package(mPackageRoot, plasmoid, ps);
-    const Plasma::PackageMetadata *metadata = p->metadata();
-    QVERIFY(metadata);
-    QCOMPARE(metadata->name(), plasmoid);
+    const Plasma::PackageMetadata metadata = p->metadata();
+    QVERIFY(metadata.isValid());
+    QCOMPARE(metadata.name(), plasmoid);
 }
 
 void PlasmoidPackageTest::createAndInstallPackage()
