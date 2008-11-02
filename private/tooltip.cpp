@@ -44,7 +44,6 @@ class ToolTipPrivate
         : label(0),
           imageLabel(0),
           preview(0),
-          windowToPreview(0),
           source(s),
           autohide(true)
     { }
@@ -52,7 +51,6 @@ class ToolTipPrivate
     QLabel *label;
     QLabel *imageLabel;
     WindowPreview *preview;
-    WId windowToPreview;
     FrameSvg *background;
     QPointer<QObject> source;
     bool autohide;
@@ -110,14 +108,13 @@ ToolTip::~ToolTip()
     delete d;
 }
 
-void ToolTip::setContent(const ToolTipManager::Content &data)
+void ToolTip::setContent(const ToolTipContent &data)
 {
     //reset our size
-    d->label->setText("<qt><b>" + data.mainText + "</b><br>" + data.subText + "</qt>");
-    d->imageLabel->setPixmap(data.image);
-    d->windowToPreview = data.windowToPreview;
-    d->preview->setWindowId(d->windowToPreview);
-    d->autohide = data.autohide;
+    d->label->setText("<qt><b>" + data.mainText() + "</b><br>" + data.subText() + "</qt>");
+    d->imageLabel->setPixmap(data.image());
+    d->preview->setWindowId(data.windowToPreview());
+    d->autohide = data.autohide();
 
     if (isVisible()) {
         resize(sizeHint());
@@ -130,7 +127,7 @@ void ToolTip::prepareShowing(bool cueUpdate)
         QMetaObject::invokeMethod(d->source, "toolTipAboutToShow");
     }
 
-    if (d->windowToPreview != 0) {
+    if (d->preview->windowId() != 0) {
         // show/hide the preview area
         d->preview->show();
     } else {

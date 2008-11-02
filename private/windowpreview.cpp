@@ -67,6 +67,11 @@ void WindowPreview::setWindowId(WId w)
     readWindowSize();
 }
 
+WId WindowPreview::windowId() const
+{
+    return id;
+}
+
 QSize WindowPreview::sizeHint() const
 {
     if (id == 0) {

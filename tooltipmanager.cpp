@@ -109,17 +109,6 @@ ToolTipManager *ToolTipManager::self()
     return &privateInstance->self;
 }
 
-ToolTipManager::Content::Content()
-    : windowToPreview(0),
-      autohide(true)
-{
-}
-
-bool ToolTipManager::Content::isEmpty() const
-{
-    return mainText.isEmpty() && subText.isEmpty() && image.isNull() && windowToPreview == 0;
-}
-
 ToolTipManager::ToolTipManager(QObject *parent)
   : QObject(parent),
     d(new ToolTipManagerPrivate)
@@ -219,7 +208,7 @@ void ToolTipManager::unregisterWidget(QGraphicsWidget *widget)
     }
 }
 
-void ToolTipManager::setContent(QGraphicsWidget *widget, const Content &data)
+void ToolTipManager::setContent(QGraphicsWidget *widget, const ToolTipContent &data)
 {
     if (d->state == Deactivated) {
         return;
@@ -248,7 +237,7 @@ void ToolTipManager::setContent(QGraphicsWidget *widget, const Content &data)
 
 void ToolTipManager::clearContent(QGraphicsWidget *widget)
 {
-    setContent(widget, Content());
+    setContent(widget, ToolTipContent());
 }
 
 void ToolTipManager::setState(ToolTipManager::State state)

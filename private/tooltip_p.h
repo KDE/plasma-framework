@@ -38,7 +38,7 @@ public:
     ~ToolTip();
 
     void updateTheme();
-    void setContent(const ToolTipManager::Content &data);
+    void setContent(const ToolTipContent &data);
     void prepareShowing(bool cueUpdate);
     void setActivated(bool value);
     bool autohide() const;

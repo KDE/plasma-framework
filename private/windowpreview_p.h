@@ -43,6 +43,7 @@ public:
     WindowPreview(QWidget *parent = 0);
 
     void setWindowId(WId w);
+    WId windowId() const;
     void setInfo();
     virtual QSize sizeHint() const;
 
