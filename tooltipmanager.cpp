@@ -308,7 +308,7 @@ void ToolTipManagerPrivate::showToolTip()
     //kDebug() << "about to show" << justCreated;
     tipWidget->setContent(tooltip);
     tipWidget->prepareShowing(!justCreated);
-    tipWidget->move(ToolTipManager::self()->m_corona->popupPosition(currentWidget, tipWidget->size()));
+    tipWidget->moveTo(ToolTipManager::self()->m_corona->popupPosition(currentWidget, tipWidget->size()));
     tipWidget->show();
     isShown = true;  //ToolTip is visible
 

@@ -27,9 +27,11 @@
 #include <QMouseEvent>
 #include <QPainter>
 #include <QPalette>
+#include <QTimeLine>
 
 #include <KDebug>
 #include <KGlobal>
+#include <KGlobalSettings>
 
 #include <plasma/plasma.h>
 #include <plasma/theme.h>
@@ -45,6 +47,7 @@ class ToolTipPrivate
           imageLabel(0),
           preview(0),
           source(0),
+          timeline(0),
           autohide(true)
     { }
 
@@ -53,6 +56,9 @@ class ToolTipPrivate
     WindowPreview *preview;
     FrameSvg *background;
     QPointer<QObject> source;
+    QTimeLine *timeline;
+    QPoint to;
+    QPoint from;
     bool autohide;
 };
 
@@ -117,6 +123,13 @@ void ToolTip::setContent(const ToolTipContent &data)
 
     if (isVisible()) {
         d->preview->setInfo();
+
+        QSize hint = sizeHint();
+        QSize current = size();
+
+        if (hint != current) {
+            move(x(), y() + (current.height() - hint.height()));
+        }
         resize(sizeHint());
     }
 }
@@ -136,7 +149,46 @@ void ToolTip::prepareShowing(bool cueUpdate)
 
     layout()->activate();
     d->preview->setInfo();
+
+    QSize hint = sizeHint();
+    QSize current = size();
+
+    if (hint != current) {
+        move(x(), y() + (current.height() - hint.height()));
+    }
     resize(sizeHint());
+}
+
+void ToolTip::moveTo(const QPoint &to)
+{
+    if (!isVisible() ||
+        !(KGlobalSettings::graphicEffectsLevel() & KGlobalSettings::SimpleAnimationEffects)) {
+        move(to);
+        return;
+    }
+
+    d->from = pos();
+    d->to = to;
+
+    if (!d->timeline) {
+        d->timeline = new QTimeLine(250, this);
+        d->timeline->setFrameRange(0, 10);
+        connect(d->timeline, SIGNAL(valueChanged(qreal)), this, SLOT(animateMove(qreal)));
+    }
+
+    d->timeline->stop();
+    d->timeline->start();
+}
+
+void ToolTip::animateMove(qreal progress)
+{
+    if (qFuzzyCompare(progress, 1.0)) {
+        move(d->to);
+        return;
+    }
+
+    move(d->from.x() + ((d->to.x() - d->from.x()) * progress),
+         d->from.y() + ((d->to.y() - d->from.y()) * progress));
 }
 
 void ToolTip::resizeEvent(QResizeEvent *e)

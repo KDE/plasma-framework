@@ -39,7 +39,7 @@ public:
 
     void setContent(const ToolTipContent &data);
     void prepareShowing(bool cueUpdate);
-    void setActivated(bool value);
+    void moveTo(const QPoint &to);
     bool autohide() const;
 
 protected:
@@ -52,6 +52,7 @@ protected:
 
 private Q_SLOTS:
     void updateTheme();
+    void animateMove(qreal);
 
 private:
     ToolTipPrivate * const d;
