@@ -34,10 +34,9 @@ class ToolTip : public QWidget
     Q_OBJECT
 
 public:
-    ToolTip(QObject *source);
+    ToolTip(QWidget *parent);
     ~ToolTip();
 
-    void updateTheme();
     void setContent(const ToolTipContent &data);
     void prepareShowing(bool cueUpdate);
     void setActivated(bool value);
@@ -52,7 +51,7 @@ protected:
     void paintEvent(QPaintEvent *);
 
 private Q_SLOTS:
-    void sourceDestroyed();
+    void updateTheme();
 
 private:
     ToolTipPrivate * const d;

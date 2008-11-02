@@ -40,11 +40,11 @@ namespace Plasma {
 class ToolTipPrivate
 {
     public:
-        ToolTipPrivate(QObject *s)
+        ToolTipPrivate()
         : label(0),
           imageLabel(0),
           preview(0),
-          source(s),
+          source(0),
           autohide(true)
     { }
 
@@ -77,14 +77,10 @@ void ToolTip::mouseReleaseEvent(QMouseEvent *event)
     }
 }
 
-ToolTip::ToolTip(QObject *source)
-    : QWidget(0),
-      d(new ToolTipPrivate(source))
+ToolTip::ToolTip(QWidget *parent)
+    : QWidget(parent),
+      d(new ToolTipPrivate())
 {
-    if (source) {
-        connect(source, SIGNAL(destroyed(QObject*)), this, SLOT(sourceDestroyed()));
-    }
-
     setWindowFlags(Qt::ToolTip);
     QGridLayout *l = new QGridLayout;
     d->preview = new WindowPreview(this);
@@ -95,7 +91,10 @@ ToolTip::ToolTip(QObject *source)
     d->imageLabel->setAlignment(Qt::AlignTop | Qt::AlignLeft);
 
     d->background = new FrameSvg(this);
-    connect(d->background, SIGNAL(repaintNeeded()), this, SLOT(update()));
+    d->background->setImagePath("widgets/tooltip");
+    d->background->setEnabledBorders(FrameSvg::AllBorders);
+    updateTheme();
+    connect(d->background, SIGNAL(repaintNeeded()), this, SLOT(updateTheme()));
 
     l->addWidget(d->preview, 0, 0, 1, 2);
     l->addWidget(d->imageLabel, 1, 0);
@@ -117,6 +116,7 @@ void ToolTip::setContent(const ToolTipContent &data)
     d->autohide = data.autohide();
 
     if (isVisible()) {
+        d->preview->setInfo();
         resize(sizeHint());
     }
 }
@@ -135,6 +135,7 @@ void ToolTip::prepareShowing(bool cueUpdate)
     }
 
     layout()->activate();
+    d->preview->setInfo();
     resize(sizeHint());
 }
 
@@ -157,11 +158,6 @@ void ToolTip::paintEvent(QPaintEvent *e)
     d->background->paintFrame(&painter);
 }
 
-void ToolTip::sourceDestroyed()
-{
-    d->source = 0;
-}
-
 bool ToolTip::autohide() const
 {
     return d->autohide;
@@ -169,9 +165,6 @@ bool ToolTip::autohide() const
 
 void ToolTip::updateTheme()
 {
-    d->background->setImagePath("widgets/tooltip");
-    d->background->setEnabledBorders(FrameSvg::AllBorders);
-
     const int topHeight = d->background->marginSize(Plasma::TopMargin);
     const int leftWidth = d->background->marginSize(Plasma::LeftMargin);
     const int rightWidth = d->background->marginSize(Plasma::RightMargin);
@@ -186,6 +179,7 @@ void ToolTip::updateTheme()
                            Plasma::Theme::defaultTheme()->color(Plasma::Theme::TextColor));
     setAutoFillBackground(true);
     setPalette(plasmaPalette);
+    update();
 }
 
 } // namespace Plasma

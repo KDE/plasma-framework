@@ -54,6 +54,8 @@ public:
                    const QString &subText,
                    const QIcon &icon);
 
+    ToolTipContent &operator=(const ToolTipContent &other);
+
     /** @return true if all the fields are empty */
     bool isEmpty() const;
 

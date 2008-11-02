@@ -50,6 +50,12 @@ ToolTipContent::ToolTipContent(const ToolTipContent &other)
 {
 }
 
+ToolTipContent &ToolTipContent::operator=(const ToolTipContent &other)
+{
+    *d = *other.d;
+    return *this;
+}
+
 ToolTipContent::ToolTipContent(const QString &mainText,
                                const QString &subText,
                                const QPixmap &image)
