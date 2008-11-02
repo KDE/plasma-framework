@@ -791,7 +791,7 @@ void Applet::flushPendingConstraintsEvents()
         closeApplet->setEnabled(unlocked);
         closeApplet->setVisible(unlocked);
         closeApplet->setShortcutContext(Qt::WidgetShortcut); //don't clash with other views
-        closeApplet->setText(i18n("Remove this %1", name()));
+        closeApplet->setText(i18nc("%1 is the name of the applet", "Remove this %1", name()));
         if (isContainment()) {
             closeApplet->setShortcut(QKeySequence("ctrl+shift+r"));
         } else {
