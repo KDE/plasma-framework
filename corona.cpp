@@ -411,7 +411,14 @@ int Corona::numScreens() const
 QRect Corona::screenGeometry(int id) const
 {
     Q_UNUSED(id);
-    return sceneRect().toRect();
+    if (views().isEmpty()) {
+        return sceneRect().toRect();
+    } else {
+        QGraphicsView *v = views()[0];
+        QRect r = sceneRect().toRect();
+        r.moveTo(v->mapToGlobal(v->pos()));
+        return r;
+    }
 }
 
 QRegion Corona::availableScreenRegion(int id) const
