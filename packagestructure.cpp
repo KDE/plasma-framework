@@ -1,5 +1,5 @@
 /******************************************************************************
-*   Copyright 2007 by Aaron Seigo <aseigo@kde.org>                        *
+*   Copyright 2007 by Aaron Seigo <aseigo@kde.org>                            *
 *                                                                             *
 *   This library is free software; you can redistribute it and/or             *
 *   modify it under the terms of the GNU Library General Public               *
@@ -20,12 +20,15 @@
 #include "packagestructure.h"
 
 #include <QMap>
+#include <QFileInfo>
 
 #include <KConfigGroup>
 #include <KStandardDirs>
 #include <KServiceTypeTrader>
 #include <KUrl>
 #include <KTemporaryFile>
+#include <KTempDir>
+#include <KZip>
 #include <kio/netaccess.h>
 #include <kio/job.h>
 
@@ -62,6 +65,15 @@ class ContentStructure
 class PackageStructurePrivate
 {
 public:
+    PackageStructurePrivate()
+        : metadata(0)
+    {
+    }
+    ~PackageStructurePrivate()
+    {
+        delete metadata;
+    }
+
     QString type;
     QString path;
     QString contentsPrefix;
@@ -70,6 +82,7 @@ public:
     QMap<QByteArray, ContentStructure> contents;
     QStringList mimetypes;
     static QHash<QString, PackageStructure::Ptr> structures;
+    PackageMetadata *metadata;
  };
 
 QHash<QString, PackageStructure::Ptr> PackageStructurePrivate::structures;
@@ -403,6 +416,7 @@ bool PackageStructure::uninstallPackage(const QString &packageName, const QStrin
 
 void PackageStructure::createNewWidgetBrowser(QWidget *parent)
 {
+    Q_UNUSED(parent)
     emit newWidgetBrowserFinished();
 }
 
@@ -424,6 +438,52 @@ void PackageStructure::setDefaultPackageRoot(const QString &packageRoot)
 void PackageStructure::setServicePrefix(const QString &servicePrefix)
 {
     d->servicePrefix = servicePrefix;
+}
+
+PackageMetadata PackageStructure::metadata()
+{
+    if (!d->metadata) {
+        QString metadataPath;
+        QString package = d->path;
+        KTempDir tempdir;
+
+        QFileInfo fileInfo(package);
+        if (fileInfo.exists()) {
+            QString path;
+
+            if (fileInfo.isDir()) {
+                path = package;
+            } else {
+                KZip archive(package);
+                if (archive.open(QIODevice::ReadOnly)) {
+                    const KArchiveDirectory *source = archive.directory();
+                    const KArchiveEntry *metadata = source->entry("metadata.desktop");
+
+                    if (metadata) {
+                        path = tempdir.name();
+                        source->copyTo(path);
+                    } else {
+                        kWarning() << "No metadata file in package" << package;
+                    }
+                } else {
+                    kWarning() << "Could not open package file:" << package;
+                }
+            }
+            if (!path.isEmpty()) {
+                metadataPath = path + "/metadata.desktop";
+                if (!QFile::exists(metadataPath)) {
+                    metadataPath.clear();
+                    kWarning() << "No such file:" << metadataPath;
+                }
+            }
+        }
+        if (metadataPath.isEmpty()) {
+            d->metadata = new PackageMetadata();
+        } else {
+            d->metadata = new PackageMetadata(metadataPath);
+        }
+    }
+    return *d->metadata;
 }
 
 } // Plasma namespace

@@ -28,6 +28,7 @@
 #include <KDE/KSharedPtr>
 
 #include <plasma/version.h>
+#include "packagemetadata.h"
 
 class KConfigBase;
 
@@ -80,7 +81,7 @@ public:
      *
      * @arg type the type of package. This is often application specific.
      **/
-    explicit PackageStructure(QObject *parent = 0, 
+    explicit PackageStructure(QObject *parent = 0,
                               const QString &type = i18nc("A non-functional package", "Invalid"));
 
     /**
@@ -271,6 +272,11 @@ public:
      * Sets service prefix.
      */
     void setServicePrefix(const QString &servicePrefix);
+
+    /**
+      * @return the package metadata object.
+      */
+    virtual PackageMetadata metadata();
 
 Q_SIGNALS:
     /**
