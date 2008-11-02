@@ -50,6 +50,11 @@ ToolTipContent::ToolTipContent(const ToolTipContent &other)
 {
 }
 
+ToolTipContent::~ToolTipContent()
+{
+    delete d;
+}
+
 ToolTipContent &ToolTipContent::operator=(const ToolTipContent &other)
 {
     *d = *other.d;

@@ -41,6 +41,8 @@ public:
     /** Creates an empty Content */
     ToolTipContent();
 
+    ~ToolTipContent();
+
     /** Copy constructor */
     ToolTipContent(const ToolTipContent &other);
 
