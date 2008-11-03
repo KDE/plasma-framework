@@ -51,6 +51,11 @@ DataEngine *DataEngineScript::dataEngine() const
     return d->dataEngine;
 }
 
+QStringList DataEngineScript::sources() const
+{
+    return d->dataEngine->sources();
+}
+
 bool DataEngineScript::sourceRequestEvent(const QString &name)
 {
     Q_UNUSED(name);
@@ -61,6 +66,11 @@ bool DataEngineScript::updateSourceEvent(const QString &source)
 {
     Q_UNUSED(source);
     return false;
+}
+
+Service *DataEngineScript::serviceForSource(const QString &source)
+{
+    return d->dataEngine->serviceForSource(source);
 }
 
 void DataEngineScript::setData(const QString &source, const QString &key,

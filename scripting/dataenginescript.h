@@ -30,6 +30,7 @@ namespace Plasma
 
 class DataEngine;
 class DataEngineScriptPrivate;
+class Service;
 
 /**
  * @class DataEngineScript plasma/scripting/dataenginescript.h <Plasma/Scripting/DataEngineScript>
@@ -62,6 +63,14 @@ public:
     DataEngine *dataEngine() const;
 
     /**
+     * @return a list of all the data sources available via this DataEngine
+     *         Whether these sources are currently available (which is what
+     *         the default implementation provides) or not is up to the
+     *         DataEngine to decide. By default, this returns dataEngine()->sources()
+     */
+     virtual QStringList sources() const;
+
+    /**
      * Called when the script should create a source that does not currently
      * exist.
      *
@@ -79,6 +88,14 @@ public:
      *         change or if the change will occur later
      **/
     virtual bool updateSourceEvent(const QString &source);
+
+    /**
+     * @param source the source to targe the Service at
+     * @return a Service that has the source as a destination. The service
+     *         is parented to the DataEngine, but may be deleted by the
+     *         caller when finished with it
+     */
+    virtual Service *serviceForSource(const QString &source);
 
 protected:
     void setData(const QString &source, const QString &key,
