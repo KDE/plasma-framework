@@ -215,10 +215,14 @@ int TabBar::insertTab(int index, const QIcon &icon, const QString &label,
     QGraphicsWidget *page = new QGraphicsWidget(this);
     page->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     if (content) {
-        QGraphicsLinearLayout *layout = new QGraphicsLinearLayout(Qt::Vertical, page);
-        layout->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-        page->setLayout(layout);
-        layout->addItem(content);
+        if (content->isLayout()) {
+            page->setLayout(static_cast<QGraphicsLayout *>(content));
+        } else {
+            QGraphicsLinearLayout *layout = new QGraphicsLinearLayout(Qt::Vertical, page);
+            layout->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+            layout->addItem(content);
+            page->setLayout(layout);
+        }
     } else {
         page->setPreferredSize(0, 0);
     }
