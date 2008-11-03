@@ -95,9 +95,8 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
             StandardBackground = 1,   /**< The standard background from the theme is drawn */
             TranslucentBackground = 2, /**< An alternate version of the background is drawn,
                                           usually more translucent */
-            ShadowedBackground = 4,   /**< The applet has a drop shadow */
-            DefaultBackground = StandardBackground | ShadowedBackground /**< Default settings:
-                                          both standard background and shadow */
+            DefaultBackground = StandardBackground /**< Default settings:
+                                          both standard background */
         };
         Q_DECLARE_FLAGS(BackgroundHints, BackgroundHint)
 
