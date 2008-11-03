@@ -1,8 +1,0 @@
-[Global]
-PluginName=KSysGuardLsofWidgets
-
-[KLsofWidget]
-Group=KSysGuard (KDE)
-ConstructorArgs=(parent)
-IncludeFile=lsof.h
-
