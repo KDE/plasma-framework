@@ -56,6 +56,7 @@ class ExtenderItemPrivate
         Applet *hostApplet() const;
         void themeChanged();
         void sourceAppletRemoved();
+        qreal iconSize();
 
         ExtenderItem *q;
 
@@ -90,6 +91,7 @@ class ExtenderItemPrivate
 
         bool mousePressed;
         bool mouseOver;
+        bool destroyActionVisibility;
 
         QTimer *expirationTimer;
 

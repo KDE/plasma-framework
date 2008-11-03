@@ -162,9 +162,8 @@ void ExtenderItem::setWidget(QGraphicsItem *widget)
 {
     widget->setParentItem(this);
 
-    QSizeF iconSize = d->dragger->elementSize("hint-preferred-icon-size");
     QSizeF panelSize(QSizeF(size().width() - d->bgLeft - d->bgRight,
-                     iconSize.height() + d->dragTop + d->dragBottom));
+                     d->iconSize() + d->dragTop + d->dragBottom));
     widget->setPos(QPointF(d->bgLeft + d->dragLeft, panelSize.height() +
                                                     d->bgTop + d->dragTop));
     d->widget = widget;
@@ -308,6 +307,26 @@ QAction *ExtenderItem::action(const QString &name) const
     }
 }
 
+void ExtenderItem::showCloseButton()
+{
+    if (d->destroyActionVisibility) {
+        return;
+    }
+
+    d->destroyActionVisibility = true;
+    d->updateToolBox();
+}
+
+void ExtenderItem::hideCloseButton()
+{
+    if (!d->destroyActionVisibility) {
+        return;
+    }
+
+    d->destroyActionVisibility = false;
+    d->updateToolBox();
+}
+
 void ExtenderItem::destroy()
 {
     if (d->mousePressed) {
@@ -387,7 +406,7 @@ void ExtenderItem::setCollapsed(bool collapsed)
     d->extender->d->adjustSize();
 }
 
-void ExtenderItem::moveBackToSource()
+void ExtenderItem::returnToSource()
 {
     if (!d->sourceApplet) {
         return;
@@ -421,7 +440,6 @@ void ExtenderItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
     //set the font for the title.
     Plasma::Theme *theme = Plasma::Theme::defaultTheme();
     QFont font = theme->font(Plasma::Theme::DefaultFont);
-    font.setPointSize(KGlobalSettings::smallestReadableFont().pointSize());
     font.setWeight(QFont::Bold);
 
     //create a pixmap with the title that is faded out at the right side of the titleRect.
@@ -729,6 +747,7 @@ ExtenderItemPrivate::ExtenderItemPrivate(ExtenderItem *extenderItem, Extender *h
       title(QString()),
       mousePressed(false),
       mouseOver(false),
+      destroyActionVisibility(false),
       expirationTimer(0)
 {
     dragLeft = dragTop = dragRight = dragBottom = 0;
@@ -743,9 +762,8 @@ ExtenderItemPrivate::~ExtenderItemPrivate()
 //returns a Rect containing the area of the detachable where the draghandle will be drawn.
 QRectF ExtenderItemPrivate::dragHandleRect()
 {
-    QSizeF iconSize = dragger->elementSize("hint-preferred-icon-size");
     QSizeF panelSize(QSizeF(q->size().width() - bgLeft - bgRight,
-                     iconSize.height() + dragTop + dragBottom));
+                     iconSize() + dragTop + dragBottom));
     return QRectF(QPointF(bgLeft, bgTop), panelSize);
 }
 
@@ -801,10 +819,9 @@ void ExtenderItemPrivate::updateToolBox()
     Q_ASSERT(dragger);
     Q_ASSERT(toolboxLayout);
 
-    uint iconHeight = dragger->elementSize("hint-preferred-icon-size").height();
+    uint iconHeight = iconSize();
 
     //TODO: only delete items that actually have to be deleted, current performance is horrible.
-    //clean the layout.
     while (toolboxLayout->count()) {
         QGraphicsLayoutItem *icon = toolboxLayout->itemAt(0);
         QGraphicsWidget *widget = dynamic_cast<QGraphicsWidget*>(icon);
@@ -833,7 +850,19 @@ void ExtenderItemPrivate::updateToolBox()
         returnToSource->setMaximumSize(iconSize);
 
         toolboxLayout->addItem(returnToSource);
-        QObject::connect(returnToSource, SIGNAL(clicked()), q, SLOT(moveBackToSource()));
+        QObject::connect(returnToSource, SIGNAL(clicked()), q, SLOT(returnToSource()));
+    }
+
+    //add the close icon if desired.
+    if (destroyActionVisibility) {
+        IconWidget *destroyAction = new IconWidget(q);
+        destroyAction->setSvg("widgets/configuration-icons", "close");
+        QSizeF iconSize = destroyAction->sizeFromIconSize(iconHeight);
+        destroyAction->setMinimumSize(iconSize);
+        destroyAction->setMaximumSize(iconSize);
+
+        toolboxLayout->addItem(destroyAction);
+        QObject::connect(destroyAction, SIGNAL(clicked()), q, SLOT(destroy()));
     }
 
     toolboxLayout->updateGeometry();
@@ -848,7 +877,7 @@ void ExtenderItemPrivate::repositionToolbox()
 {
     QSizeF minimum = toolboxLayout->minimumSize();
     toolbox->setPos(q->size().width() - minimum.width() - bgRight,
-                    ((dragHandleRect().height() + dragTop + dragBottom)/2) -
+                    (dragHandleRect().height()/2) -
                     (minimum.height()/2) + bgTop);
 }
 
@@ -909,8 +938,6 @@ Applet *ExtenderItemPrivate::hostApplet() const
 
 void ExtenderItemPrivate::themeChanged()
 {
-    QSizeF iconSize = dragger->elementSize("hint-preferred-icon-size");
-
     background->setImagePath("widgets/extender-background");
     if (mousePressed) {
         background->setEnabledBorders(FrameSvg::AllBorders);
@@ -923,14 +950,14 @@ void ExtenderItemPrivate::themeChanged()
     dragger->getMargins(dragLeft, dragTop, dragRight, dragBottom);
 
     QSizeF panelSize(QSizeF(q->size().width() - bgLeft - bgRight,
-                     iconSize.height() + dragTop + dragBottom));
+                     iconSize() + dragTop + dragBottom));
 
     //resize the collapse icon.
-    collapseIcon->resize(collapseIcon->sizeFromIconSize(iconSize.height()));
+    collapseIcon->resize(collapseIcon->sizeFromIconSize(iconSize()));
 
     //reposition the collapse icon based on the new margins and size.
     collapseIcon->setPos(bgLeft + dragLeft,
-                         (panelSize.height() + dragTop + dragBottom)/2 -
+                         panelSize.height()/2 -
                          collapseIcon->size().height()/2 + bgTop);
 
     //reposition the widget based on the new margins.
@@ -954,6 +981,17 @@ void ExtenderItemPrivate::sourceAppletRemoved()
     //source icon.
     sourceApplet = 0;
     updateToolBox();
+}
+
+qreal ExtenderItemPrivate::iconSize()
+{
+    QSizeF size = dragger->elementSize("hint-preferred-icon-size");
+
+    Plasma::Theme *theme = Plasma::Theme::defaultTheme();
+    QFont font = theme->font(Plasma::Theme::DefaultFont);
+    QFontMetrics fm(font);
+
+    return qMax(size.height(), (qreal) fm.height());
 }
 
 uint ExtenderItemPrivate::s_maxExtenderItemId = 0;

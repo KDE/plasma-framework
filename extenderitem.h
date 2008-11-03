@@ -216,7 +216,18 @@ class PLASMA_EXPORT ExtenderItem : public QGraphicsWidget
         /**
          * Returns the extender item to its source applet.
          */
-        void moveBackToSource();
+        void returnToSource();
+
+        /**
+         * Shows a close button in this item's drag handle. By default a close button will not be
+         * shown.
+         */
+        void showCloseButton();
+
+        /**
+         * Hides the close button in this item's drag handle.
+         */
+        void hideCloseButton();
 
     protected:
         void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);

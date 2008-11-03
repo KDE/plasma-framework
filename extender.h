@@ -142,12 +142,12 @@ class PLASMA_EXPORT Extender : public QGraphicsWidget
          * want to call this function in your applet's constraintsEvent, allthough this is already
          * done for you when using PopupApplet at base class for your applet. Defaults to NoBorders.
          */
-        void setExtenderAppearance(Appearance appearance);
+        void setAppearance(Appearance appearance);
 
         /**
          * @return the current way of rendering extender items that is used.
          */
-        Appearance extenderAppearance() const;
+        Appearance appearance() const;
 
     protected:
         /**

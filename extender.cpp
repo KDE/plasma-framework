@@ -141,7 +141,7 @@ ExtenderItem *Extender::item(const QString &name) const
     return 0;
 }
 
-void Extender::setExtenderAppearance(Appearance appearance)
+void Extender::setAppearance(Appearance appearance)
 {
     if (d->appearance == appearance) {
         return;
@@ -151,7 +151,7 @@ void Extender::setExtenderAppearance(Appearance appearance)
     d->updateBorders();
 }
 
-Extender::Appearance Extender::extenderAppearance() const
+Extender::Appearance Extender::appearance() const
 {
     return d->appearance;
 }

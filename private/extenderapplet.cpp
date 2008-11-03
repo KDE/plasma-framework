@@ -37,14 +37,10 @@ ExtenderApplet::~ExtenderApplet()
 void ExtenderApplet::init()
 {
     QGraphicsLinearLayout *layout = new QGraphicsLinearLayout(this);
-    layout->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
-    layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
     setLayout(layout);
 
-    qreal left, top, right, bottom;
-    getContentsMargins(&left, &top, &right, &bottom);
-    extender()->setExtenderAppearance(Plasma::Extender::NoBorders);
+    extender()->setAppearance(Plasma::Extender::NoBorders);
     extender()->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
 
     connect(extender(), SIGNAL(itemDetached(Plasma::ExtenderItem*)),
