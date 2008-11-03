@@ -74,6 +74,8 @@ public:
         delete metadata;
     }
 
+    void createPackageMetadata(const QString &path);
+
     QString type;
     QString path;
     QString contentsPrefix;
@@ -440,49 +442,46 @@ void PackageStructure::setServicePrefix(const QString &servicePrefix)
     d->servicePrefix = servicePrefix;
 }
 
+void PackageStructurePrivate::createPackageMetadata(const QString &path)
+{
+    if (metadata) {
+        delete metadata;
+        metadata = 0;
+    }
+
+    QString metadataPath(path + "/metadata.desktop");
+    if (!QFile::exists(metadataPath)) {
+        metadataPath.clear();
+        kWarning() << "No metadata file in the package, expected it at:" << metadataPath;
+    }
+
+    metadata = new PackageMetadata(metadataPath);
+}
+
 PackageMetadata PackageStructure::metadata()
 {
-    if (!d->metadata) {
-        QString metadataPath;
-        QString package = d->path;
-        KTempDir tempdir;
+    if (!d->metadata && !d->path.isEmpty()) {
+        QFileInfo fileInfo(d->path);
 
-        QFileInfo fileInfo(package);
-        if (fileInfo.exists()) {
-            QString path;
-
-            if (fileInfo.isDir()) {
-                path = package;
+        if (fileInfo.isDir()) {
+            d->createPackageMetadata(d->path);
+        } else if (fileInfo.exists()) {
+            KZip archive(d->path);
+            if (archive.open(QIODevice::ReadOnly)) {
+                const KArchiveDirectory *source = archive.directory();
+                KTempDir tempdir;
+                source->copyTo(tempdir.name());
+                d->createPackageMetadata(tempdir.name());
             } else {
-                KZip archive(package);
-                if (archive.open(QIODevice::ReadOnly)) {
-                    const KArchiveDirectory *source = archive.directory();
-                    const KArchiveEntry *metadata = source->entry("metadata.desktop");
-
-                    if (metadata) {
-                        path = tempdir.name();
-                        source->copyTo(path);
-                    } else {
-                        kWarning() << "No metadata file in package" << package;
-                    }
-                } else {
-                    kWarning() << "Could not open package file:" << package;
-                }
+                kWarning() << "Could not open package file:" << d->path;
             }
-            if (!path.isEmpty()) {
-                metadataPath = path + "/metadata.desktop";
-                if (!QFile::exists(metadataPath)) {
-                    metadataPath.clear();
-                    kWarning() << "No such file:" << metadataPath;
-                }
-            }
-        }
-        if (metadataPath.isEmpty()) {
-            d->metadata = new PackageMetadata();
-        } else {
-            d->metadata = new PackageMetadata(metadataPath);
         }
     }
+
+    if (!d->metadata) {
+        d->metadata = new PackageMetadata();
+    }
+
     return *d->metadata;
 }
 
