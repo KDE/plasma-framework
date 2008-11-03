@@ -94,7 +94,7 @@ class PLASMA_EXPORT DataEngine : public QObject
         virtual QStringList sources() const;
 
         /**
-         * @param source the source to targe the Service at
+         * @param source the source to target the Service at
          * @return a Service that has the source as a destination. The service
          *         is parented to the DataEngine, but may be deleted by the
          *         caller when finished with it
