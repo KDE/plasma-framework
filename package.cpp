@@ -52,7 +52,8 @@ public:
           basePath(p),
           valid(QFile::exists(basePath))
     {
-        if (valid && basePath[basePath.length() - 1] != '/') {
+        QFileInfo info(basePath);
+        if (valid && info.isDir() && basePath[basePath.length() - 1] != '/') {
             basePath.append('/');
         }
     }
