@@ -19,6 +19,7 @@
 
 #include "querymatch.h"
 
+#include <QAction>
 #include <QPointer>
 #include <QVariant>
 #include <QSharedData>
@@ -40,7 +41,8 @@ class QueryMatchPrivate : public QSharedData
               runner(r),
               type(QueryMatch::ExactMatch),
               enabled(true),
-              relevance(.7)
+              relevance(.7),
+              selAction(0)
         {
         }
 
@@ -53,6 +55,7 @@ class QueryMatchPrivate : public QSharedData
         QVariant data;
         bool enabled;
         qreal relevance;
+        QAction *selAction;
 };
 
 QueryMatch::QueryMatch(AbstractRunner *runner)
@@ -103,7 +106,7 @@ qreal QueryMatch::relevance() const
     return d->relevance;
 }
 
-AbstractRunner *QueryMatch::runner() const
+AbstractRunner* QueryMatch::runner() const
 {
     return d->runner;
 }
@@ -168,6 +171,16 @@ void QueryMatch::setEnabled(bool enabled)
 bool QueryMatch::isEnabled() const
 {
     return d->enabled && d->runner;
+}
+
+QAction* QueryMatch::selectedAction() const
+{
+    return d->selAction;
+}
+
+void QueryMatch::setSelectedAction(QAction *action)
+{
+    d->selAction = action;
 }
 
 bool QueryMatch::operator<(const QueryMatch &other) const

@@ -19,6 +19,8 @@
 
 #include "abstractrunner.h"
 
+#include <QAction>
+#include <QHash>
 #include <QMutex>
 #include <QMutexLocker>
 
@@ -93,6 +95,7 @@ public:
     QTime runtime;
     int fastRuns;
     Package *package;
+    QHash<QString, QAction*> actions;
 };
 
 K_GLOBAL_STATIC(QMutex, s_bigLock)
@@ -163,6 +166,47 @@ void AbstractRunner::performMatch(Plasma::RunnerContext &globalContext)
     }
 }
 
+QList<QAction*> AbstractRunner::actionsForMatch(const Plasma::QueryMatch &match)
+{
+    Q_UNUSED(match)
+    QList<QAction*> ret;
+    return ret;
+}
+
+QAction* AbstractRunner::addAction(const QString &id, const QIcon &icon, const QString &text)
+{
+    QAction *a = new QAction(icon, text, this);
+    d->actions.insert(id, a);
+    return a;
+}
+
+void AbstractRunner::addAction(const QString &id, QAction *action)
+{
+    d->actions.insert(id, action);
+}
+
+void AbstractRunner::removeAction(const QString &id)
+{
+    QAction *a = d->actions.take(id);
+    delete a;
+}
+
+QAction* AbstractRunner::action(const QString &id) const
+{
+    return d->actions.value(id);
+}
+
+QHash<QString, QAction*> AbstractRunner::actions() const
+{
+    return d->actions;
+}
+
+void AbstractRunner::clearActions()
+{
+    qDeleteAll(d->actions);
+    d->actions.clear();
+}
+
 bool AbstractRunner::hasRunOptions()
 {
     return d->hasRunOptions;
@@ -214,7 +258,7 @@ KService::List AbstractRunner::serviceQuery(const QString &serviceType, const QS
     return KServiceTypeTrader::self()->query(serviceType, constraint);
 }
 
-QMutex *AbstractRunner::bigLock() const
+QMutex* AbstractRunner::bigLock() const
 {
     return s_bigLock;
 }
@@ -257,7 +301,7 @@ QString AbstractRunner::description() const
     return d->runnerDescription.property("Comment").toString();
 }
 
-const Package *AbstractRunner::package() const
+const Package* AbstractRunner::package() const
 {
     return d->package;
 }

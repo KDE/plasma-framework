@@ -28,6 +28,7 @@
 #include <plasma/plasma_export.h>
 #include "abstractrunner.h"
 
+class QAction;
 class KConfigGroup;
 
 namespace Plasma
@@ -82,6 +83,11 @@ class PLASMA_EXPORT RunnerManager : public QObject
          * @arg id the id of the match to run
          */
         void run(const QString &id);
+
+        /**
+         * Retrieves the list of actions, if any, for a match
+         */
+        QList<QAction*> actionsForMatch(const QueryMatch &match);
 
         /**
          * @return the current query term

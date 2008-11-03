@@ -226,7 +226,9 @@ public:
         KService::List offers = KServiceTypeTrader::self()->query("Plasma/Runner");
 
         bool loadAll = config.readEntry("loadAll", false);
-        KConfigGroup conf(&config, "Plugins");
+        //The plugin configuration is stored under the section Plugins
+        //and not PlasmaRunnerManager->Plugins
+        KConfigGroup conf(KGlobal::config(), "Plugins");
 
         foreach (const KService::Ptr &service, offers) {
             //kDebug() << "Loading runner: " << service->name() << service->storageId();
@@ -277,7 +279,7 @@ public:
             }
         }
 
-        //kDebug() << "All runners loaded, total:" << runners.count();
+        kDebug() << "All runners loaded, total:" << runners.count();
     }
 
     void jobDone(ThreadWeaver::Job *job)
@@ -385,6 +387,16 @@ void RunnerManager::run(const QueryMatch &match)
     if (d->deferredRun.isValid()) {
         d->deferredRun = QueryMatch(0);
     }
+}
+
+QList<QAction*> RunnerManager::actionsForMatch(const QueryMatch &match)
+{
+    AbstractRunner *runner = match.runner();
+    if (runner) {
+        return runner->actionsForMatch(match);
+    }
+
+    return QList<QAction*>();
 }
 
 void RunnerManager::launchQuery(const QString &term)

@@ -32,6 +32,8 @@
 #include <plasma/querymatch.h>
 #include <plasma/version.h>
 
+class QAction;
+
 class KCompletion;
 
 namespace Plasma
@@ -114,6 +116,12 @@ class PLASMA_EXPORT AbstractRunner : public QObject
          * quit the loop and make the match() method return. The local status is kept
          * entirely in MyAsyncWorker which makes match() trivially thread-safe.
          *
+         * If a particular match supports multiple actions, set up the corresponding
+         * actions in the actionsForMatch method. Do not call any of the action methods
+         * within this method!
+         * @see actionsForMatch
+         *
+         * Execution of the correct action should be handled in the run method.
          * @caution This method needs to be thread-safe since KRunner will simply
          * start a new thread for each new term.
          *
@@ -121,7 +129,6 @@ class PLASMA_EXPORT AbstractRunner : public QObject
          *
          * @sa run(), RunnerContext::addMatch, RunnerContext::addMatches, QueryMatch
          */
-        // trueg: why is this method not protected?
         virtual void match(Plasma::RunnerContext &context);
 
         /**
@@ -263,6 +270,62 @@ class PLASMA_EXPORT AbstractRunner : public QObject
                                     const QString &constraint = QString()) const;
 
         QMutex *bigLock() const;
+
+        /**
+         * A given match can have more than action that can be performed on it.
+         * For example, a song match returned by a music player runner can be queued,
+         * added to the playlist, or played.
+         *
+         * Call this method to add actions that can be performed by the runner.
+         * Actions must first be added to the runner's action registry.
+         * Note: execution of correct action is left up to the runner.
+         */
+        virtual QList<QAction*> actionsForMatch(const Plasma::QueryMatch &match);
+
+        /**
+         * Creates and then adds an action to the action registry.
+         * AbstractRunner assumes ownership of the created action.
+         *
+         * @param id A unique identifier string
+         * @param icon The icon to display
+         * @param text The text to display
+         * @return the created QAction
+         */
+        QAction* addAction(const QString &id, const QIcon &icon, const QString &text);
+
+        /**
+         * Adds an action to the runner's action registry.
+         *
+         * The QAction must be created within the GUI thread;
+         * do not create it within the match method of AbstractRunner.
+         *
+         * @param id A unique identifier string
+         * @param action The QAction to be stored
+         */
+        void addAction(const QString &id, QAction *action);
+
+        /**
+         * Removes the action from the action registry.
+         * AbstractRunner deletes the action once removed.
+         *
+         * @param id The id of the action to be removed
+         */
+        void removeAction(const QString &id);
+
+        /**
+         * Returns the action associated with the id
+         */
+        QAction* action(const QString &id) const;
+
+        /**
+         * Returns all registered actions
+         */
+        QHash<QString, QAction*> actions() const;
+        /**
+         * Clears the action registry.
+         * The action pool deletes the actions.
+         */
+        void clearActions();
 
     protected Q_SLOTS:
         void init();

@@ -20,10 +20,12 @@
 #ifndef PLASMA_QUERYMATCH_H
 #define PLASMA_QUERYMATCH_H
 
+#include <QList>
 #include <QtCore/QSharedDataPointer>
 
 #include <plasma/plasma_export.h>
 
+class QAction;
 class QIcon;
 class QVariant;
 class QString;
@@ -167,6 +169,15 @@ class PLASMA_EXPORT QueryMatch
         void setSubtext(const QString &text);
         void setIcon(const QIcon &icon);
         void setEnabled(bool enable);
+
+        /**
+         * The current action.
+         */
+        QAction* selectedAction() const;
+        /**
+        * Sets the selected action
+        */
+        void setSelectedAction(QAction *action);
 
     private:
         QSharedDataPointer<QueryMatchPrivate> d;
