@@ -1,0 +1,66 @@
+[Desktop Entry]
+Type=ServiceType
+X-KDE-ServiceType=SolidNetworkManager
+
+Comment=Network Management Backend
+Comment[af]=Netwerk-beheer agtergrondprogram
+Comment[be]=Кіраванне сеткай
+Comment[be@latin]=Кіраванне сеткай
+Comment[bg]=Заден слой за управление на мрежа
+Comment[ca]=Dorsal de gestió de xarxa
+Comment[da]=Håndteringsmotor for netværk
+Comment[de]=Backend zur Netzwerkverwaltung
+Comment[el]=Σύστημα διαχείρισης δικτύου
+Comment[eo]=Retadministra plenumilo
+Comment[es]=Motor de gestión de redes
+Comment[et]=Võrgu haldamise taustaprogramm
+Comment[eu]=Sarea kudeatzeko interfazea
+Comment[fa]=پایانۀ پشتیبانی مدیریت شبکه
+Comment[fi]=Verkon hallinnan taustaosa
+Comment[fr]=Interface de gestion du réseau
+Comment[fy]=Network behear backend
+Comment[ga]=Inneall Bainisteoireachta Líonra
+Comment[gl]=Infraestrutura de xestión da rede
+Comment[gu]=નેટવર્ક વ્યવસ્થાપક બેકએન્ડ
+Comment[he]=ממשק ניהול רשת
+Comment[hi]=नेटवर्क प्रबंधन बैकएण्ड
+Comment[hu]=Hálózatkezelő modul
+Comment[is]=Netstýringakerfi
+Comment[it]=Backend per la gestione di rete
+Comment[ja]=ネットワーク管理のバックエンド
+Comment[kk]=Желіні басқару тетігі
+Comment[km]=ការ​គ្រប់គ្រង​បណ្តាញ​កម្មវិធី​ខាងក្រោយ
+Comment[kn]=ಜಾಲ ವ್ಯವಸ್ಥಾಪನೆ ಹಿನ್ನೆಲೆ (ಬಾಕೆ ಎಂಡ್)
+Comment[ko]=네트워크 관리 백엔드
+Comment[lv]=Tīkla pārvaldes aizmugure
+Comment[ml]=നെറ്റ്‌വര്‍ക്ക് മാനേജ്മെന്റ് ബാക്കെന്‍ഡ്
+Comment[mr]=संजाळ व्यवस्थापन बैकएण्ड
+Comment[nb]=Bakgrunnsmotor for nettverksstyring
+Comment[nds]=Hülpprogramm för den Nettwark-Pleger
+Comment[ne]=सञ्जाल व्यवस्थापन ब्याकइन्ड
+Comment[nl]=Netwerkbeheer backend
+Comment[nn]=Motor for nettverkshandtering
+Comment[pa]=ਨੈੱਟਵਰਕ ਮੈਨਿਜਮੈਂਟ ਬੈਕਐਂਡ
+Comment[pl]=Usługa zarządzania siecią
+Comment[pt]=Infra-Estrutura de Gestão da Rede
+Comment[pt_BR]=Infra-estrutura do Gerenciamento de Rede
+Comment[ro]=Suport pentru gestiune rețea
+Comment[ru]=Модуль управления сетью
+Comment[se]=Fierpmádatgieđahallanmohtor
+Comment[sl]=Hrbtenica za upravljanje z omrežji
+Comment[sr]=Позадина за управљање мрежом
+Comment[sr@latin]=Pozadina za upravljanje mrežom
+Comment[sv]=Nätverkshanteringsgränssnitt
+Comment[te]=నెట్వర్‍క్  నిర్వహణా బ్యాక్ఎండ్
+Comment[tg]=Пуштибонии идоракунии шабака
+Comment[th]=โปรแกรมเบื้องหลังการจัดการเครือข่าย
+Comment[tr]=Ağ Yönetimi Arka Ucu
+Comment[uk]=Програма керування мережею
+Comment[vi]=Hậu phương quản lý mạng
+Comment[x-test]=xxNetwork Management Backendxx
+Comment[zh_CN]=网络管理后端
+Comment[zh_TW]=網路管理後端介面
+
+[PropertyDef::X-KDE-SolidBackendInfo-Version]
+Type=QString
+

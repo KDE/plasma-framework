@@ -1,0 +1,67 @@
+[Desktop Entry]
+Type=ServiceType
+X-KDE-ServiceType=SolidPowerManager
+
+Comment=Power Management Backend
+Comment[af]=Krag-beheer agtergrondprogram
+Comment[be]=Кіраванне сілкаваннем
+Comment[be@latin]=Кіраванне сілкаваннем
+Comment[bg]=Заден слой за управление на захранване
+Comment[ca]=Dorsal de gestió d'energia
+Comment[da]=Motor for strømstyring
+Comment[de]=Backend zur Energieverwaltung
+Comment[el]=Σύστημα διαχείρισης ενέργειας
+Comment[eo]=Energiadministrada interno
+Comment[es]=Motor de la gestión de energía
+Comment[et]=Voolutarbe haldamise taustaprogramm
+Comment[eu]=Energia kudeatzeko interfazea
+Comment[fa]=پایانۀ پشتیبانی مدیریت توان
+Comment[fi]=Tulostuksenhallinnan taustaosa
+Comment[fr]=Interface de gestion de l'énergie
+Comment[fy]=Enerzjybehear backend
+Comment[ga]=Inneall Bainisteoireachta Cumhachta
+Comment[gl]=Infraestrutura de xestión da enerxía
+Comment[gu]=પાવર વ્યવસ્થાપક બેકએન્ડ
+Comment[he]=ממשק ניהול צריכת חשמל
+Comment[hi]=पॉवर प्रबंधन बैकएण्ड
+Comment[hu]=Energiakezelő modul
+Comment[is]=Orkustýringarkerfi
+Comment[it]=Backend per la gestione dell'energia
+Comment[ja]=電源管理のバックエンド
+Comment[kk]=Қуаттандыруды басқару тетігі
+Comment[km]=ការ​គ្រប់គ្រង​ថាមពល​កម្មវិធី​ខាង​ក្រោយ
+Comment[kn]=ವಿದ್ಯುಚ್ಛಕ್ತಿ ವ್ಯವಸ್ಥಾಪನೆ ಹಿನ್ನೆಲೆ (ಬಾಕ್ ಎಂಡ್)
+Comment[ko]=전력 관리 백엔드
+Comment[lv]=Energokontroles aizmugure
+Comment[ml]=പവര്‍ മാനേജ്മെന്റ് ബാക്കെന്‍ഡ്
+Comment[mr]=पॉवर व्यवस्थापन बैकएण्ड
+Comment[nb]=Bakgrunnsmotor for strømstyring
+Comment[nds]=Hülpprogramm för de Stroomkuntrull
+Comment[ne]=शक्ति व्यवस्थापन ब्याकइन्ड
+Comment[nl]=Energiebeheer backend
+Comment[nn]=Motor for straumstyring
+Comment[pa]=ਪਾਵਰ ਮੈਨਿਜਮੈਂਟ ਬੈਕਐਂਡ
+Comment[pl]=Usługa zarządzania energią
+Comment[pt]=Infra-Estrutura de Gestão da Energia
+Comment[pt_BR]=Infra-estrutura do Gerenciamento de Energia
+Comment[ro]=Suport pentru administrare de energie
+Comment[ru]=Модуль управления питанием
+Comment[se]=El-rávdnjegieđahallanmohtor
+Comment[sl]=Hrbtenica za upravljanje z energijo
+Comment[sr]=Позадина за управљање енергијом
+Comment[sr@latin]=Pozadina za upravljanje energijom
+Comment[sv]=Gränssnitt för strömsparhantering
+Comment[te]=పవర్ నిర్వహణా బ్యాక్ఎండ్
+Comment[tg]=Пуштибонии идоракунии барқи батарея
+Comment[th]=โปรแกรมเบื้องหลังการจัดการพลังงาน
+Comment[tr]=Güç Yönetimi Arka Ucu
+Comment[uk]=Програма керування живленням
+Comment[vi]=Hậu phương quản lý nguồn điện
+Comment[wa]=Bouye di fond di manaedjmint di l' enerdjeye
+Comment[x-test]=xxPower Management Backendxx
+Comment[zh_CN]=电源管理后端
+Comment[zh_TW]=電源管理後端介面
+
+[PropertyDef::X-KDE-SolidBackendInfo-Version]
+Type=QString
+

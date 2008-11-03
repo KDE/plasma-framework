@@ -1,0 +1,97 @@
+<machine>
+    <property key="networking">true</property>
+    <property key="wireless">true</property>
+    <property key="rfkill">false</property>
+
+    <device uni="/org/kde/solid/fakenet/eth0">
+        <property key="interfacename">eth0</property>
+        <property key="driver">ipw3945</property>
+        <property key="active">true</property>
+        <property key="type">ieee80211</property>
+        <property key="speed">83886080</property>
+        <property key="bitrate">932741824</property>
+        <property key="linkup">true</property>
+        <property key="capabilities">manageable,carrierdetect</property>
+        <ipv4config>
+            <property key="addresses">193.1.234.22</property>
+            <property key="subnet">193.1.234.0</property>
+            <property key="broadcast">193.1.234.255</property>
+            <property key="dns">193.1.214.50,193.1.214.55</property>
+        </ipv4config>
+        <property key="wirelesscapabilities">wep,wpa,psk,wep40,wep104,tkip</property>
+        <accesspoint uni="/org/kde/solid/fakenet/accesspoints/0">
+            <property key="hwaddress">00:0D:65:48:6C:06</property>
+            <property key="capabilities">privacy</property>
+            <property key="wpaflags">pairwep104,pairtkip,keypsk</property>
+            <property key="rsnflags"></property>
+            <property key="frequency">11</property>
+            <property key="ssid">aKademy</property>
+            <property key="maxbitrate">56623104</property>
+            <property key="mode">master</property>
+            <property key="signalstrength">45</property>
+        </accesspoint>
+        <accesspoint uni="/org/kde/solid/fakenet/accesspoints/1">
+            <property key="hwaddress">00:0D:65:48:6C:12</property>
+            <property key="capabilities">privacy</property>
+            <property key="wpaflags">pairwep104,pairtkip,keypsk</property>
+            <property key="rsnflags"></property>
+            <property key="frequency">11</property>
+            <property key="ssid">aKademy</property>
+            <property key="maxbitrate">56623104</property>
+            <property key="mode">master</property>
+            <property key="signalstrength">72</property>
+        </accesspoint>
+        <!-- Non-member AP with same SSID to test AP to network merging -->
+        <accesspoint uni="/org/kde/solid/fakenet/accesspoints/2">
+            <property key="hwaddress">00:12:01:B5:21:E0</property>
+            <property key="capabilities">privacy</property>
+            <property key="wpaflags">pairwep104</property>
+            <property key="rsnflags"></property>
+            <property key="frequency">7</property>
+            <property key="ssid">aKademy</property>
+            <property key="maxbitrate">56623104</property>
+            <property key="mode">master</property>
+            <property key="signalstrength">12</property>
+        </accesspoint>
+        <accesspoint uni="/org/kde/solid/fakenet/accesspoint/3">
+            <property key="hwaddress">00:0D:65:48:7A:2E</property>
+            <property key="signalstrength">60</property>
+            <property key="maxbitrate">11534336</property>
+            <property key="frequency">9</property>
+            <property key="capabilities"></property>
+            <property key="mode">master</property>
+            <property key="ssid">Kennedy's</property>
+        </accesspoint>
+        <accesspoint uni="/org/kde/solid/fakenet/accesspoint/8">
+            <property key="hwaddress">00:0D:65:48:6B:B8</property>
+            <property key="signalstrength">30</property>
+            <property key="maxbitrate">56623104</property>
+            <property key="frequency">5</property>
+            <property key="capabilities">privacy</property>
+            <property key="wpaflags">pairwep104</property>
+            <property key="mode">master</property>
+            <property key="ssid">FOSDEM-H2218</property>
+        </accesspoint>
+    </device>
+
+    <device uni="/org/kde/solid/fakenet/eth1">
+        <property key="interfacename">eth1</property>
+        <property key="driver">e1000</property>
+        <property key="hwaddress">00:16:D3:31:32:21</property>
+        <property key="active">true</property>
+        <property key="type">ieee8023</property>
+        <property key="state">connected</property>
+        <property key="speed">1073741824</property>
+        <property key="bitrate">932741824</property>
+        <property key="linkup">true</property>
+        <property key="capabilities">manageable,carrierdetect</property>
+
+        <ipv4config>
+            <property key="addresses">193.1.233.16</property>
+            <property key="subnet">193.1.233.0</property>
+            <property key="broadcast">193.1.233.255</property>
+            <property key="dns">193.1.219.90,193.1.219.94</property>
+        </ipv4config>
+    </device>
+
+</machine>

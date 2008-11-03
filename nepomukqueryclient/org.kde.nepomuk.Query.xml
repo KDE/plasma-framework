@@ -1,0 +1,16 @@
+<!DOCTYPE node PUBLIC "-//freedesktop//DTD D-BUS Object Introspection 1.0//EN"
+         "http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
+<node>
+  <interface name="org.kde.nepomuk.Query">
+    <method name="list" />
+    <method name="close" />
+    <signal name="newEntries">
+      <arg name="entries" type="a(sda{s(isss)})" />
+      <annotation name="com.trolltech.QtDBus.QtTypeName.In0" value="QList&lt;Nepomuk::Search::Result&gt;" />
+    </signal>
+    <signal name="entriesRemoved">
+      <arg name="entries" type="as" />
+    </signal>
+    <signal name="finishedListing" />
+  </interface>
+</node>
