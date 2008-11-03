@@ -38,21 +38,17 @@ class PLASMA_EXPORT PackageMetadata
 {
 public:
     /**
-     * Default constructor
+     * Constructs a metadata object using the values in the file at path
+     *
+     * @param path path to a metadata.desktop file
      **/
-    PackageMetadata();
+    explicit PackageMetadata(const QString &path = QString());
 
     /**
      * Copy constructor
      **/
     PackageMetadata(const PackageMetadata &other);
 
-    /**
-     * Constructs a metadata object using the values in the file at path
-     *
-     * @param path path to a metadata.desktop file
-     **/
-    PackageMetadata(const QString &path);
     ~PackageMetadata();
 
     bool isValid() const;
