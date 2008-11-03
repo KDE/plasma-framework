@@ -117,6 +117,7 @@ if(QT_QTOPENGL_FOUND AND OPENGL_FOUND)
     target_link_libraries(plasma ${QT_QTOPENGL_LIBRARY} ${OPENGL_gl_LIBRARY})
 endif(QT_QTOPENGL_FOUND AND OPENGL_FOUND)
 
+#do NOT use GENERIC versioning -- the plasma team will take care of versioning
 set_target_properties(plasma PROPERTIES
                              VERSION 3.0.0
                              SOVERSION 3
