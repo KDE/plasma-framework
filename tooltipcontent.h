@@ -17,6 +17,9 @@
  * Boston, MA  02110-1301  USA
  */
 
+#ifndef PLASMA_TOOLTIPCONTENT_H
+#define PLASMA_TOOLTIPCONTENT_H
+
 #include <QtCore/QString>
 #include <QtGui/QPixmap>
 #include <QtGui/QIcon>
@@ -100,4 +103,5 @@ private:
 
 } // namespace Plasma
 
+#endif
 
