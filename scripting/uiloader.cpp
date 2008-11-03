@@ -19,7 +19,10 @@
 
 #include "uiloader.h"
 
+#include <QGraphicsGridLayout>
+#include <QGraphicsLinearLayout>
 #include <QStringList>
+
 #include "widgets/checkbox.h"
 #include "widgets/combobox.h"
 #include "widgets/flashinglabel.h"
@@ -62,6 +65,10 @@ UiLoader::UiLoader(QObject *parent)
         << "Slider"
         << "TabBar"
         << "TextEdit";
+
+    d->layouts
+        << "GridLayout"
+        << "LinearLayout";
 }
 
 UiLoader::~UiLoader()
@@ -112,17 +119,14 @@ QStringList UiLoader::availableLayouts() const
     return d->layouts;
 }
 
-Layout *UiLoader::createLayout(const QString &className, LayoutItem *parent)
+QGraphicsLayout *UiLoader::createLayout(const QString &className, QGraphicsLayoutItem *parent)
 {
-    #ifdef RICHARD_WORK
-    if (className == QString("HBoxLayout")) {
-        return new HBoxLayout(parent);
-    } else if (className == QString("VBoxLayout")) {
-        return new VBoxLayout(parent);
-    } else if (className == QString("FlowLayout")) {
-        return new FlowLayout(parent);
+    if (className == QString("GridLayout")) {
+        return new QGraphicsGridLayout(parent);
+    } else if (className == QString("LinearLayout")) {
+        return new QGraphicsLinearLayout(parent);
     }
-    #endif
+
     return 0;
 }
 

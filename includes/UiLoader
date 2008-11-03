@@ -1,2 +1,2 @@
-#include "../../plasma/uiloader.h"
+#include "../../plasma/scripting/uiloader.h"
 

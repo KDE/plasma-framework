@@ -31,8 +31,6 @@ class QGraphicsProxyWidget;
 namespace Plasma
 {
 
-class Layout;
-class LayoutItem;
 class UiLoaderPrivate;
 
 /**
@@ -54,7 +52,7 @@ public:
     QGraphicsWidget *createWidget(const QString &className, QGraphicsWidget *parent = 0);
 
     QStringList availableLayouts() const;
-    Layout *createLayout(const QString &className, LayoutItem *parent);
+    QGraphicsLayout *createLayout(const QString &className, QGraphicsLayoutItem *parent);
 
 private:
     UiLoaderPrivate *const d;
