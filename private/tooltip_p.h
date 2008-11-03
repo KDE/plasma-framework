@@ -43,6 +43,7 @@ public:
     bool autohide() const;
 
 protected:
+    void checkSize();
     void showEvent(QShowEvent *);
     void hideEvent(QHideEvent *);
     void mouseReleaseEvent(QMouseEvent *);

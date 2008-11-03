@@ -117,6 +117,29 @@ ToolTip::~ToolTip()
     delete d;
 }
 
+void ToolTip::checkSize()
+{
+    QSize hint = sizeHint();
+    QSize current = size();
+
+    if (hint != current) {
+        /*
+#ifdef Q_WS_X11
+        NETRootInfo i(QX11Info::display(), 0);
+        int flags = NET::BottomLeft;
+        i.moveResizeWindowRequest(winId(), flags,
+                                  x(), y() + (current.height() - hint.height()),
+                                  hint.width(), hint.height());
+#else
+        move(x(), y() + (current.height() - hint.height()));
+        resize(hint);
+#endif
+    */
+        move(x(), y() + (current.height() - hint.height()));
+        resize(hint);
+    }
+}
+
 void ToolTip::setContent(const ToolTipContent &data)
 {
     //reset our size
@@ -127,22 +150,7 @@ void ToolTip::setContent(const ToolTipContent &data)
 
     if (isVisible()) {
         d->preview->setInfo();
-
-        QSize hint = sizeHint();
-        QSize current = size();
-
-        if (hint != current) {
-#ifdef Q_WS_X11
-            NETRootInfo i(QX11Info::display(), 0);
-            int flags = (0x20 << 12) | (0x03 << 8) | 1; // from tool, x/y, northwest gravity
-            i.moveResizeWindowRequest(winId(), flags,
-                                      x(), y() + (current.height() - hint.height()),
-                                      hint.width(), hint.height());
-#else
-            move(x(), y() + (current.height() - hint.height()));
-            resize(hint);
-#endif
-        }
+        checkSize();
     }
 }
 
@@ -161,14 +169,7 @@ void ToolTip::prepareShowing(bool cueUpdate)
 
     layout()->activate();
     d->preview->setInfo();
-
-    QSize hint = sizeHint();
-    QSize current = size();
-
-    if (hint != current) {
-        move(x(), y() + (current.height() - hint.height()));
-    }
-    resize(sizeHint());
+    checkSize();
 }
 
 void ToolTip::moveTo(const QPoint &to)
