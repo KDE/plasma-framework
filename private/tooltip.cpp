@@ -135,8 +135,14 @@ void ToolTip::checkSize()
         resize(hint);
 #endif
     */
-        move(x(), y() + (current.height() - hint.height()));
+        /*
+        kDebug() << "resizing from" << current << "to" << hint
+                 << "and moving from" << pos() << "to"
+                 << x() << y() + (current.height() - hint.height())
+                 << current.height() - hint.height();
+                 */
         resize(hint);
+        move(x(), y() + (current.height() - hint.height()));
     }
 }
 
@@ -150,6 +156,7 @@ void ToolTip::setContent(const ToolTipContent &data)
 
     if (isVisible()) {
         d->preview->setInfo();
+        //kDebug() << "about to check size";
         checkSize();
     }
 }
@@ -169,6 +176,7 @@ void ToolTip::prepareShowing(bool cueUpdate)
 
     layout()->activate();
     d->preview->setInfo();
+    //kDebug() << "about to check size";
     checkSize();
 }
 
@@ -180,7 +188,7 @@ void ToolTip::moveTo(const QPoint &to)
         return;
     }
 
-    d->from = pos();
+    d->from = QPoint();
     d->to = to;
 
     if (!d->timeline) {
@@ -196,6 +204,10 @@ void ToolTip::moveTo(const QPoint &to)
 
 void ToolTip::animateMove(qreal progress)
 {
+    if (d->from.isNull()) {
+        d->from = pos();
+    }
+
     if (qFuzzyCompare(progress, 1.0)) {
         move(d->to);
         return;
@@ -209,7 +221,6 @@ void ToolTip::resizeEvent(QResizeEvent *e)
 {
     QWidget::resizeEvent(e);
     d->background->resizeFrame(size());
-
     setMask(d->background->mask());
 }
 
