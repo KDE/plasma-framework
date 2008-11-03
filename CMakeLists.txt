@@ -81,6 +81,7 @@ set(plasma_LIB_SRCS
     widgets/scrollbar.cpp
     widgets/signalplotter.cpp
     widgets/slider.cpp
+    widgets/busywidget.cpp
     widgets/svgwidget.cpp
     widgets/tabbar.cpp
     widgets/treeview.cpp
@@ -196,6 +197,7 @@ install(FILES
     widgets/scrollbar.h
     widgets/signalplotter.h
     widgets/slider.h
+    widgets/busywidget.h
     widgets/svgwidget.h
     widgets/tabbar.h
     widgets/treeview.h
@@ -257,6 +259,7 @@ includes/Service
 includes/ServiceJob
 includes/SignalPlotter
 includes/Slider
+includes/BusyWidget
 includes/Svg
 includes/SvgWidget
 includes/TabBar
