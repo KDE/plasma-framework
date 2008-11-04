@@ -555,6 +555,7 @@ void Applet::setBusy(bool busy)
     } else {
         d->busyWidget->hide();
         d->busyWidget->deleteLater();
+        d->busyWidget = 0;
     }
 }
 
