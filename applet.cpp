@@ -41,22 +41,22 @@
 #include <QTextDocument>
 #include <QUiLoader>
 
-#include <KAction>
-#include <KIcon>
-#include <KColorScheme>
-#include <KConfigDialog>
-#include <KDialog>
-#include <KIconLoader>
-#include <KPluginInfo>
-#include <KStandardDirs>
-#include <KService>
-#include <KServiceTypeTrader>
-#include <KShortcut>
-#include <KWindowSystem>
-#include <KActionCollection>
-#include <KAuthorized>
+#include <kaction.h>
+#include <kicon.h>
+#include <kcolorscheme.h>
+#include <kconfigdialog.h>
+#include <kdialog.h>
+#include <kiconloader.h>
+#include <kplugininfo.h>
+#include <kstandarddirs.h>
+#include <kservice.h>
+#include <kservicetypetrader.h>
+#include <kshortcut.h>
+#include <kwindowsystem.h>
+#include <kactioncollection.h>
+#include <kauthorized.h>
 
-#include <Solid/PowerManagement>
+#include <solid/powermanagement.h>
 
 #include "configloader.h"
 #include "containment.h"

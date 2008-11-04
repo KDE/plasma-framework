@@ -26,10 +26,10 @@
 #include <QTimerEvent>
 #include <QVariant>
 
-#include <KDebug>
-#include <KPluginInfo>
-#include <KService>
-#include <KStandardDirs>
+#include <kdebug.h>
+#include <kplugininfo.h>
+#include <kservice.h>
+#include <kstandarddirs.h>
 
 #include "datacontainer.h"
 #include "package.h"

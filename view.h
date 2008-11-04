@@ -23,7 +23,7 @@
 #include <QtGui/QApplication>
 #include <QtGui/QGraphicsView>
 
-#include <KDE/KConfigGroup>
+#include <kconfiggroup.h>
 
 #include <plasma/plasma_export.h>
 

@@ -22,13 +22,13 @@
 #include <QMap>
 #include <QFileInfo>
 
-#include <KConfigGroup>
-#include <KStandardDirs>
-#include <KServiceTypeTrader>
-#include <KUrl>
-#include <KTemporaryFile>
-#include <KTempDir>
-#include <KZip>
+#include <kconfiggroup.h>
+#include <kstandarddirs.h>
+#include <kservicetypetrader.h>
+#include <kurl.h>
+#include <ktemporaryfile.h>
+#include <ktempdir.h>
+#include <kzip.h>
 #include <kio/netaccess.h>
 #include <kio/job.h>
 

@@ -25,19 +25,19 @@
 #include <QTimer>
 #include <QCoreApplication>
 
-#include <KDebug>
-#include <KPluginInfo>
-#include <KServiceTypeTrader>
-#include <KStandardDirs>
+#include <kdebug.h>
+#include <kplugininfo.h>
+#include <kservicetypetrader.h>
+#include <kstandarddirs.h>
 
-#include <Solid/Device>
-#include <Solid/DeviceInterface>
+#include <solid/device.h>
+#include <solid/deviceinterface.h>
 
-#include <threadweaver/DebuggingAids.h>
-#include <ThreadWeaver/Thread>
-#include <ThreadWeaver/Job>
-#include <ThreadWeaver/QueuePolicy>
-#include <ThreadWeaver/Weaver>
+#include <threadweaver/debuggingaids.h.h>
+#include <threadweaver/thread.h>
+#include <threadweaver/job.h>
+#include <threadweaver/queuepolicy.h>
+#include <threadweaver/weaver.h>
 
 #include "querymatch.h"
 

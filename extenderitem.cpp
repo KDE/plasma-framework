@@ -29,10 +29,10 @@
 #include <QPainter>
 #include <QTimer>
 
-#include <KDebug>
-#include <KIcon>
-#include <KWindowSystem>
-#include <KGlobalSettings>
+#include <kdebug.h>
+#include <kicon.h>
+#include <kwindowsystem.h>
+#include <kglobalsettings.h>
 
 #include "applet.h"
 #include "containment.h"

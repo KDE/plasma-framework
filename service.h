@@ -24,7 +24,8 @@
 #include <QtCore/QObject>
 #include <QtCore/QVariant>
 
-#include <KDE/KConfigGroup>
+#include <kconfiggroup.h>
+
 #include <plasma/plasma_export.h>
 
 class QGraphicsWidget;

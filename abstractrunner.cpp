@@ -23,12 +23,12 @@
 #include <QHash>
 #include <QMutex>
 #include <QMutexLocker>
-
-#include <KDebug>
-#include <KPluginInfo>
-#include <KServiceTypeTrader>
-#include <KStandardDirs>
 #include <QTimer>
+
+#include <kdebug.h>
+#include <kplugininfo.h>
+#include <kservicetypetrader.h>
+#include <kstandarddirs.h>
 
 #include <plasma/querymatch.h>
 #include <plasma/package.h>

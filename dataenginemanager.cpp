@@ -19,8 +19,8 @@
 
 #include "dataenginemanager.h"
 
-#include <KDebug>
-#include <KServiceTypeTrader>
+#include <kdebug.h>
+#include <kservicetypetrader.h>
 
 #include "private/dataengine_p.h"
 #include "scripting/scriptengine.h"

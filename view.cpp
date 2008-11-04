@@ -19,9 +19,9 @@
 
 #include "view.h"
 
-#include <KGlobal>
-#include <KWindowSystem>
-#include <KActionCollection>
+#include <kglobal>
+#include <kwindowsystem.h>
+#include <kactioncollection.h>
 
 #include "corona.h"
 #include "containment.h"

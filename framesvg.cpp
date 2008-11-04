@@ -24,7 +24,7 @@
 #include <QSize>
 #include <QBitmap>
 
-#include <KDebug>
+#include <kdebug.h>
 
 #include <plasma/theme.h>
 

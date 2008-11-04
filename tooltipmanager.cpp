@@ -28,7 +28,7 @@
 #include <QGraphicsView>
 
 //KDE
-#include <KWindowSystem>
+#include <kwindowsystem.h>
 
 //X11
 #ifdef Q_WS_X11

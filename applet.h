@@ -26,10 +26,10 @@
 #include <QtGui/QWidget>
 #include <QtGui/QGraphicsWidget>
 
-#include <KDE/KConfigGroup>
-#include <KDE/KGenericFactory>
-#include <KDE/KPluginInfo>
-#include <KDE/KShortcut>
+#include <kconfiggroup.h>
+#include <kgenericfactory.h>
+#include <kplugininfo.h>
+#include <kshortcut.h>
 
 #include <plasma/configloader.h>
 #include <plasma/packagestructure.h>

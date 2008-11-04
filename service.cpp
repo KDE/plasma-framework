@@ -23,12 +23,12 @@
 #include <QFile>
 #include <QTimer>
 
-#include <KDebug>
-#include <KService>
-#include <KServiceTypeTrader>
-#include <KSharedConfig>
-#include <KStandardDirs>
-#include <KTemporaryFile>
+#include <kdebug.h.h>
+#include <kservice.h>
+#include <kservicetypetrader.h>
+#include <ksharedconfig.h>
+#include <kstandarddirs.h>
+#include <ktemporaryfile.h>
 
 #include "configloader.h"
 

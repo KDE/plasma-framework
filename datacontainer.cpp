@@ -22,7 +22,7 @@
 
 #include <QVariant>
 
-#include <KDebug>
+#include <kdebug.h>
 
 #include "plasma.h"
 

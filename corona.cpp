@@ -29,10 +29,10 @@
 #include <QPainter>
 #include <QTimer>
 
-#include <KDebug>
-#include <KGlobal>
-#include <KLocale>
-#include <KMimeType>
+#include <kdebug.h>
+#include <kglobal.h>
+#include <klocale.h>
+#include <kmimetype.h>
 
 #include "containment.h"
 #include "view.h"

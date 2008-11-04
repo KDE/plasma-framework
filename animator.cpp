@@ -23,11 +23,11 @@
 #include <QGraphicsItem>
 #include <QTimeLine>
 
-#include <KConfig>
-#include <KConfigGroup>
-#include <KService>
-#include <KServiceTypeTrader>
-#include <KGlobalSettings>
+#include <kconfig.h>
+#include <kconfiggroup.h>
+#include <kservice.h>
+#include <kservicetypetrader.h>
+#include <kglobalsettings.h>
 
 #include "animationdriver.h"
 

@@ -24,13 +24,13 @@
 #include <QPainter>
 #include <QSharedData>
 
-#include <KColorScheme>
-#include <KConfigGroup>
-#include <KDebug>
-#include <KIconEffect>
-#include <KGlobalSettings>
-#include <KSharedPtr>
-#include <KSvgRenderer>
+#include <kcolorscheme.h>
+#include <kconfiggroup.h>
+#include <kdebug.h>
+#include <kiconeffect.h>
+#include <kglobalsettings.h>
+#include <ksharedptr.h>
+#include <ksvgrenderer.h>
 
 #include "theme.h"
 

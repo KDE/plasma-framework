@@ -31,18 +31,18 @@
 #include <QGraphicsLayout>
 #include <QGraphicsLinearLayout>
 
-#include <KAction>
-#include <KApplication>
-#include <KAuthorized>
-#include <KIcon>
-#include <KMenu>
-#include <KMessageBox>
-#include <KMimeType>
-#include <KRun>
-#include <KServiceTypeTrader>
-#include <KStandardDirs>
-#include <KTemporaryFile>
-#include <KWindowSystem>
+#include <kaction.h>
+#include <kapplication.h>
+#include <kauthorized.h>
+#include <kicon.h>
+#include <kmenu.h>
+#include <kmessagebox.h>
+#include <kmimetype.h>
+#include <krun.h>
+#include <kservicetypetrader.h>
+#include <kstandarddirs.h>
+#include <ktemporaryfile.h>
+#include <kwindowsystem.h>
 
 #include "animator.h"
 #include "context.h"

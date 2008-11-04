@@ -22,8 +22,8 @@
 
 #include <QtGui/QGraphicsWidget>
 
-#include <KDE/KConfigGroup>
-#include <KDE/KIcon>
+#include <kconfiggroup.h>
+#include <kicon.h>
 
 #include "plasma/plasma_export.h"
 

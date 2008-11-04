@@ -21,7 +21,7 @@
 #ifndef PLASMA_WALLPAPER_H
 #define PLASMA_WALLPAPER_H
 
-#include <KDE/KPluginInfo>
+#include <kplugininfo.h>
 
 #include <plasma/plasma.h>
 #include <plasma/version.h>

@@ -21,8 +21,8 @@
 
 #include <QDir>
 
-#include <KConfigGroup>
-#include <KDesktopFile>
+#include <kconfiggroup.h>
+#include <kdesktopfile.h>
 
 namespace Plasma
 {

@@ -27,10 +27,10 @@
 #include <QTimer>
 #include <QApplication>
 
-#include <KIcon>
-#include <KIconLoader>
-#include <KWindowSystem>
-#include <KGlobalSettings>
+#include <kicon.h>
+#include <kiconloader.h>
+#include <kwindowsystem.h>
+#include <kglobalsettings.h>
 
 #include "plasma/private/applet_p.h"
 #include "plasma/dialog.h"

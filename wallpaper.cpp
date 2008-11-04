@@ -20,8 +20,8 @@
 
 #include "wallpaper.h"
 
-#include <KServiceTypeTrader>
-#include <KDebug>
+#include <kservicetypetrader.h>
+#include <kdebug.h>
 
 #include <version.h>
 

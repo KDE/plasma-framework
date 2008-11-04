@@ -26,12 +26,12 @@
 #include <QFileInfo>
 #include <QSharedData>
 
-#include <KCompletion>
-#include <KDebug>
-#include <KMimeType>
-#include <KShell>
-#include <KStandardDirs>
-#include <KUrl>
+#include <kcompletion.h>
+#include <kdebug.h>
+#include <kmimetype.h>
+#include <kshell.h>
+#include <kstandarddirs.h>
+#include <kurl.h>
 
 #include "abstractrunner.h"
 #include "querymatch.h"

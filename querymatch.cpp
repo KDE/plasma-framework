@@ -26,7 +26,7 @@
 #include <QStringList>
 #include <QIcon>
 
-#include <KDebug>
+#include <kdebug.h>
 
 #include "abstractrunner.h"
 

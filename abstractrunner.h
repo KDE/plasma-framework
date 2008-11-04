@@ -24,8 +24,8 @@
 #include <QtCore/QMutex>
 #include <QtCore/QStringList>
 
-#include <KDE/KConfigGroup>
-#include <KDE/KService>
+#include <kconfiggroup.h>
+#include <kservice.h>
 
 #include <plasma/plasma_export.h>
 #include <plasma/runnercontext.h>

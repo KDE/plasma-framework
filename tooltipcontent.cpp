@@ -19,7 +19,7 @@
 
 #include "tooltipcontent.h"
 
-#include <KIconLoader>
+#include <kiconloader>
 
 namespace Plasma
 {

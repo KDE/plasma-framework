@@ -21,9 +21,11 @@
 #define PLASMA_SERVICEJOB_H
 
 #include <QtCore/QVariant>
+
+#include <kjob.h>
+#include <kservice.h>
+
 #include <plasma/plasma_export.h>
-#include <KDE/KJob>
-#include <KDE/KService>
 
 namespace Plasma
 {

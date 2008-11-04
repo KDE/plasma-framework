@@ -24,20 +24,20 @@
 #include <QFile>
 #include <QRegExp>
 
-#include <KArchiveDirectory>
-#include <KArchiveEntry>
-#include <KComponentData>
-#include <KDesktopFile>
-#include <KIO/CopyJob>
-#include <KIO/DeleteJob>
-#include <KIO/FileCopyJob>
-#include <KIO/Job>
-#include <KPluginInfo>
-#include <KStandardDirs>
-#include <KTempDir>
-#include <KTemporaryFile>
-#include <KZip>
-#include <KDebug>
+#include <karchivedirectory.h>
+#include <karchiveentry.h>
+#include <kcomponentdata.h>
+#include <kdesktopfile.h>
+#include <kio/copyjob.h>
+#include <kio/deletejob.h>
+#include <kio/filecopyjob.h>
+#include <kio/job.h>
+#include <kplugininfo.h>
+#include <kstandarddirs.h>
+#include <ktempdir.h>
+#include <ktemporaryfile.h>
+#include <kzip.h>
+#include <kdebug.h>
 
 #include "packagemetadata.h"
 

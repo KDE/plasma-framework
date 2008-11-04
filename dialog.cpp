@@ -35,8 +35,8 @@
 #include <QtGui/QGraphicsView>
 #include <QtGui/QGraphicsWidget>
 
-#include <KDebug>
-#include <NETRootInfo>
+#include <kdebug.h>
+#include <netrootinfo.h>
 
 #include "plasma/applet.h"
 #include "plasma/extender.h"

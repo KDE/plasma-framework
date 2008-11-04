@@ -20,9 +20,9 @@
 #ifndef PLASMA_CONFIGLOADER_H
 #define PLASMA_CONFIGLOADER_H
 
-#include <KDE/KConfigGroup>
-#include <KDE/KConfigSkeleton>
-#include <KDE/KSharedConfig>
+#include <kconfiggroup.h>
+#include <kconfigskeleton.h>
+#include <ksharedconfig.h>
 
 #include <plasma/plasma_export.h>
 

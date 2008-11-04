@@ -34,11 +34,11 @@
 #include <QStyleOptionViewItem>
 
 // KDE
-#include <KColorUtils>
-#include <KDebug>
-#include <KGlobal>
-#include <KGlobalSettings>
-#include <KColorScheme>
+#include <kcolorutils.h>
+#include <kdebug.h>
+#include <kglobal.h>
+#include <kglobalsettings.h>
+#include <kcolorscheme.h>
 
 // plasma
 #include <plasma/paintutils.h>

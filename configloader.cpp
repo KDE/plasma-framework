@@ -26,8 +26,8 @@
 #include <QXmlInputSource>
 #include <QXmlSimpleReader>
 
-#include <KDebug>
-#include <KUrl>
+#include <kdebug.h>
+#include <kurl.h>
 
 namespace Plasma
 {

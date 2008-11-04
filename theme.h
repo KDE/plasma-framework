@@ -24,7 +24,7 @@
 #include <QtGui/QFont>
 #include <QtGui/QFontMetrics>
 
-#include <KDE/KSharedConfig>
+#include <ksharedconfig.h>
 
 #include <plasma/plasma_export.h>
 #include <plasma/packagestructure.h>

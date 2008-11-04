@@ -25,17 +25,17 @@
 #include <QX11Info>
 #endif
 
-#include <KColorScheme>
-#include <KComponentData>
-#include <KConfigGroup>
-#include <KDebug>
-#include <KGlobal>
-#include <KGlobalSettings>
-#include <KPixmapCache>
-#include <KSelectionWatcher>
-#include <KSharedConfig>
-#include <KStandardDirs>
-#include <KWindowSystem>
+#include <kcolorscheme.h>
+#include <kcomponentdata.h>
+#include <kconfiggroup.h>
+#include <kdebug.h>
+#include <kglobal.h>
+#include <kglobalsettings.h>
+#include <kpixmapcache.h>
+#include <kselectionwatcher.h>
+#include <ksharedconfig.h>
+#include <kstandarddirs.h>
+#include <kwindowsystem.h>
 
 #include "private/packages_p.h"
 
