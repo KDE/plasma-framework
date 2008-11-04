@@ -588,7 +588,7 @@ bool Applet::shouldConserveResources() const
 QString Applet::category() const
 {
     if (!d->appletDescription.isValid()) {
-        return i18n("Miscellaneous");
+        return i18nc("misc category", "Miscellaneous");
     }
 
     return d->appletDescription.category();
@@ -1406,8 +1406,8 @@ QStringList Applet::listCategories(const QString &parentApp, bool visibleOnly)
 
         //kDebug() << "   and we have " << appletCategory;
         if (appletCategory.isEmpty()) {
-            if (!categories.contains(i18n("Miscellaneous"))) {
-                categories << i18n("Miscellaneous");
+            if (!categories.contains(i18nc("misc category", "Miscellaneous"))) {
+                categories << i18nc("misc category", "Miscellaneous");
             }
         } else  if (!categories.contains(appletCategory)) {
             categories << appletCategory;
