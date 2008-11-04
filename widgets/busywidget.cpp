@@ -46,12 +46,18 @@ public:
 
     void themeChanged()
     {
+        frames.clear();
         rotationAngle = svg->elementSize("hint-rotation-angle").width();
+
+        //use an angle near to rotationAngle but that it fits an integer number of times in 360
+        int nFrames = 360/rotationAngle;
+        rotationAngle = 360/nFrames;
     }
 
     Svg *svg;
     QString styleSheet;
     int timerId;
+    QHash<int, QPixmap> frames;
     qreal rotationAngle;
     qreal rotation;
 };
@@ -64,7 +70,7 @@ BusyWidget::BusyWidget(QGraphicsWidget *parent)
     d->svg = new Plasma::Svg(this);
     d->svg->setImagePath("widgets/busywidget");
     d->svg->setContainsMultipleImages(true);
-    d->rotationAngle = d->svg->elementSize("hint-rotation-angle").width();
+    d->themeChanged();
 
     connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()), SLOT(themeChanged()));
 }
@@ -88,27 +94,38 @@ void BusyWidget::timerEvent(QTimerEvent *event)
 }
 
 void BusyWidget::paint(QPainter *painter,
-                    const QStyleOptionGraphicsItem *option,
-                    QWidget *widget)
+                       const QStyleOptionGraphicsItem *option,
+                       QWidget *widget)
 {
     Q_UNUSED(option)
     Q_UNUSED(widget)
 
-    QPointF translatedPos(size().width()/2.0, size().height()/2.0);
+    int intRotation = int(d->rotation);
 
-    painter->save();
-    painter->setRenderHints(QPainter::SmoothPixmapTransform);
-    painter->translate(translatedPos);
+    if (!d->frames[intRotation]) {
+        QPointF translatedPos(size().width()/2.0, size().height()/2.0);
 
-    painter->save();
-    painter->translate(2,2);
-    painter->rotate(d->rotation);
-    d->svg->paint(painter, QRect(-translatedPos.toPoint(), size().toSize()), "busywidget-shadow");
-    painter->restore();
+        d->frames[intRotation] = QPixmap(size().toSize());
+        d->frames[intRotation].fill(Qt::transparent);
 
-    painter->rotate(d->rotation);
-    d->svg->paint(painter, QRect(-translatedPos.toPoint(), size().toSize()), "busywidget");
-    painter->restore();
+        QPainter buffPainter(&d->frames[intRotation]);
+
+        buffPainter.setRenderHints(QPainter::SmoothPixmapTransform);
+        buffPainter.translate(translatedPos);
+
+        if (d->svg->hasElement("busywidget-shadow")) {
+            buffPainter.save();
+            buffPainter.translate(2,2);
+            buffPainter.rotate(intRotation);
+            d->svg->paint(&buffPainter, QRect(-translatedPos.toPoint(), size().toSize()), "busywidget-shadow");
+            buffPainter.restore();
+        }
+
+        buffPainter.rotate(intRotation);
+        d->svg->paint(&buffPainter, QRect(-translatedPos.toPoint(), size().toSize()), "busywidget");
+    }
+
+    painter->drawPixmap(QPoint(0,0), d->frames[intRotation]);
 }
 
 void BusyWidget::showEvent(QShowEvent *event)
@@ -122,6 +139,11 @@ void BusyWidget::hideEvent(QHideEvent *event)
     Q_UNUSED(event)
     killTimer(d->timerId);
     d->timerId = 0;
+}
+
+void BusyWidget::resizeEvent(QGraphicsSceneResizeEvent *event)
+{
+    d->frames.clear();
 }
 
 } // namespace Plasma
