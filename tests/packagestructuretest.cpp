@@ -19,9 +19,9 @@
 
 #include "packagestructuretest.h"
 
-#include <KConfig>
-#include <KConfigGroup>
-#include <KDebug>
+#include <kconfig.h>
+#include <kconfiggroup.h>
+#include <kdebug.h>
 
 #include "plasma/packagestructure.h"
 #include "plasma/applet.h"

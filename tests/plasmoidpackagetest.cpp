@@ -21,7 +21,7 @@
 
 #include <QDir>
 #include <QFile>
-#include <KZip>
+#include <kzip.h>
 
 #include "plasma/applet.h"
 #include "plasma/packagemetadata.h"
