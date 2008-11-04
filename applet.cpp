@@ -552,7 +552,7 @@ void Applet::setBusy(bool busy)
         QRect busyRect(0, 0, busySize, busySize);
         busyRect.moveCenter(boundingRect().center().toPoint());
         d->busyWidget->setGeometry(busyRect);
-    } else {
+    } else if (d->busyWidget) {
         d->busyWidget->hide();
         d->busyWidget->deleteLater();
         d->busyWidget = 0;
