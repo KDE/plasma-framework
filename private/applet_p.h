@@ -30,6 +30,7 @@ namespace Plasma
 class FrameSvg;
 class AppletScript;
 class Wallpaper;
+class BusyWidget;
 
 class AppletOverlayWidget : public QGraphicsWidget
 {
@@ -85,6 +86,7 @@ public:
     Applet::BackgroundHints backgroundHints;
     KPluginInfo appletDescription;
     AppletOverlayWidget *needsConfigOverlay;
+    Plasma::BusyWidget *busyWidget;
     QList<QGraphicsItem*> registeredAsDragHandle;
     QStringList loadedEngines;
     Plasma::FrameSvg *background;

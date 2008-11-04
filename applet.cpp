@@ -75,6 +75,7 @@
 #include "widgets/iconwidget.h"
 #include "widgets/label.h"
 #include "widgets/pushbutton.h"
+#include "widgets/busywidget.h"
 #include "tooltipmanager.h"
 #include "wallpaper.h"
 
@@ -539,6 +540,29 @@ Extender *Applet::extender() const
     return d->extender;
 }
 
+void Applet::setBusy(bool busy)
+{
+    if (busy) {
+        if (!d->busyWidget) {
+            d->busyWidget = new Plasma::BusyWidget(this);
+        } else {
+            d->busyWidget->show();
+        }
+        int busySize = qMin(size().width(), size().height())/3;
+        QRect busyRect(0, 0, busySize, busySize);
+        busyRect.moveCenter(boundingRect().center().toPoint());
+        d->busyWidget->setGeometry(busyRect);
+    } else {
+        d->busyWidget->hide();
+        d->busyWidget->deleteLater();
+    }
+}
+
+bool Applet::isBusy() const
+{
+    return d->busyWidget && d->busyWidget->isVisible();
+}
+
 QString Applet::name() const
 {
     if (isContainment()) {
@@ -832,6 +856,13 @@ void Applet::flushPendingConstraintsEvents()
             button->setPos(d->needsConfigOverlay->boundingRect().width() / 2 - s.width() / 2,
                            d->needsConfigOverlay->boundingRect().height() / 2 - s.height() / 2);
         }
+    }
+
+    if (c & Plasma::SizeConstraint && d->busyWidget && d->busyWidget->isVisible()) {
+        int busySize = qMin(size().width(), size().height())/3;
+        QRect busyRect(0, 0, busySize, busySize);
+        busyRect.moveCenter(boundingRect().center().toPoint());
+        d->busyWidget->setGeometry(busyRect);
     }
 
     if (c & Plasma::FormFactorConstraint) {
@@ -1666,6 +1697,7 @@ AppletPrivate::AppletPrivate(KService::Ptr service, int uniqueID, Applet *applet
           backgroundHints(Applet::StandardBackground),
           appletDescription(service),
           needsConfigOverlay(0),
+          busyWidget(0),
           background(0),
           script(0),
           package(0),

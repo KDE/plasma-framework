@@ -542,6 +542,17 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
                         const QString &serviceId = QString(),
                         uint appletId = 0);
 
+        /**
+         * Shows a busy indicator that overlays the applet
+         * @param busy show or hide the busy indicator
+         */
+        void setBusy(bool busy);
+
+        /**
+         * @return true if the applet is busy and is showing an indicator widget for that
+         */
+        bool isBusy() const;
+
     Q_SIGNALS:
         /**
          * This signal indicates that an application launch, window
