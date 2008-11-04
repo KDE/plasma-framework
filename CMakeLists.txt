@@ -1,6 +1,3 @@
-find_package(Nepomuk REQUIRED)
-include (KDE4Defaults)
-include(NepomukMacros)
 macro_optional_find_package(OpenGL)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}
