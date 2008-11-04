@@ -137,7 +137,12 @@ kde4_add_library(plasma SHARED ${plasma_LIB_SRCS})
 
 target_link_libraries(plasma ${KDE4_KIO_LIBS} ${KDE4_KFILE_LIBS} knewstuff2
                              ${QT_QTUITOOLS_LIBRARY} ${QT_QTWEBKIT_LIBRARY}
-                             threadweaver ${KDE4_SOLID_LIBS} ${X11_LIBRARIES})
+                             threadweaver ${KDE4_SOLID_LIBS} )
+if(X11_FOUND)
+   target_link_libraries(plasma ${X11_LIBRARIES})
+endif(X11_FOUND)
+
+
 if(DL_LIBRARY)
 target_link_libraries(plasma ${DL_LIBRARY})
 endif(DL_LIBRARY)
