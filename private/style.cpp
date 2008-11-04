@@ -23,7 +23,7 @@
 #include <QPainter>
 #include <QStyleOptionComplex>
 
-#include <KDebug>
+#include <kdebug.h>
 
 #include <plasma/framesvg.h>
 

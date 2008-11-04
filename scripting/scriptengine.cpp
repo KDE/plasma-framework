@@ -19,9 +19,9 @@
 
 #include "scripting/scriptengine.h"
 
-#include <KDebug>
-#include <KService>
-#include <KServiceTypeTrader>
+#include <kdebug.h>
+#include <kservice.h>
+#include <kservicetypetrader.h>
 
 #include "abstractrunner.h"
 #include "applet.h"

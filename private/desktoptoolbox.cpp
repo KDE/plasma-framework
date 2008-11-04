@@ -25,11 +25,12 @@
 #include <QRadialGradient>
 #include <QGraphicsView>
 
+#include <kcolorscheme.h>
+#include <kdebug.h>
+
 #include <plasma/theme.h>
 #include <plasma/paintutils.h>
-#include <KColorScheme>
 
-#include <KDebug>
 
 #include <plasma/applet.h>
 

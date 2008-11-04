@@ -19,10 +19,10 @@
 
 #include "private/packages_p.h"
 
-#include <KConfigGroup>
-#include <KDesktopFile>
-#include <KLocale>
-#include <KMessageBox>
+#include <kconfiggroup.h>
+#include <kdesktopfile.h>
+#include <klocale.h>
+#include <kmessagebox.h>
 
 #include <knewstuff2/engine.h>
 

@@ -24,7 +24,7 @@
 #include <QtCore/QRect>
 #include <QtCore/QSizeF>
 
-#include <KDE/KGenericFactory>
+#include <kgenericfactory.h>
 
 #include <plasma/plasma_export.h>
 #include <plasma/scripting/scriptengine.h>

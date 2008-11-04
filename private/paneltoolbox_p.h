@@ -25,7 +25,7 @@
 #include <QObject>
 #include <QTime>
 
-#include <KIcon>
+#include <kicon.h>
 
 #include <private/toolbox_p.h>
 

@@ -21,10 +21,6 @@
 // Own
 #include "nativetabbar_p.h"
 
-// KDE
-#include <KDebug>
-#include <KColorUtils>
-
 // Qt
 #include <QIcon>
 #include <QMouseEvent>
@@ -35,6 +31,10 @@
 
 #include <QGradient>
 #include <QLinearGradient>
+
+// KDE
+#include <kdebug.h>
+#include <kcolorutils.h>
 
 #include "plasma/plasma.h"
 #include "plasma/theme.h"

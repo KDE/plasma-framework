@@ -27,7 +27,7 @@
 #include <QWidget>
 #include <QSet>
 
-#include <KTemporaryFile>
+#include <ktemporaryfile.h>
 
 namespace Plasma
 {

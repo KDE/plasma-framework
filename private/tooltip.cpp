@@ -30,12 +30,12 @@
 #include <QTimeLine>
 #ifdef Q_WS_X11
 #include <QX11Info>
-#include <NETRootInfo>
+#include <netwm.h>
 #endif
 
-#include <KDebug>
-#include <KGlobal>
-#include <KGlobalSettings>
+#include <kdebug.h>
+#include <kglobal.h>
+#include <kglobalsettings.h>
 
 #include <plasma/plasma.h>
 #include <plasma/theme.h>

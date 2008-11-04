@@ -22,7 +22,7 @@
 #ifndef PLASMA_APPLET_P_H
 #define PLASMA_APPLET_P_H
 
-#include <KActionCollection>
+#include <kactioncollection.h>
 
 namespace Plasma
 {

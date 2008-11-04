@@ -26,11 +26,11 @@
 #include <QtGui/QPainter>
 #include <QtGui/QApplication>
 
-#include <KColorScheme>
-#include <KGlobalSettings>
-#include <KIcon>
-#include <KIconLoader>
-#include <KWindowSystem>
+#include <kcolorscheme.h>
+#include <kglobalsettings.h>
+#include <kicon.h>
+#include <kiconloader.h>
+#include <kwindowsystem.h>
 
 #include <cmath>
 #include <math.h>

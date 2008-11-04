@@ -25,8 +25,8 @@
 #include <QPainter>
 #include <QRadialGradient>
 
-#include <KColorScheme>
-#include <KDebug>
+#include <kcolorscheme.h>
+#include <kdebug.h>
 
 #include <plasma/theme.h>
 #include "widgets/iconwidget.h"

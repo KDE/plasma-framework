@@ -22,7 +22,8 @@
 
 #include <QQueue>
 #include <QTime>
-#include <KPluginInfo>
+
+#include <kplugininfo.h>
 
 class QTime;
 

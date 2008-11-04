@@ -20,7 +20,7 @@
 
 #include "windowpreview_p.h"
 
-#include <KWindowSystem>
+#include <kwindowsystem.h>
 
 #ifdef Q_WS_X11
 #include <QX11Info>
