@@ -1587,7 +1587,12 @@ void Applet::timerEvent(QTimerEvent *event)
     if (event->timerId() == d->constraintsTimerId) {
         killTimer(d->constraintsTimerId);
         d->constraintsTimerId = 0;
-        flushPendingConstraintsEvents();
+
+        // Don't flushPendingConstraints if we're just starting up
+        // flushPendingConstraints will be called by Corona
+        if(!(d->pendingConstraints & Plasma::StartupCompletedConstraint)) {
+            flushPendingConstraintsEvents();
+        }
     } else if (event->timerId() == d->modificationsTimerId) {
         killTimer(d->modificationsTimerId);
         d->modificationsTimerId = 0;
