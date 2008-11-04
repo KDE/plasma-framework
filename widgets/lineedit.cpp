@@ -19,10 +19,10 @@
 
 #include "lineedit.h"
 
-#include <KLineEdit>
 #include <QPainter>
 
-#include <KMimeType>
+#include <klineedit.h>
+#include <kmimetype.h>
 
 #include "theme.h"
 #include "svg.h"

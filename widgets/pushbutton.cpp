@@ -25,10 +25,10 @@
 #include <QDir>
 #include <QApplication>
 
-#include <KIcon>
-#include <KIconEffect>
-#include <KMimeType>
-#include <KPushButton>
+#include <kicon.h>
+#include <kiconeffect.h>
+#include <kmimetype.h>
+#include <kpushbutton.h>
 
 #include "theme.h"
 #include "svg.h"

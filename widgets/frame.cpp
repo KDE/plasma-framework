@@ -27,7 +27,7 @@
 #include <QApplication>
 
 //KDE
-#include <KMimeType>
+#include <kmimetype.h>
 
 //Plasma
 #include "plasma/theme.h"

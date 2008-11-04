@@ -29,9 +29,10 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}
                     ${CMAKE_SOURCE_DIR}/kdeui/windowmanagement
                     ${CMAKE_SOURCE_DIR}/kio
                     ${CMAKE_SOURCE_DIR}/kio/kio
+                    ${CMAKE_SOURCE_DIR}/knewstuff/
                     ${CMAKE_BINARY_DIR}/solid/
                     ${CMAKE_SOURCE_DIR}/solid/
-                    ${CMAKE_SOURCE_DIR}/knewstuff/
+                    ${CMAKE_SOURCE_DIR}/threadweaver/
                     ${KDE4_INCLUDES})
 if(QT_QTOPENGL_FOUND AND OPENGL_FOUND)
     include_directories(${OPENGL_INCLUDE_DIR})

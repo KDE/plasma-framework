@@ -23,7 +23,7 @@
 #include <QPainter>
 #include <QStyleOptionSlider>
 
-#include <KMimeType>
+#include <kmimetype.h>
 
 #include "theme.h"
 #include "framesvg.h"

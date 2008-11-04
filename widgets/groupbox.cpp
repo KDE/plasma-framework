@@ -22,7 +22,7 @@
 #include <QGroupBox>
 #include <QPainter>
 
-#include <KMimeType>
+#include <kmimetype.h>
 
 #include "theme.h"
 #include "svg.h"

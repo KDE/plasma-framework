@@ -19,7 +19,7 @@
 
 #include "view.h"
 
-#include <kglobal>
+#include <kglobal.h>
 #include <kwindowsystem.h>
 #include <kactioncollection.h>
 

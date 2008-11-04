@@ -23,7 +23,7 @@
 #include <QPainter>
 #include <QDir>
 
-#include <KMimeType>
+#include <kmimetype.h>
 
 #include "theme.h"
 #include "svg.h"

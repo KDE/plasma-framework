@@ -27,7 +27,7 @@
 #include <QtWebKit/QWebFrame>
 #include <QtWebKit/QWebPage>
 
-#include <KDE/KDebug>
+#include <kdebug.h>
 
 #include "plasma/widgets/webview.h"
 

@@ -23,7 +23,7 @@
 #include <QFile>
 #include <QTimer>
 
-#include <kdebug.h.h>
+#include <kdebug.h>
 #include <kservice.h>
 #include <kservicetypetrader.h>
 #include <ksharedconfig.h>

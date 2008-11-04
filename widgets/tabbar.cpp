@@ -28,7 +28,8 @@
 #include <QIcon>
 #include <QStyleOption>
 #include <QPainter>
-#include <KDebug>
+
+#include <kdebug.h>
 
 #include <plasma/animator.h>
 

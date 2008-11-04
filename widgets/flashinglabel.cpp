@@ -28,7 +28,7 @@
 #include <QtGui/QPixmap>
 #include <QtGui/QColor>
 
-#include <KDebug>
+#include <kdebug.h>
 
 #include <plasma/animator.h>
 

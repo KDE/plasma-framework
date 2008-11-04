@@ -19,11 +19,11 @@
 
 #include "textedit.h"
 
-#include <KTextEdit>
 #include <QPainter>
 #include <QScrollBar>
 
-#include <KMimeType>
+#include <kmimetype.h>
+#include <ktextedit.h>
 
 #include "theme.h"
 #include "svg.h"

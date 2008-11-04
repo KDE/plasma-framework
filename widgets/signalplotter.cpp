@@ -32,11 +32,11 @@
 #include <QtGui/QPainterPath>
 #include <QtGui/QPolygon>
 
-#include <KDebug>
-#include <KGlobal>
-#include <KLocale>
-#include <KApplication>
-#include <KStandardDirs>
+#include <kdebug.h>
+#include <kglobal.h>
+#include <klocale.h>
+#include <kapplication.h>
+#include <kstandarddirs.h>
 
 #include <plasma/svg.h>
 

@@ -40,15 +40,15 @@
 #include "effects/blur.cpp"
 #endif
 
-#include <KGlobalSettings>
-#include <KIconEffect>
-#include <KIconLoader>
-#include <KIcon>
-#include <KUrl>
-#include <KRun>
-#include <KMimeType>
-#include <KDebug>
-#include <KColorScheme>
+#include <kglobalsettings.h>
+#include <kiconeffect.h>
+#include <kiconloader.h>
+#include <kicon.h>
+#include <kurl.h>
+#include <krun.h>
+#include <kmimetype.h>
+#include <kdebug.h>
+#include <kcolorscheme.h>
 
 #include <plasma/paintutils.h>
 #include <plasma/theme.h>

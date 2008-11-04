@@ -19,13 +19,13 @@
 
 #include "combobox.h"
 
-#include <KComboBox>
 #include <QPainter>
 #include <QApplication>
 
-#include <KMimeType>
-#include <KIconEffect>
-#include <KIconLoader>
+#include <kcombobox.h>
+#include <kmimetype.h>
+#include <kiconeffect.h>
+#include <kiconloader.h>
 
 #include "theme.h"
 #include "framesvg.h"

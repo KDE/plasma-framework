@@ -23,7 +23,7 @@
 #include <QHeaderView>
 #include <QScrollBar>
 
-#include <KIconLoader>
+#include <kiconloader.h>
 
 #include "private/style.h"
 

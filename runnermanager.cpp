@@ -33,11 +33,11 @@
 #include <solid/device.h>
 #include <solid/deviceinterface.h>
 
-#include <threadweaver/debuggingaids.h.h>
-#include <threadweaver/thread.h>
-#include <threadweaver/job.h>
-#include <threadweaver/queuepolicy.h>
-#include <threadweaver/weaver.h>
+#include <Weaver/DebuggingAids.h>
+#include <Weaver/Thread.h>
+#include <Weaver/Job.h>
+#include <Weaver/QueuePolicy.h>
+#include <Weaver/ThreadWeaver.h>
 
 #include "querymatch.h"
 
