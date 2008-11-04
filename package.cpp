@@ -24,13 +24,12 @@
 #include <QFile>
 #include <QRegExp>
 
-#include <karchivedirectory.h>
-#include <karchiveentry.h>
+#include <karchive.h>
 #include <kcomponentdata.h>
 #include <kdesktopfile.h>
 #include <kio/copyjob.h>
 #include <kio/deletejob.h>
-#include <kio/filecopyjob.h>
+#include <kio/jobclasses.h>
 #include <kio/job.h>
 #include <kplugininfo.h>
 #include <kstandarddirs.h>

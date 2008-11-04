@@ -2,7 +2,27 @@ find_package(Nepomuk REQUIRED)
 include (KDE4Defaults)
 include(NepomukMacros)
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${KDEBASE_WORKSPACE_SOURCE_DIR}/libs ${CMAKE_CURRENT_SOURCE_DIR}/.. ${KDE4_INCLUDES})
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}
+                    ${CMAKE_BINARY_DIR}/kdecore/
+                    ${CMAKE_SOURCE_DIR}/kdecore/
+                    ${CMAKE_SOURCE_DIR}/kdecore/config
+                    ${CMAKE_SOURCE_DIR}/kdecore/jobs
+                    ${CMAKE_SOURCE_DIR}/kdecore/kernel
+                    ${CMAKE_SOURCE_DIR}/kdecore/localization
+                    ${CMAKE_SOURCE_DIR}/kdecore/io
+                    ${CMAKE_SOURCE_DIR}/kdecore/services
+                    ${CMAKE_SOURCE_DIR}/kdecore/sycoca
+                    ${CMAKE_SOURCE_DIR}/kdecore/util
+                    ${CMAKE_BINARY_DIR}/kdeui/
+                    ${CMAKE_SOURCE_DIR}/kdeui/about
+                    ${CMAKE_SOURCE_DIR}/kdeui/config
+                    ${CMAKE_SOURCE_DIR}/kdeui/icons
+                    ${CMAKE_SOURCE_DIR}/kdeui/shortcuts
+                    ${CMAKE_SOURCE_DIR}/kio/kio
+                    ${CMAKE_SOURCE_DIR}/kio
+                    ${CMAKE_SOURCE_DIR}/kdeui/
+                    ${CMAKE_SOURCE_DIR}/kdeui/
+                    ${KDE4_INCLUDES})
 if(QT_QTOPENGL_FOUND AND OPENGL_FOUND)
     include_directories(${OPENGL_INCLUDE_DIR})
 endif(QT_QTOPENGL_FOUND AND OPENGL_FOUND)
