@@ -62,6 +62,7 @@ namespace Plasma
 IconWidgetPrivate::IconWidgetPrivate(IconWidget *i)
     : q(i),
       iconSvg(0),
+      iconSvgElementChanged(0),
       m_fadeIn(false),
       m_hoverAnimId(-1),
       m_hoverAlpha(20 / 255),
@@ -505,6 +506,8 @@ void IconWidget::setSvg(const QString &svgFilePath, const QString &elementId)
     d->iconSvg->setImagePath(svgFilePath);
     d->iconSvg->setContainsMultipleImages(!elementId.isNull());
     d->iconSvgElement = elementId;
+    d->iconSvgElementChanged = true;
+    update();
 }
 
 void IconWidget::hoverEffect(bool show)
@@ -599,7 +602,7 @@ QPixmap IconWidgetPrivate::decoration(const QStyleOptionGraphicsItem *option, bo
     QIcon::State state = option->state & QStyle::State_Open ? QIcon::On : QIcon::Off;
 
     if (iconSvg) {
-        if (iconSvgPixmap.size() != iconSize.toSize()) {
+        if (iconSvgElementChanged || iconSvgPixmap.size() != iconSize.toSize()) {
             QImage img(iconSize.toSize(), QImage::Format_ARGB32_Premultiplied);
             {
                 img.fill(0);
@@ -608,6 +611,7 @@ QPixmap IconWidgetPrivate::decoration(const QStyleOptionGraphicsItem *option, bo
                 iconSvg->paint(&p, img.rect(), iconSvgElement);
             }
             iconSvgPixmap = QPixmap::fromImage(img);
+            iconSvgElementChanged = false;
         }
         result = iconSvgPixmap;
     } else {
@@ -1041,6 +1045,7 @@ void IconWidget::setIcon(const QString &icon)
 void IconWidget::setIcon(const QIcon &icon)
 {
     d->icon = icon;
+    update();
 }
 
 QSizeF IconWidget::iconSize() const

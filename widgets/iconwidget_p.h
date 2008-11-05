@@ -181,6 +181,7 @@ public:
     QString infoText;
     Svg *iconSvg;
     QString iconSvgElement;
+    bool iconSvgElementChanged;
     QPixmap iconSvgPixmap;
     QColor textColor;
     QColor shadowColor;
