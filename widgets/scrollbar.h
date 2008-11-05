@@ -29,6 +29,8 @@
 namespace Plasma
 {
 
+class ScrollBarPrivate;
+
 /**
  * @class ScrollBar plasma/widgets/scrollbar.h <Plasma/Widgets/ScrollBar>
  *
@@ -117,6 +119,9 @@ public:
      * @return the native widget wrapped by this ScrollBar
      */
     QScrollBar *nativeWidget() const;
+
+private:
+    ScrollBarPrivate * const d;
 };
 
 }

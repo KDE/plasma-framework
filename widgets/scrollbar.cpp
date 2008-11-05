@@ -26,7 +26,8 @@ namespace Plasma
 {
 
 ScrollBar::ScrollBar(Qt::Orientation orientation, QGraphicsWidget *parent)
-   : QGraphicsProxyWidget(parent)
+   : QGraphicsProxyWidget(parent),
+     d(0)
 {
    QScrollBar *scrollbar = new QScrollBar(orientation);
    scrollbar->setAttribute(Qt::WA_NoSystemBackground);
