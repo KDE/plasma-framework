@@ -40,9 +40,9 @@ class PLASMA_EXPORT SvgWidget : public QGraphicsWidget
     Q_PROPERTY(QString elementID READ elementID WRITE setElementID)
 
     public:
-        SvgWidget(QGraphicsItem *parent = 0, Qt::WindowFlags wFlags = 0);
-        SvgWidget(Svg *svg, const QString & elementID = QString(),
-                  QGraphicsItem *parent = 0, Qt::WindowFlags wFlags = 0);
+        explicit SvgWidget(QGraphicsItem *parent = 0, Qt::WindowFlags wFlags = 0);
+        explicit SvgWidget(Svg *svg, const QString & elementID = QString(),
+                           QGraphicsItem *parent = 0, Qt::WindowFlags wFlags = 0);
         virtual ~SvgWidget();
 
         virtual void mouseReleaseEvent ( QGraphicsSceneMouseEvent * event );
