@@ -459,7 +459,7 @@ DataEnginePrivate::DataEnginePrivate(DataEngine *e, KService::Ptr service)
         if (!api.isEmpty()) {
             const QString path =
                 KStandardDirs::locate("data",
-                                      "plasma/engines/" + dataEngineDescription.pluginName() + '/');
+                                      "plasma/dataengines/" + dataEngineDescription.pluginName() + '/');
             PackageStructure::Ptr structure =
                 Plasma::packageStructure(api, Plasma::DataEngineComponent);
             structure->setPath(path);

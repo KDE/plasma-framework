@@ -20,6 +20,7 @@
 #include "dataenginescript.h"
 
 #include "dataengine.h"
+#include "package.h"
 
 namespace Plasma
 {
@@ -71,6 +72,18 @@ bool DataEngineScript::updateSourceEvent(const QString &source)
 Service *DataEngineScript::serviceForSource(const QString &source)
 {
     return d->dataEngine->serviceForSource(source);
+}
+
+QString DataEngineScript::mainScript() const
+{
+    Q_ASSERT(d->dataEngine);
+    return d->dataEngine->package()->filePath("mainscript");
+}
+
+const Package *DataEngineScript::package() const
+{
+    Q_ASSERT(d->dataEngine);
+    return d->dataEngine->package();
 }
 
 void DataEngineScript::setData(const QString &source, const QString &key,

@@ -98,6 +98,18 @@ public:
     virtual Service *serviceForSource(const QString &source);
 
 protected:
+    /**
+     * @return absolute path to the main script file for this plasmoid
+     */
+    QString mainScript() const;
+
+    /**
+     * @return the Package associated with this plasmoid which can
+     *         be used to request resources, such as images and
+     *         interface files.
+     */
+    const Package *package() const;
+
     void setData(const QString &source, const QString &key,
                  const QVariant &value);
     void setData(const QString &source, const QVariant &value);
