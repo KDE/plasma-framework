@@ -4,7 +4,7 @@ MACRO(PLASMA_UNIT_TESTS)
        FOREACH(_testname ${ARGN})
                kde4_add_unit_test(${_testname} ${_testname}.cpp)
                target_link_libraries(${_testname} plasma ${QT_QTTEST_LIBRARY}
-                                     ${KDE4_KIO_LIBRARY})
+                                     ${KDE4_KIO_LIBS})
        ENDFOREACH(_testname)
 ENDMACRO(PLASMA_UNIT_TESTS)
 
