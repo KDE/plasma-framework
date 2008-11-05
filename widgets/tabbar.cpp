@@ -85,7 +85,7 @@ public:
 
     void updateTabWidgetMode();
     void slidingCompleted(QGraphicsItem *item);
-    void shapeChanged(const QTabBar::Shape shape);
+    void shapeChanged(const KTabBar::Shape shape);
 
     TabBar *q;
     TabBarProxy *tabProxy;
@@ -399,7 +399,7 @@ QString TabBar::styleSheet() const
     return d->tabProxy->native->styleSheet();
 }
 
-QTabBar *TabBar::nativeWidget() const
+KTabBar *TabBar::nativeWidget() const
 {
     return d->tabProxy->native;
 }

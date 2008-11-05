@@ -21,14 +21,14 @@
 #ifndef NATIVETABBAR_H
 #define NATIVETABBAR_H
 
-#include <QTabBar>
+#include <ktabbar.h>
 
 namespace Plasma
 {
 
 class NativeTabBarPrivate;
 
-class NativeTabBar : public QTabBar
+class NativeTabBar : public KTabBar
 {
     Q_OBJECT
 

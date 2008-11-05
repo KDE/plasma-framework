@@ -21,7 +21,8 @@
 #define PLASMA_TABBAR_H
 
 #include <QtGui/QGraphicsWidget>
-#include <QtGui/QTabBar>
+
+#include <ktabbar.h>
 
 #include <plasma/plasma_export.h>
 
@@ -46,7 +47,7 @@ class PLASMA_EXPORT TabBar : public QGraphicsWidget
 {
     Q_OBJECT
 
-    Q_PROPERTY(QTabBar *nativeWidget READ nativeWidget)
+    Q_PROPERTY(KTabBar *nativeWidget READ nativeWidget)
     Q_PROPERTY(int currentIndex READ currentIndex WRITE setCurrentIndex)
     Q_PROPERTY(int count READ count)
     Q_PROPERTY(QString styleSheet READ styleSheet WRITE setStyleSheet)
@@ -171,7 +172,7 @@ public:
     /**
      * @return the native widget wrapped by this TabBar
      */
-    QTabBar *nativeWidget() const;
+    KTabBar *nativeWidget() const;
 
 public Q_SLOTS:
     /**

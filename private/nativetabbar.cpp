@@ -98,7 +98,7 @@ void NativeTabBarPrivate::storeLastIndex()
 }
 
 NativeTabBar::NativeTabBar(QWidget *parent)
-        : QTabBar(parent),
+        : KTabBar(parent),
           d(new NativeTabBarPrivate(this))
 {
     d->backgroundSvg = new Plasma::FrameSvg();
