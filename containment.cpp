@@ -335,7 +335,9 @@ void Containment::restoreContents(KConfigGroup &group)
     }
     qSort(appletConfigs.begin(), appletConfigs.end(), appletConfigLessThan);
 
-    foreach (KConfigGroup appletConfig, appletConfigs) {
+    QMutableListIterator<KConfigGroup> it(appletConfigs);
+    while (it.hasNext()) {
+        KConfigGroup &appletConfig = it.next();
         int appId = appletConfig.name().toUInt();
         QString plugin = appletConfig.readEntry("plugin", QString());
 
@@ -343,9 +345,9 @@ void Containment::restoreContents(KConfigGroup &group)
             continue;
         }
 
-        Applet *applet =
-            d->addApplet(plugin, QVariantList(),
-                         appletConfig.readEntry("geometry", QRectF()), appId, true);
+        Applet *applet = d->addApplet(plugin, QVariantList(),
+                                      appletConfig.readEntry("geometry", QRectF()),
+                                      appId, true);
         applet->restore(appletConfig);
     }
 }
