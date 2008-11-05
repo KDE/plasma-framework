@@ -2,6 +2,13 @@
 Type=ServiceType
 X-KDE-ServiceType=Plasma/PackageStructure
 Comment=Plasma package structure definition
+Comment[el]=Ορισμός δομής πακέτου του Plasma
+Comment[nds]=Paketstruktuur-Fastleggen vun Plasma
+Comment[pt]=Definição da estrutura de pacotes do Plasma
+Comment[pt_BR]=Definição da estrutura de pacotes do Plasma
+Comment[sv]=Strukturdefinition av Plasma-paket
+Comment[uk]=Опис структури пакунка плазми
+Comment[zh_TW]=Plasma 套件結構定義
 
 [PropertyDef::X-Plasma-PackageFileFilter]
 Type=QString

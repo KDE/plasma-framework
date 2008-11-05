@@ -3,4 +3,11 @@ Type=ServiceType
 X-KDE-ServiceType=Plasma/DataEngine
 
 Comment=Plasma Data Engine
+Comment[el]=Μηχανή δεδομένων Plasma
+Comment[nds]=Plasma-Datenkarn
+Comment[pt]=Motor de Dados do Plasma
+Comment[pt_BR]=Motor de Dados do Plasma
+Comment[sv]=Plasma datagränssnitt
+Comment[uk]=Рушій даних Плазми
+Comment[zh_TW]=Plasma 資料引擎
 

@@ -3,6 +3,13 @@ Type=ServiceType
 X-KDE-ServiceType=Plasma/Applet
 
 Comment=Plasma applet
+Comment[el]=Μικροεφαρμογή plasma
+Comment[nds]=Plasma-Lüttprogramm
+Comment[pt]='Applet' do Plasma
+Comment[pt_BR]='Applet' do Plasma
+Comment[sv]=Plasma-miniprogram
+Comment[uk]=Аплет Плазми
+Comment[zh_TW]=Plasma 小程式
 
 [PropertyDef::X-Plasma-API]
 Type=QString

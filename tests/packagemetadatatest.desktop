@@ -1,6 +1,20 @@
 [Desktop Entry]
 Name=Package metadata test file
+Name[el]=Δοκιμαστικό αρχείο μεταδεδομένων του πακέτου
+Name[nds]=Paketmetadaten-Testdatei
+Name[pt]=Ficheiro de testes de meta-dados dos pacotes
+Name[pt_BR]=Ficheiro de testes de meta-dados dos pacotes
+Name[sv]=Testfil för paketmetadata
+Name[uk]=Файл перевірки метаданих пакунка
+Name[zh_TW]=套件中繼資料測試檔
 Comment=A test desktop file to test the PackageMetaData class.
+Comment[el]=Ένα δοκιμαστικό αρχείο desktop για τον έλεγχο τς κλάσης PackageMetaData.
+Comment[nds]=En Test-Schriefdischdatei för't Utproberen vun de Klass "PackageMetaData".
+Comment[pt]=Um ficheiro 'desktop' de testes da classe PackageMetaData.
+Comment[pt_BR]=Um ficheiro 'desktop' de testes da classe PackageMetaData.
+Comment[sv]=En skrivbordsfil för att testa klassen PackageMetaData.
+Comment[uk]=Тестовий стільничний файл для перевірки класу PackageMetaData.
+Comment[zh_TW]=測試 PackageMetaData 類別的桌面檔
 
 Icon=test
 Type=Service

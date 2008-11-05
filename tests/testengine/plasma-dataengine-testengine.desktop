@@ -1,5 +1,12 @@
 [Desktop Entry]
 Name=Test Data Engine
+Name[el]=Μηχανή δεδομένων ελέγχου
+Name[nds]=Test-Datenkarn
+Name[pt]=Motor de Dados de Teste
+Name[pt_BR]=Motor de Dados de Teste
+Name[sv]=Testdatagränssnitt
+Name[uk]=Перевірка рушія даних
+Name[zh_TW]=測試資料引擎
 X-KDE-ServiceTypes=Plasma/DataEngine
 Type=Service
 Icon=unknown
