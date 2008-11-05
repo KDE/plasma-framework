@@ -742,7 +742,7 @@ void Containment::setScreen(int screen)
     // a screen of -1 means no associated screen.
     Containment *swapScreensWith(0);
     if (d->type == DesktopContainment || d->type == CustomContainment) {
-#ifndef Q_OS_WIN
+
         // we want to listen to changes in work area if our screen changes
         if (d->screen < 0 && screen > -1) {
             connect(KWindowSystem::self(), SIGNAL(workAreaChanged()),
@@ -751,7 +751,7 @@ void Containment::setScreen(int screen)
             disconnect(KWindowSystem::self(), SIGNAL(workAreaChanged()),
                        this, SLOT(positionToolBox()));
         }
-#endif
+
         if (screen > -1 && corona()) {
             // sanity check to make sure someone else doesn't have this screen already!
             Containment *currently = corona()->containmentForScreen(screen);
