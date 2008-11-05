@@ -17,7 +17,6 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include <QtCore/QUrl>
 #include <QtGui/QGraphicsSceneContextMenuEvent>
 #include <QtGui/QGraphicsSceneDragDropEvent>
 #include <QtGui/QGraphicsSceneMouseEvent>
@@ -65,7 +64,7 @@ WebView::~WebView()
    delete d;
 }
 
-void WebView::setUrl(const QUrl &url)
+void WebView::setUrl(const KUrl &url)
 {
     d->loaded = false;
     if (d->page) {
@@ -73,7 +72,7 @@ void WebView::setUrl(const QUrl &url)
     }
 }
 
-void WebView::setHtml(const QByteArray &html, const QUrl &baseUrl)
+void WebView::setHtml(const QByteArray &html, const KUrl &baseUrl)
 {
     d->loaded = false;
     if (d->page) {
@@ -81,7 +80,7 @@ void WebView::setHtml(const QByteArray &html, const QUrl &baseUrl)
     }
 }
 
-void WebView::setHtml(const QString &html, const QUrl &baseUrl)
+void WebView::setHtml(const QString &html, const KUrl &baseUrl)
 {
     d->loaded = false;
     if (d->page) {

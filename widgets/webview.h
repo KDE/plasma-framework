@@ -21,8 +21,9 @@
 #define PLASMA_WEBVIEW_H
 
 #include <plasma/plasma_export.h>
-#include <QtCore/QUrl>
 #include <QtGui/QGraphicsWidget>
+
+#include <kurl.h>
 
 class QWebPage;
 class QWebFrame;
@@ -55,7 +56,7 @@ class PLASMA_EXPORT WebView : public QGraphicsWidget
          *
          * @param url the location of the content to load.
          */
-        void setUrl(const QUrl &url);
+        void setUrl(const KUrl &url);
 
         /**
          * Sets the html to be shown along with a base URL to be used
@@ -64,7 +65,7 @@ class PLASMA_EXPORT WebView : public QGraphicsWidget
          * @param html the html (in utf8) to display in the content area
          * @param baseUrl the base url for relative references
          */
-        void setHtml(const QByteArray &html, const QUrl &baseUrl = QUrl());
+        void setHtml(const QByteArray &html, const KUrl &baseUrl = KUrl());
 
         /**
          * Sets the html to be shown along with a base URL to be used
@@ -73,7 +74,7 @@ class PLASMA_EXPORT WebView : public QGraphicsWidget
          * @param html the html (in utf8) to display in the content area
          * @param baseUrl the base url for relative references
          */
-        void setHtml(const QString &html, const QUrl &baseUrl = QUrl());
+        void setHtml(const QString &html, const KUrl &baseUrl = KUrl());
 
         /**
          * Reimplementation
