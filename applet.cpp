@@ -40,6 +40,7 @@
 #include <QStyleOptionGraphicsItem>
 #include <QTextDocument>
 #include <QUiLoader>
+#include <QWidget>
 
 #include <kaction.h>
 #include <kicon.h>
@@ -433,6 +434,38 @@ void AppletPrivate::cleanUpAndDelete()
     q->deleteLater();
 }
 
+void AppletPrivate::createMessageOverlay()
+{
+    if (!messageOverlay) {
+        messageOverlay = new AppletOverlayWidget(q);
+    } else {
+        qDeleteAll(messageOverlay->children());
+        messageOverlay->setLayout(0);
+    }
+
+    messageOverlay->resize(q->contentsRect().size());
+    messageOverlay->setPos(q->contentsRect().topLeft());
+
+    // raise the overlay above all the other children!
+    int zValue = 100;
+    foreach (QGraphicsItem *child, q->QGraphicsItem::children()) {
+        if (child->zValue() > zValue) {
+            zValue = child->zValue() + 1;
+        }
+    }
+    messageOverlay->setZValue(zValue);
+
+}
+
+void AppletPrivate::destroyMessageOverlay()
+{
+    //TODO: fade out? =)
+    QGraphicsWidget *w = messageOverlay;
+    messageOverlay = 0;
+    w->hide();
+    w->deleteLater();
+}
+
 ConfigLoader *Applet::configScheme() const
 {
     return d->configLoader;
@@ -731,37 +764,25 @@ void Applet::paintWindowFrame(QPainter *painter,
 
 bool Applet::configurationRequired() const
 {
-    return d->needsConfigOverlay != 0;
+    return d->needsConfig;
 }
 
 void Applet::setConfigurationRequired(bool needsConfig, const QString &reason)
 {
-    if ((d->needsConfigOverlay != 0) == needsConfig) {
+    if (d->needsConfig == needsConfig) {
         return;
     }
 
-    if (d->needsConfigOverlay) {
-        QGraphicsWidget *w = d->needsConfigOverlay;
-        d->needsConfigOverlay = 0;
-        w->hide();
-        w->deleteLater();
+    d->needsConfig = needsConfig;
+
+    if (!needsConfig) {
+        d->destroyMessageOverlay();
         return;
     }
 
-    d->needsConfigOverlay = new AppletOverlayWidget(this);
-    d->needsConfigOverlay->resize(contentsRect().size());
-    d->needsConfigOverlay->setPos(contentsRect().topLeft());
+    d->createMessageOverlay();
 
-    int zValue = 100;
-    foreach (QGraphicsItem *child, QGraphicsItem::children()) {
-        if (child->zValue() > zValue) {
-            zValue = child->zValue() + 1;
-        }
-    }
-    d->needsConfigOverlay->setZValue(zValue);
-
-    qDeleteAll(d->needsConfigOverlay->QGraphicsItem::children());
-    QGraphicsGridLayout *configLayout = new QGraphicsGridLayout(d->needsConfigOverlay);
+    QGraphicsGridLayout *configLayout = new QGraphicsGridLayout(d->messageOverlay);
     configLayout->setContentsMargins(0, 0, 0, 0);
 
   //  configLayout->addStretch();
@@ -772,7 +793,7 @@ void Applet::setConfigurationRequired(bool needsConfig, const QString &reason)
 
     int row = 1;
     if (!reason.isEmpty()) {
-        Label *explanation = new Label(d->needsConfigOverlay);
+        Label *explanation = new Label(d->messageOverlay);
         explanation->setText(reason);
         configLayout->addItem(explanation, row, 1);
         configLayout->setColumnStretchFactor(1, 10);
@@ -780,14 +801,14 @@ void Applet::setConfigurationRequired(bool needsConfig, const QString &reason)
         //configLayout->setAlignment(explanation, Qt::AlignBottom | Qt::AlignCenter);
     }
 
-    PushButton *configWidget = new PushButton(d->needsConfigOverlay);
+    PushButton *configWidget = new PushButton(d->messageOverlay);
     configWidget->setText(i18n("Configure..."));
     connect(configWidget, SIGNAL(clicked()), this, SLOT(showConfigurationInterface()));
     configLayout->addItem(configWidget, row, 1);
     //configLayout->setAlignment(configWidget, Qt::AlignTop | Qt::AlignCenter);
     //configLayout->addStretch();
 
-    d->needsConfigOverlay->show();
+    d->messageOverlay->show();
 }
 
 void Applet::flushPendingConstraintsEvents()
@@ -842,11 +863,11 @@ void Applet::flushPendingConstraintsEvents()
         }
     }
 
-    if (c & Plasma::SizeConstraint && d->needsConfigOverlay) {
-        d->needsConfigOverlay->setGeometry(QRectF(QPointF(0, 0), geometry().size()));
+    if (c & Plasma::SizeConstraint && d->messageOverlay) {
+        d->messageOverlay->setGeometry(QRectF(QPointF(0, 0), geometry().size()));
 
         QGraphicsItem *button = 0;
-        QList<QGraphicsItem*> children = d->needsConfigOverlay->QGraphicsItem::children();
+        QList<QGraphicsItem*> children = d->messageOverlay->QGraphicsItem::children();
 
         if (!children.isEmpty()) {
             button = children.first();
@@ -854,8 +875,8 @@ void Applet::flushPendingConstraintsEvents()
 
         if (button) {
             QSizeF s = button->boundingRect().size();
-            button->setPos(d->needsConfigOverlay->boundingRect().width() / 2 - s.width() / 2,
-                           d->needsConfigOverlay->boundingRect().height() / 2 - s.height() / 2);
+            button->setPos(d->messageOverlay->boundingRect().width() / 2 - s.width() / 2,
+                           d->messageOverlay->boundingRect().height() / 2 - s.height() / 2);
         }
     }
 
@@ -1697,7 +1718,7 @@ AppletPrivate::AppletPrivate(KService::Ptr service, int uniqueID, Applet *applet
           extender(0),
           backgroundHints(Applet::StandardBackground),
           appletDescription(service),
-          needsConfigOverlay(0),
+          messageOverlay(0),
           busyWidget(0),
           background(0),
           script(0),
@@ -1715,7 +1736,8 @@ AppletPrivate::AppletPrivate(KService::Ptr service, int uniqueID, Applet *applet
           failed(false),
           isContainment(false),
           transient(false),
-          ghost(false)
+          ghost(false),
+          needsConfig(false)
 {
     if (appletId == 0) {
         appletId = ++s_maxAppletId;

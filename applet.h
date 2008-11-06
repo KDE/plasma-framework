@@ -23,8 +23,8 @@
 #define PLASMA_APPLET_H
 
 #include <QtGui/QGraphicsItem>
-#include <QtGui/QWidget>
 #include <QtGui/QGraphicsWidget>
+#include <QtGui/QIcon>
 
 #include <kconfiggroup.h>
 #include <kgenericfactory.h>
@@ -36,6 +36,8 @@
 #include <plasma/plasma.h>
 #include <plasma/animator.h>
 #include <plasma/version.h>
+
+class QWidget;
 
 class KConfigDialog;
 class QGraphicsView;
@@ -78,6 +80,7 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
     Q_PROPERTY(QString category READ category)
     Q_PROPERTY(ImmutabilityType immutability READ immutability WRITE setImmutability)
     Q_PROPERTY(bool hasFailedToLaunch READ hasFailedToLaunch WRITE setFailedToLaunch)
+    Q_PROPERTY(bool isBusy READ isBusy WRITE setBusy)
     Q_PROPERTY(bool configurationRequired READ configurationRequired WRITE setConfigurationRequired)
     Q_PROPERTY(QRectF geometry READ geometry WRITE setGeometry)
     Q_PROPERTY(bool shouldConserveResources READ shouldConserveResources)
@@ -416,6 +419,11 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         bool hasFailedToLaunch() const;
 
         /**
+         * @return true if the applet is busy and is showing an indicator widget for that
+         */
+        bool isBusy() const;
+
+        /**
          * @return true if the applet currently needs to be configured,
          *         otherwise, false
          */
@@ -542,17 +550,6 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
                         const QString &serviceId = QString(),
                         uint appletId = 0);
 
-        /**
-         * Shows a busy indicator that overlays the applet
-         * @param busy show or hide the busy indicator
-         */
-        void setBusy(bool busy);
-
-        /**
-         * @return true if the applet is busy and is showing an indicator widget for that
-         */
-        bool isBusy() const;
-
     Q_SIGNALS:
         /**
          * This signal indicates that an application launch, window
@@ -671,6 +668,12 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          *               failed to launch
          **/
         void setFailedToLaunch(bool failed, const QString &reason = QString());
+
+        /**
+         * Shows a busy indicator that overlays the applet
+         * @param busy show or hide the busy indicator
+         */
+        void setBusy(bool busy);
 
         /**
          * When called, the Applet should write any information needed as part
@@ -830,6 +833,7 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
                                                        Plasma::Animator::Animation anim))
         Q_PRIVATE_SLOT(d, void selectItemToDestroy())
         Q_PRIVATE_SLOT(d, void updateRect(const QRectF& rect))
+        Q_PRIVATE_SLOT(d, void destroyMessageOverlay())
 
         /**
          * Reimplemented from QGraphicsItem

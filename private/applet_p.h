@@ -71,6 +71,8 @@ public:
     void updateRect(const QRectF &rect);
     void setFocus();
     void cleanUpAndDelete();
+    void createMessageOverlay();
+    void destroyMessageOverlay();
 
     static uint s_maxAppletId;
     static uint s_maxZValue;
@@ -85,7 +87,7 @@ public:
     Extender *extender;
     Applet::BackgroundHints backgroundHints;
     KPluginInfo appletDescription;
-    AppletOverlayWidget *needsConfigOverlay;
+    AppletOverlayWidget *messageOverlay;
     Plasma::BusyWidget *busyWidget;
     QList<QGraphicsItem*> registeredAsDragHandle;
     QStringList loadedEngines;
@@ -107,6 +109,7 @@ public:
     bool square : 1;
     bool transient : 1;
     bool ghost : 1;
+    bool needsConfig : 1;
 };
 
 } // Plasma namespace
