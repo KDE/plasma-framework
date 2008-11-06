@@ -315,9 +315,11 @@ class PLASMA_EXPORT Containment : public Applet
 
         /**
          * Shows a visual clue for drag and drop
-         * This implementation does nothing, reimplement in containments that needs it
+         * The default implementation does nothing,
+         * reimplement in containments that need it
          *
-         * @param pos point where to show the drop target
+         * @param pos point where to show the drop target; if an invalid point is passed in
+         *        the drop zone should not be shown
          */
         virtual void showDropZone(const QPoint pos);
 
