@@ -401,6 +401,15 @@ void Meter::paint(QPainter *p,
         }
         angle = percentage * (d->maxrotate - d->minrotate) + d->minrotate;
 
+        if (d->image->hasElement("pointer-shadow")) {
+            p->save();
+            p->translate(rotateCenter+QPoint(2,3));
+            p->rotate(angle);
+            p->translate(-1 * rotateCenter);
+            d->paint(p, "pointer-shadow");
+            p->restore();
+        }
+
         p->translate(rotateCenter);
         p->rotate(angle);
         p->translate(-1 * rotateCenter);
