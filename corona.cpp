@@ -179,6 +179,8 @@ public:
         return containment;
     }
 
+    void offscreenWidgetDestroyed(QObject *);
+
     Corona *q;
     ImmutabilityType immutability;
     QString mimetype;
@@ -386,7 +388,33 @@ void Corona::addOffscreenWidget(QGraphicsWidget *widget)
 
     d->offscreenLayout->addItem(widget, d->offscreenLayout->rowCount() + 1,
                                         d->offscreenLayout->columnCount() + 1);
+    // this is lame: adding a widget to a layout and then deleting it
+    // doesn't automatically remove it from the layout, so we have to watch for that ourselves
+    connect(widget, SIGNAL(destroyed(QObject*)), this, SLOT(offscreenWidgetDestroyed(QObject*)));
     widget->update();
+}
+
+//FIXME: remove the offscreenWidgetDestroyed method when QGraphicsLayout no longer
+//       craps up when an item in the layout is deleted!
+void CoronaPrivate::offscreenWidgetDestroyed(QObject *o)
+{
+    if (!offscreenLayout) {
+        return;
+    }
+
+    // at this point, it's just a QObject, not a QGraphicsWidget, but we still need
+    // a pointer of the appropriate type.
+    // WARNING: DO NOT USE THE WIDGET POINTER FOR ANYTHING OTHER THAN POINTER COMPARISONS
+    QGraphicsWidget *widget = static_cast<QGraphicsWidget *>(o);
+    for (int i = 0; i < offscreenLayout->count(); i++) {
+        // we have to static_cast here as well, even though that's not overly correct
+        // or wonderful; but it's the best we can do as the item is no longer a
+        // QGraphicsWidget at this point, just a QObject
+        QGraphicsWidget *foundWidget = static_cast<QGraphicsWidget *>(offscreenLayout->itemAt(i));
+        if (foundWidget == widget) {
+            offscreenLayout->removeAt(i);
+        }
+    }
 }
 
 void Corona::removeOffscreenWidget(QGraphicsWidget *widget)
@@ -399,6 +427,8 @@ void Corona::removeOffscreenWidget(QGraphicsWidget *widget)
         QGraphicsWidget *foundWidget = dynamic_cast<QGraphicsWidget*>(d->offscreenLayout->itemAt(i));
         if (foundWidget == widget) {
             d->offscreenLayout->removeAt(i);
+            disconnect(widget, SIGNAL(destroyed(QObject*)), this, SLOT(offscreenWidgetDestroyed(QObject*)));
+            break;
         }
     }
 }
