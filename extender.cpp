@@ -431,11 +431,18 @@ void ExtenderPrivate::updateBorders()
 
 void ExtenderPrivate::adjustSize()
 {
+    //FIXME: what happens in this function are some nasty workarounds for a bug in qt4.4's QGL.
+    //Alexis has told me they are working on a fix for qt4.5, so this can be removed once the bug
+    //has been fixed in Qt.
     if (q->layout()) {
         q->layout()->updateGeometry();
-        //FIXME: for some reason the preferred size hint get's set correctly,
-        //but the minimumSizeHint doesn't. Investigate why.
         q->setMinimumSize(q->layout()->preferredSize());
+    }
+
+    if (applet->layout()) {
+        applet->layout()->updateGeometry();
+        applet->setMinimumSize(applet->preferredSize());
+        applet->adjustSize();
     }
 
     emit q->geometryChanged();
