@@ -11,8 +11,8 @@ SOURCE="${LOWERNAME}.cpp"
 BOTH="$HEADER $SOURCE"
 QHEADER="Q${HEADER}"
 
-cp template.h $HEADER
-cp template.cpp $SOURCE
+cp widget.h.template $HEADER
+cp widget.cpp.template $SOURCE
 
 perl -pi -e "s,<Name>,${NAME},g" $BOTH
 perl -pi -e "s,<NAME>,${CAPNAME},g" $BOTH
