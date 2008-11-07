@@ -124,7 +124,7 @@ NativeTabBar::~NativeTabBar()
 
 QRect NativeTabBar::tabRect(int index) const
 {
-    QRect rect = QTabBar::tabRect(index).translated(d->left, d->top);
+    QRect rect = KTabBar::tabRect(index).translated(d->left, d->top);
 
     if (isVertical()) {
         rect.setWidth(rect.width() - d->right - d->left);
@@ -140,7 +140,7 @@ int NativeTabBar::lastIndex() const
 
 QSize NativeTabBar::tabSizeHint(int index) const
 {
-    //return QTabBar::tabSizeHint(index);
+    //return KTabBar::tabSizeHint(index);
     QSize hint = tabSize(index);
     int minwidth = 0;
     int minheight = 0;
@@ -212,7 +212,7 @@ QSize NativeTabBar::sizeHint() const
 void NativeTabBar::paintEvent(QPaintEvent *event)
 {
     if (!styleSheet().isNull()) {
-        QTabBar::paintEvent(event);
+        KTabBar::paintEvent(event);
         return;
     }
 
@@ -309,7 +309,7 @@ void NativeTabBar::paintEvent(QPaintEvent *event)
 
 void NativeTabBar::resizeEvent(QResizeEvent *event)
 {
-    QTabBar::resizeEvent(event);
+    KTabBar::resizeEvent(event);
     d->currentAnimRect = tabRect(currentIndex());
     d->backgroundSvg->resizeFrame(size());
 
@@ -318,19 +318,19 @@ void NativeTabBar::resizeEvent(QResizeEvent *event)
 
 void NativeTabBar::tabInserted(int index)
 {
-    QTabBar::tabInserted(index);
+    KTabBar::tabInserted(index);
     emit sizeHintChanged();
 }
 
 void NativeTabBar::tabRemoved(int index)
 {
-    QTabBar::tabRemoved(index);
+    KTabBar::tabRemoved(index);
     emit sizeHintChanged();
 }
 
 void NativeTabBar::tabLayoutChange()
 {
-    QTabBar::tabLayoutChange();
+    KTabBar::tabLayoutChange();
 
     if (shape() != d->shape) {
         d->shape = shape();
