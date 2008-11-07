@@ -332,6 +332,8 @@ QStringList PackageStructure::mimetypes(const char *key) const
 void PackageStructure::setPath(const QString &path)
 {
     d->path = path;
+    delete d->metadata;
+    d->metadata = 0;
     pathChanged();
 }
 
