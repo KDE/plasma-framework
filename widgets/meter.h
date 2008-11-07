@@ -189,6 +189,12 @@ public:
      */
     Qt::Alignment labelAlignment(int index) const;
 
+    /**
+     * @param index label index
+     * @return the size of this label.
+     */
+    QRectF labelRect(int index) const;
+
 public Q_SLOTS:
     /**
      * Used when connecting to a DataEngine

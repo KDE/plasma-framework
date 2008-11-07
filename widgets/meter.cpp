@@ -281,6 +281,12 @@ Qt::Alignment Meter::labelAlignment(int index) const
     return d->alignments[index];
 }
 
+QRectF Meter::labelRect(int index) const
+{
+    QString elementID = QString("label%1").arg(index);
+    return d->image->elementRect(elementID);
+}
+
 void Meter::dataUpdated(const QString &sourceName, const Plasma::DataEngine::Data &data)
 {
     Q_UNUSED(sourceName)
