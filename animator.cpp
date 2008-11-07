@@ -255,7 +255,7 @@ void AnimatorPrivate::customAnimReceiverDestroyed(QObject *o)
     QMutableMapIterator<int, CustomAnimationState*> it(customAnims);
     while (it.hasNext()) {
         if (it.next().value()->receiver == o) {
-            delete it.value()->slot;
+            delete[] it.value()->slot;
             delete it.value();
             it.remove();
         }
