@@ -135,7 +135,7 @@ public:
      * behavior should override this method.
      */
     virtual QRegion availableScreenRegion(int id) const;
-    
+
     /**
     * Reccomended position for a popup window like a menu or a tooltip
     * given its size
@@ -217,6 +217,11 @@ Q_SIGNALS:
      * This signal indicates that the configuration file was flushed to disc.
      */
     void configSynced();
+
+    /**
+     * This signal inicates that a change in available screen goemetry occured.
+     */
+    void availableScreenRegionChanged();
 
 protected:
     /**
