@@ -5,6 +5,7 @@ Name[nds]=Paketmetadaten-Testdatei
 Name[pt]=Ficheiro de testes de meta-dados dos pacotes
 Name[pt_BR]=Arquivo de teste dos metadados do pacote
 Name[sv]=Testfil för paketmetadata
+Name[tr]=Paket metadata test dosyası
 Name[uk]=Файл перевірки метаданих пакунка
 Name[zh_TW]=套件中繼資料測試檔
 Comment=A test desktop file to test the PackageMetaData class.
@@ -13,6 +14,7 @@ Comment[nds]=En Test-Schriefdischdatei för't Utproberen vun de Klass "PackageMe
 Comment[pt]=Um ficheiro 'desktop' de testes da classe PackageMetaData.
 Comment[pt_BR]=Um arquivo desktop de testes para a classe PackageMetaData.
 Comment[sv]=En skrivbordsfil för att testa klassen PackageMetaData.
+Comment[tr]=PackageMetaData sınıfını test etmek için bir desktop dosyası.
 Comment[uk]=Тестовий стільничний файл для перевірки класу PackageMetaData.
 Comment[zh_TW]=測試 PackageMetaData 類別的桌面檔
 

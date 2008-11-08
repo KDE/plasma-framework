@@ -5,6 +5,7 @@ Name[nds]=Test-Datenkarn
 Name[pt]=Motor de Dados de Teste
 Name[pt_BR]=Mecanismo de dados de teste
 Name[sv]=Testdatagränssnitt
+Name[tr]=Test Veri Motoru
 Name[uk]=Перевірка рушія даних
 Name[zh_TW]=測試資料引擎
 X-KDE-ServiceTypes=Plasma/DataEngine
