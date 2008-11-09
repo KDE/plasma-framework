@@ -355,6 +355,10 @@ void PushButton::paint(QPainter *painter,
 
 void PushButton::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 {
+    if (nativeWidget()->isDown()) {
+        return;
+    }
+
     const int FadeInDuration = 75;
 
     if (d->animId != -1) {
@@ -371,6 +375,10 @@ void PushButton::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 
 void PushButton::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 {
+    if (nativeWidget()->isDown()) {
+        return;
+    }
+
     const int FadeOutDuration = 150;
 
     if (d->animId != -1) {
