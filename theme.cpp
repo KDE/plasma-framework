@@ -21,6 +21,7 @@
 
 #include <QApplication>
 #include <QFile>
+#include <QFileInfo>
 #ifdef Q_WS_X11
 #include <QX11Info>
 #endif
@@ -264,7 +265,8 @@ void Theme::setThemeName(const QString &themeName)
     //kDebug() << "we're going for..." << colorsFile << "*******************";
 
     // load the wallpaper settings, if any
-    KConfig metadata(KStandardDirs::locate("data", "desktoptheme/" + theme + "/metadata.desktop"));
+    QString metadataPath(KStandardDirs::locate("data", "desktoptheme/" + theme + "/metadata.desktop"));
+    KConfig metadata(metadataPath);
     KConfigGroup cg;
     if (metadata.hasGroup("Wallpaper")) {
         // we have a theme color config, so let's also check to see if
@@ -308,6 +310,18 @@ void Theme::setThemeName(const QString &themeName)
 
 
     QString svgElementsFile = KStandardDirs::locateLocal("cache", "plasma-svgelements-"+themeName);
+
+    //check for expired cache
+    QFile f(metadataPath);
+    QFileInfo info(f);
+
+    if (info.lastModified().toTime_t() > d->pixmapCache->timestamp()) {
+        d->pixmapCache->discard();
+
+        QFile f(svgElementsFile);
+        f.remove();
+    }
+
     d->invalidElements.clear();
     d->svgElementsCache = KSharedConfig::openConfig(svgElementsFile);
 
