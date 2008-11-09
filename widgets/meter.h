@@ -210,6 +210,7 @@ protected:
                        QWidget *widget = 0);
 
 private:
+    Q_PRIVATE_SLOT(d, void progressChanged(qreal))
     MeterPrivate *const d;
 };
 

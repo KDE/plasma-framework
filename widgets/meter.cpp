@@ -18,10 +18,17 @@
  */
 
 #include "meter.h"
-#include "plasma/framesvg.h"
+
 #include <cmath>
-#include <kdebug.h>
+
 #include <QPainter>
+#include <QTimeLine>
+
+#include <kdebug.h>
+#include <kglobalsettings.h>
+
+#include "plasma/animator.h"
+#include "plasma/framesvg.h"
 
 namespace Plasma {
 
@@ -32,11 +39,41 @@ public:
         : minimum(0),
           maximum(100),
           value(0),
+          targetValue(0),
           meterType(Meter::AnalogMeter),
           image(0),
           minrotate(0),
           maxrotate(360),
-          meter(m) {}
+          meter(m),
+          movementId(0)
+    {
+    }
+
+    void progressChanged(qreal progress)
+    {
+        bool over = qFuzzyCompare(progress, 1.0);
+
+        if (value == targetValue) {
+            if (!over && movementId) {
+                Animator::self()->stopCustomAnimation(movementId);
+            }
+
+            return;
+        }
+
+        if (over) {
+            value = targetValue;
+            //kDebug() << "done";
+            movementId = 0;
+        } else {
+            int frame = progress * 10;
+            int delta = targetValue - value;
+            value += (delta / qreal(10 - frame));
+            //kDebug() << frame << value << targetValue;
+        }
+
+        meter->update();
+    }
 
     void paint(QPainter *p, const QString &elementID)
     {
@@ -174,6 +211,7 @@ public:
     int minimum;
     int maximum;
     int value;
+    int targetValue;
     QStringList labels;
     QList<Qt::Alignment> alignments;
     QList<QColor> colors;
@@ -184,6 +222,7 @@ public:
     int minrotate;
     int maxrotate;
     Meter *meter;
+    int movementId;
 };
 
 Meter::Meter(QGraphicsItem *parent) :
@@ -220,8 +259,27 @@ int Meter::minimum() const
 
 void Meter::setValue(int value)
 {
-    d->value = value;
-    update();
+    if (value == d->targetValue) {
+        return;
+    }
+
+    d->targetValue = qBound(d->minimum, value, d->maximum);
+    int delta = abs(d->value - d->targetValue);
+
+    if (d->movementId) {
+        Animator::self()->stopCustomAnimation(d->movementId);
+        d->movementId = 0;
+    }
+
+    //kDebug() << d->targetValue << d->value << delta;
+    if (!(KGlobalSettings::graphicEffectsLevel() & KGlobalSettings::SimpleAnimationEffects) ||
+        delta / qreal(d->maximum) < 0.1) {
+        d->value = value;
+        update();
+    } else  {
+        d->movementId = Animator::self()->customAnimation(10, 100, Animator::EaseOutCurve,
+                                                          this, "progressChanged");
+    }
 }
 
 int Meter::value() const
