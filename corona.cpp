@@ -152,6 +152,7 @@ public:
         }
 
         static_cast<Applet*>(containment)->d->setIsContainment(true);
+        containments.append(containment);
         q->addItem(containment);
 
         if (!delayedInit) {
@@ -162,7 +163,6 @@ public:
             q->requestConfigSync();
         }
 
-        containments.append(containment);
         QObject::connect(containment, SIGNAL(destroyed(QObject*)),
                          q, SLOT(containmentDestroyed(QObject*)));
         QObject::connect(containment, SIGNAL(configNeedsSaving()),
