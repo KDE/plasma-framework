@@ -22,6 +22,7 @@
 #include "tooltipmanager.h"
 
 //Qt
+#include <QCoreApplication>
 #include <QLabel>
 #include <QTimer>
 #include <QGridLayout>
@@ -66,8 +67,9 @@ public :
 
     ~ToolTipManagerPrivate()
     {
-        clearTips();
-        delete tipWidget;
+        if (!QCoreApplication::closingDown()) {
+            delete tipWidget;
+        }
     }
 
     void showToolTip();
