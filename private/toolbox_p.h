@@ -75,6 +75,9 @@ public:
     void setCorner(Corner corner);
     Corner corner() const;
 
+    bool isMovable() const;
+    void setIsMovable(bool movable);
+
     virtual void showToolBox() = 0;
     virtual void hideToolBox() = 0;
 public Q_SLOTS:
@@ -88,6 +91,7 @@ Q_SIGNALS:
 protected:
     QPoint toolPosition(int toolHeight);
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
+    void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
 
 private:

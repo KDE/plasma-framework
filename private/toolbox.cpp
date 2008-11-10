@@ -40,16 +40,21 @@ public:
     ToolBoxPrivate()
       : size(50),
       iconSize(32, 32),
+      corner(ToolBox::TopRight),
       hidden(false),
       showing(false),
-      corner(ToolBox::TopRight)
+      movable(false),
+      dragging(false)
     {}
 
     int size;
     QSize iconSize;
-    bool hidden;
-    bool showing;
     ToolBox::Corner corner;
+    QPoint dragStart;
+    bool hidden : 1;
+    bool showing : 1;
+    bool movable : 1;
+    bool dragging : 1;
 };
 
 ToolBox::ToolBox(QGraphicsItem *parent)
@@ -173,13 +178,110 @@ ToolBox::Corner ToolBox::corner() const
 void ToolBox::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     event->accept();
+    d->dragStart = mapToParent(event->pos()).toPoint();
+}
+
+void ToolBox::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
+{
+    if (!d->movable || (!d->dragging && boundingRect().contains(event->pos()))) {
+        return;
+    }
+
+    //TODOs:
+    // save toolbox position
+    // move relative to where on the toolbox it was grabbed
+    // stop the toolbox from painting and having a boundingRect that is negative
+    // sticky points at midpoints
+    // change how buttons appear depending on the location of the box
+    d->dragging = true;
+    const QPoint newPos = mapToParent(event->pos()).toPoint();
+    const QPoint curPos = pos().toPoint();
+    const int h = abs(boundingRect().height());
+    const int w = abs(boundingRect().width());
+
+    const int areaWidth = parentWidget()->size().width();
+    const int areaHeight = parentWidget()->size().height();
+
+    int x = curPos.x();
+    int y = curPos.y();
+
+    if (y == 0 || y + h >= areaHeight) {
+        x = curPos.x() + (newPos.x() - d->dragStart.x());
+        if (x < 0) {
+            x = 0;
+        } else if (x + w > areaWidth) {
+            x = areaWidth - w;
+        }
+    }
+
+    //kDebug() << x << w << areaWidth;
+    if (x == 0 || x + w >= areaWidth) {
+        //kDebug() << "moving along the y axis" << curPos << newPos << d->dragStart;
+        y = curPos.y() + (newPos.y() - d->dragStart.y());
+
+        if (y < 0) {
+            y = 0;
+        } else if (y + h > areaHeight) {
+            y = areaHeight - h;
+        }
+    }
+
+    x = qBound(0, x, areaWidth - w);
+    y = qBound(0, y, areaHeight - h);
+
+
+    Corner newCorner = d->corner;
+    if (x == 0) {
+        if (y == 0) {
+            newCorner = TopLeft;
+        } else if (y + h >= areaHeight) {
+            newCorner = BottomLeft;
+        } else {
+            newCorner = Left;
+        }
+    } else if (y == 0) {
+        if (x + w >= areaWidth) {
+            newCorner = TopRight;
+        } else {
+            newCorner = Top;
+        }
+    } else if (x + w >= areaWidth) {
+        if (y + h >= areaHeight) {
+            newCorner = BottomRight;
+        } else {
+            newCorner = Right;
+        }
+    } else {
+        newCorner = Bottom;
+    }
+
+    if (newCorner != d->corner) {
+        prepareGeometryChange();
+        d->corner = newCorner;
+    }
+
+    setPos(x, y);
+    d->dragStart = newPos;
 }
 
 void ToolBox::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
-    if (boundingRect().contains(event->pos())) {
+    if (!d->dragging && boundingRect().contains(event->pos())) {
         emit toggled();
     }
+
+    d->dragStart = QPoint();
+    d->dragging = false;
+}
+
+bool ToolBox::isMovable() const
+{
+    return d->movable;
+}
+
+void ToolBox::setIsMovable(bool movable)
+{
+    d->movable = movable;
 }
 
 } // plasma namespace

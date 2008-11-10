@@ -113,6 +113,7 @@ DesktopToolBox::DesktopToolBox(QGraphicsItem *parent)
     setFlag(ItemClipsToShape, true);
     setFlag(ItemClipsChildrenToShape, false);
     setFlag(ItemIgnoresTransformations, true);
+    setIsMovable(true);
 }
 
 DesktopToolBox::~DesktopToolBox()
