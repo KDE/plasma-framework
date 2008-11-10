@@ -1491,8 +1491,8 @@ void ContainmentPrivate::positionToolBox()
             toolBox->setCorner(ToolBox::Bottom);
             toolBox->setPos(q->geometry().width() / 2 - toolBox->boundingRect().width() / 2,
                             q->geometry().height());
-        //defaulting to Horizontal right now
         } else {
+            //defaulting to Horizontal right now
             if (QApplication::layoutDirection() == Qt::RightToLeft) {
                 toolBox->setPos(q->geometry().left(),
                                 q->geometry().height() / 2 - toolBox->boundingRect().height() / 2);
@@ -1504,9 +1504,6 @@ void ContainmentPrivate::positionToolBox()
             }
         }
     } else if (q->corona()) {
-        //TODO: we should probably get these values from the Plasma app itself
-        //      so we actually know what the available space *is*
-        //      perhaps a virtual method in Corona for this?
         QRectF avail = q->corona()->availableScreenRegion(screen).boundingRect();
         QRectF screenGeom = q->corona()->screenGeometry(screen);
 
