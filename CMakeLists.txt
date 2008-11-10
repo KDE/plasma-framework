@@ -153,14 +153,15 @@ if(QT_QTOPENGL_FOUND AND OPENGL_FOUND)
     target_link_libraries(plasma ${QT_QTOPENGL_LIBRARY} ${OPENGL_gl_LIBRARY})
 endif(QT_QTOPENGL_FOUND AND OPENGL_FOUND)
 
+target_link_libraries(plasma LINK_INTERFACE_LIBRARIES kdeui kdecore ${QT_QTGUI_LIBRARY})
+
 #do NOT use GENERIC versioning -- the plasma team will take care of versioning
 set_target_properties(plasma PROPERTIES
                              VERSION 3.0.0
                              SOVERSION 3
-                             ${KDE4_DISABLE_PROPERTY_}LINK_INTERFACE_LIBRARIES  "${KDE4_KDEUI_LIBS}"
                       )
 
-install(TARGETS plasma ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS plasma EXPORT kdelibsLibraryTargets ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 
 ########### install files ###############
