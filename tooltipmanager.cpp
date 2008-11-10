@@ -209,7 +209,7 @@ void ToolTipManager::setContent(QGraphicsWidget *widget, const ToolTipContent &d
             hide(widget);
         }
 
-        d->tipWidget->setContent(data);
+        d->tipWidget->setContent(widget, data);
     }
 }
 
@@ -255,6 +255,8 @@ void ToolTipManagerPrivate::onWidgetDestroyed(QObject *object)
     QGraphicsWidget *w = static_cast<QGraphicsWidget*>(object);
 
     if (currentWidget == w) {
+        tipWidget->setContent(0, ToolTipContent());
+        tipWidget->hide();
         currentWidget = 0;
         showTimer->stop();  // stop the timer to show the tooltip
         delayedHide = false;
@@ -308,7 +310,7 @@ void ToolTipManagerPrivate::showToolTip()
     }
 
     //kDebug() << "about to show" << justCreated;
-    tipWidget->setContent(tooltip);
+    tipWidget->setContent(currentWidget,tooltip);
     tipWidget->prepareShowing(!justCreated);
     tipWidget->moveTo(ToolTipManager::self()->m_corona->popupPosition(currentWidget, tipWidget->size()));
     tipWidget->show();

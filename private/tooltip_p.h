@@ -37,7 +37,7 @@ public:
     ToolTip(QWidget *parent);
     ~ToolTip();
 
-    void setContent(const ToolTipContent &data);
+    void setContent(QObject *tipper, const ToolTipContent &data);
     void prepareShowing(bool cueUpdate);
     void moveTo(const QPoint &to);
     bool autohide() const;

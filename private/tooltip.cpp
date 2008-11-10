@@ -146,13 +146,14 @@ void ToolTip::checkSize()
     }
 }
 
-void ToolTip::setContent(const ToolTipContent &data)
+void ToolTip::setContent(QObject *tipper, const ToolTipContent &data)
 {
     //reset our size
     d->label->setText("<qt><b>" + data.mainText() + "</b><br>" + data.subText() + "</qt>");
     d->imageLabel->setPixmap(data.image());
     d->preview->setWindowId(data.windowToPreview());
     d->autohide = data.autohide();
+    d->source = tipper;
 
     if (isVisible()) {
         d->preview->setInfo();
