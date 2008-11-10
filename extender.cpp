@@ -166,7 +166,7 @@ void Extender::saveState()
 QVariant Extender::itemChange(GraphicsItemChange change, const QVariant &value)
 {
     if (change == QGraphicsItem::ItemPositionHasChanged) {
-        d->adjustSize();
+        d->adjustSizeHints();
     }
 
     return QGraphicsWidget::itemChange(change, value);
@@ -195,7 +195,7 @@ void Extender::itemAddedEvent(ExtenderItem *item, const QPointF &pos)
         d->emptyExtenderLabel->hide();
     }
 
-    d->adjustSize();
+    d->adjustSizeHints();
 }
 
 void Extender::itemRemovedEvent(ExtenderItem *item)
@@ -211,7 +211,7 @@ void Extender::itemRemovedEvent(ExtenderItem *item)
         d->layout->addItem(d->emptyExtenderLabel);
     }
 
-    d->adjustSize();
+    d->adjustSizeHints();
 }
 
 void Extender::itemHoverEnterEvent(ExtenderItem *item)
@@ -247,7 +247,7 @@ void Extender::itemHoverMoveEvent(ExtenderItem *item, const QPointF &pos)
         d->emptyExtenderLabel->hide();
     }
 
-    d->adjustSize();
+    d->adjustSizeHints();
 }
 
 void Extender::itemHoverLeaveEvent(ExtenderItem *item)
@@ -270,7 +270,7 @@ void Extender::itemHoverLeaveEvent(ExtenderItem *item)
             d->layout->addItem(d->emptyExtenderLabel);
         }
 
-        d->adjustSize();
+        d->adjustSizeHints();
     }
 }
 
@@ -415,7 +415,7 @@ void ExtenderPrivate::loadExtenderItems()
         }
     }
 
-    adjustSize();
+    adjustSizeHints();
 }
 
 void ExtenderPrivate::updateBorders()
@@ -429,7 +429,7 @@ void ExtenderPrivate::updateBorders()
     }
 }
 
-void ExtenderPrivate::adjustSize()
+void ExtenderPrivate::adjustSizeHints()
 {
     //FIXME: what happens in this function are some nasty workarounds for a bug in qt4.4's QGL.
     //Alexis has told me they are working on a fix for qt4.5, so this can be removed once the bug
@@ -441,7 +441,12 @@ void ExtenderPrivate::adjustSize()
 
     if (applet->layout()) {
         applet->layout()->updateGeometry();
-        applet->setMinimumSize(applet->preferredSize());
+
+        qreal left, top, right, bottom;
+        applet->getContentsMargins(&left, &top, &right, &bottom);
+        QSizeF margins(left + right, top + bottom);
+
+        applet->setMinimumSize(applet->layout()->minimumSize() + margins);
         applet->adjustSize();
     }
 

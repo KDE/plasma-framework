@@ -403,7 +403,7 @@ void ExtenderItem::setCollapsed(bool collapsed)
     }
 
     updateGeometry();
-    d->extender->d->adjustSize();
+    d->extender->d->adjustSizeHints();
 }
 
 void ExtenderItem::returnToSource()
