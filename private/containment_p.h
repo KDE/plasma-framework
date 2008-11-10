@@ -57,6 +57,7 @@ public:
     ToolBox *createToolBox();
     void positionToolBox();
     void triggerShowAddWidgets();
+    void requestConfiguration();
 
     /**
      * Called when constraints have been updated on this containment to provide

@@ -146,6 +146,13 @@ void Containment::init()
     appletBrowserAction->setShortcut(QKeySequence("ctrl+a"));
     d->actions().addAction("add widgets", appletBrowserAction);
 
+    QAction *configureActivityAction = new QAction(i18n("Activity and Theme Settings"), this);
+    configureActivityAction->setIcon(KIcon("configure"));
+    configureActivityAction->setVisible(unlocked);
+    configureActivityAction->setEnabled(unlocked);
+    connect(configureActivityAction, SIGNAL(triggered()), this, SLOT(requestConfiguration()));
+    d->actions().addAction("activity settings", configureActivityAction);
+
     QAction *action = new QAction(i18n("Next Widget"), this);
     //no icon
     connect(action, SIGNAL(triggered()), this, SLOT(focusNextApplet()));
@@ -210,6 +217,7 @@ void Containment::init()
                 d->toolBox->addTool(this->action("lock widgets"));
             }
             d->toolBox->addTool(this->action("add sibling containment"));
+            d->toolBox->addTool(this->action("activity settings"));
             if (hasConfigurationInterface()) {
                 // re-use the contianment's action.
                 QAction *configureContainment = this->action("configure");
@@ -217,7 +225,6 @@ void Containment::init()
                     d->toolBox->addTool(this->action("configure"));
                 }
             }
-
         }
 
         //Set a default wallpaper the first time the containment is created,
@@ -504,7 +511,7 @@ bool ContainmentPrivate::showContextMenu(const QPointF &point,
         }
 
         QList<QAction*> containmentActions = q->contextualActions();
-        if (!containmentActions.isEmpty()) {
+        if (!containmentActions.isEmpty() || q->hasConfigurationInterface()) {
             if (hasEntries) {
                 desktopMenu.addSeparator();
             }
@@ -521,6 +528,10 @@ bool ContainmentPrivate::showContextMenu(const QPointF &point,
                 if (action) {
                     containmentActionMenu->addAction(action);
                 }
+            }
+
+            if (q->hasConfigurationInterface()) {
+                containmentActionMenu->addAction(q->action("configure"));
             }
         }
 
@@ -1358,6 +1369,16 @@ void Containment::destroy()
     destroy(true);
 }
 
+void Containment::showConfigurationInterface()
+{
+    Applet::showConfigurationInterface();
+}
+
+void ContainmentPrivate::requestConfiguration()
+{
+    emit q->configureRequested(q);
+}
+
 void Containment::destroy(bool confirm)
 {
     if (immutability() != Mutable) {
@@ -1388,17 +1409,6 @@ void Containment::destroy(bool confirm)
         Applet::destroy();
     }
 }
-
-void Containment::showConfigurationInterface()
-{
-    if (isContainment()) {
-        emit configureRequested(this);
-    } else {
-        Applet::showConfigurationInterface();
-    }
-}
-
-// Private class implementation
 
 void ContainmentPrivate::toggleDesktopImmutability()
 {
