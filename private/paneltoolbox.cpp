@@ -118,14 +118,30 @@ PanelToolBox::~PanelToolBox()
 
 QRectF PanelToolBox::boundingRect() const
 {
+    QRectF r;
+
     if (corner() == ToolBox::Bottom) {
-        return QRectF(0, 0, size() * 2, -size());
+        r = QRectF(0, 0, size() * 2, -size());
     } else if (corner() == ToolBox::Left) {
-        return QRectF(0, 0, size(), size() * 2);
+        r = QRectF(0, 0, size(), size() * 2);
     //Only Left,Right and Bottom supported, default to Right
     } else {
-        return QRectF(0, 0, -size(), size() * 2);
+        r = QRectF(0, 0, -size(), size() * 2);
     }
+
+    if (parentItem()) {
+        QSizeF s = parentItem()->boundingRect().size();
+
+        if (r.height() > s.height()) {
+            r.setHeight(s.height());
+        }
+
+        if (r.width() > s.width()) {
+            r.setWidth(s.width());
+        }
+    }
+
+    return r;
 }
 
 void PanelToolBox::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
