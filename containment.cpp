@@ -146,7 +146,7 @@ void Containment::init()
     appletBrowserAction->setShortcut(QKeySequence("ctrl+a"));
     d->actions().addAction("add widgets", appletBrowserAction);
 
-    QAction *configureActivityAction = new QAction(i18n("Activity and Theme Settings"), this);
+    QAction *configureActivityAction = new QAction(i18n("Appearance and Activity Settings"), this);
     configureActivityAction->setIcon(KIcon("configure"));
     configureActivityAction->setVisible(unlocked);
     configureActivityAction->setEnabled(unlocked);
