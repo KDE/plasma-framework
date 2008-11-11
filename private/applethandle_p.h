@@ -64,6 +64,7 @@ class AppletHandle : public QObject, public QGraphicsItem
         QPainterPath shape() const;
         void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
         void startFading(FadeType anim, const QPointF &hoverPos);
+        void setHoverPos(const QPointF &hoverPos);
 
     protected:
         void mousePressEvent(QGraphicsSceneMouseEvent *event);

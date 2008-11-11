@@ -926,6 +926,11 @@ void AppletHandle::appletResized()
     update();
 }
 
+void AppletHandle::setHoverPos(const QPointF &hoverPos)
+{
+    m_entryPos = hoverPos;
+}
+
 void AppletHandle::startFading(FadeType anim, const QPointF &hoverPos)
 {
     if (m_animId != 0) {

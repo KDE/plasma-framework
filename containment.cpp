@@ -1080,7 +1080,12 @@ bool Containment::sceneEventFilter(QGraphicsItem *watched, QEvent *event)
         //kDebug() << "got hoverenterEvent" << immutability() << " " << applet->immutability();
         if (immutability() == Mutable && applet->immutability() == Mutable) {
             QGraphicsSceneHoverEvent *he = static_cast<QGraphicsSceneHoverEvent*>(event);
-            if (!d->handles.contains(applet)) {
+            if (d->handles.contains(applet)) {
+                AppletHandle *handle = d->handles.value(applet);
+                if (handle) {
+                    handle->setHoverPos(he->pos());
+                }
+            } else {
                 //kDebug() << "generated applet handle";
                 AppletHandle *handle = new AppletHandle(this, applet, he->pos());
                 d->handles[applet] = handle;
