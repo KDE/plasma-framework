@@ -224,7 +224,7 @@ void ToolButton::resizeEvent(QGraphicsSceneResizeEvent *event)
 
    if (d->background) {
         //resize all four panels
-        d->background->setElementPrefix("pressed");
+        d->background->setElementPrefix("toolbutton-pressed");
         d->background->resizeFrame(size());
         d->background->setElementPrefix("focus");
         d->background->resizeFrame(size());
@@ -262,7 +262,7 @@ void ToolButton::paint(QPainter *painter,
 
     if (d->animId || (buttonOpt.state & QStyle::State_MouseOver) || (buttonOpt.state & QStyle::State_On)) {
         if (button->isDown() || (buttonOpt.state & QStyle::State_On)) {
-            d->background->setElementPrefix("pressed");
+            d->background->setElementPrefix("toolbutton-pressed");
         } else {
             d->background->setElementPrefix("normal");
         }
