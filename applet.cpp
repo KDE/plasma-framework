@@ -300,7 +300,7 @@ void Applet::setFailedToLaunch(bool failed, const QString &reason)
 
         Plasma::ToolTipManager::self()->registerWidget(failureIcon);
         Plasma::ToolTipContent data(i18n("Unable to load the widget"), reason,
-                                    KIcon("dialog-error").pixmap(IconSize(KIconLoader::Desktop)));
+                                    KIcon("dialog-error"));
         Plasma::ToolTipManager::self()->setContent(failureIcon, data);
 
         setLayout(failureLayout);
