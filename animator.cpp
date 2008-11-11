@@ -709,7 +709,7 @@ void AnimatorPrivate::init(Animator *q)
             KPluginLoader plugin(*offers.first());
 
             if (Plasma::isPluginVersionCompatible(plugin.pluginVersion())) {
-                driver = offers.first()->createInstance<Plasma::AnimationDriver>(0, QVariantList(), &error);
+                driver = offers.first()->createInstance<Plasma::AnimationDriver>(q, QVariantList(), &error);
             }
 
             if (!driver) {
