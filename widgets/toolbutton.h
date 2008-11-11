@@ -42,6 +42,7 @@ class PLASMA_EXPORT ToolButton : public QGraphicsProxyWidget
 
     Q_PROPERTY(QGraphicsWidget *parentWidget READ parentWidget)
     Q_PROPERTY(QString text READ text WRITE setText)
+    Q_PROPERTY(bool autoRaise READ autoRaise WRITE setAutoRaise)
     Q_PROPERTY(QString image READ image WRITE setImage)
     Q_PROPERTY(QString stylesheet READ styleSheet WRITE setStyleSheet)
     Q_PROPERTY(QToolButton *nativeWidget READ nativeWidget)
@@ -49,6 +50,18 @@ class PLASMA_EXPORT ToolButton : public QGraphicsProxyWidget
 public:
     explicit ToolButton(QGraphicsWidget *parent = 0);
     ~ToolButton();
+
+    /**
+     * Sets if the toolbutton has an autoraise behaviour
+     *
+     * @arg raise
+     */
+    void setAutoRaise(bool raise);
+
+    /**
+     * @return true if the toolbutton has an autoraise behaviour
+     */
+    bool autoRaise() const;
 
     /**
      * Sets the display text for this ToolButton

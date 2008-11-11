@@ -145,6 +145,7 @@ ToolButton::ToolButton(QGraphicsWidget *parent)
     connect(native, SIGNAL(clicked()), this, SIGNAL(clicked()));
     setWidget(native);
     native->setAttribute(Qt::WA_NoSystemBackground);
+    native->setAutoRaise(true);
 
     d->background = new FrameSvg(this);
     d->background->setImagePath("widgets/button");
@@ -158,6 +159,16 @@ ToolButton::ToolButton(QGraphicsWidget *parent)
 ToolButton::~ToolButton()
 {
     delete d;
+}
+
+void ToolButton::setAutoRaise(bool raise)
+{
+    nativeWidget()->setAutoRaise(raise);
+}
+
+bool ToolButton::autoRaise() const
+{
+    return nativeWidget()->autoRaise();
 }
 
 void ToolButton::setText(const QString &text)
@@ -260,7 +271,7 @@ void ToolButton::paint(QPainter *painter,
     buttonOpt.toolButtonStyle = button->toolButtonStyle();
 
 
-    if (d->animId || (buttonOpt.state & QStyle::State_MouseOver) || (buttonOpt.state & QStyle::State_On)) {
+    if (d->animId || !button->autoRaise() || (buttonOpt.state & QStyle::State_MouseOver) || (buttonOpt.state & QStyle::State_On)) {
         if (button->isDown() || (buttonOpt.state & QStyle::State_On)) {
             d->background->setElementPrefix("toolbutton-pressed");
         } else {
@@ -295,7 +306,7 @@ void ToolButton::paint(QPainter *painter,
 
 void ToolButton::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 {
-    if (nativeWidget()->isDown()) {
+    if (nativeWidget()->isDown() || !nativeWidget()->autoRaise()) {
         return;
     }
 
@@ -315,7 +326,7 @@ void ToolButton::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 
 void ToolButton::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 {
-    if (nativeWidget()->isDown()) {
+    if (nativeWidget()->isDown() || !nativeWidget()->autoRaise()) {
         return;
     }
 
