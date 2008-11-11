@@ -224,14 +224,14 @@ void PushButton::resizeEvent(QGraphicsSceneResizeEvent *event)
 
    if (d->background) {
         //resize all four panels
+        d->background->setElementPrefix("pressed");
+        d->background->resizeFrame(size());
         d->background->setElementPrefix("focus");
         d->background->resizeFrame(size());
 
         d->syncActiveRect();
 
         d->background->setElementPrefix("active");
-        d->background->resizeFrame(d->activeRect.size());
-        d->background->setElementPrefix("pressed");
         d->background->resizeFrame(d->activeRect.size());
 
         d->background->setElementPrefix("normal");
@@ -254,15 +254,13 @@ void PushButton::paint(QPainter *painter,
 
     //Normal button, pressed or not
     if (isEnabled()) {
-        QPointF topLeft(0,0);
         if (nativeWidget()->isDown()) {
             d->background->setElementPrefix("pressed");
-            topLeft = d->activeRect.topLeft();
         } else {
             d->background->setElementPrefix("normal");
         }
         if (d->animId == -1) {
-            d->background->paintFrame(painter, topLeft);
+            d->background->paintFrame(painter);
         }
     //flat or disabled
     } else if (!isEnabled() || nativeWidget()->isFlat()) {
