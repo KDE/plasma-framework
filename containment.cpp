@@ -1490,6 +1490,7 @@ void ContainmentPrivate::positionToolBox()
         return;
     }
 
+    kDebug();
     //The placement assumes that the geometry width/height is no more than the screen
     if (type == Containment::PanelContainment) {
         if (q->formFactor() == Vertical) {
@@ -1509,20 +1510,23 @@ void ContainmentPrivate::positionToolBox()
             }
         }
     } else if (q->corona()) {
+        kDebug() << "desktop";
+
         QRectF avail = q->corona()->availableScreenRegion(screen).boundingRect();
         QRectF screenGeom = q->corona()->screenGeometry(screen);
 
         // Transform to the containment's coordinate system.
         avail.translate(-screenGeom.topLeft());
         screenGeom.moveTo(0, 0);
+        const int toolBoxSize = toolBox->size();
 
-        if (q->view() && !q->view()->transform().isScaling()) {
+        if (!q->view() || !q->view()->transform().isScaling()) {
             if (QApplication::layoutDirection() == Qt::RightToLeft) {
                 if (avail.top() > screenGeom.top()) {
-                    toolBox->setPos(avail.topLeft() - QPoint(0, toolBox->size()));
+                    toolBox->setPos(avail.topLeft() - QPoint(0, toolBoxSize));
                     toolBox->setCorner(ToolBox::Left);
                 } else if (avail.left() > screenGeom.left()) {
-                    toolBox->setPos(avail.topLeft() - QPoint(toolBox->size(), 0));
+                    toolBox->setPos(avail.topLeft() - QPoint(toolBoxSize, 0));
                     toolBox->setCorner(ToolBox::Top);
                 } else {
                     toolBox->setPos(avail.topLeft());
@@ -1530,13 +1534,13 @@ void ContainmentPrivate::positionToolBox()
                 }
             } else {
                 if (avail.top() > screenGeom.top()) {
-                    toolBox->setPos(avail.topRight() - QPoint(0, toolBox->size()));
+                    toolBox->setPos(avail.topRight() - QPoint(0, toolBoxSize));
                     toolBox->setCorner(ToolBox::Right);
                 } else if (avail.right() < screenGeom.right()) {
-                    toolBox->setPos(QPoint(avail.right() - toolBox->boundingRect().width(), avail.top()));
+                    toolBox->setPos(avail.topRight() - QPoint(toolBoxSize, 0));
                     toolBox->setCorner(ToolBox::Top);
                 } else {
-                    toolBox->setPos(avail.topRight());
+                    toolBox->setPos(avail.topRight() - QPoint(toolBoxSize, 0));
                     toolBox->setCorner(ToolBox::TopRight);
                 }
             }

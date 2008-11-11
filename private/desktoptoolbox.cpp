@@ -98,6 +98,8 @@ public:
     qreal animCircleFrame;
     qreal animHighlightFrame;
     QRect shapeRect;
+    QColor fgColor;
+    QColor bgColor;
     bool hovering : 1;
 };
 
@@ -108,12 +110,14 @@ DesktopToolBox::DesktopToolBox(QGraphicsItem *parent)
     connect(Plasma::Animator::self(), SIGNAL(movementFinished(QGraphicsItem*)),
             this, SLOT(toolMoved(QGraphicsItem*)));
     connect(this, SIGNAL(toggled()), this, SLOT(toggle()));
-
+    connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()),
+            this, SLOT(assignColors()));
     setZValue(10000000);
     setFlag(ItemClipsToShape, true);
     setFlag(ItemClipsChildrenToShape, false);
     setFlag(ItemIgnoresTransformations, true);
     setIsMovable(true);
+    assignColors();
 }
 
 DesktopToolBox::~DesktopToolBox()
@@ -123,100 +127,75 @@ DesktopToolBox::~DesktopToolBox()
 
 QRectF DesktopToolBox::boundingRect() const
 {
-    Corner c = corner();
-    qreal width;
-    qreal height;
-
-    if (c == Left || c == Right) {
-        height = size() * 4;
-    } else {
-        height = size() * 2;
-    }
-
-    if (c == Bottom || c == BottomRight || c == BottomLeft) {
-        height = -height;
-    }
-
-    if (c == Top || c == Bottom) {
-        width = size() * 4;
-    } else {
-        width = size() * 2;
-    }
-
-    if (c == Right || c == TopRight || c == BottomRight) {
-        width = -width;
-    }
-
-    return QRectF(0, 0, width, height);
+    return QRectF(0, 0, size(), size());
 }
 
-void DesktopToolBox::paint(QPainter *painter,
-                           const QStyleOptionGraphicsItem *option, QWidget *widget)
+void DesktopToolBox::assignColors()
+{
+    d->bgColor = Plasma::Theme::defaultTheme()->color(Plasma::Theme::BackgroundColor);
+    d->fgColor = Plasma::Theme::defaultTheme()->color(Plasma::Theme::TextColor);
+}
+
+void DesktopToolBox::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     Q_UNUSED(option)
     Q_UNUSED(widget)
-
-    painter->save();
-    painter->translate(boundingRect().topLeft());
-
-    QColor color1 = KColorScheme(QPalette::Active, KColorScheme::Window,
-                                 Plasma::Theme::defaultTheme()->colorScheme()).background().color();
-    color1.setAlpha(64);
-
-    QColor color2 = KColorScheme(QPalette::Active, KColorScheme::Window,
-                                 Plasma::Theme::defaultTheme()->colorScheme()).foreground().color();
-    color2.setAlpha(64);
 
     QPainterPath p = shape();
 
     QPoint iconPos;
     QPointF gradientCenter;
+    const QRectF rect = boundingRect();
+    const QSize icons = iconSize();
+
     switch (corner()) {
     case TopRight:
-        iconPos = QPoint((int)boundingRect().left() - iconSize().width() + 2, 2);
-        gradientCenter = boundingRect().topLeft();
+        iconPos = QPoint((int)rect.right() - icons.width() + 2, 2);
+        gradientCenter = rect.topRight();
         break;
     case Top:
-        iconPos = QPoint(boundingRect().center().x() - iconSize().width() / 2, 2);
-        gradientCenter = QPoint(boundingRect().center().x(), boundingRect().y());
+        iconPos = QPoint(rect.center().x() - icons.width() / 2, 2);
+        gradientCenter = QPoint(rect.center().x(), rect.y());
         break;
     case TopLeft:
         iconPos = QPoint(2, 2);
-        gradientCenter = boundingRect().topLeft();
+        gradientCenter = rect.topLeft();
         break;
     case Left:
-        iconPos = QPoint(2, boundingRect().center().y() - iconSize().height() / 2);
-        gradientCenter = QPointF(boundingRect().left(), boundingRect().center().y());
+        iconPos = QPoint(2, rect.center().y() - icons.height() / 2);
+        gradientCenter = QPointF(rect.left(), rect.center().y());
         break;
     case Right:
-        iconPos = QPoint((int)boundingRect().left() - iconSize().width() + 2,
-                         boundingRect().center().y() - iconSize().height() / 2);
-        gradientCenter = QPointF(boundingRect().left(), boundingRect().center().y());
+        iconPos = QPoint((int)rect.right() - icons.width() + 2,
+                         rect.center().y() - icons.height() / 2);
+        gradientCenter = QPointF(rect.right(), rect.center().y());
         break;
     case BottomLeft:
-        iconPos = QPoint(2, boundingRect().top() - iconSize().height() - 2);
-        gradientCenter = boundingRect().topLeft();
+        iconPos = QPoint(2, rect.bottom() - icons.height() - 2);
+        gradientCenter = rect.bottomLeft();
         break;
     case Bottom:
-        iconPos = QPoint(boundingRect().center().x() - iconSize().width() / 2,
-                         boundingRect().top() - iconSize().height() - 2);
-        gradientCenter = QPointF(boundingRect().center().x(), boundingRect().top());
+        iconPos = QPoint(rect.center().x() - icons.width() / 2,
+                         rect.bottom() - icons.height() - 2);
+        gradientCenter = QPointF(rect.center().x(), rect.bottom());
         break;
     case BottomRight:
     default:
-        iconPos = QPoint((int)boundingRect().left() - iconSize().width() - 2,
-                         (int)boundingRect().top() - iconSize().height() - 2);
-        gradientCenter = boundingRect().topLeft();
+        iconPos = QPoint((int)rect.right() - icons.width() + 2,
+                         (int)rect.bottom() - icons.height() - 2);
+        gradientCenter = rect.bottomRight();
         break;
     }
 
+    d->bgColor.setAlpha(64);
+    d->fgColor.setAlpha(64);
     QRadialGradient gradient(gradientCenter, size() + d->animCircleFrame);
     gradient.setFocalPoint(gradientCenter);
-    gradient.setColorAt(0, color1);
-    gradient.setColorAt(.87, color1);
-    gradient.setColorAt(.97, color2);
-    color2.setAlpha(0);
-    gradient.setColorAt(1, color2);
+    gradient.setColorAt(0, d->bgColor);
+    gradient.setColorAt(.87, d->bgColor);
+    gradient.setColorAt(.97, d->fgColor);
+    d->fgColor.setAlpha(0);
+    gradient.setColorAt(1, d->fgColor);
     painter->save();
     painter->setPen(Qt::NoPen);
     painter->setRenderHint(QPainter::Antialiasing, true);
@@ -239,55 +218,33 @@ void DesktopToolBox::paint(QPainter *painter,
             d->icon.pixmap(iconSize()), progress);
         painter->drawPixmap(QRect(iconPos, iconSize()), result);
     }
-
-    painter->restore();
 }
 
 QPainterPath DesktopToolBox::shape() const
 {
-    QPainterPath path;
-    int toolSize = size() + (int)d->animCircleFrame;
+    const QRectF rect = boundingRect();
+    const int w = rect.width();
+    const int h = rect.height();
 
+    QPainterPath path;
     switch (corner()) {
-    case TopRight:
-        path.arcTo(QRectF(boundingRect().left() - toolSize, boundingRect().top() - toolSize,
-                          toolSize * 2, toolSize * 2), 180, 90);
-        break;
-    case Top:
-        path.arcTo(QRectF(boundingRect().center().x() - toolSize,
-                          boundingRect().top() - toolSize,
-                          toolSize * 2, toolSize * 2), 180, 180);
-        break;
-    case TopLeft:
-        path.arcTo(QRectF(boundingRect().left() - toolSize,
-                          boundingRect().top() - toolSize,
-                          toolSize * 2, toolSize * 2), 270, 90);
-        break;
-    case Left:
-        path.arcTo(QRectF(boundingRect().left() - toolSize,
-                          boundingRect().center().y() - toolSize,
-                          toolSize * 2, toolSize * 2), 270, 180);
-        break;
-    case Right:
-        path.arcTo(QRectF(boundingRect().left() - toolSize,
-                          boundingRect().center().y() - toolSize,
-                          toolSize * 2, toolSize * 2), 90, 180);
-        break;
     case BottomLeft:
-        path.arcTo(QRectF(boundingRect().left() - toolSize,
-                          boundingRect().top() - toolSize,
-                          toolSize * 2, toolSize * 2), 0, 90);
-        break;
-    case Bottom:
-        path.arcTo(QRectF(boundingRect().center().x() - toolSize,
-                          boundingRect().top() - toolSize,
-                          toolSize * 2, toolSize * 2), 0, 180);
+        path.moveTo(rect.bottomLeft());
+        path.arcTo(QRectF(rect.left() - w, rect.top(), w * 2, h * 2), 0, 90);
         break;
     case BottomRight:
+        path.moveTo(rect.bottomRight());
+        path.arcTo(QRectF(rect.left(), rect.top(), w * 2, h * 2), 90, 90);
+        break;
+    case TopRight:
+        path.moveTo(rect.topRight());
+        path.arcTo(QRectF(rect.left(), rect.top() - h, w * 2, h * 2), 180, 90);
+        break;
+    case TopLeft:
+        path.arcTo(QRectF(rect.left() - w, rect.top() - h, w * 2, h * 2), 270, 90);
+        break;
     default:
-        path.arcTo(QRectF(boundingRect().left() - toolSize,
-                          boundingRect().top() - toolSize,
-                          toolSize * 2, toolSize * 2), 90, 90);
+        path.addRect(rect);
         break;
     }
 
@@ -398,10 +355,6 @@ void DesktopToolBox::showToolBox()
     }
 
     setShowing(true);
-    // TODO: 10 and 200 shouldn't be hardcoded here. There needs to be a way to
-    // match whatever the time is that moveItem() takes. Same in hoverLeaveEvent().
-    d->animCircleId =
-        animdriver->customAnimation(10, 240, Plasma::Animator::EaseInCurve, this, "animateCircle");
 }
 
 void DesktopToolBox::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
@@ -447,27 +400,10 @@ void DesktopToolBox::hideToolBox()
     }
 
     setShowing(false);
-    d->animCircleId =
-        animdriver->customAnimation(10, 240, Plasma::Animator::EaseOutCurve, this, "animateCircle");
 
     if (d->toolBacker) {
         d->toolBacker->hide();
     }
-}
-
-void DesktopToolBox::animateCircle(qreal progress)
-{
-    if (showing()) {
-        d->animCircleFrame = size() * progress;
-    } else {
-        d->animCircleFrame = size() * (1.0 - progress);
-    }
-
-    if (progress >= 1) {
-        d->animCircleId = 0;
-    }
-
-    update();
 }
 
 void DesktopToolBox::animateHighlight(qreal progress)
