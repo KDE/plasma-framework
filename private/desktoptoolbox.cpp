@@ -289,7 +289,7 @@ void DesktopToolBox::showToolBox()
     int y;
     switch (corner()) {
     case TopRight:
-        x = (int)boundingRect().left() - maxwidth - iconWidth - 5;
+        x = (int)boundingRect().right() - maxwidth - iconWidth - 5;
         y = (int)boundingRect().top() + 5;
         break;
     case Top:
@@ -305,7 +305,7 @@ void DesktopToolBox::showToolBox()
         y = (int)boundingRect().center().y() - iconWidth;
         break;
     case Right:
-        x = (int)boundingRect().left() - maxwidth - iconWidth - 5;
+        x = (int)boundingRect().right() - maxwidth - iconWidth - 5;
         y = (int)boundingRect().center().y() - iconWidth;
         break;
     case BottomLeft:
@@ -318,7 +318,7 @@ void DesktopToolBox::showToolBox()
         break;
     case BottomRight:
     default:
-        x = (int)boundingRect().left() - maxwidth - iconWidth - 5;
+        x = (int)boundingRect().right() - maxwidth - iconWidth - 5;
         y = (int)boundingRect().bottom() - iconWidth - 5;
         break;
     }

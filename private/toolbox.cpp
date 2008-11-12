@@ -73,22 +73,22 @@ QPoint ToolBox::toolPosition(int toolHeight)
 {
     switch (d->corner) {
     case TopRight:
-        return QPoint(d->size * 2, -toolHeight);
+        return QPoint(d->size, -toolHeight);
     case Top:
         return QPoint((int)boundingRect().center().x() - d->iconSize.width(), -toolHeight);
     case TopLeft:
-        return QPoint(-d->size * 2, -toolHeight);
+        return QPoint(-d->size, -toolHeight);
     case Left:
-        return QPoint(-d->size * 2, (int)boundingRect().center().y() - d->iconSize.height());
+        return QPoint(-d->size, (int)boundingRect().center().y() - d->iconSize.height());
     case Right:
-        return QPoint(d->size * 2, (int)boundingRect().center().y() - d->iconSize.height());
+        return QPoint(d->size, (int)boundingRect().center().y() - d->iconSize.height());
     case BottomLeft:
-        return QPoint(-d->size * 2, toolHeight);
+        return QPoint(-d->size, toolHeight);
     case Bottom:
         return QPoint((int)boundingRect().center().x() - d->iconSize.width(), toolHeight);
     case BottomRight:
     default:
-        return QPoint(d->size * 2, toolHeight);
+        return QPoint(d->size, toolHeight);
     }
 }
 
