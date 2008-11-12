@@ -130,10 +130,10 @@ set(plasma_LIB_SRCS
 #)
 
 if(QT_QTOPENGL_FOUND AND OPENGL_FOUND)
-MESSAGE(STATUS "Adding support for OpenGL applets to libplasma")
-set(plasma_LIB_SRCS
-    ${plasma_LIB_SRCS}
-    glapplet.cpp)
+    message(STATUS "Adding support for OpenGL applets to libplasma")
+    set(plasma_LIB_SRCS
+        ${plasma_LIB_SRCS}
+        glapplet.cpp)
 endif(QT_QTOPENGL_FOUND AND OPENGL_FOUND)
 
 kde4_add_library(plasma SHARED ${plasma_LIB_SRCS})
@@ -147,7 +147,7 @@ endif(X11_FOUND)
 
 
 if(DL_LIBRARY)
-target_link_libraries(plasma ${DL_LIBRARY})
+    target_link_libraries(plasma ${DL_LIBRARY})
 endif(DL_LIBRARY)
 
 if(QT_QTOPENGL_FOUND AND OPENGL_FOUND)
@@ -211,9 +211,9 @@ set(plasma_LIB_INCLUDES
     wallpaper.h)
 
 if(QT_QTOPENGL_FOUND AND OPENGL_FOUND)
-set(plasma_LIB_INCLUDES
-    ${plasma_LIB_INCLUDES}
-    glapplet.h)
+    set(plasma_LIB_INCLUDES
+        ${plasma_LIB_INCLUDES}
+        glapplet.h)
 endif(QT_QTOPENGL_FOUND AND OPENGL_FOUND)
 
 install(FILES
