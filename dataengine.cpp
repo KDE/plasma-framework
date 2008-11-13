@@ -379,6 +379,11 @@ void DataEngine::timerEvent(QTimerEvent *event)
     }
 
     d->updateTimestamp.restart();
+    updateAllSources();
+}
+
+void DataEngine::updateAllSources()
+{
     QHashIterator<QString, Plasma::DataContainer*> it(d->sources);
     while (it.hasNext()) {
         it.next();

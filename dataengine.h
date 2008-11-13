@@ -439,6 +439,11 @@ class PLASMA_EXPORT DataEngine : public QObject
          **/
         void removeSource(const QString &source);
 
+        /**
+         * Immediately updates all existing sources when called
+         */
+        void updateAllSources();
+
     private:
         friend class DataEnginePrivate;
         friend class DataEngineScript;
