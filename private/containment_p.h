@@ -21,6 +21,8 @@
 #ifndef CONTAINMENT_P_H
 #define CONTAINMENT_P_H
 
+#include <KMenu>
+
 static const int INTER_CONTAINMENT_MARGIN = 6;
 static const int CONTAINMENT_COLUMNS = 2;
 static const int VERTICAL_STACKING_OFFSET = 10000;
@@ -75,6 +77,8 @@ public:
     void containmentAppletAnimationComplete(QGraphicsItem *item, Plasma::Animator::Animation anim);
     void zoomIn();
     void zoomOut();
+    void containmentActions(KMenu &desktopMenu);
+    void appletActions(KMenu &desktopMenu, Applet *applet, bool includeApplet);
     bool showContextMenu(const QPointF &point, const QPoint &screenPos, bool includeApplet);
 
     /**

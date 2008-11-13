@@ -463,6 +463,83 @@ void Containment::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
     }
 }
 
+void ContainmentPrivate::containmentActions(KMenu &desktopMenu)
+{
+    if (static_cast<Corona*>(q->scene())->immutability() != Mutable &&
+        !KAuthorized::authorizeKAction("unlock_desktop")) {
+        //kDebug() << "immutability";
+        return;
+    }
+
+    //get base context actions
+    QList<QAction*> actions = q->contextualActions();
+
+    foreach (QAction *action, actions) {
+        if (action) {
+            desktopMenu.addAction(action);
+        }
+    }
+
+    desktopMenu.addSeparator();
+
+    //TODO: should a submenu be created if there are too many containment specific
+    //      actions? see folderview containment
+    if(q->containmentType() == Containment::DesktopContainment) {
+        desktopMenu.addAction(q->action("activity settings"));
+        if (q->hasConfigurationInterface()) {
+            desktopMenu.addAction(q->action("configure"));
+        }
+    }
+}
+
+void ContainmentPrivate::appletActions(KMenu &desktopMenu, Applet *applet, bool includeApplet)
+{
+    QList<QAction*> actions;
+
+    if (includeApplet) {
+        actions = applet->contextualActions();
+        if (!actions.isEmpty()) {
+            foreach (QAction *action, actions) {
+                if (action) {
+                    desktopMenu.addAction(action);
+                }
+            }
+        }
+    }
+
+    if (applet->hasConfigurationInterface()) {
+        QAction *configureApplet = applet->d->actions.action("configure");
+        if (configureApplet) {
+            desktopMenu.addAction(configureApplet);
+        }
+    }
+
+    KMenu *containmentMenu = new KMenu(i18nc("%1 is the name of the containment", "%1 Options", q->name()), &desktopMenu);
+    containmentActions(*containmentMenu);
+    if (!containmentMenu->isEmpty()) {
+        if (!desktopMenu.isEmpty()) {
+            desktopMenu.addSeparator();
+        }
+
+        desktopMenu.addMenu(containmentMenu);
+    }
+
+    if (static_cast<Corona*>(q->scene())->immutability() == Mutable) {
+        if (!desktopMenu.isEmpty()) {
+            desktopMenu.addSeparator();
+        }
+
+        QAction *closeApplet = applet->d->actions.action("remove");
+        if (!closeApplet) { //unlikely but not impossible
+            kDebug() << "no remove action!!!!!!!!";
+            closeApplet = new QAction(i18nc("%1 is the name of the applet", "Remove this %1", applet->name()), &desktopMenu);
+            closeApplet->setIcon(KIcon("edit-delete"));
+            QObject::connect(closeApplet, SIGNAL(triggered(bool)), applet, SLOT(destroy()));
+        }
+        desktopMenu.addAction(closeApplet);
+    }
+}
+
 bool ContainmentPrivate::showContextMenu(const QPointF &point,
                                          const QPoint &screenPos, bool includeApplet)
 {
@@ -487,98 +564,18 @@ bool ContainmentPrivate::showContextMenu(const QPointF &point,
     KMenu desktopMenu;
     //kDebug() << "context menu event " << (QObject*)applet;
     if (applet) {
-        bool hasEntries = false;
-        QList<QAction*> actions;
-
-        if (includeApplet) {
-            actions = applet->contextualActions();
-            if (!actions.isEmpty()) {
-                foreach (QAction *action, actions) {
-                    if (action) {
-                        desktopMenu.addAction(action);
-                    }
-                }
-                hasEntries = true;
-            }
-        }
-
-        if (applet->hasConfigurationInterface()) {
-            QAction *configureApplet = applet->d->actions.action("configure");
-            if (configureApplet) {
-                desktopMenu.addAction(configureApplet);
-                hasEntries = true;
-            }
-        }
-
-        QList<QAction*> containmentActions = q->contextualActions();
-        if (!containmentActions.isEmpty() || q->hasConfigurationInterface()) {
-            if (hasEntries) {
-                desktopMenu.addSeparator();
-            }
-
-            hasEntries = true;
-            QMenu *containmentActionMenu = &desktopMenu;
-
-            if (!actions.isEmpty() && containmentActions.count() > 2) {
-                containmentActionMenu = new KMenu(i18nc("%1 is the name of the containment", "%1 Options", q->name()), &desktopMenu);
-                desktopMenu.addMenu(containmentActionMenu);
-            }
-
-            foreach (QAction *action, containmentActions) {
-                if (action) {
-                    containmentActionMenu->addAction(action);
-                }
-            }
-
-            if (q->hasConfigurationInterface()) {
-                containmentActionMenu->addAction(q->action("configure"));
-            }
-        }
-
-        if (static_cast<Corona*>(q->scene())->immutability() == Mutable) {
-            if (hasEntries) {
-                desktopMenu.addSeparator();
-            }
-
-            QAction *closeApplet = applet->d->actions.action("remove");
-            if (!closeApplet) { //unlikely but not impossible
-                kDebug() << "no remove action!!!!!!!!";
-                closeApplet = new QAction(i18nc("%1 is the name of the applet", "Remove this %1", applet->name()), &desktopMenu);
-                closeApplet->setIcon(KIcon("edit-delete"));
-                QObject::connect(closeApplet, SIGNAL(triggered(bool)), applet, SLOT(destroy()));
-            }
-            desktopMenu.addAction(closeApplet);
-            hasEntries = true;
-        }
-
-        if (!hasEntries) {
-            kDebug() << "no entries";
-            return false;
-        }
+        appletActions(desktopMenu, applet, includeApplet);
     } else {
-        if (static_cast<Corona*>(q->scene())->immutability() != Mutable &&
-            !KAuthorized::authorizeKAction("unlock_desktop")) {
-            //kDebug() << "immutability";
-            return false;
-        }
-
-        QList<QAction*> actions = q->contextualActions();
-
-        if (actions.count() < 1) {
-            //kDebug() << "no applet, but no actions";
-            return false;
-        }
-
-        foreach (QAction *action, actions) {
-            if (action) {
-                desktopMenu.addAction(action);
-            }
-        }
+        containmentActions(desktopMenu);
     }
 
-    //kDebug() << "executing at" << screenPos;
-    desktopMenu.exec(screenPos);
-    return true;
+    if (!desktopMenu.isEmpty()) {
+        //kDebug() << "executing at" << screenPos;
+        desktopMenu.exec(screenPos);
+        return true;
+    }
+
+    return false;
 }
 
 void Containment::setFormFactor(FormFactor formFactor)
