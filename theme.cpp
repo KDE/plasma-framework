@@ -163,6 +163,7 @@ void ThemePrivate::compositingChanged()
 
     if (compositingActive != nowCompositingActive) {
         compositingActive = nowCompositingActive;
+        pixmapCache->discard();
         emit q->themeChanged();
     }
 #endif
