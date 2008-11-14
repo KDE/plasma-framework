@@ -306,7 +306,7 @@ void ToolTipManagerPrivate::showToolTip()
         tooltip = tooltips.constFind(currentWidget);
         //kDebug() << "attempt to make one ... we gots" << tooltip.isEmpty();
 
-        if (tooltip.value().isEmpty()) {
+        if (tooltip == tooltips.constEnd() || tooltip.value().isEmpty()) {
             currentWidget = 0;
             return;
         }
