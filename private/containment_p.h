@@ -21,7 +21,7 @@
 #ifndef CONTAINMENT_P_H
 #define CONTAINMENT_P_H
 
-#include <KMenu>
+#include <kmenu.h>
 
 static const int INTER_CONTAINMENT_MARGIN = 6;
 static const int CONTAINMENT_COLUMNS = 2;
