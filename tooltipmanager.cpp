@@ -292,16 +292,21 @@ void ToolTipManagerPrivate::showToolTip()
         return;
     }
 
-    ToolTipContent tooltip = tooltips.value(currentWidget);
+    QHash<QGraphicsWidget *, ToolTipContent>::const_iterator tooltip = tooltips.constFind(currentWidget);
+
+    if (tooltip == tooltips.constEnd()) {
+        return;
+    }
+
     bool justCreated = false;
 
-    if (tooltip.isEmpty()) {
+    if (tooltip.value().isEmpty()) {
         // give the object a chance for delayed loading of the tip
         QMetaObject::invokeMethod(currentWidget, "toolTipAboutToShow");
-        tooltip = tooltips.value(currentWidget);
+        tooltip = tooltips.constFind(currentWidget);
         //kDebug() << "attempt to make one ... we gots" << tooltip.isEmpty();
 
-        if (tooltip.isEmpty()) {
+        if (tooltip.value().isEmpty()) {
             currentWidget = 0;
             return;
         }
@@ -310,13 +315,13 @@ void ToolTipManagerPrivate::showToolTip()
     }
 
     //kDebug() << "about to show" << justCreated;
-    tipWidget->setContent(currentWidget,tooltip);
+    tipWidget->setContent(currentWidget, tooltip.value());
     tipWidget->prepareShowing(!justCreated);
     tipWidget->moveTo(ToolTipManager::self()->m_corona->popupPosition(currentWidget, tipWidget->size()));
     tipWidget->show();
     isShown = true;  //ToolTip is visible
 
-    delayedHide = tooltip.autohide();
+    delayedHide = tooltip.value().autohide();
     if (delayedHide) {
         //kDebug() << "starting authoide";
         hideTimer->start(3000);

@@ -52,9 +52,9 @@ public:
           document(new QTextDocument(this))
     {
         //d->text->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
-        QTextOption op;
-        op.setWrapMode(QTextOption::WordWrap);
-        document->setDefaultTextOption(op);
+//        QTextOption op;
+//        op.setWrapMode(QTextOption::WordWrap);
+//        document->setDefaultTextOption(op);
     }
 
     void setStyleSheet(const QString &css)
@@ -68,6 +68,7 @@ public:
         data.registerResources(document);
         document->setHtml("<p><b>" + data.mainText() + "</b><br>" + data.subText() + "</p>");
         document->adjustSize();
+        update();
     }
 
     QSize minimumSizeHint() const
