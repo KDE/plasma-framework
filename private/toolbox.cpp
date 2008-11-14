@@ -280,6 +280,8 @@ void ToolBox::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 
     d->dragStart = QPoint();
     d->dragging = false;
+    KConfigGroup cg(d->containment->config());
+    save(cg);
 }
 
 bool ToolBox::isMovable() const
