@@ -307,6 +307,10 @@ void Containment::save(KConfigGroup &g) const
     group.writeEntry("location", (int)d->location);
     group.writeEntry("activity", d->context()->currentActivity());
 
+    if (d->toolBox) {
+        d->toolBox->save(group);
+    }
+
     if (d->wallpaper) {
         group.writeEntry("wallpaperplugin", d->wallpaper->pluginName());
         group.writeEntry("wallpaperpluginmode", d->wallpaper->renderingMode().name());
@@ -1476,6 +1480,7 @@ ToolBox *ContainmentPrivate::createToolBox()
 
         if (toolBox) {
             QObject::connect(toolBox, SIGNAL(toggled()), q, SIGNAL(toolBoxToggled()));
+            toolBox->load();
             positionToolBox();
         }
     }
@@ -1485,73 +1490,8 @@ ToolBox *ContainmentPrivate::createToolBox()
 
 void ContainmentPrivate::positionToolBox()
 {
-    if (!toolBox) {
-        return;
-    }
-
-    kDebug();
-    //The placement assumes that the geometry width/height is no more than the screen
-    if (type == Containment::PanelContainment) {
-        if (q->formFactor() == Vertical) {
-            toolBox->setCorner(ToolBox::Bottom);
-            toolBox->setPos(q->geometry().width() / 2 - toolBox->boundingRect().width() / 2,
-                            q->geometry().height());
-        } else {
-            //defaulting to Horizontal right now
-            if (QApplication::layoutDirection() == Qt::RightToLeft) {
-                toolBox->setPos(q->geometry().left(),
-                                q->geometry().height() / 2 - toolBox->boundingRect().height() / 2);
-                toolBox->setCorner(ToolBox::Left);
-            } else {
-                toolBox->setPos(q->geometry().width(),
-                                q->geometry().height() / 2 - toolBox->boundingRect().height() / 2);
-                toolBox->setCorner(ToolBox::Right);
-            }
-        }
-    } else if (q->corona()) {
-        kDebug() << "desktop";
-
-        QRectF avail = q->corona()->availableScreenRegion(screen).boundingRect();
-        QRectF screenGeom = q->corona()->screenGeometry(screen);
-
-        // Transform to the containment's coordinate system.
-        avail.translate(-screenGeom.topLeft());
-        screenGeom.moveTo(0, 0);
-        const int toolBoxSize = toolBox->size();
-
-        if (!q->view() || !q->view()->transform().isScaling()) {
-            if (QApplication::layoutDirection() == Qt::RightToLeft) {
-                if (avail.top() > screenGeom.top()) {
-                    toolBox->setPos(avail.topLeft() - QPoint(0, toolBoxSize));
-                    toolBox->setCorner(ToolBox::Left);
-                } else if (avail.left() > screenGeom.left()) {
-                    toolBox->setPos(avail.topLeft() - QPoint(toolBoxSize, 0));
-                    toolBox->setCorner(ToolBox::Top);
-                } else {
-                    toolBox->setPos(avail.topLeft());
-                    toolBox->setCorner(ToolBox::TopLeft);
-                }
-            } else {
-                if (avail.top() > screenGeom.top()) {
-                    toolBox->setPos(avail.topRight() - QPoint(0, toolBoxSize));
-                    toolBox->setCorner(ToolBox::Right);
-                } else if (avail.right() < screenGeom.right()) {
-                    toolBox->setPos(avail.topRight() - QPoint(toolBoxSize, 0));
-                    toolBox->setCorner(ToolBox::Top);
-                } else {
-                    toolBox->setPos(avail.topRight() - QPoint(toolBoxSize, 0));
-                    toolBox->setCorner(ToolBox::TopRight);
-                }
-            }
-        } else {
-            if (QApplication::layoutDirection() == Qt::RightToLeft) {
-                toolBox->setPos(q->mapFromScene(QPointF(q->geometry().topLeft())));
-                toolBox->setCorner(ToolBox::TopLeft);
-            } else {
-                toolBox->setPos(q->mapFromScene(QPointF(q->geometry().topRight())));
-                toolBox->setCorner(ToolBox::TopRight);
-            }
-        }
+    if (toolBox) {
+        toolBox->reposition();
     }
 }
 

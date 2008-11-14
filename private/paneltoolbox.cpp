@@ -95,7 +95,7 @@ public:
     bool toggled;
 };
 
-PanelToolBox::PanelToolBox(QGraphicsItem *parent)
+PanelToolBox::PanelToolBox(Containment *parent)
     : ToolBox(parent),
       d(new PanelToolBoxPrivate)
 {

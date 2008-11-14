@@ -43,7 +43,7 @@ class DesktopToolBox : public ToolBox
     Q_OBJECT
 
 public:
-    explicit DesktopToolBox(QGraphicsItem *parent = 0);
+    explicit DesktopToolBox(Containment *parent = 0);
     ~DesktopToolBox();
     QRectF boundingRect() const;
     QPainterPath shape() const;

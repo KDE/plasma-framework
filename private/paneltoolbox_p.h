@@ -43,7 +43,7 @@ class PanelToolBox : public ToolBox
     Q_OBJECT
 
 public:
-    explicit PanelToolBox(QGraphicsItem *parent = 0);
+    explicit PanelToolBox(Containment *parent);
     ~PanelToolBox();
     QRectF boundingRect() const;
     QPainterPath shape() const;

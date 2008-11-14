@@ -24,9 +24,11 @@
 #include <QGraphicsItem>
 #include <QObject>
 
-#include "animator.h"
+#include "containment.h"
 
 class QAction;
+
+class KConfigGroup;
 
 namespace Plasma
 {
@@ -54,7 +56,7 @@ public:
         BottomLeft
     };
 
-    explicit ToolBox(QGraphicsItem *parent = 0);
+    explicit ToolBox(Containment *parent);
     ~ToolBox();
 
     /**
@@ -77,6 +79,10 @@ public:
 
     bool isMovable() const;
     void setIsMovable(bool movable);
+
+    void save(KConfigGroup &cg) const;
+    void load();
+    void reposition();
 
     virtual void showToolBox() = 0;
     virtual void hideToolBox() = 0;

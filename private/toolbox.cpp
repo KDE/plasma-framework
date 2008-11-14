@@ -21,14 +21,18 @@
 #include "toolbox_p.h"
 
 #include <QAction>
+#include <QApplication>
 #include <QGraphicsSceneHoverEvent>
+#include <QGraphicsView>
 #include <QPainter>
 #include <QRadialGradient>
 
 #include <kcolorscheme.h>
+#include <kconfiggroup.h>
 #include <kdebug.h>
 
-#include <plasma/theme.h>
+#include "corona.h"
+#include "theme.h"
 #include "widgets/iconwidget.h"
 
 namespace Plasma
@@ -37,16 +41,18 @@ namespace Plasma
 class ToolBoxPrivate
 {
 public:
-    ToolBoxPrivate()
-      : size(50),
-      iconSize(32, 32),
-      corner(ToolBox::TopRight),
-      hidden(false),
-      showing(false),
-      movable(false),
-      dragging(false)
+    ToolBoxPrivate(Containment *c)
+      : containment(c),
+        size(50),
+        iconSize(32, 32),
+        corner(ToolBox::TopRight),
+        hidden(false),
+        showing(false),
+        movable(false),
+        dragging(false)
     {}
 
+    Containment *containment;
     int size;
     QSize iconSize;
     ToolBox::Corner corner;
@@ -55,11 +61,12 @@ public:
     bool showing : 1;
     bool movable : 1;
     bool dragging : 1;
+    bool userMoved : 1;
 };
 
-ToolBox::ToolBox(QGraphicsItem *parent)
+ToolBox::ToolBox(Containment *parent)
     : QGraphicsItem(parent),
-      d(new ToolBoxPrivate)
+      d(new ToolBoxPrivate(parent))
 {
     setAcceptsHoverEvents(true);
 }
@@ -194,6 +201,7 @@ void ToolBox::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     // sticky points at midpoints
     // change how buttons appear depending on the location of the box
     d->dragging = true;
+    d->userMoved = true;
     const QPoint newPos = mapToParent(event->pos()).toPoint();
     const QPoint curPos = pos().toPoint();
     const int h = abs(boundingRect().height());
@@ -282,6 +290,131 @@ bool ToolBox::isMovable() const
 void ToolBox::setIsMovable(bool movable)
 {
     d->movable = movable;
+}
+
+void ToolBox::save(KConfigGroup &cg) const
+{
+    if (!d->movable) {
+        return;
+    }
+
+    KConfigGroup group(&cg, "ToolBox");
+    if (!d->userMoved) {
+        group.deleteGroup();
+        return;
+    }
+
+    int offset = 0;
+    if (d->corner == ToolBox::Left ||
+        d->corner == ToolBox::Right) {
+        offset = y();
+    } else if (d->corner == ToolBox::Left ||
+               d->corner == ToolBox::Right) {
+        offset = x();
+    }
+
+    group.writeEntry("corner", int(d->corner));
+    group.writeEntry("offset", offset);
+}
+
+void ToolBox::load()
+{
+    if (!d->movable) {
+        return;
+    }
+
+    KConfigGroup group = d->containment->config();
+    group = KConfigGroup(&group, "ToolBox");
+
+    if (!group.hasKey("corner")) {
+        return;
+    }
+
+    d->userMoved = true;
+    d->corner = Corner(group.readEntry("corner", int(d->corner)));
+
+    int offset = group.readEntry("offset", 0);
+    if (d->corner == ToolBox::Left) {
+        setPos(0, offset);
+    } else if (d->corner == ToolBox::Right) {
+        setPos(d->containment->size().width() - d->size, offset);
+    } else if (d->corner == ToolBox::Top) {
+        setPos(offset, 0);
+    } else if (d->corner == ToolBox::Bottom) {
+        setPos(offset, d->containment->size().height() - d->size);
+    }
+}
+
+void ToolBox::reposition()
+{
+    if (d->userMoved) {
+        //FIXME: adjust for situations like changing of the available space
+        load();
+        return;
+    }
+
+    if (d->containment->containmentType() == Containment::PanelContainment) {
+        if (d->containment->formFactor() == Vertical) {
+            setCorner(ToolBox::Bottom);
+            setPos(d->containment->geometry().width() / 2 - boundingRect().width() / 2,
+                            d->containment->geometry().height());
+        } else {
+            //defaulting to Horizontal right now
+            if (QApplication::layoutDirection() == Qt::RightToLeft) {
+                setPos(d->containment->geometry().left(),
+                                d->containment->geometry().height() / 2 - boundingRect().height() / 2);
+                setCorner(ToolBox::Left);
+            } else {
+                setPos(d->containment->geometry().width(),
+                                d->containment->geometry().height() / 2 - boundingRect().height() / 2);
+                setCorner(ToolBox::Right);
+            }
+        }
+    } else if (d->containment->corona()) {
+        //kDebug() << "desktop";
+
+        int screen = d->containment->screen();
+        QRectF avail = d->containment->corona()->availableScreenRegion(screen).boundingRect();
+        QRectF screenGeom = d->containment->corona()->screenGeometry(screen);
+
+        // Transform to the containment's coordinate system.
+        avail.translate(-screenGeom.topLeft());
+        screenGeom.moveTo(0, 0);
+
+        if (!d->containment->view() || !d->containment->view()->transform().isScaling()) {
+            if (QApplication::layoutDirection() == Qt::RightToLeft) {
+                if (avail.top() > screenGeom.top()) {
+                    setPos(avail.topLeft() - QPoint(0, d->size));
+                    setCorner(ToolBox::Left);
+                } else if (avail.left() > screenGeom.left()) {
+                    setPos(avail.topLeft() - QPoint(d->size, 0));
+                    setCorner(ToolBox::Top);
+                } else {
+                    setPos(avail.topLeft());
+                    setCorner(ToolBox::TopLeft);
+                }
+            } else {
+                if (avail.top() > screenGeom.top()) {
+                    setPos(avail.topRight() - QPoint(0, d->size));
+                    setCorner(ToolBox::Right);
+                } else if (avail.right() < screenGeom.right()) {
+                    setPos(avail.topRight() - QPoint(d->size, 0));
+                    setCorner(ToolBox::Top);
+                } else {
+                    setPos(avail.topRight() - QPoint(d->size, 0));
+                    setCorner(ToolBox::TopRight);
+                }
+            }
+        } else {
+            if (QApplication::layoutDirection() == Qt::RightToLeft) {
+                setPos(d->containment->mapFromScene(QPointF(d->containment->geometry().topLeft())));
+                setCorner(ToolBox::TopLeft);
+            } else {
+                setPos(d->containment->mapFromScene(QPointF(d->containment->geometry().topRight())));
+                setCorner(ToolBox::TopRight);
+            }
+        }
+    }
 }
 
 } // plasma namespace

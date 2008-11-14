@@ -103,7 +103,7 @@ public:
     bool hovering : 1;
 };
 
-DesktopToolBox::DesktopToolBox(QGraphicsItem *parent)
+DesktopToolBox::DesktopToolBox(Containment *parent)
     : ToolBox(parent),
       d(new DesktopToolBoxPrivate)
 {
