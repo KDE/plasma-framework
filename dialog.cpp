@@ -239,41 +239,30 @@ void Dialog::mouseMoveEvent(QMouseEvent *event)
 
         switch(d->resizeStartCorner) {
             case Dialog::NorthEast:
-                newWidth = event->x();
-                newHeight = height() - event->y();
+                newWidth = qMin(maximumWidth(), qMax(minimumWidth(), event->x()));
+                newHeight = qMin(maximumHeight(), qMax(minimumHeight(), height() - event->y()));
                 position = QPoint(x(), y() + height() - newHeight);
                 break;
             case Dialog::NorthWest:
-                newWidth = width() - event->x();
-                newHeight = height() - event->y();
+                newWidth = qMin(maximumWidth(), qMax(minimumWidth(), width() - event->x()));
+                newHeight = qMin(maximumHeight(), qMax(minimumHeight(), height() - event->y()));
                 position = QPoint(x() + width() - newWidth, y() + height() - newHeight);
                 break;
             case Dialog::SouthWest:
-                newWidth = width() - event->x();
-                newHeight = event->y();
+                newWidth = qMin(maximumWidth(), qMax(minimumWidth(), width() - event->x()));
+                newHeight = qMin(maximumHeight(), qMax(minimumHeight(), event->y()));
                 position = QPoint(x() + width() - newWidth, y());
                 break;
             case Dialog::SouthEast:
-                newWidth = event->x();
-                newHeight = event->y();
+                newWidth = qMin(maximumWidth(), qMax(minimumWidth(), event->x()));
+                newHeight = qMin(maximumHeight(), qMax(minimumHeight(), event->y()));
                 position = QPoint(x(), y());
                 break;
              default:
-                newWidth = width();
-                newHeight = height();
+                newWidth = qMin(maximumWidth(), qMax(minimumWidth(), width()));
+                newHeight = qMin(maximumHeight(), qMax(minimumHeight(), height()));
                 position = QPoint(x(), y());
                 break;
-        }
-
-        // let's check for limitations
-        if (newWidth < minimumWidth() || newWidth > maximumWidth()) {
-            newWidth = width();
-            position.setX(x());
-        }
-
-        if (newHeight < minimumHeight() || newHeight > maximumHeight()) {
-            newHeight = height();
-            position.setY(y());
         }
 
         setGeometry(QRect(position, QSize(newWidth, newHeight)));
