@@ -336,14 +336,31 @@ void ToolBox::load()
     d->corner = Corner(group.readEntry("corner", int(d->corner)));
 
     int offset = group.readEntry("offset", 0);
-    if (d->corner == ToolBox::Left) {
-        setPos(0, offset);
-    } else if (d->corner == ToolBox::Right) {
-        setPos(d->containment->size().width() - d->size, offset);
-    } else if (d->corner == ToolBox::Top) {
-        setPos(offset, 0);
-    } else if (d->corner == ToolBox::Bottom) {
-        setPos(offset, d->containment->size().height() - d->size);
+    switch (d->corner) {
+        case ToolBox::TopLeft:
+            setPos(0, 0);
+            break;
+        case ToolBox::Top:
+            setPos(offset, 0);
+            break;
+        case ToolBox::TopRight:
+            setPos(d->containment->size().width() - d->size, 0);
+            break;
+        case ToolBox::Right:
+            setPos(d->containment->size().width() - d->size, offset);
+            break;
+        case ToolBox::BottomRight:
+            setPos(d->containment->size().width() - d->size, d->containment->size().height() - d->size);
+            break;
+        case ToolBox::Bottom:
+            setPos(offset, d->containment->size().height() - d->size);
+            break;
+        case ToolBox::BottomLeft:
+            setPos(0, d->containment->size().height() - d->size);
+            break;
+        case ToolBox::Left:
+            setPos(0, offset);
+            break;
     }
 }
 
