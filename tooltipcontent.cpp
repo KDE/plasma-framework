@@ -19,11 +19,29 @@
 
 #include "tooltipcontent.h"
 
+#include <QHash>
+#include <QTextDocument>
+
 #include <kiconloader.h>
 
 namespace Plasma
 {
 
+struct ToolTipResource
+{
+    ToolTipResource()
+    {
+    }
+
+    ToolTipResource(ToolTipContent::ResourceType t, const QVariant &v)
+        : type(t),
+          data(v)
+    {
+    }
+
+    ToolTipContent::ResourceType type;
+    QVariant data;
+};
 class ToolTipContentPrivate
 {
 public:
@@ -37,6 +55,7 @@ public:
     QString subText;
     QPixmap image;
     WId windowToPreview;
+    QHash<QString, ToolTipResource> resources;
     bool autohide;
 };
 
@@ -142,6 +161,39 @@ void ToolTipContent::setAutohide(bool autohide)
 bool ToolTipContent::autohide() const
 {
     return d->autohide;
+}
+
+void ToolTipContent::addResource(ResourceType type, const QUrl &path, const QVariant &resource)
+{
+    d->resources.insert(path.toString(), ToolTipResource(type, resource));
+}
+
+void ToolTipContent::registerResources(QTextDocument *document) const
+{
+    if (!document) {
+        return;
+    }
+
+    QHashIterator<QString, ToolTipResource> it(d->resources);
+    while (it.hasNext()) {
+        it.next();
+        const ToolTipResource &r = it.value();
+        QTextDocument::ResourceType t;
+
+        switch (r.type) {
+            case ImageResource:
+                t = QTextDocument::ImageResource;
+                break;
+            case HtmlResource:
+                t = QTextDocument::HtmlResource;
+                break;
+            case CssResource:
+                t = QTextDocument::StyleSheetResource;
+                break;
+        }
+
+        document->addResource(t, it.key(), r.data);
+    }
 }
 
 } // namespace Plasma

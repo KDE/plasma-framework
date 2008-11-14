@@ -21,10 +21,14 @@
 #define PLASMA_TOOLTIPCONTENT_H
 
 #include <QtCore/QString>
+#include <QtCore/QUrl>
+#include <QtCore/QVariant>
 #include <QtGui/QPixmap>
 #include <QtGui/QIcon>
 
 #include <plasma/plasma_export.h>
+
+class QTextDocument;
 
 /**
  * This provides the content for a tooltip.
@@ -41,6 +45,8 @@ class ToolTipContentPrivate;
 class PLASMA_EXPORT ToolTipContent
 {
 public:
+    enum ResourceType { ImageResource = 0, HtmlResource, CssResource };
+
     /** Creates an empty Content */
     ToolTipContent();
 
@@ -96,6 +102,13 @@ public:
 
     /** Whether or not to autohide the tooltip, defaults to true */
     bool autohide() const;
+
+    /** Adds a resource that can then be referenced from the text elements
+        using rich text **/
+    void addResource(ResourceType type, const QUrl &path, const QVariant &resource);
+
+    /** Registers all resources with a given document */
+    void registerResources(QTextDocument *document) const;
 
 private:
     ToolTipContentPrivate * const d;

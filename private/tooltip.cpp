@@ -27,6 +27,7 @@
 #include <QMouseEvent>
 #include <QPainter>
 #include <QPalette>
+#include <QTextDocument>
 #include <QTimeLine>
 #ifdef Q_WS_X11
 #include <QX11Info>
@@ -43,11 +44,52 @@
 
 namespace Plasma {
 
+class TipTextWidget : public QWidget
+{
+public:
+    TipTextWidget(QWidget *parent)
+        : QWidget(parent),
+          document(new QTextDocument(this))
+    {
+        //d->text->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
+        QTextOption op;
+        op.setWrapMode(QTextOption::WordWrap);
+        document->setDefaultTextOption(op);
+    }
+
+    void setStyleSheet(const QString &css)
+    {
+        document->setDefaultStyleSheet(css);
+    }
+
+    void setContent(const ToolTipContent &data)
+    {
+        document->clear();
+        data.registerResources(document);
+        document->setHtml("<p><b>" + data.mainText() + "</b><br>" + data.subText() + "</p>");
+        document->adjustSize();
+    }
+
+    QSize minimumSizeHint() const
+    {
+        return document->size().toSize();
+    }
+
+    void paintEvent(QPaintEvent *event)
+    {
+        QPainter p(this);
+        document->drawContents(&p, event->rect());
+    }
+
+private:
+    QTextDocument *document;
+};
+
 class ToolTipPrivate
 {
     public:
         ToolTipPrivate()
-        : label(0),
+        : text(0),
           imageLabel(0),
           preview(0),
           source(0),
@@ -55,7 +97,7 @@ class ToolTipPrivate
           autohide(true)
     { }
 
-    QLabel *label;
+    TipTextWidget *text;
     QLabel *imageLabel;
     WindowPreview *preview;
     FrameSvg *background;
@@ -94,9 +136,7 @@ ToolTip::ToolTip(QWidget *parent)
     setWindowFlags(Qt::ToolTip);
     QGridLayout *l = new QGridLayout;
     d->preview = new WindowPreview(this);
-    d->label = new QLabel(this);
-    d->label->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
-    d->label->setWordWrap(true);
+    d->text = new TipTextWidget(this);
     d->imageLabel = new QLabel(this);
     d->imageLabel->setAlignment(Qt::AlignTop | Qt::AlignLeft);
 
@@ -108,7 +148,7 @@ ToolTip::ToolTip(QWidget *parent)
 
     l->addWidget(d->preview, 0, 0, 1, 2);
     l->addWidget(d->imageLabel, 1, 0);
-    l->addWidget(d->label, 1, 1);
+    l->addWidget(d->text, 1, 1);
     setLayout(l);
 }
 
@@ -149,7 +189,7 @@ void ToolTip::checkSize()
 void ToolTip::setContent(QObject *tipper, const ToolTipContent &data)
 {
     //reset our size
-    d->label->setText("<qt><b>" + data.mainText() + "</b><br>" + data.subText() + "</qt>");
+    d->text->setContent(data);
     d->imageLabel->setPixmap(data.image());
     d->preview->setWindowId(data.windowToPreview());
     d->autohide = data.autohide();
@@ -250,13 +290,14 @@ void ToolTip::updateTheme()
     setContentsMargins(leftWidth, topHeight, rightWidth, bottomHeight);
 
     // Make the tooltip use Plasma's colorscheme
+    QColor textColor = Plasma::Theme::defaultTheme()->color(Plasma::Theme::TextColor);
     QPalette plasmaPalette = QPalette();
     plasmaPalette.setColor(QPalette::Window,
                            Plasma::Theme::defaultTheme()->color(Plasma::Theme::BackgroundColor));
-    plasmaPalette.setColor(QPalette::WindowText,
-                           Plasma::Theme::defaultTheme()->color(Plasma::Theme::TextColor));
+    plasmaPalette.setColor(QPalette::WindowText, textColor);
     setAutoFillBackground(true);
     setPalette(plasmaPalette);
+    d->text->setStyleSheet(QString("p { color: %1; }").arg(textColor.name()));
     update();
 }
 
