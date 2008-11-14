@@ -103,8 +103,12 @@ void WebView::setPage(QWebPage *page)
         return;
     }
 
-    if (d->page && d->page->parent() == this) {
-        delete d->page;
+    if (d->page) {
+        if (d->page->parent() == this) {
+            delete d->page;
+        } else {
+            disconnect(d->page, 0, this, 0);
+        }
     }
 
     d->page = page;
