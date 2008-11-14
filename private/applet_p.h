@@ -110,6 +110,7 @@ public:
     bool transient : 1;
     bool ghost : 1;
     bool needsConfig : 1;
+    bool started : 1;
 };
 
 } // Plasma namespace

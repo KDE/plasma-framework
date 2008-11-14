@@ -1737,7 +1737,8 @@ AppletPrivate::AppletPrivate(KService::Ptr service, int uniqueID, Applet *applet
           isContainment(false),
           transient(false),
           ghost(false),
-          needsConfig(false)
+          needsConfig(false),
+          started(false)
 {
     if (appletId == 0) {
         appletId = ++s_maxAppletId;
@@ -1889,8 +1890,12 @@ void AppletPrivate::scheduleConstraintsUpdate(Plasma::Constraints c)
 {
     // Don't start up a timer if we're just starting up
     // flushPendingConstraints will be called by Corona
-    if (!constraintsTimerId && !(c & Plasma::StartupCompletedConstraint)) {
+    if (started && !constraintsTimerId && !(c & Plasma::StartupCompletedConstraint)) {
         constraintsTimerId = q->startTimer(0);
+    }
+
+    if (c & Plasma::StartupCompletedConstraint) {
+        started = true;
     }
 
     pendingConstraints |= c;
