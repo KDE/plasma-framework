@@ -240,10 +240,12 @@ bool appletConfigLessThan(const KConfigGroup &c1, const KConfigGroup &c2)
 {
     QPointF p1 = c1.readEntry("geometry", QRectF()).topLeft();
     QPointF p2 = c2.readEntry("geometry", QRectF()).topLeft();
-    if (p1.x() != p2.x()) {
+
+    if (!qFuzzyCompare(p1.x(), p2.x())) {
         return p1.x() < p2.x();
     }
-    return p1.y() < p2.y();
+
+    return qFuzzyCompare(p1.y(), p2.y()) || p1.y() < p2.y();
 }
 
 void Containment::restore(KConfigGroup &group)
@@ -340,7 +342,7 @@ void Containment::restoreContents(KConfigGroup &group)
         KConfigGroup appletConfig(&applets, appletGroup);
         appletConfigs.append(appletConfig);
     }
-    qSort(appletConfigs.begin(), appletConfigs.end(), appletConfigLessThan);
+    qStableSort(appletConfigs.begin(), appletConfigs.end(), appletConfigLessThan);
 
     QMutableListIterator<KConfigGroup> it(appletConfigs);
     while (it.hasNext()) {
