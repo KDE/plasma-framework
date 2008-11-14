@@ -31,7 +31,6 @@
 #include <plasma/theme.h>
 #include <plasma/paintutils.h>
 
-
 #include <plasma/applet.h>
 
 namespace Plasma
@@ -69,6 +68,13 @@ class EmptyGraphicsItem : public QGraphicsItem
             Q_UNUSED(p)
             //p->setPen(Qt::red);
             //p->drawRect(boundingRect());
+            p->setRenderHints(QPainter::Antialiasing);
+            p->translate(0.5, 0.5);
+            //TODO: use Plasma::Theme, and a gradient for the brush!
+            p->setPen(QPen(Qt::white, 1));
+            p->setBrush(QColor(0, 0, 0, 160));
+            QPainterPath path = PaintUtils::roundedRectangle(boundingRect(), 10);
+            p->drawPath(path);
         }
 
     private:
@@ -290,15 +296,15 @@ void DesktopToolBox::showToolBox()
     switch (corner()) {
     case TopRight:
         x = (int)boundingRect().right() - maxwidth - iconWidth - 5;
-        y = (int)boundingRect().top() + 5;
+        y = (int)boundingRect().top() + 10;
         break;
     case Top:
         x = (int)boundingRect().center().x() - iconWidth;
-        y = (int)boundingRect().top() + iconWidth + 5;
+        y = (int)boundingRect().top() + iconWidth + 10;
         break;
     case TopLeft:
         x = (int)boundingRect().left() + iconWidth + 5;
-        y = (int)boundingRect().top() + 5;
+        y = (int)boundingRect().top() + 10;
         break;
     case Left:
         x = (int)boundingRect().left() + iconWidth + 5;
@@ -322,11 +328,18 @@ void DesktopToolBox::showToolBox()
         y = (int)boundingRect().bottom() - iconWidth - 5;
         break;
     }
+
+    int startX = x;
+    int startY = y;
+    x += 5;
+
     Plasma::Animator *animdriver = Plasma::Animator::self();
     foreach (QGraphicsItem *tool, QGraphicsItem::children()) {
         if (tool == d->toolBacker) {
             continue;
         }
+
+        y += 5;
 
         if (!tool->isEnabled()) {
             if (tool->isVisible()) {
@@ -341,13 +354,14 @@ void DesktopToolBox::showToolBox()
         tool->show();
         animdriver->moveItem(tool, Plasma::Animator::SlideInMovement, QPoint(x, y));
         //x += 0;
-        y += static_cast<int>(tool->boundingRect().height()) + 5;
+        y += static_cast<int>(tool->boundingRect().height());
     }
 
     if (!d->toolBacker) {
         d->toolBacker = new EmptyGraphicsItem(this);
     }
-    d->toolBacker->setRect(QRectF(QPointF(x, 0), QSizeF(maxwidth, y - 10)));
+
+    d->toolBacker->setRect(QRectF(QPointF(startX, startY), QSizeF(maxwidth + 10, y)));
     d->toolBacker->show();
 
     if (d->animCircleId) {
