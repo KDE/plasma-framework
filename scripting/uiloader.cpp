@@ -131,3 +131,6 @@ QGraphicsLayout *UiLoader::createLayout(const QString &className, QGraphicsLayou
 }
 
 }
+
+#include "uiloader.moc"
+

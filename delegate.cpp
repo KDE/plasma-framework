@@ -383,3 +383,6 @@ QSize Delegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &
 }
 
 }
+
+#include "delegate.moc"
+
