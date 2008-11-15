@@ -46,6 +46,7 @@ ScrollBar::~ScrollBar()
 {
     widget()->setStyle(0);
     delete d->style;
+    delete d;
 }
 
 void ScrollBar::setRange(int min, int max)
