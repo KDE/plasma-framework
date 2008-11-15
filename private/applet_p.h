@@ -24,6 +24,8 @@
 
 #include <kactioncollection.h>
 
+class KKeySequenceWidget;
+
 namespace Plasma
 {
 
@@ -73,6 +75,7 @@ public:
     void cleanUpAndDelete();
     void createMessageOverlay();
     void destroyMessageOverlay();
+    void addGlobalShortcutsPage(KConfigDialog *dialog);
 
     static uint s_maxAppletId;
     static uint s_maxZValue;
@@ -101,6 +104,7 @@ public:
     ImmutabilityType immutability;
     KActionCollection actions;
     KAction *activationAction;
+    KKeySequenceWidget *shortcutEditor; //TODO: subclass KConfigDialog and encapsulate this in there
     int constraintsTimerId;
     int modificationsTimerId;
     bool hasConfigurationInterface : 1;

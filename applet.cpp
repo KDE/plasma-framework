@@ -40,22 +40,24 @@
 #include <QStyleOptionGraphicsItem>
 #include <QTextDocument>
 #include <QUiLoader>
+#include <QVBoxLayout>
 #include <QWidget>
 
 #include <kaction.h>
-#include <kicon.h>
+#include <kactioncollection.h>
+#include <kauthorized.h>
 #include <kcolorscheme.h>
 #include <kconfigdialog.h>
 #include <kdialog.h>
+#include <kicon.h>
 #include <kiconloader.h>
+#include <kkeysequencewidget.h>
 #include <kplugininfo.h>
 #include <kstandarddirs.h>
 #include <kservice.h>
 #include <kservicetypetrader.h>
 #include <kshortcut.h>
 #include <kwindowsystem.h>
-#include <kactioncollection.h>
-#include <kauthorized.h>
 
 #include <solid/powermanagement.h>
 
@@ -1366,8 +1368,12 @@ void Applet::showConfigurationInterface()
         f.close();
 
         dialog->addPage(w, i18n("Settings"), icon(), i18n("%1 Settings", name()));
+        d->addGlobalShortcutsPage(dialog);
+        connect(dialog, SIGNAL(applyClicked()), this, SLOT(configChanged()));
+        connect(dialog, SIGNAL(okClicked()), this, SLOT(configChanged()));
         dialog->show();
     } else if (d->script) {
+        //FIXME: global shorcuts?
         d->script->showConfigurationInterface();
     } else {
         KConfigSkeleton *nullManager = new KConfigSkeleton(0);
@@ -1376,7 +1382,7 @@ void Applet::showConfigurationInterface()
         dialog->setWindowTitle(windowTitle);
         dialog->setAttribute(Qt::WA_DeleteOnClose, true);
         createConfigurationInterface(dialog);
-        //TODO: would be nice to not show dialog if there are no pages added?
+        d->addGlobalShortcutsPage(dialog);
         connect(dialog, SIGNAL(finished()), nullManager, SLOT(deleteLater()));
         //TODO: Apply button does not correctly work for now, so do not show it
         dialog->showButton(KDialog::Apply, false);
@@ -1388,10 +1394,36 @@ void Applet::showConfigurationInterface()
     emit releaseVisualFocus();
 }
 
+void AppletPrivate::addGlobalShortcutsPage(KConfigDialog *dialog)
+{
+    QWidget *page = new QWidget;
+    QVBoxLayout *layout = new QVBoxLayout(page);
+
+    if (!shortcutEditor) {
+        shortcutEditor = new KKeySequenceWidget(page);
+    }
+
+    shortcutEditor->setKeySequence(q->globalShortcut().primary());
+    layout->addWidget(shortcutEditor);
+    layout->addStretch();
+    dialog->addPage(page, i18n("Keyboard Shortcut"), "preferences-desktop-keyboard");
+}
+
 void Applet::configChanged()
 {
     if (d->script) {
         d->script->configChanged();
+    }
+
+    if (d->shortcutEditor) {
+        QKeySequence sequence = d->shortcutEditor->keySequence();
+        if (sequence != globalShortcut().primary()) {
+            setGlobalShortcut(KShortcut(sequence));
+            emit configNeedsSaving();
+        }
+
+        delete d->shortcutEditor;
+        d->shortcutEditor = 0;
     }
 }
 
@@ -1730,6 +1762,7 @@ AppletPrivate::AppletPrivate(KService::Ptr service, int uniqueID, Applet *applet
           immutability(Mutable),
           actions(applet),
           activationAction(0),
+          shortcutEditor(0),
           constraintsTimerId(0),
           modificationsTimerId(-1),
           hasConfigurationInterface(false),
