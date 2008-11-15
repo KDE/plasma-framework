@@ -18,7 +18,7 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "style.h"
+#include "style_p.h"
 
 #include <QPainter>
 #include <QStyleOptionComplex>
@@ -138,4 +138,7 @@ void Style::drawComplexControl(ComplexControl control,
 }
 
 }
+
+#include "style_p.moc"
+
 
