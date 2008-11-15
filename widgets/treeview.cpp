@@ -25,7 +25,7 @@
 
 #include <kiconloader.h>
 
-#include "private/style.h"
+#include "private/style_p.h"
 
 namespace Plasma
 {
@@ -33,13 +33,7 @@ namespace Plasma
 class TreeViewPrivate
 {
 public:
-    TreeViewPrivate()
-    {
-    }
-
-    ~TreeViewPrivate()
-    {
-    }
+    Plasma::Style *style;
 };
 
 TreeView::TreeView(QGraphicsWidget *parent)
@@ -51,13 +45,15 @@ TreeView::TreeView(QGraphicsWidget *parent)
     native->setAttribute(Qt::WA_NoSystemBackground);
     native->setFrameStyle(QFrame::NoFrame);
 
-    Plasma::Style *style = new Plasma::Style();
-    native->verticalScrollBar()->setStyle(style);
-    native->horizontalScrollBar()->setStyle(style);
+    d->style = new Plasma::Style();
+    native->verticalScrollBar()->setStyle(d->style);
+    native->horizontalScrollBar()->setStyle(d->style);
 }
 
 TreeView::~TreeView()
 {
+    widget()->setStyle(0);
+    delete d->style;
     delete d;
 }
 

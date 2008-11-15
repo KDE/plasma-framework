@@ -42,7 +42,7 @@
 #include "plasma/framesvg.h"
 #include "plasma/paintutils.h"
 
-#include "private/style.h"
+//#include "private/style_p.h"
 
 namespace Plasma
 {

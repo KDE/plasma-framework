@@ -20,24 +20,32 @@
 
 #include "scrollbar.h"
 
-#include <plasma/private/style.h>
+#include <plasma/private/style_p.h>
 
 namespace Plasma
 {
 
+class ScrollBarPrivate
+{
+public:
+    Plasma::Style *style;
+};
+
 ScrollBar::ScrollBar(Qt::Orientation orientation, QGraphicsWidget *parent)
    : QGraphicsProxyWidget(parent),
-     d(0)
+     d(new ScrollBarPrivate)
 {
    QScrollBar *scrollbar = new QScrollBar(orientation);
    scrollbar->setAttribute(Qt::WA_NoSystemBackground);
    setWidget(scrollbar);
-   Plasma::Style *style = new Plasma::Style();
-   scrollbar->setStyle(style);
+   d->style = new Plasma::Style();
+   scrollbar->setStyle(d->style);
 }
 
 ScrollBar::~ScrollBar()
 {
+    widget()->setStyle(0);
+    delete d->style;
 }
 
 void ScrollBar::setRange(int min, int max)

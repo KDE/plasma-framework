@@ -27,7 +27,7 @@
 
 #include "theme.h"
 #include "svg.h"
-#include "private/style.h"
+#include "private/style_p.h"
 
 namespace Plasma
 {
@@ -35,13 +35,7 @@ namespace Plasma
 class TextEditPrivate
 {
 public:
-    TextEditPrivate()
-    {
-    }
-
-    ~TextEditPrivate()
-    {
-    }
+    Plasma::Style *style;
 };
 
 TextEdit::TextEdit(QGraphicsWidget *parent)
@@ -52,13 +46,16 @@ TextEdit::TextEdit(QGraphicsWidget *parent)
     connect(native, SIGNAL(textChanged()), this, SIGNAL(textChanged()));
     setWidget(native);
     native->setAttribute(Qt::WA_NoSystemBackground);
-    Plasma::Style *style = new Plasma::Style();
-    native->verticalScrollBar()->setStyle(style);
-    native->horizontalScrollBar()->setStyle(style);
+    d->style = new Plasma::Style();
+    native->verticalScrollBar()->setStyle(d->style);
+    native->horizontalScrollBar()->setStyle(d->style);
 }
 
 TextEdit::~TextEdit()
 {
+    nativeWidget()->verticalScrollBar()->setStyle(0);
+    nativeWidget()->horizontalScrollBar()->setStyle(0);
+    delete d->style;
     delete d;
 }
 
