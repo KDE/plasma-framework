@@ -102,6 +102,7 @@ public:
 
     QString findInTheme(const QString &image, const QString &theme) const;
     void compositingChanged();
+    void discardCache();
 
     static const char *defaultTheme;
     static PackageStructure::Ptr packageStructure;
@@ -167,6 +168,11 @@ void ThemePrivate::compositingChanged()
         emit q->themeChanged();
     }
 #endif
+}
+
+void ThemePrivate::discardCache()
+{
+    pixmapCache->discard();
 }
 
 class ThemeSingleton
@@ -286,10 +292,15 @@ void Theme::setThemeName(const QString &themeName)
 
     disconnect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()),
                this, SIGNAL(themeChanged()));
+    disconnect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()),
+                this, SLOT(discardCache()));
+
     if (colorsFile.isEmpty()) {
         d->colors = 0;
         connect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()),
                 this, SIGNAL(themeChanged()));
+        connect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()),
+                this, SLOT(discardCache()));
     } else {
         d->colors = KSharedConfig::openConfig(colorsFile);
     }

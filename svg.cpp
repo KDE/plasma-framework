@@ -276,14 +276,14 @@ class SvgPrivate
 
         void checkApplyColorHint()
         {
-            KConfigGroup cg(KGlobal::config(), "SvgHints");
-            QString cgKey = themePath + "-hint-apply-color-scheme";
-            if (cg.hasKey(cgKey)) {
-                applyColors = cg.readEntry(cgKey, false);
+            QRectF elementRect;
+            bool found = Theme::defaultTheme()->findInRectsCache(themePath, cacheId("hint-apply-color-scheme"), elementRect);
+
+            if (found) {
+                applyColors = elementRect.isValid();
             } else {
-                createRenderer();
+                findAndCacheElementRect("hint-apply-color-scheme");
                 applyColors = renderer->elementExists("hint-apply-color-scheme");
-                cg.writeEntry(cgKey, applyColors);
             }
         }
 

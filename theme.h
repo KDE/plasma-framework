@@ -247,6 +247,7 @@ class PLASMA_EXPORT Theme : public QObject
         ThemePrivate *const d;
 
         Q_PRIVATE_SLOT(d, void compositingChanged())
+        Q_PRIVATE_SLOT(d, void discardCache())
 };
 
 } // Plasma namespace
