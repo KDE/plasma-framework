@@ -1397,6 +1397,10 @@ void Applet::showConfigurationInterface()
 
 void AppletPrivate::addGlobalShortcutsPage(KConfigDialog *dialog)
 {
+    if (isContainment) {
+        return;
+    }
+
     QWidget *page = new QWidget;
     QVBoxLayout *layout = new QVBoxLayout(page);
 
