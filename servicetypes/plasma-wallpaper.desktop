@@ -10,6 +10,7 @@ Comment[gl]=Fondo de escritorio de Plasma
 Comment[gu]=પ્લાઝમા વોલપેપર
 Comment[he]=תמונת רקע של Plasma
 Comment[hsb]=Tapeta za Plasma
+Comment[is]=Plasma veggfóður
 Comment[nb]=Plasma tapet
 Comment[nds]=Plasma-Achtergrundbild
 Comment[nl]=Plasma-bureaubladachtergrond
@@ -18,6 +19,7 @@ Comment[pt_BR]=Papel de parede do Plasma
 Comment[sv]=Plasma skrivbordsunderlägg
 Comment[tr]=Plasma duvar kağıdı
 Comment[uk]=Тло стільниці Плазми
+Comment[x-test]=xxPlasma wallpaperxx
 Comment[zh_TW]=Plasma 桌布
 
 [PropertyDef::X-Plasma-FormFactors]

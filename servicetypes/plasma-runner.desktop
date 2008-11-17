@@ -9,6 +9,7 @@ Comment[el]=Πρόσθετο του KRunner
 Comment[gl]=Extensión KFileWrite
 Comment[gu]=KRunner પ્લગઈન
 Comment[he]=תוסף KRunner
+Comment[is]=KRunner íforrit
 Comment[nb]=KRunner-programtillegg
 Comment[nds]=KRunner-Moduul
 Comment[nl]=KRunner-plugin
@@ -17,6 +18,7 @@ Comment[pt_BR]=Plug-in do KRunner
 Comment[sv]=Krunner-insticksprogram
 Comment[tr]=KRunner eklentisi
 Comment[uk]=Втулок KRunner
+Comment[x-test]=xxKRunner pluginxx
 Comment[zh_TW]=KRunner 外掛程式
 
 [PropertyDef::TryExec]

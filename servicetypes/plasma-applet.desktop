@@ -9,6 +9,7 @@ Comment[el]=Μικροεφαρμογή plasma
 Comment[gl]=Applet de Plasma
 Comment[gu]=પ્લાઝમા એપ્લેટ
 Comment[he]=יישומון של Plasma
+Comment[is]=Plasma smáforrit
 Comment[nb]=Plasma miniprogram
 Comment[nds]=Plasma-Lüttprogramm
 Comment[nl]=Plasma-applet
@@ -17,6 +18,7 @@ Comment[pt_BR]=Miniaplicativo do Plasma
 Comment[sv]=Plasma-miniprogram
 Comment[tr]=Plasma programcığı
 Comment[uk]=Аплет Плазми
+Comment[x-test]=xxPlasma appletxx
 Comment[zh_TW]=Plasma 小程式
 
 [PropertyDef::X-Plasma-API]

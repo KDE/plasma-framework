@@ -9,6 +9,7 @@ Comment[gl]=Extensicón de linguaxe de scripting para Plasma
 Comment[gu]=પ્લાઝમા માટે સ્ક્રિપ્ટીંગ ભાષા એક્સટેન્શન
 Comment[he]=הרחבת שפת תסריטים של Plasma
 Comment[hsb]=Skriptowa rěč jako Plasma-ekstensija
+Comment[is]=Framlenging á skriftunarmál fyrir Plasma
 Comment[nb]=Skriptspråk-utvidelse for Plasma
 Comment[nds]=Skriptspraak-Verwiedern för Plasma
 Comment[nl]=Scripttaalextensie voor Plasma
@@ -17,6 +18,7 @@ Comment[pt_BR]=Extensão de linguagem de script do Plasma
 Comment[sv]=Skriptspråksutökning för Plasma
 Comment[tr]=Plasma için betik dili eklentisi
 Comment[uk]=Розширення скриптових мов для Plasma
+Comment[x-test]=xxScripting language extension for Plasmaxx
 Comment[zh_TW]=Plasma 文稿語言延伸
 
 [PropertyDef::X-Plasma-ComponentTypes]
