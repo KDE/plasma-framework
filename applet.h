@@ -642,6 +642,12 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          */
         virtual void configChanged();
 
+        /**
+         * Shows a busy indicator that overlays the applet
+         * @param busy show or hide the busy indicator
+         */
+        void setBusy(bool busy);
+
     protected:
         /**
          * This constructor is to be used with the plugin loading systems
@@ -668,12 +674,6 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          *               failed to launch
          **/
         void setFailedToLaunch(bool failed, const QString &reason = QString());
-
-        /**
-         * Shows a busy indicator that overlays the applet
-         * @param busy show or hide the busy indicator
-         */
-        void setBusy(bool busy);
 
         /**
          * When called, the Applet should write any information needed as part
