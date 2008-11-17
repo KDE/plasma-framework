@@ -973,8 +973,11 @@ void Applet::addAction(QString name, QAction *action)
 
 void Applet::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-    QPainter *p;
-    //FIXME: we should probably set the pixmap to screenSize(), but that breaks stuff atm.
+    if (!d->started) {
+        return;
+    }
+
+    QPainter *p = painter;
     QPixmap *pixmap = 0;
 
     if (d->ghost) {
@@ -987,8 +990,6 @@ void Applet::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
 
         p = new QPainter();
         p->begin(pixmap);
-    } else {
-        p = painter;
     }
 
     p->save();
