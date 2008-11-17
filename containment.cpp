@@ -274,7 +274,7 @@ void Containment::restore(KConfigGroup &group)
 
     setLocation((Plasma::Location)group.readEntry("location", (int)d->location));
     setFormFactor((Plasma::FormFactor)group.readEntry("formfactor", (int)d->formFactor));
-    setScreen(group.readEntry("screen", d->screen));
+    setScreen(group.readEntry("screen", d->screen), group.readEntry("desktop", d->desktop));
     setActivity(group.readEntry("activity", QString()));
 
     flushPendingConstraintsEvents();
@@ -303,6 +303,7 @@ void Containment::save(KConfigGroup &g) const
     // locking is saved in Applet::save
     Applet::save(group);
     group.writeEntry("screen", d->screen);
+    group.writeEntry("desktop", d->desktop);
     group.writeEntry("formfactor", (int)d->formFactor);
     group.writeEntry("location", (int)d->location);
     group.writeEntry("activity", d->context()->currentActivity());
