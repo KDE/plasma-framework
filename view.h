@@ -84,9 +84,10 @@ public:
      * Sets which screen this view is associated with, if any.
      * This will also set the containment if a valid screen is specified
      *
-     * @arg screen the xinerama screen number; -1 for no screen
+     * @arg screen the physical screen number; -1 for no screen
+     * @arg desktop the virtual desktop number, or -1 for all virtual desktops
      */
-    void setScreen(int screen);
+    void setScreen(int screen, int desktop = -1);
 
     /**
      * Returns the screen this view is associated with
@@ -94,13 +95,6 @@ public:
      * @return the xinerama screen number, or -1 for none
      */
     int screen() const;
-
-    /**
-     * Sets which virtual desktop this view is asociated with, if any.
-     *
-     * @arg desktop a valid desktop number, -1 for all desktops, less than -1 for none
-     */
-    void setDesktop(int desktop);
 
     /**
      * The virtual desktop this view is associated with

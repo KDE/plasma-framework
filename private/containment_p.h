@@ -43,6 +43,7 @@ public:
           focusedApplet(0),
           wallpaper(0),
           screen(-1), // no screen
+          desktop(-1), // all desktops
           toolBox(0),
           con(0),
           type(Containment::NoContainmentType),
@@ -112,6 +113,7 @@ public:
     Plasma::Wallpaper *wallpaper;
     QMap<Applet*, AppletHandle*> handles;
     int screen;
+    int desktop;
     ToolBox *toolBox;
     Context *con;
     Containment::Type type;

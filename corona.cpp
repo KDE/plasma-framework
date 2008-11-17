@@ -320,10 +320,11 @@ void Corona::loadLayout(const QString &configName)
     }
 }
 
-Containment *Corona::containmentForScreen(int screen) const
+Containment *Corona::containmentForScreen(int screen, int desktop) const
 {
     foreach (Containment *containment, d->containments) {
         if (containment->screen() == screen &&
+            (desktop < 0 || containment->desktop() == desktop) &&
             (containment->containmentType() == Containment::DesktopContainment ||
              containment->containmentType() >= Containment::CustomContainment)) {
             return containment;

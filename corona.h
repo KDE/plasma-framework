@@ -94,8 +94,10 @@ public:
      * Returns the Containment, if any, for a given physical screen
      *
      * @param screen number of the physical screen to locate
+     * @param desktop the virtual dekstop) to locate; if < 0 then it will
+     *        simply return the first Containment associated with screen
      */
-    Containment *containmentForScreen(int screen) const;
+    Containment *containmentForScreen(int screen, int desktop = -1) const;
 
     /**
      * Adds a widget in the topleft quadrant in the scene. Widgets in the topleft quadrant are

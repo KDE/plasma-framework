@@ -208,14 +208,20 @@ class PLASMA_EXPORT Containment : public Applet
          *
          * @param screen the screen number this containment is the desktop for, or -1
          *               if it is not serving as the desktop for any screen
+         * @param desktop the virtual desktop to also associate this this screen with
          */
-        void setScreen(int screen);
+        void setScreen(int screen, int desktop = -1);
 
         /**
          * @return the screen number this containment is serving as the desktop for
          *         or -1 if none
          */
         int screen() const;
+
+        /**
+         * @return the viewport (e.g. virtual desktop) this Containment is associated with.
+         */
+        int desktop() const;
 
         /**
          * @reimplemented from Applet

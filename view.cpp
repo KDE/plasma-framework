@@ -141,7 +141,7 @@ View::~View()
     clearFocus();
 }
 
-void View::setScreen(int screen)
+void View::setScreen(int screen, int desktop)
 {
     if (screen > -1) {
         Corona *corona = qobject_cast<Corona*>(scene());
@@ -150,7 +150,14 @@ void View::setScreen(int screen)
             return;
         }
 
-        Containment *containment = corona->containmentForScreen(screen);
+        // -1 == All desktops
+        if (desktop < -1 || desktop > KWindowSystem::numberOfDesktops() - 1) {
+            desktop = -1;
+        }
+
+        d->desktop = desktop;
+
+        Containment *containment = corona->containmentForScreen(screen, desktop);
         if (containment) {
             d->containment = 0; //so that we don't end up on the old containment's screen
             setContainment(containment);
@@ -165,16 +172,6 @@ int View::screen() const
     }
 
     return -1;
-}
-
-void View::setDesktop(int desktop)
-{
-    // -1 == All desktops
-    if (desktop < -1 || desktop > KWindowSystem::numberOfDesktops() - 1) {
-        desktop = -1;
-    }
-
-    d->desktop = desktop;
 }
 
 int View::desktop() const

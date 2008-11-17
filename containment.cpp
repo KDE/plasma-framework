@@ -446,6 +446,7 @@ void Containment::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 
 void Containment::showDropZone(const QPoint pos)
 {
+    Q_UNUSED(pos)
     //Base implementation does nothing, don't put code here
 }
 
@@ -744,7 +745,7 @@ Applet::List Containment::applets() const
     return d->applets;
 }
 
-void Containment::setScreen(int screen)
+void Containment::setScreen(int screen, int desktop)
 {
     // What we want to do in here is:
     //   * claim the screen as our own
@@ -758,7 +759,6 @@ void Containment::setScreen(int screen)
     // a screen of -1 means no associated screen.
     Containment *swapScreensWith(0);
     if (d->type == DesktopContainment || d->type == CustomContainment) {
-
         // we want to listen to changes in work area if our screen changes
         if (d->screen < 0 && screen > -1) {
             connect(KWindowSystem::self(), SIGNAL(workAreaChanged()),
@@ -770,7 +770,7 @@ void Containment::setScreen(int screen)
 
         if (screen > -1 && corona()) {
             // sanity check to make sure someone else doesn't have this screen already!
-            Containment *currently = corona()->containmentForScreen(screen);
+            Containment *currently = corona()->containmentForScreen(screen, desktop);
             if (currently && currently != this) {
                 //kDebug() << "currently is on screen" << currently->screen()
                 //         << "and is" << currently->name()
@@ -788,6 +788,7 @@ void Containment::setScreen(int screen)
         screen = -1;
     }
 
+
     //kDebug() << "setting screen to " << screen << "and type is" << containmentType();
     if (screen < numScreens && screen > -1) {
         if (containmentType() == DesktopContainment ||
@@ -795,6 +796,13 @@ void Containment::setScreen(int screen)
             resize(corona()->screenGeometry(screen).size());
         }
     }
+
+    // -1 == All desktops
+    if (desktop < -1 || desktop > KWindowSystem::numberOfDesktops() - 1) {
+        desktop = -1;
+    }
+
+    d->desktop = desktop;
 
     int oldScreen = d->screen;
     d->screen = screen;
@@ -815,6 +823,11 @@ void Containment::setScreen(int screen)
 int Containment::screen() const
 {
     return d->screen;
+}
+
+int Containment::desktop() const
+{
+    return d->desktop;
 }
 
 KPluginInfo::List Containment::listContainments(const QString &category,
