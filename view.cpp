@@ -40,7 +40,6 @@ public:
           containment(0),
           drawWallpaper(true),
           trackChanges(true),
-          desktop(-1),
           viewId(0)
     {
         if (uniqueId > s_maxViewId) {
@@ -102,7 +101,6 @@ public:
     Plasma::Containment *containment;
     bool drawWallpaper;
     bool trackChanges;
-    int desktop;
     int viewId;
     static int s_maxViewId;
 };
@@ -155,8 +153,6 @@ void View::setScreen(int screen, int desktop)
             desktop = -1;
         }
 
-        d->desktop = desktop;
-
         Containment *containment = corona->containmentForScreen(screen, desktop);
         if (containment) {
             d->containment = 0; //so that we don't end up on the old containment's screen
@@ -176,12 +172,17 @@ int View::screen() const
 
 int View::desktop() const
 {
-    return d->desktop;
+    if (d->containment) {
+        return d->containment->desktop();
+    }
+
+    return -2;
 }
 
 int View::effectiveDesktop() const
 {
-    return d->desktop > -1 ? d->desktop : KWindowSystem::currentDesktop();
+    int desk = desktop();
+    return desk > -1 ? desk : KWindowSystem::currentDesktop();
 }
 
 void View::setContainment(Plasma::Containment *containment)
@@ -204,8 +205,10 @@ void View::setContainment(Plasma::Containment *containment)
     Containment *oldContainment = d->containment;
 
     int screen = -1;
+    int desktop = -1;
     if (oldContainment) {
         screen = d->containment->screen();
+        desktop = d->containment->desktop();
     } else {
         setScene(containment->scene());
     }
@@ -216,13 +219,15 @@ void View::setContainment(Plasma::Containment *containment)
     d->containment->addAssociatedWidget(this);
 
     int otherScreen = containment->screen();
+    int otherDesktop = containment->desktop();
 
     if (screen > -1) {
-        containment->setScreen(screen);
+        containment->setScreen(screen, desktop);
     }
 
     if (oldContainment && otherScreen > -1) {
-        oldContainment->setScreen(otherScreen);
+        // assign the old containment the old screen/desktop
+        oldContainment->setScreen(otherScreen, otherDesktop);
     }
 
     /*
@@ -231,12 +236,6 @@ void View::setContainment(Plasma::Containment *containment)
                  << (QObject*)containment << otherScreen << containment->screen();
     }
     */
-
-    if (containment->screen() > -1 && d->desktop < -1) {
-        // we want to set it to "all desktops" if we get ownership of
-        // a screen but don't have a desktop explicitly set
-        d->desktop = -1;
-    }
 
     d->updateSceneRect();
     connect(containment, SIGNAL(destroyed(QObject*)), this, SLOT(containmentDestroyed()));
