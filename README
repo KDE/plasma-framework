@@ -11,11 +11,13 @@ Unit tests are next to godliness. (Though as you can see, right now libplasma
 is hellbound.)
 
 This directory contains the classes making up libplasma, which provides the
-core framework used by Plasma and its components. This includes applet and
-extension definitions and loading, common GUI elements, etc.
+core framework used by Plasma applictions, such as the Plasma desktop shell
+and its components. This includes applet and extension definitions and loading,
+common GUI elements, data and service interaction, search system, etc.
 
 Domain specific sets of functionality, e.g. for network awareness or sensors,
-are not found here but in one of the Plasma Engines.
+are not found here but as DataEngine, Service, Applet, PackageStructure, etc
+plugins.
 
 Please refer to the Plasma website (http://plasma.kde.org) and Plasma wiki
 (http://techbase.kde.org/Projects/Plasma) for API documentation and design
