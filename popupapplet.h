@@ -83,13 +83,6 @@ public:
     virtual QGraphicsWidget *graphicsWidget();
 
     /**
-     * Shows the dialog showing the widget if the applet is in a panel.
-     * @arg displayTime the time in ms that the popup should be displayed, defaults to 0 which means
-     * always (until the user closes it again, that is).
-     */
-    void showPopup(uint displayTime = 0);
-
-    /**
      * @return the placement of the popup relating to the icon
      */
     Plasma::PopupPlacement popupPlacement() const;
@@ -108,6 +101,18 @@ public Q_SLOTS:
      * Hides the popup.
      */
     void hidePopup();
+
+    /**
+     * Shows the dialog showing the widget if the applet is in a panel.
+     * @arg displayTime the time in ms that the popup should be displayed, defaults to 0 which means
+     * always (until the user closes it again, that is).
+     */
+    void showPopup(uint displayTime = 0);
+
+    /**
+     * Toggles the popup.
+     */
+    void togglePopup();
 
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *event);

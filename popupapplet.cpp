@@ -350,6 +350,13 @@ void PopupApplet::hidePopup()
     }
 }
 
+void PopupApplet::togglePopup()
+{
+    if (d->dialog && (formFactor() == Horizontal || formFactor() == Vertical)) {
+        d->dialog->setVisible(!d->dialog->isVisible());
+    }
+}
+
 Plasma::PopupPlacement PopupApplet::popupPlacement() const
 {
     return d->popupPlacement;
@@ -417,7 +424,7 @@ void PopupAppletPrivate::dialogSizeChanged()
 {
     //Reposition the dialog
     if (dialog) {
-        dialog->updateGeometry();
+        //dialog->updateGeometry();
         dialog->move(q->popupPosition(dialog->size()));
 
         KConfigGroup sizeGroup = q->config();
