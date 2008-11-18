@@ -113,17 +113,18 @@ DesktopToolBox::DesktopToolBox(Containment *parent)
     : ToolBox(parent),
       d(new DesktopToolBoxPrivate)
 {
-    connect(Plasma::Animator::self(), SIGNAL(movementFinished(QGraphicsItem*)),
-            this, SLOT(toolMoved(QGraphicsItem*)));
-    connect(this, SIGNAL(toggled()), this, SLOT(toggle()));
-    connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()),
-            this, SLOT(assignColors()));
     setZValue(10000000);
     setFlag(ItemClipsToShape, true);
     setFlag(ItemClipsChildrenToShape, false);
     setFlag(ItemIgnoresTransformations, true);
     setIsMovable(true);
     assignColors();
+
+    connect(Plasma::Animator::self(), SIGNAL(movementFinished(QGraphicsItem*)),
+            this, SLOT(toolMoved(QGraphicsItem*)));
+    connect(this, SIGNAL(toggled()), this, SLOT(toggle()));
+    connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()),
+            this, SLOT(assignColors()));
 }
 
 DesktopToolBox::~DesktopToolBox()

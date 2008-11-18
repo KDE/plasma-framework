@@ -373,22 +373,24 @@ void ToolBox::reposition()
     }
 
     if (d->containment->containmentType() == Containment::PanelContainment) {
+        QRectF rect = boundingRect();
         if (d->containment->formFactor() == Vertical) {
             setCorner(ToolBox::Bottom);
-            setPos(d->containment->geometry().width() / 2 - boundingRect().width() / 2,
-                            d->containment->geometry().height());
+            setPos(d->containment->geometry().width() / 2 - rect.width() / 2,
+                   d->containment->geometry().height() - rect.height());
         } else {
             //defaulting to Horizontal right now
             if (QApplication::layoutDirection() == Qt::RightToLeft) {
                 setPos(d->containment->geometry().left(),
-                                d->containment->geometry().height() / 2 - boundingRect().height() / 2);
+                       d->containment->geometry().height() / 2 - rect.height() / 2);
                 setCorner(ToolBox::Left);
             } else {
-                setPos(d->containment->geometry().width(),
-                                d->containment->geometry().height() / 2 - boundingRect().height() / 2);
+                setPos(d->containment->geometry().width() - rect.width(),
+                       d->containment->geometry().height() / 2 - rect.height() / 2);
                 setCorner(ToolBox::Right);
             }
         }
+        //kDebug() << pos();
     } else if (d->containment->corona()) {
         //kDebug() << "desktop";
 
