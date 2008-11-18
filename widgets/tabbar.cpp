@@ -268,6 +268,18 @@ int TabBar::currentIndex() const
     return d->tabProxy->native->currentIndex();
 }
 
+void TabBar::resizeEvent(QGraphicsSceneResizeEvent * event)
+{
+    if (!d->isTabWidget) {
+        d->tabProxy->native->setMinimumSize(contentsRect().size().toSize());
+    } else {
+        d->tabProxy->native->setMinimumSize(QSize(0,0));
+    }
+
+    setMaximumSize(QWIDGETSIZE_MAX,QWIDGETSIZE_MAX);
+    setMinimumSize(0, 0);
+}
+
 void TabBar::setCurrentIndex(int index)
 {
     if (index > d->tabProxy->native->count() || d->tabProxy->native->count() <= 1) {

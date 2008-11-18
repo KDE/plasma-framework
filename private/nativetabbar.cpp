@@ -248,7 +248,6 @@ void NativeTabBar::paintEvent(QPaintEvent *event)
 
         // draw tab text
         if (i == currentIndex() && d->animProgress == 1) {
-            //FIXME: theme will need a ButtonColor and ButtonTextColor
             painter.setPen(Plasma::Theme::defaultTheme()->color(Theme::ButtonTextColor));
         } else {
             QColor color(Plasma::Theme::defaultTheme()->color(Theme::TextColor));
@@ -394,6 +393,14 @@ QSize NativeTabBar::tabSize(int index) const
     hint.rheight() = qMax(iconSize().height(), textSize.height());
     hint.rwidth() += d->buttonLeft + d->buttonRight;
     hint.rheight() += d->buttonTop + d->buttonBottom;
+
+    //FIXME: this margin calculation isn't reeeally right...
+    if (isVertical()) {
+        hint.rwidth() = qMax(hint.width(), int(minimumWidth() - d->left - d->right - d->buttonLeft - d->buttonRight));
+    } else {
+        hint.rheight() = qMax(hint.height(), int(minimumHeight() - d->top - d->bottom - d->buttonTop - d->buttonBottom));
+    }
+
     return hint;
 }
 

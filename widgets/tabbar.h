@@ -192,6 +192,7 @@ Q_SIGNALS:
 
 protected:
     void wheelEvent(QGraphicsSceneWheelEvent *event);
+    void resizeEvent(QGraphicsSceneResizeEvent * event);
 
 private:
     TabBarPrivate * const d;
