@@ -875,6 +875,15 @@ void AppletHandle::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
         //wait a moment to hide the handle in order to recheck the mouse position
         m_leaveTimer->start();
     }
+
+   if (m_topview) {
+        //We were on a toplevel view, but are moving back on the scene
+        //again. destroy the toplevel view:
+        m_topview->hide();
+        delete m_topview;
+        m_topview = 0;
+        m_applet->d->ghost = false;
+    }
 }
 
 bool AppletHandle::sceneEventFilter(QGraphicsItem *watched, QEvent *event)
