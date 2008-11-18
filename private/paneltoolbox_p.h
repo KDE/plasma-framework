@@ -58,7 +58,6 @@ protected:
 
 protected slots:
     void animate(qreal progress);
-    void toolMoved(QGraphicsItem*);
     void toggle();
     void assignColors();
 

@@ -59,8 +59,6 @@ PanelToolBox::PanelToolBox(Containment *parent)
     : ToolBox(parent),
       d(new PanelToolBoxPrivate)
 {
-    connect(Plasma::Animator::self(), SIGNAL(movementFinished(QGraphicsItem*)),
-            this, SLOT(toolMoved(QGraphicsItem*)));
     connect(this, SIGNAL(toggled()), this, SLOT(toggle()));
 
     setZValue(10000000);
@@ -286,15 +284,6 @@ void PanelToolBox::animate(qreal progress)
     }
 
     update();
-}
-
-void PanelToolBox::toolMoved(QGraphicsItem *item)
-{
-    //kDebug() << "geometry is now " << static_cast<Plasma::Widget*>(item)->geometry();
-    if (!showing() &&
-        QGraphicsItem::children().indexOf(static_cast<Plasma::Applet*>(item)) != -1) {
-        item->hide();
-    }
 }
 
 void PanelToolBox::toggle()
