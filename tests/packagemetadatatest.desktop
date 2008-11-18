@@ -2,6 +2,7 @@
 Name=Package metadata test file
 Name[ca]=Fitxer de proves de metadades de paquet
 Name[el]=Δοκιμαστικό αρχείο μεταδεδομένων του πακέτου
+Name[es]=Archivo de pruebas de metadatos de paquete
 Name[gl]=Ficheiro de proba de metadatos de paquete
 Name[gu]=પેકેજ મેટાડેટા ચકાસણી ફાઇલ
 Name[he]=חבילת בדיקה של מטה־מידע
@@ -20,6 +21,7 @@ Name[zh_TW]=套件中繼資料測試檔
 Comment=A test desktop file to test the PackageMetaData class.
 Comment[ca]=Un fitxer d'escriptori de proves per provar la classe PackageMetaData.
 Comment[el]=Ένα δοκιμαστικό αρχείο desktop για τον έλεγχο τς κλάσης PackageMetaData.
+Comment[es]=Un archivo de escritorio para probar la clase PackageMetaData.
 Comment[gl]=Un ficheiro de escritorio de proba para probar a clase PackageMetaData.
 Comment[gu]=પેકેજમેટાડેટા વર્ગ ચકાસવા માટે ચકાસણી ડેસ્કટોપ ફાઇલ.
 Comment[he]=קובץ desktop לבדיקה של מחלקה PackageMetaData.
