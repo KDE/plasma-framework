@@ -278,6 +278,7 @@ public:
 
 private:
     Q_PRIVATE_SLOT(d, void syncToAction())
+    Q_PRIVATE_SLOT(d, void clearAction())
     void init();
     void layoutIcons(const QStyleOptionGraphicsItem *option);
     void hoverEffect(bool);

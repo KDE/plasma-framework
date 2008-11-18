@@ -343,6 +343,7 @@ void IconWidget::setAction(QAction *action)
     d->action = action;
     if (action) {
         connect(action, SIGNAL(changed()), this, SLOT(syncToAction()));
+        connect(action, SIGNAL(destroyed(QObject*)), this, SLOT(clearAction()));
         connect(this, SIGNAL(clicked()), action, SLOT(trigger()));
         d->syncToAction();
     }
@@ -1188,9 +1189,19 @@ void IconWidget::setUnpressed()
     setPressed(false);
 }
 
+void IconWidgetPrivate::clearAction()
+{
+    action = 0;
+    syncToAction();
+    emit q->changed();
+}
+
 void IconWidgetPrivate::syncToAction()
 {
     if (!action) {
+        q->setIcon(QIcon());
+        q->setText(QString());
+        q->setEnabled(false);
         return;
     }
     //we don't get told *what* changed, just that something changed

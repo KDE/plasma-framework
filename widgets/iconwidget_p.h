@@ -175,6 +175,7 @@ public:
      * update the icon's text, icon, etc. to reflect the properties of its associated action.
      */
     void syncToAction();
+    void clearAction();
 
     IconWidget *q;
     QString text;
