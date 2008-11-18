@@ -48,7 +48,6 @@ public:
 
 
     KIcon icon;
-    QTime stopwatch;
     int animId;
     qreal animFrame;
     bool toggled;
@@ -207,7 +206,7 @@ QPainterPath PanelToolBox::shape() const
 
 void PanelToolBox::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 {
-    if (showing() || d->stopwatch.elapsed() < 100) {
+    if (showing()) {
         QGraphicsItem::hoverEnterEvent(event);
         return;
     }
@@ -242,18 +241,15 @@ void PanelToolBox::showToolBox()
     // match whatever the time is that moveItem() takes. Same in hoverLeaveEvent().
     d->animId = animdriver->customAnimation(
         10, 240, Plasma::Animator::EaseInCurve, this, "animate");
-    d->stopwatch.restart();
 }
 
 void PanelToolBox::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 {
     //kDebug() << event->pos() << event->scenePos()
-    if (d->stopwatch.elapsed() < 100 || d->toggled) {
-        QGraphicsItem::hoverLeaveEvent(event);
-        return;
+    if (!d->toggled) {
+        hideToolBox();
     }
 
-    hideToolBox();
     QGraphicsItem::hoverLeaveEvent(event);
 }
 
@@ -273,8 +269,6 @@ void PanelToolBox::hideToolBox()
     setShowing(false);
     d->animId = animdriver->customAnimation(
         10, 240, Plasma::Animator::EaseOutCurve, this, "animate");
-
-    d->stopwatch.restart();
 }
 
 void PanelToolBox::animate(qreal progress)
