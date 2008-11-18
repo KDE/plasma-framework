@@ -756,6 +756,8 @@ ExtenderItemPrivate::ExtenderItemPrivate(ExtenderItem *extenderItem, Extender *h
 
 ExtenderItemPrivate::~ExtenderItemPrivate()
 {
+    delete widget;
+    widget = 0;
     delete toplevel;
 }
 
