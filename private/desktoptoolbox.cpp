@@ -284,10 +284,9 @@ void DesktopToolBox::showToolBox()
 
     int maxwidth = 0;
     foreach (QGraphicsItem *tool, QGraphicsItem::children()) {
-        if (!tool->isEnabled()) {
-            continue;
+        if (tool->isEnabled()) {
+            maxwidth = qMax(static_cast<int>(tool->boundingRect().width()), maxwidth);
         }
-        maxwidth = qMax(static_cast<int>(tool->boundingRect().width()), maxwidth);
     }
 
     // put tools 5px from icon edge
@@ -334,28 +333,27 @@ void DesktopToolBox::showToolBox()
     int startY = y;
     x += 5;
 
+    //kDebug() << "starting at" << startX << startY;
     Plasma::Animator *animdriver = Plasma::Animator::self();
     foreach (QGraphicsItem *tool, QGraphicsItem::children()) {
         if (tool == d->toolBacker) {
             continue;
         }
 
-        y += 5;
-
-        if (!tool->isEnabled()) {
-            if (tool->isVisible()) {
-                const int height = static_cast<int>(tool->boundingRect().height());
-                animdriver->moveItem(tool, Plasma::Animator::SlideOutMovement,
-                                     toolPosition(height));
-            }
-            continue;
+        if (tool->isEnabled()) {
+            //kDebug() << tool << "is enabled";
+            y += 5;
+            //kDebug() << "let's show and move" << tool << tool->boundingRect();
+            tool->show();
+            animdriver->moveItem(tool, Plasma::Animator::SlideInMovement, QPoint(x, y));
+            //x += 0;
+            y += static_cast<int>(tool->boundingRect().height());
+        } else if (tool->isVisible()) {
+            // disabled, but visible, so hide it!
+            const int height = static_cast<int>(tool->boundingRect().height());
+            animdriver->moveItem(tool, Plasma::Animator::SlideOutMovement,
+                                 toolPosition(height));
         }
-
-        //kDebug() << "let's show and move" << tool << tool->boundingRect();
-        tool->show();
-        animdriver->moveItem(tool, Plasma::Animator::SlideInMovement, QPoint(x, y));
-        //x += 0;
-        y += static_cast<int>(tool->boundingRect().height());
     }
 
     if (!d->toolBacker) {
