@@ -119,6 +119,7 @@ void ToolBox::addTool(QAction *action)
 
     //make enabled/disabled tools appear/disappear instantly
     connect(tool, SIGNAL(changed()), this, SLOT(updateToolBox()));
+    kDebug() << "added tool" << action->text() << (QGraphicsItem*)tool;
 }
 
 void ToolBox::updateToolBox()
@@ -136,7 +137,7 @@ void ToolBox::removeTool(QAction *action)
         Plasma::IconWidget *tool = dynamic_cast<Plasma::IconWidget*>(child);
         if (tool && tool->action() == action) {
             //kDebug() << "tool found!";
-            tool->deleteLater();
+            delete tool;
             break;
         }
     }
