@@ -1595,8 +1595,10 @@ void ContainmentPrivate::containmentConstraintsEvent(Plasma::Constraints constra
         }
     }
 
-    if ((constraints & Plasma::SizeConstraint || constraints & Plasma::ScreenConstraint) &&
-         toolBox) {
+    if (toolBox && (constraints & Plasma::SizeConstraint ||
+                    constraints & Plasma::FormFactorConstraint ||
+                    constraints & Plasma::ScreenConstraint ||
+                    constraints & Plasma::StartupCompletedConstraint)) {
         positionToolBox();
     }
 }
