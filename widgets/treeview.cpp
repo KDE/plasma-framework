@@ -22,7 +22,6 @@
 #include <QTreeView>
 #include <QHeaderView>
 #include <QScrollBar>
-#include <QApplication>
 
 #include <kiconloader.h>
 
