@@ -1024,6 +1024,11 @@ void Containment::dropEvent(QGraphicsSceneDragDropEvent *event)
     }
 }
 
+const QGraphicsItem *Containment::toolBoxItem() const
+{
+    return d->toolBox;
+}
+
 void Containment::resizeEvent(QGraphicsSceneResizeEvent *event)
 {
     Applet::resizeEvent(event);
@@ -1529,7 +1534,7 @@ void ContainmentPrivate::containmentConstraintsEvent(Plasma::Constraints constra
         return;
     }
 
-    //kDebug() << "got containmentConstraintsEvent" << constraints << (QObject*)toolBox;
+    kDebug() << "got containmentConstraintsEvent" << constraints << (QObject*)toolBox;
     if (constraints & Plasma::ImmutableConstraint) {
         //update actions
         bool unlocked = q->immutability() == Mutable;
@@ -1558,11 +1563,7 @@ void ContainmentPrivate::containmentConstraintsEvent(Plasma::Constraints constra
         }
 
         if (q->isContainment() && type == Containment::PanelContainment) {
-            if (unlocked) {
-                toolBox->show();
-            } else {
-                toolBox->hide();
-            }
+            toolBox->setVisible(unlocked);
         }
     }
 
@@ -1590,7 +1591,6 @@ void ContainmentPrivate::containmentConstraintsEvent(Plasma::Constraints constra
                 positionPanel();
                 break;
             default:
-                positionContainment();
                 break;
         }
     }
@@ -1599,6 +1599,7 @@ void ContainmentPrivate::containmentConstraintsEvent(Plasma::Constraints constra
                     constraints & Plasma::FormFactorConstraint ||
                     constraints & Plasma::ScreenConstraint ||
                     constraints & Plasma::StartupCompletedConstraint)) {
+        kDebug() << "BWUHA!";
         positionToolBox();
     }
 }

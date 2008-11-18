@@ -494,6 +494,11 @@ class PLASMA_EXPORT Containment : public Applet
          */
         void resizeEvent(QGraphicsSceneResizeEvent *event);
 
+        /**
+         * @returns the toolbox associated with this containment, or a null pointer if none
+         */
+        const QGraphicsItem *toolBoxItem() const;
+
     private:
         Q_PRIVATE_SLOT(d, void appletDestroyed(QObject*))
         Q_PRIVATE_SLOT(d, void containmentAppletAnimationComplete(QGraphicsItem *item,
