@@ -52,8 +52,6 @@ TreeView::TreeView(QGraphicsWidget *parent)
 
 TreeView::~TreeView()
 {
-    widget()->setStyle(0);
-    delete d->style;
     delete d;
 }
 
