@@ -22,6 +22,7 @@
 #include <QTreeView>
 #include <QHeaderView>
 #include <QScrollBar>
+#include <QApplication>
 
 #include <kiconloader.h>
 
@@ -52,6 +53,7 @@ TreeView::TreeView(QGraphicsWidget *parent)
 
 TreeView::~TreeView()
 {
+    delete d->style;
     delete d;
 }
 
