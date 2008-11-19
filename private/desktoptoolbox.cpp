@@ -360,7 +360,7 @@ void DesktopToolBox::showToolBox()
         d->toolBacker = new EmptyGraphicsItem(this);
     }
 
-    d->toolBacker->setRect(QRectF(QPointF(startX, startY), QSizeF(maxwidth + 10, y)));
+    d->toolBacker->setRect(QRectF(QPointF(startX, startY), QSizeF(maxwidth + 10, y - startY)));
     d->toolBacker->show();
 
     if (d->animCircleId) {
