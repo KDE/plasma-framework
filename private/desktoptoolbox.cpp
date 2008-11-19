@@ -334,6 +334,46 @@ void DesktopToolBox::showToolBox()
     x += 5;
 
     //kDebug() << "starting at" << startX << startY;
+    // find our theoretical X and Y end coordinates
+    foreach (QGraphicsItem *tool, QGraphicsItem::children()) {
+        if (tool == d->toolBacker) {
+            continue;
+        }
+
+        if (tool->isEnabled()) {
+            //kDebug() << tool << "is enabled";
+            y += 5;
+            //kDebug() << "let's show and move" << tool << tool->boundingRect();
+            tool->show();
+            //x += 0;
+            y += static_cast<int>(tool->boundingRect().height());
+        }
+    }
+
+    // the rect the tools back should have
+    QRectF backerRect = QRectF(QPointF(startX, startY), QSizeF(maxwidth + 10, y - startY));
+
+    // now check that is actually fits within the parent's boundaries
+    backerRect = mapToParent(backerRect).boundingRect();
+    QSizeF parentSize = parentWidget()->size();
+    if (backerRect.x() < 5) {
+        backerRect.moveLeft(5);
+    } else if (backerRect.right() > parentSize.width() - 5) {
+        backerRect.moveRight(parentSize.width() - 5);
+    }
+
+    if (backerRect.y() < 5) {
+        backerRect.moveTop(5);
+    } else if (backerRect.bottom() > parentSize.height() - 5) {
+        backerRect.moveBottom(parentSize.height() - 5);
+    }
+
+    // re-map our starting points back to our coordinate system
+    backerRect = mapFromParent(backerRect).boundingRect();
+    x = backerRect.x() + 5;
+    y = backerRect.y();
+
+    // now move the items
     Plasma::Animator *animdriver = Plasma::Animator::self();
     foreach (QGraphicsItem *tool, QGraphicsItem::children()) {
         if (tool == d->toolBacker) {
@@ -360,7 +400,7 @@ void DesktopToolBox::showToolBox()
         d->toolBacker = new EmptyGraphicsItem(this);
     }
 
-    d->toolBacker->setRect(QRectF(QPointF(startX, startY), QSizeF(maxwidth + 10, y - startY)));
+    d->toolBacker->setRect(backerRect);
     d->toolBacker->show();
 
     if (d->animCircleId) {
