@@ -282,20 +282,13 @@ void DesktopToolBox::showToolBox()
         return;
     }
 
-    int maxwidth = 0;
-    foreach (QGraphicsItem *tool, QGraphicsItem::children()) {
-        if (tool->isEnabled()) {
-            maxwidth = qMax(static_cast<int>(tool->boundingRect().width()), maxwidth);
-        }
-    }
-
     // put tools 5px from icon edge
     const int iconWidth = 32;
     int x;
     int y;
     switch (corner()) {
     case TopRight:
-        x = (int)boundingRect().right() - maxwidth - iconWidth - 5;
+        x = (int)boundingRect().right() - iconWidth - 5;
         y = (int)boundingRect().top() + 10;
         break;
     case Top:
@@ -311,7 +304,7 @@ void DesktopToolBox::showToolBox()
         y = (int)boundingRect().center().y() - iconWidth;
         break;
     case Right:
-        x = (int)boundingRect().right() - maxwidth - iconWidth - 5;
+        x = (int)boundingRect().right() - iconWidth - 5;
         y = (int)boundingRect().center().y() - iconWidth;
         break;
     case BottomLeft:
@@ -324,17 +317,16 @@ void DesktopToolBox::showToolBox()
         break;
     case BottomRight:
     default:
-        x = (int)boundingRect().right() - maxwidth - iconWidth - 5;
+        x = (int)boundingRect().right() - iconWidth - 5;
         y = (int)boundingRect().bottom() - iconWidth - 5;
         break;
     }
 
-    int startX = x;
     int startY = y;
-    x += 5;
 
-    //kDebug() << "starting at" << startX << startY;
     // find our theoretical X and Y end coordinates
+
+    int maxwidth = 0;
     foreach (QGraphicsItem *tool, QGraphicsItem::children()) {
         if (tool == d->toolBacker) {
             continue;
@@ -343,15 +335,19 @@ void DesktopToolBox::showToolBox()
         if (tool->isEnabled()) {
             //kDebug() << tool << "is enabled";
             y += 5;
-            //kDebug() << "let's show and move" << tool << tool->boundingRect();
-            tool->show();
-            //x += 0;
+            maxwidth = qMax(static_cast<int>(tool->boundingRect().width()), maxwidth);
             y += static_cast<int>(tool->boundingRect().height());
         }
     }
 
+    if (corner() == TopRight || corner() == Right || corner() == BottomRight) {
+        x -= maxwidth;
+    }
+
+    y += 5;
     // the rect the tools back should have
-    QRectF backerRect = QRectF(QPointF(startX, startY), QSizeF(maxwidth + 10, y - startY));
+    QRectF backerRect = QRectF(QPointF(x, startY), QSizeF(maxwidth + 10, y - startY));
+    //kDebug() << "starting at" <<  x << startY;
 
     // now check that is actually fits within the parent's boundaries
     backerRect = mapToParent(backerRect).boundingRect();
