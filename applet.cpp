@@ -1372,6 +1372,8 @@ void Applet::showConfigurationInterface()
         d->addGlobalShortcutsPage(dialog);
         connect(dialog, SIGNAL(applyClicked()), this, SLOT(configChanged()));
         connect(dialog, SIGNAL(okClicked()), this, SLOT(configChanged()));
+        //FIXME: in this case use another ad-hoc slot?
+        connect(dialog, SIGNAL(finished()), this, SLOT(configChanged()));
         dialog->show();
     } else if (d->script) {
         //FIXME: global shorcuts?
@@ -1389,6 +1391,7 @@ void Applet::showConfigurationInterface()
         dialog->showButton(KDialog::Apply, false);
         connect(dialog, SIGNAL(applyClicked()), this, SLOT(configChanged()));
         connect(dialog, SIGNAL(okClicked()), this, SLOT(configChanged()));
+        connect(dialog, SIGNAL(finished()), this, SLOT(configChanged()));
         dialog->show();
     }
 
