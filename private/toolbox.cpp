@@ -196,11 +196,8 @@ void ToolBox::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     }
 
     //TODOs:
-    // save toolbox position
     // move relative to where on the toolbox it was grabbed
-    // stop the toolbox from painting and having a boundingRect that is negative
     // sticky points at midpoints
-    // change how buttons appear depending on the location of the box
     d->dragging = true;
     d->userMoved = true;
     const QPoint newPos = mapToParent(event->pos()).toPoint();
@@ -363,6 +360,8 @@ void ToolBox::load()
             setPos(0, offset);
             break;
     }
+    kDebug() << "marked as user moved" << pos()
+             << (d->containment->containmentType() == Containment::PanelContainment);
 }
 
 void ToolBox::reposition()
@@ -391,7 +390,7 @@ void ToolBox::reposition()
                 setCorner(ToolBox::Right);
             }
         }
-        //kDebug() << pos();
+        kDebug() << pos();
     } else if (d->containment->corona()) {
         //kDebug() << "desktop";
 
