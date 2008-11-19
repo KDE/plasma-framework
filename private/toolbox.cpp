@@ -395,11 +395,16 @@ void ToolBox::reposition()
         //kDebug() << "desktop";
 
         int screen = d->containment->screen();
-        QRectF avail = d->containment->corona()->availableScreenRegion(screen).boundingRect();
-        QRectF screenGeom = d->containment->corona()->screenGeometry(screen);
+        QRectF avail = d->containment->geometry();
+        QRectF screenGeom = avail;
+
+        if (screen > -1 && screen < d->containment->corona()->numScreens()) {
+            screenGeom = d->containment->corona()->availableScreenRegion(screen).boundingRect();
+            screenGeom = d->containment->corona()->screenGeometry(screen);
+            avail.translate(-screenGeom.topLeft());
+        }
 
         // Transform to the containment's coordinate system.
-        avail.translate(-screenGeom.topLeft());
         screenGeom.moveTo(0, 0);
 
         if (!d->containment->view() || !d->containment->view()->transform().isScaling()) {
