@@ -61,12 +61,6 @@ Extender::Extender(Applet *applet)
 
     setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
 
-    d->emptyExtenderLabel = new Label(this);
-    d->emptyExtenderLabel->setText(d->emptyExtenderMessage);
-    d->emptyExtenderLabel->setMinimumSize(QSizeF(150, 64));
-    d->emptyExtenderLabel->setPreferredSize(QSizeF(200, 64));
-    d->emptyExtenderLabel->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
-    d->layout->addItem(d->emptyExtenderLabel);
 
     d->loadExtenderItems();
 }
@@ -190,10 +184,7 @@ void Extender::itemAddedEvent(ExtenderItem *item, const QPointF &pos)
     }
 
     //remove the empty extender message if needed.
-    if (d->emptyExtenderLabel) {
-        d->layout->removeItem(d->emptyExtenderLabel);
-        d->emptyExtenderLabel->hide();
-    }
+    d->updateEmptyExtenderLabel();
 
     d->adjustSizeHints();
 }
@@ -202,15 +193,14 @@ void Extender::itemRemovedEvent(ExtenderItem *item)
 {
     d->layout->removeItem(item);
 
-    //add the empty extender message if needed.
-    if (!attachedItems().count() && !d->spacerWidget) {
-        d->emptyExtenderLabel->show();
-        d->emptyExtenderLabel->setMinimumSize(item->size());
-        //just in case:
-        d->layout->removeItem(d->emptyExtenderLabel);
-        d->layout->addItem(d->emptyExtenderLabel);
+    if (d->spacerWidget) {
+        d->layout->removeItem(d->spacerWidget);
+        delete d->spacerWidget;
+        d->spacerWidget = 0;
     }
 
+    //add the empty extender message if needed.
+    d->updateEmptyExtenderLabel();
     d->adjustSizeHints();
 }
 
@@ -241,12 +231,7 @@ void Extender::itemHoverMoveEvent(ExtenderItem *item, const QPointF &pos)
     d->layout->insertItem(insertIndex, widget);
 
     //Make sure we remove any 'no detachables' label that might be there, and update the layout.
-    //XXX: duplicated from itemAttachedEvent.
-    if (d->emptyExtenderLabel) {
-        d->layout->removeItem(d->emptyExtenderLabel);
-        d->emptyExtenderLabel->hide();
-    }
-
+    d->updateEmptyExtenderLabel();
     d->adjustSizeHints();
 }
 
@@ -262,14 +247,7 @@ void Extender::itemHoverLeaveEvent(ExtenderItem *item)
 
         d->currentSpacerIndex = -1;
 
-        //Make sure we add a 'no detachables' label when the layout is empty.
-        if (!attachedItems().count()) {
-            d->emptyExtenderLabel->show();
-            d->emptyExtenderLabel->setMinimumSize(item->size());
-            d->layout->removeItem(d->emptyExtenderLabel);
-            d->layout->addItem(d->emptyExtenderLabel);
-        }
-
+        d->updateEmptyExtenderLabel();
         d->adjustSizeHints();
     }
 }
@@ -294,9 +272,8 @@ ExtenderPrivate::ExtenderPrivate(Applet *applet, Extender *extender) :
     applet(applet),
     currentSpacerIndex(-1),
     spacerWidget(0),
-    emptyExtenderMessage(i18n("no items")),
+    emptyExtenderMessage(QString()),
     emptyExtenderLabel(0),
-    popup(false),
     appearance(Extender::NoBorders)
 {
 }
@@ -451,6 +428,25 @@ void ExtenderPrivate::adjustSizeHints()
     }
 
     emit q->geometryChanged();
+}
+
+void ExtenderPrivate::updateEmptyExtenderLabel()
+{
+    if (q->attachedItems().isEmpty() && !emptyExtenderLabel && !emptyExtenderMessage.isEmpty()
+                                     && !spacerWidget ) {
+        //add the empty extender label.
+        emptyExtenderLabel = new Label(q);
+        emptyExtenderLabel->setText(emptyExtenderMessage);
+        emptyExtenderLabel->setMinimumSize(QSizeF(150, 64));
+        emptyExtenderLabel->setPreferredSize(QSizeF(200, 64));
+        emptyExtenderLabel->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
+        layout->addItem(emptyExtenderLabel);
+    } else if (!q->attachedItems().isEmpty() && emptyExtenderLabel) {
+        //remove the empty extender label.
+        layout->removeItem(emptyExtenderLabel);
+        delete emptyExtenderLabel;
+        emptyExtenderLabel = 0;
+    }
 }
 
 } // Plasma namespace

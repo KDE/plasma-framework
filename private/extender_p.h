@@ -50,6 +50,7 @@ class ExtenderPrivate
         void loadExtenderItems();
         void updateBorders();
         void adjustSizeHints();
+        void updateEmptyExtenderLabel();
 
         Extender *q;
 
@@ -63,11 +64,7 @@ class ExtenderPrivate
         QString emptyExtenderMessage;
         Label *emptyExtenderLabel;
 
-        uint sourceAppletId;
-
         QList<ExtenderItem*> attachedExtenderItems;
-
-        bool popup;
 
         Extender::Appearance appearance;
 
