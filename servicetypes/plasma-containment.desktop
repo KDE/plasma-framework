@@ -20,6 +20,7 @@ Comment[sv]=Plasma miniprogrambehållare och bakgrundsuppritning
 Comment[tr]=Plasma programcık içerici ve arkaplan oluşturucu
 Comment[uk]=Контейнер аплетів плазми і малювання тла
 Comment[x-test]=xxPlasma applet container and background painterxx
+Comment[zh_CN]=Plasma 小程序容器及背景绘制器
 Comment[zh_TW]=Plasma 小程式容器與背景畫家
 
 [PropertyDef::X-Plasma-ContainmentCategories]

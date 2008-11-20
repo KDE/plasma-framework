@@ -16,6 +16,7 @@ Name[sv]=Testdatagränssnitt
 Name[tr]=Test Veri Motoru
 Name[uk]=Перевірка рушія даних
 Name[x-test]=xxTest Data Enginexx
+Name[zh_CN]=测试用数据引擎
 Name[zh_TW]=測試資料引擎
 X-KDE-ServiceTypes=Plasma/DataEngine
 Type=Service
