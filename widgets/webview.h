@@ -129,6 +129,7 @@ class PLASMA_EXPORT WebView : public QGraphicsWidget
          */
         void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
         void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
+        void hoverMoveEvent(QGraphicsSceneHoverEvent *event);
         void mousePressEvent(QGraphicsSceneMouseEvent *event);
         void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event);
         void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);

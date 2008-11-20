@@ -57,6 +57,8 @@ WebView::WebView(QGraphicsItem *parent)
     d->page = 0;
     d->loaded = false;
     setPage(new QWebPage(this));
+    setAcceptsHoverEvents(true);
+    setFlags(QGraphicsItem::ItemIsFocusable);
 }
 
 WebView::~WebView()
@@ -160,12 +162,28 @@ void WebView::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     }
 }
 
+void WebView::hoverMoveEvent(QGraphicsSceneHoverEvent *event)
+{
+    if (!d->page) {
+        QGraphicsWidget::hoverMoveEvent(event);
+        return;
+    }
+
+    QMouseEvent me(QEvent::MouseMove, event->pos().toPoint(), Qt::NoButton, Qt::NoButton, Qt::NoModifier);
+    d->page->event(&me);
+    if (me.isAccepted()) {
+        event->accept();
+    }
+}
+
 void WebView::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     if (!d->page) {
         QGraphicsWidget::mousePressEvent(event);
         return;
     }
+
+    setFocus();
 
     QMouseEvent me(QEvent::MouseButtonPress, event->pos().toPoint(), event->button(),
                    event->buttons(), event->modifiers());
@@ -247,7 +265,7 @@ void WebView::keyPressEvent(QKeyEvent * event)
     }
 
     d->page->event(event);
-
+kWarning()<<event;
     if (!event->isAccepted()) {
         QGraphicsWidget::keyPressEvent(event);
     }
