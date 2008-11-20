@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Oxygen
+Name[ar]=أكسجين
 Name[csb]=Krziseń
 Name[es]=Oxígeno
 Name[gu]=ઓક્સિજન
@@ -21,6 +22,7 @@ Name[th]=รูปแบบ Oxygen
 Name[wa]=Ocsidjinne
 Name[x-test]=xxOxygenxx
 Comment=Theme done in the Oxygen style
+Comment[ar]=نمط صمم باسلوب اوكسجين
 Comment[be@latin]=Matyŭ u styli „Oxygen”
 Comment[bg]=Тема в стил "Oxygen"
 Comment[ca]=Tema fet en estil Oxygen
