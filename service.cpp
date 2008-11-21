@@ -31,8 +31,8 @@
 #include <ktemporaryfile.h>
 
 #include "configloader.h"
-
 #include "version.h"
+#include "private/configloader_p.h"
 
 namespace Plasma
 {
@@ -264,6 +264,7 @@ void Service::setOperationsScheme(QIODevice *xml)
 
     KSharedConfigPtr c = KSharedConfig::openConfig(d->tempFile->fileName(), KConfig::NoGlobals);
     d->config = new ConfigLoader(c, xml, this);
+    d->config->d->setWriteDefaults(true);
 
     emit operationsChanged();
 

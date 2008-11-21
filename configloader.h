@@ -128,7 +128,14 @@ public:
      */
     QStringList groupList() const;
 
+protected:
+    /**
+     * Hack used to force writing when no default exists in config file.
+     */
+    void usrWriteConfig();
+
 private:
+    friend class Service;
     ConfigLoaderPrivate * const d;
 };
 
