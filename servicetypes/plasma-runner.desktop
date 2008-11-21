@@ -3,6 +3,7 @@ Type=ServiceType
 X-KDE-ServiceType=Plasma/Runner
 
 Comment=KRunner plugin
+Comment[be@latin]=Plugin dla „KRunner”
 Comment[ca]=Connector del KRunner
 Comment[de]=KRunner-Modul
 Comment[el]=Πρόσθετο του KRunner
@@ -11,6 +12,8 @@ Comment[gl]=Extensión KFileWrite
 Comment[gu]=KRunner પ્લગઈન
 Comment[he]=תוסף KRunner
 Comment[is]=KRunner íforrit
+Comment[km]=កម្មវិធី​ជំនួយ​របស់ KRunner
+Comment[ml]=കെറണ്ണര്‍ സംയോജകം
 Comment[nb]=KRunner-programtillegg
 Comment[nds]=KRunner-Moduul
 Comment[nl]=KRunner-plugin

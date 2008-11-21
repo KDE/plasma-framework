@@ -3,6 +3,7 @@ Type=ServiceType
 X-KDE-ServiceType=Plasma/Animator
 
 Comment=Plasma Animation Engine
+Comment[be@latin]=Systema animacyi „Plasma”
 Comment[ca]=Motor d'animació del Plasma
 Comment[el]=Μηχανή εφέ κίνησης του Plasma
 Comment[es]=Motor de animación para Plasma
@@ -11,6 +12,8 @@ Comment[gu]=પ્લાઝમા એનિમેશન એન્જિન
 Comment[he]=מנוע אנימציה של Plasma
 Comment[hsb]=Plasma-engine za animacije
 Comment[is]=Plasma hreyfingastjóri
+Comment[km]=ម៉ាស៊ីន​ចលនា​របស់ប្លាស្មា
+Comment[ml]=പ്ലാസ്മ അനിമേഷന്‍ എഞ്ചിന്‍
 Comment[nb]=Plasma animasjonsmotor
 Comment[nds]=Plasma-Animeerkarn
 Comment[nl]=Plasma-animatie-engine

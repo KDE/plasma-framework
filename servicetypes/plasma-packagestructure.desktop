@@ -2,6 +2,7 @@
 Type=ServiceType
 X-KDE-ServiceType=Plasma/PackageStructure
 Comment=Plasma package structure definition
+Comment[be@latin]=Aznačeńnie struktury pakunka „Plasma”
 Comment[ca]=Definició de l'estructura d'un paquet Plasma
 Comment[el]=Ορισμός δομής πακέτου του Plasma
 Comment[es]=Definición de estructura de paquete para Plasma
@@ -10,6 +11,8 @@ Comment[gu]=પ્લાઝમા પેકેજ માળખાંની વ�
 Comment[he]=הגדרת מבנה של חבילת Plasma
 Comment[hsb]=Strukturna definicija Plasma-pakćika
 Comment[is]=Skilgreiningar Plasma pakkauppbyggingar
+Comment[km]=កា​រកំណត់​រចនាសម្ព័ន្ធ​កញ្ចប់​របស់​ប្លាស្មា
+Comment[ml]=പ്ലാസ്മ പാക്കേജ് സ്ട്രക്ചര്‍ ഡെഫനിഷന്‍
 Comment[nb]=Definisjon av Plasma pakkestruktur
 Comment[nds]=Paketstruktuur-Fastleggen vun Plasma
 Comment[nl]=Structuurdefinitie van plasmapakket

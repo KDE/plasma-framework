@@ -3,6 +3,7 @@ Type=ServiceType
 X-KDE-ServiceType=Plasma/DataEngine
 
 Comment=Plasma Data Engine
+Comment[be@latin]=Systema dostupu da źviestak „Plasma”
 Comment[ca]=Motor de dades del Plasma
 Comment[el]=Μηχανή δεδομένων Plasma
 Comment[es]=Motor de datos para Plasma
@@ -11,6 +12,8 @@ Comment[gu]=પ્લાઝમા માહિતી એન્જિન
 Comment[he]=מנוע מידע עבור Plasma
 Comment[hsb]=Datowa engine za Plasma
 Comment[is]=Plasma gagnavél
+Comment[km]=ម៉ាស៊ីន​ទិន្នន័យ​ប្លាស្មា
+Comment[ml]=പ്ലാസ്മ ഡാറ്റ എഞ്ചിന്‍
 Comment[nb]=Plasma datamotor
 Comment[nds]=Plasma-Datenkarn
 Comment[nl]=Plasma-gegevensengine

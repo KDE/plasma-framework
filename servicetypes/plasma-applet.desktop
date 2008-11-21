@@ -3,6 +3,7 @@ Type=ServiceType
 X-KDE-ServiceType=Plasma/Applet
 
 Comment=Plasma applet
+Comment[be@latin]=Aplet „Plasma”
 Comment[ca]=Miniaplicació del Plasma
 Comment[de]=Plasma-Miniprogramm
 Comment[el]=Μικροεφαρμογή plasma
@@ -11,6 +12,8 @@ Comment[gl]=Applet de Plasma
 Comment[gu]=પ્લાઝમા એપ્લેટ
 Comment[he]=יישומון של Plasma
 Comment[is]=Plasma smáforrit
+Comment[km]=អាប់ភ្លេត​ប្លាស្មា
+Comment[ml]=പ്ലാസ്മ ലഘുപ്രയോഗം
 Comment[nb]=Plasma miniprogram
 Comment[nds]=Plasma-Lüttprogramm
 Comment[nl]=Plasma-applet

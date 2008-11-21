@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Test Data Engine
+Name[be@latin]=Systema spraŭdžvańnia dla źviestak
 Name[ca]=Motor de dades de prova
 Name[el]=Μηχανή δεδομένων ελέγχου
 Name[es]=Motor de datos de prueba
@@ -7,6 +8,8 @@ Name[gl]=Motor de datos de probas
 Name[gu]=ચકાસણી માહિતી એન્જિન
 Name[he]=בדיקה למנוע מידע
 Name[is]=Gagnaprófunarvél
+Name[km]=សាកល្បង​ម៉ាស៊ីន​ទិន្នន័យ
+Name[ml]=പരിശോധനാ ഡാറ്റാ എഞ്ചിന്‍
 Name[nb]=Testdata-motor
 Name[nds]=Test-Datenkarn
 Name[nl]=Testgegevensengine
