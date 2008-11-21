@@ -1409,12 +1409,18 @@ void AppletPrivate::addGlobalShortcutsPage(KConfigDialog *dialog)
 
     if (!shortcutEditor) {
         shortcutEditor = new KKeySequenceWidget(page);
+        QObject::connect(shortcutEditor, SIGNAL(destroyed(QObject*)), q, SLOT(clearShortcutEditorPtr()));
     }
 
     shortcutEditor->setKeySequence(q->globalShortcut().primary());
     layout->addWidget(shortcutEditor);
     layout->addStretch();
     dialog->addPage(page, i18n("Keyboard Shortcut"), "preferences-desktop-keyboard");
+}
+
+void AppletPrivate::clearShortcutEditorPtr()
+{
+    shortcutEditor = 0;
 }
 
 void Applet::configChanged()
@@ -1429,9 +1435,6 @@ void Applet::configChanged()
             setGlobalShortcut(KShortcut(sequence));
             emit configNeedsSaving();
         }
-
-        delete d->shortcutEditor;
-        d->shortcutEditor = 0;
     }
 }
 

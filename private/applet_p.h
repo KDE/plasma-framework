@@ -76,6 +76,7 @@ public:
     void createMessageOverlay();
     void destroyMessageOverlay();
     void addGlobalShortcutsPage(KConfigDialog *dialog);
+    void clearShortcutEditorPtr();
 
     static uint s_maxAppletId;
     static uint s_maxZValue;
