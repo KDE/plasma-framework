@@ -183,6 +183,8 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
                 q->setLayout(lay);
             }
 
+            QSize prefSize;
+
             if (gWidget) {
                 Extender *extender = qobject_cast<Extender*>(gWidget);
                 if (extender) {
@@ -190,6 +192,7 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
                 }
 
                 lay->addItem(gWidget);
+                prefSize = gWidget->preferredSize().toSize();
             } else if (qWidget) {
                 if (!proxy) {
                     proxy = new QGraphicsProxyWidget(q);
@@ -200,11 +203,13 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
                 if (lay) {
                     lay->addItem(proxy);
                 }
+                prefSize = qWidget->sizeHint();
             }
 
             qreal left, top, right, bottom;
             q->getContentsMargins(&left, &top, &right, &bottom);
             q->setMinimumSize(minimum + QSizeF(left+right, top+bottom));
+            q->resize(prefSize);
         } else {
             //save the aspect ratio mode in case we drag'n drop in the Desktop later
             savedAspectRatio = q->aspectRatioMode();
