@@ -20,14 +20,14 @@
 #ifndef EXTENDERAPPLET_H
 #define EXTENDERAPPLET_H
 
-#include "applet.h"
+#include "popupapplet.h"
 
 /**
  * This class is used as a 'host' for detached extender items. When an extender item is dropped
  * somewhere, this applet is added at the location where the item is dropped, and the item is added
  * to it's extender.
  */
-class ExtenderApplet : public Plasma::Applet
+class ExtenderApplet : public Plasma::PopupApplet
 {
     Q_OBJECT
     public:

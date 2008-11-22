@@ -25,9 +25,9 @@
 #include <QGraphicsLinearLayout>
 
 ExtenderApplet::ExtenderApplet(QObject *parent, const QVariantList &args)
-    : Plasma::Applet(parent, args)
+    : Plasma::PopupApplet(parent, args)
 {
-    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    setPopupIcon("utilities-desktop-extra");
 }
 
 ExtenderApplet::~ExtenderApplet()
@@ -52,7 +52,7 @@ void ExtenderApplet::init()
 
 void ExtenderApplet::itemDetached(Plasma::ExtenderItem *)
 {
-    if (!extender()->attachedItems().count()) {
+    if (extender()->attachedItems().isEmpty()) {
         destroy();
     }
 }
