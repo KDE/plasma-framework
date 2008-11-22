@@ -146,8 +146,8 @@ void DialogPrivate::adjustView()
                           qMin(int(widget->minimumSize().height()) + top + bottom, QWIDGETSIZE_MAX));
         q->setMaximumSize(qMin(int(widget->maximumSize().width()) + left + right, QWIDGETSIZE_MAX),
                           qMin(int(widget->maximumSize().height()) + top + bottom, QWIDGETSIZE_MAX));
-        q->resize(qMin(int(view->size().width()) + left + right, QWIDGETSIZE_MAX),
-                          qMin(int(view->size().height()) + top + bottom, QWIDGETSIZE_MAX));
+        q->resize(qMin(int(widget->size().width()) + left + right, QWIDGETSIZE_MAX),
+                          qMin(int(widget->size().height()) + top + bottom, QWIDGETSIZE_MAX));
         q->updateGeometry();
 
         //reposition and resize the view.

@@ -258,8 +258,15 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
                     //could that cast ever fail??
                     if (corona) {
                         corona->addOffscreenWidget(gWidget);
-                        gWidget->resize(gWidget->preferredSize());
-                        gWidget->setMinimumSize(gWidget->preferredSize());
+
+                        //necessary to mess around with the offscreen widget
+                        QGraphicsLayoutItem *layout = gWidget->parentLayoutItem();
+                        QGraphicsWidget *parentWidget = gWidget->parentWidget();
+
+                        if (layout && parentWidget) {
+                            layout->updateGeometry();
+                            parentWidget->resize(layout->preferredSize());
+                        }
                         dialog->setGraphicsWidget(gWidget);
                     }
                 } else if (qWidget) {
