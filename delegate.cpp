@@ -253,6 +253,82 @@ void Delegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
 
     QFont titleFont(option.font);
 
+    // draw icon
+    QIcon decorationIcon = index.data(Qt::DecorationRole).value<QIcon>();
+
+    if (index.data(d->roles[ColumnTypeRole]).toInt() == SecondaryActionColumn) {
+        if (hover) {
+            // Only draw on hover
+            const int delta = floor((qreal)(option.decorationSize.width() - DelegatePrivate::ACTION_ICON_SIZE) / 2.0);
+            decorationRect.adjust(delta, delta-1, -delta-1, -delta);
+            decorationIcon.paint(painter, decorationRect, option.decorationAlignment);
+        }
+    } else {
+        // as default always draw as main column
+        decorationIcon.paint(painter, decorationRect, option.decorationAlignment);
+    }
+
+    painter->save();
+
+    // draw title
+    painter->setFont(titleFont);
+    painter->drawText(titleRect, Qt::AlignLeft|Qt::AlignVCenter, titleText);
+
+    if (hover || !uniqueTitle) {
+        // draw sub-title, BUT only if:
+        //   * it isn't a unique title, this allows two items to have the same title and be
+        //          disambiguated by their subtitle
+        //   * we are directed by the model that this item should never be treated as unique
+        //          e.g. the documents list in the recently used tab
+        //   * the mouse is hovered over the item, causing the additional information to be
+        //          displayed
+        //
+        // the rational for this is that subtitle text should in most cases not be
+        // required to understand the item itself and that showing all the subtexts in a
+        // listing makes the information density very high, impacting both the speed at
+        // which one can scan the list visually and the aesthetic qualities of the listing.
+        painter->setPen(QPen(KColorScheme(QPalette::Active).foreground(KColorScheme::InactiveText), 1));
+        painter->setFont(subTitleFont);
+        painter->drawText(subTitleRect, Qt::AlignLeft|Qt::AlignVCenter, "  " + subTitleText);
+    }
+
+    painter->restore();
+
+
+    painter->save();
+    painter->setPen(Qt::NoPen);
+    if (option.direction == Qt::LeftToRight) {
+        if ((titleRect.width() + 20) > option.rect.width() ||
+            (subTitleRect.width() + 20) > option.rect.width()) {
+            QLinearGradient gr;
+            QRect gradientRect(option.rect.width() - 30, titleRect.y(),
+                  80, titleRect.height() + subTitleRect.height());
+            // draw it on the right side
+            gr.setStart(gradientRect.topLeft());
+            gr.setFinalStop(gradientRect.topRight());
+            gr.setColorAt(0.0, Qt::transparent);
+            gr.setColorAt(0.7, Qt::white);
+            painter->setBrush(QBrush(gr));
+            painter->drawRect(gradientRect);
+        }
+
+    } else {
+        if (titleRect.width() + 20 > option.rect.width() || 
+            subTitleRect.width() + 20 > option.rect.width()) {
+            QLinearGradient gr;
+            QRect gradientRect(option.rect.x() - 25, titleRect.y(),
+                                60, titleRect.height() + subTitleRect.height());
+            gr.setStart(gradientRect.topRight());
+            gr.setFinalStop(gradientRect.topLeft());
+            gr.setColorAt(0.0, Qt::transparent);
+            gr.setColorAt(0.6, Qt::white);
+            painter->setBrush(QBrush(gr));
+            painter->drawRect(gradientRect);
+        }
+    }
+    
+    painter->restore(); 
+
     if (hover) {
         painter->save();
         painter->setRenderHint(QPainter::Antialiasing);
@@ -323,46 +399,6 @@ void Delegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
         painter->restore();
     }
 
-    // draw icon
-    QIcon decorationIcon = index.data(Qt::DecorationRole).value<QIcon>();
-
-    if (index.data(d->roles[ColumnTypeRole]).toInt() == SecondaryActionColumn) {
-        if (hover) {
-            // Only draw on hover
-            const int delta = floor((qreal)(option.decorationSize.width() - DelegatePrivate::ACTION_ICON_SIZE) / 2.0);
-            decorationRect.adjust(delta, delta-1, -delta-1, -delta);
-            decorationIcon.paint(painter, decorationRect, option.decorationAlignment);
-        }
-    } else {
-        // as default always draw as main column
-        decorationIcon.paint(painter, decorationRect, option.decorationAlignment);
-    }
-
-    painter->save();
-
-    // draw title
-    painter->setFont(titleFont);
-    painter->drawText(titleRect, Qt::AlignLeft|Qt::AlignVCenter, titleText);
-
-    if (hover || !uniqueTitle) {
-        // draw sub-title, BUT only if:
-        //   * it isn't a unique title, this allows two items to have the same title and be
-        //          disambiguated by their subtitle
-        //   * we are directed by the model that this item should never be treated as unique
-        //          e.g. the documents list in the recently used tab
-        //   * the mouse is hovered over the item, causing the additional information to be
-        //          displayed
-        //
-        // the rational for this is that subtitle text should in most cases not be
-        // required to understand the item itself and that showing all the subtexts in a
-        // listing makes the information density very high, impacting both the speed at
-        // which one can scan the list visually and the aesthetic qualities of the listing.
-        painter->setPen(QPen(KColorScheme(QPalette::Active).foreground(KColorScheme::InactiveText), 1));
-        painter->setFont(subTitleFont);
-        painter->drawText(subTitleRect, Qt::AlignLeft|Qt::AlignVCenter, "  " + subTitleText);
-    }
-
-    painter->restore();
 
 }
 
