@@ -616,6 +616,12 @@ void ExtenderItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
                     }
                 }
             }
+
+            if (containment->sceneBoundingRect().contains(mousePos) && !targetExtender) {
+                containment->showDropZone(event->screenPos() - d->mousePos);
+            } else {
+                containment->showDropZone(QPoint());
+            }
         }
     }
 
@@ -695,6 +701,7 @@ void ExtenderItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 
         if (!mousePos.isNull()) {
             foreach (Containment *containment, corona->containments()) {
+                containment->showDropZone(QPoint());
                 foreach (Applet *applet, containment->applets()) {
                     if (applet->d->extender &&
                         (applet->sceneBoundingRect().contains(mousePos) ||
