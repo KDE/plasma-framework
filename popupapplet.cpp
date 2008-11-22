@@ -208,8 +208,12 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
 
             qreal left, top, right, bottom;
             q->getContentsMargins(&left, &top, &right, &bottom);
+            QSizeF oldSize(q->size());
             q->setMinimumSize(minimum + QSizeF(left+right, top+bottom));
-            q->resize(prefSize);
+            //size not saved/invalid size saved
+            if (oldSize.width() < q->minimumSize().width() || oldSize.height() < q->minimumSize().height()) {
+                q->resize(prefSize);
+            }
         } else {
             //save the aspect ratio mode in case we drag'n drop in the Desktop later
             savedAspectRatio = q->aspectRatioMode();
