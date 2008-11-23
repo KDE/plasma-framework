@@ -147,6 +147,7 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
             containmentSize = q->containment()->size();
         }
 
+        //Applet on desktop
         if (icon && !icon->icon().isNull() && ((f != Plasma::Vertical && f != Plasma::Horizontal) ||
             ((f == Plasma::Vertical && containmentSize.width() >= minimum.width()) ||
              (f == Plasma::Horizontal && containmentSize.height() >= minimum.height())))) {
@@ -214,6 +215,7 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
             if (oldSize.width() < q->minimumSize().width() || oldSize.height() < q->minimumSize().height()) {
                 q->resize(prefSize);
             }
+        //Applet on popup
         } else {
             //save the aspect ratio mode in case we drag'n drop in the Desktop later
             savedAspectRatio = q->aspectRatioMode();
