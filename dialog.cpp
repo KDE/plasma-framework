@@ -151,8 +151,14 @@ void DialogPrivate::adjustView()
         q->updateGeometry();
 
         //reposition and resize the view.
-        view->setSceneRect(widget->sceneBoundingRect());
-        view->resize(view->mapFromScene(view->sceneRect()).boundingRect().size());
+        //force a valid rect, otherwise it will take up the whole scene
+        QRectF sceneRect(widget->sceneBoundingRect());
+
+        sceneRect.setWidth(qMax(qreal(1), sceneRect.width()));
+        sceneRect.setHeight(qMax(qreal(1), sceneRect.height()));
+        view->setSceneRect(sceneRect);
+
+        view->resize(widget->size().toSize());
         view->centerOn(widget);
 
         if (q->size() != prevSize) {
