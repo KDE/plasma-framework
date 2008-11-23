@@ -207,6 +207,14 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
                 prefSize = qWidget->sizeHint();
             }
 
+            //we could be on a big panel, but in that case we will be able to resize
+            //more than the natural minimum size, because we'll transform into an icon
+            if (f == Plasma::Horizontal) {
+                minimum.setHeight(0);
+            } else if (f == Plasma::Vertical) {
+                minimum.setWidth(0);
+            }
+
             qreal left, top, right, bottom;
             q->getContentsMargins(&left, &top, &right, &bottom);
             QSizeF oldSize(q->size());

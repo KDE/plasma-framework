@@ -349,6 +349,8 @@ void Dialog::setGraphicsWidget(QGraphicsWidget *widget)
 
         if (!d->view) {
             d->view = new QGraphicsView(this);
+            d->view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+            d->view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
             d->view->setFrameShape(QFrame::NoFrame);
             d->view->viewport()->setAutoFillBackground(false);
             layout()->addWidget(d->view);
