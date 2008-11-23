@@ -58,6 +58,7 @@
 #include <kservicetypetrader.h>
 #include <kshortcut.h>
 #include <kwindowsystem.h>
+#include <kpushbutton.h>
 
 #include <solid/powermanagement.h>
 
@@ -804,9 +805,24 @@ void Applet::setConfigurationRequired(bool needsConfig, const QString &reason)
     }
 
     PushButton *configWidget = new PushButton(d->messageOverlay);
-    configWidget->setText(i18n("Configure..."));
-    connect(configWidget, SIGNAL(clicked()), this, SLOT(showConfigurationInterface()));
-    configLayout->addItem(configWidget, row, 1);
+
+    //popupapplets in panels just show an icon, otherwise the button is too large
+    Plasma::FormFactor f = formFactor();
+    if (f == Plasma::Horizontal || f == Plasma::Vertical) {
+        IconWidget *configWidget = new IconWidget(d->messageOverlay);
+        configWidget->setSvg("widgets/configuration-icons", "configure");
+        configWidget->setDrawBackground(true);
+        connect(configWidget, SIGNAL(clicked()), this, SLOT(showConfigurationInterface()));
+        configLayout->addItem(configWidget, row, 1);
+        //FIXME: this thing seems necessary for some applets, others not
+        configWidget->setZValue(999);
+    } else {
+        PushButton *configWidget = new PushButton(d->messageOverlay);
+        configWidget->setText(i18n("Configure..."));
+        connect(configWidget, SIGNAL(clicked()), this, SLOT(showConfigurationInterface()));
+        configLayout->addItem(configWidget, row, 1);
+    }
+
     //configLayout->setAlignment(configWidget, Qt::AlignTop | Qt::AlignCenter);
     //configLayout->addStretch();
 
