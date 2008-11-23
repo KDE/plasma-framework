@@ -13,18 +13,16 @@ framework</a> and the <a href="http://api.kde.org/4.x-api/kdelibs-apidocs/">KDE
 libraries</a> provide the underpinning for libplasma.  As a result, it should
 work anywhere that Qt and KDE do.
 
-Although libplasma is developed for the use of Plasma, the new desktop shell in
+Although libplasma is developed for the use of the Plasma desktop shell in
 KDE 4, it is general enough to be useful in other applications.
-<a href="http://amarok.kde.org">Amarok</a> is already using it for its context
+<a href="http://amarok.kde.org">Amarok</a> is using it for its context
 view, allowing for pluggable widgets to display and interact with the music
 collection, such as "current track" and "tag cloud" widgets.
 
 libplasma itself only provides a framework, and the widgets, containments,
 data engines and runners are all implemented as plugins.  However, the framework
 is designed to make implementing these plugins as easy as possible, including
-providing scripting support.  Also, infrastructure such as a dialog to install
-new widgets and even download them from the web (Plasma::AppletBrowser) is also
-included.
+providing scripting support.
 
 Other important classes are:
 
@@ -40,7 +38,7 @@ Other important classes are:
    mouse is hovered over them
  - Plasma::Dialog: displays a themed application dialog
  - Plasma::Extender: provides detachable sections to Plasma::Applet
- - Plasma::GLApplet: provides an OpneGL-rendered Plasma::Applet
+ - Plasma::GLApplet: provides an OpenGL-rendered Plasma::Applet
  - Plasma::PackageStructure: provides descriptions of packages containing plugins
    for libplasma
  - Plasma::PopupApplet: provides a simple way of implementing a Plasma::Applet
@@ -95,6 +93,6 @@ Aaron Seigo \<aseigo@kde.org\>
 
 */
 
-// DOXYGEN_SET_PROJECT_NAME = libplasma
+// DOXYGEN_SET_PROJECT_NAME = Plasma
 // DOXYGEN_SET_RECURSIVE = YES
 // vim:ts=4:sw=4:expandtab:filetype=doxygen
