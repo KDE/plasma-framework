@@ -74,7 +74,7 @@ public:
     void  setIconSize(const QSize newSize);
     bool showing() const;
     void setShowing(const bool show);
-    void setCorner(Corner corner);
+    void setCorner(const Corner corner);
     Corner corner() const;
 
     bool isMovable() const;
