@@ -49,7 +49,8 @@ public:
         hidden(false),
         showing(false),
         movable(false),
-        dragging(false)
+        dragging(false),
+        userMoved(false)
     {}
 
     Containment *containment;
