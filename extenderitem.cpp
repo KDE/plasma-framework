@@ -596,6 +596,7 @@ void ExtenderItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     //position in scene coordinates (event->scenePos won't work, since it doesn't take in
     //consideration that you're leaving the current view).
     QPointF mousePos = d->scenePosFromScreenPos(event->screenPos());
+    QPointF topleft = d->scenePosFromScreenPos(event->screenPos() - d->mousePos);
 
     //find the extender we're hovering over.
     Extender *targetExtender = 0;
@@ -617,7 +618,7 @@ void ExtenderItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
                 }
             }
 
-            if (containment->sceneBoundingRect().contains(mousePos) && !targetExtender) {
+            if (containment->sceneBoundingRect().contains(topleft) && !targetExtender) {
                 containment->showDropZone(event->screenPos() - d->mousePos);
             } else {
                 containment->showDropZone(QPoint());

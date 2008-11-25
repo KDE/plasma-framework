@@ -371,7 +371,7 @@ void PopupApplet::showPopup(uint popupDuration)
 
 void PopupApplet::hidePopup()
 {
-    if (d->dialog && (formFactor() == Horizontal || formFactor() == Vertical)) {
+    if (d->dialog) {
         d->dialog->hide();
     }
 }
