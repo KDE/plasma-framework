@@ -71,7 +71,7 @@ public:
 
     bool regionIsEmpty(const QRectF &region, Applet *ignoredApplet=0) const;
     void positionPanel(bool force = false);
-    void positionContainment();
+    void positionContainments();
     void setLockToolText();
     void handleDisappeared(AppletHandle *handle);
     void appletDestroyed(QObject*);

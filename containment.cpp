@@ -1129,16 +1129,15 @@ QVariant Containment::itemChange(GraphicsItemChange change, const QVariant &valu
 {
     //FIXME if the applet is moved to another containment we need to unfocus it
 
-    if (isContainment() &&
-        (change == QGraphicsItem::ItemSceneHasChanged ||
-         change == QGraphicsItem::ItemPositionHasChanged) && !ContainmentPrivate::s_positioning) {
+    if (isContainment() && !ContainmentPrivate::s_positioning &&
+        (change == QGraphicsItem::ItemSceneHasChanged || change == QGraphicsItem::ItemPositionHasChanged)) {
         switch (containmentType()) {
             case PanelContainment:
             case CustomPanelContainment:
                 d->positionPanel();
                 break;
             default:
-                d->positionContainment();
+                d->positionContainments();
                 break;
         }
     }
@@ -1593,6 +1592,7 @@ void ContainmentPrivate::containmentConstraintsEvent(Plasma::Constraints constra
                 positionPanel();
                 break;
             default:
+                positionContainments();
                 break;
         }
     }
@@ -1697,12 +1697,14 @@ bool containmentSortByPosition(const Containment *c1, const Containment *c2)
     return c1->id() < c2->id();
 }
 
-void ContainmentPrivate::positionContainment()
+void ContainmentPrivate::positionContainments()
 {
     Corona *c = q->corona();
-    if (!c) {
+    if (!c || ContainmentPrivate::s_positioning) {
         return;
     }
+
+    ContainmentPrivate::s_positioning = true;
 
     //TODO: we should avoid running this too often; consider compressing requests
     //      with a timer.
@@ -1721,6 +1723,7 @@ void ContainmentPrivate::positionContainment()
     }
 
     if (containments.isEmpty()) {
+        ContainmentPrivate::s_positioning = false;
         return;
     }
 
@@ -1732,7 +1735,6 @@ void ContainmentPrivate::positionContainment()
     int y = 0;
     int rowHeight = 0;
     //int count = 0;
-    ContainmentPrivate::s_positioning = true;
 
     //kDebug() << "+++++++++++++++++++++++++++++++++++++++++++++++++++" << containments.count();
     while (it.hasNext()) {
