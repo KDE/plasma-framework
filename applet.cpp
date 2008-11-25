@@ -1239,7 +1239,6 @@ void Applet::setHasConfigurationInterface(bool hasInterface)
             } else {
                 configAction->setShortcut(QKeySequence("ctrl+s"));
             }
-            //TODO how can we handle configuration of the shortcut in a way that spans all applets?
             connect(configAction, SIGNAL(triggered(bool)),
                     this, SLOT(showConfigurationInterface()));
             d->actions.addAction("configure", configAction);
@@ -1346,6 +1345,7 @@ void Applet::showConfigurationInterface()
     }
 
     if (immutability() != Mutable && !KAuthorized::authorize("PlasmaAllowConfigureWhenLocked")) {
+        //FIXME: in 4.3 add an explanatory dialog
         return;
     }
 
