@@ -781,11 +781,6 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
 
         /**
-         * @internal manage the mouse movement to drag the applet around
-         */
-        void mousePressEvent(QGraphicsSceneMouseEvent *event);
-
-        /**
          * Reimplemented from QGraphicsItem
          */
         void focusInEvent(QFocusEvent *event);

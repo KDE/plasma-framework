@@ -1301,11 +1301,6 @@ void Applet::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     }
 }
 
-void Applet::mousePressEvent(QGraphicsSceneMouseEvent *event)
-{
-    QGraphicsWidget::mousePressEvent(event);
-}
-
 void Applet::focusInEvent(QFocusEvent *event)
 {
     if (!isContainment() && containment()) {
