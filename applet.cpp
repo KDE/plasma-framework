@@ -1303,7 +1303,6 @@ void Applet::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
 void Applet::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-    setFocus(Qt::MouseFocusReason);
     QGraphicsWidget::mousePressEvent(event);
 }
 
@@ -1842,6 +1841,7 @@ void AppletPrivate::init()
     q->setCacheMode(Applet::DeviceCoordinateCache);
     q->setAcceptsHoverEvents(true);
     q->setFlag(QGraphicsItem::ItemIsFocusable, true);
+    q->setFocusPolicy(Qt::ClickFocus);
     // FIXME: adding here because nothing seems to be doing it in QGraphicsView,
     // but it doesn't actually work anyways =/
     q->setLayoutDirection(qApp->layoutDirection());
