@@ -272,7 +272,7 @@ Containment *View::swapContainment(Plasma::Containment *existing, const QString 
         oldConfig.copyTo(&newConfig);
 
         if (old == d->containment) {
-            // set our containment to the new one
+            // set our containment to the new one, if the the old containment was us
             setContainment(c);
         }
 

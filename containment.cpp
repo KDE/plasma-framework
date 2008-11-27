@@ -111,6 +111,11 @@ Containment::Containment(QObject *parent, const QVariantList &args)
 
 Containment::~Containment()
 {
+    if (Applet::d->transient) {
+        Applet::d->resetConfigurationObject();
+        Applet::d->transient = false;
+    }
+
     delete d;
 }
 

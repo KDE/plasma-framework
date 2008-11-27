@@ -133,7 +133,9 @@ Applet::Applet(QObject *parentObject, const QVariantList &args)
 
 Applet::~Applet()
 {
-    if (d->extender) {
+    if (d->transient) {
+        d->resetConfigurationObject();
+    } else if (d->extender) {
         //This would probably be nicer if it was located in extender. But in it's dtor, this won't
         //work since when that get's called, the applet's config() isn't accessible anymore. (same
         //problem with calling saveState(). Doing this in saveState() might be a possibility, but
@@ -148,10 +150,6 @@ Applet::~Applet()
         }
 
         d->extender->saveState();
-    }
-
-    if (d->transient) {
-        d->resetConfigurationObject();
     }
 
     delete d;
@@ -2032,9 +2030,11 @@ void AppletPrivate::themeChanged()
 
 void AppletPrivate::resetConfigurationObject()
 {
-    mainConfigGroup()->deleteGroup();
-    delete mainConfig;
-    mainConfig = 0;
+    if (mainConfig) {
+        mainConfig->deleteGroup();
+        delete mainConfig;
+        mainConfig = 0;
+    }
 }
 
 uint AppletPrivate::s_maxAppletId = 0;
