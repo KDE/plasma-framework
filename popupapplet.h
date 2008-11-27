@@ -88,13 +88,9 @@ public:
     Plasma::PopupPlacement popupPlacement() const;
 
     /**
-     * This event handler can be reimplemented in a subclass to receive an
-     * event before the popup is shown or hidden.
-     * @arg show true if the popup is going to be shown, false if the popup
-     * is going to be hidden.
-     * Note that showing and hiding the popup on click is already done in PopupApplet.
+     *
      */
-    virtual void popupEvent(bool show);
+    void setPassivePopup(bool passive);
 
 public Q_SLOTS:
     /**
@@ -115,6 +111,15 @@ public Q_SLOTS:
     void togglePopup();
 
 protected:
+    /**
+     * This event handler can be reimplemented in a subclass to receive an
+     * event before the popup is shown or hidden.
+     * @arg show true if the popup is going to be shown, false if the popup
+     * is going to be hidden.
+     * Note that showing and hiding the popup on click is already done in PopupApplet.
+     */
+    virtual void popupEvent(bool show);
+
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
     bool eventFilter(QObject *watched, QEvent *event);
@@ -127,6 +132,7 @@ private:
     Q_PRIVATE_SLOT(d, void dialogStatusChanged(bool))
 
     friend class Applet;
+    friend class PopupAppletPrivate;
     PopupAppletPrivate * const d;
 };
 

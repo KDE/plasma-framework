@@ -47,6 +47,7 @@ public:
     QPoint clicked;
     bool startupComplete : 1;
     bool popupLostFocus : 1;
+    bool passive : 1;
 };
 
 } // Plasma namespace

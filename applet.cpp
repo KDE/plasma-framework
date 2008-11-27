@@ -804,8 +804,6 @@ void Applet::setConfigurationRequired(bool needsConfig, const QString &reason)
         //configLayout->setAlignment(explanation, Qt::AlignBottom | Qt::AlignCenter);
     }
 
-    PushButton *configWidget = new PushButton(d->messageOverlay);
-
     //popupapplets in panels just show an icon, otherwise the button is too large
     Plasma::FormFactor f = formFactor();
     if (f == Plasma::Horizontal || f == Plasma::Vertical) {

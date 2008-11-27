@@ -246,7 +246,13 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
                 //stuff out of your Dialog (extenders). Monitor WindowDeactivate events so we can
                 //emulate the same kind of behavior as Qt::Popup (close when you click somewhere
                 //else.
-                dialog->setWindowFlags(Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
+                Qt::WindowFlags wflags = Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint;
+
+                if (passive) {
+                    wflags |= Qt::X11BypassWindowManagerHint;
+                }
+
+                dialog->setWindowFlags(wflags);
                 KWindowSystem::setState(dialog->winId(), NET::SkipTaskbar | NET::SkipPager);
                 dialog->installEventFilter(q);
 
@@ -390,7 +396,21 @@ Plasma::PopupPlacement PopupApplet::popupPlacement() const
 
 void PopupApplet::popupEvent(bool)
 {
+}
 
+void PopupApplet::setPassivePopup(bool passive)
+{
+    d->passive = passive;
+
+    if (d->dialog) {
+        Qt::WindowFlags wflags = Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint;
+
+        if (d->passive) {
+            wflags |= Qt::X11BypassWindowManagerHint;
+        }
+
+        d->dialog->setWindowFlags(wflags);
+    }
 }
 
 PopupAppletPrivate::PopupAppletPrivate(PopupApplet *applet)
@@ -402,7 +422,8 @@ PopupAppletPrivate::PopupAppletPrivate(PopupApplet *applet)
           savedAspectRatio(Plasma::InvalidAspectRatioMode),
           timer(0),
           startupComplete(false),
-          popupLostFocus(false)
+          popupLostFocus(false),
+          passive(false)
 {
 }
 
