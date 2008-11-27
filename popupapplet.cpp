@@ -413,6 +413,11 @@ void PopupApplet::setPassivePopup(bool passive)
     }
 }
 
+bool PopupApplet::isPassivePopup() const
+{
+    return d->passive;
+}
+
 PopupAppletPrivate::PopupAppletPrivate(PopupApplet *applet)
         : q(applet),
           icon(0),

@@ -88,9 +88,17 @@ public:
     Plasma::PopupPlacement popupPlacement() const;
 
     /**
+     * Sets whether or not the dialog popup that gets created should be a "passive" popup
+     * that does not steal focus from other windows or not.
      *
+     * @arg passive true if the dialog should be treated as a passive popup
      */
     void setPassivePopup(bool passive);
+
+    /**
+     * @return true if the dialog will be treated as a passive poup
+     */
+    bool isPassivePopup() const;
 
 public Q_SLOTS:
     /**
