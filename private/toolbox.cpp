@@ -120,7 +120,7 @@ void ToolBox::addTool(QAction *action)
 
     //make enabled/disabled tools appear/disappear instantly
     connect(tool, SIGNAL(changed()), this, SLOT(updateToolBox()));
-    kDebug() << "added tool" << action->text() << (QGraphicsItem*)tool;
+    //kDebug() << "added tool" << action->text() << (QGraphicsItem*)tool;
 }
 
 void ToolBox::updateToolBox()
@@ -361,8 +361,8 @@ void ToolBox::load()
             setPos(0, offset);
             break;
     }
-    kDebug() << "marked as user moved" << pos()
-             << (d->containment->containmentType() == Containment::PanelContainment);
+    //kDebug() << "marked as user moved" << pos()
+    //         << (d->containment->containmentType() == Containment::PanelContainment);
 }
 
 void ToolBox::reposition()
@@ -391,7 +391,7 @@ void ToolBox::reposition()
                 setCorner(ToolBox::Right);
             }
         }
-        kDebug() << pos();
+        //kDebug() << pos();
     } else if (d->containment->corona()) {
         //kDebug() << "desktop";
 
