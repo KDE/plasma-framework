@@ -49,6 +49,10 @@ void shadowBlur(QImage &image, int radius, const QColor &color)
 
 QPixmap shadowText(QString text, QColor textColor, QColor shadowColor, QPoint offset, int radius)
 {
+    //don't try to paint stuff on a future null pixmap because the text is empty
+    if (text.size() == 0) {
+        return QPixmap();
+    }
     // Draw text
     QFontMetrics fm(text);
     QRect textRect = fm.boundingRect(text);
