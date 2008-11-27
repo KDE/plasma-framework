@@ -220,7 +220,9 @@ void NativeTabBar::paintEvent(QPaintEvent *event)
     //int numTabs = count();
     //bool ltr = painter.layoutDirection() == Qt::LeftToRight; // Not yet used
 
-    d->backgroundSvg->paintFrame(&painter);
+    if (drawBase()) {
+        d->backgroundSvg->paintFrame(&painter);
+    }
 
     // Drawing Tabborders
     QRect movingRect;
