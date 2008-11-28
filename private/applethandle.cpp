@@ -465,6 +465,19 @@ void AppletHandle::mousePressEvent(QGraphicsSceneMouseEvent *event)
         if (m_pressedButton == MoveButton) {
             m_pos = pos();
         }
+
+        if (m_pressedButton == ResizeButton) {
+            QRectF rect = QRectF(m_applet->pos(), m_applet->size());
+            m_originalSize = rect.size();
+            if (m_buttonsOnRight) {
+                m_resizeAnchor = rect.bottomLeft();
+                m_resizeOffset = event->pos() - rect.topRight();
+            } else {
+                m_resizeAnchor = rect.bottomRight(); 
+                m_resizeOffset = event->pos() - rect.topLeft();
+            }
+        }
+
         event->accept();
 
         update();
@@ -514,29 +527,13 @@ void AppletHandle::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
         case ResizeButton:
         case RotateButton:
         {
-            if (m_scaleWidth > 0 && m_scaleHeight > 0) {
-                QRectF rect(m_applet->boundingRect());
-                const qreal newWidth = rect.width() * m_scaleWidth;
-                const qreal newHeight = rect.height() * m_scaleHeight;
-                m_applet->resetTransform();
-                m_applet->resize(newWidth, newHeight);
-                scale(1.0 / m_scaleWidth, 1.0 / m_scaleHeight);
-                moveBy((rect.width() - newWidth) / 2, (rect.height() - newHeight) / 2);
-                m_scaleWidth = m_scaleHeight = 0;
-            }
-            QRectF rect = QRectF(m_applet->pos(), m_applet->size());
-            QPointF center = rect.center();
-
             m_angle += m_tempAngle;
-            m_tempAngle = 0;
-
-            QTransform matrix;
-            matrix.translate(center.x(), center.y());
-            matrix.rotateRadians(m_angle);
-            matrix.translate(-center.x(), -center.y());
-
-            setTransform(matrix);
-            m_applet->update();
+            if (m_angle > M_PI) {
+                m_angle = m_angle - 2 * M_PI;
+            } else if (m_angle < -M_PI) {
+                m_angle = m_angle + 2 * M_PI;
+            }
+            m_tempAngle = 0; 
             break;
         }
         case ConfigureButton:
@@ -721,6 +718,7 @@ void AppletHandle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
         QPointF pressPos = mapFromScene(event->buttonDownScenePos(Qt::LeftButton));
 
+        QRectF originalRect = m_totalRect;
         QRectF rect = QRectF(m_applet->pos(), m_applet->size());
         QPointF center = rect.center();
 
@@ -737,6 +735,13 @@ void AppletHandle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
             qreal h = m_applet->size().height();
             QSizeF min = m_applet->minimumSize();
             QSizeF max = m_applet->maximumSize();
+            QPointF resizePoint(0.0, 0.0);
+            if (m_buttonsOnRight) {
+                resizePoint = rect.topRight();
+            } else {
+                resizePoint = rect.topLeft();
+            }
+
 
             // If the applet doesn't have a minimum size, calculate based on a
             // minimum content area size of 16x16
@@ -756,16 +761,16 @@ void AppletHandle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
                 qreal newScaleWidth = 0;
                 qreal newScaleHeight = 0;
 
-                QPointF startDistance(pressPos - center);
-                QPointF currentDistance(event->pos() - center);
+                QPointF startDistance(resizePoint - m_resizeAnchor);
+                QPointF currentDistance((event->pos() - m_resizeOffset) - m_resizeAnchor);
                 newScaleWidth = currentDistance.x() / startDistance.x();
                 newScaleHeight = currentDistance.y() / startDistance.y();
 
-                if (qAbs(w - (newScaleWidth * w)) <= KGlobalSettings::dndEventDelay()) {
-                    newScaleWidth = 1.0;
+                if (qAbs(event->pos().x() - pressPos.x()) <= KGlobalSettings::dndEventDelay()) {
+                    newScaleWidth = m_originalSize.width() / originalRect.width();
                 }
-                if (qAbs(h - (newScaleHeight * h)) <= KGlobalSettings::dndEventDelay()) {
-                    newScaleHeight = 1.0;
+                if (qAbs(event->pos().y() - pressPos.y()) <= KGlobalSettings::dndEventDelay()) {
+                    newScaleHeight = m_originalSize.height() / originalRect.height();
                 }
 
                 if (newScaleHeight * h < min.height()) {
@@ -787,10 +792,11 @@ void AppletHandle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
                 qreal newScale = 0;
 
                 newScale =
-                    _k_distanceForPoint(event->pos()-center) /
-                    _k_distanceForPoint(pressPos - center);
-                if (qAbs(h - (newScale * h)) <= KGlobalSettings::dndEventDelay()) {
-                    newScale = 1.0;
+                    _k_distanceForPoint((event->pos() - m_resizeOffset) - m_resizeAnchor) /
+                    _k_distanceForPoint(resizePoint - m_resizeAnchor);
+
+                if (qAbs(event->pos().y() - pressPos.y()) <= KGlobalSettings::dndEventDelay()) {
+                    newScale = m_originalSize.height() / originalRect.height();
                 }
 
                 if (newScale * w < min.width() || newScale * h < min.height()) {
@@ -801,14 +807,63 @@ void AppletHandle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
                     m_scaleHeight = m_scaleWidth = newScale;
                 }
             }
+            
+            // Resize Applet
+            QSizeF oldSize(m_applet->size());
+            const qreal newWidth = oldSize.width() * m_scaleWidth;
+            const qreal newHeight = oldSize.height() * m_scaleHeight;
+            m_applet->resize(newWidth, newHeight);
+
+            // Adjust position based on new applet size
+            qreal deltaX = 0;
+            qreal deltaY = 0;
+            const qreal deltaH = newHeight - oldSize.height();
+            const qreal deltaW = newWidth - oldSize.width();
+            if (m_buttonsOnRight) {
+                if (m_angle >= 0 && m_angle < M_PI_2) {
+                    deltaX = 0;
+                    deltaY = -cos(m_angle) * deltaH;
+                } else if (m_angle >= M_PI_2 && m_angle <= M_PI) {
+                    deltaX = cos(m_angle) * deltaW;
+                    deltaY = 0;
+                } else if (m_angle >= -M_PI_2 && m_angle < 0) {
+                    deltaX = sin(m_angle) * deltaH;
+                    deltaY = -cos(m_angle) * deltaH + sin(m_angle) * deltaW;
+                } else if (m_angle >= -M_PI && m_angle < M_PI_2) {
+                    deltaX = cos(m_angle) * deltaW + sin(m_angle) * deltaH;
+                    deltaY = sin(m_angle) * deltaW;
+                }
+            } else {
+                if (m_angle >= 0 && m_angle < M_PI_2) {
+                    deltaX = -cos(m_angle) * deltaW;
+                    deltaY = -cos(m_angle) * deltaH - sin(m_angle) * deltaW;
+                } else if (m_angle >= M_PI_2 && m_angle <= M_PI) {
+                    deltaX = 0;
+                    deltaY = -sin(m_angle) * deltaW;
+                } else if (m_angle >= -M_PI_2 && m_angle < 0) {
+                    deltaX = sin(m_angle) * deltaH - cos(m_angle) * deltaW;
+                    deltaY = 0;
+                } else if (m_angle >= -M_PI && m_angle < M_PI_2) {
+                    deltaX = sin(m_angle) * deltaH;
+                    deltaY = 0;
+                }
+            }
+
+            //kDebug() << "delta:" << deltaX << "," << deltaY;
+            //kDebug() << "Scale:" << m_scaleWidth << "," << m_scaleHeight;
+            moveBy(deltaX, deltaY);
         }
 
+        //kDebug() << "Angle:" << m_angle * 180/M_PI << "," << (m_angle + m_tempAngle)*180/M_PI;
+
+        rect = QRectF(m_applet->pos(), m_applet->size());
+        center = rect.center();
         QTransform matrix;
         matrix.translate(center.x(), center.y());
         matrix.rotateRadians(m_angle + m_tempAngle);
-        matrix.scale(m_scaleWidth, m_scaleHeight);
         matrix.translate(-center.x(), -center.y());
         setTransform(matrix);
+        m_applet->update();
     } else {
         QGraphicsItem::mouseMoveEvent(event);
     }

@@ -308,8 +308,8 @@ void Applet::setFailedToLaunch(bool failed, const QString &reason)
         resize(300, 250);
         setMinimumSize(failureLayout->minimumSize());
         d->background->resizeFrame(geometry().size());
-
     }
+
     update();
 }
 
