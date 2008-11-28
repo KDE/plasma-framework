@@ -79,14 +79,18 @@ ExtenderItem::ExtenderItem(Extender *hostExtender, uint extenderItemId)
         //The item is new
         dg.writeEntry("sourceAppletPluginName", hostExtender->d->applet->pluginName());
         dg.writeEntry("sourceAppletId", hostExtender->d->applet->id());
-        dg.writeEntry("sourceIconName", hostExtender->d->applet->icon());
+        dg.writeEntry("extenderIconName", hostExtender->d->applet->icon());
         d->sourceApplet = hostExtender->d->applet;
         d->collapseIcon = new IconWidget(KIcon(hostExtender->d->applet->icon()), "", this);
     } else {
         //The item already exists.
         d->name = dg.readEntry("extenderItemName", "");
         d->title = dg.readEntry("extenderTitle", "");
-        d->collapseIcon = new IconWidget(KIcon(dg.readEntry("extenderIconName", "")), "", this);
+        QString iconName = dg.readEntry("extenderIconName", "utilities-desktop-extra");
+        if (iconName.isEmpty()) {
+            iconName = "utilities-desktop-extra";
+        }
+        d->collapseIcon = new IconWidget(KIcon(iconName), "", this);
 
         //Find the sourceapplet.
         Corona *corona = hostExtender->d->applet->containment()->corona();
@@ -126,6 +130,10 @@ ExtenderItem::ExtenderItem(Extender *hostExtender, uint extenderItemId)
 
 ExtenderItem::~ExtenderItem()
 {
+    //make sure the original mousepointer always get's restored.
+    if (d->mouseOver) {
+        QApplication::restoreOverrideCursor();
+    }
     delete d;
 }
 
@@ -470,6 +478,14 @@ void ExtenderItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
     painter->drawPixmap(d->titleRect().topLeft(), pixmap);
 }
 
+void ExtenderItem::moveEvent(QGraphicsSceneMoveEvent *event)
+{
+    if (d->toplevel) {
+        d->toplevel->setSceneRect(sceneBoundingRect());
+        update();
+    }
+}
+
 void ExtenderItem::resizeEvent(QGraphicsSceneResizeEvent *event)
 {
     qreal width = event->newSize().width();
@@ -497,6 +513,12 @@ void ExtenderItem::resizeEvent(QGraphicsSceneResizeEvent *event)
     d->repositionToolbox();
 
     update();
+
+    if (d->toplevel) {
+        d->toplevel->setSceneRect(sceneBoundingRect());
+        d->toplevel->setMask(d->background->mask());
+        update();
+    }
 }
 
 void ExtenderItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
@@ -506,30 +528,33 @@ void ExtenderItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
         return;
     }
 
-    d->mousePressed = true;
-    d->deltaScene = pos();
-    d->mousePos = event->pos().toPoint();
-    d->hostApplet()->raise();
-    setZValue(d->hostApplet()->zValue());
-
-    QPointF mousePos = d->scenePosFromScreenPos(event->screenPos());
-
-    if (!mousePos.isNull()) {
-        d->extender->itemHoverMoveEvent(this, d->extender->mapFromScene(mousePos));
-    }
-
-    d->extender->d->removeExtenderItem(this);
     QApplication::setOverrideCursor(Qt::ClosedHandCursor);
+
+    d->mousePos = event->pos().toPoint();
+    d->deltaScene = pos();
 }
 
 void ExtenderItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
-    if (!d->mousePressed) {
-        return;
+    if ((d->mousePos - event->pos().toPoint()).manhattanLength()
+                       >= QApplication::startDragDistance()) {
+        d->mousePressed = true;
+        //start the drag:
+        //set the zValue to the maximum.
+        d->hostApplet()->raise();
+        setZValue(d->hostApplet()->zValue());
+
+        QPointF mousePos = d->scenePosFromScreenPos(event->screenPos());
+        if (!mousePos.isNull()) {
+            d->extender->itemHoverMoveEvent(this, d->extender->mapFromScene(mousePos));
+        }
+        d->extender->d->removeExtenderItem(this);
+
+        d->themeChanged();
     }
 
-    if (d->background->enabledBorders() != FrameSvg::AllBorders) {
-        d->themeChanged();
+    if (!d->mousePressed) {
+        return;
     }
 
     //keep track of the movement in scene coordinates. we use this to set the position of the
@@ -551,9 +576,9 @@ void ExtenderItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
         if (!d->toplevel) {
             //FIXME: duplication from applethandle
             //create a toplevel view and aim it at the applet.
-            d->toplevel = new QGraphicsView(corona, 0);
-
             corona->addOffscreenWidget(this);
+
+            d->toplevel = new QGraphicsView(scene(), 0);
 
             d->toplevel->setWindowFlags(
                 Qt::ToolTip | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
@@ -575,20 +600,16 @@ void ExtenderItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
             d->toplevel->show();
         }
 
-        //move the toplevel view.
         d->toplevel->setSceneRect(sceneBoundingRect());
         d->toplevel->setGeometry(screenRect);
-        update();
     } else {
         corona->removeOffscreenWidget(this);
         setParentItem(d->hostApplet());
         setPos(d->deltaScene);
 
        //remove the toplevel view.
-       if (d->toplevel) {
-            delete d->toplevel;
-            d->toplevel = 0;
-        }
+        delete d->toplevel;
+        d->toplevel = 0;
     }
 
     //let's insert spacers in applets we're hovering over for some useful visual feedback.
@@ -596,7 +617,6 @@ void ExtenderItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     //position in scene coordinates (event->scenePos won't work, since it doesn't take in
     //consideration that you're leaving the current view).
     QPointF mousePos = d->scenePosFromScreenPos(event->screenPos());
-    QPointF topleft = d->scenePosFromScreenPos(event->screenPos() - d->mousePos);
 
     //find the extender we're hovering over.
     Extender *targetExtender = 0;
@@ -618,8 +638,8 @@ void ExtenderItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
                 }
             }
 
-            if (containment->sceneBoundingRect().contains(topleft) && !targetExtender) {
-                containment->showDropZone(event->screenPos() - d->mousePos);
+            if (containment->sceneBoundingRect().contains(mousePos) && !targetExtender) {
+                containment->showDropZone(containment->mapFromScene(mousePos).toPoint());
             } else {
                 containment->showDropZone(QPoint());
             }
@@ -696,7 +716,7 @@ void ExtenderItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 
         //find the extender we're hovering over.
         Extender *targetExtender = 0;
-        Corona *corona = qobject_cast<Corona*>(scene());
+        Corona *corona = qobject_cast<Corona*>(d->extender->d->applet->scene());
 
         corona->removeOffscreenWidget(this);
 
@@ -722,18 +742,37 @@ void ExtenderItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
             }
         } else {
             //apparently, it is not, so instantiate a new ExtenderApplet.
-            //TODO: maybe we alow the user to choose a default extenderapplet.
-            kDebug() << "Instantiate a new ExtenderApplet";
-            mousePos = d->scenePosFromScreenPos(event->screenPos() - d->mousePos);
+            bool extenderCreated = false;
+            mousePos = d->scenePosFromScreenPos(event->screenPos());
             if (!mousePos.isNull()) {
                 foreach (Containment *containment, corona->containments()) {
                     if (containment->sceneBoundingRect().contains(mousePos)) {
+                        kDebug() << "Instantiate a new ExtenderApplet";
+
+                        //when on a desktopcontainment, we use the widgets topleft corner to
+                        //position the applet in the containment, on other containments, we use the
+                        //actual mouse position.
+                        QPointF position;
+                        if (containment->type() == Plasma::Containment::DesktopContainment) {
+                            position = containment->mapFromScene(
+                                       d->scenePosFromScreenPos(event->screenPos() - d->mousePos));
+                        } else {
+                            position = containment->mapFromScene(mousePos);
+                        }
+
                         Applet *applet = containment->addApplet("internal:extender",
                                 QVariantList(),
                                 QRectF(containment->mapFromScene(mousePos), size()));
                         setExtender(applet->d->extender);
+                        extenderCreated = true;
                     }
                 }
+            }
+
+            //if no containment is at the position where the item is dropped, just move the item
+            //back to where it came from.
+            if (!extenderCreated) {
+                setExtender(extender());
             }
         }
 
@@ -995,8 +1034,11 @@ void ExtenderItemPrivate::sourceAppletRemoved()
 
 qreal ExtenderItemPrivate::iconSize()
 {
+    //read the icon size hint, and enforce a minimum size of 16x16
     QSizeF size = dragger->elementSize("hint-preferred-icon-size");
+    size = size.expandedTo(QSizeF(16,16));
 
+    //return the size of the text, if that is larger then the recommended icon size
     Plasma::Theme *theme = Plasma::Theme::defaultTheme();
     QFont font = theme->font(Plasma::Theme::DefaultFont);
     QFontMetrics fm(font);

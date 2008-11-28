@@ -27,7 +27,6 @@
 ExtenderApplet::ExtenderApplet(QObject *parent, const QVariantList &args)
     : Plasma::PopupApplet(parent, args)
 {
-    setPopupIcon("utilities-desktop-extra");
 }
 
 ExtenderApplet::~ExtenderApplet()
@@ -36,6 +35,8 @@ ExtenderApplet::~ExtenderApplet()
 
 void ExtenderApplet::init()
 {
+    setPopupIcon("utilities-desktop-extra");
+
     QGraphicsLinearLayout *layout = new QGraphicsLinearLayout(this);
     layout->setSpacing(0);
     setLayout(layout);
@@ -47,7 +48,7 @@ void ExtenderApplet::init()
             this, SLOT(itemDetached(Plasma::ExtenderItem*)));
 
     layout->addItem(extender());
-    updateGeometry();
+    //updateGeometry();
 }
 
 void ExtenderApplet::itemDetached(Plasma::ExtenderItem *)

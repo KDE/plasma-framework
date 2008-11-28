@@ -211,24 +211,27 @@ void Extender::itemHoverEnterEvent(ExtenderItem *item)
 
 void Extender::itemHoverMoveEvent(ExtenderItem *item, const QPointF &pos)
 {
-    int insertIndex = d->insertIndexFromPos(pos);
-
-    if ((insertIndex == d->currentSpacerIndex) || (insertIndex == -1)) {
-        //relayouting is resource intensive, so don't do that when not necesarry.
+    if (d->spacerWidget && d->spacerWidget->geometry().contains(pos)) {
         return;
     }
 
     //Make sure we remove any spacer that might already be in the layout.
-    itemHoverLeaveEvent(item);
+    if (d->spacerWidget) {
+        d->layout->removeItem(d->spacerWidget);
+    }
 
-    d->currentSpacerIndex = insertIndex;
+    int insertIndex = d->insertIndexFromPos(pos);
 
     //Create a widget that functions as spacer, and add that to the layout.
-    QGraphicsWidget *widget = new QGraphicsWidget(this);
-    widget->setMinimumSize(QSizeF(item->minimumSize().width(), item->size().height()));
-    widget->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
-    d->spacerWidget = widget;
-    d->layout->insertItem(insertIndex, widget);
+    if (!d->spacerWidget) {
+        QGraphicsWidget *widget = new QGraphicsWidget(this);
+        widget->setMinimumSize(item->minimumSize());
+        widget->setPreferredSize(item->preferredSize());
+        widget->setMaximumSize(item->maximumSize());
+        widget->setSizePolicy(item->sizePolicy());
+        d->spacerWidget = widget;
+    }
+    d->layout->insertItem(insertIndex, d->spacerWidget);
 
     //Make sure we remove any 'no detachables' label that might be there, and update the layout.
     d->updateEmptyExtenderLabel();
@@ -357,38 +360,46 @@ void ExtenderPrivate::loadExtenderItems()
 
         bool temporarySourceApplet = false;
 
-        //find the source applet.
-        Corona *corona = applet->containment()->corona();
-        Applet *sourceApplet = 0;
-        foreach (Containment *containment, corona->containments()) {
-            foreach (Applet *applet, containment->applets()) {
-                if (applet->id() == sourceAppletId) {
-                    sourceApplet = applet;
+        kDebug() << "applet id = " << applet->id();
+        kDebug() << "sourceappletid = " << sourceAppletId;
+
+        if (sourceAppletId != applet->id()) {
+            //find the source applet.
+            Corona *corona = applet->containment()->corona();
+            Applet *sourceApplet = 0;
+            foreach (Containment *containment, corona->containments()) {
+                foreach (Applet *applet, containment->applets()) {
+                    if (applet->id() == sourceAppletId) {
+                        sourceApplet = applet;
+                    }
                 }
             }
-        }
 
-        //There is no source applet. We just instantiate one just for the sake of creating
-        //detachables.
-        if (!sourceApplet) {
-            kDebug() << "creating a temporary applet as factory";
-            sourceApplet = Applet::load(appletName);
-            temporarySourceApplet = true;
-            //TODO: maybe add an option to applet to indicate that it shouldn't be deleted after
-            //having used it as factory.
-        }
-
-        if (!sourceApplet) {
-            kDebug() << "sourceApplet is null? appletName = " << appletName;
-            kDebug() << "                      extenderItemId = " << extenderItemId;
-        } else {
-            ExtenderItem *item = new ExtenderItem(q, extenderItemId.toInt());
-            item->setName(extenderItemName);
-            sourceApplet->initExtenderItem(item);
-
-            if (temporarySourceApplet) {
-                delete sourceApplet;
+            //There is no source applet. We just instantiate one just for the sake of creating
+            //detachables.
+            if (!sourceApplet) {
+                kDebug() << "creating a temporary applet as factory";
+                sourceApplet = Applet::load(appletName);
+                temporarySourceApplet = true;
+                //TODO: maybe add an option to applet to indicate that it shouldn't be deleted after
+                //having used it as factory.
             }
+
+            if (!sourceApplet) {
+                kDebug() << "sourceApplet is null? appletName = " << appletName;
+                kDebug() << "                      extenderItemId = " << extenderItemId;
+            } else {
+                ExtenderItem *item = new ExtenderItem(q, extenderItemId.toInt());
+                sourceApplet->initExtenderItem(item);
+
+                if (temporarySourceApplet) {
+                    delete sourceApplet;
+                }
+            }
+        } else {
+            //this entry is still here, probably because plasma crashed, but it isn't detached and
+            //should be reinstantiated. Just delete the entry.
+            cg.deleteGroup(pair.second);
         }
     }
 
@@ -411,9 +422,9 @@ void ExtenderPrivate::adjustSizeHints()
     //FIXME: what happens in this function are some nasty workarounds for a bug in qt4.4's QGL.
     //Alexis has told me they are working on a fix for qt4.5, so this can be removed once the bug
     //has been fixed in Qt.
-    if (q->layout()) {
-        q->layout()->updateGeometry();
-        q->setMinimumSize(q->layout()->preferredSize());
+    if (layout) {
+        layout->updateGeometry();
+        q->setMinimumSize(layout->preferredSize());
     }
 
     if (applet->layout()) {
