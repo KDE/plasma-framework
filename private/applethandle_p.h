@@ -120,7 +120,6 @@ class AppletHandle : public QObject, public QGraphicsItem
         QColor m_gradientColor;
         QTimer *m_hoverTimer;
         QTimer *m_leaveTimer;
-        View *m_topview;
         QPixmap *m_backgroundBuffer;
         QGraphicsView *m_currentView;
 

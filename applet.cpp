@@ -986,99 +986,74 @@ void Applet::addAction(QString name, QAction *action)
 void Applet::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     if (!d->started) {
+        kDebug() << "not started";
         return;
     }
 
-    QPainter *p = painter;
-    QPixmap *pixmap = 0;
-
-    if (d->ghost) {
-        // The applet has to be displayed semi transparent. Create a pixmap and a painter on
-        // that pixmap where the applet can draw on so we can draw the result transparently
-        // at the end.
-        kDebug() << "Painting ghosted...";
-        pixmap = new QPixmap(boundingRect().size().toSize());
-        pixmap->fill(Qt::transparent);
-
-        p = new QPainter();
-        p->begin(pixmap);
-    }
-
-    p->save();
-
     if (transform().isRotating()) {
-        p->setRenderHint(QPainter::SmoothPixmapTransform);
-        p->setRenderHint(QPainter::Antialiasing);
+        painter->setRenderHint(QPainter::SmoothPixmapTransform);
+        painter->setRenderHint(QPainter::Antialiasing);
     }
 
     if (d->background &&
         formFactor() != Plasma::Vertical &&
         formFactor() != Plasma::Horizontal) {
         //kDebug() << "option rect is" << option->rect;
-        d->background->paintFrame(p);
+        d->background->paintFrame(painter);
     }
 
-    if (!d->failed) {
-        qreal left, top, right, bottom;
-        getContentsMargins(&left, &top, &right, &bottom);
-        QRect contentsRect =
-            QRectF(QPointF(0, 0),
-                   boundingRect().size()).adjusted(left, top, -right, -bottom).toRect();
+    if (d->failed) {
+        kDebug() << "failed!";
+        return;
+    }
 
-        if (widget && isContainment()) {
-            // note that the widget we get is actually the viewport of the view, not the view itself
-            View* v = qobject_cast<Plasma::View*>(widget->parent());
-            Containment* c = qobject_cast<Plasma::Containment*>(this);
+    qreal left, top, right, bottom;
+    getContentsMargins(&left, &top, &right, &bottom);
+    QRect contentsRect = QRectF(QPointF(0, 0),
+                                boundingRect().size()).adjusted(left, top, -right, -bottom).toRect();
 
-            //update the view transform of the toolbox, since it ignores transforms
-            if (c && c->d->toolBox) {
-                c->d->toolBox->setViewTransform(v->transform());
-            }
+    if (widget && isContainment()) {
+        // note that the widget we get is actually the viewport of the view, not the view itself
+        View* v = qobject_cast<Plasma::View*>(widget->parent());
+        Containment* c = qobject_cast<Plasma::Containment*>(this);
 
-            if (!v || v->isWallpaperEnabled()) {
-                if (c && c->drawWallpaper() && c->wallpaper()) {
-                    Wallpaper *w = c->wallpaper();
-                    if (!w->isInitialized()) {
-                        // delayed paper initialization
-                        KConfigGroup wallpaperConfig = c->config();
-                        wallpaperConfig = KConfigGroup(&wallpaperConfig, "Wallpaper");
-                        wallpaperConfig = KConfigGroup(&wallpaperConfig, w->pluginName());
-                        w->restore(wallpaperConfig);
-                    }
-
-                    p->save();
-                    c->wallpaper()->paint(p, option->exposedRect);
-                    p->restore();
-                }
-
-                Containment::StyleOption coption(*option);
-                coption.view = v;
-                paintInterface(p, &coption, contentsRect);
-            }
-
-            p->restore();
-            return;
+        //update the view transform of the toolbox, since it ignores transforms
+        if (c && c->d->toolBox) {
+            c->d->toolBox->setViewTransform(v->transform());
         }
 
+        if (!v || v->isWallpaperEnabled()) {
+
+            // paint the wallpaper
+            if (c && c->drawWallpaper() && c->wallpaper()) {
+                Wallpaper *w = c->wallpaper();
+                if (!w->isInitialized()) {
+                    // delayed paper initialization
+                    KConfigGroup wallpaperConfig = c->config();
+                    wallpaperConfig = KConfigGroup(&wallpaperConfig, "Wallpaper");
+                    wallpaperConfig = KConfigGroup(&wallpaperConfig, w->pluginName());
+                    w->restore(wallpaperConfig);
+                }
+
+                painter->save();
+                c->wallpaper()->paint(painter, option->exposedRect);
+                painter->restore();
+            }
+
+            // .. and now paint the actual containment interface, but with
+            //  a Containment style option based on the one we get
+            Containment::StyleOption coption(*option);
+            coption.view = v;
+            paintInterface(painter, &coption, contentsRect);
+        }
+    } else {
         //kDebug() << "paint interface of" << (QObject*) this;
-        paintInterface(p, option, contentsRect);
-    }
-    p->restore();
-
-    if (d->ghost) {
-        // Lets display the pixmap that we've just drawn... transparently.
-        p->setCompositionMode(QPainter::CompositionMode_DestinationIn);
-        p->fillRect(pixmap->rect(), QColor(0, 0, 0, (0.3 * 255)));
-        p->end();
-        delete p;
-
-        painter->drawPixmap(0, 0, *pixmap);
-        delete pixmap;
+        // paint the applet's interface
+        paintInterface(painter, option, contentsRect);
     }
 }
 
-void Applet::paintInterface(QPainter *painter, const QStyleOptionGraphicsItem *option,
-                            const QRect &contentsRect)
+void Applet::paintInterface(QPainter *painter, const QStyleOptionGraphicsItem *option, const QRect &contentsRect)
 {
     if (d->script) {
         d->script->paintInterface(painter, option, contentsRect);
@@ -1791,7 +1766,6 @@ AppletPrivate::AppletPrivate(KService::Ptr service, int uniqueID, Applet *applet
           failed(false),
           isContainment(false),
           transient(false),
-          ghost(false),
           needsConfig(false),
           started(false)
 {
@@ -2059,7 +2033,6 @@ void AppletOverlayWidget::paint(QPainter *painter,
 {
     Q_UNUSED(option)
     Q_UNUSED(widget)
-    painter->save();
     painter->setRenderHint(QPainter::Antialiasing);
     QColor wash = Plasma::Theme::defaultTheme()->color(Theme::BackgroundColor);
     wash.setAlphaF(.6);
@@ -2071,8 +2044,6 @@ void AppletOverlayWidget::paint(QPainter *painter,
     } else {
         painter->fillPath(parentItem()->shape(), wash);
     }
-
-    painter->restore();
 }
 
 } // Plasma namespace

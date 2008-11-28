@@ -113,7 +113,6 @@ public:
     bool isContainment : 1;
     bool square : 1;
     bool transient : 1;
-    bool ghost : 1;
     bool needsConfig : 1;
     bool started : 1;
 };

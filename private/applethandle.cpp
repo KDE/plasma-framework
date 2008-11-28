@@ -63,7 +63,6 @@ AppletHandle::AppletHandle(Containment *parent, Applet *applet, const QPointF &h
       m_tempAngle(0.0),
       m_scaleWidth(1.0),
       m_scaleHeight(1.0),
-      m_topview(0),
       m_backgroundBuffer(0),
       m_currentView(applet->view()),
       m_entryPos(hoverPos),
@@ -136,9 +135,6 @@ AppletHandle::~AppletHandle()
 {
     detachApplet();
     delete m_backgroundBuffer;
-    if (m_topview) {
-        delete m_topview;
-    }
 }
 
 Applet *AppletHandle::applet() const
@@ -229,14 +225,14 @@ void AppletHandle::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
     Q_UNUSED(option);
     Q_UNUSED(widget);
 
+    //kDebug() << m_opacity << m_anim << FadeOut;
     if (qFuzzyCompare(m_opacity + 1.0, 1.0)) {
         if (m_anim == FadeOut) {
+            //kDebug() << "WOOOOOOOOO";
             QTimer::singleShot(0, this, SLOT(emitDisappear()));
         }
         return;
     }
-
-    painter->save();
 
     qreal translation;
 
@@ -393,8 +389,6 @@ void AppletHandle::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
     basePoint = m_rect.bottomLeft() + QPointF(HANDLE_MARGIN, 0) - step;
     sourceIconRect.translate(0, m_iconSize);
     painter->drawPixmap(QRectF(basePoint + shiftD, iconSize), *m_backgroundBuffer, sourceIconRect);
-
-    painter->restore();
 }
 
 void AppletHandle::emitDisappear()
@@ -500,10 +494,7 @@ bool AppletHandle::leaveCurrentView(const QPoint &pos) const
             //is this widget a plasma view, a different view then our current one,
             //AND not a dashboardview?
             Plasma::View *v = qobject_cast<Plasma::View *>(widget);
-            if (v &&
-                v != m_currentView &&
-                v != m_topview &&
-                v->containment() != m_containment) {
+            if (v && v != m_currentView && v->containment() != m_containment) {
                 return true;
             }
         }
@@ -550,27 +541,6 @@ void AppletHandle::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
             break;
         case MoveButton:
         {
-            if (m_topview) {
-                m_topview->hide();
-                delete m_topview;
-                m_topview = 0;
-                m_applet->d->ghost = false;
-                m_applet->update();
-            }
-
-            //find out if we were dropped on a panel or something
-            if (leaveCurrentView(event->screenPos())) {
-                startFading(FadeOut, m_entryPos);
-                Plasma::View *v = Plasma::View::topLevelViewAt(event->screenPos());
-                if (v && v != m_currentView) {
-                    Containment *c = v->containment();
-                    QPoint pos = v->mapFromGlobal(event->screenPos());
-                    //we actually have been dropped on another containment, so
-                    //move there: we have a screenpos, we need a scenepos
-                    //FIXME how reliable is this transform?
-                    switchContainment(c, v->mapToScene(pos));
-                }
-            } else {
                 // test for containment change
                 //kDebug() << "testing for containment change, sceneBoundingRect = "
                 //         << m_containment->sceneBoundingRect();
@@ -599,7 +569,6 @@ void AppletHandle::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
                         }
                     }
                 }
-            }
             break;
         }
         default:
@@ -641,75 +610,22 @@ void AppletHandle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
     if (m_pressedButton == MoveButton) {
         m_pos += deltaScene;
-
-        //Are we moving out of the current view?
-        bool toTopLevel = leaveCurrentView(event->screenPos());
-
-        if (!toTopLevel) {
-            setPos(m_pos);
-            if (m_topview) {
-                //We were on a toplevel view, but are moving back on the scene
-                //again. destroy the toplevel view:
-                m_topview->hide();
-                delete m_topview;
-                m_topview = 0;
-                m_applet->d->ghost = false;
+        if (leaveCurrentView(event->screenPos())) {
+            Plasma::View *v = Plasma::View::topLevelViewAt(event->screenPos());
+            if (v && v != m_currentView) {
+                Containment *c = v->containment();
+                QPoint pos = v->mapFromGlobal(event->screenPos());
+                //we actually have been dropped on another containment, so
+                //move there: we have a screenpos, we need a scenepos
+                //FIXME how reliable is this transform?
+                m_pressedButton = NoButton;
+                switchContainment(c, v->mapToScene(pos));
+            } else {
+                setPos(m_pos);
             }
         } else {
-            //set the screenRect correctly. the screenRect contains the bounding
-            //rect of the applet in screen coordinates. m_mousePos contains the
-            //position of the mouse relative to the applet, in screen coords.
-            QRect screenRect = QRect(event->screenPos() - m_mousePos, m_applet->size().toSize());
-
-            //kDebug() << "screenRect = " << screenRect;
-
-            if (!m_topview) { //create a new toplevel view
-                m_topview = new View(m_containment, -1, 0);
-
-                m_topview->setTrackContainmentChanges(false);
-                m_topview->setWindowFlags(
-                    Qt::ToolTip | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
-                m_topview->setWallpaperEnabled(false);
-                m_topview->resize(screenRect.size());
-                m_topview->setSceneRect(m_applet->sceneBoundingRect());
-                m_topview->centerOn(m_applet);
-
-                //We might have to scale the view, because we might be zoomed out.
-                qreal scale = screenRect.width() / m_applet->boundingRect().width();
-                m_topview->scale(scale, scale);
-
-                //Paint a mask based on the applets shape.
-                //TODO: I think it's nicer to have this functionality in Applet.
-                //TODO: When the corona tiled background is disabled, disable the
-                //mask when compositing is enabled.
-                //FIXME: the mask doesn't function correctly when zoomed out.
-                QBitmap bitmap(screenRect.size());
-                {
-                    QPainter shapePainter;
-                    shapePainter.begin(&bitmap);
-                    shapePainter.fillRect(0, 0, screenRect.width(),
-                                                screenRect.height(),
-                                                Qt::white);
-                    shapePainter.setBrush(Qt::black);
-                    shapePainter.drawPath(m_applet->shape());
-                    shapePainter.end();
-                }
-                m_topview->setMask(bitmap);
-
-                m_topview->show();
-
-                m_applet->d->ghost = true;
-
-                //TODO: non compositing users are screwed: masking looks terrible.
-                //Consider always enabling the applet background. Stuff like the analog clock
-                //looks absolutely terrible when masked, while the minor rounded corners of most
-                //themes should look quite ok. I said should, since shape() doesn't really
-                //function correctly right now for applets drawing standard backgrounds.
-            }
-
-            m_topview->setGeometry(screenRect);
+            setPos(m_pos);
         }
-
     } else if (m_pressedButton == RotateButton ||
                m_pressedButton == ResizeButton) {
         if (_k_distanceForPoint(deltaScene) <= 1.0) {
@@ -874,7 +790,7 @@ void AppletHandle::switchContainment(Containment *containment, const QPointF &po
 {
     if (containment->containmentType() != Containment::PanelContainment) {
         //FIXME assuming everything else behaves like desktop?
-        kDebug() << "desktop";
+        //kDebug() << "desktop";
         m_containment = containment;
     }
 
@@ -930,15 +846,6 @@ void AppletHandle::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
         //wait a moment to hide the handle in order to recheck the mouse position
         m_leaveTimer->start();
     }
-
-   if (m_topview) {
-        //We were on a toplevel view, but are moving back on the scene
-        //again. destroy the toplevel view:
-        m_topview->hide();
-        delete m_topview;
-        m_topview = 0;
-        m_applet->d->ghost = false;
-    }
 }
 
 bool AppletHandle::sceneEventFilter(QGraphicsItem *watched, QEvent *event)
@@ -958,7 +865,8 @@ void AppletHandle::fadeAnimation(qreal progress)
     } else {
         m_opacity = 1 - progress;
     }
-    //kDebug() << "progress" << progress << "m_opacity" << m_opacity;// << endOpacity;
+
+    //kDebug() << "progress" << progress << "m_opacity" << m_opacity << m_anim << "(" << FadeIn << ")";
     if (qFuzzyCompare(progress, qreal(1.0))) {
         m_animId = 0;
         delete m_backgroundBuffer;
@@ -1009,6 +917,7 @@ void AppletHandle::startFading(FadeType anim, const QPointF &hoverPos)
 
     if (!m_applet || (anim == FadeOut && m_hoverTimer->isActive())) {
         // fading out before we've started fading in
+        m_anim = FadeOut;
         fadeAnimation(1.0);
         return;
     }
@@ -1055,8 +964,8 @@ void AppletHandle::startFading(FadeType anim, const QPointF &hoverPos)
 
     m_anim = anim;
     //kDebug() << "animating for " << time << "ms";
-    m_animId = Animator::self()->customAnimation(
-        80 * (time / 1000.0), (int)time, Animator::EaseInCurve, this, "fadeAnimation");
+    m_animId = Animator::self()->customAnimation(80 * (time / 1000.0), (int)time,
+                                                 Animator::EaseInCurve, this, "fadeAnimation");
 }
 
 void AppletHandle::forceDisappear()
