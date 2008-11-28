@@ -24,14 +24,18 @@
 #include <QPainter>
 #include <QRadialGradient>
 #include <QGraphicsView>
+#include <QAction>
 
 #include <kcolorscheme.h>
 #include <kdebug.h>
 
 #include <plasma/theme.h>
 #include <plasma/paintutils.h>
+#include <plasma/framesvg.h>
 
 #include <plasma/applet.h>
+#include <plasma/containment.h>
+#include <plasma/widgets/iconwidget.h>
 
 namespace Plasma
 {
@@ -43,6 +47,13 @@ class EmptyGraphicsItem : public QGraphicsItem
             : QGraphicsItem(parent)
         {
             setAcceptsHoverEvents(true);
+            m_background = new Plasma::FrameSvg();
+            m_background->setImagePath("widgets/translucentbackground");
+        }
+
+        ~EmptyGraphicsItem()
+        {
+            delete m_background;
         }
 
         QRectF boundingRect() const
@@ -58,27 +69,23 @@ class EmptyGraphicsItem : public QGraphicsItem
         void setRect(const QRectF &rect)
         {
             //kDebug() << "setting rect to" << rect;
+            qreal left, top, right, bottom;
+            m_background->getMargins(left, top, right, bottom);
+
             prepareGeometryChange();
-            m_rect = rect;
-            setPos(rect.topLeft());
+            m_rect = rect.adjusted(-left, -top, right, bottom);
+            setPos(m_rect.topLeft());
+            m_background->resizeFrame(m_rect.size());
         }
 
         void paint(QPainter *p, const QStyleOptionGraphicsItem *, QWidget *)
         {
-            Q_UNUSED(p)
-            //p->setPen(Qt::red);
-            //p->drawRect(boundingRect());
-            p->setRenderHints(QPainter::Antialiasing);
-            p->translate(0.5, 0.5);
-            //TODO: use Plasma::Theme, and a gradient for the brush!
-            p->setPen(QPen(Qt::white, 1));
-            p->setBrush(QColor(0, 0, 0, 160));
-            QPainterPath path = PaintUtils::roundedRectangle(boundingRect(), 10);
-            p->drawPath(path);
+            m_background->paintFrame(p);
         }
 
     private:
         QRectF m_rect;
+        Plasma::FrameSvg *m_background;
 };
 
 // used with QGrahphicsItem::setData
@@ -87,8 +94,10 @@ static const int ToolName = 7001;
 class DesktopToolBoxPrivate
 {
 public:
-    DesktopToolBoxPrivate()
-      : icon("plasma"),
+    DesktopToolBoxPrivate(DesktopToolBox *toolbox)
+      : q(toolbox),
+        containment(0),
+        icon("plasma"),
         toolBacker(0),
         animCircleId(0),
         animHighlightId(0),
@@ -97,6 +106,30 @@ public:
         hovering(0)
     {}
 
+    bool needsToolBarBehaviour()
+    {
+        bool changed = false;
+
+        if (containment && viewTransform != q->viewTransform()) {
+            viewTransform = q->viewTransform();
+            changed = true;
+        }
+
+        if (viewTransform.isScaling()) {
+            q->setIsToolbar(true);
+            q->showToolBox();
+            return true;
+        } else {
+            q->setIsToolbar(false);
+            if (changed) {
+                q->hideToolBox();
+            }
+            return false;
+        }
+    }
+
+    DesktopToolBox *q;
+    Containment *containment;
     KIcon icon;
     EmptyGraphicsItem *toolBacker;
     int animCircleId;
@@ -106,13 +139,15 @@ public:
     QRect shapeRect;
     QColor fgColor;
     QColor bgColor;
+    QTransform viewTransform;
     bool hovering : 1;
 };
 
 DesktopToolBox::DesktopToolBox(Containment *parent)
     : ToolBox(parent),
-      d(new DesktopToolBoxPrivate)
+      d(new DesktopToolBoxPrivate(this))
 {
+    d->containment = parent;
     setZValue(10000000);
     setFlag(ItemClipsToShape, true);
     setFlag(ItemClipsChildrenToShape, false);
@@ -147,6 +182,10 @@ void DesktopToolBox::paint(QPainter *painter, const QStyleOptionGraphicsItem *op
 {
     Q_UNUSED(option)
     Q_UNUSED(widget)
+
+    if (d->needsToolBarBehaviour()) {
+        return;
+    }
 
     QPainterPath p = shape();
 
@@ -278,7 +317,7 @@ void DesktopToolBox::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 
 void DesktopToolBox::showToolBox()
 {
-    if (showing()) {
+    if (showing() && !isToolbar()) {
         return;
     }
 
@@ -326,7 +365,10 @@ void DesktopToolBox::showToolBox()
 
     // find our theoretical X and Y end coordinates
 
-    int maxwidth = 0;
+    int maxWidth = 0;
+    int maxHeight = 0;
+    int totalWidth = 0;
+
     foreach (QGraphicsItem *tool, QGraphicsItem::children()) {
         if (tool == d->toolBacker) {
             continue;
@@ -335,18 +377,36 @@ void DesktopToolBox::showToolBox()
         if (tool->isEnabled()) {
             //kDebug() << tool << "is enabled";
             y += 5;
-            maxwidth = qMax(static_cast<int>(tool->boundingRect().width()), maxwidth);
+            QSize toolSize = tool->boundingRect().size().toSize();
+            totalWidth += toolSize.width() + 5;
+
+            maxWidth = qMax(toolSize.width(), maxWidth);
+            maxHeight = qMax(toolSize.height(), maxHeight);
             y += static_cast<int>(tool->boundingRect().height());
         }
     }
 
     if (corner() == TopRight || corner() == Right || corner() == BottomRight) {
-        x -= maxwidth;
+        x -= maxWidth;
     }
 
     y += 5;
     // the rect the tools back should have
-    QRectF backerRect = QRectF(QPointF(x, startY), QSizeF(maxwidth + 10, y - startY));
+    QRectF backerRect = QRectF(QPointF(x, startY), QSizeF(maxWidth + 10, y - startY));
+
+    if (isToolbar()) {
+        QPointF topRight;
+
+        //could that cast ever fail?
+        if (d->containment) {
+            topRight = d->viewTransform.map(mapFromParent(d->containment->boundingRect().topRight()));
+        } else {
+            topRight = boundingRect().topRight();
+        }
+
+        backerRect.setSize(QSize(totalWidth, maxHeight));
+        backerRect.moveTopRight(topRight);
+    }
     //kDebug() << "starting at" <<  x << startY;
 
     // now check that is actually fits within the parent's boundaries
@@ -376,14 +436,35 @@ void DesktopToolBox::showToolBox()
             continue;
         }
 
+        Plasma::IconWidget *icon = qgraphicsitem_cast<Plasma::IconWidget *>(tool);
+        if (icon) {
+            if (d->viewTransform.isScaling() && d->viewTransform.m11() < Plasma::scalingFactor(Plasma::GroupZoom)) {
+                icon->setText(QString());
+                icon->resize(icon->sizeFromIconSize(22));
+            } else {
+                icon->setText(icon->action()->text());
+                icon->resize(icon->sizeFromIconSize(22));
+            }
+        }
+
         if (tool->isEnabled()) {
-            //kDebug() << tool << "is enabled";
-            y += 5;
-            //kDebug() << "let's show and move" << tool << tool->boundingRect();
-            tool->show();
-            animdriver->moveItem(tool, Plasma::Animator::SlideInMovement, QPoint(x, y));
-            //x += 0;
-            y += static_cast<int>(tool->boundingRect().height());
+            if (isToolbar()) {
+                //kDebug() << tool << "is enabled";
+                x += 5;
+                //kDebug() << "let's show and move" << tool << tool->boundingRect();
+                tool->show();
+                animdriver->moveItem(tool, Plasma::Animator::SlideInMovement, QPoint(x, y));
+
+                x += static_cast<int>(tool->boundingRect().width());
+            } else {
+                //kDebug() << tool << "is enabled";
+                y += 5;
+                //kDebug() << "let's show and move" << tool << tool->boundingRect();
+                tool->show();
+                animdriver->moveItem(tool, Plasma::Animator::SlideInMovement, QPoint(x, y));
+                //x += 0;
+                y += static_cast<int>(tool->boundingRect().height());
+            }
         } else if (tool->isVisible()) {
             // disabled, but visible, so hide it!
             const int height = static_cast<int>(tool->boundingRect().height());
@@ -410,7 +491,7 @@ void DesktopToolBox::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 {
     //kDebug() << event->pos() << event->scenePos()
     //         << d->toolBacker->rect().contains(event->scenePos().toPoint());
-    if (! d->hovering) {
+    if (!d->hovering || isToolbar()) {
         QGraphicsItem::hoverLeaveEvent(event);
         return;
     }
@@ -481,6 +562,10 @@ void DesktopToolBox::toolMoved(QGraphicsItem *item)
 
 void DesktopToolBox::toggle()
 {
+    if (isToolbar()) {
+        return;
+    }
+
     if (showing()) {
         hideToolBox();
     } else {

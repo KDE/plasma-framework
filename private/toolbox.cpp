@@ -49,6 +49,7 @@ public:
         hidden(false),
         showing(false),
         movable(false),
+        toolbar(false),
         dragging(false),
         userMoved(false)
     {}
@@ -58,9 +59,11 @@ public:
     QSize iconSize;
     ToolBox::Corner corner;
     QPoint dragStart;
+    QTransform viewTransform;
     bool hidden : 1;
     bool showing : 1;
     bool movable : 1;
+    bool toolbar : 1;
     bool dragging : 1;
     bool userMoved : 1;
 };
@@ -192,7 +195,7 @@ void ToolBox::mousePressEvent(QGraphicsSceneMouseEvent *event)
 
 void ToolBox::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
-    if (!d->movable || (!d->dragging && boundingRect().contains(event->pos()))) {
+    if (!d->movable || (!d->dragging && boundingRect().contains(event->pos())) || isToolbar()) {
         return;
     }
 
@@ -291,6 +294,26 @@ bool ToolBox::isMovable() const
 void ToolBox::setIsMovable(bool movable)
 {
     d->movable = movable;
+}
+
+bool ToolBox::isToolbar() const
+{
+    return d->toolbar;
+}
+
+void ToolBox::setIsToolbar(bool toolbar)
+{
+    d->toolbar = toolbar;
+}
+
+QTransform ToolBox::viewTransform() const
+{
+    return d->viewTransform;
+}
+
+void ToolBox::setViewTransform(QTransform transform)
+{
+    d->viewTransform = transform;
 }
 
 void ToolBox::save(KConfigGroup &cg) const

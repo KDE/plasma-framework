@@ -80,6 +80,12 @@ public:
     bool isMovable() const;
     void setIsMovable(bool movable);
 
+    bool isToolbar() const;
+    void setIsToolbar(bool toolbar);
+
+    QTransform viewTransform() const;
+    void setViewTransform(QTransform transforn);
+
     void save(KConfigGroup &cg) const;
     void load();
     void reposition();
