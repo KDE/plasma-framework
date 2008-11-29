@@ -23,6 +23,7 @@
 #include <QPainter>
 #include <QSize>
 #include <QBitmap>
+#include <QTimer>
 
 #include <kdebug.h>
 
@@ -79,7 +80,8 @@ class FrameSvgPrivate
 public:
     FrameSvgPrivate(FrameSvg *psvg)
       : q(psvg),
-        cacheAll(false)
+        cacheAll(false),
+        saveTimer(0)
     {
     }
 
@@ -90,6 +92,7 @@ public:
     }
 
     void generateBackground(FrameData *frame);
+    void scheduledCacheUpdate();
     void updateSizes();
     void updateNeeded();
     void updateAndSignalSizes();
@@ -100,6 +103,8 @@ public:
     FrameSvg *q;
 
     bool cacheAll : 1;
+    QStringList framesToSave;
+    QTimer *saveTimer;
 
     QHash<QString, FrameData*> frames;
 };
@@ -110,6 +115,10 @@ FrameSvg::FrameSvg(QObject *parent)
 {
     connect(this, SIGNAL(repaintNeeded()), this, SLOT(updateNeeded()));
     d->frames.insert(QString(), new FrameData());
+
+    d->saveTimer = new QTimer(this);
+    d->saveTimer->setSingleShot(true);
+    connect(d->saveTimer, SIGNAL(timeout()), this, SLOT(scheduledCacheUpdate()));
 }
 
 FrameSvg::~FrameSvg()
@@ -198,6 +207,7 @@ void FrameSvg::setElementPrefix(const QString & prefix)
 
     if (!d->cacheAll) {
         delete d->frames[oldPrefix];
+        d->framesToSave.removeAll(oldPrefix);
         d->frames.remove(oldPrefix);
     }
 
@@ -419,6 +429,7 @@ void FrameSvgPrivate::generateBackground(FrameData *frame)
 
     QString id = QString::fromLatin1("%5_%4_%3_%2_%1_").
                          arg(frame->enabledBorders).arg(frame->frameSize.width()).arg(frame->frameSize.height()).arg(prefix).arg(q->imagePath());
+
     Theme *theme = Theme::defaultTheme();
     if (theme->findInCache(id, frame->cachedBackground) && !frame->cachedBackground.isNull()) {
         return;
@@ -593,7 +604,26 @@ void FrameSvgPrivate::generateBackground(FrameData *frame)
         }
     }
 
-    theme->insertIntoCache(id, frame->cachedBackground);
+    if (!framesToSave.contains(prefix)) {
+        framesToSave.append(prefix);
+    }
+
+    saveTimer->start(300);
+}
+
+void FrameSvgPrivate::scheduledCacheUpdate()
+{
+    foreach ( QString prefixToSave, framesToSave) {
+        FrameData *frame = frames[prefix];
+        framesToSave.removeAll(prefixToSave);
+
+        QString id = QString::fromLatin1("%5_%4_%3_%2_%1_").
+                            arg(frame->enabledBorders).arg(frame->frameSize.width()).arg(frame->frameSize.height()).arg(prefix).arg(q->imagePath());
+
+        //kDebug()<<"Saving to cache frame"<<id;
+
+        Theme::defaultTheme()->insertIntoCache(id, frame->cachedBackground);
+    }
 }
 
 void FrameSvgPrivate::updateSizes()

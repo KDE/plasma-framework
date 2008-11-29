@@ -254,6 +254,7 @@ class PLASMA_EXPORT FrameSvg : public Svg
 
         Q_PRIVATE_SLOT(d, void updateSizes())
         Q_PRIVATE_SLOT(d, void updateNeeded())
+        Q_PRIVATE_SLOT(d, void scheduledCacheUpdate())
 };
 
 } // Plasma namespace
