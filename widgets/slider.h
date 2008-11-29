@@ -91,6 +91,7 @@ public:
 
 protected:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+    void wheelEvent(QGraphicsSceneWheelEvent *event);
 
 public Q_SLOTS:
     /**

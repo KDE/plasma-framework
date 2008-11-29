@@ -19,10 +19,11 @@
 
 #include "slider.h"
 
-#include <QSlider>
+#include <QApplication>
 #include <QPainter>
+#include <QSlider>
 #include <QStyleOptionSlider>
-
+#include <QGraphicsSceneWheelEvent>
 #include <kmimetype.h>
 
 #include "theme.h"
@@ -123,6 +124,13 @@ void Slider::paint(QPainter *painter,
         style->subControlRect(QStyle::CC_Slider, &sliderOpt, QStyle::SC_SliderHandle, slider);
     d->handle->resizeFrame(handleRect.size());
     d->handle->paintFrame(painter, handleRect.topLeft());
+}
+
+void Slider::wheelEvent(QGraphicsSceneWheelEvent *event)
+{
+    QWheelEvent e(event->pos().toPoint(), event->delta(),event->buttons(),event->modifiers(),event->orientation());
+    QApplication::sendEvent(widget(), &e);
+    event->accept();
 }
 
 void Slider::setMaximum(int max)
