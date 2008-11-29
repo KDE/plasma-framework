@@ -115,17 +115,17 @@ public:
             changed = true;
         }
 
-        if (viewTransform.isScaling()) {
-            q->setIsToolbar(true);
-            q->showToolBox();
-            return true;
-        } else {
-            q->setIsToolbar(false);
-            if (changed) {
+        if (changed || q->isToolbar() != viewTransform.isScaling()) {
+            if (!q->isToolbar()) {
+                q->setIsToolbar(true);
+                q->showToolBox();
+            } else {
+                q->setIsToolbar(false);
                 q->hideToolBox();
             }
-            return false;
         }
+
+        return q->isToolbar();
     }
 
     DesktopToolBox *q;
@@ -374,6 +374,17 @@ void DesktopToolBox::showToolBox()
             continue;
         }
 
+        Plasma::IconWidget *icon = qgraphicsitem_cast<Plasma::IconWidget *>(tool);
+        if (icon) {
+            if (d->viewTransform.isScaling() && d->viewTransform.m11() < Plasma::scalingFactor(Plasma::GroupZoom)) {
+                icon->setText(QString());
+                icon->resize(icon->sizeFromIconSize(22));
+            } else {
+                icon->setText(icon->action()->text());
+                icon->resize(icon->sizeFromIconSize(22));
+            }
+        }
+
         if (tool->isEnabled()) {
             //kDebug() << tool << "is enabled";
             y += 5;
@@ -434,17 +445,6 @@ void DesktopToolBox::showToolBox()
     foreach (QGraphicsItem *tool, QGraphicsItem::children()) {
         if (tool == d->toolBacker) {
             continue;
-        }
-
-        Plasma::IconWidget *icon = qgraphicsitem_cast<Plasma::IconWidget *>(tool);
-        if (icon) {
-            if (d->viewTransform.isScaling() && d->viewTransform.m11() < Plasma::scalingFactor(Plasma::GroupZoom)) {
-                icon->setText(QString());
-                icon->resize(icon->sizeFromIconSize(22));
-            } else {
-                icon->setText(icon->action()->text());
-                icon->resize(icon->sizeFromIconSize(22));
-            }
         }
 
         if (tool->isEnabled()) {
