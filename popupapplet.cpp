@@ -356,8 +356,8 @@ bool PopupApplet::eventFilter(QObject *watched, QEvent *event)
 void PopupApplet::showPopup(uint popupDuration)
 {
     if (d->dialog && (formFactor() == Horizontal || formFactor() == Vertical)) {
-        d->updateDialogPosition();
         d->dialog->show();
+        d->updateDialogPosition();
         KWindowSystem::setState(d->dialog->winId(), NET::SkipTaskbar | NET::SkipPager);
 
         if (d->timer) {
@@ -452,8 +452,8 @@ void PopupAppletPrivate::togglePopup()
         if (dialog->isVisible()) {
             dialog->hide();
         } else {
-            updateDialogPosition();
             dialog->show();
+            updateDialogPosition();
             KWindowSystem::setState(dialog->winId(), NET::SkipTaskbar | NET::SkipPager);
         }
 
