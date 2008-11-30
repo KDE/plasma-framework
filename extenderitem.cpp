@@ -532,14 +532,16 @@ void ExtenderItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 
     d->mousePos = event->pos().toPoint();
     d->deltaScene = pos();
+    d->mousePressed = true;
 }
 
 void ExtenderItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
-    if ((d->mousePos - event->pos().toPoint()).manhattanLength()
-                       >= QApplication::startDragDistance()) {
-        d->mousePressed = true;
+    if (!d->dragStarted && (d->mousePos - event->pos().toPoint()).manhattanLength()
+                           >= QApplication::startDragDistance()) {
         //start the drag:
+        d->dragStarted = true;
+
         //set the zValue to the maximum.
         d->hostApplet()->raise();
         setZValue(d->hostApplet()->zValue());
@@ -551,9 +553,7 @@ void ExtenderItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
         d->extender->d->removeExtenderItem(this);
 
         d->themeChanged();
-    }
-
-    if (!d->mousePressed) {
+    } else if (!d->dragStarted) {
         return;
     }
 
@@ -700,7 +700,13 @@ void ExtenderItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 void ExtenderItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
     if (d->mousePressed) {
-        d->mousePressed = false;
+        QApplication::restoreOverrideCursor();
+    }
+
+    d->mousePressed = false;
+
+    if (d->dragStarted) {
+        d->dragStarted = false;
 
         //remove the toplevel view
         if (d->toplevel) {
@@ -775,8 +781,6 @@ void ExtenderItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
                 setExtender(extender());
             }
         }
-
-        QApplication::restoreOverrideCursor();
     }
 }
 
@@ -794,6 +798,7 @@ ExtenderItemPrivate::ExtenderItemPrivate(ExtenderItem *extenderItem, Extender *h
       title(QString()),
       mousePressed(false),
       mouseOver(false),
+      dragStarted(false),
       destroyActionVisibility(false),
       expirationTimer(0)
 {
