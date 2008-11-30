@@ -160,7 +160,7 @@ void Extender::saveState()
 QVariant Extender::itemChange(GraphicsItemChange change, const QVariant &value)
 {
     if (change == QGraphicsItem::ItemPositionHasChanged) {
-        d->adjustSizeHints();
+        emit geometryChanged();
     }
 
     return QGraphicsWidget::itemChange(change, value);
@@ -186,7 +186,12 @@ void Extender::itemAddedEvent(ExtenderItem *item, const QPointF &pos)
     //remove the empty extender message if needed.
     d->updateEmptyExtenderLabel();
 
-    d->adjustSizeHints();
+    //if the item doesn't got a widget one will be set real soon, causing it's sizehints to
+    //change. Don't adjust the size hints in that case, since that spares us a call to
+    //adjustSizeHints()
+    if (item->widget()) {
+        d->adjustSizeHints();
+    }
 }
 
 void Extender::itemRemovedEvent(ExtenderItem *item)
@@ -402,8 +407,6 @@ void ExtenderPrivate::loadExtenderItems()
             cg.deleteGroup(pair.second);
         }
     }
-
-    adjustSizeHints();
 }
 
 void ExtenderPrivate::updateBorders()
