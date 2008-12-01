@@ -72,6 +72,7 @@ ToolBox::ToolBox(Containment *parent)
     : QGraphicsItem(parent),
       d(new ToolBoxPrivate(parent))
 {
+    d->userMoved = false;
     setAcceptsHoverEvents(true);
 }
 
