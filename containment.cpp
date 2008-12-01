@@ -1745,9 +1745,6 @@ void ContainmentPrivate::positionContainments()
     it.toFront();
 
     int toolBoxMargin = 0;
-    if (toolBox) {
-        toolBoxMargin = TOOLBOX_MARGIN;
-    }
 
     int column = 0;
     int x = 0;
@@ -1760,6 +1757,12 @@ void ContainmentPrivate::positionContainments()
         Containment *containment = it.next();
         containment->setPos(x, y);
         //kDebug() << ++count << "setting to" << x << y;
+
+        if (containment->toolBoxItem()) {
+            toolBoxMargin = TOOLBOX_MARGIN;
+        } else {
+            toolBoxMargin = 0;
+        }
 
         int height = containment->size().height();
         if (height > rowHeight) {

@@ -422,9 +422,10 @@ void DesktopToolBox::showToolBox()
 
         Plasma::IconWidget *icon = qgraphicsitem_cast<Plasma::IconWidget *>(tool);
         if (icon) {
-            if (d->viewTransform.m11() == Plasma::scalingFactor(Plasma::DesktopZoom) ||
-                icon->action() == d->containment->action("add sibling containment") ||
-                icon->action() == d->containment->action("add widgets")) {
+            if (d->viewTransform.m11() != Plasma::scalingFactor(Plasma::OverviewZoom) &&
+                (d->viewTransform.m11() == Plasma::scalingFactor(Plasma::DesktopZoom) ||
+                 icon->action() == d->containment->action("add sibling containment") ||
+                 icon->action() == d->containment->action("add widgets"))) {
                 icon->setText(icon->action()->text());
                 icon->resize(icon->sizeFromIconSize(22));
             } else {
