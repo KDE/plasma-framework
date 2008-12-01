@@ -550,6 +550,12 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
                         const QString &serviceId = QString(),
                         uint appletId = 0);
 
+        /**
+         * @return true if destroy() was called; useful for Applets which should avoid
+         * certain tasks if they are about to be deleted permanently
+         */
+        bool destroyed() const;
+
     Q_SIGNALS:
         /**
          * This signal indicates that an application launch, window

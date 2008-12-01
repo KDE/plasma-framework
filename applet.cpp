@@ -371,6 +371,11 @@ void Applet::destroy()
     }
 }
 
+bool Applet::destroyed() const
+{
+    return d->transient;
+}
+
 void AppletPrivate::appletAnimationComplete(QGraphicsItem *item, Plasma::Animator::Animation anim)
 {
     if (anim != Animator::DisappearAnimation || item != q) {
