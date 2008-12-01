@@ -2014,11 +2014,12 @@ void AppletPrivate::themeChanged()
 
 void AppletPrivate::resetConfigurationObject()
 {
-    if (mainConfig) {
-        mainConfig->deleteGroup();
-        delete mainConfig;
-        mainConfig = 0;
-    }
+    // make sure mainConfigGroup exists in all cases
+    mainConfigGroup();
+
+    mainConfig->deleteGroup();
+    delete mainConfig;
+    mainConfig = 0;
 }
 
 uint AppletPrivate::s_maxAppletId = 0;
