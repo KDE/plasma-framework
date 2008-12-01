@@ -258,19 +258,25 @@ class SvgPrivate
             }
 
             renderer = 0;
+            localRectCache.clear();
         }
 
         QRectF elementRect(const QString &elementId)
         {
-            QRectF rect;
-
             if (themed && path.isEmpty()) {
                 path = Plasma::Theme::defaultTheme()->imagePath(themePath);
             }
 
-            bool found = Theme::defaultTheme()->findInRectsCache(path, cacheId(elementId), rect);
+            QString id = cacheId(elementId);
+            if (localRectCache.contains(id)) {
+                return localRectCache[id];
+            }
+
+            QRectF rect;
+            bool found = Theme::defaultTheme()->findInRectsCache(path, id, rect);
 
             if (found) {
+                localRectCache.insert(id, rect);
                 return rect;
             }
 
@@ -357,6 +363,7 @@ class SvgPrivate
 
         Svg *q;
         static QHash<QString, SharedSvgRenderer::Ptr> s_renderers;
+        QHash<QString, QRectF> localRectCache;
         QHash <QString, QPixmap> itemsToSave;
         QTimer *saveTimer;
         SharedSvgRenderer::Ptr renderer;
@@ -516,10 +523,9 @@ bool Svg::containsMultipleImages() const
 
 void Svg::setImagePath(const QString &svgFilePath)
 {
-    if (d->setImagePath(svgFilePath, this)) {
-    }
-        d->eraseRenderer();
-        emit repaintNeeded();
+    d->setImagePath(svgFilePath, this);
+    d->eraseRenderer();
+    emit repaintNeeded();
 }
 
 QString Svg::imagePath() const
