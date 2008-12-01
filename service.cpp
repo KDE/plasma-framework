@@ -131,10 +131,11 @@ ServiceJob *Service::startOperationCall(const KConfigGroup &description, QObject
 {
     // TODO: nested groups?
     ServiceJob *job = 0;
-    QString op = description.name();
+    QString op = description.isValid() ? description.name() : QString();
+
     if (!d->config) {
         kDebug() << "No valid operations scheme has been registered";
-    } else if (d->config->hasGroup(op)) {
+    } else if (!op.isEmpty() && d->config->hasGroup(op)) {
         if (d->disabledOperations.contains(op)) {
             kDebug() << "Operation" << op << "is disabled";
         } else {
