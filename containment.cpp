@@ -216,12 +216,13 @@ void Containment::init()
 
         if (d->type == DesktopContainment && d->toolBox) {
             d->toolBox->addTool(this->action("add widgets"));
+            d->toolBox->addTool(this->action("add sibling containment"));
             d->toolBox->addTool(this->action("zoom in"));
             d->toolBox->addTool(this->action("zoom out"));
+
             if (immutability() != SystemImmutable) {
                 d->toolBox->addTool(this->action("lock widgets"));
             }
-            d->toolBox->addTool(this->action("add sibling containment"));
             d->toolBox->addTool(this->action("activity settings"));
             if (hasConfigurationInterface()) {
                 // re-use the contianment's action.
@@ -825,6 +826,8 @@ void Containment::setScreen(int screen, int desktop)
     if (swapScreensWith) {
         swapScreensWith->setScreen(oldScreen);
     }
+
+    enableAction("remove", screen == -1);
 }
 
 int Containment::screen() const
@@ -1607,8 +1610,13 @@ void ContainmentPrivate::containmentConstraintsEvent(Plasma::Constraints constra
                     constraints & Plasma::FormFactorConstraint ||
                     constraints & Plasma::ScreenConstraint ||
                     constraints & Plasma::StartupCompletedConstraint)) {
-        kDebug() << "BWUHA!";
+        //kDebug() << "Positioning toolbox";
         positionToolBox();
+    }
+
+    if (toolBox && constraints & Plasma::StartupCompletedConstraint) {
+        toolBox->addTool(q->action("remove"));
+        q->enableAction("remove", false);
     }
 }
 
@@ -1736,6 +1744,11 @@ void ContainmentPrivate::positionContainments()
     qSort(containments.begin(), containments.end(), containmentSortByPosition);
     it.toFront();
 
+    int toolBoxMargin = 0;
+    if (toolBox) {
+        toolBoxMargin = TOOLBOX_MARGIN;
+    }
+
     int column = 0;
     int x = 0;
     int y = 0;
@@ -1758,7 +1771,7 @@ void ContainmentPrivate::positionContainments()
         if (column == CONTAINMENT_COLUMNS) {
             column = 0;
             x = 0;
-            y += rowHeight + INTER_CONTAINMENT_MARGIN;
+            y += rowHeight + INTER_CONTAINMENT_MARGIN + toolBoxMargin;
             rowHeight = 0;
         } else {
             x += containment->size().width() + INTER_CONTAINMENT_MARGIN;

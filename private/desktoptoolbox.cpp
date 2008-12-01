@@ -44,16 +44,24 @@ class EmptyGraphicsItem : public QGraphicsItem
 {
     public:
         EmptyGraphicsItem(QGraphicsItem *parent)
-            : QGraphicsItem(parent)
+            : QGraphicsItem(parent),
+              m_toolbar(false)
         {
             setAcceptsHoverEvents(true);
             m_background = new Plasma::FrameSvg();
+            m_toolbarBackground = new Plasma::FrameSvg();
+
+            m_toolbarBackground->setImagePath("widgets/background");
             m_background->setImagePath("widgets/translucentbackground");
+
+            m_toolbarBackground->setEnabledBorders(FrameSvg::LeftBorder|FrameSvg::RightBorder|FrameSvg::BottomBorder);
+            m_background->setEnabledBorders(FrameSvg::AllBorders);
         }
 
         ~EmptyGraphicsItem()
         {
             delete m_background;
+            delete m_toolbarBackground;
         }
 
         QRectF boundingRect() const
@@ -66,25 +74,63 @@ class EmptyGraphicsItem : public QGraphicsItem
             return m_rect;
         }
 
+        void setIsToolbar(bool toolbar)
+        {
+            m_toolbar = toolbar;
+        }
+
+        bool isToolbar() const
+        {
+            return m_toolbar;
+        }
+
+        void getContentsMargins(qreal &left, qreal &top, qreal &right, qreal &bottom)
+        {
+            if (m_toolbar) {
+                m_toolbarBackground->getMargins(left, top, right, bottom);
+            } else {
+                m_background->getMargins(left, top, right, bottom);
+            }
+        }
+
+        QRectF contentsRect() const
+        {
+            qreal left, top, right, bottom;
+
+            if (m_toolbar) {
+                m_toolbarBackground->getMargins(left, top, right, bottom);
+            } else {
+                m_background->getMargins(left, top, right, bottom);
+            }
+            return m_rect.adjusted(left, top, -right, -bottom);
+        }
+
         void setRect(const QRectF &rect)
         {
             //kDebug() << "setting rect to" << rect;
-            qreal left, top, right, bottom;
-            m_background->getMargins(left, top, right, bottom);
-
             prepareGeometryChange();
-            m_rect = rect.adjusted(-left, -top, right, bottom);
+            m_rect = rect;
             setPos(m_rect.topLeft());
-            m_background->resizeFrame(m_rect.size());
+            if (m_toolbar) {
+                m_toolbarBackground->resizeFrame(m_rect.size());
+            } else {
+                m_background->resizeFrame(m_rect.size());
+            }
         }
 
         void paint(QPainter *p, const QStyleOptionGraphicsItem *, QWidget *)
         {
-            m_background->paintFrame(p);
+            if (m_toolbar) {
+                m_toolbarBackground->paintFrame(p);
+            } else {
+                m_background->paintFrame(p);
+            }
         }
 
     private:
+        bool m_toolbar;
         QRectF m_rect;
+        Plasma::FrameSvg *m_toolbarBackground;
         Plasma::FrameSvg *m_background;
 };
 
@@ -376,11 +422,13 @@ void DesktopToolBox::showToolBox()
 
         Plasma::IconWidget *icon = qgraphicsitem_cast<Plasma::IconWidget *>(tool);
         if (icon) {
-            if (d->viewTransform.isScaling() && d->viewTransform.m11() < Plasma::scalingFactor(Plasma::GroupZoom)) {
-                icon->setText(QString());
+            if (d->viewTransform.m11() == Plasma::scalingFactor(Plasma::DesktopZoom) ||
+                icon->action() == d->containment->action("add sibling containment") ||
+                icon->action() == d->containment->action("add widgets")) {
+                icon->setText(icon->action()->text());
                 icon->resize(icon->sizeFromIconSize(22));
             } else {
-                icon->setText(icon->action()->text());
+                icon->setText(QString());
                 icon->resize(icon->sizeFromIconSize(22));
             }
         }
@@ -405,38 +453,49 @@ void DesktopToolBox::showToolBox()
     // the rect the tools back should have
     QRectF backerRect = QRectF(QPointF(x, startY), QSizeF(maxWidth + 10, y - startY));
 
+    if (!d->toolBacker) {
+        d->toolBacker = new EmptyGraphicsItem(this);
+    }
+
+    d->toolBacker->setIsToolbar(isToolbar());
+
     if (isToolbar()) {
         QPointF topRight;
 
         //could that cast ever fail?
         if (d->containment) {
-            topRight = d->viewTransform.map(mapFromParent(d->containment->boundingRect().topRight()));
+            topRight = d->viewTransform.map(mapFromParent(d->containment->boundingRect().bottomRight()));
         } else {
             topRight = boundingRect().topRight();
         }
 
-        backerRect.setSize(QSize(totalWidth, maxHeight));
+        qreal left, top, right, bottom;
+        d->toolBacker->getContentsMargins(left, top, right, bottom);
+        x -= left;
+
+        backerRect.setSize(QSize(totalWidth+left+right, maxHeight+top+bottom));
         backerRect.moveTopRight(topRight);
-    }
-    //kDebug() << "starting at" <<  x << startY;
+    } else {
+        //kDebug() << "starting at" <<  x << startY;
 
-    // now check that is actually fits within the parent's boundaries
-    backerRect = mapToParent(backerRect).boundingRect();
-    QSizeF parentSize = parentWidget()->size();
-    if (backerRect.x() < 5) {
-        backerRect.moveLeft(5);
-    } else if (backerRect.right() > parentSize.width() - 5) {
-        backerRect.moveRight(parentSize.width() - 5);
-    }
+        // now check that is actually fits within the parent's boundaries
+        backerRect = mapToParent(backerRect).boundingRect();
+        QSizeF parentSize = parentWidget()->size();
+        if (backerRect.x() < 5) {
+            backerRect.moveLeft(5);
+        } else if (backerRect.right() > parentSize.width() - 5) {
+            backerRect.moveRight(parentSize.width() - 5);
+        }
 
-    if (backerRect.y() < 5) {
-        backerRect.moveTop(5);
-    } else if (backerRect.bottom() > parentSize.height() - 5) {
-        backerRect.moveBottom(parentSize.height() - 5);
-    }
+        if (backerRect.y() < 5) {
+            backerRect.moveTop(5);
+        } else if (backerRect.bottom() > parentSize.height() - 5) {
+            backerRect.moveBottom(parentSize.height() - 5);
+        }
 
-    // re-map our starting points back to our coordinate system
-    backerRect = mapFromParent(backerRect).boundingRect();
+        // re-map our starting points back to our coordinate system
+        backerRect = mapFromParent(backerRect).boundingRect();
+    }
     x = backerRect.x() + 5;
     y = backerRect.y();
 
@@ -473,9 +532,6 @@ void DesktopToolBox::showToolBox()
         }
     }
 
-    if (!d->toolBacker) {
-        d->toolBacker = new EmptyGraphicsItem(this);
-    }
 
     d->toolBacker->setRect(backerRect);
     d->toolBacker->show();

@@ -24,6 +24,7 @@
 #include <kmenu.h>
 
 static const int INTER_CONTAINMENT_MARGIN = 6;
+static const int TOOLBOX_MARGIN = 150;
 static const int CONTAINMENT_COLUMNS = 2;
 static const int VERTICAL_STACKING_OFFSET = 10000;
 
