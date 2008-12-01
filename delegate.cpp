@@ -297,6 +297,8 @@ void Delegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
 
     painter->save();
     painter->setPen(Qt::NoPen);
+    const QColor gradientColor = 
+	KColorScheme(QPalette::Active).background(KColorScheme::NormalBackground).color();
     if (option.direction == Qt::LeftToRight) {
         if ((titleRect.width() + 20) > option.rect.width() ||
             (subTitleRect.width() + 20) > option.rect.width()) {
@@ -307,7 +309,7 @@ void Delegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
             gr.setStart(gradientRect.topLeft());
             gr.setFinalStop(gradientRect.topRight());
             gr.setColorAt(0.0, Qt::transparent);
-            gr.setColorAt(0.7, Qt::white);
+            gr.setColorAt(0.7, gradientColor);
             painter->setBrush(QBrush(gr));
             painter->drawRect(gradientRect);
         }
@@ -321,7 +323,7 @@ void Delegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
             gr.setStart(gradientRect.topRight());
             gr.setFinalStop(gradientRect.topLeft());
             gr.setColorAt(0.0, Qt::transparent);
-            gr.setColorAt(0.6, Qt::white);
+            gr.setColorAt(0.6, gradientColor);
             painter->setBrush(QBrush(gr));
             painter->drawRect(gradientRect);
         }
