@@ -36,6 +36,7 @@ class Applet;
 class Extender;
 class ExtenderItem;
 class Label;
+class Spacer;
 class Svg;
 
 class ExtenderPrivate
@@ -59,7 +60,7 @@ class ExtenderPrivate
         FrameSvg *background;
 
         int currentSpacerIndex;
-        QGraphicsWidget *spacerWidget;
+        Spacer *spacerWidget;
 
         QString emptyExtenderMessage;
         Label *emptyExtenderLabel;

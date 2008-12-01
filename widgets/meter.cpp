@@ -191,10 +191,10 @@ public:
     {
         switch (meterType) {
             case Meter::BarMeterHorizontal:
-                meter->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+                meter->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
                 break;
             case Meter::BarMeterVertical:
-                meter->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
+                meter->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::MinimumExpanding);
                 break;
             case Meter::AnalogMeter:
             default:

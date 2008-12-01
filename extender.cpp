@@ -22,14 +22,17 @@
 #include <QAction>
 #include <QGraphicsGridLayout>
 #include <QGraphicsLinearLayout>
+#include <QPainter>
 
 #include "applet.h"
 #include "containment.h"
 #include "corona.h"
 #include "extenderitem.h"
 #include "framesvg.h"
+#include "paintutils.h"
 #include "popupapplet.h"
 #include "svg.h"
+#include "theme.h"
 #include "widgets/label.h"
 
 #include "private/applet_p.h"
@@ -38,6 +41,34 @@
 
 namespace Plasma
 {
+
+//TODO: copied from panel containment. We'll probably want a spacer widget in libplasma for 4.3.
+class Spacer : public QGraphicsWidget
+{
+    public:
+        Spacer(QGraphicsWidget *parent)
+                 : QGraphicsWidget(parent)
+       {
+       }
+
+       ~Spacer()
+       {
+       }
+
+    protected:
+        void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget * widget = 0)
+        {
+            Q_UNUSED(option)
+            Q_UNUSED(widget)
+
+            painter->setRenderHint(QPainter::Antialiasing);
+            QPainterPath p = Plasma::PaintUtils::roundedRectangle(contentsRect().adjusted(4, 4, -4, -4), 4);
+
+            QColor c = Plasma::Theme::defaultTheme()->color(Plasma::Theme::TextColor);
+            c.setAlphaF(0.3);
+            painter->fillPath(p, c);
+        }
+};
 
 Extender::Extender(Applet *applet)
         : QGraphicsWidget(applet),
@@ -60,7 +91,6 @@ Extender::Extender(Applet *applet)
     setLayout(d->layout);
 
     setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
-
 
     d->loadExtenderItems();
 }
@@ -172,6 +202,14 @@ void Extender::resizeEvent(QGraphicsSceneResizeEvent *event)
     emit geometryChanged();
 }
 
+void Extender::mousePressEvent(QGraphicsSceneMouseEvent *event)
+{
+    PopupApplet *popupApplet = qobject_cast<PopupApplet*>(d->applet);
+    if (attachedItems().isEmpty() && popupApplet) {
+        popupApplet->hidePopup();
+    }
+}
+
 void Extender::itemAddedEvent(ExtenderItem *item, const QPointF &pos)
 {
     //this is a sane size policy imo.
@@ -229,7 +267,7 @@ void Extender::itemHoverMoveEvent(ExtenderItem *item, const QPointF &pos)
 
     //Create a widget that functions as spacer, and add that to the layout.
     if (!d->spacerWidget) {
-        QGraphicsWidget *widget = new QGraphicsWidget(this);
+        Spacer *widget = new Spacer(this);
         widget->setMinimumSize(item->minimumSize());
         widget->setPreferredSize(item->preferredSize());
         widget->setMaximumSize(item->maximumSize());
