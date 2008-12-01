@@ -22,6 +22,9 @@
 
 #include "popupapplet.h"
 
+namespace Plasma
+{
+
 /**
  * This class is used as a 'host' for detached extender items. When an extender item is dropped
  * somewhere, this applet is added at the location where the item is dropped, and the item is added
@@ -39,5 +42,7 @@ class ExtenderApplet : public Plasma::PopupApplet
     public Q_SLOTS:
         void itemDetached(Plasma::ExtenderItem *);
 };
+
+} // namespace Plasma
 
 #endif

@@ -24,31 +24,34 @@
 
 #include <QGraphicsLinearLayout>
 
+namespace Plasma
+{
+
 ExtenderApplet::ExtenderApplet(QObject *parent, const QVariantList &args)
-    : Plasma::PopupApplet(parent, args)
+    : PopupApplet(parent, args)
 {
 }
 
 ExtenderApplet::~ExtenderApplet()
 {
+    if (destroyed()) {
+        disconnect(extender(), SIGNAL(itemDetached(Plasma::ExtenderItem*)),
+                this, SLOT(itemDetached(Plasma::ExtenderItem*)));
+        foreach (ExtenderItem *item, extender()->attachedItems()) {
+            item->returnToSource();
+        }
+    }
 }
 
 void ExtenderApplet::init()
 {
     setPopupIcon("utilities-desktop-extra");
 
-    QGraphicsLinearLayout *layout = new QGraphicsLinearLayout(this);
-    layout->setSpacing(0);
-    setLayout(layout);
-
-    extender()->setAppearance(Plasma::Extender::NoBorders);
+    extender()->setAppearance(Extender::NoBorders);
     extender()->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
 
     connect(extender(), SIGNAL(itemDetached(Plasma::ExtenderItem*)),
             this, SLOT(itemDetached(Plasma::ExtenderItem*)));
-
-    layout->addItem(extender());
-    //updateGeometry();
 }
 
 void ExtenderApplet::itemDetached(Plasma::ExtenderItem *)
@@ -57,6 +60,8 @@ void ExtenderApplet::itemDetached(Plasma::ExtenderItem *)
         destroy();
     }
 }
+
+} // namespace Plasma
 
 #include "extenderapplet_p.moc"
 
