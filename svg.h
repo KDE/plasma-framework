@@ -225,6 +225,7 @@ class PLASMA_EXPORT Svg : public QObject
 
         Q_PRIVATE_SLOT(d, void themeChanged())
         Q_PRIVATE_SLOT(d, void colorsChanged())
+        Q_PRIVATE_SLOT(d, void scheduledCacheUpdate())
 
         friend class SvgPrivate;
         friend class FrameSvgPrivate;

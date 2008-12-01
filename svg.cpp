@@ -23,6 +23,7 @@
 #include <QMatrix>
 #include <QPainter>
 #include <QSharedData>
+#include <QTimer>
 
 #include <kcolorscheme.h>
 #include <kconfiggroup.h>
@@ -65,6 +66,7 @@ class SvgPrivate
     public:
         SvgPrivate(Svg *svg)
             : q(svg),
+              saveTimer(0),
               renderer(0),
               multipleImages(false),
               themed(false),
@@ -191,8 +193,31 @@ class SvgPrivate
                 p = p.fromImage(itmp);
             }
 
-            theme->insertIntoCache(id, p);
+            itemsToSave[elementId] = p;
+            saveTimer->start(300);
             return p;
+        }
+
+        void scheduledCacheUpdate()
+        {
+            QHash<QString, QPixmap>::iterator i = itemsToSave.begin();
+
+            while (i != itemsToSave.end()) {
+                QPixmap p = i.value();
+
+                QString id = QString::fromLatin1("%3_%2_%1_").
+                         arg(p.size().width()).arg(p.size().height()).arg(path);
+
+                if (!i.key().isEmpty()) {
+                    id.append(i.key());
+                }
+
+                //kDebug()<<"Saving item to cache: "<<id;
+
+                Theme::defaultTheme()->insertIntoCache(id, p);
+                ++i;
+            }
+            itemsToSave.clear();
         }
 
         void createRenderer()
@@ -332,6 +357,8 @@ class SvgPrivate
 
         Svg *q;
         static QHash<QString, SharedSvgRenderer::Ptr> s_renderers;
+        QHash <QString, QPixmap> itemsToSave;
+        QTimer *saveTimer;
         SharedSvgRenderer::Ptr renderer;
         QString themePath;
         QString path;
@@ -348,6 +375,9 @@ Svg::Svg(QObject *parent)
     : QObject(parent),
       d(new SvgPrivate(this))
 {
+    d->saveTimer = new QTimer(this);
+    d->saveTimer->setSingleShot(true);
+    connect(d->saveTimer, SIGNAL(timeout()), this, SLOT(scheduledCacheUpdate()));
 }
 
 Svg::~Svg()
@@ -448,6 +478,8 @@ bool Svg::hasElement(const QString &elementId) const
 
 QString Svg::elementAtPoint(const QPoint &point) const
 {
+    Q_UNUSED(point)
+
     return QString();
 /*
 FIXME: implement when Qt can support us!
