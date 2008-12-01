@@ -300,8 +300,9 @@ void Delegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
     const QColor gradientColor = 
 	KColorScheme(QPalette::Active).background(KColorScheme::NormalBackground).color();
     if (option.direction == Qt::LeftToRight) {
-        if ((titleRect.width() + 60) > option.rect.width() ||
-            (subTitleRect.width() + 60) > option.rect.width()) {
+        if (((titleRect.width() + 40) > option.rect.width() ||
+            (subTitleRect.width() + 40) > option.rect.width()) && 
+	    (titleRect.width() > 120 || subTitleRect.width() > 120)) {
             QLinearGradient gr;
             QRect gradientRect(option.rect.width() - 30, titleRect.y(),
                   80, titleRect.height() + subTitleRect.height());
@@ -315,8 +316,9 @@ void Delegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
         }
 
     } else {
-        if (titleRect.width() + 60 > option.rect.width() || 
-            subTitleRect.width() + 60 > option.rect.width()) {
+        if ((titleRect.width() + 40 > option.rect.width() || 
+            subTitleRect.width() + 40 > option.rect.width()) &&
+	    (titleRect.width() > 120 || subTitleRect.width() > 120)) {
             QLinearGradient gr;
             QRect gradientRect(option.rect.x() - 25, titleRect.y(),
                                 60, titleRect.height() + subTitleRect.height());
