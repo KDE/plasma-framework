@@ -69,7 +69,7 @@ Direction locationToDirection(Location location)
 
 QGraphicsView *viewFor(const QGraphicsItem *item)
 {
-    if (!item->scene()) {
+    if (!item || !item->scene()) {
         return 0;
     }
 

@@ -166,9 +166,9 @@ void ToolTipManager::hide(QGraphicsWidget *widget)
         return;
     }
 
+    d->currentWidget = 0;
     d->showTimer->stop();  // stop the timer to show the tooltip
     d->delayedHide = false;
-    d->currentWidget = 0;
     d->tipWidget->hide();
 }
 
@@ -255,10 +255,10 @@ void ToolTipManagerPrivate::onWidgetDestroyed(QObject *object)
     QGraphicsWidget *w = static_cast<QGraphicsWidget*>(object);
 
     if (currentWidget == w) {
-        tipWidget->setContent(0, ToolTipContent());
-        tipWidget->hide();
         currentWidget = 0;
         showTimer->stop();  // stop the timer to show the tooltip
+        tipWidget->setContent(0, ToolTipContent());
+        tipWidget->hide();
         delayedHide = false;
     }
 
@@ -277,8 +277,8 @@ void ToolTipManagerPrivate::resetShownState()
             //One might have moused out and back in again
             delayedHide = false;
             isShown = false;
-            tipWidget->hide();
             currentWidget = 0;
+            tipWidget->hide();
         }
     }
 }
