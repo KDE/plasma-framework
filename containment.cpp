@@ -1758,12 +1758,6 @@ void ContainmentPrivate::positionContainments()
         containment->setPos(x, y);
         //kDebug() << ++count << "setting to" << x << y;
 
-        if (containment->toolBoxItem()) {
-            toolBoxMargin = TOOLBOX_MARGIN;
-        } else {
-            toolBoxMargin = 0;
-        }
-
         int height = containment->size().height();
         if (height > rowHeight) {
             rowHeight = height;
@@ -1774,7 +1768,7 @@ void ContainmentPrivate::positionContainments()
         if (column == CONTAINMENT_COLUMNS) {
             column = 0;
             x = 0;
-            y += rowHeight + INTER_CONTAINMENT_MARGIN + toolBoxMargin;
+            y += rowHeight + INTER_CONTAINMENT_MARGIN + TOOLBOX_MARGIN;
             rowHeight = 0;
         } else {
             x += containment->size().width() + INTER_CONTAINMENT_MARGIN;
