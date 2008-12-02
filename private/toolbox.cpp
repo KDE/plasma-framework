@@ -424,7 +424,7 @@ void ToolBox::reposition()
         QRectF screenGeom = avail;
 
         if (screen > -1 && screen < d->containment->corona()->numScreens()) {
-            screenGeom = d->containment->corona()->availableScreenRegion(screen).boundingRect();
+            avail = d->containment->corona()->availableScreenRegion(screen).boundingRect();
             screenGeom = d->containment->corona()->screenGeometry(screen);
             avail.translate(-screenGeom.topLeft());
         }
