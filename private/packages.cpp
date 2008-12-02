@@ -88,9 +88,8 @@ void PlasmoidPackage::createNewWidgetBrowser(QWidget *parent)
                 }
             }
         }
-
-        qDeleteAll(entries);
     }
+
     emit newWidgetBrowserFinished();
 }
 
