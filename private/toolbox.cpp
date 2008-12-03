@@ -315,6 +315,12 @@ QTransform ToolBox::viewTransform() const
 void ToolBox::setViewTransform(QTransform transform)
 {
     d->viewTransform = transform;
+    if (transform.isScaling()) {
+        d->toolbar = true;
+        showToolBox();
+    } else {
+        d->toolbar = false;
+    }
 }
 
 void ToolBox::save(KConfigGroup &cg) const

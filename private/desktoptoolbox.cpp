@@ -152,27 +152,6 @@ public:
         hovering(0)
     {}
 
-    bool needsToolBarBehaviour()
-    {
-        bool changed = false;
-
-        if (containment && viewTransform != q->viewTransform()) {
-            viewTransform = q->viewTransform();
-            changed = true;
-        }
-
-        if (changed || q->isToolbar() != viewTransform.isScaling()) {
-            if (!q->isToolbar()) {
-                q->setIsToolbar(true);
-                q->showToolBox();
-            } else {
-                q->setIsToolbar(false);
-                q->hideToolBox();
-            }
-        }
-
-        return q->isToolbar();
-    }
 
     DesktopToolBox *q;
     Containment *containment;
@@ -185,7 +164,6 @@ public:
     QRect shapeRect;
     QColor fgColor;
     QColor bgColor;
-    QTransform viewTransform;
     bool hovering : 1;
 };
 
@@ -229,7 +207,7 @@ void DesktopToolBox::paint(QPainter *painter, const QStyleOptionGraphicsItem *op
     Q_UNUSED(option)
     Q_UNUSED(widget)
 
-    if (d->needsToolBarBehaviour()) {
+    if (isToolbar()){
         return;
     }
 
@@ -422,8 +400,8 @@ void DesktopToolBox::showToolBox()
 
         Plasma::IconWidget *icon = qgraphicsitem_cast<Plasma::IconWidget *>(tool);
         if (icon) {
-            if (d->viewTransform.m11() != Plasma::scalingFactor(Plasma::OverviewZoom) &&
-                (d->viewTransform.m11() == Plasma::scalingFactor(Plasma::DesktopZoom) ||
+            if (viewTransform().m11() != Plasma::scalingFactor(Plasma::OverviewZoom) &&
+                (viewTransform().m11() == Plasma::scalingFactor(Plasma::DesktopZoom) ||
                  icon->action() == d->containment->action("add sibling containment") ||
                  icon->action() == d->containment->action("add widgets"))) {
                 icon->setText(icon->action()->text());
@@ -465,7 +443,7 @@ void DesktopToolBox::showToolBox()
 
         //could that cast ever fail?
         if (d->containment) {
-            topRight = d->viewTransform.map(mapFromParent(d->containment->boundingRect().bottomRight()));
+            topRight = viewTransform().map(mapFromParent(d->containment->boundingRect().bottomRight()));
         } else {
             topRight = boundingRect().topRight();
         }
