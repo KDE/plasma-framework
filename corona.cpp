@@ -161,6 +161,7 @@ public:
             KConfigGroup cg = containment->config();
             containment->save(cg);
             q->requestConfigSync();
+            containment->flushPendingConstraintsEvents();
         }
 
         QObject::connect(containment, SIGNAL(destroyed(QObject*)),
