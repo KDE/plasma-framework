@@ -1209,6 +1209,7 @@ void IconWidgetPrivate::syncToAction()
     q->setIcon(action->icon());
     q->setText(action->iconText());
     q->setEnabled(action->isEnabled());
+    q->setVisible(action->isVisible());
     //TODO use action's tooltip too
 
     emit q->changed();
