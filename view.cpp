@@ -192,7 +192,7 @@ void View::setContainment(Plasma::Containment *containment)
     }
 
     if (d->containment) {
-        disconnect(containment, SIGNAL(destroyed(QObject*)), this, SLOT(containmentDestroyed()));
+        disconnect(d->containment, SIGNAL(destroyed(QObject*)), this, SLOT(containmentDestroyed()));
         disconnect(d->containment, SIGNAL(geometryChanged()), this, SLOT(updateSceneRect()));
         d->containment->removeAssociatedWidget(this);
     }
