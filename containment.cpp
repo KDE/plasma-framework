@@ -394,6 +394,11 @@ void Containment::setContainmentType(Containment::Type type)
     if ((type == DesktopContainment || type == PanelContainment)) {
         d->createToolBox();
     }
+
+    enableAction("remove", (immutability() == Mutable &&
+                            (screen() == -1 ||
+                             containmentType() == Plasma::Containment::PanelContainment ||
+                             containmentType() == Plasma::Containment::CustomPanelContainment)));
 }
 
 Corona *Containment::corona() const
@@ -827,8 +832,10 @@ void Containment::setScreen(int screen, int desktop)
         swapScreensWith->setScreen(oldScreen);
     }
 
-    if (immutability() == Mutable && containmentType() != Plasma::Containment::PanelContainment) {
-        enableAction("remove", screen == -1);
+    if (immutability() == Mutable) {
+        enableAction("remove", screen == -1 ||
+                               containmentType() != Plasma::Containment::PanelContainment ||
+                               containmentType() != Plasma::Containment::CustomPanelContainment);
     }
 }
 
@@ -1618,7 +1625,10 @@ void ContainmentPrivate::containmentConstraintsEvent(Plasma::Constraints constra
 
     if (toolBox && constraints & Plasma::StartupCompletedConstraint) {
         toolBox->addTool(q->action("remove"));
-        q->enableAction("remove", (q->immutability() == Mutable && q->containmentType() == Plasma::Containment::PanelContainment));
+        q->enableAction("remove", (q->immutability() == Mutable &&
+                                   (screen == -1 ||
+                                    q->containmentType() == Plasma::Containment::PanelContainment ||
+                                    q->containmentType() == Plasma::Containment::CustomPanelContainment)));
     }
 }
 
