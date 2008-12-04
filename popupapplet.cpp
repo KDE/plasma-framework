@@ -357,7 +357,6 @@ void PopupApplet::showPopup(uint popupDuration)
 {
     if (d->dialog && (formFactor() == Horizontal || formFactor() == Vertical)) {
         d->dialog->show();
-        d->updateDialogPosition();
         KWindowSystem::setState(d->dialog->winId(), NET::SkipTaskbar | NET::SkipPager);
 
         if (d->timer) {
@@ -476,8 +475,7 @@ void PopupAppletPrivate::dialogSizeChanged()
 {
     //Reposition the dialog
     if (dialog) {
-        //dialog->updateGeometry();
-        dialog->move(q->popupPosition(dialog->size()));
+        updateDialogPosition();
 
         KConfigGroup sizeGroup = q->config();
         sizeGroup = KConfigGroup(&sizeGroup, "PopupApplet");
@@ -503,7 +501,7 @@ void PopupAppletPrivate::updateDialogPosition()
 
     KConfigGroup sizeGroup = q->config();
     sizeGroup = KConfigGroup(&sizeGroup, "PopupApplet");
-    
+
     Q_ASSERT(q->containment());
     Q_ASSERT(q->containment()->corona());
     const int width = qMin(sizeGroup.readEntry("DialogWidth", 0),
