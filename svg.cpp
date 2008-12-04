@@ -483,9 +483,13 @@ bool Svg::hasElement(const QString &elementId) const
         return false;
     }
 
+    QString id = d->cacheId(elementId);
+    if (d->localRectCache.contains(id)) {
+      return d->localRectCache[id].isValid();
+    }
 
     QRectF elementRect;
-    bool found = Theme::defaultTheme()->findInRectsCache(d->path, d->cacheId(elementId), elementRect);
+    bool found = Theme::defaultTheme()->findInRectsCache(d->path, id, elementRect);
 
     if (found) {
         return elementRect.isValid();
