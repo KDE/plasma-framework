@@ -150,8 +150,7 @@ class SvgPrivate
                 return QPixmap();
             }
 
-            QString id = QString::fromLatin1("%3_%2_%1_").
-                         arg(size.width()).arg(size.height()).arg(path);
+            QString id = cacheId(path);
 
             if (!elementId.isEmpty()) {
                 id.append(elementId);
@@ -205,8 +204,7 @@ class SvgPrivate
             while (i != itemsToSave.end()) {
                 QPixmap p = i.value();
 
-                QString id = QString::fromLatin1("%3_%2_%1_").
-                         arg(p.size().width()).arg(p.size().height()).arg(path);
+                QString id = cacheId(path);
 
                 if (!i.key().isEmpty()) {
                     id.append(i.key());
