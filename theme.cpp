@@ -66,13 +66,9 @@ public:
           useGlobal(true),
           hasWallpapers(false)
     {
-        KConfigGroup cg(KGlobal::config(), "CachePolicies");
-        bool useCache = cg.readEntry("CacheTheme", true);
-        if (useCache) {
-            pixmapCache = new KPixmapCache(KGlobal::mainComponent().componentName());
-            pixmapCache->setCacheLimit(cg.readEntry("ThemeCacheKb", 80 * 1024));
-        }
         generalFont = QApplication::font();
+        KConfigGroup cg(KGlobal::config(), "CachePolicies");
+        cacheTheme = cg.readEntry("CacheTheme", true);
     }
 
     ~ThemePrivate()
@@ -103,6 +99,7 @@ public:
     QString findInTheme(const QString &image, const QString &theme) const;
     void compositingChanged();
     void discardCache();
+    bool useCache();
 
     static const char *defaultTheme;
     static PackageStructure::Ptr packageStructure;
@@ -130,11 +127,22 @@ public:
     bool isDefault : 1;
     bool useGlobal : 1;
     bool hasWallpapers : 1;
+    bool cacheTheme : 1;
 };
 
 PackageStructure::Ptr ThemePrivate::packageStructure(0);
 const char *ThemePrivate::defaultTheme = "default";
 
+bool ThemePrivate::useCache()
+{
+    if (cacheTheme && !pixmapCache) {
+        KConfigGroup cg(KGlobal::config(), "CachePolicies");
+        pixmapCache = new KPixmapCache("plasma_theme_" + themeName);
+        pixmapCache->setCacheLimit(cg.readEntry("ThemeCacheKb", 80 * 1024));
+    }
+
+    return cacheTheme;
+}
 QString ThemePrivate::findInTheme(const QString &image, const QString &theme) const
 {
     //TODO: this should be using Package
@@ -164,7 +172,7 @@ void ThemePrivate::compositingChanged()
 
     if (compositingActive != nowCompositingActive) {
         compositingActive = nowCompositingActive;
-        pixmapCache->discard();
+        discardCache();
         emit q->themeChanged();
     }
 #endif
@@ -172,7 +180,15 @@ void ThemePrivate::compositingChanged()
 
 void ThemePrivate::discardCache()
 {
-    pixmapCache->discard();
+    delete pixmapCache;
+    pixmapCache = 0;
+    KPixmapCache::deleteCache("plasma_theme_" + themeName);
+
+    QString svgElementsFile = KStandardDirs::locateLocal("cache", "plasma-svgelements-" + themeName);
+    if (!svgElementsFile.isEmpty()) {
+        QFile f(svgElementsFile);
+        f.remove();
+    }
 }
 
 class ThemeSingleton
@@ -262,7 +278,7 @@ void Theme::setThemeName(const QString &themeName)
     }
 
     if (!d->themeName.isEmpty() && d->pixmapCache) {
-        d->pixmapCache->discard();
+        d->discardCache();
     }
 
     d->themeName = theme;
@@ -320,21 +336,16 @@ void Theme::setThemeName(const QString &themeName)
         }
     }
 
-
-    QString svgElementsFile = KStandardDirs::locateLocal("cache", "plasma-svgelements-"+themeName);
-
     //check for expired cache
     QFile f(metadataPath);
     QFileInfo info(f);
 
-    if (info.lastModified().toTime_t() > d->pixmapCache->timestamp()) {
-        d->pixmapCache->discard();
-
-        QFile f(svgElementsFile);
-        f.remove();
+    if (d->pixmapCache && info.lastModified().toTime_t() > d->pixmapCache->timestamp()) {
+        d->discardCache();
     }
 
     d->invalidElements.clear();
+    QString svgElementsFile = KStandardDirs::locateLocal("cache", "plasma-svgelements-" + themeName);
     d->svgElementsCache = KSharedConfig::openConfig(svgElementsFile);
 
     emit themeChanged();
@@ -524,12 +535,12 @@ bool Theme::useGlobalSettings() const
 
 bool Theme::findInCache(const QString &key, QPixmap &pix)
 {
-    return d->pixmapCache && d->pixmapCache->find(key, pix);
+    return d->useCache() && d->pixmapCache->find(key, pix);
 }
 
 void Theme::insertIntoCache(const QString& key, const QPixmap& pix)
 {
-    if (d->pixmapCache) {
+    if (d->useCache()) {
         d->pixmapCache->insert(key, pix);
     }
 }
@@ -576,7 +587,7 @@ void Theme::invalidateRectsCache(const QString& image)
 
 void Theme::setCacheLimit(int kbytes)
 {
-    if (d->pixmapCache) {
+    if (d->useCache()) {
         d->pixmapCache->setCacheLimit(kbytes);
     }
 }
