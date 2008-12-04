@@ -827,7 +827,9 @@ void Containment::setScreen(int screen, int desktop)
         swapScreensWith->setScreen(oldScreen);
     }
 
-    enableAction("remove", screen == -1);
+    if (immutability() == Mutable && containmentType() != Plasma::Containment::PanelContainment) {
+        enableAction("remove", screen == -1);
+    }
 }
 
 int Containment::screen() const
@@ -1616,7 +1618,7 @@ void ContainmentPrivate::containmentConstraintsEvent(Plasma::Constraints constra
 
     if (toolBox && constraints & Plasma::StartupCompletedConstraint) {
         toolBox->addTool(q->action("remove"));
-        q->enableAction("remove", false);
+        q->enableAction("remove", (q->immutability() == Mutable && q->containmentType() == Plasma::Containment::PanelContainment));
     }
 }
 
