@@ -178,6 +178,10 @@ Dialog::Dialog(QWidget *parent, Qt::WindowFlags f)
     d->background->setEnabledBorders(FrameSvg::AllBorders);
     d->background->resizeFrame(size());
 
+    QPalette pal = palette();
+    pal.setColor(backgroundRole(), Qt::transparent);
+    setPalette(pal);
+
     connect(d->background, SIGNAL(repaintNeeded()), this, SLOT(update()));
 
     connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()), this, SLOT(themeUpdated()));
