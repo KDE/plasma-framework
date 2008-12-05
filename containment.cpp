@@ -834,8 +834,8 @@ void Containment::setScreen(int screen, int desktop)
 
     if (immutability() == Mutable) {
         enableAction("remove", screen == -1 ||
-                               containmentType() != Plasma::Containment::PanelContainment ||
-                               containmentType() != Plasma::Containment::CustomPanelContainment);
+                               containmentType() == Plasma::Containment::PanelContainment ||
+                               containmentType() == Plasma::Containment::CustomPanelContainment);
     }
 }
 
