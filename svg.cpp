@@ -79,6 +79,7 @@ class SvgPrivate
             eraseRenderer();
         }
 
+        //This function is meant for the rects cache
         QString cacheId(const QString &elementId)
         {
             if (size.isValid() && size != naturalSize) {
@@ -89,6 +90,14 @@ class SvgPrivate
                 return QString("%2_%1").arg("Natural")
                                         .arg(elementId);
             }
+        }
+
+        //This function is meant for the pixmap cache
+        QString cachePath(const QString &path)
+        {
+             return QString("%3_%2_%1_").arg(int(size.width()))
+                                       .arg(int(size.height()))
+                                       .arg(path);
         }
 
         bool setImagePath(const QString &imagePath, Svg *q)
@@ -150,7 +159,7 @@ class SvgPrivate
                 return QPixmap();
             }
 
-            QString id = cacheId(path);
+            QString id = cachePath(path);
 
             if (!elementId.isEmpty()) {
                 id.append(elementId);
@@ -204,7 +213,7 @@ class SvgPrivate
             while (i != itemsToSave.end()) {
                 QPixmap p = i.value();
 
-                QString id = cacheId(path);
+                QString id = cachePath(path);
 
                 if (!i.key().isEmpty()) {
                     id.append(i.key());
