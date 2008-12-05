@@ -160,6 +160,8 @@ ToolTip::~ToolTip()
 
 void ToolTip::checkSize()
 {
+    //FIXME: layout bugs even on qlayouts? oh, please, no.
+    d->text->setMinimumSize(d->text->minimumSizeHint());
     QSize hint = sizeHint();
     QSize current = size();
 
@@ -183,7 +185,7 @@ void ToolTip::checkSize()
                  << current.height() - hint.height();
                  */
         resize(hint);
-        move(x(), y() + (current.height() - hint.height()));
+        move(x(), y() + (current.height() - size().height()));
     }
 }
 
