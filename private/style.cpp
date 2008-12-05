@@ -137,6 +137,22 @@ void Style::drawComplexControl(ComplexControl control,
     painter->restore();
 }
 
+int Style::pixelMetric(PixelMetric metric, const QStyleOption *option, const QWidget *widget) const
+{
+    switch (metric) {
+    case PM_ScrollBarExtent: {
+        const QStyleOptionSlider *scrollOption = qstyleoption_cast<const QStyleOptionSlider *>(option);
+        if (scrollOption && scrollOption->orientation == Qt::Vertical) {
+            return d->scrollbar->elementSize("arrow-down").width() + 2;
+        } else {
+            return d->scrollbar->elementSize("arrow-left").height() + 2;
+        }
+    }
+    default:
+        return QCommonStyle::pixelMetric(metric, option, widget);
+    }
+}
+
 }
 
 #include "style_p.moc"

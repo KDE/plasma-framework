@@ -41,6 +41,8 @@ protected:
                             const QStyleOptionComplex *option,
                             QPainter *painter,
                             const QWidget *widget) const;
+
+    int pixelMetric(PixelMetric metric, const QStyleOption *option = 0, const QWidget *widget = 0) const;
 private:
     StylePrivate *d;
 };

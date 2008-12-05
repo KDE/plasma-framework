@@ -40,6 +40,8 @@ ScrollBar::ScrollBar(Qt::Orientation orientation, QGraphicsWidget *parent)
    setWidget(scrollbar);
    d->style = new Plasma::Style();
    scrollbar->setStyle(d->style);
+
+   scrollbar->resize(scrollbar->sizeHint());
 }
 
 ScrollBar::~ScrollBar()
