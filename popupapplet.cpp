@@ -298,6 +298,7 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
             }
 
             dialog->adjustSize();
+            updateDialogPosition();
 
             if (icon && lay) {
                 lay->addItem(icon);
