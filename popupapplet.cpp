@@ -298,7 +298,6 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
             }
 
             dialog->adjustSize();
-            updateDialogPosition();
 
             if (icon && lay) {
                 lay->addItem(icon);
@@ -476,12 +475,12 @@ void PopupAppletPrivate::dialogSizeChanged()
 {
     //Reposition the dialog
     if (dialog) {
-        updateDialogPosition();
-
         KConfigGroup sizeGroup = q->config();
         sizeGroup = KConfigGroup(&sizeGroup, "PopupApplet");
         sizeGroup.writeEntry("DialogHeight", dialog->height());
         sizeGroup.writeEntry("DialogWidth", dialog->width());
+
+        updateDialogPosition();
 
         emit q->configNeedsSaving();
     }
