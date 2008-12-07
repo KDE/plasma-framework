@@ -493,7 +493,7 @@ void ExtenderItem::resizeEvent(QGraphicsSceneResizeEvent *event)
 
     //resize the dragger
     d->dragger->resizeFrame(QSizeF(width - d->bgLeft - d->bgRight,
-                            d->dragger->elementSize("hint-preferred-icon-size").height() +
+                            d->iconSize() +
                             d->dragTop + d->dragBottom));
 
     //resize the applet background
