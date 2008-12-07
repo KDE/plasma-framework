@@ -201,8 +201,11 @@ class SvgPrivate
                 p = p.fromImage(itmp);
             }
 
-            itemsToSave[elementId] = p;
-            saveTimer->start(300);
+            if (!itemsToSave.contains(id)) {
+                itemsToSave.insert(id, p);
+                saveTimer->start(300);
+            }
+
             return p;
         }
 
@@ -211,17 +214,9 @@ class SvgPrivate
             QHash<QString, QPixmap>::iterator i = itemsToSave.begin();
 
             while (i != itemsToSave.end()) {
-                QPixmap p = i.value();
+                //kDebug()<<"Saving item to cache: "<<i.key();
 
-                QString id = cachePath(path);
-
-                if (!i.key().isEmpty()) {
-                    id.append(i.key());
-                }
-
-                //kDebug()<<"Saving item to cache: "<<id;
-
-                Theme::defaultTheme()->insertIntoCache(id, p);
+                Theme::defaultTheme()->insertIntoCache(i.key(), i.value());
                 ++i;
             }
             itemsToSave.clear();
