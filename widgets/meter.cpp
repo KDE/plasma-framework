@@ -29,6 +29,7 @@
 
 #include "plasma/animator.h"
 #include "plasma/framesvg.h"
+#include "plasma/theme.h"
 
 namespace Plasma {
 
@@ -201,8 +202,31 @@ public:
                 meter->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
                 break;
         }
+
         if (image) {
-            meter->setPreferredSize(image->size());
+            //set a sane preferredSize. We can't just use the svg's native size, since that way
+            //letters get cut off if the user uses a font larger then usual. Check how many rows of
+            //labels we have, add 1 (the progress bar), and multiply by the font height to get a
+            //somewhat sane size height. This is not perfect but work well enough for 4.2. I suggest
+            //we look into alternatives for 4.3.
+            uint i = 0;
+            uint rows = 0;
+            qreal prevY = -1;
+            QString labelName = "label0";
+            while (image->hasElement(labelName)) {
+                if (image->elementRect(labelName).y() > prevY) {
+                    prevY = image->elementRect(labelName).y();
+                    rows++;
+                }
+                i++;
+                labelName = QString("label%0").arg(i);
+            }
+
+            Plasma::Theme *theme = Plasma::Theme::defaultTheme();
+            QFont font = theme->font(Plasma::Theme::DefaultFont);
+            QFontMetrics fm(font);
+
+            meter->setPreferredHeight((rows + 1) * fm.height());
         } else {
             meter->setPreferredSize(QSizeF(30, 30));
         }
