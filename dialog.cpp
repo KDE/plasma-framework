@@ -237,7 +237,7 @@ void Dialog::mouseMoveEvent(QMouseEvent *event)
         setCursor(Qt::SizeFDiagCursor);
     } else if (d->resizeAreas[Dialog::SouthWest].contains(event->pos()) && d->resizeCorners & Dialog::SouthWest) {
         setCursor(Qt::SizeBDiagCursor);
-    } else {
+    } else if (!(event->buttons() & Qt::LeftButton)) {
         unsetCursor();
     }
 
@@ -306,6 +306,7 @@ void Dialog::mouseReleaseEvent(QMouseEvent *event)
 {
     if (d->resizeStartCorner != Dialog::NoCorner) {
         d->resizeStartCorner = Dialog::NoCorner;
+        unsetCursor();
         emit dialogResized();
     }
 
