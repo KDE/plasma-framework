@@ -487,7 +487,7 @@ bool Svg::hasElement(const QString &elementId) const
 
     QString id = d->cacheId(elementId);
     if (d->localRectCache.contains(id)) {
-        return d->localRectCache.value().isValid();
+        return d->localRectCache.value(id).isValid();
     }
 
     QRectF elementRect;
