@@ -499,7 +499,7 @@ void FrameSvgPrivate::generateBackground(FrameData *frame)
     }
 
     // Corners
-    if (q->hasElement(prefix + "top") && frame->enabledBorders & FrameSvg::TopBorder) {
+    if (frame->enabledBorders & FrameSvg::TopBorder && q->hasElement(prefix + "top")) {
         contentTop = frame->topHeight;
         bottomOffset += frame->topHeight;
 
@@ -515,7 +515,7 @@ void FrameSvgPrivate::generateBackground(FrameData *frame)
         }
     }
 
-    if (q->hasElement(prefix + "bottom") && frame->enabledBorders & FrameSvg::BottomBorder) {
+    if (frame->enabledBorders & FrameSvg::BottomBorder && q->hasElement(prefix + "bottom")) {
         if (q->hasElement(prefix + "bottomleft") && frame->enabledBorders & FrameSvg::LeftBorder) {
             q->paint(&p, QRect(leftOffset, bottomOffset, frame->leftWidth, frame->bottomHeight), prefix + "bottomleft");
 
@@ -523,7 +523,7 @@ void FrameSvgPrivate::generateBackground(FrameData *frame)
             rightOffset = contentWidth + frame->leftWidth;
         }
 
-        if (q->hasElement(prefix + "bottomright") && frame->enabledBorders & FrameSvg::RightBorder) {
+        if (frame->enabledBorders & FrameSvg::RightBorder && q->hasElement(prefix + "bottomright")) {
             q->paint(&p, QRect(rightOffset, bottomOffset, frame->rightWidth, frame->bottomHeight), prefix + "bottomright");
         }
     }
@@ -531,7 +531,6 @@ void FrameSvgPrivate::generateBackground(FrameData *frame)
     // Sides
     if (frame->stretchBorders) {
         if (frame->enabledBorders & FrameSvg::LeftBorder || frame->enabledBorders & FrameSvg::RightBorder) {
-
             if (q->hasElement(prefix + "left") &&
                 frame->enabledBorders & FrameSvg::LeftBorder) {
                 q->paint(&p, QRect(leftOffset, contentTop, frame->leftWidth, contentHeight), prefix + "left");
@@ -543,23 +542,17 @@ void FrameSvgPrivate::generateBackground(FrameData *frame)
             }
         }
 
-        if (frame->enabledBorders & FrameSvg::TopBorder ||
-            frame->enabledBorders & FrameSvg::BottomBorder) {
-
-            if (q->hasElement(prefix + "top") &&
-                frame->enabledBorders & FrameSvg::TopBorder) {
+        if (frame->enabledBorders & FrameSvg::TopBorder || frame->enabledBorders & FrameSvg::BottomBorder) {
+            if (frame->enabledBorders & FrameSvg::TopBorder && q->hasElement(prefix + "top")) {
                 q->paint(&p, QRect(contentLeft, topOffset, contentWidth, frame->topHeight), prefix + "top");
             }
 
-            if (q->hasElement(prefix + "bottom") &&
-                frame->enabledBorders & FrameSvg::BottomBorder) {
+            if (frame->enabledBorders & FrameSvg::BottomBorder && q->hasElement(prefix + "bottom")) {
                 q->paint(&p, QRect(contentLeft, bottomOffset, contentWidth, frame->bottomHeight), prefix + "bottom");
             }
-
         }
     } else {
-        if (q->hasElement(prefix + "left") &&
-            frame->enabledBorders & FrameSvg::LeftBorder) {
+        if (frame->enabledBorders & FrameSvg::LeftBorder && q->hasElement(prefix + "left")) {
             QPixmap left(frame->leftWidth, leftHeight);
             left.fill(Qt::transparent);
 
@@ -570,7 +563,7 @@ void FrameSvgPrivate::generateBackground(FrameData *frame)
             p.drawTiledPixmap(QRect(leftOffset, contentTop, frame->leftWidth, contentHeight), left);
         }
 
-        if (q->hasElement(prefix + "right") && frame->enabledBorders & FrameSvg::RightBorder) {
+        if (frame->enabledBorders & FrameSvg::RightBorder && q->hasElement(prefix + "right")) {
             QPixmap right(frame->rightWidth, leftHeight);
             right.fill(Qt::transparent);
 
@@ -581,7 +574,7 @@ void FrameSvgPrivate::generateBackground(FrameData *frame)
             p.drawTiledPixmap(QRect(rightOffset, contentTop, frame->rightWidth, contentHeight), right);
         }
 
-        if (q->hasElement(prefix + "top") && frame->enabledBorders & FrameSvg::TopBorder) {
+        if (frame->enabledBorders & FrameSvg::TopBorder && q->hasElement(prefix + "top")) {
             QPixmap top(topWidth, frame->topHeight);
             top.fill(Qt::transparent);
 
@@ -592,7 +585,7 @@ void FrameSvgPrivate::generateBackground(FrameData *frame)
             p.drawTiledPixmap(QRect(contentLeft, topOffset, contentWidth, frame->topHeight), top);
         }
 
-        if (q->hasElement(prefix + "bottom") && frame->enabledBorders & FrameSvg::BottomBorder) {
+        if (frame->enabledBorders & FrameSvg::BottomBorder && q->hasElement(prefix + "bottom")) {
             QPixmap bottom(topWidth, frame->bottomHeight);
             bottom.fill(Qt::transparent);
 
