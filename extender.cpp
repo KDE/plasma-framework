@@ -300,6 +300,10 @@ void Extender::itemHoverLeaveEvent(ExtenderItem *item)
 
 FrameSvg::EnabledBorders Extender::enabledBordersForItem(ExtenderItem *item) const
 {
+    if (d->layout->count() < 1) {
+        return 0;
+    }
+
     ExtenderItem *topItem = dynamic_cast<ExtenderItem*>(d->layout->itemAt(0));
     ExtenderItem *bottomItem = dynamic_cast<ExtenderItem*>(d->layout->itemAt(d->layout->count() - 1));
     if (d->appearance == TopDownStacked && bottomItem != item) {
