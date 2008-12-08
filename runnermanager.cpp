@@ -346,7 +346,11 @@ AbstractRunner *RunnerManager::runner(const QString &name) const
         d->loadRunners();
     }
 
-    return d->runners.value(name);
+    if (d->runners.contains(name)) {
+        return d->runners.value(name);
+    }
+
+    return 0;
 }
 
 RunnerContext *RunnerManager::searchContext() const
@@ -428,7 +432,10 @@ void RunnerManager::launchQuery(const QString &term, const QString &runnerName)
 
     //if the name is not empty we will launch only the specified runner
     if (!runnerName.isEmpty()) {
-        runable.append(runner(runnerName));
+        AbstractRunner *r = runner(runnerName);
+        if (r) {
+            runable.append(r);
+        }
     } else {
         runable = d->runners.values();
     }
