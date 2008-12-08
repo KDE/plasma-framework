@@ -211,7 +211,7 @@ class SvgPrivate
 
         void scheduledCacheUpdate()
         {
-            QHash<QString, QPixmap>::const_iterator i = itemsToSave.begin();
+            QHash<QString, QPixmap>::const_iterator i = itemsToSave.constBegin();
 
             while (i != itemsToSave.constEnd()) {
                 //kDebug()<<"Saving item to cache: "<<i.key();
