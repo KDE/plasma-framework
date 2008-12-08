@@ -440,6 +440,7 @@ protected:
 
 private:
     SignalPlotterPrivate *const d;
+    Q_PRIVATE_SLOT(d, void themeChanged())
 };
 
 } // Plasma namespace

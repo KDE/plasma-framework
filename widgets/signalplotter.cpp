@@ -39,20 +39,31 @@
 #include <kstandarddirs.h>
 
 #include <plasma/svg.h>
+#include <plasma/theme.h>
 
 namespace Plasma
 {
 
 class SignalPlotterPrivate
 {
-    public:
-        SignalPlotterPrivate()
-            : svgBackground(0)
-        { }
+public:
+    SignalPlotterPrivate()
+        : svgBackground(0)
+    { }
 
-        ~SignalPlotterPrivate()
-        {
-        }
+    ~SignalPlotterPrivate()
+    {
+    }
+
+    void themeChanged()
+    {
+        Plasma::Theme *theme = Plasma::Theme::defaultTheme();
+        backgroundColor = theme->color(Theme::BackgroundColor);
+        verticalLinesColor = theme->color(Theme::TextColor);
+        verticalLinesColor.setAlphaF(0.4);
+        horizontalLinesColor = theme->color(Theme::TextColor);
+        horizontalLinesColor.setAlphaF(0.4);
+    }
 
     int precision;
     uint samples;
@@ -116,14 +127,12 @@ SignalPlotter::SignalPlotter(QGraphicsItem *parent)
     setMinimumSize(QSizeF(16, 16));
 
     d->showVerticalLines = true;
-    d->verticalLinesColor = QColor("black");
     d->verticalLinesDistance = 30;
     d->verticalLinesScroll = true;
     d->verticalLinesOffset = 0;
     d->horizontalScale = 1;
 
     d->showHorizontalLines = true;
-    d->horizontalLinesColor = QColor("black");
     d->horizontalLinesCount = 5;
 
     d->showLabels = true;
@@ -132,7 +141,9 @@ SignalPlotter::SignalPlotter(QGraphicsItem *parent)
     d->fillPlots = true;
 
     d->svgBackground = 0;
-    d->backgroundColor = QColor(0, 0, 0);
+
+    connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()), SLOT(themeChanged()));
+    d->themeChanged();
 
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 }
