@@ -211,14 +211,14 @@ class SvgPrivate
 
         void scheduledCacheUpdate()
         {
-            QHash<QString, QPixmap>::iterator i = itemsToSave.begin();
+            QHash<QString, QPixmap>::const_iterator i = itemsToSave.begin();
 
-            while (i != itemsToSave.end()) {
+            while (i != itemsToSave.constEnd()) {
                 //kDebug()<<"Saving item to cache: "<<i.key();
-
                 Theme::defaultTheme()->insertIntoCache(i.key(), i.value());
                 ++i;
             }
+
             itemsToSave.clear();
         }
 
@@ -271,7 +271,7 @@ class SvgPrivate
 
             QString id = cacheId(elementId);
             if (localRectCache.contains(id)) {
-                return localRectCache[id];
+                return localRectCache.value(id);
             }
 
             QRectF rect;
@@ -366,7 +366,7 @@ class SvgPrivate
         Svg *q;
         static QHash<QString, SharedSvgRenderer::Ptr> s_renderers;
         QHash<QString, QRectF> localRectCache;
-        QHash <QString, QPixmap> itemsToSave;
+        QHash<QString, QPixmap> itemsToSave;
         QTimer *saveTimer;
         SharedSvgRenderer::Ptr renderer;
         QString themePath;
@@ -487,7 +487,7 @@ bool Svg::hasElement(const QString &elementId) const
 
     QString id = d->cacheId(elementId);
     if (d->localRectCache.contains(id)) {
-      return d->localRectCache[id].isValid();
+        return d->localRectCache.value().isValid();
     }
 
     QRectF elementRect;
