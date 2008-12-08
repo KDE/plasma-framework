@@ -204,6 +204,7 @@ void Extender::resizeEvent(QGraphicsSceneResizeEvent *event)
 
 void Extender::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
+    Q_UNUSED(event)
     PopupApplet *popupApplet = qobject_cast<PopupApplet*>(d->applet);
     if (attachedItems().isEmpty() && popupApplet) {
         popupApplet->hidePopup();
@@ -454,6 +455,8 @@ void ExtenderPrivate::loadExtenderItems()
 void ExtenderPrivate::updateBorders()
 {
     foreach (ExtenderItem *item, q->attachedItems()) {
+        //kDebug() << "checking" << (QObject*)item << item->d->background->enabledBorders()
+        //         << q->enabledBordersForItem(item);
         if (item && (item->d->background->enabledBorders() != q->enabledBordersForItem(item))) {
             //call themeChanged to change the backgrounds enabled borders, and move all contained
             //widgets according to it's changed margins.
