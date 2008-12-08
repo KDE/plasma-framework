@@ -36,6 +36,7 @@ public:
     void dialogStatusChanged(bool status);
     void updateDialogPosition();
     void popupConstraintsEvent(Plasma::Constraints constraints);
+    void checkExtenderAppearance(Plasma::FormFactor f);
 
     PopupApplet *q;
     Plasma::IconWidget *icon;

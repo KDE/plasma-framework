@@ -108,6 +108,24 @@ QGraphicsWidget *PopupApplet::graphicsWidget()
     return static_cast<Applet*>(this)->d->extender;
 }
 
+void PopupAppletPrivate::checkExtenderAppearance(Plasma::FormFactor f)
+{
+    Extender *extender = qobject_cast<Extender*>(q->graphicsWidget());
+    if (extender) {
+        if (f != Plasma::Horizontal && f != Plasma::Vertical) {
+            extender->setAppearance(Extender::NoBorders);
+        } else if (q->location() == TopEdge) {
+            extender->setAppearance(Extender::TopDownStacked);
+        } else {
+            extender->setAppearance(Extender::BottomUpStacked);
+        }
+    }
+
+    if (dialog) {
+        dialog->setGraphicsWidget(extender);
+    }
+}
+
 void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
 {
     if (constraints & Plasma::StartupCompletedConstraint) {
@@ -119,6 +137,13 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
     }
 
     Plasma::FormFactor f = q->formFactor();
+
+    kDebug() << "whoop!" << constraints;
+
+    if (constraints & Plasma::LocationConstraint) {
+        checkExtenderAppearance(f);
+    }
+
     if (constraints & Plasma::FormFactorConstraint ||
         (constraints & Plasma::SizeConstraint &&
          (f == Plasma::Vertical || f == Plasma::Horizontal))) {
@@ -132,13 +157,17 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
         QSizeF containmentSize;
 
         QGraphicsWidget *gWidget = q->graphicsWidget();
-        kDebug() << "graphics widget is" << (QObject*)gWidget;
+        //kDebug() << "graphics widget is" << (QObject*)gWidget;
         QWidget *qWidget = q->widget();
 
         if (gWidget) {
             minimum = gWidget->minimumSize();
             // our layout may have been replaced on us in the call to graphicsWidget!
             lay = dynamic_cast<QGraphicsLinearLayout *>(q->layout());
+
+            if (!(constraints & LocationConstraint)) {
+                checkExtenderAppearance(f);
+            }
         } else if (qWidget) {
             minimum = qWidget->minimumSizeHint();
         }
@@ -187,11 +216,6 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
             QSize prefSize;
 
             if (gWidget) {
-                Extender *extender = qobject_cast<Extender*>(gWidget);
-                if (extender) {
-                    extender->setAppearance(Extender::NoBorders);
-                }
-
                 lay->addItem(gWidget);
                 prefSize = gWidget->preferredSize().toSize();
             } else if (qWidget) {
@@ -256,24 +280,11 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
                 KWindowSystem::setState(dialog->winId(), NET::SkipTaskbar | NET::SkipPager);
                 dialog->installEventFilter(q);
 
-                QObject::connect(dialog, SIGNAL(dialogResized()),
-                                 q, SLOT(dialogSizeChanged()));
-                QObject::connect(dialog, SIGNAL(dialogVisible(bool)),
-                                 q, SLOT(dialogStatusChanged(bool)));
+                QObject::connect(dialog, SIGNAL(dialogResized()), q, SLOT(dialogSizeChanged()));
+                QObject::connect(dialog, SIGNAL(dialogVisible(bool)), q, SLOT(dialogStatusChanged(bool)));
                 q->setMinimumSize(QSize(0, 0));
                 if (gWidget) {
                     Corona *corona = qobject_cast<Corona *>(gWidget->scene());
-
-                    Extender *extender = qobject_cast<Extender*>(gWidget);
-                    if (extender) {
-                        if (q->formFactor() == MediaCenter || q->formFactor() == Planar) {
-                            extender->setAppearance(Extender::NoBorders);
-                        } else if (q->location() == TopEdge) {
-                            extender->setAppearance(Extender::TopDownStacked);
-                        } else {
-                            extender->setAppearance(Extender::BottomUpStacked);
-                        }
-                    }
 
                     //could that cast ever fail??
                     if (corona) {
