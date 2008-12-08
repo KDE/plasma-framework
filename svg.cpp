@@ -155,7 +155,7 @@ class SvgPrivate
                 size = elementRect(elementId).size().toSize();
             }
 
-            if (!size.isValid()) {
+            if (size.width() <= 0 || size.height() <= 0) {
                 return QPixmap();
             }
 
