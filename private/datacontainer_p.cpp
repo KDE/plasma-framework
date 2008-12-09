@@ -110,6 +110,7 @@ void SignalRelay::checkAlignment()
 
 void SignalRelay::checkQueueing()
 {
+    //kDebug() << m_queued;
     if (m_queued) {
         emit dataUpdated(dc->objectName(), d->data);
         m_queued = false;

@@ -143,6 +143,7 @@ bool ThemePrivate::useCache()
 
     return cacheTheme;
 }
+
 QString ThemePrivate::findInTheme(const QString &image, const QString &theme) const
 {
     //TODO: this should be using Package

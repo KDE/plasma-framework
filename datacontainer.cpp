@@ -59,7 +59,7 @@ void DataContainer::setData(const QString &key, const QVariant &value)
 
 void DataContainer::removeAllData()
 {
-    if (d->data.count() < 1) {
+    if (d->data.isEmpty()) {
         // avoid an update if we don't have any data anyways
         return;
     }
@@ -162,6 +162,7 @@ void DataContainer::disconnectVisualization(QObject *visualization)
 
 void DataContainer::checkForUpdate()
 {
+    //kDebug() << objectName() << d->dirty;
     if (d->dirty) {
         emit dataUpdated(objectName(), d->data);
 
