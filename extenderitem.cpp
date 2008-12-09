@@ -185,13 +185,17 @@ QGraphicsItem *ExtenderItem::widget() const
 
 void ExtenderItem::setIcon(const QIcon &icon)
 {
+    d->iconName = QString();
     d->collapseIcon->setIcon(icon);
 }
 
 void ExtenderItem::setIcon(const QString &icon)
 {
-    d->collapseIcon->setIcon(icon);
-    config().writeEntry("extenderIconName", icon);
+    if (icon != d->iconName) {
+        d->collapseIcon->setIcon(icon);
+        d->iconName = icon;
+        config().writeEntry("extenderIconName", icon);
+    }
 }
 
 QIcon ExtenderItem::icon() const
@@ -480,6 +484,8 @@ void ExtenderItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
 
 void ExtenderItem::moveEvent(QGraphicsSceneMoveEvent *event)
 {
+    Q_UNUSED(event);
+
     if (d->toplevel) {
         d->toplevel->setSceneRect(sceneBoundingRect());
         update();

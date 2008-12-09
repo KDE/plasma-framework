@@ -80,6 +80,7 @@ class ExtenderItemPrivate
 
         QString title;
         QString name;
+        QString iconName;
 
         uint extenderItemId;
 
