@@ -119,10 +119,10 @@ void PopupAppletPrivate::checkExtenderAppearance(Plasma::FormFactor f)
         } else {
             extender->setAppearance(Extender::BottomUpStacked);
         }
-    }
 
-    if (dialog) {
-        dialog->setGraphicsWidget(extender);
+        if (dialog) {
+            dialog->setGraphicsWidget(extender);
+        }
     }
 }
 
