@@ -93,10 +93,10 @@ class SvgPrivate
         }
 
         //This function is meant for the pixmap cache
-        QString cachePath(const QString &path)
+        QString cachePath(const QString &path, const QSize &size)
         {
-             return QString("%3_%2_%1_").arg(int(size.width()))
-                                       .arg(int(size.height()))
+             return QString("%3_%2_%1_").arg(int(size.height()))
+                                       .arg(int(size.width()))
                                        .arg(path);
         }
 
@@ -159,7 +159,7 @@ class SvgPrivate
                 return QPixmap();
             }
 
-            QString id = cachePath(path);
+            QString id = cachePath(path, size);
 
             if (!elementId.isEmpty()) {
                 id.append(elementId);
