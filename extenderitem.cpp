@@ -744,8 +744,14 @@ void ExtenderItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
                         Applet *applet = containment->addApplet("internal:extender",
                                 QVariantList(),
                                 QRectF(containment->mapFromScene(mousePos), size()));
-                        setExtender(applet->d->extender);
-                        extenderCreated = true;
+
+                        if (applet) {
+                            setExtender(applet->d->extender);
+                            extenderCreated = true;
+                        } else {
+                            kDebug() << "Creating internal:extender applet failed, probably "
+                                     << "because widgets are locked.";
+                        }
                     }
                 }
             }
@@ -754,6 +760,7 @@ void ExtenderItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
             //back to where it came from.
             if (!extenderCreated) {
                 setExtender(extender());
+                kDebug() << "Move the item back to where it came from.";
             }
         }
     }
