@@ -201,7 +201,6 @@ void Dialog::paintEvent(QPaintEvent *e)
     p.setRenderHint(QPainter::Antialiasing);
     p.setClipRect(e->rect());
     p.setCompositionMode(QPainter::CompositionMode_Source);
-    p.fillRect(rect(), Qt::transparent);
     d->background->paintFrame(&p);
 
     //we set the resize handlers
@@ -311,6 +310,17 @@ void Dialog::mouseReleaseEvent(QMouseEvent *event)
     }
 
     QWidget::mouseReleaseEvent(event);
+}
+
+bool Dialog::event(QEvent *event)
+{
+    if (event->type() == QEvent::Paint) {
+        QPainter p(this);
+        p.setCompositionMode(QPainter::CompositionMode_Source);
+        p.fillRect(rect(), Qt::transparent);
+    }
+
+    return QWidget::event(event);
 }
 
 void Dialog::resizeEvent(QResizeEvent *e)
