@@ -185,6 +185,10 @@ void ThemePrivate::discardCache()
     pixmapCache = 0;
     KPixmapCache::deleteCache("plasma_theme_" + themeName);
 
+
+    delete svgElementsCache;
+    svgElementsCache = 0;
+
     QString svgElementsFile = KStandardDirs::locateLocal("cache", "plasma-svgelements-" + themeName);
     if (!svgElementsFile.isEmpty()) {
         QFile f(svgElementsFile);
@@ -278,6 +282,7 @@ void Theme::setThemeName(const QString &themeName)
         return;
     }
 
+    //discard the old theme cache
     if (!d->themeName.isEmpty() && d->pixmapCache) {
         d->discardCache();
     }
@@ -341,7 +346,7 @@ void Theme::setThemeName(const QString &themeName)
     QFile f(metadataPath);
     QFileInfo info(f);
 
-    if (d->pixmapCache && info.lastModified().toTime_t() > d->pixmapCache->timestamp()) {
+    if (d->useCache() && info.lastModified().toTime_t() > d->pixmapCache->timestamp()) {
         d->discardCache();
     }
 
