@@ -625,8 +625,18 @@ void ExtenderItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     if (targetExtender != d->previousTargetExtender) {
         if (d->previousTargetExtender) {
             d->previousTargetExtender->itemHoverLeaveEvent(this);
+            d->previousTargetExtender->disconnect(this, SIGNAL(destroyed(QObject*)));
         }
+
         d->previousTargetExtender = targetExtender;
+
+        //monitor the current previousTargetExtender, so we don't accidently try to remove it's
+        //spacer after the extender has been destoryed.
+        if (targetExtender) {
+            connect(targetExtender, SIGNAL(destroyed(QObject*)),
+                    this, SLOT(previousTargetExtenderDestroyed(QObject*)));
+        }
+
         if (targetExtender) {
             targetExtender->itemHoverEnterEvent(this);
         }
@@ -682,6 +692,7 @@ void ExtenderItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 
     if (d->dragStarted) {
         d->dragStarted = false;
+        d->previousTargetExtender = 0;
 
         //remove the toplevel view
         if (d->toplevel) {
@@ -1059,6 +1070,11 @@ void ExtenderItemPrivate::resizeContent(const QSizeF &newSize)
     repositionToolbox();
 
     q->update();
+}
+
+void ExtenderItemPrivate::previousTargetExtenderDestroyed(QObject *o)
+{
+    previousTargetExtender = 0;
 }
 
 uint ExtenderItemPrivate::s_maxExtenderItemId = 0;
