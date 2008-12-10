@@ -55,8 +55,7 @@ public:
         : q(corona),
           immutability(Mutable),
           mimetype("text/x-plasmoidservicename"),
-          config(0),
-          offscreenLayout(0)
+          config(0)
     {
         if (KGlobal::hasMainComponent()) {
             configName = KGlobal::mainComponent().componentName() + "-appletsrc";
@@ -189,7 +188,7 @@ public:
     KSharedConfigPtr config;
     QTimer configSyncTimer;
     QList<Containment*> containments;
-    QGraphicsGridLayout *offscreenLayout;
+    QHash<uint, QGraphicsWidget*> offscreenWidgets;
 };
 
 Corona::Corona(QObject *parent)
@@ -368,71 +367,45 @@ Containment *Corona::addContainmentDelayed(const QString &name, const QVariantLi
 
 void Corona::addOffscreenWidget(QGraphicsWidget *widget)
 {
-    widget->setParentItem(0);
-    if (!d->offscreenLayout) {
-        kDebug() << "adding offscreen widget.";
-        QGraphicsWidget *offscreenWidget = new QGraphicsWidget(0);
-        addItem(offscreenWidget);
-        d->offscreenLayout = new QGraphicsGridLayout(offscreenWidget);
-        //FIXME: do this a nice way.
-        offscreenWidget->setPos(-10000, -10000);
-        offscreenWidget->setLayout(d->offscreenLayout);
-    }
-
-    //check if the layout already contains this widget.
-    //XXX: duplicated from removeOffscreenWidget()
-    for (int i = 0; i < d->offscreenLayout->count(); i++) {
-        QGraphicsWidget *foundWidget = dynamic_cast<QGraphicsWidget*>(d->offscreenLayout->itemAt(i));
-        if (foundWidget == widget) {
-            return;
-        }
-    }
-
-    d->offscreenLayout->addItem(widget, d->offscreenLayout->rowCount() + 1,
-                                        d->offscreenLayout->columnCount() + 1);
-    // this is lame: adding a widget to a layout and then deleting it
-    // doesn't automatically remove it from the layout, so we have to watch for that ourselves
-    connect(widget, SIGNAL(destroyed(QObject*)), this, SLOT(offscreenWidgetDestroyed(QObject*)));
-    widget->update();
-}
-
-//FIXME: remove the offscreenWidgetDestroyed method when QGraphicsLayout no longer
-//       craps up when an item in the layout is deleted!
-void CoronaPrivate::offscreenWidgetDestroyed(QObject *o)
-{
-    if (!offscreenLayout) {
+    if (d->offscreenWidgets.values().contains(widget)) {
         return;
     }
 
-    // at this point, it's just a QObject, not a QGraphicsWidget, but we still need
-    // a pointer of the appropriate type.
-    // WARNING: DO NOT USE THE WIDGET POINTER FOR ANYTHING OTHER THAN POINTER COMPARISONS
-    QGraphicsWidget *widget = static_cast<QGraphicsWidget *>(o);
-    for (int i = 0; i < offscreenLayout->count(); i++) {
-        // we have to static_cast here as well, even though that's not overly correct
-        // or wonderful; but it's the best we can do as the item is no longer a
-        // QGraphicsWidget at this point, just a QObject
-        QGraphicsWidget *foundWidget = static_cast<QGraphicsWidget *>(offscreenLayout->itemAt(i));
-        if (foundWidget == widget) {
-            offscreenLayout->removeAt(i);
-        }
+    widget->setParentItem(0);
+
+    //search for an empty spot in the topleft quadrant of the scene. each 'slot' is QWIDGETSIZE_MAX
+    //x QWIDGETSIZE_MAX, so we're guaranteed to never have to move widgets once they're placed here.
+    int i = 0;
+    while (d->offscreenWidgets.contains(i)) {
+        i++;
     }
+
+    d->offscreenWidgets[i] = widget;
+    widget->setPos((-i - 1) * QWIDGETSIZE_MAX, -QWIDGETSIZE_MAX);
+    kDebug() << "adding offscreen widget at slot " << i;
+
+    connect(widget, SIGNAL(destroyed(QObject*)), this, SLOT(offscreenWidgetDestroyed(QObject*)));
 }
 
 void Corona::removeOffscreenWidget(QGraphicsWidget *widget)
 {
-    if (!d->offscreenLayout) {
-        return;
-    }
+    QMutableHashIterator<uint, QGraphicsWidget *> it(d->offscreenWidgets);
 
-    for (int i = 0; i < d->offscreenLayout->count(); i++) {
-        QGraphicsWidget *foundWidget = dynamic_cast<QGraphicsWidget*>(d->offscreenLayout->itemAt(i));
-        if (foundWidget == widget) {
-            d->offscreenLayout->removeAt(i);
-            disconnect(widget, SIGNAL(destroyed(QObject*)), this, SLOT(offscreenWidgetDestroyed(QObject*)));
-            break;
+    while (it.hasNext()) {
+        if (it.next().value() == widget) {
+            it.remove();
+            return;
         }
     }
+}
+
+void CoronaPrivate::offscreenWidgetDestroyed(QObject *o)
+{
+    // at this point, it's just a QObject, not a QGraphicsWidget, but we still need
+    // a pointer of the appropriate type.
+    // WARNING: DO NOT USE THE WIDGET POINTER FOR ANYTHING OTHER THAN POINTER COMPARISONS
+    QGraphicsWidget *widget = static_cast<QGraphicsWidget *>(o);
+    q->removeOffscreenWidget(widget);
 }
 
 int Corona::numScreens() const

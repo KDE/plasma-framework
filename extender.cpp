@@ -486,6 +486,8 @@ void ExtenderPrivate::adjustSizeHints()
         applet->adjustSize();
     }
 
+    q->adjustSize();
+
     emit q->geometryChanged();
 }
 

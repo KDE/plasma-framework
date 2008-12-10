@@ -57,6 +57,7 @@ class ExtenderItemPrivate
         void themeChanged();
         void sourceAppletRemoved();
         qreal iconSize();
+        void resizeContent(const QSizeF &newSize);
 
         ExtenderItem *q;
 

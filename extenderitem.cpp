@@ -488,42 +488,17 @@ void ExtenderItem::moveEvent(QGraphicsSceneMoveEvent *event)
 
     if (d->toplevel) {
         d->toplevel->setSceneRect(sceneBoundingRect());
-        update();
+        d->toplevel->setMask(d->background->mask());
     }
 }
 
 void ExtenderItem::resizeEvent(QGraphicsSceneResizeEvent *event)
 {
-    qreal width = event->newSize().width();
-    qreal height = event->newSize().height();
-
-    //resize the dragger
-    d->dragger->resizeFrame(QSizeF(width - d->bgLeft - d->bgRight,
-                            d->iconSize() +
-                            d->dragTop + d->dragBottom));
-
-    //resize the applet background
-    d->background->resizeFrame(event->newSize());
-
-    //resize the widget
-    if (d->widget && d->widget->isWidget()) {
-        QSizeF newWidgetSize(width - d->bgLeft - d->bgRight - d->dragLeft - d->dragRight,
-                             height - d->dragHandleRect().height() - d->bgTop - d->bgBottom -
-                             2 * d->dragTop - 2 * d->dragBottom);
-
-        QGraphicsWidget *graphicsWidget = static_cast<QGraphicsWidget*>(d->widget);
-        graphicsWidget->resize(newWidgetSize);
-    }
-
-    //reposition the toolbox.
-    d->repositionToolbox();
-
-    update();
+    d->resizeContent(event->newSize());
 
     if (d->toplevel) {
         d->toplevel->setSceneRect(sceneBoundingRect());
         d->toplevel->setMask(d->background->mask());
-        update();
     }
 }
 
@@ -543,8 +518,8 @@ void ExtenderItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 
 void ExtenderItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
-    if (!d->dragStarted && (d->mousePos - event->pos().toPoint()).manhattanLength()
-                           >= QApplication::startDragDistance()) {
+    if (d->mousePressed && !d->dragStarted &&
+        (d->mousePos - event->pos().toPoint()).manhattanLength() >= QApplication::startDragDistance()) {
         //start the drag:
         d->dragStarted = true;
 
@@ -588,26 +563,20 @@ void ExtenderItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
             d->toplevel->setWindowFlags(
                 Qt::ToolTip | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
-            d->toplevel->setFrameShape(QFrame::NoFrame);
-            d->toplevel->resize(screenRect.size());
-            d->toplevel->setSceneRect(sceneBoundingRect());
-            d->toplevel->centerOn(this);
-
-            //We might have to scale the view, because we might be zoomed out.
-            qreal scale = screenRect.width() / size().width();
-            d->toplevel->scale(scale, scale);
-
             d->toplevel->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
             d->toplevel->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+            d->toplevel->setFrameShape(QFrame::NoFrame);
 
+            d->toplevel->setSceneRect(sceneBoundingRect());
+            d->toplevel->setGeometry(screenRect);
             d->toplevel->setMask(d->background->mask());
 
-            d->toplevel->update();
             d->toplevel->show();
         }
 
         d->toplevel->setSceneRect(sceneBoundingRect());
         d->toplevel->setGeometry(screenRect);
+        d->toplevel->setMask(d->background->mask());
     } else {
         corona->removeOffscreenWidget(this);
         setParentItem(d->hostApplet());
@@ -1032,7 +1001,7 @@ void ExtenderItemPrivate::themeChanged()
     //setCollapsed recalculates size hints.
     q->setCollapsed(q->isCollapsed());
 
-    q->update();
+    resizeContent(q->size());
 }
 
 void ExtenderItemPrivate::sourceAppletRemoved()
@@ -1055,6 +1024,34 @@ qreal ExtenderItemPrivate::iconSize()
     QFontMetrics fm(font);
 
     return qMax(size.height(), (qreal) fm.height());
+}
+
+void ExtenderItemPrivate::resizeContent(const QSizeF &newSize)
+{
+    qreal width = newSize.width();
+    qreal height = newSize.height();
+
+    //resize the dragger
+    dragger->resizeFrame(QSizeF(width - bgLeft - bgRight,
+                         iconSize() + dragTop + dragBottom));
+
+    //resize the applet background
+    background->resizeFrame(newSize);
+
+    //resize the widget
+    if (widget && widget->isWidget()) {
+        QSizeF newWidgetSize(width - bgLeft - bgRight - dragLeft - dragRight,
+                             height - dragHandleRect().height() - bgTop - bgBottom -
+                             2 * dragTop - 2 * dragBottom);
+
+        QGraphicsWidget *graphicsWidget = static_cast<QGraphicsWidget*>(widget);
+        graphicsWidget->resize(newWidgetSize);
+    }
+
+    //reposition the toolbox.
+    repositionToolbox();
+
+    q->update();
 }
 
 uint ExtenderItemPrivate::s_maxExtenderItemId = 0;
