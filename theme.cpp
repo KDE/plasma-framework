@@ -117,7 +117,7 @@ public:
     int defaultWallpaperHeight;
     KPixmapCache *pixmapCache;
     KSharedConfigPtr svgElementsCache;
-    QHash<QString, QList<QString> > invalidElements;
+    QHash<QString, QSet<QString> > invalidElements;
 
 #ifdef Q_WS_X11
     KSelectionWatcher *compositeWatch;
@@ -236,6 +236,13 @@ Theme::Theme(QObject *parent)
 
 Theme::~Theme()
 {
+    QHashIterator<QString, QSet<QString> > it(d->invalidElements);
+    while (it.hasNext()) {
+        it.next();
+        KConfigGroup imageGroup(d->svgElementsCache, it.key());
+        imageGroup.writeEntry("invalidElements", it.value().toList()); //FIXME: add QSet support to KConfig
+    }
+
     delete d;
 }
 
@@ -557,13 +564,24 @@ bool Theme::findInRectsCache(const QString &image, const QString &element, QRect
     }
 
     KConfigGroup imageGroup(d->svgElementsCache, image);
-    rect = imageGroup.readEntry(element+"Size", QRectF());
+    rect = imageGroup.readEntry(element + "Size", QRectF());
 
-    if (!d->invalidElements.contains(image)) {
-        d->invalidElements[image] = imageGroup.readEntry("invalidElements", QStringList());
+    if (rect.isValid()) {
+        return true;
     }
 
-    return d->invalidElements[image].contains(element) || rect.isValid();
+    bool invalid = false;
+
+    QHash<QString, QSet<QString> >::iterator it = d->invalidElements.find(image);
+    if (it == d->invalidElements.end()) {
+        QSet<QString> elements = imageGroup.readEntry("invalidElements", QStringList()).toSet();
+        d->invalidElements.insert(image, elements);
+        invalid = elements.contains(element);
+    } else {
+        invalid = it.value().contains(element);
+    }
+
+    return invalid;
 }
 
 void Theme::insertIntoRectsCache(const QString& image, const QString &element, const QRectF &rect)
@@ -572,15 +590,20 @@ void Theme::insertIntoRectsCache(const QString& image, const QString &element, c
         return;
     }
 
-    KConfigGroup imageGroup(d->svgElementsCache, image);
     if (rect.isValid()) {
-        imageGroup.writeEntry(element+"Size", rect);
-    } else if (!d->invalidElements[image].contains(element)) {
-        d->invalidElements[image].append(element);
-        if (d->invalidElements[image].count() > 1000) {
-            d->invalidElements[image].pop_front();
+        KConfigGroup imageGroup(d->svgElementsCache, image);
+        imageGroup.writeEntry(element + "Size", rect);
+    } else {
+        QHash<QString, QSet<QString> >::iterator it = d->invalidElements.find(image);
+        if (it == d->invalidElements.end()) {
+            d->invalidElements[image].insert(element);
+        } else if (!it.value().contains(element)) {
+            if (it.value().count() > 1000) {
+                it.value().erase(it.value().begin());
+            }
+
+            it.value().insert(element);
         }
-        imageGroup.writeEntry("invalidElements", d->invalidElements[image]);
     }
 }
 
