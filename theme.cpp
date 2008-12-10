@@ -186,7 +186,6 @@ void ThemePrivate::discardCache()
     KPixmapCache::deleteCache("plasma_theme_" + themeName);
 
 
-    delete svgElementsCache;
     svgElementsCache = 0;
 
     QString svgElementsFile = KStandardDirs::locateLocal("cache", "plasma-svgelements-" + themeName);

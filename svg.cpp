@@ -349,6 +349,10 @@ class SvgPrivate
                                     q, SLOT(colorsChanged()));
             }
 
+            localRectCache.clear();
+            itemsToSave.clear();
+            saveTimer->stop();
+
             //kDebug() << themePath << ">>>>>>>>>>>>>>>>>> theme changed";
             emit q->repaintNeeded();
         }
