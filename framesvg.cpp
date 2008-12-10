@@ -371,10 +371,14 @@ void FrameSvg::clearCache()
 {
     FrameData *frame = d->frames[d->prefix];
 
+    d->saveTimer->stop();
+    d->framesToSave.clear();
+
     // delete all the frames that aren't this one
     QMutableHashIterator<QString, FrameData*> it(d->frames);
     while (it.hasNext()) {
         FrameData *p = it.next().value();
+
         if (frame != p) {
             delete p;
             it.remove();
