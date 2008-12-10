@@ -80,13 +80,12 @@ class RunnerContextPrivate : public QSharedData
             type = RunnerContext::UnknownType;
             QString path = QDir::cleanPath(KShell::tildeExpand(term));
 
-            int space = term.indexOf(' ');
-            if (space > 0) {
-                if (!KStandardDirs::findExe(path.left(space)).isEmpty()) {
-                    type = RunnerContext::ShellCommand;
-                }
-            } else if (!KStandardDirs::findExe(path.left(space)).isEmpty()) {
-                type = RunnerContext::Executable;
+            int space = path.indexOf(' ');
+            if (!KStandardDirs::findExe(path.left(space)).isEmpty()) {
+                // it's a shell command if there's a space because that implies
+                // that it has arguments!
+                type = (space > 0) ? RunnerContext::ShellCommand :
+                                     RunnerContext::Executable;
             } else {
                 KUrl url(term);
                 if (!url.protocol().isEmpty() && !url.isLocalFile()) {
