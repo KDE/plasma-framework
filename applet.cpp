@@ -1164,16 +1164,12 @@ void Applet::setAspectRatioMode(Plasma::AspectRatioMode mode)
 
 void Applet::registerAsDragHandle(QGraphicsItem *item)
 {
-    if (!item) {
+    if (!item || d->registeredAsDragHandle.contains(item)) {
         return;
     }
 
-    int index = d->registeredAsDragHandle.indexOf(item);
-
-    if (index == -1) {
-        d->registeredAsDragHandle.append(item);
-        item->installSceneEventFilter(this);
-    }
+    d->registeredAsDragHandle.insert(item);
+    item->installSceneEventFilter(this);
 }
 
 void Applet::unregisterAsDragHandle(QGraphicsItem *item)
@@ -1182,16 +1178,14 @@ void Applet::unregisterAsDragHandle(QGraphicsItem *item)
         return;
     }
 
-    int index = d->registeredAsDragHandle.indexOf(item);
-    if (index != -1) {
-        d->registeredAsDragHandle.removeAt(index);
+    if (d->registeredAsDragHandle.remove(item)) {
         item->removeSceneEventFilter(this);
     }
 }
 
 bool Applet::isRegisteredAsDragHandle(QGraphicsItem *item)
 {
-    return (d->registeredAsDragHandle.indexOf(item) != -1);
+    return d->registeredAsDragHandle.contains(item);
 }
 
 bool Applet::hasConfigurationInterface() const
@@ -1241,10 +1235,12 @@ bool Applet::sceneEventFilter(QGraphicsItem *watched, QEvent *event)
     {
         // don't move when the containment is not mutable,
         // in the rare case the containment doesn't exists consider it as mutable
-        if ((!containment() || containment()->immutability() == Mutable) &&
-            d->registeredAsDragHandle.contains(watched)) {
-            mouseMoveEvent(static_cast<QGraphicsSceneMouseEvent*>(event));
-            return true;
+        if (d->registeredAsDragHandle.contains(watched)) {
+            Containment *c = containment();
+            if (!c || c->immutability() == Mutable) {
+                mouseMoveEvent(static_cast<QGraphicsSceneMouseEvent*>(event));
+                return true;
+            }
         }
         break;
     }

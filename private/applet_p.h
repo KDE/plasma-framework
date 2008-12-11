@@ -93,7 +93,7 @@ public:
     KPluginInfo appletDescription;
     AppletOverlayWidget *messageOverlay;
     Plasma::BusyWidget *busyWidget;
-    QList<QGraphicsItem*> registeredAsDragHandle;
+    QSet<QGraphicsItem*> registeredAsDragHandle;
     QStringList loadedEngines;
     Plasma::FrameSvg *background;
     AppletScript *script;
