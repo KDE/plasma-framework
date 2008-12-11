@@ -138,8 +138,6 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
 
     Plasma::FormFactor f = q->formFactor();
 
-    kDebug() << "whoop!" << constraints;
-
     if (constraints & Plasma::LocationConstraint) {
         checkExtenderAppearance(f);
     }
