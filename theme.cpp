@@ -99,6 +99,7 @@ public:
     QString findInTheme(const QString &image, const QString &theme) const;
     void compositingChanged();
     void discardCache();
+    void discardCache(bool recreateElementsCache);
     bool useCache();
 
     static const char *defaultTheme;
@@ -173,7 +174,7 @@ void ThemePrivate::compositingChanged()
 
     if (compositingActive != nowCompositingActive) {
         compositingActive = nowCompositingActive;
-        discardCache();
+        discardCache(true);
         emit q->themeChanged();
     }
 #endif
@@ -181,10 +182,15 @@ void ThemePrivate::compositingChanged()
 
 void ThemePrivate::discardCache()
 {
+    discardCache(true);
+}
+
+void ThemePrivate::discardCache(bool recreateElementsCache)
+{
     delete pixmapCache;
     pixmapCache = 0;
+    invalidElements.clear();
     KPixmapCache::deleteCache("plasma_theme_" + themeName);
-
 
     svgElementsCache = 0;
 
@@ -192,6 +198,10 @@ void ThemePrivate::discardCache()
     if (!svgElementsFile.isEmpty()) {
         QFile f(svgElementsFile);
         f.remove();
+    }
+
+    if (recreateElementsCache) {
+        svgElementsCache = KSharedConfig::openConfig(svgElementsFile);
     }
 }
 
@@ -290,7 +300,7 @@ void Theme::setThemeName(const QString &themeName)
 
     //discard the old theme cache
     if (!d->themeName.isEmpty() && d->pixmapCache) {
-        d->discardCache();
+        d->discardCache(false);
     }
 
     d->themeName = theme;
@@ -353,7 +363,7 @@ void Theme::setThemeName(const QString &themeName)
     QFileInfo info(f);
 
     if (d->useCache() && info.lastModified().toTime_t() > d->pixmapCache->timestamp()) {
-        d->discardCache();
+        d->discardCache(false);
     }
 
     d->invalidElements.clear();
