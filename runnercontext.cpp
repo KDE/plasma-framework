@@ -242,12 +242,12 @@ QList<QueryMatch> RunnerContext::matches() const
 QueryMatch RunnerContext::match(const QString &id) const
 {
     LOCK_FOR_READ(this)
-    if (d->matchesById.contains(id)) {
-        const QueryMatch *match = d->matchesById.value(id);
-        UNLOCK(this)
+    const QueryMatch *match = d->matchesById.value(id, 0);
+    UNLOCK(this)
+
+    if (match) {
         return *match;
     }
-    UNLOCK(this)
 
     return QueryMatch(0);
 }
