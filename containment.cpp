@@ -1557,7 +1557,7 @@ void ContainmentPrivate::containmentConstraintsEvent(Plasma::Constraints constra
         return;
     }
 
-    kDebug() << "got containmentConstraintsEvent" << constraints << (QObject*)toolBox;
+    //kDebug() << "got containmentConstraintsEvent" << constraints << (QObject*)toolBox;
     if (constraints & Plasma::ImmutableConstraint) {
         //update actions
         bool unlocked = q->immutability() == Mutable;
