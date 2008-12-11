@@ -346,11 +346,7 @@ AbstractRunner *RunnerManager::runner(const QString &name) const
         d->loadRunners();
     }
 
-    if (d->runners.contains(name)) {
-        return d->runners.value(name);
-    }
-
-    return 0;
+    return d->runners.value(name, 0);
 }
 
 RunnerContext *RunnerManager::searchContext() const
