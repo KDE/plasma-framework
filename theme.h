@@ -224,8 +224,19 @@ class PLASMA_EXPORT Theme : public QObject
 
         /**
          * Discards all the information about a given image from the rectangle disk cache
+         *
+         * @arg image the path to the image the cache is assoiated with
          **/
-        void invalidateRectsCache(const QString& image);
+        void invalidateRectsCache(const QString &image);
+
+        /**
+         * Frees up memory used by cached information for a given image without removing
+         * the permenant record of it on disk.
+         * @see invalidateRectsCache
+         *
+         * @arg image the path to the image the cache is assoiated with
+         */
+        void releaseRectsCache(const QString &image);
 
     Q_SIGNALS:
         /**

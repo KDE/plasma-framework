@@ -611,6 +611,16 @@ void Theme::invalidateRectsCache(const QString& image)
 {
     KConfigGroup imageGroup(d->svgElementsCache, image);
     imageGroup.deleteGroup();
+
+    releaseRectsCache(image);
+}
+
+void Theme::releaseRectsCache(const QString &image)
+{
+    QHash<QString, QSet<QString> >::iterator it = d->invalidElements.find(image);
+    if (it != d->invalidElements.end()) {
+        d->invalidElements.erase(it);
+    }
 }
 
 void Theme::setCacheLimit(int kbytes)

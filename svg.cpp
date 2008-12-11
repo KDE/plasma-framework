@@ -257,6 +257,7 @@ class SvgPrivate
             if (renderer && renderer.count() == 2) {
                 // this and the cache reference it; and boy is this not thread safe ;)
                 s_renderers.erase(s_renderers.find(path));
+                Plasma::Theme::defaultTheme()->releaseRectsCache(path);
             }
 
             renderer = 0;
