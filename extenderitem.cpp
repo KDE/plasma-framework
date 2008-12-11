@@ -305,18 +305,14 @@ void ExtenderItem::addAction(const QString &name, QAction *action)
 {
     Q_ASSERT(action);
 
-    d->actions[name] = action;
+    d->actions.insert(name, action);
     connect(action, SIGNAL(changed()), this, SLOT(updateToolBox()));
     d->updateToolBox();
 }
 
 QAction *ExtenderItem::action(const QString &name) const
 {
-    if (d->actions.contains(name)) {
-        return d->actions[name];
-    } else {
-        return 0;
-    }
+    return d->actions.value(name, 0);
 }
 
 void ExtenderItem::showCloseButton()
