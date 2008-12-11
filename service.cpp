@@ -223,7 +223,7 @@ void Service::setOperationEnabled(const QString &operation, bool enable)
 
     if (enable) {
         d->disabledOperations.remove(operation);
-    } else if (!d->disabledOperations.contains(operation)) {
+    } else {
         d->disabledOperations.insert(operation);
     }
 
