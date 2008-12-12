@@ -183,18 +183,23 @@ void Applet::save(KConfigGroup &g) const
         group = *d->mainConfigGroup();
     }
 
-    kDebug() << "saving to" << group.name();
+    //kDebug() << "saving to" << group.name();
     // we call the dptr member directly for locked since isImmutable()
     // also checks kiosk and parent containers
     group.writeEntry("immutability", (int)d->immutability);
     group.writeEntry("plugin", pluginName());
+
+    group.writeEntry("geometry", geometry());
+    group.writeEntry("zvalue", zValue());
+
+    if (!d->started) {
+        return;
+    }
+
     //FIXME: for containments, we need to have some special values here w/regards to
     //       screen affinity (e.g. "bottom of screen 0")
     //kDebug() << pluginName() << "geometry is" << geometry()
     //         << "pos is" << pos() << "bounding rect is" << boundingRect();
-    group.writeEntry("geometry", geometry());
-    group.writeEntry("zvalue", zValue());
-
     if (transform() == QTransform()) {
         group.deleteEntry("transform");
     } else {

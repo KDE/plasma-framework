@@ -748,15 +748,24 @@ void Containment::addApplet(Applet *applet, const QPointF &pos, bool delayInit)
 
     applet->updateConstraints(Plasma::AllConstraints);
 
-    if (!currentContainment) {
-        applet->updateConstraints(Plasma::StartupCompletedConstraint);
-    }
-
     if (!delayInit) {
         applet->flushPendingConstraintsEvents();
     }
 
     emit appletAdded(applet, pos);
+
+    if (!delayInit) {
+        KConfigGroup cg;
+        applet->save(cg);
+        emit configNeedsSaving();
+    }
+
+    if (!currentContainment) {
+        applet->updateConstraints(Plasma::StartupCompletedConstraint);
+        if (!delayInit) {
+            applet->flushPendingConstraintsEvents();
+        }
+    }
 }
 
 Applet::List Containment::applets() const
@@ -1761,8 +1770,6 @@ void ContainmentPrivate::positionContainments()
 
     qSort(containments.begin(), containments.end(), containmentSortByPosition);
     it.toFront();
-
-    int toolBoxMargin = 0;
 
     int column = 0;
     int x = 0;
