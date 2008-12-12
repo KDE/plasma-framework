@@ -370,6 +370,7 @@ Containment *Corona::addContainmentDelayed(const QString &name, const QVariantLi
 void Corona::addOffscreenWidget(QGraphicsWidget *widget)
 {
     if (d->offscreenWidgets.values().contains(widget)) {
+        kDebug() << "widget is already an offscreen widget!";
         return;
     }
 
