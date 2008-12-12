@@ -494,11 +494,11 @@ QPoint Corona::popupPosition(const QGraphicsItem *item, const QSize &s)
         screenGeometry((pv && pv->containment()) ? pv->containment()->screen() : -1);
     //kDebug() << "==> rect for" << (pv ? pv->containment()->screen() : -1) << "is" << screenRect;
 
-    if (pos.rx() + s.width() > screenRect.right()) {
+    if (loc != LeftEdge && pos.rx() + s.width() > screenRect.right()) {
         pos.rx() -= ((pos.rx() + s.width()) - screenRect.right());
     }
 
-    if (pos.ry() + s.height() > screenRect.bottom()) {
+    if (loc != TopEdge && pos.ry() + s.height() > screenRect.bottom()) {
         pos.ry() -= ((pos.ry() + s.height()) - screenRect.bottom());
     }
 
