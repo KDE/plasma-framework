@@ -29,6 +29,8 @@
 #include <QPainter>
 #include <QTimer>
 
+#include <cmath>
+
 #include <kdebug.h>
 #include <kglobal.h>
 #include <klocale.h>
@@ -439,7 +441,23 @@ QPoint Corona::popupPosition(const QGraphicsItem *item, const QSize &s)
         return QPoint(0, 0);
     }
 
-    QPoint pos = v->mapFromScene(item->scenePos());
+    QPoint pos;
+    QTransform sceneTransform = item->sceneTransform();
+
+    //if the applet is rotated the popup position has to be un-transformed
+    if (sceneTransform.isRotating()) {
+        qreal angle = acos(sceneTransform.m11());
+        QTransform newTransform;
+        QPointF center = item->sceneBoundingRect().center();
+
+        newTransform.translate(center.x(), center.y());
+        newTransform.rotateRadians(-angle);
+        newTransform.translate(-center.x(), -center.y());
+        pos = v->mapFromScene(newTransform.inverted().map(item->scenePos()));
+    } else {
+        pos = v->mapFromScene(item->scenePos());
+    }
+
     pos = v->mapToGlobal(pos);
     //kDebug() << "==> position is" << item->scenePos() << v->mapFromScene(item->scenePos()) << pos;
     Plasma::View *pv = dynamic_cast<Plasma::View *>(v);
