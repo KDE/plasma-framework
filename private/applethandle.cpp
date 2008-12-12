@@ -674,13 +674,18 @@ void AppletHandle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
             if (ignoreAspectRatio) {
                 // free resizing
-                qreal newScaleWidth = 0;
-                qreal newScaleHeight = 0;
+                qreal newScaleWidth = 1.0;
+                qreal newScaleHeight = 1.0;
+  
+                qreal x = deltaScene.x() / m_applet->size().width();
+                qreal y = -deltaScene.y() / m_applet->size().height();
 
-                QPointF startDistance(resizePoint - m_resizeAnchor);
-                QPointF currentDistance((event->pos() - m_resizeOffset) - m_resizeAnchor);
-                newScaleWidth = currentDistance.x() / startDistance.x();
-                newScaleHeight = currentDistance.y() / startDistance.y();
+                if (!m_buttonsOnRight) {
+                    x *= -1.0;
+                }
+
+                newScaleWidth += x;
+                newScaleHeight += y;
 
                 if (qAbs(event->pos().x() - pressPos.x()) <= KGlobalSettings::dndEventDelay()) {
                     newScaleWidth = m_originalSize.width() / originalRect.width();
@@ -705,11 +710,16 @@ void AppletHandle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
                 }
             } else {
                 // maintain aspect ratio
-                qreal newScale = 0;
+                qreal newScale = 1.0;
+  
+                qreal x = deltaScene.x() / m_applet->size().width();
+                qreal y = -deltaScene.y() / m_applet->size().height();
 
-                newScale =
-                    _k_distanceForPoint((event->pos() - m_resizeOffset) - m_resizeAnchor) /
-                    _k_distanceForPoint(resizePoint - m_resizeAnchor);
+                if (!m_buttonsOnRight) {
+                    x *= -1.0;
+                }
+
+                newScale += (x + y) / 2; //divide by two to have slower resizing
 
                 if (qAbs(event->pos().y() - pressPos.y()) <= KGlobalSettings::dndEventDelay()) {
                     newScale = m_originalSize.height() / originalRect.height();
