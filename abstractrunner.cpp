@@ -258,7 +258,7 @@ KService::List AbstractRunner::serviceQuery(const QString &serviceType, const QS
     return KServiceTypeTrader::self()->query(serviceType, constraint);
 }
 
-QMutex* AbstractRunner::bigLock() const
+QMutex* AbstractRunner::bigLock()
 {
     return s_bigLock;
 }

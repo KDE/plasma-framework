@@ -219,6 +219,20 @@ class PLASMA_EXPORT AbstractRunner : public QObject
          */
         virtual void reloadConfiguration();
 
+        /**
+         * Access to a shared lock that all runners (and code that manages/interacts with them)
+         * can share to protect access to non-thread-safe shared code or data.
+         * Access of KSycoca records, for instance, is one place this lock should be used.
+         *
+         * Common usage:
+         *
+         * {
+         *     QMutexLocker lock(bigLock());
+         *     .. do something that isn't thread safe ..
+         * }
+         */
+        static QMutex *bigLock();
+
     protected:
         friend class RunnerManager;
         friend class RunnerManagerPrivate;
@@ -268,8 +282,6 @@ class PLASMA_EXPORT AbstractRunner : public QObject
          */
         KService::List serviceQuery(const QString &serviceType,
                                     const QString &constraint = QString()) const;
-
-        QMutex *bigLock() const;
 
         /**
          * A given match can have more than action that can be performed on it.
