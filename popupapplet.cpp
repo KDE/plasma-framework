@@ -143,6 +143,7 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
     }
 
     if (constraints & Plasma::FormFactorConstraint ||
+        constraints & Plasma::StartupCompletedConstraint ||
         (constraints & Plasma::SizeConstraint &&
          (f == Plasma::Vertical || f == Plasma::Horizontal))) {
         QGraphicsLinearLayout *lay = dynamic_cast<QGraphicsLinearLayout *>(q->layout());
