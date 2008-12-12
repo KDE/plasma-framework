@@ -524,76 +524,57 @@ void PopupAppletPrivate::updateDialogPosition()
 
     QSize s = dialog->size();
     QPoint pos = view->mapFromScene(q->scenePos());
-    pos = view->mapToGlobal(pos);
+    //try to access a corona
+    if (q->containment() && q->containment()->corona()) {
+        pos = q->containment()->corona()->popupPosition(q, s);
+    } else {
+        Corona *corona = qobject_cast<Corona *>(q->scene());
+        if (corona) {
+            pos = corona->popupPosition(q, s);
+        }
+    }
 
     switch (q->location()) {
     case BottomEdge:
-        pos = QPoint(pos.x(), pos.y() - s.height());
-        popupPlacement = Plasma::TopPosedLeftAlignedPopup;
-        dialog->setResizeHandleCorners(Dialog::NorthEast);
-
-        break;
-    case TopEdge:
-        pos = QPoint(pos.x(), pos.y() + (int)q->boundingRect().size().height());
-        popupPlacement = Plasma::BottomPosedLeftAlignedPopup;
-        dialog->setResizeHandleCorners(Dialog::SouthEast);
-
-        break;
-    case LeftEdge:
-        pos = QPoint(pos.x() + (int)q->boundingRect().size().width(), pos.y());
-        popupPlacement = Plasma::RightPosedTopAlignedPopup;
-        dialog->setResizeHandleCorners(Dialog::SouthEast);
-
-        break;
-
-    case RightEdge:
-        pos = QPoint(pos.x() - s.width(), pos.y());
-        popupPlacement = Plasma::LeftPosedTopAlignedPopup;
-        dialog->setResizeHandleCorners(Dialog::SouthWest);
-
-        break;
-    default:
-        if (pos.y() - s.height() > 0) {
-            pos = QPoint(pos.x(), pos.y() - s.height());
+        if (pos.x() >= q->pos().x()) {
+            popupPlacement = Plasma::TopPosedLeftAlignedPopup;
+            dialog->setResizeHandleCorners(Dialog::NorthEast);
         } else {
-            pos = QPoint(pos.x(), pos.y() + (int)q->boundingRect().size().height());
-        }
-
-        dialog->setResizeHandleCorners(Dialog::NorthEast);
-    }
-    //are we out of screen?
-
-    QRect screenRect =
-        q->containment()->corona()->screenGeometry(q->containment() ? q->containment()->screen() : -1);
-    //kDebug() << "==> rect for"
-    //         << (containment() ? containment()->screen() : -1)
-    //         << "is" << screenRect;
-
-    if (pos.rx() + s.width() > screenRect.right()) {
-        pos.rx() += (int)q->boundingRect().size().width() - s.width();
-
-        if (q->location() == BottomEdge) {
             popupPlacement = Plasma::TopPosedRightAlignedPopup;
             dialog->setResizeHandleCorners(Dialog::NorthWest);
-        } else if (q->location() == TopEdge) {
+        }
+        break;
+    case TopEdge:
+        if (pos.x() >= q->pos().x()) {
+            popupPlacement = Plasma::BottomPosedLeftAlignedPopup;
+            dialog->setResizeHandleCorners(Dialog::SouthEast);
+        } else {
             popupPlacement = Plasma::BottomPosedRightAlignedPopup;
             dialog->setResizeHandleCorners(Dialog::SouthWest);
         }
-    }
-
-    if (pos.ry() + s.height() > screenRect.bottom()) {
-        pos.ry() += (int)q->boundingRect().size().height() - s.height();
-
-        if (q->location() == LeftEdge) {
+        break;
+    case LeftEdge:
+        if (pos.y() >= q->pos().y()) {
+            popupPlacement = Plasma::RightPosedTopAlignedPopup;
+            dialog->setResizeHandleCorners(Dialog::SouthEast);
+        } else {
             popupPlacement = Plasma::RightPosedBottomAlignedPopup;
             dialog->setResizeHandleCorners(Dialog::NorthEast);
-        } else if (q->location() == RightEdge) {
+        }
+        break;
+
+    case RightEdge:
+        if (pos.y() >= q->pos().y()) {
+            popupPlacement = Plasma::LeftPosedTopAlignedPopup;
+            dialog->setResizeHandleCorners(Dialog::SouthWest);
+        } else {
             popupPlacement = Plasma::LeftPosedBottomAlignedPopup;
             dialog->setResizeHandleCorners(Dialog::NorthWest);
         }
+        break;
+    default:
+        dialog->setResizeHandleCorners(Dialog::NorthEast);
     }
-
-    pos.rx() = qMax(0, pos.rx());
 
     dialog->move(pos);
 }
