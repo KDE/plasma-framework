@@ -266,6 +266,7 @@ void ToolTip::resizeEvent(QResizeEvent *e)
     QWidget::resizeEvent(e);
     d->background->resizeFrame(size());
     setMask(d->background->mask());
+    d->preview->setInfo();
 }
 
 void ToolTip::paintEvent(QPaintEvent *e)
