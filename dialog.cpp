@@ -328,15 +328,7 @@ void Dialog::resizeEvent(QResizeEvent *e)
     setMask(d->background->mask());
 
     if (d->resizeStartCorner != Dialog::NoCorner && d->view && d->widget) {
-        d->widget->setPreferredSize(d->view->size());
-
-        QGraphicsLayoutItem *layout = d->widget->parentLayoutItem();
-        QGraphicsWidget *parentWidget = d->widget->parentWidget();
-
-        if (layout && parentWidget) {
-            layout->updateGeometry();
-            parentWidget->resize(layout->preferredSize());
-        }
+        d->widget->resize(d->view->size());
 
         d->view->setSceneRect(d->widget->mapToScene(d->widget->boundingRect()).boundingRect());
         d->view->centerOn(d->widget);
