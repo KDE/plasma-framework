@@ -676,10 +676,11 @@ void AppletHandle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
                 newScaleHeight += y;
 
                 if (qAbs(event->pos().x() - pressPos.x()) <= KGlobalSettings::dndEventDelay()) {
-                    newScaleWidth = m_originalSize.width() / originalRect.width();
+                    newScaleWidth = 1.0 + m_originalSize.width() / originalRect.width();
                 }
+
                 if (qAbs(event->pos().y() - pressPos.y()) <= KGlobalSettings::dndEventDelay()) {
-                    newScaleHeight = m_originalSize.height() / originalRect.height();
+                    newScaleHeight = 1.0 + m_originalSize.height() / originalRect.height();
                 }
 
                 if (newScaleHeight * h < min.height()) {
@@ -710,7 +711,7 @@ void AppletHandle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
                 newScale += (x + y) / 2; //divide by two to have slower resizing
 
                 if (qAbs(event->pos().y() - pressPos.y()) <= KGlobalSettings::dndEventDelay()) {
-                    newScale = m_originalSize.height() / originalRect.height();
+                    newScale = 1.0 + m_originalSize.height() / originalRect.height();
                 }
 
                 if (newScale * w < min.width() || newScale * h < min.height()) {
