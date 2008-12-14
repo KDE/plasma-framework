@@ -460,18 +460,6 @@ void AppletHandle::mousePressEvent(QGraphicsSceneMouseEvent *event)
             m_pos = pos();
         }
 
-        if (m_pressedButton == ResizeButton) {
-            QRectF rect = QRectF(m_applet->pos(), m_applet->size());
-            m_originalSize = rect.size();
-            if (m_buttonsOnRight) {
-                m_resizeAnchor = rect.bottomLeft();
-                m_resizeOffset = event->pos() - rect.topRight();
-            } else {
-                m_resizeAnchor = rect.bottomRight(); 
-                m_resizeOffset = event->pos() - rect.topLeft();
-            }
-        }
-
         event->accept();
 
         update();

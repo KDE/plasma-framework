@@ -130,8 +130,6 @@ class AppletHandle : public QObject, public QGraphicsItem
         QPointF m_entryPos; //where the hover in event occurred
         QPointF m_pos;      //current position of applet in sceneCoords
         qreal m_zValue;     //current zValue of the applet, so it can be restored after drag.
-        QPointF m_resizeAnchor;
-        QPointF m_resizeOffset;
         QSizeF m_originalSize;
 
         bool m_buttonsOnRight : 1;
