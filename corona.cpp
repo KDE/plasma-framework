@@ -208,12 +208,6 @@ Corona::~Corona()
     //        destroyed we don't try to transfer it to something that's already been
     //        deleted.
     clearFocus();
-
-    KConfigGroup cg(config(), "General");
-
-    // we call the dptr member directly for locked since isImmutable()
-    // also checks kiosk and parent containers
-    cg.writeEntry("immutability", (int)d->immutability);
     delete d;
 }
 
@@ -542,6 +536,13 @@ void Corona::setImmutability(const ImmutabilityType immutable)
     kDebug() << "setting immutability to" << immutable;
     d->immutability = immutable;
     d->updateContainmentImmutability();
+
+    KConfigGroup cg(config(), "General");
+
+    // we call the dptr member directly for locked since isImmutable()
+    // also checks kiosk and parent containers
+    cg.writeEntry("immutability", (int)d->immutability);
+    requestConfigSync();
 }
 
 } // namespace Plasma
