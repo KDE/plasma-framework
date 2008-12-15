@@ -63,6 +63,7 @@ public:
     QString globalName() const;
     QString instanceName();
     void scheduleConstraintsUpdate(Plasma::Constraints c);
+    void scheduleModificationNotification();
     KConfigGroup *mainConfigGroup();
     QString visibleFailureText(const QString &reason);
     void checkImmutability();

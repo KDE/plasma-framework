@@ -263,11 +263,6 @@ void Applet::restore(KConfigGroup &group)
         //TODO: implement; the shortcut
     }
     */
-    // start up is done, we can now go do a mod timer
-    if (d->modificationsTimerId > 0) {
-        killTimer(d->modificationsTimerId);
-    }
-    d->modificationsTimerId = 0;
 }
 
 void AppletPrivate::setFocus()
@@ -970,6 +965,14 @@ void Applet::flushPendingConstraintsEvents()
     if (layout()) {
         layout()->updateGeometry();
     }
+
+    if (c & StartupCompletedConstraint) {
+        // start up is done, we can now go do a mod timer
+        if (d->modificationsTimerId > 0) {
+            killTimer(d->modificationsTimerId);
+        }
+        d->modificationsTimerId = 0;
+    }
 }
 
 int Applet::type() const
@@ -1303,14 +1306,7 @@ void Applet::resizeEvent(QGraphicsSceneResizeEvent *event)
 
     updateConstraints(Plasma::SizeConstraint);
 
-    if (d->modificationsTimerId != -1) {
-        // schedule a save
-        if (d->modificationsTimerId) {
-            killTimer(d->modificationsTimerId);
-        }
-        d->modificationsTimerId = startTimer(1000);
-    }
-
+    d->scheduleModificationNotification();
     emit geometryChanged();
 }
 
@@ -1591,20 +1587,13 @@ QVariant Applet::itemChange(GraphicsItemChange change, const QVariant &value)
             d->checkImmutability();
         }
     }
-    break;
+        break;
     case ItemPositionHasChanged:
         emit geometryChanged();
         // fall through!
     case ItemTransformHasChanged:
-    {
-        if (d->modificationsTimerId != -1) {
-            if (d->modificationsTimerId) {
-                killTimer(d->modificationsTimerId);
-            }
-            d->modificationsTimerId = startTimer(1000);
-        }
-    }
-    break;
+        d->scheduleModificationNotification();
+        break;
     default:
         break;
     };
@@ -1935,6 +1924,19 @@ void AppletPrivate::scheduleConstraintsUpdate(Plasma::Constraints c)
     }
 
     pendingConstraints |= c;
+}
+
+void AppletPrivate::scheduleModificationNotification()
+{
+    // modificationsTimerId is -1 until we get our notice of being started
+    if (modificationsTimerId != -1) {
+        // schedule a save
+        if (modificationsTimerId) {
+            q->killTimer(modificationsTimerId);
+        }
+
+        modificationsTimerId = q->startTimer(1000);
+    }
 }
 
 KConfigGroup *AppletPrivate::mainConfigGroup()
