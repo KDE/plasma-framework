@@ -245,8 +245,7 @@ Qt::LayoutDirection IconWidgetPrivate::iconDirection(const QStyleOptionGraphicsI
 
 void IconWidgetPrivate::setActiveMargins()
 {
-    activeMargins = (orientation == Qt::Horizontal ?
-            horizontalMargin : verticalMargin);
+    activeMargins = (orientation == Qt::Horizontal ? horizontalMargin : verticalMargin);
 }
 
 void IconWidgetPrivate::setVerticalMargin(MarginType type, qreal left, qreal top,

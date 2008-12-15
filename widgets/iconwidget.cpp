@@ -33,13 +33,6 @@
 #include <QStyleOptionGraphicsItem>
 #include <QTextLayout>
 
-//#define BACKINGSTORE_BLUR_HACK
-
-#ifdef BACKINGSTORE_BLUR_HACK
-#include <private/qwindowsurface_p.h>
-#include "effects/blur.cpp"
-#endif
-
 #include <kglobalsettings.h>
 #include <kiconeffect.h>
 #include <kiconloader.h>
@@ -302,22 +295,18 @@ void IconWidget::init()
     // setAcceptedMouseButtons(Qt::LeftButton);
     setAcceptsHoverEvents(true);
 
-    int focusHMargin = QApplication::style()->pixelMetric(QStyle::PM_FocusFrameHMargin);
-    int focusVMargin = QApplication::style()->pixelMetric(QStyle::PM_FocusFrameVMargin);
-
     // Margins for horizontal mode (list views, tree views, table views)
-    d->setHorizontalMargin(IconWidgetPrivate::TextMargin, focusHMargin, focusVMargin);
-    d->setHorizontalMargin(IconWidgetPrivate::IconMargin, focusHMargin, focusVMargin);
+    d->setHorizontalMargin(IconWidgetPrivate::TextMargin, 1, 1);
+    d->setHorizontalMargin(IconWidgetPrivate::IconMargin, 1, 1);
     d->setHorizontalMargin(IconWidgetPrivate::ItemMargin, 0, 0);
 
     // Margins for vertical mode (icon views)
     d->setVerticalMargin(IconWidgetPrivate::TextMargin, 6, 2);
-    d->setVerticalMargin(IconWidgetPrivate::IconMargin, focusHMargin, focusVMargin);
+    d->setVerticalMargin(IconWidgetPrivate::IconMargin, 1, 1);
     d->setVerticalMargin(IconWidgetPrivate::ItemMargin, 0, 0);
 
     d->setActiveMargins();
     d->currentSize = QSizeF(-1, -1);
-    //setDrawStandardBackground(false);
 }
 
 void IconWidget::addIconAction(QAction *action)
@@ -340,7 +329,9 @@ void IconWidget::setAction(QAction *action)
         disconnect(d->action, 0, this, 0);
         disconnect(this, 0, d->action, 0);
     }
+
     d->action = action;
+
     if (action) {
         connect(action, SIGNAL(changed()), this, SLOT(syncToAction()));
         connect(action, SIGNAL(destroyed(QObject*)), this, SLOT(clearAction()));
@@ -375,7 +366,7 @@ int IconWidget::numDisplayLines()
 
 void IconWidget::setNumDisplayLines(int numLines)
 {
-    if(numLines > d->maxDisplayLines) {
+    if (numLines > d->maxDisplayLines) {
         d->numDisplayLines = d->maxDisplayLines;
     } else {
         d->numDisplayLines = numLines;
@@ -386,6 +377,15 @@ void IconWidget::setDrawBackground(bool draw)
 {
     if (d->drawBg != draw) {
         d->drawBg = draw;
+
+        QStyle *style = QApplication::style();
+        int focusHMargin = draw ? style->pixelMetric(QStyle::PM_FocusFrameHMargin) : 1;
+        int focusVMargin = draw ? style->pixelMetric(QStyle::PM_FocusFrameVMargin) : 1;
+        d->setHorizontalMargin(IconWidgetPrivate::TextMargin, focusHMargin, focusVMargin);
+        d->setHorizontalMargin(IconWidgetPrivate::IconMargin, focusHMargin, focusVMargin);
+        d->setVerticalMargin(IconWidgetPrivate::IconMargin, focusHMargin, focusVMargin);
+        d->currentSize = QSizeF(-1, -1);
+
         update();
     }
 }
@@ -451,15 +451,15 @@ void IconWidget::layoutIcons(const QStyleOptionGraphicsItem *option)
     if (d->orientation == Qt::Vertical) {
         qreal heightAvail;
         //if there is text resize the icon in order to make room for the text
-        if (!d->text.isEmpty() || !d->infoText.isEmpty()) {
+        if (d->text.isEmpty() && d->infoText.isEmpty()) {
+            heightAvail = d->currentSize.height();
+        } else {
             heightAvail = d->currentSize.height() -
                           d->displaySizeHint(option, d->currentSize.width()).height() -
                           d->verticalMargin[IconWidgetPrivate::TextMargin].top -
                           d->verticalMargin[IconWidgetPrivate::TextMargin].bottom;
             //never make a label higher than half the total height
             heightAvail = qMax(heightAvail, d->currentSize.height() / 2);
-        } else {
-            heightAvail = d->currentSize.height();
         }
 
         //aspect ratio very "tall"
@@ -479,7 +479,7 @@ void IconWidget::layoutIcons(const QStyleOptionGraphicsItem *option)
         //if there is text resize the icon in order to make room for the text
         if (d->text.isEmpty() && d->infoText.isEmpty()) {
             // with no text, we just take up the whole geometry
-            iconWidth = d->currentSize.width() -
+            iconWidth = d->currentSize.height() -
                         d->horizontalMargin[IconWidgetPrivate::IconMargin].left -
                         d->horizontalMargin[IconWidgetPrivate::IconMargin].right;
         } else {
@@ -894,22 +894,6 @@ void IconWidgetPrivate::drawTextItems(QPainter *painter,
 void IconWidget::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     Q_UNUSED(widget);
-
-#ifdef BACKINGSTORE_BLUR_HACK
-     if (d->state == IconWidgetPrivate::HoverState && scene()) {
-         QList<QGraphicsView*> views = scene()->views();
-         if (views.count() > 0) {
-             QPixmap* pix = static_cast<QPixmap*>(views[0]->windowSurface()->paintDevice());
-             QImage image(boundingRect().size().toSize(), QImage::Format_ARGB32_Premultiplied);
-             {
-                 QPainter p(&image);
-                 p.drawPixmap(image.rect(), *pix, sceneBoundingRect());
-             }
-             expblur<16,7>(image, 8);
-             painter->drawImage(0, 0, image);
-         }
-     }
-#endif
 
     //Lay out the main icon and action icons
     layoutIcons(option);
