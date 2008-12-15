@@ -750,17 +750,15 @@ void Containment::addApplet(Applet *applet, const QPointF &pos, bool delayInit)
 
     emit appletAdded(applet, pos);
 
-    if (!delayInit) {
-        KConfigGroup cg;
-        applet->save(cg);
-        emit configNeedsSaving();
-    }
-
     if (!currentContainment) {
         applet->updateConstraints(Plasma::StartupCompletedConstraint);
         if (!delayInit) {
             applet->flushPendingConstraintsEvents();
         }
+    }
+
+    if (!delayInit) {
+        applet->d->scheduleModificationNotification();
     }
 }
 
