@@ -200,10 +200,10 @@ class PLASMA_EXPORT FrameSvg : public Svg
         QString prefix();
 
         /**
-         * Returns a monochrome mask that tightly contains the fully opaque areas of the svg
-         * @return a monochrome bitmap of opaque areas
+         * Returns a mask that tightly contains the fully opaque areas of the svg
+         * @return a region of opaque areas
          */
-        QBitmap mask() const;
+        QRegion mask() const;
 
        /**
         * Sets whether saving all the rendered prefixes in a cache or not

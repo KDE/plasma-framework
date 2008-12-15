@@ -23,6 +23,7 @@
 #include <QPainter>
 #include <QSize>
 #include <QBitmap>
+#include <QRegion>
 #include <QTimer>
 
 #include <kdebug.h>
@@ -53,7 +54,7 @@ public:
 
     FrameSvg::EnabledBorders enabledBorders;
     QPixmap cachedBackground;
-    QBitmap cachedMask;
+    QRegion cachedMask;
     QSizeF frameSize;
 
     //measures
@@ -337,11 +338,11 @@ QRectF FrameSvg::contentsRect() const
     }
 }
 
-QBitmap FrameSvg::mask() const
+QRegion FrameSvg::mask() const
 {
     FrameData *frame = d->frames[d->prefix];
 
-    if (!frame->cachedMask) {
+    if (frame->cachedMask.isEmpty()) {
         // ivan: we are testing whether we have the mask prefixed
         // elements to use for creating the mask.
         if (hasElement("mask-" + d->prefix + "center")) {
@@ -360,7 +361,7 @@ QBitmap FrameSvg::mask() const
             if (maskFrame->cachedBackground.isNull()) {
                 d->generateBackground(maskFrame);
                 if (maskFrame->cachedBackground.isNull()) {
-                    return QBitmap();
+                    return QRegion();
                 }
             }
 
@@ -370,10 +371,10 @@ QBitmap FrameSvg::mask() const
             if (frame->cachedBackground.isNull()) {
                 d->generateBackground(frame);
                 if (frame->cachedBackground.isNull()) {
-                    return QBitmap();
+                    return QRegion();
                 }
             }
-            frame->cachedMask = QBitmap(frame->cachedBackground.alphaChannel().createMaskFromColor(Qt::black));
+            frame->cachedMask = QRegion(QBitmap(frame->cachedBackground.alphaChannel().createMaskFromColor(Qt::black)));
         }
     }
     return frame->cachedMask;
@@ -656,7 +657,7 @@ void FrameSvgPrivate::updateSizes()
     Q_ASSERT(frame);
 
     frame->cachedBackground = QPixmap();
-    frame->cachedMask = QPixmap();
+    frame->cachedMask = QRegion();
 
     if (frame->enabledBorders & FrameSvg::TopBorder) {
         frame->topHeight = q->elementSize(prefix + "top").height();
