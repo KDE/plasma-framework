@@ -82,6 +82,7 @@ public:
     void containmentActions(KMenu &desktopMenu);
     void appletActions(KMenu &desktopMenu, Applet *applet, bool includeApplet);
     bool showContextMenu(const QPointF &point, const QPoint &screenPos, bool includeApplet);
+    void checkRemoveAction();
 
     /**
      * Locks or unlocks plasma's applets.

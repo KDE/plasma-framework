@@ -395,10 +395,7 @@ void Containment::setContainmentType(Containment::Type type)
         d->createToolBox();
     }
 
-    enableAction("remove", (immutability() == Mutable &&
-                            (screen() == -1 ||
-                             containmentType() == Plasma::Containment::PanelContainment ||
-                             containmentType() == Plasma::Containment::CustomPanelContainment)));
+    d->checkRemoveAction();
 }
 
 Corona *Containment::corona() const
@@ -556,7 +553,6 @@ void ContainmentPrivate::appletActions(KMenu &desktopMenu, Applet *applet, bool 
 
         QAction *closeApplet = applet->d->actions.action("remove");
         if (!closeApplet) { //unlikely but not impossible
-            kDebug() << "no remove action!!!!!!!!";
             closeApplet = new QAction(i18nc("%1 is the name of the applet", "Remove this %1", applet->name()), &desktopMenu);
             closeApplet->setIcon(KIcon("edit-delete"));
             QObject::connect(closeApplet, SIGNAL(triggered(bool)), applet, SLOT(destroy()));
@@ -847,11 +843,7 @@ void Containment::setScreen(int screen, int desktop)
         swapScreensWith->setScreen(oldScreen);
     }
 
-    if (immutability() == Mutable) {
-        enableAction("remove", screen == -1 ||
-                               containmentType() == Plasma::Containment::PanelContainment ||
-                               containmentType() == Plasma::Containment::CustomPanelContainment);
-    }
+    d->checkRemoveAction();
 }
 
 int Containment::screen() const
@@ -1560,6 +1552,14 @@ void ContainmentPrivate::handleDisappeared(AppletHandle *handle)
     }
 }
 
+void ContainmentPrivate::checkRemoveAction()
+{
+    q->enableAction("remove", (q->immutability() == Mutable &&
+                              (screen == -1 ||
+                              type == Plasma::Containment::PanelContainment ||
+                              type == Plasma::Containment::CustomPanelContainment)));
+}
+
 void ContainmentPrivate::containmentConstraintsEvent(Plasma::Constraints constraints)
 {
     if (!q->isContainment()) {
@@ -1569,21 +1569,17 @@ void ContainmentPrivate::containmentConstraintsEvent(Plasma::Constraints constra
     //kDebug() << "got containmentConstraintsEvent" << constraints << (QObject*)toolBox;
     if (constraints & Plasma::ImmutableConstraint) {
         //update actions
+        checkRemoveAction();
         bool unlocked = q->immutability() == Mutable;
         q->setAcceptDrops(unlocked);
-
-        QAction *action = actions().action("add widgets");
-        if (action) {
-            action->setVisible(unlocked);
-            action->setEnabled(unlocked);
-        }
+        q->enableAction("add widgets", unlocked);
         //FIXME immutability changes conflict with zoom changes
         /*action = actions().action("add sibling containment");
         if (action) {
             action->setVisible(unlocked);
             action->setEnabled(unlocked);
         }*/
-        action = actions().action("lock widgets");
+        QAction *action = actions().action("lock widgets");
         if (action) {
             action->setText(unlocked ? i18n("Lock Widgets") : i18n("Unlock Widgets"));
             action->setIcon(KIcon(unlocked ? "object-locked" : "object-unlocked"));
@@ -1640,10 +1636,7 @@ void ContainmentPrivate::containmentConstraintsEvent(Plasma::Constraints constra
 
     if (toolBox && constraints & Plasma::StartupCompletedConstraint) {
         toolBox->addTool(q->action("remove"));
-        q->enableAction("remove", (q->immutability() == Mutable &&
-                                   (screen == -1 ||
-                                    q->containmentType() == Plasma::Containment::PanelContainment ||
-                                    q->containmentType() == Plasma::Containment::CustomPanelContainment)));
+        checkRemoveAction();
     }
 }
 
