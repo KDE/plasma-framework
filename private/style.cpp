@@ -42,7 +42,26 @@ public:
     }
 
     Plasma::FrameSvg *scrollbar;
+    static Plasma::Style::Ptr s_sharedStyle;
 };
+
+Style::Ptr StylePrivate::s_sharedStyle(0);
+
+Style::Ptr Style::sharedStyle()
+{
+    if (!StylePrivate::s_sharedStyle) {
+        StylePrivate::s_sharedStyle = new Style();
+    }
+
+    return StylePrivate::s_sharedStyle;
+}
+
+void Style::doneWithSharedStyle()
+{
+    if (StylePrivate::s_sharedStyle.isUnique()) {
+        StylePrivate::s_sharedStyle = 0;
+    }
+}
 
 Style::Style()
      : QCommonStyle(),

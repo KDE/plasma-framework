@@ -28,7 +28,7 @@ namespace Plasma
 class ScrollBarPrivate
 {
 public:
-    Plasma::Style *style;
+    Plasma::Style::Ptr style;
 };
 
 ScrollBar::ScrollBar(QGraphicsWidget *parent)
@@ -38,8 +38,8 @@ ScrollBar::ScrollBar(QGraphicsWidget *parent)
    QScrollBar *scrollbar = new QScrollBar();
    scrollbar->setAttribute(Qt::WA_NoSystemBackground);
    setWidget(scrollbar);
-   d->style = new Plasma::Style();
-   scrollbar->setStyle(d->style);
+   d->style = Plasma::Style::sharedStyle();
+   scrollbar->setStyle(d->style.data());
 
    scrollbar->resize(scrollbar->sizeHint());
    connect(scrollbar, SIGNAL(valueChanged(int)), this, SIGNAL(valueChanged(int)));
@@ -48,8 +48,8 @@ ScrollBar::ScrollBar(QGraphicsWidget *parent)
 ScrollBar::~ScrollBar()
 {
     widget()->setStyle(0);
-    delete d->style;
     delete d;
+    Plasma::Style::doneWithSharedStyle();
 }
 
 void ScrollBar::setRange(int min, int max)

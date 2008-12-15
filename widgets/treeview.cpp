@@ -33,7 +33,7 @@ namespace Plasma
 class TreeViewPrivate
 {
 public:
-    Plasma::Style *style;
+    Plasma::Style::Ptr style;
 };
 
 TreeView::TreeView(QGraphicsWidget *parent)
@@ -45,15 +45,15 @@ TreeView::TreeView(QGraphicsWidget *parent)
     native->setAttribute(Qt::WA_NoSystemBackground);
     native->setFrameStyle(QFrame::NoFrame);
 
-    d->style = new Plasma::Style();
-    native->verticalScrollBar()->setStyle(d->style);
-    native->horizontalScrollBar()->setStyle(d->style);
+    d->style = Plasma::Style::sharedStyle();
+    native->verticalScrollBar()->setStyle(d->style.data());
+    native->horizontalScrollBar()->setStyle(d->style.data());
 }
 
 TreeView::~TreeView()
 {
-    delete d->style;
     delete d;
+    Plasma::Style::doneWithSharedStyle();
 }
 
 void TreeView::setModel(QAbstractItemModel *model)

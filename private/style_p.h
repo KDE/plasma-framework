@@ -21,18 +21,26 @@
 #ifndef PLASMA_STYLE_H
 #define PLASMA_STYLE_H
 
+#include <QtCore/QSharedData>
 #include <QtGui/QCommonStyle>
+
+#include <ksharedptr.h>
 
 namespace Plasma
 {
 
 class StylePrivate;
 
-class Style : public QCommonStyle
+class Style : public QCommonStyle, public QSharedData
 {
     Q_OBJECT
 
 public:
+    typedef KSharedPtr<Style> Ptr;
+
+    static Style::Ptr sharedStyle();
+    static void doneWithSharedStyle();
+
     explicit Style();
     ~Style();
 
@@ -43,6 +51,7 @@ protected:
                             const QWidget *widget) const;
 
     int pixelMetric(PixelMetric metric, const QStyleOption *option = 0, const QWidget *widget = 0) const;
+
 private:
     StylePrivate *d;
 };

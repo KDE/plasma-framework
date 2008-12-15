@@ -35,7 +35,7 @@ namespace Plasma
 class TextEditPrivate
 {
 public:
-    Plasma::Style *style;
+    Plasma::Style::Ptr style;
 };
 
 TextEdit::TextEdit(QGraphicsWidget *parent)
@@ -46,17 +46,17 @@ TextEdit::TextEdit(QGraphicsWidget *parent)
     connect(native, SIGNAL(textChanged()), this, SIGNAL(textChanged()));
     setWidget(native);
     native->setAttribute(Qt::WA_NoSystemBackground);
-    d->style = new Plasma::Style();
-    native->verticalScrollBar()->setStyle(d->style);
-    native->horizontalScrollBar()->setStyle(d->style);
+    d->style = Plasma::Style::sharedStyle();
+    native->verticalScrollBar()->setStyle(d->style.data());
+    native->horizontalScrollBar()->setStyle(d->style.data());
 }
 
 TextEdit::~TextEdit()
 {
     nativeWidget()->verticalScrollBar()->setStyle(0);
     nativeWidget()->horizontalScrollBar()->setStyle(0);
-    delete d->style;
     delete d;
+    Plasma::Style::doneWithSharedStyle();
 }
 
 void TextEdit::setText(const QString &text)
