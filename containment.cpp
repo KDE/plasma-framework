@@ -780,7 +780,7 @@ void Containment::setScreen(int screen, int desktop)
     //
     // a screen of -1 means no associated screen.
     Containment *swapScreensWith(0);
-    if (d->type == DesktopContainment || d->type == CustomContainment) {
+    if (d->type == DesktopContainment || d->type >= CustomContainment) {
         // we want to listen to changes in work area if our screen changes
         if (d->screen < 0 && screen > -1) {
             connect(KWindowSystem::self(), SIGNAL(workAreaChanged()),
@@ -794,16 +794,16 @@ void Containment::setScreen(int screen, int desktop)
             // sanity check to make sure someone else doesn't have this screen already!
             Containment *currently = corona()->containmentForScreen(screen, desktop);
             if (currently && currently != this) {
-                //kDebug() << "currently is on screen" << currently->screen()
-                //         << "and is" << currently->name()
-                //         << (QObject*)currently << (QObject*)this;
+                kDebug() << "currently is on screen" << currently->screen()
+                         << "and is" << currently->name()
+                         << (QObject*)currently << (QObject*)this;
                 currently->setScreen(-1);
                 swapScreensWith = currently;
             }
         }
     }
 
-    //kDebug() << "setting screen to" << screen << "and we are a" << containmentType();
+    kDebug() << "setting screen to" << screen << "and we are a" << containmentType();
     Q_ASSERT(corona());
     int numScreens = corona()->numScreens();
     if (screen < -1) {
@@ -811,7 +811,7 @@ void Containment::setScreen(int screen, int desktop)
     }
 
 
-    //kDebug() << "setting screen to " << screen << "and type is" << containmentType();
+    kDebug() << "setting screen to " << screen << "and type is" << containmentType();
     if (screen < numScreens && screen > -1) {
         if (containmentType() == DesktopContainment ||
             containmentType() >= CustomContainment) {
