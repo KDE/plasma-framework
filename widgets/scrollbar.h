@@ -49,7 +49,11 @@ class PLASMA_EXPORT ScrollBar : public QGraphicsProxyWidget
     Q_PROPERTY(QScrollBar *nativeWidget READ nativeWidget)
 
 public:
-    explicit ScrollBar(Qt::Orientation orientation, QGraphicsWidget *parent);
+    /**
+     * Creates a scrollbar; the default orientation is vertical
+     */
+    explicit ScrollBar(QGraphicsWidget *parent);
+
     ~ScrollBar();
 
     /**
@@ -83,12 +87,6 @@ public:
     int pageStep();
 
     /**
-     * Sets the current value for the ScrollBar
-     * @arg value must be minimum() <= value <= maximum()
-     */
-    void setValue(int val);
-
-    /**
      * @return the current scrollbar value
      */
     int value() const;
@@ -119,6 +117,24 @@ public:
      * @return the native widget wrapped by this ScrollBar
      */
     QScrollBar *nativeWidget() const;
+
+public Q_SLOTS:
+    /**
+     * Sets the current value for the ScrollBar
+     * @arg value must be minimum() <= value <= maximum()
+     */
+    void setValue(int val);
+
+    /**
+     * Sets the orientation of the ScrollBar.
+     */
+    void setOrientation(Qt::Orientation orientation);
+
+Q_SIGNALS:
+    /**
+     * Emitted when the value of the slider changes
+     */
+    void valueChanged(int value);
 
 private:
     ScrollBarPrivate * const d;

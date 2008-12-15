@@ -31,17 +31,18 @@ public:
     Plasma::Style *style;
 };
 
-ScrollBar::ScrollBar(Qt::Orientation orientation, QGraphicsWidget *parent)
-   : QGraphicsProxyWidget(parent),
-     d(new ScrollBarPrivate)
+ScrollBar::ScrollBar(QGraphicsWidget *parent)
+    : QGraphicsProxyWidget(parent),
+      d(new ScrollBarPrivate)
 {
-   QScrollBar *scrollbar = new QScrollBar(orientation);
+   QScrollBar *scrollbar = new QScrollBar();
    scrollbar->setAttribute(Qt::WA_NoSystemBackground);
    setWidget(scrollbar);
    d->style = new Plasma::Style();
    scrollbar->setStyle(d->style);
 
    scrollbar->resize(scrollbar->sizeHint());
+   connect(scrollbar, SIGNAL(valueChanged(int)), this, SIGNAL(valueChanged(int)));
 }
 
 ScrollBar::~ScrollBar()
@@ -109,6 +110,11 @@ QString ScrollBar::styleSheet()
 QScrollBar *ScrollBar::nativeWidget() const
 {
    return static_cast<QScrollBar*>(widget());
+}
+
+void ScrollBar::setOrientation(Qt::Orientation orientation)
+{
+   static_cast<QScrollBar*>(widget())->setOrientation(orientation);
 }
 
 }
