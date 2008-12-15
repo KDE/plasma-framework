@@ -342,13 +342,39 @@ QBitmap FrameSvg::mask() const
     FrameData *frame = d->frames[d->prefix];
 
     if (!frame->cachedMask) {
-        if (frame->cachedBackground.isNull()) {
-            d->generateBackground(frame);
-            if (frame->cachedBackground.isNull()) {
-                return QBitmap();
+        // ivan: we are testing whether we have the mask prefixed
+        // elements to use for creating the mask.
+        if (hasElement("mask-" + d->prefix + "center")) {
+            QString oldPrefix = d->prefix;
+
+            // We are setting the prefix only temporary to generate
+            // the needed mask image
+            d->prefix = "mask-" + oldPrefix;
+
+            if (!d->frames.contains(d->prefix)) {
+                d->frames.insert(d->prefix, new FrameData(*(d->frames[oldPrefix])));
+                d->updateSizes();
             }
+
+            FrameData *maskFrame = d->frames[d->prefix];
+            if (maskFrame->cachedBackground.isNull()) {
+                d->generateBackground(maskFrame);
+                if (maskFrame->cachedBackground.isNull()) {
+                    return QBitmap();
+                }
+            }
+
+            frame->cachedMask = QBitmap(maskFrame->cachedBackground.alphaChannel().createMaskFromColor(Qt::black));
+            d->prefix = oldPrefix;
+        } else {
+            if (frame->cachedBackground.isNull()) {
+                d->generateBackground(frame);
+                if (frame->cachedBackground.isNull()) {
+                    return QBitmap();
+                }
+            }
+            frame->cachedMask = QBitmap(frame->cachedBackground.alphaChannel().createMaskFromColor(Qt::black));
         }
-        frame->cachedMask = QBitmap(frame->cachedBackground.alphaChannel().createMaskFromColor(Qt::black));
     }
     return frame->cachedMask;
 }
