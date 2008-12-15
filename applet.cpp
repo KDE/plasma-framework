@@ -882,28 +882,34 @@ void Applet::flushPendingConstraintsEvents()
         }
     }
 
-    if (c & Plasma::SizeConstraint && d->messageOverlay) {
-        d->messageOverlay->setGeometry(QRectF(QPointF(0, 0), geometry().size()));
+    if (c & Plasma::SizeConstraint) {
+        if (d->messageOverlay) {
+            d->messageOverlay->setGeometry(QRectF(QPointF(0, 0), geometry().size()));
 
-        QGraphicsItem *button = 0;
-        QList<QGraphicsItem*> children = d->messageOverlay->QGraphicsItem::children();
+            QGraphicsItem *button = 0;
+            QList<QGraphicsItem*> children = d->messageOverlay->QGraphicsItem::children();
 
-        if (!children.isEmpty()) {
-            button = children.first();
+            if (!children.isEmpty()) {
+                button = children.first();
+            }
+
+            if (button) {
+                QSizeF s = button->boundingRect().size();
+                button->setPos(d->messageOverlay->boundingRect().width() / 2 - s.width() / 2,
+                        d->messageOverlay->boundingRect().height() / 2 - s.height() / 2);
+            }
         }
 
-        if (button) {
-            QSizeF s = button->boundingRect().size();
-            button->setPos(d->messageOverlay->boundingRect().width() / 2 - s.width() / 2,
-                           d->messageOverlay->boundingRect().height() / 2 - s.height() / 2);
+        if (d->busyWidget && d->busyWidget->isVisible()) {
+            int busySize = qMin(size().width(), size().height())/3;
+            QRect busyRect(0, 0, busySize, busySize);
+            busyRect.moveCenter(boundingRect().center().toPoint());
+            d->busyWidget->setGeometry(busyRect);
         }
-    }
 
-    if (c & Plasma::SizeConstraint && d->busyWidget && d->busyWidget->isVisible()) {
-        int busySize = qMin(size().width(), size().height())/3;
-        QRect busyRect(0, 0, busySize, busySize);
-        busyRect.moveCenter(boundingRect().center().toPoint());
-        d->busyWidget->setGeometry(busyRect);
+        if (d->started && layout()) {
+            layout()->updateGeometry();
+        }
     }
 
     if (c & Plasma::FormFactorConstraint) {
@@ -926,30 +932,29 @@ void Applet::flushPendingConstraintsEvents()
         }
     }
 
-    //enforce square size in panels
-    if ((c & Plasma::SizeConstraint || c & Plasma::FormFactorConstraint) &&
-        aspectRatioMode() == Plasma::Square) {
-        if (formFactor() == Horizontal) {
-            setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding));
-        } else if (formFactor() == Vertical) {
-            setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed));
-        }
+    if (c & Plasma::SizeConstraint || c & Plasma::FormFactorConstraint) {
+        if (aspectRatioMode() == Plasma::Square) {
+            // enforce square size in panels
+            if (formFactor() == Horizontal) {
+                setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding));
+            } else if (formFactor() == Vertical) {
+                setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed));
+            }
 
-        updateGeometry();
+            updateGeometry();
+        } else if (aspectRatioMode() == Plasma::ConstrainedSquare) {
+            // enforce a constrained square size in panels
+            if (formFactor() == Horizontal) {
+                setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding));
+            } else if (formFactor() == Vertical) {
+                setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed));
+            }
+
+            updateGeometry();
+        }
     }
 
-    //enforce a constrained square size in panels
-    if ((c & Plasma::SizeConstraint || c & Plasma::FormFactorConstraint) &&
-        aspectRatioMode() == Plasma::ConstrainedSquare) {
-        if (formFactor() == Horizontal) {
-            setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding));
-        } else if (formFactor() == Vertical) {
-            setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed));
-        }
-
-        updateGeometry();
-    }
-
+    // now take care of constraints in special subclasses: Contaiment and PopupApplet
     Containment* containment = qobject_cast<Plasma::Containment*>(this);
     if (isContainment() && containment) {
         containment->d->containmentConstraintsEvent(c);
@@ -960,11 +965,8 @@ void Applet::flushPendingConstraintsEvents()
         popup->d->popupConstraintsEvent(c);
     }
 
+    // pass the constraint on to the actual subclass
     constraintsEvent(c);
-
-    if (layout()) {
-        layout()->updateGeometry();
-    }
 
     if (c & StartupCompletedConstraint) {
         // start up is done, we can now go do a mod timer
