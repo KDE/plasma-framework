@@ -500,7 +500,8 @@ void ExtenderItem::resizeEvent(QGraphicsSceneResizeEvent *event)
 
 void ExtenderItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-    if (!(d->dragHandleRect().contains(event->pos()))) {
+    if (!(d->dragHandleRect().contains(event->pos())) ||
+        d->extender->d->applet->immutability() != Plasma::Mutable) {
         event->ignore();
         return;
     }
@@ -655,7 +656,8 @@ void ExtenderItem::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
 
 void ExtenderItem::hoverMoveEvent(QGraphicsSceneHoverEvent *event)
 {
-    if (d->titleRect().contains(event->pos())) {
+    if (d->titleRect().contains(event->pos()) &&
+        d->extender->d->applet->immutability() == Plasma::Mutable) {
         if (!d->mouseOver) {
             QApplication::setOverrideCursor(Qt::OpenHandCursor);
             d->mouseOver = true;
@@ -1070,6 +1072,8 @@ void ExtenderItemPrivate::resizeContent(const QSizeF &newSize)
 
 void ExtenderItemPrivate::previousTargetExtenderDestroyed(QObject *o)
 {
+    Q_UNUSED(o)
+
     previousTargetExtender = 0;
 }
 
