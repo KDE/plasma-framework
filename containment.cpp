@@ -148,7 +148,7 @@ void Containment::init()
     appletBrowserAction->setEnabled(unlocked);
     connect(appletBrowserAction, SIGNAL(triggered()), this, SLOT(triggerShowAddWidgets()));
     appletBrowserAction->setShortcutContext(Qt::WidgetShortcut);
-    appletBrowserAction->setShortcut(QKeySequence("ctrl+a"));
+    //appletBrowserAction->setShortcut(QKeySequence("ctrl+a")); //FIXME in KDE 4.3, see bug #165938
     d->actions().addAction("add widgets", appletBrowserAction);
 
     QAction *configureActivityAction = new QAction(i18n("Appearance Settings"), this);
