@@ -135,7 +135,7 @@ class PLASMA_EXPORT Svg : public QObject
 
         /**
          * Currently set size of the SVG
-         * @return the current size of a given element
+         * @return the current size of the SVG
          **/
         QSize size() const;
 
