@@ -534,42 +534,69 @@ void PopupAppletPrivate::updateDialogPosition()
         }
     }
 
+    bool reverse = false;
+    if (q->formFactor() == Plasma::Vertical) {
+        if (view->mapToGlobal(view->mapFromScene(q->scenePos())).y() + q->size().height()/2 < pos.y() + dialog->size().width()/2) {
+            reverse = true;
+        }
+    } else {
+        if (view->mapToGlobal(view->mapFromScene(q->scenePos())).x() + q->size().width()/2 < pos.x() + dialog->size().width()/2) {
+            reverse = true;
+        }
+    }
+
     switch (q->location()) {
     case BottomEdge:
         if (pos.x() >= q->pos().x()) {
-            popupPlacement = Plasma::TopPosedLeftAlignedPopup;
             dialog->setResizeHandleCorners(Dialog::NorthEast);
         } else {
-            popupPlacement = Plasma::TopPosedRightAlignedPopup;
             dialog->setResizeHandleCorners(Dialog::NorthWest);
+        }
+
+        if (reverse) {
+            popupPlacement = Plasma::TopPosedLeftAlignedPopup;
+        } else {
+            popupPlacement = Plasma::TopPosedRightAlignedPopup;
         }
         break;
     case TopEdge:
         if (pos.x() >= q->pos().x()) {
-            popupPlacement = Plasma::BottomPosedLeftAlignedPopup;
             dialog->setResizeHandleCorners(Dialog::SouthEast);
         } else {
-            popupPlacement = Plasma::BottomPosedRightAlignedPopup;
             dialog->setResizeHandleCorners(Dialog::SouthWest);
+        }
+
+        if (reverse) {
+            popupPlacement = Plasma::BottomPosedLeftAlignedPopup;
+        } else {
+            popupPlacement = Plasma::BottomPosedRightAlignedPopup;
         }
         break;
     case LeftEdge:
         if (pos.y() >= q->pos().y()) {
-            popupPlacement = Plasma::RightPosedTopAlignedPopup;
             dialog->setResizeHandleCorners(Dialog::SouthEast);
         } else {
-            popupPlacement = Plasma::RightPosedBottomAlignedPopup;
             dialog->setResizeHandleCorners(Dialog::NorthEast);
+        }
+
+        if (reverse) {
+            popupPlacement = Plasma::RightPosedTopAlignedPopup;
+        } else {
+            popupPlacement = Plasma::RightPosedBottomAlignedPopup;
         }
         break;
 
     case RightEdge:
         if (pos.y() >= q->pos().y()) {
-            popupPlacement = Plasma::LeftPosedTopAlignedPopup;
             dialog->setResizeHandleCorners(Dialog::SouthWest);
         } else {
-            popupPlacement = Plasma::LeftPosedBottomAlignedPopup;
             dialog->setResizeHandleCorners(Dialog::NorthWest);
+        }
+
+        if (reverse) {
+            popupPlacement = Plasma::LeftPosedTopAlignedPopup;
+        } else {
+            popupPlacement = Plasma::LeftPosedBottomAlignedPopup;
         }
         break;
     default:
