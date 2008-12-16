@@ -1590,6 +1590,12 @@ QVariant Applet::itemChange(GraphicsItemChange change, const QVariant &value)
         }
     }
         break;
+    case ItemPositionChange:
+        return immutability() == Mutable ? value : pos();
+        break;
+    case ItemTransformChange:
+        return immutability() == Mutable ? value : transform();
+        break;
     case ItemPositionHasChanged:
         emit geometryChanged();
         // fall through!
