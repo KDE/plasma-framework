@@ -360,6 +360,8 @@ bool PopupApplet::eventFilter(QObject *watched, QEvent *event)
 void PopupApplet::showPopup(uint popupDuration)
 {
     if (d->dialog && (formFactor() == Horizontal || formFactor() == Vertical)) {
+        // move the popup before its fist show, even if the show isn't triggered by
+        // a click, this should fix the first random position seen in some widgets
         d->updateDialogPosition();
         d->dialog->show();
         KWindowSystem::setState(d->dialog->winId(), NET::SkipTaskbar | NET::SkipPager);
