@@ -429,7 +429,7 @@ QSize Delegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &
     return size;
 }
 
-bool Delegate::showToolTip()
+bool Delegate::showToolTip() const
 {
     return d->m_showToolTip;
 }
