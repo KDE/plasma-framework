@@ -1832,6 +1832,7 @@ void AppletPrivate::init()
         return;
     }
 
+    q->setHasConfigurationInterface(true);
     QString api = appletDescription.property("X-Plasma-API").toString();
 
     // we have a scripted plasmoid
