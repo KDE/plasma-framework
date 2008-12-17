@@ -40,7 +40,9 @@ public:
           containment(0),
           drawWallpaper(true),
           trackChanges(true),
-          viewId(0)
+          viewId(0),
+          lastScreen(-1),
+          lastDesktop(-2)
     {
         if (uniqueId > s_maxViewId) {
             s_maxViewId = uniqueId;
@@ -102,6 +104,8 @@ public:
     bool drawWallpaper;
     bool trackChanges;
     int viewId;
+    int lastScreen;
+    int lastDesktop;
     static int s_maxViewId;
 };
 
@@ -167,7 +171,7 @@ int View::screen() const
         return d->containment->screen();
     }
 
-    return -1;
+    return d->lastScreen;
 }
 
 int View::desktop() const
@@ -176,7 +180,7 @@ int View::desktop() const
         return d->containment->desktop();
     }
 
-    return -2;
+    return d->lastDesktop;
 }
 
 int View::effectiveDesktop() const
@@ -229,6 +233,9 @@ void View::setContainment(Plasma::Containment *containment)
         // assign the old containment the old screen/desktop
         oldContainment->setScreen(otherScreen, otherDesktop);
     }
+
+    d->lastScreen = screen;
+    d->lastDesktop = desktop;
 
     /*
     if (oldContainment) {
