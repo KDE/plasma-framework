@@ -360,6 +360,7 @@ bool PopupApplet::eventFilter(QObject *watched, QEvent *event)
 void PopupApplet::showPopup(uint popupDuration)
 {
     if (d->dialog && (formFactor() == Horizontal || formFactor() == Vertical)) {
+        d->updateDialogPosition();
         d->dialog->show();
         KWindowSystem::setState(d->dialog->winId(), NET::SkipTaskbar | NET::SkipPager);
 
