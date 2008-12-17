@@ -160,6 +160,8 @@ void View::setScreen(int screen, int desktop)
         Containment *containment = corona->containmentForScreen(screen, desktop);
         if (containment) {
             d->containment = 0; //so that we don't end up on the old containment's screen
+            d->lastScreen = screen;
+            d->lastDesktop = desktop;
             setContainment(containment);
         }
     }
@@ -167,10 +169,6 @@ void View::setScreen(int screen, int desktop)
 
 int View::screen() const
 {
-    if (d->containment) {
-        return d->containment->screen();
-    }
-
     return d->lastScreen;
 }
 
@@ -226,7 +224,12 @@ void View::setContainment(Plasma::Containment *containment)
     int otherDesktop = containment->desktop();
 
     if (screen > -1) {
+        d->lastScreen = screen;
+        d->lastDesktop = desktop;
         containment->setScreen(screen, desktop);
+    } else {
+        d->lastScreen = otherScreen;
+        d->lastDesktop = otherDesktop;
     }
 
     if (oldContainment && otherScreen > -1) {
@@ -234,13 +237,10 @@ void View::setContainment(Plasma::Containment *containment)
         oldContainment->setScreen(otherScreen, otherDesktop);
     }
 
-    d->lastScreen = screen;
-    d->lastDesktop = desktop;
-
     /*
     if (oldContainment) {
-        kDebug() << (QObject*)oldContainment << screen << oldContainment->screen()
-                 << (QObject*)containment << otherScreen << containment->screen();
+        kDebug() << "old" << (QObject*)oldContainment << screen << oldContainment->screen()
+                 << "new" << (QObject*)containment << otherScreen << containment->screen();
     }
     */
 
