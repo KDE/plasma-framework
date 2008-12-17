@@ -120,7 +120,7 @@ void ToolBox::addTool(QAction *action)
     tool->hide();
     const int height = static_cast<int>(tool->boundingRect().height());
     tool->setPos(toolPosition(height));
-    tool->setZValue(zValue() + 1);
+    tool->setZValue(zValue() + 10);
     tool->setToolTip(action->text());
 
     //make enabled/disabled tools appear/disappear instantly

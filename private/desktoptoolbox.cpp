@@ -456,6 +456,7 @@ void DesktopToolBox::showToolBox()
 
     if (!d->toolBacker) {
         d->toolBacker = new EmptyGraphicsItem(this);
+        d->toolBacker->setZValue(zValue() + 1);
     }
 
     d->toolBacker->setIsToolbar(isToolbar());

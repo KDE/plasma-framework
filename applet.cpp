@@ -459,8 +459,8 @@ void AppletPrivate::createMessageOverlay()
             zValue = child->zValue() + 1;
         }
     }
-    messageOverlay->setZValue(zValue);
 
+    messageOverlay->setZValue(zValue);
 }
 
 void AppletPrivate::destroyMessageOverlay()
@@ -815,8 +815,14 @@ void Applet::setConfigurationRequired(bool needsConfig, const QString &reason)
         configWidget->setDrawBackground(true);
         connect(configWidget, SIGNAL(clicked()), this, SLOT(showConfigurationInterface()));
         configLayout->addItem(configWidget, row, 1);
-        //FIXME: this thing seems necessary for some applets, others not
-        configWidget->setZValue(999);
+        // raise the overlay above all the other children!
+        int zValue = 100;
+        foreach (QGraphicsItem *child, QGraphicsItem::children()) {
+            if (child->zValue() > zValue) {
+                zValue = child->zValue() + 1;
+            }
+        }
+        configWidget->setZValue(zValue);
     } else {
         PushButton *configWidget = new PushButton(d->messageOverlay);
         configWidget->setText(i18n("Configure..."));

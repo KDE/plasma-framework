@@ -125,7 +125,7 @@ AppletHandle::AppletHandle(Containment *parent, Applet *applet, const QPointF &h
     //so we want a high zValue.
     //FIXME: apparently this doesn't work: sometimes an applet still get's drawn behind
     //the containment it's being dragged to, sometimes it doesn't.
-    m_zValue = m_applet->zValue()-1;
+    m_zValue = m_applet->zValue() - 1;
     m_applet->raise();
     m_applet->installSceneEventFilter(this);
     setZValue(m_applet->zValue());
