@@ -980,6 +980,10 @@ void Applet::flushPendingConstraintsEvents()
             killTimer(d->modificationsTimerId);
         }
         d->modificationsTimerId = 0;
+
+        if (!isContainment()) {
+            setHasConfigurationInterface(true);
+        }
     }
 }
 
@@ -1832,7 +1836,6 @@ void AppletPrivate::init()
         return;
     }
 
-    q->setHasConfigurationInterface(true);
     QString api = appletDescription.property("X-Plasma-API").toString();
 
     // we have a scripted plasmoid
