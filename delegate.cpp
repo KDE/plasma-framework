@@ -67,6 +67,8 @@ class DelegatePrivate
         static const int ITEM_RIGHT_MARGIN = 5;
         static const int ITEM_TOP_MARGIN = 5;
         static const int ITEM_BOTTOM_MARGIN = 5;
+
+        bool m_showToolTip;
 };
 
 QFont DelegatePrivate::fontForSubTitle(const QFont &titleFont) const
@@ -295,13 +297,15 @@ void Delegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
     painter->restore();
 
 
+    d->m_showToolTip = false;
+
     painter->save();
     painter->setPen(Qt::NoPen);
     const QColor gradientColor = 
 	KColorScheme(QPalette::Active).background(KColorScheme::NormalBackground).color();
     if (option.direction == Qt::LeftToRight) {
-        if (((titleRect.width() + 40) > option.rect.width() ||
-            (subTitleRect.width() + 40) > option.rect.width()) && 
+        if (((titleRect.width() + decorationRect.width() + 10) > option.rect.width() ||
+            (subTitleRect.width() + decorationRect.width() + 15) > option.rect.width()) &&
 	    (titleRect.width() > 120 || subTitleRect.width() > 120)) {
             QLinearGradient gr;
             QRect gradientRect(option.rect.width() - 30, titleRect.y(),
@@ -313,11 +317,12 @@ void Delegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
             gr.setColorAt(0.7, gradientColor);
             painter->setBrush(QBrush(gr));
             painter->drawRect(gradientRect);
+            d->m_showToolTip = true;
         }
 
     } else {
-        if ((titleRect.width() + 40 > option.rect.width() || 
-            subTitleRect.width() + 40 > option.rect.width()) &&
+        if (((titleRect.width() + decorationRect.width() + 10) > option.rect.width() || 
+            (subTitleRect.width() + decorationRect.width() + 15 )> option.rect.width()) &&
 	    (titleRect.width() > 120 || subTitleRect.width() > 120)) {
             QLinearGradient gr;
             QRect gradientRect(option.rect.x() - 25, titleRect.y(),
@@ -328,6 +333,8 @@ void Delegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
             gr.setColorAt(0.6, gradientColor);
             painter->setBrush(QBrush(gr));
             painter->drawRect(gradientRect);
+
+            d->m_showToolTip = true;
         }
     }
     
@@ -420,6 +427,11 @@ QSize Delegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &
     size *= 1.1;
 
     return size;
+}
+
+bool Delegate::showToolTip()
+{
+    return d->m_showToolTip;
 }
 
 }
