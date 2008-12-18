@@ -75,6 +75,11 @@ public:
     {
         return document->size().toSize();
     }
+    
+    QSize maximumSizeHint() const
+    {
+        return minimumSizeHint();
+    }
 
     void paintEvent(QPaintEvent *event)
     {
@@ -111,6 +116,7 @@ class ToolTipPrivate
 
 void ToolTip::showEvent(QShowEvent *e)
 {
+    checkSize();
     QWidget::showEvent(e);
     d->preview->setInfo();
 }
@@ -162,6 +168,7 @@ void ToolTip::checkSize()
 {
     //FIXME: layout bugs even on qlayouts? oh, please, no.
     d->text->setMinimumSize(d->text->minimumSizeHint());
+    d->text->setMaximumSize(d->text->maximumSizeHint());
     QSize hint = sizeHint();
     QSize current = size();
 
