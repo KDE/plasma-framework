@@ -435,6 +435,7 @@ void DesktopToolBox::showToolBox()
         }
 
         if (tool->isEnabled()) {
+            tool->show();
             //kDebug() << tool << "is enabled";
             y += 5;
             QSize toolSize = tool->boundingRect().size().toSize();

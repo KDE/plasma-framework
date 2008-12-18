@@ -133,6 +133,8 @@ void ToolBox::updateToolBox()
     if (d->showing) {
         d->showing = false;
         showToolBox();
+    } else if (Plasma::IconWidget *tool = qobject_cast<Plasma::IconWidget *>(sender())) {
+        tool->hide();
     }
 }
 
