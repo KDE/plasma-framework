@@ -262,6 +262,7 @@ class SvgPrivate
 
             renderer = 0;
             localRectCache.clear();
+            size = QSizeF();
         }
 
         QRectF elementRect(const QString &elementId)
