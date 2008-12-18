@@ -1044,6 +1044,9 @@ void Applet::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
 
         //update the view transform of the toolbox, since it ignores transforms
         if (c && c->d->toolBox) {
+            if (c->d->toolBox->viewTransform().isScaling() && !v->transform().isScaling()) {
+                c->d->positionToolBox();
+            }
             c->d->toolBox->setViewTransform(v->transform());
         }
 
