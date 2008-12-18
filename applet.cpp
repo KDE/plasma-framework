@@ -178,6 +178,10 @@ uint Applet::id() const
 
 void Applet::save(KConfigGroup &g) const
 {
+    if (d->transient) {
+        return;
+    }
+
     KConfigGroup group = g;
     if (!group.isValid()) {
         group = *d->mainConfigGroup();
@@ -341,11 +345,11 @@ KConfigGroup Applet::config() const
 KConfigGroup Applet::globalConfig() const
 {
     KConfigGroup globalAppletConfig;
-    const Containment *c = containment();
     QString group = isContainment() ? "ContainmentGlobals" : "AppletGlobals";
 
-    if (c && c->corona()) {
-        KSharedConfig::Ptr coronaConfig = c->corona()->config();
+    Corona *corona = qobject_cast<Corona*>(scene());
+    if (corona) {
+        KSharedConfig::Ptr coronaConfig = corona->config();
         globalAppletConfig = KConfigGroup(coronaConfig, group);
     } else {
         globalAppletConfig = KConfigGroup(KGlobal::config(), group);
@@ -365,9 +369,15 @@ void Applet::destroy()
     if (isContainment()) {
         d->cleanUpAndDelete();
     } else {
+        d->resetConfigurationObject();
         connect(Animator::self(), SIGNAL(animationFinished(QGraphicsItem*,Plasma::Animator::Animation)),
                 this, SLOT(appletAnimationComplete(QGraphicsItem*,Plasma::Animator::Animation)));
         Animator::self()->animateItem(this, Animator::DisappearAnimation);
+    }
+
+    Corona * corona = qobject_cast<Corona*>(scene());
+    if (corona) {
+        corona->requireConfigSync();
     }
 }
 
@@ -540,9 +550,9 @@ QRect Applet::mapToView(const QGraphicsView *view, const QRectF &rect) const
 
 QPoint Applet::popupPosition(const QSize &s) const
 {
-    Q_ASSERT(containment());
-    Q_ASSERT(containment()->corona());
-    return containment()->corona()->popupPosition(this, s);
+    Corona * corona = qobject_cast<Corona*>(scene());
+    Q_ASSERT(corona);
+    return corona->popupPosition(this, s);
 }
 
 void Applet::updateConstraints(Plasma::Constraints constraints)
@@ -684,7 +694,7 @@ ImmutabilityType Applet::immutability() const
     //Returning the more strict immutability between the applet immutability and Corona one
     ImmutabilityType coronaImmutability = Mutable;
 
-    if (dynamic_cast<Corona*>(scene())) {
+    if (qobject_cast<Corona*>(scene())) {
         coronaImmutability = static_cast<Corona*>(scene())->immutability();
     }
 
@@ -1099,7 +1109,7 @@ FormFactor Applet::formFactor() const
 Containment *Applet::containment() const
 {
     if (isContainment()) {
-        Containment *c = dynamic_cast<Containment*>(const_cast<Applet*>(this));
+        Containment *c = qobject_cast<Containment*>(const_cast<Applet*>(this));
         if (c) {
             return c;
         }
@@ -1967,13 +1977,12 @@ KConfigGroup *AppletPrivate::mainConfigGroup()
     }
 
     if (isContainment) {
-        const Containment *asContainment = qobject_cast<Containment*>(const_cast<Applet*>(q));
-        Q_ASSERT(asContainment);
-
+        Corona *corona = qobject_cast<Corona*>(q->scene());
         KConfigGroup containmentConfig;
-        //kDebug() << "got a corona, baby?" << (QObject*)asContainment->corona();
-        if (asContainment->corona()) {
-            containmentConfig = KConfigGroup(asContainment->corona()->config(), "Containments");
+        //kDebug() << "got a corona, baby?" << (QObject*)corona;
+
+        if (corona) {
+            containmentConfig = KConfigGroup(corona->config(), "Containments");
         } else {
             containmentConfig =  KConfigGroup(KGlobal::config(), "Containments");
         }
@@ -2013,7 +2022,7 @@ void AppletPrivate::checkImmutability()
     const bool systemImmutable = q->globalConfig().isImmutable() || q->config().isImmutable() ||
                                 ((!isContainment && q->containment()) &&
                                     q->containment()->immutability() == SystemImmutable) ||
-                                (dynamic_cast<Corona*>(q->scene()) && static_cast<Corona*>(q->scene())->immutability() == SystemImmutable);
+                                (qobject_cast<Corona*>(q->scene()) && static_cast<Corona*>(q->scene())->immutability() == SystemImmutable);
 
     if (systemImmutable) {
         q->updateConstraints(ImmutableConstraint);
