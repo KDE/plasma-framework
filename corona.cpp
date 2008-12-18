@@ -248,6 +248,11 @@ void Corona::requestConfigSync()
     }
 }
 
+void Corona::requireConfigSync()
+{
+    d->syncConfig();
+}
+
 void Corona::initializeLayout(const QString &configName)
 {
     clearContainments();

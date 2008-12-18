@@ -190,6 +190,15 @@ public Q_SLOTS:
      */
     void requestConfigSync();
 
+    /**
+     * Schedules a time sensitive flush-to-disk synchronization of the
+     * configuration state. Since this method does not provide any sort of
+     * event compression, it should only be used when an *immediate* disk
+     * sync is *absolutely* required. Otherwise, use @see requestConfigSync()
+     * which does do event compression.
+     */
+    void requireConfigSync();
+
 Q_SIGNALS:
     /**
      * This signal indicates a new containment has been added to
