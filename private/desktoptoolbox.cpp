@@ -515,8 +515,7 @@ void DesktopToolBox::showToolBox()
                 x += 5;
                 //kDebug() << "let's show and move" << tool << tool->boundingRect();
                 tool->show();
-                animdriver->moveItem(tool, Plasma::Animator::SlideInMovement, QPoint(x, y));
-
+                tool->setPos(QPoint(x, y));
                 x += static_cast<int>(tool->boundingRect().width());
             } else {
                 //kDebug() << tool << "is enabled";
@@ -530,8 +529,11 @@ void DesktopToolBox::showToolBox()
         } else if (tool->isVisible()) {
             // disabled, but visible, so hide it!
             const int height = static_cast<int>(tool->boundingRect().height());
-            animdriver->moveItem(tool, Plasma::Animator::SlideOutMovement,
-                                 toolPosition(height));
+            if (isToolbar()) {
+                tool->hide();
+            } else {
+                animdriver->moveItem(tool, Plasma::Animator::SlideOutMovement, toolPosition(height));
+            }
         }
     }
 
@@ -581,7 +583,12 @@ void DesktopToolBox::hideToolBox()
         }
 
         const int height = static_cast<int>(tool->boundingRect().height());
-        animdriver->moveItem(tool, Plasma::Animator::SlideOutMovement, toolPosition(height));
+        if (isToolbar()) {
+            tool->setPos(toolPosition(height));
+            tool->hide();
+        } else {
+            animdriver->moveItem(tool, Plasma::Animator::SlideOutMovement, toolPosition(height));
+        }
     }
 
     if (d->animCircleId) {
