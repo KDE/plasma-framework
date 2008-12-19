@@ -100,6 +100,7 @@ public:
     void compositingChanged();
     void discardCache();
     void discardCache(bool recreateElementsCache);
+    void colorsChanged();
     bool useCache();
 
     static const char *defaultTheme;
@@ -187,10 +188,10 @@ void ThemePrivate::discardCache()
 
 void ThemePrivate::discardCache(bool recreateElementsCache)
 {
+    KPixmapCache::deleteCache("plasma_theme_" + themeName);
     delete pixmapCache;
     pixmapCache = 0;
     invalidElements.clear();
-    KPixmapCache::deleteCache("plasma_theme_" + themeName);
 
     svgElementsCache = 0;
 
@@ -203,6 +204,13 @@ void ThemePrivate::discardCache(bool recreateElementsCache)
     if (recreateElementsCache) {
         svgElementsCache = KSharedConfig::openConfig(svgElementsFile);
     }
+}
+
+void ThemePrivate::colorsChanged()
+{
+    discardCache(true);
+    colorScheme = KColorScheme(QPalette::Active, KColorScheme::Window, colors);
+    buttonColorScheme = KColorScheme(QPalette::Active, KColorScheme::Button, colors);
 }
 
 class ThemeSingleton
@@ -331,14 +339,14 @@ void Theme::setThemeName(const QString &themeName)
     disconnect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()),
                this, SIGNAL(themeChanged()));
     disconnect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()),
-                this, SLOT(discardCache()));
+                this, SLOT(colorsChanged()));
 
     if (colorsFile.isEmpty()) {
         d->colors = 0;
         connect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()),
                 this, SIGNAL(themeChanged()));
         connect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()),
-                this, SLOT(discardCache()));
+                this, SLOT(colorsChanged()));
     } else {
         d->colors = KSharedConfig::openConfig(colorsFile);
     }

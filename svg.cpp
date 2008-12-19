@@ -366,6 +366,8 @@ class SvgPrivate
             }
 
             eraseRenderer();
+            itemsToSave.clear();
+            saveTimer->stop();
             emit q->repaintNeeded();
         }
 
