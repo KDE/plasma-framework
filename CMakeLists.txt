@@ -1,4 +1,3 @@
-macro_optional_find_package(OpenGL)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}
                     ${CMAKE_BINARY_DIR}/kdecore/
