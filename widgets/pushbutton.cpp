@@ -328,6 +328,7 @@ void PushButton::paint(QPainter *painter,
 
         QPainter p(&bufferPixmap);
         p.setPen(painter->pen());
+        p.setFont(Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont));
 
         // Create the alpha gradient for the fade out effect
         QLinearGradient alphaGradient(0, 0, 1, 0);
@@ -349,6 +350,7 @@ void PushButton::paint(QPainter *painter,
 
         painter->drawPixmap(rect.topLeft(), bufferPixmap);
     } else {
+        painter->setFont(Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont));
         painter->drawText(rect, Qt::AlignCenter, nativeWidget()->text());
     }
 }
