@@ -1057,7 +1057,9 @@ void Applet::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
             if (c->d->toolBox->viewTransform().isScaling() && !v->transform().isScaling()) {
                 c->d->positionToolBox();
             }
-            c->d->toolBox->setViewTransform(v->transform());
+            if (v) {
+                c->d->toolBox->setViewTransform(v->transform());
+            }
         }
 
         if (!v || v->isWallpaperEnabled()) {
