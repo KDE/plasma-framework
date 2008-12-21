@@ -756,6 +756,11 @@ void ExtenderItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 
                         if (applet) {
                             setExtender(applet->d->extender);
+                            QSizeF margin = applet->size() - applet->contentsRect().size();
+                            applet->setMinimumSize(minimumSize() + margin);
+                            applet->setPreferredSize(preferredSize() + margin);
+                            applet->resize(preferredSize());
+
                             extenderCreated = true;
                         } else {
                             kDebug() << "Creating internal:extender applet failed, probably "
