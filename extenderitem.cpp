@@ -185,7 +185,7 @@ QGraphicsItem *ExtenderItem::widget() const
 
 void ExtenderItem::setIcon(const QIcon &icon)
 {
-    d->iconName = QString();
+    d->iconName.clear();
     d->collapseIcon->setIcon(icon);
 }
 

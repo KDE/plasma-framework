@@ -18,8 +18,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef PLASMA_STYLE_H
-#define PLASMA_STYLE_H
+#ifndef PLASMA_STYLE_P_H
+#define PLASMA_STYLE_P_H
 
 #include <QtCore/QSharedData>
 #include <QtGui/QCommonStyle>
