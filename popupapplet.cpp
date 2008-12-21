@@ -248,6 +248,8 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
             if (oldSize.width() < q->minimumSize().width() || oldSize.height() < q->minimumSize().height()) {
                 q->resize(prefSize);
             }
+            //FIXME: this will be automatically propagated by the qgraphicslayout in the future
+            lay->setPreferredSize(prefSize);
         //Applet on popup
         } else {
             kDebug() << "about to switch to a popup";
