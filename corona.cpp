@@ -550,6 +550,22 @@ void Corona::setImmutability(const ImmutabilityType immutable)
     requestConfigSync();
 }
 
+QList<Plasma::Location> Corona::freeEdges(int screen) const
+{
+    QList<Plasma::Location> freeEdges;
+    freeEdges << Plasma::TopEdge << Plasma::BottomEdge
+              << Plasma::LeftEdge << Plasma::RightEdge;
+
+    foreach (Containment *containment, containments()) {
+        if (containment->screen() == screen && 
+            freeEdges.contains(containment->location())) {
+            freeEdges.removeAll(containment->location());
+        }
+    }
+
+    return freeEdges;
+}
+
 } // namespace Plasma
 
 #include "corona.moc"

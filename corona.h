@@ -146,6 +146,14 @@ public:
     */
     QPoint popupPosition(const QGraphicsItem *item, const QSize &s);
 
+    /**
+     * This method is useful in order to retrieve the list of available
+     * screen edges for panel type containments.
+     * @param screen the id of the screen to look for free edges.
+     * @returns a list of free edges not filled with panel type containments.
+     */
+    QList<Plasma::Location> freeEdges(int screen) const;
+
 public Q_SLOTS:
     /**
      * Initializes the layout from a config file. This will first clear any existing
