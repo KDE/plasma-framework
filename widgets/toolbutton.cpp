@@ -301,6 +301,8 @@ void ToolButton::paint(QPainter *painter,
         buttonOpt.palette.setColor(QPalette::ButtonText, Plasma::Theme::defaultTheme()->color(Plasma::Theme::TextColor));
     }
 
+    painter->setFont(Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont));
+
     button->style()->drawControl(QStyle::CE_ToolButtonLabel, &buttonOpt, painter, button);
 }
 

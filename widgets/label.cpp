@@ -74,6 +74,7 @@ public:
         p.setColor(QPalette::Normal, QPalette::WindowText, color);
         p.setColor(QPalette::Inactive, QPalette::WindowText, color);
         native->setPalette(p);
+        native->setFont(Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont));
     }
 
     Label *q;

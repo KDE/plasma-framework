@@ -265,6 +265,7 @@ void NativeTabBar::paintEvent(QPaintEvent *event)
             textRect.setLeft(iconRect.right());
         }
 
+        painter.setFont(Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont));
         painter.drawText(textRect, Qt::AlignCenter | Qt::TextHideMnemonic, tabText(i));
     }
 
