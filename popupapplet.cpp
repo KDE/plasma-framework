@@ -64,6 +64,7 @@ void PopupApplet::setPopupIcon(const QIcon &icon)
             delete d->icon;
             d->icon = 0;
             setLayout(0);
+            setAspectRatioMode(d->savedAspectRatio);
         }
         return;
     }
@@ -255,10 +256,10 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
             kDebug() << "about to switch to a popup";
             //save the aspect ratio mode in case we drag'n drop in the Desktop later
             savedAspectRatio = q->aspectRatioMode();
-            q->setAspectRatioMode(Plasma::ConstrainedSquare);
 
             if (icon) {
                 icon->show();
+                q->setAspectRatioMode(Plasma::ConstrainedSquare);
             }
 
             if (proxy) {
