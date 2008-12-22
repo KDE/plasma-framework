@@ -3,6 +3,7 @@ Type=ServiceType
 X-KDE-ServiceType=Plasma/Applet
 
 Comment=Plasma applet
+Comment[ar]=بريمجة بلازما
 Comment[be@latin]=Aplet „Plasma”
 Comment[bg]=Аплет за Plasma
 Comment[bn]=প্লাসমা অ্যাপলেট

@@ -3,6 +3,7 @@ Type=ServiceType
 X-KDE-ServiceType=Plasma/Wallpaper
 
 Comment=Plasma wallpaper
+Comment[ar]=خلفية شاشة بلازما
 Comment[be@latin]=Špalery „Plasma”
 Comment[bg]=Тапет за Plasma
 Comment[bn]=প্লাসমা ওয়ালপেপার

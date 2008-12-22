@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Package metadata test file
+Name[ar]=ملف اختبار البيانات الوصفية للحزمة
 Name[be@latin]=Fajł spraŭdžvańnia metaźviestak pakunka
 Name[ca]=Fitxer de proves de metadades de paquet
 Name[de]=Testdatei für Paket-Metadaten
@@ -35,6 +36,7 @@ Name[x-test]=xxPackage metadata test filexx
 Name[zh_CN]=工具包元数据测试文件
 Name[zh_TW]=套件中繼資料測試檔
 Comment=A test desktop file to test the PackageMetaData class.
+Comment[ar]=ملف اختبار سطح المكتب لختبار صف  PackageMetaData
 Comment[be@latin]=Testavy fajł rabočaha stała dla spraŭdžvańnia klasy „PackageMetaData”.
 Comment[ca]=Un fitxer d'escriptori de proves per provar la classe PackageMetaData.
 Comment[de]=Eine Test-Desktop-Datei zum Testen der Klasse PackageMetaData.

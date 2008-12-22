@@ -3,6 +3,7 @@ Type=ServiceType
 X-KDE-ServiceType=Plasma/Animator
 
 Comment=Plasma Animation Engine
+Comment[ar]=محرك تحريك البلازما
 Comment[be@latin]=Systema animacyi „Plasma”
 Comment[bn]=প্লাসমা অ্যানিমেশন ইঞ্জিন
 Comment[bn_IN]=প্লাসমা অ্যানিমেশন ইঞ্জিন
