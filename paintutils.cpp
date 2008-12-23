@@ -47,19 +47,27 @@ void shadowBlur(QImage &image, int radius, const QColor &color)
     p.end();
 }
 
+//TODO: we should have shadowText methods that paint the results directly into a QPainter passed in
 QPixmap shadowText(QString text, QColor textColor, QColor shadowColor, QPoint offset, int radius)
+{
+    return shadowText(text, qApp->font(), textColor, shadowColor, offset, radius);
+}
+
+QPixmap shadowText(QString text, const QFont &font, QColor textColor, QColor shadowColor, QPoint offset, int radius)
 {
     //don't try to paint stuff on a future null pixmap because the text is empty
     if (text.isEmpty()) {
         return QPixmap();
     }
+
     // Draw text
-    QFontMetrics fm(text);
+    QFontMetrics fm(font);
     QRect textRect = fm.boundingRect(text);
-    QPixmap textPixmap(textRect.size());
+    QPixmap textPixmap(textRect.width(), fm.height());
     textPixmap.fill(Qt::transparent);
     QPainter p(&textPixmap);
     p.setPen(textColor);
+    p.setFont(font);
     p.drawText(textPixmap.rect(), Qt::AlignLeft, text);
     p.end();
 
