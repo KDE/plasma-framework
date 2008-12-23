@@ -44,6 +44,7 @@ class PLASMA_EXPORT Label : public QGraphicsProxyWidget
     Q_PROPERTY(QGraphicsWidget *parentWidget READ parentWidget)
     Q_PROPERTY(QString text READ text WRITE setText)
     Q_PROPERTY(QString image READ image WRITE setImage)
+    Q_PROPERTY(Qt::Alignment alignment READ alignment WRITE setAlignment)
     Q_PROPERTY(QString styleSheet READ styleSheet WRITE setStyleSheet)
     Q_PROPERTY(QLabel *nativeWidget READ nativeWidget)
 
@@ -74,6 +75,18 @@ public:
      * @return the image path being displayed currently, or an empty string if none.
      */
     QString image() const;
+
+    /**
+     * Sets the alignment for the text
+     *
+     * @arg the desired alignment
+     */
+    void setAlignment(Qt::Alignment alignment);
+
+    /**
+     * @return the alignment for the text used in the labels
+     */
+    Qt::Alignment alignment() const;
 
     /**
      * Sets the stylesheet used to control the visual display of this Label

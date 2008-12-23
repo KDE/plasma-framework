@@ -145,6 +145,16 @@ QString Label::image() const
     return d->imagePath;
 }
 
+void Label::setAlignment(Qt::Alignment alignment)
+{
+    nativeWidget()->setAlignment(alignment);
+}
+
+Qt::Alignment Label::alignment() const
+{
+    return nativeWidget()->alignment();
+}
+
 void Label::setStyleSheet(const QString &stylesheet)
 {
     widget()->setStyleSheet(stylesheet);
