@@ -75,7 +75,7 @@ public:
     {
         return document->size().toSize();
     }
-    
+
     QSize maximumSizeHint() const
     {
         return minimumSizeHint();
@@ -100,6 +100,7 @@ class ToolTipPrivate
           preview(0),
           source(0),
           timeline(0),
+          orientation(Qt::Horizontal),
           autohide(true)
     { }
 
@@ -111,6 +112,7 @@ class ToolTipPrivate
     QTimeLine *timeline;
     QPoint to;
     QPoint from;
+    Qt::Orientation orientation;
     bool autohide;
 };
 
@@ -185,14 +187,39 @@ void ToolTip::checkSize()
         resize(hint);
 #endif
     */
+        int deltaX = 0;
+        int deltaY = 0;
+        if (d->orientation == Qt::Horizontal) {
         /*
         kDebug() << "resizing from" << current << "to" << hint
                  << "and moving from" << pos() << "to"
                  << x() << y() + (current.height() - hint.height())
                  << current.height() - hint.height();
                  */
-        resize(hint);
-        move(x(), y() + (current.height() - size().height()));
+            deltaY = current.height() - hint.height();
+        } else {
+        /*
+        kDebug() << "vertical resizing from" << current << "to" << hint
+                 << "and moving from" << pos() << "to"
+                 << x() + (current.width() - hint.width()) << y()
+                 << current.width() - hint.width(); */
+            deltaX = current.width() - hint.width();
+        }
+
+        // resize then move if we're getting smaller, vice versa when getting bigger
+        // this prevents overlap with the item in the smaller case, and a repaint of
+        // the tipped item when getting bigger
+        bool resizeFirst = deltaY > 0 || deltaX > 0;
+
+        if (resizeFirst) {
+            resize(hint);
+        }
+
+        move(x() + deltaX, y() + deltaY);
+
+        if (!resizeFirst) {
+            resize(hint);
+        }
     }
 }
 
@@ -290,6 +317,11 @@ void ToolTip::paintEvent(QPaintEvent *e)
 bool ToolTip::autohide() const
 {
     return d->autohide;
+}
+
+void ToolTip::setOrientation(Qt::Orientation orientation)
+{
+    d->orientation = orientation;
 }
 
 void ToolTip::updateTheme()

@@ -314,7 +314,12 @@ void ToolTipManagerPrivate::showToolTip()
         justCreated = true;
     }
 
-    //kDebug() << "about to show" << justCreated;
+    Containment *c = dynamic_cast<Containment *>(currentWidget->topLevelItem());
+    kDebug() << "about to show" << justCreated << (QObject*)c;
+    if (c) {
+        tipWidget->setOrientation(c->formFactor() == Vertical ? Qt::Vertical : Qt::Horizontal);
+    }
+
     tipWidget->setContent(currentWidget, tooltip.value());
     tipWidget->prepareShowing(!justCreated);
     tipWidget->moveTo(ToolTipManager::self()->m_corona->popupPosition(currentWidget, tipWidget->size()));

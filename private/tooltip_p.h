@@ -41,6 +41,7 @@ public:
     void prepareShowing(bool cueUpdate);
     void moveTo(const QPoint &to);
     bool autohide() const;
+    void setOrientation(Qt::Orientation);
 
 protected:
     void checkSize();
