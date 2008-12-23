@@ -137,6 +137,7 @@ public:
         QSize imageSize = image->size();
         image->resize();
         QSize tileSize = image->elementSize("bar-active-center");
+        image->resize(imageSize);
 
         if (elementRect.width() > elementRect.height()) {
             qreal ratio = tileSize.height() / tileSize.width();
