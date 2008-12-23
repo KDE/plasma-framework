@@ -122,11 +122,41 @@ public:
 
     QRectF barRect()
     {
+        QRectF elementRect;
+
         if (labels.count() > 0) {
-            return image->elementRect("background");
+            elementRect = image->elementRect("background");
         } else {
-            return QRectF(QPoint(0,0), meter->size());
+            elementRect = QRectF(QPoint(0,0), meter->size());
         }
+
+        if (image->hasElement("hint-bar-stretch")) {
+            return elementRect;
+        }
+
+        QSize imageSize = image->size();
+        image->resize();
+        QSize tileSize = image->elementSize("bar-active-center");
+
+        if (elementRect.width() > elementRect.height()) {
+            qreal ratio = tileSize.height() / tileSize.width();
+            int numTiles = elementRect.width()/(elementRect.height()/ratio);
+            tileSize = QSize(elementRect.width()/numTiles, elementRect.height());
+
+            QPoint center = elementRect.center().toPoint();
+            elementRect.setWidth(tileSize.width()*numTiles);
+            elementRect.moveCenter(center);
+        } else {
+            qreal ratio = tileSize.width() / tileSize.height();
+            int numTiles = elementRect.height()/(elementRect.width()/ratio);
+            tileSize = QSize(elementRect.width(), elementRect.height()/numTiles);
+
+            QPoint center = elementRect.center().toPoint();
+            elementRect.setHeight(tileSize.height()*numTiles);
+            elementRect.moveCenter(center);
+        }
+
+        return elementRect;
     }
 
     void paintBackground(QPainter *p)
@@ -151,32 +181,30 @@ public:
     void paintBar(QPainter *p, const QString &prefix)
     {
         QRectF elementRect = barRect();
-        QSize imageSize = image->size();
-        image->resize();
-        QSize tileSize = image->elementSize("bar-active-center");
 
-        if (elementRect.width() > elementRect.height()) {
-            qreal ratio = tileSize.height() / tileSize.width();
-            int numTiles = elementRect.width()/(elementRect.height()/ratio);
-            tileSize = QSize(elementRect.width()/numTiles, elementRect.height());
-
-            QPoint center = elementRect.center().toPoint();
-            elementRect.setWidth(tileSize.width()*numTiles);
-            elementRect.moveCenter(center);
+        if (image->hasElement("hint-bar-stretch")) {
+            image->resizeFrame(elementRect.size());
+            image->paintFrame(p);
         } else {
-            qreal ratio = tileSize.width() / tileSize.height();
-            int numTiles = elementRect.height()/(elementRect.width()/ratio);
-            tileSize = QSize(elementRect.width(), elementRect.height()/numTiles);
+            QSize imageSize = image->size();
+            image->resize();
+            QSize tileSize = image->elementSize("bar-active-center");
 
-            QPoint center = elementRect.center().toPoint();
-            elementRect.setHeight(tileSize.height()*numTiles);
-            elementRect.moveCenter(center);
+            if (elementRect.width() > elementRect.height()) {
+                qreal ratio = tileSize.height() / tileSize.width();
+                int numTiles = elementRect.width()/(elementRect.height()/ratio);
+                tileSize = QSize(elementRect.width()/numTiles, elementRect.height());
+            } else {
+                qreal ratio = tileSize.width() / tileSize.height();
+                int numTiles = elementRect.height()/(elementRect.width()/ratio);
+                tileSize = QSize(elementRect.width(), elementRect.height()/numTiles);
+            }
+
+            image->setElementPrefix(prefix);
+            image->resizeFrame(tileSize);
+            p->drawTiledPixmap(elementRect, image->framePixmap());
+            image->resize(imageSize);
         }
-
-        image->setElementPrefix(prefix);
-        image->resizeFrame(tileSize);
-        p->drawTiledPixmap(elementRect, image->framePixmap());
-        image->resize(imageSize);
     }
 
     void paintForeground(QPainter *p)
