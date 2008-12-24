@@ -640,6 +640,10 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          * If the applet requires a QGraphicsScene or has an particularly intensive
          * set of initialization routines to go through, consider implementing it
          * in this method instead of the constructor.
+         *
+         * Note: paintInterface may get called before init() depending on initialization
+         * order. Painting is managed by the canvas (QGraphisScene), and may schedule a
+         * paint event prior to init() being called.
          **/
         virtual void init();
 
