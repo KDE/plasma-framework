@@ -135,8 +135,6 @@ class AppletHandle : public QObject, public QGraphicsItem
         // used for resize
         QPointF m_resizeStaticPoint;
         QPointF m_resizeGrabPoint;
-        // used during aspect-ratio preserving resize
-        qreal m_aspectResizeOrigRadius;
         // used for rotate
         qreal m_rotateAngleOffset; // applet angle minus cursor angle
 

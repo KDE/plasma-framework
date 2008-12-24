@@ -469,7 +469,6 @@ void AppletHandle::mousePressEvent(QGraphicsSceneMouseEvent *event)
             }
             m_resizeGrabPoint = mapToScene(event->pos());                
             QPointF cursorRelativeToStatic = m_resizeGrabPoint - m_resizeStaticPoint;
-            m_aspectResizeOrigRadius = sqrt(pow(cursorRelativeToStatic.x(), 2) + pow(cursorRelativeToStatic.y(), 2));
 
             // rotate
             m_rotateAngleOffset = m_angle - _k_pointAngle(mapToScene(event->pos()) - m_origAppletCenter);
@@ -578,7 +577,7 @@ qreal _k_distanceForPoint(QPointF point)
 
 qreal _k_pointAngle(QPointF in)
 {
-    qreal r = sqrt(pow(in.x(), 2) + pow(in.y(), 2));
+    qreal r = sqrt(in.x()*in.x() + in.y()*in.y());
     qreal cosine = in.x()/r;
     qreal sine = in.y()/r;
 
@@ -591,7 +590,7 @@ qreal _k_pointAngle(QPointF in)
 
 QPointF _k_rotatePoint(QPointF in, qreal rotateAngle)
 {
-    qreal r = sqrt(pow(in.x(), 2) + pow(in.y(), 2));
+    qreal r = sqrt(in.x()*in.x() + in.y()*in.y());
     qreal cosine = in.x()/r;
     qreal sine = in.y()/r;
 
@@ -688,14 +687,20 @@ void AppletHandle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
                 qreal sx = newSize.x();
                 qreal sy = newSize.y();
 
-                qreal x = ox*(sx*ox+sy*oy)/(pow(ox,2)+pow(oy,2));
-                qreal y = oy*x/ox;
+                qreal x = ox*(sx*ox+sy*oy)/(ox*ox+oy*oy);
+                qreal y = (oy/ox)*x;
                 newSize = QPointF(x, y);
-            }
 
-            // limit size
-            newSize.rx() = qMin(max.width(), qMax(min.width(), newSize.x()));
-            newSize.ry() = qMin(max.height(), qMax(min.height(), newSize.y()));
+                // limit size, preserve ratio
+                newSize.rx() = qMin(max.width(), qMax(min.width(), newSize.x()));
+                newSize.ry() = newSize.x()*(oy/ox);
+                newSize.ry() = qMin(max.height(), qMax(min.height(), newSize.y()));
+                newSize.rx() = newSize.y()/(oy/ox);
+            } else {
+                // limit size
+                newSize.rx() = qMin(max.width(), qMax(min.width(), newSize.x()));
+                newSize.ry() = qMin(max.height(), qMax(min.height(), newSize.y()));
+            }
 
             // move center such that the static corner remains in the same place
             if (m_buttonsOnRight) {
