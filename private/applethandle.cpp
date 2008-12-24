@@ -47,7 +47,9 @@
 namespace Plasma
 {
 
-qreal _k_angleForPoints(const QPointF &center, const QPointF &pt1, const QPointF &pt2);
+qreal _k_distanceForPoint(QPointF point);
+qreal _k_pointAngle(QPointF in);
+QPointF _k_rotatePoint(QPointF in, qreal rotateAngle);
 
 AppletHandle::AppletHandle(Containment *parent, Applet *applet, const QPointF &hoverPos)
     : QObject(),
@@ -60,9 +62,6 @@ AppletHandle::AppletHandle(Containment *parent, Applet *applet, const QPointF &h
       m_anim(FadeIn),
       m_animId(0),
       m_angle(0.0),
-      m_tempAngle(0.0),
-      m_scaleWidth(1.0),
-      m_scaleHeight(1.0),
       m_backgroundBuffer(0),
       m_currentView(applet->view()),
       m_entryPos(hoverPos),
@@ -83,9 +82,7 @@ AppletHandle::AppletHandle(Containment *parent, Applet *applet, const QPointF &h
     qreal cosine = originalMatrix.m11();
     qreal sine = originalMatrix.m12();
 
-    m_angle = _k_angleForPoints(QPointF(0, 0),
-                                QPointF(1, 0),
-                                QPointF(cosine, sine));
+    m_angle = _k_pointAngle(QPointF(cosine, sine));
 
     m_applet->setParentItem(this);
 
@@ -154,17 +151,17 @@ void AppletHandle::detachApplet ()
 
     m_applet->removeSceneEventFilter(this);
 
-    QRectF rect = QRectF(m_applet->pos(), m_applet->size());
-    QPointF center = m_applet->mapFromParent(rect.center());
+    QRectF appletGeomLocal = m_applet->geometry();
+    QPointF center = mapToParent(appletGeomLocal.center());
+    QPointF appletPos = QPointF(center.x()-appletGeomLocal.width()/2, center.y()-appletGeomLocal.height()/2);
+    m_applet->setPos(appletPos);
 
-    QPointF newPos = transform().inverted().map(m_applet->pos());
-    m_applet->setPos(mapToParent(newPos));
-
-    QTransform matrix;
-    matrix.translate(center.x(), center.y());
-    matrix.rotateRadians(m_angle);
-    matrix.translate(-center.x(), -center.y());
-    m_applet->setTransform(matrix);
+    // transform is relative to the applet
+    QTransform t;
+    t.translate(appletGeomLocal.width()/2, appletGeomLocal.height()/2);
+    t.rotateRadians(m_angle);
+    t.translate(-appletGeomLocal.width()/2, -appletGeomLocal.height()/2);
+    m_applet->setTransform(t);
 
     m_applet->setParentItem(m_containment);
 
@@ -460,6 +457,24 @@ void AppletHandle::mousePressEvent(QGraphicsSceneMouseEvent *event)
             m_pos = pos();
         }
 
+        if (m_pressedButton == ResizeButton || m_pressedButton == RotateButton) {
+            m_origAppletCenter = mapToScene(m_applet->geometry().center());
+            m_origAppletSize = QPointF(m_applet->size().width(), m_applet->size().height());
+
+            // resize
+            if (m_buttonsOnRight) {
+                m_resizeStaticPoint = mapToScene(m_applet->geometry().bottomLeft());
+            } else {
+                m_resizeStaticPoint = mapToScene(m_applet->geometry().bottomRight());
+            }
+            m_resizeGrabPoint = mapToScene(event->pos());                
+            QPointF cursorRelativeToStatic = m_resizeGrabPoint - m_resizeStaticPoint;
+            m_aspectResizeOrigRadius = sqrt(pow(cursorRelativeToStatic.x(), 2) + pow(cursorRelativeToStatic.y(), 2));
+
+            // rotate
+            m_rotateAngleOffset = m_angle - _k_pointAngle(mapToScene(event->pos()) - m_origAppletCenter);
+        }
+
         event->accept();
 
         update();
@@ -503,18 +518,6 @@ void AppletHandle::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 
     if (m_applet && event->button() == Qt::LeftButton) {
         switch (m_pressedButton) {
-        case ResizeButton:
-        case RotateButton:
-        {
-            m_angle += m_tempAngle;
-            if (m_angle > M_PI) {
-                m_angle = m_angle - 2 * M_PI;
-            } else if (m_angle < -M_PI) {
-                m_angle = m_angle + 2 * M_PI;
-            }
-            m_tempAngle = 0; 
-            break;
-        }
         case ConfigureButton:
             //FIXME: Remove this call once the configuration management change was done
             if (m_pressedButton == releasedAtButton) {
@@ -573,15 +576,34 @@ qreal _k_distanceForPoint(QPointF point)
     return std::sqrt(point.x() * point.x() + point.y() * point.y());
 }
 
-qreal _k_angleForPoints(const QPointF &center, const QPointF &pt1, const QPointF &pt2)
+qreal _k_pointAngle(QPointF in)
 {
-    QPointF vec1 = pt1 - center;
-    QPointF vec2 = pt2 - center;
+    qreal r = sqrt(pow(in.x(), 2) + pow(in.y(), 2));
+    qreal cosine = in.x()/r;
+    qreal sine = in.y()/r;
 
-    qreal alpha = std::atan2(vec1.y(), vec1.x());
-    qreal beta = std::atan2(vec2.y(), vec2.x());
+    if (sine>=0) {
+        return acos(cosine);
+    } else {
+        return -acos(cosine);
+    }
+}
 
-    return beta - alpha;
+QPointF _k_rotatePoint(QPointF in, qreal rotateAngle)
+{
+    qreal r = sqrt(pow(in.x(), 2) + pow(in.y(), 2));
+    qreal cosine = in.x()/r;
+    qreal sine = in.y()/r;
+
+    qreal angle;
+    if (sine>=0) {
+        angle = acos(cosine);
+    } else {
+        angle = -acos(cosine);
+    }
+
+    qreal newAngle = angle + rotateAngle;
+    return QPointF(r*cos(newAngle), r*sin(newAngle));
 }
 
 void AppletHandle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
@@ -614,170 +636,94 @@ void AppletHandle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
         } else {
             setPos(m_pos);
         }
-    } else if (m_pressedButton == RotateButton ||
-               m_pressedButton == ResizeButton) {
-        if (_k_distanceForPoint(deltaScene) <= 1.0) {
-            return;
+    } else if (m_pressedButton == ResizeButton || m_pressedButton == RotateButton) {
+        QPointF cursorPoint = mapToScene(event->pos());
+
+        // the code below will adjust these based on the type of operation
+        QPointF newSize;
+        QPointF newCenter;
+        qreal newAngle;
+
+        // get size limits
+        QSizeF min = m_applet->minimumSize();
+        QSizeF max = m_applet->maximumSize();
+        // If the applet doesn't have a minimum size, calculate based on a
+        // minimum content area size of 16x16
+        if (min.isEmpty()) {
+            min = m_applet->boundingRect().size() - m_applet->boundingRect().size();
+            min += QSizeF(16, 16);
         }
-
-        QPointF pressPos = mapFromScene(event->buttonDownScenePos(Qt::LeftButton));
-
-        QRectF originalRect = m_totalRect;
-        QRectF rect = QRectF(m_applet->pos(), m_applet->size());
-        QPointF center = rect.center();
 
         if (m_pressedButton == RotateButton) {
-            m_tempAngle = _k_angleForPoints(center, pressPos, event->pos());
+            newSize = m_origAppletSize;
+            newCenter = m_origAppletCenter;
 
-            if (fabs(remainder(m_angle + m_tempAngle, snapAngle)) < 0.15) {
-                m_tempAngle = m_tempAngle - remainder(m_angle + m_tempAngle, snapAngle);
+            QPointF centerRelativePoint = cursorPoint - m_origAppletCenter;
+            if (_k_distanceForPoint(centerRelativePoint) < 10) {
+                newAngle = m_angle;
+            } else {
+                qreal cursorAngle = _k_pointAngle(centerRelativePoint);
+                newAngle = m_rotateAngleOffset + cursorAngle;
+                if (fabs(remainder(newAngle, snapAngle)) < 0.15) {
+                    newAngle = newAngle - remainder(newAngle, snapAngle);
+                }
             }
-
-            m_scaleWidth = m_scaleHeight = 1.0;
         } else {
-            qreal w = m_applet->size().width();
-            qreal h = m_applet->size().height();
-            QSizeF min = m_applet->minimumSize();
-            QSizeF max = m_applet->maximumSize();
-            QPointF resizePoint(0.0, 0.0);
+            // un-rotate screen points so we can read differences of coordinates
+            QPointF rStaticPoint = _k_rotatePoint(m_resizeStaticPoint, -m_angle);
+            QPointF rCursorPoint = _k_rotatePoint(cursorPoint, -m_angle);
+            QPointF rGrabPoint = _k_rotatePoint(m_resizeGrabPoint, -m_angle);
+
             if (m_buttonsOnRight) {
-                resizePoint = rect.topRight();
+                newSize = m_origAppletSize + QPointF(rCursorPoint.x() - rGrabPoint.x(), rGrabPoint.y() - rCursorPoint.y());
             } else {
-                resizePoint = rect.topLeft();
+                newSize = m_origAppletSize + QPointF(rGrabPoint.x() - rCursorPoint.x(), rGrabPoint.y() - rCursorPoint.y());
             }
 
+            // if preserving aspect ratio, project the calculated size point to the line
+            // theough the origin and the original size point
+            if (m_applet->aspectRatioMode() != Plasma::IgnoreAspectRatio) {
+                qreal ox = m_origAppletSize.x();
+                qreal oy = m_origAppletSize.y();
+                qreal sx = newSize.x();
+                qreal sy = newSize.y();
 
-            // If the applet doesn't have a minimum size, calculate based on a
-            // minimum content area size of 16x16
-            if (min.isEmpty()) {
-                min = m_applet->boundingRect().size() - m_applet->boundingRect().size();
-                min += QSizeF(16, 16);
+                qreal x = ox*(sx*ox+sy*oy)/(pow(ox,2)+pow(oy,2));
+                qreal y = oy*x/ox;
+                newSize = QPointF(x, y);
             }
 
-            bool ignoreAspectRatio = m_applet->aspectRatioMode() == Plasma::IgnoreAspectRatio;
+            // limit size
+            newSize.rx() = qMin(max.width(), qMax(min.width(), newSize.x()));
+            newSize.ry() = qMin(max.height(), qMax(min.height(), newSize.y()));
 
-            if (QApplication::keyboardModifiers() & Qt::ControlModifier) {
-                ignoreAspectRatio = !ignoreAspectRatio;
-            }
-
-            if (ignoreAspectRatio) {
-                // free resizing
-                qreal newScaleWidth = 1.0;
-                qreal newScaleHeight = 1.0;
-  
-                qreal x = deltaScene.x() / m_applet->size().width();
-                qreal y = -deltaScene.y() / m_applet->size().height();
-
-                if (!m_buttonsOnRight) {
-                    x *= -1.0;
-                }
-
-                newScaleWidth += x;
-                newScaleHeight += y;
-
-                if (qAbs(event->pos().x() - pressPos.x()) <= KGlobalSettings::dndEventDelay()) {
-                    newScaleWidth = 1.0 + m_originalSize.width() / originalRect.width();
-                }
-
-                if (qAbs(event->pos().y() - pressPos.y()) <= KGlobalSettings::dndEventDelay()) {
-                    newScaleHeight = 1.0 + m_originalSize.height() / originalRect.height();
-                }
-
-                if (newScaleHeight * h < min.height()) {
-                    m_scaleHeight = min.height() / h;
-                } else if (newScaleHeight * h > max.height()) {
-                    m_scaleHeight = max.height() / h;
-                } else {
-                    m_scaleHeight = newScaleHeight;
-                }
-                if (newScaleWidth * w < min.width()) {
-                    m_scaleWidth = min.width() / w;
-                } else if (newScaleWidth * w > max.width()) {
-                    m_scaleWidth = max.width() / w;
-                } else {
-                    m_scaleWidth = newScaleWidth;
-                }
-            } else {
-                // maintain aspect ratio
-                qreal newScale = 1.0;
-  
-                qreal x = deltaScene.x() / m_applet->size().width();
-                qreal y = -deltaScene.y() / m_applet->size().height();
-
-                if (!m_buttonsOnRight) {
-                    x *= -1.0;
-                }
-
-                newScale += (x + y) / 2; //divide by two to have slower resizing
-
-                if (qAbs(event->pos().y() - pressPos.y()) <= KGlobalSettings::dndEventDelay()) {
-                    newScale = 1.0 + m_originalSize.height() / originalRect.height();
-                }
-
-                if (newScale * w < min.width() || newScale * h < min.height()) {
-                    m_scaleWidth = m_scaleHeight = qMax(min.width() / w, min.height() / h);
-                } else if (newScale * w > max.width() && newScale * h > max.height()) {
-                    m_scaleWidth = m_scaleHeight = qMin(max.width() / w, max.height() / h);
-                } else {
-                    m_scaleHeight = m_scaleWidth = newScale;
-                }
-            }
-            
-            // Resize Applet
-            QSizeF oldSize(m_applet->size());
-            const qreal newWidth = oldSize.width() * m_scaleWidth;
-            const qreal newHeight = oldSize.height() * m_scaleHeight;
-            m_applet->resize(newWidth, newHeight);
-
-            // Adjust position based on new applet size
-            qreal deltaX = 0;
-            qreal deltaY = 0;
-            const qreal deltaH = newHeight - oldSize.height();
-            const qreal deltaW = newWidth - oldSize.width();
+            // move center such that the static corner remains in the same place
             if (m_buttonsOnRight) {
-                if (m_angle >= 0 && m_angle < M_PI_2) {
-                    deltaX = 0;
-                    deltaY = -cos(m_angle) * deltaH;
-                } else if (m_angle >= M_PI_2 && m_angle <= M_PI) {
-                    deltaX = cos(m_angle) * deltaW;
-                    deltaY = 0;
-                } else if (m_angle >= -M_PI_2 && m_angle < 0) {
-                    deltaX = sin(m_angle) * deltaH;
-                    deltaY = -cos(m_angle) * deltaH + sin(m_angle) * deltaW;
-                } else if (m_angle >= -M_PI && m_angle < M_PI_2) {
-                    deltaX = cos(m_angle) * deltaW + sin(m_angle) * deltaH;
-                    deltaY = sin(m_angle) * deltaW;
-                }
+                newCenter =  _k_rotatePoint(QPointF(rStaticPoint.x() + newSize.x()/2, rStaticPoint.y() - newSize.y()/2), m_angle);
             } else {
-                if (m_angle >= 0 && m_angle < M_PI_2) {
-                    deltaX = -cos(m_angle) * deltaW;
-                    deltaY = -cos(m_angle) * deltaH - sin(m_angle) * deltaW;
-                } else if (m_angle >= M_PI_2 && m_angle <= M_PI) {
-                    deltaX = 0;
-                    deltaY = -sin(m_angle) * deltaW;
-                } else if (m_angle >= -M_PI_2 && m_angle < 0) {
-                    deltaX = sin(m_angle) * deltaH - cos(m_angle) * deltaW;
-                    deltaY = 0;
-                } else if (m_angle >= -M_PI && m_angle < M_PI_2) {
-                    deltaX = sin(m_angle) * deltaH;
-                    deltaY = 0;
-                }
+                newCenter =  _k_rotatePoint(QPointF(rStaticPoint.x() - newSize.x()/2, rStaticPoint.y() - newSize.y()/2), m_angle);
             }
 
-            //kDebug() << "delta:" << deltaX << "," << deltaY;
-            //kDebug() << "Scale:" << m_scaleWidth << "," << m_scaleHeight;
-            moveBy(deltaX, deltaY);
+            newAngle = m_angle;
         }
 
-        //kDebug() << "Angle:" << m_angle * 180/M_PI << "," << (m_angle + m_tempAngle)*180/M_PI;
+        // set position of applet handle
+        QPointF newHandlePosInScene = newCenter - (m_applet->pos() + newSize/2);
+        QPointF newHandlePos = parentItem()->mapFromScene(newHandlePosInScene);
+        setPos(newHandlePos);
 
-        rect = QRectF(m_applet->pos(), m_applet->size());
-        center = rect.center();
-        QTransform matrix;
-        matrix.translate(center.x(), center.y());
-        matrix.rotateRadians(m_angle + m_tempAngle);
-        matrix.translate(-center.x(), -center.y());
-        setTransform(matrix);
+        // set applet size
+        m_applet->resize(newSize.x(), newSize.y());
+
+        // set applet handle rotation - rotate around center of applet
+        QTransform t;
+        QPointF appletCenter = m_applet->geometry().center();
+        t.translate(appletCenter.x(), appletCenter.y());
+        t.rotateRadians(newAngle);
+        t.translate(-appletCenter.x(), -appletCenter.y());
+        setTransform(t);
+        m_angle = newAngle;
+
         m_applet->update();
     } else {
         QGraphicsItem::mouseMoveEvent(event);

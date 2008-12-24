@@ -114,9 +114,6 @@ class AppletHandle : public QObject, public QGraphicsItem
         FadeType m_anim;
         int m_animId;
         qreal m_angle;
-        qreal m_tempAngle;
-        qreal m_scaleWidth;
-        qreal m_scaleHeight;
         QColor m_gradientColor;
         QTimer *m_hoverTimer;
         QTimer *m_leaveTimer;
@@ -130,7 +127,18 @@ class AppletHandle : public QObject, public QGraphicsItem
         QPointF m_entryPos; //where the hover in event occurred
         QPointF m_pos;      //current position of applet in sceneCoords
         qreal m_zValue;     //current zValue of the applet, so it can be restored after drag.
-        QSizeF m_originalSize;
+
+        // used for both resize and rotate
+        QPointF m_origAppletCenter;
+        QPointF m_origAppletSize;
+
+        // used for resize
+        QPointF m_resizeStaticPoint;
+        QPointF m_resizeGrabPoint;
+        // used during aspect-ratio preserving resize
+        qreal m_aspectResizeOrigRadius;
+        // used for rotate
+        qreal m_rotateAngleOffset; // applet angle minus cursor angle
 
         bool m_buttonsOnRight : 1;
         bool m_pendingFade : 1;
