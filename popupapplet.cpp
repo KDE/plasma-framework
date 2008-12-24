@@ -218,6 +218,12 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
             QSize prefSize;
 
             if (gWidget) {
+                Corona *corona = qobject_cast<Corona *>(gWidget->scene());
+
+                if (corona) {
+                    corona->removeOffscreenWidget(gWidget);
+                }
+
                 lay->addItem(gWidget);
                 prefSize = gWidget->preferredSize().toSize();
             } else if (qWidget) {
