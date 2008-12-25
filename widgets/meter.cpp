@@ -141,7 +141,7 @@ public:
 
         if (elementRect.width() > elementRect.height()) {
             qreal ratio = tileSize.height() / tileSize.width();
-            int numTiles = elementRect.width()/(elementRect.height()/ratio);
+            int numTiles = qreal(elementRect.width())/(qreal(elementRect.height())/ratio);
             tileSize = QSize(elementRect.width()/numTiles, elementRect.height());
 
             QPoint center = elementRect.center().toPoint();
@@ -149,7 +149,7 @@ public:
             elementRect.moveCenter(center);
         } else {
             qreal ratio = tileSize.width() / tileSize.height();
-            int numTiles = elementRect.height()/(elementRect.width()/ratio);
+            int numTiles = qreal(elementRect.height())/(qreal(elementRect.width())/ratio);
             tileSize = QSize(elementRect.width(), elementRect.height()/numTiles);
 
             QPoint center = elementRect.center().toPoint();
