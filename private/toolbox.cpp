@@ -58,7 +58,7 @@ public:
     int size;
     QSize iconSize;
     ToolBox::Corner corner;
-    QPoint dragStart;
+    QPoint dragStartRelative;
     QTransform viewTransform;
     bool hidden : 1;
     bool showing : 1;
@@ -194,7 +194,8 @@ ToolBox::Corner ToolBox::corner() const
 void ToolBox::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     event->accept();
-    d->dragStart = mapToParent(event->pos()).toPoint();
+    // set grab position relative to toolbox
+    d->dragStartRelative = mapToParent(event->pos()).toPoint() - pos().toPoint();
 }
 
 void ToolBox::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
@@ -203,9 +204,6 @@ void ToolBox::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
         return;
     }
 
-    //TODOs:
-    // move relative to where on the toolbox it was grabbed
-    // sticky points at midpoints
     d->dragging = true;
     d->userMoved = true;
     const QPoint newPos = mapToParent(event->pos()).toPoint();
@@ -219,6 +217,36 @@ void ToolBox::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     int x = curPos.x();
     int y = curPos.y();
 
+    // jump to the nearest desktop border
+    int distanceToLeft = newPos.x() - d->dragStartRelative.x();
+    int distanceToRight = areaWidth - w - distanceToLeft;
+    int distanceToTop = newPos.y() - d->dragStartRelative.y();
+    int distanceToBottom = areaHeight - h - distanceToTop;
+
+    // decide which border is the nearest
+    if (distanceToLeft < distanceToTop && distanceToLeft < distanceToRight &&
+        distanceToLeft < distanceToBottom ) {
+        x = 0;
+        y = (newPos.y() - d->dragStartRelative.y());
+    }
+    else if (distanceToRight < distanceToTop && distanceToRight < distanceToLeft &&
+             distanceToRight < distanceToBottom) {
+        x = areaWidth - w;
+        y = (newPos.y() - d->dragStartRelative.y());
+    }
+    else if (distanceToTop < distanceToLeft && distanceToTop < distanceToRight &&
+             distanceToTop < distanceToBottom ) {
+        y = 0;
+        x = (newPos.x() - d->dragStartRelative.x());
+    }
+    else if (distanceToBottom < distanceToLeft && distanceToBottom < distanceToRight &&
+             distanceToBottom < distanceToTop) {
+        y = areaHeight - h;
+        x = (newPos.x() - d->dragStartRelative.x());
+    }
+
+    //kDebug() << "distances from borders" << (newPos - d->dragStartRelative) << distanceToLeft << distanceToRight << distanceToTop << distanceToBottom << "=>" << x << y;
+/*
     if (y == 0 || y + h >= areaHeight) {
         x = curPos.x() + (newPos.x() - d->dragStart.x());
         if (x < 0) {
@@ -239,10 +267,9 @@ void ToolBox::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
             y = areaHeight - h;
         }
     }
-
+*/
     x = qBound(0, x, areaWidth - w);
     y = qBound(0, y, areaHeight - h);
-
 
     Corner newCorner = d->corner;
     if (x == 0) {
@@ -275,7 +302,6 @@ void ToolBox::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     }
 
     setPos(x, y);
-    d->dragStart = newPos;
 }
 
 void ToolBox::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
@@ -284,7 +310,6 @@ void ToolBox::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
         emit toggled();
     }
 
-    d->dragStart = QPoint();
     d->dragging = false;
     KConfigGroup cg(d->containment->config());
     save(cg);
