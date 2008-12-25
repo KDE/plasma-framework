@@ -467,9 +467,9 @@ void PopupAppletPrivate::togglePopup()
         if (dialog->isVisible()) {
             dialog->hide();
         } else {
-            dialog->show();
             updateDialogPosition();
             KWindowSystem::setState(dialog->winId(), NET::SkipTaskbar | NET::SkipPager);
+            dialog->show();
         }
 
         dialog->clearFocus();
