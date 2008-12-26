@@ -497,6 +497,7 @@ void ExtenderPrivate::updateEmptyExtenderLabel()
                                      && !spacerWidget ) {
         //add the empty extender label.
         emptyExtenderLabel = new Label(q);
+        emptyExtenderLabel->setAlignment(Qt::AlignCenter);
         emptyExtenderLabel->setText(emptyExtenderMessage);
         emptyExtenderLabel->setMinimumSize(QSizeF(150, 64));
         emptyExtenderLabel->setPreferredSize(QSizeF(200, 64));
