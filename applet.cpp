@@ -1616,7 +1616,7 @@ QVariant Applet::itemChange(GraphicsItemChange change, const QVariant &value)
     }
         break;
     case ItemPositionChange:
-        return immutability() == Mutable ? value : pos();
+        return (immutability() == Mutable || formFactor() == Horizontal || formFactor() == Vertical) ? value : pos();
         break;
     case ItemTransformChange:
         return immutability() == Mutable ? value : transform();
