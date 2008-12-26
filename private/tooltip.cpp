@@ -100,7 +100,7 @@ class ToolTipPrivate
           preview(0),
           source(0),
           timeline(0),
-          orientation(Qt::Horizontal),
+          direction(Plasma::Up),
           autohide(true)
     { }
 
@@ -112,7 +112,7 @@ class ToolTipPrivate
     QTimeLine *timeline;
     QPoint to;
     QPoint from;
-    Qt::Orientation orientation;
+    Plasma::Direction direction;
     bool autohide;
 };
 
@@ -187,9 +187,11 @@ void ToolTip::checkSize()
         resize(hint);
 #endif
     */
+
+        //offsets to stop tooltips from jumping when they resize
         int deltaX = 0;
         int deltaY = 0;
-        if (d->orientation == Qt::Horizontal) {
+        if (d->direction == Plasma::Up) {
         /*
         kDebug() << "resizing from" << current << "to" << hint
                  << "and moving from" << pos() << "to"
@@ -197,7 +199,7 @@ void ToolTip::checkSize()
                  << current.height() - hint.height();
                  */
             deltaY = current.height() - hint.height();
-        } else {
+        } else if (d->direction == Plasma::Left) {
         /*
         kDebug() << "vertical resizing from" << current << "to" << hint
                  << "and moving from" << pos() << "to"
@@ -319,9 +321,9 @@ bool ToolTip::autohide() const
     return d->autohide;
 }
 
-void ToolTip::setOrientation(Qt::Orientation orientation)
+void ToolTip::setDirection(Plasma::Direction direction)
 {
-    d->orientation = orientation;
+    d->direction = direction;
 }
 
 void ToolTip::updateTheme()

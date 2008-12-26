@@ -317,7 +317,7 @@ void ToolTipManagerPrivate::showToolTip()
     Containment *c = dynamic_cast<Containment *>(currentWidget->topLevelItem());
     kDebug() << "about to show" << justCreated << (QObject*)c;
     if (c) {
-        tipWidget->setOrientation(c->formFactor() == Vertical ? Qt::Vertical : Qt::Horizontal);
+        tipWidget->setDirection(Plasma::locationToDirection(c->location()));
     }
 
     tipWidget->setContent(currentWidget, tooltip.value());
