@@ -207,6 +207,14 @@ void ToolTipManager::setContent(QGraphicsWidget *widget, const ToolTipContent &d
     if (d->currentWidget == widget) {
         if (data.isEmpty()) {
             hide(widget);
+        } else {
+            d->delayedHide = data.autohide();
+            if (d->delayedHide) {
+                //kDebug() << "starting authoide";
+                d->hideTimer->start(3000);
+            } else {
+                d->hideTimer->stop();
+            }
         }
 
         d->tipWidget->setContent(widget, data);
@@ -330,6 +338,8 @@ void ToolTipManagerPrivate::showToolTip()
     if (delayedHide) {
         //kDebug() << "starting authoide";
         hideTimer->start(3000);
+    } else {
+        hideTimer->stop();
     }
 }
 
