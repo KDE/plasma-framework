@@ -53,6 +53,33 @@
 namespace Plasma
 {
 
+class ExtenderItemView : public QGraphicsView
+{
+public:
+    ExtenderItemView(QGraphicsScene *scene, QWidget *parent = 0)
+        : QGraphicsView(scene, parent)
+    {
+        //since this view witll have a really short lifespan it can be checked a single time
+        composite = KWindowSystem::compositingActive();
+    }
+
+    ~ExtenderItemView()
+    {}
+
+    void drawBackground(QPainter *painter, const QRectF &rect)
+    {
+        if (composite) {
+            painter->setCompositionMode(QPainter::CompositionMode_Source);
+            painter->fillRect(rect.toAlignedRect(), Qt::transparent);
+        } else {
+            QGraphicsView::drawBackground(painter, rect);
+        }
+    }
+
+private:
+    bool composite;
+};
+
 ExtenderItem::ExtenderItem(Extender *hostExtender, uint extenderItemId)
         : QGraphicsWidget(hostExtender),
           d(new ExtenderItemPrivate(this, hostExtender))
@@ -556,7 +583,7 @@ void ExtenderItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
             //create a toplevel view and aim it at the applet.
             corona->addOffscreenWidget(this);
 
-            d->toplevel = new QGraphicsView(scene(), 0);
+            d->toplevel = new ExtenderItemView(scene(), 0);
 
             d->toplevel->setWindowFlags(
                 Qt::ToolTip | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
