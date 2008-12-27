@@ -470,6 +470,7 @@ void PopupAppletPrivate::togglePopup()
             updateDialogPosition();
             KWindowSystem::setState(dialog->winId(), NET::SkipTaskbar | NET::SkipPager);
             dialog->show();
+            dialog->adjustSize();
         }
 
         dialog->clearFocus();
