@@ -4,6 +4,7 @@ X-KDE-ServiceType=Plasma/Runner
 
 Comment=KRunner plugin
 Comment[ar]=ملحق KRunner
+Comment[as]=KRunner প্লাগ-ইন
 Comment[be@latin]=Plugin dla „KRunner”
 Comment[bg]=Приставка за KRunner
 Comment[bn]=কে-রানার প্লাগ-ইন
@@ -23,6 +24,7 @@ Comment[is]=KRunner íforrit
 Comment[ja]=KRunner プラグイン
 Comment[kk]=KRunner плагині
 Comment[km]=កម្មវិធី​ជំនួយ​របស់ KRunner
+Comment[ko]=KRunner 플러그인
 Comment[ku]=Pêveka KAjoker 
 Comment[lv]=KRunner spraudnis
 Comment[mai]=केरनर प्लगइन

@@ -4,6 +4,7 @@ X-KDE-ServiceType=Plasma/Applet
 
 Comment=Plasma applet
 Comment[ar]=بريمجة بلازما
+Comment[as]=Plasma এপ্লেট
 Comment[be@latin]=Aplet „Plasma”
 Comment[bg]=Аплет за Plasma
 Comment[bn]=প্লাসমা অ্যাপলেট
@@ -22,6 +23,7 @@ Comment[he]=יישומון של Plasma
 Comment[is]=Plasma smáforrit
 Comment[ja]=Plasma アプレット
 Comment[km]=អាប់ភ្លេត​ប្លាស្មា
+Comment[ko]=Plasma 애플릿
 Comment[ku]=Sepanoka Plasma
 Comment[lv]=Plasma aplets
 Comment[mai]=प्लाजमा एप्पलेट
