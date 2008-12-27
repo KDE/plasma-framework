@@ -208,8 +208,8 @@ void ToolBox::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     d->userMoved = true;
     const QPoint newPos = mapToParent(event->pos()).toPoint();
     const QPoint curPos = pos().toPoint();
-    const int h = abs(boundingRect().height());
-    const int w = abs(boundingRect().width());
+    const int h = abs((int)boundingRect().height());
+    const int w = abs((int)boundingRect().width());
 
     const int areaWidth = parentWidget()->size().width();
     const int areaHeight = parentWidget()->size().height();
