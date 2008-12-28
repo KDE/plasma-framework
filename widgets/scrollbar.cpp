@@ -47,7 +47,6 @@ ScrollBar::ScrollBar(QGraphicsWidget *parent)
 
 ScrollBar::~ScrollBar()
 {
-    widget()->setStyle(0);
     delete d;
     Plasma::Style::doneWithSharedStyle();
 }

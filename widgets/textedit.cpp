@@ -53,8 +53,6 @@ TextEdit::TextEdit(QGraphicsWidget *parent)
 
 TextEdit::~TextEdit()
 {
-    nativeWidget()->verticalScrollBar()->setStyle(0);
-    nativeWidget()->horizontalScrollBar()->setStyle(0);
     delete d;
     Plasma::Style::doneWithSharedStyle();
 }
