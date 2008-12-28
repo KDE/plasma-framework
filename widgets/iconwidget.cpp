@@ -1194,7 +1194,10 @@ void IconWidgetPrivate::syncToAction()
     q->setText(action->iconText());
     q->setEnabled(action->isEnabled());
     q->setVisible(action->isVisible());
-    //TODO use action's tooltip too
+
+    if (!q->toolTip().isEmpty()) {
+        q->setToolTip(action->text());
+    }
 
     emit q->changed();
 }
