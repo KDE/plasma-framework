@@ -291,8 +291,6 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
                 KWindowSystem::setState(dialog->winId(), NET::SkipTaskbar | NET::SkipPager);
                 dialog->installEventFilter(q);
 
-                QObject::connect(dialog, SIGNAL(dialogResized()), q, SLOT(dialogSizeChanged()));
-                QObject::connect(dialog, SIGNAL(dialogVisible(bool)), q, SLOT(dialogStatusChanged(bool)));
                 q->setMinimumSize(QSize(0, 0));
                 if (gWidget) {
                     Corona *corona = qobject_cast<Corona *>(gWidget->scene());
@@ -307,10 +305,13 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
                     l_layout->setSpacing(0);
                     l_layout->setMargin(0);
                     l_layout->addWidget(qWidget);
+                    dialog->adjustSize();
                 }
+                
+                QObject::connect(dialog, SIGNAL(dialogResized()), q, SLOT(dialogSizeChanged()));
+                QObject::connect(dialog, SIGNAL(dialogVisible(bool)), q, SLOT(dialogStatusChanged(bool)));
             }
 
-            dialog->adjustSize();
 
             if (icon && lay) {
                 lay->addItem(icon);
@@ -470,7 +471,7 @@ void PopupAppletPrivate::togglePopup()
             updateDialogPosition();
             KWindowSystem::setState(dialog->winId(), NET::SkipTaskbar | NET::SkipPager);
             dialog->show();
-            dialog->adjustSize();
+            dialog->resize(dialog->size());
         }
 
         dialog->clearFocus();
@@ -521,9 +522,17 @@ void PopupAppletPrivate::updateDialogPosition()
 
     Q_ASSERT(q->containment());
     Q_ASSERT(q->containment()->corona());
-    const int width = qMin(sizeGroup.readEntry("DialogWidth", 0),
+
+    int preferredWidth = 0;
+    int preferredHeight = 0;
+    if (dialog->graphicsWidget()) {
+        preferredWidth = dialog->graphicsWidget()->preferredSize().width();
+        preferredHeight = dialog->graphicsWidget()->preferredSize().height();
+    }
+
+    const int width = qMin(sizeGroup.readEntry("DialogWidth", preferredWidth),
                            q->containment()->corona()->screenGeometry(-1).width() - 50);
-    const int height = qMin(sizeGroup.readEntry("DialogHeight", 0),
+    const int height = qMin(sizeGroup.readEntry("DialogHeight", preferredHeight),
                             q->containment()->corona()->screenGeometry(-1).height() - 50);
 
     QSize saved(width, height);
