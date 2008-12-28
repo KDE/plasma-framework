@@ -1582,6 +1582,13 @@ void ContainmentPrivate::containmentConstraintsEvent(Plasma::Constraints constra
             action->setText(unlocked ? i18n("Lock Widgets") : i18n("Unlock Widgets"));
             action->setIcon(KIcon(unlocked ? "object-locked" : "object-unlocked"));
         }
+        if (!KAuthorized::authorize("PlasmaAllowConfigureWhenLocked")) {
+            action = actions().action("activity settings");
+            if (action) {
+                action->setVisible(unlocked);
+                action->setEnabled(unlocked);
+            }
+        }
 
         // tell the applets too
         foreach (Applet *a, applets) {
