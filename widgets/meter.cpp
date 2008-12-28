@@ -130,7 +130,7 @@ public:
             elementRect = QRectF(QPoint(0,0), meter->size());
         }
 
-        if (image->hasElement("hint-bar-stretch")) {
+        if (image->hasElement("hint-bar-stretch") || !image->hasElement("bar-active-center")) {
             return elementRect;
         }
 
