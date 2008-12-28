@@ -211,6 +211,7 @@ void ThemePrivate::colorsChanged()
     discardCache(true);
     colorScheme = KColorScheme(QPalette::Active, KColorScheme::Window, colors);
     buttonColorScheme = KColorScheme(QPalette::Active, KColorScheme::Button, colors);
+    emit q->themeChanged();
 }
 
 class ThemeSingleton
@@ -337,14 +338,10 @@ void Theme::setThemeName(const QString &themeName)
     d->defaultWallpaperHeight = cg.readEntry("defaultHeight", DEFAULT_WALLPAPER_HEIGHT);
 
     disconnect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()),
-               this, SIGNAL(themeChanged()));
-    disconnect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()),
                 this, SLOT(colorsChanged()));
 
     if (colorsFile.isEmpty()) {
         d->colors = 0;
-        connect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()),
-                this, SIGNAL(themeChanged()));
         connect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()),
                 this, SLOT(colorsChanged()));
     } else {
