@@ -95,9 +95,8 @@ QPainterPath AppletScript::shape() const
 
 void AppletScript::setHasConfigurationInterface(bool hasInterface)
 {
-    Q_UNUSED(hasInterface)
     if (applet()) {
-        applet()->setHasConfigurationInterface(true);
+        applet()->setHasConfigurationInterface(hasInterface);
     }
 }
 
