@@ -117,6 +117,16 @@ public:
      */
     void setHasConfigurationInterface(bool hasInterface);
 
+    /**
+     * @see Applet
+     */
+    void setConfigurationRequired(bool req, const QString &reason = QString());
+
+    /**
+     * @see Applet
+     */
+    void setFailedToLaunch(bool failed, const QString &reason = QString());
+
 public Q_SLOTS:
 
     /**

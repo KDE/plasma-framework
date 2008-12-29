@@ -100,6 +100,20 @@ void AppletScript::setHasConfigurationInterface(bool hasInterface)
     }
 }
 
+void AppletScript::setConfigurationRequired(bool req, const QString &reason)
+{
+    if (applet()) {
+        applet()->setConfigurationRequired(req, reason);
+    }
+}
+
+void AppletScript::setFailedToLaunch(bool failed, const QString &reason)
+{
+    if (applet()) {
+        applet()->setFailedToLaunch(failed, reason);
+    }
+}
+
 void AppletScript::showConfigurationInterface()
 {
 }
