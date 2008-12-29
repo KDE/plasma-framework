@@ -712,10 +712,6 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          * method can be called to show a standard interface prompting the user
          * to configure the applet
          *
-         * Not that all children items will be deleted when this method is
-         * called. If you have pointers to these items, you will need to
-         * reset them after calling this method.
-         *
          * @param needsConfiguring true if the applet needs to be configured,
          *                         or false if it doesn't
          */
