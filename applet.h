@@ -509,6 +509,13 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         KShortcut globalShortcut() const;
 
         /**
+         * @return true is there is a popup assoiated with this Applet
+         * showing, such as the dialog of a PopupApplet. May be reimplemented
+         * for custom popup implementations.
+         */
+        virtual bool isPopupShowing() const;
+
+        /**
          * associate actions with this widget, including ones added after this call.
          * needed to make keyboard shortcuts work.
          */

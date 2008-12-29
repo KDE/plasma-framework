@@ -1164,6 +1164,11 @@ KShortcut Applet::globalShortcut() const
     return KShortcut();
 }
 
+bool Applet::isPopupShowing() const
+{
+    return false;
+}
+
 void Applet::addAssociatedWidget(QWidget *widget)
 {
     d->actions.addAssociatedWidget(widget);

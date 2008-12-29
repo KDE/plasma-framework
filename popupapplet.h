@@ -100,6 +100,11 @@ public:
      */
     bool isPassivePopup() const;
 
+    /**
+     * @return true if the applet is popped up
+     */
+    bool isPopupShowing() const;
+
 public Q_SLOTS:
     /**
      * Hides the popup.
