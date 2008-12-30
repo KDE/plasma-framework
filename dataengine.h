@@ -159,9 +159,8 @@ class PLASMA_EXPORT DataEngine : public QObject
          *                        If the data has not changed, no update will be sent.
          * @param intervalAlignment the number of ms to align the interval to
          **/
-        Q_INVOKABLE void connectAllSources(
-            QObject *visualization, uint pollingInterval = 0,
-            Plasma::IntervalAlignment intervalAlignment = NoAlignment) const;
+        Q_INVOKABLE void connectAllSources(QObject *visualization, uint pollingInterval = 0,
+                                           Plasma::IntervalAlignment intervalAlignment = NoAlignment) const;
 
         /**
          * Disconnects a source to an object that was receiving data updates.
@@ -226,7 +225,7 @@ class PLASMA_EXPORT DataEngine : public QObject
          * @return the Package object, or 0 if none
          **/
         const Package *package() const;
-        
+
         /**
          * Returns the plugin name for the applet
          */
