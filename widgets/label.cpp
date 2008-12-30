@@ -24,6 +24,7 @@
 #include <QDir>
 
 #include <kmimetype.h>
+#include <kglobalsettings.h>
 
 #include "theme.h"
 #include "svg.h"
@@ -91,6 +92,8 @@ Label::Label(QGraphicsWidget *parent)
     connect(native, SIGNAL(linkActivated(QString)), this, SIGNAL(linkActivated(QString)));
 
     connect(Theme::defaultTheme(), SIGNAL(themeChanged()), this, SLOT(setPalette()));
+    connect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()), this, SLOT(setPalette()));
+
     native->setAttribute(Qt::WA_NoSystemBackground);
     native->setWordWrap(true);
     setWidget(native);

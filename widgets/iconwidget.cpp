@@ -291,6 +291,7 @@ void IconWidget::init()
 {
     readColors();
     connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()), SLOT(readColors()));
+    connect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()), SLOT(readColors()));
 
     // setAcceptedMouseButtons(Qt::LeftButton);
     setAcceptsHoverEvents(true);
