@@ -33,10 +33,11 @@
 #include <kglobalsettings.h>
 
 #include "plasma/private/applet_p.h"
-#include "plasma/dialog.h"
 #include "plasma/corona.h"
 #include "plasma/containment.h"
+#include "plasma/dialog.h"
 #include "plasma/extender.h"
+#include "plasma/tooltipmanager.h"
 #include "plasma/widgets/iconwidget.h"
 
 namespace Plasma
@@ -474,6 +475,7 @@ void PopupAppletPrivate::internalTogglePopup()
         if (dialog->isVisible()) {
             dialog->hide();
         } else {
+            ToolTipManager::self()->hide(q);
             updateDialogPosition();
             KWindowSystem::setState(dialog->winId(), NET::SkipTaskbar | NET::SkipPager);
             dialog->show();
