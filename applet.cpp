@@ -278,6 +278,14 @@ void AppletPrivate::setFocus()
 void Applet::setFailedToLaunch(bool failed, const QString &reason)
 {
     if (d->failed == failed) {
+        if (failed && !reason.isEmpty()) {
+            foreach (QGraphicsItem *item, QGraphicsItem::children()) {
+                Label *l = dynamic_cast<Label *>(item);
+                if (l) {
+                    l->setText(d->visibleFailureText(reason));
+                }
+            }
+        }
         return;
     }
 
