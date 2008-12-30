@@ -106,37 +106,37 @@ class PLASMA_EXPORT FrameSvg : public Svg
          * Loads a new Svg
          * @arg imagePath the new file
          */
-        void setImagePath(const QString &path);
+        Q_INVOKABLE void setImagePath(const QString &path);
 
         /**
          * Sets what borders should be painted
          * @arg flags borders we want to paint
          */
-        void setEnabledBorders(const EnabledBorders borders);
+        Q_INVOKABLE void setEnabledBorders(const EnabledBorders borders);
 
         /**
          * Convenience method to get the enabled borders
          * @return what borders are painted
          */
-        EnabledBorders enabledBorders() const;
+        Q_INVOKABLE EnabledBorders enabledBorders() const;
 
         /**
          * Resize the frame maintaining the same border size
          * @arg size the new size of the frame
          */
-        void resizeFrame(const QSizeF &size);
+        Q_INVOKABLE void resizeFrame(const QSizeF &size);
 
         /**
          * @returns the size of the frame
          */
-        QSizeF frameSize() const;
+        Q_INVOKABLE QSizeF frameSize() const;
 
         /**
          * Returns the margin size given the margin edge we want
          * @arg edge the margin edge we want, top, bottom, left or right
          * @return the margin size
          */
-        qreal marginSize(const Plasma::MarginEdge edge) const;
+        Q_INVOKABLE qreal marginSize(const Plasma::MarginEdge edge) const;
 
         /**
          * Convenience method that extracts the size of the four margins
@@ -146,12 +146,12 @@ class PLASMA_EXPORT FrameSvg : public Svg
          * @arg right right margin size
          * @arg bottom bottom margin size
          */
-        void getMargins(qreal &left, qreal &top, qreal &right, qreal &bottom) const;
+        Q_INVOKABLE void getMargins(qreal &left, qreal &top, qreal &right, qreal &bottom) const;
 
         /**
          * @return the rectangle of the center element, taking the margins into account.
          */
-        QRectF contentsRect() const;
+        Q_INVOKABLE QRectF contentsRect() const;
 
         /**
          * Sets the prefix (@see setElementPrefix) to 'north', 'south', 'west' and 'east'
@@ -159,7 +159,7 @@ class PLASMA_EXPORT FrameSvg : public Svg
          * respectively. Clears the prefix in other cases.
          * @arg location location
          */
-        void setElementPrefix(Plasma::Location location);
+        Q_INVOKABLE void setElementPrefix(Plasma::Location location);
 
         /**
          * Sets the prefix for the SVG elements to be used for painting. For example,
@@ -174,14 +174,14 @@ class PLASMA_EXPORT FrameSvg : public Svg
          * If the
          * @arg prefix prefix for the SVG element names
          */
-        void setElementPrefix(const QString & prefix);
+        Q_INVOKABLE void setElementPrefix(const QString & prefix);
 
         /**
          * @return true if the svg has the necessary elements with the given prefix
          * to draw a frame
          * @arg prefix the given prefix we want to check if drawable
          */
-        bool hasElementPrefix(const QString & prefix) const;
+        Q_INVOKABLE bool hasElementPrefix(const QString & prefix) const;
 
         /**
          * This is an overloaded method provided for convenience equivalent to
@@ -191,37 +191,37 @@ class PLASMA_EXPORT FrameSvg : public Svg
          * to draw a frame.
          * @arg location the given prefix we want to check if drawable
          */
-        bool hasElementPrefix(Plasma::Location location) const;
+        Q_INVOKABLE bool hasElementPrefix(Plasma::Location location) const;
 
         /**
          * Returns the prefix for SVG elements of the FrameSvg
          * @return the prefix
          */
-        QString prefix();
+        Q_INVOKABLE QString prefix();
 
         /**
          * Returns a mask that tightly contains the fully opaque areas of the svg
          * @return a region of opaque areas
          */
-        QRegion mask() const;
+        Q_INVOKABLE QRegion mask() const;
 
        /**
         * Sets whether saving all the rendered prefixes in a cache or not
         * @arg cache if use the cache or not
         */
-        void setCacheAllRenderedFrames(bool cache);
+        Q_INVOKABLE void setCacheAllRenderedFrames(bool cache);
 
        /**
         * @return if all the different prefixes should be kept in a cache when rendered
         */
-        bool cacheAllRenderedFrames() const;
+        Q_INVOKABLE bool cacheAllRenderedFrames() const;
 
        /**
         * Deletes the internal cache freeing memory: use this if you want to switch the rendered
         * element and you don't plan to switch back to the previous one for a long time and you
         * used setUseCache(true)
         */
-        void clearCache();
+        Q_INVOKABLE void clearCache();
 
        /**
          * Returns a pixmap of the SVG represented by this object.
