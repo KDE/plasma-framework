@@ -153,8 +153,8 @@ QSize NativeTabBar::tabSizeHint(int index) const
                     minwidth += tabSize(i).width();
                 }
 
-                if (minwidth < width()) {
-                    hint.rwidth() += (width() - minwidth) / count();
+                if (minwidth < width() - d->left - d->right) {
+                    hint.rwidth() += (width() - d->left - d->right - minwidth) / count();
                 }
             }
             break;
