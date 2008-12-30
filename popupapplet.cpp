@@ -309,11 +309,10 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
                     l_layout->addWidget(qWidget);
                     dialog->adjustSize();
                 }
-                
+
                 QObject::connect(dialog, SIGNAL(dialogResized()), q, SLOT(dialogSizeChanged()));
                 QObject::connect(dialog, SIGNAL(dialogVisible(bool)), q, SLOT(dialogStatusChanged(bool)));
             }
-
 
             if (icon && lay) {
                 lay->addItem(icon);
@@ -438,7 +437,7 @@ bool PopupApplet::isPassivePopup() const
 
 bool PopupApplet::isPopupShowing() const
 {
-    return d->dialog && d->dialog->isVisible();
+    return !d->dialog || d->dialog->isVisible();
 }
 
 PopupAppletPrivate::PopupAppletPrivate(PopupApplet *applet)
