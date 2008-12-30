@@ -126,10 +126,6 @@ QRect NativeTabBar::tabRect(int index) const
 {
     QRect rect = KTabBar::tabRect(index).translated(d->left, d->top);
 
-    if (isVertical()) {
-        rect.setWidth(rect.width() - d->right - d->left);
-    }
-
     return rect;
 }
 
@@ -156,12 +152,10 @@ QSize NativeTabBar::tabSizeHint(int index) const
                 for (int i = count() - 1; i >= 0; i--) {
                     minwidth += tabSize(i).width();
                 }
-                minwidth += d->left + d->right;
 
                 if (minwidth < width()) {
                     hint.rwidth() += (width() - minwidth) / count();
                 }
-                hint.rheight() += d->top + d->bottom;
             }
             break;
         case RoundedWest:
@@ -175,12 +169,10 @@ QSize NativeTabBar::tabSizeHint(int index) const
                         maxwidth = tabSize(i).width();
                     }
                 }
-                minheight += d->top + d->bottom;
 
                 if (minheight < height()) {
                     hint.rheight() += (height() - minheight) / count();
                 }
-                hint.rwidth() = maxwidth + d->left + d->right;
             }
             break;
     }
@@ -397,11 +389,10 @@ QSize NativeTabBar::tabSize(int index) const
     hint.rwidth() += d->buttonLeft + d->buttonRight;
     hint.rheight() += d->buttonTop + d->buttonBottom;
 
-    //FIXME: this margin calculation isn't reeeally right...
     if (isVertical()) {
-        hint.rwidth() = qMax(hint.width(), int(minimumWidth() - d->left - d->right - d->buttonLeft - d->buttonRight));
+        hint.rwidth() = qMax(hint.width(), int(minimumWidth() - d->left - d->right));
     } else {
-        hint.rheight() = qMax(hint.height(), int(minimumHeight() - d->top - d->bottom - d->buttonTop - d->buttonBottom));
+        hint.rheight() = qMax(hint.height(), int(minimumHeight() - d->top - d->bottom));
     }
 
     return hint;
