@@ -23,6 +23,7 @@
 #include <QGraphicsLinearLayout>
 #include <QStringList>
 
+#include "widgets/busywidget.h"
 #include "widgets/checkbox.h"
 #include "widgets/combobox.h"
 #include "widgets/flashinglabel.h"
@@ -31,11 +32,18 @@
 #include "widgets/iconwidget.h"
 #include "widgets/label.h"
 #include "widgets/lineedit.h"
+#include "widgets/meter.h"
 #include "widgets/pushbutton.h"
 #include "widgets/radiobutton.h"
+#include "widgets/scrollbar.h"
+#include "widgets/signalplotter.h"
 #include "widgets/slider.h"
+#include "widgets/svgwidget.h"
 #include "widgets/tabbar.h"
 #include "widgets/textedit.h"
+#include "widgets/toolbutton.h"
+#include "widgets/treeview.h"
+#include "widgets/webview.h"
 
 namespace Plasma
 {
@@ -52,6 +60,7 @@ UiLoader::UiLoader(QObject *parent)
       d(new UiLoaderPrivate())
 {
     d->widgets
+        << "BusyWidget"
         << "CheckBox"
         << "ComboBox"
         << "FlashingLabel"
@@ -60,11 +69,18 @@ UiLoader::UiLoader(QObject *parent)
         << "IconWidget"
         << "Label"
         << "LineEdit"
+        << "Meter"
         << "PushButton"
         << "RadioButton"
+        << "ScrollBar"
+        << "SignalPlotter"
         << "Slider"
+        << "SvgWidget"
         << "TabBar"
-        << "TextEdit";
+        << "TextEdit"
+        << "ToolButton"
+        << "TreeView"
+        << "WebView";
 
     d->layouts
         << "GridLayout"
@@ -83,7 +99,9 @@ QStringList UiLoader::availableWidgets() const
 
 QGraphicsWidget *UiLoader::createWidget(const QString &className, QGraphicsWidget *parent)
 {
-    if (className == QString("CheckBox")) {
+    if (className == QString("BusyWidget")) {
+        return new BusyWidget(parent);
+    } else if (className == QString("CheckBox")) {
         return new CheckBox(parent);
     } else if (className == QString("ComboBox")) {
         return new ComboBox(parent);
@@ -99,16 +117,30 @@ QGraphicsWidget *UiLoader::createWidget(const QString &className, QGraphicsWidge
         return new Label(parent);
     } else if (className == QString("LineEdit")) {
         return new LineEdit(parent);
+    } else if (className == QString("Meter")) {
+        return new Meter(parent);
     } else if (className == QString("PushButton")) {
         return new PushButton(parent);
     } else if (className == QString("RadioButton")) {
         return new RadioButton(parent);
+    } else if (className == QString("ScrollBar")) {
+        return new ScrollBar(parent);
+    } else if (className == QString("SignalPlotter")) {
+        return new SignalPlotter(parent);
     } else if (className == QString("Slider")) {
         return new Slider(parent);
+    } else if (className == QString("SvgWidget")) {
+        return new SvgWidget(parent);
     } else if (className == QString("TabBar")) {
         return new TabBar(parent);
     } else if (className == QString("TextEdit")) {
         return new TextEdit(parent);
+    } else if (className == QString("ToolButton")) {
+        return new ToolButton(parent);
+    } else if (className == QString("TreeView")) {
+        return new TreeView(parent);
+    } else if (className == QString("WebView")) {
+        return new WebView(parent);
     }
 
     return 0;
