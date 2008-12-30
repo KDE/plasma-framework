@@ -39,13 +39,14 @@
 #endif
 
 //Plasma
-#include <applet.h>
-#include <containment.h>
-#include <corona.h>
-#include <framesvg.h>
-#include <theme.h>
-#include <view.h>
-#include <private/tooltip_p.h>
+#include "plasma/applet.h"
+#include "plasma/containment.h"
+#include "plasma/corona.h"
+#include "plasma/framesvg.h"
+#include "plasma/popupapplet.h"
+#include "plasma/theme.h"
+#include "plasma/view.h"
+#include "plasma/private/tooltip_p.h"
 
 namespace Plasma
 {
@@ -297,6 +298,11 @@ void ToolTipManagerPrivate::showToolTip()
         !currentWidget ||
         QApplication::activePopupWidget() ||
         QApplication::activeModalWidget()) {
+        return;
+    }
+
+    PopupApplet *popup = qobject_cast<PopupApplet*>(currentWidget);
+    if (popup && popup->isPopupShowing()) {
         return;
     }
 
