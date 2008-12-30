@@ -370,12 +370,12 @@ bool PopupApplet::eventFilter(QObject *watched, QEvent *event)
 
 void PopupApplet::showPopup(uint popupDuration)
 {
-    if (d->dialog && (formFactor() == Horizontal || formFactor() == Vertical)) {
+    if (d->dialog) {
         // move the popup before its fist show, even if the show isn't triggered by
         // a click, this should fix the first random position seen in some widgets
-        d->updateDialogPosition();
-        d->dialog->show();
-        KWindowSystem::setState(d->dialog->winId(), NET::SkipTaskbar | NET::SkipPager);
+        if (!d->dialog->isVisible()) {
+            d->internalTogglePopup();
+        }
 
         if (d->timer) {
             d->timer->stop();
@@ -401,9 +401,7 @@ void PopupApplet::hidePopup()
 
 void PopupApplet::togglePopup()
 {
-    if (d->dialog && (formFactor() == Horizontal || formFactor() == Vertical)) {
-        d->internalTogglePopup();
-    }
+    d->internalTogglePopup();
 }
 
 Plasma::PopupPlacement PopupApplet::popupPlacement() const
@@ -466,23 +464,25 @@ PopupAppletPrivate::~PopupAppletPrivate()
 
 void PopupAppletPrivate::internalTogglePopup()
 {
-    if (dialog) {
-        if (timer) {
-            timer->stop();
-        }
-
-        if (dialog->isVisible()) {
-            dialog->hide();
-        } else {
-            ToolTipManager::self()->hide(q);
-            updateDialogPosition();
-            KWindowSystem::setState(dialog->winId(), NET::SkipTaskbar | NET::SkipPager);
-            dialog->show();
-            dialog->resize(dialog->size());
-        }
-
-        dialog->clearFocus();
+    if (!dialog) {
+        return;
     }
+
+    if (timer) {
+        timer->stop();
+    }
+
+    if (dialog->isVisible()) {
+        dialog->hide();
+    } else {
+        ToolTipManager::self()->hide(q);
+        updateDialogPosition();
+        KWindowSystem::setState(dialog->winId(), NET::SkipTaskbar | NET::SkipPager);
+        dialog->show();
+        dialog->resize(dialog->size());
+    }
+
+    dialog->clearFocus();
 }
 
 void PopupAppletPrivate::hideTimedPopup()
