@@ -48,7 +48,7 @@ PopupApplet::PopupApplet(QObject *parent, const QVariantList &args)
 {
     int iconSize = IconSize(KIconLoader::Desktop);
     resize(iconSize, iconSize);
-    connect(this, SIGNAL(activate()), this, SLOT(togglePopup()));
+    connect(this, SIGNAL(activate()), this, SLOT(internalTogglePopup()));
 }
 
 PopupApplet::~PopupApplet()
@@ -72,7 +72,7 @@ void PopupApplet::setPopupIcon(const QIcon &icon)
 
     if (!d->icon) {
         d->icon = new Plasma::IconWidget(icon, QString(), this);
-        connect(d->icon, SIGNAL(clicked()), this, SLOT(togglePopup()));
+        connect(d->icon, SIGNAL(clicked()), this, SLOT(internalTogglePopup()));
 
         QGraphicsLinearLayout *layout = new QGraphicsLinearLayout();
         layout->setContentsMargins(0, 0, 0, 0);
@@ -339,7 +339,7 @@ void PopupApplet::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
     if (!d->icon &&
         (d->clicked - scenePos().toPoint()).manhattanLength() < KGlobalSettings::dndEventDelay()) {
-        d->togglePopup();
+        d->internalTogglePopup();
     } else {
         Applet::mouseReleaseEvent(event);
     }
@@ -402,7 +402,7 @@ void PopupApplet::hidePopup()
 void PopupApplet::togglePopup()
 {
     if (d->dialog && (formFactor() == Horizontal || formFactor() == Vertical)) {
-        d->dialog->setVisible(!d->dialog->isVisible());
+        d->internalTogglePopup();
     }
 }
 
@@ -464,7 +464,7 @@ PopupAppletPrivate::~PopupAppletPrivate()
     delete icon;
 }
 
-void PopupAppletPrivate::togglePopup()
+void PopupAppletPrivate::internalTogglePopup()
 {
     if (dialog) {
         if (timer) {

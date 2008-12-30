@@ -29,7 +29,7 @@ public:
     PopupAppletPrivate(PopupApplet *applet);
     ~PopupAppletPrivate();
 
-    void togglePopup();
+    void internalTogglePopup();
     void hideTimedPopup();
     void clearPopupLostFocus();
     void dialogSizeChanged();
