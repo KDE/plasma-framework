@@ -148,6 +148,16 @@ QString Label::image() const
     return d->imagePath;
 }
 
+void Label::setScaledContents(bool scaled)
+{
+    static_cast<QLabel*>(widget())->setScaledContents(scaled);
+}
+
+bool Label::hasScaledContents() const
+{
+    return static_cast<QLabel*>(widget())->hasScaledContents();
+}
+
 void Label::setAlignment(Qt::Alignment alignment)
 {
     nativeWidget()->setAlignment(alignment);

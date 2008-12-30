@@ -45,6 +45,7 @@ class PLASMA_EXPORT Label : public QGraphicsProxyWidget
     Q_PROPERTY(QString text READ text WRITE setText)
     Q_PROPERTY(QString image READ image WRITE setImage)
     Q_PROPERTY(Qt::Alignment alignment READ alignment WRITE setAlignment)
+    Q_PROPERTY(bool hasScaledContents READ hasScaledContents WRITE setScaledContents)
     Q_PROPERTY(QString styleSheet READ styleSheet WRITE setStyleSheet)
     Q_PROPERTY(QLabel *nativeWidget READ nativeWidget)
 
@@ -87,6 +88,18 @@ public:
      * @return the alignment for the text used in the labels
      */
     Qt::Alignment alignment() const;
+
+    /**
+     * Scale or not the contents of the label to the label size
+     *
+     * @arg scale
+     */
+    void setScaledContents(bool scaled);
+
+    /**
+     * @return true if the contents are scaled to the label size
+     */
+    bool hasScaledContents() const;
 
     /**
      * Sets the stylesheet used to control the visual display of this Label
