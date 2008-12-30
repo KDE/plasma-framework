@@ -38,7 +38,7 @@ public:
     ~ToolTip();
 
     void setContent(QObject *tipper, const ToolTipContent &data);
-    void prepareShowing(bool cueUpdate);
+    void prepareShowing();
     void moveTo(const QPoint &to);
     bool autohide() const;
     void setDirection(Plasma::Direction);

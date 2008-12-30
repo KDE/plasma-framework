@@ -241,12 +241,8 @@ void ToolTip::setContent(QObject *tipper, const ToolTipContent &data)
     }
 }
 
-void ToolTip::prepareShowing(bool cueUpdate)
+void ToolTip::prepareShowing()
 {
-    if (cueUpdate && d->source) {
-        QMetaObject::invokeMethod(d->source, "toolTipAboutToShow");
-    }
-
     if (d->preview->windowId() != 0) {
         // show/hide the preview area
         d->preview->show();

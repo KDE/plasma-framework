@@ -300,36 +300,21 @@ void ToolTipManagerPrivate::showToolTip()
         return;
     }
 
+    QMetaObject::invokeMethod(currentWidget, "toolTipAboutToShow");
     QHash<QGraphicsWidget *, ToolTipContent>::const_iterator tooltip = tooltips.constFind(currentWidget);
 
-    if (tooltip == tooltips.constEnd()) {
+    if (tooltip == tooltips.constEnd() || tooltip.value().isEmpty()) {
         return;
     }
 
-    bool justCreated = false;
-
-    if (tooltip.value().isEmpty()) {
-        // give the object a chance for delayed loading of the tip
-        QMetaObject::invokeMethod(currentWidget, "toolTipAboutToShow");
-        tooltip = tooltips.constFind(currentWidget);
-        //kDebug() << "attempt to make one ... we gots" << tooltip.isEmpty();
-
-        if (tooltip == tooltips.constEnd() || tooltip.value().isEmpty()) {
-            currentWidget = 0;
-            return;
-        }
-
-        justCreated = true;
-    }
-
     Containment *c = dynamic_cast<Containment *>(currentWidget->topLevelItem());
-    kDebug() << "about to show" << justCreated << (QObject*)c;
+    //kDebug() << "about to show" << (QObject*)c;
     if (c) {
         tipWidget->setDirection(Plasma::locationToDirection(c->location()));
     }
 
     tipWidget->setContent(currentWidget, tooltip.value());
-    tipWidget->prepareShowing(!justCreated);
+    tipWidget->prepareShowing();
     tipWidget->moveTo(ToolTipManager::self()->m_corona->popupPosition(currentWidget, tipWidget->size()));
     tipWidget->show();
     isShown = true;  //ToolTip is visible
