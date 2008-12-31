@@ -140,7 +140,7 @@ SignalPlotter::SignalPlotter(QGraphicsItem *parent)
     d->stackPlots = true;
     d->fillPlots = true;
 
-    d->svgBackground = 0;
+    setSvgBackground("widgets/plot-background");
 
     connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()), SLOT(themeChanged()));
     d->themeChanged();
