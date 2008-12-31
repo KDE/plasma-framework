@@ -628,6 +628,7 @@ void SignalPlotter::drawWidget(QPainter *p, uint w, uint height, int horizontalS
         (uint)d->backgroundPixmap.size().width() != w) {
         // recreate on resize etc
         d->backgroundPixmap = QPixmap(w, height);
+        d->backgroundPixmap.fill(Qt::transparent);
         QPainter pCache(&d->backgroundPixmap);
         pCache.setRenderHint(QPainter::Antialiasing, false);
         pCache.setFont(d->font);
@@ -689,10 +690,11 @@ void SignalPlotter::drawWidget(QPainter *p, uint w, uint height, int horizontalS
 
 void SignalPlotter::drawBackground(QPainter *p, int w, int h)
 {
-    p->fillRect(0, 0, w, h, d->backgroundColor);
     if (d->svgBackground) {
         d->svgBackground->resize(w, h);
         d->svgBackground->paint(p, 0, 0);
+    } else {
+        p->fillRect(0, 0, w, h, d->backgroundColor);
     }
 }
 
