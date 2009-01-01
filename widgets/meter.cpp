@@ -52,7 +52,7 @@ public:
 
     void progressChanged(qreal progress)
     {
-        bool over = qFuzzyCompare(progress, 1.0);
+        bool over = qFuzzyCompare(progress, qreal(1.0));
 
         if (value == targetValue) {
             if (!over && movementId) {

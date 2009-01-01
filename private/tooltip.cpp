@@ -284,7 +284,7 @@ void ToolTip::animateMove(qreal progress)
         d->from = pos();
     }
 
-    if (qFuzzyCompare(progress, 1.0)) {
+    if (qFuzzyCompare(progress, qreal(1.0))) {
         move(d->to);
         return;
     }
