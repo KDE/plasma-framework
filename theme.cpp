@@ -351,7 +351,7 @@ void Theme::setThemeName(const QString &themeName)
     d->colorScheme = KColorScheme(QPalette::Active, KColorScheme::Window, d->colors);
     d->buttonColorScheme = KColorScheme(QPalette::Active, KColorScheme::Button, d->colors);
     d->hasWallpapers =
-        !KStandardDirs::locate("data", "desktoptheme/" + theme + "/wallpapers").isEmpty();
+        KStandardDirs::exists(KStandardDirs::locateLocal("data", "desktoptheme/" + theme + "/wallpapers/"));
 
     if (d->isDefault) {
         // we're the default theme, let's save our state
@@ -439,10 +439,10 @@ QString Theme::wallpaperPath(const QSize &size) const
     //      to override the theme?
     if (d->hasWallpapers) {
         // check in the theme first
-        fullPath = d->findInTheme("wallpaper/" + image, d->themeName);
+        fullPath = d->findInTheme("wallpapers/" + image, d->themeName);
 
         if (fullPath.isEmpty()) {
-            fullPath = d->findInTheme("wallpaper/" + defaultImage, d->themeName);
+            fullPath = d->findInTheme("wallpapers/" + defaultImage, d->themeName);
         }
     }
 
