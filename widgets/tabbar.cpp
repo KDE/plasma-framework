@@ -288,7 +288,6 @@ void TabBar::setCurrentIndex(int index)
         return;
     }
 
-    d->tabProxy->native->setCurrentIndex(index);
     d->tabWidgetLayout->removeAt(1);
 
     d->oldPage = d->pages[d->currentIndex];
@@ -347,6 +346,7 @@ void TabBar::setCurrentIndex(int index)
 #endif
     d->currentIndex = index;
     emit currentChanged(index);
+    d->tabProxy->native->setCurrentIndex(index);
 }
 
 int TabBar::count() const
