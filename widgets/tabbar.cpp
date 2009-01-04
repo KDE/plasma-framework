@@ -282,14 +282,13 @@ void TabBar::resizeEvent(QGraphicsSceneResizeEvent * event)
 
 void TabBar::setCurrentIndex(int index)
 {
-    if (index > d->tabProxy->native->count() || d->tabProxy->native->count() <= 1) {
+    if (index > d->tabProxy->native->count() ||
+        d->tabProxy->native->count() <= 1 ||
+        d->currentIndex == index) {
         return;
     }
 
-    if (d->currentIndex != index) {
-        d->tabProxy->native->setCurrentIndex(index);
-    }
-
+    d->tabProxy->native->setCurrentIndex(index);
     d->tabWidgetLayout->removeAt(1);
 
     d->oldPage = d->pages[d->currentIndex];
