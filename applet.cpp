@@ -271,7 +271,7 @@ void Applet::restore(KConfigGroup &group)
 
 void AppletPrivate::setFocus()
 {
-    kDebug() << "setting focus";
+    //kDebug() << "setting focus";
     q->setFocus(Qt::ShortcutFocusReason);
 }
 
