@@ -310,6 +310,13 @@ void Dialog::mouseReleaseEvent(QMouseEvent *event)
     QWidget::mouseReleaseEvent(event);
 }
 
+void Dialog::keyPressEvent(QKeyEvent *event)
+{
+    if (event->key() == Qt::Key_Escape) {
+        hide();
+    }
+}
+
 bool Dialog::event(QEvent *event)
 {
     if (event->type() == QEvent::Paint) {
