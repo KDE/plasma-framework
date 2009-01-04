@@ -255,14 +255,13 @@ class SvgPrivate
         void eraseRenderer()
         {
             if (renderer && renderer.count() == 2) {
-                // this and the cache reference it; and boy is this not thread safe ;)
+                // this and the cache reference it
                 s_renderers.erase(s_renderers.find(path));
                 Plasma::Theme::defaultTheme()->releaseRectsCache(path);
             }
 
             renderer = 0;
             localRectCache.clear();
-            size = QSizeF();
         }
 
         QRectF elementRect(const QString &elementId)

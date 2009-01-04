@@ -656,6 +656,8 @@ void FrameSvgPrivate::updateSizes()
     FrameData *frame = frames[prefix];
     Q_ASSERT(frame);
 
+    QSize s = q->size();
+    q->resize();
     frame->cachedBackground = QPixmap();
     frame->cachedMask = QRegion();
 
@@ -711,6 +713,7 @@ void FrameSvgPrivate::updateSizes()
     frame->tileCenter = q->hasElement("hint-tile-center");
     frame->noBorderPadding = q->hasElement("hint-no-border-padding");
     frame->stretchBorders = q->hasElement("hint-stretch-borders");
+    q->resize(s);
 }
 
 void FrameSvgPrivate::updateNeeded()
