@@ -55,7 +55,7 @@ namespace Plasma
 IconWidgetPrivate::IconWidgetPrivate(IconWidget *i)
     : q(i),
       iconSvg(0),
-      iconSvgElementChanged(0),
+      iconSvgElementChanged(false),
       m_fadeIn(false),
       m_hoverAnimId(-1),
       m_hoverAlpha(20 / 255),
@@ -503,6 +503,7 @@ void IconWidget::setSvg(const QString &svgFilePath, const QString &elementId)
 {
     if (!d->iconSvg) {
         d->iconSvg = new Plasma::Svg(this);
+        connect(d->iconSvg, SIGNAL(repaintNeeded()), this, SLOT(svgChanged()));
     }
 
     d->iconSvg->setImagePath(svgFilePath);
@@ -1179,6 +1180,12 @@ void IconWidgetPrivate::clearAction()
     action = 0;
     syncToAction();
     emit q->changed();
+}
+
+void IconWidgetPrivate::svgChanged()
+{
+    iconSvgElementChanged = true;
+    q->update();
 }
 
 void IconWidgetPrivate::syncToAction()

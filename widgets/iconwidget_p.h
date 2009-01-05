@@ -176,6 +176,7 @@ public:
      */
     void syncToAction();
     void clearAction();
+    void svgChanged();
 
     IconWidget *q;
     QString text;
