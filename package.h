@@ -114,13 +114,22 @@ class PLASMA_EXPORT Package
         const PackageStructure::Ptr structure() const;
 
         /**
-         * Returns a list of all installed packages
+         * Returns a list of all installed packages by name
          *
          * @param packageRoot path to the directory where Plasmagik packages
          *                    have been installed to
          * @return a list of installed Plasmagik packages
          **/
         static QStringList listInstalled(const QString &packageRoot);
+
+        /**
+         * Returns a list of all paths of installed packages in the given root
+         *
+         * @param packageRoot path to the directory where Plasmagik packages
+         *                    have been installed to
+         * @return a list of installed Plasmagik packages by path
+         **/
+        static QStringList listInstalledPaths(const QString &packageRoot);
 
         /**
          * Installs a package.

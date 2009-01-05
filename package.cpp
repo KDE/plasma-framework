@@ -48,12 +48,20 @@ class PackagePrivate
 public:
     PackagePrivate(const PackageStructure::Ptr st, const QString &p)
         : structure(st),
-          basePath(p),
-          valid(QFile::exists(basePath))
+          basePath(p)
     {
-        QFileInfo info(basePath);
-        if (valid && info.isDir() && basePath[basePath.length() - 1] != '/') {
-            basePath.append('/');
+        QDir dir(basePath);
+        basePath = dir.canonicalPath();
+        valid = QFile::exists(basePath);
+
+        if (valid) {
+            QFileInfo info(basePath);
+            if (info.isDir()) {
+                basePath.append(QDir::separator());
+            }
+            kDebug() << "basePath is" << basePath;
+        } else {
+            kDebug() << p << "invalid, basePath is" << basePath;
         }
     }
 
@@ -206,6 +214,26 @@ QStringList Package::listInstalled(const QString &packageRoot) // static
         if (QFile::exists(metadata)) {
             PackageMetadata m(metadata);
             packages << m.pluginName();
+        }
+    }
+
+    return packages;
+}
+
+QStringList Package::listInstalledPaths(const QString &packageRoot) // static
+{
+    QDir dir(packageRoot);
+
+    if (!dir.exists()) {
+        return QStringList();
+    }
+
+    QStringList packages;
+
+    foreach (const QString &sdir, dir.entryList(QDir::AllDirs | QDir::Readable)) {
+        QString metadata = packageRoot + '/' + sdir + "/metadata.desktop";
+        if (QFile::exists(metadata)) {
+            packages << sdir;
         }
     }
 
