@@ -6,8 +6,8 @@ controller = service("nowplaying", watchingPlayer);
 plasmoid.dataUpdate = function(a, b)
 {
     label.text = "Playing " + b.Title + " by " + b.Artist + ". time: " +
-                 parseInt(parseInt(b.Position)/60) + ":" + (parseInt(b.Position)%60);
-    progress.value = b.Position;
+                 Math.floor(b.Position/60) + ":" + (parseInt(b.Position)%60);
+    progress.value = 100*b.Position/b.Length;
 }
 
 plasmoid.stop = function()
@@ -52,6 +52,6 @@ progress.orientation = QtHorizontal;
 layout.addItem(progress);
 controller.associateWidget(progress, "progress");
 
-progress["valueChanged(int)"].connect(plasmoid.setProgress);
+progress["sliderMoved(int)"].connect(plasmoid.setProgress);
 
 engine.connectSource(watchingPlayer, plasmoid, 500);
