@@ -23,13 +23,18 @@
 #include <KDebug>
 
 #include <Plasma/DataEngine>
+#include <Plasma/Service>
+#include <Plasma/ServiceJob>
 
 using namespace Plasma;
 
 Q_DECLARE_METATYPE(DataEngine*)
+Q_DECLARE_METATYPE(Service*)
+Q_DECLARE_METATYPE(ServiceJob*)
 Q_DECLARE_METATYPE(QVariant)
 Q_DECLARE_METATYPE(DataEngine::Dict)
 Q_DECLARE_METATYPE(DataEngine::Data)
+
 
 template <class M>
 QScriptValue qScriptValueFromMap(QScriptEngine *eng, const M &map)

@@ -27,6 +27,7 @@
 #include <KDebug>
 #include <KLocale>
 #include <KStandardDirs>
+#include <KConfigGroup>
 
 #include <Plasma/Applet>
 #include <Plasma/Svg>
@@ -47,6 +48,7 @@ Q_DECLARE_METATYPE(AppletInterface*)
 Q_DECLARE_METATYPE(Applet*)
 Q_DECLARE_METATYPE(QGraphicsWidget*)
 Q_DECLARE_METATYPE(QGraphicsLayout*)
+Q_DECLARE_METATYPE(KConfigGroup)
 
 Q_SCRIPT_DECLARE_QMETAOBJECT(AppletInterface, SimpleJavaScriptApplet*)
 
@@ -58,6 +60,15 @@ QScriptValue constructFontClass(QScriptEngine *engine);
 QScriptValue constructQRectFClass(QScriptEngine *engine);
 QScriptValue constructQPointClass(QScriptEngine *engine);
 QScriptValue constructQSizeFClass(QScriptEngine *engine);
+
+class DummyService : public Service
+{
+    ServiceJob *createJob(const QString &operation,
+                          QMap<QString, QVariant> &parameters)
+    {
+        return 0;
+    }
+};
 
 /*
  * Workaround the fact that QtScripts handling of variants seems a bit broken.
@@ -116,6 +127,37 @@ QScriptValue qScriptValueFromData(QScriptEngine *engine, const DataEngine::Data 
     return obj;
 }
 
+QScriptValue qScriptValueFromKConfigGroup(QScriptEngine *engine, const KConfigGroup &config)
+{
+    QScriptValue obj = engine->newObject();
+
+    if (!config.isValid()) {
+        return obj;
+    }
+
+    QMap<QString, QString> entryMap = config.entryMap();
+    QMap<QString, QString>::const_iterator it = entryMap.begin();
+    QMap<QString, QString>::const_iterator begin = it;
+    QMap<QString, QString>::const_iterator end = entryMap.end();
+
+    for (it = begin; it != end; ++it) {
+        //kDebug() << "setting" << it.key() << "to" << it.value();
+        QString prop = it.key();
+        prop.replace(' ', '_');
+        obj.setProperty(prop, variant2ScriptValue(engine, it.value()));
+    }
+
+    return obj;
+}
+
+void kConfigGroupFromScriptValue(const QScriptValue& obj, KConfigGroup &config)
+{
+    QScriptValueIterator it(obj);
+
+    while (it.hasNext()) {
+        config.writeEntry(it.name(), it.value().toString());
+    }
+}
 
 SimpleJavaScriptApplet::SimpleJavaScriptApplet(QObject *parent, const QVariantList &args)
     : Plasma::AppletScript(parent)
@@ -329,6 +371,8 @@ void SimpleJavaScriptApplet::setupObjects()
 
     // Bindings for data engine
     m_engine->setDefaultPrototype(qMetaTypeId<DataEngine*>(), m_engine->newQObject(new DataEngine()));
+    m_engine->setDefaultPrototype(qMetaTypeId<Service*>(), m_engine->newQObject(new DummyService()));
+    m_engine->setDefaultPrototype(qMetaTypeId<ServiceJob*>(), m_engine->newQObject(new ServiceJob(QString(), QString(), QMap<QString, QVariant>())));
 #if 0
     fun = m_engine->newFunction(SimpleJavaScriptApplet::dataEngine);
     m_self.setProperty("dataEngine", fun);
@@ -339,6 +383,7 @@ void SimpleJavaScriptApplet::setupObjects()
 //    qScriptRegisterMapMetaType<DataEngine::Dict>(m_engine);
 //    qScriptRegisterMapMetaType<DataEngine::Data>(m_engine);
     qScriptRegisterMetaType<DataEngine::Data>(m_engine, qScriptValueFromData, 0, QScriptValue());
+    qScriptRegisterMetaType<KConfigGroup>(m_engine, qScriptValueFromKConfigGroup, kConfigGroupFromScriptValue, QScriptValue());
 
     // Expose applet interface
     m_interface = new AppletInterface(this);

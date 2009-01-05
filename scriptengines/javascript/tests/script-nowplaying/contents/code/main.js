@@ -1,3 +1,8 @@
+engine = dataEngine("nowplaying");
+players = engine.sources;
+watchingPlayer = players[0];
+controller = engine.serviceForSource(watchingPlayer);
+
 plasmoid.dataUpdate = function(a, b)
 {
     label.text = "Playing " + b.Title + " by " + b.Artist + ". time: " +
@@ -6,6 +11,13 @@ plasmoid.dataUpdate = function(a, b)
 
 plasmoid.stop = function()
 {
+    data = engine.serviceForSource(watchingPlayer).operationDescription("stop");
+    print(data+controller.name());
+    for ( var i in data ) {
+        print(i + ' -> ' + data[i] );
+    }
+
+    controller.startOperationCall(controller.operationDescription("stop"));
     print("stopping");
 }
 
@@ -18,6 +30,9 @@ stop = new PushButton();
 stop.text = "Stop";
 layout.addItem(stop);
 
+controller.associateWidget(stop, "stop");
+print(controller.operationNames());
+
 stop["clicked()"].connect(plasmoid.stop);
 
-plasmoid.dataEngine("nowplaying").connectSource("org.mpris.amarok", plasmoid, 500);
+engine.connectSource(watchingPlayer, plasmoid, 500);
