@@ -4,6 +4,7 @@ set(simple_javascript_engine_SRCS
     uiloader.cpp
     qtgui/font.cpp
     qtgui/graphicsitem.cpp
+    qtgui/linearlayout.cpp
     qtgui/painter.cpp
     qtgui/point.cpp
     qtgui/rect.cpp

@@ -180,6 +180,12 @@ BEGIN_DECLARE_METHOD(Class, __fun__) { \
     return eng->undefinedValue(); \
 } END_DECLARE_METHOD
 
+#define DECLARE_VOID_QUAD_NUMBER_METHOD(Class, __fun__) \
+BEGIN_DECLARE_METHOD(Class, __fun__) { \
+    self->__fun__(ctx->argument(0).toNumber(), ctx->argument(1).toNumber(), ctx->argument(2).toNumber(), ctx->argument(3).toNumber()); \
+    return eng->undefinedValue(); \
+} END_DECLARE_METHOD
+
 #define DECLARE_VOID_1ARG_METHOD(Class, ArgType, __fun__) \
 BEGIN_DECLARE_METHOD(Class, __fun__) { \
     self->__fun__(qscriptvalue_cast<ArgType>(ctx->argument(0))); \

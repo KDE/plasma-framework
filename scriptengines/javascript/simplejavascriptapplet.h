@@ -65,9 +65,7 @@ private:
     static QScriptValue newPlasmaFrameSvg(QScriptContext *context, QScriptEngine *engine);
 
     void installWidgets( QScriptEngine *engine );
-    void installLayouts( QScriptEngine *engine );
     static QScriptValue createWidget(QScriptContext *context, QScriptEngine *engine);
-    static QScriptValue createLayout(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue print(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue createPrototype( QScriptEngine *engine, const QString &name );
 

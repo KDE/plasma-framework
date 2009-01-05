@@ -52,6 +52,7 @@ Q_SCRIPT_DECLARE_QMETAOBJECT(AppletInterface, SimpleJavaScriptApplet*)
 
 QScriptValue constructPainterClass(QScriptEngine *engine);
 QScriptValue constructGraphicsItemClass(QScriptEngine *engine);
+QScriptValue constructLinearLayoutClass(QScriptEngine *engine);
 QScriptValue constructTimerClass(QScriptEngine *engine);
 QScriptValue constructFontClass(QScriptEngine *engine);
 QScriptValue constructQRectFClass(QScriptEngine *engine);
@@ -218,7 +219,7 @@ void SimpleJavaScriptApplet::paintInterface(QPainter *p, const QStyleOptionGraph
     //kDebug() << "paintInterface() (c++)";
     QScriptValue fun = m_self.property("paintInterface");
     if (!fun.isFunction()) {
-        kDebug() << "Script: paintInterface is not a function, " << fun.toString();
+        //kDebug() << "Script: paintInterface is not a function, " << fun.toString();
         AppletScript::paintInterface(p, option, contentsRect);
         return;
     }
@@ -367,6 +368,7 @@ void SimpleJavaScriptApplet::setupObjects()
     global.setProperty("QRectF", constructQRectFClass(m_engine));
     global.setProperty("QSizeF", constructQSizeFClass(m_engine));
     global.setProperty("QPoint", constructQPointClass(m_engine));
+    global.setProperty("LinearLayout", constructLinearLayoutClass(m_engine));
 
     // Bindings for data engine
     m_engine->setDefaultPrototype(qMetaTypeId<DataEngine*>(), m_engine->newQObject(new DataEngine()));
@@ -381,7 +383,6 @@ void SimpleJavaScriptApplet::setupObjects()
     qScriptRegisterMetaType<DataEngine::Data>(m_engine, qScriptValueFromData, 0, QScriptValue());
 
     installWidgets(m_engine);
-    installLayouts(m_engine);
 }
 
 QString SimpleJavaScriptApplet::findDataResource(const QString &filename)
@@ -522,15 +523,14 @@ void SimpleJavaScriptApplet::installWidgets(QScriptEngine *engine)
     QScriptValue globalObject = engine->globalObject();
     UiLoader loader;
 
-    QStringList widgets = loader.availableWidgets();
-    for (int i=0; i < widgets.size(); ++i) {
+    foreach (const QString &widget, loader.availableWidgets()) {
         QScriptValue fun = engine->newFunction(createWidget);
-        QScriptValue name = engine->toScriptValue(widgets[i]);
+        QScriptValue name = engine->toScriptValue(widget);
         fun.setProperty(QString("functionName"), name,
                          QScriptValue::ReadOnly | QScriptValue::Undeletable | QScriptValue::SkipInEnumeration);
         fun.setProperty(QString("prototype"), createPrototype(engine, name.toString()));
 
-        globalObject.setProperty(widgets[i], fun);
+        globalObject.setProperty(widget, fun);
     }
 }
 
@@ -562,56 +562,6 @@ QScriptValue SimpleJavaScriptApplet::createWidget(QScriptContext *context, QScri
     fun.setPrototype(context->callee().property("prototype"));
 
     return fun;
-}
-
-void SimpleJavaScriptApplet::installLayouts(QScriptEngine *engine)
-{
-    QScriptValue globalObject = engine->globalObject();
-    UiLoader loader;
-
-    QStringList layouts = loader.availableLayouts();
-    for (int i=0; i < layouts.size(); ++i) {
-        QScriptValue fun = engine->newFunction(createLayout);
-        QScriptValue name = engine->toScriptValue(layouts[i]);
-        fun.setProperty(QString("functionName"), name,
-                         QScriptValue::ReadOnly | QScriptValue::Undeletable | QScriptValue::SkipInEnumeration);
-        fun.setProperty(QString("prototype"), createPrototype(engine, name.toString()));
-
-        globalObject.setProperty(layouts[i], fun);
-    }
-}
-
-QScriptValue SimpleJavaScriptApplet::createLayout(QScriptContext *context, QScriptEngine *engine)
-{
-    return context->throwError("CreateLayout is currently broken.");
-    /*
-    if (context->argumentCount() > 1) {
-        //FIXME: 4.3: i18nc
-        return context->throwError("CreateLayout takes one argument");
-    }
-
-    QGraphicsWidget *parent = 0;
-    if (context->argumentCount()) {
-        parent = qscriptvalue_cast<QGraphicsWidget*>(context->argument(0));
-
-        if (!parent) {
-            return context->throwError(i18n("The parent must be a QGraphicsWidget"));
-        }
-    }
-
-    QString self = context->callee().property("functionName").toString();
-    UiLoader loader;
-    QGraphicsLayout *w = loader.createLayout(self, parent);
-
-    if (!w) {
-        return QScriptValue();
-    }
-
-    QScriptValue fun = engine->newQObject(w);
-    fun.setPrototype(context->callee().property("prototype"));
-
-    return fun;
-    */
 }
 
 QScriptValue SimpleJavaScriptApplet::print(QScriptContext *context, QScriptEngine *engine)

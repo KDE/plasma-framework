@@ -141,6 +141,7 @@ enum AspectRatioMode {
 
     const Plasma::Package *package() const;
     QList<QAction*> contextualActions() const;
+    Plasma::Applet *applet() const;
 
 Q_SIGNALS:
     void releaseVisualFocus();
@@ -151,7 +152,6 @@ public Q_SLOTS:
     void dataUpdated(QString source, Plasma::DataEngine::Data data);
 
 private:
-    Plasma::Applet *applet() const;
     SimpleJavaScriptApplet *m_appletScriptEngine;
     QSet<QString> m_actions;
     QSignalMapper *m_actionSignals;
