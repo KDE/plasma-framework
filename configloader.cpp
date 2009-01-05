@@ -387,6 +387,22 @@ KConfigSkeletonItem *ConfigLoader::findItem(const QString &group, const QString 
     return KConfigSkeleton::findItem(d->keysToNames[group + key]);
 }
 
+KConfigSkeletonItem *ConfigLoader::findItemByName(const QString &name)
+{
+    return KConfigSkeleton::findItem(name);
+}
+
+QVariant ConfigLoader::property(const QString &name)
+{
+    KConfigSkeletonItem *item = KConfigSkeleton::findItem(name);
+
+    if (item) {
+        return item->property();
+    }
+
+    return QVariant();
+}
+
 bool ConfigLoader::hasGroup(const QString &group) const
 {
     return d->groups.contains(group);

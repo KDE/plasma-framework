@@ -116,6 +116,16 @@ public:
     KConfigSkeletonItem *findItem(const QString &group, const QString &key);
 
     /**
+     * Finds an item by its name
+     */
+    KConfigSkeletonItem *findItemByName(const QString &name);
+
+    /**
+     * Returns the property (variantized value) of the named item
+     */
+    QVariant property(const QString &name);
+
+    /**
      * Check to see if a group exists
      *
      * @param group the name of the group to check for
