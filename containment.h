@@ -69,7 +69,7 @@ class PLASMA_EXPORT Containment : public Applet
     Q_OBJECT
 
     public:
-        class StyleOption : public QStyleOptionGraphicsItem
+        class PLASMA_EXPORT StyleOption : public QStyleOptionGraphicsItem
         {
             public:
                 explicit StyleOption();
