@@ -26,7 +26,6 @@
 #include <Plasma/RunnerScript>
 
 class QScriptEngine;
-class QScriptContext;
 
 class JavaScriptRunner : public Plasma::RunnerScript
 {

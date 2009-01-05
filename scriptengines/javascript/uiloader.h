@@ -26,7 +26,6 @@
 #include <plasma/applet.h>
 
 class QGraphicsWidget;
-class QGraphicsProxyWidget;
 
 class UiLoaderPrivate;
 
