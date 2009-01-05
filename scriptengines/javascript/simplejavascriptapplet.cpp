@@ -136,9 +136,9 @@ QScriptValue qScriptValueFromKConfigGroup(QScriptEngine *engine, const KConfigGr
     }
 
     QMap<QString, QString> entryMap = config.entryMap();
-    QMap<QString, QString>::const_iterator it = entryMap.begin();
+    QMap<QString, QString>::const_iterator it = entryMap.constBegin();
     QMap<QString, QString>::const_iterator begin = it;
-    QMap<QString, QString>::const_iterator end = entryMap.end();
+    QMap<QString, QString>::const_iterator end = entryMap.constEnd();
 
     for (it = begin; it != end; ++it) {
         //kDebug() << "setting" << it.key() << "to" << it.value();
