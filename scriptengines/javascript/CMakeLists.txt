@@ -1,6 +1,7 @@
 set(simple_javascript_engine_SRCS
     simplejavascriptapplet.cpp
     appletinterface.cpp
+    uiloader.cpp
     qtgui/font.cpp
     qtgui/graphicsitem.cpp
     qtgui/painter.cpp
