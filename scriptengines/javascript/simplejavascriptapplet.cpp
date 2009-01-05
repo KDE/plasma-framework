@@ -85,8 +85,10 @@ QScriptValue variant2ScriptValue(QScriptEngine *engine, QVariant var)
             return QScriptValue(engine, var.toInt());
         case QVariant::String:
             return QScriptValue(engine, var.toString());
-        case QVariant::Time:
-            return engine->newDate(var.toDateTime());
+        case QVariant::Time: {
+            QDateTime t(QDate::currentDate(), var.toTime());
+            return engine->newDate(t);
+        }
         case QVariant::UInt:
             return QScriptValue(engine, var.toUInt());
         default:
@@ -105,7 +107,10 @@ QScriptValue qScriptValueFromData(QScriptEngine *engine, const DataEngine::Data 
     QScriptValue obj = engine->newObject();
 
     for (it = begin; it != end; ++it) {
-        obj.setProperty(it.key(), variant2ScriptValue(engine, it.value()));
+        //kDebug() << "setting" << it.key() << "to" << it.value();
+        QString prop = it.key();
+        prop.replace(' ', '_');
+        obj.setProperty(prop, variant2ScriptValue(engine, it.value()));
     }
 
     return obj;
@@ -175,9 +180,9 @@ void SimpleJavaScriptApplet::configAccepted()
 
 void SimpleJavaScriptApplet::dataUpdated(const QString &name, const DataEngine::Data &data)
 {
-    QScriptValue fun = m_self.property("dataUpdated");
+    QScriptValue fun = m_self.property("dataUpdate");
     if (!fun.isFunction()) {
-        kDebug() << "Script: dataUpdated is not a function, " << fun.toString();
+        kDebug() << "Script: dataUpdate is not a function, " << fun.toString();
         return;
     }
 
@@ -322,6 +327,19 @@ void SimpleJavaScriptApplet::setupObjects()
 {
     QScriptValue global = m_engine->globalObject();
 
+    // Bindings for data engine
+    m_engine->setDefaultPrototype(qMetaTypeId<DataEngine*>(), m_engine->newQObject(new DataEngine()));
+#if 0
+    fun = m_engine->newFunction(SimpleJavaScriptApplet::dataEngine);
+    m_self.setProperty("dataEngine", fun);
+#endif
+
+    global.setProperty("dataEngine", m_engine->newFunction(SimpleJavaScriptApplet::dataEngine));
+//    qScriptRegisterMapMetaType<QMap<QString, QVariant> >(m_engine);
+//    qScriptRegisterMapMetaType<DataEngine::Dict>(m_engine);
+//    qScriptRegisterMapMetaType<DataEngine::Data>(m_engine);
+    qScriptRegisterMetaType<DataEngine::Data>(m_engine, qScriptValueFromData, 0, QScriptValue());
+
     // Expose applet interface
     m_interface = new AppletInterface(this);
     m_self = m_engine->newQObject(m_interface);
@@ -370,17 +388,6 @@ void SimpleJavaScriptApplet::setupObjects()
     global.setProperty("QPoint", constructQPointClass(m_engine));
     global.setProperty("LinearLayout", constructLinearLayoutClass(m_engine));
 
-    // Bindings for data engine
-    m_engine->setDefaultPrototype(qMetaTypeId<DataEngine*>(), m_engine->newQObject(new DataEngine()));
-#if 0
-    fun = m_engine->newFunction(SimpleJavaScriptApplet::dataEngine);
-    m_self.setProperty("dataEngine", fun);
-#endif
-
-    global.setProperty("dataEngine", m_engine->newFunction(SimpleJavaScriptApplet::dataEngine));
-    qScriptRegisterMapMetaType<DataEngine::Dict>(m_engine);
-//    qScriptRegisterMapMetaType<DataEngine::Data>(m_engine);
-    qScriptRegisterMetaType<DataEngine::Data>(m_engine, qScriptValueFromData, 0, QScriptValue());
 
     installWidgets(m_engine);
 }

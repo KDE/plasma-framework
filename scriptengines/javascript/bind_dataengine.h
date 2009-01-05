@@ -37,8 +37,8 @@ QScriptValue qScriptValueFromMap(QScriptEngine *eng, const M &map)
     kDebug() << "qScriptValueFromMap called";
 
     QScriptValue obj = eng->newObject();
-    typename M::const_iterator begin = map.begin();
-    typename M::const_iterator end = map.end();
+    typename M::const_iterator begin = map.constBegin();
+    typename M::const_iterator end = map.constEnd();
     typename M::const_iterator it;
     for (it = begin; it != end; ++it)
         obj.setProperty(it.key(), qScriptValueFromValue(eng, it.value()));
