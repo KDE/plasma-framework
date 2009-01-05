@@ -60,6 +60,7 @@ private:
 
     static QString findSvg(QScriptEngine *engine, const QString &file);
     static QScriptValue dataEngine(QScriptContext *context, QScriptEngine *engine);
+    static QScriptValue service(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue loadui(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue newPlasmaSvg(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue newPlasmaFrameSvg(QScriptContext *context, QScriptEngine *engine);

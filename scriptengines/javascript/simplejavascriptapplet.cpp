@@ -63,9 +63,11 @@ QScriptValue constructQSizeFClass(QScriptEngine *engine);
 
 class DummyService : public Service
 {
-    ServiceJob *createJob(const QString &operation,
-                          QMap<QString, QVariant> &parameters)
+public:
+    ServiceJob *createJob(const QString &operation, QMap<QString, QVariant> &parameters)
     {
+        Q_UNUSED(operation)
+        Q_UNUSED(parameters)
         return 0;
     }
 };
@@ -373,15 +375,9 @@ void SimpleJavaScriptApplet::setupObjects()
     m_engine->setDefaultPrototype(qMetaTypeId<DataEngine*>(), m_engine->newQObject(new DataEngine()));
     m_engine->setDefaultPrototype(qMetaTypeId<Service*>(), m_engine->newQObject(new DummyService()));
     m_engine->setDefaultPrototype(qMetaTypeId<ServiceJob*>(), m_engine->newQObject(new ServiceJob(QString(), QString(), QMap<QString, QVariant>())));
-#if 0
-    fun = m_engine->newFunction(SimpleJavaScriptApplet::dataEngine);
-    m_self.setProperty("dataEngine", fun);
-#endif
 
     global.setProperty("dataEngine", m_engine->newFunction(SimpleJavaScriptApplet::dataEngine));
-//    qScriptRegisterMapMetaType<QMap<QString, QVariant> >(m_engine);
-//    qScriptRegisterMapMetaType<DataEngine::Dict>(m_engine);
-//    qScriptRegisterMapMetaType<DataEngine::Data>(m_engine);
+    global.setProperty("service", m_engine->newFunction(SimpleJavaScriptApplet::service));
     qScriptRegisterMetaType<DataEngine::Data>(m_engine, qScriptValueFromData, 0, QScriptValue());
     qScriptRegisterMetaType<KConfigGroup>(m_engine, qScriptValueFromKConfigGroup, kConfigGroupFromScriptValue, QScriptValue());
 
@@ -401,12 +397,6 @@ void SimpleJavaScriptApplet::setupObjects()
             global.setProperty(e.key(i), QScriptValue(m_engine, e.value(i)));
         }
     }
-
-//    global.setProperty("Planar", QScriptValue(m_engine, Plasma::Planar));
-//    m_metaObject = m_engine->newQMetaObject(&AppletInterface::staticMetaObject);
-//    m_metaObject.setScope(global);
-//    global.setProperty("meta", m_metaObject);
-
 
     // Add a global loadui method for ui files
     QScriptValue fun = m_engine->newFunction(SimpleJavaScriptApplet::loadui);
@@ -432,7 +422,6 @@ void SimpleJavaScriptApplet::setupObjects()
     global.setProperty("QSizeF", constructQSizeFClass(m_engine));
     global.setProperty("QPoint", constructQPointClass(m_engine));
     global.setProperty("LinearLayout", constructLinearLayoutClass(m_engine));
-
 
     installWidgets(m_engine);
 }
@@ -486,6 +475,34 @@ QScriptValue SimpleJavaScriptApplet::dataEngine(QScriptContext *context, QScript
 
     DataEngine *data = interface->dataEngine(dataEngine);
     return engine->newQObject(data);
+}
+
+QScriptValue SimpleJavaScriptApplet::service(QScriptContext *context, QScriptEngine *engine)
+{
+    if (context->argumentCount() != 2) {
+        return context->throwError("service takes two arguments");
+    }
+
+    QString dataEngine = context->argument(0).toString();
+
+    QScriptValue appletValue = engine->globalObject().property("plasmoid");
+    //kDebug() << "appletValue is " << appletValue.toString();
+
+    QObject *appletObject = appletValue.toQObject();
+    if (!appletObject) {
+        return context->throwError(i18n("Could not extract the AppletObject"));
+    }
+
+    AppletInterface *interface = qobject_cast<AppletInterface*>(appletObject);
+    if (!interface) {
+        return context->throwError(i18n("Could not extract the Applet"));
+    }
+
+    DataEngine *data = interface->dataEngine(dataEngine);
+    QString source = context->argument(1).toString();
+    Service *service = data->serviceForSource(source);
+    kDebug( )<< "lets try to get" << source << "from" << dataEngine;
+    return engine->newQObject(service);
 }
 
 QScriptValue SimpleJavaScriptApplet::loadui(QScriptContext *context, QScriptEngine *engine)
