@@ -1,16 +1,12 @@
-layout = new QGraphicsLinearLayout(Horizontal, plasmoid);
-
-label = new Label();
-
-plasmoid.dataEngine("time").connectSource("UTC", plasmoid, 500);
-print(dataEngine("time").query("UTC").toString());
-
-layout.addItem(label);
-label.text = "test clock";
-plasmoid.setLayout(layout);
-
-
-plasmoid.dataUpdated = function(a, b)
+plasmoid.dataUpdate = function(a, b)
 {
-    print("This should print time");
+    label.text = "It is " + b.Time.toString() + " in " + a;
 }
+
+layout = new LinearLayout(plasmoid);
+label = new Label();
+layout.addItem(label);
+
+print(dataEngine("time").query("UTC").Time.toString());
+plasmoid.dataEngine("time").connectSource("UTC", plasmoid, 500);
+
