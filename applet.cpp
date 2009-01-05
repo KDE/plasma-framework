@@ -1398,10 +1398,10 @@ void Applet::showConfigurationInterface()
 
         dialog->addPage(w, i18n("Settings"), icon(), i18n("%1 Settings", name()));
         d->addGlobalShortcutsPage(dialog);
-        connect(dialog, SIGNAL(applyClicked()), this, SLOT(configChanged()));
-        connect(dialog, SIGNAL(okClicked()), this, SLOT(configChanged()));
+        connect(dialog, SIGNAL(applyClicked()), this, SLOT(configDialogFinished()));
+        connect(dialog, SIGNAL(okClicked()), this, SLOT(configDialogFinished()));
         //FIXME: in this case use another ad-hoc slot?
-        connect(dialog, SIGNAL(finished()), this, SLOT(configChanged()));
+        connect(dialog, SIGNAL(finished()), this, SLOT(configDialogFinished()));
         dialog->show();
     } else if (d->script) {
         //FIXME: global shorcuts?
@@ -1417,9 +1417,9 @@ void Applet::showConfigurationInterface()
         connect(dialog, SIGNAL(finished()), nullManager, SLOT(deleteLater()));
         //TODO: Apply button does not correctly work for now, so do not show it
         dialog->showButton(KDialog::Apply, false);
-        connect(dialog, SIGNAL(applyClicked()), this, SLOT(configChanged()));
-        connect(dialog, SIGNAL(okClicked()), this, SLOT(configChanged()));
-        connect(dialog, SIGNAL(finished()), this, SLOT(configChanged()));
+        connect(dialog, SIGNAL(applyClicked()), this, SLOT(configDialogFinished()));
+        connect(dialog, SIGNAL(okClicked()), this, SLOT(configDialogFinished()));
+        connect(dialog, SIGNAL(finished()), this, SLOT(configDialogFinished()));
         dialog->show();
     }
 
@@ -1451,18 +1451,23 @@ void AppletPrivate::clearShortcutEditorPtr()
     shortcutEditor = 0;
 }
 
+void AppletPrivate::configDialogFinished()
+{
+    if (shortcutEditor) {
+        QKeySequence sequence = shortcutEditor->keySequence();
+        if (sequence != q->globalShortcut().primary()) {
+            q->setGlobalShortcut(KShortcut(sequence));
+            emit q->configNeedsSaving();
+        }
+    }
+
+    q->configChanged();
+}
+
 void Applet::configChanged()
 {
     if (d->script) {
         d->script->configChanged();
-    }
-
-    if (d->shortcutEditor) {
-        QKeySequence sequence = d->shortcutEditor->keySequence();
-        if (sequence != globalShortcut().primary()) {
-            setGlobalShortcut(KShortcut(sequence));
-            emit configNeedsSaving();
-        }
     }
 }
 
