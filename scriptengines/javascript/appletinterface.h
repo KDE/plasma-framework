@@ -136,6 +136,8 @@ enum QtOrientation {
 
     Q_INVOKABLE void update();
 
+    Q_INVOKABLE QVariant readConfig(const QString &entry) const;
+
     //FIXME bindings
     Plasma::DataEngine *dataEngine(const QString &name);
 

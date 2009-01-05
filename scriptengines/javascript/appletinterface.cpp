@@ -109,6 +109,17 @@ void AppletInterface::update()
     applet()->update();
 }
 
+QVariant AppletInterface::readConfig(const QString &entry) const
+{
+    Plasma::ConfigLoader *config = applet()->configScheme();
+
+    if (config) {
+        return config->property(entry);
+    }
+
+    return QVariant();
+}
+
 const Plasma::Package *AppletInterface::package() const
 {
     return m_appletScriptEngine->package();
