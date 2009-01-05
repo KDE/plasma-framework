@@ -36,8 +36,8 @@ AppletInterface::AppletInterface(SimpleJavaScriptApplet *parent)
       m_appletScriptEngine(parent),
       m_actionSignals(0)
 {
-    connect(this, SIGNAL(releaseVisualFocus()), m_appletScriptEngine->applet(), SIGNAL(releaseVisualFocus()));
-    connect(this, SIGNAL(configNeedsSaving()), m_appletScriptEngine->applet(), SIGNAL(configNeedsSaving()));
+    connect(this, SIGNAL(releaseVisualFocus()), applet(), SIGNAL(releaseVisualFocus()));
+    connect(this, SIGNAL(configNeedsSaving()), applet(), SIGNAL(configNeedsSaving()));
 }
 
 AppletInterface::~AppletInterface()
@@ -46,32 +46,32 @@ AppletInterface::~AppletInterface()
 
 KConfigGroup AppletInterface::config()
 {
-    return m_appletScriptEngine->applet()->config();
+    return applet()->config();
 }
 
 Plasma::DataEngine* AppletInterface::dataEngine(const QString &name)
 {
-    return m_appletScriptEngine->applet()->dataEngine(name);
+    return applet()->dataEngine(name);
 }
 
 AppletInterface::FormFactor AppletInterface::formFactor()
 {
-    return static_cast<FormFactor>(m_appletScriptEngine->applet()->formFactor());
+    return static_cast<FormFactor>(applet()->formFactor());
 }
 
 AppletInterface::Location AppletInterface::location()
 {
-    return static_cast<Location>(m_appletScriptEngine->applet()->location());
+    return static_cast<Location>(applet()->location());
 }
 
 QString AppletInterface::currentActivity()
 {
-    return m_appletScriptEngine->applet()->context()->currentActivity();
+    return applet()->context()->currentActivity();
 }
 
 AppletInterface::AspectRatioMode AppletInterface::aspectRatioMode()
 {
-    return static_cast<AspectRatioMode>(m_appletScriptEngine->applet()->aspectRatioMode());
+    return static_cast<AspectRatioMode>(applet()->aspectRatioMode());
 }
 
 void AppletInterface::setAspectRatioMode(AppletInterface::AspectRatioMode mode)
@@ -81,7 +81,7 @@ void AppletInterface::setAspectRatioMode(AppletInterface::AspectRatioMode mode)
 
 bool AppletInterface::shouldConserveResources()
 {
-    return m_appletScriptEngine->applet()->shouldConserveResources();
+    return applet()->shouldConserveResources();
 }
 
 void AppletInterface::setFailedToLaunch(bool failed, const QString &reason)
@@ -91,7 +91,7 @@ void AppletInterface::setFailedToLaunch(bool failed, const QString &reason)
 
 bool AppletInterface::isBusy()
 {
-    return m_appletScriptEngine->applet()->isBusy();
+    return applet()->isBusy();
 }
 
 void AppletInterface::setBusy(bool busy)
@@ -116,7 +116,7 @@ void AppletInterface::setLayout(QGraphicsLayout *layout)
 
 QGraphicsLayout *AppletInterface::layout() const
 {
-    return m_appletScriptEngine->applet()->layout();
+    return applet()->layout();
 }
 
 const Plasma::Package *AppletInterface::package() const
@@ -142,7 +142,7 @@ QList<QAction*> AppletInterface::contextualActions() const
 
 QSizeF AppletInterface::size() const
 {
-    return m_appletScriptEngine->applet()->size();
+    return applet()->size();
 }
 
 void AppletInterface::setAction(const QString &name, const QString &text, const QString &icon, const QString &shortcut)
