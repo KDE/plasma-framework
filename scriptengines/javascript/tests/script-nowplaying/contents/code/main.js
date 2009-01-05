@@ -1,7 +1,7 @@
 engine = dataEngine("nowplaying");
 players = engine.sources;
 watchingPlayer = players[0];
-controller = engine.serviceForSource(watchingPlayer);
+controller = service("nowplaying", watchingPlayer);
 
 plasmoid.dataUpdate = function(a, b)
 {
@@ -11,7 +11,7 @@ plasmoid.dataUpdate = function(a, b)
 
 plasmoid.stop = function()
 {
-    data = engine.serviceForSource(watchingPlayer).operationDescription("stop");
+    data = controler.operationDescription("stop");
     print(data+controller.name());
     for ( var i in data ) {
         print(i + ' -> ' + data[i] );
