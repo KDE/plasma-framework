@@ -6,7 +6,8 @@ controller = service("nowplaying", watchingPlayer);
 plasmoid.dataUpdate = function(a, b)
 {
     label.text = "Playing " + b.Title + " by " + b.Artist + ". time: " +
-                 parseInt(b.Position/60) + ":" + (parseInt(b.Position)%60);
+                 parseInt(parseInt(b.Position)/60) + ":" + (parseInt(b.Position)%60);
+    progress.value = b.Position;
 }
 
 plasmoid.stop = function()
@@ -34,7 +35,7 @@ plasmoid.setProgress = function(progress)
 }
 
 layout = new LinearLayout(plasmoid);
-layout.setOrientation(Vertical);
+layout.setOrientation(QtVertical);
 label = new Label();
 layout.addItem(label);
 
@@ -47,7 +48,7 @@ controller.associateWidget(stop, "stop");
 stop["clicked()"].connect(plasmoid.stop);
 
 progress = new Slider();
-progress.orientation = Horizontal;
+progress.orientation = QtHorizontal;
 layout.addItem(progress);
 controller.associateWidget(progress, "progress");
 

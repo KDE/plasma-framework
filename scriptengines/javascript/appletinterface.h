@@ -42,6 +42,7 @@ class AppletInterface : public QObject
     Q_ENUMS(FormFactor)
     Q_ENUMS(Location)
     Q_ENUMS(AspectRatioMode)
+    Q_ENUMS(QtOrientation)
 public:
     AppletInterface(SimpleJavaScriptApplet *parent);
     ~AppletInterface();
@@ -89,6 +90,11 @@ enum AspectRatioMode {
     FixedSize = 4                /** The applet cannot be resized */
 };
 
+//From Qt namespace
+enum QtOrientation {
+    QtHorizontal= Qt::Horizontal,
+    QtVertical = Qt::Vertical
+};
 
 //-------------------------------------------------------------------
 
