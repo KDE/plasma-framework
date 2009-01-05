@@ -1,0 +1,17 @@
+[Desktop Entry]
+Name=script-digital-clock
+Comment=Javascript digital clock
+Icon=configure
+Type=Service
+X-KDE-ServiceTypes=Plasma/Applet
+X-Plasma-MainScript=code/main.js
+X-KDE-PluginInfo-Author=Marco Martin
+X-KDE-PluginInfo-Email=notmart@gmail.com
+X-KDE-PluginInfo-Name=script-digital-clock
+X-KDE-PluginInfo-Version=0.0
+X-KDE-PluginInfo-Website=http://plasma.kde.org/
+X-KDE-PluginInfo-Category=Utilities
+X-KDE-PluginInfo-Depends=
+X-KDE-PluginInfo-License=GPL
+X-KDE-PluginInfo-EnabledByDefault=true
+X-Plasma-API=javascript
