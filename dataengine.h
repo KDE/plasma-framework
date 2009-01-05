@@ -91,7 +91,7 @@ class PLASMA_EXPORT DataEngine : public QObject
          *         the default implementation provides) or not is up to the
          *         DataEngine to decide.
          **/
-        virtual QStringList sources() const;
+        Q_INVOKABLE virtual QStringList sources() const;
 
         /**
          * @param source the source to target the Service at
@@ -99,12 +99,12 @@ class PLASMA_EXPORT DataEngine : public QObject
          *         is parented to the DataEngine, but may be deleted by the
          *         caller when finished with it
          */
-        virtual Service *serviceForSource(const QString &source);
+        Q_INVOKABLE virtual Service *serviceForSource(const QString &source);
 
         /**
          * Returns the engine name for the DataEngine
          */
-        QString name() const;
+        Q_INVOKABLE QString name() const;
 
         /**
          * Connects a source to an object for data updates. The object must

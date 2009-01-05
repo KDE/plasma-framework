@@ -97,17 +97,17 @@ public:
      * @arg destination specific to each Service, this sets which
      *                  target or address for ServiceJobs to operate on
      */
-    void setDestination(const QString &destination);
+    Q_INVOKABLE void setDestination(const QString &destination);
 
     /**
      * @return the target destination, if any, that this service is associated with
      */
-    QString destination() const;
+    Q_INVOKABLE QString destination() const;
 
     /**
      * @return the possible operations for this profile
      */
-    QStringList operationNames() const;
+    Q_INVOKABLE QStringList operationNames() const;
 
     /**
      * Retrieves the parameters for a given operation
@@ -115,7 +115,7 @@ public:
      * @param operation the operation to retrieve parameters for
      * @return KConfigGroup containing the parameters
      */
-    KConfigGroup operationDescription(const QString &operationName);
+    Q_INVOKABLE KConfigGroup operationDescription(const QString &operationName);
 
     /**
      * Called to create a ServiceJob which is associated with a given
@@ -124,7 +124,7 @@ public:
      * @return a started ServiceJob; the consumer may connect to relevant
      *         signals before returning to the event loop
      */
-    ServiceJob *startOperationCall(const KConfigGroup &description, QObject *parent = 0);
+    Q_INVOKABLE ServiceJob *startOperationCall(const KConfigGroup &description, QObject *parent = 0);
 
     /**
      * Query to find if an operation is enabled or not.
@@ -132,12 +132,12 @@ public:
      * @param operation the name of the operation to check
      * @return true if the operation is enabled, false otherwise
      */
-    bool isOperationEnabled(const QString &operation) const;
+    Q_INVOKABLE bool isOperationEnabled(const QString &operation) const;
 
     /**
      * The name of this service
      */
-    QString name() const;
+    Q_INVOKABLE QString name() const;
 
     /**
      * Assoicates a widget with an operation, which allows the service to
@@ -149,7 +149,7 @@ public:
      * @param widget the QWidget to associate with the service
      * @param operation the operation to associate the widget with
      */
-    void associateWidget(QWidget *widget, const QString &operation);
+    Q_INVOKABLE void associateWidget(QWidget *widget, const QString &operation);
 
     /**
      * Disassociates a widget if it has been associated with an operation
@@ -159,7 +159,7 @@ public:
      *
      * @param widget the QWidget to disassociate.
      */
-    void disassociateWidget(QWidget *widget);
+    Q_INVOKABLE void disassociateWidget(QWidget *widget);
 
     /**
      * Assoicates a widget with an operation, which allows the service to
@@ -171,7 +171,7 @@ public:
      * @param widget the QGraphicsItem to associate with the service
      * @param operation the operation to associate the widget with
      */
-    void associateWidget(QGraphicsWidget *widget, const QString &operation);
+    Q_INVOKABLE void associateWidget(QGraphicsWidget *widget, const QString &operation);
 
     /**
      * Disassociates a widget if it has been associated with an operation
@@ -181,7 +181,7 @@ public:
      *
      * @param widget the QGraphicsWidget to disassociate.
      */
-    void disassociateWidget(QGraphicsWidget *widget);
+    Q_INVOKABLE void disassociateWidget(QGraphicsWidget *widget);
 
 Q_SIGNALS:
     /**
