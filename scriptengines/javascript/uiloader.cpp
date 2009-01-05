@@ -45,9 +45,6 @@
 #include <Plasma/TreeView>
 #include <Plasma/WebView>
 
-namespace Plasma
-{
-
 class UiLoaderPrivate
 {
 public:
@@ -100,47 +97,47 @@ QStringList UiLoader::availableWidgets() const
 QGraphicsWidget *UiLoader::createWidget(const QString &className, QGraphicsWidget *parent)
 {
     if (className == QString("BusyWidget")) {
-        return new BusyWidget(parent);
+        return new Plasma::BusyWidget(parent);
     } else if (className == QString("CheckBox")) {
-        return new CheckBox(parent);
+        return new Plasma::CheckBox(parent);
     } else if (className == QString("ComboBox")) {
-        return new ComboBox(parent);
+        return new Plasma::ComboBox(parent);
     } else if (className == QString("FlashingLabel")) {
-        return new FlashingLabel(parent);
+        return new Plasma::FlashingLabel(parent);
     } else if (className == QString("Frame")) {
-        return new Frame(parent);
+        return new Plasma::Frame(parent);
     } else if (className == QString("GroupBox")) {
-        return new GroupBox(parent);
+        return new Plasma::GroupBox(parent);
     } else if (className == QString("IconWidget")) {
-        return new IconWidget(parent);
+        return new Plasma::IconWidget(parent);
     } else if (className == QString("Label")) {
-        return new Label(parent);
+        return new Plasma::Label(parent);
     } else if (className == QString("LineEdit")) {
-        return new LineEdit(parent);
+        return new Plasma::LineEdit(parent);
     } else if (className == QString("Meter")) {
-        return new Meter(parent);
+        return new Plasma::Meter(parent);
     } else if (className == QString("PushButton")) {
-        return new PushButton(parent);
+        return new Plasma::PushButton(parent);
     } else if (className == QString("RadioButton")) {
-        return new RadioButton(parent);
+        return new Plasma::RadioButton(parent);
     } else if (className == QString("ScrollBar")) {
-        return new ScrollBar(parent);
+        return new Plasma::ScrollBar(parent);
     } else if (className == QString("SignalPlotter")) {
-        return new SignalPlotter(parent);
+        return new Plasma::SignalPlotter(parent);
     } else if (className == QString("Slider")) {
-        return new Slider(parent);
+        return new Plasma::Slider(parent);
     } else if (className == QString("SvgWidget")) {
-        return new SvgWidget(parent);
+        return new Plasma::SvgWidget(parent);
     } else if (className == QString("TabBar")) {
-        return new TabBar(parent);
+        return new Plasma::TabBar(parent);
     } else if (className == QString("TextEdit")) {
-        return new TextEdit(parent);
+        return new Plasma::TextEdit(parent);
     } else if (className == QString("ToolButton")) {
-        return new ToolButton(parent);
+        return new Plasma::ToolButton(parent);
     } else if (className == QString("TreeView")) {
-        return new TreeView(parent);
+        return new Plasma::TreeView(parent);
     } else if (className == QString("WebView")) {
-        return new WebView(parent);
+        return new Plasma::WebView(parent);
     }
 
     return 0;
@@ -160,8 +157,6 @@ QGraphicsLayout *UiLoader::createLayout(const QString &className, QGraphicsLayou
     }
 
     return 0;
-}
-
 }
 
 #include "uiloader.moc"

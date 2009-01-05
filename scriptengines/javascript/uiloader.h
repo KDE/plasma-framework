@@ -28,9 +28,6 @@
 class QGraphicsWidget;
 class QGraphicsProxyWidget;
 
-namespace Plasma
-{
-
 class UiLoaderPrivate;
 
 /**
@@ -57,7 +54,5 @@ public:
 private:
     UiLoaderPrivate *const d;
 };
-
-}
 
 #endif // PLASMA_UILOADER_H
