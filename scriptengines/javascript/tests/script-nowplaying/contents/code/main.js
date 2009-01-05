@@ -11,7 +11,7 @@ plasmoid.dataUpdate = function(a, b)
 
 plasmoid.stop = function()
 {
-    data = controler.operationDescription("stop");
+    data = controller.operationDescription("stop");
     print(data+controller.name());
     for ( var i in data ) {
         print(i + ' -> ' + data[i] );

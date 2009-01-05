@@ -142,8 +142,11 @@ QScriptValue qScriptValueFromKConfigGroup(QScriptEngine *engine, const KConfigGr
     QMap<QString, QString>::const_iterator begin = it;
     QMap<QString, QString>::const_iterator end = entryMap.constEnd();
 
+    //setting the group name
+    obj.setProperty("__name", QScriptValue(engine, config.name()));
+
+    //setting the key/value pairs
     for (it = begin; it != end; ++it) {
-        //kDebug() << "setting" << it.key() << "to" << it.value();
         QString prop = it.key();
         prop.replace(' ', '_');
         obj.setProperty(prop, variant2ScriptValue(engine, it.value()));
@@ -156,8 +159,14 @@ void kConfigGroupFromScriptValue(const QScriptValue& obj, KConfigGroup &config)
 {
     QScriptValueIterator it(obj);
 
+    KConfigSkeleton *skel = new KConfigSkeleton();
+    config = KConfigGroup(skel->config(), obj.property("__name").toString());
+
     while (it.hasNext()) {
-        config.writeEntry(it.name(), it.value().toString());
+        if (it.name() != "__name") {
+            config.writeEntry(it.name(), it.value().toString());
+        }
+        it.next();
     }
 }
 
@@ -373,7 +382,7 @@ void SimpleJavaScriptApplet::setupObjects()
 
     // Bindings for data engine
     m_engine->setDefaultPrototype(qMetaTypeId<DataEngine*>(), m_engine->newQObject(new DataEngine()));
-    m_engine->setDefaultPrototype(qMetaTypeId<Service*>(), m_engine->newQObject(new DummyService()));
+   m_engine->setDefaultPrototype(qMetaTypeId<Service*>(), m_engine->newQObject(new DummyService()));
     m_engine->setDefaultPrototype(qMetaTypeId<ServiceJob*>(), m_engine->newQObject(new ServiceJob(QString(), QString(), QMap<QString, QVariant>())));
 
     global.setProperty("dataEngine", m_engine->newFunction(SimpleJavaScriptApplet::dataEngine));
