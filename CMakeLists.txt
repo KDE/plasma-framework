@@ -87,7 +87,6 @@ set(plasma_LIB_SRCS
     scripting/dataenginescript.cpp
     scripting/runnerscript.cpp
     scripting/scriptengine.cpp
-    scripting/uiloader.cpp
     service.cpp
     servicejob.cpp
     svg.cpp
@@ -248,7 +247,6 @@ install(FILES
     scripting/dataenginescript.h
     scripting/runnerscript.h
     scripting/scriptengine.h
-    scripting/uiloader.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/plasma/scripting COMPONENT Devel)
 
 
