@@ -95,9 +95,6 @@ enum AspectRatioMode {
     //FIXME kconfiggroup bindings
     Q_INVOKABLE KConfigGroup config();
 
-    //FIXME bindings
-    Plasma::DataEngine *dataEngine(const QString &name);
-
     Q_INVOKABLE FormFactor formFactor();
 
     Q_INVOKABLE Location location();
@@ -133,11 +130,8 @@ enum AspectRatioMode {
 
     Q_INVOKABLE void update();
 
-    Q_INVOKABLE void setLayout(QGraphicsLayout *layout);
-
-    Q_INVOKABLE QGraphicsLayout *layout() const;
-
-    //TODO setLayout? layout()?
+    //FIXME bindings
+    Plasma::DataEngine *dataEngine(const QString &name);
 
     const Plasma::Package *package() const;
     QList<QAction*> contextualActions() const;

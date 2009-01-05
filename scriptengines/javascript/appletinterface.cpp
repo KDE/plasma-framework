@@ -109,16 +109,6 @@ void AppletInterface::update()
     applet()->update();
 }
 
-void AppletInterface::setLayout(QGraphicsLayout *layout)
-{
-    applet()->setLayout(layout);
-}
-
-QGraphicsLayout *AppletInterface::layout() const
-{
-    return applet()->layout();
-}
-
 const Plasma::Package *AppletInterface::package() const
 {
     return m_appletScriptEngine->package();
