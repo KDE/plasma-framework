@@ -681,7 +681,10 @@ void AppletHandle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
             // if preserving aspect ratio, project the calculated size point to the line
             // theough the origin and the original size point
-            if (m_applet->aspectRatioMode() != Plasma::IgnoreAspectRatio) {
+            if ((m_applet->aspectRatioMode() != Plasma::IgnoreAspectRatio &&
+                 !(event->modifiers() & Qt::ControlModifier)) ||
+                 (m_applet->aspectRatioMode() == Plasma::IgnoreAspectRatio &&
+                  (event->modifiers() & Qt::ControlModifier))) {
                 qreal ox = m_origAppletSize.x();
                 qreal oy = m_origAppletSize.y();
                 qreal sx = newSize.x();
