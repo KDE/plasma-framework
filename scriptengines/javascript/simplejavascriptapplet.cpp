@@ -32,9 +32,9 @@
 #include <Plasma/Svg>
 #include <Plasma/FrameSvg>
 #include <Plasma/Package>
-#include <Plasma/UiLoader>
 
 #include "appletinterface.h"
+#include "uiloader.h"
 
 using namespace Plasma;
 
