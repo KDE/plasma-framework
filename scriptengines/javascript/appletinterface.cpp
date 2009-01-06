@@ -140,6 +140,24 @@ void AppletInterface::setActiveConfig(const QString &name)
     m_currentConfig = name;
 }
 
+void AppletInterface::writeConfig(const QString &entry, const QVariant &value)
+{
+    Plasma::ConfigLoader *config = 0;
+    if (m_currentConfig.isEmpty()) {
+        config = applet()->configScheme();
+    } else {
+        config = m_configs.value(m_currentConfig, 0);
+    }
+
+    if (config) {
+        KConfigSkeletonItem *item = config->findItemByName(entry);
+        if (item) {
+            item->setProperty(entry);
+            m_appletScriptEngine->configNeedsSaving();
+        }
+    }
+}
+
 QVariant AppletInterface::readConfig(const QString &entry) const
 {
     Plasma::ConfigLoader *config = 0;
