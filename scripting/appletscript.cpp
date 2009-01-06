@@ -114,6 +114,13 @@ void AppletScript::setFailedToLaunch(bool failed, const QString &reason)
     }
 }
 
+void AppletScript::configNeedsSaving() const
+{
+    if (applet()) {
+        emit applet()->configNeedsSaving();
+    }
+}
+
 void AppletScript::showConfigurationInterface()
 {
 }

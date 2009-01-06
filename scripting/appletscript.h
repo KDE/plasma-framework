@@ -127,6 +127,11 @@ public:
      */
     void setFailedToLaunch(bool failed, const QString &reason = QString());
 
+    /**
+     * @see Applet
+     */
+    void configNeedsSaving() const;
+
 public Q_SLOTS:
 
     /**
