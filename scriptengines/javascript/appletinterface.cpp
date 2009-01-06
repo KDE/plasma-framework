@@ -20,6 +20,7 @@
 #include "appletinterface.h"
 
 #include <QAction>
+#include <QFile>
 #include <QSignalMapper>
 
 #include <KDE/KIcon>
@@ -28,6 +29,7 @@
 #include <Plasma/Applet>
 #include <Plasma/Context>
 #include <Plasma/DataEngine>
+#include <Plasma/Package>
 
 #include "simplejavascriptapplet.h"
 
@@ -109,9 +111,43 @@ void AppletInterface::update()
     applet()->update();
 }
 
+QString AppletInterface::activeConfig() const
+{
+    return m_currentConfig.isEmpty() ? "main" : m_currentConfig;
+}
+
+void AppletInterface::setActiveConfig(const QString &name)
+{
+    if (name == "main") {
+        m_currentConfig = QString();
+        return;
+    }
+
+    Plasma::ConfigLoader *loader = m_configs.value(name, 0);
+
+    if (!loader) {
+        QString path = applet()->package()->filePath("config", name + ".xml");
+        if (path.isEmpty()) {
+            return;
+        }
+
+        QFile f(path);
+        KConfigGroup cg = applet()->config();
+        loader = new Plasma::ConfigLoader(&cg, &f, this);
+        m_configs.insert(name, loader);
+    }
+
+    m_currentConfig = name;
+}
+
 QVariant AppletInterface::readConfig(const QString &entry) const
 {
-    Plasma::ConfigLoader *config = applet()->configScheme();
+    Plasma::ConfigLoader *config = 0;
+    if (m_currentConfig.isEmpty()) {
+        config = applet()->configScheme();
+    } else {
+        config = m_configs.value(m_currentConfig, 0);
+    }
 
     if (config) {
         return config->property(entry);

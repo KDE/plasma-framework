@@ -34,6 +34,7 @@ class KConfigGroup;
 namespace Plasma
 {
     class Applet;
+    class ConfigLoader;
 } // namespace Plasa
 
 class AppletInterface : public QObject
@@ -43,6 +44,8 @@ class AppletInterface : public QObject
     Q_ENUMS(Location)
     Q_ENUMS(AspectRatioMode)
     Q_ENUMS(QtOrientation)
+    Q_PROPERTY(QString activeConfig WRITE setActiveConfig READ activeConfig)
+
 public:
     AppletInterface(SimpleJavaScriptApplet *parent);
     ~AppletInterface();
@@ -136,6 +139,10 @@ enum QtOrientation {
 
     Q_INVOKABLE void update();
 
+    Q_INVOKABLE QString activeConfig() const;
+
+    Q_INVOKABLE void setActiveConfig(const QString &name);
+
     Q_INVOKABLE QVariant readConfig(const QString &entry) const;
 
     //FIXME bindings
@@ -157,6 +164,8 @@ private:
     SimpleJavaScriptApplet *m_appletScriptEngine;
     QSet<QString> m_actions;
     QSignalMapper *m_actionSignals;
+    QString m_currentConfig;
+    QMap<QString, Plasma::ConfigLoader*> m_configs;
 };
 
 #endif

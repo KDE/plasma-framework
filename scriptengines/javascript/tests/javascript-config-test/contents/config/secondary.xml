@@ -8,7 +8,7 @@
   <group name="General">
     <entry name="Test" type="String">
       <label>A test label</label>
-      <default>Hello hello!</default>
+      <default>This is in the secondary config XML</default>
     </entry>
   </group>
 
