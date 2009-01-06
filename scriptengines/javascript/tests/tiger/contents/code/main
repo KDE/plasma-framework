@@ -1,4 +1,4 @@
-svg = new PlasmaSvg( 'tiger', plasmoid );
+svg = new PlasmaSvg('tiger');
 plasmoid.setAction("myAction", "Select Me!", "plasma");
 
 plasmoid.action_myAction = function()
