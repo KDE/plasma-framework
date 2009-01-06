@@ -209,7 +209,7 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
                 dialog = 0;
             }
 
-            if (!lay && !q->layout()) {
+            if (!lay) {
                 lay = new QGraphicsLinearLayout();
                 lay->setContentsMargins(0, 0, 0, 0);
                 lay->setSpacing(0);
@@ -235,9 +235,7 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
                     proxy->show();
                 }
 
-                if (lay) {
-                    lay->addItem(proxy);
-                }
+                lay->addItem(proxy);
                 prefSize = qWidget->sizeHint();
             }
 
@@ -257,6 +255,7 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
             if (oldSize.width() < q->minimumSize().width() || oldSize.height() < q->minimumSize().height()) {
                 q->resize(prefSize);
             }
+
             //FIXME: this will be automatically propagated by the qgraphicslayout in the future
             lay->setPreferredSize(prefSize);
         //Applet on popup
