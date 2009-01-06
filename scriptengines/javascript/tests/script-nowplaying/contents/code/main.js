@@ -26,7 +26,7 @@ plasmoid.stop = function()
 plasmoid.setProgress = function(progress)
 {
     operation = controller.operationDescription("seek");
-    operation["seconds"] = progress;
+    operation.seconds = progress;
     for ( var i in operation ) {
         print(i + ' -> ' + operation[i] );
     }
