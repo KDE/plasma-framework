@@ -1,8 +1,9 @@
+// set up the engine, player and controller
 engine = dataEngine("nowplaying");
-players = engine.sources;
-watchingPlayer = players[0];
+watchingPlayer = engine.sources[0];
 controller = service("nowplaying", watchingPlayer);
 
+// define a few functions
 plasmoid.dataUpdate = function(a, b)
 {
     label.text = "Playing " + b.Title + " by " + b.Artist + ". time: " +
@@ -34,6 +35,7 @@ plasmoid.setProgress = function(progress)
     print("set progress to " + progress);
 }
 
+// Set up the UI
 layout = new LinearLayout(plasmoid);
 layout.setOrientation(QtVertical);
 label = new Label();
@@ -43,15 +45,16 @@ stop = new PushButton();
 stop.text = "Stop";
 layout.addItem(stop);
 
-controller.associateWidget(stop, "stop");
-
-stop["clicked()"].connect(plasmoid.stop);
-
 progress = new Slider();
 progress.orientation = QtHorizontal;
 layout.addItem(progress);
-controller.associateWidget(progress, "progress");
 
+// Glue things together
+stop["clicked()"].connect(plasmoid.stop);
 progress["sliderMoved(int)"].connect(plasmoid.setProgress);
 
+controller.associateWidget(stop, "stop");
+controller.associateWidget(progress, "progress");
+
 engine.connectSource(watchingPlayer, plasmoid, 500);
+
