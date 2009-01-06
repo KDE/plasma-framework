@@ -1,6 +1,21 @@
 [Desktop Entry]
 Name=script-digital-clock
+Name[mk]=Едноставен дигитален часовник
+Name[nds]=Skript-Digitaalklock
+Name[sv]=Skript med digitalklocka
+Name[zh_TW]=文稿數位時鐘
 Comment=Javascript digital clock
+Comment[ca]=Rellotge digital en javascript
+Comment[da]=Digitalt ur i Javascript
+Comment[et]=Javascripti digikell
+Comment[gl]=Reloxo dixital escrito en JavaScript
+Comment[ko]=자바스크립트 디지털 시계
+Comment[nds]=JavaScript-Digitaalklock
+Comment[pt]=Relógio digital em JavaScript
+Comment[pt_BR]=Relógio digital em JavaScript
+Comment[sv]=Javascript-digitalklocka
+Comment[uk]=Цифровий годинник на JavaScript
+Comment[zh_TW]=Javascript 數位時鐘
 Icon=configure
 Type=Service
 X-KDE-ServiceTypes=Plasma/Applet
