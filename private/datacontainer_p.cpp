@@ -28,11 +28,11 @@ SignalRelay *DataContainerPrivate::signalRelay(const DataContainer *dc, QObject 
                                                Plasma::IntervalAlignment align,
                                                bool immediateUpdate)
 {
-    QMap<uint, SignalRelay *>::const_iterator relayIt = relays.find(pollingInterval);
+    QMap<uint, SignalRelay *>::const_iterator relayIt = relays.constFind(pollingInterval);
     SignalRelay *relay = 0;
 
     //FIXME what if we have two applets with the same interval and different alignment?
-    if (relayIt == relays.end()) {
+    if (relayIt == relays.constEnd()) {
         relay = new SignalRelay(const_cast<DataContainer*>(dc), this,
                                 pollingInterval, align, immediateUpdate);
         relays[pollingInterval] = relay;

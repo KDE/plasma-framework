@@ -250,9 +250,9 @@ class SvgPrivate
             //kDebug() << "FAIL! **************************";
             //kDebug() << path << "**";
 
-            QHash<QString, SharedSvgRenderer::Ptr>::const_iterator it = s_renderers.find(path);
+            QHash<QString, SharedSvgRenderer::Ptr>::const_iterator it = s_renderers.constFind(path);
 
-            if (it != s_renderers.end()) {
+            if (it != s_renderers.constEnd()) {
                 //kDebug() << "gots us an existing one!";
                 renderer = it.value();
             } else {

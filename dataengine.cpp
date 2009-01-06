@@ -535,7 +535,7 @@ bool DataEnginePrivate::isUsed() const
 
 DataContainer *DataEnginePrivate::source(const QString &sourceName, bool createWhenMissing)
 {
-    DataEngine::SourceDict::const_iterator it = sources.find(sourceName);
+    DataEngine::SourceDict::const_iterator it = sources.constFind(sourceName);
     if (it != sources.constEnd()) {
         DataContainer *s = it.value();
         if (limit > 0) {

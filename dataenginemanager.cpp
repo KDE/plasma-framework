@@ -95,8 +95,8 @@ DataEngineManager::~DataEngineManager()
 
 Plasma::DataEngine *DataEngineManager::engine(const QString &name) const
 {
-    Plasma::DataEngine::Dict::const_iterator it = d->engines.find(name);
-    if (it != d->engines.end()) {
+    Plasma::DataEngine::Dict::const_iterator it = d->engines.constFind(name);
+    if (it != d->engines.constEnd()) {
         // ref and return the engine
         //Plasma::DataEngine *engine = *it;
         return *it;
@@ -108,9 +108,9 @@ Plasma::DataEngine *DataEngineManager::engine(const QString &name) const
 Plasma::DataEngine *DataEngineManager::loadEngine(const QString &name)
 {
     Plasma::DataEngine *engine = 0;
-    Plasma::DataEngine::Dict::const_iterator it = d->engines.find(name);
+    Plasma::DataEngine::Dict::const_iterator it = d->engines.constFind(name);
 
-    if (it != d->engines.end()) {
+    if (it != d->engines.constEnd()) {
         engine = *it;
         engine->d->ref();
         return engine;

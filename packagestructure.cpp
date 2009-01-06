@@ -261,7 +261,7 @@ void PackageStructure::addFileDefinition(const char *key, const QString &path, c
 QString PackageStructure::path(const char *key) const
 {
     //kDebug() << "looking for" << key;
-    QMap<QByteArray, ContentStructure>::const_iterator it = d->contents.find(key);
+    QMap<QByteArray, ContentStructure>::const_iterator it = d->contents.constFind(key);
     if (it == d->contents.constEnd()) {
         return QString();
     }
@@ -272,7 +272,7 @@ QString PackageStructure::path(const char *key) const
 
 QString PackageStructure::name(const char *key) const
 {
-    QMap<QByteArray, ContentStructure>::const_iterator it = d->contents.find(key);
+    QMap<QByteArray, ContentStructure>::const_iterator it = d->contents.constFind(key);
     if (it == d->contents.constEnd()) {
         return QString();
     }
@@ -292,7 +292,7 @@ void PackageStructure::setRequired(const char *key, bool required)
 
 bool PackageStructure::isRequired(const char *key) const
 {
-    QMap<QByteArray, ContentStructure>::const_iterator it = d->contents.find(key);
+    QMap<QByteArray, ContentStructure>::const_iterator it = d->contents.constFind(key);
     if (it == d->contents.constEnd()) {
         return false;
     }
@@ -317,7 +317,7 @@ void PackageStructure::setMimetypes(const char *key, QStringList mimetypes)
 
 QStringList PackageStructure::mimetypes(const char *key) const
 {
-    QMap<QByteArray, ContentStructure>::const_iterator it = d->contents.find(key);
+    QMap<QByteArray, ContentStructure>::const_iterator it = d->contents.constFind(key);
     if (it == d->contents.constEnd()) {
         return QStringList();
     }

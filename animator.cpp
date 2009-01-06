@@ -511,7 +511,7 @@ void Animator::setInitialPixmap(int id, const QPixmap &pixmap)
 
 QPixmap Animator::currentPixmap(int id)
 {
-    QMap<int, ElementAnimationState*>::const_iterator it = d->animatedElements.find(id);
+    QMap<int, ElementAnimationState*>::const_iterator it = d->animatedElements.constFind(id);
 
     if (it == d->animatedElements.constEnd()) {
         //kDebug() << "Animator::currentPixmap(" << id << ") found no entry for it!";
