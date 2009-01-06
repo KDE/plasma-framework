@@ -22,7 +22,6 @@
 
 #include <QtCore/QObject>
 
-#include <plasma/plasma_export.h>
 #include <plasma/applet.h>
 
 class QGraphicsWidget;
@@ -36,7 +35,7 @@ class UiLoaderPrivate;
  *
  * @author Richard J. Moore, <rich@kde.org>
  */
-class PLASMA_EXPORT UiLoader : public QObject
+class UiLoader : public QObject
 {
     Q_OBJECT
 
