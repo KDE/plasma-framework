@@ -171,10 +171,12 @@ void ToolTip::checkSize()
     //FIXME: layout bugs even on qlayouts? oh, please, no.
     d->text->setMinimumSize(d->text->minimumSizeHint());
     d->text->setMaximumSize(d->text->maximumSizeHint());
-    QSize hint = sizeHint();
+
+    QSize previous = size();
+    adjustSize();
     QSize current = size();
 
-    if (hint != current) {
+    if (previous != current) {
         /*
 #ifdef Q_WS_X11
         NETRootInfo i(QX11Info::display(), 0);
@@ -198,30 +200,21 @@ void ToolTip::checkSize()
                  << x() << y() + (current.height() - hint.height())
                  << current.height() - hint.height();
                  */
-            deltaY = current.height() - hint.height();
+            deltaY = previous.height() - current.height();
         } else if (d->direction == Plasma::Left) {
         /*
         kDebug() << "vertical resizing from" << current << "to" << hint
                  << "and moving from" << pos() << "to"
                  << x() + (current.width() - hint.width()) << y()
                  << current.width() - hint.width(); */
-            deltaX = current.width() - hint.width();
+            deltaX = previous.width() - current.width();
         }
 
         // resize then move if we're getting smaller, vice versa when getting bigger
         // this prevents overlap with the item in the smaller case, and a repaint of
         // the tipped item when getting bigger
-        bool resizeFirst = deltaY > 0 || deltaX > 0;
-
-        if (resizeFirst) {
-            resize(hint);
-        }
 
         move(x() + deltaX, y() + deltaY);
-
-        if (!resizeFirst) {
-            resize(hint);
-        }
     }
 }
 
