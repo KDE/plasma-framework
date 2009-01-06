@@ -33,6 +33,8 @@
 #include <ksharedptr.h>
 #include <ksvgrenderer.h>
 
+#include "applet.h"
+#include "package.h"
 #include "theme.h"
 
 namespace Plasma
@@ -230,7 +232,18 @@ class SvgPrivate
 
             //kDebug() << kBacktrace();
             if (themed && path.isEmpty()) {
-                path = Plasma::Theme::defaultTheme()->imagePath(themePath);
+                Applet *applet = qobject_cast<Applet*>(q->parent());
+                if (applet && applet->package()) {
+                    path = applet->package()->filePath("images", themePath + ".svg");
+
+                    if (path.isEmpty()) {
+                        path = applet->package()->filePath("images", themePath + ".svgz");
+                    }
+                }
+
+                if (path.isEmpty()) {
+                    path = Plasma::Theme::defaultTheme()->imagePath(themePath);
+                }
             }
 
             //kDebug() << "********************************";
