@@ -50,8 +50,8 @@ progress.orientation = QtHorizontal;
 layout.addItem(progress);
 
 // Glue things together
-stop["clicked()"].connect(plasmoid.stop);
-progress["sliderMoved(int)"].connect(plasmoid.setProgress);
+stop.clicked.connect(plasmoid.stop);
+progress.sliderMoved.connect(plasmoid.setProgress);
 
 controller.associateWidget(stop, "stop");
 controller.associateWidget(progress, "progress");
