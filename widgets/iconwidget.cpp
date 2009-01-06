@@ -49,6 +49,13 @@
 #include "animator.h"
 #include "svg.h"
 
+/*
+TODO:
+    Add these to a UrlIcon class
+    void setUrl(const KUrl& url);
+    KUrl url() const;
+*/
+
 namespace Plasma
 {
 
@@ -56,9 +63,9 @@ IconWidgetPrivate::IconWidgetPrivate(IconWidget *i)
     : q(i),
       iconSvg(0),
       iconSvgElementChanged(false),
-      m_fadeIn(false),
-      m_hoverAnimId(-1),
-      m_hoverAlpha(20 / 255),
+      fadeIn(false),
+      hoverAnimId(-1),
+      hoverAlpha(20 / 255),
       iconSize(48, 48),
       states(IconWidgetPrivate::NoState),
       orientation(Qt::Vertical),
@@ -75,11 +82,10 @@ IconWidgetPrivate::~IconWidgetPrivate()
     qDeleteAll(cornerActions);
 }
 
-void IconWidget::readColors()
+void IconWidgetPrivate::readColors()
 {
-    d->textColor = Plasma::Theme::defaultTheme()->color(Theme::TextColor);
-    d->shadowColor = Plasma::Theme::defaultTheme()->color(Theme::BackgroundColor);
-
+    textColor = Plasma::Theme::defaultTheme()->color(Theme::TextColor);
+    shadowColor = Plasma::Theme::defaultTheme()->color(Theme::BackgroundColor);
 }
 
 IconAction::IconAction(IconWidget *icon, QAction *action)
@@ -262,14 +268,14 @@ IconWidget::IconWidget(QGraphicsItem *parent)
     : QGraphicsWidget(parent),
       d(new IconWidgetPrivate(this))
 {
-    init();
+    d->init();
 }
 
 IconWidget::IconWidget(const QString &text, QGraphicsItem *parent)
     : QGraphicsWidget(parent),
       d(new IconWidgetPrivate(this))
 {
-    init();
+    d->init();
     setText(text);
 }
 
@@ -277,7 +283,7 @@ IconWidget::IconWidget(const QIcon &icon, const QString &text, QGraphicsItem *pa
     : QGraphicsWidget(parent),
       d(new IconWidgetPrivate(this))
 {
-    init();
+    d->init();
     setText(text);
     setIcon(icon);
 }
@@ -287,27 +293,27 @@ IconWidget::~IconWidget()
     delete d;
 }
 
-void IconWidget::init()
+void IconWidgetPrivate::init()
 {
     readColors();
-    connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()), SLOT(readColors()));
-    connect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()), SLOT(readColors()));
+    QObject::connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()), q, SLOT(readColors()));
+    QObject::connect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()), q, SLOT(readColors()));
 
     // setAcceptedMouseButtons(Qt::LeftButton);
-    setAcceptsHoverEvents(true);
+    q->setAcceptsHoverEvents(true);
 
     // Margins for horizontal mode (list views, tree views, table views)
-    d->setHorizontalMargin(IconWidgetPrivate::TextMargin, 1, 1);
-    d->setHorizontalMargin(IconWidgetPrivate::IconMargin, 1, 1);
-    d->setHorizontalMargin(IconWidgetPrivate::ItemMargin, 0, 0);
+    setHorizontalMargin(IconWidgetPrivate::TextMargin, 1, 1);
+    setHorizontalMargin(IconWidgetPrivate::IconMargin, 1, 1);
+    setHorizontalMargin(IconWidgetPrivate::ItemMargin, 0, 0);
 
     // Margins for vertical mode (icon views)
-    d->setVerticalMargin(IconWidgetPrivate::TextMargin, 6, 2);
-    d->setVerticalMargin(IconWidgetPrivate::IconMargin, 1, 1);
-    d->setVerticalMargin(IconWidgetPrivate::ItemMargin, 0, 0);
+    setVerticalMargin(IconWidgetPrivate::TextMargin, 6, 2);
+    setVerticalMargin(IconWidgetPrivate::IconMargin, 1, 1);
+    setVerticalMargin(IconWidgetPrivate::ItemMargin, 0, 0);
 
-    d->setActiveMargins();
-    d->currentSize = QSizeF(-1, -1);
+    setActiveMargins();
+    currentSize = QSizeF(-1, -1);
 }
 
 void IconWidget::addIconAction(QAction *action)
@@ -346,18 +352,18 @@ QAction *IconWidget::action() const
     return d->action;
 }
 
-void IconWidget::actionDestroyed(QObject *action)
+void IconWidgetPrivate::actionDestroyed(QObject *action)
 {
-    QList<IconAction*>::iterator it = d->cornerActions.begin();
+    QList<IconAction*>::iterator it = cornerActions.begin();
 
-    while (it != d->cornerActions.end()) {
+    while (it != cornerActions.end()) {
         if ((*it)->action() == action) {
-            d->cornerActions.erase(it);
+            cornerActions.erase(it);
             break;
         }
     }
 
-    update();   // redraw since an action has been deleted.
+    q->update();   // redraw since an action has been deleted.
 }
 
 int IconWidget::numDisplayLines()
@@ -411,6 +417,7 @@ QSizeF IconWidgetPrivate::displaySizeHint(const QStyleOptionGraphicsItem *option
     if (text.isEmpty() && infoText.isEmpty()) {
       return QSizeF(.0, .0);
     }
+
     QString label = text;
     // const qreal maxWidth = (orientation == Qt::Vertical) ? iconSize.width() + 10 : 32757;
     // NOTE: find a way to use the other layoutText, it currently returns nominal width, when
@@ -437,64 +444,64 @@ QSizeF IconWidgetPrivate::displaySizeHint(const QStyleOptionGraphicsItem *option
     return addMargin(size, TextMargin);
 }
 
-void IconWidget::layoutIcons(const QStyleOptionGraphicsItem *option)
+void IconWidgetPrivate::layoutIcons(const QStyleOptionGraphicsItem *option)
 {
-    if (size() == d->currentSize) {
+    if (q->size() == currentSize) {
         return;
     }
 
-    d->currentSize = size();
-    d->setActiveMargins();
+    currentSize = q->size();
+    setActiveMargins();
 
     //calculate icon size based on the available space
     qreal iconWidth;
 
-    if (d->orientation == Qt::Vertical) {
+    if (orientation == Qt::Vertical) {
         qreal heightAvail;
         //if there is text resize the icon in order to make room for the text
-        if (d->text.isEmpty() && d->infoText.isEmpty()) {
-            heightAvail = d->currentSize.height();
+        if (text.isEmpty() && infoText.isEmpty()) {
+            heightAvail = currentSize.height();
         } else {
-            heightAvail = d->currentSize.height() -
-                          d->displaySizeHint(option, d->currentSize.width()).height() -
-                          d->verticalMargin[IconWidgetPrivate::TextMargin].top -
-                          d->verticalMargin[IconWidgetPrivate::TextMargin].bottom;
+            heightAvail = currentSize.height() -
+                          displaySizeHint(option, currentSize.width()).height() -
+                          verticalMargin[IconWidgetPrivate::TextMargin].top -
+                          verticalMargin[IconWidgetPrivate::TextMargin].bottom;
             //never make a label higher than half the total height
-            heightAvail = qMax(heightAvail, d->currentSize.height() / 2);
+            heightAvail = qMax(heightAvail, currentSize.height() / 2);
         }
 
         //aspect ratio very "tall"
-        if (d->currentSize.width() < heightAvail) {
-            iconWidth = d->currentSize.width() -
-                        d->horizontalMargin[IconWidgetPrivate::IconMargin].left -
-                        d->horizontalMargin[IconWidgetPrivate::IconMargin].right;
+        if (currentSize.width() < heightAvail) {
+            iconWidth = currentSize.width() -
+                        horizontalMargin[IconWidgetPrivate::IconMargin].left -
+                        horizontalMargin[IconWidgetPrivate::IconMargin].right;
         } else {
             iconWidth = heightAvail -
-                        d->verticalMargin[IconWidgetPrivate::IconMargin].top -
-                        d->verticalMargin[IconWidgetPrivate::IconMargin].bottom;
+                        verticalMargin[IconWidgetPrivate::IconMargin].top -
+                        verticalMargin[IconWidgetPrivate::IconMargin].bottom;
         }
     } else {
         //Horizontal layout
-        QFontMetricsF fm(font());
+        QFontMetricsF fm(q->font());
 
         //if there is text resize the icon in order to make room for the text
-        if (d->text.isEmpty() && d->infoText.isEmpty()) {
+        if (text.isEmpty() && infoText.isEmpty()) {
             // with no text, we just take up the whole geometry
-            iconWidth = d->currentSize.height() -
-                        d->horizontalMargin[IconWidgetPrivate::IconMargin].left -
-                        d->horizontalMargin[IconWidgetPrivate::IconMargin].right;
+            iconWidth = currentSize.height() -
+                        horizontalMargin[IconWidgetPrivate::IconMargin].left -
+                        horizontalMargin[IconWidgetPrivate::IconMargin].right;
         } else {
-            iconWidth = d->currentSize.height() -
-                        d->verticalMargin[IconWidgetPrivate::IconMargin].top -
-                        d->verticalMargin[IconWidgetPrivate::IconMargin].bottom;
+            iconWidth = currentSize.height() -
+                        verticalMargin[IconWidgetPrivate::IconMargin].top -
+                        verticalMargin[IconWidgetPrivate::IconMargin].bottom;
         }
     }
 
-    d->iconSize = QSizeF(iconWidth, iconWidth);
+    iconSize = QSizeF(iconWidth, iconWidth);
 
     int count = 0;
-    foreach (IconAction *iconAction, d->cornerActions) {
-        iconAction->setRect(d->actionRect((IconWidgetPrivate::ActionPosition)count));
+    foreach (IconAction *iconAction, cornerActions) {
+        iconAction->setRect(actionRect((IconWidgetPrivate::ActionPosition)count));
         ++count;
     }
 }
@@ -513,42 +520,43 @@ void IconWidget::setSvg(const QString &svgFilePath, const QString &elementId)
     update();
 }
 
-void IconWidget::hoverEffect(bool show)
+void IconWidgetPrivate::hoverEffect(bool show)
 {
     if (show) {
-        d->states |= IconWidgetPrivate::HoverState;
+        states |= IconWidgetPrivate::HoverState;
     }
 
-    d->m_fadeIn = show;
+    fadeIn = show;
     const int FadeInDuration = 150;
 
-    if (d->m_hoverAnimId != -1) {
-        Animator::self()->stopCustomAnimation(d->m_hoverAnimId);
+    if (hoverAnimId != -1) {
+        Animator::self()->stopCustomAnimation(hoverAnimId);
     }
-    d->m_hoverAnimId = Animator::self()->customAnimation(
+
+    hoverAnimId = Animator::self()->customAnimation(
         40 / (1000 / FadeInDuration), FadeInDuration,
-        Animator::EaseOutCurve, this, "hoverAnimationUpdate");
+        Animator::EaseOutCurve, q, "hoverAnimationUpdate");
 }
 
-void IconWidget::hoverAnimationUpdate(qreal progress)
+void IconWidgetPrivate::hoverAnimationUpdate(qreal progress)
 {
-    if (d->m_fadeIn) {
-        d->m_hoverAlpha = progress;
+    if (fadeIn) {
+        hoverAlpha = progress;
     } else {
         // If we mouse leaves before the fade in is done, fade out from where we were,
         // not from fully faded in
-        d->m_hoverAlpha = qMin(1 - progress, d->m_hoverAlpha);
+        hoverAlpha = qMin(1 - progress, hoverAlpha);
     }
 
     if (qFuzzyCompare(qreal(1.0), progress)) {
-        d->m_hoverAnimId = -1;
+        hoverAnimId = -1;
 
-        if (!d->m_fadeIn) {
-            d->states &= ~IconWidgetPrivate::HoverState;
+        if (!fadeIn) {
+            states &= ~IconWidgetPrivate::HoverState;
         }
     }
 
-    update();
+    q->update();
 }
 
 void IconWidgetPrivate::drawBackground(QPainter *painter, IconWidgetState state)
@@ -566,23 +574,23 @@ void IconWidgetPrivate::drawBackground(QPainter *painter, IconWidgetState state)
             shadow.setHsv(
                 shadow.hue(),
                 shadow.saturation(),
-                shadow.value() + (int)(darkShadow ? 50 * m_hoverAlpha: -50 * m_hoverAlpha),
-                200 + (int)m_hoverAlpha * 55); // opacity
+                shadow.value() + (int)(darkShadow ? 50 * hoverAlpha: -50 * hoverAlpha),
+                200 + (int)hoverAlpha * 55); // opacity
             break;
         case IconWidgetPrivate::PressedState:
             shadow.setHsv(
                 shadow.hue(),
                 shadow.saturation(),
                 shadow.value() + (darkShadow ?
-                                  (int)(50 * m_hoverAlpha) : (int)(-50 * m_hoverAlpha)),
+                                  (int)(50 * hoverAlpha) : (int)(-50 * hoverAlpha)),
                 204); //80% opacity
             break;
         default:
             break;
     }
 
-    border.setAlphaF(0.3 * m_hoverAlpha);
-    shadow.setAlphaF(0.6 * m_hoverAlpha);
+    border.setAlphaF(0.3 * hoverAlpha);
+    shadow.setAlphaF(0.6 * hoverAlpha);
 
     painter->save();
     painter->translate(0.5, 0.5);
@@ -630,13 +638,13 @@ QPixmap IconWidgetPrivate::decoration(const QStyleOptionGraphicsItem *option, bo
         // We're assuming that the icon group is desktop/filemanager, since this
         // is KFileItemDelegate.
         if (effect->hasEffect(KIconLoader::Desktop, KIconLoader::ActiveState)) {
-            if (qFuzzyCompare(qreal(1.0), m_hoverAlpha)) {
+            if (qFuzzyCompare(qreal(1.0), hoverAlpha)) {
                 result = effect->apply(result, KIconLoader::Desktop, KIconLoader::ActiveState);
             } else {
                 result = PaintUtils::transition(
                     result,
                     effect->apply(result, KIconLoader::Desktop,
-                                  KIconLoader::ActiveState), m_hoverAlpha);
+                                  KIconLoader::ActiveState), hoverAlpha);
             }
         }
     }
@@ -898,7 +906,7 @@ void IconWidget::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
     Q_UNUSED(widget);
 
     //Lay out the main icon and action icons
-    layoutIcons(option);
+    d->layoutIcons(option);
 
     // Compute the metrics, and lay out the text items
     // ========================================================================
@@ -987,7 +995,7 @@ void IconWidget::setText(const QString &text)
     //try to relayout, needed if an icon was never shown before
     if (!isVisible()) {
         QStyleOptionGraphicsItem styleoption;
-        layoutIcons(&styleoption);
+        d->layoutIcons(&styleoption);
     }
     resize(sizeFromIconSize(d->iconSize.width()));
 }
@@ -1004,7 +1012,7 @@ void IconWidget::setInfoText(const QString &text)
     d->currentSize = QSizeF(-1, -1);
     //try to relayout, needed if an icon was never shown before
     if (!isVisible()) {
-        layoutIcons(new QStyleOptionGraphicsItem);
+        d->layoutIcons(new QStyleOptionGraphicsItem);
     }
     resize(sizeFromIconSize(d->iconSize.width()));
 }
@@ -1139,7 +1147,8 @@ void IconWidget::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
         action->show();
         action->event(event->type(), event->pos());
     }
-    hoverEffect(true);
+
+    d->hoverEffect(true);
     update();
 
     QGraphicsWidget::hoverEnterEvent(event);
@@ -1152,7 +1161,7 @@ void IconWidget::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
         action->event(event->type(), event->pos());
     }
     // d->states &= ~IconWidgetPrivate::HoverState; // Will be set once progress is zero again ...
-    hoverEffect(false);
+    d->hoverEffect(false);
     update();
 
     QGraphicsWidget::hoverLeaveEvent(event);

@@ -105,7 +105,6 @@ public:
     };
     Q_DECLARE_FLAGS(IconWidgetStates, IconWidgetState)
 
-public:
     IconWidgetPrivate(IconWidget *i);
     ~IconWidgetPrivate();
 
@@ -178,6 +177,13 @@ public:
     void clearAction();
     void svgChanged();
 
+    void actionDestroyed(QObject *obj);
+    void readColors();
+    void hoverAnimationUpdate(qreal progress);
+    void init();
+    void layoutIcons(const QStyleOptionGraphicsItem *option);
+    void hoverEffect(bool);
+
     IconWidget *q;
     QString text;
     QString infoText;
@@ -187,9 +193,9 @@ public:
     QPixmap iconSvgPixmap;
     QColor textColor;
     QColor shadowColor;
-    bool m_fadeIn;
-    int m_hoverAnimId;
-    qreal m_hoverAlpha;
+    bool fadeIn;
+    int hoverAnimId;
+    qreal hoverAlpha;
     QSizeF iconSize;
     QIcon icon;
     IconWidgetStates states;
