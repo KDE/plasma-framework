@@ -152,7 +152,7 @@ void AppletInterface::writeConfig(const QString &entry, const QVariant &value)
     if (config) {
         KConfigSkeletonItem *item = config->findItemByName(entry);
         if (item) {
-            item->setProperty(entry);
+            item->setProperty(value);
             m_appletScriptEngine->configNeedsSaving();
         }
     }
