@@ -35,7 +35,6 @@
 #include <Plasma/Package>
 
 #include "appletinterface.h"
-#include "uiloader.h"
 
 using namespace Plasma;
 
@@ -172,6 +171,8 @@ void kConfigGroupFromScriptValue(const QScriptValue& obj, KConfigGroup &config)
     }
 }
 
+KSharedPtr<UiLoader> SimpleJavaScriptApplet::s_widgetLoader;
+
 SimpleJavaScriptApplet::SimpleJavaScriptApplet(QObject *parent, const QVariantList &args)
     : Plasma::AppletScript(parent)
 {
@@ -183,6 +184,9 @@ SimpleJavaScriptApplet::SimpleJavaScriptApplet(QObject *parent, const QVariantLi
 
 SimpleJavaScriptApplet::~SimpleJavaScriptApplet()
 {
+    if (s_widgetLoader.count() == 1) {
+        s_widgetLoader.clear();
+    }
 }
 
 void SimpleJavaScriptApplet::reportError()
@@ -631,9 +635,11 @@ QScriptValue SimpleJavaScriptApplet::newPlasmaFrameSvg(QScriptContext *context, 
 void SimpleJavaScriptApplet::installWidgets(QScriptEngine *engine)
 {
     QScriptValue globalObject = engine->globalObject();
-    UiLoader loader;
+    if (!s_widgetLoader) {
+        s_widgetLoader = new UiLoader;
+    }
 
-    foreach (const QString &widget, loader.availableWidgets()) {
+    foreach (const QString &widget, s_widgetLoader->availableWidgets()) {
         QScriptValue fun = engine->newFunction(createWidget);
         QScriptValue name = engine->toScriptValue(widget);
         fun.setProperty(QString("functionName"), name,
@@ -660,8 +666,11 @@ QScriptValue SimpleJavaScriptApplet::createWidget(QScriptContext *context, QScri
     }
 
     QString self = context->callee().property("functionName").toString();
-    UiLoader loader;
-    QGraphicsWidget *w = loader.createWidget(self, parent);
+    if (!s_widgetLoader) {
+        s_widgetLoader = new UiLoader;
+    }
+
+    QGraphicsWidget *w = s_widgetLoader->createWidget(self, parent);
 
     if (!w) {
         return QScriptValue();

@@ -38,6 +38,7 @@
 #include <Plasma/ScrollBar>
 #include <Plasma/SignalPlotter>
 #include <Plasma/Slider>
+#include <Plasma/SpinBox>
 #include <Plasma/SvgWidget>
 #include <Plasma/TabBar>
 #include <Plasma/TextEdit>
@@ -45,115 +46,68 @@
 #include <Plasma/TreeView>
 #include <Plasma/WebView>
 
-class UiLoaderPrivate
-{
-public:
-    QStringList widgets;
-    QStringList layouts;
-};
+QGraphicsWidget *createBusyWidget(QGraphicsWidget *parent) { return new Plasma::BusyWidget(parent); }
+QGraphicsWidget *createCheckBox(QGraphicsWidget *parent) { return new Plasma::CheckBox(parent); }
+QGraphicsWidget *createComboBox(QGraphicsWidget *parent) { return new Plasma::ComboBox(parent); }
+QGraphicsWidget *createFlashingLabel(QGraphicsWidget *parent) { return new Plasma::FlashingLabel(parent); }
+QGraphicsWidget *createFrame(QGraphicsWidget *parent) { return new Plasma::Frame(parent); }
+QGraphicsWidget *createGroupBox(QGraphicsWidget *parent) { return new Plasma::GroupBox(parent); }
+QGraphicsWidget *createIconWidget(QGraphicsWidget *parent) { return new Plasma::IconWidget(parent); }
+QGraphicsWidget *createLabel(QGraphicsWidget *parent) { return new Plasma::Label(parent); }
+QGraphicsWidget *createLineEdit(QGraphicsWidget *parent) { return new Plasma::LineEdit(parent); }
+QGraphicsWidget *createMeter(QGraphicsWidget *parent) { return new Plasma::Meter(parent); }
+QGraphicsWidget *createPushButton(QGraphicsWidget *parent) { return new Plasma::PushButton(parent); }
+QGraphicsWidget *createRadioButton(QGraphicsWidget *parent) { return new Plasma::RadioButton(parent); }
+QGraphicsWidget *createScrollBar(QGraphicsWidget *parent) { return new Plasma::ScrollBar(parent); }
+QGraphicsWidget *createSignalPlotter(QGraphicsWidget *parent) { return new Plasma::SignalPlotter(parent); }
+QGraphicsWidget *createSlider(QGraphicsWidget *parent) { return new Plasma::Slider(parent); }
+QGraphicsWidget *createSpinBox(QGraphicsWidget *parent) { return new Plasma::SpinBox(parent); }
+QGraphicsWidget *createSvgWidget(QGraphicsWidget *parent) { return new Plasma::SvgWidget(parent); }
+QGraphicsWidget *createTabBar(QGraphicsWidget *parent) { return new Plasma::TabBar(parent); }
+QGraphicsWidget *createTextEdit(QGraphicsWidget *parent) { return new Plasma::TextEdit(parent); }
+QGraphicsWidget *createToolButton(QGraphicsWidget *parent) { return new Plasma::ToolButton(parent); }
+QGraphicsWidget *createTreeView(QGraphicsWidget *parent) { return new Plasma::TreeView(parent); }
 
-UiLoader::UiLoader(QObject *parent)
-    : QObject(parent),
-      d(new UiLoaderPrivate())
+UiLoader::UiLoader()
 {
-    d->widgets
-        << "BusyWidget"
-        << "CheckBox"
-        << "ComboBox"
-        << "FlashingLabel"
-        << "Frame"
-        << "GroupBox"
-        << "IconWidget"
-        << "Label"
-        << "LineEdit"
-        << "Meter"
-        << "PushButton"
-        << "RadioButton"
-        << "ScrollBar"
-        << "SignalPlotter"
-        << "Slider"
-        << "SvgWidget"
-        << "TabBar"
-        << "TextEdit"
-        << "ToolButton"
-        << "TreeView"
-        << "WebView";
-
-    d->layouts
-        << "GridLayout"
-        << "LinearLayout";
+    m_widgetCtors.insert("BusyWidget", createBusyWidget);
+    m_widgetCtors.insert("CheckBox", createCheckBox);
+    m_widgetCtors.insert("ComboBox", createComboBox);
+    m_widgetCtors.insert("FlashingLabel", createFlashingLabel);
+    m_widgetCtors.insert("Frame", createFrame);
+    m_widgetCtors.insert("GroupBox", createGroupBox);
+    m_widgetCtors.insert("IconWidget", createIconWidget);
+    m_widgetCtors.insert("Label", createLabel);
+    m_widgetCtors.insert("LineEdit", createLineEdit);
+    m_widgetCtors.insert("Meter", createMeter);
+    m_widgetCtors.insert("PushButton", createPushButton);
+    m_widgetCtors.insert("RadioButton", createRadioButton);
+    m_widgetCtors.insert("ScrollBar", createScrollBar);
+    m_widgetCtors.insert("SignalPlotter", createSignalPlotter);
+    m_widgetCtors.insert("Slider", createSlider);
+    m_widgetCtors.insert("SpinBox", createSpinBox);
+    m_widgetCtors.insert("SvgWidget", createSvgWidget);
+    m_widgetCtors.insert("TabBar", createTabBar);
+    m_widgetCtors.insert("TextEdit", createTextEdit);
+    m_widgetCtors.insert("ToolButton", createToolButton);
+    m_widgetCtors.insert("TreeView", createTreeView);
 }
 
 UiLoader::~UiLoader()
 {
-    delete d;
+    kDebug();
 }
 
 QStringList UiLoader::availableWidgets() const
 {
-    return d->widgets;
+    return m_widgetCtors.keys();
 }
 
 QGraphicsWidget *UiLoader::createWidget(const QString &className, QGraphicsWidget *parent)
 {
-    if (className == QString("BusyWidget")) {
-        return new Plasma::BusyWidget(parent);
-    } else if (className == QString("CheckBox")) {
-        return new Plasma::CheckBox(parent);
-    } else if (className == QString("ComboBox")) {
-        return new Plasma::ComboBox(parent);
-    } else if (className == QString("FlashingLabel")) {
-        return new Plasma::FlashingLabel(parent);
-    } else if (className == QString("Frame")) {
-        return new Plasma::Frame(parent);
-    } else if (className == QString("GroupBox")) {
-        return new Plasma::GroupBox(parent);
-    } else if (className == QString("IconWidget")) {
-        return new Plasma::IconWidget(parent);
-    } else if (className == QString("Label")) {
-        return new Plasma::Label(parent);
-    } else if (className == QString("LineEdit")) {
-        return new Plasma::LineEdit(parent);
-    } else if (className == QString("Meter")) {
-        return new Plasma::Meter(parent);
-    } else if (className == QString("PushButton")) {
-        return new Plasma::PushButton(parent);
-    } else if (className == QString("RadioButton")) {
-        return new Plasma::RadioButton(parent);
-    } else if (className == QString("ScrollBar")) {
-        return new Plasma::ScrollBar(parent);
-    } else if (className == QString("SignalPlotter")) {
-        return new Plasma::SignalPlotter(parent);
-    } else if (className == QString("Slider")) {
-        return new Plasma::Slider(parent);
-    } else if (className == QString("SvgWidget")) {
-        return new Plasma::SvgWidget(parent);
-    } else if (className == QString("TabBar")) {
-        return new Plasma::TabBar(parent);
-    } else if (className == QString("TextEdit")) {
-        return new Plasma::TextEdit(parent);
-    } else if (className == QString("ToolButton")) {
-        return new Plasma::ToolButton(parent);
-    } else if (className == QString("TreeView")) {
-        return new Plasma::TreeView(parent);
-    } else if (className == QString("WebView")) {
-        return new Plasma::WebView(parent);
-    }
-
-    return 0;
-}
-
-QStringList UiLoader::availableLayouts() const
-{
-    return d->layouts;
-}
-
-QGraphicsLayout *UiLoader::createLayout(const QString &className, QGraphicsLayoutItem *parent)
-{
-    if (className == QString("GridLayout")) {
-        return new QGraphicsGridLayout(parent);
-    } else if (className == QString("LinearLayout")) {
-        return new QGraphicsLinearLayout(parent);
+    widgetCreator w = m_widgetCtors.value(className, 0);
+    if (w) {
+        return (w)(parent);
     }
 
     return 0;

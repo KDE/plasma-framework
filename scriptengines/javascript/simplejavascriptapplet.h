@@ -24,6 +24,8 @@
 #include <Plasma/AppletScript>
 #include <Plasma/DataEngine>
 
+#include "uiloader.h"
+
 class QScriptEngine;
 class QScriptContext;
 
@@ -71,6 +73,7 @@ private:
     static QScriptValue createPrototype( QScriptEngine *engine, const QString &name );
 
 private:
+    static KSharedPtr<UiLoader> s_widgetLoader;
     QScriptEngine *m_engine;
     QScriptValue m_self;
     AppletInterface *m_interface;

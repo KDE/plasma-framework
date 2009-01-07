@@ -20,37 +20,25 @@
 #ifndef PLASMA_UILOADER_H
 #define PLASMA_UILOADER_H
 
-#include <QtCore/QObject>
+#include <KSharedPtr>
 
 #include <plasma/applet.h>
 
 class QGraphicsWidget;
 
-class UiLoaderPrivate;
-
-/**
- * @class UiLoader plasma/uiloader.h <Plasma/UiLoader>
- *
- * Dynamically create plasma Widgets and Layouts.
- *
- * @author Richard J. Moore, <rich@kde.org>
- */
-class UiLoader : public QObject
+class UiLoader : public QSharedData
 {
-    Q_OBJECT
-
 public:
-    UiLoader(QObject *parent = 0);
+    UiLoader();
     virtual ~UiLoader();
 
     QStringList availableWidgets() const;
     QGraphicsWidget *createWidget(const QString &className, QGraphicsWidget *parent = 0);
 
-    QStringList availableLayouts() const;
-    QGraphicsLayout *createLayout(const QString &className, QGraphicsLayoutItem *parent);
-
 private:
-    UiLoaderPrivate *const d;
+    typedef QGraphicsWidget *(*widgetCreator)(QGraphicsWidget*);
+    QHash<QString, widgetCreator> m_widgetCtors;
 };
+
 
 #endif // PLASMA_UILOADER_H
