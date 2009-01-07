@@ -223,6 +223,10 @@ void Applet::save(KConfigGroup &g) const
         KConfigGroup shortcutConfig(&group, "Shortcuts");
         shortcutConfig.writeEntry("global", d->activationAction->globalShortcut().toString());
     }
+
+    if (d->configLoader) {
+        d->configLoader->writeConfig();
+    }
 }
 
 void Applet::restore(KConfigGroup &group)
