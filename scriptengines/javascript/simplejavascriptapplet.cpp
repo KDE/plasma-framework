@@ -466,7 +466,7 @@ QScriptValue SimpleJavaScriptApplet::dataEngine(QScriptContext *context, QScript
 QScriptValue SimpleJavaScriptApplet::dataEngine(QScriptContext *context, QScriptEngine *engine)
 {
     if (context->argumentCount() != 1) {
-        return context->throwError("dataEngine takes one argument");
+        return context->throwError(i18n("DataEngine takes one argument"));
     }
 
     QString dataEngine = context->argument(0).toString();
@@ -491,7 +491,7 @@ QScriptValue SimpleJavaScriptApplet::dataEngine(QScriptContext *context, QScript
 QScriptValue SimpleJavaScriptApplet::service(QScriptContext *context, QScriptEngine *engine)
 {
     if (context->argumentCount() != 2) {
-        return context->throwError("service takes two arguments");
+        return context->throwError(i18n("Service takes two arguments"));
     }
 
     QString dataEngine = context->argument(0).toString();
@@ -519,7 +519,7 @@ QScriptValue SimpleJavaScriptApplet::service(QScriptContext *context, QScriptEng
 QScriptValue SimpleJavaScriptApplet::loadui(QScriptContext *context, QScriptEngine *engine)
 {
     if (context->argumentCount() != 1) {
-        return context->throwError("loadui takes one argument");
+        return context->throwError(i18n("loadUI takes one argument"));
     }
 
     QString filename = context->argument(0).toString();
@@ -647,8 +647,7 @@ void SimpleJavaScriptApplet::installWidgets(QScriptEngine *engine)
 QScriptValue SimpleJavaScriptApplet::createWidget(QScriptContext *context, QScriptEngine *engine)
 {
     if (context->argumentCount() > 1) {
-        //FIXME: 4.3: i18nc
-        return context->throwError("CreateWidget takes one argument");
+        return context->throwError(i18n("CreateWidget takes one argument"));
     }
 
     QGraphicsWidget *parent = 0;
