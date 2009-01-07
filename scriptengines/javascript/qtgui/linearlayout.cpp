@@ -68,15 +68,13 @@ QGraphicsLayoutItem *layoutItem(QScriptContext *ctx, int index)
 static QScriptValue ctor(QScriptContext *ctx, QScriptEngine *eng)
 {
     if (ctx->argumentCount() == 0) {
-        //FIXME 4.3: i18n
-        return ctx->throwError("GridLayout requires a parent");
+        return ctx->throwError(i18n("LinearLayout requires a parent"));
     }
 
     QGraphicsLayoutItem *parent = layoutItem(ctx, 0);
 
     if (!parent) {
-        //FIXME 4.3: i18n
-        return ctx->throwError("The parent must be a QGraphicsLayoutItem");
+        return ctx->throwError(i18n("The parent must be a QGraphicsLayoutItem"));
     }
 
     return qScriptValueFromValue(eng, new QGraphicsLinearLayout(parent));
