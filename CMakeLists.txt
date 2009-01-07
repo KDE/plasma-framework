@@ -110,6 +110,7 @@ set(plasma_LIB_SRCS
     widgets/scrollbar.cpp
     widgets/signalplotter.cpp
     widgets/slider.cpp
+    widgets/spinbox.cpp
     widgets/toolbutton.cpp
     widgets/busywidget.cpp
     widgets/svgwidget.cpp
@@ -234,6 +235,7 @@ install(FILES
     widgets/scrollbar.h
     widgets/signalplotter.h
     widgets/slider.h
+    widgets/spinbox.h
     widgets/busywidget.h
     widgets/svgwidget.h
     widgets/tabbar.h
