@@ -1597,10 +1597,12 @@ void ContainmentPrivate::containmentConstraintsEvent(Plasma::Constraints constra
             a->updateConstraints(ImmutableConstraint);
         }
 
-        if (type == Containment::PanelContainment || type == Containment::CustomPanelContainment) {
-            toolBox->setVisible(unlocked);
-        } else {
-            toolBox->setIsMovable(unlocked);
+        if (toolBox) {
+            if (type == Containment::PanelContainment || type == Containment::CustomPanelContainment) {
+                toolBox->setVisible(unlocked);
+            } else {
+                toolBox->setIsMovable(unlocked);
+            }
         }
     }
 
