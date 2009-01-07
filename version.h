@@ -28,12 +28,12 @@
  * String version of libplasma version, suitable for use in
  * file formats or network protocols
  */
-#define PLASMA_VERSION_STRING "3.0.0"
+#define PLASMA_VERSION_STRING "3.1.0"
 
 /// @brief Major version of libplasma, at compile time
 #define PLASMA_VERSION_MAJOR 3
 /// @brief Minor version of libplasma, at compile time
-#define PLASMA_VERSION_MINOR 0
+#define PLASMA_VERSION_MINOR 1
 /// @brief Release version of libplasma, at compile time
 #define PLASMA_VERSION_RELEASE 0
 
