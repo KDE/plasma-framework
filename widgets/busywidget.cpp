@@ -137,12 +137,14 @@ void BusyWidget::showEvent(QShowEvent *event)
 void BusyWidget::hideEvent(QHideEvent *event)
 {
     Q_UNUSED(event)
-    killTimer(d->timerId);
+    if (d->timerId)
+        killTimer(d->timerId);
     d->timerId = 0;
 }
 
 void BusyWidget::resizeEvent(QGraphicsSceneResizeEvent *event)
 {
+    Q_UNUSED(event)
     d->frames.clear();
 }
 
