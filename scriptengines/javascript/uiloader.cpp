@@ -113,5 +113,4 @@ QGraphicsWidget *UiLoader::createWidget(const QString &className, QGraphicsWidge
     return 0;
 }
 
-#include "uiloader.moc"
 
