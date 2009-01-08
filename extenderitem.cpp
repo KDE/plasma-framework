@@ -1049,7 +1049,8 @@ void ExtenderItemPrivate::themeChanged()
     //setCollapsed recalculates size hints.
     q->setCollapsed(q->isCollapsed());
 
-    resizeContent(q->size());
+    if (!q->size().isEmpty())
+        resizeContent(q->size());
 }
 
 void ExtenderItemPrivate::sourceAppletRemoved()
