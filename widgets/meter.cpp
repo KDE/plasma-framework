@@ -165,6 +165,8 @@ public:
         //be retrocompatible with themes for kde <= 4.1
         if (image->hasElement("background-center")) {
             QRectF elementRect = barRect();
+            if (elementRect.isEmpty())
+                return; // nothing to be done 
             QSize imageSize = image->size();
             image->resize();
 
