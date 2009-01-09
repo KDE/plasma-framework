@@ -41,6 +41,7 @@ class ExtenderApplet : public Plasma::PopupApplet
 
     public Q_SLOTS:
         void itemDetached(Plasma::ExtenderItem *);
+        void extenderGeometryChanged();
 };
 
 } // namespace Plasma
