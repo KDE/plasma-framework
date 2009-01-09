@@ -80,9 +80,8 @@ public :
       * called when a widget inside the tooltip manager is deleted
       */
     void onWidgetDestroyed(QObject * object);
-
+    void removeWidget(QGraphicsWidget *w);
     void clearTips();
-
     void doDelayedHide();
 
     QGraphicsWidget *currentWidget;
@@ -182,7 +181,6 @@ void ToolTipManager::registerWidget(QGraphicsWidget *widget)
     //the tooltip is not registered we add it in our map of tooltips
     d->tooltips.insert(widget, ToolTipContent());
     widget->installEventFilter(this);
-    //connect to object destruction
     connect(widget, SIGNAL(destroyed(QObject*)), this, SLOT(onWidgetDestroyed(QObject*)));
 }
 
@@ -193,7 +191,7 @@ void ToolTipManager::unregisterWidget(QGraphicsWidget *widget)
     }
 
     widget->removeEventFilter(this);
-    d->tooltips.remove(widget);
+    d->removeWidget(widget);
 }
 
 void ToolTipManager::setContent(QGraphicsWidget *widget, const ToolTipContent &data)
@@ -262,7 +260,12 @@ void ToolTipManagerPrivate::onWidgetDestroyed(QObject *object)
     // NOTE: DO NOT USE THE w VARIABLE FOR ANYTHING OTHER THAN COMPARING
     //       THE ADDRESS! ACTUALLY USING THE OBJECT WILL RESULT IN A CRASH!!!
     QGraphicsWidget *w = static_cast<QGraphicsWidget*>(object);
+    removeWidget(w);
+}
 
+void ToolTipManagerPrivate::removeWidget(QGraphicsWidget *w)
+{
+    // DO NOTE ACCESS w HERE!! IT MAY BE IN THE PROCESS OF DELETION!
     if (currentWidget == w) {
         currentWidget = 0;
         showTimer->stop();  // stop the timer to show the tooltip
