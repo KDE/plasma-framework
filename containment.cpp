@@ -732,7 +732,7 @@ void Containment::addApplet(Applet *applet, const QPointF &pos, bool delayInit)
         applet->setPos(pos);
     }
 
-    if (delayInit) {
+    if (delayInit || currentContainment) {
         if (containmentType() == DesktopContainment) {
             applet->installSceneEventFilter(this);
             //applet->setWindowFlags(Qt::Window);
