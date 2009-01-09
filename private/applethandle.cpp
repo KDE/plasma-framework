@@ -627,7 +627,6 @@ void AppletHandle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
                 //we actually have been dropped on another containment, so
                 //move there: we have a screenpos, we need a scenepos
                 //FIXME how reliable is this transform?
-                m_pressedButton = NoButton;
                 switchContainment(c, v->mapToScene(pos));
             } else {
                 setPos(m_pos);
@@ -741,19 +740,14 @@ void AppletHandle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 //pos relative to scene
 void AppletHandle::switchContainment(Containment *containment, const QPointF &pos)
 {
-    if (containment->containmentType() != Containment::PanelContainment) {
-        //FIXME assuming everything else behaves like desktop?
-        //kDebug() << "desktop";
-        m_containment = containment;
-    }
-
+    m_containment = containment;
     Applet *applet = m_applet;
     m_applet = 0; //make sure we don't try to act on the applet again
     applet->removeSceneEventFilter(this);
     forceDisappear(); //takes care of event filter and killing handle
     applet->disconnect(this); //make sure the applet doesn't tell us to do anything
     applet->setZValue(m_zValue);
-    containment->addApplet(applet, containment->mapFromScene(pos));
+    containment->addApplet(applet, containment->mapFromScene(pos), false);
     update();
 }
 
