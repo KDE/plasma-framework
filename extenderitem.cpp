@@ -331,9 +331,14 @@ bool ExtenderItem::isDetached() const
 void ExtenderItem::addAction(const QString &name, QAction *action)
 {
     Q_ASSERT(action);
+    if (d->actionsInOrder.contains(action)) {
+        return;
+    }
 
     d->actions.insert(name, action);
+    d->actionsInOrder.append(action);
     connect(action, SIGNAL(changed()), this, SLOT(updateToolBox()));
+    connect(action, SIGNAL(destroyed(QObject*)), this, SLOT(actionDestroyed(QObject*)));
     d->updateToolBox();
 }
 
@@ -907,7 +912,7 @@ void ExtenderItemPrivate::updateToolBox()
     }
 
     //add the actions that are actually set to visible.
-    foreach (QAction *action, actions) {
+    foreach (QAction *action, actionsInOrder) {
         if (action->isVisible()) {
             IconWidget *icon = new IconWidget(q);
             icon->setAction(action);
@@ -1106,8 +1111,27 @@ void ExtenderItemPrivate::resizeContent(const QSizeF &newSize)
 void ExtenderItemPrivate::previousTargetExtenderDestroyed(QObject *o)
 {
     Q_UNUSED(o)
-
     previousTargetExtender = 0;
+}
+
+void ExtenderItemPrivate::actionDestroyed(QObject *o)
+{
+    QAction *action = static_cast<QAction *>(o);
+    QMutableHashIterator<QString, QAction *> hit(actions);
+    while (hit.hasNext()) {
+        if (hit.next().value() == action) {
+            hit.remove();
+            break;
+        }
+    }
+
+    QMutableListIterator<QAction *> lit(actionsInOrder);
+    while (lit.hasNext()) {
+        if (lit.next() == action) {
+            lit.remove();
+            break;
+        }
+    }
 }
 
 uint ExtenderItemPrivate::s_maxExtenderItemId = 0;
