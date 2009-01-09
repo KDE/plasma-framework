@@ -80,7 +80,7 @@ QPixmap shadowText(QString text, const QFont &font, QColor textColor, QColor sha
     //Draw blurred shadow
     QImage img(textRect.size() + QSize(radius * 2, radius * 2),
     QImage::Format_ARGB32_Premultiplied);
-    img.fill(Qt::transparent);
+    img.fill(0);
     p.begin(&img);
     p.drawImage(QPoint(radius, radius), textPixmap.toImage());
     p.end();
