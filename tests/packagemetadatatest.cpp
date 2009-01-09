@@ -29,10 +29,9 @@ void PackageMetadataTest::init()
     // Create data dir
     mDataDir = QDir::homePath() + "/.kde-unit-test/share/config/";
     QVERIFY(QDir().mkpath(mDataDir));
-
     QDir dir(mDataDir);
     QFile::copy(QString::fromLatin1(KDESRCDIR) 
-        + QLatin1String("packagemetadatatest.desktop"), mDataDir 
+        + QLatin1String("/packagemetadatatest.desktop"), mDataDir 
         + QLatin1String("packagemetadatatest.desktop"));
 }
 
@@ -57,7 +56,7 @@ void PackageMetadataTest::removeDir(const QString &subdir)
 
 void PackageMetadataTest::read()
 {
-    pm->read("packagemetadatatest.desktop");
+    pm->read(mDataDir + QLatin1String("packagemetadatatest.desktop"));
 
     QVERIFY(pm->isValid());
 
