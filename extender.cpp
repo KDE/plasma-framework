@@ -475,17 +475,6 @@ void ExtenderPrivate::adjustSizeHints()
         q->setMinimumSize(layout->preferredSize());
     }
 
-    if (applet->layout()) {
-        applet->layout()->updateGeometry();
-
-        qreal left, top, right, bottom;
-        applet->getContentsMargins(&left, &top, &right, &bottom);
-        QSizeF margins(left + right, top + bottom);
-
-        applet->setMinimumSize(applet->layout()->minimumSize() + margins);
-        applet->adjustSize();
-    }
-
     q->adjustSize();
 
     emit q->geometryChanged();

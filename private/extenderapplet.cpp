@@ -52,12 +52,31 @@ void ExtenderApplet::init()
 
     connect(extender(), SIGNAL(itemDetached(Plasma::ExtenderItem*)),
             this, SLOT(itemDetached(Plasma::ExtenderItem*)));
+    connect(extender(), SIGNAL(geometryChanged()),
+            this, SLOT(extenderGeometryChanged()));
 }
 
 void ExtenderApplet::itemDetached(Plasma::ExtenderItem *)
 {
     if (extender()->attachedItems().isEmpty()) {
         destroy();
+    }
+}
+
+void ExtenderApplet::extenderGeometryChanged()
+{
+    if (formFactor() != Plasma::Horizontal &&
+        formFactor() != Plasma::Vertical) {
+
+        qreal left, top, right, bottom;
+        getContentsMargins(&left, &top, &right, &bottom);
+        QSizeF margins(left + right, top + bottom);
+
+        setMinimumSize(extender()->minimumSize() + margins);
+        setMaximumSize(extender()->maximumSize() + margins);
+        setPreferredSize(extender()->preferredSize() + margins);
+
+        adjustSize();
     }
 }
 
