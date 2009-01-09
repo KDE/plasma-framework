@@ -249,6 +249,7 @@ class PLASMA_EXPORT ExtenderItem : public QGraphicsWidget
         Q_PRIVATE_SLOT(d, void themeChanged())
         Q_PRIVATE_SLOT(d, void sourceAppletRemoved())
         Q_PRIVATE_SLOT(d, void previousTargetExtenderDestroyed(QObject*))
+        Q_PRIVATE_SLOT(d, void actionDestroyed(QObject*))
 
         ExtenderItemPrivate * const d;
 

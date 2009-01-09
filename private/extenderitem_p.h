@@ -59,6 +59,7 @@ class ExtenderItemPrivate
         qreal iconSize();
         void resizeContent(const QSizeF &newSize);
         void previousTargetExtenderDestroyed(QObject *o);
+        void actionDestroyed(QObject *o);
 
         ExtenderItem *q;
 
@@ -78,7 +79,8 @@ class ExtenderItemPrivate
 
         IconWidget *collapseIcon;
 
-        QMap<QString, QAction*> actions;
+        QHash<QString, QAction*> actions;
+        QList<QAction*> actionsInOrder;
 
         QString title;
         QString name;
