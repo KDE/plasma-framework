@@ -101,9 +101,6 @@ enum QtOrientation {
 
 //-------------------------------------------------------------------
 
-    //FIXME kconfiggroup bindings
-    Q_INVOKABLE KConfigGroup config();
-
     Q_INVOKABLE FormFactor formFactor();
 
     Q_INVOKABLE Location location();
@@ -147,7 +144,6 @@ enum QtOrientation {
 
     Q_INVOKABLE void writeConfig(const QString &entry, const QVariant &value);
 
-    //FIXME bindings
     Plasma::DataEngine *dataEngine(const QString &name);
 
     const Plasma::Package *package() const;

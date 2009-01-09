@@ -46,11 +46,6 @@ AppletInterface::~AppletInterface()
 {
 }
 
-KConfigGroup AppletInterface::config()
-{
-    return applet()->config();
-}
-
 Plasma::DataEngine* AppletInterface::dataEngine(const QString &name)
 {
     return applet()->dataEngine(name);
