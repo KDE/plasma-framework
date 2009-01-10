@@ -347,7 +347,6 @@ bool SimpleJavaScriptApplet::init()
     kDebug() << "ScriptName:" << applet()->name();
     kDebug() << "ScriptCategory:" << applet()->category();
 
-    applet()->resize(200, 200);
     QFile file(mainScript());
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         kWarning() << "Unable to load script file";
