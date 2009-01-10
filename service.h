@@ -112,7 +112,7 @@ public:
     /**
      * Retrieves the parameters for a given operation
      *
-     * @param operation the operation to retrieve parameters for
+     * @param operationName the operation to retrieve parameters for
      * @return KConfigGroup containing the parameters
      */
     Q_INVOKABLE KConfigGroup operationDescription(const QString &operationName);

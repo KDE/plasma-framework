@@ -117,6 +117,7 @@ class PLASMA_EXPORT DataContainer : public QObject
          *
          * @param visualization the object to connect to this DataContainer
          * @param pollingInterval the time in milliseconds between updates
+         * @param alignment the clock position to align updates to
          **/
         void connectVisualization(QObject *visualization, uint pollingInterval,
                                   Plasma::IntervalAlignment alignment);

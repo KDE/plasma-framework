@@ -131,7 +131,7 @@ PLASMA_EXPORT RunnerScript *loadScriptEngine(const QString &language, AbstractRu
 /**
  * Loads an appropriate PackageStructure for the given language and type
  *
- * @param langauge the language to load the PackageStructure for
+ * @param language the language to load the PackageStructure for
  * @param type the component type
  * @return a guarded PackageStructure pointer
  */

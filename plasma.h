@@ -244,7 +244,7 @@ PLASMA_EXPORT qreal scalingFactor(ZoomLevel level);
  * location or to point arrows and other directional items.
  *
  * @param location the location of the container the element will appear in
- * @reutrn the visual direction of the element should be oriented in
+ * @return the visual direction of the element should be oriented in
  **/
 PLASMA_EXPORT Direction locationToDirection(Location location);
 

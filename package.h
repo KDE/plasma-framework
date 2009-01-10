@@ -137,6 +137,8 @@ class PLASMA_EXPORT Package
          * @param package path to the Plasmagik package
          * @param packageRoot path to the directory where the package should be
          *                    installed to
+         * @param servicePrefix the prefix for the desktop file, so as not to interfere
+         *                      with unrelated services (eg: "plasma-applet-")
          * @return true on successful installation, false otherwise
          **/
         static bool installPackage(const QString &package,
@@ -149,6 +151,8 @@ class PLASMA_EXPORT Package
          * @param package path to the Plasmagik package
          * @param packageRoot path to the directory where the package should be
          *                    installed to
+         * @param servicePrefix the prefix for the desktop file, so as not to interfere
+         *                      with unrelated services (eg: "plasma-applet-")
          * @return true on successful uninstallation, false otherwise
          **/
         static bool uninstallPackage(const QString &package,

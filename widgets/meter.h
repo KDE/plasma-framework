@@ -152,8 +152,8 @@ public:
 
     /**
      * Set text label color for the meter
-     * @param index label index.
-     * @param text color for the label.
+     * @param index label index
+     * @param color the color to apply to the label
      */
     void setLabelColor(int index, const QColor &color);
 
@@ -165,8 +165,8 @@ public:
 
     /**
      * Set text label font for the meter
-     * @param index label index.
-     * @param text font for the label.
+     * @param index label index
+     * @param font the font to apply to the label
      */
     void setLabelFont(int index, const QFont &font);
 
@@ -178,8 +178,8 @@ public:
 
     /**
      * Set text label alignment for the meter
-     * @param index label index.
-     * @param text alignment for the label.
+     * @param index label index
+     * @param alignment the text alignment to apply to the label
      */
     void setLabelAlignment(int index, const Qt::Alignment alignment);
 

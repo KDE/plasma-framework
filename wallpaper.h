@@ -41,7 +41,7 @@ class WallpaperPrivate;
  * Wallpaper plugins are registered using .desktop files. These files should be
  * named using the following naming scheme:
  *
- *     plasma-wallpaper-<pluginname>.desktop
+ *     plasma-wallpaper-\<pluginname\>.desktop
  *
  * If a wallpaper plugin provides more than on mode (e.g. Single Image, Wallpaper)
  * it should include a Actions= entry in the .desktop file, listing the possible
@@ -223,10 +223,10 @@ class PLASMA_EXPORT Wallpaper : public QObject
 
         /**
          * This method is called once the wallpaper is loaded or mode is changed.
-         * The mode can be retrieved using the @see renderMode() method.
+         *
+         * The mode can be retrieved using the renderMode() method.
+         *
          * @param config Config group to load settings
-         * @param mode One of the modes supported by the plugin,
-         *        or an empty string for the default mode.
          **/
         virtual void init(const KConfigGroup &config);
 
