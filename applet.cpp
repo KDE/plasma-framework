@@ -1945,7 +1945,7 @@ void AppletPrivate::setupScriptSupport()
 
     //set a default size before any saved settings are read
     QSize size = appletDescription.property("X-Plasma-DefaultSize").toSize();
-    if (size == QSize()) {
+    if (size.isEmpty()) {
         size = QSize(200,200);
     }
     //kDebug() << "size" << size;
