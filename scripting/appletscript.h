@@ -74,6 +74,8 @@ public:
      *
      * @param painter the QPainter to use
      * @param option the style option containing such flags as selection, level of detail, etc
+     * @param contentsRect the rect to paint within; automatically adjusted for
+     *                     the background, if any
      */
     virtual void paintInterface(QPainter *painter,
                                 const QStyleOptionGraphicsItem *option,

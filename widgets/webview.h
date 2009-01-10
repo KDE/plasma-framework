@@ -39,7 +39,7 @@ namespace Plasma
 class WebViewPrivate;
 
 /**
- * @class WebView plasma/widgets/webcontent.h <Plasma/Widgets/WebView>
+ * @class WebView plasma/widgets/webview.h <Plasma/Widgets/WebView>
  *
  * @short Provides a widget to display html content in Plasma.
  */

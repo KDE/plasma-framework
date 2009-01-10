@@ -721,6 +721,9 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          *
          * @param needsConfiguring true if the applet needs to be configured,
          *                         or false if it doesn't
+         * @param reason a translated message for the user explaining that the
+         *               applet needs configuring; this should note what needs
+         *               to be configured
          */
         void setConfigurationRequired(bool needsConfiguring, const QString &reason = QString());
 

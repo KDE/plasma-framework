@@ -119,13 +119,12 @@ class PLASMA_EXPORT AbstractRunner : public QObject
          * If a particular match supports multiple actions, set up the corresponding
          * actions in the actionsForMatch method. Do not call any of the action methods
          * within this method!
-         * @see actionsForMatch
          *
          * Execution of the correct action should be handled in the run method.
          * @caution This method needs to be thread-safe since KRunner will simply
          * start a new thread for each new term.
          *
-         * @caution Returning from this method means to end execution of the runner.
+         * @warning Returning from this method means to end execution of the runner.
          *
          * @sa run(), RunnerContext::addMatch, RunnerContext::addMatches, QueryMatch
          */

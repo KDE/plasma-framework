@@ -139,12 +139,13 @@ public:
     virtual QRegion availableScreenRegion(int id) const;
 
     /**
-    * Reccomended position for a popup window like a menu or a tooltip
+    * Recommended position for a popup window like a menu or a tooltip
     * given its size
-    * @param s size of the popup
+    * @param item the item that the popup should appear adjacent to (an applet, say)
+    * @param size size of the popup
     * @returns reccomended position
     */
-    QPoint popupPosition(const QGraphicsItem *item, const QSize &s);
+    QPoint popupPosition(const QGraphicsItem *item, const QSize &size);
 
     /**
      * This method is useful in order to retrieve the list of available

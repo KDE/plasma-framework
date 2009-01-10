@@ -224,12 +224,14 @@ class PLASMA_EXPORT Containment : public Applet
         int desktop() const;
 
         /**
-         * @reimplemented from Applet
+         * @reimp
+         * @sa Applet::save(KConfigGroup &)
          */
         void save(KConfigGroup &group) const;
 
         /**
-         * @reimplemented from Applet
+         * @reimp
+         * @sa Applet::restore(KConfigGroup &)
          */
         void restore(KConfigGroup &group);
 
@@ -434,7 +436,8 @@ class PLASMA_EXPORT Containment : public Applet
         void destroy(bool confirm);
 
         /**
-         * @reimplemented from Plasma::Applet
+         * @reimp
+         * @sa Applet::showConfigurationInterface()
          */
         void showConfigurationInterface();
 
@@ -475,22 +478,26 @@ class PLASMA_EXPORT Containment : public Applet
         QVariant itemChange(GraphicsItemChange change, const QVariant &value);
 
         /**
-         * @reimplemented from QGraphicsItem
+         * @reimp
+         * @sa QGraphicsItem::dragEnterEvent()
          */
         void dragEnterEvent(QGraphicsSceneDragDropEvent *event);
 
         /**
-         * @reimplemented from QGraphicsItem
+         * @reimp
+         * @sa QGraphicsItem::dragMoveEvent()
          */
         void dragMoveEvent(QGraphicsSceneDragDropEvent *event);
 
         /**
-         * @reimplemented from QGraphicsItem
+         * @reimp
+         * @sa QGraphicsItem::dropEvent()
          */
         void dropEvent(QGraphicsSceneDragDropEvent *event);
 
         /**
-         * @reimplemented from QGraphicsItem
+         * @reimp
+         * @sa QGraphicsItem::resizeEvent()
          */
         void resizeEvent(QGraphicsSceneResizeEvent *event);
 

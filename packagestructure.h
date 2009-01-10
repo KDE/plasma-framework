@@ -164,7 +164,7 @@ public:
      * The path must already have been added using addDirectoryDefinition
      * or addFileDefinition.
      *
-     * @param path the path of the entry within the package
+     * @param key the entry within the package
      * @param required true if this entry is required, false if not
      */
     void setRequired(const char *key, bool required);
@@ -188,7 +188,7 @@ public:
      * The path must already have been added using addDirectoryDefinition
      * or addFileDefinition.
      *
-     * @param path the path of the entry within the package
+     * @param key the entry within the package
      * @param mimetypes a list of mimetypes
      **/
     void setMimetypes(const char *key, QStringList mimetypes);
@@ -249,7 +249,7 @@ public:
      * When the process is complete, the newWidgetBrowserFinished() signal must be
      * emitted.
      *
-     * @args parent the parent widget to use for the widget
+     * @param parent the parent widget to use for the widget
      */
     virtual void createNewWidgetBrowser(QWidget *parent = 0);
 
