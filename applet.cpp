@@ -1942,6 +1942,15 @@ void AppletPrivate::setupScriptSupport()
     if (!package->filePath("mainconfigui").isEmpty()) {
         q->setHasConfigurationInterface(true);
     }
+
+    //set a default size before any saved settings are read
+    QSize size = appletDescription.property("X-Plasma-DefaultSize").toSize();
+    if (size == QSize()) {
+        size = QSize(200,200);
+    }
+    //kDebug() << "size" << size;
+    q->resize(size);
+
 }
 
 QString AppletPrivate::globalName() const
