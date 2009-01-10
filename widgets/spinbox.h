@@ -124,6 +124,12 @@ Q_SIGNALS:
      */
     void valueChanged(int value);
 
+    /**
+     * This signal is emitted when editing is finished. 
+     * This happens when the spinbox loses focus and when enter is pressed.
+     */
+    void editingFinished();
+
 private:
     SpinBoxPrivate * const d;
 };

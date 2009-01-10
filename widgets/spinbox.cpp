@@ -47,6 +47,7 @@ SpinBox::SpinBox(QGraphicsWidget *parent)
     KIntSpinBox *native = new KIntSpinBox;
 
     connect(native, SIGNAL(valueChanged(int)), this, SIGNAL(valueChanged(int)));
+    connect(native, SIGNAL(editingFinished()), this, SIGNAL(editingFinished()));
 
     setWidget(native);
     native->setAttribute(Qt::WA_NoSystemBackground);
