@@ -106,7 +106,7 @@ ThemePackage::ThemePackage(QObject *parent)
 
     addDirectoryDefinition("widgets", "widgets/", i18n("Images for widgets"));
     addFileDefinition("widgets/background", "widgets/background.svg",
-                      i18n("Background image for plasmoids"));
+                      i18n("Background image for widgets"));
     addFileDefinition("widgets/clock", "widgets/clock.svg",
                       i18n("Analog clock face"));
     addFileDefinition("widgets/panel-background", "widgets/panel-background.svg",
@@ -137,7 +137,7 @@ ThemePackage::ThemePackage(QObject *parent)
 
     addDirectoryDefinition("locolor/widgets", "locolor/widgets/", i18n("Images for widgets"));
     addFileDefinition("locolor/widgets/background", "locolor/widgets/background.svg",
-                      i18n("Low color background image for plasmoids"));
+                      i18n("Low color background image for widgets"));
     addFileDefinition("locolor/widgets/clock", "locolor/widgets/clock.svg",
                       i18n("Low color analog clock face"));
     addFileDefinition("locolor/widgets/panel-background", "locolor/widgets/panel-background.svg",
