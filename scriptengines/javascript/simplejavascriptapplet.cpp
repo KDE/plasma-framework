@@ -176,7 +176,7 @@ KSharedPtr<UiLoader> SimpleJavaScriptApplet::s_widgetLoader;
 SimpleJavaScriptApplet::SimpleJavaScriptApplet(QObject *parent, const QVariantList &args)
     : Plasma::AppletScript(parent)
 {
-    kDebug() << "Script applet launched, args" << args;
+    //kDebug() << "Script applet launched, args" << args;
 
     m_engine = new QScriptEngine(this);
     importExtensions();
@@ -354,7 +354,7 @@ bool SimpleJavaScriptApplet::init()
     }
 
     QString script = file.readAll();
-    kDebug() << "Script says" << script;
+    //kDebug() << "Script says" << script;
 
     m_engine->evaluate(script);
     if (m_engine->hasUncaughtException()) {
@@ -368,6 +368,8 @@ bool SimpleJavaScriptApplet::init()
 void SimpleJavaScriptApplet::importExtensions()
 {
     return; // no extension, so do bother wasting cycles
+
+    /*
     QStringList extensions;
     //extensions << "qt.core" << "qt.gui" << "qt.svg" << "qt.xml" << "qt.plasma";
     //extensions << "qt.core" << "qt.gui" << "qt.xml";
@@ -379,6 +381,7 @@ void SimpleJavaScriptApplet::importExtensions()
         }
     }
     kDebug() << "done importing extensions.";
+    */
 }
 
 void SimpleJavaScriptApplet::setupObjects()
@@ -405,9 +408,9 @@ void SimpleJavaScriptApplet::setupObjects()
     QMetaObject meta = AppletInterface::staticMetaObject;
     for (int i=0; i < meta.enumeratorCount(); ++i) {
         QMetaEnum e = meta.enumerator(i);
-        kDebug() << e.name();
+        //kDebug() << e.name();
         for (int i=0; i < e.keyCount(); ++i) {
-            kDebug() << e.key(i) << e.value(i);
+            //kDebug() << e.key(i) << e.value(i);
             global.setProperty(e.key(i), QScriptValue(m_engine, e.value(i)));
         }
     }
@@ -515,7 +518,7 @@ QScriptValue SimpleJavaScriptApplet::service(QScriptContext *context, QScriptEng
     DataEngine *data = interface->dataEngine(dataEngine);
     QString source = context->argument(1).toString();
     Service *service = data->serviceForSource(source);
-    kDebug( )<< "lets try to get" << source << "from" << dataEngine;
+    //kDebug( )<< "lets try to get" << source << "from" << dataEngine;
     return engine->newQObject(service);
 }
 
