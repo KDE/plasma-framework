@@ -583,7 +583,8 @@ void FrameSvgPrivate::generateBackground(FrameData *frame)
             }
         }
     } else {
-        if (frame->enabledBorders & FrameSvg::LeftBorder && q->hasElement(prefix + "left")) {
+        if (frame->enabledBorders & FrameSvg::LeftBorder && q->hasElement(prefix + "left")
+                && leftHeight > 0 && frame->leftWidth > 0) {
             QPixmap left(frame->leftWidth, leftHeight);
             left.fill(Qt::transparent);
 
@@ -594,7 +595,8 @@ void FrameSvgPrivate::generateBackground(FrameData *frame)
             p.drawTiledPixmap(QRect(leftOffset, contentTop, frame->leftWidth, contentHeight), left);
         }
 
-        if (frame->enabledBorders & FrameSvg::RightBorder && q->hasElement(prefix + "right")) {
+        if (frame->enabledBorders & FrameSvg::RightBorder && q->hasElement(prefix + "right") &&
+                leftHeight > 0 && frame->rightWidth > 0) {
             QPixmap right(frame->rightWidth, leftHeight);
             right.fill(Qt::transparent);
 
@@ -605,7 +607,8 @@ void FrameSvgPrivate::generateBackground(FrameData *frame)
             p.drawTiledPixmap(QRect(rightOffset, contentTop, frame->rightWidth, contentHeight), right);
         }
 
-        if (frame->enabledBorders & FrameSvg::TopBorder && q->hasElement(prefix + "top")) {
+        if (frame->enabledBorders & FrameSvg::TopBorder && q->hasElement(prefix + "top")
+                && topWidth > 0 && frame->topHeight > 0) {
             QPixmap top(topWidth, frame->topHeight);
             top.fill(Qt::transparent);
 
@@ -616,7 +619,8 @@ void FrameSvgPrivate::generateBackground(FrameData *frame)
             p.drawTiledPixmap(QRect(contentLeft, topOffset, contentWidth, frame->topHeight), top);
         }
 
-        if (frame->enabledBorders & FrameSvg::BottomBorder && q->hasElement(prefix + "bottom")) {
+        if (frame->enabledBorders & FrameSvg::BottomBorder && q->hasElement(prefix + "bottom")
+                && topWidth > 0 && frame->bottomHeight > 0) {
             QPixmap bottom(topWidth, frame->bottomHeight);
             bottom.fill(Qt::transparent);
 
