@@ -1934,10 +1934,13 @@ void AppletPrivate::init()
 void AppletPrivate::setupScriptSupport()
 {
     Q_ASSERT(package);
+    kDebug() << "setting up script support, package is in" << package->path()
+             << "which is a" << package->structure()->type() << "package"
+             << ", main script is" << package->filePath("mainscript");
+
     QString xmlPath = package->filePath("mainconfigxml");
     if (!xmlPath.isEmpty()) {
         QFile file(xmlPath);
-        // FIXME: KConfigSkeleton doesn't play well with KConfigGroup =/
         KConfigGroup config = q->config();
         configLoader = new ConfigLoader(&config, &file);
         QObject::connect(configLoader, SIGNAL(configChanged()), q, SLOT(configChanged()));
