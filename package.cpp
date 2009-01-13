@@ -128,7 +128,7 @@ QString Package::filePath(const char *fileType, const QString &filename) const
     QString path = d->structure->path(fileType);
 
     if (path.isEmpty()) {
-        kDebug() << "no matching path came of it";
+        kDebug() << "no matching path came of it, while looking for" << fileType << filename;
         return QString();
     }
 
