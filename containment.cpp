@@ -539,11 +539,26 @@ void ContainmentPrivate::appletActions(KMenu &desktopMenu, Applet *applet, bool 
     KMenu *containmentMenu = new KMenu(i18nc("%1 is the name of the containment", "%1 Options", q->name()), &desktopMenu);
     containmentActions(*containmentMenu);
     if (!containmentMenu->isEmpty()) {
-        if (!desktopMenu.isEmpty()) {
+        int enabled = 0;
+        //count number of real actions
+        foreach(QAction *action, containmentMenu->actions()) {
+            if(action->isEnabled() && !action->isSeparator()) {
+                enabled++;
+            }
+        }
+
+        if (enabled > 0) {
             desktopMenu.addSeparator();
         }
 
-        desktopMenu.addMenu(containmentMenu);
+        //if there is only one, don't create a submenu
+        if(enabled < 2) {
+            foreach(QAction *action, containmentMenu->actions()) {
+                desktopMenu.addAction(action); 
+            }
+        } else {
+            desktopMenu.addMenu(containmentMenu);
+        }
     }
 
     if (static_cast<Corona*>(q->scene())->immutability() == Mutable) {
