@@ -76,6 +76,9 @@ class FrameSvgPrivate;
 class PLASMA_EXPORT FrameSvg : public Svg
 {
     Q_OBJECT
+
+    friend class Applet;
+
     public:
         /**
          * These flags represents what borders should be drawn
@@ -204,6 +207,11 @@ class PLASMA_EXPORT FrameSvg : public Svg
          * @return a region of opaque areas
          */
         Q_INVOKABLE QRegion mask() const;
+
+        /**
+         * @return a pixmap whose alpha channel is the opacity of the frame. It may be the frame itself or a special frame with the mask- prefix
+         */
+        QPixmap alphaMask() const;
 
        /**
         * Sets whether saving all the rendered prefixes in a cache or not

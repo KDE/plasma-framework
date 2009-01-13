@@ -19,96 +19,22 @@
  */
 
 #include "framesvg.h"
+#include "private/framesvg_p.h"
 
 #include <QPainter>
 #include <QSize>
 #include <QBitmap>
 #include <QRegion>
 #include <QTimer>
+#include <QCryptographicHash>
 
 #include <kdebug.h>
 
 #include <plasma/theme.h>
+#include <plasma/applet.h>
 
 namespace Plasma
 {
-
-class FrameData
-{
-public:
-    FrameData()
-      : enabledBorders(FrameSvg::AllBorders),
-        frameSize(-1,-1)
-    {
-    }
-
-    FrameData(const FrameData &other)
-      : enabledBorders(other.enabledBorders),
-        frameSize(other.frameSize)
-    {
-    }
-
-    ~FrameData()
-    {
-    }
-
-    FrameSvg::EnabledBorders enabledBorders;
-    QPixmap cachedBackground;
-    QRegion cachedMask;
-    QSizeF frameSize;
-
-    //measures
-    int topHeight;
-    int leftWidth;
-    int rightWidth;
-    int bottomHeight;
-
-    //margins, are equal to the measures by default
-    int topMargin;
-    int leftMargin;
-    int rightMargin;
-    int bottomMargin;
-
-    //size of the svg where the size of the "center"
-    //element is contentWidth x contentHeight
-    bool noBorderPadding : 1;
-    bool stretchBorders : 1;
-    bool tileCenter : 1;
-};
-
-class FrameSvgPrivate
-{
-public:
-    FrameSvgPrivate(FrameSvg *psvg)
-      : q(psvg),
-        cacheAll(false),
-        saveTimer(0)
-    {
-    }
-
-    ~FrameSvgPrivate()
-    {
-        qDeleteAll(frames);
-        frames.clear();
-    }
-
-    void generateBackground(FrameData *frame);
-    void scheduledCacheUpdate();
-    void updateSizes();
-    void updateNeeded();
-    void updateAndSignalSizes();
-
-    Location location;
-    QString prefix;
-
-    FrameSvg *q;
-
-    bool cacheAll : 1;
-    QStringList framesToSave;
-    QTimer *saveTimer;
-
-    QHash<QString, FrameData*> frames;
-};
 
 FrameSvg::FrameSvg(QObject *parent)
     : Svg(parent),
@@ -338,45 +264,50 @@ QRectF FrameSvg::contentsRect() const
     }
 }
 
-QRegion FrameSvg::mask() const
+QPixmap FrameSvg::alphaMask() const
 {
     FrameData *frame = d->frames[d->prefix];
 
-    if (frame->cachedMask.isEmpty()) {
-        // ivan: we are testing whether we have the mask prefixed
-        // elements to use for creating the mask.
-        if (hasElement("mask-" + d->prefix + "center")) {
-            QString oldPrefix = d->prefix;
+    if (hasElement("mask-" + d->prefix + "center")) {
+        QString oldPrefix = d->prefix;
 
-            // We are setting the prefix only temporary to generate
-            // the needed mask image
-            d->prefix = "mask-" + oldPrefix;
+        // We are setting the prefix only temporary to generate
+        // the needed mask image
+        d->prefix = "mask-" + oldPrefix;
 
-            if (!d->frames.contains(d->prefix)) {
-                d->frames.insert(d->prefix, new FrameData(*(d->frames[oldPrefix])));
-                d->updateSizes();
-            }
-
-            FrameData *maskFrame = d->frames[d->prefix];
-            if (maskFrame->cachedBackground.isNull()) {
-                d->generateBackground(maskFrame);
-                if (maskFrame->cachedBackground.isNull()) {
-                    return QRegion();
-                }
-            }
-
-            frame->cachedMask = QBitmap(maskFrame->cachedBackground.alphaChannel().createMaskFromColor(Qt::black));
-            d->prefix = oldPrefix;
-        } else {
-            if (frame->cachedBackground.isNull()) {
-                d->generateBackground(frame);
-                if (frame->cachedBackground.isNull()) {
-                    return QRegion();
-                }
-            }
-            frame->cachedMask = QRegion(QBitmap(frame->cachedBackground.alphaChannel().createMaskFromColor(Qt::black)));
+        if (!d->frames.contains(d->prefix)) {
+            d->frames.insert(d->prefix, new FrameData(*(d->frames[oldPrefix])));
+            d->updateSizes();
         }
+
+        FrameData *maskFrame = d->frames[d->prefix];
+        if (maskFrame->cachedBackground.isNull() || maskFrame->frameSize != frame->frameSize ) {
+            maskFrame->frameSize = frame->frameSize;
+            maskFrame->cachedBackground = QPixmap();
+
+            d->generateBackground(maskFrame);
+            if (maskFrame->cachedBackground.isNull()) {
+                return QPixmap();
+            }
+        }
+
+        d->prefix = oldPrefix;
+        return maskFrame->cachedBackground;
+    } else {
+        if (frame->cachedBackground.isNull()) {
+            d->generateBackground(frame);
+            if (frame->cachedBackground.isNull()) {
+                return QPixmap();
+            }
+        }
+        return frame->cachedBackground;
     }
+}
+
+QRegion FrameSvg::mask() const
+{
+    FrameData *frame = d->frames[d->prefix];
+    frame->cachedMask = QRegion(QBitmap(alphaMask().alphaChannel().createMaskFromColor(Qt::black)));
     return frame->cachedMask;
 }
 
@@ -423,6 +354,7 @@ QPixmap FrameSvg::framePixmap()
         }
     }
 
+
     return frame->cachedBackground;
 }
 
@@ -457,6 +389,7 @@ void FrameSvgPrivate::generateBackground(FrameData *frame)
     if (!frame->cachedBackground.isNull()) {
         return;
     }
+
 
     QString id = QString::fromLatin1("%5_%4_%3_%2_%1_").
                          arg(frame->enabledBorders).arg(frame->frameSize.width()).arg(frame->frameSize.height()).arg(prefix).arg(q->imagePath());
@@ -632,6 +565,42 @@ void FrameSvgPrivate::generateBackground(FrameData *frame)
         }
     }
 
+    //Overlays
+    if (!prefix.startsWith("mask-") && q->hasElement(prefix+"overlay")) {
+        QPoint pos = QPoint(0, 0);
+        QSize overlaySize = q->elementSize(prefix+"overlay");
+
+        //Random pos, stretched and tiled are mutually exclusive
+        if (q->hasElement(prefix+"hint-overlay-random-pos")) {
+            pos = overlayPos;
+        //Stretched or Tiled?
+        } else if (q->hasElement(prefix+"hint-overlay-stretch") || q->hasElement(prefix+"hint-overlay-tile")) {
+            overlaySize = frame->frameSize.toSize();
+        }
+
+        QString id = QString::fromLatin1("overlay_%7_%6_%5_%4_%3_%2_%1_").
+                            arg(overlayPos.y()).arg(overlayPos.x()).arg(frame->enabledBorders).arg(frame->frameSize.width()).arg(frame->frameSize.height()).arg(prefix).arg(q->imagePath());
+
+        QPixmap overlay = q->alphaMask();
+
+        QPainter overlayPainter(&overlay);
+        overlayPainter.setCompositionMode(QPainter::CompositionMode_SourceIn);
+
+        //Tiling?
+        if (q->hasElement(prefix+"hint-overlay-tile")) {
+            q->resize(q->elementSize(prefix+"overlay"));
+            overlayPainter.drawTiledPixmap(QRect(QPoint(0,0), overlaySize), q->pixmap(prefix+"overlay"));
+            q->resize();
+        } else {
+            q->paint(&overlayPainter, QRect(overlayPos, overlaySize), prefix+"overlay");
+        }
+        overlayPainter.end();
+
+        p.setCompositionMode(QPainter::CompositionMode_SourceOver);
+
+        p.drawPixmap(overlayPos, overlay, QRect(overlayPos, overlaySize));
+    }
+
     if (!framesToSave.contains(prefix)) {
         framesToSave.append(prefix);
     }
@@ -639,9 +608,11 @@ void FrameSvgPrivate::generateBackground(FrameData *frame)
     saveTimer->start(300);
 }
 
+
 void FrameSvgPrivate::scheduledCacheUpdate()
 {
     foreach ( QString prefixToSave, framesToSave) {
+        //insert background
         FrameData *frame = frames[prefix];
         framesToSave.removeAll(prefixToSave);
 
@@ -649,6 +620,12 @@ void FrameSvgPrivate::scheduledCacheUpdate()
                             arg(frame->enabledBorders).arg(frame->frameSize.width()).arg(frame->frameSize.height()).arg(prefix).arg(q->imagePath());
 
         //kDebug()<<"Saving to cache frame"<<id;
+
+        Theme::defaultTheme()->insertIntoCache(id, frame->cachedBackground);
+
+        //insert overlay
+        id = QString::fromLatin1("overlay_%7_%6_%5_%4_%3_%2_%1_").
+                            arg(overlayPos.y()).arg(overlayPos.x()).arg(frame->enabledBorders).arg(frame->frameSize.width()).arg(frame->frameSize.height()).arg(prefix).arg(q->imagePath());
 
         Theme::defaultTheme()->insertIntoCache(id, frame->cachedBackground);
     }

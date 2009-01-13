@@ -73,6 +73,7 @@
 #include "scripting/appletscript.h"
 #include "svg.h"
 #include "framesvg.h"
+#include "private/framesvg_p.h"
 #include "popupapplet.h"
 #include "theme.h"
 #include "view.h"
@@ -123,6 +124,7 @@ Applet::Applet(QObject *parentObject, const QVariantList &args)
     }
 
     setParent(parentObject);
+
     // WARNING: do not access config() OR globalConfig() in this method!
     //          that requires a scene, which is not available at this point
     d->init();
@@ -760,6 +762,26 @@ void Applet::setBackgroundHints(const BackgroundHints hints)
             setMinimumSize(minimumSize().expandedTo(fitSize));
         }
         d->background->resizeFrame(boundingRect().size());
+
+        //if the background has an "overlay" element decide a random position for it and then save it so it's consistent across plasma starts
+        if (d->background->hasElement("overlay")) {
+            QSize overlaySize = d->background->elementSize("overlay");
+
+            d->background->d->overlayPos = config().readEntry("overlayposition", QPoint(overlaySize.width()*2, overlaySize.height()*2));
+
+            //position can never be overlaySize.width()*2, overlaySize.height()*2, if it is means we didn't found the position in the config file, or the theme is changed and the overlay size is smaller now
+            if (d->background->d->overlayPos.x() >= overlaySize.width()*2 ||
+                d->background->d->overlayPos.y() >= overlaySize.height()*2) {
+                qsrand(id() + QDateTime::currentDateTime().toTime_t());
+
+                d->background->d->overlayPos.rx() = - (overlaySize.width() /4) + (overlaySize.width() /4) * (qrand() % (4 + 1));
+
+                d->background->d->overlayPos.ry() = - (overlaySize.height() /4) + (overlaySize.height() /4) * (qrand() % (4 + 1));
+
+                config().writeEntry("overlayposition", d->background->d->overlayPos);
+            }
+        }
+
     } else if (d->background) {
         qreal left, top, right, bottom;
         d->background->getMargins(left, top, right, bottom);

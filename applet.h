@@ -36,6 +36,7 @@
 #include <plasma/plasma.h>
 #include <plasma/animator.h>
 #include <plasma/version.h>
+#include <plasma/framesvg.h>
 
 class QWidget;
 
@@ -53,6 +54,7 @@ class DataEngine;
 class Extender;
 class ExtenderItem;
 class Package;
+
 
 /**
  * @class Applet plasma/applet.h <Plasma/Applet>
