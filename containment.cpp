@@ -496,7 +496,7 @@ void ContainmentPrivate::containmentActions(KMenu &desktopMenu)
     foreach (QAction *action, actions) {
         if (action) {
             desktopMenu.addAction(action);
-            if(action->isSeparator()) {
+            if (action->isSeparator()) {
                 separatorAction = action;
             }
         }
@@ -506,7 +506,7 @@ void ContainmentPrivate::containmentActions(KMenu &desktopMenu)
 
     //TODO: should a submenu be created if there are too many containment specific
     //      actions? see folderview containment
-    if(q->containmentType() == Containment::DesktopContainment) {
+    if (q->containmentType() == Containment::DesktopContainment) {
         desktopMenu.insertAction(separatorAction, q->action("activity settings"));
         if (q->hasConfigurationInterface()) {
             desktopMenu.addAction(q->action("configure"));
