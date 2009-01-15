@@ -217,6 +217,8 @@ void ToolTipManager::setContent(QGraphicsWidget *widget, const ToolTipContent &d
         }
 
         d->tipWidget->setContent(widget, data);
+        d->tipWidget->prepareShowing();
+        d->tipWidget->moveTo(m_corona->popupPosition(d->currentWidget, d->tipWidget->size()));
     }
 }
 
