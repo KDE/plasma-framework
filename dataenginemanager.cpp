@@ -188,6 +188,20 @@ QStringList DataEngineManager::listAllEngines(const QString &parentApp)
     return engines;
 }
 
+KPluginInfo::List DataEngineManager::listEngineInfo(const QString &parentApp)
+{
+    QString constraint;
+
+    if (parentApp.isEmpty()) {
+        constraint.append("not exist [X-KDE-ParentApp]");
+    } else {
+        constraint.append("[X-KDE-ParentApp] == '").append(parentApp).append("'");
+    }
+
+    KService::List offers = KServiceTypeTrader::self()->query("Plasma/DataEngine", constraint);
+    return KPluginInfo::fromServices(offers);
+}
+
 } // namespace Plasma
 
 #include "dataenginemanager.moc"

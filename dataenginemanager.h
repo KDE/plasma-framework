@@ -21,6 +21,9 @@
 #define PLASMA_DATAENGINEMANAGER_H
 
 #include <QtCore/QHash>
+
+#include <kplugininfo.h>
+
 #include <plasma/dataengine.h>
 
 namespace Plasma
@@ -72,7 +75,7 @@ class PLASMA_EXPORT DataEngineManager: public QObject
         void unloadEngine(const QString &name);
 
         /**
-         * @return a listing of all known engines by name
+         * @return a listing of all known DataEngines by name
          *
          * @param parentApp the application to filter applets on. Uses the
          *                  X-KDE-ParentApp entry (if any) in the plugin info.
@@ -81,6 +84,18 @@ class PLASMA_EXPORT DataEngineManager: public QObject
          *                  registered to an application.
          */
         static QStringList listAllEngines(const QString &parentApp = QString());
+
+        /**
+         * Returns a list of all known DataEngines.
+         *
+         * @param parentApp the application to filter applets on. Uses the
+         *                  X-KDE-ParentApp entry (if any) in the plugin info.
+         *                  The default value of QString() will result in a
+         *                  list containing only applets not specifically
+         *                  registered to an application.
+         * @return list of DataEngines
+         **/
+        static KPluginInfo::List listEngineInfo(const QString &parentApp = QString());
 
     private:
         /**
