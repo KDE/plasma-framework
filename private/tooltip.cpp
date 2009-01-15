@@ -169,6 +169,8 @@ ToolTip::~ToolTip()
 void ToolTip::checkSize()
 {
     //FIXME: layout bugs even on qlayouts? oh, please, no.
+    d->text->setMinimumSize(0, 0);
+    d->text->setMaximumSize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX);
     d->text->setMinimumSize(d->text->minimumSizeHint());
     d->text->setMaximumSize(d->text->maximumSizeHint());
 
