@@ -165,10 +165,19 @@ void DataEngineManager::unloadEngine(const QString &name)
     }
 }
 
-QStringList DataEngineManager::listAllEngines()
+QStringList DataEngineManager::listAllEngines(const QString &parentApp)
 {
+    QString constraint;
+
+    if (parentApp.isEmpty()) {
+        constraint.append("not exist [X-KDE-ParentApp]");
+    } else {
+        constraint.append("[X-KDE-ParentApp] == '").append(parentApp).append("'");
+    }
+
+    KService::List offers = KServiceTypeTrader::self()->query("Plasma/DataEngine", constraint);
+
     QStringList engines;
-    KService::List offers = KServiceTypeTrader::self()->query("Plasma/DataEngine");
     foreach (const KService::Ptr &service, offers) {
         QString name = service->property("X-KDE-PluginInfo-Name").toString();
         if (!name.isEmpty()) {
