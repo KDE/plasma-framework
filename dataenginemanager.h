@@ -72,9 +72,15 @@ class PLASMA_EXPORT DataEngineManager: public QObject
         void unloadEngine(const QString &name);
 
         /**
-         * Returns a listing of all known engines by name
+         * @return a listing of all known engines by name
+         *
+         * @param parentApp the application to filter applets on. Uses the
+         *                  X-KDE-ParentApp entry (if any) in the plugin info.
+         *                  The default value of QString() will result in a
+         *                  list containing only applets not specifically
+         *                  registered to an application.
          */
-        static QStringList listAllEngines();
+        static QStringList listAllEngines(const QString &parentApp = QString());
 
     private:
         /**
