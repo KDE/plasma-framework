@@ -113,6 +113,8 @@ ExtenderItem::ExtenderItem(Extender *hostExtender, uint extenderItemId)
         //The item already exists.
         d->name = dg.readEntry("extenderItemName", "");
         d->title = dg.readEntry("extenderTitle", "");
+        setCollapsed(dg.readEntry("isCollapsed", false));
+
         QString iconName = dg.readEntry("extenderIconName", "utilities-desktop-extra");
         if (iconName.isEmpty()) {
             iconName = "utilities-desktop-extra";
@@ -279,11 +281,7 @@ Extender *ExtenderItem::extender() const
 
 bool ExtenderItem::isCollapsed() const
 {
-    if (!d->widget) {
-        return true;
-    } else {
-        return !d->widget->isVisible();
-    }
+    return d->collapsed;
 }
 
 void ExtenderItem::setAutoExpireDelay(uint time)
@@ -381,6 +379,9 @@ void ExtenderItem::destroy()
 
 void ExtenderItem::setCollapsed(bool collapsed)
 {
+    config().writeEntry("isCollapsed", collapsed);
+    d->collapsed = collapsed;
+
     qreal marginWidth = d->bgLeft + d->bgRight + d->dragLeft + d->dragRight;
     qreal marginHeight = d->bgTop + d->bgBottom + 2 * d->dragTop + 2 * d->dragBottom;
 
@@ -828,6 +829,7 @@ ExtenderItemPrivate::ExtenderItemPrivate(ExtenderItem *extenderItem, Extender *h
       mouseOver(false),
       dragStarted(false),
       destroyActionVisibility(false),
+      collapsed(false),
       expirationTimer(0)
 {
     dragLeft = dragTop = dragRight = dragBottom = 0;

@@ -98,6 +98,7 @@ class ExtenderItemPrivate
         bool mouseOver;
         bool dragStarted;
         bool destroyActionVisibility;
+        bool collapsed;
 
         QTimer *expirationTimer;
 

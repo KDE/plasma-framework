@@ -143,15 +143,15 @@ Applet::~Applet()
         //problem with calling saveState(). Doing this in saveState() might be a possibility, but
         //that would require every extender savestate implementation to call it's parent function,
         //which isn't very nice.
+        d->extender->saveState();
+
         foreach (ExtenderItem *item, d->extender->attachedItems()) {
-            if (!item->isDetached() || item->autoExpireDelay()) {
+            if (item->autoExpireDelay()) {
                 //destroy temporary extender items, or items that aren't detached, so their
                 //configuration won't linger after a plasma restart.
                 item->destroy();
             }
         }
-
-        d->extender->saveState();
     }
 
     delete d;
@@ -590,7 +590,10 @@ void Applet::constraintsEvent(Plasma::Constraints constraints)
 
 void Applet::initExtenderItem(ExtenderItem *item)
 {
-    Q_UNUSED(item)
+    kWarning() << "Missing implementation of initExtenderItem in the applet "
+               << item->config().readEntry("SourceAppletPluginName", "")
+               << "!\n Any applet that uses extenders should implement initExtenderItem to "
+               << "instantiate a widget. Destroying the item...";
     item->destroy();
 }
 

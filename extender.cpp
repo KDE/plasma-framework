@@ -386,8 +386,6 @@ void ExtenderPrivate::loadExtenderItems()
 
     //first create a list of extenderItems, and then sort them on their position, so the items get
     //recreated in the correct order.
-    //TODO: this restoring of the correct order should now be done in itemAddedEvent instead of
-    //here, to allow easy subclassing of Extender.
     QList<QPair<int, QString> > groupList;
     foreach (const QString &extenderItemId, cg.groupList()) {
         KConfigGroup dg = cg.group(extenderItemId);
@@ -398,6 +396,7 @@ void ExtenderPrivate::loadExtenderItems()
     //iterate over the extender items
     for (int i = 0; i < groupList.count(); i++) {
         QPair<int, QString> pair = groupList[i];
+
         KConfigGroup dg = cg.group(pair.second);
 
         //load the relevant settings.
@@ -411,43 +410,37 @@ void ExtenderPrivate::loadExtenderItems()
         kDebug() << "applet id = " << applet->id();
         kDebug() << "sourceappletid = " << sourceAppletId;
 
-        if (sourceAppletId != applet->id()) {
-            //find the source applet.
-            Corona *corona = applet->containment()->corona();
-            Applet *sourceApplet = 0;
-            foreach (Containment *containment, corona->containments()) {
-                foreach (Applet *applet, containment->applets()) {
-                    if (applet->id() == sourceAppletId) {
-                        sourceApplet = applet;
-                    }
+        //find the source applet.
+        Corona *corona = applet->containment()->corona();
+        Applet *sourceApplet = 0;
+        foreach (Containment *containment, corona->containments()) {
+            foreach (Applet *applet, containment->applets()) {
+                if (applet->id() == sourceAppletId) {
+                    sourceApplet = applet;
                 }
             }
+        }
 
-            //There is no source applet. We just instantiate one just for the sake of creating
-            //detachables.
-            if (!sourceApplet) {
-                kDebug() << "creating a temporary applet as factory";
-                sourceApplet = Applet::load(appletName);
-                temporarySourceApplet = true;
-                //TODO: maybe add an option to applet to indicate that it shouldn't be deleted after
-                //having used it as factory.
-            }
+        //There is no source applet. We just instantiate one just for the sake of creating
+        //detachables.
+        if (!sourceApplet) {
+            kDebug() << "creating a temporary applet as factory";
+            sourceApplet = Applet::load(appletName);
+            temporarySourceApplet = true;
+            //TODO: maybe add an option to applet to indicate that it shouldn't be deleted after
+            //having used it as factory.
+        }
 
-            if (!sourceApplet) {
-                kDebug() << "sourceApplet is null? appletName = " << appletName;
-                kDebug() << "                      extenderItemId = " << extenderItemId;
-            } else {
-                ExtenderItem *item = new ExtenderItem(q, extenderItemId.toInt());
-                sourceApplet->initExtenderItem(item);
-
-                if (temporarySourceApplet) {
-                    delete sourceApplet;
-                }
-            }
+        if (!sourceApplet) {
+            kDebug() << "sourceApplet is null? appletName = " << appletName;
+            kDebug() << "                      extenderItemId = " << extenderItemId;
         } else {
-            //this entry is still here, probably because plasma crashed, but it isn't detached and
-            //should be reinstantiated. Just delete the entry.
-            cg.deleteGroup(pair.second);
+            ExtenderItem *item = new ExtenderItem(q, extenderItemId.toInt());
+            sourceApplet->initExtenderItem(item);
+
+            if (temporarySourceApplet) {
+                delete sourceApplet;
+            }
         }
     }
 }
