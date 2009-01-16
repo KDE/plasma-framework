@@ -475,17 +475,18 @@ void Svg::resize(const QSizeF &size)
 
 void Svg::resize()
 {
-    QSizeF newSize;
-    if (d->renderer) {
-        newSize = d->renderer->defaultSize();
+    if (d->naturalSize.isEmpty()) {
+        d->createRenderer();
+        d->naturalSize = d->renderer->defaultSize();
     }
 
-    if (qFuzzyCompare(newSize.width(), d->size.width()) &&
-        qFuzzyCompare(newSize.height(), d->size.height())) {
+
+    if (qFuzzyCompare(d->naturalSize.width(), d->size.width()) &&
+        qFuzzyCompare(d->naturalSize.height(), d->size.height())) {
         return;
     }
 
-    d->size = newSize;
+    d->size = d->naturalSize;
     d->localRectCache.clear();
 }
 
