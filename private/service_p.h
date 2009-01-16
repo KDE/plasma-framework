@@ -29,6 +29,8 @@
 
 #include <ktemporaryfile.h>
 
+#include "plasma/configloader.h"
+
 namespace Plasma
 {
 
@@ -74,8 +76,10 @@ public:
           tempFile(0)
     {
     }
+
     ~ServicePrivate()
     {
+        delete config;
         delete tempFile;
     }
 
