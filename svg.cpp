@@ -139,6 +139,17 @@ class SvgPrivate
                     QObject::connect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()),
                                      q, SLOT(colorsChanged()));
                 }
+
+                QRectF rect;
+                bool found = Theme::defaultTheme()->findInRectsCache(path, "_Natural", rect);
+
+                if (found && !rect.isValid()) {
+                    createRenderer();
+                    naturalSize = renderer->defaultSize();
+                    Theme::defaultTheme()->insertIntoRectsCache(path, "_Natural", QRectF(QPointF(0,0), naturalSize));
+                } else {
+                    naturalSize = rect.size();
+                }
             } else if (QFile::exists(imagePath)) {
                 path = imagePath;
             } else {
@@ -455,8 +466,7 @@ void Svg::paint(QPainter *painter, int x, int y, int width, int height, const QS
 QSize Svg::size() const
 {
     if (d->size.isEmpty()) {
-        d->createRenderer();
-        d->size = d->renderer->defaultSize();
+        d->size = d->naturalSize;
     }
 
     return d->size.toSize();
@@ -480,12 +490,6 @@ void Svg::resize(const QSizeF &size)
 
 void Svg::resize()
 {
-    if (d->naturalSize.isEmpty()) {
-        d->createRenderer();
-        d->naturalSize = d->renderer->defaultSize();
-    }
-
-
     if (qFuzzyCompare(d->naturalSize.width(), d->size.width()) &&
         qFuzzyCompare(d->naturalSize.height(), d->size.height())) {
         return;
