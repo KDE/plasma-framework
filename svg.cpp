@@ -454,6 +454,11 @@ void Svg::paint(QPainter *painter, int x, int y, int width, int height, const QS
 
 QSize Svg::size() const
 {
+    if (d->size.isEmpty()) {
+        d->createRenderer();
+        d->size = d->renderer->defaultSize();
+    }
+
     return d->size.toSize();
 }
 
