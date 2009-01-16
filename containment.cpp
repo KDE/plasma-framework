@@ -153,8 +153,9 @@ void Containment::init()
 
     QAction *configureActivityAction = new QAction(i18n("Appearance Settings"), this);
     configureActivityAction->setIcon(KIcon("configure"));
-    configureActivityAction->setVisible(unlocked);
-    configureActivityAction->setEnabled(unlocked);
+    bool canConfig = unlocked || KAuthorized::authorize("PlasmaAllowConfigureWhenLocked");
+    configureActivityAction->setVisible(canConfig);
+    configureActivityAction->setEnabled(canConfig);
     connect(configureActivityAction, SIGNAL(triggered()), this, SLOT(requestConfiguration()));
     d->actions().addAction("activity settings", configureActivityAction);
 
@@ -1599,11 +1600,13 @@ void ContainmentPrivate::containmentConstraintsEvent(Plasma::Constraints constra
             action->setText(unlocked ? i18n("Lock Widgets") : i18n("Unlock Widgets"));
             action->setIcon(KIcon(unlocked ? "object-locked" : "object-unlocked"));
         }
-        if (!KAuthorized::authorize("PlasmaAllowConfigureWhenLocked")) {
+
+        bool canConfig = unlocked || KAuthorized::authorize("PlasmaAllowConfigureWhenLocked");
+        if (canConfig) {
             action = actions().action("activity settings");
             if (action) {
-                action->setVisible(unlocked);
-                action->setEnabled(unlocked);
+                action->setVisible(canConfig);
+                action->setEnabled(canConfig);
             }
         }
 
