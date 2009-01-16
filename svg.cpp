@@ -139,6 +139,17 @@ class SvgPrivate
                     QObject::connect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()),
                                      q, SLOT(colorsChanged()));
                 }
+
+                QRectF rect;
+                bool found = Theme::defaultTheme()->findInRectsCache(path, "_Natural", rect);
+
+                if (found && !rect.isValid()) {
+                    createRenderer();
+                    naturalSize = renderer->defaultSize();
+                    Theme::defaultTheme()->insertIntoRectsCache(path, "_Natural", QRectF(QPointF(0,0), naturalSize));
+                } else {
+                    naturalSize = rect.size();
+                }
             } else if (QFile::exists(imagePath)) {
                 path = imagePath;
             } else {
@@ -454,6 +465,10 @@ void Svg::paint(QPainter *painter, int x, int y, int width, int height, const QS
 
 QSize Svg::size() const
 {
+    if (d->size.isEmpty()) {
+        d->size = d->naturalSize;
+    }
+
     return d->size.toSize();
 }
 
@@ -475,17 +490,12 @@ void Svg::resize(const QSizeF &size)
 
 void Svg::resize()
 {
-    QSizeF newSize;
-    if (d->renderer) {
-        newSize = d->renderer->defaultSize();
-    }
-
-    if (qFuzzyCompare(newSize.width(), d->size.width()) &&
-        qFuzzyCompare(newSize.height(), d->size.height())) {
+    if (qFuzzyCompare(d->naturalSize.width(), d->size.width()) &&
+        qFuzzyCompare(d->naturalSize.height(), d->size.height())) {
         return;
     }
 
-    d->size = newSize;
+    d->size = d->naturalSize;
     d->localRectCache.clear();
 }
 
@@ -514,11 +524,11 @@ bool Svg::hasElement(const QString &elementId) const
     bool found = Theme::defaultTheme()->findInRectsCache(d->path, id, elementRect);
 
     if (found) {
+        d->localRectCache.insert(id, elementRect);
         return elementRect.isValid();
     } else {
 //        kDebug() << "** ** *** !!!!!!!! *** ** ** creating renderer due to hasElement miss" << d->path << elementId;
-        d->findAndCacheElementRect(elementId);
-        return d->renderer->elementExists(elementId);
+        return d->findAndCacheElementRect(elementId).isValid();
     }
 }
 
