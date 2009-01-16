@@ -58,23 +58,27 @@ class ContentStructure
         QString path;
         QString name;
         QStringList mimetypes;
-        bool directory;
-        bool required;
+        bool directory : 1;
+        bool required : 1;
 };
 
 class PackageStructurePrivate
 {
 public:
     PackageStructurePrivate()
-        : metadata(0)
+        : metadata(0),
+          externalPaths(false)
     {
     }
+
     ~PackageStructurePrivate()
     {
         delete metadata;
     }
 
     void createPackageMetadata(const QString &path);
+
+    static QHash<QString, PackageStructure::Ptr> structures;
 
     QString type;
     QString path;
@@ -83,8 +87,8 @@ public:
     QString servicePrefix;
     QMap<QByteArray, ContentStructure> contents;
     QStringList mimetypes;
-    static QHash<QString, PackageStructure::Ptr> structures;
     PackageMetadata *metadata;
+    bool externalPaths;
  };
 
 QHash<QString, PackageStructure::Ptr> PackageStructurePrivate::structures;
@@ -489,6 +493,16 @@ PackageMetadata PackageStructure::metadata()
     }
 
     return *d->metadata;
+}
+
+bool PackageStructure::allowExternalPaths() const
+{
+    return d->externalPaths;
+}
+
+void PackageStructure::setAllowExternalPaths(bool allow)
+{
+    d->externalPaths = allow;
 }
 
 } // Plasma namespace

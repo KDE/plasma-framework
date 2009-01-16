@@ -278,6 +278,12 @@ public:
       */
     virtual PackageMetadata metadata();
 
+    /**
+     * @return true if paths/symlinks outside the package itself should be followed.
+     * By default this is set to false for security reasons.
+     */
+    bool allowExternalPaths() const;
+
 Q_SIGNALS:
     /**
      * Emitted when the new widget browser process completes.
@@ -285,6 +291,13 @@ Q_SIGNALS:
     void newWidgetBrowserFinished();
 
 protected:
+    /**
+     * Sets whether or not external paths/symlinks can be followed by a package
+     * @arg allow true if paths/symlinks outside of the package should be followed,
+     *             false if they should be rejected.
+     */
+    void setAllowExternalPaths(bool allow);
+
     /**
      * Sets the prefix that all the contents in this package should
      * appear under. This defaults to "contents/" and is added automatically

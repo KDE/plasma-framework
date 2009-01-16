@@ -139,6 +139,10 @@ QString Package::filePath(const char *fileType, const QString &filename) const
     }
 
     if (QFile::exists(path)) {
+        if (d->structure->allowExternalPaths()) {
+            return path;
+        }
+
         // ensure that we don't return files outside of our base path
         // due to symlink or ../ games
         QDir dir(path);
@@ -171,6 +175,10 @@ QStringList Package::entryList(const char *fileType) const
     QDir dir(d->basePath + d->structure->contentsPrefix() + path);
 
     if (dir.exists()) {
+        if (d->structure->allowExternalPaths()) {
+            return dir.entryList(QDir::Files | QDir::Readable);
+        }
+
         // ensure that we don't return files outside of our base path
         // due to symlink or ../ games
         QString canonicalized = dir.canonicalPath();
