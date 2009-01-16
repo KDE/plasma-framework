@@ -514,11 +514,11 @@ bool Svg::hasElement(const QString &elementId) const
     bool found = Theme::defaultTheme()->findInRectsCache(d->path, id, elementRect);
 
     if (found) {
+        d->localRectCache.insert(id, elementRect);
         return elementRect.isValid();
     } else {
 //        kDebug() << "** ** *** !!!!!!!! *** ** ** creating renderer due to hasElement miss" << d->path << elementId;
-        d->findAndCacheElementRect(elementId);
-        return d->renderer->elementExists(elementId);
+        return d->findAndCacheElementRect(elementId).isValid();
     }
 }
 
