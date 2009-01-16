@@ -923,11 +923,13 @@ void Applet::flushPendingConstraintsEvents()
             action->setVisible(unlocked);
             action->setEnabled(unlocked);
         }
-        if (!KAuthorized::authorize("PlasmaAllowConfigureWhenLocked")) {
+
+        bool canConfig = unlocked || KAuthorized::authorize("PlasmaAllowConfigureWhenLocked");
+        if (canConfig) {
             action = d->actions.action("configure");
             if (action) {
-                action->setVisible(unlocked);
-                action->setEnabled(unlocked);
+                action->setVisible(canConfig);
+                action->setEnabled(canConfig);
             }
         }
     }
@@ -1282,6 +1284,10 @@ void Applet::setHasConfigurationInterface(bool hasInterface)
             configAction = new QAction(i18n("%1 Settings", name()), this);
             configAction->setIcon(KIcon("configure"));
             configAction->setShortcutContext(Qt::WidgetShortcut); //don't clash with other views
+            bool unlocked = immutability() == Mutable;
+            bool canConfig = unlocked || KAuthorized::authorize("PlasmaAllowConfigureWhenLocked");
+            configAction->setVisible(canConfig);
+            configAction->setEnabled(canConfig);
             if (isContainment()) {
                 //kDebug() << "I am a containment";
                 configAction->setShortcut(QKeySequence("ctrl+shift+s"));
