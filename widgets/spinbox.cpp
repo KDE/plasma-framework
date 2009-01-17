@@ -25,24 +25,47 @@
 #include <knuminput.h>
 #include <kmimetype.h>
 
+#include <plasma/theme.h>
+#include <plasma/private/style_p.h>
+
 namespace Plasma
 {
 
 class SpinBoxPrivate
 {
 public:
-    SpinBoxPrivate()
+    SpinBoxPrivate(SpinBox *spinBox)
+        : q(spinBox)
     {
     }
 
     ~SpinBoxPrivate()
     {
     }
+
+    void setPalette()
+    {
+        QSpinBox *native = q->nativeWidget();
+        QColor color = Theme::defaultTheme()->color(Theme::TextColor);
+        QPalette p = native->palette();
+
+        p.setColor(QPalette::Normal, QPalette::Text, color);
+        p.setColor(QPalette::Inactive, QPalette::Text, color);
+        p.setColor(QPalette::Normal, QPalette::ButtonText, color);
+        p.setColor(QPalette::Inactive, QPalette::ButtonText, color);
+        p.setColor(QPalette::Normal, QPalette::Base, QColor(0,0,0,0));
+        p.setColor(QPalette::Inactive, QPalette::Base, QColor(0,0,0,0));
+        native->setPalette(p);
+        native->setFont(Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont));
+    }
+
+    SpinBox *q;
+    Plasma::Style::Ptr style;
 };
 
 SpinBox::SpinBox(QGraphicsWidget *parent)
     : QGraphicsProxyWidget(parent),
-      d(new SpinBoxPrivate)
+      d(new SpinBoxPrivate(this))
 {
     KIntSpinBox *native = new KIntSpinBox;
 
@@ -51,11 +74,18 @@ SpinBox::SpinBox(QGraphicsWidget *parent)
 
     setWidget(native);
     native->setAttribute(Qt::WA_NoSystemBackground);
+    native->setAutoFillBackground(false);
+
+    d->style = Plasma::Style::sharedStyle();
+    native->setStyle(d->style.data());
+    d->setPalette();
+    connect(Theme::defaultTheme(), SIGNAL(themeChanged()), this, SLOT(setPalette()));
 }
 
 SpinBox::~SpinBox()
 {
     delete d;
+    Plasma::Style::doneWithSharedStyle();
 }
 
 void SpinBox::setMaximum(int max)

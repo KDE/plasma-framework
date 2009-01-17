@@ -22,6 +22,9 @@
 
 #include <QPainter>
 #include <QStyleOptionComplex>
+#include <QSpinBox>
+#include <QComboBox>
+#include <QApplication>
 
 #include <kdebug.h>
 
@@ -32,8 +35,10 @@ namespace Plasma {
 class StylePrivate
 {
 public:
-    StylePrivate()
-        : scrollbar(0)
+    StylePrivate(Style *style)
+        : q(style),
+          scrollbar(0),
+          textBox(0)
     {
     }
 
@@ -41,7 +46,27 @@ public:
     {
     }
 
+    void createScrollbar()
+    {
+        if (!scrollbar) {
+            scrollbar = new Plasma::FrameSvg(q);
+            scrollbar->setImagePath("widgets/scrollbar");
+            scrollbar->setCacheAllRenderedFrames(true);
+        }
+    }
+
+    void createTextBox()
+    {
+        if (!textBox) {
+            textBox = new Plasma::FrameSvg(q);
+            textBox->setImagePath("widgets/frame");
+            textBox->setElementPrefix("sunken");
+        }
+    }
+
+    Style *q;
     Plasma::FrameSvg *scrollbar;
+    Plasma::FrameSvg *textBox;
     static Plasma::Style::Ptr s_sharedStyle;
 };
 
@@ -65,11 +90,8 @@ void Style::doneWithSharedStyle()
 
 Style::Style()
      : QCommonStyle(),
-       d(new StylePrivate)
+       d(new StylePrivate(this))
 {
-    d->scrollbar = new Plasma::FrameSvg(this);
-    d->scrollbar->setImagePath("widgets/scrollbar");
-    d->scrollbar->setCacheAllRenderedFrames(true);
 }
 
 Style::~Style()
@@ -82,84 +104,176 @@ void Style::drawComplexControl(ComplexControl control,
                                QPainter *painter,
                                const QWidget *widget) const
 {
-    if (control != CC_ScrollBar) {
-        QCommonStyle::drawComplexControl(control, option, painter, widget);
-        return;
-    }
+    switch (control) {
+    case CC_ScrollBar: {
+        d->createScrollbar();
 
-    painter->save();
-    painter->setRenderHint(QPainter::Antialiasing);
+        painter->save();
+        painter->setRenderHint(QPainter::Antialiasing);
 
-    const bool sunken = option->state & State_Sunken;
-    const QStyleOptionSlider *scrollOption = qstyleoption_cast<const QStyleOptionSlider *>(option);
-    QString prefix;
+        const bool sunken = option->state & State_Sunken;
+        const QStyleOptionSlider *scrollOption = qstyleoption_cast<const QStyleOptionSlider *>(option);
+        QString prefix;
 
-    if (option->state & State_MouseOver) {
-        prefix= "mouseover-";
-    }
-
-    QRect subLine;
-    QRect addLine;
-    if (scrollOption && scrollOption->orientation == Qt::Horizontal) {
-        subLine = d->scrollbar->elementRect(prefix + "arrow-left").toRect();
-        addLine = d->scrollbar->elementRect(prefix + "arrow-right").toRect();
-    } else {
-        subLine = d->scrollbar->elementRect(prefix + "arrow-up").toRect();
-        addLine = d->scrollbar->elementRect(prefix + "arrow-down").toRect();
-    }
-
-    subLine.moveCenter(subControlRect(control, option, SC_ScrollBarSubLine, widget).center());
-    addLine.moveCenter(subControlRect(control, option, SC_ScrollBarAddLine, widget).center());
-
-    const QRect slider =
-        subControlRect(control, option, SC_ScrollBarSlider, widget).adjusted(1, 0, -1, 0);
-
-    d->scrollbar->setElementPrefix("background");
-    d->scrollbar->resizeFrame(option->rect.size());
-    d->scrollbar->paintFrame(painter);
-
-    if (sunken && scrollOption && scrollOption->activeSubControls & SC_ScrollBarSlider) {
-        d->scrollbar->setElementPrefix("sunken-slider");
-    } else {
-        d->scrollbar->setElementPrefix(prefix + "slider");
-    }
-
-    d->scrollbar->resizeFrame(slider.size());
-    d->scrollbar->paintFrame(painter, slider.topLeft());
-
-    if (scrollOption && scrollOption->orientation == Qt::Horizontal) {
-        if (sunken && scrollOption->activeSubControls & SC_ScrollBarAddLine) {
-            d->scrollbar->paint(painter, addLine, "sunken-arrow-right");
-        } else {
-            d->scrollbar->paint(painter, addLine, prefix + "arrow-right");
+        if (option->state & State_MouseOver) {
+            prefix= "mouseover-";
         }
 
-        if (sunken && scrollOption->activeSubControls & SC_ScrollBarSubLine) {
-            d->scrollbar->paint(painter, subLine, "sunken-arrow-left");
+        QRect subLine;
+        QRect addLine;
+        if (scrollOption && scrollOption->orientation == Qt::Horizontal) {
+            subLine = d->scrollbar->elementRect(prefix + "arrow-left").toRect();
+            addLine = d->scrollbar->elementRect(prefix + "arrow-right").toRect();
         } else {
-            d->scrollbar->paint(painter, subLine, prefix + "arrow-left");
-        }
-    } else {
-        if (sunken && scrollOption && scrollOption->activeSubControls & SC_ScrollBarAddLine) {
-            d->scrollbar->paint(painter, addLine, "sunken-arrow-down");
-        } else {
-            d->scrollbar->paint(painter, addLine, prefix + "arrow-down");
+            subLine = d->scrollbar->elementRect(prefix + "arrow-up").toRect();
+            addLine = d->scrollbar->elementRect(prefix + "arrow-down").toRect();
         }
 
-        if (sunken && scrollOption && scrollOption->activeSubControls & SC_ScrollBarSubLine) {
-            d->scrollbar->paint(painter, subLine, "sunken-arrow-up");
+        subLine.moveCenter(subControlRect(control, option, SC_ScrollBarSubLine, widget).center());
+        addLine.moveCenter(subControlRect(control, option, SC_ScrollBarAddLine, widget).center());
+
+        const QRect slider =
+            subControlRect(control, option, SC_ScrollBarSlider, widget).adjusted(1, 0, -1, 0);
+
+        d->scrollbar->setElementPrefix("background");
+        d->scrollbar->resizeFrame(option->rect.size());
+        d->scrollbar->paintFrame(painter);
+
+        if (sunken && scrollOption && scrollOption->activeSubControls & SC_ScrollBarSlider) {
+            d->scrollbar->setElementPrefix("sunken-slider");
         } else {
-            d->scrollbar->paint(painter, subLine, prefix + "arrow-up");
+            d->scrollbar->setElementPrefix(prefix + "slider");
         }
+
+        d->scrollbar->resizeFrame(slider.size());
+        d->scrollbar->paintFrame(painter, slider.topLeft());
+
+        if (scrollOption && scrollOption->orientation == Qt::Horizontal) {
+            if (sunken && scrollOption->activeSubControls & SC_ScrollBarAddLine) {
+                d->scrollbar->paint(painter, addLine, "sunken-arrow-right");
+            } else {
+                d->scrollbar->paint(painter, addLine, prefix + "arrow-right");
+            }
+
+            if (sunken && scrollOption->activeSubControls & SC_ScrollBarSubLine) {
+                d->scrollbar->paint(painter, subLine, "sunken-arrow-left");
+            } else {
+                d->scrollbar->paint(painter, subLine, prefix + "arrow-left");
+            }
+        } else {
+            if (sunken && scrollOption && scrollOption->activeSubControls & SC_ScrollBarAddLine) {
+                d->scrollbar->paint(painter, addLine, "sunken-arrow-down");
+            } else {
+                d->scrollbar->paint(painter, addLine, prefix + "arrow-down");
+            }
+
+            if (sunken && scrollOption && scrollOption->activeSubControls & SC_ScrollBarSubLine) {
+                d->scrollbar->paint(painter, subLine, "sunken-arrow-up");
+            } else {
+                d->scrollbar->paint(painter, subLine, prefix + "arrow-up");
+            }
+        }
+
+        painter->restore();
+        break;
     }
+    case CC_SpinBox: {
+        d->createTextBox();
 
-    painter->restore();
+        d->textBox->resizeFrame(option->rect.size());
+        d->textBox->paintFrame(painter);
+
+        const QStyleOptionSpinBox *spinOpt = qstyleoption_cast<const QStyleOptionSpinBox *>(option);
+        bool upSunken = (spinOpt->activeSubControls & SC_SpinBoxUp) &&
+                         (spinOpt->state & (State_Sunken | State_On));
+        bool downSunken = (spinOpt->activeSubControls & SC_SpinBoxDown) &&
+                           (spinOpt->state & (State_Sunken | State_On));
+
+        const QSpinBox *spin = qobject_cast<const QSpinBox *>(widget);
+        PrimitiveElement pe;
+        if (spin->buttonSymbols() == QSpinBox::PlusMinus) {
+            pe = PE_IndicatorSpinPlus;
+        } else {
+            pe = PE_IndicatorArrowUp;
+        }
+
+        QStyleOption upOpt;
+        upOpt = *option;
+        upOpt.rect = subControlRect(CC_SpinBox, option, SC_SpinBoxUp, widget);
+
+        if (upSunken) {
+            upOpt.state = State_Sunken|State_Enabled;
+        } else {
+            upOpt.state = State_Enabled;
+        }
+
+        qApp->style()->drawPrimitive(pe, &upOpt, painter, widget);
+
+        if (spin->buttonSymbols() == QSpinBox::PlusMinus) {
+            pe = PE_IndicatorSpinMinus;
+        } else {
+            pe = PE_IndicatorArrowDown;
+        }
+
+        QStyleOption downOpt;
+        downOpt= *option;
+        downOpt.rect = subControlRect(CC_SpinBox, option, SC_SpinBoxDown, widget);
+
+        if (downSunken) {
+            downOpt.state = State_Sunken|State_Enabled;
+        } else {
+            downOpt.state = State_Enabled;
+        }
+
+        qApp->style()->drawPrimitive(pe, &downOpt, painter, widget);
+        break;
+    }
+    case CC_ComboBox: {
+        const QComboBox *combo = qobject_cast<const QComboBox *>(widget);
+        if (!combo->isEditable()) {
+            qApp->style()->drawComplexControl(control, option, painter, widget);
+        } else {
+            d->createTextBox();
+            d->textBox->resizeFrame(option->rect.size());
+            d->textBox->paintFrame(painter);
+
+            QStyleOption arrowOpt;
+            arrowOpt = *option;
+            arrowOpt.rect = subControlRect(CC_ComboBox, option, SC_ComboBoxArrow, widget);
+            qApp->style()->drawPrimitive(PE_IndicatorArrowDown, &arrowOpt, painter, widget);
+        }
+        break;
+    }
+    default:
+        qApp->style()->drawComplexControl(control, option, painter, widget);
+    }
+}
+
+void Style::drawPrimitive(PrimitiveElement element, const QStyleOption *option, QPainter *painter, const QWidget *widget) const
+{
+    Q_UNUSED(widget)
+
+    switch (element) {
+    case PE_PanelLineEdit:
+        //comboboxes draws their own frame
+        if (qobject_cast<QComboBox *>(widget->parent())) {
+            return;
+        }
+        d->createTextBox();
+
+        d->textBox->resizeFrame(option->rect.size());
+        d->textBox->paintFrame(painter);
+        break;
+    default:
+        qApp->style()->drawPrimitive(element, option, painter, widget);
+    }
 }
 
 int Style::pixelMetric(PixelMetric metric, const QStyleOption *option, const QWidget *widget) const
 {
     switch (metric) {
     case PM_ScrollBarExtent: {
+        d->createScrollbar();
         const QStyleOptionSlider *scrollOption = qstyleoption_cast<const QStyleOptionSlider *>(option);
         if (scrollOption && scrollOption->orientation == Qt::Vertical) {
             return d->scrollbar->elementSize("arrow-down").width() + 2;

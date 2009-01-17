@@ -131,6 +131,8 @@ Q_SIGNALS:
     void editingFinished();
 
 private:
+    Q_PRIVATE_SLOT(d, void setPalette())
+
     SpinBoxPrivate * const d;
 };
 

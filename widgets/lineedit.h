@@ -84,6 +84,8 @@ Q_SIGNALS:
     void textEdited(const QString &text);
 
 private:
+    Q_PRIVATE_SLOT(d, void setPalette())
+
     LineEditPrivate *const d;
 };
 

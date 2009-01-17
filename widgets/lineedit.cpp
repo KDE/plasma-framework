@@ -24,6 +24,8 @@
 #include <klineedit.h>
 #include <kmimetype.h>
 
+#include <plasma/private/style_p.h>
+
 #include "theme.h"
 #include "svg.h"
 
@@ -33,18 +35,34 @@ namespace Plasma
 class LineEditPrivate
 {
 public:
-    LineEditPrivate()
+    LineEditPrivate(LineEdit *lineEdit)
+        :q(lineEdit)
     {
     }
 
     ~LineEditPrivate()
     {
     }
+
+    void setPalette()
+    {
+        KLineEdit *native = q->nativeWidget();
+        QColor color = Theme::defaultTheme()->color(Theme::TextColor);
+        QPalette p = native->palette();
+
+        p.setColor(QPalette::Normal, QPalette::Text, color);
+        p.setColor(QPalette::Inactive, QPalette::Text, color);
+        native->setPalette(p);
+        native->setFont(Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont));
+    }
+
+    LineEdit *q;
+    Plasma::Style::Ptr style;
 };
 
 LineEdit::LineEdit(QGraphicsWidget *parent)
     : QGraphicsProxyWidget(parent),
-      d(new LineEditPrivate)
+      d(new LineEditPrivate(this))
 {
     KLineEdit *native = new KLineEdit;
     connect(native, SIGNAL(editingFinished()), this, SIGNAL(editingFinished()));
@@ -52,11 +70,17 @@ LineEdit::LineEdit(QGraphicsWidget *parent)
     connect(native, SIGNAL(textEdited(const QString&)), this, SIGNAL(textEdited(const QString&)));
     setWidget(native);
     native->setAttribute(Qt::WA_NoSystemBackground);
+    d->style = Plasma::Style::sharedStyle();
+    native->setStyle(d->style.data());
+
+    d->setPalette();
+    connect(Theme::defaultTheme(), SIGNAL(themeChanged()), this, SLOT(setPalette()));
 }
 
 LineEdit::~LineEdit()
 {
     delete d;
+    Plasma::Style::doneWithSharedStyle();
 }
 
 void LineEdit::setText(const QString &text)

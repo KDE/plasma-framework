@@ -27,6 +27,7 @@
 #include <kiconeffect.h>
 #include <kiconloader.h>
 
+#include <plasma/private/style_p.h>
 #include "theme.h"
 #include "framesvg.h"
 #include "animator.h"
@@ -59,6 +60,7 @@ public:
     bool fadeIn;
     qreal opacity;
     QRectF activeRect;
+    Plasma::Style::Ptr style;
 };
 
 void ComboBoxPrivate::syncActiveRect()
@@ -90,6 +92,15 @@ void ComboBoxPrivate::syncBorders()
 
     //calc the rect for the over effect
     syncActiveRect();
+
+    KComboBox *native = q->nativeWidget();
+    QColor color = Theme::defaultTheme()->color(Theme::TextColor);
+    QPalette p = native->palette();
+
+    p.setColor(QPalette::Normal, QPalette::Text, color);
+    p.setColor(QPalette::Inactive, QPalette::Text, color);
+    native->setPalette(p);
+    native->setFont(Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont));
 }
 
 void ComboBoxPrivate::animationUpdate(qreal progress)
@@ -122,11 +133,14 @@ ComboBox::ComboBox(QGraphicsWidget *parent)
     d->syncBorders();
     setAcceptHoverEvents(true);
     connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()), SLOT(syncBorders()));
+    d->style = Plasma::Style::sharedStyle();
+    native->setStyle(d->style.data());
 }
 
 ComboBox::~ComboBox()
 {
     delete d;
+    Plasma::Style::doneWithSharedStyle();
 }
 
 QString ComboBox::text() const
