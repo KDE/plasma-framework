@@ -783,7 +783,7 @@ Applet::List Containment::applets() const
     return d->applets;
 }
 
-void Containment::setScreen(int screen, int desktop)
+void Containment::setScreen(int newScreen, int newDesktop)
 {
     // What we want to do in here is:
     //   * claim the screen as our own
@@ -795,59 +795,60 @@ void Containment::setScreen(int screen, int desktop)
     //            we kick out
     //
     // a screen of -1 means no associated screen.
+    Q_ASSERT(corona());
+    int numScreens = corona()->numScreens();
+    if (newScreen < -1) {
+        newScreen = -1;
+    }
+
+    // -1 == All desktops
+    if (newDesktop < -1 || newDesktop > KWindowSystem::numberOfDesktops() - 1) {
+        newDesktop = -1;
+    }
+
+    kDebug() << "setting screen to " << newScreen << newDesktop << "and type is" << containmentType();
+
     Containment *swapScreensWith(0);
     if (d->type == DesktopContainment || d->type >= CustomContainment) {
         // we want to listen to changes in work area if our screen changes
-        if (d->screen < 0 && screen > -1) {
+        if (d->screen < 0 && newScreen > -1) {
             connect(KWindowSystem::self(), SIGNAL(workAreaChanged()),
                     this, SLOT(positionToolBox()));
-        } else if (screen < 0) {
+        } else if (newScreen < 0) {
             disconnect(KWindowSystem::self(), SIGNAL(workAreaChanged()),
                        this, SLOT(positionToolBox()));
         }
 
-        if (screen > -1 && corona()) {
+        if (newScreen > -1 && corona()) {
             // sanity check to make sure someone else doesn't have this screen already!
-            Containment *currently = corona()->containmentForScreen(screen, desktop);
+            Containment *currently = corona()->containmentForScreen(newScreen, newDesktop);
             if (currently && currently != this) {
                 kDebug() << "currently is on screen" << currently->screen()
                          << "and is" << currently->name()
                          << (QObject*)currently << (QObject*)this;
-                currently->setScreen(-1, desktop);
+                currently->setScreen(-1, newDesktop);
                 swapScreensWith = currently;
             }
         }
     }
 
-    kDebug() << "setting screen to" << screen << desktop << "and we are a" << containmentType();
-    Q_ASSERT(corona());
-    int numScreens = corona()->numScreens();
-    if (screen < -1) {
-        screen = -1;
-    }
-
-
-    kDebug() << "setting screen to " << screen << desktop << "and type is" << containmentType();
-    if (screen < numScreens && screen > -1) {
+    if (newScreen < numScreens && newScreen > -1) {
         if (containmentType() == DesktopContainment ||
             containmentType() >= CustomContainment) {
-            resize(corona()->screenGeometry(screen).size());
+            resize(corona()->screenGeometry(newScreen).size());
         }
     }
 
-    // -1 == All desktops
-    if (desktop < -1 || desktop > KWindowSystem::numberOfDesktops() - 1) {
-        desktop = -1;
-    }
-
     int oldDesktop = d->desktop;
-    d->desktop = desktop;
+    d->desktop = newDesktop;
 
     int oldScreen = d->screen;
-    d->screen = screen;
+    d->screen = newScreen;
+
     updateConstraints(Plasma::ScreenConstraint);
-    if (oldScreen != screen) {
-        emit screenChanged(oldScreen, screen, this);
+
+    if (oldScreen != newScreen) {
+        emit screenChanged(oldScreen, newScreen, this);
 
         KConfigGroup c = config();
         c.writeEntry("screen", d->screen);
