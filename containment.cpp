@@ -813,13 +813,13 @@ void Containment::setScreen(int screen, int desktop)
                 kDebug() << "currently is on screen" << currently->screen()
                          << "and is" << currently->name()
                          << (QObject*)currently << (QObject*)this;
-                currently->setScreen(-1);
+                currently->setScreen(-1, desktop);
                 swapScreensWith = currently;
             }
         }
     }
 
-    kDebug() << "setting screen to" << screen << "and we are a" << containmentType();
+    kDebug() << "setting screen to" << screen << desktop << "and we are a" << containmentType();
     Q_ASSERT(corona());
     int numScreens = corona()->numScreens();
     if (screen < -1) {
@@ -827,7 +827,7 @@ void Containment::setScreen(int screen, int desktop)
     }
 
 
-    kDebug() << "setting screen to " << screen << "and type is" << containmentType();
+    kDebug() << "setting screen to " << screen << desktop << "and type is" << containmentType();
     if (screen < numScreens && screen > -1) {
         if (containmentType() == DesktopContainment ||
             containmentType() >= CustomContainment) {
@@ -840,6 +840,7 @@ void Containment::setScreen(int screen, int desktop)
         desktop = -1;
     }
 
+    int oldDesktop = d->desktop;
     d->desktop = desktop;
 
     int oldScreen = d->screen;
@@ -854,7 +855,7 @@ void Containment::setScreen(int screen, int desktop)
     }
 
     if (swapScreensWith) {
-        swapScreensWith->setScreen(oldScreen);
+        swapScreensWith->setScreen(oldScreen, oldDesktop);
     }
 
     d->checkRemoveAction();
