@@ -209,6 +209,16 @@ void ToolButton::setImage(const QString &path)
     d->setPixmap(this);
 }
 
+void ToolButton::setIcon(const QIcon &icon)
+{
+    nativeWidget()->setIcon(icon);
+}
+
+QIcon ToolButton::icon() const
+{
+    return nativeWidget()->icon();
+}
+
 QString ToolButton::image() const
 {
     return d->imagePath;

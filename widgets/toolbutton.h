@@ -104,6 +104,18 @@ public:
      */
     QToolButton *nativeWidget() const;
 
+    /**
+     * sets the icon for this toolbutton
+     * 
+     * @arg icon the icon we want to use
+     */
+    void setIcon(const QIcon &icon);
+
+    /**
+     * @return the icon of this button
+     */
+    QIcon icon() const;
+
 Q_SIGNALS:
     void clicked();
 
