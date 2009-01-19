@@ -1028,11 +1028,8 @@ void Applet::flushPendingConstraintsEvents()
         if (d->modificationsTimerId > 0) {
             killTimer(d->modificationsTimerId);
         }
-        d->modificationsTimerId = 0;
 
-        if (!isContainment()) {
-            setHasConfigurationInterface(true);
-        }
+        d->modificationsTimerId = 0;
     }
 }
 
@@ -1843,7 +1840,7 @@ AppletPrivate::AppletPrivate(KService::Ptr service, int uniqueID, Applet *applet
           shortcutEditor(0),
           constraintsTimerId(0),
           modificationsTimerId(-1),
-          hasConfigurationInterface(false),
+          hasConfigurationInterface(true),
           failed(false),
           isContainment(false),
           transient(false),
