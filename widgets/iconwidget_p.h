@@ -30,6 +30,7 @@
 #include <QtGui/QTextOption>
 
 #include <plasma/plasma_export.h>
+#include <plasma/framesvg.h>
 #include <plasma/svg.h>
 
 #include "iconwidget.h"
@@ -188,6 +189,7 @@ public:
     QString text;
     QString infoText;
     Svg *iconSvg;
+    FrameSvg *background;
     QString iconSvgElement;
     bool iconSvgElementChanged;
     QPixmap iconSvgPixmap;

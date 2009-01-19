@@ -314,6 +314,10 @@ void IconWidgetPrivate::init()
 
     setActiveMargins();
     currentSize = QSizeF(-1, -1);
+
+    background = new Plasma::FrameSvg(q);
+    background->setImagePath("widgets/viewitem");
+    background->setCacheAllRenderedFrames(true);
 }
 
 void IconWidget::addIconAction(QAction *action)
@@ -565,44 +569,24 @@ void IconWidgetPrivate::drawBackground(QPainter *painter, IconWidgetState state)
         return;
     }
 
-    bool darkShadow = shadowColor.value() < 128;
-    QColor shadow = shadowColor;
-    QColor border = textColor;
-
-    switch (state) {
-        case IconWidgetPrivate::HoverState:
-            shadow.setHsv(
-                shadow.hue(),
-                shadow.saturation(),
-                shadow.value() + (int)(darkShadow ? 50 * hoverAlpha: -50 * hoverAlpha),
-                200 + (int)hoverAlpha * 55); // opacity
-            break;
-        case IconWidgetPrivate::PressedState:
-            shadow.setHsv(
-                shadow.hue(),
-                shadow.saturation(),
-                shadow.value() + (darkShadow ?
-                                  (int)(50 * hoverAlpha) : (int)(-50 * hoverAlpha)),
-                204); //80% opacity
-            break;
-        default:
-            break;
+    if (state == IconWidgetPrivate::PressedState) {
+        background->setElementPrefix("selected");
+    } else {
+        background->setElementPrefix("hover");
     }
 
-    border.setAlphaF(0.3 * hoverAlpha);
-    shadow.setAlphaF(0.6 * hoverAlpha);
-
-    painter->save();
-    painter->translate(0.5, 0.5);
-    painter->setRenderHint(QPainter::Antialiasing);
-    painter->setBrush(shadow);
-    painter->setPen(QPen(border, 1));
-    painter->drawPath(
-        PaintUtils::roundedRectangle(
-            QRectF(QPointF(1, 1), QSize((int)currentSize.width() - 2,
-                                        (int)currentSize.height() - 2)),
-            5.0));
-    painter->restore();
+    if (qFuzzyCompare(hoverAlpha, 1)) {
+        background->resizeFrame(currentSize);
+        background->paintFrame(painter);
+    } else if (!qFuzzyCompare(hoverAlpha+1, 1)) {
+        background->resizeFrame(currentSize);
+        QPixmap frame = background->framePixmap();
+        QPainter bufferPainter(&frame);
+        bufferPainter.setCompositionMode(QPainter::CompositionMode_DestinationIn);
+        bufferPainter.fillRect(frame.rect(), QColor(0,0,0, 255*hoverAlpha));
+        bufferPainter.end();
+        painter->drawPixmap(QPoint(0,0), frame);
+    }
 }
 
 QPixmap IconWidgetPrivate::decoration(const QStyleOptionGraphicsItem *option, bool useHoverEffect)
