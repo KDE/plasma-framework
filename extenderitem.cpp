@@ -95,6 +95,12 @@ ExtenderItem::ExtenderItem(Extender *hostExtender, uint extenderItemId)
         d->extenderItemId = ++ExtenderItemPrivate::s_maxExtenderItemId;
     }
 
+    //create the toolbox.
+    d->toolbox = new QGraphicsWidget(this);
+    d->toolboxLayout = new QGraphicsLinearLayout(d->toolbox);
+    d->toolbox->setLayout(d->toolboxLayout);
+
+
     //create items's configgroup
     KConfigGroup cg = hostExtender->d->applet->config("ExtenderItems");
     KConfigGroup dg = KConfigGroup(&cg, QString::number(d->extenderItemId));
@@ -135,11 +141,6 @@ ExtenderItem::ExtenderItem(Extender *hostExtender, uint extenderItemId)
     //can be hidden if it is removed.
     connect(d->sourceApplet, SIGNAL(destroyed()), this, SLOT(sourceAppletRemoved()));
     connect(d->collapseIcon, SIGNAL(clicked()), this, SLOT(toggleCollapse()));
-
-    //create the toolbox.
-    d->toolbox = new QGraphicsWidget(this);
-    d->toolboxLayout = new QGraphicsLinearLayout(d->toolbox);
-    d->toolbox->setLayout(d->toolboxLayout);
 
     //set the extender we want to move to.
     setExtender(hostExtender);
