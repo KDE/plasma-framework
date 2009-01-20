@@ -1853,7 +1853,7 @@ AppletPrivate::AppletPrivate(KService::Ptr service, int uniqueID, Applet *applet
           shortcutEditor(0),
           constraintsTimerId(0),
           modificationsTimerId(-1),
-          hasConfigurationInterface(true),
+          hasConfigurationInterface(false),
           failed(false),
           isContainment(false),
           transient(false),
@@ -1966,6 +1966,7 @@ void AppletPrivate::init()
     }
 
     q->setBackgroundHints(Applet::DefaultBackground);
+    q->setHasConfigurationInterface(true);
 
     QObject::connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()), q, SLOT(themeChanged()));
 }
