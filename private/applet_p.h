@@ -79,6 +79,9 @@ public:
     void addGlobalShortcutsPage(KConfigDialog *dialog);
     void clearShortcutEditorPtr();
     void configDialogFinished();
+    void generateGenericConfigDialog();
+    QString configDialogId() const;
+    QString configWindowTitle() const;
 
     static uint s_maxAppletId;
     static uint s_maxZValue;

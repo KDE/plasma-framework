@@ -21,6 +21,7 @@
 
 #include "applet.h"
 #include "package.h"
+#include "private/applet_p.h"
 
 namespace Plasma
 {
@@ -123,6 +124,9 @@ void AppletScript::configNeedsSaving() const
 
 void AppletScript::showConfigurationInterface()
 {
+    if (applet()) {
+        applet()->d->generateGenericConfigDialog();
+    }
 }
 
 void AppletScript::configChanged()

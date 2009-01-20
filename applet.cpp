@@ -1394,7 +1394,7 @@ void Applet::showConfigurationInterface()
     }
 
     const QString dialogId = QString("%1settings%2").arg(id()).arg(name());
-    KConfigDialog * dlg = KConfigDialog::exists(dialogId);
+    KConfigDialog *dlg = KConfigDialog::exists(d->configDialogId());
 
     if (dlg) {
         KWindowSystem::setOnDesktop(dlg->winId(), KWindowSystem::currentDesktop());
@@ -1403,7 +1403,6 @@ void Applet::showConfigurationInterface()
         return;
     }
 
-    const QString windowTitle = i18nc("@title:window", "%1 Settings", name());
     if (d->package && d->configLoader) {
         QString uiFile = d->package->filePath("mainconfigui");
         if (uiFile.isEmpty()) {
@@ -1411,7 +1410,7 @@ void Applet::showConfigurationInterface()
         }
 
         KConfigDialog *dialog = new KConfigDialog(0, dialogId, d->configLoader);
-        dialog->setWindowTitle(windowTitle);
+        dialog->setWindowTitle(d->configWindowTitle());
         dialog->setAttribute(Qt::WA_DeleteOnClose, true);
 
         QUiLoader loader;
@@ -1436,26 +1435,40 @@ void Applet::showConfigurationInterface()
         connect(dialog, SIGNAL(finished()), this, SLOT(configDialogFinished()));
         dialog->show();
     } else if (d->script) {
-        //FIXME: global shorcuts?
         d->script->showConfigurationInterface();
     } else {
-        KConfigSkeleton *nullManager = new KConfigSkeleton(0);
-        KConfigDialog *dialog = new KConfigDialog(0, dialogId, nullManager);
-        dialog->setFaceType(KPageDialog::Auto);
-        dialog->setWindowTitle(windowTitle);
-        dialog->setAttribute(Qt::WA_DeleteOnClose, true);
-        createConfigurationInterface(dialog);
-        d->addGlobalShortcutsPage(dialog);
-        connect(dialog, SIGNAL(finished()), nullManager, SLOT(deleteLater()));
-        //TODO: Apply button does not correctly work for now, so do not show it
-        dialog->showButton(KDialog::Apply, false);
-        connect(dialog, SIGNAL(applyClicked()), this, SLOT(configDialogFinished()));
-        connect(dialog, SIGNAL(okClicked()), this, SLOT(configDialogFinished()));
-        connect(dialog, SIGNAL(finished()), this, SLOT(configDialogFinished()));
-        dialog->show();
+        d->generateGenericConfigDialog();
     }
 
     emit releaseVisualFocus();
+}
+
+QString AppletPrivate::configDialogId() const
+{
+    return QString("%1settings%2").arg(appletId).arg(q->name());
+}
+
+QString AppletPrivate::configWindowTitle() const
+{
+    return i18nc("@title:window", "%1 Settings", q->name());
+}
+
+void AppletPrivate::generateGenericConfigDialog()
+{
+    KConfigSkeleton *nullManager = new KConfigSkeleton(0);
+    KConfigDialog *dialog = new KConfigDialog(0, configDialogId(), nullManager);
+    dialog->setFaceType(KPageDialog::Auto);
+    dialog->setWindowTitle(configWindowTitle());
+    dialog->setAttribute(Qt::WA_DeleteOnClose, true);
+    q->createConfigurationInterface(dialog);
+    addGlobalShortcutsPage(dialog);
+    //TODO: Apply button does not correctly work for now, so do not show it
+    dialog->showButton(KDialog::Apply, false);
+    QObject::connect(dialog, SIGNAL(applyClicked()), q, SLOT(configDialogFinished()));
+    QObject::connect(dialog, SIGNAL(okClicked()), q, SLOT(configDialogFinished()));
+    QObject::connect(dialog, SIGNAL(finished()), q, SLOT(configDialogFinished()));
+    QObject::connect(dialog, SIGNAL(finished()), nullManager, SLOT(deleteLater()));
+    dialog->show();
 }
 
 void AppletPrivate::addGlobalShortcutsPage(KConfigDialog *dialog)
