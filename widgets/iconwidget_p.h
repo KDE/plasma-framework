@@ -179,6 +179,8 @@ public:
 
     void actionDestroyed(QObject *obj);
     void readColors();
+    void colorConfigChanged();
+    void iconConfigChanged();
     void hoverAnimationUpdate(qreal progress);
     void init();
     void layoutIcons(const QStyleOptionGraphicsItem *option);

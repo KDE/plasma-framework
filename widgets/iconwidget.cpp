@@ -88,6 +88,19 @@ void IconWidgetPrivate::readColors()
     shadowColor = Plasma::Theme::defaultTheme()->color(Theme::BackgroundColor);
 }
 
+void IconWidgetPrivate::colorConfigChanged()
+{
+    readColors();
+    q->update();
+}
+
+void IconWidgetPrivate::iconConfigChanged()
+{
+    if (!icon.isNull()) {
+        q->update();
+    }
+}
+
 IconAction::IconAction(IconWidget *icon, QAction *action)
     : m_icon(icon),
       m_action(action),
@@ -296,8 +309,9 @@ IconWidget::~IconWidget()
 void IconWidgetPrivate::init()
 {
     readColors();
-    QObject::connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()), q, SLOT(readColors()));
-    QObject::connect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()), q, SLOT(readColors()));
+    QObject::connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()), q, SLOT(colorConfigChanged()));
+    QObject::connect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()), q, SLOT(colorConfigChanged()));
+    QObject::connect(KGlobalSettings::self(), SIGNAL(iconChanged(int)), q, SLOT(iconConfigChanged()));
 
     // setAcceptedMouseButtons(Qt::LeftButton);
     q->setAcceptsHoverEvents(true);
@@ -517,6 +531,7 @@ void IconWidget::setSvg(const QString &svgFilePath, const QString &elementId)
     d->iconSvg->setContainsMultipleImages(!elementId.isNull());
     d->iconSvgElement = elementId;
     d->iconSvgElementChanged = true;
+    d->icon = QIcon();
     update();
 }
 
