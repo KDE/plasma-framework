@@ -281,8 +281,9 @@ private:
     Q_PRIVATE_SLOT(d, void clearAction())
     Q_PRIVATE_SLOT(d, void svgChanged())
     Q_PRIVATE_SLOT(d, void actionDestroyed(QObject *obj))
-    Q_PRIVATE_SLOT(d, void readColors())
     Q_PRIVATE_SLOT(d, void hoverAnimationUpdate(qreal progress))
+    Q_PRIVATE_SLOT(d, void colorConfigChanged())
+    Q_PRIVATE_SLOT(d, void iconConfigChanged())
 
     IconWidgetPrivate * const d;
     friend class IconWidgetPrivate;
