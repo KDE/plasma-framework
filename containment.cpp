@@ -148,7 +148,7 @@ void Containment::init()
     appletBrowserAction->setEnabled(unlocked);
     connect(appletBrowserAction, SIGNAL(triggered()), this, SLOT(triggerShowAddWidgets()));
     appletBrowserAction->setShortcutContext(Qt::WidgetShortcut);
-    //appletBrowserAction->setShortcut(QKeySequence("ctrl+a")); //FIXME in KDE 4.3, see bug #165938
+    appletBrowserAction->setShortcut(QKeySequence("alt+d,a"));
     d->actions().addAction("add widgets", appletBrowserAction);
 
     QAction *configureActivityAction = new QAction(i18n("Appearance Settings"), this);
@@ -157,20 +157,22 @@ void Containment::init()
     configureActivityAction->setVisible(canConfig);
     configureActivityAction->setEnabled(canConfig);
     connect(configureActivityAction, SIGNAL(triggered()), this, SLOT(requestConfiguration()));
+    appletBrowserAction->setShortcutContext(Qt::WidgetShortcut);
+    configureActivityAction->setShortcut(QKeySequence("alt+d,alt+s"));
     d->actions().addAction("activity settings", configureActivityAction);
 
     QAction *action = new QAction(i18n("Next Widget"), this);
     //no icon
     connect(action, SIGNAL(triggered()), this, SLOT(focusNextApplet()));
     action->setShortcutContext(Qt::WidgetShortcut);
-    action->setShortcut(QKeySequence("ctrl+n"));
+    action->setShortcut(QKeySequence("alt+d,n"));
     d->actions().addAction("next applet", action);
 
     action = new QAction(i18n("Previous Widget"), this);
     //no icon
     connect(action, SIGNAL(triggered()), this, SLOT(focusPreviousApplet()));
     action->setShortcutContext(Qt::WidgetShortcut);
-    action->setShortcut(QKeySequence("ctrl+p"));
+    action->setShortcut(QKeySequence("alt+d,p"));
     d->actions().addAction("previous applet", action);
 
     if (immutability() != SystemImmutable) {
@@ -182,7 +184,7 @@ void Containment::init()
         connect(lockDesktopAction, SIGNAL(triggered(bool)),
                 this, SLOT(toggleDesktopImmutability()));
         lockDesktopAction->setShortcutContext(Qt::WidgetShortcut);
-        lockDesktopAction->setShortcut(QKeySequence("ctrl+l"));
+        lockDesktopAction->setShortcut(QKeySequence("alt+d,l"));
         d->actions().addAction("lock widgets", lockDesktopAction);
     }
 
@@ -194,8 +196,8 @@ void Containment::init()
         zoomAction->setShortcutContext(Qt::WidgetShortcut);
         //two shortcuts because I hate ctrl-+ but others expect it
         QList<QKeySequence> keys;
-        keys << QKeySequence(QKeySequence::ZoomIn);
-        keys << QKeySequence("ctrl+=");
+        keys << QKeySequence("alt+d,+");
+        keys << QKeySequence("alt+d,=");
         zoomAction->setShortcuts(keys);
         d->actions().addAction("zoom in", zoomAction);
 
@@ -203,7 +205,7 @@ void Containment::init()
         zoomAction->setIcon(KIcon("zoom-out"));
         connect(zoomAction, SIGNAL(triggered(bool)), this, SLOT(zoomOut()));
         zoomAction->setShortcutContext(Qt::WidgetShortcut);
-        zoomAction->setShortcut(QKeySequence(QKeySequence::ZoomOut));
+        zoomAction->setShortcut(QKeySequence("alt+d,-"));
         d->actions().addAction("zoom out", zoomAction);
 
         QAction *activityAction = new QAction(i18n("Add Activity"), this);
@@ -212,7 +214,7 @@ void Containment::init()
         activityAction->setEnabled(unlocked);
         connect(activityAction, SIGNAL(triggered(bool)), this, SLOT(addSiblingContainment()));
         activityAction->setShortcutContext(Qt::WidgetShortcut);
-        activityAction->setShortcut(QKeySequence("ctrl+shift+a"));
+        activityAction->setShortcut(QKeySequence("alt+d,alt+a"));
         d->actions().addAction("add sibling containment", activityAction);
 
         if (d->type == DesktopContainment && d->toolBox) {

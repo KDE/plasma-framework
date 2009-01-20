@@ -911,9 +911,9 @@ void Applet::flushPendingConstraintsEvents()
         closeApplet->setShortcutContext(Qt::WidgetShortcut); //don't clash with other views
         closeApplet->setText(i18nc("%1 is the name of the applet", "Remove this %1", name()));
         if (isContainment()) {
-            closeApplet->setShortcut(QKeySequence("ctrl+shift+r"));
+            closeApplet->setShortcut(QKeySequence("alt+d,alt+r"));
         } else {
-            closeApplet->setShortcut(QKeySequence("ctrl+r"));
+            closeApplet->setShortcut(QKeySequence("alt+d,r"));
         }
         connect(closeApplet, SIGNAL(triggered(bool)), this, SLOT(selectItemToDestroy()));
         d->actions.addAction("remove", closeApplet);
@@ -1289,10 +1289,10 @@ void Applet::setHasConfigurationInterface(bool hasInterface)
             configAction->setVisible(canConfig);
             configAction->setEnabled(canConfig);
             if (isContainment()) {
-                //kDebug() << "I am a containment";
-                configAction->setShortcut(QKeySequence("ctrl+shift+s"));
+                //FIXME containments don't seem to use this action any more
+                //configAction->setShortcut(QKeySequence("ctrl+shift+s"));
             } else {
-                configAction->setShortcut(QKeySequence("ctrl+s"));
+                configAction->setShortcut(QKeySequence("alt+d,s"));
             }
             connect(configAction, SIGNAL(triggered(bool)),
                     this, SLOT(showConfigurationInterface()));
