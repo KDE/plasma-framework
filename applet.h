@@ -565,6 +565,16 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          */
         bool destroyed() const;
 
+        /**
+         * Reimplement this method so provide a configuration interface,
+         * parented to the supplied widget. Ownership of the widgets is passed
+         * to the parent widget.
+         *
+         * @param parent the dialog which is the parent of the configuration
+         *               widgets
+         */
+        virtual void createConfigurationInterface(KConfigDialog *parent);
+
     Q_SIGNALS:
         /**
          * This signal indicates that an application launch, window
@@ -730,16 +740,6 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         void setConfigurationRequired(bool needsConfiguring, const QString &reason = QString());
 
         /**
-         * Reimplement this method so provide a configuration interface,
-         * parented to the supplied widget. Ownership of the widgets is passed
-         * to the parent widget.
-         *
-         * @param parent the dialog which is the parent of the configuration
-         *               widgets
-         */
-        virtual void createConfigurationInterface(KConfigDialog *parent);
-
-        /**
          * Called when any of the geometry constraints have been updated.
          *
          * This is always called prior to painting and should be used as an
@@ -776,7 +776,6 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          * @return true if it is registered, false otherwise
          */
         bool isRegisteredAsDragHandle(QGraphicsItem *item);
-
 
         /**
          * @return the extender of this applet.
