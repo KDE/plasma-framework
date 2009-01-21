@@ -152,9 +152,9 @@ public:
             containment->setFormFactor(Plasma::Planar);
         }
 
+        q->addItem(containment);
         static_cast<Applet*>(containment)->d->setIsContainment(true);
         containments.append(containment);
-        q->addItem(containment);
 
         if (!delayedInit) {
             containment->init();
@@ -300,7 +300,6 @@ void Corona::loadLayout(const QString &configName)
             continue;
         }
 
-        //addItem(c);
         c->init();
         c->restore(containmentConfig);
     }
