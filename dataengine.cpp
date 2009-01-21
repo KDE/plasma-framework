@@ -636,9 +636,10 @@ DataContainer *DataEnginePrivate::requestSource(const QString &sourceName, bool 
 void DataEnginePrivate::trimQueue()
 {
     uint queueCount = sourceQueue.count();
-    while (queueCount >= limit) {
+    while (queueCount >= limit && !sourceQueue.isEmpty()) {
         DataContainer *punted = sourceQueue.dequeue();
         q->removeSource(punted->objectName());
+        queueCount = sourceQueue.count();
     }
 }
 
