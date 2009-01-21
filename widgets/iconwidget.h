@@ -59,7 +59,9 @@ class PLASMA_EXPORT IconWidget : public QGraphicsWidget
     Q_PROPERTY(QIcon icon READ icon WRITE setIcon)
     Q_PROPERTY(QSizeF iconSize READ iconSize)
     Q_PROPERTY(QString svg WRITE setSvg)
-//    Q_PROPERTY(QAction action READ action WRITE setAction)
+    Q_PROPERTY(QAction *action READ action WRITE setAction)
+    Q_PROPERTY(Qt::Orientation orientation READ orientation WRITE setOrientation)
+    Q_PROPERTY(int numDisplayLines READ numDisplayLines WRITE setNumDisplayLines)
 
 public:
     /**
@@ -170,6 +172,11 @@ public:
     * @param orientation the orientation we want
     */
     void setOrientation(Qt::Orientation orientation);
+
+    /**
+     * @return the orientation of the icon
+     */
+    Qt::Orientation orientation() const;
 
     /**
     * inverts the layout of the icons if the orientation is horizontal,

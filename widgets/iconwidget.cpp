@@ -1224,6 +1224,11 @@ void IconWidget::setOrientation(Qt::Orientation orientation)
     resize(sizeFromIconSize(d->iconSize.width()));
 }
 
+Qt::Orientation IconWidget::orientation() const
+{
+    return d->orientation;
+}
+
 void IconWidget::invertLayout(bool invert)
 {
     d->invertLayout = invert;
