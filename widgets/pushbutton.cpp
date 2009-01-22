@@ -146,6 +146,8 @@ PushButton::PushButton(QGraphicsWidget *parent)
     setWidget(native);
     native->setAttribute(Qt::WA_NoSystemBackground);
 
+    setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+
     d->background = new FrameSvg(this);
     d->background->setImagePath("widgets/button");
     d->background->setCacheAllRenderedFrames(true);
