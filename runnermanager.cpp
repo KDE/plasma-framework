@@ -1,7 +1,7 @@
 /*
  *   Copyright (C) 2006 Aaron Seigo <aseigo@kde.org>
- *   Copyright (C) 2007 Ryan P. Bitanga <ryan.bitanga@gmail.com>
- *   Copyright (2) 2008 Jordi Polo <mumismo@gmail.com>
+ *   Copyright (C) 2007, 2009 Ryan P. Bitanga <ryan.bitanga@gmail.com>
+ *   Copyright (C) 2008 Jordi Polo <mumismo@gmail.com>
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU Library General Public License as
@@ -91,7 +91,7 @@ RunnerRestrictionPolicy::~RunnerRestrictionPolicy()
 {
 }
 
-RunnerRestrictionPolicy &RunnerRestrictionPolicy::instance()
+RunnerRestrictionPolicy& RunnerRestrictionPolicy::instance()
 {
     static RunnerRestrictionPolicy policy;
     return policy;
@@ -126,6 +126,35 @@ void RunnerRestrictionPolicy::destructed(Job *job)
     Q_UNUSED(job)
 }
 
+// QueuePolicy that limits the instances of a particular runner
+class DefaultRunnerPolicy : public ThreadWeaver::QueuePolicy
+{
+public:
+    ~DefaultRunnerPolicy();
+
+    static DefaultRunnerPolicy &instance();
+
+    void setCap(int cap)
+    {
+        m_cap = cap;
+    }
+    int cap() const
+    {
+        return m_cap;
+    }
+
+    bool canRun(Job *job);
+    void free(Job *job);
+    void release(Job *job);
+    void destructed(Job *job);
+private:
+    DefaultRunnerPolicy();
+
+    int m_cap;
+    QHash<QString, int> m_runCounts;
+    QMutex m_mutex;
+};
+
 /*****************************************************
 *  FindMatchesJob class
 * Class to run queries in different threads
@@ -137,7 +166,7 @@ public:
                    Plasma::RunnerContext *context, QObject *parent = 0);
 
     int priority() const;
-    Plasma::AbstractRunner *runner() const;
+    Plasma::AbstractRunner* runner() const;
 
 protected:
     void run();
@@ -154,6 +183,8 @@ FindMatchesJob::FindMatchesJob(Plasma::AbstractRunner *runner,
 {
     if (runner->speed() == Plasma::AbstractRunner::SlowSpeed) {
         assignQueuePolicy(&RunnerRestrictionPolicy::instance());
+    } else {
+        assignQueuePolicy(&DefaultRunnerPolicy::instance());
     }
 }
 
@@ -169,9 +200,58 @@ int FindMatchesJob::priority() const
     return m_runner->priority();
 }
 
-Plasma::AbstractRunner *FindMatchesJob::runner() const
+Plasma::AbstractRunner* FindMatchesJob::runner() const
 {
     return m_runner;
+}
+
+DefaultRunnerPolicy::DefaultRunnerPolicy()
+    : QueuePolicy(),
+      m_cap(2)
+{
+}
+
+DefaultRunnerPolicy::~DefaultRunnerPolicy()
+{
+}
+
+DefaultRunnerPolicy& DefaultRunnerPolicy::instance()
+{
+    static DefaultRunnerPolicy policy;
+    return policy;
+}
+
+bool DefaultRunnerPolicy::canRun(Job *job)
+{
+    QMutexLocker l(&m_mutex);
+
+    Plasma::AbstractRunner *runner = static_cast<FindMatchesJob*>(job)->runner();
+
+    if (m_runCounts[runner->name()] > m_cap) {
+        return false;
+    } else {
+        ++m_runCounts[runner->name()];
+        return true;
+    }
+}
+
+void DefaultRunnerPolicy::free(Job *job)
+{
+    QMutexLocker l(&m_mutex);
+
+    Plasma::AbstractRunner *runner = static_cast<FindMatchesJob*>(job)->runner();
+
+    --m_runCounts[runner->name()];
+}
+
+void DefaultRunnerPolicy::release(Job *job)
+{
+    free(job);
+}
+
+void DefaultRunnerPolicy::destructed(Job *job)
+{
+    Q_UNUSED(job)
 }
 
 /*****************************************************
@@ -213,9 +293,11 @@ public:
         const int numThreads = qMin(maxThreads, 2 + ((numProcs - 1) * 2));
         //kDebug() << "setting up" << numThreads << "threads for" << numProcs << "processors";
         Weaver::instance()->setMaximumNumberOfThreads(numThreads);
-
-        //Preferred order of execution of runners
-        //prioritylist = config.readEntry("priority", QStringList());
+        // Limit the number of instances of a single normal speed runner and all of the slow runners
+        // to half the number of threads
+        const int cap = qMax(2, numThreads/2);
+        DefaultRunnerPolicy::instance().setCap(cap);
+        RunnerRestrictionPolicy::instance().setCap(cap);
 
         //If set, this list defines which runners won't be used at runtime
         //blacklist = config.readEntry("blacklist", QStringList());
@@ -340,7 +422,7 @@ void RunnerManager::reloadConfiguration()
     d->loadRunners();
 }
 
-AbstractRunner *RunnerManager::runner(const QString &name) const
+AbstractRunner* RunnerManager::runner(const QString &name) const
 {
     if (d->runners.isEmpty()) {
         d->loadRunners();
@@ -349,7 +431,7 @@ AbstractRunner *RunnerManager::runner(const QString &name) const
     return d->runners.value(name, 0);
 }
 
-RunnerContext *RunnerManager::searchContext() const
+RunnerContext* RunnerManager::searchContext() const
 {
     return &d->context;
 }
