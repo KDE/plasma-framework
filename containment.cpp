@@ -97,6 +97,7 @@ Containment::Containment(QGraphicsItem *parent,
     setPos(0, 0);
     setBackgroundHints(NoBackground);
     setContainmentType(CustomContainment);
+    setHasConfigurationInterface(false);
 }
 
 Containment::Containment(QObject *parent, const QVariantList &args)
@@ -107,15 +108,11 @@ Containment::Containment(QObject *parent, const QVariantList &args)
     //          that requires a scene, which is not available at this point
     setPos(0, 0);
     setBackgroundHints(NoBackground);
+    setHasConfigurationInterface(false);
 }
 
 Containment::~Containment()
 {
-    if (Applet::d->transient) {
-        Applet::d->resetConfigurationObject();
-        Applet::d->transient = false;
-    }
-
     delete d;
 }
 
@@ -150,16 +147,6 @@ void Containment::init()
     appletBrowserAction->setShortcutContext(Qt::WidgetShortcut);
     appletBrowserAction->setShortcut(QKeySequence("alt+d,a"));
     d->actions().addAction("add widgets", appletBrowserAction);
-
-    QAction *configureActivityAction = new QAction(i18n("Appearance Settings"), this);
-    configureActivityAction->setIcon(KIcon("configure"));
-    bool canConfig = unlocked || KAuthorized::authorize("PlasmaAllowConfigureWhenLocked");
-    configureActivityAction->setVisible(canConfig);
-    configureActivityAction->setEnabled(canConfig);
-    connect(configureActivityAction, SIGNAL(triggered()), this, SLOT(requestConfiguration()));
-    appletBrowserAction->setShortcutContext(Qt::WidgetShortcut);
-    configureActivityAction->setShortcut(QKeySequence("alt+d,alt+s"));
-    d->actions().addAction("activity settings", configureActivityAction);
 
     QAction *action = new QAction(i18n("Next Widget"), this);
     //no icon
@@ -226,13 +213,13 @@ void Containment::init()
             if (immutability() != SystemImmutable) {
                 d->toolBox->addTool(this->action("lock widgets"));
             }
-            d->toolBox->addTool(this->action("activity settings"));
-            if (hasConfigurationInterface()) {
-                // re-use the contianment's action.
-                QAction *configureContainment = this->action("configure");
-                if (configureContainment) {
-                    d->toolBox->addTool(this->action("configure"));
-                }
+
+            //TODO: do we need some way to allow this be overridden?
+            //      it's always available because shells rely on this
+            //      to offer their own custom configuration as well
+            QAction *configureContainment = this->action("configure");
+            if (configureContainment) {
+                d->toolBox->addTool(configureContainment);
             }
         }
 
@@ -304,6 +291,10 @@ void Containment::restore(KConfigGroup &group)
 
 void Containment::save(KConfigGroup &g) const
 {
+    if (Applet::d->transient) {
+        return;
+    }
+
     KConfigGroup group = g;
     if (!group.isValid()) {
         group = config();
@@ -496,6 +487,8 @@ void ContainmentPrivate::containmentActions(KMenu &desktopMenu)
     //find the separator to insert the activity settings before it
     QAction *separatorAction = 0;
 
+    //TODO: should a submenu be created if there are too many containment specific
+    //      actions? see folderview containment
     foreach (QAction *action, actions) {
         if (action) {
             desktopMenu.addAction(action);
@@ -507,13 +500,8 @@ void ContainmentPrivate::containmentActions(KMenu &desktopMenu)
 
     desktopMenu.addSeparator();
 
-    //TODO: should a submenu be created if there are too many containment specific
-    //      actions? see folderview containment
     if (q->containmentType() == Containment::DesktopContainment) {
-        desktopMenu.insertAction(separatorAction, q->action("activity settings"));
-        if (q->hasConfigurationInterface()) {
-            desktopMenu.addAction(q->action("configure"));
-        }
+        desktopMenu.addAction(q->action("configure"));
     }
 }
 
@@ -1603,15 +1591,6 @@ void ContainmentPrivate::containmentConstraintsEvent(Plasma::Constraints constra
         if (action) {
             action->setText(unlocked ? i18n("Lock Widgets") : i18n("Unlock Widgets"));
             action->setIcon(KIcon(unlocked ? "object-locked" : "object-unlocked"));
-        }
-
-        bool canConfig = unlocked || KAuthorized::authorize("PlasmaAllowConfigureWhenLocked");
-        if (canConfig) {
-            action = actions().action("activity settings");
-            if (action) {
-                action->setVisible(canConfig);
-                action->setEnabled(canConfig);
-            }
         }
 
         // tell the applets too

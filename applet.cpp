@@ -135,9 +135,7 @@ Applet::Applet(QObject *parentObject, const QVariantList &args)
 
 Applet::~Applet()
 {
-    if (d->transient) {
-        d->resetConfigurationObject();
-    } else if (d->extender) {
+    if (!d->transient && d->extender) {
         //This would probably be nicer if it was located in extender. But in it's dtor, this won't
         //work since when that get's called, the applet's config() isn't accessible anymore. (same
         //problem with calling saveState(). Doing this in saveState() might be a possibility, but
@@ -343,12 +341,20 @@ void Applet::saveState(KConfigGroup &group) const
 
 KConfigGroup Applet::config(const QString &group) const
 {
+    if (d->transient) {
+        return KConfigGroup(KGlobal::config(), "PlasmaTransientsConfig");
+    }
+
     KConfigGroup cg = config();
     return KConfigGroup(&cg, group);
 }
 
 KConfigGroup Applet::config() const
 {
+    if (d->transient) {
+        return KConfigGroup(KGlobal::config(), "PlasmaTransientsConfig");
+    }
+
     if (d->isContainment) {
         return *(d->mainConfigGroup());
     }
@@ -383,15 +389,9 @@ void Applet::destroy()
     if (isContainment()) {
         d->cleanUpAndDelete();
     } else {
-        d->resetConfigurationObject();
         connect(Animator::self(), SIGNAL(animationFinished(QGraphicsItem*,Plasma::Animator::Animation)),
                 this, SLOT(appletAnimationComplete(QGraphicsItem*,Plasma::Animator::Animation)));
         Animator::self()->animateItem(this, Animator::DisappearAnimation);
-    }
-
-    Corona * corona = qobject_cast<Corona*>(scene());
-    if (corona) {
-        corona->requireConfigSync();
     }
 }
 
@@ -412,7 +412,7 @@ void AppletPrivate::appletAnimationComplete(QGraphicsItem *item, Plasma::Animato
 void AppletPrivate::selectItemToDestroy()
 {
     //FIXME: this will not work nicely with multiple screens and being zoomed out!
-    if (q->isContainment()) {
+    if (isContainment) {
         QGraphicsView *view = q->view();
         if (view && view->transform().isScaling() &&
             q->scene()->focusItem() != q) {
@@ -439,12 +439,12 @@ void AppletPrivate::updateRect(const QRectF &rect)
 
 void AppletPrivate::cleanUpAndDelete()
 {
-    //kDebug() << "???????????????? DESTROYING APPLET" << name() << " ???????????????????????????";
+    //kDebug() << "???????????????? DESTROYING APPLET" << q->name() << q->scene() << " ???????????????????????????";
     QGraphicsWidget *parent = dynamic_cast<QGraphicsWidget *>(q->parentItem());
     //it probably won't matter, but right now if there are applethandles, *they* are the parent.
     //not the containment.
 
-    //is the applet in a containment and is the containment have a layout?
+    //is the applet in a containment and does the containment have a layout?
     //if yes, we remove the applet in the layout
     if (parent && parent->layout()) {
         QGraphicsLayout *l = parent->layout();
@@ -459,6 +459,8 @@ void AppletPrivate::cleanUpAndDelete()
     if (configLoader) {
         configLoader->setDefaults();
     }
+
+    resetConfigurationObject();
 
     q->scene()->removeItem(q);
     q->deleteLater();
@@ -632,7 +634,7 @@ bool Applet::isBusy() const
 
 QString Applet::name() const
 {
-    if (isContainment()) {
+    if (d->isContainment) {
         if (!d->appletDescription.isValid()) {
             return i18n("Unknown Activity");
         }
@@ -910,7 +912,7 @@ void Applet::flushPendingConstraintsEvents()
         closeApplet->setVisible(unlocked);
         closeApplet->setShortcutContext(Qt::WidgetShortcut); //don't clash with other views
         closeApplet->setText(i18nc("%1 is the name of the applet", "Remove this %1", name()));
-        if (isContainment()) {
+        if (d->isContainment) {
             closeApplet->setShortcut(QKeySequence("alt+d,alt+r"));
         } else {
             closeApplet->setShortcut(QKeySequence("alt+d,r"));
@@ -969,7 +971,7 @@ void Applet::flushPendingConstraintsEvents()
 
     if (c & Plasma::FormFactorConstraint) {
         FormFactor f = formFactor();
-        if (!isContainment() && f != Vertical && f != Horizontal) {
+        if (!d->isContainment && f != Vertical && f != Horizontal) {
             setBackgroundHints(d->backgroundHints | StandardBackground);
         } else if(d->backgroundHints & StandardBackground) {
             setBackgroundHints(d->backgroundHints ^ StandardBackground);
@@ -1011,7 +1013,7 @@ void Applet::flushPendingConstraintsEvents()
 
     // now take care of constraints in special subclasses: Contaiment and PopupApplet
     Containment* containment = qobject_cast<Plasma::Containment*>(this);
-    if (isContainment() && containment) {
+    if (d->isContainment && containment) {
         containment->d->containmentConstraintsEvent(c);
     }
 
@@ -1057,7 +1059,7 @@ void Applet::addAction(QString name, QAction *action)
 void Applet::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     if (!d->started) {
-        kDebug() << "not started";
+        //kDebug() << "not started";
         return;
     }
 
@@ -1074,7 +1076,7 @@ void Applet::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
     }
 
     if (d->failed) {
-        kDebug() << "failed!";
+        //kDebug() << "failed!";
         return;
     }
 
@@ -1083,7 +1085,7 @@ void Applet::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
     QRect contentsRect = QRectF(QPointF(0, 0),
                                 boundingRect().size()).adjusted(left, top, -right, -bottom).toRect();
 
-    if (widget && isContainment()) {
+    if (widget && d->isContainment) {
         // note that the widget we get is actually the viewport of the view, not the view itself
         View* v = qobject_cast<Plasma::View*>(widget->parent());
         Containment* c = qobject_cast<Plasma::Containment*>(this);
@@ -1146,7 +1148,7 @@ FormFactor Applet::formFactor() const
 
 Containment *Applet::containment() const
 {
-    if (isContainment()) {
+    if (d->isContainment) {
         Containment *c = qobject_cast<Containment*>(const_cast<Applet*>(this));
         if (c) {
             return c;
@@ -1158,7 +1160,7 @@ Containment *Applet::containment() const
 
     while (parent) {
         Containment *possibleC = dynamic_cast<Containment*>(parent);
-        if (possibleC && possibleC->isContainment()) {
+        if (possibleC && possibleC->Applet::d->isContainment) {
             c = possibleC;
             break;
         }
@@ -1288,17 +1290,17 @@ void Applet::setHasConfigurationInterface(bool hasInterface)
             bool canConfig = unlocked || KAuthorized::authorize("PlasmaAllowConfigureWhenLocked");
             configAction->setVisible(canConfig);
             configAction->setEnabled(canConfig);
-            if (isContainment()) {
+            if (d->isContainment) {
                 //FIXME containments don't seem to use this action any more
                 //configAction->setShortcut(QKeySequence("ctrl+shift+s"));
+                connect(configAction, SIGNAL(triggered()), this, SLOT(requestConfiguration()));
             } else {
                 configAction->setShortcut(QKeySequence("alt+d,s"));
+                connect(configAction, SIGNAL(triggered(bool)), this, SLOT(showConfigurationInterface()));
             }
-            connect(configAction, SIGNAL(triggered(bool)),
-                    this, SLOT(showConfigurationInterface()));
             d->actions.addAction("configure", configAction);
         }
-    } else {
+    } else if (!d->isContainment || !qobject_cast<Plasma::Containment*>(this)) {
         d->actions.removeAction(configAction);
     }
 }
@@ -1393,7 +1395,6 @@ void Applet::showConfigurationInterface()
         return;
     }
 
-    const QString dialogId = QString("%1settings%2").arg(id()).arg(name());
     KConfigDialog *dlg = KConfigDialog::exists(d->configDialogId());
 
     if (dlg) {
@@ -1409,7 +1410,7 @@ void Applet::showConfigurationInterface()
             return;
         }
 
-        KConfigDialog *dialog = new KConfigDialog(0, dialogId, d->configLoader);
+        KConfigDialog *dialog = new KConfigDialog(0, d->configDialogId(), d->configLoader);
         dialog->setWindowTitle(d->configWindowTitle());
         dialog->setAttribute(Qt::WA_DeleteOnClose, true);
 
@@ -1813,6 +1814,9 @@ void AppletPrivate::setIsContainment(bool nowIsContainment)
 
     isContainment = nowIsContainment;
 
+    delete mainConfig;
+    mainConfig = 0;
+
     Containment *c = qobject_cast<Containment*>(q);
     if (c) {
         if (isContainment) {
@@ -1821,6 +1825,20 @@ void AppletPrivate::setIsContainment(bool nowIsContainment)
         } else {
             delete c->d->toolBox;
             c->d->toolBox = 0;
+        }
+    }
+
+    QAction *configAction = actions.action("configure");
+    if (configAction) {
+        QObject::disconnect(configAction, SIGNAL(triggered()), q, SLOT(requestConfiguration()));
+        QObject::disconnect(configAction, SIGNAL(triggered(bool)), q, SLOT(showConfigurationInterface()));
+        if (nowIsContainment) {
+            //kDebug() << "I am a containment";
+            configAction->setShortcut(QKeySequence("ctrl+shift+s"));
+            QObject::connect(configAction, SIGNAL(triggered()), q, SLOT(requestConfiguration()));
+        } else {
+            configAction->setShortcut(QKeySequence("ctrl+s"));
+            QObject::connect(configAction, SIGNAL(triggered(bool)), q, SLOT(showConfigurationInterface()));
         }
     }
 }
@@ -2057,7 +2075,7 @@ KConfigGroup *AppletPrivate::mainConfigGroup()
     if (isContainment) {
         Corona *corona = qobject_cast<Corona*>(q->scene());
         KConfigGroup containmentConfig;
-        //kDebug() << "got a corona, baby?" << (QObject*)corona;
+        //kDebug() << "got a corona, baby?" << (QObject*)corona << (QObject*)q;
 
         if (corona) {
             containmentConfig = KConfigGroup(corona->config(), "Containments");
@@ -2131,6 +2149,11 @@ void AppletPrivate::resetConfigurationObject()
     mainConfig->deleteGroup();
     delete mainConfig;
     mainConfig = 0;
+
+    Corona * corona = qobject_cast<Corona*>(q->scene());
+    if (corona) {
+        corona->requireConfigSync();
+    }
 }
 
 uint AppletPrivate::s_maxAppletId = 0;

@@ -204,6 +204,9 @@ Corona::Corona(QObject *parent)
 
 Corona::~Corona()
 {
+    KConfigGroup trans(KGlobal::config(), "PlasmaTransientsConfig");
+    trans.deleteGroup();
+
     // FIXME: Same fix as in Plasma::View - make sure that when the focused widget is
     //        destroyed we don't try to transfer it to something that's already been
     //        deleted.
