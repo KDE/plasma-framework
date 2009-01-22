@@ -988,27 +988,22 @@ void Applet::flushPendingConstraintsEvents()
             }
         }
     }
-
     if (c & Plasma::SizeConstraint || c & Plasma::FormFactorConstraint) {
-        if (aspectRatioMode() == Plasma::Square) {
+        if (aspectRatioMode() == Plasma::Square || aspectRatioMode() == Plasma::ConstrainedSquare) {
             // enforce square size in panels
             if (formFactor() == Horizontal) {
                 setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding));
             } else if (formFactor() == Vertical) {
                 setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed));
             }
-
-            updateGeometry();
-        } else if (aspectRatioMode() == Plasma::ConstrainedSquare) {
-            // enforce a constrained square size in panels
+        } else {
             if (formFactor() == Horizontal) {
-                setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding));
+                setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding));
             } else if (formFactor() == Vertical) {
-                setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed));
+                setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred));
             }
-
-            updateGeometry();
         }
+        updateGeometry();
     }
 
     // now take care of constraints in special subclasses: Contaiment and PopupApplet
