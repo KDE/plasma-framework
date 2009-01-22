@@ -140,20 +140,24 @@ class SvgPrivate
                                      q, SLOT(colorsChanged()));
                 }
 
+            } else if (QFile::exists(imagePath)) {
+                path = imagePath;
+            } else {
+                kDebug() << "file '" << path << "' does not exist!";
+            }
+
+            //also images with absolute path needs to have a natural size initialized, even if looks a bit weird using Theme to store non-themed stuff
+            if (themed || QFile::exists(imagePath)) {
                 QRectF rect;
                 bool found = Theme::defaultTheme()->findInRectsCache(path, "_Natural", rect);
 
-                if (found && !rect.isValid()) {
+                if (!found) {
                     createRenderer();
                     naturalSize = renderer->defaultSize();
                     Theme::defaultTheme()->insertIntoRectsCache(path, "_Natural", QRectF(QPointF(0,0), naturalSize));
                 } else {
                     naturalSize = rect.size();
                 }
-            } else if (QFile::exists(imagePath)) {
-                path = imagePath;
-            } else {
-                kDebug() << "file '" << path << "' does not exist!";
             }
 
             return updateNeeded;
