@@ -1295,7 +1295,7 @@ void Applet::setHasConfigurationInterface(bool hasInterface)
             }
             d->actions.addAction("configure", configAction);
         }
-    } else if (!d->isContainment || !qobject_cast<Plasma::Containment*>(this)) {
+    } else if (!d->isContainment && !qobject_cast<Plasma::Containment*>(this)) {
         d->actions.removeAction(configAction);
     }
 }
