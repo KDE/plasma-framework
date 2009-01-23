@@ -84,8 +84,8 @@ public:
     QString configWindowTitle() const;
 
     static uint s_maxAppletId;
-    static uint s_maxZValue;
-    static uint s_minZValue;
+    static int s_maxZValue;
+    static int s_minZValue;
     static PackageStructure::Ptr packageStructure;
 
     //TODO: examine the usage of memory here; there's a pretty large

@@ -2153,8 +2153,8 @@ void AppletPrivate::resetConfigurationObject()
 }
 
 uint AppletPrivate::s_maxAppletId = 0;
-uint AppletPrivate::s_maxZValue = 0;
-uint AppletPrivate::s_minZValue = 0;
+int AppletPrivate::s_maxZValue = 0;
+int AppletPrivate::s_minZValue = 0;
 PackageStructure::Ptr AppletPrivate::packageStructure(0);
 
 AppletOverlayWidget::AppletOverlayWidget(QGraphicsWidget *parent)
