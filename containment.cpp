@@ -246,7 +246,7 @@ bool appletConfigLessThan(const KConfigGroup &c1, const KConfigGroup &c2)
 
 void Containment::restore(KConfigGroup &group)
 {
-    /*kDebug() << "!!!!!!!!!!!!initConstraints" << group.name() << containmentType();
+    /*kDebug() << "!!!!!!!!!!!!initConstraints" << group.name() << d->type;
     kDebug() << "    location:" << group.readEntry("location", (int)d->location);
     kDebug() << "    geom:" << group.readEntry("geometry", geometry());
     kDebug() << "    formfactor:" << group.readEntry("formfactor", (int)d->formFactor);
@@ -500,7 +500,7 @@ void ContainmentPrivate::containmentActions(KMenu &desktopMenu)
 
     desktopMenu.addSeparator();
 
-    if (q->containmentType() == Containment::DesktopContainment) {
+    if (type == Containment::DesktopContainment) {
         desktopMenu.addAction(q->action("configure"));
     }
 }
@@ -704,7 +704,7 @@ void Containment::addApplet(Applet *applet, const QPointF &pos, bool delayInit)
 
     Containment *currentContainment = applet->containment();
 
-    if (containmentType() == PanelContainment) {
+    if (d->type == PanelContainment) {
         //panels don't want backgrounds, which is important when setting geometry
         setBackgroundHints(NoBackground);
     }
@@ -721,6 +721,7 @@ void Containment::addApplet(Applet *applet, const QPointF &pos, bool delayInit)
         applet->setParentItem(this);
 
         // now move the old config to the new location
+        //FIXME: this doesn't seem to get the actual main config group containing plugin=, etc
         KConfigGroup c = config().group("Applets").group(QString::number(applet->id()));
         oldConfig.reparent(&c);
         applet->d->resetConfigurationObject();
@@ -739,7 +740,7 @@ void Containment::addApplet(Applet *applet, const QPointF &pos, bool delayInit)
     }
 
     if (delayInit || currentContainment) {
-        if (containmentType() == DesktopContainment) {
+        if (d->type == DesktopContainment) {
             applet->installSceneEventFilter(this);
             //applet->setWindowFlags(Qt::Window);
         }
@@ -796,7 +797,7 @@ void Containment::setScreen(int newScreen, int newDesktop)
         newDesktop = -1;
     }
 
-    kDebug() << "setting screen to " << newScreen << newDesktop << "and type is" << containmentType();
+    kDebug() << "setting screen to " << newScreen << newDesktop << "and type is" << d->type;
 
     Containment *swapScreensWith(0);
     if (d->type == DesktopContainment || d->type >= CustomContainment) {
@@ -823,8 +824,8 @@ void Containment::setScreen(int newScreen, int newDesktop)
     }
 
     if (newScreen < numScreens && newScreen > -1) {
-        if (containmentType() == DesktopContainment ||
-            containmentType() >= CustomContainment) {
+        if (d->type == DesktopContainment ||
+            d->type >= CustomContainment) {
             resize(corona()->screenGeometry(newScreen).size());
         }
     }
@@ -1096,7 +1097,7 @@ void Containment::wheelEvent(QGraphicsSceneWheelEvent *event)
         }
     }
 
-    if (containmentType() == DesktopContainment) {
+    if (d->type == DesktopContainment) {
         QGraphicsItem *item = scene()->itemAt(event->scenePos());
         if (item == this) {
             int numDesktops = KWindowSystem::numberOfDesktops();
@@ -1162,7 +1163,7 @@ QVariant Containment::itemChange(GraphicsItemChange change, const QVariant &valu
 
     if (isContainment() && !ContainmentPrivate::s_positioning &&
         (change == QGraphicsItem::ItemSceneHasChanged || change == QGraphicsItem::ItemPositionHasChanged)) {
-        switch (containmentType()) {
+        switch (d->type) {
             case PanelContainment:
             case CustomPanelContainment:
                 d->positionPanel();
@@ -1625,7 +1626,7 @@ void ContainmentPrivate::containmentConstraintsEvent(Plasma::Constraints constra
     }
 
     if (constraints & Plasma::SizeConstraint && !ContainmentPrivate::s_positioning) {
-        switch (q->containmentType()) {
+        switch (type) {
             case Containment::PanelContainment:
             case Containment::CustomPanelContainment:
                 positionPanel();
@@ -1722,12 +1723,14 @@ void ContainmentPrivate::appletDestroyed(QObject *object)
 void ContainmentPrivate::containmentAppletAnimationComplete(QGraphicsItem *item, Plasma::Animator::Animation anim)
 {
     if (anim == Animator::AppearAnimation &&
-        q->containmentType() == Containment::DesktopContainment &&
         item->parentItem() == q) {
         Applet *applet = qgraphicsitem_cast<Applet*>(item);
 
         if (applet) {
-            applet->installSceneEventFilter(q);
+            if (type == Containment::DesktopContainment) {
+                applet->installSceneEventFilter(q);
+            }
+
             KConfigGroup *cg = applet->d->mainConfigGroup();
             applet->save(*cg);
             emit q->configNeedsSaving();
@@ -1757,8 +1760,8 @@ void ContainmentPrivate::positionContainments()
 
     while (it.hasNext()) {
         Containment *containment = it.next();
-        if (containment->containmentType() == Containment::PanelContainment ||
-            containment->containmentType() == Containment::CustomPanelContainment) {
+        if (containment->d->type == Containment::PanelContainment ||
+            containment->d->type == Containment::CustomPanelContainment) {
             // weed out all containments we don't care about at all
             // e.g. Panels and ourself
             it.remove();
@@ -1838,8 +1841,8 @@ void ContainmentPrivate::positionPanel(bool force)
     // likely be too slow.
     foreach (const Containment *other, q->corona()->containments()) {
         if (other == q ||
-            (other->containmentType() != Containment::PanelContainment &&
-             other->containmentType() != Containment::CustomPanelContainment) ||
+            (other->d->type != Containment::PanelContainment &&
+             other->d->type != Containment::CustomPanelContainment) ||
             horiz != (other->formFactor() == Plasma::Horizontal)) {
             // only line up with panels of the same orientation
             continue;
