@@ -48,8 +48,6 @@
 #include <X11/Xlib.h>
 #endif
 
-const int resizeAreaMargin = 20;
-
 namespace Plasma
 {
 
@@ -72,8 +70,10 @@ public:
 
     void themeUpdated();
     void adjustView();
+    void updateResizeCorners();
 
     Plasma::Dialog *q;
+
     /**
      * Holds the background SVG, to be re-rendered when the cache is invalidated,
      * for example by resizing the dialogue.
@@ -124,6 +124,7 @@ void DialogPrivate::themeUpdated()
     } else {
         q->setContentsMargins(leftWidth, topHeight, rightWidth, bottomHeight);
     }
+
     q->update();
 }
 
@@ -196,32 +197,8 @@ Dialog::~Dialog()
 void Dialog::paintEvent(QPaintEvent *e)
 {
     QPainter p(this);
-    p.setRenderHint(QPainter::Antialiasing);
-    p.setClipRect(e->rect());
     p.setCompositionMode(QPainter::CompositionMode_Source);
-    d->background->paintFrame(&p);
-
-    //we set the resize handlers
-    d->resizeAreas.clear();
-    if (d->resizeCorners & Dialog::NorthEast) {
-        d->resizeAreas[Dialog::NorthEast] = QRect(rect().right() - resizeAreaMargin, 0,
-                                             resizeAreaMargin, resizeAreaMargin);
-    }
-
-    if (d->resizeCorners & Dialog::NorthWest) {
-        d->resizeAreas[Dialog::NorthWest] = QRect(0, 0, resizeAreaMargin, resizeAreaMargin);
-    }
-
-    if (d->resizeCorners & Dialog::SouthEast) {
-        d->resizeAreas[Dialog::SouthEast] = QRect(rect().right() - resizeAreaMargin,
-                                            rect().bottom() - resizeAreaMargin,
-                                            resizeAreaMargin, resizeAreaMargin);
-    }
-
-    if (d->resizeCorners & Dialog::SouthWest) {
-        d->resizeAreas[Dialog::SouthWest] = QRect(0, rect().bottom() - resizeAreaMargin,
-                                            resizeAreaMargin, resizeAreaMargin);
-    }
+    d->background->paintFrame(&p, e->rect());
 }
 
 void Dialog::mouseMoveEvent(QMouseEvent *event)
@@ -340,6 +317,36 @@ void Dialog::resizeEvent(QResizeEvent *e)
         d->view->setSceneRect(d->widget->mapToScene(d->widget->boundingRect()).boundingRect());
         d->view->centerOn(d->widget);
     }
+
+    d->updateResizeCorners();
+}
+
+void DialogPrivate::updateResizeCorners()
+{
+    const int resizeAreaMargin = 20;
+    const QRect r = q->rect();
+
+    resizeAreas.clear();
+    if (resizeCorners & Dialog::NorthEast) {
+        resizeAreas[Dialog::NorthEast] = QRect(r.right() - resizeAreaMargin, 0,
+                                               resizeAreaMargin, resizeAreaMargin);
+    }
+
+    if (resizeCorners & Dialog::NorthWest) {
+        resizeAreas[Dialog::NorthWest] = QRect(0, 0, resizeAreaMargin, resizeAreaMargin);
+    }
+
+    if (resizeCorners & Dialog::SouthEast) {
+        resizeAreas[Dialog::SouthEast] = QRect(r.right() - resizeAreaMargin,
+                                               r.bottom() - resizeAreaMargin,
+                                               resizeAreaMargin, resizeAreaMargin);
+    }
+
+    if (resizeCorners & Dialog::SouthWest) {
+        resizeAreas[Dialog::SouthWest] = QRect(0, r.bottom() - resizeAreaMargin,
+                                               resizeAreaMargin, resizeAreaMargin);
+    }
+
 }
 
 void Dialog::setGraphicsWidget(QGraphicsWidget *widget)
@@ -412,14 +419,16 @@ void Dialog::showEvent(QShowEvent * event)
         d->view->setSceneRect(d->widget->mapToScene(d->widget->boundingRect()).boundingRect());
         d->view->centerOn(d->widget);
     }
-    
+
     emit dialogVisible(true);
 }
 
 void Dialog::setResizeHandleCorners(ResizeCorners corners)
 {
-    d->resizeCorners = corners;
-    update();
+    if (d->resizeCorners != corners) {
+        d->resizeCorners = corners;
+        d->updateResizeCorners();
+    }
 }
 
 Dialog::ResizeCorners Dialog::resizeCorners() const

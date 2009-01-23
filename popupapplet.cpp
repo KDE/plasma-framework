@@ -478,7 +478,6 @@ void PopupAppletPrivate::internalTogglePopup()
         updateDialogPosition();
         KWindowSystem::setState(dialog->winId(), NET::SkipTaskbar | NET::SkipPager);
         dialog->show();
-        dialog->resize(dialog->size());
     }
 
     dialog->clearFocus();
@@ -544,22 +543,22 @@ void PopupAppletPrivate::updateDialogPosition()
     QSize saved(width, height);
 
     if (saved.isNull()) {
-        dialog->adjustSize();
+        saved = dialog->sizeHint();
     } else {
         saved = saved.expandedTo(dialog->minimumSizeHint());
+    }
+
+    if (saved.width() != dialog->width() || saved.height() != dialog->height()) {
         dialog->resize(saved);
     }
 
     QSize s = dialog->size();
     QPoint pos = view->mapFromScene(q->scenePos());
+
     //try to access a corona
-    if (q->containment() && q->containment()->corona()) {
-        pos = q->containment()->corona()->popupPosition(q, s);
-    } else {
-        Corona *corona = qobject_cast<Corona *>(q->scene());
-        if (corona) {
-            pos = corona->popupPosition(q, s);
-        }
+    Corona *corona = qobject_cast<Corona *>(q->scene());
+    if (corona) {
+        pos = corona->popupPosition(q, s);
     }
 
     bool reverse = false;
