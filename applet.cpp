@@ -1173,7 +1173,6 @@ void Applet::setGlobalShortcut(const KShortcut &shortcut)
         d->activationAction->setObjectName(QString("activate widget %1").arg(id())); // NO I18N
         connect(d->activationAction, SIGNAL(triggered()), this, SIGNAL(activate()));
         connect(this, SIGNAL(activate()), this, SLOT(setFocus()));
-        connect(this, SIGNAL(activate()), containment(), SIGNAL(activate()));
 
         QList<QWidget *> widgets = d->actions.associatedWidgets();
         foreach (QWidget *w, widgets) {

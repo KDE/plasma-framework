@@ -725,6 +725,8 @@ void Containment::addApplet(Applet *applet, const QPointF &pos, bool delayInit)
         KConfigGroup c = config().group("Applets").group(QString::number(applet->id()));
         oldConfig.reparent(&c);
         applet->d->resetConfigurationObject();
+
+        disconnect(applet, SIGNAL(activate()), currentContainment, SIGNAL(activate()));
     } else {
         applet->setParentItem(this);
     }
@@ -734,6 +736,7 @@ void Containment::addApplet(Applet *applet, const QPointF &pos, bool delayInit)
     connect(applet, SIGNAL(configNeedsSaving()), this, SIGNAL(configNeedsSaving()));
     connect(applet, SIGNAL(releaseVisualFocus()), this, SIGNAL(releaseVisualFocus()));
     connect(applet, SIGNAL(destroyed(QObject*)), this, SLOT(appletDestroyed(QObject*)));
+    connect(applet, SIGNAL(activate()), this, SIGNAL(activate()));
 
     if (pos != QPointF(-1, -1)) {
         applet->setPos(pos);
