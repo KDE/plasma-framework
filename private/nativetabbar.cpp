@@ -35,6 +35,8 @@
 // KDE
 #include <kdebug.h>
 #include <kcolorutils.h>
+#include <KIcon>
+#include <KIconLoader>
 
 #include "plasma/plasma.h"
 #include "plasma/theme.h"
@@ -54,6 +56,7 @@ public:
         : q(parent),
           backgroundSvg(0),
           buttonSvg(0),
+          closeIcon("window-close"),
           animationId(-1)
     {
     }
@@ -73,6 +76,7 @@ public:
     qreal left, top, right, bottom;
     FrameSvg *buttonSvg;
     qreal buttonLeft, buttonTop, buttonRight, buttonBottom;
+    KIcon closeIcon;
 
     int animationId;
 
@@ -259,7 +263,12 @@ void NativeTabBar::paintEvent(QPaintEvent *event)
 
         painter.setFont(Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont));
         painter.drawText(textRect, Qt::AlignCenter | Qt::TextHideMnemonic, tabText(i));
+
+        if (isCloseButtonEnabled()) {
+            d->closeIcon.paint(&painter, QRect(closeButtonPos(i), QSize(KIconLoader::SizeSmall, KIconLoader::SizeSmall)) );
+        }
     }
+
 
     QRect scrollButtonsRect;
     foreach (QObject *child, children()) {
@@ -396,6 +405,36 @@ QSize NativeTabBar::tabSize(int index) const
     }
 
     return hint;
+}
+
+//Unfortunately copied from KTabBar
+QPoint NativeTabBar::closeButtonPos( int tabIndex ) const
+{
+  QPoint buttonPos;
+  if ( tabIndex < 0 ) {
+    return buttonPos;
+  }
+
+  int availableHeight = height();
+  if ( tabIndex == currentIndex() ) {
+    QStyleOption option;
+    option.initFrom(this);
+    availableHeight -= style()->pixelMetric( QStyle::PM_TabBarTabShiftVertical, &option, this );
+  }
+
+  const QRect tabBounds = tabRect( tabIndex );
+  const int xInc = (height() - KIconLoader::SizeSmall) / 2;
+
+  if ( layoutDirection() == Qt::RightToLeft ) {
+    buttonPos = tabBounds.topLeft();
+    buttonPos.rx() += xInc;
+  } else {
+    buttonPos = tabBounds.topRight();
+    buttonPos.rx() -= KIconLoader::SizeSmall + xInc;
+  }
+  buttonPos.ry() += (availableHeight - KIconLoader::SizeSmall) / 2;
+
+  return buttonPos;
 }
 
 } // namespace Plasma

@@ -64,6 +64,7 @@ Q_SIGNALS:
 
 private:
     QSize tabSize(int index) const;
+    QPoint closeButtonPos( int tabIndex ) const;
 
     NativeTabBarPrivate * const d;
 
