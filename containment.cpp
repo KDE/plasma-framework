@@ -1602,12 +1602,10 @@ void ContainmentPrivate::containmentConstraintsEvent(Plasma::Constraints constra
         }
 
         bool canConfig = unlocked || KAuthorized::authorize("PlasmaAllowConfigureWhenLocked");
-        if (canConfig) {
-            action = actions().action("activity settings");
-            if (action) {
-                action->setVisible(canConfig);
-                action->setEnabled(canConfig);
-            }
+        action = actions().action("activity settings");
+        if (action) {
+            action->setVisible(canConfig);
+            action->setEnabled(canConfig);
         }
 
         // tell the applets too
