@@ -152,6 +152,12 @@ public:
     void addIconAction(QAction *action);
 
     /**
+     * Removes a previously set iconAction. The action will be removed from the widget
+     * but will not be deleted.
+     */
+    void removeIconAction(QAction *action);
+
+    /**
      * Associate an action with this IconWidget
      * this makes the IconWidget follow the state of the action, using its icon, text, etc.
      * when the IconWidget is clicked, it will also trigger the action.

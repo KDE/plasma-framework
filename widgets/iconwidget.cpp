@@ -348,6 +348,16 @@ void IconWidget::addIconAction(QAction *action)
     iconAction->setRect(d->actionRect((IconWidgetPrivate::ActionPosition)count));
 }
 
+void IconWidget::removeIconAction(QAction *action)
+{
+    foreach (IconAction *i_action, d->cornerActions) {
+        if (i_action->action() == action) {
+            delete i_action;
+            d->cornerActions.removeAll(i_action);
+        }
+    }
+}
+
 void IconWidget::setAction(QAction *action)
 {
     if (d->action) {
