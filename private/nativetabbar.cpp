@@ -35,8 +35,8 @@
 // KDE
 #include <kdebug.h>
 #include <kcolorutils.h>
-#include <KIcon>
-#include <KIconLoader>
+#include <kicon.h>
+#include <kiconloader.h>
 
 #include "plasma/plasma.h"
 #include "plasma/theme.h"
