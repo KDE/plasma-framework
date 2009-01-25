@@ -271,7 +271,7 @@ int TabBar::currentIndex() const
 void TabBar::resizeEvent(QGraphicsSceneResizeEvent * event)
 {
     if (!d->isTabWidget) {
-        d->tabProxy->native->setMinimumSize(contentsRect().size().toSize());
+        d->tabProxy->native->setMinimumSize(event->newSize().toSize());
     } else {
         d->tabProxy->native->setMinimumSize(QSize(0,0));
     }
