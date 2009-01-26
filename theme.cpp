@@ -30,6 +30,7 @@
 #include <kcomponentdata.h>
 #include <kconfiggroup.h>
 #include <kdebug.h>
+#include <kdirwatch.h>
 #include <kglobal.h>
 #include <kglobalsettings.h>
 #include <kmanagerselection.h>
@@ -77,7 +78,7 @@ public:
 
     KConfigGroup cacheConfig()
     {
-        return KConfigGroup(KSharedConfig::openConfig("plasmarc"), "CachePolicies");
+        return KConfigGroup(KSharedConfig::openConfig(themeRcFile), "CachePolicies");
     }
 
     KConfigGroup &config()
@@ -94,7 +95,7 @@ public:
                 }
             }
 
-            cfg = KConfigGroup(KSharedConfig::openConfig("plasmarc"), groupName);
+            cfg = KConfigGroup(KSharedConfig::openConfig(themeRcFile), groupName);
         }
 
         return cfg;
@@ -106,8 +107,10 @@ public:
     void discardCache(bool recreateElementsCache);
     void colorsChanged();
     bool useCache();
+    void settingsFileChanged(const QString &);
 
     static const char *defaultTheme;
+    static const char *themeRcFile;
     static PackageStructure::Ptr packageStructure;
 
     Theme *q;
@@ -138,6 +141,7 @@ public:
 
 PackageStructure::Ptr ThemePrivate::packageStructure(0);
 const char *ThemePrivate::defaultTheme = "default";
+const char *ThemePrivate::themeRcFile = "plasmarc";
 
 bool ThemePrivate::useCache()
 {
@@ -254,6 +258,10 @@ Theme::Theme(QObject *parent)
         connect(d->compositeWatch, SIGNAL(lostOwner()), this, SLOT(compositingChanged()));
     }
 #endif
+
+    //FIXME: if/when kconfig gets change notification, this will be unecessary
+    KDirWatch::self()->addFile(KStandardDirs::locateLocal("config", ThemePrivate::themeRcFile));
+    connect(KDirWatch::self(), SIGNAL(dirty(QString)), this, SLOT(settingsFileChanged(QString)));
 }
 
 Theme::~Theme()
@@ -277,6 +285,13 @@ PackageStructure::Ptr Theme::packageStructure()
     return ThemePrivate::packageStructure;
 }
 
+void ThemePrivate::settingsFileChanged(const QString &file)
+{
+    kDebug() << file;
+    config().config()->reparseConfiguration();
+    q->settingsChanged();
+}
+
 void Theme::settingsChanged()
 {
     setThemeName(d->config().readEntry("name", ThemePrivate::defaultTheme));
@@ -284,6 +299,7 @@ void Theme::settingsChanged()
 
 void Theme::setThemeName(const QString &themeName)
 {
+    kDebug();
     QString theme = themeName;
     if (theme.isEmpty() || theme == d->themeName) {
         // let's try and get the default theme at least
