@@ -131,14 +131,6 @@ void PopupAppletPrivate::checkExtenderAppearance(Plasma::FormFactor f)
 
 void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
 {
-    if (constraints & Plasma::StartupCompletedConstraint) {
-        startupComplete = true;
-    }
-
-    if (!startupComplete) {
-        return;
-    }
-
     Plasma::FormFactor f = q->formFactor();
 
     if (constraints & Plasma::LocationConstraint) {
@@ -445,7 +437,6 @@ PopupAppletPrivate::PopupAppletPrivate(PopupApplet *applet)
           popupPlacement(Plasma::FloatingPopup),
           savedAspectRatio(Plasma::InvalidAspectRatioMode),
           timer(0),
-          startupComplete(false),
           popupLostFocus(false),
           passive(false)
 {

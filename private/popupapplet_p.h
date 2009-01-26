@@ -46,7 +46,6 @@ public:
     Plasma::AspectRatioMode savedAspectRatio;
     QTimer *timer;
     QPoint clicked;
-    bool startupComplete : 1;
     bool popupLostFocus : 1;
     bool passive : 1;
 };
