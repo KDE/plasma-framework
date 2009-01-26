@@ -67,13 +67,17 @@ public:
           hasWallpapers(false)
     {
         generalFont = QApplication::font();
-        KConfigGroup cg(KGlobal::config(), "CachePolicies");
-        cacheTheme = cg.readEntry("CacheTheme", true);
+        cacheTheme = cacheConfig().readEntry("CacheTheme", true);
     }
 
     ~ThemePrivate()
     {
        delete pixmapCache;
+    }
+
+    KConfigGroup cacheConfig()
+    {
+        return KConfigGroup(KSharedConfig::openConfig("plasmarc"), "CachePolicies");
     }
 
     KConfigGroup &config()
@@ -138,9 +142,8 @@ const char *ThemePrivate::defaultTheme = "default";
 bool ThemePrivate::useCache()
 {
     if (cacheTheme && !pixmapCache) {
-        KConfigGroup cg(KGlobal::config(), "CachePolicies");
         pixmapCache = new KPixmapCache("plasma_theme_" + themeName);
-        pixmapCache->setCacheLimit(cg.readEntry("ThemeCacheKb", 80 * 1024));
+        pixmapCache->setCacheLimit(cacheConfig().readEntry("ThemeCacheKb", 80 * 1024));
     }
 
     return cacheTheme;
