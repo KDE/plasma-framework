@@ -434,7 +434,7 @@ bool PopupApplet::isPassivePopup() const
 
 bool PopupApplet::isPopupShowing() const
 {
-    return !d->dialog || d->dialog->isVisible();
+    return d->dialog && d->dialog->isVisible();
 }
 
 PopupAppletPrivate::PopupAppletPrivate(PopupApplet *applet)
