@@ -167,7 +167,7 @@ void TabBarPrivate::shapeChanged(const QTabBar::Shape shape)
     default:
         tabBarLayout->setOrientation(Qt::Horizontal);
         tabWidgetLayout->setOrientation(Qt::Vertical);
-        tabWidgetLayout->itemAt(0)->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+        tabWidgetLayout->itemAt(0)->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
         tabWidgetLayout->itemAt(1)->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         tabProxy->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     }
@@ -271,7 +271,7 @@ int TabBar::currentIndex() const
 void TabBar::resizeEvent(QGraphicsSceneResizeEvent * event)
 {
     if (!d->isTabWidget) {
-        d->tabProxy->native->setMinimumSize(event->newSize().toSize());
+        d->tabProxy->setMinimumSize(event->newSize().toSize());
     } else {
         d->tabProxy->native->setMinimumSize(QSize(0,0));
     }

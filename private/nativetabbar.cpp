@@ -118,7 +118,7 @@ NativeTabBar::NativeTabBar(QWidget *parent)
     d->lastIndex[0] = -1;
     connect(this, SIGNAL(currentChanged(int)), this, SLOT(startAnimation()));
 
-    setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 }
 
 NativeTabBar::~NativeTabBar()
@@ -129,6 +129,12 @@ NativeTabBar::~NativeTabBar()
 QRect NativeTabBar::tabRect(int index) const
 {
     QRect rect = KTabBar::tabRect(index).translated(d->left, d->top);
+
+    if (isVertical()) {
+        rect.setWidth(width()-d->top-d->bottom);
+    } else {
+        rect.setHeight(height()-d->top-d->bottom);
+    }
 
     return rect;
 }
@@ -183,26 +189,10 @@ QSize NativeTabBar::tabSizeHint(int index) const
     return hint;
 }
 
-//FIXME: this shouldn't be necessary but it seems to return wring numbers the base implementation?
+
 QSize NativeTabBar::sizeHint() const
 {
-    int width = 0;
-    int height = 0;
-
-    if (isVertical()) {
-        for (int i = count() - 1; i >= 0; i--) {
-             height += tabRect(i).height();
-        }
-
-        width = tabRect(0).width();
-    } else {
-        for (int i = count() - 1; i >= 0; i--) {
-             width += tabRect(i).width();
-        }
-
-        height = tabRect(0).height();
-    }
-    return QSize(width + d->left + d->right, height + d->top + d->bottom);
+    return KTabBar::sizeHint();
 }
 
 void NativeTabBar::paintEvent(QPaintEvent *event)
