@@ -2168,7 +2168,6 @@ void AppletOverlayWidget::paint(QPainter *painter,
 {
     Q_UNUSED(option)
     Q_UNUSED(widget)
-    painter->setRenderHint(QPainter::Antialiasing);
     QColor wash = Plasma::Theme::defaultTheme()->color(Theme::BackgroundColor);
     wash.setAlphaF(.6);
 
