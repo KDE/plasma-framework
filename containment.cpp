@@ -21,7 +21,7 @@
 #include "containment.h"
 #include "private/containment_p.h"
 
-#include <QAction>
+#include <KAction>
 #include <QFile>
 #include <QGraphicsSceneContextMenuEvent>
 #include <QGraphicsView>
@@ -139,7 +139,7 @@ void Containment::init()
     //common actions
     bool unlocked = immutability() == Mutable;
 
-    QAction *appletBrowserAction = new QAction(i18n("Add Widgets..."), this);
+    KAction *appletBrowserAction = new KAction(i18n("Add Widgets..."), this);
     appletBrowserAction->setIcon(KIcon("list-add"));
     appletBrowserAction->setVisible(unlocked);
     appletBrowserAction->setEnabled(unlocked);
@@ -148,14 +148,14 @@ void Containment::init()
     appletBrowserAction->setShortcut(QKeySequence("alt+d,a"));
     d->actions().addAction("add widgets", appletBrowserAction);
 
-    QAction *action = new QAction(i18n("Next Widget"), this);
+    KAction *action = new KAction(i18n("Next Widget"), this);
     //no icon
     connect(action, SIGNAL(triggered()), this, SLOT(focusNextApplet()));
     action->setShortcutContext(Qt::WidgetShortcut);
     action->setShortcut(QKeySequence("alt+d,n"));
     d->actions().addAction("next applet", action);
 
-    action = new QAction(i18n("Previous Widget"), this);
+    action = new KAction(i18n("Previous Widget"), this);
     //no icon
     connect(action, SIGNAL(triggered()), this, SLOT(focusPreviousApplet()));
     action->setShortcutContext(Qt::WidgetShortcut);
@@ -165,8 +165,8 @@ void Containment::init()
     if (immutability() != SystemImmutable) {
         //FIXME I'm not certain this belongs in Containment
         //but it sure is nice to have the keyboard shortcut in every containment by default
-        QAction *lockDesktopAction =
-            new QAction(unlocked ? i18n("Lock Widgets") : i18n("Unlock Widgets"), this);
+        KAction *lockDesktopAction =
+            new KAction(unlocked ? i18n("Lock Widgets") : i18n("Unlock Widgets"), this);
         lockDesktopAction->setIcon(KIcon(unlocked ? "object-locked" : "object-unlocked"));
         connect(lockDesktopAction, SIGNAL(triggered(bool)),
                 this, SLOT(toggleDesktopImmutability()));
@@ -177,7 +177,7 @@ void Containment::init()
 
     if (d->type != PanelContainment &&
         d->type != CustomPanelContainment) {
-        QAction *zoomAction = new QAction(i18n("Zoom In"), this);
+        KAction *zoomAction = new KAction(i18n("Zoom In"), this);
         zoomAction->setIcon(KIcon("zoom-in"));
         connect(zoomAction, SIGNAL(triggered(bool)), this, SLOT(zoomIn()));
         zoomAction->setShortcutContext(Qt::WidgetShortcut);
@@ -188,14 +188,14 @@ void Containment::init()
         zoomAction->setShortcuts(keys);
         d->actions().addAction("zoom in", zoomAction);
 
-        zoomAction = new QAction(i18n("Zoom Out"), this);
+        zoomAction = new KAction(i18n("Zoom Out"), this);
         zoomAction->setIcon(KIcon("zoom-out"));
         connect(zoomAction, SIGNAL(triggered(bool)), this, SLOT(zoomOut()));
         zoomAction->setShortcutContext(Qt::WidgetShortcut);
         zoomAction->setShortcut(QKeySequence("alt+d,-"));
         d->actions().addAction("zoom out", zoomAction);
 
-        QAction *activityAction = new QAction(i18n("Add Activity"), this);
+        KAction *activityAction = new KAction(i18n("Add Activity"), this);
         activityAction->setIcon(KIcon("list-add"));
         activityAction->setVisible(unlocked);
         activityAction->setEnabled(unlocked);

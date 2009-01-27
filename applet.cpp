@@ -25,7 +25,7 @@
 #include <cmath>
 #include <limits>
 
-#include <QAction>
+#include <KAction>
 #include <QApplication>
 #include <QEvent>
 #include <QFile>
@@ -906,7 +906,7 @@ void Applet::flushPendingConstraintsEvents()
         //FIXME desktop containments can't be removed while in use.
         //it's kinda silly to have a keyboard shortcut for something that can only be used when the
         //shortcut isn't active.
-        QAction *closeApplet = new QAction(this);
+        KAction *closeApplet = new KAction(this);
         closeApplet->setIcon(KIcon("edit-delete"));
         closeApplet->setEnabled(unlocked);
         closeApplet->setVisible(unlocked);
@@ -1275,19 +1275,19 @@ void Applet::setHasConfigurationInterface(bool hasInterface)
     d->hasConfigurationInterface = hasInterface;
     //config action
     //TODO respect security when it's implemented (4.2)
-    QAction *configAction = d->actions.action("configure");
+    KAction *configAction = qobject_cast<KAction*>(d->actions.action("configure"));
     if (hasInterface) {
         if (!configAction) { //should be always true
-            configAction = new QAction(i18n("%1 Settings", name()), this);
+            configAction = new KAction(i18n("%1 Settings", name()), this);
             configAction->setIcon(KIcon("configure"));
             configAction->setShortcutContext(Qt::WidgetShortcut); //don't clash with other views
             bool unlocked = immutability() == Mutable;
             bool canConfig = unlocked || KAuthorized::authorize("PlasmaAllowConfigureWhenLocked");
             configAction->setVisible(canConfig);
             configAction->setEnabled(canConfig);
+            //XXX these shortcuts are also in setIsContainment. keep them in sync.
             if (d->isContainment) {
-                //FIXME containments don't seem to use this action any more
-                //configAction->setShortcut(QKeySequence("ctrl+shift+s"));
+                configAction->setShortcut(QKeySequence("alt+d,alt+s"));
                 connect(configAction, SIGNAL(triggered()), this, SLOT(requestConfiguration()));
             } else {
                 configAction->setShortcut(QKeySequence("alt+d,s"));
@@ -1823,16 +1823,17 @@ void AppletPrivate::setIsContainment(bool nowIsContainment)
         }
     }
 
-    QAction *configAction = actions.action("configure");
+    KAction *configAction = qobject_cast<KAction*>(actions.action("configure"));
     if (configAction) {
         QObject::disconnect(configAction, SIGNAL(triggered()), q, SLOT(requestConfiguration()));
         QObject::disconnect(configAction, SIGNAL(triggered(bool)), q, SLOT(showConfigurationInterface()));
+        //XXX these shortcuts are also in setHasConfigurationInterface. keep them in sync.
         if (nowIsContainment) {
             //kDebug() << "I am a containment";
-            configAction->setShortcut(QKeySequence("ctrl+shift+s"));
+            configAction->setShortcut(QKeySequence("alt+d,alt+s"));
             QObject::connect(configAction, SIGNAL(triggered()), q, SLOT(requestConfiguration()));
         } else {
-            configAction->setShortcut(QKeySequence("ctrl+s"));
+            configAction->setShortcut(QKeySequence("alt+d,s"));
             QObject::connect(configAction, SIGNAL(triggered(bool)), q, SLOT(showConfigurationInterface()));
         }
     }
