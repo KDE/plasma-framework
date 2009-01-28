@@ -134,6 +134,9 @@ Applet::Applet(QObject *parentObject, const QVariantList &args)
 
 Applet::~Applet()
 {
+    //let people know that i will die
+    emit appletDestroyed(this);
+
     if (!d->transient && d->extender) {
         //This would probably be nicer if it was located in extender. But in it's dtor, this won't
         //work since when that get's called, the applet's config() isn't accessible anymore. (same

@@ -734,7 +734,7 @@ void Containment::addApplet(Applet *applet, const QPointF &pos, bool delayInit)
 
     connect(applet, SIGNAL(configNeedsSaving()), this, SIGNAL(configNeedsSaving()));
     connect(applet, SIGNAL(releaseVisualFocus()), this, SIGNAL(releaseVisualFocus()));
-    connect(applet, SIGNAL(destroyed(QObject*)), this, SLOT(appletDestroyed(QObject*)));
+    connect(applet, SIGNAL(appletDestroyed(Plasma::Applet*)), this, SLOT(appletDestroyed(Plasma::Applet*)));
     connect(applet, SIGNAL(activate()), this, SIGNAL(activate()));
 
     if (pos != QPointF(-1, -1)) {
@@ -1697,16 +1697,8 @@ bool ContainmentPrivate::regionIsEmpty(const QRectF &region, Applet *ignoredAppl
     return true;
 }
 
-void ContainmentPrivate::appletDestroyed(QObject *object)
+void ContainmentPrivate::appletDestroyed(Plasma::Applet *applet)
 {
-    // we do a static_cast here since it really isn't an Applet by this
-    // point anymore since we are in the qobject dtor. we don't actually
-    // try and do anything with it, we just need the value of the pointer
-    // so this unsafe looking code is actually just fine.
-    //
-    // NOTE: DO NOT USE THE applet VARIABLE FOR ANYTHING OTHER THAN COMPARING
-    //       THE ADDRESS! ACTUALLY USING THE OBJECT WILL RESULT IN A CRASH!!!
-    Applet *applet = static_cast<Plasma::Applet*>(object);
     applets.removeAll(applet);
     if (focusedApplet == applet) {
         focusedApplet = 0;
