@@ -60,6 +60,7 @@ protected slots:
     void animateHighlight(qreal progress);
     void toolMoved(QGraphicsItem*);
     void assignColors();
+    void toolTriggered(bool);
     /**
      * show/hide the toolbox
      */

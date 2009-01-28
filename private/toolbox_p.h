@@ -97,6 +97,7 @@ public Q_SLOTS:
      * re-show the toolbox, in case any tools have changed
      */
     void updateToolBox();
+
 Q_SIGNALS:
     void toggled();
 
@@ -105,6 +106,9 @@ protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
+
+protected Q_SLOTS:
+    virtual void toolTriggered(bool);
 
 private:
     ToolBoxPrivate *d;

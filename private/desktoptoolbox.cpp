@@ -206,6 +206,11 @@ void DesktopToolBox::assignColors()
     d->fgColor = Plasma::Theme::defaultTheme()->color(Plasma::Theme::TextColor);
 }
 
+void DesktopToolBox::toolTriggered(bool)
+{
+    hideToolBox();
+}
+
 void DesktopToolBox::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     Q_UNUSED(option)
@@ -552,12 +557,11 @@ void DesktopToolBox::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 {
     //kDebug() << event->pos() << event->scenePos()
     //         << d->toolBacker->rect().contains(event->scenePos().toPoint());
-    if (!d->hovering || isToolbar()) {
+    if (!d->hovering || showing() || isToolbar()) {
         QGraphicsItem::hoverLeaveEvent(event);
         return;
     }
 
-    hideToolBox();
     Plasma::Animator *animdriver = Plasma::Animator::self();
     if (d->animHighlightId) {
         animdriver->stopCustomAnimation(d->animHighlightId);
