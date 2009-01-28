@@ -174,14 +174,13 @@ DesktopToolBox::DesktopToolBox(Containment *parent)
 {
     d->containment = parent;
     setZValue(10000000);
-    setFlag(ItemClipsToShape, true);
     setFlag(ItemClipsChildrenToShape, false);
     setFlag(ItemIgnoresTransformations, true);
     setIsMovable(true);
     assignColors();
 
     d->background = new Plasma::FrameSvg();
-    d->background->setImagePath("widgets/translucentbackground");
+    d->background->setImagePath("widgets/toolbox");
 
     connect(Plasma::Animator::self(), SIGNAL(movementFinished(QGraphicsItem*)),
             this, SLOT(toolMoved(QGraphicsItem*)));
@@ -223,50 +222,53 @@ void DesktopToolBox::paint(QPainter *painter, const QStyleOptionGraphicsItem *op
     QPainterPath p = shape();
 
     QPoint iconPos;
-    QPointF gradientCenter;
+    QRect backgroundRect;
     const QRectF rect = boundingRect();
     const QSize icons = iconSize();
     bool atCorner;
+    QString cornerElement;
 
     switch (corner()) {
     case TopRight:
         iconPos = QPoint((int)rect.right() - icons.width() + 2, 2);
-        gradientCenter = rect.topRight();
+        cornerElement = "desktop-northeast";
+        backgroundRect = d->background->elementRect(cornerElement).toRect();
+        backgroundRect.moveTopRight(rect.topRight().toPoint());
         atCorner = true;
         break;
     case Top:
         iconPos = QPoint(rect.center().x() - icons.width() / 2, 2);
-        gradientCenter = QPoint(rect.center().x(), rect.y());
         atCorner = false;
         d->background->setEnabledBorders(FrameSvg::BottomBorder|FrameSvg::LeftBorder|FrameSvg::RightBorder);
         break;
     case TopLeft:
         iconPos = QPoint(2, 2);
-        gradientCenter = rect.topLeft();
+        cornerElement = "desktop-northwest";
+        backgroundRect = d->background->elementRect(cornerElement).toRect();
+        backgroundRect.moveTopLeft(rect.topLeft().toPoint());
         atCorner = true;
         break;
     case Left:
         iconPos = QPoint(2, rect.center().y() - icons.height() / 2);
-        gradientCenter = QPointF(rect.left(), rect.center().y());
         atCorner = false;
         d->background->setEnabledBorders(FrameSvg::BottomBorder|FrameSvg::TopBorder|FrameSvg::RightBorder);
         break;
     case Right:
         iconPos = QPoint((int)rect.right() - icons.width() + 2,
                          rect.center().y() - icons.height() / 2);
-        gradientCenter = QPointF(rect.right(), rect.center().y());
         atCorner = false;
         d->background->setEnabledBorders(FrameSvg::BottomBorder|FrameSvg::TopBorder|FrameSvg::LeftBorder);
         break;
     case BottomLeft:
         iconPos = QPoint(2, rect.bottom() - icons.height() - 2);
-        gradientCenter = rect.bottomLeft();
+        cornerElement = "desktop-southwest";
+        backgroundRect = d->background->elementRect(cornerElement).toRect();
+        backgroundRect.moveBottomLeft(rect.bottomLeft().toPoint());
         atCorner = true;
         break;
     case Bottom:
         iconPos = QPoint(rect.center().x() - icons.width() / 2,
                          rect.bottom() - icons.height() - 2);
-        gradientCenter = QPointF(rect.center().x(), rect.bottom());
         atCorner = false;
         d->background->setEnabledBorders(FrameSvg::TopBorder|FrameSvg::LeftBorder|FrameSvg::RightBorder);
         break;
@@ -274,27 +276,15 @@ void DesktopToolBox::paint(QPainter *painter, const QStyleOptionGraphicsItem *op
     default:
         iconPos = QPoint((int)rect.right() - icons.width() + 2,
                          (int)rect.bottom() - icons.height() - 2);
-        gradientCenter = rect.bottomRight();
+        cornerElement = "desktop-southeast";
+        backgroundRect = d->background->elementRect(cornerElement).toRect();
+        backgroundRect.moveBottomRight(rect.bottomRight().toPoint());
         atCorner = true;
         break;
     }
 
     if (atCorner) {
-        d->bgColor.setAlpha(64);
-        d->fgColor.setAlpha(64);
-        QRadialGradient gradient(gradientCenter, size() + d->animCircleFrame);
-        gradient.setFocalPoint(gradientCenter);
-        gradient.setColorAt(0, d->bgColor);
-        gradient.setColorAt(.87, d->bgColor);
-        gradient.setColorAt(.97, d->fgColor);
-        d->fgColor.setAlpha(0);
-        gradient.setColorAt(1, d->fgColor);
-        painter->save();
-        painter->setPen(Qt::NoPen);
-        painter->setRenderHint(QPainter::Antialiasing, true);
-        painter->setBrush(gradient);
-        painter->drawPath(p);
-        painter->restore();
+        d->background->paint(painter, backgroundRect, cornerElement);
     } else {
         d->background->resizeFrame(rect.size());
         d->background->paintFrame(painter);

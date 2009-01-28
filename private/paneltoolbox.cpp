@@ -31,6 +31,7 @@
 #include <plasma/applet.h>
 #include <plasma/paintutils.h>
 #include <plasma/theme.h>
+#include <plasma/svg.h>
 
 namespace Plasma
 {
@@ -53,6 +54,7 @@ public:
     bool toggled;
     QColor fgColor;
     QColor bgColor;
+    Plasma::Svg *background;
 };
 
 PanelToolBox::PanelToolBox(Containment *parent)
@@ -62,7 +64,6 @@ PanelToolBox::PanelToolBox(Containment *parent)
     connect(this, SIGNAL(toggled()), this, SLOT(toggle()));
 
     setZValue(10000000);
-    setFlag(ItemClipsToShape, true);
     setFlag(ItemClipsChildrenToShape, false);
     //panel toolbox is allowed to zoom, otherwise a part of it will be displayed behind the desktop
     //toolbox when the desktop is zoomed out
@@ -70,6 +71,10 @@ PanelToolBox::PanelToolBox(Containment *parent)
     assignColors();
     connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()),
             this, SLOT(assignColors()));
+
+    d->background = new Plasma::Svg();
+    d->background->setImagePath("widgets/toolbox");
+    d->background->setContainsMultipleImages(true);
 }
 
 PanelToolBox::~PanelToolBox()
@@ -118,33 +123,34 @@ void PanelToolBox::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
 
     const qreal progress = d->animFrame / size();
 
+    QRect backgroundRect;
     QPoint gradientCenter;
     QRectF rect = boundingRect();
+    QString cornerElement;
+
     if (corner() == ToolBox::Bottom) {
         gradientCenter = QPoint(rect.center().x(), rect.bottom());
+        cornerElement = "panel-south";
+
+        backgroundRect = d->background->elementRect(cornerElement).toRect();
+        backgroundRect.moveBottomLeft(shape().boundingRect().bottomLeft().toPoint());
+    } else if (corner() == ToolBox::Right) {
+        gradientCenter = QPoint(rect.right(), rect.center().y());
+        cornerElement = "panel-east";
+
+        backgroundRect = d->background->elementRect(cornerElement).toRect();
+        backgroundRect.moveTopRight(shape().boundingRect().topRight().toPoint());
     } else {
         gradientCenter = QPoint(rect.right(), rect.center().y());
+        cornerElement = "panel-west";
+
+        backgroundRect = d->background->elementRect(cornerElement).toRect();
+        backgroundRect.moveTopLeft(shape().boundingRect().topLeft().toPoint());
     }
 
-    {
-        QRadialGradient gradient(gradientCenter, size() - 2);
-        gradient.setFocalPoint(gradientCenter);
-        d->bgColor.setAlpha(64);
-        d->fgColor.setAlpha(64);
-        gradient.setColorAt(0, d->bgColor);
-        gradient.setColorAt(.85, d->bgColor);
-        gradient.setColorAt(.95, d->fgColor);
-        d->fgColor.setAlpha(0);
-        gradient.setColorAt(1, d->fgColor);
 
-        painter->save();
-        painter->setPen(Qt::NoPen);
-        painter->setRenderHint(QPainter::Antialiasing, true);
-        painter->setBrush(gradient);
-        QPainterPath p = shape();
-        painter->drawPath(p);
-        painter->restore();
-    }
+    d->background->paint(painter, backgroundRect, cornerElement);
+
 
     QRect iconRect;
 
