@@ -21,7 +21,6 @@
 #include "containment.h"
 #include "private/containment_p.h"
 
-#include <kaction.h>
 #include <QFile>
 #include <QGraphicsSceneContextMenuEvent>
 #include <QGraphicsView>
