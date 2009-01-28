@@ -133,6 +133,9 @@ Applet::Applet(QObject *parentObject, const QVariantList &args)
 
 Applet::~Applet()
 {
+    //let people know that i will die
+    emit appletDestroyed(this);
+
     if (d->transient) {
         d->resetConfigurationObject();
     } else if (d->extender) {

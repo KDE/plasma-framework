@@ -507,7 +507,7 @@ class PLASMA_EXPORT Containment : public Applet
         const QGraphicsItem *toolBoxItem() const;
 
     private:
-        Q_PRIVATE_SLOT(d, void appletDestroyed(QObject*))
+        Q_PRIVATE_SLOT(d, void appletDestroyed(Plasma::Applet*))
         Q_PRIVATE_SLOT(d, void containmentAppletAnimationComplete(QGraphicsItem *item,
                                                                   Plasma::Animator::Animation anim))
         Q_PRIVATE_SLOT(d, void triggerShowAddWidgets())

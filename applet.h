@@ -609,6 +609,11 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          */
         void activate();
 
+        /**
+         * Emitted when the applet is deleted
+         */
+        void appletDestroyed(Plasma::Applet *applet);
+
     public Q_SLOTS:
         /**
          * Sets the immutability type for this applet (not immutable,
