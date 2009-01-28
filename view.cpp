@@ -19,6 +19,8 @@
 
 #include "view.h"
 
+#include <QTimer>
+
 #include <kglobal.h>
 #include <kwindowsystem.h>
 #include <kactioncollection.h>
@@ -38,11 +40,12 @@ public:
     ViewPrivate(View *view, int uniqueId)
         : q(view),
           containment(0),
-          drawWallpaper(true),
-          trackChanges(true),
           viewId(0),
           lastScreen(-1),
-          lastDesktop(-2)
+          lastDesktop(-2),
+          drawWallpaper(true),
+          trackChanges(true),
+          init(false)
     {
         if (uniqueId > s_maxViewId) {
             s_maxViewId = uniqueId;
@@ -58,6 +61,12 @@ public:
 
     ~ViewPrivate()
     {
+    }
+
+    void privateInit()
+    {
+        q->setContainment(containment);
+        init = true;
     }
 
     void updateSceneRect()
@@ -99,14 +108,16 @@ public:
         q->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     }
 
+    static int s_maxViewId;
+
     Plasma::View *q;
     Plasma::Containment *containment;
-    bool drawWallpaper;
-    bool trackChanges;
     int viewId;
     int lastScreen;
     int lastDesktop;
-    static int s_maxViewId;
+    bool drawWallpaper : 1;
+    bool trackChanges : 1;
+    bool init : 1;
 };
 
 int ViewPrivate::s_maxViewId(0);
@@ -119,7 +130,8 @@ View::View(Containment *containment, QWidget *parent)
 
     if (containment) {
         setScene(containment->scene());
-        setContainment(containment);
+        d->containment = containment;
+        QTimer::singleShot(0, this, SLOT(privateInit()));
     }
 }
 
@@ -131,7 +143,8 @@ View::View(Containment *containment, int viewId, QWidget *parent)
 
     if (containment) {
         setScene(containment->scene());
-        setContainment(containment);
+        d->containment = containment;
+        QTimer::singleShot(0, this, SLOT(privateInit()));
     }
 }
 
@@ -189,7 +202,7 @@ int View::effectiveDesktop() const
 
 void View::setContainment(Plasma::Containment *containment)
 {
-    if (containment == d->containment) {
+    if (d->init && containment == d->containment) {
         return;
     }
 
