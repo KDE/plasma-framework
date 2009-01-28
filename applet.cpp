@@ -25,7 +25,7 @@
 #include <cmath>
 #include <limits>
 
-#include <KAction>
+#include <kaction.h>
 #include <QApplication>
 #include <QEvent>
 #include <QFile>
