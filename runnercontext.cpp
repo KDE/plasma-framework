@@ -47,6 +47,104 @@
 namespace Plasma
 {
 
+/*
+Corrects the case of the last component in a path (e.g. /usr/liB -> /usr/lib)
+path: The path to be processed.
+correctCasePath: The corrected-case path
+mustBeDir: Tells whether the last component is a folder or doesn't matter
+Returns true on success and false on error, in case of error, correctCasePath is not modified
+*/
+bool correctLastComponentCase(const QString &path, QString &correctCasePath, const bool mustBeDir)
+{
+    //kDebug() << "Correcting " << path;
+
+    // If the file already exists then no need to search for it.
+    if (QFile::exists(path)) {
+        correctCasePath = path;
+        //kDebug() << "Correct path is" << correctCasePath;
+        return true;
+    }
+
+    const QFileInfo pathInfo(path);
+
+    const QDir fileDir = pathInfo.dir();
+    //kDebug() << "Directory is" << fileDir;
+
+    const QString filename = pathInfo.fileName();
+    //kDebug() << "Filename is" << filename;
+
+    //kDebug() << "searching for a" << (mustBeDir ? "directory" : "directory/file");
+
+    const QStringList matchingFilenames = fileDir.entryList(QStringList(filename),
+                                          mustBeDir ? QDir::Dirs : QDir::NoFilter);
+
+    if (matchingFilenames.empty()) {
+        //kDebug() << "No matches found!!\n";
+        return false;
+    } else {
+        /*if (matchingFilenames.size() > 1) {
+            kDebug() << "Found multiple matches!!\n";
+        }*/
+
+        if (fileDir.path().endsWith(QDir::separator())) {
+            correctCasePath = fileDir.path() + matchingFilenames[0];
+        } else {
+            correctCasePath = fileDir.path() + QDir::separator() + matchingFilenames[0];
+        }
+
+        //kDebug() << "Correct path is" << correctCasePath;
+        return true;
+    }
+}
+
+/*
+Corrects the case of a path (e.g. /uSr/loCAL/bIN -> /usr/local/bin)
+path: The path to be processed.
+corrected: The corrected-case path
+Returns true on success and false on error, in case of error, corrected is not modified
+*/
+bool correctPathCase(const QString path, QString &corrected)
+{
+    // early exit check
+    if (QFile::exists(path)) {
+        corrected = path;
+        return true;
+    }
+
+    // path components
+    QStringList components = QString(path).split(QDir::separator());
+
+    if (components.size() < 2) {
+        return false;
+    }
+
+    const bool mustBeDir = components.back().isEmpty();
+
+    //kDebug() << "Components are" << components;
+
+    QString correctPath;
+
+    if (components.back().isEmpty()) {
+        components.pop_back();
+    }
+
+    const unsigned initialComponents = components.size();
+    for (unsigned i = 0; i < initialComponents - 1; i ++) {
+        const QString tmp = components[0] + QDir::separator() + components[1];
+
+        if (!correctLastComponentCase(tmp, correctPath, components.size() > 2 || mustBeDir)) {
+            //kDebug() << "search was not successfull";
+            return false;
+        }
+
+        components.removeFirst();
+        components[0] = correctPath;
+    }
+
+    corrected = correctPath;
+    return true;
+}
+
 class RunnerContextPrivate : public QSharedData
 {
     public:
@@ -88,9 +186,11 @@ class RunnerContextPrivate : public QSharedData
                                      RunnerContext::Executable;
             } else {
                 KUrl url(term);
+                QString correctCasePath;
                 if (!url.protocol().isEmpty() && !url.isLocalFile()) {
                     type = RunnerContext::NetworkLocation;
-                } else if (QFile::exists(path)) {
+                } else if (correctPathCase(path, correctCasePath)) {
+                    path = correctCasePath;
                     QFileInfo info(path);
                     if (info.isSymLink()) {
                         path = info.canonicalFilePath();
