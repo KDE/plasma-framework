@@ -258,6 +258,9 @@ class SvgPrivate
 
                 if (path.isEmpty()) {
                     path = Plasma::Theme::defaultTheme()->imagePath(themePath);
+                    if (path.isEmpty()) {
+                        kWarning() << "No image path found for" << themePath;
+                    }
                 }
             }
 
@@ -271,7 +274,10 @@ class SvgPrivate
                 //kDebug() << "gots us an existing one!";
                 renderer = it.value();
             } else {
-                renderer = new SharedSvgRenderer(path);
+                if (path.isEmpty())
+                    renderer = new SharedSvgRenderer();
+                else
+                    renderer = new SharedSvgRenderer(path);
                 s_renderers[path] = renderer;
             }
 
