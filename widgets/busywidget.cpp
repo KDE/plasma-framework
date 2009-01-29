@@ -36,7 +36,9 @@ class BusyWidgetPrivate
 public:
     BusyWidgetPrivate()
         : svg(0),
-          timerId(0)
+          timerId(0),
+          rotationAngle(0),
+          rotation(0)
     {
     }
 
