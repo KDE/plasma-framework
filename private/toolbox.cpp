@@ -125,7 +125,7 @@ void ToolBox::addTool(QAction *action)
 
     //make enabled/disabled tools appear/disappear instantly
     connect(tool, SIGNAL(changed()), this, SLOT(updateToolBox()));
-    connect(tool, SIGNAL(triggered(bool)), this, SLOT(toolTriggered(bool)));
+    connect(action, SIGNAL(triggered(bool)), this, SLOT(toolTriggered(bool)));
     //kDebug() << "added tool" << action->text() << (QGraphicsItem*)tool;
 }
 
