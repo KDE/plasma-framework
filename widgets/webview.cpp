@@ -232,9 +232,16 @@ void WebView::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
 
     QContextMenuEvent ce(static_cast<QContextMenuEvent::Reason>(event->reason()),
                          event->pos().toPoint(), event->screenPos());
-    d->page->event(&ce);
-    if (ce.isAccepted()) {
+
+    if (d->page->swallowContextMenuEvent(&ce)) {
         event->accept();
+    } else {
+        d->page->updatePositionDependentActions(event->pos().toPoint());
+
+        d->page->event(&ce);
+        if (ce.isAccepted()) {
+            event->accept();
+        }
     }
 }
 
