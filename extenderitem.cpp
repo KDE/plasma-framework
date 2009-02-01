@@ -449,10 +449,12 @@ void ExtenderItem::setCollapsed(bool collapsed)
 
 void ExtenderItem::returnToSource()
 {
-    if (!d->sourceApplet) {
+    if (!d || !d->sourceApplet) {
         return;
     }
-    setExtender(d->sourceApplet->d->extender);
+    if (d->sourceApplet->d) {
+        setExtender(d->sourceApplet->d->extender);
+    }
 }
 
 void ExtenderItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
