@@ -481,12 +481,12 @@ QList<QAction*> RunnerManager::actionsForMatch(const QueryMatch &match)
     return QList<QAction*>();
 }
 
-bool RunnerManager::launchQuery(const QString &term)
+void RunnerManager::launchQuery(const QString &term)
 {
-    return launchQuery(term, QString());
+    launchQuery(term, QString());
 }
 
-bool RunnerManager::launchQuery(const QString &term, const QString &runnerName)
+void RunnerManager::launchQuery(const QString &term, const QString &runnerName)
 {
     if (d->runners.isEmpty()) {
         d->loadRunners();
@@ -494,12 +494,12 @@ bool RunnerManager::launchQuery(const QString &term, const QString &runnerName)
 
     if (term.isEmpty()) {
         reset();
-        return false;
+        return;
     }
 
     if (d->context.query() == term) {
         // we already are searching for this!
-        return false;
+        return;
     }
 
     reset();
@@ -527,7 +527,6 @@ bool RunnerManager::launchQuery(const QString &term, const QString &runnerName)
             d->searchJobs.append(job);
         }
     }
-    return true;
 }
 
 bool RunnerManager::execQuery(const QString &term)

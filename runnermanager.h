@@ -108,12 +108,12 @@ class PLASMA_EXPORT RunnerManager : public QObject
          * @arg term the term we want to find matches for
          * @arg runner optional, if only one specific runner is to be used
          */
-        bool launchQuery(const QString &term, const QString &runnerName);
+        void launchQuery(const QString &term, const QString &runnerName);
 
         /**
          * Convenience version of above
          */
-        bool launchQuery(const QString &term);
+        void launchQuery(const QString &term);
 
         /**
          * Execute a query, this method will only return when the query is executed
