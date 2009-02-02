@@ -234,6 +234,16 @@ enum MarginEdge {
     RightMargin
 };
 
+enum MessageButton {
+    ButtonNone = 0,
+    ButtonOk = 1,
+    ButtonYes = 2,
+    ButtonNo = 4,
+    ButtonCancel = 8
+};
+Q_DECLARE_FLAGS(MessageButtons, MessageButton)
+
+
 /**
  * @return the scaling factor (0..1) for a ZoomLevel
  **/

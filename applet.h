@@ -612,9 +612,17 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         void activate();
 
         /**
+         * Emitted when the user clicked on a button of the message overlay
+         * @see showMessage
+         * @see Plasma::MessageButton
+         */
+        void messageButtonPressed(const MessageButton button);
+
+        /**
          * Emitted when the applet is deleted
          */
         void appletDestroyed(Plasma::Applet *applet);
+
 
     public Q_SLOTS:
         /**
@@ -743,6 +751,21 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          *               to be configured
          */
         void setConfigurationRequired(bool needsConfiguring, const QString &reason = QString());
+
+        /**
+         * Shows a message as an overlay of the applet: the message has an
+         * icon, text and (optional) buttons
+         *
+         * @param icon the icon that will be shown
+         * @param message the message string that will be shown.
+         *                If the message is empty nothng will be shown
+         *                and if there was a message already it will be hidden
+         * @param buttons an OR combination of all the buttons needed
+         *
+         * @see Plasma::MessageButtons
+         * @see messageButtonPressed
+         */
+        void showMessage(const QIcon &icon, const QString &message, const MessageButtons buttons);
 
         /**
          * Called when any of the geometry constraints have been updated.

@@ -82,6 +82,7 @@
 #include "widgets/busywidget.h"
 #include "tooltipmanager.h"
 #include "wallpaper.h"
+#include "paintutils.h"
 
 #include "private/containment_p.h"
 #include "private/extenderapplet_p.h"
@@ -498,6 +499,26 @@ void AppletPrivate::destroyMessageOverlay()
     messageOverlay = 0;
     w->hide();
     w->deleteLater();
+
+    MessageButton buttonCode = ButtonNo;
+    //find out if we're disappearing because of a button press
+    PushButton *button = qobject_cast<PushButton *>(q->sender());
+    if (button) {
+        if (button->text() == i18n("Ok")) {
+            buttonCode = ButtonOk;
+        }
+        if (button->text() == i18n("Yes")) {
+            buttonCode = ButtonYes;
+        }
+        if (button->text() == i18n("No")) {
+            buttonCode = ButtonNo;
+        }
+        if (button->text() == i18n("Cancel")) {
+            buttonCode = ButtonCancel;
+        }
+
+        emit q->messageButtonPressed(buttonCode);
+    }
 }
 
 ConfigLoader *Applet::configScheme() const
@@ -887,6 +908,74 @@ void Applet::setConfigurationRequired(bool needsConfig, const QString &reason)
     d->messageOverlay->show();
 }
 
+void Applet::showMessage(const QIcon &icon, const QString &message, const MessageButtons buttons)
+{
+    if (message.isEmpty()) {
+        d->destroyMessageOverlay();
+        return;
+    }
+
+    d->createMessageOverlay();
+    QGraphicsLinearLayout *mainLayout = new QGraphicsLinearLayout(d->messageOverlay);
+    mainLayout->setOrientation(Qt::Vertical);
+    mainLayout->addStretch();
+
+    QGraphicsLinearLayout *messageLayout = new QGraphicsLinearLayout();
+    messageLayout->setOrientation(Qt::Horizontal);
+
+    QGraphicsLinearLayout *buttonLayout = new QGraphicsLinearLayout();
+    buttonLayout->setOrientation(Qt::Horizontal);
+
+    mainLayout->addItem(messageLayout);
+    mainLayout->addItem(buttonLayout);
+    mainLayout->addStretch();
+
+    IconWidget *messageIcon = new IconWidget(this);
+    Label *messageText = new Label(this);
+    messageText->nativeWidget()->setWordWrap(true);
+
+    messageLayout->addStretch();
+    messageLayout->addItem(messageIcon);
+    messageLayout->addItem(messageText);
+    messageLayout->addStretch();
+
+    messageIcon->setIcon(icon);
+    messageText->setText(message);
+
+
+    buttonLayout->addStretch();
+
+    if (buttons & ButtonOk) {
+        PushButton *ok = new PushButton(this);
+        ok->setText(i18n("Ok"));
+        buttonLayout->addItem(ok);
+        connect(ok, SIGNAL(clicked()), this, SLOT(destroyMessageOverlay()));
+    }
+    if (buttons & ButtonYes) {
+        PushButton *yes = new PushButton(this);
+        yes->setText(i18n("Yes"));
+        buttonLayout->addItem(yes);
+        connect(yes, SIGNAL(clicked()), this, SLOT(destroyMessageOverlay()));
+    }
+    if (buttons & ButtonNo) {
+        PushButton *no = new PushButton(this);
+        no->setText(i18n("No"));
+        buttonLayout->addItem(no);
+        connect(no, SIGNAL(clicked()), this, SLOT(destroyMessageOverlay()));
+    }
+    if (buttons & ButtonCancel) {
+        PushButton *cancel = new PushButton(this);
+        cancel->setText(i18n("Cancel"));
+        buttonLayout->addItem(cancel);
+        connect(cancel, SIGNAL(clicked()), this, SLOT(destroyMessageOverlay()));
+    }
+
+    buttonLayout->addStretch();
+
+    d->messageOverlay->show();
+
+}
+
 void Applet::flushPendingConstraintsEvents()
 {
     if (d->pendingConstraints == NoConstraint) {
@@ -944,7 +1033,7 @@ void Applet::flushPendingConstraintsEvents()
     if (c & Plasma::SizeConstraint) {
         if (d->messageOverlay) {
             d->messageOverlay->setGeometry(QRectF(QPointF(0, 0), geometry().size()));
-
+/*
             QGraphicsItem *button = 0;
             QList<QGraphicsItem*> children = d->messageOverlay->QGraphicsItem::children();
 
@@ -956,7 +1045,7 @@ void Applet::flushPendingConstraintsEvents()
                 QSizeF s = button->boundingRect().size();
                 button->setPos(d->messageOverlay->boundingRect().width() / 2 - s.width() / 2,
                         d->messageOverlay->boundingRect().height() / 2 - s.height() / 2);
-            }
+            }*/
         }
 
         if (d->busyWidget && d->busyWidget->isVisible()) {
@@ -2172,15 +2261,18 @@ void AppletOverlayWidget::paint(QPainter *painter,
     Q_UNUSED(option)
     Q_UNUSED(widget)
     QColor wash = Plasma::Theme::defaultTheme()->color(Theme::BackgroundColor);
-    wash.setAlphaF(.6);
+    wash.setAlphaF(.8);
 
     Applet *applet = qobject_cast<Applet *>(parentWidget());
 
+    QPainterPath backgroundShape;
     if (applet->backgroundHints() & Applet::StandardBackground) {
-        painter->fillRect(parentWidget()->contentsRect(), wash);
+        backgroundShape = PaintUtils::roundedRectangle(parentWidget()->contentsRect(), 8);
     } else {
-        painter->fillPath(parentItem()->shape(), wash);
+        backgroundShape = parentItem()->shape();
     }
+
+    painter->fillPath(backgroundShape, wash);
 }
 
 } // Plasma namespace
