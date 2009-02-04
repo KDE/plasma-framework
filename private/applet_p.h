@@ -38,9 +38,13 @@ class AppletOverlayWidget : public QGraphicsWidget
 {
 public:
     AppletOverlayWidget(QGraphicsWidget *parent);
+    void destroy();
 
 protected:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
+
+protected Q_SLOTS:
+    void overlayAnimationComplete();
 };
 
 class AppletPrivate

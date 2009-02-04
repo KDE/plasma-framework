@@ -496,9 +496,10 @@ void AppletPrivate::destroyMessageOverlay()
 {
     //TODO: fade out? =)
     QGraphicsWidget *w = messageOverlay;
+
+    messageOverlay->destroy();
+
     messageOverlay = 0;
-    w->hide();
-    w->deleteLater();
 
     MessageButton buttonCode = ButtonNo;
     //find out if we're disappearing because of a button press
@@ -2252,6 +2253,21 @@ AppletOverlayWidget::AppletOverlayWidget(QGraphicsWidget *parent)
     : QGraphicsWidget(parent)
 {
     resize(parent->size());
+    Animator::self()->animateItem(this, Animator::AppearAnimation);
+}
+
+void AppletOverlayWidget::destroy()
+{
+    connect(Animator::self(),
+            SIGNAL(animationFinished(QGraphicsItem*,Plasma::Animator::Animation)),
+            this,
+            SLOT(overlayAnimationCompleteComplete(QGraphicsItem*,Plasma::Animator::Animation)));
+    Animator::self()->animateItem(this, Animator::DisappearAnimation);
+}
+
+void AppletOverlayWidget::overlayAnimationComplete()
+{
+    deleteLater();
 }
 
 void AppletOverlayWidget::paint(QPainter *painter,
