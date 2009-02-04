@@ -71,7 +71,7 @@ public:
         : q(parent),
           tabProxy(0),
           currentIndex(0),
-          isTabWidget(true),
+          tabWidgetMode(true),
           oldPage(0),
           newPage(0),
           oldPageAnimId(-1),
@@ -94,7 +94,7 @@ public:
     QGraphicsLinearLayout *tabWidgetLayout;
     QGraphicsLinearLayout *tabBarLayout;
     int currentIndex;
-    bool isTabWidget;
+    bool tabWidgetMode;
 
     QGraphicsWidget *oldPage;
     QGraphicsWidget *newPage;
@@ -113,7 +113,7 @@ void TabBarPrivate::updateTabWidgetMode()
         }
     }
 
-    if (tabWidget != isTabWidget) {
+    if (tabWidget != tabWidgetMode) {
         if (tabWidget) {
             mainLayout->removeAt(0);
             tabBarLayout->insertItem(1, tabProxy);
@@ -125,7 +125,12 @@ void TabBarPrivate::updateTabWidgetMode()
         }
     }
 
-    isTabWidget = tabWidget;
+    //always show the tabbar
+    if (!tabWidget) {
+        q->setTabBarShown(true);
+    }
+
+    tabWidgetMode = tabWidget;
 }
 
 void TabBarPrivate::slidingCompleted(QGraphicsItem *item)
@@ -270,7 +275,7 @@ int TabBar::currentIndex() const
 
 void TabBar::resizeEvent(QGraphicsSceneResizeEvent * event)
 {
-    if (!d->isTabWidget) {
+    if (!d->tabWidgetMode) {
         d->tabProxy->setMinimumSize(event->newSize().toSize());
     } else {
         d->tabProxy->native->setMinimumSize(QSize(0,0));
@@ -403,6 +408,26 @@ void TabBar::setTabIcon(int index, const QIcon &icon)
 QIcon TabBar::tabIcon(int index) const
 {
     return d->tabProxy->native->tabIcon(index);
+}
+
+void TabBar::setTabBarShown(bool show)
+{
+    if (!show && !d->tabWidgetMode) {
+        return;
+    }
+
+    if (!show && d->tabProxy->isVisible()) {
+        d->tabProxy->hide();
+        d->tabBarLayout->removeItem(d->tabProxy);
+    } else if (show && !d->tabProxy->isVisible()) {
+        d->tabProxy->show();
+        d->tabBarLayout->insertItem(0, d->tabProxy);
+    }
+}
+
+bool TabBar::isTabBarShown() const
+{
+    return d->tabProxy->isVisible();
 }
 
 void TabBar::setStyleSheet(const QString &stylesheet)

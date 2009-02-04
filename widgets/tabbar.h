@@ -51,6 +51,7 @@ class PLASMA_EXPORT TabBar : public QGraphicsWidget
     Q_PROPERTY(int currentIndex READ currentIndex WRITE setCurrentIndex)
     Q_PROPERTY(int count READ count)
     Q_PROPERTY(QString styleSheet READ styleSheet WRITE setStyleSheet)
+    Q_PROPERTY(bool tabBarShown READ isTabBarShown WRITE setTabBarShown)
 
 public:
     /**
@@ -156,6 +157,20 @@ public:
      * @arg index the index of the tab we want to know its icon
      */
     QIcon tabIcon(int index) const;
+
+    /**
+     * shows or hides the tabbar, used if you just want to display the
+     * pages, when the tabbar doesn't have content pages at all this
+     * function has no effect
+     *
+     * @arg show true if we want to show the tabbar
+     */
+     void setTabBarShown(bool show);
+
+     /**
+      * @return true if the tabbar is shown
+      */
+     bool isTabBarShown() const;
 
     /**
      * Sets the stylesheet used to control the visual display of this TabBar
