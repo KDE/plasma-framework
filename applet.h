@@ -615,6 +615,7 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          * Emitted when the user clicked on a button of the message overlay
          * @see showMessage
          * @see Plasma::MessageButton
+         * @since 4.3
          */
         void messageButtonPressed(const MessageButton button);
 
@@ -764,6 +765,7 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          *
          * @see Plasma::MessageButtons
          * @see messageButtonPressed
+         * @since 4.3
          */
         void showMessage(const QIcon &icon, const QString &message, const MessageButtons buttons);
 

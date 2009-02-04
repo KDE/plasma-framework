@@ -164,11 +164,13 @@ public:
      * function has no effect
      *
      * @arg show true if we want to show the tabbar
+     * @since 4.3
      */
      void setTabBarShown(bool show);
 
      /**
       * @return true if the tabbar is shown
+      * @since 4.3
       */
      bool isTabBarShown() const;
 
