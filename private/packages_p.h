@@ -21,6 +21,7 @@
 #define LIBS_PLASMA_PACKAGES_P_H
 
 #include <plasma/packagestructure.h>
+#include "plasma.h"
 
 namespace Plasma
 {
@@ -42,6 +43,8 @@ class ThemePackage : public PackageStructure
 public:
     explicit ThemePackage(QObject *parent = 0);
 };
+
+PackageStructure::Ptr defaultPackageStructure(ComponentType type);
 
 } // namespace Plasma
 

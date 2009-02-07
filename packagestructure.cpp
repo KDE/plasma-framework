@@ -33,6 +33,8 @@
 #include <kio/job.h>
 
 #include "package.h"
+#include "private/packages_p.h"
+#include "theme.h"
 
 namespace Plasma
 {
@@ -117,6 +119,21 @@ PackageStructure::Ptr PackageStructure::load(const QString &packageFormat)
     PackageStructure::Ptr structure = PackageStructurePrivate::structures[packageFormat];
 
     if (structure) {
+        return structure;
+    }
+
+    if (packageFormat == "plasmoid") {
+        structure = defaultPackageStructure(AppletComponent);
+    } else if (packageFormat == "dataengine") {
+        structure = defaultPackageStructure(DataEngineComponent);
+    } else if (packageFormat == "runner") {
+        structure = defaultPackageStructure(RunnerComponent);
+    } else if (packageFormat == "theme") {
+        structure = Theme::packageStructure();
+    }
+
+    if (structure) {
+        PackageStructurePrivate::structures[packageFormat] = structure;
         return structure;
     }
 
