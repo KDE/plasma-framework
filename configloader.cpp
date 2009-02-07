@@ -112,11 +112,11 @@ bool ConfigLoaderHandler::startElement(const QString &namespaceURI, const QStrin
         for (int i = 0; i < numAttrs; ++i) {
             QString name = attrs.localName(i).toLower();
             if (name == "name") {
-                m_name = attrs.value(i);
+                m_name = attrs.value(i).trimmed();
             } else if (name == "type") {
                 m_type = attrs.value(i).toLower();
             } else if (name == "key") {
-                m_key = attrs.value(i);
+                m_key = attrs.value(i).trimmed();
             }
         }
     } else if (tag == "choice") {
@@ -182,8 +182,14 @@ bool ConfigLoaderHandler::endElement(const QString &namespaceURI,
 void ConfigLoaderHandler::addItem()
 {
     if (m_name.isEmpty()) {
-        return;
+        if (m_key.isEmpty()) {
+            return;
+        }
+
+        m_name = m_key;
     }
+
+    m_name.remove(' ');
 
     KConfigSkeletonItem *item = 0;
 
