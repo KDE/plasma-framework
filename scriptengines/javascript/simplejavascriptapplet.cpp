@@ -198,9 +198,9 @@ void SimpleJavaScriptApplet::reportError()
 
 void SimpleJavaScriptApplet::configChanged()
 {
-    QScriptValue fun = m_self.property("configAccepted");
+    QScriptValue fun = m_self.property("configChanged");
     if (!fun.isFunction()) {
-        kDebug() << "Script: configAccepted is not a function, " << fun.toString();
+        kDebug() << "Script: plasmoid.configChanged is not a function, " << fun.toString();
         return;
     }
 
