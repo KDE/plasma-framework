@@ -47,7 +47,7 @@ public:
     FrameSvg::EnabledBorders enabledBorders;
     QPixmap cachedBackground;
     QRegion cachedMask;
-    QSizeF frameSize;
+    QSize frameSize;
 
     //measures
     int topHeight;

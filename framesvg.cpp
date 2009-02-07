@@ -194,7 +194,7 @@ void FrameSvg::resizeFrame(const QSizeF &size)
     }
 
     d->updateSizes();
-    d->frames[d->prefix]->frameSize = size;
+    d->frames[d->prefix]->frameSize = size.toSize();
 }
 
 QSizeF FrameSvg::frameSize() const
@@ -565,7 +565,7 @@ void FrameSvgPrivate::generateBackground(FrameData *frame)
             pos = overlayPos;
         //Stretched or Tiled?
         } else if (q->hasElement(prefix+"hint-overlay-stretch") || q->hasElement(prefix+"hint-overlay-tile")) {
-            overlaySize = frame->frameSize.toSize();
+            overlaySize = frame->frameSize;
         }
 
         QString id = QString::fromLatin1("overlay_%7_%6_%5_%4_%3_%2_%1_").
