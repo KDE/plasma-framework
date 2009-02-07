@@ -224,13 +224,6 @@ void Extender::itemAddedEvent(ExtenderItem *item, const QPointF &pos)
 
     //remove the empty extender message if needed.
     d->updateEmptyExtenderLabel();
-
-    //if the item doesn't got a widget one will be set real soon, causing it's sizehints to
-    //change. Don't adjust the size hints in that case, since that spares us a call to
-    //adjustSizeHints()
-    if (item->widget()) {
-        d->adjustSizeHints();
-    }
 }
 
 void Extender::itemRemovedEvent(ExtenderItem *item)
@@ -245,7 +238,6 @@ void Extender::itemRemovedEvent(ExtenderItem *item)
 
     //add the empty extender message if needed.
     d->updateEmptyExtenderLabel();
-    d->adjustSizeHints();
 }
 
 void Extender::itemHoverEnterEvent(ExtenderItem *item)
@@ -279,7 +271,6 @@ void Extender::itemHoverMoveEvent(ExtenderItem *item, const QPointF &pos)
 
     //Make sure we remove any 'no detachables' label that might be there, and update the layout.
     d->updateEmptyExtenderLabel();
-    d->adjustSizeHints();
 }
 
 void Extender::itemHoverLeaveEvent(ExtenderItem *item)
@@ -295,7 +286,6 @@ void Extender::itemHoverLeaveEvent(ExtenderItem *item)
         d->currentSpacerIndex = -1;
 
         d->updateEmptyExtenderLabel();
-        d->adjustSizeHints();
     }
 }
 
@@ -456,21 +446,6 @@ void ExtenderPrivate::updateBorders()
             item->d->themeChanged();
         }
     }
-}
-
-void ExtenderPrivate::adjustSizeHints()
-{
-    //FIXME: what happens in this function are some nasty workarounds for a bug in qt4.4's QGL.
-    //Alexis has told me they are working on a fix for qt4.5, so this can be removed once the bug
-    //has been fixed in Qt.
-    if (layout) {
-        layout->updateGeometry();
-        q->setMinimumSize(layout->preferredSize());
-    }
-
-    q->adjustSize();
-
-    emit q->geometryChanged();
 }
 
 void ExtenderPrivate::updateEmptyExtenderLabel()

@@ -50,7 +50,6 @@ class ExtenderPrivate
         int insertIndexFromPos(const QPointF &pos) const;
         void loadExtenderItems();
         void updateBorders();
-        void adjustSizeHints();
         void updateEmptyExtenderLabel();
 
         Extender *q;
