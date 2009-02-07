@@ -71,9 +71,7 @@ bool PackageMetadata::isValid() const
 {
     return ! (d->name.isEmpty() ||
               d->author.isEmpty() ||
-              d->version.isEmpty() ||
               d->license.isEmpty() ||
-              d->app.isEmpty() ||
               d->type.isEmpty());
 }
 
@@ -94,8 +92,8 @@ void PackageMetadata::write(const QString &filename) const
     config.writeEntry("X-KDE-PluginInfo-License", d->license);
     config.writeEntry("X-KDE-PluginInfo-Category", d->category);
     config.writeEntry("X-Plasma-API", d->api);
-    config.writeEntry("X-KDE-Plasmagik-ApplicationName", d->app);
-    config.writeEntry("X-KDE-Plasmagik-RequiredVersion", d->requiredVersion);
+    config.writeEntry("X-KDE-ParentApp", d->app);
+    config.writeEntry("Type", d->type);
 }
 
 void PackageMetadata::read(const QString &filename)
@@ -116,10 +114,10 @@ void PackageMetadata::read(const QString &filename)
     d->version = config.readEntry("X-KDE-PluginInfo-Version", d->version);
     d->website = config.readEntry("X-KDE-PluginInfo-Website", d->website);
     d->license = config.readEntry("X-KDE-PluginInfo-License", d->license);
-    d->type = config.readEntry("Type", d->type);
     d->category = config.readEntry("X-KDE-PluginInfo-Category", d->category);
-    d->app = config.readEntry("X-KDE-Plasmagik-ApplicationName", d->app);
-    d->requiredVersion = config.readEntry("X-KDE-Plasmagik-RequiredVersion", d->requiredVersion);
+    d->api = config.readEntry("X-Plasma-API", d->api);
+    d->app = config.readEntry("X-KDE-ParentApp", d->app);
+    d->type = config.readEntry("Type", d->type);
 }
 
 QString PackageMetadata::name() const
