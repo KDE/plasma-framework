@@ -425,16 +425,6 @@ void FrameSvgPrivate::generateBackground(FrameData *frame)
     p.setCompositionMode(QPainter::CompositionMode_Source);
     p.setRenderHint(QPainter::SmoothPixmapTransform);
 
-    //if we must stretch the center or the borders we compute how much we will have to stretch
-    //the svg to get the desired element sizes
-    QSizeF  scaledContentSize(0, 0);
-    if (q->elementSize(prefix + "center").width() > 0 &&
-        q->elementSize(prefix + "center").height() > 0 &&
-        (!frame->tileCenter || frame->stretchBorders)) {
-        scaledContentSize = QSizeF(contentWidth * ((qreal)q->size().width() / (qreal)q->elementSize(prefix + "center").width()),
-                                   contentHeight * ((qreal)q->size().height() / (qreal)q->elementSize(prefix + "center").height()));
-    }
-
     //CENTER
     if (frame->tileCenter) {
         if (contentHeight > 0 && contentWidth > 0) {
