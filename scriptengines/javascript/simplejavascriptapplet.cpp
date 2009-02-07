@@ -196,30 +196,7 @@ void SimpleJavaScriptApplet::reportError()
     kDebug() << m_engine->uncaughtExceptionBacktrace();
 }
 
-void SimpleJavaScriptApplet::showConfigurationInterface()
-{
-    kDebug() << "Script: showConfigurationInterface";
-
-    // Here we'll load a ui file...
-    QScriptValue global = m_engine->globalObject();
-
-    QScriptValue fun = m_self.property("showConfigurationInterface");
-    if (!fun.isFunction()) {
-        kDebug() << "Script: ShowConfiguratioInterface is not a function, " << fun.toString();
-        return;
-    }
-
-    QScriptContext *ctx = m_engine->pushContext();
-    ctx->setActivationObject(m_self);
-    fun.call(m_self);
-    m_engine->popContext();
-
-    if (m_engine->hasUncaughtException()) {
-        reportError();
-    }
-}
-
-void SimpleJavaScriptApplet::configAccepted()
+void SimpleJavaScriptApplet::configChanged()
 {
     QScriptValue fun = m_self.property("configAccepted");
     if (!fun.isFunction()) {
@@ -229,6 +206,7 @@ void SimpleJavaScriptApplet::configAccepted()
 
     QScriptContext *ctx = m_engine->pushContext();
     ctx->setActivationObject(m_self);
+    //kDebug() << "calling plasmoid";
     fun.call(m_self);
     m_engine->popContext();
 

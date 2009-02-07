@@ -51,8 +51,7 @@ public:
 
 public slots:
     void dataUpdated( const QString &name, const Plasma::DataEngine::Data &data );
-    void showConfigurationInterface();
-    void configAccepted();
+    void configChanged();
     void executeAction(const QString &name);
 
 private:
