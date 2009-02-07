@@ -56,7 +56,6 @@ class ExtenderItemPrivate
         Applet *hostApplet() const;
         void themeChanged();
         void sourceAppletRemoved();
-        qreal iconSize();
         void resizeContent(const QSizeF &newSize);
         void previousTargetExtenderDestroyed(QObject *o);
         void actionDestroyed(QObject *o);
@@ -101,6 +100,8 @@ class ExtenderItemPrivate
         bool collapsed;
 
         QTimer *expirationTimer;
+
+        qreal iconSize;    //preferred size for the icon in the title bar.
 
         static uint s_maxExtenderItemId;
 };

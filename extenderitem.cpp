@@ -199,9 +199,10 @@ QString ExtenderItem::name() const
 void ExtenderItem::setWidget(QGraphicsItem *widget)
 {
     widget->setParentItem(this);
+    widget->installSceneEventFilter(this);
 
     QSizeF panelSize(QSizeF(size().width() - d->bgLeft - d->bgRight,
-                     d->iconSize() + d->dragTop + d->dragBottom));
+                     d->iconSize + d->dragTop + d->dragBottom));
     widget->setPos(QPointF(d->bgLeft + d->dragLeft, panelSize.height() +
                                                     d->bgTop + d->dragTop));
     d->widget = widget;
@@ -606,8 +607,8 @@ void ExtenderItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
             d->toplevel->show();
         }
 
-        d->toplevel->setSceneRect(sceneBoundingRect());
         d->toplevel->setGeometry(screenRect);
+        d->toplevel->setSceneRect(sceneBoundingRect());
         d->toplevel->setMask(d->background->mask());
     } else {
         corona->removeOffscreenWidget(this);
@@ -687,6 +688,26 @@ void ExtenderItem::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
     if (d->titleRect().contains(event->pos())) {
         d->toggleCollapse();
     }
+}
+
+/**
+bool ExtenderItem::sceneEvent(QEvent *event)
+{
+    kDebug() << event->type();
+    return QGraphicsWidget::sceneEvent(event);
+}
+*/
+
+bool ExtenderItem::sceneEventFilter(QGraphicsItem *watched, QEvent *event)
+{
+    if (watched == d->widget && event->type() == QEvent::GraphicsSceneResize) {
+        kDebug() << "widget size has changed, recalculating new size hints";
+        //TODO: abusing the setcollapsed function for recalculating size hints isn't very nice.
+        //not only that, now that layouts work correctly, having the item managed by a layout is
+        //probably best. Something to do for 4.3.
+        setCollapsed(isCollapsed());
+    }
+    return false;
 }
 
 void ExtenderItem::hoverMoveEvent(QGraphicsSceneHoverEvent *event)
@@ -832,7 +853,8 @@ ExtenderItemPrivate::ExtenderItemPrivate(ExtenderItem *extenderItem, Extender *h
       dragStarted(false),
       destroyActionVisibility(false),
       collapsed(false),
-      expirationTimer(0)
+      expirationTimer(0),
+      iconSize(qreal(0))
 {
     dragLeft = dragTop = dragRight = dragBottom = 0;
     bgLeft = bgTop = bgRight = bgBottom = 0;
@@ -849,7 +871,7 @@ ExtenderItemPrivate::~ExtenderItemPrivate()
 QRectF ExtenderItemPrivate::dragHandleRect()
 {
     QSizeF panelSize(QSizeF(q->size().width() - bgLeft - bgRight,
-                     iconSize() + dragTop + dragBottom));
+                     iconSize + dragTop + dragBottom));
     return QRectF(QPointF(bgLeft, bgTop), panelSize);
 }
 
@@ -905,8 +927,6 @@ void ExtenderItemPrivate::updateToolBox()
     Q_ASSERT(dragger);
     Q_ASSERT(toolboxLayout);
 
-    uint iconHeight = iconSize();
-
     //TODO: only delete items that actually have to be deleted, current performance is horrible.
     while (toolboxLayout->count()) {
         QGraphicsLayoutItem *icon = toolboxLayout->itemAt(0);
@@ -920,9 +940,9 @@ void ExtenderItemPrivate::updateToolBox()
         if (action->isVisible()) {
             IconWidget *icon = new IconWidget(q);
             icon->setAction(action);
-            QSizeF iconSize = icon->sizeFromIconSize(iconHeight);
-            icon->setMinimumSize(iconSize);
-            icon->setMaximumSize(iconSize);
+            QSizeF size = icon->sizeFromIconSize(iconSize);
+            icon->setMinimumSize(size);
+            icon->setMaximumSize(size);
             toolboxLayout->addItem(icon);
         }
     }
@@ -931,9 +951,9 @@ void ExtenderItemPrivate::updateToolBox()
     if (q->isDetached() && sourceApplet) {
         IconWidget *returnToSource = new IconWidget(q);
         returnToSource->setSvg("widgets/configuration-icons", "return-to-source");
-        QSizeF iconSize = returnToSource->sizeFromIconSize(iconHeight);
-        returnToSource->setMinimumSize(iconSize);
-        returnToSource->setMaximumSize(iconSize);
+        QSizeF size = returnToSource->sizeFromIconSize(iconSize);
+        returnToSource->setMinimumSize(size);
+        returnToSource->setMaximumSize(size);
 
         toolboxLayout->addItem(returnToSource);
         QObject::connect(returnToSource, SIGNAL(clicked()), q, SLOT(returnToSource()));
@@ -943,9 +963,9 @@ void ExtenderItemPrivate::updateToolBox()
     if (destroyActionVisibility) {
         IconWidget *destroyAction = new IconWidget(q);
         destroyAction->setSvg("widgets/configuration-icons", "close");
-        QSizeF iconSize = destroyAction->sizeFromIconSize(iconHeight);
-        destroyAction->setMinimumSize(iconSize);
-        destroyAction->setMaximumSize(iconSize);
+        QSizeF size = destroyAction->sizeFromIconSize(iconSize);
+        destroyAction->setMinimumSize(size);
+        destroyAction->setMaximumSize(size);
 
         toolboxLayout->addItem(destroyAction);
         QObject::connect(destroyAction, SIGNAL(clicked()), q, SLOT(destroy()));
@@ -1033,13 +1053,27 @@ void ExtenderItemPrivate::themeChanged()
     background->getMargins(bgLeft, bgTop, bgRight, bgBottom);
 
     dragger->setImagePath("widgets/extender-dragger");
+
+    //Read the preferred icon size hint, look at the font size, and calculate the desired title bar
+    //icon height.
+    dragger->resize();
+    QSizeF size = dragger->elementSize("hint-preferred-icon-size");
+    size = size.expandedTo(QSizeF(16,16));
+
+    Plasma::Theme *theme = Plasma::Theme::defaultTheme();
+    QFont font = theme->font(Plasma::Theme::DefaultFont);
+    QFontMetrics fm(font);
+
+    iconSize = qMax(size.height(), (qreal) fm.height());
+
+
     dragger->getMargins(dragLeft, dragTop, dragRight, dragBottom);
 
     QSizeF panelSize(QSizeF(q->size().width() - bgLeft - bgRight,
-                     iconSize() + dragTop + dragBottom));
+                     iconSize + dragTop + dragBottom));
 
     //resize the collapse icon.
-    collapseIcon->resize(collapseIcon->sizeFromIconSize(iconSize()));
+    collapseIcon->resize(collapseIcon->sizeFromIconSize(iconSize));
 
     //reposition the collapse icon based on the new margins and size.
     collapseIcon->setPos(bgLeft + dragLeft,
@@ -1070,20 +1104,6 @@ void ExtenderItemPrivate::sourceAppletRemoved()
     updateToolBox();
 }
 
-qreal ExtenderItemPrivate::iconSize()
-{
-    //read the icon size hint, and enforce a minimum size of 16x16
-    QSizeF size = dragger->elementSize("hint-preferred-icon-size");
-    size = size.expandedTo(QSizeF(16,16));
-
-    //return the size of the text, if that is larger then the recommended icon size
-    Plasma::Theme *theme = Plasma::Theme::defaultTheme();
-    QFont font = theme->font(Plasma::Theme::DefaultFont);
-    QFontMetrics fm(font);
-
-    return qMax(size.height(), (qreal) fm.height());
-}
-
 void ExtenderItemPrivate::resizeContent(const QSizeF &newSize)
 {
     qreal width = newSize.width();
@@ -1091,7 +1111,7 @@ void ExtenderItemPrivate::resizeContent(const QSizeF &newSize)
 
     //resize the dragger
     dragger->resizeFrame(QSizeF(width - bgLeft - bgRight,
-                         iconSize() + dragTop + dragBottom));
+                         iconSize + dragTop + dragBottom));
 
     //resize the applet background
     background->resizeFrame(newSize);

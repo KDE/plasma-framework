@@ -81,7 +81,7 @@ class PLASMA_EXPORT ExtenderItem : public QGraphicsWidget
     Q_PROPERTY(Extender * extender READ extender WRITE setExtender)
     Q_PROPERTY(bool collapsed READ isCollapsed WRITE setCollapsed)
     Q_PROPERTY(bool detached READ isDetached)
-    Q_PROPERTY(uint autoExpireDelay WRITE setAutoExpireDelay)
+    Q_PROPERTY(uint autoExpireDelay READ autoExpireDelay WRITE setAutoExpireDelay)
 
     public:
         /**
@@ -242,6 +242,9 @@ class PLASMA_EXPORT ExtenderItem : public QGraphicsWidget
 
         void hoverMoveEvent(QGraphicsSceneHoverEvent *event);
         void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
+
+        //bool sceneEvent(QEvent *event);
+        bool sceneEventFilter(QGraphicsItem *watched, QEvent *event);
 
     private:
         Q_PRIVATE_SLOT(d, void toggleCollapse())
