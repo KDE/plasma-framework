@@ -43,7 +43,7 @@ PlasmoidPackage::PlasmoidPackage(QObject *parent)
     setMimetypes("config", mimetypes);
     setMimetypes("configui", mimetypes);
 
-    addDirectoryDefinition("ui", "ui", i18n("Executable Scripts"));
+    addDirectoryDefinition("ui", "ui", i18n("User Interface"));
     setMimetypes("ui", mimetypes);
 
     addDirectoryDefinition("scripts", "code", i18n("Executable Scripts"));
