@@ -9,7 +9,9 @@ inputPort PrinterService {
 
 main
 {
-    printInput(input)() {
-        println@Console(input)()
+    printInput(input)(result) {
+        println@Console(input)();
+        result = "success"
     }
 }
+
