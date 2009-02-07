@@ -947,7 +947,7 @@ void IconWidget::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
         }
     }
 
-    // Draw text last because its overlayed
+    // Draw text last because it is overlayed
     QTextLayout labelLayout, infoLayout;
     QRectF textBoundingRect;
     d->layoutTextItems(option, icon, &labelLayout, &infoLayout, &textBoundingRect);

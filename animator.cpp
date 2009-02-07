@@ -612,7 +612,7 @@ void Animator::timerEvent(QTimerEvent *event)
 
     foreach (ElementAnimationState *state, d->animatedElements) {
         if (state->currentFrame == state->frames) {
-            //kDebug() << "skipping" << state->id << "as its already at frame"
+            //kDebug() << "skipping" << state->id << "as it is already at frame"
             //         << state->currentFrame << "of" << state->frames;
             // since we keep element animations around until they are
             // removed, we will end up with finished animations in the queue;
