@@ -97,11 +97,11 @@ private slots:
         SodepMessage result;
 
         buffer.open(QIODevice::WriteOnly);
-        original.writeTo(buffer);
+        sodepWrite(buffer, original);
         buffer.close();
 
         buffer.open(QIODevice::ReadOnly);
-        result = SodepMessage::readFrom(buffer);
+        result = sodepReadMessage(buffer);
         buffer.close();
 
         sodepCompare(result, original);

@@ -18,41 +18,62 @@
   * Boston, MA 02110-1301, USA.
   */
 
-#ifndef SODEPMESSAGE_H
-#define SODEPMESSAGE_H
+#include "sodepfault.h"
 
-#include <sodepvalue.h>
-#include <sodepfault.h>
+#include <QtCore/QString>
 
-class SodepMessagePrivate;
+#include "sodephelpers_p.h"
 
-class Q_DECL_EXPORT SodepMessage
+class SodepFaultPrivate
 {
 public:
-    SodepMessage();
-    explicit SodepMessage(const QString &resourcePath,
-                          const QString &operationName,
-                          qint64 id = 0);
-    SodepMessage(const SodepMessage &other);
-    ~SodepMessage();
-
-    SodepMessage &operator=(const SodepMessage &other);
-
-    qint64 id() const;
-
-    QString resourcePath() const;
-    QString operationName() const;
-
-    SodepFault fault() const;
-    void setFault(const SodepFault &fault);
-
-    SodepValue data() const;
-    void setData(const SodepValue &data);
-
-    bool isValid();
-
-private:
-    SodepMessagePrivate * const d;
+    QString name;
+    SodepValue data;
 };
 
-#endif
+SodepFault::SodepFault()
+    : d(new SodepFaultPrivate)
+{
+
+}
+
+SodepFault::SodepFault(const QString &name, const SodepValue &data)
+    : d(new SodepFaultPrivate)
+{
+    d->name = name;
+    d->data = data;
+}
+
+SodepFault::SodepFault(const SodepFault &other)
+    : d(new SodepFaultPrivate)
+{
+    *d = *other.d;
+}
+
+SodepFault::~SodepFault()
+{
+    delete d;
+}
+
+SodepFault &SodepFault::operator=(const SodepFault &other)
+{
+    *d = *other.d;
+
+    return *this;
+}
+
+QString SodepFault::name() const
+{
+    return d->name;
+}
+
+SodepValue SodepFault::data() const
+{
+    return d->data;
+}
+
+bool SodepFault::isValid() const
+{
+    return !d->name.isEmpty();
+}
+

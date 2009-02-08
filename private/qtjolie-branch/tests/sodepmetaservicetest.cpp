@@ -81,7 +81,7 @@ private slots:
         QVERIFY(m_socket.waitForConnected(5000));
 
         SodepMessage message("/", "shutdown");
-        message.writeTo(m_socket);
+        sodepWrite(m_socket, message);
         QTest::qWait(1000);
 
         metaserviceProcess.waitForFinished();
@@ -110,12 +110,12 @@ private slots:
         value.children("resourcePrefix") << SodepValue(resourcePrefix);
         value.children("filepath") << SodepValue(QString(DATA_DIR"/")+fileName);
         message.setData(value);
-        message.writeTo(m_socket);
+        sodepWrite(m_socket, message);
 
         QVERIFY(m_socket.waitForReadyRead(5000));
         QTest::qWait(1000);
 
-        SodepMessage reply = SodepMessage::readFrom(m_socket);
+        SodepMessage reply = sodepReadMessage(m_socket);
 
         m_socket.close();
 
@@ -132,12 +132,12 @@ private slots:
         QVERIFY(m_socket.waitForConnected(5000));
 
         SodepMessage message("/", "getServices");
-        message.writeTo(m_socket);
+        sodepWrite(m_socket, message);
 
         QVERIFY(m_socket.waitForReadyRead(5000));
         QTest::qWait(1000);
 
-        SodepMessage reply = SodepMessage::readFrom(m_socket);
+        SodepMessage reply = sodepReadMessage(m_socket);
 
         m_socket.close();
 
@@ -181,12 +181,12 @@ private slots:
 
         SodepMessage message("/", method);
         message.setData(data);
-        message.writeTo(m_socket);
+        sodepWrite(m_socket, message);
 
         QVERIFY(m_socket.waitForReadyRead(5000));
         QTest::qWait(1000);
 
-        SodepMessage reply = SodepMessage::readFrom(m_socket);
+        SodepMessage reply = sodepReadMessage(m_socket);
 
         m_socket.close();
 
@@ -215,12 +215,12 @@ private slots:
         SodepMessage message("/", "unloadEmbeddedService");
         SodepValue value(serviceName);
         message.setData(value);
-        message.writeTo(m_socket);
+        sodepWrite(m_socket, message);
 
         QVERIFY(m_socket.waitForReadyRead(5000));
         QTest::qWait(1000);
 
-        SodepMessage reply = SodepMessage::readFrom(m_socket);
+        SodepMessage reply = sodepReadMessage(m_socket);
 
         m_socket.close();
 

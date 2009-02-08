@@ -18,41 +18,45 @@
   * Boston, MA 02110-1301, USA.
   */
 
-#ifndef SODEPMESSAGE_H
-#define SODEPMESSAGE_H
+#ifndef SODEPVALUE_H
+#define SODEPVALUE_H
 
-#include <sodepvalue.h>
-#include <sodepfault.h>
+#include <QtCore/QIODevice>
+#include <QtCore/QList>
 
-class SodepMessagePrivate;
+class SodepValuePrivate;
 
-class Q_DECL_EXPORT SodepMessage
+class Q_DECL_EXPORT SodepValue
 {
 public:
-    SodepMessage();
-    explicit SodepMessage(const QString &resourcePath,
-                          const QString &operationName,
-                          qint64 id = 0);
-    SodepMessage(const SodepMessage &other);
-    ~SodepMessage();
+    SodepValue();
 
-    SodepMessage &operator=(const SodepMessage &other);
+    explicit SodepValue(const QString &content);
+    explicit SodepValue(qint32 content);
+    explicit SodepValue(double content);
 
-    qint64 id() const;
+    SodepValue(const SodepValue &other);
 
-    QString resourcePath() const;
-    QString operationName() const;
+    ~SodepValue();
 
-    SodepFault fault() const;
-    void setFault(const SodepFault &fault);
+    SodepValue &operator=(const SodepValue &other);
 
-    SodepValue data() const;
-    void setData(const SodepValue &data);
+    QStringList childrenNames() const;
+    QList<SodepValue> &children(const QString &name);
+    const QList<SodepValue> &children(const QString &name) const;
 
-    bool isValid();
+    QString toString() const;
+    qint32 toInt() const;
+    double toDouble() const;
+
+    bool isString() const;
+    bool isInt() const;
+    bool isDouble() const;
+
+    bool isValid() const;
 
 private:
-    SodepMessagePrivate * const d;
+    SodepValuePrivate * const d;
 };
 
 #endif

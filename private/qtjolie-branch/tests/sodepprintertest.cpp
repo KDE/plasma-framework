@@ -27,6 +27,7 @@
 
 #include <sodepmessage.h>
 #include <sodepvalue.h>
+#include <sodephelpers_p.h>
 
 class MainWindow : public QWidget
 {
@@ -57,20 +58,20 @@ private slots:
     {
         SodepMessage message("/", "printInput");
         message.setData(SodepValue(m_lineEdit->text()));
-        message.writeTo(m_socket);
+        sodepWrite(m_socket, message);
 
         qDebug("Message sent:");
         QBuffer buffer;
         buffer.open(QIODevice::WriteOnly);
-        message.writeTo(buffer);
+        sodepWrite(buffer, message);
         buffer.close();
         qDebug(buffer.data().toHex());
 
         qDebug("Message received:");
         buffer.setData(QByteArray());
         buffer.open(QIODevice::WriteOnly);
-        message = SodepMessage::readFrom(m_socket);
-        message.writeTo(buffer);
+        message = sodepReadMessage(m_socket);
+        sodepWrite(buffer, message);
         buffer.close();
         qDebug(buffer.data().toHex());
     }

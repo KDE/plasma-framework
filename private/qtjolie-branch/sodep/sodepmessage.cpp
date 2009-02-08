@@ -107,25 +107,3 @@ bool SodepMessage::isValid()
     return !d->resourcePath.isEmpty() && !d->operationName.isEmpty();
 }
 
-void SodepMessage::writeTo(QIODevice &io) const
-{
-    sodepWrite(io, d->id);
-    sodepWrite(io, d->resourcePath);
-    sodepWrite(io, d->operationName);
-    d->fault.writeTo(io);
-    d->data.writeTo(io);
-}
-
-SodepMessage SodepMessage::readFrom(QIODevice &io)
-{
-    SodepMessage result;
-
-    result.d->id = sodepReadInt64(io);
-    result.d->resourcePath = sodepReadString(io);
-    result.d->operationName = sodepReadString(io);
-    result.d->fault = SodepFault::readFrom(io);
-    result.d->data = SodepValue::readFrom(io);
-
-    return result;
-}
-

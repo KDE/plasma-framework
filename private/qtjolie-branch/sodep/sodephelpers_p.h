@@ -23,6 +23,11 @@
 
 #include <QtCore/QIODevice>
 #include <QtCore/QString>
+#include <QtCore/QStringList>
+
+#include "sodepvalue.h"
+#include "sodepfault.h"
+#include "sodepmessage.h"
 
 inline void sodepWrite(QIODevice &io, double value)
 {
@@ -65,6 +70,57 @@ inline void sodepWrite(QIODevice &io, const QString &value)
     QByteArray data = value.toUtf8();
     sodepWrite(io, data.size());
     io.write(data);
+}
+
+inline void sodepWrite(QIODevice &io, const SodepValue &value)
+{
+    if (value.isDouble()) {
+        io.putChar(3);
+        sodepWrite(io, value.toDouble());
+    } else if (value.isInt()) {
+        io.putChar(2);
+        sodepWrite(io, value.toInt());
+    } else if (value.isString()) {
+        io.putChar(1);
+        sodepWrite(io, value.toString());
+    } else {
+        io.putChar(0);
+    }
+
+    sodepWrite(io, value.childrenNames().size());
+
+    foreach (const QString &name, value.childrenNames()) {
+        sodepWrite(io, name);
+
+        QList<SodepValue> values = value.children(name);
+        qint32 valueCount = values.size();
+        sodepWrite(io, valueCount);
+        for (int j=0; j<valueCount; ++j) {
+            sodepWrite(io, values[j]);
+        }
+    }
+
+}
+
+inline void sodepWrite(QIODevice &io, const SodepFault &fault)
+{
+    if (!fault.isValid()) {
+        io.putChar(0);
+        return;
+    }
+
+    io.putChar(1);
+    sodepWrite(io, fault.name());
+    sodepWrite(io, fault.data());
+}
+
+inline void sodepWrite(QIODevice &io, const SodepMessage &message)
+{
+    sodepWrite(io, message.id());
+    sodepWrite(io, message.resourcePath());
+    sodepWrite(io, message.operationName());
+    sodepWrite(io, message.fault());
+    sodepWrite(io, message.data());
 }
 
 inline double sodepReadDouble(QIODevice &io)
@@ -115,9 +171,85 @@ inline qint64 sodepReadInt64(QIODevice &io)
 inline QString sodepReadString(QIODevice &io)
 {
     qint32 length = sodepReadInt32(io);
-    QByteArray data = io.read(length);
-    return QString::fromUtf8(data);
+
+    char *data = new char[length+1];
+    io.read(data, length);
+    data[length] = '\0';
+
+    QString result = QString::fromUtf8(data);
+    delete[] data;
+
+    return result;
 }
 
+inline SodepValue sodepReadValue(QIODevice &io)
+{
+    SodepValue result;
+
+    char code;
+    io.getChar(&code);
+
+    switch(code) {
+    case 3: {
+        result = SodepValue(sodepReadDouble(io));
+        break;
+    }
+    case 2: {
+        result = SodepValue(sodepReadInt32(io));
+        break;
+    }
+    case 1: {
+        result = SodepValue(sodepReadString(io));
+        break;
+    }
+    default:
+        break;
+    }
+
+    qint32 childrenCount = sodepReadInt32(io);
+
+    for (int i=0; i<childrenCount; ++i) {
+        QString name = sodepReadString(io);
+
+        QList<SodepValue> values;
+        qint32 valueCount = sodepReadInt32(io);
+        for (int j=0; j<valueCount; ++j) {
+            values << sodepReadValue(io);
+        }
+
+        result.children(name) = values;
+    }
+
+    return result;
+}
+
+inline SodepFault sodepReadFault(QIODevice &io)
+{
+    char code;
+    io.getChar(&code);
+
+    if (code!=1) {
+        return SodepFault();
+    }
+
+    QString name = sodepReadString(io);
+    SodepValue data = sodepReadValue(io);
+
+    return SodepFault(name, data);
+}
+
+inline SodepMessage sodepReadMessage(QIODevice &io)
+{
+    qint64 id = sodepReadInt64(io);
+    QString resourcePath = sodepReadString(io);
+    QString operationName = sodepReadString(io);
+
+    SodepMessage result(resourcePath, operationName, id);
+
+    result.setFault(sodepReadFault(io));
+    result.setData(sodepReadValue(io));
+
+    return result;
+}
 
 #endif

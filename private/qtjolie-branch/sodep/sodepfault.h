@@ -18,41 +18,32 @@
   * Boston, MA 02110-1301, USA.
   */
 
-#ifndef SODEPMESSAGE_H
-#define SODEPMESSAGE_H
+#ifndef SODEPFAULT_H
+#define SODEPFAULT_H
 
 #include <sodepvalue.h>
-#include <sodepfault.h>
 
-class SodepMessagePrivate;
+class SodepFaultPrivate;
 
-class Q_DECL_EXPORT SodepMessage
+class Q_DECL_EXPORT SodepFault
 {
 public:
-    SodepMessage();
-    explicit SodepMessage(const QString &resourcePath,
-                          const QString &operationName,
-                          qint64 id = 0);
-    SodepMessage(const SodepMessage &other);
-    ~SodepMessage();
+    SodepFault();
+    explicit SodepFault(const QString &name, const SodepValue &data = SodepValue());
 
-    SodepMessage &operator=(const SodepMessage &other);
+    SodepFault(const SodepFault &other);
 
-    qint64 id() const;
+    ~SodepFault();
 
-    QString resourcePath() const;
-    QString operationName() const;
+    SodepFault &operator=(const SodepFault &other);
 
-    SodepFault fault() const;
-    void setFault(const SodepFault &fault);
-
+    QString name() const;
     SodepValue data() const;
-    void setData(const SodepValue &data);
 
-    bool isValid();
+    bool isValid() const;
 
 private:
-    SodepMessagePrivate * const d;
+    SodepFaultPrivate * const d;
 };
 
 #endif
