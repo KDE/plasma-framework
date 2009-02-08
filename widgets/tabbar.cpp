@@ -298,10 +298,7 @@ void TabBar::setCurrentIndex(int index)
     d->oldPage = d->pages[d->currentIndex];
     d->newPage = d->pages[index];
 
-//FIXME: this part should be enabled again once
-//http://trolltech.com/developer/task-tracker/index_html?id=220488
-//get fixed
-#ifdef USE_SLIDING_ANIMATION
+
     d->newPage->resize(d->oldPage->size());
 
     setFlags(QGraphicsItem::ItemClipsChildrenToShape);
@@ -342,13 +339,7 @@ void TabBar::setCurrentIndex(int index)
             d->oldPage, Plasma::Animator::SlideOutMovement,
             d->oldPage->geometry().topRight().toPoint());
     }
-#else
-    d->tabWidgetLayout->addItem(d->pages[index]);
-    d->oldPage->hide();
-    d->newPage->show();
-    d->newPage->setEnabled(true);
-    d->oldPage->setEnabled(false);
-#endif
+
     d->currentIndex = index;
     emit currentChanged(index);
     d->tabProxy->native->setCurrentIndex(index);
