@@ -1,6 +1,6 @@
 
 inputPort MathService {
-    Location: "socket://localhost:11000"
+    Location: "local"
     Protocol: sodep
     RequestResponse:
         twice

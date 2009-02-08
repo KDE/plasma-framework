@@ -64,27 +64,29 @@ class SodepMetaServiceTest : public QObject
 {
     Q_OBJECT
 
-    QProcess metaserviceProcess;
+    QProcess m_metaserviceProcess;
+    QTcpSocket m_socket;
 
 private slots:
     void initTestCase()
     {
-        metaserviceProcess.start("metaservice");
-        QVERIFY2(metaserviceProcess.waitForStarted(), "Looks like you don't have Jolie's metaservice command");
+        m_metaserviceProcess.start("metaservice");
+        QVERIFY2(m_metaserviceProcess.waitForStarted(), "Looks like you don't have Jolie's metaservice command");
         QTest::qWait(1000);
+
+        m_socket.connectToHost("localhost", 9000);
+        QVERIFY(m_socket.waitForConnected(-1));
     }
 
     void cleanupTestCase()
     {
-        QTcpSocket m_socket;
-        m_socket.connectToHost("localhost", 9000);
-        QVERIFY(m_socket.waitForConnected(5000));
-
         SodepMessage message("/", "shutdown");
         sodepWrite(m_socket, message);
         QTest::qWait(1000);
 
-        metaserviceProcess.waitForFinished();
+        m_socket.close();
+
+        m_metaserviceProcess.waitForFinished();
     }
 
     void shouldLoadService_data()
@@ -101,10 +103,6 @@ private slots:
         QFETCH(QString, resourcePrefix);
         QFETCH(QString, fileName);
 
-        QTcpSocket m_socket;
-        m_socket.connectToHost("localhost", 9000);
-        QVERIFY(m_socket.waitForConnected(5000));
-
         SodepMessage message("/", "loadEmbeddedJolieService");
         SodepValue value(0);
         value.children("resourcePrefix") << SodepValue(resourcePrefix);
@@ -114,8 +112,6 @@ private slots:
 
         SodepMessage reply = sodepReadMessage(m_socket);
 
-        m_socket.close();
-
         SodepMessage expected("/", "loadEmbeddedJolieService");
         expected.setData(SodepValue(resourcePrefix));
 
@@ -124,16 +120,10 @@ private slots:
 
     void shouldListServices()
     {
-        QTcpSocket m_socket;
-        m_socket.connectToHost("localhost", 9000);
-        QVERIFY(m_socket.waitForConnected(5000));
-
         SodepMessage message("/", "getServices");
         sodepWrite(m_socket, message);
 
         SodepMessage reply = sodepReadMessage(m_socket);
-
-        m_socket.close();
 
         SodepMessage expected("/", "getServices");
         SodepValue value;
@@ -153,33 +143,27 @@ private slots:
 
     void shouldPlaceServiceCalls_data()
     {
-        QTest::addColumn<int>("port");
+        QTest::addColumn<QString>("path");
         QTest::addColumn<QString>("method");
         QTest::addColumn<SodepValue>("data");
         QTest::addColumn<SodepValue>("replyData");
 
-        QTest::newRow("printer service") << 10000 << "printInput" << SodepValue("Patapatapon!") << SodepValue("success");
-        QTest::newRow("math service") << 11000 << "twice" << SodepValue(10.5) << SodepValue(21.0);
+        QTest::newRow("printer service") << "/Printer" << "printInput" << SodepValue("Patapatapon!") << SodepValue("success");
+        QTest::newRow("math service") << "/Math" << "twice" << SodepValue(10.5) << SodepValue(21.0);
     }
 
     void shouldPlaceServiceCalls()
     {
-        QFETCH(int, port);
+        QFETCH(QString, path);
         QFETCH(QString, method);
         QFETCH(SodepValue, data);
         QFETCH(SodepValue, replyData);
 
-        QTcpSocket m_socket;
-        m_socket.connectToHost("localhost", port);
-        QVERIFY(m_socket.waitForConnected(5000));
-
-        SodepMessage message("/", method);
+        SodepMessage message(path, method);
         message.setData(data);
         sodepWrite(m_socket, message);
 
         SodepMessage reply = sodepReadMessage(m_socket);
-
-        m_socket.close();
 
         SodepMessage expected("/", method);
         expected.setData(replyData);
@@ -199,18 +183,12 @@ private slots:
     {
         QFETCH(QString, serviceName);
 
-        QTcpSocket m_socket;
-        m_socket.connectToHost("localhost", 9000);
-        QVERIFY(m_socket.waitForConnected(5000));
-
         SodepMessage message("/", "unloadEmbeddedService");
         SodepValue value(serviceName);
         message.setData(value);
         sodepWrite(m_socket, message);
 
         SodepMessage reply = sodepReadMessage(m_socket);
-
-        m_socket.close();
 
         SodepMessage expected("/", "unloadEmbeddedService");
 

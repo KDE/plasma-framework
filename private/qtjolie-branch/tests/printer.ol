@@ -1,7 +1,7 @@
 include "console.iol"
 
 inputPort PrinterService {
-    Location: "socket://localhost:10000"
+    Location: "local"
     Protocol: sodep
     RequestResponse:
         printInput
