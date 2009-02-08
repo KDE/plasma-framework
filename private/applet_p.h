@@ -106,6 +106,7 @@ public:
     QStringList loadedEngines;
     Plasma::FrameSvg *background;
     AppletScript *script;
+    QVariantList args;
     Package *package;
     ConfigLoader *configLoader;
     KConfigGroup *mainConfig;

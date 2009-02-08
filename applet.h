@@ -560,6 +560,23 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
                         uint appletId = 0);
 
         /**
+         * @param parent the QGraphicsItem this applet is parented to
+         * @param serviceId the name of the .desktop file containing the
+         *      information about the widget
+         * @param appletId a unique id used to differentiate between multiple
+         *      instances of the same Applet type
+         * @param args  a list of strings containing two entries: the service id
+         *      and the applet id
+         * @since KDE4.3 
+         */
+        explicit Applet(QGraphicsItem *parent,
+                        const QString &serviceId,
+                        uint appletId,
+                        const QVariantList &args
+                        );
+
+
+        /**
          * @return true if destroy() was called; useful for Applets which should avoid
          * certain tasks if they are about to be deleted permanently
          */
@@ -690,6 +707,12 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          * @param busy show or hide the busy indicator
          */
         void setBusy(bool busy);
+
+        /**
+         * @return the list of arguments which the applet was called
+         * @since KDE4.3
+         */
+        QVariantList startupArguments() const;
 
     protected:
         /**

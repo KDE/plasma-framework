@@ -105,6 +105,30 @@ Applet::Applet(QGraphicsItem *parent,
     d->init();
 }
 
+Applet::Applet(QGraphicsItem *parent,
+               const QString &serviceID,
+               uint appletId,
+               const QVariantList &args)
+    :  QGraphicsWidget(parent),
+       d(new AppletPrivate(KService::serviceByStorageId(serviceID), appletId, this))
+{
+    // WARNING: do not access config() OR globalConfig() in this method!
+    //          that requires a scene, which is not available at this point
+
+    QVariantList &mutableArgs = const_cast<QVariantList &>(args);
+    if (!mutableArgs.isEmpty()) {
+        mutableArgs.removeFirst();
+
+        if (!mutableArgs.isEmpty()) {
+            mutableArgs.removeFirst();
+        }
+    }
+
+    d->args = mutableArgs;
+
+    d->init();
+}
+
 Applet::Applet(QObject *parentObject, const QVariantList &args)
     :  QGraphicsWidget(0),
        d(new AppletPrivate(
@@ -122,6 +146,8 @@ Applet::Applet(QObject *parentObject, const QVariantList &args)
             mutableArgs.removeFirst();
         }
     }
+
+    d->args = mutableArgs;
 
     setParent(parentObject);
 
@@ -977,6 +1003,11 @@ void Applet::showMessage(const QIcon &icon, const QString &message, const Messag
 
 }
 
+QVariantList Applet::startupArguments() const
+{
+    return d->args;
+}
+
 void Applet::flushPendingConstraintsEvents()
 {
     if (d->pendingConstraints == NoConstraint) {
@@ -1709,13 +1740,16 @@ Applet *Applet::load(const QString &appletName, uint appletId, const QVariantLis
         appletId = ++AppletPrivate::s_maxAppletId;
     }
 
+    QVariantList allArgs;
+    allArgs << offer->storageId() << appletId << args;
+
     if (!offer->property("X-Plasma-API").toString().isEmpty()) {
         kDebug() << "we have a script using the"
                  << offer->property("X-Plasma-API").toString() << "API";
         if (isContainment) {
             return new Containment(0, offer->storageId(), appletId);
         }
-        return new Applet(0, offer->storageId(), appletId);
+        return new Applet(0, offer->storageId(),  appletId, allArgs);
     }
 
     KPluginLoader plugin(*offer);
@@ -1725,8 +1759,7 @@ Applet *Applet::load(const QString &appletName, uint appletId, const QVariantLis
         return 0;
     }
 
-    QVariantList allArgs;
-    allArgs << offer->storageId() << appletId << args;
+
     QString error;
     Applet *applet;
 
