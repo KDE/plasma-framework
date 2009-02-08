@@ -18,11 +18,13 @@
   * Boston, MA 02110-1301, USA.
   */
 
+#include <QtCore/QEventLoop>
 #include <QtCore/QObject>
 #include <QtCore/QProcess>
 #include <QtNetwork/QTcpSocket>
 #include <QtTest/QtTest>
 
+#include <sodepclient.h>
 #include <sodepmessage.h>
 #include "sodeptesthelpers.h"
 
@@ -66,6 +68,14 @@ class SodepMetaServiceTest : public QObject
 
     QProcess m_metaserviceProcess;
     QTcpSocket m_socket;
+    SodepClient m_client;
+
+public:
+    SodepMetaServiceTest()
+        : QObject(), m_client(&m_socket)
+    {
+        qRegisterMetaType<SodepMessage>();
+    }
 
 private slots:
     void initTestCase()
@@ -121,9 +131,23 @@ private slots:
     void shouldListServices()
     {
         SodepMessage message("/", "getServices");
-        sodepWrite(m_socket, message);
 
-        SodepMessage reply = sodepReadMessage(m_socket);
+        QSignalSpy spy(&m_client, SIGNAL(requestFinished(int, const SodepMessage&, bool)));
+
+        int id = m_client.postMessage(message);
+        QEventLoop eventLoop;
+        connect(&m_client, SIGNAL(requestFinished(int, const SodepMessage&, bool)),
+                &eventLoop, SLOT(quit()));
+        eventLoop.exec();
+
+        QCOMPARE(spy.count(), 1);
+        QVariantList signal = spy.takeFirst();
+        QCOMPARE(signal.at(0).toInt(), id);
+        sodepCompare(signal.at(1).value<SodepMessage>(), message);
+        QCOMPARE(signal.at(2).toBool(), false);
+
+        id = m_client.requestMessage();
+        eventLoop.exec();
 
         SodepMessage expected("/", "getServices");
         SodepValue value;
@@ -138,7 +162,11 @@ private slots:
         value.children("service") << s1 << s2;
         expected.setData(value);
 
-        sodepCompare(reply, expected);
+        QCOMPARE(spy.count(), 1);
+        signal = spy.takeFirst();
+        QCOMPARE(signal.at(0).toInt(), id);
+        sodepCompare(signal.at(1).value<SodepMessage>(), expected);
+        QCOMPARE(signal.at(2).toBool(), false);
     }
 
     void shouldPlaceServiceCalls_data()
