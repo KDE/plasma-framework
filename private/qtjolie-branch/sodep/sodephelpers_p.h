@@ -125,6 +125,10 @@ inline void sodepWrite(QIODevice &io, const SodepMessage &message)
 
 inline double sodepReadDouble(QIODevice &io)
 {
+    while (io.bytesAvailable()<8) {
+        io.waitForReadyRead(-1);
+    }
+
     double d;
     char *out = (char*)&d;
     char in[8];
@@ -140,6 +144,10 @@ inline double sodepReadDouble(QIODevice &io)
 
 inline qint32 sodepReadInt32(QIODevice &io)
 {
+    while (io.bytesAvailable()<4) {
+        io.waitForReadyRead(-1);
+    }
+
     qint32 i;
     char *out = (char*)&i;
     char in[4];
@@ -155,6 +163,10 @@ inline qint32 sodepReadInt32(QIODevice &io)
 
 inline qint64 sodepReadInt64(QIODevice &io)
 {
+    while (io.bytesAvailable()<8) {
+        io.waitForReadyRead(-1);
+    }
+
     qint64 i;
     char *out = (char*)&i;
     char in[8];
@@ -172,6 +184,10 @@ inline QString sodepReadString(QIODevice &io)
 {
     qint32 length = sodepReadInt32(io);
 
+    while (io.bytesAvailable()<length) {
+        io.waitForReadyRead(-1);
+    }
+
     char *data = new char[length+1];
     io.read(data, length);
     data[length] = '\0';
@@ -185,6 +201,10 @@ inline QString sodepReadString(QIODevice &io)
 inline SodepValue sodepReadValue(QIODevice &io)
 {
     SodepValue result;
+
+    while (io.bytesAvailable()<1) {
+        io.waitForReadyRead(-1);
+    }
 
     char code;
     io.getChar(&code);
@@ -225,6 +245,10 @@ inline SodepValue sodepReadValue(QIODevice &io)
 
 inline SodepFault sodepReadFault(QIODevice &io)
 {
+    while (io.bytesAvailable()<1) {
+        io.waitForReadyRead(-1);
+    }
+
     char code;
     io.getChar(&code);
 

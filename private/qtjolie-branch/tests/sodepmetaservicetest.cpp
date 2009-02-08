@@ -112,9 +112,6 @@ private slots:
         message.setData(value);
         sodepWrite(m_socket, message);
 
-        QVERIFY(m_socket.waitForReadyRead(5000));
-        QTest::qWait(1000);
-
         SodepMessage reply = sodepReadMessage(m_socket);
 
         m_socket.close();
@@ -133,9 +130,6 @@ private slots:
 
         SodepMessage message("/", "getServices");
         sodepWrite(m_socket, message);
-
-        QVERIFY(m_socket.waitForReadyRead(5000));
-        QTest::qWait(1000);
 
         SodepMessage reply = sodepReadMessage(m_socket);
 
@@ -183,9 +177,6 @@ private slots:
         message.setData(data);
         sodepWrite(m_socket, message);
 
-        QVERIFY(m_socket.waitForReadyRead(5000));
-        QTest::qWait(1000);
-
         SodepMessage reply = sodepReadMessage(m_socket);
 
         m_socket.close();
@@ -216,9 +207,6 @@ private slots:
         SodepValue value(serviceName);
         message.setData(value);
         sodepWrite(m_socket, message);
-
-        QVERIFY(m_socket.waitForReadyRead(5000));
-        QTest::qWait(1000);
 
         SodepMessage reply = sodepReadMessage(m_socket);
 
