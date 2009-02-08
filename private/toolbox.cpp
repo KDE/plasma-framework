@@ -131,10 +131,16 @@ void ToolBox::addTool(QAction *action)
 
 void ToolBox::updateToolBox()
 {
+    Plasma::IconWidget *tool = qobject_cast<Plasma::IconWidget *>(sender());
+    if (tool && tool->action() == 0) {
+        delete tool;
+        tool = 0;
+    }
+
     if (d->showing) {
         d->showing = false;
         showToolBox();
-    } else if (Plasma::IconWidget *tool = qobject_cast<Plasma::IconWidget *>(sender())) {
+    } else if (tool && !tool->isEnabled()) {
         tool->hide();
     }
 }
