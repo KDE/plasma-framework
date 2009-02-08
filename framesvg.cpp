@@ -428,10 +428,8 @@ void FrameSvgPrivate::generateBackground(FrameData *frame)
     //CENTER
     if (frame->tileCenter) {
         if (contentHeight > 0 && contentWidth > 0) {
-            int centerTileHeight;
-            int centerTileWidth;
-            centerTileHeight = q->elementSize(prefix + "center").height();
-            centerTileWidth = q->elementSize(prefix + "center").width();
+            const int centerTileHeight = q->elementSize(prefix + "center").height();
+            const int centerTileWidth = q->elementSize(prefix + "center").width();
             QPixmap center(centerTileWidth, centerTileHeight);
             center.fill(Qt::transparent);
 
