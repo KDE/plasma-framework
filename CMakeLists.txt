@@ -251,7 +251,6 @@ install(FILES
     widgets/tabbar.h
     widgets/treeview.h
     widgets/textedit.h
-    widgets/videowidget.h
     widgets/webview.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/plasma/widgets COMPONENT Devel)
 
@@ -262,7 +261,11 @@ install(FILES
     scripting/scriptengine.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/plasma/scripting COMPONENT Devel)
 
-
+if(PHONON_FOUND)
+    install (FILES
+        widgets/videowidget.h
+        DESTINATION ${INCLUDE_INSTALL_DIR}/plasma/widgets COMPONENT Devel)
+endif(PHONON_FOUND)
 
 install(FILES
    servicetypes/plasma-animator.desktop
