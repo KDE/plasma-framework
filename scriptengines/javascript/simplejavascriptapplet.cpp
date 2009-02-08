@@ -176,7 +176,7 @@ KSharedPtr<UiLoader> SimpleJavaScriptApplet::s_widgetLoader;
 SimpleJavaScriptApplet::SimpleJavaScriptApplet(QObject *parent, const QVariantList &args)
     : Plasma::AppletScript(parent)
 {
-    //kDebug() << "Script applet launched, args" << args;
+//    kDebug() << "Script applet launched, args" << applet()->startupArguments();
 
     m_engine = new QScriptEngine(this);
     importExtensions();
@@ -381,6 +381,14 @@ void SimpleJavaScriptApplet::setupObjects()
     m_self = m_engine->newQObject(m_interface);
     m_self.setScope(global);
     global.setProperty("plasmoid", m_self);
+
+    QScriptValue args = m_engine->newArray();
+    int i = 0;
+    foreach (QVariant arg, applet()->startupArguments()) {
+        args.setProperty(i, variant2ScriptValue(m_engine, arg));
+        ++i;
+    }
+    global.setProperty("startupArguments", args);
 
     //manually create enum values. ugh
     QMetaObject meta = AppletInterface::staticMetaObject;
