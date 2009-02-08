@@ -1053,12 +1053,10 @@ void Applet::flushPendingConstraintsEvents()
         }
 
         bool canConfig = unlocked || KAuthorized::authorize("PlasmaAllowConfigureWhenLocked");
-        if (canConfig) {
-            action = d->actions.action("configure");
-            if (action) {
-                action->setVisible(canConfig);
-                action->setEnabled(canConfig);
-            }
+        action = d->actions.action("configure");
+        if (action) {
+            action->setVisible(canConfig);
+            action->setEnabled(canConfig);
         }
     }
 
