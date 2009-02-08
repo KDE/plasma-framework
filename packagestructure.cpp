@@ -122,13 +122,13 @@ PackageStructure::Ptr PackageStructure::load(const QString &packageFormat)
         return structure;
     }
 
-    if (packageFormat == "plasmoid") {
+    if (packageFormat == "Plasma/Applet") {
         structure = defaultPackageStructure(AppletComponent);
-    } else if (packageFormat == "dataengine") {
+    } else if (packageFormat == "Plasma/DataEngine") {
         structure = defaultPackageStructure(DataEngineComponent);
-    } else if (packageFormat == "runner") {
+    } else if (packageFormat == "Plasma/Runner") {
         structure = defaultPackageStructure(RunnerComponent);
-    } else if (packageFormat == "theme") {
+    } else if (packageFormat == "Plasma/Theme") {
         structure = Theme::packageStructure();
     }
 
