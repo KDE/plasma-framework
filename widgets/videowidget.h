@@ -22,6 +22,8 @@
 
 #include <QtGui/QGraphicsProxyWidget>
 
+#include <plasma/plasma_export.h>
+
 namespace Phonon {
     class VideoWidget;
     class MediaObject;
@@ -38,7 +40,7 @@ class VideoWidgetPrivate;
  *
  * @short Provides a video player widget
  */
-class VideoWidget : public QGraphicsProxyWidget
+class PLASMA_EXPORT VideoWidget : public QGraphicsProxyWidget
 {
     Q_OBJECT
 

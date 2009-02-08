@@ -135,6 +135,13 @@ if(QT_QTOPENGL_FOUND AND OPENGL_FOUND)
         glapplet.cpp)
 endif(QT_QTOPENGL_FOUND AND OPENGL_FOUND)
 
+if (PHONON_FOUND)
+    message(STATUS "Adding support to Phonon to libplasma")
+    set(plasma_LIB_SRCS
+        ${plasma_LIB_SRCS}
+        widgets/videowidget.cpp)
+endif(PHONON_FOUND)
+
 kde4_add_library(plasma SHARED ${plasma_LIB_SRCS})
 
 target_link_libraries(plasma ${KDE4_KIO_LIBS} ${KDE4_KFILE_LIBS} knewstuff2
@@ -144,6 +151,9 @@ if(X11_FOUND)
    target_link_libraries(plasma ${X11_LIBRARIES})
 endif(X11_FOUND)
 
+if(PHONON_FOUND)
+   target_link_libraries(plasma ${KDE4_PHONON_LIBS})
+endif(PHONON_FOUND)
 
 if(DL_LIBRARY)
     target_link_libraries(plasma ${DL_LIBRARY})
@@ -241,6 +251,7 @@ install(FILES
     widgets/tabbar.h
     widgets/treeview.h
     widgets/textedit.h
+    widgets/videowidget.h
     widgets/webview.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/plasma/widgets COMPONENT Devel)
 
