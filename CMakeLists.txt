@@ -73,6 +73,7 @@ set(plasma_LIB_SRCS
     private/datacontainer_p.cpp
     private/desktoptoolbox.cpp
     private/extenderapplet.cpp
+    private/extenderitemmimedata.cpp
     private/nativetabbar.cpp
     private/packages.cpp
     private/paneltoolbox.cpp

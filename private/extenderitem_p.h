@@ -47,27 +47,22 @@ class ExtenderItemPrivate
 
         QRectF dragHandleRect();
         QRectF titleRect();
-        bool leaveCurrentView(const QRect &rect);
-        QRect screenRect();
         void toggleCollapse();
         void updateToolBox();
         void repositionToolbox();
-        QPointF scenePosFromScreenPos(const QPoint &pos) const;
         Applet *hostApplet() const;
         void themeChanged();
         void sourceAppletRemoved();
         void resizeContent(const QSizeF &newSize);
-        void previousTargetExtenderDestroyed(QObject *o);
         void actionDestroyed(QObject *o);
+        void updateSizeHints();
 
         ExtenderItem *q;
 
         QGraphicsItem *widget;
         QGraphicsWidget *toolbox;
         QGraphicsLinearLayout *toolboxLayout;
-        QGraphicsView *toplevel;
 
-        Extender *previousTargetExtender;
         Extender *extender;
         Applet *sourceApplet;
 
@@ -90,10 +85,8 @@ class ExtenderItemPrivate
         qreal dragLeft, dragTop, dragRight, dragBottom;
         qreal bgLeft, bgTop, bgRight, bgBottom;
 
-        QPointF deltaScene;
         QPoint mousePos;
 
-        bool mousePressed;
         bool mouseOver;
         bool dragStarted;
         bool destroyActionVisibility;

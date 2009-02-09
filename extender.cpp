@@ -20,6 +20,7 @@
 #include "extender.h"
 
 #include <QAction>
+#include <QGraphicsSceneDragDropEvent>
 #include <QGraphicsGridLayout>
 #include <QGraphicsLinearLayout>
 #include <QPainter>
@@ -36,8 +37,11 @@
 #include "widgets/label.h"
 
 #include "private/applet_p.h"
+#include "private/applethandle_p.h"
 #include "private/extender_p.h"
+#include "private/extenderapplet_p.h"
 #include "private/extenderitem_p.h"
+#include "private/extenderitemmimedata_p.h"
 
 namespace Plasma
 {
@@ -90,9 +94,9 @@ Extender::Extender(Applet *applet)
     d->layout->setSpacing(0);
     setLayout(d->layout);
 
-    setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
-
     d->loadExtenderItems();
+
+    setAcceptDrops(true);
 }
 
 Extender::~Extender()
@@ -211,11 +215,78 @@ void Extender::mousePressEvent(QGraphicsSceneMouseEvent *event)
     }
 }
 
+void Extender::dragEnterEvent(QGraphicsSceneDragDropEvent *event)
+{
+    if (event->mimeData()->hasFormat(ExtenderItemMimeData::mimeType())) {
+        event->accept();
+
+        const ExtenderItemMimeData *mimeData =
+            qobject_cast<const ExtenderItemMimeData*>(event->mimeData());
+
+        if (mimeData) {
+            itemHoverEnterEvent(mimeData->extenderItem());
+        }
+    }
+}
+
+void Extender::dragMoveEvent(QGraphicsSceneDragDropEvent *event)
+{
+    if (event->mimeData()->hasFormat(ExtenderItemMimeData::mimeType())) {
+        const ExtenderItemMimeData *mimeData =
+            qobject_cast<const ExtenderItemMimeData*>(event->mimeData());
+
+        if (mimeData) {
+            itemHoverMoveEvent(mimeData->extenderItem(), event->pos());
+        }
+    }
+}
+
+void Extender::dragLeaveEvent(QGraphicsSceneDragDropEvent *event)
+{
+    if (event->mimeData()->hasFormat(ExtenderItemMimeData::mimeType())) {
+        const ExtenderItemMimeData *mimeData =
+            qobject_cast<const ExtenderItemMimeData*>(event->mimeData());
+
+        if (mimeData) {
+            itemHoverLeaveEvent(mimeData->extenderItem());
+
+            //Hide popups when we drag the last item away.
+            PopupApplet *popupApplet = qobject_cast<PopupApplet*>(d->applet);
+            if (popupApplet && attachedItems().count() < 2) {
+                kDebug() << "leaving the extender, and there are no more attached items so hide the popup.";
+                popupApplet->hidePopup();
+            }
+
+            //Hide empty internal extender containers when we drag the last item away. Avoids having
+            //an ugly empty applet on the desktop temporarily.
+            ExtenderApplet *extenderApplet = qobject_cast<ExtenderApplet*>(d->applet);
+            if (extenderApplet && attachedItems().count() < 2) {
+                kDebug() << "leaving the internal extender container, so hide the applet and it's handle.";
+                extenderApplet->hide();
+                AppletHandle *handle = qgraphicsitem_cast<AppletHandle*>(extenderApplet->parentItem());
+                if (handle) {
+                    handle->hide();
+                }
+            }
+        }
+    }
+}
+
+void Extender::dropEvent(QGraphicsSceneDragDropEvent *event)
+{
+    if (event->mimeData()->hasFormat(ExtenderItemMimeData::mimeType())) {
+        const ExtenderItemMimeData *mimeData =
+            qobject_cast<const ExtenderItemMimeData*>(event->mimeData());
+
+        if (mimeData) {
+            mimeData->extenderItem()->setExtender(this, event->pos());
+            QApplication::restoreOverrideCursor();
+        }
+    }
+}
+
 void Extender::itemAddedEvent(ExtenderItem *item, const QPointF &pos)
 {
-    //this is a sane size policy imo.
-    item->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
-
     if (pos == QPointF(-1, -1)) {
         d->layout->addItem(item);
     } else {
@@ -438,14 +509,17 @@ void ExtenderPrivate::loadExtenderItems()
 void ExtenderPrivate::updateBorders()
 {
     foreach (ExtenderItem *item, q->attachedItems()) {
-        //kDebug() << "checking" << (QObject*)item << item->d->background->enabledBorders()
-        //         << q->enabledBordersForItem(item);
+        kDebug() << "checking" << (QObject*)item << item->d->background->enabledBorders()
+                 << q->enabledBordersForItem(item);
         if (item && (item->d->background->enabledBorders() != q->enabledBordersForItem(item))) {
             //call themeChanged to change the backgrounds enabled borders, and move all contained
             //widgets according to it's changed margins.
             item->d->themeChanged();
         }
     }
+
+    applet->updateGeometry();
+    applet->adjustSize();
 }
 
 void ExtenderPrivate::updateEmptyExtenderLabel()

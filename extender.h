@@ -221,6 +221,26 @@ class PLASMA_EXPORT Extender : public QGraphicsWidget
          */
         void mousePressEvent(QGraphicsSceneMouseEvent *event);
 
+        /**
+         * Reimplemented from QGraphicsWidget
+         */
+        void dragEnterEvent(QGraphicsSceneDragDropEvent *event);
+
+        /**
+         * Reimplemented from QGraphicsWidget
+         */
+        void dragMoveEvent(QGraphicsSceneDragDropEvent *event);
+
+        /**
+         * Reimplemented from QGraphicsWidget
+         */
+        void dragLeaveEvent(QGraphicsSceneDragDropEvent *event);
+
+        /**
+         * Reimplemented from QGraphicsWidget
+         */
+        void dropEvent(QGraphicsSceneDragDropEvent *event);
+
     Q_SIGNALS:
         /**
          * Fires when an extender item is added to this extender.

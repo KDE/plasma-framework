@@ -243,7 +243,6 @@ class PLASMA_EXPORT ExtenderItem : public QGraphicsWidget
         void hoverMoveEvent(QGraphicsSceneHoverEvent *event);
         void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
 
-        //bool sceneEvent(QEvent *event);
         bool sceneEventFilter(QGraphicsItem *watched, QEvent *event);
 
     private:
@@ -251,13 +250,13 @@ class PLASMA_EXPORT ExtenderItem : public QGraphicsWidget
         Q_PRIVATE_SLOT(d, void updateToolBox())
         Q_PRIVATE_SLOT(d, void themeChanged())
         Q_PRIVATE_SLOT(d, void sourceAppletRemoved())
-        Q_PRIVATE_SLOT(d, void previousTargetExtenderDestroyed(QObject*))
         Q_PRIVATE_SLOT(d, void actionDestroyed(QObject*))
 
         ExtenderItemPrivate * const d;
 
         friend class Extender;
         friend class ExtenderPrivate;
+        friend class ExtenderItemPrivate;
 };
 } // namespace Plasma
 #endif // PLASMA_EXTENDERITEM_H

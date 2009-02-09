@@ -46,12 +46,14 @@
 #include "animator.h"
 #include "context.h"
 #include "corona.h"
+#include "extenderitem.h"
 #include "svg.h"
 #include "wallpaper.h"
 
 #include "private/applet_p.h"
 #include "private/applethandle_p.h"
 #include "private/desktoptoolbox_p.h"
+#include "private/extenderitemmimedata_p.h"
 #include "private/paneltoolbox_p.h"
 
 namespace Plasma
@@ -905,7 +907,8 @@ void Containment::dragEnterEvent(QGraphicsSceneDragDropEvent *event)
     //kDebug() << immutability() << Mutable << (immutability() == Mutable);
     event->setAccepted(immutability() == Mutable &&
                        (event->mimeData()->hasFormat(static_cast<Corona*>(scene())->appletMimeType()) ||
-                        KUrl::List::canDecode(event->mimeData())));
+                        KUrl::List::canDecode(event->mimeData()) ||
+                        event->mimeData()->hasFormat(ExtenderItemMimeData::mimeType())));
 
     if (!event->isAccepted()) {
         // check to see if we have an applet that accepts the format.
@@ -947,6 +950,17 @@ void Containment::dropEvent(QGraphicsSceneDragDropEvent *event)
             addApplet(appletName, QVariantList(), geom);
         }
         event->acceptProposedAction();
+    } else if (event->mimeData()->hasFormat(ExtenderItemMimeData::mimeType())) {
+        kDebug() << "mimetype plasma/extenderitem is dropped, creating internal:extender";
+        //Handle dropping extenderitems.
+        const ExtenderItemMimeData *mimeData = qobject_cast<const ExtenderItemMimeData*>(event->mimeData());
+        if (mimeData) {
+            ExtenderItem *item = mimeData->extenderItem();
+            QRectF geometry(event->pos(), item->size());
+            kDebug() << "desired geometry: " << geometry;
+            Applet *applet = addApplet("internal:extender", QVariantList(), geometry);
+            item->setExtender(applet->extender());
+        }
     } else if (KUrl::List::canDecode(event->mimeData())) {
         //TODO: collect the mimetypes of available script engines and offer
         //      to create widgets out of the matching URLs, if any

@@ -19,20 +19,20 @@
 
 #include "extenderitem.h"
 
-#include <QApplication>
 #include <QAction>
+#include <QApplication>
 #include <QBitmap>
+#include <QDrag>
 #include <QGraphicsSceneResizeEvent>
 #include <QGraphicsSceneMouseEvent>
 #include <QGraphicsLinearLayout>
 #include <QLayout>
+#include <QMimeData>
 #include <QPainter>
 #include <QTimer>
 
 #include <kdebug.h>
 #include <kicon.h>
-#include <kwindowsystem.h>
-#include <kglobalsettings.h>
 
 #include "applet.h"
 #include "containment.h"
@@ -44,41 +44,16 @@
 #include "theme.h"
 #include "view.h"
 
-#include "private/applet_p.h"
-#include "private/extender_p.h"
-#include "private/extenderitem_p.h"
-
 #include "widgets/iconwidget.h"
+
+#include "private/applethandle_p.h"
+#include "private/extender_p.h"
+#include "private/extenderapplet_p.h"
+#include "private/extenderitem_p.h"
+#include "private/extenderitemmimedata_p.h"
 
 namespace Plasma
 {
-
-class ExtenderItemView : public QGraphicsView
-{
-public:
-    ExtenderItemView(QGraphicsScene *scene, QWidget *parent = 0)
-        : QGraphicsView(scene, parent)
-    {
-        //since this view witll have a really short lifespan it can be checked a single time
-        composite = KWindowSystem::compositingActive();
-    }
-
-    ~ExtenderItemView()
-    {}
-
-    void drawBackground(QPainter *painter, const QRectF &rect)
-    {
-        if (composite) {
-            painter->setCompositionMode(QPainter::CompositionMode_Source);
-            painter->fillRect(rect.toAlignedRect(), Qt::transparent);
-        } else {
-            QGraphicsView::drawBackground(painter, rect);
-        }
-    }
-
-private:
-    bool composite;
-};
 
 ExtenderItem::ExtenderItem(Extender *hostExtender, uint extenderItemId)
         : QGraphicsWidget(hostExtender),
@@ -206,7 +181,7 @@ void ExtenderItem::setWidget(QGraphicsItem *widget)
     widget->setPos(QPointF(d->bgLeft + d->dragLeft, panelSize.height() +
                                                     d->bgTop + d->dragTop));
     d->widget = widget;
-    setCollapsed(isCollapsed()); //updates the size hints.
+    d->updateSizeHints();
 }
 
 QGraphicsItem *ExtenderItem::widget() const
@@ -238,6 +213,10 @@ void ExtenderItem::setExtender(Extender *extender, const QPointF &pos)
 {
     Q_ASSERT(extender);
 
+    //themeChanged() has to now that by now, we're no longer dragging, even though the QDrag has not
+    //been entirely finished.
+    d->dragStarted = false;
+
     if (extender == d->extender) {
         //We're not moving between extenders, so just insert this item back into the layout.
         setParentItem(extender);
@@ -248,13 +227,15 @@ void ExtenderItem::setExtender(Extender *extender, const QPointF &pos)
     //We are switching extender...
     //first remove this item from the old extender.
     d->extender->d->removeExtenderItem(this);
-    emit d->extender->itemDetached(this);
 
     //move the configuration.
     if (d->hostApplet() && (extender != d->extender)) {
         KConfigGroup c = extender->d->applet->config("ExtenderItems");
         config().reparent(&c);
     }
+
+    //and notify the applet of the item being detached, after the config has been moved.
+    emit d->extender->itemDetached(this);
 
     d->extender = extender;
 
@@ -268,9 +249,6 @@ void ExtenderItem::setExtender(Extender *extender, const QPointF &pos)
         delete d->expirationTimer;
         d->expirationTimer = 0;
     }
-
-    //set the background svg to that of the extender we're moving to.
-    d->themeChanged();
 
     //we might have to enable or disable the returnToSource button.
     d->updateToolBox();
@@ -369,7 +347,7 @@ void ExtenderItem::hideCloseButton()
 
 void ExtenderItem::destroy()
 {
-    if (d->mousePressed) {
+    if (d->dragStarted) {
         //avoid being destroyed while we're being dragged.
         return;
     }
@@ -383,69 +361,10 @@ void ExtenderItem::setCollapsed(bool collapsed)
 {
     config().writeEntry("isCollapsed", collapsed);
     d->collapsed = collapsed;
-
-    qreal marginWidth = d->bgLeft + d->bgRight + d->dragLeft + d->dragRight;
-    qreal marginHeight = d->bgTop + d->bgBottom + 2 * d->dragTop + 2 * d->dragBottom;
-
-    if (!d->widget) {
-        setPreferredSize(QSizeF(200, d->dragHandleRect().height()));
-        setMinimumSize(QSizeF(0, d->dragHandleRect().height()));
-        //FIXME: wasn't there some sort of QWIDGETMAXSIZE thingy?
-        setMaximumSize(QSizeF(1000, d->dragHandleRect().height()));
-        setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-        updateGeometry();
-        return;
+    if (d->widget) {
+        d->widget->setVisible(!collapsed);
+        d->updateSizeHints();
     }
-
-    d->widget->setVisible(!collapsed);
-
-    QSizeF min;
-    QSizeF pref;
-    QSizeF max;
-
-    if (d->widget->isWidget()) {
-        QGraphicsWidget *graphicsWidget = static_cast<QGraphicsWidget*>(d->widget);
-        min = graphicsWidget->minimumSize();
-        pref = graphicsWidget->preferredSize();
-        max = graphicsWidget->maximumSize();
-    } else {
-        min = d->widget->boundingRect().size();
-        pref = d->widget->boundingRect().size();
-        max = d->widget->boundingRect().size();
-    }
-
-    if (collapsed) {
-        setPreferredSize(QSizeF(pref.width() + marginWidth,
-                                d->dragHandleRect().height() + marginHeight));
-        setMinimumSize(QSizeF(min.width() + marginWidth,
-                              d->dragHandleRect().height() + marginHeight));
-        setMaximumSize(QSizeF(max.width() + marginWidth,
-                              d->dragHandleRect().height() + marginHeight));
-        setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-
-        if (d->collapseIcon) {
-            d->collapseIcon->setToolTip(i18n("Expand this widget"));
-        }
-    } else {
-        setPreferredSize(QSizeF(pref.width() + marginWidth,
-                         pref.height() + d->dragHandleRect().height() + marginHeight));
-        setMinimumSize(QSizeF(min.width() + marginWidth,
-                              min.height() + d->dragHandleRect().height() + marginHeight));
-        setMaximumSize(QSizeF(max.width() + marginWidth,
-                              max.height() + d->dragHandleRect().height() + marginHeight));
-
-        if (d->widget->isWidget()) {
-            setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
-        } else {
-            setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-        }
-
-        if (d->collapseIcon) {
-            d->collapseIcon->setToolTip(i18n("Collapse this widget"));
-        }
-    }
-
-    updateGeometry();
 }
 
 void ExtenderItem::returnToSource()
@@ -454,7 +373,7 @@ void ExtenderItem::returnToSource()
         return;
     }
     if (d->sourceApplet->d) {
-        setExtender(d->sourceApplet->d->extender);
+        setExtender(d->sourceApplet->extender());
     }
 }
 
@@ -516,22 +435,14 @@ void ExtenderItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
 
 void ExtenderItem::moveEvent(QGraphicsSceneMoveEvent *event)
 {
-    Q_UNUSED(event);
-
-    if (d->toplevel) {
-        d->toplevel->setSceneRect(sceneBoundingRect());
-        d->toplevel->setMask(d->background->mask());
-    }
+    Q_UNUSED(event)
+    //not needed anymore, but here for binary compatibility
 }
 
 void ExtenderItem::resizeEvent(QGraphicsSceneResizeEvent *event)
 {
-    d->resizeContent(event->newSize());
-
-    if (d->toplevel) {
-        d->toplevel->setSceneRect(sceneBoundingRect());
-        d->toplevel->setMask(d->background->mask());
-    }
+    Q_UNUSED(event)
+    d->themeChanged();
 }
 
 void ExtenderItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
@@ -542,145 +453,71 @@ void ExtenderItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
         return;
     }
 
-    QApplication::setOverrideCursor(Qt::ClosedHandCursor);
-
     d->mousePos = event->pos().toPoint();
-    d->deltaScene = pos();
-    d->mousePressed = true;
 }
 
 void ExtenderItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
-    if (d->mousePressed && !d->dragStarted &&
-        (d->mousePos - event->pos().toPoint()).manhattanLength() >= QApplication::startDragDistance()) {
-        //start the drag:
-        d->dragStarted = true;
-
-        //set the zValue to the maximum.
-        d->hostApplet()->raise();
-        setZValue(d->hostApplet()->zValue());
-
-        QPointF mousePos = d->scenePosFromScreenPos(event->screenPos());
-        if (!mousePos.isNull()) {
-            d->extender->itemHoverMoveEvent(this, d->extender->mapFromScene(mousePos));
-        }
-        d->extender->d->removeExtenderItem(this);
-
-        d->themeChanged();
-    } else if (!d->dragStarted) {
+    if ((event->pos().toPoint() - d->mousePos).manhattanLength()
+        < QApplication::startDragDistance()) {
         return;
     }
 
-    //keep track of the movement in scene coordinates. we use this to set the position of the
-    //applet when remaining in the current view.
-    d->deltaScene += event->scenePos() - event->lastScenePos();
+    //Start the drag:
+    d->dragStarted = true;
 
-    //set a rect in screencoordinates so we can check when we need to move to a toplevel
-    //view.
-    QRect screenRect = QRect();
-    screenRect.setTopLeft(event->screenPos() - d->mousePos);
-    screenRect.setSize(d->screenRect().size());
+    //first update the borders.
+    d->themeChanged();
 
-    Corona *corona = d->hostApplet()->containment()->corona();
+    //create a view to render the ExtenderItem and it's contents to a pixmap and set up a painter on
+    //a pixmap.
+    QGraphicsView view(scene());
+    QSize screenSize(view.mapFromScene(sceneBoundingRect()).boundingRect().size());
+    QPixmap pixmap(screenSize);
+    pixmap.fill(Qt::transparent);
+    QPainter p(&pixmap);
 
-    if (d->leaveCurrentView(screenRect)) {
-        //we're moving the applet to a toplevel view, so place it somewhere out of sight
-        //first: in the topleft quadrant.
+    //the following is necesarry to avoid having an offset when rendering the widget into the
+    //pixmap.
+    view.setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    view.setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    view.setFrameShape(QFrame::NoFrame);
 
-        if (!d->toplevel) {
-            //FIXME: duplication from applethandle
-            //create a toplevel view and aim it at the applet.
-            corona->addOffscreenWidget(this);
+    //aim the view and render.
+    view.resize(screenSize);
+    view.setSceneRect(sceneBoundingRect());
+    view.render(&p, QRectF(QPointF(0, 0), pixmap.size()), QRect(QPoint(0, 0), screenSize));
 
-            d->toplevel = new ExtenderItemView(scene(), 0);
+    hide();
 
-            d->toplevel->setWindowFlags(
-                Qt::ToolTip | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
-            d->toplevel->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-            d->toplevel->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-            d->toplevel->setFrameShape(QFrame::NoFrame);
+    //create the necesarry mimedata.
+    ExtenderItemMimeData *mimeData = new ExtenderItemMimeData();
+    mimeData->setExtenderItem(this);
 
-            d->toplevel->setSceneRect(sceneBoundingRect());
-            d->toplevel->setGeometry(screenRect);
-            d->toplevel->setMask(d->background->mask());
-
-            d->toplevel->show();
-        }
-
-        d->toplevel->setGeometry(screenRect);
-        d->toplevel->setSceneRect(sceneBoundingRect());
-        d->toplevel->setMask(d->background->mask());
-    } else {
-        corona->removeOffscreenWidget(this);
-        setParentItem(d->hostApplet());
-        setPos(d->deltaScene);
-
-       //remove the toplevel view.
-        delete d->toplevel;
-        d->toplevel = 0;
-    }
-
-    //let's insert spacers in applets we're hovering over for some useful visual feedback.
-    //check which view we're hovering over and use that information to get the mouse
-    //position in scene coordinates (event->scenePos won't work, since it doesn't take in
-    //consideration that you're leaving the current view).
-    QPointF mousePos = d->scenePosFromScreenPos(event->screenPos());
-
-    //find the extender we're hovering over.
-    Extender *targetExtender = 0;
-
-    if (!mousePos.isNull()) {
-        foreach (Containment *containment, corona->containments()) {
-            foreach (Applet *applet, containment->applets()) {
-                if (applet->d->extender &&
-                        (applet->sceneBoundingRect().contains(mousePos) ||
-                         applet->d->extender->sceneBoundingRect().contains(mousePos))) {
-                    targetExtender = applet->d->extender;
-
-                    //check if we're hovering over an popupapplet, and open it up in case it does.
-                    PopupApplet *popupApplet = qobject_cast<PopupApplet*>(applet);
-                    if (popupApplet && (applet->formFactor() == Plasma::Horizontal ||
-                                applet->formFactor() == Plasma::Vertical)) {
-                        popupApplet->showPopup();
-                    }
-                }
-            }
-
-            if (containment->sceneBoundingRect().contains(mousePos) && !targetExtender) {
-                containment->showDropZone(containment->mapFromScene(mousePos).toPoint());
-            } else {
-                containment->showDropZone(QPoint());
-            }
+    //Hide empty internal extender containers when we drag the last item away. Avoids having
+    //an ugly empty applet on the desktop temporarily.
+    ExtenderApplet *extenderApplet = qobject_cast<ExtenderApplet*>(d->extender->d->applet);
+    if (extenderApplet && d->extender->attachedItems().count() < 2) {
+        kDebug() << "leaving the internal extender container, so hide the applet and it's handle.";
+        extenderApplet->hide();
+        AppletHandle *handle = qgraphicsitem_cast<AppletHandle*>(extenderApplet->parentItem());
+        if (handle) {
+            handle->hide();
         }
     }
 
-    //remove any previous spacers.
-    if (targetExtender != d->previousTargetExtender) {
-        if (d->previousTargetExtender) {
-            d->previousTargetExtender->itemHoverLeaveEvent(this);
-            d->previousTargetExtender->disconnect(this, SIGNAL(destroyed(QObject*)));
-        }
+    //and execute the drag.
+    QWidget *dragParent = extender()->d->applet->view();
+    QDrag *drag = new QDrag(dragParent);
+    drag->setPixmap(pixmap);
+    drag->setMimeData(mimeData);
+    drag->setHotSpot(d->mousePos);
+    drag->exec();
 
-        d->previousTargetExtender = targetExtender;
+    show();
+    d->widget->show();
 
-        //monitor the current previousTargetExtender, so we don't accidently try to remove it's
-        //spacer after the extender has been destoryed.
-        if (targetExtender) {
-            connect(targetExtender, SIGNAL(destroyed(QObject*)),
-                    this, SLOT(previousTargetExtenderDestroyed(QObject*)));
-        }
-
-        if (targetExtender) {
-            targetExtender->itemHoverEnterEvent(this);
-        }
-    }
-
-    //insert a spacer if the applet accepts detachables.
-    if (targetExtender) {
-        if (targetExtender->sceneBoundingRect().contains(mousePos)) {
-            targetExtender->itemHoverMoveEvent(this, targetExtender->mapFromScene(mousePos));
-        }
-    }
+    d->dragStarted = false;
 }
 
 void ExtenderItem::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
@@ -690,24 +527,18 @@ void ExtenderItem::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
     }
 }
 
-/**
-bool ExtenderItem::sceneEvent(QEvent *event)
-{
-    kDebug() << event->type();
-    return QGraphicsWidget::sceneEvent(event);
-}
-*/
-
 bool ExtenderItem::sceneEventFilter(QGraphicsItem *watched, QEvent *event)
 {
     if (watched == d->widget && event->type() == QEvent::GraphicsSceneResize) {
-        kDebug() << "widget size has changed, recalculating new size hints";
-        //TODO: abusing the setcollapsed function for recalculating size hints isn't very nice.
-        //not only that, now that layouts work correctly, having the item managed by a layout is
-        //probably best. Something to do for 4.3.
-        setCollapsed(isCollapsed());
+        d->updateSizeHints();
     }
     return false;
+}
+
+void ExtenderItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
+{
+    Q_UNUSED(event)
+    //not needed anymore, but here for binary compatibility
 }
 
 void ExtenderItem::hoverMoveEvent(QGraphicsSceneHoverEvent *event)
@@ -736,119 +567,16 @@ void ExtenderItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
     }
 }
 
-void ExtenderItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
-{
-    if (d->mousePressed) {
-        QApplication::restoreOverrideCursor();
-    }
-
-    d->mousePressed = false;
-
-    if (d->dragStarted) {
-        d->dragStarted = false;
-        d->previousTargetExtender = 0;
-
-        //remove the toplevel view
-        if (d->toplevel) {
-            delete d->toplevel;
-            d->toplevel = 0;
-        }
-
-        //let's insert spacers in applets we're hovering over for some useful visual feedback.
-        //check which view we're hovering over and use that information to get the mouse
-        //position in scene coordinates (event->scenePos won't work, since it doesn't take in
-        //consideration that you're leaving the current view).
-        QPointF mousePos = d->scenePosFromScreenPos(event->screenPos());
-
-        //find the extender we're hovering over.
-        Extender *targetExtender = 0;
-        Corona *corona = qobject_cast<Corona*>(d->extender->d->applet->scene());
-
-        corona->removeOffscreenWidget(this);
-
-        if (!mousePos.isNull()) {
-            foreach (Containment *containment, corona->containments()) {
-                containment->showDropZone(QPoint());
-                foreach (Applet *applet, containment->applets()) {
-                    if (applet->d->extender &&
-                        (applet->sceneBoundingRect().contains(mousePos) ||
-                         applet->d->extender->sceneBoundingRect().contains(mousePos))) {
-                        targetExtender = applet->d->extender;
-                    }
-                }
-            }
-        }
-
-        //are we hovering over an applet that accepts extender items?
-        if (targetExtender) {
-            if (targetExtender->sceneBoundingRect().contains(mousePos)) {
-                setExtender(targetExtender, targetExtender->mapFromScene(mousePos));
-            } else {
-                setExtender(targetExtender);
-            }
-        } else {
-            //apparently, it is not, so instantiate a new ExtenderApplet.
-            bool extenderCreated = false;
-            mousePos = d->scenePosFromScreenPos(event->screenPos());
-            if (!mousePos.isNull()) {
-                foreach (Containment *containment, corona->containments()) {
-                    if (containment->sceneBoundingRect().contains(mousePos)) {
-                        kDebug() << "Instantiate a new ExtenderApplet";
-
-                        //when on a desktopcontainment, we use the widgets topleft corner to
-                        //position the applet in the containment, on other containments, we use the
-                        //actual mouse position.
-                        QPointF position;
-                        if (containment->type() == Plasma::Containment::DesktopContainment) {
-                            position = containment->mapFromScene(
-                                       d->scenePosFromScreenPos(event->screenPos() - d->mousePos));
-                        } else {
-                            position = containment->mapFromScene(mousePos);
-                        }
-
-                        Applet *applet = containment->addApplet("internal:extender",
-                                QVariantList(),
-                                QRectF(containment->mapFromScene(mousePos), size()));
-
-                        if (applet) {
-                            setExtender(applet->d->extender);
-                            QSizeF margin = applet->size() - applet->contentsRect().size();
-                            applet->setMinimumSize(minimumSize() + margin);
-                            applet->setPreferredSize(preferredSize() + margin);
-                            applet->resize(preferredSize());
-
-                            extenderCreated = true;
-                        } else {
-                            kDebug() << "Creating internal:extender applet failed, probably "
-                                     << "because widgets are locked.";
-                        }
-                    }
-                }
-            }
-
-            //if no containment is at the position where the item is dropped, just move the item
-            //back to where it came from.
-            if (!extenderCreated) {
-                setExtender(extender());
-                kDebug() << "Move the item back to where it came from.";
-            }
-        }
-    }
-}
-
 ExtenderItemPrivate::ExtenderItemPrivate(ExtenderItem *extenderItem, Extender *hostExtender)
     : q(extenderItem),
       widget(0),
       toolbox(0),
-      toplevel(0),
-      previousTargetExtender(0),
       extender(hostExtender),
       sourceApplet(0),
       dragger(new FrameSvg(extenderItem)),
       background(new FrameSvg(extenderItem)),
       collapseIcon(0),
       title(QString()),
-      mousePressed(false),
       mouseOver(false),
       dragStarted(false),
       destroyActionVisibility(false),
@@ -864,7 +592,6 @@ ExtenderItemPrivate::~ExtenderItemPrivate()
 {
     delete widget;
     widget = 0;
-    delete toplevel;
 }
 
 //returns a Rect containing the area of the detachable where the draghandle will be drawn.
@@ -879,41 +606,6 @@ QRectF ExtenderItemPrivate::titleRect()
 {
     return dragHandleRect().adjusted(dragLeft + collapseIcon->size().width() + 1, dragTop,
                                      -toolbox->size().width() - dragRight, -dragBottom);
-}
-
-bool ExtenderItemPrivate::leaveCurrentView(const QRect &rect)
-{
-    if ((q->sceneBoundingRect().left() < 0)) {
-        //always leaveCurrentView when the item is in a Plasma::Dialog which can easy be
-        //seen by checking if it is in topleft quadrant and it's not just there because it's
-        //being viewed by the toplevel view.
-        return true;
-    }
-
-    foreach (QWidget *widget, QApplication::topLevelWidgets()) {
-        if (widget->geometry().intersects(rect) && widget->isVisible() && widget != toplevel) {
-            //is this widget a plasma view, a different view then our current one,
-            //AND not a dashboardview?
-            QGraphicsView *v = qobject_cast<QGraphicsView*>(widget);
-            QGraphicsView *currentV = 0;
-
-            if (hostApplet()) {
-                currentV = qobject_cast<QGraphicsView*>(hostApplet()->containment()->view());
-            }
-
-            if (v && v != currentV) {
-                return true;
-            }
-        }
-    }
-
-    return false;
-}
-
-QRect ExtenderItemPrivate::screenRect()
-{
-    return hostApplet()->containment()->view()
-                       ->mapFromScene(q->sceneBoundingRect()).boundingRect();
 }
 
 void ExtenderItemPrivate::toggleCollapse()
@@ -987,52 +679,6 @@ void ExtenderItemPrivate::repositionToolbox()
                     (minimum.height()/2) + bgTop);
 }
 
-//TODO: something like this as static function in corona might be a good idea.
-QPointF ExtenderItemPrivate::scenePosFromScreenPos(const QPoint &pos) const
-{
-    //get the stacking order of the toplevel windows and remove the toplevel view that's
-    //only here while dragging, since we're not interested in finding that.
-    QList<WId> order = KWindowSystem::stackingOrder();
-    if (toplevel) {
-        order.removeOne(toplevel->winId());
-    }
-
-    QGraphicsView *found = 0;
-    foreach (QWidget *w, QApplication::topLevelWidgets()) {
-        QGraphicsView *v = 0;
-
-        //first check if we're over a Dialog.
-        Dialog *dialog = qobject_cast<Dialog*>(w);
-        if (dialog) {
-            if (dialog->isVisible() && dialog->geometry().contains(pos)) {
-                v = qobject_cast<QGraphicsView*>(dialog->layout()->itemAt(0)->widget());
-                if (v) {
-                    return v->mapToScene(v->mapFromGlobal(pos));
-                }
-            }
-        } else {
-            v = qobject_cast<QGraphicsView *>(w);
-        }
-
-        //else check if it is a QGV:
-        if (v && w->isVisible() && w->geometry().contains(pos)) {
-            if (found && order.contains(found->winId())) {
-                if (order.indexOf(found->winId()) < order.indexOf(v->winId())) {
-                    found = v;
-                }
-            } else {
-                found = v;
-            }
-        }
-    }
-
-    if (!found) {
-        return QPointF();
-    }
-
-    return found->mapToScene(found->mapFromGlobal(pos));
-}
-
 Applet *ExtenderItemPrivate::hostApplet() const
 {
     if (extender) {
@@ -1045,7 +691,7 @@ Applet *ExtenderItemPrivate::hostApplet() const
 void ExtenderItemPrivate::themeChanged()
 {
     background->setImagePath("widgets/extender-background");
-    if (mousePressed) {
+    if (dragStarted) {
         background->setEnabledBorders(FrameSvg::AllBorders);
     } else {
         background->setEnabledBorders(extender->enabledBordersForItem(q));
@@ -1089,8 +735,7 @@ void ExtenderItemPrivate::themeChanged()
     //reposition the toolbox.
     repositionToolbox();
 
-    //setCollapsed recalculates size hints.
-    q->setCollapsed(q->isCollapsed());
+    updateSizeHints();
 
     if (!q->size().isEmpty())
         resizeContent(q->size());
@@ -1132,12 +777,6 @@ void ExtenderItemPrivate::resizeContent(const QSizeF &newSize)
     q->update();
 }
 
-void ExtenderItemPrivate::previousTargetExtenderDestroyed(QObject *o)
-{
-    Q_UNUSED(o)
-    previousTargetExtender = 0;
-}
-
 void ExtenderItemPrivate::actionDestroyed(QObject *o)
 {
     QAction *action = static_cast<QAction *>(o);
@@ -1156,6 +795,70 @@ void ExtenderItemPrivate::actionDestroyed(QObject *o)
             break;
         }
     }
+}
+
+void ExtenderItemPrivate::updateSizeHints()
+{
+    if (!widget) {
+        return;
+    }
+
+    qreal marginWidth = bgLeft + bgRight + dragLeft + dragRight;
+    qreal marginHeight = bgTop + bgBottom + 2 * dragTop + 2 * dragBottom;
+
+    QSizeF min;
+    QSizeF pref;
+    QSizeF max;
+
+    if (widget->isWidget()) {
+        QGraphicsWidget *graphicsWidget = static_cast<QGraphicsWidget*>(widget);
+        min = graphicsWidget->minimumSize();
+        pref = graphicsWidget->preferredSize();
+        max = graphicsWidget->maximumSize();
+    } else {
+        min = widget->boundingRect().size();
+        pref = widget->boundingRect().size();
+        max = widget->boundingRect().size();
+    }
+
+    if (collapsed) {
+        q->setPreferredSize(QSizeF(pref.width() + marginWidth,
+                                   dragHandleRect().height() + marginHeight));
+        q->setMinimumSize(QSizeF(min.width() + marginWidth,
+                                 dragHandleRect().height() + marginHeight));
+        q->setMaximumSize(QSizeF(max.width() + marginWidth,
+                                 dragHandleRect().height() + marginHeight));
+        q->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
+
+        if (collapseIcon) {
+            collapseIcon->setToolTip(i18n("Expand this widget"));
+        }
+    } else {
+        q->setPreferredSize(QSizeF(pref.width() + marginWidth,
+                            pref.height() + dragHandleRect().height() + marginHeight));
+        q->setMinimumSize(QSizeF(min.width() + marginWidth,
+                          min.height() + dragHandleRect().height() + marginHeight));
+        q->setMaximumSize(QSizeF(max.width() + marginWidth,
+                          max.height() + dragHandleRect().height() + marginHeight));
+
+        //set sane size policies depending on the appearence.
+        if (extender->d->appearance == Extender::TopDownStacked ||
+            extender->d->appearance == Extender::BottomUpStacked) {
+            //used in popups, so fixed make sense.
+            kDebug() << "updating size hints for stacked look, vertical policy is fixed";
+            q->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
+        } else if (extender->d->appearance == Extender::NoBorders) {
+            //on the desktop or panel so take all the space we want.
+            kDebug() << "updating size hints for no borders look, both policies are expanding";
+            q->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
+        }
+
+        if (collapseIcon) {
+            collapseIcon->setToolTip(i18n("Collapse this widget"));
+        }
+    }
+
+    q->updateGeometry();
 }
 
 uint ExtenderItemPrivate::s_maxExtenderItemId = 0;

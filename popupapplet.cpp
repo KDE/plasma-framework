@@ -33,10 +33,12 @@
 #include <kglobalsettings.h>
 
 #include "plasma/private/applet_p.h"
+#include "plasma/private/extenderitemmimedata_p.h"
 #include "plasma/corona.h"
 #include "plasma/containment.h"
 #include "plasma/dialog.h"
 #include "plasma/extender.h"
+#include "plasma/extenderitem.h"
 #include "plasma/tooltipmanager.h"
 #include "plasma/widgets/iconwidget.h"
 
@@ -50,6 +52,7 @@ PopupApplet::PopupApplet(QObject *parent, const QVariantList &args)
     int iconSize = IconSize(KIconLoader::Desktop);
     resize(iconSize, iconSize);
     connect(this, SIGNAL(activate()), this, SLOT(internalTogglePopup()));
+    setAcceptDrops(true);
 }
 
 PopupApplet::~PopupApplet()
@@ -358,6 +361,48 @@ bool PopupApplet::eventFilter(QObject *watched, QEvent *event)
     */
 
     return Applet::eventFilter(watched, event);
+}
+
+//FIXME: some duplication between the drag events... maybe add some simple helper function?
+void PopupApplet::dragEnterEvent(QGraphicsSceneDragDropEvent *event)
+{
+    if (event->mimeData()->hasFormat(ExtenderItemMimeData::mimeType())) {
+        const ExtenderItemMimeData *mimeData =
+            qobject_cast<const ExtenderItemMimeData*>(event->mimeData());
+        if (mimeData && qobject_cast<Extender*>(graphicsWidget())) {
+            event->accept();
+            showPopup();
+        }
+    }
+}
+
+void PopupApplet::dragLeaveEvent(QGraphicsSceneDragDropEvent *event)
+{
+    if (event->mimeData()->hasFormat(ExtenderItemMimeData::mimeType())) {
+        const ExtenderItemMimeData *mimeData =
+            qobject_cast<const ExtenderItemMimeData*>(event->mimeData());
+        if (mimeData && qobject_cast<Extender*>(graphicsWidget())) {
+            //We want to hide the popup if we're not moving onto the popup AND it is not the popup
+            //we started.
+            if (d->dialog && !d->dialog->geometry().contains(event->screenPos()) &&
+                mimeData->extenderItem()->extender() != qobject_cast<Extender*>(graphicsWidget())) {
+                kDebug() << "leaving the popupApplet, and it's not our starting popupApplet, hiding.";
+                hidePopup();
+            }
+        }
+    }
+}
+
+void PopupApplet::dropEvent(QGraphicsSceneDragDropEvent *event)
+{
+    if (event->mimeData()->hasFormat(ExtenderItemMimeData::mimeType())) {
+        const ExtenderItemMimeData *mimeData =
+            qobject_cast<const ExtenderItemMimeData*>(event->mimeData());
+        if (mimeData && qobject_cast<Extender*>(graphicsWidget())) {
+            mimeData->extenderItem()->setExtender(extender());
+            QApplication::restoreOverrideCursor();
+        }
+    }
 }
 
 void PopupApplet::showPopup(uint popupDuration)

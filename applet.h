@@ -931,6 +931,7 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         friend class PopupAppletPrivate;
 
         friend class Extender;
+        friend class ExtenderPrivate;
         friend class ExtenderItem;
 };
 

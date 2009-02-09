@@ -48,12 +48,11 @@ void ExtenderApplet::init()
     setPopupIcon("utilities-desktop-extra");
 
     extender()->setAppearance(Extender::NoBorders);
-    extender()->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
 
     connect(extender(), SIGNAL(itemDetached(Plasma::ExtenderItem*)),
             this, SLOT(itemDetached(Plasma::ExtenderItem*)));
-    connect(extender(), SIGNAL(geometryChanged()),
-            this, SLOT(extenderGeometryChanged()));
+    //connect(extender(), SIGNAL(geometryChanged()),
+            //this, SLOT(extenderGeometryChanged()));
 }
 
 void ExtenderApplet::itemDetached(Plasma::ExtenderItem *)
@@ -63,6 +62,7 @@ void ExtenderApplet::itemDetached(Plasma::ExtenderItem *)
     }
 }
 
+/**
 void ExtenderApplet::extenderGeometryChanged()
 {
     if (formFactor() != Plasma::Horizontal &&
@@ -79,6 +79,7 @@ void ExtenderApplet::extenderGeometryChanged()
         adjustSize();
     }
 }
+*/
 
 } // namespace Plasma
 

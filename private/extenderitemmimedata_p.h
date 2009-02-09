@@ -17,31 +17,36 @@
  * Boston, MA  02110-1301  USA
  */
 
-#ifndef EXTENDERAPPLET_H
-#define EXTENDERAPPLET_H
+#ifndef EXTENDERITEMMIMEDATA_H
+#define EXTENDERITEMMIMEDATA_H
 
-#include "popupapplet.h"
+#include <QMimeData>
 
 namespace Plasma
 {
 
+class ExtenderItem;
+
 /**
- * This class is used as a 'host' for detached extender items. When an extender item is dropped
- * somewhere, this applet is added at the location where the item is dropped, and the item is added
- * to it's extender.
+ * This class is used to deliver pointers to ExtenderItems to drag/drop event handlers.
  */
-class ExtenderApplet : public Plasma::PopupApplet
+class ExtenderItemMimeData : public QMimeData
 {
     Q_OBJECT
     public:
-        ExtenderApplet(QObject *parent, const QVariantList &args);
-        ~ExtenderApplet();
+        ExtenderItemMimeData();
+        ~ExtenderItemMimeData();
 
-        void init();
+        QStringList formats() const;
+        bool hasFormat(const QString &mimeType) const;
 
-    public Q_SLOTS:
-        void itemDetached(Plasma::ExtenderItem *);
-        //void extenderGeometryChanged();
+        void setExtenderItem(ExtenderItem *item);
+        ExtenderItem *extenderItem() const;
+
+        static QString mimeType();
+
+    private:
+        ExtenderItem *m_extenderItem;
 };
 
 } // namespace Plasma
