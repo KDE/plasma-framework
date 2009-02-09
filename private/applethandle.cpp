@@ -72,6 +72,9 @@ AppletHandle::AppletHandle(Containment *parent, Applet *applet, const QPointF &h
                              Theme::defaultTheme()->colorScheme());
     m_gradientColor = colorScheme.background(KColorScheme::NormalBackground).color();
 
+    m_originalGeom = m_applet->geometry();
+    m_originalTransform = m_applet->transform();
+
     QTransform originalMatrix = m_applet->transform();
     m_applet->resetTransform();
 
@@ -166,6 +169,10 @@ void AppletHandle::detachApplet ()
     m_applet->setParentItem(m_containment);
 
     m_applet->setZValue(m_zValue);
+
+    if (m_applet->geometry() != m_originalGeom || m_applet->transform() != m_originalTransform) {
+        emit m_applet->appletTransformedByUser();
+    }
 
     m_applet->update(); // re-render the background, now we've transformed the applet
 

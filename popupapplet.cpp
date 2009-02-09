@@ -246,6 +246,7 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
             //size not saved/invalid size saved
             if (oldSize.width() < q->minimumSize().width() || oldSize.height() < q->minimumSize().height()) {
                 q->resize(prefSize);
+                emit q->appletTransformedItself();
             }
 
             //FIXME: this will be automatically propagated by the qgraphicslayout in the future

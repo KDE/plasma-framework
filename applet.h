@@ -608,6 +608,16 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         void geometryChanged();
 
         /**
+         * Emitted when the user completes a transformation of the applet.
+         */
+        void appletTransformedByUser();
+
+        /**
+         * Emitted when the applet changes its own geometry or transform.
+         */
+        void appletTransformedItself();
+
+        /**
          * Emitted by Applet subclasses when they change a sizeHint and wants to announce the change
          */
         void sizeHintChanged(Qt::SizeHint which);
