@@ -37,8 +37,11 @@ class VideoWidgetPrivate;
 
 /**
  * @class VideoWidget plasma/widgets/videowidget.h <Plasma/Widgets/VideoWidget>
+ * a Video playing widget via Phonon, it encloses the
+ * Phonon::MediaObject and Phonon::AudioOutput too
  *
  * @short Provides a video player widget
+ * @since KDE4.3
  */
 class PLASMA_EXPORT VideoWidget : public QGraphicsProxyWidget
 {
@@ -54,20 +57,42 @@ public:
     explicit VideoWidget(QGraphicsWidget *parent = 0);
     ~VideoWidget();
 
+    /**
+     * Choose what file to play
+     * @arg path resource to play
+     */
     void setFile(const QString &path);
 
-    //TODO: decide ifsupporting just file from the api or even just make use just MediaObject wtith no api here
+    /**
+     * @return the file we are playing
+     */
     QString file() const;
 
+    /**
+     * @return the Phonon::MediaObject being used
+     * @see Phonon::MediaObject
+     */
     Q_INVOKABLE Phonon::MediaObject *mediaObject() const;
 
+    /**
+     * @return the Phonon::AudioOutput being used
+     * @see Phonon::AudioOutput
+     */
     Q_INVOKABLE Phonon::AudioOutput *audioOutput() const;
 
-    //FIXME: bunch of stuff wrapped from MediaObject: makes sense for scripting or just use MediaObject also for scripts?
+    /**
+     * @return the current time of the current media file
+     */
     qint64 currentTime() const;
 
+    /**
+     * @return the total playing time of the current media file
+     */
     qint64 totalTime() const;
 
+    /**
+     * @return the time remaining to the current media file
+     */
     qint64 remainingTime() const;
 
     /**
@@ -88,16 +113,37 @@ public:
     Phonon::VideoWidget *nativeWidget() const;
 
 public Q_SLOTS:
+    /**
+     * Play the current file
+     */
     void play();
 
+    /**
+     * Pause the current file
+     */
     void pause();
 
+    /**
+     * Stop the current file
+     */
     void stop();
 
+    /**
+     * Jump at a given millisecond in the current file
+     * @arg time where we want to jump
+     */
     void seek(qint64 time);
 
 Q_SIGNALS:
+    /**
+     * Emitted regularly when the playing is progressing
+     * @arg time where we are
+     */
     void tick(qint64 time);
+
+    /**
+     * Emitted an instant before the playback is finished
+     */
     void aboutToFinish();
 
 private:
