@@ -30,6 +30,7 @@ namespace Plasma
 ExtenderApplet::ExtenderApplet(QObject *parent, const QVariantList &args)
     : PopupApplet(parent, args)
 {
+    setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
 }
 
 ExtenderApplet::~ExtenderApplet()
@@ -51,8 +52,8 @@ void ExtenderApplet::init()
 
     connect(extender(), SIGNAL(itemDetached(Plasma::ExtenderItem*)),
             this, SLOT(itemDetached(Plasma::ExtenderItem*)));
-    //connect(extender(), SIGNAL(geometryChanged()),
-            //this, SLOT(extenderGeometryChanged()));
+    connect(extender(), SIGNAL(geometryChanged()),
+            this, SLOT(extenderGeometryChanged()));
 }
 
 void ExtenderApplet::itemDetached(Plasma::ExtenderItem *)
@@ -62,7 +63,6 @@ void ExtenderApplet::itemDetached(Plasma::ExtenderItem *)
     }
 }
 
-/**
 void ExtenderApplet::extenderGeometryChanged()
 {
     if (formFactor() != Plasma::Horizontal &&
@@ -76,10 +76,9 @@ void ExtenderApplet::extenderGeometryChanged()
         setMaximumSize(extender()->maximumSize() + margins);
         setPreferredSize(extender()->preferredSize() + margins);
 
-        adjustSize();
+        updateGeometry();
     }
 }
-*/
 
 } // namespace Plasma
 

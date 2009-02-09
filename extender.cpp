@@ -509,17 +509,12 @@ void ExtenderPrivate::loadExtenderItems()
 void ExtenderPrivate::updateBorders()
 {
     foreach (ExtenderItem *item, q->attachedItems()) {
-        kDebug() << "checking" << (QObject*)item << item->d->background->enabledBorders()
-                 << q->enabledBordersForItem(item);
         if (item && (item->d->background->enabledBorders() != q->enabledBordersForItem(item))) {
             //call themeChanged to change the backgrounds enabled borders, and move all contained
             //widgets according to it's changed margins.
             item->d->themeChanged();
         }
     }
-
-    applet->updateGeometry();
-    applet->adjustSize();
 }
 
 void ExtenderPrivate::updateEmptyExtenderLabel()

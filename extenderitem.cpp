@@ -845,11 +845,9 @@ void ExtenderItemPrivate::updateSizeHints()
         if (extender->d->appearance == Extender::TopDownStacked ||
             extender->d->appearance == Extender::BottomUpStacked) {
             //used in popups, so fixed make sense.
-            kDebug() << "updating size hints for stacked look, vertical policy is fixed";
             q->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
         } else if (extender->d->appearance == Extender::NoBorders) {
             //on the desktop or panel so take all the space we want.
-            kDebug() << "updating size hints for no borders look, both policies are expanding";
             q->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
         }
 
