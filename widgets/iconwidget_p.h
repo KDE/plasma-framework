@@ -141,7 +141,8 @@ public:
                          QTextLayout *infoLayout, QRectF *textBoundingRect) const;
 
     inline void setLayoutOptions(QTextLayout &layout,
-                                 const QStyleOptionGraphicsItem *options) const;
+                                 const QStyleOptionGraphicsItem *options,
+                                 const Qt::Orientation orientation) const;
 
     inline Qt::LayoutDirection iconDirection(const QStyleOptionGraphicsItem *option) const;
 
@@ -226,11 +227,17 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(IconWidgetPrivate::IconWidgetStates)
 
 // Inline methods
 void IconWidgetPrivate::setLayoutOptions(QTextLayout &layout,
-                                         const QStyleOptionGraphicsItem *option) const
+                                         const QStyleOptionGraphicsItem *option,
+                                         const Qt::Orientation orientation) const
 {
     QTextOption textoption;
     textoption.setTextDirection(option->direction);
-    textoption.setAlignment(Qt::AlignCenter);   // NOTE: assumption
+    if (orientation == Qt::Horizontal) {
+        textoption.setAlignment(Qt::Alignment(Qt::AlignLeft|Qt::AlignVCenter));
+    } else {
+        textoption.setAlignment(Qt::AlignCenter);
+    }
+
     textoption.setWrapMode(QTextOption::WordWrap);  // NOTE: assumption as well
 
     layout.setFont(QApplication::font());    // NOTE: find better ways to get the font

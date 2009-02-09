@@ -466,7 +466,7 @@ QSizeF IconWidgetPrivate::displaySizeHint(const QStyleOptionGraphicsItem *option
     }
 
     QTextLayout layout;
-    setLayoutOptions(layout, option);
+    setLayoutOptions(layout, option, q->orientation());
     QSizeF size = layoutText(layout, option, label, QSizeF(textWidth, maxHeight));
 
     return addMargin(size, TextMargin);
@@ -815,7 +815,7 @@ void IconWidgetPrivate::layoutTextItems(const QStyleOptionGraphicsItem *option,
 {
     bool showInformation = false;
 
-    setLayoutOptions(*labelLayout, option);
+    setLayoutOptions(*labelLayout, option, q->orientation());
 
     QFontMetricsF fm(labelLayout->font());
     const QRectF textArea = labelRectangle(option, icon, text);
@@ -950,6 +950,8 @@ void IconWidget::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
     // Draw text last because it is overlayed
     QTextLayout labelLayout, infoLayout;
     QRectF textBoundingRect;
+
+
     d->layoutTextItems(option, icon, &labelLayout, &infoLayout, &textBoundingRect);
 
     QImage shadow(textBoundingRect.size().toSize() + QSize(4, 4),
