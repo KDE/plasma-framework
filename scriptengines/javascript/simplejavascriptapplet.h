@@ -68,6 +68,7 @@ private:
 
     void installWidgets( QScriptEngine *engine );
     static QScriptValue createWidget(QScriptContext *context, QScriptEngine *engine);
+    static QScriptValue notSupported(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue print(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue createPrototype( QScriptEngine *engine, const QString &name );
 
