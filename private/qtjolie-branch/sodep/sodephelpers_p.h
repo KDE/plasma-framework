@@ -231,13 +231,10 @@ inline SodepValue sodepReadValue(QIODevice &io)
     for (int i=0; i<childrenCount; ++i) {
         QString name = sodepReadString(io);
 
-        QList<SodepValue> values;
         qint32 valueCount = sodepReadInt32(io);
         for (int j=0; j<valueCount; ++j) {
-            values << sodepReadValue(io);
+            result.children(name) << sodepReadValue(io);
         }
-
-        result.children(name) = values;
     }
 
     return result;
