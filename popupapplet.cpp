@@ -386,8 +386,10 @@ void PopupApplet::dragLeaveEvent(QGraphicsSceneDragDropEvent *event)
             //we started.
             if (d->dialog && !d->dialog->geometry().contains(event->screenPos()) &&
                 mimeData->extenderItem()->extender() != qobject_cast<Extender*>(graphicsWidget())) {
-                kDebug() << "leaving the popupApplet, and it's not our starting popupApplet, hiding.";
-                hidePopup();
+                //We actually try to hide the popup, with a call to showPopup, with a smal timeout,
+                //so if the user moves into the popup fast enough, it remains open (the extender
+                //will call showPopup which will cancel the timeout.
+                showPopup(250);
             }
         }
     }

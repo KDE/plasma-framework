@@ -225,6 +225,11 @@ void Extender::dragEnterEvent(QGraphicsSceneDragDropEvent *event)
 
         if (mimeData) {
             itemHoverEnterEvent(mimeData->extenderItem());
+
+            PopupApplet *popupApplet = qobject_cast<PopupApplet*>(d->applet);
+            if (popupApplet) {
+                popupApplet->showPopup();
+            }
         }
     }
 }
@@ -250,9 +255,20 @@ void Extender::dragLeaveEvent(QGraphicsSceneDragDropEvent *event)
         if (mimeData) {
             itemHoverLeaveEvent(mimeData->extenderItem());
 
-            //Hide popups when we drag the last item away.
+            //Some logic to conveniently show/hide popups or applets when logical.
+            Extender *sourceExtender = mimeData->extenderItem()->d->extender;
+
+            //Hide popups when they're not the extender where we started, and we're leaving the
+            //extender. Use a small timeout here, to avoid accidental hides of extenders we're
+            //targetting.
             PopupApplet *popupApplet = qobject_cast<PopupApplet*>(d->applet);
-            if (popupApplet && attachedItems().count() < 2) {
+            if (popupApplet && sourceExtender != this) {
+                kDebug() << "leaving another extender then the extender we started, so hide the popup.";
+                popupApplet->showPopup(250);
+            }
+
+            //Hide popups when we drag the last item away.
+            if (popupApplet && sourceExtender == this && attachedItems().count() < 2) {
                 kDebug() << "leaving the extender, and there are no more attached items so hide the popup.";
                 popupApplet->hidePopup();
             }
@@ -260,7 +276,7 @@ void Extender::dragLeaveEvent(QGraphicsSceneDragDropEvent *event)
             //Hide empty internal extender containers when we drag the last item away. Avoids having
             //an ugly empty applet on the desktop temporarily.
             ExtenderApplet *extenderApplet = qobject_cast<ExtenderApplet*>(d->applet);
-            if (extenderApplet && attachedItems().count() < 2) {
+            if (extenderApplet && sourceExtender == this && (attachedItems().count() < 2)) {
                 kDebug() << "leaving the internal extender container, so hide the applet and it's handle.";
                 extenderApplet->hide();
                 AppletHandle *handle = qgraphicsitem_cast<AppletHandle*>(extenderApplet->parentItem());
