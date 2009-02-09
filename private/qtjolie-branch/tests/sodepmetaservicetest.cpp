@@ -114,7 +114,7 @@ private slots:
         QFETCH(QString, fileName);
 
         SodepMessage message("/", "loadEmbeddedJolieService");
-        SodepValue value(0);
+        SodepValue value;
         value.children("resourcePrefix") << SodepValue(resourcePrefix);
         value.children("filepath") << SodepValue(QString(DATA_DIR"/")+fileName);
         message.setData(value);
@@ -153,10 +153,10 @@ private slots:
         SodepValue value;
 
         SodepValue s1;
-        s1.children("metadata");
+        s1.children("isEmbedded") << SodepValue(1);
         s1.children("resourceName") << SodepValue("Math");
         SodepValue s2;
-        s2.children("metadata");
+        s2.children("isEmbedded") << SodepValue(1);
         s2.children("resourceName") << SodepValue("Printer");
 
         value.children("service") << s1 << s2;
