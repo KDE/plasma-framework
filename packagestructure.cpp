@@ -124,12 +124,16 @@ PackageStructure::Ptr PackageStructure::load(const QString &packageFormat)
 
     if (packageFormat == "Plasma/Applet") {
         structure = defaultPackageStructure(AppletComponent);
+        structure->d->type = "Plasma/Applet";
     } else if (packageFormat == "Plasma/DataEngine") {
         structure = defaultPackageStructure(DataEngineComponent);
+        structure->d->type = "Plasma/DataEngine";
     } else if (packageFormat == "Plasma/Runner") {
         structure = defaultPackageStructure(RunnerComponent);
+        structure->d->type = "Plasma/Runner";
     } else if (packageFormat == "Plasma/Theme") {
         structure = Theme::packageStructure();
+        structure->d->type = "Plasma/Theme";
     }
 
     if (structure) {
