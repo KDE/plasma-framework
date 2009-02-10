@@ -639,7 +639,7 @@ void SimpleJavaScriptApplet::installWidgets(QScriptEngine *engine)
 #ifndef HAVE_PHONON
     QScriptValue fun = engine->newFunction(notSupported);
     fun.setProperty( QString("message"),
-                     i18n("Phonon support was not available"),
+                     QScriptValue(engine, i18n("Phonon support was not available")),
                      QScriptValue::ReadOnly | QScriptValue::Undeletable | QScriptValue::SkipInEnumeration );
     globalObject.setProperty(QString("VideoWidget"), fun);
 #endif
