@@ -76,6 +76,7 @@ private:
     static KSharedPtr<UiLoader> s_widgetLoader;
     QScriptEngine *m_engine;
     QScriptValue m_self;
+    QVariantList m_args;
     AppletInterface *m_interface;
     friend class AppletInterface;
 };

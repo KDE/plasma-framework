@@ -636,13 +636,7 @@ void SimpleJavaScriptApplet::installWidgets(QScriptEngine *engine)
 
         globalObject.setProperty(widget, fun);
     }
-#ifndef HAVE_PHONON
-    QScriptValue fun = engine->newFunction(notSupported);
-    fun.setProperty( QString("message"),
-                     QScriptValue(engine, i18n("Phonon support was not available")),
-                     QScriptValue::ReadOnly | QScriptValue::Undeletable | QScriptValue::SkipInEnumeration );
-    globalObject.setProperty(QString("VideoWidget"), fun);
-#endif
+
 }
 
 QScriptValue SimpleJavaScriptApplet::createWidget(QScriptContext *context, QScriptEngine *engine)
@@ -680,7 +674,7 @@ QScriptValue SimpleJavaScriptApplet::createWidget(QScriptContext *context, QScri
 QScriptValue SimpleJavaScriptApplet::notSupported(QScriptContext *context, QScriptEngine *engine)
 {
         QString message = context->callee().property("message").toString();
-        return context->throwError(i18n("This operation was not supported, %1").arg(message) );
+        return context->throwError(i18n("This operation was not supported, %1", message) );
 }
 
 

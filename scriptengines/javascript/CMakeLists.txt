@@ -12,6 +12,9 @@ set(simple_javascript_engine_SRCS
     qtgui/timer.cpp
 )
 
+include_directories(${PHONON_INCLUDES})
+
+
 kde4_add_plugin(plasma_appletscript_simple_javascript
 	        ${simple_javascript_engine_SRCS})
 

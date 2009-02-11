@@ -45,9 +45,8 @@
 #include <Plasma/ToolButton>
 #include <Plasma/TreeView>
 #include <Plasma/WebView>
-#ifdef HAVE_PHONON
 #include <Plasma/VideoWidget>
-#endif
+
 
 QGraphicsWidget *createBusyWidget(QGraphicsWidget *parent) { return new Plasma::BusyWidget(parent); }
 QGraphicsWidget *createCheckBox(QGraphicsWidget *parent) { return new Plasma::CheckBox(parent); }
@@ -70,9 +69,7 @@ QGraphicsWidget *createTabBar(QGraphicsWidget *parent) { return new Plasma::TabB
 QGraphicsWidget *createTextEdit(QGraphicsWidget *parent) { return new Plasma::TextEdit(parent); }
 QGraphicsWidget *createToolButton(QGraphicsWidget *parent) { return new Plasma::ToolButton(parent); }
 QGraphicsWidget *createTreeView(QGraphicsWidget *parent) { return new Plasma::TreeView(parent); }
-#ifdef HAVE_PHONON
 QGraphicsWidget *createVideoWidget(QGraphicsWidget *parent) { return new Plasma::VideoWidget(parent); }
-#endif
 
 UiLoader::UiLoader()
 {
@@ -97,9 +94,7 @@ UiLoader::UiLoader()
     m_widgetCtors.insert("TextEdit", createTextEdit);
     m_widgetCtors.insert("ToolButton", createToolButton);
     m_widgetCtors.insert("TreeView", createTreeView);
-#ifdef HAVE_PHONON
     m_widgetCtors.insert("VideoWidget", createVideoWidget);
-#endif
 }
 
 UiLoader::~UiLoader()
