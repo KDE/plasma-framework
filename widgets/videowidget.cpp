@@ -19,6 +19,8 @@
 
 #include "videowidget.h"
 
+#include <kurl.h>
+
 #include <phonon/videowidget.h>
 #include <phonon/mediaobject.h>
 #include <phonon/mediasource.h>
@@ -77,14 +79,14 @@ Phonon::AudioOutput *VideoWidget::audioOutput() const
     return d->audioOutput;
 }
 
-void VideoWidget::setFile(const QString &path)
+void VideoWidget::setUrl(const QString &url)
 {
-    d->media->setCurrentSource(Phonon::MediaSource(path));
+    d->media->setCurrentSource(Phonon::MediaSource(url));
 }
 
-QString VideoWidget::file() const
+QString VideoWidget::url() const
 {
-    return d->media->currentSource().fileName();
+    return d->media->currentSource().url().toString();
 }
 
 void VideoWidget::play()

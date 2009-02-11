@@ -30,6 +30,8 @@ namespace Phonon {
     class AudioOutput;
 }
 
+class KUrl;
+
 namespace Plasma
 {
 
@@ -47,7 +49,7 @@ class PLASMA_EXPORT VideoWidget : public QGraphicsProxyWidget
 {
     Q_OBJECT
 
-    Q_PROPERTY(QString file READ file WRITE setFile)
+    Q_PROPERTY(QString url READ url WRITE setUrl)
     Q_PROPERTY(QString currentTime READ currentTime)
     Q_PROPERTY(QString totalTime READ totalTime)
     Q_PROPERTY(QString remainingTime READ remainingTime)
@@ -58,15 +60,15 @@ public:
     ~VideoWidget();
 
     /**
-     * Choose what file to play
+     * Load a certain url that can be a local file or a remote one
      * @arg path resource to play
      */
-    void setFile(const QString &path);
+    void setUrl(const QString &url);
 
     /**
-     * @return the file we are playing
+     * @return the url (local or remote) we are playing
      */
-    QString file() const;
+    QString url() const;
 
     /**
      * @return the Phonon::MediaObject being used
