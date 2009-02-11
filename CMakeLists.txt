@@ -77,6 +77,7 @@ set(plasma_LIB_SRCS
     private/nativetabbar.cpp
     private/packages.cpp
     private/paneltoolbox.cpp
+    private/runnerjobs.cpp
     private/style.cpp
     private/toolbox.cpp
     private/tooltip.cpp

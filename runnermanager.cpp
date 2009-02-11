@@ -35,10 +35,9 @@
 
 #include <Weaver/DebuggingAids.h>
 #include <Weaver/Thread.h>
-#include <Weaver/Job.h>
-#include <Weaver/QueuePolicy.h>
 #include <Weaver/ThreadWeaver.h>
 
+#include "private/runnerjobs.h"
 #include "querymatch.h"
 
 using ThreadWeaver::Weaver;
@@ -46,213 +45,6 @@ using ThreadWeaver::Job;
 
 namespace Plasma
 {
-
-/*****************************************************
-*  RunnerRestrictionPolicy class
-* Restricts simultaneous jobs of the same type
-* Similar to ResourceRestrictionPolicy but check the object type first
-******************************************************/
-class RunnerRestrictionPolicy : public ThreadWeaver::QueuePolicy
-{
-public:
-    ~RunnerRestrictionPolicy();
-
-    static RunnerRestrictionPolicy &instance();
-
-    void setCap(int cap)
-    {
-        m_cap = cap;
-    }
-    int cap() const
-    {
-        return m_cap;
-    }
-
-    bool canRun(Job *job);
-    void free(Job *job);
-    void release(Job *job);
-    void destructed(Job *job);
-private:
-    RunnerRestrictionPolicy();
-
-    int m_count;
-    int m_cap;
-    QMutex m_mutex;
-};
-
-RunnerRestrictionPolicy::RunnerRestrictionPolicy()
-    : QueuePolicy(),
-      m_count(0),
-      m_cap(2)
-{
-}
-
-RunnerRestrictionPolicy::~RunnerRestrictionPolicy()
-{
-}
-
-RunnerRestrictionPolicy& RunnerRestrictionPolicy::instance()
-{
-    static RunnerRestrictionPolicy policy;
-    return policy;
-}
-
-bool RunnerRestrictionPolicy::canRun(Job *job)
-{
-    Q_UNUSED(job)
-    QMutexLocker l(&m_mutex);
-    if (m_count > m_cap) {
-        return false;
-    } else {
-        ++m_count;
-        return true;
-    }
-}
-
-void RunnerRestrictionPolicy::free(Job *job)
-{
-    Q_UNUSED(job)
-    QMutexLocker l(&m_mutex);
-    --m_count;
-}
-
-void RunnerRestrictionPolicy::release(Job *job)
-{
-    free(job);
-}
-
-void RunnerRestrictionPolicy::destructed(Job *job)
-{
-    Q_UNUSED(job)
-}
-
-// QueuePolicy that limits the instances of a particular runner
-class DefaultRunnerPolicy : public ThreadWeaver::QueuePolicy
-{
-public:
-    ~DefaultRunnerPolicy();
-
-    static DefaultRunnerPolicy &instance();
-
-    void setCap(int cap)
-    {
-        m_cap = cap;
-    }
-    int cap() const
-    {
-        return m_cap;
-    }
-
-    bool canRun(Job *job);
-    void free(Job *job);
-    void release(Job *job);
-    void destructed(Job *job);
-private:
-    DefaultRunnerPolicy();
-
-    int m_cap;
-    QHash<QString, int> m_runCounts;
-    QMutex m_mutex;
-};
-
-/*****************************************************
-*  FindMatchesJob class
-* Class to run queries in different threads
-******************************************************/
-class FindMatchesJob : public Job
-{
-public:
-    FindMatchesJob(Plasma::AbstractRunner *runner,
-                   Plasma::RunnerContext *context, QObject *parent = 0);
-
-    int priority() const;
-    Plasma::AbstractRunner* runner() const;
-
-protected:
-    void run();
-private:
-    Plasma::RunnerContext *m_context;
-    Plasma::AbstractRunner *m_runner;
-};
-
-FindMatchesJob::FindMatchesJob(Plasma::AbstractRunner *runner,
-                               Plasma::RunnerContext *context, QObject *parent)
-    : ThreadWeaver::Job(parent),
-      m_context(context),
-      m_runner(runner)
-{
-    if (runner->speed() == Plasma::AbstractRunner::SlowSpeed) {
-        assignQueuePolicy(&RunnerRestrictionPolicy::instance());
-    } else {
-        assignQueuePolicy(&DefaultRunnerPolicy::instance());
-    }
-}
-
-void FindMatchesJob::run()
-{
-//     kDebug() << "Running match for " << m_runner->objectName()
-//              << " in Thread " << thread()->id() << endl;
-    m_runner->performMatch(*m_context);
-}
-
-int FindMatchesJob::priority() const
-{
-    return m_runner->priority();
-}
-
-Plasma::AbstractRunner* FindMatchesJob::runner() const
-{
-    return m_runner;
-}
-
-DefaultRunnerPolicy::DefaultRunnerPolicy()
-    : QueuePolicy(),
-      m_cap(2)
-{
-}
-
-DefaultRunnerPolicy::~DefaultRunnerPolicy()
-{
-}
-
-DefaultRunnerPolicy& DefaultRunnerPolicy::instance()
-{
-    static DefaultRunnerPolicy policy;
-    return policy;
-}
-
-bool DefaultRunnerPolicy::canRun(Job *job)
-{
-    QMutexLocker l(&m_mutex);
-
-    Plasma::AbstractRunner *runner = static_cast<FindMatchesJob*>(job)->runner();
-
-    if (m_runCounts[runner->name()] > m_cap) {
-        return false;
-    } else {
-        ++m_runCounts[runner->name()];
-        return true;
-    }
-}
-
-void DefaultRunnerPolicy::free(Job *job)
-{
-    QMutexLocker l(&m_mutex);
-
-    Plasma::AbstractRunner *runner = static_cast<FindMatchesJob*>(job)->runner();
-
-    --m_runCounts[runner->name()];
-}
-
-void DefaultRunnerPolicy::release(Job *job)
-{
-    free(job);
-}
-
-void DefaultRunnerPolicy::destructed(Job *job)
-{
-    Q_UNUSED(job)
-}
 
 /*****************************************************
 *  RunnerManager::Private class
@@ -267,8 +59,11 @@ public:
         deferredRun(0)
     {
         matchChangeTimer.setSingleShot(true);
+        delayTimer.setSingleShot(true);
+
         QObject::connect(&matchChangeTimer, SIGNAL(timeout()), q, SLOT(matchesChanged()));
         QObject::connect(&context, SIGNAL(matchesChanged()), q, SLOT(scheduleMatchesChanged()));
+        QObject::connect(&delayTimer, SIGNAL(timeout()), q, SLOT(unblockJobs()));
     }
 
     void scheduleMatchesChanged()
@@ -297,7 +92,6 @@ public:
         // to half the number of threads
         const int cap = qMax(2, numThreads/2);
         DefaultRunnerPolicy::instance().setCap(cap);
-        RunnerRestrictionPolicy::instance().setCap(cap);
 
         //If set, this list defines which runners won't be used at runtime
         //blacklist = config.readEntry("blacklist", QStringList());
@@ -376,13 +170,25 @@ public:
         delete runJob;
     }
 
+    void unblockJobs()
+    {
+        // WORKAROUND: Queue an empty job to force ThreadWeaver to awaken threads
+        // kDebug() << "- Unblocking jobs -" << endl;
+        DummyJob *dummy = new DummyJob(q);
+        Weaver::instance()->enqueue(dummy);
+        QObject::connect(dummy, SIGNAL(done(ThreadWeaver::Job*)), dummy, SLOT(deleteLater()));
+    }
+
+    // Delay in ms before slow runners are allowed to run
+    static const int slowRunDelay = 400;
+
     RunnerManager *q;
     QueryMatch deferredRun;
     RunnerContext context;
     QTimer matchChangeTimer;
+    QTimer delayTimer; // Timer to control when to run slow runners
     QHash<QString, AbstractRunner*> runners;
     QList<FindMatchesJob*> searchJobs;
-//     QStringList prioritylist;
     bool loadAll;
     KConfigGroup config;
 };
@@ -523,10 +329,15 @@ void RunnerManager::launchQuery(const QString &term, const QString &runnerName)
 //            kDebug() << "launching" << r->name();
             FindMatchesJob *job = new FindMatchesJob(r, &d->context, this);
             connect(job, SIGNAL(done(ThreadWeaver::Job*)), this, SLOT(jobDone(ThreadWeaver::Job*)));
+            if (r->speed() == AbstractRunner::SlowSpeed) {
+                job->setDelayTimer(&d->delayTimer);
+            }
             Weaver::instance()->enqueue(job);
             d->searchJobs.append(job);
         }
     }
+    // Start timer to unblock slow runners
+    d->delayTimer.start(RunnerManagerPrivate::slowRunDelay);
 }
 
 bool RunnerManager::execQuery(const QString &term)
