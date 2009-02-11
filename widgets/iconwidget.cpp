@@ -1082,7 +1082,7 @@ void IconWidget::mousePressEvent(QGraphicsSceneMouseEvent *event)
         }
     }
 
-    if (!handled && geometry().contains(event->pos())) {
+    if (!handled && boundingRect().contains(event->pos())) {
         emit pressed(true);
     }
 
