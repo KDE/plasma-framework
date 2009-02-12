@@ -53,7 +53,8 @@ class PLASMA_EXPORT VideoWidget : public QGraphicsProxyWidget
     Q_PROPERTY(QString currentTime READ currentTime)
     Q_PROPERTY(QString totalTime READ totalTime)
     Q_PROPERTY(QString remainingTime READ remainingTime)
-    Q_PROPERTY(Controls shownControls READ shownControls WRITE setShownControls)
+    Q_PROPERTY(Controls usedControls READ usedControls WRITE setUsedControls)
+    Q_PROPERTY(bool controlsVisible READ controlsVisible WRITE setControlsVisible)
     Q_PROPERTY(QString styleSheet READ styleSheet WRITE setStyleSheet)
 
 public:
@@ -112,18 +113,31 @@ public:
     qint64 remainingTime() const;
 
     /**
-     * Set what control widgets to show
+     * Set what control widgets to use
      *
-     * @arg controls OR combination of Controls flags
+     * @arg controls bitwise OR combination of Controls flags
      * @see Controls
      */
-    void setShownControls(Controls controls);
+    void setUsedControls(Controls controls);
 
     /**
-     * @return the video controls that are being show right now
+     * @return the video controls that are used and shown
      * @see Controls
      */
-    Controls shownControls() const;
+    Controls usedControls() const;
+
+    /**
+     * Show/hide the main controls widget, if any of them is used
+     *
+     * @arg visible if we want to show or hide the main controls
+     * @see setUsedControls()
+     */
+    void setControlsVisible(bool visible);
+
+    /**
+     * @return true if the controls widget is being shown right now
+     */
+    bool controlsVisible() const;
 
     /**
      * Sets the stylesheet used to control the visual display of this VideoWidget

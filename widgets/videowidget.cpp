@@ -44,6 +44,7 @@ public:
     VideoWidgetPrivate(VideoWidget *video)
          : q(video),
            ticking(false),
+           forceControlsVisible(false),
            animId(0),
            hideTimer(0),
            shownControls(VideoWidget::NoControls),
@@ -74,6 +75,7 @@ public:
     void animateControlWidget(bool show);
     void hideControlWidget();
     void slidingCompleted(QGraphicsItem *item);
+    bool spaceForControlsAvailable();
 
 
     VideoWidget *q;
@@ -83,6 +85,7 @@ public:
     Phonon::MediaObject *media;
 
     bool ticking;
+    bool forceControlsVisible;
 
     //control widgets
     int animId;
@@ -202,8 +205,19 @@ void VideoWidgetPrivate::slidingCompleted(QGraphicsItem *item)
 
     if (controlsWidget->pos().y() < 0) {
         controlsWidget->hide();
-    } else {
+    } else if (!forceControlsVisible) {
         hideTimer->start(3000);
+    }
+}
+
+bool VideoWidgetPrivate::spaceForControlsAvailable()
+{
+    if (controlsWidget) {
+        QSize hint = controlsWidget->effectiveSizeHint(Qt::MinimumSize).toSize();
+        return (q->size().width() >= hint.width()) &&
+               (q->size().height() >= hint.height());
+    } else {
+        return true;
     }
 }
 
@@ -257,7 +271,7 @@ QString VideoWidget::url() const
     return d->media->currentSource().url().toString();
 }
 
-void VideoWidget::setShownControls(Controls controls)
+void VideoWidget::setUsedControls(Controls controls)
 {
     d->shownControls = controls;
 
@@ -394,7 +408,7 @@ void VideoWidget::setShownControls(Controls controls)
     d->controlsWidget->hide();
 }
 
-VideoWidget::Controls VideoWidget::shownControls() const
+VideoWidget::Controls VideoWidget::usedControls() const
 {
     return d->shownControls;
 }
@@ -435,6 +449,19 @@ qint64 VideoWidget::remainingTime() const
     return d->media->remainingTime();
 }
 
+void VideoWidget::setControlsVisible(bool visible)
+{
+    if (d->controlsWidget) {
+        d->forceControlsVisible = visible;
+        d->animateControlWidget(visible);
+    }
+}
+
+bool VideoWidget::controlsVisible() const
+{
+    return d->controlsWidget != 0 && d->controlsWidget->isVisible();
+}
+
 void VideoWidget::setStyleSheet(const QString &stylesheet)
 {
     d->videoWidget->setStyleSheet(stylesheet);
@@ -457,6 +484,10 @@ void VideoWidget::resizeEvent(QGraphicsSceneResizeEvent *event)
 
     if (d->controlsWidget) {
         d->controlsWidget->resize(event->newSize().width(), d->controlsWidget->size().height());
+
+        if (d->spaceForControlsAvailable()) {
+            d->animateControlWidget(false);
+        }
     }
 }
 
@@ -464,7 +495,9 @@ void VideoWidget::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 {
     Q_UNUSED(event)
 
-    if (d->controlsWidget) {
+    if (d->controlsWidget &&
+        !d->forceControlsVisible &&
+        d->spaceForControlsAvailable()) {
         d->animateControlWidget(true);
     }
 }
@@ -473,7 +506,7 @@ void VideoWidget::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 {
     Q_UNUSED(event)
 
-    if (d->controlsWidget) {
+    if (d->controlsWidget && !d->forceControlsVisible) {
         d->hideTimer->start(1000);
     }
 }
@@ -482,9 +515,15 @@ void VideoWidget::hoverMoveEvent(QGraphicsSceneHoverEvent *event)
 {
     Q_UNUSED(event)
 
+    if (d->forceControlsVisible) {
+        return;
+    }
+
     d->hideTimer->start(3000);
 
-    if (d->controlsWidget && !d->controlsWidget->isVisible()) {
+    if (d->controlsWidget &&
+        !d->controlsWidget->isVisible() &&
+        d->spaceForControlsAvailable()) {
         d->animateControlWidget(true);
     }
 }
