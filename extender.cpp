@@ -467,6 +467,9 @@ void ExtenderPrivate::updateBorders()
 
 void ExtenderPrivate::adjustSizeHints()
 {
+#if (QT_VERSION >= QT_VERSION_CHECK(4, 90, 0))
+    return;
+#endif
     //FIXME: what happens in this function are some nasty workarounds for a bug in qt4.4's QGL.
     //Alexis has told me they are working on a fix for qt4.5, so this can be removed once the bug
     //has been fixed in Qt.
