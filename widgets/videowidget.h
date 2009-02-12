@@ -63,11 +63,9 @@ public:
         Pause = 2,
         Stop = 4,
         PlayPause = 8,
-        Previous = 16,
-        Next = 32,
-        Progress = 64,
-        Volume = 128,
-        OpenFile = 256,
+        Progress = 32,
+        Volume = 64,
+        OpenFile = 128,
         DefaultControls = PlayPause|Progress|Volume|OpenFile
     };
     Q_DECLARE_FLAGS(Controls, Control);

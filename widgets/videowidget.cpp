@@ -43,7 +43,14 @@ public:
     VideoWidgetPrivate()
          : ticking(false),
            shownControls(VideoWidget::NoControls),
-           controlsWidget(0)
+           controlsWidget(0),
+           playButton(0),
+           pauseButton(0),
+           stopButton(0),
+           playPauseButton(0),
+           progress(0),
+           volume(0),
+           openFileButton(0)
     {
     }
 
@@ -71,6 +78,9 @@ public:
     //control widgets
     VideoWidget::Controls shownControls;
     QGraphicsWidget *controlsWidget;
+    IconWidget *playButton;
+    IconWidget *pauseButton;
+    IconWidget *stopButton;
     IconWidget *playPauseButton;
     Slider *progress;
     Slider *volume;
@@ -209,50 +219,113 @@ void VideoWidget::setShownControls(Controls controls)
         return;
     }
 
+    //empty the layout
+    while (controlsLayout->count() > 0) {
+        controlsLayout->removeAt(0);
+    }
 
-    d->playPauseButton = new IconWidget(d->controlsWidget);
-    d->playPauseButton->setIcon("media-playback-start");
-    controlsLayout->addItem(d->playPauseButton);
-    connect(d->playPauseButton, SIGNAL(clicked()), this, SLOT(playPause()));
+    if (controls&Play) {
+        if (!d->playButton) {
+            d->playButton = new IconWidget(d->controlsWidget);
+            d->playButton->setIcon("media-playback-start");
+            connect(d->playButton, SIGNAL(clicked()), this, SLOT(play()));
+        }
+        controlsLayout->addItem(d->playButton);
+    } else {
+        d->playButton->deleteLater();
+        d->playButton = 0;
+    }
+
+    if (controls&Pause) {
+        if (!d->pauseButton) {
+            d->pauseButton = new IconWidget(d->controlsWidget);
+            d->pauseButton->setIcon("media-playback-pause");
+            connect(d->pauseButton, SIGNAL(clicked()), this, SLOT(pause()));
+        }
+        controlsLayout->addItem(d->pauseButton);
+    } else {
+        d->pauseButton->deleteLater();
+        d->pauseButton = 0;
+    }
+
+    if (controls&Stop) {
+        if (!d->stopButton) {
+            d->stopButton = new IconWidget(d->controlsWidget);
+            d->stopButton->setIcon("media-playback-stop");
+            connect(d->stopButton, SIGNAL(clicked()), this, SLOT(stop()));
+        }
+        controlsLayout->addItem(d->stopButton);
+    } else {
+        d->stopButton->deleteLater();
+        d->stopButton = 0;
+    }
+
+    if (controls&PlayPause) {
+        if (!d->playPauseButton) {
+            d->playPauseButton = new IconWidget(d->controlsWidget);
+            d->playPauseButton->setIcon("media-playback-start");
+            connect(d->playPauseButton, SIGNAL(clicked()), this, SLOT(playPause()));
+        }
+        controlsLayout->addItem(d->playPauseButton);
+    } else {
+        d->playPauseButton->deleteLater();
+        d->playPauseButton = 0;
+    }
+
     connect(d->media, SIGNAL(stateChanged(Phonon::State, Phonon::State)), this, SLOT(stateChanged(Phonon::State, Phonon::State)));
 
-    d->playPauseButton->setVisible(controls&PlayPause);
 
 
 
-    d->progress = new Slider(d->controlsWidget);
-    d->progress->setMinimum(0);
-    d->progress->setMaximum(100);
-    d->progress->setOrientation(Qt::Horizontal);
-    controlsLayout->addItem(d->progress);
-    controlsLayout->setStretchFactor(d->progress, 4);
+    if (controls&Progress) {
+        if (!d->progress) {
+            d->progress = new Slider(d->controlsWidget);
+            d->progress->setMinimum(0);
+            d->progress->setMaximum(100);
+            d->progress->setOrientation(Qt::Horizontal);
+            controlsLayout->setStretchFactor(d->progress, 4);
 
-    connect(d->media, SIGNAL(tick(qint64)), this, SLOT(ticked(qint64)));
-    connect(d->media, SIGNAL(totalTimeChanged(qint64)), SLOT(totalTimeChanged(qint64)));
-    connect(d->progress, SIGNAL(valueChanged(int)), this, SLOT(setPosition(int)));
-
-    d->progress->setVisible(controls&Progress);
-
-
-    d->volume = new Slider(d->controlsWidget);
-    d->volume->setMinimum(0);
-    d->volume->setMaximum(100);
-    d->volume->setValue(100);
-    d->volume->setOrientation(Qt::Horizontal);
-    controlsLayout->addItem(d->volume);
-
-    connect(d->volume, SIGNAL(valueChanged(int)), SLOT(setVolume(int)));
-    connect(d->audioOutput, SIGNAL(volumeChanged(qreal)), SLOT(volumeChanged(qreal)));
-
-    d->volume->setVisible(controls&Volume);
+            connect(d->media, SIGNAL(tick(qint64)), this, SLOT(ticked(qint64)));
+            connect(d->media, SIGNAL(totalTimeChanged(qint64)), SLOT(totalTimeChanged(qint64)));
+            connect(d->progress, SIGNAL(valueChanged(int)), this, SLOT(setPosition(int)));
+        }
+        controlsLayout->addItem(d->progress);
+    } else {
+        d->progress->deleteLater();
+        d->progress = 0;
+    }
 
 
-    d->openFileButton = new IconWidget(d->controlsWidget);
-    d->openFileButton->setIcon(KIcon("document-open"));
-    connect(d->openFileButton, SIGNAL(clicked()), this, SLOT(showOpenFileDialog()));
-    controlsLayout->addItem(d->openFileButton);
+    if (controls&Volume) {
+        if (!d->volume) {
+            d->volume = new Slider(d->controlsWidget);
+            d->volume->setMinimum(0);
+            d->volume->setMaximum(100);
+            d->volume->setValue(100);
+            d->volume->setOrientation(Qt::Horizontal);
 
-    d->openFileButton->setVisible(controls&OpenFile);
+            connect(d->volume, SIGNAL(valueChanged(int)), SLOT(setVolume(int)));
+            connect(d->audioOutput, SIGNAL(volumeChanged(qreal)), SLOT(volumeChanged(qreal)));
+        }
+            controlsLayout->addItem(d->volume);
+    } else {
+        d->volume->deleteLater();
+        d->volume = 0;
+    }
+
+
+    if (controls&OpenFile) {
+        if (!d->openFileButton) {
+            d->openFileButton = new IconWidget(d->controlsWidget);
+            d->openFileButton->setIcon(KIcon("document-open"));
+            connect(d->openFileButton, SIGNAL(clicked()), this, SLOT(showOpenFileDialog()));
+        }
+        controlsLayout->addItem(d->openFileButton);
+    } else {
+        d->openFileButton->deleteLater();
+        d->openFileButton = 0;
+    }
+
 }
 
 VideoWidget::Controls VideoWidget::shownControls() const
