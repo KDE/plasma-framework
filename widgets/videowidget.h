@@ -53,9 +53,25 @@ class PLASMA_EXPORT VideoWidget : public QGraphicsProxyWidget
     Q_PROPERTY(QString currentTime READ currentTime)
     Q_PROPERTY(QString totalTime READ totalTime)
     Q_PROPERTY(QString remainingTime READ remainingTime)
+    Q_PROPERTY(Controls shownControls READ shownControls WRITE setShownControls)
     Q_PROPERTY(QString styleSheet READ styleSheet WRITE setStyleSheet)
 
 public:
+    enum Control {
+        NoControls = 0,
+        Play = 1,
+        Pause = 2,
+        Stop = 4,
+        PlayPause = 8,
+        Previous = 16,
+        Next = 32,
+        Progress = 64,
+        Volume = 128,
+        OpenFile = 256,
+        DefaultControls = PlayPause|Progress|Volume|OpenFile
+    };
+    Q_DECLARE_FLAGS(Controls, Control);
+
     explicit VideoWidget(QGraphicsWidget *parent = 0);
     ~VideoWidget();
 
@@ -96,6 +112,20 @@ public:
      * @return the time remaining to the current media file
      */
     qint64 remainingTime() const;
+
+    /**
+     * Set what control widgets to show
+     *
+     * @arg controls OR combination of Controls flags
+     * @see Controls
+     */
+    void setShownControls(Controls controls);
+
+    /**
+     * @return the video controls that are being show right now
+     * @see Controls
+     */
+    Controls shownControls() const;
 
     /**
      * Sets the stylesheet used to control the visual display of this VideoWidget
@@ -148,8 +178,20 @@ Q_SIGNALS:
      */
     void aboutToFinish();
 
+protected:
+    void resizeEvent(QGraphicsSceneResizeEvent *event);
+
 private:
     VideoWidgetPrivate * const d;
+
+    Q_PRIVATE_SLOT(d, void playPause())
+    Q_PRIVATE_SLOT(d, void ticked(qint64 progress))
+    Q_PRIVATE_SLOT(d, void totalTimeChanged(qint64 time))
+    Q_PRIVATE_SLOT(d, void setPosition(int progress))
+    Q_PRIVATE_SLOT(d, void setVolume(int value))
+    Q_PRIVATE_SLOT(d, void volumeChanged(qreal value))
+    Q_PRIVATE_SLOT(d, void showOpenFileDialog())
+    Q_PRIVATE_SLOT(d, void stateChanged(Phonon::State newState, Phonon::State oldState))
 };
 
 } // namespace Plasma
