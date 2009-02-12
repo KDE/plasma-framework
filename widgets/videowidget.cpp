@@ -515,14 +515,13 @@ void VideoWidget::hoverMoveEvent(QGraphicsSceneHoverEvent *event)
 {
     Q_UNUSED(event)
 
-    if (d->forceControlsVisible) {
+    if (d->forceControlsVisible || !d->controlsWidget) {
         return;
     }
 
     d->hideTimer->start(3000);
 
-    if (d->controlsWidget &&
-        !d->controlsWidget->isVisible() &&
+    if (!d->controlsWidget->isVisible() &&
         d->spaceForControlsAvailable()) {
         d->animateControlWidget(true);
     }
