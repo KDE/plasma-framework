@@ -20,6 +20,7 @@
 #include "videowidget.h"
 
 #include <QUrl>
+#include <QTimer>
 #include <QGraphicsLinearLayout>
 #include <QGraphicsSceneResizeEvent>
 
@@ -40,8 +41,11 @@ namespace Plasma
 class VideoWidgetPrivate
 {
 public:
-    VideoWidgetPrivate()
-         : ticking(false),
+    VideoWidgetPrivate(VideoWidget *video)
+         : q(video),
+           ticking(false),
+           animId(0),
+           hideTimer(0),
            shownControls(VideoWidget::NoControls),
            controlsWidget(0),
            playButton(0),
@@ -67,7 +71,12 @@ public:
     void showOpenFileDialog();
     void openFile(const QString &path);
     void stateChanged(Phonon::State newState, Phonon::State oldState);
+    void animateControlWidget(bool show);
+    void hideControlWidget();
+    void slidingCompleted(QGraphicsItem *item);
 
+
+    VideoWidget *q;
 
     Phonon::VideoWidget *videoWidget;
     Phonon::AudioOutput *audioOutput;
@@ -76,6 +85,8 @@ public:
     bool ticking;
 
     //control widgets
+    int animId;
+    QTimer *hideTimer;
     VideoWidget::Controls shownControls;
     QGraphicsWidget *controlsWidget;
     IconWidget *playButton;
@@ -150,11 +161,57 @@ void VideoWidgetPrivate::stateChanged(Phonon::State newState, Phonon::State oldS
     }
 }
 
+void VideoWidgetPrivate::animateControlWidget(bool show)
+{
+    if (!controlsWidget || controlsWidget->isVisible() == show) {
+        return;
+    }
+
+    QPoint oldPos(0,0);
+    QPoint newPos(0,0);
+
+    if (show) {
+        oldPos = QPoint(0, -controlsWidget->size().height());
+    } else {
+        newPos = QPoint(0, -controlsWidget->size().height());
+    }
+
+    controlsWidget->setPos(oldPos);
+    controlsWidget->show();
+
+    animId = Animator::self()->moveItem(
+              controlsWidget, Plasma::Animator::SlideOutMovement,
+              newPos);
+}
+
+void VideoWidgetPrivate::hideControlWidget()
+{
+    animateControlWidget(false);
+}
+
+void VideoWidgetPrivate::slidingCompleted(QGraphicsItem *item)
+{
+    Q_UNUSED(item)
+
+    animId = 0;
+
+    if (!controlsWidget) {
+        return;
+    }
+
+
+    if (controlsWidget->pos().y() < 0) {
+        controlsWidget->hide();
+    } else {
+        hideTimer->start(3000);
+    }
+}
+
 
 
 VideoWidget::VideoWidget(QGraphicsWidget *parent)
     : QGraphicsProxyWidget(parent),
-      d(new VideoWidgetPrivate)
+      d(new VideoWidgetPrivate(this))
 {
     d->videoWidget = new Phonon::VideoWidget;
     d->audioOutput = new Phonon::AudioOutput(this);
@@ -165,9 +222,14 @@ VideoWidget::VideoWidget(QGraphicsWidget *parent)
 
 
     setWidget(d->videoWidget);
+    setAcceptHoverEvents(true);
+    //FIXME: would be desiderable to have clipping on just when animating, seems that changing it on the fly messes up with visibility of children, indagate if is a qt bug
+    setFlags(flags()|QGraphicsItem::ItemClipsChildrenToShape);
 
     connect(d->media, SIGNAL(tick(qint64)), this, SIGNAL(tick(qint64)));
     connect(d->media, SIGNAL(aboutToFinish()), this, SIGNAL(aboutToFinish()));
+    connect(Plasma::Animator::self(), SIGNAL(movementFinished(QGraphicsItem*)),
+           this, SLOT(slidingCompleted(QGraphicsItem*)));
 }
 
 VideoWidget::~VideoWidget()
@@ -203,12 +265,12 @@ void VideoWidget::setShownControls(Controls controls)
     if (controls != NoControls && d->controlsWidget == 0) {
         d->controlsWidget = new QGraphicsWidget(this);
         controlsLayout = new QGraphicsLinearLayout(Qt::Horizontal, d->controlsWidget);
-        d->controlsWidget->setPos(0,0);
-        d->controlsWidget->show();
-        d->controlsWidget->resize(size().width(), d->controlsWidget->size().height());
+        d->hideTimer = new QTimer(this);
+        connect(d->hideTimer, SIGNAL(timeout()), this, SLOT(hideControlWidget()));
     //controls == NoControls
     } else if (d->controlsWidget != 0) {
         d->controlsWidget->deleteLater();
+        d->hideTimer->deleteLater();
         d->controlsWidget = 0;
 
         //disconnect all the stuff that wasn't automatically disconnected 'cause widget deaths
@@ -307,7 +369,7 @@ void VideoWidget::setShownControls(Controls controls)
             connect(d->volume, SIGNAL(valueChanged(int)), SLOT(setVolume(int)));
             connect(d->audioOutput, SIGNAL(volumeChanged(qreal)), SLOT(volumeChanged(qreal)));
         }
-            controlsLayout->addItem(d->volume);
+        controlsLayout->addItem(d->volume);
     } else {
         d->volume->deleteLater();
         d->volume = 0;
@@ -326,6 +388,10 @@ void VideoWidget::setShownControls(Controls controls)
         d->openFileButton = 0;
     }
 
+    controlsLayout->activate();
+    d->controlsWidget->setPos(0,-d->controlsWidget->size().height());
+    d->controlsWidget->resize(size().width(), d->controlsWidget->size().height());
+    d->controlsWidget->hide();
 }
 
 VideoWidget::Controls VideoWidget::shownControls() const
@@ -391,6 +457,35 @@ void VideoWidget::resizeEvent(QGraphicsSceneResizeEvent *event)
 
     if (d->controlsWidget) {
         d->controlsWidget->resize(event->newSize().width(), d->controlsWidget->size().height());
+    }
+}
+
+void VideoWidget::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
+{
+    Q_UNUSED(event)
+
+    if (d->controlsWidget) {
+        d->animateControlWidget(true);
+    }
+}
+
+void VideoWidget::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
+{
+    Q_UNUSED(event)
+
+    if (d->controlsWidget) {
+        d->hideTimer->start(1000);
+    }
+}
+
+void VideoWidget::hoverMoveEvent(QGraphicsSceneHoverEvent *event)
+{
+    Q_UNUSED(event)
+
+    d->hideTimer->start(3000);
+
+    if (d->controlsWidget && !d->controlsWidget->isVisible()) {
+        d->animateControlWidget(true);
     }
 }
 

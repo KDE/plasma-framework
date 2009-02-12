@@ -178,6 +178,9 @@ Q_SIGNALS:
 
 protected:
     void resizeEvent(QGraphicsSceneResizeEvent *event);
+    void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
+    void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
+    void hoverMoveEvent(QGraphicsSceneHoverEvent *event);
 
 private:
     VideoWidgetPrivate * const d;
@@ -190,6 +193,8 @@ private:
     Q_PRIVATE_SLOT(d, void volumeChanged(qreal value))
     Q_PRIVATE_SLOT(d, void showOpenFileDialog())
     Q_PRIVATE_SLOT(d, void stateChanged(Phonon::State newState, Phonon::State oldState))
+    Q_PRIVATE_SLOT(d, void hideControlWidget())
+    Q_PRIVATE_SLOT(d, void slidingCompleted(QGraphicsItem *item))
 };
 
 } // namespace Plasma
