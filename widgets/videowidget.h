@@ -69,7 +69,7 @@ public:
         OpenFile = 128,
         DefaultControls = PlayPause|Progress|Volume|OpenFile
     };
-    Q_DECLARE_FLAGS(Controls, Control);
+    Q_DECLARE_FLAGS(Controls, Control)
 
     explicit VideoWidget(QGraphicsWidget *parent = 0);
     ~VideoWidget();
