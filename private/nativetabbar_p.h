@@ -52,6 +52,7 @@ protected:
 
     bool isHorizontal() const;
     bool isVertical() const;
+    void wheelEvent(QWheelEvent *event);
 
 protected slots:
     void animationFinished();

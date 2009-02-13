@@ -427,6 +427,37 @@ QPoint NativeTabBar::closeButtonPos( int tabIndex ) const
   return buttonPos;
 }
 
+void NativeTabBar::wheelEvent(QWheelEvent *event)
+{
+    if (underMouse()) {
+        //Cycle tabs with the circular array tecnique
+        if (event->delta() < 0) {
+            int index = currentIndex();
+            //search for an enabled tab
+            for (int i = 0; i < count()-1; ++i) {
+                index = (index + 1) % count();
+                if (isTabEnabled(index)) {
+                    break;
+                }
+            }
+
+            setCurrentIndex(index);
+        } else {
+            int index = currentIndex();
+            for (int i = 0; i < count()-1; ++i) {
+                index = (count() + index -1) % count();
+                if (isTabEnabled(index)) {
+                    break;
+                }
+            }
+
+            setCurrentIndex(index);
+        }
+    } else {
+        QTabBar::wheelEvent(event);
+    }
+}
+
 } // namespace Plasma
 
 #include "nativetabbar_p.moc"

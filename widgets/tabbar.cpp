@@ -438,35 +438,7 @@ KTabBar *TabBar::nativeWidget() const
 
 void TabBar::wheelEvent(QGraphicsSceneWheelEvent * event)
 {
-    //FIXME: probably this would make more sense in NativeTabBar, but it works only here
-
-    if (d->tabProxy->native->underMouse()) {
-        //Cycle tabs with the circular array tecnique
-        if (event->delta() < 0) {
-            int index = d->tabProxy->native->currentIndex();
-            //search for an enabled tab
-            for (int i = 0; i < d->tabProxy->native->count()-1; ++i) {
-                index = (index + 1) % d->tabProxy->native->count();
-                if (d->tabProxy->native->isTabEnabled(index)) {
-                    break;
-                }
-            }
-
-            d->tabProxy->native->setCurrentIndex(index);
-        } else {
-            int index = d->tabProxy->native->currentIndex();
-            for (int i = 0; i < d->tabProxy->native->count()-1; ++i) {
-                index = (d->tabProxy->native->count() + index -1) % d->tabProxy->native->count();
-                if (d->tabProxy->native->isTabEnabled(index)) {
-                    break;
-                }
-            }
-
-            d->tabProxy->native->setCurrentIndex(index);
-        }
-    } else {
-        QGraphicsWidget::wheelEvent(event);
-    }
+    //Still here for binary compatibility
 }
 
 } // namespace Plasma
