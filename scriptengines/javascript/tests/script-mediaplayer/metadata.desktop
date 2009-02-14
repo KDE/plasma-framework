@@ -2,13 +2,16 @@
 Name=script-mediaplayer
 Name[nds]=Afspeler-Skript
 Name[sv]=script-mediaspelare
+Name[tr]=betik-çokluortam oynatıcı
 
 Comment=Javascript media player
+Comment[el]=Αναπαραγωγή πολυμέσων Javascript
 Comment[ga]=Seinnteoir meán Javascript
 Comment[nds]=JavaScript-Afspeler
 Comment[pt]=Leitor multimédia em JavaScript
 Comment[pt_BR]=Leitor de mídias em JavaScript
 Comment[sv]=Javascript-mediaspelare
+Comment[tr]=Javascript çokluortam oynatıcı
 Comment[uk]=Програвач на JavaScript
 
 Icon=applications-multimedia
