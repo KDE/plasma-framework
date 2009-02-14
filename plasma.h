@@ -42,13 +42,20 @@ namespace Plasma
  */
 enum Constraint {
     NoConstraint = 0,
-    FormFactorConstraint = 1, /** The FormFactor for an object */
-    LocationConstraint = 2, /** The Location of an object */
-    ScreenConstraint = 4, /** Which screen an object is on */
-    SizeConstraint = 8, /** the size of the applet was changed */
-    ImmutableConstraint = 16, /** the immutability (locked) nature of the applet changed  */
-    StartupCompletedConstraint = 32, /** application startup has completed */
-    ContextConstraint = 64, /** the desktop context has changed */
+    /** The FormFactor for an object */
+    FormFactorConstraint = 1, 
+    /** The Location of an object */
+    LocationConstraint = 2,
+    /** Which screen an object is on */ 
+    ScreenConstraint = 4,
+    /** the size of the applet was changed */
+    SizeConstraint = 8,
+    /** the immutability (locked) nature of the applet changed  */
+    ImmutableConstraint = 16, 
+    /** application startup has completed */
+    StartupCompletedConstraint = 32, 
+    /** the desktop context has changed */
+    ContextConstraint = 64, 
     AllConstraints = FormFactorConstraint | LocationConstraint | ScreenConstraint |
     SizeConstraint | ImmutableConstraint | ContextConstraint
 };
