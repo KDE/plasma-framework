@@ -56,6 +56,7 @@ class PLASMA_EXPORT VideoWidget : public QGraphicsProxyWidget
     Q_PROPERTY(Controls usedControls READ usedControls WRITE setUsedControls)
     Q_PROPERTY(bool controlsVisible READ controlsVisible WRITE setControlsVisible)
     Q_PROPERTY(QString styleSheet READ styleSheet WRITE setStyleSheet)
+    Q_ENUMS(Control)
 
 public:
     enum Control {
@@ -118,7 +119,7 @@ public:
      * @arg controls bitwise OR combination of Controls flags
      * @see Controls
      */
-    void setUsedControls(Controls controls);
+    void setUsedControls(const Controls controls);
 
     /**
      * @return the video controls that are used and shown

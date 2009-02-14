@@ -271,9 +271,11 @@ QString VideoWidget::url() const
     return d->media->currentSource().url().toString();
 }
 
-void VideoWidget::setUsedControls(Controls controls)
+void VideoWidget::setUsedControls(const Controls controls)
 {
     d->shownControls = controls;
+
+    //kDebug()<<"Setting used controls"<<controls;
 
     QGraphicsLinearLayout *controlsLayout;
     if (controls != NoControls && d->controlsWidget == 0) {
