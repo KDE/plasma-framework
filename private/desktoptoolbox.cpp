@@ -422,10 +422,8 @@ void DesktopToolBox::showToolBox()
                  icon->action() == d->containment->action("add sibling containment") ||
                  icon->action() == d->containment->action("add widgets"))) {
                 icon->setText(icon->action()->text());
-                icon->resize(icon->sizeFromIconSize(22));
             } else {
                 icon->setText(QString());
-                icon->resize(icon->sizeFromIconSize(22));
             }
         }
 
@@ -503,6 +501,9 @@ void DesktopToolBox::showToolBox()
         if (tool == d->toolBacker) {
             continue;
         }
+
+        Plasma::IconWidget *icon = qgraphicsitem_cast<Plasma::IconWidget *>(tool);
+        icon->resize(maxWidth, icon->sizeFromIconSize(22).height());
 
         if (tool->isEnabled()) {
             if (isToolbar()) {
