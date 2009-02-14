@@ -33,6 +33,7 @@
 #include <Plasma/Svg>
 #include <Plasma/FrameSvg>
 #include <Plasma/Package>
+#include <Plasma/VideoWidget>
 
 #include "appletinterface.h"
 
@@ -59,6 +60,11 @@ QScriptValue constructFontClass(QScriptEngine *engine);
 QScriptValue constructQRectFClass(QScriptEngine *engine);
 QScriptValue constructQPointClass(QScriptEngine *engine);
 QScriptValue constructQSizeFClass(QScriptEngine *engine);
+
+
+//typedef VideoWidget::Control Control;
+Q_DECLARE_FLAGS(Controls, VideoWidget::Control)
+Q_DECLARE_METATYPE(Controls)
 
 class DummyService : public Service
 {
@@ -108,6 +114,38 @@ QScriptValue variant2ScriptValue(QScriptEngine *engine, QVariant var)
     }
 
     return qScriptValueFromValue(engine, var);
+}
+
+QScriptValue qScriptValueFromControls(QScriptEngine *engine, const Controls &controls)
+{
+    return QScriptValue(engine, controls);
+}
+
+void controlsFromScriptValue(const QScriptValue& obj, Controls &controls)
+{
+    int flagValue = obj.toInteger();
+    //FIXME: it has to be a less ugly way to do that :)
+    if (flagValue&VideoWidget::Play) {
+        controls |= VideoWidget::Play;
+    }
+    if (flagValue&VideoWidget::Pause) {
+        controls |= VideoWidget::Pause;
+    }
+    if (flagValue&VideoWidget::Stop) {
+        controls |= VideoWidget::Stop;
+    }
+    if (flagValue&VideoWidget::PlayPause) {
+        controls |= VideoWidget::PlayPause;
+    }
+    if (flagValue&VideoWidget::Progress) {
+        controls |= VideoWidget::Progress;
+    }
+    if (flagValue&VideoWidget::Volume) {
+        controls |= VideoWidget::Volume;
+    }
+    if (flagValue&VideoWidget::OpenFile) {
+        controls |= VideoWidget::OpenFile;
+    }
 }
 
 QScriptValue qScriptValueFromData(QScriptEngine *engine, const DataEngine::Data &data)
@@ -167,6 +205,19 @@ void kConfigGroupFromScriptValue(const QScriptValue& obj, KConfigGroup &config)
         //kDebug() << it.name() << "is" << it.value().toString();
         if (it.name() != "__name") {
             config.writeEntry(it.name(), it.value().toString());
+        }
+    }
+}
+
+void registerEnums(QScriptEngine *engine, QScriptValue &scriptValue, const QMetaObject &meta)
+{
+    //manually create enum values. ugh
+    for (int i=0; i < meta.enumeratorCount(); ++i) {
+        QMetaEnum e = meta.enumerator(i);
+        //kDebug() << e.name();
+        for (int i=0; i < e.keyCount(); ++i) {
+            //kDebug() << e.key(i) << e.value(i);
+            scriptValue.setProperty(e.key(i), QScriptValue(engine, e.value(i)));
         }
     }
 }
@@ -390,16 +441,8 @@ void SimpleJavaScriptApplet::setupObjects()
     }
     global.setProperty("startupArguments", args);
 
-    //manually create enum values. ugh
-    QMetaObject meta = AppletInterface::staticMetaObject;
-    for (int i=0; i < meta.enumeratorCount(); ++i) {
-        QMetaEnum e = meta.enumerator(i);
-        //kDebug() << e.name();
-        for (int i=0; i < e.keyCount(); ++i) {
-            //kDebug() << e.key(i) << e.value(i);
-            global.setProperty(e.key(i), QScriptValue(m_engine, e.value(i)));
-        }
-    }
+    registerEnums(m_engine, global, AppletInterface::staticMetaObject);
+
 
     // Add a global loadui method for ui files
     QScriptValue fun = m_engine->newFunction(SimpleJavaScriptApplet::loadui);
@@ -627,6 +670,11 @@ void SimpleJavaScriptApplet::installWidgets(QScriptEngine *engine)
         s_widgetLoader = new UiLoader;
     }
 
+    //two customs things needed for VideoWidget
+    registerEnums(m_engine, globalObject, VideoWidget::staticMetaObject);
+
+    qScriptRegisterMetaType<Controls>(m_engine, qScriptValueFromControls, controlsFromScriptValue, QScriptValue());
+
     foreach (const QString &widget, s_widgetLoader->availableWidgets()) {
         QScriptValue fun = engine->newFunction(createWidget);
         QScriptValue name = engine->toScriptValue(widget);
@@ -636,7 +684,6 @@ void SimpleJavaScriptApplet::installWidgets(QScriptEngine *engine)
 
         globalObject.setProperty(widget, fun);
     }
-
 }
 
 QScriptValue SimpleJavaScriptApplet::createWidget(QScriptContext *context, QScriptEngine *engine)
