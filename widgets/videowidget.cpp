@@ -34,6 +34,7 @@
 
 #include <plasma/widgets/iconwidget.h>
 #include <plasma/widgets/slider.h>
+#include <plasma/widgets/frame.h>
 
 namespace Plasma
 {
@@ -91,7 +92,7 @@ public:
     int animId;
     QTimer *hideTimer;
     VideoWidget::Controls shownControls;
-    QGraphicsWidget *controlsWidget;
+    Plasma::Frame *controlsWidget;
     IconWidget *playButton;
     IconWidget *pauseButton;
     IconWidget *stopButton;
@@ -279,7 +280,8 @@ void VideoWidget::setUsedControls(const Controls controls)
 
     QGraphicsLinearLayout *controlsLayout;
     if (controls != NoControls && d->controlsWidget == 0) {
-        d->controlsWidget = new QGraphicsWidget(this);
+        d->controlsWidget = new Plasma::Frame(this);
+        d->controlsWidget->setFrameShadow(Plasma::Frame::Raised);
         controlsLayout = new QGraphicsLinearLayout(Qt::Horizontal, d->controlsWidget);
         d->hideTimer = new QTimer(this);
         connect(d->hideTimer, SIGNAL(timeout()), this, SLOT(hideControlWidget()));
