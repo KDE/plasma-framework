@@ -1533,8 +1533,8 @@ ToolBox *ContainmentPrivate::createToolBox()
         switch (type) {
         case Containment::PanelContainment:
             toolBox = new PanelToolBox(q);
-            toolBox->setSize(22);
-            toolBox->setIconSize(QSize(16, 16));
+            toolBox->setSize(KIconLoader::SizeSmallMedium);
+            toolBox->setIconSize(QSize(KIconLoader::SizeSmall, KIconLoader::SizeSmall));
             if (q->immutability() != Mutable) {
                 toolBox->hide();
             }

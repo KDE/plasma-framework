@@ -28,6 +28,7 @@
 
 #include <kcolorscheme.h>
 #include <kdebug.h>
+#include <kiconloader.h>
 
 #include <plasma/theme.h>
 #include <plasma/paintutils.h>
@@ -363,7 +364,7 @@ void DesktopToolBox::showToolBox()
     }
 
     // put tools 5px from icon edge
-    const int iconWidth = 32;
+    const int iconWidth = KIconLoader::SizeMedium;
     int x;
     int y;
     switch (corner()) {
@@ -503,7 +504,8 @@ void DesktopToolBox::showToolBox()
         }
 
         Plasma::IconWidget *icon = qgraphicsitem_cast<Plasma::IconWidget *>(tool);
-        icon->resize(maxWidth, icon->sizeFromIconSize(22).height());
+        const int iconHeight = icon->sizeFromIconSize(KIconLoader::SizeSmallMedium).height();
+        icon->resize(maxWidth, iconHeight);
 
         if (tool->isEnabled()) {
             if (isToolbar()) {

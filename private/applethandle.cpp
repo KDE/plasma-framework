@@ -57,7 +57,7 @@ AppletHandle::AppletHandle(Containment *parent, Applet *applet, const QPointF &h
       m_pressedButton(NoButton),
       m_containment(parent),
       m_applet(applet),
-      m_iconSize(16),
+      m_iconSize(KIconLoader::SizeSmall),
       m_opacity(0.0),
       m_anim(FadeIn),
       m_animId(0),
@@ -653,10 +653,10 @@ void AppletHandle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
         QSizeF min = m_applet->minimumSize();
         QSizeF max = m_applet->maximumSize();
         // If the applet doesn't have a minimum size, calculate based on a
-        // minimum content area size of 16x16
+        // minimum content area size of 16x16 (KIconLoader::SizeSmall)
         if (min.isEmpty()) {
             min = m_applet->boundingRect().size() - m_applet->boundingRect().size();
-            min += QSizeF(16, 16);
+            min += QSizeF(KIconLoader::SizeSmall, KIconLoader::SizeSmall);
         }
 
         if (m_pressedButton == RotateButton) {

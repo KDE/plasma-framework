@@ -29,6 +29,7 @@
 
 #include <kcolorscheme.h>
 #include <kconfiggroup.h>
+#include <kiconloader.h>
 #include <kdebug.h>
 
 #include "corona.h"
@@ -44,7 +45,7 @@ public:
     ToolBoxPrivate(Containment *c)
       : containment(c),
         size(50),
-        iconSize(32, 32),
+        iconSize(KIconLoader::SizeMedium, KIconLoader::SizeMedium),
         corner(ToolBox::TopRight),
         hidden(false),
         showing(false),
@@ -115,7 +116,7 @@ void ToolBox::addTool(QAction *action)
     tool->setAction(action);
     tool->setDrawBackground(true);
     tool->setOrientation(Qt::Horizontal);
-    tool->resize(tool->sizeFromIconSize(22));
+    tool->resize(tool->sizeFromIconSize(KIconLoader::SizeSmallMedium));
 
     tool->hide();
     const int height = static_cast<int>(tool->boundingRect().height());

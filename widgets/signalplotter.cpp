@@ -37,6 +37,7 @@
 #include <klocale.h>
 #include <kapplication.h>
 #include <kstandarddirs.h>
+#include <kiconloader.h>
 
 #include <plasma/svg.h>
 #include <plasma/theme.h>
@@ -124,7 +125,7 @@ SignalPlotter::SignalPlotter(QGraphicsItem *parent)
     d->showThinFrame = true;
 
     // Anything smaller than this does not make sense.
-    setMinimumSize(QSizeF(16, 16));
+    setMinimumSize(QSizeF(KIconLoader::SizeSmall, KIconLoader::SizeSmall));
 
     d->showVerticalLines = true;
     d->verticalLinesDistance = 30;

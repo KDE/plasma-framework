@@ -33,6 +33,7 @@
 
 #include <kdebug.h>
 #include <kicon.h>
+#include <kiconloader.h>
 
 #include "applet.h"
 #include "containment.h"
@@ -704,7 +705,7 @@ void ExtenderItemPrivate::themeChanged()
     //icon height.
     dragger->resize();
     QSizeF size = dragger->elementSize("hint-preferred-icon-size");
-    size = size.expandedTo(QSizeF(16,16));
+    size = size.expandedTo(QSizeF(KIconLoader::SizeSmall,KIconLoader::SizeSmall));
 
     Plasma::Theme *theme = Plasma::Theme::defaultTheme();
     QFont font = theme->font(Plasma::Theme::DefaultFont);
