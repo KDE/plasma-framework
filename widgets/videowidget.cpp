@@ -180,6 +180,9 @@ void VideoWidgetPrivate::animateControlWidget(bool show)
         newPos = QPoint(0, -controlsWidget->size().height());
     }
 
+    //clip only when animating
+    q->setFlags(q->flags()|QGraphicsItem::ItemClipsChildrenToShape);
+
     controlsWidget->setPos(oldPos);
     controlsWidget->show();
 
@@ -203,6 +206,8 @@ void VideoWidgetPrivate::slidingCompleted(QGraphicsItem *item)
         return;
     }
 
+    //usually don't clip
+    q->setFlags(q->flags()^QGraphicsItem::ItemClipsChildrenToShape);
 
     if (controlsWidget->pos().y() < 0) {
         controlsWidget->hide();
@@ -238,8 +243,6 @@ VideoWidget::VideoWidget(QGraphicsWidget *parent)
 
     setWidget(d->videoWidget);
     setAcceptHoverEvents(true);
-    //FIXME: would be desiderable to have clipping on just when animating, seems that changing it on the fly messes up with visibility of children, indagate if is a qt bug
-    setFlags(flags()|QGraphicsItem::ItemClipsChildrenToShape);
 
     connect(d->media, SIGNAL(tick(qint64)), this, SIGNAL(tick(qint64)));
     connect(d->media, SIGNAL(aboutToFinish()), this, SIGNAL(aboutToFinish()));
