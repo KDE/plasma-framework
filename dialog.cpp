@@ -171,6 +171,7 @@ Dialog::Dialog(QWidget *parent, Qt::WindowFlags f)
     : QWidget(parent, f),
       d(new DialogPrivate(this))
 {
+    setAttribute(Qt::WA_TranslucentBackground);
     setWindowFlags(Qt::FramelessWindowHint);
     d->background = new FrameSvg(this);
     d->background->setImagePath("dialogs/background");

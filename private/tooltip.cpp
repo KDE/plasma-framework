@@ -142,6 +142,7 @@ ToolTip::ToolTip(QWidget *parent)
     : QWidget(parent),
       d(new ToolTipPrivate())
 {
+    setAttribute(Qt::WA_TranslucentBackground);
     setWindowFlags(Qt::ToolTip);
     QGridLayout *l = new QGridLayout;
     d->preview = new WindowPreview(this);

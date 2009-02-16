@@ -98,6 +98,7 @@ public:
     void initGraphicsView()
     {
         q->setFrameShape(QFrame::NoFrame);
+        q->setAttribute(Qt::WA_TranslucentBackground);
         q->setAutoFillBackground(true);
         q->setDragMode(QGraphicsView::NoDrag);
         //setCacheMode(QGraphicsView::CacheBackground);
