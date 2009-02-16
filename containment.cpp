@@ -1177,26 +1177,20 @@ QVariant Containment::itemChange(GraphicsItemChange change, const QVariant &valu
 {
     //FIXME if the applet is moved to another containment we need to unfocus it
 
-    QVariant newValue = Applet::itemChange(change, value);
-
     if (isContainment() && !ContainmentPrivate::s_positioning &&
-        (change == QGraphicsItem::ItemSceneChange || change == QGraphicsItem::ItemPositionChange)) {
-
-        //if the position will be actually changed, reposition before the change
-        if (newValue == value) {
-          switch (d->type) {
-              case PanelContainment:
-              case CustomPanelContainment:
-                  d->positionPanel();
-                  break;
-              default:
-                  d->positionContainments();
-                  break;
-          }
+        (change == QGraphicsItem::ItemSceneHasChanged || change == QGraphicsItem::ItemPositionHasChanged)) {
+        switch (d->type) {
+            case PanelContainment:
+            case CustomPanelContainment:
+                d->positionPanel();
+                break;
+            default:
+                d->positionContainments();
+                break;
         }
     }
 
-    return newValue;
+    return Applet::itemChange(change, value);
 }
 
 void Containment::enableAction(const QString &name, bool enable)
