@@ -819,7 +819,8 @@ void Applet::setBackgroundHints(const BackgroundHints hints)
         d->background->resizeFrame(boundingRect().size());
 
         //if the background has an "overlay" element decide a random position for it and then save it so it's consistent across plasma starts
-        if (d->background->hasElement("overlay")) {
+
+        if (containment() && d->background->hasElement("overlay")) {
             QSize overlaySize = d->background->elementSize("overlay");
 
             d->background->d->overlayPos = config().readEntry("overlayposition", QPoint(overlaySize.width()*2, overlaySize.height()*2));
@@ -2114,6 +2115,7 @@ void AppletPrivate::init()
     }
 
     q->setBackgroundHints(Applet::DefaultBackground);
+
     q->setHasConfigurationInterface(true);
 
     QObject::connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()), q, SLOT(themeChanged()));
