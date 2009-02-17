@@ -2319,18 +2319,21 @@ void AppletOverlayWidget::paint(QPainter *painter,
     Q_UNUSED(option)
     Q_UNUSED(widget)
     QColor wash = Plasma::Theme::defaultTheme()->color(Theme::BackgroundColor);
-    wash.setAlphaF(.8);
+    wash.setAlphaF(.7);
 
     Applet *applet = qobject_cast<Applet *>(parentWidget());
 
     QPainterPath backgroundShape;
     if (applet->backgroundHints() & Applet::StandardBackground) {
-        backgroundShape = PaintUtils::roundedRectangle(parentWidget()->contentsRect(), 8);
+        backgroundShape = PaintUtils::roundedRectangle(parentWidget()->contentsRect(), 5);
     } else {
         backgroundShape = parentItem()->shape();
     }
 
+    painter->save();
+    painter->setRenderHints(QPainter::Antialiasing);
     painter->fillPath(backgroundShape, wash);
+    painter->restore();
 }
 
 } // Plasma namespace
