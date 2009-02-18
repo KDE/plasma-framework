@@ -562,8 +562,15 @@ void FrameSvgPrivate::generateBackground(FrameData *frame)
         if (q->hasElement(prefix+"hint-overlay-random-pos")) {
             pos = overlayPos;
         //Stretched or Tiled?
-        } else if (q->hasElement(prefix+"hint-overlay-stretch") || q->hasElement(prefix+"hint-overlay-tile")) {
+        } else if (q->hasElement(prefix+"hint-overlay-stretch")) {
             overlaySize = frame->frameSize;
+        } else {
+            if (q->hasElement(prefix+"hint-overlay-tile-horizontal")) {
+                overlaySize.setWidth(frame->frameSize.width());
+            }
+            if (q->hasElement(prefix+"hint-overlay-tile-vertical")) {
+                overlaySize.setHeight(frame->frameSize.height());
+            }
         }
 
         QString id = QString::fromLatin1("overlay_%7_%6_%5_%4_%3_%2_%1_").
@@ -575,10 +582,14 @@ void FrameSvgPrivate::generateBackground(FrameData *frame)
         overlayPainter.setCompositionMode(QPainter::CompositionMode_SourceIn);
 
         //Tiling?
-        if (q->hasElement(prefix+"hint-overlay-tile")) {
+        if (q->hasElement(prefix+"hint-overlay-tile-horizontal") ||
+            q->hasElement(prefix+"hint-overlay-tile-vertical")) {
+
+            QSize s = q->size();
             q->resize(q->elementSize(prefix+"overlay"));
+kWarning()<<"AAAAAAA"<<q->elementSize(prefix+"overlay");
             overlayPainter.drawTiledPixmap(QRect(QPoint(0,0), overlaySize), q->pixmap(prefix+"overlay"));
-            q->resize();
+            q->resize(s);
         } else {
             q->paint(&overlayPainter, QRect(overlayPos, overlaySize), prefix+"overlay");
         }
