@@ -820,22 +820,15 @@ void Applet::setBackgroundHints(const BackgroundHints hints)
 
         //if the background has an "overlay" element decide a random position for it and then save it so it's consistent across plasma starts
 
-        if (containment() && d->background->hasElement("overlay")) {
+        if (d->background->hasElement("overlay")) {
             QSize overlaySize = d->background->elementSize("overlay");
 
-            d->background->d->overlayPos = config().readEntry("overlayposition", QPoint(overlaySize.width()*2, overlaySize.height()*2));
+            //position is in the boundaries overlaySize.width()*2, overlaySize.height()
+            qsrand(id());
 
-            //position can never be overlaySize.width()*2, overlaySize.height()*2, if it is means we didn't found the position in the config file, or the theme is changed and the overlay size is smaller now
-            if (d->background->d->overlayPos.x() >= overlaySize.width()*2 ||
-                d->background->d->overlayPos.y() >= overlaySize.height()*2) {
-                qsrand(id() + QDateTime::currentDateTime().toTime_t());
+            d->background->d->overlayPos.rx() = - (overlaySize.width() /4) + (overlaySize.width() /4) * (qrand() % (4 + 1));
 
-                d->background->d->overlayPos.rx() = - (overlaySize.width() /4) + (overlaySize.width() /4) * (qrand() % (4 + 1));
-
-                d->background->d->overlayPos.ry() = - (overlaySize.height() /4) + (overlaySize.height() /4) * (qrand() % (4 + 1));
-
-                config().writeEntry("overlayposition", d->background->d->overlayPos);
-            }
+            d->background->d->overlayPos.ry() = (- (overlaySize.height() /4) + (overlaySize.height() /4) * (qrand() % (4 + 1)))/2;
         }
 
     } else if (d->background) {
