@@ -1936,9 +1936,9 @@ void Applet::lower()
     setZValue(--AppletPrivate::s_minZValue);
 }
 
-void AppletPrivate::setIsContainment(bool nowIsContainment)
+void AppletPrivate::setIsContainment(bool nowIsContainment, bool forceUpdate)
 {
-    if (isContainment == nowIsContainment) {
+    if (isContainment == nowIsContainment && !forceUpdate) {
         return;
     }
 
