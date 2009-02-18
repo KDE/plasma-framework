@@ -152,8 +152,9 @@ public:
             containment->setFormFactor(Plasma::Planar);
         }
 
+        static_cast<Applet*>(containment)->d->isContainment = true;
         q->addItem(containment);
-        static_cast<Applet*>(containment)->d->setIsContainment(true);
+        static_cast<Applet*>(containment)->d->setIsContainment(true, true);
         containments.append(containment);
 
         if (!delayedInit) {

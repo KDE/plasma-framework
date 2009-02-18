@@ -58,7 +58,7 @@ public:
     /**
      * Sets whether or not this Applet is acting as a Containment
      */
-    void setIsContainment(bool isContainment);
+    void setIsContainment(bool isContainment, bool forceUpdate = false);
 
     QString globalName() const;
     QString instanceName();
