@@ -1166,6 +1166,17 @@ bool Containment::sceneEventFilter(QGraphicsItem *watched, QEvent *event)
             }
         }
         break;
+    case QEvent::GraphicsSceneHoverMove:
+        if (immutability() == Mutable && applet->immutability() == Mutable) {
+            QGraphicsSceneHoverEvent *he = static_cast<QGraphicsSceneHoverEvent*>(event);
+            if (d->handles.contains(applet)) {
+                AppletHandle *handle = d->handles.value(applet);
+                if (handle) {
+                    handle->setHoverPos(he->pos());
+                }
+            }
+        }
+        break;
     default:
         break;
     }
