@@ -670,11 +670,6 @@ void SimpleJavaScriptApplet::installWidgets(QScriptEngine *engine)
         s_widgetLoader = new UiLoader;
     }
 
-    //two customs things needed for VideoWidget
-    registerEnums(m_engine, globalObject, VideoWidget::staticMetaObject);
-
-    qScriptRegisterMetaType<Controls>(m_engine, qScriptValueFromControls, controlsFromScriptValue, QScriptValue());
-
     foreach (const QString &widget, s_widgetLoader->availableWidgets()) {
         QScriptValue fun = engine->newFunction(createWidget);
         QScriptValue name = engine->toScriptValue(widget);
@@ -714,6 +709,14 @@ QScriptValue SimpleJavaScriptApplet::createWidget(QScriptContext *context, QScri
 
     QScriptValue fun = engine->newQObject(w);
     fun.setPrototype(context->callee().property("prototype"));
+
+    //register enums will be accessed for instance as frame.Sunken for Frame shadow...
+    registerEnums(engine, fun, *w->metaObject());
+
+    //FIXME: still don't have a better approach than try to cast for every widget that could have flags..
+    if (qobject_cast<VideoWidget *>(w)) {
+        qScriptRegisterMetaType<Controls>(engine, qScriptValueFromControls, controlsFromScriptValue, QScriptValue());
+    }
 
     return fun;
 }
