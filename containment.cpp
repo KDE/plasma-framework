@@ -1071,6 +1071,19 @@ const QGraphicsItem *Containment::toolBoxItem() const
 void Containment::resizeEvent(QGraphicsSceneResizeEvent *event)
 {
     Applet::resizeEvent(event);
+
+    if (!ContainmentPrivate::s_positioning) {
+        switch (d->type) {
+            case Containment::PanelContainment:
+            case Containment::CustomPanelContainment:
+                d->positionPanel();
+                break;
+            default:
+                d->positionContainments();
+                break;
+        }
+    }
+
     if (d->wallpaper) {
         d->wallpaper->setBoundingRect(boundingRect());
     }
@@ -1639,18 +1652,6 @@ void ContainmentPrivate::containmentConstraintsEvent(Plasma::Constraints constra
         }
     }
 
-    if (constraints & Plasma::SizeConstraint && !ContainmentPrivate::s_positioning) {
-        switch (q->containmentType()) {
-            case Containment::PanelContainment:
-            case Containment::CustomPanelContainment:
-                positionPanel();
-                break;
-            default:
-                positionContainments();
-                break;
-        }
-    }
-
     if (toolBox && (constraints & Plasma::SizeConstraint ||
                     constraints & Plasma::FormFactorConstraint ||
                     constraints & Plasma::ScreenConstraint ||
@@ -1825,6 +1826,7 @@ void ContainmentPrivate::positionPanel(bool force)
 
     // we position panels in negative coordinates, and stack all horizontal
     // and all vertical panels with each other.
+
 
     const QPointF p = q->pos();
 
