@@ -1852,7 +1852,7 @@ void ContainmentPrivate::positionPanel(bool force)
 
     //TODO: research how non-Horizontal, non-Vertical (e.g. Planar) panels behave here
     bool horiz = q->formFactor() == Plasma::Horizontal;
-    qreal bottom = horiz ? -HORIZONTAL_STACKING_OFFSET : VERTICAL_STACKING_OFFSET;
+    qreal bottom = horiz ? 0 : VERTICAL_STACKING_OFFSET;
     qreal lastHeight = 0;
 
     // this should be ok for small numbers of panels, but if we ever end
@@ -1868,7 +1868,7 @@ void ContainmentPrivate::positionPanel(bool force)
         }
 
         if (horiz) {
-            qreal y = other->pos().y() - HORIZONTAL_STACKING_OFFSET;
+            qreal y = other->pos().y();
             if (y < bottom) {
                 lastHeight = other->size().height();
                 bottom = y;
