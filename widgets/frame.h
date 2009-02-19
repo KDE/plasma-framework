@@ -42,12 +42,17 @@ class FramePrivate;
 class PLASMA_EXPORT Frame : public QGraphicsWidget
 {
     Q_OBJECT
+    Q_PROPERTY(Shadow frameShadow READ frameShadow WRITE setFrameShadow)
+    Q_PROPERTY(QString text READ text WRITE setText)
+    Q_PROPERTY(QString image READ image WRITE setImage)
+    Q_PROPERTY(QString styleSheet READ styleSheet WRITE setStyleSheet)
+    Q_ENUMS(Shadow)
 
 public:
     enum Shadow {
         Plain = 1,
-        Raised,
-        Sunken
+        Raised = 2,
+        Sunken = 3
     };
 
     /**
