@@ -139,7 +139,7 @@ if(QT_QTOPENGL_FOUND AND OPENGL_FOUND)
 endif(QT_QTOPENGL_FOUND AND OPENGL_FOUND)
 
 if (PHONON_FOUND)
-    message(STATUS "Adding support to Phonon to libplasma")
+    message(STATUS "Adding support for Phonon to libplasma")
     set(plasma_LIB_SRCS
         ${plasma_LIB_SRCS}
         widgets/videowidget.cpp)
