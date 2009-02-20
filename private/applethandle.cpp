@@ -129,8 +129,6 @@ AppletHandle::AppletHandle(Containment *parent, Applet *applet, const QPointF &h
     m_applet->raise();
     m_applet->installSceneEventFilter(this);
     setZValue(m_applet->zValue());
-    setFlag(QGraphicsItem::ItemDoesntPropagateOpacityToChildren,true);
-    setCacheMode(QGraphicsItem::DeviceCoordinateCache);
 }
 
 AppletHandle::~AppletHandle()
@@ -263,6 +261,34 @@ void AppletHandle::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
 
     //regenerate our buffer?
     if (m_animId > 0 || !m_backgroundBuffer || m_backgroundBuffer->size() != pixmapSize) {
+        QColor transparencyColor = Qt::black;
+        transparencyColor.setAlphaF(qMin(m_opacity, qreal(0.99)));
+
+        QLinearGradient g(QPoint(0, 0), QPoint(m_decorationRect.width(), 0));
+        //fading out panel
+        if (m_rect.height() > qreal(minimumHeight()) * 1.25) {
+            if (m_buttonsOnRight) {
+                qreal opaquePoint =
+                    (m_background->marginSize(LeftMargin) - translation) / m_decorationRect.width();
+                //kDebug() << "opaquePoint" << opaquePoint
+                //         << m_background->marginSize(LeftMargin) << m_decorationRect.width();
+                g.setColorAt(0.0, Qt::transparent);
+                g.setColorAt(qMax(0.0, opaquePoint - 0.05), Qt::transparent);
+                g.setColorAt(opaquePoint, transparencyColor);
+                g.setColorAt(1.0, transparencyColor);
+            } else {
+                qreal opaquePoint =
+                    1 - ((m_background->marginSize(RightMargin) + translation) / m_decorationRect.width());
+                g.setColorAt(1.0, Qt::transparent);
+                g.setColorAt(opaquePoint, Qt::transparent);
+                g.setColorAt(qMax(0.0, opaquePoint - 0.05), transparencyColor);
+                g.setColorAt(0.0, transparencyColor);
+            }
+        //complete panel
+        } else {
+            g.setColorAt(0.0, transparencyColor);
+        }
+
         m_background->resizeFrame(m_decorationRect.size());
 
         if (!m_backgroundBuffer || m_backgroundBuffer->size() != pixmapSize) {
@@ -298,7 +324,8 @@ void AppletHandle::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
         m_configureIcons->paint(&buffPainter, iconRect, "close");
 
         buffPainter.setCompositionMode(QPainter::CompositionMode_DestinationIn);
-        setOpacity(m_opacity);
+        //blend the background
+        buffPainter.fillRect(m_backgroundBuffer->rect(), g);
         //blend the icons
         //buffPainter.fillRect(QRect(QPoint((int)m_decorationRect.width(), 0), QSize(m_iconSize + 1,
         //                                  (int)m_decorationRect.height())), transparencyColor);
@@ -456,6 +483,8 @@ void AppletHandle::mousePressEvent(QGraphicsSceneMouseEvent *event)
 
         event->accept();
 
+        update();
+
         //set mousePos to the position in the applet, in screencoords, so it becomes easy
         //to reposition the toplevel view to the correct position.
         QPoint localpos = m_currentView->mapFromScene(m_applet->scenePos());
@@ -545,6 +574,7 @@ void AppletHandle::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     }
 
     m_pressedButton = NoButton;
+    update();
 }
 
 qreal _k_distanceForPoint(QPointF point)
@@ -708,6 +738,7 @@ void AppletHandle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
         setTransform(t);
         m_angle = newAngle;
 
+        m_applet->update();
     } else {
         QGraphicsItem::mouseMoveEvent(event);
     }
