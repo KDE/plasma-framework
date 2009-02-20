@@ -105,7 +105,7 @@ AppletHandle::AppletHandle(Containment *parent, Applet *applet, const QPointF &h
     m_leaveTimer->setSingleShot(true);
     m_leaveTimer->setInterval(500);
 
-    connect(m_hoverTimer, SIGNAL(timeout()), this, SLOT(fadeIn()));
+    connect(m_hoverTimer, SIGNAL(timeout()), this, SLOT(hoverTimeout()));
     connect(m_leaveTimer, SIGNAL(timeout()), this, SLOT(leaveTimeout()));
     connect(m_applet, SIGNAL(destroyed(QObject*)), this, SLOT(appletDestroyed()));
 
@@ -148,7 +148,7 @@ void AppletHandle::detachApplet ()
         return;
     }
 
-    disconnect(m_hoverTimer, SIGNAL(timeout()), this, SLOT(fadeIn()));
+    disconnect(m_hoverTimer, SIGNAL(timeout()), this, SLOT(hoverTimeout()));
     disconnect(m_leaveTimer, SIGNAL(timeout()), this, SLOT(leaveTimeout()));
     m_applet->disconnect(this);
 
@@ -772,29 +772,29 @@ void AppletHandle::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
     //kDebug() << "hover enter";
 
     //if a disappear was scheduled stop the timer
-    m_leaveTimer->stop();
-
+    if (m_leaveTimer->isActive()) {
+        m_leaveTimer->stop();
+    }
     // if we're already fading out, fade back in
-    if (m_animId != 0 && m_anim == FadeOut) {
-        startFading(FadeIn, m_entryPos);
-    } else {
-        //schedule appear
-        m_hoverTimer->start();
+    else if (m_animId != 0 && m_anim == FadeOut) {
+        startFading(FadeIn, m_entryPos, true);
     }
 }
 
 void AppletHandle::hoverMoveEvent(QGraphicsSceneHoverEvent *event)
 {
-    Q_UNUSED(event);
-    m_leaveTimer->stop();
+    hoverEnterEvent(event);
 }
 
 void AppletHandle::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 {
     Q_UNUSED(event);
-    m_hoverTimer->stop();
 
-    if (m_pressedButton != NoButton) {
+    // if we haven't even showed up yet, remove the handle
+    if (m_hoverTimer->isActive()) {
+        m_hoverTimer->stop();
+        QTimer::singleShot(0, this, SLOT(emitDisappear()));
+    } else if (m_pressedButton != NoButton) {
         m_pendingFade = true;
     } else {
         //wait a moment to hide the handle in order to recheck the mouse position
@@ -830,7 +830,7 @@ void AppletHandle::fadeAnimation(qreal progress)
     update();
 }
 
-void AppletHandle::fadeIn()
+void AppletHandle::hoverTimeout()
 {
     startFading(FadeIn, m_entryPos);
 }
@@ -857,20 +857,16 @@ void AppletHandle::setHoverPos(const QPointF &hoverPos)
     m_entryPos = hoverPos;
 }
 
-void AppletHandle::startFading(FadeType anim, const QPointF &hoverPos)
+void AppletHandle::startFading(FadeType anim, const QPointF &hoverPos, bool preserveSide)
 {
     if (m_animId != 0) {
         Animator::self()->stopCustomAnimation(m_animId);
     }
 
-    m_hoverTimer->stop();
-    m_leaveTimer->stop();
-
     m_entryPos = hoverPos;
     qreal time = 100;
 
-    if (!m_applet || (anim == FadeOut && m_hoverTimer->isActive())) {
-        // fading out before we've started fading in
+    if (!m_applet) {
         m_anim = FadeOut;
         fadeAnimation(1.0);
         return;
@@ -880,7 +876,9 @@ void AppletHandle::startFading(FadeType anim, const QPointF &hoverPos)
         //kDebug() << m_entryPos.x() << m_applet->pos().x();
         prepareGeometryChange();
         bool wasOnRight = m_buttonsOnRight;
-        m_buttonsOnRight = m_entryPos.x() > (m_applet->size().width() / 2);
+        if (!preserveSide) {
+            m_buttonsOnRight = m_entryPos.x() > (m_applet->size().width() / 2);
+        }
         calculateSize();
         QPolygonF region = mapToParent(m_rect).intersected(parentWidget()->boundingRect());
         //kDebug() << region << m_rect << mapToParent(m_rect) << parentWidget()->boundingRect();
