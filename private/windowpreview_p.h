@@ -26,6 +26,8 @@
 
 namespace Plasma {
 
+class FrameSvg;
+
 /**
  * @internal
  *
@@ -47,11 +49,15 @@ public:
     void setInfo();
     virtual QSize sizeHint() const;
 
+protected:
+    void paintEvent(QPaintEvent *e);
+
 private:
     void readWindowSize() const;
 
     WId id;
     mutable QSize windowSize;
+    FrameSvg *m_background;
 };
 
 } // namespace Plasma

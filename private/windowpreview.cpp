@@ -20,7 +20,12 @@
 
 #include "windowpreview_p.h"
 
+#include <QPainter>
+
 #include <kwindowsystem.h>
+#include <kdebug.h>
+
+#include <plasma/framesvg.h>
 
 #ifdef Q_WS_X11
 #include <QX11Info>
@@ -55,16 +60,25 @@ bool WindowPreview::previewsAvailable() // static
 WindowPreview::WindowPreview(QWidget *parent)
     : QWidget(parent)
 {
+    m_background = new Plasma::FrameSvg(this);
+    m_background->setImagePath("widgets/frame");
+    m_background->setElementPrefix("raised");
 }
 
 void WindowPreview::setWindowId(WId w)
 {
     if (!previewsAvailable()) {
+        setMinimumSize(0,0);
+        setMaximumSize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX);
         id = 0;
         return;
     }
     id = w;
     readWindowSize();
+    QSize s(sizeHint());
+    if (s.isValid()) {
+        setFixedSize(sizeHint());
+    }
 }
 
 WId WindowPreview::windowId() const
@@ -82,17 +96,16 @@ QSize WindowPreview::sizeHint() const
     }
     QSize s = windowSize;
     s.scale(200, 150, Qt::KeepAspectRatio);
+
     return s;
 }
 
 void WindowPreview::readWindowSize() const
 {
 #ifdef Q_WS_X11
-    Window r;
-    int x, y;
-    unsigned int w, h, b, d;
-    if (id > 0 && XGetGeometry(QX11Info::display(), id, &r, &x, &y, &w, &h, &b, &d)) {
-        windowSize = QSize(w, h);
+    if (id > 0) {
+        KWindowInfo info = KWindowSystem::windowInfo(id, NET::WMGeometry|NET::WMFrameExtents);
+        windowSize = info.frameGeometry().size();
     } else {
         windowSize = QSize();
     }
@@ -118,9 +131,30 @@ void WindowPreview::setInfo()
         return;
     }
     Q_ASSERT(parentWidget()->isWindow()); // parent must be toplevel
-    long data[] = { 1, 5, id, x(), y(), width(), height() };
+
+    QSize thumbnailSize = sizeHint();
+    thumbnailSize.scale(size(), Qt::KeepAspectRatio);
+    m_background->resizeFrame(thumbnailSize);
+
+    qreal left, top, right, bottom;
+    m_background->getMargins(left, top, right, bottom);
+    QRect thumbnailRect = geometry().adjusted(left, top, -right, -bottom);
+
+
+    long data[] = { 1, 5, id, thumbnailRect.x(), thumbnailRect.y(), thumbnailRect.width(), thumbnailRect.height() };
     XChangeProperty(dpy, parentWidget()->winId(), atom, atom, 32, PropModeReplace,
         reinterpret_cast<unsigned char *>(data), sizeof(data) / sizeof(data[ 0 ]));
+#endif
+}
+
+void WindowPreview::paintEvent(QPaintEvent *e)
+{
+    Q_UNUSED(e)
+#ifdef Q_WS_X11
+    QPainter painter(this);
+    QRect r(QPoint(0,0), m_background->frameSize().toSize());
+    r.moveCenter(QPoint(size().width()/2, size().height()/2));
+    m_background->paintFrame(&painter, r.topLeft());
 #endif
 }
 
