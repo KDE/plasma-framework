@@ -63,7 +63,7 @@ class AppletHandle : public QObject, public QGraphicsItem
         QRectF boundingRect() const;
         QPainterPath shape() const;
         void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
-        void startFading(FadeType anim, const QPointF &hoverPos);
+        void startFading(FadeType anim, const QPointF &hoverPos, bool preserveSide = false);
         void setHoverPos(const QPointF &hoverPos);
 
     protected:
@@ -83,7 +83,7 @@ class AppletHandle : public QObject, public QGraphicsItem
         void fadeAnimation(qreal progress);
         void appletDestroyed();
         void appletResized();
-        void fadeIn();
+        void hoverTimeout();
         void leaveTimeout();
         void emitDisappear();
 
