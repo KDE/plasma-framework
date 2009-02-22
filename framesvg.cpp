@@ -587,7 +587,7 @@ void FrameSvgPrivate::generateBackground(FrameData *frame)
 
             QSize s = q->size();
             q->resize(q->elementSize(prefix+"overlay"));
-kWarning()<<"AAAAAAA"<<q->elementSize(prefix+"overlay");
+
             overlayPainter.drawTiledPixmap(QRect(QPoint(0,0), overlaySize), q->pixmap(prefix+"overlay"));
             q->resize(s);
         } else {
