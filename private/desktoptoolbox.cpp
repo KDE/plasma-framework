@@ -417,17 +417,6 @@ void DesktopToolBox::showToolBox()
         }
 
         Plasma::IconWidget *icon = qgraphicsitem_cast<Plasma::IconWidget *>(tool);
-        if (icon) {
-            if (viewTransform().m11() != Plasma::scalingFactor(Plasma::OverviewZoom) &&
-                (viewTransform().m11() == Plasma::scalingFactor(Plasma::DesktopZoom) ||
-                 icon->action() == d->containment->action("add sibling containment") ||
-                 icon->action() == d->containment->action("add widgets"))) {
-                icon->setText(icon->action()->text());
-            } else {
-                icon->setText(QString());
-            }
-        }
-
         if (tool->isEnabled()) {
             tool->show();
             //kDebug() << tool << "is enabled";
@@ -438,6 +427,17 @@ void DesktopToolBox::showToolBox()
             maxWidth = qMax(toolSize.width(), maxWidth);
             maxHeight = qMax(toolSize.height(), maxHeight);
             y += static_cast<int>(tool->boundingRect().height());
+        }
+
+        if (icon) {
+            if (viewTransform().m11() != Plasma::scalingFactor(Plasma::OverviewZoom) &&
+                (viewTransform().m11() == Plasma::scalingFactor(Plasma::DesktopZoom) ||
+                 icon->action() == d->containment->action("add sibling containment") ||
+                 icon->action() == d->containment->action("add widgets"))) {
+                icon->setText(icon->action()->text());
+            } else {
+                icon->setText(QString());
+            }
         }
     }
 
@@ -504,8 +504,14 @@ void DesktopToolBox::showToolBox()
         }
 
         Plasma::IconWidget *icon = qgraphicsitem_cast<Plasma::IconWidget *>(tool);
-        const int iconHeight = icon->sizeFromIconSize(KIconLoader::SizeSmallMedium).height();
-        icon->resize(maxWidth, iconHeight);
+        const QSize iconSizeHint = icon->sizeFromIconSize(KIconLoader::SizeSmallMedium).toSize();
+
+        //force max size if we aren't zooming
+        if (viewTransform().m11() == 1) {
+            icon->resize(maxWidth, iconSizeHint.height());
+        } else {
+            icon->resize(iconSizeHint);
+        }
 
         if (tool->isEnabled()) {
             if (isToolbar()) {
