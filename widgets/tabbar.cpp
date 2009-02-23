@@ -160,7 +160,9 @@ void TabBarPrivate::shapeChanged(const QTabBar::Shape shape)
         tabBarLayout->setOrientation(Qt::Vertical);
         tabWidgetLayout->setOrientation(Qt::Horizontal);
         tabWidgetLayout->itemAt(0)->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
-        tabWidgetLayout->itemAt(1)->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        if (tabWidgetLayout->count() > 1) {
+            tabWidgetLayout->itemAt(1)->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        }
         tabProxy->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
         break;
 
@@ -173,7 +175,9 @@ void TabBarPrivate::shapeChanged(const QTabBar::Shape shape)
         tabBarLayout->setOrientation(Qt::Horizontal);
         tabWidgetLayout->setOrientation(Qt::Vertical);
         tabWidgetLayout->itemAt(0)->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
-        tabWidgetLayout->itemAt(1)->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        if (tabWidgetLayout->count() > 1) {
+            tabWidgetLayout->itemAt(1)->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        }
         tabProxy->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     }
     tabProxy->setPreferredSize(tabProxy->native->sizeHint());
