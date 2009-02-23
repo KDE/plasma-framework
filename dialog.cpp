@@ -421,6 +421,14 @@ void Dialog::showEvent(QShowEvent * event)
         d->view->centerOn(d->widget);
     }
 
+    if (d->view) {
+        d->view->setFocus();
+    }
+
+    if (d->widget) {
+        d->widget->setFocus();
+    }
+
     emit dialogVisible(true);
 }
 
