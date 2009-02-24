@@ -182,6 +182,7 @@ Applet::~Applet()
     }
 
     // clean up our config dialog, if any
+    delete KConfigDialog::exists(d->configDialogId());
     delete d;
 }
 
