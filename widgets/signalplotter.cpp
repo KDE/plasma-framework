@@ -504,10 +504,9 @@ void SignalPlotter::setSvgBackground(const QString &filename)
         d->svgFilename = filename;
     }
 
+    delete d->svgBackground;
+    d->svgBackground = 0;
     if (!d->svgFilename.isEmpty()) {
-        if (d->svgBackground) {
-            delete d->svgBackground;
-        }
         d->svgBackground = new Svg(this);
         d->svgBackground->setImagePath(d->svgFilename);
     }
