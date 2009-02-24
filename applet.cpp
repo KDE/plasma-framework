@@ -155,6 +155,8 @@ Applet::~Applet()
         d->extender->saveState();
     }
 
+    const QString dialogId = QString("%1settings%2").arg(id()).arg(name());
+    delete KConfigDialog::exists(dialogId);
     delete d;
 }
 
