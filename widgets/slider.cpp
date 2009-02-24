@@ -74,10 +74,10 @@ Slider::~Slider()
 }
 
 void Slider::paint(QPainter *painter,
-                       const QStyleOptionGraphicsItem *option,
-                       QWidget *widget)
+                   const QStyleOptionGraphicsItem *option,
+                   QWidget *widget)
 {
-    if (!styleSheet().isNull()) {
+    if (!styleSheet().isNull() || Theme::defaultTheme()->useNativeWidgetStyle()) {
         QGraphicsProxyWidget::paint(painter, option, widget);
         return;
     }
@@ -112,7 +112,7 @@ void Slider::paint(QPainter *painter,
     d->background->resizeFrame(backgroundRect.size());
     d->background->paintFrame(painter, backgroundRect.topLeft());
 
-    //Thickmarks
+    //Tickmarks
     if (sliderOpt.tickPosition != QSlider::NoTicks) {
         sliderOpt.subControls = QStyle::SC_SliderTickmarks;
         sliderOpt.palette.setColor(

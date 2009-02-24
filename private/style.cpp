@@ -29,6 +29,7 @@
 #include <kdebug.h>
 
 #include <plasma/framesvg.h>
+#include <plasma/theme.h>
 
 namespace Plasma {
 
@@ -104,6 +105,11 @@ void Style::drawComplexControl(ComplexControl control,
                                QPainter *painter,
                                const QWidget *widget) const
 {
+    if (Theme::defaultTheme()->useNativeWidgetStyle()) {
+        qApp->style()->drawComplexControl(control, option, painter, widget);
+        return;
+    }
+
     switch (control) {
     case CC_ScrollBar: {
         d->createScrollbar();
@@ -251,7 +257,10 @@ void Style::drawComplexControl(ComplexControl control,
 
 void Style::drawPrimitive(PrimitiveElement element, const QStyleOption *option, QPainter *painter, const QWidget *widget) const
 {
-    Q_UNUSED(widget)
+    if (Theme::defaultTheme()->useNativeWidgetStyle()) {
+        qApp->style()->drawPrimitive(element, option, painter, widget);
+        return;
+    }
 
     switch (element) {
     case PE_PanelLineEdit:
@@ -271,6 +280,10 @@ void Style::drawPrimitive(PrimitiveElement element, const QStyleOption *option, 
 
 int Style::pixelMetric(PixelMetric metric, const QStyleOption *option, const QWidget *widget) const
 {
+    if (Theme::defaultTheme()->useNativeWidgetStyle()) {
+        return qApp->style()->pixelMetric(metric, option, widget);
+    }
+
     switch (metric) {
     case PM_ScrollBarExtent: {
         d->createScrollbar();

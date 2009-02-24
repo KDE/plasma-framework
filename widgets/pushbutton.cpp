@@ -247,7 +247,7 @@ void PushButton::paint(QPainter *painter,
                        const QStyleOptionGraphicsItem *option,
                        QWidget *widget)
 {
-    if (!styleSheet().isNull()) {
+    if (!styleSheet().isNull() || Theme::defaultTheme()->useNativeWidgetStyle()) {
         QGraphicsProxyWidget::paint(painter, option, widget);
         return;
     }

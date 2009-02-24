@@ -60,7 +60,7 @@ public:
     bool fadeIn;
     qreal opacity;
     QRectF activeRect;
-    Plasma::Style::Ptr style;
+    Style::Ptr style;
 };
 
 void ComboBoxPrivate::syncActiveRect()
@@ -100,7 +100,7 @@ void ComboBoxPrivate::syncBorders()
     p.setColor(QPalette::Normal, QPalette::Text, color);
     p.setColor(QPalette::Inactive, QPalette::Text, color);
     native->setPalette(p);
-    native->setFont(Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont));
+    native->setFont(Theme::defaultTheme()->font(Theme::DefaultFont));
 }
 
 void ComboBoxPrivate::animationUpdate(qreal progress)
@@ -132,15 +132,15 @@ ComboBox::ComboBox(QGraphicsWidget *parent)
 
     d->syncBorders();
     setAcceptHoverEvents(true);
-    connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()), SLOT(syncBorders()));
-    d->style = Plasma::Style::sharedStyle();
+    connect(Theme::defaultTheme(), SIGNAL(themeChanged()), SLOT(syncBorders()));
+    d->style = Style::sharedStyle();
     native->setStyle(d->style.data());
 }
 
 ComboBox::~ComboBox()
 {
     delete d;
-    Plasma::Style::doneWithSharedStyle();
+    Style::doneWithSharedStyle();
 }
 
 QString ComboBox::text() const
@@ -196,7 +196,9 @@ void ComboBox::paint(QPainter *painter,
                      const QStyleOptionGraphicsItem *option,
                      QWidget *widget)
 {
-    if (!styleSheet().isNull() || nativeWidget()->isEditable()) {
+    if (!styleSheet().isNull() ||
+        nativeWidget()->isEditable() ||
+        Theme::defaultTheme()->useNativeWidgetStyle()) {
         QGraphicsProxyWidget::paint(painter, option, widget);
         return;
     }
@@ -243,14 +245,14 @@ void ComboBox::paint(QPainter *painter,
         d->background->paintFrame(painter);
     }
 
-    painter->setPen(Plasma::Theme::defaultTheme()->color(Theme::ButtonTextColor));
+    painter->setPen(Theme::defaultTheme()->color(Theme::ButtonTextColor));
 
     QStyleOptionComboBox comboOpt;
 
     comboOpt.initFrom(nativeWidget());
 
     comboOpt.palette.setColor(
-        QPalette::ButtonText, Plasma::Theme::defaultTheme()->color(Plasma::Theme::ButtonTextColor));
+        QPalette::ButtonText, Theme::defaultTheme()->color(Theme::ButtonTextColor));
     comboOpt.currentIcon = nativeWidget()->itemIcon(
         nativeWidget()->currentIndex());
     comboOpt.currentText = nativeWidget()->itemText(
@@ -270,11 +272,11 @@ void ComboBox::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
     const int FadeInDuration = 75;
 
     if (d->animId != -1) {
-        Plasma::Animator::self()->stopCustomAnimation(d->animId);
+        Animator::self()->stopCustomAnimation(d->animId);
     }
-    d->animId = Plasma::Animator::self()->customAnimation(
+    d->animId = Animator::self()->customAnimation(
         40 / (1000 / FadeInDuration), FadeInDuration,
-        Plasma::Animator::LinearCurve, this, "animationUpdate");
+        Animator::LinearCurve, this, "animationUpdate");
 
     d->background->setElementPrefix("active");
 
@@ -286,13 +288,13 @@ void ComboBox::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
     const int FadeOutDuration = 150;
 
     if (d->animId != -1) {
-        Plasma::Animator::self()->stopCustomAnimation(d->animId != -1);
+        Animator::self()->stopCustomAnimation(d->animId != -1);
     }
 
     d->fadeIn = false;
-    d->animId = Plasma::Animator::self()->customAnimation(
+    d->animId = Animator::self()->customAnimation(
         40 / (1000 / FadeOutDuration),
-        FadeOutDuration, Plasma::Animator::LinearCurve, this, "animationUpdate");
+        FadeOutDuration, Animator::LinearCurve, this, "animationUpdate");
 
     d->background->setElementPrefix("active");
 

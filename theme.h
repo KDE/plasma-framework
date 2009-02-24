@@ -180,6 +180,12 @@ class PLASMA_EXPORT Theme : public QObject
         bool useGlobalSettings() const;
 
         /**
+         * @return true if the native widget styles should be used instead of themed
+         * widgets. Defaults is false.
+         */
+        bool useNativeWidgetStyle() const;
+
+        /**
          * Tries to load pixmap with the specified key from cache.
          * @return true when pixmap was found and loaded from cache, false otherwise
          **/

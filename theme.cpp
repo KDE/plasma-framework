@@ -65,7 +65,8 @@ public:
           compositingActive(KWindowSystem::compositingActive()),
           isDefault(false),
           useGlobal(true),
-          hasWallpapers(false)
+          hasWallpapers(false),
+          useNativeWidgetStyle(false)
     {
         generalFont = QApplication::font();
         cacheTheme = cacheConfig().readEntry("CacheTheme", true);
@@ -138,6 +139,7 @@ public:
     bool useGlobal : 1;
     bool hasWallpapers : 1;
     bool cacheTheme : 1;
+    bool useNativeWidgetStyle :1;
 };
 
 PackageStructure::Ptr ThemePrivate::packageStructure(0);
@@ -362,6 +364,9 @@ void ThemePrivate::setThemeName(const QString &tempThemeName, bool writeSettings
     defaultWallpaperWidth = cg.readEntry("defaultWidth", DEFAULT_WALLPAPER_WIDTH);
     defaultWallpaperHeight = cg.readEntry("defaultHeight", DEFAULT_WALLPAPER_HEIGHT);
 
+    cg = KConfigGroup(&metadata, "Settings");
+    useNativeWidgetStyle = cg.readEntry("UseNativeWidgetStyle", false);
+
     QObject::disconnect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()),
                         q, SLOT(colorsChanged()));
 
@@ -582,6 +587,11 @@ void Theme::setUseGlobalSettings(bool useGlobal)
 bool Theme::useGlobalSettings() const
 {
     return d->useGlobal;
+}
+
+bool Theme::useNativeWidgetStyle() const
+{
+    return d->useNativeWidgetStyle;
 }
 
 bool Theme::findInCache(const QString &key, QPixmap &pix)
