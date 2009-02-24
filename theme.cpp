@@ -108,6 +108,7 @@ public:
     void colorsChanged();
     bool useCache();
     void settingsFileChanged(const QString &);
+    void setThemeName(const QString &themeName, bool writeSettings);
 
     static const char *defaultTheme;
     static const char *themeRcFile;
@@ -294,16 +295,21 @@ void ThemePrivate::settingsFileChanged(const QString &file)
 
 void Theme::settingsChanged()
 {
-    setThemeName(d->config().readEntry("name", ThemePrivate::defaultTheme));
+    d->setThemeName(d->config().readEntry("name", ThemePrivate::defaultTheme), false);
 }
 
 void Theme::setThemeName(const QString &themeName)
 {
+    d->setThemeName(themeName, true);
+}
+
+void ThemePrivate::setThemeName(const QString &tempThemeName, bool writeSettings)
+{
     kDebug();
-    QString theme = themeName;
-    if (theme.isEmpty() || theme == d->themeName) {
+    QString theme = tempThemeName;
+    if (theme.isEmpty() || theme == themeName) {
         // let's try and get the default theme at least
-        if (d->themeName.isEmpty()) {
+        if (themeName.isEmpty()) {
             theme = ThemePrivate::defaultTheme;
         } else {
             return;
@@ -312,7 +318,7 @@ void Theme::setThemeName(const QString &themeName)
 
     //TODO: should we care about names with relative paths in them?
     QString themePath = KStandardDirs::locate("data", "desktoptheme/" + theme + '/');
-    if (themePath.isEmpty() && d->themeName.isEmpty()) {
+    if (themePath.isEmpty() && themeName.isEmpty()) {
         themePath = KStandardDirs::locate("data", "desktoptheme/default/");
 
         if (themePath.isEmpty()) {
@@ -322,16 +328,16 @@ void Theme::setThemeName(const QString &themeName)
         theme = ThemePrivate::defaultTheme;
     }
 
-    if (d->themeName == theme) {
+    if (themeName == theme) {
         return;
     }
 
     //discard the old theme cache
-    if (!d->themeName.isEmpty() && d->pixmapCache) {
-        d->discardCache(false);
+    if (!themeName.isEmpty() && pixmapCache) {
+        discardCache(false);
     }
 
-    d->themeName = theme;
+    themeName = theme;
 
     // load the color scheme config
     QString colorsFile = KStandardDirs::locate("data", "desktoptheme/" + theme + "/colors");
@@ -348,37 +354,36 @@ void Theme::setThemeName(const QString &themeName)
     } else {
         // since we didn't find an entry in the theme, let's look in the main
         // theme config
-        cg = d->config();
+        cg = config();
     }
 
-    d->defaultWallpaperTheme = cg.readEntry("defaultWallpaperTheme", DEFAULT_WALLPAPER_THEME);
-    d->defaultWallpaperSuffix = cg.readEntry("defaultFileSuffix", DEFAULT_WALLPAPER_SUFFIX);
-    d->defaultWallpaperWidth = cg.readEntry("defaultWidth", DEFAULT_WALLPAPER_WIDTH);
-    d->defaultWallpaperHeight = cg.readEntry("defaultHeight", DEFAULT_WALLPAPER_HEIGHT);
+    defaultWallpaperTheme = cg.readEntry("defaultWallpaperTheme", DEFAULT_WALLPAPER_THEME);
+    defaultWallpaperSuffix = cg.readEntry("defaultFileSuffix", DEFAULT_WALLPAPER_SUFFIX);
+    defaultWallpaperWidth = cg.readEntry("defaultWidth", DEFAULT_WALLPAPER_WIDTH);
+    defaultWallpaperHeight = cg.readEntry("defaultHeight", DEFAULT_WALLPAPER_HEIGHT);
 
-    disconnect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()),
-                this, SLOT(colorsChanged()));
+    QObject::disconnect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()),
+                        q, SLOT(colorsChanged()));
 
     if (colorsFile.isEmpty()) {
-        d->colors = 0;
-        connect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()),
-                this, SLOT(colorsChanged()));
+        colors = 0;
+        QObject::connect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()),
+                         q, SLOT(colorsChanged()));
     } else {
-        d->colors = KSharedConfig::openConfig(colorsFile);
+        colors = KSharedConfig::openConfig(colorsFile);
     }
 
-    d->colorScheme = KColorScheme(QPalette::Active, KColorScheme::Window, d->colors);
-    d->buttonColorScheme = KColorScheme(QPalette::Active, KColorScheme::Button, d->colors);
-    d->hasWallpapers =
-        KStandardDirs::exists(KStandardDirs::locateLocal("data", "desktoptheme/" + theme + "/wallpapers/"));
+    colorScheme = KColorScheme(QPalette::Active, KColorScheme::Window, colors);
+    buttonColorScheme = KColorScheme(QPalette::Active, KColorScheme::Button, colors);
+    hasWallpapers = KStandardDirs::exists(KStandardDirs::locateLocal("data", "desktoptheme/" + theme + "/wallpapers/"));
 
-    if (d->isDefault) {
+    if (isDefault && writeSettings) {
         // we're the default theme, let's save our state
-        KConfigGroup &cg = d->config();
-        if (ThemePrivate::defaultTheme == d->themeName) {
+        KConfigGroup &cg = config();
+        if (ThemePrivate::defaultTheme == themeName) {
             cg.deleteEntry("name");
         } else {
-            cg.writeEntry("name", d->themeName);
+            cg.writeEntry("name", themeName);
         }
     }
 
@@ -386,15 +391,15 @@ void Theme::setThemeName(const QString &themeName)
     QFile f(metadataPath);
     QFileInfo info(f);
 
-    if (d->useCache() && info.lastModified().toTime_t() > d->pixmapCache->timestamp()) {
-        d->discardCache(false);
+    if (useCache() && info.lastModified().toTime_t() > pixmapCache->timestamp()) {
+        discardCache(false);
     }
 
-    d->invalidElements.clear();
+    invalidElements.clear();
     QString svgElementsFile = KStandardDirs::locateLocal("cache", "plasma-svgelements-" + themeName);
-    d->svgElementsCache = KSharedConfig::openConfig(svgElementsFile);
+    svgElementsCache = KSharedConfig::openConfig(svgElementsFile);
 
-    emit themeChanged();
+    emit q->themeChanged();
 }
 
 QString Theme::themeName() const
