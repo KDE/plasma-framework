@@ -19,6 +19,8 @@
 
 #include "scripting/appletscript.h"
 
+#include "kconfigdialog.h"
+
 #include "applet.h"
 #include "package.h"
 #include "private/applet_p.h"
@@ -125,8 +127,17 @@ void AppletScript::configNeedsSaving() const
 void AppletScript::showConfigurationInterface()
 {
     if (applet()) {
-        applet()->d->generateGenericConfigDialog();
+        applet()->d->generateGenericConfigDialog()->show();
     }
+}
+
+KConfigDialog *AppletScript::standardConfigurationDialog()
+{
+    if (applet()) {
+        return applet()->d->generateGenericConfigDialog();
+    }
+
+    return 0;
 }
 
 void AppletScript::configChanged()

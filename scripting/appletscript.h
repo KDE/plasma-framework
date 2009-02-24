@@ -32,6 +32,7 @@
 class QAction;
 class QPainter;
 class QStyleOptionGraphicsItem;
+class KConfigDialog;
 
 namespace Plasma
 {
@@ -164,6 +165,14 @@ protected:
      *         interface files.
      */
     const Package *package() const;
+
+    /**
+     * @return a standard Plasma applet configuration dialog, ready
+     * to have pages added to it.
+     *
+     * Note that the dialog returned is set to delete on close.
+     */
+    KConfigDialog *standardConfigurationDialog();
 
 private:
     AppletScriptPrivate *const d;

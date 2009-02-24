@@ -181,6 +181,7 @@ Applet::~Applet()
         }
     }
 
+    // clean up our config dialog, if any
     delete d;
 }
 
@@ -1548,7 +1549,7 @@ void Applet::showConfigurationInterface()
     } else if (d->script) {
         d->script->showConfigurationInterface();
     } else {
-        d->generateGenericConfigDialog();
+        d->generateGenericConfigDialog()->show();
     }
 
     emit releaseVisualFocus();
@@ -1564,7 +1565,7 @@ QString AppletPrivate::configWindowTitle() const
     return i18nc("@title:window", "%1 Settings", q->name());
 }
 
-void AppletPrivate::generateGenericConfigDialog()
+KConfigDialog *AppletPrivate::generateGenericConfigDialog()
 {
     KConfigSkeleton *nullManager = new KConfigSkeleton(0);
     KConfigDialog *dialog = new KConfigDialog(0, configDialogId(), nullManager);
@@ -1579,7 +1580,7 @@ void AppletPrivate::generateGenericConfigDialog()
     QObject::connect(dialog, SIGNAL(okClicked()), q, SLOT(configDialogFinished()));
     QObject::connect(dialog, SIGNAL(finished()), q, SLOT(configDialogFinished()));
     QObject::connect(dialog, SIGNAL(finished()), nullManager, SLOT(deleteLater()));
-    dialog->show();
+    return dialog;
 }
 
 void AppletPrivate::addGlobalShortcutsPage(KConfigDialog *dialog)
