@@ -197,6 +197,7 @@ private:
 
     Q_PRIVATE_SLOT(d, void updateSceneRect())
     Q_PRIVATE_SLOT(d, void containmentDestroyed())
+    Q_PRIVATE_SLOT(d, void containmentScreenChanged(int, int, Plasma::Containment *))
     Q_PRIVATE_SLOT(d, void privateInit())
 
     friend class ViewPrivate;
