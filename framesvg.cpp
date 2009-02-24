@@ -681,7 +681,7 @@ void FrameSvgPrivate::updateSizes()
         frame->leftWidth = q->elementSize(prefix + "left").width();
 
         if (q->hasElement(prefix + "hint-left-margin")) {
-            frame->leftMargin = q->elementSize(prefix + "hint-left-margin").height();
+            frame->leftMargin = q->elementSize(prefix + "hint-left-margin").width();
         } else {
             frame->leftMargin = frame->leftWidth;
         }
@@ -693,7 +693,7 @@ void FrameSvgPrivate::updateSizes()
         frame->rightWidth = q->elementSize(prefix + "right").width();
 
         if (q->hasElement(prefix + "hint-right-margin")) {
-            frame->rightMargin = q->elementSize(prefix + "hint-right-margin").height();
+            frame->rightMargin = q->elementSize(prefix + "hint-right-margin").width();
         } else {
             frame->rightMargin = frame->rightWidth;
         }
