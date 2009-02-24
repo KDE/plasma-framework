@@ -613,15 +613,23 @@ void Containment::setFormFactor(FormFactor formFactor)
     }
 
     //kDebug() << "switching FF to " << formFactor;
-    FormFactor was = d->formFactor;
     d->formFactor = formFactor;
 
     if (isContainment() &&
-        was != formFactor &&
-        (d->type == PanelContainment ||
-         d->type == CustomPanelContainment)) {
+        (d->type == PanelContainment || d->type == CustomPanelContainment)) {
         // we are a panel and we have chaged our orientation
         d->positionPanel(true);
+    }
+
+    if (d->toolBox) {
+        if (d->formFactor == Vertical) {
+            d->toolBox->setCorner(ToolBox::Bottom);
+            //defaults to horizontal
+        } else if (QApplication::layoutDirection() == Qt::RightToLeft) {
+            d->toolBox->setCorner(ToolBox::Left);
+        } else {
+            d->toolBox->setCorner(ToolBox::Right);
+        }
     }
 
     updateConstraints(Plasma::FormFactorConstraint);
@@ -807,11 +815,9 @@ void Containment::setScreen(int newScreen, int newDesktop)
     if (d->type == DesktopContainment || d->type >= CustomContainment) {
         // we want to listen to changes in work area if our screen changes
         if (d->screen < 0 && newScreen > -1) {
-            connect(KWindowSystem::self(), SIGNAL(workAreaChanged()),
-                    this, SLOT(positionToolBox()));
+            connect(KWindowSystem::self(), SIGNAL(workAreaChanged()), this, SLOT(positionToolBox()));
         } else if (newScreen < 0) {
-            disconnect(KWindowSystem::self(), SIGNAL(workAreaChanged()),
-                       this, SLOT(positionToolBox()));
+            disconnect(KWindowSystem::self(), SIGNAL(workAreaChanged()), this, SLOT(positionToolBox()));
         }
 
         if (newScreen > -1 && corona()) {
@@ -1649,17 +1655,6 @@ void ContainmentPrivate::containmentConstraintsEvent(Plasma::Constraints constra
     }
 
     if (constraints & Plasma::FormFactorConstraint) {
-        if (toolBox) {
-            if (q->formFactor() == Vertical) {
-                toolBox->setCorner(ToolBox::Bottom);
-                //defaults to horizontal
-            } else if (QApplication::layoutDirection() == Qt::RightToLeft) {
-                toolBox->setCorner(ToolBox::Left);
-            } else {
-                toolBox->setCorner(ToolBox::Right);
-            }
-        }
-
         foreach (Applet *applet, applets) {
             applet->updateConstraints(Plasma::FormFactorConstraint);
         }
@@ -1853,7 +1848,7 @@ void ContainmentPrivate::positionPanel(bool force)
     }
 
     //TODO: research how non-Horizontal, non-Vertical (e.g. Planar) panels behave here
-    bool horiz = q->formFactor() == Plasma::Horizontal;
+    bool horiz = formFactor == Plasma::Horizontal;
     qreal bottom = horiz ? 0 : VERTICAL_STACKING_OFFSET;
     qreal lastHeight = 0;
 
@@ -1901,12 +1896,11 @@ void ContainmentPrivate::positionPanel(bool force)
         newPos = QPointF(bottom + q->size().width(), -INTER_CONTAINMENT_MARGIN - q->size().height());
     }
 
-    ContainmentPrivate::s_positioning = true;
     if (p != newPos) {
+        ContainmentPrivate::s_positioning = true;
         q->setPos(newPos);
-        emit q->geometryChanged();
+        ContainmentPrivate::s_positioning = false;
     }
-    ContainmentPrivate::s_positioning = false;
 }
 
 } // Plasma namespace

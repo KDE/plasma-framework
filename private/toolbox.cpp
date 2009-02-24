@@ -446,7 +446,8 @@ void ToolBox::reposition()
         return;
     }
 
-    if (d->containment->containmentType() == Containment::PanelContainment) {
+    if (d->containment->containmentType() == Containment::PanelContainment ||
+        d->containment->containmentType() == Containment::CustomPanelContainment) {
         QRectF rect = boundingRect();
         if (d->containment->formFactor() == Vertical) {
             setCorner(ToolBox::Bottom);
@@ -464,7 +465,8 @@ void ToolBox::reposition()
                 setCorner(ToolBox::Right);
             }
         }
-        //kDebug() << pos();
+
+        //kDebug() << "got ourselves a panel containment, moving to" << pos();
     } else if (d->containment->corona()) {
         //kDebug() << "desktop";
 
