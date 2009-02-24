@@ -86,6 +86,12 @@ public:
         containment = 0;
     }
 
+    void containmentScreenChanged(int wasScreen, int newScreen, Plasma::Containment *containment)
+    {
+        lastScreen = newScreen;
+        lastDesktop = this->containment->desktop();
+    }
+
     void initGraphicsView()
     {
         q->setFrameShape(QFrame::NoFrame);
@@ -196,6 +202,7 @@ void View::setContainment(Plasma::Containment *containment)
     if (d->containment) {
         disconnect(d->containment, SIGNAL(destroyed(QObject*)), this, SLOT(containmentDestroyed()));
         disconnect(d->containment, SIGNAL(geometryChanged()), this, SLOT(updateSceneRect()));
+        disconnect(d->containment, SIGNAL(screenChanged(int, int, Plasma::Containment *)), this, SLOT(containmentScreenChanged(int, int, Plasma::Containment *)));
         d->containment->removeAssociatedWidget(this);
     }
 
@@ -247,6 +254,7 @@ void View::setContainment(Plasma::Containment *containment)
     d->updateSceneRect();
     connect(containment, SIGNAL(destroyed(QObject*)), this, SLOT(containmentDestroyed()));
     connect(containment, SIGNAL(geometryChanged()), this, SLOT(updateSceneRect()));
+    connect(containment, SIGNAL(screenChanged(int, int, Plasma::Containment *)), this, SLOT(containmentScreenChanged(int, int, Plasma::Containment *)));
 }
 
 Containment *View::containment() const
