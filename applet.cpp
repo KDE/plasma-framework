@@ -155,6 +155,7 @@ Applet::~Applet()
         d->extender->saveState();
     }
 
+    delete KConfigDialog::exists(d->configDialogId());
     delete d;
 }
 
