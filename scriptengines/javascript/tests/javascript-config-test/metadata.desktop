@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=javascript-config-test
+Name[cs]=Test nastavení JavaScript
 Name[es]=test-de-config-javascript
 Name[gu]=જાવાસ્ક્રિપ્ટ-રૂપરેખાંકન-ચકાસણી
 Name[is]=JavaScript stillingaprófun
@@ -11,6 +12,7 @@ Name[zh_CN]=JavaScript-配置测试
 Comment=Javascript config object test widget
 Comment[ca]=Eina de proves de configuració d'objectes de Javascript
 Comment[ca@valencia]=Eina de proves de configuració d'objectes de Javascript
+Comment[cs]=Widget pro testování Javascriptu
 Comment[da]=Widget til test af Javascript config-objekt
 Comment[de]=Javascript-Einrichtungsobjekt Testelement
 Comment[el]=Γραφικό συστατικό ελέγχου αντικειμένου ρυθμίσεων Javascript

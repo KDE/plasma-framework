@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=script-digital-clock
+Name[cs]=Skript pro digitální hodiny
 Name[es]=script-Reloj-digital
 Name[gu]=સ્ક્રિપ્ટ-ડિજીટલ-ઘડિયાળ
 Name[is]=Stafræn klukkuskrifta
@@ -17,6 +18,7 @@ Name[zh_CN]=脚本-数字钟
 Comment=Javascript digital clock
 Comment[ca]=Rellotge digital en Javascript
 Comment[ca@valencia]=Rellotge digital en Javascript
+Comment[cs]=Digitální hodiny v JavaScriptu
 Comment[da]=Digitalt ur i Javascript
 Comment[de]=Eine digitale Javascript-Uhr
 Comment[el]=Ψηφιακό ρολόι Javascript

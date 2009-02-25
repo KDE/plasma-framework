@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=script-nowplaying
+Name[cs]=Skript  "Právě hraje"
 Name[es]=script-ejecutando
 Name[is]=spilanúna-skrifta
 Name[nds]=Warrt-jüst-afspeelt-Skript
@@ -13,6 +14,7 @@ Name[zh_CN]=脚本-现在收听
 Comment=Javascript version current track playing
 Comment[ca]=Versió en Javascript de la peça actual en reproducció
 Comment[ca@valencia]=Versió en Javascript de la peça actual en reproducció
+Comment[cs]=JavaScriptová verze skriptu "Právě hraje"
 Comment[da]=Javascript-version af nuværende spor som afspilles
 Comment[de]=Javascript-Version der Musiktitel-Anzeige
 Comment[el]=Τρέχον κομμάτι αναπαραγωγής σε έκδοση Javascript
