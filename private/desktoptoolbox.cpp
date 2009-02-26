@@ -445,16 +445,23 @@ void DesktopToolBox::showToolBox()
         x -= maxWidth;
     }
 
-    y += 5;
-    // the rect the tools back should have
-    QRectF backerRect = QRectF(QPointF(x, startY), QSizeF(maxWidth + 10, y - startY));
+    //y += 5;
+
 
     if (!d->toolBacker) {
         d->toolBacker = new EmptyGraphicsItem(this);
         d->toolBacker->setZValue(zValue() + 1);
     }
 
+    qreal left, top, right, bottom;
+    d->toolBacker->getContentsMargins(left, top, right, bottom);
+
+    // the rect the tools back should have
+    QRectF backerRect = QRectF(QPointF(x, startY), QSizeF(maxWidth + left+right, y - startY + top + bottom));
+
+
     d->toolBacker->setIsToolbar(isToolbar());
+
 
     if (isToolbar()) {
         QPointF topRight;
@@ -466,9 +473,6 @@ void DesktopToolBox::showToolBox()
             topRight = boundingRect().topRight();
         }
 
-        qreal left, top, right, bottom;
-        d->toolBacker->getContentsMargins(left, top, right, bottom);
-        x -= left;
 
         backerRect.setSize(QSize(totalWidth+left+right, maxHeight+top+bottom));
         backerRect.moveTopRight(topRight);
@@ -493,8 +497,8 @@ void DesktopToolBox::showToolBox()
         // re-map our starting points back to our coordinate system
         backerRect = mapFromParent(backerRect).boundingRect();
     }
-    x = backerRect.x() + 5;
-    y = backerRect.y();
+    x = backerRect.x() + left;
+    y = backerRect.y() + top;
 
     // now move the items
     Plasma::Animator *animdriver = Plasma::Animator::self();
