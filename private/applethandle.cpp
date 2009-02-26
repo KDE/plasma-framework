@@ -474,7 +474,7 @@ void AppletHandle::mousePressEvent(QGraphicsSceneMouseEvent *event)
             } else {
                 m_resizeStaticPoint = mapToScene(m_applet->geometry().bottomRight());
             }
-            m_resizeGrabPoint = mapToScene(event->pos());                
+            m_resizeGrabPoint = mapToScene(event->pos());
             QPointF cursorRelativeToStatic = m_resizeGrabPoint - m_resizeStaticPoint;
 
             // rotate
@@ -487,9 +487,10 @@ void AppletHandle::mousePressEvent(QGraphicsSceneMouseEvent *event)
 
         //set mousePos to the position in the applet, in screencoords, so it becomes easy
         //to reposition the toplevel view to the correct position.
-        QPoint localpos = m_currentView->mapFromScene(m_applet->scenePos());
-        m_mousePos = event->screenPos() - m_currentView->mapToGlobal(localpos);
-
+        if (m_currentView && m_applet) {
+            QPoint localpos = m_currentView->mapFromScene(m_applet->scenePos());
+            m_mousePos = event->screenPos() - m_currentView->mapToGlobal(localpos);
+        }
         return;
     }
 
