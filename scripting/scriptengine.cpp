@@ -224,10 +224,10 @@ PackageStructure::Ptr defaultPackageStructure(ComponentType type)
 {
     switch (type) {
     case AppletComponent:
+    case DataEngineComponent:
         return PackageStructure::Ptr(new PlasmoidPackage());
         break;
     case RunnerComponent:
-    case DataEngineComponent:
     {
         PackageStructure::Ptr structure(new PackageStructure());
         structure->addFileDefinition("mainscript", "code/main", i18n("Main Script File"));
