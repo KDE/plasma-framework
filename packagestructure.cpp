@@ -175,7 +175,7 @@ PackageStructure::Ptr PackageStructure::load(const QString &packageFormat)
     // try to load from absolute file path
     KUrl url(packageFormat);
     if (url.isLocalFile()) {
-        KConfig config(KIO::NetAccess::mostLocalUrl(url, NULL).path(), KConfig::SimpleConfig);
+        KConfig config(KIO::NetAccess::mostLocalUrl(url, NULL).toLocalFile(), KConfig::SimpleConfig);
         structure->read(&config);
         PackageStructurePrivate::structures[structure->type()] = structure;
     } else {
