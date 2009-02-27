@@ -83,7 +83,7 @@ void PlasmoidPackage::createNewWidgetBrowser(QWidget *parent)
             foreach (const QString &package, entry->installedFiles()) {
                 if (!installPackage(package, defaultPackageRoot())) {
                     kDebug() << "FAIL! on install of" << package;
-                    KMessageBox::error(0, i18n("Installation of <b>%1</b> failed!", package),
+                    KMessageBox::error(0, i18n("Installation of <b>%1</b> failed.", package),
                                        i18n("Installation Failed"));
                 }
             }
