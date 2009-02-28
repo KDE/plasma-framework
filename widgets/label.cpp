@@ -90,6 +90,7 @@ Label::Label(QGraphicsWidget *parent)
 {
     QLabel *native = new QLabel;
     connect(native, SIGNAL(linkActivated(QString)), this, SIGNAL(linkActivated(QString)));
+    connect(native, SIGNAL(linkHovered(QString)), this, SIGNAL(linkHovered(QString)));
 
     connect(Theme::defaultTheme(), SIGNAL(themeChanged()), this, SLOT(setPalette()));
     connect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()), this, SLOT(setPalette()));

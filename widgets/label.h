@@ -120,6 +120,7 @@ public:
 
 Q_SIGNALS:
     void linkActivated(const QString &link);
+    void linkHovered(const QString &link);
 
 public Q_SLOTS:
     void dataUpdated(const QString &sourceName, const Plasma::DataEngine::Data &data);
