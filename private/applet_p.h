@@ -22,6 +22,8 @@
 #ifndef PLASMA_APPLET_P_H
 #define PLASMA_APPLET_P_H
 
+#include <QGraphicsProxyWidget>
+
 #include <kactioncollection.h>
 
 class KKeySequenceWidget;
@@ -116,6 +118,7 @@ public:
     KActionCollection actions;
     KAction *activationAction;
     KKeySequenceWidget *shortcutEditor; //TODO: subclass KConfigDialog and encapsulate this in there
+    QGraphicsProxyWidget *popupBusyWidgetProxy;
     int constraintsTimerId;
     int modificationsTimerId;
     bool hasConfigurationInterface : 1;

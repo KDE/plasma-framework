@@ -523,8 +523,6 @@ void AppletPrivate::createMessageOverlay()
 void AppletPrivate::destroyMessageOverlay()
 {
     //TODO: fade out? =)
-    QGraphicsWidget *w = messageOverlay;
-
     messageOverlay->destroy();
 
     messageOverlay = 0;
@@ -663,19 +661,53 @@ Extender *Applet::extender() const
 void Applet::setBusy(bool busy)
 {
     if (busy) {
+        PopupApplet *popup = qobject_cast<Plasma::PopupApplet*>(this);
+
         if (!d->busyWidget) {
-            d->busyWidget = new Plasma::BusyWidget(this);
+            if (popup && popup->widget()) {
+                d->popupBusyWidgetProxy = new QGraphicsProxyWidget(this);
+                d->popupBusyWidgetProxy->setWidget(popup->widget());
+                d->busyWidget = new Plasma::BusyWidget(d->popupBusyWidgetProxy);
+            } else if (popup && popup->graphicsWidget()) {
+                d->busyWidget = new Plasma::BusyWidget(popup->graphicsWidget());
+            } else {
+                d->busyWidget = new Plasma::BusyWidget(this);
+            }
         } else {
             d->busyWidget->show();
         }
-        int busySize = qMin(size().width(), size().height())/3;
-        QRect busyRect(0, 0, busySize, busySize);
-        busyRect.moveCenter(boundingRect().center().toPoint());
-        d->busyWidget->setGeometry(busyRect);
+
+        if (popup && popup->widget()) {
+            // popupapplet with widget()
+            int busySize = qMin(popup->widget()->size().width(),
+                                popup->widget()->size().height())/3;
+            QRect busyRect(0, 0, busySize, busySize);
+            busyRect.moveCenter(popup->widget()->contentsRect().center());
+            d->busyWidget->setGeometry(busyRect);
+        } else if (popup && popup->graphicsWidget()) {
+            // popupapplet with graphicsWidget()
+            int busySize = qMin(popup->graphicsWidget()->size().width(),
+                                popup->graphicsWidget()->size().height())/3;
+            QRect busyRect(0, 0, busySize, busySize);
+            busyRect.moveCenter(popup->graphicsWidget()->boundingRect().center().toPoint());
+            d->busyWidget->setGeometry(busyRect);
+        } else {
+            // normal applet
+            int busySize = qMin(size().width(), size().height())/3;
+            QRect busyRect(0, 0, busySize, busySize);
+            busyRect.moveCenter(boundingRect().center().toPoint());
+            d->busyWidget->setGeometry(busyRect);
+        }
+
     } else if (d->busyWidget) {
         d->busyWidget->hide();
         d->busyWidget->deleteLater();
         d->busyWidget = 0;
+
+        if (d->popupBusyWidgetProxy) {
+            delete d->popupBusyWidgetProxy;
+            d->popupBusyWidgetProxy = 0;
+        }
     }
 }
 
@@ -1995,6 +2027,7 @@ AppletPrivate::AppletPrivate(KService::Ptr service, int uniqueID, Applet *applet
           actions(applet),
           activationAction(0),
           shortcutEditor(0),
+          popupBusyWidgetProxy(0),
           constraintsTimerId(0),
           modificationsTimerId(-1),
           hasConfigurationInterface(false),
