@@ -264,6 +264,7 @@ Theme::Theme(QObject *parent)
 
     //FIXME: if/when kconfig gets change notification, this will be unecessary
     KDirWatch::self()->addFile(KStandardDirs::locateLocal("config", ThemePrivate::themeRcFile));
+    connect(KDirWatch::self(), SIGNAL(created(QString)), this, SLOT(settingsFileChanged(QString)));
     connect(KDirWatch::self(), SIGNAL(dirty(QString)), this, SLOT(settingsFileChanged(QString)));
 }
 
@@ -390,6 +391,7 @@ void ThemePrivate::setThemeName(const QString &tempThemeName, bool writeSettings
         } else {
             cg.writeEntry("name", themeName);
         }
+        cg.sync();
     }
 
     //check for expired cache
