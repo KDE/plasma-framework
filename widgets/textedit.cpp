@@ -46,6 +46,9 @@ TextEdit::TextEdit(QGraphicsWidget *parent)
     connect(native, SIGNAL(textChanged()), this, SIGNAL(textChanged()));
     setWidget(native);
     native->setAttribute(Qt::WA_NoSystemBackground);
+    native->setFrameShape( QFrame::NoFrame );
+    native->setTextBackgroundColor( Qt::transparent );
+    native->viewport()->setAutoFillBackground( false );
     d->style = Plasma::Style::sharedStyle();
     native->verticalScrollBar()->setStyle(d->style.data());
     native->horizontalScrollBar()->setStyle(d->style.data());
