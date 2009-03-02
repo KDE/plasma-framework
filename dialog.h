@@ -111,6 +111,7 @@ class PLASMA_EXPORT Dialog : public QWidget
         void mousePressEvent(QMouseEvent *event);
         void mouseReleaseEvent(QMouseEvent *event);
         void keyPressEvent(QKeyEvent *event);
+        void moveEvent(QMoveEvent *event);
 
         /**
          * Convenience method to know whether the point is in a control area (e.g. resize area)

@@ -30,10 +30,13 @@
 #include <QX11Info>
 #endif
 #include <QBitmap>
+#include <QTimer>
 #include <QtGui/QVBoxLayout>
 #include <QtGui/QGraphicsSceneEvent>
 #include <QtGui/QGraphicsView>
 #include <QtGui/QGraphicsWidget>
+#include <QApplication>
+#include <QDesktopWidget>
 
 #include <kdebug.h>
 #include <netwm.h>
@@ -60,7 +63,8 @@ public:
               view(0),
               widget(0),
               resizeCorners(Dialog::NoCorner),
-              resizeStartCorner(Dialog::NoCorner)
+              resizeStartCorner(Dialog::NoCorner),
+              moveTimer(0)
     {
     }
 
@@ -84,46 +88,69 @@ public:
     Dialog::ResizeCorners resizeCorners;
     QMap<Dialog::ResizeCorner, QRect> resizeAreas;
     Dialog::ResizeCorner resizeStartCorner;
+    QTimer *moveTimer;
 };
 
 void DialogPrivate::themeUpdated()
 {
-    const int topHeight = background->marginSize(Plasma::TopMargin);
-    const int leftWidth = background->marginSize(Plasma::LeftMargin);
-    const int rightWidth = background->marginSize(Plasma::RightMargin);
-    const int bottomHeight = background->marginSize(Plasma::BottomMargin);
+    int topHeight = background->marginSize(Plasma::TopMargin);
+    int leftWidth = background->marginSize(Plasma::LeftMargin);
+    int rightWidth = background->marginSize(Plasma::RightMargin);
+    int bottomHeight = background->marginSize(Plasma::BottomMargin);
+
+    FrameSvg::EnabledBorders borders = FrameSvg::AllBorders;
 
     //TODO: correct handling of the situation when having vertical panels.
     Extender *extender = qobject_cast<Extender*>(widget);
     if (extender) {
         switch (extender->d->applet->location()) {
         case BottomEdge:
-            background->setEnabledBorders(FrameSvg::LeftBorder | FrameSvg::TopBorder
-                                                               | FrameSvg::RightBorder);
-            q->setContentsMargins(0, topHeight, 0, 0);
+            borders ^= FrameSvg::BottomBorder;
+            leftWidth = 0;
+            rightWidth = 0;
+            bottomHeight = 0;
             break;
         case TopEdge:
-            background->setEnabledBorders(FrameSvg::LeftBorder | FrameSvg::BottomBorder
-                                                               | FrameSvg::RightBorder);
-            q->setContentsMargins(0, 0, 0, bottomHeight);
+            borders ^= FrameSvg::TopBorder;
+            topHeight = 0;
+            leftWidth = 0;
+            rightWidth = 0;
             break;
         case LeftEdge:
-            background->setEnabledBorders(FrameSvg::TopBorder | FrameSvg::BottomBorder
-                                                              | FrameSvg::RightBorder);
-            q->setContentsMargins(0, topHeight, 0, bottomHeight);
+            borders ^= FrameSvg::LeftBorder;
+            leftWidth = 0;
+            rightWidth = 0;
             break;
         case RightEdge:
-            background->setEnabledBorders(FrameSvg::TopBorder | FrameSvg::BottomBorder
-                                                              | FrameSvg::LeftBorder);
-            q->setContentsMargins(0, topHeight, 0, bottomHeight);
+            borders ^= FrameSvg::RightBorder;
+            leftWidth = 0;
+            rightWidth = 0;
             break;
         default:
-            background->setEnabledBorders(FrameSvg::AllBorders);
-            q->setContentsMargins(leftWidth, topHeight, rightWidth, bottomHeight);
+            break;
         }
     } else {
-        q->setContentsMargins(leftWidth, topHeight, rightWidth, bottomHeight);
+        QRect avail = QApplication::desktop()->availableGeometry();
+        QRect dialogGeom = q->geometry();
+
+        if (dialogGeom.left() <= avail.left()) {
+            borders ^= FrameSvg::LeftBorder;
+        }
+        if (dialogGeom.top() <= avail.top()) {
+            borders ^= FrameSvg::TopBorder;
+        }
+        //FIXME: that 2 pixels offset has probably something to do with kwin
+        if (dialogGeom.right() + 2 > avail.right()) {
+            borders ^= FrameSvg::RightBorder;
+        }
+        if (dialogGeom.bottom() + 2 > avail.bottom()) {
+            borders ^= FrameSvg::BottomBorder;
+        }
     }
+
+    background->setEnabledBorders(borders);
+
+    q->setContentsMargins(leftWidth, topHeight, rightWidth, bottomHeight);
 
     q->update();
 }
@@ -429,7 +456,18 @@ void Dialog::showEvent(QShowEvent * event)
         d->widget->setFocus();
     }
 
+    d->themeUpdated();
     emit dialogVisible(true);
+}
+
+void Dialog::moveEvent(QMoveEvent *event)
+{
+    if (!d->moveTimer) {
+        d->moveTimer = new QTimer(this);
+        d->moveTimer->setSingleShot(true);
+        connect(d->moveTimer, SIGNAL(timeout()), this, SLOT(themeUpdated()));
+    }
+    d->moveTimer->start(200);
 }
 
 void Dialog::setResizeHandleCorners(ResizeCorners corners)
