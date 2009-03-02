@@ -175,8 +175,7 @@ DesktopToolBox::DesktopToolBox(Containment *parent)
 {
     d->containment = parent;
     setZValue(10000000);
-    setFlag(ItemClipsChildrenToShape, false);
-    setFlag(ItemIgnoresTransformations, true);
+
     setIsMovable(true);
     assignColors();
 
@@ -359,6 +358,8 @@ void DesktopToolBox::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 
 void DesktopToolBox::showToolBox()
 {
+    setFlag(ItemIgnoresTransformations, isToolbar());
+
     if (showing() && !isToolbar()) {
         return;
     }
