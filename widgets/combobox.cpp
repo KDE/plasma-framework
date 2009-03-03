@@ -94,12 +94,6 @@ void ComboBoxPrivate::syncBorders()
     syncActiveRect();
 
     KComboBox *native = q->nativeWidget();
-    QColor color = Theme::defaultTheme()->color(Theme::TextColor);
-    QPalette p = native->palette();
-
-    p.setColor(QPalette::Normal, QPalette::Text, color);
-    p.setColor(QPalette::Inactive, QPalette::Text, color);
-    native->setPalette(p);
     native->setFont(Theme::defaultTheme()->font(Theme::DefaultFont));
 }
 
