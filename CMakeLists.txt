@@ -116,6 +116,7 @@ set(plasma_LIB_SRCS
     widgets/spinbox.cpp
     widgets/toolbutton.cpp
     widgets/busywidget.cpp
+    widgets/scrollwidget.cpp
     widgets/svgwidget.cpp
     widgets/tabbar.cpp
     widgets/treeview.cpp
@@ -251,6 +252,7 @@ install(FILES
     widgets/spinbox.h
     widgets/busywidget.h
     widgets/svgwidget.h
+    widgets/scrollwidget.h
     widgets/tabbar.h
     widgets/treeview.h
     widgets/textedit.h
