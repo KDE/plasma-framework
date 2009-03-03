@@ -299,6 +299,12 @@ QString RunnerContext::mimeType() const
     return d->mimeType;
 }
 
+bool RunnerContext::isValid()
+{
+    // if our qptr is null, we aren't useful anymore
+    return d->q;
+}
+
 bool RunnerContext::addMatches(const QString &term, const QList<QueryMatch> &matches)
 {
     Q_UNUSED(term)

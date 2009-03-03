@@ -102,6 +102,25 @@ class PLASMA_EXPORT RunnerContext : public QObject
          */
         QString mimeType() const;
 
+        /**
+         * @returns true if this context is no longer valid and therefore
+         * matching using it should abort. Most useful as an optimization technique
+         * inside of AbstractRunner subclasses in the match method, e.g.:
+         *
+         * while (.. a possibly large iteration) {
+         *     if (!context.isValid()) {
+         *         return;
+         *     }
+         *
+         *     ... some processing ...
+         * }
+         *
+         * While not required to be used within runners, it provies a nice way
+         * to avoid unecessary processing in runners that may run for an extended
+         * period (as measured in 10s of ms) and therefore improve the user experience.
+         */
+        bool isValid();
+
          /**
          * Appends lists of matches to the list of matches.
          *
