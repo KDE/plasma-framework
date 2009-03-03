@@ -107,6 +107,9 @@ public:
 
     int priority() const;
     Plasma::AbstractRunner* runner() const;
+    void setStale();
+    bool isStale() const;
+
 
     QTimer* delayTimer() const;
     void setDelayTimer(QTimer *timer);
@@ -118,6 +121,7 @@ private:
     Plasma::RunnerContext *m_context;
     Plasma::AbstractRunner *m_runner;
     QTimer *m_timer;
+    bool m_stale;
 };
 
 }
