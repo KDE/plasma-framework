@@ -287,8 +287,9 @@ public:
         FindMatchesJob *runJob = static_cast<FindMatchesJob*>(job);
         if (deferredRun.isEnabled() && runJob->runner() == deferredRun.runner()) {
             //kDebug() << "job actually done, running now **************";
-            deferredRun.run(context);
-            deferredRun = QueryMatch(0);
+            QueryMatch tmpRun = deferredRun;
+            deferredRun = QueryMatch(0);	  
+            tmpRun.run(context);
         }
         searchJobs.removeAll(runJob);
         delete runJob;
@@ -382,10 +383,12 @@ void RunnerManager::run(const QueryMatch &match)
         }
     }
 
-    match.run(d->context);
-
     if (d->deferredRun.isValid()) {
         d->deferredRun = QueryMatch(0);
+
+    match.run(d->context);
+
+
     }
 }
 
@@ -507,8 +510,9 @@ void RunnerManager::reset()
 
     if (d->deferredRun.isEnabled()) {
         //kDebug() << "job actually done, running now **************";
-        d->deferredRun.run(d->context);
+        QueryMatch tmpRun = d->deferredRun;
         d->deferredRun = QueryMatch(0);
+        tmpRun.run(d->context);
     }
 
     d->context.reset();
