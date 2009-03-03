@@ -118,7 +118,7 @@ public:
     KActionCollection actions;
     KAction *activationAction;
     KKeySequenceWidget *shortcutEditor; //TODO: subclass KConfigDialog and encapsulate this in there
-    QGraphicsProxyWidget *popupBusyWidgetProxy;
+    QGraphicsProxyWidget *messageOverlayProxy;
     int constraintsTimerId;
     int modificationsTimerId;
     bool hasConfigurationInterface : 1;

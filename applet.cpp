@@ -499,25 +499,44 @@ void AppletPrivate::cleanUpAndDelete()
 
 void AppletPrivate::createMessageOverlay()
 {
-    if (!messageOverlay) {
-        messageOverlay = new AppletOverlayWidget(q);
-    } else {
+    if (messageOverlay) {
         qDeleteAll(messageOverlay->children());
         messageOverlay->setLayout(0);
     }
 
-    messageOverlay->resize(q->contentsRect().size());
-    messageOverlay->setPos(q->contentsRect().topLeft());
+    PopupApplet *popup = qobject_cast<Plasma::PopupApplet*>(q);
 
-    // raise the overlay above all the other children!
-    int zValue = 100;
-    foreach (QGraphicsItem *child, q->QGraphicsItem::children()) {
-        if (child->zValue() > zValue) {
-            zValue = child->zValue() + 1;
+    if (!messageOverlay) {
+        if (popup && popup->widget()) {
+            messageOverlayProxy = new QGraphicsProxyWidget(q);
+            messageOverlayProxy->setWidget(popup->widget());
+            messageOverlay = new AppletOverlayWidget(messageOverlayProxy);
+        } else if (popup && popup->graphicsWidget()) {
+            messageOverlay = new AppletOverlayWidget(popup->graphicsWidget());
+        } else {
+            messageOverlay = new AppletOverlayWidget(q);
         }
     }
 
-    messageOverlay->setZValue(zValue);
+    if (popup && popup->widget()) {
+        // popupapplet with widget()
+        messageOverlay->setGeometry(popup->widget()->contentsRect());
+    } else if (popup && popup->graphicsWidget()) {
+        // popupapplet with graphicsWidget()
+        messageOverlay->setGeometry(popup->graphicsWidget()->boundingRect());
+    } else {
+        // normal applet
+        messageOverlay->setGeometry(q->contentsRect());
+
+        // raise the overlay above all the other children!
+        int zValue = 100;
+        foreach (QGraphicsItem *child, q->QGraphicsItem::children()) {
+            if (child->zValue() > zValue) {
+                zValue = child->zValue() + 1;
+            }
+        }
+        messageOverlay->setZValue(zValue);
+    }
 }
 
 void AppletPrivate::destroyMessageOverlay()
@@ -665,9 +684,9 @@ void Applet::setBusy(bool busy)
 
         if (!d->busyWidget) {
             if (popup && popup->widget()) {
-                d->popupBusyWidgetProxy = new QGraphicsProxyWidget(this);
-                d->popupBusyWidgetProxy->setWidget(popup->widget());
-                d->busyWidget = new Plasma::BusyWidget(d->popupBusyWidgetProxy);
+                d->messageOverlayProxy = new QGraphicsProxyWidget(this);
+                d->messageOverlayProxy->setWidget(popup->widget());
+                d->busyWidget = new Plasma::BusyWidget(d->messageOverlayProxy);
             } else if (popup && popup->graphicsWidget()) {
                 d->busyWidget = new Plasma::BusyWidget(popup->graphicsWidget());
             } else {
@@ -704,9 +723,9 @@ void Applet::setBusy(bool busy)
         d->busyWidget->deleteLater();
         d->busyWidget = 0;
 
-        if (d->popupBusyWidgetProxy) {
-            delete d->popupBusyWidgetProxy;
-            d->popupBusyWidgetProxy = 0;
+        if (d->messageOverlayProxy) {
+            delete d->messageOverlayProxy;
+            d->messageOverlayProxy = 0;
         }
     }
 }
@@ -934,28 +953,10 @@ void Applet::setConfigurationRequired(bool needsConfig, const QString &reason)
         //configLayout->setAlignment(explanation, Qt::AlignBottom | Qt::AlignCenter);
     }
 
-    //popupapplets in panels just show an icon, otherwise the button is too large
-    Plasma::FormFactor f = formFactor();
-    if (f == Plasma::Horizontal || f == Plasma::Vertical) {
-        IconWidget *configWidget = new IconWidget(d->messageOverlay);
-        configWidget->setSvg("widgets/configuration-icons", "configure");
-        configWidget->setDrawBackground(true);
-        connect(configWidget, SIGNAL(clicked()), this, SLOT(showConfigurationInterface()));
-        configLayout->addItem(configWidget, row, 1);
-        // raise the overlay above all the other children!
-        int zValue = 100;
-        foreach (QGraphicsItem *child, QGraphicsItem::children()) {
-            if (child->zValue() > zValue) {
-                zValue = child->zValue() + 1;
-            }
-        }
-        configWidget->setZValue(zValue);
-    } else {
-        PushButton *configWidget = new PushButton(d->messageOverlay);
-        configWidget->setText(i18n("Configure..."));
-        connect(configWidget, SIGNAL(clicked()), this, SLOT(showConfigurationInterface()));
-        configLayout->addItem(configWidget, row, 1);
-    }
+    PushButton *configWidget = new PushButton(d->messageOverlay);
+    configWidget->setText(i18n("Configure..."));
+    connect(configWidget, SIGNAL(clicked()), this, SLOT(showConfigurationInterface()));
+    configLayout->addItem(configWidget, row, 1);
 
     //configLayout->setAlignment(configWidget, Qt::AlignTop | Qt::AlignCenter);
     //configLayout->addStretch();
@@ -2027,7 +2028,7 @@ AppletPrivate::AppletPrivate(KService::Ptr service, int uniqueID, Applet *applet
           actions(applet),
           activationAction(0),
           shortcutEditor(0),
-          popupBusyWidgetProxy(0),
+          messageOverlayProxy(0),
           constraintsTimerId(0),
           modificationsTimerId(-1),
           hasConfigurationInterface(false),
@@ -2353,8 +2354,13 @@ void AppletOverlayWidget::paint(QPainter *painter,
 
     Applet *applet = qobject_cast<Applet *>(parentWidget());
 
+
     QPainterPath backgroundShape;
-    if (applet->backgroundHints() & Applet::StandardBackground) {
+    if (!applet || applet->backgroundHints() & Applet::StandardBackground) {
+        //FIXME: a resize here is nasty, but perhaps still better than an eventfilter just for that..
+        if (parentWidget()->size() != size()) {
+            resize(parentWidget()->size());
+        }
         backgroundShape = PaintUtils::roundedRectangle(parentWidget()->contentsRect(), 5);
     } else {
         backgroundShape = parentItem()->shape();
