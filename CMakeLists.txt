@@ -119,6 +119,7 @@ set(plasma_LIB_SRCS
     widgets/scrollwidget.cpp
     widgets/svgwidget.cpp
     widgets/tabbar.cpp
+    widgets/textbrowser.cpp
     widgets/treeview.cpp
     widgets/textedit.cpp
     widgets/webview.cpp
@@ -254,6 +255,7 @@ install(FILES
     widgets/svgwidget.h
     widgets/scrollwidget.h
     widgets/tabbar.h
+    widgets/textbrowser.h
     widgets/treeview.h
     widgets/textedit.h
     widgets/webview.h
