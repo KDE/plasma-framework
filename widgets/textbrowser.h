@@ -36,6 +36,8 @@ class TextBrowserPrivate;
  * @class TextBrowser plasma/widgets/TextBrowser.h <Plasma/Widgets/TextBrowser>
  *
  * @short Provides a plasma-themed KTextBrowser.
+ *
+ * @since 4.3
  */
 class PLASMA_EXPORT TextBrowser : public QGraphicsProxyWidget
 {

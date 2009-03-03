@@ -36,6 +36,8 @@ class ScrollWidgetPrivate;
  * @short A container of widgets that can have scrollbars
  *
  * A container of widgets that can have horizontal and vertical scrollbars if the content is bigger than the widget itself
+ *
+ * @since 4.3
  */
 class PLASMA_EXPORT ScrollWidget : public QGraphicsWidget
 {
