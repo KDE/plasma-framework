@@ -138,19 +138,23 @@ public:
 
     int priority() const;
     Plasma::AbstractRunner *runner() const;
+    void setStale();
+    bool isStale() const;
 
 protected:
     void run();
 private:
     Plasma::RunnerContext *m_context;
     Plasma::AbstractRunner *m_runner;
+    bool m_stale;
 };
 
 FindMatchesJob::FindMatchesJob(Plasma::AbstractRunner *runner,
                                Plasma::RunnerContext *context, QObject *parent)
     : ThreadWeaver::Job(parent),
       m_context(context),
-      m_runner(runner)
+      m_runner(runner),
+      m_stale(false)
 {
     if (runner->speed() == Plasma::AbstractRunner::SlowSpeed) {
         assignQueuePolicy(&RunnerRestrictionPolicy::instance());
@@ -172,6 +176,16 @@ int FindMatchesJob::priority() const
 Plasma::AbstractRunner *FindMatchesJob::runner() const
 {
     return m_runner;
+}
+
+void FindMatchesJob::setStale() 
+{
+    m_stale = true;
+}
+
+bool FindMatchesJob::isStale() const
+{
+    return m_stale;
 }
 
 /*****************************************************
@@ -376,8 +390,8 @@ void RunnerManager::run(const QueryMatch &match)
     AbstractRunner *runner = match.runner();
 
     foreach (FindMatchesJob *job, d->searchJobs) {
-        if (job->runner() == runner && !job->isFinished()) {
-            //kDebug() << "!!!!!!!!!!!!!!!!!!! uh oh!";
+        if (job->runner() == runner && !job->isFinished() && !job->isStale()) {
+            kDebug() << "!!!!!!!!!!!!!!!!!!! uh oh!";
             d->deferredRun = match;
             return;
         }
@@ -385,11 +399,12 @@ void RunnerManager::run(const QueryMatch &match)
 
     if (d->deferredRun.isValid()) {
         d->deferredRun = QueryMatch(0);
-
+    }
+    
     match.run(d->context);
 
 
-    }
+    
 }
 
 QList<QAction*> RunnerManager::actionsForMatch(const QueryMatch &match)
@@ -506,6 +521,11 @@ void RunnerManager::reset()
         d->searchJobs.clear();
     } else {
         Weaver::instance()->dequeue();
+        // Since we cannot safely delete the jobs, mark them as stale 
+        // TODO: delete them eventually?
+        foreach (FindMatchesJob *job, d->searchJobs) {
+	    job->setStale();
+        }
     }
 
     if (d->deferredRun.isEnabled()) {
