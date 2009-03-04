@@ -269,6 +269,7 @@ class PLASMA_EXPORT AbstractRunner : public QObject
         void setPriority(Priority newPriority);
 
         /**
+         * @deprecated
          * A blocking method to do queries of installed Services which can provide
          * a measure of safety for runners running their own threads. This should
          * be used instead of calling KServiceTypeTrader::query(..) directly.
