@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=script-mediaplayer
 Name[nds]=Afspeler-Skript
+Name[nl]=script-mediaspeler
 Name[ro]=script-lectormultimedia
 Name[sv]=script-mediaspelare
 Name[tr]=betik-çokluortam oynatıcı
@@ -12,6 +13,7 @@ Comment[ga]=Seinnteoir meán JavaScript
 Comment[gl]=Reprodutor multimedia escrito en Javascript
 Comment[nb]=Javascript mediaspiller
 Comment[nds]=JavaScript-Afspeler
+Comment[nl]=Javascript-mediaspeler
 Comment[pt]=Leitor multimédia em JavaScript
 Comment[pt_BR]=Leitor de mídias em JavaScript
 Comment[ro]=Lector multimedia Javascript
