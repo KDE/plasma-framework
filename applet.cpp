@@ -1669,6 +1669,12 @@ void Applet::createConfigurationInterface(KConfigDialog *parent)
     // do not put anything here ...
 }
 
+bool Applet::isAllowed(const QString &constraint)
+{
+    KConfigGroup constraintGroup(KGlobal::config(), "Constraints");
+    return constraintGroup.readEntry(constraint, true);
+}
+
 KPluginInfo::List Applet::listAppletInfo(const QString &category,
                                          const QString &parentApp)
 {
@@ -1697,6 +1703,28 @@ KPluginInfo::List Applet::listAppletInfo(const QString &category,
     }
 
     KService::List offers = KServiceTypeTrader::self()->query("Plasma/Applet", constraint);
+
+    //now we have to do some manual filtering because the constraint can't handle everything
+    KConfigGroup constraintGroup(KGlobal::config(), "Constraints");
+    foreach (const QString &key, constraintGroup.keyList()) {
+        //kDebug() << "security constraint" << key;
+        if (constraintGroup.readEntry(key, true)) {
+            continue;
+        }
+        //ugh. a qlist of ksharedptr<kservice>
+        QMutableListIterator<KService::Ptr> it(offers);
+        while (it.hasNext()) {
+            KService::Ptr p = it.next();
+            QString prop = QString("X-Plasma-Requires-").append(key);
+            QVariant req = p->property(prop, QVariant::Bool);
+            //FIXME before release, switch the if statement:
+            //if (!req.isValid() || req.toBool()) {
+            if (req.isValid() && req.toBool()) {
+                it.remove();
+            }
+        }
+    }
+
     //kDebug() << "Applet::listAppletInfo constraint was '" << constraint
     //         << "' which got us " << offers.count() << " matches";
     return KPluginInfo::fromServices(offers);

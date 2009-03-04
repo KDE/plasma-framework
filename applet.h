@@ -592,6 +592,12 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          */
         virtual void createConfigurationInterface(KConfigDialog *parent);
 
+        /**
+         * returns true if the applet is allowed to perform functions covered by the given constraint
+         * eg. isAllowed("FileDialog") returns true iff applets are allowed to show filedialogs.
+         */
+        bool isAllowed(const QString &constraint);
+
     Q_SIGNALS:
         /**
          * This signal indicates that an application launch, window
