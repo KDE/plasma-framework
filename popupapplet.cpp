@@ -251,9 +251,6 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
                 q->resize(prefSize);
                 emit q->appletTransformedItself();
             }
-
-            //FIXME: this will be automatically propagated by the qgraphicslayout in the future
-            lay->setPreferredSize(prefSize);
         //Applet on popup
         } else {
             kDebug() << "about to switch to a popup";
@@ -296,6 +293,7 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
                     if (corona) {
                         corona->addOffscreenWidget(gWidget);
                         dialog->setGraphicsWidget(gWidget);
+                        gWidget->resize(gWidget->preferredSize());
                     }
                 } else if (qWidget) {
                     QVBoxLayout *l_layout = new QVBoxLayout(dialog);

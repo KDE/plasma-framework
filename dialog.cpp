@@ -442,10 +442,7 @@ void Dialog::showEvent(QShowEvent * event)
 
     //check if the widget size is still synced with the view
     if (d->widget && d->view && d->widget->size().toSize() != d->view->size()) {
-        d->widget->resize(d->view->size());
-
-        d->view->setSceneRect(d->widget->mapToScene(d->widget->boundingRect()).boundingRect());
-        d->view->centerOn(d->widget);
+        d->adjustView();
     }
 
     if (d->view) {
