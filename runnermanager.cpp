@@ -144,7 +144,7 @@ public:
 protected:
     void run();
 private:
-    Plasma::RunnerContext *m_context;
+    Plasma::RunnerContext m_context;
     Plasma::AbstractRunner *m_runner;
     bool m_stale;
 };
@@ -152,7 +152,7 @@ private:
 FindMatchesJob::FindMatchesJob(Plasma::AbstractRunner *runner,
                                Plasma::RunnerContext *context, QObject *parent)
     : ThreadWeaver::Job(parent),
-      m_context(context),
+      m_context(*context, 0),
       m_runner(runner),
       m_stale(false)
 {
@@ -165,7 +165,7 @@ void FindMatchesJob::run()
 {
 //     kDebug() << "Running match for " << m_runner->objectName()
 //              << " in Thread " << thread()->id() << endl;
-    m_runner->performMatch(*m_context);
+    m_runner->performMatch(m_context);
 }
 
 int FindMatchesJob::priority() const
@@ -501,8 +501,8 @@ bool RunnerManager::execQuery(const QString &term, const QString &runnerName)
         //kDebug() << "ignored!";
         return false;
     }
-
-    r->performMatch(d->context);
+    RunnerContext localContext(d->context, 0);
+    r->performMatch(localContext);
     //kDebug() << "succeeded with" << d->context.matches().count() << "results";
     emit matchesChanged(d->context.matches());
     return true;
