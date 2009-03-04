@@ -132,14 +132,14 @@ void AbstractRunner::reloadConfiguration()
 {
 }
 
-void AbstractRunner::performMatch(Plasma::RunnerContext &globalContext)
+void AbstractRunner::performMatch(Plasma::RunnerContext &localContext)
 {
     static const int reasonableRunTime = 1500;
     static const int fastEnoughTime = 250;
 
     d->runtime.restart();
-//TODO :this is a copy ctor
-    RunnerContext localContext(globalContext, 0);
+
+    //The local copy is already obtained in the job
     match(localContext);
     // automatically rate limit runners that become slooow
     const int runtime = d->runtime.elapsed();
