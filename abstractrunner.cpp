@@ -253,7 +253,6 @@ void AbstractRunner::setIgnoredTypes(RunnerContext::Types types)
 
 KService::List AbstractRunner::serviceQuery(const QString &serviceType, const QString &constraint) const
 {
-    QMutexLocker lock(s_bigLock);
     return KServiceTypeTrader::self()->query(serviceType, constraint);
 }
 
