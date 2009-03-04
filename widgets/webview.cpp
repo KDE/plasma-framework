@@ -23,6 +23,7 @@
 #include <QtGui/QGraphicsSceneWheelEvent>
 #include <QtGui/QKeyEvent>
 #include <QtGui/QStyleOptionGraphicsItem>
+#include <fixx11h.h>
 #include <QtWebKit/QWebFrame>
 #include <QtWebKit/QWebPage>
 
