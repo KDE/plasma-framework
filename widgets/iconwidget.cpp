@@ -85,7 +85,11 @@ IconWidgetPrivate::~IconWidgetPrivate()
 void IconWidgetPrivate::readColors()
 {
     textColor = Plasma::Theme::defaultTheme()->color(Theme::TextColor);
-    shadowColor = Plasma::Theme::defaultTheme()->color(Theme::BackgroundColor);
+    if (qGray(textColor.rgb()) > 192) {
+        shadowColor = Qt::black;
+    } else {
+        shadowColor = Qt::white;
+    }
 }
 
 void IconWidgetPrivate::colorConfigChanged()
