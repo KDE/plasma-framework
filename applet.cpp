@@ -908,19 +908,19 @@ void Applet::setConfigurationRequired(bool needsConfig, const QString &reason)
     configLayout->setContentsMargins(0, 0, 0, 0);
 
   //  configLayout->addStretch();
-    /*configLayout->setColumnStretchFactor(0, 10);
-    configLayout->setColumnStretchFactor(2, 10);
-    configLayout->setRowStretchFactor(0, 10);
-    configLayout->setRowStretchFactor(3, 10);*/
+    configLayout->setColumnStretchFactor(0, 5);
+    configLayout->setColumnStretchFactor(2, 5);
+    configLayout->setRowStretchFactor(0, 5);
+    configLayout->setRowStretchFactor(3, 5);
 
     int row = 1;
     if (!reason.isEmpty()) {
         Label *explanation = new Label(d->messageOverlay);
         explanation->setText(reason);
         configLayout->addItem(explanation, row, 1);
-        //configLayout->setColumnStretchFactor(1, 10);
+        configLayout->setColumnStretchFactor(1, 5);
         ++row;
-        //configLayout->setAlignment(explanation, Qt::AlignBottom | Qt::AlignCenter);
+        configLayout->setAlignment(explanation, Qt::AlignBottom | Qt::AlignCenter);
     }
 
     PushButton *configWidget = new PushButton(d->messageOverlay);
