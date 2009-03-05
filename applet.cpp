@@ -542,6 +542,9 @@ void AppletPrivate::createMessageOverlay()
 void AppletPrivate::destroyMessageOverlay()
 {
     //TODO: fade out? =)
+    if (!messageOverlay) {
+        return;
+    }
     messageOverlay->destroy();
 
     messageOverlay = 0;
@@ -680,53 +683,17 @@ Extender *Applet::extender() const
 void Applet::setBusy(bool busy)
 {
     if (busy) {
-        PopupApplet *popup = qobject_cast<Plasma::PopupApplet*>(this);
+        d->createMessageOverlay();
+        d->messageOverlay->opacity = 0.4;
 
-        if (!d->busyWidget) {
-            if (popup && popup->widget()) {
-                d->messageOverlayProxy = new QGraphicsProxyWidget(this);
-                d->messageOverlayProxy->setWidget(popup->widget());
-                d->busyWidget = new Plasma::BusyWidget(d->messageOverlayProxy);
-            } else if (popup && popup->graphicsWidget()) {
-                d->busyWidget = new Plasma::BusyWidget(popup->graphicsWidget());
-            } else {
-                d->busyWidget = new Plasma::BusyWidget(this);
-            }
-        } else {
-            d->busyWidget->show();
-        }
+        QGraphicsLinearLayout *mainLayout = new QGraphicsLinearLayout(d->messageOverlay);
+        d->busyWidget = new Plasma::BusyWidget(d->messageOverlay);
 
-        if (popup && popup->widget()) {
-            // popupapplet with widget()
-            int busySize = qMin(popup->widget()->size().width(),
-                                popup->widget()->size().height())/3;
-            QRect busyRect(0, 0, busySize, busySize);
-            busyRect.moveCenter(popup->widget()->contentsRect().center());
-            d->busyWidget->setGeometry(busyRect);
-        } else if (popup && popup->graphicsWidget()) {
-            // popupapplet with graphicsWidget()
-            int busySize = qMin(popup->graphicsWidget()->size().width(),
-                                popup->graphicsWidget()->size().height())/3;
-            QRect busyRect(0, 0, busySize, busySize);
-            busyRect.moveCenter(popup->graphicsWidget()->boundingRect().center().toPoint());
-            d->busyWidget->setGeometry(busyRect);
-        } else {
-            // normal applet
-            int busySize = qMin(size().width(), size().height())/3;
-            QRect busyRect(0, 0, busySize, busySize);
-            busyRect.moveCenter(boundingRect().center().toPoint());
-            d->busyWidget->setGeometry(busyRect);
-        }
-
-    } else if (d->busyWidget) {
-        d->busyWidget->hide();
-        d->busyWidget->deleteLater();
-        d->busyWidget = 0;
-
-        if (d->messageOverlayProxy) {
-            delete d->messageOverlayProxy;
-            d->messageOverlayProxy = 0;
-        }
+        mainLayout->addStretch();
+        mainLayout->addItem(d->busyWidget);
+        mainLayout->addStretch();
+    } else {
+        d->destroyMessageOverlay();
     }
 }
 
@@ -933,22 +900,23 @@ void Applet::setConfigurationRequired(bool needsConfig, const QString &reason)
     }
 
     d->createMessageOverlay();
+    d->messageOverlay->opacity = 0.4;
 
     QGraphicsGridLayout *configLayout = new QGraphicsGridLayout(d->messageOverlay);
     configLayout->setContentsMargins(0, 0, 0, 0);
 
   //  configLayout->addStretch();
-    configLayout->setColumnStretchFactor(0, 10);
+    /*configLayout->setColumnStretchFactor(0, 10);
     configLayout->setColumnStretchFactor(2, 10);
     configLayout->setRowStretchFactor(0, 10);
-    configLayout->setRowStretchFactor(3, 10);
+    configLayout->setRowStretchFactor(3, 10);*/
 
     int row = 1;
     if (!reason.isEmpty()) {
         Label *explanation = new Label(d->messageOverlay);
         explanation->setText(reason);
         configLayout->addItem(explanation, row, 1);
-        configLayout->setColumnStretchFactor(1, 10);
+        //configLayout->setColumnStretchFactor(1, 10);
         ++row;
         //configLayout->setAlignment(explanation, Qt::AlignBottom | Qt::AlignCenter);
     }
@@ -972,6 +940,7 @@ void Applet::showMessage(const QIcon &icon, const QString &message, const Messag
     }
 
     d->createMessageOverlay();
+    d->messageOverlay->opacity = 0.8;
     QGraphicsLinearLayout *mainLayout = new QGraphicsLinearLayout(d->messageOverlay);
     mainLayout->setOrientation(Qt::Vertical);
     mainLayout->addStretch();
@@ -2351,7 +2320,8 @@ int AppletPrivate::s_minZValue = 0;
 PackageStructure::Ptr AppletPrivate::packageStructure(0);
 
 AppletOverlayWidget::AppletOverlayWidget(QGraphicsWidget *parent)
-    : QGraphicsWidget(parent)
+    : QGraphicsWidget(parent),
+      opacity(0.4)
 {
     resize(parent->size());
     Animator::self()->animateItem(this, Animator::AppearAnimation);
@@ -2378,7 +2348,7 @@ void AppletOverlayWidget::paint(QPainter *painter,
     Q_UNUSED(option)
     Q_UNUSED(widget)
     QColor wash = Plasma::Theme::defaultTheme()->color(Theme::BackgroundColor);
-    wash.setAlphaF(.7);
+    wash.setAlphaF(opacity);
 
     Applet *applet = qobject_cast<Applet *>(parentWidget());
 

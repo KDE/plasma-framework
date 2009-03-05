@@ -104,10 +104,13 @@ void BusyWidget::paint(QPainter *painter,
 
     int intRotation = int(d->rotation);
 
-    if (!d->frames[intRotation]) {
-        QPointF translatedPos(size().width()/2.0, size().height()/2.0);
+    QRect spinnerRect(QPoint(0, 0), QSize(qMin(size().width(), size().height()), qMin(size().width(), size().height())));
+    spinnerRect.moveCenter(QPoint(size().width()/2, size().height()/2));
 
-        d->frames[intRotation] = QPixmap(size().toSize());
+    if (!d->frames[intRotation]) {
+        QPointF translatedPos(spinnerRect.width()/2, spinnerRect.height()/2);
+
+        d->frames[intRotation] = QPixmap(spinnerRect.size());
         d->frames[intRotation].fill(Qt::transparent);
 
         QPainter buffPainter(&d->frames[intRotation]);
@@ -119,15 +122,15 @@ void BusyWidget::paint(QPainter *painter,
             buffPainter.save();
             buffPainter.translate(2,2);
             buffPainter.rotate(intRotation);
-            d->svg->paint(&buffPainter, QRect(-translatedPos.toPoint(), size().toSize()), "busywidget-shadow");
+            d->svg->paint(&buffPainter, QRect(-translatedPos.toPoint(), spinnerRect.size()), "busywidget-shadow");
             buffPainter.restore();
         }
 
         buffPainter.rotate(intRotation);
-        d->svg->paint(&buffPainter, QRect(-translatedPos.toPoint(), size().toSize()), "busywidget");
+        d->svg->paint(&buffPainter, QRect(-translatedPos.toPoint(), spinnerRect.size()), "busywidget");
     }
 
-    painter->drawPixmap(QPoint(0,0), d->frames[intRotation]);
+    painter->drawPixmap(spinnerRect.topLeft(), d->frames[intRotation]);
 }
 
 void BusyWidget::showEvent(QShowEvent *event)
