@@ -118,7 +118,7 @@ protected:
     void run();
 
 private:
-    Plasma::RunnerContext m_context;
+    Plasma::RunnerContext *m_context;
     Plasma::AbstractRunner *m_runner;
     QTimer *m_timer;
     bool m_stale;

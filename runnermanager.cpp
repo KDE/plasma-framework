@@ -390,9 +390,8 @@ bool RunnerManager::execQuery(const QString &term, const QString &runnerName)
         //kDebug() << "ignored!";
         return false;
     }
-    //CHECK: the match is performed in the same thread, do we really need a local copy?
-    RunnerContext localContext(d->context, 0);
-    r->performMatch(localContext);
+    
+    r->performMatch(d->context);
     //kDebug() << "succeeded with" << d->context.matches().count() << "results";
     emit matchesChanged(d->context.matches());
     return true;
