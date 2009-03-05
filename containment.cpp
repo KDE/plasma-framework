@@ -1571,6 +1571,8 @@ ToolBox *ContainmentPrivate::createToolBox()
             break;
         case Containment::DesktopContainment:
             toolBox = new DesktopToolBox(q);
+            toolBox->setSize(KIconLoader::SizeSmallMedium);
+            toolBox->setIconSize(QSize(KIconLoader::SizeSmall, KIconLoader::SizeSmall));
             break;
         default:
             break;

@@ -86,22 +86,22 @@ QPoint ToolBox::toolPosition(int toolHeight)
 {
     switch (d->corner) {
     case TopRight:
-        return QPoint(d->size, -toolHeight);
+        return QPoint(boundingRect().width(), -toolHeight);
     case Top:
-        return QPoint((int)boundingRect().center().x() - d->iconSize.width(), -toolHeight);
+        return QPoint((int)boundingRect().center().x() - boundingRect().width(), -toolHeight);
     case TopLeft:
-        return QPoint(-d->size, -toolHeight);
+        return QPoint(-boundingRect().width(), -toolHeight);
     case Left:
-        return QPoint(-d->size, (int)boundingRect().center().y() - d->iconSize.height());
+        return QPoint(-boundingRect().width(), (int)boundingRect().center().y() - boundingRect().height());
     case Right:
-        return QPoint(d->size, (int)boundingRect().center().y() - d->iconSize.height());
+        return QPoint(boundingRect().width(), (int)boundingRect().center().y() - boundingRect().height());
     case BottomLeft:
-        return QPoint(-d->size, toolHeight);
+        return QPoint(-boundingRect().width(), toolHeight);
     case Bottom:
         return QPoint((int)boundingRect().center().x() - d->iconSize.width(), toolHeight);
     case BottomRight:
     default:
-        return QPoint(d->size, toolHeight);
+        return QPoint(boundingRect().width(), toolHeight);
     }
 }
 
@@ -382,8 +382,8 @@ void ToolBox::save(KConfigGroup &cg) const
     if (d->corner == ToolBox::Left ||
         d->corner == ToolBox::Right) {
         offset = y();
-    } else if (d->corner == ToolBox::Left ||
-               d->corner == ToolBox::Right) {
+    } else if (d->corner == ToolBox::Top ||
+               d->corner == ToolBox::Bottom) {
         offset = x();
     }
 
@@ -416,19 +416,19 @@ void ToolBox::load()
             setPos(offset, 0);
             break;
         case ToolBox::TopRight:
-            setPos(d->containment->size().width() - d->size, 0);
+            setPos(d->containment->size().width() - boundingRect().width(), 0);
             break;
         case ToolBox::Right:
-            setPos(d->containment->size().width() - d->size, offset);
+            setPos(d->containment->size().width() - boundingRect().width(), offset);
             break;
         case ToolBox::BottomRight:
-            setPos(d->containment->size().width() - d->size, d->containment->size().height() - d->size);
+            setPos(d->containment->size().width() - boundingRect().width(), d->containment->size().height() - boundingRect().height());
             break;
         case ToolBox::Bottom:
-            setPos(offset, d->containment->size().height() - d->size);
+            setPos(offset, d->containment->size().height() - boundingRect().height());
             break;
         case ToolBox::BottomLeft:
-            setPos(0, d->containment->size().height() - d->size);
+            setPos(0, d->containment->size().height() - boundingRect().height());
             break;
         case ToolBox::Left:
             setPos(0, offset);
@@ -486,10 +486,10 @@ void ToolBox::reposition()
         if (!d->containment->view() || !d->containment->view()->transform().isScaling()) {
             if (QApplication::layoutDirection() == Qt::RightToLeft) {
                 if (avail.top() > screenGeom.top()) {
-                    setPos(avail.topLeft() - QPoint(0, d->size));
+                    setPos(avail.topLeft() - QPoint(0, boundingRect().height()));
                     setCorner(ToolBox::Left);
                 } else if (avail.left() > screenGeom.left()) {
-                    setPos(avail.topLeft() - QPoint(d->size, 0));
+                    setPos(avail.topLeft() - QPoint(boundingRect().width(), 0));
                     setCorner(ToolBox::Top);
                 } else {
                     setPos(avail.topLeft());
@@ -497,13 +497,13 @@ void ToolBox::reposition()
                 }
             } else {
                 if (avail.top() > screenGeom.top()) {
-                    setPos(avail.topRight() - QPoint(0, d->size));
+                    setPos(avail.topRight() - QPoint(0, boundingRect().height()));
                     setCorner(ToolBox::Right);
                 } else if (avail.right() < screenGeom.right()) {
-                    setPos(avail.topRight() - QPoint(d->size, 0));
+                    setPos(avail.topRight() - QPoint(boundingRect().width(), 0));
                     setCorner(ToolBox::Top);
                 } else {
-                    setPos(avail.topRight() - QPoint(d->size, 0));
+                    setPos(avail.topRight() - QPoint(boundingRect().width(), 0));
                     setCorner(ToolBox::TopRight);
                 }
             }

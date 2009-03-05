@@ -143,6 +143,7 @@ class DesktopToolBoxPrivate
 public:
     DesktopToolBoxPrivate(DesktopToolBox *toolbox)
       : q(toolbox),
+        background(0),
         containment(0),
         icon("plasma"),
         toolBacker(0),
@@ -153,6 +154,36 @@ public:
         hovering(0)
     {}
 
+    void adjustBackgroundBorders()
+    {
+        switch (q->corner()) {
+          case ToolBox::TopRight:
+            background->setEnabledBorders(FrameSvg::BottomBorder|FrameSvg::LeftBorder);
+            break;
+        case ToolBox::Top:
+            background->setEnabledBorders(FrameSvg::BottomBorder|FrameSvg::LeftBorder|FrameSvg::RightBorder);
+            break;
+        case ToolBox::TopLeft:
+            background->setEnabledBorders(FrameSvg::BottomBorder|FrameSvg::RightBorder);
+            break;
+        case ToolBox::Left:
+            background->setEnabledBorders(FrameSvg::BottomBorder|FrameSvg::TopBorder|FrameSvg::RightBorder);
+            break;
+        case ToolBox::Right:
+            background->setEnabledBorders(FrameSvg::BottomBorder|FrameSvg::TopBorder|FrameSvg::LeftBorder);
+            break;
+        case ToolBox::BottomLeft:
+            background->setEnabledBorders(FrameSvg::TopBorder|FrameSvg::RightBorder);
+            break;
+        case ToolBox::Bottom:
+            background->setEnabledBorders(FrameSvg::TopBorder|FrameSvg::LeftBorder|FrameSvg::RightBorder);
+            break;
+        case ToolBox::BottomRight:
+        default:
+            background->setEnabledBorders(FrameSvg::TopBorder|FrameSvg::LeftBorder);
+            break;
+        }
+    }
 
     DesktopToolBox *q;
     Plasma::FrameSvg *background;
@@ -173,14 +204,14 @@ DesktopToolBox::DesktopToolBox(Containment *parent)
     : ToolBox(parent),
       d(new DesktopToolBoxPrivate(this))
 {
+    d->background = new Plasma::FrameSvg();
+    d->background->setImagePath("widgets/toolbox");
+
     d->containment = parent;
     setZValue(10000000);
 
     setIsMovable(true);
     assignColors();
-
-    d->background = new Plasma::FrameSvg();
-    d->background->setImagePath("widgets/toolbox");
 
     connect(Plasma::Animator::self(), SIGNAL(movementFinished(QGraphicsItem*)),
             this, SLOT(toolMoved(QGraphicsItem*)));
@@ -196,7 +227,22 @@ DesktopToolBox::~DesktopToolBox()
 
 QRectF DesktopToolBox::boundingRect() const
 {
-    return QRectF(0, 0, size(), size());
+    int extraSpace = size();
+
+    d->adjustBackgroundBorders();
+
+    if (!d->containment->activity().isNull()) {
+        extraSpace = Plasma::Theme::defaultTheme()->fontMetrics().width(d->containment->activity());
+    }
+
+    qreal left, top, right, bottom;
+    d->background->getMargins(left, top, right, bottom);
+
+    if (corner() == Left || corner() == Right) {
+        return QRectF(0, 0, size()+left+right, size()+extraSpace+top+bottom);
+    } else {
+        return QRectF(0, 0, size()+extraSpace+left+right, size()+top+bottom);
+    }
 }
 
 void DesktopToolBox::assignColors()
@@ -225,70 +271,54 @@ void DesktopToolBox::paint(QPainter *painter, const QStyleOptionGraphicsItem *op
     QRect backgroundRect;
     const QRectF rect = boundingRect();
     const QSize icons = iconSize();
-    bool atCorner;
-    QString cornerElement;
 
-    switch (corner()) {
-    case TopRight:
-        iconPos = QPoint((int)rect.right() - icons.width() + 2, 2);
-        cornerElement = "desktop-northeast";
-        backgroundRect = d->background->elementRect(cornerElement).toRect();
-        backgroundRect.moveTopRight(rect.topRight().toPoint());
-        atCorner = true;
-        break;
-    case Top:
-        iconPos = QPoint(rect.center().x() - icons.width() / 2, 2);
-        atCorner = false;
-        d->background->setEnabledBorders(FrameSvg::BottomBorder|FrameSvg::LeftBorder|FrameSvg::RightBorder);
-        break;
-    case TopLeft:
-        iconPos = QPoint(2, 2);
-        cornerElement = "desktop-northwest";
-        backgroundRect = d->background->elementRect(cornerElement).toRect();
-        backgroundRect.moveTopLeft(rect.topLeft().toPoint());
-        atCorner = true;
-        break;
-    case Left:
-        iconPos = QPoint(2, rect.center().y() - icons.height() / 2);
-        atCorner = false;
-        d->background->setEnabledBorders(FrameSvg::BottomBorder|FrameSvg::TopBorder|FrameSvg::RightBorder);
-        break;
-    case Right:
-        iconPos = QPoint((int)rect.right() - icons.width() + 2,
-                         rect.center().y() - icons.height() / 2);
-        atCorner = false;
-        d->background->setEnabledBorders(FrameSvg::BottomBorder|FrameSvg::TopBorder|FrameSvg::LeftBorder);
-        break;
-    case BottomLeft:
-        iconPos = QPoint(2, rect.bottom() - icons.height() - 2);
-        cornerElement = "desktop-southwest";
-        backgroundRect = d->background->elementRect(cornerElement).toRect();
-        backgroundRect.moveBottomLeft(rect.bottomLeft().toPoint());
-        atCorner = true;
-        break;
-    case Bottom:
-        iconPos = QPoint(rect.center().x() - icons.width() / 2,
-                         rect.bottom() - icons.height() - 2);
-        atCorner = false;
-        d->background->setEnabledBorders(FrameSvg::TopBorder|FrameSvg::LeftBorder|FrameSvg::RightBorder);
-        break;
-    case BottomRight:
-    default:
-        iconPos = QPoint((int)rect.right() - icons.width() + 2,
-                         (int)rect.bottom() - icons.height() - 2);
-        cornerElement = "desktop-southeast";
-        backgroundRect = d->background->elementRect(cornerElement).toRect();
-        backgroundRect.moveBottomRight(rect.bottomRight().toPoint());
-        atCorner = true;
-        break;
-    }
+    const QString activityName = d->containment->activity();
 
-    if (atCorner) {
-        d->background->paint(painter, backgroundRect, cornerElement);
+    const QSize textSize =  Plasma::Theme::defaultTheme()->fontMetrics().size(Qt::TextSingleLine, activityName);
+
+    d->adjustBackgroundBorders();
+
+
+    d->background->resizeFrame(rect.size());
+    d->background->paintFrame(painter);
+
+
+    QRect iconRect;
+    QRect textRect;
+
+    if (corner() == Left || corner() == Right) {
+        Qt::Alignment alignment;
+
+        if (activityName.isNull()) {
+            alignment = Qt::Alignment(Qt::AlignCenter);
+        } else {
+            alignment = Qt::Alignment(Qt::AlignHCenter|Qt::AlignTop);
+        }
+
+        iconRect = QStyle::alignedRect(QApplication::layoutDirection(), alignment, iconSize(), d->background->contentsRect().toRect());
+
+        QRect boundRect(QPoint(d->background->contentsRect().top(),
+                               d->background->contentsRect().left()),
+                        QSize(d->background->contentsRect().height(),
+                              d->background->contentsRect().width()));
+
+        textRect = QStyle::alignedRect(QApplication::layoutDirection(), Qt::AlignRight|Qt::AlignVCenter, textSize, boundRect);
     } else {
-        d->background->resizeFrame(rect.size());
-        d->background->paintFrame(painter);
+        Qt::Alignment alignment;
+
+        if (activityName.isNull()) {
+            alignment = Qt::Alignment(Qt::AlignCenter);
+        } else {
+            alignment = Qt::Alignment(Qt::AlignLeft|Qt::AlignVCenter);
+        }
+
+        iconRect = QStyle::alignedRect(QApplication::layoutDirection(), alignment, iconSize(), d->background->contentsRect().toRect());
+
+        textRect = QStyle::alignedRect(QApplication::layoutDirection(), Qt::AlignRight|Qt::AlignVCenter, textSize, d->background->contentsRect().toRect());
     }
+
+
+    iconPos = iconRect.topLeft();
 
     const qreal progress = d->animHighlightFrame;
 
@@ -305,6 +335,35 @@ void DesktopToolBox::paint(QPainter *painter, const QStyleOptionGraphicsItem *op
             d->icon.pixmap(iconSize()), progress);
         painter->drawPixmap(QRect(iconPos, iconSize()), result);
     }
+
+    if (activityName.isNull()) {
+        return;
+    }
+
+    QColor textColor = Plasma::Theme::defaultTheme()->color(Theme::TextColor);
+    QColor shadowColor;
+    QPoint shadowOffset;
+
+    if (qGray(textColor.rgb()) > 192) {
+        shadowColor = Qt::black;
+        shadowOffset = QPoint(1,1);
+    } else {
+        shadowColor = Qt::white;
+        shadowOffset = QPoint(0,0);
+    }
+
+    QPixmap shadowText = Plasma::PaintUtils::shadowText(activityName, textColor, shadowColor, shadowOffset);
+
+    painter->save();
+    if (corner() == Left || corner() == Right) {
+        painter->rotate(90);
+        painter->translate(textRect.left(), -textRect.top()-textRect.height());
+        painter->drawPixmap(QPoint(0,0), shadowText);
+    } else {
+        painter->drawPixmap(textRect.topLeft(), shadowText);
+    }
+
+    painter->restore();
 }
 
 QPainterPath DesktopToolBox::shape() const
