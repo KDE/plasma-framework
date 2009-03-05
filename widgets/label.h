@@ -50,6 +50,11 @@ class PLASMA_EXPORT Label : public QGraphicsProxyWidget
     Q_PROPERTY(QLabel *nativeWidget READ nativeWidget)
 
 public:
+    /**
+     * Constructs a label with word wrap on by default
+     *
+     * @arg parent the parent of this widget
+     */
     explicit Label(QGraphicsWidget *parent = 0);
     ~Label();
 
