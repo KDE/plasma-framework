@@ -693,6 +693,8 @@ void Applet::setBusy(bool busy)
         mainLayout->addItem(d->busyWidget);
         mainLayout->addStretch();
     } else {
+        //will be deleted by its parent
+        d->busyWidget = 0;
         d->destroyMessageOverlay();
     }
 }
