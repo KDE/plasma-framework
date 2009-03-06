@@ -1234,6 +1234,10 @@ void Containment::enableAction(const QString &name, bool enable)
 
 void Containment::addToolBoxAction(QAction *action)
 {
+    if (!d->toolBox && (d->type == CustomPanelContainment || d->type >= CustomContainment)) {
+        d->createToolBox();
+    }
+
     if (d->toolBox) {
         d->toolBox->addTool(action);
     }
@@ -1562,6 +1566,7 @@ ToolBox *ContainmentPrivate::createToolBox()
     if (!toolBox) {
         switch (type) {
         case Containment::PanelContainment:
+        case Containment::CustomPanelContainment:
             toolBox = new PanelToolBox(q);
             toolBox->setSize(KIconLoader::SizeSmallMedium);
             toolBox->setIconSize(QSize(KIconLoader::SizeSmall, KIconLoader::SizeSmall));
@@ -1569,12 +1574,10 @@ ToolBox *ContainmentPrivate::createToolBox()
                 toolBox->hide();
             }
             break;
-        case Containment::DesktopContainment:
+        default:
             toolBox = new DesktopToolBox(q);
             toolBox->setSize(KIconLoader::SizeSmallMedium);
             toolBox->setIconSize(QSize(KIconLoader::SizeSmall, KIconLoader::SizeSmall));
-            break;
-        default:
             break;
         }
 
