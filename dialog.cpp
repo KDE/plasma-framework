@@ -133,7 +133,6 @@ void DialogPrivate::themeUpdated()
         QDesktopWidget *desktop = QApplication::desktop();
         QRect avail = desktop->availableGeometry(desktop->screenNumber(q));
         QRect dialogGeom = q->geometry();
-        kWarning()<<"AAAAAAAAA"<<avail<<dialogGeom;
 
         if (dialogGeom.left() <= avail.left()) {
             borders ^= FrameSvg::LeftBorder;
