@@ -1033,7 +1033,6 @@ void Applet::flushPendingConstraintsEvents()
         closeApplet->setIcon(KIcon("edit-delete"));
         closeApplet->setEnabled(unlocked);
         closeApplet->setVisible(unlocked);
-        closeApplet->setShortcutContext(Qt::WidgetShortcut); //don't clash with other views
         closeApplet->setText(i18nc("%1 is the name of the applet", "Remove this %1", name()));
         if (d->isContainment) {
             closeApplet->setShortcut(QKeySequence("alt+d,alt+r"));
@@ -1170,6 +1169,7 @@ QAction *Applet::action(QString name) const
 void Applet::addAction(QString name, QAction *action)
 {
     d->actions.addAction(name, action);
+    QGraphicsWidget::addAction(action);
 }
 
 void Applet::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
@@ -1401,7 +1401,7 @@ void Applet::setHasConfigurationInterface(bool hasInterface)
         if (!configAction) { //should be always true
             configAction = new KAction(i18n("%1 Settings", name()), this);
             configAction->setIcon(KIcon("configure"));
-            configAction->setShortcutContext(Qt::WidgetShortcut); //don't clash with other views
+            //configAction->setShortcutContext(Qt::WidgetWithChildrenShortcut); //don't clash with other views
             bool unlocked = immutability() == Mutable;
             bool canConfig = unlocked || KAuthorized::authorize("PlasmaAllowConfigureWhenLocked");
             configAction->setVisible(canConfig);
