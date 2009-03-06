@@ -130,8 +130,10 @@ void DialogPrivate::themeUpdated()
             break;
         }
     } else {
-        QRect avail = QApplication::desktop()->availableGeometry();
+        QDesktopWidget *desktop = QApplication::desktop();
+        QRect avail = desktop->availableGeometry(desktop->screenNumber(q));
         QRect dialogGeom = q->geometry();
+        kWarning()<<"AAAAAAAAA"<<avail<<dialogGeom;
 
         if (dialogGeom.left() <= avail.left()) {
             borders ^= FrameSvg::LeftBorder;
