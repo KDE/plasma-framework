@@ -231,8 +231,9 @@ QRectF DesktopToolBox::boundingRect() const
 
     d->adjustBackgroundBorders();
 
+    //keep space for the label and a character more
     if (!d->containment->activity().isNull()) {
-        extraSpace = Plasma::Theme::defaultTheme()->fontMetrics().width(d->containment->activity());
+        extraSpace = Plasma::Theme::defaultTheme()->fontMetrics().width(d->containment->activity()+"x");
     }
 
     qreal left, top, right, bottom;
@@ -274,7 +275,7 @@ void DesktopToolBox::paint(QPainter *painter, const QStyleOptionGraphicsItem *op
 
     const QString activityName = d->containment->activity();
 
-    const QSize textSize =  Plasma::Theme::defaultTheme()->fontMetrics().size(Qt::TextSingleLine, activityName);
+    const QSize textSize =  Plasma::Theme::defaultTheme()->fontMetrics().size(Qt::TextSingleLine, activityName+"x");
 
     d->adjustBackgroundBorders();
 
