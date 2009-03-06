@@ -82,7 +82,7 @@ public:
     void updateRect(const QRectF &rect);
     void setFocus();
     void cleanUpAndDelete();
-    void createMessageOverlay();
+    void createMessageOverlay(bool usePopup = true);
     void destroyMessageOverlay();
     void addGlobalShortcutsPage(KConfigDialog *dialog);
     void clearShortcutEditorPtr();

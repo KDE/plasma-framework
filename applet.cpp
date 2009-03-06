@@ -497,7 +497,7 @@ void AppletPrivate::cleanUpAndDelete()
     q->deleteLater();
 }
 
-void AppletPrivate::createMessageOverlay()
+void AppletPrivate::createMessageOverlay(bool usePopup)
 {
     if (messageOverlay) {
         qDeleteAll(messageOverlay->children());
@@ -507,21 +507,21 @@ void AppletPrivate::createMessageOverlay()
     PopupApplet *popup = qobject_cast<Plasma::PopupApplet*>(q);
 
     if (!messageOverlay) {
-        if (popup && popup->widget()) {
+        if (usePopup && popup && popup->widget()) {
             messageOverlayProxy = new QGraphicsProxyWidget(q);
             messageOverlayProxy->setWidget(popup->widget());
             messageOverlay = new AppletOverlayWidget(messageOverlayProxy);
-        } else if (popup && popup->graphicsWidget()) {
+        } else if (usePopup && popup && popup->graphicsWidget()) {
             messageOverlay = new AppletOverlayWidget(popup->graphicsWidget());
         } else {
             messageOverlay = new AppletOverlayWidget(q);
         }
     }
 
-    if (popup && popup->widget()) {
+    if (usePopup && popup && popup->widget()) {
         // popupapplet with widget()
         messageOverlay->setGeometry(popup->widget()->contentsRect());
-    } else if (popup && popup->graphicsWidget()) {
+    } else if (usePopup && popup && popup->graphicsWidget()) {
         // popupapplet with graphicsWidget()
         messageOverlay->setGeometry(popup->graphicsWidget()->boundingRect());
     } else {
@@ -683,8 +683,8 @@ Extender *Applet::extender() const
 void Applet::setBusy(bool busy)
 {
     if (busy) {
-        d->createMessageOverlay();
-        d->messageOverlay->opacity = 0.4;
+        d->createMessageOverlay(false);
+        d->messageOverlay->opacity = 0;
 
         QGraphicsLinearLayout *mainLayout = new QGraphicsLinearLayout(d->messageOverlay);
         d->busyWidget = new Plasma::BusyWidget(d->messageOverlay);
@@ -1075,13 +1075,6 @@ void Applet::flushPendingConstraintsEvents()
                 button->setPos(d->messageOverlay->boundingRect().width() / 2 - s.width() / 2,
                         d->messageOverlay->boundingRect().height() / 2 - s.height() / 2);
             }*/
-        }
-
-        if (d->busyWidget && d->busyWidget->isVisible()) {
-            int busySize = qMin(size().width(), size().height())/3;
-            QRect busyRect(0, 0, busySize, busySize);
-            busyRect.moveCenter(boundingRect().center().toPoint());
-            d->busyWidget->setGeometry(busyRect);
         }
 
         if (d->started && layout()) {
@@ -2349,6 +2342,11 @@ void AppletOverlayWidget::paint(QPainter *painter,
 {
     Q_UNUSED(option)
     Q_UNUSED(widget)
+
+    if (qFuzzyCompare(1, 1+opacity)) {
+        return;
+    }
+
     QColor wash = Plasma::Theme::defaultTheme()->color(Theme::BackgroundColor);
     wash.setAlphaF(opacity);
 
