@@ -1162,7 +1162,6 @@ QAction *Applet::action(QString name) const
 void Applet::addAction(QString name, QAction *action)
 {
     d->actions.addAction(name, action);
-    QGraphicsWidget::addAction(action);
 }
 
 void Applet::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
