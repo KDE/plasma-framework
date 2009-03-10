@@ -35,6 +35,8 @@
 #include <kglobal.h>
 #include <klocale.h>
 #include <kmimetype.h>
+#include <kactioncollection.h>
+#include <kaction.h>
 
 #include "containment.h"
 #include "view.h"
@@ -57,7 +59,8 @@ public:
         : q(corona),
           immutability(Mutable),
           mimetype("text/x-plasmoidservicename"),
-          config(0)
+          config(0),
+          actions(corona)
     {
         if (KGlobal::hasMainComponent()) {
             configName = KGlobal::mainComponent().componentName() + "-appletsrc";
@@ -75,6 +78,24 @@ public:
     {
         configSyncTimer.setSingleShot(true);
         QObject::connect(&configSyncTimer, SIGNAL(timeout()), q, SLOT(syncConfig()));
+
+        //some common actions
+        KAction *lockAction = new KAction(i18n("Lock Widgets"), q);
+        lockAction->setIcon(KIcon("object-locked"));
+        QObject::connect(lockAction, SIGNAL(triggered(bool)),
+                q, SLOT(toggleImmutability()));
+        lockAction->setShortcut(QKeySequence("alt+d,l"));
+        lockAction->setShortcutContext(Qt::ApplicationShortcut);
+        actions.addAction("lock widgets", lockAction);
+    }
+
+    void toggleImmutability()
+    {
+        if (immutability == Mutable) {
+            q->setImmutability(UserImmutable);
+        } else {
+            q->setImmutability(Mutable);
+        }
     }
 
     void saveLayout(KSharedConfigPtr cg) const
@@ -192,6 +213,7 @@ public:
     QTimer configSyncTimer;
     QList<Containment*> containments;
     QHash<uint, QGraphicsWidget*> offscreenWidgets;
+    KActionCollection actions;
 };
 
 Corona::Corona(QObject *parent)
@@ -567,6 +589,21 @@ QList<Plasma::Location> Corona::freeEdges(int screen) const
     }
 
     return freeEdges;
+}
+
+QAction *Corona::action(QString name) const
+{
+    return d->actions.action(name);
+}
+
+void Corona::addAction(QString name, QAction *action)
+{
+    d->actions.addAction(name, action);
+}
+
+QList<QAction*> Corona::actions() const
+{
+    return d->actions.actions();
 }
 
 } // namespace Plasma

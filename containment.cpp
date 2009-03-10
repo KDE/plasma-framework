@@ -160,16 +160,12 @@ void Containment::init()
     action->setShortcut(QKeySequence("alt+d,p"));
     d->actions().addAction("previous applet", action);
 
-    if (immutability() != SystemImmutable) {
-        //FIXME I'm not certain this belongs in Containment
-        //but it sure is nice to have the keyboard shortcut in every containment by default
-        KAction *lockDesktopAction =
-            new KAction(unlocked ? i18n("Lock Widgets") : i18n("Unlock Widgets"), this);
-        lockDesktopAction->setIcon(KIcon(unlocked ? "object-locked" : "object-unlocked"));
-        connect(lockDesktopAction, SIGNAL(triggered(bool)),
-                this, SLOT(toggleDesktopImmutability()));
-        lockDesktopAction->setShortcut(QKeySequence("alt+d,l"));
-        d->actions().addAction("lock widgets", lockDesktopAction);
+    if (immutability() != SystemImmutable && corona()) {
+        QAction *lockDesktopAction = corona()->action("lock widgets");
+        //keep a pointer so nobody notices it moved to corona
+        if (lockDesktopAction) {
+            d->actions().addAction("lock widgets", lockDesktopAction);
+        }
     }
 
     if (d->type != PanelContainment &&
@@ -1513,35 +1509,6 @@ void Containment::destroy(bool confirm)
     }
 }
 
-void ContainmentPrivate::toggleDesktopImmutability()
-{
-    if (q->corona()) {
-        if (q->corona()->immutability() == Mutable) {
-            q->corona()->setImmutability(UserImmutable);
-        } else if (q->corona()->immutability() == UserImmutable) {
-            q->corona()->setImmutability(Mutable);
-        }
-    } else {
-        if (q->immutability() == Mutable) {
-            q->setImmutability(UserImmutable);
-        } else if (q->immutability() == UserImmutable) {
-            q->setImmutability(Mutable);
-        }
-    }
-
-    if (q->immutability() != Mutable) {
-        QMap<Applet*, AppletHandle*> h = handles;
-        handles.clear();
-
-        foreach (AppletHandle *handle, h) {
-            handle->disconnect(q);
-            handle->deleteLater();
-        }
-    }
-
-    //setLockToolText();
-}
-
 void ContainmentPrivate::zoomIn()
 {
     emit q->zoomRequested(q, Plasma::ZoomIn);
@@ -1648,6 +1615,17 @@ void ContainmentPrivate::containmentConstraintsEvent(Plasma::Constraints constra
                 toolBox->setVisible(unlocked);
             } else {
                 toolBox->setIsMovable(unlocked);
+            }
+        }
+
+        //clear handles on lock
+        if (!unlocked) {
+            QMap<Applet*, AppletHandle*> h = handles;
+            handles.clear();
+
+            foreach (AppletHandle *handle, h) {
+                handle->disconnect(q);
+                handle->deleteLater();
             }
         }
     }

@@ -28,6 +28,7 @@
 #include <plasma/plasma_export.h>
 
 class QGraphicsGridLayout;
+class QAction;
 
 namespace Plasma
 {
@@ -155,6 +156,21 @@ public:
      */
     QList<Plasma::Location> freeEdges(int screen) const;
 
+    /**
+     * Returns the QAction with the given name from our collection
+     */
+    QAction *action(QString name) const;
+
+    /**
+     * Adds the action to our collection under the given name
+     */
+    void addAction(QString name, QAction *action);
+
+    /**
+     * Returns all the actions in our collection
+     */
+    QList<QAction*> actions() const;
+
 public Q_SLOTS:
     /**
      * Initializes the layout from a config file. This will first clear any existing
@@ -277,6 +293,7 @@ private:
     Q_PRIVATE_SLOT(d, void containmentDestroyed(QObject*))
     Q_PRIVATE_SLOT(d, void offscreenWidgetDestroyed(QObject *))
     Q_PRIVATE_SLOT(d, void syncConfig())
+    Q_PRIVATE_SLOT(d, void toggleImmutability())
 
     friend class CoronaPrivate;
 };
