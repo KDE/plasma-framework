@@ -54,6 +54,7 @@ class NativeTabBarPrivate
 public:
     NativeTabBarPrivate(NativeTabBar *parent)
         : q(parent),
+          shape(NativeTabBar::RoundedNorth),
           backgroundSvg(0),
           buttonSvg(0),
           closeIcon("window-close"),
