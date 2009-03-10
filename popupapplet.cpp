@@ -535,8 +535,8 @@ void PopupAppletPrivate::dialogSizeChanged()
 {
     //Reposition the dialog
     if (dialog) {
-        KConfigGroup sizeGroup = q->config();
-        sizeGroup = KConfigGroup(&sizeGroup, "PopupApplet");
+        KConfigGroup *mainGroup = static_cast<Applet*>(q)->d->mainConfigGroup();
+        KConfigGroup sizeGroup(mainGroup, "PopupApplet");
         sizeGroup.writeEntry("DialogHeight", dialog->height());
         sizeGroup.writeEntry("DialogWidth", dialog->width());
 
@@ -559,8 +559,8 @@ void PopupAppletPrivate::updateDialogPosition()
         return;
     }
 
-    KConfigGroup sizeGroup = q->config();
-    sizeGroup = KConfigGroup(&sizeGroup, "PopupApplet");
+    KConfigGroup *mainGroup = static_cast<Applet*>(q)->d->mainConfigGroup();
+    KConfigGroup sizeGroup(mainGroup, "PopupApplet");
 
     Q_ASSERT(q->containment());
     Q_ASSERT(q->containment()->corona());
