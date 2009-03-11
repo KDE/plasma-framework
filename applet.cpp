@@ -2358,9 +2358,9 @@ void AppletOverlayWidget::paint(QPainter *painter,
         if (parentWidget()->size() != size()) {
             resize(parentWidget()->size());
         }
-        backgroundShape = PaintUtils::roundedRectangle(parentWidget()->contentsRect(), 5);
+        backgroundShape = PaintUtils::roundedRectangle(contentsRect(), 5);
     } else {
-        backgroundShape = parentItem()->shape();
+        backgroundShape = shape();
     }
 
     painter->save();
