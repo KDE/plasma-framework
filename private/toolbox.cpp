@@ -235,6 +235,9 @@ void ToolBox::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     int distanceToTop = newPos.y() - d->dragStartRelative.y();
     int distanceToBottom = areaHeight - h - distanceToTop;
 
+    int distancetoHorizontalMiddle = qAbs(newPos.x() - areaWidth/2);
+    int distancetoVerticalMiddle = qAbs(newPos.y() - areaHeight/2);
+
     // decide which border is the nearest
     if (distanceToLeft < distanceToTop && distanceToLeft < distanceToRight &&
         distanceToLeft < distanceToBottom ) {
@@ -255,6 +258,12 @@ void ToolBox::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
              distanceToBottom < distanceToTop) {
         y = areaHeight - h;
         x = (newPos.x() - d->dragStartRelative.x());
+    }
+
+    if (distancetoHorizontalMiddle < 10) {
+        x = areaWidth/2 - d->dragStartRelative.x();
+    } else if (distancetoVerticalMiddle < 10) {
+        y = areaHeight/2 - d->dragStartRelative.y();
     }
 
     //kDebug() << "distances from borders" << (newPos - d->dragStartRelative) << distanceToLeft << distanceToRight << distanceToTop << distanceToBottom << "=>" << x << y;
