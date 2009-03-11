@@ -141,7 +141,13 @@ void Style::drawComplexControl(ComplexControl control,
         const QRect slider =
             subControlRect(control, option, SC_ScrollBarSlider, widget).adjusted(1, 0, -1, 0);
 
-        d->scrollbar->setElementPrefix("background");
+        if (scrollOption && scrollOption->orientation == Qt::Horizontal && d->scrollbar->hasElement("background-horizontal-center")) {
+            d->scrollbar->setElementPrefix("background-horizontal");
+        } else if (scrollOption && scrollOption->orientation == Qt::Vertical && d->scrollbar->hasElement("background-vertical-center")) {
+            d->scrollbar->setElementPrefix("background-vertical");
+        } else {
+            d->scrollbar->setElementPrefix("background");
+        }
         d->scrollbar->resizeFrame(option->rect.size());
         d->scrollbar->paintFrame(painter);
 
