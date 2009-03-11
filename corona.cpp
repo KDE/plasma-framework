@@ -567,6 +567,14 @@ void Corona::setImmutability(const ImmutabilityType immutable)
     d->immutability = immutable;
     d->updateContainmentImmutability();
 
+    //update our actions
+    bool unlocked = d->immutability == Mutable;
+    QAction *action = d->actions.action("lock widgets");
+    if (action) {
+        action->setText(unlocked ? i18n("Lock Widgets") : i18n("Unlock Widgets"));
+        action->setIcon(KIcon(unlocked ? "object-locked" : "object-unlocked"));
+    }
+
     KConfigGroup cg(config(), "General");
 
     // we call the dptr member directly for locked since isImmutable()

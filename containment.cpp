@@ -1599,11 +1599,6 @@ void ContainmentPrivate::containmentConstraintsEvent(Plasma::Constraints constra
             action->setVisible(unlocked);
             action->setEnabled(unlocked);
         }*/
-        QAction *action = actions().action("lock widgets");
-        if (action) {
-            action->setText(unlocked ? i18n("Lock Widgets") : i18n("Unlock Widgets"));
-            action->setIcon(KIcon(unlocked ? "object-locked" : "object-unlocked"));
-        }
 
         // tell the applets too
         foreach (Applet *a, applets) {
