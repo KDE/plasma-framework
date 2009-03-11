@@ -171,6 +171,14 @@ public:
      */
     QList<QAction*> actions() const;
 
+    /**
+     * convenience function - enables or disables an action by name
+     *
+     * @param name the name of the action in our collection
+     * @param enable true to enable, false to disable
+     */
+    void enableAction(const QString &name, bool enable);
+
 public Q_SLOTS:
     /**
      * Initializes the layout from a config file. This will first clear any existing
@@ -258,6 +266,14 @@ Q_SIGNALS:
      * This signal inicates that a change in available screen goemetry occurred.
      */
     void availableScreenRegionChanged();
+
+    /**
+     * emitted when immutability changes.
+     * this is for use by things that don't get contraints events, like plasmaapp.
+     * it's NOT for containments or applets or any of the other stuff on the scene.
+     * if your code's not in shells/ it probably shouldn't be using it.
+     */
+    void immutabilityChanged(Plasma::ImmutabilityType immutability);
 
 protected:
     /**

@@ -566,13 +566,20 @@ void Corona::setImmutability(const ImmutabilityType immutable)
     kDebug() << "setting immutability to" << immutable;
     d->immutability = immutable;
     d->updateContainmentImmutability();
+    //tell non-containments that might care (like plasmaapp or a custom corona)
+    emit immutabilityChanged(immutable);
 
     //update our actions
-    bool unlocked = d->immutability == Mutable;
     QAction *action = d->actions.action("lock widgets");
     if (action) {
-        action->setText(unlocked ? i18n("Lock Widgets") : i18n("Unlock Widgets"));
-        action->setIcon(KIcon(unlocked ? "object-locked" : "object-unlocked"));
+        if (d->immutability == SystemImmutable) {
+            action->setEnabled(false);
+            action->setVisible(false);
+        } else {
+            bool unlocked = d->immutability == Mutable;
+            action->setText(unlocked ? i18n("Lock Widgets") : i18n("Unlock Widgets"));
+            action->setIcon(KIcon(unlocked ? "object-locked" : "object-unlocked"));
+        }
     }
 
     KConfigGroup cg(config(), "General");
@@ -612,6 +619,15 @@ void Corona::addAction(QString name, QAction *action)
 QList<QAction*> Corona::actions() const
 {
     return d->actions.actions();
+}
+
+void Corona::enableAction(const QString &name, bool enable)
+{
+    QAction *action = d->actions.action(name);
+    if (action) {
+        action->setEnabled(enable);
+        action->setVisible(enable);
+    }
 }
 
 } // namespace Plasma

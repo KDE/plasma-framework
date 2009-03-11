@@ -186,23 +186,17 @@ void Containment::init()
         zoomAction->setShortcut(QKeySequence("alt+d,-"));
         d->actions().addAction("zoom out", zoomAction);
 
-        KAction *activityAction = new KAction(i18n("Add Activity"), this);
-        activityAction->setIcon(KIcon("list-add"));
-        activityAction->setVisible(unlocked);
-        activityAction->setEnabled(unlocked);
-        connect(activityAction, SIGNAL(triggered(bool)), this, SLOT(addSiblingContainment()));
-        activityAction->setShortcut(QKeySequence("alt+d,alt+a"));
-        d->actions().addAction("add sibling containment", activityAction);
+        if (corona()) {
+            QAction *action = corona()->action("add sibling containment");
+            if (action) {
+                d->actions().addAction("add sibling containment", action);
+            }
+        }
 
         if (d->type == DesktopContainment && d->toolBox) {
             d->toolBox->addTool(this->action("add widgets"));
-            d->toolBox->addTool(this->action("add sibling containment"));
             d->toolBox->addTool(this->action("zoom in"));
             d->toolBox->addTool(this->action("zoom out"));
-
-            if (immutability() != SystemImmutable) {
-                d->toolBox->addTool(this->action("lock widgets"));
-            }
 
             //TODO: do we need some way to allow this be overridden?
             //      it's always available because shells rely on this
@@ -1603,12 +1597,6 @@ void ContainmentPrivate::containmentConstraintsEvent(Plasma::Constraints constra
         bool unlocked = q->immutability() == Mutable;
         q->setAcceptDrops(unlocked);
         q->enableAction("add widgets", unlocked);
-        //FIXME immutability changes conflict with zoom changes
-        /*action = actions().action("add sibling containment");
-        if (action) {
-            action->setVisible(unlocked);
-            action->setEnabled(unlocked);
-        }*/
 
         // tell the applets too
         foreach (Applet *a, applets) {
