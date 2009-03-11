@@ -917,12 +917,22 @@ void Containment::dragEnterEvent(QGraphicsSceneDragDropEvent *event)
             }
         }
     }
+
+    if (event->isAccepted() && view()) {
+        showDropZone(view()->mapFromScene(event->scenePos()));
+    }
 }
 
 void Containment::dragMoveEvent(QGraphicsSceneDragDropEvent *event)
 {
     QGraphicsItem *item = scene()->itemAt(event->scenePos());
     event->setAccepted(item == this || !item);
+    Plasma::Containment *c = containment();
+    if (c && c->immutability() == Plasma::Mutable &&
+        (event->mimeData()->hasFormat(static_cast<Plasma::Corona*>(scene())->appletMimeType()) ||
+        KUrl::List::canDecode(event->mimeData())) && view()) {
+            showDropZone(view()->mapFromScene(event->scenePos()));
+     }
 }
 
 void Containment::dropEvent(QGraphicsSceneDragDropEvent *event)

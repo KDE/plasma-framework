@@ -466,8 +466,15 @@ void ExtenderItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
     //Start the drag:
     d->dragStarted = true;
+    QPointF curPos = pos();
 
-    //first update the borders.
+    //remove item from the layout, and add it somewhere off screen so we can render it to a pixmap,
+    //without other widgets interefing.
+    d->extender->itemRemovedEvent(this);
+    Corona *corona = qobject_cast<Corona*>(scene());
+    corona->addOffscreenWidget(this);
+
+    //update the borders, since while dragging, we want all of theme.
     d->themeChanged();
 
     //create a view to render the ExtenderItem and it's contents to a pixmap and set up a painter on
@@ -489,8 +496,6 @@ void ExtenderItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     view.setSceneRect(sceneBoundingRect());
     view.render(&p, QRectF(QPointF(0, 0), pixmap.size()), QRect(QPoint(0, 0), screenSize));
 
-    hide();
-
     //create the necesarry mimedata.
     ExtenderItemMimeData *mimeData = new ExtenderItemMimeData();
     mimeData->setExtenderItem(this);
@@ -498,10 +503,12 @@ void ExtenderItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     //Hide empty internal extender containers when we drag the last item away. Avoids having
     //an ugly empty applet on the desktop temporarily.
     ExtenderApplet *extenderApplet = qobject_cast<ExtenderApplet*>(d->extender->d->applet);
-    if (extenderApplet && d->extender->attachedItems().count() < 2) {
+    if (extenderApplet && d->extender->attachedItems().count() < 2 &&
+        extenderApplet->formFactor() != Plasma::Horizontal &&
+        extenderApplet->formFactor() != Plasma::Vertical) {
         kDebug() << "leaving the internal extender container, so hide the applet and it's handle.";
         extenderApplet->hide();
-        AppletHandle *handle = qgraphicsitem_cast<AppletHandle*>(extenderApplet->parentItem());
+        AppletHandle *handle = dynamic_cast<AppletHandle*>(extenderApplet->parentItem());
         if (handle) {
             handle->hide();
         }
@@ -513,10 +520,13 @@ void ExtenderItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     drag->setPixmap(pixmap);
     drag->setMimeData(mimeData);
     drag->setHotSpot(d->mousePos);
-    drag->exec();
+    Qt::DropAction action = drag->exec();
 
-    show();
-    d->widget->show();
+    corona->removeOffscreenWidget(this);
+
+    if (!action) { //we weren't moved, so reinsert the item in our current layout.
+        d->extender->itemAddedEvent(this, curPos);
+    }
 
     d->dragStarted = false;
 }
