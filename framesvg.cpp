@@ -450,6 +450,10 @@ void FrameSvgPrivate::generateBackground(FrameData *frame)
         }
     }
 
+    if (frame->enabledBorders & FrameSvg::LeftBorder && q->hasElement(prefix + "left")) {
+        rightOffset += frame->leftWidth;
+    }
+
     // Corners
     if (frame->enabledBorders & FrameSvg::TopBorder && q->hasElement(prefix + "top")) {
         contentTop = frame->topHeight;
@@ -459,7 +463,6 @@ void FrameSvgPrivate::generateBackground(FrameData *frame)
             q->paint(&p, QRect(leftOffset, topOffset, frame->leftWidth, frame->topHeight), prefix + "topleft");
 
             contentLeft = frame->leftWidth;
-            rightOffset = contentWidth + frame->leftWidth;
         }
 
         if (q->hasElement(prefix + "topright") && frame->enabledBorders & FrameSvg::RightBorder) {
@@ -472,7 +475,6 @@ void FrameSvgPrivate::generateBackground(FrameData *frame)
             q->paint(&p, QRect(leftOffset, bottomOffset, frame->leftWidth, frame->bottomHeight), prefix + "bottomleft");
 
             contentLeft = frame->leftWidth;
-            rightOffset = contentWidth + frame->leftWidth;
         }
 
         if (frame->enabledBorders & FrameSvg::RightBorder && q->hasElement(prefix + "bottomright")) {
