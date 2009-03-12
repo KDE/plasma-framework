@@ -127,8 +127,7 @@ FindMatchesJob::FindMatchesJob(Plasma::AbstractRunner *runner,
     : ThreadWeaver::Job(parent),
       m_context(*context, 0),
       m_runner(runner),
-      m_timer(0),
-      m_stale(false)
+      m_timer(0)
 {
     if (runner->speed() == Plasma::AbstractRunner::SlowSpeed) {
         assignQueuePolicy(&DelayedRunnerPolicy::instance());

@@ -167,8 +167,17 @@ public:
             deferredRun = QueryMatch(0);	  
             tmpRun.run(context);
         }
-        searchJobs.removeAll(runJob);
+
+        searchJobs.remove(runJob);
+        oldSearchJobs.remove(runJob);
         delete runJob;
+
+        if (searchJobs.isEmpty() && context.matches().isEmpty()) {
+            // we finished our run, and there are no valid matches, and so no
+            // signal will have been sent out. so we need to emit the signal
+            // ourselves here
+            emit q->matchesChanged(context.matches());
+        }
     }
 
     void unblockJobs()
@@ -189,20 +198,11 @@ public:
     QTimer matchChangeTimer;
     QTimer delayTimer; // Timer to control when to run slow runners
     QHash<QString, AbstractRunner*> runners;
-    QList<FindMatchesJob*> searchJobs;
+    QSet<FindMatchesJob*> searchJobs;
+    QSet<FindMatchesJob*> oldSearchJobs;
     bool loadAll;
     KConfigGroup config;
 };
-
-void FindMatchesJob::setStale() 
-{
-    m_stale = true;
-}
-
-bool FindMatchesJob::isStale() const
-{
-    return m_stale;
-}
 
 /*****************************************************
 *  RunnerManager::Public class
@@ -274,8 +274,8 @@ void RunnerManager::run(const QueryMatch &match)
     AbstractRunner *runner = match.runner();
 
     foreach (FindMatchesJob *job, d->searchJobs) {
-        if (job->runner() == runner && !job->isFinished() && !job->isStale()) {
-            kDebug() << "!!!!!!!!!!!!!!!!!!! uh oh!";
+        if (job->runner() == runner && !job->isFinished()) {
+            kDebug() << "deferred run";
             d->deferredRun = match;
             return;
         }
@@ -284,11 +284,8 @@ void RunnerManager::run(const QueryMatch &match)
     if (d->deferredRun.isValid()) {
         d->deferredRun = QueryMatch(0);
     }
-    
+
     match.run(d->context);
-
-
-    
 }
 
 QList<QAction*> RunnerManager::actionsForMatch(const QueryMatch &match)
@@ -347,7 +344,7 @@ void RunnerManager::launchQuery(const QString &term, const QString &runnerName)
                 job->setDelayTimer(&d->delayTimer);
             }
             Weaver::instance()->enqueue(job);
-            d->searchJobs.append(job);
+            d->searchJobs.insert(job);
         }
     }
     // Start timer to unblock slow runners
@@ -390,7 +387,7 @@ bool RunnerManager::execQuery(const QString &term, const QString &runnerName)
         //kDebug() << "ignored!";
         return false;
     }
-    
+
     r->performMatch(d->context);
     //kDebug() << "succeeded with" << d->context.matches().count() << "results";
     emit matchesChanged(d->context.matches());
@@ -407,15 +404,13 @@ void RunnerManager::reset()
     // If ThreadWeaver is idle, it is safe to clear previous jobs
     if (Weaver::instance()->isIdle()) {
         qDeleteAll(d->searchJobs);
-        d->searchJobs.clear();
+        qDeleteAll(d->oldSearchJobs);
     } else {
         Weaver::instance()->dequeue();
-        // Since we cannot safely delete the jobs, mark them as stale 
-        // TODO: delete them eventually?
-        foreach (FindMatchesJob *job, d->searchJobs) {
-	    job->setStale();
-        }
+        d->oldSearchJobs += d->searchJobs;
     }
+
+    d->searchJobs.clear();
 
     if (d->deferredRun.isEnabled()) {
         //kDebug() << "job actually done, running now **************";
