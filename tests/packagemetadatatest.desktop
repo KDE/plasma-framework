@@ -121,8 +121,6 @@ X-KDE-PluginInfo-Depends=some_test_dep
 X-KDE-PluginInfo-License=GPL
 X-KDE-PluginInfo-EnabledByDefault=true
 
-X-KDE-Plasmagik-RequiredVersion=1.2.3
-X-KDE-Plasmagik-ApplicationName=A Test name
-X-KDE-Plasmagik-MainFile=Main file
+X-KDE-ParentApp=A Test name
 
 X-PlasmoidCategory=System Information
