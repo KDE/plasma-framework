@@ -328,7 +328,11 @@ void Extender::dropEvent(QGraphicsSceneDragDropEvent *event)
 void Extender::itemAddedEvent(ExtenderItem *item, const QPointF &pos)
 {
     if (pos == QPointF(-1, -1)) {
-        d->layout->addItem(item);
+        if (appearance() == BottomUpStacked) {
+            d->layout->insertItem(0, item);
+        } else {
+            d->layout->addItem(item);
+        }
     } else {
         d->layout->insertItem(d->insertIndexFromPos(pos), item);
     }
