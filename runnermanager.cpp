@@ -87,7 +87,9 @@ public:
         const int maxThreads = config.readEntry("maxThreads", 16);
         const int numThreads = qMin(maxThreads, 2 + ((numProcs - 1) * 2));
         //kDebug() << "setting up" << numThreads << "threads for" << numProcs << "processors";
-        Weaver::instance()->setMaximumNumberOfThreads(numThreads);
+        if (numThreads > Weaver::instance()->maximumNumberOfThreads()) {
+            Weaver::instance()->setMaximumNumberOfThreads(numThreads);
+        }
         // Limit the number of instances of a single normal speed runner and all of the slow runners
         // to half the number of threads
         const int cap = qMax(2, numThreads/2);
