@@ -22,6 +22,7 @@
 
 #include <QHash>
 #include <QMutex>
+#include <QSet>
 
 #include <Weaver/Job.h>
 #include <Weaver/QueuePolicy.h>
@@ -118,6 +119,21 @@ private:
     Plasma::RunnerContext m_context;
     Plasma::AbstractRunner *m_runner;
     QTimer *m_timer;
+};
+
+class DelayedJobCleaner : public QObject
+{
+public:
+    DelayedJobCleaner(QSet<FindMatchesJob*> jobs, ThreadWeaver::WeaverInterface *weaver);
+
+private Q_SLOTS:
+    void jobDone(ThreadWeaver::Job*);
+    void checkIfFinished();
+    //connect(ThreadWeaver::instance(), SIGNAL(finished()), this, SLOT(checkIfFinished()));
+
+private:
+    ThreadWeaver::WeaverInterface *m_weaver;
+    QSet<FindMatchesJob*> m_jobs;
 };
 
 }

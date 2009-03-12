@@ -160,7 +160,12 @@ public:
 
     void jobDone(ThreadWeaver::Job *job)
     {
-        FindMatchesJob *runJob = static_cast<FindMatchesJob*>(job);
+        FindMatchesJob *runJob = dynamic_cast<FindMatchesJob*>(job);
+
+        if (!runJob) {
+            return;
+        }
+
         if (deferredRun.isEnabled() && runJob->runner() == deferredRun.runner()) {
             //kDebug() << "job actually done, running now **************";
             QueryMatch tmpRun = deferredRun;
@@ -187,6 +192,17 @@ public:
         DummyJob *dummy = new DummyJob(q);
         Weaver::instance()->enqueue(dummy);
         QObject::connect(dummy, SIGNAL(done(ThreadWeaver::Job*)), dummy, SLOT(deleteLater()));
+    }
+
+    void checkIfFinished()
+    {
+        if (Weaver::instance()->isIdle()) {
+            qDeleteAll(searchJobs);
+            searchJobs.clear();
+            qDeleteAll(oldSearchJobs);
+            oldSearchJobs.clear();
+            q->deleteLater();
+        }
     }
 
     // Delay in ms before slow runners are allowed to run
@@ -230,6 +246,10 @@ RunnerManager::RunnerManager(KConfigGroup &c, QObject *parent)
 
 RunnerManager::~RunnerManager()
 {
+    if (!qApp->closingDown && (!d->searchJobs.isEmpty() || !d->oldSearchJobs.isEmpty())) {
+        new DelayedJobCleaner(d->searchJobs + d->oldSearchJobs, Weaver::instance());
+    }
+
     delete d;
 }
 

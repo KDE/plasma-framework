@@ -167,6 +167,24 @@ Plasma::AbstractRunner* FindMatchesJob::runner() const
     return m_runner;
 }
 
+DelayedJobCleaner::DelayedJobCleaner(QSet<FindMatchesJob*> jobs, ThreadWeaver::WeaverInterface *weaver)
+    : QObject(weaver),
+      m_weaver(weaver),
+      m_jobs(jobs)
+{
+    connect(m_weaver, SIGNAL(finished()), this, SLOT(checkIfFinished()));
+}
+
+void DelayedJobCleaner::checkIfFinished()
+{
+    if (m_weaver->isIdle()) {
+        qDeleteAll(m_jobs);
+        m_jobs.clear();
+        deleteLater();
+    }
+}
+
+
 } // Plasma namespace
 
 // #include "runnerjobs.moc"
