@@ -1,5 +1,5 @@
 /*
- * Copyright 2008 by Rob Scheepmaker <r.scheepmaker@student.utwente.nl>
+ * Copyright 2008, 2009 by Rob Scheepmaker <r.scheepmaker@student.utwente.nl>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -251,6 +251,23 @@ void ExtenderItem::setExtender(Extender *extender, const QPointF &pos)
         d->expirationTimer = 0;
     }
 
+    Corona *corona = qobject_cast<Corona*>(scene());
+    KConfigGroup extenderItemGroup(corona->config(), "DetachedExtenderItems");
+
+    if (isDetached()) {
+        kDebug() << "detached, adding entry to the global group";
+        KConfigGroup itemConfig = extenderItemGroup.group(QString::number(d->extenderItemId));
+        itemConfig.writeEntry("sourceAppletPluginName",
+                config().readEntry("sourceAppletPluginName", ""));
+        itemConfig.writeEntry("sourceAppletId",
+                config().readEntry("sourceAppletId", 0));
+        itemConfig.writeEntry("extenderItemName",
+                config().readEntry("extenderItemName", ""));
+    } else if (extenderItemGroup.hasGroup(QString::number(d->extenderItemId))) {
+        kDebug() << "no longer detached, removing entry from the global group";
+        extenderItemGroup.deleteGroup(QString::number(d->extenderItemId));
+    }
+
     //we might have to enable or disable the returnToSource button.
     d->updateToolBox();
 }
@@ -351,6 +368,13 @@ void ExtenderItem::destroy()
     if (d->dragStarted) {
         //avoid being destroyed while we're being dragged.
         return;
+    }
+
+    //remove global entry if needed.
+    Corona *corona = qobject_cast<Corona*>(scene());
+    KConfigGroup extenderItemGroup(corona->config(), "DetachedExtenderItems");
+    if (extenderItemGroup.hasGroup(QString::number(d->extenderItemId))) {
+        extenderItemGroup.deleteGroup(QString::number(d->extenderItemId));
     }
 
     d->hostApplet()->config("ExtenderItems").deleteGroup(QString::number(d->extenderItemId));

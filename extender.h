@@ -1,5 +1,5 @@
 /*
- * Copyright 2008 by Rob Scheepmaker <r.scheepmaker@student.utwente.nl>
+ * Copyright 2008, 2009 by Rob Scheepmaker <r.scheepmaker@student.utwente.nl>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -93,6 +93,8 @@ class PLASMA_EXPORT Extender : public QGraphicsWidget
          * in an applet's constructor.
          * The constructor also takes care of restoring ExtenderItems that were contained in this
          * extender before, so ExtenderItems are persistent between sessions.
+         * Note that a call to extender() in an applet will instantiate an Extender for you if one
+         * isn't already associated with your applet.
          * @param applet The applet this extender is part of. Null is not allowed here.
          */
         explicit Extender(Applet *applet);
@@ -101,7 +103,6 @@ class PLASMA_EXPORT Extender : public QGraphicsWidget
 
         /**
          * @param message The text to be shown whenever the applet's extender is empty.
-         * Defaults to i18n'ed "no items".
          */
         void setEmptyExtenderMessage(const QString &message);
 
@@ -127,20 +128,29 @@ class PLASMA_EXPORT Extender : public QGraphicsWidget
         QList<ExtenderItem*> detachedItems() const;
 
         /**
-         * This function can be used for easily determining if a certain item is already displayed
-         * in a extender item somewhere, so your applet doesn't duplicate this item. Say the applet
-         * displays 'jobs', from an engine which add's a source for every job. In sourceAdded you
-         * could do something like:
-         * if (!item(source)) {
-         *     //add an extender item monitoring this source.
-         * }
+         * This function can be used for obtaining the extender item specified by name. For checking
+         * whether or not an item already exists, you should use hasItem instead: while plasma is
+         * starting up, not all detached items might have been instantiated yet. hasItem returns true
+         * even if the requested item isn't instantiated yet.
+         * @returns the requested item
          */
         ExtenderItem *item(const QString &name) const;
 
         /**
+         * This function can be used for easily determining if a certain item is already displayed
+         * in an extender item somewhere, so your applet doesn't duplicate this item. This is needed
+         * because ExtenderItems are persistent, so you can't blindly add new extender items in all
+         * cases.
+         * @returns whether or not this item already exists.
+         * @since 4.3
+         */
+        bool hasItem(const QString &name) const;
+
+        /**
          * Use this function to instruct the extender on how to render it's items. Usually you will
          * want to call this function in your applet's constraintsEvent, allthough this is already
-         * done for you when using PopupApplet at base class for your applet. Defaults to NoBorders.
+         * done for you when using PopupApplet as base class for your applet. Defaults to NoBorders.
+         * @param appearance the way this extender should look.
          */
         void setAppearance(Appearance appearance);
 

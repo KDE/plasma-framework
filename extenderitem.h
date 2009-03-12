@@ -1,5 +1,5 @@
 /*
- * Copyright 2008 by Rob Scheepmaker <r.scheepmaker@student.utwente.nl>
+ * Copyright 2008, 2009 by Rob Scheepmaker <r.scheepmaker@student.utwente.nl>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -46,12 +46,17 @@ class ExtenderItemPrivate;
  * Typical usage of ExtenderItems in your applet could look like this:
  *
  * @code
- * ExtenderItem *item = new ExtenderItem(extender());
- * //name can be used to later access this item through extender()->item(name):
- * item->setName("networkmonitoreth0");
- * item->config().writeEntry("device", "eth0");
- * initExtenderItem(item);
+ * if (!extender()->hasItem("networkmonitoreth0")) {
+ *     ExtenderItem *item = new ExtenderItem(extender());
+ *     //name can be used to later access this item through extender()->item(name):
+ *     item->setName("networkmonitoreth0");
+ *     item->config().writeEntry("device", "eth0");
+ *     initExtenderItem(item);
+ * }
  * @endcode
+ *
+ * Note that we first check if the item already exists: ExtenderItems are persistent
+ * between sessions so we can't blindly add items since they might already exist.
  *
  * You'll then need to implement the initExtenderItem function. Having this function in your applet
  * makes sure that detached extender items get restored after plasma is restarted, just like applets

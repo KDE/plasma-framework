@@ -1,5 +1,5 @@
 /*
- * Copyright 2008 by Rob Scheepmaker <r.scheepmaker@student.utwente.nl>
+ * Copyright 2008, 2009 by Rob Scheepmaker <r.scheepmaker@student.utwente.nl>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -167,6 +167,28 @@ ExtenderItem *Extender::item(const QString &name) const
     }
 
     return 0;
+}
+
+bool Extender::hasItem(const QString &name) const
+{
+    if (item(name)) {
+        return true;
+    }
+
+    //if item(name) returns false, that doesn't mean that the item doesn't exist, just that it has
+    //not been instantiated yet.
+    Corona *corona = qobject_cast<Corona*>(scene());
+    KConfigGroup extenderItemGroup(corona->config(), "DetachedExtenderItems");
+    foreach (const QString &extenderItemId, extenderItemGroup.groupList()) {
+        KConfigGroup cg = extenderItemGroup.group(extenderItemId);
+        if (cg.readEntry("sourceAppletId", 0) == d->applet->id() &&
+            cg.readEntry("extenderItemName", "") == name &&
+            cg.readEntry("sourceAppletPluginName", "") == d->applet->pluginName()) {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 void Extender::setAppearance(Appearance appearance)
