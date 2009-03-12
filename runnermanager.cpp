@@ -405,6 +405,7 @@ void RunnerManager::reset()
     if (Weaver::instance()->isIdle()) {
         qDeleteAll(d->searchJobs);
         qDeleteAll(d->oldSearchJobs);
+        d->oldSearchJobs.clear();
     } else {
         Weaver::instance()->dequeue();
         d->oldSearchJobs += d->searchJobs;
