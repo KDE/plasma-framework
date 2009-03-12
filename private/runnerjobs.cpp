@@ -189,6 +189,10 @@ void DelayedJobCleaner::jobDone(ThreadWeaver::Job *job)
 
     m_jobs.remove(runJob);
     delete runJob;
+
+    if (m_jobs.isEmpty()) {
+        deleteLater();
+    }
 }
 
 void DelayedJobCleaner::checkIfFinished()
