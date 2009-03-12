@@ -160,7 +160,7 @@ public:
 
     void jobDone(ThreadWeaver::Job *job)
     {
-        FindMatchesJob *runJob = dynamic_cast<FindMatchesJob*>(job);
+        FindMatchesJob *runJob = dynamic_cast<FindMatchesJob *>(job);
 
         if (!runJob) {
             return;
@@ -192,17 +192,6 @@ public:
         DummyJob *dummy = new DummyJob(q);
         Weaver::instance()->enqueue(dummy);
         QObject::connect(dummy, SIGNAL(done(ThreadWeaver::Job*)), dummy, SLOT(deleteLater()));
-    }
-
-    void checkIfFinished()
-    {
-        if (Weaver::instance()->isIdle()) {
-            qDeleteAll(searchJobs);
-            searchJobs.clear();
-            qDeleteAll(oldSearchJobs);
-            oldSearchJobs.clear();
-            q->deleteLater();
-        }
     }
 
     // Delay in ms before slow runners are allowed to run
@@ -358,7 +347,7 @@ void RunnerManager::launchQuery(const QString &term, const QString &runnerName)
     foreach (Plasma::AbstractRunner *r, runable) {
         if ((r->ignoredTypes() & d->context.type()) == 0) {
 //            kDebug() << "launching" << r->name();
-            FindMatchesJob *job = new FindMatchesJob(r, &d->context, this);
+            FindMatchesJob *job = new FindMatchesJob(r, &d->context, Weaver::instance());
             connect(job, SIGNAL(done(ThreadWeaver::Job*)), this, SLOT(jobDone(ThreadWeaver::Job*)));
             if (r->speed() == AbstractRunner::SlowSpeed) {
                 job->setDelayTimer(&d->delayTimer);

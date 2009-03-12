@@ -173,6 +173,22 @@ DelayedJobCleaner::DelayedJobCleaner(QSet<FindMatchesJob*> jobs, ThreadWeaver::W
       m_jobs(jobs)
 {
     connect(m_weaver, SIGNAL(finished()), this, SLOT(checkIfFinished()));
+
+    foreach (FindMatchesJob *job, m_jobs) {
+        connect(job, SIGNAL(done(ThreadWeaver::Job*)), this, SLOT(jobDone(ThreadWeaver::Job*)));
+    }
+}
+
+void DelayedJobCleaner::jobDone(ThreadWeaver::Job *job)
+{
+    FindMatchesJob *runJob = dynamic_cast<FindMatchesJob *>(job);
+
+    if (!runJob) {
+        return;
+    }
+
+    m_jobs.remove(runJob);
+    delete runJob;
 }
 
 void DelayedJobCleaner::checkIfFinished()
