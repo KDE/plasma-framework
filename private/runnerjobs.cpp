@@ -125,7 +125,7 @@ void DefaultRunnerPolicy::destructed(Job *job)
 FindMatchesJob::FindMatchesJob(Plasma::AbstractRunner *runner,
                                Plasma::RunnerContext *context, QObject *parent)
     : ThreadWeaver::Job(parent),
-      m_context(context),
+      m_context(*context, 0),
       m_runner(runner),
       m_timer(0),
       m_stale(false)
@@ -155,7 +155,7 @@ void FindMatchesJob::run()
 {
 //     kDebug() << "Running match for " << m_runner->objectName()
 //              << " in Thread " << thread()->id() << endl;
-    m_runner->performMatch(*m_context);
+    m_runner->performMatch(m_context);
 }
 
 int FindMatchesJob::priority() const
