@@ -237,7 +237,7 @@ RunnerManager::RunnerManager(KConfigGroup &c, QObject *parent)
 
 RunnerManager::~RunnerManager()
 {
-    if (!qApp->closingDown && (!d->searchJobs.isEmpty() || !d->oldSearchJobs.isEmpty())) {
+    if (!qApp->closingDown() && (!d->searchJobs.isEmpty() || !d->oldSearchJobs.isEmpty())) {
         new DelayedJobCleaner(d->searchJobs + d->oldSearchJobs, Weaver::instance());
     }
 
