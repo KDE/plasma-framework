@@ -1580,8 +1580,8 @@ void ContainmentPrivate::checkRemoveAction()
 {
     q->enableAction("remove", (q->immutability() == Mutable &&
                               (screen == -1 ||
-                              type == Plasma::Containment::PanelContainment ||
-                              type == Plasma::Containment::CustomPanelContainment)));
+                               type == Plasma::Containment::PanelContainment ||
+                               type == Plasma::Containment::CustomPanelContainment)));
 }
 
 void ContainmentPrivate::containmentConstraintsEvent(Plasma::Constraints constraints)
@@ -1637,7 +1637,9 @@ void ContainmentPrivate::containmentConstraintsEvent(Plasma::Constraints constra
         positionToolBox();
     }
 
-    if (toolBox && constraints & Plasma::StartupCompletedConstraint) {
+    if (toolBox &&
+        constraints & Plasma::StartupCompletedConstraint &&
+        type < Containment::CustomContainment) {
         toolBox->addTool(q->action("remove"));
         checkRemoveAction();
     }
