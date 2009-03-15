@@ -108,15 +108,25 @@ void DialogPrivate::themeUpdated()
         switch (extender->d->applet->location()) {
         case BottomEdge:
             borders ^= FrameSvg::BottomBorder;
+            leftWidth = 0;
+            rightWidth = 0;
+            bottomHeight = 0;
             break;
         case TopEdge:
             borders ^= FrameSvg::TopBorder;
+            topHeight = 0;
+            leftWidth = 0;
+            rightWidth = 0;
             break;
         case LeftEdge:
             borders ^= FrameSvg::LeftBorder;
+            leftWidth = 0;
+            rightWidth = 0;
             break;
         case RightEdge:
             borders ^= FrameSvg::RightBorder;
+             leftWidth = 0;
+             rightWidth = 0;
             break;
         default:
             break;
@@ -143,7 +153,10 @@ void DialogPrivate::themeUpdated()
 
     background->setEnabledBorders(borders);
 
-    background->getMargins(leftWidth, topHeight, rightWidth, bottomHeight);
+    if (!extender) {
+        background->getMargins(leftWidth, topHeight, rightWidth, bottomHeight);
+    }
+
     q->setContentsMargins(leftWidth, topHeight, rightWidth, bottomHeight);
 
     q->update();
