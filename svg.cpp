@@ -72,7 +72,8 @@ class SvgPrivate
               renderer(0),
               multipleImages(false),
               themed(false),
-              applyColors(false)
+              applyColors(false),
+              lastModified(0)
         {
         }
 
@@ -187,7 +188,7 @@ class SvgPrivate
             Theme *theme = Theme::defaultTheme();
             QPixmap p;
 
-            if (theme->findInCache(id, p)) {
+            if (theme->findInCache(id, p, lastModified)) {
                 //kDebug() << "found cached version of " << id << p.size();
                 return p;
             } else {
@@ -417,6 +418,7 @@ class SvgPrivate
         bool multipleImages;
         bool themed;
         bool applyColors;
+        unsigned int lastModified;
 };
 
 QHash<QString, SharedSvgRenderer::Ptr> SvgPrivate::s_renderers;
@@ -583,6 +585,14 @@ bool Svg::containsMultipleImages() const
 void Svg::setImagePath(const QString &svgFilePath)
 {
     d->setImagePath(svgFilePath, this);
+
+    if (!d->themed) {
+        QFile f(svgFilePath);
+        QFileInfo info(f);
+
+        d->lastModified = info.lastModified().toTime_t();
+    }
+
     d->eraseRenderer();
     emit repaintNeeded();
 }

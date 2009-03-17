@@ -192,6 +192,14 @@ class PLASMA_EXPORT Theme : public QObject
         bool findInCache(const QString &key, QPixmap &pix);
 
         /**
+         * This is an overloaded member provided to check with file timestamp
+         * where cache is still valid.
+         * @return true when pixmap was found and loaded from cache, false otherwise
+         * @since 4.3
+         **/
+        bool findInCache(const QString &key, QPixmap &pix, unsigned int lastModified);
+
+        /**
          * Insert specified pixmap into the cache.
          * If the cache already contains pixmap with the specified key then it is
          *  overwritten.
