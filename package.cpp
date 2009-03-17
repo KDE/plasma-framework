@@ -317,7 +317,7 @@ bool Package::installPackage(const QString &package,
 
     // Ensure that package names are safe so package uninstall can't inject
     // bad characters into the paths used for removal.
-    QRegExp validatePluginName("^[\\w-_\\.]+$"); // Only allow letters, numbers, underscore and period.
+    QRegExp validatePluginName("^[\\w-\\.]+$"); // Only allow letters, numbers, underscore and period.
     if (!validatePluginName.exactMatch(targetName)) {
         kWarning() << "Package plugin name " << targetName << "contains invalid characters";
         return false;
