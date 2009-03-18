@@ -454,7 +454,7 @@ void Svg::paint(QPainter *painter, int x, int y, const QString &elementID)
 void Svg::paint(QPainter *painter, const QRectF &rect, const QString &elementID)
 {
     QPixmap pix(d->findInCache(elementID, rect.size()));
-    painter->drawPixmap(rect, pix, QRectF(QPointF(0, 0), pix.size()));
+    painter->drawPixmap(QRectF(rect.topLeft(), pix.size()), pix, QRectF(QPointF(0, 0), pix.size()));
 }
 
 void Svg::paint(QPainter *painter, int x, int y, int width, int height, const QString &elementID)
