@@ -192,6 +192,12 @@ protected:
      */
     KConfigGroup config() const;
 
+
+    /**
+     * Requests that the config be synchronized to disk
+     */
+    void configNeedsSaving() const;
+
 private:
     ViewPrivate * const d;
 

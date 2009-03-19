@@ -97,8 +97,9 @@ public:
 
     void containmentScreenChanged(int wasScreen, int newScreen, Plasma::Containment *containment)
     {
+        Q_UNUSED(wasScreen)
         lastScreen = newScreen;
-        lastDesktop = this->containment->desktop();
+        lastDesktop = containment->desktop();
     }
 
     void initGraphicsView()
@@ -330,6 +331,16 @@ KConfigGroup View::config() const
 {
     KConfigGroup views(KGlobal::config(), "PlasmaViews");
     return KConfigGroup(&views, QString::number(d->viewId));
+}
+
+void View::configNeedsSaving() const
+{
+    Plasma::Corona *corona = qobject_cast<Plasma::Corona*>(scene());
+    if (corona) {
+        corona->requestConfigSync();
+    } else {
+        KGlobal::config()->sync();
+    }
 }
 
 int View::id() const
