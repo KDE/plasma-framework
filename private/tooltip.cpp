@@ -226,7 +226,14 @@ void ToolTip::setContent(QObject *tipper, const ToolTipContent &data)
     //reset our size
     d->text->setContent(data);
     d->imageLabel->setPixmap(data.image());
-    d->preview->setWindowId(data.windowToPreview());
+    if (data.windowsToPreview().size() > 1) {
+        d->preview->setWindowIds(data.windowsToPreview());
+    } else {
+        QList<WId>ids;
+        ids.append(data.windowToPreview());
+        d->preview->setWindowIds(ids);
+    }
+
     d->autohide = data.autohide();
     d->source = tipper;
 
@@ -239,7 +246,7 @@ void ToolTip::setContent(QObject *tipper, const ToolTipContent &data)
 
 void ToolTip::prepareShowing()
 {
-    if (d->preview->windowId() != 0) {
+    if (!d->preview->isEmpty()) {
         // show/hide the preview area
         d->preview->show();
     } else {

@@ -44,20 +44,25 @@ public:
 
     WindowPreview(QWidget *parent = 0);
 
-    void setWindowId(WId w);
-    WId windowId() const;
+    void setWindowIds(const QList<WId> w);
+    QList<WId> windowIds() const;
     void setInfo();
+    bool isEmpty() const;
     virtual QSize sizeHint() const;
 
 protected:
     void paintEvent(QPaintEvent *e);
 
 private:
-    void readWindowSize() const;
+    void readWindowSizes() const;
 
-    WId id;
-    mutable QSize windowSize;
+    QList<WId> ids;
+    mutable QList<QSize> windowSizes;
     FrameSvg *m_background;
+
+    static const int windowMargin = 5;
+    static const int windowWidth = 200;
+    static const int windowHeight = 150;
 };
 
 } // namespace Plasma

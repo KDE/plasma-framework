@@ -23,6 +23,7 @@
 #include <QtCore/QString>
 #include <QtCore/QUrl>
 #include <QtCore/QVariant>
+#include <QtCore/QList>
 #include <QtGui/QPixmap>
 #include <QtGui/QIcon>
 
@@ -91,11 +92,19 @@ public:
     /** An icon to display */
     QPixmap image() const;
 
+    //BIC FIXME: remove when we can break BC
     /** Sets the ID of the window to show a preview for */
     void setWindowToPreview(WId id);
 
+    //BIC FIXME: remove when we can break BC
     /** Id of a window if you want to show a preview */
     WId windowToPreview() const;
+
+    /** Sets the IDS of the windows to show a preview for */
+    void setWindowsToPreview(const QList<WId> ids);
+
+    /** Ids of a windows if you want to show a preview */
+    QList<WId> windowsToPreview() const;
 
     /** Sets whether or not to autohide the tooltip, defaults to true */
     void setAutohide(bool autohide);

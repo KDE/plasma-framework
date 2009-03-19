@@ -46,15 +46,14 @@ class ToolTipContentPrivate
 {
 public:
     ToolTipContentPrivate()
-      : windowToPreview(0),
-        autohide(true)
+      : autohide(true)
     {
     }
 
     QString mainText;
     QString subText;
     QPixmap image;
-    WId windowToPreview;
+    QList<WId> windowsToPreview;
     QHash<QString, ToolTipResource> resources;
     bool autohide;
 };
@@ -105,7 +104,7 @@ bool ToolTipContent::isEmpty() const
     return d->mainText.isEmpty() &&
            d->subText.isEmpty() &&
            d->image.isNull() &&
-           d->windowToPreview == 0;
+           (d->windowsToPreview.size() == 0);
 }
 
 void ToolTipContent::setMainText(const QString &text)
@@ -143,14 +142,29 @@ QPixmap ToolTipContent::image() const
     return d->image;
 }
 
-void ToolTipContent::setWindowToPreview(WId id)
+void ToolTipContent::setWindowToPreview(const WId id)
 {
-    d->windowToPreview = id;
+    d->windowsToPreview.clear();
+    d->windowsToPreview.append(id);
 }
 
 WId ToolTipContent::windowToPreview() const
 {
-    return d->windowToPreview;
+    if (d->windowsToPreview.size() == 1) {
+        return d->windowsToPreview.first();
+    } else {
+        return 0;
+    }
+}
+
+void ToolTipContent::setWindowsToPreview(QList<WId> ids)
+{
+    d->windowsToPreview = ids;
+}
+
+QList<WId> ToolTipContent::windowsToPreview() const
+{
+    return d->windowsToPreview;
 }
 
 void ToolTipContent::setAutohide(bool autohide)

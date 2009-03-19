@@ -65,53 +65,86 @@ WindowPreview::WindowPreview(QWidget *parent)
     m_background->setElementPrefix("raised");
 }
 
-void WindowPreview::setWindowId(WId w)
+void WindowPreview::setWindowIds(const QList<WId> wids)
 {
     if (!previewsAvailable()) {
         setMinimumSize(0,0);
         setMaximumSize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX);
-        id = 0;
+        ids.clear();
         return;
     }
-    id = w;
-    readWindowSize();
+    ids = wids;
+    readWindowSizes();
     QSize s(sizeHint());
     if (s.isValid()) {
         setFixedSize(sizeHint());
     }
 }
 
-WId WindowPreview::windowId() const
+QList<WId> WindowPreview::windowIds() const
 {
-    return id;
+    return ids;
 }
 
 QSize WindowPreview::sizeHint() const
 {
-    if (id == 0) {
+    if (ids.size() == 0) {
         return QSize();
     }
-    if (!windowSize.isValid()) {
-        readWindowSize();
+    if (!windowSizes.size() == 0) {
+        readWindowSizes();
     }
-    QSize s = windowSize;
-    s.scale(200, 150, Qt::KeepAspectRatio);
+
+    int maxHeight = 0;
+    int totalWidth = 0;
+    foreach (QSize s, windowSizes) {
+        if (s.height() > maxHeight) {
+            maxHeight = s.height();
+        }
+
+        totalWidth += s.width();
+    }
+
+    QSize s(totalWidth, maxHeight);
+
+    qreal left, top, right, bottom;
+    m_background->getMargins(left, top, right, bottom);
+
+    s.scale(windowWidth*windowSizes.size(), windowHeight, Qt::KeepAspectRatio);
+
+    s = s + QSize(left+right+windowMargin*(windowSizes.size()-1), top+bottom);
 
     return s;
 }
 
-void WindowPreview::readWindowSize() const
+void WindowPreview::readWindowSizes() const
 {
+    windowSizes.clear();
+    foreach (WId id, ids) {
 #ifdef Q_WS_X11
-    if (id > 0) {
-        KWindowInfo info = KWindowSystem::windowInfo(id, NET::WMGeometry|NET::WMFrameExtents);
-        windowSize = info.frameGeometry().size();
-    } else {
-        windowSize = QSize();
-    }
+        if (id > 0) {
+            KWindowInfo info = KWindowSystem::windowInfo(id, NET::WMGeometry|NET::WMFrameExtents);
+            windowSizes.append(info.frameGeometry().size());
+        } else {
+            windowSizes.append(QSize());
+        }
 #else
-    windowSize = QSize();
+        windowSizes.append(QSize());
 #endif
+    }
+}
+
+bool WindowPreview::isEmpty() const
+{
+  if (ids.size() == 0) {
+      return true;
+  }
+  foreach (WId id, ids) {
+      if (id != 0) {
+          return false;
+      }
+  }
+  return true;
 }
 
 void WindowPreview::setInfo()
@@ -119,14 +152,14 @@ void WindowPreview::setInfo()
 #ifdef Q_WS_X11
     Display *dpy = QX11Info::display();
     Atom atom = XInternAtom(dpy, "_KDE_WINDOW_PREVIEW", False);
-    if (id == 0) {
+    if (isEmpty()) {
         XDeleteProperty(dpy, parentWidget()->winId(), atom);
         return;
     }
-    if (!windowSize.isValid()) {
-        readWindowSize();
+    if (windowSizes.size() == 0) {
+        readWindowSizes();
     }
-    if (!windowSize.isValid()) {
+    if (windowSizes.size() == 0) {
         XDeleteProperty(dpy, parentWidget()->winId(), atom);
         return;
     }
@@ -140,8 +173,33 @@ void WindowPreview::setInfo()
     m_background->getMargins(left, top, right, bottom);
     QRect thumbnailRect = geometry().adjusted(left, top, -right, -bottom);
 
+    const int numWindows = ids.size();
 
-    long data[] = { 1, 5, id, thumbnailRect.x(), thumbnailRect.y(), thumbnailRect.width(), thumbnailRect.height() };
+    QList <QRect> thumbnailRects;
+    int x = thumbnailRect.x();
+
+    foreach (QSize s, windowSizes) {
+        s.scale((qreal)(thumbnailRect.width()-5*(numWindows-1))/numWindows, thumbnailRect.height(), Qt::KeepAspectRatio);
+        int y = thumbnailRect.y() + (thumbnailRect.height() - s.height())/2;
+        thumbnailRects.append(QRect(QPoint(x,y), s));
+        x += s.width() + 5;
+    }
+
+    long data[(1 + 6*numWindows)];
+    data[0] = numWindows;
+
+    for (int i = 0; i<numWindows; ++i) {
+        const int start = i*6+1;
+        const QRect thumbnailRect = thumbnailRects[i];
+
+        data[start] = 5;
+        data[start+1] = ids[i];
+        data[start+2] = thumbnailRect.x();
+        data[start+3] = thumbnailRect.y();
+        data[start+4] = thumbnailRect.width();
+        data[start+5] = thumbnailRect.height();
+    }
+
     XChangeProperty(dpy, parentWidget()->winId(), atom, atom, 32, PropModeReplace,
         reinterpret_cast<unsigned char *>(data), sizeof(data) / sizeof(data[ 0 ]));
 #endif
