@@ -157,7 +157,7 @@ WId ToolTipContent::windowToPreview() const
     }
 }
 
-void ToolTipContent::setWindowsToPreview(QList<WId> ids)
+void ToolTipContent::setWindowsToPreview(const QList<WId> & ids)
 {
     d->windowsToPreview = ids;
 }
