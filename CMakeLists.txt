@@ -35,6 +35,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}
 if(QT_QTOPENGL_FOUND AND OPENGL_FOUND)
     # libGL needs dlopen() and friends from the dl library
     find_library(DL_LIBRARY dl)
+    mark_as_advanced(DL_LIBRARY)
     include_directories(${OPENGL_INCLUDE_DIR})
 endif(QT_QTOPENGL_FOUND AND OPENGL_FOUND)
 
