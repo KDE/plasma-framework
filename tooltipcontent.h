@@ -100,10 +100,12 @@ public:
     /** Id of a window if you want to show a preview */
     WId windowToPreview() const;
 
-    /** Sets the IDS of the windows to show a preview for */
-    void setWindowsToPreview(const QList<WId> ids);
+    /** Sets the IDS of the windows to show a preview for
+        @since 4.3*/
+    void setWindowsToPreview(const QList<WId> &ids);
 
-    /** Ids of a windows if you want to show a preview */
+    /** Ids of a windows if you want to show a preview
+        @since 4.3*/
     QList<WId> windowsToPreview() const;
 
     /** Sets whether or not to autohide the tooltip, defaults to true */
