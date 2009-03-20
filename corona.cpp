@@ -494,16 +494,42 @@ QPoint Corona::popupPosition(const QGraphicsItem *item, const QSize &s)
 
     switch (loc) {
     case BottomEdge:
-        pos = QPoint(pos.x(), v->geometry().y() - s.height());
+    case TopEdge: {
+        //TODO: following line makes them centered.
+        //could make it better or worse, must be decided
+        //pos.setX(pos.x() + item->boundingRect().width()/2 - s.width()/2);
+        if (pos.x() + s.width() > v->geometry().right()) {
+            pos.setX(v->geometry().right() - s.width());
+        } else {
+            pos.setX(qMax(pos.x(), v->geometry().left()));
+        }
+        break;
+    }
+    case LeftEdge:
+    case RightEdge: {
+        //pos.setY(pos.y() + item->boundingRect().height()/2 - s.height()/2);
+        if (pos.y() + s.height() > v->geometry().bottom()) {
+            pos.setY(v->geometry().bottom() - s.height());
+        } else {
+            pos.setY(qMax(pos.y(), v->geometry().top()));
+        }
+        break;
+    }
+    default:
+        break;
+    }
+    switch (loc) {
+    case BottomEdge:
+        pos.setY(v->geometry().y() - s.height());
         break;
     case TopEdge:
-        pos = QPoint(pos.x(), v->geometry().bottom());
+        pos.setY(v->geometry().bottom());
         break;
     case LeftEdge:
-        pos = QPoint(v->geometry().right(), pos.y());
+        pos.setX(v->geometry().right());
         break;
     case RightEdge:
-        pos = QPoint(v->geometry().x() - s.width(), pos.y());
+        pos.setX(v->geometry().x() - s.width());
         break;
     default:
         if (pos.y() - s.height() > 0) {
