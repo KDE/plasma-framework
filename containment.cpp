@@ -180,14 +180,12 @@ void Containment::init()
         zoomAction->setShortcuts(keys);
         d->actions().addAction("zoom in", zoomAction);
 
-        zoomAction = new KAction(i18n("Zoom Out"), this);
-        zoomAction->setIcon(KIcon("zoom-out"));
-        connect(zoomAction, SIGNAL(triggered(bool)), this, SLOT(zoomOut()));
-        zoomAction->setShortcut(QKeySequence("alt+d,-"));
-        d->actions().addAction("zoom out", zoomAction);
-
         if (corona()) {
-            QAction *action = corona()->action("add sibling containment");
+            QAction *action = corona()->action("zoom out");
+            if (action) {
+                d->actions().addAction("zoom out", action);
+            }
+            action = corona()->action("add sibling containment");
             if (action) {
                 d->actions().addAction("add sibling containment", action);
             }
@@ -196,7 +194,6 @@ void Containment::init()
         if (d->type == DesktopContainment && d->toolBox) {
             d->toolBox->addTool(this->action("add widgets"));
             d->toolBox->addTool(this->action("zoom in"));
-            d->toolBox->addTool(this->action("zoom out"));
 
             //TODO: do we need some way to allow this be overridden?
             //      it's always available because shells rely on this
