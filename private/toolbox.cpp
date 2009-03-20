@@ -134,7 +134,7 @@ void ToolBox::updateToolBox()
 {
     Plasma::IconWidget *tool = qobject_cast<Plasma::IconWidget *>(sender());
     if (tool && tool->action() == 0) {
-        delete tool;
+        tool->deleteLater();
         tool = 0;
     }
 
@@ -157,7 +157,7 @@ void ToolBox::removeTool(QAction *action)
         Plasma::IconWidget *tool = dynamic_cast<Plasma::IconWidget*>(child);
         if (tool && tool->action() == action) {
             //kDebug() << "tool found!";
-            delete tool;
+            tool->deleteLater();
             break;
         }
     }
