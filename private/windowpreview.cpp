@@ -21,6 +21,7 @@
 #include "windowpreview_p.h"
 
 #include <QPainter>
+#include <QVarLengthArray>
 
 #include <kwindowsystem.h>
 #include <kdebug.h>
@@ -185,7 +186,7 @@ void WindowPreview::setInfo()
         x += s.width() + 5;
     }
 
-    long data[(1 + 6*numWindows)];
+    QVarLengthArray<long, 1024> data(1 + 6*numWindows);
     data[0] = numWindows;
 
     for (int i = 0; i<numWindows; ++i) {
@@ -201,7 +202,7 @@ void WindowPreview::setInfo()
     }
 
     XChangeProperty(dpy, parentWidget()->winId(), atom, atom, 32, PropModeReplace,
-        reinterpret_cast<unsigned char *>(data), sizeof(data) / sizeof(data[ 0 ]));
+                    reinterpret_cast<unsigned char *>(data.data()), data.size());
 #endif
 }
 
