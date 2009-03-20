@@ -103,7 +103,7 @@ path: The path to be processed.
 corrected: The corrected-case path
 Returns true on success and false on error, in case of error, corrected is not modified
 */
-bool correctPathCase(const QString path, QString &corrected)
+bool correctPathCase(const QString& path, QString &corrected)
 {
     // early exit check
     if (QFile::exists(path)) {
