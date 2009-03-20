@@ -494,16 +494,16 @@ QPoint Corona::popupPosition(const QGraphicsItem *item, const QSize &s)
 
     switch (loc) {
     case BottomEdge:
-        pos = QPoint(pos.x(), pos.y() - s.height());
+        pos = QPoint(pos.x(), v->geometry().y() - s.height());
         break;
     case TopEdge:
-        pos = QPoint(pos.x(), pos.y() + (int)item->boundingRect().size().height());
+        pos = QPoint(pos.x(), v->geometry().bottom());
         break;
     case LeftEdge:
-        pos = QPoint(pos.x() + (int)item->boundingRect().size().width(), pos.y());
+        pos = QPoint(v->geometry().right(), pos.y());
         break;
     case RightEdge:
-        pos = QPoint(pos.x() - s.width(), pos.y());
+        pos = QPoint(v->geometry().x() - s.width(), pos.y());
         break;
     default:
         if (pos.y() - s.height() > 0) {
