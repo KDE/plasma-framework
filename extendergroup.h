@@ -21,7 +21,7 @@
 #define PLASMA_EXTENDERGROUP_H
 
 #include <QtGui/QGraphicsWidget>
-#include <QList>
+#include <QtCore/QList>
 
 #include "extenderitem.h"
 
