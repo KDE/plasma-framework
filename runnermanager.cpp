@@ -174,6 +174,61 @@ Plasma::AbstractRunner *FindMatchesJob::runner() const
     return m_runner;
 }
 
+class DelayedJobCleaner : public QObject
+{
+public:
+    DelayedJobCleaner(QSet<FindMatchesJob*> jobs, ThreadWeaver::WeaverInterface *weaver);
+
+private Q_SLOTS:
+    void jobDone(ThreadWeaver::Job*);
+    void checkIfFinished();
+    //connect(ThreadWeaver::instance(), SIGNAL(finished()), this, SLOT(checkIfFinished()));
+
+private:
+    ThreadWeaver::WeaverInterface *m_weaver;
+    QSet<FindMatchesJob*> m_jobs;
+};
+
+DelayedJobCleaner::DelayedJobCleaner(QSet<FindMatchesJob*> jobs, ThreadWeaver::WeaverInterface *weaver)
+    : QObject(weaver),
+      m_weaver(weaver),
+      m_jobs(jobs)
+{
+    connect(m_weaver, SIGNAL(finished()), this, SLOT(checkIfFinished()));
+
+    foreach (FindMatchesJob *job, m_jobs) {
+    connect(job, SIGNAL(done(ThreadWeaver::Job*)), this, SLOT(jobDone(ThreadWeaver::Job*)));
+    }
+}
+
+void DelayedJobCleaner::jobDone(ThreadWeaver::Job *job)
+{
+    FindMatchesJob *runJob = dynamic_cast<FindMatchesJob *>(job);
+
+    if (!runJob) {
+        return;
+    }
+
+    m_jobs.remove(runJob);
+    delete runJob;
+
+    if (m_jobs.isEmpty()) {
+        deleteLater();
+    }
+}
+
+void DelayedJobCleaner::checkIfFinished()
+{
+    if (m_weaver->isIdle()) {
+        qDeleteAll(m_jobs);
+        m_jobs.clear();
+        deleteLater();
+    }
+}
+
+
+
+
 /*****************************************************
 *  RunnerManager::Private class
 *
@@ -212,8 +267,9 @@ public:
         const int maxThreads = config.readEntry("maxThreads", 16);
         const int numThreads = qMin(maxThreads, 2 + ((numProcs - 1) * 2));
         //kDebug() << "setting up" << numThreads << "threads for" << numProcs << "processors";
-        Weaver::instance()->setMaximumNumberOfThreads(numThreads);
-
+        if (numThreads > Weaver::instance()->maximumNumberOfThreads()) {
+            Weaver::instance()->setMaximumNumberOfThreads(numThreads);
+        }
         //Preferred order of execution of runners
         //prioritylist = config.readEntry("priority", QStringList());
 
@@ -284,7 +340,12 @@ public:
 
     void jobDone(ThreadWeaver::Job *job)
     {
-        FindMatchesJob *runJob = static_cast<FindMatchesJob*>(job);
+        FindMatchesJob *runJob = dynamic_cast<FindMatchesJob *>(job);
+
+        if (!runJob) {
+            return;
+        }
+
         if (deferredRun.isEnabled() && runJob->runner() == deferredRun.runner()) {
             //kDebug() << "job actually done, running now **************";
             QueryMatch tmpRun = deferredRun;
@@ -342,6 +403,11 @@ RunnerManager::RunnerManager(KConfigGroup &c, QObject *parent)
 
 RunnerManager::~RunnerManager()
 {
+    if (!qApp->closingDown() && (!d->searchJobs.isEmpty() || !d->oldSearchJobs.isEmpty())) {
+         new DelayedJobCleaner(d->searchJobs + d->oldSearchJobs, Weaver::instance());
+    }
+
+
     delete d;
 }
 
@@ -450,7 +516,7 @@ void RunnerManager::launchQuery(const QString &term, const QString &runnerName)
     foreach (Plasma::AbstractRunner *r, runable) {
         if ((r->ignoredTypes() & d->context.type()) == 0) {
 //            kDebug() << "launching" << r->name();
-            FindMatchesJob *job = new FindMatchesJob(r, &d->context, this);
+            FindMatchesJob *job = new FindMatchesJob(r, &d->context, Weaver::instance());
             connect(job, SIGNAL(done(ThreadWeaver::Job*)), this, SLOT(jobDone(ThreadWeaver::Job*)));
             Weaver::instance()->enqueue(job);
             d->searchJobs.insert(job);
