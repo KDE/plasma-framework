@@ -138,23 +138,19 @@ public:
 
     int priority() const;
     Plasma::AbstractRunner *runner() const;
-    void setStale();
-    bool isStale() const;
 
 protected:
     void run();
 private:
     Plasma::RunnerContext m_context;
     Plasma::AbstractRunner *m_runner;
-    bool m_stale;
 };
 
 FindMatchesJob::FindMatchesJob(Plasma::AbstractRunner *runner,
                                Plasma::RunnerContext *context, QObject *parent)
     : ThreadWeaver::Job(parent),
       m_context(*context, 0),
-      m_runner(runner),
-      m_stale(false)
+      m_runner(runner)
 {
     if (runner->speed() == Plasma::AbstractRunner::SlowSpeed) {
         assignQueuePolicy(&RunnerRestrictionPolicy::instance());
@@ -178,16 +174,6 @@ Plasma::AbstractRunner *FindMatchesJob::runner() const
     return m_runner;
 }
 
-void FindMatchesJob::setStale() 
-{
-    m_stale = true;
-}
-
-bool FindMatchesJob::isStale() const
-{
-    return m_stale;
-}
-
 /*****************************************************
 *  RunnerManager::Private class
 *
@@ -207,7 +193,7 @@ public:
 
     void scheduleMatchesChanged()
     {
-        matchChangeTimer.start(0);
+        matchChangeTimer.start(50);
     }
 
     void matchesChanged()
@@ -305,8 +291,17 @@ public:
             deferredRun = QueryMatch(0);	  
             tmpRun.run(context);
         }
-        searchJobs.removeAll(runJob);
+
+        searchJobs.remove(runJob);
+        oldSearchJobs.remove(runJob);
         delete runJob;
+
+        if (searchJobs.isEmpty() && context.matches().isEmpty()) {
+            // we finished our run, and there are no valid matches, and so no
+            // signal will have been sent out. so we need to emit the signal
+            // ourselves here
+            emit q->matchesChanged(context.matches());
+        }
     }
 
     RunnerManager *q;
@@ -314,7 +309,8 @@ public:
     RunnerContext context;
     QTimer matchChangeTimer;
     QHash<QString, AbstractRunner*> runners;
-    QList<FindMatchesJob*> searchJobs;
+    QSet<FindMatchesJob*> searchJobs;
+    QSet<FindMatchesJob*> oldSearchJobs;
 //     QStringList prioritylist;
     bool loadAll;
     KConfigGroup config;
@@ -390,8 +386,8 @@ void RunnerManager::run(const QueryMatch &match)
     AbstractRunner *runner = match.runner();
 
     foreach (FindMatchesJob *job, d->searchJobs) {
-        if (job->runner() == runner && !job->isFinished() && !job->isStale()) {
-            kDebug() << "!!!!!!!!!!!!!!!!!!! uh oh!";
+        if (job->runner() == runner && !job->isFinished()) {
+            kDebug() << "deferred run";
             d->deferredRun = match;
             return;
         }
@@ -400,11 +396,8 @@ void RunnerManager::run(const QueryMatch &match)
     if (d->deferredRun.isValid()) {
         d->deferredRun = QueryMatch(0);
     }
-    
+
     match.run(d->context);
-
-
-    
 }
 
 QList<QAction*> RunnerManager::actionsForMatch(const QueryMatch &match)
@@ -460,7 +453,7 @@ void RunnerManager::launchQuery(const QString &term, const QString &runnerName)
             FindMatchesJob *job = new FindMatchesJob(r, &d->context, this);
             connect(job, SIGNAL(done(ThreadWeaver::Job*)), this, SLOT(jobDone(ThreadWeaver::Job*)));
             Weaver::instance()->enqueue(job);
-            d->searchJobs.append(job);
+            d->searchJobs.insert(job);
         }
     }
 }
@@ -518,15 +511,14 @@ void RunnerManager::reset()
     // If ThreadWeaver is idle, it is safe to clear previous jobs
     if (Weaver::instance()->isIdle()) {
         qDeleteAll(d->searchJobs);
-        d->searchJobs.clear();
+        qDeleteAll(d->oldSearchJobs);
+        d->oldSearchJobs.clear();
     } else {
         Weaver::instance()->dequeue();
-        // Since we cannot safely delete the jobs, mark them as stale 
-        // TODO: delete them eventually?
-        foreach (FindMatchesJob *job, d->searchJobs) {
-	    job->setStale();
-        }
+        d->oldSearchJobs += d->searchJobs;
     }
+
+    d->searchJobs.clear();
 
     if (d->deferredRun.isEnabled()) {
         //kDebug() << "job actually done, running now **************";
