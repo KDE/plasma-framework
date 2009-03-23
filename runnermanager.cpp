@@ -68,7 +68,7 @@ public:
 
     void scheduleMatchesChanged()
     {
-        matchChangeTimer.start(0);
+        matchChangeTimer.start(50);
     }
 
     void matchesChanged()
