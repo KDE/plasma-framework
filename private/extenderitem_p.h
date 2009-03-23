@@ -34,6 +34,7 @@ class QTimer;
 namespace Plasma
 {
     class Applet;
+    class ExtenderGroup;
     class ExtenderItem;
     class Extender;
     class IconWidget;
@@ -65,6 +66,7 @@ class ExtenderItemPrivate
 
         Extender *extender;
         Applet *sourceApplet;
+        ExtenderGroup *group;
 
         KConfigGroup config;
 

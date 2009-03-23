@@ -32,6 +32,7 @@ namespace Plasma
 
 class Applet;
 class Extender;
+class ExtenderGroup;
 class ExtenderItemPrivate;
 
 /**
@@ -170,6 +171,24 @@ class PLASMA_EXPORT ExtenderItem : public QGraphicsWidget
          * @return the extender this items belongs to.
          */
         Extender *extender() const;
+
+        /**
+         * @param group the group you want this item to belong to.
+         * @since 4.3
+         */
+        void setGroup(ExtenderGroup *group);
+
+        /**
+         * @returns the group this item belongs to.
+         * @since 4.3
+         */
+        ExtenderGroup *group() const;
+
+        /**
+         * @returns whether or not this is an ExtenderGroup.
+         * @since 4.3
+         */
+        bool isGroup() const;
 
         /**
          * @param time (in ms) before this extender item destroys itself unless it is detached,

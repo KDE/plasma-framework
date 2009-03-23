@@ -34,6 +34,7 @@ namespace Plasma
 
 class Applet;
 class Extender;
+class ExtenderGroup;
 class ExtenderItem;
 class Label;
 class Spacer;
@@ -51,6 +52,7 @@ class ExtenderPrivate
         void loadExtenderItems();
         void updateBorders();
         void updateEmptyExtenderLabel();
+        ExtenderGroup *findGroup(const QString &name) const;
 
         Extender *q;
 

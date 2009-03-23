@@ -66,6 +66,7 @@ set(plasma_LIB_SRCS
     delegate.cpp
     dialog.cpp
     extender.cpp
+    extendergroup.cpp
     extenderitem.cpp
     paintutils.cpp
     framesvg.cpp
@@ -205,6 +206,7 @@ set(plasma_LIB_INCLUDES
     delegate.h
     dialog.h
     extender.h
+    extendergroup.h
     extenderitem.h
     paintutils.h
     framesvg.h

@@ -40,6 +40,7 @@
 #include "corona.h"
 #include "dialog.h"
 #include "extender.h"
+#include "extendergroup.h"
 #include "framesvg.h"
 #include "popupapplet.h"
 #include "theme.h"
@@ -102,6 +103,10 @@ ExtenderItem::ExtenderItem(Extender *hostExtender, uint extenderItemId)
             iconName = "utilities-desktop-extra";
         }
         d->collapseIcon = new IconWidget(KIcon(iconName), "", this);
+
+        //Find the group if it's already there.
+        QString groupName = dg.readEntry("group", "");
+        d->group = hostExtender->d->findGroup(groupName);
 
         //Find the sourceapplet.
         Corona *corona = hostExtender->d->applet->containment()->corona();
@@ -277,6 +282,22 @@ Extender *ExtenderItem::extender() const
     return d->extender;
 }
 
+void ExtenderItem::setGroup(ExtenderGroup *group)
+{
+    d->group = group;
+    config().writeEntry("group", group->name());
+}
+
+ExtenderGroup *ExtenderItem::group() const
+{
+    return d->group;
+}
+
+bool ExtenderItem::isGroup() const
+{
+    return (config().readEntry("isGroup", false));
+}
+
 bool ExtenderItem::isCollapsed() const
 {
     return d->collapsed;
@@ -379,6 +400,7 @@ void ExtenderItem::destroy()
 
     d->hostApplet()->config("ExtenderItems").deleteGroup(QString::number(d->extenderItemId));
     d->extender->d->removeExtenderItem(this);
+    emit d->extender->itemDetached(this);
     deleteLater();
 }
 
@@ -608,6 +630,7 @@ ExtenderItemPrivate::ExtenderItemPrivate(ExtenderItem *extenderItem, Extender *h
       toolbox(0),
       extender(hostExtender),
       sourceApplet(0),
+      group(0),
       dragger(new FrameSvg(extenderItem)),
       background(new FrameSvg(extenderItem)),
       collapseIcon(0),

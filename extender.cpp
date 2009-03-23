@@ -28,6 +28,7 @@
 #include "applet.h"
 #include "containment.h"
 #include "corona.h"
+#include "extendergroup.h"
 #include "extenderitem.h"
 #include "framesvg.h"
 #include "paintutils.h"
@@ -204,6 +205,17 @@ void Extender::setAppearance(Appearance appearance)
 Extender::Appearance Extender::appearance() const
 {
     return d->appearance;
+}
+
+QList<ExtenderGroup*> Extender::groups() const
+{
+    QList<ExtenderGroup*> result;
+    foreach (ExtenderItem *item, attachedItems()) {
+        if (item->isGroup() && !result.contains(item->group())) {
+            result.append(item->group());
+        }
+    }
+    return result;
 }
 
 void Extender::saveState()
@@ -540,7 +552,12 @@ void ExtenderPrivate::loadExtenderItems()
             kDebug() << "sourceApplet is null? appletName = " << appletName;
             kDebug() << "                      extenderItemId = " << extenderItemId;
         } else {
-            ExtenderItem *item = new ExtenderItem(q, extenderItemId.toInt());
+            ExtenderItem *item;
+            if (dg.readEntry("isGroup", false)) {
+                item = new ExtenderGroup(q, extenderItemId.toInt());
+            } else {
+                item = new ExtenderItem(q, extenderItemId.toInt());
+            }
             sourceApplet->initExtenderItem(item);
 
             if (temporarySourceApplet) {
@@ -579,6 +596,16 @@ void ExtenderPrivate::updateEmptyExtenderLabel()
         delete emptyExtenderLabel;
         emptyExtenderLabel = 0;
     }
+}
+
+ExtenderGroup *ExtenderPrivate::findGroup(const QString &name) const
+{
+    foreach (ExtenderItem *item, q->attachedItems()) {
+        if (item->isGroup() && item->name() == name) {
+            return qobject_cast<ExtenderGroup*>(item);
+        }
+    }
+    return 0;
 }
 
 } // Plasma namespace

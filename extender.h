@@ -27,6 +27,8 @@
 
 namespace Plasma
 {
+
+class ExtenderGroup;
 class ExtenderPrivate;
 class ExtenderItem;
 class Applet;
@@ -155,9 +157,15 @@ class PLASMA_EXPORT Extender : public QGraphicsWidget
         void setAppearance(Appearance appearance);
 
         /**
-         * @return the current way of rendering extender items that is used.
+         * @returns the current way of rendering extender items that is used.
          */
         Appearance appearance() const;
+
+        /**
+         * @returns a list of groups that are contained in this extender.
+         * @since 4.3
+         */
+        QList<ExtenderGroup*> groups() const;
 
     protected:
         /**
@@ -168,7 +176,7 @@ class PLASMA_EXPORT Extender : public QGraphicsWidget
          * @param item The item that has just been added.
          * @param pos The location the item has been dropped in local coordinates.
          */
-        virtual void itemAddedEvent(ExtenderItem *item, const QPointF &pos);
+        virtual void itemAddedEvent(ExtenderItem *item, const QPointF &pos = QPointF(-1, -1));
 
         /**
          * Get's called after an item has been removed from this extender. All bookkeeping has
@@ -271,6 +279,8 @@ class PLASMA_EXPORT Extender : public QGraphicsWidget
         ExtenderPrivate *const d;
 
         friend class ExtenderPrivate;
+        friend class ExtenderGroup;
+        friend class ExtenderGroupPrivate;
         friend class ExtenderItem;
         friend class ExtenderItemPrivate;
         //dialog needs access to the extender's applet location.
