@@ -229,6 +229,26 @@ QRectF DesktopToolBox::boundingRect() const
 {
     int extraSpace = size();
 
+
+    //keep space for the label and a character more
+    if (!d->containment->activity().isNull()) {
+        extraSpace = Plasma::Theme::defaultTheme()->fontMetrics().width(d->containment->activity()+"x");
+    }
+
+    //get all borders
+    d->background->setEnabledBorders(FrameSvg::AllBorders);
+    qreal left, top, right, bottom;
+    d->background->getMargins(left, top, right, bottom);
+    d->adjustBackgroundBorders();
+
+
+    return QRectF(0, 0, size()+left+right+extraSpace, size()+top+bottom+extraSpace);
+}
+
+QRectF DesktopToolBox::apparentBoundingRect() const
+{
+    int extraSpace = size();
+
     d->adjustBackgroundBorders();
 
     //keep space for the label and a character more
@@ -239,11 +259,46 @@ QRectF DesktopToolBox::boundingRect() const
     qreal left, top, right, bottom;
     d->background->getMargins(left, top, right, bottom);
 
-    if (corner() == Left || corner() == Right) {
-        return QRectF(0, 0, size()+left+right, size()+extraSpace+top+bottom);
+    QRectF rect;
+
+    //disable text at corners
+    if (corner() == TopLeft || corner() == TopRight || corner() == BottomLeft || corner() == BottomRight) {
+        rect = QRectF(0, 0, size()+left+right, size()+top+bottom);
+    } else if (corner() == Left || corner() == Right) {
+        rect = QRectF(0, 0, size()+left+right, size()+extraSpace+top+bottom);
+    //top or bottom
     } else {
-        return QRectF(0, 0, size()+extraSpace+left+right, size()+top+bottom);
+        rect = QRectF(0, 0, size()+extraSpace+left+right, size()+top+bottom);
     }
+
+    switch (corner()) {
+    case TopLeft:
+        //the rect is ok
+        break;
+    case TopRight:
+        rect.moveTopRight(boundingRect().topRight());
+        break;
+    case BottomLeft:
+        rect.moveBottomLeft(boundingRect().bottomLeft());
+        break;
+    case BottomRight:
+        rect.moveBottomRight(boundingRect().bottomRight());
+        break;
+    case Left:
+        rect.moveLeft(boundingRect().left());
+        break;
+    case Right:
+        rect.moveRight(boundingRect().right());
+        break;
+    case Top:
+        //the rect is ok
+        break;
+    case Bottom:
+    default:
+        rect.moveBottom(boundingRect().bottom());
+    }
+
+    return rect;
 }
 
 void DesktopToolBox::assignColors()
@@ -270,18 +325,45 @@ void DesktopToolBox::paint(QPainter *painter, const QStyleOptionGraphicsItem *op
 
     QPoint iconPos;
     QRect backgroundRect;
-    const QRectF rect = boundingRect();
+    const QRectF rect = apparentBoundingRect();
     const QSize icons = iconSize();
 
-    const QString activityName = d->containment->activity();
+    QString cornerElement;
 
-    const QSize textSize =  Plasma::Theme::defaultTheme()->fontMetrics().size(Qt::TextSingleLine, activityName+"x");
+    switch (corner()) {
+    case TopLeft:
+        cornerElement = "desktop-northwest";
+        break;
+    case TopRight:
+        cornerElement = "desktop-northeast";
+        break;
+    case BottomRight:
+        cornerElement = "desktop-southeast";
+        break;
+    case BottomLeft:
+        cornerElement = "desktop-southwest";
+        break;
+    default:
+        break;
+    }
+
+    QString activityName;
+
+    QSize textSize;
+    if (cornerElement.isNull()) {
+        activityName = d->containment->activity();
+        textSize =  Plasma::Theme::defaultTheme()->fontMetrics().size(Qt::TextSingleLine, activityName+"x");
+    }
 
     d->adjustBackgroundBorders();
 
-
     d->background->resizeFrame(rect.size());
-    d->background->paintFrame(painter);
+
+    if (!cornerElement.isNull()) {
+        d->background->paint(painter, rect, cornerElement);
+    } else {
+        d->background->paintFrame(painter, rect.topLeft());
+    }
 
 
     QRect iconRect;
@@ -304,6 +386,7 @@ void DesktopToolBox::paint(QPainter *painter, const QStyleOptionGraphicsItem *op
                               d->background->contentsRect().width()));
 
         textRect = QStyle::alignedRect(QApplication::layoutDirection(), Qt::AlignRight|Qt::AlignVCenter, textSize, boundRect);
+        textRect.moveTopLeft(textRect.topLeft() + QPoint(rect.top(), rect.left()));
     } else {
         Qt::Alignment alignment;
 
@@ -316,7 +399,10 @@ void DesktopToolBox::paint(QPainter *painter, const QStyleOptionGraphicsItem *op
         iconRect = QStyle::alignedRect(QApplication::layoutDirection(), alignment, iconSize(), d->background->contentsRect().toRect());
 
         textRect = QStyle::alignedRect(QApplication::layoutDirection(), Qt::AlignRight|Qt::AlignVCenter, textSize, d->background->contentsRect().toRect());
+        textRect.moveTopLeft(textRect.topLeft() + rect.topLeft().toPoint());
     }
+
+    iconRect.moveTopLeft(iconRect.topLeft() + rect.topLeft().toPoint());
 
 
     iconPos = iconRect.topLeft();
@@ -337,7 +423,7 @@ void DesktopToolBox::paint(QPainter *painter, const QStyleOptionGraphicsItem *op
         painter->drawPixmap(QRect(iconPos, iconSize()), result);
     }
 
-    if (activityName.isNull()) {
+    if (!cornerElement.isNull() || activityName.isNull()) {
         return;
     }
 
@@ -369,7 +455,7 @@ void DesktopToolBox::paint(QPainter *painter, const QStyleOptionGraphicsItem *op
 
 QPainterPath DesktopToolBox::shape() const
 {
-    const QRectF rect = boundingRect();
+    const QRectF rect = apparentBoundingRect();
     const int w = rect.width();
     const int h = rect.height();
 
