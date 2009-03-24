@@ -250,11 +250,6 @@ void Applet::save(KConfigGroup &g) const
     //FIXME: we need a global save state too
     saveState(appletConfigGroup);
 
-    if (d->activationAction) {
-        KConfigGroup shortcutConfig(&group, "Shortcuts");
-        shortcutConfig.writeEntry("global", d->activationAction->globalShortcut().toString());
-    }
-
     if (d->configLoader) {
         d->configLoader->writeConfig();
     }
@@ -289,9 +284,11 @@ void Applet::restore(KConfigGroup &group)
     QString shortcutText = shortcutConfig.readEntryUntranslated("global", QString());
     if (!shortcutText.isEmpty()) {
         setGlobalShortcut(KShortcut(shortcutText));
+        /*
         kDebug() << "got global shortcut for" << name() << "of" << QKeySequence(shortcutText);
         kDebug() << "set to" << d->activationAction->objectName()
                  << d->activationAction->globalShortcut().primary();
+                 */
     }
 
     // local shortcut, if any
@@ -1298,6 +1295,10 @@ void Applet::setGlobalShortcut(const KShortcut &shortcut)
         shortcut,
         KAction::ShortcutTypes(KAction::ActiveShortcut | KAction::DefaultShortcut),
         KAction::NoAutoloading);
+
+    KConfigGroup shortcutConfig(d->mainConfigGroup(), "Shortcuts");
+    shortcutConfig.writeEntry("global", d->activationAction->globalShortcut().toString());
+    d->scheduleModificationNotification();
     //kDebug() << "after" << shortcut.primary() << d->activationAction->globalShortcut().primary();
 }
 
