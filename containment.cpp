@@ -366,7 +366,7 @@ void Containment::setContainmentType(Containment::Type type)
         return;
     }
 
-    if ((type == DesktopContainment || type == PanelContainment)) {
+    if (type == DesktopContainment || type == PanelContainment) {
         d->createToolBox();
     }
 
