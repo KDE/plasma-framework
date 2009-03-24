@@ -1967,17 +1967,6 @@ void AppletPrivate::setIsContainment(bool nowIsContainment, bool forceUpdate)
     delete mainConfig;
     mainConfig = 0;
 
-    Containment *c = qobject_cast<Containment*>(q);
-    if (c) {
-        if (isContainment) {
-            // set up the toolbox
-            c->d->createToolBox();
-        } else {
-            delete c->d->toolBox;
-            c->d->toolBox = 0;
-        }
-    }
-
     KAction *configAction = qobject_cast<KAction*>(actions.action("configure"));
     if (configAction) {
         QObject::disconnect(configAction, SIGNAL(triggered()), q, SLOT(requestConfiguration()));
