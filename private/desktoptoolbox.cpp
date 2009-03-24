@@ -204,7 +204,7 @@ DesktopToolBox::DesktopToolBox(Containment *parent)
     : ToolBox(parent),
       d(new DesktopToolBoxPrivate(this))
 {
-    d->background = new Plasma::FrameSvg();
+    d->background = new Plasma::FrameSvg(this);
     d->background->setImagePath("widgets/toolbox");
 
     d->containment = parent;
