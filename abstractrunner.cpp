@@ -152,8 +152,7 @@ void AbstractRunner::performMatch(Plasma::RunnerContext &localContext)
         setSpeed(SlowSpeed);
     }
 
-    //If matches were not added, delete items on the heap
-    if (slowed && runtime < fastEnoughTime) {
+     if (slowed && runtime < fastEnoughTime && localContext.query().size() > 2) {
         ++d->fastRuns;
 
         if (d->fastRuns > 2) {
