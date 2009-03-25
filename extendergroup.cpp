@@ -27,54 +27,10 @@
 #include "extendergroup.h"
 #include "extenderitem.h"
 
+#include "private/extendergroup_p.h"
+
 namespace Plasma
 {
-
-class ExtenderGroupPrivate
-{
-    public:
-        ExtenderGroupPrivate(ExtenderGroup *group)
-            : collapsed(true),
-              hideIfEmpty(true)
-        {
-            q = group;
-        }
-
-        ~ExtenderGroupPrivate()
-        {
-        }
-
-        void addItemToGroup(Plasma::ExtenderItem *item)
-        {
-            if (item->group() == q) {
-                if (collapsed) {
-                    q->extender()->itemRemovedEvent(item);
-                    item->hide();
-                }
-                if (!q->isVisible()) {
-                    q->extender()->itemAddedEvent(q);
-                    q->show();
-                }
-            }
-        }
-
-        void removeItemFromGroup(Plasma::ExtenderItem *item)
-        {
-            if (item->group() == q) {
-                if (q->items().isEmpty()) {
-                    q->extender()->itemRemovedEvent(q);
-                    q->hide();
-                }
-            }
-        }
-
-        ExtenderGroup *q;
-        bool collapsed;
-        bool hideIfEmpty;
-};
-
-class ExtenderItem;
-class Applet;
 
 ExtenderGroup::ExtenderGroup(Extender *parent, uint groupId)
              : ExtenderItem(parent, groupId),
@@ -168,6 +124,42 @@ void ExtenderGroup::collapseGroup()
         if (item != this && item->group() == this) {
             item->hide();
             extender()->itemRemovedEvent(item);
+        }
+    }
+}
+
+
+ExtenderGroupPrivate::ExtenderGroupPrivate(ExtenderGroup *group)
+    : collapsed(true),
+      hideIfEmpty(true)
+{
+    q = group;
+}
+
+ExtenderGroupPrivate::~ExtenderGroupPrivate()
+{
+}
+
+void ExtenderGroupPrivate::addItemToGroup(Plasma::ExtenderItem *item)
+{
+    if (item->group() == q) {
+        if (collapsed) {
+            q->extender()->itemRemovedEvent(item);
+            item->hide();
+        }
+        if (!q->isVisible()) {
+            q->extender()->itemAddedEvent(q);
+            q->show();
+        }
+    }
+}
+
+void ExtenderGroupPrivate::removeItemFromGroup(Plasma::ExtenderItem *item)
+{
+    if (item->group() == q) {
+        if (q->items().isEmpty()) {
+            q->extender()->itemRemovedEvent(q);
+            q->hide();
         }
     }
 }

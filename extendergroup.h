@@ -93,6 +93,8 @@ class PLASMA_EXPORT ExtenderGroup : public ExtenderItem
 
         Q_PRIVATE_SLOT(d, void addItemToGroup(Plasma::ExtenderItem *item))
         Q_PRIVATE_SLOT(d, void removeItemFromGroup(Plasma::ExtenderItem *item))
+
+        friend class ExtenderItem;
 };
 } // Plasma namespace
 

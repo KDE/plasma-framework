@@ -51,6 +51,7 @@
 #include "private/applethandle_p.h"
 #include "private/extender_p.h"
 #include "private/extenderapplet_p.h"
+#include "private/extendergroup_p.h"
 #include "private/extenderitem_p.h"
 #include "private/extenderitemmimedata_p.h"
 
@@ -286,6 +287,7 @@ void ExtenderItem::setGroup(ExtenderGroup *group)
 {
     d->group = group;
     config().writeEntry("group", group->name());
+    group->d->addItemToGroup(this);
 }
 
 ExtenderGroup *ExtenderItem::group() const
