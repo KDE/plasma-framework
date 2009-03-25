@@ -22,6 +22,7 @@
 
 #include <QGraphicsItem>
 #include <QTimeLine>
+#include <QTimerEvent>
 
 #include <kconfig.h>
 #include <kconfiggroup.h>
@@ -548,6 +549,11 @@ bool Animator::isAnimating() const
 
 void Animator::timerEvent(QTimerEvent *event)
 {
+    if (event->timerId() != d->timerId) {
+        QObject::timerEvent(event);
+        return;
+    }
+
     Q_UNUSED(event)
     bool animationsRemain = false;
     int elapsed = MIN_TICK_RATE;

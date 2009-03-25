@@ -84,7 +84,10 @@ BusyWidget::~BusyWidget()
 
 void BusyWidget::timerEvent(QTimerEvent *event)
 {
-    Q_UNUSED(event)
+    if (event->timerId() != d->timerId) {
+        QObject::timerEvent(event);
+        return;
+    }
 
     d->rotation += d->rotationAngle;
 
@@ -142,8 +145,10 @@ void BusyWidget::showEvent(QShowEvent *event)
 void BusyWidget::hideEvent(QHideEvent *event)
 {
     Q_UNUSED(event)
-    if (d->timerId)
+    if (d->timerId) {
         killTimer(d->timerId);
+    }
+
     d->timerId = 0;
 }
 

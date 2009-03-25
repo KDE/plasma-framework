@@ -131,6 +131,11 @@ void SignalRelay::checkQueueing()
 
 void SignalRelay::timerEvent(QTimerEvent *event)
 {
+    if (event->timerId() != m_timerId) {
+        QObject::timerEvent(event);
+        return;
+    }
+
     if (m_resetTimer) {
         killTimer(m_timerId);
         m_timerId = startTimer(m_interval);
@@ -152,7 +157,6 @@ void SignalRelay::timerEvent(QTimerEvent *event)
         //kDebug() << "queued";
         m_queued = true;
     }
-    event->accept();
 }
 
 } // Plasma namespace

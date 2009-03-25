@@ -55,7 +55,6 @@ class Plasma::FlashingLabelPrivate
               state(FlashingLabelPrivate::Invisible),
               autohide(false)
         {
-            //TODO: put this on a diet by using timerEvent instead?
             fadeOutTimer.setInterval(defaultDuration);
             fadeOutTimer.setSingleShot(true);
             fadeInTimer.setInterval(0);

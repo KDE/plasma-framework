@@ -360,7 +360,7 @@ DataEngine::SourceDict DataEngine::containerDict() const
 void DataEngine::timerEvent(QTimerEvent *event)
 {
     if (event->timerId() != d->updateTimerId) {
-        kDebug() << "bzzzt";
+        QObject::timerEvent(event);
         return;
     }
 
