@@ -369,7 +369,7 @@ class PLASMA_EXPORT AbstractRunner : public QObject
          * @param the syntaxes to register for this runner
          * @since 4.3
          */
-        void setSyntaxes(QList<RunnerSyntax> &syns);
+        void setSyntaxes(const QList<RunnerSyntax> &syns);
 
     protected Q_SLOTS:
         void init();
