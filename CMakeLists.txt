@@ -88,6 +88,7 @@ set(plasma_LIB_SRCS
     querymatch.cpp
     runnercontext.cpp
     runnermanager.cpp
+    runnersyntax.cpp
     scripting/appletscript.cpp
     scripting/dataenginescript.cpp
     scripting/runnerscript.cpp
@@ -216,6 +217,7 @@ set(plasma_LIB_INCLUDES
     querymatch.h
     runnercontext.h
     runnermanager.h
+    runnersyntax.h
     service.h
     servicejob.h
     svg.h

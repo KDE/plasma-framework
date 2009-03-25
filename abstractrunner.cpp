@@ -26,6 +26,7 @@
 #include <QTimer>
 
 #include <kdebug.h>
+#include <kicon.h>
 #include <kplugininfo.h>
 #include <kservicetypetrader.h>
 #include <kstandarddirs.h>
@@ -96,6 +97,7 @@ public:
     int fastRuns;
     Package *package;
     QHash<QString, QAction*> actions;
+    QList<RunnerSyntax> syntaxes;
 };
 
 K_GLOBAL_STATIC(QMutex, s_bigLock)
@@ -130,6 +132,21 @@ KConfigGroup AbstractRunner::config() const
 
 void AbstractRunner::reloadConfiguration()
 {
+}
+
+void AbstractRunner::addSyntax(const RunnerSyntax &syntax)
+{
+    d->syntaxes.append(syntax);
+}
+
+void AbstractRunner::clearSyntaxes()
+{
+    d->syntaxes.clear();
+}
+
+QList<RunnerSyntax> AbstractRunner::syntaxes() const
+{
+    return d->syntaxes;
 }
 
 void AbstractRunner::performMatch(Plasma::RunnerContext &localContext)
@@ -281,7 +298,17 @@ QString AbstractRunner::name() const
     if (!d->runnerDescription.isValid()) {
         return objectName();
     }
+
     return d->runnerDescription.name();
+}
+
+QIcon AbstractRunner::icon() const
+{
+    if (!d->runnerDescription.isValid()) {
+        return QIcon();
+    }
+
+    return KIcon(d->runnerDescription.icon());
 }
 
 QString AbstractRunner::id() const
@@ -297,6 +324,7 @@ QString AbstractRunner::description() const
     if (!d->runnerDescription.isValid()) {
         return objectName();
     }
+
     return d->runnerDescription.property("Comment").toString();
 }
 

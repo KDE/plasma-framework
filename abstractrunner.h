@@ -28,8 +28,9 @@
 #include <kservice.h>
 
 #include <plasma/plasma_export.h>
-#include <plasma/runnercontext.h>
 #include <plasma/querymatch.h>
+#include <plasma/runnercontext.h>
+#include <plasma/runnersyntax.h>
 #include <plasma/version.h>
 
 class QAction;
@@ -189,19 +190,24 @@ class PLASMA_EXPORT AbstractRunner : public QObject
         void setIgnoredTypes(RunnerContext::Types types);
 
         /**
-          * Returns the user visible engine name for the Runner
+          * @return the user visible engine name for the Runner
           */
         QString name() const;
 
         /**
-          * Returns an id string for the Runner
+          * @return an id string for the Runner
           */
         QString id() const;
 
         /**
-          * Returns the description of this Runner
+          * @return the description of this Runner
           */
         QString description() const;
+
+        /**
+         * @return the icon for this Runner
+         */
+        QIcon icon() const;
 
         /**
          * Accessor for the associated Package object if any.
@@ -217,6 +223,12 @@ class PLASMA_EXPORT AbstractRunner : public QObject
          * Signal runner to reload its configuration.
          */
         virtual void reloadConfiguration();
+
+        /**
+         * @return the syntaxes the runner has registered that it accepts and understands
+         * @since 4.3
+         */
+        QList<RunnerSyntax> syntaxes() const;
 
         /**
          * Access to a shared lock that all runners (and code that manages/interacts with them)
@@ -333,11 +345,28 @@ class PLASMA_EXPORT AbstractRunner : public QObject
          * Returns all registered actions
          */
         QHash<QString, QAction*> actions() const;
+
         /**
          * Clears the action registry.
          * The action pool deletes the actions.
          */
         void clearActions();
+
+        /**
+         * Adds a registed syntax that this runner understands. This is used to
+         * display to the user what this runner can understand and how it can be
+         * used.
+         *
+         * @arg syntax the syntax to register
+         * @since 4.3
+         */
+        void addSyntax(const RunnerSyntax &syntax);
+
+        /**
+         * Clears all registered syntaxes.
+         * @since 4.3
+         */
+        void clearSyntaxes();
 
     protected Q_SLOTS:
         void init();

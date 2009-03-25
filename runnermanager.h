@@ -61,6 +61,11 @@ class PLASMA_EXPORT RunnerManager : public QObject
         AbstractRunner *runner(const QString &name) const;
 
         /**
+         * @return the list of all currently loaded runners
+         */
+        QList<AbstractRunner *> runners() const;
+
+        /**
          * Retrieves the current context
          * @return pointer to the current context
          */

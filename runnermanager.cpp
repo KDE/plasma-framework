@@ -142,7 +142,14 @@ public:
                     }
 
                     if (runner) {
-                        kDebug() << "loading runner:" << service->name();
+                        kDebug() << "================= loading runner:" << service->name() << "=================";
+
+                        /*
+                        foreach (const RunnerSyntax &syntax, runner->syntaxes()) {
+                            kDebug() << syntax.exampleQueriesWithTermDescription().join(", ") << " ==> " << syntax.description();
+                        }
+                        */
+
                         runners.insert(runnerName, runner);
                     } else {
                         kDebug() << "failed to load runner:" << service->name()
@@ -257,6 +264,11 @@ AbstractRunner* RunnerManager::runner(const QString &name) const
     }
 
     return d->runners.value(name, 0);
+}
+
+QList<AbstractRunner *> RunnerManager::runners() const
+{
+    return d->runners.values();
 }
 
 RunnerContext* RunnerManager::searchContext() const
