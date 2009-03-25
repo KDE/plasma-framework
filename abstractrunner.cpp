@@ -139,9 +139,9 @@ void AbstractRunner::addSyntax(const RunnerSyntax &syntax)
     d->syntaxes.append(syntax);
 }
 
-void AbstractRunner::clearSyntaxes()
+void AbstractRunner::setSyntaxes(QList<RunnerSyntax> &syntaxes)
 {
-    d->syntaxes.clear();
+    d->syntaxes = syntaxes;
 }
 
 QList<RunnerSyntax> AbstractRunner::syntaxes() const

@@ -357,16 +357,19 @@ class PLASMA_EXPORT AbstractRunner : public QObject
          * display to the user what this runner can understand and how it can be
          * used.
          *
-         * @arg syntax the syntax to register
+         * @param syntax the syntax to register
          * @since 4.3
          */
         void addSyntax(const RunnerSyntax &syntax);
 
         /**
-         * Clears all registered syntaxes.
+         * Sets the list of syntaxes; passing in an empty list effectively clears
+         * the syntaxes.
+         *
+         * @param the syntaxes to register for this runner
          * @since 4.3
          */
-        void clearSyntaxes();
+        void setSyntaxes(QList<RunnerSyntax> &syns);
 
     protected Q_SLOTS:
         void init();
