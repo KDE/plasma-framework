@@ -1090,7 +1090,7 @@ void Containment::resizeEvent(QGraphicsSceneResizeEvent *event)
     }
 
     if (d->wallpaper) {
-        d->wallpaper->setBoundingRect(boundingRect());
+        d->wallpaper->setBoundingRect(QRectF(QPointF(0, 0), size()));
     }
 }
 
@@ -1335,7 +1335,7 @@ void Containment::setWallpaper(const QString &pluginName, const QString &mode)
         }
 
         if (d->wallpaper) {
-            d->wallpaper->setBoundingRect(boundingRect());
+            d->wallpaper->setBoundingRect(QRectF(QPointF(0, 0), size()));
             d->wallpaper->setRenderingMode(mode);
 
             if (newPlugin) {
