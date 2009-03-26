@@ -64,9 +64,19 @@ public:
 
     void setContent(const ToolTipContent &data)
     {
+        QString html;
+        if (!data.mainText().isEmpty()) {
+            html.append("<b>" + data.mainText() + "</b>");
+
+            if (!data.subText().isEmpty()) {
+                html.append("<br>");
+            }
+        }
+        html.append(data.subText());
+
         document->clear();
         data.registerResources(document);
-        document->setHtml("<p><b>" + data.mainText() + "</b><br>" + data.subText() + "</p>");
+        document->setHtml("<p>" + html + "</p>");
         document->adjustSize();
         update();
     }
