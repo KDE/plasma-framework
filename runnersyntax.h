@@ -20,8 +20,7 @@
 #ifndef PLASMA_RUNNERSYNTAX_H
 #define PLASMA_RUNNERSYNTAX_H
 
-#include <QString>
-#include <QStringList>
+#include <QtCore/QStringList>
 
 #include <plasma/plasma.h>
 
