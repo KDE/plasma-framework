@@ -170,24 +170,24 @@ QGraphicsWidget *ScrollWidget::widget() const
 }
 
 
-void ScrollWidget::setHorizontalScrollbarPolicy(const Qt::ScrollBarPolicy policy)
+void ScrollWidget::setHorizontalScrollBarPolicy(const Qt::ScrollBarPolicy policy)
 {
     d->horizontalScrollBarPolicy = policy;
 }
 
 
-Qt::ScrollBarPolicy ScrollWidget::horizontalScrollbarPolicy() const
+Qt::ScrollBarPolicy ScrollWidget::horizontalScrollBarPolicy() const
 {
     return d->horizontalScrollBarPolicy;
 }
 
 
-void ScrollWidget::setVerticalScrollbarPolicy(const Qt::ScrollBarPolicy policy)
+void ScrollWidget::setVerticalScrollBarPolicy(const Qt::ScrollBarPolicy policy)
 {
     d->verticalScrollBarPolicy = policy;
 }
 
-Qt::ScrollBarPolicy ScrollWidget::verticalScrollbarPolicy() const
+Qt::ScrollBarPolicy ScrollWidget::verticalScrollBarPolicy() const
 {
     return d->verticalScrollBarPolicy;
 }

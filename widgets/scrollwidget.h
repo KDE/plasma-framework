@@ -43,8 +43,8 @@ class PLASMA_EXPORT ScrollWidget : public QGraphicsWidget
 {
     Q_OBJECT
     Q_PROPERTY(QGraphicsWidget *widget READ widget WRITE setWidget)
-    Q_PROPERTY(Qt::ScrollBarPolicy horizontalScrollbarPolicy READ horizontalScrollbarPolicy WRITE setHorizontalScrollbarPolicy)
-    Q_PROPERTY(Qt::ScrollBarPolicy verticalScrollbarPolicy READ verticalScrollbarPolicy WRITE setVerticalScrollbarPolicy)
+    Q_PROPERTY(Qt::ScrollBarPolicy horizontalScrollBarPolicy READ horizontalScrollBarPolicy WRITE setHorizontalScrollBarPolicy)
+    Q_PROPERTY(Qt::ScrollBarPolicy verticalScrollBarPolicy READ verticalScrollBarPolicy WRITE setVerticalScrollBarPolicy)
     Q_PROPERTY(QString styleSheet READ styleSheet WRITE setStyleSheet)
 
 public:
@@ -76,24 +76,24 @@ public:
      *
      * @arg policy desired policy
      */
-    void setHorizontalScrollbarPolicy(const Qt::ScrollBarPolicy policy);
+    void setHorizontalScrollBarPolicy(const Qt::ScrollBarPolicy policy);
 
     /**
      * @return the horizontal scrollbar policy
      */
-    Qt::ScrollBarPolicy horizontalScrollbarPolicy() const;
+    Qt::ScrollBarPolicy horizontalScrollBarPolicy() const;
 
     /**
      * Sets the vertical scrollbar policy
      *
      * @arg policy desired policy
      */
-    void setVerticalScrollbarPolicy(const Qt::ScrollBarPolicy policy);
+    void setVerticalScrollBarPolicy(const Qt::ScrollBarPolicy policy);
 
     /**
      * @return the vertical scrollbar policy
      */
-    Qt::ScrollBarPolicy verticalScrollbarPolicy() const;
+    Qt::ScrollBarPolicy verticalScrollBarPolicy() const;
 
     /**
      * Sets the stylesheet used to control the visual display of this ScrollWidget
