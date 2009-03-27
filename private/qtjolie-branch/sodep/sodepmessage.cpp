@@ -44,7 +44,13 @@ SodepMessage::SodepMessage()
 SodepMessage::SodepMessage(const QString &resourcePath, const QString &operationName, qint64 id)
     : d(new SodepMessagePrivate)
 {
-    d->id = id;
+    static qint64 lastId = 0;
+
+    if (id==0) {
+        d->id = ++lastId;
+    } else {
+        d->id = id;
+    }
     d->resourcePath = resourcePath;
     d->operationName = operationName;
 }
