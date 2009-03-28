@@ -126,7 +126,9 @@ void TabBarPrivate::updateTabWidgetMode()
     }
 
     //always show the tabbar
-    if (!tabWidget) {
+    //FIXME: Qt BUG: calling show on a child of an hidden item it shows it anyways
+    //so we avoid to call it if the parent is hidden
+    if (!tabWidget && q->isVisible()) {
         q->setTabBarShown(true);
     }
 
