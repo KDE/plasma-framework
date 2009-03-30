@@ -106,11 +106,13 @@ class PLASMA_EXPORT WebView : public QGraphicsWidget
 
         /**
          * Sets if the page can be scrolled around by dragging the contents with the mouse
+         * @since 4.3
          */
         void setDragToScroll(bool drag);
 
         /**
          * @return true if the page can be scrolled by dragging the mouse
+         * @since 4.3
          */
         bool dragToScroll();
 
