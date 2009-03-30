@@ -111,7 +111,7 @@ public:
         foreach (const KService::Ptr &service, offers) {
             //kDebug() << "Loading runner: " << service->name() << service->storageId();
             QString tryExec = service->property("TryExec", QVariant::String).toString();
-            kDebug() << "tryExec is" << tryExec;
+            //kDebug() << "TryExec is" << tryExec;
             if (!tryExec.isEmpty() && KStandardDirs::findExe(tryExec).isEmpty()) {
                 // we don't actually have this application!
                 continue;
