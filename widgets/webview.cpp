@@ -26,6 +26,7 @@
 #include <fixx11h.h>
 #include <QtWebKit/QWebFrame>
 #include <QtWebKit/QWebPage>
+#include <QtCore/QTimer>
 
 #include <kdebug.h>
 
@@ -38,17 +39,26 @@ class WebViewPrivate
 {
 public:
     WebViewPrivate(WebView *parent)
-        : q(parent)
+        : q(parent),
+          dragToScroll(false),
+          dragging(false),
+          dragTimeout(false),
+          dragTimeoutTimer(0)
     {
     }
 
     void loadingFinished(bool success);
     void updateRequested(const QRect &dirtyRect);
     void scrollRequested(int dx, int dy, const QRect &scrollRect);
+    void dragTimeoutExpired();
 
     WebView *q;
     QWebPage *page;
     bool loaded;
+    bool dragToScroll;
+    bool dragging;
+    bool dragTimeout;
+    QTimer *dragTimeoutTimer;
 };
 
 WebView::WebView(QGraphicsItem *parent)
@@ -138,6 +148,16 @@ QWebFrame *WebView::mainFrame() const
     return d->page ? d->page->mainFrame() : 0;
 }
 
+void WebView::setDragToScroll(bool drag)
+{
+    d->dragToScroll = drag;
+}
+
+bool WebView::dragToScroll()
+{
+    return d->dragToScroll;
+}
+
 void WebView::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     Q_UNUSED(widget)
@@ -155,11 +175,21 @@ void WebView::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
         return;
     }
 
-    QMouseEvent me(QEvent::MouseMove, event->pos().toPoint(), event->button(),
-                   event->buttons(), event->modifiers());
-    d->page->event(&me);
-    if (me.isAccepted()) {
-        event->accept();
+    if (d->dragToScroll && d->dragTimeout) {
+        QPointF deltaPos = event->pos() - event->lastPos();
+        d->page->mainFrame()->setScrollBarValue(Qt::Horizontal, d->page->mainFrame()->scrollBarValue(Qt::Horizontal) - deltaPos.x());
+        d->page->mainFrame()->setScrollBarValue(Qt::Vertical, d->page->mainFrame()->scrollBarValue(Qt::Vertical) - deltaPos.y());
+        d->dragging = true;
+    } else {
+        if (d->dragTimeoutTimer) {
+            d->dragTimeoutTimer->stop();
+        }
+        QMouseEvent me(QEvent::MouseMove, event->pos().toPoint(), event->button(),
+                      event->buttons(), event->modifiers());
+        d->page->event(&me);
+        if (me.isAccepted()) {
+            event->accept();
+        }
     }
 }
 
@@ -183,6 +213,14 @@ void WebView::mousePressEvent(QGraphicsSceneMouseEvent *event)
         QGraphicsWidget::mousePressEvent(event);
         return;
     }
+
+    d->dragTimeout = false;
+    if (!d->dragTimeoutTimer) {
+        d->dragTimeoutTimer = new QTimer(this);
+        d->dragTimeoutTimer->setSingleShot(true);
+        connect(d->dragTimeoutTimer, SIGNAL(timeout()), this, SLOT(dragTimeoutExpired()));
+    }
+    d->dragTimeoutTimer->start(250);
 
     setFocus();
 
@@ -211,7 +249,8 @@ void WebView::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
 
 void WebView::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
-    if (!d->page) {
+    if (!d->page || d->dragging) {
+        d->dragging = false;
         QGraphicsWidget::mouseReleaseEvent(event);
         return;
     }
@@ -273,7 +312,7 @@ void WebView::keyPressEvent(QKeyEvent * event)
     }
 
     d->page->event(event);
-kWarning()<<event;
+
     if (!event->isAccepted()) {
         QGraphicsWidget::keyPressEvent(event);
     }
@@ -400,6 +439,11 @@ void WebViewPrivate::updateRequested(const QRect &dirtyRect)
 void WebViewPrivate::scrollRequested(int dx, int dy, const QRect &scrollRect)
 {
     updateRequested(scrollRect);
+}
+
+void WebViewPrivate::dragTimeoutExpired()
+{
+    dragTimeout = true;
 }
 
 } // namespace Plasma

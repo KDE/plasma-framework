@@ -105,6 +105,16 @@ class PLASMA_EXPORT WebView : public QGraphicsWidget
         QWebFrame *mainFrame() const;
 
         /**
+         * Sets if the page can be scrolled around by dragging the contents with the mouse
+         */
+        void setDragToScroll(bool drag);
+
+        /**
+         * @return true if the page can be scrolled by dragging the mouse
+         */
+        bool dragToScroll();
+
+        /**
          * Reimplementation
          */
         void setGeometry(const QRectF &geometry);
@@ -151,6 +161,7 @@ class PLASMA_EXPORT WebView : public QGraphicsWidget
         Q_PRIVATE_SLOT(d, void loadingFinished(bool success))
         Q_PRIVATE_SLOT(d, void updateRequested(const QRect& dirtyRect))
         Q_PRIVATE_SLOT(d, void scrollRequested(int dx, int dy, const QRect &scrollRect))
+        Q_PRIVATE_SLOT(d, void dragTimeoutExpired())
 
         WebViewPrivate * const d;
         friend class WebViewPrivate;
