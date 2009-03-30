@@ -60,9 +60,9 @@ private:
     mutable QList<QSize> windowSizes;
     FrameSvg *m_background;
 
-    static const int windowMargin = 5;
-    static const int windowWidth = 200;
-    static const int windowHeight = 150;
+    static const int WINDOW_MARGIN = 5;
+    static const int WINDOW_WIDTH = 200;
+    static const int WINDOW_HEIGHT = 150;
 };
 
 } // namespace Plasma

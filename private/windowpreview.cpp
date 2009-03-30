@@ -111,9 +111,9 @@ QSize WindowPreview::sizeHint() const
     qreal left, top, right, bottom;
     m_background->getMargins(left, top, right, bottom);
 
-    s.scale(windowWidth*windowSizes.size(), windowHeight, Qt::KeepAspectRatio);
+    s.scale(WINDOW_WIDTH*windowSizes.size(), WINDOW_HEIGHT, Qt::KeepAspectRatio);
 
-    s = s + QSize(left+right+windowMargin*(windowSizes.size()-1), top+bottom);
+    s = s + QSize(left+right+WINDOW_MARGIN*(windowSizes.size()-1), top+bottom);
 
     return s;
 }
