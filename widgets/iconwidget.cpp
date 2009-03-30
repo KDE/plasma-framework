@@ -618,7 +618,7 @@ void IconWidgetPrivate::drawBackground(QPainter *painter, IconWidgetState state)
     }
 }
 
-QPixmap IconWidgetPrivate::decoration(const QStyleOptionGraphicsItem *option, bool useHoverEffect)
+QPixmap IconWidgetPrivate::decoration(const QStyleOptionGraphicsItem *option, bool useHoverEffect, bool usePressedEffect)
 {
     QPixmap result;
 
@@ -642,6 +642,10 @@ QPixmap IconWidgetPrivate::decoration(const QStyleOptionGraphicsItem *option, bo
         const QSize size = icon.actualSize(iconSize.toSize(), mode, state);
         result = icon.pixmap(size, mode, state);
     }
+
+	if (usePressedEffect) {
+		result = result.scaled(result.size() * 0.9, Qt::KeepAspectRatio);
+	}
 
     // We disable the iconeffect here since we cannot get it into sync with
     // the fade animation. TODO: Enable it when animations are switched off
@@ -934,7 +938,7 @@ void IconWidget::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
         state = IconWidgetPrivate::HoverState;
     }
 
-    QPixmap icon = d->decoration(option, state != IconWidgetPrivate::NoState);
+    QPixmap icon = d->decoration(option, state != IconWidgetPrivate::NoState, state & IconWidgetPrivate::PressedState);
     const QPointF iconPos = d->iconPosition(option, icon);
 
     d->drawBackground(painter, state);

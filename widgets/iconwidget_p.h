@@ -114,7 +114,7 @@ public:
     void drawTextItems(QPainter *painter, const QStyleOptionGraphicsItem *option,
                         const QTextLayout &labelLayout, const QTextLayout &infoLayout) const;
 
-    QPixmap decoration(const QStyleOptionGraphicsItem *option, bool useHoverEffect);
+    QPixmap decoration(const QStyleOptionGraphicsItem *option, bool useHoverEffect, bool usePressedEffect);
     QPointF iconPosition(const QStyleOptionGraphicsItem *option, const QPixmap &pixmap) const;
 
     QSizeF displaySizeHint(const QStyleOptionGraphicsItem *option, const qreal width) const;
