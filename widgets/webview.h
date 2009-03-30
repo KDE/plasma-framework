@@ -49,6 +49,7 @@ class PLASMA_EXPORT WebView : public QGraphicsWidget
 
     Q_PROPERTY(QString url  WRITE setUrl)
     Q_PROPERTY(QString html WRITE setHtml)
+    Q_PROPERTY(bool dragToScroll READ dragToScroll WRITE setDragToScroll)
 
     public:
         explicit WebView(QGraphicsItem *parent = 0);
