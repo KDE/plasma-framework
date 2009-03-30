@@ -604,7 +604,7 @@ bool Theme::findInCache(const QString &key, QPixmap &pix)
 // BIC FIXME: Should be merged with the other findInCache method above when we break BC
 bool Theme::findInCache(const QString &key, QPixmap &pix, unsigned int lastModified)
 {
-    if (lastModified > d->pixmapCache->timestamp()) {
+    if (d->useCache() && lastModified > d->pixmapCache->timestamp()) {
         d->discardCache();
     }
 
