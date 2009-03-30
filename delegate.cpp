@@ -354,7 +354,7 @@ void Delegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
         backgroundColor.setAlphaF(0.2);
 
         QColor backgroundColor2 = option.palette.color(QPalette::Highlight);
-        backgroundColor.setAlphaF(0.5);
+        backgroundColor2.setAlphaF(0.5);
 
         QRect highlightRect = option.rect.adjusted(2, 2, -2, -2);
 
