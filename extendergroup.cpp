@@ -43,15 +43,20 @@ ExtenderGroup::ExtenderGroup(Extender *parent, uint groupId)
 
     config().writeEntry("isGroup", true);
 
+    //TODO: monitor for change in theme
+    Plasma::Svg *svg = new Plasma::Svg(this);
+    svg->setImagePath("widgets/configuration-icons");
+    svg->resize();
+
     QAction *expand = new QAction(this);
-    expand->setIcon(KIcon("arrow-up"));
+    expand->setIcon(QIcon(svg->pixmap("restore")));
     expand->setVisible(true);
     expand->setToolTip(i18n("Show this group."));
     connect(expand, SIGNAL(triggered()), this, SLOT(expandGroup()));
     addAction("expand", expand);
 
     QAction *collapse = new QAction(this);
-    collapse->setIcon(KIcon("arrow-down"));
+    collapse->setIcon(QIcon(svg->pixmap("collapse")));
     collapse->setVisible(false);
     collapse->setToolTip(i18n("Hide this group."));
     connect(collapse, SIGNAL(triggered()), this, SLOT(collapseGroup()));
