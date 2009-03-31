@@ -25,10 +25,12 @@
 
 #include <version.h>
 
+#include "plasma/private/dataengineconsumer_p.h"
+
 namespace Plasma
 {
 
-class WallpaperPrivate
+class WallpaperPrivate : public DataEngineConsumer
 {
 public:
     WallpaperPrivate(KService::Ptr service, Wallpaper *wallpaper) :
@@ -109,6 +111,7 @@ Wallpaper *Wallpaper::load(const QString &wallpaperName, const QVariantList &arg
     if (!wallpaper) {
         kDebug() << "Couldn't load wallpaper \"" << wallpaperName << "\"! reason given: " << error;
     }
+
     return wallpaper;
 }
 
@@ -235,6 +238,11 @@ void Wallpaper::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 void Wallpaper::wheelEvent(QGraphicsSceneWheelEvent *event)
 {
     Q_UNUSED(event)
+}
+
+DataEngine *Wallpaper::dataEngine(const QString &name) const
+{
+    return d->dataEngine(name);
 }
 
 } // Plasma namespace

@@ -574,17 +574,7 @@ ConfigLoader *Applet::configScheme() const
 
 DataEngine *Applet::dataEngine(const QString &name) const
 {
-    int index = d->loadedEngines.indexOf(name);
-    if (index != -1) {
-        return DataEngineManager::self()->engine(name);
-    }
-
-    DataEngine *engine = DataEngineManager::self()->loadEngine(name);
-    if (engine->isValid()) {
-        d->loadedEngines.append(name);
-    }
-
-    return engine;
+    return d->dataEngine(name);
 }
 
 const Package *Applet::package() const
@@ -2033,10 +2023,6 @@ AppletPrivate::~AppletPrivate()
     if (activationAction && activationAction->isGlobalShortcutEnabled()) {
         //kDebug() << "reseting global action for" << q->name() << activationAction->objectName();
         activationAction->forgetGlobalShortcut();
-    }
-
-    foreach (const QString &engine, loadedEngines) {
-        DataEngineManager::self()->unloadEngine(engine);
     }
 
     if (extender) {

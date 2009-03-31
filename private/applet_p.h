@@ -26,6 +26,8 @@
 
 #include <kactioncollection.h>
 
+#include "plasma/private/dataengineconsumer_p.h"
+
 class KKeySequenceWidget;
 
 namespace Plasma
@@ -51,7 +53,7 @@ protected Q_SLOTS:
     void overlayAnimationComplete();
 };
 
-class AppletPrivate
+class AppletPrivate : public DataEngineConsumer
 {
 public:
     AppletPrivate(KService::Ptr service, int uniqueID, Applet *applet);
@@ -107,7 +109,6 @@ public:
     AppletOverlayWidget *messageOverlay;
     Plasma::BusyWidget *busyWidget;
     QSet<QGraphicsItem*> registeredAsDragHandle;
-    QStringList loadedEngines;
     Plasma::FrameSvg *background;
     AppletScript *script;
     QVariantList args;

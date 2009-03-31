@@ -28,6 +28,8 @@
 
 namespace Plasma
 {
+
+class DataEngine;
 class WallpaperPrivate;
 
 /**
@@ -203,6 +205,25 @@ class PLASMA_EXPORT Wallpaper : public QObject
          * @param event the wheel event object
          */
         virtual void wheelEvent(QGraphicsSceneWheelEvent *event);
+
+        /**
+         * Loads the given DataEngine
+         *
+         * Tries to load the data engine given by @p name.  Each engine is
+         * only loaded once, and that instance is re-used on all subsequent
+         * requests.
+         *
+         * If the data engine was not found, an invalid data engine is returned
+         * (see DataEngine::isValid()).
+         *
+         * Note that you should <em>not</em> delete the returned engine.
+         *
+         * @param name Name of the data engine to load
+         * @return pointer to the data engine if it was loaded,
+         *         or an invalid data engine if the requested engine
+         *         could not be loaded
+         */
+        Q_INVOKABLE DataEngine *dataEngine(const QString &name) const;
 
     Q_SIGNALS:
         /**
