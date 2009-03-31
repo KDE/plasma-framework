@@ -572,7 +572,8 @@ void ExtenderItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
     corona->removeOffscreenWidget(this);
 
-    if (!action) { //we weren't moved, so reinsert the item in our current layout.
+    if (!action || !drag->target()) {
+        //we weren't moved, so reinsert the item in our current layout.
         d->extender->itemAddedEvent(this, curPos);
     }
 
