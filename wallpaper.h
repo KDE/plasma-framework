@@ -222,6 +222,8 @@ class PLASMA_EXPORT Wallpaper : public QObject
          * @return pointer to the data engine if it was loaded,
          *         or an invalid data engine if the requested engine
          *         could not be loaded
+         *
+         * @since 4.3
          */
         Q_INVOKABLE DataEngine *dataEngine(const QString &name) const;
 
