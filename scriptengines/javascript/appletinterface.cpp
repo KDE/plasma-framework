@@ -154,9 +154,11 @@ void AppletInterface::writeConfig(const QString &entry, const QVariant &value)
     }
 }
 
-QVariant AppletInterface::readConfig(const QString &entry) const
+QScriptValue AppletInterface::readConfig(const QString &entry) const
 {
     Plasma::ConfigLoader *config = 0;
+    QVariant result;
+    
     if (m_currentConfig.isEmpty()) {
         config = applet()->configScheme();
     } else {
@@ -164,10 +166,9 @@ QVariant AppletInterface::readConfig(const QString &entry) const
     }
 
     if (config) {
-        return config->property(entry);
+        result = config->property(entry);
     }
-
-    return QVariant();
+    return m_appletScriptEngine->variantToScriptValue(result);
 }
 
 const Plasma::Package *AppletInterface::package() const

@@ -80,7 +80,7 @@ public:
 /*
  * Workaround the fact that QtScripts handling of variants seems a bit broken.
  */
-QScriptValue variant2ScriptValue(QScriptEngine *engine, QVariant var)
+QScriptValue variantToScriptValue(QScriptEngine *engine, QVariant var)
 {
     if (var.isNull()) {
         return engine->nullValue();
@@ -110,6 +110,13 @@ QScriptValue variant2ScriptValue(QScriptEngine *engine, QVariant var)
         case QVariant::UInt:
             return QScriptValue(engine, var.toUInt());
         default:
+            if (var.typeName() == QLatin1String("KUrl")) {
+                return QScriptValue(engine, var.value<KUrl>().prettyUrl());
+            } else if (var.typeName() == QLatin1String("QColor")) {
+                return QScriptValue(engine, var.value<QColor>().name());
+            } else if (var.typeName() == QLatin1String("QUrl")) {
+                return QScriptValue(engine, var.value<QUrl>().toString());
+            }
             break;
     }
 
@@ -160,7 +167,7 @@ QScriptValue qScriptValueFromData(QScriptEngine *engine, const DataEngine::Data 
         //kDebug() << "setting" << it.key() << "to" << it.value();
         QString prop = it.key();
         prop.replace(' ', '_');
-        obj.setProperty(prop, variant2ScriptValue(engine, it.value()));
+        obj.setProperty(prop, variantToScriptValue(engine, it.value()));
     }
 
     return obj;
@@ -187,7 +194,7 @@ QScriptValue qScriptValueFromKConfigGroup(QScriptEngine *engine, const KConfigGr
         //kDebug() << "setting" << it.key() << "to" << it.value();
         QString prop = it.key();
         prop.replace(' ', '_');
-        obj.setProperty(prop, variant2ScriptValue(engine, it.value()));
+        obj.setProperty(prop, variantToScriptValue(engine, it.value()));
     }
 
     return obj;
@@ -227,6 +234,7 @@ KSharedPtr<UiLoader> SimpleJavaScriptApplet::s_widgetLoader;
 SimpleJavaScriptApplet::SimpleJavaScriptApplet(QObject *parent, const QVariantList &args)
     : Plasma::AppletScript(parent)
 {
+    Q_UNUSED(args)
 //    kDebug() << "Script applet launched, args" << applet()->startupArguments();
 
     m_engine = new QScriptEngine(this);
@@ -436,7 +444,7 @@ void SimpleJavaScriptApplet::setupObjects()
     QScriptValue args = m_engine->newArray();
     int i = 0;
     foreach (QVariant arg, applet()->startupArguments()) {
-        args.setProperty(i, variant2ScriptValue(m_engine, arg));
+        args.setProperty(i, variantToScriptValue(arg));
         ++i;
     }
     global.setProperty("startupArguments", args);
@@ -723,8 +731,9 @@ QScriptValue SimpleJavaScriptApplet::createWidget(QScriptContext *context, QScri
 
 QScriptValue SimpleJavaScriptApplet::notSupported(QScriptContext *context, QScriptEngine *engine)
 {
-        QString message = context->callee().property("message").toString();
-        return context->throwError(i18n("This operation was not supported, %1", message) );
+    Q_UNUSED(engine)
+    QString message = context->callee().property("message").toString();
+    return context->throwError(i18n("This operation was not supported, %1", message) );
 }
 
 
@@ -745,6 +754,11 @@ QScriptValue SimpleJavaScriptApplet::createPrototype(QScriptEngine *engine, cons
 
     // Hook for adding extra properties/methods
     return proto;
+}
+
+QScriptValue SimpleJavaScriptApplet::variantToScriptValue(QVariant var)
+{
+    return ::variantToScriptValue(m_engine, var);
 }
 
 K_EXPORT_PLASMA_APPLETSCRIPTENGINE(qscriptapplet, SimpleJavaScriptApplet)

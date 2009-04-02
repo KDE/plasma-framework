@@ -49,6 +49,8 @@ public:
     Q_INVOKABLE QString findDataResource( const QString &filename );
     Q_INVOKABLE void debug( const QString &msg );
 
+    QScriptValue variantToScriptValue(QVariant var);
+
 public slots:
     void dataUpdated( const QString &name, const Plasma::DataEngine::Data &data );
     void configChanged();

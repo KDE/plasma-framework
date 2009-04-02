@@ -21,6 +21,7 @@
 #define APPLETINTERFACE_H
 
 #include <QObject>
+#include <QScriptValue>
 #include <Plasma/DataEngine>
 
 class QAction;
@@ -140,7 +141,7 @@ enum QtOrientation {
 
     Q_INVOKABLE void setActiveConfig(const QString &name);
 
-    Q_INVOKABLE QVariant readConfig(const QString &entry) const;
+    Q_INVOKABLE QScriptValue readConfig(const QString &entry) const;
 
     Q_INVOKABLE void writeConfig(const QString &entry, const QVariant &value);
 
