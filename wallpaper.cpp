@@ -36,7 +36,8 @@ public:
     WallpaperPrivate(KService::Ptr service, Wallpaper *wallpaper) :
         q(wallpaper),
         wallpaperDescription(service),
-        initialized(false)
+        initialized(false),
+        needsConfig(false)
     {
     };
 
@@ -48,7 +49,8 @@ public:
     KPluginInfo wallpaperDescription;
     QRectF boundingRect;
     KServiceAction mode;
-    bool initialized;
+    bool initialized : 1;
+    bool needsConfig : 1;
 };
 
 Wallpaper::Wallpaper(QObject *parentObject, const QVariantList &args)
@@ -243,6 +245,25 @@ void Wallpaper::wheelEvent(QGraphicsSceneWheelEvent *event)
 DataEngine *Wallpaper::dataEngine(const QString &name) const
 {
     return d->dataEngine(name);
+}
+
+bool Wallpaper::configurationRequired() const
+{
+    return d->needsConfig;
+}
+
+void Wallpaper::setConfigurationRequired(bool needsConfig, const QString &reason)
+{
+    //TODO: implement something for reason. first, we need to decide where/how
+    //      to communicate it to the user
+    Q_UNUSED(reason)
+
+    if (d->needsConfig == needsConfig) {
+        return;
+    }
+
+    d->needsConfig = needsConfig;
+    emit configurationRequired(needsConfig);
 }
 
 } // Plasma namespace

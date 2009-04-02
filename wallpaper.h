@@ -227,11 +227,34 @@ class PLASMA_EXPORT Wallpaper : public QObject
          */
         Q_INVOKABLE DataEngine *dataEngine(const QString &name) const;
 
+        /**
+         * @return true if the wallpaper currently needs to be configured,
+         *         otherwise, false
+         */
+        bool configurationRequired() const;
+
     Q_SIGNALS:
         /**
          * This signal indicates that wallpaper needs to be repainted.
          */
         void update(const QRectF &exposedArea);
+
+        /**
+         * Emitted when the user wants to configure/change the wallpaper.
+         */
+        void configureRequested();
+
+        /**
+         * Emitted when the state of the wallpaper requiring configuration
+         * changes.
+         */
+        void configurationRequired(bool needsConfig);
+
+        /**
+         * Emitted when the configuration of the wallpaper needs to be saved
+         * to disk.
+         */
+        void configNeedsSaving();
 
     protected:
         /**
@@ -252,6 +275,18 @@ class PLASMA_EXPORT Wallpaper : public QObject
          * @param config Config group to load settings
          **/
         virtual void init(const KConfigGroup &config);
+
+        /**
+         * When the wallpaper needs to be configured before being usable, this
+         * method can be called to denote that action is required
+         *
+         * @param needsConfiguring true if the applet needs to be configured,
+         *                         or false if it doesn't
+         * @param reason a translated message for the user explaining that the
+         *               applet needs configuring; this should note what needs
+         *               to be configured
+         */
+        void setConfigurationRequired(bool needsConfiguring, const QString &reason = QString());
 
     private:
         WallpaperPrivate *const d;
