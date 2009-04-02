@@ -37,7 +37,10 @@ class TextBrowserPrivate
 public:
     TextBrowserPrivate(TextBrowser *browser)
         : q(browser),
-          native(0)
+          native(0),
+          savedMinimumHeight(0),
+          savedMaximumHeight(QWIDGETSIZE_MAX),
+          wasNotFixed(true)
     {
     }
 
@@ -48,11 +51,17 @@ public:
             native->verticalScrollBarPolicy() == Qt::ScrollBarAlwaysOff) {
             native->document()->setTextWidth(q->size().width());
             QSize s = native->document()->size().toSize();
+            if (wasNotFixed) {
+                savedMinimumHeight = q->minimumHeight();
+                savedMaximumHeight = q->maximumHeight();
+                wasNotFixed = false;
+            }
             q->setMinimumHeight(s.height());
             q->setMaximumHeight(s.height());
-        } else {
-            q->setMinimumHeight(0);
-            q->setMaximumHeight(QWIDGETSIZE_MAX);
+        } else if (!wasNotFixed) {
+            q->setMinimumHeight(savedMinimumHeight);
+            q->setMaximumHeight(savedMaximumHeight);
+            wasNotFixed = true;
         }
     }
 
@@ -60,6 +69,9 @@ public:
     TextBrowser *q;
     KTextBrowser *native;
     Plasma::Style::Ptr style;
+    int savedMinimumHeight;
+    int savedMaximumHeight;
+    bool wasNotFixed;
 };
 
 TextBrowser::TextBrowser(QGraphicsWidget *parent)
