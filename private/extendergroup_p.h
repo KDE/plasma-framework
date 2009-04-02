@@ -34,6 +34,7 @@ class ExtenderGroupPrivate
 
         void addItemToGroup(Plasma::ExtenderItem *item);
         void removeItemFromGroup(Plasma::ExtenderItem *item);
+        void themeChanged();
 
         Plasma::ExtenderGroup *q;
         bool collapsed;

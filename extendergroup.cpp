@@ -17,6 +17,8 @@
  * Boston, MA  02110-1301  USA
  */
 
+#include "extendergroup.h"
+
 #include <QAction>
 #include <QString>
 #include <QList>
@@ -24,8 +26,8 @@
 
 #include "applet.h"
 #include "extender.h"
-#include "extendergroup.h"
 #include "extenderitem.h"
+#include "theme.h"
 
 #include "private/extendergroup_p.h"
 
@@ -43,29 +45,24 @@ ExtenderGroup::ExtenderGroup(Extender *parent, uint groupId)
 
     config().writeEntry("isGroup", true);
 
-    //TODO: monitor for change in theme
-    Plasma::Svg *svg = new Plasma::Svg(this);
-    svg->setImagePath("widgets/configuration-icons");
-    svg->resize();
-
     QAction *expand = new QAction(this);
-    expand->setIcon(QIcon(svg->pixmap("restore")));
     expand->setVisible(true);
     expand->setToolTip(i18n("Show this group."));
     connect(expand, SIGNAL(triggered()), this, SLOT(expandGroup()));
     addAction("expand", expand);
 
     QAction *collapse = new QAction(this);
-    collapse->setIcon(QIcon(svg->pixmap("collapse")));
     collapse->setVisible(false);
     collapse->setToolTip(i18n("Hide this group."));
     connect(collapse, SIGNAL(triggered()), this, SLOT(collapseGroup()));
     addAction("collapse", collapse);
 
+    d->themeChanged();
+
     QString groupName;
     foreach (ExtenderItem *item, extender()->attachedItems()) {
         groupName = item->config().readEntry("group", "");
-        if (groupName != "" && groupName == name()) {
+        if (!groupName.isEmpty() && groupName == name()) {
             item->setGroup(this);
         }
     }
@@ -74,6 +71,9 @@ ExtenderGroup::ExtenderGroup(Extender *parent, uint groupId)
         hide();
         extender()->itemRemovedEvent(this);
     }
+
+    connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()),
+            this, SLOT(themeChanged()));
 }
 
 ExtenderGroup::~ExtenderGroup()
@@ -167,6 +167,16 @@ void ExtenderGroupPrivate::removeItemFromGroup(Plasma::ExtenderItem *item)
             q->hide();
         }
     }
+}
+
+void ExtenderGroupPrivate::themeChanged()
+{
+    Plasma::Svg *svg = new Plasma::Svg(q);
+    svg->setImagePath("widgets/configuration-icons");
+    svg->resize();
+
+    q->action("expand")->setIcon(QIcon(svg->pixmap("restore")));
+    q->action("collapse")->setIcon(QIcon(svg->pixmap("collapse")));
 }
 
 } // Plasma namespace
