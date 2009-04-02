@@ -1,28 +1,43 @@
 /*
-  Copyright (c) 2007 Paolo Capriotti <p.capriotti@gmail.com>
+ *   Copyright (c) 2007 Paolo Capriotti <p.capriotti@gmail.com>
+ *   Copyright (c) 2009 Aaron Seigo <aseigo@kde.org>
+ *
+ *   This program is free software; you can redistribute it and/or modify
+ *   it under the terms of the GNU Library General Public License as
+ *   published by the Free Software Foundation; either version 2, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details
+ *
+ *   You should have received a copy of the GNU Library General Public
+ *   License along with this program; if not, write to the
+ *   Free Software Foundation, Inc.,
+ *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ */
 
-  This program is free software; you can redistribute it and/or modify
-  it under the terms of the GNU General Public License as published by
-  the Free Software Foundation; either version 2 of the License, or
-  (at your option) any later version.
-*/
-
-#include "renderthread.h"
+#include "plasma/private/wallpaperrenderthread_p.h"
 
 #include <QPainter>
 #include <QFile>
-#include <KDebug>
-#include <KSvgRenderer>
+#include <QSvgRenderer>
 
-RenderThread::RenderThread()
-: m_current_token(-1)
-, m_size(0, 0)
+#include <kdebug.h>
+
+namespace Plasma
+{
+
+WallpaperRenderThread::WallpaperRenderThread(QObject *parent)
+    : QThread(parent),
+      m_currentToken(-1)
 {
     m_abort = false;
     m_restart = false;
 }
 
-RenderThread::~RenderThread()
+WallpaperRenderThread::~WallpaperRenderThread()
 {
     {
         // abort computation
@@ -34,15 +49,16 @@ RenderThread::~RenderThread()
     wait();
 }
 
-void RenderThread::setSize(const QSize& size)
+void WallpaperRenderThread::setSize(const QSize& size)
 {
     QMutexLocker lock(&m_mutex);
     m_size = size;
 }
 
-int RenderThread::render(const QString &file,
-                          const QColor &color,
-                          Background::ResizeMethod method)
+int WallpaperRenderThread::render(const QString &file,
+                                  const QSize &size,
+                                  Wallpaper::ResizeMethod method,
+                                  const QColor &color)
 {
     int token;
     {
@@ -50,8 +66,9 @@ int RenderThread::render(const QString &file,
         m_file = file;
         m_color = color;
         m_method = method;
+        m_size = size;
         m_restart = true;
-        token = ++m_current_token;
+        token = ++m_currentToken;
     }
 
     if (!isRunning()) {
@@ -63,13 +80,13 @@ int RenderThread::render(const QString &file,
     return token;
 }
 
-void RenderThread::run()
+void WallpaperRenderThread::run()
 {
     QString file;
     QColor color;
     QSize size;
     qreal ratio;
-    Background::ResizeMethod method;
+    Wallpaper::ResizeMethod method;
     int token;
 
     forever {
@@ -87,7 +104,7 @@ void RenderThread::run()
             m_restart = false;
 
             // load all parameters in nonshared variables
-            token = m_current_token;
+            token = m_currentToken;
             file = m_file;
             color = m_color;
             size = m_size;
@@ -99,7 +116,7 @@ void RenderThread::run()
         result.fill(color.rgba());
 
         if (file.isEmpty() || !QFile::exists(file)) {
-            emit done(token, result);
+            emit done(token, result, file, size, method, color);
             continue;
         }
 
@@ -137,11 +154,11 @@ void RenderThread::run()
         // set render parameters according to resize mode
         switch (method)
         {
-        case Background::Scale:
+        case Wallpaper::ScaledResize:
             imgSize *= ratio;
             scaledSize = size;
             break;
-        case Background::Center:
+        case Wallpaper::CenteredResize:
             scaledSize = imgSize;
             pos = QPoint((size.width() - scaledSize.width()) / 2,
                         (size.height() - scaledSize.height()) / 2);
@@ -162,7 +179,7 @@ void RenderThread::run()
             }
 
             break;
-        case Background::Maxpect: {
+        case Wallpaper::MaxpectResize: {
             imgSize *= ratio;
             float xratio = (float) size.width() / imgSize.width();
             float yratio = (float) size.height() / imgSize.height();
@@ -179,7 +196,7 @@ void RenderThread::run()
                         (size.height() - scaledSize.height()) / 2);
             break;
         }
-        case Background::ScaleCrop: {
+        case Wallpaper::ScaledAndCroppedResize: {
             imgSize *= ratio;
             float xratio = (float) size.width() / imgSize.width();
             float yratio = (float) size.height() / imgSize.height();
@@ -196,11 +213,11 @@ void RenderThread::run()
                         (size.height() - scaledSize.height()) / 2);
             break;
         }
-        case Background::Tiled:
+        case Wallpaper::TiledResize:
             scaledSize = imgSize;
             tiled = true;
             break;
-        case Background::CenterTiled:
+        case Wallpaper::CenterTiledResize:
             scaledSize = imgSize;
             pos = QPoint(
                 -scaledSize.width() +
@@ -215,7 +232,7 @@ void RenderThread::run()
         kDebug() << token << scalable << scaledSize << imgSize;
         if (scalable) {
             // tiling is ignored for scalable wallpapers
-            KSvgRenderer svg(file);
+            QSvgRenderer svg(file);
             if (m_restart) {
                 continue;
             }
@@ -244,7 +261,12 @@ void RenderThread::run()
         }
 
         // signal we're done
-        emit done(token, result);
+        emit done(token, result, file, size, method, color);
         endLoop: continue;
     }
 }
+
+} // namespace Plasma
+
+#include "wallpaperrenderthread_p.moc"
+

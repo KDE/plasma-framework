@@ -20,12 +20,20 @@
 
 #include "wallpaper.h"
 
-#include <kservicetypetrader.h>
+#include <QColor>
+#include <QFile>
+#include <QImage>
+
 #include <kdebug.h>
+#include <kglobal.h>
+#include <kservicetypetrader.h>
+#include <kstandarddirs.h>
 
 #include <version.h>
 
 #include "plasma/private/dataengineconsumer_p.h"
+#include "plasma/private/packages_p.h"
+#include "plasma/private/wallpaperrenderthread_p.h"
 
 namespace Plasma
 {
@@ -36,22 +44,40 @@ public:
     WallpaperPrivate(KService::Ptr service, Wallpaper *wallpaper) :
         q(wallpaper),
         wallpaperDescription(service),
+        renderColor(0, 0, 0),
+        renderToken(-1),
+        renderResizeMethod(Wallpaper::ScaledResize),
+        cacheRendering(false),
         initialized(false),
         needsConfig(false)
     {
     };
 
-    ~WallpaperPrivate()
-    {
-    };
+    QString cachePath(const QString &sourceImagePath, const QSize &size,
+                      Wallpaper::ResizeMethod resizeMethod, const QColor &color) const;
+
+
+    void renderComplete(int token, const QImage &image,
+                        const QString &sourceImagePath, const QSize &size,
+                        Wallpaper::ResizeMethod resizeMethod, const QColor &color);
+
+    static WallpaperRenderThread s_renderer;
+    static PackageStructure::Ptr packageStructure;
 
     Wallpaper *q;
     KPluginInfo wallpaperDescription;
     QRectF boundingRect;
     KServiceAction mode;
+    QColor renderColor;
+    int renderToken;
+    Wallpaper::ResizeMethod renderResizeMethod;
+    bool cacheRendering : 1;
     bool initialized : 1;
     bool needsConfig : 1;
 };
+
+WallpaperRenderThread WallpaperPrivate::s_renderer;
+PackageStructure::Ptr WallpaperPrivate::packageStructure(0);
 
 Wallpaper::Wallpaper(QObject *parentObject, const QVariantList &args)
     : d(new WallpaperPrivate(KService::serviceByStorageId(args.count() > 0 ?
@@ -65,6 +91,9 @@ Wallpaper::Wallpaper(QObject *parentObject, const QVariantList &args)
         mutableArgs.removeFirst();
     }
     setParent(parentObject);
+
+    connect(&WallpaperPrivate::s_renderer, SIGNAL(done(int,QImage,QString,QSize,Wallpaper::ResizeMethod,QColor)),
+            this, SLOT(renderComplete(int,QImage,QString,QSize,Wallpaper::ResizeMethod,QColor)));
 }
 
 Wallpaper::~Wallpaper()
@@ -124,6 +153,16 @@ Wallpaper *Wallpaper::load(const KPluginInfo &info, const QVariantList &args)
     }
     return load(info.pluginName(), args);
 }
+
+PackageStructure::Ptr Wallpaper::packageStructure()
+{
+    if (!WallpaperPrivate::packageStructure) {
+        WallpaperPrivate::packageStructure = new WallpaperPackage();
+    }
+
+    return WallpaperPrivate::packageStructure;
+}
+
 
 QString Wallpaper::name() const
 {
@@ -264,6 +303,60 @@ void Wallpaper::setConfigurationRequired(bool needsConfig, const QString &reason
 
     d->needsConfig = needsConfig;
     emit configurationRequired(needsConfig);
+}
+
+bool Wallpaper::setUseDiskCache() const
+{
+    return d->cacheRendering;
+}
+
+void Wallpaper::setUseDiskCache(bool useCache)
+{
+    d->cacheRendering = useCache;
+}
+
+void Wallpaper::render(const QString &sourceImagePath, const QSize &size,
+                       Wallpaper::ResizeMethod resizeMethod, const QColor &color)
+{
+    if (sourceImagePath.isEmpty() || !QFile::exists(sourceImagePath)) {
+        return;
+    }
+
+    if (d->cacheRendering) {
+        QString cache = d->cachePath(sourceImagePath, size, resizeMethod, color);
+        if (QFile::exists(cache)) {
+            kDebug() << "loading cached wallpaper from" << cache;
+            QImage img(cache);
+            emit renderComplete(img);
+            return;
+        }
+    }
+
+    d->renderToken = WallpaperPrivate::s_renderer.render(sourceImagePath, size, resizeMethod, color);
+}
+
+QString WallpaperPrivate::cachePath(const QString &sourceImagePath, const QSize &size,
+                                    Wallpaper::ResizeMethod resizeMethod, const QColor &color) const
+{
+    const QString id = QString("plasma-wallpapers/%5_%3_%4_%1x%2.png")
+                              .arg(size.width()).arg(size.height()).arg(color.name())
+                              .arg(resizeMethod).arg(sourceImagePath);
+    return KGlobal::dirs()->locateLocal("cache", id);
+}
+
+void WallpaperPrivate::renderComplete(int token, const QImage &image,
+                                      const QString &sourceImagePath, const QSize &size,
+                                      Wallpaper::ResizeMethod resizeMethod, const QColor &color)
+{
+    if (token != renderToken) {
+        return;
+    }
+
+    if (cacheRendering) {
+        image.save(cachePath(sourceImagePath, size, resizeMethod, color));
+    }
+
+    emit q->renderComplete(image);
 }
 
 } // Plasma namespace

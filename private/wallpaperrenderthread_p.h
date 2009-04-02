@@ -1,36 +1,55 @@
 /*
-  Copyright (c) 2007 Paolo Capriotti <p.capriotti@gmail.com>
+ *   Copyright (c) 2007 Paolo Capriotti <p.capriotti@gmail.com>
+ *   Copyright (c) 2009 Aaron Seigo <aseigo@kde.org>
+ *
+ *   This program is free software; you can redistribute it and/or modify
+ *   it under the terms of the GNU Library General Public License as
+ *   published by the Free Software Foundation; either version 2, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details
+ *
+ *   You should have received a copy of the GNU Library General Public
+ *   License along with this program; if not, write to the
+ *   Free Software Foundation, Inc.,
+ *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ */
 
-  This program is free software; you can redistribute it and/or modify
-  it under the terms of the GNU General Public License as published by
-  the Free Software Foundation; either version 2 of the License, or
-  (at your option) any later version.
-*/
+#ifndef PLASMA_WALLPAPERRENDERTHREAD_H
+#define PLASMA_WALLPAPERRENDERTHREAD_H
 
-#ifndef RENDERTHREAD_H
-#define RENDERTHREAD_H
-
-#include "backgroundpackage.h"
 #include <QColor>
 #include <QImage>
 #include <QMutex>
 #include <QThread>
 #include <QWaitCondition>
 
-class RenderThread : public QThread
-{
-Q_OBJECT
-public:
-    RenderThread();
-    virtual ~RenderThread();
+#include "plasma/wallpaper.h"
 
-    int render(const QString &file,
-               const QColor &color,
-               Background::ResizeMethod method);
+namespace Plasma
+{
+
+class WallpaperRenderThread : public QThread
+{
+    Q_OBJECT
+
+public:
+    WallpaperRenderThread(QObject *parent = 0);
+    virtual ~WallpaperRenderThread();
+
+    int render(const QString &file, const QSize &size,
+               Wallpaper::ResizeMethod, const QColor &color);
 
     void setSize(const QSize &size);
     void setRatio(float ratio);
 
+Q_SIGNALS:
+    void done(int token, const QImage &pixmap,
+              const QString &sourceImagePath, const QSize &size,
+              Wallpaper::ResizeMethod resizeMethod, const QColor &color);
 protected:
     virtual void run();
 
@@ -39,18 +58,16 @@ private:
     QWaitCondition m_condition;
 
     // protected by mutex
-    int m_current_token;
+    int m_currentToken;
     QString m_file;
     QColor m_color;
     QSize m_size;
     float m_ratio;
-    Background::ResizeMethod m_method;
+    Wallpaper::ResizeMethod m_method;
 
     bool m_abort;
     bool m_restart;
-
-signals:
-    void done(int token, const QImage &pixmap);
 };
 
+} // namespace Plasma
 #endif // RENDERTHREAD_H

@@ -24,6 +24,7 @@
 #include <kplugininfo.h>
 
 #include <plasma/plasma.h>
+#include <plasma/packagestructure.h>
 #include <plasma/version.h>
 
 namespace Plasma
@@ -61,6 +62,19 @@ class PLASMA_EXPORT Wallpaper : public QObject
     Q_PROPERTY(QList<KServiceAction> listRenderingModes READ listRenderingModes)
 
     public:
+        /**
+         * Various resize modes supported by the built in image renderer
+         */
+        enum ResizeMethod {
+            ScaledResize /**< Scales the image to fit the full area*/,
+            CenteredResize /**< Centers the image within the area */,
+            ScaledAndCroppedResize /**< Scales and crops the image, preserving the aspect ratio */,
+            TiledResize /**< Tiles the image to fill the area */,
+            CenterTiledResize /**< Tiles the image to fill the area, starting with a centered tile */,
+            MaxpectResize /**< Best fit resize */
+        };
+        Q_ENUMS(ResizeMethod)
+
         ~Wallpaper();
 
         /**
@@ -95,6 +109,11 @@ class PLASMA_EXPORT Wallpaper : public QObject
          * @return a pointer to the loaded wallpaper, or 0 on load failure
          **/
         static Wallpaper *load(const KPluginInfo &info, const QVariantList &args = QVariantList());
+
+        /**
+         * Returns the Package specialization for wallpapers
+         */
+        static PackageStructure::Ptr packageStructure();
 
         /**
          * Returns the user-visible name for the wallpaper, as specified in the
@@ -230,8 +249,15 @@ class PLASMA_EXPORT Wallpaper : public QObject
         /**
          * @return true if the wallpaper currently needs to be configured,
          *         otherwise, false
+         * @since 4.3
          */
         bool configurationRequired() const;
+
+        /**
+         * @return true if disk caching is turned on.
+         * @since 4.3
+         */
+        bool setUseDiskCache() const;
 
     Q_SIGNALS:
         /**
@@ -241,20 +267,29 @@ class PLASMA_EXPORT Wallpaper : public QObject
 
         /**
          * Emitted when the user wants to configure/change the wallpaper.
+         * @since 4.3
          */
         void configureRequested();
 
         /**
          * Emitted when the state of the wallpaper requiring configuration
          * changes.
+         * @since 4.3
          */
         void configurationRequired(bool needsConfig);
 
         /**
          * Emitted when the configuration of the wallpaper needs to be saved
          * to disk.
+         * @since 4.3
          */
         void configNeedsSaving();
+
+        /**
+         * Emitted when a wallpaper image render is completed.
+         * @since 4.3
+         */
+        void renderComplete(const QImage &image);
 
     protected:
         /**
@@ -285,10 +320,45 @@ class PLASMA_EXPORT Wallpaper : public QObject
          * @param reason a translated message for the user explaining that the
          *               applet needs configuring; this should note what needs
          *               to be configured
+         * @since 4.3
          */
         void setConfigurationRequired(bool needsConfiguring, const QString &reason = QString());
 
+        /**
+         * Renders the wallpaper asyncronously with the given parameters. When the rendering is
+         * complete, the renderComplete signal is emitted.
+         *
+         * @param sourceImagePath the path to the image file on disk. Common image formats such as
+         *                        PNG, JPEG and SVG are supported
+         * @param size the size to render the image as
+         * @param resizeMethod the method to use when resizing the image to fit size, @see
+         *                     ResizeMethod
+         * @param color the color to use to pad the rendered image if it doesn't take up the
+         *              entire size with the given ResizeMethod
+         * @since 4.3
+         */
+        void render(const QString &sourceImagePath, const QSize &size,
+                    Wallpaper::ResizeMethod resizeMethod = ScaledResize,
+                    const QColor &color = QColor(0, 0, 0));
+
+        /**
+         * Sets whether or not to cache on disk the results of calls to render. If the wallpaper
+         * changes often or is innexpensive to render, then it's probably best not to cache them.
+         * 
+         * The default is not to cache.
+         *
+         * @see render
+         * @param useCache true to cache rendered papers on disk, false not to cache
+         * @since 4.3
+         */
+        void setUseDiskCache(bool useCache);
+
     private:
+        Q_PRIVATE_SLOT(d, void renderComplete(int token, const QImage &image,
+                                              const QString &sourceImagePath, const QSize &size,
+                                              Wallpaper::ResizeMethod resizeMethod, const QColor &color))
+
+        friend class WallpaperPrivate;
         WallpaperPrivate *const d;
 };
 

@@ -84,6 +84,7 @@ set(plasma_LIB_SRCS
     private/style.cpp
     private/toolbox.cpp
     private/tooltip.cpp
+    private/wallpaperrenderthread.cpp
     private/windowpreview.cpp
     querymatch.cpp
     runnercontext.cpp
