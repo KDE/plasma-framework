@@ -48,6 +48,11 @@ RunnerSyntax::RunnerSyntax(const RunnerSyntax &other)
 {
 }
 
+RunnerSyntax::~RunnerSyntax()
+{
+    delete d;
+}
+
 RunnerSyntax &RunnerSyntax::operator=(const RunnerSyntax &rhs)
 {
     *d = *rhs.d;

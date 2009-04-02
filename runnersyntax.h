@@ -57,6 +57,8 @@ class PLASMA_EXPORT RunnerSyntax
          */
         RunnerSyntax(const RunnerSyntax &other);
 
+        ~RunnerSyntax();
+
         /**
          * Assignment operator
          */
