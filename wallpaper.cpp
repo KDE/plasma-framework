@@ -52,12 +52,12 @@ public:
     };
 
     QString cachePath(const QString &sourceImagePath, const QSize &size,
-                      Wallpaper::ResizeMethod resizeMethod, const QColor &color) const;
+                      int resizeMethod, const QColor &color) const;
 
 
     void renderCompleted(int token, const QImage &image,
                          const QString &sourceImagePath, const QSize &size,
-                         Wallpaper::ResizeMethod resizeMethod, const QColor &color);
+                         int resizeMethod, const QColor &color);
 
     static WallpaperRenderThread s_renderer;
     static PackageStructure::Ptr packageStructure;
@@ -88,8 +88,8 @@ Wallpaper::Wallpaper(QObject *parentObject, const QVariantList &args)
     }
     setParent(parentObject);
 
-    connect(&WallpaperPrivate::s_renderer, SIGNAL(done(int,QImage,QString,QSize,Wallpaper::ResizeMethod,QColor)),
-            this, SLOT(renderCompleted(int,QImage,QString,QSize,Wallpaper::ResizeMethod,QColor)));
+    connect(&WallpaperPrivate::s_renderer, SIGNAL(done(int,QImage,QString,QSize,int,QColor)),
+            this, SLOT(renderCompleted(int,QImage,QString,QSize,int,QColor)));
 }
 
 Wallpaper::~Wallpaper()
@@ -315,13 +315,14 @@ void Wallpaper::render(const QString &sourceImagePath, const QSize &size,
                        Wallpaper::ResizeMethod resizeMethod, const QColor &color)
 {
     if (sourceImagePath.isEmpty() || !QFile::exists(sourceImagePath)) {
+        //kDebug() << "failed on:" << sourceImagePath;
         return;
     }
 
     if (d->cacheRendering) {
         QString cache = d->cachePath(sourceImagePath, size, resizeMethod, color);
         if (QFile::exists(cache)) {
-            kDebug() << "loading cached wallpaper from" << cache;
+            //kDebug() << "loading cached wallpaper from" << cache;
             QImage img(cache);
             emit renderCompleted(img);
             return;
@@ -329,10 +330,11 @@ void Wallpaper::render(const QString &sourceImagePath, const QSize &size,
     }
 
     d->renderToken = WallpaperPrivate::s_renderer.render(sourceImagePath, size, resizeMethod, color);
+    //kDebug() << "rendering" << sourceImagePath << ", token is" << d->renderToken;
 }
 
 QString WallpaperPrivate::cachePath(const QString &sourceImagePath, const QSize &size,
-                                    Wallpaper::ResizeMethod resizeMethod, const QColor &color) const
+                                    int resizeMethod, const QColor &color) const
 {
     const QString id = QString("plasma-wallpapers/%5_%3_%4_%1x%2.png")
                               .arg(size.width()).arg(size.height()).arg(color.name())
@@ -342,9 +344,10 @@ QString WallpaperPrivate::cachePath(const QString &sourceImagePath, const QSize 
 
 void WallpaperPrivate::renderCompleted(int token, const QImage &image,
                                        const QString &sourceImagePath, const QSize &size,
-                                       Wallpaper::ResizeMethod resizeMethod, const QColor &color)
+                                       int resizeMethod, const QColor &color)
 {
     if (token != renderToken) {
+        //kDebug() << "render token mismatch" << token << renderToken;
         return;
     }
 
@@ -352,6 +355,7 @@ void WallpaperPrivate::renderCompleted(int token, const QImage &image,
         image.save(cachePath(sourceImagePath, size, resizeMethod, color));
     }
 
+    //kDebug() << "rendering complete!";
     emit q->renderCompleted(image);
 }
 

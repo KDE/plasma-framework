@@ -49,7 +49,7 @@ public:
 Q_SIGNALS:
     void done(int token, const QImage &pixmap,
               const QString &sourceImagePath, const QSize &size,
-              Wallpaper::ResizeMethod resizeMethod, const QColor &color);
+              int resizeMethod, const QColor &color);
 protected:
     virtual void run();
 

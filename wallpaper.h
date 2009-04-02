@@ -356,7 +356,7 @@ class PLASMA_EXPORT Wallpaper : public QObject
     private:
         Q_PRIVATE_SLOT(d, void renderCompleted(int token, const QImage &image,
                                                const QString &sourceImagePath, const QSize &size,
-                                               Wallpaper::ResizeMethod resizeMethod, const QColor &color))
+                                               int resizeMethod, const QColor &color))
 
         friend class WallpaperPrivate;
         WallpaperPrivate *const d;
