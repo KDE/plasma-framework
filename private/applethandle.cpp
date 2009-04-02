@@ -25,6 +25,7 @@
 #include <QtGui/QLinearGradient>
 #include <QtGui/QPainter>
 #include <QtGui/QApplication>
+#include <QtGui/QMenu>
 
 #include <kcolorscheme.h>
 #include <kglobalsettings.h>
@@ -790,6 +791,15 @@ void AppletHandle::hoverMoveEvent(QGraphicsSceneHoverEvent *event)
 void AppletHandle::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 {
     Q_UNUSED(event);
+
+    foreach (QWidget *widget, QApplication::topLevelWidgets()) {
+      QMenu *menu = qobject_cast<QMenu*>(widget);
+      if (menu && menu->isVisible()) {
+          connect(menu, SIGNAL(aboutToHide()), this, SLOT(leaveTimeout()));
+          return;
+      }
+    }
+
 
     // if we haven't even showed up yet, remove the handle
     if (m_hoverTimer->isActive()) {
