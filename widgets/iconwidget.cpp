@@ -1186,6 +1186,25 @@ void IconWidget::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
     QGraphicsWidget::hoverLeaveEvent(event);
 }
 
+
+void IconWidget::dragEnterEvent(QGraphicsSceneDragDropEvent * event)
+{
+    event->ignore();
+    d->hoverEffect(true);
+    update();
+
+    QGraphicsWidget::dragEnterEvent(event);
+}
+
+void IconWidget::dragLeaveEvent(QGraphicsSceneDragDropEvent * event)
+{
+    // d->states &= ~IconWidgetPrivate::HoverState; // Will be set once progress is zero again ...
+    d->hoverEffect(false);
+    update();
+
+    QGraphicsWidget::dragLeaveEvent(event);
+}
+
 void IconWidget::setPressed(bool pressed)
 {
     if (pressed) {
