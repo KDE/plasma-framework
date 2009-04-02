@@ -305,12 +305,12 @@ void Wallpaper::setConfigurationRequired(bool needsConfig, const QString &reason
     emit configurationRequired(needsConfig);
 }
 
-bool Wallpaper::setUseDiskCache() const
+bool Wallpaper::isUsingDiskCache() const
 {
     return d->cacheRendering;
 }
 
-void Wallpaper::setUseDiskCache(bool useCache)
+void Wallpaper::setUsingDiskCache(bool useCache)
 {
     d->cacheRendering = useCache;
 }

@@ -257,7 +257,7 @@ class PLASMA_EXPORT Wallpaper : public QObject
          * @return true if disk caching is turned on.
          * @since 4.3
          */
-        bool setUseDiskCache() const;
+        bool isUsingDiskCache() const;
 
     Q_SIGNALS:
         /**
@@ -351,7 +351,7 @@ class PLASMA_EXPORT Wallpaper : public QObject
          * @param useCache true to cache rendered papers on disk, false not to cache
          * @since 4.3
          */
-        void setUseDiskCache(bool useCache);
+        void setUsingDiskCache(bool useCache);
 
     private:
         Q_PRIVATE_SLOT(d, void renderComplete(int token, const QImage &image,
