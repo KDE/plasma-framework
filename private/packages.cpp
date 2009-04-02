@@ -154,6 +154,18 @@ ThemePackage::ThemePackage(QObject *parent)
     setDefaultMimetypes(mimetypes);
 }
 
+WallpaperPackage::WallpaperPackage(QObject *parent)
+    : PackageStructure(parent, "Background")
+{
+    QStringList mimetypes;
+    mimetypes << "image/svg" << "image/png" << "image/jpeg" << "image/jpg";
+    setDefaultMimetypes(mimetypes);
+
+    addDirectoryDefinition("images", "images", i18n("Images"));
+    addFileDefinition("screenshot", "screenshot.png", i18n("Screenshot"));
+    setAllowExternalPaths(true);
+}
+
 } // namespace Plasma
 
 #include "packages_p.moc"

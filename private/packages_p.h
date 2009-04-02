@@ -44,6 +44,14 @@ public:
     explicit ThemePackage(QObject *parent = 0);
 };
 
+class WallpaperPackage : public PackageStructure
+{
+    Q_OBJECT
+
+public:
+    explicit WallpaperPackage(QObject *parent = 0);
+};
+
 PackageStructure::Ptr defaultPackageStructure(ComponentType type);
 
 } // namespace Plasma
