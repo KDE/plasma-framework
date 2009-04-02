@@ -44,9 +44,7 @@ public:
     WallpaperPrivate(KService::Ptr service, Wallpaper *wallpaper) :
         q(wallpaper),
         wallpaperDescription(service),
-        renderColor(0, 0, 0),
         renderToken(-1),
-        renderResizeMethod(Wallpaper::ScaledResize),
         cacheRendering(false),
         initialized(false),
         needsConfig(false)
@@ -57,9 +55,9 @@ public:
                       Wallpaper::ResizeMethod resizeMethod, const QColor &color) const;
 
 
-    void renderComplete(int token, const QImage &image,
-                        const QString &sourceImagePath, const QSize &size,
-                        Wallpaper::ResizeMethod resizeMethod, const QColor &color);
+    void renderCompleted(int token, const QImage &image,
+                         const QString &sourceImagePath, const QSize &size,
+                         Wallpaper::ResizeMethod resizeMethod, const QColor &color);
 
     static WallpaperRenderThread s_renderer;
     static PackageStructure::Ptr packageStructure;
@@ -68,9 +66,7 @@ public:
     KPluginInfo wallpaperDescription;
     QRectF boundingRect;
     KServiceAction mode;
-    QColor renderColor;
     int renderToken;
-    Wallpaper::ResizeMethod renderResizeMethod;
     bool cacheRendering : 1;
     bool initialized : 1;
     bool needsConfig : 1;
@@ -93,7 +89,7 @@ Wallpaper::Wallpaper(QObject *parentObject, const QVariantList &args)
     setParent(parentObject);
 
     connect(&WallpaperPrivate::s_renderer, SIGNAL(done(int,QImage,QString,QSize,Wallpaper::ResizeMethod,QColor)),
-            this, SLOT(renderComplete(int,QImage,QString,QSize,Wallpaper::ResizeMethod,QColor)));
+            this, SLOT(renderCompleted(int,QImage,QString,QSize,Wallpaper::ResizeMethod,QColor)));
 }
 
 Wallpaper::~Wallpaper()
@@ -327,7 +323,7 @@ void Wallpaper::render(const QString &sourceImagePath, const QSize &size,
         if (QFile::exists(cache)) {
             kDebug() << "loading cached wallpaper from" << cache;
             QImage img(cache);
-            emit renderComplete(img);
+            emit renderCompleted(img);
             return;
         }
     }
@@ -344,9 +340,9 @@ QString WallpaperPrivate::cachePath(const QString &sourceImagePath, const QSize 
     return KGlobal::dirs()->locateLocal("cache", id);
 }
 
-void WallpaperPrivate::renderComplete(int token, const QImage &image,
-                                      const QString &sourceImagePath, const QSize &size,
-                                      Wallpaper::ResizeMethod resizeMethod, const QColor &color)
+void WallpaperPrivate::renderCompleted(int token, const QImage &image,
+                                       const QString &sourceImagePath, const QSize &size,
+                                       Wallpaper::ResizeMethod resizeMethod, const QColor &color)
 {
     if (token != renderToken) {
         return;
@@ -356,7 +352,7 @@ void WallpaperPrivate::renderComplete(int token, const QImage &image,
         image.save(cachePath(sourceImagePath, size, resizeMethod, color));
     }
 
-    emit q->renderComplete(image);
+    emit q->renderCompleted(image);
 }
 
 } // Plasma namespace

@@ -289,7 +289,7 @@ class PLASMA_EXPORT Wallpaper : public QObject
          * Emitted when a wallpaper image render is completed.
          * @since 4.3
          */
-        void renderComplete(const QImage &image);
+        void renderCompleted(const QImage &image);
 
     protected:
         /**
@@ -326,7 +326,7 @@ class PLASMA_EXPORT Wallpaper : public QObject
 
         /**
          * Renders the wallpaper asyncronously with the given parameters. When the rendering is
-         * complete, the renderComplete signal is emitted.
+         * complete, the renderCompleted signal is emitted.
          *
          * @param sourceImagePath the path to the image file on disk. Common image formats such as
          *                        PNG, JPEG and SVG are supported
@@ -354,9 +354,9 @@ class PLASMA_EXPORT Wallpaper : public QObject
         void setUsingDiskCache(bool useCache);
 
     private:
-        Q_PRIVATE_SLOT(d, void renderComplete(int token, const QImage &image,
-                                              const QString &sourceImagePath, const QSize &size,
-                                              Wallpaper::ResizeMethod resizeMethod, const QColor &color))
+        Q_PRIVATE_SLOT(d, void renderCompleted(int token, const QImage &image,
+                                               const QString &sourceImagePath, const QSize &size,
+                                               Wallpaper::ResizeMethod resizeMethod, const QColor &color))
 
         friend class WallpaperPrivate;
         WallpaperPrivate *const d;
