@@ -848,7 +848,9 @@ void AppletHandle::hoverTimeout()
 
 void AppletHandle::leaveTimeout()
 {
-    startFading(FadeOut, m_entryPos);
+    if (!isUnderMouse()) {
+        startFading(FadeOut, m_entryPos);
+    }
 }
 
 void AppletHandle::appletDestroyed()
