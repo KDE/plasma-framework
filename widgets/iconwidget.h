@@ -283,8 +283,7 @@ protected:
     void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
     void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
 
-    void dragEnterEvent(QGraphicsSceneDragDropEvent *event);
-    void dragLeaveEvent(QGraphicsSceneDragDropEvent *event);
+    bool sceneEventFilter(QGraphicsItem *watched, QEvent *event);
 
 public:
     /**

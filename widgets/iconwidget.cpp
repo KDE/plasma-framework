@@ -1186,23 +1186,17 @@ void IconWidget::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
     QGraphicsWidget::hoverLeaveEvent(event);
 }
 
-
-void IconWidget::dragEnterEvent(QGraphicsSceneDragDropEvent * event)
+bool IconWidget::sceneEventFilter(QGraphicsItem *watched, QEvent *event)
 {
-    event->ignore();
-    d->hoverEffect(true);
-    update();
+    if (event->type() == QEvent::GraphicsSceneDragEnter){
+        d->hoverEffect(true);
+        update();
+    }else if (event->type() == QEvent::GraphicsSceneDragLeave){
+        d->hoverEffect(false);
+        update();
+    }
 
-    QGraphicsWidget::dragEnterEvent(event);
-}
-
-void IconWidget::dragLeaveEvent(QGraphicsSceneDragDropEvent * event)
-{
-    // d->states &= ~IconWidgetPrivate::HoverState; // Will be set once progress is zero again ...
-    d->hoverEffect(false);
-    update();
-
-    QGraphicsWidget::dragLeaveEvent(event);
+    return false;
 }
 
 void IconWidget::setPressed(bool pressed)
