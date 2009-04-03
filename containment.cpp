@@ -856,12 +856,28 @@ int Containment::desktop() const
 KPluginInfo::List Containment::listContainments(const QString &category,
                                                 const QString &parentApp)
 {
+    return listContainmentsOfType(QString(), category, parentApp);
+}
+
+
+KPluginInfo::List Containment::listContainmentsOfType(const QString &type,
+                                                      const QString &category,
+                                                      const QString &parentApp)
+{
     QString constraint;
 
     if (parentApp.isEmpty()) {
         constraint.append("not exist [X-KDE-ParentApp]");
     } else {
         constraint.append("[X-KDE-ParentApp] == '").append(parentApp).append("'");
+    }
+
+    if (!type.isEmpty()) {
+        if (!constraint.isEmpty()) {
+            constraint.append(" and ");
+        }
+
+        constraint.append("'").append(type).append("' ~in [X-Plasma-ContainmentCategories] ~in '");
     }
 
     if (!category.isEmpty()) {
@@ -886,6 +902,21 @@ KPluginInfo::List Containment::listContainmentsForMimetype(const QString &mimety
     //kDebug() << mimetype << constraint;
     KService::List offers = KServiceTypeTrader::self()->query("Plasma/Containment", constraint);
     return KPluginInfo::fromServices(offers);
+}
+
+QStringList Containment::listContainmentTypes()
+{
+    KPluginInfo::List containmentInfos = listContainments();
+    QSet<QString> types;
+
+    foreach (const KPluginInfo &containmentInfo, containmentInfos) {
+        QStringList theseTypes = containmentInfo.service()->property("X-Plasma-ContainmentCategories").toStringList();
+        foreach (const QString &type, theseTypes) {
+            types.insert(type);
+        }
+    }
+
+    return types.toList();
 }
 
 void Containment::dragEnterEvent(QGraphicsSceneDragDropEvent *event)
