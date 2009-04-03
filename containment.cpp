@@ -877,7 +877,7 @@ KPluginInfo::List Containment::listContainmentsOfType(const QString &type,
             constraint.append(" and ");
         }
 
-        constraint.append("'").append(type).append("' ~in [X-Plasma-ContainmentCategories] ~in '");
+        constraint.append("'").append(type).append("' ~in [X-Plasma-ContainmentCategories]");
     }
 
     if (!category.isEmpty()) {
