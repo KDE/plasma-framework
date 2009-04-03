@@ -326,8 +326,10 @@ void RunnerManager::launchQuery(const QString &term)
     launchQuery(term, QString());
 }
 
-void RunnerManager::launchQuery(const QString &term, const QString &runnerName)
+void RunnerManager::launchQuery(const QString &untrimmedTerm, const QString &runnerName)
 {
+    QString term = untrimmedTerm.trimmed();
+
     if (d->runners.isEmpty()) {
         d->loadRunners();
     }
@@ -379,8 +381,10 @@ bool RunnerManager::execQuery(const QString &term)
     return execQuery(term, QString());
 }
 
-bool RunnerManager::execQuery(const QString &term, const QString &runnerName)
+bool RunnerManager::execQuery(const QString &untrimmedTerm, const QString &runnerName)
 {
+    QString term = untrimmedTerm.trimmed();
+
     if (d->runners.isEmpty()) {
         d->loadRunners();
     }
