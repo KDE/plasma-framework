@@ -67,7 +67,7 @@ ExtenderGroup::ExtenderGroup(Extender *parent, uint groupId)
         }
     }
 
-    if (items().isEmpty()) {
+    if (items().isEmpty() && d->hideIfEmpty && !isDetached()) {
         hide();
         extender()->itemRemovedEvent(this);
     }
@@ -104,6 +104,9 @@ void ExtenderGroup::setHideIfEmpty(bool hideIfEmpty)
     if (hideIfEmpty && items().isEmpty()) {
         hide();
         extender()->itemRemovedEvent(this);
+    } else if (!hideIfEmpty && !isVisible()) {
+        extender()->itemAddedEvent(this);
+        show();
     }
 }
 
@@ -162,7 +165,7 @@ void ExtenderGroupPrivate::addItemToGroup(Plasma::ExtenderItem *item)
 void ExtenderGroupPrivate::removeItemFromGroup(Plasma::ExtenderItem *item)
 {
     if (item->group() == q) {
-        if (q->items().isEmpty()) {
+        if (q->items().isEmpty() && hideIfEmpty && !q->isDetached()) {
             q->extender()->itemRemovedEvent(q);
             q->hide();
         }

@@ -287,7 +287,9 @@ void ExtenderItem::setGroup(ExtenderGroup *group)
 {
     d->group = group;
     config().writeEntry("group", group->name());
-    group->d->addItemToGroup(this);
+    if (!group->isDetached()) {
+        group->d->addItemToGroup(this);
+    }
 }
 
 ExtenderGroup *ExtenderItem::group() const
