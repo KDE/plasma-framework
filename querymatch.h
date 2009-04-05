@@ -27,8 +27,9 @@
 
 class QAction;
 class QIcon;
-class QVariant;
 class QString;
+class QVariant;
+class QWidget;
 
 namespace Plasma
 {
@@ -70,8 +71,8 @@ class PLASMA_EXPORT QueryMatch
          * Constructs a PossibleMatch associated with a given RunnerContext
          * and runner.
          *
-         * @arg search the RunnerContext this match belongs to
-         * @arg runner the runner this match belongs to
+         * @param search the RunnerContext this match belongs to
+         * @param runner the runner this match belongs to
          */
         explicit QueryMatch(AbstractRunner *runner);
 
@@ -81,7 +82,19 @@ class PLASMA_EXPORT QueryMatch
         QueryMatch(const QueryMatch &other);
 
         ~QueryMatch();
+        QueryMatch &operator=(const QueryMatch &other);
+        bool operator<(const QueryMatch &other) const;
 
+
+        /**
+         * @return the runner associated with this action
+         */
+        AbstractRunner *runner() const;
+
+        /**
+         * @return true if the match is valid and can therefore be run,
+         *         an invalid match does not have an associated AbstractRunner
+         */
         bool isValid() const;
 
         /**
@@ -111,30 +124,6 @@ class PLASMA_EXPORT QueryMatch
         qreal relevance() const;
 
         /**
-         * The runner associated with this action
-         */
-        AbstractRunner *runner() const;
-
-        /**
-         * A string that can be used as an ID for this match,
-         * even between different queries. It is based in part
-         * on the source of the match (the AbstractRunner) and
-         * distinguishing information provided by the runner,
-         * ensuring global uniqueness as well as consistency
-         * between query matches.
-         */
-        QString id() const;
-
-        QString text() const;
-        QString subtext() const;
-        QVariant data() const;
-        QIcon icon() const;
-        bool isEnabled() const;
-
-        bool operator<(const QueryMatch &other) const;
-        QueryMatch &operator=(const QueryMatch &other);
-
-        /**
          * Requests this match to activae using the given context
          *
          * @param context the context to use in conjunction with this run
@@ -155,6 +144,11 @@ class PLASMA_EXPORT QueryMatch
         void setData(const QVariant &data);
 
         /**
+         * @return the data associated with this match; usually runner-specific
+         */
+        QVariant data() const;
+
+        /**
          * Sets the id for this match; useful if the id does not
          * match data().toString(). The id must be unique to all
          * matches from this runner, and should remain constant
@@ -165,19 +159,91 @@ class PLASMA_EXPORT QueryMatch
          */
         void setId(const QString &id);
 
+        /**
+         * @ruetnr a string that can be used as an ID for this match,
+         * even between different queries. It is based in part
+         * on the source of the match (the AbstractRunner) and
+         * distinguishing information provided by the runner,
+         * ensuring global uniqueness as well as consistency
+         * between query matches.
+         */
+        QString id() const;
+
+        /**
+         * Sets the main title text for this match; should be short
+         * enough to fit nicely on one line in a user interface
+         *
+         * @param text the text to use as the title
+         */
         void setText(const QString &text);
+
+        /**
+         * @return the title text for this match
+         */
+        QString text() const;
+
+        /**
+         * Sets the descriptive text for this match; can be longer
+         * than the main title text
+         *
+         * @param text the text to use as the description
+         */
         void setSubtext(const QString &text);
+
+        /**
+         * @return the descriptive text for this match
+         */
+        QString subtext() const;
+
+        /**
+         * Sets the icon associated with this match
+         *
+         * @param icon the icon to show along with the match
+         */
         void setIcon(const QIcon &icon);
+
+        /**
+         * @return the icon for this match
+         */
+        QIcon icon() const;
+
+        /**
+         * Sets whether or not this match can be activited
+         *
+         * @param enable true if the match is enabled and therefore runnable
+         */
         void setEnabled(bool enable);
+
+        /**
+         * @return true if the match is enabled and therefore runnable, otherwise false
+         */
+        bool isEnabled() const;
 
         /**
          * The current action.
          */
         QAction* selectedAction() const;
+
         /**
-        * Sets the selected action
-        */
+         * Sets the selected action
+         */
         void setSelectedAction(QAction *action);
+
+        /**
+         * @return true if this match can be configured before being run
+         * @since 4.3
+         */
+        bool hasConfigurationInterface() const;
+
+        /**
+         * If hasConfigurationInterface() returns true, this method may be called to get
+         * a widget displaying the options the user can interact with to modify
+         * the behaviour of what happens when the match is run.
+         *
+         * @param widget the parent of the options widgets.
+         * @since 4.3
+         */
+        void createConfigurationInterface(QWidget *parent);
 
     private:
         QSharedDataPointer<QueryMatchPrivate> d;

@@ -219,5 +219,17 @@ void QueryMatch::run(const RunnerContext &context) const
     }
 }
 
+bool QueryMatch::hasConfigurationInterface() const
+{
+    return d->runner && d->runner->hasRunOptions();
+}
+
+void QueryMatch::createConfigurationInterface(QWidget *parent)
+{
+    if (hasConfigurationInterface()) {
+        d->runner->createRunOptions(parent);
+    }
+}
+
 } // Plasma namespace
 
