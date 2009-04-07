@@ -47,8 +47,8 @@ class PLASMA_EXPORT WebView : public QGraphicsWidget
 {
     Q_OBJECT
 
-    Q_PROPERTY(QString url  WRITE setUrl)
-    Q_PROPERTY(QString html WRITE setHtml)
+    Q_PROPERTY(KUrl url READ url WRITE setUrl)
+    Q_PROPERTY(QString html READ html WRITE setHtml)
     Q_PROPERTY(bool dragToScroll READ dragToScroll WRITE setDragToScroll)
 
     public:
@@ -63,6 +63,11 @@ class PLASMA_EXPORT WebView : public QGraphicsWidget
         void setUrl(const KUrl &url);
 
         /**
+         * @return the html content of the page
+         */
+        KUrl url() const;
+
+        /**
          * Sets the html to be shown along with a base URL to be used
          * to resolve relative references.
          *
@@ -70,6 +75,11 @@ class PLASMA_EXPORT WebView : public QGraphicsWidget
          * @param baseUrl the base url for relative references
          */
         void setHtml(const QByteArray &html, const KUrl &baseUrl = KUrl());
+
+        /**
+         * @return the html content of the page
+         */
+        QString html() const;
 
         /**
          * Sets the html to be shown along with a base URL to be used

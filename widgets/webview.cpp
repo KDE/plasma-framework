@@ -85,6 +85,11 @@ void WebView::setUrl(const KUrl &url)
     }
 }
 
+KUrl WebView::url() const
+{
+    return d->page ? d->page->mainFrame()->url() : KUrl();
+}
+
 void WebView::setHtml(const QByteArray &html, const KUrl &baseUrl)
 {
     d->loaded = false;
@@ -99,6 +104,11 @@ void WebView::setHtml(const QString &html, const KUrl &baseUrl)
     if (d->page) {
         d->page->mainFrame()->setHtml(html, baseUrl);
     }
+}
+
+QString WebView::html() const
+{
+    return d->page ? d->page->mainFrame()->toHtml() : QByteArray();
 }
 
 QRectF WebView::geometry() const
@@ -438,6 +448,8 @@ void WebViewPrivate::updateRequested(const QRect &dirtyRect)
 
 void WebViewPrivate::scrollRequested(int dx, int dy, const QRect &scrollRect)
 {
+    Q_UNUSED(dx)
+    Q_UNUSED(dy)
     updateRequested(scrollRect);
 }
 
