@@ -85,6 +85,7 @@ struct CustomAnimationState
     Animator::CurveShape curve;
     int frames;
     int currentFrame;
+    int frameInterval;
     int interval;
     int currentInterval;
     int id;
@@ -378,8 +379,8 @@ int Animator::customAnimation(int frames, int duration, Animator::CurveShape cur
     state->frames = frames;
     state->currentFrame = 0;
     state->curve = curve;
-    state->interval = duration / qreal(state->frames);
-    state->interval = qMax(MIN_TICK_RATE_INT, state->interval - (state->interval % MIN_TICK_RATE_INT));
+    state->frameInterval = duration / qreal(state->frames);
+    state->interval = qMax(MIN_TICK_RATE_INT, state->frameInterval - (state->frameInterval % MIN_TICK_RATE_INT));
     state->currentInterval = state->interval;
     state->receiver = receiver;
     state->slot = qstrdup(slot);
@@ -657,7 +658,7 @@ void Animator::timerEvent(QTimerEvent *event)
             // advance the frame
             state->currentFrame +=
                 (KGlobalSettings::graphicEffectsLevel() & KGlobalSettings::SimpleAnimationEffects) ?
-                qMax(1, elapsed / state->interval) : state->frames - state->currentFrame;
+                qMax(1, elapsed / state->frameInterval) : state->frames - state->currentFrame;
             /*kDebug() << "custom anim for" << state->receiver
                        << "to slot" << state->slot
                        << "with interval of" << state->interval
