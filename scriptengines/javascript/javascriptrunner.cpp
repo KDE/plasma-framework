@@ -36,7 +36,7 @@ Q_DECLARE_METATYPE(ConstSearchMatchStar)
 JavaScriptRunner::JavaScriptRunner(QObject *parent, const QVariantList &args)
     : RunnerScript(parent)
 {
-    m_engine = new QScriptEngine( this );
+    m_engine = new QScriptEngine(this);
     importExtensions();
 }
 
@@ -54,7 +54,7 @@ bool JavaScriptRunner::init()
     setupObjects();
 
     QFile file(mainScript());
-    if ( !file.open(QIODevice::ReadOnly | QIODevice::Text) ) {
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text) ) {
         kWarning() << "Unable to load script file";
         return false;
     }
@@ -62,8 +62,8 @@ bool JavaScriptRunner::init()
     QString script = file.readAll();
     kDebug() << "Script says" << script;
 
-    m_engine->evaluate( script );
-    if ( m_engine->hasUncaughtException() ) {
+    m_engine->evaluate(script);
+    if (m_engine->hasUncaughtException()) {
         reportError();
         return false;
     }
@@ -73,31 +73,31 @@ bool JavaScriptRunner::init()
 
 void JavaScriptRunner::match(Plasma::RunnerContext *search)
 {
-    QScriptValue fun = m_self.property( "match" );
-    if ( !fun.isFunction() ) {
-	kDebug() << "Script: match is not a function, " << fun.toString();
-	return;
+    QScriptValue fun = m_self.property("match");
+    if (!fun.isFunction()) {
+        kDebug() << "Script: match is not a function, " << fun.toString();
+        return;
     }
 
     QScriptValueList args;
     args << m_engine->toScriptValue(search);
 
     QScriptContext *ctx = m_engine->pushContext();
-    ctx->setActivationObject( m_self );
-    fun.call( m_self, args );
+    ctx->setActivationObject(m_self);
+    fun.call(m_self, args);
     m_engine->popContext();
 
-    if ( m_engine->hasUncaughtException() ) {
-	reportError();
+    if (m_engine->hasUncaughtException()) {
+        reportError();
     }
 }
 
 void JavaScriptRunner::exec(const Plasma::RunnerContext *search, const Plasma::QueryMatch *action)
 {
-    QScriptValue fun = m_self.property( "exec" );
-    if ( !fun.isFunction() ) {
-	kDebug() << "Script: exec is not a function, " << fun.toString();
-	return;
+    QScriptValue fun = m_self.property("exec");
+    if (!fun.isFunction()) {
+        kDebug() << "Script: exec is not a function, " << fun.toString();
+        return;
     }
 
     QScriptValueList args;
@@ -105,12 +105,12 @@ void JavaScriptRunner::exec(const Plasma::RunnerContext *search, const Plasma::Q
     args << m_engine->toScriptValue(action);
 
     QScriptContext *ctx = m_engine->pushContext();
-    ctx->setActivationObject( m_self );
-    fun.call( m_self, args );
+    ctx->setActivationObject(m_self);
+    fun.call(m_self, args);
     m_engine->popContext();
 
-    if ( m_engine->hasUncaughtException() ) {
-	reportError();
+    if (m_engine->hasUncaughtException()) {
+        reportError();
     }
 }
 
@@ -118,9 +118,9 @@ void JavaScriptRunner::setupObjects()
 {
     QScriptValue global = m_engine->globalObject();
 
-    // Expose an applet
-    m_self = m_engine->newQObject( this );
-    m_self.setScope( global );    
+    // Expose the runner
+    m_self = m_engine->newQObject(this);
+    m_self.setScope(global);
 
     global.setProperty("runner", m_self);
 }
@@ -129,12 +129,13 @@ void JavaScriptRunner::importExtensions()
 {
     QStringList extensions;
     //extensions << "qt.core" << "qt.gui" << "qt.svg" << "qt.xml" << "org.kde.plasma";
-    extensions << "qt.core" << "qt.gui" << "qt.xml";
+    //extensions << "qt.core" << "qt.gui" << "qt.xml";
     foreach (const QString &ext, extensions) {
         kDebug() << "importing " << ext << "...";
         QScriptValue ret = m_engine->importExtension(ext);
-        if (ret.isError())
+        if (ret.isError()) {
             kDebug() << "failed to import extension" << ext << ":" << ret.toString();
+        }
     }
     kDebug() << "done importing extensions.";
 }
@@ -142,7 +143,7 @@ void JavaScriptRunner::importExtensions()
 void JavaScriptRunner::reportError()
 {
     kDebug() << "Error: " << m_engine->uncaughtException().toString()
-	     << " at line " << m_engine->uncaughtExceptionLineNumber() << endl;
+             << " at line " << m_engine->uncaughtExceptionLineNumber() << endl;
     kDebug() << m_engine->uncaughtExceptionBacktrace();
 }
 
