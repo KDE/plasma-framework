@@ -75,6 +75,11 @@ class PLASMA_EXPORT Wallpaper : public QObject
         };
         Q_ENUMS(ResizeMethod)
 
+        /**
+         * Default constructor for an empty or null wallpaper
+         */
+        explicit Wallpaper(QObject * parent = 0);
+
         ~Wallpaper();
 
         /**
@@ -111,9 +116,15 @@ class PLASMA_EXPORT Wallpaper : public QObject
         static Wallpaper *load(const KPluginInfo &info, const QVariantList &args = QVariantList());
 
         /**
-         * Returns the Package specialization for wallpapers
+         * Returns the Package specialization for wallpapers. May be queried for 'preferred'
+         * which will return the preferred wallpaper image path given the associated Wallpaper
+         * object, if any.
+         *
+         * @param paper the Wallpaper object to associated the PackageStructure with,
+         *              which will then use the Wallpaper object to define things such as
+         *              default size and resize methods.
          */
-        static PackageStructure::Ptr packageStructure();
+        static PackageStructure::Ptr packageStructure(Wallpaper *paper = 0);
 
         /**
          * Returns the user-visible name for the wallpaper, as specified in the
@@ -358,6 +369,7 @@ class PLASMA_EXPORT Wallpaper : public QObject
                                                const QString &sourceImagePath, const QSize &size,
                                                int resizeMethod, const QColor &color))
 
+        friend class WallpaperPackage;
         friend class WallpaperPrivate;
         WallpaperPrivate *const d;
 };

@@ -33,47 +33,21 @@
 
 #include "plasma/private/dataengineconsumer_p.h"
 #include "plasma/private/packages_p.h"
-#include "plasma/private/wallpaperrenderthread_p.h"
+#include "plasma/private/wallpaper_p.h"
 
 namespace Plasma
 {
 
-class WallpaperPrivate : public DataEngineConsumer
-{
-public:
-    WallpaperPrivate(KService::Ptr service, Wallpaper *wallpaper) :
-        q(wallpaper),
-        wallpaperDescription(service),
-        renderToken(-1),
-        cacheRendering(false),
-        initialized(false),
-        needsConfig(false)
-    {
-    };
-
-    QString cachePath(const QString &sourceImagePath, const QSize &size,
-                      int resizeMethod, const QColor &color) const;
-
-
-    void renderCompleted(int token, const QImage &image,
-                         const QString &sourceImagePath, const QSize &size,
-                         int resizeMethod, const QColor &color);
-
-    static WallpaperRenderThread s_renderer;
-    static PackageStructure::Ptr packageStructure;
-
-    Wallpaper *q;
-    KPluginInfo wallpaperDescription;
-    QRectF boundingRect;
-    KServiceAction mode;
-    int renderToken;
-    bool cacheRendering : 1;
-    bool initialized : 1;
-    bool needsConfig : 1;
-};
-
 WallpaperRenderThread WallpaperPrivate::s_renderer;
-PackageStructure::Ptr WallpaperPrivate::packageStructure(0);
+PackageStructure::Ptr WallpaperPrivate::s_packageStructure(0);
+
+Wallpaper::Wallpaper(QObject * parentObject)
+    : d(new WallpaperPrivate(KService::serviceByStorageId(QString()), this))
+{
+    setParent(parentObject);
+    connect(&WallpaperPrivate::s_renderer, SIGNAL(done(int,QImage,QString,QSize,int,QColor)),
+            this, SLOT(renderCompleted(int,QImage,QString,QSize,int,QColor)));
+}
 
 Wallpaper::Wallpaper(QObject *parentObject, const QVariantList &args)
     : d(new WallpaperPrivate(KService::serviceByStorageId(args.count() > 0 ?
@@ -86,8 +60,8 @@ Wallpaper::Wallpaper(QObject *parentObject, const QVariantList &args)
     if (!mutableArgs.isEmpty()) {
         mutableArgs.removeFirst();
     }
-    setParent(parentObject);
 
+    setParent(parentObject);
     connect(&WallpaperPrivate::s_renderer, SIGNAL(done(int,QImage,QString,QSize,int,QColor)),
             this, SLOT(renderCompleted(int,QImage,QString,QSize,int,QColor)));
 }
@@ -150,15 +124,19 @@ Wallpaper *Wallpaper::load(const KPluginInfo &info, const QVariantList &args)
     return load(info.pluginName(), args);
 }
 
-PackageStructure::Ptr Wallpaper::packageStructure()
+PackageStructure::Ptr Wallpaper::packageStructure(Wallpaper *paper)
 {
-    if (!WallpaperPrivate::packageStructure) {
-        WallpaperPrivate::packageStructure = new WallpaperPackage();
+    if (paper) {
+        PackageStructure::Ptr package(new WallpaperPackage(paper, paper));
+        return package;
     }
 
-    return WallpaperPrivate::packageStructure;
-}
+    if (!WallpaperPrivate::s_packageStructure) {
+        WallpaperPrivate::s_packageStructure = new WallpaperPackage();
+    }
 
+    return WallpaperPrivate::s_packageStructure;
+}
 
 QString Wallpaper::name() const
 {
@@ -318,6 +296,8 @@ void Wallpaper::render(const QString &sourceImagePath, const QSize &size,
         //kDebug() << "failed on:" << sourceImagePath;
         return;
     }
+
+    d->lastResizeMethod = resizeMethod;
 
     if (d->cacheRendering) {
         QString cache = d->cachePath(sourceImagePath, size, resizeMethod, color);
