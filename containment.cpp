@@ -1781,7 +1781,8 @@ void ContainmentPrivate::positionContainments()
     while (it.hasNext()) {
         Containment *containment = it.next();
         if (containment->d->type == Containment::PanelContainment ||
-            containment->d->type == Containment::CustomPanelContainment) {
+            containment->d->type == Containment::CustomPanelContainment ||
+            q->corona()->offscreenWidgets().contains(containment)) {
             // weed out all containments we don't care about at all
             // e.g. Panels and ourself
             it.remove();

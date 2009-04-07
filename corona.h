@@ -115,6 +115,12 @@ public:
     void removeOffscreenWidget(QGraphicsWidget *widget);
 
     /**
+     * @return the list of all offscreen widgets
+     * @since 4.3
+     */
+    QList <QGraphicsWidget *> offscreenWidgets() const;
+
+    /**
      * Returns the number of screens available to plasma.
      * Subclasses should override this method as the default
      * implementation returns a meaningless value.

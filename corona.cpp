@@ -426,6 +426,11 @@ void Corona::removeOffscreenWidget(QGraphicsWidget *widget)
     }
 }
 
+QList <QGraphicsWidget *> Corona::offscreenWidgets() const
+{
+    return d->offscreenWidgets.values();
+}
+
 void CoronaPrivate::offscreenWidgetDestroyed(QObject *o)
 {
     // at this point, it's just a QObject, not a QGraphicsWidget, but we still need
