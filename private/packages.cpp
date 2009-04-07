@@ -1,5 +1,5 @@
 /******************************************************************************
-*   Copyright 2007 by Aaron Seigo <aseigo@kde.org>                        *
+*   Copyright 2007-2009 by Aaron Seigo <aseigo@kde.org>                       *
 *                                                                             *
 *   This library is free software; you can redistribute it and/or             *
 *   modify it under the terms of the GNU Library General Public               *
@@ -17,7 +17,12 @@
 *   Boston, MA 02110-1301, USA.                                               *
 *******************************************************************************/
 
-#include "private/packages_p.h"
+#include "plasma/private/packages_p.h"
+
+#include <math.h>
+#include <float.h> // FLT_MAX
+
+#include <QFileInfo>
 
 #include <kconfiggroup.h>
 #include <kdesktopfile.h>
@@ -26,13 +31,15 @@
 
 #include <knewstuff2/engine.h>
 
+#include "plasma/private/wallpaper_p.h"
+
 namespace Plasma
 {
 
 PlasmoidPackage::PlasmoidPackage(QObject *parent)
     : Plasma::PackageStructure(parent, QString("Plasmoid"))
 {
-    addDirectoryDefinition("images", "images", i18n("Images"));
+    addDirectoryDefinition("images", "images/", i18n("Images"));
     QStringList mimetypes;
     mimetypes << "image/svg+xml" << "image/png" << "image/jpeg";
     setMimetypes("images", mimetypes);
@@ -154,16 +161,130 @@ ThemePackage::ThemePackage(QObject *parent)
     setDefaultMimetypes(mimetypes);
 }
 
-WallpaperPackage::WallpaperPackage(QObject *parent)
-    : PackageStructure(parent, "Background")
+WallpaperPackage::WallpaperPackage(Wallpaper *paper, QObject *parent)
+    : PackageStructure(parent, "Background"),
+      m_paper(paper)
 {
     QStringList mimetypes;
     mimetypes << "image/svg" << "image/png" << "image/jpeg" << "image/jpg";
     setDefaultMimetypes(mimetypes);
 
-    addDirectoryDefinition("images", "images", i18n("Images"));
+    addDirectoryDefinition("images", "images/", i18n("Images"));
     addFileDefinition("screenshot", "screenshot.png", i18n("Screenshot"));
     setAllowExternalPaths(true);
+
+    if (m_paper) {
+        connect(m_paper, SIGNAL(destroyed(QObject*)), this, SLOT(paperDestroyed()));
+    }
+}
+
+void WallpaperPackage::pathChanged()
+{
+    static bool guard = false;
+
+    if (guard) {
+        return;
+    }
+
+    guard = true;
+
+    QFileInfo info(path());
+
+    if (info.isDir()) {
+        findBestPaper();
+    } else {
+        // dirty trick to support having a file passed in instead of a directory
+        addFileDefinition("preferred", info.fileName(), i18n("Recommended wallpaper file"));
+        setContentsPrefix(QString());
+        kDebug() << "changing" << path() << "to" << info.path();
+        setPath(info.path());
+    }
+
+    guard = false;
+}
+
+QSize WallpaperPackage::resSize(const QString &str) const
+{
+    int index = str.indexOf('x');
+    if (index != -1) {
+        return QSize(str.left(index).toInt(),
+                     str.mid(index + 1).toInt());
+    } else {
+        return QSize();
+    }
+}
+
+void WallpaperPackage::findBestPaper()
+{
+    QStringList images = entryList("images");
+    if (images.empty()) {
+        return;
+    }
+
+    //kDebug() << "wanted" << size;
+
+    // choose the nearest resolution
+    float best = FLT_MAX;
+    const QSize size = m_paper ? m_paper->boundingRect().size().toSize() : QSize(100000, 100000);
+    const Wallpaper::ResizeMethod method = m_paper ? m_paper->d->lastResizeMethod
+                                                   : Wallpaper::ScaledResize;
+
+    QString bestImage;
+    foreach (const QString &entry, images) {
+        QSize candidate = resSize(QFileInfo(entry).baseName());
+        if (candidate == QSize()) {
+            continue;
+        }
+
+        double dist = distance(candidate, size, method);
+        //kDebug() << "candidate" << candidate << "distance" << dist;
+        if (bestImage.isEmpty() || dist < best) {
+            bestImage = entry;
+            best = dist;
+            //kDebug() << "best" << bestImage;
+            if (dist == 0) {
+                break;
+            }
+        }
+    }
+
+    //kDebug() << "best image" << bestImage;
+    addFileDefinition("preferred", path("images") + bestImage, i18n("Recommended wallpaper file"));
+}
+
+float WallpaperPackage::distance(const QSize& size, const QSize& desired,
+                                 Plasma::Wallpaper::ResizeMethod method) const
+{
+    // compute difference of areas
+    float delta = size.width() * size.height() -
+                  desired.width() * desired.height();
+    // scale down to about 1.0
+    delta /= ((desired.width() * desired.height())+(size.width() * size.height()))/2;
+
+
+    switch (method) {
+    case Plasma::Wallpaper::ScaledResize: {
+        // Consider first the difference in aspect ratio,
+        // then in areas. Prefer scaling down.
+        float deltaRatio = 1.0;
+        if (size.height() > 0 && desired.height() > 0) {
+            deltaRatio = float(size.width()) / float(size.height()) -
+                         float(desired.width()) / float(desired.height());
+        }
+        return fabs(deltaRatio) * 3.0 + (delta >= 0.0 ? delta : -delta + 5.0);
+    }
+    case Plasma::Wallpaper::ScaledAndCroppedResize:
+        // Difference of areas, slight preference to scale down
+        return delta >= 0.0 ? delta : -delta + 2.0;
+    default:
+        // Difference in areas
+        return fabs(delta);
+    }
+}
+
+void WallpaperPackage::paperDestroyed()
+{
+    m_paper = 0;
 }
 
 } // namespace Plasma

@@ -20,11 +20,14 @@
 #ifndef LIBS_PLASMA_PACKAGES_P_H
 #define LIBS_PLASMA_PACKAGES_P_H
 
-#include <plasma/packagestructure.h>
-#include "plasma.h"
+#include "plasma/packagestructure.h"
+#include "plasma/wallpaper.h"
+#include "plasma/plasma.h"
 
 namespace Plasma
 {
+
+class Wallpaper;
 
 class PlasmoidPackage : public PackageStructure
 {
@@ -49,7 +52,22 @@ class WallpaperPackage : public PackageStructure
     Q_OBJECT
 
 public:
-    explicit WallpaperPackage(QObject *parent = 0);
+    explicit WallpaperPackage(Wallpaper *paper = 0, QObject *parent = 0);
+
+protected:
+    void pathChanged();
+
+private:
+    QSize resSize(const QString &str) const;
+    void findBestPaper();
+    float distance(const QSize& size, const QSize& desired,
+                   Plasma::Wallpaper::ResizeMethod method) const;
+
+private Q_SLOTS:
+    void paperDestroyed();
+
+private:
+    Wallpaper *m_paper;
 };
 
 PackageStructure::Ptr defaultPackageStructure(ComponentType type);
