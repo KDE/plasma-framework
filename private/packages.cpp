@@ -202,7 +202,7 @@ void WallpaperPackage::pathChanged()
         // dirty trick to support having a file passed in instead of a directory
         addFileDefinition("preferred", info.fileName(), i18n("Recommended wallpaper file"));
         setContentsPrefix(QString());
-        kDebug() << "changing" << path() << "to" << info.path();
+        //kDebug() << "changing" << path() << "to" << info.path();
         setPath(info.path());
     }
 
