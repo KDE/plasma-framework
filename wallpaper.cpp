@@ -192,6 +192,11 @@ bool Wallpaper::isInitialized() const
 void Wallpaper::setBoundingRect(const QRectF &boundingRect)
 {
     d->boundingRect = boundingRect;
+
+    if (!d->targetSize.isValid())  {
+        d->targetSize = boundingRect.size();
+        emit renderHintsChanged();
+    }
 }
 
 void Wallpaper::setRenderingMode(const QString &mode)
@@ -289,6 +294,18 @@ void Wallpaper::setUsingDiskCache(bool useCache)
     d->cacheRendering = useCache;
 }
 
+void Wallpaper::setResizeMethodHint(Wallpaper::ResizeMethod resizeMethod)
+{
+    d->lastResizeMethod = resizeMethod;
+    emit renderHintsChanged();
+}
+
+void Wallpaper::setTargetSizeHint(const QSizeF &targetSize)
+{
+    d->targetSize = targetSize;
+    emit renderHintsChanged();
+}
+
 void Wallpaper::render(const QString &sourceImagePath, const QSize &size,
                        Wallpaper::ResizeMethod resizeMethod, const QColor &color)
 {
@@ -297,7 +314,10 @@ void Wallpaper::render(const QString &sourceImagePath, const QSize &size,
         return;
     }
 
-    d->lastResizeMethod = resizeMethod;
+    if (d->lastResizeMethod != resizeMethod) {
+        d->lastResizeMethod = resizeMethod;
+        emit renderHintsChanged();
+    }
 
     if (d->cacheRendering) {
         QString cache = d->cachePath(sourceImagePath, size, resizeMethod, color);

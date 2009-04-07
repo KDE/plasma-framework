@@ -65,6 +65,7 @@ private:
 
 private Q_SLOTS:
     void paperDestroyed();
+    void renderHintsChanged();
 
 private:
     Wallpaper *m_paper;

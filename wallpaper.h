@@ -270,6 +270,29 @@ class PLASMA_EXPORT Wallpaper : public QObject
          */
         bool isUsingDiskCache() const;
 
+        /**
+         * Allows one to set rendering hints that may differ from the actualities of the
+         * Wallpaper's current state, allowing for better selection of papers from packages, 
+         * for instance.
+         *
+         * @arg resizeMethod The resize method to assume will be used for future wallpaper
+         *                   scaling; may later be changed by calls to render()
+         *
+         * @since 4.3
+         */
+        void setResizeMethodHint(Wallpaper::ResizeMethod resizeMethod);
+
+        /*
+         * Allows one to set rendering hints that may differ from the actualities of the
+         * Wallpaper's current state, allowing for better selection of papers from packages, 
+         * for instance.
+         *
+         * @arg targetSize The size to assume will be used for future wallpaper scaling
+         *
+         * @since 4.3
+         */
+        void setTargetSizeHint(const QSizeF &targetSize);
+
     Q_SIGNALS:
         /**
          * This signal indicates that wallpaper needs to be repainted.
@@ -301,6 +324,11 @@ class PLASMA_EXPORT Wallpaper : public QObject
          * @since 4.3
          */
         void renderCompleted(const QImage &image);
+
+        /**
+         * @internal
+         */
+        void renderHintsChanged();
 
     protected:
         /**

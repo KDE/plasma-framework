@@ -59,6 +59,7 @@ public:
     KServiceAction mode;
     int renderToken;
     Wallpaper::ResizeMethod lastResizeMethod;
+    QSizeF targetSize;
     bool cacheRendering : 1;
     bool initialized : 1;
     bool needsConfig : 1;

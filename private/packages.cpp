@@ -174,8 +174,14 @@ WallpaperPackage::WallpaperPackage(Wallpaper *paper, QObject *parent)
     setAllowExternalPaths(true);
 
     if (m_paper) {
+        connect(paper, SIGNAL(renderHintsChanged()), this, SLOT(renderHintsChanged()));
         connect(m_paper, SIGNAL(destroyed(QObject*)), this, SLOT(paperDestroyed()));
     }
+}
+
+void WallpaperPackage::renderHintsChanged()
+{
+    pathChanged();
 }
 
 void WallpaperPackage::pathChanged()
@@ -225,7 +231,7 @@ void WallpaperPackage::findBestPaper()
 
     // choose the nearest resolution
     float best = FLT_MAX;
-    const QSize size = m_paper ? m_paper->boundingRect().size().toSize() : QSize(100000, 100000);
+    const QSize size = m_paper ? m_paper->d->targetSize.toSize() : QSize(100000, 100000);
     const Wallpaper::ResizeMethod method = m_paper ? m_paper->d->lastResizeMethod
                                                    : Wallpaper::ScaledResize;
 
