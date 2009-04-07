@@ -22,7 +22,9 @@
 #ifndef PLASMA_DATAENGINECONSUMER_H
 #define PLASMA_DATAENGINECONSUMER_H
 
-#include <QtCore/QStringList>
+#include <QtCore/QSet>
+
+#include <kdebug.h>
 
 #include "plasma/dataenginemanager.h"
 
@@ -41,21 +43,20 @@ public:
 
     DataEngine *dataEngine(const QString &name)
     {
-        int index = m_loadedEngines.indexOf(name);
-        if (index != -1) {
+        if (m_loadedEngines.contains(name)) {
             return DataEngineManager::self()->engine(name);
         }
 
         DataEngine *engine = DataEngineManager::self()->loadEngine(name);
         if (engine->isValid()) {
-            m_loadedEngines.append(name);
+            m_loadedEngines.insert(name);
         }
 
         return engine;
     }
 
 private:
-    QStringList m_loadedEngines;
+    QSet<QString> m_loadedEngines;
 };
 
 } // namespace Plasma
