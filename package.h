@@ -59,8 +59,6 @@ class PLASMA_EXPORT Package
           */
         Package(const QString &packagePath, PackageStructure::Ptr structure);
 
-        //TODO for 4.1: be able to load an uninstalled/uncompressed file.
-
         ~Package();
 
         /**
