@@ -47,22 +47,10 @@ class PackagePrivate
 {
 public:
     PackagePrivate(const PackageStructure::Ptr st, const QString &p)
-        : structure(st),
-          basePath(p)
+        : structure(st)
     {
-        QDir dir(basePath);
-        basePath = dir.canonicalPath();
-        valid = QFile::exists(basePath);
-
-        if (valid) {
-            QFileInfo info(basePath);
-            if (info.isDir()) {
-                basePath.append(QDir::separator());
-            }
-            kDebug() << "basePath is" << basePath;
-        } else {
-            kDebug() << p << "invalid, basePath is" << basePath;
-        }
+        structure->setPath(p);
+        valid = !structure->path().isEmpty();
     }
 
     ~PackagePrivate()
@@ -70,7 +58,6 @@ public:
     }
 
     PackageStructure::Ptr structure;
-    QString basePath;
     bool valid;
 };
 
@@ -78,13 +65,11 @@ Package::Package(const QString &packageRoot, const QString &package,
                  PackageStructure::Ptr structure)
     : d(new PackagePrivate(structure, packageRoot + '/' + package))
 {
-    structure->setPath(d->basePath);
 }
 
 Package::Package(const QString &packagePath, PackageStructure::Ptr structure)
     : d(new PackagePrivate(structure, packagePath))
 {
-    structure->setPath(d->basePath);
 }
 
 Package::~Package()
@@ -99,7 +84,7 @@ bool Package::isValid() const
     }
 
     foreach (const char *dir, d->structure->requiredDirectories()) {
-        if (!QFile::exists(d->basePath + d->structure->contentsPrefix() + d->structure->path(dir))) {
+        if (!QFile::exists(d->structure->path() + d->structure->contentsPrefix() + d->structure->path(dir))) {
             kWarning() << "Could not find required directory" << dir;
             d->valid = false;
             return false;
@@ -107,9 +92,9 @@ bool Package::isValid() const
     }
 
     foreach (const char *file, d->structure->requiredFiles()) {
-        if (!QFile::exists(d->basePath + d->structure->contentsPrefix() + d->structure->path(file))) {
+        if (!QFile::exists(d->structure->path() + d->structure->contentsPrefix() + d->structure->path(file))) {
             kWarning() << "Could not find required file" << file << ", look in"
-                       << d->basePath + d->structure->contentsPrefix() + d->structure->path(file) << endl;
+                       << d->structure->path() + d->structure->contentsPrefix() + d->structure->path(file) << endl;
             d->valid = false;
             return false;
         }
@@ -132,7 +117,7 @@ QString Package::filePath(const char *fileType, const QString &filename) const
         return QString();
     }
 
-    path.prepend(d->basePath + d->structure->contentsPrefix());
+    path.prepend(d->structure->path() + d->structure->contentsPrefix());
 
     if (!filename.isEmpty()) {
         path.append("/").append(filename);
@@ -147,7 +132,7 @@ QString Package::filePath(const char *fileType, const QString &filename) const
         // due to symlink or ../ games
         QDir dir(path);
         QString canonicalized = dir.canonicalPath() + QDir::separator();
-        if (canonicalized.startsWith(d->basePath)) {
+        if (canonicalized.startsWith(d->structure->path())) {
             return path;
         }
     }
@@ -167,27 +152,7 @@ QStringList Package::entryList(const char *fileType) const
         return QStringList();
     }
 
-    QString path = d->structure->path(fileType);
-    if (path.isEmpty()) {
-        return QStringList();
-    }
-
-    QDir dir(d->basePath + d->structure->contentsPrefix() + path);
-
-    if (dir.exists()) {
-        if (d->structure->allowExternalPaths()) {
-            return dir.entryList(QDir::Files | QDir::Readable);
-        }
-
-        // ensure that we don't return files outside of our base path
-        // due to symlink or ../ games
-        QString canonicalized = dir.canonicalPath();
-        if (canonicalized.startsWith(d->basePath)) {
-            return dir.entryList(QDir::Files | QDir::Readable);
-        }
-    }
-
-    return QStringList();
+    return d->structure->entryList(fileType);
 }
 
 PackageMetadata Package::metadata() const
@@ -197,7 +162,7 @@ PackageMetadata Package::metadata() const
 
 const QString Package::path() const
 {
-    return d->basePath;
+    return d->structure->path();
 }
 
 const PackageStructure::Ptr Package::structure() const

@@ -155,6 +155,15 @@ public:
     QString path(const char *key) const;
 
     /**
+     * Get the list of files of a given type.
+     *
+     * @arg key the type of file to look for
+     * @return list of files by name
+     * @since 4.3
+     */
+    QStringList entryList(const char *key);
+
+    /**
      * @return user visible name for the given entry
      **/
     QString name(const char *key) const;

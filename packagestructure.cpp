@@ -19,6 +19,7 @@
 
 #include "packagestructure.h"
 
+#include <QDir>
 #include <QMap>
 #include <QFileInfo>
 
@@ -262,6 +263,32 @@ QList<const char*> PackageStructure::requiredFiles() const
     return files;
 }
 
+QStringList PackageStructure::entryList(const char *key)
+{
+    QString p = path(key);
+
+    if (p.isEmpty()) {
+        return QStringList();
+    }
+
+    QDir dir(d->path + d->contentsPrefix + p);
+
+    if (dir.exists()) {
+        if (d->externalPaths) {
+            return dir.entryList(QDir::Files | QDir::Readable);
+        }
+
+        // ensure that we don't return files outside of our base path
+        // due to symlink or ../ games
+        QString canonicalized = dir.canonicalPath();
+        if (canonicalized.startsWith(d->path)) {
+            return dir.entryList(QDir::Files | QDir::Readable);
+        }
+    }
+
+    return QStringList();
+}
+
 void PackageStructure::addDirectoryDefinition(const char *key,
                                               const QString &path, const QString &name)
 {
@@ -356,11 +383,26 @@ QStringList PackageStructure::mimetypes(const char *key) const
 
 void PackageStructure::setPath(const QString &path)
 {
-    if (d->path == path) {
+    QDir dir(path);
+    QString basePath = dir.canonicalPath();
+    bool valid = QFile::exists(basePath);
+
+    if (valid) {
+        QFileInfo info(basePath);
+        if (info.isDir()) {
+            basePath.append(QDir::separator());
+        }
+        kDebug() << "basePath is" << basePath;
+    } else {
+        kDebug() << path << "invalid, basePath is" << basePath;
         return;
     }
 
-    d->path = path;
+    if (d->path == basePath) {
+        return;
+    }
+
+    d->path = basePath;
     delete d->metadata;
     d->metadata = 0;
     pathChanged();
