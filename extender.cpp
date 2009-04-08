@@ -340,10 +340,14 @@ void Extender::dropEvent(QGraphicsSceneDragDropEvent *event)
 void Extender::itemAddedEvent(ExtenderItem *item, const QPointF &pos)
 {
     if (pos == QPointF(-1, -1)) {
-        if (appearance() == BottomUpStacked) {
-            d->layout->insertItem(0, item);
+	if (!item->group()) {
+            if (appearance() == BottomUpStacked) {
+                d->layout->insertItem(0, item);
+            } else {
+                d->layout->addItem(item);
+            }
         } else {
-            d->layout->addItem(item);
+            d->layout->insertItem(d->insertIndexFromPos(item->group()->pos()) + 1, item);
         }
     } else {
         d->layout->insertItem(d->insertIndexFromPos(pos), item);
@@ -351,6 +355,7 @@ void Extender::itemAddedEvent(ExtenderItem *item, const QPointF &pos)
 
     //remove the empty extender message if needed.
     d->updateEmptyExtenderLabel();
+    d->updateBorders();
 }
 
 void Extender::itemRemovedEvent(ExtenderItem *item)
@@ -365,6 +370,7 @@ void Extender::itemRemovedEvent(ExtenderItem *item)
 
     //add the empty extender message if needed.
     d->updateEmptyExtenderLabel();
+    d->updateBorders();
 }
 
 void Extender::itemHoverEnterEvent(ExtenderItem *item)
@@ -424,7 +430,9 @@ FrameSvg::EnabledBorders Extender::enabledBordersForItem(ExtenderItem *item) con
 
     ExtenderItem *topItem = dynamic_cast<ExtenderItem*>(d->layout->itemAt(0));
     ExtenderItem *bottomItem = dynamic_cast<ExtenderItem*>(d->layout->itemAt(d->layout->count() - 1));
-    if (d->appearance == TopDownStacked && bottomItem != item) {
+    if (item->group()) {
+        return FrameSvg::LeftBorder | FrameSvg::RightBorder;
+    } else if (d->appearance == TopDownStacked && bottomItem != item) {
         return FrameSvg::LeftBorder | FrameSvg::BottomBorder | FrameSvg::RightBorder;
     } else if (d->appearance == BottomUpStacked && topItem != item) {
         return FrameSvg::LeftBorder | FrameSvg::TopBorder | FrameSvg::RightBorder;
@@ -455,7 +463,6 @@ void ExtenderPrivate::addExtenderItem(ExtenderItem *item, const QPointF &pos)
     attachedExtenderItems.append(item);
     q->itemHoverLeaveEvent(item);
     q->itemAddedEvent(item, pos);
-    updateBorders();
     emit q->itemAttached(item);
 }
 
@@ -472,7 +479,6 @@ void ExtenderPrivate::removeExtenderItem(ExtenderItem *item)
     }
 
     q->itemRemovedEvent(item);
-    updateBorders();
 }
 
 int ExtenderPrivate::insertIndexFromPos(const QPointF &pos) const

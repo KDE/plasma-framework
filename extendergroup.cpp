@@ -154,6 +154,9 @@ void ExtenderGroupPrivate::addItemToGroup(Plasma::ExtenderItem *item)
         if (collapsed) {
             q->extender()->itemRemovedEvent(item);
             item->hide();
+        } else {
+            q->extender()->itemAddedEvent(item);
+            item->show();
         }
         if (!q->isVisible()) {
             q->extender()->itemAddedEvent(q);
