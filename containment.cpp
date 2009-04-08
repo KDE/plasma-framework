@@ -247,6 +247,11 @@ void Containment::restore(KConfigGroup &group)
     if (geo.size() != geo.size().expandedTo(minimumSize())) {
         setMinimumSize(minimumSize().boundedTo(geo.size()));
     }
+
+    //are we an offscreen containment?
+    if (containmentType() != PanelContainment && containmentType() != CustomPanelContainment && geo.right() < 0) {
+        corona()->addOffscreenWidget(this);
+    }
     setGeometry(geo);
 
     setLocation((Plasma::Location)group.readEntry("location", (int)d->location));
