@@ -344,7 +344,7 @@ class PLASMA_EXPORT Wallpaper : public QObject
         /**
          * This method is called once the wallpaper is loaded or mode is changed.
          *
-         * The mode can be retrieved using the renderMode() method.
+         * The mode can be retrieved using the renderingMode() method.
          *
          * @param config Config group to load settings
          **/
