@@ -220,8 +220,8 @@ void Wallpaper::setRenderingMode(const QString &mode)
 
 void Wallpaper::restore(const KConfigGroup &config)
 {
-    d->initialized = true;
     init(config);
+    d->initialized = true;
 }
 
 void Wallpaper::init(const KConfigGroup &config)
