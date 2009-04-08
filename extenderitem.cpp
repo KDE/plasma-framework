@@ -753,7 +753,11 @@ Applet *ExtenderItemPrivate::hostApplet() const
 
 void ExtenderItemPrivate::themeChanged()
 {
-    background->setImagePath("widgets/extender-background");
+    if (dragStarted) {
+        background->setImagePath("opaque/widgets/extender-background");
+    } else {
+        background->setImagePath("widgets/extender-background");
+    }
     if (dragStarted) {
         background->setEnabledBorders(FrameSvg::AllBorders);
     } else {
