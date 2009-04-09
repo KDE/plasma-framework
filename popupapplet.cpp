@@ -275,8 +275,7 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
                 //stuff out of your Dialog (extenders). Monitor WindowDeactivate events so we can
                 //emulate the same kind of behavior as Qt::Popup (close when you click somewhere
                 //else.
-                //Use Qt::Tool otherwise dialogs get shown over screensaver (bug #179924).
-                Qt::WindowFlags wflags = Qt::Tool | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint;
+                Qt::WindowFlags wflags = Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint;
 
                 if (passive) {
                     wflags |= Qt::X11BypassWindowManagerHint;
