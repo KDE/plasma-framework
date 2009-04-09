@@ -2302,13 +2302,15 @@ void AppletOverlayWidget::destroy()
     connect(Animator::self(),
             SIGNAL(animationFinished(QGraphicsItem*,Plasma::Animator::Animation)),
             this,
-            SLOT(overlayAnimationCompleteComplete(QGraphicsItem*,Plasma::Animator::Animation)));
+            SLOT(overlayAnimationComplete(QGraphicsItem*,Plasma::Animator::Animation)));
     Animator::self()->animateItem(this, Animator::DisappearAnimation);
 }
 
-void AppletOverlayWidget::overlayAnimationComplete()
+void AppletOverlayWidget::overlayAnimationComplete(QGraphicsItem *item, Plasma::Animator::Animation)
 {
-    deleteLater();
+    if (item == this) {
+        deleteLater();
+    }
 }
 
 void AppletOverlayWidget::paint(QPainter *painter,

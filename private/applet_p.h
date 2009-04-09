@@ -26,6 +26,7 @@
 
 #include <kactioncollection.h>
 
+#include "plasma/animator.h"
 #include "plasma/private/dataengineconsumer_p.h"
 
 class KKeySequenceWidget;
@@ -50,7 +51,7 @@ protected:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
 
 protected Q_SLOTS:
-    void overlayAnimationComplete();
+    void overlayAnimationComplete(QGraphicsItem *item, Plasma::Animator::Animation);
 };
 
 class AppletPrivate : public DataEngineConsumer
