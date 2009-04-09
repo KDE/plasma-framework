@@ -234,8 +234,8 @@ void ScrollWidget::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
     QPointF deltaPos = event->pos() - event->lastPos();
 
-    d->widget->setPos(qBound(-d->widget->size().width()+d->scrollingWidget->size().width(), d->widget->pos().x()+deltaPos.x(), (qreal)0),
-                      qBound(-d->widget->size().height()+d->scrollingWidget->size().height(), d->widget->pos().y()+deltaPos.y(), (qreal)0));
+    d->widget->setPos(qBound(qMin((qreal)0,-d->widget->size().width()+d->scrollingWidget->size().width()), d->widget->pos().x()+deltaPos.x(), (qreal)0),
+                      qBound(qMin((qreal)0,-d->widget->size().height()+d->scrollingWidget->size().height()), d->widget->pos().y()+deltaPos.y(), (qreal)0));
 
     d->dragging = true;
     d->horizontalScrollBar->setValue(-d->widget->pos().x()/10);
