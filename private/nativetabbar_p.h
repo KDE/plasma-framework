@@ -54,6 +54,10 @@ protected:
     bool isVertical() const;
     void wheelEvent(QWheelEvent *event);
 
+    void mousePressEvent(QMouseEvent *event);
+    void mouseMoveEvent(QMouseEvent *event);
+    void mouseReleaseEvent(QMouseEvent *event);
+
 protected slots:
     void animationFinished();
     void startAnimation();

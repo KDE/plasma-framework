@@ -58,7 +58,8 @@ public:
           backgroundSvg(0),
           buttonSvg(0),
           closeIcon("window-close"),
-          animationId(-1)
+          animationId(-1),
+          mousePressOffset(0)
     {
     }
 
@@ -82,6 +83,8 @@ public:
     int animationId;
 
     QRect currentAnimRect;
+    QRect startAnimRect;
+    int mousePressOffset;
     int lastIndex[2];
     qreal animProgress;
 };
@@ -132,9 +135,17 @@ QRect NativeTabBar::tabRect(int index) const
     QRect rect = KTabBar::tabRect(index).translated(d->left, d->top);
 
     if (isVertical()) {
-        rect.setWidth(width()-d->top-d->bottom);
+        rect.setWidth(width() - d->left - d->right);
+
+        if (index == count() - 1) {
+            rect.adjust(0, 0, 0, -d->bottom);
+        }
     } else {
-        rect.setHeight(height()-d->top-d->bottom);
+        rect.setHeight(height() - d->top- d->bottom);
+
+        if (index == count() - 1) {
+            rect.adjust(0, 0, -d->right, 0);
+        }
     }
 
     return rect;
@@ -226,7 +237,7 @@ void NativeTabBar::paintEvent(QPaintEvent *event)
 
     QFontMetrics metrics(painter.font());
 
-    for (int i = 0; i < count(); i++) {
+    for (int i = 0; i < count(); ++i) {
         QRect rect = tabRect(i).adjusted(d->buttonLeft, d->buttonTop,
                                          -d->buttonRight, -d->buttonBottom);
         // draw tab icon
@@ -306,6 +317,7 @@ void NativeTabBar::resizeEvent(QResizeEvent *event)
     KTabBar::resizeEvent(event);
     d->currentAnimRect = tabRect(currentIndex());
     d->backgroundSvg->resizeFrame(size());
+    d->syncBorders();
 
     update();
 }
@@ -348,7 +360,8 @@ void NativeTabBar::onValueChanged(qreal value)
 
     // animation rect
     QRect rect = tabRect(currentIndex());
-    QRect lastRect = tabRect(lastIndex());
+    QRect lastRect = d->startAnimRect.isNull() ? tabRect(lastIndex())
+                                               : d->startAnimRect;
     int x = isHorizontal() ? (int)(lastRect.x() - value * (lastRect.x() - rect.x())) : rect.x();
     int y = isHorizontal() ? rect.y() : (int)(lastRect.y() - value * (lastRect.y() - rect.y()));
     QSizeF sz = lastRect.size() - value * (lastRect.size() - rect.size());
@@ -358,6 +371,7 @@ void NativeTabBar::onValueChanged(qreal value)
 
 void NativeTabBar::animationFinished()
 {
+    d->startAnimRect = QRect();
     d->currentAnimRect = QRect();
     update();
 }
@@ -426,6 +440,55 @@ QPoint NativeTabBar::closeButtonPos( int tabIndex ) const
   buttonPos.ry() += (availableHeight - KIconLoader::SizeSmall) / 2;
 
   return buttonPos;
+}
+
+void NativeTabBar::mousePressEvent(QMouseEvent *event)
+{
+    if (d->currentAnimRect.isNull()) {
+        QRect rect = tabRect(currentIndex());
+
+        if (rect.contains(event->pos())) {
+            d->mousePressOffset = event->pos().x();
+            event->accept();
+            return;
+        }
+    }
+
+    KTabBar::mousePressEvent(event);
+}
+
+void NativeTabBar::mouseMoveEvent(QMouseEvent *event)
+{
+    if (d->mousePressOffset) {
+        d->currentAnimRect = tabRect(currentIndex());
+
+        int pos = qBound(0, d->currentAnimRect.left() + (event->pos().x() - d->mousePressOffset),
+                         width() - d->currentAnimRect.width());
+        d->currentAnimRect.moveLeft(pos);
+        update();
+    } else {
+        KTabBar::mouseMoveEvent(event);
+    }
+}
+
+void NativeTabBar::mouseReleaseEvent(QMouseEvent *event)
+{
+    if (d->mousePressOffset) {
+        bool left = event->pos().x() - d->mousePressOffset < 0;
+        int index = tabAt(QPoint(left ? d->currentAnimRect.left() : d->currentAnimRect.right(), 1));
+        d->mousePressOffset = 0;
+
+        if (index != currentIndex() && isTabEnabled(index)) {
+            d->startAnimRect = d->currentAnimRect;
+            setCurrentIndex(index);
+        } else {
+            d->currentAnimRect = QRect();
+        }
+
+        update();
+    } else {
+        KTabBar::mouseReleaseEvent(event);
+    }
 }
 
 void NativeTabBar::wheelEvent(QWheelEvent *event)
