@@ -61,7 +61,7 @@ public:
             : q(dialog),
               background(0),
               view(0),
-              widget(0),
+              graphicsWidget(0),
               resizeCorners(Dialog::NoCorner),
               resizeStartCorner(Dialog::NoCorner),
               moveTimer(0)
@@ -84,7 +84,7 @@ public:
      */
     Plasma::FrameSvg *background;
     QGraphicsView *view;
-    QGraphicsWidget *widget;
+    QGraphicsWidget *graphicsWidget;
     Dialog::ResizeCorners resizeCorners;
     QMap<Dialog::ResizeCorner, QRect> resizeAreas;
     Dialog::ResizeCorner resizeStartCorner;
@@ -102,7 +102,7 @@ void DialogPrivate::themeUpdated()
 
     FrameSvg::EnabledBorders borders = FrameSvg::AllBorders;
 
-    Extender *extender = qobject_cast<Extender*>(widget);
+    Extender *extender = qobject_cast<Extender*>(graphicsWidget);
     if (extender) {
         switch (extender->d->applet->location()) {
         case BottomEdge:
@@ -162,36 +162,36 @@ void DialogPrivate::themeUpdated()
 
 void DialogPrivate::adjustView()
 {
-    if (view && widget) {
+    if (view && graphicsWidget) {
         QSize prevSize = q->size();
-        kDebug() << "Widget size:" << widget->size()
-                 << "| Widget size hint:" << widget->effectiveSizeHint(Qt::PreferredSize)
-                 << "| Widget minsize hint:" << widget->minimumSize()
-                 << "| Widget maxsize hint:" << widget->maximumSize()
-                 << "| Widget bounding rect:" << widget->sceneBoundingRect();
+        kDebug() << "Widget size:" << graphicsWidget->size()
+                 << "| Widget size hint:" << graphicsWidget->effectiveSizeHint(Qt::PreferredSize)
+                 << "| Widget minsize hint:" << graphicsWidget->minimumSize()
+                 << "| Widget maxsize hint:" << graphicsWidget->maximumSize()
+                 << "| Widget bounding rect:" << graphicsWidget->sceneBoundingRect();
 
         //set the sizehints correctly:
         int left, top, right, bottom;
         q->getContentsMargins(&left, &top, &right, &bottom);
 
-        q->setMinimumSize(qMin(int(widget->minimumSize().width()) + left + right, QWIDGETSIZE_MAX),
-                          qMin(int(widget->minimumSize().height()) + top + bottom, QWIDGETSIZE_MAX));
-        q->setMaximumSize(qMin(int(widget->maximumSize().width()) + left + right, QWIDGETSIZE_MAX),
-                          qMin(int(widget->maximumSize().height()) + top + bottom, QWIDGETSIZE_MAX));
-        q->resize(qMin(int(widget->size().width()) + left + right, QWIDGETSIZE_MAX),
-                          qMin(int(widget->size().height()) + top + bottom, QWIDGETSIZE_MAX));
+        q->setMinimumSize(qMin(int(graphicsWidget->minimumSize().width()) + left + right, QWIDGETSIZE_MAX),
+                          qMin(int(graphicsWidget->minimumSize().height()) + top + bottom, QWIDGETSIZE_MAX));
+        q->setMaximumSize(qMin(int(graphicsWidget->maximumSize().width()) + left + right, QWIDGETSIZE_MAX),
+                          qMin(int(graphicsWidget->maximumSize().height()) + top + bottom, QWIDGETSIZE_MAX));
+        q->resize(qMin(int(graphicsWidget->size().width()) + left + right, QWIDGETSIZE_MAX),
+                          qMin(int(graphicsWidget->size().height()) + top + bottom, QWIDGETSIZE_MAX));
         q->updateGeometry();
 
         //reposition and resize the view.
         //force a valid rect, otherwise it will take up the whole scene
-        QRectF sceneRect(widget->sceneBoundingRect());
+        QRectF sceneRect(graphicsWidget->sceneBoundingRect());
 
         sceneRect.setWidth(qMax(qreal(1), sceneRect.width()));
         sceneRect.setHeight(qMax(qreal(1), sceneRect.height()));
         view->setSceneRect(sceneRect);
 
-        view->resize(widget->size().toSize());
-        view->centerOn(widget);
+        view->resize(graphicsWidget->size().toSize());
+        view->centerOn(graphicsWidget);
 
         if (q->size() != prevSize) {
             //the size of the dialog has changed, emit the signal:
@@ -345,14 +345,14 @@ void Dialog::resizeEvent(QResizeEvent *e)
 
     setMask(d->background->mask());
 
-    if (d->resizeStartCorner != Dialog::NoCorner && d->view && d->widget) {
-        d->widget->resize(d->view->size());
+    if (d->resizeStartCorner != Dialog::NoCorner && d->view && d->graphicsWidget) {
+        d->graphicsWidget->resize(d->view->size());
 
-        QRectF sceneRect(d->widget->sceneBoundingRect());
+        QRectF sceneRect(d->graphicsWidget->sceneBoundingRect());
         sceneRect.setWidth(qMax(qreal(1), sceneRect.width()));
         sceneRect.setHeight(qMax(qreal(1), sceneRect.height()));
         d->view->setSceneRect(sceneRect);
-        d->view->centerOn(d->widget);
+        d->view->centerOn(d->graphicsWidget);
     }
 
     d->updateResizeCorners();
@@ -388,11 +388,11 @@ void DialogPrivate::updateResizeCorners()
 
 void Dialog::setGraphicsWidget(QGraphicsWidget *widget)
 {
-    if (d->widget) {
-        d->widget->removeEventFilter(this);
+    if (d->graphicsWidget) {
+        d->graphicsWidget->removeEventFilter(this);
     }
 
-    d->widget = widget;
+    d->graphicsWidget = widget;
 
     if (widget) {
         if (!layout()) {
@@ -426,12 +426,12 @@ void Dialog::setGraphicsWidget(QGraphicsWidget *widget)
 
 QGraphicsWidget *Dialog::graphicsWidget()
 {
-    return d->widget;
+    return d->graphicsWidget;
 }
 
 bool Dialog::eventFilter(QObject *watched, QEvent *event)
 {
-    if (d->resizeStartCorner == Dialog::NoCorner && watched == d->widget &&
+    if (d->resizeStartCorner == Dialog::NoCorner && watched == d->graphicsWidget &&
         (event->type() == QEvent::GraphicsSceneResize || event->type() == QEvent::GraphicsSceneMove)) {
         d->adjustView();
     }
@@ -452,7 +452,7 @@ void Dialog::showEvent(QShowEvent * event)
     //check if the widget size is still synced with the view
     d->themeUpdated();
 
-    if (d->widget && d->view && d->widget->size().toSize() != d->view->size()) {
+    if (d->graphicsWidget && d->view && d->graphicsWidget->size().toSize() != d->view->size()) {
         d->adjustView();
     }
 
@@ -460,8 +460,8 @@ void Dialog::showEvent(QShowEvent * event)
         d->view->setFocus();
     }
 
-    if (d->widget) {
-        d->widget->setFocus();
+    if (d->graphicsWidget) {
+        d->graphicsWidget->setFocus();
     }
 
     emit dialogVisible(true);
