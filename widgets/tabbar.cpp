@@ -444,6 +444,7 @@ KTabBar *TabBar::nativeWidget() const
 
 void TabBar::wheelEvent(QGraphicsSceneWheelEvent * event)
 {
+    Q_UNUSED(event)
     //Still here for binary compatibility
 }
 
