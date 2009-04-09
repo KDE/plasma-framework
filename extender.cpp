@@ -182,7 +182,7 @@ bool Extender::hasItem(const QString &name) const
     KConfigGroup extenderItemGroup(corona->config(), "DetachedExtenderItems");
     foreach (const QString &extenderItemId, extenderItemGroup.groupList()) {
         KConfigGroup cg = extenderItemGroup.group(extenderItemId);
-        if (cg.readEntry("sourceAppletId", 0) == d->applet->id() &&
+        if (uint(cg.readEntry("sourceAppletId", 0)) == d->applet->id() &&
             cg.readEntry("extenderItemName", "") == name &&
             cg.readEntry("sourceAppletPluginName", "") == d->applet->pluginName()) {
             return true;
