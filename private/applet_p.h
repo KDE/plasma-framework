@@ -41,6 +41,8 @@ class BusyWidget;
 
 class AppletOverlayWidget : public QGraphicsWidget
 {
+    Q_OBJECT
+
 public:
     AppletOverlayWidget(QGraphicsWidget *parent);
     void destroy();

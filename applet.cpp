@@ -2350,3 +2350,4 @@ void AppletOverlayWidget::paint(QPainter *painter,
 } // Plasma namespace
 
 #include "applet.moc"
+#include "private/applet_p.moc"
