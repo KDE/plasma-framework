@@ -102,7 +102,6 @@ void DialogPrivate::themeUpdated()
 
     FrameSvg::EnabledBorders borders = FrameSvg::AllBorders;
 
-    //TODO: correct handling of the situation when having vertical panels.
     Extender *extender = qobject_cast<Extender*>(widget);
     if (extender) {
         switch (extender->d->applet->location()) {
@@ -158,7 +157,6 @@ void DialogPrivate::themeUpdated()
     }
 
     q->setContentsMargins(leftWidth, topHeight, rightWidth, bottomHeight);
-
     q->update();
 }
 
@@ -170,7 +168,8 @@ void DialogPrivate::adjustView()
                  << "| Widget size hint:" << widget->effectiveSizeHint(Qt::PreferredSize)
                  << "| Widget minsize hint:" << widget->minimumSize()
                  << "| Widget maxsize hint:" << widget->maximumSize()
-                 << "| Widget bounding rect:" << widget->boundingRect();
+                 << "| Widget bounding rect:" << widget->sceneBoundingRect();
+
         //set the sizehints correctly:
         int left, top, right, bottom;
         q->getContentsMargins(&left, &top, &right, &bottom);
@@ -349,7 +348,10 @@ void Dialog::resizeEvent(QResizeEvent *e)
     if (d->resizeStartCorner != Dialog::NoCorner && d->view && d->widget) {
         d->widget->resize(d->view->size());
 
-        d->view->setSceneRect(d->widget->mapToScene(d->widget->boundingRect()).boundingRect());
+        QRectF sceneRect(d->widget->sceneBoundingRect());
+        sceneRect.setWidth(qMax(qreal(1), sceneRect.width()));
+        sceneRect.setHeight(qMax(qreal(1), sceneRect.height()));
+        d->view->setSceneRect(sceneRect);
         d->view->centerOn(d->widget);
     }
 
@@ -448,6 +450,8 @@ void Dialog::showEvent(QShowEvent * event)
     Q_UNUSED(event);
 
     //check if the widget size is still synced with the view
+    d->themeUpdated();
+
     if (d->widget && d->view && d->widget->size().toSize() != d->view->size()) {
         d->adjustView();
     }
@@ -460,12 +464,13 @@ void Dialog::showEvent(QShowEvent * event)
         d->widget->setFocus();
     }
 
-    d->themeUpdated();
     emit dialogVisible(true);
 }
 
 void Dialog::moveEvent(QMoveEvent *event)
 {
+    Q_UNUSED(event)
+
     if (!d->moveTimer) {
         d->moveTimer = new QTimer(this);
         d->moveTimer->setSingleShot(true);
