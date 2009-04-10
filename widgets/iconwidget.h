@@ -57,6 +57,7 @@ class PLASMA_EXPORT IconWidget : public QGraphicsWidget
     Q_PROPERTY(QString text READ text WRITE setText)
     Q_PROPERTY(QString infoText READ infoText WRITE setInfoText)
     Q_PROPERTY(QIcon icon READ icon WRITE setIcon)
+    Q_PROPERTY(QColor textBackgroundColor READ textBackgroundColor WRITE setTextBackgroundColor)
     Q_PROPERTY(QSizeF iconSize READ iconSize)
     Q_PROPERTY(QString svg WRITE setSvg)
     Q_PROPERTY(QAction *action READ action WRITE setAction)
@@ -130,6 +131,19 @@ public:
     * @param icon the KIcon to associate with this icon.
     */
     void setIcon(const QIcon &icon);
+
+    /**
+     * @return the color to use behind the text of the icon
+     * @since 4.3
+     */
+    QColor textBackgroundColor() const;
+
+    /**
+     * Sets the color to use behind the text of the icon
+     * @param color the color, or QColor() to reset it to no background color
+     * @since 4.3
+     */
+    void setTextBackgroundColor(const QColor &color);
 
     /**
     * Convenience method to set the icon of this Plasma::IconWidget

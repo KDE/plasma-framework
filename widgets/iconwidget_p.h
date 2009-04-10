@@ -194,11 +194,10 @@ public:
     Svg *iconSvg;
     FrameSvg *background;
     QString iconSvgElement;
-    bool iconSvgElementChanged;
     QPixmap iconSvgPixmap;
     QColor textColor;
+    QColor textBgColor;
     QColor shadowColor;
-    bool fadeIn;
     int hoverAnimId;
     qreal hoverAlpha;
     QSizeF iconSize;
@@ -206,8 +205,6 @@ public:
     IconWidgetStates states;
     Qt::Orientation orientation;
     int numDisplayLines;
-    bool invertLayout;
-    bool drawBg;
     QSizeF currentSize;
     QPointF clickStartPos;
 
@@ -218,6 +215,11 @@ public:
     Margin horizontalMargin[NMargins];
     Margin *activeMargins;
 
+    bool iconSvgElementChanged : 1;
+    bool fadeIn : 1;
+    bool invertLayout : 1;
+    bool drawBg : 1;
+    bool textBgCustomized : 1;
     static const int maxDisplayLines = 5;
     static const int iconActionSize = 26;
     static const int iconActionMargin = 4;

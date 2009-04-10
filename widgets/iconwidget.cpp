@@ -62,18 +62,19 @@ namespace Plasma
 IconWidgetPrivate::IconWidgetPrivate(IconWidget *i)
     : q(i),
       iconSvg(0),
-      iconSvgElementChanged(false),
-      fadeIn(false),
       hoverAnimId(-1),
       hoverAlpha(20 / 255),
       iconSize(48, 48),
       states(IconWidgetPrivate::NoState),
       orientation(Qt::Vertical),
       numDisplayLines(2),
+      action(0),
+      activeMargins(0),
+      iconSvgElementChanged(false),
+      fadeIn(false),
       invertLayout(false),
       drawBg(false),
-      action(0),
-      activeMargins(0)
+      textBgCustomized(false)
 {
 }
 
@@ -85,10 +86,15 @@ IconWidgetPrivate::~IconWidgetPrivate()
 void IconWidgetPrivate::readColors()
 {
     textColor = Plasma::Theme::defaultTheme()->color(Theme::TextColor);
+
     if (qGray(textColor.rgb()) > 192) {
         shadowColor = Qt::black;
     } else {
         shadowColor = Qt::white;
+    }
+
+    if (!textBgCustomized) {
+        textBgColor = Theme::defaultTheme()->color(Theme::HighlightColor);
     }
 }
 
@@ -976,9 +982,33 @@ void IconWidget::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
         shadowOffset = QPoint(0, 1);
     }
 
+
+    if (state == IconWidgetPrivate::NoState && d->textBgColor != QColor() &&
+        !(d->text.isEmpty() && d->infoText.isEmpty())) {
+        QRectF rect = textBoundingRect.adjusted(-2, -2, 4, 4);
+        painter->setPen(Qt::transparent);
+        QColor color = d->textBgColor;
+        color.setAlpha(60 * 1.0 - d->hoverAlpha);
+        painter->setBrush(color);
+        painter->setRenderHint(QPainter::Antialiasing);
+        painter->drawPath(PaintUtils::roundedRectangle(rect, 4));
+    }
+
     PaintUtils::shadowBlur(shadow, 2, d->shadowColor);
     painter->drawImage(textBoundingRect.topLeft() + shadowOffset, shadow);
     d->drawTextItems(painter, option, labelLayout, infoLayout);
+}
+
+void IconWidget::setTextBackgroundColor(const QColor &color)
+{
+    d->textBgCustomized = true;
+    d->textBgColor = color;
+    update();
+}
+
+QColor IconWidget::textBackgroundColor() const
+{
+    return d->textBgColor;
 }
 
 void IconWidget::drawActionButtonBase(QPainter *painter, const QSize &size, int element)
@@ -1188,10 +1218,12 @@ void IconWidget::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 
 bool IconWidget::sceneEventFilter(QGraphicsItem *watched, QEvent *event)
 {
-    if (event->type() == QEvent::GraphicsSceneDragEnter){
+    Q_UNUSED(watched)
+
+    if (event->type() == QEvent::GraphicsSceneDragEnter) {
         d->hoverEffect(true);
         update();
-    }else if (event->type() == QEvent::GraphicsSceneDragLeave){
+    } else if (event->type() == QEvent::GraphicsSceneDragLeave) {
         d->hoverEffect(false);
         update();
     }
