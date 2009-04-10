@@ -187,6 +187,10 @@ class PLASMA_EXPORT Theme : public QObject
 
         /**
          * Tries to load pixmap with the specified key from cache.
+         *
+         * @param key the name to use in the cache for this image
+         * @param pix the pixmap object to populate with the resulting data if found
+         *
          * @return true when pixmap was found and loaded from cache, false otherwise
          **/
         bool findInCache(const QString &key, QPixmap &pix);
@@ -194,6 +198,12 @@ class PLASMA_EXPORT Theme : public QObject
         /**
          * This is an overloaded member provided to check with file timestamp
          * where cache is still valid.
+         *
+         * @param key the name to use in the cache for this image
+         * @param pix the pixmap object to populate with the resulting data if found
+         * @param lastModified if non-zero, the time stamp is also checked on the file,
+         *                     and must be newer than the timestamp to be loaded
+         *
          * @return true when pixmap was found and loaded from cache, false otherwise
          * @since 4.3
          **/
@@ -202,7 +212,10 @@ class PLASMA_EXPORT Theme : public QObject
         /**
          * Insert specified pixmap into the cache.
          * If the cache already contains pixmap with the specified key then it is
-         *  overwritten.
+         * overwritten.
+         *
+         * @param key the name to use in the cache for this pixmap
+         * @param pix the pixmap data to store in the cache
          **/
         void insertIntoCache(const QString& key, const QPixmap& pix);
 
