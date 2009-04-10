@@ -392,7 +392,7 @@ void PackageStructure::setPath(const QString &path)
         if (info.isDir()) {
             basePath.append(QDir::separator());
         }
-        kDebug() << "basePath is" << basePath;
+        //kDebug() << "basePath is" << basePath;
     } else {
         kDebug() << path << "invalid, basePath is" << basePath;
         return;
