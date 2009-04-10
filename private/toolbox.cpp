@@ -113,6 +113,7 @@ void ToolBox::addTool(QAction *action)
 
     Plasma::IconWidget *tool = new Plasma::IconWidget(this);
 
+    tool->setTextBackgroundColor(QColor());
     tool->setAction(action);
     tool->setDrawBackground(true);
     tool->setOrientation(Qt::Horizontal);
