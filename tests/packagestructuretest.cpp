@@ -87,7 +87,7 @@ void PackageStructureTest::requiredFiles()
 
 void PackageStructureTest::path()
 {
-    QCOMPARE(ps->path("images"), QString("images"));
+    QCOMPARE(ps->path("images"), QString("images/"));
     QCOMPARE(ps->path("mainscript"), QString("code/main"));
 }
 
@@ -119,7 +119,7 @@ void PackageStructureTest::read()
     // check some names
     QCOMPARE(structure.name("config"), i18n("Configuration Definitions"));
     QCOMPARE(structure.name("mainscript"), i18n("Main Script File"));
-    
+
     // check some paths
     QCOMPARE(structure.path("images"), QString("images"));
     QCOMPARE(structure.path("mainscript"), QString("code/main"));
