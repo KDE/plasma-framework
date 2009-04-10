@@ -22,12 +22,15 @@
 
 #include <QColor>
 #include <QFile>
+#include <QFileInfo>
 #include <QImage>
 
 #include <kdebug.h>
 #include <kglobal.h>
 #include <kservicetypetrader.h>
 #include <kstandarddirs.h>
+
+#include <kio/job.h>
 
 #include <version.h>
 
@@ -320,10 +323,10 @@ void Wallpaper::render(const QString &sourceImagePath, const QSize &size,
     }
 
     if (d->cacheRendering) {
-        QString cache = d->cachePath(sourceImagePath, size, resizeMethod, color);
-        if (QFile::exists(cache)) {
-            //kDebug() << "loading cached wallpaper from" << cache;
-            QImage img(cache);
+        QFileInfo info(sourceImagePath);
+        QString cache = d->cacheKey(sourceImagePath, size, resizeMethod, color);
+        QImage img;
+        if (findInCache(cache, img, info.lastModified().toTime_t())) {
             emit renderCompleted(img);
             return;
         }
@@ -333,13 +336,18 @@ void Wallpaper::render(const QString &sourceImagePath, const QSize &size,
     //kDebug() << "rendering" << sourceImagePath << ", token is" << d->renderToken;
 }
 
-QString WallpaperPrivate::cachePath(const QString &sourceImagePath, const QSize &size,
-                                    int resizeMethod, const QColor &color) const
+QString WallpaperPrivate::cacheKey(const QString &sourceImagePath, const QSize &size,
+                                   int resizeMethod, const QColor &color) const
 {
-    const QString id = QString("plasma-wallpapers/%5_%3_%4_%1x%2.png")
+    const QString id = QString("%5_%3_%4_%1x%2")
                               .arg(size.width()).arg(size.height()).arg(color.name())
                               .arg(resizeMethod).arg(sourceImagePath);
-    return KGlobal::dirs()->locateLocal("cache", id);
+    return id;
+}
+
+QString WallpaperPrivate::cachePath(const QString &key) const
+{
+    return KGlobal::dirs()->locateLocal("cache", "plasma-wallpapers/" + key + ".png");
 }
 
 void WallpaperPrivate::renderCompleted(int token, const QImage &image,
@@ -352,11 +360,43 @@ void WallpaperPrivate::renderCompleted(int token, const QImage &image,
     }
 
     if (cacheRendering) {
-        image.save(cachePath(sourceImagePath, size, resizeMethod, color));
+        q->insertIntoCache(cacheKey(sourceImagePath, size, resizeMethod, color), image);
     }
 
     //kDebug() << "rendering complete!";
     emit q->renderCompleted(image);
+}
+
+bool Wallpaper::findInCache(const QString &key, QImage &image, unsigned int lastModified)
+{
+    if (d->cacheRendering) {
+        QString cache = d->cachePath(key);
+        if (QFile::exists(cache)) {
+            if (lastModified > 0) {
+                QFileInfo info(cache);
+                if (info.lastModified().toTime_t() < lastModified) {
+                    return false;
+                }
+            }
+
+            image.load(cache);
+            return true;
+        }
+    }
+
+    return false;
+}
+
+void Wallpaper::insertIntoCache(const QString& key, const QImage &image)
+{
+    //TODO: cache limits?
+    if (d->cacheRendering) {
+        if (image.isNull()) {
+            KIO::file_delete(d->cachePath(key));
+        } else {
+            image.save(d->cachePath(key));
+        }
+    }
 }
 
 } // Plasma namespace

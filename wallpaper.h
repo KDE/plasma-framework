@@ -392,6 +392,33 @@ class PLASMA_EXPORT Wallpaper : public QObject
          */
         void setUsingDiskCache(bool useCache);
 
+        /**
+         * Tries to load pixmap with the specified key from cache.
+         *
+         * @param key the name to use in the cache for this image
+         * @param image the image object to populate with the resulting data if found
+         * @param lastModified if non-zero, the time stamp is also checked on the file,
+         *                     and must be newer than the timestamp to be loaded
+         *
+         * @return true when pixmap was found and loaded from cache, false otherwise
+         * @since 4.3
+         **/
+        bool findInCache(const QString &key, QImage &image, unsigned int lastModified = 0);
+
+        /**
+         * Insert specified pixmap into the cache if usingDiskCache.
+         * If the cache already contains pixmap with the specified key then it is
+         * overwritten.
+         *
+         * @param key the name use in the cache for this image; if the image is specific
+         *            to this wallpaper plugin, consider including the name() as part of
+         *            the cache key to avoid collisions with other plugins.
+         * @param image the image to store in the cache
+         *
+         * @since 4.3
+         **/
+        void insertIntoCache(const QString& key, const QImage &image);
+
     private:
         Q_PRIVATE_SLOT(d, void renderCompleted(int token, const QImage &image,
                                                const QString &sourceImagePath, const QSize &size,

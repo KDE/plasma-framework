@@ -41,8 +41,9 @@ public:
     {
     };
 
-    QString cachePath(const QString &sourceImagePath, const QSize &size,
-                      int resizeMethod, const QColor &color) const;
+    QString cachePath(const QString &key) const;
+    QString cacheKey(const QString &sourceImagePath, const QSize &size,
+                     int resizeMethod, const QColor &color) const;
 
 
     void renderCompleted(int token, const QImage &image,
