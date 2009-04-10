@@ -413,7 +413,8 @@ class PLASMA_EXPORT Wallpaper : public QObject
          * @param key the name use in the cache for this image; if the image is specific
          *            to this wallpaper plugin, consider including the name() as part of
          *            the cache key to avoid collisions with other plugins.
-         * @param image the image to store in the cache
+         * @param image the image to store in the cache; passing in a null image will cause
+         *              the cached image to be removed from the cache
          *
          * @since 4.3
          **/
