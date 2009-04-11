@@ -443,7 +443,7 @@ void SimpleJavaScriptApplet::setupObjects()
 
     QScriptValue args = m_engine->newArray();
     int i = 0;
-    foreach (QVariant arg, applet()->startupArguments()) {
+    foreach (const QVariant &arg, applet()->startupArguments()) {
         args.setProperty(i, variantToScriptValue(arg));
         ++i;
     }

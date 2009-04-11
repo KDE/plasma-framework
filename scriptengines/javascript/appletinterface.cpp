@@ -181,7 +181,7 @@ QList<QAction*> AppletInterface::contextualActions() const
     QList<QAction*> actions;
     Plasma::Applet *a = applet();
 
-    foreach (const QString name, m_actions) {
+    foreach (const QString &name, m_actions) {
         QAction *action = a->action(name);
 
         if (action) {
