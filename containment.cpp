@@ -810,8 +810,9 @@ void Containment::setScreen(int newScreen, int newDesktop)
             Containment *currently = corona()->containmentForScreen(newScreen, newDesktop);
             if (currently && currently != this) {
                 kDebug() << "currently is on screen" << currently->screen()
-                         << "and is" << currently->name()
-                         << (QObject*)currently << (QObject*)this;
+                         << "desktop" << currently->desktop()
+                         << "and is" << currently->activity()
+                         << (QObject*)currently << "i'm" << (QObject*)this;
                 currently->setScreen(-1, newDesktop);
                 swapScreensWith = currently;
             }
