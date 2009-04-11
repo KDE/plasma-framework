@@ -245,9 +245,12 @@ void View::setContainment(Plasma::Containment *containment)
     int otherScreen = containment->screen();
     int otherDesktop = containment->desktop();
 
+
     if (screen > -1) {
         d->lastScreen = screen;
         d->lastDesktop = desktop;
+        oldContainment->setScreen(-1, -1);
+        containment->setScreen(-1, -1);
         containment->setScreen(screen, desktop);
     } else {
         d->lastScreen = otherScreen;
@@ -258,6 +261,7 @@ void View::setContainment(Plasma::Containment *containment)
         // assign the old containment the old screen/desktop
         oldContainment->setScreen(otherScreen, otherDesktop);
     }
+
 
     /*
     if (oldContainment) {

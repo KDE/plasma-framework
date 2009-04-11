@@ -794,7 +794,7 @@ void Containment::setScreen(int newScreen, int newDesktop)
         newDesktop = -1;
     }
 
-    kDebug() << "setting screen to " << newScreen << newDesktop << "and type is" << d->type;
+    kDebug() << activity() << "setting screen to " << newScreen << newDesktop << "and type is" << d->type;
 
     Containment *swapScreensWith(0);
     if (d->type == DesktopContainment || d->type >= CustomContainment) {
