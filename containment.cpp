@@ -971,10 +971,10 @@ void Containment::dropEvent(QGraphicsSceneDragDropEvent *event)
         return;
     }
 
-    QString mimetype(static_cast<Corona*>(scene())->appletMimeType());
+    QString appletMimetype(corona() ? corona()->appletMimeType() : QString());
 
-    if (event->mimeData()->hasFormat(mimetype) && scene()) {
-        QString data = event->mimeData()->data(mimetype);
+    if (!appletMimetype.isEmpty() && event->mimeData()->hasFormat(appletMimetype)) {
+        QString data = event->mimeData()->data(appletMimetype);
         QStringList appletNames = data.split('\n', QString::SkipEmptyParts);
 
         foreach (const QString &appletName, appletNames) {
