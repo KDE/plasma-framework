@@ -1,6 +1,6 @@
 /**
   * This file is part of the KDE project
-  * Copyright (C) 2009 Kevin Ottens <ervin@kde.org>
+  * Copyright (C) 2008 Kevin Ottens <ervin@kde.org>
   *
   * This library is free software; you can redistribute it and/or
   * modify it under the terms of the GNU Library General Public
@@ -18,47 +18,35 @@
   * Boston, MA 02110-1301, USA.
   */
 
-#ifndef SODEPCLIENTTHREAD_P_H
-#define SODEPCLIENTTHREAD_P_H
+#ifndef SODEPPENDINGCALL_H
+#define SODEPPENDINGCALL_H
 
-#include <QtCore/QThread>
-#include <QtCore/QMutex>
-#include <QtCore/QQueue>
+#include <QtCore/QExplicitlySharedDataPointer>
 
-class QAbstractSocket;
-
+class SodepClient;
+class SodepPendingCallPrivate;
 class SodepMessage;
-class SodepClientPrivate;
 
-class SodepClientThread : public QThread
+class Q_DECL_EXPORT SodepPendingCall
 {
-    Q_OBJECT
-
 public:
-    explicit SodepClientThread(const QString &hostName, quint16 port, SodepClientPrivate *client);
-    ~SodepClientThread();
+    SodepPendingCall(const SodepPendingCall &other);
+    ~SodepPendingCall();
 
-    void run();
+    SodepPendingCall &operator=(const SodepPendingCall &other);
 
-    void sendMessage(const SodepMessage &message);
+    bool isFinished() const;
+    SodepMessage reply() const;
 
-signals:
-    void messageReceived(const SodepMessage &message);
-
-private slots:
-    void readMessage();
-    void writeMessageQueue();
+    void waitForFinished();
 
 private:
-    QString m_hostName;
-    quint16 m_port;
+    friend class SodepClient;
 
-    QAbstractSocket *m_socket;
-    SodepClientPrivate *m_client;
+    SodepPendingCall(); // Not defined
+    SodepPendingCall(QExplicitlySharedDataPointer<SodepPendingCallPrivate> dd);
 
-    QQueue<SodepMessage> m_messageQueue;
-
-    QMutex m_mutex;
+    QExplicitlySharedDataPointer<SodepPendingCallPrivate> d;
 };
 
 #endif

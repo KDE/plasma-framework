@@ -20,41 +20,71 @@
 
 #include "sodepclientthread_p.h"
 
+#include <QtCore/QTimer>
+#include <QtNetwork/QTcpSocket>
+
+#include "sodepclient_p.h"
 #include "sodepmessage.h"
 #include "sodephelpers_p.h"
 
-SodepClientThread::SodepClientThread(QIODevice *device, QObject *parent)
-    : QThread(parent), m_device(device), m_quit(false)
+SodepClientThread::SodepClientThread(const QString &hostName, quint16 port, SodepClientPrivate *client)
+    : QThread(), m_hostName(hostName), m_port(port), m_socket(0), m_client(client)
 {
-
+    moveToThread(this);
 }
 
 SodepClientThread::~SodepClientThread()
 {
-    m_quit = true;
-    m_cond.wakeOne();
+    quit();
     wait();
 }
 
-void SodepClientThread::requestMessage()
+void SodepClientThread::sendMessage(const SodepMessage &message)
 {
-    if (!isRunning()) {
-        start();
-    } else {
-        m_cond.wakeOne();
+  QMutexLocker locker(&m_mutex);
+
+  m_messageQueue.enqueue(message);
+  QTimer::singleShot(0, this, SLOT(writeMessageQueue()));
+}
+
+void SodepClientThread::writeMessageQueue()
+{
+  QMutexLocker locker(&m_mutex);
+
+  while (!m_messageQueue.isEmpty()) {
+    sodepWrite(*m_socket, m_messageQueue.dequeue());
+  }
+}
+
+void SodepClientThread::readMessage()
+{
+    if (m_socket->bytesAvailable()==0) {
+        return;
+    }
+
+    SodepMessage message = sodepReadMessage(*m_socket);
+    emit messageReceived(message);
+
+    if (m_socket->bytesAvailable()>0) {
+        QTimer::singleShot(0, this, SLOT(readMessage()));
     }
 }
 
 void SodepClientThread::run()
 {
-    while (!m_quit) {
-        QMutexLocker locker(&m_mutex);
+    m_socket = new QTcpSocket;
 
-        SodepMessage message = sodepReadMessage(*m_device);
-        emit messageLoaded(message);
+    connect(m_socket, SIGNAL(readyRead()),
+            this, SLOT(readMessage()), Qt::QueuedConnection);
+    connect(this, SIGNAL(messageReceived(SodepMessage)),
+            m_client, SLOT(messageReceived(SodepMessage)));
 
-        m_cond.wait(&m_mutex);
-    }
+    m_socket->connectToHost(m_hostName, m_port);
+    m_socket->waitForConnected(-1);
+
+    exec();
+
+    delete m_socket;
 }
 
 #include "sodepclientthread_p.moc"

@@ -18,47 +18,36 @@
   * Boston, MA 02110-1301, USA.
   */
 
-#ifndef SODEPCLIENTTHREAD_P_H
-#define SODEPCLIENTTHREAD_P_H
+#ifndef SODEPCLIENT_P_H
+#define SODEPCLIENT_P_H
 
-#include <QtCore/QThread>
-#include <QtCore/QMutex>
-#include <QtCore/QQueue>
+#include "sodepclient.h"
+#include "sodeppendingcall_p.h"
 
-class QAbstractSocket;
+#include <QtCore/QMap>
+#include <QtCore/QObject>
 
-class SodepMessage;
-class SodepClientPrivate;
+class SodepClientThread;
 
-class SodepClientThread : public QThread
+class SodepClientPrivate : public QObject
 {
     Q_OBJECT
-
 public:
-    explicit SodepClientThread(const QString &hostName, quint16 port, SodepClientPrivate *client);
-    ~SodepClientThread();
+    SodepClientPrivate(SodepClient *client)
+        : q(client),
+          error(SodepClient::NoError) {}
 
-    void run();
-
-    void sendMessage(const SodepMessage &message);
-
-signals:
+public slots:
     void messageReceived(const SodepMessage &message);
 
-private slots:
-    void readMessage();
-    void writeMessageQueue();
-
 private:
-    QString m_hostName;
-    quint16 m_port;
+    friend class SodepClient;
+    SodepClient * const q;
+    SodepClientThread *readerThread;
 
-    QAbstractSocket *m_socket;
-    SodepClientPrivate *m_client;
-
-    QQueue<SodepMessage> m_messageQueue;
-
-    QMutex m_mutex;
+    SodepClient::Error error;
+    QString errorString;
+    QMap<int, QExplicitlySharedDataPointer<SodepPendingCallPrivate> > pendingCalls;
 };
 
 #endif

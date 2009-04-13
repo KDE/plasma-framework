@@ -21,18 +21,17 @@
 #ifndef SODEPCLIENT_H
 #define SODEPCLIENT_H
 
-#include <QtCore/QObject>
+#include <QtCore/QtGlobal>
 
 class QIODevice;
+class QObject;
 
 class SodepClientPrivate;
 class SodepMessage;
+class SodepPendingCall;
 
-class Q_DECL_EXPORT SodepClient : public QObject
+class Q_DECL_EXPORT SodepClient
 {
-    Q_OBJECT
-    Q_ENUMS(Error)
-
 public:
     enum Error
     {
@@ -41,24 +40,16 @@ public:
         UnkownError
     };
 
-    explicit SodepClient(QIODevice *device);
-
+    explicit SodepClient(const QString &hostName, quint16 port);
     ~SodepClient();
-
-    int requestMessage();
-    int postMessage(const SodepMessage &message);
 
     Error error() const;
     QString errorString() const;
 
-signals:
-    void requestStarted(int id);
-    void requestFinished(int id, const SodepMessage &message, bool hasError);
+    SodepPendingCall asyncCall(const SodepMessage &message);
+    SodepMessage call(const SodepMessage &message);
 
 private:
-    Q_PRIVATE_SLOT(d, void _k_messageLoaded(const SodepMessage&))
-    Q_PRIVATE_SLOT(d, void _k_bytesWritten())
-
     friend class SodepClientPrivate;
     SodepClientPrivate * const d;
 };

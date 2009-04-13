@@ -4,11 +4,11 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}
                     ${CMAKE_CURRENT_BINARY_DIR}
                     ${QT_INCLUDE_DIR})
 
-set(sodep_LIB_SRCS sodepclient.cpp sodepclientthread.cpp sodepvalue.cpp sodepfault.cpp sodepmessage.cpp)
+set(sodep_LIB_SRCS sodepclient.cpp sodepclientthread.cpp sodepvalue.cpp sodepfault.cpp sodepmessage.cpp sodeppendingcall.cpp)
 
 kde4_add_library(sodep SHARED ${sodep_LIB_SRCS})
 
-target_link_libraries(sodep ${QT_QTCORE_LIBRARY})
+target_link_libraries(sodep ${QT_QTCORE_LIBRARY} ${QT_QTNETWORK_LIBRARY})
 
 install(TARGETS sodep
         DESTINATION ${LIB_INSTALL_DIR})
@@ -20,4 +20,5 @@ install(FILES
         sodepvalue.h
         sodepfault.h
         sodepmessage.h
+        sodeppendingcall.h
         DESTINATION ${INCLUDE_INSTALL_DIR})

@@ -19,90 +19,24 @@
   */
 
 #include "sodepclient.h"
+#include "sodepclient_p.h"
 
-#include <QtCore/QHash>
-#include <QtCore/QIODevice>
-#include <QtCore/QTimer>
-
-#include "sodepmessage.h"
-#include "sodephelpers_p.h"
 #include "sodepclientthread_p.h"
+#include "sodepmessage.h"
+#include "sodeppendingcall.h"
 
-struct SodepRequest
-{
-    enum { Send, Receive } type;
-    SodepMessage message;
-};
 
-class SodepClientPrivate
-{
-public:
-    SodepClientPrivate(SodepClient *client)
-        : q(client), device(0),
-          error(SodepClient::NoError),
-          lastAllocatedRequestId(0),
-          currentRequestId(-1) {}
-
-    void startRequest(int id);
-    void emitCurrentRequestFinished();
-
-    void _k_messageLoaded(const SodepMessage &message);
-    void _k_bytesWritten();
-
-    SodepClient * const q;
-
-    QIODevice *device;
-    SodepClientThread *readerThread;
-
-    SodepClient::Error error;
-    QString errorString;
-
-    int lastAllocatedRequestId;
-    int currentRequestId;
-    QHash<int, SodepRequest> queuedRequests;
-};
-
-SodepClient::SodepClient(QIODevice *device)
+SodepClient::SodepClient(const QString &hostName, quint16 port)
     : d(new SodepClientPrivate(this))
 {
-    d->device = device;
-    d->readerThread = new SodepClientThread(device, this);
+    d->readerThread = new SodepClientThread(hostName, port, d);
+    d->readerThread->start();
 }
 
 SodepClient::~SodepClient()
 {
+    delete d->readerThread;
     delete d;
-}
-
-int SodepClient::requestMessage()
-{
-    int id = ++d->lastAllocatedRequestId;
-
-    SodepRequest request;
-    request.type = SodepRequest::Receive;
-    d->queuedRequests[id] = request;
-
-    if (d->currentRequestId==-1) {
-        d->startRequest(id);
-    }
-
-    return id;
-}
-
-int SodepClient::postMessage(const SodepMessage &message)
-{
-    int id = ++d->lastAllocatedRequestId;
-
-    SodepRequest request;
-    request.type = SodepRequest::Send;
-    request.message = message;
-    d->queuedRequests[id] = request;
-
-    if (d->currentRequestId==-1) {
-        d->startRequest(id);
-    }
-
-    return id;
 }
 
 SodepClient::Error SodepClient::error() const
@@ -115,63 +49,23 @@ QString SodepClient::errorString() const
     return d->errorString;
 }
 
-void SodepClientPrivate::startRequest(int id)
+SodepPendingCall SodepClient::asyncCall(const SodepMessage &message)
 {
-    currentRequestId = id;
-
-    SodepRequest &request = queuedRequests[id];
-
-    error = SodepClient::NoError;
-    errorString = QString();
-
-    emit q->requestStarted(id);
-
-    if (request.type == SodepRequest::Receive) {
-        QObject::connect(readerThread, SIGNAL(messageLoaded(const SodepMessage&)),
-                         q, SLOT(_k_messageLoaded(const SodepMessage&)));
-        readerThread->requestMessage();
-    } else {
-        QObject::connect(device, SIGNAL(bytesWritten(qint64)),
-                         q, SLOT(_k_bytesWritten()));
-        SodepMessage &message = request.message;
-        sodepWrite(*device, message);
-    }
+    Q_ASSERT(!d->pendingCalls.contains(message.id()));
+    d->pendingCalls[message.id()] = new SodepPendingCallPrivate(message);
+    d->readerThread->sendMessage(message);
+    return SodepPendingCall(d->pendingCalls[message.id()]);
 }
 
-void SodepClientPrivate::emitCurrentRequestFinished()
+SodepMessage SodepClient::call(const SodepMessage &message)
 {
-    SodepRequest request = queuedRequests.take(currentRequestId);
-
-    if (request.type == SodepRequest::Receive) {
-        QObject::disconnect(readerThread, SIGNAL(messageLoaded(const SodepMessage&)),
-                            q, SLOT(_k_messageLoaded(const SodepMessage&)));
-    } else {
-        QObject::disconnect(device, SIGNAL(bytesWritten(qint64)),
-                            q, SLOT(_k_bytesWritten()));
-    }
-
-    emit q->requestFinished(currentRequestId, request.message, false);
-
-    if (currentRequestId<lastAllocatedRequestId) {
-        startRequest(currentRequestId+1);
-    } else {
-        currentRequestId = -1;
-    }
+    SodepPendingCall pending = asyncCall(message);
+    pending.waitForFinished();
+    return pending.reply();
 }
 
-void SodepClientPrivate::_k_messageLoaded(const SodepMessage &message)
+void SodepClientPrivate::messageReceived(const SodepMessage &message)
 {
-    queuedRequests[currentRequestId].message = message;
-    emitCurrentRequestFinished();
+    QExplicitlySharedDataPointer<SodepPendingCallPrivate> pending = pendingCalls.take(message.id());
+    pending->setReply(message);
 }
-
-void SodepClientPrivate::_k_bytesWritten()
-{
-    if (device->bytesToWrite()>0) {
-        return;
-    }
-
-    emitCurrentRequestFinished();
-}
-
-#include "sodepclient.moc"

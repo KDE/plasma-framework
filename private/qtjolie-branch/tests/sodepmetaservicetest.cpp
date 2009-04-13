@@ -68,11 +68,10 @@ class SodepMetaServiceTest : public QObject
 
     QProcess m_metaserviceProcess;
     QTcpSocket m_socket;
-    SodepClient m_client;
 
 public:
     SodepMetaServiceTest()
-        : QObject(), m_client(&m_socket)
+        : QObject()
     {
         qRegisterMetaType<SodepMessage>();
     }
@@ -130,25 +129,11 @@ private slots:
 
     void shouldListServices()
     {
+        SodepClient client("localhost", 9000);
+
         SodepMessage message("/", "getServices");
 
-        QSignalSpy spy(&m_client, SIGNAL(requestFinished(int, const SodepMessage&, bool)));
-
-        int id = m_client.postMessage(message);
-        QEventLoop eventLoop;
-        connect(&m_client, SIGNAL(requestFinished(int, const SodepMessage&, bool)),
-                &eventLoop, SLOT(quit()));
-        eventLoop.exec();
-
-        QCOMPARE(spy.count(), 1);
-        QVariantList signal = spy.takeFirst();
-        QCOMPARE(signal.at(0).toInt(), id);
-        sodepCompare(signal.at(1).value<SodepMessage>(), message);
-        QCOMPARE(signal.at(2).toBool(), false);
-
-        id = m_client.requestMessage();
-        eventLoop.exec();
-
+        SodepMessage reply = client.call(message);
         SodepMessage expected("/", "getServices");
         SodepValue value;
 
@@ -162,11 +147,7 @@ private slots:
         value.children("service") << s1 << s2;
         expected.setData(value);
 
-        QCOMPARE(spy.count(), 1);
-        signal = spy.takeFirst();
-        QCOMPARE(signal.at(0).toInt(), id);
-        sodepCompare(signal.at(1).value<SodepMessage>(), expected);
-        QCOMPARE(signal.at(2).toBool(), false);
+        sodepCompare(reply, expected);
     }
 
     void shouldPlaceServiceCalls_data()
