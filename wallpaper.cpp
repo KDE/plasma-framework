@@ -392,7 +392,8 @@ void Wallpaper::insertIntoCache(const QString& key, const QImage &image)
     //TODO: cache limits?
     if (d->cacheRendering) {
         if (image.isNull()) {
-            KIO::file_delete(d->cachePath(key));
+            KIO::SimpleJob *job = KIO::file_delete(d->cachePath(key));
+            job->exec();
         } else {
             image.save(d->cachePath(key));
         }
