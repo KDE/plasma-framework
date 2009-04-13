@@ -164,7 +164,7 @@ class PLASMA_EXPORT Wallpaper : public QObject
         QList<KServiceAction> listRenderingModes() const;
 
         /**
-         * @return true if initialized (usually by calling retore), false otherwise
+         * @return true if initialized (usually by calling restore), false otherwise
          */
         bool isInitialized() const;
 
