@@ -381,6 +381,12 @@ class PLASMA_EXPORT Containment : public Applet
         void toolBoxToggled();
 
         /**
+         * Emitted when the toolbox is hidden or shown
+         * @since 4.3
+         */
+        void toolBoxVisibilityChanged(bool);
+
+        /**
          * Emitted when the containment wants a new containment to be created.
          * Usually only used for desktop containments.
          */
@@ -544,6 +550,7 @@ class PLASMA_EXPORT Containment : public Applet
         Q_PRIVATE_SLOT(d, void zoomIn())
         Q_PRIVATE_SLOT(d, void zoomOut())
         Q_PRIVATE_SLOT(d, void requestConfiguration())
+        Q_PRIVATE_SLOT(d, void updateToolboxVisibility())
 
         friend class Applet;
         friend class AppletPrivate;

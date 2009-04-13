@@ -1587,6 +1587,7 @@ ToolBox *ContainmentPrivate::createToolBox()
 
         if (toolBox) {
             QObject::connect(toolBox, SIGNAL(toggled()), q, SIGNAL(toolBoxToggled()));
+            QObject::connect(toolBox, SIGNAL(toggled()), q, SLOT(updateToolboxVisibility()));
             toolBox->load();
             positionToolBox();
         }
@@ -1599,6 +1600,13 @@ void ContainmentPrivate::positionToolBox()
 {
     if (toolBox) {
         toolBox->reposition();
+    }
+}
+
+void ContainmentPrivate::updateToolboxVisibility()
+{
+    if (toolBox) {
+        emit q->toolBoxVisibilityChanged(toolBox->showing());
     }
 }
 
