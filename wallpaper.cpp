@@ -391,10 +391,13 @@ bool Wallpaper::findInCache(const QString &key, QImage &image, unsigned int last
 void Wallpaper::insertIntoCache(const QString& key, const QImage &image)
 {
     //TODO: cache limits?
+    if (key.isEmpty()) {
+        return;
+    }
+
     if (d->cacheRendering) {
         if (image.isNull()) {
-            KIO::SimpleJob *job = KIO::file_delete(d->cachePath(key));
-            job->exec();
+            KIO::file_delete(d->cachePath(key));
         } else {
             image.save(d->cachePath(key));
         }
