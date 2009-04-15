@@ -670,16 +670,18 @@ Extender *Applet::extender() const
 void Applet::setBusy(bool busy)
 {
     if (busy) {
-        d->createMessageOverlay(false);
-        d->messageOverlay->opacity = 0;
+        if (!d->busyWidget) {
+            d->createMessageOverlay(false);
+            d->messageOverlay->opacity = 0;
 
-        QGraphicsLinearLayout *mainLayout = new QGraphicsLinearLayout(d->messageOverlay);
-        d->busyWidget = new Plasma::BusyWidget(d->messageOverlay);
+            QGraphicsLinearLayout *mainLayout = new QGraphicsLinearLayout(d->messageOverlay);
+            d->busyWidget = new Plasma::BusyWidget(d->messageOverlay);
 
-        mainLayout->addStretch();
-        mainLayout->addItem(d->busyWidget);
-        mainLayout->addStretch();
-    } else {
+            mainLayout->addStretch();
+            mainLayout->addItem(d->busyWidget);
+            mainLayout->addStretch();
+        }
+    } else if (d->busyWidget) {
         //will be deleted by its parent
         d->busyWidget = 0;
         d->destroyMessageOverlay();
