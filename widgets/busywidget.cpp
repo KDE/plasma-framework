@@ -23,6 +23,7 @@
 #include <QPainter>
 #include <QTimer>
 #include <QGraphicsSceneResizeEvent>
+#include <QTextOption>
 
 //Plasma
 #include "plasma/theme.h"
@@ -38,7 +39,8 @@ public:
         : svg(0),
           timerId(0),
           rotationAngle(0),
-          rotation(0)
+          rotation(0),
+          running(true)
     {
     }
 
@@ -62,6 +64,8 @@ public:
     QHash<int, QPixmap> frames;
     qreal rotationAngle;
     qreal rotation;
+    bool running;
+    QString label;
 };
 
 
@@ -80,6 +84,33 @@ BusyWidget::BusyWidget(QGraphicsWidget *parent)
 BusyWidget::~BusyWidget()
 {
     delete d;
+}
+
+void BusyWidget::setRunning(bool running)
+{
+    if (running && !d->timerId && isVisible()) {
+        d->timerId = startTimer(150);
+    } else if (!running && d->timerId) {
+        killTimer(d->timerId);
+        d->timerId = 0;
+    }
+    d->running = running;
+}
+
+bool BusyWidget::isRunning() const
+{
+    return d->running;
+}
+
+void BusyWidget::setLabel(const QString &label)
+{
+    d->label = label;
+    update();
+}
+
+QString BusyWidget::label() const
+{
+    return d->label;
 }
 
 void BusyWidget::timerEvent(QTimerEvent *event)
@@ -134,12 +165,16 @@ void BusyWidget::paint(QPainter *painter,
     }
 
     painter->drawPixmap(spinnerRect.topLeft(), d->frames[intRotation]);
+    painter->setPen(Plasma::Theme::defaultTheme()->color(Theme::HighlightColor));
+    painter->drawText(boundingRect(), d->label, QTextOption(Qt::AlignVCenter | Qt::AlignHCenter));
 }
 
 void BusyWidget::showEvent(QShowEvent *event)
 {
     Q_UNUSED(event)
-    d->timerId = startTimer(150);
+    if (d->running) {
+        d->timerId = startTimer(150);
+    }
 }
 
 void BusyWidget::hideEvent(QHideEvent *event)
@@ -156,6 +191,12 @@ void BusyWidget::resizeEvent(QGraphicsSceneResizeEvent *event)
 {
     Q_UNUSED(event)
     d->frames.clear();
+}
+
+void BusyWidget::mousePressEvent(QGraphicsSceneMouseEvent *event)
+{
+    Q_UNUSED(event)
+    emit clicked();
 }
 
 } // namespace Plasma

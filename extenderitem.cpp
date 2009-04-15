@@ -185,8 +185,7 @@ void ExtenderItem::setWidget(QGraphicsItem *widget)
 
     QSizeF panelSize(QSizeF(size().width() - d->bgLeft - d->bgRight,
                      d->iconSize + d->dragTop + d->dragBottom));
-    widget->setPos(QPointF(d->bgLeft + d->dragLeft, panelSize.height() +
-                                                    d->bgTop + d->dragTop));
+    widget->setPos(QPointF(d->bgLeft + d->dragLeft, panelSize.height() + d->bgTop));
     d->widget = widget;
     d->updateSizeHints();
 }
@@ -796,7 +795,7 @@ void ExtenderItemPrivate::themeChanged()
     //reposition the widget based on the new margins.
     if (widget) {
         widget->setPos(QPointF(bgLeft + dragLeft, panelSize.height() +
-                                                  bgTop + dragTop));
+                                                  bgTop));
     }
 
     //reposition the toolbox.
@@ -832,7 +831,7 @@ void ExtenderItemPrivate::resizeContent(const QSizeF &newSize)
     if (widget && widget->isWidget()) {
         QSizeF newWidgetSize(width - bgLeft - bgRight - dragLeft - dragRight,
                              height - dragHandleRect().height() - bgTop - bgBottom -
-                             2 * dragTop - 2 * dragBottom);
+                             dragTop - dragBottom);
 
         QGraphicsWidget *graphicsWidget = static_cast<QGraphicsWidget*>(widget);
         graphicsWidget->resize(newWidgetSize);
@@ -871,7 +870,7 @@ void ExtenderItemPrivate::updateSizeHints()
     }
 
     qreal marginWidth = bgLeft + bgRight + dragLeft + dragRight;
-    qreal marginHeight = bgTop + bgBottom + 2 * dragTop + 2 * dragBottom;
+    qreal marginHeight = bgTop + bgBottom + dragTop + dragBottom;
 
     QSizeF min;
     QSizeF pref;

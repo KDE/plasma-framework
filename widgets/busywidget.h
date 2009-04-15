@@ -41,6 +41,8 @@ class BusyWidgetPrivate;
 class PLASMA_EXPORT BusyWidget : public QGraphicsWidget
 {
     Q_OBJECT
+    Q_PROPERTY(bool running READ isRunning WRITE setRunning)
+    Q_PROPERTY(QString label READ label WRITE setLabel)
 
 public:
     /**
@@ -51,6 +53,29 @@ public:
     explicit BusyWidget(QGraphicsWidget *parent = 0);
     ~BusyWidget();
 
+    /**
+     * @param running whether or not the spinner has to be animated. defaults to true.
+     */
+    void setRunning(bool running);
+
+    /**
+     * @return whether or not the spinner is animated.
+     */
+    bool isRunning() const;
+
+    /**
+     * @param label a string to be shown in front of the icon.
+     */
+    void setLabel(const QString &label);
+
+    /**
+     * @param label the string that is shown in front of the icon.
+     */
+    QString label() const;
+
+Q_SIGNALS:
+    void clicked();
+
 protected:
     void paint(QPainter *painter,
                const QStyleOptionGraphicsItem *option,
@@ -59,6 +84,7 @@ protected:
     void showEvent(QShowEvent *event);
     void hideEvent(QHideEvent *event);
     void resizeEvent(QGraphicsSceneResizeEvent *event);
+    void mousePressEvent(QGraphicsSceneMouseEvent *event);
 
 protected Q_SLOTS:
     void timerEvent(QTimerEvent *event);
