@@ -130,7 +130,7 @@ Wallpaper *Wallpaper::load(const KPluginInfo &info, const QVariantList &args)
 PackageStructure::Ptr Wallpaper::packageStructure(Wallpaper *paper)
 {
     if (paper) {
-        PackageStructure::Ptr package(new WallpaperPackage(paper, paper));
+        PackageStructure::Ptr package(new WallpaperPackage(paper));
         return package;
     }
 
