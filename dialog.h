@@ -28,6 +28,7 @@
 #include <QtGui/QGraphicsView>
 
 #include <plasma/plasma_export.h>
+#include <plasma/plasma.h>
 
 namespace Plasma
 {
@@ -86,6 +87,12 @@ class PLASMA_EXPORT Dialog : public QWidget
          */
         ResizeCorners resizeCorners() const;
 
+        /**
+         * Causes an animated hide; requires compositing to work, otherwise
+         * the dialog will simply hide.
+         */
+        void animatedHide(Plasma::Direction direction);
+
     Q_SIGNALS:
         /**
          * Fires when the dialog automatically resizes.
@@ -128,6 +135,7 @@ class PLASMA_EXPORT Dialog : public QWidget
          * React to theme changes
          */
         Q_PRIVATE_SLOT(d, void themeUpdated())
+        Q_PRIVATE_SLOT(d, void progressHide(qreal))
 };
 
 } // Plasma namespace

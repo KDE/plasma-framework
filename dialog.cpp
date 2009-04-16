@@ -39,9 +39,11 @@
 #include <QDesktopWidget>
 
 #include <kdebug.h>
+#include <kwindowsystem.h>
 #include <netwm.h>
 
 #include "plasma/applet.h"
+#include "plasma/animator.h"
 #include "plasma/extender.h"
 #include "plasma/private/extender_p.h"
 #include "plasma/framesvg.h"
@@ -64,7 +66,8 @@ public:
               graphicsWidget(0),
               resizeCorners(Dialog::NoCorner),
               resizeStartCorner(Dialog::NoCorner),
-              moveTimer(0)
+              moveTimer(0),
+              hideAnimId(0)
     {
     }
 
@@ -75,6 +78,7 @@ public:
     void themeUpdated();
     void adjustView();
     void updateResizeCorners();
+    void progressHide(qreal amount);
 
     Plasma::Dialog *q;
 
@@ -89,6 +93,8 @@ public:
     QMap<Dialog::ResizeCorner, QRect> resizeAreas;
     Dialog::ResizeCorner resizeStartCorner;
     QTimer *moveTimer;
+    Direction hideDirection;
+    int hideAnimId;
 };
 
 void DialogPrivate::themeUpdated()
@@ -110,25 +116,29 @@ void DialogPrivate::themeUpdated()
             leftWidth = 0;
             rightWidth = 0;
             bottomHeight = 0;
-            break;
+        break;
+
         case TopEdge:
             borders ^= FrameSvg::TopBorder;
             topHeight = 0;
             leftWidth = 0;
             rightWidth = 0;
-            break;
+        break;
+
         case LeftEdge:
             borders ^= FrameSvg::LeftBorder;
             leftWidth = 0;
             rightWidth = 0;
-            break;
+        break;
+
         case RightEdge:
             borders ^= FrameSvg::RightBorder;
-             leftWidth = 0;
-             rightWidth = 0;
-            break;
+            leftWidth = 0;
+            rightWidth = 0;
+        break;
+
         default:
-            break;
+        break;
         }
     } else {
         QDesktopWidget *desktop = QApplication::desktop();
@@ -230,9 +240,43 @@ Dialog::~Dialog()
 
 void Dialog::paintEvent(QPaintEvent *e)
 {
+    QRect target = e->rect();
+    QRect source = target;
+
+    if (d->hideAnimId) {
+        target = rect();
+        source = target;
+        switch (d->hideDirection) {
+            case Plasma::Up: {
+                int bottomMargin = height() - d->view->geometry().bottom();
+                target.setBottom(d->view->viewport()->geometry().bottom() - bottomMargin); 
+                source.setTop(-d->view->viewport()->y() + bottomMargin);
+            }
+            break;
+
+            case Plasma::Down:
+                target.setX(d->view->viewport()->x() + d->view->x());
+                target.setY(d->view->viewport()->y() + d->view->y());
+                source.moveTo(0, 0);
+            break;
+
+            case Plasma::Right: {
+                target.setLeft(d->view->viewport()->x());
+                source.setRight(target.width() - 1);
+            }
+            break;
+
+            case Plasma::Left: {
+                target.setWidth(d->view->viewport()->geometry().right() - 1);
+                source.setLeft(width() - target.width());
+            }
+            break;
+        }
+    }
+
     QPainter p(this);
     p.setCompositionMode(QPainter::CompositionMode_Source);
-    d->background->paintFrame(&p, e->rect());
+    d->background->paintFrame(&p, target, source);
 }
 
 void Dialog::mouseMoveEvent(QMouseEvent *event)
@@ -490,6 +534,59 @@ void Dialog::setResizeHandleCorners(ResizeCorners corners)
 Dialog::ResizeCorners Dialog::resizeCorners() const
 {
     return d->resizeCorners;
+}
+
+void Dialog::animatedHide(Plasma::Direction direction)
+{
+    if (d->hideAnimId) {
+        // already hiding
+        return;
+    }
+
+    if (KWindowSystem::compositingActive() && d->view) {
+        //TODO: implement for the QWidget scenario too
+        d->hideDirection = direction;
+        d->hideAnimId = Animator::self()->customAnimation(20, 200, Animator::EaseOutCurve,
+                                                          this, "progressHide");
+    } else {
+        hide();
+    }
+}
+
+void DialogPrivate::progressHide(qreal amount)
+{
+    //kDebug() << amount;
+    if (qFuzzyCompare(amount, 1.0)) {
+        q->hide();
+        view->viewport()->move(0, 0);
+        hideAnimId = 0;
+        return;
+    }
+
+    int xtrans = 0;
+    int ytrans = 0;
+
+    //TODO: switch between directions
+    switch (hideDirection) {
+        case Plasma::Up:
+            ytrans = -(amount * view->height());
+        break;
+
+        case Plasma::Down:
+            ytrans = amount * view->height();
+        break;
+
+        case Plasma::Right:
+            xtrans = amount * view->width();
+        break;
+
+        case Plasma::Left:
+            xtrans = -(amount * view->width());
+        break;
+    }
+
+    view->viewport()->move(xtrans, ytrans);
+    q->update();
 }
 
 bool Dialog::inControlArea(const QPoint &point)
