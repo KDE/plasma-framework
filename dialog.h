@@ -93,6 +93,12 @@ class PLASMA_EXPORT Dialog : public QWidget
          */
         void animatedHide(Plasma::Direction direction);
 
+        /**
+         * Causes an animated hide; requires compositing to work, otherwise
+         * the dialog will simply hide.
+         */
+        void animatedShow(Plasma::Direction direction);
+
     Q_SIGNALS:
         /**
          * Fires when the dialog automatically resizes.
@@ -136,6 +142,7 @@ class PLASMA_EXPORT Dialog : public QWidget
          */
         Q_PRIVATE_SLOT(d, void themeUpdated())
         Q_PRIVATE_SLOT(d, void progressHide(qreal))
+        Q_PRIVATE_SLOT(d, void progressShow(qreal))
 };
 
 } // Plasma namespace

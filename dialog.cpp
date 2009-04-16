@@ -79,6 +79,7 @@ public:
     void adjustView();
     void updateResizeCorners();
     void progressHide(qreal amount);
+    void progressShow(qreal amount);
 
     Plasma::Dialog *q;
 
@@ -247,17 +248,12 @@ void Dialog::paintEvent(QPaintEvent *e)
         target = rect();
         source = target;
         switch (d->hideDirection) {
-            case Plasma::Up: {
+            case Plasma::Up:
+            case Plasma::Down: {
                 int bottomMargin = height() - d->view->geometry().bottom();
                 target.setBottom(d->view->viewport()->geometry().bottom() - bottomMargin); 
                 source.setTop(-d->view->viewport()->y() + bottomMargin);
             }
-            break;
-
-            case Plasma::Down:
-                target.setX(d->view->viewport()->x() + d->view->x());
-                target.setY(d->view->viewport()->y() + d->view->y());
-                source.moveTo(0, 0);
             break;
 
             case Plasma::Right: {
@@ -553,6 +549,58 @@ void Dialog::animatedHide(Plasma::Direction direction)
     }
 }
 
+void Dialog::animatedShow(Plasma::Direction direction)
+{
+    if (d->hideAnimId) {
+        // already hiding
+        return;
+    }
+
+    if (KWindowSystem::compositingActive() && d->view) {
+        //TODO: implement for the QWidget scenario too
+        d->hideDirection = direction;
+        d->hideAnimId = Animator::self()->customAnimation(20, 200, Animator::EaseInCurve,
+                                                          this, "progressShow");
+    }
+}
+
+void DialogPrivate::progressShow(qreal amount)
+{
+    //kDebug() << amount;
+    if (qFuzzyCompare(amount, 1.0)) {
+        view->viewport()->move(0, 0);
+        hideAnimId = 0;
+        q->update();
+        q->show();
+        return;
+    }
+
+    int xtrans = 0;
+    int ytrans = 0;
+
+    switch (hideDirection) {
+        case Plasma::Up:
+            ytrans = (1.0 - amount) * view->height();
+        break;
+
+        case Plasma::Down:
+            ytrans = (amount * view->height()) - view->height();
+        break;
+
+        case Plasma::Right:
+            xtrans = (amount * view->width()) - view->width();
+        break;
+
+        case Plasma::Left:
+            xtrans = (1.0 - amount) * view->width();
+        break;
+    }
+
+    view->viewport()->move(xtrans, ytrans);
+    q->update();
+    q->show();
+}
+
 void DialogPrivate::progressHide(qreal amount)
 {
     //kDebug() << amount;
@@ -566,7 +614,6 @@ void DialogPrivate::progressHide(qreal amount)
     int xtrans = 0;
     int ytrans = 0;
 
-    //TODO: switch between directions
     switch (hideDirection) {
         case Plasma::Up:
             ytrans = -(amount * view->height());

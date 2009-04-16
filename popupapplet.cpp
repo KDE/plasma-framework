@@ -524,7 +524,11 @@ void PopupAppletPrivate::internalTogglePopup()
         ToolTipManager::self()->hide(q);
         updateDialogPosition();
         KWindowSystem::setState(dialog->winId(), NET::SkipTaskbar | NET::SkipPager);
-        dialog->show();
+        if (q->location() != Floating) {
+            dialog->animatedShow(locationToDirection(q->location()));
+        } else {
+            dialog->hide();
+        }
     }
 
     dialog->clearFocus();
