@@ -527,6 +527,25 @@ void PopupAppletPrivate::internalTogglePopup()
         updateDialogPosition();
         KWindowSystem::setState(dialog->winId(), NET::SkipTaskbar | NET::SkipPager);
 
+        /**
+          a sketch of what it might look like to do the animated show/hide using the WM
+          NETWinInfo ni(QX11Info::display(), dialog->winId(), QX11Info::appRootWindow(), 0);
+          NETRect r;
+
+          QRect rect = q->geometry().toRect();
+          rect.setTopLeft(q->view()->mapToGlobal(rect.topLeft()));
+          if (rect.isValid())
+          {
+          r.pos.x = rect.x();
+          r.pos.y = rect.y();
+          r.size.width = rect.width();
+          r.size.height = rect.height();
+          }
+          ni.setIconGeometry(r);
+          KWindowSystem::minimizeWindow(dialog->winId());
+          KWindowSystem::unminimizeWindow(dialog->winId());
+        */
+
         if (q->location() != Floating) {
             dialog->animatedShow(locationToDirection(q->location()));
         } else {
