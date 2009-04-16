@@ -21,16 +21,18 @@
 #include "popupapplet.h"
 #include "private/popupapplet_p.h"
 
+#include <QApplication>
 #include <QGraphicsProxyWidget>
 #include <QGraphicsLinearLayout>
-#include <QVBoxLayout>
 #include <QTimer>
-#include <QApplication>
+#include <QVBoxLayout>
+#include <QX11Info>
 
 #include <kicon.h>
 #include <kiconloader.h>
 #include <kwindowsystem.h>
 #include <kglobalsettings.h>
+#include <netwm.h>
 
 #include "plasma/private/applet_p.h"
 #include "plasma/private/extenderitemmimedata_p.h"
@@ -524,6 +526,7 @@ void PopupAppletPrivate::internalTogglePopup()
         ToolTipManager::self()->hide(q);
         updateDialogPosition();
         KWindowSystem::setState(dialog->winId(), NET::SkipTaskbar | NET::SkipPager);
+
         if (q->location() != Floating) {
             dialog->animatedShow(locationToDirection(q->location()));
         } else {
