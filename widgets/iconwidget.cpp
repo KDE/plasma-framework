@@ -653,8 +653,7 @@ QPixmap IconWidgetPrivate::decoration(const QStyleOptionGraphicsItem *option, bo
 		result = result.scaled(result.size() * 0.9, Qt::KeepAspectRatio);
 	}
 
-    // We disable the iconeffect here since we cannot get it into sync with
-    // the fade animation. TODO: Enable it when animations are switched off
+
     if (!result.isNull() && useHoverEffect) {
         KIconEffect *effect = KIconLoader::global()->iconEffect();
         // Note that in KIconLoader terminology, active = hover.
@@ -983,12 +982,12 @@ void IconWidget::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
     }
 
 
-    if (state == IconWidgetPrivate::NoState && d->textBgColor != QColor() &&
+    if (d->textBgColor != QColor() &&
         !(d->text.isEmpty() && d->infoText.isEmpty())) {
         QRectF rect = textBoundingRect.adjusted(-2, -2, 4, 4);
         painter->setPen(Qt::transparent);
         QColor color = d->textBgColor;
-        color.setAlpha(60 * 1.0 - d->hoverAlpha);
+        color.setAlpha(60 * (1.0 - d->hoverAlpha));
         painter->setBrush(color);
         painter->setRenderHint(QPainter::Antialiasing);
         painter->drawPath(PaintUtils::roundedRectangle(rect, 4));
