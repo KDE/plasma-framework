@@ -432,7 +432,11 @@ void PopupApplet::showPopup(uint popupDuration)
 void PopupApplet::hidePopup()
 {
     if (d->dialog) {
-        d->dialog->hide();
+        if (location() != Floating) {
+            d->dialog->animatedHide(locationToInverseDirection(location()));
+        } else {
+            d->dialog->hide();
+        }
     }
 }
 
@@ -511,7 +515,11 @@ void PopupAppletPrivate::internalTogglePopup()
     }
 
     if (dialog->isVisible()) {
-        dialog->hide();
+        if (q->location() != Floating) {
+            dialog->animatedHide(locationToInverseDirection(q->location()));
+        } else {
+            dialog->hide();
+        }
     } else {
         ToolTipManager::self()->hide(q);
         updateDialogPosition();
