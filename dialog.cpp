@@ -535,7 +535,7 @@ Dialog::ResizeCorners Dialog::resizeCorners() const
 void Dialog::animatedHide(Plasma::Direction direction)
 {
     if (d->hideAnimId) {
-        // already hiding
+        // already hiding/showing
         return;
     }
 
@@ -552,14 +552,14 @@ void Dialog::animatedHide(Plasma::Direction direction)
 void Dialog::animatedShow(Plasma::Direction direction)
 {
     if (d->hideAnimId) {
-        // already hiding
+        // already hiding/showing
         return;
     }
 
     if (KWindowSystem::compositingActive() && d->view) {
         //TODO: implement for the QWidget scenario too
         d->hideDirection = direction;
-        d->hideAnimId = Animator::self()->customAnimation(10, 100, Animator::EaseOutCurve,
+        d->hideAnimId = Animator::self()->customAnimation(5, 100, Animator::EaseInCurve,
                                                           this, "progressShow");
     } else {
         show();
