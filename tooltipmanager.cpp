@@ -384,9 +384,9 @@ bool ToolTipManager::eventFilter(QObject *watched, QEvent *event)
             break;
 
         case QEvent::GraphicsSceneMousePress:
-        case QEvent::GraphicsSceneWheel:
             hide(widget);
 
+        case QEvent::GraphicsSceneWheel:
         default:
             break;
     }
