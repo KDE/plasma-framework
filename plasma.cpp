@@ -67,6 +67,27 @@ Direction locationToDirection(Location location)
     return Down;
 }
 
+Direction locationToInverseDirection(Location location)
+{
+    switch (location) {
+    case Floating:
+    case Desktop:
+    case TopEdge:
+    case FullScreen:
+        //TODO: should we be smarter for floating and planer?
+        //      perhaps we should take a QRect and/or QPos as well?
+        return Up;
+    case BottomEdge:
+        return Down;
+    case LeftEdge:
+        return Left;
+    case RightEdge:
+        return Right;
+    }
+
+    return Up;
+}
+
 QGraphicsView *viewFor(const QGraphicsItem *item)
 {
     if (!item || !item->scene()) {
