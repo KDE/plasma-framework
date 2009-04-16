@@ -559,8 +559,10 @@ void Dialog::animatedShow(Plasma::Direction direction)
     if (KWindowSystem::compositingActive() && d->view) {
         //TODO: implement for the QWidget scenario too
         d->hideDirection = direction;
-        d->hideAnimId = Animator::self()->customAnimation(20, 200, Animator::EaseInCurve,
+        d->hideAnimId = Animator::self()->customAnimation(10, 100, Animator::EaseOutCurve,
                                                           this, "progressShow");
+    } else {
+        show();
     }
 }
 

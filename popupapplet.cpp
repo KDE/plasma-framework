@@ -527,7 +527,7 @@ void PopupAppletPrivate::internalTogglePopup()
         if (q->location() != Floating) {
             dialog->animatedShow(locationToDirection(q->location()));
         } else {
-            dialog->hide();
+            dialog->show();
         }
     }
 
