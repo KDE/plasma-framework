@@ -185,24 +185,15 @@ void ToolTip::checkSize()
     d->text->setMinimumSize(d->text->minimumSizeHint());
     d->text->setMaximumSize(d->text->maximumSizeHint());
 
-    QSize previous = size();
+    const QSize previous = size();
     adjustSize();
-    QSize current = size();
+    const QSize current = size();
 
+}
+
+void ToolTip::adjustPosition(const QSize &previous, const QSize &current)
+{
     if (previous != current) {
-        /*
-#ifdef Q_WS_X11
-        NETRootInfo i(QX11Info::display(), 0);
-        int flags = NET::BottomLeft;
-        i.moveResizeWindowRequest(winId(), flags,
-                                  x(), y() + (current.height() - hint.height()),
-                                  hint.width(), hint.height());
-#else
-        move(x(), y() + (current.height() - hint.height()));
-        resize(hint);
-#endif
-    */
-
         //offsets to stop tooltips from jumping when they resize
         int deltaX = 0;
         int deltaY = 0;
@@ -312,6 +303,10 @@ void ToolTip::resizeEvent(QResizeEvent *e)
     d->background->resizeFrame(size());
     setMask(d->background->mask());
     d->preview->setInfo();
+
+    if (isVisible()) {
+        adjustPosition(e->oldSize(), e->size());
+    }
 }
 
 void ToolTip::paintEvent(QPaintEvent *e)

@@ -45,6 +45,7 @@ public:
 
 protected:
     void checkSize();
+    void adjustPosition(const QSize &previous, const QSize &current);
     void showEvent(QShowEvent *);
     void hideEvent(QHideEvent *);
     void mouseReleaseEvent(QMouseEvent *);
