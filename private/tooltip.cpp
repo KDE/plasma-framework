@@ -185,10 +185,7 @@ void ToolTip::checkSize()
     d->text->setMinimumSize(d->text->minimumSizeHint());
     d->text->setMaximumSize(d->text->maximumSizeHint());
 
-    const QSize previous = size();
     adjustSize();
-    const QSize current = size();
-
 }
 
 void ToolTip::adjustPosition(const QSize &previous, const QSize &current)
