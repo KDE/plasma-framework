@@ -277,13 +277,8 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
                 //stuff out of your Dialog (extenders). Monitor WindowDeactivate events so we can
                 //emulate the same kind of behavior as Qt::Popup (close when you click somewhere
                 //else.
-                Qt::WindowFlags wflags = Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint;
-
-                if (passive) {
-                    wflags |= Qt::X11BypassWindowManagerHint;
-                }
-
-                dialog->setWindowFlags(wflags);
+                dialog->setWindowFlags(Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
+                updateDialogFlags();
                 KWindowSystem::setState(dialog->winId(), NET::SkipTaskbar | NET::SkipPager);
                 dialog->installEventFilter(q);
 
@@ -342,7 +337,7 @@ void PopupApplet::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 
 bool PopupApplet::eventFilter(QObject *watched, QEvent *event)
 {
-    if (watched == d->dialog && (event->type() == QEvent::WindowDeactivate)) {
+    if (!d->passive && watched == d->dialog && (event->type() == QEvent::WindowDeactivate)) {
         d->popupLostFocus = true;
         hidePopup();
         QTimer::singleShot(100, this, SLOT(clearPopupLostFocus()));
@@ -461,15 +456,7 @@ void PopupApplet::setPassivePopup(bool passive)
     d->passive = passive;
 
     if (d->dialog) {
-        Qt::WindowFlags wflags = d->dialog->windowFlags();
-
-        if (d->passive) {
-            wflags |= Qt::X11BypassWindowManagerHint;
-        } else {
-            wflags &= ~Qt::X11BypassWindowManagerHint;
-        }
-
-        d->dialog->setWindowFlags(wflags);
+        d->updateDialogFlags();
     }
 }
 
@@ -705,6 +692,15 @@ void PopupAppletPrivate::updateDialogPosition()
 
     dialog->move(pos);
 }
+
+
+void PopupAppletPrivate::updateDialogFlags()
+{
+    Q_ASSERT(dialog);
+    dialog->setAttribute(Qt::WA_X11NetWmWindowTypeNotification, passive);
+}
+
+
 } // Plasma namespace
 
 #include "popupapplet.moc"

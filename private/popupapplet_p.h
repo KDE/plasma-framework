@@ -35,6 +35,7 @@ public:
     void dialogSizeChanged();
     void dialogStatusChanged(bool status);
     void updateDialogPosition();
+    void updateDialogFlags();
     void popupConstraintsEvent(Plasma::Constraints constraints);
     void checkExtenderAppearance(Plasma::FormFactor f);
 
