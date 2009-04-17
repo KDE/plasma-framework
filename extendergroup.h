@@ -42,15 +42,15 @@ class Applet;
  * To be able to group multiple items together, you'll need to instantiate an ExtenderGroup, and
  * call setGroup() on all extender items you wish to add to this group.
  * This ExtenderGroup is just the same as any other ExtenderItem, except for the expand group and
- * collapse group buttons it provides, and the fact that it will automatically hide itself if no
- * other items belong to this group and hideIfEmpty is set to true.
+ * collapse group buttons it provides, and the fact that it will automatically hide itself if less
+ * then one item belong to this group and autoHide is set to true.
  *
  * @since 4.3
  */
 class PLASMA_EXPORT ExtenderGroup : public ExtenderItem
 {
     Q_OBJECT
-    Q_PROPERTY(bool hideIfEmpty READ hideIfEmpty WRITE setHideIfEmpty)
+    Q_PROPERTY(bool autoHide READ autoHide WRITE setAutoHide)
 
     public:
         /**
@@ -67,14 +67,14 @@ class PLASMA_EXPORT ExtenderGroup : public ExtenderItem
         QList<ExtenderItem*> items() const;
 
         /**
-         * @return whether or not this item hides itself if no other items belong to this group.
+         * @return whether or not this item hides itself if there are less then 2 items in.
          */
-        bool hideIfEmpty() const;
+        bool autoHide() const;
 
         /**
-         * @param hideIfEmpty whether or not this item hides itself if no other items belong to this group.
+         * @param autoHide whether or not this item hides itself if less then 2 items belong to this group.
          */
-        void setHideIfEmpty(bool hideIfEmpty);
+        void setAutoHide(bool autoHide);
 
     public Q_SLOTS:
         /**

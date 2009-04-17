@@ -38,7 +38,7 @@ class ExtenderGroupPrivate
 
         Plasma::ExtenderGroup *q;
         bool collapsed;
-        bool hideIfEmpty;
+        bool autoHide;
 };
 }
 
