@@ -26,7 +26,10 @@
 #include <QGraphicsLinearLayout>
 #include <QTimer>
 #include <QVBoxLayout>
+
+#ifdef Q_WS_X11
 #include <QX11Info>
+#endif
 
 #include <kicon.h>
 #include <kiconloader.h>
