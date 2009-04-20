@@ -191,7 +191,7 @@ void ExtenderGroupPrivate::removeItemFromGroup(Plasma::ExtenderItem *item)
 
 void ExtenderGroupPrivate::themeChanged()
 {
-    Plasma::Svg *svg = new Plasma::Svg(q);
+    Plasma::Svg *svg = new Plasma::Svg(q);///Who deletes the svg? (Looks like a memory hog/leak on multiple theme changes)
     svg->setImagePath("widgets/configuration-icons");
     svg->resize();
 
