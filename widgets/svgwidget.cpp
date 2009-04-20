@@ -67,6 +67,7 @@ void SvgWidget::mouseReleaseEvent ( QGraphicsSceneMouseEvent * event  )
 void SvgWidget::setSvg(Svg *svg)
 {
     d->svg = svg;
+    update();
 }
 
 Svg *SvgWidget::svg() const
@@ -77,6 +78,7 @@ Svg *SvgWidget::svg() const
 void SvgWidget::setElementID(const QString &elementID)
 {
     d->elementID = elementID;
+    update();
 }
 
 QString SvgWidget::elementID() const
