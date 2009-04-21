@@ -209,7 +209,7 @@ enum ImmutabilityType {
  * Defines the aspect ratio used when scaling an applet
  */
 enum AspectRatioMode {
-    InvalidAspectRatioMode = -1, /**< Unsetted mode used for dev convenience
+    InvalidAspectRatioMode = -1, /**< Unset mode used for dev convenience
                                     when there is a need to store the
                                     aspectRatioMode somewhere */
     IgnoreAspectRatio = 0,       /**< The applet can be freely resized */
