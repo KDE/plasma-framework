@@ -196,11 +196,13 @@ Q_SIGNALS:
 
     /**
      * The user pressed the "next" button
+     * @since 4.3
      */
     void nextRequested();
 
     /**
      * The user pressed the "previous" button
+     * @since 4.3
      */
     void previousRequested();
 
