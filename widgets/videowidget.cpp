@@ -50,10 +50,12 @@ public:
            hideTimer(0),
            shownControls(VideoWidget::NoControls),
            controlsWidget(0),
+           previousButton(0),
            playButton(0),
            pauseButton(0),
            stopButton(0),
            playPauseButton(0),
+           nextButton(0),
            progress(0),
            volume(0),
            openFileButton(0)
@@ -93,10 +95,12 @@ public:
     QTimer *hideTimer;
     VideoWidget::Controls shownControls;
     Plasma::Frame *controlsWidget;
+    IconWidget *previousButton;
     IconWidget *playButton;
     IconWidget *pauseButton;
     IconWidget *stopButton;
     IconWidget *playPauseButton;
+    IconWidget *nextButton;
     Slider *progress;
     Slider *volume;
     IconWidget *openFileButton;
@@ -307,6 +311,18 @@ void VideoWidget::setUsedControls(const Controls controls)
         controlsLayout->removeAt(0);
     }
 
+    if (controls&Previous) {
+        if (!d->previousButton) {
+            d->previousButton = new IconWidget(d->controlsWidget);
+            d->previousButton->setIcon("media-playback-start");
+            connect(d->playButton, SIGNAL(clicked()), this, SLOT(PreviousRequested()));
+        }
+        controlsLayout->addItem(d->previousButton);
+    } else {
+        d->previousButton->deleteLater();
+        d->previousButton = 0;
+    }
+
     if (controls&Play) {
         if (!d->playButton) {
             d->playButton = new IconWidget(d->controlsWidget);
@@ -353,6 +369,18 @@ void VideoWidget::setUsedControls(const Controls controls)
     } else {
         d->playPauseButton->deleteLater();
         d->playPauseButton = 0;
+    }
+
+    if (controls&Next) {
+        if (!d->nextButton) {
+            d->nextButton = new IconWidget(d->nextButton);
+            d->nextButton->setIcon("media-playback-start");
+            connect(d->nextButton, SIGNAL(clicked()), this, SIGNAL(nextRequested()));
+        }
+        controlsLayout->addItem(d->nextButton);
+    } else {
+        d->nextButton->deleteLater();
+        d->nextButton = 0;
     }
 
     connect(d->media, SIGNAL(stateChanged(Phonon::State, Phonon::State)), this, SLOT(stateChanged(Phonon::State, Phonon::State)));
@@ -434,7 +462,6 @@ void VideoWidget::stop()
 {
     d->media->stop();
 }
-
 
 void VideoWidget::seek(qint64 time)
 {

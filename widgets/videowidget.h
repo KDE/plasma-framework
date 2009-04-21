@@ -65,8 +65,10 @@ public:
         Pause = 2,
         Stop = 4,
         PlayPause = 8,
-        Progress = 32,
-        Volume = 64,
+        Previous = 16,
+        Next = 32,
+        Progress = 64,
+        Volume = 128,
         OpenFile = 128,
         DefaultControls = PlayPause|Progress|Volume|OpenFile
     };
@@ -158,6 +160,7 @@ public:
     Phonon::VideoWidget *nativeWidget() const;
 
 public Q_SLOTS:
+
     /**
      * Play the current file
      */
@@ -190,6 +193,16 @@ Q_SIGNALS:
      * Emitted an instant before the playback is finished
      */
     void aboutToFinish();
+
+    /**
+     * The user pressed the "next" button
+     */
+    void nextRequested();
+
+    /**
+     * The user pressed the "previous" button
+     */
+    void previousRequested();
 
 protected:
     void resizeEvent(QGraphicsSceneResizeEvent *event);
