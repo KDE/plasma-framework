@@ -379,7 +379,7 @@ int Animator::customAnimation(int frames, int duration, Animator::CurveShape cur
     state->frames = frames;
     state->currentFrame = 0;
     state->curve = curve;
-    state->frameInterval = duration / qreal(state->frames);
+    state->frameInterval = qMax(qreal(1.0), duration / qreal(state->frames));
     state->interval = qMax(MIN_TICK_RATE_INT, state->frameInterval - (state->frameInterval % MIN_TICK_RATE_INT));
     state->currentInterval = state->interval;
     state->receiver = receiver;
