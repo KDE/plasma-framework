@@ -297,3 +297,5 @@ install(FILES
 
 install(FILES scripting/plasmoids.knsrc DESTINATION  ${CONFIG_INSTALL_DIR})
 
+install(FILES plasma_popupapplet_fix_groups.upd DESTINATION ${KCONF_UPDATE_INSTALL_DIR})
+install(PROGRAMS plasma_popupapplet_fix_groups.pl DESTINATION ${KCONF_UPDATE_INSTALL_DIR})
