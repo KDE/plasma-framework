@@ -110,6 +110,11 @@ class RunnerContextPrivate : public QSharedData
             }
         }
 
+        void invalidate()
+        {
+            q = &s_dummyContext;
+        }
+
         QReadWriteLock lock;
         QList<QueryMatch> matches;
         QMap<QString, const QueryMatch*> matchesById;
@@ -117,7 +122,10 @@ class RunnerContextPrivate : public QSharedData
         QString mimeType;
         RunnerContext::Type type;
         RunnerContext * q;
+        static RunnerContext s_dummyContext;
 };
+
+RunnerContext RunnerContextPrivate::s_dummyContext;
 
 RunnerContext::RunnerContext(QObject *parent)
     : QObject(parent),
@@ -143,14 +151,17 @@ void RunnerContext::reset()
     // We will detach if we are a copy of someone. But we will reset
     // if we are the 'main' context others copied from. Resetting
     // one RunnerContext makes all the copies obsolete.
-    
-    d->q = 0; //we need to mark the q pointer of the detached RunnerContextPrivate 
-              //as dirty on detach to avoid receiving results for old queries   
+
+    // We need to invalidate the RunnerContextPrivate before detaching
+    // to avoid receiving results for old queries.
+
+    d->invalidate();
 
     d.detach();
-    
-    d->q = this; //now that we detached the d pointer we need to mark its q pointer as
-                 //this to receive the signals 
+
+    // Now that we detached the d pointer we need to reset its q pointer
+
+    d->q = this;
 
     // we still have to remove all the matches, since if the
     // ref count was 1 (e.g. only the RunnerContext is using
@@ -197,11 +208,18 @@ QString RunnerContext::mimeType() const
     return d->mimeType;
 }
 
+bool RunnerContext::isValid()
+{
+    // if our qptr is dirty, we aren't useful anymore
+    return (d->q != &(d->s_dummyContext));
+}
+
 bool RunnerContext::addMatches(const QString &term, const QList<QueryMatch> &matches)
 {
     Q_UNUSED(term)
 
-    if (matches.isEmpty() || (!d->q)) { //Bail out if the query is empty or the qptr is dirty 
+    if (matches.isEmpty() || (!isValid())) {
+    //Bail out if the query is empty or the qptr is dirty
         return false;
     }
 
@@ -221,7 +239,7 @@ bool RunnerContext::addMatches(const QString &term, const QList<QueryMatch> &mat
     // we always want to sent the signal of the object that created
     // the d pointer
     emit d->q->matchesChanged();
-    
+
     return true;
 }
 
@@ -229,17 +247,18 @@ bool RunnerContext::addMatch(const QString &term, const QueryMatch &match)
 {
     Q_UNUSED(term)
 
-    if (!d->q) { // Bail out if the qptr is dirty
+    if (!isValid()) {
+    // Bail out if the qptr is dirty
         return false;
     }
-    
+
     LOCK_FOR_WRITE(this)
     d->matches.append(match);
     d->matchesById.insert(match.id(), &d->matches.at(d->matches.size() - 1));
     UNLOCK(this);
     //kDebug()<< "added match" << match->text();
-    emit d->q->matchesChanged(); 
-    
+    emit d->q->matchesChanged();
+
 
     return true;
 }

@@ -161,7 +161,7 @@ void FindMatchesJob::run()
 {
 //     kDebug() << "Running match for " << m_runner->objectName()
 //              << " in Thread " << thread()->id() << endl;
-    m_runner->performMatch(m_context);
+    if (m_context.isValid()) m_runner->performMatch(m_context);
 }
 
 int FindMatchesJob::priority() const
@@ -349,7 +349,7 @@ public:
         if (deferredRun.isEnabled() && runJob->runner() == deferredRun.runner()) {
             //kDebug() << "job actually done, running now **************";
             QueryMatch tmpRun = deferredRun;
-            deferredRun = QueryMatch(0);	  
+            deferredRun = QueryMatch(0);
             tmpRun.run(context);
         }
 
@@ -484,7 +484,7 @@ void RunnerManager::launchQuery(const QString &term)
 void RunnerManager::launchQuery(const QString &untrimmedTerm, const QString &runnerName)
 {
     QString term = untrimmedTerm.trimmed();
-   
+
     if (d->runners.isEmpty()) {
         d->loadRunners();
     }
@@ -534,7 +534,7 @@ bool RunnerManager::execQuery(const QString &term)
 bool RunnerManager::execQuery(const QString &untrimmedTerm, const QString &runnerName)
 {
     QString term = untrimmedTerm.trimmed();
-   
+
     if (d->runners.isEmpty()) {
         d->loadRunners();
     }
