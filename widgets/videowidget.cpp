@@ -285,7 +285,7 @@ void VideoWidget::setUsedControls(const Controls controls)
 
     //kDebug()<<"Setting used controls"<<controls;
 
-    QGraphicsLinearLayout *controlsLayout;
+    QGraphicsLinearLayout *controlsLayout = 0;
     if (controls != NoControls && d->controlsWidget == 0) {
         d->controlsWidget = new Plasma::Frame(this);
         d->controlsWidget->setFrameShadow(Plasma::Frame::Raised);
@@ -305,6 +305,8 @@ void VideoWidget::setUsedControls(const Controls controls)
         disconnect(d->audioOutput, SIGNAL(volumeChanged(qreal)), this, SLOT(volumeChanged(qreal)));
         return;
     }
+
+    Q_ASSERT(controlsLayout);
 
     //empty the layout
     while (controlsLayout->count() > 0) {
