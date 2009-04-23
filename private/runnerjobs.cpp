@@ -154,7 +154,9 @@ void FindMatchesJob::run()
 {
 //     kDebug() << "Running match for " << m_runner->objectName()
 //              << " in Thread " << thread()->id() << endl;
-    if (m_context.isValid()) m_runner->performMatch(m_context);
+    if (m_context.isValid()) {
+        m_runner->performMatch(m_context);
+    }
 }
 
 int FindMatchesJob::priority() const
