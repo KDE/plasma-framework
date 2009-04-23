@@ -1747,14 +1747,27 @@ Applet *Applet::load(const QString &appletName, uint appletId, const QVariantLis
         //TODO: what would be -really- cool is offer to try and download the applet
         //      from the network at this point
         offers = KServiceTypeTrader::self()->query("Plasma/Containment", constraint);
-        isContainment = true;
-        if (offers.isEmpty()) {
-            kDebug() << "offers is empty for " << appletName;
-            return 0;
+        if (offers.count() > 0) {
+            isContainment = true;
         }
-    } /* else if (offers.count() > 1) {
+    }
+
+    bool isPopupApplet = false;
+    if (offers.isEmpty()) {
+        offers = KServiceTypeTrader::self()->query("Plasma/PopupApplet", constraint);
+        if (offers.count() > 0) {
+            isPopupApplet = true;
+        }
+    }
+
+    /* if (offers.count() > 1) {
         kDebug() << "hey! we got more than one! let's blindly take the first one";
     } */
+    
+    if (offers.isEmpty()) {
+        kDebug() << "offers is empty for " << appletName;
+        return 0;
+    }
 
     KService::Ptr offer = offers.first();
 
@@ -1769,9 +1782,12 @@ Applet *Applet::load(const QString &appletName, uint appletId, const QVariantLis
         kDebug() << "we have a script using the"
                  << offer->property("X-Plasma-API").toString() << "API";
         if (isContainment) {
-            return new Containment(0, offer->storageId(), appletId);
+            return new Containment(0, allArgs);
+        } else if (isPopupApplet) {
+            return new PopupApplet(0, allArgs);
+        } else {
+            return new Applet(0, allArgs);
         }
-        return new Applet(0, offer->storageId(),  appletId, allArgs);
     }
 
     KPluginLoader plugin(*offer);
