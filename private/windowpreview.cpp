@@ -137,14 +137,12 @@ void WindowPreview::readWindowSizes() const
 
 bool WindowPreview::isEmpty() const
 {
-  if (ids.size() == 0) {
-      return true;
-  }
   foreach (WId id, ids) {
       if (id != 0) {
           return false;
       }
   }
+
   return true;
 }
 
