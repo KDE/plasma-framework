@@ -1,4 +1,12 @@
 # Fix groups of the form ...[Configuration][PopupApplet] into ...[PopupApplet]
-Id=PlasmaPopupAppletFixGroups
-File=plasma-appletsrc,plasmarc,plasmoidviewer-appletsrc
+Id=PlasmaPopupAppletFixGroups1
+File=plasma-appletsrc
+Script=plasma_popupapplet_fix_groups.pl,perl
+#
+Id=PlasmaPopupAppletFixGroups2
+File=plasmarc
+Script=plasma_popupapplet_fix_groups.pl,perl
+#
+Id=PlasmaPopupAppletFixGroups3
+File=plasmoidviewer-appletsrc
 Script=plasma_popupapplet_fix_groups.pl,perl
