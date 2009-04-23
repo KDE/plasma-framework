@@ -1403,8 +1403,8 @@ void Containment::setWallpaper(const QString &pluginName, const QString &mode)
 
     if (newPlugin || newMode) {
         if (newPlugin && d->wallpaper) {
-            connect(d->wallpaper, SIGNAL(configureRequested()), this, SLOT(configureRequested()));
-            connect(d->wallpaper, SIGNAL(configNeedsSaving()), this, SLOT(configNeedsSaving()));
+            connect(d->wallpaper, SIGNAL(configureRequested()), this, SLOT(requestConfiguration()));
+            connect(d->wallpaper, SIGNAL(configNeedsSaving()), this, SIGNAL(configNeedsSaving()));
         }
 
         emit configNeedsSaving();
