@@ -117,7 +117,7 @@ void WallpaperRenderThread::run()
 
         if (file.isEmpty() || !QFile::exists(file)) {
             emit done(token, result, file, size, method, color);
-            continue;
+            break;
         }
 
         QPoint pos(0, 0);
@@ -251,7 +251,7 @@ void WallpaperRenderThread::run()
                     for (int y = pos.y(); y < size.height(); y += scaledSize.height()) {
                         p.drawImage(QPoint(x, y), img);
                         if (m_restart) {
-                            goto endLoop;
+                            continue;
                         }
                     }
                 }
@@ -262,7 +262,7 @@ void WallpaperRenderThread::run()
 
         // signal we're done
         emit done(token, result, file, size, method, color);
-        endLoop: continue;
+        break;
     }
 }
 
