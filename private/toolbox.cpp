@@ -186,7 +186,7 @@ void ToolBox::setIconSize(const QSize newSize)
 
 bool ToolBox::showing() const
 {
-    return  d->showing;
+    return d->showing;
 }
 
 void ToolBox::setShowing(const bool show)
