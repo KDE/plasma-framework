@@ -35,15 +35,17 @@
 #include "framesvg.h"
 #include "animator.h"
 #include "paintutils.h"
+#include "private/actionwidgetinterface_p.h"
 
 namespace Plasma
 {
 
-class ToolButtonPrivate
+class ToolButtonPrivate : public ActionWidgetInterface<ToolButton>
 {
 public:
     ToolButtonPrivate(ToolButton *toolButton)
-        : q(toolButton),
+        : ActionWidgetInterface<ToolButton>(toolButton),
+          q(toolButton),
           background(0),
           animId(0),
           fadeIn(false),
@@ -159,6 +161,16 @@ ToolButton::ToolButton(QGraphicsWidget *parent)
 ToolButton::~ToolButton()
 {
     delete d;
+}
+
+void ToolButton::setAction(QAction *action)
+{
+    d->setAction(action);
+}
+
+QAction *ToolButton::action() const
+{
+    return d->action;
 }
 
 void ToolButton::setAutoRaise(bool raise)
@@ -312,7 +324,6 @@ void ToolButton::paint(QPainter *painter,
     }
 
     painter->setFont(Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont));
-
     button->style()->drawControl(QStyle::CE_ToolButtonLabel, &buttonOpt, painter, button);
 }
 

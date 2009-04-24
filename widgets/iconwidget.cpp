@@ -60,7 +60,8 @@ namespace Plasma
 {
 
 IconWidgetPrivate::IconWidgetPrivate(IconWidget *i)
-    : q(i),
+    : ActionWidgetInterface<IconWidget>(i),
+      q(i),
       iconSvg(0),
       hoverAnimId(-1),
       hoverAlpha(20 / 255),
@@ -68,7 +69,6 @@ IconWidgetPrivate::IconWidgetPrivate(IconWidget *i)
       states(IconWidgetPrivate::NoState),
       orientation(Qt::Vertical),
       numDisplayLines(2),
-      action(0),
       activeMargins(0),
       iconSvgElementChanged(false),
       fadeIn(false),
@@ -370,19 +370,7 @@ void IconWidget::removeIconAction(QAction *action)
 
 void IconWidget::setAction(QAction *action)
 {
-    if (d->action) {
-        disconnect(d->action, 0, this, 0);
-        disconnect(this, 0, d->action, 0);
-    }
-
-    d->action = action;
-
-    if (action) {
-        connect(action, SIGNAL(changed()), this, SLOT(syncToAction()));
-        connect(action, SIGNAL(destroyed(QObject*)), this, SLOT(clearAction()));
-        connect(this, SIGNAL(clicked()), action, SLOT(trigger()));
-        d->syncToAction();
-    }
+    d->setAction(action);
 }
 
 QAction *IconWidget::action() const
@@ -557,6 +545,15 @@ void IconWidget::setSvg(const QString &svgFilePath, const QString &elementId)
     d->iconSvgElementChanged = true;
     d->icon = QIcon();
     update();
+}
+
+QString IconWidget::svg() const
+{
+    if (d->iconSvg) {
+        return d->iconSvg->imagePath();
+    }
+
+    return QString();
 }
 
 void IconWidgetPrivate::hoverEffect(bool show)
@@ -1247,39 +1244,10 @@ void IconWidget::setUnpressed()
     setPressed(false);
 }
 
-void IconWidgetPrivate::clearAction()
-{
-    action = 0;
-    syncToAction();
-    emit q->changed();
-}
-
 void IconWidgetPrivate::svgChanged()
 {
     iconSvgElementChanged = true;
     q->update();
-}
-
-void IconWidgetPrivate::syncToAction()
-{
-    if (!action) {
-        q->setIcon(QIcon());
-        q->setText(QString());
-        q->setEnabled(false);
-        return;
-    }
-    //we don't get told *what* changed, just that something changed
-    //so we update everything we care about
-    q->setIcon(action->icon());
-    q->setText(action->iconText());
-    q->setEnabled(action->isEnabled());
-    q->setVisible(action->isVisible());
-
-    if (!q->toolTip().isEmpty()) {
-        q->setToolTip(action->text());
-    }
-
-    emit q->changed();
 }
 
 void IconWidget::setOrientation(Qt::Orientation orientation)

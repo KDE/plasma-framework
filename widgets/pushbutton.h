@@ -45,6 +45,7 @@ class PLASMA_EXPORT PushButton : public QGraphicsProxyWidget
     Q_PROPERTY(QString image READ image WRITE setImage)
     Q_PROPERTY(QString stylesheet READ styleSheet WRITE setStyleSheet)
     Q_PROPERTY(KPushButton *nativeWidget READ nativeWidget)
+    Q_PROPERTY(QAction *action READ action WRITE setAction)
 
 public:
     explicit PushButton(QGraphicsWidget *parent = 0);
@@ -85,6 +86,38 @@ public:
      * @return the stylesheet currently used with this widget
      */
     QString styleSheet();
+
+    /**
+     * Associate an action with this IconWidget
+     * this makes the button follow the state of the action, using its icon, text, etc.
+     * when the button is clicked, it will also trigger the action.
+     *
+     * @since 4.3
+     */
+    void setAction(QAction *action);
+
+    /**
+     * @return the currently associated action, if any.
+     *
+     * @since 4.3
+     */
+    QAction *action() const;
+
+    /**
+     * sets the icon for this toolbutton
+     * 
+     * @arg icon the icon we want to use
+     *
+     * @since 4.3
+     */
+    void setIcon(const QIcon &icon);
+
+    /**
+     * @return the icon of this button
+     *
+     * @since 4.3
+     */
+    QIcon icon() const;
 
     /**
      * @return the native widget wrapped by this PushButton

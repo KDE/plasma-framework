@@ -110,6 +110,11 @@ public:
     void setSvg(const QString &svgFilePath, const QString &svgIconElement = QString());
 
     /**
+     * @return the path to the svg file set, if any
+     */
+    QString svg() const;
+
+    /**
     * Returns the meta text associated with this icon.
     */
     QString infoText() const;

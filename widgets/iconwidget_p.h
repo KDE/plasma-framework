@@ -35,6 +35,7 @@
 
 #include "iconwidget.h"
 #include "animator.h"
+#include "private/actionwidgetinterface_p.h"
 
 class QAction;
 class QPainter;
@@ -88,7 +89,7 @@ struct Margin
     qreal left, right, top, bottom;
 };
 
-class IconWidgetPrivate
+class IconWidgetPrivate : public ActionWidgetInterface<IconWidget>
 {
 public:
     enum MarginType {
@@ -108,6 +109,11 @@ public:
 
     IconWidgetPrivate(IconWidget *i);
     ~IconWidgetPrivate();
+
+    void changed()
+    {
+        emit q->changed();
+    }
 
     void drawBackground(QPainter *painter, IconWidgetState state);
     void drawText(QPainter *painter);
@@ -172,14 +178,9 @@ public:
     inline QSizeF subtractMargin(const QSizeF &size, MarginType type) const;
     inline QRectF actionRect(ActionPosition position) const;
 
-    /**
-     * update the icon's text, icon, etc. to reflect the properties of its associated action.
-     */
-    void syncToAction();
-    void clearAction();
+    void actionDestroyed(QObject *obj);
     void svgChanged();
 
-    void actionDestroyed(QObject *obj);
     void readColors();
     void colorConfigChanged();
     void iconConfigChanged();
@@ -209,7 +210,6 @@ public:
     QPointF clickStartPos;
 
     QList<IconAction*> cornerActions;
-    QAction *action;
 
     Margin verticalMargin[NMargins];
     Margin horizontalMargin[NMargins];

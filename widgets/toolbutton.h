@@ -46,6 +46,7 @@ class PLASMA_EXPORT ToolButton : public QGraphicsProxyWidget
     Q_PROPERTY(QString image READ image WRITE setImage)
     Q_PROPERTY(QString stylesheet READ styleSheet WRITE setStyleSheet)
     Q_PROPERTY(QToolButton *nativeWidget READ nativeWidget)
+    Q_PROPERTY(QAction *action READ action WRITE setAction)
 
 public:
     explicit ToolButton(QGraphicsWidget *parent = 0);
@@ -100,9 +101,20 @@ public:
     QString styleSheet();
 
     /**
-     * @return the native widget wrapped by this ToolButton
+     * Associate an action with this IconWidget
+     * this makes the button follow the state of the action, using its icon, text, etc.
+     * when the button is clicked, it will also trigger the action.
+     *
+     * @since 4.3
      */
-    QToolButton *nativeWidget() const;
+    void setAction(QAction *action);
+
+    /**
+     * @return the currently associated action, if any.
+     *
+     * @since 4.3
+     */
+    QAction *action() const;
 
     /**
      * sets the icon for this toolbutton
@@ -115,6 +127,11 @@ public:
      * @return the icon of this button
      */
     QIcon icon() const;
+
+    /**
+     * @return the native widget wrapped by this ToolButton
+     */
+    QToolButton *nativeWidget() const;
 
 Q_SIGNALS:
     void clicked();
@@ -133,6 +150,8 @@ private:
     friend class ToolButtonPrivate;
     Q_PRIVATE_SLOT(d, void syncBorders())
     Q_PRIVATE_SLOT(d, void animationUpdate(qreal progress))
+    Q_PRIVATE_SLOT(d, void syncToAction())
+    Q_PRIVATE_SLOT(d, void clearAction())
 };
 
 } // namespace Plasma

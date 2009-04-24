@@ -35,15 +35,17 @@
 #include "framesvg.h"
 #include "animator.h"
 #include "paintutils.h"
+#include "private/actionwidgetinterface_p.h"
 
 namespace Plasma
 {
 
-class PushButtonPrivate
+class PushButtonPrivate : public ActionWidgetInterface<PushButton>
 {
 public:
     PushButtonPrivate(PushButton *pushButton)
-        : q(pushButton),
+        : ActionWidgetInterface<PushButton>(pushButton),
+          q(pushButton),
           background(0),
           animId(-1),
           fadeIn(false),
@@ -213,6 +215,26 @@ void PushButton::setStyleSheet(const QString &stylesheet)
 QString PushButton::styleSheet()
 {
     return widget()->styleSheet();
+}
+
+void PushButton::setAction(QAction *action)
+{
+    d->setAction(action);
+}
+
+QAction *PushButton::action() const
+{
+    return d->action;
+}
+
+void PushButton::setIcon(const QIcon &icon)
+{
+    nativeWidget()->setIcon(icon);
+}
+
+QIcon PushButton::icon() const
+{
+    return nativeWidget()->icon();
 }
 
 KPushButton *PushButton::nativeWidget() const
