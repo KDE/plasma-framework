@@ -43,7 +43,7 @@ public:
       : icon("plasma"),
         animId(0),
         animFrame(0),
-        toggled(false)
+        highlighting(false)
     {
     }
 
@@ -51,10 +51,10 @@ public:
     KIcon icon;
     int animId;
     qreal animFrame;
-    bool toggled;
     QColor fgColor;
     QColor bgColor;
     Plasma::Svg *background;
+    bool highlighting;
 };
 
 PanelToolBox::PanelToolBox(Containment *parent)
@@ -72,7 +72,7 @@ PanelToolBox::PanelToolBox(Containment *parent)
     connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()),
             this, SLOT(assignColors()));
 
-    d->background = new Plasma::Svg();
+    d->background = new Plasma::Svg(this);
     d->background->setImagePath("widgets/toolbox");
     d->background->setContainsMultipleImages(true);
 }
@@ -210,74 +210,54 @@ QPainterPath PanelToolBox::shape() const
 
 void PanelToolBox::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 {
-    if (showing()) {
-        QGraphicsItem::hoverEnterEvent(event);
-        return;
-    }
-
-    showToolBox();
+    highlight(true);
     QGraphicsItem::hoverEnterEvent(event);
-}
-
-void PanelToolBox::showToolBox()
-{
-    if (showing()) {
-        return;
-    }
-
-    int maxwidth = 0;
-    foreach (QGraphicsItem *tool, QGraphicsItem::children()) {
-        if (!tool->isEnabled()) {
-            continue;
-        }
-        maxwidth = qMax(static_cast<int>(tool->boundingRect().width()), maxwidth);
-    }
-
-    // put tools 5px from icon edge
-    Plasma::Animator *animdriver = Plasma::Animator::self();
-
-    if (d->animId) {
-        animdriver->stopCustomAnimation(d->animId);
-    }
-
-    setShowing(true);
-    // TODO: 10 and 200 shouldn't be hardcoded here. There needs to be a way to
-    // match whatever the time is that moveItem() takes. Same in hoverLeaveEvent().
-    d->animId = animdriver->customAnimation(
-        10, 240, Plasma::Animator::EaseInCurve, this, "animate");
 }
 
 void PanelToolBox::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 {
     //kDebug() << event->pos() << event->scenePos()
-    if (!d->toggled) {
-        hideToolBox();
+    if (!showing()) {
+        highlight(false);
     }
 
     QGraphicsItem::hoverLeaveEvent(event);
 }
 
+void PanelToolBox::showToolBox()
+{
+    setShowing(true);
+    highlight(true);
+}
+
 void PanelToolBox::hideToolBox()
 {
-    if (!showing()) {
+    setShowing(false);
+    highlight(false);
+}
+
+void PanelToolBox::highlight(bool highlighting)
+{
+    if (d->highlighting == highlighting) {
         return;
     }
 
-    d->toggled = false;
     Plasma::Animator *animdriver = Plasma::Animator::self();
 
     if (d->animId) {
         animdriver->stopCustomAnimation(d->animId);
     }
 
-    setShowing(false);
-    d->animId = animdriver->customAnimation(
-        10, 240, Plasma::Animator::EaseOutCurve, this, "animate");
+    d->highlighting = highlighting;
+    d->animId = animdriver->customAnimation(10, 240, 
+                                            highlighting ? Plasma::Animator::EaseInCurve 
+                                                         : Plasma::Animator::EaseOutCurve,
+                                            this, "animate");
 }
 
 void PanelToolBox::animate(qreal progress)
 {
-    if (showing()) {
+    if (d->highlighting) {
         d->animFrame = size() * progress;
     } else {
         d->animFrame = size() * (1.0 - progress);
@@ -294,10 +274,8 @@ void PanelToolBox::animate(qreal progress)
 
 void PanelToolBox::toggle()
 {
-    d->toggled = !d->toggled;
-    if (showing() && !d->toggled) {
-        hideToolBox();
-    }
+    setShowing(!showing());
+    highlight(showing());
 }
 
 } // plasma namespace

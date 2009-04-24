@@ -62,6 +62,7 @@ protected slots:
     void assignColors();
 
 private:
+    void highlight(bool highlighting);
     PanelToolBoxPrivate *d;
 };
 
