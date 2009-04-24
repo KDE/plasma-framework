@@ -550,7 +550,7 @@ class PLASMA_EXPORT Containment : public Applet
         Q_PRIVATE_SLOT(d, void zoomIn())
         Q_PRIVATE_SLOT(d, void zoomOut())
         Q_PRIVATE_SLOT(d, void requestConfiguration())
-        Q_PRIVATE_SLOT(d, void updateToolboxVisibility())
+        Q_PRIVATE_SLOT(d, void updateToolBoxVisibility())
 
         friend class Applet;
         friend class AppletPrivate;

@@ -1288,15 +1288,17 @@ void Containment::setToolBoxOpen(bool open)
 
 void Containment::openToolBox()
 {
-    if (d->toolBox) {
+    if (d->toolBox && !d->toolBox->showing()) {
         d->toolBox->showToolBox();
+        emit toolBoxVisibilityChanged(true);
     }
 }
 
 void Containment::closeToolBox()
 {
-    if (d->toolBox) {
+    if (d->toolBox && d->toolBox->showing()) {
         d->toolBox->hideToolBox();
+        emit toolBoxVisibilityChanged(false);
     }
 }
 
@@ -1587,7 +1589,7 @@ ToolBox *ContainmentPrivate::createToolBox()
 
         if (toolBox) {
             QObject::connect(toolBox, SIGNAL(toggled()), q, SIGNAL(toolBoxToggled()));
-            QObject::connect(toolBox, SIGNAL(toggled()), q, SLOT(updateToolboxVisibility()));
+            QObject::connect(toolBox, SIGNAL(toggled()), q, SLOT(updateToolBoxVisibility()));
             toolBox->load();
             positionToolBox();
         }
@@ -1603,11 +1605,9 @@ void ContainmentPrivate::positionToolBox()
     }
 }
 
-void ContainmentPrivate::updateToolboxVisibility()
+void ContainmentPrivate::updateToolBoxVisibility()
 {
-    if (toolBox) {
-        emit q->toolBoxVisibilityChanged(toolBox->showing());
-    }
+    emit q->toolBoxVisibilityChanged(toolBox->showing());
 }
 
 void ContainmentPrivate::triggerShowAddWidgets()
