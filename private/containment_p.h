@@ -60,7 +60,7 @@ public:
 
     ToolBox *createToolBox();
     void positionToolBox();
-    void updateToolboxVisibility();
+    void updateToolBoxVisibility();
     void triggerShowAddWidgets();
     void requestConfiguration();
 
