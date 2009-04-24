@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=ServiceType
+X-KDE-ServiceType=Plasma/PopupApplet
+
+Comment=Plasma scripting popup applet
+
+

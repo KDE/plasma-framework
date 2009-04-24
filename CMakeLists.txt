@@ -283,6 +283,7 @@ endif(PHONON_FOUND)
 install(FILES
    servicetypes/plasma-animator.desktop
    servicetypes/plasma-applet.desktop
+   servicetypes/plasma-applet-popupapplet.desktop
    servicetypes/plasma-containment.desktop
    servicetypes/plasma-dataengine.desktop
    servicetypes/plasma-packagestructure.desktop
