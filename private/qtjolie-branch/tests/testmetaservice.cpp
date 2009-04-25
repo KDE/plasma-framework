@@ -22,9 +22,9 @@
 #include <QtCore/QProcess>
 #include <QtTest/QtTest>
 
-#include <qtjolie/client.h>
-#include <qtjolie/message.h>
-#include <qtjolie/pendingcall.h>
+#include <QtJolie/Client>
+#include <QtJolie/Message>
+#include <QtJolie/PendingCall>
 #include "testhelpers.h"
 
 #ifndef DATA_DIR

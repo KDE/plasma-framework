@@ -21,7 +21,7 @@
 #include <QtCore/QObject>
 #include <QtTest/QtTest>
 
-#include <qtjolie/message.h>
+#include <QtJolie/Message>
 #include "testhelpers.h"
 
 using namespace Jolie;

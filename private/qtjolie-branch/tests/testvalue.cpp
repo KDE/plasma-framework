@@ -21,7 +21,7 @@
 #include <QtCore/QObject>
 #include <QtTest/QtTest>
 
-#include <qtjolie/value.h>
+#include <QtJolie/Value>
 
 #include "testhelpers.h"
 

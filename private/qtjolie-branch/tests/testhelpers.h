@@ -23,10 +23,10 @@
 
 #include <QtTest/QtTest>
 
-#include <qtjolie/fault.h>
-#include <qtjolie/message.h>
-#include <qtjolie/value.h>
-#include <qtjolie/sodephelpers_p.h>
+#include <QtJolie/Fault>
+#include <QtJolie/Message>
+#include <QtJolie/Value>
+#include "../qtjolie/sodephelpers_p.h"
 
 Q_DECLARE_METATYPE(Jolie::Value);
 

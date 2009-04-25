@@ -21,7 +21,7 @@
 #include <QtCore/QObject>
 #include <QtTest/QtTest>
 
-#include <qtjolie/fault.h>
+#include <QtJolie/Fault>
 #include "testhelpers.h"
 
 using namespace Jolie;
