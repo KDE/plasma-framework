@@ -64,6 +64,11 @@ SodepMessage SodepClient::call(const SodepMessage &message)
     return pending.reply();
 }
 
+void SodepClient::callNoReply(const SodepMessage &message)
+{
+    d->readerThread->sendMessage(message);
+}
+
 void SodepClientPrivate::messageReceived(const SodepMessage &message)
 {
     QExplicitlySharedDataPointer<SodepPendingCallPrivate> pending = pendingCalls.take(message.id());

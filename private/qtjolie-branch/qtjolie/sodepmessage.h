@@ -21,8 +21,8 @@
 #ifndef SODEPMESSAGE_H
 #define SODEPMESSAGE_H
 
-#include <sodepvalue.h>
-#include <sodepfault.h>
+#include <qtjolie/sodepvalue.h>
+#include <qtjolie/sodepfault.h>
 
 class SodepMessagePrivate;
 

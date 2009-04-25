@@ -21,7 +21,7 @@
 #include <QtCore/QObject>
 #include <QtTest/QtTest>
 
-#include <sodepvalue.h>
+#include <qtjolie/sodepvalue.h>
 
 #include "sodeptesthelpers.h"
 

@@ -1,6 +1,6 @@
 /**
   * This file is part of the KDE project
-  * Copyright (C) 2009 Kevin Ottens <ervin@kde.org>
+  * Copyright (C) 2008 Kevin Ottens <ervin@kde.org>
   *
   * This library is free software; you can redistribute it and/or
   * modify it under the terms of the GNU Library General Public
@@ -18,40 +18,32 @@
   * Boston, MA 02110-1301, USA.
   */
 
-#ifndef SODEPCLIENT_H
-#define SODEPCLIENT_H
+#ifndef SODEPFAULT_H
+#define SODEPFAULT_H
 
-#include <QtCore/QtGlobal>
+#include <qtjolie/sodepvalue.h>
 
-class QIODevice;
-class QObject;
+class SodepFaultPrivate;
 
-class SodepClientPrivate;
-class SodepMessage;
-class SodepPendingCall;
-
-class Q_DECL_EXPORT SodepClient
+class Q_DECL_EXPORT SodepFault
 {
 public:
-    enum Error
-    {
-        NoError,
-        UnexpectedClose,
-        UnkownError
-    };
+    SodepFault();
+    explicit SodepFault(const QString &name, const SodepValue &data = SodepValue());
 
-    explicit SodepClient(const QString &hostName, quint16 port);
-    ~SodepClient();
+    SodepFault(const SodepFault &other);
 
-    Error error() const;
-    QString errorString() const;
+    ~SodepFault();
 
-    SodepPendingCall asyncCall(const SodepMessage &message);
-    SodepMessage call(const SodepMessage &message);
+    SodepFault &operator=(const SodepFault &other);
+
+    QString name() const;
+    SodepValue data() const;
+
+    bool isValid() const;
 
 private:
-    friend class SodepClientPrivate;
-    SodepClientPrivate * const d;
+    SodepFaultPrivate * const d;
 };
 
 #endif

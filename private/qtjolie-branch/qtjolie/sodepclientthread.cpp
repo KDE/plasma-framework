@@ -41,19 +41,19 @@ SodepClientThread::~SodepClientThread()
 
 void SodepClientThread::sendMessage(const SodepMessage &message)
 {
-  QMutexLocker locker(&m_mutex);
+    QMutexLocker locker(&m_mutex);
 
-  m_messageQueue.enqueue(message);
-  QTimer::singleShot(0, this, SLOT(writeMessageQueue()));
+    m_messageQueue.enqueue(message);
+    QTimer::singleShot(0, this, SLOT(writeMessageQueue()));
 }
 
 void SodepClientThread::writeMessageQueue()
 {
-  QMutexLocker locker(&m_mutex);
+    QMutexLocker locker(&m_mutex);
 
-  while (!m_messageQueue.isEmpty()) {
-    sodepWrite(*m_socket, m_messageQueue.dequeue());
-  }
+    while (!m_messageQueue.isEmpty()) {
+        sodepWrite(*m_socket, m_messageQueue.dequeue());
+    }
 }
 
 void SodepClientThread::readMessage()
@@ -80,9 +80,11 @@ void SodepClientThread::run()
             m_client, SLOT(messageReceived(SodepMessage)));
 
     m_socket->connectToHost(m_hostName, m_port);
-    m_socket->waitForConnected(-1);
+    m_socket->waitForConnected(30000);
 
     exec();
+    writeMessageQueue();
+    m_socket->waitForBytesWritten(30000);
 
     delete m_socket;
 }

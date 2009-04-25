@@ -25,9 +25,9 @@
 #include <QtGui/QPushButton>
 #include <QtNetwork/QTcpSocket>
 
-#include <sodepmessage.h>
-#include <sodepvalue.h>
-#include <sodephelpers_p.h>
+#include <qtjolie/sodepmessage.h>
+#include <qtjolie/sodepvalue.h>
+#include <qtjolie/sodephelpers_p.h>
 
 class MainWindow : public QWidget
 {

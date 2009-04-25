@@ -23,10 +23,10 @@
 
 #include <QtTest/QtTest>
 
-#include <sodepfault.h>
-#include <sodepmessage.h>
-#include <sodepvalue.h>
-#include <sodephelpers_p.h>
+#include <qtjolie/sodepfault.h>
+#include <qtjolie/sodepmessage.h>
+#include <qtjolie/sodepvalue.h>
+#include <qtjolie/sodephelpers_p.h>
 
 Q_DECLARE_METATYPE(SodepValue);
 

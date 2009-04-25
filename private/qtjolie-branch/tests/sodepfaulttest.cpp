@@ -21,7 +21,7 @@
 #include <QtCore/QObject>
 #include <QtTest/QtTest>
 
-#include <sodepfault.h>
+#include <qtjolie/sodepfault.h>
 #include "sodeptesthelpers.h"
 
 class SodepFaultTest : public QObject

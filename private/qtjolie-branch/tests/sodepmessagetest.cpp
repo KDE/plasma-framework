@@ -21,7 +21,7 @@
 #include <QtCore/QObject>
 #include <QtTest/QtTest>
 
-#include <sodepmessage.h>
+#include <qtjolie/sodepmessage.h>
 #include "sodeptesthelpers.h"
 
 class SodepMessageTest : public QObject
@@ -31,12 +31,12 @@ class SodepMessageTest : public QObject
 private slots:
     void shouldVerifyInitialState()
     {
-        SodepMessage m1("/foo", "bar");
+        SodepMessage m1("/foo", "bar", 1);
         SodepMessage m2("/pata/pata", "pon", 2);
 
         QCOMPARE(m1.resourcePath(), QString("/foo"));
         QCOMPARE(m1.operationName(), QString("bar"));
-        QCOMPARE(m1.id(), qint64(0));
+        QCOMPARE(m1.id(), qint64(1));
 
         QCOMPARE(m2.resourcePath(), QString("/pata/pata"));
         QCOMPARE(m2.operationName(), QString("pon"));
@@ -60,18 +60,18 @@ private slots:
         QTest::addColumn<SodepMessage>("original");
         QTest::addColumn<QByteArray>("serialized");
 
-        QTest::newRow("no payload message") << SodepMessage("/pata", "pon")
-                                            << QByteArray::fromHex("0000000000000000")
+        QTest::newRow("no payload message") << SodepMessage("/pata", "pon", 1)
+                                            << QByteArray::fromHex("0000000000000001")
                                              + QByteArray::fromHex("00000005")+QByteArray("/pata")
                                              + QByteArray::fromHex("00000003")+QByteArray("pon")
                                              + QByteArray::fromHex("00")
                                              + QByteArray::fromHex("0000000000");
 
-        SodepMessage payload("/pata", "pon");
+        SodepMessage payload("/pata", "pon", 1);
         payload.setFault(f);
         payload.setData(v);
         QTest::newRow("payload message") << payload
-                                         << QByteArray::fromHex("0000000000000000")
+                                         << QByteArray::fromHex("0000000000000001")
                                           + QByteArray::fromHex("00000005")+QByteArray("/pata")
                                           + QByteArray::fromHex("00000003")+QByteArray("pon")
                                           + fSerial

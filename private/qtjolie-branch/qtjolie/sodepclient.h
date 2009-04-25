@@ -1,6 +1,6 @@
 /**
   * This file is part of the KDE project
-  * Copyright (C) 2008 Kevin Ottens <ervin@kde.org>
+  * Copyright (C) 2009 Kevin Ottens <ervin@kde.org>
   *
   * This library is free software; you can redistribute it and/or
   * modify it under the terms of the GNU Library General Public
@@ -18,32 +18,41 @@
   * Boston, MA 02110-1301, USA.
   */
 
-#ifndef SODEPFAULT_H
-#define SODEPFAULT_H
+#ifndef SODEPCLIENT_H
+#define SODEPCLIENT_H
 
-#include <sodepvalue.h>
+#include <QtCore/QtGlobal>
 
-class SodepFaultPrivate;
+class QIODevice;
+class QObject;
 
-class Q_DECL_EXPORT SodepFault
+class SodepClientPrivate;
+class SodepMessage;
+class SodepPendingCall;
+
+class Q_DECL_EXPORT SodepClient
 {
 public:
-    SodepFault();
-    explicit SodepFault(const QString &name, const SodepValue &data = SodepValue());
+    enum Error
+    {
+        NoError,
+        UnexpectedClose,
+        UnkownError
+    };
 
-    SodepFault(const SodepFault &other);
+    explicit SodepClient(const QString &hostName, quint16 port);
+    ~SodepClient();
 
-    ~SodepFault();
+    Error error() const;
+    QString errorString() const;
 
-    SodepFault &operator=(const SodepFault &other);
-
-    QString name() const;
-    SodepValue data() const;
-
-    bool isValid() const;
+    SodepPendingCall asyncCall(const SodepMessage &message);
+    SodepMessage call(const SodepMessage &message);
+    void callNoReply(const SodepMessage &message);
 
 private:
-    SodepFaultPrivate * const d;
+    friend class SodepClientPrivate;
+    SodepClientPrivate * const d;
 };
 
 #endif

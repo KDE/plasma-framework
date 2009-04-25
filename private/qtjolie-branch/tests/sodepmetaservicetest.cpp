@@ -18,14 +18,13 @@
   * Boston, MA 02110-1301, USA.
   */
 
-#include <QtCore/QEventLoop>
 #include <QtCore/QObject>
 #include <QtCore/QProcess>
-#include <QtNetwork/QTcpSocket>
 #include <QtTest/QtTest>
 
-#include <sodepclient.h>
-#include <sodepmessage.h>
+#include <qtjolie/sodepclient.h>
+#include <qtjolie/sodepmessage.h>
+#include <qtjolie/sodeppendingcall.h>
 #include "sodeptesthelpers.h"
 
 #ifndef DATA_DIR
@@ -67,7 +66,7 @@ class SodepMetaServiceTest : public QObject
     Q_OBJECT
 
     QProcess m_metaserviceProcess;
-    QTcpSocket m_socket;
+    SodepClient *m_client;
 
 public:
     SodepMetaServiceTest()
@@ -83,17 +82,14 @@ private slots:
         QVERIFY2(m_metaserviceProcess.waitForStarted(), "Looks like you don't have Jolie's metaservice command");
         QTest::qWait(1000);
 
-        m_socket.connectToHost("localhost", 9000);
-        QVERIFY(m_socket.waitForConnected(-1));
+        m_client = new SodepClient("localhost", 9000);
     }
 
     void cleanupTestCase()
     {
         SodepMessage message("/", "shutdown");
-        sodepWrite(m_socket, message);
-        QTest::qWait(1000);
-
-        m_socket.close();
+        m_client->callNoReply(message);
+        delete m_client;
 
         m_metaserviceProcess.waitForFinished();
     }
@@ -117,9 +113,8 @@ private slots:
         value.children("resourcePrefix") << SodepValue(resourcePrefix);
         value.children("filepath") << SodepValue(QString(DATA_DIR"/")+fileName);
         message.setData(value);
-        sodepWrite(m_socket, message);
 
-        SodepMessage reply = sodepReadMessage(m_socket);
+        SodepMessage reply = m_client->call(message);
 
         SodepMessage expected("/", "loadEmbeddedJolieService");
         expected.setData(SodepValue(resourcePrefix));
@@ -129,11 +124,9 @@ private slots:
 
     void shouldListServices()
     {
-        SodepClient client("localhost", 9000);
-
         SodepMessage message("/", "getServices");
 
-        SodepMessage reply = client.call(message);
+        SodepMessage reply = m_client->call(message);
         SodepMessage expected("/", "getServices");
         SodepValue value;
 
@@ -170,9 +163,8 @@ private slots:
 
         SodepMessage message(path, method);
         message.setData(data);
-        sodepWrite(m_socket, message);
 
-        SodepMessage reply = sodepReadMessage(m_socket);
+        SodepMessage reply = m_client->call(message);
 
         SodepMessage expected("/", method);
         expected.setData(replyData);
@@ -195,9 +187,8 @@ private slots:
         SodepMessage message("/", "unloadEmbeddedService");
         SodepValue value(serviceName);
         message.setData(value);
-        sodepWrite(m_socket, message);
 
-        SodepMessage reply = sodepReadMessage(m_socket);
+        SodepMessage reply = m_client->call(message);
 
         SodepMessage expected("/", "unloadEmbeddedService");
 
