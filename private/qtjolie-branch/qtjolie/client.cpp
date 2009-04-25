@@ -18,59 +18,61 @@
   * Boston, MA 02110-1301, USA.
   */
 
-#include "sodepclient.h"
-#include "sodepclient_p.h"
+#include "client.h"
+#include "client_p.h"
 
-#include "sodepclientthread_p.h"
-#include "sodepmessage.h"
-#include "sodeppendingcall.h"
+#include "clientthread_p.h"
+#include "message.h"
+#include "pendingcall.h"
 
+using namespace Jolie;
 
-SodepClient::SodepClient(const QString &hostName, quint16 port)
-    : d(new SodepClientPrivate(this))
+Client::Client(const QString &hostName, quint16 port)
+    : d(new ClientPrivate(this))
 {
-    d->readerThread = new SodepClientThread(hostName, port, d);
+    d->readerThread = new ClientThread(hostName, port, d);
     d->readerThread->start();
 }
 
-SodepClient::~SodepClient()
+Client::~Client()
 {
     delete d->readerThread;
     delete d;
 }
 
-SodepClient::Error SodepClient::error() const
+Client::Error Client::error() const
 {
     return d->error;
 }
 
-QString SodepClient::errorString() const
+QString Client::errorString() const
 {
     return d->errorString;
 }
 
-SodepPendingCall SodepClient::asyncCall(const SodepMessage &message)
+PendingCall Client::asyncCall(const Message &message)
 {
     Q_ASSERT(!d->pendingCalls.contains(message.id()));
-    d->pendingCalls[message.id()] = new SodepPendingCallPrivate(message);
+    d->pendingCalls[message.id()] = new PendingCallPrivate(message);
     d->readerThread->sendMessage(message);
-    return SodepPendingCall(d->pendingCalls[message.id()]);
+    return PendingCall(d->pendingCalls[message.id()]);
 }
 
-SodepMessage SodepClient::call(const SodepMessage &message)
+Message Client::call(const Message &message)
 {
-    SodepPendingCall pending = asyncCall(message);
+    PendingCall pending = asyncCall(message);
     pending.waitForFinished();
     return pending.reply();
 }
 
-void SodepClient::callNoReply(const SodepMessage &message)
+void Client::callNoReply(const Message &message)
 {
     d->readerThread->sendMessage(message);
 }
 
-void SodepClientPrivate::messageReceived(const SodepMessage &message)
+void ClientPrivate::messageReceived(const Message &message)
 {
-    QExplicitlySharedDataPointer<SodepPendingCallPrivate> pending = pendingCalls.take(message.id());
+    QExplicitlySharedDataPointer<PendingCallPrivate> pending = pendingCalls.take(message.id());
     pending->setReply(message);
 }
+

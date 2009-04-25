@@ -18,32 +18,37 @@
   * Boston, MA 02110-1301, USA.
   */
 
-#ifndef SODEPFAULT_H
-#define SODEPFAULT_H
+#ifndef QTJOLIE_FAULT_H
+#define QTJOLIE_FAULT_H
 
-#include <qtjolie/sodepvalue.h>
+#include <qtjolie/value.h>
 
-class SodepFaultPrivate;
+namespace Jolie
+{
+class FaultPrivate;
 
-class Q_DECL_EXPORT SodepFault
+class Q_DECL_EXPORT Fault
 {
 public:
-    SodepFault();
-    explicit SodepFault(const QString &name, const SodepValue &data = SodepValue());
+    Fault();
+    explicit Fault(const QString &name, const Value &data = Value());
 
-    SodepFault(const SodepFault &other);
+    Fault(const Fault &other);
 
-    ~SodepFault();
+    ~Fault();
 
-    SodepFault &operator=(const SodepFault &other);
+    Fault &operator=(const Fault &other);
 
     QString name() const;
-    SodepValue data() const;
+    Value data() const;
 
     bool isValid() const;
 
 private:
-    SodepFaultPrivate * const d;
+    FaultPrivate * const d;
 };
 
+} // namespace Jolie
+
 #endif
+

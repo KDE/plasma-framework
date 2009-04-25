@@ -1,6 +1,6 @@
 /**
   * This file is part of the KDE project
-  * Copyright (C) 2008 Kevin Ottens <ervin@kde.org>
+  * Copyright (C) 2009 Kevin Ottens <ervin@kde.org>
   *
   * This library is free software; you can redistribute it and/or
   * modify it under the terms of the GNU Library General Public
@@ -18,62 +18,46 @@
   * Boston, MA 02110-1301, USA.
   */
 
-#include "sodepfault.h"
+#ifndef QTJOLIE_CLIENT_H
+#define QTJOLIE_CLIENT_H
 
-#include <QtCore/QString>
+#include <QtCore/QtGlobal>
 
-#include "sodephelpers_p.h"
+class QIODevice;
+class QObject;
 
-class SodepFaultPrivate
+namespace Jolie
+{
+class ClientPrivate;
+class Message;
+class PendingCall;
+
+class Q_DECL_EXPORT Client
 {
 public:
-    QString name;
-    SodepValue data;
+    enum Error
+    {
+        NoError,
+        UnexpectedClose,
+        UnkownError
+    };
+
+    explicit Client(const QString &hostName, quint16 port);
+    ~Client();
+
+    Error error() const;
+    QString errorString() const;
+
+    PendingCall asyncCall(const Message &message);
+    Message call(const Message &message);
+    void callNoReply(const Message &message);
+
+private:
+    friend class ClientPrivate;
+    ClientPrivate * const d;
 };
 
-SodepFault::SodepFault()
-    : d(new SodepFaultPrivate)
-{
+} // namespace Jolie
 
-}
-
-SodepFault::SodepFault(const QString &name, const SodepValue &data)
-    : d(new SodepFaultPrivate)
-{
-    d->name = name;
-    d->data = data;
-}
-
-SodepFault::SodepFault(const SodepFault &other)
-    : d(new SodepFaultPrivate)
-{
-    *d = *other.d;
-}
-
-SodepFault::~SodepFault()
-{
-    delete d;
-}
-
-SodepFault &SodepFault::operator=(const SodepFault &other)
-{
-    *d = *other.d;
-
-    return *this;
-}
-
-QString SodepFault::name() const
-{
-    return d->name;
-}
-
-SodepValue SodepFault::data() const
-{
-    return d->data;
-}
-
-bool SodepFault::isValid() const
-{
-    return !d->name.isEmpty();
-}
+#endif
 

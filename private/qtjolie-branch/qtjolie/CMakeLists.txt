@@ -4,7 +4,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}
                     ${CMAKE_CURRENT_BINARY_DIR}
                     ${QT_INCLUDE_DIR})
 
-set(qtjolie_LIB_SRCS sodepclient.cpp sodepclientthread.cpp sodepvalue.cpp sodepfault.cpp sodepmessage.cpp sodeppendingcall.cpp)
+set(qtjolie_LIB_SRCS client.cpp clientthread.cpp value.cpp fault.cpp message.cpp pendingcall.cpp)
 
 kde4_add_library(QtJolie SHARED ${qtjolie_LIB_SRCS})
 
@@ -16,9 +16,9 @@ install(TARGETS QtJolie
 set_target_properties(QtJolie PROPERTIES VERSION 1.0.0 SOVERSION 1)
 
 install(FILES
-        sodepclient.h
-        sodepvalue.h
-        sodepfault.h
-        sodepmessage.h
-        sodeppendingcall.h
-        DESTINATION ${INCLUDE_INSTALL_DIR})
+        client.h
+        value.h
+        fault.h
+        message.h
+        pendingcall.h
+        DESTINATION ${INCLUDE_INSTALL_DIR}/qtjolie)

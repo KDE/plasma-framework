@@ -21,18 +21,20 @@
 #include <QtCore/QObject>
 #include <QtTest/QtTest>
 
-#include <qtjolie/sodepvalue.h>
+#include <qtjolie/value.h>
 
-#include "sodeptesthelpers.h"
+#include "testhelpers.h"
 
-class SodepValueTest : public QObject
+using namespace Jolie;
+
+class TestValue : public QObject
 {
     Q_OBJECT
 
 private slots:
     void shouldHandleInvalids()
     {
-        SodepValue v;
+        Value v;
 
         QCOMPARE(v.toInt(), 0);
         QCOMPARE(v.toDouble(), 0.0);
@@ -47,7 +49,7 @@ private slots:
 
     void shouldRespectIntValues()
     {
-        SodepValue v1(42), v2;
+        Value v1(42), v2;
 
         QCOMPARE(v1.toInt(), 42);
         QCOMPARE(v2.toInt(), 0);
@@ -66,7 +68,7 @@ private slots:
 
     void shouldRespectDoubleValues()
     {
-        SodepValue v1(0.42), v2;
+        Value v1(0.42), v2;
 
         QCOMPARE(v1.toDouble(), 0.42);
         QCOMPARE(v2.toDouble(), 0.0);
@@ -85,7 +87,7 @@ private slots:
 
     void shouldRespectStringValues()
     {
-        SodepValue v1("42"), v2;
+        Value v1("42"), v2;
 
         QCOMPARE(v1.toString(), QString("42"));
         QCOMPARE(v2.toString(), QString());
@@ -104,10 +106,10 @@ private slots:
 
     void shouldHandleChildren()
     {
-        SodepValue v;
+        Value v;
 
-        v.children("first") << SodepValue(7) << SodepValue(8);
-        v.children("second") << SodepValue(42);
+        v.children("first") << Value(7) << Value(8);
+        v.children("second") << Value(42);
 
         QCOMPARE(v.children("second").size(), 1);
         QCOMPARE(v.children("second")[0].toInt(), 42);
@@ -121,22 +123,22 @@ private slots:
 
     void shouldBeSerializable_data()
     {
-        QTest::addColumn<SodepValue>("original");
+        QTest::addColumn<Value>("original");
         QTest::addColumn<QByteArray>("serialized");
 
-        QTest::newRow("empty value") << SodepValue()
+        QTest::newRow("empty value") << Value()
                                       << QByteArray::fromHex("0000000000");
-        QTest::newRow("double value") << SodepValue(0.42)
+        QTest::newRow("double value") << Value(0.42)
                                       << QByteArray::fromHex("033FDAE147AE147AE100000000");
-        QTest::newRow("int value") << SodepValue(42)
+        QTest::newRow("int value") << Value(42)
                                    << QByteArray::fromHex("020000002A00000000");
-        QTest::newRow("string value") << SodepValue("foo")
+        QTest::newRow("string value") << Value("foo")
                                       << QByteArray::fromHex("0100000003")+QByteArray("foo")
                                        + QByteArray::fromHex("00000000");
 
-        SodepValue complex("complex");
-        complex.children("foo") << SodepValue(42);
-        complex.children("bar") << SodepValue(0.42);
+        Value complex("complex");
+        complex.children("foo") << Value(42);
+        complex.children("bar") << Value(0.42);
         QTest::newRow("complex value") << complex
                                        << QByteArray::fromHex("0100000007")+QByteArray("complex")
                                         + QByteArray::fromHex("00000002") // two children
@@ -152,9 +154,9 @@ private slots:
     {
         QBuffer buffer;
 
-        QFETCH(SodepValue, original);
+        QFETCH(Value, original);
         QFETCH(QByteArray, serialized);
-        SodepValue result;
+        Value result;
 
         buffer.open(QIODevice::WriteOnly);
         sodepWrite(buffer, original);
@@ -169,6 +171,6 @@ private slots:
     }
 };
 
-QTEST_MAIN(SodepValueTest)
+QTEST_MAIN(TestValue)
 
-#include "sodepvaluetest.moc"
+#include "testvalue.moc"

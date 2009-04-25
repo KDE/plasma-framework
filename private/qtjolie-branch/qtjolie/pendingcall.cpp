@@ -18,62 +18,64 @@
   * Boston, MA 02110-1301, USA.
   */
 
-#include "sodeppendingcall.h"
-#include "sodeppendingcall_p.h"
+#include "pendingcall.h"
+#include "pendingcall_p.h"
 
+using namespace Jolie;
 
-SodepPendingCall::SodepPendingCall(const SodepPendingCall &other)
+PendingCall::PendingCall(const PendingCall &other)
     : d(other.d)
 {
 }
 
-SodepPendingCall::SodepPendingCall(QExplicitlySharedDataPointer<SodepPendingCallPrivate> dd)
+PendingCall::PendingCall(QExplicitlySharedDataPointer<PendingCallPrivate> dd)
     : d(dd)
 {
 }
 
-SodepPendingCall::~SodepPendingCall()
+PendingCall::~PendingCall()
 {
 }
 
-SodepPendingCall &SodepPendingCall::operator=(const SodepPendingCall &other)
+PendingCall &PendingCall::operator=(const PendingCall &other)
 {
     d = other.d;
 
     return *this;
 }
 
-bool SodepPendingCall::isFinished() const
+bool PendingCall::isFinished() const
 {
     return d->isFinished;
 }
 
-SodepMessage SodepPendingCall::reply() const
+Message PendingCall::reply() const
 {
     return d->reply;
 }
 
-void SodepPendingCall::waitForFinished()
+void PendingCall::waitForFinished()
 {
-    SodepPendingCallWaiter waiter;
+    PendingCallWaiter waiter;
     waiter.waitForFinished(d.data());
 }
 
-void SodepPendingCallPrivate::setReply(const SodepMessage &message)
+void PendingCallPrivate::setReply(const Message &message)
 {
     Q_ASSERT(message.id()==id);
     isFinished = true;
     reply = message;
 
-    foreach (SodepPendingCallWaiter *waiter, waiters) {
+    foreach (PendingCallWaiter *waiter, waiters) {
         waiter->eventLoop.quit();
     }
 
     waiters.clear();
 }
 
-void SodepPendingCallWaiter::waitForFinished(SodepPendingCallPrivate *pendingCall)
+void PendingCallWaiter::waitForFinished(PendingCallPrivate *pendingCall)
 {
     pendingCall->waiters << this;
     eventLoop.exec();
 }
+

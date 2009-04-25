@@ -18,28 +18,30 @@
   * Boston, MA 02110-1301, USA.
   */
 
-#include "sodepclientthread_p.h"
+#include "clientthread_p.h"
 
 #include <QtCore/QTimer>
 #include <QtNetwork/QTcpSocket>
 
-#include "sodepclient_p.h"
-#include "sodepmessage.h"
+#include "client_p.h"
+#include "message.h"
 #include "sodephelpers_p.h"
 
-SodepClientThread::SodepClientThread(const QString &hostName, quint16 port, SodepClientPrivate *client)
+using namespace Jolie;
+
+ClientThread::ClientThread(const QString &hostName, quint16 port, ClientPrivate *client)
     : QThread(), m_hostName(hostName), m_port(port), m_socket(0), m_client(client)
 {
     moveToThread(this);
 }
 
-SodepClientThread::~SodepClientThread()
+ClientThread::~ClientThread()
 {
     quit();
     wait();
 }
 
-void SodepClientThread::sendMessage(const SodepMessage &message)
+void ClientThread::sendMessage(const Message &message)
 {
     QMutexLocker locker(&m_mutex);
 
@@ -47,7 +49,7 @@ void SodepClientThread::sendMessage(const SodepMessage &message)
     QTimer::singleShot(0, this, SLOT(writeMessageQueue()));
 }
 
-void SodepClientThread::writeMessageQueue()
+void ClientThread::writeMessageQueue()
 {
     QMutexLocker locker(&m_mutex);
 
@@ -56,13 +58,13 @@ void SodepClientThread::writeMessageQueue()
     }
 }
 
-void SodepClientThread::readMessage()
+void ClientThread::readMessage()
 {
     if (m_socket->bytesAvailable()==0) {
         return;
     }
 
-    SodepMessage message = sodepReadMessage(*m_socket);
+    Message message = sodepReadMessage(*m_socket);
     emit messageReceived(message);
 
     if (m_socket->bytesAvailable()>0) {
@@ -70,14 +72,14 @@ void SodepClientThread::readMessage()
     }
 }
 
-void SodepClientThread::run()
+void ClientThread::run()
 {
     m_socket = new QTcpSocket;
 
     connect(m_socket, SIGNAL(readyRead()),
             this, SLOT(readMessage()), Qt::QueuedConnection);
-    connect(this, SIGNAL(messageReceived(SodepMessage)),
-            m_client, SLOT(messageReceived(SodepMessage)));
+    connect(this, SIGNAL(messageReceived(Jolie::Message)),
+            m_client, SLOT(messageReceived(Jolie::Message)));
 
     m_socket->connectToHost(m_hostName, m_port);
     m_socket->waitForConnected(30000);
@@ -89,4 +91,4 @@ void SodepClientThread::run()
     delete m_socket;
 }
 
-#include "sodepclientthread_p.moc"
+#include "clientthread_p.moc"

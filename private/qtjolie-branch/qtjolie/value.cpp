@@ -18,77 +18,84 @@
   * Boston, MA 02110-1301, USA.
   */
 
-#include "sodepvalue.h"
+#include "value.h"
 
 #include <QtCore/QStringList>
 #include <QtCore/QVariant>
 
 #include "sodephelpers_p.h"
 
-class SodepValuePrivate
+namespace Jolie
+{
+
+class ValuePrivate
 {
 public:
     QVariant content;
-    QMap<QString, QList<SodepValue> > children;
+    QMap<QString, QList<Value> > children;
 };
 
-SodepValue::SodepValue()
-    : d(new SodepValuePrivate)
+} // namespace Jolie
+
+using namespace Jolie;
+
+Value::Value()
+    : d(new ValuePrivate)
 {
 }
 
-SodepValue::SodepValue(const QString &content)
-    : d(new SodepValuePrivate)
-{
-    d->content = content;
-}
-
-SodepValue::SodepValue(qint32 content)
-    : d(new SodepValuePrivate)
+Value::Value(const QString &content)
+    : d(new ValuePrivate)
 {
     d->content = content;
 }
 
-SodepValue::SodepValue(double content)
-    : d(new SodepValuePrivate)
+Value::Value(qint32 content)
+    : d(new ValuePrivate)
 {
     d->content = content;
 }
 
-SodepValue::SodepValue(const SodepValue &other)
-    : d(new SodepValuePrivate)
+Value::Value(double content)
+    : d(new ValuePrivate)
+{
+    d->content = content;
+}
+
+Value::Value(const Value &other)
+    : d(new ValuePrivate)
 {
     *d = *other.d;
 }
 
-SodepValue::~SodepValue()
+Value::~Value()
 {
     delete d;
 }
 
-SodepValue &SodepValue::operator=(const SodepValue &other)
+Value &Value::operator=(const Value &other)
 {
     *d = *other.d;
 
     return *this;
 }
 
-QStringList SodepValue::childrenNames() const
+QStringList Value::childrenNames() const
 {
     return d->children.keys();
 }
 
-QList<SodepValue> & SodepValue::children(const QString &name)
+QList<Value> & Value::children(const QString &name)
 {
     return d->children[name];
 }
 
-const QList<SodepValue> & SodepValue::children(const QString &name) const
+const QList<Value> & Value::children(const QString &name) const
 {
     return d->children[name];
 }
 
-QString SodepValue::toString() const
+QString Value::toString() const
 {
     if (isString()) {
         return d->content.toString();
@@ -97,7 +104,7 @@ QString SodepValue::toString() const
     }
 }
 
-qint32 SodepValue::toInt() const
+qint32 Value::toInt() const
 {
     if (isInt()) {
         return d->content.toInt();
@@ -106,7 +113,7 @@ qint32 SodepValue::toInt() const
     }
 }
 
-double SodepValue::toDouble() const
+double Value::toDouble() const
 {
     if (isDouble()) {
         return d->content.toDouble();
@@ -115,22 +122,23 @@ double SodepValue::toDouble() const
     }
 }
 
-bool SodepValue::isString() const
+bool Value::isString() const
 {
     return d->content.type()==QVariant::String;
 }
 
-bool SodepValue::isInt() const
+bool Value::isInt() const
 {
     return d->content.type()==QVariant::Int;
 }
 
-bool SodepValue::isDouble() const
+bool Value::isDouble() const
 {
     return d->content.type()==QVariant::Double;
 }
 
-bool SodepValue::isValid() const
+bool Value::isValid() const
 {
     return isString() || isInt() || isDouble();
 }
+

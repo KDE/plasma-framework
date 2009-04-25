@@ -25,9 +25,11 @@
 #include <QtGui/QPushButton>
 #include <QtNetwork/QTcpSocket>
 
-#include <qtjolie/sodepmessage.h>
-#include <qtjolie/sodepvalue.h>
+#include <qtjolie/message.h>
+#include <qtjolie/value.h>
 #include <qtjolie/sodephelpers_p.h>
+
+using namespace Jolie;
 
 class MainWindow : public QWidget
 {
@@ -56,8 +58,8 @@ public:
 private slots:
     void sendMessage()
     {
-        SodepMessage message("/", "printInput");
-        message.setData(SodepValue(m_lineEdit->text()));
+        Message message("/", "printInput");
+        message.setData(Value(m_lineEdit->text()));
         sodepWrite(m_socket, message);
 
         qDebug("Message sent:");
@@ -90,4 +92,4 @@ int main(int argc, char **argv)
     return app.exec();
 }
 
-#include "sodepprintertest.moc"
+#include "testprinter.moc"

@@ -21,17 +21,19 @@
 #include <QtCore/QObject>
 #include <QtTest/QtTest>
 
-#include <qtjolie/sodepfault.h>
-#include "sodeptesthelpers.h"
+#include <qtjolie/fault.h>
+#include "testhelpers.h"
 
-class SodepFaultTest : public QObject
+using namespace Jolie;
+
+class TestFault : public QObject
 {
     Q_OBJECT
 
 private slots:
     void shouldHandleInvalids()
     {
-        SodepFault f;
+        Fault f;
 
         QCOMPARE(f.name(), QString());
         QVERIFY(!f.data().isValid());
@@ -40,7 +42,7 @@ private slots:
     }
     void shouldVerifyInitialState()
     {
-        SodepFault f1("blup"), f2("blop", SodepValue(42));
+        Fault f1("blup"), f2("blop", Value(42));
 
         QCOMPARE(f1.name(), QString("blup"));
         QVERIFY(!f1.data().isValid());
@@ -58,18 +60,18 @@ private slots:
 
     void shouldBeSerializable_data()
     {
-        SodepValue v(42);
+        Value v(42);
         QByteArray vSerial = QByteArray::fromHex("020000002A00000000");
 
-        QTest::addColumn<SodepFault>("original");
+        QTest::addColumn<Fault>("original");
         QTest::addColumn<QByteArray>("serialized");
 
-        QTest::newRow("empty fault") << SodepFault()
+        QTest::newRow("empty fault") << Fault()
                                      << QByteArray::fromHex("00");
-        QTest::newRow("no value fault") << SodepFault("foo")
+        QTest::newRow("no value fault") << Fault("foo")
                                         << QByteArray::fromHex("0100000003")+QByteArray("foo")
                                          + QByteArray::fromHex("0000000000");
-        QTest::newRow("value fault") << SodepFault("bar", v)
+        QTest::newRow("value fault") << Fault("bar", v)
                                      << QByteArray::fromHex("0100000003")+QByteArray("bar")
                                       + vSerial;
     }
@@ -78,9 +80,9 @@ private slots:
     {
         QBuffer buffer;
 
-        QFETCH(SodepFault, original);
+        QFETCH(Fault, original);
         QFETCH(QByteArray, serialized);
-        SodepFault result;
+        Fault result;
 
         buffer.open(QIODevice::WriteOnly);
         sodepWrite(buffer, original);
@@ -95,6 +97,6 @@ private slots:
     }
 };
 
-QTEST_MAIN(SodepFaultTest)
+QTEST_MAIN(TestFault)
 
-#include "sodepfaulttest.moc"
+#include "testfault.moc"

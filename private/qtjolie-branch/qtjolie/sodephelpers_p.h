@@ -18,16 +18,19 @@
   * Boston, MA 02110-1301, USA.
   */
 
-#ifndef SODEPHELPERS_P_H
-#define SODEPHELPERS_P_H
+#ifndef QTJOLIE_SODEPHELPERS_P_H
+#define QTJOLIE_SODEPHELPERS_P_H
 
 #include <QtCore/QIODevice>
 #include <QtCore/QString>
 #include <QtCore/QStringList>
 
-#include "sodepvalue.h"
-#include "sodepfault.h"
-#include "sodepmessage.h"
+#include "value.h"
+#include "fault.h"
+#include "message.h"
+
+namespace Jolie
+{
 
 inline void sodepWrite(QIODevice &io, double value)
 {
@@ -72,7 +75,7 @@ inline void sodepWrite(QIODevice &io, const QString &value)
     io.write(data);
 }
 
-inline void sodepWrite(QIODevice &io, const SodepValue &value)
+inline void sodepWrite(QIODevice &io, const Value &value)
 {
     if (value.isDouble()) {
         io.putChar(3);
@@ -92,7 +95,7 @@ inline void sodepWrite(QIODevice &io, const SodepValue &value)
     foreach (const QString &name, value.childrenNames()) {
         sodepWrite(io, name);
 
-        QList<SodepValue> values = value.children(name);
+        QList<Value> values = value.children(name);
         qint32 valueCount = values.size();
         sodepWrite(io, valueCount);
         for (int j=0; j<valueCount; ++j) {
@@ -102,7 +105,7 @@ inline void sodepWrite(QIODevice &io, const SodepValue &value)
 
 }
 
-inline void sodepWrite(QIODevice &io, const SodepFault &fault)
+inline void sodepWrite(QIODevice &io, const Fault &fault)
 {
     if (!fault.isValid()) {
         io.putChar(0);
@@ -114,7 +117,7 @@ inline void sodepWrite(QIODevice &io, const SodepFault &fault)
     sodepWrite(io, fault.data());
 }
 
-inline void sodepWrite(QIODevice &io, const SodepMessage &message)
+inline void sodepWrite(QIODevice &io, const Message &message)
 {
     sodepWrite(io, message.id());
     sodepWrite(io, message.resourcePath());
@@ -198,9 +201,9 @@ inline QString sodepReadString(QIODevice &io)
     return result;
 }
 
-inline SodepValue sodepReadValue(QIODevice &io)
+inline Value sodepReadValue(QIODevice &io)
 {
-    SodepValue result;
+    Value result;
 
     while (io.bytesAvailable()<1) {
         io.waitForReadyRead(-1);
@@ -211,15 +214,15 @@ inline SodepValue sodepReadValue(QIODevice &io)
 
     switch(code) {
     case 3: {
-        result = SodepValue(sodepReadDouble(io));
+        result = Value(sodepReadDouble(io));
         break;
     }
     case 2: {
-        result = SodepValue(sodepReadInt32(io));
+        result = Value(sodepReadInt32(io));
         break;
     }
     case 1: {
-        result = SodepValue(sodepReadString(io));
+        result = Value(sodepReadString(io));
         break;
     }
     default:
@@ -240,7 +243,7 @@ inline SodepValue sodepReadValue(QIODevice &io)
     return result;
 }
 
-inline SodepFault sodepReadFault(QIODevice &io)
+inline Fault sodepReadFault(QIODevice &io)
 {
     while (io.bytesAvailable()<1) {
         io.waitForReadyRead(-1);
@@ -250,22 +253,22 @@ inline SodepFault sodepReadFault(QIODevice &io)
     io.getChar(&code);
 
     if (code!=1) {
-        return SodepFault();
+        return Fault();
     }
 
     QString name = sodepReadString(io);
-    SodepValue data = sodepReadValue(io);
+    Value data = sodepReadValue(io);
 
-    return SodepFault(name, data);
+    return Fault(name, data);
 }
 
-inline SodepMessage sodepReadMessage(QIODevice &io)
+inline Message sodepReadMessage(QIODevice &io)
 {
     qint64 id = sodepReadInt64(io);
     QString resourcePath = sodepReadString(io);
     QString operationName = sodepReadString(io);
 
-    SodepMessage result(resourcePath, operationName, id);
+    Message result(resourcePath, operationName, id);
 
     result.setFault(sodepReadFault(io));
     result.setData(sodepReadValue(io));
@@ -273,4 +276,7 @@ inline SodepMessage sodepReadMessage(QIODevice &io)
     return result;
 }
 
+} // namespace Jolie
+
 #endif
+

@@ -1,6 +1,6 @@
 /**
   * This file is part of the KDE project
-  * Copyright (C) 2009 Kevin Ottens <ervin@kde.org>
+  * Copyright (C) 2008 Kevin Ottens <ervin@kde.org>
   *
   * This library is free software; you can redistribute it and/or
   * modify it under the terms of the GNU Library General Public
@@ -18,47 +18,49 @@
   * Boston, MA 02110-1301, USA.
   */
 
-#ifndef SODEPCLIENTTHREAD_P_H
-#define SODEPCLIENTTHREAD_P_H
+#ifndef QTJOLIE_PENDINGCALL_P_H
+#define QTJOLIE_PENDINGCALL_P_H
 
-#include <QtCore/QThread>
-#include <QtCore/QMutex>
-#include <QtCore/QQueue>
+#include <QtCore/QEventLoop>
+#include <QtCore/QObject>
+#include <QtCore/QSharedData>
 
-class QAbstractSocket;
+#include "message.h"
 
-class SodepMessage;
-class SodepClientPrivate;
-
-class SodepClientThread : public QThread
+namespace Jolie
 {
-    Q_OBJECT
 
+class PendingCallPrivate;
+
+class PendingCallWaiter
+{
 public:
-    explicit SodepClientThread(const QString &hostName, quint16 port, SodepClientPrivate *client);
-    ~SodepClientThread();
-
-    void run();
-
-    void sendMessage(const SodepMessage &message);
-
-signals:
-    void messageReceived(const SodepMessage &message);
-
-private slots:
-    void readMessage();
-    void writeMessageQueue();
+    void waitForFinished(PendingCallPrivate *pendingCall);
 
 private:
-    QString m_hostName;
-    quint16 m_port;
-
-    QAbstractSocket *m_socket;
-    SodepClientPrivate *m_client;
-
-    QQueue<SodepMessage> m_messageQueue;
-
-    QMutex m_mutex;
+    friend class PendingCallPrivate;
+    QEventLoop eventLoop;
 };
 
+class PendingCallPrivate : public QSharedData
+{
+public:
+    PendingCallPrivate(const Message &message)
+        : id(message.id()), isFinished(false) {}
+
+    void setReply(const Message &message);
+
+private:
+    friend class PendingCall;
+    friend class PendingCallWaiter;
+
+    qint64 id;
+    bool isFinished;
+    Message reply;
+    QList<PendingCallWaiter*> waiters;
+};
+
+} // namespace Jolie
+
 #endif
+

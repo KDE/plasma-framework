@@ -18,31 +18,38 @@
   * Boston, MA 02110-1301, USA.
   */
 
-#include "sodepmessage.h"
+#include "message.h"
 
 #include <QtCore/QString>
 
 #include "sodephelpers_p.h"
 
-class SodepMessagePrivate
+namespace Jolie
+{
+
+class MessagePrivate
 {
 public:
-    SodepMessagePrivate() : id(0) {}
+    MessagePrivate() : id(0) {}
 
     qint64 id;
     QString resourcePath;
     QString operationName;
-    SodepFault fault;
-    SodepValue data;
+    Fault fault;
+    Value data;
 };
 
-SodepMessage::SodepMessage()
-    : d(new SodepMessagePrivate)
+} // namespace Jolie
+
+using namespace Jolie;
+
+Message::Message()
+    : d(new MessagePrivate)
 {
 }
 
-SodepMessage::SodepMessage(const QString &resourcePath, const QString &operationName, qint64 id)
-    : d(new SodepMessagePrivate)
+Message::Message(const QString &resourcePath, const QString &operationName, qint64 id)
+    : d(new MessagePrivate)
 {
     static qint64 lastId = 0;
 
@@ -55,60 +62,60 @@ SodepMessage::SodepMessage(const QString &resourcePath, const QString &operation
     d->operationName = operationName;
 }
 
-SodepMessage::SodepMessage(const SodepMessage &other)
-    : d(new SodepMessagePrivate)
+Message::Message(const Message &other)
+    : d(new MessagePrivate)
 {
     *d = *other.d;
 }
 
-SodepMessage::~SodepMessage()
+Message::~Message()
 {
     delete d;
 }
 
-SodepMessage &SodepMessage::operator=(const SodepMessage &other)
+Message &Message::operator=(const Message &other)
 {
     *d = *other.d;
 
     return *this;
 }
 
-qint64 SodepMessage::id() const
+qint64 Message::id() const
 {
     return d->id;
 }
 
-QString SodepMessage::resourcePath() const
+QString Message::resourcePath() const
 {
     return d->resourcePath;
 }
 
-QString SodepMessage::operationName() const
+QString Message::operationName() const
 {
     return d->operationName;
 }
 
-SodepFault SodepMessage::fault() const
+Fault Message::fault() const
 {
     return d->fault;
 }
 
-void SodepMessage::setFault(const SodepFault &fault)
+void Message::setFault(const Fault &fault)
 {
     d->fault = fault;
 }
 
-SodepValue SodepMessage::data() const
+Value Message::data() const
 {
     return d->data;
 }
 
-void SodepMessage::setData(const SodepValue &data)
+void Message::setData(const Value &data)
 {
     d->data = data;
 }
 
-bool SodepMessage::isValid()
+bool Message::isValid()
 {
     return !d->resourcePath.isEmpty() && !d->operationName.isEmpty();
 }

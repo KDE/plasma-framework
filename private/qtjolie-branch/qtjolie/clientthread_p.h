@@ -1,6 +1,6 @@
 /**
   * This file is part of the KDE project
-  * Copyright (C) 2008 Kevin Ottens <ervin@kde.org>
+  * Copyright (C) 2009 Kevin Ottens <ervin@kde.org>
   *
   * This library is free software; you can redistribute it and/or
   * modify it under the terms of the GNU Library General Public
@@ -18,41 +18,52 @@
   * Boston, MA 02110-1301, USA.
   */
 
-#ifndef SODEPMESSAGE_H
-#define SODEPMESSAGE_H
+#ifndef QTJOLIE_CLIENTTHREAD_P_H
+#define QTJOLIE_CLIENTTHREAD_P_H
 
-#include <qtjolie/sodepvalue.h>
-#include <qtjolie/sodepfault.h>
+#include <QtCore/QThread>
+#include <QtCore/QMutex>
+#include <QtCore/QQueue>
 
-class SodepMessagePrivate;
+class QAbstractSocket;
 
-class Q_DECL_EXPORT SodepMessage
+namespace Jolie
 {
+class Message;
+class ClientPrivate;
+
+class ClientThread : public QThread
+{
+    Q_OBJECT
+
 public:
-    SodepMessage();
-    explicit SodepMessage(const QString &resourcePath,
-                          const QString &operationName,
-                          qint64 id = 0);
-    SodepMessage(const SodepMessage &other);
-    ~SodepMessage();
+    explicit ClientThread(const QString &hostName, quint16 port, ClientPrivate *client);
+    ~ClientThread();
 
-    SodepMessage &operator=(const SodepMessage &other);
+    void run();
 
-    qint64 id() const;
+    void sendMessage(const Message &message);
 
-    QString resourcePath() const;
-    QString operationName() const;
+signals:
+    void messageReceived(const Jolie::Message &message);
 
-    SodepFault fault() const;
-    void setFault(const SodepFault &fault);
-
-    SodepValue data() const;
-    void setData(const SodepValue &data);
-
-    bool isValid();
+private slots:
+    void readMessage();
+    void writeMessageQueue();
 
 private:
-    SodepMessagePrivate * const d;
+    QString m_hostName;
+    quint16 m_port;
+
+    QAbstractSocket *m_socket;
+    ClientPrivate *m_client;
+
+    QQueue<Message> m_messageQueue;
+
+    QMutex m_mutex;
 };
 
+} // namespace Jolie
+
 #endif
+

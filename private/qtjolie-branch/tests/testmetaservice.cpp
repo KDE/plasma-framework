@@ -22,17 +22,18 @@
 #include <QtCore/QProcess>
 #include <QtTest/QtTest>
 
-#include <qtjolie/sodepclient.h>
-#include <qtjolie/sodepmessage.h>
-#include <qtjolie/sodeppendingcall.h>
-#include "sodeptesthelpers.h"
+#include <qtjolie/client.h>
+#include <qtjolie/message.h>
+#include <qtjolie/pendingcall.h>
+#include "testhelpers.h"
 
 #ifndef DATA_DIR
     #error "DATA_DIR is not set. A directory containing test jolie scripts is required for this test"
 #endif
 
+using namespace Jolie;
 
-void dump(const SodepValue &value, int level)
+void dump(const Value &value, int level)
 {
     QString indent;
 
@@ -43,15 +44,15 @@ void dump(const SodepValue &value, int level)
 
     qDebug() << (indent+value.toString()) << value.toInt() << value.toDouble();
     foreach (const QString &name, value.childrenNames()) {
-        QList<SodepValue> children = value.children(name);
+        QList<Value> children = value.children(name);
         qDebug() << (indent+"Children:") << name;
-        foreach (const SodepValue &child, children) {
+        foreach (const Value &child, children) {
             dump(child, level+1);
         }
     }
 }
 
-void dump(const SodepMessage &message)
+void dump(const Message &message)
 {
     qDebug() << "Resource :" << message.resourcePath();
     qDebug() << "Operation:" << message.operationName();
@@ -61,18 +62,18 @@ void dump(const SodepMessage &message)
     dump(message.data(), 1);
 }
 
-class SodepMetaServiceTest : public QObject
+class TestMetaService : public QObject
 {
     Q_OBJECT
 
     QProcess m_metaserviceProcess;
-    SodepClient *m_client;
+    Client *m_client;
 
 public:
-    SodepMetaServiceTest()
+    TestMetaService()
         : QObject()
     {
-        qRegisterMetaType<SodepMessage>();
+        qRegisterMetaType<Message>();
     }
 
 private slots:
@@ -82,12 +83,12 @@ private slots:
         QVERIFY2(m_metaserviceProcess.waitForStarted(), "Looks like you don't have Jolie's metaservice command");
         QTest::qWait(1000);
 
-        m_client = new SodepClient("localhost", 9000);
+        m_client = new Client("localhost", 9000);
     }
 
     void cleanupTestCase()
     {
-        SodepMessage message("/", "shutdown");
+        Message message("/", "shutdown");
         m_client->callNoReply(message);
         delete m_client;
 
@@ -108,34 +109,34 @@ private slots:
         QFETCH(QString, resourcePrefix);
         QFETCH(QString, fileName);
 
-        SodepMessage message("/", "loadEmbeddedJolieService");
-        SodepValue value;
-        value.children("resourcePrefix") << SodepValue(resourcePrefix);
-        value.children("filepath") << SodepValue(QString(DATA_DIR"/")+fileName);
+        Message message("/", "loadEmbeddedJolieService");
+        Value value;
+        value.children("resourcePrefix") << Value(resourcePrefix);
+        value.children("filepath") << Value(QString(DATA_DIR"/")+fileName);
         message.setData(value);
 
-        SodepMessage reply = m_client->call(message);
+        Message reply = m_client->call(message);
 
-        SodepMessage expected("/", "loadEmbeddedJolieService");
-        expected.setData(SodepValue(resourcePrefix));
+        Message expected("/", "loadEmbeddedJolieService");
+        expected.setData(Value(resourcePrefix));
 
         sodepCompare(reply, expected);
     }
 
     void shouldListServices()
     {
-        SodepMessage message("/", "getServices");
+        Message message("/", "getServices");
 
-        SodepMessage reply = m_client->call(message);
-        SodepMessage expected("/", "getServices");
-        SodepValue value;
+        Message reply = m_client->call(message);
+        Message expected("/", "getServices");
+        Value value;
 
-        SodepValue s1;
-        s1.children("isEmbedded") << SodepValue(1);
-        s1.children("resourceName") << SodepValue("Math");
-        SodepValue s2;
-        s2.children("isEmbedded") << SodepValue(1);
-        s2.children("resourceName") << SodepValue("Printer");
+        Value s1;
+        s1.children("isEmbedded") << Value(1);
+        s1.children("resourceName") << Value("Math");
+        Value s2;
+        s2.children("isEmbedded") << Value(1);
+        s2.children("resourceName") << Value("Printer");
 
         value.children("service") << s1 << s2;
         expected.setData(value);
@@ -147,26 +148,26 @@ private slots:
     {
         QTest::addColumn<QString>("path");
         QTest::addColumn<QString>("method");
-        QTest::addColumn<SodepValue>("data");
-        QTest::addColumn<SodepValue>("replyData");
+        QTest::addColumn<Value>("data");
+        QTest::addColumn<Value>("replyData");
 
-        QTest::newRow("printer service") << "/Printer" << "printInput" << SodepValue("Patapatapon!") << SodepValue("success");
-        QTest::newRow("math service") << "/Math" << "twice" << SodepValue(10.5) << SodepValue(21.0);
+        QTest::newRow("printer service") << "/Printer" << "printInput" << Value("Patapatapon!") << Value("success");
+        QTest::newRow("math service") << "/Math" << "twice" << Value(10.5) << Value(21.0);
     }
 
     void shouldPlaceServiceCalls()
     {
         QFETCH(QString, path);
         QFETCH(QString, method);
-        QFETCH(SodepValue, data);
-        QFETCH(SodepValue, replyData);
+        QFETCH(Value, data);
+        QFETCH(Value, replyData);
 
-        SodepMessage message(path, method);
+        Message message(path, method);
         message.setData(data);
 
-        SodepMessage reply = m_client->call(message);
+        Message reply = m_client->call(message);
 
-        SodepMessage expected("/", method);
+        Message expected("/", method);
         expected.setData(replyData);
 
         sodepCompare(reply, expected);
@@ -184,18 +185,18 @@ private slots:
     {
         QFETCH(QString, serviceName);
 
-        SodepMessage message("/", "unloadEmbeddedService");
-        SodepValue value(serviceName);
+        Message message("/", "unloadEmbeddedService");
+        Value value(serviceName);
         message.setData(value);
 
-        SodepMessage reply = m_client->call(message);
+        Message reply = m_client->call(message);
 
-        SodepMessage expected("/", "unloadEmbeddedService");
+        Message expected("/", "unloadEmbeddedService");
 
         sodepCompare(reply, expected);
     }
 };
 
-QTEST_MAIN(SodepMetaServiceTest)
+QTEST_MAIN(TestMetaService)
 
-#include "sodepmetaservicetest.moc"
+#include "testmetaservice.moc"

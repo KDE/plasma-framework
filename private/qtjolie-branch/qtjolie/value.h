@@ -18,32 +18,34 @@
   * Boston, MA 02110-1301, USA.
   */
 
-#ifndef SODEPVALUE_H
-#define SODEPVALUE_H
+#ifndef QTJOLIE_VALUE_H
+#define QTJOLIE_VALUE_H
 
 #include <QtCore/QIODevice>
 #include <QtCore/QList>
 
-class SodepValuePrivate;
+namespace Jolie
+{
+class ValuePrivate;
 
-class Q_DECL_EXPORT SodepValue
+class Q_DECL_EXPORT Value
 {
 public:
-    SodepValue();
+    Value();
 
-    explicit SodepValue(const QString &content);
-    explicit SodepValue(qint32 content);
-    explicit SodepValue(double content);
+    explicit Value(const QString &content);
+    explicit Value(qint32 content);
+    explicit Value(double content);
 
-    SodepValue(const SodepValue &other);
+    Value(const Value &other);
 
-    ~SodepValue();
+    ~Value();
 
-    SodepValue &operator=(const SodepValue &other);
+    Value &operator=(const Value &other);
 
     QStringList childrenNames() const;
-    QList<SodepValue> &children(const QString &name);
-    const QList<SodepValue> &children(const QString &name) const;
+    QList<Value> &children(const QString &name);
+    const QList<Value> &children(const QString &name) const;
 
     QString toString() const;
     qint32 toInt() const;
@@ -56,7 +58,10 @@ public:
     bool isValid() const;
 
 private:
-    SodepValuePrivate * const d;
+    ValuePrivate * const d;
 };
 
+} // namespace Jolie
+
 #endif
+

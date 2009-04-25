@@ -21,18 +21,20 @@
 #include <QtCore/QObject>
 #include <QtTest/QtTest>
 
-#include <qtjolie/sodepmessage.h>
-#include "sodeptesthelpers.h"
+#include <qtjolie/message.h>
+#include "testhelpers.h"
 
-class SodepMessageTest : public QObject
+using namespace Jolie;
+
+class TestMessage : public QObject
 {
     Q_OBJECT
 
 private slots:
     void shouldVerifyInitialState()
     {
-        SodepMessage m1("/foo", "bar", 1);
-        SodepMessage m2("/pata/pata", "pon", 2);
+        Message m1("/foo", "bar", 1);
+        Message m2("/pata/pata", "pon", 2);
 
         QCOMPARE(m1.resourcePath(), QString("/foo"));
         QCOMPARE(m1.operationName(), QString("bar"));
@@ -51,23 +53,23 @@ private slots:
 
     void shouldBeSerializable_data()
     {
-        SodepValue v(42);
+        Value v(42);
         QByteArray vSerial = QByteArray::fromHex("020000002A00000000");
-        SodepFault f("foo");
+        Fault f("foo");
         QByteArray fSerial = QByteArray::fromHex("0100000003")+QByteArray("foo")
                            + QByteArray::fromHex("0000000000");
 
-        QTest::addColumn<SodepMessage>("original");
+        QTest::addColumn<Message>("original");
         QTest::addColumn<QByteArray>("serialized");
 
-        QTest::newRow("no payload message") << SodepMessage("/pata", "pon", 1)
+        QTest::newRow("no payload message") << Message("/pata", "pon", 1)
                                             << QByteArray::fromHex("0000000000000001")
                                              + QByteArray::fromHex("00000005")+QByteArray("/pata")
                                              + QByteArray::fromHex("00000003")+QByteArray("pon")
                                              + QByteArray::fromHex("00")
                                              + QByteArray::fromHex("0000000000");
 
-        SodepMessage payload("/pata", "pon", 1);
+        Message payload("/pata", "pon", 1);
         payload.setFault(f);
         payload.setData(v);
         QTest::newRow("payload message") << payload
@@ -77,7 +79,7 @@ private slots:
                                           + fSerial
                                           + vSerial;
 
-        SodepMessage payloadId("/pata", "pon", 42);
+        Message payloadId("/pata", "pon", 42);
         payloadId.setFault(f);
         payloadId.setData(v);
         QTest::newRow("payload and id message") << payloadId
@@ -92,9 +94,9 @@ private slots:
     {
         QBuffer buffer;
 
-        QFETCH(SodepMessage, original);
+        QFETCH(Message, original);
         QFETCH(QByteArray, serialized);
-        SodepMessage result;
+        Message result;
 
         buffer.open(QIODevice::WriteOnly);
         sodepWrite(buffer, original);
@@ -109,6 +111,6 @@ private slots:
     }
 };
 
-QTEST_MAIN(SodepMessageTest)
+QTEST_MAIN(TestMessage)
 
-#include "sodepmessagetest.moc"
+#include "testmessage.moc"

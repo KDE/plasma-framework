@@ -18,35 +18,40 @@
   * Boston, MA 02110-1301, USA.
   */
 
-#ifndef SODEPPENDINGCALL_H
-#define SODEPPENDINGCALL_H
+#ifndef QTJOLIE_PENDINGCALL_H
+#define QTJOLIE_PENDINGCALL_H
 
 #include <QtCore/QExplicitlySharedDataPointer>
 
-class SodepClient;
-class SodepPendingCallPrivate;
-class SodepMessage;
+namespace Jolie
+{
+class Client;
+class PendingCallPrivate;
+class Message;
 
-class Q_DECL_EXPORT SodepPendingCall
+class Q_DECL_EXPORT PendingCall
 {
 public:
-    SodepPendingCall(const SodepPendingCall &other);
-    ~SodepPendingCall();
+    PendingCall(const PendingCall &other);
+    ~PendingCall();
 
-    SodepPendingCall &operator=(const SodepPendingCall &other);
+    PendingCall &operator=(const PendingCall &other);
 
     bool isFinished() const;
-    SodepMessage reply() const;
+    Message reply() const;
 
     void waitForFinished();
 
 private:
-    friend class SodepClient;
+    friend class Client;
 
-    SodepPendingCall(); // Not defined
-    SodepPendingCall(QExplicitlySharedDataPointer<SodepPendingCallPrivate> dd);
+    PendingCall(); // Not defined
+    PendingCall(QExplicitlySharedDataPointer<PendingCallPrivate> dd);
 
-    QExplicitlySharedDataPointer<SodepPendingCallPrivate> d;
+    QExplicitlySharedDataPointer<PendingCallPrivate> d;
 };
 
+} // namespace Jolie
+
 #endif
+

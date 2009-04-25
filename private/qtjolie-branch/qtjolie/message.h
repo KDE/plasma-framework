@@ -1,6 +1,6 @@
 /**
   * This file is part of the KDE project
-  * Copyright (C) 2009 Kevin Ottens <ervin@kde.org>
+  * Copyright (C) 2008 Kevin Ottens <ervin@kde.org>
   *
   * This library is free software; you can redistribute it and/or
   * modify it under the terms of the GNU Library General Public
@@ -18,36 +18,46 @@
   * Boston, MA 02110-1301, USA.
   */
 
-#ifndef SODEPCLIENT_P_H
-#define SODEPCLIENT_P_H
+#ifndef QTJOLIE_MESSAGE_H
+#define QTJOLIE_MESSAGE_H
 
-#include "sodepclient.h"
-#include "sodeppendingcall_p.h"
+#include <qtjolie/value.h>
+#include <qtjolie/fault.h>
 
-#include <QtCore/QMap>
-#include <QtCore/QObject>
-
-class SodepClientThread;
-
-class SodepClientPrivate : public QObject
+namespace Jolie
 {
-    Q_OBJECT
-public:
-    SodepClientPrivate(SodepClient *client)
-        : q(client),
-          error(SodepClient::NoError) {}
+class MessagePrivate;
 
-public slots:
-    void messageReceived(const SodepMessage &message);
+class Q_DECL_EXPORT Message
+{
+public:
+    Message();
+    explicit Message(const QString &resourcePath,
+                          const QString &operationName,
+                          qint64 id = 0);
+    Message(const Message &other);
+    ~Message();
+
+    Message &operator=(const Message &other);
+
+    qint64 id() const;
+
+    QString resourcePath() const;
+    QString operationName() const;
+
+    Fault fault() const;
+    void setFault(const Fault &fault);
+
+    Value data() const;
+    void setData(const Value &data);
+
+    bool isValid();
 
 private:
-    friend class SodepClient;
-    SodepClient * const q;
-    SodepClientThread *readerThread;
-
-    SodepClient::Error error;
-    QString errorString;
-    QMap<int, QExplicitlySharedDataPointer<SodepPendingCallPrivate> > pendingCalls;
+    MessagePrivate * const d;
 };
 
+} // namespace Jolie
+
 #endif
+

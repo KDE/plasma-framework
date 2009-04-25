@@ -17,12 +17,12 @@ MACRO(SODEP_EXECUTABLE_TESTS)
 ENDMACRO(SODEP_EXECUTABLE_TESTS)
 
 SODEP_UNIT_TESTS(
-  sodepvaluetest
-  sodepfaulttest
-  sodepmessagetest
-  sodepmetaservicetest
+  testvalue
+  testfault
+  testmessage
+  testmetaservice
 )
 
 SODEP_EXECUTABLE_TESTS(
-  sodepprintertest
+  testprinter
 )

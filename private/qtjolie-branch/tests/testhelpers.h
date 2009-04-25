@@ -23,14 +23,14 @@
 
 #include <QtTest/QtTest>
 
-#include <qtjolie/sodepfault.h>
-#include <qtjolie/sodepmessage.h>
-#include <qtjolie/sodepvalue.h>
+#include <qtjolie/fault.h>
+#include <qtjolie/message.h>
+#include <qtjolie/value.h>
 #include <qtjolie/sodephelpers_p.h>
 
-Q_DECLARE_METATYPE(SodepValue);
+Q_DECLARE_METATYPE(Jolie::Value);
 
-inline void sodepCompare(const SodepValue &v1, const SodepValue &v2)
+inline void sodepCompare(const Jolie::Value &v1, const Jolie::Value &v2)
 {
     QCOMPARE(v1.isValid(), v2.isValid());
 
@@ -47,8 +47,8 @@ inline void sodepCompare(const SodepValue &v1, const SodepValue &v2)
     QCOMPARE(v1Names, v2Names);
 
     foreach (const QString &name, v1Names) {
-        QList<SodepValue> v1Values = v1.children(name);
-        QList<SodepValue> v2Values = v2.children(name);
+        QList<Jolie::Value> v1Values = v1.children(name);
+        QList<Jolie::Value> v2Values = v2.children(name);
 
         QCOMPARE(v1Values.size(), v2Values.size());
 
@@ -58,18 +58,18 @@ inline void sodepCompare(const SodepValue &v1, const SodepValue &v2)
     }
 }
 
-Q_DECLARE_METATYPE(SodepFault);
+Q_DECLARE_METATYPE(Jolie::Fault);
 
-inline void sodepCompare(const SodepFault &f1, const SodepFault &f2)
+inline void sodepCompare(const Jolie::Fault &f1, const Jolie::Fault &f2)
 {
     QCOMPARE(f1.isValid(), f2.isValid());
     QCOMPARE(f1.name(), f2.name());
     sodepCompare(f1.data(), f2.data());
 }
 
-Q_DECLARE_METATYPE(SodepMessage);
+Q_DECLARE_METATYPE(Jolie::Message);
 
-inline void sodepCompare(const SodepMessage &m1, const SodepMessage &m2)
+inline void sodepCompare(const Jolie::Message &m1, const Jolie::Message &m2)
 {
     QCOMPARE(m1.resourcePath(), m2.resourcePath());
     QCOMPARE(m1.operationName(), m2.operationName());

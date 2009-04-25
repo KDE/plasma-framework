@@ -1,6 +1,6 @@
 /**
   * This file is part of the KDE project
-  * Copyright (C) 2008 Kevin Ottens <ervin@kde.org>
+  * Copyright (C) 2009 Kevin Ottens <ervin@kde.org>
   *
   * This library is free software; you can redistribute it and/or
   * modify it under the terms of the GNU Library General Public
@@ -18,44 +18,42 @@
   * Boston, MA 02110-1301, USA.
   */
 
-#ifndef SODEPPENDINGCALL_P_H
-#define SODEPPENDINGCALL_P_H
+#ifndef QTJOLIE_CLIENT_P_H
+#define QTJOLIE_CLIENT_P_H
 
-#include <QtCore/QEventLoop>
+#include "client.h"
+#include "pendingcall_p.h"
+
+#include <QtCore/QMap>
 #include <QtCore/QObject>
-#include <QtCore/QSharedData>
 
-#include "sodepmessage.h"
-
-class SodepPendingCallPrivate;
-
-class SodepPendingCallWaiter
+namespace Jolie
 {
+
+class ClientThread;
+
+class ClientPrivate : public QObject
+{
+    Q_OBJECT
 public:
-    void waitForFinished(SodepPendingCallPrivate *pendingCall);
+    ClientPrivate(Client *client)
+        : q(client),
+          error(Client::NoError) {}
+
+public slots:
+    void messageReceived(const Jolie::Message &message);
 
 private:
-    friend class SodepPendingCallPrivate;
-    QEventLoop eventLoop;
+    friend class Client;
+    Client * const q;
+    ClientThread *readerThread;
+
+    Client::Error error;
+    QString errorString;
+    QMap<int, QExplicitlySharedDataPointer<PendingCallPrivate> > pendingCalls;
 };
 
-class SodepPendingCallPrivate : public QSharedData
-{
-public:
-    SodepPendingCallPrivate(const SodepMessage &message)
-        : id(message.id()), isFinished(false) {}
-
-    void setReply(const SodepMessage &message);
-
-private:
-    friend class SodepPendingCall;
-    friend class SodepPendingCallWaiter;
-
-    qint64 id;
-    bool isFinished;
-    SodepMessage reply;
-    QList<SodepPendingCallWaiter*> waiters;
-};
-
+} // namespace Jolie
 
 #endif
+
