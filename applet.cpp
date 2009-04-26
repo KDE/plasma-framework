@@ -94,9 +94,7 @@
 namespace Plasma
 {
 
-Applet::Applet(QGraphicsItem *parent,
-               const QString &serviceID,
-               uint appletId)
+Applet::Applet(QGraphicsItem *parent, const QString &serviceID, uint appletId)
     :  QGraphicsWidget(parent),
        d(new AppletPrivate(KService::serviceByStorageId(serviceID), appletId, this))
 {
@@ -1733,6 +1731,23 @@ QStringList Applet::listCategories(const QString &parentApp, bool visibleOnly)
     return categories;
 }
 
+Applet::Applet(const QString &packagePath, uint appletId, const QVariantList &args)
+    : QGraphicsWidget(0),
+      d(new AppletPrivate(KService::Ptr(new KService(packagePath + "/metadata.desktop")), appletId, this))
+{
+    Q_UNUSED(args) // FIXME?
+    d->init(packagePath);
+}
+
+Applet *Applet::loadPlasmoid(const QString &path, uint appletId, const QVariantList &args)
+{
+    if (QFile::exists(path + "/metadata.desktop")) {
+        return new Applet(path, appletId, args);
+    }
+
+    return 0;
+}
+
 Applet *Applet::load(const QString &appletName, uint appletId, const QVariantList &args)
 {
     if (appletName.isEmpty()) {
@@ -2058,7 +2073,7 @@ AppletPrivate::~AppletPrivate()
     mainConfig = 0;
 }
 
-void AppletPrivate::init()
+void AppletPrivate::init(const QString &packagePath)
 {
     // WARNING: do not access config() OR globalConfig() in this method!
     //          that requires a scene, which is not available at this point
@@ -2082,9 +2097,10 @@ void AppletPrivate::init()
     // we have a scripted plasmoid
     if (!api.isEmpty()) {
         // find where the Package is
-        QString path = KStandardDirs::locate(
-            "data",
-            "plasma/plasmoids/" + appletDescription.pluginName() + '/');
+        QString path = packagePath;
+        if (path.isEmpty()) {
+            KStandardDirs::locate("data", "plasma/plasmoids/" + appletDescription.pluginName() + '/');
+        }
 
         if (path.isEmpty()) {
             q->setFailedToLaunch(
@@ -2095,8 +2111,7 @@ void AppletPrivate::init()
         } else {
             // create the package and see if we have something real
             //kDebug() << "trying for" << path;
-            PackageStructure::Ptr structure =
-                Plasma::packageStructure(api, Plasma::AppletComponent);
+            PackageStructure::Ptr structure = Plasma::packageStructure(api, Plasma::AppletComponent);
             structure->setPath(path);
             package = new Package(path, structure);
 
@@ -2129,9 +2144,7 @@ void AppletPrivate::init()
     }
 
     q->setBackgroundHints(Applet::DefaultBackground);
-
     q->setHasConfigurationInterface(true);
-
     QObject::connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()), q, SLOT(themeChanged()));
 }
 

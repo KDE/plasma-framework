@@ -311,6 +311,23 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
                                           bool visibleOnly = true);
 
         /**
+         * Attempts to load an apppet from a package
+         *
+         * Returns a pointer to the applet if successful.
+         * The caller takes responsibility for the applet, including
+         * deleting it when no longer needed.
+         *
+         * @param path the path to the package
+         * @param appletId unique ID to assign the applet, or zero to have one
+         *        assigned automatically.
+         * @param args to send the applet extra arguments
+         * @return a pointer to the loaded applet, or 0 on load failure
+         * @since 4.3
+         **/
+        static Applet *loadPlasmoid(const QString &path, uint appletId = 0,
+                                    const QVariantList &args = QVariantList());
+
+        /**
          * Attempts to load an applet
          *
          * Returns a pointer to the applet if successful.
@@ -567,13 +584,12 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          *      instances of the same Applet type
          * @param args  a list of strings containing two entries: the service id
          *      and the applet id
-         * @since KDE4.3 
+         * @since KDE4.3
          */
         explicit Applet(QGraphicsItem *parent,
                         const QString &serviceId,
                         uint appletId,
-                        const QVariantList &args
-                        );
+                        const QVariantList &args);
 
 
         /**
@@ -907,6 +923,16 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         void timerEvent (QTimerEvent *event);
 
     private:
+        /**
+         * @internal This constructor is to be used with the Package loading system.
+         *
+         * @param parent a QObject parent; you probably want to pass in 0
+         * @param args a list of strings containing two entries: the service id
+         *      and the applet id
+         * @since 4.3
+         */
+        Applet(const QString &packagePath, uint appletId, const QVariantList &args);
+
         Q_PRIVATE_SLOT(d, void setFocus())
         Q_PRIVATE_SLOT(d, void checkImmutability())
         Q_PRIVATE_SLOT(d, void themeChanged())

@@ -62,7 +62,7 @@ public:
     AppletPrivate(KService::Ptr service, int uniqueID, Applet *applet);
     ~AppletPrivate();
 
-    void init();
+    void init(const QString &packagePath = QString());
 
     // put all setup routines for script here. at this point we can assume that
     // package exists and that we have a script engin
