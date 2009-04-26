@@ -3,5 +3,6 @@ Type=ServiceType
 X-KDE-ServiceType=Plasma/PopupApplet
 
 Comment=Plasma scripting popup applet
+Comment[uk]=Аплет програмованого контекстного вікна Плазми
 
 
