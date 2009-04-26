@@ -142,6 +142,7 @@ class PLASMA_EXPORT Extender : public QGraphicsWidget
          * Extra convenience function for obtaining groups specified by name. This will avoid needed
          * to call item and casting to ExtenderGroup, which is otherwise quite common.
          * @returns the requested group
+         * @since 4.3
          */
         ExtenderGroup *group(const QString &name) const;
 

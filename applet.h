@@ -584,7 +584,7 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          *      instances of the same Applet type
          * @param args  a list of strings containing two entries: the service id
          *      and the applet id
-         * @since KDE4.3
+         * @since 4.3
          */
         explicit Applet(QGraphicsItem *parent,
                         const QString &serviceId,
