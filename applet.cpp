@@ -2100,6 +2100,8 @@ void AppletPrivate::init(const QString &packagePath)
         QString path = packagePath;
         if (path.isEmpty()) {
             KStandardDirs::locate("data", "plasma/plasmoids/" + appletDescription.pluginName() + '/');
+        } else if (!path.endsWith('/')) {
+            path.append('/');
         }
 
         if (path.isEmpty()) {
