@@ -188,12 +188,6 @@ void ExtenderItem::setWidget(QGraphicsItem *widget)
     widget->setPos(QPointF(d->bgLeft + d->dragLeft, panelSize.height() + d->bgTop));
     d->widget = widget;
     d->updateSizeHints();
-
-    /**
-    if (isGroup() && !isVisible()) {
-        widget->hide();
-    }
-    */
 }
 
 QGraphicsItem *ExtenderItem::widget() const
@@ -228,6 +222,12 @@ void ExtenderItem::setExtender(Extender *extender, const QPointF &pos)
     //themeChanged() has to now that by now, we're no longer dragging, even though the QDrag has not
     //been entirely finished.
     d->dragStarted = false;
+
+    ExtenderGroup *group = qobject_cast<ExtenderGroup*>(this);
+    QList<ExtenderItem*> childItems;
+    if (group) {
+        childItems = group->items();
+    }
 
     if (extender == d->extender) {
         //We're not moving between extenders, so just insert this item back into the layout.
@@ -281,6 +281,14 @@ void ExtenderItem::setExtender(Extender *extender, const QPointF &pos)
 
     //we might have to enable or disable the returnToSource button.
     d->updateToolBox();
+
+    //invoke setGroup on all items belonging to this group, to make sure all children move to the
+    //new extender together with the group.
+    if (group) {
+        foreach (ExtenderItem *item, childItems) {
+            item->setGroup(group);
+        }
+    }
 }
 
 Extender *ExtenderItem::extender() const
@@ -584,12 +592,10 @@ void ExtenderItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     }
 
     ExtenderGroup *group = qobject_cast<ExtenderGroup*>(this);
-    QList<ExtenderItem*> childItems;
     bool collapsedGroup;
     if (isGroup()) {
         collapsedGroup = group->d->collapsed;
         group->collapseGroup();
-        childItems = group->items();
     }
 
     //and execute the drag.
@@ -605,14 +611,6 @@ void ExtenderItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     if (!action || !drag->target()) {
         //we weren't moved, so reinsert the item in our current layout.
         d->extender->itemAddedEvent(this, curPos);
-    }
-
-    //invoke setGroup on all items belonging to this group, to make sure all children move to the
-    //new extender together with the group.
-    if (isGroup()) {
-        foreach (ExtenderItem *item, childItems) {
-            item->setGroup(group);
-        }
     }
 
     if (isGroup() && !collapsedGroup) {

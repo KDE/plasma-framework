@@ -72,6 +72,10 @@ ExtenderGroup::ExtenderGroup(Extender *parent, uint groupId)
         hide();
     }
 
+    if (!config().readEntry("groupCollapsed", true)) {
+        expandGroup();
+    }
+
     connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()),
             this, SLOT(themeChanged()));
 }
@@ -113,6 +117,7 @@ void ExtenderGroup::setAutoHide(bool autoHide)
 void ExtenderGroup::expandGroup()
 {
     d->collapsed = false;
+    config().writeEntry("groupCollapsed", d->collapsed);
     action("collapse")->setVisible(true);
     action("expand")->setVisible(false);
     foreach (ExtenderItem *item, extender()->attachedItems()) {
@@ -126,6 +131,7 @@ void ExtenderGroup::expandGroup()
 void ExtenderGroup::collapseGroup()
 {
     d->collapsed = true;
+    config().writeEntry("groupCollapsed", d->collapsed);
     action("collapse")->setVisible(false);
     action("expand")->setVisible(true);
     foreach (ExtenderItem *item, extender()->attachedItems()) {
