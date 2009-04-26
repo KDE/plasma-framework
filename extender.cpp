@@ -170,6 +170,11 @@ ExtenderItem *Extender::item(const QString &name) const
     return 0;
 }
 
+ExtenderGroup *Extender::group(const QString &name) const
+{
+    return qobject_cast<ExtenderGroup*>(item(name));
+}
+
 bool Extender::hasItem(const QString &name) const
 {
     if (item(name)) {
@@ -177,7 +182,8 @@ bool Extender::hasItem(const QString &name) const
     }
 
     //if item(name) returns false, that doesn't mean that the item doesn't exist, just that it has
-    //not been instantiated yet.
+    //not been instantiated yet. check to see if there's mention of this item existing in the
+    //plasma config's section DetachedExtenderItems
     Corona *corona = qobject_cast<Corona*>(scene());
     KConfigGroup extenderItemGroup(corona->config(), "DetachedExtenderItems");
     foreach (const QString &extenderItemId, extenderItemGroup.groupList()) {
@@ -340,13 +346,17 @@ void Extender::dropEvent(QGraphicsSceneDragDropEvent *event)
 void Extender::itemAddedEvent(ExtenderItem *item, const QPointF &pos)
 {
     if (pos == QPointF(-1, -1)) {
+        //if just plain adding an item, add it at a sane position:
 	if (!item->group()) {
             if (appearance() == BottomUpStacked) {
+                //at the top
                 d->layout->insertItem(0, item);
             } else {
+                //at the bottom
                 d->layout->addItem(item);
             }
         } else {
+            //at the top in the group it belongs to
             d->layout->insertItem(d->insertIndexFromPos(item->group()->pos()) + 1, item);
         }
     } else {

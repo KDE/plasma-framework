@@ -188,6 +188,12 @@ void ExtenderItem::setWidget(QGraphicsItem *widget)
     widget->setPos(QPointF(d->bgLeft + d->dragLeft, panelSize.height() + d->bgTop));
     d->widget = widget;
     d->updateSizeHints();
+
+    /**
+    if (isGroup() && !isVisible()) {
+        widget->hide();
+    }
+    */
 }
 
 QGraphicsItem *ExtenderItem::widget() const
@@ -284,10 +290,24 @@ Extender *ExtenderItem::extender() const
 
 void ExtenderItem::setGroup(ExtenderGroup *group)
 {
+    if (isGroup()) {
+        //nesting extender groups is just insane. I don't think we'd even want to support that.
+        kWarning() << "Nesting ExtenderGroups is not supported";
+        return;
+    }
+
     d->group = group;
-    config().writeEntry("group", group->name());
-    if (!group->isDetached()) {
+
+    if (group) {
+        config().writeEntry("group", group->name());
+        //TODO: move to another extender if the group we set is actually detached.
+        if (group->extender() != extender()) {
+            kDebug() << "moving to another extender because we're joining a detached group.";
+            setExtender(group->extender());
+        }
         group->d->addItemToGroup(this);
+    } else {
+        config().deleteEntry("group");
     }
 }
 
@@ -563,6 +583,15 @@ void ExtenderItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
         }
     }
 
+    ExtenderGroup *group = qobject_cast<ExtenderGroup*>(this);
+    QList<ExtenderItem*> childItems;
+    bool collapsedGroup;
+    if (isGroup()) {
+        collapsedGroup = group->d->collapsed;
+        group->collapseGroup();
+        childItems = group->items();
+    }
+
     //and execute the drag.
     QWidget *dragParent = extender()->d->applet->view();
     QDrag *drag = new QDrag(dragParent);
@@ -576,6 +605,18 @@ void ExtenderItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     if (!action || !drag->target()) {
         //we weren't moved, so reinsert the item in our current layout.
         d->extender->itemAddedEvent(this, curPos);
+    }
+
+    //invoke setGroup on all items belonging to this group, to make sure all children move to the
+    //new extender together with the group.
+    if (isGroup()) {
+        foreach (ExtenderItem *item, childItems) {
+            item->setGroup(group);
+        }
+    }
+
+    if (isGroup() && !collapsedGroup) {
+        group->expandGroup();
     }
 
     d->dragStarted = false;

@@ -139,6 +139,13 @@ class PLASMA_EXPORT Extender : public QGraphicsWidget
         ExtenderItem *item(const QString &name) const;
 
         /**
+         * Extra convenience function for obtaining groups specified by name. This will avoid needed
+         * to call item and casting to ExtenderGroup, which is otherwise quite common.
+         * @returns the requested group
+         */
+        ExtenderGroup *group(const QString &name) const;
+
+        /**
          * This function can be used for easily determining if a certain item is already displayed
          * in an extender item somewhere, so your applet doesn't duplicate this item. This is needed
          * because ExtenderItems are persistent, so you can't blindly add new extender items in all

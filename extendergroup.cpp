@@ -68,8 +68,8 @@ ExtenderGroup::ExtenderGroup(Extender *parent, uint groupId)
     }
 
     if (items().isEmpty() && d->autoHide && !isDetached()) {
-        hide();
         extender()->itemRemovedEvent(this);
+        hide();
     }
 
     connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()),
@@ -101,9 +101,9 @@ bool ExtenderGroup::autoHide() const
 void ExtenderGroup::setAutoHide(bool autoHide)
 {
     d->autoHide = autoHide;
-    if (autoHide && items().count() < 2) {
-        hide();
+    if (autoHide && items().isEmpty()) {
         extender()->itemRemovedEvent(this);
+        hide();
     } else if (!autoHide && !isVisible()) {
         extender()->itemAddedEvent(this);
         show();
@@ -151,26 +151,16 @@ ExtenderGroupPrivate::~ExtenderGroupPrivate()
 void ExtenderGroupPrivate::addItemToGroup(Plasma::ExtenderItem *item)
 {
     if (item->group() == q) {
-        int itemCount = q->items().count();
-        if (collapsed && !(autoHide && itemCount == 1)) {
-            //the group is collapsed, so hide the new item unless there's only one item and autohide
-            //is true, in which case we hide this group, and not the item in it.
+        if (!q->isVisible() && !q->items().isEmpty()) {
+            q->extender()->itemAddedEvent(q);
+            q->show();
+        }
+        if (collapsed) {
             q->extender()->itemRemovedEvent(item);
             item->hide();
         } else {
-            //the group isn't collapsed so show and readd this item to the extender, which takes
-            //care of placing the new item directly under the group widget.
             q->extender()->itemAddedEvent(item);
             item->show();
-        }
-        if (!q->isVisible() && (itemCount > 1 || !autoHide)) {
-            //show the group if needed, depending on autoHide policy.
-            q->extender()->itemAddedEvent(q);
-            q->show();
-            if (collapsed) {
-                q->extender()->itemRemovedEvent(q->items().first());
-                q->items().first()->hide();
-            }
         }
     }
 }
@@ -178,13 +168,9 @@ void ExtenderGroupPrivate::addItemToGroup(Plasma::ExtenderItem *item)
 void ExtenderGroupPrivate::removeItemFromGroup(Plasma::ExtenderItem *item)
 {
     if (item->group() == q) {
-        if (q->items().count() < 2 && autoHide && !q->isDetached()) {
+        if (q->items().isEmpty() && autoHide && !q->isDetached()) {
             q->extender()->itemRemovedEvent(q);
             q->hide();
-        }
-        if (q->items().count() == 1 && autoHide) {
-            q->extender()->itemAddedEvent(q->items().first());
-            q->items().first()->show();
         }
     }
 }
