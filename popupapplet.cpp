@@ -56,6 +56,7 @@ PopupApplet::PopupApplet(QObject *parent, const QVariantList &args)
 {
     int iconSize = IconSize(KIconLoader::Desktop);
     resize(iconSize, iconSize);
+    disconnect(this, SIGNAL(activate()), (Applet*)this, SLOT(setFocus()));
     connect(this, SIGNAL(activate()), this, SLOT(internalTogglePopup()));
     setAcceptDrops(true);
 }
@@ -499,6 +500,7 @@ PopupAppletPrivate::~PopupAppletPrivate()
 void PopupAppletPrivate::internalTogglePopup()
 {
     if (!dialog) {
+        q->setFocus(Qt::ShortcutFocusReason);
         return;
     }
 
@@ -512,7 +514,16 @@ void PopupAppletPrivate::internalTogglePopup()
         } else {
             dialog->hide();
         }
+
+        dialog->clearFocus();
     } else {
+        if (q->graphicsWidget() &&
+            q->graphicsWidget() == static_cast<Applet*>(q)->d->extender &&
+            static_cast<Applet*>(q)->d->extender->attachedItems().isEmpty()) {
+            // we have nothing to show, so let's not.
+            return;
+        }
+
         ToolTipManager::self()->hide(q);
         updateDialogPosition();
         KWindowSystem::setState(dialog->winId(), NET::SkipTaskbar | NET::SkipPager);
@@ -542,8 +553,6 @@ void PopupAppletPrivate::internalTogglePopup()
             dialog->show();
         }
     }
-
-    dialog->clearFocus();
 }
 
 void PopupAppletPrivate::hideTimedPopup()
@@ -700,7 +709,7 @@ void PopupAppletPrivate::updateDialogPosition()
 void PopupAppletPrivate::updateDialogFlags()
 {
     Q_ASSERT(dialog);
-    dialog->setAttribute(Qt::WA_X11NetWmWindowTypeNotification, passive);
+    //dialog->setAttribute(Qt::WA_X11NetWmWindowTypeNotification, passive);
 }
 
 
