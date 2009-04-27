@@ -160,7 +160,7 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
         QSizeF containmentSize;
 
         QGraphicsWidget *gWidget = q->graphicsWidget();
-        kDebug() << "graphics widget is" << (QObject*)gWidget;
+        //kDebug() << "graphics widget is" << (QObject*)gWidget;
         QWidget *qWidget = q->widget();
 
         if (gWidget) {
@@ -183,7 +183,7 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
         if (icon && !icon->icon().isNull() && ((f != Plasma::Vertical && f != Plasma::Horizontal) ||
             ((f == Plasma::Vertical && containmentSize.width() >= minimum.width()) ||
              (f == Plasma::Horizontal && containmentSize.height() >= minimum.height())))) {
-            kDebug() << "we are expanding the popupapplet";
+            //kDebug() << "we are expanding the popupapplet";
 
             // we only switch to expanded if we aren't horiz/vert constrained and
             // this applet has an icon.
@@ -259,7 +259,7 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
             }
         //Applet on popup
         } else {
-            kDebug() << "about to switch to a popup";
+            //kDebug() << "about to switch to a popup";
             //save the aspect ratio mode in case we drag'n drop in the Desktop later
             savedAspectRatio = q->aspectRatioMode();
 
