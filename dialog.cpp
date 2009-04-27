@@ -175,12 +175,13 @@ void DialogPrivate::adjustView()
 {
     if (view && graphicsWidget) {
         QSize prevSize = q->size();
+        /*
         kDebug() << "Widget size:" << graphicsWidget->size()
                  << "| Widget size hint:" << graphicsWidget->effectiveSizeHint(Qt::PreferredSize)
                  << "| Widget minsize hint:" << graphicsWidget->minimumSize()
                  << "| Widget maxsize hint:" << graphicsWidget->maximumSize()
                  << "| Widget bounding rect:" << graphicsWidget->sceneBoundingRect();
-
+        */
         //set the sizehints correctly:
         int left, top, right, bottom;
         q->getContentsMargins(&left, &top, &right, &bottom);
