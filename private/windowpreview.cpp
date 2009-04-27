@@ -174,14 +174,14 @@ void WindowPreview::setInfo()
 
     const int numWindows = ids.size();
 
-    QList <QRect> thumbnailRects;
+    m_thumbnailRects.clear();
     int x = thumbnailRect.x();
 
     foreach (QSize s, windowSizes) {
-        s.scale((qreal)(thumbnailRect.width()-5*(numWindows-1))/numWindows, thumbnailRect.height(), Qt::KeepAspectRatio);
+        s.scale((qreal)(thumbnailRect.width()-WINDOW_MARGIN*(numWindows-1))/numWindows, thumbnailRect.height(), Qt::KeepAspectRatio);
         int y = thumbnailRect.y() + (thumbnailRect.height() - s.height())/2;
-        thumbnailRects.append(QRect(QPoint(x,y), s));
-        x += s.width() + 5;
+        m_thumbnailRects.append(QRect(QPoint(x,y), s));
+        x += s.width() + WINDOW_MARGIN;
     }
 
     QVarLengthArray<long, 1024> data(1 + 6*numWindows);
@@ -189,7 +189,7 @@ void WindowPreview::setInfo()
 
     for (int i = 0; i<numWindows; ++i) {
         const int start = i*6+1;
-        const QRect thumbnailRect = thumbnailRects[i];
+        const QRect thumbnailRect = m_thumbnailRects[i];
 
         data[start] = 5;
         data[start+1] = ids[i];
@@ -209,9 +209,15 @@ void WindowPreview::paintEvent(QPaintEvent *e)
     Q_UNUSED(e)
 #ifdef Q_WS_X11
     QPainter painter(this);
-    QRect r(QPoint(0,0), m_background->frameSize().toSize());
-    r.moveCenter(QPoint(size().width()/2, size().height()/2));
-    m_background->paintFrame(&painter, r.topLeft());
+
+    qreal left, top, right, bottom;
+    m_background->getMargins(left, top, right, bottom);
+
+    foreach (QRect r, m_thumbnailRects) {
+      kWarning()<<r;
+        m_background->resizeFrame(r.size()+QSize(left+right, top+bottom));
+        m_background->paintFrame(&painter, r.topLeft()-pos()-QPoint(left,top));
+    }
 #endif
 }
 

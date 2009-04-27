@@ -58,9 +58,10 @@ private:
 
     QList<WId> ids;
     mutable QList<QSize> windowSizes;
+    QList <QRect> m_thumbnailRects;
     FrameSvg *m_background;
 
-    static const int WINDOW_MARGIN = 5;
+    static const int WINDOW_MARGIN = 10;
     static const int WINDOW_WIDTH = 200;
     static const int WINDOW_HEIGHT = 150;
 };
