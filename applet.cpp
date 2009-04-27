@@ -1272,7 +1272,6 @@ void Applet::setGlobalShortcut(const KShortcut &shortcut)
         d->activationAction->setText(i18n("Activate %1 Widget", name()));
         d->activationAction->setObjectName(QString("activate widget %1").arg(id())); // NO I18N
         connect(d->activationAction, SIGNAL(triggered()), this, SIGNAL(activate()));
-        connect(this, SIGNAL(activate()), this, SLOT(setFocus()));
 
         QList<QWidget *> widgets = d->actions.associatedWidgets();
         foreach (QWidget *w, widgets) {
@@ -2148,6 +2147,7 @@ void AppletPrivate::init(const QString &packagePath)
     q->setBackgroundHints(Applet::DefaultBackground);
     q->setHasConfigurationInterface(true);
     QObject::connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()), q, SLOT(themeChanged()));
+    QObject::connect(q, SIGNAL(activate()), q, SLOT(setFocus()));
 }
 
 // put all setup routines for script here. at this point we can assume that
