@@ -55,6 +55,7 @@ Q_SCRIPT_DECLARE_QMETAOBJECT(AppletInterface, SimpleJavaScriptApplet*)
 QScriptValue constructPainterClass(QScriptEngine *engine);
 QScriptValue constructGraphicsItemClass(QScriptEngine *engine);
 QScriptValue constructLinearLayoutClass(QScriptEngine *engine);
+QScriptValue constructKUrlClass(QScriptEngine *engine);
 QScriptValue constructTimerClass(QScriptEngine *engine);
 QScriptValue constructFontClass(QScriptEngine *engine);
 QScriptValue constructQRectFClass(QScriptEngine *engine);
@@ -476,6 +477,7 @@ void SimpleJavaScriptApplet::setupObjects()
     global.setProperty("QSizeF", constructQSizeFClass(m_engine));
     global.setProperty("QPoint", constructQPointClass(m_engine));
     global.setProperty("LinearLayout", constructLinearLayoutClass(m_engine));
+    global.setProperty("Url", constructKUrlClass(m_engine));
 
     installWidgets(m_engine);
 }
@@ -702,6 +704,23 @@ QScriptValue SimpleJavaScriptApplet::createWidget(QScriptContext *context, QScri
         if (!parent) {
             return context->throwError(i18n("The parent must be a QGraphicsWidget"));
         }
+    }
+
+    if (!parent) {
+        QScriptValue appletValue = engine->globalObject().property("plasmoid");
+        //kDebug() << "appletValue is " << appletValue.toString();
+
+        QObject *appletObject = appletValue.toQObject();
+        if (!appletObject) {
+            return context->throwError(i18n("Could not extract the AppletObject"));
+        }
+
+        AppletInterface *interface = qobject_cast<AppletInterface*>(appletObject);
+        if (!interface) {
+            return context->throwError(i18n("Could not extract the Applet"));
+        }
+
+        parent = interface->applet();
     }
 
     QString self = context->callee().property("functionName").toString();
