@@ -10,6 +10,7 @@ set(simple_javascript_engine_SRCS
     qtgui/rect.cpp
     qtgui/size.cpp
     qtgui/timer.cpp
+    qtgui/url.cpp
 )
 
 include_directories(${PHONON_INCLUDES})
