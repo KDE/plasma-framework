@@ -171,8 +171,19 @@ QScriptValue AppletInterface::readConfig(const QString &entry) const
     return m_appletScriptEngine->variantToScriptValue(result);
 }
 
+QString AppletInterface::file(const QString &fileType)
+{
+    return m_appletScriptEngine->package()->filePath(fileType.toLocal8Bit().constData());
+}
+
+QString AppletInterface::file(const QString &fileType, const QString &filePath)
+{
+    return m_appletScriptEngine->package()->filePath(fileType.toLocal8Bit().constData(), filePath);
+}
+
 const Plasma::Package *AppletInterface::package() const
 {
+    kDebug() << "woot";
     return m_appletScriptEngine->package();
 }
 

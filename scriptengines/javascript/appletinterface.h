@@ -145,6 +145,9 @@ enum QtOrientation {
 
     Q_INVOKABLE void writeConfig(const QString &entry, const QVariant &value);
 
+    Q_INVOKABLE QString file(const QString &fileType);
+    Q_INVOKABLE QString file(const QString &fileType, const QString &filePath);
+
     Plasma::DataEngine *dataEngine(const QString &name);
 
     const Plasma::Package *package() const;
