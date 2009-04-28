@@ -308,7 +308,7 @@ void Theme::setThemeName(const QString &themeName)
 
 void ThemePrivate::setThemeName(const QString &tempThemeName, bool writeSettings)
 {
-    kDebug();
+    //kDebug() << tempThemeName;
     QString theme = tempThemeName;
     if (theme.isEmpty() || theme == themeName) {
         // let's try and get the default theme at least
