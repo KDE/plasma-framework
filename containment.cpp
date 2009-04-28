@@ -513,6 +513,21 @@ void ContainmentPrivate::appletActions(KMenu &desktopMenu, Applet *applet, bool 
         }
     }
 
+
+    if (static_cast<Corona*>(q->scene())->immutability() == Mutable) {
+        if (!desktopMenu.isEmpty()) {
+            desktopMenu.addSeparator();
+        }
+
+        QAction *closeApplet = applet->d->actions.action("remove");
+        if (!closeApplet) { //unlikely but not impossible
+            closeApplet = new QAction(i18nc("%1 is the name of the applet", "Remove this %1", applet->name()), &desktopMenu);
+            closeApplet->setIcon(KIcon("edit-delete"));
+            QObject::connect(closeApplet, SIGNAL(triggered(bool)), applet, SLOT(destroy()));
+        }
+        desktopMenu.addAction(closeApplet);
+    }
+
     KMenu *containmentMenu = new KMenu(i18nc("%1 is the name of the containment", "%1 Options", q->name()), &desktopMenu);
     containmentActions(*containmentMenu);
     if (!containmentMenu->isEmpty()) {
@@ -537,24 +552,9 @@ void ContainmentPrivate::appletActions(KMenu &desktopMenu, Applet *applet, bool 
             desktopMenu.addMenu(containmentMenu);
         }
     }
-
-    if (static_cast<Corona*>(q->scene())->immutability() == Mutable) {
-        if (!desktopMenu.isEmpty()) {
-            desktopMenu.addSeparator();
-        }
-
-        QAction *closeApplet = applet->d->actions.action("remove");
-        if (!closeApplet) { //unlikely but not impossible
-            closeApplet = new QAction(i18nc("%1 is the name of the applet", "Remove this %1", applet->name()), &desktopMenu);
-            closeApplet->setIcon(KIcon("edit-delete"));
-            QObject::connect(closeApplet, SIGNAL(triggered(bool)), applet, SLOT(destroy()));
-        }
-        desktopMenu.addAction(closeApplet);
-    }
 }
 
-bool ContainmentPrivate::showContextMenu(const QPointF &point,
-                                         const QPoint &screenPos, bool includeApplet)
+bool ContainmentPrivate::showContextMenu(const QPointF &point, const QPoint &screenPos, bool includeApplet)
 {
     Applet *applet = 0;
 
