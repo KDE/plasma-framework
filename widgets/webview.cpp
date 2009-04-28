@@ -17,15 +17,18 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
+#include <QtGui/QApplication>
 #include <QtGui/QGraphicsSceneContextMenuEvent>
 #include <QtGui/QGraphicsSceneDragDropEvent>
 #include <QtGui/QGraphicsSceneMouseEvent>
 #include <QtGui/QGraphicsSceneWheelEvent>
 #include <QtGui/QKeyEvent>
 #include <QtGui/QStyleOptionGraphicsItem>
+
 #include <fixx11h.h>
 #include <QtWebKit/QWebFrame>
 #include <QtWebKit/QWebPage>
+
 #include <QtCore/QTimer>
 
 #include <kdebug.h>
@@ -67,9 +70,14 @@ WebView::WebView(QGraphicsItem *parent)
 {
     d->page = 0;
     d->loaded = false;
-    setPage(new QWebPage(this));
     setAcceptsHoverEvents(true);
     setFlags(QGraphicsItem::ItemIsFocusable);
+
+    QWebPage *page = new QWebPage(this);
+    QPalette palette = qApp->palette();
+    palette.setBrush(QPalette::Base, Qt::transparent);
+    page->setPalette(palette);
+    setPage(page);
 }
 
 WebView::~WebView()
