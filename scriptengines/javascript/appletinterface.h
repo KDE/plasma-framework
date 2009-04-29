@@ -45,6 +45,7 @@ class AppletInterface : public QObject
     Q_ENUMS(Location)
     Q_ENUMS(AspectRatioMode)
     Q_ENUMS(QtOrientation)
+    Q_ENUMS(QtAlignment)
     Q_PROPERTY(QString activeConfig WRITE setActiveConfig READ activeConfig)
 
 public:
@@ -100,6 +101,15 @@ enum QtOrientation {
     QtVertical = Qt::Vertical
 };
 
+enum QtAlignment {
+    QtAlignLeft = 0x0001,
+    QtAlignRight = 0x0002,
+    QtAlignHCenter = 0x0004,
+    QtAlignJustify = 0x0005,
+    QtAlignTop = 0x0020,
+    QtAlignBottom = 0x0020,
+    QtAlignVCenter = 0x0080
+};
 //-------------------------------------------------------------------
 
     Q_INVOKABLE FormFactor formFactor();

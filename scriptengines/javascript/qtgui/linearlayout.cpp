@@ -31,6 +31,7 @@
 Q_DECLARE_METATYPE(QScript::Pointer<QGraphicsItem>::wrapped_pointer_type)
 Q_DECLARE_METATYPE(QGraphicsWidget*)
 Q_DECLARE_METATYPE(QGraphicsGridLayout*)
+Q_DECLARE_METATYPE(QGraphicsLayoutItem*)
 DECLARE_POINTER_METATYPE(QGraphicsLinearLayout)
 
 DECLARE_VOID_NUMBER_METHOD(QGraphicsLinearLayout, removeAt)
@@ -42,19 +43,19 @@ DECLARE_NUMBER_GET_SET_METHODS(QGraphicsLinearLayout, spacing, setSpacing)
 
 /////////////////////////////////////////////////////////////
 
-QGraphicsLayoutItem *layoutItem(QScriptContext *ctx, int index)
+QGraphicsLayoutItem *layoutItem(QScriptContext *ctx, int index = 0)
 {
-    QGraphicsLayoutItem *item = qscriptvalue_cast<QGraphicsWidget*>(ctx->argument(0));
+    QGraphicsLayoutItem *item = qscriptvalue_cast<QGraphicsWidget*>(ctx->argument(index));
 
     if (!item) {
-        item = qscriptvalue_cast<QGraphicsLinearLayout*>(ctx->argument(0));
+        item = qscriptvalue_cast<QGraphicsLinearLayout*>(ctx->argument(index));
     }
 
     if (!item) {
-        item = qscriptvalue_cast<QGraphicsGridLayout*>(ctx->argument(0));
+        item = qscriptvalue_cast<QGraphicsGridLayout*>(ctx->argument(index));
     }
 
-    QObject *appletObject = ctx->argument(0).toQObject();
+    QObject *appletObject = ctx->argument(index).toQObject();
     if (appletObject) {
         AppletInterface *interface = qobject_cast<AppletInterface*>(appletObject);
         if (interface) {
@@ -71,7 +72,7 @@ static QScriptValue ctor(QScriptContext *ctx, QScriptEngine *eng)
         return ctx->throwError(i18n("LinearLayout requires a parent"));
     }
 
-    QGraphicsLayoutItem *parent = layoutItem(ctx, 0);
+    QGraphicsLayoutItem *parent = layoutItem(ctx);
 
     if (!parent) {
         return ctx->throwError(i18n("The parent must be a QGraphicsLayoutItem"));
@@ -89,16 +90,52 @@ BEGIN_DECLARE_METHOD(QGraphicsLinearLayout, setOrientation) {
     return eng->undefinedValue();
 } END_DECLARE_METHOD
 
-/*
-void insertItem(int index, QGraphicsLayoutItem * item)
-void removeItem(QGraphicsLayoutItem * item)
+BEGIN_DECLARE_METHOD(QGraphicsLinearLayout, setAlignment) {
+    QGraphicsLayoutItem *item = layoutItem(ctx);
 
-void setAlignment(QGraphicsLayoutItem * item, Qt::Alignment alignment)
-void setStretchFactor(QGraphicsLayoutItem * item, int stretch)
-*/
+    if (!item) {
+        return eng->undefinedValue();
+    }
+
+    self->setAlignment(item, static_cast<Qt::Alignment>(ctx->argument(1).toInt32()));
+    return eng->undefinedValue();
+} END_DECLARE_METHOD
+
+BEGIN_DECLARE_METHOD(QGraphicsLinearLayout, insertItem) {
+    QGraphicsLayoutItem *item = layoutItem(ctx, 1);
+
+    if (!item) {
+        return eng->undefinedValue();
+    }
+
+    self->insertItem(ctx->argument(0).toInt32(), item);
+    return eng->undefinedValue();
+} END_DECLARE_METHOD
+
+BEGIN_DECLARE_METHOD(QGraphicsLinearLayout, removeItem) {
+    QGraphicsLayoutItem *item = layoutItem(ctx);
+
+    if (!item) {
+        return eng->undefinedValue();
+    }
+
+    self->removeItem(item);
+    return eng->undefinedValue();
+} END_DECLARE_METHOD
+
+BEGIN_DECLARE_METHOD(QGraphicsLinearLayout, setStretchFactor) {
+    QGraphicsLayoutItem *item = ctx->argument(0).toVariant().value<QGraphicsLayoutItem*>();
+
+    if (!item) {
+        return eng->undefinedValue();
+    }
+
+    self->setStretchFactor(item, static_cast<Qt::Orientation>(ctx->argument(1).toInt32()));
+    return eng->undefinedValue();
+} END_DECLARE_METHOD
 
 BEGIN_DECLARE_METHOD(QGraphicsLinearLayout, addItem) {
-    QGraphicsLayoutItem *item = layoutItem(ctx, 0);
+    QGraphicsLayoutItem *item = layoutItem(ctx);
     if (!item) {
         return ctx->throwError(QScriptContext::TypeError,
                                "QGraphicsLinearLayout.prototype.addItem: argument is not a GraphicsLayoutItem");
@@ -127,13 +164,16 @@ QScriptValue constructLinearLayoutClass(QScriptEngine *eng)
     QScriptValue proto = QScript::wrapPointer<QGraphicsLinearLayout>(eng, new QGraphicsLinearLayout(), QScript::UserOwnership);
     ADD_GET_SET_METHODS(proto, spacing, setSpacing);
     ADD_GET_SET_METHODS(proto, orientation, setOrientation);
-    //ADD_GET_METHOD(proto, y);
     ADD_METHOD(proto, removeAt);
     ADD_METHOD(proto, addStretch);
+    ADD_METHOD(proto, setStretchFactor);
+    ADD_METHOD(proto, setAlignment);
     ADD_METHOD(proto, insertStretch);
     ADD_METHOD(proto, setItemSpacing);
     ADD_METHOD(proto, setContentsMargins);
     ADD_METHOD(proto, addItem);
+    ADD_METHOD(proto, removeItem);
+    ADD_METHOD(proto, insertItem);
     ADD_METHOD(proto, toString);
 
     QScript::registerPointerMetaType<QGraphicsLinearLayout>(eng, proto);
