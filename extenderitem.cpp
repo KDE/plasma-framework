@@ -78,7 +78,6 @@ ExtenderItem::ExtenderItem(Extender *hostExtender, uint extenderItemId)
     d->toolboxLayout = new QGraphicsLinearLayout(d->toolbox);
     d->toolbox->setLayout(d->toolboxLayout);
 
-
     //create items's configgroup
     KConfigGroup cg = hostExtender->d->applet->config("ExtenderItems");
     KConfigGroup dg = KConfigGroup(&cg, QString::number(d->extenderItemId));

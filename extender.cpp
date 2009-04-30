@@ -20,6 +20,7 @@
 #include "extender.h"
 
 #include <QAction>
+#include <QLabel>
 #include <QGraphicsSceneDragDropEvent>
 #include <QGraphicsGridLayout>
 #include <QGraphicsLinearLayout>
@@ -51,7 +52,7 @@ namespace Plasma
 class Spacer : public QGraphicsWidget
 {
     public:
-        Spacer(QGraphicsWidget *parent)
+        Spacer(Extender *parent)
                  : QGraphicsWidget(parent)
        {
        }
@@ -60,6 +61,14 @@ class Spacer : public QGraphicsWidget
        {
        }
 
+        void setMargins(qreal left, qreal top, qreal right, qreal bottom)
+        {
+            m_left = left;
+            m_top = top;
+            m_right = right;
+            m_bottom = bottom;
+        }
+
     protected:
         void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget * widget = 0)
         {
@@ -67,12 +76,19 @@ class Spacer : public QGraphicsWidget
             Q_UNUSED(widget)
 
             painter->setRenderHint(QPainter::Antialiasing);
-            QPainterPath p = Plasma::PaintUtils::roundedRectangle(contentsRect().adjusted(4, 4, -4, -4), 4);
+            QPainterPath p = Plasma::PaintUtils::roundedRectangle(
+                                contentsRect().adjusted(m_left, m_top, -m_right, -m_bottom), 4);
 
             QColor c = Plasma::Theme::defaultTheme()->color(Plasma::Theme::TextColor);
             c.setAlphaF(0.3);
             painter->fillPath(p, c);
         }
+
+    private:
+        qreal m_left;
+        qreal m_top;
+        qreal m_right;
+        qreal m_bottom;
 };
 
 Extender::Extender(Applet *applet)
@@ -250,7 +266,7 @@ void Extender::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     Q_UNUSED(event)
     PopupApplet *popupApplet = qobject_cast<PopupApplet*>(d->applet);
-    if (attachedItems().isEmpty() && popupApplet) {
+    if (d->isEmpty() && popupApplet) {
         popupApplet->hidePopup();
     }
 }
@@ -308,7 +324,7 @@ void Extender::dragLeaveEvent(QGraphicsSceneDragDropEvent *event)
             }
 
             //Hide popups when we drag the last item away.
-            if (popupApplet && sourceExtender == this && attachedItems().count() < 2) {
+            if (popupApplet && sourceExtender == this && (attachedItems().count() < 2)) {
                 kDebug() << "leaving the extender, and there are no more attached items so hide the popup.";
                 popupApplet->hidePopup();
             }
@@ -404,6 +420,10 @@ void Extender::itemHoverMoveEvent(ExtenderItem *item, const QPointF &pos)
     //Create a widget that functions as spacer, and add that to the layout.
     if (!d->spacerWidget) {
         Spacer *widget = new Spacer(this);
+        qreal left, top, right, bottom;
+        d->background->getMargins(left, top, right, bottom);
+        widget->setMargins(left, 4, right, 4);
+
         widget->setMinimumSize(item->minimumSize());
         widget->setPreferredSize(item->preferredSize());
         widget->setMaximumSize(item->maximumSize());
@@ -456,12 +476,14 @@ FrameSvg::EnabledBorders Extender::enabledBordersForItem(ExtenderItem *item) con
 ExtenderPrivate::ExtenderPrivate(Applet *applet, Extender *extender) :
     q(extender),
     applet(applet),
+    background(new FrameSvg(extender)),
     currentSpacerIndex(-1),
     spacerWidget(0),
     emptyExtenderMessage(QString()),
     emptyExtenderLabel(0),
     appearance(Extender::NoBorders)
 {
+    background->setImagePath("widgets/extender-background");
 }
 
 ExtenderPrivate::~ExtenderPrivate()
@@ -596,17 +618,20 @@ void ExtenderPrivate::updateBorders()
 
 void ExtenderPrivate::updateEmptyExtenderLabel()
 {
-    if (q->attachedItems().isEmpty() && !emptyExtenderLabel && !emptyExtenderMessage.isEmpty()
+    if (isEmpty() && !emptyExtenderLabel && !emptyExtenderMessage.isEmpty()
                                      && !spacerWidget ) {
         //add the empty extender label.
         emptyExtenderLabel = new Label(q);
         emptyExtenderLabel->setAlignment(Qt::AlignCenter);
         emptyExtenderLabel->setText(emptyExtenderMessage);
-        emptyExtenderLabel->setMinimumSize(QSizeF(150, 64));
-        emptyExtenderLabel->setPreferredSize(QSizeF(200, 64));
+
+        qreal left, top, right, bottom;
+        background->getMargins(left, top, right, bottom);
+        emptyExtenderLabel->nativeWidget()->setMargin(left + right);
+
         emptyExtenderLabel->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
         layout->addItem(emptyExtenderLabel);
-    } else if (!q->attachedItems().isEmpty() && emptyExtenderLabel) {
+    } else if (!isEmpty() && emptyExtenderLabel) {
         //remove the empty extender label.
         layout->removeItem(emptyExtenderLabel);
         delete emptyExtenderLabel;
@@ -622,6 +647,16 @@ ExtenderGroup *ExtenderPrivate::findGroup(const QString &name) const
         }
     }
     return 0;
+}
+
+bool ExtenderPrivate::isEmpty() const
+{
+    if (q->attachedItems().isEmpty()) {
+        return true;
+    } else {
+        //If there are only groups, consider this extender empty
+        return (q->attachedItems().size() == q->groups().size());
+    }
 }
 
 } // Plasma namespace
