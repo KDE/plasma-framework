@@ -25,6 +25,7 @@ namespace Plasma
 
 class ExtenderGroup;
 class ExtenderItem;
+class Svg;
 
 class ExtenderGroupPrivate
 {
@@ -37,6 +38,7 @@ class ExtenderGroupPrivate
         void themeChanged();
 
         Plasma::ExtenderGroup *q;
+        Plasma::Svg *svg;
         bool collapsed;
         bool autoHide;
 };

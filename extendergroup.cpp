@@ -144,10 +144,11 @@ void ExtenderGroup::collapseGroup()
 
 
 ExtenderGroupPrivate::ExtenderGroupPrivate(ExtenderGroup *group)
-    : collapsed(true),
+    : q(group),
+      svg(new Svg(group)),
+      collapsed(true),
       autoHide(true)
 {
-    q = group;
 }
 
 ExtenderGroupPrivate::~ExtenderGroupPrivate()
@@ -183,7 +184,6 @@ void ExtenderGroupPrivate::removeItemFromGroup(Plasma::ExtenderItem *item)
 
 void ExtenderGroupPrivate::themeChanged()
 {
-    Plasma::Svg *svg = new Plasma::Svg(q);///Who deletes the svg? (Looks like a memory hog/leak on multiple theme changes)
     svg->setImagePath("widgets/configuration-icons");
     svg->resize();
 
