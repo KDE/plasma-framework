@@ -397,6 +397,7 @@ void VideoWidget::setUsedControls(const Controls controls)
             d->progress->setMaximum(100);
             d->progress->setOrientation(Qt::Horizontal);
             controlsLayout->setStretchFactor(d->progress, 4);
+            d->progress->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
 
             connect(d->media, SIGNAL(tick(qint64)), this, SLOT(ticked(qint64)));
             connect(d->media, SIGNAL(totalTimeChanged(qint64)), SLOT(totalTimeChanged(qint64)));
@@ -416,6 +417,7 @@ void VideoWidget::setUsedControls(const Controls controls)
             d->volume->setMaximum(100);
             d->volume->setValue(100);
             d->volume->setOrientation(Qt::Horizontal);
+            d->volume->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
 
             connect(d->volume, SIGNAL(valueChanged(int)), SLOT(setVolume(int)));
             connect(d->audioOutput, SIGNAL(volumeChanged(qreal)), SLOT(volumeChanged(qreal)));
