@@ -46,7 +46,6 @@ public:
     }
 
     Plasma::FrameSvg *background;
-    Plasma::FrameSvg *handle;
     Plasma::Style::Ptr style;
 };
 
@@ -63,12 +62,7 @@ Slider::Slider(QGraphicsWidget *parent)
     native->setAttribute(Qt::WA_NoSystemBackground);
 
     d->background = new Plasma::FrameSvg(this);
-    d->background->setImagePath("widgets/frame");
-    d->background->setElementPrefix("sunken");
-
-    d->handle = new Plasma::FrameSvg(this);
-    d->handle->setImagePath("widgets/button");
-    d->handle->setElementPrefix("normal");
+    d->background->setImagePath("widgets/slider");
 
     d->style = Plasma::Style::sharedStyle();
     native->setStyle(d->style.data());
@@ -116,8 +110,28 @@ void Slider::paint(QPainter *painter,
 
     QRect backgroundRect =
         style->subControlRect(QStyle::CC_Slider, &sliderOpt, QStyle::SC_SliderGroove, slider);
-    d->background->resizeFrame(backgroundRect.size());
-    d->background->paintFrame(painter, backgroundRect.topLeft());
+
+    if (sliderOpt.orientation == Qt::Horizontal &&
+        d->background->hasElement("horizontal-background-center")) {
+        d->background->setElementPrefix("horizontal-background");
+        d->background->resizeFrame(backgroundRect.size());
+        d->background->paintFrame(painter, backgroundRect.topLeft());
+    } else if (sliderOpt.orientation == Qt::Vertical &&
+        d->background->hasElement("vertical-background-center")) {
+        d->background->setElementPrefix("vertical-background");
+        d->background->resizeFrame(backgroundRect.size());
+        d->background->paintFrame(painter, backgroundRect.topLeft());
+    } else if (sliderOpt.orientation == Qt::Horizontal) {
+        QRect elementRect = d->background->elementRect("horizontal-slider-line").toRect();
+        elementRect.setWidth(sliderOpt.rect.width());
+        elementRect.moveCenter(sliderOpt.rect.center());
+        d->background->paint(painter, elementRect, "horizontal-slider-line");
+    } else {
+        QRect elementRect = d->background->elementRect("vertical-slider-line").toRect();
+        elementRect.setHeight(sliderOpt.rect.height());
+        elementRect.moveCenter(sliderOpt.rect.center());
+        d->background->paint(painter, elementRect, "vertical-slider-line");
+    }
 
     //Tickmarks
     if (sliderOpt.tickPosition != QSlider::NoTicks) {
@@ -129,8 +143,18 @@ void Slider::paint(QPainter *painter,
 
     QRect handleRect =
         style->subControlRect(QStyle::CC_Slider, &sliderOpt, QStyle::SC_SliderHandle, slider);
-    d->handle->resizeFrame(handleRect.size());
-    d->handle->paintFrame(painter, handleRect.topLeft());
+
+    QString handle;
+    if (sliderOpt.orientation == Qt::Horizontal) {
+        handle = "horizontal-slider-handle";
+    } else {
+        handle = "vertical-slider-handle";
+    }
+
+    QRect elementRect = d->background->elementRect(handle).toRect();
+    elementRect.moveCenter(handleRect.center());
+    d->background->paint(painter, elementRect, handle);
+
 }
 
 void Slider::wheelEvent(QGraphicsSceneWheelEvent *event)
