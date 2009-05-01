@@ -515,7 +515,7 @@ QScriptValue SimpleJavaScriptApplet::dataEngine(QScriptContext *context, QScript
 QScriptValue SimpleJavaScriptApplet::jsi18n(QScriptContext *context, QScriptEngine *engine)
 {
     if (context->argumentCount() < 1) {
-        return context->throwError(i18n("i18n takes at least one argument"));
+        return context->throwError(i18n("i18n() takes at least one argument"));
     }
 
     KLocalizedString message = ki18n(context->argument(0).toString().toUtf8());
@@ -531,7 +531,7 @@ QScriptValue SimpleJavaScriptApplet::jsi18n(QScriptContext *context, QScriptEngi
 QScriptValue SimpleJavaScriptApplet::jsi18nc(QScriptContext *context, QScriptEngine *engine)
 {
     if (context->argumentCount() < 2) {
-        return context->throwError(i18n("i18n takes at least two arguments"));
+        return context->throwError(i18n("i18nc() takes at least two arguments"));
     }
 
     KLocalizedString message = ki18nc(context->argument(0).toString().toUtf8(),
@@ -548,7 +548,7 @@ QScriptValue SimpleJavaScriptApplet::jsi18nc(QScriptContext *context, QScriptEng
 QScriptValue SimpleJavaScriptApplet::jsi18np(QScriptContext *context, QScriptEngine *engine)
 {
     if (context->argumentCount() < 2) {
-        return context->throwError(i18n("i18n takes at least two arguments"));
+        return context->throwError(i18n("i18np() takes at least two arguments"));
     }
 
     KLocalizedString message = ki18np(context->argument(0).toString().toUtf8(),
@@ -565,7 +565,7 @@ QScriptValue SimpleJavaScriptApplet::jsi18np(QScriptContext *context, QScriptEng
 QScriptValue SimpleJavaScriptApplet::jsi18ncp(QScriptContext *context, QScriptEngine *engine)
 {
     if (context->argumentCount() < 3) {
-        return context->throwError(i18n("i18n takes at least three arguments"));
+        return context->throwError(i18n("i18ncp() takes at least three arguments"));
     }
 
     KLocalizedString message = ki18ncp(context->argument(0).toString().toUtf8(),
@@ -583,7 +583,7 @@ QScriptValue SimpleJavaScriptApplet::jsi18ncp(QScriptContext *context, QScriptEn
 QScriptValue SimpleJavaScriptApplet::dataEngine(QScriptContext *context, QScriptEngine *engine)
 {
     if (context->argumentCount() != 1) {
-        return context->throwError(i18n("DataEngine takes one argument"));
+        return context->throwError(i18n("dataEngine() takes one argument"));
     }
 
     QString dataEngine = context->argument(0).toString();
@@ -608,7 +608,7 @@ QScriptValue SimpleJavaScriptApplet::dataEngine(QScriptContext *context, QScript
 QScriptValue SimpleJavaScriptApplet::service(QScriptContext *context, QScriptEngine *engine)
 {
     if (context->argumentCount() != 2) {
-        return context->throwError(i18n("Service takes two arguments"));
+        return context->throwError(i18n("service() takes two arguments"));
     }
 
     QString dataEngine = context->argument(0).toString();
@@ -636,7 +636,7 @@ QScriptValue SimpleJavaScriptApplet::service(QScriptContext *context, QScriptEng
 QScriptValue SimpleJavaScriptApplet::loadui(QScriptContext *context, QScriptEngine *engine)
 {
     if (context->argumentCount() != 1) {
-        return context->throwError(i18n("loadUI takes one argument"));
+        return context->throwError(i18n("loadui() takes one argument"));
     }
 
     QString filename = context->argument(0).toString();
@@ -831,7 +831,7 @@ QScriptValue SimpleJavaScriptApplet::notSupported(QScriptContext *context, QScri
 QScriptValue SimpleJavaScriptApplet::print(QScriptContext *context, QScriptEngine *engine)
 {
     if (context->argumentCount() != 1) {
-        return context->throwError(i18n("print takes one argument"));
+        return context->throwError(i18n("print() takes one argument"));
     }
 
     kDebug() << context->argument(0).toString();
