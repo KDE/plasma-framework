@@ -432,6 +432,7 @@ void SimpleJavaScriptApplet::setupObjects()
     m_engine->setDefaultPrototype(qMetaTypeId<ServiceJob*>(), m_engine->newQObject(new ServiceJob(QString(), QString(), QMap<QString, QVariant>())));
 
     global.setProperty("i18n", m_engine->newFunction(SimpleJavaScriptApplet::jsi18n));
+    global.setProperty("i18np", m_engine->newFunction(SimpleJavaScriptApplet::jsi18np));
     global.setProperty("dataEngine", m_engine->newFunction(SimpleJavaScriptApplet::dataEngine));
     global.setProperty("service", m_engine->newFunction(SimpleJavaScriptApplet::service));
     qScriptRegisterMetaType<DataEngine::Data>(m_engine, qScriptValueFromData, 0, QScriptValue());
@@ -511,13 +512,35 @@ QScriptValue SimpleJavaScriptApplet::dataEngine(QScriptContext *context, QScript
 
 QScriptValue SimpleJavaScriptApplet::jsi18n(QScriptContext *context, QScriptEngine *engine)
 {
-    if (context->argumentCount() != 1) {
-        return context->throwError(i18n("i18n takes one argument"));
+    if (context->argumentCount() < 1) {
+        return context->throwError(i18n("i18n takes at least one argument"));
     }
 
-    //TODO: detect i18np pattern
-    QString message = context->argument(0).toString();
-    return engine->newVariant(i18n(message.toLocal8Bit()));
+    KLocalizedString message = ki18n(context->argument(0).toString().toLocal8Bit());
+
+    int numArgs = context->argumentCount();
+    for (int i = 1; i < numArgs; ++i) {
+        message.subs(context->argument(i).toString());
+    }
+
+    return engine->newVariant(message.toString().toLocal8Bit());
+}
+
+QScriptValue SimpleJavaScriptApplet::jsi18np(QScriptContext *context, QScriptEngine *engine)
+{
+    if (context->argumentCount() < 2) {
+        return context->throwError(i18n("i18n takes at least two arguments"));
+    }
+
+    KLocalizedString message = ki18np(context->argument(0).toString().toLocal8Bit(),
+                                      context->argument(1).toString().toLocal8Bit());
+
+    int numArgs = context->argumentCount();
+    for (int i = 1; i < numArgs; ++i) {
+        message.subs(context->argument(i).toString());
+    }
+
+    return engine->newVariant(message.toString().toLocal8Bit());
 }
 
 QScriptValue SimpleJavaScriptApplet::dataEngine(QScriptContext *context, QScriptEngine *engine)
