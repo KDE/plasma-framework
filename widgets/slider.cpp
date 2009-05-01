@@ -29,6 +29,8 @@
 #include "theme.h"
 #include "framesvg.h"
 
+#include "private/style_p.h"
+
 namespace Plasma
 {
 
@@ -45,6 +47,7 @@ public:
 
     Plasma::FrameSvg *background;
     Plasma::FrameSvg *handle;
+    Plasma::Style::Ptr style;
 };
 
 Slider::Slider(QGraphicsWidget *parent)
@@ -66,11 +69,15 @@ Slider::Slider(QGraphicsWidget *parent)
     d->handle = new Plasma::FrameSvg(this);
     d->handle->setImagePath("widgets/button");
     d->handle->setElementPrefix("normal");
+
+    d->style = Plasma::Style::sharedStyle();
+    native->setStyle(d->style.data());
 }
 
 Slider::~Slider()
 {
     delete d;
+    Plasma::Style::doneWithSharedStyle();
 }
 
 void Slider::paint(QPainter *painter,

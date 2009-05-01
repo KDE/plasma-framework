@@ -521,7 +521,23 @@ void VideoWidget::resizeEvent(QGraphicsSceneResizeEvent *event)
     QGraphicsProxyWidget::resizeEvent(event);
 
     if (d->controlsWidget) {
-        d->controlsWidget->resize(event->newSize().width(), d->controlsWidget->size().height());
+        QSize newControlsSize(event->newSize().width(), d->controlsWidget->size().height());
+        int newHeight = event->newSize().height();
+        qreal leftMargin, topMargin, rightMargin, bottomMargin;
+        d->controlsWidget->getContentsMargins(&leftMargin, &topMargin, &rightMargin, &bottomMargin);
+
+        if (newHeight/5 >= KIconLoader::SizeEnormous) {
+            newControlsSize.setHeight(KIconLoader::SizeEnormous+topMargin+bottomMargin);
+        } else if (newHeight/5 >= KIconLoader::SizeHuge) {
+            newControlsSize.setHeight(KIconLoader::SizeHuge+topMargin+bottomMargin);
+        } else if (newHeight/5 >= KIconLoader::SizeLarge) {
+            newControlsSize.setHeight(KIconLoader::SizeLarge+topMargin+bottomMargin);
+        } else if (newHeight/5 >= KIconLoader::SizeMedium) {
+            newControlsSize.setHeight(KIconLoader::SizeMedium+topMargin+bottomMargin);
+        } else {
+            newControlsSize.setHeight(KIconLoader::SizeSmallMedium+topMargin+bottomMargin);
+        }
+        d->controlsWidget->resize(newControlsSize);
 
         if (d->spaceForControlsAvailable()) {
             d->animateControlWidget(false);
