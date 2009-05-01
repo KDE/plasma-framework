@@ -432,7 +432,9 @@ void SimpleJavaScriptApplet::setupObjects()
     m_engine->setDefaultPrototype(qMetaTypeId<ServiceJob*>(), m_engine->newQObject(new ServiceJob(QString(), QString(), QMap<QString, QVariant>())));
 
     global.setProperty("i18n", m_engine->newFunction(SimpleJavaScriptApplet::jsi18n));
+    global.setProperty("i18nc", m_engine->newFunction(SimpleJavaScriptApplet::jsi18nc));
     global.setProperty("i18np", m_engine->newFunction(SimpleJavaScriptApplet::jsi18np));
+    global.setProperty("i18ncp", m_engine->newFunction(SimpleJavaScriptApplet::jsi18ncp));
     global.setProperty("dataEngine", m_engine->newFunction(SimpleJavaScriptApplet::dataEngine));
     global.setProperty("service", m_engine->newFunction(SimpleJavaScriptApplet::service));
     qScriptRegisterMetaType<DataEngine::Data>(m_engine, qScriptValueFromData, 0, QScriptValue());
@@ -526,6 +528,23 @@ QScriptValue SimpleJavaScriptApplet::jsi18n(QScriptContext *context, QScriptEngi
     return engine->newVariant(message.toString().toLocal8Bit());
 }
 
+QScriptValue SimpleJavaScriptApplet::jsi18nc(QScriptContext *context, QScriptEngine *engine)
+{
+    if (context->argumentCount() < 2) {
+        return context->throwError(i18n("i18n takes at least two arguments"));
+    }
+
+    KLocalizedString message = ki18nc(context->argument(0).toString().toLocal8Bit(),
+                                      context->argument(1).toString().toLocal8Bit());
+
+    int numArgs = context->argumentCount();
+    for (int i = 2; i < numArgs; ++i) {
+        message.subs(context->argument(i).toString());
+    }
+
+    return engine->newVariant(message.toString().toLocal8Bit());
+}
+
 QScriptValue SimpleJavaScriptApplet::jsi18np(QScriptContext *context, QScriptEngine *engine)
 {
     if (context->argumentCount() < 2) {
@@ -536,7 +555,25 @@ QScriptValue SimpleJavaScriptApplet::jsi18np(QScriptContext *context, QScriptEng
                                       context->argument(1).toString().toLocal8Bit());
 
     int numArgs = context->argumentCount();
-    for (int i = 1; i < numArgs; ++i) {
+    for (int i = 2; i < numArgs; ++i) {
+        message.subs(context->argument(i).toString());
+    }
+
+    return engine->newVariant(message.toString().toLocal8Bit());
+}
+
+QScriptValue SimpleJavaScriptApplet::jsi18ncp(QScriptContext *context, QScriptEngine *engine)
+{
+    if (context->argumentCount() < 3) {
+        return context->throwError(i18n("i18n takes at least three arguments"));
+    }
+
+    KLocalizedString message = ki18ncp(context->argument(0).toString().toLocal8Bit(),
+                                       context->argument(1).toString().toLocal8Bit(),
+                                       context->argument(2).toString().toLocal8Bit());
+
+    int numArgs = context->argumentCount();
+    for (int i = 3; i < numArgs; ++i) {
         message.subs(context->argument(i).toString());
     }
 

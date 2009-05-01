@@ -63,7 +63,9 @@ private:
 
     static QString findSvg(QScriptEngine *engine, const QString &file);
     static QScriptValue jsi18n(QScriptContext *context, QScriptEngine *engine);
+    static QScriptValue jsi18nc(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue jsi18np(QScriptContext *context, QScriptEngine *engine);
+    static QScriptValue jsi18ncp(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue dataEngine(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue service(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue loadui(QScriptContext *context, QScriptEngine *engine);
