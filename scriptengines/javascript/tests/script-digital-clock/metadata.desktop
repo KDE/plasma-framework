@@ -66,7 +66,6 @@ X-KDE-PluginInfo-Name=script-digital-clock
 X-KDE-PluginInfo-Version=0.0
 X-KDE-PluginInfo-Website=http://plasma.kde.org/
 X-KDE-PluginInfo-Category=Utilities
-Keywords=Utilities
 X-KDE-PluginInfo-Depends=
 X-KDE-PluginInfo-License=GPL
 X-KDE-PluginInfo-EnabledByDefault=true
