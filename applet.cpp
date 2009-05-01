@@ -748,7 +748,7 @@ QString Applet::category() const
 
 QString Applet::category(const KPluginInfo &applet)
 {
-    return applet.property("Keywords").toStringList().first();
+    return applet.property("X-KDE-PluginInfo-Category").toString();
 }
 
 QString Applet::category(const QString &appletName)
@@ -764,7 +764,7 @@ QString Applet::category(const QString &appletName)
         return QString();
     }
 
-    return offers.first()->property("Keywords").toStringList().first();
+    return offers.first()->property("X-KDE-PluginInfo-Category").toString();
 }
 
 ImmutabilityType Applet::immutability() const
@@ -1552,6 +1552,33 @@ QString AppletPrivate::configWindowTitle() const
     return i18nc("@title:window", "%1 Settings", q->name());
 }
 
+QSet<QString> AppletPrivate::knownCategories()
+{
+    // this is to trick the tranlsation tools into making the correct
+    // strings for translation
+    QSet<QString> categories;
+    categories << QString(I18N_NOOP("Accessibility")).toLower()
+               << QString(I18N_NOOP("Application Launchers")).toLower()
+               << QString(I18N_NOOP("Astronomy")).toLower()
+               << QString(I18N_NOOP("Date and Time")).toLower()
+               << QString(I18N_NOOP("Development Tools")).toLower()
+               << QString(I18N_NOOP("Education")).toLower()
+               << QString(I18N_NOOP("Environment and Weather")).toLower()
+               << QString(I18N_NOOP("Examples")).toLower()
+               << QString(I18N_NOOP("File System")).toLower()
+               << QString(I18N_NOOP("Fun and Games")).toLower()
+               << QString(I18N_NOOP("Graphics")).toLower()
+               << QString(I18N_NOOP("Language")).toLower()
+               << QString(I18N_NOOP("Mapping")).toLower()
+               << QString(I18N_NOOP("Miscellaneous")).toLower()
+               << QString(I18N_NOOP("Multimedia")).toLower()
+               << QString(I18N_NOOP("Online Services")).toLower()
+               << QString(I18N_NOOP("System Information")).toLower()
+               << QString(I18N_NOOP("Utilities")).toLower()
+               << QString(I18N_NOOP("Windows and Tasks")).toLower();
+    return categories;
+}
+
 KConfigDialog *AppletPrivate::generateGenericConfigDialog()
 {
     KConfigSkeleton *nullManager = new KConfigSkeleton(0);
@@ -1644,12 +1671,14 @@ KPluginInfo::List Applet::listAppletInfo(const QString &category,
         KConfigGroup group(KGlobal::config(), "General");
         QStringList excluded = group.readEntry("ExcludeCategories", QStringList());
         foreach (const QString &category, excluded) {
-            constraint.append(" and not '").append(category).append("' ~in Keywords");
+            constraint.append(" and [X-KDE-PluginInfo-Category] != '").append(category).append("'");
         }
     } else { //specific category (this could be an excluded one - is that bad?)
-        constraint.append(" and ").append("'").append(category).append("'").append(" in Keywords");
+        constraint.append(" and ");
+
+        constraint.append("[X-KDE-PluginInfo-Category] == '").append(category).append("'");
         if (category == "Miscellaneous") {
-            constraint.append(" or not exist Keywords");
+            constraint.append(" or (not exist [X-KDE-PluginInfo-Category] or [X-KDE-PluginInfo-Category] == '')");
         }
     }
 
@@ -1691,7 +1720,7 @@ KPluginInfo::List Applet::listAppletInfoForMimetype(const QString &mimetype)
 
 QStringList Applet::listCategories(const QString &parentApp, bool visibleOnly)
 {
-    QString constraint = "exist Keywords";
+    QString constraint = "exist [X-KDE-PluginInfo-Category]";
 
     if (parentApp.isEmpty()) {
         constraint.append(" and not exist [X-KDE-ParentApp]");
@@ -1702,31 +1731,32 @@ QStringList Applet::listCategories(const QString &parentApp, bool visibleOnly)
     KConfigGroup group(KGlobal::config(), "General");
     QStringList excluded = group.readEntry("ExcludeCategories", QStringList());
     foreach (const QString &category, excluded) {
-        constraint.append(" and not '").append(category).append("' in Keywords");
+        constraint.append(" and [X-KDE-PluginInfo-Category] != '").append(category).append("'");
     }
 
     KService::List offers = KServiceTypeTrader::self()->query("Plasma/Applet", constraint);
-    //TODO: this is potentially slow using a QStringList if there are lots and lots of categories
     QStringList categories;
+    QSet<QString> known = AppletPrivate::knownCategories();
     foreach (const KService::Ptr &applet, offers) {
+        QString appletCategory = applet->property("X-KDE-PluginInfo-Category").toString();
         if (visibleOnly && applet->noDisplay()) {
             // we don't want to show the hidden category
             continue;
         }
 
-        QStringList appletCategories = applet->property("Keywords").toStringList();
-
         //kDebug() << "   and we have " << appletCategory;
-        if (appletCategories.isEmpty()) {
+        if (!appletCategory.isEmpty() && !known.contains(appletCategory.toLower())) {
+            kDebug() << "Unknown category: " << applet->name() << "says it is in the"
+                     << appletCategory << "category which is unknown to us";
+            appletCategory.clear();
+        }
+
+        if (appletCategory.isEmpty()) {
             if (!categories.contains(i18nc("misc category", "Miscellaneous"))) {
                 categories << i18nc("misc category", "Miscellaneous");
             }
-        } else  {
-            foreach (const QString &category, appletCategories) {
-                if (!categories.contains(category, Qt::CaseInsensitive)) {
-                    categories << category;
-                }
-            }
+        } else  if (!categories.contains(appletCategory)) {
+            categories << appletCategory;
         }
     }
 

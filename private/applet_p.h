@@ -96,6 +96,8 @@ public:
     QString configDialogId() const;
     QString configWindowTitle() const;
 
+    static QSet<QString> knownCategories();
+
     static uint s_maxAppletId;
     static int s_maxZValue;
     static int s_minZValue;
