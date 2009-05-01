@@ -2193,6 +2193,13 @@ void AppletPrivate::setupScriptSupport()
              << "which is a" << package->structure()->type() << "package"
              << ", main script is" << package->filePath("mainscript");
 
+    QString translationsPath = package->filePath("translations");
+    if (!translationsPath.isEmpty()) {
+        //FIXME: we should _probably_ use a KComponentData to segregate the applets
+        //       from each other; but I want to get the basics working first :)
+        KGlobal::dirs()->addResourceDir("locale", translationsPath);
+    }
+
     QString xmlPath = package->filePath("mainconfigxml");
     if (!xmlPath.isEmpty()) {
         QFile file(xmlPath);
@@ -2210,9 +2217,9 @@ void AppletPrivate::setupScriptSupport()
     if (size.isEmpty()) {
         size = QSize(200,200);
     }
+
     //kDebug() << "size" << size;
     q->resize(size);
-
 }
 
 QString AppletPrivate::globalName() const
