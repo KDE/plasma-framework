@@ -22,7 +22,6 @@
 #include <QApplication>
 #include <QFile>
 #include <QFileInfo>
-#include <QtGui/QPainter>
 #ifdef Q_WS_X11
 #include <QX11Info>
 #endif
@@ -41,7 +40,6 @@
 #include <kwindowsystem.h>
 
 #include "private/packages_p.h"
-#include "private/framebackgroundprovider.h"
 
 namespace Plasma
 {
@@ -50,8 +48,6 @@ namespace Plasma
 #define DEFAULT_WALLPAPER_SUFFIX ".jpg"
 static const int DEFAULT_WALLPAPER_WIDTH = 1920;
 static const int DEFAULT_WALLPAPER_HEIGHT = 1200;
-
-QMap<QString, StandardThemeBackgroundProvider::PatternAlphaPair> StandardThemeBackgroundProvider::m_cachedPatterns;
 
 class ThemePrivate
 {
@@ -86,10 +82,6 @@ public:
         return KConfigGroup(KSharedConfig::openConfig(themeRcFile), "CachePolicies");
     }
 
-    const KConfigGroup& config() const {
-      return const_cast<ThemePrivate*>(this)->config();
-    }
-
     KConfigGroup &config()
     {
         if (!cfg.isValid()) {
@@ -108,28 +100,6 @@ public:
         }
 
         return cfg;
-    }
-
-    /**
-     *  Reads optional configuration, that is specific to the current composite mode:
-     *  When composition is active, the configuration entry is prefixed with "composite_".
-     *  Optionally, the configuration can also be specific to the specified image path:
-     *  Then the image path has to be appended to the configuration name
-     */
-    template<class T>
-    T readOptionalConfig(QString configName, T _default, QString imagePath) {
-      if(compositingActive)
-          configName = "composite_" + configName;
-
-      T ret = config().readEntry(configName, _default);
-      return config().readEntry(configName + "_" + imagePath, ret);
-    }
-
-    bool hasOptionalConfig(QString configName, QString imagePath = QString()) {
-      if(compositingActive)
-          configName = "composite_" + configName;
-
-      return config().hasKey(configName) || config().hasKey(configName + "_" + imagePath);
     }
 
     QString findInTheme(const QString &image, const QString &theme) const;
@@ -194,7 +164,7 @@ QString ThemePrivate::findInTheme(const QString &image, const QString &theme) co
     if (locolor) {
         search = "desktoptheme/" + theme + "/locolor/" + image;
         search =  KStandardDirs::locate("data", search);
-    } else if (!compositingActive && !config().readEntry<bool>("forceTransparentTheme", false)) {
+    } else if (!compositingActive) {
         search = "desktoptheme/" + theme + "/opaque/" + image;
         search =  KStandardDirs::locate("data", search);
     }
@@ -322,26 +292,13 @@ PackageStructure::Ptr Theme::packageStructure()
 void ThemePrivate::settingsFileChanged(const QString &file)
 {
     kDebug() << file;
-    QMap< QString, QString > oldEntries = config().entryMap();
-    
     config().config()->reparseConfiguration();
-    
-    if(oldEntries != config().entryMap())
-      q->settingsChanged();
+    q->settingsChanged();
 }
 
 void Theme::settingsChanged()
 {
-     StandardThemeBackgroundProvider::clearCache(); //So we don't waste memory with background images that are not used
-
-     QString newThemeName = d->config().readEntry("name", ThemePrivate::defaultTheme);
-     if(newThemeName != d->themeName) {
-      d->setThemeName(newThemeName, false);
-     }else{
-      ///@todo More precise monitoring of attributes
-      d->discardCache(true);
-      emit themeChanged();
-     }
+    d->setThemeName(d->config().readEntry("name", ThemePrivate::defaultTheme), false);
 }
 
 void Theme::setThemeName(const QString &themeName)
@@ -740,98 +697,6 @@ void Theme::setCacheLimit(int kbytes)
     }
 }
 
-
-void StandardThemeBackgroundProvider::clearCache()
-{
-    m_cachedPatterns.clear();
-}
-
-StandardThemeBackgroundProvider::StandardThemeBackgroundProvider(Theme* theme, QString imagePath) : m_color(Qt::black), m_patternAlpha(0), m_valid(false)
-{
-    if(theme->d->locolor)
-        return;
-
-    if((imagePath.startsWith("widgets/panel-") || imagePath.startsWith("dialogs/")) &&
-       (theme->d->hasOptionalConfig("frameBackgroundColor") || theme->d->hasOptionalConfig("frameBackgroundPattern")))
-    {
-        m_valid = true;
-        m_color = theme->d->readOptionalConfig<QColor>("frameBackgroundColor", Qt::black, imagePath);
-        if(theme->d->hasOptionalConfig("frameBackgroundColor"))
-            m_color.setAlpha(theme->d->readOptionalConfig<int>("frameBackgroundColorAlpha", 255, imagePath));
-        else
-            m_color.setAlpha(0);
-
-        m_pattern = theme->d->readOptionalConfig<QString>("frameBackgroundPattern", QString(), imagePath);
-        m_patternAlpha = theme->d->readOptionalConfig<int>("frameBackgroundPatternAlpha", 255, imagePath);
-        m_offsetX = theme->d->readOptionalConfig<int>("frameBackgroundPatternOffsetX", 0, imagePath);
-        m_offsetY = theme->d->readOptionalConfig<int>("frameBackgroundPatternOffsetY", 0, imagePath);
-        int randomX = theme->d->readOptionalConfig<int>("frameBackgroundPatternOffsetRandomX", 0, imagePath);
-        int randomY = theme->d->readOptionalConfig<int>("frameBackgroundPatternOffsetRandomY", 0, imagePath);
-
-        if(randomX || randomY) {
-            //Add "this" so the offsets are different after every startup, but stay same for the same image path
-            qsrand(qHash(imagePath) + ((size_t)this) + randomX + 11 * randomY);
-            if(randomX)
-                m_offsetX += qrand() % randomX;
-            if(randomY)
-                m_offsetY += qrand() % randomY;
-        }
-
-    }
-}
-
-void StandardThemeBackgroundProvider::apply(QPainter& target) const
-{
-    if(!m_valid)
-        return;
-
-    target.setCompositionMode(QPainter::CompositionMode_DestinationOver);
-
-    //Apply color
-    if(m_color.alpha())
-        target.fillRect(target.clipRegion().boundingRect(), m_color);
-
-    //Apply pattern
-    if(m_patternAlpha && !m_pattern.isEmpty()) {
-        if(!m_cachedPatterns.contains(m_pattern) || m_cachedPatterns[m_pattern].second != m_patternAlpha) {
-            m_cachedPatterns.remove(m_pattern);
-            m_cachedPatterns.insert(m_pattern, PatternAlphaPair(QImage(m_pattern), m_patternAlpha));
-            if(m_patternAlpha != 255) {
-                PatternAlphaPair& cached(m_cachedPatterns[m_pattern]);
-                //Apply lower alpha value to the pattern
-                QImage alpha(cached.first.size(), QImage::Format_ARGB32);
-                alpha.fill(QColor(cached.second, cached.second, cached.second).rgb());
-                cached.first.setAlphaChannel(alpha);
-            }
-        }
-
-        PatternAlphaPair& cached(m_cachedPatterns[m_pattern]);
-
-        if(!cached.first.isNull()) {
-            QBrush brush;
-            QColor col(Qt::white);
-            col.setAlpha(m_patternAlpha);
-            brush.setColor(col);
-            brush.setTextureImage(cached.first);
-            target.setBrushOrigin(-m_offsetX, -m_offsetY);
-            target.fillRect(target.clipRegion().boundingRect(), brush);
-        }else{
-            kDebug() << "failed to load pattern" << m_pattern;
-        }
-    }
-}
-
-StandardThemeBackgroundProvider::operator bool() const
-{
-    return m_valid;
-}
-
-QString StandardThemeBackgroundProvider::identity() const
-{
-    if(!m_valid)
-        return QString();
-    return QString("bgcolor_%1=").arg(m_color.alpha()) + m_color.name()+QString("_pattern_%1=").arg(m_patternAlpha)+m_pattern + QString("_offsets_%1_%2__").arg(m_offsetX).arg(m_offsetY);
-}
 }
 
 #include <theme.moc>

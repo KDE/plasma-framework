@@ -32,7 +32,6 @@
 
 #include <plasma/theme.h>
 #include <plasma/applet.h>
-#include "private/framebackgroundprovider.h"
 
 namespace Plasma
 {
@@ -385,27 +384,20 @@ void FrameSvg::paintFrame(QPainter *painter, const QPointF &pos)
     painter->drawPixmap(pos, frame->cachedBackground);
 }
 
-QString FrameSvgPrivate::cacheId(const FrameData* frame) const
-{
-    Theme *theme = Theme::defaultTheme();
-    StandardThemeBackgroundProvider backgroundProvider(theme, q->imagePath());
-
-    return QString::fromLatin1("%6_%5_%4_%3_%2_%1_").
-                         arg(frame->enabledBorders).arg(frame->frameSize.width()).arg(frame->frameSize.height()).arg(prefix)
-                         .arg(q->imagePath()).arg(backgroundProvider.identity());
-}
-
 void FrameSvgPrivate::generateBackground(FrameData *frame)
 {
     if (!frame->cachedBackground.isNull()) {
         return;
     }
 
-    QString id = cacheId(frame);
+
+    QString id = QString::fromLatin1("%5_%4_%3_%2_%1_").
+                         arg(frame->enabledBorders).arg(frame->frameSize.width()).arg(frame->frameSize.height()).arg(prefix).arg(q->imagePath());
 
     Theme *theme = Theme::defaultTheme();
-    if (theme->findInCache(id, frame->cachedBackground) && !frame->cachedBackground.isNull())
+    if (theme->findInCache(id, frame->cachedBackground) && !frame->cachedBackground.isNull()) {
         return;
+    }
 
     //kDebug() << "generating background";
     const int topWidth = q->elementSize(prefix + "top").width();
@@ -610,14 +602,6 @@ void FrameSvgPrivate::generateBackground(FrameData *frame)
         p.drawPixmap(overlayPos, overlay, QRect(overlayPos, overlaySize));
     }
 
-    if(!prefix.startsWith("mask-")) {
-        StandardThemeBackgroundProvider backgroundProvider(theme, q->imagePath());
-        if(backgroundProvider) {
-            p.setClipRegion(q->mask() );
-            backgroundProvider.apply(p);
-        }
-    }
-
     if (!framesToSave.contains(prefix)) {
         framesToSave.append(prefix);
     }
@@ -633,7 +617,8 @@ void FrameSvgPrivate::scheduledCacheUpdate()
         FrameData *frame = frames[prefix];
         framesToSave.removeAll(prefixToSave);
 
-        QString id = cacheId(frame);
+        QString id = QString::fromLatin1("%5_%4_%3_%2_%1_").
+                            arg(frame->enabledBorders).arg(frame->frameSize.width()).arg(frame->frameSize.height()).arg(prefix).arg(q->imagePath());
 
         //kDebug()<<"Saving to cache frame"<<id;
 

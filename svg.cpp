@@ -364,29 +364,31 @@ class SvgPrivate
 
             QString newPath = Theme::defaultTheme()->imagePath(themePath);
 
-            if (path != newPath) {
-              path = newPath;
-              //delete d->renderer; we're a KSharedPtr
-              eraseRenderer();
-
-              // check if new theme svg wants colorscheme applied
-              bool wasApplyColors = applyColors;
-              checkApplyColorHint();
-              if (applyColors && !Theme::defaultTheme()->colorScheme()) {
-                  if (!wasApplyColors) {
-                      QObject::connect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()),
-                                      q, SLOT(colorsChanged()));
-                  }
-              } else {
-                  QObject::disconnect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()),
-                                      q, SLOT(colorsChanged()));
-              }
-              localRectCache.clear();
-              itemsToSave.clear();
-              saveTimer->stop();
+            if (path == newPath) {
+                return;
             }
-            //Even trigger a repaint when the theme path has not changed.
-            //It may be other aspects of the theme rendering that changed (Composition type, background color, ...)
+
+            path = newPath;
+            //delete d->renderer; we're a KSharedPtr
+            eraseRenderer();
+
+            // check if new theme svg wants colorscheme applied
+            bool wasApplyColors = applyColors;
+            checkApplyColorHint();
+            if (applyColors && !Theme::defaultTheme()->colorScheme()) {
+                if (!wasApplyColors) {
+                    QObject::connect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()),
+                                     q, SLOT(colorsChanged()));
+                }
+            } else {
+                QObject::disconnect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()),
+                                    q, SLOT(colorsChanged()));
+            }
+
+            localRectCache.clear();
+            itemsToSave.clear();
+            saveTimer->stop();
+
             //kDebug() << themePath << ">>>>>>>>>>>>>>>>>> theme changed";
             emit q->repaintNeeded();
         }

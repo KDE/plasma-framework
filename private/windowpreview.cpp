@@ -155,13 +155,16 @@ void WindowPreview::setInfo()
         XDeleteProperty(dpy, parentWidget()->winId(), atom);
         return;
     }
+
     if (windowSizes.size() == 0) {
         readWindowSizes();
     }
+
     if (windowSizes.size() == 0) {
         XDeleteProperty(dpy, parentWidget()->winId(), atom);
         return;
     }
+
     Q_ASSERT(parentWidget()->isWindow()); // parent must be toplevel
 
     QSize thumbnailSize = sizeHint();
@@ -184,11 +187,11 @@ void WindowPreview::setInfo()
         x += s.width() + WINDOW_MARGIN;
     }
 
-    QVarLengthArray<long, 1024> data(1 + 6*numWindows);
+    QVarLengthArray<long, 1024> data(1 + (6 * numWindows));
     data[0] = numWindows;
 
-    for (int i = 0; i<numWindows; ++i) {
-        const int start = i*6+1;
+    for (int i = 0; i < numWindows; ++i) {
+        const int start = (i * 6) + 1;
         const QRect thumbnailRect = m_thumbnailRects[i];
 
         data[start] = 5;
