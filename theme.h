@@ -31,7 +31,7 @@
 
 namespace Plasma
 {
-class FrameBackgroundProvider;
+class StandardThemeBackgroundProvider;
 class ThemePrivate;
 
 /**
@@ -265,18 +265,6 @@ class PLASMA_EXPORT Theme : public QObject
          */
         void releaseRectsCache(const QString &image);
 
-        /**
-         * Returns a frame background provider, that allows intelligently filling the
-         * background of the frame represented by the given image.
-         *
-         * The ownership stays with the theme object, and the background provider
-         * is only for immediate usage.
-         *
-         * @param imagePath image path identifying the frame
-         * @return the backgrond-provider or zero, depending on the image, settings, and composition mode
-         */
-        FrameBackgroundProvider* frameBackgroundProvider(QString imagePath) const;
-
     Q_SIGNALS:
         /**
          * Emitted when the user changes the theme. SVGs should be reloaded at
@@ -294,6 +282,7 @@ class PLASMA_EXPORT Theme : public QObject
     private:
         friend class ThemeSingleton;
         friend class ThemePrivate;
+        friend class StandardThemeBackgroundProvider;
         ThemePrivate *const d;
 
         Q_PRIVATE_SLOT(d, void compositingChanged())

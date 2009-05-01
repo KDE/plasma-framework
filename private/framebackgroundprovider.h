@@ -20,27 +20,20 @@
 #ifndef PLASMA_PANELBACKGROUNDPROVIDER_H
 #define PLASMA_PANELBACKGROUNDPROVIDER_H
 
-#include <plasma/plasma_export.h>
-#include <QtCore/QPoint>
-
-class QPainter;
-class QRegion;
-
 namespace Plasma {
+class Theme;
 
 /**
- * Abstract class to provide additional panel backgrounds behind translucent panels.
+ * A class that paints an additional background behind specific elements of a theme.
+ * Construct it locally right before using it.
  */
-class PLASMA_EXPORT FrameBackgroundProvider
-{
-public:
-    virtual ~FrameBackgroundProvider();
+class StandardThemeBackgroundProvider {
+  public:
     /**
-     * Returns an identity that can be used for caching the result of the background rendering.
-     * @return The identity string
+     * Constructs a background-provider for the given theme
      */
-    virtual QString identity() = 0;
-
+    StandardThemeBackgroundProvider(Theme* theme, QString imagePath);
+    
     /**
      * Applies the background to the given target. The target must have correct alpha-values,
      * so the background can be painted under it. Also the clip-region must be already set correctly
@@ -48,9 +41,33 @@ public:
      * @param target The target where the background should be painted
      * @param offset Additional offset for the rendering: The render-source is translated by this offset
      */
-    virtual void apply(QPainter& target, QPoint offset = QPoint()) = 0;
+    void apply(QPainter& target) const;
+    
+    /**
+     * Returns an identity that can be used for caching the result of the background rendering.
+     * @return The identity string
+     */
+    QString identity() const;
+    
+    static void clearCache();
+    
+    /**
+     * Returns true if  this background-provider will paint something
+     */
+    operator bool() const;
+  private:
+    QColor m_color;
+    QString m_pattern;
+    int m_patternAlpha;
+    int m_offsetX;
+    int m_offsetY;
+    bool m_valid;
+    
+    //Maps file-name to (image, alpha)
+    typedef QPair<QImage, int> PatternAlphaPair; //The alpha value is statically applied to the pattern
+    static QMap<QString, PatternAlphaPair > m_cachedPatterns;
 };
 
 }
 
-#endif // PLASMA_PANELBACKGROUNDPROVIDER_H
+#endif

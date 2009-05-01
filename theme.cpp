@@ -41,7 +41,7 @@
 #include <kwindowsystem.h>
 
 #include "private/packages_p.h"
-#include "framebackgroundprovider.h"
+#include "private/framebackgroundprovider.h"
 
 namespace Plasma
 {
@@ -51,31 +51,7 @@ namespace Plasma
 static const int DEFAULT_WALLPAPER_WIDTH = 1920;
 static const int DEFAULT_WALLPAPER_HEIGHT = 1200;
 
-class StandardThemeBackgroundProvider : public FrameBackgroundProvider {
-  public:
-    StandardThemeBackgroundProvider();
-    virtual void apply(QPainter& target, QPoint offset);
-    virtual QString identity();
-    QColor m_color;
-    QString m_pattern;
-    int m_patternAlpha;
-    int m_offsetX;
-    int m_offsetY;
-
-    void clearCache() {
-      m_cachedPatterns.clear();
-    }
-
-  private:
-    //Maps file-name to (image, alpha)
-    typedef QPair<QImage, uint> PatternAlphaPair; //The alpha value is statically applied to the pattern
-    QMap<QString, PatternAlphaPair > m_cachedPatterns;
-};
-
-static StandardThemeBackgroundProvider& standardThemeBackgroundProvider() {
-    static StandardThemeBackgroundProvider ret;
-    return ret;
-}
+QMap<QString, StandardThemeBackgroundProvider::PatternAlphaPair> StandardThemeBackgroundProvider::m_cachedPatterns;
 
 class ThemePrivate
 {
@@ -356,7 +332,7 @@ void ThemePrivate::settingsFileChanged(const QString &file)
 
 void Theme::settingsChanged()
 {
-     standardThemeBackgroundProvider().clearCache(); //So we don't waste memory with background images that are not used
+     StandardThemeBackgroundProvider::clearCache(); //So we don't waste memory with background images that are not used
 
      QString newThemeName = d->config().readEntry("name", ThemePrivate::defaultTheme);
      if(newThemeName != d->themeName) {
@@ -764,10 +740,51 @@ void Theme::setCacheLimit(int kbytes)
     }
 }
 
-StandardThemeBackgroundProvider::StandardThemeBackgroundProvider() : m_color(Qt::black), m_patternAlpha(0) {
+
+void StandardThemeBackgroundProvider::clearCache()
+{
+    m_cachedPatterns.clear();
 }
 
-void StandardThemeBackgroundProvider::apply(QPainter& target, QPoint offset) {
+StandardThemeBackgroundProvider::StandardThemeBackgroundProvider(Theme* theme, QString imagePath) : m_color(Qt::black), m_patternAlpha(0), m_valid(false)
+{
+    if(theme->d->locolor)
+        return;
+
+    if((imagePath.startsWith("widgets/panel-") || imagePath.startsWith("dialogs/")) &&
+       (theme->d->hasOptionalConfig("frameBackgroundColor") || theme->d->hasOptionalConfig("frameBackgroundPattern")))
+    {
+        m_valid = true;
+        m_color = theme->d->readOptionalConfig<QColor>("frameBackgroundColor", Qt::black, imagePath);
+        if(theme->d->hasOptionalConfig("frameBackgroundColor"))
+            m_color.setAlpha(theme->d->readOptionalConfig<int>("frameBackgroundColorAlpha", 255, imagePath));
+        else
+            m_color.setAlpha(0);
+
+        m_pattern = theme->d->readOptionalConfig<QString>("frameBackgroundPattern", QString(), imagePath);
+        m_patternAlpha = theme->d->readOptionalConfig<int>("frameBackgroundPatternAlpha", 255, imagePath);
+        m_offsetX = theme->d->readOptionalConfig<int>("frameBackgroundPatternOffsetX", 0, imagePath);
+        m_offsetY = theme->d->readOptionalConfig<int>("frameBackgroundPatternOffsetY", 0, imagePath);
+        int randomX = theme->d->readOptionalConfig<int>("frameBackgroundPatternOffsetRandomX", 0, imagePath);
+        int randomY = theme->d->readOptionalConfig<int>("frameBackgroundPatternOffsetRandomY", 0, imagePath);
+
+        if(randomX || randomY) {
+            //Add "this" so the offsets are different after every startup, but stay same for the same image path
+            qsrand(qHash(imagePath) + ((size_t)this) + randomX + 11 * randomY);
+            if(randomX)
+                m_offsetX += qrand() % randomX;
+            if(randomY)
+                m_offsetY += qrand() % randomY;
+        }
+
+    }
+}
+
+void StandardThemeBackgroundProvider::apply(QPainter& target) const
+{
+    if(!m_valid)
+        return;
+
     target.setCompositionMode(QPainter::CompositionMode_DestinationOver);
 
     //Apply color
@@ -796,7 +813,7 @@ void StandardThemeBackgroundProvider::apply(QPainter& target, QPoint offset) {
             col.setAlpha(m_patternAlpha);
             brush.setColor(col);
             brush.setTextureImage(cached.first);
-            target.setBrushOrigin(-(m_offsetX + offset.x()), -(m_offsetY + offset.y()));
+            target.setBrushOrigin(-m_offsetX, -m_offsetY);
             target.fillRect(target.clipRegion().boundingRect(), brush);
         }else{
             kDebug() << "failed to load pattern" << m_pattern;
@@ -804,46 +821,17 @@ void StandardThemeBackgroundProvider::apply(QPainter& target, QPoint offset) {
     }
 }
 
-QString StandardThemeBackgroundProvider::identity() {
+StandardThemeBackgroundProvider::operator bool() const
+{
+    return m_valid;
+}
+
+QString StandardThemeBackgroundProvider::identity() const
+{
+    if(!m_valid)
+        return QString();
     return QString("bgcolor_%1=").arg(m_color.alpha()) + m_color.name()+QString("_pattern_%1=").arg(m_patternAlpha)+m_pattern + QString("_offsets_%1_%2__").arg(m_offsetX).arg(m_offsetY);
 }
-
-FrameBackgroundProvider* Theme::frameBackgroundProvider(QString imagePath) const {
-    if(d->locolor)
-        return 0;
-
-    if((imagePath.startsWith("widgets/panel-") || imagePath.startsWith("dialogs/")) &&
-       (d->hasOptionalConfig("frameBackgroundColor") || d->hasOptionalConfig("frameBackgroundPattern")))
-    {
-        StandardThemeBackgroundProvider& provider(standardThemeBackgroundProvider());;
-      
-        provider.m_color = d->readOptionalConfig<QColor>("frameBackgroundColor", Qt::black, imagePath);
-        if(d->hasOptionalConfig("frameBackgroundColor"))
-            provider.m_color.setAlpha(d->readOptionalConfig<int>("frameBackgroundColorAlpha", 255, imagePath));
-        else
-            provider.m_color.setAlpha(0);
-
-        provider.m_pattern = d->readOptionalConfig<QString>("frameBackgroundPattern", QString(), imagePath);
-        provider.m_patternAlpha = d->readOptionalConfig<int>("frameBackgroundPatternAlpha", 255, imagePath);
-        provider.m_offsetX = d->readOptionalConfig<int>("frameBackgroundPatternOffsetX", 0, imagePath);
-        provider.m_offsetY = d->readOptionalConfig<int>("frameBackgroundPatternOffsetY", 0, imagePath);
-        int randomX = d->readOptionalConfig<int>("frameBackgroundPatternOffsetRandomX", 0, imagePath);
-        int randomY = d->readOptionalConfig<int>("frameBackgroundPatternOffsetRandomY", 0, imagePath);
-
-        if(randomX || randomY) {
-            //Add "this" so the offsets are different after every startup, but stay same for the same image path
-            qsrand(qHash(imagePath) + ((size_t)this) + randomX + 11 * randomY);
-            if(randomX)
-                provider.m_offsetX += qrand() % randomX;
-            if(randomY)
-                provider.m_offsetY += qrand() % randomY;
-        }
-
-        return &provider;
-    }else
-        return 0;
-}
-
 }
 
 #include <theme.moc>

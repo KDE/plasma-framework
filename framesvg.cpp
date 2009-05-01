@@ -32,7 +32,7 @@
 
 #include <plasma/theme.h>
 #include <plasma/applet.h>
-#include "framebackgroundprovider.h"
+#include "private/framebackgroundprovider.h"
 
 namespace Plasma
 {
@@ -388,12 +388,11 @@ void FrameSvg::paintFrame(QPainter *painter, const QPointF &pos)
 QString FrameSvgPrivate::cacheId(const FrameData* frame) const
 {
     Theme *theme = Theme::defaultTheme();
-    FrameBackgroundProvider* backgroundProvider = theme->frameBackgroundProvider(q->imagePath());
-
+    StandardThemeBackgroundProvider backgroundProvider(theme, q->imagePath());
 
     return QString::fromLatin1("%6_%5_%4_%3_%2_%1_").
                          arg(frame->enabledBorders).arg(frame->frameSize.width()).arg(frame->frameSize.height()).arg(prefix)
-                         .arg(q->imagePath()).arg(backgroundProvider ? backgroundProvider->identity() : QString());
+                         .arg(q->imagePath()).arg(backgroundProvider.identity());
 }
 
 void FrameSvgPrivate::generateBackground(FrameData *frame)
@@ -612,9 +611,10 @@ void FrameSvgPrivate::generateBackground(FrameData *frame)
     }
 
     if(!prefix.startsWith("mask-")) {
-        if(FrameBackgroundProvider* backgroundProvider = theme->frameBackgroundProvider(q->imagePath())) {
+        StandardThemeBackgroundProvider backgroundProvider(theme, q->imagePath());
+        if(backgroundProvider) {
             p.setClipRegion(q->mask() );
-            backgroundProvider->apply(p);
+            backgroundProvider.apply(p);
         }
     }
 
