@@ -891,9 +891,9 @@ KPluginInfo::List Containment::listContainmentsOfType(const QString &type,
             constraint.append(" and ");
         }
 
-        constraint.append("[X-KDE-PluginInfo-Category] == '").append(category).append("'");
+        constraint.append("'").append(category).append("' in Keywords");
         if (category == "Miscellaneous") {
-            constraint.append(" or (not exist [X-KDE-PluginInfo-Category] or [X-KDE-PluginInfo-Category] == '')");
+            constraint.append(" or not exist Keywords");
         }
     }
 

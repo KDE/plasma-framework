@@ -748,7 +748,7 @@ QString Applet::category() const
 
 QString Applet::category(const KPluginInfo &applet)
 {
-    return applet.property("X-KDE-PluginInfo-Category").toString();
+    return applet.property("Keywords").toStringList().first();
 }
 
 QString Applet::category(const QString &appletName)
@@ -764,7 +764,7 @@ QString Applet::category(const QString &appletName)
         return QString();
     }
 
-    return offers.first()->property("X-KDE-PluginInfo-Category").toString();
+    return offers.first()->property("Keywords").toStringList().first();
 }
 
 ImmutabilityType Applet::immutability() const
@@ -1644,14 +1644,12 @@ KPluginInfo::List Applet::listAppletInfo(const QString &category,
         KConfigGroup group(KGlobal::config(), "General");
         QStringList excluded = group.readEntry("ExcludeCategories", QStringList());
         foreach (const QString &category, excluded) {
-            constraint.append(" and [X-KDE-PluginInfo-Category] != '").append(category).append("'");
+            constraint.append(" and not '").append(category).append("' ~in Keywords");
         }
     } else { //specific category (this could be an excluded one - is that bad?)
-        constraint.append(" and ");
-
-        constraint.append("[X-KDE-PluginInfo-Category] == '").append(category).append("'");
+        constraint.append(" and ").append("'").append(category).append("'").append(" in Keywords");
         if (category == "Miscellaneous") {
-            constraint.append(" or (not exist [X-KDE-PluginInfo-Category] or [X-KDE-PluginInfo-Category] == '')");
+            constraint.append(" or not exist Keywords");
         }
     }
 
@@ -1693,7 +1691,7 @@ KPluginInfo::List Applet::listAppletInfoForMimetype(const QString &mimetype)
 
 QStringList Applet::listCategories(const QString &parentApp, bool visibleOnly)
 {
-    QString constraint = "exist [X-KDE-PluginInfo-Category]";
+    QString constraint = "exist Keywords";
 
     if (parentApp.isEmpty()) {
         constraint.append(" and not exist [X-KDE-ParentApp]");
@@ -1704,25 +1702,31 @@ QStringList Applet::listCategories(const QString &parentApp, bool visibleOnly)
     KConfigGroup group(KGlobal::config(), "General");
     QStringList excluded = group.readEntry("ExcludeCategories", QStringList());
     foreach (const QString &category, excluded) {
-        constraint.append(" and [X-KDE-PluginInfo-Category] != '").append(category).append("'");
+        constraint.append(" and not '").append(category).append("' in Keywords");
     }
 
     KService::List offers = KServiceTypeTrader::self()->query("Plasma/Applet", constraint);
+    //TODO: this is potentially slow using a QStringList if there are lots and lots of categories
     QStringList categories;
     foreach (const KService::Ptr &applet, offers) {
-        QString appletCategory = applet->property("X-KDE-PluginInfo-Category").toString();
         if (visibleOnly && applet->noDisplay()) {
             // we don't want to show the hidden category
             continue;
         }
 
+        QStringList appletCategories = applet->property("Keywords").toStringList();
+
         //kDebug() << "   and we have " << appletCategory;
-        if (appletCategory.isEmpty()) {
+        if (appletCategories.isEmpty()) {
             if (!categories.contains(i18nc("misc category", "Miscellaneous"))) {
                 categories << i18nc("misc category", "Miscellaneous");
             }
-        } else  if (!categories.contains(appletCategory)) {
-            categories << appletCategory;
+        } else  {
+            foreach (const QString &category, appletCategories) {
+                if (!categories.contains(category, Qt::CaseInsensitive)) {
+                    categories << category;
+                }
+            }
         }
     }
 

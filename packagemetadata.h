@@ -75,6 +75,7 @@ public:
 
     QString name() const;
     QString description() const;
+    QStringList keywords() const;
     QString serviceType() const;
     QString author() const;
     QString email() const;
@@ -100,6 +101,12 @@ public:
      * information what the package is about.
      */
     void setDescription(const QString &);
+
+    /**
+     * Set the keywords used to provide search and categorizations
+     * @param keywords the keywords to associate with this package
+     */
+    void setKeywords(const QStringList &keywords);
 
     /**
      * Set the service-type which defines the X-KDE-ServiceTypes

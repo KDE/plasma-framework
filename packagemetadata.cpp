@@ -37,6 +37,7 @@ class PackageMetadataPrivate
 
         QString name;
         QString description;
+        QStringList keywords;
         QString author;
         QString email;
         QString version;
@@ -83,6 +84,7 @@ void PackageMetadata::write(const QString &filename) const
 
     config.writeEntry("Name", d->name);
     config.writeEntry("Comment", d->description);
+    config.writeEntry("Keywords", d->keywords);
     config.writeEntry("X-KDE-ServiceTypes", d->serviceType);
     config.writeEntry("X-KDE-PluginInfo-Name", d->pluginName);
     config.writeEntry("X-KDE-PluginInfo-Author", d->author);
@@ -107,6 +109,7 @@ void PackageMetadata::read(const QString &filename)
 
     d->name = config.readEntry("Name", d->name);
     d->description = config.readEntry("Comment", d->description);
+    d->keywords = config.readEntry("Keywords", d->keywords);
     d->serviceType = config.readEntry("X-KDE-ServiceTypes", d->serviceType);
     d->pluginName = config.readEntry("X-KDE-PluginInfo-Name", d->pluginName);
     d->author = config.readEntry("X-KDE-PluginInfo-Author", d->author);
@@ -114,7 +117,7 @@ void PackageMetadata::read(const QString &filename)
     d->version = config.readEntry("X-KDE-PluginInfo-Version", d->version);
     d->website = config.readEntry("X-KDE-PluginInfo-Website", d->website);
     d->license = config.readEntry("X-KDE-PluginInfo-License", d->license);
-    d->category = config.readEntry("X-KDE-PluginInfo-Category", d->category);
+    d->category = config.readEntry("KDE-PluginInfo-Category", d->category);
     d->api = config.readEntry("X-Plasma-API", d->api);
     d->app = config.readEntry("X-KDE-ParentApp", d->app);
     d->type = config.readEntry("Type", d->type);
@@ -168,6 +171,16 @@ QString PackageMetadata::application() const
 QString PackageMetadata::category() const
 {
     return d->category;
+}
+
+void PackageMetadata::setKeywords(const QStringList &keywords)
+{
+    d->keywords = keywords;
+}
+
+QStringList PackageMetadata::keywords() const
+{
+    return d->keywords;
 }
 
 QString PackageMetadata::requiredVersion() const
