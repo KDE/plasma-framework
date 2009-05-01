@@ -287,7 +287,7 @@ void Style::drawPrimitive(PrimitiveElement element, const QStyleOption *option, 
 QRect Style::subControlRect(ComplexControl control, const QStyleOptionComplex *option,
                             SubControl subControl, const QWidget *widget) const
 {
-    QRect rect(qApp->style()->subControlRect(control, option, subControl, widget));
+    QRect rect(QCommonStyle::subControlRect(control, option, subControl, widget));
     switch (control) {
     case CC_Slider: {
         const QStyleOptionSlider *sliderOpt = qstyleoption_cast<const QStyleOptionSlider *>(option);
