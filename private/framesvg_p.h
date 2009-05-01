@@ -85,6 +85,8 @@ public:
         frames.clear();
     }
 
+    QString cacheId(const FrameData* frame) const;
+
     void generateBackground(FrameData *frame);
     void scheduledCacheUpdate();
     void updateSizes();

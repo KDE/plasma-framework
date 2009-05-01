@@ -72,6 +72,7 @@ set(plasma_LIB_SRCS
     framesvg.cpp
     plasma.cpp
     popupapplet.cpp
+    framebackgroundprovider.cpp
     private/applethandle.cpp
     private/datacontainer_p.cpp
     private/desktoptoolbox.cpp
@@ -223,6 +224,7 @@ set(plasma_LIB_INCLUDES
     servicejob.h
     svg.h
     theme.h
+    framebackgroundprovider.h
     tooltipcontent.h
     tooltipmanager.h
     tooltipmanager.h
