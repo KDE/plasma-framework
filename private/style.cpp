@@ -284,6 +284,28 @@ void Style::drawPrimitive(PrimitiveElement element, const QStyleOption *option, 
     }
 }
 
+QRect Style::subControlRect(ComplexControl control, const QStyleOptionComplex *option,
+                            SubControl subControl, const QWidget *widget) const
+{
+    QRect rect(qApp->style()->subControlRect(control, option, subControl, widget));
+    switch (control) {
+    case CC_Slider: {
+        const QStyleOptionSlider *sliderOpt = qstyleoption_cast<const QStyleOptionSlider *>(option);
+        if (sliderOpt) {
+            if (sliderOpt->orientation == Qt::Horizontal) {
+                rect.moveCenter(QPoint(rect.center().x(), option->rect.center().y()));
+            } else {
+                rect.moveCenter(QPoint(option->rect.center().x(), rect.center().y()));
+            }
+        }
+        return rect;
+        break;
+    }
+    default:
+        return rect;
+    }
+}
+
 int Style::pixelMetric(PixelMetric metric, const QStyleOption *option, const QWidget *widget) const
 {
     if (Theme::defaultTheme()->useNativeWidgetStyle()) {
@@ -301,7 +323,7 @@ int Style::pixelMetric(PixelMetric metric, const QStyleOption *option, const QWi
         }
     }
     default:
-        return QCommonStyle::pixelMetric(metric, option, widget);
+        return qApp->style()->pixelMetric(metric, option, widget);
     }
 }
 

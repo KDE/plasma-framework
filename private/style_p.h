@@ -53,6 +53,8 @@ protected:
                             const QWidget *widget) const;
 
     int pixelMetric(PixelMetric metric, const QStyleOption *option = 0, const QWidget *widget = 0) const;
+    QRect subControlRect(ComplexControl control, const QStyleOptionComplex *option,
+                         SubControl subControl, const QWidget *widget) const;
 
 private:
     StylePrivate *d;
