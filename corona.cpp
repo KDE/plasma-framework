@@ -84,24 +84,24 @@ public:
         //some common actions
         actions.setConfigGroup("Shortcuts");
 
-        KAction *lockAction = new KAction(i18n("Lock Widgets"), q);
+        KAction *lockAction = actions.addAction("lock widgets");
+        lockAction->setText(i18n("Lock Widgets"));
         lockAction->setIcon(KIcon("object-locked"));
         QObject::connect(lockAction, SIGNAL(triggered(bool)),
                 q, SLOT(toggleImmutability()));
         lockAction->setShortcut(KShortcut("alt+d, l"));
         lockAction->setShortcutContext(Qt::ApplicationShortcut);
-        actions.addAction("lock widgets", lockAction);
 
         //FIXME this doesn't really belong here. desktop KCM maybe?
         //but should the shortcuts be per-app or really-global?
         //I don't know how to make kactioncollections use plasmarc
-        KAction *action = new KAction(i18n("Shortcut Settings"), q);
+        KAction *action = actions.addAction("configure shortcuts");
+        action->setText(i18n("Shortcut Settings"));
         action->setIcon(KIcon("configure"));
         QObject::connect(action, SIGNAL(triggered()),
                 q, SLOT(showShortcutConfig()));
         //action->setShortcut(KShortcut("ctrl+h"));
         action->setShortcutContext(Qt::ApplicationShortcut);
-        actions.addAction("configure shortcuts", action);
 
         actions.readSettings();
 
@@ -683,6 +683,11 @@ QAction *Corona::action(QString name) const
 void Corona::addAction(QString name, QAction *action)
 {
     d->actions.addAction(name, action);
+}
+
+KAction* Corona::addAction(QString name)
+{
+    return d->actions.addAction(name);
 }
 
 QList<QAction*> Corona::actions() const

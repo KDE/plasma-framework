@@ -30,6 +30,8 @@
 class QGraphicsGridLayout;
 class QAction;
 
+class KAction;
+
 namespace Plasma
 {
 
@@ -200,6 +202,15 @@ public:
      * those are handled automatically. this is for stuff outside of that.
      */
     void addShortcuts(KActionCollection *newShortcuts);
+
+    /**
+     * @since 4.3
+     * Creates an action in our collection under the given name
+     * @return the new action
+     * FIXME I'm wrapping so much of kactioncollection API now, maybe I should just expose the
+     * collection itself :P
+     */
+    KAction* addAction(QString name);
 
 public Q_SLOTS:
     /**

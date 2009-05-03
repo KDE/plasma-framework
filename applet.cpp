@@ -1417,15 +1417,15 @@ KActionCollection* AppletPrivate::defaultActions(QObject *parent)
     KActionCollection *actions = new KActionCollection(parent);
     actions->setConfigGroup("Shortcuts-Applet");
 
-    KAction *configAction = new KAction(i18n("Widget Settings"), actions);
+    KAction *configAction = actions->addAction("configure");
+    configAction->setText(i18n("Widget Settings"));
     configAction->setIcon(KIcon("configure"));
     configAction->setShortcut(KShortcut("alt+d, s"));
-    actions->addAction("configure", configAction);
 
-    KAction *closeApplet = new KAction("Remove this Widget", actions);
+    KAction *closeApplet = actions->addAction("remove");
+    closeApplet->setText("Remove this Widget");
     closeApplet->setIcon(KIcon("edit-delete"));
     closeApplet->setShortcut(KShortcut("alt+d, r"));
-    actions->addAction("remove", closeApplet);
 
     return actions;
 }

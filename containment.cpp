@@ -226,26 +226,26 @@ void ContainmentPrivate::addDefaultActions(KActionCollection *actions)
     }
 
     //add our own actions
-    KAction *appletBrowserAction = new KAction(i18n("Add Widgets..."), actions);
+    KAction *appletBrowserAction = actions->addAction("add widgets");
+    appletBrowserAction->setText(i18n("Add Widgets..."));
     appletBrowserAction->setIcon(KIcon("list-add"));
     appletBrowserAction->setShortcut(KShortcut("alt+d, a"));
-    actions->addAction("add widgets", appletBrowserAction);
 
-    KAction *action = new KAction(i18n("Next Widget"), actions);
+    KAction *action = actions->addAction("next applet");
+    action->setText(i18n("Next Widget"));
     //no icon
     action->setShortcut(KShortcut("alt+d, n"));
-    actions->addAction("next applet", action);
 
-    action = new KAction(i18n("Previous Widget"), actions);
+    action = actions->addAction("previous applet");
+    action->setText(i18n("Previous Widget"));
     //no icon
     action->setShortcut(KShortcut("alt+d, p"));
-    actions->addAction("previous applet", action);
 
-    KAction *zoomAction = new KAction(i18n("Zoom In"), actions);
+    KAction *zoomAction = actions->addAction("zoom in");
+    zoomAction->setText(i18n("Zoom In"));
     zoomAction->setIcon(KIcon("zoom-in"));
     //two shortcuts because I hate ctrl-+ but others expect it
     zoomAction->setShortcuts(KShortcut("alt+d, +; alt+d, ="));
-    actions->addAction("zoom in", zoomAction);
 
 }
 
