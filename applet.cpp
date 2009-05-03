@@ -1016,30 +1016,45 @@ void Applet::flushPendingConstraintsEvents()
         //FIXME desktop containments can't be removed while in use.
         //it's kinda silly to have a keyboard shortcut for something that can only be used when the
         //shortcut isn't active.
-        KAction *closeApplet = new KAction(this);
-        closeApplet->setIcon(KIcon("edit-delete"));
-        closeApplet->setEnabled(unlocked);
-        closeApplet->setVisible(unlocked);
-        closeApplet->setText(i18nc("%1 is the name of the applet", "Remove this %1", name()));
-        if (d->isContainment) {
-            closeApplet->setShortcut(QKeySequence("alt+d,alt+r"));
-        } else {
-            closeApplet->setShortcut(QKeySequence("alt+d,r"));
+        QAction *closeApplet = d->actions->action("remove");
+        if (closeApplet) {
+            closeApplet->setEnabled(unlocked);
+            closeApplet->setVisible(unlocked);
+            connect(closeApplet, SIGNAL(triggered(bool)), this, SLOT(selectItemToDestroy()));
         }
-        connect(closeApplet, SIGNAL(triggered(bool)), this, SLOT(selectItemToDestroy()));
-        d->actions.addAction("remove", closeApplet);
+
+        QAction *configAction = d->actions->action("configure");
+        if (configAction) {
+            //XXX assumption: isContainment won't change after this
+            if (d->isContainment) {
+                connect(configAction, SIGNAL(triggered()), this, SLOT(requestConfiguration()));
+            } else {
+                connect(configAction, SIGNAL(triggered(bool)), this, SLOT(showConfigurationInterface()));
+            }
+            bool canConfig = unlocked || KAuthorized::authorize("PlasmaAllowConfigureWhenLocked");
+            canConfig = canConfig && (d->hasConfigurationInterface || d->isContainment);
+            configAction->setVisible(canConfig);
+            configAction->setEnabled(canConfig);
+        }
+
+        d->updateShortcuts();
+        Corona * corona = qobject_cast<Corona*>(scene());
+        if (corona) {
+            connect(corona, SIGNAL(shortcutsChanged()), this, SLOT(updateShortcuts()));
+        }
     }
 
     if (c & Plasma::ImmutableConstraint) {
         bool unlocked = immutability() == Mutable;
-        QAction *action = d->actions.action("remove");
+        QAction *action = d->actions->action("remove");
         if (action) {
             action->setVisible(unlocked);
             action->setEnabled(unlocked);
         }
 
         bool canConfig = unlocked || KAuthorized::authorize("PlasmaAllowConfigureWhenLocked");
-        action = d->actions.action("configure");
+        canConfig = canConfig && (d->hasConfigurationInterface || d->isContainment);
+        action = d->actions->action("configure");
         if (action) {
             action->setVisible(canConfig);
             action->setEnabled(canConfig);
@@ -1143,12 +1158,12 @@ QList<QAction*> Applet::contextualActions()
 
 QAction *Applet::action(QString name) const
 {
-    return d->actions.action(name);
+    return d->actions->action(name);
 }
 
 void Applet::addAction(QString name, QAction *action)
 {
-    d->actions.addAction(name, action);
+    d->actions->addAction(name, action);
 }
 
 void Applet::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
@@ -1273,7 +1288,7 @@ void Applet::setGlobalShortcut(const KShortcut &shortcut)
         d->activationAction->setObjectName(QString("activate widget %1").arg(id())); // NO I18N
         connect(d->activationAction, SIGNAL(triggered()), this, SIGNAL(activate()));
 
-        QList<QWidget *> widgets = d->actions.associatedWidgets();
+        QList<QWidget *> widgets = d->actions->associatedWidgets();
         foreach (QWidget *w, widgets) {
             w->addAction(d->activationAction);
         }
@@ -1307,12 +1322,12 @@ bool Applet::isPopupShowing() const
 
 void Applet::addAssociatedWidget(QWidget *widget)
 {
-    d->actions.addAssociatedWidget(widget);
+    d->actions->addAssociatedWidget(widget);
 }
 
 void Applet::removeAssociatedWidget(QWidget *widget)
 {
-    d->actions.removeAssociatedWidget(widget);
+    d->actions->removeAssociatedWidget(widget);
 }
 
 Location Applet::location() const
@@ -1369,6 +1384,8 @@ bool Applet::hasConfigurationInterface() const
     return d->hasConfigurationInterface;
 }
 
+//it bugs me that this can get turned on and off at will. I don't see it being useful and it just
+//makes more work for me and more code duplication.
 void Applet::setHasConfigurationInterface(bool hasInterface)
 {
     if (d->hasConfigurationInterface == hasInterface) {
@@ -1376,31 +1393,41 @@ void Applet::setHasConfigurationInterface(bool hasInterface)
     }
 
     d->hasConfigurationInterface = hasInterface;
-    //config action
-    //TODO respect security when it's implemented (4.2)
-    KAction *configAction = qobject_cast<KAction*>(d->actions.action("configure"));
-    if (hasInterface) {
-        if (!configAction) { //should be always true
-            configAction = new KAction(i18n("%1 Settings", name()), this);
-            configAction->setIcon(KIcon("configure"));
-            //configAction->setShortcutContext(Qt::WidgetWithChildrenShortcut); //don't clash with other views
-            bool unlocked = immutability() == Mutable;
-            bool canConfig = unlocked || KAuthorized::authorize("PlasmaAllowConfigureWhenLocked");
-            configAction->setVisible(canConfig);
-            configAction->setEnabled(canConfig);
-            //XXX these shortcuts are also in setIsContainment. keep them in sync.
-            if (d->isContainment) {
-                configAction->setShortcut(QKeySequence("alt+d,alt+s"));
-                connect(configAction, SIGNAL(triggered()), this, SLOT(requestConfiguration()));
-            } else {
-                configAction->setShortcut(QKeySequence("alt+d,s"));
-                connect(configAction, SIGNAL(triggered(bool)), this, SLOT(showConfigurationInterface()));
-            }
-            d->actions.addAction("configure", configAction);
-        }
-    } else if (!d->isContainment && !qobject_cast<Plasma::Containment*>(this)) {
-        d->actions.removeAction(configAction);
+
+    //FIXME I'm pretty sure this line has issues but I'm preserving current behaviour for now
+    if (!hasInterface && (d->isContainment || qobject_cast<Plasma::Containment*>(this))) {
+        return;
     }
+
+    //config action
+    KAction *configAction = qobject_cast<KAction*>(d->actions->action("configure"));
+    if (configAction) {
+        bool canConfig = false;
+        if (hasInterface) {
+            bool unlocked = immutability() == Mutable;
+            canConfig = unlocked || KAuthorized::authorize("PlasmaAllowConfigureWhenLocked");
+        }
+        configAction->setVisible(canConfig);
+        configAction->setEnabled(canConfig);
+    }
+}
+
+KActionCollection* AppletPrivate::defaultActions(QObject *parent)
+{
+    KActionCollection *actions = new KActionCollection(parent);
+    actions->setConfigGroup("Shortcuts-Applet");
+
+    KAction *configAction = new KAction(i18n("Widget Settings"), actions);
+    configAction->setIcon(KIcon("configure"));
+    configAction->setShortcut(KShortcut("alt+d, s"));
+    actions->addAction("configure", configAction);
+
+    KAction *closeApplet = new KAction("Remove this Widget", actions);
+    closeApplet->setIcon(KIcon("edit-delete"));
+    closeApplet->setShortcut(KShortcut("alt+d, r"));
+    actions->addAction("remove", closeApplet);
+
+    return actions;
 }
 
 bool Applet::eventFilter(QObject *o, QEvent *e)
@@ -1633,6 +1660,33 @@ void AppletPrivate::configDialogFinished()
     }
 
     q->configChanged();
+}
+
+void AppletPrivate::updateShortcuts()
+{
+    if (isContainment) {
+        //a horrible hack to avoid clobbering corona settings
+        //we pull them out, then read, then put them back
+        QList<QString> names;
+        QList<QAction*> qactions;
+        names << "zoom out" << "add sibling containment" << "configure shortcuts" << "lock widgets";
+        foreach (const QString &name, names) {
+            QAction *a = actions->action(name);
+            actions->takeAction(a); //FIXME this is stupid, KActionCollection needs a takeAction(QString) method
+            qactions << a;
+        }
+
+        actions->readSettings();
+
+        for (int i=0; i<names.size(); ++i) {
+            QAction *a = qactions.at(i);
+            if (a) {
+                actions->addAction(names.at(i), a);
+            }
+        }
+    } else {
+        actions->readSettings();
+    }
 }
 
 void Applet::configChanged()
@@ -2019,24 +2073,12 @@ void AppletPrivate::setIsContainment(bool nowIsContainment, bool forceUpdate)
     }
 
     isContainment = nowIsContainment;
+    //FIXME I do not like this function.
+    //currently it's only called before ctmt/applet init, with (true,true), and I'm going to assume it stays that way.
+    //if someone calls it at some other time it'll cause headaches. :P
 
     delete mainConfig;
     mainConfig = 0;
-
-    KAction *configAction = qobject_cast<KAction*>(actions.action("configure"));
-    if (configAction) {
-        QObject::disconnect(configAction, SIGNAL(triggered()), q, SLOT(requestConfiguration()));
-        QObject::disconnect(configAction, SIGNAL(triggered(bool)), q, SLOT(showConfigurationInterface()));
-        //XXX these shortcuts are also in setHasConfigurationInterface. keep them in sync.
-        if (nowIsContainment) {
-            //kDebug() << "I am a containment";
-            configAction->setShortcut(QKeySequence("alt+d,alt+s"));
-            QObject::connect(configAction, SIGNAL(triggered()), q, SLOT(requestConfiguration()));
-        } else {
-            configAction->setShortcut(QKeySequence("alt+d,s"));
-            QObject::connect(configAction, SIGNAL(triggered(bool)), q, SLOT(showConfigurationInterface()));
-        }
-    }
 }
 
 bool Applet::isContainment() const
@@ -2062,7 +2104,7 @@ AppletPrivate::AppletPrivate(KService::Ptr service, int uniqueID, Applet *applet
           pendingConstraints(NoConstraint),
           aspectRatioMode(Plasma::KeepAspectRatio),
           immutability(Mutable),
-          actions(applet),
+          actions(AppletPrivate::defaultActions(applet)),
           activationAction(0),
           shortcutEditor(0),
           messageOverlayProxy(0),
@@ -2179,7 +2221,13 @@ void AppletPrivate::init(const QString &packagePath)
     }
 
     q->setBackgroundHints(Applet::DefaultBackground);
-    q->setHasConfigurationInterface(true);
+    q->setHasConfigurationInterface(true); //FIXME why not default it to true in the constructor?
+
+    QAction *closeApplet = actions->action("remove");
+    closeApplet->setText(i18nc("%1 is the name of the applet", "Remove this %1", q->name()));
+    QAction *configAction = actions->action("configure");
+    configAction->setText(i18nc("%1 is the name of the applet", "%1 Settings", q->name()));
+
     QObject::connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()), q, SLOT(themeChanged()));
     QObject::connect(q, SIGNAL(activate()), q, SLOT(setFocus()));
 }

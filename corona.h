@@ -185,6 +185,22 @@ public:
      */
     void enableAction(const QString &name, bool enable);
 
+    /**
+     * @since 4.3
+     * Updates keyboard shortcuts for all the corona's actions.
+     * If you've added actions to the corona you'll need to
+     * call this for them to be configurable.
+     */
+    void updateShortcuts();
+
+    /**
+     * @since 4.3
+     * Adds a set of actions to the shortcut config dialog.
+     * don't use this on actions in the corona's own actioncollection,
+     * those are handled automatically. this is for stuff outside of that.
+     */
+    void addShortcuts(KActionCollection *newShortcuts);
+
 public Q_SLOTS:
     /**
      * Initializes the layout from a config file. This will first clear any existing
@@ -281,6 +297,16 @@ Q_SIGNALS:
      */
     void immutabilityChanged(Plasma::ImmutabilityType immutability);
 
+    /**
+     * @since 4.3
+     * emitted when the user changes keyboard shortcut settings
+     * connect to this if you've put some extra shortcuts in your app
+     * that are NOT in corona's actioncollection.
+     * if your code's not in shells/ it probably shouldn't be using this function.
+     * @see addShortcuts
+     */
+    void shortcutsChanged();
+
 protected:
     /**
      * Loads the default (system wide) layout for this user
@@ -316,6 +342,7 @@ private:
     Q_PRIVATE_SLOT(d, void offscreenWidgetDestroyed(QObject *))
     Q_PRIVATE_SLOT(d, void syncConfig())
     Q_PRIVATE_SLOT(d, void toggleImmutability())
+    Q_PRIVATE_SLOT(d, void showShortcutConfig())
 
     friend class CoronaPrivate;
 };

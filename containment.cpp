@@ -137,57 +137,55 @@ void Containment::init()
         setContainmentType(DesktopContainment);
     }
 
-    //common actions
+    //connect actions
+    ContainmentPrivate::addDefaultActions(d->actions());
     bool unlocked = immutability() == Mutable;
 
-    KAction *appletBrowserAction = new KAction(i18n("Add Widgets..."), this);
-    appletBrowserAction->setIcon(KIcon("list-add"));
+    //fix the text of the actions that need name()
+    //btw, do we really want to use name() when it's a desktopcontainment?
+    QAction *closeApplet = d->actions()->action("remove");
+    closeApplet->setText(i18nc("%1 is the name of the applet", "Remove this %1", name()));
+    QAction *configAction = d->actions()->action("configure");
+    configAction->setText(i18nc("%1 is the name of the applet", "%1 Settings", name()));
+
+    QAction *appletBrowserAction = action("add widgets");
     appletBrowserAction->setVisible(unlocked);
     appletBrowserAction->setEnabled(unlocked);
     connect(appletBrowserAction, SIGNAL(triggered()), this, SLOT(triggerShowAddWidgets()));
-    appletBrowserAction->setShortcut(QKeySequence("alt+d,a"));
-    d->actions().addAction("add widgets", appletBrowserAction);
 
-    KAction *action = new KAction(i18n("Next Widget"), this);
-    //no icon
-    connect(action, SIGNAL(triggered()), this, SLOT(focusNextApplet()));
-    action->setShortcut(QKeySequence("alt+d,n"));
-    d->actions().addAction("next applet", action);
-
-    action = new KAction(i18n("Previous Widget"), this);
-    //no icon
-    connect(action, SIGNAL(triggered()), this, SLOT(focusPreviousApplet()));
-    action->setShortcut(QKeySequence("alt+d,p"));
-    d->actions().addAction("previous applet", action);
+    QAction *act = action("next applet");
+    connect(act, SIGNAL(triggered()), this, SLOT(focusNextApplet()));
+    act = action("previous applet");
+    connect(act, SIGNAL(triggered()), this, SLOT(focusPreviousApplet()));
 
     if (immutability() != SystemImmutable && corona()) {
         QAction *lockDesktopAction = corona()->action("lock widgets");
         //keep a pointer so nobody notices it moved to corona
         if (lockDesktopAction) {
-            d->actions().addAction("lock widgets", lockDesktopAction);
+            d->actions()->addAction("lock widgets", lockDesktopAction);
         }
     }
 
-    if (d->type != PanelContainment &&
-        d->type != CustomPanelContainment) {
-        KAction *zoomAction = new KAction(i18n("Zoom In"), this);
-        zoomAction->setIcon(KIcon("zoom-in"));
-        connect(zoomAction, SIGNAL(triggered(bool)), this, SLOT(zoomIn()));
-        //two shortcuts because I hate ctrl-+ but others expect it
-        QList<QKeySequence> keys;
-        keys << QKeySequence("alt+d,+");
-        keys << QKeySequence("alt+d,=");
-        zoomAction->setShortcuts(keys);
-        d->actions().addAction("zoom in", zoomAction);
+    if (d->type == PanelContainment ||
+        d->type == CustomPanelContainment) {
+        d->actions()->removeAction(d->actions()->action("zoom in"));
+    } else {
+        QAction *zoomAction = action("zoom in");
+        connect(zoomAction, SIGNAL(triggered()), this, SLOT(zoomIn()));
 
         if (corona()) {
             QAction *action = corona()->action("zoom out");
             if (action) {
-                d->actions().addAction("zoom out", action);
+                d->actions()->addAction("zoom out", action);
             }
             action = corona()->action("add sibling containment");
             if (action) {
-                d->actions().addAction("add sibling containment", action);
+                d->actions()->addAction("add sibling containment", action);
+            }
+            //a stupid hack to make this one's keyboard shortcut work
+            action = corona()->action("configure shortcuts");
+            if (action) {
+                d->actions()->addAction("configure shortcuts", action);
             }
         }
 
@@ -210,6 +208,45 @@ void Containment::init()
             setDrawWallpaper(true);
         }
     }
+
+}
+
+void ContainmentPrivate::addDefaultActions(KActionCollection *actions)
+{
+    actions->setConfigGroup("Shortcuts-Containment");
+
+    //adjust applet actions
+    KAction *appAction = qobject_cast<KAction*>(actions->action("remove"));
+    appAction->setShortcut(KShortcut("alt+d, alt+r"));
+    appAction->setText(i18n("Remove this Activity"));
+    appAction = qobject_cast<KAction*>(actions->action("configure"));
+    if (appAction) {
+        appAction->setShortcut(KShortcut("alt+d, alt+s"));
+        appAction->setText(i18n("Activity Settings"));
+    }
+
+    //add our own actions
+    KAction *appletBrowserAction = new KAction(i18n("Add Widgets..."), actions);
+    appletBrowserAction->setIcon(KIcon("list-add"));
+    appletBrowserAction->setShortcut(KShortcut("alt+d, a"));
+    actions->addAction("add widgets", appletBrowserAction);
+
+    KAction *action = new KAction(i18n("Next Widget"), actions);
+    //no icon
+    action->setShortcut(KShortcut("alt+d, n"));
+    actions->addAction("next applet", action);
+
+    action = new KAction(i18n("Previous Widget"), actions);
+    //no icon
+    action->setShortcut(KShortcut("alt+d, p"));
+    actions->addAction("previous applet", action);
+
+    KAction *zoomAction = new KAction(i18n("Zoom In"), actions);
+    zoomAction->setIcon(KIcon("zoom-in"));
+    //two shortcuts because I hate ctrl-+ but others expect it
+    zoomAction->setShortcuts(KShortcut("alt+d, +; alt+d, ="));
+    actions->addAction("zoom in", zoomAction);
+
 }
 
 // helper function for sorting the list of applets
@@ -507,7 +544,7 @@ void ContainmentPrivate::appletActions(KMenu &desktopMenu, Applet *applet, bool 
     }
 
     if (applet->hasConfigurationInterface()) {
-        QAction *configureApplet = applet->d->actions.action("configure");
+        QAction *configureApplet = applet->d->actions->action("configure");
         if (configureApplet) {
             desktopMenu.addAction(configureApplet);
         }
@@ -519,7 +556,7 @@ void ContainmentPrivate::appletActions(KMenu &desktopMenu, Applet *applet, bool 
             desktopMenu.addSeparator();
         }
 
-        QAction *closeApplet = applet->d->actions.action("remove");
+        QAction *closeApplet = applet->d->actions->action("remove");
         if (!closeApplet) { //unlikely but not impossible
             closeApplet = new QAction(i18nc("%1 is the name of the applet", "Remove this %1", applet->name()), &desktopMenu);
             closeApplet->setIcon(KIcon("edit-delete"));
@@ -1450,7 +1487,7 @@ Context *ContainmentPrivate::context()
     return con;
 }
 
-KActionCollection &ContainmentPrivate::actions()
+KActionCollection* ContainmentPrivate::actions()
 {
     return static_cast<Applet*>(q)->d->actions;
 }
@@ -1461,7 +1498,7 @@ void ContainmentPrivate::focusApplet(Plasma::Applet *applet)
         return;
     }
 
-    QList<QWidget *> widgets = actions().associatedWidgets();
+    QList<QWidget *> widgets = actions()->associatedWidgets();
     if (focusedApplet) {
         foreach (QWidget *w, widgets) {
             focusedApplet->removeAssociatedWidget(w);

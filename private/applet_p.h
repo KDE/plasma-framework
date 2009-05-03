@@ -95,7 +95,9 @@ public:
     KConfigDialog *generateGenericConfigDialog();
     QString configDialogId() const;
     QString configWindowTitle() const;
+    void updateShortcuts();
 
+    static KActionCollection* defaultActions(QObject *parent);
     static QSet<QString> knownCategories();
 
     static uint s_maxAppletId;
@@ -123,7 +125,7 @@ public:
     Plasma::Constraints pendingConstraints;
     Plasma::AspectRatioMode aspectRatioMode;
     ImmutabilityType immutability;
-    KActionCollection actions;
+    KActionCollection *actions;
     KAction *activationAction;
     KKeySequenceWidget *shortcutEditor; //TODO: subclass KConfigDialog and encapsulate this in there
     QGraphicsProxyWidget *messageOverlayProxy;

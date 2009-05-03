@@ -89,7 +89,12 @@ public:
                       const QRectF &geometry = QRectF(-1, -1, -1, -1), uint id = 0,
                       bool delayedInit = false);
 
-    KActionCollection &actions();
+    KActionCollection *actions();
+
+    /**
+     * add the regular actions & keyboard shortcuts onto Applet's collection
+     */
+    static void addDefaultActions(KActionCollection *actions);
 
     /**
      * give keyboard focus to applet within this containment

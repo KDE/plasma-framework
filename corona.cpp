@@ -37,10 +37,12 @@
 #include <kmimetype.h>
 #include <kactioncollection.h>
 #include <kaction.h>
+#include <kshortcutsdialog.h>
 
 #include "containment.h"
 #include "view.h"
 #include "private/applet_p.h"
+#include "private/containment_p.h"
 #include "tooltipmanager.h"
 
 using namespace Plasma;
@@ -80,13 +82,48 @@ public:
         QObject::connect(&configSyncTimer, SIGNAL(timeout()), q, SLOT(syncConfig()));
 
         //some common actions
+        actions.setConfigGroup("Shortcuts");
+
         KAction *lockAction = new KAction(i18n("Lock Widgets"), q);
         lockAction->setIcon(KIcon("object-locked"));
         QObject::connect(lockAction, SIGNAL(triggered(bool)),
                 q, SLOT(toggleImmutability()));
-        lockAction->setShortcut(QKeySequence("alt+d,l"));
+        lockAction->setShortcut(KShortcut("alt+d, l"));
         lockAction->setShortcutContext(Qt::ApplicationShortcut);
         actions.addAction("lock widgets", lockAction);
+
+        //FIXME this doesn't really belong here. desktop KCM maybe?
+        //but should the shortcuts be per-app or really-global?
+        //I don't know how to make kactioncollections use plasmarc
+        KAction *action = new KAction(i18n("Shortcuts..."), q);
+        action->setIcon(KIcon("configure"));
+        QObject::connect(action, SIGNAL(triggered()),
+                q, SLOT(showShortcutConfig()));
+        //action->setShortcut(KShortcut("ctrl+h"));
+        action->setShortcutContext(Qt::ApplicationShortcut);
+        actions.addAction("configure shortcuts", action);
+
+        actions.readSettings();
+
+        //fake containment/applet actions
+        KActionCollection *aActions = AppletPrivate::defaultActions(q);
+        KActionCollection *cActions = AppletPrivate::defaultActions(q); //containment has to start with applet stuff
+        ContainmentPrivate::addDefaultActions(cActions); //now it's really containment
+        //grab the current stuff
+        cActions->readSettings();
+        aActions->readSettings();
+
+        shortcutsDlg.setModal(false);
+        shortcutsDlg.addCollection(aActions);
+        shortcutsDlg.addCollection(cActions);
+
+        QObject::connect(&shortcutsDlg, SIGNAL(saved()), q, SIGNAL(shortcutsChanged()));
+    }
+
+    void showShortcutConfig()
+    {
+        //show a kshortcutsdialog with the actions
+        shortcutsDlg.configure();
     }
 
     void toggleImmutability()
@@ -214,6 +251,7 @@ public:
     QList<Containment*> containments;
     QHash<uint, QGraphicsWidget*> offscreenWidgets;
     KActionCollection actions;
+    KShortcutsDialog shortcutsDlg;
 };
 
 Corona::Corona(QObject *parent)
@@ -659,6 +697,17 @@ void Corona::enableAction(const QString &name, bool enable)
         action->setEnabled(enable);
         action->setVisible(enable);
     }
+}
+
+void Corona::updateShortcuts()
+{
+    d->actions.readSettings();
+    d->shortcutsDlg.addCollection(&d->actions);
+}
+
+void Corona::addShortcuts(KActionCollection *newShortcuts)
+{
+    d->shortcutsDlg.addCollection(newShortcuts);
 }
 
 } // namespace Plasma
