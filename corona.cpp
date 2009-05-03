@@ -95,7 +95,7 @@ public:
         //FIXME this doesn't really belong here. desktop KCM maybe?
         //but should the shortcuts be per-app or really-global?
         //I don't know how to make kactioncollections use plasmarc
-        KAction *action = new KAction(i18n("Shortcuts..."), q);
+        KAction *action = new KAction(i18n("Shortcut Settings"), q);
         action->setIcon(KIcon("configure"));
         QObject::connect(action, SIGNAL(triggered()),
                 q, SLOT(showShortcutConfig()));
