@@ -117,9 +117,10 @@ class PLASMA_EXPORT RunnerContext : public QObject
          *
          * While not required to be used within runners, it provies a nice way
          * to avoid unecessary processing in runners that may run for an extended
-         * period (as measured in 10s of ms) and therefore improve the user experience.
+         * period (as measured in 10s of ms) and therefore improve the user experience. 
+         * @since 4.2.3
          */
-        bool isValid();
+        bool isValid() const;
 
          /**
          * Appends lists of matches to the list of matches.

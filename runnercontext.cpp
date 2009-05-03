@@ -307,7 +307,7 @@ QString RunnerContext::mimeType() const
     return d->mimeType;
 }
 
-bool RunnerContext::isValid()
+bool RunnerContext::isValid() const
 {
     // if our qptr is dirty, we aren't useful anymore
     return (d->q != &(d->s_dummyContext));
