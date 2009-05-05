@@ -106,6 +106,12 @@ public:
      */
     Context *context();
 
+    /**
+     * Handles dropped/pasted mimetype data
+     * @param event the drop or mouse event
+     */
+    void dropData(QGraphicsSceneEvent *event);
+
     Containment *q;
     FormFactor formFactor;
     Location location;

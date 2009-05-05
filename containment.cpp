@@ -21,6 +21,7 @@
 #include "containment.h"
 #include "private/containment_p.h"
 
+#include <QClipboard>
 #include <QFile>
 #include <QGraphicsSceneContextMenuEvent>
 #include <QGraphicsView>
@@ -448,6 +449,9 @@ void Containment::mousePressEvent(QGraphicsSceneMouseEvent *event)
 
     if (event->isAccepted()) {
         setFocus(Qt::MouseFocusReason);
+    } else if (event->button() == Qt::MidButton) {
+        //middle-click = paste
+        event->accept();
     } else {
         event->accept();
         Applet::mousePressEvent(event);
@@ -464,7 +468,13 @@ void Containment::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
         }
     }
 
-    if (!event->isAccepted()) {
+    if (event->isAccepted()) {
+        //do nothing
+    } else if (event->button() == Qt::MidButton) {
+        //middle-click = paste
+        event->accept();
+        d->dropData(event);
+    } else {
         event->accept();
         Applet::mouseReleaseEvent(event);
     }
@@ -1002,43 +1012,79 @@ void Containment::dragMoveEvent(QGraphicsSceneDragDropEvent *event)
 
 void Containment::dropEvent(QGraphicsSceneDragDropEvent *event)
 {
-    //kDebug() << event->mimeData()->text();
-    if (!isContainment()) {
+    if (isContainment()) {
+        d->dropData(event);
+    } else {
         Applet::dropEvent(event);
+    }
+}
+
+void ContainmentPrivate::dropData(QGraphicsSceneEvent *event)
+{
+    if (q->immutability() != Mutable) {
         return;
     }
 
-    QString appletMimetype(corona() ? corona()->appletMimeType() : QString());
+    QGraphicsSceneDragDropEvent *dropEvent = dynamic_cast<QGraphicsSceneDragDropEvent*>(event);
+    QGraphicsSceneMouseEvent *mouseEvent = dynamic_cast<QGraphicsSceneMouseEvent*>(event);
 
-    if (!appletMimetype.isEmpty() && event->mimeData()->hasFormat(appletMimetype)) {
-        QString data = event->mimeData()->data(appletMimetype);
+    QPointF pos;
+    QPointF scenePos;
+    QPoint screenPos;
+    const QMimeData *mimeData;
+
+    if (dropEvent) {
+        pos = dropEvent->pos();
+        scenePos = dropEvent->scenePos();
+        screenPos = dropEvent->screenPos();
+        mimeData = dropEvent->mimeData();
+    } else if (mouseEvent) {
+        pos = mouseEvent->pos();
+        scenePos = mouseEvent->scenePos();
+        screenPos = mouseEvent->screenPos();
+        QClipboard *clipboard = QApplication::clipboard();
+        mimeData = clipboard->mimeData(QClipboard::Selection);
+        //TODO if that's not supported (ie non-linux) should we try clipboard instead of selection?
+    } else {
+        kDebug() << "unexpected event";
+        return;
+    }
+
+    //kDebug() << event->mimeData()->text();
+
+    QString appletMimetype(q->corona() ? q->corona()->appletMimeType() : QString());
+
+    if (!appletMimetype.isEmpty() && mimeData->hasFormat(appletMimetype)) {
+        QString data = mimeData->data(appletMimetype);
         QStringList appletNames = data.split('\n', QString::SkipEmptyParts);
 
         foreach (const QString &appletName, appletNames) {
             //kDebug() << "doing" << appletName;
-            QRectF geom(mapFromScene(event->scenePos()), QSize(0, 0));
-            addApplet(appletName, QVariantList(), geom);
+            QRectF geom(q->mapFromScene(scenePos), QSize(0, 0));
+            q->addApplet(appletName, QVariantList(), geom);
         }
-        event->acceptProposedAction();
-    } else if (event->mimeData()->hasFormat(ExtenderItemMimeData::mimeType())) {
+        if (dropEvent) {
+            dropEvent->acceptProposedAction();
+        }
+    } else if (mimeData->hasFormat(ExtenderItemMimeData::mimeType())) {
         kDebug() << "mimetype plasma/extenderitem is dropped, creating internal:extender";
         //Handle dropping extenderitems.
-        const ExtenderItemMimeData *mimeData = qobject_cast<const ExtenderItemMimeData*>(event->mimeData());
-        if (mimeData) {
-            ExtenderItem *item = mimeData->extenderItem();
-            QRectF geometry(event->pos(), item->size());
+        const ExtenderItemMimeData *extenderData = qobject_cast<const ExtenderItemMimeData*>(mimeData);
+        if (extenderData) {
+            ExtenderItem *item = extenderData->extenderItem();
+            QRectF geometry(pos, item->size());
             kDebug() << "desired geometry: " << geometry;
-            Applet *applet = addApplet("internal:extender", QVariantList(), geometry);
+            Applet *applet = q->addApplet("internal:extender", QVariantList(), geometry);
             item->setExtender(applet->extender());
         }
-    } else if (KUrl::List::canDecode(event->mimeData())) {
+    } else if (KUrl::List::canDecode(mimeData)) {
         //TODO: collect the mimetypes of available script engines and offer
         //      to create widgets out of the matching URLs, if any
-        KUrl::List urls = KUrl::List::fromMimeData(event->mimeData());
+        KUrl::List urls = KUrl::List::fromMimeData(mimeData);
         foreach (const KUrl &url, urls) {
             KMimeType::Ptr mime = KMimeType::findByUrl(url);
             QString mimeName = mime->name();
-            QRectF geom(event->pos(), QSize());
+            QRectF geom(pos, QSize());
             QVariantList args;
             args << url.url();
             //             kDebug() << mimeName;
@@ -1061,19 +1107,21 @@ void Containment::dropEvent(QGraphicsSceneDragDropEvent *event)
                 }
 
                 actionsToPlugins.insert(choices.addAction(i18n("Icon")), "icon");
-                QAction *choice = choices.exec(event->screenPos());
+                QAction *choice = choices.exec(screenPos);
                 if (choice) {
-                    addApplet(actionsToPlugins[choice], args, geom);
+                    q->addApplet(actionsToPlugins[choice], args, geom);
                 }
             } else if (url.protocol() != "data") {
                 // We don't try to do anything with data: URIs
                 // no special applet associated with this mimetype, let's
-                addApplet("icon", args, geom);
+                q->addApplet("icon", args, geom);
             }
         }
-        event->acceptProposedAction();
+        if (dropEvent) {
+            dropEvent->acceptProposedAction();
+        }
     } else {
-        QStringList formats = event->mimeData()->formats();
+        QStringList formats = mimeData->formats();
         QHash<QString, KPluginInfo> seenPlugins;
         QHash<QString, QString> pluginFormats;
 
@@ -1112,7 +1160,7 @@ void Containment::dropEvent(QGraphicsSceneDragDropEvent *event)
                 actionsToPlugins.insert(action, info.pluginName());
             }
 
-            QAction *choice = choices.exec(event->screenPos());
+            QAction *choice = choices.exec(screenPos);
             if (choice) {
                 selectedPlugin = actionsToPlugins[choice];
             }
@@ -1126,17 +1174,17 @@ void Containment::dropEvent(QGraphicsSceneDragDropEvent *event)
 
                 {
                     QDataStream stream(&tempFile);
-                    QByteArray data = event->mimeData()->data(pluginFormats[selectedPlugin]);
+                    QByteArray data = mimeData->data(pluginFormats[selectedPlugin]);
                     stream.writeRawData(data, data.size());
                 }
 
-                QRectF geom(event->pos(), QSize());
+                QRectF geom(pos, QSize());
                 QVariantList args;
                 args << tempFile.fileName();
                 kDebug() << args;
                 tempFile.close();
 
-                addApplet(selectedPlugin, args, geom);
+                q->addApplet(selectedPlugin, args, geom);
             }
         }
     }
