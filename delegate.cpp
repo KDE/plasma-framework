@@ -283,7 +283,7 @@ void Delegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
     // draw title
     p.setFont(titleFont);
     if (option.palette.color(QPalette::Base).alpha() > 0) {
-        p.setPen(QPen(KColorScheme(QPalette::Active).foreground(KColorScheme::ActiveText), 1));
+        p.setPen(QPen(KColorScheme(QPalette::Active).foreground(KColorScheme::NormalText), 1));
     } else {
         p.setPen(Plasma::Theme::defaultTheme()->color(Plasma::Theme::TextColor));
     }
