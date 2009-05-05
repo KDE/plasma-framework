@@ -282,6 +282,11 @@ void Delegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
     QPainter p(&buffer);
     // draw title
     p.setFont(titleFont);
+    if (option.palette.color(QPalette::Base).alpha() > 0) {
+        p.setPen(QPen(KColorScheme(QPalette::Active).foreground(KColorScheme::ActiveText), 1));
+    } else {
+        p.setPen(Plasma::Theme::defaultTheme()->color(Plasma::Theme::TextColor));
+    }
     p.drawText(titleRect, Qt::AlignLeft|Qt::AlignVCenter, titleText);
 
     if (hover || !uniqueTitle) {
@@ -297,7 +302,13 @@ void Delegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
         // required to understand the item itself and that showing all the subtexts in a
         // listing makes the information density very high, impacting both the speed at
         // which one can scan the list visually and the aesthetic qualities of the listing.
-        p.setPen(QPen(KColorScheme(QPalette::Active).foreground(KColorScheme::InactiveText), 1));
+        if (option.palette.color(QPalette::Base).alpha() > 0) {
+            p.setPen(QPen(KColorScheme(QPalette::Active).foreground(KColorScheme::InactiveText), 1));
+        } else {
+            QColor textColor = Plasma::Theme::defaultTheme()->color(Plasma::Theme::TextColor);
+            textColor.setAlphaF(0.6);
+            p.setPen(textColor);
+        }
         p.setFont(subTitleFont);
         p.drawText(subTitleRect, Qt::AlignLeft|Qt::AlignVCenter, "  " + subTitleText);
     }
