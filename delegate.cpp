@@ -42,6 +42,7 @@
 
 // plasma
 #include <plasma/paintutils.h>
+#include <plasma/framesvg.h>
 
 namespace Plasma
 {
@@ -69,6 +70,7 @@ class DelegatePrivate
         static const int ITEM_BOTTOM_MARGIN = 5;
 
         bool m_showToolTip;
+        FrameSvg *svg;
 };
 
 QFont DelegatePrivate::fontForSubTitle(const QFont &titleFont) const
@@ -144,6 +146,9 @@ Delegate::Delegate(QObject *parent)
     : QAbstractItemDelegate(parent),
       d(new DelegatePrivate)
 {
+    d->svg = new FrameSvg(this);
+    d->svg->setImagePath("widgets/viewitem");
+    d->svg->setElementPrefix("hover");
 }
 
 Delegate::~Delegate()
@@ -230,7 +235,9 @@ void Delegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
     QString subTitleText = index.data(d->roles[SubTitleRole]).value<QString>();
 
     QRect titleRect = d->titleRect(option, index);
+    titleRect.moveTopLeft(titleRect.topLeft()-option.rect.topLeft());
     QRect subTitleRect = d->subTitleRect(option, index);
+    subTitleRect.moveTopLeft(subTitleRect.topLeft()-option.rect.topLeft());
 
     bool uniqueTitle = !index.data(d->roles[SubTitleMandatoryRole]).value<bool>();// true;
     if (uniqueTitle) {
@@ -270,11 +277,12 @@ void Delegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
         decorationIcon.paint(painter, decorationRect, option.decorationAlignment);
     }
 
-    painter->save();
-
+    QPixmap buffer(option.rect.size());
+    buffer.fill(Qt::transparent);
+    QPainter p(&buffer);
     // draw title
-    painter->setFont(titleFont);
-    painter->drawText(titleRect, Qt::AlignLeft|Qt::AlignVCenter, titleText);
+    p.setFont(titleFont);
+    p.drawText(titleRect, Qt::AlignLeft|Qt::AlignVCenter, titleText);
 
     if (hover || !uniqueTitle) {
         // draw sub-title, BUT only if:
@@ -289,24 +297,24 @@ void Delegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
         // required to understand the item itself and that showing all the subtexts in a
         // listing makes the information density very high, impacting both the speed at
         // which one can scan the list visually and the aesthetic qualities of the listing.
-        painter->setPen(QPen(KColorScheme(QPalette::Active).foreground(KColorScheme::InactiveText), 1));
-        painter->setFont(subTitleFont);
-        painter->drawText(subTitleRect, Qt::AlignLeft|Qt::AlignVCenter, "  " + subTitleText);
+        p.setPen(QPen(KColorScheme(QPalette::Active).foreground(KColorScheme::InactiveText), 1));
+        p.setFont(subTitleFont);
+        p.drawText(subTitleRect, Qt::AlignLeft|Qt::AlignVCenter, "  " + subTitleText);
     }
-
-    painter->restore();
+    p.end();
 
 
     d->m_showToolTip = false;
 
-    painter->save();
-    painter->setPen(Qt::NoPen);
-    const QColor gradientColor = 
-	KColorScheme(QPalette::Active).background(KColorScheme::NormalBackground).color();
+    const QColor gradientColor = KColorScheme(QPalette::Active).background(KColorScheme::NormalBackground).color();
+
     if (option.direction == Qt::LeftToRight) {
         if (((titleRect.width() + decorationRect.width() + 10) > option.rect.width() ||
             (subTitleRect.width() + decorationRect.width() + 15) > option.rect.width()) &&
 	    (titleRect.width() > 120 || subTitleRect.width() > 120)) {
+            QPainter p(&buffer);
+            p.setCompositionMode(QPainter::CompositionMode_DestinationOut);
+            p.setPen(Qt::NoPen);
             QLinearGradient gr;
             QRect gradientRect(option.rect.width() - 30, titleRect.y(),
                   80, titleRect.height() + subTitleRect.height());
@@ -315,15 +323,20 @@ void Delegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
             gr.setFinalStop(gradientRect.topRight());
             gr.setColorAt(0.0, Qt::transparent);
             gr.setColorAt(0.7, gradientColor);
-            painter->setBrush(QBrush(gr));
-            painter->drawRect(gradientRect);
+            p.setBrush(QBrush(gr));
+            p.drawRect(gradientRect);
             d->m_showToolTip = true;
+            p.end();
         }
 
     } else {
         if (((titleRect.width() + decorationRect.width() + 10) > option.rect.width() || 
             (subTitleRect.width() + decorationRect.width() + 15 )> option.rect.width()) &&
 	    (titleRect.width() > 120 || subTitleRect.width() > 120)) {
+            buffer.fill(Qt::transparent);
+            QPainter p(&buffer);
+            p.setCompositionMode(QPainter::CompositionMode_DestinationOut);
+            p.setPen(Qt::NoPen);
             QLinearGradient gr;
             QRect gradientRect(option.rect.x() - 25, titleRect.y(),
                                 60, titleRect.height() + subTitleRect.height());
@@ -331,14 +344,16 @@ void Delegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
             gr.setFinalStop(gradientRect.topLeft());
             gr.setColorAt(0.0, Qt::transparent);
             gr.setColorAt(0.6, gradientColor);
-            painter->setBrush(QBrush(gr));
-            painter->drawRect(gradientRect);
+            p.setBrush(QBrush(gr));
+            p.drawRect(gradientRect);
 
             d->m_showToolTip = true;
+            p.end();
         }
     }
-    
-    painter->restore(); 
+
+    painter->drawPixmap(option.rect, buffer, buffer.rect());
+
 
     if (hover) {
         painter->save();
@@ -404,8 +419,14 @@ void Delegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
             highlightRect.adjust(-roundedRadius, 0, +roundedRadius, 0);
         }
 
-        painter->setPen(outlinePen);
-        painter->drawPath(PaintUtils::roundedRectangle(highlightRect, roundedRadius));
+        //if the view is transparent paint as plasma, otherwise paint with kde colors
+        if (option.palette.color(QPalette::Base).alpha() > 0) {
+            painter->setPen(outlinePen);
+            painter->drawPath(PaintUtils::roundedRectangle(highlightRect, roundedRadius));
+        } else {
+            d->svg->resizeFrame(highlightRect.size());
+            d->svg->paintFrame(painter, highlightRect.topLeft());
+        }
 
         painter->restore();
     }
