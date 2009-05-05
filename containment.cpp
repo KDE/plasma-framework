@@ -21,6 +21,7 @@
 #include "containment.h"
 #include "private/containment_p.h"
 
+#include <QApplication>
 #include <QClipboard>
 #include <QFile>
 #include <QGraphicsSceneContextMenuEvent>
@@ -32,7 +33,6 @@
 #include <QGraphicsLinearLayout>
 
 #include <kaction.h>
-#include <kapplication.h>
 #include <kauthorized.h>
 #include <kicon.h>
 #include <kmenu.h>

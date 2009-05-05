@@ -25,6 +25,7 @@
 #include <math.h>
 #include <string.h>
 
+#include <QApplication>
 #include <QList>
 #include <QPalette>
 #include <QtGui/QPainter>
@@ -35,7 +36,6 @@
 #include <kdebug.h>
 #include <kglobal.h>
 #include <klocale.h>
-#include <kapplication.h>
 #include <kstandarddirs.h>
 #include <kiconloader.h>
 
@@ -60,10 +60,11 @@ public:
     {
         Plasma::Theme *theme = Plasma::Theme::defaultTheme();
         backgroundColor = theme->color(Theme::BackgroundColor);
-        verticalLinesColor = theme->color(Theme::TextColor);
+        fontColor = theme->color(Theme::TextColor);
+        borderColor = fontColor;
+        verticalLinesColor = fontColor;
         verticalLinesColor.setAlphaF(0.4);
-        horizontalLinesColor = theme->color(Theme::TextColor);
-        horizontalLinesColor.setAlphaF(0.4);
+        horizontalLinesColor = verticalLinesColor;
     }
 
     int precision;
@@ -99,6 +100,7 @@ public:
     QString svgFilename;
 
     QColor fontColor;
+    QColor borderColor;
     QColor backgroundColor;
     QPixmap backgroundPixmap;
 
@@ -700,9 +702,9 @@ void SignalPlotter::drawBackground(QPainter *p, int w, int h)
 
 void SignalPlotter::drawThinFrame(QPainter *p, int w, int h)
 {
-    // Draw white line along the bottom and the right side of the
+    // Draw a line along the bottom and the right side of the
     // widget to create a 3D like look.
-    p->setPen(kapp->palette().color(QPalette::Light));
+    p->setPen(d->borderColor);
     p->drawLine(0, h - 1, w - 1, h - 1);
     p->drawLine(w - 1, 0, w - 1, h - 1);
 }
