@@ -570,7 +570,7 @@ void Dialog::animatedShow(Plasma::Direction direction)
 void DialogPrivate::progressShow(qreal amount)
 {
     //kDebug() << amount;
-    if (qFuzzyCompare(amount, 1.0)) {
+    if (qFuzzyCompare(amount, qreal(1.0))) {
         view->viewport()->move(0, 0);
         hideAnimId = 0;
         q->update();
@@ -607,7 +607,7 @@ void DialogPrivate::progressShow(qreal amount)
 void DialogPrivate::progressHide(qreal amount)
 {
     //kDebug() << amount;
-    if (qFuzzyCompare(amount, 1.0)) {
+    if (qFuzzyCompare(amount, qreal(1.0))) {
         q->hide();
         view->viewport()->move(0, 0);
         hideAnimId = 0;
