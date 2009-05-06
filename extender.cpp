@@ -232,7 +232,7 @@ Extender::Appearance Extender::appearance() const
 QList<ExtenderGroup*> Extender::groups() const
 {
     QList<ExtenderGroup*> result;
-    foreach (ExtenderItem *item, attachedItems()) {
+    foreach (ExtenderItem *item, d->attachedExtenderItems) {
         if (item->isGroup() && !result.contains(item->group())) {
             result.append(item->group());
         }
@@ -266,7 +266,7 @@ void Extender::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     Q_UNUSED(event)
     PopupApplet *popupApplet = qobject_cast<PopupApplet*>(d->applet);
-    if (d->isEmpty() && popupApplet) {
+    if (isEmpty() && popupApplet) {
         popupApplet->hidePopup();
     }
 }
@@ -618,8 +618,8 @@ void ExtenderPrivate::updateBorders()
 
 void ExtenderPrivate::updateEmptyExtenderLabel()
 {
-    if (isEmpty() && !emptyExtenderLabel && !emptyExtenderMessage.isEmpty()
-                                     && !spacerWidget ) {
+    if (q->isEmpty() && !emptyExtenderLabel &&
+        !emptyExtenderMessage.isEmpty() && !spacerWidget ) {
         //add the empty extender label.
         emptyExtenderLabel = new Label(q);
         emptyExtenderLabel->setAlignment(Qt::AlignCenter);
@@ -631,7 +631,7 @@ void ExtenderPrivate::updateEmptyExtenderLabel()
 
         emptyExtenderLabel->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
         layout->addItem(emptyExtenderLabel);
-    } else if (!isEmpty() && emptyExtenderLabel) {
+    } else if (!q->isEmpty() && emptyExtenderLabel) {
         //remove the empty extender label.
         layout->removeItem(emptyExtenderLabel);
         delete emptyExtenderLabel;
@@ -649,14 +649,16 @@ ExtenderGroup *ExtenderPrivate::findGroup(const QString &name) const
     return 0;
 }
 
-bool ExtenderPrivate::isEmpty() const
+bool Extender::isEmpty() const
 {
-    if (q->attachedItems().isEmpty()) {
-        return true;
-    } else {
-        //If there are only groups, consider this extender empty
-        return (q->attachedItems().size() == q->groups().size());
+    //If there are no items or only groups, consider this extender empty
+    foreach (ExtenderItem *item, d->attachedExtenderItems) {
+        if (!item->isGroup()) {
+            return false;
+        }
     }
+
+    return true;
 }
 
 } // Plasma namespace

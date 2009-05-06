@@ -157,6 +157,12 @@ class PLASMA_EXPORT Extender : public QGraphicsWidget
         bool hasItem(const QString &name) const;
 
         /**
+         * @return true if the Extender is visually empty (though it may have items such as
+         * empty groups or detached items associatd with it)
+         */
+        bool isEmpty() const;
+
+        /**
          * Use this function to instruct the extender on how to render it's items. Usually you will
          * want to call this function in your applet's constraintsEvent, allthough this is already
          * done for you when using PopupApplet as base class for your applet. Defaults to NoBorders.
