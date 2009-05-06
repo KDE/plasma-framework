@@ -282,7 +282,6 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
                 //emulate the same kind of behavior as Qt::Popup (close when you click somewhere
                 //else.
                 dialog->setWindowFlags(Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
-                updateDialogFlags();
                 KWindowSystem::setState(dialog->winId(), NET::SkipTaskbar | NET::SkipPager);
                 dialog->installEventFilter(q);
 
@@ -458,10 +457,6 @@ void PopupApplet::popupEvent(bool)
 void PopupApplet::setPassivePopup(bool passive)
 {
     d->passive = passive;
-
-    if (d->dialog) {
-        d->updateDialogFlags();
-    }
 }
 
 bool PopupApplet::isPassivePopup() const
@@ -704,14 +699,6 @@ void PopupAppletPrivate::updateDialogPosition()
 
     dialog->move(pos);
 }
-
-
-void PopupAppletPrivate::updateDialogFlags()
-{
-    Q_ASSERT(dialog);
-    //dialog->setAttribute(Qt::WA_X11NetWmWindowTypeNotification, passive);
-}
-
 
 } // Plasma namespace
 
