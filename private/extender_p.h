@@ -53,7 +53,6 @@ class ExtenderPrivate
         void updateBorders();
         void updateEmptyExtenderLabel();
         ExtenderGroup *findGroup(const QString &name) const;
-        bool isEmpty() const;
 
         Extender *q;
 
