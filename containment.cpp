@@ -567,12 +567,9 @@ void ContainmentPrivate::appletActions(KMenu &desktopMenu, Applet *applet, bool 
         }
 
         QAction *closeApplet = applet->d->actions->action("remove");
-        if (!closeApplet) { //unlikely but not impossible
-            closeApplet = new QAction(i18nc("%1 is the name of the applet", "Remove this %1", applet->name()), &desktopMenu);
-            closeApplet->setIcon(KIcon("edit-delete"));
-            QObject::connect(closeApplet, SIGNAL(triggered(bool)), applet, SLOT(destroy()));
+        if (closeApplet) {
+            desktopMenu.addAction(closeApplet);
         }
-        desktopMenu.addAction(closeApplet);
     }
 
     KMenu *containmentMenu = new KMenu(i18nc("%1 is the name of the containment", "%1 Options", q->name()), &desktopMenu);
@@ -1611,7 +1608,7 @@ void ContainmentPrivate::requestConfiguration()
 
 void Containment::destroy(bool confirm)
 {
-    if (immutability() != Mutable) {
+    if (immutability() != Mutable || Applet::d->transient) {
         return;
     }
 
