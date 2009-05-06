@@ -519,7 +519,7 @@ void PopupAppletPrivate::internalTogglePopup()
     } else {
         if (q->graphicsWidget() &&
             q->graphicsWidget() == static_cast<Applet*>(q)->d->extender &&
-            static_cast<Applet*>(q)->d->extender->attachedItems().isEmpty()) {
+            static_cast<Applet*>(q)->d->extender->isEmpty()) {
             // we have nothing to show, so let's not.
             return;
         }
