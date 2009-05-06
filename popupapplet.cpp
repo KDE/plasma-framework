@@ -547,6 +547,8 @@ void PopupAppletPrivate::internalTogglePopup()
         } else {
             dialog->show();
         }
+
+        KWindowSystem::activateWindow(dialog->winId());
     }
 }
 
