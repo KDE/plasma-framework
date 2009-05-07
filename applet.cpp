@@ -674,6 +674,9 @@ void Applet::setBusy(bool busy)
 
             QGraphicsLinearLayout *mainLayout = new QGraphicsLinearLayout(d->messageOverlay);
             d->busyWidget = new Plasma::BusyWidget(d->messageOverlay);
+            d->busyWidget->setAcceptHoverEvents(false);
+            d->busyWidget->setAcceptedMouseButtons(Qt::NoButton);
+            d->messageOverlay->setAcceptHoverEvents(false);
 
             mainLayout->addStretch();
             mainLayout->addItem(d->busyWidget);
