@@ -738,9 +738,13 @@ QSizeF IconWidgetPrivate::layoutText(QTextLayout &layout, const QStyleOptionGrap
     const QSizeF size = layoutText(layout, text, constraints.width());
 
     if (size.width() > constraints.width() || size.height() > constraints.height()) {
+        if (action) {
+            q->setToolTip(action->text());
+        }
         const QString elided = elidedText(layout, option, constraints);
         return layoutText(layout, elided, constraints.width());
     }
+    q->setToolTip(QString());
 
     return size;
 }
