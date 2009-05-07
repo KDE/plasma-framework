@@ -1,5 +1,9 @@
 [Desktop Entry]
 Name=Collection
+Name[es]=Colección
+Name[sv]=Samling
+Name[uk]=Збірка
+Name[zh_TW]=收藏
 Type=Service
 Icon=utilities-desktop-extra
 NoDisplay=true
