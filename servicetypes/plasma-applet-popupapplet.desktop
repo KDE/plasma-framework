@@ -4,6 +4,7 @@ X-KDE-ServiceType=Plasma/PopupApplet
 
 Comment=Plasma scripting popup applet
 Comment[be@latin]=Skryptavy vypłyŭny aplet „Plasma”
+Comment[da]=Popop-applet til Plasma-scripting
 Comment[el]=Αναδυόμενη μικροεφαρμογή σεναρίου plasma
 Comment[es]=Miniaplicación emergente de guiones para Plasma
 Comment[et]=Plasma skriptimise hüpikaplett
