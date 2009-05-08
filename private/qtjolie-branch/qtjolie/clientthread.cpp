@@ -20,7 +20,6 @@
 
 #include "clientthread_p.h"
 
-#include <QtCore/QTimer>
 #include <QtNetwork/QTcpSocket>
 
 #include "client_p.h"
@@ -46,7 +45,7 @@ void ClientThread::sendMessage(const Message &message)
     QMutexLocker locker(&m_mutex);
 
     m_messageQueue.enqueue(message);
-    QTimer::singleShot(0, this, SLOT(writeMessageQueue()));
+    QMetaObject::invokeMethod(this, "writeMessageQueue", Qt::QueuedConnection);
 }
 
 void ClientThread::writeMessageQueue()
@@ -68,7 +67,7 @@ void ClientThread::readMessage()
     emit messageReceived(message);
 
     if (m_socket->bytesAvailable()>0) {
-        QTimer::singleShot(0, this, SLOT(readMessage()));
+        QMetaObject::invokeMethod(this, "readMessage", Qt::QueuedConnection);
     }
 }
 
@@ -85,8 +84,6 @@ void ClientThread::run()
     m_socket->waitForConnected(30000);
 
     exec();
-    writeMessageQueue();
-    m_socket->waitForBytesWritten(30000);
 
     delete m_socket;
 }
