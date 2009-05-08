@@ -24,6 +24,7 @@
 
 #include <QtJolie/Client>
 #include <QtJolie/Message>
+#include <QtJolie/MetaService>
 #include <QtJolie/PendingCall>
 #include "testhelpers.h"
 
@@ -66,7 +67,7 @@ class TestMetaService : public QObject
 {
     Q_OBJECT
 
-    QProcess m_metaserviceProcess;
+    MetaService m_metaService;
     Client *m_client;
 
 public:
@@ -79,8 +80,7 @@ public:
 private slots:
     void initTestCase()
     {
-        m_metaserviceProcess.start("metaservice");
-        QVERIFY2(m_metaserviceProcess.waitForStarted(), "Looks like you don't have Jolie's metaservice command");
+        QVERIFY2(m_metaService.start(), "Looks like you don't have Jolie's metaservice command");
         QTest::qWait(1000);
 
         m_client = new Client("localhost", 9000);
@@ -88,11 +88,8 @@ private slots:
 
     void cleanupTestCase()
     {
-        Message message("/", "shutdown");
-        m_client->callNoReply(message);
         delete m_client;
-
-        m_metaserviceProcess.waitForFinished();
+        QVERIFY(m_metaService.stop());
     }
 
     void shouldLoadService_data()
@@ -109,39 +106,15 @@ private slots:
         QFETCH(QString, resourcePrefix);
         QFETCH(QString, fileName);
 
-        Message message("/", "loadEmbeddedJolieService");
-        Value value;
-        value.children("resourcePrefix") << Value(resourcePrefix);
-        value.children("filepath") << Value(QString(DATA_DIR"/")+fileName);
-        message.setData(value);
-
-        Message reply = m_client->call(message);
-
-        Message expected("/", "loadEmbeddedJolieService");
-        expected.setData(Value(resourcePrefix));
-
-        sodepCompare(reply, expected);
+        QCOMPARE(m_metaService.loadService(resourcePrefix, QString(DATA_DIR"/")+fileName),
+                 resourcePrefix);
     }
 
     void shouldListServices()
     {
-        Message message("/", "getServices");
-
-        Message reply = m_client->call(message);
-        Message expected("/", "getServices");
-        Value value;
-
-        Value s1;
-        s1.children("isEmbedded") << Value(1);
-        s1.children("resourceName") << Value("Math");
-        Value s2;
-        s2.children("isEmbedded") << Value(1);
-        s2.children("resourceName") << Value("Printer");
-
-        value.children("service") << s1 << s2;
-        expected.setData(value);
-
-        sodepCompare(reply, expected);
+        QStringList expected;
+        expected << "Math" << "Printer";
+        QCOMPARE(m_metaService.loadedServices(), expected);
     }
 
     void shouldPlaceServiceCalls_data()
@@ -185,15 +158,7 @@ private slots:
     {
         QFETCH(QString, serviceName);
 
-        Message message("/", "unloadEmbeddedService");
-        Value value(serviceName);
-        message.setData(value);
-
-        Message reply = m_client->call(message);
-
-        Message expected("/", "unloadEmbeddedService");
-
-        sodepCompare(reply, expected);
+        m_metaService.unloadService(serviceName);
     }
 };
 

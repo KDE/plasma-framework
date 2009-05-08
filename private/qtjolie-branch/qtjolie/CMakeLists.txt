@@ -5,7 +5,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}
                     ${CMAKE_CURRENT_BINARY_DIR}
                     ${QT_INCLUDE_DIR})
 
-set(qtjolie_LIB_SRCS client.cpp clientthread.cpp value.cpp fault.cpp message.cpp pendingcall.cpp)
+set(qtjolie_LIB_SRCS client.cpp clientthread.cpp value.cpp fault.cpp message.cpp metaservice.cpp pendingcall.cpp)
 
 kde4_add_library(QtJolie SHARED ${qtjolie_LIB_SRCS})
 
@@ -21,5 +21,6 @@ install(FILES
         value.h
         fault.h
         message.h
+        metaservice.h
         pendingcall.h
         DESTINATION ${INCLUDE_INSTALL_DIR}/qtjolie)
