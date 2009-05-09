@@ -1,10 +1,13 @@
 [Desktop Entry]
 Name=Collection
+Name[ca]=Col·lecció
+Name[ca@valencia]=Col·lecció
 Name[da]=Samling
 Name[es]=Colección
 Name[pt]=Colecção
 Name[pt_BR]=Coleção
 Name[sv]=Samling
+Name[tr]=Koleksiyon
 Name[uk]=Збірка
 Name[zh_TW]=收藏
 Type=Service
