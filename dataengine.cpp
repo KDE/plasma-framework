@@ -45,14 +45,12 @@ DataEngine::DataEngine(QObject *parent, KService::Ptr service)
     : QObject(parent),
       d(new DataEnginePrivate(this, service))
 {
-    connect(d->updateTimer, SIGNAL(timeout()), this, SLOT(scheduleSourcesUpdated()));
 }
 
 DataEngine::DataEngine(QObject *parent, const QVariantList &args)
     : QObject(parent),
       d(new DataEnginePrivate(this, KService::serviceByStorageId(args.count() > 0 ? args[0].toString() : QString())))
 {
-    connect(d->updateTimer, SIGNAL(timeout()), this, SLOT(scheduleSourcesUpdated()));
 }
 
 DataEngine::~DataEngine()
@@ -129,8 +127,9 @@ DataEngine::Data DataEngine::query(const QString &source) const
         return DataEngine::Data();
     } else if (!newSource && d->minPollingInterval >= 0 &&
                s->timeSinceLastUpdate() >= uint(d->minPollingInterval)) {
-        if (const_cast<DataEngine*>(this)->updateSourceEvent(source)) {
-            d->queueUpdate();
+        DataEngine *unconstThis = const_cast<DataEngine*>(this);
+        if (unconstThis->updateSourceEvent(source)) {
+            unconstThis->scheduleSourcesUpdated();
         }
     }
 
@@ -189,7 +188,7 @@ void DataEngine::setData(const QString &source, const QString &key, const QVaria
         emit sourceAdded(source);
     }
 
-    d->queueUpdate();
+    scheduleSourcesUpdated();
 }
 
 void DataEngine::setData(const QString &source, const Data &data)
@@ -211,7 +210,7 @@ void DataEngine::setData(const QString &source, const Data &data)
         emit sourceAdded(source);
     }
 
-    d->queueUpdate();
+    scheduleSourcesUpdated();
 }
 
 void DataEngine::removeAllData(const QString &source)
@@ -219,7 +218,7 @@ void DataEngine::removeAllData(const QString &source)
     DataContainer *s = d->source(source, false);
     if (s) {
         s->removeAllData();
-        d->queueUpdate();
+        scheduleSourcesUpdated();
     }
 }
 
@@ -228,7 +227,7 @@ void DataEngine::removeData(const QString &source, const QString &key)
     DataContainer *s = d->source(source, false);
     if (s) {
         s->setData(key, QVariant());
-        d->queueUpdate();
+        scheduleSourcesUpdated();
     }
 }
 
@@ -243,7 +242,7 @@ void DataEngine::addSource(DataContainer *source)
                      this, SLOT(internalUpdateSource(DataContainer*)));
     d->sources.insert(source->objectName(), source);
     emit sourceAdded(source->objectName());
-    d->queueUpdate();
+    scheduleSourcesUpdated();
 }
 
 void DataEngine::setMaxSourceCount(uint limit)
@@ -359,27 +358,34 @@ DataEngine::SourceDict DataEngine::containerDict() const
 
 void DataEngine::timerEvent(QTimerEvent *event)
 {
-    if (event->timerId() != d->updateTimerId) {
+    if (event->timerId() == d->updateTimerId) {
+        // if the freq update is less than 0, don't bother
+        if (d->minPollingInterval < 0) {
+            //kDebug() << "uh oh.. no polling allowed!";
+            return;
+        }
+
+        // minPollingInterval
+        if (d->updateTimestamp.elapsed() < d->minPollingInterval) {
+            //kDebug() << "hey now.. slow down!";
+            return;
+        }
+
+        d->updateTimestamp.restart();
+        d->updateTimerId = 0;
+        updateAllSources();
+    } else if (event->timerId() == d->checkSourcesTimerId) {
+        QHashIterator<QString, Plasma::DataContainer*> it(d->sources);
+        while (it.hasNext()) {
+            it.next();
+            it.value()->checkForUpdate();
+        }
+
+        killTimer(d->checkSourcesTimerId);
+        d->checkSourcesTimerId = 0;
+    } else {
         QObject::timerEvent(event);
-        return;
     }
-
-    event->accept();
-
-    // if the freq update is less than 0, don't bother
-    if (d->minPollingInterval < 0) {
-        //kDebug() << "uh oh.. no polling allowed!";
-        return;
-    }
-
-    // minPollingInterval
-    if (d->updateTimestamp.elapsed() < d->minPollingInterval) {
-        //kDebug() << "hey now.. slow down!";
-        return;
-    }
-
-    d->updateTimestamp.restart();
-    updateAllSources();
 }
 
 void DataEngine::updateAllSources()
@@ -420,11 +426,11 @@ const Package *DataEngine::package() const
 
 void DataEngine::scheduleSourcesUpdated()
 {
-    QHashIterator<QString, Plasma::DataContainer*> it(d->sources);
-    while (it.hasNext()) {
-        it.next();
-        it.value()->checkForUpdate();
+    if (d->checkSourcesTimerId) {
+        return;
     }
+
+    d->checkSourcesTimerId = startTimer(0);
 }
 
 QString DataEngine::name() const
@@ -443,6 +449,7 @@ DataEnginePrivate::DataEnginePrivate(DataEngine *e, KService::Ptr service)
     : q(e),
       dataEngineDescription(service),
       refCount(-1), // first ref
+      checkSourcesTimerId(0),
       updateTimerId(0),
       minPollingInterval(-1),
       limit(0),
@@ -450,8 +457,6 @@ DataEnginePrivate::DataEnginePrivate(DataEngine *e, KService::Ptr service)
       script(0),
       package(0)
 {
-    updateTimer = new QTimer(q);
-    updateTimer->setSingleShot(true);
     updateTimestamp.start();
 
     if (!service) {
@@ -512,7 +517,7 @@ void DataEnginePrivate::internalUpdateSource(DataContainer *source)
 
     if (q->updateSourceEvent(source->objectName())) {
         //kDebug() << "queuing an update";
-        queueUpdate();
+        q->scheduleSourcesUpdated();
     }/* else {
         kDebug() << "no update";
     }*/
@@ -641,14 +646,6 @@ void DataEnginePrivate::trimQueue()
         q->removeSource(punted->objectName());
         queueCount = sourceQueue.count();
     }
-}
-
-void DataEnginePrivate::queueUpdate()
-{
-    if (updateTimer->isActive()) {
-        return;
-    }
-    updateTimer->start(0);
 }
 
 }

@@ -40,7 +40,6 @@ class DataEnginePrivate
                            Plasma::IntervalAlignment align, bool immediateCall = true);
         DataContainer *requestSource(const QString &sourceName, bool *newSource = 0);
         void trimQueue();
-        void queueUpdate();
         void internalUpdateSource(DataContainer*);
 
         /**
@@ -65,12 +64,12 @@ class DataEnginePrivate
         DataEngine *q;
         KPluginInfo dataEngineDescription;
         int refCount;
+        int checkSourcesTimerId;
         int updateTimerId;
         int minPollingInterval;
         QTime updateTimestamp;
         DataEngine::SourceDict sources;
         QQueue<DataContainer*> sourceQueue;
-        QTimer *updateTimer;
         QString icon;
         uint limit;
         bool valid;
