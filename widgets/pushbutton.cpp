@@ -300,7 +300,7 @@ void PushButton::paint(QPainter *painter,
     }
 
     //if is under mouse draw the animated glow overlay
-    if (!nativeWidget()->isDown() && nativeWidget()->isChecked() && isEnabled() && acceptHoverEvents()) {
+    if (!nativeWidget()->isDown() && !nativeWidget()->isChecked() && isEnabled() && acceptHoverEvents()) {
         if (d->animId != -1) {
             QPixmap normalPix = d->background->framePixmap();
             d->background->setElementPrefix("active");
