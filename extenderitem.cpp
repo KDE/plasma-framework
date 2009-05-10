@@ -591,7 +591,7 @@ void ExtenderItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     }
 
     ExtenderGroup *group = qobject_cast<ExtenderGroup*>(this);
-    bool collapsedGroup;
+    bool collapsedGroup = false;
     if (isGroup()) {
         collapsedGroup = group->d->collapsed;
         group->collapseGroup();
