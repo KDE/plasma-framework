@@ -25,6 +25,7 @@
 
 #include <kmimetype.h>
 #include <kglobalsettings.h>
+#include <kcolorscheme.h>
 
 #include "theme.h"
 #include "svg.h"
@@ -74,6 +75,10 @@ public:
         QPalette p = native->palette();
         p.setColor(QPalette::Normal, QPalette::WindowText, color);
         p.setColor(QPalette::Inactive, QPalette::WindowText, color);
+
+        KColorScheme colorScheme(QPalette::Active, KColorScheme::View, Plasma::Theme::defaultTheme()->colorScheme());
+        p.setColor(QPalette::Normal, QPalette::Link, colorScheme.foreground(KColorScheme::LinkText).color());
+        p.setColor(QPalette::Normal, QPalette::LinkVisited, colorScheme.foreground(KColorScheme::VisitedText).color());
         native->setPalette(p);
         native->setFont(Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont));
     }
