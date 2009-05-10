@@ -173,7 +173,8 @@ void BusyWidget::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
     }
 
     painter->setPen(Plasma::Theme::defaultTheme()->color(Theme::HighlightColor));
-    painter->drawText(boundingRect(), d->label, QTextOption(Qt::AlignVCenter | Qt::AlignHCenter));
+    Qt::Alignment align(Qt::AlignVCenter | Qt::AlignHCenter);
+    painter->drawText(boundingRect(), d->label, QTextOption(align));
 }
 
 void BusyWidget::showEvent(QShowEvent *event)
