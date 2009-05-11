@@ -327,7 +327,7 @@ void Delegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
             p.setCompositionMode(QPainter::CompositionMode_DestinationOut);
             p.setPen(Qt::NoPen);
             QLinearGradient gr;
-            QRect gradientRect(option.rect.width() - 30, titleRect.y(),
+            QRect gradientRect(option.rect.width() - 60, titleRect.y(),
                   80, titleRect.height() + subTitleRect.height());
             // draw it on the right side
             gr.setStart(gradientRect.topLeft());
@@ -349,7 +349,7 @@ void Delegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
             p.setCompositionMode(QPainter::CompositionMode_DestinationOut);
             p.setPen(Qt::NoPen);
             QLinearGradient gr;
-            QRect gradientRect(option.rect.x() - 25, titleRect.y(),
+            QRect gradientRect(option.rect.x() - 55, titleRect.y(),
                                 60, titleRect.height() + subTitleRect.height());
             gr.setStart(gradientRect.topRight());
             gr.setFinalStop(gradientRect.topLeft());
