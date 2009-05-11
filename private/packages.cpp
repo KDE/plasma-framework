@@ -81,22 +81,8 @@ void PlasmoidPackage::createNewWidgetBrowser(QWidget *parent)
 {
     KNS::Engine engine(0);
     if (engine.init("plasmoids.knsrc")) {
+        //FIXME: this should not be modal, but requires fixes in knewstuff2 first
         KNS::Entry::List entries = engine.downloadDialogModal(parent);
-
-        foreach (KNS::Entry *entry, entries) {
-            if (entry->status() != KNS::Entry::Installed) {
-                continue;
-            }
-
-            // install the packges!
-            foreach (const QString &package, entry->installedFiles()) {
-                if (!installPackage(package, defaultPackageRoot())) {
-                    kDebug() << "FAIL! on install of" << package;
-                    KMessageBox::error(0, i18n("Installation of <b>%1</b> failed.", package),
-                                       i18n("Installation Failed"));
-                }
-            }
-        }
     }
 
     emit newWidgetBrowserFinished();
