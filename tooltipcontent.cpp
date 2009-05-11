@@ -42,6 +42,7 @@ struct ToolTipResource
     ToolTipContent::ResourceType type;
     QVariant data;
 };
+
 class ToolTipContentPrivate
 {
 public:

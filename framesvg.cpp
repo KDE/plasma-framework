@@ -561,16 +561,16 @@ void FrameSvgPrivate::generateBackground(FrameData *frame)
         QSize overlaySize = q->elementSize(prefix+"overlay");
 
         //Random pos, stretched and tiled are mutually exclusive
-        if (q->hasElement(prefix+"hint-overlay-random-pos")) {
+        if (q->hasElement(prefix + "hint-overlay-random-pos")) {
             pos = overlayPos;
         //Stretched or Tiled?
-        } else if (q->hasElement(prefix+"hint-overlay-stretch")) {
+        } else if (q->hasElement(prefix + "hint-overlay-stretch")) {
             overlaySize = frame->frameSize;
         } else {
-            if (q->hasElement(prefix+"hint-overlay-tile-horizontal")) {
+            if (q->hasElement(prefix + "hint-overlay-tile-horizontal")) {
                 overlaySize.setWidth(frame->frameSize.width());
             }
-            if (q->hasElement(prefix+"hint-overlay-tile-vertical")) {
+            if (q->hasElement(prefix + "hint-overlay-tile-vertical")) {
                 overlaySize.setHeight(frame->frameSize.height());
             }
         }
@@ -579,10 +579,8 @@ void FrameSvgPrivate::generateBackground(FrameData *frame)
                             arg(overlayPos.y()).arg(overlayPos.x()).arg(frame->enabledBorders).arg(frame->frameSize.width()).arg(frame->frameSize.height()).arg(prefix).arg(q->imagePath());
 
         QPixmap overlay = q->alphaMask();
-
         QPainter overlayPainter(&overlay);
         overlayPainter.setCompositionMode(QPainter::CompositionMode_SourceIn);
-
         //Tiling?
         if (q->hasElement(prefix+"hint-overlay-tile-horizontal") ||
             q->hasElement(prefix+"hint-overlay-tile-vertical")) {
@@ -598,7 +596,6 @@ void FrameSvgPrivate::generateBackground(FrameData *frame)
         overlayPainter.end();
 
         p.setCompositionMode(QPainter::CompositionMode_SourceOver);
-
         p.drawPixmap(overlayPos, overlay, QRect(overlayPos, overlaySize));
     }
 

@@ -837,9 +837,7 @@ void Applet::setBackgroundHints(const BackgroundHints hints)
 
             //position is in the boundaries overlaySize.width()*2, overlaySize.height()
             qsrand(id());
-
             d->background->d->overlayPos.rx() = - (overlaySize.width() /2) + (overlaySize.width() /4) * (qrand() % (4 + 1));
-
             d->background->d->overlayPos.ry() = (- (overlaySize.height() /2) + (overlaySize.height() /4) * (qrand() % (4 + 1)))/2;
         }
 
