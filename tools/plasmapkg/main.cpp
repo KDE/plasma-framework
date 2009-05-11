@@ -50,7 +50,7 @@ void output(const QString &msg)
 void runKbuildsycoca()
 {
     QDBusInterface dbus("org.kde.kded", "/kbuildsycoca", "org.kde.kbuildsycoca");
-    dbus.call(QDBus::Block, "recreate");
+    dbus.call(QDBus::NoBlock, "recreate");
 }
 
 QStringList packages(const QString& type)
@@ -205,7 +205,7 @@ int main(int argc, char **argv)
                     output(i18n("Successfully removed %1", pluginName));
                 } else if (!args->isSet("upgrade")) {
                     output(i18n("Removal of %1 failed.", pluginName));
-		    delete installer;
+                    delete installer;
                     return 1;
                 }
             } else {
@@ -217,7 +217,7 @@ int main(int argc, char **argv)
                 output(i18n("Successfully installed %1", packageFile));
             } else {
                 output(i18n("Installation of %1 failed.", packageFile));
-		delete installer;
+                delete installer;
                 return 1;
             }
         }
