@@ -141,7 +141,7 @@ void DialogPrivate::themeUpdated()
         default:
         break;
         }
-    } else {
+    } else if (q->isVisible()) {
         QDesktopWidget *desktop = QApplication::desktop();
         QRect avail = desktop->availableGeometry(desktop->screenNumber(q));
         QRect dialogGeom = q->geometry();
