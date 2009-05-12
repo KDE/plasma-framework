@@ -158,6 +158,7 @@ WallpaperPackage::WallpaperPackage(Wallpaper *paper, QObject *parent)
     setDefaultMimetypes(mimetypes);
 
     addDirectoryDefinition("images", "images/", i18n("Images"));
+    setRequired("images", true);
     addFileDefinition("screenshot", "screenshot.png", i18n("Screenshot"));
     setAllowExternalPaths(true);
 
