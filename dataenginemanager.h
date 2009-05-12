@@ -73,7 +73,7 @@ class PLASMA_EXPORT DataEngineManager: public QObject
          * zero, then the engine is deleted to save resources.
          */
         void unloadEngine(const QString &name);
-
+        
         /**
          * @return a listing of all known DataEngines by name
          *
@@ -97,6 +97,23 @@ class PLASMA_EXPORT DataEngineManager: public QObject
          **/
         static KPluginInfo::List listEngineInfo(const QString &parentApp = QString());
 
+        /**
+         * Returns a list of all known DataEngines filtering by category.
+         *
+         * @param category the category to filter applets on. Uses the
+         *                  X-KDE-PluginInfo-Category entry (if any) in the
+         *                  plugin info. The value of QString() will
+         *                  result in a list of engines with an empty category.
+         *                  
+         * @param parentApp the application to filter applets on. Uses the
+         *                  X-KDE-ParentApp entry (if any) in the plugin info.
+         *                  The default value of QString() will result in a
+         *                  list containing only applets not specifically
+         *                  registered to an application.
+         * @return list of DataEngines
+         * @since 4.3
+         **/
+        static KPluginInfo::List listEngineInfoByCategory(const QString &category, const QString &parentApp = QString());
     private:
         /**
          * Default constructor. The singleton method self() is the
