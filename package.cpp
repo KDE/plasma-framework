@@ -160,6 +160,12 @@ PackageMetadata Package::metadata() const
     return d->structure->metadata();
 }
 
+void Package::setPath(const QString &path)
+{
+    d->structure->setPath(path);
+    d->valid = !d->structure->path().isEmpty();
+}
+
 const QString Package::path() const
 {
     return d->structure->path();

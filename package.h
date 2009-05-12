@@ -97,9 +97,16 @@ class PLASMA_EXPORT Package
         QStringList entryList(const char *fileType) const;
 
         /**
-          * @return the package metadata object.
-          */
+         * @return the package metadata object.
+         */
         PackageMetadata metadata() const;
+
+        /**
+         * Sets the path to the root of this package
+         * @arg path and absolute path
+         * @since 4.3
+         */
+        void setPath(const QString &path);
 
         /**
          * @return the path to the root of this particular package
