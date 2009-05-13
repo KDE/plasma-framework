@@ -66,6 +66,11 @@ public:
         QObject::connect(&delayTimer, SIGNAL(timeout()), q, SLOT(unblockJobs()));
     }
 
+    ~RunnerManagerPrivate()
+    {
+        context.saveLaunchCounts(config);
+    }
+
     void scheduleMatchesChanged()
     {
         matchChangeTimer.start(50);
@@ -95,8 +100,7 @@ public:
         const int cap = qMax(2, numThreads/2);
         DefaultRunnerPolicy::instance().setCap(cap);
 
-        //If set, this list defines which runners won't be used at runtime
-        //blacklist = config.readEntry("blacklist", QStringList());
+        context.restoreLaunchCounts(config);
     }
 
     void loadRunners()
@@ -308,7 +312,7 @@ void RunnerManager::run(const QueryMatch &match)
         d->deferredRun = QueryMatch(0);
     }
 
-    match.run(d->context);
+    d->context.run(match);
 }
 
 QList<QAction*> RunnerManager::actionsForMatch(const QueryMatch &match)

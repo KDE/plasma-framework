@@ -27,6 +27,7 @@
 #include <plasma/plasma_export.h>
 
 class KCompletion;
+class KConfigGroup;
 
 namespace Plasma
 {
@@ -162,6 +163,33 @@ class PLASMA_EXPORT RunnerContext : public QObject
          *         if the id does not eixst
          */
         QueryMatch match(const QString &id) const;
+
+        /**
+         * Sets the launch counts for the associated match ids
+         *
+         * If a runner adds a match to this context, the context will check if the
+         * match id has been launched before and increase the matches relevance
+         * correspondingly. In this manner, any front end can implement adaptive search
+         * by sorting items according to relevance.
+         *
+         * @param config the config group where launch data was stored
+         */
+        void restore(const KConfigGroup &config);
+
+        /**
+         * @param config the config group where launch data should be stored
+         */
+        void save(KConfigGroup &config);
+
+        /**
+         * Run a match using the information from this context
+         *
+         * The context will also keep track of the number of times the match was
+         * launched to sort future matches according to user habits
+         *
+         * @param match the match to run
+         */
+        void run(const QueryMatch &match);
 
     Q_SIGNALS:
         void matchesChanged();

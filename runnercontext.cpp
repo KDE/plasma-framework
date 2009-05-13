@@ -27,6 +27,7 @@
 #include <QSharedData>
 
 #include <kcompletion.h>
+#include <kconfiggroup.h>
 #include <kdebug.h>
 #include <kmimetype.h>
 #include <kshell.h>
@@ -157,6 +158,7 @@ class RunnerContextPrivate : public QSharedData
 
         RunnerContextPrivate(const RunnerContextPrivate &p)
             : QSharedData(),
+              launchCounts(p.launchCounts),
               type(RunnerContext::None),
               q(p.q)
         {
@@ -218,6 +220,7 @@ class RunnerContextPrivate : public QSharedData
         QReadWriteLock lock;
         QList<QueryMatch> matches;
         QMap<QString, const QueryMatch*> matchesById;
+        QHash<QString, int> launchCounts;
         QString term;
         QString mimeType;
         RunnerContext::Type type;
@@ -323,7 +326,12 @@ bool RunnerContext::addMatches(const QString &term, const QList<QueryMatch> &mat
     }
 
     LOCK_FOR_WRITE(this)
-    foreach (const QueryMatch &match, matches) {
+    foreach (QueryMatch match, matches) {
+        // Give previously launched matches a slight boost in relevance
+        if (int count = d->launchCounts.value(match.id())) {
+            match.setRelevance(match.relevance() + 0.05 * count);
+        }
+
         d->matches.append(match);
 #ifndef NDEBUG
         if (d->matchesById.contains(match.id())) {
@@ -351,9 +359,16 @@ bool RunnerContext::addMatch(const QString &term, const QueryMatch &match)
         return false;
     }
 
+    QueryMatch m(match); // match must be non-const to modify relevance
+
     LOCK_FOR_WRITE(this)
-    d->matches.append(match);
-    d->matchesById.insert(match.id(), &d->matches.at(d->matches.size() - 1));
+
+    if (int count = d->launchCounts.value(m.id())) {
+        m.setRelevance(m.relevance() + 0.05 * count);
+    }
+
+    d->matches.append(m);
+    d->matchesById.insert(m.id(), &d->matches.at(d->matches.size() - 1));
     UNLOCK(this);
     //kDebug()<< "added match" << match->text();
     emit d->q->matchesChanged();
@@ -380,6 +395,39 @@ QueryMatch RunnerContext::match(const QString &id) const
     }
 
     return QueryMatch(0);
+}
+
+void RunnerContext::restore(const KConfigGroup &config)
+{
+    QStringList cfgList = config.readEntry("LaunchCounts", QStringList());
+
+    QRegExp r("(\\d*) (.*)");
+    foreach (QString entry, cfgList) {
+        r.indexIn(entry);
+        int count = r.cap(1).toInt();
+        QString id = r.cap(2);
+        d->launchCounts[id] = count;
+    }
+}
+
+void RunnerContext::save(KConfigGroup &config)
+{
+    QStringList countList;
+
+    typedef QHash<QString, int>::const_iterator Iterator;
+    Iterator end = d->launchCounts.constEnd();
+    for (Iterator i = d->launchCounts.constBegin(); i != end; ++i) {
+        countList << QString("%2 %1").arg(i.key()).arg(i.value());
+    }
+
+    config.writeEntry("LaunchCounts", countList);
+    config.sync();
+}
+
+void RunnerContext::run(const QueryMatch &match)
+{
+    ++d->launchCounts[match.id()];
+    match.run(*this);
 }
 
 } // Plasma namespace
