@@ -1751,10 +1751,20 @@ KPluginInfo::List Applet::listAppletInfo(const QString &category,
         while (it.hasNext()) {
             KService::Ptr p = it.next();
             QString prop = QString("X-Plasma-Requires-").append(key);
-            QVariant req = p->property(prop, QVariant::Bool);
-            //FIXME before release, switch the if statement:
-            //if (!req.isValid() || req.toBool()) {
-            if (req.isValid() && req.toBool()) {
+            QVariant req = p->property(prop, QVariant::String);
+            //valid values: Required/Optional/Unused
+            QString reqValue;
+            if (req.isValid()) {
+                reqValue = req.toString();
+            } else {
+                //TODO if it's a scripted language default to not-required because the bindings disable it
+                //this isn't actually implemented in any bindings yet but should be possible for
+                //anything but c++
+            }
+            //TODO 4.3 be very strict about what we accept
+            //if (!(reqValue == "Optional" || reqValue == "Unused")) {
+            //for testing purposes I'm being lax right now
+            if (reqValue == "Required") {
                 it.remove();
             }
         }
