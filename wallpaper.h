@@ -60,6 +60,7 @@ class PLASMA_EXPORT Wallpaper : public QObject
     Q_PROPERTY(QString icon READ icon)
     Q_PROPERTY(KServiceAction renderingMode READ renderingMode)
     Q_PROPERTY(QList<KServiceAction> listRenderingModes READ listRenderingModes)
+    Q_PROPERTY(bool usingDiskCache READ usingDiskCache WRITE setUsingDiskCache)
 
     public:
         /**
@@ -397,6 +398,11 @@ class PLASMA_EXPORT Wallpaper : public QObject
          * @since 4.3
          */
         void setUsingDiskCache(bool useCache);
+
+        /**
+         * @return true if the wallpaper is using disk caching for render results
+         */
+        bool usingDiskCache() const;
 
         /**
          * Tries to load pixmap with the specified key from cache.

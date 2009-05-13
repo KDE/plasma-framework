@@ -298,6 +298,11 @@ void Wallpaper::setUsingDiskCache(bool useCache)
     d->cacheRendering = useCache;
 }
 
+bool Wallpaper::usingDiskCache() const
+{
+    return d->cacheRendering;
+}
+
 void Wallpaper::setResizeMethodHint(Wallpaper::ResizeMethod resizeMethod)
 {
     d->lastResizeMethod = resizeMethod;
