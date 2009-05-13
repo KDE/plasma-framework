@@ -165,8 +165,10 @@ public:
         //be retrocompatible with themes for kde <= 4.1
         if (image->hasElement("background-center")) {
             QRectF elementRect = barRect();
-            if (elementRect.isEmpty())
+            if (elementRect.isEmpty()) {
                 return; // nothing to be done 
+            }
+
             QSize imageSize = image->size();
             image->resize();
 
@@ -185,6 +187,7 @@ public:
     {
         QRectF elementRect = barRect();
 
+        image->setUsingRenderingCache(false);
         if (image->hasElement("hint-bar-stretch")) {
             image->resizeFrame(elementRect.size());
             image->paintFrame(p);
@@ -208,6 +211,7 @@ public:
             p->drawTiledPixmap(elementRect, image->framePixmap());
             image->resize(imageSize);
         }
+        image->setUsingRenderingCache(true);
     }
 
     void paintForeground(QPainter *p)
@@ -481,6 +485,7 @@ void Meter::paint(QPainter *p,
     if (d->maximum != d->minimum) {
         percentage = (qreal)d->value / (d->maximum - d->minimum);
     }
+
     p->setRenderHint(QPainter::SmoothPixmapTransform);
     switch (d->meterType) {
     case BarMeterHorizontal:
@@ -497,6 +502,7 @@ void Meter::paint(QPainter *p,
             clipRect.moveBottom(bottom);
         }
         p->setClipRect(clipRect);
+
         //be retrocompatible
         if (d->image->hasElement("bar-active-center")) {
             d->paintBar(p, "bar-active");
