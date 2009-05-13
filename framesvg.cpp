@@ -394,9 +394,11 @@ void FrameSvgPrivate::generateBackground(FrameData *frame)
     QString id = QString::fromLatin1("%5_%4_%3_%2_%1_").
                          arg(frame->enabledBorders).arg(frame->frameSize.width()).arg(frame->frameSize.height()).arg(prefix).arg(q->imagePath());
 
-    Theme *theme = Theme::defaultTheme();
-    if (theme->findInCache(id, frame->cachedBackground) && !frame->cachedBackground.isNull()) {
-        return;
+    if (q->isUsingRenderingCache()) {
+        Theme *theme = Theme::defaultTheme();
+        if (theme->findInCache(id, frame->cachedBackground) && !frame->cachedBackground.isNull()) {
+            return;
+        }
     }
 
     //kDebug() << "generating background";
@@ -609,7 +611,12 @@ void FrameSvgPrivate::generateBackground(FrameData *frame)
 
 void FrameSvgPrivate::scheduledCacheUpdate()
 {
-    foreach ( QString prefixToSave, framesToSave) {
+    if (!q->isUsingRenderingCache()) {
+        framesToSave.clear();
+        return;
+    }
+
+    foreach (QString prefixToSave, framesToSave) {
         //insert background
         FrameData *frame = frames[prefix];
         framesToSave.removeAll(prefixToSave);
@@ -627,6 +634,8 @@ void FrameSvgPrivate::scheduledCacheUpdate()
 
         Theme::defaultTheme()->insertIntoCache(id, frame->cachedBackground);
     }
+
+    framesToSave.clear();
 }
 
 void FrameSvgPrivate::updateSizes()
