@@ -618,9 +618,7 @@ void FrameSvgPrivate::scheduledCacheUpdate()
 
     foreach (QString prefixToSave, framesToSave) {
         //insert background
-        FrameData *frame = frames[prefix];
-        framesToSave.removeAll(prefixToSave);
-
+        FrameData *frame = frames[prefixToSave];
         QString id = QString::fromLatin1("%5_%4_%3_%2_%1_").
                             arg(frame->enabledBorders).arg(frame->frameSize.width()).arg(frame->frameSize.height()).arg(prefix).arg(q->imagePath());
 
