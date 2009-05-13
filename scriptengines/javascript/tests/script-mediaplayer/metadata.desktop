@@ -1,27 +1,23 @@
 [Desktop Entry]
 Name=script-mediaplayer
-Name[gu]=સ્ક્રિપ્ટ-મીડિઆપ્લેયર
 Name[nds]=Afspeler-Skript
-Name[nl]=script-mediaspeler
 Name[ro]=script-lectormultimedia
 Name[sv]=script-mediaspelare
 Name[tr]=betik-çokluortam oynatıcı
 Name[x-test]=xxscript-mediaplayerxx
 
 Comment=Javascript media player
+Comment[da]=Medieafspiller i Javascript
 Comment[de]=Javascript-Medienspieler
 Comment[el]=Αναπαραγωγή πολυμέσων Javascript
 Comment[et]=Javascripti meediamängija
 Comment[fi]=Javascript-mediasoitin
 Comment[ga]=Seinnteoir meán JavaScript
 Comment[gl]=Reprodutor multimedia escrito en Javascript
-Comment[gu]=જાવાસ્ક્રિપ્ટ મિડીઆ પ્લેયર
 Comment[ja]=JavaScript のメディアプレーヤー
 Comment[km]=កម្មវិធី​ចាក់មេឌៀ Javascript
 Comment[ko]=자바스크립트 미디어 재생기
-Comment[nb]=Javascript mediaspiller
 Comment[nds]=JavaScript-Afspeler
-Comment[nl]=Javascript-mediaspeler
 Comment[pt]=Leitor multimédia em JavaScript
 Comment[pt_BR]=Leitor de mídias em JavaScript
 Comment[ro]=Lector multimedia Javascript
