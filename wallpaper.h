@@ -60,7 +60,7 @@ class PLASMA_EXPORT Wallpaper : public QObject
     Q_PROPERTY(QString icon READ icon)
     Q_PROPERTY(KServiceAction renderingMode READ renderingMode)
     Q_PROPERTY(QList<KServiceAction> listRenderingModes READ listRenderingModes)
-    Q_PROPERTY(bool usingDiskCache READ usingDiskCache WRITE setUsingDiskCache)
+    Q_PROPERTY(bool usingRenderingCache READ isUsingRenderingCache WRITE setUsingRenderingCache)
 
     public:
         /**
@@ -275,7 +275,7 @@ class PLASMA_EXPORT Wallpaper : public QObject
          * @return true if disk caching is turned on.
          * @since 4.3
          */
-        bool isUsingDiskCache() const;
+        bool isUsingRenderingCache() const;
 
         /**
          * Allows one to set rendering hints that may differ from the actualities of the
@@ -397,12 +397,7 @@ class PLASMA_EXPORT Wallpaper : public QObject
          * @param useCache true to cache rendered papers on disk, false not to cache
          * @since 4.3
          */
-        void setUsingDiskCache(bool useCache);
-
-        /**
-         * @return true if the wallpaper is using disk caching for render results
-         */
-        bool usingDiskCache() const;
+        void setUsingRenderingCache(bool useCache);
 
         /**
          * Tries to load pixmap with the specified key from cache.
@@ -418,7 +413,7 @@ class PLASMA_EXPORT Wallpaper : public QObject
         bool findInCache(const QString &key, QImage &image, unsigned int lastModified = 0);
 
         /**
-         * Insert specified pixmap into the cache if usingDiskCache.
+         * Insert specified pixmap into the cache if usingRenderingCache.
          * If the cache already contains pixmap with the specified key then it is
          * overwritten.
          *

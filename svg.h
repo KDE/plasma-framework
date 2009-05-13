@@ -59,7 +59,7 @@ class PLASMA_EXPORT Svg : public QObject
     Q_PROPERTY(QSize size READ size)
     Q_PROPERTY(bool multipleImages READ containsMultipleImages WRITE setContainsMultipleImages)
     Q_PROPERTY(QString imagePath READ imagePath WRITE setImagePath)
-    Q_PROPERTY(bool usingDiskCache READ usingDiskCache WRITE setUsingDiskCache)
+    Q_PROPERTY(bool usingRenderingCache READ isUsingRenderingCache WRITE setUsingRenderingCache)
 
     public:
 
@@ -232,12 +232,12 @@ class PLASMA_EXPORT Svg : public QObject
          * @param useCache true to cache rendered pixmaps
          * @since 4.3
          */
-        void setUsingDiskCache(bool useCache);
+        void setUsingRenderingCache(bool useCache);
 
         /**
          * @return true if the Svgis using caching for rendering results
          */
-        bool usingDiskCache() const;
+        bool isUsingRenderingCache() const;
 
     Q_SIGNALS:
         void repaintNeeded();

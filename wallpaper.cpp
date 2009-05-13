@@ -288,19 +288,14 @@ void Wallpaper::setConfigurationRequired(bool needsConfig, const QString &reason
     emit configurationRequired(needsConfig);
 }
 
-bool Wallpaper::isUsingDiskCache() const
+bool Wallpaper::isUsingRenderingCache() const
 {
     return d->cacheRendering;
 }
 
-void Wallpaper::setUsingDiskCache(bool useCache)
+void Wallpaper::setUsingRenderingCache(bool useCache)
 {
     d->cacheRendering = useCache;
-}
-
-bool Wallpaper::usingDiskCache() const
-{
-    return d->cacheRendering;
 }
 
 void Wallpaper::setResizeMethodHint(Wallpaper::ResizeMethod resizeMethod)

@@ -607,12 +607,12 @@ QString Svg::imagePath() const
    return d->themed ? d->themePath : d->path;
 }
 
-void Svg::setUsingDiskCache(bool useCache)
+void Svg::setUsingRenderingCache(bool useCache)
 {
     d->cacheRendering = useCache;
 }
 
-bool Svg::usingDiskCache() const
+bool Svg::isUsingRenderingCache() const
 {
     return d->cacheRendering;
 }
