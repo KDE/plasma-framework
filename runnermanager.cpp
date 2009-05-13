@@ -68,7 +68,7 @@ public:
 
     ~RunnerManagerPrivate()
     {
-        context.saveLaunchCounts(config);
+        context.save(config);
     }
 
     void scheduleMatchesChanged()
@@ -100,7 +100,7 @@ public:
         const int cap = qMax(2, numThreads/2);
         DefaultRunnerPolicy::instance().setCap(cap);
 
-        context.restoreLaunchCounts(config);
+        context.restore(config);
     }
 
     void loadRunners()
