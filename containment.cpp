@@ -749,6 +749,10 @@ void Containment::addApplet(Applet *applet, const QPointF &pos, bool delayInit)
 
     if (currentContainment && currentContainment != this) {
         emit currentContainment->appletRemoved(applet);
+        if (currentContainment->d->focusedApplet == applet) {
+            currentContainment->d->focusedApplet = 0;
+        }
+
         disconnect(applet, 0, currentContainment, 0);
         applet->removeSceneEventFilter(currentContainment);
         KConfigGroup oldConfig = applet->config();
