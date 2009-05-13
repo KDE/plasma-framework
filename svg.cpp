@@ -70,11 +70,15 @@ class SvgPrivate
             : q(svg),
               saveTimer(0),
               renderer(0),
+              lastModified(0),
               multipleImages(false),
               themed(false),
               applyColors(false),
-              lastModified(0)
+              cacheRendering(true)
         {
+            saveTimer = new QTimer(q);
+            saveTimer->setSingleShot(true);
+            QObject::connect(saveTimer, SIGNAL(timeout()), q, SLOT(scheduledCacheUpdate()));
         }
 
         ~SvgPrivate()
@@ -188,7 +192,7 @@ class SvgPrivate
             Theme *theme = Theme::defaultTheme();
             QPixmap p;
 
-            if (theme->findInCache(id, p, lastModified)) {
+            if (cacheRendering && theme->findInCache(id, p, lastModified)) {
                 //kDebug() << "found cached version of " << id << p.size();
                 return p;
             } else {
@@ -219,7 +223,7 @@ class SvgPrivate
                 p = p.fromImage(itmp);
             }
 
-            if (!itemsToSave.contains(id)) {
+            if (cacheRendering && !itemsToSave.contains(id)) {
                 itemsToSave.insert(id, p);
                 saveTimer->start(300);
             }
@@ -232,7 +236,7 @@ class SvgPrivate
             QHash<QString, QPixmap>::const_iterator i = itemsToSave.constBegin();
 
             while (i != itemsToSave.constEnd()) {
-                //kDebug()<<"Saving item to cache: "<<i.key();
+                //kDebug()<<"Saving item to cache: " << i.key();
                 Theme::defaultTheme()->insertIntoCache(i.key(), i.value());
                 ++i;
             }
@@ -332,7 +336,10 @@ class SvgPrivate
 
             elementRect = QRectF(elementRect.x() * dx, elementRect.y() * dy,
                                  elementRect.width() * dx, elementRect.height() * dy);
-            Theme::defaultTheme()->insertIntoRectsCache(path, cacheId(elementId), elementRect);
+
+            if (cacheRendering) {
+                Theme::defaultTheme()->insertIntoRectsCache(path, cacheId(elementId), elementRect);
+            }
 
             return elementRect;
         }
@@ -415,10 +422,11 @@ class SvgPrivate
         QString path;
         QSizeF size;
         QSizeF naturalSize;
-        bool multipleImages;
-        bool themed;
-        bool applyColors;
         unsigned int lastModified;
+        bool multipleImages : 1;
+        bool themed : 1;
+        bool applyColors : 1;
+        bool cacheRendering : 1;
 };
 
 QHash<QString, SharedSvgRenderer::Ptr> SvgPrivate::s_renderers;
@@ -427,9 +435,6 @@ Svg::Svg(QObject *parent)
     : QObject(parent),
       d(new SvgPrivate(this))
 {
-    d->saveTimer = new QTimer(this);
-    d->saveTimer->setSingleShot(true);
-    connect(d->saveTimer, SIGNAL(timeout()), this, SLOT(scheduledCacheUpdate()));
 }
 
 Svg::~Svg()
@@ -600,6 +605,16 @@ void Svg::setImagePath(const QString &svgFilePath)
 QString Svg::imagePath() const
 {
    return d->themed ? d->themePath : d->path;
+}
+
+void Svg::setUsingDiskCache(bool useCache)
+{
+    d->cacheRendering = useCache;
+}
+
+bool Svg::usingDiskCache() const
+{
+    return d->cacheRendering;
 }
 
 } // Plasma namespace

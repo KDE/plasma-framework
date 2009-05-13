@@ -59,6 +59,7 @@ class PLASMA_EXPORT Svg : public QObject
     Q_PROPERTY(QSize size READ size)
     Q_PROPERTY(bool multipleImages READ containsMultipleImages WRITE setContainsMultipleImages)
     Q_PROPERTY(QString imagePath READ imagePath WRITE setImagePath)
+    Q_PROPERTY(bool usingDiskCache READ usingDiskCache WRITE setUsingDiskCache)
 
     public:
 
@@ -216,6 +217,27 @@ class PLASMA_EXPORT Svg : public QObject
          * @return the svg's filepath including name of the svg.
          */
         QString imagePath() const;
+
+        /**
+         * Sets whether or not to cache the results of rendering to pixmaps.
+         * If the Svg is resized and re-rendered often without pattern to the resulting
+         * pixmap dimensions, then it may be less efficient to do disk caching. A good
+         * example might be a progress meter that uses an Svg object to paint itself:
+         * the meter will be changing often enoughi, with enough unpredictability and
+         * without re-use of the previous pixmaps to not get a gain from caching.
+         *
+         * Most Svg objects should use the caching feature, however.
+         * Therefore, the default is to use the render cache.
+         *
+         * @param useCache true to cache rendered pixmaps
+         * @since 4.3
+         */
+        void setUsingDiskCache(bool useCache);
+
+        /**
+         * @return true if the Svgis using caching for rendering results
+         */
+        bool usingDiskCache() const;
 
     Q_SIGNALS:
         void repaintNeeded();
