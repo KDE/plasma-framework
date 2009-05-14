@@ -1,9 +1,11 @@
 [Desktop Entry]
 Name=script-nowplaying
+Name[cs]=Skript  "Právě hraje"
 Name[es]=script-ejecutando
 Name[is]=spilanúna-skrifta
 Name[lt]=scenarijus-dabar groja
 Name[nds]=Warrt-jüst-afspeelt-Skript
+Name[nl]=script-nu-aan-het-spelen
 Name[ro]=script-înredare
 Name[sv]=script-spelar-nu
 Name[te]=ఇప్పుడునడుస్తున్న-స్క్రిప్ట్
@@ -13,6 +15,7 @@ Name[zh_CN]=脚本-现在收听
 Comment=Javascript version current track playing
 Comment[ca]=Versió en Javascript de la peça actual en reproducció
 Comment[ca@valencia]=Versió en Javascript de la peça actual en reproducció
+Comment[cs]=JavaScriptová verze skriptu "Právě hraje"
 Comment[da]=Javascript-version af nuværende spor som afspilles
 Comment[de]=Javascript-Version der Musiktitel-Anzeige
 Comment[el]=Τρέχον κομμάτι αναπαραγωγής σε έκδοση Javascript
@@ -30,6 +33,7 @@ Comment[ko]=자바스크립트 버전 지금 재생 중
 Comment[lt]=JavaScript versija – dabar grojantis takelis
 Comment[lv]=Pašlaik atskaņo javascript versija
 Comment[nds]=JavaScript-Verschoon vun Opstunns afspeelt Stück
+Comment[nl]=Javascript-versie van momenteel spelende track
 Comment[pl]=Wersja "Teraz odtwarzany" w Javascript
 Comment[pt]=Versão em JavaScript do 'Agora a tocar'
 Comment[pt_BR]=Versão em Javascript da reprodução da trilha atual

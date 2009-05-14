@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=script-mediaplayer
+Name[gu]=સ્ક્રિપ્ટ-મીડિઆપ્લેયર
 Name[nds]=Afspeler-Skript
 Name[ro]=script-lectormultimedia
 Name[sv]=script-mediaspelare
@@ -14,6 +15,7 @@ Comment[et]=Javascripti meediamängija
 Comment[fi]=Javascript-mediasoitin
 Comment[ga]=Seinnteoir meán JavaScript
 Comment[gl]=Reprodutor multimedia escrito en Javascript
+Comment[gu]=જાવાસ્ક્રિપ્ટ મિડીઆ પ્લેયર
 Comment[ja]=JavaScript のメディアプレーヤー
 Comment[km]=កម្មវិធី​ចាក់មេឌៀ Javascript
 Comment[ko]=자바스크립트 미디어 재생기
