@@ -6,6 +6,7 @@ Name[ro]=script-lectormultimedia
 Name[sv]=script-mediaspelare
 Name[tr]=betik-çokluortam oynatıcı
 Name[x-test]=xxscript-mediaplayerxx
+Name[zh_CN]=脚本-媒体播放器
 
 Comment=Javascript media player
 Comment[da]=Medieafspiller i Javascript
@@ -27,6 +28,7 @@ Comment[sv]=Javascript-mediaspelare
 Comment[tr]=Javascript çokluortam oynatıcı
 Comment[uk]=Програвач на JavaScript
 Comment[x-test]=xxJavascript media playerxx
+Comment[zh_CN]=JavaScript 媒体播放器
 Comment[zh_TW]=Javascript 媒體播放器
 
 Icon=applications-multimedia
