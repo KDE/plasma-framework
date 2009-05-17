@@ -348,6 +348,8 @@ bool Package::installPackage(const QString &package,
             KConfigGroup cg = df.desktopGroup();
             cg.writeEntry("Icon", iconPath);
         }
+    } else {
+        kWarning() << "Could not register package as service (this is not necessarily fatal):" << serviceName << " : " << job->errorString();
     }
 
     return true;
