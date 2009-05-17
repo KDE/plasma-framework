@@ -1457,10 +1457,10 @@ void Containment::setWallpaper(const QString &pluginName, const QString &mode)
 
         if (!pluginName.isEmpty() && !d->wallpaper) {
             d->wallpaper = Plasma::Wallpaper::load(pluginName);
-            d->wallpaper->setParent(this);
         }
 
         if (d->wallpaper) {
+            d->wallpaper->setParent(this);
             d->wallpaper->setBoundingRect(QRectF(QPointF(0, 0), size()));
             d->wallpaper->setRenderingMode(mode);
 
