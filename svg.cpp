@@ -68,7 +68,7 @@ class SvgPrivate
     public:
         SvgPrivate(Svg *svg)
             : q(svg),
-              theme(Plasma::Theme::defaultTheme()),
+              theme(0),
               saveTimer(0),
               renderer(0),
               lastModified(0),
@@ -133,6 +133,10 @@ class SvgPrivate
             themePath.clear();
 
             if (themed) {
+                if (!theme) {
+                    theme = Plasma::Theme::defaultTheme();
+                }
+
                 themePath = imagePath;
                 QObject::connect(theme, SIGNAL(themeChanged()),
                                  q, SLOT(themeChanged()));
@@ -188,10 +192,8 @@ class SvgPrivate
 
             //kDebug() << "id is " << id;
 
-            Theme *theme = Theme::defaultTheme();
             QPixmap p;
-
-            if (cacheRendering && theme->findInCache(id, p, lastModified)) {
+            if (cacheRendering && const_cast<Theme*>(theme)->findInCache(id, p, lastModified)) {
                 //kDebug() << "found cached version of " << id << p.size();
                 return p;
             } else {
