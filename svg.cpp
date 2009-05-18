@@ -123,8 +123,11 @@ class SvgPrivate
             // then lets not schedule a repaint because we are just initializing!
             bool updateNeeded = true; //!path.isEmpty() || !themePath.isEmpty();
 
-            QObject::disconnect(theme, SIGNAL(themeChanged()),
-                                q, SLOT(themeChanged()));
+            if (themed) {
+                QObject::disconnect(actualTheme(), SIGNAL(themeChanged()),
+                                    q, SLOT(themeChanged()));
+            }
+
             QObject::disconnect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()),
                                 q, SLOT(colorsChanged()));
 
@@ -133,12 +136,8 @@ class SvgPrivate
             themePath.clear();
 
             if (themed) {
-                if (!theme) {
-                    theme = Plasma::Theme::defaultTheme();
-                }
-
                 themePath = imagePath;
-                QObject::connect(theme, SIGNAL(themeChanged()),
+                QObject::connect(actualTheme(), SIGNAL(themeChanged()),
                                  q, SLOT(themeChanged()));
 
                 // check if svg wants colorscheme applied
@@ -147,7 +146,6 @@ class SvgPrivate
                     QObject::connect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()),
                                      q, SLOT(colorsChanged()));
                 }
-
             } else if (QFile::exists(imagePath)) {
                 path = imagePath;
             } else {
@@ -157,7 +155,7 @@ class SvgPrivate
             //also images with absolute path needs to have a natural size initialized, even if looks a bit weird using Theme to store non-themed stuff
             if (themed || QFile::exists(imagePath)) {
                 QRectF rect;
-                bool found = Theme::defaultTheme()->findInRectsCache(path, "_Natural", rect);
+                bool found = actualTheme()->findInRectsCache(path, "_Natural", rect);
 
                 if (!found) {
                     createRenderer();
@@ -169,6 +167,15 @@ class SvgPrivate
             }
 
             return updateNeeded;
+        }
+
+        const Theme *actualTheme()
+        {
+            if (!theme) {
+                theme = Plasma::Theme::defaultTheme();
+            }
+
+            return theme;
         }
 
         QPixmap findInCache(const QString &elementId, const QSizeF &s = QSizeF())
@@ -193,12 +200,14 @@ class SvgPrivate
             //kDebug() << "id is " << id;
 
             QPixmap p;
-            if (cacheRendering && const_cast<Theme*>(theme)->findInCache(id, p, lastModified)) {
-                //kDebug() << "found cached version of " << id << p.size();
-                return p;
-            } else {
-                //kDebug() << "didn't find cached version of " << id << ", so re-rendering";
+            if (cacheRendering) {
+                if (const_cast<Theme*>(actualTheme())->findInCache(id, p, lastModified)) {
+                    //kDebug() << "found cached version of " << id << p.size();
+                    return p;
+                }
             }
+
+                //kDebug() << "didn't find cached version of " << id << ", so re-rendering";
 
             //kDebug() << "size for " << elementId << " is " << s;
             // we have to re-render this puppy
@@ -220,7 +229,7 @@ class SvgPrivate
             // Apply current color scheme if the svg asks for it
             if (applyColors) {
                 QImage itmp = p.toImage();
-                KIconEffect::colorize(itmp, theme->color(Theme::BackgroundColor), 1.0);
+                KIconEffect::colorize(itmp, actualTheme()->color(Theme::BackgroundColor), 1.0);
                 p = p.fromImage(itmp);
             }
 
@@ -263,7 +272,7 @@ class SvgPrivate
                 }
 
                 if (path.isEmpty()) {
-                    path = theme->imagePath(themePath);
+                    path = actualTheme()->imagePath(themePath);
                     if (path.isEmpty()) {
                         kWarning() << "No image path found for" << themePath;
                     }
@@ -297,7 +306,10 @@ class SvgPrivate
             if (renderer && renderer.count() == 2) {
                 // this and the cache reference it
                 s_renderers.erase(s_renderers.find(path));
-                const_cast<Plasma::Theme *>(theme)->releaseRectsCache(path);
+
+                if (theme) {
+                    const_cast<Plasma::Theme *>(theme)->releaseRectsCache(path);
+                }
             }
 
             renderer = 0;
@@ -307,7 +319,7 @@ class SvgPrivate
         QRectF elementRect(const QString &elementId)
         {
             if (themed && path.isEmpty()) {
-                path = theme->imagePath(themePath);
+                path = actualTheme()->imagePath(themePath);
             }
 
             QString id = cacheId(elementId);
@@ -316,7 +328,7 @@ class SvgPrivate
             }
 
             QRectF rect;
-            bool found = Theme::defaultTheme()->findInRectsCache(path, id, rect);
+            bool found = actualTheme()->findInRectsCache(path, id, rect);
 
             if (found) {
                 localRectCache.insert(id, rect);
@@ -354,7 +366,7 @@ class SvgPrivate
         void checkApplyColorHint()
         {
             QRectF elementRect;
-            bool found = Theme::defaultTheme()->findInRectsCache(themePath, cacheId("hint-apply-color-scheme"), elementRect);
+            bool found = actualTheme()->findInRectsCache(themePath, cacheId("hint-apply-color-scheme"), elementRect);
 
             if (found) {
                 applyColors = elementRect.isValid();
@@ -541,7 +553,7 @@ bool Svg::hasElement(const QString &elementId) const
     }
 
     QRectF elementRect;
-    bool found = Theme::defaultTheme()->findInRectsCache(d->path, id, elementRect);
+    bool found = d->actualTheme()->findInRectsCache(d->path, id, elementRect);
 
     if (found) {
         d->localRectCache.insert(id, elementRect);
@@ -597,7 +609,6 @@ void Svg::setImagePath(const QString &svgFilePath)
     if (!d->themed) {
         QFile f(svgFilePath);
         QFileInfo info(f);
-
         d->lastModified = info.lastModified().toTime_t();
     }
 
@@ -622,12 +633,11 @@ bool Svg::isUsingRenderingCache() const
 
 void Svg::setTheme(const Plasma::Theme *theme)
 {
-    if (!theme) {
-        d->theme = Plasma::Theme::defaultTheme();
-    } else {
-        d->theme = theme;
+    if (d->theme) {
+        disconnect(d->theme, 0, this, 0);
     }
 
+    d->theme = theme;
     setImagePath(imagePath());
 }
 
