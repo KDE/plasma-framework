@@ -296,8 +296,7 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         static KPluginInfo::List listAppletInfoForMimetype(const QString &mimetype);
 
         /**
-         * Returns a list of all the categories used by
-         * installed applets.
+         * Returns a list of all the categories used by installed applets.
          *
          * @param parentApp the application to filter applets on. Uses the
          *                  X-KDE-ParentApp entry (if any) in the plugin info.
@@ -309,6 +308,20 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          */
         static QStringList listCategories(const QString &parentApp = QString(),
                                           bool visibleOnly = true);
+
+        /**
+         * Sets the list of custom categories that are used in addition to the default
+         * set of categories known to libplasma for Applets.
+         * @arg categories a list of categories
+         * @since 4.3
+         */
+        void setCustomCategories(const QStringList &categories);
+
+        /**
+         * @return the list of custom categories known to libplasma
+         * @since 4.3
+         */
+        QStringList customCategories();
 
         /**
          * Attempts to load an apppet from a package

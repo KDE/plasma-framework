@@ -1584,7 +1584,7 @@ QSet<QString> AppletPrivate::knownCategories()
 {
     // this is to trick the tranlsation tools into making the correct
     // strings for translation
-    QSet<QString> categories;
+    QSet<QString> categories = s_customCategories;
     categories << QString(I18N_NOOP("Accessibility")).toLower()
                << QString(I18N_NOOP("Application Launchers")).toLower()
                << QString(I18N_NOOP("Astronomy")).toLower()
@@ -1827,6 +1827,16 @@ QStringList Applet::listCategories(const QString &parentApp, bool visibleOnly)
 
     categories.sort();
     return categories;
+}
+
+void Applet::setCustomCategories(const QStringList &categories)
+{
+    AppletPrivate::s_customCategories = QSet<QString>::fromList(categories);
+}
+
+QStringList Applet::customCategories()
+{
+    return AppletPrivate::s_customCategories.toList();
 }
 
 Applet::Applet(const QString &packagePath, uint appletId, const QVariantList &args)
@@ -2421,6 +2431,7 @@ uint AppletPrivate::s_maxAppletId = 0;
 int AppletPrivate::s_maxZValue = 0;
 int AppletPrivate::s_minZValue = 0;
 PackageStructure::Ptr AppletPrivate::packageStructure(0);
+QSet<QString> AppletPrivate::s_customCategories;
 
 AppletOverlayWidget::AppletOverlayWidget(QGraphicsWidget *parent)
     : QGraphicsWidget(parent),

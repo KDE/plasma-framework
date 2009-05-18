@@ -104,6 +104,7 @@ public:
     static int s_maxZValue;
     static int s_minZValue;
     static PackageStructure::Ptr packageStructure;
+    static QSet<QString> s_customCategories;
 
     //TODO: examine the usage of memory here; there's a pretty large
     //      number of members at this point.
