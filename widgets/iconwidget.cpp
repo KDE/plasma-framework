@@ -915,7 +915,13 @@ void IconWidgetPrivate::drawTextItems(QPainter *painter,
     // when applied to the canvas
     painter->translate(0.5, 0.5);
 
-    labelLayout.draw(painter, QPointF());
+    if (action) {
+        QRectF textRect = labelLayout.boundingRect();
+        textRect.moveTopLeft(labelLayout.position());
+        painter->drawText(textRect, Qt::TextShowMnemonic, action->text());
+    } else {
+        labelLayout.draw(painter, QPointF());
+    }
 
     if (!infoLayout.text().isEmpty()) {
         painter->setPen(textColor);
