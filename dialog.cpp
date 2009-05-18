@@ -205,6 +205,21 @@ void DialogPrivate::adjustView()
         view->resize(graphicsWidget->size().toSize());
         view->centerOn(graphicsWidget);
 
+        //if the view resized and a border is disabled move the dialog to make sure it will still look attached to panel/screen edge
+        qreal topHeight;
+        qreal leftWidth;
+        qreal rightWidth;
+        qreal bottomHeight;
+
+        background->getMargins(leftWidth, topHeight, rightWidth, bottomHeight);
+
+        if (rightWidth == 0) {
+            q->move(q->pos().x() + (prevSize.width() - q->size().width()), q->pos().y());
+        }
+        if (bottomHeight == 0) {
+            q->move(q->pos().x(), q->pos().y() + (prevSize.height() - q->size().height()));
+        }
+
         if (q->size() != prevSize) {
             //the size of the dialog has changed, emit the signal:
             emit q->dialogResized();
