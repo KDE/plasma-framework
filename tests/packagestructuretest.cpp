@@ -43,7 +43,7 @@ void PackageStructureTest::type()
 void PackageStructureTest::directories()
 {
     QList<const char*> dirs;
-    dirs << "config" << "images" << "scripts" << "ui";
+    dirs << "config" << "images" << "scripts" << "translations" << "ui";
 
     QList<const char*> psDirs = ps->directories();
 
@@ -165,7 +165,8 @@ void PackageStructureTest::write()
     // check groups
     QStringList groups;
     groups << "images" << "config" << "scripts"
-           << "mainconfigui" << "mainconfigxml" << "mainscript" << "ui";
+           << "mainconfigui" << "mainconfigxml" << "mainscript"
+           << "translations" << "ui";
     groups.sort();
 
     QStringList actualGroups = config.groupList();
@@ -176,7 +177,7 @@ void PackageStructureTest::write()
     KConfigGroup scripts = config.group("scripts");
     QCOMPARE(scripts.readEntry("Path", QString()), QString("code"));
     QCOMPARE(scripts.readEntry("Name", QString()), QString("Executable Scripts"));
-    QCOMPARE(scripts.readEntry("Mimetypes", QStringList()), QStringList() << "text/*");
+    QCOMPARE(scripts.readEntry("Mimetypes", QStringList()), QStringList() << "text/plain");
     QCOMPARE(scripts.readEntry("Directory", false), true);
     QCOMPARE(scripts.readEntry("Required", false), false);
 }
