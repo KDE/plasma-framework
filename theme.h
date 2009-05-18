@@ -24,6 +24,7 @@
 #include <QtGui/QFont>
 #include <QtGui/QFontMetrics>
 
+#include <kplugininfo.h>
 #include <ksharedconfig.h>
 
 #include <plasma/plasma_export.h>
@@ -79,14 +80,32 @@ class PLASMA_EXPORT Theme : public QObject
 
         /**
          * Default constructor. Usually you want to use the singleton instead.
+         * @see defaultTheme
+         * @arg parent the parent object
          */
         explicit Theme(QObject *parent = 0);
+
+        /**
+         * Construct a theme. Usually you want to use the singleton instead.
+         * @see defaultTheme
+         * @arg themeName the name of the theme to create
+         * @arg parent the parent object
+         * @since 4.3
+         */
+        explicit Theme(const QString &themeName, QObject *parent = 0);
+
         ~Theme();
 
         /**
          * @return a package structure representing a Theme
          */
         static PackageStructure::Ptr packageStructure();
+
+        /**
+         * @return a list of all known themes
+         * @since 4.3
+         */
+        static KPluginInfo::List listThemeInfo();
 
         /**
          * Sets the current theme being used.

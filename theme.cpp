@@ -70,6 +70,25 @@ public:
     {
         generalFont = QApplication::font();
         cacheTheme = cacheConfig().readEntry("CacheTheme", true);
+
+#ifdef Q_WS_X11
+        Display *dpy = QX11Info::display();
+        int screen = DefaultScreen(dpy);
+        locolor = DefaultDepth(dpy, screen) < 16;
+
+        if (!locolor) {
+            char net_wm_cm_name[100];
+            sprintf(net_wm_cm_name, "_NET_WM_CM_S%d", screen);
+            compositeWatch = new KSelectionWatcher(net_wm_cm_name, -1, q);
+            QObject::connect(compositeWatch, SIGNAL(newOwner(Window)), q, SLOT(compositingChanged()));
+            QObject::connect(compositeWatch, SIGNAL(lostOwner()), q, SLOT(compositingChanged()));
+        }
+#endif
+
+        //FIXME: if/when kconfig gets change notification, this will be unecessary
+        KDirWatch::self()->addFile(KStandardDirs::locateLocal("config", ThemePrivate::themeRcFile));
+        QObject::connect(KDirWatch::self(), SIGNAL(created(QString)), q, SLOT(settingsFileChanged(QString)));
+        QObject::connect(KDirWatch::self(), SIGNAL(dirty(QString)), q, SLOT(settingsFileChanged(QString)));
     }
 
     ~ThemePrivate()
@@ -247,25 +266,17 @@ Theme::Theme(QObject *parent)
       d(new ThemePrivate(this))
 {
     settingsChanged();
+}
 
-#ifdef Q_WS_X11
-    Display *dpy = QX11Info::display();
-    int screen = DefaultScreen(dpy);
-    d->locolor = DefaultDepth(dpy, screen) < 16;
-
-    if (!d->locolor) {
-        char net_wm_cm_name[100];
-        sprintf(net_wm_cm_name, "_NET_WM_CM_S%d", screen);
-        d->compositeWatch = new KSelectionWatcher(net_wm_cm_name, -1, this);
-        connect(d->compositeWatch, SIGNAL(newOwner(Window)), this, SLOT(compositingChanged()));
-        connect(d->compositeWatch, SIGNAL(lostOwner()), this, SLOT(compositingChanged()));
-    }
-#endif
-
-    //FIXME: if/when kconfig gets change notification, this will be unecessary
-    KDirWatch::self()->addFile(KStandardDirs::locateLocal("config", ThemePrivate::themeRcFile));
-    connect(KDirWatch::self(), SIGNAL(created(QString)), this, SLOT(settingsFileChanged(QString)));
-    connect(KDirWatch::self(), SIGNAL(dirty(QString)), this, SLOT(settingsFileChanged(QString)));
+Theme::Theme(const QString &themeName, QObject *parent)
+    : QObject(parent),
+      d(new ThemePrivate(this))
+{
+    // turn off caching so we don't accidently trigger unnecessary disk activity at this point
+    bool useCache = d->cacheTheme;
+    d->cacheTheme = false;
+    setThemeName(themeName);
+    d->cacheTheme = useCache;
 }
 
 Theme::~Theme()
@@ -289,11 +300,20 @@ PackageStructure::Ptr Theme::packageStructure()
     return ThemePrivate::packageStructure;
 }
 
+KPluginInfo::List Theme::listThemeInfo()
+{
+    QStringList themes = KGlobal::dirs()->findAllResources("data", "desktoptheme/*/metadata.desktop",
+                                                           KStandardDirs::NoDuplicates);
+    return KPluginInfo::fromFiles(themes);
+}
+
 void ThemePrivate::settingsFileChanged(const QString &file)
 {
     kDebug() << file;
-    config().config()->reparseConfiguration();
-    q->settingsChanged();
+    if (file.endsWith(themeRcFile)) {
+        config().config()->reparseConfiguration();
+        q->settingsChanged();
+    }
 }
 
 void Theme::settingsChanged()
