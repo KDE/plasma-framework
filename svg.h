@@ -246,12 +246,12 @@ class PLASMA_EXPORT Svg : public QObject
          * @arg theme the theme object to use
          * @since 4.3
          */
-        void setTheme(const Plasma::Theme *theme);
+        void setTheme(Plasma::Theme *theme);
 
         /**
          * @return the theme used by this Svg
          */
-        const Theme *theme() const;
+        Theme *theme() const;
 
     Q_SIGNALS:
         void repaintNeeded();

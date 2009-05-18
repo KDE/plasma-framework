@@ -128,24 +128,25 @@ class SvgPrivate
                                     q, SLOT(themeChanged()));
             }
 
-            QObject::disconnect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()),
-                                q, SLOT(colorsChanged()));
-
             themed = isThemed;
             path.clear();
             themePath.clear();
+
+            // check if svg wants colorscheme applied
+
+            QObject::disconnect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()),
+                                q, SLOT(colorsChanged()));
+
+            checkApplyColorHint();
+            if (applyColors && !actualTheme()->colorScheme()) {
+                QObject::connect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()),
+                                 q, SLOT(colorsChanged()));
+            }
 
             if (themed) {
                 themePath = imagePath;
                 QObject::connect(actualTheme(), SIGNAL(themeChanged()),
                                  q, SLOT(themeChanged()));
-
-                // check if svg wants colorscheme applied
-                checkApplyColorHint();
-                if (applyColors && !Theme::defaultTheme()->colorScheme()) {
-                    QObject::connect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()),
-                                     q, SLOT(colorsChanged()));
-                }
             } else if (QFile::exists(imagePath)) {
                 path = imagePath;
             } else {
@@ -160,7 +161,7 @@ class SvgPrivate
                 if (!found) {
                     createRenderer();
                     naturalSize = renderer->defaultSize();
-                    Theme::defaultTheme()->insertIntoRectsCache(path, "_Natural", QRectF(QPointF(0,0), naturalSize));
+                    actualTheme()->insertIntoRectsCache(path, "_Natural", QRectF(QPointF(0,0), naturalSize));
                 } else {
                     naturalSize = rect.size();
                 }
@@ -169,7 +170,7 @@ class SvgPrivate
             return updateNeeded;
         }
 
-        const Theme *actualTheme()
+        Theme *actualTheme()
         {
             if (!theme) {
                 theme = Plasma::Theme::defaultTheme();
@@ -201,7 +202,7 @@ class SvgPrivate
 
             QPixmap p;
             if (cacheRendering) {
-                if (const_cast<Theme*>(actualTheme())->findInCache(id, p, lastModified)) {
+                if (actualTheme()->findInCache(id, p, lastModified)) {
                     //kDebug() << "found cached version of " << id << p.size();
                     return p;
                 }
@@ -247,7 +248,7 @@ class SvgPrivate
 
             while (i != itemsToSave.constEnd()) {
                 //kDebug()<<"Saving item to cache: " << i.key();
-                Theme::defaultTheme()->insertIntoCache(i.key(), i.value());
+                actualTheme()->insertIntoCache(i.key(), i.value());
                 ++i;
             }
 
@@ -308,7 +309,7 @@ class SvgPrivate
                 s_renderers.erase(s_renderers.find(path));
 
                 if (theme) {
-                    const_cast<Plasma::Theme *>(theme)->releaseRectsCache(path);
+                    theme->releaseRectsCache(path);
                 }
             }
 
@@ -350,10 +351,7 @@ class SvgPrivate
             elementRect = QRectF(elementRect.x() * dx, elementRect.y() * dy,
                                  elementRect.width() * dx, elementRect.height() * dy);
 
-            if (cacheRendering) {
-                Theme::defaultTheme()->insertIntoRectsCache(path, cacheId(elementId), elementRect);
-            }
-
+            actualTheme()->insertIntoRectsCache(path, cacheId(elementId), elementRect);
             return elementRect;
         }
 
@@ -365,37 +363,15 @@ class SvgPrivate
 
         void checkApplyColorHint()
         {
-            QRectF elementRect;
-            bool found = actualTheme()->findInRectsCache(themePath, cacheId("hint-apply-color-scheme"), elementRect);
-
-            if (found) {
-                applyColors = elementRect.isValid();
-            } else {
-                findAndCacheElementRect("hint-apply-color-scheme");
-                applyColors = renderer->elementExists("hint-apply-color-scheme");
-            }
+            applyColors = elementRect("hint-apply-color-scheme").isValid();
         }
 
         void themeChanged()
         {
-            if (!themed) {
-                return;
-            }
-
-            QString newPath = Theme::defaultTheme()->imagePath(themePath);
-
-            if (path == newPath) {
-                return;
-            }
-
-            path = newPath;
-            //delete d->renderer; we're a KSharedPtr
-            eraseRenderer();
-
             // check if new theme svg wants colorscheme applied
             bool wasApplyColors = applyColors;
             checkApplyColorHint();
-            if (applyColors && !Theme::defaultTheme()->colorScheme()) {
+            if (applyColors && actualTheme()->colorScheme()) {
                 if (!wasApplyColors) {
                     QObject::connect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()),
                                      q, SLOT(colorsChanged()));
@@ -404,6 +380,20 @@ class SvgPrivate
                 QObject::disconnect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()),
                                     q, SLOT(colorsChanged()));
             }
+
+            if (!themed) {
+                return;
+            }
+
+            QString newPath = actualTheme()->imagePath(themePath);
+
+            if (path == newPath) {
+                return;
+            }
+
+            path = newPath;
+            //delete d->renderer; we're a KSharedPtr
+            eraseRenderer();
 
             localRectCache.clear();
             itemsToSave.clear();
@@ -428,7 +418,7 @@ class SvgPrivate
         static QHash<QString, SharedSvgRenderer::Ptr> s_renderers;
 
         Svg *q;
-        const Plasma::Theme *theme;
+        Theme *theme;
         QHash<QString, QRectF> localRectCache;
         QHash<QString, QPixmap> itemsToSave;
         QTimer *saveTimer;
@@ -547,21 +537,7 @@ bool Svg::hasElement(const QString &elementId) const
         return false;
     }
 
-    QString id = d->cacheId(elementId);
-    if (d->localRectCache.contains(id)) {
-        return d->localRectCache.value(id).isValid();
-    }
-
-    QRectF elementRect;
-    bool found = d->actualTheme()->findInRectsCache(d->path, id, elementRect);
-
-    if (found) {
-        d->localRectCache.insert(id, elementRect);
-        return elementRect.isValid();
-    } else {
-//        kDebug() << "** ** *** !!!!!!!! *** ** ** creating renderer due to hasElement miss" << d->path << elementId;
-        return d->findAndCacheElementRect(elementId).isValid();
-    }
+    return d->elementRect(elementId).isValid();
 }
 
 QString Svg::elementAtPoint(const QPoint &point) const
@@ -631,7 +607,7 @@ bool Svg::isUsingRenderingCache() const
     return d->cacheRendering;
 }
 
-void Svg::setTheme(const Plasma::Theme *theme)
+void Svg::setTheme(Plasma::Theme *theme)
 {
     if (d->theme) {
         disconnect(d->theme, 0, this, 0);
@@ -641,7 +617,7 @@ void Svg::setTheme(const Plasma::Theme *theme)
     setImagePath(imagePath());
 }
 
-const Theme *Svg::theme() const
+Theme *Svg::theme() const
 {
     return d->theme;
 }
