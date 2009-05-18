@@ -117,7 +117,7 @@ void PackageMetadata::read(const QString &filename)
     d->version = config.readEntry("X-KDE-PluginInfo-Version", d->version);
     d->website = config.readEntry("X-KDE-PluginInfo-Website", d->website);
     d->license = config.readEntry("X-KDE-PluginInfo-License", d->license);
-    d->category = config.readEntry("KDE-PluginInfo-Category", d->category);
+    d->category = config.readEntry("X-KDE-PluginInfo-Category", d->category);
     d->api = config.readEntry("X-Plasma-API", d->api);
     d->app = config.readEntry("X-KDE-ParentApp", d->app);
     d->type = config.readEntry("Type", d->type);
