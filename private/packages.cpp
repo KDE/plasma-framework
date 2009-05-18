@@ -55,7 +55,7 @@ PlasmoidPackage::PlasmoidPackage(QObject *parent)
 
     addDirectoryDefinition("scripts", "code", i18n("Executable Scripts"));
     mimetypes.clear();
-    mimetypes << "text/*";
+    mimetypes << "text/plain";
     setMimetypes("scripts", mimetypes);
 
     addDirectoryDefinition("translations", "locale", i18n("Translations"));
