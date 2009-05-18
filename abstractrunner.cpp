@@ -52,7 +52,8 @@ public:
         runnerDescription(service),
         runner(r),
         fastRuns(0),
-        package(0)
+        package(0),
+        hasRunOptions(false)
     {
         if (runnerDescription.isValid()) {
             const QString api = runnerDescription.property("X-Plasma-API").toString();
@@ -85,8 +86,6 @@ public:
         package = 0;
     }
 
-    bool hasRunOptions;
-    bool hasConfig;
     AbstractRunner::Priority priority;
     AbstractRunner::Speed speed;
     RunnerContext::Types blackListed;
@@ -98,6 +97,7 @@ public:
     Package *package;
     QHash<QString, QAction*> actions;
     QList<RunnerSyntax> syntaxes;
+    bool hasRunOptions;
 };
 
 K_GLOBAL_STATIC(QMutex, s_bigLock)
