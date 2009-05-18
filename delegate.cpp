@@ -389,13 +389,8 @@ void Delegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
         if (column == 0) {
             //clip right (or left for rtl languages) to make the connection with the next column
             if (columns > 1) {
-                if (option.direction == Qt::LeftToRight) {
-                    painter->setClipRect(option.rect);
-                    highlightRect.adjust(0, 0, roundedRadius, 0);
-                } else {
-                    painter->setClipRect(option.rect);
-                    highlightRect.adjust(-roundedRadius, 0, 0, 0);
-                }
+                painter->setClipRect(option.rect);
+                highlightRect.adjust(0, 0, roundedRadius, 0);
             }
 
             QLinearGradient gradient(highlightRect.topLeft(), highlightRect.topRight());
@@ -416,13 +411,8 @@ void Delegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
 
         //last column, clip left (right for rtl)
         } else if (column == columns-1) {
-            if (option.direction == Qt::LeftToRight) {
-                painter->setClipRect(option.rect);
-                highlightRect.adjust(-roundedRadius, 0, 0, 0);
-            } else {
-                painter->setClipRect(option.rect);
-                highlightRect.adjust(0, 0, +roundedRadius, 0);
-            }
+            painter->setClipRect(option.rect);
+            highlightRect.adjust(-roundedRadius, 0, 0, 0);
 
         //column < columns-1; clip both ways
         } else {
