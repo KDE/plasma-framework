@@ -38,6 +38,9 @@ public:
 
 protected:
     void pathChanged();
+
+protected Q_SLOTS:
+    void widgetBrowserFinished();
 };
 
 class ThemePackage : public PackageStructure

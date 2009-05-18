@@ -79,12 +79,14 @@ void PlasmoidPackage::pathChanged()
 
 void PlasmoidPackage::createNewWidgetBrowser(QWidget *parent)
 {
-    KNS::Engine engine(0);
-    if (engine.init("plasmoids.knsrc")) {
-        //FIXME: this should not be modal, but requires fixes in knewstuff2 first
-        KNS::Entry::List entries = engine.downloadDialogModal(parent);
+    KNS::Engine *engine = new KNS::Engine(parent);
+    if (engine->init("plasmoids.knsrc")) {
+        engine->downloadDialog(this, SLOT(widgetBrowserFinished()));
     }
+}
 
+void PlasmoidPackage::widgetBrowserFinished()
+{
     emit newWidgetBrowserFinished();
 }
 
