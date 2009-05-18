@@ -37,8 +37,9 @@ class QMatrix;
 namespace Plasma
 {
 
-class SvgPrivate;
 class FrameSvgPrivate;
+class SvgPrivate;
+class Theme;
 
 /**
  * @class Svg plasma/svg.h <Plasma/Svg>
@@ -62,7 +63,6 @@ class PLASMA_EXPORT Svg : public QObject
     Q_PROPERTY(bool usingRenderingCache READ isUsingRenderingCache WRITE setUsingRenderingCache)
 
     public:
-
         /**
          * Constructs an SVG object that implicitly shares and caches rendering
          * As opposed to QSvgRenderer, which this class uses internally,
@@ -235,9 +235,23 @@ class PLASMA_EXPORT Svg : public QObject
         void setUsingRenderingCache(bool useCache);
 
         /**
-         * @return true if the Svgis using caching for rendering results
+         * @return true if the Svg is using caching for rendering results
+         * @since 4.3
          */
         bool isUsingRenderingCache() const;
+
+        /**
+         * Sets the Plasma::Theme to use with this Svg object. By default, Svg
+         * objects use Plasma::Theme::default()
+         * @arg theme the theme object to use
+         * @since 4.3
+         */
+        void setTheme(const Plasma::Theme *theme);
+
+        /**
+         * @return the theme used by this Svg
+         */
+        const Theme *theme() const;
 
     Q_SIGNALS:
         void repaintNeeded();
