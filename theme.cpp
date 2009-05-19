@@ -437,8 +437,9 @@ QString Theme::themeName() const
 QString Theme::imagePath(const QString &name) const
 {
     // look for a compressed svg file in the theme
-    if (name.contains("../")) {
+    if (name.contains("../") || name.isEmpty()) {
         // we don't support relative paths
+        kDebug() << "Theme says: bad image path " << name;
         return QString();
     }
 
