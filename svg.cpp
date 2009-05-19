@@ -132,8 +132,17 @@ class SvgPrivate
             path.clear();
             themePath.clear();
 
-            // check if svg wants colorscheme applied
+            if (themed) {
+                themePath = imagePath;
+                QObject::connect(actualTheme(), SIGNAL(themeChanged()), q, SLOT(themeChanged()));
+            } else if (QFile::exists(imagePath)) {
+                path = imagePath;
+            } else {
+                kDebug() << "file '" << path << "' does not exist!";
+            }
 
+
+            // check if svg wants colorscheme applied
             QObject::disconnect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()),
                                 q, SLOT(colorsChanged()));
 
@@ -141,16 +150,6 @@ class SvgPrivate
             if (applyColors && !actualTheme()->colorScheme()) {
                 QObject::connect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()),
                                  q, SLOT(colorsChanged()));
-            }
-
-            if (themed) {
-                themePath = imagePath;
-                QObject::connect(actualTheme(), SIGNAL(themeChanged()),
-                                 q, SLOT(themeChanged()));
-            } else if (QFile::exists(imagePath)) {
-                path = imagePath;
-            } else {
-                kDebug() << "file '" << path << "' does not exist!";
             }
 
             //also images with absolute path needs to have a natural size initialized, even if looks a bit weird using Theme to store non-themed stuff
@@ -614,7 +613,9 @@ void Svg::setTheme(Plasma::Theme *theme)
     }
 
     d->theme = theme;
-    setImagePath(imagePath());
+    if (!imagePath().isEmpty()) {
+        setImagePath(imagePath());
+    }
 }
 
 Theme *Svg::theme() const
