@@ -620,7 +620,7 @@ void FrameSvgPrivate::scheduledCacheUpdate()
         //insert background
         FrameData *frame = frames[prefixToSave];
         QString id = QString::fromLatin1("%5_%4_%3_%2_%1_").
-                            arg(frame->enabledBorders).arg(frame->frameSize.width()).arg(frame->frameSize.height()).arg(prefix).arg(q->imagePath());
+                            arg(frame->enabledBorders).arg(frame->frameSize.width()).arg(frame->frameSize.height()).arg(prefixToSave).arg(q->imagePath());
 
         //kDebug()<<"Saving to cache frame"<<id;
 
@@ -628,7 +628,7 @@ void FrameSvgPrivate::scheduledCacheUpdate()
 
         //insert overlay
         id = QString::fromLatin1("overlay_%7_%6_%5_%4_%3_%2_%1_").
-                            arg(overlayPos.y()).arg(overlayPos.x()).arg(frame->enabledBorders).arg(frame->frameSize.width()).arg(frame->frameSize.height()).arg(prefix).arg(q->imagePath());
+                            arg(overlayPos.y()).arg(overlayPos.x()).arg(frame->enabledBorders).arg(frame->frameSize.width()).arg(frame->frameSize.height()).arg(prefixToSave).arg(q->imagePath());
 
         Theme::defaultTheme()->insertIntoCache(id, frame->cachedBackground);
     }
