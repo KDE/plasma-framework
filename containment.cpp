@@ -286,11 +286,12 @@ void Containment::restore(KConfigGroup &group)
         setMinimumSize(minimumSize().boundedTo(geo.size()));
     }
 
+
+    setGeometry(geo);
     //are we an offscreen containment?
     if (containmentType() != PanelContainment && containmentType() != CustomPanelContainment && geo.right() < 0) {
         corona()->addOffscreenWidget(this);
     }
-    setGeometry(geo);
 
     setLocation((Plasma::Location)group.readEntry("location", (int)d->location));
     setFormFactor((Plasma::FormFactor)group.readEntry("formfactor", (int)d->formFactor));
