@@ -577,9 +577,6 @@ void FrameSvgPrivate::generateBackground(FrameData *frame)
             }
         }
 
-        QString id = QString::fromLatin1("overlay_%7_%6_%5_%4_%3_%2_%1_").
-                            arg(overlayPos.y()).arg(overlayPos.x()).arg(frame->enabledBorders).arg(frame->frameSize.width()).arg(frame->frameSize.height()).arg(prefix).arg(q->imagePath());
-
         QPixmap overlay = q->alphaMask();
         QPainter overlayPainter(&overlay);
         overlayPainter.setCompositionMode(QPainter::CompositionMode_SourceIn);
@@ -619,8 +616,8 @@ void FrameSvgPrivate::scheduledCacheUpdate()
     foreach (QString prefixToSave, framesToSave) {
         //insert background
         FrameData *frame = frames[prefixToSave];
-        QString id = QString::fromLatin1("%5_%4_%3_%2_%1_").
-                            arg(frame->enabledBorders).arg(frame->frameSize.width()).arg(frame->frameSize.height()).arg(prefixToSave).arg(q->imagePath());
+        QString id = QString::fromLatin1("%7_%6_%5_%4_%3_%2_%1_").
+                            arg(overlayPos.y()).arg(overlayPos.x()).arg(frame->enabledBorders).arg(frame->frameSize.width()).arg(frame->frameSize.height()).arg(prefixToSave).arg(q->imagePath());
 
         //kDebug()<<"Saving to cache frame"<<id;
 
