@@ -72,7 +72,7 @@ class Package;
  * of scripting support for each applet, providing access to the associated
  * plasmoid package (if any) and access to configuration data.
  *
- * See techbase.kde.org for tutorial on writing Applets using this class.
+ * See techbase.kde.org for tutorials on writing Applets using this class.
  */
 class PLASMA_EXPORT Applet : public QGraphicsWidget
 {
@@ -622,7 +622,7 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         virtual void createConfigurationInterface(KConfigDialog *parent);
 
         /**
-         * returns true if the applet is allowed to perform functions covered by the given constraint
+         * Returns true if the applet is allowed to perform functions covered by the given constraint
          * eg. isAllowed("FileDialog") returns true iff applets are allowed to show filedialogs.
          * @since 4.3
          */
@@ -744,7 +744,7 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         virtual void init();
 
         /**
-         * Called when applet configuration values has changed.
+         * Called when applet configuration values have changed.
          */
         virtual void configChanged();
 
@@ -755,7 +755,7 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         void setBusy(bool busy);
 
         /**
-         * @return the list of arguments which the applet was called
+         * @return the list of arguments which the applet was called with
          * @since KDE4.3
          */
         QVariantList startupArguments() const;
