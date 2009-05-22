@@ -1046,6 +1046,9 @@ void ContainmentPrivate::dropData(QGraphicsSceneEvent *event)
         screenPos = mouseEvent->screenPos();
         QClipboard *clipboard = QApplication::clipboard();
         mimeData = clipboard->mimeData(QClipboard::Selection);
+        if (!mimeData) { //Selection is either empty or not sopported on this OS
+            return;
+        }
         //TODO if that's not supported (ie non-linux) should we try clipboard instead of selection?
     } else {
         kDebug() << "unexpected event";
