@@ -65,6 +65,16 @@ public:
     QString text() const;
 
     /**
+     * Sets the policy used to show/hide the horizontal scrollbar
+     */
+    void setHorizontalScrollBarPolicy(Qt::ScrollBarPolicy policy);
+
+    /**
+     * Sets the policy used to show/hide the vertical scrollbar
+     */
+    void setVerticalScrollBarPolicy(Qt::ScrollBarPolicy policy);
+
+    /**
      * Sets the stylesheet used to control the visual display of this TextBrowser
      *
      * @arg stylesheet a CSS string

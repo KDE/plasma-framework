@@ -109,6 +109,16 @@ QString TextBrowser::text() const
     return static_cast<KTextBrowser*>(widget())->toHtml();
 }
 
+void TextBrowser::setHorizontalScrollBarPolicy(Qt::ScrollBarPolicy policy)
+{
+    d->native->setHorizontalScrollBarPolicy(policy);
+}
+
+void TextBrowser::setVerticalScrollBarPolicy(Qt::ScrollBarPolicy policy)
+{
+    d->native->setVerticalScrollBarPolicy(policy);
+}
+
 void TextBrowser::setStyleSheet(const QString &stylesheet)
 {
     widget()->setStyleSheet(stylesheet);
