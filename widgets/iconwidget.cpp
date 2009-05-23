@@ -915,13 +915,7 @@ void IconWidgetPrivate::drawTextItems(QPainter *painter,
     // when applied to the canvas
     painter->translate(0.5, 0.5);
 
-    if (action) {
-        QRectF textRect = labelLayout.boundingRect();
-        textRect.moveTopLeft(labelLayout.position());
-        painter->drawText(textRect, Qt::TextShowMnemonic, action->text());
-    } else {
-        labelLayout.draw(painter, QPointF());
-    }
+    labelLayout.draw(painter, QPointF());
 
     if (!infoLayout.text().isEmpty()) {
         painter->setPen(textColor);
@@ -1044,7 +1038,7 @@ void IconWidget::drawActionButtonBase(QPainter *painter, const QSize &size, int 
 
 void IconWidget::setText(const QString &text)
 {
-    d->text = text;
+    d->text = KGlobal::locale()->removeAcceleratorMarker(text);
     // cause a relayout
     d->currentSize = QSizeF(-1, -1);
     //try to relayout, needed if an icon was never shown before
