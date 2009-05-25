@@ -372,7 +372,8 @@ void Delegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
 
         const int column = index.column();
         const int columns = index.model()->columnCount();
-        const int roundedRadius = 5;
+        int roundedRadius = 5;
+        const bool useSvg = option.palette.color(QPalette::Base).alpha() == 0;
 
         // use a slightly translucent version of the palette's highlight color
         // for the background
@@ -389,6 +390,9 @@ void Delegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
         if (column == 0) {
             //clip right (or left for rtl languages) to make the connection with the next column
             if (columns > 1) {
+                if (useSvg) {
+                    roundedRadius = d->svg->marginSize(Plasma::RightMargin);
+                }
                 painter->setClipRect(option.rect);
                 highlightRect.adjust(0, 0, roundedRadius, 0);
             }
@@ -411,17 +415,23 @@ void Delegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
 
         //last column, clip left (right for rtl)
         } else if (column == columns-1) {
+            if (useSvg) {
+                roundedRadius = d->svg->marginSize(Plasma::LeftMargin);
+            }
             painter->setClipRect(option.rect);
             highlightRect.adjust(-roundedRadius, 0, 0, 0);
 
         //column < columns-1; clip both ways
         } else {
+            if (useSvg) {
+                roundedRadius = d->svg->marginSize(Plasma::LeftMargin);
+            }
             painter->setClipRect(option.rect);
             highlightRect.adjust(-roundedRadius, 0, +roundedRadius, 0);
         }
 
         //if the view is transparent paint as plasma, otherwise paint with kde colors
-        if (option.palette.color(QPalette::Base).alpha() > 0) {
+        if (!useSvg) {
             painter->setPen(outlinePen);
             painter->drawPath(PaintUtils::roundedRectangle(highlightRect, roundedRadius));
         } else {
