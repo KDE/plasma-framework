@@ -367,11 +367,6 @@ class SvgPrivate
 
         void themeChanged()
         {
-            //if we're displaying another theme we don't care if the default one changed
-            if (theme != Plasma::Theme::defaultTheme()) {
-                return;
-            }
-
             // check if new theme svg wants colorscheme applied
             bool wasApplyColors = applyColors;
             checkApplyColorHint();
