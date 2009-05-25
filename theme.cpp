@@ -84,11 +84,6 @@ public:
             QObject::connect(compositeWatch, SIGNAL(lostOwner()), q, SLOT(compositingChanged()));
         }
 #endif
-
-        //FIXME: if/when kconfig gets change notification, this will be unecessary
-        KDirWatch::self()->addFile(KStandardDirs::locateLocal("config", ThemePrivate::themeRcFile));
-        QObject::connect(KDirWatch::self(), SIGNAL(created(QString)), q, SLOT(settingsFileChanged(QString)));
-        QObject::connect(KDirWatch::self(), SIGNAL(dirty(QString)), q, SLOT(settingsFileChanged(QString)));
     }
 
     ~ThemePrivate()
@@ -249,6 +244,11 @@ public:
     ThemeSingleton()
     {
         self.d->isDefault = true;
+
+        //FIXME: if/when kconfig gets change notification, this will be unecessary
+        KDirWatch::self()->addFile(KStandardDirs::locateLocal("config", ThemePrivate::themeRcFile));
+        QObject::connect(KDirWatch::self(), SIGNAL(created(QString)), &self, SLOT(settingsFileChanged(QString)));
+        QObject::connect(KDirWatch::self(), SIGNAL(dirty(QString)), &self, SLOT(settingsFileChanged(QString)));
     }
 
    Theme self;
@@ -309,7 +309,6 @@ KPluginInfo::List Theme::listThemeInfo()
 
 void ThemePrivate::settingsFileChanged(const QString &file)
 {
-    kDebug() << file;
     if (file.endsWith(themeRcFile)) {
         config().config()->reparseConfiguration();
         q->settingsChanged();
