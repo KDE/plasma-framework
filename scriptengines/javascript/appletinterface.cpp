@@ -114,7 +114,7 @@ QString AppletInterface::activeConfig() const
 void AppletInterface::setActiveConfig(const QString &name)
 {
     if (name == "main") {
-        m_currentConfig = QString();
+        m_currentConfig.clear();
         return;
     }
 
@@ -148,7 +148,9 @@ void AppletInterface::writeConfig(const QString &entry, const QVariant &value)
         KConfigSkeletonItem *item = config->findItemByName(entry);
         if (item) {
             item->setProperty(value);
+            config->blockSignals(true);
             config->writeConfig();
+            config->blockSignals(false);
             m_appletScriptEngine->configNeedsSaving();
         }
     }
@@ -158,7 +160,7 @@ QScriptValue AppletInterface::readConfig(const QString &entry) const
 {
     Plasma::ConfigLoader *config = 0;
     QVariant result;
-    
+
     if (m_currentConfig.isEmpty()) {
         config = applet()->configScheme();
     } else {
@@ -168,6 +170,7 @@ QScriptValue AppletInterface::readConfig(const QString &entry) const
     if (config) {
         result = config->property(entry);
     }
+
     return m_appletScriptEngine->variantToScriptValue(result);
 }
 
