@@ -4,6 +4,7 @@ Name[cs]=Skript  "Právě hraje"
 Name[es]=script-ejecutando
 Name[is]=spilanúna-skrifta
 Name[lt]=scenarijus-dabar groja
+Name[ml]=ലഘു ആജ്ഞയാണ് ഇപ്പോള്‍ ഓടിക്കൊണ്ടിരിക്കുന്നത്
 Name[nds]=Warrt-jüst-afspeelt-Skript
 Name[nl]=script-nu-aan-het-spelen
 Name[ro]=script-înredare
@@ -32,6 +33,7 @@ Comment[km]=ការ​ចាក់​បទ​បច្ចុប្បន្�
 Comment[ko]=자바스크립트 버전 지금 재생 중
 Comment[lt]=JavaScript versija – dabar grojantis takelis
 Comment[lv]=Pašlaik atskaņo javascript versija
+Comment[ml]=ഇപ്പോള്‍ ഓടിക്കൊണ്ടിരിക്കുന്ന ട്രാക്ക് ജാവാ സ്ക്രിപ്റ്റ് പതിപ്പാണ്.
 Comment[nds]=JavaScript-Verschoon vun Opstunns afspeelt Stück
 Comment[nl]=Javascript-versie van momenteel spelende track
 Comment[pl]=Wersja "Teraz odtwarzany" w Javascript
