@@ -1535,30 +1535,30 @@ void Applet::showConfigurationInterface()
     }
 
     if (d->package && d->configLoader) {
-        QString uiFile = d->package->filePath("mainconfigui");
-        if (uiFile.isEmpty()) {
-            return;
-        }
-
         KConfigDialog *dialog = new KConfigDialog(0, d->configDialogId(), d->configLoader);
-        dialog->setWindowTitle(d->configWindowTitle());
-        dialog->setAttribute(Qt::WA_DeleteOnClose, true);
 
-        QUiLoader loader;
-        QFile f(uiFile);
-        if (!f.open(QIODevice::ReadOnly)) {
-            delete dialog;
+        QString uiFile = d->package->filePath("mainconfigui");
+        if (!uiFile.isEmpty()) {
+            dialog->setWindowTitle(d->configWindowTitle());
+            dialog->setAttribute(Qt::WA_DeleteOnClose, true);
 
-            if (d->script) {
-                d->script->showConfigurationInterface();
+            QUiLoader loader;
+            QFile f(uiFile);
+            if (!f.open(QIODevice::ReadOnly)) {
+                delete dialog;
+
+                if (d->script) {
+                    d->script->showConfigurationInterface();
+                }
+                return;
             }
-            return;
+
+            QWidget *w = loader.load(&f);
+            f.close();
+
+            dialog->addPage(w, i18n("Settings"), icon(), i18n("%1 Settings", name()));
         }
 
-        QWidget *w = loader.load(&f);
-        f.close();
-
-        dialog->addPage(w, i18n("Settings"), icon(), i18n("%1 Settings", name()));
         d->addGlobalShortcutsPage(dialog);
         connect(dialog, SIGNAL(applyClicked()), this, SLOT(configDialogFinished()));
         connect(dialog, SIGNAL(okClicked()), this, SLOT(configDialogFinished()));
