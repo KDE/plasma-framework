@@ -5,7 +5,7 @@
       http://www.kde.org/standards/kcfg/1.0/kcfg.xsd" >
   <kcfgfile name=""/>
 
-  <group name="General">
+  <group name="Secondary">
     <entry name="Test" type="String">
       <label>A test label</label>
       <default>This is in the secondary config XML</default>
