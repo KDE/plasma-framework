@@ -417,7 +417,7 @@ class SvgPrivate
         static QHash<QString, SharedSvgRenderer::Ptr> s_renderers;
 
         Svg *q;
-        Theme *theme;
+        QPointer<Theme> theme;
         QHash<QString, QRectF> localRectCache;
         QHash<QString, QPixmap> itemsToSave;
         QTimer *saveTimer;
