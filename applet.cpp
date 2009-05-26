@@ -1,3 +1,5 @@
+#ifndef APPLET_CPP
+#define APPLET_CPP
 /*
  *   Copyright 2005 by Aaron Seigo <aseigo@kde.org>
  *   Copyright 2007 by Riccardo Iaconelli <riccardo@kde.org>
@@ -244,12 +246,14 @@ void Applet::save(KConfigGroup &g) const
     }
 
     KConfigGroup appletConfigGroup(&group, "Configuration");
-
-    //FIXME: we need a global save state too
     saveState(appletConfigGroup);
 
     if (d->configLoader) {
+        // we're saving so we know its changed, we don't need or want the configChanged
+        // signal bubbling up at this point due to that
+        disconnect(d->configLoader, SIGNAL(configChanged()), this, SLOT(configChanged()));
         d->configLoader->writeConfig();
+        connect(d->configLoader, SIGNAL(configChanged()), this, SLOT(configChanged()));
     }
 }
 
@@ -1558,8 +1562,6 @@ void Applet::showConfigurationInterface()
         d->addGlobalShortcutsPage(dialog);
         connect(dialog, SIGNAL(applyClicked()), this, SLOT(configDialogFinished()));
         connect(dialog, SIGNAL(okClicked()), this, SLOT(configDialogFinished()));
-        //FIXME: in this case use another ad-hoc slot?
-        connect(dialog, SIGNAL(finished()), this, SLOT(configDialogFinished()));
         dialog->show();
     } else if (d->script) {
         d->script->showConfigurationInterface();
@@ -1620,7 +1622,6 @@ KConfigDialog *AppletPrivate::generateGenericConfigDialog()
     dialog->showButton(KDialog::Apply, false);
     QObject::connect(dialog, SIGNAL(applyClicked()), q, SLOT(configDialogFinished()));
     QObject::connect(dialog, SIGNAL(okClicked()), q, SLOT(configDialogFinished()));
-    QObject::connect(dialog, SIGNAL(finished()), q, SLOT(configDialogFinished()));
     QObject::connect(dialog, SIGNAL(finished()), nullManager, SLOT(deleteLater()));
     return dialog;
 }
@@ -1660,7 +1661,10 @@ void AppletPrivate::configDialogFinished()
         }
     }
 
-    q->configChanged();
+    if (!configLoader) {
+        // the config loader will trigger this for us, so we don't need to.
+        q->configChanged();
+    }
 }
 
 void AppletPrivate::updateShortcuts()
@@ -2495,3 +2499,4 @@ void AppletOverlayWidget::paint(QPainter *painter,
 
 #include "applet.moc"
 #include "private/applet_p.moc"
+#endif // APPLET_CPP
