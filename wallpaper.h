@@ -91,7 +91,7 @@ class PLASMA_EXPORT Wallpaper : public QObject
         static KPluginInfo::List listWallpaperInfo(const QString &formFactor = QString());
 
         /**
-         * Attempts to load an wallpaper
+         * Attempts to load a wallpaper
          *
          * Returns a pointer to the wallpaper if successful.
          * The caller takes responsibility for the wallpaper, including
@@ -104,7 +104,7 @@ class PLASMA_EXPORT Wallpaper : public QObject
         static Wallpaper *load(const QString &name, const QVariantList &args = QVariantList());
 
         /**
-         * Attempts to load an wallpaper
+         * Attempts to load a wallpaper
          *
          * Returns a pointer to the wallpaper if successful.
          * The caller takes responsibility for the wallpaper, including
@@ -440,7 +440,7 @@ class PLASMA_EXPORT Wallpaper : public QObject
 } // Plasma namespace
 
 /**
- * Register an wallpaper when it is contained in a loadable module
+ * Register a wallpaper when it is contained in a loadable module
  */
 #define K_EXPORT_PLASMA_WALLPAPER(libname, classname) \
 K_PLUGIN_FACTORY(factory, registerPlugin<classname>();) \
