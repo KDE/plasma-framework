@@ -188,6 +188,7 @@ void WallpaperPackage::pathChanged()
     QFileInfo info(path());
 
     if (info.isDir()) {
+        setContentsPrefix("contents/");
         findBestPaper();
     } else {
         // dirty trick to support having a file passed in instead of a directory
