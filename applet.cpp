@@ -1890,7 +1890,7 @@ Applet *Applet::load(const QString &appletName, uint appletId, const QVariantLis
     /* if (offers.count() > 1) {
         kDebug() << "hey! we got more than one! let's blindly take the first one";
     } */
-    
+
     if (offers.isEmpty()) {
         kDebug() << "offers is empty for " << appletName;
         return 0;
@@ -2271,6 +2271,7 @@ void AppletPrivate::setupScriptSupport()
         //FIXME: we should _probably_ use a KComponentData to segregate the applets
         //       from each other; but I want to get the basics working first :)
         KGlobal::dirs()->addResourceDir("locale", translationsPath);
+        KGlobal::locale()->insertCatalog(package->metadata().pluginName());
     }
 
     QString xmlPath = package->filePath("mainconfigxml");
