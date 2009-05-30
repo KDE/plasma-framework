@@ -22,6 +22,7 @@
 #include <QApplication>
 #include <QFile>
 #include <QFileInfo>
+#include <QTimer>
 #ifdef Q_WS_X11
 #include <QX11Info>
 #endif
@@ -84,6 +85,10 @@ public:
             QObject::connect(compositeWatch, SIGNAL(lostOwner()), q, SLOT(compositingChanged()));
         }
 #endif
+
+        saveTimer = new QTimer(q);
+        saveTimer->setSingleShot(true);
+        QObject::connect(saveTimer, SIGNAL(timeout()), q, SLOT(scheduledCacheUpdate()));
     }
 
     ~ThemePrivate()
@@ -120,6 +125,7 @@ public:
     void compositingChanged();
     void discardCache();
     void discardCache(bool recreateElementsCache);
+    void scheduledCacheUpdate();
     void colorsChanged();
     bool useCache();
     void settingsFileChanged(const QString &);
@@ -143,6 +149,8 @@ public:
     KPixmapCache *pixmapCache;
     KSharedConfigPtr svgElementsCache;
     QHash<QString, QSet<QString> > invalidElements;
+    QHash<QString, QPixmap> pixmapsToCache;
+    QTimer *saveTimer;
 
 #ifdef Q_WS_X11
     KSelectionWatcher *compositeWatch;
@@ -216,9 +224,10 @@ void ThemePrivate::discardCache(bool recreateElementsCache)
     delete pixmapCache;
     pixmapCache = 0;
     invalidElements.clear();
+    pixmapsToCache.clear();
+    saveTimer->stop();
 
     svgElementsCache = 0;
-
     QString svgElementsFile = KStandardDirs::locateLocal("cache", "plasma-svgelements-" + themeName);
     if (!svgElementsFile.isEmpty()) {
         QFile f(svgElementsFile);
@@ -228,6 +237,20 @@ void ThemePrivate::discardCache(bool recreateElementsCache)
     if (recreateElementsCache) {
         svgElementsCache = KSharedConfig::openConfig(svgElementsFile);
     }
+}
+
+void ThemePrivate::scheduledCacheUpdate()
+{
+    //kDebug()<< "Saving to cache:";
+    QHash<QString, QPixmap>::const_iterator it = pixmapsToCache.constBegin();
+
+    while (it != pixmapsToCache.constEnd()) {
+        //kDebug()<< "Saving item to cache: " << it.key();
+        pixmapCache->insert(it.key(), it.value());
+        ++it;
+    }
+
+    pixmapsToCache.clear();
 }
 
 void ThemePrivate::colorsChanged()
@@ -618,7 +641,16 @@ bool Theme::useNativeWidgetStyle() const
 
 bool Theme::findInCache(const QString &key, QPixmap &pix)
 {
-    return d->useCache() && d->pixmapCache->find(key, pix);
+    if (d->useCache()) {
+        if (d->pixmapsToCache.contains(key)) {
+            pix = d->pixmapsToCache.value(key);
+            return true;
+        }
+
+        return d->pixmapCache->find(key, pix);
+    }
+
+    return false;
 }
 
 // BIC FIXME: Should be merged with the other findInCache method above when we break BC
@@ -634,7 +666,8 @@ bool Theme::findInCache(const QString &key, QPixmap &pix, unsigned int lastModif
 void Theme::insertIntoCache(const QString& key, const QPixmap& pix)
 {
     if (d->useCache()) {
-        d->pixmapCache->insert(key, pix);
+        d->pixmapsToCache.insert(key, pix);
+        d->saveTimer->start(500);
     }
 }
 

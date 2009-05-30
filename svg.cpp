@@ -23,7 +23,6 @@
 #include <QMatrix>
 #include <QPainter>
 #include <QSharedData>
-#include <QTimer>
 
 #include <kcolorscheme.h>
 #include <kconfiggroup.h>
@@ -69,7 +68,6 @@ class SvgPrivate
         SvgPrivate(Svg *svg)
             : q(svg),
               theme(0),
-              saveTimer(0),
               renderer(0),
               lastModified(0),
               multipleImages(false),
@@ -77,9 +75,6 @@ class SvgPrivate
               applyColors(false),
               cacheRendering(true)
         {
-            saveTimer = new QTimer(q);
-            saveTimer->setSingleShot(true);
-            QObject::connect(saveTimer, SIGNAL(timeout()), q, SLOT(scheduledCacheUpdate()));
         }
 
         ~SvgPrivate()
@@ -233,25 +228,11 @@ class SvgPrivate
                 p = p.fromImage(itmp);
             }
 
-            if (cacheRendering && !itemsToSave.contains(id)) {
-                itemsToSave.insert(id, p);
-                saveTimer->start(300);
+            if (cacheRendering) {
+                actualTheme()->insertIntoCache(id, p);
             }
 
             return p;
-        }
-
-        void scheduledCacheUpdate()
-        {
-            QHash<QString, QPixmap>::const_iterator i = itemsToSave.constBegin();
-
-            while (i != itemsToSave.constEnd()) {
-                //kDebug()<<"Saving item to cache: " << i.key();
-                actualTheme()->insertIntoCache(i.key(), i.value());
-                ++i;
-            }
-
-            itemsToSave.clear();
         }
 
         void createRenderer()
@@ -395,8 +376,6 @@ class SvgPrivate
             eraseRenderer();
 
             localRectCache.clear();
-            itemsToSave.clear();
-            saveTimer->stop();
 
             //kDebug() << themePath << ">>>>>>>>>>>>>>>>>> theme changed";
             emit q->repaintNeeded();
@@ -409,8 +388,6 @@ class SvgPrivate
             }
 
             eraseRenderer();
-            itemsToSave.clear();
-            saveTimer->stop();
             emit q->repaintNeeded();
         }
 
@@ -419,8 +396,6 @@ class SvgPrivate
         Svg *q;
         QPointer<Theme> theme;
         QHash<QString, QRectF> localRectCache;
-        QHash<QString, QPixmap> itemsToSave;
-        QTimer *saveTimer;
         SharedSvgRenderer::Ptr renderer;
         QString themePath;
         QString path;
