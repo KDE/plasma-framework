@@ -20,7 +20,7 @@
 
 #include "message.h"
 
-#include <QtCore/QString>
+#include <QtCore/QByteArray>
 
 #include "sodephelpers_p.h"
 
@@ -33,8 +33,8 @@ public:
     MessagePrivate() : id(0) {}
 
     qint64 id;
-    QString resourcePath;
-    QString operationName;
+    QByteArray resourcePath;
+    QByteArray operationName;
     Fault fault;
     Value data;
 };
@@ -48,7 +48,7 @@ Message::Message()
 {
 }
 
-Message::Message(const QString &resourcePath, const QString &operationName, qint64 id)
+Message::Message(const QByteArray &resourcePath, const QByteArray &operationName, qint64 id)
     : d(new MessagePrivate)
 {
     static qint64 lastId = 0;
@@ -85,12 +85,12 @@ qint64 Message::id() const
     return d->id;
 }
 
-QString Message::resourcePath() const
+QByteArray Message::resourcePath() const
 {
     return d->resourcePath;
 }
 
-QString Message::operationName() const
+QByteArray Message::operationName() const
 {
     return d->operationName;
 }

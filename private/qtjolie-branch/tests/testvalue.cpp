@@ -38,11 +38,11 @@ private slots:
 
         QCOMPARE(v.toInt(), 0);
         QCOMPARE(v.toDouble(), 0.0);
-        QCOMPARE(v.toString(), QString());
+        QCOMPARE(v.toByteArray(), QByteArray());
 
         QVERIFY(!v.isValid());
 
-        QVERIFY(!v.isString());
+        QVERIFY(!v.isByteArray());
         QVERIFY(!v.isInt());
         QVERIFY(!v.isDouble());
     }
@@ -63,7 +63,7 @@ private slots:
         QVERIFY(v2.isInt());
 
         QCOMPARE(v2.toDouble(), 0.0);
-        QCOMPARE(v2.toString(), QString());
+        QCOMPARE(v2.toByteArray(), QByteArray());
     }
 
     void shouldRespectDoubleValues()
@@ -82,23 +82,23 @@ private slots:
         QVERIFY(v2.isDouble());
 
         QCOMPARE(v2.toInt(), 0);
-        QCOMPARE(v2.toString(), QString());
+        QCOMPARE(v2.toByteArray(), QByteArray());
     }
 
-    void shouldRespectStringValues()
+    void shouldRespectByteArrayValues()
     {
         Value v1("42"), v2;
 
-        QCOMPARE(v1.toString(), QString("42"));
-        QCOMPARE(v2.toString(), QString());
+        QCOMPARE(v1.toByteArray(), QByteArray("42"));
+        QCOMPARE(v2.toByteArray(), QByteArray());
 
-        QVERIFY(v1.isString());
-        QVERIFY(!v2.isString());
+        QVERIFY(v1.isByteArray());
+        QVERIFY(!v2.isByteArray());
 
         v2 = v1;
 
-        QCOMPARE(v2.toString(), QString("42"));
-        QVERIFY(v2.isString());
+        QCOMPARE(v2.toByteArray(), QByteArray("42"));
+        QVERIFY(v2.isByteArray());
 
         QCOMPARE(v2.toInt(), 0);
         QCOMPARE(v2.toDouble(), 0.0);

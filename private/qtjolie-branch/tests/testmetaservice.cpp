@@ -36,15 +36,15 @@ using namespace Jolie;
 
 void dump(const Value &value, int level)
 {
-    QString indent;
+    QByteArray indent;
 
     while (level>0) {
         indent+="    ";
         level--;
     }
 
-    qDebug() << (indent+value.toString()) << value.toInt() << value.toDouble();
-    foreach (const QString &name, value.childrenNames()) {
+    qDebug() << (indent+value.toByteArray()) << value.toInt() << value.toDouble();
+    foreach (const QByteArray &name, value.childrenNames()) {
         QList<Value> children = value.children(name);
         qDebug() << (indent+"Children:") << name;
         foreach (const Value &child, children) {
@@ -83,7 +83,7 @@ private slots:
         QVERIFY2(m_metaService.start(), "Looks like you don't have Jolie's metaservice command");
         QTest::qWait(1000);
 
-        m_client = new Client("localhost", 9000);
+        m_client = new Client(QString::fromUtf8("localhost"), 9000);
     }
 
     void cleanupTestCase()
@@ -97,8 +97,8 @@ private slots:
         QTest::addColumn<QString>("resourcePrefix");
         QTest::addColumn<QString>("fileName");
 
-        QTest::newRow("printer service") << "Printer" << "printer.ol";
-        QTest::newRow("math service") << "Math" << "math.ol";
+        QTest::newRow("printer service") << QString::fromUtf8("Printer") << QString::fromUtf8("printer.ol");
+        QTest::newRow("math service") << QString::fromUtf8("Math") << QString::fromUtf8("math.ol");
     }
 
     void shouldLoadService()
@@ -106,32 +106,32 @@ private slots:
         QFETCH(QString, resourcePrefix);
         QFETCH(QString, fileName);
 
-        QCOMPARE(m_metaService.loadService(resourcePrefix, QString(DATA_DIR"/")+fileName),
+        QCOMPARE(m_metaService.loadService(resourcePrefix, QString::fromUtf8(DATA_DIR"/")+fileName),
                  resourcePrefix);
     }
 
     void shouldListServices()
     {
         QStringList expected;
-        expected << "Math" << "Printer";
+        expected << QString::fromUtf8("Math") << QString::fromUtf8("Printer");
         QCOMPARE(m_metaService.loadedServices(), expected);
     }
 
     void shouldPlaceServiceCalls_data()
     {
-        QTest::addColumn<QString>("path");
-        QTest::addColumn<QString>("method");
+        QTest::addColumn<QByteArray>("path");
+        QTest::addColumn<QByteArray>("method");
         QTest::addColumn<Value>("data");
         QTest::addColumn<Value>("replyData");
 
-        QTest::newRow("printer service") << "/Printer" << "printInput" << Value("Patapatapon!") << Value("success");
-        QTest::newRow("math service") << "/Math" << "twice" << Value(10.5) << Value(21.0);
+        QTest::newRow("printer service") << QByteArray("/Printer") << QByteArray("printInput") << Value("Patapatapon!") << Value("success");
+        QTest::newRow("math service") << QByteArray("/Math") << QByteArray("twice") << Value(10.5) << Value(21.0);
     }
 
     void shouldPlaceServiceCalls()
     {
-        QFETCH(QString, path);
-        QFETCH(QString, method);
+        QFETCH(QByteArray, path);
+        QFETCH(QByteArray, method);
         QFETCH(Value, data);
         QFETCH(Value, replyData);
 
@@ -150,8 +150,8 @@ private slots:
     {
         QTest::addColumn<QString>("serviceName");
 
-        QTest::newRow("printer service") << "PrinterService";
-        QTest::newRow("math service") << "MathService";
+        QTest::newRow("printer service") << QString::fromUtf8("PrinterService");
+        QTest::newRow("math service") << QString::fromUtf8("MathService");
     }
 
     void shouldUnloadService()

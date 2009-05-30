@@ -34,19 +34,19 @@ inline void sodepCompare(const Jolie::Value &v1, const Jolie::Value &v2)
 {
     QCOMPARE(v1.isValid(), v2.isValid());
 
-    QCOMPARE(v1.isString(), v2.isString());
+    QCOMPARE(v1.isByteArray(), v2.isByteArray());
     QCOMPARE(v1.isInt(), v2.isInt());
     QCOMPARE(v1.isDouble(), v2.isDouble());
 
-    QCOMPARE(v1.toString(), v2.toString());
+    QCOMPARE(v1.toByteArray(), v2.toByteArray());
     QCOMPARE(v1.toInt(), v2.toInt());
     QCOMPARE(v1.toDouble(), v2.toDouble());
 
-    QStringList v1Names = v1.childrenNames();
-    QStringList v2Names = v2.childrenNames();
+    QList<QByteArray> v1Names = v1.childrenNames();
+    QList<QByteArray> v2Names = v2.childrenNames();
     QCOMPARE(v1Names, v2Names);
 
-    foreach (const QString &name, v1Names) {
+    foreach (const QByteArray &name, v1Names) {
         QList<Jolie::Value> v1Values = v1.children(name);
         QList<Jolie::Value> v2Values = v2.children(name);
 

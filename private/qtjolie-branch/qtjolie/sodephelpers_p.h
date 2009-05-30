@@ -22,8 +22,7 @@
 #define QTJOLIE_SODEPHELPERS_P_H
 
 #include <QtCore/QIODevice>
-#include <QtCore/QString>
-#include <QtCore/QStringList>
+#include <QtCore/QByteArray>
 
 #include "value.h"
 #include "fault.h"
@@ -68,11 +67,10 @@ inline void sodepWrite(QIODevice &io, qint64 value)
     io.write(out, 8);
 }
 
-inline void sodepWrite(QIODevice &io, const QString &value)
+inline void sodepWrite(QIODevice &io, const QByteArray &value)
 {
-    QByteArray data = value.toUtf8();
-    sodepWrite(io, data.size());
-    io.write(data);
+    sodepWrite(io, value.size());
+    io.write(value);
 }
 
 inline void sodepWrite(QIODevice &io, const Value &value)
@@ -83,16 +81,16 @@ inline void sodepWrite(QIODevice &io, const Value &value)
     } else if (value.isInt()) {
         io.putChar(2);
         sodepWrite(io, value.toInt());
-    } else if (value.isString()) {
+    } else if (value.isByteArray()) {
         io.putChar(1);
-        sodepWrite(io, value.toString());
+        sodepWrite(io, value.toByteArray());
     } else {
         io.putChar(0);
     }
 
     sodepWrite(io, value.childrenNames().size());
 
-    foreach (const QString &name, value.childrenNames()) {
+    foreach (const QByteArray &name, value.childrenNames()) {
         sodepWrite(io, name);
 
         QList<Value> values = value.children(name);
@@ -183,7 +181,7 @@ inline qint64 sodepReadInt64(QIODevice &io)
     return i;
 }
 
-inline QString sodepReadString(QIODevice &io)
+inline QByteArray sodepReadByteArray(QIODevice &io)
 {
     qint32 length = sodepReadInt32(io);
 
@@ -195,7 +193,7 @@ inline QString sodepReadString(QIODevice &io)
     io.read(data, length);
     data[length] = '\0';
 
-    QString result = QString::fromUtf8(data);
+    QByteArray result(data);
     delete[] data;
 
     return result;
@@ -222,7 +220,7 @@ inline Value sodepReadValue(QIODevice &io)
         break;
     }
     case 1: {
-        result = Value(sodepReadString(io));
+        result = Value(sodepReadByteArray(io));
         break;
     }
     default:
@@ -232,7 +230,7 @@ inline Value sodepReadValue(QIODevice &io)
     qint32 childrenCount = sodepReadInt32(io);
 
     for (int i=0; i<childrenCount; ++i) {
-        QString name = sodepReadString(io);
+        QByteArray name = sodepReadByteArray(io);
 
         qint32 valueCount = sodepReadInt32(io);
         for (int j=0; j<valueCount; ++j) {
@@ -256,7 +254,7 @@ inline Fault sodepReadFault(QIODevice &io)
         return Fault();
     }
 
-    QString name = sodepReadString(io);
+    QByteArray name = sodepReadByteArray(io);
     Value data = sodepReadValue(io);
 
     return Fault(name, data);
@@ -265,8 +263,8 @@ inline Fault sodepReadFault(QIODevice &io)
 inline Message sodepReadMessage(QIODevice &io)
 {
     qint64 id = sodepReadInt64(io);
-    QString resourcePath = sodepReadString(io);
-    QString operationName = sodepReadString(io);
+    QByteArray resourcePath = sodepReadByteArray(io);
+    QByteArray operationName = sodepReadByteArray(io);
 
     Message result(resourcePath, operationName, id);
 

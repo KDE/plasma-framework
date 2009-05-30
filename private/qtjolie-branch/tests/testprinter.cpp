@@ -42,12 +42,12 @@ public:
         layout()->addWidget(m_lineEdit);
 
         QPushButton *button = new QPushButton(this);
-        button->setText("SEND");
+        button->setText(QString::fromUtf8("SEND"));
         layout()->addWidget(button);
         connect(button, SIGNAL(clicked()),
                 this, SLOT(sendMessage()));
 
-        m_socket.connectToHost("localhost", 10000);
+        m_socket.connectToHost(QString::fromUtf8("localhost"), 10000);
         if (!m_socket.waitForConnected(10000)) {
             qDebug("Failed to connect!");
             return;
@@ -59,7 +59,7 @@ private slots:
     void sendMessage()
     {
         Message message("/", "printInput");
-        message.setData(Value(m_lineEdit->text()));
+        message.setData(Value(m_lineEdit->text().toUtf8()));
         sodepWrite(m_socket, message);
 
         qDebug("Message sent:");
@@ -67,7 +67,7 @@ private slots:
         buffer.open(QIODevice::WriteOnly);
         sodepWrite(buffer, message);
         buffer.close();
-        qDebug(buffer.data().toHex());
+        qDebug("%s", buffer.data().toHex().constData());
 
         qDebug("Message received:");
         buffer.setData(QByteArray());
@@ -75,7 +75,7 @@ private slots:
         message = sodepReadMessage(m_socket);
         sodepWrite(buffer, message);
         buffer.close();
-        qDebug(buffer.data().toHex());
+        qDebug("%s", buffer.data().toHex().constData());
     }
 private:
     QLineEdit *m_lineEdit;

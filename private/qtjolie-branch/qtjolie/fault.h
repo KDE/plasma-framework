@@ -31,7 +31,7 @@ class Q_DECL_EXPORT Fault
 {
 public:
     Fault();
-    explicit Fault(const QString &name, const Value &data = Value());
+    explicit Fault(const QByteArray &name, const Value &data = Value());
 
     Fault(const Fault &other);
 
@@ -39,7 +39,7 @@ public:
 
     Fault &operator=(const Fault &other);
 
-    QString name() const;
+    QByteArray name() const;
     Value data() const;
 
     bool isValid() const;

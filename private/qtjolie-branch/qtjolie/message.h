@@ -32,9 +32,9 @@ class Q_DECL_EXPORT Message
 {
 public:
     Message();
-    explicit Message(const QString &resourcePath,
-                          const QString &operationName,
-                          qint64 id = 0);
+    explicit Message(const QByteArray &resourcePath,
+                     const QByteArray &operationName,
+                     qint64 id = 0);
     Message(const Message &other);
     ~Message();
 
@@ -42,8 +42,8 @@ public:
 
     qint64 id() const;
 
-    QString resourcePath() const;
-    QString operationName() const;
+    QByteArray resourcePath() const;
+    QByteArray operationName() const;
 
     Fault fault() const;
     void setFault(const Fault &fault);

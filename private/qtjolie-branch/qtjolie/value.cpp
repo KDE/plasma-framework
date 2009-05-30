@@ -20,7 +20,6 @@
 
 #include "value.h"
 
-#include <QtCore/QStringList>
 #include <QtCore/QVariant>
 
 #include "sodephelpers_p.h"
@@ -32,7 +31,7 @@ class ValuePrivate
 {
 public:
     QVariant content;
-    QMap<QString, QList<Value> > children;
+    QMap<QByteArray, QList<Value> > children;
 };
 
 } // namespace Jolie
@@ -44,7 +43,7 @@ Value::Value()
 {
 }
 
-Value::Value(const QString &content)
+Value::Value(const QByteArray &content)
     : d(new ValuePrivate)
 {
     d->content = content;
@@ -80,27 +79,27 @@ Value &Value::operator=(const Value &other)
     return *this;
 }
 
-QStringList Value::childrenNames() const
+QList<QByteArray> Value::childrenNames() const
 {
     return d->children.keys();
 }
 
-QList<Value> & Value::children(const QString &name)
+QList<Value> & Value::children(const QByteArray &name)
 {
     return d->children[name];
 }
 
-const QList<Value> & Value::children(const QString &name) const
+const QList<Value> & Value::children(const QByteArray &name) const
 {
     return d->children[name];
 }
 
-QString Value::toString() const
+QByteArray Value::toByteArray() const
 {
-    if (isString()) {
-        return d->content.toString();
+    if (isByteArray()) {
+        return d->content.toByteArray();
     } else {
-        return QString();
+        return QByteArray();
     }
 }
 
@@ -122,9 +121,9 @@ double Value::toDouble() const
     }
 }
 
-bool Value::isString() const
+bool Value::isByteArray() const
 {
-    return d->content.type()==QVariant::String;
+    return d->content.type()==QVariant::ByteArray;
 }
 
 bool Value::isInt() const
@@ -139,6 +138,6 @@ bool Value::isDouble() const
 
 bool Value::isValid() const
 {
-    return isString() || isInt() || isDouble();
+    return isByteArray() || isInt() || isDouble();
 }
 

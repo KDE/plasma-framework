@@ -20,7 +20,7 @@
 
 #include "fault.h"
 
-#include <QtCore/QString>
+#include <QtCore/QByteArray>
 
 #include "sodephelpers_p.h"
 
@@ -30,7 +30,7 @@ namespace Jolie
 class FaultPrivate
 {
 public:
-    QString name;
+    QByteArray name;
     Value data;
 };
 
@@ -44,7 +44,7 @@ Fault::Fault()
 
 }
 
-Fault::Fault(const QString &name, const Value &data)
+Fault::Fault(const QByteArray &name, const Value &data)
     : d(new FaultPrivate)
 {
     d->name = name;
@@ -69,7 +69,7 @@ Fault &Fault::operator=(const Fault &other)
     return *this;
 }
 
-QString Fault::name() const
+QByteArray Fault::name() const
 {
     return d->name;
 }

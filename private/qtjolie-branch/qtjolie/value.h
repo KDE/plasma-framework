@@ -33,7 +33,7 @@ class Q_DECL_EXPORT Value
 public:
     Value();
 
-    explicit Value(const QString &content);
+    explicit Value(const QByteArray &content);
     explicit Value(qint32 content);
     explicit Value(double content);
 
@@ -43,15 +43,15 @@ public:
 
     Value &operator=(const Value &other);
 
-    QStringList childrenNames() const;
-    QList<Value> &children(const QString &name);
-    const QList<Value> &children(const QString &name) const;
+    QList<QByteArray> childrenNames() const;
+    QList<Value> &children(const QByteArray &name);
+    const QList<Value> &children(const QByteArray &name) const;
 
-    QString toString() const;
+    QByteArray toByteArray() const;
     qint32 toInt() const;
     double toDouble() const;
 
-    bool isString() const;
+    bool isByteArray() const;
     bool isInt() const;
     bool isDouble() const;
 

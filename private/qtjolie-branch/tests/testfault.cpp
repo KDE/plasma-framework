@@ -35,7 +35,7 @@ private slots:
     {
         Fault f;
 
-        QCOMPARE(f.name(), QString());
+        QCOMPARE(f.name(), QByteArray());
         QVERIFY(!f.data().isValid());
 
         QVERIFY(!f.isValid());
@@ -44,16 +44,16 @@ private slots:
     {
         Fault f1("blup"), f2("blop", Value(42));
 
-        QCOMPARE(f1.name(), QString("blup"));
+        QCOMPARE(f1.name(), QByteArray("blup"));
         QVERIFY(!f1.data().isValid());
 
-        QCOMPARE(f2.name(), QString("blop"));
+        QCOMPARE(f2.name(), QByteArray("blop"));
         QVERIFY(f2.data().isValid());
         QCOMPARE(f2.data().toInt(), 42);
 
         f1 = f2;
 
-        QCOMPARE(f1.name(), QString("blop"));
+        QCOMPARE(f1.name(), QByteArray("blop"));
         QVERIFY(f1.data().isValid());
         QCOMPARE(f1.data().toInt(), 42);
     }

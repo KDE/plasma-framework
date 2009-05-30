@@ -50,13 +50,13 @@ MetaService::~MetaService()
 
 bool MetaService::start()
 {
-    d->metaserviceProcess.start("metaservice");
+    d->metaserviceProcess.start(QString::fromUtf8("metaservice"));
     return d->metaserviceProcess.waitForStarted();
 }
 
 bool MetaService::stop()
 {
-    Client client("localhost", 9000);
+    Client client(QString::fromUtf8("localhost"), 9000);
     Message message("/", "shutdown");
     client.callNoReply(message);
     return d->metaserviceProcess.waitForFinished(30000);
@@ -69,20 +69,20 @@ bool MetaService::isRunning() const
 
 QString MetaService::loadService(const QString &name, const QString &fileName)
 {
-    Client client("localhost", 9000);
+    Client client(QString::fromUtf8("localhost"), 9000);
     Message message("/", "loadEmbeddedJolieService");
     Value value;
-    value.children("resourcePrefix") << Value(name);
-    value.children("filepath") << Value(fileName);
+    value.children("resourcePrefix") << Value(name.toUtf8());
+    value.children("filepath") << Value(fileName.toUtf8());
     message.setData(value);
 
     Message reply = client.call(message);
-    return reply.data().toString();
+    return QString::fromUtf8(reply.data().toByteArray());
 }
 
 QStringList MetaService::loadedServices() const
 {
-    Client client("localhost", 9000);
+    Client client(QString::fromUtf8("localhost"), 9000);
     Message message("/", "getServices");
 
     Message reply = client.call(message);
@@ -90,7 +90,7 @@ QStringList MetaService::loadedServices() const
 
     QStringList result;
     foreach (const Value &service, services) {
-        result << service.children("resourceName").first().toString();
+        result << QString::fromUtf8(service.children("resourceName").first().toByteArray());
     }
 
     return result;
@@ -98,9 +98,9 @@ QStringList MetaService::loadedServices() const
 
 void MetaService::unloadService(const QString &name)
 {
-    Client client("localhost", 9000);
+    Client client(QString::fromUtf8("localhost"), 9000);
     Message message("/", "unloadEmbeddedService");
-    message.setData(Value(name));
+    message.setData(Value(name.toUtf8()));
 
     client.call(message);
 }
