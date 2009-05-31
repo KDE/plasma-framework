@@ -42,10 +42,6 @@ FrameSvg::FrameSvg(QObject *parent)
 {
     connect(this, SIGNAL(repaintNeeded()), this, SLOT(updateNeeded()));
     d->frames.insert(QString(), new FrameData());
-
-    d->saveTimer = new QTimer(this);
-    d->saveTimer->setSingleShot(true);
-    connect(d->saveTimer, SIGNAL(timeout()), this, SLOT(scheduledCacheUpdate()));
 }
 
 FrameSvg::~FrameSvg()
@@ -106,10 +102,11 @@ void FrameSvg::setElementPrefix(Plasma::Location location)
             setElementPrefix(QString());
             break;
     }
+
     d->location = location;
 }
 
-void FrameSvg::setElementPrefix(const QString & prefix)
+void FrameSvg::setElementPrefix(const QString &prefix)
 {
     const QString oldPrefix(d->prefix);
 
@@ -120,21 +117,25 @@ void FrameSvg::setElementPrefix(const QString & prefix)
         if (!d->prefix.isEmpty()) {
             d->prefix += '-';
         }
-
     }
 
-    if (oldPrefix == d->prefix && d->frames[oldPrefix]) {
+    FrameData *oldFrameData = d->frames.value(oldPrefix);
+    if (oldPrefix == d->prefix && oldFrameData) {
         return;
     }
 
     if (!d->frames.contains(d->prefix)) {
-        d->frames.insert(d->prefix, new FrameData(*(d->frames[oldPrefix])));
+        if (oldFrameData) {
+            d->frames.insert(d->prefix, new FrameData(*oldFrameData));
+        } else {
+            d->frames.insert(d->prefix, new FrameData());
+        }
+
         d->updateSizes();
     }
 
     if (!d->cacheAll) {
         delete d->frames[oldPrefix];
-        d->framesToSave.removeAll(oldPrefix);
         d->frames.remove(oldPrefix);
     }
 
@@ -329,15 +330,13 @@ void FrameSvg::clearCache()
 {
     FrameData *frame = d->frames[d->prefix];
 
-    d->saveTimer->stop();
-    d->framesToSave.clear();
-
     // delete all the frames that aren't this one
     QMutableHashIterator<QString, FrameData*> it(d->frames);
     while (it.hasNext()) {
         FrameData *p = it.next().value();
 
         if (frame != p) {
+            //TODO: should we clear from the pixmap cache as well?
             delete p;
             it.remove();
         }
@@ -598,39 +597,35 @@ void FrameSvgPrivate::generateBackground(FrameData *frame)
         p.drawPixmap(overlayPos, overlay, QRect(overlayPos, overlaySize));
     }
 
-    if (!framesToSave.contains(prefix)) {
-        framesToSave.append(prefix);
-    }
-
-    saveTimer->start(300);
+    cacheFrame(prefix);
 }
 
 
-void FrameSvgPrivate::scheduledCacheUpdate()
+void FrameSvgPrivate::cacheFrame(const QString &prefixToSave)
 {
     if (!q->isUsingRenderingCache()) {
-        framesToSave.clear();
         return;
     }
 
-    foreach (QString prefixToSave, framesToSave) {
-        //insert background
-        FrameData *frame = frames[prefixToSave];
-        QString id = QString::fromLatin1("%7_%6_%5_%4_%3_%2_%1_").
-                            arg(overlayPos.y()).arg(overlayPos.x()).arg(frame->enabledBorders).arg(frame->frameSize.width()).arg(frame->frameSize.height()).arg(prefixToSave).arg(q->imagePath());
+    //insert background
+    FrameData *frame = frames.value(prefixToSave);
 
-        //kDebug()<<"Saving to cache frame"<<id;
-
-        Theme::defaultTheme()->insertIntoCache(id, frame->cachedBackground);
-
-        //insert overlay
-        id = QString::fromLatin1("overlay_%7_%6_%5_%4_%3_%2_%1_").
-                            arg(overlayPos.y()).arg(overlayPos.x()).arg(frame->enabledBorders).arg(frame->frameSize.width()).arg(frame->frameSize.height()).arg(prefixToSave).arg(q->imagePath());
-
-        Theme::defaultTheme()->insertIntoCache(id, frame->cachedBackground);
+    if (!frame) {
+        return;
     }
 
-    framesToSave.clear();
+    QString id = QString::fromLatin1("%7_%6_%5_%4_%3_%2_%1_").
+        arg(overlayPos.y()).arg(overlayPos.x()).arg(frame->enabledBorders).arg(frame->frameSize.width()).arg(frame->frameSize.height()).arg(prefixToSave).arg(q->imagePath());
+
+    //kDebug()<<"Saving to cache frame"<<id;
+
+    Theme::defaultTheme()->insertIntoCache(id, frame->cachedBackground);
+
+    //insert overlay
+    id = QString::fromLatin1("overlay_%7_%6_%5_%4_%3_%2_%1_").
+        arg(overlayPos.y()).arg(overlayPos.x()).arg(frame->enabledBorders).arg(frame->frameSize.width()).arg(frame->frameSize.height()).arg(prefixToSave).arg(q->imagePath());
+
+    Theme::defaultTheme()->insertIntoCache(id, frame->cachedBackground);
 }
 
 void FrameSvgPrivate::updateSizes()

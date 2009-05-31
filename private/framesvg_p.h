@@ -30,13 +30,35 @@ class FrameData
 public:
     FrameData()
       : enabledBorders(FrameSvg::AllBorders),
-        frameSize(-1,-1)
+        frameSize(-1,-1),
+        topHeight(0),
+        leftWidth(0),
+        rightWidth(0),
+        bottomHeight(0),
+        topMargin(0),
+        leftMargin(0),
+        rightMargin(0),
+        bottomMargin(0),
+        noBorderPadding(false),
+        stretchBorders(false),
+        tileCenter(false)
     {
     }
 
     FrameData(const FrameData &other)
       : enabledBorders(other.enabledBorders),
-        frameSize(other.frameSize)
+        frameSize(other.frameSize),
+        topHeight(0),
+        leftWidth(0),
+        rightWidth(0),
+        bottomHeight(0),
+        topMargin(0),
+        leftMargin(0),
+        rightMargin(0),
+        bottomMargin(0),
+        noBorderPadding(false),
+        stretchBorders(false),
+        tileCenter(false)
     {
     }
 
@@ -74,7 +96,6 @@ public:
     FrameSvgPrivate(FrameSvg *psvg)
       : q(psvg),
         cacheAll(false),
-        saveTimer(0),
         overlayPos(0,0)
     {
     }
@@ -86,7 +107,7 @@ public:
     }
 
     void generateBackground(FrameData *frame);
-    void scheduledCacheUpdate();
+    void cacheFrame(const QString &prefix);
     void updateSizes();
     void updateNeeded();
     void updateAndSignalSizes();
@@ -97,8 +118,6 @@ public:
     FrameSvg *q;
 
     bool cacheAll : 1;
-    QStringList framesToSave;
-    QTimer *saveTimer;
     QPoint overlayPos;
 
     QHash<QString, FrameData*> frames;
