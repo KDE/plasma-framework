@@ -347,7 +347,7 @@ void Corona::loadLayout(const QString &configName)
         c = KSharedConfig::openConfig(configName);
     }
 
-    KConfigGroup containments(config(), "Containments");
+    KConfigGroup containments(c, "Containments");
 
     foreach (const QString &group, containments.groupList()) {
         KConfigGroup containmentConfig(&containments, group);
