@@ -118,13 +118,17 @@ public:
 
     /**
      * sets the icon for this toolbutton
-     * 
+     *
      * @arg icon the icon we want to use
+     *
+     * @since 4.3
      */
     void setIcon(const QIcon &icon);
 
     /**
      * @return the icon of this button
+     *
+     * @since 4.3
      */
     QIcon icon() const;
 
