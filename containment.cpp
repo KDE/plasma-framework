@@ -295,6 +295,7 @@ void Containment::restore(KConfigGroup &group)
 
     setLocation((Plasma::Location)group.readEntry("location", (int)d->location));
     setFormFactor((Plasma::FormFactor)group.readEntry("formfactor", (int)d->formFactor));
+    //kDebug() << "setScreen from restore";
     setScreen(group.readEntry("screen", d->screen), group.readEntry("desktop", d->desktop));
     setActivity(group.readEntry("activity", QString()));
 
@@ -843,7 +844,7 @@ void Containment::setScreen(int newScreen, int newDesktop)
         newDesktop = -1;
     }
 
-    kDebug() << activity() << "setting screen to " << newScreen << newDesktop << "and type is" << d->type;
+    //kDebug() << activity() << "setting screen to " << newScreen << newDesktop << "and type is" << d->type;
 
     Containment *swapScreensWith(0);
     if (d->type == DesktopContainment || d->type >= CustomContainment) {
@@ -862,6 +863,7 @@ void Containment::setScreen(int newScreen, int newDesktop)
                          << "desktop" << currently->desktop()
                          << "and is" << currently->activity()
                          << (QObject*)currently << "i'm" << (QObject*)this;
+                //kDebug() << "setScreen due to swap";
                 currently->setScreen(-1, newDesktop);
                 swapScreensWith = currently;
             }
@@ -883,15 +885,19 @@ void Containment::setScreen(int newScreen, int newDesktop)
 
     updateConstraints(Plasma::ScreenConstraint);
 
-    if (oldScreen != newScreen) {
-        emit screenChanged(oldScreen, newScreen, this);
+    if (oldScreen != newScreen || oldDesktop != newDesktop) {
+        if (oldScreen != newScreen) {
+            emit screenChanged(oldScreen, newScreen, this);
+        }
 
         KConfigGroup c = config();
         c.writeEntry("screen", d->screen);
+        c.writeEntry("desktop", d->desktop);
         emit configNeedsSaving();
     }
 
     if (swapScreensWith) {
+        //kDebug() << "setScreen due to swap, part 2";
         swapScreensWith->setScreen(oldScreen, oldDesktop);
     }
 
