@@ -162,6 +162,12 @@ const Package *AppletScript::package() const
     return d->applet->package();
 }
 
+Extender *AppletScript::extender() const
+{
+    Q_ASSERT(d->applet);
+    return d->applet->extender();
+}
+
 } // Plasma namespace
 
 #include "appletscript.moc"

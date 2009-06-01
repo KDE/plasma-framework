@@ -38,6 +38,7 @@ namespace Plasma
 {
 
 class AppletScriptPrivate;
+class Extender;
 
 /**
  * @class AppletScript plasma/scripting/appletscript.h <Plasma/Scripting/AppletScript>
@@ -134,6 +135,11 @@ public:
      * @see Applet
      */
     void configNeedsSaving() const;
+
+    /**
+     * @see Applet
+     */
+    Extender *extender() const;
 
 public Q_SLOTS:
 
