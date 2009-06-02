@@ -1708,7 +1708,7 @@ void Applet::createConfigurationInterface(KConfigDialog *parent)
     // do not put anything here ...
 }
 
-bool Applet::isAllowed(const QString &constraint)
+bool Applet::hasAuthorization(const QString &constraint)
 {
     KConfigGroup constraintGroup(KGlobal::config(), "Constraints");
     return constraintGroup.readEntry(constraint, true);
