@@ -103,7 +103,7 @@ class SvgPrivate
                                         .arg(path);
         }
 
-        bool setImagePath(const QString &imagePath, Svg *q)
+        bool setImagePath(const QString &imagePath)
         {
             bool isThemed = !QDir::isAbsolutePath(imagePath);
 
@@ -126,6 +126,7 @@ class SvgPrivate
             themed = isThemed;
             path.clear();
             themePath.clear();
+            localRectCache.clear();
 
             if (themed) {
                 themePath = imagePath;
@@ -135,7 +136,6 @@ class SvgPrivate
             } else {
                 kDebug() << "file '" << path << "' does not exist!";
             }
-
 
             // check if svg wants colorscheme applied
             QObject::disconnect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()),
@@ -147,7 +147,8 @@ class SvgPrivate
                                  q, SLOT(colorsChanged()));
             }
 
-            //also images with absolute path needs to have a natural size initialized, even if looks a bit weird using Theme to store non-themed stuff
+            // also images with absolute path needs to have a natural size initialized,
+            // even if looks a bit weird using Theme to store non-themed stuff
             if (themed || QFile::exists(imagePath)) {
                 QRectF rect;
                 bool found = actualTheme()->findInRectsCache(path, "_Natural", rect);
@@ -155,10 +156,18 @@ class SvgPrivate
                 if (!found) {
                     createRenderer();
                     naturalSize = renderer->defaultSize();
+                    //kDebug() << "natural size for" << path << "from renderer is" << naturalSize;
                     actualTheme()->insertIntoRectsCache(path, "_Natural", QRectF(QPointF(0,0), naturalSize));
                 } else {
                     naturalSize = rect.size();
+                    //kDebug() << "natural size for" << path << "from cache is" << naturalSize;
                 }
+            }
+
+            if (!themed) {
+                QFile f(imagePath);
+                QFileInfo info(f);
+                lastModified = info.lastModified().toTime_t();
             }
 
             return updateNeeded;
@@ -202,7 +211,7 @@ class SvgPrivate
                 }
             }
 
-                //kDebug() << "didn't find cached version of " << id << ", so re-rendering";
+            //kDebug() << "didn't find cached version of " << id << ", so re-rendering";
 
             //kDebug() << "size for " << elementId << " is " << s;
             // we have to re-render this puppy
@@ -325,6 +334,7 @@ class SvgPrivate
             QRectF elementRect = renderer->elementExists(elementId) ?
                                  renderer->boundsOnElement(elementId) : QRectF();
             naturalSize = renderer->defaultSize();
+            //kDebug() << "natural size for" << path << "is" << naturalSize;
             qreal dx = size.width() / naturalSize.width();
             qreal dy = size.height() / naturalSize.height();
 
@@ -365,17 +375,10 @@ class SvgPrivate
                 return;
             }
 
-            QString newPath = actualTheme()->imagePath(themePath);
-
-            if (path == newPath) {
-                return;
-            }
-
-            path = newPath;
-            //delete d->renderer; we're a KSharedPtr
+            QString currentPath = themePath;
+            themePath.clear();
             eraseRenderer();
-
-            localRectCache.clear();
+            setImagePath(currentPath);
 
             //kDebug() << themePath << ">>>>>>>>>>>>>>>>>> theme changed";
             emit q->repaintNeeded();
@@ -388,6 +391,7 @@ class SvgPrivate
             }
 
             eraseRenderer();
+            //kDebug() << "repaint needed from colorsChanged";
             emit q->repaintNeeded();
         }
 
@@ -554,15 +558,9 @@ bool Svg::containsMultipleImages() const
 
 void Svg::setImagePath(const QString &svgFilePath)
 {
-    d->setImagePath(svgFilePath, this);
-
-    if (!d->themed) {
-        QFile f(svgFilePath);
-        QFileInfo info(f);
-        d->lastModified = info.lastModified().toTime_t();
-    }
-
     d->eraseRenderer();
+    d->setImagePath(svgFilePath);
+    //kDebug() << "repaintNeeded";
     emit repaintNeeded();
 }
 
@@ -589,7 +587,9 @@ void Svg::setTheme(Plasma::Theme *theme)
 
     d->theme = theme;
     if (!imagePath().isEmpty()) {
-        setImagePath(imagePath());
+        QString path = imagePath();
+        d->themePath.clear();
+        setImagePath(path);
     }
 }
 
