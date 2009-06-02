@@ -18,29 +18,56 @@
   * Boston, MA 02110-1301, USA.
   */
 
-#include "pendingcallwatcher.h"
+#include "pendingreply.h"
 
 #include "pendingcall_p.h"
 
 using namespace Jolie;
 
-PendingCallWatcher::PendingCallWatcher(const PendingCall &other, QObject *parent)
-    : QObject(parent), PendingCall(other.d)
+PendingReply::PendingReply()
+    : PendingCall(QExplicitlySharedDataPointer<PendingCallPrivate>())
 {
-    d->watchers << this;
 }
 
-PendingCallWatcher::~PendingCallWatcher()
+PendingReply::PendingReply(const PendingReply &other)
+    : PendingCall(other.d)
 {
-    d->watchers.removeAll(this);
 }
 
-bool PendingCallWatcher::isFinished() const
+PendingReply::PendingReply(const PendingCall &call)
+    : PendingCall(call.d)
 {
-    return d->isFinished;
 }
 
-void PendingCallWatcher::waitForFinished()
+PendingReply::~PendingReply()
+{
+}
+
+PendingReply &PendingReply::operator=(const PendingReply &other)
+{
+    d = other.d;
+
+    return *this;
+}
+
+PendingReply &PendingReply::operator=(const PendingCall &call)
+{
+    d = call.d;
+
+    return *this;
+}
+
+bool PendingReply::isFinished() const
+{
+    return d ? d->isFinished : false;
+}
+
+Message PendingReply::reply() const
+{
+    return d ? d->reply : Message();
+}
+
+void PendingReply::waitForFinished()
 {
     PendingCallWaiter waiter;
     waiter.waitForFinished(d.data());

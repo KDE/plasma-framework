@@ -14,6 +14,7 @@ set(qtjolie_LIB_SRCS
   metaservice.cpp
   pendingcall.cpp
   pendingcallwatcher.cpp
+  pendingreply.cpp
 )
 
 kde4_add_library(QtJolie SHARED ${qtjolie_LIB_SRCS})
@@ -33,4 +34,5 @@ install(FILES
         metaservice.h
         pendingcall.h
         pendingcallwatcher.h
+        pendingreply.h
         DESTINATION ${INCLUDE_INSTALL_DIR}/qtjolie)

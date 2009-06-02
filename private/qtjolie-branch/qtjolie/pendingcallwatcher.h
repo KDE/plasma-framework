@@ -1,6 +1,6 @@
 /**
   * This file is part of the KDE project
-  * Copyright (C) 2008 Kevin Ottens <ervin@kde.org>
+  * Copyright (C) 2009 Kevin Ottens <ervin@kde.org>
   *
   * This library is free software; you can redistribute it and/or
   * modify it under the terms of the GNU Library General Public
@@ -35,8 +35,6 @@ public:
     ~PendingCallWatcher();
 
     bool isFinished() const;
-    Message reply() const;
-
     void waitForFinished();
 
 Q_SIGNALS:

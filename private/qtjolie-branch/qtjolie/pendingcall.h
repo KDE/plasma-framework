@@ -40,6 +40,7 @@ public:
 private:
     friend class Client;
     friend class PendingCallWatcher;
+    friend class PendingReply;
 
     PendingCall(); // Not defined
     PendingCall(QExplicitlySharedDataPointer<PendingCallPrivate> dd);

@@ -64,6 +64,7 @@ void PendingCallPrivate::setReply(const Message &message)
 
 void PendingCallWaiter::waitForFinished(PendingCallPrivate *pendingCall)
 {
+    if (pendingCall==0) return;
     pendingCall->waiters << this;
     eventLoop.exec();
 }

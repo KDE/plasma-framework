@@ -55,6 +55,7 @@ private:
     friend class PendingCall;
     friend class PendingCallWatcher;
     friend class PendingCallWaiter;
+    friend class PendingReply;
 
     qint64 id;
     bool isFinished;

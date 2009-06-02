@@ -18,31 +18,34 @@
   * Boston, MA 02110-1301, USA.
   */
 
-#include "pendingcallwatcher.h"
+#ifndef QTJOLIE_PENDINGREPLY_H
+#define QTJOLIE_PENDINGREPLY_H
 
-#include "pendingcall_p.h"
+#include <qtjolie/pendingcall.h>
 
-using namespace Jolie;
-
-PendingCallWatcher::PendingCallWatcher(const PendingCall &other, QObject *parent)
-    : QObject(parent), PendingCall(other.d)
+namespace Jolie
 {
-    d->watchers << this;
-}
-
-PendingCallWatcher::~PendingCallWatcher()
+class Q_DECL_EXPORT PendingReply : public PendingCall
 {
-    d->watchers.removeAll(this);
-}
+public:
+    PendingReply();
+    PendingReply(const PendingReply &other);
+    PendingReply(const PendingCall &call);
+    ~PendingReply();
 
-bool PendingCallWatcher::isFinished() const
-{
-    return d->isFinished;
-}
+    PendingReply &operator=(const PendingReply &other);
+    PendingReply &operator=(const PendingCall &call);
 
-void PendingCallWatcher::waitForFinished()
-{
-    PendingCallWaiter waiter;
-    waiter.waitForFinished(d.data());
-}
+    bool isFinished() const;
+    Message reply() const;
+
+    void waitForFinished();
+
+private:
+    friend class PendingCallPrivate;
+};
+
+} // namespace Jolie
+
+#endif
 
