@@ -54,8 +54,9 @@ namespace Plasma
 class ToolTipManagerPrivate
 {
 public :
-    ToolTipManagerPrivate()
-        : currentWidget(0),
+    ToolTipManagerPrivate(ToolTipManager *manager)
+        : q(manager),
+          currentWidget(0),
           showTimer(0),
           hideTimer(0),
           tipWidget(new ToolTip(0)),
@@ -84,6 +85,7 @@ public :
     void clearTips();
     void doDelayedHide();
 
+    ToolTipManager *q;
     QGraphicsWidget *currentWidget;
     QTimer *showTimer;
     QTimer *hideTimer;
@@ -112,7 +114,8 @@ ToolTipManager *ToolTipManager::self()
 
 ToolTipManager::ToolTipManager(QObject *parent)
   : QObject(parent),
-    d(new ToolTipManagerPrivate)
+    d(new ToolTipManagerPrivate(this)),
+    m_corona(0)
 {
     d->showTimer = new QTimer(this);
     d->showTimer->setSingleShot(true);
@@ -196,12 +199,12 @@ void ToolTipManager::unregisterWidget(QGraphicsWidget *widget)
 
 void ToolTipManager::setContent(QGraphicsWidget *widget, const ToolTipContent &data)
 {
-    if (d->state == Deactivated) {
+    if (d->state == Deactivated || !widget) {
         return;
     }
 
     registerWidget(widget);
-    d->tooltips[widget] = data;
+    d->tooltips.insert(widget, data);
 
     if (d->currentWidget == widget) {
         if (data.isEmpty()) {
@@ -218,7 +221,9 @@ void ToolTipManager::setContent(QGraphicsWidget *widget, const ToolTipContent &d
 
         d->tipWidget->setContent(widget, data);
         d->tipWidget->prepareShowing();
-        d->tipWidget->moveTo(m_corona->popupPosition(d->currentWidget, d->tipWidget->size()));
+        if (m_corona) {
+            d->tipWidget->moveTo(m_corona->popupPosition(widget, d->tipWidget->size()));
+        }
     }
 }
 
@@ -267,7 +272,7 @@ void ToolTipManagerPrivate::onWidgetDestroyed(QObject *object)
 
 void ToolTipManagerPrivate::removeWidget(QGraphicsWidget *w)
 {
-    // DO NOTE ACCESS w HERE!! IT MAY BE IN THE PROCESS OF DELETION!
+    // DO NOT ACCESS w HERE!! IT MAY BE IN THE PROCESS OF DELETION!
     if (currentWidget == w) {
         currentWidget = 0;
         showTimer->stop();  // stop the timer to show the tooltip
@@ -311,7 +316,14 @@ void ToolTipManagerPrivate::showToolTip()
         return;
     }
 
-    QMetaObject::invokeMethod(currentWidget, "toolTipAboutToShow");
+    // toolTipAboutToShow may call into methods such as setContent which play
+    // with the current widget; so let's just pretend for a moment that we don't have
+    // a current widget
+    QGraphicsWidget *temp = currentWidget;
+    currentWidget = 0;
+    QMetaObject::invokeMethod(temp, "toolTipAboutToShow");
+    currentWidget = temp;
+
     QHash<QGraphicsWidget *, ToolTipContent>::const_iterator tooltip = tooltips.constFind(currentWidget);
 
     if (tooltip == tooltips.constEnd() || tooltip.value().isEmpty()) {
@@ -326,7 +338,9 @@ void ToolTipManagerPrivate::showToolTip()
 
     tipWidget->setContent(currentWidget, tooltip.value());
     tipWidget->prepareShowing();
-    tipWidget->moveTo(ToolTipManager::self()->m_corona->popupPosition(currentWidget, tipWidget->size()));
+    if (q->m_corona) {
+        tipWidget->moveTo(q->m_corona->popupPosition(currentWidget, tipWidget->size()));
+    }
     tipWidget->show();
     isShown = true;  //ToolTip is visible
 
