@@ -1,6 +1,6 @@
 /**
   * This file is part of the KDE project
-  * Copyright (C) 2009 Kevin Ottens <ervin@kde.org>
+  * Copyright (C) 2008 Kevin Ottens <ervin@kde.org>
   *
   * This library is free software; you can redistribute it and/or
   * modify it under the terms of the GNU Library General Public
@@ -18,36 +18,36 @@
   * Boston, MA 02110-1301, USA.
   */
 
-#ifndef QTJOLIE_PENDINGCALL_H
-#define QTJOLIE_PENDINGCALL_H
+#include "pendingcallwatcher.h"
 
-#include <QtCore/QExplicitlySharedDataPointer>
+#include "pendingcall_p.h"
 
-namespace Jolie
+using namespace Jolie;
+
+PendingCallWatcher::PendingCallWatcher(const PendingCall &other, QObject *parent)
+    : QObject(parent), PendingCall(other.d)
 {
-class Client;
-class PendingCallPrivate;
-class Message;
+    d->watchers << this;
+}
 
-class Q_DECL_EXPORT PendingCall
+PendingCallWatcher::~PendingCallWatcher()
 {
-public:
-    PendingCall(const PendingCall &other);
-    ~PendingCall();
+    d->watchers.removeAll(this);
+}
 
-    PendingCall &operator=(const PendingCall &other);
+bool PendingCallWatcher::isFinished() const
+{
+    return d->isFinished;
+}
 
-private:
-    friend class Client;
-    friend class PendingCallWatcher;
+Message PendingCallWatcher::reply() const
+{
+    return d->reply;
+}
 
-    PendingCall(); // Not defined
-    PendingCall(QExplicitlySharedDataPointer<PendingCallPrivate> dd);
-
-    QExplicitlySharedDataPointer<PendingCallPrivate> d;
-};
-
-} // namespace Jolie
-
-#endif
+void PendingCallWatcher::waitForFinished()
+{
+    PendingCallWaiter waiter;
+    waiter.waitForFinished(d.data());
+}
 

@@ -1,6 +1,6 @@
 /**
   * This file is part of the KDE project
-  * Copyright (C) 2008 Kevin Ottens <ervin@kde.org>
+  * Copyright (C) 2009 Kevin Ottens <ervin@kde.org>
   *
   * This library is free software; you can redistribute it and/or
   * modify it under the terms of the GNU Library General Public
@@ -20,6 +20,7 @@
 
 #include "pendingcall.h"
 #include "pendingcall_p.h"
+#include "pendingcallwatcher.h"
 
 using namespace Jolie;
 
@@ -44,22 +45,6 @@ PendingCall &PendingCall::operator=(const PendingCall &other)
     return *this;
 }
 
-bool PendingCall::isFinished() const
-{
-    return d->isFinished;
-}
-
-Message PendingCall::reply() const
-{
-    return d->reply;
-}
-
-void PendingCall::waitForFinished()
-{
-    PendingCallWaiter waiter;
-    waiter.waitForFinished(d.data());
-}
-
 void PendingCallPrivate::setReply(const Message &message)
 {
     Q_ASSERT(message.id()==id);
@@ -69,8 +54,12 @@ void PendingCallPrivate::setReply(const Message &message)
     foreach (PendingCallWaiter *waiter, waiters) {
         waiter->eventLoop.quit();
     }
-
     waiters.clear();
+
+    foreach (PendingCallWatcher *watcher, watchers) {
+        emit watcher->finished(watcher);
+    }
+    watchers.clear();
 }
 
 void PendingCallWaiter::waitForFinished(PendingCallPrivate *pendingCall)

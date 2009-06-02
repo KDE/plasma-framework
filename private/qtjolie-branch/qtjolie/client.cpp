@@ -24,6 +24,7 @@
 #include "clientthread_p.h"
 #include "message.h"
 #include "pendingcall.h"
+#include "pendingcallwatcher.h"
 
 using namespace Jolie;
 
@@ -60,7 +61,7 @@ PendingCall Client::asyncCall(const Message &message)
 
 Message Client::call(const Message &message)
 {
-    PendingCall pending = asyncCall(message);
+    PendingCallWatcher pending(asyncCall(message));
     pending.waitForFinished();
     return pending.reply();
 }
