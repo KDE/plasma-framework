@@ -140,7 +140,7 @@ class PLASMA_EXPORT Dialog : public QWidget
         /**
          * React to theme changes
          */
-        Q_PRIVATE_SLOT(d, void themeUpdated())
+        Q_PRIVATE_SLOT(d, void themeChanged())
         Q_PRIVATE_SLOT(d, void progressHide(qreal))
         Q_PRIVATE_SLOT(d, void progressShow(qreal))
 };

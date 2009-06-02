@@ -75,7 +75,7 @@ public:
     {
     }
 
-    void themeUpdated();
+    void themeChanged();
     void adjustView();
     void updateResizeCorners();
     void progressHide(qreal amount);
@@ -98,7 +98,7 @@ public:
     int hideAnimId;
 };
 
-void DialogPrivate::themeUpdated()
+void DialogPrivate::themeChanged()
 {
     qreal topHeight;
     qreal leftWidth;
@@ -106,6 +106,7 @@ void DialogPrivate::themeUpdated()
     qreal bottomHeight;
 
     background->getMargins(leftWidth, topHeight, rightWidth, bottomHeight);
+    //kDebug() << leftWidth << topHeight << rightWidth << bottomHeight;
 
     FrameSvg::EnabledBorders borders = FrameSvg::AllBorders;
 
@@ -244,8 +245,8 @@ Dialog::Dialog(QWidget *parent, Qt::WindowFlags f)
 
     connect(d->background, SIGNAL(repaintNeeded()), this, SLOT(update()));
 
-    connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()), this, SLOT(themeUpdated()));
-    d->themeUpdated();
+    connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()), this, SLOT(themeChanged()));
+    d->themeChanged();
 
     setMouseTracking(true);
 }
@@ -457,7 +458,7 @@ void Dialog::setGraphicsWidget(QGraphicsWidget *widget)
             lay->setSpacing(0);
         }
 
-        d->themeUpdated();
+        d->themeChanged();
 
         if (!d->view) {
             d->view = new QGraphicsView(this);
@@ -506,7 +507,7 @@ void Dialog::showEvent(QShowEvent * event)
     Q_UNUSED(event);
 
     //check if the widget size is still synced with the view
-    d->themeUpdated();
+    d->themeChanged();
 
     if (d->graphicsWidget && d->view && d->graphicsWidget->size().toSize() != d->view->size()) {
         d->adjustView();
@@ -530,8 +531,9 @@ void Dialog::moveEvent(QMoveEvent *event)
     if (!d->moveTimer) {
         d->moveTimer = new QTimer(this);
         d->moveTimer->setSingleShot(true);
-        connect(d->moveTimer, SIGNAL(timeout()), this, SLOT(themeUpdated()));
+        connect(d->moveTimer, SIGNAL(timeout()), this, SLOT(themeChanged()));
     }
+
     d->moveTimer->start(200);
 }
 
