@@ -172,7 +172,7 @@ void BusyWidget::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
         painter->drawPixmap(spinnerRect.topLeft(), d->frames[intRotation]);
     }
 
-    painter->setPen(Plasma::Theme::defaultTheme()->color(Theme::HighlightColor));
+    painter->setPen(Plasma::Theme::defaultTheme()->color(Theme::TextColor));
     Qt::Alignment align(Qt::AlignVCenter | Qt::AlignHCenter);
     painter->drawText(boundingRect(), d->label, QTextOption(align));
 }
