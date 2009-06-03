@@ -626,7 +626,7 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          * eg. hasAuthorization("FileDialog") returns true iff applets are allowed to show filedialogs.
          * @since 4.3
          */
-        bool hasAuthorization(const QString &constraint);
+        bool hasAuthorization(const QString &constraint) const;
 
     Q_SIGNALS:
         /**
