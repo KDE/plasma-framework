@@ -321,6 +321,7 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
             q->setMinimumSize(0,0);
         }
     }
+    emit q->sizeHintChanged(Qt::PreferredSize);
 }
 
 void PopupApplet::mousePressEvent(QGraphicsSceneMouseEvent *event)
