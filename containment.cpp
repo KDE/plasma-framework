@@ -1398,11 +1398,6 @@ void Containment::closeToolBox()
     }
 }
 
-bool Containment::isToolBoxOpen() const
-{
-    return (d->toolBox && d->toolBox->showing());
-}
-
 void Containment::addAssociatedWidget(QWidget *widget)
 {
     Applet::addAssociatedWidget(widget);
