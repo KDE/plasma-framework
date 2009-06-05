@@ -510,7 +510,8 @@ void AppletPrivate::createMessageOverlay(bool usePopup)
             messageOverlayProxy = new QGraphicsProxyWidget(q);
             messageOverlayProxy->setWidget(popup->widget());
             messageOverlay = new AppletOverlayWidget(messageOverlayProxy);
-        } else if (usePopup && popup && popup->graphicsWidget()) {
+        } else if (usePopup && popup && popup->graphicsWidget() &&
+                   popup->graphicsWidget() != extender) {
             messageOverlay = new AppletOverlayWidget(popup->graphicsWidget());
         } else {
             messageOverlay = new AppletOverlayWidget(q);
@@ -520,7 +521,8 @@ void AppletPrivate::createMessageOverlay(bool usePopup)
     if (usePopup && popup && popup->widget()) {
         // popupapplet with widget()
         messageOverlay->setGeometry(popup->widget()->contentsRect());
-    } else if (usePopup && popup && popup->graphicsWidget()) {
+    } else if (usePopup && popup && popup->graphicsWidget() &&
+               popup->graphicsWidget() != extender) {
         // popupapplet with graphicsWidget()
         messageOverlay->setGeometry(popup->graphicsWidget()->boundingRect());
     } else {
@@ -893,7 +895,7 @@ void Applet::setConfigurationRequired(bool needsConfig, const QString &reason)
         return;
     }
 
-    d->createMessageOverlay();
+    d->createMessageOverlay(false);
     d->messageOverlay->opacity = 0.4;
 
     QGraphicsGridLayout *configLayout = new QGraphicsGridLayout(d->messageOverlay);
