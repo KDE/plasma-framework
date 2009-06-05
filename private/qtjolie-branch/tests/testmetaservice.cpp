@@ -34,35 +34,6 @@
 
 using namespace Jolie;
 
-void dump(const Value &value, int level)
-{
-    QByteArray indent;
-
-    while (level>0) {
-        indent+="    ";
-        level--;
-    }
-
-    qDebug() << (indent+value.toByteArray()) << value.toInt() << value.toDouble();
-    foreach (const QByteArray &name, value.childrenNames()) {
-        QList<Value> children = value.children(name);
-        qDebug() << (indent+"Children:") << name;
-        foreach (const Value &child, children) {
-            dump(child, level+1);
-        }
-    }
-}
-
-void dump(const Message &message)
-{
-    qDebug() << "Resource :" << message.resourcePath();
-    qDebug() << "Operation:" << message.operationName();
-    qDebug() << "Fault    :" << message.fault().name();
-    dump(message.fault().data(), 1);
-    qDebug() << "Value    :";
-    dump(message.data(), 1);
-}
-
 class TestMetaService : public QObject
 {
     Q_OBJECT

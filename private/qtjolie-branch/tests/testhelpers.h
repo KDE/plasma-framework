@@ -28,6 +28,35 @@
 #include <QtJolie/Value>
 #include "../qtjolie/sodephelpers_p.h"
 
+inline void sodepDump(const Jolie::Value &value, int level)
+{
+    QByteArray indent;
+
+    while (level>0) {
+        indent+="    ";
+        level--;
+    }
+
+    qDebug() << (indent+value.toByteArray()) << value.toInt() << value.toDouble();
+    foreach (const QByteArray &name, value.childrenNames()) {
+        QList<Jolie::Value> children = value.children(name);
+        qDebug() << (indent+"Children:") << name;
+        foreach (const Jolie::Value &child, children) {
+            sodepDump(child, level+1);
+        }
+    }
+}
+
+inline void sodepDump(const Jolie::Message &message)
+{
+    qDebug() << "Resource :" << message.resourcePath();
+    qDebug() << "Operation:" << message.operationName();
+    qDebug() << "Fault    :" << message.fault().name();
+    sodepDump(message.fault().data(), 1);
+    qDebug() << "Value    :";
+    sodepDump(message.data(), 1);
+}
+
 inline void sodepCompare(const Jolie::Value &v1, const Jolie::Value &v2)
 {
     QCOMPARE(v1.isValid(), v2.isValid());
