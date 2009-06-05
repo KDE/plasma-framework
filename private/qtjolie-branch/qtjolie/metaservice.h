@@ -42,6 +42,8 @@ public:
     QStringList loadedServices() const;
     void unloadService(const QString &name);
 
+    QString addRedirection(const QString &name, const QString &url, const QString &inProtocol, const QString &outProtocol);
+
 private:
     MetaServicePrivate * const d;
 };

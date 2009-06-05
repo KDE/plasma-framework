@@ -104,3 +104,18 @@ void MetaService::unloadService(const QString &name)
 
     client.call(message);
 }
+
+QString Jolie::MetaService::addRedirection(const QString &name, const QString &url, const QString &inProtocol, const QString &outProtocol)
+{
+    Client client(QString::fromUtf8("localhost"), 9000);
+    Message message("/", "addRedirection");
+    Value value;
+    value.children("resourcePrefix") << Value(name.toUtf8());
+    value.children("location") << Value(url.toUtf8());
+    value.children("protocol") << Value(inProtocol.toUtf8());
+    value.children("exposedProtocol") << Value(outProtocol.toUtf8());
+    message.setData(value);
+
+    Message reply = client.call(message);
+    return QString::fromUtf8(reply.data().toByteArray());
+}
