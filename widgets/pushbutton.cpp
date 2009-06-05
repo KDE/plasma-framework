@@ -145,6 +145,7 @@ PushButton::PushButton(QGraphicsWidget *parent)
 {
     KPushButton *native = new KPushButton;
     connect(native, SIGNAL(clicked()), this, SIGNAL(clicked()));
+    connect(native, SIGNAL(toggled(bool)), this, SIGNAL(toggled(bool)));
     setWidget(native);
     native->setAttribute(Qt::WA_NoSystemBackground);
 
@@ -235,6 +236,21 @@ void PushButton::setIcon(const QIcon &icon)
 QIcon PushButton::icon() const
 {
     return nativeWidget()->icon();
+}
+
+void PushButton::setCheckable(bool checkable)
+{
+    nativeWidget()->setCheckable(checkable);
+}
+
+void PushButton::setChecked(bool checked)
+{
+    nativeWidget()->setChecked(checked);
+}
+
+bool PushButton::isChecked() const
+{
+    return nativeWidget()->isChecked();
 }
 
 KPushButton *PushButton::nativeWidget() const

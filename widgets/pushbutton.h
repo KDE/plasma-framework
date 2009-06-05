@@ -120,12 +120,35 @@ public:
     QIcon icon() const;
 
     /**
+     * Sets whether or not this button can be toggled on/off
+     *
+     * @since 4.3
+     */
+    void setCheckable(bool checkable);
+
+    /**
+     * Sets whether or not this button is checked. Implies setIsCheckable(true).
+     *
+     * @since 4.3
+     */
+    void setChecked(bool checked);
+
+    /**
+     * @return true if the button is checked; requires setIsCheckable(true) to
+     * be called
+     *
+     * @since 4.3
+     */
+    bool isChecked() const;
+
+    /**
      * @return the native widget wrapped by this PushButton
      */
     KPushButton *nativeWidget() const;
 
 Q_SIGNALS:
     void clicked();
+    void toggled(bool);
 
 protected:
     void paint(QPainter *painter,
