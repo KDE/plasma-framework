@@ -623,7 +623,7 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
 
         /**
          * Returns true if the applet is allowed to perform functions covered by the given constraint
-         * eg. hasAuthorization("FileDialog") returns true iff applets are allowed to show filedialogs.
+         * eg. hasAuthorization("FileDialog") returns true if applets are allowed to show filedialogs.
          * @since 4.3
          */
         bool hasAuthorization(const QString &constraint) const;
