@@ -109,6 +109,8 @@ qint32 Value::toInt() const
 {
     if (isInt()) {
         return d->content.toInt();
+    } else if (isByteArray()) {
+        return d->content.toByteArray().toInt();
     } else {
         return 0;
     }
@@ -118,6 +120,8 @@ double Value::toDouble() const
 {
     if (isDouble()) {
         return d->content.toDouble();
+    } else if (isByteArray()) {
+        return d->content.toByteArray().toInt();
     } else {
         return 0.0;
     }
