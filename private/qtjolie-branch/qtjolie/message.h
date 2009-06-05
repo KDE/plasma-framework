@@ -24,6 +24,8 @@
 #include <qtjolie/value.h>
 #include <qtjolie/fault.h>
 
+#include <QtCore/QMetaType>
+
 namespace Jolie
 {
 class MessagePrivate;
@@ -58,6 +60,8 @@ private:
 };
 
 } // namespace Jolie
+
+Q_DECLARE_METATYPE(Jolie::Message);
 
 #endif
 

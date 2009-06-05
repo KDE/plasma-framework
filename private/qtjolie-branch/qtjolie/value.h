@@ -23,6 +23,7 @@
 
 #include <QtCore/QIODevice>
 #include <QtCore/QList>
+#include <QtCore/QMetaType>
 
 namespace Jolie
 {
@@ -62,6 +63,8 @@ private:
 };
 
 } // namespace Jolie
+
+Q_DECLARE_METATYPE(Jolie::Value)
 
 #endif
 

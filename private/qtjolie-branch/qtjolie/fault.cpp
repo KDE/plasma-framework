@@ -38,6 +38,8 @@ public:
 
 using namespace Jolie;
 
+static int _qtjolie_faultTypeId = qRegisterMetaType<Fault>();
+
 Fault::Fault()
     : d(new FaultPrivate)
 {

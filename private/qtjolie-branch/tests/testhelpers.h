@@ -28,8 +28,6 @@
 #include <QtJolie/Value>
 #include "../qtjolie/sodephelpers_p.h"
 
-Q_DECLARE_METATYPE(Jolie::Value);
-
 inline void sodepCompare(const Jolie::Value &v1, const Jolie::Value &v2)
 {
     QCOMPARE(v1.isValid(), v2.isValid());
@@ -58,16 +56,12 @@ inline void sodepCompare(const Jolie::Value &v1, const Jolie::Value &v2)
     }
 }
 
-Q_DECLARE_METATYPE(Jolie::Fault);
-
 inline void sodepCompare(const Jolie::Fault &f1, const Jolie::Fault &f2)
 {
     QCOMPARE(f1.isValid(), f2.isValid());
     QCOMPARE(f1.name(), f2.name());
     sodepCompare(f1.data(), f2.data());
 }
-
-Q_DECLARE_METATYPE(Jolie::Message);
 
 inline void sodepCompare(const Jolie::Message &m1, const Jolie::Message &m2)
 {

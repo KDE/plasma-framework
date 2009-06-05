@@ -43,6 +43,8 @@ public:
 
 using namespace Jolie;
 
+static int _qtjolie_messageTypeId = qRegisterMetaType<Message>();
+
 Message::Message()
     : d(new MessagePrivate)
 {

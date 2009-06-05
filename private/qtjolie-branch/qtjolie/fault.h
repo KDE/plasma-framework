@@ -23,6 +23,8 @@
 
 #include <qtjolie/value.h>
 
+#include <QtCore/QMetaType>
+
 namespace Jolie
 {
 class FaultPrivate;
@@ -49,6 +51,8 @@ private:
 };
 
 } // namespace Jolie
+
+Q_DECLARE_METATYPE(Jolie::Fault);
 
 #endif
 

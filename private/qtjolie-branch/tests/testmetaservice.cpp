@@ -74,7 +74,6 @@ public:
     TestMetaService()
         : QObject()
     {
-        qRegisterMetaType<Message>();
     }
 
 private slots:

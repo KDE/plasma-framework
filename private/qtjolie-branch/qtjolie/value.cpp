@@ -38,6 +38,8 @@ public:
 
 using namespace Jolie;
 
+static int _qtjolie_valueTypeId = qRegisterMetaType<Value>();
+
 Value::Value()
     : d(new ValuePrivate)
 {
