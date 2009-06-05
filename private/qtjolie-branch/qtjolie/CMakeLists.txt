@@ -6,6 +6,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}
                     ${QT_INCLUDE_DIR})
 
 set(qtjolie_LIB_SRCS
+  abstractadaptor.cpp
   client.cpp
   clientthread.cpp
   value.cpp
@@ -15,6 +16,8 @@ set(qtjolie_LIB_SRCS
   pendingcall.cpp
   pendingcallwatcher.cpp
   pendingreply.cpp
+  server.cpp
+  serverthread.cpp
 )
 
 kde4_add_library(QtJolie SHARED ${qtjolie_LIB_SRCS})
@@ -27,6 +30,7 @@ install(TARGETS QtJolie
 set_target_properties(QtJolie PROPERTIES VERSION 1.0.0 SOVERSION 1)
 
 install(FILES
+        abstractadaptor.h
         client.h
         value.h
         fault.h
@@ -35,4 +39,5 @@ install(FILES
         pendingcall.h
         pendingcallwatcher.h
         pendingreply.h
+        server.h
         DESTINATION ${INCLUDE_INSTALL_DIR}/qtjolie)
