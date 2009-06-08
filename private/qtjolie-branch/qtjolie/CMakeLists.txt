@@ -41,3 +41,8 @@ install(FILES
         pendingreply.h
         server.h
         DESTINATION ${INCLUDE_INSTALL_DIR}/qtjolie)
+
+if(NOT WIN32) # pkgconfig file
+   configure_file(${CMAKE_CURRENT_SOURCE_DIR}/QtJolie.pc.cmake ${CMAKE_CURRENT_BINARY_DIR}/QtJolie.pc @ONLY)
+   install(FILES ${CMAKE_CURRENT_BINARY_DIR}/QtJolie.pc DESTINATION ${LIB_INSTALL_DIR}/pkgconfig)
+endif(NOT WIN32)
