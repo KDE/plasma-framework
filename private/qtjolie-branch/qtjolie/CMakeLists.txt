@@ -46,3 +46,6 @@ if(NOT WIN32) # pkgconfig file
    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/QtJolie.pc.cmake ${CMAKE_CURRENT_BINARY_DIR}/QtJolie.pc @ONLY)
    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/QtJolie.pc DESTINATION ${LIB_INSTALL_DIR}/pkgconfig)
 endif(NOT WIN32)
+
+configure_file("QtJolie.prf.cmake" "${CMAKE_BINARY_DIR}/QtJolie.prf" @ONLY)
+install(FILES "${CMAKE_BINARY_DIR}/QtJolie.prf" DESTINATION ${CMAKE_INSTALL_PREFIX}/mkspecs/features)
