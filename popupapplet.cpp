@@ -305,7 +305,6 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
                     dialog->setWindowFlags(Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
                 }
 
-                dialog->setWindowFlags(Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
                 KWindowSystem::setState(dialog->winId(), NET::SkipTaskbar | NET::SkipPager);
                 dialog->installEventFilter(q);
 
@@ -528,6 +527,7 @@ void PopupAppletPrivate::internalTogglePopup()
 
         ToolTipManager::self()->hide(q);
         updateDialogPosition();
+
         KWindowSystem::setState(dialog->winId(), NET::SkipTaskbar | NET::SkipPager);
 
         /**
@@ -555,7 +555,9 @@ void PopupAppletPrivate::internalTogglePopup()
             dialog->show();
         }
 
-        KWindowSystem::activateWindow(dialog->winId());
+        if (!(dialog->windowFlags() & Qt::X11BypassWindowManagerHint)) {
+            KWindowSystem::activateWindow(dialog->winId());
+        }
     }
 }
 
