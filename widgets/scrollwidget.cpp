@@ -270,8 +270,12 @@ bool ScrollWidget::eventFilter(QObject *watched, QEvent *event)
         d->adjustScrollbars();
         d->adjustClipping();
     } else if (watched == d->widget && event->type() == QEvent::GraphicsSceneMove) {
+        d->horizontalScrollBar->blockSignals(true);
+        d->verticalScrollBar->blockSignals(true);
         d->horizontalScrollBar->setValue(-d->widget->pos().x()/10);
         d->verticalScrollBar->setValue(-d->widget->pos().y()/10);
+        d->horizontalScrollBar->blockSignals(false);
+        d->verticalScrollBar->blockSignals(false);
     }
 
     return false;
