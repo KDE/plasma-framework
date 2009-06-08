@@ -105,13 +105,14 @@ void DialogPrivate::themeChanged()
     qreal rightWidth;
     qreal bottomHeight;
 
-    background->getMargins(leftWidth, topHeight, rightWidth, bottomHeight);
     //kDebug() << leftWidth << topHeight << rightWidth << bottomHeight;
 
     FrameSvg::EnabledBorders borders = FrameSvg::AllBorders;
 
     Extender *extender = qobject_cast<Extender*>(graphicsWidget);
     if (extender) {
+        background->getMargins(leftWidth, topHeight, rightWidth, bottomHeight);
+
         switch (extender->d->applet->location()) {
         case BottomEdge:
             borders ^= FrameSvg::BottomBorder;
