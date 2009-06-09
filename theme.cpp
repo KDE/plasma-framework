@@ -564,7 +564,7 @@ QColor Theme::color(ColorRole role) const
             break;
 
         case HighlightColor:
-            return d->colorScheme.background(KColorScheme::ActiveBackground).color();
+            return d->colorScheme.decoration(KColorScheme::HoverColor).color();
             break;
 
         case BackgroundColor:
