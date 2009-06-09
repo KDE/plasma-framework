@@ -358,8 +358,9 @@ int Animator::moveItem(QGraphicsItem *item, Movement movement, const QPoint &des
              d->movingItemsToDelete.append(it.value());
          } else {
              delete it.value();
-             d->movingItems.erase(it);
          }
+
+         d->movingItems.erase(it);
      }
 
      int frames = d->driver->movementAnimationFps(movement);
@@ -468,9 +469,9 @@ void Animator::stopItemAnimation(int id)
                 d->animatedItemsToDelete.append(it.value());
             } else {
                 delete it.value();
-                it.remove();
             }
 
+            it.remove();
             return;
         }
     }
@@ -486,9 +487,9 @@ void Animator::stopItemMovement(int id)
                 d->movingItemsToDelete.append(it.value());
             } else {
                 delete it.value();
-                it.remove();
             }
 
+            it.remove();
             return;
         }
     }
