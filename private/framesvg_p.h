@@ -111,6 +111,7 @@ public:
     void updateSizes();
     void updateNeeded();
     void updateAndSignalSizes();
+    QSizeF frameSize(FrameData *frame);
 
     Location location;
     QString prefix;
