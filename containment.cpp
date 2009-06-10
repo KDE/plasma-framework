@@ -144,20 +144,32 @@ void Containment::init()
 
     //fix the text of the actions that need name()
     //btw, do we really want to use name() when it's a desktopcontainment?
-    QAction *closeApplet = d->actions()->action("remove");
-    closeApplet->setText(i18nc("%1 is the name of the applet", "Remove this %1", name()));
-    QAction *configAction = d->actions()->action("configure");
-    configAction->setText(i18nc("%1 is the name of the applet", "%1 Settings", name()));
+    QAction *closeApplet = action("remove");
+    if (closeApplet) {
+        closeApplet->setText(i18nc("%1 is the name of the applet", "Remove this %1", name()));
+    }
+
+    QAction *configAction = action("configure");
+    if (configAction) {
+        configAction->setText(i18nc("%1 is the name of the applet", "%1 Settings", name()));
+    }
 
     QAction *appletBrowserAction = action("add widgets");
-    appletBrowserAction->setVisible(unlocked);
-    appletBrowserAction->setEnabled(unlocked);
-    connect(appletBrowserAction, SIGNAL(triggered()), this, SLOT(triggerShowAddWidgets()));
+    if (appletBrowserAction) {
+        appletBrowserAction->setVisible(unlocked);
+        appletBrowserAction->setEnabled(unlocked);
+        connect(appletBrowserAction, SIGNAL(triggered()), this, SLOT(triggerShowAddWidgets()));
+    }
 
     QAction *act = action("next applet");
-    connect(act, SIGNAL(triggered()), this, SLOT(focusNextApplet()));
+    if (act) {
+        connect(act, SIGNAL(triggered()), this, SLOT(focusNextApplet()));
+    }
+
     act = action("previous applet");
-    connect(act, SIGNAL(triggered()), this, SLOT(focusPreviousApplet()));
+    if (act) {
+        connect(act, SIGNAL(triggered()), this, SLOT(focusPreviousApplet()));
+    }
 
     if (immutability() != SystemImmutable && corona()) {
         QAction *lockDesktopAction = corona()->action("lock widgets");
@@ -169,7 +181,7 @@ void Containment::init()
 
     if (d->type == PanelContainment ||
         d->type == CustomPanelContainment) {
-        d->actions()->removeAction(d->actions()->action("zoom in"));
+        d->actions()->removeAction(action("zoom in"));
     } else {
         QAction *zoomAction = action("zoom in");
         connect(zoomAction, SIGNAL(triggered()), this, SLOT(zoomIn()));
