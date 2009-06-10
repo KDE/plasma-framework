@@ -328,12 +328,12 @@ void IconWidgetPrivate::init()
 
     // Margins for horizontal mode (list views, tree views, table views)
     setHorizontalMargin(IconWidgetPrivate::TextMargin, 1, 1);
-    setHorizontalMargin(IconWidgetPrivate::IconMargin, 1, 1);
+    setHorizontalMargin(IconWidgetPrivate::IconMargin, 0, 0);
     setHorizontalMargin(IconWidgetPrivate::ItemMargin, 0, 0);
 
     // Margins for vertical mode (icon views)
     setVerticalMargin(IconWidgetPrivate::TextMargin, 6, 2);
-    setVerticalMargin(IconWidgetPrivate::IconMargin, 1, 1);
+    setVerticalMargin(IconWidgetPrivate::IconMargin, 0, 0);
     setVerticalMargin(IconWidgetPrivate::ItemMargin, 0, 0);
 
     setActiveMargins();
@@ -1192,6 +1192,7 @@ void IconWidget::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
 
 void IconWidget::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 {
+    kDebug();
     foreach (IconAction *action, d->cornerActions) {
         action->show();
         action->event(event->type(), event->pos());
@@ -1205,6 +1206,7 @@ void IconWidget::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 
 void IconWidget::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 {
+    kDebug() << d->cornerActions;
     foreach (IconAction *action, d->cornerActions) {
         action->hide();
         action->event(event->type(), event->pos());
