@@ -221,6 +221,12 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
             QSize prefSize;
 
             if (gWidget) {
+                if (proxy) {
+                    proxy->setWidget(0);
+                    delete proxy;
+                    proxy = 0;
+                }
+
                 Corona *corona = qobject_cast<Corona *>(gWidget->scene());
 
                 if (corona) {
