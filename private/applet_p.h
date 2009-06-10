@@ -111,27 +111,44 @@ public:
     uint appletId;
     Applet *q;
 
-    Extender *extender;
+    // applet attributes
     Applet::BackgroundHints backgroundHints;
-    KPluginInfo appletDescription;
-    AppletOverlayWidget *messageOverlay;
-    Plasma::BusyWidget *busyWidget;
-    QSet<QGraphicsItem*> registeredAsDragHandle;
-    Plasma::FrameSvg *background;
-    AppletScript *script;
-    QVariantList args;
-    Package *package;
-    ConfigLoader *configLoader;
-    KConfigGroup *mainConfig;
-    Plasma::Constraints pendingConstraints;
     Plasma::AspectRatioMode aspectRatioMode;
     ImmutabilityType immutability;
+
+    // applet info we keep around in case its needed
+    KPluginInfo appletDescription;
+    QVariantList args;
+
+    // bookkeeping
+    Extender *extender;
+    QSet<QGraphicsItem*> registeredAsDragHandle;
+    Plasma::FrameSvg *background;
+    KConfigGroup *mainConfig;
+    Plasma::Constraints pendingConstraints;
+
+    // overlays and messages
+    AppletOverlayWidget *messageOverlay;
+    QGraphicsProxyWidget *messageOverlayProxy;
+    Plasma::BusyWidget *busyWidget;
+
+    // sripting and package stuff
+    AppletScript *script;
+    Package *package;
+    ConfigLoader *configLoader;
+
+    // actions stuff; put activationAction into actions?
     KActionCollection *actions;
     KAction *activationAction;
+
+    // configuration
     KKeySequenceWidget *shortcutEditor; //TODO: subclass KConfigDialog and encapsulate this in there
-    QGraphicsProxyWidget *messageOverlayProxy;
+
+    // timerEvent bookkeeping
     int constraintsTimerId;
     int modificationsTimerId;
+
+    // a great green field of booleans :)
     bool hasConfigurationInterface : 1;
     bool failed : 1;
     bool isContainment : 1;

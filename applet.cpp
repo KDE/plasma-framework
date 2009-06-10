@@ -1972,6 +1972,24 @@ QVariant Applet::itemChange(GraphicsItemChange change, const QVariant &value)
         }
     }
         break;
+    case ItemParentChange:
+        if (d->mainConfig && !d->isContainment &&
+            !containment() &&
+            dynamic_cast<Containment*>(value.value<QGraphicsItem *>())) {
+            // if this is an applet, and we've just been assigned to our first containment,
+            // but the applet did something stupid like ask for the config() object prior to
+            // this happening (e.g. inits ctor) then let's repair that situation for them.
+            kWarning() << "Configuration object was requested prior to init(), which is too early. "
+                          "Please fix this item:" << parentItem() << value.value<QGraphicsItem *>()
+                          << name();
+            KConfigGroup *old = d->mainConfig;
+            KConfigGroup appletConfig = dynamic_cast<Containment*>(value.value<QGraphicsItem *>())->config();
+            appletConfig = KConfigGroup(&appletConfig, "Applets");
+            d->mainConfig = new KConfigGroup(&appletConfig, QString::number(d->appletId));
+            old->copyTo(d->mainConfig);
+            old->deleteGroup();
+            delete old;
+        }
     case ItemPositionChange:
         return (immutability() == Mutable || isContainment() || formFactor() == Horizontal || formFactor() == Vertical) ? value : pos();
         break;
@@ -2124,23 +2142,23 @@ bool Applet::isContainment() const
 AppletPrivate::AppletPrivate(KService::Ptr service, int uniqueID, Applet *applet)
         : appletId(uniqueID),
           q(applet),
-          extender(0),
           backgroundHints(Applet::StandardBackground),
+          aspectRatioMode(Plasma::KeepAspectRatio),
+          immutability(Mutable),
           appletDescription(service),
-          messageOverlay(0),
-          busyWidget(0),
+          extender(0),
           background(0),
+          mainConfig(0),
+          pendingConstraints(NoConstraint),
+          messageOverlay(0),
+          messageOverlayProxy(0),
+          busyWidget(0),
           script(0),
           package(0),
           configLoader(0),
-          mainConfig(0),
-          pendingConstraints(NoConstraint),
-          aspectRatioMode(Plasma::KeepAspectRatio),
-          immutability(Mutable),
           actions(AppletPrivate::defaultActions(applet)),
           activationAction(0),
           shortcutEditor(0),
-          messageOverlayProxy(0),
           constraintsTimerId(0),
           modificationsTimerId(-1),
           hasConfigurationInterface(false),
