@@ -190,10 +190,10 @@ class AnimatorPrivate
         QMap<int, CustomAnimationState *> customAnims;
 
         // items to cull
-        QList<AnimationState *> animatedItemsToDelete;
-        QList<MovementState *> movingItemsToDelete;
-        QList<ElementAnimationState *> animatedElementsToDelete;
-        QList<CustomAnimationState *> customAnimsToDelete;
+        QSet<AnimationState *> animatedItemsToDelete;
+        QSet<MovementState *> movingItemsToDelete;
+        QSet<ElementAnimationState *> animatedElementsToDelete;
+        QSet<CustomAnimationState *> customAnimsToDelete;
 };
 
 class AnimatorSingleton
@@ -231,7 +231,7 @@ void AnimatorPrivate::animatedItemDestroyed(QObject *o)
         if (it.value()->qobj == o) {
             kDebug() << "found deleted animated item";
             if (timerId) {
-                animatedItemsToDelete.append(it.value());
+                animatedItemsToDelete.insert(it.value());
             } else {
                 delete it.value();
             }
@@ -248,7 +248,7 @@ void AnimatorPrivate::movingItemDestroyed(QObject *o)
         it.next();
         if (it.value()->qobj == o) {
             if (timerId) {
-                movingItemsToDelete.append(it.value());
+                movingItemsToDelete.insert(it.value());
             } else {
                 delete it.value();
             }
@@ -265,7 +265,7 @@ void AnimatorPrivate::animatedElementDestroyed(QObject *o)
         it.next();
         if (it.value()->qobj == o) {
             if (timerId) {
-                animatedElementsToDelete.append(it.value());
+                animatedElementsToDelete.insert(it.value());
             } else {
                 delete it.value();
             }
@@ -281,7 +281,7 @@ void AnimatorPrivate::customAnimReceiverDestroyed(QObject *o)
     while (it.hasNext()) {
         if (it.next().value()->receiver == o) {
             if (timerId) {
-                customAnimsToDelete.append(it.value());
+                customAnimsToDelete.insert(it.value());
             } else {
                 delete[] it.value()->slot;
                 delete it.value();
@@ -300,7 +300,7 @@ int Animator::animateItem(QGraphicsItem *item, Animation animation)
     QMap<QGraphicsItem*, AnimationState*>::iterator it = d->animatedItems.find(item);
     if (it != d->animatedItems.end()) {
         if (d->timerId) {
-            d->animatedItemsToDelete.append(it.value());
+            d->animatedItemsToDelete.insert(it.value());
         } else {
             delete it.value();
         }
@@ -355,7 +355,7 @@ int Animator::moveItem(QGraphicsItem *item, Movement movement, const QPoint &des
      QMap<QGraphicsItem*, MovementState*>::iterator it = d->movingItems.find(item);
      if (it != d->movingItems.end()) {
          if (d->timerId) {
-             d->movingItemsToDelete.append(it.value());
+             d->movingItemsToDelete.insert(it.value());
          } else {
              delete it.value();
          }
@@ -448,9 +448,9 @@ void Animator::stopCustomAnimation(int id)
     QMap<int, CustomAnimationState*>::iterator it = d->customAnims.find(id);
     if (it != d->customAnims.end()) {
         if (d->timerId) {
-            d->customAnimsToDelete.append(it.value());
+            d->customAnimsToDelete.insert(it.value());
         } else {
-            delete [] it.value()->slot;
+            delete[] it.value()->slot;
             delete it.value();
         }
 
@@ -466,7 +466,7 @@ void Animator::stopItemAnimation(int id)
         it.next();
         if (it.value()->id == id) {
             if (d->timerId) {
-                d->animatedItemsToDelete.append(it.value());
+                d->animatedItemsToDelete.insert(it.value());
             } else {
                 delete it.value();
             }
@@ -484,7 +484,7 @@ void Animator::stopItemMovement(int id)
         it.next();
         if (it.value()->id == id) {
             if (d->timerId) {
-                d->movingItemsToDelete.append(it.value());
+                d->movingItemsToDelete.insert(it.value());
             } else {
                 delete it.value();
             }
@@ -546,7 +546,7 @@ void Animator::stopElementAnimation(int id)
     QMap<int, ElementAnimationState*>::iterator it = d->animatedElements.find(id);
     if (it != d->animatedElements.end()) {
         if (d->timerId) {
-            d->animatedElementsToDelete.append(it.value());
+            d->animatedElementsToDelete.insert(it.value());
         } else {
             delete it.value();
         }
@@ -639,7 +639,7 @@ void Animator::timerEvent(QTimerEvent *event)
                 d->performAnimation(1, state);
                 d->animatedItems.erase(d->animatedItems.find(state->item));
                 emit animationFinished(state->item, state->animation);
-                d->animatedItemsToDelete.append(state);
+                d->animatedItemsToDelete.insert(state);
             }
         } else {
             state->currentInterval -= elapsed;
@@ -666,7 +666,7 @@ void Animator::timerEvent(QTimerEvent *event)
                 d->performMovement(1, state);
                 d->movingItems.erase(d->movingItems.find(state->item));
                 emit movementFinished(state->item);
-                d->movingItemsToDelete.append(state);
+                d->movingItemsToDelete.insert(state);
             }
         } else {
             state->currentInterval -= elapsed;
@@ -702,7 +702,7 @@ void Animator::timerEvent(QTimerEvent *event)
             } else {
                 d->animatedElements.remove(state->id);
                 emit elementAnimationFinished(state->id);
-                d->animatedElementsToDelete.append(state);
+                d->animatedElementsToDelete.insert(state);
             }
         } else {
             state->currentInterval -= elapsed;
@@ -742,7 +742,7 @@ void Animator::timerEvent(QTimerEvent *event)
                 }
                 d->customAnims.erase(d->customAnims.find(state->id));
                 emit customAnimationFinished(state->id);
-                d->customAnimsToDelete.append(state);
+                d->customAnimsToDelete.insert(state);
             }
         } else {
             state->currentInterval -= elapsed;
@@ -803,7 +803,7 @@ void AnimatorPrivate::cleanupStates()
     qDeleteAll(movingItemsToDelete);
     movingItemsToDelete.clear();
 
-    QListIterator<CustomAnimationState*> it(customAnimsToDelete);
+    QSetIterator<CustomAnimationState*> it(customAnimsToDelete);
     while (it.hasNext()) {
         CustomAnimationState *state = it.next();
         delete[] state->slot;
