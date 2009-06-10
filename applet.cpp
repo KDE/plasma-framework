@@ -546,9 +546,15 @@ void AppletPrivate::destroyMessageOverlay()
     if (!messageOverlay) {
         return;
     }
-    messageOverlay->destroy();
 
-    messageOverlay = 0;
+    messageOverlay->destroy();
+    essageOverlay = 0;
+
+    if (messageOverlayProxy) {
+        messageOverlayProxy->setWidget(0);
+        delete messageOverlayProxy;
+        messageOverlayProxy = 0;
+    }
 
     MessageButton buttonCode = ButtonNo;
     //find out if we're disappearing because of a button press
