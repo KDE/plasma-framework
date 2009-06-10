@@ -1,15 +1,5 @@
 libplasma
 
-Commit Rules:
-* If your patch is not an obvious or trivial bug fix, have it peer reviewed
-  by another Plasma developer
-* All code MUST follow the kdelibs coding style, as found at:
-    http://techbase.kde.org/Policies/Kdelibs_Coding_Style
-* All new public API MUST have apidox written before committing
-
-Unit tests are next to godliness. (Though as you can see, right now libplasma
-is hellbound.)
-
 This directory contains the classes making up libplasma, which provides the
 core framework used by Plasma applictions, such as the Plasma desktop shell
 and its components. This includes applet and extension definitions and loading,
@@ -18,6 +8,20 @@ common GUI elements, data and service interaction, search system, etc.
 Domain specific sets of functionality, e.g. for network awareness or sensors,
 are not found here but as DataEngine, Service, Applet, PackageStructure, etc
 plugins.
+
+Commit Guidelines:
+* If your patch is not an obvious or trivial bug fix, have it peer reviewed
+  by another Plasma developer; http://reviewboard.kde.org is your friend :)
+
+* All code MUST follow the kdelibs coding style, as found at:
+        http://techbase.kde.org/Policies/Kdelibs_Coding_Style
+
+* All new public API MUST have apidox written before committing and must go
+  through an API review with another Plasma developer. We have to maintain
+  binary compatibility, remember!
+
+Unit tests are next to godliness. (Though as you can see, right now libplasma
+is hellbound.)
 
 Please refer to the Plasma website (http://plasma.kde.org) and Plasma wiki
 (http://techbase.kde.org/Projects/Plasma) for API documentation and design
