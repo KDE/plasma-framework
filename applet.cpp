@@ -548,7 +548,7 @@ void AppletPrivate::destroyMessageOverlay()
     }
 
     messageOverlay->destroy();
-    essageOverlay = 0;
+    messageOverlay = 0;
 
     if (messageOverlayProxy) {
         messageOverlayProxy->setWidget(0);
