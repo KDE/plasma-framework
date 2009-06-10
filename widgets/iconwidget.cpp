@@ -430,7 +430,7 @@ bool IconWidget::drawBackground() const
 
 QPainterPath IconWidget::shape() const
 {
-    if (d->currentSize.width() < 1) {
+    if (!d->drawBg || d->currentSize.width() < 1) {
         return QGraphicsItem::shape();
     }
 
