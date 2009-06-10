@@ -202,10 +202,10 @@ QSizeF FrameSvg::frameSize() const
 {
     QHash<QString, FrameData*>::const_iterator it = d->frames.constFind(d->prefix);
 
-    if (it != d->frames.constEnd()) {
-        return it.value()->frameSize;
-    } else {
+    if (it == d->frames.constEnd()) {
         return QSize(-1, -1);
+    } else {
+        return d->frameSize(it.value());
     }
 }
 
@@ -282,8 +282,8 @@ QPixmap FrameSvg::alphaMask() const
         }
 
         FrameData *maskFrame = d->frames[d->prefix];
-        if (maskFrame->cachedBackground.isNull() || maskFrame->frameSize != frame->frameSize ) {
-            maskFrame->frameSize = frame->frameSize;
+        if (maskFrame->cachedBackground.isNull() || maskFrame->frameSize != d->frameSize(frame)) {
+            maskFrame->frameSize = d->frameSize(frame).toSize();
             maskFrame->cachedBackground = QPixmap();
 
             d->generateBackground(maskFrame);
@@ -390,8 +390,9 @@ void FrameSvgPrivate::generateBackground(FrameData *frame)
     }
 
 
+    QSizeF size = frameSize(frame);
     QString id = QString::fromLatin1("%5_%4_%3_%2_%1_").
-                         arg(frame->enabledBorders).arg(frame->frameSize.width()).arg(frame->frameSize.height()).arg(prefix).arg(q->imagePath());
+                         arg(frame->enabledBorders).arg(size.width()).arg(size.height()).arg(prefix).arg(q->imagePath());
 
     if (q->isUsingRenderingCache()) {
         Theme *theme = Theme::defaultTheme();
@@ -407,13 +408,13 @@ void FrameSvgPrivate::generateBackground(FrameData *frame)
     const int leftOffset = 0;
 
 
-    if (!frame->frameSize.isValid()) {
-        kWarning() << "Invalid frame size" << frame->frameSize;
+    if (!size.isValid()) {
+        kWarning() << "Invalid frame size" << size;
         return;
     }
 
-    const int contentWidth = frame->frameSize.width() - frame->leftWidth  - frame->rightWidth;
-    const int contentHeight = frame->frameSize.height() - frame->topHeight  - frame->bottomHeight;
+    const int contentWidth = size.width() - frame->leftWidth  - frame->rightWidth;
+    const int contentHeight = size.height() - frame->topHeight  - frame->bottomHeight;
     int contentTop = 0;
     int contentLeft = 0;
     int rightOffset = contentWidth;
@@ -566,13 +567,13 @@ void FrameSvgPrivate::generateBackground(FrameData *frame)
             pos = overlayPos;
         //Stretched or Tiled?
         } else if (q->hasElement(prefix + "hint-overlay-stretch")) {
-            overlaySize = frame->frameSize;
+            overlaySize = frameSize(frame).toSize();
         } else {
             if (q->hasElement(prefix + "hint-overlay-tile-horizontal")) {
-                overlaySize.setWidth(frame->frameSize.width());
+                overlaySize.setWidth(frameSize(frame).width());
             }
             if (q->hasElement(prefix + "hint-overlay-tile-vertical")) {
-                overlaySize.setHeight(frame->frameSize.height());
+                overlaySize.setHeight(frameSize(frame).height());
             }
         }
 
@@ -614,8 +615,9 @@ void FrameSvgPrivate::cacheFrame(const QString &prefixToSave)
         return;
     }
 
+    QSizeF size = frameSize(frame);
     QString id = QString::fromLatin1("%7_%6_%5_%4_%3_%2_%1_").
-        arg(overlayPos.y()).arg(overlayPos.x()).arg(frame->enabledBorders).arg(frame->frameSize.width()).arg(frame->frameSize.height()).arg(prefixToSave).arg(q->imagePath());
+        arg(overlayPos.y()).arg(overlayPos.x()).arg(frame->enabledBorders).arg(size.width()).arg(size.height()).arg(prefixToSave).arg(q->imagePath());
 
     //kDebug()<<"Saving to cache frame"<<id;
 
@@ -623,7 +625,7 @@ void FrameSvgPrivate::cacheFrame(const QString &prefixToSave)
 
     //insert overlay
     id = QString::fromLatin1("overlay_%7_%6_%5_%4_%3_%2_%1_").
-        arg(overlayPos.y()).arg(overlayPos.x()).arg(frame->enabledBorders).arg(frame->frameSize.width()).arg(frame->frameSize.height()).arg(prefixToSave).arg(q->imagePath());
+        arg(overlayPos.y()).arg(overlayPos.x()).arg(frame->enabledBorders).arg(size.width()).arg(size.height()).arg(prefixToSave).arg(q->imagePath());
 
     Theme::defaultTheme()->insertIntoCache(id, frame->cachedBackground);
 }
@@ -705,6 +707,17 @@ void FrameSvgPrivate::updateAndSignalSizes()
     updateSizes();
     emit q->repaintNeeded();
 }
+
+QSizeF FrameSvgPrivate::frameSize(FrameData *frame)
+{
+    if (!frame->frameSize.isValid()) {
+        updateSizes();
+        frame->frameSize = q->size();
+    }
+
+    return frame->frameSize;
+}
+
 
 } // Plasma namespace
 
