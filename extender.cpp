@@ -166,9 +166,17 @@ QList<ExtenderItem*> Extender::detachedItems() const
 {
     QList<ExtenderItem*> result;
 
-    foreach (ExtenderItem *item, items()) {
-        if (item->isDetached()) {
-            result.append(item);
+    //FIXME: a triple nested loop ... ew. there should be a more efficient way to do this
+    //iterate through all extenders we can find and check each extenders source applet.
+    foreach (Containment *c, d->applet->containment()->corona()->containments()) {
+        foreach (Applet *applet, c->applets()) {
+            if (applet->d->extender) {
+                foreach (ExtenderItem *item, applet->d->extender->attachedItems()) {
+                    if (item->d->sourceApplet == d->applet && item->isDetached()) {
+                        result.append(item);
+                    }
+                }
+            }
         }
     }
 
@@ -177,9 +185,30 @@ QList<ExtenderItem*> Extender::detachedItems() const
 
 ExtenderItem *Extender::item(const QString &name) const
 {
-    foreach (ExtenderItem *item, items()) {
-        if (item->name() == name) {
+    // chances are the item is in our own extender, so check there first
+    foreach (ExtenderItem *item, d->attachedExtenderItems) {
+        if (item->d->sourceApplet == d->applet && item->name() == name) {
             return item;
+        }
+    }
+
+    // maybe it's been moved elsewhere, so lets search through the entire tree of elements
+    //FIXME: a triple nested loop ... ew. there should be a more efficient way to do this
+    //iterate through all extenders we can find and check each extenders source applet.
+    foreach (Containment *c, d->applet->containment()->corona()->containments()) {
+        foreach (Applet *applet, c->applets()) {
+            if (applet->d->extender) {
+                if (applet->d->extender == this) {
+                    // skip it, we checked it already
+                    continue;
+                }
+
+                foreach (ExtenderItem *item, applet->d->extender->attachedItems()) {
+                    if (item->d->sourceApplet == d->applet && item->name() == name) {
+                        return item;
+                    }
+                }
+            }
         }
     }
 
