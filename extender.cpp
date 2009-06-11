@@ -142,7 +142,12 @@ QList<ExtenderItem*> Extender::items() const
 
     //FIXME: a triple nested loop ... ew. there should be a more efficient way to do this
     //iterate through all extenders we can find and check each extenders source applet.
-    foreach (Containment *c, d->applet->containment()->corona()->containments()) {
+    Containment *containment = d->applet->containment();
+    if (!containment) {
+        return result;
+    }
+
+    foreach (Containment *c, containment->corona()->containments()) {
         foreach (Applet *applet, c->applets()) {
             if (applet->d->extender) {
                 foreach (ExtenderItem *item, applet->d->extender->attachedItems()) {
@@ -168,7 +173,12 @@ QList<ExtenderItem*> Extender::detachedItems() const
 
     //FIXME: a triple nested loop ... ew. there should be a more efficient way to do this
     //iterate through all extenders we can find and check each extenders source applet.
-    foreach (Containment *c, d->applet->containment()->corona()->containments()) {
+    Containment *containment = d->applet->containment();
+    if (!containment) {
+        return result;
+    }
+
+    foreach (Containment *c, containment->corona()->containments()) {
         foreach (Applet *applet, c->applets()) {
             if (applet->d->extender) {
                 foreach (ExtenderItem *item, applet->d->extender->attachedItems()) {
@@ -195,7 +205,12 @@ ExtenderItem *Extender::item(const QString &name) const
     // maybe it's been moved elsewhere, so lets search through the entire tree of elements
     //FIXME: a triple nested loop ... ew. there should be a more efficient way to do this
     //iterate through all extenders we can find and check each extenders source applet.
-    foreach (Containment *c, d->applet->containment()->corona()->containments()) {
+    Containment *containment = d->applet->containment();
+    if (!containment) {
+        return 0;
+    }
+
+    foreach (Containment *c, containment->corona()->containments()) {
         foreach (Applet *applet, c->applets()) {
             if (applet->d->extender) {
                 if (applet->d->extender == this) {
@@ -229,7 +244,11 @@ bool Extender::hasItem(const QString &name) const
     //if item(name) returns false, that doesn't mean that the item doesn't exist, just that it has
     //not been instantiated yet. check to see if there's mention of this item existing in the
     //plasma config's section DetachedExtenderItems
-    Corona *corona = qobject_cast<Corona*>(scene());
+    Corona *corona = qobject_cast<Corona *>(scene());
+    if (!corona) {
+        return false;
+    }
+
     KConfigGroup extenderItemGroup(corona->config(), "DetachedExtenderItems");
     foreach (const QString &extenderItemId, extenderItemGroup.groupList()) {
         KConfigGroup cg = extenderItemGroup.group(extenderItemId);
@@ -595,12 +614,22 @@ void ExtenderPrivate::loadExtenderItems()
         kDebug() << "sourceappletid = " << sourceAppletId;
 
         //find the source applet.
-        Corona *corona = applet->containment()->corona();
         Applet *sourceApplet = 0;
-        foreach (Containment *containment, corona->containments()) {
-            foreach (Applet *applet, containment->applets()) {
-                if (applet->id() == sourceAppletId) {
-                    sourceApplet = applet;
+        if (applet->id() == sourceAppletId) {
+            // it's ours!
+            sourceApplet = applet;
+        } else {
+            Containment *containment = applet->containment();
+
+            if (containment) {
+                Corona *corona = containment->corona();
+
+                foreach (Containment *containment, corona->containments()) {
+                    foreach (Applet *applet, containment->applets()) {
+                        if (applet->id() == sourceAppletId) {
+                            sourceApplet = applet;
+                        }
+                    }
                 }
             }
         }
