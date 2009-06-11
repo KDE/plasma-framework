@@ -401,13 +401,19 @@ void ToolBox::save(KConfigGroup &cg) const
     group.writeEntry("offset", offset);
 }
 
-void ToolBox::load()
+void ToolBox::load(const KConfigGroup &containmentGroup)
 {
     if (!d->movable) {
         return;
     }
 
-    KConfigGroup group = d->containment->config();
+    KConfigGroup group;
+    if (containmentGroup.isValid()) {
+        group = containmentGroup;
+    } else {
+        group = d->containment->config();
+    }
+
     group = KConfigGroup(&group, "ToolBox");
 
     if (!group.hasKey("corner")) {

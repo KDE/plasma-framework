@@ -87,7 +87,7 @@ public:
     void setViewTransform(QTransform transforn);
 
     void save(KConfigGroup &cg) const;
-    void load();
+    void load(const KConfigGroup &containmentGroup = KConfigGroup());
     void reposition();
 
     virtual void showToolBox() = 0;
