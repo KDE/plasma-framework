@@ -197,8 +197,13 @@ PackageStructure::Ptr Applet::packageStructure()
 
 void Applet::init()
 {
-    if (d->script && !d->script->init()) {
-        setFailedToLaunch(true, i18n("Script initialization failed"));
+    if (d->script) {
+        if (d->package) {
+            d->setupScriptSupport();
+        }
+        if (!d->script->init()) {
+            setFailedToLaunch(true, i18n("Script initialization failed"));
+        }
     }
 }
 
@@ -2263,10 +2268,6 @@ void AppletPrivate::init(const QString &packagePath)
                                                  appletDescription.pluginName(), appletDescription.name()));
                 delete package;
                 package = 0;
-            }
-
-            if (package) {
-                setupScriptSupport();
             }
         }
     }
