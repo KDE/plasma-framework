@@ -201,13 +201,20 @@ class PLASMA_EXPORT Wallpaper : public QObject
         virtual void save(KConfigGroup &config);
 
         /**
-         * Returns the widget used in the configuration dialog.
-         * Add the configuration interface of the wallpaper to this widget.
+         * Returns a widget that can be used to configure the options (if any)
+         * associated with this wallpaper. It will be deleted by the caller
+         * when it complete. The default implementation returns a null pointer.
+         *
          * To signal that settings have changed connect to
          * settingsChanged(bool modified) in @p parent.
+         *
          * @code connect(this, SIGNAL(settingsChanged(bool), parent, SLOT(settingsChanged(bool)))
          * @endcode
+         *
          * Emit settingsChanged(true) when the settings are changed and false when the original state is restored.
+         *
+         * Implementation detail note: for best visual results, use a QGridLayout with two columns,
+         * with the option labels in column 0
          */
         virtual QWidget *createConfigurationInterface(QWidget *parent);
 
