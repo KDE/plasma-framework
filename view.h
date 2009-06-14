@@ -121,6 +121,7 @@ public:
      * @param existing the existing containment to swap out
      * @param name the plugin name for the new containment.
      * @param args argument list to pass to the containment
+     * @return the new containment
      */
     Containment *swapContainment(Plasma::Containment *existing,
                                  const QString &name,
