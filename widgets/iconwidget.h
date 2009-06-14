@@ -59,7 +59,7 @@ class PLASMA_EXPORT IconWidget : public QGraphicsWidget
     Q_PROPERTY(QIcon icon READ icon WRITE setIcon)
     Q_PROPERTY(QColor textBackgroundColor READ textBackgroundColor WRITE setTextBackgroundColor)
     Q_PROPERTY(QSizeF iconSize READ iconSize)
-    Q_PROPERTY(QString svg WRITE setSvg)
+    Q_PROPERTY(QString svg READ svg WRITE setSvg)
     Q_PROPERTY(QAction *action READ action WRITE setAction)
     Q_PROPERTY(Qt::Orientation orientation READ orientation WRITE setOrientation)
     Q_PROPERTY(int numDisplayLines READ numDisplayLines WRITE setNumDisplayLines)
