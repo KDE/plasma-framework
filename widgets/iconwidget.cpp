@@ -328,12 +328,12 @@ void IconWidgetPrivate::init()
 
     // Margins for horizontal mode (list views, tree views, table views)
     setHorizontalMargin(IconWidgetPrivate::TextMargin, 1, 1);
-    setHorizontalMargin(IconWidgetPrivate::IconMargin, 0, 0);
+    setHorizontalMargin(IconWidgetPrivate::IconMargin, 1, 1);
     setHorizontalMargin(IconWidgetPrivate::ItemMargin, 0, 0);
 
     // Margins for vertical mode (icon views)
     setVerticalMargin(IconWidgetPrivate::TextMargin, 6, 2);
-    setVerticalMargin(IconWidgetPrivate::IconMargin, 0, 0);
+    setVerticalMargin(IconWidgetPrivate::IconMargin, 1, 1);
     setVerticalMargin(IconWidgetPrivate::ItemMargin, 0, 0);
 
     setActiveMargins();
