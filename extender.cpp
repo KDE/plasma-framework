@@ -619,6 +619,7 @@ void ExtenderPrivate::loadExtenderItems()
             // it's ours!
             sourceApplet = applet;
         } else {
+            // maybe it's foreign?
             Containment *containment = applet->containment();
 
             if (containment) {
@@ -704,6 +705,7 @@ ExtenderGroup *ExtenderPrivate::findGroup(const QString &name) const
             return qobject_cast<ExtenderGroup*>(item);
         }
     }
+
     return 0;
 }
 
