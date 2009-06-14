@@ -5,6 +5,7 @@ X-KDE-ServiceType=Plasma/DataEngine
 Comment=Plasma Data Engine
 Comment[ar]=محرك بيانات بلازما
 Comment[be@latin]=Systema dostupu da źviestak „Plasma”
+Comment[bg]=Ядро за данни на Plasma
 Comment[bn]=প্লাসমা ডাটা ইঞ্জিন
 Comment[bn_IN]=Plasma ডাটা ইঞ্জিন
 Comment[ca]=Motor de dades del Plasma
