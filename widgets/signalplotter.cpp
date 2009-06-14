@@ -538,6 +538,11 @@ void SignalPlotter::setThinFrame(bool set)
     d->backgroundPixmap = QPixmap(); // we changed a paint setting, so reset the cache
 }
 
+bool SignalPlotter::thinFrame() const
+{
+    return d->showThinFrame;
+}
+
 void SignalPlotter::setStackPlots(bool stack)
 {
     d->stackPlots = stack;

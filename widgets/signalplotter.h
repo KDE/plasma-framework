@@ -63,7 +63,7 @@ class PLASMA_EXPORT SignalPlotter : public QGraphicsWidget
     Q_PROPERTY(bool showTopBar READ showTopBar WRITE setShowTopBar)
     Q_PROPERTY(QColor backgroundColor READ backgroundColor WRITE setBackgroundColor)
     Q_PROPERTY(QString svgBackground READ svgBackground WRITE setSvgBackground)
-    Q_PROPERTY(bool thinFrame WRITE setThinFrame)
+    Q_PROPERTY(bool thinFrame READ thinFrame WRITE setThinFrame)
     Q_PROPERTY(bool stackPlots READ stackPlots WRITE setStackPlots)
 
 public:
@@ -391,6 +391,12 @@ public:
      * @param set true if the frame should get drawn
      */
     void setThinFrame(bool set);
+
+    /**
+     * show a white line on the left and botton of the widget for a 3D effect
+     * @return true if frame show be draw
+     */
+    bool thinFrame() const;
 
     /**
      * Whether to stack the plots on top of each other.  The first plot
