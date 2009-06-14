@@ -822,6 +822,10 @@ Applet::BackgroundHints Applet::backgroundHints() const
 
 void Applet::setBackgroundHints(const BackgroundHints hints)
 {
+    if (d->backgroundHints == hints) {
+        return;
+    }
+
     d->backgroundHints = hints;
 
     //Draw the standard background?
@@ -870,6 +874,8 @@ void Applet::setBackgroundHints(const BackgroundHints hints)
         d->background = 0;
         setContentsMargins(0, 0, 0, 0);
     }
+
+    update();
 }
 
 bool Applet::hasFailedToLaunch() const
@@ -2147,7 +2153,7 @@ bool Applet::isContainment() const
 AppletPrivate::AppletPrivate(KService::Ptr service, int uniqueID, Applet *applet)
         : appletId(uniqueID),
           q(applet),
-          backgroundHints(Applet::StandardBackground),
+          backgroundHints(Applet::NoBackground),
           aspectRatioMode(Plasma::KeepAspectRatio),
           immutability(Mutable),
           appletDescription(service),
