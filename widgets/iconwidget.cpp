@@ -1192,7 +1192,7 @@ void IconWidget::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
 
 void IconWidget::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 {
-    kDebug();
+    //kDebug();
     foreach (IconAction *action, d->cornerActions) {
         action->show();
         action->event(event->type(), event->pos());
@@ -1206,7 +1206,7 @@ void IconWidget::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 
 void IconWidget::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 {
-    kDebug() << d->cornerActions;
+    //kDebug() << d->cornerActions;
     foreach (IconAction *action, d->cornerActions) {
         action->hide();
         action->event(event->type(), event->pos());
