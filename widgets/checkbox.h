@@ -45,7 +45,7 @@ class PLASMA_EXPORT CheckBox : public QGraphicsProxyWidget
     Q_PROPERTY(QString image READ image WRITE setImage)
     Q_PROPERTY(QString styleSheet READ styleSheet WRITE setStyleSheet)
     Q_PROPERTY(QCheckBox *nativeWidget READ nativeWidget)
-    Q_PROPERTY(bool isChecked READ isChecked WRITE setChecked)
+    Q_PROPERTY(bool isChecked READ isChecked WRITE setChecked NOTIFY toggled)
 
 public:
     explicit CheckBox(QGraphicsWidget *parent = 0);

@@ -116,6 +116,8 @@ ComboBox::ComboBox(QGraphicsWidget *parent)
 {
     KComboBox *native = new KComboBox;
     connect(native, SIGNAL(activated(const QString &)), this, SIGNAL(activated(const QString &)));
+    connect(native, SIGNAL(currentIndexChanged(const QString &)),
+            this, SIGNAL(textChanged(const QString &)));
     setWidget(native);
     native->setAttribute(Qt::WA_NoSystemBackground);
 

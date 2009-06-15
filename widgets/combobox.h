@@ -41,7 +41,7 @@ class PLASMA_EXPORT ComboBox : public QGraphicsProxyWidget
     Q_OBJECT
 
     Q_PROPERTY(QGraphicsWidget *parentWidget READ parentWidget)
-    Q_PROPERTY(QString text READ text)
+    Q_PROPERTY(QString text READ text NOTIFY textChanged)
     Q_PROPERTY(QString styleSheet READ styleSheet WRITE setStyleSheet)
     Q_PROPERTY(KComboBox *nativeWidget READ nativeWidget)
 
@@ -82,6 +82,7 @@ public Q_SLOTS:
 
 Q_SIGNALS:
     void activated(const QString & text);
+    void textChanged(const QString & text);
 
 protected:
     void resizeEvent(QGraphicsSceneResizeEvent *event);

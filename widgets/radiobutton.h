@@ -45,7 +45,7 @@ class PLASMA_EXPORT RadioButton : public QGraphicsProxyWidget
     Q_PROPERTY(QString image READ image WRITE setImage)
     Q_PROPERTY(QString styleSheet READ styleSheet WRITE setStyleSheet)
     Q_PROPERTY(QRadioButton *nativeWidget READ nativeWidget)
-    Q_PROPERTY(bool isChecked READ isChecked WRITE setChecked)
+    Q_PROPERTY(bool isChecked READ isChecked WRITE setChecked NOTIFY toggled)
 
 public:
     explicit RadioButton(QGraphicsWidget *parent = 0);

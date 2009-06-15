@@ -44,7 +44,7 @@ class PLASMA_EXPORT TextBrowser : public QGraphicsProxyWidget
     Q_OBJECT
 
     Q_PROPERTY(QGraphicsWidget *parentWidget READ parentWidget)
-    Q_PROPERTY(QString text READ text WRITE setText)
+    Q_PROPERTY(QString text READ text WRITE setText NOTIFY textChanged)
     Q_PROPERTY(QString stylesheet READ styleSheet WRITE setStyleSheet)
     Q_PROPERTY(KTextBrowser *nativeWidget READ nativeWidget)
 
