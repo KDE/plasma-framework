@@ -918,6 +918,10 @@ void Containment::setScreen(int newScreen, int newDesktop)
     }
 
     d->checkRemoveAction();
+
+    if (newScreen >= 0) {
+        emit activate();
+    }
 }
 
 int Containment::screen() const
