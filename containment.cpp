@@ -317,6 +317,10 @@ void Containment::restore(KConfigGroup &group)
 
     setWallpaper(group.readEntry("wallpaperplugin", defaultWallpaper),
                  group.readEntry("wallpaperpluginmode", defaultWallpaperMode));
+
+    if (d->toolBox) {
+        d->toolBox->load(group);
+    }
     /*
     kDebug() << "Containment" << id() <<
                 "screen" << screen() <<
