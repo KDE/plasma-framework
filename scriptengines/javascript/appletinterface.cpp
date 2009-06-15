@@ -186,7 +186,6 @@ QString AppletInterface::file(const QString &fileType, const QString &filePath)
 
 const Plasma::Package *AppletInterface::package() const
 {
-    kDebug() << "woot";
     return m_appletScriptEngine->package();
 }
 
