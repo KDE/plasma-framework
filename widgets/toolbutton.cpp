@@ -293,7 +293,7 @@ void ToolButton::paint(QPainter *painter,
     buttonOpt.toolButtonStyle = button->toolButtonStyle();
 
 
-    if (d->animId || !button->autoRaise() || (buttonOpt.state & QStyle::State_MouseOver) || (buttonOpt.state & QStyle::State_On)) {
+    if (button->isEnabled() && (d->animId || !button->autoRaise() || (buttonOpt.state & QStyle::State_MouseOver) || (buttonOpt.state & QStyle::State_On))) {
         if (button->isDown() || (buttonOpt.state & QStyle::State_On)) {
             d->background->setElementPrefix("pressed");
         } else {
