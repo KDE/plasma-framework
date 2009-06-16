@@ -98,7 +98,7 @@ void LineEdit::setClearButtonShown(bool show)
     nativeWidget()->setClearButtonShown(show);
 }
 
-bool LineEdit::isClearButtonShown()
+bool LineEdit::isClearButtonShown() const
 {
     return nativeWidget()->isClearButtonShown();
 }

@@ -72,7 +72,7 @@ public:
      * @return true if the clear button is set to be shown
      * @since 4.3
      */
-    bool isClearButtonShown();
+    bool isClearButtonShown() const;
 
     /**
      * Sets the stylesheet used to control the visual display of this LineEdit
