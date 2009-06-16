@@ -486,12 +486,12 @@ void Containment::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
         }
     }
 
-    if (event->isAccepted()) {
+    if (event->isAccepted() || !isContainment()) {
         //do nothing
     } else if (event->button() == Qt::MidButton) {
         //middle-click = paste
-        event->accept();
         d->dropData(event);
+        event->accept();
     } else {
         event->accept();
         Applet::mouseReleaseEvent(event);
@@ -1059,7 +1059,7 @@ void ContainmentPrivate::dropData(QGraphicsSceneEvent *event)
     QPointF pos;
     QPointF scenePos;
     QPoint screenPos;
-    const QMimeData *mimeData;
+    const QMimeData *mimeData = 0;
 
     if (dropEvent) {
         pos = dropEvent->pos();
@@ -1072,12 +1072,14 @@ void ContainmentPrivate::dropData(QGraphicsSceneEvent *event)
         screenPos = mouseEvent->screenPos();
         QClipboard *clipboard = QApplication::clipboard();
         mimeData = clipboard->mimeData(QClipboard::Selection);
-        if (!mimeData) { //Selection is either empty or not sopported on this OS
-            return;
-        }
         //TODO if that's not supported (ie non-linux) should we try clipboard instead of selection?
     } else {
         kDebug() << "unexpected event";
+    }
+
+    if (!mimeData) {
+        //Selection is either empty or not sopported on this OS
+        kDebug() << "no mime data";
         return;
     }
 
@@ -1148,6 +1150,7 @@ void ContainmentPrivate::dropData(QGraphicsSceneEvent *event)
                 q->addApplet("icon", args, geom);
             }
         }
+
         if (dropEvent) {
             dropEvent->acceptProposedAction();
         }
@@ -1172,10 +1175,8 @@ void ContainmentPrivate::dropData(QGraphicsSceneEvent *event)
         QString selectedPlugin;
 
         if (seenPlugins.isEmpty()) {
-            // do nothing, we have no matches =/
-        }
-
-        if (seenPlugins.count() == 1) {
+            // do nothing
+        } else if (seenPlugins.count() == 1) {
             selectedPlugin = seenPlugins.constBegin().key();
         } else {
             QMenu choices;
