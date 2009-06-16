@@ -93,6 +93,16 @@ QString LineEdit::text() const
     return static_cast<KLineEdit*>(widget())->text();
 }
 
+void LineEdit::setClearButtonShown(bool show)
+{
+    nativeWidget()->setClearButtonShown(show);
+}
+
+bool LineEdit::isClearButtonShown()
+{
+    return nativeWidget()->isClearButtonShown();
+}
+
 void LineEdit::setStyleSheet(const QString &stylesheet)
 {
     widget()->setStyleSheet(stylesheet);

@@ -42,6 +42,7 @@ class PLASMA_EXPORT LineEdit : public QGraphicsProxyWidget
 
     Q_PROPERTY(QGraphicsWidget *parentWidget READ parentWidget)
     Q_PROPERTY(QString text READ text WRITE setText NOTIFY textEdited)
+    Q_PROPERTY(bool isClearButtonShown READ isClearButtonShown WRITE setClearButtonShown)
     Q_PROPERTY(QString styleSheet READ styleSheet WRITE setStyleSheet)
     Q_PROPERTY(KLineEdit *nativeWidget READ nativeWidget)
 
@@ -60,6 +61,18 @@ public:
      * @return the display text
      */
     QString text() const;
+
+    /**
+     * Shows a button to clear the text
+     * @since 4.3
+     */
+    void setClearButtonShown(bool show);
+
+    /**
+     * @return true if the clear button is set to be shown
+     * @since 4.3
+     */
+    bool isClearButtonShown();
 
     /**
      * Sets the stylesheet used to control the visual display of this LineEdit
