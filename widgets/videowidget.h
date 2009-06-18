@@ -50,9 +50,9 @@ class PLASMA_EXPORT VideoWidget : public QGraphicsProxyWidget
     Q_OBJECT
 
     Q_PROPERTY(QString url READ url WRITE setUrl)
-    Q_PROPERTY(QString currentTime READ currentTime)
-    Q_PROPERTY(QString totalTime READ totalTime)
-    Q_PROPERTY(QString remainingTime READ remainingTime)
+    Q_PROPERTY(qint64 currentTime READ currentTime)
+    Q_PROPERTY(qint64 totalTime READ totalTime)
+    Q_PROPERTY(qint64 remainingTime READ remainingTime)
     Q_PROPERTY(Controls usedControls READ usedControls WRITE setUsedControls)
     Q_PROPERTY(bool controlsVisible READ controlsVisible WRITE setControlsVisible)
     Q_PROPERTY(QString styleSheet READ styleSheet WRITE setStyleSheet)
