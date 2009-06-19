@@ -365,7 +365,6 @@ void Delegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
 
     painter->drawPixmap(option.rect, buffer, buffer.rect());
 
-
     if (hover) {
         painter->save();
         painter->setRenderHint(QPainter::Antialiasing);
@@ -383,7 +382,10 @@ void Delegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
         QColor backgroundColor2 = option.palette.color(QPalette::Highlight);
         backgroundColor2.setAlphaF(0.5);
 
-        QRect highlightRect = option.rect.adjusted(2, 2, -2, -2);
+        QRect highlightRect = option.rect;
+        if (!useSvg) {
+            highlightRect.adjust(2, 2, -2, -2);
+        }
 
         QPen outlinePen(backgroundColor, 2);
 
@@ -406,13 +408,9 @@ void Delegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
             }
 
             gradient.setColorAt(0, backgroundColor);
-
             gradient.setColorAt(((qreal)titleRect.width()/3.0) / (qreal)highlightRect.width(), backgroundColor2);
-
             gradient.setColorAt(0.7, backgroundColor);
-
             outlinePen.setBrush(gradient);
-
         //last column, clip left (right for rtl)
         } else if (column == columns-1) {
             if (useSvg) {
@@ -431,12 +429,12 @@ void Delegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
         }
 
         //if the view is transparent paint as plasma, otherwise paint with kde colors
-        if (!useSvg) {
-            painter->setPen(outlinePen);
-            painter->drawPath(PaintUtils::roundedRectangle(highlightRect, roundedRadius));
-        } else {
+        if (useSvg) {
             d->svg->resizeFrame(highlightRect.size());
             d->svg->paintFrame(painter, highlightRect.topLeft());
+        } else {
+            painter->setPen(outlinePen);
+            painter->drawPath(PaintUtils::roundedRectangle(highlightRect, roundedRadius));
         }
 
         painter->restore();
