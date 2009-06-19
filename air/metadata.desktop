@@ -1,0 +1,38 @@
+[Desktop Entry]
+Name=Air
+Name[de]=Luft
+Name[el]=Αέρας
+Name[gl]=Ar
+Name[km]=ខ្យល់
+Name[nds]=Luft
+Name[pa]=ਹਵਾ
+Name[pt]=Ar
+Name[pt_BR]=Ar
+Name[ro]=Aer
+Name[sv]=Luft
+Name[x-test]=xxAirxx
+Comment=A breath of fresh air
+Comment[el]=Μια ριπή φρέσκου αέρα
+Comment[et]=Sõõm värsket õhku
+Comment[fr]=Une bonne inspiration d'air frais
+Comment[gl]=Un pouco de ar fresco
+Comment[km]=ស្រូប​យក​ខ្យល់​បរិសុទ្ធ
+Comment[nds]=En beten Frischluft
+Comment[pt]=Uma brisa de ar fresco
+Comment[pt_BR]=Uma brisa de ar fresco
+Comment[ro]=O gură de aer proaspăt
+Comment[sv]=En frisk fläkt
+Comment[tr]=Bir nefes temiz hava
+Comment[uk]=Ковток свіжого повітря
+Comment[x-test]=xxA breath of fresh airxx
+
+
+X-KDE-PluginInfo-Author=The Oxygen Project
+X-KDE-PluginInfo-Email=kde-artists@kde.org
+X-KDE-PluginInfo-Name=air
+X-KDE-PluginInfo-Version=pre0.1
+X-KDE-PluginInfo-Website=http://plasma.kde.org
+X-KDE-PluginInfo-Category=
+X-KDE-PluginInfo-Depends=
+X-KDE-PluginInfo-License=GPL
+X-KDE-PluginInfo-EnabledByDefault=true
