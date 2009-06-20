@@ -2278,6 +2278,14 @@ void AppletPrivate::init(const QString &packagePath)
         }
     }
 
+    //set a default size before any saved settings are read
+    QSize size = appletDescription.property("X-Plasma-DefaultSize").toSize();
+    if (size.isEmpty()) {
+        size = QSize(200, 200);
+    }
+    //kDebug() << "size" << size;
+    q->resize(size);
+
     q->setBackgroundHints(Applet::DefaultBackground);
     q->setHasConfigurationInterface(true); //FIXME why not default it to true in the constructor?
 
@@ -2318,15 +2326,6 @@ void AppletPrivate::setupScriptSupport()
     if (!package->filePath("mainconfigui").isEmpty()) {
         q->setHasConfigurationInterface(true);
     }
-
-    //set a default size before any saved settings are read
-    QSize size = appletDescription.property("X-Plasma-DefaultSize").toSize();
-    if (size.isEmpty()) {
-        size = QSize(200,200);
-    }
-
-    //kDebug() << "size" << size;
-    q->resize(size);
 }
 
 QString AppletPrivate::globalName() const
