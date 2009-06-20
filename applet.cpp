@@ -415,7 +415,7 @@ KConfigGroup Applet::globalConfig() const
 
 void Applet::destroy()
 {
-    if (immutability() != Mutable || d->transient) {
+    if (immutability() != Mutable || d->transient || !d->started) {
         return; //don't double delete
     }
 
