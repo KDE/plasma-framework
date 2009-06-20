@@ -1225,7 +1225,7 @@ void Applet::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
         Containment* c = qobject_cast<Plasma::Containment*>(this);
 
         //update the view transform of the toolbox, since it ignores transforms
-        if (c && c->d->toolBox) {
+        if (v && c && c->d->toolBox) {
             if (c->d->toolBox->viewTransform().isScaling() && !v->transform().isScaling()) {
                 c->d->positionToolBox();
             }
