@@ -40,6 +40,12 @@ Name[uk]=Повітря
 Name[x-test]=xxAirxx
 Name[zh_CN]=大气
 Comment=A breath of fresh air
+Comment[ca]=Una alenada d'aire fresc
+Comment[ca@valencia]=Una alenada d'aire fresc
+Comment[es]=Un soplo de aire fresco
+Comment[sv]=Ett friskt andetag
+Comment[uk]=Ковток свіжого повітря
+Comment[zh_TW]=吸一口新鮮空氣
 
 
 X-KDE-PluginInfo-Author=The Oxygen Project
