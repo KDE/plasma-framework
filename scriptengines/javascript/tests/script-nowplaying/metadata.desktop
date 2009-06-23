@@ -17,6 +17,7 @@ Name[tr]=betik-şimdi dinlenen parça
 Name[x-test]=xxscript-nowplayingxx
 Name[zh_CN]=脚本-现在收听
 Comment=Javascript version current track playing
+Comment[bg]=Текущо изпълняван запис (JavaScript)
 Comment[ca]=Versió en Javascript de la peça actual en reproducció
 Comment[ca@valencia]=Versió en Javascript de la peça actual en reproducció
 Comment[cs]=JavaScriptová verze skriptu "Právě hraje"

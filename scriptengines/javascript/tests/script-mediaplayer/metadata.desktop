@@ -14,6 +14,7 @@ Name[x-test]=xxscript-mediaplayerxx
 Name[zh_CN]=脚本-媒体播放器
 
 Comment=Javascript media player
+Comment[bg]=Медиа плеър (JavaScript)
 Comment[ca]=Reproductor de suports en Javascript
 Comment[ca@valencia]=Reproductor de suports en Javascript
 Comment[da]=Medieafspiller i Javascript

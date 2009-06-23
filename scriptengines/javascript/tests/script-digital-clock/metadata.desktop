@@ -18,6 +18,7 @@ Name[tr]=betik-dijital-saat
 Name[x-test]=xxscript-digital-clockxx
 Name[zh_CN]=脚本-数字钟
 Comment=Javascript digital clock
+Comment[bg]=Цифров часовник (JavaScript)
 Comment[ca]=Rellotge digital en Javascript
 Comment[ca@valencia]=Rellotge digital en Javascript
 Comment[cs]=Digitální hodiny v JavaScriptu
