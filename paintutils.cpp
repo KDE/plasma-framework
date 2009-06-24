@@ -135,6 +135,10 @@ QPainterPath roundedRectangle(const QRectF &rect, qreal radius)
 
 QPixmap transition(const QPixmap &from, const QPixmap &to, qreal amount)
 {
+    if (from.isNull() || to.isNull()) {
+        return from;
+    }
+
     int value = int(0xff * amount);
 
     if (value == 0) {
