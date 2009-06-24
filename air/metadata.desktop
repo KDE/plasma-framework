@@ -39,7 +39,7 @@ Name[sv]=Luft
 Name[tg]=Ҳаво
 Name[uk]=Повітря
 Name[x-test]=xxAirxx
-Name[zh_CN]=大气
+Name[zh_CN]=空气
 Comment=A breath of fresh air
 Comment[ca]=Una alenada d'aire fresc
 Comment[ca@valencia]=Una alenada d'aire fresc
@@ -47,13 +47,16 @@ Comment[da]=En mundfuld frisk luft
 Comment[es]=Un soplo de aire fresco
 Comment[et]=Värskendav tuulepuhang
 Comment[gl]=Un folgo de ar fresco
+Comment[hu]=Friss fuvallat
 Comment[is]=Ferskir vindar
 Comment[km]=ខ្យល់ដង្ហើម​បរិសុទ្ធ
 Comment[nn]=Eit friskt pust
 Comment[pt]=Uma brisa de ar fresco
 Comment[pt_BR]=Uma brisa de ar fresco
+Comment[ro]=O gură de aer proaspăt
 Comment[sv]=Ett friskt andetag
 Comment[uk]=Ковток свіжого повітря
+Comment[zh_CN]=呼吸清新空气
 Comment[zh_TW]=吸一口新鮮空氣
 
 
