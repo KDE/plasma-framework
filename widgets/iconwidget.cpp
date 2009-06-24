@@ -472,11 +472,11 @@ QSizeF IconWidgetPrivate::displaySizeHint(const QStyleOptionGraphicsItem *option
 
 void IconWidgetPrivate::layoutIcons(const QStyleOptionGraphicsItem *option)
 {
-    if (q->size() == currentSize) {
+    if (option->rect.size() == currentSize) {
         return;
     }
 
-    currentSize = q->size();
+    currentSize = option->rect.size();
     setActiveMargins();
 
     //calculate icon size based on the available space
@@ -646,10 +646,9 @@ QPixmap IconWidgetPrivate::decoration(const QStyleOptionGraphicsItem *option, bo
         result = icon.pixmap(size, mode, state);
     }
 
-	if (usePressedEffect) {
-		result = result.scaled(result.size() * 0.9, Qt::KeepAspectRatio);
-	}
-
+    if (usePressedEffect) {
+        result = result.scaled(result.size() * 0.9, Qt::KeepAspectRatio);
+    }
 
     if (!result.isNull() && useHoverEffect) {
         KIconEffect *effect = KIconLoader::global()->iconEffect();
