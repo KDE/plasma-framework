@@ -403,6 +403,7 @@ void Extender::dropEvent(QGraphicsSceneDragDropEvent *event)
         if (mimeData) {
             mimeData->extenderItem()->setExtender(this, event->pos());
             QApplication::restoreOverrideCursor();
+            itemHoverLeaveEvent(0);
         }
     }
 }
