@@ -600,6 +600,10 @@ void PopupAppletPrivate::dialogStatusChanged(bool status)
 
 void PopupAppletPrivate::updateDialogPosition()
 {
+    if (!dialog) {
+        return;
+    }
+
     QGraphicsView *view = q->view();
 
     if (!view) {

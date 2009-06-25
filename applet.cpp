@@ -1999,6 +1999,19 @@ QVariant Applet::itemChange(GraphicsItemChange change, const QVariant &value)
             old->copyTo(d->mainConfig);
             old->deleteGroup();
             delete old;
+        } else if (!d->isContainment) {
+            Plasma::PopupApplet *pa = qobject_cast<Plasma::PopupApplet *>(this);
+            if (!pa) {
+                break;
+            }
+            //reconnect of popupapplets with new containment geometryChanged
+            if (containment()) {
+                disconnect(containment(), SIGNAL(geometryChanged()), pa, SLOT(updateDialogPosition()));
+            }
+            Plasma::Containment *cont = dynamic_cast<Containment*>(value.value<QGraphicsItem *>());
+            if (cont) {
+                connect(cont, SIGNAL(geometryChanged()), pa, SLOT(updateDialogPosition()));
+            }
         }
     case ItemPositionChange:
         return (immutability() == Mutable || isContainment() || formFactor() == Horizontal || formFactor() == Vertical) ? value : pos();
