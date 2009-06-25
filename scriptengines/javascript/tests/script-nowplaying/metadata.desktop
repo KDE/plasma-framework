@@ -2,6 +2,7 @@
 Name=script-nowplaying
 Name[cs]=Skript  "Právě hraje"
 Name[es]=script-ejecutando
+Name[fy]=skript-no ôfspyljend
 Name[is]=spilanúna-skrifta
 Name[lt]=scenarijus-dabar groja
 Name[mai]=स्क्रिप्ट अखनचलाए रहल अछि
@@ -28,6 +29,7 @@ Comment[es]=versión javascript de la reproducción actual
 Comment[et]=Esitatava pala JavaScripti versioon
 Comment[fi]=Nyt soi -sovelman Javascript-versio
 Comment[fr]=Morceau en cours de lecture - version Javascript
+Comment[fy]=Javaskript-ferzje fan do no ôfspiljend nûmer
 Comment[ga]=Amhrán á sheinm anois in JavaScript
 Comment[gl]=Versión en Javascript da pista a reproducir
 Comment[hu]=JavaScript-függvény az éppen lejátszott szám jellemzőihez

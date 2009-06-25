@@ -2,6 +2,7 @@
 Name=javascript-config-test
 Name[cs]=Test nastavení JavaScript
 Name[es]=test-de-config-javascript
+Name[fy]=javaskript-konfig-test
 Name[gu]=જાવાસ્ક્રિપ્ટ-રૂપરેખાંકન-ચકાસણી
 Name[is]=JavaScript stillingaprófun
 Name[lt]=javascript-config-testas
@@ -21,6 +22,7 @@ Comment[el]=Γραφικό συστατικό ελέγχου αντικειμέ�
 Comment[es]=widget de prueba de configuración objeto de javascript
 Comment[et]=JavaScripti seadistuse objekti testi vidin
 Comment[fr]=Plasmoïde de test de configuration Javascript
+Comment[fy]=Javaskript konfiguraasje objekt test widget
 Comment[ga]=Giuirléid tástála cumraíochta JavaScript
 Comment[gl]=Widget de proba da configuración do obxecto en Javascript
 Comment[gu]=જાવાસ્ક્રિપ્ટ રૂપરેખાંકન ઓબ્જેક્ટ ચકાસણી વિજેટ

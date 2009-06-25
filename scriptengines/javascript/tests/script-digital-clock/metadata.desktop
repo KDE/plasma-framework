@@ -2,6 +2,7 @@
 Name=script-digital-clock
 Name[cs]=Skript pro digitální hodiny
 Name[es]=script-Reloj-digital
+Name[fy]=skript-digitale-klok
 Name[gu]=સ્ક્રિપ્ટ-ડિજીટલ-ઘડિયાળ
 Name[is]=Stafræn klukkuskrifta
 Name[km]=នាឡិកា​ឌីជីថលស្គ្រីប
@@ -28,6 +29,7 @@ Comment[el]=Ψηφιακό ρολόι Javascript
 Comment[es]=Reloj javascript digital
 Comment[et]=Javascripti digikell
 Comment[fr]=Horloge numérique JavaScript
+Comment[fy]=Javaskript digitale klok
 Comment[ga]=Clog digiteach JavaScript
 Comment[gl]=Reloxo dixital escrito en JavaScript
 Comment[gu]=જાવાસ્ક્રિપ્ટ ડિજીટલ ઘડિયાળ
