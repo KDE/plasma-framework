@@ -148,6 +148,7 @@ private:
     Q_PRIVATE_SLOT(d, void clearPopupLostFocus())
     Q_PRIVATE_SLOT(d, void dialogSizeChanged())
     Q_PRIVATE_SLOT(d, void dialogStatusChanged(bool))
+    Q_PRIVATE_SLOT(d, void updateDialogPosition())
 
     friend class Applet;
     friend class PopupAppletPrivate;
