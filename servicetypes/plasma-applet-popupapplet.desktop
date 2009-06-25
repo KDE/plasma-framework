@@ -3,7 +3,6 @@ Type=ServiceType
 X-KDE-ServiceType=Plasma/PopupApplet
 
 Comment=Plasma scripting popup applet
-Comment[ar]=بريمج منبثق بواسطة سكربت بلازما
 Comment[be@latin]=Skryptavy vypłyŭny aplet „Plasma”
 Comment[bg]=Аплет за Plasma за скриптове за изскачащи прозорци
 Comment[ca]=Miniaplicació emergent d'scripting del Plasma
