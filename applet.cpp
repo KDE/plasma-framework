@@ -1784,10 +1784,9 @@ KPluginInfo::List Applet::listAppletInfo(const QString &category,
                 //this isn't actually implemented in any bindings yet but should be possible for
                 //anything but c++
             }
-            //TODO 4.3 be very strict about what we accept
-            //if (!(reqValue == "Optional" || reqValue == "Unused")) {
-            //for testing purposes I'm being lax right now
-            if (reqValue == "Required") {
+
+            if (!(reqValue == "Optional" || reqValue == "Unused")) {
+            //if (reqValue == "Required") {
                 it.remove();
             }
         }
