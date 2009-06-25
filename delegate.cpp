@@ -454,7 +454,15 @@ QSize Delegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &
     size.setHeight(qMax(option.decorationSize.height(), qMax(size.height(), metrics.height() + subMetrics.ascent()) + 3) + 4);
 //    kDebug() << "size hint is" << size << (metrics.height() + subMetrics.ascent());
 
-    size *= 1.1;
+    const bool useSvg = option.palette.color(QPalette::Base).alpha() == 0;
+
+    if (useSvg) {
+        qreal left, top, right, bottom;
+        d->svg->getMargins(left, top, right, bottom);
+        size += QSize(left+right, top+bottom);
+    } else {
+        size *= 1.1;
+    }
 
     return size;
 }
