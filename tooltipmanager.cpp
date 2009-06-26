@@ -388,7 +388,7 @@ void ToolTipManagerPrivate::toolTipHovered(bool hovered)
 
     if (hovered) {
         hideTimer->stop();
-    } else if (delayedHide) {
+    } else {
         hideTimer->start(500);
     }
 }
