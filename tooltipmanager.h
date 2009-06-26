@@ -165,7 +165,7 @@ public:
      */
     ToolTipManager::State state() const;
 
-signals:
+Q_SIGNALS:
     /**
      * This signal is emitted when a window preview in the tooltip is clicked.
      * @arg window the id of the window that was clicked
