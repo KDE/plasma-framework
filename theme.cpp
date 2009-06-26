@@ -136,6 +136,7 @@ public:
 
     Theme *q;
     QString themeName;
+    QList<QString> fallbackThemes;
     KSharedConfigPtr colors;
     KColorScheme colorScheme;
     KColorScheme buttonColorScheme;
@@ -403,6 +404,20 @@ void ThemePrivate::setThemeName(const QString &tempThemeName, bool writeSettings
 
     cg = KConfigGroup(&metadata, "Settings");
     useNativeWidgetStyle = cg.readEntry("UseNativeWidgetStyle", false);
+    QString fallback = cg.readEntry("FallbackTheme", QString());
+
+    fallbackThemes.clear();
+    while (!fallback.isEmpty()) {
+        fallbackThemes.append(fallback);
+
+        QString metadataPath(KStandardDirs::locate("data", "desktoptheme/" + theme + "/metadata.desktop"));
+        KConfig metadata(metadataPath);
+        cg = KConfigGroup(&metadata, "Settings");
+        fallback = cg.readEntry("FallbackTheme", QString());
+        //TODO: grab the fallback's wallpaper defaults?
+    }
+    fallbackThemes.append("oxygen");
+    fallbackThemes.append(ThemePrivate::defaultTheme);
 
     QObject::disconnect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()),
                         q, SLOT(colorsChanged()));
@@ -465,16 +480,20 @@ QString Theme::imagePath(const QString &name) const
         // try for an uncompressed svg file
         path = d->findInTheme(name + ".svg", d->themeName);
 
-        if (path.isEmpty() && d->themeName != ThemePrivate::defaultTheme) {
-            // try a compressed svg file in the default theme
-            path = d->findInTheme(name + ".svgz", ThemePrivate::defaultTheme);
+        // search in fallback themes if necessary
+        for (int i = 0; path.isEmpty() && i < d->fallbackThemes.count(); ++i) {
+            if (d->themeName == d->fallbackThemes[i]) {
+                continue;
+            }
+
+            // try a compressed svg file in the fallback theme
+            path = d->findInTheme(name + ".svgz", d->fallbackThemes[i]);
 
             if (path.isEmpty()) {
-                // try an uncompressed svg file in the default theme
-                path = d->findInTheme(name + ".svg", ThemePrivate::defaultTheme);
+                // try an uncompressed svg file in the fallback theme
+                path = d->findInTheme(name + ".svg", d->fallbackThemes[i]);
             }
         }
-
     }
 
     if (path.isEmpty()) {
