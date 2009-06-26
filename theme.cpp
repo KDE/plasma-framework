@@ -407,17 +407,24 @@ void ThemePrivate::setThemeName(const QString &tempThemeName, bool writeSettings
     QString fallback = cg.readEntry("FallbackTheme", QString());
 
     fallbackThemes.clear();
-    while (!fallback.isEmpty()) {
+    while (!fallback.isEmpty() && !fallbackThemes.contains(fallback)) {
         fallbackThemes.append(fallback);
 
         QString metadataPath(KStandardDirs::locate("data", "desktoptheme/" + theme + "/metadata.desktop"));
         KConfig metadata(metadataPath);
         cg = KConfigGroup(&metadata, "Settings");
         fallback = cg.readEntry("FallbackTheme", QString());
+
         //TODO: grab the fallback's wallpaper defaults?
     }
-    fallbackThemes.append("oxygen");
-    fallbackThemes.append(ThemePrivate::defaultTheme);
+
+    if (!fallbackThemes.contains("oxygen")) {
+        fallbackThemes.append("oxygen");
+    }
+
+    if (!fallbackThemes.contains(ThemePrivate::defaultTheme)) {
+        fallbackThemes.append(ThemePrivate::defaultTheme);
+    }
 
     QObject::disconnect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()),
                         q, SLOT(colorsChanged()));
