@@ -50,8 +50,12 @@ public:
     bool isEmpty() const;
     virtual QSize sizeHint() const;
 
+Q_SIGNALS:
+    void windowPreviewClicked(WId wid, Qt::MouseButtons buttons, Qt::KeyboardModifiers keys, const QPoint &screenPos);
+
 protected:
     void paintEvent(QPaintEvent *e);
+    void mousePressEvent(QMouseEvent *event);
 
 private:
     void readWindowSizes() const;

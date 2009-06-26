@@ -42,6 +42,16 @@ public:
     void moveTo(const QPoint &to);
     bool autohide() const;
     void setDirection(Plasma::Direction);
+    void linkActivated(const QString &anchor, QMouseEvent *event);
+
+Q_SIGNALS:
+    void activateWindowByWId(WId wid,
+                             Qt::MouseButtons buttons, Qt::KeyboardModifiers modifiers,
+                             const QPoint& screenPos);
+    void linkActivated(const QString &anchor, 
+                       Qt::MouseButtons buttons, Qt::KeyboardModifiers modifiers,
+                       const QPoint& screenPos);
+    void hovered(bool hovered);
 
 protected:
     void checkSize();
@@ -49,6 +59,8 @@ protected:
     void showEvent(QShowEvent *);
     void hideEvent(QHideEvent *);
     void mouseReleaseEvent(QMouseEvent *);
+    void enterEvent(QEvent *);
+    void leaveEvent(QEvent *);
 
     void resizeEvent(QResizeEvent *);
     void paintEvent(QPaintEvent *);

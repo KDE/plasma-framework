@@ -21,6 +21,7 @@
 #include "tooltip_p.h"
 #include "windowpreview_p.h"
 
+#include <QAbstractTextDocumentLayout>
 #include <QBitmap>
 #include <QGridLayout>
 #include <QLabel>
@@ -47,19 +48,20 @@ namespace Plasma {
 class TipTextWidget : public QWidget
 {
 public:
-    TipTextWidget(QWidget *parent)
+    TipTextWidget(ToolTip *parent)
         : QWidget(parent),
-          document(new QTextDocument(this))
+          m_toolTip(parent),
+          m_document(new QTextDocument(this))
     {
         //d->text->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
 //        QTextOption op;
 //        op.setWrapMode(QTextOption::WordWrap);
-//        document->setDefaultTextOption(op);
+//        m_document->setDefaultTextOption(op);
     }
 
     void setStyleSheet(const QString &css)
     {
-        document->setDefaultStyleSheet(css);
+        m_document->setDefaultStyleSheet(css);
     }
 
     void setContent(const ToolTipContent &data)
@@ -74,16 +76,17 @@ public:
         }
         html.append(data.subText());
 
-        document->clear();
-        data.registerResources(document);
-        document->setHtml("<p>" + html + "</p>");
-        document->adjustSize();
+        m_anchor.clear();
+        m_document->clear();
+        data.registerResources(m_document);
+        m_document->setHtml("<p>" + html + "</p>");
+        m_document->adjustSize();
         update();
     }
 
     QSize minimumSizeHint() const
     {
-        return document->size().toSize();
+        return m_document->size().toSize();
     }
 
     QSize maximumSizeHint() const
@@ -94,11 +97,34 @@ public:
     void paintEvent(QPaintEvent *event)
     {
         QPainter p(this);
-        document->drawContents(&p, event->rect());
+        m_document->drawContents(&p, event->rect());
+    }
+
+    void mousePressEvent(QMouseEvent *event)
+    {
+        QAbstractTextDocumentLayout *layout = m_document->documentLayout();
+        if (layout) {
+            m_anchor = layout->anchorAt(event->pos());
+        }
+    }
+
+    void mouseReleaseEvent(QMouseEvent *event)
+    {
+        QAbstractTextDocumentLayout *layout = m_document->documentLayout();
+        if (layout) {
+            QString anchor = layout->anchorAt(event->pos());
+            if (anchor == m_anchor) {
+                m_toolTip->linkActivated(m_anchor, event);
+            }
+
+            m_anchor.clear();
+        }
     }
 
 private:
-    QTextDocument *document;
+    ToolTip *m_toolTip;
+    QTextDocument *m_document;
+    QString m_anchor;
 };
 
 class ToolTipPrivate
@@ -126,28 +152,6 @@ class ToolTipPrivate
     bool autohide;
 };
 
-void ToolTip::showEvent(QShowEvent *e)
-{
-    checkSize();
-    QWidget::showEvent(e);
-    d->preview->setInfo();
-}
-
-void ToolTip::hideEvent(QHideEvent *e)
-{
-    QWidget::hideEvent(e);
-    if (d->source) {
-        QMetaObject::invokeMethod(d->source, "toolTipHidden");
-    }
-}
-
-void ToolTip::mouseReleaseEvent(QMouseEvent *event)
-{
-    if (rect().contains(event->pos())) {
-        hide();
-    }
-}
-
 ToolTip::ToolTip(QWidget *parent)
     : QWidget(parent),
       d(new ToolTipPrivate())
@@ -165,7 +169,8 @@ ToolTip::ToolTip(QWidget *parent)
     d->background->setEnabledBorders(FrameSvg::AllBorders);
     updateTheme();
     connect(d->background, SIGNAL(repaintNeeded()), this, SLOT(updateTheme()));
-
+    connect(d->preview, SIGNAL(windowPreviewClicked(WId,Qt::MouseButtons,Qt::KeyboardModifiers,QPoint)),
+            this, SIGNAL(activateWindowByWId(WId,Qt::MouseButtons,Qt::KeyboardModifiers,QPoint)));
     l->addWidget(d->preview, 0, 0, 1, 2);
     l->addWidget(d->imageLabel, 1, 0);
     l->addWidget(d->text, 1, 1);
@@ -175,6 +180,39 @@ ToolTip::ToolTip(QWidget *parent)
 ToolTip::~ToolTip()
 {
     delete d;
+}
+
+void ToolTip::showEvent(QShowEvent *e)
+{
+    checkSize();
+    QWidget::showEvent(e);
+    d->preview->setInfo();
+}
+
+void ToolTip::hideEvent(QHideEvent *e)
+{
+    QWidget::hideEvent(e);
+    if (d->source) {
+        QMetaObject::invokeMethod(d->source, "toolTipHidden");
+    }
+}
+
+void ToolTip::mouseReleaseEvent(QMouseEvent *event)
+{
+    if (rect().contains(event->pos()) &&
+        (!d->preview || !d->preview->geometry().contains(event->pos()))) {
+        hide();
+    }
+}
+
+void ToolTip::enterEvent(QEvent *)
+{
+    emit hovered(true);
+}
+
+void ToolTip::leaveEvent(QEvent *)
+{
+    emit hovered(false);
 }
 
 void ToolTip::checkSize()
@@ -325,6 +363,11 @@ bool ToolTip::autohide() const
 void ToolTip::setDirection(Plasma::Direction direction)
 {
     d->direction = direction;
+}
+
+void ToolTip::linkActivated(const QString &anchor, QMouseEvent *event)
+{
+    emit linkActivated(anchor, event->buttons(), event->modifiers(), event->globalPos());
 }
 
 void ToolTip::updateTheme()

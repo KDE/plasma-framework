@@ -47,7 +47,8 @@ class ToolTipContentPrivate
 {
 public:
     ToolTipContentPrivate()
-      : autohide(true)
+      : autohide(true),
+        clickable(false)
     {
     }
 
@@ -56,7 +57,8 @@ public:
     QPixmap image;
     QList<WId> windowsToPreview;
     QHash<QString, ToolTipResource> resources;
-    bool autohide;
+    bool autohide : 1;
+    bool clickable : 1;
 };
 
 ToolTipContent::ToolTipContent()
@@ -209,6 +211,16 @@ void ToolTipContent::registerResources(QTextDocument *document) const
 
         document->addResource(t, it.key(), r.data);
     }
+}
+
+void ToolTipContent::setClickable(bool clickable)
+{
+    d->clickable = clickable;
+}
+
+bool ToolTipContent::isClickable() const
+{
+    return d->clickable;
 }
 
 } // namespace Plasma

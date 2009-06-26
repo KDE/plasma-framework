@@ -62,9 +62,14 @@ public :
           tipWidget(new ToolTip(0)),
           state(ToolTipManager::Activated),
           isShown(false),
-          delayedHide(false)
+          delayedHide(false),
+          clickable(false)
     {
-
+        QObject::connect(tipWidget, SIGNAL(activateWindowByWId(WId,Qt::MouseButtons,Qt::KeyboardModifiers,QPoint)),
+                         q, SIGNAL(windowPreviewActivated(WId,Qt::MouseButtons,Qt::KeyboardModifiers,QPoint)));
+        QObject::connect(tipWidget, SIGNAL(linkActivated(QString,Qt::MouseButtons,Qt::KeyboardModifiers,QPoint)),
+                         q, SIGNAL(linkActivated(QString,Qt::MouseButtons,Qt::KeyboardModifiers,QPoint)));
+        QObject::connect(tipWidget, SIGNAL(hovered(bool)), q, SLOT(toolTipHovered(bool)));
     }
 
     ~ToolTipManagerPrivate()
@@ -81,9 +86,10 @@ public :
       * called when a widget inside the tooltip manager is deleted
       */
     void onWidgetDestroyed(QObject * object);
-    void removeWidget(QGraphicsWidget *w);
+    void removeWidget(QGraphicsWidget *w, bool canSafelyAccess = true);
     void clearTips();
     void doDelayedHide();
+    void toolTipHovered(bool);
 
     ToolTipManager *q;
     QGraphicsWidget *currentWidget;
@@ -94,6 +100,7 @@ public :
     ToolTipManager::State state;
     bool isShown : 1;
     bool delayedHide : 1;
+    bool clickable : 1;
 };
 
 //TOOLTIP IMPLEMENTATION
@@ -137,6 +144,10 @@ void ToolTipManager::show(QGraphicsWidget *widget)
         return;
     }
 
+    if (d->currentWidget) {
+        disconnect(this, 0, d->currentWidget, 0);
+    }
+
     d->hideTimer->stop();
     d->delayedHide = false;
     d->showTimer->stop();
@@ -160,13 +171,23 @@ void ToolTipManagerPrivate::doDelayedHide()
 {
     showTimer->stop();  // stop the timer to show the tooltip
     delayedHide = true;
-    hideTimer->start(250);
+
+    if (isShown && clickable) {
+        // leave enough time for user to choose
+        hideTimer->start(1000);
+    } else {
+        hideTimer->start(250);
+    }
 }
 
 void ToolTipManager::hide(QGraphicsWidget *widget)
 {
     if (d->currentWidget != widget) {
         return;
+    }
+
+    if (d->currentWidget) {
+        disconnect(this, 0, d->currentWidget, 0);
     }
 
     d->currentWidget = 0;
@@ -211,6 +232,7 @@ void ToolTipManager::setContent(QGraphicsWidget *widget, const ToolTipContent &d
             hide(widget);
         } else {
             d->delayedHide = data.autohide();
+            d->clickable = data.isClickable();
             if (d->delayedHide) {
                 //kDebug() << "starting authoide";
                 d->hideTimer->start(3000);
@@ -267,13 +289,16 @@ void ToolTipManagerPrivate::onWidgetDestroyed(QObject *object)
     // NOTE: DO NOT USE THE w VARIABLE FOR ANYTHING OTHER THAN COMPARING
     //       THE ADDRESS! ACTUALLY USING THE OBJECT WILL RESULT IN A CRASH!!!
     QGraphicsWidget *w = static_cast<QGraphicsWidget*>(object);
-    removeWidget(w);
+    removeWidget(w, false);
 }
 
-void ToolTipManagerPrivate::removeWidget(QGraphicsWidget *w)
+void ToolTipManagerPrivate::removeWidget(QGraphicsWidget *w, bool canSafelyAccess)
 {
-    // DO NOT ACCESS w HERE!! IT MAY BE IN THE PROCESS OF DELETION!
-    if (currentWidget == w) {
+    if (currentWidget == w && currentWidget) {
+        if (canSafelyAccess) {
+            QObject::disconnect(q, 0, currentWidget, 0);
+        }
+
         currentWidget = 0;
         showTimer->stop();  // stop the timer to show the tooltip
         tipWidget->setContent(0, ToolTipContent());
@@ -296,6 +321,7 @@ void ToolTipManagerPrivate::resetShownState()
             //One might have moused out and back in again
             delayedHide = false;
             isShown = false;
+            QObject::disconnect(q, 0, currentWidget, 0);
             currentWidget = 0;
             tipWidget->hide();
         }
@@ -336,6 +362,7 @@ void ToolTipManagerPrivate::showToolTip()
         tipWidget->setDirection(Plasma::locationToDirection(c->location()));
     }
 
+    clickable = tooltip.value().isClickable();
     tipWidget->setContent(currentWidget, tooltip.value());
     tipWidget->prepareShowing();
     if (q->m_corona) {
@@ -350,6 +377,19 @@ void ToolTipManagerPrivate::showToolTip()
         hideTimer->start(3000);
     } else {
         hideTimer->stop();
+    }
+}
+
+void ToolTipManagerPrivate::toolTipHovered(bool hovered)
+{
+    if (!clickable) {
+        return;
+    }
+
+    if (hovered) {
+        hideTimer->stop();
+    } else if (delayedHide) {
+        hideTimer->start(500);
     }
 }
 
@@ -394,11 +434,16 @@ bool ToolTipManager::eventFilter(QObject *watched, QEvent *event)
         }
 
         case QEvent::GraphicsSceneHoverLeave:
-            d->doDelayedHide();
+            if (d->currentWidget == widget) {
+                d->doDelayedHide();
+            }
             break;
 
         case QEvent::GraphicsSceneMousePress:
-            hide(widget);
+            if (d->currentWidget == widget) {
+                hide(widget);
+            }
+            break;
 
         case QEvent::GraphicsSceneWheel:
         default:

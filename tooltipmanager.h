@@ -22,7 +22,8 @@
 #ifndef PLASMA_TOOLTIP_MANAGER_H
 #define PLASMA_TOOLTIP_MANAGER_H
 
-//plasma
+#include <kurl.h>
+
 #include <plasma/plasma.h>
 #include <plasma/plasma_export.h>
 #include <plasma/tooltipcontent.h>
@@ -164,6 +165,27 @@ public:
      */
     ToolTipManager::State state() const;
 
+signals:
+    /**
+     * This signal is emitted when a window preview in the tooltip is clicked.
+     * @arg window the id of the window that was clicked
+     * @arg buttons the mouse buttons involved in the activation
+     * @arg modifiers the keyboard modifiers involved in the activation, if any
+     * @since 4.3
+     */
+    void windowPreviewActivated(WId window, Qt::MouseButtons buttons, Qt::KeyboardModifiers modifiers,
+                                const QPoint &screenPos);
+
+    /**
+     * This signal is emitted when a link in the tooltip is clicked.
+     * @arg anchor the achor text (e.g. url) that was clicked on
+     * @arg buttons the mouse buttons involved in the activation
+     * @arg modifiers the keyboard modifiers involved in the activation, if any
+     * @since 4.3
+     */
+    void linkActivated(const QString &anchor, Qt::MouseButtons buttons, Qt::KeyboardModifiers modifiers,
+                       const QPoint &screenPos);
+
 private:
     /**
      * Default constructor.
@@ -186,6 +208,7 @@ private:
     Corona* m_corona;
 
     Q_PRIVATE_SLOT(d, void showToolTip())
+    Q_PRIVATE_SLOT(d, void toolTipHovered(bool))
     Q_PRIVATE_SLOT(d, void resetShownState())
     Q_PRIVATE_SLOT(d, void onWidgetDestroyed(QObject*))
 };

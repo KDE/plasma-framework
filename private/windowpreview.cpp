@@ -22,6 +22,7 @@
 
 #include <QPainter>
 #include <QVarLengthArray>
+#include <QMouseEvent>
 
 #include <kwindowsystem.h>
 #include <kdebug.h>
@@ -217,11 +218,28 @@ void WindowPreview::paintEvent(QPaintEvent *e)
     m_background->getMargins(left, top, right, bottom);
 
     foreach (QRect r, m_thumbnailRects) {
-      kWarning()<<r;
+        //kWarning()<<r;
         m_background->resizeFrame(r.size()+QSize(left+right, top+bottom));
         m_background->paintFrame(&painter, r.topLeft()-pos()-QPoint(left,top));
     }
 #endif
+}
+
+void WindowPreview::mousePressEvent(QMouseEvent *event)
+{
+    QPoint p = event->pos();
+    WId wid = 0;
+
+    for (int i = 0; i < m_thumbnailRects.size(); ++i) {
+        if (m_thumbnailRects[i].contains(p)) {
+            wid = ids[i];
+            break;
+        }
+    }
+
+    if (wid) {
+        emit windowPreviewClicked(wid, event->buttons(), event->modifiers(), event->globalPos());
+    }
 }
 
 } // namespace Plasma
