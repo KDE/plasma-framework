@@ -353,6 +353,11 @@ void ToolTipManagerPrivate::showToolTip()
     QHash<QGraphicsWidget *, ToolTipContent>::const_iterator tooltip = tooltips.constFind(currentWidget);
 
     if (tooltip == tooltips.constEnd() || tooltip.value().isEmpty()) {
+        if (isShown) {
+            delayedHide = true;
+            hideTimer->start(250);
+        }
+
         return;
     }
 
