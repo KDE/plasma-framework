@@ -400,6 +400,13 @@ void DataEngine::updateAllSources()
     scheduleSourcesUpdated();
 }
 
+void DataEngine::forceImmediateUpdateOfAllVisualizations()
+{
+    foreach (DataContainer *source, d->sources) {
+        source->forceImmediateUpdate();
+    }
+}
+
 void DataEngine::setIcon(const QString &icon)
 {
     d->icon = icon;

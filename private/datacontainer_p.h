@@ -58,10 +58,11 @@ public:
                 uint ival, Plasma::IntervalAlignment align, bool immediateUpdate);
 
     int receiverCount() const;
-    bool isUnused();
+    bool isUnused() const;
 
     void checkAlignment();
     void checkQueueing();
+    void forceImmediateUpdate();
 
     DataContainer *dc;
     DataContainerPrivate *d;

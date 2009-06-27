@@ -131,6 +131,12 @@ class PLASMA_EXPORT DataContainer : public QObject
          **/
         void disconnectVisualization(QObject *visualization);
 
+        /**
+         * Forces immediate update signals to all visualizations
+         * @since 4.4
+         */
+        void forceImmediateUpdate();
+
     Q_SIGNALS:
         /**
          * Emitted when the data has been updated, allowing visualizations to

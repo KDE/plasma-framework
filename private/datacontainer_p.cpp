@@ -77,7 +77,7 @@ int SignalRelay::receiverCount() const
     return receivers(SIGNAL(dataUpdated(QString,Plasma::DataEngine::Data)));
 }
 
-bool SignalRelay::isUnused()
+bool SignalRelay::isUnused() const
 {
     return receivers(SIGNAL(dataUpdated(QString,Plasma::DataEngine::Data))) < 1;
 }
@@ -127,6 +127,12 @@ void SignalRelay::checkQueueing()
         // killTimer(m_timerId);
         // m_timerId = startTime(m_interval);
     }
+}
+
+void SignalRelay::forceImmediateUpdate()
+{
+    emit dataUpdated(dc->objectName(), d->data);
+    m_queued = false;
 }
 
 void SignalRelay::timerEvent(QTimerEvent *event)

@@ -174,6 +174,18 @@ void DataContainer::checkForUpdate()
     }
 }
 
+void DataContainer::forceImmediateUpdate()
+{
+    if (d->dirty) {
+        d->dirty = false;
+        emit dataUpdated(objectName(), d->data);
+    }
+
+    foreach (SignalRelay *relay, d->relays) {
+        relay->forceImmediateUpdate();
+    }
+}
+
 uint DataContainer::timeSinceLastUpdate() const
 {
     //FIXME: we still assume it's been <24h

@@ -443,6 +443,18 @@ class PLASMA_EXPORT DataEngine : public QObject
          */
         void updateAllSources();
 
+        /**
+         * Forces an immediate update to all connected sources, even those with
+         * timeouts that haven't yet expired. This should _only_ be used when
+         * there was no data available, e.g. due to network non-availability,
+         * and then it becomes available. Normal changes in data values due to
+         * calls to updateSource or in the natural progression of the monitored
+         * object (e.g. CPU heat) should not result in a call to this method!
+         *
+         * @since 4.4
+         */
+        void forceImmediateUpdateOfAllVisualizations();
+
     private:
         friend class DataEnginePrivate;
         friend class DataEngineScript;
