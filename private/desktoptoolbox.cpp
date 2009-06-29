@@ -309,7 +309,11 @@ void DesktopToolBox::assignColors()
 
 void DesktopToolBox::toolTriggered(bool)
 {
-    hideToolBox();
+    QAction *action = qobject_cast<QAction *>(sender());
+
+    if (!action || !action->autoRepeat()) {
+        hideToolBox();
+    }
 }
 
 void DesktopToolBox::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)

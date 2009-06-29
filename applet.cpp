@@ -1442,11 +1442,13 @@ KActionCollection* AppletPrivate::defaultActions(QObject *parent)
     actions->setConfigGroup("Shortcuts-Applet");
 
     KAction *configAction = actions->addAction("configure");
+    configAction->setAutoRepeat(false);
     configAction->setText(i18n("Widget Settings"));
     configAction->setIcon(KIcon("configure"));
     configAction->setShortcut(KShortcut("alt+d, s"));
 
     KAction *closeApplet = actions->addAction("remove");
+    closeApplet->setAutoRepeat(false);
     closeApplet->setText("Remove this Widget");
     closeApplet->setIcon(KIcon("edit-delete"));
     closeApplet->setShortcut(KShortcut("alt+d, r"));
