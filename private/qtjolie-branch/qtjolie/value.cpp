@@ -31,7 +31,7 @@ class ValuePrivate
 {
 public:
     QVariant content;
-    QMap<QByteArray, QList<Value> > children;
+    QMap<QByteArray, Value::List> children;
 };
 
 } // namespace Jolie
@@ -86,12 +86,12 @@ QList<QByteArray> Value::childrenNames() const
     return d->children.keys();
 }
 
-QList<Value> & Value::children(const QByteArray &name)
+Value::List &Value::children(const QByteArray &name)
 {
     return d->children[name];
 }
 
-const QList<Value> & Value::children(const QByteArray &name) const
+const Value::List &Value::children(const QByteArray &name) const
 {
     return d->children[name];
 }

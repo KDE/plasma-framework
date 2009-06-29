@@ -32,6 +32,8 @@ class ValuePrivate;
 class Q_DECL_EXPORT Value
 {
 public:
+    typedef QList<Value> List;
+
     Value();
 
     explicit Value(const QByteArray &content);
@@ -45,8 +47,8 @@ public:
     Value &operator=(const Value &other);
 
     QList<QByteArray> childrenNames() const;
-    QList<Value> &children(const QByteArray &name);
-    const QList<Value> &children(const QByteArray &name) const;
+    Value::List &children(const QByteArray &name);
+    const Value::List &children(const QByteArray &name) const;
 
     QByteArray toByteArray() const;
     qint32 toInt() const;
