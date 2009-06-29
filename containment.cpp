@@ -240,6 +240,7 @@ void ContainmentPrivate::addDefaultActions(KActionCollection *actions)
 
     //add our own actions
     KAction *appletBrowserAction = actions->addAction("add widgets");
+    appletBrowserAction->setAutoRepeat(false);
     appletBrowserAction->setText(i18n("Add Widgets..."));
     appletBrowserAction->setIcon(KIcon("list-add"));
     appletBrowserAction->setShortcut(KShortcut("alt+d, a"));
@@ -255,6 +256,7 @@ void ContainmentPrivate::addDefaultActions(KActionCollection *actions)
     action->setShortcut(KShortcut("alt+d, p"));
 
     KAction *zoomAction = actions->addAction("zoom in");
+    zoomAction->setAutoRepeat(false);
     zoomAction->setText(i18n("Zoom In"));
     zoomAction->setIcon(KIcon("zoom-in"));
     //two shortcuts because I hate ctrl-+ but others expect it

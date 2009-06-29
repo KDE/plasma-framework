@@ -98,6 +98,7 @@ public:
         KAction *action = actions.addAction("configure shortcuts");
         action->setText(i18n("Shortcut Settings"));
         action->setIcon(KIcon("configure"));
+        action->setAutoRepeat(false);
         QObject::connect(action, SIGNAL(triggered()),
                 q, SLOT(showShortcutConfig()));
         //action->setShortcut(KShortcut("ctrl+h"));
