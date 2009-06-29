@@ -27,6 +27,7 @@
 namespace Jolie
 {
 class MetaServicePrivate;
+class Value;
 
 class Q_DECL_EXPORT MetaService
 {
@@ -42,7 +43,7 @@ public:
     QStringList loadedServices() const;
     void unloadService(const QString &name);
 
-    QString addRedirection(const QString &name, const QString &url, const QString &inProtocol, const QString &outProtocol);
+    QString addRedirection(const QString &name, const QString &url, const Value &inProtocol, const Value &outProtocol);
 
 private:
     MetaServicePrivate * const d;

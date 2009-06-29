@@ -94,8 +94,8 @@ private slots:
 
         m_meta.addRedirection(QString::fromUtf8("Calculator"),
                               QString::fromUtf8("socket://localhost:8000/"),
-                              QString::fromUtf8("sodep"),
-                              QString::fromUtf8("soap"));
+                              Value("sodep"),
+                              Value("soap"));
     }
 
     void onAdded(int a, int b, int result)
