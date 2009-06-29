@@ -85,7 +85,7 @@ private slots:
         QCOMPARE(v2.toByteArray(), QByteArray());
     }
 
-    void shouldRespectByteArrayValues()
+    void shouldAutoConvertByteArrayValues()
     {
         Value v1("42"), v2;
 
@@ -100,8 +100,8 @@ private slots:
         QCOMPARE(v2.toByteArray(), QByteArray("42"));
         QVERIFY(v2.isByteArray());
 
-        QCOMPARE(v2.toInt(), 0);
-        QCOMPARE(v2.toDouble(), 0.0);
+        QCOMPARE(v2.toInt(), 42);
+        QCOMPARE(v2.toDouble(), 42.0);
     }
 
     void shouldHandleChildren()
