@@ -26,4 +26,5 @@ SODEP_UNIT_TESTS(
 SODEP_EXECUTABLE_TESTS(
   testprinter
   calculatorservice
+  trivialyahooclient
 )
