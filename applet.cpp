@@ -2108,6 +2108,7 @@ void Applet::timerEvent(QTimerEvent *event)
         d->modificationsTimerId = 0;
         // invalid group, will result in save using the default group
         KConfigGroup cg;
+
         save(cg);
         emit configNeedsSaving();
     }
@@ -2408,7 +2409,10 @@ KConfigGroup *AppletPrivate::mainConfigGroup()
         mainConfig = new KConfigGroup(&containmentConfig, QString::number(appletId));
     } else {
         KConfigGroup appletConfig;
-        if (q->containment()) {
+        Plasma::Applet *parentApplet = qobject_cast<Plasma::Applet *>(q->parent());
+        if (parentApplet && q->containment() && parentApplet != q->containment()) {
+            appletConfig = KConfigGroup(&parentApplet->config(), "Applets");
+        } else if (q->containment()) {
             appletConfig = q->containment()->config();
             appletConfig = KConfigGroup(&appletConfig, "Applets");
         } else {

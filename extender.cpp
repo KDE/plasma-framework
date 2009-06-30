@@ -662,6 +662,7 @@ void ExtenderPrivate::loadExtenderItems()
                 item = new ExtenderItem(q, extenderItemId.toInt());
             }
             sourceApplet->initExtenderItem(item);
+            item->d->sourceApplet = sourceApplet;
 
             if (temporarySourceApplet) {
                 delete sourceApplet;
