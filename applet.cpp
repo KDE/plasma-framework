@@ -1985,36 +1985,42 @@ QVariant Applet::itemChange(GraphicsItemChange change, const QVariant &value)
     }
         break;
     case ItemParentChange:
-        if (d->mainConfig && !d->isContainment &&
-            !containment() &&
-            dynamic_cast<Containment*>(value.value<QGraphicsItem *>())) {
-            // if this is an applet, and we've just been assigned to our first containment,
-            // but the applet did something stupid like ask for the config() object prior to
-            // this happening (e.g. inits ctor) then let's repair that situation for them.
-            kWarning() << "Configuration object was requested prior to init(), which is too early. "
-                          "Please fix this item:" << parentItem() << value.value<QGraphicsItem *>()
-                          << name();
-            KConfigGroup *old = d->mainConfig;
-            KConfigGroup appletConfig = dynamic_cast<Containment*>(value.value<QGraphicsItem *>())->config();
-            appletConfig = KConfigGroup(&appletConfig, "Applets");
-            d->mainConfig = new KConfigGroup(&appletConfig, QString::number(d->appletId));
-            old->copyTo(d->mainConfig);
-            old->deleteGroup();
-            delete old;
-        } else if (!d->isContainment) {
+        if (!d->isContainment) {
+            Containment *c = containment();
+            if (d->mainConfig && !c) {
+                kWarning() << "Configuration object was requested prior to init(), which is too early. "
+                    "Please fix this item:" << parentItem() << value.value<QGraphicsItem *>()
+                    << name();
+
+                Applet *newC = dynamic_cast<Applet*>(value.value<QGraphicsItem *>());
+                if (newC) {
+                    // if this is an applet, and we've just been assigned to our first containment,
+                    // but the applet did something stupid like ask for the config() object prior to
+                    // this happening (e.g. inits ctor) then let's repair that situation for them.
+                    KConfigGroup *old = d->mainConfig;
+                    KConfigGroup appletConfig = newC->config();
+                    appletConfig = KConfigGroup(&appletConfig, "Applets");
+                    d->mainConfig = new KConfigGroup(&appletConfig, QString::number(d->appletId));
+                    old->copyTo(d->mainConfig);
+                    old->deleteGroup();
+                    delete old;
+                }
+            }
+
             Plasma::PopupApplet *pa = qobject_cast<Plasma::PopupApplet *>(this);
-            if (!pa) {
-                break;
-            }
-            //reconnect of popupapplets with new containment geometryChanged
-            if (containment()) {
-                disconnect(containment(), SIGNAL(geometryChanged()), pa, SLOT(updateDialogPosition()));
-            }
-            Plasma::Containment *cont = dynamic_cast<Containment*>(value.value<QGraphicsItem *>());
-            if (cont) {
-                connect(cont, SIGNAL(geometryChanged()), pa, SLOT(updateDialogPosition()));
+            if (pa) {
+                //reconnect of popupapplets with new containment geometryChanged
+                if (c) {
+                    disconnect(containment(), SIGNAL(geometryChanged()), pa, SLOT(updateDialogPosition()));
+                }
+
+                Plasma::Containment *cont = dynamic_cast<Containment*>(value.value<QGraphicsItem *>());
+                if (cont) {
+                    connect(cont, SIGNAL(geometryChanged()), pa, SLOT(updateDialogPosition()));
+                }
             }
         }
+        break;
     case ItemPositionChange:
         return (immutability() == Mutable || isContainment() || formFactor() == Horizontal || formFactor() == Vertical) ? value : pos();
         break;
@@ -2409,11 +2415,18 @@ KConfigGroup *AppletPrivate::mainConfigGroup()
         mainConfig = new KConfigGroup(&containmentConfig, QString::number(appletId));
     } else {
         KConfigGroup appletConfig;
-        Plasma::Applet *parentApplet = qobject_cast<Plasma::Applet *>(q->parent());
-        if (parentApplet && q->containment() && parentApplet != q->containment()) {
-            appletConfig = KConfigGroup(&parentApplet->config(), "Applets");
-        } else if (q->containment()) {
-            appletConfig = q->containment()->config();
+
+        if (Containment *c = q->containment()) {
+            Plasma::Applet *parentApplet = qobject_cast<Applet *>(q->parent());
+            if (parentApplet && parentApplet != static_cast<Applet *>(c)) {
+                // this applet is nested inside another applet! use it's config
+                // as the parent group in the config
+                appletConfig = parentApplet->config();
+            } else {
+                // applet directly in a Containment, as usual
+                appletConfig = c->config();
+            }
+
             appletConfig = KConfigGroup(&appletConfig, "Applets");
         } else {
             kWarning() << "requesting config for" << q->name() << "without a containment!";
