@@ -29,6 +29,9 @@
 
 using namespace Jolie;
 
+Q_DECLARE_METATYPE(QAbstractSocket*)
+static int _jolie_socketDataTypeId = qRegisterMetaType<QAbstractSocket*>();
+
 ServerThread::ServerThread(quint16 port, ServerPrivate *server)
     : QThread(), m_port(port), m_serverSocket(0), m_server(server)
 {
