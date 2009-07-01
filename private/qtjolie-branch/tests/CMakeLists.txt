@@ -28,3 +28,12 @@ SODEP_EXECUTABLE_TESTS(
   calculatorservice
   trivialyahooclient
 )
+
+set(visiondriver_SRCS
+   visiondriver.cpp
+)
+kde4_add_ui_files(visiondriver_SRCS visiondriverwidget.ui)
+
+kde4_add_executable(visiondriver ${visiondriver_SRCS})
+target_link_libraries(visiondriver ${KDE4_KDEUI_LIBS} ${QT_QTNETWORK_LIBRARY} QtJolie)
+
