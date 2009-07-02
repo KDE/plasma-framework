@@ -622,6 +622,10 @@ void Animator::timerEvent(QTimerEvent *event)
     //kDebug() << "timeEvent, elapsed time: " << elapsed;
 
     foreach (AnimationState *state, d->animatedItems) {
+        if (d->animatedItemsToDelete.contains(state)) {
+            continue;
+        }
+
         if (state->currentInterval <= elapsed) {
             // we need to step forward!
             state->currentFrame +=
@@ -648,6 +652,10 @@ void Animator::timerEvent(QTimerEvent *event)
     }
 
     foreach (MovementState *state, d->movingItems) {
+        if (d->movingItemsToDelete.contains(state)) {
+            continue;
+        }
+
         if (state->currentInterval <= elapsed) {
             // we need to step forward!
             state->currentFrame +=
@@ -675,6 +683,10 @@ void Animator::timerEvent(QTimerEvent *event)
     }
 
     foreach (ElementAnimationState *state, d->animatedElements) {
+        if (d->animatedElementsToDelete.contains(state)) {
+            continue;
+        }
+
         if (state->currentFrame == state->frames) {
             //kDebug() << "skipping" << state->id << "as it is already at frame"
             //         << state->currentFrame << "of" << state->frames;
@@ -711,6 +723,10 @@ void Animator::timerEvent(QTimerEvent *event)
     }
 
     foreach (CustomAnimationState *state, d->customAnims) {
+        if (d->customAnimsToDelete.contains(state)) {
+            continue;
+        }
+
         if (state->currentInterval <= elapsed) {
             // advance the frame
             state->currentFrame +=
