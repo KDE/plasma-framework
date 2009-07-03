@@ -37,7 +37,8 @@ namespace Plasma
 {
 
 PlasmoidPackage::PlasmoidPackage(QObject *parent)
-    : Plasma::PackageStructure(parent, QString("Plasmoid"))
+    : Plasma::PackageStructure(parent, QString("Plasmoid")),
+      m_knsEngine(0)
 {
     addDirectoryDefinition("images", "images/", i18n("Images"));
     QStringList mimetypes;
@@ -66,6 +67,11 @@ PlasmoidPackage::PlasmoidPackage(QObject *parent)
     setRequired("mainscript", true);
 }
 
+PlasmoidPackage::~PlasmoidPackage()
+{
+    delete m_knsEngine;
+}
+
 void PlasmoidPackage::pathChanged()
 {
     KDesktopFile config(path() + "/metadata.desktop");
@@ -79,10 +85,20 @@ void PlasmoidPackage::pathChanged()
 
 void PlasmoidPackage::createNewWidgetBrowser(QWidget *parent)
 {
-    KNS::Engine *engine = new KNS::Engine(parent);
-    if (engine->init("plasmoids.knsrc")) {
-        engine->downloadDialog(this, SLOT(widgetBrowserFinished()));
-    }
+//FIXME: memory leak below: it creates a new KNS::Engine every time it's called
+//       however, due to issues in the KNS2 library, reusing the same engine causes crashes :(
+//    if (!m_knsEngine) {
+        m_knsEngine = new KNS::Engine(parent);
+        kDebug() << "creating new kns engine" << m_knsEngine;
+        if (!m_knsEngine->init("plasmoids.knsrc")) {
+            delete m_knsEngine;
+            m_knsEngine = 0;
+            return;
+        }
+//    }
+
+    kDebug() << "successful kns engine" << m_knsEngine;
+    m_knsEngine->downloadDialog(this, SLOT(widgetBrowserFinished()));
 }
 
 void PlasmoidPackage::widgetBrowserFinished()

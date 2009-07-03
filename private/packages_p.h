@@ -24,6 +24,11 @@
 #include "plasma/wallpaper.h"
 #include "plasma/plasma.h"
 
+namespace KNS
+{
+    class Engine;
+} // namespace KNS
+
 namespace Plasma
 {
 
@@ -34,6 +39,7 @@ class PlasmoidPackage : public PackageStructure
     Q_OBJECT
 public:
     explicit PlasmoidPackage(QObject *parent = 0);
+    ~PlasmoidPackage();
     void createNewWidgetBrowser(QWidget *parent = 0);
 
 protected:
@@ -41,6 +47,10 @@ protected:
 
 protected Q_SLOTS:
     void widgetBrowserFinished();
+    void deleteNewStuffEngine();
+
+private:
+    KNS::Engine *m_knsEngine;
 };
 
 class ThemePackage : public PackageStructure
