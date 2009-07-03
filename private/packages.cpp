@@ -72,6 +72,10 @@ PlasmoidPackage::~PlasmoidPackage()
     delete m_knsEngine;
 }
 
+void PlasmoidPackage::deleteNewStuffEngine()
+{
+}
+
 void PlasmoidPackage::pathChanged()
 {
     KDesktopFile config(path() + "/metadata.desktop");
