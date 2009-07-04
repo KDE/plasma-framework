@@ -1,3 +1,5 @@
+# APPLET
+
 set(simple_javascript_engine_SRCS
     simplejavascriptapplet.cpp
     appletinterface.cpp
@@ -30,6 +32,8 @@ target_link_libraries(plasma_appletscript_simple_javascript
 install(TARGETS plasma_appletscript_simple_javascript DESTINATION ${PLUGIN_INSTALL_DIR})
 install(FILES plasma-scriptengine-applet-simple-javascript.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
 
+# RUNNER
+
 set(javascript_runner_engine_SRCS
     javascriptrunner.cpp
 )
@@ -46,3 +50,20 @@ target_link_libraries(plasma_runnerscript_javascript
 
 install(TARGETS plasma_runnerscript_javascript DESTINATION ${PLUGIN_INSTALL_DIR})
 install(FILES plasma-scriptengine-runner-javascript.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+
+
+# DATAENGINE
+
+set(javascript_dataengine_engine_SRCS
+    javascriptdataengine.cpp
+)
+kde4_add_plugin(plasma_dataenginescript_javascript ${javascript_dataengine_engine_SRCS})
+
+target_link_libraries(plasma_dataenginescript_javascript
+                       ${KDE4_KDECORE_LIBS}
+                       ${KDE4_PLASMA_LIBS}
+                       ${QT_QTSCRIPT_LIBRARY})
+
+install(TARGETS plasma_dataenginescript_javascript DESTINATION ${PLUGIN_INSTALL_DIR})
+install(FILES plasma-scriptengine-dataengine-javascript.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+

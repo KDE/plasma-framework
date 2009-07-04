@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=JavaScript DataEngine
+X-KDE-ServiceTypes=Plasma/ScriptEngine
+Type=Service
+Icon=text-x-script
+X-KDE-Library=plasma_dataenginescript_javascript
+X-Plasma-API=javascript
+X-Plasma-ComponentTypes=DataEngine

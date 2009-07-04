@@ -73,5 +73,68 @@ int qScriptRegisterMapMetaType(
                                       qScriptValueToMap, prototype);
 }
 
+/*
+ * Workaround the fact that QtScripts handling of variants seems a bit broken.
+ */
+QScriptValue variantToScriptValue(QScriptEngine *engine, QVariant var)
+{
+    if (var.isNull()) {
+        return engine->nullValue();
+    }
+
+    switch(var.type())
+    {
+        case QVariant::Invalid:
+            return engine->nullValue();
+        case QVariant::Bool:
+            return QScriptValue(engine, var.toBool());
+        case QVariant::Date:
+            return engine->newDate(var.toDateTime());
+        case QVariant::DateTime:
+            return engine->newDate(var.toDateTime());
+        case QVariant::Double:
+            return QScriptValue(engine, var.toDouble());
+        case QVariant::Int:
+        case QVariant::LongLong:
+            return QScriptValue(engine, var.toInt());
+        case QVariant::String:
+            return QScriptValue(engine, var.toString());
+        case QVariant::Time: {
+            QDateTime t(QDate::currentDate(), var.toTime());
+            return engine->newDate(t);
+        }
+        case QVariant::UInt:
+            return QScriptValue(engine, var.toUInt());
+        default:
+            if (var.typeName() == QLatin1String("KUrl")) {
+                return QScriptValue(engine, var.value<KUrl>().prettyUrl());
+            } else if (var.typeName() == QLatin1String("QColor")) {
+                return QScriptValue(engine, var.value<QColor>().name());
+            } else if (var.typeName() == QLatin1String("QUrl")) {
+                return QScriptValue(engine, var.value<QUrl>().toString());
+            }
+            break;
+    }
+
+    return qScriptValueFromValue(engine, var);
+}
+QScriptValue qScriptValueFromData(QScriptEngine *engine, const DataEngine::Data &data)
+{
+    DataEngine::Data::const_iterator begin = data.begin();
+    DataEngine::Data::const_iterator end = data.end();
+    DataEngine::Data::const_iterator it;
+
+    QScriptValue obj = engine->newObject();
+
+    for (it = begin; it != end; ++it) {
+        //kDebug() << "setting" << it.key() << "to" << it.value();
+        QString prop = it.key();
+        prop.replace(' ', '_');
+        obj.setProperty(prop, variantToScriptValue(engine, it.value()));
+    }
+
+    return obj;
+}
+
 #endif // BIND_DATAENGINE_H
 

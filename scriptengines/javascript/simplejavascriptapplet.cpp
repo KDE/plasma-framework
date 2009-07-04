@@ -40,6 +40,7 @@
 using namespace Plasma;
 
 #include "bind_dataengine.h"
+#include "bind_i18n.h"
 
 Q_DECLARE_METATYPE(QPainter*)
 Q_DECLARE_METATYPE(QStyleOptionGraphicsItem*)
@@ -78,52 +79,6 @@ public:
     }
 };
 
-/*
- * Workaround the fact that QtScripts handling of variants seems a bit broken.
- */
-QScriptValue variantToScriptValue(QScriptEngine *engine, QVariant var)
-{
-    if (var.isNull()) {
-        return engine->nullValue();
-    }
-
-    switch(var.type())
-    {
-        case QVariant::Invalid:
-            return engine->nullValue();
-        case QVariant::Bool:
-            return QScriptValue(engine, var.toBool());
-        case QVariant::Date:
-            return engine->newDate(var.toDateTime());
-        case QVariant::DateTime:
-            return engine->newDate(var.toDateTime());
-        case QVariant::Double:
-            return QScriptValue(engine, var.toDouble());
-        case QVariant::Int:
-        case QVariant::LongLong:
-            return QScriptValue(engine, var.toInt());
-        case QVariant::String:
-            return QScriptValue(engine, var.toString());
-        case QVariant::Time: {
-            QDateTime t(QDate::currentDate(), var.toTime());
-            return engine->newDate(t);
-        }
-        case QVariant::UInt:
-            return QScriptValue(engine, var.toUInt());
-        default:
-            if (var.typeName() == QLatin1String("KUrl")) {
-                return QScriptValue(engine, var.value<KUrl>().prettyUrl());
-            } else if (var.typeName() == QLatin1String("QColor")) {
-                return QScriptValue(engine, var.value<QColor>().name());
-            } else if (var.typeName() == QLatin1String("QUrl")) {
-                return QScriptValue(engine, var.value<QUrl>().toString());
-            }
-            break;
-    }
-
-    return qScriptValueFromValue(engine, var);
-}
-
 QScriptValue qScriptValueFromControls(QScriptEngine *engine, const Controls &controls)
 {
     return QScriptValue(engine, controls);
@@ -154,24 +109,6 @@ void controlsFromScriptValue(const QScriptValue& obj, Controls &controls)
     if (flagValue&VideoWidget::OpenFile) {
         controls |= VideoWidget::OpenFile;
     }
-}
-
-QScriptValue qScriptValueFromData(QScriptEngine *engine, const DataEngine::Data &data)
-{
-    DataEngine::Data::const_iterator begin = data.begin();
-    DataEngine::Data::const_iterator end = data.end();
-    DataEngine::Data::const_iterator it;
-
-    QScriptValue obj = engine->newObject();
-
-    for (it = begin; it != end; ++it) {
-        //kDebug() << "setting" << it.key() << "to" << it.value();
-        QString prop = it.key();
-        prop.replace(' ', '_');
-        obj.setProperty(prop, variantToScriptValue(engine, it.value()));
-    }
-
-    return obj;
 }
 
 QScriptValue qScriptValueFromKConfigGroup(QScriptEngine *engine, const KConfigGroup &config)
@@ -431,10 +368,7 @@ void SimpleJavaScriptApplet::setupObjects()
     m_engine->setDefaultPrototype(qMetaTypeId<Service*>(), m_engine->newQObject(new DummyService()));
     m_engine->setDefaultPrototype(qMetaTypeId<ServiceJob*>(), m_engine->newQObject(new ServiceJob(QString(), QString(), QMap<QString, QVariant>())));
 
-    global.setProperty("i18n", m_engine->newFunction(SimpleJavaScriptApplet::jsi18n));
-    global.setProperty("i18nc", m_engine->newFunction(SimpleJavaScriptApplet::jsi18nc));
-    global.setProperty("i18np", m_engine->newFunction(SimpleJavaScriptApplet::jsi18np));
-    global.setProperty("i18ncp", m_engine->newFunction(SimpleJavaScriptApplet::jsi18ncp));
+    bindI18N(m_engine);
     global.setProperty("dataEngine", m_engine->newFunction(SimpleJavaScriptApplet::dataEngine));
     global.setProperty("service", m_engine->newFunction(SimpleJavaScriptApplet::service));
     qScriptRegisterMetaType<DataEngine::Data>(m_engine, qScriptValueFromData, 0, QScriptValue());
@@ -495,89 +429,6 @@ QString SimpleJavaScriptApplet::findDataResource(const QString &filename)
 void SimpleJavaScriptApplet::debug(const QString &msg)
 {
     kDebug() << msg;
-}
-
-#if 0
-QScriptValue SimpleJavaScriptApplet::dataEngine(QScriptContext *context, QScriptEngine *engine)
-{
-    if (context->argumentCount() != 1)
-        return context->throwError("dataEngine takes one argument");
-
-    QString dataEngine = context->argument(0).toString();
-
-    Script *self = engine->fromScriptValue<Script*>(context->thisObject());
-
-    DataEngine *data = self->dataEngine(dataEngine);
-    return engine->newQObject(data);
-}
-#endif
-
-QScriptValue SimpleJavaScriptApplet::jsi18n(QScriptContext *context, QScriptEngine *engine)
-{
-    if (context->argumentCount() < 1) {
-        return context->throwError(i18n("i18n() takes at least one argument"));
-    }
-
-    KLocalizedString message = ki18n(context->argument(0).toString().toUtf8());
-
-    int numArgs = context->argumentCount();
-    for (int i = 1; i < numArgs; ++i) {
-        message.subs(context->argument(i).toString());
-    }
-
-    return engine->newVariant(message.toString());
-}
-
-QScriptValue SimpleJavaScriptApplet::jsi18nc(QScriptContext *context, QScriptEngine *engine)
-{
-    if (context->argumentCount() < 2) {
-        return context->throwError(i18n("i18nc() takes at least two arguments"));
-    }
-
-    KLocalizedString message = ki18nc(context->argument(0).toString().toUtf8(),
-                                      context->argument(1).toString().toUtf8());
-
-    int numArgs = context->argumentCount();
-    for (int i = 2; i < numArgs; ++i) {
-        message.subs(context->argument(i).toString());
-    }
-
-    return engine->newVariant(message.toString());
-}
-
-QScriptValue SimpleJavaScriptApplet::jsi18np(QScriptContext *context, QScriptEngine *engine)
-{
-    if (context->argumentCount() < 2) {
-        return context->throwError(i18n("i18np() takes at least two arguments"));
-    }
-
-    KLocalizedString message = ki18np(context->argument(0).toString().toUtf8(),
-                                      context->argument(1).toString().toUtf8());
-
-    int numArgs = context->argumentCount();
-    for (int i = 2; i < numArgs; ++i) {
-        message.subs(context->argument(i).toString());
-    }
-
-    return engine->newVariant(message.toString());
-}
-
-QScriptValue SimpleJavaScriptApplet::jsi18ncp(QScriptContext *context, QScriptEngine *engine)
-{
-    if (context->argumentCount() < 3) {
-        return context->throwError(i18n("i18ncp() takes at least three arguments"));
-    }
-
-    KLocalizedString message = ki18ncp(context->argument(0).toString().toUtf8(),
-                                       context->argument(1).toString().toUtf8(),
-                                       context->argument(2).toString().toUtf8());
-
-    int numArgs = context->argumentCount();
-    for (int i = 3; i < numArgs; ++i) {
-        message.subs(context->argument(i).toString());
-    }
-
-    return engine->newVariant(message.toString());
 }
 
 QScriptValue SimpleJavaScriptApplet::dataEngine(QScriptContext *context, QScriptEngine *engine)
