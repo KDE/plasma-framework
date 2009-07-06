@@ -1,9 +1,11 @@
 [Desktop Entry]
 Name=JavaScript DataEngine
 Name[pt]=Motor de Dados do JavaScript
-Name[pt_BR]=Motor de Dados do JavaScript
+Name[pt_BR]=Mecanismo de dados JavaScript
+Name[sv]=Javascript-datagränssnitt
 Name[uk]=Рушій даних JavaScript
 Name[x-test]=xxJavaScript DataEnginexx
+Name[zh_TW]=JavaScript 資料引擎
 X-KDE-ServiceTypes=Plasma/ScriptEngine
 Type=Service
 Icon=text-x-script
