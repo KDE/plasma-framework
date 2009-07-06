@@ -148,7 +148,7 @@ bool ConfigLoaderHandler::endElement(const QString &namespaceURI,
     Q_UNUSED(qName)
 
 //     kDebug() << "ConfigLoaderHandler::endElement(" << localName << qName;
-    QString tag = localName.toLower();
+    const QString tag = localName.toLower();
     if (tag == "entry") {
         addItem();
         resetState();

@@ -59,7 +59,7 @@ void Context::setCurrentActivity(const QString &name)
     emit activityChanged(this);
     emit changed(this);
 
-    QStringList activities = listActivities();
+    const QStringList activities = listActivities();
     if (!activities.contains(name)) {
         createActivity(name);
     }

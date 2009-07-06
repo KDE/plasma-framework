@@ -981,9 +981,9 @@ KPluginInfo::List Containment::listContainmentsOfType(const QString &type,
 
 KPluginInfo::List Containment::listContainmentsForMimetype(const QString &mimetype)
 {
-    QString constraint = QString("'%1' in [X-Plasma-DropMimeTypes]").arg(mimetype);
+    const QString constraint = QString("'%1' in [X-Plasma-DropMimeTypes]").arg(mimetype);
     //kDebug() << mimetype << constraint;
-    KService::List offers = KServiceTypeTrader::self()->query("Plasma/Containment", constraint);
+    const KService::List offers = KServiceTypeTrader::self()->query("Plasma/Containment", constraint);
     return KPluginInfo::fromServices(offers);
 }
 
@@ -1091,7 +1091,7 @@ void ContainmentPrivate::dropData(QGraphicsSceneEvent *event)
 
     if (!appletMimetype.isEmpty() && mimeData->hasFormat(appletMimetype)) {
         QString data = mimeData->data(appletMimetype);
-        QStringList appletNames = data.split('\n', QString::SkipEmptyParts);
+        const QStringList appletNames = data.split('\n', QString::SkipEmptyParts);
 
         foreach (const QString &appletName, appletNames) {
             //kDebug() << "doing" << appletName;
@@ -1115,7 +1115,7 @@ void ContainmentPrivate::dropData(QGraphicsSceneEvent *event)
     } else if (KUrl::List::canDecode(mimeData)) {
         //TODO: collect the mimetypes of available script engines and offer
         //      to create widgets out of the matching URLs, if any
-        KUrl::List urls = KUrl::List::fromMimeData(mimeData);
+        const KUrl::List urls = KUrl::List::fromMimeData(mimeData);
         foreach (const KUrl &url, urls) {
             KMimeType::Ptr mime = KMimeType::findByUrl(url);
             QString mimeName = mime->name();
@@ -1454,8 +1454,8 @@ void Containment::setDrawWallpaper(bool drawWallpaper)
     d->drawWallpaper = drawWallpaper;
     if (drawWallpaper) {
         KConfigGroup cfg = config();
-        QString wallpaper = cfg.readEntry("wallpaperplugin", defaultWallpaper);
-        QString mode = cfg.readEntry("wallpaperpluginmode", defaultWallpaperMode);
+        const QString wallpaper = cfg.readEntry("wallpaperplugin", defaultWallpaper);
+        const QString mode = cfg.readEntry("wallpaperpluginmode", defaultWallpaperMode);
         setWallpaper(wallpaper, mode);
     } else {
         delete d->wallpaper;
