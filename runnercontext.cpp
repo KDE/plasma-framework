@@ -399,10 +399,10 @@ QueryMatch RunnerContext::match(const QString &id) const
 
 void RunnerContext::restore(const KConfigGroup &config)
 {
-    QStringList cfgList = config.readEntry("LaunchCounts", QStringList());
+    const QStringList cfgList = config.readEntry("LaunchCounts", QStringList());
 
-    QRegExp r("(\\d*) (.*)");
-    foreach (QString entry, cfgList) {
+    const QRegExp r("(\\d*) (.*)");
+    foreach (const QString& entry, cfgList) {
         r.indexIn(entry);
         int count = r.cap(1).toInt();
         QString id = r.cap(2);
