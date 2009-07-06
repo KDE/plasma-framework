@@ -223,7 +223,7 @@ void ThemePrivate::discardCache(bool recreateElementsCache)
     saveTimer->stop();
 
     svgElementsCache = 0;
-    QString svgElementsFile = KStandardDirs::locateLocal("cache", "plasma-svgelements-" + themeName);
+    const QString svgElementsFile = KStandardDirs::locateLocal("cache", "plasma-svgelements-" + themeName);
     if (!svgElementsFile.isEmpty()) {
         QFile f(svgElementsFile);
         f.remove();
@@ -320,7 +320,7 @@ PackageStructure::Ptr Theme::packageStructure()
 
 KPluginInfo::List Theme::listThemeInfo()
 {
-    QStringList themes = KGlobal::dirs()->findAllResources("data", "desktoptheme/*/metadata.desktop",
+    const QStringList themes = KGlobal::dirs()->findAllResources("data", "desktoptheme/*/metadata.desktop",
                                                            KStandardDirs::NoDuplicates);
     return KPluginInfo::fromFiles(themes);
 }
@@ -380,11 +380,11 @@ void ThemePrivate::setThemeName(const QString &tempThemeName, bool writeSettings
     themeName = theme;
 
     // load the color scheme config
-    QString colorsFile = KStandardDirs::locate("data", "desktoptheme/" + theme + "/colors");
+    const QString colorsFile = KStandardDirs::locate("data", "desktoptheme/" + theme + "/colors");
     //kDebug() << "we're going for..." << colorsFile << "*******************";
 
     // load the wallpaper settings, if any
-    QString metadataPath(KStandardDirs::locate("data", "desktoptheme/" + theme + "/metadata.desktop"));
+    const QString metadataPath(KStandardDirs::locate("data", "desktoptheme/" + theme + "/metadata.desktop"));
     KConfig metadata(metadataPath);
     KConfigGroup cg;
     if (metadata.hasGroup("Wallpaper")) {
