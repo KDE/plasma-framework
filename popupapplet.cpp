@@ -481,6 +481,17 @@ bool PopupApplet::isPopupShowing() const
     return d->dialog && d->dialog->isVisible();
 }
 
+ItemStatus PopupApplet::status()
+{
+    return d->itemStatus;
+}
+
+void PopupApplet::setStatus(ItemStatus status)
+{
+    d->itemStatus = status;
+    emit newStatus(status);
+}
+
 PopupAppletPrivate::PopupAppletPrivate(PopupApplet *applet)
         : q(applet),
           icon(0),
@@ -489,6 +500,7 @@ PopupAppletPrivate::PopupAppletPrivate(PopupApplet *applet)
           popupPlacement(Plasma::FloatingPopup),
           savedAspectRatio(Plasma::InvalidAspectRatioMode),
           timer(0),
+          itemStatus(UnknownStatus),
           popupLostFocus(false),
           passive(false)
 {

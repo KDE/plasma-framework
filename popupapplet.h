@@ -22,6 +22,7 @@
 
 #include <plasma/applet.h>
 #include <plasma/plasma_export.h>
+#include <plasma/plasma.h>
 
 class QGraphicsProxyWidget;
 class QGraphicsLinearLayout;
@@ -107,6 +108,9 @@ public:
      */
     bool isPopupShowing() const;
 
+    ItemStatus status();
+    void setStatus(ItemStatus stat);
+
 public Q_SLOTS:
     /**
      * Hides the popup.
@@ -141,6 +145,9 @@ protected:
     void dragEnterEvent(QGraphicsSceneDragDropEvent *event);
     void dragLeaveEvent(QGraphicsSceneDragDropEvent *event);
     void dropEvent(QGraphicsSceneDragDropEvent *event);
+
+Q_SIGNALS:
+    void newStatus(ItemStatus status);
 
 private:
     Q_PRIVATE_SLOT(d, void internalTogglePopup())

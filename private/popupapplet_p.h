@@ -20,6 +20,8 @@
 #ifndef POPUPAPPLET_P_H
 #define POPUPAPPLET_P_H
 
+#include <plasma/plasma.h>
+
 namespace Plasma
 {
 
@@ -46,6 +48,7 @@ public:
     Plasma::AspectRatioMode savedAspectRatio;
     QTimer *timer;
     QPoint clicked;
+    ItemStatus itemStatus;
     bool popupLostFocus : 1;
     bool passive : 1;
 };
