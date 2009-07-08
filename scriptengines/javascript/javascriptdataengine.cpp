@@ -153,7 +153,7 @@ QScriptValue JavaScriptDataEngine::jsRemoveAllData(QScriptContext *context, QScr
 QScriptValue JavaScriptDataEngine::jsRemoveData(QScriptContext *context, QScriptEngine *engine)
 {
     if (context->argumentCount() < 2) {
-        return context->throwError(i18n("removeData() takes at least two arguments (the source and key names"));
+        return context->throwError(i18n("removeData() takes at least two arguments (the source and key names)"));
     }
 
     QString source = context->argument(0).toString();
