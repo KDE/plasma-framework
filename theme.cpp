@@ -57,6 +57,7 @@ public:
         : q(theme),
           colorScheme(QPalette::Active, KColorScheme::Window, KSharedConfigPtr(0)),
           buttonColorScheme(QPalette::Active, KColorScheme::Button, KSharedConfigPtr(0)),
+          viewColorScheme(KColorScheme(QPalette::Active, KColorScheme::View, KSharedConfigPtr(0))),
           defaultWallpaperTheme(DEFAULT_WALLPAPER_THEME),
           defaultWallpaperSuffix(DEFAULT_WALLPAPER_SUFFIX),
           defaultWallpaperWidth(DEFAULT_WALLPAPER_WIDTH),
@@ -140,6 +141,7 @@ public:
     KSharedConfigPtr colors;
     KColorScheme colorScheme;
     KColorScheme buttonColorScheme;
+    KColorScheme viewColorScheme;
     KConfigGroup cfg;
     QFont generalFont;
     QString defaultWallpaperTheme;
@@ -253,6 +255,7 @@ void ThemePrivate::colorsChanged()
     discardCache(true);
     colorScheme = KColorScheme(QPalette::Active, KColorScheme::Window, colors);
     buttonColorScheme = KColorScheme(QPalette::Active, KColorScheme::Button, colors);
+    viewColorScheme = KColorScheme(QPalette::Active, KColorScheme::View, colors);
     emit q->themeChanged();
 }
 
@@ -439,6 +442,7 @@ void ThemePrivate::setThemeName(const QString &tempThemeName, bool writeSettings
 
     colorScheme = KColorScheme(QPalette::Active, KColorScheme::Window, colors);
     buttonColorScheme = KColorScheme(QPalette::Active, KColorScheme::Button, colors);
+    viewColorScheme = KColorScheme(QPalette::Active, KColorScheme::View, colors);
     hasWallpapers = KStandardDirs::exists(KStandardDirs::locateLocal("data", "desktoptheme/" + theme + "/wallpapers/"));
 
     if (isDefault && writeSettings) {
@@ -598,6 +602,12 @@ QColor Theme::color(ColorRole role) const
         case ButtonBackgroundColor:
             return d->buttonColorScheme.background(KColorScheme::ActiveBackground).color();
             break;
+
+        case LinkColor:
+            return d->viewColorScheme.foreground(KColorScheme::LinkText).color();
+
+        case VisitedLinkColor:
+            return d->viewColorScheme.foreground(KColorScheme::VisitedText).color();
     }
 
     return QColor();

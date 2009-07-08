@@ -76,9 +76,8 @@ public:
         p.setColor(QPalette::Normal, QPalette::WindowText, color);
         p.setColor(QPalette::Inactive, QPalette::WindowText, color);
 
-        KColorScheme colorScheme(QPalette::Active, KColorScheme::View, Plasma::Theme::defaultTheme()->colorScheme());
-        p.setColor(QPalette::Normal, QPalette::Link, colorScheme.foreground(KColorScheme::LinkText).color());
-        p.setColor(QPalette::Normal, QPalette::LinkVisited, colorScheme.foreground(KColorScheme::VisitedText).color());
+        p.setColor(QPalette::Normal, QPalette::Link, Theme::defaultTheme()->color(Theme::LinkColor));
+        p.setColor(QPalette::Normal, QPalette::LinkVisited, Theme::defaultTheme()->color(Theme::VisitedLinkColor));
         native->setPalette(p);
         native->setFont(Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont));
     }
