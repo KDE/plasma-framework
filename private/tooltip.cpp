@@ -158,7 +158,6 @@ ToolTip::ToolTip(QWidget *parent)
 {
     setAttribute(Qt::WA_TranslucentBackground);
     setWindowFlags(Qt::ToolTip);
-    QGridLayout *l = new QGridLayout;
     d->preview = new WindowPreview(this);
     d->text = new TipTextWidget(this);
     d->imageLabel = new QLabel(this);
@@ -171,10 +170,22 @@ ToolTip::ToolTip(QWidget *parent)
     connect(d->background, SIGNAL(repaintNeeded()), this, SLOT(updateTheme()));
     connect(d->preview, SIGNAL(windowPreviewClicked(WId,Qt::MouseButtons,Qt::KeyboardModifiers,QPoint)),
             this, SIGNAL(activateWindowByWId(WId,Qt::MouseButtons,Qt::KeyboardModifiers,QPoint)));
-    l->addWidget(d->preview, 0, 0, 1, 2);
-    l->addWidget(d->imageLabel, 1, 0);
-    l->addWidget(d->text, 1, 1);
-    setLayout(l);
+
+    QHBoxLayout *previewHBoxLayout = new QHBoxLayout;
+    previewHBoxLayout->addWidget(d->preview);
+
+    QHBoxLayout *iconTextHBoxLayout = new QHBoxLayout;
+    iconTextHBoxLayout->addWidget(d->imageLabel);    
+    iconTextHBoxLayout->setAlignment(d->imageLabel, Qt::AlignCenter);
+    iconTextHBoxLayout->addWidget(d->text);  
+    iconTextHBoxLayout->setAlignment(d->text, Qt::AlignLeft | Qt::AlignVCenter);
+    iconTextHBoxLayout->setStretchFactor(d->text, 1);
+
+    QVBoxLayout *mainLayout = new QVBoxLayout;
+    mainLayout->addLayout(previewHBoxLayout);
+    mainLayout->addLayout(iconTextHBoxLayout);
+
+    setLayout(mainLayout);
 }
 
 ToolTip::~ToolTip()
