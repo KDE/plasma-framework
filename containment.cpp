@@ -271,6 +271,10 @@ bool appletConfigLessThan(const KConfigGroup &c1, const KConfigGroup &c2)
     QPointF p2 = c2.readEntry("geometry", QRectF()).topLeft();
 
     if (!qFuzzyCompare(p1.x(), p2.x())) {
+        if (QApplication::layoutDirection() == Qt::RightToLeft) {
+            return p1.x() > p2.x();
+        }
+
         return p1.x() < p2.x();
     }
 
