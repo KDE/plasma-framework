@@ -144,6 +144,8 @@ public:
     // configuration
     KKeySequenceWidget *shortcutEditor; //TODO: subclass KConfigDialog and encapsulate this in there
 
+    ItemStatus itemStatus;
+
     // timerEvent bookkeeping
     int constraintsTimerId;
     int modificationsTimerId;
