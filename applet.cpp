@@ -1019,6 +1019,17 @@ QVariantList Applet::startupArguments() const
     return d->args;
 }
 
+ItemStatus Applet::status() const
+{
+    return d->itemStatus;
+}
+
+void Applet::setStatus(const ItemStatus status)
+{
+    d->itemStatus = status;
+    emit newStatus(status);
+}
+
 void Applet::flushPendingConstraintsEvents()
 {
     if (d->pendingConstraints == NoConstraint) {
@@ -2191,6 +2202,7 @@ AppletPrivate::AppletPrivate(KService::Ptr service, int uniqueID, Applet *applet
           actions(AppletPrivate::defaultActions(applet)),
           activationAction(0),
           shortcutEditor(0),
+          itemStatus(UnknownStatus),
           constraintsTimerId(0),
           modificationsTimerId(-1),
           hasConfigurationInterface(false),

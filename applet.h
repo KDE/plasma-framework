@@ -687,6 +687,11 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          */
         void appletDestroyed(Plasma::Applet *applet);
 
+        /**
+         * Emitted when the applet status changes
+         * @since 4.4
+         */
+        void newStatus(Plasma::ItemStatus status);
 
     public Q_SLOTS:
         /**
@@ -759,6 +764,18 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          * @since KDE4.3
          */
         QVariantList startupArguments() const;
+
+        /**
+         * @return the status of the applet
+         * @since 4.4
+         */
+        ItemStatus status() const;
+
+        /**
+         * sets the status for this applet
+         * @since 4.4
+         */
+        void setStatus(const ItemStatus stat);
 
     protected:
         /**

@@ -251,14 +251,15 @@ enum MessageButton {
 Q_DECLARE_FLAGS(MessageButtons, MessageButton)
 
 /**
- * Status of an applet...
- * FIXME: this will have to move in PopupApplet? or find an api-less way?
+ * Status of an applet
+ * @since 4.3
  */
 enum ItemStatus {
     UnknownStatus = 0,
     PassiveStatus = 1,
     ActiveStatus = 2,
-    NeedsAttentionStatus = 3
+    NeedsAttentionStatus = 3,
+    AcceptingInputStatus = 4
 };
 Q_ENUMS(ItemStatus)
 
