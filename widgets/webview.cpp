@@ -32,6 +32,7 @@
 #include <QtCore/QTimer>
 
 #include <kdebug.h>
+#include <accessmanager.h>
 
 #include "plasma/widgets/webview.h"
 
@@ -74,6 +75,7 @@ WebView::WebView(QGraphicsItem *parent)
     setFlags(QGraphicsItem::ItemIsFocusable);
 
     QWebPage *page = new QWebPage(this);
+    page->setNetworkAccessManager(new KIO::AccessManager(page));
     QPalette palette = qApp->palette();
     palette.setBrush(QPalette::Base, Qt::transparent);
     page->setPalette(palette);
