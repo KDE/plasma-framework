@@ -1146,12 +1146,6 @@ void Applet::flushPendingConstraintsEvents()
             } else if (formFactor() == Vertical) {
                 setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed));
             }
-        } else {
-            if (formFactor() == Horizontal) {
-                setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding));
-            } else if (formFactor() == Vertical) {
-                setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred));
-            }
         }
         updateGeometry();
     }
