@@ -362,7 +362,7 @@ QTransform ToolBox::viewTransform() const
     return d->viewTransform;
 }
 
-void ToolBox::setViewTransform(QTransform transform)
+void ToolBox::setViewTransform(const QTransform &transform)
 {
     if (transform.isScaling()) {
         d->toolbar = true;

@@ -108,6 +108,8 @@ class EmptyGraphicsItem : public QGraphicsItem
 
         void setRect(const QRectF &rect)
         {
+            if (m_rect == rect)
+                return;
             //kDebug() << "setting rect to" << rect;
             prepareGeometryChange();
             m_rect = rect;
@@ -510,9 +512,8 @@ void DesktopToolBox::showToolBox()
 {
     setFlag(ItemIgnoresTransformations, isToolbar());
 
-    if (showing() && !isToolbar()) {
+    if (showing() && !isToolbar())
         return;
-    }
 
     // put tools 5px from icon edge
     const int iconWidth = KIconLoader::SizeMedium;
@@ -695,7 +696,6 @@ void DesktopToolBox::showToolBox()
             }
         }
     }
-
 
     d->toolBacker->setRect(backerRect);
     d->toolBacker->show();

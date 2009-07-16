@@ -84,7 +84,7 @@ public:
     void setIsToolbar(bool toolbar);
 
     QTransform viewTransform() const;
-    void setViewTransform(QTransform transforn);
+    void setViewTransform(const QTransform &transform);
 
     void save(KConfigGroup &cg) const;
     void load(const KConfigGroup &containmentGroup = KConfigGroup());
