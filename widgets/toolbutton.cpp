@@ -66,11 +66,27 @@ public:
 
         KMimeType::Ptr mime = KMimeType::findByPath(absImagePath);
         QPixmap pm(q->size().toSize());
+        pm.fill(Qt::transparent);
 
-        if (mime->is("image/svg+xml")) {
+        if (mime->is("image/svg+xml") || mime->is("image/svg+xml-compressed")) {
             svg = new Svg();
             QPainter p(&pm);
-            svg->paint(&p, pm.rect());
+
+            svg->setImagePath(absImagePath);
+
+            if (!svgElement.isNull() && svg->hasElement(svgElement)) {
+                QSizeF elementSize = svg->elementSize(svgElement);
+                float scale = pm.width() / qMax(elementSize.width(), elementSize.height());
+
+                svg->resize(svg->size() * scale);
+
+                QRectF elementRect(QPointF(0,0), svg->elementSize(svgElement));
+                elementRect.moveCenter(q->rect().center());
+                svg->paint(&p, elementRect, svgElement);
+            } else {
+                svg->resize(pm.size());
+                svg->paint(&p, pm.rect());
+            }
         } else {
             pm = QPixmap(absImagePath);
         }
@@ -93,6 +109,7 @@ public:
     QString imagePath;
     QString absImagePath;
     Svg *svg;
+    QString svgElement;
 };
 
 void ToolButtonPrivate::syncActiveRect()
@@ -219,6 +236,12 @@ void ToolButton::setImage(const QString &path)
     }
 
     d->setPixmap(this);
+}
+
+void ToolButton::setImage(const QString &path, const QString &elementid)
+{
+    d->svgElement = elementid;
+    setImage(path);
 }
 
 void ToolButton::setIcon(const QIcon &icon)
