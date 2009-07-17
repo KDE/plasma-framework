@@ -44,6 +44,8 @@ public:
     Plasma::IconWidget *icon;
     QPointer<Plasma::Dialog> dialog;
     QGraphicsProxyWidget *proxy;
+    QWidget *widget;
+    QGraphicsWidget *graphicsWidget;
     Plasma::PopupPlacement popupPlacement;
     Plasma::AspectRatioMode savedAspectRatio;
     QTimer *timer;
