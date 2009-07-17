@@ -76,6 +76,7 @@ public:
      * depending on the form factor of the applet.
      */
     virtual QWidget *widget();
+    void setWidget(QWidget * widget);
 
     /**
      * Implement either this function or widget().
@@ -83,6 +84,7 @@ public:
      * depending on the form factor of the applet.
      */
     virtual QGraphicsWidget *graphicsWidget();
+    void setGraphicsWidget(QGraphicsWidget * widget);
 
     /**
      * @return the placement of the popup relating to the icon

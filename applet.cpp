@@ -666,11 +666,15 @@ void Applet::constraintsEvent(Plasma::Constraints constraints)
 
 void Applet::initExtenderItem(ExtenderItem *item)
 {
-    kWarning() << "Missing implementation of initExtenderItem in the applet "
-               << item->config().readEntry("SourceAppletPluginName", "")
-               << "!\n Any applet that uses extenders should implement initExtenderItem to "
-               << "instantiate a widget. Destroying the item...";
-    item->destroy();
+    if (d->script) {
+        emit initScriptExtenderItem(item);
+    } else {
+        kWarning() << "Missing implementation of initExtenderItem in the applet "
+                   << item->config().readEntry("SourceAppletPluginName", "")
+                   << "!\n Any applet that uses extenders should implement initExtenderItem to "
+                   << "instantiate a widget. Destroying the item...";
+        item->destroy();
+    }
 }
 
 Extender *Applet::extender() const

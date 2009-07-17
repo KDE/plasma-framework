@@ -112,12 +112,26 @@ QIcon PopupApplet::popupIcon() const
 
 QWidget *PopupApplet::widget()
 {
-    return 0;
+    return d->widget;
+}
+
+void PopupApplet::setWidget(QWidget * widget)
+{
+    d->widget = widget;
 }
 
 QGraphicsWidget *PopupApplet::graphicsWidget()
 {
-    return static_cast<Applet*>(this)->d->extender;
+    if (d->graphicsWidget != 0) {
+        return d->graphicsWidget;
+    } else {
+        return static_cast<Applet*>(this)->d->extender;
+    }
+}
+
+void PopupApplet::setGraphicsWidget(QGraphicsWidget * graphicsWidget)
+{
+    d->graphicsWidget = graphicsWidget;
 }
 
 void PopupAppletPrivate::checkExtenderAppearance(Plasma::FormFactor f)
@@ -486,6 +500,8 @@ PopupAppletPrivate::PopupAppletPrivate(PopupApplet *applet)
           icon(0),
           dialog(0),
           proxy(0),
+          widget(0),
+          graphicsWidget(0),
           popupPlacement(Plasma::FloatingPopup),
           savedAspectRatio(Plasma::InvalidAspectRatioMode),
           timer(0),
