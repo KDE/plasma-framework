@@ -385,7 +385,7 @@ QFont Meter::labelFont(int index) const
     return d->fonts[index];
 }
 
-void Meter::setLabelAlignment(int index, Qt::Alignment alignment)
+void Meter::setLabelAlignment(int index, const Qt::Alignment alignment)
 {
     while (d->alignments.count() <= index) {
         d->alignments << alignment;
