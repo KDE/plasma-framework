@@ -696,7 +696,7 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         /**
          * Emitted when an ExtenderItem in a scripting applet needs to be initialized
          */
-        void initScriptExtenderItem(Plasma::ExtenderItem *item);
+        void extenderItemRestored(Plasma::ExtenderItem *item);
 
     public Q_SLOTS:
         /**

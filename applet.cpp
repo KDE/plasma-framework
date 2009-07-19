@@ -667,7 +667,7 @@ void Applet::constraintsEvent(Plasma::Constraints constraints)
 void Applet::initExtenderItem(ExtenderItem *item)
 {
     if (d->script) {
-        emit initScriptExtenderItem(item);
+        emit extenderItemRestored(item);
     } else {
         kWarning() << "Missing implementation of initExtenderItem in the applet "
                    << item->config().readEntry("SourceAppletPluginName", "")
