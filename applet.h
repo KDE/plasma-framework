@@ -324,7 +324,7 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         QStringList customCategories();
 
         /**
-         * Attempts to load an apppet from a package
+         * Attempts to load an applet from a package
          *
          * Returns a pointer to the applet if successful.
          * The caller takes responsibility for the applet, including
@@ -560,7 +560,7 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         virtual void removeAssociatedWidget(QWidget *widget);
 
         /**
-         * Gets called when and extender item has to be initialized after a plasma restart. If you
+         * Gets called when an extender item has to be initialized after a plasma restart. If you
          * create ExtenderItems in your applet, you should implement this function to again create
          * the widget that should be shown in this extender item. This function might look something
          * like this:
