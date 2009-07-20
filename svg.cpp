@@ -238,7 +238,7 @@ class SvgPrivate
             }
 
             if (cacheRendering) {
-                actualTheme()->insertIntoCache(id, p);
+                actualTheme()->insertIntoCache(id, p, QString::number((int)q)+elementId);
             }
 
             return p;

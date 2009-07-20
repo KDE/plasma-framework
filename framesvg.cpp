@@ -621,13 +621,13 @@ void FrameSvgPrivate::cacheFrame(const QString &prefixToSave)
 
     //kDebug()<<"Saving to cache frame"<<id;
 
-    Theme::defaultTheme()->insertIntoCache(id, frame->cachedBackground);
+    Theme::defaultTheme()->insertIntoCache(id, frame->cachedBackground, QString::number((int)q)+prefixToSave);
 
     //insert overlay
     id = QString::fromLatin1("overlay_%7_%6_%5_%4_%3_%2_%1_").
         arg(overlayPos.y()).arg(overlayPos.x()).arg(frame->enabledBorders).arg(size.width()).arg(size.height()).arg(prefixToSave).arg(q->imagePath());
 
-    Theme::defaultTheme()->insertIntoCache(id, frame->cachedBackground);
+    Theme::defaultTheme()->insertIntoCache(id, frame->cachedBackground, QString::number((int)q)+prefixToSave+"overlay");
 }
 
 void FrameSvgPrivate::updateSizes()
