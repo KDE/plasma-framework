@@ -23,6 +23,7 @@
 #include <QFile>
 #include <QFileInfo>
 #include <QTimer>
+#include <QPair>
 #ifdef Q_WS_X11
 #include <QX11Info>
 #endif
@@ -152,6 +153,8 @@ public:
     KSharedConfigPtr svgElementsCache;
     QHash<QString, QSet<QString> > invalidElements;
     QHash<QString, QPixmap> pixmapsToCache;
+    QHash<QString, QString> keysToCache;
+    QHash<QString, QString> idsToCache;
     QTimer *saveTimer;
 
 #ifdef Q_WS_X11
@@ -238,16 +241,15 @@ void ThemePrivate::discardCache(bool recreateElementsCache)
 
 void ThemePrivate::scheduledCacheUpdate()
 {
-    //kDebug()<< "Saving to cache:";
-    QHash<QString, QPixmap>::const_iterator it = pixmapsToCache.constBegin();
-
-    while (it != pixmapsToCache.constEnd()) {
-        //kDebug()<< "Saving item to cache: " << it.key();
-        pixmapCache->insert(it.key(), it.value());
-        ++it;
+    QHashIterator<QString, QPixmap> it(pixmapsToCache);
+    while (it.hasNext()) {
+        it.next();
+        pixmapCache->insert(idsToCache[it.key()], it.value());
     }
 
     pixmapsToCache.clear();
+    keysToCache.clear();
+    idsToCache.clear();
 }
 
 void ThemePrivate::colorsChanged()
@@ -672,8 +674,13 @@ bool Theme::useNativeWidgetStyle() const
 bool Theme::findInCache(const QString &key, QPixmap &pix)
 {
     if (d->useCache()) {
-        if (d->pixmapsToCache.contains(key)) {
-            pix = d->pixmapsToCache.value(key);
+        if (!d->keysToCache.contains(key)) {
+            return false;
+        }
+
+        const QString id = d->keysToCache[key];
+        if (d->pixmapsToCache.contains(id)) {
+            pix = d->pixmapsToCache.value(id);
             return true;
         }
 
@@ -696,8 +703,22 @@ bool Theme::findInCache(const QString &key, QPixmap &pix, unsigned int lastModif
 void Theme::insertIntoCache(const QString& key, const QPixmap& pix)
 {
     if (d->useCache()) {
-        d->pixmapsToCache.insert(key, pix);
-        d->saveTimer->start(500);
+        d->pixmapCache->insert(key, pix);
+    }
+}
+
+void Theme::insertIntoCache(const QString& key, const QPixmap& pix, const QString& id)
+{
+    if (d->useCache()) {
+        d->pixmapsToCache.insert(id, pix);
+
+        if (d->idsToCache.contains(id)) {
+            d->keysToCache.remove(d->idsToCache[id]);
+        }
+
+        d->keysToCache.insert(key, id);
+        d->idsToCache.insert(id, key);
+        d->saveTimer->start(600);
     }
 }
 
