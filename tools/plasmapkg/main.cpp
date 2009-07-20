@@ -163,7 +163,9 @@ int main(int argc, char **argv)
             installer->setServicePrefix(servicePrefix);
         }
 
-        if (args->isSet("packageroot")) {
+        if (args->isSet("packageroot") && args->isSet("global")) {
+            KCmdLineArgs::usageError(i18nc("The user entered conflicting options packageroot and global, this is the error message telling the user he can use only one", "The packageroot and global options conflict each other, please select only one."));
+        } else if (args->isSet("packageroot")) {
             packageRoot = args->getOption("packageroot");
         } else if (args->isSet("global")) {
             packageRoot = KStandardDirs::locate("data", packageRoot);
