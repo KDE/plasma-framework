@@ -37,6 +37,7 @@
 #include <QtGui/QGraphicsWidget>
 #include <QApplication>
 #include <QDesktopWidget>
+#include <QVarLengthArray>
 
 #include <kdebug.h>
 #include <kwindowsystem.h>
@@ -553,36 +554,86 @@ Dialog::ResizeCorners Dialog::resizeCorners() const
 
 void Dialog::animatedHide(Plasma::Direction direction)
 {
-    if (d->hideAnimId) {
-        // already hiding/showing
+    if (!KWindowSystem::compositingActive()) {
+        hide();
         return;
     }
 
-    if (KWindowSystem::compositingActive() && d->view) {
-        //TODO: implement for the QWidget scenario too
-        d->hideDirection = direction;
-        d->hideAnimId = Animator::self()->customAnimation(20, 200, Animator::EaseOutCurve,
-                                                          this, "progressHide");
-    } else {
-        hide();
+#ifdef Q_WS_X11
+    //set again the atom, the location could have changed
+    QDesktopWidget *desktop = QApplication::desktop();
+    QRect avail = desktop->availableGeometry(desktop->screenNumber(pos()));
+
+    Display *dpy = QX11Info::display();
+    Atom atom = XInternAtom( dpy, "_KDE_SLIDE", False );
+    QVarLengthArray<long, 1024> data(2);
+
+    switch (direction) {
+    case Left:
+        data[0] = avail.left();
+        data[1] = 0;
+        break;
+    case Up:
+        data[0] = avail.top();
+        data[1] = 1;
+        break;
+    case Right:
+        data[0] = avail.right();
+        data[1] = 2;
+        break;
+    case Down:
+    default:
+        data[0] = avail.bottom();
+        data[1] = 3;
     }
+
+    XChangeProperty(dpy, winId(), atom, atom, 32, PropModeReplace,
+                reinterpret_cast<unsigned char *>(data.data()), data.size());
+#endif
+
+    hide();
 }
 
 void Dialog::animatedShow(Plasma::Direction direction)
 {
-    if (d->hideAnimId) {
-        // already hiding/showing
+    if (!KWindowSystem::compositingActive()) {
+        show();
         return;
     }
 
-    if (KWindowSystem::compositingActive() && d->view) {
-        //TODO: implement for the QWidget scenario too
-        d->hideDirection = direction;
-        d->hideAnimId = Animator::self()->customAnimation(5, 100, Animator::EaseInCurve,
-                                                          this, "progressShow");
-    } else {
-        show();
+#ifdef Q_WS_X11
+    QDesktopWidget *desktop = QApplication::desktop();
+    QRect avail = desktop->availableGeometry(desktop->screenNumber(pos()));
+
+    Display *dpy = QX11Info::display();
+    Atom atom = XInternAtom( dpy, "_KDE_SLIDE", False );
+    QVarLengthArray<long, 1024> data(2);
+
+    switch (direction) {
+    case Right:
+        data[0] = avail.left();
+        data[1] = 0;
+        break;
+    case Down:
+        data[0] = avail.top();
+        data[1] = 1;
+        break;
+    case Left:
+        data[0] = avail.right();
+        data[1] = 2;
+        break;
+    case Up:
+    default:
+        data[0] = avail.bottom();
+        data[1] = 3;
     }
+
+    XChangeProperty(dpy, winId(), atom, atom, 32, PropModeReplace,
+                reinterpret_cast<unsigned char *>(data.data()), data.size());
+#endif
+
+    show();
+
 }
 
 void DialogPrivate::progressShow(qreal amount)
