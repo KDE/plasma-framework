@@ -217,11 +217,11 @@ void ScrollWidget::resizeEvent(QGraphicsSceneResizeEvent *event)
         return;
     }
 
-    d->widget->resize(d->scrollingWidget->size());
-
     d->adjustScrollbars();
 
     d->adjustClipping();
+
+    d->widget->resize(d->scrollingWidget->size());
 
     QGraphicsWidget::resizeEvent(event);
 }
