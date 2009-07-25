@@ -227,6 +227,8 @@ void AbstractRunner::clearActions()
 
 QList<QAction*> AbstractRunner::actionsFromMenu(QMenu *menu, const QString &prefix)
 {
+    Q_ASSERT(menu);
+
     QList<QAction*> ret;
     foreach (QAction *action, menu->actions()) {
         if (QMenu *submenu = action->menu()) {
