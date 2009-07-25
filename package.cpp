@@ -31,8 +31,10 @@
 #include <kio/deletejob.h>
 #include <kio/jobclasses.h>
 #include <kio/job.h>
+#include <kmimetype.h>
 #include <kplugininfo.h>
 #include <kstandarddirs.h>
+#include <ktar.h>
 #include <ktempdir.h>
 #include <ktemporaryfile.h>
 #include <kzip.h>
@@ -253,28 +255,42 @@ bool Package::installPackage(const QString &package,
             path.append('/');
         }
     } else {
-        KZip archive(package);
-        if (!archive.open(QIODevice::ReadOnly)) {
+        KArchive *archive = 0;
+        KMimeType::Ptr mimetype = KMimeType::findByPath(package);
+
+        if (mimetype->is("application/zip")) {
+            archive = new KZip(package);
+        } else if (mimetype->is("application/x-compressed-tar") ||
+                   mimetype->is("application/x-tar")) {
+            archive = new KTar(package);
+        } else {
+            kWarning() << "Could not open package file, unsupported archive format:" << package << mimetype->name();
+            return false;
+        }
+
+        if (!archive->open(QIODevice::ReadOnly)) {
             kWarning() << "Could not open package file:" << package;
             return false;
         }
 
         archivedPackage = true;
-        const KArchiveDirectory *source = archive.directory();
-        const KArchiveEntry *metadata = source->entry("metadata.desktop");
-
-        if (!metadata) {
-            kWarning() << "No metadata file in package" << package;
-            return false;
-        }
-
         path = tempdir.name();
+
+        const KArchiveDirectory *source = archive->directory();
         source->copyTo(path);
+
+        QStringList entries = source->entries();
+        if (entries.count() == 1) {
+            const KArchiveEntry *entry = source->entry(entries[0]);
+            if (entry->isDirectory()) {
+                path.append(entry->name()).append("/");
+            }
+        }
     }
 
     QString metadataPath = path + "metadata.desktop";
     if (!QFile::exists(metadataPath)) {
-        kWarning() << "No metadata file in package" << package;
+        kWarning() << "No metadata file in package" << package << metadataPath;
         return false;
     }
 
@@ -322,34 +338,36 @@ bool Package::installPackage(const QString &package,
         tempdir.setAutoRemove(false);
     }
 
-    // and now we register it as a service =)
-    QString metaPath = targetName + "/metadata.desktop";
-    KDesktopFile df(metaPath);
-    KConfigGroup cg = df.desktopGroup();
+    if (!servicePrefix.isEmpty()) {
+        // and now we register it as a service =)
+        QString metaPath = targetName + "/metadata.desktop";
+        KDesktopFile df(metaPath);
+        KConfigGroup cg = df.desktopGroup();
 
-    // Q: should not installing it as a service disqualify it?
-    // Q: i don't think so since KServiceTypeTrader may not be
-    // used by the installing app in any case, and the
-    // package is properly installed - aseigo
+        // Q: should not installing it as a service disqualify it?
+        // Q: i don't think so since KServiceTypeTrader may not be
+        // used by the installing app in any case, and the
+        // package is properly installed - aseigo
 
-    //TODO: reduce code duplication with registerPackage below
+        //TODO: reduce code duplication with registerPackage below
 
-    QString serviceName = servicePrefix + meta.pluginName();
+        QString serviceName = servicePrefix + meta.pluginName();
 
-    QString service = KStandardDirs::locateLocal("services", serviceName + ".desktop");
-    KIO::FileCopyJob *job = KIO::file_copy(metaPath, service, -1, KIO::HideProgressInfo);
-    if (job->exec()) {
-        // the icon in the installed file needs to point to the icon in the
-        // installation dir!
-        QString iconPath = targetName + '/' + cg.readEntry("Icon");
-        QFile icon(iconPath);
-        if (icon.exists()) {
-            KDesktopFile df(service);
-            KConfigGroup cg = df.desktopGroup();
-            cg.writeEntry("Icon", iconPath);
+        QString service = KStandardDirs::locateLocal("services", serviceName + ".desktop");
+        KIO::FileCopyJob *job = KIO::file_copy(metaPath, service, -1, KIO::HideProgressInfo);
+        if (job->exec()) {
+            // the icon in the installed file needs to point to the icon in the
+            // installation dir!
+            QString iconPath = targetName + '/' + cg.readEntry("Icon");
+            QFile icon(iconPath);
+            if (icon.exists()) {
+                KDesktopFile df(service);
+                KConfigGroup cg = df.desktopGroup();
+                cg.writeEntry("Icon", iconPath);
+            }
+        } else {
+            kWarning() << "Could not register package as service (this is not necessarily fatal):" << serviceName << " : " << job->errorString();
         }
-    } else {
-        kWarning() << "Could not register package as service (this is not necessarily fatal):" << serviceName << " : " << job->errorString();
     }
 
     return true;
