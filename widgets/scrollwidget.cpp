@@ -81,6 +81,9 @@ public:
             layout->addItem(horizontalScrollBar, 1, 0);
             horizontalScrollBar->show();
         }
+
+        layout->activate();
+        widget->resize(scrollingWidget->size().width(), widget->size().height());
     }
 
     void verticalScroll(int value)
@@ -220,8 +223,6 @@ void ScrollWidget::resizeEvent(QGraphicsSceneResizeEvent *event)
     d->adjustScrollbars();
 
     d->adjustClipping();
-
-    d->widget->resize(d->scrollingWidget->size());
 
     QGraphicsWidget::resizeEvent(event);
 }
