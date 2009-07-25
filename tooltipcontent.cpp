@@ -145,7 +145,7 @@ QPixmap ToolTipContent::image() const
     return d->image;
 }
 
-void ToolTipContent::setWindowToPreview(const WId id)
+void ToolTipContent::setWindowToPreview(WId id)
 {
     d->windowsToPreview.clear();
     d->windowsToPreview.append(id);
