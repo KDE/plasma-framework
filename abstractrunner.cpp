@@ -21,6 +21,7 @@
 
 #include <QAction>
 #include <QHash>
+#include <QMenu>
 #include <QMutex>
 #include <QMutexLocker>
 #include <QTimer>
@@ -222,6 +223,37 @@ void AbstractRunner::clearActions()
 {
     qDeleteAll(d->actions);
     d->actions.clear();
+}
+
+QList<QAction*> AbstractRunner::actionsFromMenu(QMenu *menu, const QString &prefix)
+{
+    QList<QAction*> ret;
+    foreach (QAction *action, menu->actions()) {
+        if (QMenu *submenu = action->menu()) {
+            //Flatten hierarchy and prefix submenu text to all actions in submenu
+            ret << actionsFromMenu(submenu, action->text());
+        } else if (!action->isSeparator() && action->isEnabled()) {
+            QString text = action->text();
+            if (action->isCheckable()) {
+                if (action->isChecked()) {
+                    text = QString("(%1) %2").arg(QChar(0x2613)).arg(text);
+                } else {
+                    text = QString("( ) %1").arg(text);
+                }
+            }
+
+            if (!prefix.isEmpty()) {
+                text = QString("%1: %2").arg(prefix).arg(text);
+            }
+            text = text.replace(QRegExp("&([\\S])"), "\\1");
+
+            QAction *a = new QAction(action->icon(), text, this);
+
+            connect(a, SIGNAL(triggered(bool)), action, SIGNAL(triggered(bool)));
+            ret << a;
+        }
+    }
+    return ret;
 }
 
 bool AbstractRunner::hasRunOptions()

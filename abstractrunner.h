@@ -353,6 +353,18 @@ class PLASMA_EXPORT AbstractRunner : public QObject
         void clearActions();
 
         /**
+         * Returns a list of all actions in the given QMenu
+         * This method flattens the hierarchy of the menu by prefixing the
+         * text of all actions in a submenu with the submenu title.
+         *
+         * @param menu the QMenu storing the actions
+         * @param prefix text to display before the text of all actions in the menu
+         *
+         * @since 4.4
+         */
+        QList<QAction*> actionsFromMenu(QMenu *menu, const QString &prefix = QString());
+
+        /**
          * Adds a registed syntax that this runner understands. This is used to
          * display to the user what this runner can understand and how it can be
          * used.
