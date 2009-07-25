@@ -1750,7 +1750,7 @@ KPluginInfo::List Applet::listAppletInfo(const QString &category,
     QString constraint;
 
     if (parentApp.isEmpty()) {
-        constraint.append("not exist [X-KDE-ParentApp]");
+        constraint.append("(not exist [X-KDE-ParentApp] or [X-KDE-ParentApp] == '')");
     } else {
         constraint.append("[X-KDE-ParentApp] == '").append(parentApp).append("'");
     }
@@ -1821,7 +1821,7 @@ QStringList Applet::listCategories(const QString &parentApp, bool visibleOnly)
     QString constraint = "exist [X-KDE-PluginInfo-Category]";
 
     if (parentApp.isEmpty()) {
-        constraint.append(" and not exist [X-KDE-ParentApp]");
+        constraint.append("and (not exist [X-KDE-ParentApp] or [X-KDE-ParentApp] == '')");
     } else {
         constraint.append(" and [X-KDE-ParentApp] == '").append(parentApp).append("'");
     }
