@@ -179,6 +179,15 @@ QString ExtenderItem::name() const
 
 void ExtenderItem::setWidget(QGraphicsItem *widget)
 {
+    if (d->widget) {
+        d->widget->removeSceneEventFilter(this);
+    }
+
+    if (!widget) {
+        d->widget = 0;
+        return;
+    }
+
     widget->setParentItem(this);
     widget->installSceneEventFilter(this);
 
