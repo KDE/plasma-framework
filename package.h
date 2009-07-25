@@ -143,7 +143,9 @@ class PLASMA_EXPORT Package
          * @param packageRoot path to the directory where the package should be
          *                    installed to
          * @param servicePrefix the prefix for the desktop file, so as not to interfere
-         *                      with unrelated services (eg: "plasma-applet-")
+         *                      with unrelated services (eg: "plasma-applet-"). If no prefix
+         *                      is set (e.g. a QString() is passed in), then the package will NOT
+         *                      be registered as a service
          * @return true on successful installation, false otherwise
          **/
         static bool installPackage(const QString &package,
