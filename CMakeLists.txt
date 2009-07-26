@@ -103,6 +103,7 @@ set(plasma_LIB_SRCS
     version.cpp
     view.cpp
     wallpaper.cpp
+    windoweffects.cpp
     widgets/checkbox.cpp
     widgets/combobox.cpp
     widgets/flashinglabel.cpp
@@ -211,6 +212,7 @@ set(plasma_LIB_INCLUDES
     extendergroup.h
     extenderitem.h
     paintutils.h
+    windoweffects.h
     framesvg.h
     plasma.h
     plasma_export.h

@@ -120,6 +120,7 @@ class PLASMA_EXPORT Dialog : public QWidget
         bool eventFilter(QObject *watched, QEvent *event);
         void hideEvent(QHideEvent *event);
         void showEvent(QShowEvent *event);
+        void focusInEvent(QFocusEvent *event);
         void mouseMoveEvent(QMouseEvent *event);
         void mousePressEvent(QMouseEvent *event);
         void mouseReleaseEvent(QMouseEvent *event);

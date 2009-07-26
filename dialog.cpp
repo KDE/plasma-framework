@@ -49,6 +49,7 @@
 #include "plasma/private/extender_p.h"
 #include "plasma/framesvg.h"
 #include "plasma/theme.h"
+#include "plasma/windoweffects.h"
 
 #ifdef Q_WS_X11
 #include <X11/Xlib.h>
@@ -526,6 +527,19 @@ void Dialog::showEvent(QShowEvent * event)
     emit dialogVisible(true);
 }
 
+void Dialog::focusInEvent(QFocusEvent *event)
+{
+    Q_UNUSED(event)
+
+    if (d->view) {
+        d->view->setFocus();
+    }
+
+    if (d->graphicsWidget) {
+        d->graphicsWidget->setFocus();
+    }
+}
+
 void Dialog::moveEvent(QMoveEvent *event)
 {
     Q_UNUSED(event)
@@ -559,37 +573,26 @@ void Dialog::animatedHide(Plasma::Direction direction)
         return;
     }
 
-#ifdef Q_WS_X11
-    //set again the atom, the location could have changed
-    QDesktopWidget *desktop = QApplication::desktop();
-    QRect avail = desktop->availableGeometry(desktop->screenNumber(pos()));
-
-    Display *dpy = QX11Info::display();
-    Atom atom = XInternAtom( dpy, "_KDE_SLIDE", False );
-    QVarLengthArray<long, 1024> data(2);
+    Location location = Desktop;
 
     switch (direction) {
-    case Left:
-        data[0] = avail.left();
-        data[1] = 0;
-        break;
-    case Up:
-        data[0] = avail.top();
-        data[1] = 1;
+    case Down:
+        location = BottomEdge;
         break;
     case Right:
-        data[0] = avail.right();
-        data[1] = 2;
+        location = RightEdge;
         break;
-    case Down:
+    case Left:
+        location = LeftEdge;
+        break;
+    case Up:
+        location = TopEdge;
+        break;
     default:
-        data[0] = avail.bottom();
-        data[1] = 3;
+        break;
     }
 
-    XChangeProperty(dpy, winId(), atom, atom, 32, PropModeReplace,
-                reinterpret_cast<unsigned char *>(data.data()), data.size());
-#endif
+    Plasma::WindowEffects::setSlidingWindow(winId(), location);
 
     hide();
 }
@@ -601,36 +604,27 @@ void Dialog::animatedShow(Plasma::Direction direction)
         return;
     }
 
-#ifdef Q_WS_X11
-    QDesktopWidget *desktop = QApplication::desktop();
-    QRect avail = desktop->availableGeometry(desktop->screenNumber(pos()));
-
-    Display *dpy = QX11Info::display();
-    Atom atom = XInternAtom( dpy, "_KDE_SLIDE", False );
-    QVarLengthArray<long, 1024> data(2);
+    //copied to not add new api
+    Location location = Desktop;
 
     switch (direction) {
-    case Right:
-        data[0] = avail.left();
-        data[1] = 0;
-        break;
-    case Down:
-        data[0] = avail.top();
-        data[1] = 1;
+    case Up:
+        location = BottomEdge;
         break;
     case Left:
-        data[0] = avail.right();
-        data[1] = 2;
+        location = RightEdge;
         break;
-    case Up:
+    case Right:
+        location = LeftEdge;
+        break;
+    case Down:
+        location = TopEdge;
+        break;
     default:
-        data[0] = avail.bottom();
-        data[1] = 3;
+        break;
     }
 
-    XChangeProperty(dpy, winId(), atom, atom, 32, PropModeReplace,
-                reinterpret_cast<unsigned char *>(data.data()), data.size());
-#endif
+    Plasma::WindowEffects::setSlidingWindow(winId(), location);
 
     show();
 
