@@ -53,19 +53,21 @@ void runKbuildsycoca()
     dbus.call(QDBus::NoBlock, "recreate");
 }
 
-QStringList packages(const QString& type)
+QStringList packages(const QStringList& types)
 {
     QStringList result;
-    KService::List services = KServiceTypeTrader::self()->query("Plasma/" + type);
-    foreach(const KService::Ptr &service, services) {
-        result << service->property("X-KDE-PluginInfo-Name", QVariant::String).toString();
+    foreach (const QString& type, types) {
+        KService::List services = KServiceTypeTrader::self()->query("Plasma/" + type);
+        foreach(const KService::Ptr &service, services) {
+            result << service->property("X-KDE-PluginInfo-Name", QVariant::String).toString();
+        }
     }
     return result;
 }
 
-void listPackages(const QString& type)
+void listPackages(const QStringList& types)
 {
-    QStringList list = packages(type);
+    QStringList list = packages(types);
     list.sort();
     foreach(const QString& package, list) {
         output(package);
@@ -114,13 +116,14 @@ int main(int argc, char **argv)
     const QString type = args->getOption("type").toLower();
     QString packageRoot = type;
     QString servicePrefix;
-    QString pluginType;
+    QStringList pluginTypes;
     Plasma::PackageStructure *installer = 0;
 
     if (type == i18nc("package type", "plasmoid") || type == "plasmoid") {
         packageRoot = "plasma/plasmoids/";
         servicePrefix = "plasma-applet-";
-        pluginType = "Applet";
+        pluginTypes << "Applet";
+        pluginTypes << "PopupApplet";
     } else if (type == i18nc("package type", "theme") || type == "theme") {
         packageRoot = "desktoptheme/";
     } else if (type == i18nc("package type", "wallpaper") || type == "wallpaper") {
@@ -128,11 +131,11 @@ int main(int argc, char **argv)
     } else if (type == i18nc("package type", "dataengine") || type == "dataengine") {
         packageRoot = "plasma/dataengines/";
         servicePrefix = "plasma-dataengine-";
-        pluginType = "DataEngine";
+        pluginTypes << "DataEngine";
     } else if (type == i18nc("package type", "runner") || type == "runner") {
         packageRoot = "plasma/runners/";
         servicePrefix = "plasma-runner-";
-        pluginType = "Runner";
+        pluginTypes << "Runner";
     } else {
         QString constraint = QString("'%1' == [X-KDE-PluginInfo-Name]").arg(packageRoot);
         KService::List offers = KServiceTypeTrader::self()->query("Plasma/PackageStructure", constraint);
@@ -151,11 +154,11 @@ int main(int argc, char **argv)
             return 1;
         }
         packageRoot = installer->defaultPackageRoot();
-        pluginType = installer->type();
+        pluginTypes << installer->type();
     }
 
     if (args->isSet("list")) {
-        listPackages(pluginType);
+        listPackages(pluginTypes);
     } else {
         // install, remove or upgrade
         if (!installer) {
@@ -201,7 +204,7 @@ int main(int argc, char **argv)
                 pluginName = metadata.pluginName();
             }
 
-            QStringList installed = packages(pluginType);
+            QStringList installed = packages(pluginTypes);
             if (installed.contains(pluginName)) {
                 if (installer->uninstallPackage(pluginName, packageRoot)) {
                     output(i18n("Successfully removed %1", pluginName));
