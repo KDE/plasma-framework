@@ -163,7 +163,7 @@ class PLASMA_EXPORT Extender : public QGraphicsWidget
         bool isEmpty() const;
 
         /**
-         * Use this function to instruct the extender on how to render it's items. Usually you will
+         * Use this function to instruct the extender on how to render its items. Usually you will
          * want to call this function in your applet's constraintsEvent, allthough this is already
          * done for you when using PopupApplet as base class for your applet. Defaults to NoBorders.
          * @param appearance the way this extender should look.
@@ -233,8 +233,8 @@ class PLASMA_EXPORT Extender : public QGraphicsWidget
         /**
          * This function get's called on every item to determine which background border's to
          * render.
-         * @param item the item for which it's position or extender has changed.
-         * @return the borders that have to be enabled on it's background.
+         * @param item the item for which its position or extender has changed.
+         * @return the borders that have to be enabled on its background.
          */
         virtual FrameSvg::EnabledBorders enabledBordersForItem(ExtenderItem *item) const;
 

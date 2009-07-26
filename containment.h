@@ -424,7 +424,7 @@ class PLASMA_EXPORT Containment : public Applet
     public Q_SLOTS:
         /**
          * Informs the Corona as to what position it is in. This is informational
-         * only, as the Corona doesn't change it's actual location. This is,
+         * only, as the Corona doesn't change its actual location. This is,
          * however, passed on to Applets that may be managed by this Corona.
          *
          * @param location the new location of this Corona

@@ -28,7 +28,7 @@ namespace Plasma
 /**
  * This class is used as a 'host' for detached extender items. When an extender item is dropped
  * somewhere, this applet is added at the location where the item is dropped, and the item is added
- * to it's extender.
+ * to its extender.
  */
 class ExtenderApplet : public Plasma::PopupApplet
 {
