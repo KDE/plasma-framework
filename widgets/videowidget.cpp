@@ -162,10 +162,12 @@ void VideoWidgetPrivate::stateChanged(Phonon::State newState, Phonon::State oldS
 {
     Q_UNUSED(oldState)
 
-    if (newState == Phonon::PlayingState) {
-        playPauseButton->setIcon("media-playback-pause");
-    } else {
-        playPauseButton->setIcon("media-playback-start");
+    if (playPauseButton) {
+        if (newState == Phonon::PlayingState) {
+            playPauseButton->setIcon("media-playback-pause");
+        } else {
+            playPauseButton->setIcon("media-playback-start");
+        }
     }
 }
 
