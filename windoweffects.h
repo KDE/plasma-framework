@@ -38,9 +38,18 @@ namespace Plasma
 
 /**
  * Namespace for all window effects for Plasma/KWin interaction
+ * @since 4.4
  */
 namespace WindowEffects
 {
+    /**
+     * Mark a window as sliding from screen edge
+     *
+     * @arg id of the window on which we want to apply the effect
+     * @arg location edge of the screen from which we want the slifing effect.
+     *               Desktop and FLoating won't have effect.
+     * @since 4.4
+     */
     PLASMA_EXPORT void setSlidingWindow(WId id, Plasma::Location location);
 }
 
