@@ -113,6 +113,7 @@ public:
 
     // applet attributes
     Applet::BackgroundHints backgroundHints;
+    Applet::BackgroundHints preferredBackgroundHints;
     Plasma::AspectRatioMode aspectRatioMode;
     ImmutabilityType immutability;
 
