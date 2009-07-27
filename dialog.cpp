@@ -574,25 +574,30 @@ void Dialog::animatedHide(Plasma::Direction direction)
     }
 
     Location location = Desktop;
+    int offset = 0;
 
     switch (direction) {
     case Down:
         location = BottomEdge;
+        offset = geometry().bottom();
         break;
     case Right:
         location = RightEdge;
+        offset = geometry().left();
         break;
     case Left:
         location = LeftEdge;
+        offset = geometry().right();
         break;
     case Up:
         location = TopEdge;
+        offset = geometry().top();
         break;
     default:
         break;
     }
 
-    Plasma::WindowEffects::setSlidingWindow(winId(), location);
+    Plasma::WindowEffects::setSlidingWindow(winId(), location, offset);
 
     hide();
 }
@@ -606,25 +611,30 @@ void Dialog::animatedShow(Plasma::Direction direction)
 
     //copied to not add new api
     Location location = Desktop;
+    int offset = 0;
 
     switch (direction) {
     case Up:
         location = BottomEdge;
+        offset = geometry().bottom();
         break;
     case Left:
         location = RightEdge;
+        offset = geometry().left();
         break;
     case Right:
         location = LeftEdge;
+        offset = geometry().right();
         break;
     case Down:
         location = TopEdge;
+        offset = geometry().top();
         break;
     default:
         break;
     }
 
-    Plasma::WindowEffects::setSlidingWindow(winId(), location);
+    Plasma::WindowEffects::setSlidingWindow(winId(), location, offset);
 
     show();
 
