@@ -835,6 +835,7 @@ void Applet::setBackgroundHints(const BackgroundHints hints)
     }
 
     d->backgroundHints = hints;
+    d->preferredBackgroundHints = hints;
 
     //Draw the standard background?
     if ((hints & StandardBackground) || (hints & TranslucentBackground)) {
@@ -1119,11 +1120,11 @@ void Applet::flushPendingConstraintsEvents()
     if (c & Plasma::FormFactorConstraint) {
         FormFactor f = formFactor();
         if (!d->isContainment && f != Vertical && f != Horizontal) {
-            setBackgroundHints(d->backgroundHints | StandardBackground);
-        } else if(d->backgroundHints & StandardBackground) {
-            setBackgroundHints(d->backgroundHints ^ StandardBackground);
-        } else if(d->backgroundHints & TranslucentBackground) {
-            setBackgroundHints(d->backgroundHints ^ TranslucentBackground);
+            setBackgroundHints(d->preferredBackgroundHints);
+        } else {
+            BackgroundHints hints = d->preferredBackgroundHints;
+            setBackgroundHints(NoBackground);
+            d->preferredBackgroundHints = hints;
         }
 
         if (d->failed) {
@@ -2173,6 +2174,7 @@ AppletPrivate::AppletPrivate(KService::Ptr service, int uniqueID, Applet *applet
         : appletId(uniqueID),
           q(applet),
           backgroundHints(Applet::NoBackground),
+          preferredBackgroundHints(Applet::StandardBackground),
           aspectRatioMode(Plasma::KeepAspectRatio),
           immutability(Mutable),
           appletDescription(service),
