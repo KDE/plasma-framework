@@ -21,6 +21,7 @@
 
 #include <QVarLengthArray>
 
+#include <KWindowSystem>
 
 namespace Plasma
 {
@@ -57,6 +58,42 @@ void slideWindow(WId id, Plasma::Location location, int offset)
         XDeleteProperty(dpy, id, atom);
     } else {
         XChangeProperty(dpy, id, atom, atom, 32, PropModeReplace,
+                        reinterpret_cast<unsigned char *>(data.data()), data.size());
+    }
+#endif
+}
+
+void slideWindow(QWidget *widget, Plasma::Location location)
+{
+#ifdef Q_WS_X11
+    Display *dpy = QX11Info::display();
+    Atom atom = XInternAtom( dpy, "_KDE_SLIDE", False );
+    QVarLengthArray<long, 1024> data(2);
+
+    switch (location) {
+    case LeftEdge:
+        data[0] = widget->geometry().left();
+        data[1] = 0;
+        break;
+    case TopEdge:
+        data[0] = widget->geometry().top();
+        data[1] = 1;
+        break;
+    case RightEdge:
+        data[0] = widget->geometry().right();
+        data[1] = 2;
+        break;
+    case BottomEdge:
+        data[0] = widget->geometry().bottom();
+        data[1] = 3;
+    default:
+        break;
+    }
+
+    if (location == Desktop || location == Floating) {
+        XDeleteProperty(dpy, widget->effectiveWinId(), atom);
+    } else {
+        XChangeProperty(dpy, widget->effectiveWinId(), atom, atom, 32, PropModeReplace,
                         reinterpret_cast<unsigned char *>(data.data()), data.size());
     }
 #endif

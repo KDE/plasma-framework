@@ -23,6 +23,8 @@
 #include <QtGui/QApplication>
 #include <QtGui/QDesktopWidget>
 
+#include <KDebug>
+
 #include <plasma/plasma_export.h>
 #include <plasma/plasma.h>
 
@@ -52,6 +54,17 @@ namespace WindowEffects
      * @since 4.4
      */
     PLASMA_EXPORT void slideWindow(WId id, Plasma::Location location, int offset);
+
+    /**
+     * Mark a window as sliding from screen edge
+     * This is an overloaded member function provided for convenience
+     *
+     * @arg widget QWidget corresponding to the top level window we want to animate
+     * @arg location edge of the screen from which we want the slifing effect.
+     *               Desktop and FLoating won't have effect.
+     * @since 4.4
+     */
+    PLASMA_EXPORT void slideWindow(QWidget *widget, Plasma::Location location);
 }
 
 } // namespace Plasma
