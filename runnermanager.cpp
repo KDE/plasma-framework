@@ -353,7 +353,6 @@ void RunnerManager::matchSessionComplete()
 
 void RunnerManager::launchQuery(const QString &term)
 {
-    setupMatchSession();
     launchQuery(term, QString());
 }
 
