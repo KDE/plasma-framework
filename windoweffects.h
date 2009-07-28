@@ -51,7 +51,7 @@ namespace WindowEffects
      * @arg offset distance in pixels from the screen edge defined by location
      * @since 4.4
      */
-    PLASMA_EXPORT void setSlidingWindow(WId id, Plasma::Location location, int offset);
+    PLASMA_EXPORT void slideWindow(WId id, Plasma::Location location, int offset);
 }
 
 } // namespace Plasma

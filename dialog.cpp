@@ -597,7 +597,7 @@ void Dialog::animatedHide(Plasma::Direction direction)
         break;
     }
 
-    Plasma::WindowEffects::setSlidingWindow(winId(), location, offset);
+    Plasma::WindowEffects::slideWindow(winId(), location, offset);
 
     hide();
 }
@@ -634,7 +634,7 @@ void Dialog::animatedShow(Plasma::Direction direction)
         break;
     }
 
-    Plasma::WindowEffects::setSlidingWindow(winId(), location, offset);
+    Plasma::WindowEffects::slideWindow(winId(), location, offset);
 
     show();
 

@@ -28,7 +28,7 @@ namespace Plasma
 namespace WindowEffects
 {
 
-void setSlidingWindow(WId id, Plasma::Location location, int offset)
+void slideWindow(WId id, Plasma::Location location, int offset)
 {
 #ifdef Q_WS_X11
     Display *dpy = QX11Info::display();
