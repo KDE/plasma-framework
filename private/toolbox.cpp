@@ -211,6 +211,21 @@ void ToolBox::mousePressEvent(QGraphicsSceneMouseEvent *event)
     d->dragStartRelative = mapToParent(event->pos()).toPoint() - pos().toPoint();
 }
 
+QSize ToolBox::cornerSize() const
+{
+    return boundingRect().size().toSize();
+}
+
+QSize ToolBox::fullWidth() const
+{
+    return boundingRect().size().toSize();
+}
+
+QSize  ToolBox::fullHeight() const
+{
+    return boundingRect().size().toSize();
+}
+
 void ToolBox::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
     if (!d->movable || (!d->dragging && boundingRect().contains(event->pos())) || isToolbar()) {
@@ -221,8 +236,12 @@ void ToolBox::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     d->userMoved = true;
     const QPoint newPos = mapToParent(event->pos()).toPoint();
     const QPoint curPos = pos().toPoint();
-    const int h = abs((int)boundingRect().height());
-    const int w = abs((int)boundingRect().width());
+
+    const QSize cSize = cornerSize();
+    const QSize fHeight = fullHeight();
+    const QSize fWidth = fullWidth();
+    const int h = fHeight.height();
+    const int w = fWidth.width();
 
     const int areaWidth = parentWidget()->size().width();
     const int areaHeight = parentWidget()->size().height();
@@ -244,19 +263,16 @@ void ToolBox::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
         distanceToLeft < distanceToBottom ) {
         x = 0;
         y = (newPos.y() - d->dragStartRelative.y());
-    }
-    else if (distanceToRight < distanceToTop && distanceToRight < distanceToLeft &&
-             distanceToRight < distanceToBottom) {
+    } else if (distanceToRight < distanceToTop && distanceToRight < distanceToLeft &&
+               distanceToRight < distanceToBottom) {
         x = areaWidth - w;
         y = (newPos.y() - d->dragStartRelative.y());
-    }
-    else if (distanceToTop < distanceToLeft && distanceToTop < distanceToRight &&
-             distanceToTop < distanceToBottom ) {
+    } else if (distanceToTop < distanceToLeft && distanceToTop < distanceToRight &&
+               distanceToTop < distanceToBottom ) {
         y = 0;
         x = (newPos.x() - d->dragStartRelative.x());
-    }
-    else if (distanceToBottom < distanceToLeft && distanceToBottom < distanceToRight &&
-             distanceToBottom < distanceToTop) {
+    } else if (distanceToBottom < distanceToLeft && distanceToBottom < distanceToRight &&
+               distanceToBottom < distanceToTop) {
         y = areaHeight - h;
         x = (newPos.x() - d->dragStartRelative.x());
     }
@@ -267,29 +283,6 @@ void ToolBox::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
         y = areaHeight/2 - d->dragStartRelative.y();
     }
 
-    //kDebug() << "distances from borders" << (newPos - d->dragStartRelative) << distanceToLeft << distanceToRight << distanceToTop << distanceToBottom << "=>" << x << y;
-/*
-    if (y == 0 || y + h >= areaHeight) {
-        x = curPos.x() + (newPos.x() - d->dragStart.x());
-        if (x < 0) {
-            x = 0;
-        } else if (x + w > areaWidth) {
-            x = areaWidth - w;
-        }
-    }
-
-    //kDebug() << x << w << areaWidth;
-    if (x == 0 || x + w >= areaWidth) {
-        //kDebug() << "moving along the y axis" << curPos << newPos << d->dragStart;
-        y = curPos.y() + (newPos.y() - d->dragStart.y());
-
-        if (y < 0) {
-            y = 0;
-        } else if (y + h > areaHeight) {
-            y = areaHeight - h;
-        }
-    }
-*/
     x = qBound(0, x, areaWidth - w);
     y = qBound(0, y, areaHeight - h);
 
@@ -297,24 +290,30 @@ void ToolBox::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     if (x == 0) {
         if (y == 0) {
             newCorner = TopLeft;
-        } else if (y + h >= areaHeight) {
+        } else if (areaHeight - cSize.height() < newPos.y()) {
+            y = areaHeight - cSize.height();
             newCorner = BottomLeft;
         } else {
             newCorner = Left;
         }
     } else if (y == 0) {
-        if (x + w >= areaWidth) {
+        if (areaWidth - cSize.width() < newPos.x()) {
+            x = areaWidth - cSize.width();
             newCorner = TopRight;
         } else {
             newCorner = Top;
         }
     } else if (x + w >= areaWidth) {
-        if (y + h >= areaHeight) {
+        if (areaHeight - cSize.height() < newPos.y()) {
+            y = areaHeight - cSize.height();
+            x = areaWidth - cSize.width();
             newCorner = BottomRight;
         } else {
+            x = areaWidth - fHeight.width();
             newCorner = Right;
         }
     } else {
+        y = areaHeight - fWidth.height();
         newCorner = Bottom;
     }
 

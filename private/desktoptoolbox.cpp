@@ -215,13 +215,13 @@ DesktopToolBox::DesktopToolBox(Containment *parent)
     setZValue(10000000);
 
     setIsMovable(true);
-    assignColors();
+    updateTheming();
 
     connect(Plasma::Animator::self(), SIGNAL(movementFinished(QGraphicsItem*)),
             this, SLOT(toolMoved(QGraphicsItem*)));
     connect(this, SIGNAL(toggled()), this, SLOT(toggle()));
     connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()),
-            this, SLOT(assignColors()));
+            this, SLOT(updateTheming()));
 }
 
 DesktopToolBox::~DesktopToolBox()
@@ -229,27 +229,47 @@ DesktopToolBox::~DesktopToolBox()
     delete d;
 }
 
-QRectF DesktopToolBox::boundingRect() const
+QSize DesktopToolBox::cornerSize() const
 {
-    int extraSpace = size();
-
-
-    //keep space for the label and a character more
-    if (!d->containment->activity().isNull()) {
-        extraSpace = Plasma::Theme::defaultTheme()->fontMetrics().width(d->containment->activity()+"x");
-    }
-
-    //get all borders
     d->background->setEnabledBorders(FrameSvg::AllBorders);
     qreal left, top, right, bottom;
     d->background->getMargins(left, top, right, bottom);
     d->adjustBackgroundBorders();
 
-
-    return QRectF(0, 0, size()+left+right+extraSpace, size()+top+bottom+extraSpace);
+    return QSize(size() + left, size() + bottom);
 }
 
-QRectF DesktopToolBox::apparentBoundingRect() const
+QSize DesktopToolBox::fullWidth() const
+{
+    d->background->setEnabledBorders(FrameSvg::AllBorders);
+    qreal left, top, right, bottom;
+    d->background->getMargins(left, top, right, bottom);
+    d->adjustBackgroundBorders();
+
+    int extraSpace = 0;
+    if (!d->containment->activity().isNull()) {
+        extraSpace = Plasma::Theme::defaultTheme()->fontMetrics().width(d->containment->activity()+"x");
+    }
+
+    return QSize(size() + left + right + extraSpace, size() + bottom);
+}
+
+QSize DesktopToolBox::fullHeight() const
+{
+    d->background->setEnabledBorders(FrameSvg::AllBorders);
+    qreal left, top, right, bottom;
+    d->background->getMargins(left, top, right, bottom);
+    d->adjustBackgroundBorders();
+
+    int extraSpace = 0;
+    if (!d->containment->activity().isNull()) {
+        extraSpace = Plasma::Theme::defaultTheme()->fontMetrics().width(d->containment->activity()+"x");
+    }
+
+    return QSize(size() + left, size() + top + bottom + extraSpace);
+}
+
+QRectF DesktopToolBox::boundingRect() const
 {
     int extraSpace = size();
 
@@ -275,37 +295,10 @@ QRectF DesktopToolBox::apparentBoundingRect() const
         rect = QRectF(0, 0, size()+extraSpace+left+right, size()+top+bottom);
     }
 
-    switch (corner()) {
-    case TopLeft:
-        //the rect is ok
-        break;
-    case TopRight:
-        rect.moveTopRight(boundingRect().topRight());
-        break;
-    case BottomLeft:
-        rect.moveBottomLeft(boundingRect().bottomLeft());
-        break;
-    case BottomRight:
-        rect.moveBottomRight(boundingRect().bottomRight());
-        break;
-    case Left:
-        rect.moveLeft(boundingRect().left());
-        break;
-    case Right:
-        rect.moveRight(boundingRect().right());
-        break;
-    case Top:
-        //the rect is ok
-        break;
-    case Bottom:
-    default:
-        rect.moveBottom(boundingRect().bottom());
-    }
-
     return rect;
 }
 
-void DesktopToolBox::assignColors()
+void DesktopToolBox::updateTheming()
 {
     d->bgColor = Plasma::Theme::defaultTheme()->color(Plasma::Theme::BackgroundColor);
     d->fgColor = Plasma::Theme::defaultTheme()->color(Plasma::Theme::TextColor);
@@ -333,7 +326,7 @@ void DesktopToolBox::paint(QPainter *painter, const QStyleOptionGraphicsItem *op
 
     QPoint iconPos;
     QRect backgroundRect;
-    const QRectF rect = apparentBoundingRect();
+    const QRectF rect = boundingRect();
     const QSize icons = iconSize();
 
     QString cornerElement;
@@ -463,7 +456,7 @@ void DesktopToolBox::paint(QPainter *painter, const QStyleOptionGraphicsItem *op
 
 QPainterPath DesktopToolBox::shape() const
 {
-    const QRectF rect = apparentBoundingRect();
+    const QRectF rect = boundingRect();
     const int w = rect.width();
     const int h = rect.height();
 

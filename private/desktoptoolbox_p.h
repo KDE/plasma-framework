@@ -51,8 +51,11 @@ public:
     void showToolBox();
     void hideToolBox();
 
+    QSize cornerSize() const;
+    QSize fullWidth() const;
+    QSize fullHeight() const;
+
 protected:
-    QRectF apparentBoundingRect() const;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
     void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
     void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
@@ -60,7 +63,7 @@ protected:
 protected slots:
     void animateHighlight(qreal progress);
     void toolMoved(QGraphicsItem*);
-    void assignColors();
+    void updateTheming();
     void toolTriggered(bool);
     /**
      * show/hide the toolbox

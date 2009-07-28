@@ -90,6 +90,10 @@ public:
     void load(const KConfigGroup &containmentGroup = KConfigGroup());
     void reposition();
 
+    virtual QSize fullWidth() const;
+    virtual QSize fullHeight() const;
+    virtual QSize cornerSize() const;
+
     virtual void showToolBox() = 0;
     virtual void hideToolBox() = 0;
 public Q_SLOTS:
@@ -112,6 +116,7 @@ protected Q_SLOTS:
 
 private:
     ToolBoxPrivate *d;
+
 };
 
 } // Plasma namespace
