@@ -71,6 +71,16 @@ public:
     void setImage(const QString &path);
 
     /**
+     * Sets the path to an svg image to display and the id of the used svg element, if necessary.
+     *
+     * @arg path the path to the image; if a relative path, then a themed image will be loaded.
+     * @arg elementid the id of a svg element.
+     *
+     * @since 4.4
+     */
+    void setImage(const QString &path, const QString &elementid);
+
+    /**
      * @return the image path being displayed currently, or an empty string if none.
      */
     QString image() const;
