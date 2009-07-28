@@ -333,6 +333,7 @@ void RunnerManager::setupMatchSession()
         return;
     }
 
+    d->prepped = true;
     foreach (AbstractRunner *runner, d->runners) {
         emit runner->prepare();
     }
