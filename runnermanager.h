@@ -106,6 +106,23 @@ class PLASMA_EXPORT RunnerManager : public QObject
 
     public Q_SLOTS:
         /**
+         * Call this method when the runners should be prepared for a query session.
+         * Call matchSessionComplete when the query session is finished for the time
+         * being.
+         * @since 4.4
+         * @see matchSessionComplete
+         */
+        void setupMatchSession();
+
+        /**
+         * Call this method when the query session is finished for the time
+         * being.
+         * @since 4.4
+         * @see prepareForMatchSession
+         */
+        void matchSessionComplete();
+
+        /**
          * Launch a query, this will create threads and return inmediately.
          * When the information will be available can be known using the
          * matchesChanged signal.

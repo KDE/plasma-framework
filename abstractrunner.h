@@ -244,6 +244,26 @@ class PLASMA_EXPORT AbstractRunner : public QObject
          */
         static QMutex *bigLock();
 
+    Q_SIGNALS:
+        /**
+         * This signal is emitted when matching is about to commence, giving runners
+         * an opportunity to prepare themselves, e.g. loading data sets or preparing
+         * IPC or network connections. This method should be fast so as not to cause
+         * slow downs. Things that take longer or which should be loaded once and
+         * remain extant for the lifespan of the AbstractRunner should be done in init().
+         * @see init()
+         * @since 4.4
+         */
+        void prepare();
+
+        /**
+         * This signal is emitted when a session of matches is complete, giving runners
+         * the opportunity to tear down anything set up as a result of the prepare()
+         * method.
+         * @since 4.4
+         */
+        void teardown();
+
     protected:
         friend class RunnerManager;
         friend class RunnerManagerPrivate;

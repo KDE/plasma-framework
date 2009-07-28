@@ -56,7 +56,8 @@ public:
 
     RunnerManagerPrivate(RunnerManager *parent)
       : q(parent),
-        deferredRun(0)
+        deferredRun(0),
+        prepped(false)
     {
         matchChangeTimer.setSingleShot(true);
         delayTimer.setSingleShot(true);
@@ -218,8 +219,9 @@ public:
     QHash<QString, AbstractRunner*> runners;
     QSet<FindMatchesJob*> searchJobs;
     QSet<FindMatchesJob*> oldSearchJobs;
-    bool loadAll;
     KConfigGroup config;
+    bool loadAll : 1;
+    bool prepped : 1;
 };
 
 /*****************************************************
@@ -325,13 +327,39 @@ QList<QAction*> RunnerManager::actionsForMatch(const QueryMatch &match)
     return QList<QAction*>();
 }
 
+void RunnerManager::setupMatchSession()
+{
+    if (d->prepped) {
+        return;
+    }
+
+    foreach (AbstractRunner *runner, d->runners) {
+        emit runner->prepare();
+    }
+}
+
+void RunnerManager::matchSessionComplete()
+{
+    if (!d->prepped) {
+        return;
+    }
+
+    foreach (AbstractRunner *runner, d->runners) {
+        emit runner->teardown();
+    }
+
+    d->prepped = false;
+}
+
 void RunnerManager::launchQuery(const QString &term)
 {
+    setupMatchSession();
     launchQuery(term, QString());
 }
 
 void RunnerManager::launchQuery(const QString &untrimmedTerm, const QString &runnerName)
 {
+    setupMatchSession();
     QString term = untrimmedTerm.trimmed();
 
     if (d->runners.isEmpty()) {
