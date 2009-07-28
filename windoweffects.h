@@ -23,7 +23,7 @@
 #include <QtGui/QApplication>
 #include <QtGui/QDesktopWidget>
 
-#include <KDebug>
+#include <kdebug.h>
 
 #include <plasma/plasma_export.h>
 #include <plasma/plasma.h>

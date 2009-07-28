@@ -21,7 +21,7 @@
 
 #include <QVarLengthArray>
 
-#include <KWindowSystem>
+#include <kwindowsystem.h>
 
 namespace Plasma
 {
