@@ -577,13 +577,10 @@ void ContainmentPrivate::appletActions(KMenu &desktopMenu, Applet *applet, bool 
         }
     }
 
-    if (applet->hasConfigurationInterface()) {
-        QAction *configureApplet = applet->d->actions->action("configure");
-        if (configureApplet) {
-            desktopMenu.addAction(configureApplet);
-        }
+    QAction *configureApplet = applet->d->actions->action("configure");
+    if (configureApplet && configureApplet->isEnabled()) {
+        desktopMenu.addAction(configureApplet);
     }
-
 
     if (static_cast<Corona*>(q->scene())->immutability() == Mutable) {
         if (!desktopMenu.isEmpty()) {
