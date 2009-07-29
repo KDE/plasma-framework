@@ -383,6 +383,49 @@ void TabBar::removeTab(int index)
     d->tabProxy->setPreferredSize(d->tabProxy->native->sizeHint());
 }
 
+QGraphicsLayoutItem *TabBar::takeTab(int index)
+{
+    if (index > d->pages.count()) {
+        return 0;
+    }
+
+    int oldCurrentIndex = d->tabProxy->native->currentIndex();
+    d->tabProxy->native->removeTab(index);
+    QGraphicsWidget *page = d->pages.takeAt(index);
+
+    int currentIndex = d->tabProxy->native->currentIndex();
+
+    if (oldCurrentIndex == index) {
+        d->tabWidgetLayout->removeAt(1);
+    }
+
+    QGraphicsLayoutItem *returnItem = 0;
+    QGraphicsLayout *lay = page->layout();
+    if (lay && lay->count() == 1) {
+        returnItem = lay->itemAt(0);
+        lay->removeAt(0);
+    } else {
+        returnItem = lay;
+    }
+
+    if (returnItem) {
+        returnItem->setParentLayoutItem(0);
+    }
+
+    page->setLayout(0);
+    scene()->removeItem(page);
+    page->deleteLater();
+
+    if (oldCurrentIndex != currentIndex) {
+        setCurrentIndex(currentIndex);
+    }
+
+    d->updateTabWidgetMode();
+    d->tabProxy->setPreferredSize(d->tabProxy->native->sizeHint());
+
+    return returnItem;
+}
+
 void TabBar::setTabText(int index, const QString &label)
 {
     if (index > d->pages.count()) {

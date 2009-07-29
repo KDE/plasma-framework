@@ -112,11 +112,19 @@ public:
     int addTab(const QString &label, QGraphicsLayoutItem *content = 0);
 
     /**
-     * Removes a tab
+     * Removes a tab, contents are deleted
      *
      * @arg index the index of the tab to remove
      */
     void removeTab(int index);
+
+    /**
+     * Removes a tab, the page is reparented to 0 and is returned
+     *
+     * @arg index the index of the tab to remove
+     * @since 4.4
+     */
+    QGraphicsLayoutItem *takeTab(int index);
 
     /**
      * @return the index of the tab currently active
