@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=script-mediaplayer
+Name[es]=script-reproductordemedios
 Name[fy]=script-mediaspiler
 Name[gu]=સ્ક્રિપ્ટ-મીડિઆપ્લેયર
 Name[is]=margmiðlunarspilara-skrifta
@@ -21,6 +22,7 @@ Comment[ca@valencia]=Reproductor de suports en Javascript
 Comment[da]=Medieafspiller i Javascript
 Comment[de]=Javascript-Medienspieler
 Comment[el]=Αναπαραγωγή πολυμέσων Javascript
+Comment[es]=Reproductor de medios javascript
 Comment[et]=Javascripti meediamängija
 Comment[fi]=Javascript-mediasoitin
 Comment[fr]=Lecteur multimédia JavaScript
