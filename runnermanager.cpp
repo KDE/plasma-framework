@@ -57,7 +57,8 @@ public:
     RunnerManagerPrivate(RunnerManager *parent)
       : q(parent),
         deferredRun(0),
-        prepped(false)
+        prepped(false),
+        teardownRequested(false)
     {
         matchChangeTimer.setSingleShot(true);
         delayTimer.setSingleShot(true);
@@ -197,6 +198,26 @@ public:
             // ourselves here
             emit q->matchesChanged(context.matches());
         }
+
+        checkTearDown();
+    }
+
+    void checkTearDown()
+    {
+        //kDebug() << prepped << teardownRequested << searchJobs.count() << oldSearchJobs.count();
+
+        if (!prepped || !teardownRequested) {
+            return;
+        }
+
+        if (searchJobs.isEmpty() && oldSearchJobs.isEmpty()) {
+            foreach (AbstractRunner *runner, runners) {
+                emit runner->teardown();
+            }
+
+            prepped = false;
+            teardownRequested = false;
+        }
     }
 
     void unblockJobs()
@@ -222,6 +243,7 @@ public:
     KConfigGroup config;
     bool loadAll : 1;
     bool prepped : 1;
+    bool teardownRequested : 1;
 };
 
 /*****************************************************
@@ -329,6 +351,8 @@ QList<QAction*> RunnerManager::actionsForMatch(const QueryMatch &match)
 
 void RunnerManager::setupMatchSession()
 {
+    d->teardownRequested = false;
+
     if (d->prepped) {
         return;
     }
@@ -345,11 +369,8 @@ void RunnerManager::matchSessionComplete()
         return;
     }
 
-    foreach (AbstractRunner *runner, d->runners) {
-        emit runner->teardown();
-    }
-
-    d->prepped = false;
+    d->teardownRequested = true;
+    d->checkTearDown();
 }
 
 void RunnerManager::launchQuery(const QString &term)
