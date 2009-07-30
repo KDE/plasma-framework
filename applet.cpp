@@ -1069,14 +1069,13 @@ void Applet::flushPendingConstraintsEvents()
 
         QAction *configAction = d->actions->action("configure");
         if (configAction) {
-            //XXX assumption: isContainment won't change after this
             if (d->isContainment) {
                 connect(configAction, SIGNAL(triggered()), this, SLOT(requestConfiguration()));
             } else {
                 connect(configAction, SIGNAL(triggered(bool)), this, SLOT(showConfigurationInterface()));
             }
+
             bool canConfig = unlocked || KAuthorized::authorize("PlasmaAllowConfigureWhenLocked");
-            canConfig = canConfig && (d->hasConfigurationInterface || d->isContainment);
             configAction->setVisible(canConfig);
             configAction->setEnabled(canConfig);
         }
@@ -1096,10 +1095,9 @@ void Applet::flushPendingConstraintsEvents()
             action->setEnabled(unlocked);
         }
 
-        bool canConfig = unlocked || KAuthorized::authorize("PlasmaAllowConfigureWhenLocked");
-        canConfig = canConfig && (d->hasConfigurationInterface || d->isContainment);
         action = d->actions->action("configure");
         if (action) {
+            bool canConfig = unlocked || KAuthorized::authorize("PlasmaAllowConfigureWhenLocked");
             action->setVisible(canConfig);
             action->setEnabled(canConfig);
         }
@@ -1422,8 +1420,6 @@ bool Applet::hasConfigurationInterface() const
     return d->hasConfigurationInterface;
 }
 
-//it bugs me that this can get turned on and off at will. I don't see it being useful and it just
-//makes more work for me and more code duplication.
 void Applet::setHasConfigurationInterface(bool hasInterface)
 {
     if (d->hasConfigurationInterface == hasInterface) {
@@ -1431,23 +1427,6 @@ void Applet::setHasConfigurationInterface(bool hasInterface)
     }
 
     d->hasConfigurationInterface = hasInterface;
-
-    //FIXME I'm pretty sure this line has issues but I'm preserving current behaviour for now
-    if (!hasInterface && (d->isContainment || qobject_cast<Plasma::Containment*>(this))) {
-        return;
-    }
-
-    //config action
-    KAction *configAction = qobject_cast<KAction*>(d->actions->action("configure"));
-    if (configAction) {
-        bool canConfig = false;
-        if (hasInterface) {
-            bool unlocked = immutability() == Mutable;
-            canConfig = unlocked || KAuthorized::authorize("PlasmaAllowConfigureWhenLocked");
-        }
-        configAction->setVisible(canConfig);
-        configAction->setEnabled(canConfig);
-    }
 }
 
 KActionCollection* AppletPrivate::defaultActions(QObject *parent)
@@ -1718,7 +1697,7 @@ void AppletPrivate::updateShortcuts()
 
         actions->readSettings();
 
-        for (int i=0; i<names.size(); ++i) {
+        for (int i = 0; i < names.size(); ++i) {
             QAction *a = qactions.at(i);
             if (a) {
                 actions->addAction(names.at(i), a);
@@ -2330,9 +2309,14 @@ void AppletPrivate::init(const QString &packagePath)
     q->setHasConfigurationInterface(true); //FIXME why not default it to true in the constructor?
 
     QAction *closeApplet = actions->action("remove");
-    closeApplet->setText(i18nc("%1 is the name of the applet", "Remove this %1", q->name()));
+    if (closeApplet) {
+        closeApplet->setText(i18nc("%1 is the name of the applet", "Remove this %1", q->name()));
+    }
+
     QAction *configAction = actions->action("configure");
-    configAction->setText(i18nc("%1 is the name of the applet", "%1 Settings", q->name()));
+    if (configAction) {
+        configAction->setText(i18nc("%1 is the name of the applet", "%1 Settings", q->name()));
+    }
 
     QObject::connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()), q, SLOT(themeChanged()));
     QObject::connect(q, SIGNAL(activate()), q, SLOT(setFocus()));
