@@ -23,6 +23,11 @@
 
 #include <kwindowsystem.h>
 
+#ifdef Q_WS_X11
+#include <X11/Xlib.h>
+#include <QX11Info>
+#endif
+
 namespace Plasma
 {
 

@@ -20,18 +20,9 @@
 #ifndef PLASMA_WINDOWEFFECTS_H
 #define PLASMA_WINDOWEFFECTS_H
 
-#include <QtGui/QApplication>
-#include <QtGui/QDesktopWidget>
+#include <QtGui/QWidget>
 
-#include <kdebug.h>
-
-#include <plasma/plasma_export.h>
 #include <plasma/plasma.h>
-
-#ifdef Q_WS_X11
-#include <X11/Xlib.h>
-#include <QX11Info>
-#endif
 
 /** @headerfile plasma/windoweffect.h <Plasma/PaintUtils> */
 
