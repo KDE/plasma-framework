@@ -786,6 +786,8 @@ void Theme::releaseRectsCache(const QString &image)
 {
     QHash<QString, QSet<QString> >::iterator it = d->invalidElements.find(image);
     if (it != d->invalidElements.end()) {
+        KConfigGroup imageGroup(d->svgElementsCache, it.key());
+        imageGroup.writeEntry("invalidElements", it.value().toList());
         d->invalidElements.erase(it);
     }
 }
