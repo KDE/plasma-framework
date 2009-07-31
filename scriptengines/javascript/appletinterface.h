@@ -26,12 +26,10 @@
 #include <Plasma/DataEngine>
 
 class QAction;
-class QGraphicsLayout;
 class SimpleJavaScriptApplet;
 class QSignalMapper;
 class QSizeF;
 
-class KConfigGroup;
 
 namespace Plasma
 {
