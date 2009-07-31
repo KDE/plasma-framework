@@ -731,9 +731,9 @@ bool Theme::findInRectsCache(const QString &image, const QString &element, QRect
         return true;
     }
 
-    //A single _ means the element is empty and we're asked for the size of
+    //Name starting by _ means the element is empty and we're asked for the size of
     //the whole image, so the whole image is never invalid
-    if (element.count('_') == 1) {
+    if (element.indexOf('_') <= 0) {
         return false;
     }
 
