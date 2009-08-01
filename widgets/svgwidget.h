@@ -58,6 +58,7 @@ class PLASMA_EXPORT SvgWidget : public QGraphicsWidget
 
     protected:
         void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+        QSizeF sizeHint(Qt::SizeHint which, const QSizeF & constraint) const;
 
     private:
         SvgWidgetPrivate * const d;

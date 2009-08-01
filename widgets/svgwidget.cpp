@@ -96,6 +96,15 @@ void SvgWidget::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
     }
 }
 
+QSizeF SvgWidget::sizeHint(Qt::SizeHint which, const QSizeF & constraint) const
+{
+    if (d->svg && which == Qt::PreferredSize) {
+        return d->svg->size();
+    } else {
+        return QGraphicsWidget::sizeHint(which, constraint);
+    }
+}
+
 } // Plasma namespace
 
 #include "svgwidget.moc"
