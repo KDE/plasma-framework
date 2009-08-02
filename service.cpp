@@ -116,7 +116,7 @@ KConfigGroup Service::operationDescription(const QString &operationName)
 {
     if (!d->config) {
         kDebug() << "No valid operations scheme has been registered";
-        return KConfigGroup();
+        return d->dummyGroup();
     }
 
     d->config->writeConfig();
@@ -212,6 +212,9 @@ void Service::setName(const QString &name)
     delete d->tempFile;
     d->tempFile = 0;
 
+    delete d->dummyConfig;
+    d->dummyConfig = 0;
+
     registerOperationsScheme();
 }
 
@@ -257,6 +260,9 @@ void Service::setOperationsScheme(QIODevice *xml)
 {
     delete d->config;
     delete d->tempFile;
+
+    delete d->dummyConfig;
+    d->dummyConfig = 0;
 
     //FIXME: make KSharedConfig and KConfigSkeleton not braindamaged in 4.2 and then get rid of the
     //       temp file object here
