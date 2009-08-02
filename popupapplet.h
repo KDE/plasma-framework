@@ -58,11 +58,17 @@ public:
 
     /**
      * @arg icon the icon that has to be displayed when the applet is in a panel.
+     *           Passing in a null icon means that the popup applet itself
+     *           will provide an interface for when the PopupApplet is not showing
+     *           the widget() or graphicsWidget() directly.
      */
     void setPopupIcon(const QIcon &icon);
 
     /**
      * @arg icon the icon that has to be displayed when the applet is in a panel.
+     *           Passing in an empty QString() means that the popup applet itself
+     *           will provide an interface for when the PopupApplet is not showing
+     *           the widget() or graphicsWidget() directly.
      */
     void setPopupIcon(const QString &iconName);
 
