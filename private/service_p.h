@@ -73,6 +73,7 @@ public:
     ServicePrivate(Service *service)
         : q(service),
           config(0),
+          dummyConfig(0),
           tempFile(0)
     {
     }
@@ -80,6 +81,7 @@ public:
     ~ServicePrivate()
     {
         delete config;
+        delete dummyConfig;
         delete tempFile;
     }
 
@@ -98,10 +100,25 @@ public:
         associatedGraphicsWidgets.remove(static_cast<QGraphicsWidget*>(obj));
     }
 
+    KConfigGroup dummyGroup()
+    {
+        if (!dummyConfig) {
+            if (!tempFile) {
+                tempFile = new KTemporaryFile;
+                tempFile->open();
+            }
+
+            dummyConfig = new KConfig(tempFile->fileName());
+        }
+
+        return KConfigGroup(dummyConfig, "DummyGroup");
+    }
+
     Service *q;
     QString destination;
     QString name;
     ConfigLoader *config;
+    KConfig *dummyConfig;
     KTemporaryFile *tempFile;
     QMultiHash<QWidget *, QString> associatedWidgets;
     QMultiHash<QGraphicsWidget *, QString> associatedGraphicsWidgets;
