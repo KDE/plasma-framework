@@ -75,7 +75,14 @@ void WindowPreview::setWindowIds(const QList<WId> wids)
         ids.clear();
         return;
     }
-    ids = wids;
+
+    //FIXME: need to get rid of this 4 window maximum by using a smarter layout
+    if (wids.count() < 5) {
+        ids = wids;
+    } else {
+        ids = wids.mid(0, 4);
+    }
+
     readWindowSizes();
     QSize s(sizeHint());
     if (s.isValid()) {
@@ -93,12 +100,14 @@ QSize WindowPreview::sizeHint() const
     if (ids.size() == 0) {
         return QSize();
     }
+
     if (!windowSizes.size() == 0) {
         readWindowSizes();
     }
 
     int maxHeight = 0;
     int totalWidth = 0;
+
     foreach (QSize s, windowSizes) {
         if (s.height() > maxHeight) {
             maxHeight = s.height();
@@ -113,9 +122,7 @@ QSize WindowPreview::sizeHint() const
     m_background->getMargins(left, top, right, bottom);
 
     s.scale(WINDOW_WIDTH*windowSizes.size(), WINDOW_HEIGHT, Qt::KeepAspectRatio);
-
     s = s + QSize(left+right+WINDOW_MARGIN*(windowSizes.size()-1), top+bottom);
-
     return s;
 }
 
