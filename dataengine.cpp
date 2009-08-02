@@ -375,14 +375,14 @@ void DataEngine::timerEvent(QTimerEvent *event)
         d->updateTimerId = 0;
         updateAllSources();
     } else if (event->timerId() == d->checkSourcesTimerId) {
+        killTimer(d->checkSourcesTimerId);
+        d->checkSourcesTimerId = 0;
+
         QHashIterator<QString, Plasma::DataContainer*> it(d->sources);
         while (it.hasNext()) {
             it.next();
             it.value()->checkForUpdate();
         }
-
-        killTimer(d->checkSourcesTimerId);
-        d->checkSourcesTimerId = 0;
     } else {
         QObject::timerEvent(event);
     }
