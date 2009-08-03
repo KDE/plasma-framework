@@ -31,6 +31,8 @@
 
 //Plasma
 #include <plasma/widgets/scrollbar.h>
+#include <plasma/widgets/svgwidget.h>
+#include <plasma/svg.h>
 
 namespace Plasma
 {
@@ -41,6 +43,10 @@ public:
     ScrollWidgetPrivate(ScrollWidget *parent)
         : q(parent),
           widget(0),
+          topBorder(0),
+          bottomBorder(0),
+          leftBorder(0),
+          rightBorder(0),
           dragging(false)
     {
     }
@@ -61,9 +67,25 @@ public:
                 layout->removeAt(1);
             }
             verticalScrollBar->hide();
+            topBorder->deleteLater();
+            bottomBorder->deleteLater();
+            topBorder = 0;
+            bottomBorder = 0;
         } else if (!verticalScrollBar->isVisible()) {
             layout->addItem(verticalScrollBar, 0, 1);
             verticalScrollBar->show();
+            topBorder = new Plasma::SvgWidget(q);
+            topBorder->setSvg(borderSvg);
+            topBorder->setElementID("border-top");
+            topBorder->setZValue(900);
+            topBorder->resize(topBorder->effectiveSizeHint(Qt::PreferredSize));
+            topBorder->show();
+            bottomBorder = new Plasma::SvgWidget(q);
+            bottomBorder->setSvg(borderSvg);
+            bottomBorder->setElementID("border-bottom");
+            bottomBorder->setZValue(900);
+            bottomBorder->resize(bottomBorder->effectiveSizeHint(Qt::PreferredSize));
+            bottomBorder->show();
         }
 
 
@@ -77,12 +99,40 @@ public:
                 layout->removeAt(1);
             }
             horizontalScrollBar->hide();
+            leftBorder->deleteLater();
+            rightBorder->deleteLater();
+            leftBorder = 0;
+            rightBorder = 0;
         } else if (!horizontalScrollBar->isVisible()) {
             layout->addItem(horizontalScrollBar, 1, 0);
             horizontalScrollBar->show();
+            leftBorder = new Plasma::SvgWidget(q);
+            leftBorder->setSvg(borderSvg);
+            leftBorder->setElementID("border-top");
+            leftBorder->setZValue(900);
+            leftBorder->resize(leftBorder->effectiveSizeHint(Qt::PreferredSize));
+            leftBorder->show();
+            rightBorder = new Plasma::SvgWidget(q);
+            rightBorder->setSvg(borderSvg);
+            rightBorder->setElementID("border-bottom");
+            rightBorder->setZValue(900);
+            rightBorder->resize(rightBorder->effectiveSizeHint(Qt::PreferredSize));
+            rightBorder->show();
         }
 
         layout->activate();
+
+        if (topBorder) {
+            topBorder->resize(q->size().width(), topBorder->size().height());
+            bottomBorder->resize(q->size().width(), bottomBorder->size().height());
+            bottomBorder->setPos(0, q->size().height() - topBorder->size().height());
+        }
+        if (leftBorder) {
+            leftBorder->resize(leftBorder->size().width(), q->size().height());
+            rightBorder->resize(rightBorder->size().width(), q->size().height());
+            rightBorder->setPos(q->size().width() - rightBorder->size().width(), 0);
+        }
+
         widget->resize(scrollingWidget->size().width(), widget->size().height());
     }
 
@@ -111,6 +161,11 @@ public:
     ScrollWidget *q;
     QGraphicsWidget *scrollingWidget;
     QGraphicsWidget *widget;
+    Plasma::Svg *borderSvg;
+    Plasma::SvgWidget *topBorder;
+    Plasma::SvgWidget *bottomBorder;
+    Plasma::SvgWidget *leftBorder;
+    Plasma::SvgWidget *rightBorder;
     QGraphicsGridLayout *layout;
     ScrollBar *verticalScrollBar;
     Qt::ScrollBarPolicy verticalScrollBarPolicy;
@@ -127,8 +182,11 @@ ScrollWidget::ScrollWidget(QGraphicsWidget *parent)
 {
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     d->layout = new QGraphicsGridLayout(this);
+    d->layout->setContentsMargins(1, 1, 1, 1);
     d->scrollingWidget = new QGraphicsWidget(this);
     d->layout->addItem(d->scrollingWidget, 0, 0);
+    d->borderSvg = new Plasma::Svg(this);
+    d->borderSvg->setImagePath("widgets/scrollwidget");
 
     d->verticalScrollBarPolicy = Qt::ScrollBarAsNeeded;
     d->verticalScrollBar = new Plasma::ScrollBar(this);
@@ -223,6 +281,18 @@ void ScrollWidget::resizeEvent(QGraphicsSceneResizeEvent *event)
     d->adjustScrollbars();
 
     d->adjustClipping();
+
+    //if topBorder exists bottomBorder too
+    if (d->topBorder) {
+        d->topBorder->resize(event->newSize().width(), d->topBorder->size().height());
+        d->bottomBorder->resize(event->newSize().width(), d->bottomBorder->size().height());
+        d->bottomBorder->setPos(0, event->newSize().height() - d->bottomBorder->size().height());
+    }
+    if (d->leftBorder) {
+        d->leftBorder->resize(d->leftBorder->size().width(), event->newSize().height());
+        d->rightBorder->resize(d->rightBorder->size().width(), event->newSize().height());
+        d->rightBorder->setPos(event->newSize().width() - d->rightBorder->size().width(), 0);
+    }
 
     QGraphicsWidget::resizeEvent(event);
 }
