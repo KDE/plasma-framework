@@ -674,7 +674,7 @@ bool Theme::useNativeWidgetStyle() const
 bool Theme::findInCache(const QString &key, QPixmap &pix)
 {
     if (d->useCache()) {
-        const QString id = d->keysToCache[key];
+        const QString id = d->keysToCache.value(key);
         if (d->pixmapsToCache.contains(id)) {
             pix = d->pixmapsToCache.value(id);
             return true;
