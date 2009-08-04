@@ -690,7 +690,7 @@ bool Theme::findInCache(const QString &key, QPixmap &pix)
 bool Theme::findInCache(const QString &key, QPixmap &pix, unsigned int lastModified)
 {
     if (d->useCache() && lastModified > d->pixmapCache->timestamp()) {
-        d->discardCache(true);
+        return false;
     }
 
     return findInCache(key, pix);
