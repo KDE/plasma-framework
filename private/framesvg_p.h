@@ -68,6 +68,7 @@ public:
 
     FrameSvg::EnabledBorders enabledBorders;
     QPixmap cachedBackground;
+    QPixmap cachedOverlay;
     QRegion cachedMask;
     QSize frameSize;
 
