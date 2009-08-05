@@ -24,16 +24,12 @@
 
 #include <KApplication>
 #include <KAboutData>
-#include <KAction>
 #include <KCmdLineArgs>
 #include <KLocale>
 #include <KService>
 #include <KServiceTypeTrader>
 #include <KShell>
 #include <KStandardDirs>
-#include <KProcess>
-#include <KSycoca>
-#include <KConfigGroup>
 
 #include <Plasma/PackageStructure>
 #include <Plasma/Package>
