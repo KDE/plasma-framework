@@ -135,7 +135,7 @@ void WallpaperRenderThread::run()
             // otherwise, use the natural size of the loaded image
             img = QImage(file);
             imgSize = img.size();
-            kDebug() << "loaded with" << imgSize << ratio;
+            //kDebug() << "loaded with" << imgSize << ratio;
         }
 
         // if any of them is zero we may run into a div-by-zero below.
@@ -229,7 +229,7 @@ void WallpaperRenderThread::run()
         }
 
         QPainter p(&result);
-        kDebug() << token << scalable << scaledSize << imgSize;
+        //kDebug() << token << scalable << scaledSize << imgSize;
         if (scalable) {
             // tiling is ignored for scalable wallpapers
             QSvgRenderer svg(file);
