@@ -171,7 +171,7 @@ Q_SIGNALS:
      * @arg window the id of the window that was clicked
      * @arg buttons the mouse buttons involved in the activation
      * @arg modifiers the keyboard modifiers involved in the activation, if any
-     * @since 4.3
+     * @since 4.4
      */
     void windowPreviewActivated(WId window, Qt::MouseButtons buttons, Qt::KeyboardModifiers modifiers,
                                 const QPoint &screenPos);
@@ -181,7 +181,7 @@ Q_SIGNALS:
      * @arg anchor the achor text (e.g. url) that was clicked on
      * @arg buttons the mouse buttons involved in the activation
      * @arg modifiers the keyboard modifiers involved in the activation, if any
-     * @since 4.3
+     * @since 4.4
      */
     void linkActivated(const QString &anchor, Qt::MouseButtons buttons, Qt::KeyboardModifiers modifiers,
                        const QPoint &screenPos);
