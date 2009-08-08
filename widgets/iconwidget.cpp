@@ -983,7 +983,8 @@ void IconWidget::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
 
 
     if (d->textBgColor != QColor() &&
-        !(d->text.isEmpty() && d->infoText.isEmpty())) {
+        !(d->text.isEmpty() && d->infoText.isEmpty()) &&
+        !textBoundingRect.isEmpty()) {
         QRectF rect = textBoundingRect.adjusted(-2, -2, 4, 4);
         painter->setPen(Qt::transparent);
         QColor color = d->textBgColor;
