@@ -32,6 +32,11 @@
 #include <plasma/applet.h>
 #include <plasma/animator.h>
 
+namespace KIO
+{
+    class Job;
+}
+
 namespace Plasma
 {
 
@@ -542,7 +547,7 @@ class PLASMA_EXPORT Containment : public Applet
 
     private:
         Q_PRIVATE_SLOT(d, void appletDestroyed(Plasma::Applet*))
-        Q_PRIVATE_SLOT(d, void containmentAppletAnimationComplete(QGraphicsItem *item,
+        Q_PRIVATE_SLOT(d, void containmentAppletAnimationComplete(QGraphicsItem *,
                                                                   Plasma::Animator::Animation anim))
         Q_PRIVATE_SLOT(d, void triggerShowAddWidgets())
         Q_PRIVATE_SLOT(d, void handleDisappeared(AppletHandle *handle))
@@ -551,6 +556,11 @@ class PLASMA_EXPORT Containment : public Applet
         Q_PRIVATE_SLOT(d, void zoomOut())
         Q_PRIVATE_SLOT(d, void requestConfiguration())
         Q_PRIVATE_SLOT(d, void updateToolBoxVisibility())
+
+        /**
+        * This slot is called when the 'stat' after a job event has finished.
+        */
+        Q_PRIVATE_SLOT(d, void mimeTypeRetrieved(KIO::Job *, const QString &))
 
         friend class Applet;
         friend class AppletPrivate;

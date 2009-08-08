@@ -80,6 +80,7 @@ public:
     void containmentAppletAnimationComplete(QGraphicsItem *item, Plasma::Animator::Animation anim);
     void zoomIn();
     void zoomOut();
+    void mimeTypeRetrieved(KIO::Job *job, const QString &mimetype);
     void containmentActions(KMenu &desktopMenu);
     void appletActions(KMenu &desktopMenu, Applet *applet, bool includeApplet);
     bool showContextMenu(const QPointF &point, const QPoint &screenPos, bool includeApplet);
@@ -126,6 +127,9 @@ public:
     Containment::Type type;
     static bool s_positioning;
     bool drawWallpaper;
+    QHash<KIO::Job*, QPointF> dropPoints;
+    QHash<KIO::Job*, QMenu*> dropMenus;
+
 };
 
 } // Plasma namespace

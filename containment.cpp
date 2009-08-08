@@ -43,6 +43,9 @@
 #include <kstandarddirs.h>
 #include <ktemporaryfile.h>
 #include <kwindowsystem.h>
+#include "kio/jobclasses.h" // for KIO::JobFlags
+#include "kio/job.h"
+#include "kio/scheduler.h"
 
 #include "animator.h"
 #include "context.h"
@@ -611,7 +614,7 @@ void ContainmentPrivate::appletActions(KMenu &desktopMenu, Applet *applet, bool 
         //if there is only one, don't create a submenu
         if(enabled < 2) {
             foreach(QAction *action, containmentMenu->actions()) {
-                desktopMenu.addAction(action); 
+                desktopMenu.addAction(action);
             }
         } else {
             desktopMenu.addMenu(containmentMenu);
@@ -1058,6 +1061,7 @@ void ContainmentPrivate::dropData(QGraphicsSceneEvent *event)
 
     QGraphicsSceneDragDropEvent *dropEvent = dynamic_cast<QGraphicsSceneDragDropEvent*>(event);
     QGraphicsSceneMouseEvent *mouseEvent = dynamic_cast<QGraphicsSceneMouseEvent*>(event);
+    //kDebug() << "Something dropped mimetype, -data: " << appletMimetype << event->mimeData()->text();
 
     QPointF pos;
     QPointF scenePos;
@@ -1081,7 +1085,7 @@ void ContainmentPrivate::dropData(QGraphicsSceneEvent *event)
     }
 
     if (!mimeData) {
-        //Selection is either empty or not sopported on this OS
+        //Selection is either empty or not supported on this OS
         kDebug() << "no mime data";
         return;
     }
@@ -1093,7 +1097,6 @@ void ContainmentPrivate::dropData(QGraphicsSceneEvent *event)
     if (!appletMimetype.isEmpty() && mimeData->hasFormat(appletMimetype)) {
         QString data = mimeData->data(appletMimetype);
         const QStringList appletNames = data.split('\n', QString::SkipEmptyParts);
-
         foreach (const QString &appletName, appletNames) {
             //kDebug() << "doing" << appletName;
             QRectF geom(q->mapFromScene(scenePos), QSize(0, 0));
@@ -1123,12 +1126,14 @@ void ContainmentPrivate::dropData(QGraphicsSceneEvent *event)
             QRectF geom(pos, QSize());
             QVariantList args;
             args << url.url();
-            //             kDebug() << mimeName;
+            //kDebug() << "can decode" << mimeName << args;
+            //kDebug() << "protocol:" << url.protocol();
             KPluginInfo::List appletList = Applet::listAppletInfoForMimetype(mimeName);
 
             if (!appletList.isEmpty()) {
-                //TODO: should we show a dialog here to choose which plasmoid load if
-                //!appletList.isEmpty()
+                // The mimetype is known, i.e. there are applet that can load this mimetype
+                // Offer the applets in a popupmenu
+                kDebug() << "Local file.";
                 QMenu choices;
                 QHash<QAction *, QString> actionsToPlugins;
                 foreach (const KPluginInfo &info, appletList) {
@@ -1141,16 +1146,29 @@ void ContainmentPrivate::dropData(QGraphicsSceneEvent *event)
 
                     actionsToPlugins.insert(action, info.pluginName());
                 }
-
                 actionsToPlugins.insert(choices.addAction(i18n("Icon")), "icon");
+
                 QAction *choice = choices.exec(screenPos);
                 if (choice) {
                     q->addApplet(actionsToPlugins[choice], args, geom);
                 }
-            } else if (url.protocol() != "data") {
-                // We don't try to do anything with data: URIs
-                // no special applet associated with this mimetype, let's
-                q->addApplet("icon", args, geom);
+
+            } else if (url.protocol() != "data") { // Why not data:?
+                //kDebug() << "Let's start a KIO::TransferJob to retrieve the mimetype" << KMimeType::findByUrl(url)->name();
+
+
+                // It may be a directory or a file, let's stat
+                KIO::JobFlags flags = KIO::HideProgressInfo;
+                KIO::TransferJob *job = KIO::get(url, KIO::NoReload, flags);
+
+                dropPoints[job] = dropEvent->scenePos();
+                QObject::connect(job, SIGNAL(mimetype(KIO::Job *, const QString&)),
+                        q, SLOT(mimeTypeRetrieved(KIO::Job *, const QString&)));
+
+                QMenu *choices = new QMenu("Content dropped");
+                choices->addAction(KIcon("process-working"), i18n("Fetching file type..."));
+                choices->popup(dropEvent->screenPos());
+                dropMenus[job] = choices;
             }
         }
 
@@ -1174,6 +1192,7 @@ void ContainmentPrivate::dropData(QGraphicsSceneEvent *event)
                 pluginFormats.insert(plugin.pluginName(), format);
             }
         }
+        kDebug() << "Mimetype ..." << formats << seenPlugins.keys() << pluginFormats.values();
 
         QString selectedPlugin;
 
@@ -1223,6 +1242,76 @@ void ContainmentPrivate::dropData(QGraphicsSceneEvent *event)
             }
         }
     }
+}
+
+void ContainmentPrivate::mimeTypeRetrieved(KIO::Job * job, const QString &mimetype)
+{
+    kDebug() << "Mimetype Job returns." << mimetype;
+    if (job->error()) {
+        // TODO: error feedback
+        kDebug() << "ERROR" << job->error() << ' ' << job->errorString();
+    } else {
+        KIO::TransferJob* tjob = dynamic_cast<KIO::TransferJob*>(job);
+        if (!tjob) {
+            kDebug() << "job should be a TransferJob, but isn't";
+            return;
+        }
+        QPointF posi; // will be overwritten with the event's position
+        if (!dropPoints.keys().contains(tjob)) {
+            kDebug() << "Bailing out. Cannot find associated dropEvent related to the TransferJob";
+            return;
+        } else {
+            posi = dropPoints[tjob];
+            kDebug() << "Received a suitable dropEvent at" << posi;
+        }
+        QMenu *choices = dropMenus[tjob];
+        if (!choices) {
+            kDebug() << "Bailing out. No QMenu found for this job.";
+            return;
+        }
+
+
+        QVariantList args;
+        args << tjob->url().url() << mimetype;
+
+        kDebug() << "Creating menu for:" << mimetype  << posi << args;
+        KPluginInfo::List appletList = Applet::listAppletInfoForMimetype(mimetype);
+        if (!appletList.isEmpty()) {
+            choices->clear();
+            QHash<QAction *, QString> actionsToPlugins;
+            foreach (const KPluginInfo &info, appletList) {
+                kDebug() << info.name();
+                QAction *action;
+                if (!info.icon().isEmpty()) {
+                    action = choices->addAction(KIcon(info.icon()), info.name());
+                } else {
+                    action = choices->addAction(info.name());
+                }
+
+                actionsToPlugins.insert(action, info.pluginName());
+                kDebug() << info.pluginName();
+            }
+            actionsToPlugins.insert(choices->addAction(i18n("Icon")), "icon");
+
+            QAction *choice = choices->exec();
+            if (choice) {
+                // Put the job on hold so it can be recycled to fetch the actual content,
+                // which is to be expected when something's dropped onto the desktop and
+                // an applet is to be created with this URL
+                tjob->putOnHold();
+                KIO::Scheduler::publishSlaveOnHold();
+
+                addApplet(actionsToPlugins[choice], args, QRectF(posi, QSize()));
+                return;
+            }
+        } else {
+            // we can at least create an icon as a link to the URL
+            addApplet("icon", args, QRectF(posi, QSize()));
+        }
+    }
+    // job is not needed anymore, clean it up, (we have already returned when an applet
+    // is created that might do something with the file now.
+    job->kill();
 }
 
 const QGraphicsItem *Containment::toolBoxItem() const
@@ -1680,6 +1769,8 @@ void ContainmentPrivate::zoomIn()
     emit q->zoomRequested(q, Plasma::ZoomIn);
     positionToolBox();
 }
+
+
 
 void ContainmentPrivate::zoomOut()
 {
