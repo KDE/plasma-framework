@@ -171,7 +171,7 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
         }
 
         QSizeF minimum;
-        QSizeF containmentSize;
+        QSizeF parentSize;
 
         QGraphicsWidget *gWidget = q->graphicsWidget();
         //kDebug() << "graphics widget is" << (QObject*)gWidget;
@@ -189,14 +189,15 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
             minimum = qWidget->minimumSizeHint();
         }
 
-        if (q->containment()) {
-            containmentSize = q->containment()->size();
+        //99% of the times q->parentWidget() is the containment, but using it  we can also manage the applet-in-applet case (i.e. systray)
+        if (q->parentWidget()) {
+            parentSize = q->parentWidget()->size();
         }
 
         //Applet on desktop
         if (icon && !icon->icon().isNull() && ((f != Plasma::Vertical && f != Plasma::Horizontal) ||
-            ((f == Plasma::Vertical && containmentSize.width() >= minimum.width()) ||
-             (f == Plasma::Horizontal && containmentSize.height() >= minimum.height())))) {
+            ((f == Plasma::Vertical && parentSize.width() >= minimum.width()) ||
+             (f == Plasma::Horizontal && parentSize.height() >= minimum.height())))) {
             //kDebug() << "we are expanding the popupapplet";
 
             // we only switch to expanded if we aren't horiz/vert constrained and

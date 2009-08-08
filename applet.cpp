@@ -1289,6 +1289,20 @@ void Applet::paintInterface(QPainter *painter, const QStyleOptionGraphicsItem *o
 FormFactor Applet::formFactor() const
 {
     Containment *c = containment();
+    QGraphicsWidget *p = dynamic_cast<QGraphicsWidget *>(parentItem());
+
+
+    //if the applet is in a widget that isn't a containment
+    //try to retrieve the formFactor from the parent size
+    //we can't use our own sizeHint here because it needs formFactor, so endless recursion
+    if (p && p != c && c != this && layout()) {
+        if (p->size().width() < layout()->effectiveSizeHint(Qt::MinimumSize).width()) {
+            return Plasma::Vertical;
+        } else if (p->size().height() < layout()->effectiveSizeHint(Qt::MinimumSize).height()) {
+            return Plasma::Horizontal;
+        }
+    }
+
     return c ? c->d->formFactor : Plasma::Planar;
 }
 
