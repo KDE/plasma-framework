@@ -203,7 +203,7 @@ class PLASMA_EXPORT ExtenderItem : public QGraphicsWidget
         uint autoExpireDelay() const;
 
         /**
-         * @return whether or not this item is detached from it's original source.
+         * @return whether or not this item is detached from its original source.
          */
         bool isDetached() const;
 
