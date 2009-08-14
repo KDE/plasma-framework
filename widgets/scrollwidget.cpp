@@ -108,13 +108,13 @@ public:
             horizontalScrollBar->show();
             leftBorder = new Plasma::SvgWidget(q);
             leftBorder->setSvg(borderSvg);
-            leftBorder->setElementID("border-top");
+            leftBorder->setElementID("border-left");
             leftBorder->setZValue(900);
             leftBorder->resize(leftBorder->effectiveSizeHint(Qt::PreferredSize));
             leftBorder->show();
             rightBorder = new Plasma::SvgWidget(q);
             rightBorder->setSvg(borderSvg);
-            rightBorder->setElementID("border-bottom");
+            rightBorder->setElementID("border-right");
             rightBorder->setZValue(900);
             rightBorder->resize(rightBorder->effectiveSizeHint(Qt::PreferredSize));
             rightBorder->show();
