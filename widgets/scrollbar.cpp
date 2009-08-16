@@ -108,12 +108,14 @@ QString ScrollBar::styleSheet()
 
 QScrollBar *ScrollBar::nativeWidget() const
 {
-   return static_cast<QScrollBar*>(widget());
+   return static_cast<QScrollBar *>(widget());
 }
 
 void ScrollBar::setOrientation(Qt::Orientation orientation)
 {
-   static_cast<QScrollBar*>(widget())->setOrientation(orientation);
+   QScrollBar *native = static_cast<QScrollBar *>(widget());
+   native->setOrientation(orientation);
+   resize(native->sizeHint());
 }
 
 }
