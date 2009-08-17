@@ -231,7 +231,6 @@ void ContextAction::setConfigurationRequired(bool needsConfig, const QString &re
     }
 
     d->needsConfig = needsConfig;
-    emit configurationRequired(needsConfig);
 }
 
 } // Plasma namespace

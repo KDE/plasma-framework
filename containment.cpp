@@ -258,8 +258,6 @@ void Containment::init()
             ContextAction *action = ContextAction::load(defaults.value(trigger));
             if (action) {
                 d->contextActions.insert(trigger, action);
-                connect(action, SIGNAL(configureRequested()), this, SLOT(requestConfiguration()));
-                connect(action, SIGNAL(configNeedsSaving()), this, SIGNAL(configNeedsSaving()));
                 action->setParent(this);
             }
         }
@@ -1721,8 +1719,6 @@ void Containment::setContextAction(const QString &trigger, const QString &plugin
             if (action) {
                 cfg.writeEntry(trigger, pluginName);
                 d->contextActions.insert(trigger, action);
-                connect(action, SIGNAL(configureRequested()), this, SLOT(requestConfiguration()));
-                connect(action, SIGNAL(configNeedsSaving()), this, SIGNAL(configNeedsSaving()));
             } else {
                 //bad plugin... gets removed. is this a feature or a bug?
                 cfg.deleteEntry(trigger);

@@ -702,7 +702,7 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          * Emitted when the immutability changes
          * @since 4.4
          */
-        void immutabilityChanged(const ImmutabilityType immutable);
+        void immutabilityChanged(ImmutabilityType immutable);
 
     public Q_SLOTS:
         /**

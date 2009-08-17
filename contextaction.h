@@ -208,24 +208,6 @@ class PLASMA_EXPORT ContextAction : public QObject
          */
         QAction *configurationAction();
 
-    Q_SIGNALS:
-        /**
-         * Emitted when the user wants to configure/change the contextaction.
-         */
-        void configureRequested();
-
-        /**
-         * Emitted when the state of the contextaction requiring configuration
-         * changes.
-         */
-        void configurationRequired(bool needsConfig);
-
-        /**
-         * Emitted when the configuration of the contextaction needs to be saved
-         * to disk.
-         */
-        void configNeedsSaving();
-
     protected:
         /**
          * This constructor is to be used with the plugin loading systems
