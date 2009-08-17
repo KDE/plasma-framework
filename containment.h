@@ -370,8 +370,28 @@ class PLASMA_EXPORT Containment : public Applet
          *
          * @param trigger the mouse button (and optional modifier) to associate the plugin with
          * @param pluginName the name of the plugin to attempt to load. blank = set no plugin.
+         * @since 4.3
          */
         void setContextAction(const QString &trigger, const QString &pluginName);
+
+        /**
+         * @return a list of all triggers that have a contextaction plugin associated
+         * @since 4.3
+         */
+        QStringList contextActionTriggers();
+
+        /**
+         * @return the plugin for the given trigger
+         * @since 4.3
+         */
+        ContextAction *contextAction(QString trigger);
+
+        /**
+         * Turns a mouse or wheel event into a string suitable for a ContextAction
+         * @return the string representation of the event
+         * @since 4.3
+         */
+        static QString eventToString(QEvent *event);
 
     Q_SIGNALS:
         /**

@@ -486,19 +486,10 @@ void Containment::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     event->ignore();
 
-    int m = QObject::staticQtMetaObject.indexOfEnumerator("MouseButtons");
-    int k = QObject::staticQtMetaObject.indexOfEnumerator("KeyboardModifiers");
-    QMetaEnum mouse = QObject::staticQtMetaObject.enumerator(m);
-    QMetaEnum kbd = QObject::staticQtMetaObject.enumerator(k);
-
-    QString context;
-    context += mouse.valueToKey(event->button());
-    context += ";";
-    context += kbd.valueToKeys(event->modifiers());
-    kDebug() << context;
+    QString trigger = eventToString(event);
 
     //FIXME what if someone changes the modifiers before the mouseup?
-    if (d->contextActions.contains(context)) {
+    if (d->contextActions.contains(trigger)) {
         kDebug() << "accepted mousedown";
         event->accept();
     }
@@ -525,20 +516,11 @@ void Containment::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
     event->ignore();
 
-    int m = QObject::staticQtMetaObject.indexOfEnumerator("MouseButtons");
-    int k = QObject::staticQtMetaObject.indexOfEnumerator("KeyboardModifiers");
-    QMetaEnum mouse = QObject::staticQtMetaObject.enumerator(m);
-    QMetaEnum kbd = QObject::staticQtMetaObject.enumerator(k);
+    QString trigger = eventToString(event);
 
-    QString context;
-    context += mouse.valueToKey(event->button());
-    context += ";";
-    context += kbd.valueToKeys(event->modifiers());
-    kDebug() << context;
-
-    if (d->contextActions.contains(context)) {
-        if (d->prepareContextAction(context, event->screenPos())) {
-            d->contextActions.value(context)->contextEvent(event);
+    if (d->contextActions.contains(trigger)) {
+        if (d->prepareContextAction(trigger, event->screenPos())) {
+            d->contextActions.value(trigger)->contextEvent(event);
         }
         event->accept();
         return;
@@ -1410,20 +1392,11 @@ void Containment::keyPressEvent(QKeyEvent *event)
 
 void Containment::wheelEvent(QGraphicsSceneWheelEvent *event)
 {
-    int o = QObject::staticQtMetaObject.indexOfEnumerator("Orientations");
-    int k = QObject::staticQtMetaObject.indexOfEnumerator("KeyboardModifiers");
-    QMetaEnum orient = QObject::staticQtMetaObject.enumerator(o);
-    QMetaEnum kbd = QObject::staticQtMetaObject.enumerator(k);
+    QString trigger = eventToString(event);
 
-    QString context = "wheel:";
-    context += orient.valueToKey(event->orientation());
-    context += ";";
-    context += kbd.valueToKeys(event->modifiers());
-    kDebug() << context;
-
-    if (d->contextActions.contains(context)) {
-        if (d->prepareContextAction(context, event->screenPos())) {
-            d->contextActions.value(context)->wheelEvent(event);
+    if (d->contextActions.contains(trigger)) {
+        if (d->prepareContextAction(trigger, event->screenPos())) {
+            d->contextActions.value(trigger)->wheelEvent(event);
         }
         event->accept();
         return;
@@ -1719,6 +1692,16 @@ void Containment::setContextAction(const QString &trigger, const QString &plugin
     }
     action->setParent(this);
 
+}
+
+QStringList Containment::contextActionTriggers()
+{
+    return d->contextActions.keys();
+}
+
+ContextAction *Containment::contextAction(QString trigger)
+{
+    return d->contextActions.value(trigger);
 }
 
 void Containment::setActivity(const QString &activity)
@@ -2248,6 +2231,65 @@ bool ContainmentPrivate::prepareContextAction(const QString &trigger, const QPoi
         return false;
     }
     return true;
+}
+
+QString Containment::eventToString(QEvent *event)
+{
+    QString trigger;
+    Qt::KeyboardModifiers modifiers;
+
+    //strict typing sucks sometimes.
+    switch (event->type()) {
+        case QEvent::MouseButtonPress:
+        case QEvent::MouseButtonRelease:
+        {
+            QMouseEvent *e = dynamic_cast<QMouseEvent*>(event);
+            int m = QObject::staticQtMetaObject.indexOfEnumerator("MouseButtons");
+            QMetaEnum mouse = QObject::staticQtMetaObject.enumerator(m);
+            trigger += mouse.valueToKey(e->button());
+            modifiers = e->modifiers();
+            break;
+        }
+        case QEvent::GraphicsSceneMousePress:
+        case QEvent::GraphicsSceneMouseRelease:
+        {
+            QGraphicsSceneMouseEvent *e = dynamic_cast<QGraphicsSceneMouseEvent*>(event);
+            int m = QObject::staticQtMetaObject.indexOfEnumerator("MouseButtons");
+            QMetaEnum mouse = QObject::staticQtMetaObject.enumerator(m);
+            trigger += mouse.valueToKey(e->button());
+            modifiers = e->modifiers();
+            break;
+        }
+        case QEvent::Wheel:
+        {
+            QWheelEvent *e = dynamic_cast<QWheelEvent*>(event);
+            int o = QObject::staticQtMetaObject.indexOfEnumerator("Orientations");
+            QMetaEnum orient = QObject::staticQtMetaObject.enumerator(o);
+            trigger = "wheel:";
+            trigger += orient.valueToKey(e->orientation());
+            modifiers = e->modifiers();
+            break;
+        }
+        case QEvent::GraphicsSceneWheel:
+        {
+            QGraphicsSceneWheelEvent *e = dynamic_cast<QGraphicsSceneWheelEvent*>(event);
+            int o = QObject::staticQtMetaObject.indexOfEnumerator("Orientations");
+            QMetaEnum orient = QObject::staticQtMetaObject.enumerator(o);
+            trigger = "wheel:";
+            trigger += orient.valueToKey(e->orientation());
+            modifiers = e->modifiers();
+            break;
+        }
+        default:
+            return QString();
+    }
+
+    int k = QObject::staticQtMetaObject.indexOfEnumerator("KeyboardModifiers");
+    QMetaEnum kbd = QObject::staticQtMetaObject.enumerator(k);
+    trigger += ";";
+    trigger += kbd.valueToKeys(modifiers);
+
+    return trigger;
 }
 
 
