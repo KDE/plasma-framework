@@ -182,6 +182,11 @@ QWidget *ContextAction::createConfigurationInterface(QWidget *parent)
     return 0;
 }
 
+void ContextAction::configurationAccepted()
+{
+    //do nothing by default
+}
+
 void ContextAction::contextEvent(QGraphicsSceneMouseEvent *event)
 {
     Q_UNUSED(event)

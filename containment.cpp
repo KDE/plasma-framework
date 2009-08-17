@@ -1727,7 +1727,8 @@ void Containment::setContextAction(const QString &trigger, const QString &plugin
 
         if (action) {
             if (action->isInitialized()) {
-                KConfigGroup actionConfig = KConfigGroup(&cfg, trigger);
+                //FIXME make a truly unique config group
+                KConfigGroup actionConfig = KConfigGroup(&cfg, pluginName);
                 action->restore(actionConfig);
             }
             action->setParent(this);
@@ -2269,7 +2270,7 @@ bool ContainmentPrivate::prepareContextAction(const QString &trigger, const QPoi
 
     if (!action->isInitialized()) {
         KConfigGroup cfg(&(q->config()), "ContextActions");
-        KConfigGroup actionConfig = KConfigGroup(&cfg, trigger);
+        KConfigGroup actionConfig = KConfigGroup(&cfg, action->pluginName());
         action->restore(actionConfig);
     }
 

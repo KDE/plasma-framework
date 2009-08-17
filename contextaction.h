@@ -154,6 +154,11 @@ class PLASMA_EXPORT ContextAction : public QObject
         virtual QWidget *createConfigurationInterface(QWidget *parent);
 
         /**
+         * This method is called when the user's configuration changes are accepted
+         */
+        virtual void configurationAccepted();
+
+        /**
          * Implement this to respond to a mouse button event.
          * The user can configure whatever button and modifier they like, so please don't look at
          * those parameters.
