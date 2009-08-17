@@ -22,6 +22,7 @@
 #include <QLabel>
 #include <QPainter>
 #include <QDir>
+#include <QStyleOptionGraphicsItem>
 
 #include <kmimetype.h>
 #include <kglobalsettings.h>
@@ -206,6 +207,52 @@ void Label::resizeEvent(QGraphicsSceneResizeEvent *event)
 {
     d->setPixmap(this);
     QGraphicsProxyWidget::resizeEvent(event);
+}
+
+void Label::paint(QPainter *painter,
+                  const QStyleOptionGraphicsItem *option,
+                  QWidget *widget)
+{
+    QLabel *native = nativeWidget();
+    QFontMetrics fm = native->font();
+
+    if (native->wordWrap() || native->text().isEmpty() || size().width() > fm.width(native->text())) {
+        QGraphicsProxyWidget::paint(painter, option, widget);
+    } else {
+        const int gradientLength = 25;
+        QPixmap buffer(size().toSize());
+        buffer.fill(Qt::transparent);
+
+        QPainter buffPainter(&buffer);
+
+        QGraphicsProxyWidget::paint(&buffPainter, option, widget);
+
+        QLinearGradient gr;
+
+        buffPainter.setCompositionMode(QPainter::CompositionMode_DestinationIn);
+        buffPainter.setPen(Qt::NoPen);
+
+        if (option->direction == Qt::LeftToRight) {
+            gr.setStart(size().width()-gradientLength, 0);
+            gr.setFinalStop(size().width(), 0);
+            gr.setColorAt(0, Qt::black);
+            gr.setColorAt(1, Qt::transparent);
+            buffPainter.setBrush(gr);
+
+            buffPainter.drawRect(QRect(gr.start().toPoint(), QSize(gradientLength, size().height())));
+        } else {
+            gr.setStart(0, 0);
+            gr.setFinalStop(gradientLength, 0);
+            gr.setColorAt(0, Qt::transparent);
+            gr.setColorAt(1, Qt::black);
+            buffPainter.setBrush(gr);
+
+            buffPainter.drawRect(QRect(0, 0, gradientLength, size().height()));
+        }
+
+        buffPainter.end();
+        painter->drawPixmap(buffer.rect(), buffer, buffer.rect());
+    }
 }
 
 } // namespace Plasma

@@ -132,6 +132,9 @@ public Q_SLOTS:
 
 protected:
     void resizeEvent(QGraphicsSceneResizeEvent *event);
+    void paint(QPainter *painter,
+               const QStyleOptionGraphicsItem *option,
+               QWidget *widget);
 
 private:
     Q_PRIVATE_SLOT(d, void setPalette())
