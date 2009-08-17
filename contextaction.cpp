@@ -127,9 +127,14 @@ PackageStructure::Ptr ContextAction::packageStructure()
     return ContextActionPrivate::s_packageStructure;
 }
 
+void ContextAction::setContainment(Containment *c)
+{
+    d->containment=c;
+}
+
 Containment *ContextAction::containment()
 {
-    return qobject_cast<Plasma::Containment*>(parent());
+    return d->containment;
 }
 
 QString ContextAction::name() const
@@ -211,6 +216,16 @@ void ContextAction::setConfigurationRequired(bool needsConfig)
 {
     //TODO: reason?
     d->needsConfig = needsConfig;
+}
+
+bool ContextAction::hasConfigurationInterface() const
+{
+    return d->hasConfig;
+}
+
+void ContextAction::setHasConfigurationInterface(bool hasConfig)
+{
+    d->hasConfig = hasConfig;
 }
 
 QString ContextAction::eventToString(QEvent *event)

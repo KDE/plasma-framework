@@ -257,6 +257,7 @@ void Containment::init()
             if (action) {
                 d->contextActions.insert(trigger, action);
                 action->setParent(this);
+                action->setContainment(this);
             }
         }
     }
@@ -1692,25 +1693,23 @@ void Containment::setContextAction(const QString &trigger, const QString &plugin
     }
     if (pluginName.isEmpty()) {
         cfg.deleteEntry(trigger);
-    } else {
-        if (!action) {
-            action = ContextAction::load(pluginName);
-            if (action) {
-                cfg.writeEntry(trigger, pluginName);
-                d->contextActions.insert(trigger, action);
-            } else {
-                //bad plugin... gets removed. is this a feature or a bug?
-                cfg.deleteEntry(trigger);
-            }
+    } else if (action) {
+        //it already existed, just reload config
+        if (action->isInitialized()) {
+            //FIXME make a truly unique config group
+            KConfigGroup actionConfig = KConfigGroup(&cfg, pluginName);
+            action->restore(actionConfig);
         }
-
+    } else {
+        action = ContextAction::load(pluginName);
         if (action) {
-            if (action->isInitialized()) {
-                //FIXME make a truly unique config group
-                KConfigGroup actionConfig = KConfigGroup(&cfg, pluginName);
-                action->restore(actionConfig);
-            }
+            cfg.writeEntry(trigger, pluginName);
+            d->contextActions.insert(trigger, action);
             action->setParent(this);
+            action->setContainment(this);
+        } else {
+            //bad plugin... gets removed. is this a feature or a bug?
+            cfg.deleteEntry(trigger);
         }
     }
 

@@ -31,20 +31,24 @@ class ContextActionPrivate : public DataEngineConsumer
 public:
     ContextActionPrivate(KService::Ptr service, ContextAction *contextAction) :
         q(contextAction),
+        containment(0),
         contextActionDescription(service),
         initialized(false),
-        needsConfig(false)
+        needsConfig(false),
+        hasConfig(false)
     {
     };
 
     static PackageStructure::Ptr s_packageStructure;
 
     ContextAction *q;
+    Containment *containment;
     KPluginInfo contextActionDescription;
     Package *package;
     KServiceAction mode;
     bool initialized : 1;
     bool needsConfig : 1;
+    bool hasConfig : 1;
 };
 
 } // namespace Plasma
