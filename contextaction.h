@@ -21,16 +21,21 @@
 #ifndef PLASMA_CONTEXTACTION_H
 #define PLASMA_CONTEXTACTION_H
 
+#include <QList>
+
 #include <kplugininfo.h>
 
 #include <plasma/plasma.h>
 #include <plasma/packagestructure.h>
 #include <plasma/version.h>
 
+class QAction;
+
 namespace Plasma
 {
 
 class DataEngine;
+class Containment;
 class ContextActionPrivate;
 
 /**
@@ -165,6 +170,13 @@ class PLASMA_EXPORT ContextAction : public QObject
         virtual void wheelEvent(QGraphicsSceneWheelEvent *event);
 
         /**
+         * Implement this to provide a list of actions that can be added to another menu
+         * for example, when right-clicking an applet, the "Activity Options" submenu is populated
+         * with this.
+         */
+        virtual QList<QAction*> contextualActions();
+
+        /**
          * Loads the given DataEngine
          *
          * Tries to load the data engine given by @p name.  Each engine is
@@ -189,6 +201,12 @@ class PLASMA_EXPORT ContextAction : public QObject
          *         otherwise, false
          */
         bool configurationRequired() const;
+
+        /**
+         * @return a config action if the contextaction currently needs to be configured,
+         *         otherwise, null
+         */
+        QAction *configurationAction();
 
     Q_SIGNALS:
         /**
@@ -239,6 +257,11 @@ class PLASMA_EXPORT ContextAction : public QObject
          *               to be configured
          */
         void setConfigurationRequired(bool needsConfiguring, const QString &reason = QString());
+
+        /**
+         * return the containment the plugin is associated with, if any.
+         */
+        Containment *containment();
 
     private:
         friend class ContextActionPackage;

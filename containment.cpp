@@ -234,25 +234,35 @@ void Containment::init()
             setContextAction(key, cfg.readEntry(key, QString()));
         }
     } else {
-        if (d->type == DesktopContainment) {
-            //we need to be very careful here to not write anything
-            //because we have a group, and so the defaults will get merged instead of overwritten
-            //when copyTo is used (which happens right before restore() is called)
-            QHash<QString,QString> defaults;
+        //we need to be very careful here to not write anything
+        //because we have a group, and so the defaults will get merged instead of overwritten
+        //when copyTo is used (which happens right before restore() is called)
+        //FIXME maybe PlasmaApp should handle the defaults?
+        QHash<QString,QString> defaults;
+        switch (d->type) {
+        case DesktopContainment:
             defaults.insert("wheel:Vertical;NoModifier", "switchdesktop");
             defaults.insert("wheel:Horizontal;ControlModifier", "test");
             defaults.insert("LeftButton;NoModifier", "switchdesktop");
-            defaults.insert("RightButton;NoModifier", "test");
-            foreach (const QString &trigger, defaults.keys()) {
-                ContextAction *action = ContextAction::load(defaults.value(trigger));
-                if (action) {
-                    d->contextActions.insert(trigger, action);
-                    connect(action, SIGNAL(configureRequested()), this, SLOT(requestConfiguration()));
-                    connect(action, SIGNAL(configNeedsSaving()), this, SIGNAL(configNeedsSaving()));
-                }
+            defaults.insert("RightButton;NoModifier", "contextmenu");
+            break;
+        case PanelContainment:
+        case CustomPanelContainment:
+            defaults.insert("RightButton;NoModifier", "contextmenu");
+            break;
+        default:
+            break;
+        }
+
+        foreach (const QString &trigger, defaults.keys()) {
+            ContextAction *action = ContextAction::load(defaults.value(trigger));
+            if (action) {
+                d->contextActions.insert(trigger, action);
+                connect(action, SIGNAL(configureRequested()), this, SLOT(requestConfiguration()));
+                connect(action, SIGNAL(configNeedsSaving()), this, SIGNAL(configNeedsSaving()));
+                action->setParent(this);
             }
         }
-        //TODO defaults for panel etc.
     }
 
 }
@@ -611,27 +621,27 @@ void ContainmentPrivate::containmentActions(KMenu &desktopMenu)
         return;
     }
 
+    QString trigger = "RightButton;NoModifier";
     //get base context actions
-    QList<QAction*> actions = q->contextualActions();
-
-    //find the separator to insert the activity settings before it
-    QAction *separatorAction = 0;
-
-    //TODO: should a submenu be created if there are too many containment specific
-    //      actions? see folderview containment
-    foreach (QAction *action, actions) {
-        if (action) {
-            desktopMenu.addAction(action);
-            if (action->isSeparator()) {
-                separatorAction = action;
+    if (ContextAction *cAction = contextActions.value(trigger)) {
+        if (QAction *a = cAction->configurationAction()) {
+            //it needs configuring
+            desktopMenu.addAction(a);
+        } else {
+            QList<QAction*> actions = cAction->contextualActions();
+            if (actions.isEmpty()) {
+                //it probably didn't bother implementing the function. give the user a chance to set
+                //a better plugin.
+                //note that if the user sets no-plugin this won't happen...
+                //FIXME maybe the behaviour could be better
+                if (type == Containment::DesktopContainment) {
+                    desktopMenu.addAction(q->action("configure"));
+                }
+            } else {
+                //yay!
+                desktopMenu.addActions(actions);
             }
         }
-    }
-
-    desktopMenu.addSeparator();
-
-    if (type == Containment::DesktopContainment) {
-        desktopMenu.addAction(q->action("configure"));
     }
 }
 
@@ -717,7 +727,8 @@ bool ContainmentPrivate::showContextMenu(const QPointF &point, const QPoint &scr
     if (applet) {
         appletActions(desktopMenu, applet, includeApplet);
     } else {
-        containmentActions(desktopMenu);
+        //containmentActions(desktopMenu);
+        return false;
     }
 
     if (!desktopMenu.isEmpty()) {
@@ -2266,11 +2277,9 @@ bool ContainmentPrivate::prepareContextAction(const QString &trigger, const QPoi
         action->restore(actionConfig);
     }
 
-    if (action->configurationRequired()) {
+    if (QAction *a = action->configurationAction()) {
         KMenu menu;
-        menu.addTitle(i18n("This plugin needs to be configured"));
-        //TODO show reason
-        //TODO offer config button
+        menu.addAction(a);
         menu.exec(screenPos);
         return false;
     }

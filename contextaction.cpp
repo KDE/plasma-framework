@@ -19,6 +19,9 @@
  */
 
 #include "contextaction.h"
+#include "containment.h"
+
+#include <QAction>
 
 #include <kdebug.h>
 #include <kglobal.h>
@@ -120,6 +123,11 @@ PackageStructure::Ptr ContextAction::packageStructure()
     return ContextActionPrivate::s_packageStructure;
 }
 
+Containment *ContextAction::containment()
+{
+    return qobject_cast<Plasma::Containment*>(parent());
+}
+
 QString ContextAction::name() const
 {
     if (!d->contextActionDescription.isValid()) {
@@ -184,6 +192,12 @@ void ContextAction::wheelEvent(QGraphicsSceneWheelEvent *event)
     Q_UNUSED(event)
 }
 
+QList<QAction*> ContextAction::contextualActions()
+{
+    //empty list
+    return QList<QAction*>();
+}
+
 DataEngine *ContextAction::dataEngine(const QString &name) const
 {
     return d->dataEngine(name);
@@ -192,6 +206,18 @@ DataEngine *ContextAction::dataEngine(const QString &name) const
 bool ContextAction::configurationRequired() const
 {
     return d->needsConfig;
+}
+
+QAction *ContextAction::configurationAction()
+{
+    if (d->needsConfig) {
+        //create the "I need configuring" action
+        QAction *action = new QAction(i18n("This plugin needs to be configured"), this);
+        //TODO name/reason?
+        //TODO connect it to something
+        return action;
+    }
+    return NULL;
 }
 
 void ContextAction::setConfigurationRequired(bool needsConfig, const QString &reason)

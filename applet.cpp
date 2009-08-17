@@ -1101,6 +1101,7 @@ void Applet::flushPendingConstraintsEvents()
             action->setVisible(canConfig);
             action->setEnabled(canConfig);
         }
+        emit immutabilityChanged(immutability());
     }
 
     if (c & Plasma::SizeConstraint) {

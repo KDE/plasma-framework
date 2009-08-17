@@ -698,6 +698,12 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          */
         void extenderItemRestored(Plasma::ExtenderItem *item);
 
+        /**
+         * Emitted when the immutability changes
+         * @since 4.4
+         */
+        void immutabilityChanged(const ImmutabilityType immutable);
+
     public Q_SLOTS:
         /**
          * Sets the immutability type for this applet (not immutable,
