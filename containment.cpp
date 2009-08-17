@@ -243,7 +243,7 @@ void Containment::init()
         switch (d->type) {
         case DesktopContainment:
             defaults.insert("wheel:Vertical;NoModifier", "switchdesktop");
-            defaults.insert("MiddleButton;NoModifier", "paste");
+            defaults.insert("MidButton;NoModifier", "paste");
             defaults.insert("RightButton;NoModifier", "contextmenu");
             break;
         case PanelContainment:
@@ -615,7 +615,7 @@ void ContainmentPrivate::containmentActions(KMenu &desktopMenu)
         if (!plugin->isInitialized()) {
             KConfigGroup cfg = q->config();
             cfg = KConfigGroup(&cfg, "ActionPlugins");
-            KConfigGroup pluginConfig = KConfigGroup(&cfg, plugin->pluginName());
+            KConfigGroup pluginConfig = KConfigGroup(&cfg, trigger);
             plugin->restore(pluginConfig);
         }
 
@@ -1704,7 +1704,7 @@ void Containment::setContainmentActions(const QString &trigger, const QString &p
         //it already existed, just reload config
         if (plugin->isInitialized()) {
             //FIXME make a truly unique config group
-            KConfigGroup pluginConfig = KConfigGroup(&cfg, pluginName);
+            KConfigGroup pluginConfig = KConfigGroup(&cfg, trigger);
             plugin->restore(pluginConfig);
         }
     } else {
@@ -2256,7 +2256,7 @@ bool ContainmentPrivate::prepareContainmentActions(const QString &trigger, const
     if (!plugin->isInitialized()) {
         KConfigGroup cfg = q->config();
         cfg = KConfigGroup(&cfg, "ActionPlugins");
-        KConfigGroup pluginConfig = KConfigGroup(&cfg, plugin->pluginName());
+        KConfigGroup pluginConfig = KConfigGroup(&cfg, trigger);
         plugin->restore(pluginConfig);
     }
 
