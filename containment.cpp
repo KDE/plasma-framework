@@ -1,6 +1,7 @@
 /*
  *   Copyright 2007 by Aaron Seigo <aseigo@kde.org>
  *   Copyright 2008 by Ménard Alexis <darktears31@gmail.com>
+ *   Copyright 2009 Chani Armitage <chani@kde.org>
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU Library General Public License as
@@ -524,6 +525,10 @@ void Containment::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 void Containment::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     event->ignore();
+    QGraphicsItem *item = scene()->itemAt(event->scenePos());
+    if (item != this) {
+        return; //no unexpected click-throughs
+    }
 
     QString trigger = ContextAction::eventToString(event);
 
@@ -534,10 +539,7 @@ void Containment::mousePressEvent(QGraphicsSceneMouseEvent *event)
     }
 
     if (d->wallpaper && d->wallpaper->isInitialized() && !event->isAccepted()) {
-        QGraphicsItem *item = scene()->itemAt(event->scenePos());
-        if (item == this) {
-            d->wallpaper->mousePressEvent(event);
-        }
+        d->wallpaper->mousePressEvent(event);
     }
 
     if (event->isAccepted()) {
@@ -551,6 +553,10 @@ void Containment::mousePressEvent(QGraphicsSceneMouseEvent *event)
 void Containment::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
     event->ignore();
+    QGraphicsItem *item = scene()->itemAt(event->scenePos());
+    if (item != this) {
+        return; //no unexpected click-throughs
+    }
 
     QString trigger = ContextAction::eventToString(event);
 
@@ -563,10 +569,7 @@ void Containment::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     }
 
     if (d->wallpaper && d->wallpaper->isInitialized()) {
-        QGraphicsItem *item = scene()->itemAt(event->scenePos());
-        if (item == this) {
-            d->wallpaper->mouseReleaseEvent(event);
-        }
+        d->wallpaper->mouseReleaseEvent(event);
     }
 
     if (event->isAccepted() || !isContainment()) {
@@ -614,6 +617,12 @@ void ContainmentPrivate::containmentActions(KMenu &desktopMenu)
     QString trigger = "RightButton;NoModifier";
     //get base context actions
     if (ContextAction *cAction = contextActions.value(trigger)) {
+        if (!cAction->isInitialized()) {
+            KConfigGroup cfg(&(q->config()), "ContextActions");
+            KConfigGroup actionConfig = KConfigGroup(&cfg, cAction->pluginName());
+            cAction->restore(actionConfig);
+        }
+
         if (cAction->configurationRequired()) {
             //it needs configuring
             //FIXME the text could be better.
@@ -703,6 +712,7 @@ bool ContainmentPrivate::showContextMenu(const QPointF &point, const QPoint &scr
         item = 0;
     }
 
+    //FIXME what if it's a handle?
     while (item) {
         applet = qgraphicsitem_cast<Applet*>(item);
         if (applet && !applet->isContainment()) {
@@ -1413,6 +1423,12 @@ void Containment::keyPressEvent(QKeyEvent *event)
 
 void Containment::wheelEvent(QGraphicsSceneWheelEvent *event)
 {
+    event->ignore();
+    QGraphicsItem *item = scene()->itemAt(event->scenePos());
+    if (item != this) {
+        return; //no unexpected click-throughs
+    }
+
     QString trigger = ContextAction::eventToString(event);
 
     if (d->contextActions.contains(trigger)) {
@@ -1729,9 +1745,10 @@ QStringList Containment::contextActionTriggers()
     return d->contextActions.keys();
 }
 
-ContextAction *Containment::contextAction(QString trigger)
+QString Containment::contextAction(const QString &trigger)
 {
-    return d->contextActions.value(trigger);
+    ContextAction *c = d->contextActions.value(trigger);
+    return c ? c->pluginName() : QString();
 }
 
 void Containment::setActivity(const QString &activity)

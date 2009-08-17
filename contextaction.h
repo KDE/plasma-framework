@@ -1,6 +1,5 @@
 /*
- *   Copyright 2008 by Aaron Seigo <aseigo@kde.org>
- *   Copyright 2008 by Petri Damsten <damu@iki.fi>
+ *   Copyright (c) 2009 Chani Armitage <chani@kde.org>
 
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU Library General Public License as

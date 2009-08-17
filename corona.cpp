@@ -2,6 +2,7 @@
  *   Copyright 2007 Matt Broadstone <mbroadst@gmail.com>
  *   Copyright 2007 Aaron Seigo <aseigo@kde.org>
  *   Copyright 2007 Riccardo Iaconelli <riccardo@kde.org>
+ *   Copyright (c) 2009 Chani Armitage <chani@kde.org>
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU Library General Public License as

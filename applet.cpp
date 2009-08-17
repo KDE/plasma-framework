@@ -4,6 +4,7 @@
  *   Copyright 2005 by Aaron Seigo <aseigo@kde.org>
  *   Copyright 2007 by Riccardo Iaconelli <riccardo@kde.org>
  *   Copyright 2008 by Ménard Alexis <darktears31@gmail.com>
+ *   Copyright (c) 2009 Chani Armitage <chani@kde.org>
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU Library General Public License as

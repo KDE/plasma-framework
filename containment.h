@@ -1,6 +1,7 @@
 /*
  *   Copyright 2007 by Aaron Seigo <aseigo@kde.org>
  *   Copyright 2008 by Ménard Alexis <darktears31@gmail.com>
+ *   Copyright (c) 2009 Chani Armitage <chani@kde.org>
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU Library General Public License as
@@ -381,10 +382,10 @@ class PLASMA_EXPORT Containment : public Applet
         QStringList contextActionTriggers();
 
         /**
-         * @return the plugin for the given trigger
+         * @return the plugin name for the given trigger
          * @since 4.3
          */
-        ContextAction *contextAction(QString trigger);
+        QString contextAction(const QString &trigger);
 
     Q_SIGNALS:
         /**
