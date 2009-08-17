@@ -25,13 +25,13 @@
 namespace Plasma
 {
 
-class ContextActionPrivate : public DataEngineConsumer
+class ContainmentActionsPrivate : public DataEngineConsumer
 {
 public:
-    ContextActionPrivate(KService::Ptr service, ContextAction *contextAction) :
-        q(contextAction),
+    ContainmentActionsPrivate(KService::Ptr service, ContainmentActions *containmentActions) :
+        q(containmentActions),
         containment(0),
-        contextActionDescription(service),
+        containmentActionsDescription(service),
         initialized(false),
         needsConfig(false),
         hasConfig(false)
@@ -40,9 +40,9 @@ public:
 
     static PackageStructure::Ptr s_packageStructure;
 
-    ContextAction *q;
+    ContainmentActions *q;
     Containment *containment;
-    KPluginInfo contextActionDescription;
+    KPluginInfo containmentActionsDescription;
     Package *package;
     KServiceAction mode;
     bool initialized : 1;

@@ -305,8 +305,8 @@ void WallpaperPackage::paperDestroyed()
     m_paper = 0;
 }
 
-ContextActionPackage::ContextActionPackage(QObject *parent)
-    : Plasma::PackageStructure(parent, QString("ContextAction"))
+ContainmentActionsPackage::ContainmentActionsPackage(QObject *parent)
+    : Plasma::PackageStructure(parent, QString("ContainmentActions"))
 {
     //FIXME how do I do the mimetypes stuff?
 }

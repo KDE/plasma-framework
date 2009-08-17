@@ -17,12 +17,12 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "contextaction.h"
+#include "containmentactions.h"
 #include "containment.h"
 
 #include "private/dataengineconsumer_p.h"
 #include "private/packages_p.h"
-#include "private/contextaction_p.h"
+#include "private/containmentactions_p.h"
 #include "private/containment_p.h"
 
 #include <QMetaEnum>
@@ -41,16 +41,16 @@
 namespace Plasma
 {
 
-PackageStructure::Ptr ContextActionPrivate::s_packageStructure(0);
+PackageStructure::Ptr ContainmentActionsPrivate::s_packageStructure(0);
 
-ContextAction::ContextAction(QObject * parentObject)
-    : d(new ContextActionPrivate(KService::serviceByStorageId(QString()), this))
+ContainmentActions::ContainmentActions(QObject * parentObject)
+    : d(new ContainmentActionsPrivate(KService::serviceByStorageId(QString()), this))
 {
     setParent(parentObject);
 }
 
-ContextAction::ContextAction(QObject *parentObject, const QVariantList &args)
-    : d(new ContextActionPrivate(KService::serviceByStorageId(args.count() > 0 ?
+ContainmentActions::ContainmentActions(QObject *parentObject, const QVariantList &args)
+    : d(new ContainmentActionsPrivate(KService::serviceByStorageId(args.count() > 0 ?
                              args[0].toString() : QString()), this))
 {
     // now remove first item since those are managed by Wallpaper and subclasses shouldn't
@@ -64,30 +64,34 @@ ContextAction::ContextAction(QObject *parentObject, const QVariantList &args)
     setParent(parentObject);
 }
 
-ContextAction::~ContextAction()
+ContainmentActions::~ContainmentActions()
 {
     delete d;
 }
 
-KPluginInfo::List ContextAction::listContextActionInfo()
+KPluginInfo::List ContainmentActions::listContainmentActionsInfo()
 {
     QString constraint;
 
-    KService::List offers = KServiceTypeTrader::self()->query("Plasma/ContextAction", constraint);
+    KService::List offers = KServiceTypeTrader::self()->query("Plasma/ContainmentActions", constraint);
     return KPluginInfo::fromServices(offers);
 }
 
-ContextAction *ContextAction::load(const QString &contextActionName, const QVariantList &args)
+ContainmentActions *ContainmentActions::load(Containment *parent, const QString &containmentActionsName, const QVariantList &args)
 {
-    if (contextActionName.isEmpty()) {
+    if (!parent) {
         return 0;
     }
 
-    QString constraint = QString("[X-KDE-PluginInfo-Name] == '%1'").arg(contextActionName);
-    KService::List offers = KServiceTypeTrader::self()->query("Plasma/ContextAction", constraint);
+    if (containmentActionsName.isEmpty()) {
+        return 0;
+    }
+
+    QString constraint = QString("[X-KDE-PluginInfo-Name] == '%1'").arg(containmentActionsName);
+    KService::List offers = KServiceTypeTrader::self()->query("Plasma/ContainmentActions", constraint);
 
     if (offers.isEmpty()) {
-        kDebug() << "offers is empty for " << contextActionName;
+        kDebug() << "offers is empty for " << containmentActionsName;
         return 0;
     }
 
@@ -101,139 +105,137 @@ ContextAction *ContextAction::load(const QString &contextActionName, const QVari
     QVariantList allArgs;
     allArgs << offer->storageId() << args;
     QString error;
-    ContextAction *contextAction = offer->createInstance<Plasma::ContextAction>(0, allArgs, &error);
+    ContainmentActions *containmentActions = offer->createInstance<Plasma::ContainmentActions>(0, allArgs, &error);
 
-    if (!contextAction) {
-        kDebug() << "Couldn't load contextAction \"" << contextActionName << "\"! reason given: " << error;
+    if (!containmentActions) {
+        kDebug() << "Couldn't load containmentActions \"" << containmentActionsName << "\"! reason given: " << error;
     }
 
-    return contextAction;
+    containmentActions->setParent(parent);
+    containmentActions->d->containment = parent;
+
+    return containmentActions;
 }
 
-ContextAction *ContextAction::load(const KPluginInfo &info, const QVariantList &args)
+ContainmentActions *ContainmentActions::load(Containment *parent, const KPluginInfo &info, const QVariantList &args)
 {
     if (!info.isValid()) {
         return 0;
     }
-    return load(info.pluginName(), args);
+    return load(parent, info.pluginName(), args);
 }
 
-PackageStructure::Ptr ContextAction::packageStructure()
+PackageStructure::Ptr ContainmentActions::packageStructure()
 {
-    if (!ContextActionPrivate::s_packageStructure) {
-        ContextActionPrivate::s_packageStructure = new ContextActionPackage();
+    if (!ContainmentActionsPrivate::s_packageStructure) {
+        ContainmentActionsPrivate::s_packageStructure = new ContainmentActionsPackage();
     }
 
-    return ContextActionPrivate::s_packageStructure;
+    return ContainmentActionsPrivate::s_packageStructure;
 }
 
-void ContextAction::setContainment(Containment *c)
-{
-    d->containment=c;
-}
-
-Containment *ContextAction::containment()
+Containment *ContainmentActions::containment()
 {
     return d->containment;
 }
 
-QString ContextAction::name() const
+QString ContainmentActions::name() const
 {
-    if (!d->contextActionDescription.isValid()) {
-        return i18n("Unknown ContextAction");
+    if (!d->containmentActionsDescription.isValid()) {
+        return i18n("Unknown ContainmentActions");
     }
 
-    return d->contextActionDescription.name();
+    return d->containmentActionsDescription.name();
 }
 
-QString ContextAction::icon() const
+QString ContainmentActions::icon() const
 {
-    if (!d->contextActionDescription.isValid()) {
+    if (!d->containmentActionsDescription.isValid()) {
         return QString();
     }
 
-    return d->contextActionDescription.icon();
+    return d->containmentActionsDescription.icon();
 }
 
-QString ContextAction::pluginName() const
+QString ContainmentActions::pluginName() const
 {
-    if (!d->contextActionDescription.isValid()) {
+    if (!d->containmentActionsDescription.isValid()) {
         return QString();
     }
 
-    return d->contextActionDescription.pluginName();
+    return d->containmentActionsDescription.pluginName();
 }
 
-bool ContextAction::isInitialized() const
+bool ContainmentActions::isInitialized() const
 {
     return d->initialized;
 }
 
-void ContextAction::restore(const KConfigGroup &config)
+void ContainmentActions::restore(const KConfigGroup &config)
 {
     init(config);
     d->initialized = true;
 }
 
-void ContextAction::init(const KConfigGroup &config)
+void ContainmentActions::init(const KConfigGroup &config)
 {
     Q_UNUSED(config);
 }
 
-void ContextAction::save(KConfigGroup &config)
+void ContainmentActions::save(KConfigGroup &config)
 {
     Q_UNUSED(config);
 }
 
-QWidget *ContextAction::createConfigurationInterface(QWidget *parent)
+QWidget *ContainmentActions::createConfigurationInterface(QWidget *parent)
 {
     Q_UNUSED(parent);
     return 0;
 }
 
-void ContextAction::configurationAccepted()
+void ContainmentActions::configurationAccepted()
 {
     //do nothing by default
 }
 
-void ContextAction::contextEvent(QEvent *event)
+void ContainmentActions::contextEvent(QEvent *event)
 {
     Q_UNUSED(event)
 }
 
-QList<QAction*> ContextAction::contextualActions()
+QList<QAction*> ContainmentActions::contextualActions()
 {
     //empty list
     return QList<QAction*>();
 }
 
-DataEngine *ContextAction::dataEngine(const QString &name) const
+DataEngine *ContainmentActions::dataEngine(const QString &name) const
 {
     return d->dataEngine(name);
 }
 
-bool ContextAction::configurationRequired() const
+bool ContainmentActions::configurationRequired() const
 {
     return d->needsConfig;
 }
 
-void ContextAction::setConfigurationRequired(bool needsConfig)
+void ContainmentActions::setConfigurationRequired(bool needsConfig)
 {
     //TODO: reason?
     d->needsConfig = needsConfig;
 }
 
-bool ContextAction::hasConfigurationInterface() const
+bool ContainmentActions::hasConfigurationInterface() const
 {
     return d->hasConfig;
 }
 
-void ContextAction::setHasConfigurationInterface(bool hasConfig)
+void ContainmentActions::setHasConfigurationInterface(bool hasConfig)
 {
     d->hasConfig = hasConfig;
 }
 
-QString ContextAction::eventToString(QEvent *event)
+QString ContainmentActions::eventToString(QEvent *event)
 {
     QString trigger;
     Qt::KeyboardModifiers modifiers;
@@ -292,7 +294,7 @@ QString ContextAction::eventToString(QEvent *event)
     return trigger;
 }
 
-void ContextAction::paste(QPointF scenePos, QPoint screenPos)
+void ContainmentActions::paste(QPointF scenePos, QPoint screenPos)
 {
     Containment *c = containment();
     if (c) {
@@ -302,4 +304,4 @@ void ContextAction::paste(QPointF scenePos, QPoint screenPos)
 
 } // Plasma namespace
 
-#include "contextaction.moc"
+#include "containmentactions.moc"

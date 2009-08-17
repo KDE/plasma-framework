@@ -116,11 +116,11 @@ public:
     void dropData(QPointF scenePos, QPoint screenPos, QGraphicsSceneDragDropEvent *dropEvent = 0);
 
     /**
-     * inits the contextaction if necessary
+     * inits the containmentactions if necessary
      * if it needs configuring, this warns the user and returns false
      * @return true if it's ok to run the action
      */
-    bool prepareContextAction(const QString &trigger, const QPoint &screenPos);
+    bool prepareContainmentActions(const QString &trigger, const QPoint &screenPos);
 
     Containment *q;
     FormFactor formFactor;
@@ -129,7 +129,7 @@ public:
     Applet *focusedApplet;
     Plasma::Wallpaper *wallpaper;
     QMap<Applet*, AppletHandle*> handles;
-    QHash<QString, ContextAction*> contextActions;
+    QHash<QString, ContainmentActions*> actionPlugins;
     int screen;
     int desktop;
     ToolBox *toolBox;

@@ -35,24 +35,24 @@ namespace Plasma
 
 class DataEngine;
 class Containment;
-class ContextActionPrivate;
+class ContainmentActionsPrivate;
 
 /**
- * @class ContextAction plasma/contextaction.h <Plasma/ContextAction>
+ * @class ContainmentActions plasma/containmentactions.h <Plasma/ContainmentActions>
  *
- * @short The base ContextAction class
+ * @short The base ContainmentActions class
  *
- * "ContextActions" are components that provide an action (usually displaying a contextmenu) in
+ * "ContainmentActions" are components that provide actions (usually displaying a contextmenu) in
  * response to an event with a position (usually a mouse event).
  *
- * ContextAction plugins are registered using .desktop files. These files should be
+ * ContainmentActions plugins are registered using .desktop files. These files should be
  * named using the following naming scheme:
  *
- *     plasma-contextaction-\<pluginname\>.desktop
+ *     plasma-containmentactions-\<pluginname\>.desktop
  *
  */
 
-class PLASMA_EXPORT ContextAction : public QObject
+class PLASMA_EXPORT ContainmentActions : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QString name READ name)
@@ -61,65 +61,67 @@ class PLASMA_EXPORT ContextAction : public QObject
 
     public:
         /**
-         * Default constructor for an empty or null contextaction
+         * Default constructor for an empty or null containmentactions
          */
-        explicit ContextAction(QObject * parent = 0);
+        explicit ContainmentActions(QObject * parent = 0);
 
-        ~ContextAction();
+        ~ContainmentActions();
 
         /**
-         * Returns a list of all known contextactions.
+         * Returns a list of all known containmentactions plugins.
          *
-         * @return list of contextactions
+         * @return list of containmentactions plugins
          **/
-        static KPluginInfo::List listContextActionInfo();
+        static KPluginInfo::List listContainmentActionsInfo();
 
         /**
-         * Attempts to load a contextaction
+         * Attempts to load a containmentactions
          *
-         * Returns a pointer to the contextaction if successful.
-         * The caller takes responsibility for the contextaction, including
+         * Returns a pointer to the containmentactions if successful.
+         * The caller takes responsibility for the containmentactions, including
          * deleting it when no longer needed.
          *
+         * @param parent the parent containment. Required; if you send null you'll get back null.
          * @param name the plugin name, as returned by KPluginInfo::pluginName()
-         * @param args to send the contextaction extra arguments
-         * @return a pointer to the loaded contextaction, or 0 on load failure
+         * @param args to send the containmentactions extra arguments
+         * @return a pointer to the loaded containmentactions, or 0 on load failure
          **/
-        static ContextAction *load(const QString &name, const QVariantList &args = QVariantList());
+        static ContainmentActions *load(Containment *parent, const QString &name, const QVariantList &args = QVariantList());
 
         /**
-         * Attempts to load a contextaction
+         * Attempts to load a containmentactions
          *
-         * Returns a pointer to the contextaction if successful.
-         * The caller takes responsibility for the contextaction, including
+         * Returns a pointer to the containmentactions if successful.
+         * The caller takes responsibility for the containmentactions, including
          * deleting it when no longer needed.
          *
-         * @param info KPluginInfo object for the desired contextaction
-         * @param args to send the contextaction extra arguments
-         * @return a pointer to the loaded contextaction, or 0 on load failure
+         * @param parent the parent containment. Required; if you send null you'll get back null.
+         * @param info KPluginInfo object for the desired containmentactions
+         * @param args to send the containmentactions extra arguments
+         * @return a pointer to the loaded containmentactions, or 0 on load failure
          **/
-        static ContextAction *load(const KPluginInfo &info, const QVariantList &args = QVariantList());
+        static ContainmentActions *load(Containment *parent, const KPluginInfo &info, const QVariantList &args = QVariantList());
 
         /**
-         * Returns the Package specialization for contextactions.
+         * Returns the Package specialization for containmentactions.
          */
         static PackageStructure::Ptr packageStructure();
 
         /**
-         * Returns the user-visible name for the contextaction, as specified in the
+         * Returns the user-visible name for the containmentactions, as specified in the
          * .desktop file.
          *
-         * @return the user-visible name for the contextaction.
+         * @return the user-visible name for the containmentactions.
          **/
         QString name() const;
 
         /**
-         * Returns the plugin name for the contextaction
+         * Returns the plugin name for the containmentactions
          */
         QString pluginName() const;
 
         /**
-         * Returns the icon related to this contextaction
+         * Returns the icon related to this containmentactions
          **/
         QString icon() const;
 
@@ -129,7 +131,7 @@ class PLASMA_EXPORT ContextAction : public QObject
         bool isInitialized() const;
 
         /**
-         * This method should be called once the wallpaper is loaded or mode is changed.
+         * This method should be called once the plugin is loaded or settings are changed.
          * @param config Config group to load settings
          * @see init
          **/
@@ -143,12 +145,7 @@ class PLASMA_EXPORT ContextAction : public QObject
 
         /**
          * Returns the widget used in the configuration dialog.
-         * Add the configuration interface of the contextaction to this widget.
-         * To signal that settings have changed connect to
-         * settingsChanged(bool modified) in @p parent.
-         * @code connect(this, SIGNAL(settingsChanged(bool), parent, SLOT(settingsChanged(bool)))
-         * @endcode
-         * Emit settingsChanged(true) when the settings are changed and false when the original state is restored.
+         * Add the configuration interface of the containmentactions to this widget.
          */
         virtual QWidget *createConfigurationInterface(QWidget *parent);
 
@@ -193,25 +190,18 @@ class PLASMA_EXPORT ContextAction : public QObject
         Q_INVOKABLE DataEngine *dataEngine(const QString &name) const;
 
         /**
-         * @return true if the contextaction currently needs to be configured,
+         * @return true if the containmentactions currently needs to be configured,
          *         otherwise, false
          */
         bool configurationRequired() const;
 
         /**
-         * @return true if the contextaction has a config UI
+         * @return true if the containmentactions has a config UI
          */
         bool hasConfigurationInterface() const;
 
         /**
-         * set the containment this contextaction is associated with.
-         * some plugins may need information from the containment in order to function or be
-         * configured.
-         */
-        void setContainment(Containment *c);
-
-        /**
-         * Turns a mouse or wheel event into a string suitable for a ContextAction
+         * Turns a mouse or wheel event into a string suitable for a ContainmentActions
          * @return the string representation of the event
          */
         static QString eventToString(QEvent *event);
@@ -225,19 +215,17 @@ class PLASMA_EXPORT ContextAction : public QObject
          * @param parent a QObject parent; you probably want to pass in 0
          * @param args a list of strings containing one entry: the service id
          */
-        ContextAction(QObject *parent, const QVariantList &args);
+        ContainmentActions(QObject *parent, const QVariantList &args);
 
         /**
-         * This method is called once the contextaction is loaded or mode is changed.
-         *
-         * The mode can be retrieved using the renderingMode() method.
+         * This method is called once the containmentactions is loaded or settings are changed.
          *
          * @param config Config group to load settings
          **/
         virtual void init(const KConfigGroup &config);
 
         /**
-         * When the contextaction needs to be configured before being usable, this
+         * When the containmentactions needs to be configured before being usable, this
          * method can be called to denote that action is required
          *
          * @param needsConfiguring true if the applet needs to be configured,
@@ -246,12 +234,12 @@ class PLASMA_EXPORT ContextAction : public QObject
         void setConfigurationRequired(bool needsConfiguring = true);
 
         /**
-         * set whether the contextaction has a config UI
+         * set whether the containmentactions has a config UI
          */
         void setHasConfigurationInterface(bool hasConfig = true);
 
         /**
-         * @return the containment the plugin is associated with, if any.
+         * @return the containment the plugin is associated with.
          */
         Containment *containment();
 
@@ -262,19 +250,19 @@ class PLASMA_EXPORT ContextAction : public QObject
         void paste(QPointF scenePos, QPoint screenPos);
 
     private:
-        friend class ContextActionPackage;
-        friend class ContextActionPrivate;
-        ContextActionPrivate *const d;
+        friend class ContainmentActionsPackage;
+        friend class ContainmentActionsPrivate;
+        ContainmentActionsPrivate *const d;
 };
 
 } // Plasma namespace
 
 /**
- * Register a contextaction when it is contained in a loadable module
+ * Register a containmentactions when it is contained in a loadable module
  */
-#define K_EXPORT_PLASMA_CONTEXTACTION(libname, classname) \
+#define K_EXPORT_PLASMA_CONTAINMENTACTIONS(libname, classname) \
 K_PLUGIN_FACTORY(factory, registerPlugin<classname>();) \
-K_EXPORT_PLUGIN(factory("plasma_contextaction_" #libname)) \
+K_EXPORT_PLUGIN(factory("plasma_containmentactions_" #libname)) \
 K_EXPORT_PLUGIN_VERSION(PLASMA_VERSION)
 
 #endif // multiple inclusion guard

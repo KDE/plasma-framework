@@ -82,12 +82,12 @@ private:
     Wallpaper *m_paper;
 };
 
-class ContextActionPackage : public PackageStructure
+class ContainmentActionsPackage : public PackageStructure
 {
     Q_OBJECT
 
 public:
-    explicit ContextActionPackage(QObject *parent = 0);
+    explicit ContainmentActionsPackage(QObject *parent = 0);
 };
 
 PackageStructure::Ptr defaultPackageStructure(ComponentType type);

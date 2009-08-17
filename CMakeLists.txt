@@ -58,8 +58,8 @@ set(plasma_LIB_SRCS
     applet.cpp
     configloader.cpp
     containment.cpp
+    containmentactions.cpp
     context.cpp
-    contextaction.cpp
     corona.cpp
     datacontainer.cpp
     dataengine.cpp
@@ -202,8 +202,8 @@ set(plasma_LIB_INCLUDES
     applet.h
     configloader.h
     containment.h
+    containmentactions.h
     context.h
-    contextaction.h
     corona.h
     datacontainer.h
     dataengine.h
@@ -289,7 +289,7 @@ install(FILES
    servicetypes/plasma-applet.desktop
    servicetypes/plasma-applet-popupapplet.desktop
    servicetypes/plasma-containment.desktop
-   servicetypes/plasma-contextaction.desktop
+   servicetypes/plasma-containmentactions.desktop
    servicetypes/plasma-dataengine.desktop
    servicetypes/plasma-packagestructure.desktop
    servicetypes/plasma-runner.desktop

@@ -47,7 +47,7 @@ class Package;
 class Corona;
 class View;
 class Wallpaper;
-class ContextAction;
+class ContainmentActions;
 class ContainmentPrivate;
 
 /**
@@ -367,25 +367,25 @@ class PLASMA_EXPORT Containment : public Applet
         virtual void showDropZone(const QPoint pos);
 
         /**
-         * Sets a contextaction plugin.
+         * Sets a containmentactions plugin.
          *
          * @param trigger the mouse button (and optional modifier) to associate the plugin with
          * @param pluginName the name of the plugin to attempt to load. blank = set no plugin.
-         * @since 4.3
+         * @since 4.4
          */
-        void setContextAction(const QString &trigger, const QString &pluginName);
+        void setContainmentActions(const QString &trigger, const QString &pluginName);
 
         /**
-         * @return a list of all triggers that have a contextaction plugin associated
-         * @since 4.3
+         * @return a list of all triggers that have a containmentactions plugin associated
+         * @since 4.4
          */
-        QStringList contextActionTriggers();
+        QStringList containmentActionsTriggers();
 
         /**
          * @return the plugin name for the given trigger
-         * @since 4.3
+         * @since 4.4
          */
-        QString contextAction(const QString &trigger);
+        QString containmentActions(const QString &trigger);
 
     Q_SIGNALS:
         /**
@@ -589,7 +589,7 @@ class PLASMA_EXPORT Containment : public Applet
         friend class AppletPrivate;
         friend class CoronaPrivate;
         friend class ContainmentPrivate;
-        friend class ContextAction;
+        friend class ContainmentActions;
         ContainmentPrivate *const d;
 };
 

@@ -50,7 +50,7 @@
 
 #include "animator.h"
 #include "context.h"
-#include "contextaction.h"
+#include "containmentactions.h"
 #include "corona.h"
 #include "extenderitem.h"
 #include "svg.h"
@@ -227,11 +227,12 @@ void Containment::init()
         }
     }
 
-    //contextactions, from config or defaults
-    KConfigGroup cfg(&config(), "ContextActions");
+    //containmentactionss, from config or defaults
+    KConfigGroup cfg = config();
+    cfg = KConfigGroup(&cfg, "ActionPlugins");
     if (cfg.exists()) {
         foreach (const QString &key, cfg.keyList()) {
-            setContextAction(key, cfg.readEntry(key, QString()));
+            setContainmentActions(key, cfg.readEntry(key, QString()));
         }
     } else {
         //we need to be very careful here to not write anything
@@ -253,12 +254,11 @@ void Containment::init()
             break;
         }
 
-        foreach (const QString &trigger, defaults.keys()) {
-            ContextAction *action = ContextAction::load(defaults.value(trigger));
-            if (action) {
-                d->contextActions.insert(trigger, action);
-                action->setParent(this);
-                action->setContainment(this);
+        for (QHash<QString,QString>::const_iterator it = defaults.constBegin(),
+                end = defaults.constEnd(); it != end; ++it) {
+            ContainmentActions *plugin = ContainmentActions::load(this, it.value());
+            if (plugin) {
+                d->actionPlugins.insert(it.key(), plugin);
             }
         }
     }
@@ -369,22 +369,16 @@ void Containment::restore(KConfigGroup &group)
         d->toolBox->load(group);
     }
 
-    KConfigGroup cfg(&group, "ContextActions");
+    KConfigGroup cfg(&group, "ActionPlugins");
     kDebug() << cfg.keyList();
     if (cfg.exists()) {
-        //clear default contextactions
-        //FIXME this feels like I'm not doing the Right Thing
-        //it's also not the most efficient way to clear things, I bet
-        foreach (const QString &key, d->contextActions.keys()) {
-            //we don't want to setContextAction here because it writes things.
-            //just delete everything, quietly.
-            kDebug() << "deleting" << key;
-            delete d->contextActions.take(key);
-        }
+        //clear default containmentactionss
+        qDeleteAll(d->actionPlugins);
+        d->actionPlugins.clear();
         //load the right configactions
         foreach (const QString &key, cfg.keyList()) {
             kDebug() << "loading" << key;
-            setContextAction(key, cfg.readEntry(key, QString()));
+            setContainmentActions(key, cfg.readEntry(key, QString()));
         }
     }
 
@@ -530,10 +524,10 @@ void Containment::mousePressEvent(QGraphicsSceneMouseEvent *event)
         return; //no unexpected click-throughs
     }
 
-    QString trigger = ContextAction::eventToString(event);
+    QString trigger = ContainmentActions::eventToString(event);
 
     //FIXME what if someone changes the modifiers before the mouseup?
-    if (d->contextActions.contains(trigger)) {
+    if (d->actionPlugins.contains(trigger)) {
         kDebug() << "accepted mousedown";
         event->accept();
     }
@@ -558,11 +552,11 @@ void Containment::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
         return; //no unexpected click-throughs
     }
 
-    QString trigger = ContextAction::eventToString(event);
+    QString trigger = ContainmentActions::eventToString(event);
 
-    if (d->contextActions.contains(trigger)) {
-        if (d->prepareContextAction(trigger, event->screenPos())) {
-            d->contextActions.value(trigger)->contextEvent(event);
+    if (d->actionPlugins.contains(trigger)) {
+        if (d->prepareContainmentActions(trigger, event->screenPos())) {
+            d->actionPlugins.value(trigger)->contextEvent(event);
         }
         event->accept();
         return;
@@ -616,20 +610,20 @@ void ContainmentPrivate::containmentActions(KMenu &desktopMenu)
 
     QString trigger = "RightButton;NoModifier";
     //get base context actions
-    if (ContextAction *cAction = contextActions.value(trigger)) {
-        if (!cAction->isInitialized()) {
-            KConfigGroup cfg(&(q->config()), "ContextActions");
-            KConfigGroup actionConfig = KConfigGroup(&cfg, cAction->pluginName());
-            cAction->restore(actionConfig);
+    ContainmentActions *plugin = actionPlugins.value(trigger);
+    if (plugin) {
+        if (!plugin->isInitialized()) {
+            KConfigGroup cfg = q->config();
+            cfg = KConfigGroup(&cfg, "ActionPlugins");
+            KConfigGroup pluginConfig = KConfigGroup(&cfg, plugin->pluginName());
+            plugin->restore(pluginConfig);
         }
 
-        if (cAction->configurationRequired()) {
-            //it needs configuring
-            //FIXME the text could be better.
-            desktopMenu.addTitle(i18n("This plugin needs to be configured"));
+        if (plugin->configurationRequired()) {
+            desktopMenu.addTitle(i18n("This menu needs to be configured"));
             desktopMenu.addAction(q->action("configure"));
         } else {
-            QList<QAction*> actions = cAction->contextualActions();
+            QList<QAction*> actions = plugin->contextualActions();
             if (actions.isEmpty()) {
                 //it probably didn't bother implementing the function. give the user a chance to set
                 //a better plugin.
@@ -652,11 +646,9 @@ void ContainmentPrivate::appletActions(KMenu &desktopMenu, Applet *applet, bool 
 
     if (includeApplet) {
         actions = applet->contextualActions();
-        if (!actions.isEmpty()) {
-            foreach (QAction *action, actions) {
-                if (action) {
-                    desktopMenu.addAction(action);
-                }
+        foreach (QAction *action, actions) {
+            if (action) {
+                desktopMenu.addAction(action);
             }
         }
     }
@@ -664,6 +656,29 @@ void ContainmentPrivate::appletActions(KMenu &desktopMenu, Applet *applet, bool 
     QAction *configureApplet = applet->d->actions->action("configure");
     if (configureApplet && configureApplet->isEnabled()) {
         desktopMenu.addAction(configureApplet);
+    }
+
+    KMenu *containmentMenu = new KMenu(i18nc("%1 is the name of the containment", "%1 Options", q->name()), &desktopMenu);
+    containmentActions(*containmentMenu);
+    if (!containmentMenu->isEmpty()) {
+        int enabled = 0;
+        //count number of real actions
+        foreach (const QAction *action, containmentMenu->actions()) {
+            if (action->isVisible() && !action->isSeparator()) {
+                ++enabled;
+            }
+        }
+
+        if (enabled) {
+            //if there is only one, don't create a submenu
+            if (enabled < 2) {
+                foreach (QAction *action, containmentMenu->actions()) {
+                    desktopMenu.addAction(action);
+                }
+            } else {
+                desktopMenu.addMenu(containmentMenu);
+            }
+        }
     }
 
     if (static_cast<Corona*>(q->scene())->immutability() == Mutable) {
@@ -674,31 +689,6 @@ void ContainmentPrivate::appletActions(KMenu &desktopMenu, Applet *applet, bool 
         QAction *closeApplet = applet->d->actions->action("remove");
         if (closeApplet) {
             desktopMenu.addAction(closeApplet);
-        }
-    }
-
-    KMenu *containmentMenu = new KMenu(i18nc("%1 is the name of the containment", "%1 Options", q->name()), &desktopMenu);
-    containmentActions(*containmentMenu);
-    if (!containmentMenu->isEmpty()) {
-        int enabled = 0;
-        //count number of real actions
-        foreach(QAction *action, containmentMenu->actions()) {
-            if(action->isEnabled() && !action->isSeparator()) {
-                enabled++;
-            }
-        }
-
-        if (enabled > 0) {
-            desktopMenu.addSeparator();
-        }
-
-        //if there is only one, don't create a submenu
-        if(enabled < 2) {
-            foreach(QAction *action, containmentMenu->actions()) {
-                desktopMenu.addAction(action);
-            }
-        } else {
-            desktopMenu.addMenu(containmentMenu);
         }
     }
 }
@@ -1429,11 +1419,11 @@ void Containment::wheelEvent(QGraphicsSceneWheelEvent *event)
         return; //no unexpected click-throughs
     }
 
-    QString trigger = ContextAction::eventToString(event);
+    QString trigger = ContainmentActions::eventToString(event);
 
-    if (d->contextActions.contains(trigger)) {
-        if (d->prepareContextAction(trigger, event->screenPos())) {
-            d->contextActions.value(trigger)->contextEvent(event);
+    if (d->actionPlugins.contains(trigger)) {
+        if (d->prepareContainmentActions(trigger, event->screenPos())) {
+            d->actionPlugins.value(trigger)->contextEvent(event);
         }
         event->accept();
         return;
@@ -1693,36 +1683,35 @@ Plasma::Wallpaper *Containment::wallpaper() const
     return d->wallpaper;
 }
 
-void Containment::setContextAction(const QString &trigger, const QString &pluginName)
+void Containment::setContainmentActions(const QString &trigger, const QString &pluginName)
 {
-    KConfigGroup cfg(&config(), "ContextActions");
+    KConfigGroup cfg = config();
+    cfg = KConfigGroup(&cfg, "ActionPlugins");
     bool everSaved = cfg.exists();
-    ContextAction *action = 0;
+    ContainmentActions *plugin = 0;
 
-    if (d->contextActions.contains(trigger)) {
-        action = d->contextActions.value(trigger);
-        if (action->pluginName() != pluginName) {
-            d->contextActions.remove(trigger);
-            delete action;
-            action=0;
+    if (d->actionPlugins.contains(trigger)) {
+        plugin = d->actionPlugins.value(trigger);
+        if (plugin->pluginName() != pluginName) {
+            d->actionPlugins.remove(trigger);
+            delete plugin;
+            plugin=0;
         }
     }
     if (pluginName.isEmpty()) {
         cfg.deleteEntry(trigger);
-    } else if (action) {
+    } else if (plugin) {
         //it already existed, just reload config
-        if (action->isInitialized()) {
+        if (plugin->isInitialized()) {
             //FIXME make a truly unique config group
-            KConfigGroup actionConfig = KConfigGroup(&cfg, pluginName);
-            action->restore(actionConfig);
+            KConfigGroup pluginConfig = KConfigGroup(&cfg, pluginName);
+            plugin->restore(pluginConfig);
         }
     } else {
-        action = ContextAction::load(pluginName);
-        if (action) {
+        plugin = ContainmentActions::load(this, pluginName);
+        if (plugin) {
             cfg.writeEntry(trigger, pluginName);
-            d->contextActions.insert(trigger, action);
-            action->setParent(this);
-            action->setContainment(this);
+            d->actionPlugins.insert(trigger, plugin);
         } else {
             //bad plugin... gets removed. is this a feature or a bug?
             cfg.deleteEntry(trigger);
@@ -1732,22 +1721,23 @@ void Containment::setContextAction(const QString &trigger, const QString &plugin
     if (!everSaved) {
         //ensure all our defaults are written out
         //the disadvantage of using a group...
-        foreach (const QString &key, d->contextActions.keys()) {
-            cfg.writeEntry(key, d->contextActions.value(key)->pluginName());
+        for (QHash<QString,ContainmentActions*>::const_iterator it = d->actionPlugins.constBegin(),
+                end = d->actionPlugins.constEnd(); it != end; ++it) {
+            cfg.writeEntry(it.key(), it.value()->pluginName());
         }
     }
 
     emit configNeedsSaving();
 }
 
-QStringList Containment::contextActionTriggers()
+QStringList Containment::containmentActionsTriggers()
 {
-    return d->contextActions.keys();
+    return d->actionPlugins.keys();
 }
 
-QString Containment::contextAction(const QString &trigger)
+QString Containment::containmentActions(const QString &trigger)
 {
-    ContextAction *c = d->contextActions.value(trigger);
+    ContainmentActions *c = d->actionPlugins.value(trigger);
     return c ? c->pluginName() : QString();
 }
 
@@ -2259,17 +2249,18 @@ void ContainmentPrivate::positionPanel(bool force)
 }
 
 
-bool ContainmentPrivate::prepareContextAction(const QString &trigger, const QPoint &screenPos)
+bool ContainmentPrivate::prepareContainmentActions(const QString &trigger, const QPoint &screenPos)
 {
-    ContextAction *action = contextActions.value(trigger);
+    ContainmentActions *plugin = actionPlugins.value(trigger);
 
-    if (!action->isInitialized()) {
-        KConfigGroup cfg(&(q->config()), "ContextActions");
-        KConfigGroup actionConfig = KConfigGroup(&cfg, action->pluginName());
-        action->restore(actionConfig);
+    if (!plugin->isInitialized()) {
+        KConfigGroup cfg = q->config();
+        cfg = KConfigGroup(&cfg, "ActionPlugins");
+        KConfigGroup pluginConfig = KConfigGroup(&cfg, plugin->pluginName());
+        plugin->restore(pluginConfig);
     }
 
-    if (action->configurationRequired()) {
+    if (plugin->configurationRequired()) {
         KMenu menu;
         menu.addTitle(i18n("This plugin needs to be configured"));
         menu.addAction(q->action("configure"));
