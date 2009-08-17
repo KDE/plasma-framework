@@ -235,10 +235,22 @@ void Containment::init()
         }
     } else {
         if (d->type == DesktopContainment) {
-            setContextAction("wheel:Vertical;NoModifier", "switchdesktop");
-            setContextAction("wheel:Horizontal;ControlModifier", "test");
-            setContextAction("LeftButton;NoModifier", "switchdesktop");
-            setContextAction("RightButton;NoModifier", "test");
+            //we need to be very careful here to not write anything
+            //because we have a group, and so the defaults will get merged instead of overwritten
+            //when copyTo is used (which happens right before restore() is called)
+            QHash<QString,QString> defaults;
+            defaults.insert("wheel:Vertical;NoModifier", "switchdesktop");
+            defaults.insert("wheel:Horizontal;ControlModifier", "test");
+            defaults.insert("LeftButton;NoModifier", "switchdesktop");
+            defaults.insert("RightButton;NoModifier", "test");
+            foreach (const QString &trigger, defaults.keys()) {
+                ContextAction *action = ContextAction::load(defaults.value(trigger));
+                if (action) {
+                    d->contextActions.insert(trigger, action);
+                    connect(action, SIGNAL(configureRequested()), this, SLOT(requestConfiguration()));
+                    connect(action, SIGNAL(configNeedsSaving()), this, SIGNAL(configNeedsSaving()));
+                }
+            }
         }
         //TODO defaults for panel etc.
     }
@@ -348,6 +360,26 @@ void Containment::restore(KConfigGroup &group)
     if (d->toolBox) {
         d->toolBox->load(group);
     }
+
+    KConfigGroup cfg(&group, "ContextActions");
+    kDebug() << cfg.keyList();
+    if (cfg.exists()) {
+        //clear default contextactions
+        //FIXME this feels like I'm not doing the Right Thing
+        //it's also not the most efficient way to clear things, I bet
+        foreach (const QString &key, d->contextActions.keys()) {
+            //we don't want to setContextAction here because it writes things.
+            //just delete everything, quietly.
+            kDebug() << "deleting" << key;
+            delete d->contextActions.take(key);
+        }
+        //load the right configactions
+        foreach (const QString &key, cfg.keyList()) {
+            kDebug() << "loading" << key;
+            setContextAction(key, cfg.readEntry(key, QString()));
+        }
+    }
+
     /*
     kDebug() << "Containment" << id() <<
                 "screen" << screen() <<
@@ -1659,6 +1691,7 @@ Plasma::Wallpaper *Containment::wallpaper() const
 void Containment::setContextAction(const QString &trigger, const QString &pluginName)
 {
     KConfigGroup cfg(&config(), "ContextActions");
+    bool everSaved = cfg.exists();
     ContextAction *action = 0;
 
     if (d->contextActions.contains(trigger)) {
@@ -1671,27 +1704,38 @@ void Containment::setContextAction(const QString &trigger, const QString &plugin
     }
     if (pluginName.isEmpty()) {
         cfg.deleteEntry(trigger);
-        return; //FIXME config?
-    }
-
-    if (!action) {
-        action = ContextAction::load(pluginName);
+    } else {
         if (!action) {
-            cfg.deleteEntry(trigger);
-            return;
+            action = ContextAction::load(pluginName);
+            if (action) {
+                cfg.writeEntry(trigger, pluginName);
+                d->contextActions.insert(trigger, action);
+                connect(action, SIGNAL(configureRequested()), this, SLOT(requestConfiguration()));
+                connect(action, SIGNAL(configNeedsSaving()), this, SIGNAL(configNeedsSaving()));
+            } else {
+                //bad plugin... gets removed. is this a feature or a bug?
+                cfg.deleteEntry(trigger);
+            }
         }
-        cfg.writeEntry(trigger, pluginName);
-        d->contextActions.insert(trigger, action);
-        connect(action, SIGNAL(configureRequested()), this, SLOT(requestConfiguration()));
-        connect(action, SIGNAL(configNeedsSaving()), this, SIGNAL(configNeedsSaving()));
+
+        if (action) {
+            if (action->isInitialized()) {
+                KConfigGroup actionConfig = KConfigGroup(&cfg, trigger);
+                action->restore(actionConfig);
+            }
+            action->setParent(this);
+        }
     }
 
-    if (action->isInitialized()) {
-        KConfigGroup actionConfig = KConfigGroup(&cfg, trigger);
-        action->restore(actionConfig);
+    if (!everSaved) {
+        //ensure all our defaults are written out
+        //the disadvantage of using a group...
+        foreach (const QString &key, d->contextActions.keys()) {
+            cfg.writeEntry(key, d->contextActions.value(key)->pluginName());
+        }
     }
-    action->setParent(this);
 
+    emit configNeedsSaving();
 }
 
 QStringList Containment::contextActionTriggers()
