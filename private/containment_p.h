@@ -113,6 +113,13 @@ public:
      */
     void dropData(QGraphicsSceneEvent *event);
 
+    /**
+     * inits the contextaction if necessary
+     * if it needs configuring, this warns the user and returns false
+     * @return true if it's ok to run the action
+     */
+    bool prepareContextAction(const QString &trigger, const QPoint &screenPos);
+
     Containment *q;
     FormFactor formFactor;
     Location location;
@@ -120,6 +127,7 @@ public:
     Applet *focusedApplet;
     Plasma::Wallpaper *wallpaper;
     QMap<Applet*, AppletHandle*> handles;
+    QHash<QString, ContextAction*> contextActions;
     int screen;
     int desktop;
     ToolBox *toolBox;

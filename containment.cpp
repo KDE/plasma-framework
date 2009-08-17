@@ -26,6 +26,7 @@
 #include <QFile>
 #include <QGraphicsSceneContextMenuEvent>
 #include <QGraphicsView>
+#include <QMetaEnum>
 #include <QMimeData>
 #include <QPainter>
 #include <QStyleOptionGraphicsItem>
@@ -49,6 +50,7 @@
 
 #include "animator.h"
 #include "context.h"
+#include "contextaction.h"
 #include "corona.h"
 #include "extenderitem.h"
 #include "svg.h"
@@ -223,6 +225,22 @@ void Containment::init()
         if (d->drawWallpaper) {
             setDrawWallpaper(true);
         }
+    }
+
+    //contextactions, from config or defaults
+    KConfigGroup cfg(&config(), "ContextActions");
+    if (cfg.exists()) {
+        foreach (const QString &key, cfg.keyList()) {
+            setContextAction(key, cfg.readEntry(key, QString()));
+        }
+    } else {
+        if (d->type == DesktopContainment) {
+            setContextAction("wheel:Vertical;NoModifier", "switchdesktop");
+            setContextAction("wheel:Horizontal;ControlModifier", "test");
+            setContextAction("LeftButton;NoModifier", "switchdesktop");
+            setContextAction("RightButton;NoModifier", "test");
+        }
+        //TODO defaults for panel etc.
     }
 
 }
@@ -467,7 +485,25 @@ void Containment::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 void Containment::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     event->ignore();
-    if (d->wallpaper && d->wallpaper->isInitialized()) {
+
+    int m = QObject::staticQtMetaObject.indexOfEnumerator("MouseButtons");
+    int k = QObject::staticQtMetaObject.indexOfEnumerator("KeyboardModifiers");
+    QMetaEnum mouse = QObject::staticQtMetaObject.enumerator(m);
+    QMetaEnum kbd = QObject::staticQtMetaObject.enumerator(k);
+
+    QString context;
+    context += mouse.valueToKey(event->button());
+    context += ";";
+    context += kbd.valueToKeys(event->modifiers());
+    kDebug() << context;
+
+    //FIXME what if someone changes the modifiers before the mouseup?
+    if (d->contextActions.contains(context)) {
+        kDebug() << "accepted mousedown";
+        event->accept();
+    }
+
+    if (d->wallpaper && d->wallpaper->isInitialized() && !event->isAccepted()) {
         QGraphicsItem *item = scene()->itemAt(event->scenePos());
         if (item == this) {
             d->wallpaper->mousePressEvent(event);
@@ -488,6 +524,26 @@ void Containment::mousePressEvent(QGraphicsSceneMouseEvent *event)
 void Containment::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
     event->ignore();
+
+    int m = QObject::staticQtMetaObject.indexOfEnumerator("MouseButtons");
+    int k = QObject::staticQtMetaObject.indexOfEnumerator("KeyboardModifiers");
+    QMetaEnum mouse = QObject::staticQtMetaObject.enumerator(m);
+    QMetaEnum kbd = QObject::staticQtMetaObject.enumerator(k);
+
+    QString context;
+    context += mouse.valueToKey(event->button());
+    context += ";";
+    context += kbd.valueToKeys(event->modifiers());
+    kDebug() << context;
+
+    if (d->contextActions.contains(context)) {
+        if (d->prepareContextAction(context, event->screenPos())) {
+            d->contextActions.value(context)->contextEvent(event);
+        }
+        event->accept();
+        return;
+    }
+
     if (d->wallpaper && d->wallpaper->isInitialized()) {
         QGraphicsItem *item = scene()->itemAt(event->scenePos());
         if (item == this) {
@@ -1354,6 +1410,25 @@ void Containment::keyPressEvent(QKeyEvent *event)
 
 void Containment::wheelEvent(QGraphicsSceneWheelEvent *event)
 {
+    int o = QObject::staticQtMetaObject.indexOfEnumerator("Orientations");
+    int k = QObject::staticQtMetaObject.indexOfEnumerator("KeyboardModifiers");
+    QMetaEnum orient = QObject::staticQtMetaObject.enumerator(o);
+    QMetaEnum kbd = QObject::staticQtMetaObject.enumerator(k);
+
+    QString context = "wheel:";
+    context += orient.valueToKey(event->orientation());
+    context += ";";
+    context += kbd.valueToKeys(event->modifiers());
+    kDebug() << context;
+
+    if (d->contextActions.contains(context)) {
+        if (d->prepareContextAction(context, event->screenPos())) {
+            d->contextActions.value(context)->wheelEvent(event);
+        }
+        event->accept();
+        return;
+    }
+
     if (d->wallpaper && d->wallpaper->isInitialized()) {
         QGraphicsItem *item = scene()->itemAt(event->scenePos());
         if (item == this) {
@@ -1363,25 +1438,6 @@ void Containment::wheelEvent(QGraphicsSceneWheelEvent *event)
             if (event->isAccepted()) {
                 return;
             }
-
-            event->accept();
-        }
-    }
-
-    if (d->type == DesktopContainment) {
-        QGraphicsItem *item = scene()->itemAt(event->scenePos());
-        if (item == this) {
-            int numDesktops = KWindowSystem::numberOfDesktops();
-            int currentDesktop = KWindowSystem::currentDesktop();
-
-            if (event->delta() < 0) {
-                KWindowSystem::setCurrentDesktop(currentDesktop % numDesktops + 1);
-            } else {
-                KWindowSystem::setCurrentDesktop((numDesktops + currentDesktop - 2) % numDesktops + 1);
-            }
-
-            event->accept();
-            return;
         }
     }
 
@@ -1625,6 +1681,44 @@ void Containment::setWallpaper(const QString &pluginName, const QString &mode)
 Plasma::Wallpaper *Containment::wallpaper() const
 {
     return d->wallpaper;
+}
+
+void Containment::setContextAction(const QString &trigger, const QString &pluginName)
+{
+    KConfigGroup cfg(&config(), "ContextActions");
+    ContextAction *action = 0;
+
+    if (d->contextActions.contains(trigger)) {
+        action = d->contextActions.value(trigger);
+        if (action->pluginName() != pluginName) {
+            d->contextActions.remove(trigger);
+            delete action;
+            action=0;
+        }
+    }
+    if (pluginName.isEmpty()) {
+        cfg.deleteEntry(trigger);
+        return; //FIXME config?
+    }
+
+    if (!action) {
+        action = ContextAction::load(pluginName);
+        if (!action) {
+            cfg.deleteEntry(trigger);
+            return;
+        }
+        cfg.writeEntry(trigger, pluginName);
+        d->contextActions.insert(trigger, action);
+        connect(action, SIGNAL(configureRequested()), this, SLOT(requestConfiguration()));
+        connect(action, SIGNAL(configNeedsSaving()), this, SIGNAL(configNeedsSaving()));
+    }
+
+    if (action->isInitialized()) {
+        KConfigGroup actionConfig = KConfigGroup(&cfg, trigger);
+        action->restore(actionConfig);
+    }
+    action->setParent(this);
+
 }
 
 void Containment::setActivity(const QString &activity)
@@ -2133,6 +2227,29 @@ void ContainmentPrivate::positionPanel(bool force)
         ContainmentPrivate::s_positioning = false;
     }
 }
+
+
+bool ContainmentPrivate::prepareContextAction(const QString &trigger, const QPoint &screenPos)
+{
+    ContextAction *action = contextActions.value(trigger);
+
+    if (!action->isInitialized()) {
+        KConfigGroup cfg(&(q->config()), "ContextActions");
+        KConfigGroup actionConfig = KConfigGroup(&cfg, trigger);
+        action->restore(actionConfig);
+    }
+
+    if (action->configurationRequired()) {
+        KMenu menu;
+        menu.addTitle(i18n("This plugin needs to be configured"));
+        //TODO show reason
+        //TODO offer config button
+        menu.exec(screenPos);
+        return false;
+    }
+    return true;
+}
+
 
 } // Plasma namespace
 

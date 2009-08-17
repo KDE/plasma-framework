@@ -46,6 +46,7 @@ class Package;
 class Corona;
 class View;
 class Wallpaper;
+class ContextAction;
 class ContainmentPrivate;
 
 /**
@@ -363,6 +364,14 @@ class PLASMA_EXPORT Containment : public Applet
          *        the drop zone should not be shown
          */
         virtual void showDropZone(const QPoint pos);
+
+        /**
+         * Sets a contextaction plugin.
+         *
+         * @param trigger the mouse button (and optional modifier) to associate the plugin with
+         * @param pluginName the name of the plugin to attempt to load. blank = set no plugin.
+         */
+        void setContextAction(const QString &trigger, const QString &pluginName);
 
     Q_SIGNALS:
         /**
