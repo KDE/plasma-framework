@@ -21,7 +21,11 @@
 #include "contextaction.h"
 #include "containment.h"
 
-#include <QAction>
+#include <QMetaEnum>
+#include <QMouseEvent>
+#include <QWheelEvent>
+#include <QGraphicsSceneMouseEvent>
+#include <QGraphicsSceneWheelEvent>
 
 #include <kdebug.h>
 #include <kglobal.h>
@@ -30,7 +34,6 @@
 
 #include <version.h>
 
-#include "plasma/private/dataengineconsumer_p.h"
 #include "plasma/private/packages_p.h"
 #include "plasma/private/contextaction_p.h"
 
@@ -187,12 +190,7 @@ void ContextAction::configurationAccepted()
     //do nothing by default
 }
 
-void ContextAction::contextEvent(QGraphicsSceneMouseEvent *event)
-{
-    Q_UNUSED(event)
-}
-
-void ContextAction::wheelEvent(QGraphicsSceneWheelEvent *event)
+void ContextAction::contextEvent(QEvent *event)
 {
     Q_UNUSED(event)
 }
@@ -203,39 +201,74 @@ QList<QAction*> ContextAction::contextualActions()
     return QList<QAction*>();
 }
 
-DataEngine *ContextAction::dataEngine(const QString &name) const
-{
-    return d->dataEngine(name);
-}
-
 bool ContextAction::configurationRequired() const
 {
     return d->needsConfig;
 }
 
-QAction *ContextAction::configurationAction()
+void ContextAction::setConfigurationRequired(bool needsConfig)
 {
-    if (d->needsConfig) {
-        //create the "I need configuring" action
-        QAction *action = new QAction(i18n("This plugin needs to be configured"), this);
-        //TODO name/reason?
-        //TODO connect it to something
-        return action;
-    }
-    return NULL;
+    //TODO: reason?
+    d->needsConfig = needsConfig;
 }
 
-void ContextAction::setConfigurationRequired(bool needsConfig, const QString &reason)
+QString ContextAction::eventToString(QEvent *event)
 {
-    //TODO: implement something for reason. first, we need to decide where/how
-    //      to communicate it to the user
-    Q_UNUSED(reason)
+    QString trigger;
+    Qt::KeyboardModifiers modifiers;
 
-    if (d->needsConfig == needsConfig) {
-        return;
+    //strict typing sucks sometimes.
+    switch (event->type()) {
+        case QEvent::MouseButtonPress:
+        case QEvent::MouseButtonRelease:
+        {
+            QMouseEvent *e = dynamic_cast<QMouseEvent*>(event);
+            int m = QObject::staticQtMetaObject.indexOfEnumerator("MouseButtons");
+            QMetaEnum mouse = QObject::staticQtMetaObject.enumerator(m);
+            trigger += mouse.valueToKey(e->button());
+            modifiers = e->modifiers();
+            break;
+        }
+        case QEvent::GraphicsSceneMousePress:
+        case QEvent::GraphicsSceneMouseRelease:
+        {
+            QGraphicsSceneMouseEvent *e = dynamic_cast<QGraphicsSceneMouseEvent*>(event);
+            int m = QObject::staticQtMetaObject.indexOfEnumerator("MouseButtons");
+            QMetaEnum mouse = QObject::staticQtMetaObject.enumerator(m);
+            trigger += mouse.valueToKey(e->button());
+            modifiers = e->modifiers();
+            break;
+        }
+        case QEvent::Wheel:
+        {
+            QWheelEvent *e = dynamic_cast<QWheelEvent*>(event);
+            int o = QObject::staticQtMetaObject.indexOfEnumerator("Orientations");
+            QMetaEnum orient = QObject::staticQtMetaObject.enumerator(o);
+            trigger = "wheel:";
+            trigger += orient.valueToKey(e->orientation());
+            modifiers = e->modifiers();
+            break;
+        }
+        case QEvent::GraphicsSceneWheel:
+        {
+            QGraphicsSceneWheelEvent *e = dynamic_cast<QGraphicsSceneWheelEvent*>(event);
+            int o = QObject::staticQtMetaObject.indexOfEnumerator("Orientations");
+            QMetaEnum orient = QObject::staticQtMetaObject.enumerator(o);
+            trigger = "wheel:";
+            trigger += orient.valueToKey(e->orientation());
+            modifiers = e->modifiers();
+            break;
+        }
+        default:
+            return QString();
     }
 
-    d->needsConfig = needsConfig;
+    int k = QObject::staticQtMetaObject.indexOfEnumerator("KeyboardModifiers");
+    QMetaEnum kbd = QObject::staticQtMetaObject.enumerator(k);
+    trigger += ";";
+    trigger += kbd.valueToKeys(modifiers);
+
+    return trigger;
 }
 
 } // Plasma namespace

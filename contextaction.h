@@ -34,7 +34,6 @@ class QAction;
 namespace Plasma
 {
 
-class DataEngine;
 class Containment;
 class ContextActionPrivate;
 
@@ -159,20 +158,12 @@ class PLASMA_EXPORT ContextAction : public QObject
         virtual void configurationAccepted();
 
         /**
-         * Implement this to respond to a mouse button event.
+         * Implement this to respond to events.
          * The user can configure whatever button and modifier they like, so please don't look at
          * those parameters.
-         * @param event the mouse event object
+         * So far the event could be a QGraphicsSceneMouseEvent or a QGraphicsSceneWheelEvent.
          */
-        virtual void contextEvent(QGraphicsSceneMouseEvent *event);
-
-        /**
-         * Implement this to respond to a wheel event.
-         * The user can configure which wheel and whatever modifier they like, so please don't look at
-         * those parameters.
-         * @param event the mousewheel event object
-         */
-        virtual void wheelEvent(QGraphicsSceneWheelEvent *event);
+        virtual void contextEvent(QEvent *event);
 
         /**
          * Implement this to provide a list of actions that can be added to another menu
@@ -182,36 +173,16 @@ class PLASMA_EXPORT ContextAction : public QObject
         virtual QList<QAction*> contextualActions();
 
         /**
-         * Loads the given DataEngine
-         *
-         * Tries to load the data engine given by @p name.  Each engine is
-         * only loaded once, and that instance is re-used on all subsequent
-         * requests.
-         *
-         * If the data engine was not found, an invalid data engine is returned
-         * (see DataEngine::isValid()).
-         *
-         * Note that you should <em>not</em> delete the returned engine.
-         *
-         * @param name Name of the data engine to load
-         * @return pointer to the data engine if it was loaded,
-         *         or an invalid data engine if the requested engine
-         *         could not be loaded
-         *
-         */
-        Q_INVOKABLE DataEngine *dataEngine(const QString &name) const;
-
-        /**
          * @return true if the contextaction currently needs to be configured,
          *         otherwise, false
          */
         bool configurationRequired() const;
 
         /**
-         * @return a config action if the contextaction currently needs to be configured,
-         *         otherwise, null
+         * Turns a mouse or wheel event into a string suitable for a ContextAction
+         * @return the string representation of the event
          */
-        QAction *configurationAction();
+        static QString eventToString(QEvent *event);
 
     protected:
         /**
@@ -239,11 +210,8 @@ class PLASMA_EXPORT ContextAction : public QObject
          *
          * @param needsConfiguring true if the applet needs to be configured,
          *                         or false if it doesn't
-         * @param reason a translated message for the user explaining that the
-         *               applet needs configuring; this should note what needs
-         *               to be configured
          */
-        void setConfigurationRequired(bool needsConfiguring, const QString &reason = QString());
+        void setConfigurationRequired(bool needsConfiguring);
 
         /**
          * return the containment the plugin is associated with, if any.

@@ -26,7 +26,6 @@
 #include <QFile>
 #include <QGraphicsSceneContextMenuEvent>
 #include <QGraphicsView>
-#include <QMetaEnum>
 #include <QMimeData>
 #include <QPainter>
 #include <QStyleOptionGraphicsItem>
@@ -526,7 +525,7 @@ void Containment::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     event->ignore();
 
-    QString trigger = eventToString(event);
+    QString trigger = ContextAction::eventToString(event);
 
     //FIXME what if someone changes the modifiers before the mouseup?
     if (d->contextActions.contains(trigger)) {
@@ -556,7 +555,7 @@ void Containment::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
     event->ignore();
 
-    QString trigger = eventToString(event);
+    QString trigger = ContextAction::eventToString(event);
 
     if (d->contextActions.contains(trigger)) {
         if (d->prepareContextAction(trigger, event->screenPos())) {
@@ -622,9 +621,11 @@ void ContainmentPrivate::containmentActions(KMenu &desktopMenu)
     QString trigger = "RightButton;NoModifier";
     //get base context actions
     if (ContextAction *cAction = contextActions.value(trigger)) {
-        if (QAction *a = cAction->configurationAction()) {
+        if (cAction->configurationRequired()) {
             //it needs configuring
-            desktopMenu.addAction(a);
+            //FIXME the text could be better.
+            desktopMenu.addTitle(i18n("This plugin needs to be configured"));
+            desktopMenu.addAction(q->action("configure"));
         } else {
             QList<QAction*> actions = cAction->contextualActions();
             if (actions.isEmpty()) {
@@ -1433,11 +1434,11 @@ void Containment::keyPressEvent(QKeyEvent *event)
 
 void Containment::wheelEvent(QGraphicsSceneWheelEvent *event)
 {
-    QString trigger = eventToString(event);
+    QString trigger = ContextAction::eventToString(event);
 
     if (d->contextActions.contains(trigger)) {
         if (d->prepareContextAction(trigger, event->screenPos())) {
-            d->contextActions.value(trigger)->wheelEvent(event);
+            d->contextActions.value(trigger)->contextEvent(event);
         }
         event->accept();
         return;
@@ -2274,72 +2275,14 @@ bool ContainmentPrivate::prepareContextAction(const QString &trigger, const QPoi
         action->restore(actionConfig);
     }
 
-    if (QAction *a = action->configurationAction()) {
+    if (action->configurationRequired()) {
         KMenu menu;
-        menu.addAction(a);
+        menu.addTitle(i18n("This plugin needs to be configured"));
+        menu.addAction(q->action("configure"));
         menu.exec(screenPos);
         return false;
     }
     return true;
-}
-
-QString Containment::eventToString(QEvent *event)
-{
-    QString trigger;
-    Qt::KeyboardModifiers modifiers;
-
-    //strict typing sucks sometimes.
-    switch (event->type()) {
-        case QEvent::MouseButtonPress:
-        case QEvent::MouseButtonRelease:
-        {
-            QMouseEvent *e = dynamic_cast<QMouseEvent*>(event);
-            int m = QObject::staticQtMetaObject.indexOfEnumerator("MouseButtons");
-            QMetaEnum mouse = QObject::staticQtMetaObject.enumerator(m);
-            trigger += mouse.valueToKey(e->button());
-            modifiers = e->modifiers();
-            break;
-        }
-        case QEvent::GraphicsSceneMousePress:
-        case QEvent::GraphicsSceneMouseRelease:
-        {
-            QGraphicsSceneMouseEvent *e = dynamic_cast<QGraphicsSceneMouseEvent*>(event);
-            int m = QObject::staticQtMetaObject.indexOfEnumerator("MouseButtons");
-            QMetaEnum mouse = QObject::staticQtMetaObject.enumerator(m);
-            trigger += mouse.valueToKey(e->button());
-            modifiers = e->modifiers();
-            break;
-        }
-        case QEvent::Wheel:
-        {
-            QWheelEvent *e = dynamic_cast<QWheelEvent*>(event);
-            int o = QObject::staticQtMetaObject.indexOfEnumerator("Orientations");
-            QMetaEnum orient = QObject::staticQtMetaObject.enumerator(o);
-            trigger = "wheel:";
-            trigger += orient.valueToKey(e->orientation());
-            modifiers = e->modifiers();
-            break;
-        }
-        case QEvent::GraphicsSceneWheel:
-        {
-            QGraphicsSceneWheelEvent *e = dynamic_cast<QGraphicsSceneWheelEvent*>(event);
-            int o = QObject::staticQtMetaObject.indexOfEnumerator("Orientations");
-            QMetaEnum orient = QObject::staticQtMetaObject.enumerator(o);
-            trigger = "wheel:";
-            trigger += orient.valueToKey(e->orientation());
-            modifiers = e->modifiers();
-            break;
-        }
-        default:
-            return QString();
-    }
-
-    int k = QObject::staticQtMetaObject.indexOfEnumerator("KeyboardModifiers");
-    QMetaEnum kbd = QObject::staticQtMetaObject.enumerator(k);
-    trigger += ";";
-    trigger += kbd.valueToKeys(modifiers);
-
-    return trigger;
 }
 
 

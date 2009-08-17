@@ -386,13 +386,6 @@ class PLASMA_EXPORT Containment : public Applet
          */
         ContextAction *contextAction(QString trigger);
 
-        /**
-         * Turns a mouse or wheel event into a string suitable for a ContextAction
-         * @return the string representation of the event
-         * @since 4.3
-         */
-        static QString eventToString(QEvent *event);
-
     Q_SIGNALS:
         /**
          * This signal is emitted when a new applet is created by the containment
