@@ -32,8 +32,6 @@ namespace KNS
 namespace Plasma
 {
 
-class Wallpaper;
-
 class PlasmoidPackage : public PackageStructure
 {
     Q_OBJECT
@@ -82,6 +80,14 @@ private Q_SLOTS:
 
 private:
     Wallpaper *m_paper;
+};
+
+class ContextActionPackage : public PackageStructure
+{
+    Q_OBJECT
+
+public:
+    explicit ContextActionPackage(QObject *parent = 0);
 };
 
 PackageStructure::Ptr defaultPackageStructure(ComponentType type);

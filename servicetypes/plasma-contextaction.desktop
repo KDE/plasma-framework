@@ -1,0 +1,6 @@
+[Desktop Entry]
+Type=ServiceType
+X-KDE-ServiceType=Plasma/ContextAction
+
+Comment=Plasma ContextAction
+
