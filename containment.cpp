@@ -1743,6 +1743,9 @@ void ContainmentPrivate::handleDisappeared(AppletHandle *handle)
     if (handles.contains(handle->applet())) {
         handles.remove(handle->applet());
         handle->detachApplet();
+        if (q->scene()) {
+            q->scene()->removeItem(handle);
+        }
         handle->deleteLater();
     }
 }
@@ -1789,6 +1792,11 @@ void ContainmentPrivate::containmentConstraintsEvent(Plasma::Constraints constra
 
             foreach (AppletHandle *handle, h) {
                 handle->disconnect(q);
+
+                if (q->scene()) {
+                    q->scene()->removeItem(handle);
+                }
+
                 handle->deleteLater();
             }
         }
@@ -1870,6 +1878,9 @@ void ContainmentPrivate::appletDestroyed(Plasma::Applet *applet)
     if (handles.contains(applet)) {
         AppletHandle *handle = handles.value(applet);
         handles.remove(applet);
+        if (q->scene()) {
+            q->scene()->removeItem(handle);
+        }
         handle->deleteLater();
     }
 
