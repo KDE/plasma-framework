@@ -21,6 +21,10 @@
 #include "contextaction.h"
 #include "containment.h"
 
+#include "private/packages_p.h"
+#include "private/contextaction_p.h"
+#include "private/containment_p.h"
+
 #include <QMetaEnum>
 #include <QMouseEvent>
 #include <QWheelEvent>
@@ -33,9 +37,6 @@
 #include <kstandarddirs.h>
 
 #include <version.h>
-
-#include "plasma/private/packages_p.h"
-#include "plasma/private/contextaction_p.h"
 
 namespace Plasma
 {
@@ -269,6 +270,14 @@ QString ContextAction::eventToString(QEvent *event)
     trigger += kbd.valueToKeys(modifiers);
 
     return trigger;
+}
+
+void ContextAction::paste(QPointF scenePos, QPoint screenPos)
+{
+    Containment *c = containment();
+    if (c) {
+        c->d->dropData(scenePos, screenPos);
+    }
 }
 
 } // Plasma namespace

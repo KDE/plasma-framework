@@ -241,8 +241,7 @@ void Containment::init()
         switch (d->type) {
         case DesktopContainment:
             defaults.insert("wheel:Vertical;NoModifier", "switchdesktop");
-            defaults.insert("wheel:Horizontal;ControlModifier", "test");
-            defaults.insert("LeftButton;NoModifier", "switchdesktop");
+            defaults.insert("MiddleButton;NoModifier", "paste");
             defaults.insert("RightButton;NoModifier", "contextmenu");
             break;
         case PanelContainment:
@@ -542,9 +541,6 @@ void Containment::mousePressEvent(QGraphicsSceneMouseEvent *event)
 
     if (event->isAccepted()) {
         setFocus(Qt::MouseFocusReason);
-    } else if (event->button() == Qt::MidButton) {
-        //middle-click = paste
-        event->accept();
     } else {
         event->accept();
         Applet::mousePressEvent(event);
@@ -574,10 +570,6 @@ void Containment::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 
     if (event->isAccepted() || !isContainment()) {
         //do nothing
-    } else if (event->button() == Qt::MidButton) {
-        //middle-click = paste
-        d->dropData(event);
-        event->accept();
     } else {
         event->accept();
         Applet::mouseReleaseEvent(event);
@@ -1127,41 +1119,27 @@ void Containment::dragMoveEvent(QGraphicsSceneDragDropEvent *event)
 void Containment::dropEvent(QGraphicsSceneDragDropEvent *event)
 {
     if (isContainment()) {
-        d->dropData(event);
+        d->dropData(event->scenePos(), event->screenPos(), event);
     } else {
         Applet::dropEvent(event);
     }
 }
 
-void ContainmentPrivate::dropData(QGraphicsSceneEvent *event)
+void ContainmentPrivate::dropData(QPointF scenePos, QPoint screenPos, QGraphicsSceneDragDropEvent *dropEvent)
 {
     if (q->immutability() != Mutable) {
         return;
     }
 
-    QGraphicsSceneDragDropEvent *dropEvent = dynamic_cast<QGraphicsSceneDragDropEvent*>(event);
-    QGraphicsSceneMouseEvent *mouseEvent = dynamic_cast<QGraphicsSceneMouseEvent*>(event);
-    //kDebug() << "Something dropped mimetype, -data: " << appletMimetype << event->mimeData()->text();
-
-    QPointF pos;
-    QPointF scenePos;
-    QPoint screenPos;
+    QPointF pos = q->mapFromScene(scenePos);
     const QMimeData *mimeData = 0;
 
     if (dropEvent) {
-        pos = dropEvent->pos();
-        scenePos = dropEvent->scenePos();
-        screenPos = dropEvent->screenPos();
         mimeData = dropEvent->mimeData();
-    } else if (mouseEvent) {
-        pos = mouseEvent->pos();
-        scenePos = mouseEvent->scenePos();
-        screenPos = mouseEvent->screenPos();
+    } else {
         QClipboard *clipboard = QApplication::clipboard();
         mimeData = clipboard->mimeData(QClipboard::Selection);
         //TODO if that's not supported (ie non-linux) should we try clipboard instead of selection?
-    } else {
-        kDebug() << "unexpected event";
     }
 
     if (!mimeData) {
@@ -1179,7 +1157,7 @@ void ContainmentPrivate::dropData(QGraphicsSceneEvent *event)
         const QStringList appletNames = data.split('\n', QString::SkipEmptyParts);
         foreach (const QString &appletName, appletNames) {
             //kDebug() << "doing" << appletName;
-            QRectF geom(q->mapFromScene(scenePos), QSize(0, 0));
+            QRectF geom(pos, QSize(0, 0));
             q->addApplet(appletName, QVariantList(), geom);
         }
         if (dropEvent) {

@@ -109,9 +109,11 @@ public:
 
     /**
      * Handles dropped/pasted mimetype data
-     * @param event the drop or mouse event
+     * @param scenePos scene-relative position
+     * @param screenPos screen-relative position
+     * @param dropEvent the drop event (if null, the clipboard is used instead)
      */
-    void dropData(QGraphicsSceneEvent *event);
+    void dropData(QPointF scenePos, QPoint screenPos, QGraphicsSceneDragDropEvent *dropEvent = 0);
 
     /**
      * inits the contextaction if necessary

@@ -218,6 +218,12 @@ class PLASMA_EXPORT ContextAction : public QObject
          */
         Containment *containment();
 
+        /**
+         * pastes the clipboard at a given location
+         * this is here specially for the paste plugin.
+         */
+        void paste(QPointF scenePos, QPoint screenPos);
+
     private:
         friend class ContextActionPackage;
         friend class ContextActionPrivate;
