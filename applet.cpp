@@ -1,5 +1,3 @@
-#ifndef APPLET_CPP
-#define APPLET_CPP
 /*
  *   Copyright 2005 by Aaron Seigo <aseigo@kde.org>
  *   Copyright 2007 by Riccardo Iaconelli <riccardo@kde.org>
@@ -93,7 +91,6 @@
 #include "private/popupapplet_p.h"
 #include "private/toolbox_p.h"
 
-//#define DYNAMIC_SHADOWS
 namespace Plasma
 {
 
@@ -438,11 +435,9 @@ bool Applet::destroyed() const
 
 void AppletPrivate::appletAnimationComplete(QGraphicsItem *item, Plasma::Animator::Animation anim)
 {
-    if (anim != Animator::DisappearAnimation || item != q) {
-        return; //it's not our time yet
+    if (anim == Animator::DisappearAnimation && item == q) {
+        cleanUpAndDelete();
     }
-
-    cleanUpAndDelete();
 }
 
 void AppletPrivate::selectItemToDestroy()
@@ -2540,6 +2535,9 @@ void AppletOverlayWidget::destroy()
 void AppletOverlayWidget::overlayAnimationComplete(QGraphicsItem *item, Plasma::Animator::Animation)
 {
     if (item == this) {
+        if (scene()) {
+            scene()->removeItem(this);
+        }
         deleteLater();
     }
 }
@@ -2582,4 +2580,3 @@ void AppletOverlayWidget::paint(QPainter *painter,
 
 #include "applet.moc"
 #include "private/applet_p.moc"
-#endif // APPLET_CPP
