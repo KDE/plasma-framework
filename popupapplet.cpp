@@ -190,7 +190,9 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
         }
 
         //99% of the times q->parentWidget() is the containment, but using it  we can also manage the applet-in-applet case (i.e. systray)
-        if (q->parentWidget()) {
+        if (q->parentLayoutItem()) {
+            parentSize = q->parentLayoutItem()->geometry().size();
+        } else if (q->parentWidget()) {
             parentSize = q->parentWidget()->size();
         }
 
