@@ -603,7 +603,8 @@ void DataEnginePrivate::connectSource(DataContainer *s, QObject *visualization,
         // we don't want to do an immediate call if we are simply
         // reconnecting
         //kDebug() << "immediate call requested, we have:" << s->visualizationIsConnected(visualization);
-        immediateCall = !s->visualizationIsConnected(visualization);
+        immediateCall = !s->data().isEmpty() &&
+                        !s->visualizationIsConnected(visualization);
     }
 
     s->connectVisualization(visualization, pollingInterval, align);
