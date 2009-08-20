@@ -1585,15 +1585,14 @@ void Applet::showConfigurationInterface()
         }
 
         d->addGlobalShortcutsPage(dialog);
-        connect(dialog, SIGNAL(applyClicked()), this, SLOT(configDialogFinished()));
-        connect(dialog, SIGNAL(okClicked()), this, SLOT(configDialogFinished()));
         dialog->show();
     } else if (d->script) {
         d->script->showConfigurationInterface();
     } else {
-        KConfigDialog *dialog = d->generateGenericConfigDialog()->show();
+        KConfigDialog *dialog = d->generateGenericConfigDialog();
         createConfigurationInterface(dialog);
         d->addGlobalShortcutsPage(dialog);
+        dialog->show();
     }
 
     emit releaseVisualFocus();
@@ -1643,6 +1642,7 @@ KConfigDialog *AppletPrivate::generateGenericConfigDialog()
     dialog->setFaceType(KPageDialog::Auto);
     dialog->setWindowTitle(configWindowTitle());
     dialog->setAttribute(Qt::WA_DeleteOnClose, true);
+    QObject::connect(dialog, SIGNAL(finished()), nullManager, SLOT(deleteLater()));
     return dialog;
 }
 
@@ -1669,7 +1669,6 @@ void AppletPrivate::addGlobalShortcutsPage(KConfigDialog *dialog)
     dialog->showButton(KDialog::Apply, false);
     QObject::connect(dialog, SIGNAL(applyClicked()), q, SLOT(configDialogFinished()));
     QObject::connect(dialog, SIGNAL(okClicked()), q, SLOT(configDialogFinished()));
-    QObject::connect(dialog, SIGNAL(finished()), nullManager, SLOT(deleteLater()));
 }
 
 void AppletPrivate::clearShortcutEditorPtr()
