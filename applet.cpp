@@ -1592,6 +1592,8 @@ void Applet::showConfigurationInterface()
         d->script->showConfigurationInterface();
     } else {
         d->generateGenericConfigDialog()->show();
+        q->createConfigurationInterface(dialog);
+        addGlobalShortcutsPage(dialog);
     }
 
     emit releaseVisualFocus();
@@ -1641,13 +1643,6 @@ KConfigDialog *AppletPrivate::generateGenericConfigDialog()
     dialog->setFaceType(KPageDialog::Auto);
     dialog->setWindowTitle(configWindowTitle());
     dialog->setAttribute(Qt::WA_DeleteOnClose, true);
-    q->createConfigurationInterface(dialog);
-    addGlobalShortcutsPage(dialog);
-    //TODO: Apply button does not correctly work for now, so do not show it
-    dialog->showButton(KDialog::Apply, false);
-    QObject::connect(dialog, SIGNAL(applyClicked()), q, SLOT(configDialogFinished()));
-    QObject::connect(dialog, SIGNAL(okClicked()), q, SLOT(configDialogFinished()));
-    QObject::connect(dialog, SIGNAL(finished()), nullManager, SLOT(deleteLater()));
     return dialog;
 }
 
@@ -1669,6 +1664,12 @@ void AppletPrivate::addGlobalShortcutsPage(KConfigDialog *dialog)
     layout->addWidget(shortcutEditor);
     layout->addStretch();
     dialog->addPage(page, i18n("Keyboard Shortcut"), "preferences-desktop-keyboard");
+
+    //TODO: Apply button does not correctly work for now, so do not show it
+    dialog->showButton(KDialog::Apply, false);
+    QObject::connect(dialog, SIGNAL(applyClicked()), q, SLOT(configDialogFinished()));
+    QObject::connect(dialog, SIGNAL(okClicked()), q, SLOT(configDialogFinished()));
+    QObject::connect(dialog, SIGNAL(finished()), nullManager, SLOT(deleteLater()));
 }
 
 void AppletPrivate::clearShortcutEditorPtr()

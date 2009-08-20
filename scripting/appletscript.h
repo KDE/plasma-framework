@@ -180,6 +180,12 @@ protected:
      */
     KConfigDialog *standardConfigurationDialog();
 
+    /**
+     * This method should be called after a scripting applet has added
+     * its own pages to a configuration dialog
+     */
+    void addStandardConfigurationPages(KConfigDialog *dialog);
+
 private:
     AppletScriptPrivate *const d;
 };
