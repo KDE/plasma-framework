@@ -1591,9 +1591,9 @@ void Applet::showConfigurationInterface()
     } else if (d->script) {
         d->script->showConfigurationInterface();
     } else {
-        d->generateGenericConfigDialog()->show();
-        q->createConfigurationInterface(dialog);
-        addGlobalShortcutsPage(dialog);
+        KConfigDialog *dialog = d->generateGenericConfigDialog()->show();
+        createConfigurationInterface(dialog);
+        d->addGlobalShortcutsPage(dialog);
     }
 
     emit releaseVisualFocus();
