@@ -143,10 +143,9 @@ KConfigDialog *AppletScript::standardConfigurationDialog()
 void AppletScript::addStandardConfigurationPages(KConfigDialog *dialog)
 {
     if (applet()) {
-        return applet()->d->addGlobalShortcutsPage(dialog);
+        applet()->d->addGlobalShortcutsPage(dialog);
     }
 
-    return 0;
 }
 
 void AppletScript::configChanged()
