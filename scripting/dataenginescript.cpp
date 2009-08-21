@@ -39,7 +39,7 @@ DataEngineScript::DataEngineScript(QObject *parent)
 
 DataEngineScript::~DataEngineScript()
 {
-//    delete d;
+    delete d;
 }
 
 void DataEngineScript::setDataEngine(DataEngine *dataEngine)
