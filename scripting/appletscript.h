@@ -183,6 +183,8 @@ protected:
     /**
      * This method should be called after a scripting applet has added
      * its own pages to a configuration dialog
+     *
+     * @since 4.3.1
      */
     void addStandardConfigurationPages(KConfigDialog *dialog);
 
