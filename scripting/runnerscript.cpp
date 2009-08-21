@@ -39,7 +39,7 @@ RunnerScript::RunnerScript(QObject *parent)
 
 RunnerScript::~RunnerScript()
 {
-//    delete d;
+    delete d;
 }
 
 void RunnerScript::setRunner(AbstractRunner *runner)
