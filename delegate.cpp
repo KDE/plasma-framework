@@ -239,17 +239,26 @@ void Delegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
     QRect subTitleRect = d->subTitleRect(option, index);
     subTitleRect.moveTopLeft(subTitleRect.topLeft()-option.rect.topLeft());
 
-    bool uniqueTitle = !index.data(d->roles[SubTitleMandatoryRole]).value<bool>();// true;
-    if (uniqueTitle) {
-        QModelIndex sib = index.sibling(index.row() + 1, index.column());
-        if (sib.isValid()) {
-            uniqueTitle = sib.data(Qt::DisplayRole).value<QString>() != titleText;
-        }
-
+    // If the model wants to have exact control for subtitles showing
+    // it is expected to return a valid data for SubTitleMandatoryRole.
+    // If it doesn't return a valid data for this role
+    // then by default we well be showing a subtitles for
+    // adjasent items with the same content (see comments below too)
+    bool uniqueTitle = true;
+    QVariant mandatoryRoleData = index.data(d->roles[SubTitleMandatoryRole]);
+    if (!mandatoryRoleData.isValid()) {
+        uniqueTitle = !mandatoryRoleData.value<bool>();// true;
         if (uniqueTitle) {
-            sib = index.sibling(index.row() + -1, index.column());
+            QModelIndex sib = index.sibling(index.row() + 1, index.column());
             if (sib.isValid()) {
                 uniqueTitle = sib.data(Qt::DisplayRole).value<QString>() != titleText;
+            }
+
+            if (uniqueTitle) {
+                sib = index.sibling(index.row() + -1, index.column());
+                if (sib.isValid()) {
+                    uniqueTitle = sib.data(Qt::DisplayRole).value<QString>() != titleText;
+                }
             }
         }
     }
@@ -289,19 +298,20 @@ void Delegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
     }
     p.drawText(titleRect, Qt::AlignLeft|Qt::AlignVCenter, titleText);
 
-    if (hover || !uniqueTitle) {
-        // draw sub-title, BUT only if:
-        //   * it isn't a unique title, this allows two items to have the same title and be
-        //          disambiguated by their subtitle
-        //   * we are directed by the model that this item should never be treated as unique
-        //          e.g. the documents list in the recently used tab
-        //   * the mouse is hovered over the item, causing the additional information to be
-        //          displayed
-        //
-        // the rational for this is that subtitle text should in most cases not be
-        // required to understand the item itself and that showing all the subtexts in a
-        // listing makes the information density very high, impacting both the speed at
-        // which one can scan the list visually and the aesthetic qualities of the listing.
+    // draw sub-title, BUT only if:
+    //   * SubTitleMandatoryRole is defined and model returns 'true'
+    //   * SubTitleMandatoryRole is not defined and the adjasent model indexes
+    //     have the same contents of the Qt::DisplayRole
+    //   * when model doesn't provide a valid data for SubTitleMandatory role
+    //     we also show title on mouse hover
+    //
+    // the rationale for this is that subtitle text should in most cases not be
+    // required to understand the item itself and that showing all the subtexts in a
+    // listing makes the information density very high, impacting both the speed at
+    // which one can scan the list visually and the aesthetic qualities of the listing.
+    bool drawSubTitle = mandatoryRoleData.isValid() ? mandatoryRoleData.value<bool>() : (hover || !uniqueTitle);
+
+    if (drawSubTitle) {
         if (option.palette.color(QPalette::Base).alpha() > 0) {
             p.setPen(QPen(KColorScheme(QPalette::Active).foreground(KColorScheme::InactiveText), 1));
         } else {
@@ -341,7 +351,7 @@ void Delegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
         }
 
     } else {
-        if (((titleRect.width() + decorationRect.width() + 10) > option.rect.width() || 
+        if (((titleRect.width() + decorationRect.width() + 10) > option.rect.width() ||
             (subTitleRect.width() + decorationRect.width() + 15 )> option.rect.width()) &&
 	    (titleRect.width() > 120 || subTitleRect.width() > 120)) {
             buffer.fill(Qt::transparent);

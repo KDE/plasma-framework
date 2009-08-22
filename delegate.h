@@ -41,6 +41,10 @@ class DelegatePrivate;
  * SubTitleRole: the text of the subtitle
  * SubTitleMandatoryRole: if the subtitle is to always be displayed
  *   (as default the subtitle is displayed only on mouse over)
+ * NOTE: if model doesn't return a valid data for SubTitleMandatoryRole (i.e. if it returns QVaraint())
+ *       then subtitles will be shown for adjasent items with the same content and not shown
+ *       otherwise.
+ *
  * ColumnTypeRole: if the column is a main column (with title and subtitle)
  * or a secondary action column (only a little icon that appears on mouse
  * over is displayed)
