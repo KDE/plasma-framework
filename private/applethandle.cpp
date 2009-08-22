@@ -665,7 +665,7 @@ void AppletHandle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
         // If the applet doesn't have a minimum size, calculate based on a
         // minimum content area size of 16x16 (KIconLoader::SizeSmall)
-        if (1||min.isEmpty()) {
+        if (min.isEmpty()) {
             min = m_applet->boundingRect().size() - m_applet->contentsRect().size();
             min = QSizeF(KIconLoader::SizeSmall, KIconLoader::SizeSmall);
         }
