@@ -133,7 +133,7 @@ PackageStructure::Ptr ContainmentActions::packageStructure()
 
 Containment *ContainmentActions::containment()
 {
-    return static_cast<Containment*>(parent());
+    return qobject_cast<Containment*>(parent());
 }
 
 QString ContainmentActions::name() const
@@ -297,6 +297,17 @@ void ContainmentActions::paste(QPointF scenePos, QPoint screenPos)
     if (c) {
         c->d->dropData(scenePos, screenPos);
     }
+}
+
+bool ContainmentActions::event(QEvent *e)
+{
+    if (e->type() == QEvent::ParentChange) {
+        if (!containment()) {
+            //some fool took away our containment. run away, run away!
+            deleteLater();
+        }
+    }
+    return false;
 }
 
 } // Plasma namespace

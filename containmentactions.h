@@ -206,6 +206,8 @@ class PLASMA_EXPORT ContainmentActions : public QObject
          */
         static QString eventToString(QEvent *event);
 
+        bool event(QEvent *e);
+
     protected:
         /**
          * This constructor is to be used with the plugin loading systems
