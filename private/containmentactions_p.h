@@ -30,7 +30,6 @@ class ContainmentActionsPrivate : public DataEngineConsumer
 public:
     ContainmentActionsPrivate(KService::Ptr service, ContainmentActions *containmentActions) :
         q(containmentActions),
-        containment(0),
         containmentActionsDescription(service),
         initialized(false),
         needsConfig(false),
@@ -41,7 +40,6 @@ public:
     static PackageStructure::Ptr s_packageStructure;
 
     ContainmentActions *q;
-    Containment *containment;
     KPluginInfo containmentActionsDescription;
     Package *package;
     KServiceAction mode;

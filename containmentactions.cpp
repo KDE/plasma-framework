@@ -105,14 +105,11 @@ ContainmentActions *ContainmentActions::load(Containment *parent, const QString 
     QVariantList allArgs;
     allArgs << offer->storageId() << args;
     QString error;
-    ContainmentActions *containmentActions = offer->createInstance<Plasma::ContainmentActions>(0, allArgs, &error);
+    ContainmentActions *containmentActions = offer->createInstance<Plasma::ContainmentActions>(parent, allArgs, &error);
 
     if (!containmentActions) {
         kDebug() << "Couldn't load containmentActions \"" << containmentActionsName << "\"! reason given: " << error;
     }
-
-    containmentActions->setParent(parent);
-    containmentActions->d->containment = parent;
 
     return containmentActions;
 }
@@ -136,7 +133,7 @@ PackageStructure::Ptr ContainmentActions::packageStructure()
 
 Containment *ContainmentActions::containment()
 {
-    return d->containment;
+    return static_cast<Containment*>(parent());
 }
 
 QString ContainmentActions::name() const
