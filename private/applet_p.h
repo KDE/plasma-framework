@@ -88,6 +88,7 @@ public:
     void setFocus();
     void cleanUpAndDelete();
     void createMessageOverlay(bool usePopup = true);
+    void positionMessageOverlay();
     void destroyMessageOverlay();
     void addGlobalShortcutsPage(KConfigDialog *dialog);
     void clearShortcutEditorPtr();

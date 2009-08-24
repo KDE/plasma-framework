@@ -507,38 +507,57 @@ void AppletPrivate::createMessageOverlay(bool usePopup)
     PopupApplet *popup = qobject_cast<Plasma::PopupApplet*>(q);
 
     if (!messageOverlay) {
-        if (usePopup && popup && popup->widget()) {
-            messageOverlayProxy = new QGraphicsProxyWidget(q);
-            messageOverlayProxy->setWidget(popup->widget());
-            messageOverlay = new AppletOverlayWidget(messageOverlayProxy);
-        } else if (usePopup && popup && popup->graphicsWidget() &&
-                   popup->graphicsWidget() != extender) {
-            messageOverlay = new AppletOverlayWidget(popup->graphicsWidget());
-        } else {
+        if (usePopup && popup) {
+            if (popup->widget()) {
+                messageOverlayProxy = new QGraphicsProxyWidget(q);
+                messageOverlayProxy->setWidget(popup->widget());
+                messageOverlay = new AppletOverlayWidget(messageOverlayProxy);
+            } else if (popup->graphicsWidget() &&
+                       popup->graphicsWidget() != extender) {
+                messageOverlay = new AppletOverlayWidget(popup->graphicsWidget());
+            }
+        }
+
+        if (!messageOverlay) {
             messageOverlay = new AppletOverlayWidget(q);
         }
     }
 
-    if (usePopup && popup && popup->widget()) {
+    positionMessageOverlay();
+}
+
+void AppletPrivate::positionMessageOverlay()
+{
+    if (!messageOverlay) {
+        return;
+    }
+
+    PopupApplet *popup = qobject_cast<Plasma::PopupApplet*>(q);
+    const bool usePopup = popup && messageOverlay->parentItem() == q;
+    QGraphicsItem *topItem = q;
+
+    if (usePopup && popup->widget()) {
         // popupapplet with widget()
+        topItem = popup->d->proxy;
         messageOverlay->setGeometry(popup->widget()->contentsRect());
-    } else if (usePopup && popup && popup->graphicsWidget() &&
-               popup->graphicsWidget() != extender) {
+    } else if (usePopup && popup->graphicsWidget() && popup->graphicsWidget() != extender) {
         // popupapplet with graphicsWidget()
-        messageOverlay->setGeometry(popup->graphicsWidget()->boundingRect());
+        topItem = popup->graphicsWidget();
+        QGraphicsWidget *w = dynamic_cast<QGraphicsWidget *>(topItem);
+        messageOverlay->setGeometry(w ? w->contentsRect() : topItem->boundingRect());
     } else {
         // normal applet
         messageOverlay->setGeometry(q->contentsRect());
-
-        // raise the overlay above all the other children!
-        int zValue = 100;
-        foreach (QGraphicsItem *child, q->QGraphicsItem::children()) {
-            if (child->zValue() > zValue) {
-                zValue = child->zValue() + 1;
-            }
-        }
-        messageOverlay->setZValue(zValue);
     }
+
+    // raise the overlay above all the other children!
+    int zValue = 100;
+    foreach (QGraphicsItem *child, topItem->children()) {
+        if (child->zValue() > zValue) {
+            zValue = child->zValue() + 1;
+        }
+    }
+    messageOverlay->setZValue(zValue);
 }
 
 void AppletPrivate::destroyMessageOverlay()
@@ -1101,22 +1120,7 @@ void Applet::flushPendingConstraintsEvents()
     }
 
     if (c & Plasma::SizeConstraint) {
-        if (d->messageOverlay) {
-            d->messageOverlay->setGeometry(QRectF(QPointF(0, 0), geometry().size()));
-/*
-            QGraphicsItem *button = 0;
-            QList<QGraphicsItem*> children = d->messageOverlay->QGraphicsItem::children();
-
-            if (!children.isEmpty()) {
-                button = children.first();
-            }
-
-            if (button) {
-                QSizeF s = button->boundingRect().size();
-                button->setPos(d->messageOverlay->boundingRect().width() / 2 - s.width() / 2,
-                        d->messageOverlay->boundingRect().height() / 2 - s.height() / 2);
-            }*/
-        }
+        d->positionMessageOverlay();
 
         if (d->started && layout()) {
             layout()->updateGeometry();

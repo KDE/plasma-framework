@@ -160,6 +160,7 @@ private:
     Q_PRIVATE_SLOT(d, void updateDialogPosition())
 
     friend class Applet;
+    friend class AppletPrivate;
     friend class PopupAppletPrivate;
     PopupAppletPrivate * const d;
 };
