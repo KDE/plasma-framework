@@ -30,7 +30,6 @@
 ContextTest::ContextTest(QObject *parent, const QVariantList &args)
     : Plasma::ContainmentActions(parent, args)
 {
-    setHasConfigurationInterface(true);
     setConfigurationRequired(true);
 }
 
