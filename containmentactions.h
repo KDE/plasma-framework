@@ -237,7 +237,6 @@ class PLASMA_EXPORT ContainmentActions : public QObject
 
         /**
          * pastes the clipboard at a given location
-         * this is here specially for the paste plugin.
          */
         void paste(QPointF scenePos, QPoint screenPos);
 
