@@ -125,7 +125,7 @@ public:
 
     QString findInTheme(const QString &image, const QString &theme) const;
     void compositingChanged();
-    void discardCache(bool recreateElementsCache);
+    void discardCache();
     void scheduledCacheUpdate();
     void colorsChanged();
     bool useCache();
@@ -212,13 +212,13 @@ void ThemePrivate::compositingChanged()
 
     if (compositingActive != nowCompositingActive) {
         compositingActive = nowCompositingActive;
-        discardCache(true);
+        discardCache();
         emit q->themeChanged();
     }
 #endif
 }
 
-void ThemePrivate::discardCache(bool recreateElementsCache)
+void ThemePrivate::discardCache()
 {
     KPixmapCache::deleteCache("plasma_theme_" + themeName);
     delete pixmapCache;
@@ -227,16 +227,13 @@ void ThemePrivate::discardCache(bool recreateElementsCache)
     pixmapsToCache.clear();
     saveTimer->stop();
 
-    svgElementsCache = 0;
     const QString svgElementsFile = KStandardDirs::locateLocal("cache", "plasma-svgelements-" + themeName);
     if (!svgElementsFile.isEmpty()) {
         QFile f(svgElementsFile);
         f.remove();
     }
 
-    if (recreateElementsCache) {
-        svgElementsCache = KSharedConfig::openConfig(svgElementsFile);
-    }
+    svgElementsCache = KSharedConfig::openConfig(svgElementsFile);
 }
 
 void ThemePrivate::scheduledCacheUpdate()
@@ -254,7 +251,7 @@ void ThemePrivate::scheduledCacheUpdate()
 
 void ThemePrivate::colorsChanged()
 {
-    discardCache(true);
+    discardCache();
     colorScheme = KColorScheme(QPalette::Active, KColorScheme::Window, colors);
     buttonColorScheme = KColorScheme(QPalette::Active, KColorScheme::Button, colors);
     viewColorScheme = KColorScheme(QPalette::Active, KColorScheme::View, colors);
@@ -379,7 +376,7 @@ void ThemePrivate::setThemeName(const QString &tempThemeName, bool writeSettings
 
     //discard the old theme cache
     if (!themeName.isEmpty() && pixmapCache) {
-        discardCache(false);
+        discardCache();
     }
 
     themeName = theme;
@@ -462,14 +459,15 @@ void ThemePrivate::setThemeName(const QString &tempThemeName, bool writeSettings
     QFile f(metadataPath);
     QFileInfo info(f);
 
+
     if (useCache() && info.lastModified().toTime_t() > pixmapCache->timestamp()) {
-        discardCache(false);
+        discardCache();
+    } else {
+        QString svgElementsFile = KStandardDirs::locateLocal("cache", "plasma-svgelements-" + themeName);
+        svgElementsCache = KSharedConfig::openConfig(svgElementsFile);
     }
 
     invalidElements.clear();
-    QString svgElementsFile = KStandardDirs::locateLocal("cache", "plasma-svgelements-" + themeName);
-    svgElementsCache = KSharedConfig::openConfig(svgElementsFile);
-
     emit q->themeChanged();
 }
 
