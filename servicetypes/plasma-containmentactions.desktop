@@ -12,3 +12,6 @@ Comment[uk]=Дії контейнерів Плазми
 Comment[x-test]=xxPlasma ContainmentActionsxx
 Comment[zh_TW]=Plasma 容器動作
 
+[PropertyDef::X-Plasma-HasConfigurationInterface]
+Type=bool
+

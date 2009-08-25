@@ -196,11 +196,6 @@ class PLASMA_EXPORT ContainmentActions : public QObject
         bool configurationRequired() const;
 
         /**
-         * @return true if the containmentactions has a config UI
-         */
-        bool hasConfigurationInterface() const;
-
-        /**
          * Turns a mouse or wheel event into a string suitable for a ContainmentActions
          * @return the string representation of the event
          */
@@ -234,11 +229,6 @@ class PLASMA_EXPORT ContainmentActions : public QObject
          *                         or false if it doesn't
          */
         void setConfigurationRequired(bool needsConfiguring = true);
-
-        /**
-         * set whether the containmentactions has a config UI
-         */
-        void setHasConfigurationInterface(bool hasConfig = true);
 
         /**
          * @return the containment the plugin is associated with.

@@ -222,16 +222,6 @@ void ContainmentActions::setConfigurationRequired(bool needsConfig)
     d->needsConfig = needsConfig;
 }
 
-bool ContainmentActions::hasConfigurationInterface() const
-{
-    return d->hasConfig;
-}
-
-void ContainmentActions::setHasConfigurationInterface(bool hasConfig)
-{
-    d->hasConfig = hasConfig;
-}
-
 QString ContainmentActions::eventToString(QEvent *event)
 {
     QString trigger;
