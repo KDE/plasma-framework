@@ -138,10 +138,15 @@ void Style::drawComplexControl(ComplexControl control,
         subLine.moveCenter(subControlRect(control, option, SC_ScrollBarSubLine, widget).center());
         addLine.moveCenter(subControlRect(control, option, SC_ScrollBarAddLine, widget).center());
 
-        const QRect slider =
-            subControlRect(control, option, SC_ScrollBarSlider, widget).adjusted(1, 0, -1, 0);
+	QRect slider = subControlRect(control, option, SC_ScrollBarSlider, widget);
 
-        if (scrollOption && scrollOption->orientation == Qt::Horizontal && d->scrollbar->hasElement("background-horizontal-center")) {
+        if (scrollOption && scrollOption->orientation == Qt::Horizontal) {
+            slider.adjust(0, 1, 0, -1);
+        } else {
+            slider.adjust(1, 0, -1, 0);
+        }
+
+/*        if (scrollOption && scrollOption->orientation == Qt::Horizontal && d->scrollbar->hasElement("background-horizontal-center")) {
             d->scrollbar->setElementPrefix("background-horizontal");
         } else if (scrollOption && scrollOption->orientation == Qt::Vertical && d->scrollbar->hasElement("background-vertical-center")) {
             d->scrollbar->setElementPrefix("background-vertical");
@@ -149,7 +154,7 @@ void Style::drawComplexControl(ComplexControl control,
             d->scrollbar->setElementPrefix("background");
         }
         d->scrollbar->resizeFrame(option->rect.size());
-        d->scrollbar->paintFrame(painter);
+        d->scrollbar->paintFrame(painter);*/
 
         if (sunken && scrollOption && scrollOption->activeSubControls & SC_ScrollBarSlider) {
             d->scrollbar->setElementPrefix("sunken-slider");
