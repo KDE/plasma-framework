@@ -524,14 +524,6 @@ void Containment::mousePressEvent(QGraphicsSceneMouseEvent *event)
         return; //no unexpected click-throughs
     }
 
-    QString trigger = ContainmentActions::eventToString(event);
-
-    //FIXME what if someone changes the modifiers before the mouseup?
-    if (d->actionPlugins.contains(trigger)) {
-        kDebug() << "accepted mousedown";
-        event->accept();
-    }
-
     if (d->wallpaper && d->wallpaper->isInitialized() && !event->isAccepted()) {
         d->wallpaper->mousePressEvent(event);
     }
@@ -539,7 +531,15 @@ void Containment::mousePressEvent(QGraphicsSceneMouseEvent *event)
     if (event->isAccepted()) {
         setFocus(Qt::MouseFocusReason);
     } else {
-        event->accept();
+        QString trigger = ContainmentActions::eventToString(event);
+        if (d->actionPlugins.contains(trigger)) {
+            if (d->prepareContainmentActions(trigger, event->screenPos())) {
+                d->actionPlugins.value(trigger)->contextEvent(event);
+            }
+            event->accept();
+            return;
+        }
+
         Applet::mousePressEvent(event);
     }
 }
@@ -554,21 +554,19 @@ void Containment::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 
     QString trigger = ContainmentActions::eventToString(event);
 
-    if (d->actionPlugins.contains(trigger)) {
-        if (d->prepareContainmentActions(trigger, event->screenPos())) {
-            d->actionPlugins.value(trigger)->contextEvent(event);
-        }
-        event->accept();
-        return;
-    }
-
     if (d->wallpaper && d->wallpaper->isInitialized()) {
         d->wallpaper->mouseReleaseEvent(event);
     }
 
-    if (event->isAccepted() || !isContainment()) {
-        //do nothing
-    } else {
+    if (!event->isAccepted() && isContainment()) {
+        if (d->actionPlugins.contains(trigger)) {
+            if (d->prepareContainmentActions(trigger, event->screenPos())) {
+                d->actionPlugins.value(trigger)->contextEvent(event);
+            }
+            event->accept();
+            return;
+        }
+
         event->accept();
         Applet::mouseReleaseEvent(event);
     }
