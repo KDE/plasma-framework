@@ -553,6 +553,7 @@ void PopupAppletPrivate::internalTogglePopup()
         ToolTipManager::self()->hide(q);
         updateDialogPosition();
 
+        KWindowSystem::setOnAllDesktops(dialog->winId(), true);
         KWindowSystem::setState(dialog->winId(), NET::SkipTaskbar | NET::SkipPager);
 
         if (q->location() != Floating) {
