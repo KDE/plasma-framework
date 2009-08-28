@@ -1751,6 +1751,10 @@ void Containment::setActivity(const QString &activity)
 
         KConfigGroup c = config();
         c.writeEntry("activity", activity);
+
+        if (d->toolBox) {
+            d->toolBox->update();
+        }
         emit configNeedsSaving();
     }
 }
