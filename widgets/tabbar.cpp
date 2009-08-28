@@ -283,12 +283,11 @@ void TabBar::resizeEvent(QGraphicsSceneResizeEvent * event)
 {
     if (!d->tabWidgetMode) {
         d->tabProxy->setMinimumSize(event->newSize().toSize());
+        setMinimumSize(QSize(0, 0));
+        setMaximumSize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX);
     } else {
         d->tabProxy->native->setMinimumSize(QSize(0,0));
     }
-
-    setMaximumSize(QWIDGETSIZE_MAX,QWIDGETSIZE_MAX);
-    setMinimumSize(0, 0);
 }
 
 void TabBar::setCurrentIndex(int index)
