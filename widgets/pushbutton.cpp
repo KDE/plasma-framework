@@ -366,7 +366,7 @@ void PushButton::paint(QPainter *painter,
     QRectF rect = contentsRect();
 
     if (!nativeWidget()->icon().isNull()) {
-        const iconSize = qMin(rect.width(), rect.height());
+        const qreal iconSize = qMin(rect.width(), rect.height());
         QPixmap iconPix = nativeWidget()->icon().pixmap(iconSize);
         if (!isEnabled()) {
             KIconEffect *effect = KIconLoader::global()->iconEffect();
