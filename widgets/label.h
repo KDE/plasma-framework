@@ -107,6 +107,20 @@ public:
     bool hasScaledContents() const;
 
     /**
+     * Set if the text on the label can be selected with the mouse
+     *
+     * @arg enable true if we want to manage text selection with the mouse
+     * @since 4.4 
+     */
+    void setTextSelectable(bool enable);
+    
+    /**
+     * @return true if the text is selectable with the mouse
+     * @since 4.4
+     */
+    bool textSelectable() const;
+
+    /**
      * Sets the stylesheet used to control the visual display of this Label
      *
      * @arg stylesheet a CSS string
@@ -132,6 +146,7 @@ public Q_SLOTS:
 
 protected:
     void resizeEvent(QGraphicsSceneResizeEvent *event);
+    void mousePressEvent(QGraphicsSceneMouseEvent *event);
     void paint(QPainter *painter,
                const QStyleOptionGraphicsItem *option,
                QWidget *widget);

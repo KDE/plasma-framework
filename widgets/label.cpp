@@ -23,6 +23,7 @@
 #include <QPainter>
 #include <QDir>
 #include <QStyleOptionGraphicsItem>
+#include <QGraphicsSceneMouseEvent>
 
 #include <kmimetype.h>
 #include <kglobalsettings.h>
@@ -87,6 +88,7 @@ public:
     QString imagePath;
     QString absImagePath;
     Svg *svg;
+    bool textSelectable;
 };
 
 Label::Label(QGraphicsWidget *parent)
@@ -94,6 +96,7 @@ Label::Label(QGraphicsWidget *parent)
       d(new LabelPrivate(this))
 {
     QLabel *native = new QLabel;
+    d->textSelectable = false;
     connect(native, SIGNAL(linkActivated(QString)), this, SIGNAL(linkActivated(QString)));
     connect(native, SIGNAL(linkHovered(QString)), this, SIGNAL(linkHovered(QString)));
 
@@ -164,6 +167,16 @@ bool Label::hasScaledContents() const
     return static_cast<QLabel*>(widget())->hasScaledContents();
 }
 
+void Label::setTextSelectable(bool enable)
+{
+  d->textSelectable = enable;
+}
+    
+bool Label::textSelectable() const
+{
+  return d->textSelectable;
+}
+
 void Label::setAlignment(Qt::Alignment alignment)
 {
     nativeWidget()->setAlignment(alignment);
@@ -207,6 +220,15 @@ void Label::resizeEvent(QGraphicsSceneResizeEvent *event)
 {
     d->setPixmap(this);
     QGraphicsProxyWidget::resizeEvent(event);
+}
+
+void Label::mousePressEvent(QGraphicsSceneMouseEvent *event)
+{
+    if (!d->textSelectable) {
+        event->ignore();
+    } else {
+        QGraphicsProxyWidget::mousePressEvent(event);
+    }
 }
 
 void Label::paint(QPainter *painter,
