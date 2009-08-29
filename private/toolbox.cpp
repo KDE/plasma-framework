@@ -111,6 +111,14 @@ void ToolBox::addTool(QAction *action)
         return;
     }
 
+    foreach (QGraphicsItem *child, QGraphicsItem::children()) {
+        //kDebug() << "checking tool" << child << child->data(ToolName);
+        Plasma::IconWidget *tool = dynamic_cast<Plasma::IconWidget*>(child);
+        if (tool && tool->action() == action) {
+            return;
+        }
+    }
+
     Plasma::IconWidget *tool = new Plasma::IconWidget(this);
 
     tool->setTextBackgroundColor(QColor());
