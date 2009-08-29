@@ -38,6 +38,9 @@ void shadowBlur(QImage &image, int radius, const QColor &color)
     if (radius < 1) {
         return;
     }
+    if (image.isNull()) {
+        return;
+    }
 
     expblur<16, 7>(image, radius);
 
