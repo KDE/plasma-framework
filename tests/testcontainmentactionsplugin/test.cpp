@@ -37,10 +37,10 @@ void ContextTest::contextEvent(QEvent *event)
 {
     switch (event->type()) {
         case QEvent::GraphicsSceneMousePress:
-            contextEvent(dynamic_cast<QGraphicsSceneMouseEvent*>(event));
+            contextEvent(static_cast<QGraphicsSceneMouseEvent*>(event));
             break;
         case QEvent::GraphicsSceneWheel:
-            wheelEvent(dynamic_cast<QGraphicsSceneWheelEvent*>(event));
+            wheelEvent(static_cast<QGraphicsSceneWheelEvent*>(event));
             break;
         default:
             break;
