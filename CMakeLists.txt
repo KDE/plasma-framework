@@ -111,6 +111,7 @@ set(plasma_LIB_SRCS
     widgets/frame.cpp
     widgets/groupbox.cpp
     widgets/iconwidget.cpp
+    widgets/itembackground.cpp
     widgets/label.cpp
     widgets/lineedit.cpp
     widgets/meter.cpp
