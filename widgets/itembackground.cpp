@@ -46,7 +46,8 @@ public:
 };
 
 ItemBackground::ItemBackground(QGraphicsWidget *parent)
-    : QGraphicsWidget(parent)
+    : QGraphicsWidget(parent),
+      d(new ItemBackgroundPrivate)
 {
     d->frameSvg = new Plasma::FrameSvg(this);
     d->animId = 0;
