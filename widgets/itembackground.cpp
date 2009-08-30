@@ -61,7 +61,7 @@ ItemBackground::ItemBackground(QGraphicsWidget *parent)
     d->frameSvg->setElementPrefix("hover");
 
     setAcceptedMouseButtons(0);
-
+    setZValue(-800);
 }
 
 ItemBackground::~ItemBackground()
@@ -69,15 +69,17 @@ ItemBackground::~ItemBackground()
 
 void ItemBackground::setTarget(const QRectF &newGeometry)
 {
-    if (!isVisible()) {
-        return;
-    }
     qreal left, top, right, bottom;
     d->frameSvg->getMargins(left, top, right, bottom);
 
     d->oldGeometry = geometry();
     d->newGeometry = newGeometry.adjusted(-left, -top, right, bottom);
 
+    if (!isVisible()) {
+        setGeometry(d->newGeometry);
+        return;
+    }
+ 
     QGraphicsWidget *pw = parentWidget();
     if (pw) {
         d->newGeometry = d->newGeometry.intersected(QRectF(QPointF(0,0), pw->size()));
@@ -95,7 +97,9 @@ void ItemBackground::setTarget(const QRectF &newGeometry)
 
 void ItemBackground::setTargetItem(QGraphicsItem *target)
 {
-    setTarget(target->boundingRect());
+    QRectF rect = target->boundingRect();
+    rect.setTopLeft(target->pos());
+    setTarget(rect);
 }
 
 QVariant ItemBackground::itemChange(GraphicsItemChange change, const QVariant &value)
