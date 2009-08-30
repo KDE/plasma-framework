@@ -122,6 +122,8 @@ public:
      */
     bool prepareContainmentActions(const QString &trigger, const QPoint &screenPos);
 
+    Applet *appletAt(const QPointF &point);
+
     Containment *q;
     FormFactor formFactor;
     Location location;

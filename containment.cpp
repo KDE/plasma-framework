@@ -519,8 +519,7 @@ void Containment::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 void Containment::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     event->ignore();
-    QGraphicsItem *item = scene()->itemAt(event->scenePos());
-    if (item != this) {
+    if (d->appletAt(event->scenePos())) {
         return; //no unexpected click-throughs
     }
 
@@ -547,8 +546,7 @@ void Containment::mousePressEvent(QGraphicsSceneMouseEvent *event)
 void Containment::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
     event->ignore();
-    QGraphicsItem *item = scene()->itemAt(event->scenePos());
-    if (item != this) {
+    if (d->appletAt(event->scenePos())) {
         return; //no unexpected click-throughs
     }
 
@@ -691,7 +689,7 @@ void ContainmentPrivate::appletActions(KMenu &desktopMenu, Applet *applet, bool 
     }
 }
 
-bool ContainmentPrivate::showContextMenu(const QPointF &point, const QPoint &screenPos, bool includeApplet)
+Applet* ContainmentPrivate::appletAt(const QPointF &point)
 {
     Applet *applet = 0;
 
@@ -703,17 +701,22 @@ bool ContainmentPrivate::showContextMenu(const QPointF &point, const QPoint &scr
     //FIXME what if it's a handle?
     while (item) {
         if (item->isWidget()) {
-            applet = qobject_cast<Applet*>(static_cast<QGrahpicsWidget*>(item));
+            applet = qobject_cast<Applet*>(static_cast<QGraphicsWidget*>(item));
             if (applet) {
                 if (applet->isContainment()) {
                     applet = 0;
                 }
                 break;
             }
-
-            item = item->parentItem();
         }
+        item = item->parentItem();
     }
+    return applet;
+}
+
+bool ContainmentPrivate::showContextMenu(const QPointF &point, const QPoint &screenPos, bool includeApplet)
+{
+    Applet *applet = appletAt(point);
 
     KMenu desktopMenu;
     //kDebug() << "context menu event " << (QObject*)applet;
@@ -1414,8 +1417,7 @@ void Containment::keyPressEvent(QKeyEvent *event)
 void Containment::wheelEvent(QGraphicsSceneWheelEvent *event)
 {
     event->ignore();
-    QGraphicsItem *item = scene()->itemAt(event->scenePos());
-    if (item != this) {
+    if (d->appletAt(event->scenePos())) {
         return; //no unexpected click-throughs
     }
 
