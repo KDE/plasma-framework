@@ -123,6 +123,7 @@ set(plasma_LIB_SRCS
     widgets/toolbutton.cpp
     widgets/busywidget.cpp
     widgets/scrollwidget.cpp
+    widgets/separator.cpp
     widgets/svgwidget.cpp
     widgets/tabbar.cpp
     widgets/textbrowser.cpp
@@ -262,6 +263,7 @@ install(FILES
     widgets/slider.h
     widgets/spinbox.h
     widgets/busywidget.h
+    widgets/separator.h
     widgets/svgwidget.h
     widgets/scrollwidget.h
     widgets/tabbar.h
