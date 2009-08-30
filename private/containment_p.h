@@ -83,7 +83,7 @@ public:
     void mimeTypeRetrieved(KIO::Job *job, const QString &mimetype);
     void containmentActions(KMenu &desktopMenu);
     void appletActions(KMenu &desktopMenu, Applet *applet, bool includeApplet);
-    bool showContextMenu(const QPointF &point, const QPoint &screenPos, bool includeApplet);
+    bool showContextMenu(const QPointF &point, const QPoint &screenPos, bool includeApplet, bool isMouseEvent);
     void checkRemoveAction();
 
     Applet *addApplet(const QString &name, const QVariantList &args = QVariantList(),

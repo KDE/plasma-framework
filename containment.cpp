@@ -578,7 +578,7 @@ void Containment::showDropZone(const QPoint pos)
 
 void Containment::showContextMenu(const QPointF &containmentPos, const QPoint &screenPos)
 {
-    d->showContextMenu(mapToScene(containmentPos), screenPos, false);
+    d->showContextMenu(mapToScene(containmentPos), screenPos, false, false);
 }
 
 void Containment::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
@@ -589,7 +589,8 @@ void Containment::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
         return;
     }
 
-    if (d->showContextMenu(event->scenePos(), event->screenPos(), true)) {
+    if (d->showContextMenu(event->scenePos(), event->screenPos(), true,
+                event->reason() == QGraphicsSceneContextMenuEvent::Mouse)) {
         event->accept();
     } else {
         Applet::contextMenuEvent(event);
@@ -714,7 +715,7 @@ Applet* ContainmentPrivate::appletAt(const QPointF &point)
     return applet;
 }
 
-bool ContainmentPrivate::showContextMenu(const QPointF &point, const QPoint &screenPos, bool includeApplet)
+bool ContainmentPrivate::showContextMenu(const QPointF &point, const QPoint &screenPos, bool includeApplet, bool isMouseEvent)
 {
     Applet *applet = appletAt(point);
 
@@ -722,6 +723,8 @@ bool ContainmentPrivate::showContextMenu(const QPointF &point, const QPoint &scr
     //kDebug() << "context menu event " << (QObject*)applet;
     if (applet) {
         appletActions(desktopMenu, applet, includeApplet);
+    } else if (isMouseEvent)  {
+        return false; //fall through to plugin/wallpaper stuff
     } else {
         containmentActions(desktopMenu);
     }
