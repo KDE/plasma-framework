@@ -591,10 +591,10 @@ void Containment::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
         return;
     }
 
-    if (!d->showContextMenu(event->scenePos(), event->screenPos(), true)) {
-        Applet::contextMenuEvent(event);
-    } else {
+    if (d->showContextMenu(event->scenePos(), event->screenPos(), true)) {
         event->accept();
+    } else {
+        Applet::contextMenuEvent(event);
     }
 }
 
