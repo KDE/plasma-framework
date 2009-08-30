@@ -702,17 +702,17 @@ bool ContainmentPrivate::showContextMenu(const QPointF &point, const QPoint &scr
 
     //FIXME what if it's a handle?
     while (item) {
-        applet = qgraphicsitem_cast<Applet*>(item);
-        if (applet) {
-            if (applet->isContainment()) {
-                applet = 0;
+        if (item->isWidget()) {
+            applet = qobject_cast<Applet*>(static_cast<QGrahpicsWidget*>(item));
+            if (applet) {
+                if (applet->isContainment()) {
+                    applet = 0;
+                }
+                break;
             }
-            break;
-        }
 
-        // applet may have a value due to finding a containment!
-        applet = 0;
-        item = item->parentItem();
+            item = item->parentItem();
+        }
     }
 
     KMenu desktopMenu;
