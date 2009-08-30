@@ -99,7 +99,7 @@ void ItemBackground::setTarget(const QRectF &newGeometry)
 void ItemBackground::setTargetItem(QGraphicsItem *target)
 {
     QRectF rect = target->boundingRect();
-    rect.setTopLeft(target->pos());
+    rect.moveTopLeft(target->pos());
     setTarget(rect);
 }
 
