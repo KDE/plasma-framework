@@ -23,6 +23,7 @@
 
 #include <QGraphicsWidget>
 
+#include <plasma/plasma_export.h>
 
 /**
  * @class ItemBackground plasma/widgets/itembackground.h
@@ -36,7 +37,7 @@ namespace Plasma {
 class FrameSvg;
 class ItemBackgroundPrivate;
 
-class ItemBackground : public QGraphicsWidget
+class PLASMA_EXPORT ItemBackground : public QGraphicsWidget
 {
     Q_OBJECT
 public:
