@@ -27,6 +27,8 @@
 #include <Plasma/FrameSvg>
 #include <Plasma/Animator>
 #include <Plasma/Theme>
+namespace Plasma
+{
 
 class ItemBackgroundPrivate
 {
@@ -154,3 +156,6 @@ void ItemBackground::animationUpdate(qreal progress)
     }
     update();
 }
+
+}
+

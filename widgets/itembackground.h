@@ -27,8 +27,6 @@ namespace Plasma {
     class FrameSvg;
 }
 
-class ItemBackgroundPrivate;
-
 /**
  * @class ItemBackground plasma/widgets/itembackground.h
  *
@@ -36,6 +34,10 @@ class ItemBackgroundPrivate;
  *
  * @since 4.4
  */
+namespace Plasma
+{
+class ItemBackgroundPrivate;
+
 class ItemBackground : public QGraphicsWidget
 {
     Q_OBJECT
@@ -65,5 +67,6 @@ private Q_SLOTS:
 private:
     ItemBackgroundPrivate *d;
 };
+}
 
 #endif
