@@ -106,6 +106,10 @@ QVariant ItemBackground::itemChange(GraphicsItemChange change, const QVariant &v
 {
     if (change == ItemVisibleChange) {
         bool visible = value.toBool();
+        bool retVisible = visible;
+        if (visible == isVisible() || d->animId == 0) {
+            retVisible = true;
+        }
         d->fading = true;
         d->fadeIn = visible;
 
@@ -115,7 +119,9 @@ QVariant ItemBackground::itemChange(GraphicsItemChange change, const QVariant &v
 
         d->animId = Plasma::Animator::self()->customAnimation(
                   10, 250, Plasma::Animator::EaseInCurve, this, "animationUpdate");
+        return retVisible;
     }
+    return value;
 }
 
 void ItemBackground::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
