@@ -253,6 +253,7 @@ install(FILES
     widgets/frame.h
     widgets/groupbox.h
     widgets/iconwidget.h
+    widgets/itembackground.h
     widgets/label.h
     widgets/lineedit.h
     widgets/meter.h
