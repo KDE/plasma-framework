@@ -583,7 +583,7 @@ void Containment::showContextMenu(const QPointF &containmentPos, const QPoint &s
 
 void Containment::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
 {
-    kDebug() << "let's see if we manage to get a context menu here, huh";
+    //kDebug() << "let's see if we manage to get a context menu here, huh";
     if (!isContainment() || !scene() || !KAuthorized::authorizeKAction("desktop_contextmenu")) {
         Applet::contextMenuEvent(event);
         return;
@@ -699,7 +699,6 @@ Applet* ContainmentPrivate::appletAt(const QPointF &point)
         item = 0;
     }
 
-    //FIXME what if it's a handle?
     while (item) {
         if (item->isWidget()) {
             applet = qobject_cast<Applet*>(static_cast<QGraphicsWidget*>(item));
@@ -709,6 +708,12 @@ Applet* ContainmentPrivate::appletAt(const QPointF &point)
                 }
                 break;
             }
+        }
+        AppletHandle *handle = dynamic_cast<AppletHandle*>(item);
+        if (handle) {
+            //pretend it was on the applet
+            applet = handle->applet();
+            break;
         }
         item = item->parentItem();
     }
