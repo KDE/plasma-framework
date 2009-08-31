@@ -50,21 +50,26 @@ public:
      * @arg newGeometry the final geometry target
      */
     void setTarget(const QRectF &newGeometry);
-    
+
     /**
      * set the ItemBackground geometry to be the target geometry, plus the ItemBackground margins 
      */
     void setTargetItem(QGraphicsItem *target);
- 
+
+    /**
+     * @reimp from QGraphicsWidget
+     */
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
 protected:
+    /**
+     * @reimp from QGraphicsWidget
+     */
     QVariant itemChange(GraphicsItemChange change, const QVariant &value);
 
-private Q_SLOTS:
-    void animationUpdate(qreal progress);
 private:
-    ItemBackgroundPrivate *d;
+    ItemBackgroundPrivate * const d;
+    Q_PRIVATE_SLOT(d, void animationUpdate(qreal progress))
 };
 }
 

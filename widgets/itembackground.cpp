@@ -33,9 +33,13 @@ namespace Plasma
 class ItemBackgroundPrivate
 {
 public:
-    ItemBackgroundPrivate()
+    ItemBackgroundPrivate(ItemBackground *parent)
+        : q(parent)
     {}
-    
+
+    void animationUpdate(qreal progress);
+
+    ItemBackground *q;
     Plasma::FrameSvg *frameSvg;
     QRectF oldGeometry;
     QRectF newGeometry;
@@ -48,7 +52,7 @@ public:
 
 ItemBackground::ItemBackground(QGraphicsWidget *parent)
     : QGraphicsWidget(parent),
-      d(new ItemBackgroundPrivate)
+      d(new ItemBackgroundPrivate(this))
 {
     d->frameSvg = new Plasma::FrameSvg(this);
     d->animId = 0;
@@ -84,7 +88,7 @@ void ItemBackground::setTarget(const QRectF &newGeometry)
         setGeometry(d->newGeometry);
         return;
     }
- 
+
     QGraphicsWidget *pw = parentWidget();
     if (pw) {
         d->newGeometry = d->newGeometry.intersected(QRectF(QPointF(0,0), pw->size()));
@@ -102,9 +106,13 @@ void ItemBackground::setTarget(const QRectF &newGeometry)
 
 void ItemBackground::setTargetItem(QGraphicsItem *target)
 {
-    QRectF rect = target->boundingRect();
-    rect.moveTopLeft(target->pos());
-    setTarget(rect);
+    if (target) {
+        QRectF rect = target->boundingRect();
+        rect.moveTopLeft(target->pos());
+        setTarget(rect);
+    } else {
+        hide();
+    }
 }
 
 QVariant ItemBackground::itemChange(GraphicsItemChange change, const QVariant &value)
@@ -155,28 +163,31 @@ void ItemBackground::paint(QPainter *painter, const QStyleOptionGraphicsItem *op
     }
 }
 
-void ItemBackground::animationUpdate(qreal progress)
+void ItemBackgroundPrivate::animationUpdate(qreal progress)
 {
     if (progress == 1) {
-        d->animId = 0;
+        animId = 0;
     }
 
-    if (d->fading) {
-        d->opacity = d->fadeIn?progress:1-progress;
-        if (!d->fadeIn && qFuzzyCompare(d->opacity+1, (qreal)1.0)) {
-            d->immediate = true;
-            hide();
-            d->immediate = false;
+    if (fading) {
+        opacity = fadeIn?progress:1-progress;
+        if (!fadeIn && qFuzzyCompare(opacity+1, (qreal)1.0)) {
+            immediate = true;
+            q->hide();
+            immediate = false;
         }
     } else {
-        setGeometry(d->oldGeometry.x() + (d->newGeometry.x() - d->oldGeometry.x()) * progress,
-                    d->oldGeometry.y() + (d->newGeometry.y() - d->oldGeometry.y()) * progress,
-
-                    d->oldGeometry.width() + (d->newGeometry.width() - d->oldGeometry.width()) * progress,
-                    d->oldGeometry.height() + (d->newGeometry.height() - d->oldGeometry.height()) * progress);
+        q->setGeometry(oldGeometry.x() + (newGeometry.x() - oldGeometry.x()) * progress,
+                       oldGeometry.y() + (newGeometry.y() - oldGeometry.y()) * progress,
+                       oldGeometry.width() + (newGeometry.width() - oldGeometry.width()) * progress,
+                       oldGeometry.height() + (newGeometry.height() - oldGeometry.height()) * progress);
     }
-    update();
+
+    q->update();
 }
 
 }
+
+#include "itembackground.moc"
+
 
