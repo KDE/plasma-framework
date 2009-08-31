@@ -34,12 +34,14 @@ class ItemBackgroundPrivate
 {
 public:
     ItemBackgroundPrivate(ItemBackground *parent)
-        : q(parent)
+        : q(parent),
+          target(0)
     {}
 
     void animationUpdate(qreal progress);
 
     ItemBackground *q;
+    QGraphicsItem *target;
     Plasma::FrameSvg *frameSvg;
     QRectF oldGeometry;
     QRectF newGeometry;
@@ -106,13 +108,34 @@ void ItemBackground::setTarget(const QRectF &newGeometry)
 
 void ItemBackground::setTargetItem(QGraphicsItem *target)
 {
+    if (d->target && d->target != target) {
+        d->target->removeSceneEventFilter(this);
+    }
+
     if (target) {
         QRectF rect = target->boundingRect();
         rect.moveTopLeft(target->pos());
         setTarget(rect);
+
+        if (d->target != target) {
+            d->target = target;
+            d->target->installSceneEventFilter(this);
+        }
     } else {
         hide();
     }
+}
+
+bool ItemBackground::sceneEventFilter(QGraphicsItem *watched, QEvent *event)
+{
+    if (watched == d->target) {
+        if (event->type() == QEvent::GraphicsSceneResize ||
+            event->type() == QEvent::GraphicsSceneMove) {
+            setTargetItem(d->target);
+        }
+    }
+
+    return false;
 }
 
 QVariant ItemBackground::itemChange(GraphicsItemChange change, const QVariant &value)

@@ -67,6 +67,11 @@ protected:
      */
     QVariant itemChange(GraphicsItemChange change, const QVariant &value);
 
+    /**
+     * @reimp from QGraphicsItem
+     */
+    bool sceneEventFilter(QGraphicsItem *watched, QEvent *event);
+
 private:
     ItemBackgroundPrivate * const d;
     Q_PRIVATE_SLOT(d, void animationUpdate(qreal progress))
