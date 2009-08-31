@@ -68,7 +68,9 @@ ItemBackground::ItemBackground(QGraphicsWidget *parent)
 }
 
 ItemBackground::~ItemBackground()
-{}
+{
+    delete d;
+}
 
 void ItemBackground::setTarget(const QRectF &newGeometry)
 {
