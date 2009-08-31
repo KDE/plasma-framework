@@ -43,6 +43,7 @@ public:
     qreal opacity;
     bool fading;
     bool fadeIn;
+    bool immediate;
 };
 
 ItemBackground::ItemBackground(QGraphicsWidget *parent)
@@ -54,6 +55,7 @@ ItemBackground::ItemBackground(QGraphicsWidget *parent)
     d->opacity = 1;
     d->fading = false;
     d->fadeIn = false;
+    d->immediate = false;
     setContentsMargins(0, 0, 0, 0);
 
     d->frameSvg->setImagePath("widgets/viewitem");
@@ -105,6 +107,10 @@ void ItemBackground::setTargetItem(QGraphicsItem *target)
 
 QVariant ItemBackground::itemChange(GraphicsItemChange change, const QVariant &value)
 {
+    if (d->immediate) {
+        return value;
+    }
+
     if (change == ItemVisibleChange) {
         bool visible = value.toBool();
         bool retVisible = visible;
@@ -156,7 +162,9 @@ void ItemBackground::animationUpdate(qreal progress)
     if (d->fading) {
         d->opacity = d->fadeIn?progress:1-progress;
         if (!d->fadeIn && qFuzzyCompare(d->opacity+1, (qreal)1.0)) {
+            d->immediate = true;
             hide();
+            d->immediate = false;
         }
     } else {
         setGeometry(d->oldGeometry.x() + (d->newGeometry.x() - d->oldGeometry.x()) * progress,
