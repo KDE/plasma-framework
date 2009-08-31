@@ -163,6 +163,11 @@ bool ItemBackground::sceneEventFilter(QGraphicsItem *watched, QEvent *event)
     return false;
 }
 
+void ItemBackground::resizeEvent(QGraphicsSceneResizeEvent *)
+{
+    d->frameSvg->resizeFrame(size());
+}
+
 QVariant ItemBackground::itemChange(GraphicsItemChange change, const QVariant &value)
 {
     if (d->immediate) {
@@ -192,10 +197,6 @@ QVariant ItemBackground::itemChange(GraphicsItemChange change, const QVariant &v
 void ItemBackground::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     Q_UNUSED(widget)
-
-    if (d->frameSvg->frameSize() != option->rect.size()) {
-        d->frameSvg->resizeFrame(option->rect.size());
-    }
 
     if (qFuzzyCompare(d->opacity, (qreal)1.0)) {
         d->frameSvg->paintFrame(painter, option->rect.topLeft());

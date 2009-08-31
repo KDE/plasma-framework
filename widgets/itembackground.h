@@ -72,6 +72,11 @@ protected:
      */
     bool sceneEventFilter(QGraphicsItem *watched, QEvent *event);
 
+    /**
+     * @reimp from QGraphicsItem
+     */
+    void resizeEvent(QGraphicsSceneResizeEvent *);
+
 private:
     Q_PRIVATE_SLOT(d, void animationUpdate(qreal progress))
     Q_PRIVATE_SLOT(d, void targetDestroyed(QObject*))
