@@ -22,11 +22,11 @@
 #include <QPainter>
 #include <QStyleOptionGraphicsItem>
 
-#include <KDebug>
+#include <kdebug.h>
 
-#include <Plasma/FrameSvg>
-#include <Plasma/Animator>
-#include <Plasma/Theme>
+#include <plasma/framesvg.h>
+#include <plasma/animator.h>
+#include <plasma/theme.h>
 namespace Plasma
 {
 
