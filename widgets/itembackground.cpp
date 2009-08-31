@@ -133,6 +133,8 @@ void ItemBackground::setTargetItem(QGraphicsItem *target)
     }
 
     if (target) {
+        setZValue(target->zValue() - 1);
+        setParentItem(target->parentItem());
         QRectF rect = target->boundingRect();
         rect.moveTopLeft(target->pos());
         setTarget(rect);
