@@ -69,14 +69,16 @@ ItemBackground::ItemBackground(QGraphicsWidget *parent)
     d->fading = false;
     d->fadeIn = false;
     d->immediate = false;
-    qreal l, t, r, b;
-    d->frameSvg->getMargins(l, t, r, b);
-    setContentsMargins(l, t, r, b);
 
     d->frameSvg->setImagePath("widgets/viewitem");
     d->frameSvg->setEnabledBorders(Plasma::FrameSvg::AllBorders);
     d->frameSvg->setCacheAllRenderedFrames(true);
     d->frameSvg->setElementPrefix("hover");
+
+    qreal l, t, r, b;
+    d->frameSvg->getMargins(l, t, r, b);
+    setContentsMargins(l, t, r, b);
+
     connect(d->frameSvg, SIGNAL(repaintNeeded()), this, SLOT(frameSvgChanged()));
 
     setAcceptedMouseButtons(0);
@@ -90,11 +92,8 @@ ItemBackground::~ItemBackground()
 
 void ItemBackground::setTarget(const QRectF &newGeometry)
 {
-    qreal left, top, right, bottom;
-    d->frameSvg->getMargins(left, top, right, bottom);
-
     d->oldGeometry = geometry();
-    d->newGeometry = newGeometry.adjusted(-left, -top, right, bottom);
+    d->newGeometry = newGeometry;
 
     if (!isVisible()) {
         setGeometry(d->newGeometry);
@@ -122,7 +121,7 @@ void ItemBackground::setTargetItem(QGraphicsItem *target)
         d->target->removeSceneEventFilter(this);
 
         QObject *obj = 0;
-        if (target->isWidget()) {
+        if (target && target->isWidget()) {
             obj = static_cast<QGraphicsWidget*>(target);
         } else {
             obj = dynamic_cast<QObject *>(target);
