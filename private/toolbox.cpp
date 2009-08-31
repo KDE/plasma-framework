@@ -214,9 +214,13 @@ ToolBox::Corner ToolBox::corner() const
 
 void ToolBox::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-    event->accept();
-    // set grab position relative to toolbox
-    d->dragStartRelative = mapToParent(event->pos()).toPoint() - pos().toPoint();
+    if (event->button() == Qt::LeftButton) {
+        event->accept();
+        // set grab position relative to toolbox
+        d->dragStartRelative = mapToParent(event->pos()).toPoint() - pos().toPoint();
+    } else {
+        event->ignore();
+    }
 }
 
 QSize ToolBox::cornerSize() const
@@ -335,7 +339,7 @@ void ToolBox::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
 void ToolBox::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
-    if (!d->dragging && boundingRect().contains(event->pos())) {
+    if (event->button() == Qt::LeftButton && !d->dragging && boundingRect().contains(event->pos())) {
         emit toggled();
     }
 
