@@ -39,6 +39,7 @@ public:
     {}
 
     void animationUpdate(qreal progress);
+    void targetDestroyed(QObject*);
 
     ItemBackground *q;
     QGraphicsItem *target;
@@ -110,6 +111,17 @@ void ItemBackground::setTargetItem(QGraphicsItem *target)
 {
     if (d->target && d->target != target) {
         d->target->removeSceneEventFilter(this);
+
+        QObject *obj = 0;
+        if (target->isWidget()) {
+            obj = static_cast<QGraphicsWidget*>(target);
+        } else {
+            obj = dynamic_cast<QObject *>(target);
+        }
+
+        if (obj) {
+            disconnect(obj, 0, obj, 0);
+        }
     }
 
     if (target) {
@@ -119,9 +131,22 @@ void ItemBackground::setTargetItem(QGraphicsItem *target)
 
         if (d->target != target) {
             d->target = target;
+
             d->target->installSceneEventFilter(this);
+
+            QObject *obj = 0;
+            if (target->isWidget()) {
+                obj = static_cast<QGraphicsWidget*>(target);
+            } else {
+                obj = dynamic_cast<QObject *>(target);
+            }
+
+            if (obj) {
+                connect(obj, SIGNAL(destroyed(QObject*)), this, SLOT(targetDestroyed(QObject*)));
+            }
         }
     } else {
+        d->target = 0;
         hide();
     }
 }
@@ -207,6 +232,11 @@ void ItemBackgroundPrivate::animationUpdate(qreal progress)
     }
 
     q->update();
+}
+
+void ItemBackgroundPrivate::targetDestroyed(QObject*)
+{
+    q->setTargetItem(0);
 }
 
 }
