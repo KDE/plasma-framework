@@ -61,6 +61,13 @@ public:
      */
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
+Q_SIGNALS:
+    /**
+     * Emitted when the visual layout and appearance changes. Useful for syncronizing
+     * content margins.
+     */
+    void appearanceChanged();
+
 protected:
     /**
      * @reimp from QGraphicsWidget
@@ -80,7 +87,9 @@ protected:
 private:
     Q_PRIVATE_SLOT(d, void animationUpdate(qreal progress))
     Q_PRIVATE_SLOT(d, void targetDestroyed(QObject*))
+    Q_PRIVATE_SLOT(d, void frameSvgChanged())
 
+    friend class ItemBackgroundPrivate;
     ItemBackgroundPrivate * const d;
 };
 }

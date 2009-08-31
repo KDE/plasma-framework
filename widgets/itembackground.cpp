@@ -40,8 +40,9 @@ public:
 
     void animationUpdate(qreal progress);
     void targetDestroyed(QObject*);
+    void frameSvgChanged();
 
-    ItemBackground *q;
+    ItemBackground * const q;
     QGraphicsItem *target;
     Plasma::FrameSvg *frameSvg;
     QRectF oldGeometry;
@@ -57,18 +58,26 @@ ItemBackground::ItemBackground(QGraphicsWidget *parent)
     : QGraphicsWidget(parent),
       d(new ItemBackgroundPrivate(this))
 {
+    setCacheMode(DeviceCoordinateCache);
+    setFlag(ItemIsMovable, false);
+    setFlag(ItemIsSelectable, false);
+    setFlag(ItemIsFocusable, false);
+
     d->frameSvg = new Plasma::FrameSvg(this);
     d->animId = 0;
     d->opacity = 1;
     d->fading = false;
     d->fadeIn = false;
     d->immediate = false;
-    setContentsMargins(0, 0, 0, 0);
+    qreal l, t, r, b;
+    d->frameSvg->getMargins(l, t, r, b);
+    setContentsMargins(l, t, r, b);
 
     d->frameSvg->setImagePath("widgets/viewitem");
     d->frameSvg->setEnabledBorders(Plasma::FrameSvg::AllBorders);
     d->frameSvg->setCacheAllRenderedFrames(true);
     d->frameSvg->setElementPrefix("hover");
+    connect(d->frameSvg, SIGNAL(repaintNeeded()), this, SLOT(frameSvgChanged()));
 
     setAcceptedMouseButtons(0);
     setZValue(-800);
@@ -240,7 +249,17 @@ void ItemBackgroundPrivate::targetDestroyed(QObject*)
     q->setTargetItem(0);
 }
 
+void ItemBackgroundPrivate::frameSvgChanged()
+{
+    qreal l, t, r, b;
+    frameSvg->getMargins(l, t, r, b);
+    q->setContentsMargins(l, t, r, b);
+    q->update();
+    emit q->appearanceChanged();
 }
+
+} // Plasma namespace
+
 
 #include "itembackground.moc"
 
