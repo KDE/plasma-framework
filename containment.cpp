@@ -519,29 +519,8 @@ void Containment::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 void Containment::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     event->ignore();
-    kDebug();
     if (d->appletAt(event->scenePos())) {
         return; //no unexpected click-throughs
-    }
-
-    QGraphicsItem *item = scene()->itemAt(event->scenePos());
-    if (event->button() == Qt::RightButton && item != this) {
-        //fake a contextmenuevent in case something in the containment plugin is expecting it
-        QGraphicsSceneContextMenuEvent contextEvent;
-        contextEvent.setReason(QGraphicsSceneContextMenuEvent::Mouse);
-        contextEvent.setPos(event->pos());
-        contextEvent.setScenePos(event->scenePos());
-        contextEvent.setScreenPos(event->screenPos());
-        contextEvent.setModifiers(event->modifiers());
-        contextEvent.setWidget(event->widget());
-
-        scene()->sendEvent(item, contextEvent);
-        if (contextEvent.isAccepted()) {
-            kDebug() << "context-accepted";
-            event->accept();
-            return;
-        }
-        kDebug() << "context not accepted";
     }
 
     if (d->wallpaper && d->wallpaper->isInitialized() && !event->isAccepted()) {
@@ -599,13 +578,12 @@ void Containment::showDropZone(const QPoint pos)
 
 void Containment::showContextMenu(const QPointF &containmentPos, const QPoint &screenPos)
 {
-    kDebug();
     d->showContextMenu(mapToScene(containmentPos), screenPos, false, false);
 }
 
 void Containment::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
 {
-    kDebug() << "let's see if we manage to get a context menu here, huh";
+    //kDebug() << "let's see if we manage to get a context menu here, huh";
     if (!isContainment() || !scene() || !KAuthorized::authorizeKAction("desktop_contextmenu")) {
         Applet::contextMenuEvent(event);
         return;
