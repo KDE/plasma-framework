@@ -288,6 +288,11 @@ QList<ExtenderGroup*> Extender::groups() const
     return result;
 }
 
+Applet *Extender::applet() const
+{
+    return d->applet;
+}
+
 void Extender::saveState()
 {
     foreach (ExtenderItem *item, attachedItems()) {

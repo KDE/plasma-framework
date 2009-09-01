@@ -181,6 +181,12 @@ class PLASMA_EXPORT Extender : public QGraphicsWidget
          */
         QList<ExtenderGroup*> groups() const;
 
+        /**
+         * @returns the Applet this Extender is associated with
+         * @since 4.4
+         */
+        Applet *applet() const;
+
     protected:
         /**
          * Get's called after an item has been added to this extender. The bookkeeping has already
