@@ -156,9 +156,11 @@ KConfigGroup ExtenderItem::config() const
 
 void ExtenderItem::setTitle(const QString &title)
 {
-    d->title = title;
-    config().writeEntry("extenderTitle", title);
-    update();
+    if (d->title != title) {
+        d->title = title;
+        config().writeEntry("extenderTitle", title);
+        update();
+    }
 }
 
 QString ExtenderItem::title() const
@@ -205,8 +207,10 @@ QGraphicsItem *ExtenderItem::widget() const
 
 void ExtenderItem::setIcon(const QIcon &icon)
 {
-    d->iconName.clear();
-    d->collapseIcon->setIcon(icon);
+    if (d->collapseIcon->icon().isNull() || icon.cacheKey() != d->collapseIcon->icon().cacheKey()) {
+        d->iconName.clear();
+        d->collapseIcon->setIcon(icon);
+    }
 }
 
 void ExtenderItem::setIcon(const QString &icon)
