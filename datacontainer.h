@@ -143,7 +143,7 @@ class PLASMA_EXPORT DataContainer : public QObject
          * reflect the new data.
          *
          * Note that you should not normally emit this directly.  Instead, use
-         * checkForUpdates() or the DataEngine::scheduleSourcesUpdated() slot.
+         * checkForUpdate() or the DataEngine::scheduleSourcesUpdated() slot.
          *
          * @param source the objectName() of the DataContainer (and hence the name
          *               of the source) that updated its data
