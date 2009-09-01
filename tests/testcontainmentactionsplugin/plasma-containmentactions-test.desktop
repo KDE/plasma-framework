@@ -66,6 +66,7 @@ Name[x-test]=xxTestxx
 Name[zh_CN]=测试
 Name[zh_TW]=測試
 Comment=A dummy plugin for testing
+Comment[et]=Libaplugin testimiseks
 Comment[id]=Plugin rekaan untuk pengujian
 Comment[nb]=Et attrapp-programtillegg for testing
 Comment[nds]=En Platzholl-Moduul för't Utproberen
