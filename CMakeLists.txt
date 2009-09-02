@@ -40,7 +40,9 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}
 #find_package(QtJolie REQUIRED)
 find_package(QCA2 REQUIRED)
 #find_package(DNSSD REQUIRED)
-include_directories(${QCA2_INCLUDES})
+
+
+include_directories(${QCA2_INCLUDE_DIR})
 include_directories(${QTJOLIE_INCLUDE_DIRS})
 
 if(QT_QTOPENGL_FOUND AND OPENGL_FOUND)

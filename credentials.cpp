@@ -18,9 +18,9 @@
 #include "credentials.h"
 
 #include <QObject>
-#include <QtCrypto/QtCrypto>
+#include <QtCrypto>
 
-#include <KDebug>
+#include <kdebug.h>
 #include "authorizationmanager.h"
 #include <kstandarddirs.h>
 

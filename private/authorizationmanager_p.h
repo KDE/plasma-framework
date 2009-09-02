@@ -22,7 +22,7 @@
 
 #include <QtCore/QMap>
 #include <QtCore/QString>
-#include <QtCrypto/QtCrypto>
+#include <QtCrypto>
 
 #include <plasma/authorizationmanager.h>
 #include <plasma/credentials.h>

@@ -24,7 +24,7 @@
 #include <QtCore/QDataStream>
 #include <QtCore/QMetaType>
 
-#include <QtCrypto/QtCrypto>
+#include <QtCrypto>
 
 namespace Plasma {
 

@@ -27,7 +27,7 @@
 #include <kurl.h>
 #include <klocalizedstring.h>
 
-#include <QtCrypto/QtCrypto>
+#include <QtCrypto>
 #include "credentials.h"
 
 namespace Plasma

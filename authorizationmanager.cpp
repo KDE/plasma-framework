@@ -39,7 +39,7 @@
 #include <QtCore/QTimer>
 #include <QtCore/QMetaType>
 
-#include <QtCrypto/QtCrypto>
+#include <QtCrypto>
 #include <QtJolie/Message>
 #include <QtJolie/Server>
 

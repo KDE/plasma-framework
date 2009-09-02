@@ -23,8 +23,8 @@
 #include <QByteArray>
 #include <QtJolie/Message>
 #include <QtJolie/Value>
-#include <QtCrypto/QtCrypto>
-#include <KDebug>
+#include <QtCrypto>
+#include <kdebug.h>
 #include <klocalizedstring.h>
 
 namespace Message {
