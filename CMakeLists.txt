@@ -347,7 +347,7 @@ install(FILES plasmoidservice.operations DESTINATION ${DATA_INSTALL_DIR}/plasma/
 
 include(MacroKAuth)
 
-kde4_auth_add_helper(kcmremotewidgetshelper org.kde.kcontrol.kcmremotewidgets root remotewidgetshelper.cpp)
+kde4_auth_add_helper(kcmremotewidgetshelper org.kde.kcontrol.kcmremotewidgets root private/remotewidgetshelper.cpp)
 
 kde4_auth_register_actions(org.kde.kcontrol.kcmremotewidgets kcm_remotewidgets.actions)
 

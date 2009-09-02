@@ -17,7 +17,7 @@
  *
  */
 
-#include "remotewidgetshelper.h"
+#include "remotewidgetshelper_p.h"
 
 #include <QFile>
 #include <QTextStream>
