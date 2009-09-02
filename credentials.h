@@ -18,7 +18,7 @@
 #ifndef IDENTITY_H
 #define IDENTITY_H
 
-#include <plasma.h>
+#include <plasma/plasma.h>
 
 #include <QtCore/QObject>
 #include <QtCore/QDataStream>
