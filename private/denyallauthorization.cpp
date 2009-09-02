@@ -22,7 +22,7 @@
 #include "authorizationrule.h"
 #include "clientpinrequest.h"
 
-#include <KDebug>
+#include <kdebug.h>
 
 
 namespace Plasma

@@ -45,7 +45,7 @@
 
 #include <kdebug.h>
 #include <kurl.h>
-#include <wallet.h>
+#include <kwallet.h>
 #include <kconfiggroup.h>
 #include <kstandarddirs.h>
 

@@ -20,7 +20,7 @@
 #include "getsource.h"
 #include "../dataengine.h"
 
-#include <KDebug>
+#include <kdebug.h>
 
 namespace Plasma
 {
