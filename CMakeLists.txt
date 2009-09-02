@@ -347,6 +347,10 @@ install(FILES plasmoidservice.operations DESTINATION ${DATA_INSTALL_DIR}/plasma/
 
 include(MacroKAuth)
 
+set( KDE4_KAUTH_DBUS_POLICY_STUB ${CMAKE_SOURCE_DIR}/kdecore/auth/backends/dbus/dbus_policy.stub)
+set( KDE4_KAUTH_DBUS_SERVICE_STUB ${CMAKE_SOURCE_DIR}/kdecore/auth/backends/dbus/dbus_service.stub)
+set( KDE4_KAUTH_POLICY_GEN ${CMAKE_BINARY_DIR}/bin/kauth-policy-gen)
+
 kde4_auth_add_helper(kcmremotewidgetshelper org.kde.kcontrol.kcmremotewidgets root private/remotewidgetshelper.cpp)
 
 kde4_auth_register_actions(org.kde.kcontrol.kcmremotewidgets kcm_remotewidgets.actions)
