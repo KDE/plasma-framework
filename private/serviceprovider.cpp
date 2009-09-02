@@ -16,92 +16,412 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef REMOTESERVICE_H
-#define REMOTESERVICE_H
-
 #include "serviceprovider_p.h"
+
+#include "authorizationrule_p.h"
+#include "authorizationmanager_p.h"
+#include "joliemessagehelper_p.h"
+
+#include <plasma/authorizationinterface.h>
+#include <plasma/authorizationmanager.h>
+#include <plasma/authorizationrule.h>
+#include <plasma/credentials.h>
+#include <plasma/service.h>
+#include <plasma/servicejob.h>
+#include <plasma/private/servicejob_p.h>
+
+#include <QtCore/QBuffer>
+#include <QtCore/QFile>
+
+#include <QtJolie/Server>
+
+#include <KDebug>
+#include <KStandardDirs>
 
 namespace Plasma 
 {
 
-ServiceProvider::ServiceProvider(Service *service)
-    : m_service(service)
+ServiceProvider::ServiceProvider(const QString &name, Service *service)
+    : Jolie::AbstractAdaptor(service),
+      m_service(service)
 {
-    //we need some resource name and a redirect should be added under that name. the actual chosen
-    //resource name (a number might be appended by jolie to avoid conflicts), should probably be made
-    //available through a resourceName() function by the jolie adaptor, or maybe just a KUrl url()
-    //since that would be convenient when wanting to announce services on the network through
-    //zeroconf, and the resource name is easily obtained from there as well.
-    setResourceName(service->name());
-    connect(AccessManager::self(),
-            SIGNAL(authorizationSuccesful(Plasma::Service *service, Jolie::Message)),
-            this, SLOT(messageAuthorized(Plasma::Service *service, Jolie::Message)));
+    connect(service, SIGNAL(finished(Plasma::ServiceJob *)),
+            this, SLOT(operationCompleted(Plasma::ServiceJob*)));
+
+    m_providerName = name;
+    AuthorizationManager::self()->d->server->registerAdaptor(m_providerName.toUtf8(), this);
+    kDebug() << "registered service provider " << m_providerName;
 }
 
-ServiceProvider::messageReceived(Jolie::Message message)
+ServiceProvider::~ServiceProvider()
 {
-    //authorization occurs by checking the value of two children that are added to every
-    //message that get's sent by RemoteService (the client side of ServiceProvider): "host"
-    //(full hostname or ip) and "signature" (a digital signature made by encrypting a hash 
-    //of the entire sodep message and verified by obtaining the public key from a PublicKeyService
-    //running at the computer sending this message. obviously this authorization needs to be
-    //async.
-    AccessManager::self()->authorize(this, message);
+    AuthorizationManager::self()->d->server->unregisterAdaptor(m_providerName.toUtf8());
 }
 
-ServiceProvider::sendOperationNames(Jolie::Message message)
+void ServiceProvider::startOperationCall(Jolie::Message message)
 {
-    Jolie::Message response(resourceName(), message->operationName(), message->id());
-    foreach (const QString &operationName, m_service->operationNames()) {
-        response.children("operationNames") << Jolie::Value(operationName);
+    kDebug() << "starting operation call";
+
+    KConfigGroup description =
+       m_service->operationDescription(QString(Message::field(Message::Field::OPERATION, message)));
+
+    //deserialize the parameters
+    QByteArray parametersByteArray;
+    parametersByteArray = Message::field(Message::Field::PARAMETERS, message);
+    kDebug() << "parameters byte array: " << parametersByteArray.toBase64();
+    QBuffer buffer(&parametersByteArray);
+    buffer.open(QIODevice::ReadOnly);
+    QDataStream in(&buffer);
+    QMap<QString, QVariant> parameters;
+    in >> parameters;
+
+    if (!description.isValid()) {
+        kDebug() << "invalid description.";
     }
-    sendMessage(response);
+
+    kDebug() << "====PARAMETERS====";
+
+    //write the parameters into the operation description
+    foreach (const QString &key, parameters.keys()) {
+        kDebug() << "key = " << key << ", value = " << parameters.value(key);
+        description.writeEntry(key, parameters.value(key));
+    }
+
+    m_service->setDestination(Message::field(Message::Field::DESTINATION, message));
+    ServiceJob *job = m_service->startOperationCall(description);
+    QString identityID = Message::field(Message::Field::IDENTITYID, message);
+    job->d->identity = AuthorizationManager::self()->d->getCredentials(identityID);
+    kDebug() << "adding into messagemap:" << ((QObject*)job);
+    m_messageMap[job] = message;
 }
 
-ServiceProvider::sendOperationDescription(Jolie::Message message)
+void ServiceProvider::sendOperations(Jolie::Message message)
 {
-    QByteArray operationDescription = //serialize the operationDescription KConfigGroup. Hmm, reading the KConfigGroup apidox this seems rather ugly. It looks like it can only be done by using a KSharedConfig to write to a temporary file, and read that. Let's hope I'm wrong :p
-    Jolie::Message response(resourceName(), message->operationName(), message->id());
-    response.setData(Jolie::Value(operationDescription));
-    sendMessage(response);
+    kDebug() << "send operations.";
+    //kDebug() << printJolieMessage(message);
+    Jolie::Message response(message.resourcePath(), message.operationName(), message.id());
+
+    //FIXME: this is duplicated from Plasma::Service
+    QString path = KStandardDirs::locate("data", "plasma/services/" + m_service->name() +
+".operations");
+
+    if (path.isEmpty()) {
+        kDebug() << "Cannot find operations description:" << m_service->name() << ".operations";
+        response.setFault(Jolie::Fault("NoOperationsDescription"));
+    } else {
+        kDebug() << "file = " << path;
+        QFile file(path);
+        file.open(QIODevice::ReadOnly);
+        Jolie::Value value;
+        value.children(Message::Field::OPERATIONSDESCRIPTION) << Jolie::Value(file.readAll());
+        file.close();
+        response.setData(value);
+    }
+
+    QByteArray id = Message::field(Message::Field::IDENTITYID, message);
+    QByteArray uuid = Message::field(Message::Field::UUID, message);
+    response = appendToken(response, id, uuid);
+    kDebug() << "caller = " << id.toBase64();
+
+    //hack around the not yet async service adaptor api in qtjolie
+    if (m_descriptorMap.contains(id + uuid)) {
+        kDebug() << "descriptor found, sending message";
+        AuthorizationManager::self()->d->server->sendMessage(
+            m_descriptorMap.value(id + uuid), response);
+    } else {
+        kDebug() << "no valid entry in descriptormap.";
+    }
 }
 
-ServiceProvider::startOperationCall(Jolie::Message message)
+void ServiceProvider::sendEnabledOperations(Jolie::Message message)
 {
-    KConfigGroup description = //deserialize the KConfigGroup
-    m_service->startOperationCall(description);
-    //map finished signal through signalmapper to include the message, and connect to
-    //operationCompleted slot.
+    kDebug() << "send enabled operations.";
+    Jolie::Message response(message.resourcePath(), message.operationName(), message.id());
+
+    QStringList enabledOperationsList;
+    foreach (const QString &operation, m_service->operationNames()) {
+        if (m_service->isOperationEnabled(operation)) {
+            enabledOperationsList << operation;
+        }
+    }
+
+    kDebug() << "enabled operations: " << enabledOperationsList;
+
+    QByteArray enabledOperationsArray;
+    QDataStream out(&enabledOperationsArray, QIODevice::WriteOnly);
+    out << enabledOperationsList;
+
+    Jolie::Value value;
+    value.children(Message::Field::ENABLEDOPERATIONS) << Jolie::Value(enabledOperationsArray);
+    response.setData(value);
+
+    QByteArray id = Message::field(Message::Field::IDENTITYID, message);
+    QByteArray uuid = Message::field(Message::Field::UUID, message);
+    response = appendToken(response, id, uuid);
+    kDebug() << "caller = " << id.toBase64();
+
+    //hack around the not yet async service adaptor api in qtjolie
+    if (m_descriptorMap.contains(id + uuid)) {
+        kDebug() << "descriptor found, sending message";
+        AuthorizationManager::self()->d->server->sendMessage(
+            m_descriptorMap.value(id + uuid), response);
+    } else {
+        kDebug() << "no valid entry in descriptormap.";
+    }
 }
 
-ServiceProvider::messageAuthorized(Plasma::Service *service, Jolie::Message message)
+QString ServiceProvider::resourceName() const
 {
-    if (service != this) {
+    return m_providerName;
+}
+
+void ServiceProvider::relay(Jolie::Server *server, int descriptor,
+                                      const Jolie::Message &message)
+{
+    Q_UNUSED(server)
+
+    if (message.operationName() == "startConnection") {
+        kDebug() << "reset token";
+        //add the identity
+        Credentials identity;
+        QByteArray identityByteArray = Message::field(Message::Field::IDENTITY, message);
+        QDataStream stream(&identityByteArray, QIODevice::ReadOnly);
+        stream >> identity;
+        AuthorizationManager::self()->d->addCredentials(identity);
+
+        Jolie::Message response(message.resourcePath(), message.operationName(), message.id());
+        QByteArray uuid = Message::field(Message::Field::UUID, message);
+        response = appendToken(response, identity.id().toAscii(), uuid);
+        AuthorizationManager::self()->d->server->sendMessage(descriptor, response);
+
+        return;
+    }
+    
+    if (Message::field(Message::Field::TOKEN, message).isEmpty()) {
+        Jolie::Message response(message.resourcePath(), message.operationName(), message.id());
+        response.setFault(Jolie::Fault(Message::Error::INVALIDTOKEN));
+        AuthorizationManager::self()->d->server->sendMessage(descriptor, response);
+        return;
+    }
+    
+    //m_descriptor = descriptor;
+    QByteArray id = Message::field(Message::Field::IDENTITYID, message);
+    QByteArray uuid = Message::field(Message::Field::UUID, message);
+    m_descriptorMap[id + uuid] = descriptor;
+    authorize(message, m_tokens[id + uuid]);
+}
+
+void ServiceProvider::operationCompleted(Plasma::ServiceJob *job)
+{
+    kDebug() << "operation completed.";
+    if (!m_messageMap.contains(job)) {
+        kDebug() << "service not in map!";
         return;
     }
 
-    //would be lovely if this kind of stuff could be autogenerated code from xml like in dbus adaptors 
-    if (message.operationName() == "getOperationNames") {
-        sendOperationNames(message);
-    } else if (message.operationName() == "getOperationDescription") {
-        sendOperationDescription(message);
+    kDebug() << "found message in message map!";
+
+    Jolie::Message message = m_messageMap.take(job);
+    Jolie::Message response(message.resourcePath(), message.operationName(), message.id());
+
+    QVariant variantResult = job->result();
+    kDebug() << "got a result: " << variantResult;
+    QByteArray byteArrayResult;
+    QBuffer buffer(&byteArrayResult);
+    buffer.open(QIODevice::WriteOnly);
+    QDataStream out(&buffer);
+    out << variantResult;
+
+    Jolie::Value data;
+    data.children(Message::Field::RESULT) << Jolie::Value(byteArrayResult);
+    response.setData(data);
+    if (job->error()) {
+        response.setFault(Jolie::Fault(job->errorString().toAscii()));
+    }
+
+    QByteArray id = Message::field(Message::Field::IDENTITYID, message);
+    QByteArray uuid = Message::field(Message::Field::UUID, message);
+    response = appendToken(response, id, uuid);
+
+    //hack around the not yet async service adaptor api in qtjolie
+    if (m_descriptorMap.contains(id + uuid)) {
+        kDebug() << "descriptor found, sending message";
+        AuthorizationManager::self()->d->server->sendMessage(
+            m_descriptorMap.value(id + uuid), response);
+    } else {
+        kDebug() << "no valid entry in descriptormap.";
+    }
+}
+
+void ServiceProvider::ruleChanged(Plasma::AuthorizationRule *rule)
+{
+    int i = 0;
+    foreach (Jolie::Message message, m_messagesPendingAuthorization) {
+        QByteArray id = Message::field(Message::Field::IDENTITYID, message);
+        //Credentials identity = AuthorizationManager::self()->d->getCredentials(id);
+
+        bool matches = rule->d->matches(message.resourcePath(), id);
+        if (matches && rule->policy() == AuthorizationRule::PinRequired &&
+            Message::field(Message::Field::PIN, message) != rule->pin()) {
+            kDebug() << "we need a pin";
+            authorizationFailed(message, Message::Error::REQUIREPIN);
+            m_messagesPendingAuthorization.removeAt(i);
+            return;
+        } else if (matches && rule->policy() == AuthorizationRule::PinRequired) {
+            kDebug() << "AUTHORIZATION: Service is freely accessable for verified caller.";
+            rule->setPolicy(AuthorizationRule::Allow);
+            authorizationSuccess(message);
+            //TODO: it might be nicer to do a removeAll once Jolie::Message implements ==
+            m_messagesPendingAuthorization.removeAt(i);
+            return;
+        } else if (matches && rule->policy() == AuthorizationRule::Allow) {
+            kDebug() << "AUTHORIZATION: Service is freely accessable for verified caller.";
+            authorizationSuccess(message);
+            //TODO: it might be nicer to do a removeAll once Jolie::Message implements ==
+            m_messagesPendingAuthorization.removeAt(i);
+            return;
+        } else if (matches && rule->policy() == AuthorizationRule::Deny) {
+            kDebug() << "AUTHORIZATION: Service is never accessable for verified caller.";
+            authorizationFailed(message, Message::Error::ACCESSDENIED);
+            m_messagesPendingAuthorization.removeAt(i);
+            return;
+        } else {
+            i++;
+        }
+    }
+}
+
+Jolie::Message ServiceProvider::appendToken(Jolie::Message message,
+                                            const QByteArray &caller,
+                                            const QByteArray &uuid)
+{
+    m_tokens[caller + uuid] = QCA::Random::randomArray(256).toByteArray();
+    //kDebug() << "setting token: " << m_tokens[caller + uuid].toBase64()
+             //<< " for caller: " << caller.toBase64()
+             //<< " with uuid caller: " << uuid.toBase64();
+    
+    Jolie::Value data = message.data();
+    data.children(Message::Field::TOKEN) << Jolie::Value(m_tokens[caller + uuid]);
+    message.setData(data);
+    return message;
+}
+
+
+void ServiceProvider::authorize(const Jolie::Message &message, const QByteArray &validToken)
+{
+    kDebug() << "VALIDATING MESSAGE:";
+    //kDebug() << Message::print(message);
+
+    //Authorization step 1: is the service accessable to all callers? In that case we can skip the
+    //verification of the signature
+    kDebug() << "STEP1";
+    AuthorizationRule *rule =
+        AuthorizationManager::self()->d->matchingRule(message.resourcePath(), Credentials());
+
+    if (rule && rule->policy() == AuthorizationRule::Allow) {
+        kDebug() << "AUTHORIZATION: Service is freely accessable.";
+        authorizationSuccess(message);
+        return;
+    } else if (rule && rule->policy() == AuthorizationRule::Deny) {
+        kDebug() << "AUTHORIZATION: Service is never accessable.";
+        authorizationFailed(message, Message::Error::ACCESSDENIED);
+        return;
+    }
+
+    //Authorization step 2: see if the token matches. If it doesn't we can't safely identify the
+    //caller and are finished.
+    kDebug() << "STEP2";
+    if (Message::field(Message::Field::TOKEN, message) != validToken && !validToken.isEmpty()) {
+        kDebug() << "AUTHORIZATION: Message token doesn't match.";
+        kDebug() << "expected: " << validToken.toBase64();
+        authorizationFailed(message, Message::Error::INVALIDTOKEN);
+        return;
+    }
+
+    QByteArray payload = Message::payload(message);
+    QByteArray signature = Message::field(Message::Field::SIGNATURE, message);
+    Credentials identity = AuthorizationManager::self()->d->getCredentials(
+            Message::field(Message::Field::IDENTITYID, message));
+
+    if (!identity.isValid()) {
+        kDebug() << "no identity";
+        authorizationFailed(message, Message::Error::INVALIDTOKEN);
+        return;
+    }
+
+    kDebug() << "STEP3";
+    //Authorization step 3: see if we have the key and can validate the signature. If we can't,
+    //either the public key has changed, or somebody is doing something nasty, and we're finished.
+    if ((!identity.isValidSignature(signature, payload))) {
+        kDebug() << "AUTHORIZATION: signature invalid.";
+        authorizationFailed(message, Message::Error::ACCESSDENIED);
+        return;
+    }
+
+    kDebug() << "STEP4";
+    //Authorization step 4: if we have a valid signature, see if we've got a matching rule
+    rule = AuthorizationManager::self()->d->matchingRule(message.resourcePath(), identity);
+    if (rule && rule->policy() == AuthorizationRule::PinRequired) {
+        kDebug() << "we expect a pin!";
+        QByteArray pin = Message::field(Message::Field::PIN, message);
+        if (rule->pin() == QString(pin)) {
+            authorizationSuccess(message);
+            rule->setPolicy(AuthorizationRule::Allow);
+        } else {
+            authorizationFailed(message, Message::Error::ACCESSDENIED);
+            AuthorizationManager::self()->d->rules.removeAll(rule);
+            delete rule;
+        }
+    } else if (rule && rule->policy() == AuthorizationRule::Allow) {
+        kDebug() << "AUTHORIZATION: Service is freely accessable for validated sender.";
+        authorizationSuccess(message);
+        return;
+    } else if (rule && rule->policy() == AuthorizationRule::Deny) {
+        kDebug() << "AUTHORIZATION: Service is not accessable for validated sender.";
+        authorizationFailed(message, Message::Error::ACCESSDENIED);
+        return;
+    } else {
+        //- let the shell set the rule matching this request:
+        kDebug() << "STEP6";
+        kDebug() << "leave it up to the authorization interface";
+        m_messagesPendingAuthorization << message;
+        AuthorizationRule *newRule =
+            new AuthorizationRule(QString(message.resourcePath()), identity.id());
+        connect(newRule, SIGNAL(changed(Plasma::AuthorizationRule*)), this,
+                         SLOT(ruleChanged(Plasma::AuthorizationRule*)));
+        AuthorizationManager::self()->d->rules.append(newRule);
+        AuthorizationManager::self()->d->authorizationInterface->authorizationRequest(*newRule);
+    }
+}
+
+void ServiceProvider::authorizationSuccess(const Jolie::Message &message)
+{
+    kDebug() << "message with operationName " << message.operationName() << " allowed!";
+
+    //would be lovely if this kind of stuff could be autogenerated code from xml like in dbus
+    //adaptors
+    if (message.operationName() == "getOperations") {
+        sendOperations(message);
+    } else if (message.operationName() == "getEnabledOperations") {
+        sendEnabledOperations(message);
     } else if (message.operationName() == "startOperationCall") {
         startOperationCall(message);
     }
 }
 
-ServiceProvider::operationCompleted(Plasma::ServiceJob *job, Jolie::Message message)
+void ServiceProvider::authorizationFailed(const Jolie::Message &message, const QByteArray &error)
 {
-    Jolie::Message response(resourceName(), message->operationName(), message->id());
-    response.setData(Jolie::Value(job->reply())); //convert first to one of the 3 supported sodep message types. double or int as values, serialize the variant otherwise
-    if (Jolie::Value(job->error())) {
-        reponse.children("error") << Jolie::Value(job->error());
-    }
-    sendMessage(response);
+    kDebug() << "message with operationName " << message.operationName() << " NOT allowed!";
+    Jolie::Message response(message.resourcePath(), message.operationName(), message.id());
+    response.setFault(Jolie::Fault(error));
+
+    QByteArray id = Message::field(Message::Field::IDENTITYID, message);
+    QByteArray uuid = Message::field(Message::Field::UUID, message);
+    AuthorizationManager::self()->d->server->sendMessage(
+                            m_descriptorMap.value(id + uuid), response);
+    return;
 }
 
 } //namespace Plasma
 
 #include "serviceprovider_p.moc"
-
-#endif //SERVICEPROVIDER_H

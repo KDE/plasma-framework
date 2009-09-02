@@ -1,0 +1,111 @@
+Index: server.cpp
+===================================================================
+--- server.cpp	(revision 985276)
++++ server.cpp	(working copy)
+@@ -22,6 +22,7 @@
+ #include "server_p.h"
+ 
+ #include <QtCore/QDebug>
++#include <QtCore/QString>
+ 
+ #include "abstractadaptor.h"
+ #include "serverthread_p.h"
+@@ -56,11 +57,13 @@
+ 
+ bool Server::registerAdaptor(const QByteArray &path, AbstractAdaptor *adaptor)
+ {
++    //qDebug() << "registering an adaptor: " << QString(path);
+     if (path.isEmpty() || d->adaptors.contains(path)) {
+         return false;
+     }
+ 
+     d->adaptors[path] = adaptor;
++    return true;
+ }
+ 
+ bool Server::unregisterAdaptor(const QByteArray &path)
+@@ -68,11 +71,16 @@
+     return d->adaptors.take(path)!=0;
+ }
+ 
++void Server::sendMessage(int descriptor, const Message &message)
++{
++    d->serverThread->sendMessage(descriptor, message);
++}
++
+ void ServerPrivate::messageReceived(int descriptor, const Message &message)
+ {
+     if (adaptors.contains(message.resourcePath())) {
+-        Message reply = adaptors[message.resourcePath()]->relay(q, message);
+-        serverThread->sendMessage(descriptor, reply);
++        adaptors[message.resourcePath()]->relay(q, descriptor, message);
++        //serverThread->sendMessage(descriptor, reply);
+     } else {
+         qWarning() << "Got a message for an unregistered object:"
+                    << message.operationName()
+Index: sodephelpers_p.h
+===================================================================
+--- sodephelpers_p.h	(revision 985276)
++++ sodephelpers_p.h	(working copy)
+@@ -193,7 +193,7 @@
+     io.read(data, length);
+     data[length] = '\0';
+ 
+-    QByteArray result(data);
++    QByteArray result(data, length);
+     delete[] data;
+ 
+     return result;
+Index: abstractadaptor.h
+===================================================================
+--- abstractadaptor.h	(revision 985276)
++++ abstractadaptor.h	(working copy)
+@@ -40,7 +40,7 @@
+ 
+ 
+ private:
+-    virtual Message relay(Server *server, const Message &message) = 0;
++    virtual void relay(Server *server, int descriptor, const Message &message) = 0;
+ 
+     friend class ServerPrivate;
+ 
+Index: QtJolie.prf.cmake
+===================================================================
+--- QtJolie.prf.cmake	(revision 985276)
++++ QtJolie.prf.cmake	(working copy)
+@@ -5,9 +5,9 @@
+ INCLUDEPATH += $$QTJOLIE_INCDIR
+ LIBS += -L$$QTJOLIE_LIBDIR
+ 
+-LINKAGE = -llibQtJolie
++LINKAGE = -lQtJolie
+ CONFIG(debug, debug|release) {
+-	windows:LINKAGE = -llibQtJolied
+-	mac:LINKAGE = -llibQtJolie_debug
++	windows:LINKAGE = -lQtJolied
++	mac:LINKAGE = -lQtJolie_debug
+ }
+ LIBS += $$LINKAGE
+Index: QtJolie.pc.cmake
+===================================================================
+--- QtJolie.pc.cmake	(revision 985276)
++++ QtJolie.pc.cmake	(working copy)
+@@ -7,5 +7,5 @@
+ Description: A QtDbus like API for JOLIE
+ Version: 1.0.0
+ Requires: QtCore
+-Libs: -L${libdir} -llibQtJolie
++Libs: -L${libdir} -lQtJolie
+ Cflags: -I${includedir}
+Index: server.h
+===================================================================
+--- server.h	(revision 985276)
++++ server.h	(working copy)
+@@ -47,6 +47,7 @@
+ 
+     bool registerAdaptor(const QByteArray &path, AbstractAdaptor *adaptor);
+     bool unregisterAdaptor(const QByteArray &path);
++    void sendMessage(int descriptor, const Message &message);
+ 
+ private:
+     friend class ServerPrivate;

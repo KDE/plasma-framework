@@ -19,27 +19,56 @@
 #ifndef SERVICEPROVIDER_H
 #define SERVICEPROVIDER_H
 
+#include <QtCore/QMap>
+
+#include <QtJolie/AbstractAdaptor>
+#include <QtJolie/Message>
+
+class QSignalMapper;
+
 namespace Plasma 
 {
 
+class AuthorizationRule;
 class Service;
+class ServiceJob;
 
-class ServiceProvider : public Jolie::Interface
+class ServiceProvider : public Jolie::AbstractAdaptor
 {
     Q_OBJECT
 
     public:
-        ServiceProvider(Service *service);
+        ServiceProvider(const QString &name, Service *service);
+        ~ServiceProvider();
+
+        void startOperationCall(Jolie::Message message);
+        void sendOperations(Jolie::Message message);
+        void sendEnabledOperations(Jolie::Message message);
+        QString resourceName() const;
 
     protected:
-        messageReceived(Jolie::Message message);
+        void relay(Jolie::Server *server, int descriptor, const Jolie::Message &message);
+
+    private Q_SLOTS:
+        void operationCompleted(Plasma::ServiceJob *job);
+        void ruleChanged(Plasma::AuthorizationRule *rule);
 
     private:
-        void sendOperationNames();
-        void sendOperationDescription(const QString &operationName);
-        void startOperationCall(const QString &destination, const QByteArray &description)
+        Jolie::Message appendToken(Jolie::Message message, const QByteArray &caller,
+                                   const QByteArray &uuid);
+        void authorize(const Jolie::Message &message, const QByteArray &validToken);
+        void authorizationSuccess(const Jolie::Message &message);
+        void authorizationFailed(const Jolie::Message &message, const QByteArray &error);
+        
+        Service                           *m_service;
+        int                               m_descriptor;
+        QString                           m_providerName;
+        
+        QMap<ServiceJob*, Jolie::Message> m_messageMap;
+        QMap<QString, QByteArray>         m_tokens;
+        QMap<QByteArray, int>             m_descriptorMap;
+        QList<Jolie::Message>             m_messagesPendingAuthorization;
 
-        Service *m_service;
 };
 
 } //namespace Plasma

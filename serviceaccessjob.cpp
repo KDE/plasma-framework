@@ -18,6 +18,7 @@
  */
 
 #include "serviceaccessjob.h"
+#include "private/remoteservice_p.h"
 
 namespace Plasma
 {
@@ -25,8 +26,9 @@ namespace Plasma
 class ServiceAccessJobPrivate
 {
 public:
-    ServiceAccessJobPrivate(ServiceJob *owner, KUrl location)
+    ServiceAccessJobPrivate(ServiceAccessJob *owner, KUrl location)
         : q(owner),
+          service(0),
           location(location)
     {
     }
@@ -36,7 +38,13 @@ public:
         q->start();
     }
 
+    void slotServiceReady()
+    {
+        q->emitResult();
+    }
+
     ServiceAccessJob *q;
+    Service *service;
     KUrl location;
 };
 
@@ -53,15 +61,16 @@ ServiceAccessJob::~ServiceAccessJob()
 
 Service *ServiceAccessJob::service() const
 {
-    return d->destination;
+    return d->service;
 }
 
 void ServiceAccessJob::start()
 {
-    //TODO: implement
+    d->service = new RemoteService(parent(), d->location);
+    connect(d->service, SIGNAL(ready()), this, SLOT(slotServiceReady()));
 }
 
 } // namespace Plasma
 
-#include "servicejob.moc"
+#include "serviceaccessjob.moc"
 

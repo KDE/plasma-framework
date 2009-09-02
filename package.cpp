@@ -40,28 +40,15 @@
 #include <kzip.h>
 #include <kdebug.h>
 
+#include "authorizationmanager.h"
 #include "packagemetadata.h"
+#include "private/authorizationmanager_p.h"
+#include "private/package_p.h"
+#include "private/plasmoidservice.h"
+#include "private/service_p.h"
 
 namespace Plasma
 {
-
-class PackagePrivate
-{
-public:
-    PackagePrivate(const PackageStructure::Ptr st, const QString &p)
-        : structure(st)
-    {
-        structure->setPath(p);
-        valid = !structure->path().isEmpty();
-    }
-
-    ~PackagePrivate()
-    {
-    }
-
-    PackageStructure::Ptr structure;
-    bool valid;
-};
 
 Package::Package(const QString &packageRoot, const QString &package,
                  PackageStructure::Ptr structure)
@@ -468,6 +455,47 @@ bool Package::createPackage(const PackageMetadata &metadata,
     creation.addLocalDirectory(source, "contents");
     creation.close();
     return true;
+}
+
+PackagePrivate::PackagePrivate(const PackageStructure::Ptr st, const QString &p)
+        : structure(st),
+          service(0)
+{
+    structure->setPath(p);
+    valid = !structure->path().isEmpty();
+}
+
+PackagePrivate::~PackagePrivate()
+{
+}
+
+void PackagePrivate::publish(AnnouncementMethods methods)
+{
+    if (service) {
+        service = new PlasmoidService(structure->path());
+    }
+
+    QString resourceName = 
+    i18nc("%1 is the name of a plasmoid, %2 the name of the machine that plasmoid is published on",
+          "%1 on %2", structure->metadata().name(), AuthorizationManager::self()->d->myCredentials.name());
+    kDebug() << "publishing package under name " << resourceName;
+    service->d->publish(methods, resourceName, structure->metadata());
+}
+
+void PackagePrivate::unpublish()
+{
+    if (service) {
+        service->d->unpublish();
+    }
+}
+
+bool PackagePrivate::isPublished() const
+{
+    if (service) {
+        return service->d->isPublished();
+    } else {
+        return false;
+    }
 }
 
 } // Namespace

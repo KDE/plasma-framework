@@ -62,6 +62,7 @@
 
 #include <solid/powermanagement.h>
 
+#include "authorizationmanager.h"
 #include "configloader.h"
 #include "containment.h"
 #include "corona.h"
@@ -85,11 +86,17 @@
 #include "wallpaper.h"
 #include "paintutils.h"
 
+#include "private/authorizationmanager_p.h"
 #include "private/containment_p.h"
 #include "private/extenderapplet_p.h"
+#include "private/package_p.h"
 #include "private/packages_p.h"
+#include "private/plasmoidservice.h"
 #include "private/popupapplet_p.h"
+#include "private/service_p.h"
+#include "private/remotedataengine.h"
 #include "private/toolbox_p.h"
+#include "ui_publish.h"
 
 namespace Plasma
 {
@@ -299,6 +306,10 @@ void Applet::restore(KConfigGroup &group)
     // local shortcut, if any
     //TODO: implement; the shortcut will need to be registered with the containment
     /*
+#include "accessmanager.h"
+#include "private/plasmoidservice.h"
+#include "authorizationmanager.h"
+#include "authorizationmanager.h"
     shortcutText = shortcutConfig.readEntryUntranslated("local", QString());
     if (!shortcutText.isEmpty()) {
         //TODO: implement; the shortcut
@@ -590,7 +601,6 @@ void AppletPrivate::destroyMessageOverlay()
             buttonCode = ButtonNo;
         }
         if (button->text() == i18n("Cancel")) {
-            buttonCode = ButtonCancel;
         }
 
         emit q->messageButtonPressed(buttonCode);
@@ -604,7 +614,15 @@ ConfigLoader *Applet::configScheme() const
 
 DataEngine *Applet::dataEngine(const QString &name) const
 {
-    return d->dataEngine(name);
+    if (!d->remoteLocation.isEmpty()) {
+        return d->remoteDataEngine(KUrl(d->remoteLocation), name);
+    }
+
+    if (!package() || package()->metadata().remoteLocation().isEmpty()) {
+        return d->dataEngine(name);
+    } else {
+        return d->remoteDataEngine(KUrl(package()->metadata().remoteLocation()), name);
+    }
 }
 
 const Package *Applet::package() const
@@ -1435,6 +1453,38 @@ bool Applet::hasConfigurationInterface() const
     return d->hasConfigurationInterface;
 }
 
+void Applet::publish(AnnouncementMethods methods)
+{
+    if (!d->service) {
+        d->service = new PlasmoidService(this);
+    }
+
+    QString resourceName =
+    i18nc("%1 is the name of a plasmoid, %2 the name of the machine that plasmoid is published on",
+          "%1 on %2", name(), AuthorizationManager::self()->d->myCredentials.name());
+    kDebug() << "publishing package under name " << resourceName;
+    d->service->d->publish(methods, resourceName, PackageMetadata());
+}
+
+void Applet::unpublish()
+{
+    if (d->service) {
+        d->service->d->unpublish();
+    }
+}
+
+bool Applet::isPublished() const
+{
+    if (d->service) {
+        return d->service->d->isPublished();
+    } else {
+        return false;
+    }
+}
+
+
+//it bugs me that this can get turned on and off at will. I don't see it being useful and it just
+//makes more work for me and more code duplication.
 void Applet::setHasConfigurationInterface(bool hasInterface)
 {
     if (d->hasConfigurationInterface == hasInterface) {
@@ -1589,6 +1639,9 @@ void Applet::showConfigurationInterface()
         }
 
         d->addGlobalShortcutsPage(dialog);
+        d->addPublishPage(dialog);
+        //connect(dialog, SIGNAL(applyClicked()), this, SLOT(configDialogFinished()));
+        //connect(dialog, SIGNAL(okClicked()), this, SLOT(configDialogFinished()));
         dialog->show();
     } else if (d->script) {
         d->script->showConfigurationInterface();
@@ -1646,6 +1699,13 @@ KConfigDialog *AppletPrivate::generateGenericConfigDialog()
     dialog->setFaceType(KPageDialog::Auto);
     dialog->setWindowTitle(configWindowTitle());
     dialog->setAttribute(Qt::WA_DeleteOnClose, true);
+    q->createConfigurationInterface(dialog);
+    addGlobalShortcutsPage(dialog);
+    addPublishPage(dialog);
+    //TODO: Apply button does not correctly work for now, so do not show it
+    dialog->showButton(KDialog::Apply, false);
+    QObject::connect(dialog, SIGNAL(applyClicked()), q, SLOT(configDialogFinished()));
+    QObject::connect(dialog, SIGNAL(okClicked()), q, SLOT(configDialogFinished()));
     QObject::connect(dialog, SIGNAL(finished()), nullManager, SLOT(deleteLater()));
     return dialog;
 }
@@ -1675,6 +1735,20 @@ void AppletPrivate::addGlobalShortcutsPage(KConfigDialog *dialog)
     QObject::connect(dialog, SIGNAL(okClicked()), q, SLOT(configDialogFinished()));
 }
 
+void AppletPrivate::addPublishPage(KConfigDialog *dialog)
+{
+    /**
+    if (!package) {
+        return; 
+    }
+    */
+
+    QWidget *page = new QWidget;
+    publishUI.setupUi(page);
+    publishUI.publishCheckbox->setChecked(q->config().readEntry("Publish", false));
+    dialog->addPage(page, i18n("Publish"), "applications-internet");
+}
+
 void AppletPrivate::clearShortcutEditorPtr()
 {
     shortcutEditor = 0;
@@ -1687,6 +1761,21 @@ void AppletPrivate::configDialogFinished()
         if (sequence != q->globalShortcut().primary()) {
             q->setGlobalShortcut(KShortcut(sequence));
             emit q->configNeedsSaving();
+        }
+    }
+
+    q->config().writeEntry("Publish", publishUI.publishCheckbox->isChecked());
+    if (package) {
+        if (publishUI.publishCheckbox->isChecked()) {
+            package->d->publish(Plasma::ZeroconfAnnouncement);
+        } else {
+            package->d->unpublish();
+        }
+    } else {
+        if (publishUI.publishCheckbox->isChecked()) {
+            q->publish(Plasma::ZeroconfAnnouncement);
+        } else {
+            q->unpublish();
         }
     }
 
@@ -2185,12 +2274,13 @@ bool Applet::isContainment() const
 AppletPrivate::AppletPrivate(KService::Ptr service, int uniqueID, Applet *applet)
         : appletId(uniqueID),
           q(applet),
-          backgroundHints(Applet::NoBackground),
+          extender(0),
+          service(0),
           preferredBackgroundHints(Applet::StandardBackground),
+          backgroundHints(Applet::StandardBackground),
           aspectRatioMode(Plasma::KeepAspectRatio),
           immutability(Mutable),
           appletDescription(service),
-          extender(0),
           background(0),
           mainConfig(0),
           pendingConstraints(NoConstraint),
@@ -2333,6 +2423,20 @@ void AppletPrivate::init(const QString &packagePath)
         configAction->setText(i18nc("%1 is the name of the applet", "%1 Settings", q->name()));
     }
 
+    if (package) {
+        if (q->config().readEntry("Publish", false)) {
+            package->d->publish(Plasma::ZeroconfAnnouncement);
+        } else {
+            package->d->unpublish();
+        }
+    } else {
+        if (q->config().readEntry("Publish", false)) {
+            q->publish(Plasma::ZeroconfAnnouncement);
+        } else {
+            q->unpublish();
+        }
+    }
+
     QObject::connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()), q, SLOT(themeChanged()));
     QObject::connect(q, SIGNAL(activate()), q, SLOT(setFocus()));
 }
@@ -2419,6 +2523,7 @@ KConfigGroup *AppletPrivate::mainConfigGroup()
         return mainConfig;
     }
 
+    bool newGroup = false;
     if (isContainment) {
         Corona *corona = qobject_cast<Corona*>(q->scene());
         KConfigGroup containmentConfig;
@@ -2430,6 +2535,10 @@ KConfigGroup *AppletPrivate::mainConfigGroup()
             containmentConfig =  KConfigGroup(KGlobal::config(), "Containments");
         }
 
+        if (!containmentConfig.hasGroup(QString::number(appletId))) {
+            newGroup = true;
+        }
+        
         mainConfig = new KConfigGroup(&containmentConfig, QString::number(appletId));
     } else {
         KConfigGroup appletConfig;
@@ -2451,7 +2560,19 @@ KConfigGroup *AppletPrivate::mainConfigGroup()
             appletConfig = KConfigGroup(KGlobal::config(), "Applets");
         }
 
+        if (!appletConfig.hasGroup(QString::number(appletId))) {
+            newGroup = true;
+        }
+        
         mainConfig = new KConfigGroup(&appletConfig, QString::number(appletId));
+    }
+
+    if (newGroup && q->package()) {
+        //see if we have a default configuration in our package
+        kDebug() << "copying default config: " << q->package()->filePath("defaultconfig");
+        KConfigGroup defaultConfig(KSharedConfig::openConfig(q->package()->filePath("config",
+                                    "default-configrc"))->group("Configuration"));
+        defaultConfig.copyTo(mainConfig);
     }
 
     return mainConfig;

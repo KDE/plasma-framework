@@ -30,6 +30,8 @@ class QTime;
 namespace Plasma
 {
 
+class Service;
+
 class DataEnginePrivate
 {
     public:
@@ -60,6 +62,21 @@ class DataEnginePrivate
          * @return true if the reference count is non-zero
          **/
         bool isUsed() const;
+        
+        /**
+         * @param methods ways to announce this engine on the network.
+         */
+        void publish(AnnouncementMethods methods, const QString &name);
+
+        /**
+         * remove this engine from the network.
+         */
+        void unpublish(const QString &name = QString());
+
+        /**
+         * @return whether or not this engine is published.
+         */
+        bool isPublished() const;
 
         DataEngine *q;
         KPluginInfo dataEngineDescription;
@@ -76,6 +93,7 @@ class DataEnginePrivate
         DataEngineScript *script;
         QString engineName;
         Package *package;
+        Service *publishedService;
 };
 
 } // Plasma namespace

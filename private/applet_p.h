@@ -28,6 +28,7 @@
 
 #include "plasma/animator.h"
 #include "plasma/private/dataengineconsumer_p.h"
+#include "plasma/ui_publish.h"
 
 class KKeySequenceWidget;
 
@@ -91,6 +92,7 @@ public:
     void positionMessageOverlay();
     void destroyMessageOverlay();
     void addGlobalShortcutsPage(KConfigDialog *dialog);
+    void addPublishPage(KConfigDialog *dialog);
     void clearShortcutEditorPtr();
     void configDialogFinished();
     KConfigDialog *generateGenericConfigDialog();
@@ -113,8 +115,10 @@ public:
     Applet *q;
 
     // applet attributes
-    Applet::BackgroundHints backgroundHints;
+    Extender *extender;
+    Service *service;
     Applet::BackgroundHints preferredBackgroundHints;
+    Applet::BackgroundHints backgroundHints;
     Plasma::AspectRatioMode aspectRatioMode;
     ImmutabilityType immutability;
 
@@ -123,7 +127,6 @@ public:
     QVariantList args;
 
     // bookkeeping
-    Extender *extender;
     QSet<QGraphicsItem*> registeredAsDragHandle;
     Plasma::FrameSvg *background;
     KConfigGroup *mainConfig;
@@ -147,6 +150,8 @@ public:
     KKeySequenceWidget *shortcutEditor; //TODO: subclass KConfigDialog and encapsulate this in there
 
     ItemStatus itemStatus;
+    QString remoteLocation;
+    Ui::publishWidget publishUI;
 
     // timerEvent bookkeeping
     int constraintsTimerId;

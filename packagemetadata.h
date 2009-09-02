@@ -24,6 +24,8 @@
 
 #include <plasma/plasma_export.h>
 
+#include <kurl.h>
+
 namespace Plasma
 {
 
@@ -51,6 +53,8 @@ public:
 
     ~PackageMetadata();
 
+    PackageMetadata &operator=(const PackageMetadata &other);
+    
     bool isValid() const;
 
     /**
@@ -87,6 +91,7 @@ public:
     QString requiredVersion() const;
     QString pluginName() const;
     QString implementationApi() const;
+    KUrl remoteLocation() const;
 
     QString type() const;
 
@@ -160,6 +165,8 @@ public:
      * method.
      */
     void setRequiredVersion(const QString &);
+
+    void setRemoteLocation(const KUrl &);
 
     /**
      * Set the type of the package. If not defined this

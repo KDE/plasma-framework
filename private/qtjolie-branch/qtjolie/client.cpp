@@ -26,6 +26,9 @@
 #include "pendingcall.h"
 #include "pendingreply.h"
 
+#define QT_NO_CAST_FROM_ASCII
+#define QT_NO_CAST_TO_ASCII
+
 using namespace Jolie;
 
 Client::Client(const QString &hostName, quint16 port)

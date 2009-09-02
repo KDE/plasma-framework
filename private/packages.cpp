@@ -47,7 +47,7 @@ PlasmoidPackage::PlasmoidPackage(QObject *parent)
 
     addDirectoryDefinition("config", "config/", i18n("Configuration Definitions"));
     mimetypes.clear();
-    mimetypes << "text/xml";
+    mimetypes << "text/\*";
     setMimetypes("config", mimetypes);
     setMimetypes("configui", mimetypes);
 
@@ -64,6 +64,7 @@ PlasmoidPackage::PlasmoidPackage(QObject *parent)
     addFileDefinition("mainconfigui", "ui/config.ui", i18n("Main Config UI File"));
     addFileDefinition("mainconfigxml", "config/main.xml", i18n("Configuration XML file"));
     addFileDefinition("mainscript", "code/main", i18n("Main Script File"));
+    addFileDefinition("defaultconfig", "config/default-configrc", i18n("Default configuration"));
     setRequired("mainscript", true);
 }
 

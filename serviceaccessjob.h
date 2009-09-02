@@ -1,5 +1,5 @@
 /*
- *   Copyright 2009 Rob Scheepmaker <r.scheepmaker@student.utwente.nl>
+ *   Copyright 2009 Rob Scheepmaker <r.scheepmaker@student.utwente.nl
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU Library General Public License as
@@ -21,7 +21,7 @@
 #define PLASMA_SERVICEACCESSJOB_H
 
 #include <kjob.h>
-#include <kservice.h>
+#include "service.h"
 
 #include <plasma/plasma_export.h>
 
@@ -44,7 +44,7 @@ class PLASMA_EXPORT ServiceAccessJob : public KJob
     Q_OBJECT
 
 public:
-    ~ServiceJob();
+    ~ServiceAccessJob();
 
     Service *service() const;
 
@@ -55,12 +55,19 @@ protected:
      * @arg location the location of the service
      * @arg parent the parent object for this service
      */
-    ServiceJob(KUrl location, QObject *parent = 0);
+    ServiceAccessJob(KUrl location, QObject *parent = 0);
+
+    void start();
 
 private:
     Q_PRIVATE_SLOT(d, void slotStart())
+    Q_PRIVATE_SLOT(d, void slotServiceReady())
 
     ServiceAccessJobPrivate * const d;
+    
+    friend class AccessManager;
+    friend class AccessManagerPrivate;
+    friend class ServiceAccessJobPrivate;
 };
 
 } // namespace Plasma

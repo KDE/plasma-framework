@@ -32,6 +32,7 @@
 #include <QtCore/QTimer>
 
 #include <kdebug.h>
+#include <kio/accessmanager.h>
 #include <accessmanager.h>
 
 #include "plasma/widgets/webview.h"

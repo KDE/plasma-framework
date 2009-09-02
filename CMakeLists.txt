@@ -1,4 +1,3 @@
-
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}
                     ${CMAKE_BINARY_DIR}/kdecore/
                     ${CMAKE_SOURCE_DIR}/kdecore/
@@ -31,15 +30,25 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}
                     ${CMAKE_BINARY_DIR}/solid/
                     ${CMAKE_SOURCE_DIR}/solid/
                     ${CMAKE_SOURCE_DIR}/threadweaver/
-                    ${KDE4_INCLUDES})
+                    ${CMAKE_SOURCE_DIR}/plasma/private/qtjolie-branch/qtjolie
+                    ${CMAKE_SOURCE_DIR}/plasma/private/qtjolie-branch
+                    ${CMAKE_SOURCE_DIR}/plasma/private/qtjolie-branch/includes
+                    ${KDE4_INCLUDES}
+		    #/mnt/data/kde/include
+                    )
+
+#find_package(QtJolie REQUIRED)
+find_package(QCA2 REQUIRED)
+#find_package(DNSSD REQUIRED)
+include_directories(${QCA2_INCLUDES})
+include_directories(${QTJOLIE_INCLUDE_DIRS})
+
 if(QT_QTOPENGL_FOUND AND OPENGL_FOUND)
     # libGL needs dlopen() and friends from the dl library
     find_library(DL_LIBRARY dl)
     mark_as_advanced(DL_LIBRARY)
     include_directories(${OPENGL_INCLUDE_DIR})
 endif(QT_QTOPENGL_FOUND AND OPENGL_FOUND)
-
-find_package(libQtJolie REQUIRED)
 
 add_subdirectory(tests)
 add_definitions(-DKDE_DEFAULT_DEBUG_AREA=1209)
@@ -59,6 +68,11 @@ set(plasma_LIB_SRCS
     animationdriver.cpp
     animator.cpp
     applet.cpp
+    authorizationinterface.cpp
+    authorizationmanager.cpp
+    authorizationrule.cpp
+    clientpinrequest.cpp
+    credentials.cpp
     configloader.cpp
     containment.cpp
     containmentactions.cpp
@@ -68,6 +82,7 @@ set(plasma_LIB_SRCS
     dataengine.cpp
     dataenginemanager.cpp
     delegate.cpp
+    private/denyallauthorization.cpp
     dialog.cpp
     extender.cpp
     extendergroup.cpp
@@ -75,20 +90,31 @@ set(plasma_LIB_SRCS
     paintutils.cpp
     framesvg.cpp
     plasma.cpp
+    accessappletjob.cpp
     popupapplet.cpp
     private/applethandle.cpp
     private/datacontainer_p.cpp
+    private/dataengineconsumer.cpp
+    private/dataengineservice.cpp
     private/desktoptoolbox.cpp
     private/extenderapplet.cpp
     private/extenderitemmimedata.cpp
+    private/getpublickey.cpp
+    private/getsource.cpp
     private/nativetabbar.cpp
     private/packages.cpp
     private/paneltoolbox.cpp
+    private/pinpairingauthorization.cpp
+    private/pinpairingdialog.cpp
+    private/plasmoidservice.cpp
+    private/publickeyservice.cpp
+    private/remotedataengine.cpp
     private/remoteservice.cpp
     private/remoteservicejob.cpp
     private/runnerjobs.cpp
     private/serviceprovider.cpp
     private/style.cpp
+    private/trustedonlyauthorization.cpp
     private/toolbox.cpp
     private/tooltip.cpp
     private/wallpaperrenderthread.cpp
@@ -138,8 +164,25 @@ set(plasma_LIB_SRCS
     widgets/treeview.cpp
     widgets/textedit.cpp
     widgets/webview.cpp
+
+    #Temporary QtJolie branch
+    private/qtjolie-branch/qtjolie/abstractadaptor.cpp
+    private/qtjolie-branch/qtjolie/client.cpp
+    private/qtjolie-branch/qtjolie/clientthread.cpp
+    private/qtjolie-branch/qtjolie/value.cpp
+    private/qtjolie-branch/qtjolie/fault.cpp
+    private/qtjolie-branch/qtjolie/message.cpp
+    private/qtjolie-branch/qtjolie/metaservice.cpp
+    private/qtjolie-branch/qtjolie/pendingcall.cpp
+    private/qtjolie-branch/qtjolie/pendingcallwatcher.cpp
+    private/qtjolie-branch/qtjolie/pendingreply.cpp
+    private/qtjolie-branch/qtjolie/server.cpp
+    private/qtjolie-branch/qtjolie/serverthread.cpp
 )
 
+kde4_add_ui_files(plasma_LIB_SRCS
+                  private/pinpairing.ui
+                  private/publish.ui)
 #NEPOMUK_GENERATE_FROM_ONTOLOGY(
 #   nwc.nrl
 #   ${metadata_test_BINARY_DIR}
@@ -164,9 +207,9 @@ endif(PHONON_FOUND)
 
 kde4_add_library(plasma SHARED ${plasma_LIB_SRCS})
 
-target_link_libraries(plasma ${KDE4_KIO_LIBS} ${KDE4_KFILE_LIBS} knewstuff2 libQtJolie
+target_link_libraries(plasma ${KDE4_KIO_LIBS} ${KDE4_KFILE_LIBS} knewstuff2 ${QCA2_LIBRARIES}
                              ${QT_QTUITOOLS_LIBRARY} ${QT_QTWEBKIT_LIBRARY}
-                             threadweaver ${KDE4_SOLID_LIBS} )
+                             kdnssd threadweaver ${KDE4_SOLID_LIBS} )
 if(X11_FOUND)
    target_link_libraries(plasma ${X11_LIBRARIES})
 endif(X11_FOUND)
@@ -207,14 +250,19 @@ install(FILES ${plasmagik_HEADERS} DESTINATION ${INCLUDE_INSTALL_DIR}/plasma/ CO
 set(plasma_LIB_INCLUDES
     abstractrunner.h
     accessmanager.h
+    authorizationmanager.h
+    authorizationrule.h
+    authorizationinterface.h
     animationdriver.h
     animator.h
     applet.h
+    clientpinrequest.h
     configloader.h
     containment.h
     containmentactions.h
     context.h
     corona.h
+    credentials.h
     datacontainer.h
     dataengine.h
     dataenginemanager.h
@@ -228,6 +276,7 @@ set(plasma_LIB_INCLUDES
     framesvg.h
     plasma.h
     plasma_export.h
+    accessappletjob.h
     popupapplet.h
     querymatch.h
     runnercontext.h
@@ -318,3 +367,5 @@ install(FILES scripting/plasmoids.knsrc DESTINATION  ${CONFIG_INSTALL_DIR})
 
 install(FILES plasma_popupapplet_fix_groups.upd DESTINATION ${KCONF_UPDATE_INSTALL_DIR})
 install(PROGRAMS plasma_popupapplet_fix_groups.pl DESTINATION ${KCONF_UPDATE_INSTALL_DIR})
+install(FILES dataengineservice.operations DESTINATION ${DATA_INSTALL_DIR}/plasma/services)
+install(FILES plasmoidservice.operations DESTINATION ${DATA_INSTALL_DIR}/plasma/services)

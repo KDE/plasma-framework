@@ -264,6 +264,21 @@ enum ItemStatus {
 };
 Q_ENUMS(ItemStatus)
 
+enum AnnouncementMethod {
+    NoAnnouncement = 0,
+    ZeroconfAnnouncement = 1
+};
+Q_DECLARE_FLAGS(AnnouncementMethods, AnnouncementMethod)
+
+enum TrustLevel {
+    InvalidCredentials = 0,
+    UnknownCredentials = 1,
+    ValidCredentials = 2,
+    TrustedCredentials = 3,
+    UltimateCredentials = 4
+};
+Q_ENUMS(TrustLevel)
+
 /**
  * @return the scaling factor (0..1) for a ZoomLevel
  **/

@@ -27,6 +27,8 @@
 #include <kconfiggroup.h>
 
 #include <plasma/plasma_export.h>
+#include <plasma/plasma.h>
+#include "packagemetadata.h"
 
 class QGraphicsWidget;
 class QIODevice;
@@ -75,6 +77,7 @@ class ServicePrivate;
 class PLASMA_EXPORT Service : public QObject
 {
     Q_OBJECT
+    Q_DECLARE_PRIVATE(Service)
 public:
     /**
      * Destructor
@@ -90,6 +93,12 @@ public:
      * @return a Service object, guaranteed to be not null.
      */
     static Service *load(const QString &name, QObject *parent = 0);
+
+    /**
+     * Used to access a service from an url. Always check for the signal serviceReady() that fires
+     * when this service is actually ready for use.
+     */
+    static Service *access(const KUrl &url, QObject *parent = 0);
 
     /**
      * Sets the destination for this Service to operate on
@@ -196,6 +205,11 @@ Q_SIGNALS:
      */
     void operationsChanged();
 
+    /**
+     * Emitted when this service is ready for use
+     */
+    void serviceReady(Plasma::Service *service);
+
 protected:
     /**
      * Default constructor
@@ -256,7 +270,11 @@ private:
 
     ServicePrivate * const d;
 
-    friend class ServicePrivate;
+    friend class Applet;
+    friend class DataEnginePrivate;
+    friend class GetSource;
+    friend class PackagePrivate;
+    friend class ServiceProvider;
 };
 
 } // namespace Plasma

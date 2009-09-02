@@ -29,6 +29,7 @@
 
 #include <plasma/version.h>
 #include <plasma/plasma.h>
+#include <plasma/service.h>
 
 namespace Plasma
 {
@@ -160,7 +161,8 @@ class PLASMA_EXPORT DataEngine : public QObject
          * @param intervalAlignment the number of ms to align the interval to
          **/
         Q_INVOKABLE void connectAllSources(QObject *visualization, uint pollingInterval = 0,
-                                           Plasma::IntervalAlignment intervalAlignment = NoAlignment) const;
+                                           Plasma::IntervalAlignment intervalAlignment =
+NoAlignment) const;
 
         /**
          * Disconnects a source to an object that was receiving data updates.
@@ -230,7 +232,6 @@ class PLASMA_EXPORT DataEngine : public QObject
          * Returns the plugin name for the applet
          */
         QString pluginName() const;
-
 
     Q_SIGNALS:
         /**
@@ -459,6 +460,7 @@ class PLASMA_EXPORT DataEngine : public QObject
         friend class DataEnginePrivate;
         friend class DataEngineScript;
         friend class DataEngineManager;
+        friend class PlasmoidServiceJob;
         friend class NullEngine;
 
         Q_PRIVATE_SLOT(d, void internalUpdateSource(DataContainer *source))

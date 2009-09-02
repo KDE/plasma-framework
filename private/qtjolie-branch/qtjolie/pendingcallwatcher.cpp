@@ -22,6 +22,9 @@
 
 #include "pendingcall_p.h"
 
+#define QT_NO_CAST_FROM_ASCII
+#define QT_NO_CAST_TO_ASCII
+
 using namespace Jolie;
 
 PendingCallWatcher::PendingCallWatcher(const PendingCall &other, QObject *parent)

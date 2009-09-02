@@ -16,27 +16,65 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef REMOTESERVICE_H
-#define REMOTESERVICE_H
+#ifndef PLASMA_REMOTESERVICE_H
+#define PLASMA_REMOTESERVICE_H
 
-#include "../service.h"
+#include <QtCore/QQueue>
+#include <QtJolie/Message>
+
+#include <plasma/service.h>
+
+namespace Jolie
+{
+    class Client;
+    class PendingCallWatcher;
+}
 
 namespace Plasma 
 {
+
+class ClientPinRequest;
+class RemoteServiceJob;
 
 class RemoteService : public Plasma::Service
 {
     Q_OBJECT
 
     public:
+        RemoteService(QObject* parent);
         RemoteService(QObject* parent, KUrl location);
+        ~RemoteService();
+
+        void setLocation(const KUrl &location);
+        QString location() const;
 
     protected:
         ServiceJob* createJob(const QString& operation,
                               QMap<QString,QVariant>& parameters);
+        void registerOperationsScheme();
+
+    private Q_SLOTS:
+        void callCompleted(Jolie::PendingCallWatcher *watcher);
+        void slotFinished();
+        void slotGotPin(Plasma::ClientPinRequest *request);
+        void slotUpdateEnabledOperations();
+        void slotReadyForRemoteAccess();
 
     private:
-        KUrl m_location;
+        Jolie::Message signMessage(const Jolie::Message &message) const;
+
+    private:
+        KUrl            m_location;
+        Jolie::Client   *m_client;
+        QByteArray      m_token;
+        QByteArray      m_operationsScheme;
+        bool            m_ready;
+        QQueue<RemoteServiceJob*> m_queue;
+        bool            m_busy;
+        QString         m_pin;
+        QString         m_uuid;
+
+        friend class RemoteServiceJob;
 
 };
 

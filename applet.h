@@ -788,6 +788,12 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          */
         void setStatus(const ItemStatus stat);
 
+        void publish(Plasma::AnnouncementMethods method);
+
+        void unpublish();
+
+        bool isPublished() const;
+
     protected:
         /**
          * This constructor is to be used with the plugin loading systems
@@ -1002,6 +1008,7 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         friend class AppletScript;
         friend class AppletHandle;
         friend class AppletPrivate;
+        friend class AccessAppletJobPrivate;
         friend class PopupApplet;
         friend class PopupAppletPrivate;
 

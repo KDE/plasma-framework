@@ -18,35 +18,24 @@
  */
 
 #include "servicejob.h"
+#include <plasma/private/servicejob_p.h>
 
 namespace Plasma
 {
 
-class ServiceJobPrivate
-{
-public:
-    ServiceJobPrivate(ServiceJob *owner,
-                      const QString &dest,
-                      const QString &op,
-                      const QMap<QString, QVariant> &params)
+ServiceJobPrivate::ServiceJobPrivate(ServiceJob *owner, const QString &dest,
+                                     const QString &op, const QMap<QString, QVariant> &params)
         : q(owner),
           destination(dest),
           operation(op),
           parameters(params)
-    {
-    }
+{
+}
 
-    void slotStart()
-    {
-        q->start();
-    }
-
-    ServiceJob *q;
-    QString destination;
-    QString operation;
-    QMap<QString, QVariant> parameters;
-    QVariant result;
-};
+void ServiceJobPrivate::slotStart()
+{
+    q->start();
+}
 
 ServiceJob::ServiceJob(const QString &destination, const QString &operation,
                        const QMap<QString, QVariant> &parameters, QObject *parent)
@@ -73,6 +62,11 @@ QString ServiceJob::operationName() const
 QMap<QString, QVariant> ServiceJob::parameters() const
 {
     return d->parameters;
+}
+
+Credentials ServiceJob::identity() const
+{
+    return d->identity;
 }
 
 QVariant ServiceJob::result() const

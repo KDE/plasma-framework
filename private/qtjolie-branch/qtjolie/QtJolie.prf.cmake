@@ -5,9 +5,9 @@ CONFIG *= qt
 INCLUDEPATH += $$QTJOLIE_INCDIR
 LIBS += -L$$QTJOLIE_LIBDIR
 
-LINKAGE = -llibQtJolie
+LINKAGE = -lQtJolie
 CONFIG(debug, debug|release) {
-	windows:LINKAGE = -llibQtJolied
-	mac:LINKAGE = -llibQtJolie_debug
+	windows:LINKAGE = -lQtJolied
+	mac:LINKAGE = -lQtJolie_debug
 }
 LIBS += $$LINKAGE

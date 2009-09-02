@@ -47,6 +47,7 @@ public:
 
     bool registerAdaptor(const QByteArray &path, AbstractAdaptor *adaptor);
     bool unregisterAdaptor(const QByteArray &path);
+    void sendMessage(int descriptor, const Message &message);
 
 private:
     friend class ServerPrivate;

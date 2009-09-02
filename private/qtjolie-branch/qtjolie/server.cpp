@@ -22,12 +22,16 @@
 #include "server_p.h"
 
 #include <QtCore/QDebug>
+#include <QtCore/QString>
 
 #include "abstractadaptor.h"
 #include "serverthread_p.h"
 #include "message.h"
 #include "pendingcall.h"
 #include "pendingreply.h"
+
+#define QT_NO_CAST_FROM_ASCII
+#define QT_NO_CAST_TO_ASCII
 
 using namespace Jolie;
 
@@ -56,11 +60,13 @@ QString Server::errorString() const
 
 bool Server::registerAdaptor(const QByteArray &path, AbstractAdaptor *adaptor)
 {
+    //qDebug() << "registering an adaptor: " << QString(path);
     if (path.isEmpty() || d->adaptors.contains(path)) {
         return false;
     }
 
     d->adaptors[path] = adaptor;
+    return true;
 }
 
 bool Server::unregisterAdaptor(const QByteArray &path)
@@ -68,11 +74,16 @@ bool Server::unregisterAdaptor(const QByteArray &path)
     return d->adaptors.take(path)!=0;
 }
 
+void Server::sendMessage(int descriptor, const Message &message)
+{
+    d->serverThread->sendMessage(descriptor, message);
+}
+
 void ServerPrivate::messageReceived(int descriptor, const Message &message)
 {
     if (adaptors.contains(message.resourcePath())) {
-        Message reply = adaptors[message.resourcePath()]->relay(q, message);
-        serverThread->sendMessage(descriptor, reply);
+        adaptors[message.resourcePath()]->relay(q, descriptor, message);
+        //serverThread->sendMessage(descriptor, reply);
     } else {
         qWarning() << "Got a message for an unregistered object:"
                    << message.operationName()

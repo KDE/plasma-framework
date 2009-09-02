@@ -31,11 +31,14 @@
 #include <kservice.h>
 #include <kstandarddirs.h>
 
+#include "authorizationmanager.h"
 #include "datacontainer.h"
 #include "package.h"
 #include "service.h"
 #include "scripting/dataenginescript.h"
 
+#include "private/authorizationmanager_p.h"
+#include "private/dataengineservice.h"
 #include "private/service_p.h"
 
 namespace Plasma
@@ -358,16 +361,17 @@ DataEngine::SourceDict DataEngine::containerDict() const
 
 void DataEngine::timerEvent(QTimerEvent *event)
 {
+    kDebug();
     if (event->timerId() == d->updateTimerId) {
         // if the freq update is less than 0, don't bother
         if (d->minPollingInterval < 0) {
-            //kDebug() << "uh oh.. no polling allowed!";
+            kDebug() << "uh oh.. no polling allowed!";
             return;
         }
 
         // minPollingInterval
         if (d->updateTimestamp.elapsed() < d->minPollingInterval) {
-            //kDebug() << "hey now.. slow down!";
+            kDebug() << "hey now.. slow down!";
             return;
         }
 
@@ -426,6 +430,36 @@ QString DataEngine::pluginName() const
     return d->dataEngineDescription.pluginName();
 }
 
+void DataEnginePrivate::publish(AnnouncementMethods methods, const QString &name)
+{
+    if (!publishedService) {
+        publishedService = new DataEngineService(q);
+    }
+
+    //QString resourceName =
+    //i18nc("%1 is the name of a dataengine, %2 the name of the machine that engine is published
+//on",
+          //"%1 dataengine on %2", name(), AuthorizationManager::self()->d->myCredentials.name());
+    kDebug() << "name: " << name;
+    publishedService->d->publish(methods, name);
+}
+
+void DataEnginePrivate::unpublish(const QString &name)
+{
+    if (publishedService) {
+        publishedService->d->unpublish();
+    }
+}
+
+bool DataEnginePrivate::isPublished() const
+{
+    if (publishedService) {
+        return publishedService->d->isPublished();
+    } else {
+        return false;
+    }
+}
+
 const Package *DataEngine::package() const
 {
     return d->package;
@@ -462,7 +496,8 @@ DataEnginePrivate::DataEnginePrivate(DataEngine *e, KService::Ptr service)
       limit(0),
       valid(true),
       script(0),
-      package(0)
+      package(0),
+      publishedService(0)
 {
     updateTimestamp.start();
 

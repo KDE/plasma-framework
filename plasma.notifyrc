@@ -1,0 +1,10 @@
+[Global]
+IconName=application-plasma
+Comment=KDE desktop shell
+Name=Plasma
+
+[Event/authorize]
+Name=Authorize remote access
+Comment=A remote computer tries to access a service
+Action=Popup
+Persistent=True

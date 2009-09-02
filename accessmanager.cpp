@@ -18,6 +18,7 @@
  */
 
 #include "accessmanager.h"
+#include "private/accessmanager_p.h"
 
 #include "service.h"
 #include "serviceaccessjob.h"
@@ -25,41 +26,20 @@
 #include <QtCore/QMap>
 #include <QtCore/QTimer>
 
-#include <QtCrypto>
 #include <QtJolie/Message>
 
+#include <KDebug>
 #include <KUrl>
+#include <kglobal.h>
+#include <dnssd/servicebrowser.h>
+#include <dnssd/remoteservice.h>
+#include <ktemporaryfile.h>
+#include <k3resolver.h>
+#include <kstandarddirs.h>
+#include <qhostinfo.h>
 
 namespace Plasma
 {
-
-class AccessManagerPrivate
-{
-    public:
-        AccessManagerPrivate() 
-        {
-            //TODO: store at a sensible place... kwallet keyring for private key maybe?
-            privateKey = QCA::PrivateKey::fromPemFile("/home/rob/plasma_private_key.pem");
-            publicKey = QCA::PrivateKey::fromPemFile("/home/rob/plasma_public_key.pem");
-            if (privateKey.isNull()) {
-                //generate public/private key pair
-                QCA::KeyGenerator generator;
-                privateKey = generator.createRSA(2048);
-                publicKey = privateKey.toPublicKey();
-                privateKey.toPEMFile("/home/rob/plasma_private_key.pem");
-                publicKey.toPEMFile("/home/rob/plasma_public_key.pem");
-            }
-        };
-
-        ~AccessManagerPrivate() {};
-
-        //TODO: is this bool based authorisation management detailed enough?
-        QMap<KUrl caller, QMap<Service *, bool> >;
-        //Needed for QCA support
-        QCA::Initializer initializer;
-        QCA:PrivateKey privateKey;
-        QCA:PrivateKey publicKey;
-};
 
 class AccessManagerSingleton
 {
@@ -67,6 +47,8 @@ class AccessManagerSingleton
         AccessManager self;
 };
 
+//FIXME: AccessManagerSignleton could be removed to remove a friend.
+//see kdelibs/kutils/kidletime/xsyncbasedpoller.cpp
 K_GLOBAL_STATIC(AccessManagerSingleton, privateAccessManagerSelf)
 
 AccessManager *AccessManager::self()
@@ -75,8 +57,10 @@ AccessManager *AccessManager::self()
 }
 
 AccessManager::AccessManager()
-    : d(new AccessManagerPrivate)
+    : QObject(),
+      d(new AccessManagerPrivate(this))
 {
+    KGlobal::dirs()->addResourceType("trustedkeys", "config", "trustedkeys/");
 }
 
 AccessManager::~AccessManager()
@@ -84,30 +68,101 @@ AccessManager::~AccessManager()
     delete d;
 }
 
-Jolie::Message AccessManager::signMessage(Jolie::Message message) const
+AccessAppletJob *AccessManager::accessRemoteApplet(const KUrl &location) const
 {
-    //TODO:what about multiple interfaces?
-    QString host = QNetworkInterface::allAddresses().first();
-    message.children("host") << Jolie::Value(host);
-    QByteArray serializedMessage = //serialize sodep message
-    QByteArray signature = d->privateKey->signMessage(MemoryRegion(serializedMessage));
-    message.children("signature") << Jolie::Value(signature);
-    return message;
-}
+    kDebug() << "unresolved location = " << location.prettyUrl();
 
-ServiceAccessJob* AccessManager::accessService(KUrl location) const
-{
-    ServiceAccesJob *job = new ServiceAccessJob(location);
+    KUrl resolvedLocation;
+    if (location.protocol() == "zeroconf") {
+        if (d->zeroconfServices.contains(location.host())) {
+            resolvedLocation = d->services[location.host()].remoteLocation();
+        } else {
+            kDebug() << "not in the map";
+        }
+    } else {
+        resolvedLocation = location;
+    }
+
+    AccessAppletJob *job = new AccessAppletJob(resolvedLocation);
+    connect(job, SIGNAL(finished(KJob*)), this, SLOT(slotJobFinished(KJob*)));
     QTimer::singleShot(0, job, SLOT(slotStart()));
     return job;
 }
 
-ServiceAccessJob* AccessManager::accessService(const QString &jolieScript, 
-                                               const QMap<QString, QVariant> &initValues) const
+QList<PackageMetadata> AccessManager::remoteApplets() const
 {
-    ServiceAccesJob *job = new ServiceAccessJob(jolieScript, initValues);
-    QTimer::singleShot(0, job, SLOT(slotStart()));
-    return job;
+    return d->services.values();
+}
+
+AccessManagerPrivate::AccessManagerPrivate(AccessManager *manager)
+    : q(manager),
+      browser(new DNSSD::ServiceBrowser("_plasma._tcp"))
+{
+    q->connect(browser, SIGNAL(serviceAdded(DNSSD::RemoteService::Ptr)),
+               q, SLOT(slotAddService(DNSSD::RemoteService::Ptr)));
+    q->connect(browser, SIGNAL(serviceRemoved(DNSSD::RemoteService::Ptr)),
+               q, SLOT(slotRemoveService(DNSSD::RemoteService::Ptr)));
+    browser->startBrowse();
+}
+
+AccessManagerPrivate::~AccessManagerPrivate()
+{
+    delete browser;
+}
+
+void AccessManagerPrivate::slotJobFinished(KJob *job)
+{
+    emit q->finished(static_cast<AccessAppletJob*>(job));
+}
+
+void AccessManagerPrivate::slotAddService(DNSSD::RemoteService::Ptr service)
+{
+    kDebug();
+    if (!service->resolve()) {
+        kDebug() << "can't be resolved";
+        return;
+    }
+
+    if (!services.contains(service->serviceName())) {
+        PackageMetadata metadata;
+        kDebug() << "textdata = " << service->textData();
+        kDebug() << "hostname: " << service->hostName();
+        QHostAddress address = DNSSD::ServiceBrowser::resolveHostName(service->hostName());
+        QString ip = address.toString();
+        kDebug() << "result for resolve = " << ip;
+
+        KUrl url(QString("plasma://%1:%2/%3").arg(ip)
+                                             .arg(service->port())
+                                             .arg(service->serviceName()));
+
+        if (!service->textData().isEmpty()) {
+            kDebug() << "service has got textdata";
+            QMap<QString, QByteArray> textData = service->textData();
+            metadata.setName(textData["name"]);
+            metadata.setDescription(textData["description"]);
+            metadata.setRemoteLocation(url.prettyUrl());
+        } else {
+            kDebug() << "no textdata?";
+            metadata.setName(service->serviceName());
+            metadata.setRemoteLocation(url.prettyUrl());
+        }
+
+        kDebug() << "location = " << metadata.remoteLocation();
+        kDebug() << "name = " << metadata.name();
+        kDebug() << "description = " << metadata.name();
+
+        services[service->serviceName()] = metadata;
+        zeroconfServices[service->serviceName()] = service;
+        emit q->remoteAppletAnnounced(metadata);
+    }
+}
+
+void AccessManagerPrivate::slotRemoveService(DNSSD::RemoteService::Ptr service)
+{
+    kDebug();
+    emit q->remoteAppletUnannounced(services[service->serviceName()]);
+    services.remove(service->serviceName());
+    zeroconfServices.remove(service->serviceName());
 }
 
 } // Plasma namespace

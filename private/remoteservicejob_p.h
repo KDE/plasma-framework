@@ -16,15 +16,23 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef REMOTESERVICEJOB_H
-#define REMOTESERVICEJOB_H
+#ifndef PLASMA_REMOTESERVICEJOB_H
+#define PLASMA_REMOTESERVICEJOB_H
 
+#include <QtCore/QByteArray>
 #include <KUrl>
 
 #include "../servicejob.h"
 
+namespace Jolie
+{
+    class PendingCallWatcher;
+}
+
 namespace Plasma
 {
+
+class RemoteService;
 
 class RemoteServiceJob : public Plasma::ServiceJob
 {
@@ -32,14 +40,22 @@ class RemoteServiceJob : public Plasma::ServiceJob
 
     public:
         RemoteServiceJob(KUrl location,
+                  const QString& destination,
                   const QString& operation,
                   QMap<QString,QVariant>& parameters,
-                  QObject* parent = 0);
+                  QByteArray initialToken,
+                  RemoteService *parent);
 
         void start();
 
+    private Q_SLOTS:
+        void callCompleted(Jolie::PendingCallWatcher *watcher);
+        void timeout();
+
     private:
+        QByteArray m_token;
         KUrl m_location;
+        RemoteService *m_service;
 };
 
 } // namespace Plasma

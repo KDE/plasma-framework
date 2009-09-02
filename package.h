@@ -23,8 +23,9 @@
 
 #include <QtCore/QStringList>
 
-#include <plasma/plasma_export.h>
+#include <plasma/plasma.h>
 #include <plasma/packagestructure.h>
+#include <plasma/plasma_export.h>
 
 namespace Plasma
 {
@@ -107,6 +108,22 @@ class PLASMA_EXPORT Package
          * @since 4.3
          */
         void setPath(const QString &path);
+
+        /**
+         * Publish this package on the network.
+         * @param methods the ways to announce this package on the network.
+         */
+        void publish(AnnouncementMethods methods, const QString &name);
+
+        /**
+         * Remove this package from the network.
+         */
+        void unpublish(const QString &name = QString());
+
+        /**
+         * @returns whether or not this service is currently published on the network.
+         */
+        bool isPublished() const;
 
         /**
          * @return the path to the root of this particular package
@@ -192,6 +209,9 @@ class PLASMA_EXPORT Package
     private:
         Q_DISABLE_COPY(Package)
         PackagePrivate * const d;
+
+        friend class Applet;
+        friend class AppletPrivate;
 };
 
 } // Namespace

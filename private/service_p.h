@@ -21,20 +21,27 @@
 #define SERVICE_P_H
 
 #include "servicejob.h"
+#include "service.h"
 
 #include <QGraphicsWidget>
+#include <QMap>
 #include <QMultiHash>
 #include <QWidget>
 #include <QSet>
 
 #include <ktemporaryfile.h>
 
+#include <dnssd/publicservice.h>
+#include <dnssd/servicebrowser.h>
+
 #include "plasma/configloader.h"
+#include "accessmanager_p.h"
 
 namespace Plasma
 {
 
 class ConfigLoader;
+class ServiceProvider;
 
 class NullServiceJob : public ServiceJob
 {
@@ -74,7 +81,9 @@ public:
         : q(service),
           config(0),
           dummyConfig(0),
-          tempFile(0)
+          tempFile(0),
+          publicService(0),
+          serviceProvider(0)
     {
     }
 
@@ -85,41 +94,30 @@ public:
         delete tempFile;
     }
 
-    void jobFinished(KJob *job)
-    {
-        emit q->finished(static_cast<ServiceJob*>(job));
-    }
+    void jobFinished(KJob *job);
 
-    void associatedWidgetDestroyed(QObject *obj)
-    {
-        associatedWidgets.remove(static_cast<QWidget*>(obj));
-    }
+    void associatedWidgetDestroyed(QObject *obj);
 
-    void associatedGraphicsWidgetDestroyed(QObject *obj)
-    {
-        associatedGraphicsWidgets.remove(static_cast<QGraphicsWidget*>(obj));
-    }
+    void associatedGraphicsWidgetDestroyed(QObject *obj);
 
-    KConfigGroup dummyGroup()
-    {
-        if (!dummyConfig) {
-            if (!tempFile) {
-                tempFile = new KTemporaryFile;
-                tempFile->open();
-            }
+    void publish(AnnouncementMethods methods, const QString &name,
+                 PackageMetadata metadata = PackageMetadata());
 
-            dummyConfig = new KConfig(tempFile->fileName());
-        }
+    void unpublish();
 
-        return KConfigGroup(dummyConfig, "DummyGroup");
-    }
+    bool isPublished() const;
+
+    KConfigGroup dummyGroup();
 
     Service *q;
     QString destination;
     QString name;
+    QString resourcename;
     ConfigLoader *config;
     KConfig *dummyConfig;
     KTemporaryFile *tempFile;
+    DNSSD::PublicService *publicService;
+    ServiceProvider *serviceProvider;
     QMultiHash<QWidget *, QString> associatedWidgets;
     QMultiHash<QGraphicsWidget *, QString> associatedGraphicsWidgets;
     QSet<QString> disabledOperations;

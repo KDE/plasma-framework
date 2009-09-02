@@ -7,5 +7,5 @@ Name: QtJolie
 Description: A QtDbus like API for JOLIE
 Version: 1.0.0
 Requires: QtCore
-Libs: -L${libdir} -llibQtJolie
+Libs: -L${libdir} -lQtJolie
 Cflags: -I${includedir}
