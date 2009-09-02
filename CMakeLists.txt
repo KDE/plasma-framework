@@ -34,12 +34,9 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}
                     ${CMAKE_SOURCE_DIR}/plasma/private/qtjolie-branch
                     ${CMAKE_SOURCE_DIR}/plasma/private/qtjolie-branch/includes
                     ${KDE4_INCLUDES}
-		    #/mnt/data/kde/include
                     )
 
-#find_package(QtJolie REQUIRED)
 find_package(QCA2 REQUIRED)
-#find_package(DNSSD REQUIRED)
 
 
 include_directories(${QCA2_INCLUDE_DIR})
