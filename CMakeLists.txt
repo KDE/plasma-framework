@@ -367,3 +367,12 @@ install(FILES plasma_popupapplet_fix_groups.upd DESTINATION ${KCONF_UPDATE_INSTA
 install(PROGRAMS plasma_popupapplet_fix_groups.pl DESTINATION ${KCONF_UPDATE_INSTALL_DIR})
 install(FILES dataengineservice.operations DESTINATION ${DATA_INSTALL_DIR}/plasma/services)
 install(FILES plasmoidservice.operations DESTINATION ${DATA_INSTALL_DIR}/plasma/services)
+
+########### next target ###############
+
+include(MacroKAuth)
+
+kde4_auth_add_helper(kcmremotewidgetshelper org.kde.kcontrol.kcmremotewidgets root remotewidgetshelper.cpp)
+
+kde4_auth_register_actions(org.kde.kcontrol.kcmremotewidgets kcm_remotewidgets.actions)
+

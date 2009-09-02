@@ -1,0 +1,4 @@
+[org.kde.kcontrol.kcmremotewidgets.save]
+Name=Save remote widgets policies
+Description=Prevents the system from saving plasma remote widgets policies
+Policy=auth_admin 
