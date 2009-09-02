@@ -43,10 +43,10 @@
 #include <QtJolie/Message>
 #include <QtJolie/Server>
 
-#include <KDebug>
-#include <KUrl>
-#include <KWallet/Wallet>
-#include <KConfigGroup>
+#include <kdebug.h>
+#include <kurl.h>
+#include <wallet.h>
+#include <kconfiggroup.h>
 #include <kstandarddirs.h>
 
 namespace Plasma

@@ -34,7 +34,6 @@
 #include <dnssd/servicebrowser.h>
 #include <dnssd/remoteservice.h>
 #include <ktemporaryfile.h>
-#include <k3resolver.h>
 #include <kstandarddirs.h>
 #include <qhostinfo.h>
 
