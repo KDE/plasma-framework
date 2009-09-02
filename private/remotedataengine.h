@@ -19,8 +19,8 @@
 #ifndef REMOTEDATAENGINE_H
 #define REMOTEDATAENGINE_H
 
-#include <plasma/dataengine.h>
-#include <plasma/private/remoteservice_p.h>
+#include "../dataengine.h"
+#include "remoteservice_p.h"
 
 class JobView;
 
@@ -39,8 +39,6 @@ public:
     Plasma::Service* serviceForSource(const QString& source);
     void setLocation(KUrl location);
 
-    //Plasma::Service* serviceForSource(const QString& source);
-
 protected:
     void init();
     QStringList sources() const;
@@ -53,12 +51,12 @@ private Q_SLOTS:
     void updateSources();
 
 private:
-    Service *m_service;
-    QStringList m_sources;
-    bool m_callInProgress;
+    Service         *m_service;
+    QStringList     m_sources;
+    bool            m_callInProgress;
     QMap<QString, RemoteService *> m_serviceForSource;
-    KUrl m_location;
-    QString m_uuid;
+    KUrl            m_location;
+    QString         m_uuid;
 
 };
 

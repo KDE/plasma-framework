@@ -26,16 +26,15 @@
 #include <QtCore/QMap>
 #include <QtCore/QTimer>
 
-#include <QtJolie/Message>
-
-#include <kdebug.h>
-#include <kurl.h>
-#include <kglobal.h>
-#include <dnssd/servicebrowser.h>
 #include <dnssd/remoteservice.h>
-#include <ktemporaryfile.h>
+#include <dnssd/servicebrowser.h>
+#include <kdebug.h>
+#include <kglobal.h>
 #include <kstandarddirs.h>
-#include <qhostinfo.h>
+#include <ktemporaryfile.h>
+#include <kurl.h>
+
+#include <QtJolie/Message>
 
 namespace Plasma
 {
@@ -46,8 +45,6 @@ class AccessManagerSingleton
         AccessManager self;
 };
 
-//FIXME: AccessManagerSignleton could be removed to remove a friend.
-//see kdelibs/kutils/kidletime/xsyncbasedpoller.cpp
 K_GLOBAL_STATIC(AccessManagerSingleton, privateAccessManagerSelf)
 
 AccessManager *AccessManager::self()
@@ -69,14 +66,12 @@ AccessManager::~AccessManager()
 
 AccessAppletJob *AccessManager::accessRemoteApplet(const KUrl &location) const
 {
-    kDebug() << "unresolved location = " << location.prettyUrl();
-
     KUrl resolvedLocation;
     if (location.protocol() == "zeroconf") {
         if (d->zeroconfServices.contains(location.host())) {
             resolvedLocation = d->services[location.host()].remoteLocation();
         } else {
-            kDebug() << "not in the map";
+            kDebug() << "There's no zeroconf service with this name.";
         }
     } else {
         resolvedLocation = location;
@@ -118,7 +113,7 @@ void AccessManagerPrivate::slotAddService(DNSSD::RemoteService::Ptr service)
 {
     kDebug();
     if (!service->resolve()) {
-        kDebug() << "can't be resolved";
+        kDebug() << "Zeroconf service can't be resolved";
         return;
     }
 

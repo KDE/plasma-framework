@@ -22,8 +22,8 @@
 #include "clientpinrequest.h"
 #include "ui_pinpairing.h"
 
-#include <kdialog.h>
 #include <kdebug.h>
+#include <kdialog.h>
 
 namespace Plasma
 {
@@ -47,7 +47,8 @@ public:
 
         if (request) {
             dialog->setCaption(i18n("Connect with remote widget"));
-            pairingUI.alwaysAllowCheckbox->setVisible(false);
+            pairingUI.persistentCheckbox->setVisible(false);
+            pairingUI.allServicesCheckbox->setVisible(false);
             pairingUI.descriptionLabel->setText(request->description());
         }
 
@@ -67,11 +68,14 @@ public:
         kDebug();
         if (rule) {
             rule->setPin(pairingUI.password->text());
-            if (pairingUI.alwaysAllowCheckbox->isChecked()) {
+            if (pairingUI.allServicesCheckbox->isChecked()) {
                 rule->setPolicy(AuthorizationRule::PinRequired);
                 rule->setTargets(AuthorizationRule::AllServices);
             } else {
                 rule->setPolicy(AuthorizationRule::PinRequired);
+            }
+            if (pairingUI.persistentCheckbox->isChecked()) {
+                rule->setPersistence(AuthorizationRule::Persistent);
             }
         }
 

@@ -17,8 +17,9 @@
  */
 
 #include "dataengineservice.h"
-#include "getsource.h"
+
 #include "../dataengine.h"
+#include "getsource.h"
 
 #include <kdebug.h>
 

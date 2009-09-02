@@ -19,11 +19,11 @@
 
 #include "clientpinrequest.h"
 
-#include <plasma/private/remoteservice_p.h>
-#include <plasma/service.h>
+#include "service.h"
+#include "private/remoteservice_p.h"
 
-#include <klocalizedstring.h>
 #include <kdebug.h>
+#include <klocalizedstring.h>
 
 namespace Plasma
 {

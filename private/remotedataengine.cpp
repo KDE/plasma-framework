@@ -18,14 +18,17 @@
 
 #include "remotedataengine.h"
 
+#include "remoteservice_p.h"
+
+#include "../accessmanager.h"
+#include "../serviceaccessjob.h"
+#include "../service.h"
+#include "../servicejob.h"
+
 #include <QTimer>
 #include <QUuid>
+
 #include <kurl.h>
-#include <plasma/accessmanager.h>
-#include <plasma/private/remoteservice_p.h>
-#include <plasma/serviceaccessjob.h>
-#include <plasma/service.h>
-#include <plasma/servicejob.h>
 
 namespace Plasma
 {

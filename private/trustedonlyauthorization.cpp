@@ -28,7 +28,7 @@
 
 namespace Plasma
 {
-    
+
 TrustedOnlyAuthorization::TrustedOnlyAuthorization()
 {
 }

@@ -1455,33 +1455,44 @@ bool Applet::hasConfigurationInterface() const
 
 void Applet::publish(AnnouncementMethods methods)
 {
-    if (!d->service) {
-        d->service = new PlasmoidService(this);
-    }
+    if (d->package) {
+        d->package->d->publish(methods);
+    } else {
+        if (!d->service) {
+            d->service = new PlasmoidService(this);
+        }
 
-    QString resourceName =
-    i18nc("%1 is the name of a plasmoid, %2 the name of the machine that plasmoid is published on",
-          "%1 on %2", name(), AuthorizationManager::self()->d->myCredentials.name());
-    kDebug() << "publishing package under name " << resourceName;
-    d->service->d->publish(methods, resourceName, PackageMetadata());
+        QString resourceName =
+        i18nc("%1 is the name of a plasmoid, %2 the name of the machine that plasmoid is published on",
+              "%1 on %2", name(), AuthorizationManager::self()->d->myCredentials.name());
+        kDebug() << "publishing package under name " << resourceName;
+        d->service->d->publish(methods, resourceName);
+    }
 }
 
 void Applet::unpublish()
 {
-    if (d->service) {
-        d->service->d->unpublish();
+    if (d->package) {
+        d->package->d->unpublish();
+    } else {
+        if (d->service) {
+            d->service->d->unpublish();
+        }
     }
 }
 
 bool Applet::isPublished() const
 {
-    if (d->service) {
-        return d->service->d->isPublished();
+    if (d->package) {
+        d->package->d->isPublished();
     } else {
-        return false;
+        if (d->service) {
+            return d->service->d->isPublished();
+        } else {
+            return false;
+        }
     }
 }
-
 
 //it bugs me that this can get turned on and off at will. I don't see it being useful and it just
 //makes more work for me and more code duplication.
@@ -1640,15 +1651,12 @@ void Applet::showConfigurationInterface()
 
         d->addGlobalShortcutsPage(dialog);
         d->addPublishPage(dialog);
-        //connect(dialog, SIGNAL(applyClicked()), this, SLOT(configDialogFinished()));
-        //connect(dialog, SIGNAL(okClicked()), this, SLOT(configDialogFinished()));
         dialog->show();
     } else if (d->script) {
         d->script->showConfigurationInterface();
     } else {
         KConfigDialog *dialog = d->generateGenericConfigDialog();
-        createConfigurationInterface(dialog);
-        d->addGlobalShortcutsPage(dialog);
+        //createConfigurationInterface(dialog);
         dialog->show();
     }
 
@@ -1737,12 +1745,6 @@ void AppletPrivate::addGlobalShortcutsPage(KConfigDialog *dialog)
 
 void AppletPrivate::addPublishPage(KConfigDialog *dialog)
 {
-    /**
-    if (!package) {
-        return; 
-    }
-    */
-
     QWidget *page = new QWidget;
     publishUI.setupUi(page);
     publishUI.publishCheckbox->setChecked(q->config().readEntry("Publish", false));
@@ -1765,18 +1767,11 @@ void AppletPrivate::configDialogFinished()
     }
 
     q->config().writeEntry("Publish", publishUI.publishCheckbox->isChecked());
-    if (package) {
-        if (publishUI.publishCheckbox->isChecked()) {
-            package->d->publish(Plasma::ZeroconfAnnouncement);
-        } else {
-            package->d->unpublish();
-        }
+
+    if (publishUI.publishCheckbox->isChecked()) {
+        q->publish(Plasma::ZeroconfAnnouncement);
     } else {
-        if (publishUI.publishCheckbox->isChecked()) {
-            q->publish(Plasma::ZeroconfAnnouncement);
-        } else {
-            q->unpublish();
-        }
+        q->unpublish();
     }
 
     if (!configLoader) {
@@ -2423,18 +2418,9 @@ void AppletPrivate::init(const QString &packagePath)
         configAction->setText(i18nc("%1 is the name of the applet", "%1 Settings", q->name()));
     }
 
-    if (package) {
-        if (q->config().readEntry("Publish", false)) {
-            package->d->publish(Plasma::ZeroconfAnnouncement);
-        } else {
-            package->d->unpublish();
-        }
-    } else {
-        if (q->config().readEntry("Publish", false)) {
-            q->publish(Plasma::ZeroconfAnnouncement);
-        } else {
-            q->unpublish();
-        }
+    if (q->config().readEntry("Publish", false)) {
+        kDebug() << "according the the config, this applet is published, so publish it now!";
+        q->publish(Plasma::ZeroconfAnnouncement);
     }
 
     QObject::connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()), q, SLOT(themeChanged()));

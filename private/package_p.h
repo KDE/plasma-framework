@@ -1,6 +1,24 @@
-#include <plasma.h>
-#include <plasma/package.h>
-#include <plasma/service.h>
+/*
+ *   Copyright © 2009 Rob Scheepmaker <r.scheepmaker@student.utwente.nl>
+ *
+ *   This program is free software; you can redistribute it and/or modify
+ *   it under the terms of the GNU Library General Public License version 2 as
+ *   published by the Free Software Foundation
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details
+ *
+ *   You should have received a copy of the GNU Library General Public
+ *   License along with this program; if not, write to the
+ *   Free Software Foundation, Inc.,
+ *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ */
+
+#include "../plasma.h"
+#include "../package.h"
+#include "../service.h"
 
 #include <QString>
 
@@ -13,20 +31,8 @@ public:
     PackagePrivate(const PackageStructure::Ptr st, const QString &p);
     ~PackagePrivate();
 
-    /**
-     * Publish this package on the network.
-     * @param methods the ways to announce this package on the network.
-     */
     void publish(AnnouncementMethods methods);
-
-    /**
-     * Remove this package from the network.
-     */
     void unpublish();
-
-    /**
-     * @returns whether or not this service is currently published on the network.
-     */
     bool isPublished() const;
 
     PackageStructure::Ptr structure;

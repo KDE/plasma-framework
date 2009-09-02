@@ -17,15 +17,15 @@
  */
 
 #include "remoteservice_p.h"
-#include "joliemessagehelper_p.h"
 
-#include <plasma/accessmanager.h>
-#include <plasma/authorizationinterface.h>
-#include <plasma/authorizationmanager.h>
-#include <plasma/clientpinrequest.h>
-#include <plasma/service.h>
+#include "../accessmanager.h"
+#include "../authorizationinterface.h"
+#include "../authorizationmanager.h"
+#include "../clientpinrequest.h"
+#include "../service.h"
 
 #include "authorizationmanager_p.h"
+#include "joliemessagehelper_p.h"
 #include "remoteservicejob_p.h"
 #include "service_p.h"
 

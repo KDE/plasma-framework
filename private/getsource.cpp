@@ -17,12 +17,14 @@
  */
 
 #include "getsource.h"
+
+#include "authorizationmanager_p.h"
 #include "service_p.h"
+
+#include "../authorizationmanager.h"
+#include "../authorizationrule.h"
 #include "../dataengine.h"
-#include <plasma/authorizationmanager.h>
-#include <plasma/private/authorizationmanager_p.h>
-#include <plasma/authorizationrule.h>
-#include <plasma/service.h>
+#include "../service.h"
 
 #include <kdebug.h>
 

@@ -19,9 +19,10 @@
 #ifndef GETSOURCE_H
 #define GETSOURCE_H
 
-#include <plasma/servicejob.h>
-#include "../dataengine.h"
 #include "dataengineservice.h"
+
+#include "../dataengine.h"
+#include "../servicejob.h"
 
 namespace Plasma
 {
@@ -44,11 +45,12 @@ class GetSource : public Plasma::ServiceJob
         }
 
         void start();
-        
+
     private:
         DataEngine          *m_engine;
         DataEngineService   *m_service;
 };
+
 }
 
 #endif //JOBVIEW_H

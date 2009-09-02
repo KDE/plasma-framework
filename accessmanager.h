@@ -20,6 +20,8 @@
 #ifndef PLASMA_ACCESSMANAGER_H
 #define PLASMA_ACCESSMANAGER_H
 
+#include "accessappletjob.h"
+#include "packagemetadata.h"
 #include "plasma_export.h"
 
 #include <QtCore/QList>
@@ -27,8 +29,6 @@
 #include <QtCore/QString>
 
 #include <kdebug.h>
-#include "accessappletjob.h"
-#include "packagemetadata.h"
 
 class QString;
 class KUrl;
@@ -44,9 +44,9 @@ class ServiceAccessJob;
  *
  * @short Allows access to remote Plasma::Applet classes.
  *
- * This manager provides a way to access a plasmoid that is hosted on another machine. It also
- * provides a mechanism to discover services announced to the network through zeroconf or
- * bluetooth.
+ * This manager provides a way to access an applet (either a binary or packaged one) that is hosted
+ * on another machine. It also provides a mechanism to discover services announced to the network
+ * through zeroconf.
  *
  * @since 4.4
  */
@@ -72,23 +72,25 @@ class PLASMA_EXPORT AccessManager : public QObject
         AccessAppletJob *accessRemoteApplet(const KUrl &location) const;
 
         /**
-         * @returns a map mapping service names to the plasmoid's metadata.
+         * @returns a list of applets that are announced on the network through zeroconf. Use the
+         * remoteLocation() function in PackageMetadata to obtain an url to pass to
+         * accessRemoteApplet in AccessManager if you want to access one of these applets.
          */
         QList<PackageMetadata> remoteApplets() const;
 
     Q_SIGNALS:
         /**
-         * fires when a AccessAppletJob is finished.
+         * fires when an AccessAppletJob is finished.
          */
-        void finished(Plasma::AccessAppletJob*);
+        void finished(Plasma::AccessAppletJob *);
 
         /**
-         * fires when a new plasmoid is announced on the network.
+         * fires when a new applet is announced on the network.
          */
         void remoteAppletAnnounced(Plasma::PackageMetadata metadata);
 
         /**
-         * fires when an announced plasmoid disappears from the network.
+         * fires when an announced applet disappears from the network.
          */
         void remoteAppletUnannounced(Plasma::PackageMetadata metadata);
 

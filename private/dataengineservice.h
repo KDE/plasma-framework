@@ -19,8 +19,9 @@
 #ifndef PUBLICKEYSERVICE_H
 #define PUBLICKEYSERVICE_H
 
-#include <dataengine.h>
 #include <QStringList>
+
+#include "../dataengine.h"
 #include "../service.h"
 
 namespace Plasma
@@ -38,7 +39,7 @@ class DataEngineService : public Plasma::Service
 
     public Q_SLOTS:
         void dataUpdated(QString source, Plasma::DataEngine::Data data);
-        
+
     protected:
         Plasma::ServiceJob* createJob(const QString& operation,
                                       QMap<QString,QVariant>& parameters);

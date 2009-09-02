@@ -16,8 +16,11 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include <plasma/servicejob.h>
-#include <plasma/credentials.h>
+#ifndef SERVICEJOB_P_H
+#define SERVICEJOB_P_H
+
+#include "../credentials.h"
+#include "../servicejob.h"
 
 #include <QString>
 #include <QVariant>
@@ -45,3 +48,4 @@ public:
 };
 
 }
+#endif // SERVICEJOB_P_H

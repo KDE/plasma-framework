@@ -21,8 +21,9 @@
 #define PLASMA_PINPAIRINGAUTHORIZATION_H
 
 #include "plasma_export.h"
-#include "pinpairingauthorization.h"
+
 #include "authorizationinterface.h"
+#include "pinpairingauthorization.h"
 
 #include <QtCore/QObject>
 
@@ -36,7 +37,7 @@ namespace Plasma
  * pin pairing authorization (let the user type the same password at both sides) in your shell for
  * every rule that doesn't match.
  *
- * @since 4.4?
+ * @since 4.4
  */
 class PLASMA_EXPORT PinPairingAuthorization : public AuthorizationInterface
 {

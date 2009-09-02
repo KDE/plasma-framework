@@ -23,13 +23,14 @@
 #include "clientpinrequest.h"
 #include "pinpairingdialog.h"
 
+#include "../credentials.h"
+
 #include <kdebug.h>
-#include <credentials.h>
 
 
 namespace Plasma
 {
-    
+
 PinPairingAuthorization::PinPairingAuthorization()
 {
 }

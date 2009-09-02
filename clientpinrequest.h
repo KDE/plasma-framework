@@ -37,9 +37,10 @@ class Service;
 /**
  * @class ClientPinRequest plasma/clientpinrequest.h <Plasma/ClientPinRequest>
  *
- * describes an outgoing connection.
+ * describes an outgoing connection. this is just passed to AuthorizationInterface when a remote
+ * widget asks to do pin pairing first, so the shell can ask the user for a pin.
  *
- * @since 4.4?
+ * @since 4.4
  */
 class PLASMA_EXPORT ClientPinRequest : public QObject
 {

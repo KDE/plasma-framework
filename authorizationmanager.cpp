@@ -28,27 +28,29 @@
 
 #include "private/authorizationrule_p.h"
 #include "private/denyallauthorization.h"
+#include "private/joliemessagehelper_p.h"
 #include "private/pinpairingauthorization.h"
 #include "private/trustedonlyauthorization.h"
-#include "private/joliemessagehelper_p.h"
 
 #include <QtCore/QBuffer>
 #include <QtCore/QMap>
-#include <QNetworkInterface>
-#include <QHostInfo>
-#include <QtCore/QTimer>
 #include <QtCore/QMetaType>
+#include <QtCore/QTimer>
 
-#include <QtCrypto>
+#include <QtNetwork/QHostInfo>
+
 #include <QtJolie/Message>
 #include <QtJolie/Server>
 
+#include <QtCrypto>
+
+#include <kauthaction.h>
+#include <kconfiggroup.h>
 #include <kdebug.h>
+#include <kstandarddirs.h>
+#include <ktemporaryfile.h>
 #include <kurl.h>
 #include <kwallet.h>
-#include <kconfiggroup.h>
-#include <kauthaction.h>
-#include <kstandarddirs.h>
 
 namespace Plasma
 {
@@ -144,30 +146,11 @@ AuthorizationManagerPrivate::AuthorizationManagerPrivate(AuthorizationManager *m
     //First, let's start the JOLIE server:
     server = new Jolie::Server(4000);
 
-    /**
-    //Actually: storing identities isn't really necesarry. TODO: remove this and see if stuff
-    //breaks.
-    foreach (const QString &groupName, identitiesConfig.groupList()) {
-        QByteArray identityByteArray =
-            identitiesConfig.group(groupName).readEntry("Credentials", QByteArray());
-        QDataStream stream(&identityByteArray, QIODevice::ReadOnly);
-        Credentials storedCredentials;
-        stream >> storedCredentials;
-        //Credentials storedCredentials = identityVariant.value<Credentials>();
-        if (storedCredentials.isNull()) {
-            kDebug() << "stored identity is null";
-        } else {
-            identities[storedCredentials.id()] = storedCredentials;
-        }
-    }
-    */
-
-    QTimer::singleShot(0, q, SLOT(loadRules()));
+    QTimer::singleShot(0, q, SLOT(slotLoadRules()));
 }
 
 AuthorizationManagerPrivate::~AuthorizationManagerPrivate()
 {
-
     delete authorizationInterface;
     delete customAuthorizationInterface;
     delete server;
@@ -182,7 +165,7 @@ void AuthorizationManagerPrivate::saveRules()
 
     int i = 0;
     foreach (AuthorizationRule *rule, rules) {
-        if (rule->persistence() == AuthorizationRule::Persistence) {
+        if (rule->persistence() == AuthorizationRule::Persistent) {
             kDebug() << "adding rule " << i;
             rulesGroup.group(QString::number(i)).writeEntry("CredentialsID", rule->credentials().id());
             rulesGroup.group(QString::number(i)).writeEntry("serviceName", rule->serviceName());
@@ -226,10 +209,8 @@ void AuthorizationManagerPrivate::slotWalletOpened()
     emit q->readyForRemoteAccess();
 }
 
-void AuthorizationManagerPrivate::loadRules()
+void AuthorizationManagerPrivate::slotLoadRules()
 {
-    //TODO: at some point we're probably going to use kauth for this stuff, by which time this will
-    //become kind of obsolete.
     foreach (const QString &groupName, rulesConfig.groupList()) {
         QString identityID = rulesConfig.group(groupName).readEntry("CredentialsID", "");
         QString serviceName = rulesConfig.group(groupName).readEntry("serviceName", "");
@@ -292,14 +273,6 @@ void AuthorizationManagerPrivate::addCredentials(const Credentials &identity)
     } else if (identity.isValid()) {
         kDebug() << "Adding a new identity for " << identity.id();
         identities[identity.id()] = identity;
-        /**
-        QByteArray identityByteArray;
-        QDataStream stream(&identityByteArray, QIODevice::WriteOnly);
-        stream << identity;
-
-        identitiesConfig.group(identity.id()).writeEntry("Credentials", identityByteArray);
-        identitiesConfig.sync();
-        */
     }
 }
 

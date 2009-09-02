@@ -69,24 +69,22 @@ class PLASMA_EXPORT AuthorizationRule : public QObject
     Q_OBJECT
     public:
         ~AuthorizationRule();
-        /**
-         * Defines this rule's behavior. 
-         */
+
         enum Policy {
             Deny = 0,           /**< access for messages matching this rule is denied. */
             Allow = 1,          /**< access for messages matching this rule is allowed. */
-            PinRequired = 2   /**< specify that the user will need to enter a pin at both sides */
+            PinRequired = 2     /**< specify that the user will need to enter a pin at both sides */
         };
 
         enum Persistence {
-            Transient = 0,
-            Persistent = 1
+            Transient = 0,      /**< specify that this rule is just valid for this session. */
+            Persistent = 1      /**< specify that this rule will be saved between sessions. */
         };
 
         enum Target {
             Default = 0,
             AllUsers = 1,       /**< specify that this rule is valid for all users */
-            AllServices = 2    /**< specify that this rule is valid for all services */
+            AllServices = 2     /**< specify that this rule is valid for all services */
         };
         Q_DECLARE_FLAGS(Targets, Target)
 
@@ -155,11 +153,14 @@ class PLASMA_EXPORT AuthorizationRule : public QObject
 
         AuthorizationRulePrivate * const d;
 
+        Q_PRIVATE_SLOT(d, void fireChangedSignal());
+
         friend class AuthorizationManager;
         friend class AuthorizationManagerPrivate;
-        friend class ServiceProvider;
+        friend class AuthorizationRulePrivate;
         friend class GetSource;
         friend class PlasmoidServiceJob;
+        friend class ServiceProvider;
 };
 } // Plasma namespace
 

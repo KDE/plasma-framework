@@ -73,7 +73,6 @@ set(plasma_LIB_SRCS
     private/desktoptoolbox.cpp
     private/extenderapplet.cpp
     private/extenderitemmimedata.cpp
-    private/getpublickey.cpp
     private/getsource.cpp
     private/nativetabbar.cpp
     private/packages.cpp
@@ -81,7 +80,6 @@ set(plasma_LIB_SRCS
     private/pinpairingauthorization.cpp
     private/pinpairingdialog.cpp
     private/plasmoidservice.cpp
-    private/publickeyservice.cpp
     private/remotedataengine.cpp
     private/remoteservice.cpp
     private/remoteservicejob.cpp

@@ -22,7 +22,7 @@
 #include <QtCore/QQueue>
 #include <QtJolie/Message>
 
-#include <plasma/service.h>
+#include "../service.h"
 
 namespace Jolie
 {

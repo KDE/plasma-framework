@@ -1,6 +1,5 @@
 /*
-    <one line to give the program's name and a brief idea of what it does.>
-    Copyright (C) <year>  <name of author>
+    Copyright (C) 2009 Rob Scheepmaker <r.scheepmaker@student.utwente.nl>
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -34,7 +33,7 @@ class PLASMA_EXPORT PinPairingDialog : public QObject
 {
 
 Q_OBJECT
-    
+
 public:
     PinPairingDialog(AuthorizationRule &rule, QObject* parent = 0);
     PinPairingDialog(ClientPinRequest &request, QObject* parent = 0);

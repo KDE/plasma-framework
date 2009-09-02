@@ -16,14 +16,15 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef PUBLICKEYSERVICE_H
-#define PUBLICKEYSERVICE_H
+#ifndef PLASMOIDSERVICE_H
+#define PLASMOIDSERVICE_H
 
 #include "dataengineconsumer_p.h"
-#include <plasma/service.h>
-#include <plasma/servicejob.h>
-#include <plasma/packagemetadata.h>
-#include <plasma/package.h>
+
+#include "../packagemetadata.h"
+#include "../package.h"
+#include "../service.h"
+#include "../servicejob.h"
 
 #include <ktemporaryfile.h>
 
@@ -63,7 +64,7 @@ class PlasmoidService : public Service, DataEngineConsumer
         PlasmoidService(Applet *applet);
         PackageMetadata metadata() const;
 
-        
+
     protected:
         Plasma::ServiceJob* createJob(const QString& operation,
                                       QMap<QString,QVariant>& parameters);
@@ -72,7 +73,6 @@ class PlasmoidService : public Service, DataEngineConsumer
         QString m_packagePath;
         PackageMetadata m_metadata;
         KTemporaryFile m_tempFile;
-        //Package m_package;
 
         friend class PlasmoidServiceJob;
 };

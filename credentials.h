@@ -15,10 +15,10 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef IDENTITY_H
-#define IDENTITY_H
+#ifndef CREDENTIALS_H
+#define CREDENTIALS_H
 
-#include <plasma/plasma.h>
+#include "plasma.h"
 
 #include <QtCore/QObject>
 #include <QtCore/QDataStream>
@@ -50,16 +50,16 @@ public:
      * Copy constructor.
      */
     Credentials(const Credentials &other);
-    
+
     ~Credentials();
-    
+
     Credentials &operator=(const Credentials &other);
 
     /**
      * Create a new identity with a new set of random public/private keys.
      */
     static Credentials createCredentials(const QString &name);
-    
+
     /**
      * @return whether or not this identity can be trusted based on e.g. having the key signed with
      * a trusted GPG key (not yet implemented) or having the key in a designated folder on disk
@@ -77,7 +77,8 @@ public:
 
     /**
      * @return the name of this identity. There's however no guarantee that if the name returns e.g.
-     * "Santa Claus", this message is actually from Mr. Claus, except if isTrusted is true.
+     * "Santa Claus", this message is actually from Mr. Claus, except if trustLevel returns a
+     * sufficiently high trust level.
      */
     QString name() const;
 

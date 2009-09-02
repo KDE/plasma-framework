@@ -53,24 +53,12 @@ class AuthorizationManagerPrivate
         AuthorizationManagerPrivate(AuthorizationManager *manager);
         ~AuthorizationManagerPrivate();
 
-        void loadRules();
-        
-        /**
-         * @returns the rule matching the parameters with the highest priority.
-         */
-        AuthorizationRule *matchingRule(const QString &serviceName, const Credentials &key) const;
-
-        /**
-         * @returns the identity with @p id. Or 0 well there's no identity with that ID.
-         */
-        Credentials getCredentials(const QString &id = QString());
-
-        /**
-         * @param identity the identity to be added to the identity ring.
-         */
-        void addCredentials(const Credentials &identity);
-
         void slotWalletOpened();
+        void slotLoadRules();
+        AuthorizationRule *matchingRule(const QString &serviceName, const Credentials &key) const;
+        Credentials getCredentials(const QString &id = QString());
+        void addCredentials(const Credentials &identity);
+        void saveRules();
 
         QCA::Initializer            initializer;
 
@@ -82,8 +70,8 @@ class AuthorizationManagerPrivate
         AuthorizationInterface      *customAuthorizationInterface;
         KWallet::Wallet             *wallet;
 
-        Credentials                    myCredentials;
-        QMap<QString, Credentials>     identities;
+        Credentials                 myCredentials;
+        QMap<QString, Credentials>  identities;
         QList<AuthorizationRule*>   rules;
         KConfigGroup                identitiesConfig;
         KConfigGroup                rulesConfig;

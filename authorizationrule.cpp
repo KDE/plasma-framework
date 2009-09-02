@@ -18,23 +18,27 @@
  */
 
 #include "authorizationrule.h"
+
 #include "authorizationmanager.h"
+#include "credentials.h"
 #include "private/authorizationmanager_p.h"
 #include "private/authorizationrule_p.h"
 
 #include <QtCore/QObject>
+#include <QtCore/QTimer>
+
+#include <QtCrypto>
 
 #include <kurl.h>
 #include <klocalizedstring.h>
 
-#include <QtCrypto>
-#include "credentials.h"
-
 namespace Plasma
 {
 
-AuthorizationRulePrivate::AuthorizationRulePrivate(const QString &serviceName, const QString &credentialID)
-    : serviceName(serviceName),
+AuthorizationRulePrivate::AuthorizationRulePrivate(const QString &serviceName, const QString &credentialID,
+                                                   AuthorizationRule *rule)
+    : q(rule),
+      serviceName(serviceName),
       credentialID(credentialID),
       policy(AuthorizationRule::Deny),
       targets(AuthorizationRule::Default),
@@ -42,7 +46,9 @@ AuthorizationRulePrivate::AuthorizationRulePrivate(const QString &serviceName, c
 {
 }
 
-AuthorizationRulePrivate::~AuthorizationRulePrivate() {}
+AuthorizationRulePrivate::~AuthorizationRulePrivate()
+{
+}
 
 bool AuthorizationRulePrivate::matches(const QString &name, const QString &id) const
 {
@@ -61,9 +67,19 @@ bool AuthorizationRulePrivate::matches(const QString &name, const QString &id) c
     return false;
 }
 
+void AuthorizationRulePrivate::scheduleChangedSignal()
+{
+    QTimer::singleShot(0, q, SLOT(fireChangedSignal()));
+}
+
+void AuthorizationRulePrivate::fireChangedSignal()
+{
+    emit q->changed(q);
+}
+
 AuthorizationRule::AuthorizationRule(const QString &serviceName, const QString &credentialID)
     : QObject(AuthorizationManager::self()),
-      d(new AuthorizationRulePrivate(serviceName, credentialID))
+      d(new AuthorizationRulePrivate(serviceName, credentialID, this))
 {
 }
 
@@ -96,7 +112,7 @@ QString AuthorizationRule::description() const
 void AuthorizationRule::setPolicy(Policy policy)
 {
     d->policy = policy;
-    emit changed(this);
+    d->scheduleChangedSignal();
 }
 
 AuthorizationRule::Policy AuthorizationRule::policy()
@@ -107,7 +123,7 @@ AuthorizationRule::Policy AuthorizationRule::policy()
 void AuthorizationRule::setTargets(Targets targets)
 {
     d->targets = targets;
-    emit changed(this);
+    d->scheduleChangedSignal();
 }
 
 AuthorizationRule::Targets AuthorizationRule::targets()
@@ -118,7 +134,7 @@ AuthorizationRule::Targets AuthorizationRule::targets()
 void AuthorizationRule::setPersistence(Persistence persistence)
 {
     d->persistence = persistence;
-    emit changed(this);
+    d->scheduleChangedSignal();
 }
 
 AuthorizationRule::Persistence AuthorizationRule::persistence()
@@ -129,6 +145,7 @@ AuthorizationRule::Persistence AuthorizationRule::persistence()
 void AuthorizationRule::setPin(const QString &pin)
 {
     d->pin = pin;
+    d->scheduleChangedSignal();
 }
 
 QString AuthorizationRule::pin() const
@@ -148,3 +165,4 @@ QString AuthorizationRule::serviceName() const
 
 } // Plasma namespace
 
+#include "authorizationrule.moc"

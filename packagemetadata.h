@@ -166,6 +166,9 @@ public:
      */
     void setRequiredVersion(const QString &);
 
+    /**
+     * Set the url where this package is hosted.
+     */
     void setRemoteLocation(const KUrl &);
 
     /**

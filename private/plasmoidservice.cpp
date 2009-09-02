@@ -59,7 +59,7 @@ void PlasmoidServiceJob::start()
         kDebug() << "sending " << m_service->m_packagePath;
         QFileInfo fileInfo(m_service->m_packagePath);
 
-        if (fileInfo.exists() && fileInfo.isFile() && fileInfo.isAbsolute()) {
+        if (fileInfo.exists() && fileInfo.isAbsolute()) {
             kDebug() << "file exists, let's try and read it";
             QFile file(m_service->m_packagePath);
             file.open(QIODevice::ReadOnly);
@@ -91,7 +91,7 @@ PlasmoidService::PlasmoidService(const QString &packageLocation)
     : Plasma::Service(0)
 {
     setName("plasmoidservice");
-    
+
     QString location;
     location = packageLocation;
     if (!location.endsWith('/')) {
@@ -107,7 +107,6 @@ PlasmoidService::PlasmoidService(const QString &packageLocation)
     }
     QString packagePath = m_tempFile.fileName();
     m_tempFile.close();
-    
 
     // put everything into a zip archive
     KZip creation(packagePath);
@@ -120,7 +119,7 @@ PlasmoidService::PlasmoidService(const QString &packageLocation)
     location.append("contents/");
     creation.addLocalDirectory(location, "contents");
     creation.close();
-    
+
     m_packagePath = packagePath;
 }
 
