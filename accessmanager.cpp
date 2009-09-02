@@ -28,8 +28,8 @@
 
 #include <QtJolie/Message>
 
-#include <KDebug>
-#include <KUrl>
+#include <kdebug.h>
+#include <kurl.h>
 #include <kglobal.h>
 #include <dnssd/servicebrowser.h>
 #include <dnssd/remoteservice.h>

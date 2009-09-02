@@ -25,7 +25,7 @@
 #include <plasma/packagemetadata.h>
 #include <plasma/package.h>
 
-#include <KTemporaryFile>
+#include <ktemporaryfile.h>
 
 namespace Plasma
 {

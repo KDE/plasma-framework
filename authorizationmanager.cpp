@@ -163,7 +163,7 @@ AuthorizationManagerPrivate::AuthorizationManagerPrivate(AuthorizationManager *m
     */
 
     QTimer::singleShot(0, q, SLOT(loadRules()));
-};
+}
 
 AuthorizationManagerPrivate::~AuthorizationManagerPrivate()
 {
