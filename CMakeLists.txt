@@ -3,6 +3,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}
                     ${CMAKE_SOURCE_DIR}/kdecore/
                     ${CMAKE_SOURCE_DIR}/kdecore/config
                     ${CMAKE_SOURCE_DIR}/kdecore/jobs
+                    ${CMAKE_SOURCE_DIR}/kdecore/auth/lib
                     ${CMAKE_SOURCE_DIR}/kdecore/kernel
                     ${CMAKE_SOURCE_DIR}/kdecore/localization
                     ${CMAKE_SOURCE_DIR}/kdecore/io
