@@ -20,7 +20,7 @@
 #define PLASMA_REMOTESERVICEJOB_H
 
 #include <QtCore/QByteArray>
-#include <KUrl>
+#include <kurl.h>
 
 #include "../servicejob.h"
 
