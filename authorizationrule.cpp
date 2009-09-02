@@ -74,6 +74,11 @@ void AuthorizationRulePrivate::scheduleChangedSignal()
 
 void AuthorizationRulePrivate::fireChangedSignal()
 {
+    if ((persistence == AuthorizationRule::Persistent) &&
+        (policy != AuthorizationRule::PinRequired)) {
+        AuthorizationManager::self()->d->saveRules();
+    }
+
     emit q->changed(q);
 }
 

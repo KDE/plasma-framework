@@ -53,6 +53,7 @@ void PinPairingAuthorization::authorizationRequest(AuthorizationRule &rule)
         rule.setPolicy(AuthorizationRule::Allow);
         rule.setTargets(AuthorizationRule::AllServices);
     } else {
+        rule.setPolicy(AuthorizationRule::PinRequired);
         new PinPairingDialog(rule);
     }
 }

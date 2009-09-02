@@ -102,9 +102,11 @@ class PLASMA_EXPORT AuthorizationManager : public QObject
         Q_PRIVATE_SLOT(d, void slotLoadRules())
         Q_PRIVATE_SLOT(d, void slotWalletOpened())
 
+        friend class AccessManager;
         friend class AuthorizationManagerPrivate;
         friend class AuthorizationManagerSingleton;
         friend class AuthorizationRule;
+        friend class AuthorizationRulePrivate;
         friend class Applet;
         friend class Credentials;
         friend class DataEngine;
@@ -113,6 +115,7 @@ class PLASMA_EXPORT AuthorizationManager : public QObject
         friend class PlasmoidServiceJob;
         friend class RemoteService;
         friend class RemoteServiceJob;
+        friend class ServicePrivate;
         friend class ServiceProvider;
 };
 } // Plasma namespace

@@ -53,6 +53,8 @@ class AuthorizationManagerPrivate
         AuthorizationManagerPrivate(AuthorizationManager *manager);
         ~AuthorizationManagerPrivate();
 
+        void prepareForServiceAccess();
+        void prepareForServicePublication();
         void slotWalletOpened();
         void slotLoadRules();
         AuthorizationRule *matchingRule(const QString &serviceName, const Credentials &key) const;

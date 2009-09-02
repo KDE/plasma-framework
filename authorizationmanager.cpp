@@ -132,21 +132,13 @@ void AuthorizationManager::setAuthorizationInterface(AuthorizationInterface *int
 
 AuthorizationManagerPrivate::AuthorizationManagerPrivate(AuthorizationManager *manager) 
     : q(manager),
+      server(0),
       authorizationPolicy(AuthorizationManager::DenyAll),
       authorizationInterface(new DenyAllAuthorization()),
       customAuthorizationInterface(0),
       rulesConfig(KSharedConfig::openConfig("/etc/plasma-remotewidgets.conf")->group("Rules")),
       locked(false)
 {
-    wallet = KWallet::Wallet::openWallet("Plasma", 0, KWallet::Wallet::Asynchronous);
-    q->connect(wallet, SIGNAL(walletOpened(bool)), q, SLOT(slotWalletOpened()));
-
-    //Let's set up plasma for remote service support. Since most of the set up involves crypto,
-    //AuthorizationManager seems the sensible place.
-    //First, let's start the JOLIE server:
-    server = new Jolie::Server(4000);
-
-    QTimer::singleShot(0, q, SLOT(slotLoadRules()));
 }
 
 AuthorizationManagerPrivate::~AuthorizationManagerPrivate()
@@ -157,10 +149,34 @@ AuthorizationManagerPrivate::~AuthorizationManagerPrivate()
     delete wallet;
 }
 
+void AuthorizationManagerPrivate::prepareForServiceAccess()
+{
+    if (myCredentials.isValid()) {
+        return;
+    }
+
+    wallet = KWallet::Wallet::openWallet("Plasma", 0, KWallet::Wallet::Asynchronous);
+    q->connect(wallet, SIGNAL(walletOpened(bool)), q, SLOT(slotWalletOpened()));
+    QTimer::singleShot(0, q, SLOT(slotLoadRules()));
+}
+
+void AuthorizationManagerPrivate::prepareForServicePublication()
+{
+    if (!server) {
+        //Let's set up plasma for remote service support. Since most of the set up involves crypto,
+        //AuthorizationManager seems the sensible place.
+        //First, let's start the JOLIE server:
+        server = new Jolie::Server(4000);
+    }
+}
+
 void AuthorizationManagerPrivate::saveRules()
 {
+    kDebug() << "SAVE RULES";
+
     KTemporaryFile tempFile;
     tempFile.open();
+    tempFile.setAutoRemove(false);
     KConfigGroup rulesGroup = KSharedConfig::openConfig(tempFile.fileName())->group("Rules");
 
     int i = 0;
@@ -177,6 +193,8 @@ void AuthorizationManagerPrivate::saveRules()
     }
     rulesGroup.sync();
     tempFile.close();
+
+    kDebug() << "tempfile = " << tempFile.fileName();
 
     KAuth::Action action("org.kde.kcontrol.kcmremotewidgets.save");
     action.addArgument("source", tempFile.fileName());

@@ -32,6 +32,7 @@
 #include <QGraphicsGridLayout>
 #include <QGraphicsSceneMouseEvent>
 #include <QGraphicsView>
+#include <QHostInfo>
 #include <QLabel>
 #include <QList>
 #include <QGraphicsLinearLayout>
@@ -1464,7 +1465,7 @@ void Applet::publish(AnnouncementMethods methods)
 
         QString resourceName =
         i18nc("%1 is the name of a plasmoid, %2 the name of the machine that plasmoid is published on",
-              "%1 on %2", name(), AuthorizationManager::self()->d->myCredentials.name());
+              "%1 on %2", name(), QHostInfo::localHostName());
         kDebug() << "publishing package under name " << resourceName;
         d->service->d->publish(methods, resourceName);
     }
@@ -1484,7 +1485,7 @@ void Applet::unpublish()
 bool Applet::isPublished() const
 {
     if (d->package) {
-        d->package->d->isPublished();
+        return d->package->d->isPublished();
     } else {
         if (d->service) {
             return d->service->d->isPublished();

@@ -18,6 +18,7 @@
  */
 
 #include "service.h"
+#include "private/authorizationmanager_p.h"
 #include "private/remoteservice_p.h"
 #include "private/service_p.h"
 #include "private/serviceprovider_p.h"
@@ -37,8 +38,6 @@
 #include "configloader.h"
 #include "version.h"
 #include "private/configloader_p.h"
-//#include "widgets/widget.h.template"
-//#include "packagemetadata.h"
 
 namespace Plasma
 {
@@ -122,6 +121,8 @@ void ServicePrivate::jobFinished(KJob *job)
     void ServicePrivate::publish(AnnouncementMethods methods, const QString &name, PackageMetadata metadata)
     {
         if (!serviceProvider) {
+            AuthorizationManager::self()->d->prepareForServicePublication();
+
             serviceProvider = new ServiceProvider(name, q);
 
             if (methods.testFlag(ZeroconfAnnouncement) &&

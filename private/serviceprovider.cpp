@@ -267,6 +267,7 @@ void ServiceProvider::ruleChanged(Plasma::AuthorizationRule *rule)
             authorizationFailed(message, Message::Error::REQUIREPIN);
             m_messagesPendingAuthorization.removeAt(i);
             return;
+        /**
         } else if (matches && rule->policy() == AuthorizationRule::PinRequired) {
             kDebug() << "AUTHORIZATION: Service is freely accessable for verified caller.";
             rule->setPolicy(AuthorizationRule::Allow);
@@ -274,6 +275,7 @@ void ServiceProvider::ruleChanged(Plasma::AuthorizationRule *rule)
             //TODO: it might be nicer to do a removeAll once Jolie::Message implements ==
             m_messagesPendingAuthorization.removeAt(i);
             return;
+        */
         } else if (matches && rule->policy() == AuthorizationRule::Allow) {
             kDebug() << "AUTHORIZATION: Service is freely accessable for verified caller.";
             authorizationSuccess(message);

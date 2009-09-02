@@ -20,8 +20,10 @@
 #include "accessmanager.h"
 #include "private/accessmanager_p.h"
 
+#include "authorizationmanager.h"
 #include "service.h"
 #include "serviceaccessjob.h"
+#include "private/authorizationmanager_p.h"
 
 #include <QtCore/QMap>
 #include <QtCore/QTimer>
@@ -66,6 +68,8 @@ AccessManager::~AccessManager()
 
 AccessAppletJob *AccessManager::accessRemoteApplet(const KUrl &location) const
 {
+    AuthorizationManager::self()->d->prepareForServiceAccess();
+
     KUrl resolvedLocation;
     if (location.protocol() == "zeroconf") {
         if (d->zeroconfServices.contains(location.host())) {
