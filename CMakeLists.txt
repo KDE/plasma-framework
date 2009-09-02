@@ -287,7 +287,6 @@ set(plasma_LIB_INCLUDES
     theme.h
     tooltipcontent.h
     tooltipmanager.h
-    tooltipmanager.h
     version.h
     view.h
     wallpaper.h)
