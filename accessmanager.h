@@ -26,7 +26,7 @@
 #include <QtCore/QObject>
 #include <QtCore/QString>
 
-#include <KDebug>
+#include <kdebug.h>
 #include "accessappletjob.h"
 #include "packagemetadata.h"
 
