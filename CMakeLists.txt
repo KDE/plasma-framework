@@ -40,7 +40,6 @@ find_package(QCA2 REQUIRED)
 
 
 include_directories(${QCA2_INCLUDE_DIR})
-include_directories(${QTJOLIE_INCLUDE_DIRS})
 
 if(QT_QTOPENGL_FOUND AND OPENGL_FOUND)
     # libGL needs dlopen() and friends from the dl library
