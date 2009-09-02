@@ -61,7 +61,7 @@ private:
 
 } // namespace Jolie
 
-Q_DECLARE_METATYPE(Jolie::Message);
+Q_DECLARE_METATYPE(Jolie::Message)
 
 #endif
 
