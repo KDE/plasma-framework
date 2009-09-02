@@ -75,7 +75,7 @@ class PLASMA_EXPORT AuthorizationRule : public QObject
         enum Policy {
             Deny = 0,           /**< access for messages matching this rule is denied. */
             Allow = 1,          /**< access for messages matching this rule is allowed. */
-            PinRequired = 2,   /**< specify that the user will need to enter a pin at both sides */
+            PinRequired = 2   /**< specify that the user will need to enter a pin at both sides */
         };
 
         enum Persistence {
@@ -86,7 +86,7 @@ class PLASMA_EXPORT AuthorizationRule : public QObject
         enum Target {
             Default = 0,
             AllUsers = 1,       /**< specify that this rule is valid for all users */
-            AllServices = 2,    /**< specify that this rule is valid for all services */
+            AllServices = 2    /**< specify that this rule is valid for all services */
         };
         Q_DECLARE_FLAGS(Targets, Target)
 
