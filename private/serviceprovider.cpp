@@ -35,8 +35,8 @@
 
 #include <QtJolie/Server>
 
-#include <KDebug>
-#include <KStandardDirs>
+#include <kdebug.h>
+#include <kstandarddirs.h>
 
 namespace Plasma 
 {

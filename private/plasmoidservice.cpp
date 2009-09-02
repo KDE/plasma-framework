@@ -30,9 +30,9 @@
 #include <plasma/servicejob.h>
 #include <plasma/packagemetadata.h>
 
-#include <KDebug>
-#include <KTemporaryFile>
-#include <KZip>
+#include <kdebug.h>
+#include <ktemporaryfile.h>
+#include <kzip.h>
 
 #include <QFile>
 #include <QFileInfo>

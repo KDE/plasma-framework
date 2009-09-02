@@ -18,7 +18,7 @@
 
 #include "remoteservicejob_p.h"
 
-#include <KUrl>
+#include <kurl.h>
 
 #include <QtCore/QBuffer>
 #include <QtJolie/Client>

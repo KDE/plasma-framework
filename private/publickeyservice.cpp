@@ -19,7 +19,7 @@
 #include "publickeyservice.h"
 #include "getpublickey.h"
 
-#include <KDebug>
+#include <kdebug.h>
 
 PublicKeyService::PublicKeyService(const QString &pemKey, QObject* parent)
     : Plasma::Service(parent),

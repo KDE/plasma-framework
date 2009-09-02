@@ -20,7 +20,7 @@
 
 #include <QTimer>
 #include <QUuid>
-#include <KUrl>
+#include <kurl.h>
 #include <plasma/accessmanager.h>
 #include <plasma/private/remoteservice_p.h>
 #include <plasma/serviceaccessjob.h>
