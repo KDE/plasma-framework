@@ -40,4 +40,5 @@ AbstractAdaptor::AbstractAdaptor(QObject *parent)
 
 AbstractAdaptor::~AbstractAdaptor()
 {
+    delete d;
 }
