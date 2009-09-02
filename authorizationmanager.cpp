@@ -47,6 +47,7 @@
 #include <kurl.h>
 #include <kwallet.h>
 #include <kconfiggroup.h>
+#include <kauthaction.h>
 #include <kstandarddirs.h>
 
 namespace Plasma
@@ -132,8 +133,7 @@ AuthorizationManagerPrivate::AuthorizationManagerPrivate(AuthorizationManager *m
       authorizationPolicy(AuthorizationManager::DenyAll),
       authorizationInterface(new DenyAllAuthorization()),
       customAuthorizationInterface(0),
-      identitiesConfig(KSharedConfig::openConfig("plasma-identityrc")->group("Identitites")),
-      rulesConfig(KSharedConfig::openConfig("plasma-rulesrc")->group("Rules")),
+      rulesConfig(KSharedConfig::openConfig("/etc/plasma-remotewidgets.conf")->group("Rules")),
       locked(false)
 {
     wallet = KWallet::Wallet::openWallet("Plasma", 0, KWallet::Wallet::Asynchronous);
@@ -167,22 +167,42 @@ AuthorizationManagerPrivate::AuthorizationManagerPrivate(AuthorizationManager *m
 
 AuthorizationManagerPrivate::~AuthorizationManagerPrivate()
 {
-    int i = 0;
-    foreach (AuthorizationRule *rule, rules) {
-        kDebug() << "adding rule " << i;
-        rulesConfig.group(QString::number(i)).writeEntry("CredentialsID", rule->credentials().id());
-        rulesConfig.group(QString::number(i)).writeEntry("serviceName", rule->serviceName());
-        rulesConfig.group(QString::number(i)).writeEntry("Policy", (uint)rule->policy());
-        rulesConfig.group(QString::number(i)).writeEntry("Targets", (uint)rule->targets());
-        rulesConfig.group(QString::number(i)).writeEntry("Persistence", (uint)rule->persistence());
-        i++;
-    }
-    rulesConfig.sync();
 
     delete authorizationInterface;
     delete customAuthorizationInterface;
     delete server;
     delete wallet;
+}
+
+void AuthorizationManagerPrivate::saveRules()
+{
+    KTemporaryFile tempFile;
+    tempFile.open();
+    KConfigGroup rulesGroup = KSharedConfig::openConfig(tempFile.fileName())->group("Rules");
+
+    int i = 0;
+    foreach (AuthorizationRule *rule, rules) {
+        if (rule->persistence() == AuthorizationRule::Persistence) {
+            kDebug() << "adding rule " << i;
+            rulesGroup.group(QString::number(i)).writeEntry("CredentialsID", rule->credentials().id());
+            rulesGroup.group(QString::number(i)).writeEntry("serviceName", rule->serviceName());
+            rulesGroup.group(QString::number(i)).writeEntry("Policy", (uint)rule->policy());
+            rulesGroup.group(QString::number(i)).writeEntry("Targets", (uint)rule->targets());
+            rulesGroup.group(QString::number(i)).writeEntry("Persistence", (uint)rule->persistence());
+            i++;
+        }
+    }
+    rulesGroup.sync();
+    tempFile.close();
+
+    KAuth::Action action("org.kde.kcontrol.kcmremotewidgets.save");
+    action.addArgument("source", tempFile.fileName());
+    action.addArgument("filename", "/etc/plasma-remotewidgets.conf");
+    KAuth::ActionReply reply = action.execute();
+
+    if (reply.failed()) {
+        kDebug() << "KAuth failed.... YOU SUCK!";
+    }
 }
 
 void AuthorizationManagerPrivate::slotWalletOpened()
