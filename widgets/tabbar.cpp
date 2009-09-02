@@ -425,6 +425,25 @@ QGraphicsLayoutItem *TabBar::takeTab(int index)
     return returnItem;
 }
 
+QGraphicsLayoutItem *TabBar::tabAt(int index)
+{
+    if (index > d->pages.count()) {
+        return 0;
+    }
+
+    QGraphicsWidget *page = d->pages.value(index);
+
+    QGraphicsLayoutItem *returnItem = 0;
+    QGraphicsLayout *lay = page->layout();
+    if (lay && lay->count() == 1) {
+        returnItem = lay->itemAt(0);
+    } else {
+        returnItem = lay;
+    }
+    
+    return returnItem;
+}
+
 void TabBar::setTabText(int index, const QString &label)
 {
     if (index > d->pages.count()) {

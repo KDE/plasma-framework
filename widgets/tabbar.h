@@ -125,6 +125,14 @@ public:
      * @since 4.4
      */
     QGraphicsLayoutItem *takeTab(int index);
+    
+    /**
+     * Returns the contents of a page
+     *
+     * @arg index the index of the tab to retrieve
+     * @since 4.4
+     */
+    QGraphicsLayoutItem *tabAt(int index);
 
     /**
      * @return the index of the tab currently active
