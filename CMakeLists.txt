@@ -1,32 +1,7 @@
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}
-                    ${CMAKE_BINARY_DIR}/kdecore/
-                    ${CMAKE_SOURCE_DIR}/kdecore/
-                    ${CMAKE_SOURCE_DIR}/kdecore/config
-                    ${CMAKE_SOURCE_DIR}/kdecore/jobs
-                    ${CMAKE_SOURCE_DIR}/kdecore/auth/lib
-                    ${CMAKE_SOURCE_DIR}/kdecore/kernel
-                    ${CMAKE_SOURCE_DIR}/kdecore/localization
-                    ${CMAKE_SOURCE_DIR}/kdecore/io
-                    ${CMAKE_SOURCE_DIR}/kdecore/services
-                    ${CMAKE_SOURCE_DIR}/kdecore/sycoca
-                    ${CMAKE_SOURCE_DIR}/kdecore/util
-                    ${CMAKE_BINARY_DIR}/kdeui/
-                    ${CMAKE_SOURCE_DIR}/kdeui/
-                    ${CMAKE_SOURCE_DIR}/kdeui/actions
-                    ${CMAKE_SOURCE_DIR}/kdeui/about
-                    ${CMAKE_SOURCE_DIR}/kdeui/config
-                    ${CMAKE_SOURCE_DIR}/kdeui/colors
-                    ${CMAKE_SOURCE_DIR}/kdeui/dialogs
-                    ${CMAKE_SOURCE_DIR}/kdeui/kernel
-                    ${CMAKE_SOURCE_DIR}/kdeui/icons
-                    ${CMAKE_SOURCE_DIR}/kdeui/paged
-                    ${CMAKE_SOURCE_DIR}/kdeui/shortcuts
-                    ${CMAKE_SOURCE_DIR}/kdeui/util
-                    ${CMAKE_SOURCE_DIR}/kdeui/widgets
-                    ${CMAKE_SOURCE_DIR}/kdeui/windowmanagement
-                    ${CMAKE_SOURCE_DIR}/kio
-                    ${CMAKE_SOURCE_DIR}/kio/kio
-                    ${CMAKE_SOURCE_DIR}/kio/kfile
+                    ${KDE4_KDECORE_INCLUDES}
+                    ${KDE4_KDEUI_INCLUDES}
+                    ${KDE4_KIO_INCLUDES}
                     ${CMAKE_SOURCE_DIR}/knewstuff/
                     ${CMAKE_BINARY_DIR}/solid/
                     ${CMAKE_SOURCE_DIR}/solid/
