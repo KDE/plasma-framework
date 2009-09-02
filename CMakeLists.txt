@@ -39,6 +39,8 @@ if(QT_QTOPENGL_FOUND AND OPENGL_FOUND)
     include_directories(${OPENGL_INCLUDE_DIR})
 endif(QT_QTOPENGL_FOUND AND OPENGL_FOUND)
 
+find_package(libQtJolie REQUIRED)
+
 add_subdirectory(tests)
 add_definitions(-DKDE_DEFAULT_DEBUG_AREA=1209)
 
@@ -53,6 +55,7 @@ set(plasmagik_SRCS
 set(plasma_LIB_SRCS
     ${plasmagik_SRCS}
     abstractrunner.cpp
+    accessmanager.cpp
     animationdriver.cpp
     animator.cpp
     applet.cpp
@@ -81,7 +84,10 @@ set(plasma_LIB_SRCS
     private/nativetabbar.cpp
     private/packages.cpp
     private/paneltoolbox.cpp
+    private/remoteservice.cpp
+    private/remoteservicejob.cpp
     private/runnerjobs.cpp
+    private/serviceprovider.cpp
     private/style.cpp
     private/toolbox.cpp
     private/tooltip.cpp
@@ -96,6 +102,7 @@ set(plasma_LIB_SRCS
     scripting/runnerscript.cpp
     scripting/scriptengine.cpp
     service.cpp
+    serviceaccessjob.cpp
     servicejob.cpp
     svg.cpp
     theme.cpp
@@ -157,7 +164,7 @@ endif(PHONON_FOUND)
 
 kde4_add_library(plasma SHARED ${plasma_LIB_SRCS})
 
-target_link_libraries(plasma ${KDE4_KIO_LIBS} ${KDE4_KFILE_LIBS} knewstuff2
+target_link_libraries(plasma ${KDE4_KIO_LIBS} ${KDE4_KFILE_LIBS} knewstuff2 libQtJolie
                              ${QT_QTUITOOLS_LIBRARY} ${QT_QTWEBKIT_LIBRARY}
                              threadweaver ${KDE4_SOLID_LIBS} )
 if(X11_FOUND)
@@ -199,6 +206,7 @@ install(FILES ${plasmagik_HEADERS} DESTINATION ${INCLUDE_INSTALL_DIR}/plasma/ CO
 
 set(plasma_LIB_INCLUDES
     abstractrunner.h
+    accessmanager.h
     animationdriver.h
     animator.h
     applet.h
@@ -226,6 +234,7 @@ set(plasma_LIB_INCLUDES
     runnermanager.h
     runnersyntax.h
     service.h
+    serviceaccessjob.h
     servicejob.h
     svg.h
     theme.h
