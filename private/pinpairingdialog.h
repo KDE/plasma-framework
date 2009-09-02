@@ -43,8 +43,8 @@ public:
 private:
     PinPairingDialogPrivate *const d;
 
-    Q_PRIVATE_SLOT(d, void slotAccept());
-    Q_PRIVATE_SLOT(d, void slotReject());
+    Q_PRIVATE_SLOT(d, void slotAccept())
+    Q_PRIVATE_SLOT(d, void slotReject())
 
     friend class PinPairingDialogPrivate;
 };
