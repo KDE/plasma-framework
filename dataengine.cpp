@@ -361,17 +361,17 @@ DataEngine::SourceDict DataEngine::containerDict() const
 
 void DataEngine::timerEvent(QTimerEvent *event)
 {
-    kDebug();
+    //kDebug();
     if (event->timerId() == d->updateTimerId) {
         // if the freq update is less than 0, don't bother
         if (d->minPollingInterval < 0) {
-            kDebug() << "uh oh.. no polling allowed!";
+            //kDebug() << "uh oh.. no polling allowed!";
             return;
         }
 
         // minPollingInterval
         if (d->updateTimestamp.elapsed() < d->minPollingInterval) {
-            kDebug() << "hey now.. slow down!";
+            //kDebug() << "hey now.. slow down!";
             return;
         }
 
