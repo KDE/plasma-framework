@@ -338,8 +338,8 @@ install(FILES scripting/plasmoids.knsrc DESTINATION  ${CONFIG_INSTALL_DIR})
 
 install(FILES kconfig_updates/plasma_popupapplet_fix_groups.upd DESTINATION ${KCONF_UPDATE_INSTALL_DIR})
 install(PROGRAMS kconfig_updates/plasma_popupapplet_fix_groups.pl DESTINATION ${KCONF_UPDATE_INSTALL_DIR})
-install(FILES dataengineservice.operations DESTINATION ${DATA_INSTALL_DIR}/plasma/services)
-install(FILES plasmoidservice.operations DESTINATION ${DATA_INSTALL_DIR}/plasma/services)
+install(FILES operations/dataengineservice.operations DESTINATION ${DATA_INSTALL_DIR}/plasma/services)
+install(FILES operations/plasmoidservice.operations DESTINATION ${DATA_INSTALL_DIR}/plasma/services)
 
 ########### next target ###############
 
