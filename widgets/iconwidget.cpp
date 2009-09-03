@@ -556,6 +556,15 @@ QString IconWidget::svg() const
     return QString();
 }
 
+QSizeF IconWidget::sizeHint(Qt::SizeHint which, const QSizeF & constraint) const
+{
+    if (which == Qt::PreferredSize) {
+        return sizeFromIconSize(KIconLoader::SizeMedium);
+    } else {
+        return QGraphicsWidget::sizeHint(which, constraint);
+    }
+}
+
 void IconWidgetPrivate::hoverEffect(bool show)
 {
     if (show) {
