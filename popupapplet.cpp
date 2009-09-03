@@ -535,6 +535,10 @@ void PopupAppletPrivate::internalTogglePopup()
         return;
     }
 
+    if (!q->view()) {
+        return;
+    }
+
     if (timer) {
         timer->stop();
     }
