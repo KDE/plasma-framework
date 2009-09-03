@@ -153,7 +153,7 @@ class PLASMA_EXPORT AuthorizationRule : public QObject
 
         AuthorizationRulePrivate * const d;
 
-        Q_PRIVATE_SLOT(d, void fireChangedSignal());
+        Q_PRIVATE_SLOT(d, void fireChangedSignal())
 
         friend class AuthorizationManager;
         friend class AuthorizationManagerPrivate;
