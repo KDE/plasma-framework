@@ -120,6 +120,7 @@ void RemoteServiceJob::timeout()
     kDebug() << "Service job timed out.";
     setError(-1);
     setErrorText(i18n("Timeout."));
+    m_service->m_queue.removeAll(this);
     emitResult();
 }
 
