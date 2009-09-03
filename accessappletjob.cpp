@@ -75,7 +75,7 @@ public:
                 applet->d->remoteLocation = location.prettyUrl();
             } else {
                 q->setError(-1);
-                q->setErrorText(i18n("You don't got the widget %1 installed.", pluginName));
+                q->setErrorText(i18n("The \"%1\" widget is not installed.", pluginName));
             }
 
             q->emitResult();
