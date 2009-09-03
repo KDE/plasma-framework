@@ -21,6 +21,7 @@
 
 #include <QPainter>
 #include <QScrollBar>
+#include <QGraphicsSceneWheelEvent>
 
 #include <kmimetype.h>
 #include <ktextbrowser.h>
@@ -152,6 +153,16 @@ void TextBrowser::resizeEvent(QGraphicsSceneResizeEvent *event)
 {
     d->setFixedHeight();
     QGraphicsProxyWidget::resizeEvent(event);
+}
+
+void TextBrowser::wheelEvent(QGraphicsSceneWheelEvent *event)
+{
+    if (d->native->verticalScrollBarPolicy() == Qt::ScrollBarAlwaysOff &&
+        d->native->horizontalScrollBarPolicy() == Qt::ScrollBarAlwaysOff) {
+        event->ignore();
+    } else {
+        QGraphicsProxyWidget::wheelEvent(event);
+    }
 }
 
 } // namespace Plasma

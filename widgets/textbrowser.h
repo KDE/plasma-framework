@@ -99,6 +99,7 @@ Q_SIGNALS:
 
 protected:
     void resizeEvent(QGraphicsSceneResizeEvent *event);
+    void wheelEvent(QGraphicsSceneWheelEvent *event);
 
 private:
     TextBrowserPrivate * const d;
