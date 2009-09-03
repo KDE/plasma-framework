@@ -18,10 +18,10 @@
 
 #include "remoteservice_p.h"
 
-#include "../accessmanager.h"
-#include "../authorizationinterface.h"
-#include "../authorizationmanager.h"
-#include "../clientpinrequest.h"
+#include "../remote/accessmanager.h"
+#include "../remote/authorizationinterface.h"
+#include "../remote/authorizationmanager.h"
+#include "../remote/clientpinrequest.h"
 #include "../service.h"
 
 #include "authorizationmanager_p.h"

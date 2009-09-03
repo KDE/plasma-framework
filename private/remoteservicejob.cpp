@@ -27,8 +27,8 @@
 #include <QtJolie/PendingReply>
 
 #include "../servicejob.h"
-#include "../accessmanager.h"
-#include "../authorizationmanager.h"
+#include "../remote/accessmanager.h"
+#include "../remote/authorizationmanager.h"
 #include "authorizationmanager_p.h"
 #include "remoteservice_p.h"
 #include "joliemessagehelper_p.h"

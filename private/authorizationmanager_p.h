@@ -24,9 +24,10 @@
 #include <QtCore/QString>
 #include <QtCrypto>
 
-#include <plasma/authorizationmanager.h>
-#include <plasma/credentials.h>
 #include <kconfiggroup.h>
+
+#include <authorizationmanager.h>
+#include <credentials.h>
 
 class QByteArray;
 

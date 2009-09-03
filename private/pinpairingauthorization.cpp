@@ -23,7 +23,7 @@
 #include "clientpinrequest.h"
 #include "pinpairingdialog.h"
 
-#include "../credentials.h"
+#include "../remote/credentials.h"
 
 #include <kdebug.h>
 

@@ -20,8 +20,9 @@
 #ifndef ACCESSMANAGER_P_H
 #define ACCESSMANAGER_P_H
 
-#include "../accessmanager.h"
 #include <dnssd/remoteservice.h>
+
+#include "../remote/accessmanager.h"
 
 class KJob;
 

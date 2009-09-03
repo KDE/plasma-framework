@@ -20,7 +20,7 @@
 #ifndef PRIVATE_AUTHORIZATIONRULE_P_H
 #define PRIVATE_AUTHORIZATIONRULE_P_H
 
-#include "../authorizationrule.h"
+#include "../remote/authorizationrule.h"
 
 namespace Plasma
 {

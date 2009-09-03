@@ -20,8 +20,8 @@
 
 #include "remoteservice_p.h"
 
-#include "../accessmanager.h"
-#include "../serviceaccessjob.h"
+#include "../remote/accessmanager.h"
+#include "../remote/serviceaccessjob.h"
 #include "../service.h"
 #include "../servicejob.h"
 

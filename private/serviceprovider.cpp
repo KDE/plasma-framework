@@ -22,10 +22,10 @@
 #include "authorizationmanager_p.h"
 #include "joliemessagehelper_p.h"
 
-#include <plasma/authorizationinterface.h>
-#include <plasma/authorizationmanager.h>
-#include <plasma/authorizationrule.h>
-#include <plasma/credentials.h>
+#include <plasma/remote/authorizationinterface.h>
+#include <plasma/remote/authorizationmanager.h>
+#include <plasma/remote/authorizationrule.h>
+#include <plasma/remote/credentials.h>
 #include <plasma/service.h>
 #include <plasma/servicejob.h>
 #include <plasma/private/servicejob_p.h>

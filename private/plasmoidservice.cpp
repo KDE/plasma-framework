@@ -23,8 +23,8 @@
 #include "dataengine_p.h"
 
 #include <plasma/applet.h>
-#include <plasma/authorizationmanager.h>
-#include <plasma/authorizationrule.h>
+#include <plasma/remote/authorizationmanager.h>
+#include <plasma/remote/authorizationrule.h>
 #include <plasma/packagemetadata.h>
 #include <plasma/service.h>
 #include <plasma/servicejob.h>

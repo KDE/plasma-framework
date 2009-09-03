@@ -19,7 +19,7 @@
 #ifndef SERVICEJOB_P_H
 #define SERVICEJOB_P_H
 
-#include "../credentials.h"
+#include "../remote/credentials.h"
 #include "../servicejob.h"
 
 #include <QString>

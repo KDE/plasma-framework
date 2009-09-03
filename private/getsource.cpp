@@ -21,8 +21,8 @@
 #include "authorizationmanager_p.h"
 #include "service_p.h"
 
-#include "../authorizationmanager.h"
-#include "../authorizationrule.h"
+#include "../remote/authorizationmanager.h"
+#include "../remote/authorizationrule.h"
 #include "../dataengine.h"
 #include "../service.h"
 

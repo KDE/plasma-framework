@@ -6,6 +6,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}
                     ${CMAKE_BINARY_DIR}/solid/
                     ${CMAKE_SOURCE_DIR}/solid/
                     ${CMAKE_SOURCE_DIR}/threadweaver/
+                    ${CMAKE_SOURCE_DIR}/plasma/remote
                     ${CMAKE_SOURCE_DIR}/plasma/private/qtjolie-branch/qtjolie
                     ${CMAKE_SOURCE_DIR}/plasma/private/qtjolie-branch
                     ${CMAKE_SOURCE_DIR}/plasma/private/qtjolie-branch/includes
@@ -38,15 +39,9 @@ set(plasmagik_SRCS
 set(plasma_LIB_SRCS
     ${plasmagik_SRCS}
     abstractrunner.cpp
-    accessmanager.cpp
     animationdriver.cpp
     animator.cpp
     applet.cpp
-    authorizationinterface.cpp
-    authorizationmanager.cpp
-    authorizationrule.cpp
-    clientpinrequest.cpp
-    credentials.cpp
     configloader.cpp
     containment.cpp
     containmentactions.cpp
@@ -56,7 +51,6 @@ set(plasma_LIB_SRCS
     dataengine.cpp
     dataenginemanager.cpp
     delegate.cpp
-    private/denyallauthorization.cpp
     dialog.cpp
     extender.cpp
     extendergroup.cpp
@@ -64,12 +58,12 @@ set(plasma_LIB_SRCS
     paintutils.cpp
     framesvg.cpp
     plasma.cpp
-    accessappletjob.cpp
     popupapplet.cpp
     private/applethandle.cpp
     private/datacontainer_p.cpp
     private/dataengineconsumer.cpp
     private/dataengineservice.cpp
+    private/denyallauthorization.cpp
     private/desktoptoolbox.cpp
     private/extenderapplet.cpp
     private/extenderitemmimedata.cpp
@@ -92,6 +86,14 @@ set(plasma_LIB_SRCS
     private/wallpaperrenderthread.cpp
     private/windowpreview.cpp
     querymatch.cpp
+    remote/accessmanager.cpp
+    remote/accessappletjob.cpp
+    remote/authorizationinterface.cpp
+    remote/authorizationmanager.cpp
+    remote/authorizationrule.cpp
+    remote/clientpinrequest.cpp
+    remote/credentials.cpp
+    remote/serviceaccessjob.cpp
     runnercontext.cpp
     runnermanager.cpp
     runnersyntax.cpp
@@ -100,7 +102,6 @@ set(plasma_LIB_SRCS
     scripting/runnerscript.cpp
     scripting/scriptengine.cpp
     service.cpp
-    serviceaccessjob.cpp
     servicejob.cpp
     svg.cpp
     theme.cpp
@@ -221,20 +222,14 @@ install(FILES ${plasmagik_HEADERS} DESTINATION ${INCLUDE_INSTALL_DIR}/plasma/ CO
 
 set(plasma_LIB_INCLUDES
     abstractrunner.h
-    accessmanager.h
-    authorizationmanager.h
-    authorizationrule.h
-    authorizationinterface.h
     animationdriver.h
     animator.h
     applet.h
-    clientpinrequest.h
     configloader.h
     containment.h
     containmentactions.h
     context.h
     corona.h
-    credentials.h
     datacontainer.h
     dataengine.h
     dataenginemanager.h
@@ -248,14 +243,20 @@ set(plasma_LIB_INCLUDES
     framesvg.h
     plasma.h
     plasma_export.h
-    accessappletjob.h
     popupapplet.h
     querymatch.h
+    remote/accessappletjob.h
+    remote/accessmanager.h
+    remote/authorizationmanager.h
+    remote/authorizationrule.h
+    remote/authorizationinterface.h
+    remote/clientpinrequest.h
+    remote/credentials.h
+    remote/serviceaccessjob.h
     runnercontext.h
     runnermanager.h
     runnersyntax.h
     service.h
-    serviceaccessjob.h
     servicejob.h
     svg.h
     theme.h
