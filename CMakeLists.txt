@@ -7,6 +7,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}
                     ${CMAKE_SOURCE_DIR}/solid/
                     ${CMAKE_SOURCE_DIR}/threadweaver/
                     ${CMAKE_SOURCE_DIR}/plasma/remote
+                    ${CMAKE_SOURCE_DIR}/plasma/runners
                     ${CMAKE_SOURCE_DIR}/plasma/private/qtjolie-branch/qtjolie
                     ${CMAKE_SOURCE_DIR}/plasma/private/qtjolie-branch
                     ${CMAKE_SOURCE_DIR}/plasma/private/qtjolie-branch/includes
@@ -38,7 +39,6 @@ set(plasmagik_SRCS
 
 set(plasma_LIB_SRCS
     ${plasmagik_SRCS}
-    abstractrunner.cpp
     animationdriver.cpp
     animator.cpp
     applet.cpp
@@ -85,7 +85,6 @@ set(plasma_LIB_SRCS
     private/tooltip.cpp
     private/wallpaperrenderthread.cpp
     private/windowpreview.cpp
-    querymatch.cpp
     remote/accessmanager.cpp
     remote/accessappletjob.cpp
     remote/authorizationinterface.cpp
@@ -94,9 +93,11 @@ set(plasma_LIB_SRCS
     remote/clientpinrequest.cpp
     remote/credentials.cpp
     remote/serviceaccessjob.cpp
-    runnercontext.cpp
-    runnermanager.cpp
-    runnersyntax.cpp
+    runners/abstractrunner.cpp
+    runners/querymatch.cpp
+    runners/runnercontext.cpp
+    runners/runnermanager.cpp
+    runners/runnersyntax.cpp
     scripting/appletscript.cpp
     scripting/dataenginescript.cpp
     scripting/runnerscript.cpp
@@ -221,7 +222,6 @@ set(plasmagik_HEADERS
 install(FILES ${plasmagik_HEADERS} DESTINATION ${INCLUDE_INSTALL_DIR}/plasma/ COMPONENT Devel)
 
 set(plasma_LIB_INCLUDES
-    abstractrunner.h
     animationdriver.h
     animator.h
     applet.h
@@ -244,7 +244,6 @@ set(plasma_LIB_INCLUDES
     plasma.h
     plasma_export.h
     popupapplet.h
-    querymatch.h
     remote/accessappletjob.h
     remote/accessmanager.h
     remote/authorizationmanager.h
@@ -253,9 +252,11 @@ set(plasma_LIB_INCLUDES
     remote/clientpinrequest.h
     remote/credentials.h
     remote/serviceaccessjob.h
-    runnercontext.h
-    runnermanager.h
-    runnersyntax.h
+    runners/abstractrunner.h
+    runners/querymatch.h
+    runners/runnercontext.h
+    runners/runnermanager.h
+    runners/runnersyntax.h
     service.h
     servicejob.h
     svg.h

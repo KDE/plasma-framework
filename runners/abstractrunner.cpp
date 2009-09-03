@@ -32,8 +32,8 @@
 #include <kservicetypetrader.h>
 #include <kstandarddirs.h>
 
-#include <plasma/querymatch.h>
 #include <plasma/package.h>
+#include <plasma/runners/querymatch.h>
 
 #include "scripting/runnerscript.h"
 

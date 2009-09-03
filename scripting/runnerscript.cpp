@@ -19,8 +19,8 @@
 
 #include "plasma/scripting/runnerscript.h"
 
-#include "plasma/abstractrunner.h"
 #include "plasma/package.h"
+#include "plasma/runners/abstractrunner.h"
 
 namespace Plasma
 {
