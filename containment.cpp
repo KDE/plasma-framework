@@ -1109,6 +1109,16 @@ void Containment::dragEnterEvent(QGraphicsSceneDragDropEvent *event)
                 break;
             }
         }
+
+        if (!event->isAccepted()) {
+            foreach (const QString &format, formats) {
+                KPluginInfo::List wallpaperList = Wallpaper::listWallpaperInfoForMimetype(format);
+                if (!wallpaperList.isEmpty()) {
+                    event->setAccepted(true);
+                    break;
+                }
+            }
+        }
     }
 
     if (event->isAccepted() && view()) {
@@ -1199,13 +1209,17 @@ void ContainmentPrivate::dropData(QPointF scenePos, QPoint screenPos, QGraphicsS
             //kDebug() << "can decode" << mimeName << args;
             //kDebug() << "protocol:" << url.protocol();
             KPluginInfo::List appletList = Applet::listAppletInfoForMimetype(mimeName);
+            KPluginInfo::List wallpaperList;
+            if (q->drawWallpaper()) {
+                wallpaperList = Wallpaper::listWallpaperInfoForMimetype(mimeName);
+            }
 
-            if (!appletList.isEmpty()) {
+            if (!appletList.isEmpty() || !wallpaperList.isEmpty()) {
                 // The mimetype is known, i.e. there are applet that can load this mimetype
                 // Offer the applets in a popupmenu
-                kDebug() << "Local file.";
-                QMenu choices;
-                QHash<QAction *, QString> actionsToPlugins;
+                //kDebug() << "Local file.";
+                KMenu choices;
+                QHash<QAction *, QString> actionsToApplets;
                 foreach (const KPluginInfo &info, appletList) {
                     QAction *action;
                     if (!info.icon().isEmpty()) {
@@ -1214,13 +1228,34 @@ void ContainmentPrivate::dropData(QPointF scenePos, QPoint screenPos, QGraphicsS
                         action = choices.addAction(info.name());
                     }
 
-                    actionsToPlugins.insert(action, info.pluginName());
+                    actionsToApplets.insert(action, info.pluginName());
                 }
-                actionsToPlugins.insert(choices.addAction(i18n("Icon")), "icon");
+                actionsToApplets.insert(choices.addAction(i18n("Icon")), "icon");
+
+                QHash<QAction *, QString> actionsToWallpapers;
+                if (!wallpaperList.isEmpty())  {
+                    choices.addTitle(i18n("Set As Wallpaper"));
+                    foreach (const KPluginInfo &info, wallpaperList) {
+                        QAction *action;
+                        if (!info.icon().isEmpty()) {
+                            action = choices.addAction(KIcon(info.icon()), info.name());
+                        } else {
+                            action = choices.addAction(info.name());
+                        }
+
+                        actionsToWallpapers.insert(action, info.pluginName());
+                    }
+                }
 
                 QAction *choice = choices.exec(screenPos);
                 if (choice) {
-                    q->addApplet(actionsToPlugins[choice], args, geom);
+                    QString plugin = actionsToApplets.value(choice);
+                    if (plugin.isEmpty()) {
+                        //set wallpapery stuff
+                        plugin = actionsToWallpapers.value(choice);
+                    } else {
+                        q->addApplet(actionsToApplets[choice], args, geom);
+                    }
                 }
 
             } else if (url.protocol() != "data") { // Why not data:?

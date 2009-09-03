@@ -25,7 +25,7 @@
 #include <QPaintEngine>
 #include <QPixmap>
 
-#include "effects/blur.cpp"
+#include "private/effects/blur.cpp"
 
 namespace Plasma
 {

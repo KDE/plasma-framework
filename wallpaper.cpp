@@ -77,12 +77,23 @@ Wallpaper::~Wallpaper()
 KPluginInfo::List Wallpaper::listWallpaperInfo(const QString &formFactor)
 {
     QString constraint;
-
     if (!formFactor.isEmpty()) {
         constraint.append("[X-Plasma-FormFactors] ~~ '").append(formFactor).append("'");
     }
 
     KService::List offers = KServiceTypeTrader::self()->query("Plasma/Wallpaper", constraint);
+    return KPluginInfo::fromServices(offers);
+}
+
+KPluginInfo::List Wallpaper::listWallpaperInfoForMimetype(const QString &mimetype, const QString &formFactor)
+{
+    QString constraint = QString("'%1' in [X-Plasma-DropMimeTypes]").arg(mimetype);
+    if (!formFactor.isEmpty()) {
+        constraint.append("[X-Plasma-FormFactors] ~~ '").append(formFactor).append("'");
+    }
+
+    KService::List offers = KServiceTypeTrader::self()->query("Plasma/Wallpaper", constraint);
+    kDebug() << offers.count() << constraint;
     return KPluginInfo::fromServices(offers);
 }
 

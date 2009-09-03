@@ -318,28 +318,28 @@ if(PHONON_FOUND)
 endif(PHONON_FOUND)
 
 install(FILES
-   servicetypes/plasma-animator.desktop
-   servicetypes/plasma-applet.desktop
-   servicetypes/plasma-applet-popupapplet.desktop
-   servicetypes/plasma-containment.desktop
-   servicetypes/plasma-containmentactions.desktop
-   servicetypes/plasma-dataengine.desktop
-   servicetypes/plasma-packagestructure.desktop
-   servicetypes/plasma-runner.desktop
-   servicetypes/plasma-scriptengine.desktop
-   servicetypes/plasma-wallpaper.desktop
+   data/servicetypes/plasma-animator.desktop
+   data/servicetypes/plasma-applet.desktop
+   data/servicetypes/plasma-applet-popupapplet.desktop
+   data/servicetypes/plasma-containment.desktop
+   data/servicetypes/plasma-containmentactions.desktop
+   data/servicetypes/plasma-dataengine.desktop
+   data/servicetypes/plasma-packagestructure.desktop
+   data/servicetypes/plasma-runner.desktop
+   data/servicetypes/plasma-scriptengine.desktop
+   data/servicetypes/plasma-wallpaper.desktop
    DESTINATION ${SERVICETYPES_INSTALL_DIR})
 
 install(FILES
-   servicetypes/plasma-applet-extenderapplet.desktop
+   data/servicetypes/plasma-applet-extenderapplet.desktop
    DESTINATION ${SERVICES_INSTALL_DIR})
 
-install(FILES scripting/plasmoids.knsrc DESTINATION  ${CONFIG_INSTALL_DIR})
+install(FILES data/knewstuff/plasmoids.knsrc DESTINATION  ${CONFIG_INSTALL_DIR})
 
-install(FILES kconfig_updates/plasma_popupapplet_fix_groups.upd DESTINATION ${KCONF_UPDATE_INSTALL_DIR})
-install(PROGRAMS kconfig_updates/plasma_popupapplet_fix_groups.pl DESTINATION ${KCONF_UPDATE_INSTALL_DIR})
-install(FILES operations/dataengineservice.operations DESTINATION ${DATA_INSTALL_DIR}/plasma/services)
-install(FILES operations/plasmoidservice.operations DESTINATION ${DATA_INSTALL_DIR}/plasma/services)
+install(FILES data/kconfig_updates/plasma_popupapplet_fix_groups.upd DESTINATION ${KCONF_UPDATE_INSTALL_DIR})
+install(PROGRAMS data/kconfig_updates/plasma_popupapplet_fix_groups.pl DESTINATION ${KCONF_UPDATE_INSTALL_DIR})
+install(FILES data/operations/dataengineservice.operations DESTINATION ${DATA_INSTALL_DIR}/plasma/services)
+install(FILES data/operations/plasmoidservice.operations DESTINATION ${DATA_INSTALL_DIR}/plasma/services)
 
 ########### next target ###############
 
