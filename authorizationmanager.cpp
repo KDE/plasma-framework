@@ -146,7 +146,6 @@ AuthorizationManagerPrivate::~AuthorizationManagerPrivate()
     delete authorizationInterface;
     delete customAuthorizationInterface;
     delete server;
-    delete wallet;
 }
 
 void AuthorizationManagerPrivate::prepareForServiceAccess()
