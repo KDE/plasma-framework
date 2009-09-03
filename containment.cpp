@@ -1220,21 +1220,49 @@ void ContainmentPrivate::dropData(QPointF scenePos, QPoint screenPos, QGraphicsS
                 //kDebug() << "Local file.";
                 KMenu choices;
                 QHash<QAction *, QString> actionsToApplets;
-                foreach (const KPluginInfo &info, appletList) {
-                    QAction *action;
-                    if (!info.icon().isEmpty()) {
-                        action = choices.addAction(KIcon(info.icon()), info.name());
-                    } else {
-                        action = choices.addAction(info.name());
+                if (!appletList.isEmpty()) {
+                    choices.addTitle(i18n("Widgets"));
+
+                    QMap<QString, KPluginInfo> sorted;
+                    bool hasIconWidget = false;
+                    foreach (const KPluginInfo &info, appletList) {
+                        if (info.pluginName() == "icon") {
+                            hasIconWidget = true;
+                        }
+
+                        sorted.insert(info.name(), info);
                     }
 
-                    actionsToApplets.insert(action, info.pluginName());
+                    if (!hasIconWidget) {
+                        const QString constraint = QString("[X-KDE-PluginInfo-Name] == 'icon'");
+                        KService::List offers = KServiceTypeTrader::self()->query("Plasma/Applet", constraint);
+                        if (!offers.isEmpty()) {
+                            KPluginInfo info(offers.at(0));
+                            sorted.insert(info.name(), info);
+                        }
+                    }
+
+                    foreach (const KPluginInfo &info, sorted) {
+                        QAction *action;
+                        if (!info.icon().isEmpty()) {
+                            action = choices.addAction(KIcon(info.icon()), info.name());
+                        } else {
+                            action = choices.addAction(info.name());
+                        }
+
+                        actionsToApplets.insert(action, info.pluginName());
+                    }
                 }
-                actionsToApplets.insert(choices.addAction(i18n("Icon")), "icon");
 
                 QHash<QAction *, QString> actionsToWallpapers;
                 if (!wallpaperList.isEmpty())  {
-                    choices.addTitle(i18n("Set As Wallpaper"));
+                    choices.addTitle(i18n("Wallpaper"));
+
+                    QMap<QString, KPluginInfo> sorted;
+                    foreach (const KPluginInfo &info, appletList) {
+                        sorted.insert(info.name(), info);
+                    }
+
                     foreach (const KPluginInfo &info, wallpaperList) {
                         QAction *action;
                         if (!info.icon().isEmpty()) {
@@ -1253,6 +1281,13 @@ void ContainmentPrivate::dropData(QPointF scenePos, QPoint screenPos, QGraphicsS
                     if (plugin.isEmpty()) {
                         //set wallpapery stuff
                         plugin = actionsToWallpapers.value(choice);
+                        if (!wallpaper || plugin != wallpaper->pluginName()) {
+                            q->setWallpaper(plugin);
+                        }
+
+                        if (wallpaper) {
+                            emit wallpaper->urlDropped(url);
+                        }
                     } else {
                         q->addApplet(actionsToApplets[choice], args, geom);
                     }
@@ -1297,7 +1332,7 @@ void ContainmentPrivate::dropData(QPointF scenePos, QPoint screenPos, QGraphicsS
                 pluginFormats.insert(plugin.pluginName(), format);
             }
         }
-        kDebug() << "Mimetype ..." << formats << seenPlugins.keys() << pluginFormats.values();
+        //kDebug() << "Mimetype ..." << formats << seenPlugins.keys() << pluginFormats.values();
 
         QString selectedPlugin;
 
