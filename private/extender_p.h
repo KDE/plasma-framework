@@ -23,7 +23,7 @@
 #include <QString>
 #include <QList>
 #include <QPointF>
-#include "../extender.h"
+#include "plasma/extenders/extender.h"
 
 class QGraphicsGridLayout;
 class QGraphicsLinearLayout;

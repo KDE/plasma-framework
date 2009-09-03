@@ -42,8 +42,8 @@
 #include "plasma/corona.h"
 #include "plasma/containment.h"
 #include "plasma/dialog.h"
-#include "plasma/extender.h"
-#include "plasma/extenderitem.h"
+#include "plasma/extenders/extender.h"
+#include "plasma/extenders/extenderitem.h"
 #include "plasma/tooltipmanager.h"
 #include "plasma/widgets/iconwidget.h"
 

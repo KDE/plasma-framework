@@ -45,7 +45,7 @@
 
 #include "plasma/applet.h"
 #include "plasma/animator.h"
-#include "plasma/extender.h"
+#include "plasma/extenders/extender.h"
 #include "plasma/private/extender_p.h"
 #include "plasma/framesvg.h"
 #include "plasma/theme.h"

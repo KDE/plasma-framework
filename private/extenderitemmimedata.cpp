@@ -19,7 +19,7 @@
 
 #include "extenderitemmimedata_p.h"
 
-#include "../extenderitem.h"
+#include "plasma/extenders/extenderitem.h"
 
 #include <QMimeData>
 

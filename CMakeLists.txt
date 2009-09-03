@@ -6,6 +6,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}
                     ${CMAKE_BINARY_DIR}/solid/
                     ${CMAKE_SOURCE_DIR}/solid/
                     ${CMAKE_SOURCE_DIR}/threadweaver/
+                    ${CMAKE_SOURCE_DIR}/plasma/extenders
                     ${CMAKE_SOURCE_DIR}/plasma/remote
                     ${CMAKE_SOURCE_DIR}/plasma/runners
                     ${CMAKE_SOURCE_DIR}/plasma/private/qtjolie-branch/qtjolie
@@ -52,9 +53,9 @@ set(plasma_LIB_SRCS
     dataenginemanager.cpp
     delegate.cpp
     dialog.cpp
-    extender.cpp
-    extendergroup.cpp
-    extenderitem.cpp
+    extenders/extender.cpp
+    extenders/extendergroup.cpp
+    extenders/extenderitem.cpp
     paintutils.cpp
     framesvg.cpp
     plasma.cpp
@@ -235,9 +236,9 @@ set(plasma_LIB_INCLUDES
     dataenginemanager.h
     delegate.h
     dialog.h
-    extender.h
-    extendergroup.h
-    extenderitem.h
+    extenders/extender.h
+    extenders/extendergroup.h
+    extenders/extenderitem.h
     paintutils.h
     windoweffects.h
     framesvg.h

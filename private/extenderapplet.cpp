@@ -19,8 +19,8 @@
 
 #include "extenderapplet_p.h"
 
-#include "../extender.h"
-#include "../extenderitem.h"
+#include "plasma/extenders/extender.h"
+#include "plasma/extenders/extenderitem.h"
 
 #include <QGraphicsLinearLayout>
 
