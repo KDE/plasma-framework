@@ -347,7 +347,7 @@ include(MacroKAuth)
 
 set( KDE4_KAUTH_DBUS_POLICY_STUB ${CMAKE_SOURCE_DIR}/kdecore/auth/backends/dbus/dbus_policy.stub)
 set( KDE4_KAUTH_DBUS_SERVICE_STUB ${CMAKE_SOURCE_DIR}/kdecore/auth/backends/dbus/dbus_service.stub)
-set( KDE4_KAUTH_POLICY_GEN ${CMAKE_BINARY_DIR}/bin/kauth-policy-gen)
+set( KDE4_KAUTH_POLICY_GEN kauth-policy-gen)
 
 kde4_auth_add_helper(kcmremotewidgetshelper org.kde.kcontrol.kcmremotewidgets root private/remotewidgetshelper.cpp)
 
