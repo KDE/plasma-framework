@@ -32,6 +32,56 @@
 namespace Plasma
 {
 
+ServiceMonitor::ServiceMonitor(DataEngineConsumer *consumer)
+    : m_consumer(consumer)
+{
+}
+
+ServiceMonitor::~ServiceMonitor()
+{
+}
+
+void ServiceMonitor::slotJobFinished(Plasma::ServiceJob *job)
+{
+    kDebug() << "engine ready!";
+    QString engineName = job->parameters()["EngineName"].toString();
+    QString location = job->destination();
+    QPair<QString, QString> pair(location, engineName);
+    kDebug() << "pair = " << pair;
+    if (!m_consumer->m_remoteEngines.contains(pair)) {
+        kDebug() << "engine doesnt exist yet!";
+    } else {
+        KUrl engineLocation(location);
+        engineLocation.setFileName(job->result().toString());
+        kDebug() << "setting location : "
+                 << engineLocation.prettyUrl();
+        m_consumer->m_remoteEngines[pair]->setLocation(engineLocation);
+    }
+}
+
+void ServiceMonitor::slotServiceReady(Plasma::Service *plasmoidService)
+{
+    kDebug() << "service ready!";
+    if (!m_consumer->m_engineNameForService.contains(plasmoidService)) {
+        kDebug() << "no engine name for service!";
+        kDebug() << "amount of services in map: " << m_consumer->m_engineNameForService.count();
+    } else {
+        kDebug() << "value = " << m_consumer->m_engineNameForService.value(plasmoidService);
+    }
+
+    kDebug() << "requesting dataengine!";
+    KConfigGroup op = plasmoidService->operationDescription("DataEngine");
+    op.writeEntry("EngineName", m_consumer->m_engineNameForService.value(plasmoidService));
+    plasmoidService->startOperationCall(op);
+    connect(plasmoidService, SIGNAL(finished(Plasma::ServiceJob*)),
+            this, SLOT(slotJobFinished(Plasma::ServiceJob*)));
+}
+
+DataEngineConsumer::DataEngineConsumer()
+    : m_monitor(new ServiceMonitor(this))
+{
+}
+
 DataEngineConsumer::~DataEngineConsumer()
 {
     foreach (const QString &engine, m_loadedEngines) {
@@ -69,47 +119,11 @@ DataEngine *DataEngineConsumer::remoteDataEngine(const KUrl &location, const QSt
     plasmoidService->setDestination(location.prettyUrl());
     m_engineNameForService[plasmoidService] = name;
     kDebug() << "name = " << name;
-    connect(plasmoidService, SIGNAL(serviceReady(Plasma::Service*)),
-            this, SLOT(slotServiceReady(Plasma::Service*)));
+    QObject::connect(plasmoidService, SIGNAL(serviceReady(Plasma::Service*)),
+                     m_monitor, SLOT(slotServiceReady(Plasma::Service*)));
     return engine;
 }
 
-void DataEngineConsumer::slotJobFinished(Plasma::ServiceJob *job)
-{
-    kDebug() << "engine ready!";
-    QString engineName = job->parameters()["EngineName"].toString();
-    QString location = job->destination();
-    QPair<QString, QString> pair(location, engineName);
-    kDebug() << "pair = " << pair;
-    if (!m_remoteEngines.contains(pair)) {
-        kDebug() << "engine doesnt exist yet!";
-    } else {
-        KUrl engineLocation(location);
-        engineLocation.setFileName(job->result().toString());
-        kDebug() << "setting location : "
-                 << engineLocation.prettyUrl();
-        m_remoteEngines[pair]->setLocation(engineLocation);
-    }
-}
-
-void DataEngineConsumer::slotServiceReady(Plasma::Service *plasmoidService)
-{
-    kDebug() << "service ready!";
-    if (!m_engineNameForService.contains(plasmoidService)) {
-        kDebug() << "no engine name for service!";
-        kDebug() << "amount of services in map: " << m_engineNameForService.count();
-    } else {
-        kDebug() << "value = " << m_engineNameForService.value(plasmoidService);
-    }
-
-    kDebug() << "requesting dataengine!";
-    KConfigGroup op = plasmoidService->operationDescription("DataEngine");
-    op.writeEntry("EngineName", m_engineNameForService.value(plasmoidService));
-    //m_engineNameForService.remove(service);
-    plasmoidService->startOperationCall(op);
-    connect(plasmoidService, SIGNAL(finished(Plasma::ServiceJob*)),
-            this, SLOT(slotJobFinished(Plasma::ServiceJob*)));
-}
 
 } // namespace Plasma
 

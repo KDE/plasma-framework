@@ -33,23 +33,38 @@
 namespace Plasma
 {
 
-class DataEngineConsumer : public QObject
+class DataEngineConsumer;
+
+class ServiceMonitor : public QObject
 {
     Q_OBJECT
-    
 public:
+    ServiceMonitor(DataEngineConsumer *consumer);
+    ~ServiceMonitor();
+
+public Q_SLOTS:
+    void slotJobFinished(Plasma::ServiceJob *job);
+    void slotServiceReady(Plasma::Service *service);
+
+private:
+    DataEngineConsumer *m_consumer;
+};
+
+class DataEngineConsumer
+{
+public:
+    DataEngineConsumer();
     ~DataEngineConsumer();
     DataEngine *dataEngine(const QString &name);
     DataEngine *remoteDataEngine(const KUrl &location, const QString &name);
-
-private Q_SLOTS:
-    void slotJobFinished(Plasma::ServiceJob *job);
-    void slotServiceReady(Plasma::Service *service);
 
 private:
     QSet<QString> m_loadedEngines;
     QMap<QPair<QString, QString>, RemoteDataEngine*> m_remoteEngines;
     QMap<Service*, QString> m_engineNameForService;
+    ServiceMonitor *m_monitor;
+
+    friend class ServiceMonitor;
 };
 
 } // namespace Plasma
