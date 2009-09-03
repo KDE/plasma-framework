@@ -350,6 +350,7 @@ void View::configNeedsSaving() const
     }
 }
 
+
 int View::id() const
 {
     return d->viewId;

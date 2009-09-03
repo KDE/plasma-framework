@@ -2102,19 +2102,6 @@ QVariant Applet::itemChange(GraphicsItemChange change, const QVariant &value)
                     delete old;
                 }
             }
-
-            Plasma::PopupApplet *pa = qobject_cast<Plasma::PopupApplet *>(this);
-            if (pa) {
-                //reconnect of popupapplets with new containment geometryChanged
-                if (c) {
-                    disconnect(containment(), SIGNAL(geometryChanged()), pa, SLOT(updateDialogPosition()));
-                }
-
-                Plasma::Containment *cont = dynamic_cast<Containment*>(value.value<QGraphicsItem *>());
-                if (cont) {
-                    connect(cont, SIGNAL(geometryChanged()), pa, SLOT(updateDialogPosition()));
-                }
-            }
         }
         break;
     case ItemPositionChange:

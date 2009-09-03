@@ -56,9 +56,11 @@ enum Constraint {
     /** application startup has completed */
     StartupCompletedConstraint = 32, 
     /** the desktop context has changed */
-    ContextConstraint = 64, 
+    ContextConstraint = 64,
+    /** the position of the popup needs to be recalculated*/
+    PopupConstraint = 128,
     AllConstraints = FormFactorConstraint | LocationConstraint | ScreenConstraint |
-    SizeConstraint | ImmutableConstraint | ContextConstraint
+    SizeConstraint | ImmutableConstraint | ContextConstraint | PopupConstraint
 };
 Q_DECLARE_FLAGS(Constraints, Constraint)
 

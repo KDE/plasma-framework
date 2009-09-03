@@ -342,6 +342,11 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
             q->setMinimumSize(0,0);
         }
     }
+
+    if (dialog && constraints & Plasma::PopupConstraint) {
+        updateDialogPosition();
+    }
+
     emit q->sizeHintChanged(Qt::PreferredSize);
 }
 
