@@ -28,9 +28,9 @@
 #include <kservice.h>
 
 #include <plasma/plasma_export.h>
-#include <plasma/runners/querymatch.h>
-#include <plasma/runners/runnercontext.h>
-#include <plasma/runners/runnersyntax.h>
+#include <plasma/querymatch.h>
+#include <plasma/runnercontext.h>
+#include <plasma/runnersyntax.h>
 #include <plasma/version.h>
 
 class QAction;

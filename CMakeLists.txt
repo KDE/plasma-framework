@@ -40,6 +40,7 @@ set(plasmagik_SRCS
 
 set(plasma_LIB_SRCS
     ${plasmagik_SRCS}
+    abstractrunner.cpp
     animationdriver.cpp
     animator.cpp
     applet.cpp
@@ -86,6 +87,7 @@ set(plasma_LIB_SRCS
     private/tooltip.cpp
     private/wallpaperrenderthread.cpp
     private/windowpreview.cpp
+    querymatch.cpp
     remote/accessmanager.cpp
     remote/accessappletjob.cpp
     remote/authorizationinterface.cpp
@@ -94,11 +96,9 @@ set(plasma_LIB_SRCS
     remote/clientpinrequest.cpp
     remote/credentials.cpp
     remote/serviceaccessjob.cpp
-    runners/abstractrunner.cpp
-    runners/querymatch.cpp
-    runners/runnercontext.cpp
-    runners/runnermanager.cpp
-    runners/runnersyntax.cpp
+    runnercontext.cpp
+    runnermanager.cpp
+    runnersyntax.cpp
     scripting/appletscript.cpp
     scripting/dataenginescript.cpp
     scripting/runnerscript.cpp
@@ -223,6 +223,7 @@ set(plasmagik_HEADERS
 install(FILES ${plasmagik_HEADERS} DESTINATION ${INCLUDE_INSTALL_DIR}/plasma/ COMPONENT Devel)
 
 set(plasma_LIB_INCLUDES
+    abstractrunner.h
     animationdriver.h
     animator.h
     applet.h
@@ -245,6 +246,7 @@ set(plasma_LIB_INCLUDES
     plasma.h
     plasma_export.h
     popupapplet.h
+    querymatch.h
     remote/accessappletjob.h
     remote/accessmanager.h
     remote/authorizationmanager.h
@@ -253,6 +255,9 @@ set(plasma_LIB_INCLUDES
     remote/clientpinrequest.h
     remote/credentials.h
     remote/serviceaccessjob.h
+    runnercontext.h
+    runnermanager.h
+    runnersyntax.h
     service.h
     servicejob.h
     svg.h
@@ -262,14 +267,6 @@ set(plasma_LIB_INCLUDES
     version.h
     view.h
     wallpaper.h)
-
-install(FILES
-    runners/abstractrunner.h
-    runners/querymatch.h
-    runners/runnercontext.h
-    runners/runnermanager.h
-    runners/runnersyntax.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/plasma/runners COMPONENT Devel)
 
 if(QT_QTOPENGL_FOUND AND OPENGL_FOUND)
     set(plasma_LIB_INCLUDES

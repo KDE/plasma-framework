@@ -33,7 +33,7 @@
 #include <kstandarddirs.h>
 
 #include <plasma/package.h>
-#include <plasma/runners/querymatch.h>
+#include <plasma/querymatch.h>
 
 #include "scripting/runnerscript.h"
 
