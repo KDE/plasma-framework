@@ -2297,7 +2297,7 @@ AppletPrivate::AppletPrivate(KService::Ptr service, int uniqueID, Applet *applet
           extender(0),
           service(0),
           preferredBackgroundHints(Applet::StandardBackground),
-          backgroundHints(Applet::StandardBackground),
+          backgroundHints(Applet::NoBackground),
           aspectRatioMode(Plasma::KeepAspectRatio),
           immutability(Mutable),
           appletDescription(service),
