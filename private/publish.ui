@@ -29,6 +29,16 @@
     </widget>
    </item>
    <item>
+    <widget class="QCheckBox" name="allUsersCheckbox">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="text">
+      <string>Allow everybody to freely access this widget.</string>
+     </property>
+    </widget>
+   </item>
+   <item>
     <spacer name="verticalSpacer">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
