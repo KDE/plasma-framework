@@ -253,11 +253,6 @@ set(plasma_LIB_INCLUDES
     remote/clientpinrequest.h
     remote/credentials.h
     remote/serviceaccessjob.h
-    runners/abstractrunner.h
-    runners/querymatch.h
-    runners/runnercontext.h
-    runners/runnermanager.h
-    runners/runnersyntax.h
     service.h
     servicejob.h
     svg.h
@@ -267,6 +262,14 @@ set(plasma_LIB_INCLUDES
     version.h
     view.h
     wallpaper.h)
+
+install(FILES
+    runners/abstractrunner.h
+    runners/querymatch.h
+    runners/runnercontext.h
+    runners/runnermanager.h
+    runners/runnersyntax.h
+    DESTINATION ${INCLUDE_INSTALL_DIR}/plasma/runners COMPONENT Devel)
 
 if(QT_QTOPENGL_FOUND AND OPENGL_FOUND)
     set(plasma_LIB_INCLUDES
