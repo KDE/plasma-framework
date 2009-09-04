@@ -99,6 +99,7 @@ public:
     QString configDialogId() const;
     QString configWindowTitle() const;
     void updateShortcuts();
+    void publishCheckboxStateChanged(int state);
 
     static KActionCollection* defaultActions(QObject *parent);
     static QSet<QString> knownCategories();

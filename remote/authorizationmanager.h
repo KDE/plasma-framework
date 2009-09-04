@@ -108,6 +108,7 @@ class PLASMA_EXPORT AuthorizationManager : public QObject
         friend class AuthorizationRule;
         friend class AuthorizationRulePrivate;
         friend class Applet;
+        friend class AppletPrivate;
         friend class Credentials;
         friend class DataEngine;
         friend class GetSource;

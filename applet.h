@@ -788,7 +788,13 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          */
         void setStatus(const ItemStatus stat);
 
-        void publish(Plasma::AnnouncementMethods method);
+        /**
+         * Publishes and optionally announces this applet on the network for remote access.
+         * @param methods the methods to use for announcing this applet.
+         * @param resourceName the name under which this applet will be published (has to be unique
+         * for each machine)
+         */
+        void publish(Plasma::AnnouncementMethods methods, const QString &resourceName);
 
         void unpublish();
 
@@ -992,6 +998,7 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         Q_PRIVATE_SLOT(d, void clearShortcutEditorPtr())
         Q_PRIVATE_SLOT(d, void configDialogFinished())
         Q_PRIVATE_SLOT(d, void updateShortcuts())
+        Q_PRIVATE_SLOT(d, void publishCheckboxStateChanged(int state))
 
         /**
          * Reimplemented from QGraphicsItem

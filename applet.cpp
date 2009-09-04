@@ -64,6 +64,7 @@
 #include <solid/powermanagement.h>
 
 #include "authorizationmanager.h"
+#include "authorizationrule.h"
 #include "configloader.h"
 #include "containment.h"
 #include "corona.h"
@@ -1454,7 +1455,7 @@ bool Applet::hasConfigurationInterface() const
     return d->hasConfigurationInterface;
 }
 
-void Applet::publish(AnnouncementMethods methods)
+void Applet::publish(AnnouncementMethods methods, const QString &resourceName)
 {
     if (d->package) {
         d->package->d->publish(methods);
@@ -1463,9 +1464,6 @@ void Applet::publish(AnnouncementMethods methods)
             d->service = new PlasmoidService(this);
         }
 
-        QString resourceName =
-        i18nc("%1 is the name of a plasmoid, %2 the name of the machine that plasmoid is published on",
-              "%1 on %2", name(), QHostInfo::localHostName());
         kDebug() << "publishing package under name " << resourceName;
         d->service->d->publish(methods, resourceName);
     }
@@ -1748,8 +1746,30 @@ void AppletPrivate::addPublishPage(KConfigDialog *dialog)
 {
     QWidget *page = new QWidget;
     publishUI.setupUi(page);
-    publishUI.publishCheckbox->setChecked(q->config().readEntry("Publish", false));
+    publishUI.publishCheckbox->setChecked(q->isPublished());
+    publishUI.allUsersCheckbox->setEnabled(q->isPublished());
+
+    QString resourceName =
+    i18nc("%1 is the name of a plasmoid, %2 the name of the machine that plasmoid is published on",
+          "%1 on %2", q->name(), QHostInfo::localHostName());
+    if (AuthorizationManager::self()->d->matchingRule(resourceName, Credentials())) {
+        publishUI.allUsersCheckbox->setChecked(true);
+    } else {
+        publishUI.allUsersCheckbox->setChecked(false);
+    }
+
+    q->connect(publishUI.publishCheckbox, SIGNAL(stateChanged(int)),
+               q, SLOT(publishCheckboxStateChanged(int)));
     dialog->addPage(page, i18n("Publish"), "applications-internet");
+}
+
+void AppletPrivate::publishCheckboxStateChanged(int state)
+{
+    if (state == Qt::Checked) {
+        publishUI.allUsersCheckbox->setEnabled(true);
+    } else {
+        publishUI.allUsersCheckbox->setEnabled(false);
+    }
 }
 
 void AppletPrivate::clearShortcutEditorPtr()
@@ -1770,7 +1790,24 @@ void AppletPrivate::configDialogFinished()
     q->config().writeEntry("Publish", publishUI.publishCheckbox->isChecked());
 
     if (publishUI.publishCheckbox->isChecked()) {
-        q->publish(Plasma::ZeroconfAnnouncement);
+        QString resourceName =
+        i18nc("%1 is the name of a plasmoid, %2 the name of the machine that plasmoid is published on",
+              "%1 on %2", q->name(), QHostInfo::localHostName());
+        q->publish(Plasma::ZeroconfAnnouncement, resourceName);
+        if (publishUI.allUsersCheckbox->isChecked()) {
+            if (!AuthorizationManager::self()->d->matchingRule(resourceName, Credentials())) {
+                AuthorizationRule *rule = new AuthorizationRule(resourceName, "");
+                rule->setPolicy(AuthorizationRule::Allow);
+                rule->setTargets(AuthorizationRule::AllUsers);
+                AuthorizationManager::self()->d->rules.append(rule);
+            }
+        } else {
+            AuthorizationRule *matchingRule =
+                AuthorizationManager::self()->d->matchingRule(resourceName, Credentials());
+            if (matchingRule) {
+                AuthorizationManager::self()->d->rules.removeAll(matchingRule);
+            }
+        }
     } else {
         q->unpublish();
     }
@@ -2404,11 +2441,6 @@ void AppletPrivate::init(const QString &packagePath)
     QAction *configAction = actions->action("configure");
     if (configAction) {
         configAction->setText(i18nc("%1 is the name of the applet", "%1 Settings", q->name()));
-    }
-
-    if (q->config().readEntry("Publish", false)) {
-        kDebug() << "according the the config, this applet is published, so publish it now!";
-        q->publish(Plasma::ZeroconfAnnouncement);
     }
 
     QObject::connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()), q, SLOT(themeChanged()));

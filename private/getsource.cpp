@@ -56,6 +56,7 @@ void GetSource::start()
         service->d->publish(Plasma::NoAnnouncement, serviceName);
         if (!AuthorizationManager::self()->d->matchingRule(serviceName, identity())) {
             AuthorizationRule *rule = new AuthorizationRule(serviceName, identity().id());
+            rule->setPolicy(AuthorizationRule::Allow);
             AuthorizationManager::self()->d->rules.append(rule);
         }
         setResult(serviceName);
