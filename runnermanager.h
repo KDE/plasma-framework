@@ -104,6 +104,20 @@ class PLASMA_EXPORT RunnerManager : public QObject
          */
         void reloadConfiguration();
 
+        /**
+         * Sets a whitelist for the plugins that can be loaded
+         *
+         * @arg plugins the plugin names of allowed runners
+         * @since 4.4
+         */
+        void setAllowedRunners(const QStringList &runners);
+
+        /**
+         * @return the list of allowed plugins
+         * @since 4.4
+         */
+        QStringList allowedRunners() const;
+
     public Q_SLOTS:
         /**
          * Call this method when the runners should be prepared for a query session.

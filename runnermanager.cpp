@@ -70,6 +70,7 @@ public:
 
     ~RunnerManagerPrivate()
     {
+        KConfigGroup config = configGroup();
         context.save(config);
     }
 
@@ -83,9 +84,9 @@ public:
         emit q->matchesChanged(context.matches());
     }
 
-    void loadConfiguration(KConfigGroup &conf)
+    void loadConfiguration()
     {
-        config = conf;
+        KConfigGroup config = configGroup();
 
         //The number of threads used scales with the number of processors.
         const int numProcs =
@@ -105,14 +106,18 @@ public:
         context.restore(config);
     }
 
+    KConfigGroup configGroup()
+    {
+        return conf.isValid() ? conf : KConfigGroup(KGlobal::config(), "PlasmaRunnerManager");
+    }
+
     void loadRunners()
     {
+        KConfigGroup config = configGroup();
         KService::List offers = KServiceTypeTrader::self()->query("Plasma/Runner");
 
         bool loadAll = config.readEntry("loadAll", false);
-        //The plugin configuration is stored under the section Plugins
-        //and not PlasmaRunnerManager->Plugins
-        KConfigGroup conf(KGlobal::config(), "Plugins");
+        KConfigGroup pluginConf(&config, "Plugins");
 
         foreach (const KService::Ptr &service, offers) {
             //kDebug() << "Loading runner: " << service->name() << service->storageId();
@@ -125,7 +130,7 @@ public:
 
             KPluginInfo description(service);
             QString runnerName = description.pluginName();
-            description.load(conf);
+            description.load(pluginConf);
 
             bool loaded = runners.contains(runnerName);
             bool selected = loadAll || description.isPluginEnabled();
@@ -240,7 +245,7 @@ public:
     QHash<QString, AbstractRunner*> runners;
     QSet<FindMatchesJob*> searchJobs;
     QSet<FindMatchesJob*> oldSearchJobs;
-    KConfigGroup config;
+    KConfigGroup conf;
     bool loadAll : 1;
     bool prepped : 1;
     bool teardownRequested : 1;
@@ -254,8 +259,7 @@ RunnerManager::RunnerManager(QObject *parent)
     : QObject(parent),
       d(new RunnerManagerPrivate(this))
 {
-    KConfigGroup config(KGlobal::config(), "PlasmaRunnerManager");
-    d->loadConfiguration(config);
+    d->loadConfiguration();
     //ThreadWeaver::setDebugLevel(true, 4);
 }
 
@@ -265,8 +269,8 @@ RunnerManager::RunnerManager(KConfigGroup &c, QObject *parent)
 {
     // Should this be really needed? Maybe d->loadConfiguration(c) would make
     // more sense.
-    KConfigGroup config(&c, "PlasmaRunnerManager");
-    d->loadConfiguration(config);
+    d->conf = KConfigGroup(&c, "PlasmaRunnerManager");
+    d->loadConfiguration();
     //ThreadWeaver::setDebugLevel(true, 4);
 }
 
@@ -281,8 +285,37 @@ RunnerManager::~RunnerManager()
 
 void RunnerManager::reloadConfiguration()
 {
-    d->loadConfiguration(d->config);
+    d->loadConfiguration();
     d->loadRunners();
+}
+
+void RunnerManager::setAllowedRunners(const QStringList &runners)
+{
+    qDeleteAll(d->runners);
+    d->runners.clear();
+
+    KConfigGroup config = d->configGroup();
+    KConfigGroup pluginConf(&config, "Plugins");
+    pluginConf.deleteGroup();
+
+    foreach (const QString &runner, runners) {
+        pluginConf.writeEntry(runner, true);
+    }
+}
+
+QStringList RunnerManager::allowedRunners() const
+{
+    KConfigGroup config = d->configGroup();
+    KConfigGroup pluginConf(&config, "Plugins");
+
+    QStringList runners;
+    foreach (const QString &key, pluginConf.keyList()) {
+        if (pluginConf.readEntry(key, true)) {
+            runners << key;
+        }
+    }
+
+    return runners;
 }
 
 AbstractRunner* RunnerManager::runner(const QString &name) const
