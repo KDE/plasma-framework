@@ -46,7 +46,7 @@ public:
     PresenterAdaptor(MainWindow *parent);
 
 private:
-    Message relay(Server *server, const Message &message);
+    void relay(Server *server, int clientId, const Message &message);
 
     MainWindow *m_window;
 };
@@ -174,7 +174,7 @@ PresenterAdaptor::PresenterAdaptor(MainWindow *parent)
 {
 }
 
-Message PresenterAdaptor::relay(Server *server, const Message &message)
+void PresenterAdaptor::relay(Server *server, int clientId, const Message &message)
 {
     if ((message.resourcePath()=="/") && (message.operationName()=="goToPage")) {
         int pageNumber = 0;
@@ -198,7 +198,7 @@ Message PresenterAdaptor::relay(Server *server, const Message &message)
                  << message.operationName();
     }
 
-    return Message();
+    server->sendReply(clientId, Message());
 }
 
 int main(int argc, char **argv)

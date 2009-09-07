@@ -46,7 +46,7 @@ signals:
     void added(int a, int b, int result);
 
 private:
-    Message relay(Server *server, const Message &message)
+    void relay(Server *server, int clientId, const Message &message)
     {
         qint32 x = message.data().children("x").first().toInt();
         qint32 y = message.data().children("y").first().toInt();
@@ -59,7 +59,7 @@ private:
                       message.id());
         reply.setData(Value(x+y));
 
-        return reply;
+        server->sendReply(clientId, reply);
     }
 };
 

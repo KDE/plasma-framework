@@ -40,7 +40,7 @@ public:
 
 
 private:
-    virtual void relay(Server *server, int descriptor, const Message &message) = 0;
+    virtual void relay(Server *server, int clientId, const Message &message) = 0;
 
     friend class ServerPrivate;
 

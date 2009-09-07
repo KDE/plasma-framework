@@ -191,7 +191,6 @@ inline QByteArray sodepReadByteArray(QIODevice &io)
 
     char *data = new char[length+1];
     io.read(data, length);
-    //data[length] = '\0';
 
     QByteArray result(data, length);
     delete[] data;
