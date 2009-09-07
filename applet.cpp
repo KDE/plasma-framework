@@ -2693,8 +2693,8 @@ void AppletOverlayWidget::paint(QPainter *painter,
     QPainterPath backgroundShape;
     if (!applet || applet->backgroundHints() & Applet::StandardBackground) {
         //FIXME: a resize here is nasty, but perhaps still better than an eventfilter just for that..
-        if (parentWidget()->size() != size()) {
-            resize(parentWidget()->size());
+        if (parentWidget()->contentsRect().size() != size()) {
+            resize(parentWidget()->contentsRect().size());
         }
         backgroundShape = PaintUtils::roundedRectangle(contentsRect(), 5);
     } else {
