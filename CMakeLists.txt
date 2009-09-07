@@ -346,13 +346,11 @@ install(FILES data/operations/plasmoidservice.operations DESTINATION ${DATA_INST
 
 ########### next target ###############
 
-include(MacroKAuth)
+kde4_add_executable(kcmremotewidgetshelper private/remotewidgetshelper.cpp)
+target_link_libraries(kcmremotewidgetshelper kdecore)
+install(TARGETS kcmremotewidgetshelper DESTINATION ${LIBEXEC_INSTALL_DIR})
 
-set( KDE4_KAUTH_DBUS_POLICY_STUB ${CMAKE_SOURCE_DIR}/kdecore/auth/backends/dbus/dbus_policy.stub)
-set( KDE4_KAUTH_DBUS_SERVICE_STUB ${CMAKE_SOURCE_DIR}/kdecore/auth/backends/dbus/dbus_service.stub)
-set( KDE4_KAUTH_POLICY_GEN kauth-policy-gen)
+kde4_install_auth_helper_files(kcmremotewidgetshelper org.kde.kcontrol.kcmremotewidgets root)
 
-kde4_auth_add_helper(kcmremotewidgetshelper org.kde.kcontrol.kcmremotewidgets root private/remotewidgetshelper.cpp)
-
-kde4_auth_register_actions(org.kde.kcontrol.kcmremotewidgets kcm_remotewidgets.actions)
+kde4_install_auth_actions(org.kde.kcontrol.kcmremotewidgets kcm_remotewidgets.actions)
 
