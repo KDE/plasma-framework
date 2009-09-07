@@ -60,11 +60,13 @@ void expblur(QImage &img, int radius)
   */
   int alpha = (int)((1 << aprec) * (1.0f - std::exp(-2.3f / (radius + 1.f))));
 
-  for (int row=0; row<img.height(); row++) {
+  int height = img.height();
+  int width = img.width();
+  for (int row=0; row<height; row++) {
     blurrow<aprec,zprec>(img, row, alpha);
   }
 
-  for (int col=0; col<img.width(); col++) {
+  for (int col=0; col<width; col++) {
     blurcol<aprec,zprec>(img, col, alpha);
   }
   return;
@@ -96,16 +98,17 @@ static inline void blurrow(QImage &im, int line, int alpha)
   int zR, zG, zB, zA;
 
   QRgb *ptr = (QRgb *)im.scanLine(line);
+  int width = im.width();
 
   zR = *((unsigned char *)ptr    ) << zprec;
   zG = *((unsigned char *)ptr + 1) << zprec;
   zB = *((unsigned char *)ptr + 2) << zprec;
   zA = *((unsigned char *)ptr + 3) << zprec;
 
-  for (int index=1; index<im.width(); index++) {
+  for (int index=1; index<width; index++) {
       blurinner<aprec,zprec>((unsigned char *)&ptr[index],zR,zG,zB,zA,alpha);
   }
-  for (int index=im.width()-2; index>=0; index--) {
+  for (int index=width-2; index>=0; index--) {
       blurinner<aprec,zprec>((unsigned char *)&ptr[index],zR,zG,zB,zA,alpha);
   }
 }
@@ -117,17 +120,19 @@ static inline void blurcol(QImage &im, int col, int alpha)
 
   QRgb *ptr = (QRgb *)im.bits();
   ptr += col;
+  int height = im.height();
+  int width = im.width();
 
   zR = *((unsigned char *)ptr    ) << zprec;
   zG = *((unsigned char *)ptr + 1) << zprec;
   zB = *((unsigned char *)ptr + 2) << zprec;
   zA = *((unsigned char *)ptr + 3) << zprec;
 
-  for (int index=im.width(); index<(im.height()-1)*im.width(); index+=im.width()) {
+  for (int index=width; index<(height-1)*width; index+=width) {
       blurinner<aprec,zprec>((unsigned char *)&ptr[index], zR, zG, zB, zA, alpha);
   }
 
-  for (int index=(im.height()-2)*im.width(); index>=0; index-=im.width()) {
+  for (int index=(height-2)*width; index>=0; index-=width) {
       blurinner<aprec,zprec>((unsigned char *)&ptr[index], zR, zG, zB, zA, alpha);
   }
 }
