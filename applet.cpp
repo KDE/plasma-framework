@@ -956,7 +956,7 @@ void Applet::setConfigurationRequired(bool needsConfig, const QString &reason)
         return;
     }
 
-    d->createMessageOverlay(false);
+    d->createMessageOverlay(true);
     d->messageOverlay->opacity = 0.4;
 
     QGraphicsGridLayout *configLayout = new QGraphicsGridLayout(d->messageOverlay);
