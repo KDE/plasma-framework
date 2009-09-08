@@ -1,4 +1,6 @@
 [org.kde.kcontrol.kcmremotewidgets.save]
 Name=Save remote widgets policies
+Name[uk]=Зберегти правила для віддалених віджетів
 Description=Prevents the system from saving plasma remote widgets policies
-Policy=auth_admin 
+Description[uk]=Заборонити системі зберігати правила для віддалених віджетів Плазми
+Policy=auth_admin
