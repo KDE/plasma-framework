@@ -101,6 +101,12 @@ void IconWidgetPrivate::readColors()
 void IconWidgetPrivate::colorConfigChanged()
 {
     readColors();
+    if (drawBg) {
+        qreal left, top, right, bottom;
+        background->getMargins(left, top, right, bottom);
+        setVerticalMargin(IconWidgetPrivate::ItemMargin, left, top, right, bottom);
+        setHorizontalMargin(IconWidgetPrivate::ItemMargin, left, top, right, bottom);
+    }
     q->update();
 }
 
@@ -326,6 +332,11 @@ void IconWidgetPrivate::init()
     // setAcceptedMouseButtons(Qt::LeftButton);
     q->setAcceptsHoverEvents(true);
 
+    background = new Plasma::FrameSvg(q);
+    background->setImagePath("widgets/viewitem");
+    background->setCacheAllRenderedFrames(true);
+    background->setElementPrefix("hover");
+
     // Margins for horizontal mode (list views, tree views, table views)
     setHorizontalMargin(IconWidgetPrivate::TextMargin, 1, 1);
     setHorizontalMargin(IconWidgetPrivate::IconMargin, 1, 1);
@@ -338,10 +349,6 @@ void IconWidgetPrivate::init()
 
     setActiveMargins();
     currentSize = QSizeF(-1, -1);
-
-    background = new Plasma::FrameSvg(q);
-    background->setImagePath("widgets/viewitem");
-    background->setCacheAllRenderedFrames(true);
 }
 
 void IconWidget::addIconAction(QAction *action)
@@ -418,6 +425,16 @@ void IconWidget::setDrawBackground(bool draw)
         d->setHorizontalMargin(IconWidgetPrivate::IconMargin, focusHMargin, focusVMargin);
         d->setVerticalMargin(IconWidgetPrivate::IconMargin, focusHMargin, focusVMargin);
         d->currentSize = QSizeF(-1, -1);
+
+        if (draw) {
+            qreal left, top, right, bottom;
+            d->background->getMargins(left, top, right, bottom);
+            d->setHorizontalMargin(IconWidgetPrivate::ItemMargin, left, top, right, bottom);
+            d->setVerticalMargin(IconWidgetPrivate::ItemMargin, left, top, right, bottom);
+        } else {
+            d->setHorizontalMargin(IconWidgetPrivate::ItemMargin, 0, 0);
+            d->setVerticalMargin(IconWidgetPrivate::ItemMargin, 0, 0);
+        }
 
         update();
     }
@@ -506,6 +523,7 @@ void IconWidgetPrivate::layoutIcons(const QStyleOptionGraphicsItem *option)
                         verticalMargin[IconWidgetPrivate::IconMargin].top -
                         verticalMargin[IconWidgetPrivate::IconMargin].bottom;
         }
+        iconWidth -= horizontalMargin[IconWidgetPrivate::ItemMargin].left + horizontalMargin[IconWidgetPrivate::ItemMargin].right;
     } else {
         //Horizontal layout
         QFontMetricsF fm(q->font());
@@ -521,6 +539,7 @@ void IconWidgetPrivate::layoutIcons(const QStyleOptionGraphicsItem *option)
                         verticalMargin[IconWidgetPrivate::IconMargin].top -
                         verticalMargin[IconWidgetPrivate::IconMargin].bottom;
         }
+        iconWidth -= verticalMargin[IconWidgetPrivate::ItemMargin].top + verticalMargin[IconWidgetPrivate::ItemMargin].bottom;
     }
 
     iconSize = QSizeF(iconWidth, iconWidth);
@@ -686,6 +705,7 @@ QPointF IconWidgetPrivate::iconPosition(const QStyleOptionGraphicsItem *option,
 
     // Compute the nominal decoration rectangle
     const QSizeF size = addMargin(iconSize, IconWidgetPrivate::IconMargin);
+
 
     Qt::LayoutDirection direction = iconDirection(option);
 

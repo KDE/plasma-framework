@@ -299,29 +299,57 @@ void IconWidgetPrivate::setHorizontalMargin(MarginType type, qreal horizontal, q
 QRectF IconWidgetPrivate::addMargin(const QRectF &rect, MarginType type) const
 {
     Q_ASSERT(activeMargins);
-    const Margin &m = activeMargins[type];
-    return rect.adjusted(-m.left, -m.top, m.right, m.bottom);
+
+    qreal left, top, right, bottom;
+    q->getContentsMargins(&left, &top, &right, &bottom);
+    if (type == ItemMargin && (left || top || right || bottom)) {
+        return rect.adjusted(-left, -top, right, bottom);
+    } else {
+        const Margin &m = activeMargins[type];
+        return rect.adjusted(-m.left, -m.top, m.right, m.bottom);
+    }
 }
 
 QRectF IconWidgetPrivate::subtractMargin(const QRectF &rect, MarginType type) const
 {
     Q_ASSERT(activeMargins);
-    const Margin &m = activeMargins[type];
-    return rect.adjusted(m.left, m.top, -m.right, -m.bottom);
+
+    qreal left, top, right, bottom;
+    q->getContentsMargins(&left, &top, &right, &bottom);
+    if (type == ItemMargin && (left || top || right || bottom)) {
+        return rect.adjusted(left, top, -right, -bottom);
+    } else {
+        const Margin &m = activeMargins[type];
+        return rect.adjusted(m.left, m.top, -m.right, -m.bottom);
+    }
 }
 
 QSizeF IconWidgetPrivate::addMargin(const QSizeF &size, MarginType type) const
 {
     Q_ASSERT(activeMargins);
-    const Margin &m = activeMargins[type];
-    return QSizeF(size.width() + m.left + m.right, size.height() + m.top + m.bottom);
+
+    qreal left, top, right, bottom;
+    q->getContentsMargins(&left, &top, &right, &bottom);
+    if (type == ItemMargin && (left || top || right || bottom)) {
+        return QSizeF(size.width() + left + right, size.height() + top + bottom);
+    } else {
+        const Margin &m = activeMargins[type];
+        return QSizeF(size.width() + m.left + m.right, size.height() + m.top + m.bottom);
+    }
 }
 
 QSizeF IconWidgetPrivate::subtractMargin(const QSizeF &size, MarginType type) const
 {
     Q_ASSERT(activeMargins);
-    const Margin &m = activeMargins[type];
-    return QSizeF(size.width() - m.left - m.right, size.height() - m.top - m.bottom);
+
+    qreal left, top, right, bottom;
+    q->getContentsMargins(&left, &top, &right, &bottom);
+    if (type == ItemMargin && (left || top || right || bottom)) {
+        return QSizeF(size.width() - left - right, size.height() - top - bottom);
+    } else {
+        const Margin &m = activeMargins[type];
+        return QSizeF(size.width() - m.left - m.right, size.height() - m.top - m.bottom);
+    }
 }
 
 QRectF IconWidgetPrivate::actionRect(ActionPosition position) const
