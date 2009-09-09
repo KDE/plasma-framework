@@ -100,6 +100,8 @@
 #include "private/toolbox_p.h"
 #include "ui_publish.h"
 
+#include "config.h"
+
 namespace Plasma
 {
 
@@ -1649,7 +1651,9 @@ void Applet::showConfigurationInterface()
         }
 
         d->addGlobalShortcutsPage(dialog);
+#ifdef ENABLE_REMOTE_WIDGETS
         d->addPublishPage(dialog);
+#endif
         dialog->show();
     } else if (d->script) {
         d->script->showConfigurationInterface();
@@ -1708,7 +1712,9 @@ KConfigDialog *AppletPrivate::generateGenericConfigDialog()
     dialog->setAttribute(Qt::WA_DeleteOnClose, true);
     q->createConfigurationInterface(dialog);
     addGlobalShortcutsPage(dialog);
+#ifdef ENABLE_REMOTE_WIDGETS
     addPublishPage(dialog);
+#endif
     //TODO: Apply button does not correctly work for now, so do not show it
     dialog->showButton(KDialog::Apply, false);
     QObject::connect(dialog, SIGNAL(applyClicked()), q, SLOT(configDialogFinished()));

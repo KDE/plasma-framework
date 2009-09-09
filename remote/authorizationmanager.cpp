@@ -162,9 +162,6 @@ void AuthorizationManagerPrivate::prepareForServiceAccess()
 void AuthorizationManagerPrivate::prepareForServicePublication()
 {
     if (!server) {
-        //Let's set up plasma for remote service support. Since most of the set up involves crypto,
-        //AuthorizationManager seems the sensible place.
-        //First, let's start the JOLIE server:
         server = new Jolie::Server(4000);
     }
 }

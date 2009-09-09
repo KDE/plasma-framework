@@ -17,11 +17,16 @@
 
 #include "credentials.h"
 
+#include "authorizationmanager.h"
+#include "config.h"
+
 #include <QObject>
+
+#ifdef ENABLE_REMOTE_WIDGETS
 #include <QtCrypto>
+#endif
 
 #include <kdebug.h>
-#include "authorizationmanager.h"
 #include <kstandarddirs.h>
 
 namespace Plasma {
@@ -37,12 +42,14 @@ public:
         : id(id),
           name(name)
     {
+    #ifdef ENABLE_REMOTE_WIDGETS
         if (isPrivateKey) {
             privateKey = QCA::PrivateKey::fromPEM(pemKey);
             publicKey = privateKey.toPublicKey();
         } else {
             publicKey = QCA::PublicKey::fromPEM(pemKey);
         }
+    #endif
     }
 
     ~CredentialsPrivate()
@@ -51,8 +58,11 @@ public:
 
     QString id;
     QString name;
+
+#ifdef ENABLE_REMOTE_WIDGETS
     QCA::PublicKey publicKey;
     QCA::PrivateKey privateKey;
+#endif
 };
 
 Credentials::Credentials(const QString &id, const QString &name,
@@ -85,12 +95,16 @@ Credentials &Credentials::operator=(const Credentials &other)
 
 Credentials Credentials::createCredentials(const QString &name)
 {
+#ifdef ENABLE_REMOTE_WIDGETS
     QCA::KeyGenerator generator;
     QCA::PrivateKey key = generator.createRSA(2048);
     QString pemKey(key.toPublicKey().toPEM());
-    //TODO: is using a md5 hash for the id a good idea?
     QString id = QCA::Hash("sha1").hashToString(pemKey.toAscii());
     return Credentials(id, name, key.toPEM(), true);
+#else
+    kDebug() << "libplasma is compiled without support for remote widgets. Creating an empty identity.";
+    return Credentials();
+#endif
 }
 
 TrustLevel Credentials::trustLevel() const
@@ -111,12 +125,17 @@ TrustLevel Credentials::trustLevel() const
 
 bool Credentials::isValid() const
 {
+#ifdef ENABLE_REMOTE_WIDGETS
     if (d->publicKey.isNull()) {
         return false;
     } else {
         QString id = QCA::Hash("sha1").hashToString(d->publicKey.toPEM().toAscii());
         return (id == d->id);
     }
+#else
+    kDebug() << "libplasma is compiled without support for remote widgets. Key invalid.";
+    return false;
+#endif
 }
 
 QString Credentials::name() const
@@ -131,6 +150,7 @@ QString Credentials::id() const
 
 bool Credentials::isValidSignature(const QByteArray &signature, const QByteArray &payload) 
 {
+#ifdef ENABLE_REMOTE_WIDGETS
     if (d->publicKey.canVerify()) {
         if (!isValid()) {
             kDebug() << "Key is null?";
@@ -143,15 +163,23 @@ bool Credentials::isValidSignature(const QByteArray &signature, const QByteArray
         kDebug() << "Can't verify?";
         return false;
     }
+#else
+    return false;
+#endif
 }
 
 bool Credentials::canSign() const
 {
+#ifdef ENABLE_REMOTE_WIDGETS
     return d->privateKey.canSign();
+#else
+    return false;
+#endif
 }
 
 QByteArray Credentials::signMessage(const QByteArray &message)
 {
+#ifdef ENABLE_REMOTE_WIDGETS
     if(!QCA::isSupported("pkey") ||
        !QCA::PKey::supportedIOTypes().contains(QCA::PKey::RSA)) {
         kDebug() << "RSA not supported";
@@ -163,21 +191,27 @@ QByteArray Credentials::signMessage(const QByteArray &message)
         QByteArray signature = d->privateKey.signature();
         return signature;
     } else {
-        kDebug() << "can't sign?";
         return QByteArray();
     }
+#else
+    return QByteArray();
+#endif
 }
 
 Credentials Credentials::toPublicCredentials() const
 {
-    kDebug();
+#ifdef ENABLE_REMOTE_WIDGETS
     Credentials result(*this);
     result.d->privateKey = QCA::PrivateKey();
     return result;
+#else
+    return Credentials();
+#endif
 }
 
 QDataStream &operator<<(QDataStream &out, const Credentials &myObj)
 {
+#ifdef ENABLE_REMOTE_WIDGETS
     QString privateKeyPem;
     QString publicKeyPem;
 
@@ -189,12 +223,14 @@ QDataStream &operator<<(QDataStream &out, const Credentials &myObj)
     }
 
     out << 1 << myObj.d->id << myObj.d->name << privateKeyPem << publicKeyPem;
+#endif
 
     return out;
 }
 
 QDataStream &operator>>(QDataStream &in, Credentials &myObj)
 {
+#ifdef ENABLE_REMOTE_WIDGETS
     QString privateKeyString;
     QString publicKeyString;
     uint version;
@@ -213,6 +249,7 @@ QDataStream &operator>>(QDataStream &in, Credentials &myObj)
     if (conversionResult != QCA::ConvertGood) {
         kDebug() << "Unsuccessfull conversion of key?";
     }
+#endif
 
     return in;
 }

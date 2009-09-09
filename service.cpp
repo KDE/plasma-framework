@@ -23,6 +23,8 @@
 #include "private/service_p.h"
 #include "private/serviceprovider_p.h"
 
+#include "config.h"
+
 #include <QFile>
 #include <QTimer>
 
@@ -120,6 +122,7 @@ void ServicePrivate::jobFinished(KJob *job)
 
     void ServicePrivate::publish(AnnouncementMethods methods, const QString &name, PackageMetadata metadata)
     {
+    #ifdef ENABLE_REMOTE_WIDGETS
         if (!serviceProvider) {
             AuthorizationManager::self()->d->prepareForServicePublication();
 
@@ -145,6 +148,9 @@ void ServicePrivate::jobFinished(KJob *job)
         } else {
             kDebug() << "already published!";
         }
+    #else
+	kWarning() << "libplasma is compiled without support for remote widgets. not publishing.";
+    #endif
     }
 
     void ServicePrivate::unpublish()

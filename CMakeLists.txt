@@ -15,10 +15,11 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}
                     ${KDE4_INCLUDES}
                     )
 
-find_package(QCA2 REQUIRED)
-
-
-include_directories(${QCA2_INCLUDE_DIR})
+if(QCA2_FOUND)
+    include_directories(${QCA2_INCLUDE_DIR})
+    set(ENABLE_REMOTE_WIDGETS TRUE)
+endif(QCA2_FOUND)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config.h.in ${CMAKE_CURRENT_BINARY_DIR}/config.h)
 
 if(QT_QTOPENGL_FOUND AND OPENGL_FOUND)
     # libGL needs dlopen() and friends from the dl library
