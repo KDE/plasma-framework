@@ -582,7 +582,8 @@ void AppletHandle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
         }
 
         if (m_applet) {
-            m_applet->moveBy(deltaScene.x(), deltaScene.y());
+            QPointF mappedPoint = transform().map(QPointF(deltaScene.x(), deltaScene.y()));
+            m_applet->moveBy(mappedPoint.x(), mappedPoint.y());
         }
     } else if (m_pressedButton == ResizeButton || m_pressedButton == RotateButton) {
         QPointF cursorPoint = event->scenePos();
