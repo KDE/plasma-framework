@@ -29,6 +29,8 @@
 #include <kdebug.h>
 #include <kstandarddirs.h>
 
+#define REQUIRED_FEATURES "rsa,sha1,pkey"
+
 namespace Plasma {
 
 class CredentialsPrivate {
@@ -43,6 +45,11 @@ public:
           name(name)
     {
     #ifdef ENABLE_REMOTE_WIDGETS
+	if (!QCA::isSupported(REQUIRED_FEATURES)) {
+	    kWarning() << "QCA doesn't support " << REQUIRED_FEATURES;
+	    return;
+	}
+	
         if (isPrivateKey) {
             privateKey = QCA::PrivateKey::fromPEM(pemKey);
             publicKey = privateKey.toPublicKey();
@@ -96,13 +103,17 @@ Credentials &Credentials::operator=(const Credentials &other)
 Credentials Credentials::createCredentials(const QString &name)
 {
 #ifdef ENABLE_REMOTE_WIDGETS
+    if (!QCA::isSupported(REQUIRED_FEATURES)) {
+	kWarning() << "QCA doesn't support " << REQUIRED_FEATURES;
+	return Credentials();
+    }
+    
     QCA::KeyGenerator generator;
     QCA::PrivateKey key = generator.createRSA(2048);
     QString pemKey(key.toPublicKey().toPEM());
     QString id = QCA::Hash("sha1").hashToString(pemKey.toAscii());
     return Credentials(id, name, key.toPEM(), true);
 #else
-    kDebug() << "libplasma is compiled without support for remote widgets. Creating an empty identity.";
     return Credentials();
 #endif
 }
@@ -126,6 +137,11 @@ TrustLevel Credentials::trustLevel() const
 bool Credentials::isValid() const
 {
 #ifdef ENABLE_REMOTE_WIDGETS
+    if (!QCA::isSupported(REQUIRED_FEATURES)) {
+	kWarning() << "QCA doesn't support " << REQUIRED_FEATURES;
+	return false;
+    }
+    
     if (d->publicKey.isNull()) {
         return false;
     } else {
@@ -151,6 +167,11 @@ QString Credentials::id() const
 bool Credentials::isValidSignature(const QByteArray &signature, const QByteArray &payload) 
 {
 #ifdef ENABLE_REMOTE_WIDGETS
+    if (!QCA::isSupported(REQUIRED_FEATURES)) {
+	kWarning() << "QCA doesn't support " << REQUIRED_FEATURES;
+	return false;
+    }
+    
     if (d->publicKey.canVerify()) {
         if (!isValid()) {
             kDebug() << "Key is null?";
@@ -171,6 +192,11 @@ bool Credentials::isValidSignature(const QByteArray &signature, const QByteArray
 bool Credentials::canSign() const
 {
 #ifdef ENABLE_REMOTE_WIDGETS
+    if (!QCA::isSupported(REQUIRED_FEATURES)) {
+	kWarning() << "QCA doesn't support " << REQUIRED_FEATURES;
+	return false;
+    }
+    
     return d->privateKey.canSign();
 #else
     return false;
@@ -180,8 +206,7 @@ bool Credentials::canSign() const
 QByteArray Credentials::signMessage(const QByteArray &message)
 {
 #ifdef ENABLE_REMOTE_WIDGETS
-    if(!QCA::isSupported("pkey") ||
-       !QCA::PKey::supportedIOTypes().contains(QCA::PKey::RSA)) {
+    if(!QCA::isSupported(REQUIRED_FEATURES)) {
         kDebug() << "RSA not supported";
         return QByteArray();
     } else if (canSign()) {
@@ -212,6 +237,11 @@ Credentials Credentials::toPublicCredentials() const
 QDataStream &operator<<(QDataStream &out, const Credentials &myObj)
 {
 #ifdef ENABLE_REMOTE_WIDGETS
+    if (!QCA::isSupported(REQUIRED_FEATURES)) {
+	kWarning() << "QCA doesn't support " << REQUIRED_FEATURES;
+	return out;
+    }
+    
     QString privateKeyPem;
     QString publicKeyPem;
 
@@ -231,6 +261,11 @@ QDataStream &operator<<(QDataStream &out, const Credentials &myObj)
 QDataStream &operator>>(QDataStream &in, Credentials &myObj)
 {
 #ifdef ENABLE_REMOTE_WIDGETS
+    if (!QCA::isSupported(REQUIRED_FEATURES)) {
+	kWarning() << "QCA doesn't support " << REQUIRED_FEATURES;
+	return in;
+    }
+    
     QString privateKeyString;
     QString publicKeyString;
     uint version;
