@@ -664,14 +664,14 @@ void AppletHandle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
                 newSize.ry() = qMin(max.height(), qMax(min.height(), newSize.y()));
             }
 
-            // move center such that the static corner remains in the same place
             if (m_buttonsOnRight) {
-                newCenter =  _k_rotatePoint(QPointF(rStaticPoint.x() + newSize.x()/2,
-                            rStaticPoint.y() - newSize.y()/2), 0);
+                newCenter = (QPointF(m_originalGeom.size().width(), m_originalGeom.size().height())/2 - newSize/2);
+                newCenter = QPointF(0, newCenter.y()*2);
             } else {
-                newCenter =  _k_rotatePoint(QPointF(rStaticPoint.x() - newSize.x()/2,
-                            rStaticPoint.y() - newSize.y()/2), 0);
+                newCenter = (QPointF(m_originalGeom.size().width(), m_originalGeom.size().height())/2 - newSize/2)*2;
             }
+
+
 
             newAngle = m_angle;
         }
@@ -679,7 +679,9 @@ void AppletHandle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
         if (m_pressedButton == ResizeButton) {
             // set applet size
             kDebug() << newCenter << m_originalGeom.topLeft() << newSize;
-            m_applet->setPos(newCenter - (m_originalGeom.topLeft() + newSize/2));
+            QPointF newPos = m_originalGeom.topLeft() + _k_rotatePoint(newCenter, m_angle);
+            m_applet->setPos(newPos);
+           // m_applet->moveBy(newCenter.x(), newCenter.y());
             m_applet->resize(newSize.x(), newSize.y());
         } else {
             // set applet handle rotation - rotate around center of applet
