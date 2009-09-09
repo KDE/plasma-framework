@@ -73,7 +73,6 @@ class AppletHandle : public QObject, public QGraphicsItem
         void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
         void hoverMoveEvent(QGraphicsSceneHoverEvent *event);
         void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
-        QVariant itemChange(GraphicsItemChange change, const QVariant &value);
         bool sceneEventFilter(QGraphicsItem *watched, QEvent *event);
 
     Q_SIGNALS:
@@ -125,7 +124,6 @@ class AppletHandle : public QObject, public QGraphicsItem
 
         QPoint m_mousePos;  //mousepos relative to applet
         QPointF m_entryPos; //where the hover in event occurred
-        QPointF m_pos;      //current position of applet in sceneCoords
         qreal m_zValue;     //current zValue of the applet, so it can be restored after drag.
         QRectF m_originalGeom;
         QTransform m_originalTransform;

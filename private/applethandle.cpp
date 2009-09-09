@@ -54,7 +54,7 @@ QPointF _k_rotatePoint(QPointF in, qreal rotateAngle);
 
 AppletHandle::AppletHandle(Containment *parent, Applet *applet, const QPointF &hoverPos)
     : QObject(),
-      QGraphicsItem(parent),
+      QGraphicsItem(applet),
       m_pressedButton(NoButton),
       m_containment(parent),
       m_applet(applet),
@@ -69,34 +69,12 @@ AppletHandle::AppletHandle(Containment *parent, Applet *applet, const QPointF &h
       m_buttonsOnRight(false),
       m_pendingFade(false)
 {
+    setFlags(flags() | QGraphicsItem::ItemStacksBehindParent);
     KColorScheme colorScheme(QPalette::Active, KColorScheme::View,
                              Theme::defaultTheme()->colorScheme());
     m_gradientColor = colorScheme.background(KColorScheme::NormalBackground).color();
-
     m_originalGeom = m_applet->geometry();
     m_originalTransform = m_applet->transform();
-
-    QTransform originalMatrix = m_applet->transform();
-    m_applet->resetTransform();
-
-    QRectF rect(m_applet->contentsRect());
-    QPointF center = rect.center();
-    originalMatrix.translate(center.x(), center.y());
-
-    qreal cosine = originalMatrix.m11();
-    qreal sine = originalMatrix.m12();
-
-    m_angle = _k_pointAngle(QPointF(cosine, sine));
-
-    m_applet->setParentItem(this);
-
-    rect = QRectF(m_applet->pos(), m_applet->size());
-    center = rect.center();
-    QTransform matrix;
-    matrix.translate(center.x(), center.y());
-    matrix.rotateRadians(m_angle);
-    matrix.translate(-center.x(), -center.y());
-    setTransform(matrix);
 
     m_hoverTimer = new QTimer(this);
     m_hoverTimer->setSingleShot(true);
@@ -116,20 +94,11 @@ AppletHandle::AppletHandle(Containment *parent, Applet *applet, const QPointF &h
     //icons
     m_configureIcons = new Svg(this);
     m_configureIcons->setImagePath("widgets/configuration-icons");
-    //FIXME: this should be of course true, but works only if false
     m_configureIcons->setContainsMultipleImages(true);
 
     m_background = new FrameSvg(this);
     m_background->setImagePath("widgets/background");
-
-    //We got to be able to see the applet while dragging to to another containment,
-    //so we want a high zValue.
-    //FIXME: apparently this doesn't work: sometimes an applet still get's drawn behind
-    //the containment it's being dragged to, sometimes it doesn't.
-    m_zValue = m_applet->zValue() - 1;
-    m_applet->raise();
     m_applet->installSceneEventFilter(this);
-    setZValue(m_applet->zValue());
 }
 
 AppletHandle::~AppletHandle()
@@ -143,7 +112,7 @@ Applet *AppletHandle::applet() const
     return m_applet;
 }
 
-void AppletHandle::detachApplet ()
+void AppletHandle::detachApplet()
 {
     if (!m_applet) {
         return;
@@ -153,29 +122,9 @@ void AppletHandle::detachApplet ()
     disconnect(m_leaveTimer, SIGNAL(timeout()), this, SLOT(leaveTimeout()));
     m_applet->disconnect(this);
 
-    m_applet->removeSceneEventFilter(this);
-
-    QRectF appletGeomLocal = m_applet->geometry();
-    QPointF center = mapToParent(appletGeomLocal.center());
-    QPointF appletPos = QPointF(center.x()-appletGeomLocal.width()/2, center.y()-appletGeomLocal.height()/2);
-    m_applet->setPos(appletPos);
-
-    // transform is relative to the applet
-    QTransform t;
-    t.translate(appletGeomLocal.width()/2, appletGeomLocal.height()/2);
-    t.rotateRadians(m_angle);
-    t.translate(-appletGeomLocal.width()/2, -appletGeomLocal.height()/2);
-    m_applet->setTransform(t);
-
-    m_applet->setParentItem(m_containment);
-
-    m_applet->setZValue(m_zValue);
-
     if (m_applet->geometry() != m_originalGeom || m_applet->transform() != m_originalTransform) {
         emit m_applet->appletTransformedByUser();
     }
-
-    m_applet->update(); // re-render the background, now we've transformed the applet
 
     m_applet = 0;
 }
@@ -201,8 +150,8 @@ QPainterPath handleRect(const QRectF &rect, int radius, bool onRight)
     QPainterPath path;
     if (onRight) {
         // make the left side straight
-        path.moveTo(rect.left(), rect.top());                                            // Top left
-        path.lineTo(rect.right() - radius, rect.top());                                 // Top side
+        path.moveTo(rect.left(), rect.top());              // Top left
+        path.lineTo(rect.right() - radius, rect.top());    // Top side
         path.quadTo(rect.right(), rect.top(),
                     rect.right(), rect.top() + radius);    // Top right corner
         path.lineTo(rect.right(), rect.bottom() - radius); // Right side
@@ -461,12 +410,8 @@ void AppletHandle::mousePressEvent(QGraphicsSceneMouseEvent *event)
             setZValue(m_zValue);
         }
 
-        if (m_pressedButton == MoveButton) {
-            m_pos = pos();
-        }
-
         if (m_pressedButton == ResizeButton || m_pressedButton == RotateButton) {
-            m_origAppletCenter = mapToScene(m_applet->geometry().center());
+            m_origAppletCenter = m_applet->geometry().center();
             m_origAppletSize = QPointF(m_applet->size().width(), m_applet->size().height());
 
             // resize
@@ -475,16 +420,13 @@ void AppletHandle::mousePressEvent(QGraphicsSceneMouseEvent *event)
             } else {
                 m_resizeStaticPoint = mapToScene(m_applet->geometry().bottomRight());
             }
-            m_resizeGrabPoint = mapToScene(event->pos());
-            QPointF cursorRelativeToStatic = m_resizeGrabPoint - m_resizeStaticPoint;
+            m_resizeGrabPoint = event->scenePos();
 
             // rotate
-            m_rotateAngleOffset = m_angle - _k_pointAngle(mapToScene(event->pos()) - m_origAppletCenter);
+            m_rotateAngleOffset = m_angle - _k_pointAngle(event->scenePos() - m_origAppletCenter);
         }
 
         event->accept();
-
-        update();
 
         //set mousePos to the position in the applet, in screencoords, so it becomes easy
         //to reposition the toplevel view to the correct position.
@@ -590,7 +532,7 @@ qreal _k_pointAngle(QPointF in)
     qreal cosine = in.x()/r;
     qreal sine = in.y()/r;
 
-    if (sine>=0) {
+    if (sine >= 0) {
         return acos(cosine);
     } else {
         return -acos(cosine);
@@ -627,7 +569,6 @@ void AppletHandle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     QPointF deltaScene  = event->scenePos() - event->lastScenePos();
 
     if (m_pressedButton == MoveButton) {
-        m_pos += deltaScene;
         if (leaveCurrentView(event->screenPos())) {
             Plasma::View *v = Plasma::View::topLevelViewAt(event->screenPos());
             if (v && v != m_currentView) {
@@ -637,14 +578,14 @@ void AppletHandle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
                 //move there: we have a screenpos, we need a scenepos
                 //FIXME how reliable is this transform?
                 switchContainment(c, v->mapToScene(pos));
-            } else {
-                setPos(m_pos);
             }
-        } else {
-            setPos(m_pos);
+        }
+
+        if (m_applet) {
+            m_applet->moveBy(deltaScene.x(), deltaScene.y());
         }
     } else if (m_pressedButton == ResizeButton || m_pressedButton == RotateButton) {
-        QPointF cursorPoint = mapToScene(event->pos());
+        QPointF cursorPoint = event->scenePos();
 
         // the code below will adjust these based on the type of operation
         QPointF newSize;
@@ -724,32 +665,32 @@ void AppletHandle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
             // move center such that the static corner remains in the same place
             if (m_buttonsOnRight) {
-                newCenter =  _k_rotatePoint(QPointF(rStaticPoint.x() + newSize.x()/2, rStaticPoint.y() - newSize.y()/2), m_angle);
+                newCenter =  _k_rotatePoint(QPointF(rStaticPoint.x() + newSize.x()/2,
+                            rStaticPoint.y() - newSize.y()/2), 0);
             } else {
-                newCenter =  _k_rotatePoint(QPointF(rStaticPoint.x() - newSize.x()/2, rStaticPoint.y() - newSize.y()/2), m_angle);
+                newCenter =  _k_rotatePoint(QPointF(rStaticPoint.x() - newSize.x()/2,
+                            rStaticPoint.y() - newSize.y()/2), 0);
             }
 
             newAngle = m_angle;
         }
 
-        // set position of applet handle
-        QPointF newHandlePosInScene = newCenter - (m_applet->pos() + newSize/2);
-        QPointF newHandlePos = parentItem()->mapFromScene(newHandlePosInScene);
-        setPos(newHandlePos);
+        if (m_pressedButton == ResizeButton) {
+            // set applet size
+            kDebug() << newCenter << m_originalGeom.topLeft() << newSize;
+            m_applet->setPos(newCenter - (m_originalGeom.topLeft() + newSize/2));
+            m_applet->resize(newSize.x(), newSize.y());
+        } else {
+            // set applet handle rotation - rotate around center of applet
+            QRectF appletGeomLocal = m_originalGeom;
+            QTransform at;
+            at.translate(appletGeomLocal.width()/2, appletGeomLocal.height()/2);
+            at.rotateRadians(newAngle);
+            at.translate(-appletGeomLocal.width()/2, -appletGeomLocal.height()/2);
+            m_applet->setTransform(at);
+        }
 
-        // set applet size
-        m_applet->resize(newSize.x(), newSize.y());
-
-        // set applet handle rotation - rotate around center of applet
-        QTransform t;
-        QPointF appletCenter = m_applet->geometry().center();
-        t.translate(appletCenter.x(), appletCenter.y());
-        t.rotateRadians(newAngle);
-        t.translate(-appletCenter.x(), -appletCenter.y());
-        setTransform(t);
         m_angle = newAngle;
-
-        m_applet->update();
     } else {
         QGraphicsItem::mouseMoveEvent(event);
     }
@@ -764,17 +705,9 @@ void AppletHandle::switchContainment(Containment *containment, const QPointF &po
     applet->removeSceneEventFilter(this);
     forceDisappear(); //takes care of event filter and killing handle
     applet->disconnect(this); //make sure the applet doesn't tell us to do anything
-    applet->setZValue(m_zValue);
+    //applet->setZValue(m_zValue);
     containment->addApplet(applet, containment->mapFromScene(pos), false);
     update();
-}
-
-QVariant AppletHandle::itemChange(GraphicsItemChange change, const QVariant &value)
-{
-    if (change == ItemPositionHasChanged && m_applet) {
-        m_applet->updateConstraints(Plasma::LocationConstraint);
-    }
-    return QGraphicsItem::itemChange(change, value);
 }
 
 void AppletHandle::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
@@ -902,14 +835,14 @@ void AppletHandle::startFading(FadeType anim, const QPointF &hoverPos, bool pres
             m_buttonsOnRight = m_entryPos.x() > (m_applet->size().width() / 2);
         }
         calculateSize();
-        QPolygonF region = mapToParent(m_rect).intersected(parentWidget()->boundingRect());
-        //kDebug() << region << m_rect << mapToParent(m_rect) << parentWidget()->boundingRect();
-        if (region != mapToParent(m_rect)) {
+        QPolygonF region = m_applet->mapToParent(m_rect).intersected(m_applet->parentWidget()->boundingRect());
+        //kDebug() << region << m_rect << mapToParent(m_rect) << containmnet->boundingRect();
+        if (region != m_applet->mapToParent(m_rect)) {
             // switch sides
             //kDebug() << "switch sides";
             m_buttonsOnRight = !m_buttonsOnRight;
             calculateSize();
-            QPolygonF region2 = mapToParent(m_rect).intersected(parentWidget()->boundingRect());
+            QPolygonF region2 = m_applet->mapToParent(m_rect).intersected(m_applet->parentWidget()->boundingRect());
             if (region2 != mapToParent(m_rect)) {
                 // ok, both sides failed to be perfect... which one is more perfect?
                 QRectF f1 = region.boundingRect();
@@ -1007,7 +940,7 @@ void AppletHandle::calculateSize()
         }
     }
 
-    m_rect = m_applet->mapToParent(m_rect).boundingRect();
+    //m_rect = m_applet->mapToParent(m_rect).boundingRect();
     m_decorationRect = m_rect.adjusted(-marginLeft, -marginTop, marginRight, marginBottom);
     m_totalRect = m_decorationRect.united(m_applet->geometry());
 }
