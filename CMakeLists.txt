@@ -183,9 +183,14 @@ endif(PHONON_FOUND)
 
 kde4_add_library(plasma SHARED ${plasma_LIB_SRCS})
 
-target_link_libraries(plasma ${KDE4_KIO_LIBS} ${KDE4_KFILE_LIBS} knewstuff2 ${QCA2_LIBRARIES}
+target_link_libraries(plasma ${KDE4_KIO_LIBS} ${KDE4_KFILE_LIBS} knewstuff2
                              ${QT_QTUITOOLS_LIBRARY} ${QT_QTWEBKIT_LIBRARY}
                              kdnssd threadweaver ${KDE4_SOLID_LIBS} )
+
+if(QCA2_FOUND)
+   target_link_libraries(plasma ${QCA2_LIBRARIES})
+endif(QCA2_FOUND)
+
 if(X11_FOUND)
    target_link_libraries(plasma ${X11_LIBRARIES})
 endif(X11_FOUND)
