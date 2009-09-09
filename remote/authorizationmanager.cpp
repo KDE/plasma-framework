@@ -154,7 +154,7 @@ void AuthorizationManagerPrivate::prepareForServiceAccess()
         return;
     }
 
-    wallet = KWallet::Wallet::openWallet("Plasma", 0, KWallet::Wallet::Asynchronous);
+    wallet = KWallet::Wallet::openWallet("kdewallet", 0, KWallet::Wallet::Asynchronous);
     q->connect(wallet, SIGNAL(walletOpened(bool)), q, SLOT(slotWalletOpened()));
     QTimer::singleShot(0, q, SLOT(slotLoadRules()));
 }
