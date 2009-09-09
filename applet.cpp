@@ -100,7 +100,7 @@
 #include "private/toolbox_p.h"
 #include "ui_publish.h"
 
-#include "config.h"
+#include "config-plasma.h"
 
 namespace Plasma
 {

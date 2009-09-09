@@ -18,7 +18,7 @@
 #include "credentials.h"
 
 #include "authorizationmanager.h"
-#include "config.h"
+#include "config-plasma.h"
 
 #include <QObject>
 

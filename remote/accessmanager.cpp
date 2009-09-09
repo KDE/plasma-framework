@@ -25,7 +25,7 @@
 #include "serviceaccessjob.h"
 #include "private/authorizationmanager_p.h"
 
-#include "config.h"
+#include "config-plasma.h"
 
 #include <QtCore/QMap>
 #include <QtCore/QTimer>

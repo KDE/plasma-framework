@@ -23,7 +23,7 @@
 #include "servicejob.h"
 #include "applet.h"
 
-#include "config.h"
+#include "config-plasma.h"
 
 #include <kzip.h>
 #include <kdebug.h>

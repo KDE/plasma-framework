@@ -23,7 +23,7 @@
 #include "private/service_p.h"
 #include "private/serviceprovider_p.h"
 
-#include "config.h"
+#include "config-plasma.h"
 
 #include <QFile>
 #include <QTimer>
