@@ -42,8 +42,6 @@
 #include <QtJolie/Message>
 #include <QtJolie/Server>
 
-#include <QtCrypto>
-
 #include <kauthaction.h>
 #include <kconfiggroup.h>
 #include <kdebug.h>

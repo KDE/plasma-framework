@@ -22,6 +22,8 @@
 #include "authorizationmanager_p.h"
 #include "joliemessagehelper_p.h"
 
+#include "config-plasma.h"
+
 #include <plasma/remote/authorizationinterface.h>
 #include <plasma/remote/authorizationmanager.h>
 #include <plasma/remote/authorizationrule.h>
@@ -34,6 +36,10 @@
 #include <QtCore/QFile>
 
 #include <QtJolie/Server>
+
+#ifdef ENABLE_REMOTE_WIDGETS
+#include <QtCrypto>
+#endif
 
 #include <kdebug.h>
 #include <kstandarddirs.h>
@@ -297,7 +303,9 @@ Jolie::Message ServiceProvider::appendToken(Jolie::Message message,
                                             const QByteArray &caller,
                                             const QByteArray &uuid)
 {
+#ifdef ENABLE_REMOTE_WIDGETS
     m_tokens[caller + uuid] = QCA::Random::randomArray(256).toByteArray();
+#endif
     //kDebug() << "setting token: " << m_tokens[caller + uuid].toBase64()
              //<< " for caller: " << caller.toBase64()
              //<< " with uuid caller: " << uuid.toBase64();

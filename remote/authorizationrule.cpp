@@ -27,8 +27,6 @@
 #include <QtCore/QObject>
 #include <QtCore/QTimer>
 
-#include <QtCrypto>
-
 #include <kurl.h>
 #include <klocalizedstring.h>
 
