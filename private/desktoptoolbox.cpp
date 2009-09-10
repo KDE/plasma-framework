@@ -309,7 +309,7 @@ void DesktopToolBox::toolTriggered(bool)
     QAction *action = qobject_cast<QAction *>(sender());
 
     if (!action || !action->autoRepeat()) {
-        hideToolBox();
+        emit toggled();
     }
 }
 
