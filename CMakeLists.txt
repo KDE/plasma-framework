@@ -19,7 +19,7 @@ if(QCA2_FOUND)
     include_directories(${QCA2_INCLUDE_DIR})
     set(ENABLE_REMOTE_WIDGETS TRUE)
 endif(QCA2_FOUND)
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config-plasma.h.in ${CMAKE_CURRENT_BINARY_DIR}/config-plasma.h)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config-plasma.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-plasma.h)
 
 if(QT_QTOPENGL_FOUND AND OPENGL_FOUND)
     # libGL needs dlopen() and friends from the dl library
