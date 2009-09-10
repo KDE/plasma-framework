@@ -117,6 +117,7 @@ public:
         KService::List offers = KServiceTypeTrader::self()->query("Plasma/Runner");
 
         bool loadAll = config.readEntry("loadAll", false);
+        QStringList whiteList = config.readEntry("pluginWhiteList", QStringList());
         KConfigGroup pluginConf(&config, "Plugins");
 
         foreach (const KService::Ptr &service, offers) {
@@ -133,7 +134,8 @@ public:
             description.load(pluginConf);
 
             bool loaded = runners.contains(runnerName);
-            bool selected = loadAll || description.isPluginEnabled();
+            bool selected = loadAll ||
+                            description.isPluginEnabled() && (whiteList.isEmpty() || whiteList.contains(runnerName));
 
             if (selected) {
                 if (!loaded) {
@@ -295,27 +297,13 @@ void RunnerManager::setAllowedRunners(const QStringList &runners)
     d->runners.clear();
 
     KConfigGroup config = d->configGroup();
-    KConfigGroup pluginConf(&config, "Plugins");
-    pluginConf.deleteGroup();
-
-    foreach (const QString &runner, runners) {
-        pluginConf.writeEntry(runner, true);
-    }
+    config.writeEntry("pluginWhiteList", runners);
 }
 
 QStringList RunnerManager::allowedRunners() const
 {
     KConfigGroup config = d->configGroup();
-    KConfigGroup pluginConf(&config, "Plugins");
-
-    QStringList runners;
-    foreach (const QString &key, pluginConf.keyList()) {
-        if (pluginConf.readEntry(key, true)) {
-            runners << key;
-        }
-    }
-
-    return runners;
+    return config.readEntry("pluginWhiteList", QStringList());
 }
 
 AbstractRunner* RunnerManager::runner(const QString &name) const
