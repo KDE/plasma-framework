@@ -349,6 +349,7 @@ void IconWidgetPrivate::init()
 
     setActiveMargins();
     currentSize = QSizeF(-1, -1);
+    q->setFont(Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont));
 }
 
 void IconWidget::addIconAction(QAction *action)
@@ -482,6 +483,7 @@ QSizeF IconWidgetPrivate::displaySizeHint(const QStyleOptionGraphicsItem *option
 
     QTextLayout layout;
     setLayoutOptions(layout, option, q->orientation());
+    layout.setFont(Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont));
     QSizeF size = layoutText(layout, option, label, QSizeF(textWidth, maxHeight));
 
     return addMargin(size, TextMargin);
@@ -526,7 +528,7 @@ void IconWidgetPrivate::layoutIcons(const QStyleOptionGraphicsItem *option)
         iconWidth -= horizontalMargin[IconWidgetPrivate::ItemMargin].left + horizontalMargin[IconWidgetPrivate::ItemMargin].right;
     } else {
         //Horizontal layout
-        QFontMetricsF fm(q->font());
+        QFontMetricsF fm = Plasma::Theme::defaultTheme()->fontMetrics();
 
         //if there is text resize the icon in order to make room for the text
         if (text.isEmpty() && infoText.isEmpty()) {
@@ -991,6 +993,8 @@ void IconWidget::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
 
     // Draw text last because it is overlayed
     QTextLayout labelLayout, infoLayout;
+    labelLayout.setFont(Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont));
+    infoLayout.setFont(Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont));
     QRectF textBoundingRect;
 
 
@@ -1308,6 +1312,7 @@ bool IconWidget::invertedLayout() const
 
 QSizeF IconWidget::sizeFromIconSize(const qreal iconWidth) const
 {
+    d->setActiveMargins();
     if (d->text.isEmpty() && d->infoText.isEmpty()) {
         //no text, less calculations
         return d->addMargin(d->addMargin(QSizeF(iconWidth, iconWidth), IconWidgetPrivate::IconMargin),
@@ -1319,8 +1324,8 @@ QSizeF IconWidget::sizeFromIconSize(const qreal iconWidth) const
 
     if (d->orientation == Qt::Vertical) {
         // make room for at most 14 characters
-        width = qMax(fm.width(d->text.left(12)),
-                     fm.width(d->infoText.left(12))) +
+        width = qMax(d->maxWordWidth(d->text),
+                     d->maxWordWidth(d->infoText)) +
                      fm.width("xx") +
                      d->horizontalMargin[IconWidgetPrivate::TextMargin].left +
                      d->horizontalMargin[IconWidgetPrivate::TextMargin].right;

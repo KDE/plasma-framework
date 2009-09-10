@@ -31,6 +31,7 @@
 
 #include <plasma/plasma_export.h>
 #include <plasma/framesvg.h>
+#include <plasma/theme.h>
 #include <plasma/svg.h>
 
 #include "iconwidget.h"
@@ -145,6 +146,8 @@ public:
     void layoutTextItems(const QStyleOptionGraphicsItem *option,
                          const QPixmap &icon, QTextLayout *labelLayout,
                          QTextLayout *infoLayout, QRectF *textBoundingRect) const;
+
+    int maxWordWidth(const QString text) const;
 
     inline void setLayoutOptions(QTextLayout &layout,
                                  const QStyleOptionGraphicsItem *options,
@@ -265,6 +268,15 @@ Qt::LayoutDirection IconWidgetPrivate::iconDirection(const QStyleOptionGraphicsI
 
 void IconWidgetPrivate::setActiveMargins()
 {
+    //sync here itemmargin with contentsrect, not overly pretty but it's where it's more reliable
+    qreal left, top, right, bottom;
+    q->getContentsMargins(&left, &top, &right, &bottom);
+    if (left || top || right || bottom) {
+        verticalMargin[ItemMargin].left = horizontalMargin[ItemMargin].left = left;
+        verticalMargin[ItemMargin].top = horizontalMargin[ItemMargin].top = top;
+        verticalMargin[ItemMargin].right = horizontalMargin[ItemMargin].right = right;
+        verticalMargin[ItemMargin].bottom = horizontalMargin[ItemMargin].bottom = bottom;
+    }
     activeMargins = (orientation == Qt::Horizontal ? horizontalMargin : verticalMargin);
 }
 
@@ -300,56 +312,44 @@ QRectF IconWidgetPrivate::addMargin(const QRectF &rect, MarginType type) const
 {
     Q_ASSERT(activeMargins);
 
-    qreal left, top, right, bottom;
-    q->getContentsMargins(&left, &top, &right, &bottom);
-    if (type == ItemMargin && (left || top || right || bottom)) {
-        return rect.adjusted(-left, -top, right, bottom);
-    } else {
-        const Margin &m = activeMargins[type];
-        return rect.adjusted(-m.left, -m.top, m.right, m.bottom);
-    }
+    const Margin &m = activeMargins[type];
+    return rect.adjusted(-m.left, -m.top, m.right, m.bottom);
 }
 
 QRectF IconWidgetPrivate::subtractMargin(const QRectF &rect, MarginType type) const
 {
     Q_ASSERT(activeMargins);
 
-    qreal left, top, right, bottom;
-    q->getContentsMargins(&left, &top, &right, &bottom);
-    if (type == ItemMargin && (left || top || right || bottom)) {
-        return rect.adjusted(left, top, -right, -bottom);
-    } else {
-        const Margin &m = activeMargins[type];
-        return rect.adjusted(m.left, m.top, -m.right, -m.bottom);
-    }
+    const Margin &m = activeMargins[type];
+    return rect.adjusted(m.left, m.top, -m.right, -m.bottom);
 }
 
 QSizeF IconWidgetPrivate::addMargin(const QSizeF &size, MarginType type) const
 {
     Q_ASSERT(activeMargins);
 
-    qreal left, top, right, bottom;
-    q->getContentsMargins(&left, &top, &right, &bottom);
-    if (type == ItemMargin && (left || top || right || bottom)) {
-        return QSizeF(size.width() + left + right, size.height() + top + bottom);
-    } else {
-        const Margin &m = activeMargins[type];
-        return QSizeF(size.width() + m.left + m.right, size.height() + m.top + m.bottom);
-    }
+    const Margin &m = activeMargins[type];
+    return QSizeF(size.width() + m.left + m.right, size.height() + m.top + m.bottom);
 }
 
 QSizeF IconWidgetPrivate::subtractMargin(const QSizeF &size, MarginType type) const
 {
     Q_ASSERT(activeMargins);
 
-    qreal left, top, right, bottom;
-    q->getContentsMargins(&left, &top, &right, &bottom);
-    if (type == ItemMargin && (left || top || right || bottom)) {
-        return QSizeF(size.width() - left - right, size.height() - top - bottom);
-    } else {
-        const Margin &m = activeMargins[type];
-        return QSizeF(size.width() - m.left - m.right, size.height() - m.top - m.bottom);
+    const Margin &m = activeMargins[type];
+    return QSizeF(size.width() - m.left - m.right, size.height() - m.top - m.bottom);
+}
+
+int IconWidgetPrivate::maxWordWidth(const QString text) const
+{
+    QFontMetricsF fm = Plasma::Theme::defaultTheme()->fontMetrics();
+    QStringList words = text.split(' ');
+
+    qreal maxWidth = 0;
+    foreach (QString word, words) {
+        maxWidth = qMax(maxWidth, fm.width(word));
     }
+    return maxWidth;
 }
 
 QRectF IconWidgetPrivate::actionRect(ActionPosition position) const
