@@ -383,7 +383,7 @@ void PushButton::paint(QPainter *painter,
     }
 
     //if there is not enough room for the text make it to fade out
-    QFontMetricsF fm(QApplication::font());
+    QFontMetricsF fm(Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont));
     if (rect.width() < fm.width(nativeWidget()->text())) {
         if (bufferPixmap.isNull()) {
             bufferPixmap = QPixmap(rect.size().toSize());
