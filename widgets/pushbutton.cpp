@@ -49,7 +49,8 @@ public:
           background(0),
           animId(-1),
           fadeIn(false),
-          svg(0)
+          svg(0),
+          customFont(false)
     {
     }
 
@@ -110,6 +111,7 @@ public:
     QString absImagePath;
     Svg *svg;
     QString svgElement;
+    bool customFont;
 };
 
 void PushButtonPrivate::syncActiveRect()
@@ -382,8 +384,15 @@ void PushButton::paint(QPainter *painter,
         }
     }
 
+    QFont widgetFont;
+    if (d->customFont) {
+        widgetFont = Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont);
+    } else {
+        widgetFont = font();
+    }
+
     //if there is not enough room for the text make it to fade out
-    QFontMetricsF fm(Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont));
+    QFontMetricsF fm(widgetFont);
     if (rect.width() < fm.width(nativeWidget()->text())) {
         if (bufferPixmap.isNull()) {
             bufferPixmap = QPixmap(rect.size().toSize());
@@ -392,7 +401,7 @@ void PushButton::paint(QPainter *painter,
 
         QPainter p(&bufferPixmap);
         p.setPen(painter->pen());
-        p.setFont(Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont));
+        p.setFont(widgetFont);
 
         // Create the alpha gradient for the fade out effect
         QLinearGradient alphaGradient(0, 0, 1, 0);
@@ -414,7 +423,7 @@ void PushButton::paint(QPainter *painter,
 
         painter->drawPixmap(rect.topLeft(), bufferPixmap);
     } else {
-        painter->setFont(Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont));
+        painter->setFont(widgetFont);
         painter->drawText(rect, Qt::AlignCenter, nativeWidget()->text());
     }
 }
@@ -437,6 +446,13 @@ void PushButton::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
     d->background->setElementPrefix("active");
 
     QGraphicsProxyWidget::hoverEnterEvent(event);
+}
+
+void PushButton::changeEvent(QEvent *event)
+{
+    if (event->type() == QEvent::FontChange) {
+        d->customFont = true;
+    }
 }
 
 void PushButton::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
