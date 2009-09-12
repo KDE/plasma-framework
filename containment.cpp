@@ -1196,6 +1196,7 @@ void ContainmentPrivate::dropData(QPointF scenePos, QPoint screenPos, QGraphicsS
             Applet *applet = q->addApplet("internal:extender", QVariantList(), geometry);
             item->setExtender(applet->extender());
         }
+
     } else if (KUrl::List::canDecode(mimeData)) {
         //TODO: collect the mimetypes of available script engines and offer
         //      to create widgets out of the matching URLs, if any
@@ -1214,102 +1215,17 @@ void ContainmentPrivate::dropData(QPointF scenePos, QPoint screenPos, QGraphicsS
                 wallpaperList = Wallpaper::listWallpaperInfoForMimetype(mimeName);
             }
 
-            if (!appletList.isEmpty() || !wallpaperList.isEmpty()) {
-                // The mimetype is known, i.e. there are applet that can load this mimetype
-                // Offer the applets in a popupmenu
-                //kDebug() << "Local file.";
-                KMenu choices;
-                QHash<QAction *, QString> actionsToApplets;
-                if (!appletList.isEmpty()) {
-                    choices.addTitle(i18n("Widgets"));
+            // It may be a directory or a file, let's stat
+            KIO::JobFlags flags = KIO::HideProgressInfo;
+            KIO::TransferJob *job = KIO::get(url, KIO::NoReload, flags);
+            dropPoints[job] = dropEvent->scenePos();
+            QObject::connect(job, SIGNAL(mimetype(KIO::Job *, const QString&)),
+                    q, SLOT(mimeTypeRetrieved(KIO::Job *, const QString&)));
 
-                    QMap<QString, KPluginInfo> sorted;
-                    bool hasIconWidget = false;
-                    foreach (const KPluginInfo &info, appletList) {
-                        if (info.pluginName() == "icon") {
-                            hasIconWidget = true;
-                        }
-
-                        sorted.insert(info.name(), info);
-                    }
-
-                    if (!hasIconWidget) {
-                        const QString constraint = QString("[X-KDE-PluginInfo-Name] == 'icon'");
-                        KService::List offers = KServiceTypeTrader::self()->query("Plasma/Applet", constraint);
-                        if (!offers.isEmpty()) {
-                            KPluginInfo info(offers.at(0));
-                            sorted.insert(info.name(), info);
-                        }
-                    }
-
-                    foreach (const KPluginInfo &info, sorted) {
-                        QAction *action;
-                        if (!info.icon().isEmpty()) {
-                            action = choices.addAction(KIcon(info.icon()), info.name());
-                        } else {
-                            action = choices.addAction(info.name());
-                        }
-
-                        actionsToApplets.insert(action, info.pluginName());
-                    }
-                }
-
-                QHash<QAction *, QString> actionsToWallpapers;
-                if (!wallpaperList.isEmpty())  {
-                    choices.addTitle(i18n("Wallpaper"));
-
-                    QMap<QString, KPluginInfo> sorted;
-                    foreach (const KPluginInfo &info, appletList) {
-                        sorted.insert(info.name(), info);
-                    }
-
-                    foreach (const KPluginInfo &info, wallpaperList) {
-                        QAction *action;
-                        if (!info.icon().isEmpty()) {
-                            action = choices.addAction(KIcon(info.icon()), info.name());
-                        } else {
-                            action = choices.addAction(info.name());
-                        }
-
-                        actionsToWallpapers.insert(action, info.pluginName());
-                    }
-                }
-
-                QAction *choice = choices.exec(screenPos);
-                if (choice) {
-                    QString plugin = actionsToApplets.value(choice);
-                    if (plugin.isEmpty()) {
-                        //set wallpapery stuff
-                        plugin = actionsToWallpapers.value(choice);
-                        if (!wallpaper || plugin != wallpaper->pluginName()) {
-                            q->setWallpaper(plugin);
-                        }
-
-                        if (wallpaper) {
-                            emit wallpaper->urlDropped(url);
-                        }
-                    } else {
-                        q->addApplet(actionsToApplets[choice], args, geom);
-                    }
-                }
-
-            } else if (url.protocol() != "data") { // Why not data:?
-                //kDebug() << "Let's start a KIO::TransferJob to retrieve the mimetype" << KMimeType::findByUrl(url)->name();
-
-
-                // It may be a directory or a file, let's stat
-                KIO::JobFlags flags = KIO::HideProgressInfo;
-                KIO::TransferJob *job = KIO::get(url, KIO::NoReload, flags);
-
-                dropPoints[job] = dropEvent->scenePos();
-                QObject::connect(job, SIGNAL(mimetype(KIO::Job *, const QString&)),
-                        q, SLOT(mimeTypeRetrieved(KIO::Job *, const QString&)));
-
-                QMenu *choices = new QMenu("Content dropped");
-                choices->addAction(KIcon("process-working"), i18n("Fetching file type..."));
-                choices->popup(dropEvent->screenPos());
-                dropMenus[job] = choices;
-            }
+            KMenu *choices = new KMenu("Content dropped");
+            choices->addAction(KIcon("process-working"), i18n("Fetching file type..."));
+            choices->popup(dropEvent->screenPos());
+            dropMenus[job] = choices;
         }
 
         if (dropEvent) {
@@ -1341,7 +1257,7 @@ void ContainmentPrivate::dropData(QPointF scenePos, QPoint screenPos, QGraphicsS
         } else if (seenPlugins.count() == 1) {
             selectedPlugin = seenPlugins.constBegin().key();
         } else {
-            QMenu choices;
+            KMenu choices;
             QHash<QAction *, QString> actionsToPlugins;
             foreach (const KPluginInfo &info, seenPlugins) {
                 QAction *action;
@@ -1404,7 +1320,7 @@ void ContainmentPrivate::mimeTypeRetrieved(KIO::Job * job, const QString &mimety
             posi = dropPoints[tjob];
             kDebug() << "Received a suitable dropEvent at" << posi;
         }
-        QMenu *choices = dropMenus[tjob];
+        KMenu *choices = dropMenus[tjob];
         if (!choices) {
             kDebug() << "Bailing out. No QMenu found for this job.";
             return;
@@ -1416,9 +1332,15 @@ void ContainmentPrivate::mimeTypeRetrieved(KIO::Job * job, const QString &mimety
 
         kDebug() << "Creating menu for:" << mimetype  << posi << args;
         KPluginInfo::List appletList = Applet::listAppletInfoForMimetype(mimetype);
-        if (!appletList.isEmpty()) {
+
+        KPluginInfo::List wallpaperList;
+        if (q->drawWallpaper()) {
+            wallpaperList = Wallpaper::listWallpaperInfoForMimetype(mimetype);
+        }
+
+        if (!appletList.isEmpty() || !wallpaperList.isEmpty()) {
             choices->clear();
-            QHash<QAction *, QString> actionsToPlugins;
+            QHash<QAction *, QString> actionsToApplets;
             foreach (const KPluginInfo &info, appletList) {
                 kDebug() << info.name();
                 QAction *action;
@@ -1428,10 +1350,31 @@ void ContainmentPrivate::mimeTypeRetrieved(KIO::Job * job, const QString &mimety
                     action = choices->addAction(info.name());
                 }
 
-                actionsToPlugins.insert(action, info.pluginName());
+                actionsToApplets.insert(action, info.pluginName());
                 kDebug() << info.pluginName();
             }
-            actionsToPlugins.insert(choices->addAction(i18n("Icon")), "icon");
+            actionsToApplets.insert(choices->addAction(i18n("Icon")), "icon");
+
+            QHash<QAction *, QString> actionsToWallpapers;
+            if (!wallpaperList.isEmpty())  {
+                choices->addTitle(i18n("Wallpaper"));
+
+                QMap<QString, KPluginInfo> sorted;
+                foreach (const KPluginInfo &info, appletList) {
+                    sorted.insert(info.name(), info);
+                }
+
+                foreach (const KPluginInfo &info, wallpaperList) {
+                    QAction *action;
+                    if (!info.icon().isEmpty()) {
+                        action = choices->addAction(KIcon(info.icon()), info.name());
+                    } else {
+                        action = choices->addAction(info.name());
+                    }
+
+                    actionsToWallpapers.insert(action, info.pluginName());
+                }
+            }
 
             QAction *choice = choices->exec();
             if (choice) {
@@ -1441,7 +1384,22 @@ void ContainmentPrivate::mimeTypeRetrieved(KIO::Job * job, const QString &mimety
                 tjob->putOnHold();
                 KIO::Scheduler::publishSlaveOnHold();
 
-                addApplet(actionsToPlugins[choice], args, QRectF(posi, QSize()));
+                QString plugin = actionsToApplets.value(choice);
+                if (plugin.isEmpty()) {
+                    //set wallpapery stuff
+                    plugin = actionsToWallpapers.value(choice);
+                    if (!wallpaper || plugin != wallpaper->pluginName()) {
+                        kDebug() << "Wallpaper dropped:" << tjob->url();
+                        q->setWallpaper(plugin);
+                    }
+
+                    if (wallpaper) {
+                        kDebug() << "Wallpaper dropped:" << tjob->url();
+                        emit wallpaper->urlDropped(tjob->url());
+                    }
+                } else {
+                    addApplet(actionsToApplets[choice], args, QRectF(posi, QSize()));
+                }
                 return;
             }
         } else {

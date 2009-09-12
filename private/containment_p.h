@@ -140,7 +140,7 @@ public:
     static bool s_positioning;
     bool drawWallpaper;
     QHash<KIO::Job*, QPointF> dropPoints;
-    QHash<KIO::Job*, QMenu*> dropMenus;
+    QHash<KIO::Job*, KMenu*> dropMenus;
 
 };
 
