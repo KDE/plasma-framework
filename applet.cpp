@@ -69,6 +69,7 @@
 #include "containment.h"
 #include "corona.h"
 #include "dataenginemanager.h"
+#include "dialog.h"
 #include "extenders/extender.h"
 #include "extenders/extenderitem.h"
 #include "package.h"
@@ -577,7 +578,12 @@ void AppletPrivate::positionMessageOverlay()
 
 void AppletPrivate::destroyMessageOverlay()
 {
-    //TODO: fade out? =)
+    if (messageDialog) {
+        messageDialog->animatedHide(Plasma::locationToInverseDirection(q->location()));
+        //messageDialog->deleteLater();
+        messageDialog = 0;
+    }
+
     if (!messageOverlay) {
         return;
     }
@@ -998,9 +1004,39 @@ void Applet::showMessage(const QIcon &icon, const QString &message, const Messag
         return;
     }
 
-    d->createMessageOverlay();
-    d->messageOverlay->opacity = 0.8;
-    QGraphicsLinearLayout *mainLayout = new QGraphicsLinearLayout(d->messageOverlay);
+    Corona *corona = qobject_cast<Corona *>(scene());
+    PopupApplet *popup = qobject_cast<Plasma::PopupApplet*>(this);
+    QGraphicsWidget *parent = 0;
+    FormFactor f = formFactor();
+
+    if (popup && popup->d->dialog &&
+        (f == Plasma::Horizontal || f == Plasma::Vertical)) {
+        // we are a popup applet, and we are collapsed to an icon, so show it in a dialog
+        // associated with ourselves
+        parent = new QGraphicsWidget;
+        if (corona) {
+            corona->addOffscreenWidget(parent);
+        }
+
+        if (d->messageDialog) {
+            delete d->messageDialog->graphicsWidget();
+        } else {
+            d->messageDialog = new Plasma::Dialog;
+        }
+
+        ToolTipManager::self()->hide(this);
+        KWindowSystem::setOnAllDesktops(d->messageDialog->winId(), true);
+        KWindowSystem::setState(d->messageDialog->winId(), NET::SkipTaskbar | NET::SkipPager);
+
+        connect(d->messageDialog, SIGNAL(destroyed(QObject*)), parent, SLOT(deleteLater()));
+    } else {
+        delete d->messageDialog;
+        d->createMessageOverlay();
+        d->messageOverlay->opacity = 0.8;
+        parent = d->messageOverlay;
+    }
+
+    QGraphicsLinearLayout *mainLayout = new QGraphicsLinearLayout(parent);
     mainLayout->setOrientation(Qt::Vertical);
     mainLayout->addStretch();
 
@@ -1026,7 +1062,6 @@ void Applet::showMessage(const QIcon &icon, const QString &message, const Messag
     messageIcon->setIcon(icon);
     messageText->setText(message);
 
-
     buttonLayout->addStretch();
 
     if (buttons & ButtonOk) {
@@ -1035,18 +1070,21 @@ void Applet::showMessage(const QIcon &icon, const QString &message, const Messag
         buttonLayout->addItem(ok);
         connect(ok, SIGNAL(clicked()), this, SLOT(destroyMessageOverlay()));
     }
+
     if (buttons & ButtonYes) {
         PushButton *yes = new PushButton(this);
         yes->setText(i18n("Yes"));
         buttonLayout->addItem(yes);
         connect(yes, SIGNAL(clicked()), this, SLOT(destroyMessageOverlay()));
     }
+
     if (buttons & ButtonNo) {
         PushButton *no = new PushButton(this);
         no->setText(i18n("No"));
         buttonLayout->addItem(no);
         connect(no, SIGNAL(clicked()), this, SLOT(destroyMessageOverlay()));
     }
+
     if (buttons & ButtonCancel) {
         PushButton *cancel = new PushButton(this);
         cancel->setText(i18n("Cancel"));
@@ -1055,9 +1093,21 @@ void Applet::showMessage(const QIcon &icon, const QString &message, const Messag
     }
 
     buttonLayout->addStretch();
+    if (d->messageDialog) {
+        parent->adjustSize();
+        d->messageDialog->setGraphicsWidget(parent);
 
-    d->messageOverlay->show();
+        QPoint pos = geometry().topLeft().toPoint();
+        if (corona) {
+            pos = corona->popupPosition(this, d->messageDialog->size());
+        }
 
+        d->messageDialog->move(pos);
+        kDebug() << location() << locationToDirection(location()) << LeftEdge << Right;
+        d->messageDialog->animatedShow(locationToDirection(location()));
+    } else {
+        d->messageOverlay->show();
+    }
 }
 
 QVariantList Applet::startupArguments() const
@@ -1655,9 +1705,7 @@ void Applet::showConfigurationInterface()
         }
 
         d->addGlobalShortcutsPage(dialog);
-#ifdef ENABLE_REMOTE_WIDGETS
         d->addPublishPage(dialog);
-#endif
         dialog->show();
     } else if (d->script) {
         d->script->showConfigurationInterface();
@@ -1716,9 +1764,7 @@ KConfigDialog *AppletPrivate::generateGenericConfigDialog()
     dialog->setAttribute(Qt::WA_DeleteOnClose, true);
     q->createConfigurationInterface(dialog);
     addGlobalShortcutsPage(dialog);
-#ifdef ENABLE_REMOTE_WIDGETS
     addPublishPage(dialog);
-#endif
     //TODO: Apply button does not correctly work for now, so do not show it
     dialog->showButton(KDialog::Apply, false);
     QObject::connect(dialog, SIGNAL(applyClicked()), q, SLOT(configDialogFinished()));
@@ -1754,6 +1800,7 @@ void AppletPrivate::addGlobalShortcutsPage(KConfigDialog *dialog)
 
 void AppletPrivate::addPublishPage(KConfigDialog *dialog)
 {
+#ifdef ENABLE_REMOTE_WIDGETS
     QWidget *page = new QWidget;
     publishUI.setupUi(page);
     publishUI.publishCheckbox->setChecked(q->isPublished());
@@ -1771,6 +1818,7 @@ void AppletPrivate::addPublishPage(KConfigDialog *dialog)
     q->connect(publishUI.publishCheckbox, SIGNAL(stateChanged(int)),
                q, SLOT(publishCheckboxStateChanged(int)));
     dialog->addPage(page, i18n("Publish"), "applications-internet");
+#endif
 }
 
 void AppletPrivate::publishCheckboxStateChanged(int state)
@@ -1799,6 +1847,7 @@ void AppletPrivate::configDialogFinished()
 
     q->config().writeEntry("Publish", publishUI.publishCheckbox->isChecked());
 
+#ifdef ENABLE_REMOTE_WIDGETS
     if (publishUI.publishCheckbox->isChecked()) {
         QString resourceName =
         i18nc("%1 is the name of a plasmoid, %2 the name of the machine that plasmoid is published on",
@@ -1821,6 +1870,7 @@ void AppletPrivate::configDialogFinished()
     } else {
         q->unpublish();
     }
+#endif
 
     if (!configLoader) {
         // the config loader will trigger this for us, so we don't need to.
