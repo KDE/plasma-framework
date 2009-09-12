@@ -68,8 +68,7 @@ public:
               graphicsWidget(0),
               resizeCorners(Dialog::NoCorner),
               resizeStartCorner(Dialog::NoCorner),
-              moveTimer(0),
-              hideAnimId(0)
+              moveTimer(0)
     {
     }
 
@@ -80,8 +79,6 @@ public:
     void themeChanged();
     void adjustView();
     void updateResizeCorners();
-    void progressHide(qreal amount);
-    void progressShow(qreal amount);
 
     Plasma::Dialog *q;
 
@@ -96,8 +93,6 @@ public:
     QMap<Dialog::ResizeCorner, QRect> resizeAreas;
     Dialog::ResizeCorner resizeStartCorner;
     QTimer *moveTimer;
-    Direction hideDirection;
-    int hideAnimId;
 };
 
 void DialogPrivate::themeChanged()
@@ -261,38 +256,9 @@ Dialog::~Dialog()
 
 void Dialog::paintEvent(QPaintEvent *e)
 {
-    QRect target = e->rect();
-    QRect source = target;
-
-    if (d->hideAnimId) {
-        target = rect();
-        source = target;
-        switch (d->hideDirection) {
-            case Plasma::Up:
-            case Plasma::Down: {
-                int bottomMargin = height() - d->view->geometry().bottom();
-                target.setBottom(d->view->viewport()->geometry().bottom() - bottomMargin); 
-                source.setTop(-d->view->viewport()->y() + bottomMargin);
-            }
-            break;
-
-            case Plasma::Right: {
-                target.setLeft(d->view->viewport()->x());
-                source.setRight(target.width() - 1);
-            }
-            break;
-
-            case Plasma::Left: {
-                target.setWidth(d->view->viewport()->geometry().right() - 1);
-                source.setLeft(width() - target.width());
-            }
-            break;
-        }
-    }
-
     QPainter p(this);
     p.setCompositionMode(QPainter::CompositionMode_Source);
-    d->background->paintFrame(&p, target, source);
+    d->background->paintFrame(&p, e->rect(), e->rect());
 }
 
 void Dialog::mouseMoveEvent(QMouseEvent *event)
@@ -574,7 +540,6 @@ void Dialog::animatedHide(Plasma::Direction direction)
     }
 
     Location location = Desktop;
-
     switch (direction) {
     case Down:
         location = BottomEdge;
@@ -593,7 +558,6 @@ void Dialog::animatedHide(Plasma::Direction direction)
     }
 
     Plasma::WindowEffects::slideWindow(this, location);
-
     hide();
 }
 
@@ -606,7 +570,6 @@ void Dialog::animatedShow(Plasma::Direction direction)
 
     //copied to not add new api
     Location location = Desktop;
-
     switch (direction) {
     case Up:
         location = BottomEdge;
@@ -624,82 +587,11 @@ void Dialog::animatedShow(Plasma::Direction direction)
         break;
     }
 
-    Plasma::WindowEffects::slideWindow(this, location);
+    if (KWindowSystem::compositingActive()) {
+        Plasma::WindowEffects::slideWindow(this, location);
+    }
 
     show();
-
-}
-
-void DialogPrivate::progressShow(qreal amount)
-{
-    //kDebug() << amount;
-    if (qFuzzyCompare(amount, qreal(1.0))) {
-        view->viewport()->move(0, 0);
-        hideAnimId = 0;
-        q->update();
-        q->show();
-        return;
-    }
-
-    int xtrans = 0;
-    int ytrans = 0;
-
-    switch (hideDirection) {
-        case Plasma::Up:
-            ytrans = (1.0 - amount) * view->height();
-        break;
-
-        case Plasma::Down:
-            ytrans = (amount * view->height()) - view->height();
-        break;
-
-        case Plasma::Right:
-            xtrans = (amount * view->width()) - view->width();
-        break;
-
-        case Plasma::Left:
-            xtrans = (1.0 - amount) * view->width();
-        break;
-    }
-
-    view->viewport()->move(xtrans, ytrans);
-    q->update();
-    q->show();
-}
-
-void DialogPrivate::progressHide(qreal amount)
-{
-    //kDebug() << amount;
-    if (qFuzzyCompare(amount, qreal(1.0))) {
-        q->hide();
-        view->viewport()->move(0, 0);
-        hideAnimId = 0;
-        return;
-    }
-
-    int xtrans = 0;
-    int ytrans = 0;
-
-    switch (hideDirection) {
-        case Plasma::Up:
-            ytrans = -(amount * view->height());
-        break;
-
-        case Plasma::Down:
-            ytrans = amount * view->height();
-        break;
-
-        case Plasma::Right:
-            xtrans = amount * view->width();
-        break;
-
-        case Plasma::Left:
-            xtrans = -(amount * view->width());
-        break;
-    }
-
-    view->viewport()->move(xtrans, ytrans);
-    q->update();
 }
 
 bool Dialog::inControlArea(const QPoint &point)
