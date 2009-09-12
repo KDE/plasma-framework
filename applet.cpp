@@ -1841,9 +1841,9 @@ void AppletPrivate::configDialogFinished()
         }
     }
 
+#ifdef ENABLE_REMOTE_WIDGETS
     q->config().writeEntry("Publish", publishUI.publishCheckbox->isChecked());
 
-#ifdef ENABLE_REMOTE_WIDGETS
     if (publishUI.publishCheckbox->isChecked()) {
         QString resourceName =
         i18nc("%1 is the name of a plasmoid, %2 the name of the machine that plasmoid is published on",
