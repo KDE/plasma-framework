@@ -1300,29 +1300,46 @@ void ContainmentPrivate::dropData(QPointF scenePos, QPoint screenPos, QGraphicsS
     }
 }
 
+void ContainmentPrivate::clearDataForMimeJob(KIO::Job *job)
+{
+    dropPoints.remove(job);
+    KMenu *choices = dropMenus.take(job);
+    if (choices) {
+        delete choices;
+    }
+    job->kill();
+}
+
 void ContainmentPrivate::mimeTypeRetrieved(KIO::Job * job, const QString &mimetype)
 {
     kDebug() << "Mimetype Job returns." << mimetype;
     if (job->error()) {
         // TODO: error feedback
+        clearDataForMimeJob(job);
         kDebug() << "ERROR" << job->error() << ' ' << job->errorString();
+        return;
     } else {
         KIO::TransferJob* tjob = dynamic_cast<KIO::TransferJob*>(job);
         if (!tjob) {
             kDebug() << "job should be a TransferJob, but isn't";
+            clearDataForMimeJob(job);
             return;
         }
+
         QPointF posi; // will be overwritten with the event's position
-        if (!dropPoints.keys().contains(tjob)) {
-            kDebug() << "Bailing out. Cannot find associated dropEvent related to the TransferJob";
-            return;
-        } else {
+        if (dropPoints.keys().contains(tjob)) {
             posi = dropPoints[tjob];
             kDebug() << "Received a suitable dropEvent at" << posi;
+        } else {
+            kDebug() << "Bailing out. Cannot find associated dropEvent related to the TransferJob";
+            clearDataForMimeJob(job);
+            return;
         }
-        KMenu *choices = dropMenus[tjob];
+
+        KMenu *choices = dropMenus.value(tjob);
         if (!choices) {
             kDebug() << "Bailing out. No QMenu found for this job.";
+            clearDataForMimeJob(job);
             return;
         }
 
@@ -1400,6 +1417,8 @@ void ContainmentPrivate::mimeTypeRetrieved(KIO::Job * job, const QString &mimety
                 } else {
                     addApplet(actionsToApplets[choice], args, QRectF(posi, QSize()));
                 }
+
+                clearDataForMimeJob(job);
                 return;
             }
         } else {
@@ -1407,9 +1426,8 @@ void ContainmentPrivate::mimeTypeRetrieved(KIO::Job * job, const QString &mimety
             addApplet("icon", args, QRectF(posi, QSize()));
         }
     }
-    // job is not needed anymore, clean it up, (we have already returned when an applet
-    // is created that might do something with the file now.
-    job->kill();
+
+    clearDataForMimeJob(job);
 }
 
 const QGraphicsItem *Containment::toolBoxItem() const

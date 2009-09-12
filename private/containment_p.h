@@ -56,6 +56,8 @@ public:
     {
         qDeleteAll(applets);
         applets.clear();
+
+        qDeleteAll(dropMenus);
     }
 
     ToolBox *createToolBox();
@@ -80,6 +82,7 @@ public:
     void containmentAppletAnimationComplete(QGraphicsItem *item, Plasma::Animator::Animation anim);
     void zoomIn();
     void zoomOut();
+    void clearDataForMimeJob(KIO::Job *job);
     void mimeTypeRetrieved(KIO::Job *job, const QString &mimetype);
     void containmentActions(KMenu &desktopMenu);
     void appletActions(KMenu &desktopMenu, Applet *applet, bool includeApplet);
@@ -141,7 +144,6 @@ public:
     bool drawWallpaper;
     QHash<KIO::Job*, QPointF> dropPoints;
     QHash<KIO::Job*, KMenu*> dropMenus;
-
 };
 
 } // Plasma namespace
