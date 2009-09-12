@@ -623,8 +623,8 @@ void PopupAppletPrivate::updateDialogPosition()
     KConfigGroup *mainGroup = static_cast<Applet*>(q)->d->mainConfigGroup();
     KConfigGroup sizeGroup(mainGroup, "PopupApplet");
 
-    Q_ASSERT(q->containment());
-    Q_ASSERT(q->containment()->corona());
+    Corona *corona = qobject_cast<Corona *>(q->scene());
+    Q_ASSERT(corona);
 
     int preferredWidth = 0;
     int preferredHeight = 0;
@@ -634,9 +634,9 @@ void PopupAppletPrivate::updateDialogPosition()
     }
 
     const int width = qMin(sizeGroup.readEntry("DialogWidth", preferredWidth),
-                           q->containment()->corona()->screenGeometry(-1).width() - 50);
+                           corona->screenGeometry(-1).width() - 50);
     const int height = qMin(sizeGroup.readEntry("DialogHeight", preferredHeight),
-                            q->containment()->corona()->screenGeometry(-1).height() - 50);
+                            corona->screenGeometry(-1).height() - 50);
 
     QSize saved(width, height);
 
@@ -653,11 +653,7 @@ void PopupAppletPrivate::updateDialogPosition()
     QSize s = dialog->size();
     QPoint pos = view->mapFromScene(q->scenePos());
 
-    //try to access a corona
-    Corona *corona = qobject_cast<Corona *>(q->scene());
-    if (corona) {
-        pos = corona->popupPosition(q, s);
-    }
+    pos = corona->popupPosition(q, s);
 
     bool reverse = false;
     if (q->formFactor() == Plasma::Vertical) {
