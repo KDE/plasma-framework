@@ -1005,38 +1005,9 @@ void Applet::showMessage(const QIcon &icon, const QString &message, const Messag
     }
 
     Corona *corona = qobject_cast<Corona *>(scene());
-    PopupApplet *popup = qobject_cast<Plasma::PopupApplet*>(this);
-    QGraphicsWidget *parent = 0;
-    FormFactor f = formFactor();
+    QGraphicsWidget *mainWidget = new QGraphicsWidget;
 
-    if (popup && popup->d->dialog &&
-        (f == Plasma::Horizontal || f == Plasma::Vertical)) {
-        // we are a popup applet, and we are collapsed to an icon, so show it in a dialog
-        // associated with ourselves
-        parent = new QGraphicsWidget;
-        if (corona) {
-            corona->addOffscreenWidget(parent);
-        }
-
-        if (d->messageDialog) {
-            delete d->messageDialog->graphicsWidget();
-        } else {
-            d->messageDialog = new Plasma::Dialog;
-        }
-
-        ToolTipManager::self()->hide(this);
-        KWindowSystem::setOnAllDesktops(d->messageDialog->winId(), true);
-        KWindowSystem::setState(d->messageDialog->winId(), NET::SkipTaskbar | NET::SkipPager);
-
-        connect(d->messageDialog, SIGNAL(destroyed(QObject*)), parent, SLOT(deleteLater()));
-    } else {
-        delete d->messageDialog;
-        d->createMessageOverlay();
-        d->messageOverlay->opacity = 0.8;
-        parent = d->messageOverlay;
-    }
-
-    QGraphicsLinearLayout *mainLayout = new QGraphicsLinearLayout(parent);
+    QGraphicsLinearLayout *mainLayout = new QGraphicsLinearLayout(mainWidget);
     mainLayout->setOrientation(Qt::Vertical);
     mainLayout->addStretch();
 
@@ -1050,8 +1021,8 @@ void Applet::showMessage(const QIcon &icon, const QString &message, const Messag
     mainLayout->addItem(buttonLayout);
     mainLayout->addStretch();
 
-    IconWidget *messageIcon = new IconWidget(this);
-    Label *messageText = new Label(this);
+    IconWidget *messageIcon = new IconWidget(mainWidget);
+    Label *messageText = new Label(mainWidget);
     messageText->nativeWidget()->setWordWrap(true);
 
     messageLayout->addStretch();
@@ -1065,45 +1036,70 @@ void Applet::showMessage(const QIcon &icon, const QString &message, const Messag
     buttonLayout->addStretch();
 
     if (buttons & ButtonOk) {
-        PushButton *ok = new PushButton(this);
+        PushButton *ok = new PushButton(mainWidget);
         ok->setText(i18n("Ok"));
         buttonLayout->addItem(ok);
         connect(ok, SIGNAL(clicked()), this, SLOT(destroyMessageOverlay()));
     }
 
     if (buttons & ButtonYes) {
-        PushButton *yes = new PushButton(this);
+        PushButton *yes = new PushButton(mainWidget);
         yes->setText(i18n("Yes"));
         buttonLayout->addItem(yes);
         connect(yes, SIGNAL(clicked()), this, SLOT(destroyMessageOverlay()));
     }
 
     if (buttons & ButtonNo) {
-        PushButton *no = new PushButton(this);
+        PushButton *no = new PushButton(mainWidget);
         no->setText(i18n("No"));
         buttonLayout->addItem(no);
         connect(no, SIGNAL(clicked()), this, SLOT(destroyMessageOverlay()));
     }
 
     if (buttons & ButtonCancel) {
-        PushButton *cancel = new PushButton(this);
+        PushButton *cancel = new PushButton(mainWidget);
         cancel->setText(i18n("Cancel"));
         buttonLayout->addItem(cancel);
         connect(cancel, SIGNAL(clicked()), this, SLOT(destroyMessageOverlay()));
     }
 
     buttonLayout->addStretch();
-    if (d->messageDialog) {
-        parent->adjustSize();
-        d->messageDialog->setGraphicsWidget(parent);
 
+    mainWidget->adjustSize();
+    QSizeF hint = mainWidget->preferredSize();
+    if (hint.height() > size().height() || hint.width() > size().width()) {
+        // either a collapsed popup in h/v form factor or just too small,
+        // so show it in a dialog associated with ourselves
+        if (corona) {
+            corona->addOffscreenWidget(mainWidget);
+        }
+
+        if (d->messageDialog) {
+            delete d->messageDialog->graphicsWidget();
+        } else {
+            d->messageDialog = new Plasma::Dialog;
+        }
+
+        ToolTipManager::self()->hide(this);
+        KWindowSystem::setOnAllDesktops(d->messageDialog->winId(), true);
+        KWindowSystem::setState(d->messageDialog->winId(), NET::SkipTaskbar | NET::SkipPager);
+        d->messageDialog->setGraphicsWidget(mainWidget);
+        connect(d->messageDialog, SIGNAL(destroyed(QObject*)), mainWidget, SLOT(deleteLater()));
+    } else {
+        delete d->messageDialog;
+        d->createMessageOverlay();
+        d->messageOverlay->opacity = 0.8;
+        QGraphicsLinearLayout *l = new QGraphicsLinearLayout(d->messageOverlay);
+        l->addItem(mainWidget);
+    }
+
+    if (d->messageDialog) {
         QPoint pos = geometry().topLeft().toPoint();
         if (corona) {
             pos = corona->popupPosition(this, d->messageDialog->size());
         }
 
         d->messageDialog->move(pos);
-        kDebug() << location() << locationToDirection(location()) << LeftEdge << Right;
         d->messageDialog->animatedShow(locationToDirection(location()));
     } else {
         d->messageOverlay->show();
