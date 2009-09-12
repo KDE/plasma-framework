@@ -1358,6 +1358,7 @@ void ContainmentPrivate::mimeTypeRetrieved(KIO::Job * job, const QString &mimety
         if (!appletList.isEmpty() || !wallpaperList.isEmpty()) {
             choices->clear();
             QHash<QAction *, QString> actionsToApplets;
+            choices->addTitle(i18n("Widgets"));
             foreach (const KPluginInfo &info, appletList) {
                 kDebug() << info.name();
                 QAction *action;
