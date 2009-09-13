@@ -262,9 +262,14 @@ QAction *PushButton::action() const
     return d->action;
 }
 
-void PushButton::setIcon(const QIcon &icon)
+void PushButton::setIcon(const KIcon &icon)
 {
     nativeWidget()->setIcon(icon);
+}
+
+void PushButton::setIcon(const QIcon &icon)
+{
+    setIcon(KIcon(icon));
 }
 
 QIcon PushButton::icon() const

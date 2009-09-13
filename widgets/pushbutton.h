@@ -22,6 +22,8 @@
 
 #include <QtGui/QGraphicsProxyWidget>
 
+#include <kicon.h>
+
 class KPushButton;
 
 #include <plasma/plasma_export.h>
@@ -46,6 +48,7 @@ class PLASMA_EXPORT PushButton : public QGraphicsProxyWidget
     Q_PROPERTY(QString stylesheet READ styleSheet WRITE setStyleSheet)
     Q_PROPERTY(KPushButton *nativeWidget READ nativeWidget)
     Q_PROPERTY(QAction *action READ action WRITE setAction)
+    Q_PROPERTY(QIcon icon READ icon WRITE setIcon)
 
 public:
     explicit PushButton(QGraphicsWidget *parent = 0);
@@ -116,11 +119,20 @@ public:
     /**
      * sets the icon for this push button
      * 
-     * @arg icon the icon we want to use
+     * @arg icon the icon to use
      *
      * @since 4.3
      */
     void setIcon(const QIcon &icon);
+
+    /**
+     * sets the icon for this push button using a KIcon
+     * 
+     * @arg icon the icon to use
+     *
+     * @since 4.4
+     */
+    void setIcon(const KIcon &icon);
 
     /**
      * @return the icon of this button
