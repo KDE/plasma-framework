@@ -164,13 +164,14 @@ void PackageStructureTest::write()
 
     // check groups
     QStringList groups;
-    groups << "images" << "config" << "scripts"
+    groups << "images" << "config" << "defaultconfig" << "scripts"
            << "mainconfigui" << "mainconfigxml" << "mainscript"
            << "translations" << "ui";
     groups.sort();
 
     QStringList actualGroups = config.groupList();
     actualGroups.sort();
+    //kDebug() << actualGroups;
     QCOMPARE(actualGroups, groups);
 
     // check scripts
