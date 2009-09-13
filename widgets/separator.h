@@ -37,7 +37,7 @@ class SeparatorPrivate;
 class PLASMA_EXPORT Separator : public QGraphicsWidget
 {
     Q_OBJECT
-    
+
     Q_PROPERTY(Qt::Orientation orientation READ orientation WRITE setOrientation)
 
     public:

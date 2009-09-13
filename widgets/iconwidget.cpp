@@ -74,7 +74,8 @@ IconWidgetPrivate::IconWidgetPrivate(IconWidget *i)
       fadeIn(false),
       invertLayout(false),
       drawBg(false),
-      textBgCustomized(false)
+      textBgCustomized(false),
+      customFont(false)
 {
 }
 
@@ -349,7 +350,6 @@ void IconWidgetPrivate::init()
 
     setActiveMargins();
     currentSize = QSizeF(-1, -1);
-    q->setFont(Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont));
 }
 
 void IconWidget::addIconAction(QAction *action)
@@ -471,9 +471,16 @@ QSizeF IconWidgetPrivate::displaySizeHint(const QStyleOptionGraphicsItem *option
                       horizontalMargin[IconWidgetPrivate::TextMargin].left -
                       horizontalMargin[IconWidgetPrivate::TextMargin].right;
 
+    QFont widgetFont;
+    if (customFont) {
+        widgetFont = Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont);
+    } else {
+        widgetFont = q->font();
+    }
+
     //allow only five lines of text
     const qreal maxHeight =
-        numDisplayLines * Plasma::Theme::defaultTheme()->fontMetrics().lineSpacing();
+        numDisplayLines * QFontMetrics(widgetFont).lineSpacing();
 
     // To compute the nominal size for the label + info, we'll just append
     // the information string to the label
@@ -483,7 +490,7 @@ QSizeF IconWidgetPrivate::displaySizeHint(const QStyleOptionGraphicsItem *option
 
     QTextLayout layout;
     setLayoutOptions(layout, option, q->orientation());
-    layout.setFont(Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont));
+    layout.setFont(widgetFont);
     QSizeF size = layoutText(layout, option, label, QSizeF(textWidth, maxHeight));
 
     return addMargin(size, TextMargin);
@@ -527,8 +534,14 @@ void IconWidgetPrivate::layoutIcons(const QStyleOptionGraphicsItem *option)
         }
         iconWidth -= horizontalMargin[IconWidgetPrivate::ItemMargin].left + horizontalMargin[IconWidgetPrivate::ItemMargin].right;
     } else {
+        QFont widgetFont;
+        if (customFont) {
+            widgetFont = Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont);
+        } else {
+            widgetFont = q->font();
+        }
         //Horizontal layout
-        QFontMetricsF fm = Plasma::Theme::defaultTheme()->fontMetrics();
+        QFontMetricsF fm = QFontMetrics(widgetFont);
 
         //if there is text resize the icon in order to make room for the text
         if (text.isEmpty() && infoText.isEmpty()) {
@@ -991,10 +1004,17 @@ void IconWidget::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
         }
     }
 
+    QFont widgetFont;
+    if (d->customFont) {
+        widgetFont = Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont);
+    } else {
+        widgetFont = font();
+    }
+
     // Draw text last because it is overlayed
     QTextLayout labelLayout, infoLayout;
-    labelLayout.setFont(Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont));
-    infoLayout.setFont(Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont));
+    labelLayout.setFont(widgetFont);
+    infoLayout.setFont(widgetFont);
     QRectF textBoundingRect;
 
 
@@ -1319,7 +1339,14 @@ QSizeF IconWidget::sizeFromIconSize(const qreal iconWidth) const
                             IconWidgetPrivate::ItemMargin);
     }
 
-    QFontMetricsF fm = Plasma::Theme::defaultTheme()->fontMetrics();
+    QFont widgetFont;
+    if (d->customFont) {
+        widgetFont = Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont);
+    } else {
+        widgetFont = font();
+    }
+
+    QFontMetricsF fm(widgetFont);
     qreal width = 0;
 
     if (d->orientation == Qt::Vertical) {
@@ -1368,6 +1395,15 @@ QSizeF IconWidget::sizeFromIconSize(const qreal iconWidth) const
     }
 
     return d->addMargin(QSizeF(width, height), IconWidgetPrivate::ItemMargin);
+}
+
+void IconWidget::changeEvent(QEvent *event)
+{
+    if (event->type() == QEvent::FontChange) {
+        d->customFont = true;
+    }
+
+    QGraphicsWidget::changeEvent(event);
 }
 
 } // namespace Plasma

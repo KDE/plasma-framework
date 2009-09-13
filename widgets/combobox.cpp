@@ -41,7 +41,8 @@ class ComboBoxPrivate
 public:
     ComboBoxPrivate(ComboBox *comboBox)
          : q(comboBox),
-           background(0)
+           background(0),
+           customFont(0)
     {
     }
 
@@ -61,6 +62,7 @@ public:
     qreal opacity;
     QRectF activeRect;
     Style::Ptr style;
+    bool customFont;
 };
 
 void ComboBoxPrivate::syncActiveRect()
@@ -94,7 +96,11 @@ void ComboBoxPrivate::syncBorders()
     syncActiveRect();
 
     KComboBox *native = q->nativeWidget();
-    native->setFont(Theme::defaultTheme()->font(Theme::DefaultFont));
+    if (customFont) {
+        native->setFont(Theme::defaultTheme()->font(Theme::DefaultFont));
+    } else {
+        native->setFont(q->font());
+    }
 }
 
 void ComboBoxPrivate::animationUpdate(qreal progress)
@@ -295,6 +301,15 @@ void ComboBox::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
     d->background->setElementPrefix("active");
 
     QGraphicsProxyWidget::hoverLeaveEvent(event);
+}
+
+void ComboBox::changeEvent(QEvent *event)
+{
+    if (event->type() == QEvent::FontChange) {
+        d->customFont = true;
+    }
+
+    QGraphicsProxyWidget::changeEvent(event);
 }
 
 } // namespace Plasma

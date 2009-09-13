@@ -63,6 +63,7 @@ public:
     QString absImagePath;
     Svg *image;
     QPixmap *pixmap;
+    bool customFont;
 };
 
 void FramePrivate::syncBorders()
@@ -72,8 +73,15 @@ void FramePrivate::syncBorders()
 
     svg->getMargins(left, top, right, bottom);
 
+    QFont widgetFont;
+    if (customFont) {
+        widgetFont = Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont);
+    } else {
+        widgetFont = q->font();
+    }
+
     if (!text.isNull()) {
-        QFontMetricsF fm(QApplication::font());
+        QFontMetricsF fm(widgetFont);
         top += fm.height();
     }
 
@@ -204,10 +212,18 @@ void Frame::paint(QPainter *painter,
 
     d->svg->paintFrame(painter);
 
+    QFont widgetFont;
+    if (d->customFont) {
+        widgetFont = Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont);
+    } else {
+        widgetFont = font();
+    }
+
     if (!d->text.isNull()) {
-        QFontMetricsF fm(QApplication::font());
+        QFontMetricsF fm(widgetFont);
         QRectF textRect = d->svg->contentsRect();
         textRect.setHeight(fm.height());
+        painter->setFont(widgetFont);
         painter->setPen(Plasma::Theme::defaultTheme()->color(Theme::TextColor));
         painter->drawText(textRect, Qt::AlignHCenter|Qt::AlignTop, d->text);
     }
@@ -244,6 +260,15 @@ QSizeF Frame::sizeHint(Qt::SizeHint which, const QSizeF & constraint) const
     }
 
     return hint;
+}
+
+void Frame::changeEvent(QEvent *event)
+{
+    if (event->type() == QEvent::FontChange) {
+        d->customFont = true;
+    }
+
+    QGraphicsWidget::changeEvent(event);
 }
 
 } // namespace Plasma

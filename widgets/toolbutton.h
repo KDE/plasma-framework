@@ -157,6 +157,7 @@ protected:
     void resizeEvent(QGraphicsSceneResizeEvent *event);
     void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
     void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
+    void changeEvent(QEvent *event);
 
 private:
     ToolButtonPrivate *const d;

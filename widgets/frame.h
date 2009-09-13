@@ -123,6 +123,7 @@ protected:
 
     void resizeEvent(QGraphicsSceneResizeEvent *event);
     QSizeF sizeHint(Qt::SizeHint which, const QSizeF & constraint) const;
+    void changeEvent(QEvent *event);
 
 private:
     FramePrivate * const d;

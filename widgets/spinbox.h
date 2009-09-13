@@ -84,6 +84,7 @@ public:
      */
     KIntSpinBox *nativeWidget() const;
 
+
 public Q_SLOTS:
     /**
      * Sets the maximum value the slider can take.

@@ -49,7 +49,8 @@ public:
           background(0),
           animId(0),
           fadeIn(false),
-          svg(0)
+          svg(0),
+          customFont(false)
     {
     }
 
@@ -110,6 +111,7 @@ public:
     QString absImagePath;
     Svg *svg;
     QString svgElement;
+    bool customFont;
 };
 
 void ToolButtonPrivate::syncActiveRect()
@@ -346,7 +348,15 @@ void ToolButton::paint(QPainter *painter,
         buttonOpt.palette.setColor(QPalette::ButtonText, Plasma::Theme::defaultTheme()->color(Plasma::Theme::TextColor));
     }
 
-    painter->setFont(Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont));
+    QFont widgetFont;
+    if (d->customFont) {
+        widgetFont = Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont);
+    } else {
+        widgetFont = font();
+    }
+    buttonOpt.font = widgetFont;
+
+    painter->setFont(widgetFont);
     button->style()->drawControl(QStyle::CE_ToolButtonLabel, &buttonOpt, painter, button);
 }
 
@@ -390,6 +400,15 @@ void ToolButton::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
     d->background->setElementPrefix("active");
 
     QGraphicsProxyWidget::hoverLeaveEvent(event);
+}
+
+void ToolButton::changeEvent(QEvent *event)
+{
+    if (event->type() == QEvent::FontChange) {
+        d->customFont = true;
+    }
+
+    QGraphicsProxyWidget::changeEvent(event);
 }
 
 } // namespace Plasma

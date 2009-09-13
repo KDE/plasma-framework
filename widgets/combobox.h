@@ -91,6 +91,7 @@ protected:
                QWidget *widget);
     void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
     void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
+    void changeEvent(QEvent *event);
 
 private:
     ComboBoxPrivate * const d;

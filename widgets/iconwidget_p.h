@@ -226,6 +226,7 @@ public:
     static const int maxDisplayLines = 5;
     static const int iconActionSize = 26;
     static const int iconActionMargin = 4;
+    bool customFont;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(IconWidgetPrivate::IconWidgetStates)

@@ -453,6 +453,8 @@ void PushButton::changeEvent(QEvent *event)
     if (event->type() == QEvent::FontChange) {
         d->customFont = true;
     }
+
+    QGraphicsProxyWidget::changeEvent(event);
 }
 
 void PushButton::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)

@@ -118,6 +118,7 @@ public:
      */
     QScrollBar *nativeWidget() const;
 
+
 public Q_SLOTS:
     /**
      * Sets the current value for the ScrollBar

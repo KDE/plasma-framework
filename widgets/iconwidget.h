@@ -304,6 +304,7 @@ protected:
     void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
 
     bool sceneEventFilter(QGraphicsItem *watched, QEvent *event);
+    void changeEvent(QEvent *event);
 
 public:
     /**
