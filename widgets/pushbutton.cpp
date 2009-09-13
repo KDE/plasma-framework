@@ -292,6 +292,11 @@ bool PushButton::isChecked() const
     return nativeWidget()->isChecked();
 }
 
+bool PushButton::isDown() const
+{
+    return nativeWidget()->isDown();
+}
+
 KPushButton *PushButton::nativeWidget() const
 {
     return static_cast<KPushButton*>(widget());

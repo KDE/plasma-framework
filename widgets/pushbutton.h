@@ -49,6 +49,8 @@ class PLASMA_EXPORT PushButton : public QGraphicsProxyWidget
     Q_PROPERTY(KPushButton *nativeWidget READ nativeWidget)
     Q_PROPERTY(QAction *action READ action WRITE setAction)
     Q_PROPERTY(QIcon icon READ icon WRITE setIcon)
+    Q_PROPERTY(bool checked READ isChecked WRITE setChecked);
+    Q_PROPERTY(bool down READ isDown);
 
 public:
     explicit PushButton(QGraphicsWidget *parent = 0);
@@ -162,6 +164,12 @@ public:
      * @since 4.3
      */
     bool isChecked() const;
+
+    /**
+     * @return true if the button is pressed down
+     * @since 4.4
+     */
+    bool isDown() const;
 
     /**
      * @return the native widget wrapped by this PushButton
