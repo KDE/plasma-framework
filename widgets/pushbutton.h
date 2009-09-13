@@ -114,7 +114,7 @@ public:
     QAction *action() const;
 
     /**
-     * sets the icon for this toolbutton
+     * sets the icon for this push button
      * 
      * @arg icon the icon we want to use
      *
@@ -157,7 +157,28 @@ public:
     KPushButton *nativeWidget() const;
 
 Q_SIGNALS:
+    /**
+     * Emitted when the button is pressed down; usually the clicked() signal
+     * will suffice, however.
+     * @since 4.4
+     */
+    void pressed();
+
+    /**
+     * Emitted when the button is released; usually the clicked() signal
+     * will suffice, however.
+     * @since 4.4
+     */
+    void released();
+
+    /**
+     * Emitted when the button is pressed then released, completing a click
+     */
     void clicked();
+
+    /**
+     * Emitted when the button changes state from up to down
+     */
     void toggled(bool);
 
 protected:

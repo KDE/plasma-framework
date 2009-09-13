@@ -71,10 +71,9 @@ public:
 
         if (mime->is("image/svg+xml") || mime->is("image/svg+xml-compressed")) {
             svg = new Svg();
-            QPainter p(&pm);
-
             svg->setImagePath(absImagePath);
 
+            QPainter p(&pm);
             if (!svgElement.isNull() && svg->hasElement(svgElement)) {
                 QSizeF elementSize = svg->elementSize(svgElement);
                 float scale = pm.width() / qMax(elementSize.width(), elementSize.height());
@@ -163,6 +162,8 @@ PushButton::PushButton(QGraphicsWidget *parent)
       d(new PushButtonPrivate(this))
 {
     KPushButton *native = new KPushButton;
+    connect(native, SIGNAL(pressed()), this, SIGNAL(pressed()));
+    connect(native, SIGNAL(released()), this, SIGNAL(released()));
     connect(native, SIGNAL(clicked()), this, SIGNAL(clicked()));
     connect(native, SIGNAL(toggled(bool)), this, SIGNAL(toggled(bool)));
     setWidget(native);
