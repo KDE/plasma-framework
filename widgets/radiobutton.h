@@ -112,7 +112,7 @@ protected:
     void changeEvent(QEvent *event);
 
 private:
-    Q_PRIVATE_SLOT(d, void setPixmap())
+    Q_PRIVATE_SLOT(d, void setPixmap(RadioButton *))
 
     RadioButtonPrivate * const d;
     Q_PRIVATE_SLOT(d, void setPalette())
