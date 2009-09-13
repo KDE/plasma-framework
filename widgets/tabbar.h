@@ -125,7 +125,7 @@ public:
      * @since 4.4
      */
     QGraphicsLayoutItem *takeTab(int index);
-    
+
     /**
      * Returns the contents of a page
      *
@@ -226,12 +226,14 @@ Q_SIGNALS:
 protected:
     void wheelEvent(QGraphicsSceneWheelEvent *event);
     void resizeEvent(QGraphicsSceneResizeEvent * event);
+    void changeEvent(QEvent *event);
 
 private:
     TabBarPrivate * const d;
 
     Q_PRIVATE_SLOT(d, void slidingCompleted(QGraphicsItem *item))
     Q_PRIVATE_SLOT(d, void shapeChanged(const QTabBar::Shape shape))
+    Q_PRIVATE_SLOT(d, void setPalette())
 };
 
 } // namespace Plasma

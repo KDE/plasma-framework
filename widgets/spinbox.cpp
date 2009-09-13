@@ -35,7 +35,8 @@ class SpinBoxPrivate
 {
 public:
     SpinBoxPrivate(SpinBox *spinBox)
-        : q(spinBox)
+        : q(spinBox),
+          customFont(false)
     {
     }
 
@@ -56,11 +57,15 @@ public:
         p.setColor(QPalette::Normal, QPalette::Base, QColor(0,0,0,0));
         p.setColor(QPalette::Inactive, QPalette::Base, QColor(0,0,0,0));
         native->setPalette(p);
-        native->setFont(Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont));
+
+        if (!customFont) {
+            q->nativeWidget()->setFont(Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont));
+        }
     }
 
     SpinBox *q;
     Plasma::Style::Ptr style;
+    bool customFont;
 };
 
 SpinBox::SpinBox(QGraphicsWidget *parent)
@@ -136,6 +141,16 @@ QString SpinBox::styleSheet()
 KIntSpinBox *SpinBox::nativeWidget() const
 {
     return static_cast<KIntSpinBox*>(widget());
+}
+
+void SpinBox::changeEvent(QEvent *event)
+{
+    if (event->type() == QEvent::FontChange) {
+        d->customFont = true;
+        nativeWidget()->setFont(font());
+    }
+
+    QGraphicsProxyWidget::changeEvent(event);
 }
 
 } // namespace Plasma

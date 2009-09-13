@@ -150,6 +150,7 @@ protected:
     void paint(QPainter *painter,
                const QStyleOptionGraphicsItem *option,
                QWidget *widget);
+    void changeEvent(QEvent *event);
 
 private:
     Q_PRIVATE_SLOT(d, void setPalette())

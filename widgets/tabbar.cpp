@@ -32,6 +32,7 @@
 #include <kdebug.h>
 
 #include <plasma/animator.h>
+#include <plasma/theme.h>
 
 #include "private/nativetabbar_p.h"
 
@@ -75,7 +76,8 @@ public:
           oldPage(0),
           newPage(0),
           oldPageAnimId(-1),
-          newPageAnimId(-1)
+          newPageAnimId(-1),
+          customFont(true)
     {
     }
 
@@ -86,6 +88,7 @@ public:
     void updateTabWidgetMode();
     void slidingCompleted(QGraphicsItem *item);
     void shapeChanged(const KTabBar::Shape shape);
+    void setPalette();
 
     TabBar *q;
     TabBarProxy *tabProxy;
@@ -100,6 +103,7 @@ public:
     QGraphicsWidget *newPage;
     int oldPageAnimId;
     int newPageAnimId;
+    bool customFont;
 };
 
 void TabBarPrivate::updateTabWidgetMode()
@@ -185,6 +189,26 @@ void TabBarPrivate::shapeChanged(const QTabBar::Shape shape)
     tabProxy->setPreferredSize(tabProxy->native->sizeHint());
 }
 
+void TabBarPrivate::setPalette()
+{
+    QTabBar *native = q->nativeWidget();
+    QColor color = Plasma::Theme::defaultTheme()->color(Plasma::Theme::TextColor);
+    QPalette p = native->palette();
+
+    p.setColor(QPalette::Normal, QPalette::Text, color);
+    p.setColor(QPalette::Inactive, QPalette::Text, color);
+    p.setColor(QPalette::Normal, QPalette::ButtonText, color);
+    p.setColor(QPalette::Inactive, QPalette::ButtonText, color);
+    p.setColor(QPalette::Normal, QPalette::Base, QColor(0,0,0,0));
+    p.setColor(QPalette::Inactive, QPalette::Base, QColor(0,0,0,0));
+    native->setPalette(p);
+
+    if (!customFont) {
+        q->nativeWidget()->setFont(Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont));
+    }
+}
+
+
 TabBar::TabBar(QGraphicsWidget *parent)
     : QGraphicsWidget(parent),
       d(new TabBarPrivate(this))
@@ -213,6 +237,8 @@ TabBar::TabBar(QGraphicsWidget *parent)
             this, SLOT(shapeChanged(QTabBar::Shape)));
     connect(Plasma::Animator::self(), SIGNAL(movementFinished(QGraphicsItem*)),
             this, SLOT(slidingCompleted(QGraphicsItem*)));
+    connect(Theme::defaultTheme(), SIGNAL(themeChanged()),
+            this, SLOT(setPalette()));
 }
 
 TabBar::~TabBar()
@@ -507,6 +533,16 @@ void TabBar::wheelEvent(QGraphicsSceneWheelEvent * event)
 {
     Q_UNUSED(event)
     //Still here for binary compatibility
+}
+
+void TabBar::changeEvent(QEvent *event)
+{
+    if (event->type() == QEvent::FontChange) {
+        d->customFont = true;
+        nativeWidget()->setFont(font());
+    }
+
+    QGraphicsWidget::changeEvent(event);
 }
 
 } // namespace Plasma

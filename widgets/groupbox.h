@@ -82,9 +82,11 @@ Q_SIGNALS:
 
 protected:
     void resizeEvent(QGraphicsSceneResizeEvent *event);
+    void changeEvent(QEvent *event);
 
 private:
     GroupBoxPrivate * const d;
+    Q_PRIVATE_SLOT(d, void setPalette())
 };
 
 } // namespace Plasma

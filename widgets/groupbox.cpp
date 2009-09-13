@@ -33,22 +33,42 @@ namespace Plasma
 class GroupBoxPrivate
 {
 public:
-    GroupBoxPrivate()
+    GroupBoxPrivate(GroupBox *groupBox)
+      :q(groupBox),
+       customFont(false)
     {
     }
 
     ~GroupBoxPrivate()
     {
     }
+
+    void setPalette()
+    {
+        QGroupBox *native = q->nativeWidget();
+        QColor color = Theme::defaultTheme()->color(Theme::TextColor);
+        QPalette p = native->palette();
+        p.setColor(QPalette::Normal, QPalette::WindowText, color);
+        p.setColor(QPalette::Inactive, QPalette::WindowText, color);
+        native->setPalette(p);
+
+        if (!customFont) {
+            q->nativeWidget()->setFont(Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont));
+        }
+    }
+
+    GroupBox *q;
+    bool customFont;
 };
 
 GroupBox::GroupBox(QGraphicsWidget *parent)
     : QGraphicsProxyWidget(parent),
-      d(new GroupBoxPrivate)
+      d(new GroupBoxPrivate(this))
 {
     QGroupBox *native = new QGroupBox;
     setWidget(native);
     native->setAttribute(Qt::WA_NoSystemBackground);
+    connect(Theme::defaultTheme(), SIGNAL(themeChanged()), this, SLOT(setPalette()));
 }
 
 GroupBox::~GroupBox()
@@ -84,6 +104,16 @@ QGroupBox *GroupBox::nativeWidget() const
 void GroupBox::resizeEvent(QGraphicsSceneResizeEvent *event)
 {
     QGraphicsProxyWidget::resizeEvent(event);
+}
+
+void GroupBox::changeEvent(QEvent *event)
+{
+    if (event->type() == QEvent::FontChange) {
+        d->customFont = true;
+        nativeWidget()->setFont(font());
+    }
+
+    QGraphicsProxyWidget::changeEvent(event);
 }
 
 } // namespace Plasma

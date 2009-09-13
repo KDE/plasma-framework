@@ -40,7 +40,8 @@ class LabelPrivate
 public:
     LabelPrivate(Label *label)
         : q(label),
-          svg(0)
+          svg(0),
+          customFont(false)
     {
     }
 
@@ -90,7 +91,10 @@ public:
         p.setColor(QPalette::Normal, QPalette::Link, Theme::defaultTheme()->color(Theme::LinkColor));
         p.setColor(QPalette::Normal, QPalette::LinkVisited, Theme::defaultTheme()->color(Theme::VisitedLinkColor));
         native->setPalette(p);
-        native->setFont(Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont));
+
+        if (!customFont) {
+            q->nativeWidget()->setFont(Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont));
+        }
     }
 
     Label *q;
@@ -98,6 +102,7 @@ public:
     QString absImagePath;
     Svg *svg;
     bool textSelectable;
+    bool customFont;
 };
 
 Label::Label(QGraphicsWidget *parent)
@@ -284,6 +289,16 @@ void Label::paint(QPainter *painter,
         buffPainter.end();
         painter->drawPixmap(buffer.rect(), buffer, buffer.rect());
     }
+}
+
+void Label::changeEvent(QEvent *event)
+{
+    if (event->type() == QEvent::FontChange) {
+        d->customFont = true;
+        nativeWidget()->setFont(font());
+    }
+
+    QGraphicsProxyWidget::changeEvent(event);
 }
 
 } // namespace Plasma

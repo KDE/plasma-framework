@@ -91,6 +91,9 @@ public:
      */
     KLineEdit *nativeWidget() const;
 
+protected:
+    void changeEvent(QEvent *event);
+
 Q_SIGNALS:
     void editingFinished();
     void returnPressed();

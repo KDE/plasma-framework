@@ -109,6 +109,7 @@ Q_SIGNALS:
 
 protected:
     void resizeEvent(QGraphicsSceneResizeEvent *event);
+    void changeEvent(QEvent *event);
 
 private:
     Q_PRIVATE_SLOT(d, void setPalette())

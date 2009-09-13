@@ -34,9 +34,10 @@ namespace Plasma
 class RadioButtonPrivate
 {
 public:
-    RadioButtonPrivate(RadioButton *w)
-        : q(w),
-          svg(0)
+    RadioButtonPrivate(RadioButton *radio)
+        : q(radio),
+          svg(0),
+          customFont(false)
     {
     }
 
@@ -45,40 +46,47 @@ public:
         delete svg;
     }
 
-    void setPixmap()
+    void setPixmap(RadioButton *q)
     {
         if (imagePath.isEmpty()) {
-            delete svg;
-            svg = 0;
             return;
         }
 
         KMimeType::Ptr mime = KMimeType::findByPath(absImagePath);
         QPixmap pm(q->size().toSize());
 
-        if (mime->is("image/svg+xml") || mime->is("image/svg+xml-compressed")) {
-            if (!svg || svg->imagePath() != imagePath) {
-                delete svg;
-                svg = new Svg();
-                svg->setImagePath(imagePath);
-                QObject::connect(svg, SIGNAL(repaintNeeded()), q, SLOT(setPixmap()));
-            }
-
+        if (mime->is("image/svg+xml")) {
+            svg = new Svg();
             QPainter p(&pm);
             svg->paint(&p, pm.rect());
         } else {
-            delete svg;
-            svg = 0;
             pm = QPixmap(absImagePath);
         }
 
         static_cast<QRadioButton*>(q->widget())->setIcon(QIcon(pm));
     }
 
+    void setPalette()
+    {
+        QRadioButton *native = q->nativeWidget();
+        QColor color = Theme::defaultTheme()->color(Theme::TextColor);
+        QPalette p = native->palette();
+
+        p.setColor(QPalette::Normal, QPalette::Text, color);
+        p.setColor(QPalette::Inactive, QPalette::Text, color);
+        native->setPalette(p);
+        native->setFont(Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont));
+
+        if (!customFont) {
+            q->nativeWidget()->setFont(Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont));
+        }
+    }
+
     RadioButton *q;
     QString imagePath;
     QString absImagePath;
     Svg *svg;
+    bool customFont;
 };
 
 RadioButton::RadioButton(QGraphicsWidget *parent)
@@ -89,6 +97,7 @@ RadioButton::RadioButton(QGraphicsWidget *parent)
     connect(native, SIGNAL(toggled(bool)), this, SIGNAL(toggled(bool)));
     setWidget(native);
     native->setAttribute(Qt::WA_NoSystemBackground);
+    connect(Theme::defaultTheme(), SIGNAL(themeChanged()), this, SLOT(setPalette()));
 }
 
 RadioButton::~RadioButton()
@@ -131,7 +140,7 @@ void RadioButton::setImage(const QString &path)
         d->absImagePath = Theme::defaultTheme()->imagePath(path);
     }
 
-    d->setPixmap();
+    d->setPixmap(this);
 }
 
 QString RadioButton::image() const
@@ -156,7 +165,7 @@ QRadioButton *RadioButton::nativeWidget() const
 
 void RadioButton::resizeEvent(QGraphicsSceneResizeEvent *event)
 {
-    d->setPixmap();
+    d->setPixmap(this);
     QGraphicsProxyWidget::resizeEvent(event);
 }
 
@@ -168,6 +177,16 @@ void RadioButton::setChecked(bool checked)
 bool RadioButton::isChecked() const
 {
     return static_cast<QRadioButton*>(widget())->isChecked();
+}
+
+void RadioButton::changeEvent(QEvent *event)
+{
+    if (event->type() == QEvent::FontChange) {
+        d->customFont = true;
+        nativeWidget()->setFont(font());
+    }
+
+    QGraphicsProxyWidget::changeEvent(event);
 }
 
 } // namespace Plasma

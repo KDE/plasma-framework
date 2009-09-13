@@ -36,7 +36,8 @@ class LineEditPrivate
 {
 public:
     LineEditPrivate(LineEdit *lineEdit)
-        :q(lineEdit)
+        :q(lineEdit),
+         customFont(false)
     {
     }
 
@@ -54,10 +55,15 @@ public:
         p.setColor(QPalette::Inactive, QPalette::Text, color);
         native->setPalette(p);
         native->setFont(Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont));
+
+        if (!customFont) {
+            q->nativeWidget()->setFont(Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont));
+        }
     }
 
     LineEdit *q;
     Plasma::Style::Ptr style;
+    bool customFont;
 };
 
 LineEdit::LineEdit(QGraphicsWidget *parent)
@@ -116,6 +122,16 @@ QString LineEdit::styleSheet()
 KLineEdit *LineEdit::nativeWidget() const
 {
     return static_cast<KLineEdit*>(widget());
+}
+
+void LineEdit::changeEvent(QEvent *event)
+{
+    if (event->type() == QEvent::FontChange) {
+        d->customFont = true;
+        nativeWidget()->setFont(font());
+    }
+
+    QGraphicsProxyWidget::changeEvent(event);
 }
 
 } // namespace Plasma

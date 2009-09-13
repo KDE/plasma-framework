@@ -35,12 +35,43 @@ namespace Plasma
 class TextEditPrivate
 {
 public:
+    TextEditPrivate(TextEdit *textEdit)
+        : q(textEdit),
+          customFont(false)
+    {
+    }
+
+    ~TextEditPrivate()
+    {
+    }
+
+    void setPalette()
+    {
+        KTextEdit *native = q->nativeWidget();
+        QColor color = Theme::defaultTheme()->color(Theme::TextColor);
+        QPalette p = native->palette();
+
+        p.setColor(QPalette::Normal, QPalette::Text, color);
+        p.setColor(QPalette::Inactive, QPalette::Text, color);
+        p.setColor(QPalette::Normal, QPalette::ButtonText, color);
+        p.setColor(QPalette::Inactive, QPalette::ButtonText, color);
+        p.setColor(QPalette::Normal, QPalette::Base, QColor(0,0,0,0));
+        p.setColor(QPalette::Inactive, QPalette::Base, QColor(0,0,0,0));
+        native->setPalette(p);
+
+        if (!customFont) {
+            q->nativeWidget()->setFont(Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont));
+        }
+    }
+
+    TextEdit *q;
     Plasma::Style::Ptr style;
+    bool customFont;
 };
 
 TextEdit::TextEdit(QGraphicsWidget *parent)
     : QGraphicsProxyWidget(parent),
-      d(new TextEditPrivate)
+      d(new TextEditPrivate(this))
 {
     KTextEdit *native = new KTextEdit;
     connect(native, SIGNAL(textChanged()), this, SIGNAL(textChanged()));
@@ -52,6 +83,8 @@ TextEdit::TextEdit(QGraphicsWidget *parent)
     d->style = Plasma::Style::sharedStyle();
     native->verticalScrollBar()->setStyle(d->style.data());
     native->horizontalScrollBar()->setStyle(d->style.data());
+    connect(Theme::defaultTheme(), SIGNAL(themeChanged()),
+            this, SLOT(setPalette()));
 }
 
 TextEdit::~TextEdit()
@@ -103,6 +136,16 @@ void TextEdit::dataUpdated(const QString &sourceName, const Plasma::DataEngine::
 void TextEdit::resizeEvent(QGraphicsSceneResizeEvent *event)
 {
     QGraphicsProxyWidget::resizeEvent(event);
+}
+
+void TextEdit::changeEvent(QEvent *event)
+{
+    if (event->type() == QEvent::FontChange) {
+        d->customFont = true;
+        nativeWidget()->setFont(font());
+    }
+
+    QGraphicsProxyWidget::changeEvent(event);
 }
 
 } // namespace Plasma

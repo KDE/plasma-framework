@@ -100,11 +100,13 @@ Q_SIGNALS:
 protected:
     void resizeEvent(QGraphicsSceneResizeEvent *event);
     void wheelEvent(QGraphicsSceneWheelEvent *event);
+    void changeEvent(QEvent *event);
 
 private:
     TextBrowserPrivate * const d;
 
     Q_PRIVATE_SLOT(d, void setFixedHeight())
+    Q_PRIVATE_SLOT(d, void setPalette())
 };
 
 } // namespace Plasma

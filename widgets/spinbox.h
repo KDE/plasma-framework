@@ -84,6 +84,8 @@ public:
      */
     KIntSpinBox *nativeWidget() const;
 
+protected:
+    void changeEvent(QEvent *event);
 
 public Q_SLOTS:
     /**

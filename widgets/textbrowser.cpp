@@ -41,7 +41,8 @@ public:
           native(0),
           savedMinimumHeight(0),
           savedMaximumHeight(QWIDGETSIZE_MAX),
-          wasNotFixed(true)
+          wasNotFixed(true),
+          customFont(false)
     {
     }
 
@@ -66,6 +67,25 @@ public:
         }
     }
 
+    void setPalette()
+    {
+        KTextBrowser *native = q->nativeWidget();
+        QColor color = Theme::defaultTheme()->color(Theme::TextColor);
+        QPalette p = native->palette();
+
+        p.setColor(QPalette::Normal, QPalette::Text, color);
+        p.setColor(QPalette::Inactive, QPalette::Text, color);
+        p.setColor(QPalette::Normal, QPalette::ButtonText, color);
+        p.setColor(QPalette::Inactive, QPalette::ButtonText, color);
+        p.setColor(QPalette::Normal, QPalette::Base, QColor(0,0,0,0));
+        p.setColor(QPalette::Inactive, QPalette::Base, QColor(0,0,0,0));
+        native->setPalette(p);
+
+        if (!customFont) {
+            q->nativeWidget()->setFont(Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont));
+        }
+    }
+
 
     TextBrowser *q;
     KTextBrowser *native;
@@ -73,6 +93,7 @@ public:
     int savedMinimumHeight;
     int savedMaximumHeight;
     bool wasNotFixed;
+    bool customFont;
 };
 
 TextBrowser::TextBrowser(QGraphicsWidget *parent)
@@ -91,6 +112,8 @@ TextBrowser::TextBrowser(QGraphicsWidget *parent)
     d->style = Plasma::Style::sharedStyle();
     native->verticalScrollBar()->setStyle(d->style.data());
     native->horizontalScrollBar()->setStyle(d->style.data());
+    connect(Theme::defaultTheme(), SIGNAL(themeChanged()),
+            this, SLOT(setPalette()));
 }
 
 TextBrowser::~TextBrowser()
@@ -163,6 +186,16 @@ void TextBrowser::wheelEvent(QGraphicsSceneWheelEvent *event)
     } else {
         QGraphicsProxyWidget::wheelEvent(event);
     }
+}
+
+void TextBrowser::changeEvent(QEvent *event)
+{
+    if (event->type() == QEvent::FontChange) {
+        d->customFont = true;
+        nativeWidget()->setFont(font());
+    }
+
+    QGraphicsProxyWidget::changeEvent(event);
 }
 
 } // namespace Plasma

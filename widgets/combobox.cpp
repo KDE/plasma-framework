@@ -307,6 +307,7 @@ void ComboBox::changeEvent(QEvent *event)
 {
     if (event->type() == QEvent::FontChange) {
         d->customFont = true;
+        nativeWidget()->setFont(font());
     }
 
     QGraphicsProxyWidget::changeEvent(event);

@@ -36,7 +36,8 @@ class CheckBoxPrivate
 public:
     CheckBoxPrivate(CheckBox *c)
         : q(c),
-          svg(0)
+          svg(0),
+          customFont(false)
     {
     }
 
@@ -83,12 +84,16 @@ public:
         p.setColor(QPalette::Normal, QPalette::WindowText, color);
         p.setColor(QPalette::Inactive, QPalette::WindowText, color);
         native->setPalette(p);
+        if (!customFont) {
+            q->nativeWidget()->setFont(Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont));
+        }
     }
 
     CheckBox *q;
     QString imagePath;
     QString absImagePath;
     Svg *svg;
+    bool customFont;
 };
 
 CheckBox::CheckBox(QGraphicsWidget *parent)
@@ -180,6 +185,16 @@ void CheckBox::setChecked(bool checked)
 bool CheckBox::isChecked() const
 {
     return static_cast<QCheckBox*>(widget())->isChecked();
+}
+
+void CheckBox::changeEvent(QEvent *event)
+{
+    if (event->type() == QEvent::FontChange) {
+        d->customFont = true;
+        nativeWidget()->setFont(font());
+    }
+
+    QGraphicsProxyWidget::changeEvent(event);
 }
 
 } // namespace Plasma
