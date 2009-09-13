@@ -97,6 +97,8 @@ protected:
     void resizeEvent(QGraphicsSceneResizeEvent *event);
 
 private:
+    Q_PRIVATE_SLOT(d, void setPixmap())
+
     <Name>Private * const d;
 };
 

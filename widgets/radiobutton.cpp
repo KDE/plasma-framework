@@ -34,8 +34,9 @@ namespace Plasma
 class RadioButtonPrivate
 {
 public:
-    RadioButtonPrivate()
-        : svg(0)
+    RadioButtonPrivate(RadioButton *w)
+        : q(w),
+          svg(0)
     {
     }
 
@@ -44,7 +45,7 @@ public:
         delete svg;
     }
 
-    void setPixmap(RadioButton *q)
+    void setPixmap()
     {
         if (imagePath.isEmpty()) {
             return;
@@ -53,8 +54,14 @@ public:
         KMimeType::Ptr mime = KMimeType::findByPath(absImagePath);
         QPixmap pm(q->size().toSize());
 
-        if (mime->is("image/svg+xml")) {
-            svg = new Svg();
+        if (mime->is("image/svg+xml") || mime->is("image/svg+xml-compressed")) {
+            if (!svg || svg->imagePath() != imagePath) {
+                delete svg;
+                svg = new Svg();
+                svg->setImagePath(imagePath);
+                QObject::connect(svg, SIGNAL(repaintNeeded()), q, SLOT(setPixmap()));
+            }
+
             QPainter p(&pm);
             svg->paint(&p, pm.rect());
         } else {
@@ -64,6 +71,7 @@ public:
         static_cast<QRadioButton*>(q->widget())->setIcon(QIcon(pm));
     }
 
+    RadioButton *q;
     QString imagePath;
     QString absImagePath;
     Svg *svg;
@@ -71,7 +79,7 @@ public:
 
 RadioButton::RadioButton(QGraphicsWidget *parent)
     : QGraphicsProxyWidget(parent),
-      d(new RadioButtonPrivate)
+      d(new RadioButtonPrivate(this))
 {
     QRadioButton *native = new QRadioButton;
     connect(native, SIGNAL(toggled(bool)), this, SIGNAL(toggled(bool)));
@@ -119,7 +127,7 @@ void RadioButton::setImage(const QString &path)
         d->absImagePath = Theme::defaultTheme()->imagePath(path);
     }
 
-    d->setPixmap(this);
+    d->setPixmap();
 }
 
 QString RadioButton::image() const
@@ -144,7 +152,7 @@ QRadioButton *RadioButton::nativeWidget() const
 
 void RadioButton::resizeEvent(QGraphicsSceneResizeEvent *event)
 {
-    d->setPixmap(this);
+    d->setPixmap();
     QGraphicsProxyWidget::resizeEvent(event);
 }
 

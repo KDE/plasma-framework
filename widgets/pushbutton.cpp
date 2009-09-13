@@ -59,7 +59,7 @@ public:
         delete svg;
     }
 
-    void setPixmap(PushButton *q)
+    void setPixmap()
     {
         if (imagePath.isEmpty()) {
             return;
@@ -70,8 +70,12 @@ public:
         pm.fill(Qt::transparent);
 
         if (mime->is("image/svg+xml") || mime->is("image/svg+xml-compressed")) {
-            svg = new Svg();
-            svg->setImagePath(absImagePath);
+            if (!svg || svg->imagePath() != imagePath) {
+                delete svg;
+                svg = new Svg();
+                svg->setImagePath(imagePath);
+                QObject::connect(svg, SIGNAL(repaintNeeded()), q, SLOT(setPixmap()));
+            }
 
             QPainter p(&pm);
             if (!svgElement.isNull() && svg->hasElement(svgElement)) {
@@ -220,7 +224,7 @@ void PushButton::setImage(const QString &path)
         d->absImagePath = Theme::defaultTheme()->imagePath(path);
     }
 
-    d->setPixmap(this);
+    d->setPixmap();
 }
 
 void PushButton::setImage(const QString &path, const QString &elementid)
@@ -286,7 +290,7 @@ KPushButton *PushButton::nativeWidget() const
 
 void PushButton::resizeEvent(QGraphicsSceneResizeEvent *event)
 {
-    d->setPixmap(this);
+    d->setPixmap();
 
    if (d->background) {
         //resize all four panels

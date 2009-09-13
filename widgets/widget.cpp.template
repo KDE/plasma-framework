@@ -33,8 +33,9 @@ namespace Plasma
 class <Name>Private
 {
 public:
-    <Name>Private()
-        : svg(0)
+    <Name>Private(<Name> *w)
+        : q(w),
+          svg(0)
     {
     }
 
@@ -53,7 +54,13 @@ public:
         QPixmap pm(q->size().toSize());
 
         if (mime->is("image/svg+xml")) {
-            svg = new Svg();
+            if (!svg || svg->imagePath() != imagePath) {
+                delete svg;
+                svg = new Svg();
+                svg->setImagePath(imagePath);
+                QObject::connect(svg, SIGNAL(repaintNeeded()), q, SLOT(setPixmap()));
+            }
+
             QPainter p(&pm);
             svg->paint(&p, pm.rect());
         } else {
@@ -65,6 +72,7 @@ public:
         //static_cast<<Native>*>(q->widget())->setIcon(QIcon(pm));
     }
 
+    <Name> *q;
     QString imagePath;
     QString absImagePath;
     Svg *svg;
@@ -72,7 +80,7 @@ public:
 
 <Name>::<Name>(QGraphicsWidget *parent)
     : QGraphicsProxyWidget(parent),
-      d(new <Name>Private)
+      d(new <Name>Private(this))
 {
     <Native>* native = new <Native>;
     //TODO: forward signals

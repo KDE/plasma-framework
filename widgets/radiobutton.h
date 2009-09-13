@@ -111,6 +111,8 @@ protected:
     void resizeEvent(QGraphicsSceneResizeEvent *event);
 
 private:
+    Q_PRIVATE_SLOT(d, void setPixmap())
+
     RadioButtonPrivate * const d;
 };
 

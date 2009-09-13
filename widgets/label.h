@@ -153,6 +153,7 @@ protected:
 
 private:
     Q_PRIVATE_SLOT(d, void setPalette())
+    Q_PRIVATE_SLOT(d, void setPixmap())
 
     LabelPrivate * const d;
 };
