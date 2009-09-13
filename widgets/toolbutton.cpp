@@ -62,6 +62,8 @@ public:
     void setPixmap()
     {
         if (imagePath.isEmpty()) {
+            delete svg;
+            svg = 0;
             return;
         }
 
@@ -92,6 +94,8 @@ public:
                 svg->paint(&p, pm.rect());
             }
         } else {
+            delete svg;
+            svg = 0;
             pm = QPixmap(absImagePath);
         }
 
