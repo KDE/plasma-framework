@@ -62,10 +62,13 @@ void PackageStructureTest::requiredDirectories()
 void PackageStructureTest::files()
 {
     QList<const char*> files;
-    files << "mainconfigui" << "mainconfigxml" << "mainscript";
+    files << "defaultconfig" << "mainconfigui" << "mainconfigxml" << "mainscript";
 
     QList<const char*> psFiles = ps->files();
 
+    //for (int i = 0; i < psFiles.count(); ++i) {
+    //    qDebug() << psFiles[i];
+    //}
     QCOMPARE(files.count(), psFiles.count());
     for (int i = 0; i < files.count(); ++i) {
         QCOMPARE(files[i], psFiles[i]);
