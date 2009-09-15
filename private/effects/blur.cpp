@@ -50,9 +50,11 @@ static inline void blurcol(QImage &im, int col, int alpha);
 template<int aprec,int zprec>
 void expblur(QImage &img, int radius)
 {
-    if(radius < 1) {
+  if (radius < 1) {
     return;
   }
+
+  img = img.convertToFormat(QImage::Format_ARGB32_Premultiplied);
 
   /* Calculate the alpha such that 90% of
      the kernel is within the radius.
