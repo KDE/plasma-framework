@@ -18,57 +18,58 @@
   * Boston, MA 02110-1301, USA.
   */
 
-#include "pendingcall.h"
-#include "pendingcall_p.h"
-#include "pendingcallwatcher.h"
+#include "pendingreply.h"
 
-#define QT_NO_CAST_FROM_ASCII
-#define QT_NO_CAST_TO_ASCII
+#include "pendingcall_p.h"
 
 using namespace Jolie;
 
-PendingCall::PendingCall(const PendingCall &other)
-    : d(other.d)
+PendingReply::PendingReply()
+    : PendingCall(QExplicitlySharedDataPointer<PendingCallPrivate>())
 {
 }
 
-PendingCall::PendingCall(QExplicitlySharedDataPointer<PendingCallPrivate> dd)
-    : d(dd)
+PendingReply::PendingReply(const PendingReply &other)
+    : PendingCall(other.d)
 {
 }
 
-PendingCall::~PendingCall()
+PendingReply::PendingReply(const PendingCall &call)
+    : PendingCall(call.d)
 {
 }
 
-PendingCall &PendingCall::operator=(const PendingCall &other)
+PendingReply::~PendingReply()
+{
+}
+
+PendingReply &PendingReply::operator=(const PendingReply &other)
 {
     d = other.d;
 
     return *this;
 }
 
-void PendingCallPrivate::setReply(const Message &message)
+PendingReply &PendingReply::operator=(const PendingCall &call)
 {
-    Q_ASSERT(message.id()==id);
-    isFinished = true;
-    reply = message;
+    d = call.d;
 
-    foreach (PendingCallWaiter *waiter, waiters) {
-        waiter->eventLoop.quit();
-    }
-    waiters.clear();
-
-    foreach (PendingCallWatcher *watcher, watchers) {
-        emit watcher->finished(watcher);
-    }
-    watchers.clear();
+    return *this;
 }
 
-void PendingCallWaiter::waitForFinished(PendingCallPrivate *pendingCall)
+bool PendingReply::isFinished() const
 {
-    if (pendingCall==0) return;
-    pendingCall->waiters << this;
-    eventLoop.exec();
+    return d ? d->isFinished : false;
+}
+
+Message PendingReply::reply() const
+{
+    return d ? d->reply : Message();
+}
+
+void PendingReply::waitForFinished()
+{
+    PendingCallWaiter waiter;
+    waiter.waitForFinished(d.data());
 }
 

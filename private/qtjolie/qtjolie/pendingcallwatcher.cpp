@@ -18,59 +18,29 @@
   * Boston, MA 02110-1301, USA.
   */
 
-#include "pendingreply.h"
+#include "pendingcallwatcher.h"
 
 #include "pendingcall_p.h"
 
-#define QT_NO_CAST_FROM_ASCII
-#define QT_NO_CAST_TO_ASCII
-
 using namespace Jolie;
 
-PendingReply::PendingReply()
-    : PendingCall(QExplicitlySharedDataPointer<PendingCallPrivate>())
+PendingCallWatcher::PendingCallWatcher(const PendingCall &other, QObject *parent)
+    : QObject(parent), PendingCall(other.d)
 {
+    d->watchers << this;
 }
 
-PendingReply::PendingReply(const PendingReply &other)
-    : PendingCall(other.d)
+PendingCallWatcher::~PendingCallWatcher()
 {
+    d->watchers.removeAll(this);
 }
 
-PendingReply::PendingReply(const PendingCall &call)
-    : PendingCall(call.d)
+bool PendingCallWatcher::isFinished() const
 {
+    return d->isFinished;
 }
 
-PendingReply::~PendingReply()
-{
-}
-
-PendingReply &PendingReply::operator=(const PendingReply &other)
-{
-    d = other.d;
-
-    return *this;
-}
-
-PendingReply &PendingReply::operator=(const PendingCall &call)
-{
-    d = call.d;
-
-    return *this;
-}
-
-bool PendingReply::isFinished() const
-{
-    return d ? d->isFinished : false;
-}
-
-Message PendingReply::reply() const
-{
-    return d ? d->reply : Message();
-}
-
-void PendingReply::waitForFinished()
+void PendingCallWatcher::waitForFinished()
 {
     PendingCallWaiter waiter;
     waiter.waitForFinished(d.data());

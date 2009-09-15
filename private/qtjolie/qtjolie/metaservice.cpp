@@ -25,9 +25,6 @@
 #include "client.h"
 #include "message.h"
 
-#define QT_NO_CAST_FROM_ASCII
-#define QT_NO_CAST_TO_ASCII
-
 namespace Jolie
 {
 
