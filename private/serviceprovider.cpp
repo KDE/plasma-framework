@@ -132,7 +132,7 @@ void ServiceProvider::sendOperations(Jolie::Message message)
     //hack around the not yet async service adaptor api in qtjolie
     if (m_descriptorMap.contains(id + uuid)) {
         kDebug() << "descriptor found, sending message";
-        AuthorizationManager::self()->d->server->sendMessage(
+        AuthorizationManager::self()->d->server->sendReply(
             m_descriptorMap.value(id + uuid), response);
     } else {
         kDebug() << "no valid entry in descriptormap.";
@@ -169,7 +169,7 @@ void ServiceProvider::sendEnabledOperations(Jolie::Message message)
     //hack around the not yet async service adaptor api in qtjolie
     if (m_descriptorMap.contains(id + uuid)) {
         kDebug() << "descriptor found, sending message";
-        AuthorizationManager::self()->d->server->sendMessage(
+        AuthorizationManager::self()->d->server->sendReply(
             m_descriptorMap.value(id + uuid), response);
     } else {
         kDebug() << "no valid entry in descriptormap.";
@@ -198,7 +198,7 @@ void ServiceProvider::relay(Jolie::Server *server, int descriptor,
         Jolie::Message response(message.resourcePath(), message.operationName(), message.id());
         QByteArray uuid = Message::field(Message::Field::UUID, message);
         response = appendToken(response, identity.id().toAscii(), uuid);
-        AuthorizationManager::self()->d->server->sendMessage(descriptor, response);
+        AuthorizationManager::self()->d->server->sendReply(descriptor, response);
 
         return;
     }
@@ -206,7 +206,7 @@ void ServiceProvider::relay(Jolie::Server *server, int descriptor,
     if (Message::field(Message::Field::TOKEN, message).isEmpty()) {
         Jolie::Message response(message.resourcePath(), message.operationName(), message.id());
         response.setFault(Jolie::Fault(Message::Error::INVALIDTOKEN));
-        AuthorizationManager::self()->d->server->sendMessage(descriptor, response);
+        AuthorizationManager::self()->d->server->sendReply(descriptor, response);
         return;
     }
     
@@ -252,7 +252,7 @@ void ServiceProvider::operationCompleted(Plasma::ServiceJob *job)
     //hack around the not yet async service adaptor api in qtjolie
     if (m_descriptorMap.contains(id + uuid)) {
         kDebug() << "descriptor found, sending message";
-        AuthorizationManager::self()->d->server->sendMessage(
+        AuthorizationManager::self()->d->server->sendReply(
             m_descriptorMap.value(id + uuid), response);
     } else {
         kDebug() << "no valid entry in descriptormap.";
@@ -427,7 +427,7 @@ void ServiceProvider::authorizationFailed(const Jolie::Message &message, const Q
 
     QByteArray id = Message::field(Message::Field::IDENTITYID, message);
     QByteArray uuid = Message::field(Message::Field::UUID, message);
-    AuthorizationManager::self()->d->server->sendMessage(
+    AuthorizationManager::self()->d->server->sendReply(
                             m_descriptorMap.value(id + uuid), response);
     return;
 }
