@@ -60,6 +60,10 @@
 #include <kshortcut.h>
 #include <kwindowsystem.h>
 #include <kpushbutton.h>
+#include <krun.h>
+#include "kio/jobclasses.h" // for KIO::JobFlags
+#include "kio/job.h"
+
 
 #include <solid/powermanagement.h>
 
@@ -99,6 +103,7 @@
 #include "private/service_p.h"
 #include "private/remotedataengine.h"
 #include "private/toolbox_p.h"
+#include "private/associatedapplicationmanager_p.h"
 #include "ui_publish.h"
 
 #include "config-plasma.h"
@@ -1163,6 +1168,11 @@ void Applet::flushPendingConstraintsEvents()
             configAction->setEnabled(canConfig);
         }
 
+        QAction *runAssociatedApplication = d->actions->action("run associated application");
+        if (runAssociatedApplication) {
+            connect(runAssociatedApplication, SIGNAL(triggered(bool)), this, SLOT(runAssociatedApplication()));
+        }
+
         d->updateShortcuts();
         Corona * corona = qobject_cast<Corona*>(scene());
         if (corona) {
@@ -1569,6 +1579,14 @@ KActionCollection* AppletPrivate::defaultActions(QObject *parent)
     closeApplet->setIcon(KIcon("edit-delete"));
     closeApplet->setShortcut(KShortcut("alt+d, r"));
 
+    KAction *runAssociatedApplication = actions->addAction("run associated application");
+    runAssociatedApplication->setAutoRepeat(false);
+    runAssociatedApplication->setText(i18n("Run the associated aplication"));
+    runAssociatedApplication->setIcon(KIcon("system-run"));
+    runAssociatedApplication->setShortcut(KShortcut("alt+d, t"));
+    runAssociatedApplication->setVisible(false);
+    runAssociatedApplication->setEnabled(false);
+
     return actions;
 }
 
@@ -1919,6 +1937,50 @@ bool Applet::hasAuthorization(const QString &constraint) const
 {
     KConfigGroup constraintGroup(KGlobal::config(), "Constraints");
     return constraintGroup.readEntry(constraint, true);
+}
+
+void Applet::setAssociatedApplication(const QString &string)
+{
+    AssociatedApplicationManager::self()->setApplication(this, string);
+
+    QAction *runAssociatedApplication = d->actions->action("run associated application");
+    if (runAssociatedApplication) {
+        bool valid = AssociatedApplicationManager::self()->appletHasValidAssociatedApplication(this);
+        runAssociatedApplication->setVisible(valid);
+        runAssociatedApplication->setEnabled(valid);
+    }
+}
+
+void Applet::setAssociatedApplicationUrls(const KUrl::List &urls)
+{
+    AssociatedApplicationManager::self()->setUrls(this, urls);
+
+    QAction *runAssociatedApplication = d->actions->action("run associated application");
+    if (runAssociatedApplication) {
+        bool valid = AssociatedApplicationManager::self()->appletHasValidAssociatedApplication(this);
+        runAssociatedApplication->setVisible(valid);
+        runAssociatedApplication->setEnabled(valid);
+    }
+}
+
+QString Applet::associatedApplication() const
+{
+    return AssociatedApplicationManager::self()->application(this);
+}
+
+KUrl::List Applet::associatedApplicationUrls() const
+{
+    return AssociatedApplicationManager::self()->urls(this);
+}
+
+void Applet::runAssociatedApplication()
+{
+    AssociatedApplicationManager::self()->run(this);
+}
+
+bool Applet::hasValidAssociatedApplication() const
+{
+    return AssociatedApplicationManager::self()->appletHasValidAssociatedApplication(this);
 }
 
 KPluginInfo::List Applet::listAppletInfo(const QString &category,

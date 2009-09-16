@@ -206,7 +206,7 @@ void AppletHandle::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
     int iconMargin = m_iconSize / 2;
 
     const QSize pixmapSize(int(m_decorationRect.width()),
-                           int(m_decorationRect.height()) + m_iconSize * 4 + 1);
+                           int(m_decorationRect.height()) + m_iconSize * 5 + 1);
     const QSize iconSize(KIconLoader::SizeSmall, KIconLoader::SizeSmall);
 
     //regenerate our buffer?
@@ -270,6 +270,12 @@ void AppletHandle::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
             iconRect.translate(0, m_iconSize);
             m_configureIcons->paint(&buffPainter, iconRect, "configure");
         }
+
+        if (m_applet && m_applet->hasValidAssociatedApplication()) {
+            iconRect.translate(0, m_iconSize);
+            m_configureIcons->paint(&buffPainter, iconRect, "maximize");
+        }
+
         iconRect.translate(0, m_iconSize);
         m_configureIcons->paint(&buffPainter, iconRect, "close");
 
@@ -294,6 +300,7 @@ void AppletHandle::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
     QPointF shiftD;
     QPointF shiftR;
     QPointF shiftM;
+    QPointF shiftMx;
 
     switch(m_pressedButton)
     {
@@ -308,6 +315,9 @@ void AppletHandle::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
         break;
     case ResizeButton:
         shiftM = QPointF(2, 2);
+        break;
+    case MaximizeButton:
+        shiftMx = QPointF(2, 2);
         break;
     default:
         break;
@@ -332,11 +342,20 @@ void AppletHandle::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
     sourceIconRect.translate(0, m_iconSize);
     painter->drawPixmap(QRectF(basePoint + shiftR, iconSize), *m_backgroundBuffer, sourceIconRect);
 
+    //configure
     if (m_applet && m_applet->hasConfigurationInterface()) {
         basePoint += step;
         sourceIconRect.translate(0, m_iconSize);
         painter->drawPixmap(
             QRectF(basePoint + shiftC, iconSize), *m_backgroundBuffer, sourceIconRect);
+    }
+
+    //maximize
+    if (m_applet && m_applet->hasValidAssociatedApplication()) {
+        basePoint += step;
+        sourceIconRect.translate(0, m_iconSize);
+        painter->drawPixmap(
+            QRectF(basePoint + shiftMx, iconSize), *m_backgroundBuffer, sourceIconRect);
     }
 
     //close
@@ -376,6 +395,13 @@ AppletHandle::ButtonType AppletHandle::mapToButton(const QPointF &point) const
         activeArea.translate(step);
         if (activeArea.contains(point)) {
             return ConfigureButton;
+        }
+    }
+
+    if (m_applet && m_applet->hasValidAssociatedApplication()) {
+        activeArea.translate(step);
+        if (activeArea.contains(point)) {
+            return MaximizeButton;
         }
     }
 
@@ -512,6 +538,11 @@ void AppletHandle::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
                 }
             break;
         }
+        case MaximizeButton:
+            if (m_applet) {
+                m_applet->runAssociatedApplication();
+            }
+            break;
         default:
             break;
         }

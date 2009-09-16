@@ -50,7 +50,8 @@ class AppletHandle : public QObject, public QGraphicsItem
             RotateButton,
             ConfigureButton,
             RemoveButton,
-            ResizeButton
+            ResizeButton,
+            MaximizeButton
         };
 
         AppletHandle(Containment *parent, Applet *applet, const QPointF &hoverPos);

@@ -628,6 +628,46 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
          */
         bool hasAuthorization(const QString &constraint) const;
 
+        /**
+         * Sets an application associated to this applet, that will be
+         * regarded as a full view of what is represented in the applet
+         *
+         * @param string the name of the application. it can be
+         *      \li a name understood by KService::serviceByDesktopName
+         *        (e.g. "konqueror")
+         *      \li a command in $PATH
+         *      \li or an absolute path to an executable
+         * @since 4.4
+         */
+        void setAssociatedApplication(const QString &string);
+
+        /**
+         * Sets a list of urls associated to this application,
+         * they will be used as parameters for the associated application
+         * @see setAssociatedApplication()
+         *
+         * @param urls
+         */
+        void setAssociatedApplicationUrls(const KUrl::List &urls);
+
+        /**
+         * @return the application associated to this applet
+         * @since 4.4
+         */
+        QString associatedApplication() const;
+
+        /**
+         * @return the urls associated to this applet
+         * @since 4.4
+         */
+        KUrl::List associatedApplicationUrls() const;
+
+        /**
+         * @return true if the applet has a valid associated application or urls
+         * @since 4.4
+         */
+        bool hasValidAssociatedApplication() const;
+
     Q_SIGNALS:
         /**
          * This signal indicates that an application launch, window
@@ -799,6 +839,16 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         void unpublish();
 
         bool isPublished() const;
+
+        /**
+         * Open the application associated to this applet, if it's not set
+         * but some urls are, open those urls with the proper application
+         * for their mimetype
+         * @see setAssociatedApplication()
+         * @see setAssociatedApplicationUrls()
+         * @since 4.4
+         */
+        void runAssociatedApplication();
 
     protected:
         /**
@@ -1018,6 +1068,7 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         friend class AccessAppletJobPrivate;
         friend class PopupApplet;
         friend class PopupAppletPrivate;
+        friend class AssociatedApplicationManager;
 
         friend class Extender;
         friend class ExtenderGroup;

@@ -32,6 +32,11 @@
 
 class KKeySequenceWidget;
 
+namespace KIO
+{
+    class Job;
+}
+
 namespace Plasma
 {
 

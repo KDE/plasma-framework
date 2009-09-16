@@ -63,6 +63,7 @@ set(plasma_LIB_SRCS
     plasma.cpp
     popupapplet.cpp
     private/applethandle.cpp
+    private/associatedapplicationmanager.cpp
     private/datacontainer_p.cpp
     private/dataengineconsumer.cpp
     private/dataengineservice.cpp
