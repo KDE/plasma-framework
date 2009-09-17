@@ -18,7 +18,7 @@
  */
 
 #include "scrollwidget.h"
-
+#include "private/kineticscroll_p.h"
 //Qt
 #include <QGraphicsSceneResizeEvent>
 #include <QGraphicsGridLayout>
@@ -37,7 +37,7 @@
 namespace Plasma
 {
 
-class ScrollWidgetPrivate
+class ScrollWidgetPrivate: public KineticScrolling
 {
 public:
     ScrollWidgetPrivate(ScrollWidget *parent)
@@ -209,7 +209,6 @@ ScrollWidget::~ScrollWidget()
     delete d;
 }
 
-
 void ScrollWidget::setWidget(QGraphicsWidget *widget)
 {
     if (d->widget && d->widget != widget) {
@@ -218,6 +217,7 @@ void ScrollWidget::setWidget(QGraphicsWidget *widget)
     }
 
     d->widget = widget;
+    d->setWidgets(widget, d->scrollingWidget);
     widget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     widget->setParentItem(d->scrollingWidget);
     widget->setPos(QPoint(0,0));
@@ -303,31 +303,25 @@ void ScrollWidget::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
         return;
     }
 
-    QPointF deltaPos = event->pos() - event->lastPos();
-
-    d->widget->setPos(qBound(qMin((qreal)0,-d->widget->size().width()+d->scrollingWidget->size().width()), d->widget->pos().x()+deltaPos.x(), (qreal)0),
-                      qBound(qMin((qreal)0,-d->widget->size().height()+d->scrollingWidget->size().height()), d->widget->pos().y()+deltaPos.y(), (qreal)0));
-
-    d->dragging = true;
-    d->horizontalScrollBar->setValue(-d->widget->pos().x()/10);
-    d->verticalScrollBar->setValue(-d->widget->pos().y()/10);
-    d->dragging = false;
-
+    d->mouseMoveEvent(event);
     QGraphicsWidget::mouseMoveEvent(event);
 }
 
 void ScrollWidget::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     event->accept();
+    d->mousePressEvent(event);
+}
+
+void ScrollWidget::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
+{
+    d->mouseReleaseEvent(event);
 }
 
 void ScrollWidget::wheelEvent(QGraphicsSceneWheelEvent *event)
 {
-    if (event->delta() < 0) {
-        d->verticalScrollBar->setValue(d->verticalScrollBar->value()+10);
-    } else {
-        d->verticalScrollBar->setValue(d->verticalScrollBar->value()-10);
-    }
+    event->accept();
+    d->wheelReleaseEvent( event );
     QGraphicsWidget::wheelEvent(event);
 }
 

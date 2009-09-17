@@ -118,6 +118,7 @@ protected:
 
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
+    void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
     void wheelEvent(QGraphicsSceneWheelEvent *event);
     bool eventFilter(QObject *watched, QEvent *event);
 
@@ -126,6 +127,7 @@ private:
 
     Q_PRIVATE_SLOT(d, void verticalScroll(int value))
     Q_PRIVATE_SLOT(d, void horizontalScroll(int value))
+
 };
 
 } // namespace Plasma

@@ -89,6 +89,7 @@ set(plasma_LIB_SRCS
     private/tooltip.cpp
     private/wallpaperrenderthread.cpp
     private/windowpreview.cpp
+    private/kineticscroll.cpp
     querymatch.cpp
     remote/accessmanager.cpp
     remote/accessappletjob.cpp
