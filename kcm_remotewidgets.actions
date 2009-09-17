@@ -2,7 +2,6 @@
 Name=Save remote widgets policies
 Name[bg]=Запазване политиките на отдалечени джаджи
 Name[ca]=Desa polítiques d'estris remots
-Name[ca@valencia]=Desa polítiques d'estris remots
 Name[id]=Simpan kebijakan widget jarak jauh
 Name[nds]=Regeln för feern Lüttprogrammen sekern
 Name[pt]=Gravar as políticas dos elementos remotos
@@ -15,7 +14,6 @@ Name[zh_TW]=儲存遠端元件政策
 Description=Prevents the system from saving plasma remote widgets policies
 Description[bg]=Посигурява системата да не запазва политиките на отдалечените джаджи па plasma
 Description[ca]=Evita al sistema de desar polítiques d'estris remots del plasma
-Description[ca@valencia]=Evita al sistema de desar polítiques d'estris remots del plasma
 Description[id]=Cegah sistem dari menyimpan kebijakan widget jarak jauh plasma
 Description[nds]=Höllt dat Systeem vun't Sekern vun de Regeln för feern Plasma-Lüttprogrammen af
 Description[pt]=Impede que o sistema grave as políticas dos elementos remotos do Plasma
