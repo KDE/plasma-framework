@@ -95,7 +95,7 @@ void ItemBackground::setTarget(const QRectF &newGeometry)
     d->oldGeometry = geometry();
     d->newGeometry = newGeometry;
 
-    if (!isVisible()) {
+    if (!isVisible() && (!d->target || !d->target->isVisible())) {
         setGeometry(d->newGeometry);
         return;
     }
@@ -107,6 +107,12 @@ void ItemBackground::setTarget(const QRectF &newGeometry)
 
     if (d->animId != 0) {
         Plasma::Animator::self()->stopCustomAnimation(d->animId);
+    }
+
+    if (d->target && d->target->isVisible() && !isVisible()) {
+        setGeometry(newGeometry);
+        d->oldGeometry = newGeometry;
+        show();
     }
 
     d->fading = false;
@@ -133,6 +139,8 @@ void ItemBackground::setTargetItem(QGraphicsItem *target)
     }
 
     if (target) {
+        d->target = target;
+
         setZValue(target->zValue() - 1);
         setParentItem(target->parentItem());
         QRectF rect = target->boundingRect();
@@ -140,8 +148,6 @@ void ItemBackground::setTargetItem(QGraphicsItem *target)
         setTarget(rect);
 
         if (d->target != target) {
-            d->target = target;
-
             d->target->installSceneEventFilter(this);
 
             QObject *obj = 0;
@@ -235,7 +241,7 @@ void ItemBackgroundPrivate::animationUpdate(qreal progress)
             q->hide();
             immediate = false;
         }
-    } else {
+    } else if (oldGeometry != newGeometry) {
         q->setGeometry(oldGeometry.x() + (newGeometry.x() - oldGeometry.x()) * progress,
                        oldGeometry.y() + (newGeometry.y() - oldGeometry.y()) * progress,
                        oldGeometry.width() + (newGeometry.width() - oldGeometry.width()) * progress,
