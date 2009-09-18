@@ -223,7 +223,6 @@ void KineticScrolling::setKineticScrollValue(int value)
 
     d->cposition = qBound(d->minimalPos, d->maximumPos, d->overshoot);
     d->widget->setPos(0, d->cposition);
-    d->verticalScroll(-d->cposition/10);
 
     if (d->cposition == d->overshoot) {
         d->direction = KineticScrollingPrivate::Up;
