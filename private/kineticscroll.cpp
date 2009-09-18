@@ -98,17 +98,17 @@ KineticScrolling::~KineticScrolling()
     delete d;
 }
 
-int KineticScrolling::movement()
+int KineticScrolling::movement() const
 {
     return d->movement;
 }
 
-int KineticScrolling::kinMovement()
+int KineticScrolling::kinMovement() const
 {
     return d->kinMovement;
 }
 
-qreal KineticScrolling::duration()
+qreal KineticScrolling::duration() const
 {
     return d->timeDelta;
 }

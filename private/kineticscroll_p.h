@@ -46,9 +46,9 @@ class KineticScrolling: public QObject
         KineticScrollingPrivate *d;
         void timerEvent(QTimerEvent *event);
         void bounceTimer();
-        qreal duration();
-        int movement();
-        int kinMovement();
+        qreal duration() const;
+        int movement() const;
+        int kinMovement() const;
         void startAnimationTimer(int interval);
         void doneOvershoot(void);
 
