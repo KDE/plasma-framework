@@ -45,7 +45,7 @@ class KineticScrollingPrivate
 {
 public:
     KineticScrollingPrivate(): mScrollVelocity(0), timerID(0),
-                               overshut(40), bounceFlag(0)
+                               overshoot(40), bounceFlag(0)
     { }
 
     void count()
@@ -77,7 +77,7 @@ public:
 
     qreal mScrollVelocity;
     enum { None, Up, Down };
-    int timerID, overshut, cposition, direction, minimalPos, maximumPos;
+    int timerID, overshoot, cposition, direction, minimalPos, maximumPos;
     char bounceFlag;
 
     QGraphicsWidget *widget;
@@ -115,7 +115,7 @@ qreal KineticScrolling::duration()
 
 void KineticScrolling::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-    doneOvershut();
+    doneOvershoot();
 
     Q_UNUSED(event);
     d->count();
@@ -217,15 +217,15 @@ void KineticScrolling::setKineticScrollValue(int value)
 {
 
     d->minimalPos = (-(d->widget->size().height())) + d->scrollingWidget->size().height()
-                 -(d->overshut);
-    d->minimalPos = qMin(d->overshut, d->minimalPos);
+                 -(d->overshoot);
+    d->minimalPos = qMin(d->overshoot, d->minimalPos);
     d->maximumPos = d->widget->pos().y() - value;
 
-    d->cposition = qBound(d->minimalPos, d->maximumPos, d->overshut);
+    d->cposition = qBound(d->minimalPos, d->maximumPos, d->overshoot);
     d->widget->setPos(0, d->cposition);
     d->verticalScroll(-d->cposition/10);
 
-    if (d->cposition == d->overshut) {
+    if (d->cposition == d->overshoot) {
         d->direction = KineticScrollingPrivate::Up;
         killTimer(d->timerID);
         d->mScrollVelocity = 5;
@@ -259,34 +259,34 @@ void KineticScrolling::bounceTimer()
 
     if ((d->direction == KineticScrollingPrivate::Up) && (d->cposition < 0)) {
         if (!d->bounceFlag) {
-            d->cposition = d->overshut/4;
+            d->cposition = d->overshoot/4;
             d->bounceFlag = 1;
             d->widget->setPos(0, d->cposition);
             return;
         } else {
             d->bounceFlag = 0;
             d->cposition = 0;
-            doneOvershut() ;
+            doneOvershoot() ;
         }
 
     } else if ((d->direction == KineticScrollingPrivate::Down) &&
-                ((d->cposition - d->overshut) > d->minimalPos)) {
+                ((d->cposition - d->overshoot) > d->minimalPos)) {
         if (!d->bounceFlag) {
-            d->cposition = d->minimalPos + d->overshut/4;
+            d->cposition = d->minimalPos + d->overshoot/4;
             d->bounceFlag = 1;
             d->widget->setPos(0, d->cposition);
             return;
         } else {
             d->bounceFlag = 0;
-            d->cposition = d->minimalPos + d->overshut;
-            doneOvershut();
+            d->cposition = d->minimalPos + d->overshoot;
+            doneOvershoot();
         }
     }
 
 }
 
 
-void KineticScrolling::doneOvershut(void)
+void KineticScrolling::doneOvershoot(void)
 {
     d->direction = KineticScrollingPrivate::None;
     d->mScrollVelocity = 0;

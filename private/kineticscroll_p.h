@@ -35,8 +35,8 @@ class KineticScrolling: public QObject
 {
     public:
         KineticScrolling();
-	~KineticScrolling();
-	void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
+        ~KineticScrolling();
+        void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
         void mousePressEvent(QGraphicsSceneMouseEvent *event);
         void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
         void wheelReleaseEvent(QGraphicsSceneWheelEvent *event);
@@ -48,9 +48,9 @@ class KineticScrolling: public QObject
         void bounceTimer();
         qreal duration();
         int movement();
-	int kinMovement();
+        int kinMovement();
         void startAnimationTimer(int interval);
-        void doneOvershut(void);
+        void doneOvershoot(void);
 
 public Q_SLOTS:
     void setKineticScrollValue(int value);
