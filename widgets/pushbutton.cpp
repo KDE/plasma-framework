@@ -394,11 +394,17 @@ void PushButton::paint(QPainter *painter,
             iconPix = effect->apply(iconPix, KIconLoader::Toolbar, KIconLoader::DisabledState);
         }
 
+        QRect pixmapRect;
+        if (nativeWidget()->text().isEmpty()) {
+            pixmapRect = nativeWidget()->style()->alignedRect(option->direction, Qt::AlignCenter, iconPix.size(), rect.toRect());
+        } else {
+            pixmapRect = nativeWidget()->style()->alignedRect(option->direction, Qt::AlignLeft|Qt::AlignVCenter, iconPix.size(), rect.toRect());
+        }
+        painter->drawPixmap(pixmapRect.topLeft(), iconPix);
+
         if (option->direction == Qt::LeftToRight) {
-            painter->drawPixmap(rect.topLeft(), iconPix);
             rect.adjust(rect.height(), 0, 0, 0);
         } else {
-            painter->drawPixmap(rect.topRight() - QPoint(rect.height(), 0), iconPix);
             rect.adjust(0, 0, -rect.height(), 0);
         }
     }
