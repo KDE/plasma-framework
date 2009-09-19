@@ -99,6 +99,12 @@ Q_SIGNALS:
     void returnPressed();
     void textEdited(const QString &text);
 
+    /**
+     * Emitted when the text changes
+     * @since 4.4
+     */
+    void textChanged(const QString &text);
+
 private:
     Q_PRIVATE_SLOT(d, void setPalette())
 

@@ -71,13 +71,15 @@ LineEdit::LineEdit(QGraphicsWidget *parent)
       d(new LineEditPrivate(this))
 {
     KLineEdit *native = new KLineEdit;
+    d->style = Plasma::Style::sharedStyle();
+    native->setStyle(d->style.data());
+    native->setAttribute(Qt::WA_NoSystemBackground);
+    setWidget(native);
+
     connect(native, SIGNAL(editingFinished()), this, SIGNAL(editingFinished()));
     connect(native, SIGNAL(returnPressed()), this, SIGNAL(returnPressed()));
     connect(native, SIGNAL(textEdited(const QString&)), this, SIGNAL(textEdited(const QString&)));
-    setWidget(native);
-    native->setAttribute(Qt::WA_NoSystemBackground);
-    d->style = Plasma::Style::sharedStyle();
-    native->setStyle(d->style.data());
+    connect(native, SIGNAL(textChanged(const QString&)), this, SIGNAL(textChanged(const QString&)));
 
     d->setPalette();
     connect(Theme::defaultTheme(), SIGNAL(themeChanged()), this, SLOT(setPalette()));
