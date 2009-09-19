@@ -26,6 +26,8 @@ class QGraphicsSceneMouseEvent;
 class QGraphicsWidget;
 #include <QObject>
 
+class QPoint;
+
 namespace Plasma
 {
 
@@ -46,14 +48,14 @@ class KineticScrolling: public QObject
         KineticScrollingPrivate *d;
         void timerEvent(QTimerEvent *event);
         void bounceTimer();
-        qreal duration() const;
-        int movement() const;
-        int kinMovement() const;
+        qreal duration();
+        QPoint movement();
+        QPoint kinMovement();
         void startAnimationTimer(int interval);
         void doneOvershoot(void);
 
 public Q_SLOTS:
-    void setKineticScrollValue(int value);
+    void setKineticScrollValue(QPoint value);
 
 };
 
