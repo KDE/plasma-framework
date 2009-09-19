@@ -127,14 +127,14 @@ void ItemBackground::setTargetItem(QGraphicsItem *target)
         d->target->removeSceneEventFilter(this);
 
         QObject *obj = 0;
-        if (target && target->isWidget()) {
-            obj = static_cast<QGraphicsWidget*>(target);
+        if (d->target->isWidget()) {
+            obj = static_cast<QGraphicsWidget*>(d->target);
         } else {
-            obj = dynamic_cast<QObject *>(target);
+            obj = dynamic_cast<QObject *>(d->target);
         }
 
         if (obj) {
-            disconnect(obj, 0, obj, 0);
+            disconnect(obj, 0, this, 0);
         }
     }
 
