@@ -108,7 +108,7 @@ public:
         }
 
 
-        if (widget && widget->size().height() <= q->size().height()) {
+        if (widget && widget->size().width() <= q->size().width()) {
             leftBorder->deleteLater();
             rightBorder->deleteLater();
             leftBorder = 0;
