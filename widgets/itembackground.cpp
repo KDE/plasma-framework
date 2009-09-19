@@ -139,8 +139,6 @@ void ItemBackground::setTargetItem(QGraphicsItem *target)
     }
 
     if (target) {
-        d->target = target;
-
         setZValue(target->zValue() - 1);
         setParentItem(target->parentItem());
         QRectF rect = target->boundingRect();
@@ -148,7 +146,7 @@ void ItemBackground::setTargetItem(QGraphicsItem *target)
         setTarget(rect);
 
         if (d->target != target) {
-            d->target->installSceneEventFilter(this);
+            target->installSceneEventFilter(this);
 
             QObject *obj = 0;
             if (target->isWidget()) {
@@ -161,6 +159,7 @@ void ItemBackground::setTargetItem(QGraphicsItem *target)
                 connect(obj, SIGNAL(destroyed(QObject*)), this, SLOT(targetDestroyed(QObject*)));
             }
         }
+        d->target = target;
     } else {
         d->target = 0;
         hide();
