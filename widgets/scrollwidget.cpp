@@ -67,13 +67,32 @@ public:
                 layout->removeAt(1);
             }
             verticalScrollBar->hide();
+        } else if (!verticalScrollBar->isVisible()) {
+            layout->addItem(verticalScrollBar, 0, 1);
+            verticalScrollBar->show();
+        }
+
+        horizontalScrollBar->nativeWidget()->setMaximum(qMax(0, int((widget->size().width() - scrollingWidget->size().width())/10)));
+
+        if (horizontalScrollBarPolicy == Qt::ScrollBarAlwaysOff ||
+            horizontalScrollBar->nativeWidget()->maximum() == 0) {
+            if (layout->itemAt(2) == horizontalScrollBar) {
+                layout->removeAt(2);
+            } else if (layout->itemAt(1) == horizontalScrollBar) {
+                layout->removeAt(1);
+            }
+            horizontalScrollBar->hide();
+        } else if (!horizontalScrollBar->isVisible()) {
+            layout->addItem(horizontalScrollBar, 1, 0);
+            horizontalScrollBar->show();
+        }
+
+        if (widget && widget->size().height() <= q->size().height()) {
             topBorder->deleteLater();
             bottomBorder->deleteLater();
             topBorder = 0;
             bottomBorder = 0;
-        } else if (!verticalScrollBar->isVisible()) {
-            layout->addItem(verticalScrollBar, 0, 1);
-            verticalScrollBar->show();
+        } else if (!topBorder) {
             topBorder = new Plasma::SvgWidget(q);
             topBorder->setSvg(borderSvg);
             topBorder->setElementID("border-top");
@@ -89,23 +108,12 @@ public:
         }
 
 
-        horizontalScrollBar->nativeWidget()->setMaximum(qMax(0, int((widget->size().width() - scrollingWidget->size().width())/10)));
-
-        if (horizontalScrollBarPolicy == Qt::ScrollBarAlwaysOff ||
-            horizontalScrollBar->nativeWidget()->maximum() == 0) {
-            if (layout->itemAt(2) == horizontalScrollBar) {
-                layout->removeAt(2);
-            } else if (layout->itemAt(1) == horizontalScrollBar) {
-                layout->removeAt(1);
-            }
-            horizontalScrollBar->hide();
+        if (widget && widget->size().height() <= q->size().height()) {
             leftBorder->deleteLater();
             rightBorder->deleteLater();
             leftBorder = 0;
             rightBorder = 0;
-        } else if (!horizontalScrollBar->isVisible()) {
-            layout->addItem(horizontalScrollBar, 1, 0);
-            horizontalScrollBar->show();
+        } else if (!leftBorder) {
             leftBorder = new Plasma::SvgWidget(q);
             leftBorder->setSvg(borderSvg);
             leftBorder->setElementID("border-left");
