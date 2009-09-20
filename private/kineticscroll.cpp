@@ -46,7 +46,7 @@ class KineticScrollingPrivate
 {
 public:
     KineticScrollingPrivate(): mScrollVelocity(0), timerID(0),
-                               overshoot(40), bounceFlag(0)
+                               overshoot(40), bounceFlag(0), hasOvershoot(true)
     { }
 
     void count()
@@ -81,6 +81,7 @@ public:
     int timerID, overshoot, direction;
     QPoint cposition, minimalPos, maximumPos;
     char bounceFlag;
+    bool hasOvershoot;
 
     QGraphicsWidget *widget;
     QGraphicsWidget *scrollingWidget;
@@ -159,7 +160,7 @@ void KineticScrolling::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
         d->direction = KineticScrollingPrivate::Down;
     } else { 
         d->direction = KineticScrollingPrivate::None;
-        d->mScrollVelocity = (d->kinMovement.x() + d->kinMovement.y())>>2;
+        d->mScrollVelocity = d->kinMovement.x() + d->kinMovement.y();
         startAnimationTimer(30);
         return;
     }
@@ -231,13 +232,13 @@ void KineticScrolling::setKineticScrollValue(QPoint value)
 
     d->widget->setPos(d->cposition);
 
-    if (d->cposition.y() == d->overshoot) {
+    if ((d->cposition.y() == d->overshoot) && d->hasOvershoot) {
         d->direction = KineticScrollingPrivate::Up;
         killTimer(d->timerID);
         d->mScrollVelocity = 5;
         startAnimationTimer(30);
 
-    } else if (d->cposition.y() == d->minimalPos.y()) {
+    } else if ((d->cposition.y() == d->minimalPos.y()) && d->hasOvershoot) {
         d->direction = KineticScrollingPrivate::Down;
         killTimer(d->timerID);
         d->mScrollVelocity = 5;
@@ -289,7 +290,6 @@ void KineticScrolling::bounceTimer()
     }
 }
 
-
 void KineticScrolling::doneOvershoot(void)
 {
     d->direction = KineticScrollingPrivate::None;
@@ -303,6 +303,32 @@ void KineticScrolling::setWidgets(QGraphicsWidget *widget,
 {
     d->widget = widget;
     d->scrollingWidget = scrolling;
+
+    if(d->widget->size().height() <= d->scrollingWidget->size().height()) {
+        d->hasOvershoot = false;
+        d->overshoot = 0;	
+    }
+
+    d->widget->installEventFilter(this);
+}
+
+bool KineticScrolling::eventFilter(QObject *watched, QEvent *event)
+{
+    const int threashold = 10;
+    if (!d->widget) {
+        return false;
+    }
+
+    if (watched == d->widget && event->type() == QEvent::GraphicsSceneResize) {
+        if(d->widget->size().height() <= d->scrollingWidget->size().height()+threashold) {
+            d->hasOvershoot = false;
+            d->overshoot = 0;
+        } else {
+            d->hasOvershoot = true;
+            d->overshoot = 40;
+        }
+    }
+    return false;
 }
 
 } // namespace Plasma
