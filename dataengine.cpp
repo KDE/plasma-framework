@@ -446,6 +446,8 @@ void DataEnginePrivate::publish(AnnouncementMethods methods, const QString &name
 
 void DataEnginePrivate::unpublish(const QString &name)
 {
+    Q_UNUSED(name)
+
     if (publishedService) {
         publishedService->d->unpublish();
     }
