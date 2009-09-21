@@ -107,7 +107,7 @@ Credentials Credentials::createCredentials(const QString &name)
         kWarning() << "QCA doesn't support " << REQUIRED_FEATURES;
         return Credentials();
     }
-    
+
     QCA::KeyGenerator generator;
     QCA::PrivateKey key = generator.createRSA(2048);
     QString pemKey(key.toPublicKey().toPEM());
@@ -141,7 +141,7 @@ bool Credentials::isValid() const
         kWarning() << "QCA doesn't support " << REQUIRED_FEATURES;
         return false;
     }
-    
+
     if (d->publicKey.isNull()) {
         return false;
     } else {
@@ -171,7 +171,7 @@ bool Credentials::isValidSignature(const QByteArray &signature, const QByteArray
         kWarning() << "QCA doesn't support " << REQUIRED_FEATURES;
         return false;
     }
-    
+
     if (d->publicKey.canVerify()) {
         if (!isValid()) {
             kDebug() << "Key is null?";
@@ -196,7 +196,7 @@ bool Credentials::canSign() const
         kWarning() << "QCA doesn't support " << REQUIRED_FEATURES;
         return false;
     }
-    
+
     return d->privateKey.canSign();
 #else
     return false;
