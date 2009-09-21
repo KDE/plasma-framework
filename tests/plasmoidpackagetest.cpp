@@ -18,6 +18,7 @@
 *******************************************************************************/
 
 #include "plasmoidpackagetest.h"
+#include "../config-plasma.h"
 
 #include <QDir>
 #include <QFile>
@@ -26,8 +27,15 @@
 #include "plasma/applet.h"
 #include "plasma/packagemetadata.h"
 
+#ifdef QCA2_FOUND
+#include <QtCrypto>
+#endif
+
 void PlasmoidPackageTest::init()
 {
+#ifdef QCA2_FOUND
+    QCA::Initializer *cryptoInit = new QCA::Initializer;
+#endif
     mPackage = QString("Package");
     mPackageRoot = QDir::homePath() + "/.kde-unit-test/packageRoot";
     ps = Plasma::Applet::packageStructure();
@@ -42,7 +50,7 @@ void PlasmoidPackageTest::cleanup()
 
     // Clean things up.
     QDir local = QDir::homePath() + QLatin1String("/.kde-unit-test/packageRoot");
-    foreach(const QString &dir, local.entryList(QDir::Dirs)) {
+    foreach (const QString &dir, local.entryList(QDir::Dirs)) {
         removeDir(QLatin1String("packageRoot/" + dir.toLatin1() + "/contents/code"));
         removeDir(QLatin1String("packageRoot/" + dir.toLatin1() + "/contents/images"));
         removeDir(QLatin1String("packageRoot/" + dir.toLatin1() + "/contents"));
@@ -70,8 +78,7 @@ void PlasmoidPackageTest::createTestPackage(const QString &packageName)
 {
     QDir pRoot(mPackageRoot);
     // Create the root and package dir.
-    if(!pRoot.exists())
-    {
+    if (!pRoot.exists()) {
         QVERIFY(QDir().mkpath(mPackageRoot));
     }
 
@@ -166,14 +173,18 @@ void PlasmoidPackageTest::isValid()
     QVERIFY(file.open(QIODevice::WriteOnly | QIODevice::Text));
 
     out.setDevice(&file);
-    out << "THIS IS A PLASMOID SCRIPT.....";
+    out << "THIS IS A PLASMOID SCRIPT.....\n";
     file.flush();
     file.close();
 
+    file.setPermissions(QFile::ReadUser | QFile::WriteUser);
     // Main file exists so should be valid now.
     delete p;
     p = new Plasma::Package(mPackageRoot, mPackage, ps);
     QVERIFY(p->isValid());
+#ifdef QCA2_FOUND
+    QCOMPARE(QString("0b8c7de4bee1ac6f373276ac2b5776c9194b2c56"), p->hash());
+#endif
 }
 
 void PlasmoidPackageTest::filePath()

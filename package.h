@@ -136,6 +136,11 @@ class PLASMA_EXPORT Package
         const PackageStructure::Ptr structure() const;
 
         /**
+         * @return a SHA1 hash digest of the contents of the package in hexadecimal form
+         */
+        QString hash() const;
+
+        /**
          * Returns a list of all installed packages by name
          *
          * @param packageRoot path to the directory where Plasmagik packages

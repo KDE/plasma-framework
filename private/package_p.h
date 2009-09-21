@@ -35,6 +35,10 @@ public:
     void unpublish();
     bool isPublished() const;
 
+#ifdef QCA2_FOUND
+    void updateHash(const QString &basePath, const QString &subPath, const QDir &dir, QCA::Hash &hash);
+#endif
+
     PackageStructure::Ptr structure;
     Service *service;
     bool valid;
