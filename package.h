@@ -138,7 +138,7 @@ class PLASMA_EXPORT Package
         /**
          * @return a SHA1 hash digest of the contents of the package in hexadecimal form
          */
-        QString hash() const;
+        QString contentsHash() const;
 
         /**
          * Returns a list of all installed packages by name

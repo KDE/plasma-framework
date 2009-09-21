@@ -202,8 +202,8 @@ void PackagePrivate::updateHash(const QString &basePath, const QString &subPath,
                     hash.update(f.read(1024));
                 }
             } else {
-                kWarning() << "permissions fail?" << info.permissions() << info.isFile();
-                kWarning() << "could not add" << f.fileName() << "to the hash; file could not be opened for reading";
+                kWarning() << "could not add" << f.fileName() << "to the hash; file could not be opened for reading. "
+                           << "permissions fail?" << info.permissions() << info.isFile();
             }
         }
     }
@@ -224,7 +224,7 @@ void PackagePrivate::updateHash(const QString &basePath, const QString &subPath,
 }
 #endif
 
-QString Package::hash() const
+QString Package::contentsHash() const
 {
 #ifdef QCA2_FOUND
     if (!QCA::isSupported("sha1")) {
@@ -240,6 +240,20 @@ QString Package::hash() const
     }
 
     QCA::Hash hash("sha1");
+    QString metadataPath = d->structure->path() + "metadata.desktop";
+    if (QFile::exists(metadataPath)) {
+        QFile f(metadataPath);
+        if (f.open(QIODevice::ReadOnly)) {
+            while (!f.atEnd()) {
+                hash.update(f.read(1024));
+            }
+        } else {
+            kWarning() << "could not add" << f.fileName() << "to the hash; file could not be opened for reading.";
+        }
+    } else {
+        kWarning() << "no metadata at" << metadataPath;
+    }
+
     d->updateHash(basePath, QString(), dir, hash);
     return QCA::arrayToHex(hash.final().toByteArray());
 #else

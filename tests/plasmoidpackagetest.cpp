@@ -183,7 +183,7 @@ void PlasmoidPackageTest::isValid()
     p = new Plasma::Package(mPackageRoot, mPackage, ps);
     QVERIFY(p->isValid());
 #ifdef QCA2_FOUND
-    QCOMPARE(QString("0b8c7de4bee1ac6f373276ac2b5776c9194b2c56"), p->hash());
+    QCOMPARE(p->contentsHash(), QString("db0b38c2b4fe21a9f37923cc25152340de055f6d"));
 #endif
 }
 
