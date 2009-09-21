@@ -138,6 +138,7 @@ void ItemBackground::setTargetItem(QGraphicsItem *target)
         }
     }
 
+    d->target = target;
     if (target) {
         setZValue(target->zValue() - 1);
         setParentItem(target->parentItem());
@@ -159,10 +160,7 @@ void ItemBackground::setTargetItem(QGraphicsItem *target)
                 connect(obj, SIGNAL(destroyed(QObject*)), this, SLOT(targetDestroyed(QObject*)));
             }
         }
-
-        d->target = target;
     } else {
-        d->target = 0;
         hide();
     }
 }
