@@ -158,7 +158,7 @@ void KineticScrolling::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     } else if (abs(d->cposition.y()) >
                abs(d->scrollingWidget->size().height() - d->widget->size().height()))  {
         d->direction = KineticScrollingPrivate::Down;
-    } else { 
+    } else {
         d->direction = KineticScrollingPrivate::None;
         d->mScrollVelocity = d->kinMovement.x() + d->kinMovement.y();
         startAnimationTimer(30);
@@ -173,17 +173,19 @@ void KineticScrolling::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 void KineticScrolling::wheelReleaseEvent(QGraphicsSceneWheelEvent *event)
 {
 
-    mousePressEvent(0);
+    if (d->direction == KineticScrollingPrivate::None) {
+        mousePressEvent(0);
 
-    /* Core */
-    d->timeDelta = d->elapsed();
-    int temp = event->delta();
-    temp *= -0.5;
-    d->kinMovement.setY(kinMovement().y() + temp);
+        /* Core */
+        d->timeDelta = d->elapsed();
+        int temp = event->delta();
+        temp *= -0.5;
+        d->kinMovement.setY(kinMovement().y() + temp);
 
-    /* After */
-    d->mScrollVelocity = kinMovement().y();
-    startAnimationTimer(30);
+        /* After */
+        d->mScrollVelocity = kinMovement().y();
+        startAnimationTimer(30);
+    }
 
 }
 
@@ -201,7 +203,7 @@ void KineticScrolling::timerEvent(QTimerEvent *event)
 {
     Q_UNUSED(event);
     if (d->direction == KineticScrollingPrivate::None) {
-        d->mScrollVelocity *= 0.9;
+        d->mScrollVelocity *= 0.8;
         if (qAbs(d->mScrollVelocity) < 5.0) {
             if (d->timerID)
                 killTimer(d->timerID);
@@ -212,7 +214,7 @@ void KineticScrolling::timerEvent(QTimerEvent *event)
         if ((d->timerID != 0) && (d->direction != KineticScrollingPrivate::None)) {
             bounceTimer();
         }
-    }										
+    }
 }
 
 void KineticScrolling::setKineticScrollValue(QPoint value)
@@ -306,7 +308,7 @@ void KineticScrolling::setWidgets(QGraphicsWidget *widget,
 
     if(d->widget->size().height() <= d->scrollingWidget->size().height()) {
         d->hasOvershoot = false;
-        d->overshoot = 0;	
+        d->overshoot = 0;
     }
 
     d->widget->installEventFilter(this);
