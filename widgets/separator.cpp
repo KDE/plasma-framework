@@ -40,8 +40,8 @@ Separator::Separator(QGraphicsItem *parent, Qt::WindowFlags wFlags)
     d->svg = new Svg();
     d->svg->setImagePath("widgets/line");
     d->svg->setContainsMultipleImages(true);
-    
-    setMaximumHeight(3);
+
+    setOrientation(Qt::Horizontal);
 }
 
 Separator::~Separator()
@@ -51,6 +51,11 @@ Separator::~Separator()
 
 void Separator::setOrientation(Qt::Orientation orientation)
 {
+    if (orientation == Qt::Horizontal) {
+        setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    } else {
+        setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
+    }
     d->orientation = orientation;
 }
 
@@ -67,11 +72,27 @@ void Separator::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
     if (d->svg){
         if (d->orientation == Qt::Horizontal){
             d->svg->paint(painter, boundingRect(), "horizontal-line");
-        }else{
+        } else {
             d->svg->paint(painter, boundingRect(), "vertical-line");
         }
     }
 }
+
+QSizeF Frame::sizeHint(Qt::SizeHint which, const QSizeF & constraint) const
+{
+    QSizeF hint = QGraphicsWidget::sizeHint(which, constraint);
+
+    if (which == Qt::PreferredSize) {
+        if (d->orientation == Qt::Horizontal){
+            hint.setHeight(d->svg->elementSize("horizontal-line").height());
+        } else {
+            hint.setWidth(d->svg->elementSize("vertical-line").width());
+        }
+    }
+
+    return hint;
+}
+
 
 } // Plasma namespace
 
