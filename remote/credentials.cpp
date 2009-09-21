@@ -45,11 +45,11 @@ public:
           name(name)
     {
     #ifdef ENABLE_REMOTE_WIDGETS
-	if (!QCA::isSupported(REQUIRED_FEATURES)) {
-	    kWarning() << "QCA doesn't support " << REQUIRED_FEATURES;
-	    return;
-	}
-	
+        if (!QCA::isSupported(REQUIRED_FEATURES)) {
+            kWarning() << "QCA doesn't support " << REQUIRED_FEATURES;
+            return;
+        }
+
         if (isPrivateKey) {
             privateKey = QCA::PrivateKey::fromPEM(pemKey);
             publicKey = privateKey.toPublicKey();
@@ -104,8 +104,8 @@ Credentials Credentials::createCredentials(const QString &name)
 {
 #ifdef ENABLE_REMOTE_WIDGETS
     if (!QCA::isSupported(REQUIRED_FEATURES)) {
-	kWarning() << "QCA doesn't support " << REQUIRED_FEATURES;
-	return Credentials();
+        kWarning() << "QCA doesn't support " << REQUIRED_FEATURES;
+        return Credentials();
     }
     
     QCA::KeyGenerator generator;
@@ -138,8 +138,8 @@ bool Credentials::isValid() const
 {
 #ifdef ENABLE_REMOTE_WIDGETS
     if (!QCA::isSupported(REQUIRED_FEATURES)) {
-	kWarning() << "QCA doesn't support " << REQUIRED_FEATURES;
-	return false;
+        kWarning() << "QCA doesn't support " << REQUIRED_FEATURES;
+        return false;
     }
     
     if (d->publicKey.isNull()) {
@@ -168,8 +168,8 @@ bool Credentials::isValidSignature(const QByteArray &signature, const QByteArray
 {
 #ifdef ENABLE_REMOTE_WIDGETS
     if (!QCA::isSupported(REQUIRED_FEATURES)) {
-	kWarning() << "QCA doesn't support " << REQUIRED_FEATURES;
-	return false;
+        kWarning() << "QCA doesn't support " << REQUIRED_FEATURES;
+        return false;
     }
     
     if (d->publicKey.canVerify()) {
@@ -193,8 +193,8 @@ bool Credentials::canSign() const
 {
 #ifdef ENABLE_REMOTE_WIDGETS
     if (!QCA::isSupported(REQUIRED_FEATURES)) {
-	kWarning() << "QCA doesn't support " << REQUIRED_FEATURES;
-	return false;
+        kWarning() << "QCA doesn't support " << REQUIRED_FEATURES;
+        return false;
     }
     
     return d->privateKey.canSign();
@@ -238,10 +238,10 @@ QDataStream &operator<<(QDataStream &out, const Credentials &myObj)
 {
 #ifdef ENABLE_REMOTE_WIDGETS
     if (!QCA::isSupported(REQUIRED_FEATURES)) {
-	kWarning() << "QCA doesn't support " << REQUIRED_FEATURES;
-	return out;
+        kWarning() << "QCA doesn't support " << REQUIRED_FEATURES;
+        return out;
     }
-    
+
     QString privateKeyPem;
     QString publicKeyPem;
 
@@ -262,10 +262,10 @@ QDataStream &operator>>(QDataStream &in, Credentials &myObj)
 {
 #ifdef ENABLE_REMOTE_WIDGETS
     if (!QCA::isSupported(REQUIRED_FEATURES)) {
-	kWarning() << "QCA doesn't support " << REQUIRED_FEATURES;
-	return in;
+        kWarning() << "QCA doesn't support " << REQUIRED_FEATURES;
+        return in;
     }
-    
+
     QString privateKeyString;
     QString publicKeyString;
     uint version;
@@ -277,6 +277,7 @@ QDataStream &operator>>(QDataStream &in, Credentials &myObj)
         myObj.d->privateKey = QCA::PrivateKey::fromPEM(privateKeyString,
                                                     QByteArray(), &conversionResult);
     }
+
     if (!publicKeyString.isEmpty()) {
         myObj.d->publicKey = QCA::PublicKey::fromPEM(publicKeyString, &conversionResult);
     }
