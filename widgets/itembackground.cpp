@@ -159,6 +159,7 @@ void ItemBackground::setTargetItem(QGraphicsItem *target)
                 connect(obj, SIGNAL(destroyed(QObject*)), this, SLOT(targetDestroyed(QObject*)));
             }
         }
+
         d->target = target;
     } else {
         d->target = 0;
@@ -252,6 +253,7 @@ void ItemBackgroundPrivate::animationUpdate(qreal progress)
 
 void ItemBackgroundPrivate::targetDestroyed(QObject*)
 {
+    target = 0;
     q->setTargetItem(0);
 }
 
