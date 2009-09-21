@@ -554,7 +554,7 @@ void AppletPrivate::positionMessageOverlay()
     }
 
     PopupApplet *popup = qobject_cast<Plasma::PopupApplet*>(q);
-    const bool usePopup = popup && messageOverlay->parentItem() == q;
+    const bool usePopup = popup && (messageOverlay->parentItem() != q);
     QGraphicsItem *topItem = q;
 
     if (usePopup && popup->widget()) {
