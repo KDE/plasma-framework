@@ -51,12 +51,13 @@ Separator::~Separator()
 
 void Separator::setOrientation(Qt::Orientation orientation)
 {
+    d->orientation = orientation;
+
     if (orientation == Qt::Horizontal) {
         setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     } else {
         setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
     }
-    d->orientation = orientation;
 }
 
 Qt::Orientation Separator::orientation()
@@ -82,12 +83,10 @@ QSizeF Separator::sizeHint(Qt::SizeHint which, const QSizeF & constraint) const
 {
     QSizeF hint = QGraphicsWidget::sizeHint(which, constraint);
 
-    if (which == Qt::PreferredSize) {
-        if (d->orientation == Qt::Horizontal){
-            hint.setHeight(d->svg->elementSize("horizontal-line").height());
-        } else {
-            hint.setWidth(d->svg->elementSize("vertical-line").width());
-        }
+    if (d->orientation == Qt::Horizontal) {
+        hint.setHeight(d->svg->elementSize("horizontal-line").height());
+    } else {
+        hint.setWidth(d->svg->elementSize("vertical-line").width());
     }
 
     return hint;
