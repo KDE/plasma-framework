@@ -130,6 +130,20 @@ Frame::Shadow Frame::frameShadow() const
     return d->shadow;
 }
 
+void Frame::setEnabledBorders(const FrameSvg::EnabledBorders borders)
+{
+    if (borders != d->svg->enabledBorders()) {
+        d->svg->setEnabledBorders(borders);
+        d->syncBorders();
+        update();
+    }
+}
+
+FrameSvg::EnabledBorders Frame::enabledBorders() const
+{
+    return d->svg->enabledBorders();
+}
+
 void Frame::setText(QString text)
 {
     d->text = text;
@@ -203,9 +217,7 @@ QWidget *Frame::nativeWidget() const
     return 0;
 }
 
-void Frame::paint(QPainter *painter,
-                   const QStyleOptionGraphicsItem *option,
-                   QWidget *widget)
+void Frame::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     Q_UNUSED(option)
     Q_UNUSED(widget)

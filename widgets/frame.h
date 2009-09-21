@@ -23,6 +23,7 @@
 #include <QtGui/QGraphicsWidget>
 
 #include <plasma/plasma_export.h>
+#include <plasma/framesvg.h>
 
 class QFrame;
 
@@ -75,10 +76,24 @@ public:
     */
     Shadow frameShadow() const;
 
+    /**
+     * Sets what borders should be painted
+     * @arg flags borders we want to paint
+     */
+    void setEnabledBorders(const FrameSvg::EnabledBorders borders);
+
+    /**
+     * Convenience method to get the enabled borders
+     * @return what borders are painted
+     * @since 4.4
+     */
+    FrameSvg::EnabledBorders enabledBorders() const;
+
    /**
     * Set the text to display by this Frame
     *
     * @arg text the text
+    * @since 4.4
     */
     void setText(QString text);
 
