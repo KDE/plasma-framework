@@ -78,7 +78,7 @@ void Separator::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
     }
 }
 
-QSizeF Frame::sizeHint(Qt::SizeHint which, const QSizeF & constraint) const
+QSizeF Separator::sizeHint(Qt::SizeHint which, const QSizeF & constraint) const
 {
     QSizeF hint = QGraphicsWidget::sizeHint(which, constraint);
 
