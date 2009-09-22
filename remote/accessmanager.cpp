@@ -73,7 +73,7 @@ AccessAppletJob *AccessManager::accessRemoteApplet(const KUrl &location) const
     AuthorizationManager::self()->d->prepareForServiceAccess();
 
     KUrl resolvedLocation;
-    if (location.protocol() == "zeroconf") {
+    if (location.protocol() == "plasma+zeroconf") {
         if (d->zeroconfServices.contains(location.host())) {
             resolvedLocation = d->services[location.host()].remoteLocation();
         } else {
@@ -92,6 +92,13 @@ AccessAppletJob *AccessManager::accessRemoteApplet(const KUrl &location) const
 QList<PackageMetadata> AccessManager::remoteApplets() const
 {
     return d->services.values();
+}
+
+QStringList AccessManager::supportedProtocols()
+{
+    QStringList list;
+    list << "plasma" << "plasma+zeroconf";
+    return list;
 }
 
 AccessManagerPrivate::AccessManagerPrivate(AccessManager *manager)

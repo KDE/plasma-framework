@@ -78,6 +78,11 @@ class PLASMA_EXPORT AccessManager : public QObject
          */
         QList<PackageMetadata> remoteApplets() const;
 
+        /**
+         * @returns a list of supported protocols of urls that can be passed to accessRemoteApplet.
+         */
+        static QStringList supportedProtocols();
+
     Q_SIGNALS:
         /**
          * fires when an AccessAppletJob is finished.

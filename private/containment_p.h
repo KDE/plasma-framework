@@ -28,9 +28,12 @@ static const int TOOLBOX_MARGIN = 150;
 static const int CONTAINMENT_COLUMNS = 2;
 static const int VERTICAL_STACKING_OFFSET = 10000;
 
+class KJob;
+
 namespace Plasma
 {
 
+class AccessAppletJob;
 class Containment;
 class ToolBox;
 
@@ -83,6 +86,7 @@ public:
     void zoomIn();
     void zoomOut();
     void clearDataForMimeJob(KIO::Job *job);
+    void remoteAppletReady(Plasma::AccessAppletJob *job);
     void mimeTypeRetrieved(KIO::Job *job, const QString &mimetype);
     void containmentActions(KMenu &desktopMenu);
     void appletActions(KMenu &desktopMenu, Applet *applet, bool includeApplet);
@@ -142,8 +146,8 @@ public:
     Containment::Type type;
     static bool s_positioning;
     bool drawWallpaper;
-    QHash<KIO::Job*, QPointF> dropPoints;
-    QHash<KIO::Job*, KMenu*> dropMenus;
+    QHash<KJob*, QPointF> dropPoints;
+    QHash<KJob*, KMenu*> dropMenus;
 };
 
 } // Plasma namespace
