@@ -280,6 +280,7 @@ int TabBar::insertTab(int index, const QIcon &icon, const QString &label,
     d->updateTabWidgetMode();
 
     int actualIndex = d->tabProxy->native->insertTab(index, icon, label);
+    d->currentIndex = d->tabProxy->native->currentIndex();
     d->tabProxy->setPreferredSize(d->tabProxy->native->sizeHint());
     d->updateTabWidgetMode();
     return actualIndex;
