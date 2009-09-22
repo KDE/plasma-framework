@@ -330,7 +330,6 @@ void ScrollWidget::wheelEvent(QGraphicsSceneWheelEvent *event)
 {
     event->accept();
     d->wheelReleaseEvent( event );
-    QGraphicsWidget::wheelEvent(event);
 }
 
 bool ScrollWidget::eventFilter(QObject *watched, QEvent *event)
