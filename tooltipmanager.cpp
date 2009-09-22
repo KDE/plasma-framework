@@ -27,6 +27,7 @@
 #include <QTimer>
 #include <QGridLayout>
 #include <QGraphicsView>
+#include <QGraphicsSceneHoverEvent>
 
 //KDE
 #include <kwindowsystem.h>
@@ -416,8 +417,12 @@ bool ToolTipManager::eventFilter(QObject *watched, QEvent *event)
             // Don't restart the show timer on a mouse move event if there hasn't
             // been an enter event or the current widget has been cleared by a click
             // or wheel event.
-            if (!d->currentWidget) {
-                break;
+            {
+                QGraphicsSceneHoverEvent *me = static_cast<QGraphicsSceneHoverEvent *>(event);
+                //FIXME: seems that wheel events generate hovermoves as well, with 0 delta
+                if (!d->currentWidget || (me->pos() == me->lastPos())) {
+                    break;
+            }
             }
 
         case QEvent::GraphicsSceneHoverEnter:
