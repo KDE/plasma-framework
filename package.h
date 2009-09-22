@@ -137,6 +137,7 @@ class PLASMA_EXPORT Package
 
         /**
          * @return a SHA1 hash digest of the contents of the package in hexadecimal form
+         * @since 4.4
          */
         QString contentsHash() const;
 
