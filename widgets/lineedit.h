@@ -92,7 +92,10 @@ public:
     KLineEdit *nativeWidget() const;
 
 protected:
+    void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
+    void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
     void changeEvent(QEvent *event);
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
 Q_SIGNALS:
     void editingFinished();

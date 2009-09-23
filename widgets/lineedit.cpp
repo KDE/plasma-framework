@@ -28,6 +28,7 @@
 
 #include "theme.h"
 #include "svg.h"
+#include "framesvg.h"
 
 namespace Plasma
 {
@@ -63,6 +64,7 @@ public:
 
     LineEdit *q;
     Plasma::Style::Ptr style;
+    Plasma::FrameSvg *background;
     bool customFont;
 };
 
@@ -72,6 +74,9 @@ LineEdit::LineEdit(QGraphicsWidget *parent)
 {
     KLineEdit *native = new KLineEdit;
     d->style = Plasma::Style::sharedStyle();
+    d->background = new Plasma::FrameSvg(this);
+    d->background->setImagePath("widgets/lineedit");
+
     native->setStyle(d->style.data());
     native->setAttribute(Qt::WA_NoSystemBackground);
     setWidget(native);
@@ -124,6 +129,38 @@ QString LineEdit::styleSheet()
 KLineEdit *LineEdit::nativeWidget() const
 {
     return static_cast<KLineEdit*>(widget());
+}
+
+void LineEdit::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
+{
+    Q_UNUSED(event)
+    update();
+}
+
+void LineEdit::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
+{
+    Q_UNUSED(event)
+    update();
+}
+
+void LineEdit::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+    Q_UNUSED(option)
+    Q_UNUSED(widget)
+
+    if (hasFocus() || isUnderMouse()) {
+        if (hasFocus()) {
+            d->background->setElementPrefix("focus");
+        } else {
+            d->background->setElementPrefix("hover");
+        }
+        qreal left, top, right, bottom;
+        d->background->getMargins(left, top, right, bottom);
+        d->background->resizeFrame(size()+QSizeF(left+right, top+bottom));
+        d->background->paintFrame(painter, QPoint(-left, -top));
+    }
+
+    nativeWidget()->render(painter, QPoint(0, 0), QRegion(), QWidget::DrawChildren|QWidget::IgnoreMask);
 }
 
 void LineEdit::changeEvent(QEvent *event)
