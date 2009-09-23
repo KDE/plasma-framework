@@ -124,12 +124,12 @@ void ItemBackground::setTarget(const QRectF &newGeometry)
 void ItemBackground::setTargetItem(QGraphicsItem *target)
 {
     if (d->target && d->target != target) {
-        d->target->removeSceneEventFilter(this);
-
         QObject *obj = 0;
         if (d->target->isWidget()) {
             obj = static_cast<QGraphicsWidget*>(d->target);
+            obj->removeEventFilter(this);
         } else {
+            d->target->removeSceneEventFilter(this);
             obj = dynamic_cast<QObject *>(d->target);
         }
 
@@ -147,12 +147,12 @@ void ItemBackground::setTargetItem(QGraphicsItem *target)
         setTarget(rect);
 
         if (d->target != target) {
-            target->installSceneEventFilter(this);
-
             QObject *obj = 0;
             if (target->isWidget()) {
                 obj = static_cast<QGraphicsWidget*>(target);
+                obj->installEventFilter(this);
             } else {
+                d->target->installSceneEventFilter(this);
                 obj = dynamic_cast<QObject *>(target);
             }
 
@@ -165,11 +165,23 @@ void ItemBackground::setTargetItem(QGraphicsItem *target)
     }
 }
 
+bool ItemBackground::eventFilter(QObject *watched, QEvent *event)
+{
+    QGraphicsWidget *targetWidget = static_cast<QGraphicsWidget *>(d->target);
+    if (watched == targetWidget) {
+        if (event->type() == QEvent::GraphicsSceneResize ||
+            event->type() == QEvent::GraphicsSceneMove) {
+            setTargetItem(targetWidget);
+        }
+    }
+
+    return false;
+}
+
 bool ItemBackground::sceneEventFilter(QGraphicsItem *watched, QEvent *event)
 {
     if (watched == d->target) {
-        if (event->type() == QEvent::GraphicsSceneResize ||
-            event->type() == QEvent::GraphicsSceneMove) {
+        if (event->type() == QEvent::GraphicsSceneMove) {
             setTargetItem(d->target);
         }
     }

@@ -75,6 +75,11 @@ protected:
     QVariant itemChange(GraphicsItemChange change, const QVariant &value);
 
     /**
+     * @reimp from QObject
+     */
+    bool eventFilter(QObject *watched, QEvent *event);
+
+    /**
      * @reimp from QGraphicsItem
      */
     bool sceneEventFilter(QGraphicsItem *watched, QEvent *event);
