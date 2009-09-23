@@ -86,6 +86,9 @@ public:
 
 protected:
     void changeEvent(QEvent *event);
+    void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
+    void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
 public Q_SLOTS:
     /**

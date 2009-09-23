@@ -22,10 +22,13 @@
 
 #include <QApplication>
 #include <QPainter>
+#include <QStyleOptionSpinBox>
+
 #include <knuminput.h>
 #include <kmimetype.h>
 
 #include <plasma/theme.h>
+#include <plasma/framesvg.h>
 #include <plasma/private/style_p.h>
 
 namespace Plasma
@@ -65,6 +68,7 @@ public:
 
     SpinBox *q;
     Plasma::Style::Ptr style;
+    Plasma::FrameSvg *background;
     bool customFont;
 };
 
@@ -80,6 +84,10 @@ SpinBox::SpinBox(QGraphicsWidget *parent)
     setWidget(native);
     native->setAttribute(Qt::WA_NoSystemBackground);
     native->setAutoFillBackground(false);
+
+    d->background = new Plasma::FrameSvg(this);
+    d->background->setImagePath("widgets/lineedit");
+    d->background->setCacheAllRenderedFrames(true);
 
     d->style = Plasma::Style::sharedStyle();
     native->setStyle(d->style.data());
@@ -152,6 +160,45 @@ void SpinBox::changeEvent(QEvent *event)
 
     QGraphicsProxyWidget::changeEvent(event);
 }
+
+void SpinBox::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
+{
+    Q_UNUSED(event)
+    update();
+}
+
+void SpinBox::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
+{
+    Q_UNUSED(event)
+    update();
+}
+
+void SpinBox::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+    Q_UNUSED(option)
+    Q_UNUSED(widget)
+
+    if (hasFocus() || isUnderMouse()) {
+        if (hasFocus()) {
+            d->background->setElementPrefix("focus");
+        } else {
+            d->background->setElementPrefix("hover");
+        }
+        qreal left, top, right, bottom;
+        d->background->getMargins(left, top, right, bottom);
+
+        QStyleOptionSpinBox spinOpt;
+        spinOpt.initFrom(nativeWidget());
+        QRect controlrect = nativeWidget()->style()->subControlRect(QStyle::CC_SpinBox, &spinOpt, QStyle::SC_SpinBoxFrame, nativeWidget());
+
+        d->background->resizeFrame(controlrect.size()+QSizeF(left+right, top+bottom));
+        d->background->paintFrame(painter, QPoint(-left, -top));
+    }
+
+    QGraphicsProxyWidget::paint(painter, option, widget);
+}
+
+
 
 } // namespace Plasma
 
