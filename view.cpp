@@ -93,6 +93,7 @@ public:
     void containmentDestroyed()
     {
         containment = 0;
+        emit q->lostContainment();
     }
 
     void containmentScreenChanged(int wasScreen, int newScreen, Plasma::Containment *containment)

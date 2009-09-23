@@ -178,6 +178,12 @@ Q_SIGNALS:
      */
     void sceneRectChanged();
 
+    /**
+     * This is emitted after the containment is destroyed, for views that need to do something about
+     * it (like find a new one).
+     */
+    void lostContainment();
+
 public Q_SLOTS:
     /**
      * Sets the containment for this view, which will also cause the view

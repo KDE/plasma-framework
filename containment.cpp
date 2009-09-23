@@ -1947,16 +1947,6 @@ void Containment::destroy(bool confirm)
     }
 
     if (isContainment()) {
-        //don't remove a desktop that's in use
-        //FIXME: this should probably be based on whether any views care or not!
-        //       sth like: foreach (view) { view->requires(this); }
-        Q_ASSERT(corona());
-        if (d->type != PanelContainment && d->type != CustomPanelContainment &&
-            (d->screen != -1 || d->screen >= corona()->numScreens())) {
-            kDebug() << (QObject*)this << "containment has a screen number?" << d->screen;
-            return;
-        }
-
         //FIXME maybe that %1 should be the containment type not the name
         if (!confirm ||
             KMessageBox::warningContinueCancel(
@@ -2047,10 +2037,7 @@ void ContainmentPrivate::handleDisappeared(AppletHandle *handle)
 
 void ContainmentPrivate::checkRemoveAction()
 {
-    q->enableAction("remove", (q->immutability() == Mutable &&
-                              (screen == -1 ||
-                               type == Plasma::Containment::PanelContainment ||
-                               type == Plasma::Containment::CustomPanelContainment)));
+    q->enableAction("remove", q->immutability() == Mutable);
 }
 
 void ContainmentPrivate::containmentConstraintsEvent(Plasma::Constraints constraints)
