@@ -60,7 +60,7 @@ public:
     {
         if (!textBox) {
             textBox = new Plasma::FrameSvg(q);
-            textBox->setImagePath("widgets/frame");
+            textBox->setImagePath("widgets/lineedit");
             textBox->setElementPrefix("sunken");
         }
     }
@@ -281,6 +281,7 @@ void Style::drawPrimitive(PrimitiveElement element, const QStyleOption *option, 
         }
         d->createTextBox();
 
+        d->textBox->setElementPrefix("base");
         d->textBox->resizeFrame(option->rect.size());
         d->textBox->paintFrame(painter);
         break;
