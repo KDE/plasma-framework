@@ -514,10 +514,10 @@ void AppletPrivate::cleanUpAndDelete()
 
     resetConfigurationObject();
 
-    QGraphicsScene *s = q->scene();
     q->scene()->removeItem(q);
+    /*a hack to try and avoid crashes. doesn't seem to work.
+    QGraphicsScene *s = q->scene();
     kDebug();
-    //a hack to try and avoid crashes. doesn't seem to work.
     QGraphicsItem *f = s->focusItem();
     if (f) {
         QGraphicsItem *top = f->topLevelItem();
@@ -527,6 +527,7 @@ void AppletPrivate::cleanUpAndDelete()
             s->setFocusItem(0);
         }
     }
+    */
     q->deleteLater();
 }
 
