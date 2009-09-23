@@ -42,7 +42,8 @@ public:
     ComboBoxPrivate(ComboBox *comboBox)
          : q(comboBox),
            background(0),
-           customFont(0)
+           customFont(0),
+           underMouse(false)
     {
     }
 
@@ -53,16 +54,19 @@ public:
     void syncActiveRect();
     void syncBorders();
     void animationUpdate(qreal progress);
+    void animationFinished(int id);
 
     ComboBox *q;
 
     FrameSvg *background;
+    FrameSvg *lineEditBackground;
     int animId;
     bool fadeIn;
     qreal opacity;
     QRectF activeRect;
     Style::Ptr style;
     bool customFont;
+    bool underMouse;
 };
 
 void ComboBoxPrivate::syncActiveRect()
@@ -116,6 +120,14 @@ void ComboBoxPrivate::animationUpdate(qreal progress)
     q->update();
 }
 
+
+void ComboBoxPrivate::animationFinished(int id)
+{
+    if (id == animId) {
+        animId = -1;
+    }
+}
+
 ComboBox::ComboBox(QGraphicsWidget *parent)
     : QGraphicsProxyWidget(parent),
       d(new ComboBoxPrivate(this))
@@ -131,10 +143,14 @@ ComboBox::ComboBox(QGraphicsWidget *parent)
     d->background->setImagePath("widgets/button");
     d->background->setCacheAllRenderedFrames(true);
     d->background->setElementPrefix("normal");
+    d->lineEditBackground = new FrameSvg(this);
+    d->lineEditBackground->setImagePath("widgets/lineedit");
+    d->lineEditBackground->setCacheAllRenderedFrames(true);
 
     d->syncBorders();
     setAcceptHoverEvents(true);
     connect(Theme::defaultTheme(), SIGNAL(themeChanged()), SLOT(syncBorders()));
+    connect(Plasma::Animator::self(), SIGNAL(customAnimationFinished(int)), this, SLOT(animationFinished(int)));
     d->style = Style::sharedStyle();
     native->setStyle(d->style.data());
 }
@@ -199,8 +215,32 @@ void ComboBox::paint(QPainter *painter,
                      QWidget *widget)
 {
     if (!styleSheet().isNull() ||
-        nativeWidget()->isEditable() ||
         Theme::defaultTheme()->useNativeWidgetStyle()) {
+        QGraphicsProxyWidget::paint(painter, option, widget);
+        return;
+    }
+
+    if (nativeWidget()->isEditable()) {
+        if (d->animId != -1 || hasFocus() || d->underMouse) {
+            if (hasFocus()) {
+                d->lineEditBackground->setElementPrefix("focus");
+            } else {
+                d->lineEditBackground->setElementPrefix("hover");
+            }
+            qreal left, top, right, bottom;
+            d->lineEditBackground->getMargins(left, top, right, bottom);
+            d->lineEditBackground->resizeFrame(size()+QSizeF(left+right, top+bottom));
+            if (qFuzzyCompare(d->opacity, (qreal)1.0)) {
+                d->lineEditBackground->paintFrame(painter, QPoint(-left, -top));
+            } else {
+                QPixmap bufferPixmap = d->lineEditBackground->framePixmap();
+                QPainter buffPainter(&bufferPixmap);
+                buffPainter.setCompositionMode(QPainter::CompositionMode_DestinationIn);
+                buffPainter.fillRect(bufferPixmap.rect(), QColor(0, 0, 0, 256*d->opacity));
+                buffPainter.end();
+                painter->drawPixmap(bufferPixmap.rect().translated(QPoint(-left, -top)), bufferPixmap, bufferPixmap.rect());
+            }
+        }
         QGraphicsProxyWidget::paint(painter, option, widget);
         return;
     }
@@ -269,8 +309,47 @@ void ComboBox::paint(QPainter *painter,
         QStyle::PE_IndicatorArrowDown, &comboOpt, painter, nativeWidget());
 }
 
+void ComboBox::focusInEvent(QFocusEvent *event)
+{
+    if (nativeWidget()->isEditable() && !d->underMouse) {
+        const int FadeInDuration = 75;
+
+        if (d->animId != -1) {
+            Animator::self()->stopCustomAnimation(d->animId);
+        }
+        d->animId = Animator::self()->customAnimation(
+            40 / (1000 / FadeInDuration), FadeInDuration,
+            Animator::LinearCurve, this, "animationUpdate");
+    }
+
+    QGraphicsProxyWidget::focusInEvent(event);
+}
+
+void ComboBox::focusOutEvent(QFocusEvent *event)
+{
+    if (nativeWidget()->isEditable() && !d->underMouse) {
+        const int FadeOutDuration = 150;
+
+        if (d->animId != -1) {
+            Animator::self()->stopCustomAnimation(d->animId != -1);
+        }
+
+        d->fadeIn = false;
+        d->animId = Animator::self()->customAnimation(
+            40 / (1000 / FadeOutDuration),
+            FadeOutDuration, Animator::LinearCurve, this, "animationUpdate");
+    }
+
+    QGraphicsProxyWidget::focusInEvent(event);
+}
+
 void ComboBox::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 {
+    d->underMouse = true;
+    if (nativeWidget()->isEditable() && hasFocus()) {
+        return;
+    }
+
     const int FadeInDuration = 75;
 
     if (d->animId != -1) {
@@ -287,6 +366,11 @@ void ComboBox::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 
 void ComboBox::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 {
+    d->underMouse = false;
+    if (nativeWidget()->isEditable() && hasFocus()) {
+        return;
+    }
+
     const int FadeOutDuration = 150;
 
     if (d->animId != -1) {

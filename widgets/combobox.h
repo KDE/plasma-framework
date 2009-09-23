@@ -89,6 +89,8 @@ protected:
     void paint(QPainter *painter,
                const QStyleOptionGraphicsItem *option,
                QWidget *widget);
+    void focusInEvent(QFocusEvent *event);
+    void focusOutEvent(QFocusEvent *event);
     void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
     void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
     void changeEvent(QEvent *event);
@@ -99,6 +101,7 @@ private:
     friend class ComboBoxPrivate;
     Q_PRIVATE_SLOT(d, void syncBorders())
     Q_PRIVATE_SLOT(d, void animationUpdate(qreal progress))
+    Q_PRIVATE_SLOT(d, void animationFinished(int id))
 };
 
 } // namespace Plasma

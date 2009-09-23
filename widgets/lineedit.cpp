@@ -76,6 +76,7 @@ LineEdit::LineEdit(QGraphicsWidget *parent)
     d->style = Plasma::Style::sharedStyle();
     d->background = new Plasma::FrameSvg(this);
     d->background->setImagePath("widgets/lineedit");
+    d->background->setCacheAllRenderedFrames(true);
 
     native->setStyle(d->style.data());
     native->setAttribute(Qt::WA_NoSystemBackground);
