@@ -515,19 +515,6 @@ void AppletPrivate::cleanUpAndDelete()
     resetConfigurationObject();
 
     q->scene()->removeItem(q);
-    /*a hack to try and avoid crashes. doesn't seem to work.
-    QGraphicsScene *s = q->scene();
-    kDebug();
-    QGraphicsItem *f = s->focusItem();
-    if (f) {
-        QGraphicsItem *top = f->topLevelItem();
-        kDebug() << "focus exists" << top;
-        if (top == q) {
-            kDebug() << "clearing focus";
-            s->setFocusItem(0);
-        }
-    }
-    */
     q->deleteLater();
 }
 
