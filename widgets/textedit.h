@@ -44,7 +44,7 @@ class PLASMA_EXPORT TextEdit : public QGraphicsProxyWidget
     Q_PROPERTY(QGraphicsWidget *parentWidget READ parentWidget)
     Q_PROPERTY(QString text READ text WRITE setText NOTIFY textChanged)
     Q_PROPERTY(QString stylesheet READ styleSheet WRITE setStyleSheet)
-    Q_PROPERTY(KTextEdit *nativeWidget READ nativeWidget)
+    Q_PROPERTY(KTextEdit *nativeWidget READ nativeWidget WRITE setNativeWidget)
 
 public:
     explicit TextEdit(QGraphicsWidget *parent = 0);
@@ -73,6 +73,14 @@ public:
      * @return the stylesheet currently used with this widget
      */
     QString styleSheet();
+
+    /**
+     * Sets the text edit wrapped by this TextEdit (widget must inherit KTextEdit), ownership is transferred to the TextEdit
+     *
+     * @arg text edit that will be wrapped by this TextEdit
+     * @since KDE4.4
+     */
+    void setNativeWidget(KTextEdit *nativeWidget);
 
     /**
      * @return the native widget wrapped by this TextEdit

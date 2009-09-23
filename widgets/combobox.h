@@ -43,7 +43,7 @@ class PLASMA_EXPORT ComboBox : public QGraphicsProxyWidget
     Q_PROPERTY(QGraphicsWidget *parentWidget READ parentWidget)
     Q_PROPERTY(QString text READ text NOTIFY textChanged)
     Q_PROPERTY(QString styleSheet READ styleSheet WRITE setStyleSheet)
-    Q_PROPERTY(KComboBox *nativeWidget READ nativeWidget)
+    Q_PROPERTY(KComboBox *nativeWidget READ nativeWidget WRITE setNativeWidget)
 
 public:
     explicit ComboBox(QGraphicsWidget *parent = 0);
@@ -67,12 +67,20 @@ public:
     QString styleSheet();
 
     /**
+     * Sets the combo box wrapped by this ComboBox (widget must inherit KComboBox), ownership is transferred to the ComboBox
+     *
+     * @arg combo box that will be wrapped by this ComboBox
+     * @since KDE4.4
+     */
+    void setNativeWidget(KComboBox *nativeWidget);
+
+    /**
      * @return the native widget wrapped by this ComboBox
      */
     KComboBox *nativeWidget() const;
 
     /**
-     * Adds an item to the combobox with the given text. The
+     * Adds an item to the combo box with the given text. The
      * item is appended to the list of existing items.
      */
     void addItem(const QString &text);

@@ -44,7 +44,7 @@ class PLASMA_EXPORT LineEdit : public QGraphicsProxyWidget
     Q_PROPERTY(QString text READ text WRITE setText NOTIFY textEdited)
     Q_PROPERTY(bool isClearButtonShown READ isClearButtonShown WRITE setClearButtonShown)
     Q_PROPERTY(QString styleSheet READ styleSheet WRITE setStyleSheet)
-    Q_PROPERTY(KLineEdit *nativeWidget READ nativeWidget)
+    Q_PROPERTY(KLineEdit *nativeWidget READ nativeWidget WRITE setNativeWidget)
 
 public:
     explicit LineEdit(QGraphicsWidget *parent = 0);
@@ -85,6 +85,14 @@ public:
      * @return the stylesheet currently used with this widget
      */
     QString styleSheet();
+
+    /**
+     * Sets the line edit wrapped by this LineEdit (widget must inherit KLineEdit), ownership is transferred to the LineEdit
+     *
+     * @arg text edit that will be wrapped by this LineEdit
+     * @since KDE4.4
+     */
+    void setNativeWidget(KLineEdit *nativeWidget);
 
     /**
      * @return the native widget wrapped by this LineEdit

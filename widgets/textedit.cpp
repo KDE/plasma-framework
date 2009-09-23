@@ -73,16 +73,9 @@ TextEdit::TextEdit(QGraphicsWidget *parent)
     : QGraphicsProxyWidget(parent),
       d(new TextEditPrivate(this))
 {
-    KTextEdit *native = new KTextEdit;
-    connect(native, SIGNAL(textChanged()), this, SIGNAL(textChanged()));
-    setWidget(native);
-    native->setAttribute(Qt::WA_NoSystemBackground);
-    native->setFrameShape( QFrame::NoFrame );
-    native->setTextBackgroundColor( Qt::transparent );
-    native->viewport()->setAutoFillBackground( false );
     d->style = Plasma::Style::sharedStyle();
-    native->verticalScrollBar()->setStyle(d->style.data());
-    native->horizontalScrollBar()->setStyle(d->style.data());
+
+    setNativeWidget(new KTextEdit);
     connect(Theme::defaultTheme(), SIGNAL(themeChanged()),
             this, SLOT(setPalette()));
 }
@@ -112,6 +105,24 @@ void TextEdit::setStyleSheet(const QString &stylesheet)
 QString TextEdit::styleSheet()
 {
     return widget()->styleSheet();
+}
+
+void TextEdit::setNativeWidget(KTextEdit *nativeWidget)
+{
+    if (widget()) {
+        widget()->deleteLater();
+    }
+
+    connect(nativeWidget, SIGNAL(textChanged()), this, SIGNAL(textChanged()));
+
+    setWidget(nativeWidget);
+
+    nativeWidget->setAttribute(Qt::WA_NoSystemBackground);
+    nativeWidget->setFrameShape(QFrame::NoFrame);
+    nativeWidget->setTextBackgroundColor(Qt::transparent);
+    nativeWidget->viewport()->setAutoFillBackground(false);
+    nativeWidget->verticalScrollBar()->setStyle(d->style.data());
+    nativeWidget->horizontalScrollBar()->setStyle(d->style.data());
 }
 
 KTextEdit *TextEdit::nativeWidget() const

@@ -132,13 +132,6 @@ ComboBox::ComboBox(QGraphicsWidget *parent)
     : QGraphicsProxyWidget(parent),
       d(new ComboBoxPrivate(this))
 {
-    KComboBox *native = new KComboBox;
-    connect(native, SIGNAL(activated(const QString &)), this, SIGNAL(activated(const QString &)));
-    connect(native, SIGNAL(currentIndexChanged(const QString &)),
-            this, SIGNAL(textChanged(const QString &)));
-    setWidget(native);
-    native->setAttribute(Qt::WA_NoSystemBackground);
-
     d->background = new FrameSvg(this);
     d->background->setImagePath("widgets/button");
     d->background->setCacheAllRenderedFrames(true);
@@ -147,12 +140,14 @@ ComboBox::ComboBox(QGraphicsWidget *parent)
     d->lineEditBackground->setImagePath("widgets/lineedit");
     d->lineEditBackground->setCacheAllRenderedFrames(true);
 
-    d->syncBorders();
     setAcceptHoverEvents(true);
+
+    d->style = Style::sharedStyle();
+
+    setNativeWidget(new KComboBox);
+
     connect(Theme::defaultTheme(), SIGNAL(themeChanged()), SLOT(syncBorders()));
     connect(Plasma::Animator::self(), SIGNAL(customAnimationFinished(int)), this, SLOT(animationFinished(int)));
-    d->style = Style::sharedStyle();
-    native->setStyle(d->style.data());
 }
 
 ComboBox::~ComboBox()
@@ -174,6 +169,24 @@ void ComboBox::setStyleSheet(const QString &stylesheet)
 QString ComboBox::styleSheet()
 {
     return widget()->styleSheet();
+}
+
+void ComboBox::setNativeWidget(KComboBox *nativeWidget)
+{
+    if (widget()) {
+        widget()->deleteLater();
+    }
+
+    connect(nativeWidget, SIGNAL(activated(const QString &)), this, SIGNAL(activated(const QString &)));
+    connect(nativeWidget, SIGNAL(currentIndexChanged(const QString &)),
+            this, SIGNAL(textChanged(const QString &)));
+
+    setWidget(nativeWidget);
+
+    nativeWidget->setAttribute(Qt::WA_NoSystemBackground);
+    nativeWidget->setStyle(d->style.data());
+
+    d->syncBorders();
 }
 
 KComboBox *ComboBox::nativeWidget() const

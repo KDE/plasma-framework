@@ -72,22 +72,13 @@ LineEdit::LineEdit(QGraphicsWidget *parent)
     : QGraphicsProxyWidget(parent),
       d(new LineEditPrivate(this))
 {
-    KLineEdit *native = new KLineEdit;
     d->style = Plasma::Style::sharedStyle();
     d->background = new Plasma::FrameSvg(this);
     d->background->setImagePath("widgets/lineedit");
     d->background->setCacheAllRenderedFrames(true);
 
-    native->setStyle(d->style.data());
-    native->setAttribute(Qt::WA_NoSystemBackground);
-    setWidget(native);
+    setNativeWidget(new KLineEdit);
 
-    connect(native, SIGNAL(editingFinished()), this, SIGNAL(editingFinished()));
-    connect(native, SIGNAL(returnPressed()), this, SIGNAL(returnPressed()));
-    connect(native, SIGNAL(textEdited(const QString&)), this, SIGNAL(textEdited(const QString&)));
-    connect(native, SIGNAL(textChanged(const QString&)), this, SIGNAL(textChanged(const QString&)));
-
-    d->setPalette();
     connect(Theme::defaultTheme(), SIGNAL(themeChanged()), this, SLOT(setPalette()));
 }
 
@@ -125,6 +116,26 @@ void LineEdit::setStyleSheet(const QString &stylesheet)
 QString LineEdit::styleSheet()
 {
     return widget()->styleSheet();
+}
+
+void LineEdit::setNativeWidget(KLineEdit *nativeWidget)
+{
+    if (widget()) {
+        widget()->deleteLater();
+    }
+
+    connect(nativeWidget, SIGNAL(editingFinished()), this, SIGNAL(editingFinished()));
+    connect(nativeWidget, SIGNAL(returnPressed()), this, SIGNAL(returnPressed()));
+    connect(nativeWidget, SIGNAL(textEdited(const QString&)), this, SIGNAL(textEdited(const QString&)));
+    connect(nativeWidget, SIGNAL(textChanged(const QString&)), this, SIGNAL(textChanged(const QString&)));
+
+
+    setWidget(nativeWidget);
+
+    nativeWidget->setAttribute(Qt::WA_NoSystemBackground);
+    nativeWidget->setStyle(d->style.data());
+
+    d->setPalette();
 }
 
 KLineEdit *LineEdit::nativeWidget() const
