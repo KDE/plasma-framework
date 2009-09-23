@@ -197,6 +197,7 @@ void Style::drawComplexControl(ComplexControl control,
     case CC_SpinBox: {
         d->createTextBox();
 
+        d->textBox->setElementPrefix("base");
         d->textBox->resizeFrame(option->rect.size());
         d->textBox->paintFrame(painter);
 
@@ -251,6 +252,7 @@ void Style::drawComplexControl(ComplexControl control,
             qApp->style()->drawComplexControl(control, option, painter, widget);
         } else {
             d->createTextBox();
+            d->textBox->setElementPrefix("base");
             d->textBox->resizeFrame(option->rect.size());
             d->textBox->paintFrame(painter);
 
