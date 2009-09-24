@@ -339,7 +339,7 @@ void TabBar::setCurrentIndex(int index)
         d->newPage = 0;
     }
 
-    if (d->newPage) {
+    if (d->newPage && d->oldPage) {
         d->newPage->resize(d->oldPage->size());
     }
 
