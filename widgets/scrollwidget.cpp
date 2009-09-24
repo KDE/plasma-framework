@@ -283,7 +283,7 @@ void ScrollWidget::ensureRectVisible(const QRectF &rect)
     if (mappedRect.left() < 0) {
         delta.setX(-mappedRect.left());
     } else if  (mappedRect.right() > viewRect.right()) {
-        delta.setY(viewRect.right() - mappedRect.right());
+        delta.setX(viewRect.right() - mappedRect.right());
     }
 
     d->animId = Animator::self()->moveItem(
