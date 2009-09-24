@@ -266,8 +266,15 @@ Qt::ScrollBarPolicy ScrollWidget::verticalScrollBarPolicy() const
 
 void ScrollWidget::ensureRectVisible(const QRectF &rect)
 {
+    if (!d->widget) {
+        return;
+    }
+
     QRectF viewRect = d->scrollingWidget->boundingRect();
-    QRectF mappedRect = d->widget->mapToItem(d->scrollingWidget, rect).boundingRect();
+    //ensure the rect is not outside the widget bounding rect
+    QRectF mappedRect = QRectF(QPointF(qBound((qreal)0.0, rect.x(), d->widget->size().width()-rect.width()),
+                                       qBound((qreal)0.0, rect.y(), d->widget->size().height()-rect.height())), rect.size());
+    mappedRect = d->widget->mapToItem(d->scrollingWidget, mappedRect).boundingRect();
     if (viewRect.contains(mappedRect)) {
         return;
     }
