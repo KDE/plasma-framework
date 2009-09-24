@@ -115,8 +115,25 @@ QWidget *PopupApplet::widget()
     return d->widget;
 }
 
-void PopupApplet::setWidget(QWidget * widget)
+void PopupApplet::setWidget(QWidget *widget)
 {
+    if (d->widget) {
+        if (d->dialog) {
+            d->dialog->setGraphicsWidget(0);
+            QVBoxLayout *lay;
+            if (d->dialog->layout()) {
+                lay = static_cast<QVBoxLayout *>(lay);
+            } else {
+                lay = new QVBoxLayout(d->dialog);
+            }
+
+            lay->removeWidget(d->widget);
+            lay->addWidget(widget);
+        } else if (d->proxy) {
+            d->proxy->setWidget(widget);
+        }
+    }
+
     d->widget = widget;
 }
 
@@ -129,8 +146,18 @@ QGraphicsWidget *PopupApplet::graphicsWidget()
     }
 }
 
-void PopupApplet::setGraphicsWidget(QGraphicsWidget * graphicsWidget)
+void PopupApplet::setGraphicsWidget(QGraphicsWidget *graphicsWidget)
 {
+    if (d->graphicsWidget) {
+        if (d->dialog) {
+            d->dialog->setGraphicsWidget(graphicsWidget);
+        } else {
+            QGraphicsLinearLayout *lay = static_cast<QGraphicsLinearLayout *>(layout());
+            lay->removeAt(0);
+            lay->addItem(graphicsWidget);
+        }
+    }
+
     d->graphicsWidget = graphicsWidget;
 }
 
