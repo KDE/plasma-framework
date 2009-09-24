@@ -327,18 +327,21 @@ void TabBar::setCurrentIndex(int index)
 
     d->tabWidgetLayout->removeAt(1);
 
-    if (index < 0) {
-        d->currentIndex = index;
-        emit currentChanged(index);
-        d->tabProxy->native->setCurrentIndex(index);
-        return;
+    if (d->currentIndex >= 0) {
+        d->oldPage = d->pages[d->currentIndex];
+    } else {
+        d->oldPage = 0;
     }
 
-    d->oldPage = d->pages[d->currentIndex];
-    d->newPage = d->pages[index];
+    if (index >= 0) {
+        d->newPage = d->pages[index];
+    } else {
+        d->newPage = 0;
+    }
 
-
-    d->newPage->resize(d->oldPage->size());
+    if (d->newPage) {
+        d->newPage->resize(d->oldPage->size());
+    }
 
     setFlags(QGraphicsItem::ItemClipsChildrenToShape);
 
@@ -355,28 +358,36 @@ void TabBar::setCurrentIndex(int index)
         }
     }
 
-    d->oldPage->show();
-    d->newPage->show();
-    d->newPage->setEnabled(true);
+    if (d->newPage) {
+        d->newPage->show();
+        d->newPage->setEnabled(true);
+    }
 
-    d->oldPage->setEnabled(false);
+    if (d->oldPage) {
+        d->oldPage->show();
+        d->oldPage->setEnabled(false);
+    }
 
-    QRect beforeCurrentGeom(d->oldPage->geometry().toRect());
-    beforeCurrentGeom.moveTopRight(beforeCurrentGeom.topLeft());
+    if (d->newPage && d->oldPage) {
+        QRect beforeCurrentGeom(d->oldPage->geometry().toRect());
+        beforeCurrentGeom.moveTopRight(beforeCurrentGeom.topLeft());
 
-    d->newPageAnimId = Animator::self()->moveItem(
-        d->newPage, Plasma::Animator::SlideOutMovement,
-        d->oldPage->pos().toPoint());
-    if (index > d->currentIndex) {
-        d->newPage->setPos(d->oldPage->geometry().topRight());
-        d->oldPageAnimId = Animator::self()->moveItem(
-            d->oldPage, Plasma::Animator::SlideOutMovement,
-            beforeCurrentGeom.topLeft());
+        d->newPageAnimId = Animator::self()->moveItem(
+            d->newPage, Plasma::Animator::SlideOutMovement,
+            d->oldPage->pos().toPoint());
+        if (index > d->currentIndex) {
+            d->newPage->setPos(d->oldPage->geometry().topRight());
+            d->oldPageAnimId = Animator::self()->moveItem(
+                d->oldPage, Plasma::Animator::SlideOutMovement,
+                beforeCurrentGeom.topLeft());
+        } else {
+            d->newPage->setPos(beforeCurrentGeom.topLeft());
+            d->oldPageAnimId = Animator::self()->moveItem(
+                d->oldPage, Plasma::Animator::SlideOutMovement,
+                d->oldPage->geometry().topRight().toPoint());
+        }
     } else {
-        d->newPage->setPos(beforeCurrentGeom.topLeft());
-        d->oldPageAnimId = Animator::self()->moveItem(
-            d->oldPage, Plasma::Animator::SlideOutMovement,
-            d->oldPage->geometry().topRight().toPoint());
+        d->tabWidgetLayout->addItem(d->newPage);
     }
 
     d->currentIndex = index;
