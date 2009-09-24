@@ -32,6 +32,7 @@
 //Plasma
 #include <plasma/widgets/scrollbar.h>
 #include <plasma/widgets/svgwidget.h>
+#include <plasma/animator.h>
 #include <plasma/svg.h>
 
 namespace Plasma
@@ -47,7 +48,8 @@ public:
           bottomBorder(0),
           leftBorder(0),
           rightBorder(0),
-          dragging(false)
+          dragging(false),
+          animId(0)
     {
     }
 
@@ -181,6 +183,7 @@ public:
     Qt::ScrollBarPolicy horizontalScrollBarPolicy;
     QString styleSheet;
     bool dragging;
+    int animId;
 };
 
 
@@ -261,6 +264,32 @@ Qt::ScrollBarPolicy ScrollWidget::verticalScrollBarPolicy() const
     return d->verticalScrollBarPolicy;
 }
 
+void ScrollWidget::ensureRectVisible(const QRectF &rect)
+{
+    QRectF viewRect = d->scrollingWidget->boundingRect();
+    QRectF mappedRect = d->widget->mapToItem(d->scrollingWidget, rect).boundingRect();
+    if (viewRect.contains(mappedRect)) {
+        return;
+    }
+
+    QPointF delta(0, 0);
+
+    if (mappedRect.top() < 0) {
+        delta.setY(-mappedRect.top());
+    } else if  (mappedRect.bottom() > viewRect.bottom()) {
+        delta.setY(viewRect.bottom() - mappedRect.bottom());
+    }
+
+    if (mappedRect.left() < 0) {
+        delta.setX(-mappedRect.left());
+    } else if  (mappedRect.right() > viewRect.right()) {
+        delta.setY(viewRect.right() - mappedRect.right());
+    }
+
+    d->animId = Animator::self()->moveItem(
+                d->widget, Plasma::Animator::SlideOutMovement,
+                (d->widget->pos() + delta).toPoint());
+}
 
 void ScrollWidget::setStyleSheet(const QString &styleSheet)
 {
@@ -311,12 +340,20 @@ void ScrollWidget::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
         return;
     }
 
+    if (d->animId) {
+        Animator::self()->stopItemMovement(d->animId);
+    }
+
     d->mouseMoveEvent(event);
     QGraphicsWidget::mouseMoveEvent(event);
 }
 
 void ScrollWidget::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
+    if (d->animId) {
+        Animator::self()->stopItemMovement(d->animId);
+    }
+
     event->accept();
     d->mousePressEvent(event);
 }
@@ -328,6 +365,10 @@ void ScrollWidget::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 
 void ScrollWidget::wheelEvent(QGraphicsSceneWheelEvent *event)
 {
+    if (d->animId) {
+        Animator::self()->stopItemMovement(d->animId);
+    }
+
     event->accept();
     d->wheelReleaseEvent( event );
 }

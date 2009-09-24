@@ -96,6 +96,14 @@ public:
     Qt::ScrollBarPolicy verticalScrollBarPolicy() const;
 
     /**
+     * Scroll the view until the given rectangle is visible
+     *
+     * @param rect rect we want visible, in coordinates mapped to the inner widget
+     * @since 4.4
+     */
+    void ensureRectVisible(const QRectF &rect);
+
+    /**
      * Sets the stylesheet used to control the visual display of this ScrollWidget
      *
      * @arg stylesheet a CSS string
