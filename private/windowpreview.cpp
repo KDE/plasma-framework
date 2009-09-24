@@ -108,7 +108,7 @@ QSize WindowPreview::sizeHint() const
     int maxHeight = 0;
     int totalWidth = 0;
 
-    foreach (QSize s, windowSizes) {
+    foreach (const QSize &s, windowSizes) {
         if (s.height() > maxHeight) {
             maxHeight = s.height();
         }
@@ -224,7 +224,7 @@ void WindowPreview::paintEvent(QPaintEvent *e)
     qreal left, top, right, bottom;
     m_background->getMargins(left, top, right, bottom);
 
-    foreach (QRect r, m_thumbnailRects) {
+    foreach (const QRect &r, m_thumbnailRects) {
         //kWarning()<<r;
         m_background->resizeFrame(r.size()+QSize(left+right, top+bottom));
         m_background->paintFrame(&painter, r.topLeft()-pos()-QPoint(left,top));

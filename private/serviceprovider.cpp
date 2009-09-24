@@ -262,7 +262,7 @@ void ServiceProvider::operationCompleted(Plasma::ServiceJob *job)
 void ServiceProvider::ruleChanged(Plasma::AuthorizationRule *rule)
 {
     int i = 0;
-    foreach (Jolie::Message message, m_messagesPendingAuthorization) {
+    foreach (const Jolie::Message &message, m_messagesPendingAuthorization) {
         QByteArray id = Message::field(Message::Field::IDENTITYID, message);
         //Credentials identity = AuthorizationManager::self()->d->getCredentials(id);
 

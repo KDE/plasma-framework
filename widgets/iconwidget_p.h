@@ -347,7 +347,7 @@ int IconWidgetPrivate::maxWordWidth(const QString text) const
     QStringList words = text.split(' ');
 
     qreal maxWidth = 0;
-    foreach (QString word, words) {
+    foreach (const QString &word, words) {
         maxWidth = qMax(maxWidth, fm.width(word));
     }
     return maxWidth;
