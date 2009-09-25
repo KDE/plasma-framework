@@ -114,7 +114,7 @@ void AssociatedApplicationManager::run(Plasma::Applet *applet)
         if (!success) {
             applet->showMessage(KIcon("application-exit"), i18n("There was an error attempting to exec the associated application with this widget."), ButtonOk);
         }
-    } else if (d->urlLists.contains(applet)) {
+    } else if (d->urlLists.contains(applet) && !d->urlLists.value(applet).isEmpty()) {
         KRun *krun = new KRun(d->urlLists.value(applet).first(), 0);
         krun->setAutoDelete(true);
     }
