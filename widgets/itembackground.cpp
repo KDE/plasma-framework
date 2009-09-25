@@ -138,6 +138,7 @@ void ItemBackground::setTargetItem(QGraphicsItem *target)
         }
     }
 
+    bool newTarget = (d->target != target);
     d->target = target;
     if (target) {
         setZValue(target->zValue() - 1);
@@ -146,7 +147,7 @@ void ItemBackground::setTargetItem(QGraphicsItem *target)
         rect.moveTopLeft(target->pos());
         setTarget(rect);
 
-        if (d->target != target) {
+        if (newTarget) {
             QObject *obj = 0;
             if (target->isWidget()) {
                 obj = static_cast<QGraphicsWidget*>(target);
