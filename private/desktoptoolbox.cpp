@@ -53,7 +53,7 @@ class EmptyGraphicsItem : public QGraphicsItem
             m_toolbarBackground = new Plasma::FrameSvg();
 
             m_toolbarBackground->setImagePath("widgets/background");
-            m_background->setImagePath("widgets/translucentbackground");
+            m_background->setImagePath("widgets/toolbox");
 
             m_toolbarBackground->setEnabledBorders(FrameSvg::LeftBorder|FrameSvg::RightBorder|FrameSvg::BottomBorder);
             m_background->setEnabledBorders(FrameSvg::AllBorders);
