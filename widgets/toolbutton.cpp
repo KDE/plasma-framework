@@ -68,8 +68,7 @@ public:
         }
 
         KMimeType::Ptr mime = KMimeType::findByPath(absImagePath);
-        QPixmap pm(q->size().toSize());
-        pm.fill(Qt::transparent);
+        QPixmap pm;
 
         if (mime->is("image/svg+xml") || mime->is("image/svg+xml-compressed")) {
             if (!svg || svg->imagePath() != absImagePath) {
@@ -77,21 +76,21 @@ public:
                 svg = new Svg();
                 svg->setImagePath(imagePath);
                 QObject::connect(svg, SIGNAL(repaintNeeded()), q, SLOT(setPixmap()));
+                if (!svgElement.isNull()) {
+                    svg->setContainsMultipleImages(true);
+                }
             }
 
-            QPainter p(&pm);
+            //QPainter p(&pm);
             if (!svgElement.isNull() && svg->hasElement(svgElement)) {
                 QSizeF elementSize = svg->elementSize(svgElement);
                 float scale = pm.width() / qMax(elementSize.width(), elementSize.height());
 
                 svg->resize(svg->size() * scale);
-
-                QRectF elementRect(QPointF(0,0), svg->elementSize(svgElement));
-                elementRect.moveCenter(q->rect().center());
-                svg->paint(&p, elementRect, svgElement);
+                pm = svg->pixmap(svgElement);
             } else {
                 svg->resize(pm.size());
-                svg->paint(&p, pm.rect());
+                pm = svg->pixmap();
             }
         } else {
             delete svg;
