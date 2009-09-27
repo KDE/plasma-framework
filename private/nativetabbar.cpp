@@ -237,6 +237,23 @@ void NativeTabBar::paintEvent(QPaintEvent *event)
 
     QFontMetrics metrics(painter.font());
 
+
+    QRect scrollButtonsRect;
+    foreach (QObject *child, children()) {
+        QToolButton *childWidget = qobject_cast<QToolButton *>(child);
+        if (childWidget) {
+            if (!childWidget->isVisible()) {
+                continue;
+            }
+
+            if (scrollButtonsRect.isValid()) {
+                scrollButtonsRect = scrollButtonsRect.united(childWidget->geometry());
+            } else {
+                scrollButtonsRect = childWidget->geometry();
+            }
+        }
+    }
+
     for (int i = 0; i < count(); ++i) {
         QRect rect = tabRect(i).adjusted(d->buttonLeft, d->buttonTop,
                                          -d->buttonRight, -d->buttonBottom);
@@ -263,8 +280,40 @@ void NativeTabBar::paintEvent(QPaintEvent *event)
             textRect.setLeft(iconRect.right());
         }
 
+
         painter.setFont(Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont));
-        painter.drawText(textRect, Qt::AlignCenter | Qt::TextHideMnemonic, tabText(i));
+
+        int endTabSpace = contentsRect().right() - scrollButtonsRect.width();
+        if (textRect.left() < endTabSpace) {
+            if (textRect.left() < contentsRect().left() || textRect.right() > endTabSpace) {
+                QPixmap buffer(textRect.size());
+                buffer.fill(Qt::transparent);
+
+                QPainter buffPainter(&buffer);
+                buffPainter.drawText(buffer.rect(), Qt::AlignCenter | Qt::TextHideMnemonic, tabText(i));
+                buffPainter.setCompositionMode(QPainter::CompositionMode_DestinationIn);
+                QLinearGradient gradient(buffer.rect().topLeft(), buffer.rect().topRight());
+
+                if (textRect.left() < contentsRect().left()) {
+                    gradient.setColorAt(0, Qt::transparent);
+                    gradient.setColorAt((-(qreal)textRect.left())/(qreal)textRect.width(), Qt::transparent);
+                    gradient.setColorAt(1, Qt::black);
+                } else {
+                    gradient.setColorAt(0, Qt::black);
+                    gradient.setColorAt(1 - (qreal)(textRect.right() - endTabSpace)/(qreal)textRect.width(), Qt::transparent);
+                    gradient.setColorAt(1, Qt::transparent);
+                }
+
+                buffPainter.setBrush(gradient);
+                buffPainter.setPen(Qt::NoPen);
+                buffPainter.drawRect(buffer.rect());
+                buffPainter.end();
+
+                painter.drawPixmap(textRect, buffer, buffer.rect());
+            } else {
+                painter.drawText(textRect, Qt::AlignCenter | Qt::TextHideMnemonic, tabText(i));
+            }
+        }
 
         if (isCloseButtonEnabled()) {
             d->closeIcon.paint(&painter, QRect(closeButtonPos(i), QSize(KIconLoader::SizeSmall, KIconLoader::SizeSmall)) );
@@ -272,21 +321,6 @@ void NativeTabBar::paintEvent(QPaintEvent *event)
     }
 
 
-    QRect scrollButtonsRect;
-    foreach (QObject *child, children()) {
-        QToolButton *childWidget = qobject_cast<QToolButton *>(child);
-        if (childWidget) {
-            if (!childWidget->isVisible()) {
-                continue;
-            }
-
-            if (scrollButtonsRect.isValid()) {
-                scrollButtonsRect = scrollButtonsRect.united(childWidget->geometry());
-            } else {
-                scrollButtonsRect = childWidget->geometry();
-            }
-        }
-    }
 
     if (scrollButtonsRect.isValid()) {
         scrollButtonsRect.adjust(2, 4, -2, -4);
