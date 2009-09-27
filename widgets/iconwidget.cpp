@@ -1037,14 +1037,21 @@ void IconWidget::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
 
     if (d->textBgColor != QColor() &&
         !(d->text.isEmpty() && d->infoText.isEmpty()) &&
-        !textBoundingRect.isEmpty()) {
-        QRectF rect = textBoundingRect.adjusted(-2, -2, 4, 4);
+        !textBoundingRect.isEmpty() &&
+        !qFuzzyCompare(d->hoverAlpha, (qreal)1.0)) {
+        QRectF rect = textBoundingRect.adjusted(-2, -2, 4, 4).toAlignedRect();
         painter->setPen(Qt::transparent);
         QColor color = d->textBgColor;
         color.setAlpha(60 * (1.0 - d->hoverAlpha));
-        painter->setBrush(color);
+        QLinearGradient gradient(rect.topLeft(), rect.bottomLeft());
+        gradient.setColorAt(0, color.lighter(120));
+        gradient.setColorAt(1, color.darker(120));
+        painter->setBrush(gradient);
+        gradient.setColorAt(0, color.lighter(130));
+        gradient.setColorAt(1, color.darker(130));
+        painter->setPen(QPen(gradient, 0));
         painter->setRenderHint(QPainter::Antialiasing);
-        painter->drawPath(PaintUtils::roundedRectangle(rect, 4));
+        painter->drawPath(PaintUtils::roundedRectangle(rect.translated(0.5, 0.5), 4));
     }
 
     PaintUtils::shadowBlur(shadow, 2, d->shadowColor);
