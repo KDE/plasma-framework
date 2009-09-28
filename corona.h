@@ -157,6 +157,17 @@ public:
     QPoint popupPosition(const QGraphicsItem *item, const QSize &size);
 
     /**
+     * @since 4.4
+    * Recommended position for a popup window like a menu or a tooltip
+    * given its size
+    * @param item the item that the popup should appear adjacent to (an applet, say)
+    * @param size size of the popup
+    * @param alignment alignment of the popup, valid flags are Qt::AlignLeft, Qt::AlignRight and Qt::AlignCenter
+    * @returns reccomended position
+    */
+    QPoint popupPosition(const QGraphicsItem *item, const QSize &size, Qt::AlignmentFlag alignment);
+
+    /**
      * This method is useful in order to retrieve the list of available
      * screen edges for panel type containments.
      * @param screen the id of the screen to look for free edges.

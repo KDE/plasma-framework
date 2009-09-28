@@ -509,6 +509,14 @@ QRegion Corona::availableScreenRegion(int id) const
 
 QPoint Corona::popupPosition(const QGraphicsItem *item, const QSize &s)
 {
+    return popupPosition(item, s, Qt::AlignLeft);
+}
+
+QPoint Corona::popupPosition(const QGraphicsItem *item, const QSize &s, Qt::AlignmentFlag alignment)
+{
+    // TODO: merge both methods (also these in Applet) into one (with optional alignment) when we can break compatibility
+    // TODO: add support for more flags in the future?
+
     QGraphicsView *v = viewFor(item);
 
     if (!v) {
@@ -517,6 +525,15 @@ QPoint Corona::popupPosition(const QGraphicsItem *item, const QSize &s)
 
     QPoint pos;
     QTransform sceneTransform = item->sceneTransform();
+
+    //swap direction if necessary
+    if (QApplication::isRightToLeft() && alignment != Qt::AlignCenter) {
+        if (alignment == Qt::AlignRight) {
+            alignment == Qt::AlignLeft;
+        } else {
+            alignment == Qt::AlignRight;
+        }
+    }
 
     //if the applet is rotated the popup position has to be un-transformed
     if (sceneTransform.isRotating()) {
@@ -544,9 +561,12 @@ QPoint Corona::popupPosition(const QGraphicsItem *item, const QSize &s)
     switch (loc) {
     case BottomEdge:
     case TopEdge: {
-        //TODO: following line makes them centered.
-        //could make it better or worse, must be decided
-        //pos.setX(pos.x() + item->boundingRect().width()/2 - s.width()/2);
+        if (alignment == Qt::AlignCenter) {
+            pos.setX(pos.x() + item->boundingRect().width()/2 - s.width()/2);
+        } else if (alignment == Qt::AlignRight) {
+            pos.setX(pos.x() + item->boundingRect().width() - s.width());
+        }
+
         if (pos.x() + s.width() > v->geometry().right()) {
             pos.setX(v->geometry().right() - s.width());
         } else {
@@ -556,7 +576,12 @@ QPoint Corona::popupPosition(const QGraphicsItem *item, const QSize &s)
     }
     case LeftEdge:
     case RightEdge: {
-        //pos.setY(pos.y() + item->boundingRect().height()/2 - s.height()/2);
+        if (alignment == Qt::AlignCenter) {
+            pos.setY(pos.y() + item->boundingRect().height()/2 - s.height()/2);
+        } else if (alignment == Qt::AlignRight) {
+            pos.setY(pos.y() + item->boundingRect().height() - s.height());
+        }
+
         if (pos.y() + s.height() > v->geometry().bottom()) {
             pos.setY(v->geometry().bottom() - s.height());
         } else {
@@ -565,6 +590,11 @@ QPoint Corona::popupPosition(const QGraphicsItem *item, const QSize &s)
         break;
     }
     default:
+        if (alignment == Qt::AlignCenter) {
+            pos.setX(pos.x() + item->boundingRect().width()/2 - s.width()/2);
+        } else if (alignment == Qt::AlignRight) {
+            pos.setX(pos.x() + item->boundingRect().width() - s.width());
+        }
         break;
     }
     switch (loc) {
@@ -602,10 +632,9 @@ QPoint Corona::popupPosition(const QGraphicsItem *item, const QSize &s)
     }
 
     pos.rx() = qMax(0, pos.rx());
+
     return pos;
 }
-
-
 
 void Corona::loadDefaultLayout()
 {
@@ -672,7 +701,7 @@ QList<Plasma::Location> Corona::freeEdges(int screen) const
               << Plasma::LeftEdge << Plasma::RightEdge;
 
     foreach (Containment *containment, containments()) {
-        if (containment->screen() == screen && 
+        if (containment->screen() == screen &&
             freeEdges.contains(containment->location())) {
             freeEdges.removeAll(containment->location());
         }

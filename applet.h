@@ -232,6 +232,16 @@ class PLASMA_EXPORT Applet : public QGraphicsWidget
         QPoint popupPosition(const QSize &s) const;
 
         /**
+         * @since 4.4
+         * Reccomended position for a popup window like a menu or a tooltip
+         * given its size
+         * @param s size of the popup
+         * @param alignment alignment of the popup, valid flags are Qt::AlignLeft, Qt::AlignRight and Qt::AlignCenter
+         * @returns reccomended position
+         */
+        QPoint popupPosition(const QSize &s, Qt::AlignmentFlag alignment) const;
+
+        /**
          * Called when any of the geometry constraints have been updated.
          * This method calls constraintsEvent, which may be reimplemented,
          * once the Applet has been prepared for updating the constraints.

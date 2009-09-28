@@ -688,9 +688,15 @@ QRect Applet::mapToView(const QGraphicsView *view, const QRectF &rect) const
 
 QPoint Applet::popupPosition(const QSize &s) const
 {
+    return popupPosition(s, Qt::AlignLeft);
+}
+
+QPoint Applet::popupPosition(const QSize &s, Qt::AlignmentFlag alignment) const
+{
     Corona * corona = qobject_cast<Corona*>(scene());
     Q_ASSERT(corona);
-    return corona->popupPosition(this, s);
+
+    return corona->popupPosition(this, s, alignment);
 }
 
 void Applet::updateConstraints(Plasma::Constraints constraints)

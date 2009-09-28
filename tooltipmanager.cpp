@@ -245,7 +245,7 @@ void ToolTipManager::setContent(QGraphicsWidget *widget, const ToolTipContent &d
         d->tipWidget->setContent(widget, data);
         d->tipWidget->prepareShowing();
         if (m_corona) {
-            d->tipWidget->moveTo(m_corona->popupPosition(widget, d->tipWidget->size()));
+            d->tipWidget->moveTo(m_corona->popupPosition(widget, d->tipWidget->size(), Qt::AlignCenter));
         }
     }
 }
@@ -372,7 +372,7 @@ void ToolTipManagerPrivate::showToolTip()
     tipWidget->setContent(currentWidget, tooltip.value());
     tipWidget->prepareShowing();
     if (q->m_corona) {
-        tipWidget->moveTo(q->m_corona->popupPosition(currentWidget, tipWidget->size()));
+        tipWidget->moveTo(q->m_corona->popupPosition(currentWidget, tipWidget->size(), Qt::AlignCenter));
     }
     tipWidget->show();
     isShown = true;  //ToolTip is visible
