@@ -73,7 +73,8 @@ class SvgPrivate
               multipleImages(false),
               themed(false),
               applyColors(false),
-              cacheRendering(true)
+              cacheRendering(true),
+              themeFailed(false)
         {
         }
 
@@ -130,6 +131,7 @@ class SvgPrivate
 
             if (themed) {
                 themePath = imagePath;
+                themeFailed = false;
                 QObject::connect(actualTheme(), SIGNAL(themeChanged()), q, SLOT(themeChanged()));
             } else if (QFile::exists(imagePath)) {
                 path = imagePath;
@@ -251,7 +253,7 @@ class SvgPrivate
             }
 
             //kDebug() << kBacktrace();
-            if (themed && path.isEmpty()) {
+            if (themed && path.isEmpty() && !themeFailed) {
                 Applet *applet = qobject_cast<Applet*>(q->parent());
                 if (applet && applet->package()) {
                     path = applet->package()->filePath("images", themePath + ".svg");
@@ -263,7 +265,8 @@ class SvgPrivate
 
                 if (path.isEmpty()) {
                     path = actualTheme()->imagePath(themePath);
-                    if (path.isEmpty()) {
+                    themeFailed = path.isEmpty();
+                    if (themeFailed) {
                         kWarning() << "No image path found for" << themePath;
                     }
                 }
@@ -279,10 +282,12 @@ class SvgPrivate
                 //kDebug() << "gots us an existing one!";
                 renderer = it.value();
             } else {
-                if (path.isEmpty())
+                if (path.isEmpty()) {
                     renderer = new SharedSvgRenderer();
-                else
+                } else {
                     renderer = new SharedSvgRenderer(path);
+                }
+
                 s_renderers[path] = renderer;
             }
 
@@ -309,7 +314,16 @@ class SvgPrivate
         QRectF elementRect(const QString &elementId)
         {
             if (themed && path.isEmpty()) {
+                if (themeFailed) {
+                    return QRectF();
+                }
+
                 path = actualTheme()->imagePath(themePath);
+                themeFailed = !path.isEmpty();
+
+                if (themeFailed) {
+                    return QRectF();
+                }
             }
 
             QString id = cacheId(elementId);
@@ -410,6 +424,7 @@ class SvgPrivate
         bool themed : 1;
         bool applyColors : 1;
         bool cacheRendering : 1;
+        bool themeFailed : 1;
 };
 
 QHash<QString, SharedSvgRenderer::Ptr> SvgPrivate::s_renderers;
