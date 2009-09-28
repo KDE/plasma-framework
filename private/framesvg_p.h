@@ -107,11 +107,13 @@ public:
     }
 
     void generateBackground(FrameData *frame);
+    void generateFrameBackground(FrameData *frame);
+    QString cacheId(FrameData *frame, const QString &prefixToUse) const;
     void cacheFrame(const QString &prefixToSave, const QPixmap &background, const QPixmap &overlay);
-    void updateSizes();
+    void updateSizes() const;
     void updateNeeded();
     void updateAndSignalSizes();
-    QSizeF frameSize(FrameData *frame);
+    QSizeF frameSize(FrameData *frame) const;
 
     Location location;
     QString prefix;
