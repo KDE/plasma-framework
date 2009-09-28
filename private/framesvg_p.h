@@ -68,7 +68,6 @@ public:
 
     FrameSvg::EnabledBorders enabledBorders;
     QPixmap cachedBackground;
-    QPixmap cachedOverlay;
     QRegion cachedMask;
     QSize frameSize;
 
@@ -108,7 +107,7 @@ public:
     }
 
     void generateBackground(FrameData *frame);
-    void cacheFrame(const QString &prefix);
+    void cacheFrame(const QString &prefixToSave, const QPixmap &background, const QPixmap &overlay);
     void updateSizes();
     void updateNeeded();
     void updateAndSignalSizes();

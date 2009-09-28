@@ -389,11 +389,9 @@ void FrameSvgPrivate::generateBackground(FrameData *frame)
         return;
     }
 
-
     QSizeF size = frameSize(frame);
-    QString id = QString::fromLatin1("%5_%4_%3_%2_%1_").
-                         arg(frame->enabledBorders).arg(size.width()).arg(size.height()).arg(prefix).arg(q->imagePath());
-
+    const QString id = QString::fromLatin1("%5_%4_%3_%2_%1_").
+                                arg(frame->enabledBorders).arg(size.width()).arg(size.height()).arg(prefix).arg(q->imagePath());
 
     Theme *theme = Theme::defaultTheme();
     if (q->isUsingRenderingCache()) {
@@ -562,10 +560,11 @@ void FrameSvgPrivate::generateBackground(FrameData *frame)
 
     //Overlays
     QSize overlaySize;
-    frame->cachedOverlay = QPixmap();
-    if (!prefix.startsWith("mask-") && q->hasElement(prefix+"overlay") &&
-        !theme->findInCache(id, frame->cachedOverlay) &&
-        frame->cachedOverlay.isNull()) {
+    QPixmap overlay;
+    bool overlayAlreadyCached = false;
+    if (!prefix.startsWith("mask-") && q->hasElement(prefix + "overlay") &&
+        !(overlayAlreadyCached = theme->findInCache("overlay_" + id, overlay)) &&
+        overlay.isNull()) {
         QPoint pos = QPoint(0, 0);
         overlaySize = q->elementSize(prefix+"overlay");
 
@@ -584,8 +583,8 @@ void FrameSvgPrivate::generateBackground(FrameData *frame)
             }
         }
 
-        frame->cachedOverlay = q->alphaMask();
-        QPainter overlayPainter(&frame->cachedOverlay);
+        overlay = q->alphaMask();
+        QPainter overlayPainter(&overlay);
         overlayPainter.setCompositionMode(QPainter::CompositionMode_SourceIn);
         //Tiling?
         if (q->hasElement(prefix+"hint-overlay-tile-horizontal") ||
@@ -602,16 +601,16 @@ void FrameSvgPrivate::generateBackground(FrameData *frame)
         overlayPainter.end();
     }
 
-    cacheFrame(prefix);
+    cacheFrame(prefix, frame->cachedBackground, overlay);
 
-    if (!frame->cachedOverlay.isNull()) {
+    if (!overlay.isNull()) {
         p.setCompositionMode(QPainter::CompositionMode_SourceOver);
-        p.drawPixmap(overlayPos, frame->cachedOverlay, QRect(overlayPos, overlaySize));
+        p.drawPixmap(overlayPos, overlay, QRect(overlayPos, overlaySize));
     }
 }
 
 
-void FrameSvgPrivate::cacheFrame(const QString &prefixToSave)
+void FrameSvgPrivate::cacheFrame(const QString &prefixToSave, const QPixmap &background, const QPixmap &overlay)
 {
     if (!q->isUsingRenderingCache()) {
         return;
@@ -624,19 +623,21 @@ void FrameSvgPrivate::cacheFrame(const QString &prefixToSave)
         return;
     }
 
-    QSizeF size = frameSize(frame);
+    const QSizeF size = frameSize(frame);
     QString id = QString::fromLatin1("%7_%6_%5_%4_%3_%2_%1_").
         arg(overlayPos.y()).arg(overlayPos.x()).arg(frame->enabledBorders).arg(size.width()).arg(size.height()).arg(prefixToSave).arg(q->imagePath());
 
     //kDebug()<<"Saving to cache frame"<<id;
 
-    Theme::defaultTheme()->insertIntoCache(id, frame->cachedBackground, QString::number((qint64)q, 16)+prefixToSave);
+    Theme::defaultTheme()->insertIntoCache(id, background, QString::number((qint64)q, 16)+prefixToSave);
 
-    //insert overlay
-    id = QString::fromLatin1("overlay_%7_%6_%5_%4_%3_%2_%1_").
-        arg(overlayPos.y()).arg(overlayPos.x()).arg(frame->enabledBorders).arg(size.width()).arg(size.height()).arg(prefixToSave).arg(q->imagePath());
+    if (!overlay.isNull()) {
+        //insert overlay
+        id = QString::fromLatin1("overlay_%7_%6_%5_%4_%3_%2_%1_").
+            arg(overlayPos.y()).arg(overlayPos.x()).arg(frame->enabledBorders).arg(size.width()).arg(size.height()).arg(prefixToSave).arg(q->imagePath());
 
-    Theme::defaultTheme()->insertIntoCache(id, frame->cachedOverlay, QString::number((qint64)q, 16)+prefixToSave+"overlay");
+        Theme::defaultTheme()->insertIntoCache(id, overlay, QString::number((qint64)q, 16) + prefixToSave + "overlay");
+    }
 }
 
 void FrameSvgPrivate::updateSizes()
