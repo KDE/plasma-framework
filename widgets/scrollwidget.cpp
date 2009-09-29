@@ -89,12 +89,15 @@ public:
             horizontalScrollBar->show();
         }
 
-        if (widget && widget->size().height() <= q->size().height()) {
+        if (topBorder && (!widget || widget->size().height() <= q->size().height())) {
+            //FIXME: in some cases topBorder->deleteLater() is deleteNever(), why?
+            topBorder->hide();
+            bottomBorder->hide();
             topBorder->deleteLater();
             bottomBorder->deleteLater();
             topBorder = 0;
             bottomBorder = 0;
-        } else if (!topBorder) {
+        } else if (widget && !topBorder) {
             topBorder = new Plasma::SvgWidget(q);
             topBorder->setSvg(borderSvg);
             topBorder->setElementID("border-top");
@@ -110,12 +113,14 @@ public:
         }
 
 
-        if (widget && widget->size().width() <= q->size().width()) {
+        if (leftBorder && (!widget || widget->size().width() <= q->size().width())) {
+            leftBorder->hide();
+            rightBorder->hide();
             leftBorder->deleteLater();
             rightBorder->deleteLater();
             leftBorder = 0;
             rightBorder = 0;
-        } else if (!leftBorder) {
+        } else if (widget && !leftBorder) {
             leftBorder = new Plasma::SvgWidget(q);
             leftBorder->setSvg(borderSvg);
             leftBorder->setElementID("border-left");
