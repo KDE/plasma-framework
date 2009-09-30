@@ -133,7 +133,7 @@ public:
             rightBorder->deleteLater();
             leftBorder = 0;
             rightBorder = 0;
-        } 
+        }
 
         layout->activate();
 
@@ -170,7 +170,16 @@ public:
         const bool clip = widget->size().width() > scrollingWidget->size().width() ||
                           widget->size().height() > scrollingWidget->size().height();
 
-        scrollingWidget->setFlag(QGraphicsItem::ItemClipsChildrenToShape, clip);
+        /* FIXME: it should really be like this:
+         *
+         * scrollingWidget->setFlag(QGraphicsItem::ItemClipsChildrenToShape, clip);
+         *
+         * however, a qt bug prevents this to work properly when toggling this flag,
+         * so we have to keep the children items always clipped (performance--)
+         * until the bug is fixed.
+         */
+
+        scrollingWidget->setFlag(QGraphicsItem::ItemClipsChildrenToShape, true);
     }
 
     ScrollWidget *q;
