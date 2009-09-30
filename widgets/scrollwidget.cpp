@@ -89,15 +89,7 @@ public:
             horizontalScrollBar->show();
         }
 
-        if (topBorder && (!widget || widget->size().height() <= q->size().height())) {
-            //FIXME: in some cases topBorder->deleteLater() is deleteNever(), why?
-            topBorder->hide();
-            bottomBorder->hide();
-            topBorder->deleteLater();
-            bottomBorder->deleteLater();
-            topBorder = 0;
-            bottomBorder = 0;
-        } else if (widget && !topBorder) {
+         if (widget && !topBorder && widget->size().height() > q->size().height()) {
             topBorder = new Plasma::SvgWidget(q);
             topBorder->setSvg(borderSvg);
             topBorder->setElementID("border-top");
@@ -110,17 +102,18 @@ public:
             bottomBorder->setZValue(900);
             bottomBorder->resize(bottomBorder->effectiveSizeHint(Qt::PreferredSize));
             bottomBorder->show();
+        } else if (topBorder && widget) {
+            //FIXME: in some cases topBorder->deleteLater() is deleteNever(), why?
+            topBorder->hide();
+            bottomBorder->hide();
+            topBorder->deleteLater();
+            bottomBorder->deleteLater();
+            topBorder = 0;
+            bottomBorder = 0;
         }
 
 
-        if (leftBorder && (!widget || widget->size().width() <= q->size().width())) {
-            leftBorder->hide();
-            rightBorder->hide();
-            leftBorder->deleteLater();
-            rightBorder->deleteLater();
-            leftBorder = 0;
-            rightBorder = 0;
-        } else if (widget && !leftBorder) {
+        if (widget && !leftBorder && widget->size().width() > q->size().width()) {
             leftBorder = new Plasma::SvgWidget(q);
             leftBorder->setSvg(borderSvg);
             leftBorder->setElementID("border-left");
@@ -133,7 +126,14 @@ public:
             rightBorder->setZValue(900);
             rightBorder->resize(rightBorder->effectiveSizeHint(Qt::PreferredSize));
             rightBorder->show();
-        }
+        } else if (leftBorder && widget) {
+            leftBorder->hide();
+            rightBorder->hide();
+            leftBorder->deleteLater();
+            rightBorder->deleteLater();
+            leftBorder = 0;
+            rightBorder = 0;
+        } 
 
         layout->activate();
 
