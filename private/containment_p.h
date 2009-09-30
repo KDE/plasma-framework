@@ -132,6 +132,12 @@ public:
 
     Applet *appletAt(const QPointF &point);
 
+    /**
+     * force the contextmenu for @p applet to be shown at @p screenPos
+     * @since 4.4
+     */
+    bool showAppletContextMenu(Applet *applet, const QPoint &screenPos);
+
     Containment *q;
     FormFactor formFactor;
     Location location;

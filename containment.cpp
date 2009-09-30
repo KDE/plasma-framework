@@ -751,6 +751,19 @@ bool ContainmentPrivate::showContextMenu(const QPointF &point, const QPoint &scr
     return false;
 }
 
+bool ContainmentPrivate::showAppletContextMenu(Applet *applet, const QPoint &screenPos)
+{
+    KMenu desktopMenu;
+    appletActions(desktopMenu, applet, true);
+
+    if (!desktopMenu.isEmpty()) {
+        desktopMenu.exec(screenPos);
+        return true;
+    }
+
+    return false;
+}
+
 void Containment::setFormFactor(FormFactor formFactor)
 {
     if (d->formFactor == formFactor) {

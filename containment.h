@@ -593,6 +593,7 @@ class PLASMA_EXPORT Containment : public Applet
         friend class CoronaPrivate;
         friend class ContainmentPrivate;
         friend class ContainmentActions;
+        friend class PopupApplet;
         ContainmentPrivate *const d;
 };
 

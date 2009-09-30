@@ -41,6 +41,7 @@
 #include "plasma/private/extenderitemmimedata_p.h"
 #include "plasma/corona.h"
 #include "plasma/containment.h"
+#include "plasma/private/containment_p.h"
 #include "plasma/dialog.h"
 #include "plasma/extenders/extender.h"
 #include "plasma/extenders/extenderitem.h"
@@ -418,6 +419,16 @@ bool PopupApplet::eventFilter(QObject *watched, QEvent *event)
         }
     }
     */
+
+    if (watched == d->dialog && event->type() == QEvent::ContextMenu) {
+        //pass it up to the applet
+        //well, actually we have to pass it to the *containment*
+        //because all the code for showing an applet's contextmenu is actually in Containment.
+        Containment *c = containment();
+        if (c) {
+            return c->d->showAppletContextMenu(this, static_cast<QContextMenuEvent*>(event)->globalPos());
+        }
+    }
 
     return Applet::eventFilter(watched, event);
 }
