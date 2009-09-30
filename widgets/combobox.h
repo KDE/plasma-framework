@@ -89,8 +89,18 @@ public Q_SLOTS:
     void clear();
 
 Q_SIGNALS:
-    void activated(const QString & text);
-    void textChanged(const QString & text);
+    /**
+     * This signal is sent when the user chooses an item in the combobox.
+     * The item's text is passed.
+     */
+    void activated(const QString &text);
+
+    /**
+     * This signal is sent whenever the currentIndex in the combobox changes 
+     * either through user interaction or programmatically. 
+     * The item's text is passed.
+     */
+    void textChanged(const QString &text);
 
 protected:
     void resizeEvent(QGraphicsSceneResizeEvent *event);
