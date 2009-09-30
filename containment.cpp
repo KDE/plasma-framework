@@ -1233,6 +1233,7 @@ void ContainmentPrivate::dropData(QPointF scenePos, QPoint screenPos, QGraphicsS
                 KIO::JobFlags flags = KIO::HideProgressInfo;
                 KIO::TransferJob *job = KIO::get(url, KIO::NoReload, flags);
                 dropPoints[job] = dropEvent->scenePos();
+                QObject::connect(job, SIGNAL(result(KJob*)), q, SLOT(dropJobResult(KJob*)));
                 QObject::connect(job, SIGNAL(mimetype(KIO::Job *, const QString&)),
                                  q, SLOT(mimeTypeRetrieved(KIO::Job *, const QString&)));
 
@@ -1342,7 +1343,16 @@ void ContainmentPrivate::remoteAppletReady(Plasma::AccessAppletJob *job)
     q->addApplet(job->applet(), pos);
 }
 
-void ContainmentPrivate::mimeTypeRetrieved(KIO::Job * job, const QString &mimetype)
+void ContainmentPrivate::dropJobResult(KJob *job)
+{
+    if (job->error()) {
+        // TODO: error feedback
+        clearDataForMimeJob(qobject_cast<KIO::Job *>(job));
+        kDebug() << "ERROR" << job->error() << ' ' << job->errorString();
+    }
+}
+
+void ContainmentPrivate::mimeTypeRetrieved(KIO::Job *job, const QString &mimetype)
 {
     kDebug() << "Mimetype Job returns." << mimetype;
     if (job->error()) {

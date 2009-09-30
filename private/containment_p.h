@@ -88,6 +88,7 @@ public:
     void clearDataForMimeJob(KIO::Job *job);
     void remoteAppletReady(Plasma::AccessAppletJob *job);
     void mimeTypeRetrieved(KIO::Job *job, const QString &mimetype);
+    void dropJobResult(KJob *);
     void containmentActions(KMenu &desktopMenu);
     void appletActions(KMenu &desktopMenu, Applet *applet, bool includeApplet);
     bool showContextMenu(const QPointF &point, const QPoint &screenPos, bool includeApplet, bool isMouseEvent);
