@@ -5,9 +5,6 @@ MACRO(PLASMA_UNIT_TESTS)
                kde4_add_unit_test(${_testname} ${_testname}.cpp)
                target_link_libraries(${_testname} plasma ${QT_QTTEST_LIBRARY}
                                      ${KDE4_KIO_LIBS})
-               if(QCA2_FOUND)
-                       target_link_libraries(${_testname} ${QCA2_LIBRARIES})
-               endif(QCA2_FOUND)
        ENDFOREACH(_testname)
 ENDMACRO(PLASMA_UNIT_TESTS)
 
@@ -16,5 +13,8 @@ PLASMA_UNIT_TESTS(
     packagemetadatatest
     plasmoidpackagetest
 )
+if(QCA2_FOUND)
+  target_link_libraries(plasmoidpackagetest ${QCA2_LIBRARIES})
+endif(QCA2_FOUND)
 
 
