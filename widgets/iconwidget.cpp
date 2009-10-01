@@ -332,6 +332,7 @@ void IconWidgetPrivate::init()
 
     // setAcceptedMouseButtons(Qt::LeftButton);
     q->setAcceptsHoverEvents(true);
+    q->setCacheMode(QGraphicsItem::DeviceCoordinateCache);
 
     background = new Plasma::FrameSvg(q);
     background->setImagePath("widgets/viewitem");
