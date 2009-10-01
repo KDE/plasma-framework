@@ -686,7 +686,7 @@ void ContainmentPrivate::appletActions(KMenu &desktopMenu, Applet *applet, bool 
         }
     }
 
-    if (static_cast<Corona*>(q->scene())->immutability() == Mutable) {
+    if (q->immutability() == Mutable) {
         if (!desktopMenu.isEmpty()) {
             desktopMenu.addSeparator();
         }
