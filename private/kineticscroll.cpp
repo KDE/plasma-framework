@@ -1,4 +1,4 @@
-/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////
 // kineticscroll.cpp                                                   //
 //                                                                     //
 // Copyright(C) 2009 Igor Trindade Oliveira <igor.oliveira@indt.org.br>//
@@ -30,13 +30,12 @@
 #include "kineticscroll_p.h"
 
 /* TODO:
- * - write a factory to animation/state object
- * - move timer based code to an implementation of the factory
- * - write another implementation using QPropertyAnimation Qt 4.6
- * - generalize code concerning viewport and other parameters
+ * - implement horizontal scrolling
+ * - implement bouncing animation (not sure if it adds in usability
+ * in plasma-netbook).
+ * - Merge QPropertyAnimation code when KDE migrates to Qt 4.6
+ * (http://repo.or.cz/w/kineticlist.git)
  * - swap the 'magic numbers' for consts
- * - consider if direct access to control state/velocity variables should
- * be done directly or using functions
  */
 
 namespace Plasma
@@ -45,9 +44,13 @@ namespace Plasma
 class KineticScrollingPrivate
 {
 public:
-    KineticScrollingPrivate(): mScrollVelocity(0), timerID(0),
-                               overshoot(40), bounceFlag(0), hasOvershoot(true)
-    { }
+    KineticScrollingPrivate(): timerID(0),
+                               overshoot(20), bounceFlag(0), hasOvershoot(true),
+                               friction(0.9)
+    {
+        maximum = 100 + overshoot;
+        minimum = -overshoot;
+    }
 
     void count()
     {
@@ -55,38 +58,27 @@ public:
         t.start();
     }
 
-    unsigned int elapsed()
+    void applyFriction()
     {
-        return t.restart();
+        qreal tmp(kinMovement.y());
+        tmp *= friction;
+        kinMovement.setY(tmp);
     }
-
-    void verticalScroll(int value)
-    {
-        widget->setPos(QPoint(0, -value*10));
-    }
-
-    void horizontalScroll(int value)
-    {
-        widget->setPos(QPoint(-value*10, 0));
-    }
-
 
     unsigned int timeDelta;
     qreal scrollVelocity;
-    QPoint movement;
     QPoint kinMovement;
 
-    qreal mScrollVelocity;
     enum { None, Up, Down };
     int timerID, overshoot, direction;
-    QPoint cposition, minimalPos, maximumPos;
+    QPoint cposition;
     char bounceFlag;
     bool hasOvershoot;
+    QObject *parent;
+    QRectF geo;
+    int maximum, minimum;
+    qreal friction;
 
-    QGraphicsWidget *widget;
-    QGraphicsWidget *scrollingWidget;
-
-protected:
     QTime t;
 };
 
@@ -101,29 +93,22 @@ KineticScrolling::~KineticScrolling()
     delete d;
 }
 
-QPoint KineticScrolling::movement()
-{
-    return d->movement;
-}
-
 QPoint KineticScrolling::kinMovement()
 {
     return d->kinMovement;
 }
 
-qreal KineticScrolling::duration()
+void KineticScrolling::duration()
 {
-    return d->timeDelta;
+    d->timeDelta = d->t.restart();
 }
 
 void KineticScrolling::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     doneOvershoot();
-
     Q_UNUSED(event);
     d->count();
     d->scrollVelocity = 0;
-    d->movement = QPoint(0, 0);
     d->kinMovement = QPoint(0, 0);
 }
 
@@ -131,59 +116,45 @@ void KineticScrolling::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
     QPoint temp = event->lastPos().toPoint() - event->pos().toPoint();
     if (!temp.isNull()) {
-        d->movement = temp;
         d->kinMovement += temp;
     }
     /* After */
-    setKineticScrollValue(movement());
+    setKineticScrollValue(d->kinMovement);
 }
 
 void KineticScrolling::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
-    d->timeDelta = d->elapsed();
-    QPoint temp = event->lastPos().toPoint() - event->pos().toPoint();
+    duration();
+    QPoint temp = event->pos().toPoint() - event->lastPos().toPoint();
     if (!temp.isNull())
         d->kinMovement += temp;
 
     if (d->timeDelta > 600) {
         if (d->kinMovement.y() > 0)
-            d->kinMovement.setY(3);
-        else
             d->kinMovement.setY(-3);
+        else
+            d->kinMovement.setY(3);
     }
 
-    /* The after */
-    if (d->cposition.y() > 0) {
-        d->direction = KineticScrollingPrivate::Up;
-    } else if (abs(d->cposition.y()) >
-               abs(d->scrollingWidget->size().height() - d->widget->size().height()))  {
-        d->direction = KineticScrollingPrivate::Down;
-    } else {
-        d->direction = KineticScrollingPrivate::None;
-        d->mScrollVelocity = d->kinMovement.x() + d->kinMovement.y();
-        startAnimationTimer(30);
-        return;
-    }
-
-    d->mScrollVelocity = 5;
-    killTimer(d->timerID);
-    startAnimationTimer(50);
+    d->direction = KineticScrollingPrivate::None;
+    startAnimationTimer(30);
 }
 
 void KineticScrolling::wheelReleaseEvent(QGraphicsSceneWheelEvent *event)
 {
-
+    doneOvershoot();
+    d->geo = d->parent->property("viewport").toRectF();
     if (d->direction == KineticScrollingPrivate::None) {
         mousePressEvent(0);
-
-        /* Core */
-        d->timeDelta = d->elapsed();
+        duration();
+        /* scroll down is negative in pixels and we want 6% */
         int temp = event->delta();
-        temp *= -0.5;
-        d->kinMovement.setY(kinMovement().y() + temp);
+        if (temp < 0)
+            temp = d->geo.height() * 0.06;
+        else
+            temp = d->geo.height() * -0.06;
 
-        /* After */
-        d->mScrollVelocity = kinMovement().y();
+        d->kinMovement.setY(kinMovement().y() + temp);
         startAnimationTimer(30);
     }
 
@@ -196,141 +167,99 @@ void KineticScrolling::startAnimationTimer(int interval)
         d->timerID = 0;
     }
 
+    d->geo = d->parent->property("viewport").toRectF();
     d->timerID = QObject::startTimer(interval);
 }
 
 void KineticScrolling::timerEvent(QTimerEvent *event)
 {
     Q_UNUSED(event);
-    if (d->direction == KineticScrollingPrivate::None) {
-        d->mScrollVelocity *= 0.8;
-        if (qAbs(d->mScrollVelocity) < 5.0) {
-            if (d->timerID)
-                killTimer(d->timerID);
+    d->cposition.setY(d->parent->property("verticalScrollValue").toInt());
 
-        }
-        setKineticScrollValue( QPoint(d->mScrollVelocity, d->mScrollVelocity));
+    if (d->direction == KineticScrollingPrivate::None) {
+        if ((qAbs(d->kinMovement.y()) < 5.0)) {
+            if ((d->cposition.y() > 100) ||
+                (d->cposition.y() < 0)) {
+                if (d->cposition.y() < 0)
+                    d->kinMovement.setY(2);
+                else
+                    d->kinMovement.setY(-2);
+
+                d->parent->setProperty("verticalScrollValue", d->cposition.y()
+                                       + d->kinMovement.y());
+                return;
+            }
+            if (d->timerID) {
+		killTimer(d->timerID);
+            }
+
+	} else
+            d->applyFriction();
+
+        setKineticScrollValue(d->kinMovement);
+
     } else {
-        if ((d->timerID != 0) && (d->direction != KineticScrollingPrivate::None)) {
-            bounceTimer();
-        }
+        /* TODO: call bouncer */
     }
 }
 
 void KineticScrolling::setKineticScrollValue(QPoint value)
 {
+    if (!(d->geo.height())) {
+        d->kinMovement.setY(0);
+        return;
+    }
 
-    d->minimalPos.setY((-(d->widget->size().height())) + d->scrollingWidget->size().height()
-                 -(d->overshoot));
-    d->minimalPos.setX((-(d->widget->size().width())) + d->scrollingWidget->size().width());
+    int movement = (100 * value.y())/int(d->geo.height());
+    int final;
 
-    d->minimalPos.setY(qMin(d->overshoot, d->minimalPos.y()));
-    d->minimalPos.setX(qMin( 0, d->minimalPos.x()));
+    movement += d->cposition.y();
 
-    d->maximumPos = d->widget->pos().toPoint() - value;
+    if (movement > d->maximum) {
+        d->kinMovement.setY(-(d->overshoot));
+    } else if (movement < d->minimum) {
+        d->kinMovement.setY(d->overshoot);
+    } else {
+        final = qBound(d->minimum, movement, d->maximum);
+        d->parent->setProperty("verticalScrollValue", final);
+    }
 
-    d->cposition.setY(qBound(d->minimalPos.y(), d->maximumPos.y(), d->overshoot));
-    d->cposition.setX( qBound(d->minimalPos.x(), d->maximumPos.x(), 0));
-
-    d->widget->setPos(d->cposition);
-
-    if ((d->cposition.y() == d->overshoot) && d->hasOvershoot) {
-        d->direction = KineticScrollingPrivate::Up;
-        killTimer(d->timerID);
-        d->mScrollVelocity = 5;
-        startAnimationTimer(30);
-
-    } else if ((d->cposition.y() == d->minimalPos.y()) && d->hasOvershoot) {
-        d->direction = KineticScrollingPrivate::Down;
-        killTimer(d->timerID);
-        d->mScrollVelocity = 5;
-        startAnimationTimer(30);
-
-    } else
-        d->direction = KineticScrollingPrivate::None;
+    /* TODO: use 'ScrollWidget::HorizontalScrollValue */
 }
 
 void KineticScrolling::bounceTimer()
 {
-    int delta = 5;
-    if ((d->direction == KineticScrollingPrivate::Up) && (d->bounceFlag == 0))
-        delta = -5;
-    else if ((d->direction == KineticScrollingPrivate::Up) && (d->bounceFlag == 1))
-        delta = -2;
-    else if ((d->direction == KineticScrollingPrivate::Down) && (d->bounceFlag == 0))
-        delta = 5;
-    else if ((d->direction == KineticScrollingPrivate::Down) && (d->bounceFlag == 1))
-        delta = 2;
+    d->applyFriction();
+    int movement = d->kinMovement.y();
+    d->cposition.setY(d->parent->property("verticalScrollValue").toInt());
+    movement += d->cposition.y();
 
-    d->cposition.setY(d->cposition.y() + delta);
-    d->widget->setPos(d->cposition);
+    if ((d->direction == KineticScrollingPrivate::Down) &&
+        (d->cposition.y() > 100)) {
+        d->parent->setProperty("verticalScrollValue", movement);
 
-    if ((d->direction == KineticScrollingPrivate::Up) && (d->cposition.y() < 0)) {
-        if (!d->bounceFlag) {
-            d->cposition.setY(d->overshoot/4);
-            d->bounceFlag = 1;
-            d->widget->setPos(d->cposition);
-            return;
-        } else {
-            d->bounceFlag = 0;
-            d->cposition = QPoint(d->cposition.x(), 0);
-            doneOvershoot() ;
-        }
+    } else if ((d->direction == KineticScrollingPrivate::Up) &&
+        (d->cposition.y() < 0)) {
+        d->parent->setProperty("verticalScrollValue", movement);
 
-    } else if ((d->direction == KineticScrollingPrivate::Down) &&
-                ((d->cposition.y() - d->overshoot) > d->minimalPos.y())) {
-        if (!d->bounceFlag) {
-            d->cposition.setY(d->minimalPos.y() + d->overshoot/4);
-            d->bounceFlag = 1;
-            d->widget->setPos(d->cposition);
-            return;
-        } else {
-            d->bounceFlag = 0;
-            d->cposition.setY(d->minimalPos.y() + d->overshoot);
-            doneOvershoot();
-        }
+    } else {
+        doneOvershoot();
     }
+
 }
 
 void KineticScrolling::doneOvershoot(void)
 {
     d->direction = KineticScrollingPrivate::None;
-    d->mScrollVelocity = 0;
+    d->kinMovement.setY(0);
     killTimer(d->timerID);
     d->timerID = 0;
 }
 
-void KineticScrolling::setWidgets(QGraphicsWidget *widget,
-                                  QGraphicsWidget *scrolling)
+void KineticScrolling::setWidget(QGraphicsWidget *parent)
 {
-    d->widget = widget;
-    d->scrollingWidget = scrolling;
-
-    if(d->widget->size().height() <= d->scrollingWidget->size().height()) {
-        d->hasOvershoot = false;
-        d->overshoot = 0;
-    }
-
-    d->widget->installEventFilter(this);
-}
-
-bool KineticScrolling::eventFilter(QObject *watched, QEvent *event)
-{
-    const int threashold = 10;
-    if (!d->widget) {
-        return false;
-    }
-
-    if (watched == d->widget && event->type() == QEvent::GraphicsSceneResize) {
-        if(d->widget->size().height() <= d->scrollingWidget->size().height()+threashold) {
-            d->hasOvershoot = false;
-            d->overshoot = 0;
-        } else {
-            d->hasOvershoot = true;
-            d->overshoot = 40;
-        }
-    }
-    return false;
+    d->parent = parent;
+    /* TODO: add a new property in plasma::ScrollWidget 'hasOvershoot' */
 }
 
 } // namespace Plasma

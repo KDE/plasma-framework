@@ -45,6 +45,9 @@ class PLASMA_EXPORT ScrollWidget : public QGraphicsWidget
     Q_PROPERTY(QGraphicsWidget *widget READ widget WRITE setWidget)
     Q_PROPERTY(Qt::ScrollBarPolicy horizontalScrollBarPolicy READ horizontalScrollBarPolicy WRITE setHorizontalScrollBarPolicy)
     Q_PROPERTY(Qt::ScrollBarPolicy verticalScrollBarPolicy READ verticalScrollBarPolicy WRITE setVerticalScrollBarPolicy)
+    Q_PROPERTY(int horizontalScrollValue READ horizontalScrollValue WRITE setHorizontalScrollValue)
+    Q_PROPERTY(int verticalScrollValue READ verticalScrollValue WRITE setVerticalScrollValue)
+    Q_PROPERTY(QRectF viewport READ viewport)
     Q_PROPERTY(QString styleSheet READ styleSheet WRITE setStyleSheet)
 
 public:
@@ -102,6 +105,36 @@ public:
      * @since 4.4
      */
     void ensureRectVisible(const QRectF &rect);
+
+     /**
+     * The horizontal scroll value, between 0 and 100
+     * @since 4.4
+     */
+    int horizontalScrollValue() const;
+
+    /**
+     * Set the horizontal scroll value, between 0 and 100
+     * @since 4.4
+     */
+    void setHorizontalScrollValue(int value);
+
+    /**
+     * The horizontal scroll value, between 0 and 100
+     * @since 4.4
+     */
+    int verticalScrollValue() const;
+
+    /**
+     * Set the horizontal scroll value, between 0 and 100
+     * @since 4.4
+     */
+    void setVerticalScrollValue(int value);
+
+    /**
+     * The scrollable widget size.
+     * @since 4.4
+     */
+    QRectF viewport() const;
 
     /**
      * Sets the stylesheet used to control the visual display of this ScrollWidget

@@ -242,7 +242,7 @@ void ScrollWidget::setWidget(QGraphicsWidget *widget)
     }
 
     d->widget = widget;
-    d->setWidgets(widget, d->scrollingWidget);
+    d->setWidget(this);
     widget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     widget->setParentItem(d->scrollingWidget);
     widget->setPos(QPoint(0,0));
@@ -310,6 +310,57 @@ void ScrollWidget::ensureRectVisible(const QRectF &rect)
     d->animId = Animator::self()->moveItem(
                 d->widget, Plasma::Animator::SlideOutMovement,
                 (d->widget->pos() + delta).toPoint());
+}
+
+int ScrollWidget::horizontalScrollValue() const
+{
+    if (!d->widget) {
+        return 0;
+    }
+    return (d->widget->x()*100)/(d->widget->size().width() -
+                                  d->scrollingWidget->size().width());
+}
+
+void ScrollWidget::setHorizontalScrollValue(int value)
+{
+    if (!d->widget) {
+        return;
+    }
+
+    d->widget->setPos((value * (d->widget->size().width() -
+                               d->scrollingWidget->size().width()))/100,
+                      d->widget->pos().y());
+}
+
+int ScrollWidget::verticalScrollValue() const
+{
+    if (!d->widget) {
+        return 0;
+    }
+    return (-1 * d->widget->y()*100)/(d->widget->size().height() -
+                                  d->scrollingWidget->size().height());
+}
+
+void ScrollWidget::setVerticalScrollValue(int value)
+{
+
+    if (!d->widget) {
+        return;
+    }
+
+    d->widget->setPos(d->widget->pos().x(),
+                      (-1 * value * (d->widget->size().height() -
+                                d->scrollingWidget->size().height()))/100);
+}
+
+QRectF ScrollWidget::viewport() const
+{
+    QRectF result;
+    if (!d->widget) {
+        return result;
+    }
+
+    return d->scrollingWidget->geometry();
 }
 
 void ScrollWidget::setStyleSheet(const QString &styleSheet)
