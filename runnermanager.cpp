@@ -404,13 +404,13 @@ void RunnerManager::launchQuery(const QString &untrimmedTerm, const QString &run
     setupMatchSession();
     QString term = untrimmedTerm.trimmed();
 
-    if (d->runners.isEmpty()) {
-        d->loadRunners();
-    }
-
     if (term.isEmpty()) {
         reset();
         return;
+    }
+
+    if (d->runners.isEmpty()) {
+        d->loadRunners();
     }
 
     if (d->context.query() == term) {
@@ -459,13 +459,13 @@ bool RunnerManager::execQuery(const QString &untrimmedTerm, const QString &runne
 {
     QString term = untrimmedTerm.trimmed();
 
-    if (d->runners.isEmpty()) {
-        d->loadRunners();
-    }
-
     if (term.isEmpty()) {
         reset();
         return false;
+    }
+
+    if (d->runners.isEmpty()) {
+        d->loadRunners();
     }
 
     if (d->context.query() == term) {
