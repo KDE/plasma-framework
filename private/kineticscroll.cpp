@@ -46,7 +46,7 @@ class KineticScrollingPrivate
 public:
     KineticScrollingPrivate(): timerID(0),
                                overshoot(20), bounceFlag(0), hasOvershoot(true),
-                               friction(0.9)
+                               friction(0.8)
     {
         maximum = 100 + overshoot;
         minimum = -overshoot;
@@ -67,11 +67,11 @@ public:
 
     unsigned int timeDelta;
     qreal scrollVelocity;
-    QPoint kinMovement;
+    QPointF kinMovement;
 
     enum { None, Up, Down };
     int timerID, overshoot, direction;
-    QPoint cposition;
+    QPointF cposition;
     char bounceFlag;
     bool hasOvershoot;
     QObject *parent;
@@ -93,7 +93,7 @@ KineticScrolling::~KineticScrolling()
     delete d;
 }
 
-QPoint KineticScrolling::kinMovement()
+QPointF KineticScrolling::kinMovement()
 {
     return d->kinMovement;
 }
@@ -126,14 +126,17 @@ void KineticScrolling::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
     duration();
     QPoint temp = event->pos().toPoint() - event->lastPos().toPoint();
-    if (!temp.isNull())
+    if (!temp.isNull()) {
         d->kinMovement += temp;
+        /* Not so fast baby! */
+        d->kinMovement *= 0.3;
+    }
 
     if (d->timeDelta > 600) {
         if (d->kinMovement.y() > 0)
-            d->kinMovement.setY(-3);
-        else
             d->kinMovement.setY(3);
+        else
+            d->kinMovement.setY(-3);
     }
 
     d->direction = KineticScrollingPrivate::None;
@@ -150,9 +153,9 @@ void KineticScrolling::wheelReleaseEvent(QGraphicsSceneWheelEvent *event)
         /* scroll down is negative in pixels and we want 6% */
         int temp = event->delta();
         if (temp < 0)
-            temp = d->geo.height() * 0.06;
+            temp = d->geo.height() * 0.07;
         else
-            temp = d->geo.height() * -0.06;
+            temp = d->geo.height() * -0.07;
 
         d->kinMovement.setY(kinMovement().y() + temp);
         startAnimationTimer(30);
@@ -203,7 +206,7 @@ void KineticScrolling::timerEvent(QTimerEvent *event)
     }
 }
 
-void KineticScrolling::setKineticScrollValue(QPoint value)
+void KineticScrolling::setKineticScrollValue(QPointF value)
 {
     if (!(d->geo.height())) {
         d->kinMovement.setY(0);
