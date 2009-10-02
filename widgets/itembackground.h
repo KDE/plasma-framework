@@ -68,6 +68,20 @@ Q_SIGNALS:
      */
     void appearanceChanged();
 
+
+    /**
+     * Emitted at each animation frame. Useful for synchronizing item animations
+     */
+    
+    void animationStep(qreal progress);
+
+    /**
+     * Emitted when the target has been reached. Useful to consider this instead of
+     * the corresponding hoverEnterEvent; 
+     */
+
+    void targetReached(QGraphicsItem *);
+
 protected:
     /**
      * @reimp from QGraphicsWidget

@@ -243,6 +243,9 @@ void ItemBackgroundPrivate::animationUpdate(qreal progress)
 {
     if (progress == 1) {
         animId = 0;
+        if ((!fading) || (fadeIn)) {
+            emit q->targetReached(target);
+        }
     }
 
     if (fading) {
@@ -260,6 +263,7 @@ void ItemBackgroundPrivate::animationUpdate(qreal progress)
     }
 
     q->update();
+    emit q->animationStep(progress);
 }
 
 void ItemBackgroundPrivate::targetDestroyed(QObject*)
