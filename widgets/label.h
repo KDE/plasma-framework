@@ -151,6 +151,7 @@ protected:
                const QStyleOptionGraphicsItem *option,
                QWidget *widget);
     void changeEvent(QEvent *event);
+    bool event(QEvent *event);
 
 private:
     Q_PRIVATE_SLOT(d, void setPalette())

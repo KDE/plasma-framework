@@ -19,6 +19,7 @@
 
 #include "label.h"
 
+#include <QApplication>
 #include <QLabel>
 #include <QPainter>
 #include <QDir>
@@ -293,12 +294,21 @@ void Label::paint(QPainter *painter,
 
 void Label::changeEvent(QEvent *event)
 {
-    if (event->type() == QEvent::FontChange) {
+    if (event->type() == QEvent::FontChange && font() != QApplication::font()) {
         d->customFont = true;
         nativeWidget()->setFont(font());
     }
 
     QGraphicsProxyWidget::changeEvent(event);
+}
+
+bool Label::event(QEvent *event)
+{
+    if (event->type() == QEvent::Show && font() != QApplication::font()) {
+        d->customFont = true;
+        nativeWidget()->setFont(font());
+    }
+    return QGraphicsProxyWidget::event(event);
 }
 
 } // namespace Plasma
