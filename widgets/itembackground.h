@@ -107,6 +107,7 @@ private:
     Q_PRIVATE_SLOT(d, void animationUpdate(qreal progress))
     Q_PRIVATE_SLOT(d, void targetDestroyed(QObject*))
     Q_PRIVATE_SLOT(d, void frameSvgChanged())
+    Q_PRIVATE_SLOT(d, void refreshCurrentTarget())
 
     friend class ItemBackgroundPrivate;
     ItemBackgroundPrivate * const d;

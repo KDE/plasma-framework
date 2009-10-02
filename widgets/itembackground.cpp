@@ -20,6 +20,7 @@
 #include "itembackground.h"
 
 #include <QPainter>
+#include <QTimer>
 #include <QStyleOptionGraphicsItem>
 
 #include <kdebug.h>
@@ -41,6 +42,7 @@ public:
     void animationUpdate(qreal progress);
     void targetDestroyed(QObject*);
     void frameSvgChanged();
+    void refreshCurrentTarget();
 
     ItemBackground * const q;
     QGraphicsItem *target;
@@ -172,7 +174,8 @@ bool ItemBackground::eventFilter(QObject *watched, QEvent *event)
     if (watched == targetWidget) {
         if (event->type() == QEvent::GraphicsSceneResize ||
             event->type() == QEvent::GraphicsSceneMove) {
-            setTargetItem(targetWidget);
+            // We need to wait for the parent widget to resize...
+            QTimer::singleShot(0, this, SLOT(refreshCurrentTarget()) );
         }
     }
 
@@ -183,7 +186,7 @@ bool ItemBackground::sceneEventFilter(QGraphicsItem *watched, QEvent *event)
 {
     if (watched == d->target) {
         if (event->type() == QEvent::GraphicsSceneMove) {
-            setTargetItem(d->target);
+            QTimer::singleShot(0, this, SLOT(refreshCurrentTarget()) );
         }
     }
 
@@ -279,6 +282,11 @@ void ItemBackgroundPrivate::frameSvgChanged()
     q->setContentsMargins(l, t, r, b);
     q->update();
     emit q->appearanceChanged();
+}
+
+void ItemBackgroundPrivate::refreshCurrentTarget()
+{
+    q->setTargetItem(target);
 }
 
 } // Plasma namespace
