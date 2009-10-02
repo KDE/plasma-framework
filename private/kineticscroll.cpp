@@ -55,7 +55,6 @@ public:
     void count()
     {
         t = QTime::currentTime();
-        t.start();
     }
 
     void applyFriction()
@@ -100,7 +99,7 @@ QPointF KineticScrolling::kinMovement()
 
 void KineticScrolling::duration()
 {
-    d->timeDelta = d->t.restart();
+    d->timeDelta = d->t.msecsTo(QTime::currentTime());
 }
 
 void KineticScrolling::mousePressEvent(QGraphicsSceneMouseEvent *event)
