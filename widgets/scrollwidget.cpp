@@ -102,7 +102,7 @@ public:
             bottomBorder->setZValue(900);
             bottomBorder->resize(bottomBorder->effectiveSizeHint(Qt::PreferredSize));
             bottomBorder->show();
-        } else if (topBorder && widget) {
+        } else if (topBorder && widget && widget->size().height() <= q->size().height()) {
             //FIXME: in some cases topBorder->deleteLater() is deleteNever(), why?
             topBorder->hide();
             bottomBorder->hide();
@@ -126,7 +126,7 @@ public:
             rightBorder->setZValue(900);
             rightBorder->resize(rightBorder->effectiveSizeHint(Qt::PreferredSize));
             rightBorder->show();
-        } else if (leftBorder && widget) {
+        } else if (leftBorder && widget && widget->size().width() <= q->size().width()) {
             leftBorder->hide();
             rightBorder->hide();
             leftBorder->deleteLater();
