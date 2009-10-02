@@ -162,6 +162,7 @@ protected:
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
     void wheelEvent(QGraphicsSceneWheelEvent *event);
     bool eventFilter(QObject *watched, QEvent *event);
+    void focusInEvent(QFocusEvent *event);
 
 private:
     ScrollWidgetPrivate * const d;

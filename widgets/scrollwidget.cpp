@@ -380,6 +380,15 @@ QWidget *ScrollWidget::nativeWidget() const
     return 0;
 }
 
+void ScrollWidget::focusInEvent(QFocusEvent *event)
+{
+    Q_UNUSED(event)
+
+    if (d->widget) {
+        d->widget->setFocus();
+    }
+}
+
 
 void ScrollWidget::resizeEvent(QGraphicsSceneResizeEvent *event)
 {
