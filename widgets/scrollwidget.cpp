@@ -312,7 +312,7 @@ void ScrollWidget::ensureRectVisible(const QRectF &rect)
                 (d->widget->pos() + delta).toPoint());
 }
 
-int ScrollWidget::horizontalScrollValue() const
+qreal ScrollWidget::horizontalScrollValue() const
 {
     if (!d->widget) {
         return 0;
@@ -321,7 +321,7 @@ int ScrollWidget::horizontalScrollValue() const
                                   d->scrollingWidget->size().width());
 }
 
-void ScrollWidget::setHorizontalScrollValue(int value)
+void ScrollWidget::setHorizontalScrollValue(qreal value)
 {
     if (!d->widget) {
         return;
@@ -332,7 +332,7 @@ void ScrollWidget::setHorizontalScrollValue(int value)
                       d->widget->pos().y());
 }
 
-int ScrollWidget::verticalScrollValue() const
+qreal ScrollWidget::verticalScrollValue() const
 {
     if (!d->widget) {
         return 0;
@@ -341,7 +341,7 @@ int ScrollWidget::verticalScrollValue() const
                                   d->scrollingWidget->size().height());
 }
 
-void ScrollWidget::setVerticalScrollValue(int value)
+void ScrollWidget::setVerticalScrollValue(qreal value)
 {
 
     if (!d->widget) {

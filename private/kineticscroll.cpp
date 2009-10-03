@@ -113,7 +113,7 @@ void KineticScrolling::mousePressEvent(QGraphicsSceneMouseEvent *event)
 
 void KineticScrolling::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
-    QPoint temp = event->lastPos().toPoint() - event->pos().toPoint();
+    QPointF temp = event->lastPos().toPoint() - event->pos().toPoint();
     if (!temp.isNull()) {
         d->kinMovement += temp;
     }
@@ -124,7 +124,7 @@ void KineticScrolling::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 void KineticScrolling::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
     duration();
-    QPoint temp = event->pos().toPoint() - event->lastPos().toPoint();
+    QPointF temp = event->pos().toPoint() - event->lastPos().toPoint();
     if (!temp.isNull()) {
         d->kinMovement += temp;
         /* Not so fast baby! */
@@ -176,7 +176,7 @@ void KineticScrolling::startAnimationTimer(int interval)
 void KineticScrolling::timerEvent(QTimerEvent *event)
 {
     Q_UNUSED(event);
-    d->cposition.setY(d->parent->property("verticalScrollValue").toInt());
+    d->cposition.setY(d->parent->property("verticalScrollValue").toReal());
 
     if (d->direction == KineticScrollingPrivate::None) {
         if ((qAbs(d->kinMovement.y()) < 5.0)) {
@@ -192,10 +192,10 @@ void KineticScrolling::timerEvent(QTimerEvent *event)
                 return;
             }
             if (d->timerID) {
-		killTimer(d->timerID);
+                killTimer(d->timerID);
             }
 
-	} else
+        } else
             d->applyFriction();
 
         setKineticScrollValue(d->kinMovement);
@@ -212,8 +212,8 @@ void KineticScrolling::setKineticScrollValue(QPointF value)
         return;
     }
 
-    int movement = (100 * value.y())/int(d->geo.height());
-    int final;
+    qreal movement = (100 * value.y())/int(d->geo.height());
+    qreal final;
 
     movement += d->cposition.y();
 
@@ -222,7 +222,7 @@ void KineticScrolling::setKineticScrollValue(QPointF value)
     } else if (movement < d->minimum) {
         d->kinMovement.setY(d->overshoot);
     } else {
-        final = qBound(d->minimum, movement, d->maximum);
+        final = qBound((qreal)d->minimum, movement, (qreal)d->maximum);
         d->parent->setProperty("verticalScrollValue", final);
     }
 
@@ -232,8 +232,8 @@ void KineticScrolling::setKineticScrollValue(QPointF value)
 void KineticScrolling::bounceTimer()
 {
     d->applyFriction();
-    int movement = d->kinMovement.y();
-    d->cposition.setY(d->parent->property("verticalScrollValue").toInt());
+    qreal movement = d->kinMovement.y();
+    d->cposition.setY(d->parent->property("verticalScrollValue").toReal());
     movement += d->cposition.y();
 
     if ((d->direction == KineticScrollingPrivate::Down) &&

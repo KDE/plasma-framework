@@ -45,8 +45,8 @@ class PLASMA_EXPORT ScrollWidget : public QGraphicsWidget
     Q_PROPERTY(QGraphicsWidget *widget READ widget WRITE setWidget)
     Q_PROPERTY(Qt::ScrollBarPolicy horizontalScrollBarPolicy READ horizontalScrollBarPolicy WRITE setHorizontalScrollBarPolicy)
     Q_PROPERTY(Qt::ScrollBarPolicy verticalScrollBarPolicy READ verticalScrollBarPolicy WRITE setVerticalScrollBarPolicy)
-    Q_PROPERTY(int horizontalScrollValue READ horizontalScrollValue WRITE setHorizontalScrollValue)
-    Q_PROPERTY(int verticalScrollValue READ verticalScrollValue WRITE setVerticalScrollValue)
+    Q_PROPERTY(qreal horizontalScrollValue READ horizontalScrollValue WRITE setHorizontalScrollValue)
+    Q_PROPERTY(qreal verticalScrollValue READ verticalScrollValue WRITE setVerticalScrollValue)
     Q_PROPERTY(QRectF viewport READ viewport)
     Q_PROPERTY(QString styleSheet READ styleSheet WRITE setStyleSheet)
 
@@ -110,25 +110,25 @@ public:
      * The horizontal scroll value, between 0 and 100
      * @since 4.4
      */
-    int horizontalScrollValue() const;
+    qreal horizontalScrollValue() const;
 
     /**
      * Set the horizontal scroll value, between 0 and 100
      * @since 4.4
      */
-    void setHorizontalScrollValue(int value);
+    void setHorizontalScrollValue(qreal value);
 
     /**
      * The horizontal scroll value, between 0 and 100
      * @since 4.4
      */
-    int verticalScrollValue() const;
+    qreal verticalScrollValue() const;
 
     /**
      * Set the horizontal scroll value, between 0 and 100
      * @since 4.4
      */
-    void setVerticalScrollValue(int value);
+    void setVerticalScrollValue(qreal value);
 
     /**
      * The scrollable widget size.
