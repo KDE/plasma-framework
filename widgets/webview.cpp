@@ -37,10 +37,12 @@
 
 #include "plasma/widgets/webview.h"
 
+#include "plasma/private/kineticscroll_p.h"
+
 namespace Plasma
 {
 
-class WebViewPrivate
+class WebViewPrivate : public KineticScrolling
 {
 public:
     WebViewPrivate(WebView *parent)
@@ -72,6 +74,7 @@ WebView::WebView(QGraphicsItem *parent)
 {
     d->page = 0;
     d->loaded = false;
+    d->setWidget(this);
     setAcceptsHoverEvents(true);
     setFlags(QGraphicsItem::ItemIsFocusable);
 
@@ -130,6 +133,76 @@ QRectF WebView::geometry() const
 
     return QGraphicsWidget::geometry();
 }
+
+qreal WebView::horizontalScrollValue() const
+{
+    if (!d->page) {
+        return 0;
+    }
+
+    const qreal value = d->page->mainFrame()->contentsSize().width() -
+         d->page->mainFrame()->geometry().width();
+
+    if(!value)
+        return 0;
+
+    return ((d->page->mainFrame()->geometry().x()*100)/value);
+}
+
+void WebView::setHorizontalScrollValue(qreal value)
+{
+    if (!d->page) {
+        return;
+    }
+
+    qreal xValue = value * (d->page->mainFrame()->contentsSize().width() -
+                      d->page->mainFrame()->geometry().width())/100;
+
+    if (!xValue)
+        xValue = 0;
+
+    d->page->mainFrame()->setScrollBarValue(Qt::Horizontal, xValue);
+}
+
+qreal WebView::verticalScrollValue() const
+{
+    if (!d->page) {
+        return 0;
+    }
+
+    const qreal value = d->page->mainFrame()->contentsSize().height() -
+        d->page->mainFrame()->geometry().height();
+
+    if (!value)
+        return 0;
+
+    return ((d->page->mainFrame()->scrollPosition().y()*100)/value);
+}
+
+void WebView::setVerticalScrollValue(qreal value)
+{
+
+    if (!d->page) {
+        return;
+    }
+
+    qreal yValue = value *
+        (d->page->mainFrame()->contentsSize().height() -
+         d->page->mainFrame()->geometry().height())/100;
+
+    if (!yValue)
+        yValue = 0;
+
+    const QPoint point(d->page->mainFrame()->scrollPosition().x(), yValue);
+
+    d->page->mainFrame()->setScrollPosition(point);
+}
+
+QRectF WebView::viewport() const
+{
+    return QRectF(d->page->mainFrame()->geometry());
+}
+
 
 void WebView::setPage(QWebPage *page)
 {
@@ -196,21 +269,16 @@ void WebView::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
         return;
     }
 
-    if (d->dragToScroll && d->dragTimeout) {
-        QPointF deltaPos = event->pos() - event->lastPos();
-        d->page->mainFrame()->setScrollBarValue(Qt::Horizontal, d->page->mainFrame()->scrollBarValue(Qt::Horizontal) - deltaPos.x());
-        d->page->mainFrame()->setScrollBarValue(Qt::Vertical, d->page->mainFrame()->scrollBarValue(Qt::Vertical) - deltaPos.y());
-        d->dragging = true;
-    } else {
-        if (d->dragTimeoutTimer) {
-            d->dragTimeoutTimer->stop();
-        }
-        QMouseEvent me(QEvent::MouseMove, event->pos().toPoint(), event->button(),
-                      event->buttons(), event->modifiers());
-        d->page->event(&me);
-        if (me.isAccepted()) {
-            event->accept();
-        }
+    if (event->pos().x() <= (d->page->mainFrame()->contentsSize().width() -
+                d->page->mainFrame()->scrollBarMaximum(Qt::Horizontal)))
+        d->mouseMoveEvent(event);
+
+    QMouseEvent me(QEvent::MouseMove, event->pos().toPoint(), event->button(),
+            event->buttons(), event->modifiers());
+    d->page->event(&me);
+
+    if (me.isAccepted()) {
+        event->accept();
     }
 }
 
@@ -235,21 +303,14 @@ void WebView::mousePressEvent(QGraphicsSceneMouseEvent *event)
         return;
     }
 
-    d->dragTimeout = false;
-    if (!d->dragTimeoutTimer) {
-        d->dragTimeoutTimer = new QTimer(this);
-        d->dragTimeoutTimer->setSingleShot(true);
-        connect(d->dragTimeoutTimer, SIGNAL(timeout()), this, SLOT(dragTimeoutExpired()));
-    }
-    d->dragTimeoutTimer->start(250);
-
     setFocus();
 
-    QMouseEvent me(QEvent::MouseButtonPress, event->pos().toPoint(), event->button(),
-                   event->buttons(), event->modifiers());
+    QMouseEvent me(QEvent::MouseButtonPress, event->pos().toPoint(), 
+            event->button(), event->buttons(), event->modifiers());
     d->page->event(&me);
     if (me.isAccepted()) {
         event->accept();
+        d->mousePressEvent(event);
     }
 }
 
@@ -260,8 +321,8 @@ void WebView::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
         return;
     }
 
-    QMouseEvent me(QEvent::MouseButtonDblClick, event->pos().toPoint(), event->button(),
-                   event->buttons(), event->modifiers());
+    QMouseEvent me(QEvent::MouseButtonDblClick, event->pos().toPoint(),
+            event->button(), event->buttons(), event->modifiers());
     d->page->event(&me);
     if (me.isAccepted()) {
         event->accept();
@@ -270,15 +331,18 @@ void WebView::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
 
 void WebView::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
-    if (!d->page || d->dragging) {
-        d->dragging = false;
+    if (!d->page) {
         QGraphicsWidget::mouseReleaseEvent(event);
         return;
     }
 
-    QMouseEvent me(QEvent::MouseButtonRelease, event->pos().toPoint(), event->button(),
-                   event->buttons(), event->modifiers());
+    event->accept();
+    d->mouseReleaseEvent(event);
+
+    QMouseEvent me(QEvent::MouseButtonRelease, event->pos().toPoint(),
+            event->button(),event->buttons(), event->modifiers());
     d->page->event(&me);
+
     if (me.isAccepted()) {
         event->accept();
     }
@@ -314,15 +378,11 @@ void WebView::wheelEvent(QGraphicsSceneWheelEvent *event)
     }
 
     QWheelEvent we(event->pos().toPoint(), event->delta(), event->buttons(),
-                   event->modifiers(), event->orientation());
-
+            event->modifiers(), event->orientation());
     d->page->event(&we);
 
-    if (we.isAccepted()) {
-        event->accept();
-    } else {
-        QGraphicsWidget::wheelEvent(event);
-    }
+    event->accept();
+    d->wheelReleaseEvent(event);
 }
 
 void WebView::keyPressEvent(QKeyEvent * event)

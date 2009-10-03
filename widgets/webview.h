@@ -50,6 +50,9 @@ class PLASMA_EXPORT WebView : public QGraphicsWidget
     Q_PROPERTY(KUrl url READ url WRITE setUrl)
     Q_PROPERTY(QString html READ html WRITE setHtml)
     Q_PROPERTY(bool dragToScroll READ dragToScroll WRITE setDragToScroll)
+    Q_PROPERTY(int horizontalScrollValue READ horizontalScrollValue WRITE setHorizontalScrollValue)
+    Q_PROPERTY(int verticalScrollValue READ verticalScrollValue WRITE setVerticalScrollValue)
+    Q_PROPERTY(QRectF viewport READ viewport)
 
     public:
         explicit WebView(QGraphicsItem *parent = 0);
@@ -94,7 +97,35 @@ class PLASMA_EXPORT WebView : public QGraphicsWidget
          * Reimplementation
          */
         QRectF geometry() const;
+        /**
+         * The horizontal scroll value, between 0 and 100
+         * @since 4.4
+         */
+        qreal horizontalScrollValue() const;
 
+        /**
+         * Set the horizontal scroll value, between 0 and 100
+         * @since 4.4
+         */
+        void setHorizontalScrollValue(qreal value);
+
+        /**
+         * The horizontal scroll value, between 0 and 100
+         * @since 4.4
+         */
+        qreal verticalScrollValue() const;
+
+        /**
+         * Set the horizontal scroll value, between 0 and 100
+         * @since 4.4
+         */
+        void setVerticalScrollValue(qreal value);
+
+        /**
+         * The scrollable widget size.
+         * @since 4.4
+         */
+        QRectF viewport() const;
         /**
          * Sets the page to use in this item. The owner of the webpage remains,
          * however if this WebView object is the owner of the current page,
