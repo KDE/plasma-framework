@@ -176,7 +176,7 @@ void KineticScrolling::startAnimationTimer(int interval)
 void KineticScrolling::timerEvent(QTimerEvent *event)
 {
     Q_UNUSED(event);
-    d->cposition.setY(d->parent->property("verticalScrollValue").toReal());
+    d->cposition.setY(d->parent->property("verticalScrollValue").value<qreal>());
 
     if (d->direction == KineticScrollingPrivate::None) {
         if ((qAbs(d->kinMovement.y()) < 5.0)) {
@@ -233,7 +233,7 @@ void KineticScrolling::bounceTimer()
 {
     d->applyFriction();
     qreal movement = d->kinMovement.y();
-    d->cposition.setY(d->parent->property("verticalScrollValue").toReal());
+    d->cposition.setY(d->parent->property("verticalScrollValue").value<qreal>());
     movement += d->cposition.y();
 
     if ((d->direction == KineticScrollingPrivate::Down) &&
