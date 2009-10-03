@@ -360,7 +360,7 @@ QRectF ScrollWidget::viewport() const
         return result;
     }
 
-    return d->scrollingWidget->geometry();
+    return d->widget->boundingRect();
 }
 
 void ScrollWidget::setStyleSheet(const QString &styleSheet)
