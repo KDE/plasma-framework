@@ -88,6 +88,8 @@ public:
         QPalette p = native->palette();
         p.setColor(QPalette::Normal, QPalette::WindowText, color);
         p.setColor(QPalette::Inactive, QPalette::WindowText, color);
+        color.setAlphaF(0.6);
+        p.setColor(QPalette::Disabled, QPalette::WindowText, color);
 
         p.setColor(QPalette::Normal, QPalette::Link, Theme::defaultTheme()->color(Theme::LinkColor));
         p.setColor(QPalette::Normal, QPalette::LinkVisited, Theme::defaultTheme()->color(Theme::VisitedLinkColor));
