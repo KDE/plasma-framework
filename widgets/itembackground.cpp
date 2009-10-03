@@ -85,6 +85,15 @@ ItemBackground::ItemBackground(QGraphicsWidget *parent)
 
     setAcceptedMouseButtons(0);
     setZValue(-800);
+
+    /***************
+     * HACK: this is needed in order to show the itemBackground correctly the first time
+     * it appears to be a workaround for some other qt 4.5 clipping bug
+     * will be removed when trunk depends on 4.6
+     */
+    resize( 1, 1 );
+    hide();
+    //**************
 }
 
 ItemBackground::~ItemBackground()
@@ -115,12 +124,12 @@ void ItemBackground::setTarget(const QRectF &newGeometry)
         setGeometry(newGeometry);
         d->oldGeometry = newGeometry;
         show();
+    } else {
+        d->fading = false;
+        d->opacity = 1;
+        d->animId = Plasma::Animator::self()->customAnimation(
+            15, 250, Plasma::Animator::EaseInOutCurve, this, "animationUpdate");
     }
-
-    d->fading = false;
-    d->opacity = 1;
-    d->animId = Plasma::Animator::self()->customAnimation(
-        15, 250, Plasma::Animator::EaseInOutCurve, this, "animationUpdate");
 }
 
 void ItemBackground::setTargetItem(QGraphicsItem *target)
