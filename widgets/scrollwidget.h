@@ -106,6 +106,14 @@ public:
      */
     void ensureRectVisible(const QRectF &rect);
 
+    /**
+     * Scroll the view until the given item is visible
+     *
+     * @param item item we want visible
+     * @since 4.4
+     */
+    void ensureItemVisible(QGraphicsItem *item);
+
      /**
      * The horizontal scroll value, between 0 and 100
      * @since 4.4
@@ -169,7 +177,7 @@ private:
 
     Q_PRIVATE_SLOT(d, void verticalScroll(int value))
     Q_PRIVATE_SLOT(d, void horizontalScroll(int value))
-
+    Q_PRIVATE_SLOT(d, void makeRectVisible())
 };
 
 } // namespace Plasma

@@ -24,6 +24,7 @@
 #include <QGraphicsGridLayout>
 #include <QApplication>
 #include <QWidget>
+#include <QTimer>
 
 //KDE
 #include <kmimetype.h>
@@ -182,6 +183,38 @@ public:
         scrollingWidget->setFlag(QGraphicsItem::ItemClipsChildrenToShape, true);
     }
 
+    void makeRectVisible()
+    {
+        QRectF viewRect = scrollingWidget->boundingRect();
+        //ensure the rect is not outside the widget bounding rect
+        QRectF mappedRect = QRectF(QPointF(qBound((qreal)0.0, rectToBeVisible.x(), widget->size().width() - rectToBeVisible.width()),
+                                           qBound((qreal)0.0, rectToBeVisible.y(), widget->size().height() - rectToBeVisible.height())),
+                                           rectToBeVisible.size());
+        mappedRect = widget->mapToItem(scrollingWidget, mappedRect).boundingRect();
+
+        if (viewRect.contains(mappedRect)) {
+            return;
+        }
+
+        QPointF delta(0, 0);
+
+        if (mappedRect.top() < 0) {
+            delta.setY(-mappedRect.top());
+        } else if  (mappedRect.bottom() > viewRect.bottom()) {
+            delta.setY(viewRect.bottom() - mappedRect.bottom());
+        }
+
+        if (mappedRect.left() < 0) {
+            delta.setX(-mappedRect.left());
+        } else if  (mappedRect.right() > viewRect.right()) {
+            delta.setX(viewRect.right() - mappedRect.right());
+        }
+
+        animId = Animator::self()->moveItem(
+        widget, Plasma::Animator::SlideOutMovement,
+                                                (widget->pos() + delta).toPoint());
+    }
+
     ScrollWidget *q;
     QGraphicsWidget *scrollingWidget;
     QGraphicsWidget *widget;
@@ -196,6 +229,7 @@ public:
     ScrollBar *horizontalScrollBar;
     Qt::ScrollBarPolicy horizontalScrollBarPolicy;
     QString styleSheet;
+    QRectF rectToBeVisible;
     bool dragging;
     int animId;
 };
@@ -284,32 +318,30 @@ void ScrollWidget::ensureRectVisible(const QRectF &rect)
         return;
     }
 
-    QRectF viewRect = d->scrollingWidget->boundingRect();
-    //ensure the rect is not outside the widget bounding rect
-    QRectF mappedRect = QRectF(QPointF(qBound((qreal)0.0, rect.x(), d->widget->size().width()-rect.width()),
-                                       qBound((qreal)0.0, rect.y(), d->widget->size().height()-rect.height())), rect.size());
-    mappedRect = d->widget->mapToItem(d->scrollingWidget, mappedRect).boundingRect();
-    if (viewRect.contains(mappedRect)) {
+    d->rectToBeVisible = rect;
+    d->makeRectVisible();
+}
+
+void ScrollWidget::ensureItemVisible(QGraphicsItem *item)
+{
+    if (!d->widget || !item) {
         return;
     }
 
-    QPointF delta(0, 0);
+    QGraphicsItem *parentOfItem = item->parentItem();
+    while (parentOfItem != d->widget) {
+        if (!parentOfItem) {
+            return;
+        }
 
-    if (mappedRect.top() < 0) {
-        delta.setY(-mappedRect.top());
-    } else if  (mappedRect.bottom() > viewRect.bottom()) {
-        delta.setY(viewRect.bottom() - mappedRect.bottom());
+        parentOfItem = parentOfItem->parentItem();
     }
 
-    if (mappedRect.left() < 0) {
-        delta.setX(-mappedRect.left());
-    } else if  (mappedRect.right() > viewRect.right()) {
-        delta.setX(viewRect.right() - mappedRect.right());
-    }
+    QRectF rect(d->widget->mapFromScene(item->scenePos()), item->boundingRect().size());
+    d->rectToBeVisible = rect;
 
-    d->animId = Animator::self()->moveItem(
-                d->widget, Plasma::Animator::SlideOutMovement,
-                (d->widget->pos() + delta).toPoint());
+    // We need to wait for the parent item to resize...
+    QTimer::singleShot(0, this, SLOT(makeRectVisible()));
 }
 
 qreal ScrollWidget::horizontalScrollValue() const
