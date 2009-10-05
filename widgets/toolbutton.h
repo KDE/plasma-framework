@@ -99,6 +99,12 @@ public:
     QString image() const;
 
     /**
+     * @return true if the button is pressed down
+     * @since 4.4
+     */
+    bool isDown() const;
+
+    /**
      * Sets the stylesheet used to control the visual display of this ToolButton
      *
      * @arg stylesheet a CSS string

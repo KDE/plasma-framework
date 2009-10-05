@@ -267,6 +267,11 @@ QString ToolButton::image() const
     return d->imagePath;
 }
 
+bool ToolButton::isDown() const
+{
+    return nativeWidget()->isDown();
+}
+
 void ToolButton::setStyleSheet(const QString &stylesheet)
 {
     widget()->setStyleSheet(stylesheet);
