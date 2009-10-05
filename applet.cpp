@@ -2668,7 +2668,7 @@ KConfigGroup *AppletPrivate::mainConfigGroup()
         if (!containmentConfig.hasGroup(QString::number(appletId))) {
             newGroup = true;
         }
-        
+
         mainConfig = new KConfigGroup(&containmentConfig, QString::number(appletId));
     } else {
         KConfigGroup appletConfig;
@@ -2693,7 +2693,7 @@ KConfigGroup *AppletPrivate::mainConfigGroup()
         if (!appletConfig.hasGroup(QString::number(appletId))) {
             newGroup = true;
         }
-        
+
         mainConfig = new KConfigGroup(&appletConfig, QString::number(appletId));
     }
 
