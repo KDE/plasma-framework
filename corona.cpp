@@ -342,11 +342,13 @@ void Corona::initializeLayout(const QString &configName)
 void Corona::loadLayout(const QString &configName)
 {
     KSharedConfigPtr c;
+    bool mergeConfig = false;
 
     if (configName.isEmpty() || configName == d->configName) {
         c = config();
     } else {
         c = KSharedConfig::openConfig(configName);
+        mergeConfig = true;
     }
 
     KConfigGroup containments(c, "Containments");
@@ -358,7 +360,7 @@ void Corona::loadLayout(const QString &configName)
             continue;
         }
 
-        int cid = group.toUInt();
+        int cid = mergeConfig ? 0 : group.toUInt();
         //kDebug() << "got a containment in the config, trying to make a" << containmentConfig.readEntry("plugin", QString()) << "from" << group;
         Containment *c = d->addContainment(containmentConfig.readEntry("plugin", QString()), QVariantList(),
                                            cid, true);
@@ -372,14 +374,24 @@ void Corona::loadLayout(const QString &configName)
 
     foreach (Containment *containment, d->containments) {
         QString cid = QString::number(containment->id());
-        KConfigGroup containmentConfig(&containments, cid);
+        KConfigGroup *appletsConfigGroup = 0;
+        if (mergeConfig) {
+            KConfigGroup containmentConfig(&containments, cid);
+            appletsConfigGroup = new KConfigGroup(&containmentConfig, "Applets");
+        }
 
         foreach (Applet *applet, containment->applets()) {
+            if (mergeConfig) {
+                KConfigGroup externalAppletConfig(appletsConfigGroup, QString::number(applet->id()));
+                externalAppletConfig.copyTo(applet->d->mainConfigGroup());
+            }
+
             applet->init();
             // We have to flush the applet constraints manually
             applet->flushPendingConstraintsEvents();
         }
 
+        delete appletsConfigGroup;
         containment->updateConstraints(Plasma::StartupCompletedConstraint);
         containment->flushPendingConstraintsEvents();
         emit containmentAdded(containment);
