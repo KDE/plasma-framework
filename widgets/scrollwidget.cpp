@@ -168,10 +168,9 @@ public:
 
     void adjustClipping()
     {
-        const bool clip = widget->size().width() > scrollingWidget->size().width() ||
-                          widget->size().height() > scrollingWidget->size().height();
-
         /* FIXME: it should really be like this:
+         * const bool clip = widget->size().width() > scrollingWidget->size().width() ||
+         *                 widget->size().height() > scrollingWidget->size().height();
          *
          * scrollingWidget->setFlag(QGraphicsItem::ItemClipsChildrenToShape, clip);
          *
