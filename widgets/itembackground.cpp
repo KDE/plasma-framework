@@ -101,6 +101,11 @@ ItemBackground::~ItemBackground()
     delete d;
 }
 
+QRectF ItemBackground::target() const
+{
+    return d->newGeometry;
+}
+
 void ItemBackground::setTarget(const QRectF &newGeometry)
 {
     d->oldGeometry = geometry();
@@ -108,6 +113,10 @@ void ItemBackground::setTarget(const QRectF &newGeometry)
 
     if (!isVisible() && (!d->target || !d->target->isVisible())) {
         setGeometry(d->newGeometry);
+        targetReached(newGeometry);
+        if (d->target) {
+            emit targetReached(d->target);
+        }
         return;
     }
 
@@ -124,6 +133,10 @@ void ItemBackground::setTarget(const QRectF &newGeometry)
         setGeometry(newGeometry);
         d->oldGeometry = newGeometry;
         show();
+        targetReached(newGeometry);
+        if (d->target) {
+            emit targetReached(d->target);
+        }
     } else {
         d->fading = false;
         d->opacity = 1;
@@ -256,7 +269,10 @@ void ItemBackgroundPrivate::animationUpdate(qreal progress)
     if (progress == 1) {
         animId = 0;
         if ((!fading) || (fadeIn)) {
-            emit q->targetReached(target);
+            emit q->targetReached(newGeometry);
+            if (target) {
+                emit q->targetReached(target);
+            }
         }
     }
 

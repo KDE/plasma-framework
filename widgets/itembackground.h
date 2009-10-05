@@ -40,6 +40,8 @@ class ItemBackgroundPrivate;
 class PLASMA_EXPORT ItemBackground : public QGraphicsWidget
 {
     Q_OBJECT
+    Q_PROPERTY(QRectF target READ target WRITE setTarget)
+
 public:
     ItemBackground(QGraphicsWidget *parent = 0);
     ~ItemBackground();
@@ -50,6 +52,11 @@ public:
      * @arg newGeometry the final geometry target
      */
     void setTarget(const QRectF &newGeometry);
+
+    /**
+     * @return the current target rect; may be empty if there is no target currently set
+     */
+    QRectF target() const;
 
     /**
      * set the ItemBackground geometry to be the target geometry, plus the ItemBackground margins 
@@ -68,18 +75,21 @@ Q_SIGNALS:
      */
     void appearanceChanged();
 
-
     /**
      * Emitted at each animation frame. Useful for synchronizing item animations
      */
-    
     void animationStep(qreal progress);
 
     /**
      * Emitted when the target has been reached. Useful to consider this instead of
      * the corresponding hoverEnterEvent; 
      */
+    void targetReached(QRectF);
 
+    /**
+     * Emitted when the target has been reached. Useful to consider this instead of
+     * the corresponding hoverEnterEvent; 
+     */
     void targetReached(QGraphicsItem *);
 
 protected:
