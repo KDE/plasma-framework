@@ -319,7 +319,7 @@ class SvgPrivate
                 }
 
                 path = actualTheme()->imagePath(themePath);
-                themeFailed = !path.isEmpty();
+                themeFailed = path.isEmpty();
 
                 if (themeFailed) {
                     return QRectF();
