@@ -166,7 +166,15 @@ void ItemBackground::setTargetItem(QGraphicsItem *target)
     d->target = target;
     if (target) {
         setZValue(target->zValue() - 1);
-        setParentItem(target->parentItem());
+        if (parentItem() != target->parentItem()) {
+            QTransform t = transform();
+            setTransform(QTransform());
+            QRectF geom = mapToScene(geometry()).boundingRect();
+            setParentItem(target->parentItem());
+            setGeometry(mapFromScene(geom).boundingRect());
+            setTransform(t);
+        }
+
         QRectF rect = target->boundingRect();
         rect.moveTopLeft(target->pos());
         setTarget(rect);
