@@ -190,6 +190,11 @@ void ItemBackground::setTargetItem(QGraphicsItem *target)
     }
 }
 
+QGraphicsItem *ItemBackground::targetItem() const
+{
+    return d->target;
+}
+
 bool ItemBackground::eventFilter(QObject *watched, QEvent *event)
 {
     QGraphicsWidget *targetWidget = static_cast<QGraphicsWidget *>(d->target);

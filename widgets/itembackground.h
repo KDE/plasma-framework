@@ -41,6 +41,7 @@ class PLASMA_EXPORT ItemBackground : public QGraphicsWidget
 {
     Q_OBJECT
     Q_PROPERTY(QRectF target READ target WRITE setTarget)
+    Q_PROPERTY(QGraphicsItem* targetItem READ targetItem WRITE setTargetItem)
 
 public:
     ItemBackground(QGraphicsWidget *parent = 0);
@@ -62,6 +63,11 @@ public:
      * set the ItemBackground geometry to be the target geometry, plus the ItemBackground margins 
      */
     void setTargetItem(QGraphicsItem *target);
+
+    /**
+     * @return the target item, if any
+     */
+    QGraphicsItem *targetItem() const;
 
     /**
      * @reimp from QGraphicsWidget
