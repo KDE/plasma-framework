@@ -155,6 +155,10 @@ public:
 
 Q_SIGNALS:
     void clicked();
+    /**
+     * @since 4.4
+     */
+    void pressed();
 
 protected:
     void paint(QPainter *painter,
