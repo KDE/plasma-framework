@@ -48,6 +48,7 @@ set(plasma_LIB_SRCS
     configloader.cpp
     containment.cpp
     containmentactions.cpp
+    containmentactionspluginsconfig.cpp
     context.cpp
     corona.cpp
     datacontainer.cpp
@@ -238,6 +239,7 @@ set(plasma_LIB_INCLUDES
     configloader.h
     containment.h
     containmentactions.h
+    containmentactionspluginsconfig.h
     context.h
     corona.h
     datacontainer.h

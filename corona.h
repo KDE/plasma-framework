@@ -24,6 +24,7 @@
 #include <QtGui/QGraphicsScene>
 
 #include <plasma/applet.h>
+#include <plasma/containment.h>
 #include <plasma/plasma.h>
 #include <plasma/plasma_export.h>
 
@@ -35,8 +36,8 @@ class KAction;
 namespace Plasma
 {
 
-class Containment;
 class CoronaPrivate;
+class ContainmentActionsPluginsConfig;
 
 /**
  * @class Corona plasma/corona.h <Plasma/Corona>
@@ -222,6 +223,18 @@ public:
      * collection itself :P
      */
     KAction* addAction(QString name);
+
+    /**
+     * @since 4.4
+     * Sets the default containmentactions plugins for the given containment type
+     */
+    void setContainmentActionsDefaults(Containment::Type containmentType, const ContainmentActionsPluginsConfig &config);
+
+    /**
+     * @since 4.4
+     * Returns the default containmentactions plugins for the given containment type
+     */
+    ContainmentActionsPluginsConfig containmentActionsDefaults(Containment::Type containmentType);
 
 public Q_SLOTS:
     /**

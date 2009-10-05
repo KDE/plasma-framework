@@ -51,6 +51,7 @@
 #include "animator.h"
 #include "context.h"
 #include "containmentactions.h"
+#include "containmentactionspluginsconfig.h"
 #include "corona.h"
 #include "extenderitem.h"
 #include "svg.h"
@@ -61,6 +62,7 @@
 
 #include "private/applet_p.h"
 #include "private/applethandle_p.h"
+#include "private/containmentactionspluginsconfig_p.h"
 #include "private/desktoptoolbox_p.h"
 #include "private/extenderitemmimedata_p.h"
 #include "private/paneltoolbox_p.h"
@@ -237,25 +239,14 @@ void Containment::init()
         foreach (const QString &key, cfg.keyList()) {
             setContainmentActions(key, cfg.readEntry(key, QString()));
         }
-    } else {
+    } else if (corona()){
         //we need to be very careful here to not write anything
         //because we have a group, and so the defaults will get merged instead of overwritten
         //when copyTo is used (which happens right before restore() is called)
-        //FIXME maybe PlasmaApp should handle the defaults?
-        QHash<QString,QString> defaults;
-        switch (d->type) {
-        case DesktopContainment:
-            defaults.insert("wheel:Vertical;NoModifier", "switchdesktop");
-            defaults.insert("MidButton;NoModifier", "paste");
-            defaults.insert("RightButton;NoModifier", "contextmenu");
-            break;
-        case PanelContainment:
-        case CustomPanelContainment:
-            defaults.insert("RightButton;NoModifier", "contextmenu");
-            break;
-        default:
-            break;
-        }
+
+        ContainmentActionsPluginsConfig conf = corona()->containmentActionsDefaults(d->type);
+        //steal the data directly, for efficiency
+        QHash<QString,QString> defaults = conf.d->plugins;
 
         for (QHash<QString,QString>::const_iterator it = defaults.constBegin(),
                 end = defaults.constEnd(); it != end; ++it) {

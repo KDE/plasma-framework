@@ -41,6 +41,7 @@
 #include <kshortcutsdialog.h>
 
 #include "containment.h"
+#include "containmentactionspluginsconfig.h"
 #include "view.h"
 #include "private/applet_p.h"
 #include "private/containment_p.h"
@@ -254,6 +255,7 @@ public:
     QHash<uint, QGraphicsWidget*> offscreenWidgets;
     KActionCollection actions;
     KShortcutsDialog shortcutsDlg;
+    QMap<Containment::Type, ContainmentActionsPluginsConfig> containmentActionsDefaults;
 };
 
 Corona::Corona(QObject *parent)
@@ -760,6 +762,16 @@ void Corona::updateShortcuts()
 void Corona::addShortcuts(KActionCollection *newShortcuts)
 {
     d->shortcutsDlg.addCollection(newShortcuts);
+}
+
+void Corona::setContainmentActionsDefaults(Containment::Type containmentType, const ContainmentActionsPluginsConfig &config)
+{
+    d->containmentActionsDefaults.insert(containmentType, config);
+}
+
+ContainmentActionsPluginsConfig Corona::containmentActionsDefaults(Containment::Type containmentType)
+{
+    return d->containmentActionsDefaults.value(containmentType);
 }
 
 } // namespace Plasma
