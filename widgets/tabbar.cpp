@@ -372,16 +372,19 @@ void TabBar::setCurrentIndex(int index)
         QRect beforeCurrentGeom(d->oldPage->geometry().toRect());
         beforeCurrentGeom.moveTopRight(beforeCurrentGeom.topLeft());
 
-        d->newPageAnimId = Animator::self()->moveItem(
-            d->newPage, Plasma::Animator::SlideOutMovement,
-            d->oldPage->pos().toPoint());
         if (index > d->currentIndex) {
             d->newPage->setPos(d->oldPage->geometry().topRight());
+            d->newPageAnimId = Animator::self()->moveItem(
+            d->newPage, Plasma::Animator::SlideOutMovement,
+            d->oldPage->pos().toPoint());
             d->oldPageAnimId = Animator::self()->moveItem(
                 d->oldPage, Plasma::Animator::SlideOutMovement,
                 beforeCurrentGeom.topLeft());
         } else {
             d->newPage->setPos(beforeCurrentGeom.topLeft());
+            d->newPageAnimId = Animator::self()->moveItem(
+            d->newPage, Plasma::Animator::SlideOutMovement,
+            d->oldPage->pos().toPoint());
             d->oldPageAnimId = Animator::self()->moveItem(
                 d->oldPage, Plasma::Animator::SlideOutMovement,
                 d->oldPage->geometry().topRight().toPoint());
