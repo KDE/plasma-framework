@@ -541,9 +541,9 @@ QPoint Corona::popupPosition(const QGraphicsItem *item, const QSize &s, Qt::Alig
     //swap direction if necessary
     if (QApplication::isRightToLeft() && alignment != Qt::AlignCenter) {
         if (alignment == Qt::AlignRight) {
-            alignment == Qt::AlignLeft;
+            alignment = Qt::AlignLeft;
         } else {
-            alignment == Qt::AlignRight;
+            alignment = Qt::AlignRight;
         }
     }
 
