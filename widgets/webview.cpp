@@ -200,7 +200,16 @@ void WebView::setVerticalScrollValue(qreal value)
 
 QRectF WebView::viewport() const
 {
-    return QRectF(d->page->mainFrame()->geometry());
+    QRectF result;
+    if (!d->page) {
+        return result;
+    }
+
+    result.setWidth(d->page->mainFrame()->contentsSize().width());
+    result.setHeight(d->page->mainFrame()->contentsSize().height());
+    result.setHeight(d->page->mainFrame()->geometry().height()/result.height());
+    result.setWidth(d->page->mainFrame()->geometry().width()/result.width());
+    return result;
 }
 
 
