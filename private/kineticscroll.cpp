@@ -118,24 +118,22 @@ void KineticScrolling::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
         d->kinMovement += temp;
     }
     /* After */
-    setKineticScrollValue(d->kinMovement);
+    setKineticScrollValue(d->kinMovement/4);
 }
 
 void KineticScrolling::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
+    Q_UNUSED(event);
     duration();
-    QPointF temp = event->pos().toPoint() - event->lastPos().toPoint();
-    if (!temp.isNull()) {
-        d->kinMovement += temp;
-        /* Not so fast baby! */
-        d->kinMovement *= 0.3;
-    }
+    /* slow down a bit */
+    d->kinMovement /= 4;
+    d->kinMovement *= d->geo.height();
 
     if (d->timeDelta > 600) {
         if (d->kinMovement.y() > 0)
-            d->kinMovement.setY(3);
+            d->kinMovement.setY(6 * d->geo.height());
         else
-            d->kinMovement.setY(-3);
+            d->kinMovement.setY(-6 * d->geo.height());
     }
 
     d->direction = KineticScrollingPrivate::None;
@@ -149,14 +147,15 @@ void KineticScrolling::wheelReleaseEvent(QGraphicsSceneWheelEvent *event)
     if (d->direction == KineticScrollingPrivate::None) {
         mousePressEvent(0);
         duration();
-        /* scroll down is negative in pixels and we want 6% */
-        int temp = event->delta();
+        /* scroll down is negative in pixels */
+        qreal temp = event->delta();
         if (temp < 0)
-            temp = d->geo.height() * 0.07;
+            temp = d->geo.height() * 30;
         else
-            temp = d->geo.height() * -0.07;
+            temp = d->geo.height() * -30;
 
         d->kinMovement.setY(kinMovement().y() + temp);
+
         startAnimationTimer(30);
     }
 
@@ -169,6 +168,12 @@ void KineticScrolling::startAnimationTimer(int interval)
         d->timerID = 0;
     }
 
+    /* factor in friction X viewport/widget ratio */
+    if (d->geo.height() < 0.30)
+      d->friction = 0.85;
+    else
+      d->friction = 0.80;
+
     d->geo = d->parent->property("viewport").toRectF();
     d->timerID = QObject::startTimer(interval);
 }
@@ -179,13 +184,13 @@ void KineticScrolling::timerEvent(QTimerEvent *event)
     d->cposition.setY(d->parent->property("verticalScrollValue").value<qreal>());
 
     if (d->direction == KineticScrollingPrivate::None) {
-        if ((qAbs(d->kinMovement.y()) < 5.0)) {
+        if ((qAbs(d->kinMovement.y()) < 2)) {
             if ((d->cposition.y() > 100) ||
                 (d->cposition.y() < 0)) {
                 if (d->cposition.y() < 0)
-                    d->kinMovement.setY(2);
+                    d->kinMovement.setY(1.0);
                 else
-                    d->kinMovement.setY(-2);
+                    d->kinMovement.setY(-1.0);
 
                 d->parent->setProperty("verticalScrollValue", d->cposition.y()
                                        + d->kinMovement.y());
@@ -212,21 +217,22 @@ void KineticScrolling::setKineticScrollValue(QPointF value)
         return;
     }
 
-    qreal movement = (100 * value.y())/int(d->geo.height());
+    qreal movement = value.y();
     qreal final;
 
     movement += d->cposition.y();
 
     if (movement > d->maximum) {
-        d->kinMovement.setY(-(d->overshoot));
+        d->kinMovement.setY(-(d->overshoot) * d->geo.height());
     } else if (movement < d->minimum) {
-        d->kinMovement.setY(d->overshoot);
+        d->kinMovement.setY(d->overshoot * d->geo.height());
     } else {
         final = qBound((qreal)d->minimum, movement, (qreal)d->maximum);
         d->parent->setProperty("verticalScrollValue", final);
     }
 
     /* TODO: use 'ScrollWidget::HorizontalScrollValue */
+
 }
 
 void KineticScrolling::bounceTimer()

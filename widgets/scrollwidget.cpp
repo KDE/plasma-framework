@@ -391,7 +391,10 @@ QRectF ScrollWidget::viewport() const
         return result;
     }
 
-    return d->widget->boundingRect();
+    result = d->scrollingWidget->boundingRect();
+    result.setHeight(result.height()/d->widget->boundingRect().height());
+    result.setWidth(result.width()/d->widget->boundingRect().width());
+    return result;
 }
 
 void ScrollWidget::setStyleSheet(const QString &styleSheet)
