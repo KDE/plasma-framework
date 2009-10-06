@@ -115,7 +115,7 @@ void ItemBackground::setTarget(const QRectF &newGeometry)
         setGeometry(d->newGeometry);
         targetReached(newGeometry);
         if (d->target) {
-            emit targetReached(d->target);
+            emit targetItemReached(d->target);
         }
         return;
     }
@@ -135,7 +135,7 @@ void ItemBackground::setTarget(const QRectF &newGeometry)
         show();
         targetReached(newGeometry);
         if (d->target) {
-            emit targetReached(d->target);
+            emit targetItemReached(d->target);
         }
     } else {
         d->fading = false;
@@ -284,7 +284,7 @@ void ItemBackgroundPrivate::animationUpdate(qreal progress)
         if ((!fading) || (fadeIn)) {
             emit q->targetReached(newGeometry);
             if (target) {
-                emit q->targetReached(target);
+                emit q->targetItemReached(target);
             }
         }
     }

@@ -96,7 +96,7 @@ Q_SIGNALS:
      * Emitted when the target has been reached. Useful to consider this instead of
      * the corresponding hoverEnterEvent; 
      */
-    void targetReached(QGraphicsItem *);
+    void targetItemReached(QGraphicsItem *);
 
 protected:
     /**
