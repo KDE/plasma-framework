@@ -64,9 +64,9 @@ public:
 
         if (verticalScrollBarPolicy == Qt::ScrollBarAlwaysOff ||
             verticalScrollBar->nativeWidget()->maximum() == 0) {
-            if (layout->itemAt(2) == verticalScrollBar) {
+            if (layout->count() > 2 && layout->itemAt(2) == verticalScrollBar) {
                 layout->removeAt(2);
-            } else if (layout->itemAt(1) == verticalScrollBar) {
+            } else if (layout->count() > 1 && layout->itemAt(1) == verticalScrollBar) {
                 layout->removeAt(1);
             }
             verticalScrollBar->hide();
@@ -79,9 +79,9 @@ public:
 
         if (horizontalScrollBarPolicy == Qt::ScrollBarAlwaysOff ||
             horizontalScrollBar->nativeWidget()->maximum() == 0) {
-            if (layout->itemAt(2) == horizontalScrollBar) {
+            if (layout->count() > 2 && layout->itemAt(2) == horizontalScrollBar) {
                 layout->removeAt(2);
-            } else if (layout->itemAt(1) == horizontalScrollBar) {
+            } else if (layout->count() > 1 && layout->itemAt(1) == horizontalScrollBar) {
                 layout->removeAt(1);
             }
             horizontalScrollBar->hide();
