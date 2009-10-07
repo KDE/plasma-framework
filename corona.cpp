@@ -452,8 +452,6 @@ void Corona::addOffscreenWidget(QGraphicsWidget *widget)
         return;
     }
 
-    widget->setParentItem(0);
-
     if (!widget->scene()) {
         addItem(widget);
     }
