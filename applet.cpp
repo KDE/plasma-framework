@@ -772,13 +772,15 @@ bool Applet::isBusy() const
 QString Applet::name() const
 {
     if (d->isContainment) {
-        if (!d->appletDescription.isValid()) {
-            return i18n("Unknown Activity");
-        }
-
         const Containment *c = qobject_cast<const Containment*>(this);
         if (c && !c->activity().isNull()) {
             return i18n("%1 Activity", c->activity());
+        }
+
+        if (!d->appletDescription.isValid()) {
+            return i18n("Unknown Activity");
+        } else {
+            return i18n("%1 Activity", d->appletDescription.name());
         }
     } else if (!d->appletDescription.isValid()) {
         return i18n("Unknown Widget");
