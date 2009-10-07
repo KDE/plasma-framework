@@ -70,7 +70,7 @@ public:
 };
 
 ToolBox::ToolBox(Containment *parent)
-    : QGraphicsItem(parent),
+    : QGraphicsWidget(parent),
       d(new ToolBoxPrivate(parent))
 {
     d->userMoved = false;
@@ -80,6 +80,11 @@ ToolBox::ToolBox(Containment *parent)
 ToolBox::~ToolBox()
 {
     delete d;
+}
+
+Containment *ToolBox::containment()
+{
+    return d->containment;
 }
 
 QPoint ToolBox::toolPosition(int toolHeight)

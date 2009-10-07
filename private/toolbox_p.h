@@ -21,8 +21,7 @@
 #ifndef PLASMA_TOOLBOX_P_H
 #define PLASMA_TOOLBOX_P_H
 
-#include <QGraphicsItem>
-#include <QObject>
+#include <QGraphicsWidget>
 
 #include "containment.h"
 
@@ -37,7 +36,7 @@ namespace Plasma
 //class EmptyGraphicsItem;
 class ToolBoxPrivate;
 
-class ToolBox : public QObject, public QGraphicsItem
+class ToolBox : public QGraphicsWidget
 {
     Q_OBJECT
 #if QT_VERSION >= 0x040600
@@ -108,6 +107,7 @@ Q_SIGNALS:
     void toggled();
 
 protected:
+    Containment *containment();
     QPoint toolPosition(int toolHeight);
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
