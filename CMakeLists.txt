@@ -159,6 +159,8 @@ set(plasma_LIB_SRCS
     private/qtjolie-branch/qtjolie/serverthread.cpp
 )
 
+kde4_add_kcfg_files(plasma_LIB_SRCS data/kconfigxt/libplasma-theme-global.kcfgc)
+
 kde4_add_ui_files(plasma_LIB_SRCS
                   private/pinpairing.ui
                   private/publish.ui)

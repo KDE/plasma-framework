@@ -42,6 +42,7 @@
 #include <kwindowsystem.h>
 
 #include "private/packages_p.h"
+#include "libplasma-theme-global.h"
 
 namespace Plasma
 {
@@ -72,7 +73,8 @@ public:
           useNativeWidgetStyle(false)
     {
         generalFont = QApplication::font();
-        cacheTheme = cacheConfig().readEntry("CacheTheme", true);
+        ThemeConfig config;
+        cacheTheme = config.cacheTheme();
 
 #ifdef Q_WS_X11
         Display *dpy = QX11Info::display();
@@ -96,11 +98,6 @@ public:
     ~ThemePrivate()
     {
        delete pixmapCache;
-    }
-
-    KConfigGroup cacheConfig()
-    {
-        return KConfigGroup(KSharedConfig::openConfig(themeRcFile), "CachePolicies");
     }
 
     KConfigGroup &config()
@@ -177,7 +174,8 @@ bool ThemePrivate::useCache()
 {
     if (cacheTheme && !pixmapCache) {
         pixmapCache = new KPixmapCache("plasma_theme_" + themeName);
-        pixmapCache->setCacheLimit(cacheConfig().readEntry("ThemeCacheKb", 80 * 1024));
+        ThemeConfig config;
+        pixmapCache->setCacheLimit(config.themeCacheKb());
     }
 
     return cacheTheme;
