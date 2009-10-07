@@ -1,0 +1,4 @@
+File=libplasma-theme.kcfg
+ClassName=ThemeConfig
+Singleton=false
+Mutators=false
