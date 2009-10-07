@@ -36,6 +36,8 @@
 
 #include <plasma/applet.h>
 #include <plasma/containment.h>
+#include <plasma/tooltipcontent.h>
+#include <plasma/tooltipmanager.h>
 #include <plasma/widgets/iconwidget.h>
 
 namespace Plasma
@@ -222,6 +224,7 @@ DesktopToolBox::DesktopToolBox(Containment *parent)
     connect(this, SIGNAL(toggled()), this, SLOT(toggle()));
     connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()),
             this, SLOT(updateTheming()));
+    ToolTipManager::self()->registerWidget(this);
 }
 
 DesktopToolBox::~DesktopToolBox()
@@ -267,6 +270,25 @@ QSize DesktopToolBox::fullHeight() const
     }
 
     return QSize(size() + left, size() + top + bottom + extraSpace);
+}
+
+void DesktopToolBox::toolTipAboutToShow()
+{
+    if (isToolbar() || showing()) {
+        return;
+    }
+
+    ToolTipContent c(i18n("Tool Box"),
+                     i18n("Click to access configuration options and controls or to add more widget to the %1.",
+                          containment()->name()),
+                     KIcon("plasma"));
+    c.setAutohide(false);
+    ToolTipManager::self()->setContent(this, c);
+}
+
+void DesktopToolBox::toolTipHidden()
+{
+    ToolTipManager::self()->clearContent(this);
 }
 
 QRectF DesktopToolBox::boundingRect() const
