@@ -30,8 +30,10 @@
 
 #include <plasma/applet.h>
 #include <plasma/paintutils.h>
-#include <plasma/theme.h>
 #include <plasma/svg.h>
+#include <plasma/theme.h>
+#include <plasma/tooltipcontent.h>
+#include <plasma/tooltipmanager.h>
 
 namespace Plasma
 {
@@ -75,6 +77,8 @@ PanelToolBox::PanelToolBox(Containment *parent)
     d->background = new Plasma::Svg(this);
     d->background->setImagePath("widgets/toolbox");
     d->background->setContainsMultipleImages(true);
+
+    ToolTipManager::self()->registerWidget(this);
 }
 
 PanelToolBox::~PanelToolBox()
@@ -234,6 +238,25 @@ void PanelToolBox::hideToolBox()
 {
     setShowing(false);
     highlight(false);
+}
+
+void PanelToolBox::toolTipAboutToShow()
+{
+    if (showing()) {
+        return;
+    }
+
+    ToolTipContent c(i18n("Panel Tool Box"),
+                     i18n("Click to access size, location and hiding controls as well as to add "
+                          "new widgets to the panel."),
+                     KIcon("plasma"));
+    c.setAutohide(false);
+    ToolTipManager::self()->setContent(this, c);
+}
+
+void PanelToolBox::toolTipHidden()
+{
+    ToolTipManager::self()->clearContent(this);
 }
 
 void PanelToolBox::highlight(bool highlighting)

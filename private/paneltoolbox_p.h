@@ -51,6 +51,10 @@ public:
     void showToolBox();
     void hideToolBox();
 
+public Q_SLOTS:
+    void toolTipAboutToShow();
+    void toolTipHidden();
+
 protected:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
     void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
