@@ -133,10 +133,6 @@ void ItemBackground::setTarget(const QRectF &newGeometry)
         setGeometry(newGeometry);
         d->oldGeometry = newGeometry;
         show();
-        targetReached(newGeometry);
-        if (d->target) {
-            emit targetItemReached(d->target);
-        }
     } else {
         d->fading = false;
         d->opacity = 1;
