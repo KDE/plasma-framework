@@ -24,6 +24,7 @@
 #include <QMenu>
 #include <QMutex>
 #include <QMutexLocker>
+#include <QReadWriteLock>
 #include <QTimer>
 
 #include <kdebug.h>
@@ -98,6 +99,7 @@ public:
     QHash<QString, QAction*> actions;
     QList<RunnerSyntax> syntaxes;
     bool hasRunOptions;
+    QReadWriteLock speedLock;
 };
 
 K_GLOBAL_STATIC(QMutex, s_bigLock)
@@ -242,12 +244,18 @@ void AbstractRunner::createRunOptions(QWidget *parent)
 
 AbstractRunner::Speed AbstractRunner::speed() const
 {
-    return d->speed;
+    // the only time the read lock will fail is if we were slow are going to speed up
+    // or if we were fast and are going to slow down; so don't wait in this case, just
+    // say we're slow. we either will be soon or were just a moment ago and it doesn't
+    // hurt to do one more run the slow way
+    return d->speedLock.tryLockForRead() ? d->speed : SlowSpeed;
 }
 
 void AbstractRunner::setSpeed(Speed speed)
 {
+    d->speedLock.lockForWrite();
     d->speed = speed;
+    d->speedLock.unlock();
 }
 
 AbstractRunner::Priority AbstractRunner::priority() const
