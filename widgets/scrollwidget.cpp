@@ -343,58 +343,29 @@ void ScrollWidget::ensureItemVisible(QGraphicsItem *item)
     QTimer::singleShot(0, this, SLOT(makeRectVisible()));
 }
 
-qreal ScrollWidget::horizontalScrollValue() const
-{
-    if (!d->widget) {
-        return 0;
-    }
-    return (d->widget->x()*100)/(d->widget->size().width() -
-                                  d->scrollingWidget->size().width());
-}
-
-void ScrollWidget::setHorizontalScrollValue(qreal value)
-{
-    if (!d->widget) {
-        return;
-    }
-
-    d->widget->setPos((value * (d->widget->size().width() -
-                               d->scrollingWidget->size().width()))/100,
-                      d->widget->pos().y());
-}
-
-qreal ScrollWidget::verticalScrollValue() const
-{
-    if (!d->widget) {
-        return 0;
-    }
-    return (-1 * d->widget->y()*100)/(d->widget->size().height() -
-                                  d->scrollingWidget->size().height());
-}
-
-void ScrollWidget::setVerticalScrollValue(qreal value)
-{
-
-    if (!d->widget) {
-        return;
-    }
-
-    d->widget->setPos(d->widget->pos().x(),
-                      (-1 * value * (d->widget->size().height() -
-                                d->scrollingWidget->size().height()))/100);
-}
-
-QRectF ScrollWidget::viewport() const
+QRectF ScrollWidget::viewportGeometry() const
 {
     QRectF result;
     if (!d->widget) {
         return result;
     }
 
-    result = d->scrollingWidget->boundingRect();
-    result.setHeight(result.height()/d->widget->boundingRect().height());
-    result.setWidth(result.width()/d->widget->boundingRect().width());
-    return result;
+    return d->scrollingWidget->boundingRect();
+}
+
+QSizeF ScrollWidget::contentsSize() const
+{
+    return d->widget->size();
+}
+
+void ScrollWidget::setScrollPosition(const QPointF &position)
+{
+    d->widget->setPos(-position);
+}
+
+QPointF ScrollWidget::scrollPosition() const
+{
+    return -d->widget->pos();
 }
 
 void ScrollWidget::setStyleSheet(const QString &styleSheet)

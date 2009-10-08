@@ -45,9 +45,9 @@ class PLASMA_EXPORT ScrollWidget : public QGraphicsWidget
     Q_PROPERTY(QGraphicsWidget *widget READ widget WRITE setWidget)
     Q_PROPERTY(Qt::ScrollBarPolicy horizontalScrollBarPolicy READ horizontalScrollBarPolicy WRITE setHorizontalScrollBarPolicy)
     Q_PROPERTY(Qt::ScrollBarPolicy verticalScrollBarPolicy READ verticalScrollBarPolicy WRITE setVerticalScrollBarPolicy)
-    Q_PROPERTY(qreal horizontalScrollValue READ horizontalScrollValue WRITE setHorizontalScrollValue)
-    Q_PROPERTY(qreal verticalScrollValue READ verticalScrollValue WRITE setVerticalScrollValue)
-    Q_PROPERTY(QRectF viewport READ viewport)
+    Q_PROPERTY(QPointF scrollPosition READ scrollPosition WRITE setScrollPosition)
+    Q_PROPERTY(QSizeF contentsSize READ contentsSize)
+    Q_PROPERTY(QRectF viewportGeometry READ viewportGeometry)
     Q_PROPERTY(QString styleSheet READ styleSheet WRITE setStyleSheet)
 
 public:
@@ -114,35 +114,31 @@ public:
      */
     void ensureItemVisible(QGraphicsItem *item);
 
-     /**
-     * The horizontal scroll value, between 0 and 100
+    /**
+     * The geometry of the viewport.
      * @since 4.4
      */
-    qreal horizontalScrollValue() const;
+    QRectF viewportGeometry() const;
+
 
     /**
-     * Set the horizontal scroll value, between 0 and 100
+     * @return the size of the internal widget
      * @since 4.4
      */
-    void setHorizontalScrollValue(qreal value);
+    QSizeF contentsSize() const;
 
     /**
-     * The horizontal scroll value, between 0 and 100
+     * Sets the position of the internal widget relative to this widget
      * @since 4.4
      */
-    qreal verticalScrollValue() const;
+    void setScrollPosition(const QPointF &position);
 
     /**
-     * Set the horizontal scroll value, between 0 and 100
+     * @return the position of the internal widget relative to this widget
      * @since 4.4
      */
-    void setVerticalScrollValue(qreal value);
+    QPointF scrollPosition() const;
 
-    /**
-     * The scrollable widget size.
-     * @since 4.4
-     */
-    QRectF viewport() const;
 
     /**
      * Sets the stylesheet used to control the visual display of this ScrollWidget

@@ -50,9 +50,9 @@ class PLASMA_EXPORT WebView : public QGraphicsWidget
     Q_PROPERTY(KUrl url READ url WRITE setUrl)
     Q_PROPERTY(QString html READ html WRITE setHtml)
     Q_PROPERTY(bool dragToScroll READ dragToScroll WRITE setDragToScroll)
-    Q_PROPERTY(int horizontalScrollValue READ horizontalScrollValue WRITE setHorizontalScrollValue)
-    Q_PROPERTY(int verticalScrollValue READ verticalScrollValue WRITE setVerticalScrollValue)
-    Q_PROPERTY(QRectF viewport READ viewport)
+    Q_PROPERTY(QPointF scrollPosition READ scrollPosition WRITE setScrollPosition)
+    Q_PROPERTY(QSizeF contentsSize READ contentsSize)
+    Q_PROPERTY(QRectF viewportGeometry READ viewportGeometry)
 
     public:
         explicit WebView(QGraphicsItem *parent = 0);
@@ -97,35 +97,31 @@ class PLASMA_EXPORT WebView : public QGraphicsWidget
          * Reimplementation
          */
         QRectF geometry() const;
-        /**
-         * The horizontal scroll value, between 0 and 100
-         * @since 4.4
-         */
-        qreal horizontalScrollValue() const;
 
         /**
-         * Set the horizontal scroll value, between 0 and 100
+         * @return the size of the internal widget
          * @since 4.4
          */
-        void setHorizontalScrollValue(qreal value);
+        QSizeF contentsSize() const;
 
         /**
-         * The horizontal scroll value, between 0 and 100
+         * Sets the position of the webpage relative to this widget
          * @since 4.4
          */
-        qreal verticalScrollValue() const;
+        void setScrollPosition(const QPointF &position);
 
         /**
-         * Set the horizontal scroll value, between 0 and 100
+         * @return the position of the webpage relative to this widget
          * @since 4.4
          */
-        void setVerticalScrollValue(qreal value);
+        QPointF scrollPosition() const;
 
         /**
-         * The scrollable widget size.
+         * The geometry of the area that actually displays the web page
          * @since 4.4
          */
-        QRectF viewport() const;
+        QRectF viewportGeometry() const;
+
         /**
          * Sets the page to use in this item. The owner of the webpage remains,
          * however if this WebView object is the owner of the current page,

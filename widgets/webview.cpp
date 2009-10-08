@@ -134,82 +134,41 @@ QRectF WebView::geometry() const
     return QGraphicsWidget::geometry();
 }
 
-qreal WebView::horizontalScrollValue() const
+QSizeF WebView::contentsSize() const
 {
     if (!d->page) {
-        return 0;
+        return QSizeF();
+    } else {
+        return d->page->mainFrame()->contentsSize();
     }
-
-    const qreal value = d->page->mainFrame()->contentsSize().width() -
-         d->page->mainFrame()->geometry().width();
-
-    if(!value)
-        return 0;
-
-    return ((d->page->mainFrame()->geometry().x()*100)/value);
 }
 
-void WebView::setHorizontalScrollValue(qreal value)
+void WebView::setScrollPosition(const QPointF &position)
 {
     if (!d->page) {
         return;
+    } else {
+        d->page->mainFrame()->setScrollPosition(position.toPoint());
     }
-
-    qreal xValue = value * (d->page->mainFrame()->contentsSize().width() -
-                      d->page->mainFrame()->geometry().width())/100;
-
-    if (!xValue)
-        xValue = 0;
-
-    d->page->mainFrame()->setScrollBarValue(Qt::Horizontal, xValue);
 }
 
-qreal WebView::verticalScrollValue() const
+QPointF WebView::scrollPosition() const
 {
     if (!d->page) {
-        return 0;
+        return QPointF();
+    } else {
+        return d->page->mainFrame()->scrollPosition();
     }
-
-    const qreal value = d->page->mainFrame()->contentsSize().height() -
-        d->page->mainFrame()->geometry().height();
-
-    if (!value)
-        return 0;
-
-    return ((d->page->mainFrame()->scrollPosition().y()*100)/value);
 }
 
-void WebView::setVerticalScrollValue(qreal value)
-{
-
-    if (!d->page) {
-        return;
-    }
-
-    qreal yValue = value *
-        (d->page->mainFrame()->contentsSize().height() -
-         d->page->mainFrame()->geometry().height())/100;
-
-    if (!yValue)
-        yValue = 0;
-
-    const QPoint point(d->page->mainFrame()->scrollPosition().x(), yValue);
-
-    d->page->mainFrame()->setScrollPosition(point);
-}
-
-QRectF WebView::viewport() const
+QRectF WebView::viewportGeometry() const
 {
     QRectF result;
     if (!d->page) {
         return result;
+    } else {
+        return d->page->mainFrame()->geometry();
     }
-
-    result.setWidth(d->page->mainFrame()->contentsSize().width());
-    result.setHeight(d->page->mainFrame()->contentsSize().height());
-    result.setHeight(d->page->mainFrame()->geometry().height()/result.height());
-    result.setWidth(d->page->mainFrame()->geometry().width()/result.width());
-    return result;
 }
 
 
