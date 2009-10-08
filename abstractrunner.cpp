@@ -93,7 +93,6 @@ public:
     RunnerScript *script;
     KPluginInfo runnerDescription;
     AbstractRunner *runner;
-    QTime runtime;
     int fastRuns;
     Package *package;
     QHash<QString, QAction*> actions;
@@ -155,13 +154,14 @@ void AbstractRunner::performMatch(Plasma::RunnerContext &localContext)
     static const int reasonableRunTime = 1500;
     static const int fastEnoughTime = 250;
 
-    d->runtime.restart();
+    QTime time;
+    time.restart();
 
     //The local copy is already obtained in the job
     match(localContext);
 
     // automatically rate limit runners that become slooow
-    const int runtime = d->runtime.elapsed();
+    const int runtime = time.elapsed();
     bool slowed = speed() == SlowSpeed;
 
     if (!slowed && runtime > reasonableRunTime) {
