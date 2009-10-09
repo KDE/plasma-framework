@@ -34,6 +34,41 @@ namespace Plasma
 namespace WindowEffects
 {
 
+//FIXME: check if this works for any atom?
+bool isEffectAvailable(Effect effect)
+{
+    if (!KWindowSystem::compositingActive()) {
+        return false;
+    }
+#ifdef Q_WS_X11
+    QString effectName;
+
+    switch (effect) {
+    case Slide:
+        effectName = "_KDE_SLIDE";
+        break;
+    case WindowPreview:
+        effectName = "_KDE_WINDOW_PREVIEW";
+        break;
+    default:
+        return false;
+    }
+
+    // hackish way to find out if KWin has the effect enabled,
+    // TODO provide proper support
+    Display *dpy = QX11Info::display();
+    Atom atom = XInternAtom(dpy, effectName.toLatin1(), False);
+    int cnt;
+    Atom *list = XListProperties(dpy, DefaultRootWindow(dpy), &cnt);
+    if (list != NULL) {
+        bool ret = (qFind(list, list + cnt, atom) != list + cnt);
+        XFree(list);
+        return ret;
+    }
+#endif
+    return false;
+}
+
 void slideWindow(WId id, Plasma::Location location, int offset)
 {
 #ifdef Q_WS_X11
@@ -101,6 +136,65 @@ void slideWindow(QWidget *widget, Plasma::Location location)
         XChangeProperty(dpy, widget->effectiveWinId(), atom, atom, 32, PropModeReplace,
                         reinterpret_cast<unsigned char *>(data.data()), data.size());
     }
+#endif
+}
+
+QList<QSize> windowSizes(const QList<WId> &ids)
+{
+    QList<QSize> windowSizes;
+    foreach (WId id, ids) {
+#ifdef Q_WS_X11
+        if (id > 0) {
+            KWindowInfo info = KWindowSystem::windowInfo(id, NET::WMGeometry|NET::WMFrameExtents);
+            windowSizes.append(info.frameGeometry().size());
+        } else {
+            windowSizes.append(QSize());
+        }
+#else
+        windowSizes.append(QSize());
+#endif
+    }
+    return windowSizes;
+}
+
+void showWindowThumbnails(WId parent, const QList<WId> &windows, const QList<QRect> &rects)
+{
+    if (windows.size() != rects.size()) {
+        return;
+    }
+#ifdef Q_WS_X11
+    Display *dpy = QX11Info::display();
+    Atom atom = XInternAtom(dpy, "_KDE_WINDOW_PREVIEW", False);
+    if (windows.isEmpty()) {
+        XDeleteProperty(dpy, parent, atom);
+        return;
+    }
+
+    int numWindows = windows.size();
+
+    QVarLengthArray<long, 1024> data(1 + (6 * numWindows));
+    data[0] = numWindows;
+
+    QList<WId>::const_iterator windowsIt;
+    QList<QRect>::const_iterator rectsIt = rects.constBegin();
+    int i = 0;
+    for (windowsIt = windows.constBegin(); windowsIt != windows.constEnd(); ++windowsIt) {
+
+        const int start = (i * 6) + 1;
+        const QRect thumbnailRect = (*rectsIt);
+
+        data[start] = 5;
+        data[start+1] = (*windowsIt);
+        data[start+2] = thumbnailRect.x();
+        data[start+3] = thumbnailRect.y();
+        data[start+4] = thumbnailRect.width();
+        data[start+5] = thumbnailRect.height();
+        ++rectsIt;
+        ++i;
+    }
+
+    XChangeProperty(dpy, parent, atom, atom, 32, PropModeReplace,
+                    reinterpret_cast<unsigned char *>(data.data()), data.size());
 #endif
 }
 

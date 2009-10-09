@@ -58,7 +58,6 @@ protected:
     void mousePressEvent(QMouseEvent *event);
 
 private:
-    void readWindowSizes() const;
 
     QList<WId> ids;
     mutable QList<QSize> windowSizes;

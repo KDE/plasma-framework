@@ -35,6 +35,19 @@ namespace Plasma
  */
 namespace WindowEffects
 {
+    enum Effect {
+        Slide = 1,
+        WindowPreview = 2
+    };
+
+    /**
+     * @return if an atom property is available
+     *
+     * @param effect the effect we want to check
+     * @since 4.4
+     */
+    PLASMA_EXPORT bool isEffectAvailable(Effect effect);
+
     /**
      * Mark a window as sliding from screen edge
      *
@@ -56,6 +69,27 @@ namespace WindowEffects
      * @since 4.4
      */
     PLASMA_EXPORT void slideWindow(QWidget *widget, Plasma::Location location);
+
+    /**
+     * @return dimension of all the windows passed as parameter
+     *
+     * @param ids all the windows we want the size
+     * @since 4.4
+     */
+    PLASMA_EXPORT QList<QSize> windowSizes(const QList<WId> &ids);
+
+    /**
+     * Paint inside the window parent the thumbnails of the windows list in
+     * the respective rectangles of the rects list
+     *
+     * @param parent window where we should paint
+     * @param windows windows we want a thumbnail of.
+     *                If it is empty any thumbnail will be deleted
+     * @param rects rectangles in parent coordinates where to paint the window thumbnails.
+     *              If it is empty any thumbnail will be deleted
+     * @since 4.4
+     */
+    PLASMA_EXPORT void showWindowThumbnails(WId parent, const QList<WId> &windows = QList<WId>(), const QList<QRect> &rects = QList<QRect>());
 }
 
 } // namespace Plasma
