@@ -456,6 +456,10 @@ void Corona::addOffscreenWidget(QGraphicsWidget *widget)
         addItem(widget);
     }
 
+    QGraphicsWidget *pw = widget->parentWidget();
+    widget->setParentItem(0);
+    widget->setParent(pw);
+
     //search for an empty spot in the topleft quadrant of the scene. each 'slot' is QWIDGETSIZE_MAX
     //x QWIDGETSIZE_MAX, so we're guaranteed to never have to move widgets once they're placed here.
     int i = 0;
