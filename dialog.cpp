@@ -111,9 +111,9 @@ void DialogPrivate::themeChanged()
     if (extender) {
         applet = extender->d->applet;
     } else if (graphicsWidget) {
-        QGraphicsItem *pw = graphicsWidget;
+        QObject *pw = graphicsWidget;
 
-        while (pw = pw->parentItem()) {
+        while (pw = pw->parent()) {
             applet = dynamic_cast<Plasma::Applet *>(pw);
             if (applet) {
                 break;
