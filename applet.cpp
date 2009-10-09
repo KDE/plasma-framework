@@ -1583,7 +1583,7 @@ KActionCollection* AppletPrivate::defaultActions(QObject *parent)
 
     KAction *closeApplet = actions->addAction("remove");
     closeApplet->setAutoRepeat(false);
-    closeApplet->setText("Remove this Widget");
+    closeApplet->setText(i18n("Remove this Widget"));
     closeApplet->setIcon(KIcon("edit-delete"));
     closeApplet->setShortcut(KShortcut("alt+d, r"));
 
