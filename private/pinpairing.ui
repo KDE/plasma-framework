@@ -38,7 +38,7 @@
         </size>
        </property>
        <property name="text">
-        <string>Enter a password below. Enter the same password on the device you're trying to connect with.</string>
+        <string>Enter a password below. Enter the same password on the device to which you are trying to connect.</string>
        </property>
        <property name="textFormat">
         <enum>Qt::RichText</enum>

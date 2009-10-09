@@ -54,8 +54,8 @@ ClientPinRequest::~ClientPinRequest()
 
 QString ClientPinRequest::description() const
 {
-    return i18n("You've requested access to the %1 hosted at %2.", d->service->name(),
-                                                                   d->service->location());
+    return i18n("You have requested access to the %1 hosted at %2.", d->service->name(),
+                                                                     d->service->location());
 }
 
 void ClientPinRequest::setPin(const QString &pin)

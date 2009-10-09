@@ -157,7 +157,7 @@ void AccessAppletJob::start()
 #else
     kWarning() << "libplasma was compiled without support for remote services. Accessing remote applet failed because of that.";
     setError(-1);
-    setErrorText(i18n("Your system doesn't provide support for the 'remote widgets' feature. Access Failed."));
+    setErrorText(i18n("Your system does not provide support for the 'remote widgets' feature. Access Failed."));
     emitResult();
 #endif
 }

@@ -279,7 +279,7 @@ void DesktopToolBox::toolTipAboutToShow()
     }
 
     ToolTipContent c(i18n("Tool Box"),
-                     i18n("Click to access configuration options and controls or to add more widget to the %1.",
+                     i18n("Click to access configuration options and controls, or to add more widgets to the %1.",
                           containment()->name()),
                      KIcon("plasma"));
     c.setAutohide(false);
