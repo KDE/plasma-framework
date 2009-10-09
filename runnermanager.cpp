@@ -191,13 +191,13 @@ public:
         if (deferredRun.isEnabled() && runJob->runner() == deferredRun.runner()) {
             //kDebug() << "job actually done, running now **************";
             QueryMatch tmpRun = deferredRun;
-            deferredRun = QueryMatch(0);	  
+            deferredRun = QueryMatch(0);
             tmpRun.run(context);
         }
 
         searchJobs.remove(runJob);
         oldSearchJobs.remove(runJob);
-        delete runJob;
+        runJob->deleteLater();
 
         if (searchJobs.isEmpty() && context.matches().isEmpty()) {
             // we finished our run, and there are no valid matches, and so no
