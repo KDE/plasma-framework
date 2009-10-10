@@ -354,8 +354,8 @@ QPixmap FrameSvgPrivate::alphaMask(const QString &maskType)
 
     QString maskPrefix;
 
-    if (q->hasElement("mask-" + maskType + prefix + "center")) {
-        maskPrefix = "mask-" + maskType;
+    if (q->hasElement("mask-" + maskType + "-" + prefix + "center")) {
+        maskPrefix = "mask-" + QString("-") + maskType;
     } else if (q->hasElement("mask-" + prefix + "center")) {
         maskPrefix = "mask-";
     }
