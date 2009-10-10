@@ -267,48 +267,13 @@ QRectF FrameSvg::contentsRect() const
 
 QPixmap FrameSvg::alphaMask() const
 {
-    FrameData *frame = d->frames[d->prefix];
-
-    if (hasElement("mask-" + d->prefix + "center")) {
-        QString oldPrefix = d->prefix;
-
-        // We are setting the prefix only temporary to generate
-        // the needed mask image
-        d->prefix = "mask-" + oldPrefix;
-
-        if (!d->frames.contains(d->prefix)) {
-            d->frames.insert(d->prefix, new FrameData(*(d->frames[oldPrefix])));
-            d->updateSizes();
-        }
-
-        FrameData *maskFrame = d->frames[d->prefix];
-        if (maskFrame->cachedBackground.isNull() || maskFrame->frameSize != d->frameSize(frame)) {
-            maskFrame->frameSize = d->frameSize(frame).toSize();
-            maskFrame->cachedBackground = QPixmap();
-
-            d->generateBackground(maskFrame);
-            if (maskFrame->cachedBackground.isNull()) {
-                return QPixmap();
-            }
-        }
-
-        d->prefix = oldPrefix;
-        return maskFrame->cachedBackground;
-    } else {
-        if (frame->cachedBackground.isNull()) {
-            d->generateBackground(frame);
-            if (frame->cachedBackground.isNull()) {
-                return QPixmap();
-            }
-        }
-        return frame->cachedBackground;
-    }
+    return d->alphaMask(QString());
 }
 
 QRegion FrameSvg::mask() const
 {
     FrameData *frame = d->frames[d->prefix];
-    frame->cachedMask = QRegion(QBitmap(alphaMask().alphaChannel().createMaskFromColor(Qt::black)));
+    frame->cachedMask = QRegion(QBitmap(d->alphaMask(QString()).alphaChannel().createMaskFromColor(Qt::black)));
     return frame->cachedMask;
 }
 
@@ -383,6 +348,54 @@ void FrameSvg::paintFrame(QPainter *painter, const QPointF &pos)
     painter->drawPixmap(pos, frame->cachedBackground);
 }
 
+QPixmap FrameSvgPrivate::alphaMask(const QString &maskType)
+{
+    FrameData *frame = frames[prefix];
+
+    QString maskPrefix;
+
+    if (q->hasElement("mask-" + maskType + prefix + "center")) {
+        maskPrefix = "mask-" + maskType;
+    } else if (q->hasElement("mask-" + prefix + "center")) {
+        maskPrefix = "mask-";
+    }
+
+    if (!maskPrefix.isNull()) {
+        QString oldPrefix = prefix;
+
+        // We are setting the prefix only temporary to generate
+        // the needed mask image
+        prefix = maskPrefix + oldPrefix;
+
+        if (!frames.contains(prefix)) {
+            frames.insert(prefix, new FrameData(*(frames[oldPrefix])));
+            updateSizes();
+        }
+
+        FrameData *maskFrame = frames[prefix];
+        if (maskFrame->cachedBackground.isNull() || maskFrame->frameSize != frameSize(frame)) {
+            maskFrame->frameSize = frameSize(frame).toSize();
+            maskFrame->cachedBackground = QPixmap();
+
+            generateBackground(maskFrame);
+            if (maskFrame->cachedBackground.isNull()) {
+                return QPixmap();
+            }
+        }
+
+        prefix = oldPrefix;
+        return maskFrame->cachedBackground;
+    } else {
+        if (frame->cachedBackground.isNull()) {
+            generateBackground(frame);
+            if (frame->cachedBackground.isNull()) {
+                return QPixmap();
+            }
+        }
+        return frame->cachedBackground;
+    }
+}
+
 void FrameSvgPrivate::generateBackground(FrameData *frame)
 {
     if (!frame->cachedBackground.isNull()) {
@@ -429,7 +442,7 @@ void FrameSvgPrivate::generateBackground(FrameData *frame)
             }
         }
 
-        overlay = q->alphaMask();
+        overlay = alphaMask("overlay");
         QPainter overlayPainter(&overlay);
         overlayPainter.setCompositionMode(QPainter::CompositionMode_SourceIn);
         //Tiling?
