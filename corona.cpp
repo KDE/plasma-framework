@@ -353,6 +353,14 @@ void Corona::loadLayout(const QString &configName)
         mergeConfig = true;
     }
 
+    QList<int> containmentsIds;
+
+    if (mergeConfig) {
+        foreach (Plasma::Containment *cont, d->containments) {
+            containmentsIds.append(cont->id());
+        }
+    }
+
     KConfigGroup containments(c, "Containments");
 
     foreach (const QString &group, containments.groupList()) {
@@ -362,12 +370,24 @@ void Corona::loadLayout(const QString &configName)
             continue;
         }
 
-        int cid = mergeConfig ? 0 : group.toUInt();
+        int cid = group.toUInt();
+        if (mergeConfig) {
+            if (containmentsIds.contains(cid)) {
+                cid = 0;
+            } else if (cid > AppletPrivate::s_maxAppletId) {
+                AppletPrivate::s_maxAppletId = cid;
+            }
+        }
+
         //kDebug() << "got a containment in the config, trying to make a" << containmentConfig.readEntry("plugin", QString()) << "from" << group;
         Containment *c = d->addContainment(containmentConfig.readEntry("plugin", QString()), QVariantList(),
                                            cid, true);
         if (!c) {
             continue;
+        }
+
+        if (mergeConfig) {
+            containmentsIds.append(c->id());
         }
 
         c->init();
