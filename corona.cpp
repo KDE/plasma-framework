@@ -699,6 +699,8 @@ void Corona::setImmutability(const ImmutabilityType immutable)
             bool unlocked = d->immutability == Mutable;
             action->setText(unlocked ? i18n("Lock Widgets") : i18n("Unlock Widgets"));
             action->setIcon(KIcon(unlocked ? "object-locked" : "object-unlocked"));
+            action->setEnabled(true);
+            action->setVisible(true);
         }
     }
 
