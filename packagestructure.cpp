@@ -384,7 +384,7 @@ QStringList PackageStructure::mimetypes(const char *key) const
 void PackageStructure::setPath(const QString &path)
 {
     KUrl url(path);
-    QDir dir(url.path());
+    QDir dir(url.toLocalFile());
     QString basePath = dir.canonicalPath();
     bool valid = QFile::exists(basePath);
 
