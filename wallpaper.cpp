@@ -24,6 +24,7 @@
 #include <QFile>
 #include <QFileInfo>
 #include <QImage>
+#include <QAction>
 
 #include <kdebug.h>
 #include <kglobal.h>
@@ -413,6 +414,16 @@ void Wallpaper::insertIntoCache(const QString& key, const QImage &image)
             image.save(d->cachePath(key));
         }
     }
+}
+
+QList<QAction*> Wallpaper::contextualActions() const
+{
+    return contextActions;
+}
+
+void Wallpaper::setContextualActions(const QList<QAction*> &actions)
+{
+    contextActions = actions;
 }
 
 } // Plasma namespace

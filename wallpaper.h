@@ -317,6 +317,11 @@ class PLASMA_EXPORT Wallpaper : public QObject
          */
         void setTargetSizeHint(const QSizeF &targetSize);
 
+        /**
+         * Returns a list of wallpaper contextual actions (nothing by default)
+         */
+        QList<QAction*> contextualActions() const;
+
     Q_SIGNALS:
         /**
          * This signal indicates that wallpaper needs to be repainted.
@@ -451,6 +456,15 @@ class PLASMA_EXPORT Wallpaper : public QObject
          * @since 4.3
          **/
         void insertIntoCache(const QString& key, const QImage &image);
+
+        /**
+         * Sets the contextual actions for this wallpaper.
+         *
+         * @param actions A list of contextual actions for this wallpaper
+         **/
+        void setContextualActions(const QList<QAction*> &actions);
+
+        QList<QAction*> contextActions;
 
     private:
         Q_PRIVATE_SLOT(d, void renderCompleted(int token, const QImage &image,
