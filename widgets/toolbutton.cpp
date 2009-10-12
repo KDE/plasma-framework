@@ -50,7 +50,8 @@ public:
           animId(0),
           fadeIn(false),
           svg(0),
-          customFont(false)
+          customFont(false),
+          underMouse(false)
     {
     }
 
@@ -118,6 +119,7 @@ public:
     Svg *svg;
     QString svgElement;
     bool customFont;
+    bool underMouse;
 };
 
 void ToolButtonPrivate::syncActiveRect()
@@ -330,7 +332,7 @@ void ToolButton::paint(QPainter *painter,
     buttonOpt.toolButtonStyle = button->toolButtonStyle();
 
 
-    if (button->isEnabled() && (d->animId || !button->autoRaise() || (buttonOpt.state & QStyle::State_MouseOver) || (buttonOpt.state & QStyle::State_On))) {
+    if (button->isEnabled() && (d->animId || !button->autoRaise() || d->underMouse || (buttonOpt.state & QStyle::State_On))) {
         if (button->isDown() || (buttonOpt.state & QStyle::State_On)) {
             d->background->setElementPrefix("pressed");
         } else {
@@ -374,6 +376,7 @@ void ToolButton::paint(QPainter *painter,
 
 void ToolButton::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 {
+    d->underMouse = true;
     if (nativeWidget()->isDown() || !nativeWidget()->autoRaise()) {
         return;
     }
@@ -394,6 +397,7 @@ void ToolButton::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 
 void ToolButton::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 {
+    d->underMouse = false;
     if (nativeWidget()->isDown() || !nativeWidget()->autoRaise()) {
         return;
     }
@@ -418,6 +422,8 @@ void ToolButton::changeEvent(QEvent *event)
 {
     if (event->type() == QEvent::FontChange) {
         d->customFont = true;
+    } else if (event->type() == QEvent::EnabledChange && !isEnabled()) {
+        d->underMouse = false;
     }
 
     QGraphicsProxyWidget::changeEvent(event);
