@@ -155,14 +155,14 @@ public:
     void verticalScroll(int value)
     {
         if (!dragging) {
-            widget->setPos(QPoint(0, -value*10));
+            widget->setPos(QPoint(widget->pos().x(), -value*10));
         }
     }
 
     void horizontalScroll(int value)
     {
         if (!dragging) {
-            widget->setPos(QPoint(-value*10, 0));
+            widget->setPos(QPoint(-value*10, widget->pos().y()));
         }
     }
 
