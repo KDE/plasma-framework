@@ -779,6 +779,9 @@ QString Applet::name() const
 
         if (!d->appletDescription.isValid()) {
             return i18n("Unknown Activity");
+        } else if (c->d->type == Containment::PanelContainment ||
+                   c->d->type == Containment::CustomPanelContainment) {
+            return d->appletDescription.name();
         } else {
             return i18n("%1 Activity", d->appletDescription.name());
         }

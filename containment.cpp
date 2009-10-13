@@ -149,7 +149,7 @@ void Containment::init()
     }
 
     //connect actions
-    ContainmentPrivate::addDefaultActions(d->actions());
+    ContainmentPrivate::addDefaultActions(d->actions(), this);
     bool unlocked = immutability() == Mutable;
 
     //fix the text of the actions that need name()
@@ -259,14 +259,20 @@ void Containment::init()
 
 }
 
-void ContainmentPrivate::addDefaultActions(KActionCollection *actions)
+void ContainmentPrivate::addDefaultActions(KActionCollection *actions, Containment *c)
 {
     actions->setConfigGroup("Shortcuts-Containment");
 
     //adjust applet actions
     KAction *appAction = qobject_cast<KAction*>(actions->action("remove"));
     appAction->setShortcut(KShortcut("alt+d, alt+r"));
-    appAction->setText(i18n("Remove this Activity"));
+    if (c && (c->d->type == Containment::PanelContainment ||
+              c->d->type == Containment::CustomPanelContainment)) {
+        appAction->setText(i18n("Remove this panel"));
+    } else {
+        appAction->setText(i18n("Remove this activity"));
+    }
+
     appAction = qobject_cast<KAction*>(actions->action("configure"));
     if (appAction) {
         appAction->setShortcut(KShortcut("alt+d, alt+s"));

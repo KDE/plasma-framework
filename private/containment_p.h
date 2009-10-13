@@ -103,7 +103,7 @@ public:
     /**
      * add the regular actions & keyboard shortcuts onto Applet's collection
      */
-    static void addDefaultActions(KActionCollection *actions);
+    static void addDefaultActions(KActionCollection *actions, Containment *c = 0);
 
     /**
      * give keyboard focus to applet within this containment
