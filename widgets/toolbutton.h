@@ -159,6 +159,10 @@ Q_SIGNALS:
      * @since 4.4
      */
     void pressed();
+    /**
+     * @since 4.4
+     */
+    void released();
 
 protected:
     void paint(QPainter *painter,

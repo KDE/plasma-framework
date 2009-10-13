@@ -173,6 +173,7 @@ ToolButton::ToolButton(QGraphicsWidget *parent)
     QToolButton *native = new QToolButton;
     connect(native, SIGNAL(clicked()), this, SIGNAL(clicked()));
     connect(native, SIGNAL(pressed()), this, SIGNAL(pressed()));
+    connect(native, SIGNAL(released()), this, SIGNAL(released()));
     setWidget(native);
     native->setAttribute(Qt::WA_NoSystemBackground);
     native->setAutoRaise(true);
