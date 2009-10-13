@@ -584,9 +584,9 @@ void AppletPrivate::positionMessageOverlay()
 void AppletPrivate::destroyMessageOverlay()
 {
     if (messageDialog) {
-        messageDialog->animatedHide(Plasma::locationToInverseDirection(q->location()));
-        //messageDialog->deleteLater();
-        messageDialog = 0;
+        messageDialog.data()->animatedHide(Plasma::locationToInverseDirection(q->location()));
+        //messageDialog.data()->deleteLater();
+        messageDialog.clear();
     }
 
     if (!messageOverlay) {
@@ -1088,18 +1088,18 @@ void Applet::showMessage(const QIcon &icon, const QString &message, const Messag
         }
 
         if (d->messageDialog) {
-            delete d->messageDialog->graphicsWidget();
+            delete d->messageDialog.data()->graphicsWidget();
         } else {
             d->messageDialog = new Plasma::Dialog;
         }
 
         ToolTipManager::self()->hide(this);
-        KWindowSystem::setOnAllDesktops(d->messageDialog->winId(), true);
-        KWindowSystem::setState(d->messageDialog->winId(), NET::SkipTaskbar | NET::SkipPager);
-        d->messageDialog->setGraphicsWidget(mainWidget);
-        connect(d->messageDialog, SIGNAL(destroyed(QObject*)), mainWidget, SLOT(deleteLater()));
+        KWindowSystem::setOnAllDesktops(d->messageDialog.data()->winId(), true);
+        KWindowSystem::setState(d->messageDialog.data()->winId(), NET::SkipTaskbar | NET::SkipPager);
+        d->messageDialog.data()->setGraphicsWidget(mainWidget);
+        connect(d->messageDialog.data(), SIGNAL(destroyed(QObject*)), mainWidget, SLOT(deleteLater()));
     } else {
-        delete d->messageDialog;
+        delete d->messageDialog.data();
         d->createMessageOverlay();
         d->messageOverlay->opacity = 0.8;
         QGraphicsLinearLayout *l = new QGraphicsLinearLayout(d->messageOverlay);
@@ -1109,11 +1109,11 @@ void Applet::showMessage(const QIcon &icon, const QString &message, const Messag
     if (d->messageDialog) {
         QPoint pos = geometry().topLeft().toPoint();
         if (corona) {
-            pos = corona->popupPosition(this, d->messageDialog->size());
+            pos = corona->popupPosition(this, d->messageDialog.data()->size());
         }
 
-        d->messageDialog->move(pos);
-        d->messageDialog->animatedShow(locationToDirection(location()));
+        d->messageDialog.data()->move(pos);
+        d->messageDialog.data()->animatedShow(locationToDirection(location()));
     } else {
         d->messageOverlay->show();
     }

@@ -67,7 +67,6 @@ class SvgPrivate
     public:
         SvgPrivate(Svg *svg)
             : q(svg),
-              theme(0),
               renderer(0),
               lastModified(0),
               multipleImages(false),
@@ -181,7 +180,7 @@ class SvgPrivate
                 theme = Plasma::Theme::defaultTheme();
             }
 
-            return theme;
+            return theme.data();
         }
 
         QPixmap findInCache(const QString &elementId, const QSizeF &s = QSizeF())
@@ -303,7 +302,7 @@ class SvgPrivate
                 s_renderers.erase(s_renderers.find(path));
 
                 if (theme) {
-                    theme->releaseRectsCache(path);
+                    theme.data()->releaseRectsCache(path);
                 }
             }
 
@@ -412,7 +411,7 @@ class SvgPrivate
         static QHash<QString, SharedSvgRenderer::Ptr> s_renderers;
 
         Svg *q;
-        QPointer<Theme> theme;
+        QWeakPointer<Theme> theme;
         QHash<QString, QRectF> localRectCache;
         SharedSvgRenderer::Ptr renderer;
         QString themePath;
@@ -597,7 +596,7 @@ bool Svg::isUsingRenderingCache() const
 void Svg::setTheme(Plasma::Theme *theme)
 {
     if (d->theme) {
-        disconnect(d->theme, 0, this, 0);
+        disconnect(d->theme.data(), 0, this, 0);
     }
 
     d->theme = theme;
@@ -610,7 +609,7 @@ void Svg::setTheme(Plasma::Theme *theme)
 
 Theme *Svg::theme() const
 {
-    return d->theme;
+    return d->theme ? d->theme.data() : Theme::defaultTheme();
 }
 
 } // Plasma namespace

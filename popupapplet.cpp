@@ -120,10 +120,10 @@ void PopupApplet::setWidget(QWidget *widget)
 {
     if (d->widget) {
         if (d->dialog) {
-            d->dialog->setGraphicsWidget(0);
+            d->dialog.data()->setGraphicsWidget(0);
             QVBoxLayout *lay = 0;
 
-            QLayout *existingLayout = d->dialog->layout();
+            QLayout *existingLayout = d->dialog.data()->layout();
             if (existingLayout) {
                 lay = dynamic_cast<QVBoxLayout *>(existingLayout);
                 if (!lay) {
@@ -133,7 +133,7 @@ void PopupApplet::setWidget(QWidget *widget)
 
             if (!lay) {
                 lay = new QVBoxLayout;
-                d->dialog->setLayout(lay);
+                d->dialog.data()->setLayout(lay);
             }
 
             lay->removeWidget(d->widget);
@@ -159,7 +159,7 @@ void PopupApplet::setGraphicsWidget(QGraphicsWidget *graphicsWidget)
 {
     if (d->graphicsWidget) {
         if (d->dialog) {
-            d->dialog->setGraphicsWidget(graphicsWidget);
+            d->dialog.data()->setGraphicsWidget(graphicsWidget);
         } else {
             QGraphicsLinearLayout *lay = static_cast<QGraphicsLinearLayout *>(layout());
             lay->removeAt(0);
@@ -183,7 +183,7 @@ void PopupAppletPrivate::checkExtenderAppearance(Plasma::FormFactor f)
         }
 
         if (dialog) {
-            dialog->setGraphicsWidget(extender);
+            dialog.data()->setGraphicsWidget(extender);
         }
     }
 }
@@ -250,17 +250,16 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
             }
 
             if (dialog) {
-                if (dialog->layout() && qWidget) {
+                if (dialog.data()->layout() && qWidget) {
                     //we don't want to delete Widget inside the dialog layout
-                    dialog->layout()->removeWidget(qWidget);
+                    dialog.data()->layout()->removeWidget(qWidget);
                 }
 
                 if (qWidget) {
                     qWidget->setParent(0);
                 }
 
-                delete dialog;
-                dialog = 0;
+                delete dialog.data();
             }
 
             if (!lay) {
@@ -348,27 +347,27 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
                     //could that cast ever fail??
                     if (corona) {
                         corona->addOffscreenWidget(gWidget);
-                        dialog->setGraphicsWidget(gWidget);
+                        dialog.data()->setGraphicsWidget(gWidget);
                         gWidget->resize(gWidget->preferredSize());
                     }
 
-                    dialog->setWindowFlags(Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint | (gWidget->windowFlags() & Qt::X11BypassWindowManagerHint));
+                    dialog.data()->setWindowFlags(Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint | (gWidget->windowFlags() & Qt::X11BypassWindowManagerHint));
                 } else if (qWidget) {
-                    QVBoxLayout *l_layout = new QVBoxLayout(dialog);
+                    QVBoxLayout *l_layout = new QVBoxLayout(dialog.data());
                     l_layout->setSpacing(0);
                     l_layout->setMargin(0);
                     l_layout->addWidget(qWidget);
-                    dialog->adjustSize();
-                    dialog->setWindowFlags(Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint | (qWidget->windowFlags() & Qt::X11BypassWindowManagerHint));
+                    dialog.data()->adjustSize();
+                    dialog.data()->setWindowFlags(Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint | (qWidget->windowFlags() & Qt::X11BypassWindowManagerHint));
                 } else {
-                    dialog->setWindowFlags(Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
+                    dialog.data()->setWindowFlags(Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
                 }
 
-                KWindowSystem::setState(dialog->winId(), NET::SkipTaskbar | NET::SkipPager);
-                dialog->installEventFilter(q);
+                KWindowSystem::setState(dialog.data()->winId(), NET::SkipTaskbar | NET::SkipPager);
+                dialog.data()->installEventFilter(q);
 
-                QObject::connect(dialog, SIGNAL(dialogResized()), q, SLOT(dialogSizeChanged()));
-                QObject::connect(dialog, SIGNAL(dialogVisible(bool)), q, SLOT(dialogStatusChanged(bool)));
+                QObject::connect(dialog.data(), SIGNAL(dialogResized()), q, SLOT(dialogSizeChanged()));
+                QObject::connect(dialog.data(), SIGNAL(dialogVisible(bool)), q, SLOT(dialogStatusChanged(bool)));
             }
 
             if (icon && lay) {
@@ -410,7 +409,7 @@ void PopupApplet::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 
 bool PopupApplet::eventFilter(QObject *watched, QEvent *event)
 {
-    if (!d->passive && watched == d->dialog && (event->type() == QEvent::WindowDeactivate)) {
+    if (!d->passive && watched == d->dialog.data() && (event->type() == QEvent::WindowDeactivate)) {
         d->popupLostFocus = true;
         hidePopup();
         QTimer::singleShot(100, this, SLOT(clearPopupLostFocus()));
@@ -428,7 +427,7 @@ bool PopupApplet::eventFilter(QObject *watched, QEvent *event)
     }
     */
 
-    if (watched == d->dialog && event->type() == QEvent::ContextMenu) {
+    if (watched == d->dialog.data() && event->type() == QEvent::ContextMenu) {
         //pass it up to the applet
         //well, actually we have to pass it to the *containment*
         //because all the code for showing an applet's contextmenu is actually in Containment.
@@ -462,7 +461,7 @@ void PopupApplet::dragLeaveEvent(QGraphicsSceneDragDropEvent *event)
         if (mimeData && qobject_cast<Extender*>(graphicsWidget())) {
             //We want to hide the popup if we're not moving onto the popup AND it is not the popup
             //we started.
-            if (d->dialog && !d->dialog->geometry().contains(event->screenPos()) &&
+            if (d->dialog && !d->dialog.data()->geometry().contains(event->screenPos()) &&
                 mimeData->extenderItem()->extender() != qobject_cast<Extender*>(graphicsWidget())) {
                 //We actually try to hide the popup, with a call to showPopup, with a smal timeout,
                 //so if the user moves into the popup fast enough, it remains open (the extender
@@ -490,7 +489,7 @@ void PopupApplet::showPopup(uint popupDuration)
     if (d->dialog) {
         // move the popup before its fist show, even if the show isn't triggered by
         // a click, this should fix the first random position seen in some widgets
-        if (!d->dialog->isVisible()) {
+        if (!d->dialog.data()->isVisible()) {
             d->internalTogglePopup();
         }
 
@@ -513,9 +512,9 @@ void PopupApplet::hidePopup()
 {
     if (d->dialog) {
         if (location() != Floating) {
-            d->dialog->animatedHide(locationToInverseDirection(location()));
+            d->dialog.data()->animatedHide(locationToInverseDirection(location()));
         } else {
-            d->dialog->hide();
+            d->dialog.data()->hide();
         }
     }
 }
@@ -546,13 +545,12 @@ bool PopupApplet::isPassivePopup() const
 
 bool PopupApplet::isPopupShowing() const
 {
-    return d->dialog && d->dialog->isVisible();
+    return d->dialog && d->dialog.data()->isVisible();
 }
 
 PopupAppletPrivate::PopupAppletPrivate(PopupApplet *applet)
         : q(applet),
           icon(0),
-          dialog(0),
           proxy(0),
           widget(0),
           graphicsWidget(0),
@@ -570,7 +568,7 @@ PopupAppletPrivate::~PopupAppletPrivate()
         proxy->setWidget(0);
     }
 
-    delete dialog;
+    delete dialog.data();
     delete icon;
 }
 
@@ -589,14 +587,14 @@ void PopupAppletPrivate::internalTogglePopup()
         timer->stop();
     }
 
-    if (dialog->isVisible()) {
+    if (dialog.data()->isVisible()) {
         if (q->location() != Floating) {
-            dialog->animatedHide(locationToInverseDirection(q->location()));
+            dialog.data()->animatedHide(locationToInverseDirection(q->location()));
         } else {
-            dialog->hide();
+            dialog.data()->hide();
         }
 
-        dialog->clearFocus();
+        dialog.data()->clearFocus();
     } else {
         if (q->graphicsWidget() &&
             q->graphicsWidget() == static_cast<Applet*>(q)->d->extender &&
@@ -608,17 +606,17 @@ void PopupAppletPrivate::internalTogglePopup()
         ToolTipManager::self()->hide(q);
         updateDialogPosition();
 
-        KWindowSystem::setOnAllDesktops(dialog->winId(), true);
-        KWindowSystem::setState(dialog->winId(), NET::SkipTaskbar | NET::SkipPager);
+        KWindowSystem::setOnAllDesktops(dialog.data()->winId(), true);
+        KWindowSystem::setState(dialog.data()->winId(), NET::SkipTaskbar | NET::SkipPager);
 
         if (q->location() != Floating) {
-            dialog->animatedShow(locationToDirection(q->location()));
+            dialog.data()->animatedShow(locationToDirection(q->location()));
         } else {
-            dialog->show();
+            dialog.data()->show();
         }
 
-        if (!(dialog->windowFlags() & Qt::X11BypassWindowManagerHint)) {
-            KWindowSystem::activateWindow(dialog->winId());
+        if (!(dialog.data()->windowFlags() & Qt::X11BypassWindowManagerHint)) {
+            KWindowSystem::activateWindow(dialog.data()->winId());
         }
     }
 }
@@ -640,8 +638,8 @@ void PopupAppletPrivate::dialogSizeChanged()
     if (dialog) {
         KConfigGroup *mainGroup = static_cast<Applet*>(q)->d->mainConfigGroup();
         KConfigGroup sizeGroup(mainGroup, "PopupApplet");
-        sizeGroup.writeEntry("DialogHeight", dialog->height());
-        sizeGroup.writeEntry("DialogWidth", dialog->width());
+        sizeGroup.writeEntry("DialogHeight", dialog.data()->height());
+        sizeGroup.writeEntry("DialogWidth", dialog.data()->width());
 
         updateDialogPosition();
 
@@ -674,9 +672,9 @@ void PopupAppletPrivate::updateDialogPosition()
 
     int preferredWidth = 0;
     int preferredHeight = 0;
-    if (dialog->graphicsWidget()) {
-        preferredWidth = dialog->graphicsWidget()->preferredSize().width();
-        preferredHeight = dialog->graphicsWidget()->preferredSize().height();
+    if (dialog.data()->graphicsWidget()) {
+        preferredWidth = dialog.data()->graphicsWidget()->preferredSize().width();
+        preferredHeight = dialog.data()->graphicsWidget()->preferredSize().height();
     }
 
     const int width = qMin(sizeGroup.readEntry("DialogWidth", preferredWidth),
@@ -687,27 +685,27 @@ void PopupAppletPrivate::updateDialogPosition()
     QSize saved(width, height);
 
     if (saved.isNull()) {
-        saved = dialog->sizeHint();
+        saved = dialog.data()->sizeHint();
     } else {
-        saved = saved.expandedTo(dialog->minimumSizeHint());
+        saved = saved.expandedTo(dialog.data()->minimumSizeHint());
     }
 
-    if (saved.width() != dialog->width() || saved.height() != dialog->height()) {
-        dialog->resize(saved);
+    if (saved.width() != dialog.data()->width() || saved.height() != dialog.data()->height()) {
+        dialog.data()->resize(saved);
     }
 
-    QSize s = dialog->size();
+    QSize s = dialog.data()->size();
     QPoint pos = view->mapFromScene(q->scenePos());
 
     pos = corona->popupPosition(q, s);
 
     bool reverse = false;
     if (q->formFactor() == Plasma::Vertical) {
-        if (view->mapToGlobal(view->mapFromScene(q->scenePos())).y() + q->size().height()/2 < pos.y() + dialog->size().width()/2) {
+        if (view->mapToGlobal(view->mapFromScene(q->scenePos())).y() + q->size().height()/2 < pos.y() + dialog.data()->size().width()/2) {
             reverse = true;
         }
     } else {
-        if (view->mapToGlobal(view->mapFromScene(q->scenePos())).x() + q->size().width()/2 < pos.x() + dialog->size().width()/2) {
+        if (view->mapToGlobal(view->mapFromScene(q->scenePos())).x() + q->size().width()/2 < pos.x() + dialog.data()->size().width()/2) {
             reverse = true;
         }
     }
@@ -715,9 +713,9 @@ void PopupAppletPrivate::updateDialogPosition()
     switch (q->location()) {
     case BottomEdge:
         if (pos.x() >= q->pos().x()) {
-            dialog->setResizeHandleCorners(Dialog::NorthEast);
+            dialog.data()->setResizeHandleCorners(Dialog::NorthEast);
         } else {
-            dialog->setResizeHandleCorners(Dialog::NorthWest);
+            dialog.data()->setResizeHandleCorners(Dialog::NorthWest);
         }
 
         if (reverse) {
@@ -728,9 +726,9 @@ void PopupAppletPrivate::updateDialogPosition()
         break;
     case TopEdge:
         if (pos.x() >= q->pos().x()) {
-            dialog->setResizeHandleCorners(Dialog::SouthEast);
+            dialog.data()->setResizeHandleCorners(Dialog::SouthEast);
         } else {
-            dialog->setResizeHandleCorners(Dialog::SouthWest);
+            dialog.data()->setResizeHandleCorners(Dialog::SouthWest);
         }
 
         if (reverse) {
@@ -741,9 +739,9 @@ void PopupAppletPrivate::updateDialogPosition()
         break;
     case LeftEdge:
         if (pos.y() >= q->pos().y()) {
-            dialog->setResizeHandleCorners(Dialog::SouthEast);
+            dialog.data()->setResizeHandleCorners(Dialog::SouthEast);
         } else {
-            dialog->setResizeHandleCorners(Dialog::NorthEast);
+            dialog.data()->setResizeHandleCorners(Dialog::NorthEast);
         }
 
         if (reverse) {
@@ -755,9 +753,9 @@ void PopupAppletPrivate::updateDialogPosition()
 
     case RightEdge:
         if (pos.y() >= q->pos().y()) {
-            dialog->setResizeHandleCorners(Dialog::SouthWest);
+            dialog.data()->setResizeHandleCorners(Dialog::SouthWest);
         } else {
-            dialog->setResizeHandleCorners(Dialog::NorthWest);
+            dialog.data()->setResizeHandleCorners(Dialog::NorthWest);
         }
 
         if (reverse) {
@@ -767,10 +765,10 @@ void PopupAppletPrivate::updateDialogPosition()
         }
         break;
     default:
-        dialog->setResizeHandleCorners(Dialog::NorthEast);
+        dialog.data()->setResizeHandleCorners(Dialog::NorthEast);
     }
 
-    dialog->move(pos);
+    dialog.data()->move(pos);
 }
 
 } // Plasma namespace

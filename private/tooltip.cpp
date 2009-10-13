@@ -134,7 +134,6 @@ class ToolTipPrivate
         : text(0),
           imageLabel(0),
           preview(0),
-          source(0),
           timeline(0),
           direction(Plasma::Up),
           autohide(true)
@@ -144,7 +143,7 @@ class ToolTipPrivate
     QLabel *imageLabel;
     WindowPreview *preview;
     FrameSvg *background;
-    QPointer<QObject> source;
+    QWeakPointer<QObject> source;
     QTimeLine *timeline;
     QPoint to;
     QPoint from;
@@ -204,7 +203,7 @@ void ToolTip::hideEvent(QHideEvent *e)
 {
     QWidget::hideEvent(e);
     if (d->source) {
-        QMetaObject::invokeMethod(d->source, "toolTipHidden");
+        QMetaObject::invokeMethod(d->source.data(), "toolTipHidden");
     }
 }
 

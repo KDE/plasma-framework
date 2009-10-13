@@ -140,7 +140,7 @@ public:
     Plasma::Constraints pendingConstraints;
 
     // overlays and messages
-    QPointer<Plasma::Dialog> messageDialog;
+    QWeakPointer<Plasma::Dialog> messageDialog;
     AppletOverlayWidget *messageOverlay;
     QGraphicsProxyWidget *messageOverlayProxy;
     Plasma::BusyWidget *busyWidget;
