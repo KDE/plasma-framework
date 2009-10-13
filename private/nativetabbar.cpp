@@ -315,7 +315,7 @@ void NativeTabBar::paintEvent(QPaintEvent *event)
             }
         }
 
-        if (isCloseButtonEnabled()) {
+        if (tabsClosable()) {
             d->closeIcon.paint(&painter, QRect(closeButtonPos(i), QSize(KIconLoader::SizeSmall, KIconLoader::SizeSmall)) );
         }
     }

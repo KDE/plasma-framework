@@ -72,7 +72,7 @@ QStringList RunnerSyntax::exampleQueries() const
 QStringList RunnerSyntax::exampleQueriesWithTermDescription() const
 {
     QStringList queries;
-    const QString termDesc("<" + searchTermDescription() + ">");
+    const QString termDesc('<' + searchTermDescription() + '>');
     foreach (QString query, d->exampleQueries) {
         queries << query.replace(":q:", termDesc);
     }
@@ -88,7 +88,7 @@ void RunnerSyntax::setDescription(const QString &description)
 QString RunnerSyntax::description() const
 {
     QString description = d->description;
-    description.replace(":q:", "<" + searchTermDescription() + ">");
+    description.replace(":q:", '<' + searchTermDescription() + '>');
     return description;
 }
 

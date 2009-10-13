@@ -275,7 +275,7 @@ QString ContainmentActions::eventToString(QEvent *event)
 
     int k = QObject::staticQtMetaObject.indexOfEnumerator("KeyboardModifiers");
     QMetaEnum kbd = QObject::staticQtMetaObject.enumerator(k);
-    trigger += ";";
+    trigger += ';';
     trigger += kbd.valueToKeys(modifiers);
 
     return trigger;

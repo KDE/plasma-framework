@@ -129,7 +129,7 @@ void RadioButton::setImage(const QString &path)
                         #ifdef Q_WS_WIN
                             !QDir::isRelativePath(path)
                         #else
-                            (path[0] == '/' || path.startsWith(":/"))
+                            (path[0] == '/' || path.startsWith(QLatin1String(":/")))
                         #endif
         ;
 

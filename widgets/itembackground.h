@@ -21,7 +21,7 @@
 #ifndef ITEMBACKGROUND_H
 #define ITEMBACKGROUND_H
 
-#include <QGraphicsWidget>
+#include <QtGui/QGraphicsWidget>
 
 #include <plasma/plasma_export.h>
 

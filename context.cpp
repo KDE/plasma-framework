@@ -42,6 +42,7 @@ Context::~Context()
 
 void Context::createActivity(const QString &name)
 {
+    Q_UNUSED(name);
 }
 
 QStringList Context::listActivities() const

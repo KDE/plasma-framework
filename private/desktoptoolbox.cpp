@@ -251,7 +251,7 @@ QSize DesktopToolBox::fullWidth() const
 
     int extraSpace = 0;
     if (!d->containment->activity().isNull()) {
-        extraSpace = Plasma::Theme::defaultTheme()->fontMetrics().width(d->containment->activity()+"x");
+        extraSpace = Plasma::Theme::defaultTheme()->fontMetrics().width(d->containment->activity()+'x');
     }
 
     return QSize(size() + left + right + extraSpace, size() + bottom);
@@ -266,7 +266,7 @@ QSize DesktopToolBox::fullHeight() const
 
     int extraSpace = 0;
     if (!d->containment->activity().isNull()) {
-        extraSpace = Plasma::Theme::defaultTheme()->fontMetrics().width(d->containment->activity()+"x");
+        extraSpace = Plasma::Theme::defaultTheme()->fontMetrics().width(d->containment->activity()+'x');
     }
 
     return QSize(size() + left, size() + top + bottom + extraSpace);
@@ -299,7 +299,7 @@ QRectF DesktopToolBox::boundingRect() const
 
     //keep space for the label and a character more
     if (!d->containment->activity().isNull()) {
-        extraSpace = Plasma::Theme::defaultTheme()->fontMetrics().width(d->containment->activity()+"x");
+        extraSpace = Plasma::Theme::defaultTheme()->fontMetrics().width(d->containment->activity()+'x');
     }
 
     qreal left, top, right, bottom;
@@ -375,7 +375,7 @@ void DesktopToolBox::paint(QPainter *painter, const QStyleOptionGraphicsItem *op
     QSize textSize;
     if (cornerElement.isNull()) {
         activityName = d->containment->activity();
-        textSize =  Plasma::Theme::defaultTheme()->fontMetrics().size(Qt::TextSingleLine, activityName+"x");
+        textSize =  Plasma::Theme::defaultTheme()->fontMetrics().size(Qt::TextSingleLine, activityName+'x');
     }
 
     d->adjustBackgroundBorders();

@@ -121,7 +121,7 @@ void PopupApplet::setWidget(QWidget *widget)
     if (d->widget) {
         if (d->dialog) {
             d->dialog->setGraphicsWidget(0);
-            QVBoxLayout *lay;
+            QVBoxLayout *lay = 0;
             if (d->dialog->layout()) {
                 lay = static_cast<QVBoxLayout *>(lay);
             } else {

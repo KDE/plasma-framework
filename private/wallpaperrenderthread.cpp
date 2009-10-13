@@ -122,7 +122,7 @@ void WallpaperRenderThread::run()
 
         QPoint pos(0, 0);
         bool tiled = false;
-        bool scalable = file.endsWith("svg") || file.endsWith("svgz");
+        bool scalable = file.endsWith(QLatin1String("svg")) || file.endsWith(QLatin1String("svgz"));
         QSize scaledSize;
         QImage img;
 
