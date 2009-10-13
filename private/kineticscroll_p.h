@@ -53,9 +53,6 @@ private:
     void startAnimationTimer(int interval);
     void doneOvershoot(void);
 
-protected:
-    bool eventFilter(QObject *watched, QEvent *event);
-
 public Q_SLOTS:
     void setKineticScrollValue(QPointF value);
 
