@@ -22,6 +22,7 @@
 #include <QtCore/qglobal.h>
 #include <QtCore/qmetatype.h>
 #include <QGraphicsSceneMouseEvent>
+#include <QGraphicsSceneWheelEvent>
 #include <QTime>
 #include <QDebug>
 #include <QGraphicsWidget>

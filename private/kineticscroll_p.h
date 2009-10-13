@@ -24,6 +24,7 @@
 
 class QGraphicsSceneMouseEvent;
 class QGraphicsWidget;
+class QGraphicsSceneWheelEvent;
 #include <QObject>
 #include <QPointF>
 
