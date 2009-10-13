@@ -20,11 +20,11 @@
 #include "querymatch.h"
 
 #include <QAction>
-#include <QPointer>
-#include <QVariant>
+#include <QIcon>
 #include <QSharedData>
 #include <QStringList>
-#include <QIcon>
+#include <QVariant>
+#include <QWeakPointer>
 
 #include <kdebug.h>
 
@@ -46,7 +46,7 @@ class QueryMatchPrivate : public QSharedData
         {
         }
 
-        QPointer<AbstractRunner> runner;
+        QWeakPointer<AbstractRunner> runner;
         QueryMatch::Type type;
         QString id;
         QString text;
@@ -61,9 +61,6 @@ class QueryMatchPrivate : public QSharedData
 QueryMatch::QueryMatch(AbstractRunner *runner)
     : d(new QueryMatchPrivate(runner))
 {
-    if (runner) {
-        d->id = runner->id();
-    }
 //    kDebug() << "new match created";
 }
 
@@ -83,6 +80,10 @@ bool QueryMatch::isValid() const
 
 QString QueryMatch::id() const
 {
+    if (d->id.isEmpty() && d->runner) {
+        return d->runner.data()->id();
+    }
+
     return d->id;
 }
 
@@ -108,7 +109,7 @@ qreal QueryMatch::relevance() const
 
 AbstractRunner* QueryMatch::runner() const
 {
-    return d->runner;
+    return d->runner.data();
 }
 
 void QueryMatch::setText(const QString &text)
@@ -130,7 +131,7 @@ void QueryMatch::setData(const QVariant & data)
 void QueryMatch::setId(const QString &id)
 {
     if (d->runner) {
-        d->id = d->runner->id();
+        d->id = d->runner.data()->id();
     }
 
     if (!id.isEmpty()) {
@@ -215,19 +216,19 @@ void QueryMatch::run(const RunnerContext &context) const
 {
     //kDebug() << "we run the term" << context->query() << "whose type is" << context->mimetype();
     if (d->runner) {
-        d->runner->run(context, *this);
+        d->runner.data()->run(context, *this);
     }
 }
 
 bool QueryMatch::hasConfigurationInterface() const
 {
-    return d->runner && d->runner->hasRunOptions();
+    return d->runner && d->runner.data()->hasRunOptions();
 }
 
 void QueryMatch::createConfigurationInterface(QWidget *parent)
 {
     if (hasConfigurationInterface()) {
-        d->runner->createRunOptions(parent);
+        d->runner.data()->createRunOptions(parent);
     }
 }
 
