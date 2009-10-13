@@ -122,10 +122,18 @@ void PopupApplet::setWidget(QWidget *widget)
         if (d->dialog) {
             d->dialog->setGraphicsWidget(0);
             QVBoxLayout *lay = 0;
-            if (d->dialog->layout()) {
-                lay = static_cast<QVBoxLayout *>(lay);
-            } else {
-                lay = new QVBoxLayout(d->dialog);
+
+            QLayout *existingLayout = d->dialog->layout();
+            if (existingLayout) {
+                lay = dynamic_cast<QVBoxLayout *>(existingLayout);
+                if (!lay) {
+                    delete existingLayout;
+                }
+            }
+
+            if (!lay) {
+                lay = new QVBoxLayout;
+                d->dialog->setLayout(lay);
             }
 
             lay->removeWidget(d->widget);
