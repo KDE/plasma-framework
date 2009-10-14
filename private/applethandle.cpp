@@ -53,8 +53,7 @@ qreal _k_pointAngle(QPointF in);
 QPointF _k_rotatePoint(QPointF in, qreal rotateAngle);
 
 AppletHandle::AppletHandle(Containment *parent, Applet *applet, const QPointF &hoverPos)
-    : QObject(),
-      QGraphicsItem(applet),
+    : QGraphicsObject(applet),
       m_pressedButton(NoButton),
       m_containment(parent),
       m_applet(applet),

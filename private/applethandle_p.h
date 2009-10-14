@@ -21,7 +21,7 @@
 #define PLASMA_APPLETHANDLE_P_H
 
 #include <QtCore/QObject>
-#include <QtGui/QGraphicsItem>
+#include <QtGui/QGraphicsObject>
 #include <QTimer>
 
 #include "animator.h"
@@ -36,7 +36,7 @@ class Containment;
 class FrameSvg;
 class View;
 
-class AppletHandle : public QObject, public QGraphicsItem
+class AppletHandle : public QGraphicsObject
 {
     Q_OBJECT
 #if QT_VERSION >= 0x040600
