@@ -116,9 +116,15 @@ public:
         KConfigGroup config = configGroup();
         KService::List offers = KServiceTypeTrader::self()->query("Plasma/Runner");
 
-        bool loadAll = config.readEntry("loadAll", false);
+        const bool loadAll = config.readEntry("loadAll", false);
         QStringList whiteList = config.readEntry("pluginWhiteList", QStringList());
-        KConfigGroup pluginConf(&config, "Plugins");
+        const bool noWhiteList = whiteList.isEmpty();
+        KConfigGroup pluginConf;
+        if (conf.isValid()) {
+            pluginConf = KConfigGroup(&conf, "Plugins");
+        } else {
+            pluginConf = KConfigGroup(KGlobal::config(), "Plugins");
+        }
 
         foreach (const KService::Ptr &service, offers) {
             //kDebug() << "Loading runner: " << service->name() << service->storageId();
@@ -133,10 +139,11 @@ public:
             QString runnerName = description.pluginName();
             description.load(pluginConf);
 
-            bool loaded = runners.contains(runnerName);
-            bool selected = loadAll ||
-                            description.isPluginEnabled() && (whiteList.isEmpty() || whiteList.contains(runnerName));
+            const bool loaded = runners.contains(runnerName);
+            const bool selected = loadAll ||
+                            (description.isPluginEnabled() && (noWhiteList || whiteList.contains(runnerName)));
 
+            //kDebug() << loadAll << description.isPluginEnabled() << noWhiteList << whiteList.contains(runnerName);
             if (selected) {
                 if (!loaded) {
                     QString api = service->property("X-Plasma-API").toString();
