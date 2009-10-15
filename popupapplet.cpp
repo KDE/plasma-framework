@@ -139,7 +139,7 @@ void PopupApplet::setWidget(QWidget *widget)
             lay->removeWidget(d->widget);
             lay->addWidget(widget);
         } else if (d->proxy) {
-            d->proxy->setWidget(widget);
+            d->proxy.data()->setWidget(widget);
         }
     }
 
@@ -274,9 +274,8 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
 
             if (gWidget) {
                 if (proxy) {
-                    proxy->setWidget(0);
-                    delete proxy;
-                    proxy = 0;
+                    proxy.data()->setWidget(0);
+                    delete proxy.data();
                 }
 
                 Corona *corona = qobject_cast<Corona *>(gWidget->scene());
@@ -290,11 +289,11 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
             } else if (qWidget) {
                 if (!proxy) {
                     proxy = new QGraphicsProxyWidget(q);
-                    proxy->setWidget(qWidget);
-                    proxy->show();
+                    proxy.data()->setWidget(qWidget);
+                    proxy.data()->show();
                 }
 
-                lay->addItem(proxy);
+                lay->addItem(proxy.data());
                 prefSize = qWidget->sizeHint();
             }
 
@@ -327,9 +326,8 @@ void PopupAppletPrivate::popupConstraintsEvent(Plasma::Constraints constraints)
             }
 
             if (proxy) {
-                proxy->setWidget(0); // prevent it from deleting our widget!
-                delete proxy;
-                proxy = 0;
+                proxy.data()->setWidget(0); // prevent it from deleting our widget!
+                delete proxy.data();
             }
 
             if (!dialog) {
@@ -551,7 +549,6 @@ bool PopupApplet::isPopupShowing() const
 PopupAppletPrivate::PopupAppletPrivate(PopupApplet *applet)
         : q(applet),
           icon(0),
-          proxy(0),
           widget(0),
           graphicsWidget(0),
           popupPlacement(Plasma::FloatingPopup),
@@ -565,7 +562,7 @@ PopupAppletPrivate::PopupAppletPrivate(PopupApplet *applet)
 PopupAppletPrivate::~PopupAppletPrivate()
 {
     if (proxy) {
-        proxy->setWidget(0);
+        proxy.data()->setWidget(0);
     }
 
     delete dialog.data();

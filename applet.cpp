@@ -559,7 +559,7 @@ void AppletPrivate::positionMessageOverlay()
 
     if (usePopup && popup->widget()) {
         // popupapplet with widget()
-        topItem = popup->d->proxy;
+        topItem = popup->d->proxy.data();
         messageOverlay->setGeometry(popup->widget()->contentsRect());
     } else if (usePopup && popup->graphicsWidget() && popup->graphicsWidget() != extender) {
         // popupapplet with graphicsWidget()

@@ -20,6 +20,8 @@
 #ifndef POPUPAPPLET_P_H
 #define POPUPAPPLET_P_H
 
+#include <QWeakPointer>
+
 #include <plasma/plasma.h>
 
 namespace Plasma
@@ -43,7 +45,7 @@ public:
     PopupApplet *q;
     Plasma::IconWidget *icon;
     QWeakPointer<Plasma::Dialog> dialog;
-    QGraphicsProxyWidget *proxy;
+    QWeakPointer<QGraphicsProxyWidget>proxy;
     QWidget *widget;
     QGraphicsWidget *graphicsWidget;
     Plasma::PopupPlacement popupPlacement;
