@@ -43,7 +43,14 @@ set(plasma_LIB_SRCS
     ${plasmagik_SRCS}
     abstractrunner.cpp
     animationdriver.cpp
-    animator.cpp
+    animations/abstractanimation.cpp
+    animations/animation.cpp
+    animations/animationgroup.cpp
+    animations/expand.cpp
+    animations/fade.cpp
+    animations/grow.cpp
+    animations/slide.cpp
+    animations/pulser.cpp
     applet.cpp
     configloader.cpp
     containment.cpp
@@ -55,6 +62,7 @@ set(plasma_LIB_SRCS
     dataengine.cpp
     dataenginemanager.cpp
     delegate.cpp
+    deprecated/animator.cpp
     dialog.cpp
     extenders/extender.cpp
     extenders/extendergroup.cpp
@@ -236,6 +244,9 @@ install(FILES ${plasmagik_HEADERS} DESTINATION ${INCLUDE_INSTALL_DIR}/plasma/ CO
 set(plasma_LIB_INCLUDES
     abstractrunner.h
     animationdriver.h
+    animations/abstractanimation.h
+    animations/animation.h
+    animations/animationgroup.h
     animator.h
     applet.h
     configloader.h
@@ -331,6 +342,18 @@ if(PHONON_FOUND)
         widgets/videowidget.h
         DESTINATION ${INCLUDE_INSTALL_DIR}/plasma/widgets COMPONENT Devel)
 endif(PHONON_FOUND)
+
+install(FILES
+    animations/abstractanimation.h
+    animations/animation.h
+    animations/animationgroup.h
+    animations/expand.h
+    animations/fade.h
+    animations/grow.h
+    animations/slide.h
+    animations/pulser.h
+    DESTINATION ${INCLUDE_INSTALL_DIR}/plasma/animations COMPONENT Devel)
+
 
 install(FILES
    data/servicetypes/plasma-animator.desktop

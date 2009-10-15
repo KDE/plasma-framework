@@ -1,0 +1,138 @@
+/* Copyright (C)  2009  Adenilson Cavalcanti <cavalcantii@gmail.com>
+ *
+ *   This program is free software; you can redistribute it and/or modify
+ *   it under the terms of the GNU Library General Public License as
+ *   published by the Free Software Foundation; either version 2, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details
+ *
+ *   You should have received a copy of the GNU Library General Public
+ *   License along with this program; if not, write to the
+ *   Free Software Foundation, Inc.,
+ *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ */
+
+#include "pulser.h"
+#include <QGraphicsWidget>
+#include <QEvent>
+#include <QAbstractAnimation>
+#include <QParallelAnimationGroup>
+#include <QDebug>
+#include <QPropertyAnimation>
+
+namespace Plasma
+{
+
+PulseAnimation::PulseAnimation(): animation(0),
+				  under(0), pulseGeometry(0),
+				  zvalue(0), mscale(0),
+				  anim1(0), anim2(0), anim3(0)
+{
+
+}
+
+PulseAnimation::~PulseAnimation()
+{
+    delete animation;
+    delete pulseGeometry;
+}
+
+void PulseAnimation::setCopy(QGraphicsWidget *copy)
+{
+    QGraphicsWidget *target = getAnimatedObject();
+    under = copy;
+    under->setParentItem(target);
+    zvalue = target->zValue();
+    --zvalue;
+    under->setOpacity(0);
+    under->setZValue(zvalue);
+    mscale = under->scale();
+    createAnimation();
+}
+
+
+void PulseAnimation::updateGeometry(QRectF updated, qreal zCoordinate, qreal scale)
+{
+    zvalue = zCoordinate;
+    --zvalue;
+    under->setGeometry(updated);
+    under->setPos(0, 0);
+    under->setOpacity(0);
+    under->setZValue(zvalue);
+
+    /* TODO: move this to a function */
+    QRectF initial(under->geometry());
+    qreal W = initial.width() * scale * 0.33;
+    qreal H = initial.height() * scale * 0.33;
+    QRectF end(initial.x() - W, initial.y() -  H, initial.width() * scale,
+        initial.height() * scale);
+    anim2->setEndValue(end);
+
+    anim2->setEndValue(end);
+
+
+}
+
+void PulseAnimation::resetPulser()
+{
+    under->setGeometry(*pulseGeometry);
+    under->setOpacity(0);
+    under->setZValue(zvalue);
+    under->setScale(mscale);
+}
+
+
+void PulseAnimation::createAnimation(qreal duration, qreal scale)
+{
+
+    pulseGeometry = new QRectF(under->geometry());
+    QParallelAnimationGroup *group = new QParallelAnimationGroup(this);
+    anim1 = new QPropertyAnimation(under, "opacity");
+    anim1->setDuration(duration);
+    anim1->setEndValue(0);
+    group->addAnimation(anim1);
+
+    /* TODO: move this to a function */
+    anim2 = new QPropertyAnimation(under, "geometry");
+    anim2->setDuration(duration);
+    QRectF initial(under->geometry());
+    qreal W = initial.width() * scale * 0.33;
+    qreal H = initial.height() * scale * 0.33;
+    QRectF end(initial.x() - W, initial.y() -  H, initial.width() * scale,
+		initial.height() * scale);
+    anim2->setEndValue(end);
+    group->addAnimation(anim2);
+
+    anim3 = new QPropertyAnimation(under, "scale");
+    anim3->setDuration(duration);
+    anim3->setEndValue(scale);
+    group->addAnimation(anim3);
+
+    animation = group;
+
+    connect(animation, SIGNAL(finished()), this, SLOT(resetPulser()));
+}
+
+QAbstractAnimation* PulseAnimation::render(QObject* parent)
+{
+    Q_UNUSED(parent);
+    if (!animation)
+      createAnimation();
+
+    return animation;
+}
+
+void PulseAnimation::start()
+{
+    under->setOpacity( 1 );
+    animation->start();
+}
+
+
+
+
+} //namespace Plasma

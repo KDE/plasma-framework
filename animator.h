@@ -32,7 +32,7 @@ class QTimeLine;
 namespace Plasma
 {
 
-class AnimatorPrivate;
+class AnimatorPrivateDeprecated;
 
 /**
  * @class Animator plasma/animator.h <Plasma/Animator>
@@ -48,21 +48,21 @@ class PLASMA_EXPORT Animator : public QObject
 
 public:
 
-    enum Animation {
+    enum KDE_DEPRECATED Animation {
         AppearAnimation = 0, /*<< Animate the appearance of an element */
         DisappearAnimation,  /*<< Animate the disappearance of an element */
         ActivateAnimation    /*<< When something is activated or launched,
                                such as an app icon being clicked */
     };
 
-    enum CurveShape {
+    enum KDE_DEPRECATED CurveShape {
         EaseInCurve = 0,
         EaseOutCurve,
         EaseInOutCurve,
         LinearCurve
     };
 
-    enum Movement {
+    enum KDE_DEPRECATED Movement {
         SlideInMovement = 0,
         SlideOutMovement,
         FastSlideInMovement,
@@ -72,7 +72,7 @@ public:
     /**
      * Singleton accessor
      **/
-    static Animator *self();
+    static KDE_DEPRECATED Animator *self();
 
     /**
      * Starts a standard animation on a QGraphicsItem.
@@ -80,8 +80,9 @@ public:
      * @arg item the item to animate in some fashion
      * @arg anim the type of animation to perform
      * @return the id of the animation
+     * @deprecated use new Animator API with Qt Kinetic
      **/
-    Q_INVOKABLE int animateItem(QGraphicsItem *item, Animation anim);
+    KDE_DEPRECATED Q_INVOKABLE int animateItem(QGraphicsItem *item,Animation anim);
 
     /**
      * Stops an item animation before the animation is complete.
@@ -89,8 +90,9 @@ public:
      * this on normal completion of the animation.
      *
      * @arg id the id of the animation as returned by animateItem
+     * @deprecated use new Animator API with Qt Kinetic
      */
-    Q_INVOKABLE void stopItemAnimation(int id);
+    KDE_DEPRECATED Q_INVOKABLE void stopItemAnimation(int id);
 
     /**
      * Starts a standard animation on a QGraphicsItem.
@@ -98,8 +100,9 @@ public:
      * @arg item the item to animate in some fashion
      * @arg anim the type of animation to perform
      * @return the id of the animation
+     * @deprecated use new Animator API with Qt Kinetic
      **/
-    Q_INVOKABLE int moveItem(QGraphicsItem *item, Movement movement, const QPoint &destination);
+    KDE_DEPRECATED Q_INVOKABLE int moveItem(QGraphicsItem *item, Movement movement, const QPoint &destination);
 
     /**
      * Stops an item movement before the animation is complete.
@@ -107,8 +110,9 @@ public:
      * this on normal completion of the animation.
      *
      * @arg id the id of the animation as returned by moveItem
+     * @deprecated use new Animator API with Qt Kinetic
      */
-    Q_INVOKABLE void stopItemMovement(int id);
+    KDE_DEPRECATED Q_INVOKABLE void stopItemMovement(int id);
 
     /**
      * Starts a custom animation, preventing the need to create a timeline
@@ -126,9 +130,10 @@ public:
      *             you want to manage multiple animations with a sigle slot
      *
      * @return an id that can be used to identify this animation.
+     * @deprecated use new Animator API with Qt Kinetic
      */
-    Q_INVOKABLE int customAnimation(int frames, int duration, Animator::CurveShape curve,
-                                    QObject *receiver, const char *method);
+    KDE_DEPRECATED Q_INVOKABLE int customAnimation(int frames, int duration,
+        Animator::CurveShape curve, QObject *receiver, const char *method);
 
     /**
      * Stops a custom animation. Note that it is not necessary to call
@@ -136,21 +141,23 @@ public:
      * a given QObject are cleaned up automatically on QObject destruction.
      *
      * @arg id the id of the animation as returned by customAnimation
+     * @deprecated use new Animator API with Qt Kinetic
      */
-    Q_INVOKABLE void stopCustomAnimation(int id);
+    KDE_DEPRECATED Q_INVOKABLE void stopCustomAnimation(int id);
 
-    Q_INVOKABLE int animateElement(QGraphicsItem *obj, Animation);
-    Q_INVOKABLE void stopElementAnimation(int id);
-    Q_INVOKABLE void setInitialPixmap(int id, const QPixmap &pixmap);
-    Q_INVOKABLE QPixmap currentPixmap(int id);
+    KDE_DEPRECATED Q_INVOKABLE int animateElement(QGraphicsItem *obj, Animation);
+    KDE_DEPRECATED Q_INVOKABLE void stopElementAnimation(int id);
+    KDE_DEPRECATED Q_INVOKABLE void setInitialPixmap(int id, const QPixmap &pixmap);
+    KDE_DEPRECATED Q_INVOKABLE QPixmap currentPixmap(int id);
 
     /**
      * Can be used to query if there are other animations happening. This way
      * heavy operations can be delayed until all animations are finished.
      * @return true if there are animations going on.
      * @since 4.1
+     * @deprecated use new Animator API with Qt Kinetic
      */
-    Q_INVOKABLE bool isAnimating() const;
+    KDE_DEPRECATED Q_INVOKABLE bool isAnimating() const;
 
 Q_SIGNALS:
     void animationFinished(QGraphicsItem *item, Plasma::Animator::Animation anim);
@@ -171,7 +178,7 @@ private:
     Q_PRIVATE_SLOT(d, void animatedElementDestroyed(QObject*))
     Q_PRIVATE_SLOT(d, void customAnimReceiverDestroyed(QObject*))
 
-    AnimatorPrivate * const d;
+    AnimatorPrivateDeprecated * const d;
 };
 
 } // namespace Plasma

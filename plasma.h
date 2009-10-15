@@ -108,6 +108,20 @@ enum ZoomDirection {
 };
 
 /**
+ * The movement direction of an animation.
+ */
+enum AnimationDirection {
+    MoveUp = 0,     /**< Move up */
+    MoveUpRight,    /**< Move up and right */
+    MoveRight,      /**< Move right */
+    MoveDownRight,  /**< Move down and right */
+    MoveDown,       /**< Move down */
+    MoveDownLeft,   /**< Move down and left */
+    MoveLeft,       /**< Move left */
+    MoveUpLeft      /**< Move up and left */
+};
+
+/**
  * The Location enumeration describes where on screen an element, such as an
  * Applet or its managing container, is positioned on the screen.
  **/
