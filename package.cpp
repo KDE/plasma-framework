@@ -569,7 +569,7 @@ PackagePrivate::~PackagePrivate()
 
 void PackagePrivate::publish(AnnouncementMethods methods)
 {
-    if (service) {
+    if (!service) {
         service = new PlasmoidService(structure->path());
     }
 
