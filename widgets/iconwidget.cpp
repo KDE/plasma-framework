@@ -356,25 +356,44 @@ void IconWidgetPrivate::init()
 void IconWidget::addIconAction(QAction *action)
 {
     int count = d->cornerActions.count();
-    if (count > 3) {
+    if (count >= IconWidgetPrivate::LastIconPosition) {
         kDebug() << "no more room for more actions!";
+        // just overlap it with the last item for now. ugly, but there you go.
     }
 
     IconAction *iconAction = new IconAction(this, action);
     d->cornerActions.append(iconAction);
     connect(action, SIGNAL(destroyed(QObject*)), this, SLOT(actionDestroyed(QObject*)));
 
-    iconAction->setRect(d->actionRect((IconWidgetPrivate::ActionPosition)count));
+    iconAction->setRect(d->actionRect(qMin((IconWidgetPrivate::ActionPosition)count, IconWidgetPrivate::LastIconPosition)));
 }
 
 void IconWidget::removeIconAction(QAction *action)
 {
-    foreach (IconAction *i_action, d->cornerActions) {
-        if (i_action->action() == action) {
-            delete i_action;
-            d->cornerActions.removeAll(i_action);
+    //WARNING: do NOT access the action pointer passed in, as it may already be
+    //be destroyed. see IconWidgetPrivate::actionDestroyed(QObject*)
+    int count = 0;
+    bool found = false;
+    foreach (IconAction *iconAction, d->cornerActions) {
+        if (found) {
+            iconAction->setRect(d->actionRect((IconWidgetPrivate::ActionPosition)count));
+        } else if (iconAction->action() == action) {
+            delete iconAction;
+            d->cornerActions.removeAll(iconAction);
+        }
+
+        if (count < IconWidgetPrivate::LastIconPosition) {
+            ++count;
         }
     }
+
+    // redraw since an action has been deleted.
+    update();
+}
+
+void IconWidgetPrivate::actionDestroyed(QObject *action)
+{
+    q->removeIconAction(static_cast<QAction*>(action));
 }
 
 void IconWidget::setAction(QAction *action)
@@ -385,20 +404,6 @@ void IconWidget::setAction(QAction *action)
 QAction *IconWidget::action() const
 {
     return d->action;
-}
-
-void IconWidgetPrivate::actionDestroyed(QObject *action)
-{
-    QList<IconAction*>::iterator it = cornerActions.begin();
-
-    while (it != cornerActions.end()) {
-        if ((*it)->action() == action) {
-            cornerActions.erase(it);
-            break;
-        }
-    }
-
-    q->update();   // redraw since an action has been deleted.
 }
 
 int IconWidget::numDisplayLines()

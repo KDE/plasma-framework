@@ -166,7 +166,7 @@ public:
         TopRight,
         BottomLeft,
         BottomRight,
-        LastIconPosition
+        LastIconPosition = BottomRight
     };
 
     // Margin functions
