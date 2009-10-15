@@ -21,6 +21,7 @@
 /////////////////////////////////////////////////////////////////////////
 #include <QtCore/qglobal.h>
 #include <QtCore/qmetatype.h>
+#include <QGraphicsScene>
 #include <QGraphicsSceneMouseEvent>
 #include <QGraphicsSceneWheelEvent>
 #include <QTime>
@@ -60,7 +61,9 @@ public:
         overshoot(20),
         bounceFlag(0),
         hasOvershoot(true),
-        friction(0.8)
+        parent(0),
+        friction(0.8),
+        forwardingEvent(false)
     {
         maximum = 100 + overshoot;
         minimum = -overshoot;
@@ -112,11 +115,12 @@ public:
     QPointF cposition;
     char bounceFlag;
     bool hasOvershoot;
-    QObject *parent;
+    QGraphicsWidget *parent;
     QRectF viewportGeometry;
     QSizeF contentsSize;
     int maximum, minimum;
     qreal friction;
+    bool forwardingEvent;
 
     QTime t;
 };
@@ -335,8 +339,56 @@ void KineticScrolling::doneOvershoot(void)
 
 void KineticScrolling::setWidget(QGraphicsWidget *parent)
 {
+    if (d->parent) {
+        d->parent->removeEventFilter(this);
+    }
+
     d->parent = parent;
+
+    if (parent) {
+        d->parent->installEventFilter(this);
+    }
     /* TODO: add a new property in plasma::ScrollWidget 'hasOvershoot' */
+}
+
+bool KineticScrolling::eventFilter(QObject *watched, QEvent *event)
+{
+    if (d->forwardingEvent) {
+        return false;
+    }
+
+    bool notBlocked = true;
+    if (d->parent && d->parent->scene()) {
+        d->forwardingEvent = true;
+        notBlocked = d->parent->scene()->sendEvent(d->parent, event);
+        d->forwardingEvent = false;
+    }
+
+   if (!notBlocked || ((event->type() != QEvent::GraphicsSceneMousePress && event->isAccepted()) && (event->type() != QEvent::GraphicsSceneWheel && event->isAccepted()))) {
+       return true;
+   }
+
+    QGraphicsSceneMouseEvent *me = static_cast<QGraphicsSceneMouseEvent *>(event);
+    QGraphicsSceneWheelEvent *we = static_cast<QGraphicsSceneWheelEvent *>(event);
+
+    switch (event->type()) {
+    case QEvent::GraphicsSceneMousePress:
+        mousePressEvent(me);
+        break;
+    case QEvent::GraphicsSceneMouseRelease:
+        mouseReleaseEvent(me);
+        break;
+    case QEvent::GraphicsSceneMouseMove:
+        mouseMoveEvent(me);
+        break;
+    case QEvent::GraphicsSceneWheel:
+        wheelReleaseEvent(we);
+        break;
+    default:
+        break;
+    }
+
+    return true;
 }
 
 } // namespace Plasma
