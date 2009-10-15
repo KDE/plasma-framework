@@ -126,6 +126,9 @@ Containment::Containment(QObject *parent, const QVariantList &args)
 Containment::~Containment()
 {
     delete d;
+    // Applet touches our dptr if we are a containment and is the superclass (think of dtors)
+    // so we reset this as we exit the building
+    Applet::d->isContainment = false;
 }
 
 void Containment::init()
