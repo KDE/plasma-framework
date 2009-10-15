@@ -430,8 +430,7 @@ void ScrollWidget::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
         Animator::self()->stopItemMovement(d->animId);
     }
 
-    d->mouseMoveEvent(event);
-    QGraphicsWidget::mouseMoveEvent(event);
+    event->ignore();
 }
 
 void ScrollWidget::mousePressEvent(QGraphicsSceneMouseEvent *event)
@@ -439,14 +438,11 @@ void ScrollWidget::mousePressEvent(QGraphicsSceneMouseEvent *event)
     if (d->animId) {
         Animator::self()->stopItemMovement(d->animId);
     }
-
-    event->accept();
-    d->mousePressEvent(event);
 }
 
 void ScrollWidget::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
-    d->mouseReleaseEvent(event);
+    event->ignore();
 }
 
 void ScrollWidget::wheelEvent(QGraphicsSceneWheelEvent *event)
@@ -455,8 +451,6 @@ void ScrollWidget::wheelEvent(QGraphicsSceneWheelEvent *event)
         Animator::self()->stopItemMovement(d->animId);
     }
 
-    event->accept();
-    d->wheelReleaseEvent( event );
 }
 
 bool ScrollWidget::eventFilter(QObject *watched, QEvent *event)

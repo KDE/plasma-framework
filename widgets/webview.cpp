@@ -47,10 +47,7 @@ class WebViewPrivate : public KineticScrolling
 public:
     WebViewPrivate(WebView *parent)
         : q(parent),
-          dragToScroll(false),
-          dragging(false),
-          dragTimeout(false),
-          dragTimeoutTimer(0)
+          dragToScroll(false)
     {
     }
 
@@ -63,9 +60,7 @@ public:
     QWebPage *page;
     bool loaded;
     bool dragToScroll;
-    bool dragging;
-    bool dragTimeout;
-    QTimer *dragTimeoutTimer;
+    QPointF lastScrollPosition;
 };
 
 WebView::WebView(QGraphicsItem *parent)
@@ -237,9 +232,9 @@ void WebView::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
         return;
     }
 
-    if (event->pos().x() <= (d->page->mainFrame()->contentsSize().width() -
-                d->page->mainFrame()->scrollBarMaximum(Qt::Horizontal)))
-        d->mouseMoveEvent(event);
+    if (d->dragToScroll) {
+        return;
+    }
 
     QMouseEvent me(QEvent::MouseMove, event->pos().toPoint(), event->button(),
             event->buttons(), event->modifiers());
@@ -271,14 +266,14 @@ void WebView::mousePressEvent(QGraphicsSceneMouseEvent *event)
         return;
     }
 
+    d->lastScrollPosition = scrollPosition();
     setFocus();
 
     QMouseEvent me(QEvent::MouseButtonPress, event->pos().toPoint(), 
             event->button(), event->buttons(), event->modifiers());
     d->page->event(&me);
-    if (me.isAccepted()) {
+    if (me.isAccepted() && !d->dragToScroll) {
         event->accept();
-        d->mousePressEvent(event);
     }
 }
 
@@ -304,14 +299,14 @@ void WebView::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
         return;
     }
 
-    event->accept();
-    d->mouseReleaseEvent(event);
-
     QMouseEvent me(QEvent::MouseButtonRelease, event->pos().toPoint(),
             event->button(),event->buttons(), event->modifiers());
-    d->page->event(&me);
 
-    if (me.isAccepted()) {
+    if (!d->dragToScroll || (scrollPosition() - d->lastScrollPosition).manhattanLength() < QApplication::startDragDistance()) {
+        d->page->event(&me);
+    }
+
+    if (me.isAccepted() && !d->dragToScroll) {
         event->accept();
     }
 }
@@ -349,8 +344,7 @@ void WebView::wheelEvent(QGraphicsSceneWheelEvent *event)
             event->modifiers(), event->orientation());
     d->page->event(&we);
 
-    event->accept();
-    d->wheelReleaseEvent(event);
+    event->setAccepted(!d->dragToScroll);
 }
 
 void WebView::keyPressEvent(QKeyEvent * event)
@@ -492,10 +486,6 @@ void WebViewPrivate::scrollRequested(int dx, int dy, const QRect &scrollRect)
     updateRequested(scrollRect);
 }
 
-void WebViewPrivate::dragTimeoutExpired()
-{
-    dragTimeout = true;
-}
 
 } // namespace Plasma
 
