@@ -51,6 +51,7 @@ set(plasma_LIB_SRCS
     animations/grow.cpp
     animations/slide.cpp
     animations/pulser.cpp
+    animations/rotation.cpp
     applet.cpp
     configloader.cpp
     containment.cpp
@@ -352,6 +353,7 @@ install(FILES
     animations/grow.h
     animations/slide.h
     animations/pulser.h
+    animations/rotation.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/plasma/animations COMPONENT Devel)
 
 
