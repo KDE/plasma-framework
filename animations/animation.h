@@ -35,6 +35,8 @@
 namespace Plasma
 {
 
+class AnimationPrivate;
+
 /**
  * Abstract representation of a single animation.
  */
@@ -47,12 +49,6 @@ public:
 
     Animation(QObject* parent = 0);
     virtual ~Animation() = 0;
-
-    /**
-     * Get the animation duration.
-     * @return duration in ms.
-     */
-    virtual int duration() const;
 
     /**
      * Start the animation.
@@ -82,20 +78,15 @@ protected:
      */
     virtual QAbstractAnimation* render(QObject* parent = 0) = 0;
 
+    /**
+     * Get the animation duration.
+     * @return duration in ms.
+     */
     int getDuration();
 
 private:
 
-    /**
-     * Parent owner object to use in generated animations.
-     */
-    QObject* m_parent;
-
-    /**
-     * Duration of the animation. Default is 1000ms.
-     */
-    int m_duration;
-
+    AnimationPrivate *d;
 };
 
 } //namespace Plasma

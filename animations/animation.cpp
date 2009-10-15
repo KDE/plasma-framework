@@ -30,24 +30,41 @@
 namespace Plasma
 {
 
+class AnimationPrivate {
+
+public:
+
+   /**
+     * Parent owner object to use in generated animations.
+     */
+    QObject* m_parent;
+
+    /**
+     * Duration of the animation. Default is 1000ms.
+     */
+    int m_duration;
+
+};
+
 Animation::Animation(QObject* parent)
-    : m_parent(parent),
-      m_duration(250)
 {
+    d = new AnimationPrivate;
+    d->m_parent = parent;
+    d->m_duration = 250;
+
 }
 
-Animation::~Animation(){}
+Animation::~Animation()
+{
+    delete d;
+}
 
 void Animation::setDuration(int duration){
-    m_duration = duration;
-}
-
-int Animation::duration() const {
-    return m_duration;
+    d->m_duration = duration;
 }
 
 void Animation::start(){
-    QAbstractAnimation* anim = getQtAnimation(m_parent);
+    QAbstractAnimation* anim = getQtAnimation(d->m_parent);
     if (anim){
         anim->start(QAbstractAnimation::DeleteWhenStopped);
     }
@@ -65,14 +82,14 @@ QAbstractAnimation* Animation::getQtAnimation(QObject* parent){
     if (parent){
         return render(parent);
     } else {
-        return render(m_parent);
+        return render(d->m_parent);
     }
 
 }
 
 int Animation::getDuration() {
 
-    return m_duration;
+    return d->m_duration;
 
 }
 
