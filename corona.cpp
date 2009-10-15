@@ -201,7 +201,14 @@ public:
 
             // in case we got a non-Containment from Applet::loadApplet or
             // a null containment was requested
-            delete applet;
+            if (applet) {
+                // the applet probably doesn't know what's hit it, so let's pretend it can be
+                // initialized to make assumptions in the applet's dtor safer
+                q->addItem(applet);
+                applet->init();
+                q->removeItem(applet);
+                delete applet;
+            }
             containment = new Containment(0, 0, id);
 
             if (pluginName == "null") {
