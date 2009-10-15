@@ -360,7 +360,7 @@ void Corona::loadLayout(const QString &configName)
         mergeConfig = true;
     }
 
-    QList<int> containmentsIds;
+    QList<uint> containmentsIds;
 
     if (mergeConfig) {
         foreach (Plasma::Containment *cont, d->containments) {
@@ -377,7 +377,7 @@ void Corona::loadLayout(const QString &configName)
             continue;
         }
 
-        int cid = group.toUInt();
+        uint cid = group.toUInt();
         if (mergeConfig) {
             if (containmentsIds.contains(cid)) {
                 cid = 0;
