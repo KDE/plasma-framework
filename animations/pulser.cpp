@@ -16,6 +16,10 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
+/* TODO:
+ * - fix centering of pulsed shadow object
+ */
+
 #include "pulser.h"
 #include <QGraphicsWidget>
 #include <QEvent>
@@ -37,8 +41,9 @@ PulseAnimation::PulseAnimation(): animation(0),
 
 PulseAnimation::~PulseAnimation()
 {
-    delete animation;
-    delete pulseGeometry;
+    //XXX: current plasma::Animation model will delete all animation objects
+    //     delete animation;
+    //     delete pulseGeometry;
 }
 
 void PulseAnimation::setCopy(QGraphicsWidget *copy)
@@ -51,7 +56,6 @@ void PulseAnimation::setCopy(QGraphicsWidget *copy)
     under->setOpacity(0);
     under->setZValue(zvalue);
     mscale = under->scale();
-    createAnimation();
 }
 
 
@@ -88,6 +92,9 @@ void PulseAnimation::resetPulser()
 
 void PulseAnimation::createAnimation(qreal duration, qreal scale)
 {
+    /* Fallback to parent widget if we don't have one 'shadow' widget */
+    if (!under)
+	setCopy(getAnimatedObject());
 
     pulseGeometry = new QRectF(under->geometry());
     QParallelAnimationGroup *group = new QParallelAnimationGroup(this);
@@ -114,21 +121,21 @@ void PulseAnimation::createAnimation(qreal duration, qreal scale)
 
     animation = group;
 
-    connect(animation, SIGNAL(finished()), this, SLOT(resetPulser()));
+    //XXX: current plasma::Animation model doesn't reuse animation objects
+    //connect(animation, SIGNAL(finished()), this, SLOT(resetPulser()));
 }
 
 QAbstractAnimation* PulseAnimation::render(QObject* parent)
 {
     Q_UNUSED(parent);
-    if (!animation)
-      createAnimation();
-
+    createAnimation();
+    under->setOpacity(1);
     return animation;
 }
 
 void PulseAnimation::start()
 {
-    under->setOpacity( 1 );
+    under->setOpacity(1);
     animation->start();
 }
 
