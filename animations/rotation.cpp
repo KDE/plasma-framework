@@ -26,10 +26,14 @@
 namespace Plasma
 {
 
-RotationAnimation::RotationAnimation(qint8 reference, const Qt::Axis &axis, 
-        const qreal &angle)
+RotationAnimation::RotationAnimation(qint8 reference, const Qt::Axis &axis, const qreal &angle)
     : m_angle(angle), m_axis(axis), m_reference(reference)
 {
+}
+
+Qt::Axis RotationAnimation::axis() const
+{
+    return m_axis;
 }
 
 void RotationAnimation::setAxis(const Qt::Axis &axis)
@@ -37,9 +41,19 @@ void RotationAnimation::setAxis(const Qt::Axis &axis)
     m_axis = axis;
 }
 
+qint8 RotationAnimation::reference() const
+{
+    return m_reference;
+}
+
 void RotationAnimation::setReference(const qint8 reference)
 {
     m_reference = reference;
+}
+
+qreal RotationAnimation::angle() const
+{
+    return m_angle;
 }
 
 void RotationAnimation::setAngle(const qreal &angle)
