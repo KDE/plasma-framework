@@ -238,8 +238,8 @@ ScrollWidget::ScrollWidget(QGraphicsWidget *parent)
     : QGraphicsWidget(parent),
       d(new ScrollWidgetPrivate(this))
 {
-    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     d->layout = new QGraphicsGridLayout(this);
+    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     d->layout->setContentsMargins(1, 1, 1, 1);
     d->scrollingWidget = new QGraphicsWidget(this);
     d->layout->addItem(d->scrollingWidget, 0, 0);
