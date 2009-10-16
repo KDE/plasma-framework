@@ -26,54 +26,80 @@
 namespace Plasma
 {
 
-RotationAnimation::RotationAnimation(qint8 reference, const Qt::Axis &axis, const qreal &angle)
-    : m_angle(angle), m_axis(axis), m_reference(reference)
+class RotationAnimationPrivate {
+    public:
+        RotationAnimationPrivate()
+        {
+        }
+
+        ~RotationAnimationPrivate()
+        {
+        }
+
+        QGraphicsRotation *rotation;
+        qreal angle;
+        Qt::Axis axis;
+        qint8 reference;
+};
+
+
+RotationAnimation::RotationAnimation(const qint8 &reference, const Qt::Axis &axis, const qreal &angle)
+    : d(new RotationAnimationPrivate)
 {
+    d->angle = angle;
+    d->axis = axis;
+    d->reference = reference;
+
+    d->rotation = new QGraphicsRotation(this);
+}
+
+RotationAnimation::~RotationAnimation()
+{
+    delete d;
 }
 
 Qt::Axis RotationAnimation::axis() const
 {
-    return m_axis;
+    return d->axis;
 }
 
 void RotationAnimation::setAxis(const Qt::Axis &axis)
 {
-    m_axis = axis;
+    d->axis = axis;
 }
 
 qint8 RotationAnimation::reference() const
 {
-    return m_reference;
+    return d->reference;
 }
 
-void RotationAnimation::setReference(const qint8 reference)
+void RotationAnimation::setReference(const qint8 &reference)
 {
-    m_reference = reference;
+    d->reference = reference;
 }
 
 qreal RotationAnimation::angle() const
 {
-    return m_angle;
+    return d->angle;
 }
 
 void RotationAnimation::setAngle(const qreal &angle)
 {
-    m_angle = angle;
+    d->angle = angle;
 }
 
 QPropertyAnimation *RotationAnimation::render(QObject *parent)
 {
     Q_UNUSED(parent);
     QGraphicsWidget *m_object = getAnimatedObject();
-    QGraphicsRotation *rotation = new QGraphicsRotation(m_object);
 
     QVector3D vector(0, 0, 0);
 
     const qreal widgetWidth = m_object->size().width();
     const qreal widgetHeight = m_object->size().height();
 
-    if (m_axis == Qt::XAxis) {
-        switch(m_reference) {
+    if (d->axis == Qt::XAxis) {
+        switch(d->reference) {
             case Center:
                 vector.setY(widgetHeight/2);
                 break;
@@ -84,8 +110,8 @@ QPropertyAnimation *RotationAnimation::render(QObject *parent)
                 vector.setY(widgetHeight);
                 break;
         }
-    } else if(m_axis == Qt::YAxis) {
-        switch(m_reference) {
+    } else if(d->axis == Qt::YAxis) {
+        switch(d->reference) {
             case Center:
                 vector.setX(widgetWidth/2);
                 break;
@@ -96,8 +122,8 @@ QPropertyAnimation *RotationAnimation::render(QObject *parent)
                 vector.setX(widgetWidth);
                 break;
         }
-    }else if (m_axis == Qt::ZAxis) {
-        switch(m_reference) {
+    }else if (d->axis == Qt::ZAxis) {
+        switch(d->reference) {
             case Center:
                 vector.setX(widgetWidth/2);
                 vector.setY(widgetHeight/2);
@@ -125,16 +151,16 @@ QPropertyAnimation *RotationAnimation::render(QObject *parent)
         }
     }
 
-    rotation->setOrigin(vector);
-    rotation->setAxis(m_axis);
+    d->rotation->setOrigin(vector);
+    d->rotation->setAxis(d->axis);
 
     QList<QGraphicsTransform *> transformation;
-    transformation.append(rotation);
+    transformation.append(d->rotation);
     m_object->setTransformations(transformation);
 
-    QPropertyAnimation *rotationAnimation= new QPropertyAnimation(rotation,
+    QPropertyAnimation *rotationAnimation= new QPropertyAnimation(d->rotation,
             "angle", m_object);
-    rotationAnimation->setEndValue(m_angle);
+    rotationAnimation->setEndValue(d->angle);
     rotationAnimation->setDuration(getDuration());
 
     return rotationAnimation;

@@ -27,6 +27,8 @@
 
 namespace Plasma {
 
+class RotationAnimationPrivate;
+
 class PLASMA_EXPORT RotationAnimation : public Animation
 {
     Q_OBJECT
@@ -44,7 +46,9 @@ class PLASMA_EXPORT RotationAnimation : public Animation
         };
 
     public:
-        RotationAnimation(qint8 reference = Center, const Qt::Axis &axis = Qt::ZAxis, const qreal &angle = 180);
+        RotationAnimation(const qint8 &reference = Center,
+                const Qt::Axis &axis = Qt::ZAxis, const qreal &angle = 180);
+        ~RotationAnimation();
 
         QPropertyAnimation* render(QObject* parent = 0);
 
@@ -52,14 +56,12 @@ class PLASMA_EXPORT RotationAnimation : public Animation
         void setAxis(const Qt::Axis &axis);
 
         qint8 reference() const;
-        void setReference(qint8 reference);
+        void setReference(const qint8 &reference);
 
         qreal angle() const;
         void setAngle(const qreal &angle);
 
     private:
-        qreal m_angle;
-        Qt::Axis  m_axis;
-        qint8 m_reference;
+        RotationAnimationPrivate *const d;
 };
 } // Plasma
