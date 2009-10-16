@@ -462,6 +462,8 @@ bool ScrollWidget::eventFilter(QObject *watched, QEvent *event)
     if (watched == d->widget && event->type() == QEvent::GraphicsSceneResize) {
         d->adjustScrollbars();
         d->adjustClipping();
+        //force to refresh the size hint
+        layout()->invalidate();
     } else if (watched == d->widget && event->type() == QEvent::GraphicsSceneMove) {
         d->horizontalScrollBar->blockSignals(true);
         d->verticalScrollBar->blockSignals(true);
