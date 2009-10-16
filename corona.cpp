@@ -655,26 +655,25 @@ QPoint Corona::popupPosition(const QGraphicsItem *item, const QSize &s, Qt::Alig
         break;
     default:
         if (pos.y() - s.height() > 0) {
-             pos = QPoint(pos.x(), pos.y() - s.height());
+             pos.ry() = pos.y() - s.height();
         } else {
-             pos = QPoint(pos.x(), pos.y() + (int)item->boundingRect().size().height());
+             pos.ry() = pos.y() + (int)item->boundingRect().size().height() + 1;
         }
     }
 
     //are we out of screen?
-    QRect screenRect =
-        screenGeometry((pv && pv->containment()) ? pv->containment()->screen() : -1);
+    QRect screenRect = screenGeometry((pv && pv->containment()) ? pv->containment()->screen() : -1);
     //kDebug() << "==> rect for" << (pv ? pv->containment()->screen() : -1) << "is" << screenRect;
 
-    if (loc != LeftEdge && pos.rx() + s.width() > screenRect.right()) {
-        pos.rx() -= ((pos.rx() + s.width()) - screenRect.right());
+    if (loc != LeftEdge && pos.x() + s.width() > screenRect.right()) {
+        pos.rx() -= ((pos.x() + s.width()) - screenRect.right());
     }
 
-    if (loc != TopEdge && pos.ry() + s.height() > screenRect.bottom()) {
-        pos.ry() -= ((pos.ry() + s.height()) - screenRect.bottom());
+    if (loc != TopEdge && pos.y() + s.height() > screenRect.bottom()) {
+        pos.ry() -= ((pos.y() + s.height()) - screenRect.bottom());
     }
 
-    pos.rx() = qMax(0, pos.rx());
+    pos.rx() = qMax(0, pos.x());
 
     return pos;
 }
