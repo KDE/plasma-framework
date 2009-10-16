@@ -58,7 +58,7 @@ public:
      * Take an AbstractAnimation and turn it into a 
      * QAbstractAnimation.
      */
-    virtual QAbstractAnimation* getQtAnimation(QObject* parent) = 0;
+    virtual QAbstractAnimation* asQAnimation(QObject* parent) = 0;
 
 public slots:
 

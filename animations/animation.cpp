@@ -59,27 +59,29 @@ Animation::~Animation()
     delete d;
 }
 
-void Animation::setDuration(int duration){
+void Animation::setDuration(int duration)
+{
     d->m_duration = duration;
 }
 
-void Animation::start(){
-    QAbstractAnimation* anim = getQtAnimation(d->m_parent);
-    if (anim){
+void Animation::start()
+{
+    QAbstractAnimation* anim = asQAnimation(d->m_parent);
+    if (anim) {
         anim->start(QAbstractAnimation::DeleteWhenStopped);
     }
 }
 
-QAbstractAnimation* Animation::getQtAnimation(QObject* parent){
-
+QAbstractAnimation* Animation::asQAnimation(QObject* parent)
+{
     //check if .setObject() was done
-    if (!getAnimatedObject()){
+    if (!getAnimatedObject()) {
         kDebug() << "Object not set.";
         return NULL;
     }
 
     //check which parent to use
-    if (parent){
+    if (parent) {
         return render(parent);
     } else {
         return render(d->m_parent);
@@ -87,10 +89,9 @@ QAbstractAnimation* Animation::getQtAnimation(QObject* parent){
 
 }
 
-int Animation::getDuration() {
-
+int Animation::getDuration()
+{
     return d->m_duration;
-
 }
 
 } //namespace Plasma

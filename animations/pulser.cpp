@@ -31,10 +31,15 @@
 namespace Plasma
 {
 
-PulseAnimation::PulseAnimation(): animation(0),
-				  under(0), pulseGeometry(0),
-				  zvalue(0), mscale(0),
-				  anim1(0), anim2(0), anim3(0)
+PulseAnimation::PulseAnimation()
+    : animation(0),
+      under(0),
+      pulseGeometry(0),
+      zvalue(0),
+      mscale(0),
+      opacityAnimation(0),
+      geometryAnimation(0),
+      scaleAnimation(0)
 {
 
 }
@@ -72,13 +77,8 @@ void PulseAnimation::updateGeometry(QRectF updated, qreal zCoordinate, qreal sca
     QRectF initial(under->geometry());
     qreal W = initial.width() * scale * 0.33;
     qreal H = initial.height() * scale * 0.33;
-    QRectF end(initial.x() - W, initial.y() -  H, initial.width() * scale,
-        initial.height() * scale);
-    anim2->setEndValue(end);
-
-    anim2->setEndValue(end);
-
-
+    QRectF end(initial.x() - W, initial.y() -  H, initial.width() * scale, initial.height() * scale);
+    geometryAnimation->setEndValue(end);
 }
 
 void PulseAnimation::resetPulser()
@@ -93,31 +93,32 @@ void PulseAnimation::resetPulser()
 void PulseAnimation::createAnimation(qreal duration, qreal scale)
 {
     /* Fallback to parent widget if we don't have one 'shadow' widget */
-    if (!under)
-	setCopy(getAnimatedObject());
+    if (!under) {
+        setCopy(getAnimatedObject());
+    }
 
     pulseGeometry = new QRectF(under->geometry());
     QParallelAnimationGroup *group = new QParallelAnimationGroup(this);
-    anim1 = new QPropertyAnimation(under, "opacity");
-    anim1->setDuration(duration);
-    anim1->setEndValue(0);
-    group->addAnimation(anim1);
+    opacityAnimation = new QPropertyAnimation(under, "opacity");
+    opacityAnimation->setDuration(duration);
+    opacityAnimation->setEndValue(0);
+    group->addAnimation(opacityAnimation);
 
     /* TODO: move this to a function */
-    anim2 = new QPropertyAnimation(under, "geometry");
-    anim2->setDuration(duration);
+    geometryAnimation = new QPropertyAnimation(under, "geometry");
+    geometryAnimation->setDuration(duration);
     QRectF initial(under->geometry());
     qreal W = initial.width() * scale * 0.33;
     qreal H = initial.height() * scale * 0.33;
     QRectF end(initial.x() - W, initial.y() -  H, initial.width() * scale,
 		initial.height() * scale);
-    anim2->setEndValue(end);
-    group->addAnimation(anim2);
+    geometryAnimation->setEndValue(end);
+    group->addAnimation(geometryAnimation);
 
-    anim3 = new QPropertyAnimation(under, "scale");
-    anim3->setDuration(duration);
-    anim3->setEndValue(scale);
-    group->addAnimation(anim3);
+    scaleAnimation = new QPropertyAnimation(under, "scale");
+    scaleAnimation->setDuration(duration);
+    scaleAnimation->setEndValue(scale);
+    group->addAnimation(scaleAnimation);
 
     animation = group;
 
@@ -138,8 +139,5 @@ void PulseAnimation::start()
     under->setOpacity(1);
     animation->start();
 }
-
-
-
 
 } //namespace Plasma

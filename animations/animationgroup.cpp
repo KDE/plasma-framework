@@ -32,43 +32,49 @@ AnimationGroup::AnimationGroup(QObject* parent)
 {
 }
 
-AnimationGroup::~AnimationGroup(){
-
+AnimationGroup::~AnimationGroup()
+{
 }
 
-void AnimationGroup::setParallel(bool parallelness){
+void AnimationGroup::setParallel(bool parallelness)
+{
     m_parallel = parallelness;
 }
 
-bool AnimationGroup::isParallel() const{
+bool AnimationGroup::isParallel() const
+{
     return m_parallel;
 }
 
-int AnimationGroup::add(AbstractAnimation* elem){
+int AnimationGroup::add(AbstractAnimation* elem)
+{
     anims.insert(anims.count(), elem);
     return anims.count();
 }
 
-AbstractAnimation* AnimationGroup::at(int id) const{
+AbstractAnimation* AnimationGroup::at(int id) const
+{
     return anims[id];
 }
 
-void AnimationGroup::remove(int id){
+void AnimationGroup::remove(int id)
+{
     anims.removeAt(id);
 }
 
-void AnimationGroup::start(){
-    QAbstractAnimation* anim = getQtAnimation(m_parent);
+void AnimationGroup::start()
+{
+    QAbstractAnimation* anim = asQAnimation(m_parent);
     if (anim){
-	/* FIXME: why to create and delete all the animations
-	 * every single time it runs?
-	 */
+        /* FIXME: why to create and delete all the animations
+         * every single time it runs?
+         */
         anim->start(QAbstractAnimation::DeleteWhenStopped);
     }
 }
 
-QAnimationGroup* AnimationGroup::getQtAnimation(QObject* parent){
-
+QAnimationGroup* AnimationGroup::asQAnimation(QObject* parent)
+{
     //if supplied, use parent given in args.
     QObject* correctParent;
     if (parent){
@@ -78,7 +84,7 @@ QAnimationGroup* AnimationGroup::getQtAnimation(QObject* parent){
     }
 
     QAnimationGroup* g;
-    if(m_parallel){
+    if (m_parallel) {
         g = new QParallelAnimationGroup(correctParent);
     } else {
         g = new QSequentialAnimationGroup(correctParent);
@@ -87,7 +93,7 @@ QAnimationGroup* AnimationGroup::getQtAnimation(QObject* parent){
     QListIterator<AbstractAnimation*> it(anims);
     while (it.hasNext()) {
         //add with group as owner
-        g->addAnimation(it.next()->getQtAnimation(g));
+        g->addAnimation(it.next()->asQAnimation(g));
     }
 
     return g;

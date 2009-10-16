@@ -22,15 +22,18 @@
 namespace Plasma
 {
 
-AbstractAnimation::AbstractAnimation(){
+AbstractAnimation::AbstractAnimation()
+{
 
 }
 
-AbstractAnimation::~AbstractAnimation(){
+AbstractAnimation::~AbstractAnimation()
+{
 
 }
 
-void AbstractAnimation::setWidget(QGraphicsWidget* receiver){
+void AbstractAnimation::setWidget(QGraphicsWidget* receiver)
+{
     m_object = receiver;
 }
 

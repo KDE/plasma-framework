@@ -47,14 +47,14 @@ protected:
     virtual QAbstractAnimation* render(QObject* parent = 0);
 
 private:
-
     void createAnimation(qreal _duration = 500, qreal _scale = 1.5);
     QAbstractAnimation *animation;
     QGraphicsWidget *under;
     QRectF *pulseGeometry;
     qreal zvalue, mscale;
-    QPropertyAnimation *anim1, *anim2, *anim3;
-
+    QPropertyAnimation *opacityAnimation;
+    QPropertyAnimation *geometryAnimation;
+    QPropertyAnimation *scaleAnimation;
 };
 
 }
