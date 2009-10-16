@@ -405,7 +405,7 @@ int TabBar::count() const
 
 void TabBar::removeTab(int index)
 {
-    if (index > d->pages.count()) {
+    if (index >= d->pages.count()) {
         return;
     }
 
@@ -432,7 +432,7 @@ void TabBar::removeTab(int index)
 
 QGraphicsLayoutItem *TabBar::takeTab(int index)
 {
-    if (index > d->pages.count()) {
+    if (index >= d->pages.count()) {
         return 0;
     }
 
@@ -475,7 +475,7 @@ QGraphicsLayoutItem *TabBar::takeTab(int index)
 
 QGraphicsLayoutItem *TabBar::tabAt(int index)
 {
-    if (index > d->pages.count()) {
+    if (index >= d->pages.count()) {
         return 0;
     }
 
@@ -488,13 +488,13 @@ QGraphicsLayoutItem *TabBar::tabAt(int index)
     } else {
         returnItem = lay;
     }
-    
+
     return returnItem;
 }
 
 void TabBar::setTabText(int index, const QString &label)
 {
-    if (index > d->pages.count()) {
+    if (index >= d->pages.count()) {
         return;
     }
 
