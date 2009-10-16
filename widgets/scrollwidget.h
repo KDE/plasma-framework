@@ -167,6 +167,7 @@ protected:
     void wheelEvent(QGraphicsSceneWheelEvent *event);
     bool eventFilter(QObject *watched, QEvent *event);
     void focusInEvent(QFocusEvent *event);
+    QSizeF sizeHint(Qt::SizeHint which, const QSizeF & constraint) const;
 
 private:
     ScrollWidgetPrivate * const d;

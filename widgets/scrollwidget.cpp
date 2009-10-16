@@ -474,6 +474,17 @@ bool ScrollWidget::eventFilter(QObject *watched, QEvent *event)
     return false;
 }
 
+QSizeF ScrollWidget::sizeHint(Qt::SizeHint which, const QSizeF & constraint) const
+{
+    QSizeF hint = QGraphicsWidget::sizeHint(which, constraint);
+
+    if (which == Qt::PreferredSize && d->widget) {
+        return d->widget->size();
+    }
+
+    return hint;
+}
+
 } // namespace Plasma
 
 #include <scrollwidget.moc>
