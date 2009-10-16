@@ -48,21 +48,21 @@ class PLASMA_EXPORT Animator : public QObject
 
 public:
 
-    enum KDE_DEPRECATED Animation {
+    enum Animation {
         AppearAnimation = 0, /*<< Animate the appearance of an element */
         DisappearAnimation,  /*<< Animate the disappearance of an element */
         ActivateAnimation    /*<< When something is activated or launched,
                                such as an app icon being clicked */
     };
 
-    enum KDE_DEPRECATED CurveShape {
+    enum CurveShape {
         EaseInCurve = 0,
         EaseOutCurve,
         EaseInOutCurve,
         LinearCurve
     };
 
-    enum KDE_DEPRECATED Movement {
+    enum Movement {
         SlideInMovement = 0,
         SlideOutMovement,
         FastSlideInMovement,
