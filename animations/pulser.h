@@ -31,13 +31,10 @@ class PLASMA_EXPORT PulseAnimation : public Animation
 
 public:
     PulseAnimation();
-
-    virtual ~PulseAnimation();
+    ~PulseAnimation();
 
     void updateGeometry(QRectF updated, qreal zCoordinate = 0, qreal scale = 1.5);
-
     void setCopy(QGraphicsWidget *copy);
-
 
 public Q_SLOTS:
     void start();

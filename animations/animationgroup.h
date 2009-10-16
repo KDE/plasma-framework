@@ -92,7 +92,7 @@ public:
      * specifically, a QSerialAnimation or QParallelAnimation depending on 
      * the value of m_parallel at the time of invocation. Returns NULL on error.
      */
-    QAnimationGroup* asQAnimation(QObject* parent = 0);
+    QAnimationGroup* toQAbstractAnimation(QObject* parent = 0);
 
 private:
 

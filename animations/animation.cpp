@@ -66,13 +66,13 @@ void Animation::setDuration(int duration)
 
 void Animation::start()
 {
-    QAbstractAnimation* anim = asQAnimation(d->m_parent);
+    QAbstractAnimation* anim = toQAbstractAnimation(d->m_parent);
     if (anim) {
         anim->start(QAbstractAnimation::DeleteWhenStopped);
     }
 }
 
-QAbstractAnimation* Animation::asQAnimation(QObject* parent)
+QAbstractAnimation* Animation::toQAbstractAnimation(QObject* parent)
 {
     //check if .setObject() was done
     if (!getAnimatedObject()) {

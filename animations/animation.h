@@ -60,7 +60,7 @@ public:
      * NULL on error. This function just does some boilerplate checking and then
      * calls render().
      */
-    QAbstractAnimation* asQAnimation(QObject* parent = 0);
+    QAbstractAnimation* toQAbstractAnimation(QObject* parent = 0);
 
 protected:
 

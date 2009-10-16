@@ -64,7 +64,7 @@ void AnimationGroup::remove(int id)
 
 void AnimationGroup::start()
 {
-    QAbstractAnimation* anim = asQAnimation(m_parent);
+    QAbstractAnimation* anim = toQAbstractAnimation(m_parent);
     if (anim){
         /* FIXME: why to create and delete all the animations
          * every single time it runs?
@@ -73,7 +73,7 @@ void AnimationGroup::start()
     }
 }
 
-QAnimationGroup* AnimationGroup::asQAnimation(QObject* parent)
+QAnimationGroup* AnimationGroup::toQAbstractAnimation(QObject* parent)
 {
     //if supplied, use parent given in args.
     QObject* correctParent;
@@ -93,7 +93,7 @@ QAnimationGroup* AnimationGroup::asQAnimation(QObject* parent)
     QListIterator<AbstractAnimation*> it(anims);
     while (it.hasNext()) {
         //add with group as owner
-        g->addAnimation(it.next()->asQAnimation(g));
+        g->addAnimation(it.next()->toQAbstractAnimation(g));
     }
 
     return g;
