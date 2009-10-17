@@ -73,6 +73,8 @@ protected:
 
     QGraphicsWidget *getAnimatedObject();
 
+    AnimationPrivate *getAnimationPrivate();
+
 private:
 
     AnimationPrivate *d;

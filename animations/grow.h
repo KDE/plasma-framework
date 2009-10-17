@@ -49,9 +49,6 @@ public:
 protected:
     virtual QAbstractAnimation* render(QObject* parent = 0);
 
-private:
-    double m_factor;
-
 };
 
 }
