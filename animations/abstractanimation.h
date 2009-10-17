@@ -35,6 +35,8 @@
 namespace Plasma
 {
 
+class AnimationPrivate;
+
 /**
  * Abstract base class for AnimationGroup and Animation.
  */
@@ -73,11 +75,7 @@ protected:
 
 private:
 
-    /**
-     * Object the animation(s) should act upon.
-     */
-    QGraphicsWidget* m_object;
-
+    AnimationPrivate *d;
 };
 
 } //namespace Plasma

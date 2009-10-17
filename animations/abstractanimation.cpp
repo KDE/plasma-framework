@@ -22,24 +22,33 @@
 namespace Plasma
 {
 
-AbstractAnimation::AbstractAnimation()
+class AnimationPrivate
+{
+public:
+    /**
+     * Object the animation(s) should act upon.
+     */
+    QGraphicsWidget* m_object;
+};
+
+AbstractAnimation::AbstractAnimation(): d(new AnimationPrivate)
 {
 
 }
 
 AbstractAnimation::~AbstractAnimation()
 {
-
+    delete d;
 }
 
 void AbstractAnimation::setWidget(QGraphicsWidget* receiver)
 {
-    m_object = receiver;
+    d->m_object = receiver;
 }
 
 QGraphicsWidget* AbstractAnimation::getAnimatedObject()
 {
-    return m_object;
+    return d->m_object;
 }
 
 } //namespace Plasma
