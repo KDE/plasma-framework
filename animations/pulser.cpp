@@ -55,14 +55,20 @@ void PulseAnimation::setCopy(QGraphicsWidget *copy)
 {
     QGraphicsWidget *target = getAnimatedObject();
     under = copy;
-    under->setParentItem(target);
+    if (under != target) {
+	under->setParentItem(target);
+	mopacity = 0;
+    } else {
+	mopacity = under->opacity();
+    }
+
     zvalue = target->zValue();
     --zvalue;
     under->setOpacity(0);
     under->setZValue(zvalue);
     mscale = under->scale();
-}
 
+}
 
 void PulseAnimation::updateGeometry(QRectF updated, qreal zCoordinate, qreal scale)
 {
@@ -77,24 +83,32 @@ void PulseAnimation::updateGeometry(QRectF updated, qreal zCoordinate, qreal sca
     QRectF initial(under->geometry());
     qreal W = initial.width() * scale * 0.33;
     qreal H = initial.height() * scale * 0.33;
-    QRectF end(initial.x() - W, initial.y() -  H, initial.width() * scale, initial.height() * scale);
+    QRectF end(initial.x() - W, initial.y() -  H, initial.width() * scale,
+	       initial.height() * scale);
     geometryAnimation->setEndValue(end);
-}
+ }
+
 
 void PulseAnimation::resetPulser()
 {
     under->setGeometry(*pulseGeometry);
-    under->setOpacity(0);
+    under->setOpacity(mopacity);
     under->setZValue(zvalue);
     under->setScale(mscale);
+
 }
 
 
 void PulseAnimation::createAnimation(qreal duration, qreal scale)
 {
+    QGraphicsWidget *target = getAnimatedObject();
     /* Fallback to parent widget if we don't have one 'shadow' widget */
     if (!under) {
-        setCopy(getAnimatedObject());
+        setCopy(target);
+    } else if (under != target) {
+	delete under;
+	under = new QGraphicsWidget(target);
+	setCopy(under);
     }
 
     pulseGeometry = new QRectF(under->geometry());
@@ -122,8 +136,9 @@ void PulseAnimation::createAnimation(qreal duration, qreal scale)
 
     animation = group;
 
-    //XXX: current plasma::Animation model doesn't reuse animation objects
-    //connect(animation, SIGNAL(finished()), this, SLOT(resetPulser()));
+    //This makes sure that if there is *not* a shadow widget, the
+    //parent widget will still remain visible
+    connect(animation, SIGNAL(finished()), this, SLOT(resetPulser()));
 }
 
 QAbstractAnimation* PulseAnimation::render(QObject* parent)

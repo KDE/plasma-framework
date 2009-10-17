@@ -48,7 +48,7 @@ private:
     QAbstractAnimation *animation;
     QGraphicsWidget *under;
     QRectF *pulseGeometry;
-    qreal zvalue, mscale;
+    qreal zvalue, mscale, mopacity;
     QPropertyAnimation *opacityAnimation;
     QPropertyAnimation *geometryAnimation;
     QPropertyAnimation *scaleAnimation;
