@@ -248,7 +248,12 @@ AbstractRunner::Speed AbstractRunner::speed() const
     // or if we were fast and are going to slow down; so don't wait in this case, just
     // say we're slow. we either will be soon or were just a moment ago and it doesn't
     // hurt to do one more run the slow way
-    return d->speedLock.tryLockForRead() ? d->speed : SlowSpeed;
+    if (!d->speedLock.tryLockForRead()) {
+        return SlowSpeed;
+    }
+    Speed s = d->speed;
+    d->speedLock.unlock();
+    return s;
 }
 
 void AbstractRunner::setSpeed(Speed speed)
