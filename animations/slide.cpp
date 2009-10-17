@@ -38,7 +38,8 @@ SlideAnimation::SlideAnimation(AnimationDirection direction, qreal distance)
 
 }
 
-QAbstractAnimation* SlideAnimation::render(QObject* parent){
+QAbstractAnimation* SlideAnimation::render(QObject* parent)
+{
 
     //get current geometry values
     QGraphicsWidget *m_object = getAnimatedObject();
@@ -52,30 +53,30 @@ QAbstractAnimation* SlideAnimation::render(QObject* parent){
     //compute new geometry values
     switch (obj->animDirection) {
 
-        case MoveUp:
-            newY = y - obj->animDistance;
-            break;
+    case MoveUp:
+	newY = y - obj->animDistance;
+	break;
 
-        case MoveRight:
-            newX = x + obj->animDistance;
-            break;
+    case MoveRight:
+	newX = x + obj->animDistance;
+	break;
 
-        case MoveDown:
-            newY = y + obj->animDistance;
-            break;
+    case MoveDown:
+	newY = y + obj->animDistance;
+	break;
 
-        case MoveLeft:
-            newX = x - obj->animDistance;
-            break;
+    case MoveLeft:
+	newX = x - obj->animDistance;
+	break;
 
-        case MoveUpRight:
-        case MoveDownRight:
-        case MoveDownLeft:
-        case MoveUpLeft:
-	    /* TODO: support compound directions */
-            kDebug() << "Compound directions (UpRight, DownRight, DownLeft, \
+    case MoveUpRight:
+    case MoveDownRight:
+    case MoveDownLeft:
+    case MoveUpLeft:
+	/* TODO: support compound directions */
+	kDebug() << "Compound directions (UpRight, DownRight, DownLeft, \
 UpLeft) are not supported\n";
-            break;
+	break;
     }
 
     //create animation
@@ -95,7 +96,8 @@ UpLeft) are not supported\n";
 
 }
 
-void SlideAnimation::setVisibleAtEnd(bool visibility){
+void SlideAnimation::setVisibleAtEnd(bool visibility)
+{
     getAnimationPrivate()->animVisible = visibility;
 }
 
