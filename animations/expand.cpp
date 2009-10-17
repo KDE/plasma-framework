@@ -41,29 +41,29 @@ QAbstractAnimation* ExpandAnimation::render(QObject* parent){
     AnimationPrivate *obj = getAnimationPrivate();
 
     //compute new geometry values
-    switch (obj->animDirection){
+    switch (obj->animDirection) {
 
-        case MoveUp:
-            geometry.setTop(geometry.y() - obj->animDistance);
-            break;
+    case MoveUp:
+	geometry.setTop(geometry.y() - obj->animDistance);
+	break;
 
-        case MoveRight:
-            geometry.setRight(geometry.x() + geometry.width() - 1 + obj->animDistance);
-            break;
+    case MoveRight:
+	geometry.setRight(geometry.x() + geometry.width() - 1 + obj->animDistance);
+	break;
 
-        case MoveDown:
-            geometry.setBottom(geometry.y() + geometry.height() - 1  + obj->animDistance);
-            break;
+    case MoveDown:
+	geometry.setBottom(geometry.y() + geometry.height() - 1  + obj->animDistance);
+	break;
 
-        case MoveLeft:
-            geometry.setLeft(geometry.x() - obj->animDistance);
-            break;
+    case MoveLeft:
+	geometry.setLeft(geometry.x() - obj->animDistance);
+	break;
 
-        case MoveUpRight:
-        case MoveDownRight:
-        case MoveDownLeft:
-        case MoveUpLeft:
-            break;
+    case MoveUpRight:
+    case MoveDownRight:
+    case MoveDownLeft:
+    case MoveUpLeft:
+	break;
     }
 
     //create animation
