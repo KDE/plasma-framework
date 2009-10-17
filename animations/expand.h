@@ -48,10 +48,6 @@ public:
 protected:
     virtual QAbstractAnimation* render(QObject* parent = 0);
 
-private:
-    AnimationDirection m_direction;
-    qreal m_distance;
-
 };
 
 }

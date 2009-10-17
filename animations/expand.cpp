@@ -18,19 +18,19 @@
  */
 
 #include "expand.h"
+#include "private/animationprivate_p.h"
 
 #include <QRect>
-
 #include <kdebug.h>
 
 namespace Plasma
 {
 
 ExpandAnimation::ExpandAnimation(AnimationDirection direction, qreal distance)
-    : m_direction(direction),
-      m_distance(distance)
 {
-
+    AnimationPrivate *obj = getAnimationPrivate();
+    obj->animDirection = direction;
+    obj->animDistance = distance;
 }
 
 QAbstractAnimation* ExpandAnimation::render(QObject* parent){
@@ -38,24 +38,25 @@ QAbstractAnimation* ExpandAnimation::render(QObject* parent){
     //get current geometry values
     QGraphicsWidget *m_object = getAnimatedObject();
     QRectF geometry = m_object->geometry();
+    AnimationPrivate *obj = getAnimationPrivate();
 
     //compute new geometry values
-    switch (m_direction){
+    switch (obj->animDirection){
 
         case MoveUp:
-            geometry.setTop(geometry.y() - m_distance);
+            geometry.setTop(geometry.y() - obj->animDistance);
             break;
 
         case MoveRight:
-            geometry.setRight(geometry.x() + geometry.width() - 1 + m_distance);
+            geometry.setRight(geometry.x() + geometry.width() - 1 + obj->animDistance);
             break;
 
         case MoveDown:
-            geometry.setBottom(geometry.y() + geometry.height() - 1  + m_distance);
+            geometry.setBottom(geometry.y() + geometry.height() - 1  + obj->animDistance);
             break;
 
         case MoveLeft:
-            geometry.setLeft(geometry.x() - m_distance);
+            geometry.setLeft(geometry.x() - obj->animDistance);
             break;
 
         case MoveUpRight:
