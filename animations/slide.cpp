@@ -30,18 +30,12 @@ SlideAnimation::SlideAnimation(AnimationDirection direction, qreal distance)
 {
     AnimationPrivate *obj = getAnimationPrivate();
     obj->animDirection = direction;
-    //: m_direction(direction),
     obj->animDistance = distance;
-    //m_distance(distance),
     obj->animVisible = true;
-    //m_end_visibility(true)
-
 }
 
 QAbstractAnimation* SlideAnimation::render(QObject* parent)
 {
-
-    //get current geometry values
     QGraphicsWidget *m_object = getAnimatedObject();
     qreal x = m_object->x();
     qreal y = m_object->y();
@@ -50,7 +44,6 @@ QAbstractAnimation* SlideAnimation::render(QObject* parent)
     qreal newY = y;
 
     AnimationPrivate *obj = getAnimationPrivate();
-    //compute new geometry values
     switch (obj->animDirection) {
 
     case MoveUp:
@@ -79,7 +72,6 @@ UpLeft) are not supported\n";
 	break;
     }
 
-    //create animation
     QPropertyAnimation* anim = new QPropertyAnimation(m_object, "pos", parent);
     anim->setEndValue(QPointF(newX, newY));
     anim->setDuration(getDuration());
