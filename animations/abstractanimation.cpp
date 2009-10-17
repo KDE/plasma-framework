@@ -28,7 +28,7 @@ public:
     /**
      * Object the animation(s) should act upon.
      */
-    QGraphicsWidget* m_object;
+    QGraphicsWidget* animObject;
 };
 
 AbstractAnimation::AbstractAnimation(): d(new AnimationPrivate)
@@ -43,12 +43,12 @@ AbstractAnimation::~AbstractAnimation()
 
 void AbstractAnimation::setWidget(QGraphicsWidget* receiver)
 {
-    d->m_object = receiver;
+    d->animObject = receiver;
 }
 
 QGraphicsWidget* AbstractAnimation::getAnimatedObject()
 {
-    return d->m_object;
+    return d->animObject;
 }
 
 } //namespace Plasma
